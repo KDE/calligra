@@ -470,16 +470,15 @@ VSegmentList::transform( const QWMatrix& m )
 		noNodeSelected = true;
 
 		// Transform selected nodes:
-		if( segment->m_nodeSelected[0] )
+		if(
+			segment->prev() &&
+			segment->prev()->m_nodeSelected[2] )
+		{
+			// Do nothing.
+		}
+		else if( segment->m_nodeSelected[0] )
 		{
 			segment->m_node[0] = segment->m_node[0].transform( m );
-
-			noNodeSelected = false;
-		}
-
-		if( segment->m_nodeSelected[1] )
-		{
-			segment->m_node[1] = segment->m_node[1].transform( m );
 
 			noNodeSelected = false;
 		}
@@ -489,8 +488,28 @@ VSegmentList::transform( const QWMatrix& m )
 			segment->m_node[1] = segment->m_node[1].transform( m );
 			segment->m_node[2] = segment->m_node[2].transform( m );
 
+			if( segment == last() )
+			{
+				first()->m_node[2] =
+					first()->m_node[2].transform( m );
+				first()->m_next->m_node[0] =
+					first()->next()->m_node[0].transform( m );
+			}
+			else
+			{
+				segment->m_next->m_node[0] =
+					segment->next()->m_node[0].transform( m );
+			}
+
 			noNodeSelected = false;
 		}
+		else if( segment->m_nodeSelected[1] )
+		{
+			segment->m_node[1] = segment->m_node[1].transform( m );
+
+			noNodeSelected = false;
+		}
+
 
 		// Transform all nodes, when none is selected. The whole segment
 		// is meant in this case:
@@ -500,6 +519,7 @@ VSegmentList::transform( const QWMatrix& m )
 			segment->m_node[1] = segment->m_node[1].transform( m );
 			segment->m_node[2] = segment->m_node[2].transform( m );
 		}
+
 
 		segment = segment->m_next;
 	}
