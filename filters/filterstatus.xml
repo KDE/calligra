@@ -187,6 +187,12 @@
                 <note xml:lang="en_us">Palm documents</note>
                 <stat import="fivestars" export="fivestars"/>
             </filter>
+	    <filter id="kword_pdf">
+                <webcvs importsuffix="#import" path="koffice/filters/kword/pdf"/>
+                <title xml:lang="en_us">PDF</title>
+                <note xml:lang="en_us">Portable Document Format</note>
+                <stat import="twostars" export="none"/>
+            </filter>
             <filter id="kword_plaintext">
                 <webcvs importsuffix="#import" exportsuffix="#export" path="koffice/filters/kword/ascii"/>
                 <title xml:lang="en_us">Plain text</title>
