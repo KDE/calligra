@@ -124,7 +124,7 @@ KexiCreateProjectPageDB::connectHost(const QString &driver, const QString &host,
 	}
 
 	QStringList databases = db->databases();
-	QPixmap &db_pix = kapp->iconLoader()->loadIcon("db", KIcon::Small);
+	QPixmap db_pix = kapp->iconLoader()->loadIcon("db", KIcon::Small);
 	for(QStringList::Iterator it = databases.begin(); it != databases.end(); it++)
 	{
 		if (!db->isSystemDatabase(*it)) {
