@@ -410,6 +410,7 @@ void KPresenterView::editDelPage()
                                            "This operation cannot be undone.") )
          != KMessageBox::Yes )
         return;
+    page->exitEditMode();
     m_pKPresenterDoc->deletePage( currPg );
     setRanges();
     currPg = QMIN( currPg, (int)m_pKPresenterDoc->getPageNums() - 1 );

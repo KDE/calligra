@@ -24,7 +24,7 @@
 #include <klocale.h>
 
 static const char* description=I18N_NOOP("KOffice Kivio Application");
-static const char* version="0.1";
+static const char* version="1.1";
 
 KAboutData * newKivioAboutData()
 {

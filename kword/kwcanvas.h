@@ -159,7 +159,7 @@ public:
     void setXimPosition( int x, int y, int w, int h );
 
     QPoint pageCorner();
-    void updateRulerOffsets();
+    void updateRulerOffsets( int cx = -1, int cy = -1 );
 
 protected:
     void applyGrid( KoPoint &p );

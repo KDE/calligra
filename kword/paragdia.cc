@@ -1302,10 +1302,16 @@ void KWParagCounterWidget::numTypeChanged( int nType ) {
 }
 
 void KWParagCounterWidget::display( const KWParagLayout & lay ) {
+    KoParagCounter::Style style =KoParagCounter::STYLE_NONE;
     if ( lay.counter )
+    {
+        style=lay.counter->style();
         m_counter = *lay.counter;
+    }
     else
+    {
         m_counter = KoParagCounter();
+    }
     preview->setCounter( m_counter );
     preview->setStyle(lay.style);
     styleBuffer = 999;
@@ -1314,9 +1320,9 @@ void KWParagCounterWidget::display( const KWParagLayout & lay ) {
     numTypeChanged( m_counter.numbering() );
 
     unsigned int i;
-    for (i=0; stylesList.count() > i && stylesList.at(i)->style() != m_counter.style(); i++);
-    lstStyle->setCurrentItem(i);
 
+    for (i=0; stylesList.count() > i && stylesList.at(i)->style() != style/*m_counter.style()*/; i++);
+    lstStyle->setCurrentItem(i);
     bCustom->setText( m_counter.customBulletCharacter() );
     if ( !m_counter.customBulletFont().isEmpty() )
         bCustom->setFont( QFont( m_counter.customBulletFont() ) );

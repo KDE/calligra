@@ -69,6 +69,11 @@ int QTextCursor::x() const
 {
     QTextStringChar *c = string->at( idx );
     int curx = c->x;
+    if ( !c->rightToLeft &&
+         c->c.isSpace() &&
+         idx > 0 &&
+         ( string->alignment() & Qt3::AlignJustify ) == Qt3::AlignJustify )
+        curx = string->at( idx - 1 )->x + string->string()->width( idx - 1 );
     if ( c->rightToLeft )
         curx += string->string()->width( idx );
     return curx;
