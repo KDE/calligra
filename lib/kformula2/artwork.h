@@ -24,9 +24,9 @@
 #include <qpoint.h>
 #include <qsize.h>
 
+#include "contextstyle.h"
 #include "formuladefs.h"
 
-class ContextStyle;
 class QPainter;
 
 
@@ -40,8 +40,11 @@ public:
     ~Artwork() {}
     
     void calcSizes(const ContextStyle& style, int parentSize);
+    void calcSizes(const ContextStyle& style, ContextStyle::TextStyle tstyle);
     void draw(QPainter& painter, const QRect& r, const ContextStyle& style,
               int parentSize, const QPoint& origin);
+    void draw(QPainter& painter, const QRect& r, const ContextStyle& style,
+              ContextStyle::TextStyle tstyle, const QPoint& parentOrigin);
     
     int getWidth() const { return size.width(); }
     int getHeight() const { return size.height(); }
@@ -49,17 +52,14 @@ public:
     void setWidth(int width) { size.setWidth(width); }
     void setHeight(int height) { size.setHeight(height); }
     
+    int getBaseline() const { return baseline; }
+    void setBaseline(int line) { baseline = line; }
+
     int getX() const { return point.x(); }
     int getY() const { return point.y(); }
     
     void setX(int x) { point.setX(x); }
     void setY(int y) { point.setY(y); }
-
-    /**
-     * Multiplies width and height with the factor.
-     */
-    void scale(double factor);
-
 
     SymbolType getType() const { return type; }
     void setType(SymbolType t) { type = t; }
@@ -109,6 +109,7 @@ private:
      * Used if we are a character.
      */
     int fontSize;
+    int baseline;
     
     SymbolType type;
 

@@ -39,7 +39,7 @@
 using namespace std;
 
 SequenceElement::SequenceElement(BasicElement* parent)
-        : BasicElement(parent), parseTree(0)
+        : BasicElement(parent), parseTree(0), textSequence(true)
 {
     children.setAutoDelete(true);
 }
@@ -868,10 +868,18 @@ void SequenceElement::parse()
 {
     delete parseTree;
 
-    // Those types are gone. Make sure they won't
-    // be used.
-    for (uint i = 0; i < children.count(); i++) {
-        children.at(i)->setElementType(0);
+    textSequence = true;
+    for (BasicElement* element = children.first();
+         element != 0;
+         element = children.next()) {
+
+        // Those types are gone. Make sure they won't
+        // be used.
+        element->setElementType(0);
+        
+        if (element->getCharacter() == QChar::null) {
+            textSequence = false;
+        }
     }
 
     const SymbolTable& symbols = formula()->getSymbolTable();

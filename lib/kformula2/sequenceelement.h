@@ -38,6 +38,11 @@ public:
     ~SequenceElement();
 
     /**
+     * @returns true if the sequence contains only text.
+     */
+    bool isTextOnly() const { return textSequence; }
+    
+    /**
      * Sets the cursor and returns the element the point is in.
      * The handled flag shows whether the cursor has been set.
      * This is needed because only the innermost matching element
@@ -317,6 +322,10 @@ private:
      */
     ElementType* parseTree;
 
+    /**
+     * true if the sequence contains only text
+     */
+    bool textSequence;
 };
 
 #endif // SEQUENCEELEMENT_H

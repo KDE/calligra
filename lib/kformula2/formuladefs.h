@@ -42,8 +42,7 @@ enum SymbolType {
     Empty = 1000,
     Integral,
     Sum,
-    Product,
-    Arrow
+    Product
 };
 
 

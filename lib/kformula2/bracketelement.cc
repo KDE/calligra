@@ -84,27 +84,45 @@ BasicElement* BracketElement::goToPos(FormulaCursor* cursor, bool& handled,
 void BracketElement::calcSizes(const ContextStyle& style, ContextStyle::TextStyle tstyle, ContextStyle::IndexStyle istyle)
 {
     content->calcSizes(style, tstyle, istyle);
-    int contentHeight = 2 * QMAX(content->getMidline(),
-                                 content->getHeight() - content->getMidline());
 
-    left->calcSizes(style, contentHeight+2);
-    right->calcSizes(style, contentHeight+2);
+    if (content->isTextOnly()) {
+        left->calcSizes(style, tstyle);
+        right->calcSizes(style, tstyle);
+
+        setBaseline(QMAX(content->getBaseline(),
+                         QMAX(left->getBaseline(), right->getBaseline())));
+        
+        content->setY(getBaseline() - content->getBaseline());
+        left   ->setY(getBaseline() - left   ->getBaseline());
+        right  ->setY(getBaseline() - right  ->getBaseline());
+        
+        setMidline(content->getY() + content->getMidline());
+        setHeight(QMAX(content->getY() + content->getHeight(),
+                       QMAX(left ->getY() + left ->getHeight(),
+                            right->getY() + right->getHeight())));
+    }
+    else {
+        int contentHeight = 2 * QMAX(content->getMidline(),
+                                     content->getHeight() - content->getMidline());
+        left->calcSizes(style, contentHeight);
+        right->calcSizes(style, contentHeight);
+
+        // height
+        setHeight(QMAX(contentHeight,
+                       QMAX(left->getHeight(), right->getHeight())));
+        setMidline(getHeight() / 2);
+
+        left   ->setY((getHeight() - left   ->getHeight())/2);
+        right  ->setY((getHeight() - right  ->getHeight())/2);
+        
+        content->setY(getMidline() - content->getMidline());
+        calcBaseline();
+    }
 
     // width
     setWidth(left->getWidth() + content->getWidth() + right->getWidth());
     content->setX(left->getWidth());
     right  ->setX(left->getWidth()+content->getWidth());
-
-    // height
-    setHeight(QMAX(contentHeight,
-                   QMAX(left->getHeight(), right->getHeight())));
-    setMidline(getHeight() / 2);
-
-    left   ->setY((getHeight() - left   ->getHeight())/2);
-    right  ->setY((getHeight() - right  ->getHeight())/2);
-
-    content->setY(getMidline() - content->getMidline());
-    calcBaseline();
 }
 
 
@@ -123,12 +141,18 @@ void BracketElement::draw(QPainter& painter, const QRect& r,
     if (!QRect(myPos, getSize()).intersects(r))
         return;
 
-    int contentHeight = 2 * QMAX(content->getMidline(),
-                                 content->getHeight() - content->getMidline());
-
-    left->draw(painter, r, style, contentHeight+2, myPos);
     content->draw(painter, r, style, tstyle, istyle, myPos);
-    right->draw(painter, r, style, contentHeight+2, myPos);
+    
+    if (content->isTextOnly()) {
+        left->draw(painter, r, style, tstyle, myPos);
+        right->draw(painter, r, style, tstyle, myPos);
+    }
+    else {
+        int contentHeight = 2 * QMAX(content->getMidline(),
+                                     content->getHeight() - content->getMidline());
+        left->draw(painter, r, style, contentHeight, myPos);
+        right->draw(painter, r, style, contentHeight, myPos);
+    }
 }
 
 

@@ -69,17 +69,6 @@ Artwork::Artwork(SymbolType t)
 {
 }
 
-/**
- * Multiplies width and height with the factor.
- */
-void Artwork::scale(double factor)
-{
-    double width = getWidth()*factor;
-    double height = getHeight()*factor;
-    setWidth((int)width);
-    setHeight((int)height);
-}
-
 
 void Artwork::calcCharSize(const ContextStyle& style, int height, char ch)
 {
@@ -91,6 +80,7 @@ void Artwork::calcCharSize(const ContextStyle& style, int height, char ch)
     QRect bound = fm.boundingRect(ch);
     setWidth(bound.width());
     setHeight(bound.height());
+    setBaseline(-bound.top());
 }
 
 bool Artwork::doSimpleRoundBracket(const ContextStyle& style, int height)
@@ -192,11 +182,58 @@ void Artwork::calcSizes(const ContextStyle& style, int parentSize)
     case Product:
         calcCharSize(style, parentSize, static_cast<char>(213));
         break;
-    case Arrow:
-        setWidth(2000);
+    }
+}
+
+
+void Artwork::calcSizes(const ContextStyle& style,
+                        ContextStyle::TextStyle tstyle)
+{
+    int mySize = style.getAdjustedSize( tstyle );
+    switch (type) {
+    case LeftSquareBracket:
+        calcCharSize(style, mySize, '[');
+        break;
+    case RightSquareBracket:
+        calcCharSize(style, mySize, ']');
+        break;
+    case LineBracket:
+        calcCharSize(style, mySize, '|');
+        break;
+    case SlashBracket:
+        calcCharSize(style, mySize, '/');
+        break;
+    case BackSlashBracket:
+        calcCharSize(style, mySize, '\\');
+        break;
+    case LeftCornerBracket:
+        calcCharSize(style, mySize, static_cast<char>(183));
+        break;
+    case RightCornerBracket:
+        calcCharSize(style, mySize, static_cast<char>(210));
+        break;
+    case LeftRoundBracket:
+        calcCharSize(style, mySize, '(');
+        break;
+    case RightRoundBracket:
+        calcCharSize(style, mySize, ')');
+        break;
+    case Empty:
+        calcCharSize(style, mySize, ' ');
+        break;
+    case LeftCurlyBracket:
+        calcCharSize(style, mySize, '{');
+        break;
+    case RightCurlyBracket:
+        calcCharSize(style, mySize, '}');
+        break;
+    case Integral:
+    case Sum:
+    case Product:
         break;
     }
 }
+
 
 void Artwork::draw(QPainter& painter, const QRect& r, const ContextStyle& style,
                    int parentSize, const QPoint& origin)
@@ -288,15 +325,66 @@ void Artwork::draw(QPainter& painter, const QRect& r, const ContextStyle& style,
     case Product:
         drawCharacter(painter, style, myX, myY, static_cast<char>(213));
         break;
-    case Arrow:
-        drawArrow(painter, myX, myY+getHeight()/2, getHeight());
-        break;
     }
 
     // debug
     //painter.setBrush(Qt::NoBrush);
     //painter.setPen(Qt::green);
     //painter.drawRect(myX, myY, getWidth(), getHeight());
+}
+
+
+void Artwork::draw(QPainter& painter, const QRect& r, const ContextStyle& style,
+                   ContextStyle::TextStyle tstyle, const QPoint& parentOrigin)
+{
+    int myX = parentOrigin.x() + getX();
+    int myY = parentOrigin.y() + getY();
+    if (!QRect(myX, myY, getWidth(), getHeight()).intersects(r))
+        return;
+
+    painter.setPen(style.getDefaultColor());
+
+    switch (type) {
+    case LeftSquareBracket:
+        drawCharacter(painter, style, myX, myY, '[');
+        break;
+    case RightSquareBracket:
+        drawCharacter(painter, style, myX, myY, ']');
+        break;
+    case LeftCurlyBracket:
+        drawCharacter(painter, style, myX, myY, '{');
+        break;
+    case RightCurlyBracket:
+        drawCharacter(painter, style, myX, myY, '}');
+        break;
+    case LineBracket:
+        drawCharacter(painter, style, myX, myY, '|');
+        break;
+    case SlashBracket:
+        drawCharacter(painter, style, myX, myY, '/');
+        break;
+    case BackSlashBracket:
+        drawCharacter(painter, style, myX, myY, '\\');
+        break;
+    case LeftCornerBracket:
+        drawCharacter(painter, style, myX, myY, static_cast<char>(183));
+        break;
+    case RightCornerBracket:
+        drawCharacter(painter, style, myX, myY, static_cast<char>(210));
+        break;
+    case LeftRoundBracket:
+        drawCharacter(painter, style, myX, myY, '(');
+        break;
+    case RightRoundBracket:
+        drawCharacter(painter, style, myX, myY, ')');
+        break;
+    case Empty:
+        break;
+    case Integral:
+    case Sum:
+    case Product:
+        break;
+    }
 }
 
 

@@ -276,11 +276,44 @@ void IndexElement::calcSizes(const ContextStyle& contextStyle,  ContextStyle::Te
     width += QMAX(urWidth, lrWidth);
 
     // calculate the y offsets
-    // the upper half
-    int ulOffset = (ulHeight-ulMidline) < content->getMidline() ? ulMidline : ulHeight-content->getMidline();
-    int urOffset = (urHeight-urMidline) < content->getMidline() ? urMidline : urHeight-content->getMidline();
+    int ulOffset = 0;
+    int urOffset = 0;
+    int llOffset = 0;
+    int lrOffset = 0;
+    if (content->isTextOnly()) {
+        int mySize = contextStyle.getAdjustedSize( tstyle );
+        contextStyle.getDefaultFont();
+        QFont font;
+        font.setPointSize(mySize);
+
+        QFontMetrics fm(font);
+        QRect bound = fm.boundingRect('x');
+
+        //setWidth(fm.width(character) + spaceBefore + spaceAfter);
+        //exHeight = bound.height();
+        int exBaseline = -bound.top();
+        //setMidline(getBaseline() - fm.strikeOutPos());
+
+        // the upper half
+        ulOffset = ulHeight + exBaseline - content->getBaseline();
+        urOffset = urHeight + exBaseline - content->getBaseline();
+
+        // the lower half
+        llOffset = lrOffset = content->getBaseline();
+    }
+    else {
+        
+        // the upper half
+        ulOffset = QMAX(ulMidline, ulHeight-content->getMidline());
+        urOffset = QMAX(urMidline, urHeight-content->getMidline());
+
+        // the lower half
+        llOffset = llMidline < (content->getHeight() - content->getMidline()) ? (content->getHeight() - llMidline) : content->getHeight() - content->getMidline();
+        lrOffset = lrMidline < (content->getHeight() - content->getMidline()) ? (content->getHeight() - lrMidline) : content->getHeight() - content->getMidline();
+    }
     int height = QMAX(umHeight, QMAX(ulOffset, urOffset));
 
+    // the upper half
     content->setY(height);
     toMidline += height;
     if (hasUpperLeft()) {
@@ -293,8 +326,7 @@ void IndexElement::calcSizes(const ContextStyle& contextStyle,  ContextStyle::Te
         upperRight->setY(height-urOffset);
     }
 
-    int llOffset = llMidline < (content->getHeight() - content->getMidline()) ? (content->getHeight() - llMidline) : content->getHeight() - content->getMidline();
-    int lrOffset = lrMidline < (content->getHeight() - content->getMidline()) ? (content->getHeight() - lrMidline) : content->getHeight() - content->getMidline();
+    // the lower half
     if (hasLowerLeft()) {
         lowerLeft->setY(height+llOffset);
     }
@@ -304,13 +336,20 @@ void IndexElement::calcSizes(const ContextStyle& contextStyle,  ContextStyle::Te
     if (hasLowerRight()) {
         lowerRight->setY(height+lrOffset);
     }
+
     fromMidline += QMAX(QMAX(llHeight+llOffset, lrHeight+lrOffset) - content->getHeight(), lmHeight);
 
     // set the result
     setWidth(width);
     setHeight(toMidline+fromMidline);
-    setMidline(toMidline);
-    calcBaseline();
+    if (content->isTextOnly()) {
+        setBaseline(content->getY() + content->getBaseline());
+        setMidline(content->getY() + content->getMidline());
+    }
+    else {
+        setMidline(toMidline);
+        calcBaseline();
+    }
 }
 
 /**
@@ -496,11 +535,11 @@ void IndexElement::moveRight(FormulaCursor* cursor, BasicElement* from)
                 upperMiddle->moveRight(cursor, this);
                 return;
             }
-            else if ((fromPos == lowerMiddlePos) && hasLowerLeft()) {
+            else if ((fromPos == lowerMiddlePos) && hasLowerRight()) {
                 lowerRight->moveRight(cursor, this);
                 return;
             }
-            else if ((fromPos == upperMiddlePos) && hasUpperLeft()) {
+            else if ((fromPos == upperMiddlePos) && hasUpperRight()) {
                 upperRight->moveRight(cursor, this);
                 return;
             }

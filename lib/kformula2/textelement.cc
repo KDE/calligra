@@ -100,10 +100,6 @@ void TextElement::calcSizes(const ContextStyle& context, ContextStyle::TextStyle
     setHeight(bound.height());
     setBaseline(-bound.top());
 
-    // Or this way. But this doesn't seem to look better...
-    //setHeight(fm.height());
-    //setBaseline(fm.ascent()+1);
-
     setMidline(getBaseline() - fm.strikeOutPos());
 }
 
