@@ -385,6 +385,8 @@ DCOPObject* KPresenterView::dcopObject()
 /*======================= destructor ============================*/
 KPresenterView::~KPresenterView()
 {
+    delete m_findReplace;
+    m_findReplace = 0L;
     if(sidebar) {
         KConfig *config=KGlobal::config();
         config->setGroup("Global");
@@ -2604,7 +2606,9 @@ void KPresenterView::setupActions()
                                      this, SLOT( editDelPage() ),
                                      actionCollection(), "edit_delpage" );
 
-    actionEditSearch=KStdAction::find( this, SLOT( editFind() ), actionCollection(), "edit_find" );
+    actionEditFind=KStdAction::find( this, SLOT( editFind() ), actionCollection(), "edit_find" );
+    actionEditFindNext = KStdAction::findNext( this, SLOT( editFindNext() ), actionCollection(), "edit_findnext" );
+    actionEditFindPrevious = KStdAction::findPrev( this, SLOT( editFindPrevious() ), actionCollection(), "edit_findprevious" );
     actionEditReplace=KStdAction::replace( this, SLOT( editReplace() ), actionCollection(), "edit_replace" );
 
     // ---------------- View actions
@@ -2655,13 +2659,13 @@ void KPresenterView::setupActions()
                                     this, SLOT( insertPage() ),
                                     actionCollection(), "insert_page" );
 
-    actionInsertPicture = new KAction( i18n( "P&icture..." ), "frame_image", Key_F3,
+    actionInsertPicture = new KAction( i18n( "P&icture..." ), "frame_image", SHIFT+Key_F5,
                                        this, SLOT( insertPicture() ),
                                        actionCollection(), "insert_picture" );
 
     // ----------------- tools actions
 
-    actionToolsMouse = new KToggleAction( i18n( "&Mouse" ), "frame_edit", Key_F5,
+    actionToolsMouse = new KToggleAction( i18n( "&Mouse" ), "frame_edit", 0,
                                           this, SLOT( toolsMouse() ),
                                           actionCollection(), "tools_mouse" );
     actionToolsMouse->setExclusiveGroup( "tools" );
@@ -2712,7 +2716,7 @@ void KPresenterView::setupActions()
                                              actionCollection(), "tools_diagramm" );
     actionToolsDiagramm->setExclusiveGroup( "tools" );
 
-    actionToolsTable = new KToggleAction( i18n( "Ta&ble"), "frame_spreadsheet", 0,
+    actionToolsTable = new KToggleAction( i18n( "Ta&ble"), "frame_spreadsheet", Key_F5 /*same as kword*/,
                                           this, SLOT( toolsTable() ),
                                           actionCollection(), "tools_table" );
     actionToolsTable->setExclusiveGroup( "tools" );
@@ -4212,7 +4216,7 @@ void KPresenterView::updateReadWrite( bool readwrite )
     {
         refreshPageButton();
         actionViewZoom->setEnabled( true );
-        actionEditSearch->setEnabled( true );
+        actionEditFind->setEnabled( true );
         actionEditSelectAll->setEnabled( true );
         actionEditDeSelectAll->setEnabled( true );
     }
@@ -6028,13 +6032,6 @@ void KPresenterView::changeCaseOfText()
 
 void KPresenterView::editFind()
 {
-    // Already a find or replace running ?
-    if ( m_findReplace )
-    {
-        m_findReplace->setActiveWindow();
-        return;
-    }
-
     if (!m_searchEntry)
         m_searchEntry = new KoSearchContext();
     KPTextView * edit = m_canvas->currentTextObjectView();
@@ -6043,30 +6040,26 @@ void KPresenterView::editFind()
     m_switchPage=m_pKPresenterDoc->pageList().findRef(m_canvas->activePage());
 
     //add sticky obj at first page
-    QPtrList<KoTextObject> list=m_canvas->activePage()->objectText(m_canvas->activePage()->objectList());
-    QPtrList<KoTextObject> list2=stickyPage()->objectText(stickyPage()->objectList());
+    QValueList<KoTextObject *> list;
+    QPtrList<KoTextObject> list2 = m_canvas->activePage()->objectText(m_canvas->activePage()->objectList());
     QPtrListIterator<KoTextObject> it( list2 );
     for ( ; it.current() ; ++it )
-    {
         list.append(it.current());
-    }
+    list2 = stickyPage()->objectText(stickyPage()->objectList());
+    QPtrListIterator<KoTextObject> it2( list2 );
+    for ( ; it2.current() ; ++it2 )
+        list.append(it2.current());
 
     if ( dialog.exec() == QDialog::Accepted )
     {
-        m_findReplace = new KPrFindReplace( m_canvas, &dialog,edit ,list);
-        doFindReplace();
+        delete m_findReplace;
+        m_findReplace = new KPrFindReplace( m_canvas, &dialog, list, edit );
+        editFindNext();
     }
 }
 
 void KPresenterView::editReplace()
 {
-    // Already a find or replace running ?
-    if ( m_findReplace )
-    {
-        m_findReplace->setActiveWindow();
-        return;
-    }
-
     if (!m_searchEntry)
         m_searchEntry = new KoSearchContext();
     if (!m_replaceEntry)
@@ -6076,46 +6069,54 @@ void KPresenterView::editReplace()
     bool hasSelection=edit && (edit->kpTextObject())->textObject()->hasSelection();
     KoReplaceDia dialog( m_canvas, "replace", m_searchEntry, m_replaceEntry,hasSelection );
     //add sticky text object at first page
-    QPtrList<KoTextObject> list=m_canvas->activePage()->objectText(m_canvas->activePage()->objectList());
-    QPtrList<KoTextObject> list2=stickyPage()->objectText(stickyPage()->objectList());
-
+    QValueList<KoTextObject *> list;
+    QPtrList<KoTextObject> list2=m_canvas->activePage()->objectText(m_canvas->activePage()->objectList());
     QPtrListIterator<KoTextObject> it( list2 );
     for ( ; it.current() ; ++it )
-    {
         list.append(it.current());
-    }
+    list2=stickyPage()->objectText(stickyPage()->objectList());
 
-    if( list.count()==0)
+    QPtrListIterator<KoTextObject> it2( list2 );
+    for ( ; it2.current() ; ++it2 )
+        list.append(it2.current());
+
+    if( list.isEmpty() )
     {
         KMessageBox::sorry( this, i18n( "There is no text object!" ) );
         return;
     }
-    m_switchPage=m_pKPresenterDoc->pageList().findRef(m_canvas->activePage());
+    m_switchPage = m_pKPresenterDoc->pageList().findRef(m_canvas->activePage());
     if ( dialog.exec() == QDialog::Accepted )
     {
         kdDebug(33001) << "KPresenterView::editReplace" << endl;
-        m_findReplace = new KPrFindReplace( m_canvas, &dialog,edit ,list);
-        doFindReplace();
+        delete m_findReplace;
+        m_findReplace = new KPrFindReplace( m_canvas, &dialog, list, edit);
+        editFindNext();
     }
 }
 
-void KPresenterView::doFindReplace()
+void KPresenterView::editFindNext()
 {
-    KPrFindReplace* findReplace = m_findReplace; // keep a copy. "this" might be deleted before we exit this method
-    m_switchPage=m_pKPresenterDoc->pageList().findRef(m_canvas->activePage());
-    m_initSwitchPage=m_switchPage;
-    bool ret = findReplace->proceed();
-
-    while( ret && switchInOtherPage(i18n( "Do you want to search in new page?")) )
+    m_switchPage = m_pKPresenterDoc->pageList().findRef(m_canvas->activePage());
+    m_initSwitchPage = m_switchPage;
+    bool ret = m_findReplace->findNext();
+    if ( !ret ) // done?
     {
-        m_findReplace->changeListObject(m_canvas->activePage()->objectText(m_canvas->activePage()->objectList()));
-        ret = findReplace->proceed();
+        while ( !ret && switchInOtherPage( i18n( "Do you want to search in new page?" ) ) )
+        {
+            // Yes, this sucks a bit. But QValueList is so much better... (see kotextiterator.h)
+            // Maybe port all the code using objectText to QValueList to avoid this copying?
+            QValueList<KoTextObject *> list;
+            QPtrList<KoTextObject> list2=m_canvas->activePage()->objectText(m_canvas->activePage()->objectList());
+            QPtrListIterator<KoTextObject> it( list2 );
+            for ( ; it.current() ; ++it )
+                list.append(it.current());
+            m_findReplace->changeListObject( list );
+            ret = m_findReplace->findNext();
+        }
     }
     m_switchPage=-1;
     m_initSwitchPage=-1;
-    if ( !findReplace->aborted() ) // Only if we still exist....
-        m_findReplace = 0L;
-    delete findReplace;
 }
 
 void KPresenterView::refreshAllVariable()
@@ -7031,7 +7032,7 @@ void KPresenterView::slotObjectEditChanged()
     actionFormatStyleMenu->setEnabled( isText );
     actionFormatStyle->setEnabled(isText);
     state=m_canvas->oneObjectTextExist();
-    actionEditSearch->setEnabled(state);
+    actionEditFind->setEnabled(state);
     actionEditReplace->setEnabled(state);
 
     slotUpdateRuler();

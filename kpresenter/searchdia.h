@@ -43,10 +43,10 @@ class KPrFindReplace : public KoFindReplace
 {
     Q_OBJECT
 public:
-    KPrFindReplace( KPrCanvas * canvas, KoSearchDia * dialog , KPTextView *textView ,const QPtrList<KoTextObject> & lstObject);
-    KPrFindReplace( KPrCanvas * canvas, KoReplaceDia * dialog, KPTextView *textView,const QPtrList<KoTextObject> & lstObject);
+    KPrFindReplace( KPrCanvas * canvas, KoSearchDia * dialog, const QValueList<KoTextObject *> & lstObjects, KPTextView *textView );
+    KPrFindReplace( KPrCanvas * canvas, KoReplaceDia * dialog, const QValueList<KoTextObject *> & lstObjects, KPTextView *textView );
     ~KPrFindReplace();
-    
+
     virtual void emitNewCommand(KCommand *);
     virtual void highlightPortion(KoTextParag * parag, int index, int length, KoTextDocument *textdoc);
 

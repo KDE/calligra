@@ -28,16 +28,16 @@
 #include <koSearchDia.h>
 #include "kprtextdocument.h"
 
-KPrFindReplace::KPrFindReplace( KPrCanvas * canvas, KoSearchDia * dialog ,KPTextView *textView ,const QPtrList<KoTextObject> & lstObject)
-    :KoFindReplace( canvas, dialog,textView ,lstObject)
+KPrFindReplace::KPrFindReplace( KPrCanvas * canvas, KoSearchDia * dialog, const QValueList<KoTextObject *> & lstObjects, KPTextView *textView)
+    :KoFindReplace( canvas, dialog, lstObjects, textView )
 {
-    m_canvas= canvas;
+    m_canvas = canvas;
 }
 
-KPrFindReplace::KPrFindReplace( KPrCanvas * canvas, KoReplaceDia * dialog, KPTextView *textView,const QPtrList<KoTextObject> & lstObject)
-    :KoFindReplace( canvas, dialog,textView ,lstObject)
+KPrFindReplace::KPrFindReplace( KPrCanvas * canvas, KoReplaceDia * dialog, const QValueList<KoTextObject *> & lstObjects, KPTextView *textView )
+    :KoFindReplace( canvas, dialog, lstObjects, textView )
 {
-    m_canvas= canvas;
+    m_canvas = canvas;
 }
 
 KPrFindReplace::~KPrFindReplace()

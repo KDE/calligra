@@ -724,7 +724,7 @@ protected:
                              KActionMenu * parentMenu, const QString & menuText );
 
     void showParagraphDialog( int initialPage = -1, double initialTabPos = 0.0 );
-    void doFindReplace();
+    void editFindNext();
 
     void spellAddTextObject();
 
@@ -940,7 +940,9 @@ private:
     KAction *actionScreenLast;
     KAction *actionScreenSkip;
 
-    KAction *actionEditSearch;
+    KAction *actionEditFind;
+    KAction *actionEditFindNext;
+    KAction *actionEditFindPrevious;
     KAction *actionEditReplace;
     KColorAction *actionScreenPenColor;
     KSelectAction *actionScreenPenWidth;
