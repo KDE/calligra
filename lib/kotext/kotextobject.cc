@@ -1528,8 +1528,13 @@ void KoTextObject::ensureFormatted( KoTextParag * parag, bool emitAfterFormattin
 {
     if ( !textdoc->lastParag() )
         return; // safety test
+    //kdDebug(32500) << name() << " ensureFormatted " << parag->paragId() << endl;
+    if ( !parag->isValid() && m_lastFormatted == 0 )
+        m_lastFormatted = parag; // bootstrap
+
     while ( !parag->isValid() )
     {
+        Q_ASSERT( m_lastFormatted );
         // The paragid diff is "a good guess". The >=1 is a safety measure ;)
         bool ret = formatMore( QMAX( 1, parag->paragId() - m_lastFormatted->paragId() ), emitAfterFormatting );
         if ( !ret ) // aborted
@@ -1656,14 +1661,14 @@ bool KoTextObject::formatMore( int count /* = 10 */, bool emitAfterFormatting /*
     {
         formatTimer->start( interval, TRUE );
 #ifdef DEBUG_FORMAT_MORE
-        kdDebug(32500) << "formatMore: will have to format more. formatTimer->start with interval=" << interval << endl;
+        kdDebug(32500) << name() << " formatMore: will have to format more. formatTimer->start with interval=" << interval << endl;
 #endif
     }
     else
     {
         interval = QMAX( 0, interval );
 #ifdef DEBUG_FORMAT_MORE
-        kdDebug(32500) << "formatMore: all formatted interval=" << interval << endl;
+        kdDebug(32500) << name() << " formatMore: all formatted interval=" << interval << endl;
 #endif
 #ifdef TIMING_FORMAT
         //if ( frameSetInfo() == FI_BODY )
