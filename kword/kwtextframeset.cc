@@ -590,6 +590,7 @@ bool KWTextFrameSet::checkVerticalBreak( int & yp, int h, QTextParag * parag, bo
                 else
                     ls->y += dy;
             }
+            parag->setMovedDown( true );
             parag->setHeight( h + dy );
 #ifdef DEBUG_FLOW
             kdDebug(32002) << "Paragraph height set to " << h+dy << endl;
