@@ -47,6 +47,7 @@ public slots:
 	void slotItemSelected( KoIconItem * );
 
 private:
+	virtual void mouseReleaseEvent( QMouseEvent *e );
 	QWidget *mainWidget;
 	QTabWidget *mTabWidget;
 	QWidget *mRGBWidget;
