@@ -120,6 +120,12 @@ KoFilter::ConversionStatus HTMLExport::convert( const QCString& from, const QCSt
     else
       title = file;
 
+    // Now get hold of the table to export
+    // (Hey, this could be part of the dialog too, choosing which table to export....
+    //  It's great to have parametrable filters... IIRC even MSOffice doesn't have that)
+    // Ok, for now we'll use the first table - my document has only one table anyway ;-)))
+    KSpreadTable * table = ksdoc->map()->firstTable();
+
     // header
     str = "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01 Transitional//EN\" ";
     str += " \"http://www.w3.org/TR/html4/loose.dtd\"> \n";
@@ -133,13 +139,8 @@ KoFilter::ConversionStatus HTMLExport::convert( const QCString& from, const QCSt
     // I have no idea where to get the document name from :-(  table->tableName()
     str += "<title>" + title + "</title>\n";
     str += "</head>\n";
-    str += "<body bgcolor=\"#FFFFFF\">\n";
-
-    // Now get hold of the table to export
-    // (Hey, this could be part of the dialog too, choosing which table to export....
-    //  It's great to have parametrable filters... IIRC even MSOffice doesn't have that)
-    // Ok, for now we'll use the first table - my document has only one table anyway ;-)))
-    KSpreadTable * table = ksdoc->map()->firstTable();
+    str += QString("<body bgcolor=\"#FFFFFF\" dir=\"%1\">\n").arg(
+        table->isRightToLeft()?"rtl":"ltr");
 
     while (table != 0)
     {
@@ -184,7 +185,8 @@ KoFilter::ConversionStatus HTMLExport::convert( const QCString& from, const QCSt
       int step=iMaxRow > 50 ? iMaxRow/50 : 1;
       int i=1;
 
-      str += "<" + html_table_tag + html_table_options + ">\n";
+      str += "<" + html_table_tag + html_table_options +
+       QString("dir=\"%1\">\n").arg(table->isRightToLeft()?"rtl":"ltr");
 
       unsigned int nonempty_cells_prev=0;
 
@@ -232,6 +234,8 @@ KoFilter::ConversionStatus HTMLExport::convert( const QCString& from, const QCSt
                  + cell->postfix(currentrow, currentcolumn);
 #endif
             line += "  <" + html_cell_tag + html_cell_options;
+	    if (text.isRightToLeft() != table->isRightToLeft())
+	    	line += QString(" dir=\"%1\" ").arg(text.isRightToLeft()?"rtl":"ltr");
             if (bgcolor.isValid() && bgcolor.name()!="#ffffff") // change color only for non-white cells
               line += " bgcolor=\"" + bgcolor.name() + "\"";
 
