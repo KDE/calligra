@@ -197,10 +197,10 @@ bool KPObject::saveOasis( KoXmlWriter &xmlWriter )
 void KPObject::saveOasisPosObject( KoXmlWriter &xmlWriter )
 {
     //save all into pt
-    xmlWriter.addAttribute( "svg:x", QString( "%1pt" ).arg(orig.x()) );
-    xmlWriter.addAttribute( "svg:y", QString( "%1pt" ).arg(orig.y()) );
-    xmlWriter.addAttribute( "svg:width", QString( "%1pt" ).arg(ext.width()) );
-    xmlWriter.addAttribute( "svg:height", QString( "%1pt" ).arg(ext.height()) );
+    xmlWriter.addAttributePt( "svg:x", orig.x() );
+    xmlWriter.addAttribute( "svg:y", orig.y() );
+    xmlWriter.addAttribute( "svg:width", ext.width() );
+    xmlWriter.addAttribute( "svg:height", ext.height() );
 }
 
 void KPObject::loadOasis(const QDomElement &element, KoOasisContext & context, QDomElement *animation)
