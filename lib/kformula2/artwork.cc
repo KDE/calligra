@@ -142,7 +142,7 @@ void Artwork::calcSizes(const ContextStyle& style, int parentSize)
     case Integral:
         //setHeight(parentSize);
         //setWidth(7.0/12/2*parentSize);
-        calcCharSize(style, parentSize, static_cast<char>(218));
+        calcCharSize(style, parentSize, static_cast<char>(242));
         break;
     case Sum:
         calcCharSize(style, parentSize, static_cast<char>(229));
@@ -234,7 +234,7 @@ void Artwork::draw(QPainter& painter, const QRect& r, const ContextStyle& style,
         break;
     case Integral:
         //drawIntegral(painter, style, myX, myY+getHeight()/2, getHeight()/2);
-        drawCharacter(painter, style, myX, myY, static_cast<char>(218));
+        drawCharacter(painter, style, myX, myY, static_cast<char>(242));
         break;
     case Sum:
         drawCharacter(painter, style, myX, myY, static_cast<char>(229));
@@ -279,6 +279,8 @@ void Artwork::drawIntegral(QPainter& painter, const ContextStyle& style, int x, 
 void Artwork::drawCharacter(QPainter& painter, const ContextStyle& style, int x, int y, QChar ch)
 {
     QFont f = style.getSymbolFont();
+    //f.setRawName("-urw-symbol-medium-r-normal-*-*-720-*-*-p-*-adobe-fontspecific");
+
     f.setPointSize(fontSize);
 
     QFontMetrics fm(f);
@@ -317,10 +319,11 @@ void Artwork::calcRoundBracket(const ContextStyle& style, int height)
         charHeight = style.zoomItY(40);
         uppercorner = static_cast<char>(236);
         lowercorner = static_cast<char>(238);
-        //line = static_cast<char>(134);
+        //line = static_cast<char>(234);
     }
     
     QFont f = style.getSymbolFont();
+    //f.setRawName("-urw-symbol-medium-r-normal-*-*-720-*-*-p-*-adobe-fontspecific");
     f.setPointSize(charHeight);
     QFontMetrics fm(f);
     QRect upperBound = fm.boundingRect(uppercorner);
@@ -358,6 +361,7 @@ void Artwork::drawRightRoundBracket(QPainter& p, const ContextStyle& style, int 
 void Artwork::drawLeftSmallRoundBracket(QPainter& p, const ContextStyle& style, int x, int y, int charHeight, bool left)
 {
     QFont f = style.getSymbolFont();
+    //f.setRawName("-urw-symbol-medium-r-normal-*-*-720-*-*-p-*-adobe-fontspecific");
     f.setPointSize(charHeight);
     p.setFont(f);
 
@@ -392,12 +396,13 @@ void Artwork::drawRightSmallRoundBracket(QPainter& p, const ContextStyle& style,
 void Artwork::drawLeftBigRoundBracket(QPainter& p, const ContextStyle& style, int x, int y, int charHeight, int height, bool left)
 {
     QFont f = style.getSymbolFont();
+    //f.setRawName("-urw-symbol-medium-r-normal-*-*-720-*-*-p-*-adobe-fontspecific");
     f.setPointSize(charHeight);
     p.setFont(f);
 
     char uppercorner = static_cast<char>(236);
     char lowercorner = static_cast<char>(238);
-    char line = static_cast<char>(134);
+    char line = static_cast<char>(234);
     
     QFontMetrics fm(p.fontMetrics());
     QRect upperBound = fm.boundingRect(uppercorner);
@@ -453,11 +458,12 @@ void Artwork::calcCurlyBracket(const ContextStyle& style, int height)
         charHeight = style.zoomItY(40);
         uppercorner = static_cast<char>(236);
         lowercorner = static_cast<char>(238);
-        line = static_cast<char>(134);
+        line = static_cast<char>(234);
         middle = static_cast<char>(237);
     }
     
     QFont f = style.getSymbolFont();
+    //f.setRawName("-urw-symbol-medium-r-normal-*-*-720-*-*-p-*-adobe-fontspecific");
     f.setPointSize(charHeight);
     QFontMetrics fm(f);
     QRect upperBound = fm.boundingRect(uppercorner);
@@ -498,6 +504,7 @@ void Artwork::drawRightCurlyBracket(QPainter& p, const ContextStyle& style, int 
 void Artwork::drawLeftSmallCurlyBracket(QPainter& p, const ContextStyle& style, int x, int y, int charHeight, bool left)
 {
     QFont f = style.getSymbolFont();
+    //f.setRawName("-urw-symbol-medium-r-normal-*-*-720-*-*-p-*-adobe-fontspecific");
     f.setPointSize(charHeight);
     p.setFont(f);
     //p.setPen(Qt::black);
@@ -539,13 +546,14 @@ void Artwork::drawRightSmallCurlyBracket(QPainter& p, const ContextStyle& style,
 void Artwork::drawLeftBigCurlyBracket(QPainter& p, const ContextStyle& style, int x, int y, int charHeight, int height, bool left)
 {
     QFont f = style.getSymbolFont();
+    //f.setRawName("-urw-symbol-medium-r-normal-*-*-720-*-*-p-*-adobe-fontspecific");
     f.setPointSize(charHeight);
     p.setFont(f);
     //p.setPen(Qt::black);
 
     char uppercorner = static_cast<char>(236);
     char lowercorner = static_cast<char>(238);
-    char line = static_cast<char>(134);
+    char line = static_cast<char>(234);
     char middle = static_cast<char>(237);
     
     QFontMetrics fm(p.fontMetrics());

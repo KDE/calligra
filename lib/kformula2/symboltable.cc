@@ -28,7 +28,7 @@ SymbolTableEnty::SymbolTableEnty(QString n, QChar ch)
 
 
 SymbolTable::SymbolTable()
-        : greekLetters("abgdezhqiklmnxpvrstufjcywGDQLXPSUFYW")
+        : greekLetters("abgdezhqiklmnxpvrstufjcywGDQLXPSUFYVW")
 {
     entries.setAutoDelete(true);
 
@@ -85,6 +85,7 @@ SymbolTable::SymbolTable()
     addEntry("rho", 'r');
     addEntry("varrho");
     addEntry("sigma", 's');
+    addEntry("varsigma", 'V');
     addEntry("varsigma");
     addEntry("tau", 't');
     addEntry("upsilon", 'u');
@@ -106,17 +107,62 @@ SymbolTable::SymbolTable()
     addEntry("Psi", 'Y');
     addEntry("Omega", 'W');
 
-    addEntry("rarrow", static_cast<char>(174));
-    addEntry("larrow", static_cast<char>(172));
-    addEntry("uarrow", static_cast<char>(173));
-    addEntry("darrow", static_cast<char>(175));
-    addEntry("doublearrow", static_cast<char>(171));
+    addEntry("rightarrow", static_cast<char>(174));
+    addEntry("leftarrow", static_cast<char>(172));
+    addEntry("uparrow", static_cast<char>(173));
+    addEntry("downarrow", static_cast<char>(175));
+    addEntry("leftrightarrow", static_cast<char>(171));
 
+    addEntry("Rightarrow", static_cast<char>(222));
+    addEntry("Leftarrow", static_cast<char>(220));
+    addEntry("Uparrow", static_cast<char>(221));
+    addEntry("Downarrow", static_cast<char>(223));
+    addEntry("Leftrightarrow", static_cast<char>(219));
+
+    // these should be operators
     addEntry("leq", static_cast<char>(163));
     addEntry("geq", static_cast<char>(179));
     addEntry("neq", static_cast<char>(185));
+    addEntry("approx", static_cast<char>(187));
+    addEntry("equiv", static_cast<char>(186));
+    addEntry("cong", '@');
+    addEntry("perp", '^');
+    addEntry("subset", static_cast<char>(204));
+    addEntry("subseteq", static_cast<char>(205));
+    addEntry("supset", static_cast<char>(201));
+    addEntry("supseteq", static_cast<char>(202));
+    addEntry("in", static_cast<char>(206));
+    addEntry("ni", static_cast<char>(39));
+    addEntry("oplus", static_cast<char>(197));
+    addEntry("otimes", static_cast<char>(196));
+    addEntry("cap", static_cast<char>(199));
+    addEntry("cup", static_cast<char>(200));
+    addEntry("div", static_cast<char>(184));
+    addEntry("times", static_cast<char>(180));
+    addEntry("propto", static_cast<char>(181));
+    addEntry("bullet", static_cast<char>(183));
+    addEntry("circ", static_cast<char>(176));
+    addEntry("pm", static_cast<char>(177));
 
-    addEntry("infinit", static_cast<char>(165));
+    addEntry("infty", static_cast<char>(165));
+    addEntry("wp", static_cast<char>(195));
+    addEntry("aleph", static_cast<char>(192));
+    addEntry("Im", static_cast<char>(193));
+    addEntry("Re", static_cast<char>(194));
+    addEntry("ldots", static_cast<char>(188));
+    addEntry("partial", static_cast<char>(182));
+    addEntry("clubsuit", static_cast<char>(167));
+    addEntry("diamondsuit", static_cast<char>(168));
+    addEntry("heartsuit", static_cast<char>(169));
+    addEntry("spadesuit", static_cast<char>(170));
+    addEntry("exists", '$');
+    addEntry("forall", '"');
+    addEntry("angle", static_cast<char>(208));
+    addEntry("nabla", static_cast<char>(209));
+    addEntry("neg", static_cast<char>(216));
+    addEntry("vee", static_cast<char>(218));
+    addEntry("wedge", static_cast<char>(217));
+    addEntry("Diamond", static_cast<char>(224));
 }
 
 
