@@ -1109,15 +1109,15 @@ void OoWriterImport::appendPicture(QDomDocument& doc, QDomElement& formats, cons
     
     kdWarning(30518) << "Picture: " << frameName << " " << href << " (in OoWriterImport::appendPicture)" << endl;
     
-    QString strExtension;
-    const int result=href.findRev(".");
-    if (result>=0)
-    {
-        strExtension=href.mid(result+1); // As we are using KoPicture, the extension should be without the dot.
-    }
     KoPicture picture;
     if ( href[0]=='#' )
     {
+        QString strExtension;
+        const int result=href.findRev(".");
+        if (result>=0)
+        {
+            strExtension=href.mid(result+1); // As we are using KoPicture, the extension should be without the dot.
+        }
         QString filename(href.mid(1));
         KoPictureKey key(filename, QDateTime::currentDateTime(Qt::UTC));
         picture.setKey(key);
@@ -1174,7 +1174,7 @@ void OoWriterImport::appendPicture(QDomDocument& doc, QDomElement& formats, cons
     else
     {
         KURL url;
-        url.setPath(href);
+        url.setPath(href); // ### TODO: is this really right?
         picture.setKeyAndDownloadPicture(url);
     }
     
@@ -1184,7 +1184,7 @@ void OoWriterImport::appendPicture(QDomDocument& doc, QDomElement& formats, cons
     strStoreName="pictures/picture";
     strStoreName+=QString::number(++m_pictureNumber);
     strStoreName+='.';
-    strStoreName+=strExtension;
+    strStoreName+=picture.getExtension();
     
     kdDebug(30518) << "Storage name: " << strStoreName << endl;
     
