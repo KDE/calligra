@@ -553,6 +553,7 @@ public:
     // settings
     KToggleAction* showStatusBar;
     KToggleAction* showTabBar;
+    KToggleAction* showCommentIndicator;
     KAction* preference;
 
     // running calculation
@@ -1177,6 +1178,12 @@ void ViewPrivate::initActions()
       view, SLOT( showTabBar( bool ) ) );
   actions->showTabBar->setToolTip(i18n("Show the tab bar."));
 
+  actions->showCommentIndicator = new KToggleAction( i18n("Show Comment Indicator"), 
+      0, ac, "showCommentIndicator" );
+  QObject::connect( actions->showCommentIndicator, SIGNAL( toggled( bool ) ),
+      view, SLOT( showCommentIndicator( bool ) ) );
+  actions->showCommentIndicator->setToolTip(i18n("Show indicator for cells with comment."));
+
   actions->preference = new KAction( i18n("Configure KSpread..."),"configure",
       0, view, SLOT( preference() ), ac, "preference" );
   actions->preference->setToolTip(i18n("Set various KSpread options."));
@@ -1348,6 +1355,7 @@ void ViewPrivate::adjustActions( bool mode )
 
   actions->showStatusBar->setChecked( doc->showStatusBar() );  
   actions->showTabBar->setChecked( doc->showTabBar() );  
+  actions->showCommentIndicator->setChecked( doc->showCommentIndicator() );  
   
   view->canvasWidget()->gotoLocation( selectionInfo->marker(), activeSheet );
   
@@ -4626,6 +4634,12 @@ void KSpreadView::showStatusBar( bool b )
 void KSpreadView::showTabBar( bool b )
 {
   d->doc->setShowTabBar( b );
+  refreshView();
+}
+
+void KSpreadView::showCommentIndicator( bool b )
+{
+  d->doc->setShowCommentIndicator( b );
   refreshView();
 }
 
