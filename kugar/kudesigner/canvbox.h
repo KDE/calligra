@@ -32,6 +32,8 @@ class CanvasReportFooter;
 class CanvasPageHeader;
 class CanvasPageFooter;
 
+const int HolderSize = 5;
+
 class CanvasBox: public QCanvasRectangle{
 public:
     CanvasBox(int x, int y, int width, int height, QCanvas * canvas):
@@ -49,6 +51,8 @@ public:
     enum ResizeEnum {ResizeNothing=0,ResizeLeft=1,ResizeTop=2,ResizeRight=4,ResizeBottom=8};
     virtual int isInHolder(const QPoint ) {return ResizeNothing;}
     virtual void drawHolders(QPainter &) {}
+
+    virtual void updateGeomProps(){;}
 
     /**
       DEPRECATED: properties format
@@ -88,7 +92,11 @@ public:
     virtual void draw(QPainter &painter);
     virtual int rtti() const { return KuDesignerRttiCanvasBand; }
     virtual QString getXml();
+    virtual int isInHolder(const QPoint );
+    virtual void drawHolders(QPainter &);
+    QRect bottomMiddleResizableRect();
     void arrange(int base, bool destructive = TRUE);
+    virtual void updateGeomProps();
 
     QCanvasItemList items;
 };

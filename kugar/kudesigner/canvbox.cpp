@@ -15,6 +15,7 @@
  *                                                                         *
  ***************************************************************************/
 #include <klocale.h>
+#include <kglobalsettings.h>
 
 #include <qcanvas.h>
 #include <qapplication.h>
@@ -57,6 +58,7 @@ void CanvasBox::draw(QPainter &painter)
 void CanvasSection::draw(QPainter &painter)
 {
     CanvasBox::draw(painter);
+    if (isSelected()) drawHolders(painter);
 }
 
 
@@ -372,6 +374,30 @@ QString CanvasBand::getXml()
     return result;
 }
 
+int CanvasBand::isInHolder(const QPoint p)
+{
+    if (bottomMiddleResizableRect().contains(p)) return (ResizeBottom);
+    return ResizeNothing;
+}
+
+void CanvasBand::drawHolders(QPainter &painter)
+{
+    painter.setPen(QColor(0, 0, 0));
+    painter.setBrush(KGlobalSettings::highlightColor());
+    painter.drawRect(bottomMiddleResizableRect());
+}
+
+QRect CanvasBand::bottomMiddleResizableRect()
+{
+    return QRect((int)(x()+width()/2-HolderSize/2.), (int)(y()+height()-HolderSize), HolderSize, HolderSize);
+}
+
+void CanvasBand::updateGeomProps()
+{
+    props["Height"]->setValue(QString("%1").arg(height()));
+    ((MyCanvas *)canvas())->templ->arrangeSections();
+}
+
 CanvasBand::~CanvasBand()
 {
     for (QCanvasItemList::Iterator it = items.begin(); it != items.end(); ++it)
@@ -381,6 +407,7 @@ CanvasBand::~CanvasBand()
     }
     items.clear();
 }
+
 
 //CanvasReportHeader class
 

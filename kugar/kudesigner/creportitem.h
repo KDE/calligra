@@ -23,8 +23,6 @@
 class QString;
 class QStringList;
 
-const int HolderSize = 5;
-
 class CanvasReportItem: public CanvasBox{
 public:
     CanvasReportItem(int x, int y, int width, int height, QCanvas * canvas):

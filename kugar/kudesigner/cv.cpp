@@ -234,30 +234,40 @@ void ReportCanvas::startMoveOrResizeOrSelectItem(QCanvasItemList &l,
     //allow user to move any item except for page rectangle
     for (QCanvasItemList::Iterator it=l.begin(); it!=l.end(); ++it)
     {
-        if ((*it)->rtti() > 2001)
+        CanvasBox *cb=(CanvasBox*)(*it);
+        if (cb->rtti() >= 1700) //> 2001)
         {
-
-    	    CanvasReportItem *item = (CanvasReportItem *)(*it);
-/*	    if (item->topLeftResizableRect().contains(e->pos()) ||
-	    item->bottomLeftResizableRect().contains(e->pos()) ||
-	    item->topRightResizableRect().contains(e->pos()) ||
-	    item->bottomRightResizableRect().contains(e->pos()))*/
             moving_start = p;
             moving_offsetX=0;
 	    moving_offsetY=0;
-            resizing_type=item->isInHolder(p);
+            resizing_type=cb->isInHolder(p);
             if (resizing_type)
-            {
+            {		
 		kdDebug()<<"A Widget should be resized"<<endl;
                 moving = 0;
-                resizing = item;
+                resizing = cb;
+		if (cb->rtti()>2001)
+		{
+                        CanvasReportItem *item = (CanvasReportItem *)(*it);
+			resizing_constraint.setX(item->section()->x());
+			resizing_constraint.setY(item->section()->y());
+			resizing_constraint.setWidth(item->section()->width());
+			resizing_constraint.setHeight(item->section()->height());
+		}
+		else
+			resizing_constraint=QRect(0,0,1000,1000);
                 return;
             }
             else
             {
-                moving = item;
-                resizing = 0;
-                return;
+		if ((*it)->rtti() >2001)
+		{
+                        CanvasReportItem *item = (CanvasReportItem *)(*it);
+	                moving = item;
+	                resizing = 0;
+	                return;
+		}
+
             }
         }
     }
@@ -446,16 +456,6 @@ void ReportCanvas::contentsMouseMoveEvent(QMouseEvent* e)
     if (resizing)
     {
         QCanvasRectangle *r = (QCanvasRectangle *)resizing;
-//        double w = r->width() + p.x() - moving_start.x();
-//        double h = r->height() + p.y() - moving_start.y();
-/*
-	if (resizing->rtti() !=KuDesignerRttiCanvasLine)
-	{
-		fixMinValues(h,10,moving_offsetY);
-		fixMinValues(w,10,moving_offsetX);
-	} */
-
-
 	double newXPos=r->x();
 	double newYPos=r->y();
 	double h=r->height();
@@ -467,7 +467,7 @@ void ReportCanvas::contentsMouseMoveEvent(QMouseEvent* e)
 	{
 		kdDebug()<<"Resize bottom"<<endl;
 		h = h + p.y() - moving_start.y();
-		fixMaxValues(h,r->y(),resizing->parentSection->y()+resizing->parentSection->height(),moving_offsetY);
+		fixMaxValues(h,r->y(),resizing_constraint.bottom(),moving_offsetY);
 		if(resizing->rtti() != KuDesignerRttiCanvasLine)
 			fixMinValues(h,10,moving_offsetY);
 	}
@@ -476,7 +476,7 @@ void ReportCanvas::contentsMouseMoveEvent(QMouseEvent* e)
 		{
 			kdDebug()<<"Resize top"<<endl;
 			newYPos=r->y()+p.y()-moving_start.y();
-			fixMinValues(newYPos,resizing->parentSection->y(),moving_offsetY);
+			fixMinValues(newYPos,resizing_constraint.top(),moving_offsetY);
 			if(resizing->rtti() != KuDesignerRttiCanvasLine)
 				fixMaxValues(newYPos,10,r->y()+r->height(),moving_offsetY);
 			h=h+(r->y()-newYPos);
@@ -488,7 +488,7 @@ void ReportCanvas::contentsMouseMoveEvent(QMouseEvent* e)
 	{
 		kdDebug()<<"Resize right"<<endl;
         	w = w + p.x() - moving_start.x();
-		fixMaxValues(w,r->x(),resizing->parentSection->x()+resizing->parentSection->width(),moving_offsetX);
+		fixMaxValues(w,r->x(),resizing_constraint.right(),moving_offsetX);
 		if(resizing->rtti() != KuDesignerRttiCanvasLine)
 			fixMinValues(w,10,moving_offsetX);
 
@@ -498,7 +498,7 @@ void ReportCanvas::contentsMouseMoveEvent(QMouseEvent* e)
 		{
 			kdDebug()<<"Resize left"<<endl;
 			newXPos=r->x()+p.x()-moving_start.x();
-			fixMinValues(newXPos,resizing->parentSection->x(),moving_offsetX);
+			fixMinValues(newXPos,resizing_constraint.left(),moving_offsetX);
 			if(resizing->rtti() != KuDesignerRttiCanvasLine)
 				fixMaxValues(newXPos,10,r->x()+r->width(),moving_offsetX);
 			w=w+(r->x()-newXPos);
