@@ -79,6 +79,66 @@ VSegmentTools::linesIntersect(
 	return true;
 }
 
+KoRect
+VSegmentTools::boundingBox( const KoPoint& previous, const VSegment& segment )
+{
+	KoRect rect;
+
+	// first and last knot:
+	if( previous.x() > segment.point( 3 ).x() )
+	{
+		rect.setLeft( segment.point( 3 ).x() );
+		rect.setRight( previous.x() );
+	}
+	else
+	{
+		rect.setLeft( previous.x() );
+		rect.setRight( segment.point( 3 ).x() );
+	}
+
+	if( previous.y() > segment.point( 3 ).y() )
+	{
+		rect.setBottom( previous.y() );
+		rect.setTop( segment.point( 3 ).y() );
+	}
+	else
+	{
+		rect.setBottom( segment.point( 3 ).y() );
+		rect.setTop( previous.y() );
+	}
+
+	// control points:
+	if(
+		segment.type() == VSegment::curve ||
+		segment.type() == VSegment::curve1 )
+	{
+		if( segment.point( 2 ).x() < rect.left() )
+			rect.setLeft( segment.point( 2 ).x() );
+		if( segment.point( 2 ).x() > rect.right() )
+			rect.setRight( segment.point( 2 ).x() );
+		if( segment.point( 2 ).y() < rect.top() )
+			rect.setTop( segment.point( 2 ).y() );
+		if( segment.point( 2 ).y() > rect.bottom() )
+			rect.setBottom( segment.point( 2 ).y() );
+	}
+
+	if(
+		segment.type() == VSegment::curve ||
+		segment.type() == VSegment::curve2 )
+	{
+		if( segment.point( 1 ).x() < rect.left() )
+			rect.setLeft( segment.point( 1 ).x() );
+		if( segment.point( 1 ).x() > rect.right() )
+			rect.setRight( segment.point( 1 ).x() );
+		if( segment.point( 1 ).y() < rect.top() )
+			rect.setTop( segment.point( 1 ).y() );
+		if( segment.point( 1 ).y() > rect.bottom() )
+			rect.setBottom( segment.point( 1 ).y() );
+	}
+
+	return rect;
+}
+
 void
 VSegmentTools::polygonize(
 	const KoPoint& p0,

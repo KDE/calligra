@@ -12,12 +12,16 @@
 
 class QRect;
 
+// calulate bounding box of a vpath.
+
 class VPathBounding : public VSegmentListTraverser
 {
 public:
 	VPathBounding();
 
+	// do the "simple" bounding box calculus:
 	void calculate( QRect& rect, const double zoomFactor, const VSegmentList& list );
+	// check for intersection with zoomFactor-dependent polyline approximation:
 	bool intersects( const QRect& rect, const double zoomFactor, const VSegmentList& list );
 
 	virtual bool begin( const KoPoint& p );

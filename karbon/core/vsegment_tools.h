@@ -6,6 +6,8 @@
 #ifndef __VSEGMENTTOOLS_H__
 #define __VSEGMENTTOOLS_H__
 
+#include <koRect.h>
+
 #include "vsegment.h"
 
 class KoPoint;
@@ -28,6 +30,8 @@ namespace VSegmentTools
 		const KoPoint& a1,
 		const KoPoint& b0,
 		const KoPoint& b1 );
+
+	KoRect boundingBox( const KoPoint& previous, const VSegment& segment );
 
 	void polygonize(
 		const KoPoint& p0,
