@@ -282,10 +282,20 @@ VPath::isClosed() const
 	return m_segmentLists.getLast()->isClosed();
 }
 
-VPath*
-VPath::booleanOp( const VPath* /*path*/, int /*type*/ ) const
+void
+VPath::booleanOp( const VPath& /*path*/, int /*type*/ )
 {
-	return 0L;
+
+}
+
+void
+VPath::insertKnots( uint n )
+{
+	QPtrListIterator<VSegmentList> itr( m_segmentLists );
+	for( ; itr.current(); ++itr )
+	{
+		itr.current()->insertKnots( n );
+	}
 }
 
 void

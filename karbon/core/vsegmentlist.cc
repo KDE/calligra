@@ -322,6 +322,34 @@ VSegmentList::transform( const QWMatrix& m )
 	}
 }
 
+void
+VSegmentList::insertKnots( uint n )
+{
+	if( n == 0 )
+		return;
+
+	// ommit "begin" segment:
+	VSegment* segment = m_first->m_next;
+
+	while( segment )
+	{
+		for( uint i = n; i > 0; --i )
+		{
+			VSegment* s = segment->splitAt( 1.0 / ( i + 1.0 ) );
+
+			VSegment* prev = segment->m_prev;
+			segment->m_prev = s;
+			prev->m_next = s;
+			s->m_prev = prev;
+			s->m_next = segment;
+
+			++m_number;
+		}
+
+		segment = segment->m_next;
+	}
+}
+
 KoRect
 VSegmentList::boundingBox() const
 {

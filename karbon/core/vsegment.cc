@@ -228,6 +228,7 @@ VSegment::splitAt( double t )
 		m_type == segment_end )
 	{
 		segment->m_point[2] =
+			m_prev->m_point[2] +
 			( m_point[2] - m_prev->m_point[2] ) * t;
 
 		segment->m_type = segment_line;
@@ -252,13 +253,13 @@ VSegment::splitAt( double t )
 	segment->m_point[2] =
 		segment->m_point[1] + ( p1 - segment->m_point[1] ) * t;
 
-	// and finally set the new segment types properly:
+	// and finally set the new segment type properly:
 	if( m_type == segment_curve1 )
 	{
 		segment->m_type = segment_curve1;
 		m_type = segment_curve;
 	}
-	else if( m_type == segment_curve2 )
+	else
 		segment->m_type = segment_curve;
 
 	return segment;

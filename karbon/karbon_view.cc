@@ -11,14 +11,15 @@
 #include <kaction.h>
 #include <klocale.h>
 #include <kmessagebox.h>
-#include <kstdaction.h>
+#include <koMainWindow.h>
 #include <kstatusbar.h>
+#include <kstdaction.h>
 
 #include "karbon_factory.h"
 #include "karbon_part.h"
 #include "karbon_view.h"
+#include "karbon_view_iface.h"
 #include "vccmd_text.h"
-#include "vmcmd_group.h"
 #include "vctool_ellipse.h"
 #include "vctool_polygon.h"
 #include "vctool_rectangle.h"
@@ -28,6 +29,7 @@
 #include "vctool_star.h"
 #include "vmcmd_delete.h"
 #include "vmcmd_fill.h"
+#include "vmcmd_group.h"
 #include "vmcmd_stroke.h"
 #include "vmdlg_solidfill.h"
 #include "vmdlg_stroke.h"
@@ -38,15 +40,15 @@
 #include "vmtool_scale.h"
 #include "vmtool_shear.h"
 #include "vpainter.h"
-#include "vqpainter.h"
 #include "vpainterfactory.h"
-#include "vtoolcontainer.h"
+#include "vqpainter.h"
 #include "vtext.h"
+#include "vtoolcontainer.h"
 
 #include <kdebug.h>
-#include <koMainWindow.h>
 
-#include "karbon_view_iface.h"
+// TODO: only for testing:
+#include "vpath.h"
 
 KarbonView::KarbonView( KarbonPart* part, QWidget* parent, const char* name )
 	: KoView( part, parent, name ), m_part( part )
@@ -240,6 +242,21 @@ KarbonView::groupSelection()
 void
 KarbonView::ungroupSelection()
 {
+}
+
+// TODO: remove this one someday:
+void
+KarbonView::dummyForTesting()
+{
+kdDebug() << "KarbonView::dummyForTesting()" << endl;
+	VObjectListIterator itr( m_part->selection() );
+	for ( ; itr.current() ; ++itr )
+	{
+		if( VPath* path = dynamic_cast<VPath*>( itr.current() ) )
+			path->insertKnots( 2 );
+	}
+
+	m_part->repaintAllViews();
 }
 
 void

@@ -73,6 +73,9 @@ public slots:
 	void groupSelection();
 	void ungroupSelection();
 
+	// TODO: remove this someday:
+	void dummyForTesting();
+
 protected slots:
 
 	// object related operations:

@@ -17,74 +17,93 @@
    Boston, MA 02111-1307, USA.
 */
 
-#include "karbon_view_iface.h"
-
-#include "karbon_view.h"
-
 #include <dcopclient.h>
 
+#include "karbon_view.h"
+#include "karbon_view_iface.h"
+
+
 KarbonViewIface::KarbonViewIface( KarbonView *view_ )
-    : KoViewIface( view_ )
+	: KoViewIface( view_ )
 {
-    m_view = view_;
+	m_view = view_;
 }
 
-void KarbonViewIface::editCut()
+void
+KarbonViewIface::editCut()
 {
-  m_view->editCut();
+	m_view->editCut();
 }
 
-void KarbonViewIface::editCopy()
+void
+KarbonViewIface::editCopy()
 {
-  m_view->editCopy();
+	m_view->editCopy();
 }
 
-void KarbonViewIface::editPaste()
+void
+KarbonViewIface::editPaste()
 {
-  m_view->editPaste();
+	m_view->editPaste();
 }
 
-void KarbonViewIface::editSelectAll()
+void
+KarbonViewIface::editSelectAll()
 {
-  m_view->editSelectAll();
+	m_view->editSelectAll();
 }
 
-void KarbonViewIface::editDeselectAll()
+void
+KarbonViewIface::editDeselectAll()
 {
-  m_view->editDeselectAll();
+	m_view->editDeselectAll();
 }
 
-void KarbonViewIface::editDeleteSelection()
+void
+KarbonViewIface::editDeleteSelection()
 {
-  m_view->editDeleteSelection();
+	m_view->editDeleteSelection();
 }
 
-void KarbonViewIface::editPurgeHistory()
+void
+KarbonViewIface::editPurgeHistory()
 {
-  m_view->editPurgeHistory();
+	m_view->editPurgeHistory();
 }
 
-void KarbonViewIface::objectMoveToTop()
+void
+KarbonViewIface::objectMoveToTop()
 {
-  m_view->selectionMoveToTop();
+	m_view->selectionMoveToTop();
 }
 
-void KarbonViewIface::objectMoveToBottom()
+void
+KarbonViewIface::objectMoveToBottom()
 {
-  m_view->selectionMoveToBottom();
+	m_view->selectionMoveToBottom();
 }
 
-double KarbonViewIface::zoomFactor()const
+void
+KarbonViewIface::objectMoveUp()
 {
-    return m_view->zoomFactor();
+	m_view->selectionMoveUp();
 }
 
-void KarbonViewIface::objectMoveUp()
+void
+KarbonViewIface::objectMoveDown()
 {
-    m_view->selectionMoveUp();
+	m_view->selectionMoveDown();
 }
 
-void KarbonViewIface::objectMoveDown()
+double
+KarbonViewIface::zoomFactor() const
 {
-    m_view->selectionMoveDown();
+	return m_view->zoomFactor();
+}
+
+// TODO: remove this someday:
+void
+KarbonViewIface::dummyForTesting()
+{
+	m_view->dummyForTesting();
 }

@@ -71,18 +71,31 @@ public:
 
 	bool curve2To( const KoPoint& p1, const KoPoint& p3 );
 
-	// this is a convenience function to approximate circular arcs with
-	// beziers. input: 2 tangent vectors and a radius (same as in postscript):
-
+	/**
+	 * A convenience function to approximate a circular arc with a
+	 * bezier curve. Input: 2 tangent vectors and a radius (same as in postscript):
+	 */
 	bool arcTo(
 		const KoPoint& p1, const KoPoint& p2, double r );
 
 	void close();
 	bool isClosed() const;
 
-	// perform a boolean operation (unite(0), intersect(1), substract(2), xor(3)):
-	VPath* booleanOp( const VPath* path, int type = 0 ) const;
+	/**
+	 * Performs a boolean operation ( unite = 0, intersect = 1,
+	 * subtract = 2, xor =3 ).
+	 */
+	void booleanOp( const VPath& path, int type = 0 );
 
+	/**
+	 * Inserts n > 0 knots into each segment.
+	 */
+	void insertKnots( uint n );
+
+	/**
+	 * Combines two paths. For example, the letter "O" is a combination
+	 * of a larger and a smaller ellipitical path.
+	 */
 	void combine( const VPath& path );
 	void combineSegmentList( const VSegmentList& segmentList );
 
@@ -92,7 +105,7 @@ public:
 	const VSegment* lastSegment() const
 		{ return m_segmentLists.getLast()->getLast(); }
 
-	// apply an affine map:
+	/// Applies an affine transformation.
 	virtual void transform( const QWMatrix& m );
 
 	virtual KoRect boundingBox( const double zoomFactor ) const;
