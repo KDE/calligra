@@ -171,16 +171,6 @@ VDrawSelection::visitVComposite( VComposite &composite )
 				m_painter->drawNode( jtr.current()->knot(), composite.stroke()->lineWidth() > 5.0 ? 3 : 2 );
 			}
 		}
-
-		// Draw a center node:
-		//if( m_drawCenterNode )
-		//{
-			//m_painter->setRasterOp( Qt::NotROP );
-			m_painter->setPen( Qt::NoPen );
-			m_painter->setBrush( Qt::blue.light() );
-
-			m_painter->drawNode( composite.boundingBox().center(), 3 );
-		//}
 	}
 
 	m_painter->restore();

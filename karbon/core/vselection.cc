@@ -190,6 +190,12 @@ VSelection::draw( VPainter* painter, double zoomFactor ) const
 			}
 		}
 	}
+
+	// Draw a center node:
+	//m_painter->setRasterOp( Qt::NotROP );
+	painter->setPen( Qt::NoPen );
+	painter->setBrush( Qt::blue.light() );
+	painter->drawNode( boundingBox().center(), 3 );
 }
 
 const KoRect&
