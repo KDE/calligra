@@ -1339,4 +1339,4 @@ Reggie 21.6.1999:
 - Use filter manager for Save As too (to be able to export files)
 - Implemented very simple and limited ASCII export
 - fixes for drawing selection
-
+- Cut&Copy&Paste works again

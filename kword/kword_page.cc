@@ -966,7 +966,7 @@ void KWPage::viewportMousePressEvent( QMouseEvent *e )
 /*================================================================*/
 void KWPage::vmrEdit()
 {
-    if ( doc->has_selection() && doc->getSelStart() != doc->getSelEnd() )
+    if ( doc->has_selection() && doc->getSelStart() != doc->getSelEnd() && mouseMoved )
         doc->copySelectedText();
 
     gui->getView()->updateStyle( fc->getParag()->getParagLayout()->getName(), false );
