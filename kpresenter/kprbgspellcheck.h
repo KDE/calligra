@@ -41,6 +41,8 @@ public:
 
     KPTextObject *currentCheckSpellingFrame(){ return m_currentObj;}
 
+    void nextTextFrameSet( KoTextObject *obj );
+
 private:
     KPresenterDoc *m_doc;
     KPTextObject *m_currentObj;

@@ -341,6 +341,10 @@ public:
 
     void startBackgroundSpellCheck();
 
+    void reactivateBgSpellChecking();
+    KPTextObject* nextTextFrameSet(KPTextObject *obj);
+
+
 public slots:
     void movePage( int from, int to );
     void copyPage( int from, int to );

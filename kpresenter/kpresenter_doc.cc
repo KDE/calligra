@@ -2608,14 +2608,10 @@ void KPresenterDoc::saveStyle( KoStyle *sty, QDomElement parentElem )
 
 void KPresenterDoc::startBackgroundSpellCheck()
 {
-    kdDebug() << "KPresenterDoc::startBackgroundSpellCheck"<<backgroundSpellCheckEnabled() << endl;
     if(backgroundSpellCheckEnabled())
     {
-        kdDebug() << "KPresenterDoc::enableBackgroundSpellCheck"<<m_initialActivePage->objectText().count() << endl;
-        //FIXME
         if(m_initialActivePage->objectText().count()>0)
         {
-            kdDebug() << "KPresenterDoc::startBackgroundSpellCheck" << endl;
             m_bgSpellCheck->objectForSpell(m_initialActivePage->textFrameSet (0));
             m_bgSpellCheck->startBackgroundSpellCheck();
         }
@@ -2631,6 +2627,77 @@ void KPresenterDoc::enableBackgroundSpellCheck( bool b )
 bool KPresenterDoc::backgroundSpellCheckEnabled() const
 {
     return m_bgSpellCheck->backgroundSpellCheckEnabled();
+}
+
+
+void KPresenterDoc::reactivateBgSpellChecking()
+{
+
+    QPtrListIterator<KPrPage> it( m_pageList );
+    for ( ; it.current(); ++it )
+    {
+        QPtrListIterator<KPObject> oIt(it.current()->objectList() )  ;
+        for ( ; oIt.current() ; ++oIt )
+        {
+            if(oIt.current()->getType()==OT_TEXT)
+                static_cast<KPTextObject*>( oIt.current() )->textObject()->setBeedSpellCheck(true);
+        }
+    }
+    QPtrListIterator<KPObject> oIt(m_stickyPage->objectList() )  ;
+    for ( ; oIt.current() ; ++oIt )
+    {
+        if(oIt.current()->getType()==OT_TEXT)
+            static_cast<KPTextObject*>( oIt.current() )->textObject()->setBeedSpellCheck(true);
+    }
+
+    startBackgroundSpellCheck();
+}
+
+KPTextObject* KPresenterDoc::nextTextFrameSet(KPTextObject *obj)
+{
+    bool actif=false;
+    if(m_kpresenterView && m_kpresenterView->getCanvas())
+    {
+        KPTextView * edit = m_kpresenterView->getCanvas()->currentTextObjectView();
+        if(edit)
+        {
+            if(edit->kpTextObject()!=obj)
+                obj->textObject()->setBeedSpellCheck(false);
+            else
+                actif=true;
+        }
+    }
+
+    QPtrList<KPTextObject> objlist;
+    QPtrListIterator<KPObject> oIt(m_kpresenterView->getCanvas()->activePage()->objectList() )  ;
+    for ( ; oIt.current() ; ++oIt )
+    {
+        if(oIt.current()->getType()==OT_TEXT)
+            objlist.append(static_cast<KPTextObject*>( oIt.current() ));
+    }
+
+
+    int pos=objlist.findNextRef(obj);
+    if(pos !=-1)
+    {
+        KPTextObject *frm=0L;
+        for ( frm=objlist.at(pos); frm != 0; frm=objlist.next() ){
+            if(frm->textObject()->beedSpellCheck())
+                return frm;
+        }
+    }
+    else
+    {
+        //return to 0
+        KPTextObject *frm=0L;
+        for ( frm=objlist.first(); frm != 0; frm=objlist.next() ){
+            if(frm->textObject()->beedSpellCheck())
+                return frm;
+        }
+    }
+    if(actif)
+        return obj;
+    return 0L;
 }
 
 
