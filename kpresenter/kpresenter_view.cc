@@ -1295,7 +1295,7 @@ void KPresenterView_impl::optionOk()
     optionDia->setRastX(1);
   if (optionDia->getRastY() < 1)
     optionDia->setRastY(1);
-  KPresenterDoc()->setRasters(optionDia->getRastX(),optionDia->getRastY());
+  KPresenterDoc()->setRasters(optionDia->getRastX(),optionDia->getRastY(),false);
 
   KPresenterDoc()->setTxtBackCol(optionDia->getBackCol());
   KPresenterDoc()->setTxtSelCol(optionDia->getSelCol());
@@ -1303,8 +1303,9 @@ void KPresenterView_impl::optionOk()
     optionDia->setRndX(1);
   if (optionDia->getRndY() < 1)
     optionDia->setRndY(1);
-  KPresenterDoc()->setRnds(optionDia->getRndX(),optionDia->getRndY());
+  KPresenterDoc()->setRnds(optionDia->getRndX(),optionDia->getRndY(),false);
 
+  KPresenterDoc()->replaceObjs();
   KPresenterDoc()->repaint(false);
 }
 

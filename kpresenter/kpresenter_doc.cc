@@ -70,8 +70,14 @@ KPresenterDocument_impl::KPresenterDocument_impl()
   _rastY = 10;
   _xRnd = 20;
   _yRnd = 20;
+  _orastX = 10;
+  _orastY = 10;
+  _oxRnd = 20;
+  _oyRnd = 20;
   _txtBackCol = white;
   _txtSelCol = lightGray;
+  _otxtBackCol = white;
+  _otxtSelCol = lightGray;
   _pageLayout.format = PG_SCREEN;
   _pageLayout.orientation = PG_PORTRAIT;
   _pageLayout.width = PG_SCREEN_WIDTH;
@@ -107,8 +113,14 @@ KPresenterDocument_impl::KPresenterDocument_impl(const CORBA::BOA::ReferenceData
   _rastY = 20;
   _xRnd = 20;
   _yRnd = 20;
+  _orastX = 10;
+  _orastY = 10;
+  _oxRnd = 20;
+  _oyRnd = 20;
   _txtBackCol = white;
   _txtSelCol = lightGray;
+  _otxtBackCol = white;
+  _otxtSelCol = lightGray;
   _pageLayout.format = PG_SCREEN;
   _pageLayout.orientation = PG_PORTRAIT;
   _pageLayout.width = PG_SCREEN_WIDTH;
@@ -1235,6 +1247,26 @@ void KPresenterDocument_impl::insertAutoform(QPen pen,QBrush brush,LineEnd lb,Li
   m_bModified = true;
 }
 
+/*======================= set rnds ==============================*/
+void KPresenterDocument_impl::setRnds(unsigned int rx,unsigned int ry,bool _replace = true)
+{
+  _oxRnd = _xRnd;
+  _oyRnd = _yRnd;
+  _xRnd = rx; 
+  _yRnd = ry; 
+  if (_replace) replaceObjs();
+}
+
+/*======================= set rasters ===========================*/
+void KPresenterDocument_impl::setRasters(unsigned int rx,unsigned int ry,bool _replace = true)
+{
+  _orastX = _rastX;
+  _orastY = _rastY;
+  _rastX = rx; 
+  _rastY = ry; 
+  if (_replace) replaceObjs();
+}
+
 /*=================== repaint all views =========================*/
 void KPresenterDocument_impl::repaint(bool erase)
 {
@@ -1466,6 +1498,10 @@ void KPresenterDocument_impl::replaceObjs()
 {
   KPObject *kpobject = 0;
   int ox,oy;
+  QList<KPObject> _objects;
+  QList<QPoint> _diffs;
+  _objects.setAutoDelete(false);
+  _diffs.setAutoDelete(false);
   
   for (int i = 0;i < static_cast<int>(objectList()->count());i++)
     {
@@ -1475,11 +1511,16 @@ void KPresenterDocument_impl::replaceObjs()
 
       ox = (ox / _rastX) * _rastX;
       oy = (oy / _rastY) * _rastY;
-      kpobject->setOrig(ox,oy);
 
-      if (kpobject->getType() == OT_RECT && dynamic_cast<KPRectObject*>(kpobject)->getRectType() == RT_ROUND)
-	dynamic_cast<KPRectObject*>(kpobject)->setRnds(_xRnd,_yRnd);
+      _diffs.append(new QPoint(ox - kpobject->getOrig().x(),oy - kpobject->getOrig().y()));
+      _objects.append(kpobject);
     }
+
+  SetOptionsCmd *setOptionsCmd = new SetOptionsCmd(i18n("Set new options"),_diffs,_objects,_xRnd,_yRnd,_rastX,_rastY,
+						   _oxRnd,_oyRnd,_orastX,_orastY,_txtBackCol,_txtSelCol,_otxtBackCol,
+						   _otxtSelCol,this);
+  _commands.addCommand(setOptionsCmd);
+  setOptionsCmd->execute();
 
   m_bModified = true;
 }

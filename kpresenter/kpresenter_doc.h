@@ -68,6 +68,7 @@ class KPresenterView_impl;
 #include "movecmd.h"
 #include "insertcmd.h"
 #include "deletecmd.h"
+#include "setoptionscmd.h"
 #include "commandhistory.h"
 
 #include <komlParser.h>
@@ -234,22 +235,20 @@ public:
   unsigned int rastY() {return _rastY;}
   unsigned int getRastX() {return _rastX;}
   unsigned int getRastY() {return _rastY;}
-  void setRasters(unsigned int rx,unsigned int ry)
-    {_rastX = rx; _rastY = ry; replaceObjs();}
+  void setRasters(unsigned int rx,unsigned int ry,bool _replace = true);
 
   // get - set options for editmodi
   QColor txtBackCol() {return _txtBackCol;}
   QColor txtSelCol() {return _txtSelCol;}
   QColor getTxtBackCol() {return _txtBackCol;}
   QColor getTxtSelCol() {return _txtSelCol;}
-  void setTxtBackCol(QColor c) {_txtBackCol = c;}
-  void setTxtSelCol(QColor c) {_txtSelCol = c;}
+  void setTxtBackCol(QColor c) {_otxtBackCol = _txtBackCol; _txtBackCol = c;}
+  void setTxtSelCol(QColor c) {_otxtSelCol = _txtSelCol; _txtSelCol = c;}
 
   // get - set roundedness
   unsigned int getRndX() {return _xRnd;}
   unsigned int getRndY() {return _yRnd;}
-  void setRnds(unsigned int rx,unsigned int ry)
-    {_xRnd = rx; _yRnd = ry; replaceObjs();}
+  void setRnds(unsigned int rx,unsigned int ry,bool _replace = true);
 
   // get values for screenpresentations
   bool spInfinitLoop() {return _spInfinitLoop;}
@@ -300,6 +299,7 @@ public:
   void alignObjsTop();
   void alignObjsCenterV();
   void alignObjsBottom();
+  void replaceObjs();
 
 signals:
 
@@ -341,7 +341,6 @@ protected:
   void saveObjects(ostream&);
   void loadBackground(KOMLParser&,vector<KOMLAttrib>&);
   void loadObjects(KOMLParser&,vector<KOMLAttrib>&);
-  void replaceObjs();
 
   // ************ variables ************
 
@@ -376,12 +375,16 @@ protected:
   // options for editmode
   QColor _txtBackCol;
   QColor _txtSelCol;
+  QColor _otxtBackCol;
+  QColor _otxtSelCol;
 
   // url
   QString m_strFileURL;
 
   bool _clean;
   int objStartY,objStartNum;
+
+  int _orastX,_orastY,_oxRnd,_oyRnd;
 
   QPen _presPen;
 
