@@ -327,7 +327,7 @@ void KoAutoFormat::doAutoCompletion( QTextCursor* textEditCursor, KoTextParag *p
     {
         QString lastWord = getLastWord(parag, index+1);
         QString word=m_listCompletion->makeCompletion( lastWord.lower() );
-        if( !word.isEmpty() )
+        if( !word.isEmpty() && word!=lastWord )
         {
             unsigned int length = lastWord.length();
             int start = index+1 - length;
