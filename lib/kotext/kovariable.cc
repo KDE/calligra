@@ -967,24 +967,20 @@ QCString KoDateVariable::formatStr(int & correct)
     int count=0;
     dialog->setMainWidget(widget);
     KConfig* config = KoGlobal::kofficeConfig();
-    bool selectLast=false;
     if( config->hasGroup("Date format history") )
     {
         KConfigGroupSaver cgs( config, "Date format history");
-        int noe=config->readNumEntry("Number Of Entries", 5);
+        const int noe=config->readNumEntry("Number Of Entries", 5);
         for(int i=0;i<noe;i++)
         {
-            QString num, tmpString;
+            QString num;
             num.setNum(i);
-            tmpString=config->readEntry("Last Used"+num);
-            if(tmpString.compare(i18n("Locale"))==0)
-            {
-                if(i==0) selectLast = true;
+            const QString tmpString(config->readEntry("Last Used"+num));
+            if(tmpString.startsWith("locale"))
                 continue;
-            }
-            if(stringList.contains(tmpString))
+            else if(stringList.contains(tmpString))
                 continue;
-            if(!tmpString.isEmpty())
+            else if(!tmpString.isEmpty())
             {
                 stringList.append(tmpString);
                 count++;
@@ -997,7 +993,7 @@ QCString KoDateVariable::formatStr(int & correct)
         widget->combo1->insertItem("---");
         widget->combo1->insertStringList(stringList);
     }
-    if(selectLast) {
+    if(false) { // ### TODO: select the last used item
         QComboBox *combo= widget->combo1;
         combo->setCurrentItem(combo->count() -1);
         widget->updateLabel();
@@ -1133,24 +1129,20 @@ QCString KoTimeVariable::formatStr(int & _correct)
     dialog->setMainWidget(widget);
     KConfig* config = KoGlobal::kofficeConfig();
     int count=0;
-    bool selectLast=false;
     if( config->hasGroup("Time format history") )
     {
         KConfigGroupSaver cgs( config, "Time format history" );
-        int noe=config->readNumEntry("Number Of Entries", 5);
+        const int noe=config->readNumEntry("Number Of Entries", 5);
         for(int i=0;i<noe;i++)
         {
-            QString num, tmpString;
+            QString num;
             num.setNum(i);
-            tmpString=config->readEntry("Last Used"+num);
-            if(tmpString.compare(i18n("Locale"))==0)
-            {
-                if(i==0) selectLast = true;
+            QString tmpString(config->readEntry("Last Used"+num));
+            if(tmpString.startsWith("Locale"))
                 continue;
-            }
-            if(stringList.contains(tmpString))
+            else if(stringList.contains(tmpString))
                 continue;
-            if(!tmpString.isEmpty())
+            else if(!tmpString.isEmpty())
             {
                 stringList.append(tmpString);
                 count++;
@@ -1162,7 +1154,7 @@ QCString KoTimeVariable::formatStr(int & _correct)
         widget->combo1->insertItem("---");
         widget->combo1->insertStringList(stringList);
     }
-    if(selectLast)
+    if(false) // ### TODO: select the last used item
     {
         QComboBox *combo= widget->combo1;
         combo->setCurrentItem(combo->count() -1);
