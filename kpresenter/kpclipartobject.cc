@@ -19,6 +19,7 @@
 
 #include <kpclipartobject.h>
 #include <kpgradient.h>
+#include <float.h>
 
 #include <qpainter.h>
 #include <qwmatrix.h>
@@ -186,7 +187,7 @@ void KPClipartObject::draw( QPainter *_painter, KoZoomHandler*_zoomHandler,
             _zoomHandler->zoomItX( ext.width()), _zoomHandler->zoomItY( ext.height()),
             0, 0, 0, 0);
     }
-    
+
     _painter->setPen( pen2 );
     _painter->setBrush( Qt::NoBrush );
     _painter->drawRect( _zoomHandler->zoomItX( penw ),
