@@ -25,6 +25,8 @@ public:
   virtual bool openDocument( const char *_filename );
   virtual bool saveDocument( const char *_file, const char *_format );
   virtual bool printDlg();
+
+  virtual void helpAbout();
   
   virtual void cleanUp();
   

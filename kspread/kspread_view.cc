@@ -13,7 +13,7 @@
 
 #include <koPartSelectDia.h>
 #include <koPrintDia.h>
-
+#include <koAboutDia.h>
 #include "kspread_map.h"
 #include "kspread_table.h"
 #include "kspread_dlg_scripts.h"
@@ -448,7 +448,7 @@ void KSpreadView::setFocus( CORBA::Boolean _mode )
 
 void KSpreadView::helpAbout()
 {
-  QMessageBox::information( 0, i18n( "About KSpread" ), i18n("About KSpread 0.0.1\nwritten by Torben Weis (weis@kde.org)" ) );
+  KoAboutDia::about( KoAboutDia::KSpread, "0.0.1" );
 }
 
 void KSpreadView::helpUsing()

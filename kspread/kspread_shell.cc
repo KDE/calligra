@@ -1,5 +1,7 @@
 #include "kspread_shell.h"
 
+#include <koAboutDia.h>
+
 KSpreadShell_impl::KSpreadShell_impl()
 {
 }
@@ -78,7 +80,12 @@ bool KSpreadShell_impl::printDlg()
 {
   assert( !CORBA::is_nil( m_vView ) );
 
-  //return m_vView->printDlg();
+  return m_vView->printDlg();
+}
+
+void KSpreadShell_impl::helpAbout()
+{
+  KoAboutDia::about( KoAboutDia::KSpread, "0.0.1" );
 }
 
 #include "kspread_shell.moc"
