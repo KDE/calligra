@@ -175,8 +175,8 @@ void KoTextDocument::drawParagWYSIWYG( QPainter *p, QTextParag *parag, int cx, i
     QRect ir( rect );
     QRect crect( cx, cy, cw, ch );
 
-    kdDebug() << "KoTextDocument::drawParagWYSIWYG parag->rect=" << DEBUGRECT( parag->rect() )
-              << " ir=" << DEBUGRECT(ir) << endl;
+    //kdDebug() << "KoTextDocument::drawParagWYSIWYG parag->rect=" << DEBUGRECT( parag->rect() )
+    //          << " ir=" << DEBUGRECT(ir) << endl;
     bool useDoubleBuffer = !parag->document()->parent();
     // no parent docs in libkotext (and no access to nextDoubleBuffered)
     //if ( !useDoubleBuffer && parag->document()->nextDoubleBuffered )
