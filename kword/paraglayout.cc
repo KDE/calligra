@@ -18,7 +18,7 @@ KWParagLayout::KWParagLayout(KWordDocument *_doc,bool _add = true,QString _name 
   flow = LEFT;
   counter.counterType = CT_NONE;
   counter.counterDepth = 0;
-  counter.counterBullet = '·';
+  counter.counterBullet = QChar('·');
   counter.counterLeftText = "";
   counter.counterRightText = "";
   followingParagLayout = "Standard";
@@ -115,7 +115,8 @@ void KWParagLayout::save(ostream &out)
   out << indent << "<ILEFT " << leftIndent << "/>" << endl;
   out << indent << "<LINESPACE " << lineSpacing << "/>" << endl;
   out << indent << "<COUNTER type=\"" << static_cast<int>(counter.counterType) << "\" depth=\"" << counter.counterDepth
-      << "\" bullet=\"" << counter.counterBullet << "\" start=\"" << counter.startCounter.ascii() << "\" numberingtype=\""
+      << "\" bullet=\"" << static_cast<unsigned short>(counter.counterBullet.unicode()) << "\" start=\"" 
+      << counter.startCounter.ascii() << "\" numberingtype=\""
       << static_cast<int>(counter.numberingType) << "\" lefttext=\"" << counter.counterLeftText.ascii() << "\" righttext=\""
       << counter.counterRightText.ascii() << "\" bulletfont=\"" << counter.bulletFont.ascii() << "\"/>" << endl;
   out << indent << "<LEFTBORDER red=\"" << left.color.red() << "\" green=\"" << left.color.green() << "\" blue=\""
@@ -355,7 +356,7 @@ void KWParagLayout::load(KOMLParser& parser,vector<KOMLAttrib>& lst)
 	      else if ((*it).m_strName == "depth")
 		counter.counterDepth = atoi((*it).m_strValue.c_str());
 	      else if ((*it).m_strName == "bullet")
-		counter.counterBullet = atoi((*it).m_strValue.c_str());
+		counter.counterBullet = QChar(static_cast<unsigned short>(atoi((*it).m_strValue.c_str())));
 	      else if ((*it).m_strName == "lefttext")
 		counter.counterLeftText = (*it).m_strValue.c_str();
 	      else if ((*it).m_strName == "righttext")

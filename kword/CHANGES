@@ -1125,3 +1125,10 @@ Reggie, 24.4.1999:
   automatical uppercase conversation
 - Started implementing dialog to configure autoformat
 - Implemented methodes for configuration of simple autoformat
+
+Reggie, 26.4.1999:
+------------------
+- Using now the KCharSelect widget of libkdeui for the character selector dialog
+- More work on unicode
+- More work on configuration and config dialog of autoformat
+- Corrected some stuff in the templates

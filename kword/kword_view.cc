@@ -2116,9 +2116,9 @@ bool KWordView::mappingCreateMenubar(OpenPartsUI::MenuBar_ptr _menubar)
 
   pix = OPUIUtils::convertPixmap(ICON("spellcheck.xpm"));
   text = Q2C( i18n("&Spell Cheking...") );
-  m_idMenuExtra_Spelling = m_vMenuExtra->insertItem4(text,this,"extraSpelling",ALT + Key_C,-1,-1);
+  m_idMenuExtra_Spelling = m_vMenuExtra->insertItem6(pix,text,this,"extraSpelling",ALT + Key_C,-1,-1);
   text = Q2C( i18n("&Autoformat...") );
-  m_idMenuExtra_AutoFormat = m_vMenuExtra->insertItem6(pix,text,this,"extraAutoFormat",0,-1,-1);
+  m_idMenuExtra_AutoFormat = m_vMenuExtra->insertItem4(text,this,"extraAutoFormat",0,-1,-1);
   text = Q2C( i18n("&Stylist...") );
   m_idMenuExtra_Stylist = m_vMenuExtra->insertItem4(text,this,"extraStylist",ALT + Key_S,-1,-1);
 

@@ -19,7 +19,12 @@
 #include <stdlib.h>
 
 #include <qtabdialog.h>
-#include <qwidget.h>
+#include <qvbox.h>
+#include <qhbox.h>
+#include <qcheckbox.h>
+#include <qpushbutton.h>
+
+#include "kcharselect.h"
 
 class KWordDocument;
 class KWPage;
@@ -39,8 +44,11 @@ protected:
   void setupTab1();
   void closeEvent(QCloseEvent *e) { emit cancelButtonPressed(); }
 
-  QWidget *tab1;
-
+  QVBox *tab1;
+  QCheckBox *cbTypographicQuotes,*cbUpperCase,*cbUpperUpper;
+  QPushButton *pbQuote1,*pbQuote2;
+  KCharSelect *charselect;
+  
   KWordDocument *doc;
   KWPage *page;
 

@@ -16,19 +16,15 @@
 #include <stdio.h>
 
 #include <qdialog.h>
-#include <qlabel.h>
-#include <qpushbt.h>
+#include <qpushbutton.h>
 #include <qlayout.h>
-#include <qfont.h>
-#include <qcombo.h>
 #include <qstrlist.h>
 #include <qlist.h>
+#include <qstring.h>
 
 #include <kbuttonbox.h>
 #include <kapp.h>
-#include <kcolorbtn.h>
-
-#include "kcharselect.h"
+#include <kcharselect.h>
 
 /******************************************************************/
 /* class KCharSelectDia                                           */
@@ -41,34 +37,22 @@ class KCharSelectDia : public QDialog
 public:
 
   // constructor - destructor
-  KCharSelectDia(QWidget*,const char*,int,QFont,QStrList _fontList);
-  ~KCharSelectDia();
+  KCharSelectDia(QWidget *parent,const char *name,const QChar &_chr,const QString &_font);
 
   // select char dialog
-  static bool selectChar(QFont &__font,int &__c,QStrList _fontList);
+  static bool selectChar(QString &_font,QChar &_chr);
 
   // internal
-  int c() {return _c;}
-  QFont font() { return _font; }
+  QChar chr() { return charSelect->chr(); }
+  QString font() { return charSelect->font(); }
 
 protected:
-
   // dialog objects
   QGridLayout *grid;
   KButtonBox *bbox;
   QPushButton *bOk,*bCancel;
   KCharSelect *charSelect;
-  QComboBox *fontCombo;
-  QLabel *lFont;
-
-  // values
-  int _c;
-  QFont _font;
-  QStrList fontList;
-
-protected slots:
-  void charChanged(int);
-  void fontSelected(const QString &);
 
 };
-#endif //KCHARSELECTDIA_H
+
+#endif

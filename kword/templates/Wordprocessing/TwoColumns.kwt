@@ -4,12 +4,18 @@
   <PAPERBORDERS mmLeft="10" mmTop="15" mmRight="10" mmBottom="15" ptLeft="28" ptTop="42" ptRight="28" ptBottom="42" inchLeft="0.393701" inchTop="0.590551" inchRight="0.393701" inchBottom="0.590551"/>
  </PAPER>
  <ATTRIBUTES processing="0" standardpage="1" hasHeader="0" hasFooter="0" unit="mm"/>
+ <FOOTNOTEMGR>
+  <START value="1"/>
+  <FORMAT superscript="1" type="1"/>
+  <FIRSTPARAG ref="(null)"/>
+ </FOOTNOTEMGR>
  <FRAMESETS>
-  <FRAMESET frameType="1" autoCreateNewFrame="1" frameInfo="0">
+  <FRAMESET frameType="1" autoCreateNewFrame="1" frameInfo="0" removeable="0">
    <FRAME left="28" top="42" right="294" bottom="798" runaround="1" runaGapPT="2" runaGapMM="1" runaGapINCH="0.0393701"  lWidth="1" lRed="255" lGreen="255" lBlue="255" lStyle="0"  rWidth="1" rRed="255" rGreen="255" rBlue="255" rStyle="0"  tWidth="1" tRed="255" tGreen="255" tBlue="255" tStyle="0"  bWidth="1" bRed="255" bGreen="255" bBlue="255" bStyle="0" bkRed="255" bkGreen="255" bkBlue="255" bleftpt="0" bleftmm="0" bleftinch="0" brightpt="0" brightmm="0" brightinch="0" btoppt="0" btopmm="0" btopinch="0" bbottompt="0" bbottommm="0" bbottominch="0"/>
    <FRAME left="300" top="42" right="566" bottom="798" runaround="1" runaGapPT="2" runaGapMM="1" runaGapINCH="0.0393701"  lWidth="1" lRed="255" lGreen="255" lBlue="255" lStyle="0"  rWidth="1" rRed="255" rGreen="255" rBlue="255" rStyle="0"  tWidth="1" tRed="255" tGreen="255" tBlue="255" tStyle="0"  bWidth="1" bRed="255" bGreen="255" bBlue="255" bStyle="0" bkRed="255" bkGreen="255" bkBlue="255" bleftpt="0" bleftmm="0" bleftinch="0" brightpt="0" brightmm="0" brightinch="0" btoppt="0" btopmm="0" btopinch="0" bbottompt="0" bbottommm="0" bbottominch="0"/>
    <PARAGRAPH>
     <TEXT></TEXT>
+    <INFO info="0"/>
     <HARDBRK frame="0"/>
     <FORMATS>
     </FORMATS>
@@ -22,7 +28,7 @@
      <IFIRST pt="0" mm="0" inch="0"/>
      <ILEFT pt="0" mm="0" inch="0"/>
      <LINESPACE pt="0" mm="0" inch="0"/>
-     <COUNTER type="0" depth="0" bullet="45" start="0" numberingtype="0" lefttext="" righttext="" bulletfont="symbol"/>
+     <COUNTER type="0" depth="0" bullet="176" start="0" numberingtype="0" lefttext="" righttext="" bulletfont="times"/>
      <LEFTBORDER red="255" green="255" blue="255" style="0" width="0"/>
      <RIGHTBORDER red="255" green="255" blue="255" style="0" width="0"/>
      <TOPBORDER red="255" green="255" blue="255" style="0" width="0"/>
@@ -35,16 +41,17 @@
       <ITALIC value="0"/>
       <UNDERLINE value="0"/>
       <VERTALIGN value="0"/>
-     </FORMAT>
-     <TABULATOR mmpos="61" ptpos="174" inchpos="1.10089e+15" type="0"/>
-     <TABULATOR mmpos="31" ptpos="88" inchpos="1.10089e+15" type="0"/>
+     </FORMAT> 
+     <TABULATOR mmpos="61.0305" ptpos="173" inchpos="2.40278" type="0"/>
+     <TABULATOR mmpos="30.6916" ptpos="87" inchpos="1.20833" type="0"/>
     </LAYOUT>
    </PARAGRAPH>
   </FRAMESET>
-  <FRAMESET frameType="1" autoCreateNewFrame="0" frameInfo="1">
+  <FRAMESET frameType="1" autoCreateNewFrame="0" frameInfo="1" removeable="0">
    <FRAME left="28" top="42" right="566" bottom="61" runaround="0" runaGapPT="2" runaGapMM="1" runaGapINCH="0.0393701"  lWidth="1" lRed="255" lGreen="255" lBlue="255" lStyle="0"  rWidth="1" rRed="255" rGreen="255" rBlue="255" rStyle="0"  tWidth="1" tRed="255" tGreen="255" tBlue="255" tStyle="0"  bWidth="1" bRed="255" bGreen="255" bBlue="255" bStyle="0" bkRed="255" bkGreen="255" bkBlue="255" bleftpt="0" bleftmm="0" bleftinch="0" brightpt="0" brightmm="0" brightinch="0" btoppt="0" btopmm="0" btopinch="0" bbottompt="0" bbottommm="0" bbottominch="0"/>
    <PARAGRAPH>
     <TEXT></TEXT>
+    <INFO info="0"/>
     <HARDBRK frame="0"/>
     <FORMATS>
     </FORMATS>
@@ -57,7 +64,7 @@
      <IFIRST pt="0" mm="0" inch="0"/>
      <ILEFT pt="0" mm="0" inch="0"/>
      <LINESPACE pt="0" mm="0" inch="0"/>
-     <COUNTER type="0" depth="0" bullet="-73" start="0" numberingtype="0" lefttext="" righttext="" bulletfont="symbol"/>
+     <COUNTER type="0" depth="0" bullet="176" start="0" numberingtype="0" lefttext="" righttext="" bulletfont="times"/>
      <LEFTBORDER red="255" green="255" blue="255" style="0" width="0"/>
      <RIGHTBORDER red="255" green="255" blue="255" style="0" width="0"/>
      <TOPBORDER red="255" green="255" blue="255" style="0" width="0"/>
@@ -70,16 +77,17 @@
       <ITALIC value="0"/>
       <UNDERLINE value="0"/>
       <VERTALIGN value="0"/>
-     </FORMAT>
+     </FORMAT> 
      <TABULATOR mmpos="61" ptpos="174" inchpos="1.10089e+15" type="0"/>
      <TABULATOR mmpos="31" ptpos="88" inchpos="1.10089e+15" type="0"/>
     </LAYOUT>
    </PARAGRAPH>
   </FRAMESET>
-  <FRAMESET frameType="1" autoCreateNewFrame="0" frameInfo="3">
+  <FRAMESET frameType="1" autoCreateNewFrame="0" frameInfo="3" removeable="0">
    <FRAME left="28" top="42" right="566" bottom="61" runaround="0" runaGapPT="2" runaGapMM="1" runaGapINCH="0.0393701"  lWidth="1" lRed="255" lGreen="255" lBlue="255" lStyle="0"  rWidth="1" rRed="255" rGreen="255" rBlue="255" rStyle="0"  tWidth="1" tRed="255" tGreen="255" tBlue="255" tStyle="0"  bWidth="1" bRed="255" bGreen="255" bBlue="255" bStyle="0" bkRed="255" bkGreen="255" bkBlue="255" bleftpt="0" bleftmm="0" bleftinch="0" brightpt="0" brightmm="0" brightinch="0" btoppt="0" btopmm="0" btopinch="0" bbottompt="0" bbottommm="0" bbottominch="0"/>
    <PARAGRAPH>
     <TEXT></TEXT>
+    <INFO info="0"/>
     <HARDBRK frame="0"/>
     <FORMATS>
     </FORMATS>
@@ -92,7 +100,7 @@
      <IFIRST pt="0" mm="0" inch="0"/>
      <ILEFT pt="0" mm="0" inch="0"/>
      <LINESPACE pt="0" mm="0" inch="0"/>
-     <COUNTER type="0" depth="0" bullet="-73" start="0" numberingtype="0" lefttext="" righttext="" bulletfont="symbol"/>
+     <COUNTER type="0" depth="0" bullet="176" start="0" numberingtype="0" lefttext="" righttext="" bulletfont="times"/>
      <LEFTBORDER red="255" green="255" blue="255" style="0" width="0"/>
      <RIGHTBORDER red="255" green="255" blue="255" style="0" width="0"/>
      <TOPBORDER red="255" green="255" blue="255" style="0" width="0"/>
@@ -105,16 +113,17 @@
       <ITALIC value="0"/>
       <UNDERLINE value="0"/>
       <VERTALIGN value="0"/>
-     </FORMAT>
+     </FORMAT> 
      <TABULATOR mmpos="61" ptpos="174" inchpos="1.10089e+15" type="0"/>
      <TABULATOR mmpos="31" ptpos="88" inchpos="1.10089e+15" type="0"/>
     </LAYOUT>
    </PARAGRAPH>
   </FRAMESET>
-  <FRAMESET frameType="1" autoCreateNewFrame="0" frameInfo="2">
+  <FRAMESET frameType="1" autoCreateNewFrame="0" frameInfo="2" removeable="0">
    <FRAME left="28" top="42" right="566" bottom="61" runaround="0" runaGapPT="2" runaGapMM="1" runaGapINCH="0.0393701"  lWidth="1" lRed="255" lGreen="255" lBlue="255" lStyle="0"  rWidth="1" rRed="255" rGreen="255" rBlue="255" rStyle="0"  tWidth="1" tRed="255" tGreen="255" tBlue="255" tStyle="0"  bWidth="1" bRed="255" bGreen="255" bBlue="255" bStyle="0" bkRed="255" bkGreen="255" bkBlue="255" bleftpt="0" bleftmm="0" bleftinch="0" brightpt="0" brightmm="0" brightinch="0" btoppt="0" btopmm="0" btopinch="0" bbottompt="0" bbottommm="0" bbottominch="0"/>
    <PARAGRAPH>
     <TEXT></TEXT>
+    <INFO info="0"/>
     <HARDBRK frame="0"/>
     <FORMATS>
     </FORMATS>
@@ -127,7 +136,7 @@
      <IFIRST pt="0" mm="0" inch="0"/>
      <ILEFT pt="0" mm="0" inch="0"/>
      <LINESPACE pt="0" mm="0" inch="0"/>
-     <COUNTER type="0" depth="0" bullet="-73" start="0" numberingtype="0" lefttext="" righttext="" bulletfont="symbol"/>
+     <COUNTER type="0" depth="0" bullet="176" start="0" numberingtype="0" lefttext="" righttext="" bulletfont="times"/>
      <LEFTBORDER red="255" green="255" blue="255" style="0" width="0"/>
      <RIGHTBORDER red="255" green="255" blue="255" style="0" width="0"/>
      <TOPBORDER red="255" green="255" blue="255" style="0" width="0"/>
@@ -140,16 +149,17 @@
       <ITALIC value="0"/>
       <UNDERLINE value="0"/>
       <VERTALIGN value="0"/>
-     </FORMAT>
+     </FORMAT> 
      <TABULATOR mmpos="61" ptpos="174" inchpos="1.10089e+15" type="0"/>
      <TABULATOR mmpos="31" ptpos="88" inchpos="1.10089e+15" type="0"/>
     </LAYOUT>
    </PARAGRAPH>
   </FRAMESET>
-  <FRAMESET frameType="1" autoCreateNewFrame="0" frameInfo="4">
+  <FRAMESET frameType="1" autoCreateNewFrame="0" frameInfo="4" removeable="0">
    <FRAME left="28" top="779" right="566" bottom="798" runaround="0" runaGapPT="2" runaGapMM="1" runaGapINCH="0.0393701"  lWidth="1" lRed="255" lGreen="255" lBlue="255" lStyle="0"  rWidth="1" rRed="255" rGreen="255" rBlue="255" rStyle="0"  tWidth="1" tRed="255" tGreen="255" tBlue="255" tStyle="0"  bWidth="1" bRed="255" bGreen="255" bBlue="255" bStyle="0" bkRed="255" bkGreen="255" bkBlue="255" bleftpt="0" bleftmm="0" bleftinch="0" brightpt="0" brightmm="0" brightinch="0" btoppt="0" btopmm="0" btopinch="0" bbottompt="0" bbottommm="0" bbottominch="0"/>
    <PARAGRAPH>
     <TEXT></TEXT>
+    <INFO info="0"/>
     <HARDBRK frame="0"/>
     <FORMATS>
     </FORMATS>
@@ -162,7 +172,7 @@
      <IFIRST pt="0" mm="0" inch="0"/>
      <ILEFT pt="0" mm="0" inch="0"/>
      <LINESPACE pt="0" mm="0" inch="0"/>
-     <COUNTER type="0" depth="0" bullet="-73" start="0" numberingtype="0" lefttext="" righttext="" bulletfont="symbol"/>
+     <COUNTER type="0" depth="0" bullet="176" start="0" numberingtype="0" lefttext="" righttext="" bulletfont="times"/>
      <LEFTBORDER red="255" green="255" blue="255" style="0" width="0"/>
      <RIGHTBORDER red="255" green="255" blue="255" style="0" width="0"/>
      <TOPBORDER red="255" green="255" blue="255" style="0" width="0"/>
@@ -175,16 +185,17 @@
       <ITALIC value="0"/>
       <UNDERLINE value="0"/>
       <VERTALIGN value="0"/>
-     </FORMAT>
+     </FORMAT> 
      <TABULATOR mmpos="61" ptpos="174" inchpos="1.10089e+15" type="0"/>
      <TABULATOR mmpos="31" ptpos="88" inchpos="1.10089e+15" type="0"/>
     </LAYOUT>
    </PARAGRAPH>
   </FRAMESET>
-  <FRAMESET frameType="1" autoCreateNewFrame="0" frameInfo="6">
+  <FRAMESET frameType="1" autoCreateNewFrame="0" frameInfo="6" removeable="0">
    <FRAME left="28" top="779" right="566" bottom="798" runaround="0" runaGapPT="2" runaGapMM="1" runaGapINCH="0.0393701"  lWidth="1" lRed="255" lGreen="255" lBlue="255" lStyle="0"  rWidth="1" rRed="255" rGreen="255" rBlue="255" rStyle="0"  tWidth="1" tRed="255" tGreen="255" tBlue="255" tStyle="0"  bWidth="1" bRed="255" bGreen="255" bBlue="255" bStyle="0" bkRed="255" bkGreen="255" bkBlue="255" bleftpt="0" bleftmm="0" bleftinch="0" brightpt="0" brightmm="0" brightinch="0" btoppt="0" btopmm="0" btopinch="0" bbottompt="0" bbottommm="0" bbottominch="0"/>
    <PARAGRAPH>
     <TEXT></TEXT>
+    <INFO info="0"/>
     <HARDBRK frame="0"/>
     <FORMATS>
     </FORMATS>
@@ -197,7 +208,7 @@
      <IFIRST pt="0" mm="0" inch="0"/>
      <ILEFT pt="0" mm="0" inch="0"/>
      <LINESPACE pt="0" mm="0" inch="0"/>
-     <COUNTER type="0" depth="0" bullet="-73" start="0" numberingtype="0" lefttext="" righttext="" bulletfont="symbol"/>
+     <COUNTER type="0" depth="0" bullet="176" start="0" numberingtype="0" lefttext="" righttext="" bulletfont="times"/>
      <LEFTBORDER red="255" green="255" blue="255" style="0" width="0"/>
      <RIGHTBORDER red="255" green="255" blue="255" style="0" width="0"/>
      <TOPBORDER red="255" green="255" blue="255" style="0" width="0"/>
@@ -210,16 +221,17 @@
       <ITALIC value="0"/>
       <UNDERLINE value="0"/>
       <VERTALIGN value="0"/>
-     </FORMAT>
+     </FORMAT> 
      <TABULATOR mmpos="61" ptpos="174" inchpos="1.10089e+15" type="0"/>
      <TABULATOR mmpos="31" ptpos="88" inchpos="1.10089e+15" type="0"/>
     </LAYOUT>
    </PARAGRAPH>
   </FRAMESET>
-  <FRAMESET frameType="1" autoCreateNewFrame="0" frameInfo="5">
+  <FRAMESET frameType="1" autoCreateNewFrame="0" frameInfo="5" removeable="0">
    <FRAME left="28" top="779" right="566" bottom="798" runaround="0" runaGapPT="2" runaGapMM="1" runaGapINCH="0.0393701"  lWidth="1" lRed="255" lGreen="255" lBlue="255" lStyle="0"  rWidth="1" rRed="255" rGreen="255" rBlue="255" rStyle="0"  tWidth="1" tRed="255" tGreen="255" tBlue="255" tStyle="0"  bWidth="1" bRed="255" bGreen="255" bBlue="255" bStyle="0" bkRed="255" bkGreen="255" bkBlue="255" bleftpt="0" bleftmm="0" bleftinch="0" brightpt="0" brightmm="0" brightinch="0" btoppt="0" btopmm="0" btopinch="0" bbottompt="0" bbottommm="0" bbottominch="0"/>
    <PARAGRAPH>
     <TEXT></TEXT>
+    <INFO info="0"/>
     <HARDBRK frame="0"/>
     <FORMATS>
     </FORMATS>
@@ -232,7 +244,7 @@
      <IFIRST pt="0" mm="0" inch="0"/>
      <ILEFT pt="0" mm="0" inch="0"/>
      <LINESPACE pt="0" mm="0" inch="0"/>
-     <COUNTER type="0" depth="0" bullet="-73" start="0" numberingtype="0" lefttext="" righttext="" bulletfont="symbol"/>
+     <COUNTER type="0" depth="0" bullet="176" start="0" numberingtype="0" lefttext="" righttext="" bulletfont="times"/>
      <LEFTBORDER red="255" green="255" blue="255" style="0" width="0"/>
      <RIGHTBORDER red="255" green="255" blue="255" style="0" width="0"/>
      <TOPBORDER red="255" green="255" blue="255" style="0" width="0"/>
@@ -245,7 +257,7 @@
       <ITALIC value="0"/>
       <UNDERLINE value="0"/>
       <VERTALIGN value="0"/>
-     </FORMAT>
+     </FORMAT> 
      <TABULATOR mmpos="61" ptpos="174" inchpos="1.10089e+15" type="0"/>
      <TABULATOR mmpos="31" ptpos="88" inchpos="1.10089e+15" type="0"/>
     </LAYOUT>
@@ -262,7 +274,7 @@
    <IFIRST pt="0" mm="0" inch="0"/>
    <ILEFT pt="0" mm="0" inch="0"/>
    <LINESPACE pt="0" mm="0" inch="0"/>
-   <COUNTER type="0" depth="0" bullet="-73" start="0" numberingtype="0" lefttext="" righttext="" bulletfont="symbol"/>
+   <COUNTER type="0" depth="0" bullet="176" start="0" numberingtype="0" lefttext="" righttext="" bulletfont="times"/>
    <LEFTBORDER red="255" green="255" blue="255" style="0" width="0"/>
    <RIGHTBORDER red="255" green="255" blue="255" style="0" width="0"/>
    <TOPBORDER red="255" green="255" blue="255" style="0" width="0"/>
@@ -275,7 +287,7 @@
     <ITALIC value="0"/>
     <UNDERLINE value="0"/>
     <VERTALIGN value="0"/>
-   </FORMAT>
+   </FORMAT> 
    <TABULATOR mmpos="61" ptpos="174" inchpos="1.10089e+15" type="0"/>
    <TABULATOR mmpos="31" ptpos="88" inchpos="1.10089e+15" type="0"/>
   </STYLE>
@@ -288,7 +300,7 @@
    <IFIRST pt="0" mm="0" inch="0"/>
    <ILEFT pt="0" mm="0" inch="0"/>
    <LINESPACE pt="0" mm="0" inch="0"/>
-   <COUNTER type="1" depth="0" bullet="-73" start="1" numberingtype="1" lefttext="" righttext="." bulletfont="symbol"/>
+   <COUNTER type="1" depth="0" bullet="176" start="1" numberingtype="1" lefttext="" righttext="." bulletfont="times"/>
    <LEFTBORDER red="255" green="255" blue="255" style="0" width="0"/>
    <RIGHTBORDER red="255" green="255" blue="255" style="0" width="0"/>
    <TOPBORDER red="255" green="255" blue="255" style="0" width="0"/>
@@ -301,7 +313,7 @@
     <ITALIC value="0"/>
     <UNDERLINE value="0"/>
     <VERTALIGN value="0"/>
-   </FORMAT>
+   </FORMAT> 
   </STYLE>
   <STYLE>
    <NAME value="Head 2"/>
@@ -312,7 +324,7 @@
    <IFIRST pt="0" mm="0" inch="0"/>
    <ILEFT pt="0" mm="0" inch="0"/>
    <LINESPACE pt="0" mm="0" inch="0"/>
-   <COUNTER type="1" depth="1" bullet="-73" start="1" numberingtype="1" lefttext="" righttext="." bulletfont="symbol"/>
+   <COUNTER type="1" depth="1" bullet="176" start="1" numberingtype="1" lefttext="" righttext="." bulletfont="times"/>
    <LEFTBORDER red="255" green="255" blue="255" style="0" width="0"/>
    <RIGHTBORDER red="255" green="255" blue="255" style="0" width="0"/>
    <TOPBORDER red="255" green="255" blue="255" style="0" width="0"/>
@@ -325,7 +337,7 @@
     <ITALIC value="0"/>
     <UNDERLINE value="0"/>
     <VERTALIGN value="0"/>
-   </FORMAT>
+   </FORMAT> 
   </STYLE>
   <STYLE>
    <NAME value="Head 3"/>
@@ -336,7 +348,7 @@
    <IFIRST pt="0" mm="0" inch="0"/>
    <ILEFT pt="0" mm="0" inch="0"/>
    <LINESPACE pt="0" mm="0" inch="0"/>
-   <COUNTER type="1" depth="2" bullet="-73" start="1" numberingtype="1" lefttext="" righttext="." bulletfont="symbol"/>
+   <COUNTER type="1" depth="2" bullet="176" start="1" numberingtype="1" lefttext="" righttext="." bulletfont="times"/>
    <LEFTBORDER red="255" green="255" blue="255" style="0" width="0"/>
    <RIGHTBORDER red="255" green="255" blue="255" style="0" width="0"/>
    <TOPBORDER red="255" green="255" blue="255" style="0" width="0"/>
@@ -349,7 +361,7 @@
     <ITALIC value="0"/>
     <UNDERLINE value="0"/>
     <VERTALIGN value="0"/>
-   </FORMAT>
+   </FORMAT> 
   </STYLE>
   <STYLE>
    <NAME value="Enumerated List"/>
@@ -360,7 +372,7 @@
    <IFIRST pt="0" mm="0" inch="0"/>
    <ILEFT pt="0" mm="0" inch="0"/>
    <LINESPACE pt="0" mm="0" inch="0"/>
-   <COUNTER type="1" depth="0" bullet="-73" start="1" numberingtype="0" lefttext="" righttext="." bulletfont="symbol"/>
+   <COUNTER type="1" depth="0" bullet="176" start="1" numberingtype="0" lefttext="" righttext="." bulletfont="times"/>
    <LEFTBORDER red="255" green="255" blue="255" style="0" width="0"/>
    <RIGHTBORDER red="255" green="255" blue="255" style="0" width="0"/>
    <TOPBORDER red="255" green="255" blue="255" style="0" width="0"/>
@@ -373,7 +385,7 @@
     <ITALIC value="0"/>
     <UNDERLINE value="0"/>
     <VERTALIGN value="0"/>
-   </FORMAT>
+   </FORMAT> 
   </STYLE>
   <STYLE>
    <NAME value="Alphabetical List"/>
@@ -384,7 +396,7 @@
    <IFIRST pt="0" mm="0" inch="0"/>
    <ILEFT pt="0" mm="0" inch="0"/>
    <LINESPACE pt="0" mm="0" inch="0"/>
-   <COUNTER type="2" depth="0" bullet="-73" start="a" numberingtype="0" lefttext="" righttext=")" bulletfont="symbol"/>
+   <COUNTER type="2" depth="0" bullet="176" start="a" numberingtype="0" lefttext="" righttext=")" bulletfont="times"/>
    <LEFTBORDER red="255" green="255" blue="255" style="0" width="0"/>
    <RIGHTBORDER red="255" green="255" blue="255" style="0" width="0"/>
    <TOPBORDER red="255" green="255" blue="255" style="0" width="0"/>
@@ -397,7 +409,7 @@
     <ITALIC value="0"/>
     <UNDERLINE value="0"/>
     <VERTALIGN value="0"/>
-   </FORMAT>
+   </FORMAT> 
   </STYLE>
   <STYLE>
    <NAME value="Bullet List"/>
@@ -408,7 +420,7 @@
    <IFIRST pt="0" mm="0" inch="0"/>
    <ILEFT pt="0" mm="0" inch="0"/>
    <LINESPACE pt="0" mm="0" inch="0"/>
-   <COUNTER type="6" depth="0" bullet="-73" start="1" numberingtype="0" lefttext="" righttext="" bulletfont="symbol"/>
+   <COUNTER type="6" depth="0" bullet="176" start="1" numberingtype="0" lefttext="" righttext="" bulletfont="times"/>
    <LEFTBORDER red="255" green="255" blue="255" style="0" width="0"/>
    <RIGHTBORDER red="255" green="255" blue="255" style="0" width="0"/>
    <TOPBORDER red="255" green="255" blue="255" style="0" width="0"/>
@@ -421,7 +433,7 @@
     <ITALIC value="0"/>
     <UNDERLINE value="0"/>
     <VERTALIGN value="0"/>
-   </FORMAT>
+   </FORMAT> 
   </STYLE>
  </STYLES>
 </DOC>

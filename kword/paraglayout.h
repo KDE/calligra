@@ -51,7 +51,7 @@ public:
   struct Counter
   {
     unsigned int counterDepth;
-    int counterBullet;
+    QChar counterBullet;
     QString counterLeftText;
     QString counterRightText;
     CounterType counterType;
@@ -88,7 +88,7 @@ public:
   /**
    *  Set counter bullet.
    */
-  void setCounterBullet(int _b) { counter.counterBullet = _b; }
+  void setCounterBullet(QChar _b) { counter.counterBullet = _b; }
   /**
    *  Set Depth of Counter.
    */
@@ -134,7 +134,7 @@ public:
   /**
    * @return the bullet of the Counter.
    */
-  int getCounterBullet() { return counter.counterBullet; }
+  QChar getCounterBullet() { return counter.counterBullet; }
   /**
    * @return depth of Counter.
    */

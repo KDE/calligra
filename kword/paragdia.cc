@@ -1303,16 +1303,14 @@ void KWParagDia::brdColorChanged(const QColor &_color)
 /*================================================================*/
 void KWParagDia::changeBullet()
 {
-  QFont f = QFont(counter.bulletFont);
-  int c = counter.counterBullet;
+  QString f = counter.bulletFont;
+  QChar c = counter.counterBullet;
 
-  if (KCharSelectDia::selectChar(f,c,fontList))
+  if (KCharSelectDia::selectChar(f,c))
     {
-      counter.bulletFont = f.family();
+      counter.bulletFont = f;
       counter.counterBullet = c;
-      QString str;
-      str.sprintf("%c",counter.counterBullet);
-      bBullets->setText(str);
+      bBullets->setText(c);
       bBullets->setFont(QFont(counter.bulletFont));
       prev4->setCounter(counter);
     }
@@ -1386,9 +1384,7 @@ void KWParagDia::setCounter(KWParagLayout::Counter _counter)
       break;
     }
 
-  QString str;
-  str.sprintf("%c",counter.counterBullet);
-  bBullets->setText(str);
+  bBullets->setText(counter.counterBullet);
   bBullets->setFont(QFont(counter.bulletFont));
 
   ecLeft->setText(counter.counterLeftText);
