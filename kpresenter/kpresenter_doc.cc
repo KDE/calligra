@@ -89,6 +89,10 @@
 #include <kglobalsettings.h>
 #include <kocommandhistory.h>
 
+#if HAVE_LIBASPELL
+#include <koSconfig.h>
+#endif
+
 using namespace std;
 
 static const int CURRENT_SYNTAX_VERSION = 2;
@@ -202,6 +206,10 @@ KPresenterDoc::KPresenterDoc( QWidget *parentWidget, const char *widgetName, QOb
     _txtBackCol = lightGray;
     _otxtBackCol = lightGray;
     m_pKSpellConfig=0;
+#if HAVE_LIBASPELL
+    m_pKOSpellConfig = 0;
+#endif
+
     m_bDontCheckUpperWord=false;
     m_bDontCheckTitleCase=false;
     m_bShowRuler=true;
@@ -443,6 +451,10 @@ KPresenterDoc::~KPresenterDoc()
     delete m_bgSpellCheck;
     delete m_styleColl;
     delete m_pKSpellConfig;
+#if HAVE_LIBASPELL
+    delete m_pKOSpellConfig;
+#endif
+
     m_pageList.setAutoDelete( true );
     m_pageList.clear();
     m_deletedPageList.setAutoDelete( true );
@@ -3363,6 +3375,22 @@ void KPresenterDoc::addWordToDictionary( const QString & word)
     if ( m_bgSpellCheck )
         m_bgSpellCheck->addPersonalDictonary( word );
 }
+
+#if HAVE_LIBASPELL
+void KPresenterDoc::setKOSpellConfig(KOSpellConfig _kspell)
+{
+  if(m_pKOSpellConfig==0)
+    m_pKOSpellConfig=new KOSpellConfig();
+
+  m_pKOSpellConfig->setNoRootAffix(_kspell.noRootAffix ());
+  m_pKOSpellConfig->setRunTogether(_kspell.runTogether ());
+  m_pKOSpellConfig->setDictionary(_kspell.dictionary ());
+  m_pKOSpellConfig->setDictFromList(_kspell.dictFromList());
+  m_pKOSpellConfig->setEncoding(_kspell.encoding());
+  //FIXME
+  //m_bgSpellCheck->setKSpellConfig(_kspell);
+}
+#endif
 
 
 #include <kpresenter_doc.moc>

@@ -20,6 +20,11 @@
 #ifndef __kpresenter_doc_h__
 #define __kpresenter_doc_h__
 
+
+#ifdef HAVE_CONFIG_H
+#include <config.h>
+#endif
+
 class KPresenterView;
 class DCOPObject;
 class KCommand;
@@ -35,6 +40,11 @@ class KTempFile;
 class KoStyle;
 class KPrBgSpellCheck;
 class KoTextParag;
+
+#if HAVE_LIBASPELL
+class KOSpellConfig;
+#endif
+
 #include "kprpage.h"
 
 #include <koDocument.h>
@@ -275,6 +285,12 @@ public:
      */
     void setKSpellConfig(KSpellConfig _kspell);
     KSpellConfig * getKSpellConfig()const {return m_pKSpellConfig;}
+
+#if HAVE_LIBASPELL
+    void setKOSpellConfig(KOSpellConfig _kspell);
+    KOSpellConfig * getKOSpellConfig()const {return m_pKOSpellConfig;}
+#endif
+
 
     bool dontCheckUpperWord() const { return m_bDontCheckUpperWord; }
     void setDontCheckUpperWord(bool _b);
@@ -572,6 +588,10 @@ protected:
     QFont m_defaultFont;
     KoAutoFormat * m_autoFormat;
     KSpellConfig *m_pKSpellConfig;
+#if HAVE_LIBASPELL
+    KOSpellConfig *m_pKOSpellConfig;
+#endif
+
     bool m_bDontCheckUpperWord;
     bool m_bDontCheckTitleCase;
     bool m_bShowRuler;
