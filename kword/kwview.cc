@@ -3100,16 +3100,16 @@ void KWView::slotApplyParag()
     KWTextFrameSetEdit *edit = currentTextEdit();
     if( !edit)
         return;
-    KMacroCommand * macroCommand = new KMacroCommand( i18n( "Paragraph Settings" ) );
+    KMacroCommand * macroCommand = 0L;
     KCommand *cmd=0L;
-    bool changed=false;
     if(m_paragDlg->isLeftMarginChanged())
     {
         cmd=edit->setMarginCommand( QStyleSheetItem::MarginLeft, m_paragDlg->leftIndent() );
         if(cmd)
         {
+            if ( !macroCommand )
+                macroCommand = new KMacroCommand( i18n( "Paragraph Settings" ) );
             macroCommand->addCommand(cmd);
-            changed=true;
         }
         m_gui->getHorzRuler()->setLeftIndent( KoUnit::ptToUnit( m_paragDlg->leftIndent(), m_doc->getUnit() ) );
 
@@ -3120,8 +3120,9 @@ void KWView::slotApplyParag()
         cmd=edit->setMarginCommand( QStyleSheetItem::MarginRight, m_paragDlg->rightIndent() );
         if(cmd)
         {
+            if ( !macroCommand )
+                macroCommand = new KMacroCommand( i18n( "Paragraph Settings" ) );
             macroCommand->addCommand(cmd);
-            changed=true;
         }
         m_gui->getHorzRuler()->setRightIndent( KoUnit::ptToUnit( m_paragDlg->rightIndent(), m_doc->getUnit() ) );
     }
@@ -3130,8 +3131,9 @@ void KWView::slotApplyParag()
         cmd=edit->setMarginCommand( QStyleSheetItem::MarginTop, m_paragDlg->spaceBeforeParag() );
         if(cmd)
         {
+            if ( !macroCommand )
+                macroCommand = new KMacroCommand( i18n( "Paragraph Settings" ) );
             macroCommand->addCommand(cmd);
-            changed=true;
         }
     }
     if(m_paragDlg->isSpaceAfterChanged())
@@ -3139,8 +3141,9 @@ void KWView::slotApplyParag()
         cmd=edit->setMarginCommand( QStyleSheetItem::MarginBottom, m_paragDlg->spaceAfterParag() );
         if(cmd)
         {
+            if ( !macroCommand )
+                macroCommand = new KMacroCommand( i18n( "Paragraph Settings" ) );
             macroCommand->addCommand(cmd);
-            changed=true;
         }
     }
     if(m_paragDlg->isFirstLineChanged())
@@ -3148,8 +3151,9 @@ void KWView::slotApplyParag()
         cmd=edit->setMarginCommand( QStyleSheetItem::MarginFirstLine, m_paragDlg->firstLineIndent());
         if(cmd)
         {
+            if ( !macroCommand )
+                macroCommand = new KMacroCommand( i18n( "Paragraph Settings" ) );
             macroCommand->addCommand(cmd);
-            changed=true;
         }
         m_gui->getHorzRuler()->setFirstIndent(
             KoUnit::ptToUnit( m_paragDlg->leftIndent() + m_paragDlg->firstLineIndent(), m_doc->getUnit() ) );
@@ -3160,8 +3164,9 @@ void KWView::slotApplyParag()
         cmd=edit->setAlignCommand( m_paragDlg->align() );
         if(cmd)
         {
+            if ( !macroCommand )
+                macroCommand = new KMacroCommand( i18n( "Paragraph Settings" ) );
             macroCommand->addCommand(cmd);
-            changed=true;
         }
     }
     if(m_paragDlg->isCounterChanged())
@@ -3169,8 +3174,9 @@ void KWView::slotApplyParag()
         cmd=edit->setCounterCommand( m_paragDlg->counter() );
         if(cmd)
         {
+            if ( !macroCommand )
+                macroCommand = new KMacroCommand( i18n( "Paragraph Settings" ) );
             macroCommand->addCommand(cmd);
-            changed=true;
         }
     }
     if(m_paragDlg->listTabulatorChanged())
@@ -3178,8 +3184,9 @@ void KWView::slotApplyParag()
         cmd=edit->setTabListCommand( m_paragDlg->tabListTabulator() );
         if(cmd)
         {
+            if ( !macroCommand )
+                macroCommand = new KMacroCommand( i18n( "Paragraph Settings" ) );
             macroCommand->addCommand(cmd);
-            changed=true;
         }
     }
 
@@ -3188,8 +3195,10 @@ void KWView::slotApplyParag()
         cmd=edit->setLineSpacingCommand( m_paragDlg->lineSpacing() );
         if(cmd)
         {
+            if ( !macroCommand )
+                macroCommand = new KMacroCommand( i18n( "Paragraph Settings" ) );
+
             macroCommand->addCommand(cmd);
-            changed=true;
         }
     }
     if(m_paragDlg->isBorderChanged())
@@ -3198,8 +3207,10 @@ void KWView::slotApplyParag()
                                      m_paragDlg->topBorder(), m_paragDlg->bottomBorder() );
         if(cmd)
         {
+            if ( !macroCommand )
+                macroCommand = new KMacroCommand( i18n( "Paragraph Settings" ) );
+
             macroCommand->addCommand(cmd);
-            changed=true;
         }
     }
     if ( m_paragDlg->isPageBreakingChanged() )
@@ -3207,8 +3218,10 @@ void KWView::slotApplyParag()
         cmd=edit->setPageBreakingCommand( m_paragDlg->pageBreaking() );
         if(cmd)
         {
+            if ( !macroCommand )
+                macroCommand = new KMacroCommand( i18n( "Paragraph Settings" ) );
+
             macroCommand->addCommand(cmd);
-            changed=true;
         }
     }
 
@@ -3217,14 +3230,13 @@ void KWView::slotApplyParag()
         cmd=edit->setShadowCommand( m_paragDlg->shadowDistance(),m_paragDlg->shadowDirection(), m_paragDlg->shadowColor() );
         if(cmd)
         {
+            if ( !macroCommand )
+                macroCommand = new KMacroCommand( i18n( "Paragraph Settings" ) );
             macroCommand->addCommand(cmd);
-            changed=true;
         }
     }
-    if(changed)
+    if(macroCommand)
         m_doc->addCommand(macroCommand);
-    else
-        delete macroCommand;
 }
 
 void KWView::slotHRulerDoubleClicked( double ptpos )
@@ -3950,14 +3962,19 @@ void KWView::textFontSelected( const QString & font )
     QPtrList<KoTextFormatInterface> lst = applicableTextInterfaces();
     if ( lst.isEmpty() ) return;
     QPtrListIterator<KoTextFormatInterface> it( lst );
-    KMacroCommand* macroCmd = new KMacroCommand( i18n("Change Text Font") );
+    KMacroCommand* macroCmd = 0L;
     for ( ; it.current() ; ++it )
     {
         KCommand *cmd = it.current()->setFamilyCommand( font );
         if (cmd)
+        {
+            if ( !macroCmd )
+                macroCmd = new KMacroCommand( i18n("Change Text Font") );
             macroCmd->addCommand( cmd );
+        }
     }
-    m_doc->addCommand( macroCmd );
+    if ( macroCmd )
+        m_doc->addCommand( macroCmd );
     m_gui->canvasWidget()->setFocus(); // the combo keeps focus...
 }
 
@@ -4500,40 +4517,39 @@ void KWView::borderSet()
     }
     else
     {
-        KMacroCommand *macro = new KMacroCommand( i18n("Change Border"));
-        bool createMacro = false;
+        KMacroCommand *macro = 0L;
         KCommand*cmd=m_gui->canvasWidget()->setLeftFrameBorder( m_border.common, actionBorderLeft->isChecked() );
         if ( cmd )
         {
+            if ( !macro )
+                macro = new KMacroCommand( i18n("Change Border"));
             macro->addCommand( cmd);
-            createMacro= true;
         }
         cmd = m_gui->canvasWidget()->setRightFrameBorder( m_border.common, actionBorderRight->isChecked() );
         if ( cmd )
         {
+            if ( !macro )
+                macro = new KMacroCommand( i18n("Change Border"));
             macro->addCommand( cmd);
-            createMacro= true;
         }
 
         cmd = m_gui->canvasWidget()->setTopFrameBorder( m_border.common, actionBorderTop->isChecked() );
         if ( cmd )
         {
+            if ( !macro )
+                macro = new KMacroCommand( i18n("Change Border"));
             macro->addCommand( cmd);
-            createMacro= true;
         }
 
         cmd = m_gui->canvasWidget()->setBottomFrameBorder( m_border.common, actionBorderBottom->isChecked() );
         if ( cmd )
         {
+            if ( !macro )
+                macro = new KMacroCommand( i18n("Change Border"));
             macro->addCommand( cmd);
-            createMacro= true;
         }
-        if ( createMacro )
-        {
+        if ( macro )
             m_doc->addCommand( macro );
-        }
-        else
-            delete macro;
     }
 }
 
