@@ -1216,8 +1216,9 @@ void KivioView::toggleFontUnderline( bool b)
 void KivioView::updateToolBars()
 {
     KivioStencil *pStencil;
-
     pStencil = m_pActivePage->selectedStencils()->first();
+    m_pStencilGeometryPanel->setEmitSignals(false);
+
     if( !pStencil )
     {
         m_setFontFamily->setFont( doc()->defaultFont().family() );
@@ -1261,6 +1262,7 @@ void KivioView::updateToolBars()
         m_setArrowHeads->setCurrentEndArrow( pStencil->endAHType() );
     }
 
+    m_pStencilGeometryPanel->setEmitSignals(true);
     m_pProtectionPanel->updateCheckBoxes();
 }
 
