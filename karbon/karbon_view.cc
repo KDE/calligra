@@ -23,7 +23,6 @@
 #include "vrectangletool.h"
 #include "vrotatetool.h"
 #include "vroundrecttool.h"
-#include "vscaletool.h"
 #include "vselecttool.h"
 #include "vsheartool.h"
 #include "vsinustool.h"
@@ -111,7 +110,6 @@ KarbonView::KarbonView( KarbonPart* part, QWidget* parent, const char* name )
 	m_rectangleTool = new VRectangleTool( this );
 	m_rotateTool = new VRotateTool( this );
 	m_roundRectTool = new VRoundRectTool( this );
-	m_scaleTool = new VScaleTool( this );
 	m_selectTool = new VSelectTool( this );
 	m_shearTool = new VShearTool( this );
 	m_sinusTool = new VSinusTool( this );
@@ -159,7 +157,6 @@ KarbonView::~KarbonView()
 	delete( m_rectangleTool );
 	delete( m_rotateTool );
 	delete( m_roundRectTool );
-	delete( m_scaleTool );
 	delete( m_selectTool );
 	delete( m_shearTool );
 	delete( m_sinusTool );
@@ -484,16 +481,6 @@ KarbonView::rotateTool()
 }
 
 void
-KarbonView::scaleTool()
-{
-	kdDebug() << "KarbonView::scaleTool()" << endl;
-	m_currentTool->deactivate();
-	m_currentTool = m_scaleTool;
-	m_currentTool->activate();
-	m_scaleToolAction->setChecked( true );
-}
-
-void
 KarbonView::textTool()
 {
     /*kdDebug() << "KarbonView::textTool()" << endl;
@@ -792,9 +779,6 @@ KarbonView::initActions()
 		i18n( "&Translate" ), "translate", 0, this,
 		SLOT( objectTrafoTranslate() ), actionCollection(), "object_trafo_translate" );
 	new KAction(
-		i18n( "&Scale" ), "scale", 0, this,
-		SLOT( objectTrafoScale() ), actionCollection(), "object_trafo_scale" );
-	new KAction(
 		i18n( "&Rotate" ), "rotate", 0, this,
 		SLOT( objectTrafoRotate() ), actionCollection(), "object_trafo_rotate" );
 	new KAction(
@@ -824,9 +808,6 @@ KarbonView::initActions()
 	m_rotateToolAction = new KToggleAction(
 		i18n( "&Rotate Objects" ), "14_rotate", 0, this,
 		SLOT( rotateTool() ), actionCollection(), "tool_rotate" );
-	m_scaleToolAction = new KToggleAction(
-		i18n( "&Scale Objects" ), "14_scale", 0, this,
-		SLOT( scaleTool() ), actionCollection(), "tool_scale" );
 	m_shearToolAction = new KToggleAction(
 		i18n( "&Shear Objects" ), "14_shear", 0, this,
 		SLOT( shearTool() ), actionCollection(), "tool_shear" );
@@ -850,7 +831,6 @@ KarbonView::initActions()
 	m_sinusToolAction->setExclusiveGroup( "Tools" );
 	m_selectToolAction->setExclusiveGroup( "Tools" );
 	m_rotateToolAction->setExclusiveGroup( "Tools" );
-	m_scaleToolAction->setExclusiveGroup( "Tools" );
 	m_spiralToolAction->setExclusiveGroup( "Tools" );
 	m_starToolAction->setExclusiveGroup( "Tools" );
 	m_gradToolAction->setExclusiveGroup( "Tools" );
@@ -957,9 +937,6 @@ KarbonView::initActions()
 	connect(
 		m_toolbox, SIGNAL( selectToolActivated() ),
 		this, SLOT( selectTool() ) );
-	connect(
-		m_toolbox, SIGNAL( scaleToolActivated() ),
-		this, SLOT( scaleTool() ) );
 	connect(
 		m_toolbox, SIGNAL( rotateToolActivated() ),
 		this, SLOT( rotateTool() ) );

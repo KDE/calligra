@@ -7,7 +7,7 @@
 #define __VSELECTTOOL_H__
 
 #include "vtool.h"
-
+#include "vselection.h"
 
 class VSelectTool : public VTool
 {

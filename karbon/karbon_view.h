@@ -117,7 +117,6 @@ protected slots:
 	void roundRectTool();
 	void selectTool();
 	void rotateTool();
-	void scaleTool();
 	void shearTool();
 	void sinusTool();
 	void spiralTool();
@@ -166,7 +165,6 @@ private:
 	KToggleAction* m_rectangleToolAction;
 	KToggleAction* m_rotateToolAction;
 	KToggleAction* m_roundRectToolAction;
-	KToggleAction* m_scaleToolAction;
 	KToggleAction* m_selectToolAction;
 	KToggleAction* m_shearToolAction;
 	KToggleAction* m_sinusToolAction;
@@ -180,7 +178,6 @@ private:
 	VRectangleTool* m_rectangleTool;
 	VRotateTool* m_rotateTool;
 	VRoundRectTool* m_roundRectTool;
-	VScaleTool* m_scaleTool;
 	VSelectTool* m_selectTool;
 	VShearTool* m_shearTool;
 	VSinusTool* m_sinusTool;

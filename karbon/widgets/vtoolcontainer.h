@@ -41,7 +41,6 @@ signals:
 	void rotateToolActivated();
 	void roundRectToolActivated();
 	void selectToolActivated();
-	void scaleToolActivated();
 	void shearToolActivated();
 	void sinusToolActivated();
 	void solidFillActivated();
@@ -56,7 +55,7 @@ private:
 	VStrokeFillPreview* m_strokeFillPreview;
 	enum ButtonChoice
 	{
-		Select, Scale, Rotate, Shear, Ellipse, Rectangle,
+		Select, Rotate, Shear, Ellipse, Rectangle,
 		Roundrect, Polygon, Star, Sinus, Spiral, Text, Grad
 	};
 

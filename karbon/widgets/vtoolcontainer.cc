@@ -51,13 +51,6 @@ VToolContainer::VToolContainer( KoView* parent, const char* /*name*/ )
 	connect( button, SIGNAL( clicked() ), this, SIGNAL( selectToolActivated() ) );
 	btngroup->insert( button, Select );
 
-	button = new QToolButton( btngroup );
-	pixmap = BarIcon( "14_scale", KarbonFactory::instance() );
-	button->setPixmap( pixmap );
-	button->setToggleButton( true );
-	connect( button, SIGNAL( clicked() ), this, SIGNAL( scaleToolActivated() ) );
-	btngroup->insert( button, Scale );
-
 	button = new QToolButton(btngroup);
 	pixmap = BarIcon( "14_rotate", KarbonFactory::instance() );
 	button->setPixmap( pixmap );
