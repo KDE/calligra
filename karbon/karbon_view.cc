@@ -1009,7 +1009,14 @@ KarbonView::snapToGrid()
 void
 KarbonView::showSelectionPopupMenu( const QPoint &pos )
 {
+	QPtrList<KAction> actionList;
+	if( m_groupObjects->isEnabled() )
+		actionList.append( m_groupObjects );
+	else if( m_ungroupObjects->isEnabled() )
+		actionList.append( m_ungroupObjects );
+	plugActionList( "selection_type_action", actionList );
 	((QPopupMenu *)factory()->container( "selection_popup", this ) )->exec( pos );
+	unplugActionList( "selection_type_action" );
 }
 
 void

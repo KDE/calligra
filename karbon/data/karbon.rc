@@ -118,6 +118,7 @@
 		<Action name="edit_paste"/>
 		<Action name="edit_delete"/>
 		<Separator/>
+		<ActionList name="selection_type_action"/>
 		<Menu name="object_order">
 			<text>&amp;Order</text>
 			<Action name="object_move_totop"/>
