@@ -74,7 +74,6 @@ KInstance* KSpreadFactory::global()
       s_global = new KInstance(aboutData());
       s_global->dirs()->addResourceType( "toolbar",
 				         KStandardDirs::kde_default("data") + "koffice/toolbar/");
-      s_global->dirs()->addResourceType( "extensions", KStandardDirs::kde_default("data") + "koffice/extensions/");
       s_global->dirs()->addResourceType( "extensions", KStandardDirs::kde_default("data") + "kspread/extensions/");
       s_global->dirs()->addResourceType( "table-styles", KStandardDirs::kde_default("data") + "kspread/tablestyles/");
       // Tell the iconloader about share/apps/koffice/icons
