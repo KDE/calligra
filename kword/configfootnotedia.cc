@@ -118,7 +118,7 @@ void KWConfigFootNoteDia::slotOk()
     if (counter != m_footNoteConfig->counter() )
     {
         macro = new KMacroCommand(i18n("Change End-/Footnote Variable Settings"));
-        cmd= new KWChangeFootEndNoteSettingsCommand( i18n("Change End-/FootNote Variable Settings") , counter, m_footNoteConfig->counter() ,true ,m_doc);
+        cmd= new KWChangeFootEndNoteSettingsCommand( i18n("Change End-/Footnote Variable Settings") , counter, m_footNoteConfig->counter() ,true ,m_doc);
         macro->addCommand(cmd );
     }
     counter = static_cast<KWVariableSettings*>(m_doc->getVariableCollection()->variableSetting())->endNoteCounter();
@@ -147,8 +147,8 @@ void KWConfigFootNoteDia::slotOk()
          type != m_doc->footNoteSeparatorLineType())
     {
         if ( !macro )
-            macro = new KMacroCommand(i18n("Change Foot Note Line Separator Settings"));
-        cmd = new KWChangeFootNoteLineSeparatorParametersCommand( i18n("Change Foot Note Line Separator Settings") , m_doc->footNoteSeparatorLinePosition(), tmp, m_doc->footNoteSeparatorLineLength(), val,m_doc->footNoteSeparatorLineWidth(), width, m_doc->footNoteSeparatorLineType(), type, m_doc);
+            macro = new KMacroCommand(i18n("Change Footnote Line Separator Settings"));
+        cmd = new KWChangeFootNoteLineSeparatorParametersCommand( i18n("Change Footnote Line Separator Settings") , m_doc->footNoteSeparatorLinePosition(), tmp, m_doc->footNoteSeparatorLineLength(), val,m_doc->footNoteSeparatorLineWidth(), width, m_doc->footNoteSeparatorLineType(), type, m_doc);
         macro->addCommand( cmd );
     }
 

@@ -1074,11 +1074,11 @@ void KWView::setupActions()
                                             this, SLOT( goToFootEndNote() ),
                                             actionCollection(), "goto_footendnote" );
 
-    actionEditFrameSet = new KAction( i18n( "Edit Text FrameSet" ), 0,
+    actionEditFrameSet = new KAction( i18n( "Edit Text Frameset" ), 0,
                                             this, SLOT( editFrameSet() ),
                                             actionCollection(), "edit_frameset" );
 
-    actionSelectedFrameSet = new KAction( i18n( "Select FrameSet" ), 0,
+    actionSelectedFrameSet = new KAction( i18n( "Select Frameset" ), 0,
                                             this, SLOT( selectFrameSet() ),
                                             actionCollection(), "select_frameset" );
 
