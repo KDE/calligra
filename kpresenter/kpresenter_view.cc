@@ -1963,7 +1963,7 @@ void KPresenterView::setupActions()
 				    this, SLOT( extraGroup() ),
 				    actionCollection(), "extra_group" );
 
-    actionExtraGroup = new KAction( i18n( "&Ungroup Objects" ),
+    actionExtraUnGroup = new KAction( i18n( "&Ungroup Objects" ),
 				    "ungroup", 0,
 				    this, SLOT( extraUnGroup() ),
 				    actionCollection(), "extra_ungroup" );
@@ -2056,6 +2056,14 @@ void KPresenterView::objectSelectedChanged()
     actionExtraRotate->setEnabled(state);
     actionExtraShadow->setEnabled(state);
     actionExtraAlignObjs->setEnabled(state);
+    actionExtraGroup->setEnabled(state);
+    actionExtraUnGroup->setEnabled(state);
+    actionExtraAlignObjLeft->setEnabled(state);
+    actionExtraAlignObjCenterH->setEnabled(state);
+    actionExtraAlignObjRight->setEnabled(state);
+    actionExtraAlignObjTop->setEnabled(state);
+    actionExtraAlignObjCenterV->setEnabled(state);
+    actionExtraAlignObjBottom->setEnabled(state);
 
 }
 
