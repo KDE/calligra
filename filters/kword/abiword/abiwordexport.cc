@@ -326,12 +326,13 @@ void AbiWordWorker::writeClipartData(const QString& koStoreName, const QString& 
         return;
     }
 
-    if (picture.load(io))
+    if (picture.load(io,NULL))
     {
         *m_streamOut << "<d name=\"" << keyName << "\""
             << " base64=\"no\""
             << " mime=\"" << strMime << "\">\n"
-            << "![CDATA[\n"; // Open CDATA section
+            << "<![CDATA["; // Open CDATA section
+        // Do not add a new line after <![CDATA[ (No white space before a XML declaration)
 
         // Save picture as SVG
 
@@ -342,7 +343,8 @@ void AbiWordWorker::writeClipartData(const QString& koStoreName, const QString& 
             kdWarning(30506) << "Could not save clipart: "  << koStoreName << endl;
         }
 
-        *m_streamOut << "\n]]>\n" << "</d>\n";
+        *m_streamOut << "]]>\n" // Close CDATA section
+            << "</d>\n";
     }
     else
     {
