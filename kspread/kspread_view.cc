@@ -265,7 +265,7 @@ KSpreadView::KSpreadView( QWidget *_parent, const char *_name, KSpreadDoc* doc )
     connect( m_transform, SIGNAL( activated() ), this, SLOT( transformPart() ) );
     m_copy = KStdAction::copy( this, SLOT( copySelection() ), actionCollection(), "copy" );
 
-    m_copy_as_text=new KAction( i18n("Copy as text"), "copy_as_text",0, this, SLOT( copyAsText() ), actionCollection(), "copy_as_text" );
+    m_copy_as_text=new KAction( i18n("Copy as text"),0, this, SLOT( copyAsText() ), actionCollection(), "copy_as_text" );
 
     m_paste = KStdAction::paste( this, SLOT( paste() ), actionCollection(), "paste" );
     m_cut = KStdAction::cut( this, SLOT( cutSelection() ), actionCollection(), "cut" );
