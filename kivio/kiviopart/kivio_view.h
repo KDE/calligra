@@ -302,7 +302,11 @@ private:
   KivioLayerPanel* m_pLayersPanel;
   KivioBirdEyePanel* m_pBirdEyePanel;
   KivioProtectionPanel* m_pProtectionPanel;
-
+    KToggleAction* showPageBorders;
+    KToggleAction* showPageMargins;
+    KToggleAction* showRulers;
+    KToggleAction* showGrid;
+    KToggleAction* showGuides;
   bool m_bShowPageBorders;
   bool m_bShowPageMargins;
   bool m_bShowRulers;

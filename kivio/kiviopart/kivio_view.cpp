@@ -413,24 +413,24 @@ void KivioView::setupActions()
   m_hidePage = new KAction( i18n("Hide Page"),0 ,this,SLOT(hidePage()), actionCollection(), "hidePage" );
   m_exportPage = new KAction( i18n("Export Page..."),0,this,SLOT(exportPage()), actionCollection(), "exportPage");
 
-  KToggleAction* showPageBorders = new KToggleAction( i18n("Show Page Borders"), BarIcon("view_pageborder",KivioFactory::global()), CTRL+Key_B, actionCollection(), "showPageBorders" );
+  showPageBorders = new KToggleAction( i18n("Show Page Borders"), BarIcon("view_pageborder",KivioFactory::global()), CTRL+Key_B, actionCollection(), "showPageBorders" );
   connect( showPageBorders, SIGNAL(toggled(bool)), SLOT(togglePageBorders(bool)));
 
-  KToggleAction* showPageMargins = new KToggleAction( i18n("Show Page Margins"), "view_margins", 0, actionCollection(), "showPageMargins" );
+  showPageMargins = new KToggleAction( i18n("Show Page Margins"), "view_margins", 0, actionCollection(), "showPageMargins" );
   connect( showPageMargins, SIGNAL(toggled(bool)), SLOT(togglePageMargins(bool)));
 
-  KToggleAction* showRulers = new KToggleAction( i18n("Show Rulers"), "view_ruler", 0, actionCollection(), "showRulers" );
+  showRulers = new KToggleAction( i18n("Show Rulers"), "view_ruler", 0, actionCollection(), "showRulers" );
   connect( showRulers, SIGNAL(toggled(bool)), SLOT(toggleShowRulers(bool)));
 
   // Grid actions
-  KToggleAction* showGrid = new KToggleAction( i18n("Show Grid"), "view_grid", 0, actionCollection(), "showGrid" );
+  showGrid = new KToggleAction( i18n("Show Grid"), "view_grid", 0, actionCollection(), "showGrid" );
   connect( showGrid, SIGNAL(toggled(bool)), SLOT(toggleShowGrid(bool)));
 
   KToggleAction* snapGrid = new KToggleAction( i18n("Snap Grid"), "view_grid", 0, actionCollection(), "snapGrid" );
   connect( snapGrid, SIGNAL(toggled(bool)), SLOT(toggleSnapGrid(bool)));
 
   // Guides actions
-  KToggleAction* showGuides = new KToggleAction( i18n("Show Guides"), 0, actionCollection(), "showGuides" );
+  showGuides = new KToggleAction( i18n("Show Guides"), 0, actionCollection(), "showGuides" );
   connect( showGuides, SIGNAL(toggled(bool)), SLOT(toggleShowGuides(bool)));
 
   KToggleAction* snapGuides = new KToggleAction( i18n("Snap Guides"), 0, actionCollection(), "snapGuides" );
@@ -509,7 +509,14 @@ void KivioView::updateReadWrite( bool readwrite )
   QValueList<KAction*>::ConstIterator aEnd = actions.end();
   for (; aIt != aEnd; ++aIt )
     (*aIt)->setEnabled( readwrite );
-
+  if ( !readwrite )
+  {
+      showPageBorders->setEnabled( true );
+      showPageMargins->setEnabled( true );
+      showRulers->setEnabled( true );
+      showGrid->setEnabled( true );
+      showGuides->setEnabled( true );
+  }
   m_showPage->setEnabled( true );
   m_hidePage->setEnabled( true );
   updateMenuPage();
