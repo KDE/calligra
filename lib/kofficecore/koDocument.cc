@@ -1375,6 +1375,12 @@ bool KoDocument::openFile()
 
 bool KoDocument::loadNativeFormat( const QString & file )
 {
+    if ( !QFileInfo( file).isFile () )
+    {
+        d->lastErrorMessage = i18n( "%1 is not a file." ).arg(file);
+        return false;
+    }
+
     QApplication::setOverrideCursor( waitCursor );
 
     kdDebug(30003) << "KoDocument::loadNativeFormat( " << file << " )" << endl;
