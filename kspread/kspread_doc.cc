@@ -85,7 +85,7 @@ KSpreadDoc::KSpreadDoc( QWidget *parentWidget, const char *widgetName, QObject* 
   m_topBorder = 20.0;
   m_bottomBorder = 20.0;
   m_paperFormat = PG_DIN_A4;
-  m_paperUnit = PG_MM;
+  m_paperUnit = KoUnit::U_MM;
   m_paperWidth = PG_A4_WIDTH;
   m_paperHeight = PG_A4_HEIGHT;
   calcPaperSize();

@@ -833,7 +833,7 @@ void configureLayoutPage::apply()
    {
      unsigned int unitPage=defaultUnit->currentItem();
      config->writeEntry( "Default unit page", unitPage);
-     m_pView->doc()->setPaperUnit((KoUnit)unitPage);
+     m_pView->doc()->setPaperUnit((KoUnit::Unit)unitPage);
    }
 }
 
