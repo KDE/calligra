@@ -29,7 +29,6 @@ KPresenterShell::KPresenterShell( const char* name )
     : KoMainWindow( KPresenterFactory::global(), name )
 {
 // partManager()->setAllowDoubleClickActivation( false );
-    resize( 800, 630 );
 }
 
 KPresenterShell::~KPresenterShell()

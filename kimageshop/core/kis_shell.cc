@@ -35,8 +35,6 @@
 KisShell::KisShell( const char* name )
     : KoMainWindow( KisFactory::global(), name )
 {
-  resize(800, 600);
-
   m_pStatusBar = new KStatusBar( this, "shell_statusbar" );
 
   m_pStatusBar->insertItem( i18n( "a little test for the statusbar" ), ID_STATUSBAR_INFOTEXT );

@@ -146,6 +146,13 @@ KoMainWindow::KoMainWindow( KInstance *instance, const char* name )
 
     buildMainWindowGUI();
     //createGUI( 0L ); // NOT this ! (duplicates shell entries !)
+
+    if (QApplication::desktop()->width() > 1100) // very big desktop ?
+        resize( 900, 800 );
+    if (QApplication::desktop()->width() > 850) // big desktop ?
+        resize( 700, 600 );
+    else // small (800x600, 640x480) desktop
+        resize( 600, 400 );
 }
 
 KoMainWindow::~KoMainWindow()

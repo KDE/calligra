@@ -56,7 +56,6 @@ public:
 
 /*
   bool saveAllPages();
-  void releasePages();
 */
 
 protected slots:
@@ -90,8 +89,10 @@ protected:
   int m_grpFile;
   int m_grpDocuments;
 
-  QValueList<KoDocumentEntry> m_lstComponents;
-  QMap<int,KoDocumentEntry*> m_mapComponents;
+  // Map of available parts (the int is the koolbar item id)
+  QMap<int,KoDocumentEntry> m_mapComponents;
+
+  QString m_filter;
 
   // Saved between openDocument and setRootDocument
   KoDocumentEntry m_documentEntry;

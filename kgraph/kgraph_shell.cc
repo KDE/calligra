@@ -26,7 +26,6 @@
 
 KGraphShell::KGraphShell(const char *name)
                          : KoMainWindow(KGraphFactory::global(), name) {
-    resize(500, 350);
 }
 
 KGraphShell::~KGraphShell() {

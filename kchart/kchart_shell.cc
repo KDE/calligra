@@ -26,7 +26,6 @@
 KChartShell::KChartShell( const char* name )
     : KoMainWindow( KChartFactory::global(), name )
 {
-  resize( 600, 400 );
 }
 
 KChartShell::~KChartShell()

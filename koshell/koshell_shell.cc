@@ -50,16 +50,16 @@ KoShellWindow::KoShellWindow()
   m_pFrame = new KoShellFrame( m_pLayout );
 
   m_grpFile = m_pKoolBar->insertGroup(i18n("Parts"));
-  m_lstComponents = KoDocumentEntry::query();
-  QValueList<KoDocumentEntry>::Iterator it = m_lstComponents.begin();
-  for( ; it != m_lstComponents.end(); ++it )
+  QValueList<KoDocumentEntry> lstComponents = KoDocumentEntry::query();
+  QValueList<KoDocumentEntry>::Iterator it = lstComponents.begin();
+  for( ; it != lstComponents.end(); ++it )
   {
       //kdDebug() << "Inserting into koolbar : " << (*it).name << endl;
       int id = m_pKoolBar->insertItem( m_grpFile,
                                        DesktopIcon((*it).service()->icon()),
                                        (*it).name(),
 				       this, SLOT( slotKoolBar( int, int ) ) );
-      m_mapComponents[ id ] = &*it;
+      m_mapComponents[ id ] = *it;
   }
 
   m_grpDocuments = m_pKoolBar->insertGroup(i18n("Documents"));
@@ -67,8 +67,6 @@ KoShellWindow::KoShellWindow()
 
   m_pKoolBar->setFixedWidth( 80 );
   m_pKoolBar->setMinimumHeight( 300 );
-
-  this->resize(550, 400);
 }
 
 KoShellWindow::~KoShellWindow()
@@ -205,7 +203,9 @@ void KoShellWindow::slotKoolBar( int _grp, int _item )
   if ( _grp == m_grpFile )
   {
     // Create new document from a KoDocumentEntry
-    m_documentEntry = * m_mapComponents[ _item ];
+    m_documentEntry = m_mapComponents[ _item ];
+    kdDebug() << m_documentEntry.service() << endl;
+    kdDebug() << m_documentEntry.name() << endl;
     KoDocument *doc = m_documentEntry.createDoc();
     if (doc)
     {

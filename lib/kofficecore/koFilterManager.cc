@@ -80,10 +80,11 @@ KoFilterManager::~KoFilterManager()
   delete d;
 }
 
-const QString KoFilterManager::fileSelectorList( const Direction &direction, const char *_format,
-                                           const char *_native_pattern,
-                                           const char *_native_name,
-                                           const bool allfiles ) const
+const QString KoFilterManager::fileSelectorList( const Direction &direction,
+                                                 const char *_format,
+                                                 const QString & _native_pattern,
+                                                 const QString & _native_name,
+                                                 const bool allfiles ) const
 {
     QString service;
     if ( direction == Import )
@@ -163,8 +164,8 @@ const QString KoFilterManager::fileSelectorList( const Direction &direction, con
 const bool KoFilterManager::prepareDialog( KFileDialog *dialog,
                                  const Direction &direction,
                                  const char *_format,
-                                 const char *_native_pattern,
-                                 const char *_native_name,
+                                 const QString & _native_pattern,
+                                 const QString & _native_name,
                                  const bool allfiles ) {
 
     QString service;
@@ -174,7 +175,7 @@ const bool KoFilterManager::prepareDialog( KFileDialog *dialog,
         service = "Import == '";
     service += _format;
     service += "'";
-    
+
     d->config=QString::null;   // reset the config string
 
     dialog->setFilter(fileSelectorList(direction, _format, _native_pattern,

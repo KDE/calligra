@@ -29,7 +29,6 @@ KWordShell::KWordShell( const char* name )
     : KoMainWindow( KWordFactory::global(), name )
 {
 //    partManager()->setAllowDoubleClickActivation( false );
-    resize( 800, 600 );
 }
 
 KWordShell::~KWordShell()

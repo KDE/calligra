@@ -79,10 +79,11 @@ public:
      *                        is added.
      * @param allfiles Whether a wildcard that matches all files should be added to the list.
      */
-    const QString fileSelectorList( const Direction &direction, const char *_format,
-                              const char *_native_pattern,
-                              const char *_native_name,
-                              const bool allfiles ) const;
+    const QString fileSelectorList( const Direction &direction,
+                                    const char *_format,
+                                    const QString & _native_pattern,
+                                    const QString & _native_name,
+                                    const bool allfiles ) const;
 
     /**
      * Prepares a KFileDialog instance. This means it adds the available
@@ -107,8 +108,8 @@ public:
     const bool prepareDialog( KFileDialog *dialog,
 			      const Direction &direction,
 			      const char *_format,
-			      const char *_native_pattern,
-			      const char *_native_name,
+			      const QString & _native_pattern,
+			      const QString & _native_name,
 			      const bool allfiles );
 
     /**
