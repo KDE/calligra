@@ -111,7 +111,7 @@ QIODevice * KoFilterDev::device( QIODevice* inDevice, const QString & mimetype, 
 
 bool KoFilterDev::open( int mode )
 {
-    //kdDebug(7005) << "KoFilterDev::open " << mode << endl;
+    kdDebug(7005) << "KoFilterDev::open " << mode << endl;
     if ( mode == IO_ReadOnly )
     {
         d->buffer.resize(0);
@@ -140,20 +140,20 @@ bool KoFilterDev::open( int mode )
 
 void KoFilterDev::close()
 {
-    //kdDebug(7005) << "KoFilterDev::close" << endl;
+    kdDebug(7005) << "KoFilterDev::close" << endl;
     if ( filter->mode() == IO_WriteOnly )
         writeBlock( 0L, 0 ); // finish writing
-    //kdDebug(7005) << "KoFilterDev::close. Calling terminate()." << endl;
+    kdDebug(7005) << "KoFilterDev::close. Calling terminate()." << endl;
 
     filter->terminate();
-    //kdDebug(7005) << "KoFilterDev::close. Terminate() done. Closing device." << endl;
+    kdDebug(7005) << "KoFilterDev::close. Terminate() done. Closing device." << endl;
     filter->device()->close();
     setState( 0 ); // not IO_Open
 }
 
 void KoFilterDev::flush()
 {
-    //kdDebug(7005) << "KoFilterDev::flush" << endl;
+    kdDebug(7005) << "KoFilterDev::flush" << endl;
     filter->device()->flush();
     // Hmm, might not be enough...
 }
@@ -179,7 +179,7 @@ QIODevice::Offset KoFilterDev::at() const
 bool KoFilterDev::at( QIODevice::Offset pos )
 {
     Q_ASSERT ( filter->mode() == IO_ReadOnly );
-    //kdDebug(7005) << "KoFilterDev::at " << pos << "  currently at " << ioIndex << endl;
+    kdDebug(7005) << "KoFilterDev::at " << pos << "  currently at " << ioIndex << endl;
 
     if ( ioIndex == pos )
         return true;
@@ -206,7 +206,7 @@ bool KoFilterDev::at( QIODevice::Offset pos )
             return false;
     }
 
-    //kdDebug(7005) << "KoFilterDev::at : reading " << pos << " dummy bytes" << endl;
+    kdDebug(7005) << "KoFilterDev::at : reading " << pos << " dummy bytes" << endl;
     // #### Slow, and allocate a huge block of memory (potentially)
     // Maybe we could have a flag in the class to know we don't care about the
     // actual data
@@ -222,7 +222,7 @@ bool KoFilterDev::atEnd() const
 Q_LONG KoFilterDev::readBlock( char *data, Q_ULONG maxlen )
 {
     Q_ASSERT ( filter->mode() == IO_ReadOnly );
-    //kdDebug(7005) << "KoFilterDev::readBlock maxlen=" << maxlen << endl;
+    kdDebug(7005) << "KoFilterDev::readBlock maxlen=" << maxlen << endl;
     // If we had an error, or came to the end of the stream, return 0.
     if ( d->result != KFilterBase::OK )
         return -1;
@@ -246,7 +246,7 @@ Q_LONG KoFilterDev::readBlock( char *data, Q_ULONG maxlen )
                 filter->setInBuffer( d->buffer.data(), size );
             else
                 readEverything = true;
-            //kdDebug(7005) << "KoFilterDev::readBlock got " << size << " bytes from device" << endl;
+            kdDebug(7005) << "KoFilterDev::readBlock got " << size << " bytes from device" << endl;
         }
         if (d->bNeedHeader)
         {
@@ -264,7 +264,7 @@ Q_LONG KoFilterDev::readBlock( char *data, Q_ULONG maxlen )
 
         // We got that much data since the last time we went here
         uint outReceived = availOut - filter->outBufferAvailable();
-        //kdDebug(7005) << "avail_out = " << filter->outBufferAvailable() << " result=" << d->result << " outReceived=" << outReceived << endl;
+        kdDebug(7005) << "avail_out = " << filter->outBufferAvailable() << " result=" << d->result << " outReceived=" << outReceived << endl;
         if( availOut < (uint)filter->outBufferAvailable() )
             kdWarning(7005) << " last availOut " << availOut << " smaller than new avail_out=" << filter->outBufferAvailable() << " !" << endl;
 
@@ -274,13 +274,13 @@ Q_LONG KoFilterDev::readBlock( char *data, Q_ULONG maxlen )
         ioIndex += outReceived;
         if (d->result == KFilterBase::END)
         {
-            //kdDebug(7005) << "KoFilterDev::readBlock got END. dataReceived=" << dataReceived << endl;
+            kdDebug(7005) << "KoFilterDev::readBlock got END. dataReceived=" << dataReceived << endl;
             break; // Finished.
         }
-        if (readEverything && filter->inBufferEmpty() )
+        if (readEverything && filter->inBufferEmpty() && filter->outBufferAvailable() != 0 )
         {
             // We decoded everything there was to decode. So -> done.
-            //kdDebug(7005) << "Seems we're done. dataReceived=" << dataReceived << endl;
+            kdDebug(7005) << "Seems we're done. dataReceived=" << dataReceived << endl;
             d->result = KFilterBase::END;
             break;
         }
@@ -329,7 +329,7 @@ Q_LONG KoFilterDev::writeBlock( const char *data /*0 to finish*/, Q_ULONG len )
             // We got that much data since the last time we went here
             uint wrote = availIn - filter->inBufferAvailable();
 
-            //kdDebug(7005) << " Wrote everything for now. avail_in = " << filter->inBufferAvailable() << " result=" << d->result << " wrote=" << wrote << endl;
+            kdDebug(7005) << " Wrote everything for now. avail_in = " << filter->inBufferAvailable() << " result=" << d->result << " wrote=" << wrote << endl;
 
             // Move on in the input buffer
             data += wrote;
@@ -337,14 +337,14 @@ Q_LONG KoFilterDev::writeBlock( const char *data /*0 to finish*/, Q_ULONG len )
             ioIndex += wrote;
 
             availIn = len - dataWritten;
-            //kdDebug(7005) << " KoFilterDev::writeBlock availIn=" << availIn << " dataWritten=" << dataWritten << " ioIndex=" << ioIndex << endl;
+            kdDebug(7005) << " KoFilterDev::writeBlock availIn=" << availIn << " dataWritten=" << dataWritten << " ioIndex=" << ioIndex << endl;
             if ( availIn > 0 ) // Not sure this will ever happen
                 filter->setInBuffer( data, availIn );
         }
 
         if (filter->outBufferFull() || (d->result == KFilterBase::END))
         {
-            //kdDebug(7005) << " KoFilterDev::writeBlock writing to underlying. avail_out=" << filter->outBufferAvailable() << endl;
+            kdDebug(7005) << " KoFilterDev::writeBlock writing to underlying. avail_out=" << filter->outBufferAvailable() << endl;
             int towrite = d->buffer.size() - filter->outBufferAvailable();
             if ( towrite > 0 )
             {
@@ -353,13 +353,13 @@ Q_LONG KoFilterDev::writeBlock( const char *data /*0 to finish*/, Q_ULONG len )
                 if ( size != towrite )
                     kdWarning(7005) << "KoFilterDev::writeBlock. Could only write " << size << " out of " << towrite << " bytes" << endl;
                 //else
-                    //kdDebug(7005) << " KoFilterDev::writeBlock wrote " << size << " bytes" << endl;
+                    kdDebug(7005) << " KoFilterDev::writeBlock wrote " << size << " bytes" << endl;
             }
             d->buffer.resize( 8*1024 );
             filter->setOutBuffer( d->buffer.data(), d->buffer.size() );
             if (d->result == KFilterBase::END)
             {
-                //kdDebug(7005) << " KoFilterDev::writeBlock END" << endl;
+                kdDebug(7005) << " KoFilterDev::writeBlock END" << endl;
                 Q_ASSERT(finish); // hopefully we don't get end before finishing
                 break;
             }
@@ -372,23 +372,23 @@ Q_LONG KoFilterDev::writeBlock( const char *data /*0 to finish*/, Q_ULONG len )
 int KoFilterDev::getch()
 {
     Q_ASSERT ( filter->mode() == IO_ReadOnly );
-    //kdDebug(7005) << "KoFilterDev::getch" << endl;
+    kdDebug(7005) << "KoFilterDev::getch" << endl;
     if ( !d->ungetchBuffer.isEmpty() ) {
         int len = d->ungetchBuffer.length();
         int ch = d->ungetchBuffer[ len-1 ];
         d->ungetchBuffer.truncate( len - 1 );
-        //kdDebug(7005) << "KoFilterDev::getch from ungetch: " << QString(QChar(ch)) << endl;
+        kdDebug(7005) << "KoFilterDev::getch from ungetch: " << QString(QChar(ch)) << endl;
         return ch;
     }
     char buf[1];
     int ret = readBlock( buf, 1 ) == 1 ? buf[0] : EOF;
-    //kdDebug(7005) << "KoFilterDev::getch ret=" << QString(QChar(ret)) << endl;
+    kdDebug(7005) << "KoFilterDev::getch ret=" << QString(QChar(ret)) << endl;
     return ret;
 }
 
 int KoFilterDev::putch( int c )
 {
-    //kdDebug(7005) << "KoFilterDev::putch" << endl;
+    kdDebug(7005) << "KoFilterDev::putch" << endl;
     char buf[1];
     buf[0] = c;
     return writeBlock( buf, 1 ) == 1 ? c : -1;
@@ -396,7 +396,7 @@ int KoFilterDev::putch( int c )
 
 int KoFilterDev::ungetch( int ch )
 {
-    //kdDebug(7005) << "KoFilterDev::ungetch " << QString(QChar(ch)) << endl;
+    kdDebug(7005) << "KoFilterDev::ungetch " << QString(QChar(ch)) << endl;
     if ( ch == EOF )                            // cannot unget EOF
         return ch;
 
