@@ -362,7 +362,7 @@ void KSpreadCluster::unshiftColumn( const QPoint& marker, bool& work )
 	    if ( i == cy )
 		top = dy + 1;
 	    int bottom = KSPREAD_CLUSTER_LEVEL2 - 1;
-	    for( int k = top; k >= bottom; ++k )
+	    for( int k = top; k <= bottom; ++k )
 	    {
 		KSpreadCell* c = cl[ k * KSPREAD_CLUSTER_LEVEL2 + dx ];
 		if ( c )		
@@ -402,7 +402,7 @@ void KSpreadCluster::unshiftRow( const QPoint& marker, bool& work )
 	    if ( i == cx )
 		left = dx + 1;
 	    int right = KSPREAD_CLUSTER_LEVEL2 - 1;
-	    for( int k = left; k >= right; ++k )
+	    for( int k = left; k <= right; ++k )
 	    {
 		KSpreadCell* c = cl[ dy * KSPREAD_CLUSTER_LEVEL2 + k ];
 		if ( c )		
@@ -420,6 +420,18 @@ void KSpreadCluster::unshiftRow( const QPoint& marker, bool& work )
 
 void KSpreadCluster::removeColumn( int col )
 {    
+    int cx = col / KSPREAD_CLUSTER_LEVEL2;
+    int dx = col % KSPREAD_CLUSTER_LEVEL2;
+    
+    for( int y1 = 0; y1 < KSPREAD_CLUSTER_LEVEL1; ++y1 )
+    {
+	KSpreadCell** cl = m_cluster[ y1 * KSPREAD_CLUSTER_LEVEL2 + cx ];
+	if ( cl )
+	    for( int y2 = 0; y2 < KSPREAD_CLUSTER_LEVEL2; ++y2 )
+		if ( cl[ y2 * KSPREAD_CLUSTER_LEVEL2 + dx ] )
+		    remove( col, y1 * KSPREAD_CLUSTER_LEVEL2 + y2 );
+    }
+		
     for( int t1 = 0; t1 < KSPREAD_CLUSTER_LEVEL1; ++t1 )
     {
 	bool work = TRUE;
@@ -430,6 +442,18 @@ void KSpreadCluster::removeColumn( int col )
 
 void KSpreadCluster::removeRow( int row )
 {    
+    int cy = row / KSPREAD_CLUSTER_LEVEL2;
+    int dy = row % KSPREAD_CLUSTER_LEVEL2;
+
+    for( int x1 = 0; x1 < KSPREAD_CLUSTER_LEVEL1; ++x1 )
+    {
+	KSpreadCell** cl = m_cluster[ cy * KSPREAD_CLUSTER_LEVEL2 + x1 ];
+	if ( cl )
+	    for( int x2 = 0; x2 < KSPREAD_CLUSTER_LEVEL2; ++x2 )
+		if ( cl[ dy * KSPREAD_CLUSTER_LEVEL2 + x2 ] )
+		    remove( x1 * KSPREAD_CLUSTER_LEVEL2 + x2, row );
+    }
+
     for( int t1 = 0; t1 < KSPREAD_CLUSTER_LEVEL1; ++t1 )
     {
 	bool work = TRUE;
@@ -708,7 +732,6 @@ KSpreadRowCluster::~KSpreadRowCluster()
 	}
     }
 
-
     free( m_cluster );
 }
     
@@ -766,7 +789,7 @@ void KSpreadRowCluster::insertElement( RowLayout* lay, int row )
     }
 
     if ( cl[ dx ] )
-	remove( row );
+	removeElement( row );
 
     cl[ dx ] = lay;
 
