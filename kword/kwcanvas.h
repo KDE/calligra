@@ -26,6 +26,7 @@
 #include <qstylesheet.h>
 #include <qrichtext_p.h>
 #include <koQueryTrader.h>
+#include <koPicture.h>
 #include "kwtextparag.h"
 #include "kwframe.h"
 #include <kwvariable.h>
@@ -123,7 +124,7 @@ public:
     void setMouseMode( MouseMode _mm );
     MouseMode mouseMode()const { return m_mouseMode; }
 
-    void insertPicture( const QString &filename, bool isClipart, QSize pixmapSize, bool _keepRatio );
+    void insertPicture( const KoPicture& newPicture, QSize pixmapSize, bool _keepRatio );
     void insertPart( const KoDocumentEntry &entry );
     void pasteImage( QMimeSource *e, const KoPoint &docPoint );
 
@@ -298,9 +299,8 @@ private:
     KoPoint m_hotSpot; // when moving frame(s)
     bool m_deleteMovingRect, m_frameMoved, m_frameResized;
     bool m_ctrlClickOnSelectedFrame;
-    bool m_isClipart; // when inserting a picture
-    QString m_pictureFilename; // when inserting a picture
-    QSize m_pixmapSize; // when inserting a picture (pixmaps only)
+    KoPicture m_kopicture; // The picture
+    QSize m_pixmapSize; // size when inserting a picture (not necessaraly the size of the picture)
     bool m_keepRatio;//when inserting a picture
     KoDocumentEntry m_partEntry; // when inserting a part
 

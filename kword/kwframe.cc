@@ -1784,11 +1784,18 @@ KWordFrameSetIface* KWPictureFrameSet::dcopObject()
     return m_dcop;
 }
 
-void KWPictureFrameSet::loadPicture( const QString & fileName)
+void KWPictureFrameSet::loadPicture( const QString & fileName )
 {
     KoPictureCollection *collection = m_doc->pictureCollection();
 
     m_picture = collection->loadPicture( fileName );
+}
+
+void KWPictureFrameSet::insertPicture( const KoPicture& picture )
+{
+    KoPictureCollection *collection = m_doc->pictureCollection();
+
+    m_picture = collection->insertPicture( picture.getKey(), picture );
 }
 
 void KWPictureFrameSet::setSize( const QSize & /*_imgSize*/ )
@@ -1828,12 +1835,10 @@ QDomElement KWPictureFrameSet::save( QDomElement & parentElem, bool saveFrames )
     }
     else
     {
-        // KWord 1.2 file format
+        // KWord 1.3 file format
         imageElem = parentElem.ownerDocument().createElement( "PICTURE" );
         framesetElem.appendChild( imageElem );
-        // Do not use m_keepAspectRatio directly, as we need the cooked version of the method.
-        // (Cliparts do not support keepAscpectRatio=="true")
-        imageElem.setAttribute( "keepAspectRatio", keepAspectRatio() ? "true" : "false" );
+        imageElem.setAttribute( "keepAspectRatio", m_keepAspectRatio ? "true" : "false" );
     }
     QDomElement elem = parentElem.ownerDocument().createElement( "KEY" );
     imageElem.appendChild( elem );

@@ -418,7 +418,7 @@ protected:
 
     void createExpressionActions( KActionMenu * parentMenu,const QString& filename,int &i , bool insertSepar );
 
-    void insertPicture( const QString &filename, bool isClipart, bool makeInline, QSize pixmapSize, bool _keepRatio );
+    void insertPicture( const QString &filename, bool makeInline, QSize pixmapSize, bool _keepRatio );
 
     void showParagraphDialog( int initialPage = -1, double initialTabPos = 0.0 );
 

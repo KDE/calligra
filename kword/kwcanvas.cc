@@ -453,7 +453,7 @@ void KWCanvas::mpCreate( const QPoint& normalPoint )
 
 void KWCanvas::mpCreatePixmap( const QPoint& normalPoint )
 {
-    if ( !m_pictureFilename.isEmpty() )
+    if ( !m_kopicture.isNull() )
     {
         // Apply grid for the first corner only
         KoPoint docPoint = m_doc->unzoomPoint( normalPoint );
@@ -461,8 +461,7 @@ void KWCanvas::mpCreatePixmap( const QPoint& normalPoint )
         m_insRect.setRect( docPoint.x(), docPoint.y(), 0, 0 );
         m_deleteMovingRect = false;
 
-        // ### TODO: remove the m_isClipart (it is the only place where it is needed)
-        if ( !m_isClipart && !m_pixmapSize.isEmpty() )
+        if ( !m_pixmapSize.isEmpty() )
         {
             // This ensures 1-1 at 100% on screen, but allows zooming and printing with correct DPI values
             uint width = qRound( (double)m_pixmapSize.width() * m_doc->zoomedResolutionX() / POINT_TO_INCH( QPaintDevice::x11AppDpiX() ) );
@@ -470,8 +469,8 @@ void KWCanvas::mpCreatePixmap( const QPoint& normalPoint )
             m_insRect.setWidth( m_doc->unzoomItX( width ) );
             m_insRect.setHeight( m_doc->unzoomItY( height ) );
             // Apply reasonable limits
-            width = QMIN( width, m_doc->paperWidth() - normalPoint.x() - 5 );
-            height = QMIN( height, m_doc->paperHeight()- normalPoint.y() - 5 );
+            width = kMin( width, m_doc->paperWidth() - normalPoint.x() - 5 );
+            height = kMin( height, m_doc->paperHeight()- normalPoint.y() - 5 );
             // And apply aspect-ratio if set
             if ( m_keepRatio )
             {
@@ -487,7 +486,7 @@ void KWCanvas::mpCreatePixmap( const QPoint& normalPoint )
             if ( viewportRect.contains( vPoint ) ) // Don't move the mouse out of the viewport
                 QCursor::setPos( viewport()->mapToGlobal( vPoint ) );
         }
-        emit docStructChanged(Pictures); // ### TODO: inside ot outside the "if"?
+        emit docStructChanged(Pictures);
     }
 }
 
@@ -1282,7 +1281,7 @@ void KWCanvas::mrCreatePixmap()
 {
     kdDebug() << "KWCanvas::mrCreatePixmap m_insRect=" << DEBUGRECT(m_insRect) << endl;
     // Make sure it's completely on page.
-    KoRect picRect( QMIN(m_insRect.left(), m_insRect.right()), QMIN( m_insRect.top(), m_insRect.bottom()), QABS( m_insRect.width()), QABS(m_insRect.height()));
+    KoRect picRect( kMin(m_insRect.left(), m_insRect.right()), kMin( m_insRect.top(), m_insRect.bottom()), kAbs( m_insRect.width()), kAbs(m_insRect.height()));
     if(picRect.right() > m_doc->ptPaperWidth()) {
         double width = picRect.width();
 
@@ -1297,12 +1296,12 @@ void KWCanvas::mrCreatePixmap()
         picRect.setBottom(m_doc->ptPaperHeight() * page);
     }
 
-    if ( picRect.width() > 0 /*m_doc->gridX()*/ &&picRect.height() > 0 /*m_doc->gridY()*/ && !m_pictureFilename.isEmpty() )
+    if ( picRect.width() > 0 /*m_doc->gridX()*/ &&picRect.height() > 0 /*m_doc->gridY()*/ && !m_kopicture.isNull() )
     {
         KWFrameSet * fs = 0L;
         KWPictureFrameSet *frameset = new KWPictureFrameSet( m_doc, QString::null /*automatic name*/ );
-        frameset->loadPicture( m_pictureFilename );
-        frameset->setKeepAspectRatio( m_keepRatio ); // For a clipart, this has almost no effect
+        frameset->insertPicture( m_kopicture );
+        frameset->setKeepAspectRatio( m_keepRatio );
         fs = frameset;
         picRect = picRect.normalize();
         KWFrame *frame = new KWFrame(fs, picRect.x(), picRect.y(), picRect.width(),
@@ -2018,14 +2017,13 @@ void KWCanvas::setMouseMode( MouseMode newMouseMode )
     }
 }
 
-void KWCanvas::insertPicture( const QString & filename, bool isClipart, QSize pixmapSize, bool _keepRatio )
+void KWCanvas::insertPicture( const KoPicture& newPicture, QSize pixmapSize, bool _keepRatio )
 {
     setMouseMode( MM_CREATE_PIX );
-    m_pictureFilename = filename;
-    m_isClipart = isClipart;
+    m_kopicture = newPicture;
     m_pixmapSize = pixmapSize;
-    /// ### FIXME: how is the following code supposed to work with cliparts?
-    if( pixmapSize.isEmpty()) m_pixmapSize = QPixmap( filename ).size();
+    if ( pixmapSize.isEmpty() )
+        m_pixmapSize = newPicture.getOriginalSize();
     m_keepRatio = _keepRatio;
 }
 
@@ -2111,10 +2109,9 @@ void KWCanvas::pasteImage( QMimeSource *e, const KoPoint &docPoint )
     KTempFile tmpFile( QString::null, ".png");
     tmpFile.setAutoDelete( true );
     i.save(tmpFile.name(), "PNG");
-    // Prepare things for mrCreatePixmap
-    m_pictureFilename = tmpFile.name();
-    m_isClipart = false;
     m_pixmapSize = i.size();
+    // Prepare things for mrCreatePixmap
+    m_kopicture.loadFromFile( tmpFile.name() );
     m_insRect = KoRect( docPoint.x(), docPoint.y(), m_doc->unzoomItX( i.width() ), m_doc->unzoomItY( i.height() ) );
     m_keepRatio = true;
     mrCreatePixmap();

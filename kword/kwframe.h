@@ -841,6 +841,7 @@ public:
     KoPictureKey key() const { return m_picture.getKey(); }
 
     void loadPicture( const QString &fileName );
+    void insertPicture( const KoPicture& picture );
 
     /**
      * @deprecated

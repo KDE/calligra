@@ -2960,7 +2960,7 @@ void KWView::insertPicture()
         KWInsertPicDia dia( this,m_gui->canvasWidget()->pictureInline(),m_gui->canvasWidget()->pictureKeepRatio(),m_doc );
         if ( dia.exec() == QDialog::Accepted && !dia.filename().isEmpty() )
         {
-            insertPicture( dia.filename(), dia.type() == KWInsertPicDia::IPD_CLIPART, dia.makeInline(), dia.pixmapSize(),dia.keepRatio() );
+            insertPicture( dia.filename(), dia.makeInline(), dia.pixmapSize(), dia.keepRatio() );
             m_gui->canvasWidget()->setPictureInline( dia.makeInline());
             m_gui->canvasWidget()->setPictureKeepRatio( dia.keepRatio() );
         }
@@ -2976,10 +2976,10 @@ void KWView::insertPicture()
 
 void KWView::slotEmbedImage( const QString &filename )
 {
-    insertPicture( filename, false, false, QSize(),true );
+    insertPicture( filename, false, QSize(),true );
 }
 
-void KWView::insertPicture( const QString &filename, bool isClipart,
+void KWView::insertPicture( const QString &filename,
                             bool makeInline, QSize pixmapSize, bool _keepRatio )
 {
     if ( makeInline )
@@ -2990,11 +2990,12 @@ void KWView::insertPicture( const QString &filename, bool isClipart,
         KWPictureFrameSet *frameset = new KWPictureFrameSet( m_doc, QString::null );
 
         frameset->loadPicture( filename );
-        QSize size (frameset->picture().getOriginalSize());
+        if ( pixmapSize.isEmpty() )
+            pixmapSize = frameset->picture().getOriginalSize();
         // This ensures 1-1 at 100% on screen, but allows zooming and printing with correct DPI values
         // ### TODO/FIXME: is the qRound really necessary?
-        double width = m_doc->unzoomItX( qRound( (double)size.width() * m_doc->zoomedResolutionX() / POINT_TO_INCH( QPaintDevice::x11AppDpiX() ) ) );
-        double height = m_doc->unzoomItY( qRound( (double)size.height() * m_doc->zoomedResolutionY() / POINT_TO_INCH( QPaintDevice::x11AppDpiY() ) ) );
+        double width = m_doc->unzoomItX( qRound( (double)pixmapSize.width() * m_doc->zoomedResolutionX() / POINT_TO_INCH( QPaintDevice::x11AppDpiX() ) ) );
+        double height = m_doc->unzoomItY( qRound( (double)pixmapSize.height() * m_doc->zoomedResolutionY() / POINT_TO_INCH( QPaintDevice::x11AppDpiY() ) ) );
 
         frameset->setKeepAspectRatio( _keepRatio);
 
@@ -3047,7 +3048,9 @@ void KWView::insertPicture( const QString &filename, bool isClipart,
     }
     else
     {
-        m_gui->canvasWidget()->insertPicture( filename, isClipart, pixmapSize,_keepRatio );
+        KoPicture picture;
+        picture.loadFromFile( filename );
+        m_gui->canvasWidget()->insertPicture( picture , pixmapSize, _keepRatio );
     }
 }
 
