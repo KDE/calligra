@@ -140,8 +140,10 @@ void OvalTool::processEvent(QEvent *e)
     if(state == S_Resize)
     {
       GOval *oval = new GOval();
-      oval->startPoint(KoPoint(r.left() - canvas->xOffset(), r.top() - canvas->yOffset()));
-      oval->endPoint(KoPoint(r.right() - canvas->xOffset(), r.bottom() - canvas->yOffset()));
+      float zoom = toolController()->view()->activeDocument()->zoomFactor();
+      kdDebug(38000) << "OvalTool zoom : " << zoom << endl;
+      oval->startPoint(KoPoint((r.left() - canvas->xOffset()) / zoom, (r.top() - canvas->yOffset()) / zoom));
+      oval->endPoint(KoPoint((r.right() - canvas->xOffset()) / zoom, (r.bottom() - canvas->yOffset()) / zoom));
       CreateOvalCmd *cmd = new CreateOvalCmd(toolController()->view()->activeDocument(), oval);
       KontourDocument *doc = (KontourDocument *)toolController()->view()->koDocument();
       doc->history()->addCommand(cmd);

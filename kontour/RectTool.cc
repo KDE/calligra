@@ -170,8 +170,14 @@ void RectTool::processEvent(QEvent *e)
     if(state == S_Resize)
     {
       GRect *rect = new GRect();
-      rect->startPoint(KoPoint(r.left() - canvas->xOffset(), r.top() - canvas->yOffset()));
-      rect->endPoint(KoPoint(r.right() - canvas->xOffset(), r.bottom() - canvas->yOffset()));
+      kdDebug(38000) << "r.left() : " << r.left() << endl;
+      kdDebug(38000) << "r.bottom() : " << r.bottom() << endl;
+      kdDebug(38000) << "canvas.xOffset() : " << canvas->xOffset() << endl;
+      kdDebug(38000) << "canvas.yOffset() : " << canvas->yOffset() << endl;
+      float zoom = toolController()->view()->activeDocument()->zoomFactor();
+      kdDebug(38000) << "RectTool zoom : " << zoom << endl;
+      rect->startPoint(KoPoint((r.left() - canvas->xOffset()) / zoom, (r.top() - canvas->yOffset()) / zoom));
+      rect->endPoint(KoPoint((r.right() - canvas->xOffset()) / zoom, (r.bottom() - canvas->yOffset()) / zoom));
       CreateRectCmd *cmd = new CreateRectCmd(toolController()->view()->activeDocument(), rect);
       KontourDocument *doc = (KontourDocument *)toolController()->view()->koDocument();
 	  rect->style() = *(doc->document()->styles()->current());	// copy current style
