@@ -194,10 +194,31 @@ bool Page::eventFilter( QObject *o, QEvent *e )
         if ( m_currentTextObjectView  )
             m_currentTextObjectView->focusOutEvent();
         return TRUE;
-    default:
-	break;
+    case QEvent::KeyPress:
+    {
+#ifndef NDEBUG
+        QKeyEvent * keyev = static_cast<QKeyEvent *>(e);
+        // Debug keys
+        if ( ( keyev->state() & ControlButton ) && ( keyev->state() & ShiftButton ) )
+        {
+            switch ( keyev->key() ) {
+                case Key_P: // 'P' -> paragraph debug
+                    printRTDebug( 0 );
+                    break;
+                case Key_V: // 'V' -> verbose parag debug
+                    printRTDebug( 1 );
+                    break;
+                default:
+                    break;
+            }
+        }
+#endif
     }
-    return false;
+        break;
+    default:
+        break;
+    }
+    return QWidget::eventFilter(o,e);
 }
 
 bool Page::focusNextPrevChild( bool )
@@ -216,9 +237,9 @@ void Page::paintEvent( QPaintEvent* paintEvent )
     painter.begin( &buffer );
 
     if ( editMode || !fillBlack )
-	painter.fillRect( paintEvent->rect(), white );
+        painter.fillRect( paintEvent->rect(), white );
     else
-	painter.fillRect( paintEvent->rect(), black );
+        painter.fillRect( paintEvent->rect(), black );
 
     painter.setClipping( true );
     painter.setClipRect( paintEvent->rect() );
@@ -237,7 +258,7 @@ void Page::drawBackground( QPainter *painter, QRect rect, bool ignoreSkip )
     QRegion grayRegion( rect );
     QPtrListIterator<KPBackGround> it(*backgroundList());
     for ( int i = 0 ; it.current(); ++it, ++i ) {
-	if ( editMode )
+        if ( editMode )
         {
             if ( !ignoreSkip && painter->device()->devType() != QInternal::Printer && i != (int)view->getCurrPgNum() - 1 )
             {
@@ -272,7 +293,7 @@ void Page::drawBackground( QPainter *painter, QRect rect, bool ignoreSkip )
                                                  pgRect.y() +
                                                  qRound(view->kPresenterDoc()->getTopBorder() * _presFakt) ),
                                 false );
-	}
+        }
     }
 
     // In edit mode we also want to draw the gray area out of the pages
@@ -1923,6 +1944,19 @@ void Page::setTextCounter(KoParagCounter counter)
         it.current()->setCounter(counter );
 }
 
+#ifndef NDEBUG
+void Page::printRTDebug( int info )
+{
+    KPTextObject *kpTxtObj = 0;
+    if ( m_currentTextObjectView )
+        kpTxtObj = m_currentTextObjectView->kpTextObject();
+    else
+        kpTxtObj = selectedTextObjs().first();
+    if ( kpTxtObj )
+        kpTxtObj->textObject()->printRTDebug( info );
+}
+#endif
+
 /*================================================================*/
 bool Page::haveASelectedPictureObj()
 {
@@ -3537,8 +3571,8 @@ void Page::print( QPainter *painter, KPrinter *printer, float left_margin, float
     view->setDiffX( -static_cast<int>( MM_TO_POINT( left_margin ) ) );
     view->setDiffY( -static_cast<int>( MM_TO_POINT( top_margin ) ) );
 
-    QColor c = kapp->winStyleHighlightColor();
-    kapp->setWinStyleHighlightColor( colorGroup().highlight() );
+    //QColor c = kapp->winStyleHighlightColor();
+    //kapp->setWinStyleHighlightColor( colorGroup().highlight() ); // deprecated in Qt3
 
     QProgressDialog progress( i18n( "Printing..." ), i18n( "Cancel" ),
                               printer->toPage() - printer->fromPage() + 2, this );
@@ -3587,7 +3621,7 @@ void Page::print( QPainter *painter, KPrinter *printer, float left_margin, float
     view->setDiffY( _yOffset );
 
     progress.setProgress( printer->toPage() - printer->fromPage() + 2 );
-    kapp->setWinStyleHighlightColor( c );
+    //kapp->setWinStyleHighlightColor( c );
 
     QPtrListIterator<KPObject> oIt( *objectList() );
     for (; oIt.current(); ++oIt )

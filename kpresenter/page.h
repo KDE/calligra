@@ -304,6 +304,10 @@ protected:
     void endDrawCubicBezierCurve();
     double getAngle( QPoint p1, QPoint p2 );
 
+#ifndef NDEBUG
+    void printRTDebug( int info );
+#endif
+
 private:
     // variables
     QPopupMenu *presMenu;
