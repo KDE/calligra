@@ -1396,8 +1396,7 @@ QString RTFWorker::textFormatToRtf(const TextFormatting& formatOrigin,
 
     if ( force
         || ( formatOrigin.strikeout != formatData.strikeout )
-        || ( formatOrigin.strikeoutType != formatData.strikeoutType )
-        )
+        || ( formatOrigin.strikeoutType != formatData.strikeoutType ) )
     {
         if ( formatData.strikeout )
         {
