@@ -159,6 +159,8 @@ public:
   QColor color() {return objColor;}
   void setVertAlign(VertAlign va) {objVertAlign = va;}
   VertAlign vertAlign() {return objVertAlign;}
+  void setOrigSize(int s) {_origSize = s;}
+  int origSize() {return _origSize;}
 
   // insert/append a char or string into the object
   void insert(unsigned int index,const char* text) {objText.insert(index,qstrdup(text));}
@@ -191,6 +193,7 @@ protected:
   QColor objColor;
   QFont objFont;
   VertAlign objVertAlign;
+  int _origSize;
 
   // text of the object
   QString objText;
@@ -454,6 +457,7 @@ public:
 
   // zoom text
   void zoom(float);
+  void zoomOrig();
 
   // add paragraph
   TxtParagraph* addParagraph();

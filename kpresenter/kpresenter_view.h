@@ -70,6 +70,7 @@ class Page;
 #include "kenumlistdia.h"
 #include "optiondia.h"
 #include "pgconfdia.h"
+#include "effectdia.h"
 
 /******************************************************************/
 /* class KPresenterFrame                                          */
@@ -242,6 +243,7 @@ protected slots:
   void styleOk();
   void optionOk();
   void pgConfOk();
+  void effectOk();
 
   // scrolling
   void scrollH(int);
@@ -451,6 +453,7 @@ protected:
   StyleDia *styleDia;
   OptionDia *optionDia;
   PgConfDia *pgConfDia;
+  EffectDia *effectDia;
 
   // default pen and brush
   QPen pen;
@@ -472,6 +475,7 @@ protected:
   bool presStarted;
 
   KPresenterShell_impl* shell;
+  QSize oldSize;
 };
 
 #endif

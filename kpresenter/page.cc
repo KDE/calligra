@@ -649,7 +649,18 @@ void Page::mouseDoubleClickEvent(QMouseEvent *e)
 /*====================== key press event =========================*/
 void Page::keyPressEvent(QKeyEvent *e)
 {
-  printf("Hallo\n");
+  if (!editMode)
+    {
+      switch (e->key())
+	{
+	case Key_Space: case Key_Right: case Key_Down:
+	  view->screenNext(); break;
+	case Key_Backspace: case Key_Left: case Key_Up:
+	  view->screenPrev(); break;
+	case Key_Escape: case Key_Q: case Key_X:
+	  view->screenStop(); break;
+	}
+    }
 }
 
 /*========================== get object ==========================*/
@@ -851,6 +862,27 @@ void Page::resizeObjRight(int diff,PageObjects* obj)
     }
 }
 
+/*====================== get page of object ======================*/
+int Page::getPageOfObj(int objNum)
+{
+  int i,j;
+
+  for (i = 0;i < objList()->count();i++)
+    {
+      objPtr = objList()->at(i);
+      if (objPtr->objNum == objNum)
+	{
+	  for (j = 0;j < pageList()->count();j++)
+	    {
+	      if (getPageSize(j+1).intersects(QRect(objPtr->ox - diffx(),objPtr->oy - diffy(),
+						    objPtr->ow,objPtr->oh)))	  
+		return j+1;
+	    }
+	}
+    }
+  return -1;
+}
+
 /*======================== setup menus ===========================*/
 void Page::setupMenus()
 {
@@ -876,6 +908,9 @@ void Page::setupMenus()
   graphMenu->insertSeparator();
   pixmap.load(pixdir+"/kpresenter/toolbar/style.xpm");
   graphMenu->insertItem(pixmap,"&Properties...",this,SLOT(objProperties()));
+  graphMenu->insertSeparator();
+  pixmap.load(pixdir+"/kpresenter/toolbar/effect.xpm");
+  graphMenu->insertItem(pixmap,"&Assign effect...",this,SLOT(assignEffect()));
   graphMenu->setMouseTracking(true);
 
   // create right button picture menu
@@ -897,6 +932,9 @@ void Page::setupMenus()
   picMenu->insertSeparator();
   pixmap.load(pixdir+"/kpresenter/toolbar/picture.xpm");
   picMenu->insertItem(pixmap,"&Change Picture...",this,SLOT(chPic()));
+  picMenu->insertSeparator();
+  pixmap.load(pixdir+"/kpresenter/toolbar/effect.xpm");
+  picMenu->insertItem(pixmap,"&Assign effect...",this,SLOT(assignEffect()));
   picMenu->setMouseTracking(true);
 
   // create right button clipart menu 
@@ -918,6 +956,9 @@ void Page::setupMenus()
   clipMenu->insertSeparator();
   pixmap.load(pixdir+"/kpresenter/toolbar/clipart.xpm");
   clipMenu->insertItem(pixmap,"&Change Clipart...",this,SLOT(chClip()));
+  clipMenu->insertSeparator();
+  pixmap.load(pixdir+"/kpresenter/toolbar/effect.xpm");
+  clipMenu->insertItem(pixmap,"&Assign effect...",this,SLOT(assignEffect()));
   clipMenu->setMouseTracking(true);
 
   // create right button text menu 
@@ -936,6 +977,9 @@ void Page::setupMenus()
   txtMenu->insertSeparator();
   pixmap.load(pixdir+"/kpresenter/toolbar/rotate.xpm");
   txtMenu->insertItem(pixmap,"&Rotate...",this,SLOT(rotateObjs()));
+  txtMenu->insertSeparator();
+  pixmap.load(pixdir+"/kpresenter/toolbar/effect.xpm");
+  txtMenu->insertItem(pixmap,"&Assign effect...",this,SLOT(assignEffect()));
   txtMenu->setMouseTracking(true);
 }
 
@@ -1033,10 +1077,10 @@ void Page::startScreenPresentation()
 {
   unsigned int i;
 
-  float _presFaktW = (float)width() / (float)getPageSize(0).width() > 1.0 ? 
+  float _presFaktW = (float)width() / (float)getPageSize(1).width() > 1.0 ? 
     (float)width() / (float)getPageSize(0).width() : 1.0;
-  float _presFaktH = (float)height() / (float)getPageSize(0).height() > 1.0 ? 
-    (float)height() / (float)getPageSize(0).height() : 1.0;
+  float _presFaktH = (float)height() / (float)getPageSize(1).height() > 1.0 ? 
+    (float)height() / (float)getPageSize(1).height() : 1.0;
   _presFakt = min(_presFaktW,_presFaktH);
 
   for (i = 0;i < pageList()->count();i++)
@@ -1071,8 +1115,10 @@ void Page::startScreenPresentation()
       objPtr->oh = (int)((float)objPtr->oh * _presFakt);
 
       // correct calculated zoom-values
-      if (objPtr->ox + objPtr->ow > getPageSize(0,_presFakt).x()+diffx() + getPageSize(0,_presFakt).width())
-	objPtr->ow -= ((objPtr->ox + objPtr->ow) - (getPageSize(0,_presFakt).x()+diffx() + getPageSize(0,_presFakt).width()));
+      if (objPtr->ox + objPtr->ow > getPageSize(1,_presFakt).x()+diffx() + getPageSize(1,_presFakt).width())
+	objPtr->ow -= ((objPtr->ox + objPtr->ow) - (getPageSize(1,_presFakt).x()+diffx() + getPageSize(1,_presFakt).width()));
+
+      // *************** TODO: correction of height ****************
 
       if (objPtr->objType != OT_TEXT)
 	objPtr->graphObj->setGeometry(objPtr->ox,objPtr->oy,objPtr->ow,objPtr->oh);
@@ -1086,12 +1132,17 @@ void Page::startScreenPresentation()
   currPresPage = 1;
   editMode = false;
   drawBack = true;
+  grabKeyboard();
+  setFocusPolicy(QWidget::StrongFocus);
+  setFocus();
   repaint(true);
 }
 
 /*====================== stop screenpresentation =================*/
 void Page::stopScreenPresentation()
 {
+  setFocusPolicy(QWidget::NoFocus);
+  releaseKeyboard();
   unsigned int i;
 
   for (i = 0;i < objList()->count();i++)
@@ -1106,7 +1157,7 @@ void Page::stopScreenPresentation()
       else
 	{
 	  objPtr->textObj->setGeometry(objPtr->ox,objPtr->oy,objPtr->ow,objPtr->oh);
-	  objPtr->textObj->zoom(1.0/_presFakt);
+	  objPtr->textObj->zoomOrig();//(1.0/_presFakt);
 	}
     }
 
@@ -1154,6 +1205,28 @@ bool Page::pPrev(bool manual)
   currPresPage--;
   return true;
 }
+
+/*======================== can we assign an effect ? =============*/
+bool Page::canAssignEffect(int &pgNum,int &objNum)
+{
+  bool ret = false; 
+
+  pgNum = -1; objNum = -1;
+
+  for (unsigned int i = 0;i < objList()->count();i++)
+    {
+      objPtr = objList()->at(i);
+      if (objPtr->isSelected)
+	{
+	  if (ret) return false;
+	  ret = true;
+	  objNum = objPtr->objNum;
+	  pgNum = getPageOfObj(objNum);
+	}
+    }
+  return ret;
+}
+	    
 
 /*======================== draw back color =======================*/
 void Page::drawBackColor(QColor cb,QColor ca,BCType bcType,

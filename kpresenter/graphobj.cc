@@ -30,6 +30,8 @@ GraphObj::GraphObj(QWidget* parent=0,const char* name=0,ObjType _objType=OT_LINE
   lineType = LT_HORZ;
   rectType = RT_NORM;
   fileName = fName;
+  xRnd = 20;
+  yRnd = 20;
   hide();
   if (objType == OT_AUTOFORM) 
     {

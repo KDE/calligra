@@ -173,7 +173,7 @@ bool KPresenterDocument_impl::save(const char *_url)
   
   if (!u.isLocalFile())
     {
-      QMessageBox::critical((QWidget*)0L,i18n("KSpread Error"),i18n("Can not save to remote URL\n"),i18n("OK"));
+      QMessageBox::critical((QWidget*)0L,i18n("KPresenter Error"),i18n("Can not save to remote URL\n"),i18n("OK"));
       return false;
     }
 
@@ -1883,5 +1883,7 @@ void KPresenterDocument_impl::replaceObjs()
     {
       objPtr->ox = (objPtr->ox / _rastX) * _rastX;
       objPtr->oy = (objPtr->oy / _rastY) * _rastY;
+      if (objPtr->objType == OT_RECT && objPtr->graphObj->getRectType() == RT_ROUND)
+	objPtr->graphObj->setRnds(_xRnd,_yRnd);
     }
 }

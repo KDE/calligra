@@ -58,6 +58,7 @@ KPresenterView_impl::KPresenterView_impl(QWidget *_parent = 0L,const char *_name
   styleDia = 0;
   optionDia = 0;
   pgConfDia = 0;
+  effectDia = 0;
   xOffset = 0;
   yOffset = 0;
   pen.operator=(QPen(black,1,SolidLine));
@@ -362,40 +363,69 @@ void KPresenterView_impl::screenConfigPages()
 /*========================== screen assign effect ===============*/
 void KPresenterView_impl::screenAssignEffect()
 {
+  int _pNum,_oNum;
+
+  if (effectDia)
+    {
+      QObject::disconnect(effectDia,SIGNAL(effectDiaOk()),this,SLOT(effectOk()));
+      effectDia->close();
+      delete effectDia;
+      effectDia = 0;
+    }
+
+  if (page->canAssignEffect(_pNum,_oNum) && _pNum >= 1)
+    {
+      effectDia = new EffectDia(0,"Effect",_pNum,_oNum,(KPresenterView_impl*)this);
+      effectDia->setMaximumSize(effectDia->width(),effectDia->height());
+      effectDia->setMinimumSize(effectDia->width(),effectDia->height());
+      effectDia->setCaption("KPresenter - Assign effects");
+      QObject::connect(effectDia,SIGNAL(effectDiaOk()),this,SLOT(effectOk()));
+      effectDia->show();
+      page->deSelectAllObj();
+      page->selectObj(_oNum);
+    }
+  else
+    QMessageBox::critical((QWidget*)0L,i18n("KPresenter Error"),i18n("I can't assign an effect. You have to select EXACTLY one object!"),
+			  i18n("OK"));
 }
 
 /*========================== screen start =======================*/
 void KPresenterView_impl::screenStart()
 {
-  if (page) 
+  if (page && !presStarted) 
     {
       page->deSelectAllObj();
       presStarted = true;
-      float _presFaktW = (float)page->width() / (float)KPresenterDoc()->getPageSize(0,0,0).width() > 1.0 ? 
-	(float)page->width() / (float)KPresenterDoc()->getPageSize(0,0,0).width() : 1.0;
-      float _presFaktH = (float)page->height() / (float)KPresenterDoc()->getPageSize(0,0,0).height() > 1.0 ? 
-	(float)page->height() / (float)KPresenterDoc()->getPageSize(0,0,0).height() : 1.0;
+      page->recreate((QWidget*)0L,0,QPoint(0,0),true);
+      page->topLevelWidget()->move(-4,-24);
+      page->topLevelWidget()->resize(QApplication::desktop()->width()-1,QApplication::desktop()->height()-1);
+
+      float _presFaktW = (float)page->width() / (float)KPresenterDoc()->getPageSize(1,0,0).width() > 1.0 ? 
+	(float)page->width() / (float)KPresenterDoc()->getPageSize(1,0,0).width() : 1.0;
+      float _presFaktH = (float)page->height() / (float)KPresenterDoc()->getPageSize(1,0,0).height() > 1.0 ? 
+	(float)page->height() / (float)KPresenterDoc()->getPageSize(1,0,0).height() : 1.0;
       float _presFakt = min(_presFaktW,_presFaktH);
       page->setPresFakt(_presFakt);
 
-      //printf("%d %d\n",widget()->mapToGlobal(QPoint(x(),y())).x(),
-      //     widget()->mapToGlobal(QPoint(x(),y())).y());
-
       _xOffset = xOffset;
       _yOffset = yOffset;
-      xOffset = 0;
-      yOffset = 0;
-      if (widget()->width() > KPresenterDoc()->getPageSize(0,0,0,page->presFakt()).width())
-	xOffset -= (widget()->width() - KPresenterDoc()->getPageSize(0,0,0,page->presFakt()).width()) / 2;
-      if (widget()->height() > KPresenterDoc()->getPageSize(0,0,0,page->presFakt()).height())
-	yOffset -= (widget()->height() - KPresenterDoc()->getPageSize(0,0,0,page->presFakt()).height()) / 2;
+      xOffset = 5;
+      yOffset = 5;
+      if (page->width() > KPresenterDoc()->getPageSize(1,0,0,page->presFakt()).width())
+ 	xOffset -= (page->width() - KPresenterDoc()->getPageSize(1,0,0,page->presFakt()).width()) / 2;
+      if (page->height() > KPresenterDoc()->getPageSize(1,0,0,page->presFakt()).height())
+ 	yOffset -= (page->height() - KPresenterDoc()->getPageSize(1,0,0,page->presFakt()).height()) / 2;
       if (yOffset < 0) yOffset += 10; 
-      page->startScreenPresentation();
       vert->setEnabled(false);
       horz->setEnabled(false);
       m_bShowGUI = false;
-      resizeEvent(0L);
+      //resizeEvent(0L);
       page->setBackgroundColor(black);
+      oldSize = widget()->size();
+      widget()->resize(page->size());
+      setSize(page->size().width(),page->size().height());
+      page->startScreenPresentation();
+      page->topLevelWidget()->resize(QApplication::desktop()->width(),QApplication::desktop()->height());
     }
 }
 
@@ -404,6 +434,7 @@ void KPresenterView_impl::screenStop()
 {
   if (presStarted)
     {
+      page->recreate((QWidget*)this,0,QPoint(0,0),true);
       xOffset = _xOffset;
       yOffset = _yOffset;
       page->stopScreenPresentation();
@@ -411,8 +442,11 @@ void KPresenterView_impl::screenStop()
       vert->setEnabled(true);
       horz->setEnabled(true);
       m_bShowGUI = true;
-      resizeEvent(0L);
+      page->setMouseTracking(true);
       page->setBackgroundColor(white);
+      setSize(oldSize.width(),oldSize.height());
+      widget()->resize(oldSize);
+      resizeEvent(0L);
     }
 }
 
@@ -923,11 +957,16 @@ void KPresenterView_impl::optionOk()
   KPresenterDoc()->repaint(false);
 }
 
-/*=================== page configuration ok =====================*/
+/*=================== page configuration ok ======================*/
 void KPresenterView_impl::pgConfOk()
 {
   KPresenterDoc()->setManualSwitch(pgConfDia->getManualSwitch());
   KPresenterDoc()->setInfinitLoop(pgConfDia->getInfinitLoop());
+}
+
+/*=================== effect dialog ok ===========================*/
+void KPresenterView_impl::effectOk()
+{
 }
 
 /*================== scroll horizontal ===========================*/
@@ -1151,7 +1190,7 @@ void KPresenterView_impl::resizeEvent(QResizeEvent *e)
     {
       horz->hide();
       vert->hide();
-      page->resize(widget()->width(),widget()->height());
+      //page->resize(widget()->width(),widget()->height());
     }  
 }
 
@@ -1890,7 +1929,7 @@ void KPresenterView_impl::setupScrollbars()
   horz->setValue(horz->maxValue());
   vert->setValue(vert->minValue());
   horz->setValue(horz->minValue());
-  if (page) page->resize(widget()->width()-16,widget()->height()-16);
+  if (page && !presStarted) page->resize(widget()->width()-16,widget()->height()-16);
   vert->setGeometry(widget()->width()-16,0,16,widget()->height()-16);
   horz->setGeometry(0,widget()->height()-16,widget()->width()-16,16);
 }

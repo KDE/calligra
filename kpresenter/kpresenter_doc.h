@@ -252,7 +252,7 @@ public:
   unsigned int getRndX() {return _xRnd;}
   unsigned int getRndY() {return _yRnd;}
   void setRnds(unsigned int rx,unsigned int ry)
-    {_xRnd = rx; _yRnd = ry;}
+    {_xRnd = rx; _yRnd = ry; replaceObjs();}
 
   // get values for screenpresentations
   bool spInfinitLoop() {return _spInfinitLoop;}

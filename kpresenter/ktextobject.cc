@@ -246,6 +246,7 @@ TxtObj::TxtObj()
   objFont = QFont("times",12);
   objVertAlign = NORMAL;
   objText = "";
+  _origSize = 12;
 }
 
 /*================= overloaded constructor =======================*/ 
@@ -258,6 +259,7 @@ TxtObj::TxtObj(const char *text,QFont f,QColor c,VertAlign va,ObjType ot=TEXT)
   objVertAlign = va;
   objText = "";
   objText.insert(0,qstrdup(text));
+  _origSize = 10;
 }
 
 /*===================== width of the object ======================*/
@@ -962,7 +964,38 @@ void KTextObject::zoom(float _fakt)
 	    {
 	      txtObj = txtLine->itemAt(k);
 	      font.operator=(txtObj->font());
+	      txtObj->setOrigSize(txtObj->font().pointSize());
 	      font.setPointSize(((int)((float)font.pointSize() * _fakt)));
+	      txtObj->setFont(font);
+	    }
+	}
+    }
+  recalc();
+  repaint(false);
+}
+
+/*==================== zoom to original size =====================*/
+void KTextObject::zoomOrig()
+{
+  TxtObj *txtObj;
+  TxtLine *txtLine;
+  TxtParagraph *txtParagraph;
+  unsigned int i,j,k;
+  QFont font;
+
+  for (i = 0;i < paragraphs();i++)
+    {
+      txtParagraph = paragraphAt(i);
+
+      for (j = 0;j < txtParagraph->lines();j++)
+	{
+	  txtLine = txtParagraph->lineAt(j);
+
+	  for (k = 0;k < txtLine->items();k++)
+	    {
+	      txtObj = txtLine->itemAt(k);
+	      font.operator=(txtObj->font());
+	      font.setPointSize(txtObj->origSize());
 	      txtObj->setFont(font);
 	    }
 	}

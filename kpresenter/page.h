@@ -69,6 +69,8 @@ public:
   // public functions
   void selectAllObj();
   void deSelectAllObj();
+  void selectObj(int num);      
+  void deSelectObj(int num);
   void setTextFont(QFont*);
   void setTextColor(QColor*);
   void setTextAlign(TxtParagraph::HorzAlign);
@@ -85,6 +87,8 @@ public:
   unsigned int presPage() {return currPresPage;}
   void setPresFakt(float f) {_presFakt = f;}
   float presFakt() {return _presFakt;}
+
+  bool canAssignEffect(int&,int&);
 
 public slots:
 
@@ -109,13 +113,12 @@ protected:
   void keyPressEvent(QKeyEvent *e);
   int getObjectAt(int x,int y); 
   struct PageObjects* getObject(int num);
-  void selectObj(int num);      
-  void deSelectObj(int num);
   void resizeObjTop(int diff,PageObjects* obj);
   void resizeObjLeft(int diff,PageObjects* obj);
   void resizeObjBot(int diff,PageObjects* obj);
   void resizeObjRight(int diff,PageObjects* obj);
-  
+  int getPageOfObj(int);
+
   // setup popupmenus
   void setupMenus();
 
@@ -166,6 +169,7 @@ private slots:
   void objProperties();
   void chPic();
   void chClip();
+  void assignEffect() {view->screenAssignEffect();}
 
 signals:
 
