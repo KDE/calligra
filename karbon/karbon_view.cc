@@ -693,14 +693,14 @@ KarbonView::zoomChanged( const KoPoint &p )
 	{
 		centerX = 0.5;
 		centerY = double( m_canvas->contentsY() + m_canvas->visibleHeight() / 2 ) / double( m_canvas->contentsHeight() );
-		zoomFactor = zoom() * double( m_canvas->visibleWidth() ) / double( m_canvas->contentsWidth() );
+		zoomFactor = double( m_canvas->visibleWidth() ) / double( part()->document().width() + 10 );
 	}
 	else if( m_zoomAction->currentText() == i18n("Whole Page") )
 	{
 		centerX = 0.5;
 		centerY = 0.5;
-		double zoomFactorX = zoom() * double( m_canvas->visibleWidth() ) / double( m_canvas->contentsWidth() );
-		double zoomFactorY = zoom() * double( m_canvas->visibleHeight() ) / double( m_canvas->contentsHeight() );
+		double zoomFactorX = double( m_canvas->visibleWidth() ) / double( part()->document().width() + 10 );
+		double zoomFactorY = double( m_canvas->visibleHeight() ) / double( part()->document().height() + 10 );
 		zoomFactor = kMin( zoomFactorX, zoomFactorY );
 	}
 	else
