@@ -23,7 +23,10 @@
 
 using namespace std;
 
-KChartFontConfigPage::KChartFontConfigPage(KChartParameters* params,QWidget* parent ) :
+#include "kdchart/KDChartParams.h"
+
+KChartFontConfigPage::KChartFontConfigPage( KDChartParams* params,
+                                            QWidget* parent ) :
   QWidget( parent ),_params( params )
 {
   QGridLayout *grid = new QGridLayout(this,5,4,15,7);
@@ -55,6 +58,9 @@ KChartFontConfigPage::KChartFontConfigPage(KChartParameters* params,QWidget* par
 
 void KChartFontConfigPage::initList()
 {
+    qDebug( "Sorry, not implemented: KChartFontConfigPage::initList()" );
+#warning Put back in
+#ifdef K
   list->insertItem(i18n("Title"));
   if(!_params->isPie())	{
     list->insertItem(i18n("X-Title"));
@@ -85,7 +91,9 @@ void KChartFontConfigPage::initList()
   }
   index = 0;
   colorButton->setColor( extColor.color(index));
+#endif
 }
+
 
 void KChartFontConfigPage::changeIndex(int newindex)
 {
@@ -128,6 +136,9 @@ void KChartFontConfigPage::changeLabelFont()
 
 void KChartFontConfigPage::init()
 {
+    qDebug( "Sorry, not implemented: KChartFontConfigPage::init()" );
+#warning Put back in
+#ifdef K
   title = _params->titleFont();
   xtitle = _params->xTitleFont();
   ytitle = _params->yTitleFont();
@@ -140,10 +151,15 @@ void KChartFontConfigPage::init()
 
   index = 0;
   colorButton->setColor(extColor.color(index));
+#endif
 }
+
 
 void KChartFontConfigPage::apply()
 {
+    qDebug( "Sorry, not implemented: KChartFontConfigPage::apply()" );
+#warning Put back in
+#ifdef K
   _params->setLabelFont(label);
   if(!_params->isPie()) {
     _params->setXAxisFont(xaxis);
@@ -156,4 +172,5 @@ void KChartFontConfigPage::apply()
   extColor.setColor(index,colorButton->color());
   for(unsigned int i=0;i<extColor.count();i++)
     _params->ExtColor.setColor(i,extColor.color(i));
+#endif
 }

@@ -1,7 +1,6 @@
 #ifndef _kchartWIZARDSELECTCHARTSUBTYPEPAGE_H
 #define _kchartWIZARDSELECTCHARTSUBTYPEPAGE_H
 
-#include <kchartparams.h>
 #include <qradiobutton.h>
 
 class QButtonGroup;
@@ -20,7 +19,8 @@ public slots:
 
 private:
   KChartPart* _chart;
-  KChartType _charttype;
+#warning "Put back in"
+  //  KChartType _charttype;
   QRadioButton *depth;
   QRadioButton *sum;
   QRadioButton *beside;

@@ -4,12 +4,6 @@ INCLUDES  = $(KOFFICE_INCLUDES) -I$(top_srcdir)/interfaces -I$(interfacedir) $(a
 kde_module_LTLIBRARIES = libkchartpart.la
 libkchartpart_la_SOURCES = kchart_part.cc \
 	kchart_view.cc kchart_factory.cc \
-	engine.cc \
-	enginehelper.cc \
-	enginedraw.cc \
-	enginepie.cc \
-	enginetoremove.cc \
-	kchartparams.cc \
 	kchartBarConfigDialog.cc \
 	kchartBarConfigPage.cc \
 	kchartColorConfigPage.cc \
@@ -26,11 +20,6 @@ libkchartpart_la_SOURCES = kchart_part.cc \
 	kchartConfigDialog.cc \
 	kchartGeometryConfigPage.cc \
 	kchartWizard.cc \
-	kchartEngine.cc \
-	kchartEngine2.cc \
-	kchartEngine_DataDraw.cc \
-	kchartEngine_Grids.cc \
-	kchartEngine_ComputeSize.cc \
 	kchartWizardLabelsLegendPage.cc \
 	kchartWizardSelectChartSubTypePage.cc \
 	kchartWizardSelectChartTypePage.cc \
@@ -42,9 +31,11 @@ libkchartpart_la_SOURCES = kchart_part.cc \
 	sheet.cc \
 	sheetdlg.cc \
 	table.cc
+
 libkchartpart_la_LDFLAGS = $(KDE_PLUGIN)
 libkchartpart_la_LIBADD = $(top_builddir)/interfaces/libkochart.la \
-                          $(top_builddir)/lib/kofficeui/libkofficeui.la
+                          $(top_builddir)/lib/kofficeui/libkofficeui.la	\
+			  kdchart/libkdchart.a			
 
 ## The kdeinit loadable module
 lib_LTLIBRARIES = kchart.la
@@ -63,7 +54,6 @@ dummy.cc:
 
 noinst_HEADERS =  kchart_part.h \
 		kchart_view.h kchart_factory.h \
-		engine.h \
 		kchartBarConfigDialog.h \
 		kchartBarConfigPage.h \
 		kchartColorConfigPage.h \
@@ -79,7 +69,6 @@ noinst_HEADERS =  kchart_part.h \
 		kchartPieConfigPage.h \
 		kchartConfigDialog.h \
 		kchartGeometryConfigPage.h \
-	   	kchartEngine.h \
 		kchartWizard.h \
 		kchartWizardLabelsLegendPage.h \
 		kchartWizardSelectChartSubTypePage.h \
@@ -92,7 +81,8 @@ noinst_HEADERS =  kchart_part.h \
 		sheet.h \
 		sheetdlg.h \
 		table.h \
-		kchart_aboutdata.h
+		kchart_aboutdata.h	\
+		kchartcolorarray.h
 
 METASOURCES = AUTO
 
@@ -113,7 +103,7 @@ linktest_LDADD = $(lib_LTLIBRARIES)
 linktest_LDFLAGS = $(libkchartpart_la_LDFLAGS)
 
 # SUBDIRS =  . plugins pics dtd toolbar
-SUBDIRS =  . toolbar pics
+SUBDIRS =  kdchart . toolbar pics
 
 messages: rc.cpp
 	$(XGETTEXT) rc.cpp *.cc kchart_aboutdata.h -o $(podir)/kchart.pot

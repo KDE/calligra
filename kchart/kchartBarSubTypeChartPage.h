@@ -14,17 +14,19 @@
 class QLabel;
 class QRadioButton;
 
+class KDChartParams;
+
 class KChartBarSubTypeChartPage : public KChartSubTypeChartPage
 {
     Q_OBJECT
 
 public:
-    KChartBarSubTypeChartPage( KChartParameters* params, QWidget* parent );
+    KChartBarSubTypeChartPage( KDChartParams* params, QWidget* parent );
     virtual void init();
     virtual void apply();
 
 private slots:
-	  void slotChangeSubType( int type );
+    void slotChangeSubType( int type );
 
 private:
     QRadioButton *depth;

@@ -20,10 +20,15 @@
 #include <qradiobutton.h>
 #include <qspinbox.h>
 
-KChartParameterPieConfigPage::KChartParameterPieConfigPage(KChartParameters* params,QWidget* parent ) :
+#include "kdchart/KDChartParams.h"
+
+KChartParameterPieConfigPage::KChartParameterPieConfigPage( KDChartParams* params,
+                                                            QWidget* parent ) :
     QWidget( parent ),_params( params )
 {
-
+    qDebug( "Sorry, not implemented: KChartParameterPieConfigPage::KChartParameterPieConfigPage()" );
+#warning Put back in
+#ifdef K
     QGridLayout *grid1 = new QGridLayout(this,2,2,15,7);
 
     QButtonGroup* gb = new QButtonGroup( i18n( "Label's position" ), this );
@@ -150,6 +155,7 @@ KChartParameterPieConfigPage::KChartParameterPieConfigPage(KChartParameters* par
     	dist->setEnabled(false);
     connect( lineLabel, SIGNAL( toggled( bool ) ),
   		   this, SLOT( changeState( bool ) ) );
+#endif
 }
 
 void KChartParameterPieConfigPage::changeState(bool state)
@@ -164,6 +170,9 @@ else
 
 void KChartParameterPieConfigPage::init()
 {
+    qDebug( "Sorry, not implemented: KChartParameterPieConfigPage::init()" );
+#warning Put back in
+#ifdef K
     title->setText(_params->title);
     lineLabel->setChecked(_params->label_line);
     dist->setValue(_params->label_dist);
@@ -188,10 +197,15 @@ void KChartParameterPieConfigPage::init()
                                    kdDebug(35001)<<" Error in _params->percent_labels\n";
     		break;
     	}
+#endif
 }
+
+
 void KChartParameterPieConfigPage::apply()
 {
-
+    qDebug( "Sorry, not implemented: KChartParameterPieConfigPage::apply()" );
+#warning Put back in
+#ifdef K
     _params->title=title->text();
     _params->label_line=lineLabel->isChecked();
     if(lineLabel->isChecked())
@@ -208,5 +222,5 @@ void KChartParameterPieConfigPage::apply()
     	_params->percent_labels=KCHARTPCTTYPE_BELOW;
     else
     	kdDebug(35001)<<"Error in QRadioButton\n";
-
+#endif
 }

@@ -33,7 +33,9 @@ protected slots:
       void barsChart();
       void lineChart();
       void areasChart();
-	  void slotRepaint();
+      void hiLoChart();
+      void ringChart();
+      void slotRepaint();
 
 protected:
     void paintEvent( QPaintEvent* );
@@ -52,6 +54,8 @@ private:
     KToggleAction* m_chartareas;
     KToggleAction* m_chartbars;
     KToggleAction* m_chartline;
+    KToggleAction* m_charthilo;
+    KToggleAction* m_chartring;
 };
 
 #endif

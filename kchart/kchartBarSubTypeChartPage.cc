@@ -19,12 +19,16 @@
 #include <qhgroupbox.h>
 
 #include "kchart_factory.h"
-#include "kchartparams.h"
 
-KChartBarSubTypeChartPage::KChartBarSubTypeChartPage( KChartParameters* params,
-													  QWidget* parent ) :
+#include "kdchart/KDChartParams.h"
+
+KChartBarSubTypeChartPage::KChartBarSubTypeChartPage( KDChartParams* params,
+                                                      QWidget* parent ) :
   KChartSubTypeChartPage( params, parent )
 {
+    qDebug( "Sorry, not implemented: KChartBarSubTypeChartPage::KChartBarSubTypeChartPage()" );
+#warning Put back in
+#ifdef K
   QHBoxLayout* toplevel = new QHBoxLayout( this, 10 );
   QVButtonGroup* subtypeBG = new QVButtonGroup( i18n( "Subtype" ), this );
   toplevel->addWidget( subtypeBG, AlignCenter );
@@ -45,10 +49,14 @@ KChartBarSubTypeChartPage::KChartBarSubTypeChartPage( KChartParameters* params,
   exampleLA = new QLabel( exampleGB );
   exampleLA->setAlignment( AlignCenter | AlignVCenter );
   // PENDING(kalle) Make image scale with available space once Qt 2.2 is out.
+#endif
 }
 
 void KChartBarSubTypeChartPage::init()
 {
+    qDebug( "Sorry, not implemented: KChartBarSubTypeChartPage::init()" );
+#warning Put back in
+#ifdef K
   // SUM is for areas only and therefore not configurable here.
   switch((int)_params->stack_type) {
 	case (int)KCHARTSTACKTYPE_DEPTH:
@@ -77,13 +85,17 @@ void KChartBarSubTypeChartPage::init()
 		break;
 	  }
 	}
-  
+
   slotChangeSubType( _params->stack_type );
+#endif
 }
 
 
 void KChartBarSubTypeChartPage::slotChangeSubType( int type )
 {
+    qDebug( "Sorry, not implemented: KChartBarSubTypeChartPage::slotChangeSubType()" );
+#warning Put back in
+#ifdef K
   switch( type ) {
   case KCHARTSTACKTYPE_DEPTH:
 	exampleLA->setPixmap( UserIcon( "barsubtypedepth", KChartFactory::global()) );
@@ -98,10 +110,15 @@ void KChartBarSubTypeChartPage::slotChangeSubType( int type )
 	exampleLA->setPixmap( UserIcon( "barsubtypepercent", KChartFactory::global() ) );
 	break;
   };
+#endif
 }
+
 
 void KChartBarSubTypeChartPage::apply()
 {
+    qDebug( "Sorry, not implemented: KChartBarSubTypeChartPage::apply()" );
+#warning Put back in
+#ifdef K
   if( depth->isChecked() ) {
 	_params->stack_type = KCHARTSTACKTYPE_DEPTH;
   } else if( layer->isChecked() ) {
@@ -113,5 +130,6 @@ void KChartBarSubTypeChartPage::apply()
   } else{
 	kdDebug( 35001 ) << "Error in groupbutton" << endl;
   }
+#endif
 }
 

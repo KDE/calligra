@@ -9,21 +9,21 @@
 
 #include <qwidget.h>
 
-#include "kchartparams.h"
-
 class QRadioButton;
+
+class KDChartParams;
 
 class KChartComboPage : public QWidget
 {
     Q_OBJECT
 
 public:
-    KChartComboPage( KChartParameters* params,QWidget* parent );
+    KChartComboPage( KDChartParams* params,QWidget* parent );
     void init();
     void apply();
 
 private:
-    KChartParameters* _params;
+    KDChartParams* _params;
     QRadioButton *diamond;
     QRadioButton *closeconnected;
     QRadioButton *connecting;

@@ -10,17 +10,18 @@
 #include <qwidget.h>
 #include <kcolorbtn.h>
 
-#include "kchartparams.h"
 class QSpinBox;
 class QCheckBox;
 class QLineEdit;
+
+class KDChartParams;
 
 class KChartParameterConfigPage : public QWidget
 {
     Q_OBJECT
 
 public:
-    KChartParameterConfigPage( KChartParameters* params,QWidget* parent );
+    KChartParameterConfigPage( KDChartParams* params, QWidget* parent );
     void init();
     void apply();
 public slots:
@@ -28,7 +29,7 @@ public slots:
     void changeXaxisState( bool );
     void changeFont();
 private:
-    KChartParameters* _params;
+    KDChartParams* _params;
     QCheckBox *grid;
     QCheckBox *border;
     QCheckBox *xaxis;

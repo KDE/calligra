@@ -7,8 +7,6 @@
 #include "kchartBackgroundPixmapConfigPage.h"
 #include "kchartBackgroundPixmapConfigPage.moc"
 
-#include "kchartparams.h"
-
 #include <klocale.h>
 #include <kglobal.h>
 #include <kstddirs.h>
@@ -26,7 +24,9 @@
 #include <qlabel.h>
 #include <qwhatsthis.h>
 
-KChartBackgroundPixmapConfigPage::KChartBackgroundPixmapConfigPage( KChartParameters* params, QWidget* parent )
+#include "kdchart/KDChartParams.h"
+
+KChartBackgroundPixmapConfigPage::KChartBackgroundPixmapConfigPage( KDChartParams* params, QWidget* parent )
   : QWidget( parent, "KChartBackgroundPixmapConfigPage" ),
 	_params( params )
 {
@@ -112,16 +112,23 @@ KChartBackgroundPixmapConfigPage::KChartBackgroundPixmapConfigPage( KChartParame
 
 void KChartBackgroundPixmapConfigPage::init()
 {
-  showSettings( _params->backgroundPixmapName );
+    qDebug( "Sorry, not implemented: KChartBackgroundPixmapConfigPage::init()" );
+#warning Put back in
+#ifdef K
+    showSettings( _params->backgroundPixmapName );
   intensitySB->setValue( (int)(_params->backgroundPixmapIntensity * 100.0) );
   scaledCB->setChecked( _params->backgroundPixmapScaled );
   centeredCB->setChecked( _params->backgroundPixmapCentered );
   if( scaledCB )
 	centeredCB->setEnabled( false );
+#endif
 }
 
 void KChartBackgroundPixmapConfigPage::apply()
 {
+    qDebug( "Sorry, not implemented: KChartBackgroundPixmapConfigPage::apply()" );
+#warning Put back in
+#ifdef K
     if( wallCB->currentText() != _params->backgroundPixmapName )
     {
         bool load=true;
@@ -159,6 +166,7 @@ void KChartBackgroundPixmapConfigPage::apply()
 	_params->backgroundPixmapCentered = centeredCB->isChecked();
 	_params->backgroundPixmapIsDirty = true;
     }
+#endif
 }
 
 

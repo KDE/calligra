@@ -7,18 +7,21 @@
 #include <qlineedit.h>
 #include <qradiobutton.h>
 #include <qlabel.h>
-#include "kchartparams.h"
 #include <klocale.h>
 #include <kfontdialog.h>
 #include <qlayout.h>
 #include <qpushbutton.h>
 #include <qcolor.h>
 
+#include "kdchart/KDChartParams.h"
 
 KChartWizardLabelsLegendPage::KChartWizardLabelsLegendPage( QWidget* parent, KChartPart* chart ) :
   QWidget( parent ),
   _chart( chart )
 {
+    qDebug( "Sorry, not implemented: KChartWizardLabelsLegendPage::KChartWizardLabelsLegendPage()" );
+#warning Put back in
+#ifdef K
   ytitle2=true;
 
 
@@ -127,6 +130,7 @@ KChartWizardLabelsLegendPage::KChartWizardLabelsLegendPage( QWidget* parent, KCh
                 this,SLOT(changeYTitle2Color(const QColor &)));
 
   resize( 600, 300 );
+#endif
 }
 
 
@@ -190,6 +194,9 @@ else
 
 void KChartWizardLabelsLegendPage::apply(  )
 {
+    qDebug( "Sorry, not implemented: KChartWizardLabelsLegendPage::apply()" );
+#warning Put back in
+#ifdef K
    _chart->params()->setXTitleFont(xlabel);
    _chart->params()->setYTitleFont(ylabel);
    _chart->params()->setTitleFont(title);
@@ -201,6 +208,8 @@ void KChartWizardLabelsLegendPage::apply(  )
    _chart->params()->TitleColor=title_color;
    _chart->params()->YTitle2Color=y_color2;
    _chart->params()->ytitle2=_ylabel2ED->text();
-
+#endif
 }
+
+
 #include "kchartWizardLabelsLegendPage.moc"

@@ -16,11 +16,16 @@
 #include <kiconloader.h>
 #include <kdebug.h>
 
+#include "kdchart/KDChartParams.h"
+
 KChartWizard::KChartWizard ( KChartPart* chart, QWidget *parent, const char* name,
 							 bool modal, WFlags f ) :
   KWizard( parent, name, modal, f ),
   _chart( chart )
 {
+    qDebug( "Sorry, not implemented: KChartWizard::KChartWizard()" );
+#warning Put back in
+#ifdef K
   // hack
 
   kdDebug(35001) << "Creating KChartWizard" << endl;
@@ -62,6 +67,7 @@ KChartWizard::KChartWizard ( KChartPart* chart, QWidget *parent, const char* nam
   //resize( 620, 380 );
   subType((int)_chart->params()->type);
   kdDebug(35001) << "kchartwizard created" << endl;
+#endif
 }
 
 
@@ -77,7 +83,10 @@ KChartWizard::~KChartWizard()
 
 void KChartWizard::subType(int _type)
 {
-  if( ((KChartType)_type==KCHARTTYPE_BAR) || ((KChartType)_type==KCHARTTYPE_3DBAR)
+    qDebug( "Sorry, not implemented: KChartWizard::subType()" );
+#warning Put back in
+#ifdef K
+    if( ((KChartType)_type==KCHARTTYPE_BAR) || ((KChartType)_type==KCHARTTYPE_3DBAR)
       ||((KChartType)_type==KCHARTTYPE_3DLINE)) {
     /*||((KChartType)_type==KCHARTTYPE_AREA)
       ||((KChartType)_type==KCHARTTYPE_3DAREA))*/
@@ -101,6 +110,7 @@ void KChartWizard::subType(int _type)
   } else {
     _labelslegendpage->ytitle2=false;
   }
+#endif
 }
 
 

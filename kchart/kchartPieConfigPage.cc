@@ -20,10 +20,15 @@
 #include <qfont.h>
 #include <qspinbox.h>
 
+#include "kdchart/KDChartParams.h"
 
-KChartPieConfigPage::KChartPieConfigPage(KChartParameters* params,QWidget* parent ) :
+KChartPieConfigPage::KChartPieConfigPage( KDChartParams* params,
+                                          QWidget* parent ) :
     QWidget( parent ),_params( params )
 {
+    qDebug( "Sorry, not implemented: KChartPieConfigPage::KChartPieConfigPage()" );
+#warning Put back in
+#ifdef K
    col=_params->colPie;
    pos=-1;
    QGridLayout *grid = new QGridLayout(this,8,4,15,7);
@@ -88,11 +93,15 @@ KChartPieConfigPage::KChartPieConfigPage(KChartParameters* params,QWidget* paren
    connect(column,SIGNAL(valueChanged(int)),this,SLOT(changeValue(int)));
 
   connect( list, SIGNAL( selectionChanged(QListViewItem *) ), this, SLOT( slotselected(QListViewItem *) ) );
-
+#endif
 }
+
 
 void KChartPieConfigPage::initList()
 {
+    qDebug( "Sorry, not implemented: KChartPieConfigPage::initList()" );
+#warning Put back in
+#ifdef K
 int indice;
 for ( QStringList::Iterator it = _params->legend.begin(); it != _params->legend.end(); ++it )
   	{
@@ -108,13 +117,15 @@ for ( ; it.current(); ++it )
 
 	}
 value.duplicate(_params->explode);
-
-
+#endif
 }
 
 
 void KChartPieConfigPage::slotselected(QListViewItem *it)
 {
+    qDebug( "Sorry, not implemented: KChartParameterConfigPage::slotselected()" );
+#warning Put back in
+#ifdef K
 //column : 0
 //cout <<"Select :"<<(it)->text(0).ascii()<<endl;
 int indice=_params->legend.findIndex((it)->text(0));
@@ -125,10 +136,15 @@ else
 
 pos=_params->legend.count()*col+indice;
 dist->setValue(value[pos]);
+#endif
 }
+
 
 void KChartPieConfigPage::changeValue(int val)
 {
+    qDebug( "Sorry, not implemented: KChartPieConfigPage::changeValue()" );
+#warning Put back in
+#ifdef K
 col=val-1;
 QListViewItemIterator it( list );
 //Select or not CheckBox
@@ -146,10 +162,15 @@ if(pos!=-1)
 	pos=_params->legend.count()*col+indice;
 	dist->setValue(value[pos]);
 	}
+#endif
 }
+
 
 void KChartPieConfigPage::init()
 {
+    qDebug( "Sorry, not implemented: KChartPieConfigPage::init()" );
+#warning Put back in
+#ifdef K
 QListViewItemIterator it( list );
 //Select or not CheckBox
 
@@ -191,4 +212,5 @@ if(_params->threeD())
    	}
 value[pos]=dist->value();
 _params->explode.duplicate(value);
+#endif
 }

@@ -13,11 +13,15 @@
 #include <qlabel.h>
 #include <qbuttongroup.h>
 
+#include "kdchart/KDChartParams.h"
 
-KChartParameter3dConfigPage::KChartParameter3dConfigPage(KChartParameters* params,QWidget* parent ) :
+KChartParameter3dConfigPage::KChartParameter3dConfigPage( KDChartParams* params,
+                                                          QWidget* parent ) :
     QWidget( parent ),_params( params )
 {
-
+    qDebug( "Sorry, not implemented: KChartParameter3dConfigPage::KChartParameter3dConfigPage()" );
+#warning Put back in
+#ifdef K
   QGridLayout* layout = new QGridLayout(this, 2, 2,15,7 );
 
   QButtonGroup* gb = new QButtonGroup( i18n("3D Parameters"), this );
@@ -70,27 +74,31 @@ KChartParameter3dConfigPage::KChartParameter3dConfigPage(KChartParameters* param
   //it's not good but I don't know how
   //to reduce space
   layout->addColSpacing(1,300);
+#endif
 }
 
 void KChartParameter3dConfigPage::init()
 {
-
-angle3d->setValue(_params->_3d_angle);
-
-
-
-depth->setValue( _params->_3d_depth);
-
-if(_params->do_bar())
+    qDebug( "Sorry, not implemented: KChartParameter3dConfigPage::init()" );
+#warning Put back in
+#ifdef K
+    angle3d->setValue(_params->_3d_angle);
+    depth->setValue( _params->_3d_depth);
+    if(_params->do_bar())
         bar_width->setValue( _params->bar_width);
+#endif
 }
 
 void KChartParameter3dConfigPage::apply()
 {
+    qDebug( "Sorry, not implemented: KChartParameter3dConfigPage::apply()" );
+#warning Put back in
+#ifdef K
 _params->_3d_angle=angle3d->value();
 
 _params->_3d_depth=depth->value();
 
 if(_params->do_bar())
         _params->bar_width=bar_width->value();
+#endif
 }

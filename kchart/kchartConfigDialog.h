@@ -9,7 +9,7 @@
 
 #include <qtabdialog.h>
 
-class KChartParameters;
+class KDChartParams;
 class KChartColorConfigPage;
 class KChartParameterConfigPage;
 class KChartParameter3dConfigPage;
@@ -25,14 +25,14 @@ class KChartConfigDialog : public QTabDialog
     Q_OBJECT
 
 public:
-    KChartConfigDialog( KChartParameters* params,
-						QWidget* parent );
+    KChartConfigDialog( KDChartParams* params,
+                        QWidget* parent );
 
 signals:
 	void dataChanged();
 
 protected:
-    KChartParameters* _params;
+    KDChartParams* _params;
     //KChartGeometryConfigPage* _geompage;
     KChartColorConfigPage* _colorpage;
     KChartParameterConfigPage*_parameterpage;

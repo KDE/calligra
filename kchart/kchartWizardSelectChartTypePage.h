@@ -2,7 +2,6 @@
 #define _kchartWIZARDSELECTCHARTTYPEPAGE_H
 
 #include <qwidget.h>
-#include "kchartparams.h"
 
 class QFrame;
 class QPushButton;
@@ -31,7 +30,8 @@ private:
   int ylabelsize;
   int xstep;
   int ystep;
-  KChartType _type;
+#warning Put back in  
+  //  KChartType _type;
 
   void addButton(QString name, QString icon_name, int type);
 };

@@ -14,12 +14,15 @@ class QLabel;
 class QRadioButton;
 class KChartParams;
 
+class KDChartParams;
+
 class KChartAreaSubTypeChartPage : public KChartSubTypeChartPage
 {
     Q_OBJECT
 
 public:
-    KChartAreaSubTypeChartPage( KChartParameters* params,QWidget* parent );
+    KChartAreaSubTypeChartPage( KDChartParams* params,
+                                QWidget* parent );
     virtual void init();
     virtual void apply();
 

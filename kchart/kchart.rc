@@ -20,5 +20,7 @@
  <Action name="linechart"/>
  <Action name="areaschart"/>
  <Action name="barschart"/>
+ <Action name="hilochart"/>
+ <Action name="ringchart"/>
 </ToolBar>
 </kpartgui>

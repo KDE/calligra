@@ -2,7 +2,7 @@
 
 #include "kchartWizardSelectChartSubTypePage.h"
 #include "kchart_view.h"
-
+#include "kchart_part.h"
 
 #include <qpushbutton.h>
 #include <qbuttongroup.h>
@@ -16,12 +16,16 @@
 #include <kglobal.h>
 #include <klocale.h>
 
+#include "kdchart/KDChartParams.h"
 
 KChartWizardSelectChartSubTypePage::KChartWizardSelectChartSubTypePage( QWidget* parent,
-						    KChartPart* chart ) :
+                                                                        KChartPart* chart ) :
   QWidget( parent ),
   _chart( chart )
 {
+    qDebug( "Sorry, not implemented: KChartWizardSelectChartSubTypePage::KChartWizardSelectChartSubTypePage()" );
+#warning Put back in
+#ifdef K
     //  _charttype = _chart->chartType();
     chartSubType=true;
 
@@ -77,12 +81,16 @@ if(!chartSubType)
         grp->setEnabled(false);
 
 grid1->addWidget(grp,0,0);
+#endif
 }
 
 
 
 void KChartWizardSelectChartSubTypePage::apply()
 {
+    qDebug( "Sorry, not implemented: KChartWizardSelectChartSubTypePage::apply()" );
+#warning Put back in
+#ifdef K
 if(chartSubType)
 {
  if(depth->isChecked())
@@ -115,6 +123,7 @@ else
  {
  _chart->params()->stack_type = KCHARTSTACKTYPE_DEPTH;
  }
+#endif
 }
 
 

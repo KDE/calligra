@@ -7,8 +7,6 @@
 #include "kchartAreaSubTypeChartPage.h"
 #include "kchartAreaSubTypeChartPage.moc"
 
-#include "kchartparams.h"
-
 #include <kapp.h>
 #include <klocale.h>
 #include <kiconloader.h>
@@ -20,10 +18,17 @@
 #include <qlayout.h>
 #include <stdlib.h>
 
-KChartAreaSubTypeChartPage::KChartAreaSubTypeChartPage(KChartParameters* params,QWidget* parent ) :
+#include "kdchart/KDChartParams.h"
+
+KChartAreaSubTypeChartPage::KChartAreaSubTypeChartPage( KDChartParams* params,
+                                                        QWidget* parent ) :
   KChartSubTypeChartPage(  params, parent )
 {
-  QHBoxLayout* toplevel = new QHBoxLayout( this, 10 );
+    qDebug( "Sorry, not implemented: KChartAreaSubTypeChartPage::KChartAreaSubTypeChartPage()" );
+#warning Put back in
+#ifdef K
+
+    QHBoxLayout* toplevel = new QHBoxLayout( this, 10 );
   QVButtonGroup* subtypeBG = new QVButtonGroup( i18n( "Subtype" ), this );
   toplevel->addWidget( subtypeBG, AlignCenter| AlignVCenter );
   depth = new QRadioButton( i18n( "Depth" ), subtypeBG );
@@ -39,10 +44,15 @@ KChartAreaSubTypeChartPage::KChartAreaSubTypeChartPage(KChartParameters* params,
   exampleLA = new QLabel( exampleGB );
   exampleLA->setAlignment( AlignCenter | AlignVCenter );
   // PENDING(kalle) Make image scale with available space once Qt 2.2 is out.
+#endif
 }
+
 
 void KChartAreaSubTypeChartPage::init()
 {
+    qDebug( "Sorry, not implemented: KChartAreaSubTypeChartPage::init()" );
+#warning Put back in
+#ifdef K
   // LAYER and PERCENT are for bars only and therefore not configurable here.
   switch((int)_params->stack_type) {
         case (int)KCHARTSTACKTYPE_DEPTH:
@@ -64,10 +74,14 @@ void KChartAreaSubTypeChartPage::init()
         }
 
   slotChangeSubType( _params->stack_type );
+#endif
 }
 
 void KChartAreaSubTypeChartPage::slotChangeSubType( int type )
 {
+    qDebug( "Sorry, not implemented: KChartAreaSubTypeChartPage::slotChangeSubType()" );
+#warning Put back in
+#ifdef K
   switch( type ) {
   case KCHARTSTACKTYPE_DEPTH:
         exampleLA->setPixmap( UserIcon( "areasubtypedepth" ) );
@@ -76,12 +90,16 @@ void KChartAreaSubTypeChartPage::slotChangeSubType( int type )
         exampleLA->setPixmap( UserIcon( "areasubtypebeside" ) );
         break;
   };
+#endif
 }
 
 
 
 void KChartAreaSubTypeChartPage::apply()
 {
+    qDebug( "Sorry, not implemented: KChartAreaSubTypeChartPage::apply()" );
+#warning Put back in
+#ifdef K
   if( depth->isChecked() ) {
         _params->stack_type = KCHARTSTACKTYPE_DEPTH;
   } else if( beside->isChecked() ) {
@@ -89,5 +107,6 @@ void KChartAreaSubTypeChartPage::apply()
   } else {
         kdDebug( 35001 ) << "Error in groupbutton" << endl;
   }
+#endif
 }
 

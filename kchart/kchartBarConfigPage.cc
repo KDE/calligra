@@ -5,7 +5,6 @@
  */
 
 #include "kchartBarConfigPage.h"
-#include "kchartparams.h"
 
 #include "kchartBarConfigPage.moc"
 
@@ -86,10 +85,10 @@ KChartBarConfigPage::KChartBarConfigPage( QWidget* parent ) :
     grid3->addColSpacing(1,_xbardist->width());
     grid3->setColStretch(0,0);
     grid3->setColStretch(1,1);
-	
+
     grid3->activate();
     grid1->addWidget(gb2,0,1);
-	
+
     grid1->addRowSpacing(0,gb->height());
     grid1->addRowSpacing(0,gb2->height());
     grid1->setRowStretch(0,0);

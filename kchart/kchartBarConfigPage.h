@@ -8,7 +8,6 @@
 #define __KCHARTBARCONFIGPAGE_H__
 
 #include <qwidget.h>
-#include "kchartparams.h"
 
 class QRadioButton;
 class QLineEdit;

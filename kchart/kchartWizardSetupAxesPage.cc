@@ -2,7 +2,6 @@
 
 #include "kchartWizardSetupAxesPage.h"
 #include "kchart_view.h"
-#include "kchartparams.h"
 
 #include <qlabel.h>
 #include <qframe.h>
@@ -19,13 +18,16 @@
 #include <qpushbutton.h>
 #include <qcolor.h>
 
-
+#include "kdchart/KDChartParams.h"
 
 KChartWizardSetupAxesPage::KChartWizardSetupAxesPage( QWidget* parent,
-													  KChartPart* chart ) :
+                                                      KChartPart* chart ) :
   QWidget( parent ),
   _chart( chart )
 {
+    qDebug( "Sorry, not implemented: KChartWizardSetupAxesPage::KChartWizardSetupAxesPage()" );
+#warning Put back in
+#ifdef K
   chart3d=true;
   /*QFrame* tmpQFrame;
     tmpQFrame = new QFrame( this, "Frame_2" );
@@ -183,6 +185,7 @@ KChartWizardSetupAxesPage::KChartWizardSetupAxesPage( QWidget* parent,
 	  this,SLOT(changeBorderColor(const QColor &)));
   connect(gridColor,SIGNAL(changed( const QColor & )),
 	  this,SLOT(changeGridColor(const QColor &)));
+#endif
 }
 
 
@@ -227,6 +230,9 @@ void KChartWizardSetupAxesPage::paintEvent( QPaintEvent *)
 
 void KChartWizardSetupAxesPage::apply()
 {
+    qDebug( "Sorry, not implemented: KChartWizardSetupAxesPage::apply()" );
+#warning Put back in
+#ifdef K
   _chart->params()->grid =grid->isChecked() ;
   if( !y_interval->text().isEmpty())
     _chart->params()->requested_yinterval=y_interval->text().toDouble();
@@ -261,6 +267,9 @@ void KChartWizardSetupAxesPage::apply()
   } else {
     _chart->params()->ylabel2_fmt="";
   }
+#endif
 }
+
+
 
 #include "kchartWizardSetupAxesPage.moc"

@@ -9,7 +9,6 @@
 
 #include <qwidget.h>
 #include <qlistview.h>
-#include "kchartparams.h"
 
 class QSpinBox;
 class QLineEdit;
@@ -18,12 +17,14 @@ class QPushButton;
 class QFont;
 class QRadioButton;
 
+class KDChartParams;
+
 class KChartPieConfigPage : public QWidget
 {
     Q_OBJECT
 
 public:
-    KChartPieConfigPage( KChartParameters* params,QWidget* parent );
+    KChartPieConfigPage( KDChartParams* params, QWidget* parent );
     void init();
     void apply();
     void initList();
@@ -34,7 +35,7 @@ public slots:
     
 private:
     int col;
-    KChartParameters* _params;
+    KDChartParams* _params;
     QSpinBox *dist;
     QSpinBox *column;
     QListView *list;

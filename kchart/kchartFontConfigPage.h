@@ -9,19 +9,21 @@
 
 #include <qwidget.h>
 
-#include "kchartparams.h"
+#include "kchartcolorarray.h"
 
 class QLineEdit;
 class QListBox;
 class QPushButton;
 class KColorButton;
 
+class KDChartParams;
+
 class KChartFontConfigPage : public QWidget
 {
     Q_OBJECT
 
 public:
-    KChartFontConfigPage( KChartParameters* params,QWidget* parent );
+    KChartFontConfigPage( KDChartParams* params,QWidget* parent );
     void init();
     void apply();
     void initList();
@@ -30,7 +32,7 @@ public slots:
     void changeIndex(int index);
     void changeLabelFont();
 private:
-    KChartParameters* _params;
+    KDChartParams* _params;
     QLineEdit *font;
     QListBox *list;
     QListBox *listColor;

@@ -10,20 +10,20 @@
 
 #include <qwidget.h>
 
-class KChartParameters;
+class KDChartParams;
 
 class KChartSubTypeChartPage : public QWidget
 {
     Q_OBJECT
 
 public:
-    KChartSubTypeChartPage( KChartParameters* params, QWidget* parent ) :
-	  QWidget( parent ), _params( params ) {}
+    KChartSubTypeChartPage( KDChartParams* params, QWidget* parent ) :
+        QWidget( parent ), _params( params ) {}
     virtual void init() = 0;
     virtual void apply() = 0;
 
 protected:
-	KChartParameters* _params;
+    KDChartParams* _params;
 };
 
 #endif

@@ -17,9 +17,15 @@
 #include <qbuttongroup.h>
 #include <kfontdialog.h>
 
-KChartParameterConfigPage::KChartParameterConfigPage(KChartParameters* params,QWidget* parent ) :
+#include "kdchart/KDChartParams.h"
+
+KChartParameterConfigPage::KChartParameterConfigPage( KDChartParams* params,
+                                                      QWidget* parent ) :
     QWidget( parent ),_params( params )
 {
+    qDebug( "Sorry, not implemented: KChartParameterConfigPage::KChartParameterConfigPage()" );
+#warning Put back in
+#ifdef K
     QVBoxLayout* toplevel = new QVBoxLayout( this, 10 );
 
     QGridLayout* layout = new QGridLayout( 1, 3 );
@@ -150,6 +156,7 @@ KChartParameterConfigPage::KChartParameterConfigPage(KChartParameters* params,QW
   		   this, SLOT( changeState( bool ) ) );
     connect( xaxis, SIGNAL( toggled( bool ) ),
   		   this, SLOT( changeXaxisState( bool ) ) );
+#endif
 }
 
 void KChartParameterConfigPage::changeXaxisState(bool state)
@@ -178,6 +185,9 @@ if (KFontDialog::getFont( annotationFont,false,this ) == QDialog::Rejected )
 
 void KChartParameterConfigPage::init()
 {
+    qDebug( "Sorry, not implemented: KChartParameterConfigPage::init()" );
+#warning Put back in
+#ifdef K
     grid->setChecked(_params->grid);
     border->setChecked(_params->border);
     xaxis->setChecked(_params->xaxis);
@@ -237,10 +247,15 @@ void KChartParameterConfigPage::init()
         annotation->setText("");
         element->setValue(1);
         }
-
+#endif
 }
+
+
 void KChartParameterConfigPage::apply()
 {
+    qDebug( "Sorry, not implemented: KChartParameterConfigPage::apply()" );
+#warning Put back in
+#ifdef K
     _params->grid=grid->isChecked();
     _params->border=border->isChecked();
     _params->xaxis=xaxis->isChecked();
@@ -286,4 +301,5 @@ void KChartParameterConfigPage::apply()
         {
          _params->cross=cross->isChecked();
         }
+#endif
 }

@@ -18,7 +18,6 @@
 #include "kchartParameterConfigPage.h"
 #include "kchartPieConfigPage.h"
 #include "kchartParameter3dConfigPage.h"
-#include "kchartparams.h"
 
 #include <kapp.h>
 #include <klocale.h>
@@ -26,12 +25,17 @@
 
 #include <qradiobutton.h>
 
-KChartConfigDialog::KChartConfigDialog( KChartParameters* params,
+#include "kdchart/KDChartParams.h"
+
+KChartConfigDialog::KChartConfigDialog( KDChartParams* params,
 					QWidget* parent ) :
     QTabDialog( parent, "Chart config dialog", true ),
     _params( params ),
 	_subTypePage( 0 )
 {
+    qDebug( "Sorry, not implemented: KChartConfigDialog::KChartConfigDialog()" );
+#warning Put back in
+#ifdef K
     // Geometry page
     // PENDING(kalle) _xstep only for axes charts
     //_geompage = new KChartGeometryConfigPage( this );
@@ -95,11 +99,15 @@ KChartConfigDialog::KChartConfigDialog( KChartParameters* params,
 
     connect( this, SIGNAL( applyButtonPressed() ), this, SLOT( apply() ) );
     connect( this, SIGNAL( defaultButtonPressed() ), this, SLOT( defaults() ) );
+#endif
 }
 
 
 void KChartConfigDialog::apply()
 {
+    qDebug( "Sorry, not implemented: KChartConfigDialog::apply()" );
+#warning Put back in
+#ifdef K
   kdDebug(35001) << "***KChartConfig::apply()";
     // Copy application data from dialog into parameter structure that is also
     // being used by the application.
@@ -143,11 +151,15 @@ void KChartConfigDialog::apply()
 
 //     for( uint i = 0; i < NUMDATACOLORS; i++ )
 // 	_params->_datacolors.setColor( i, _colorpage->dataColor( i ) );
+#endif
 }
 
 
 void KChartConfigDialog::defaults()
 {
+    qDebug( "Sorry, not implemented: KChartConfigDialog::defaults()" );
+#warning Put back in
+#ifdef K
     // Fill pages with values
 
     // color page
@@ -186,5 +198,6 @@ void KChartConfigDialog::defaults()
 	_backgroundpixpage->init();
 //     for( uint i = 0; i < NUMDATACOLORS; i++ )
 // 	_colorpage->setDataColor( i, _params->_datacolors.color( i ) );
+#endif
 }
 

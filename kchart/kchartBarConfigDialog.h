@@ -9,23 +9,23 @@
 
 #include "kchartConfigDialog.h"
 
-class KChartParameters;
+class KDChartParams;
 class KChartBarConfigPage;
 
 class KChartBarConfigDialog : public KChartConfigDialog
 {
-	Q_OBJECT
+    Q_OBJECT
 
 public:
-	KChartBarConfigDialog( KChartParameters* params, 
-			       QWidget*	parent );
+    KChartBarConfigDialog( KDChartParams* params, 
+                           QWidget* parent );
 
 public slots:
-	virtual void apply();
-	virtual void defaults();
+    virtual void apply();
+    virtual void defaults();
 
 private:
-	KChartBarConfigPage* _barpage;
+    KChartBarConfigPage* _barpage;
 };
 
 #endif

@@ -12,7 +12,9 @@
 #include <kapp.h>
 #include <klocale.h>
 
-KChartBarConfigDialog::KChartBarConfigDialog( KChartParameters* params,
+#include "kdchart/KDChartParams.h"
+
+KChartBarConfigDialog::KChartBarConfigDialog( KDChartParams* params,
 					      QWidget* parent ) :
     KChartConfigDialog( params, parent  )
 {
