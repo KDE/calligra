@@ -1,4 +1,4 @@
-// $Header$
+// 
 
 /*
    This file is part of the KDE project
@@ -57,7 +57,7 @@ public:
         const double bottom, const double right);
     virtual bool doFullDefineStyle(LayoutData& layout);
     virtual bool doHeader(const HeaderData& header);
-    virtual bool doFooter(const HeaderData& footer);
+    virtual bool doFooter(const FooterData& footer);
     virtual bool doVariableSettings(const VariableSettingsData& vs);
 
 private:
