@@ -653,7 +653,7 @@ protected:
 
     int getZoomEntirePage();
 
-    KCommand * applyAutoFormatToCurrentPage();
+    KCommand * applyAutoFormatToCurrentPage( const QPtrList<KoTextObject> & lst);
 
 private:
 // ********** variables **********

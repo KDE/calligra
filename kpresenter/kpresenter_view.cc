@@ -6373,8 +6373,15 @@ void KPresenterView::applyAutoFormat()
     bool createmacro = false;
     m_switchPage=m_pKPresenterDoc->pageList().findRef(m_canvas->activePage());
     m_initSwitchPage=m_switchPage;
-    KCommand * cmd = applyAutoFormatToCurrentPage();
-    kdDebug()<<" cmd :"<<cmd <<endl;
+    QPtrList<KoTextObject> list=m_canvas->activePage()->objectText();
+    QPtrList<KoTextObject> list2=stickyPage()->objectText();
+    QPtrListIterator<KoTextObject> it( list2 );
+    for ( ; it.current() ; ++it )
+    {
+        list.append(it.current());
+    }
+
+    KCommand * cmd = applyAutoFormatToCurrentPage( list );
     if ( cmd )
     {
         createmacro = true;
@@ -6383,7 +6390,7 @@ void KPresenterView::applyAutoFormat()
 
     while(switchInOtherPage(i18n( "Do you want to Apply Autoformat in new page?")) )
     {
-        KCommand * cmd = applyAutoFormatToCurrentPage();
+        KCommand * cmd = applyAutoFormatToCurrentPage(m_canvas->activePage()->objectText());
         if ( cmd )
         {
             createmacro = true;
@@ -6415,15 +6422,15 @@ bool KPresenterView::switchInOtherPage( const QString & text )
 }
 
 
-KCommand * KPresenterView::applyAutoFormatToCurrentPage( )
+KCommand * KPresenterView::applyAutoFormatToCurrentPage( const QPtrList<KoTextObject> & lst)
 {
     KMacroCommand *macro = new KMacroCommand( i18n("Apply AutoFormat"));
     bool createcmd=false;
-    QPtrList<KPTextObject> list(m_canvas->listOfTextObjs());
-    QPtrListIterator<KPTextObject> fit(list);
+    QPtrList<KoTextObject> list(lst);
+    QPtrListIterator<KoTextObject> fit(list);
     for ( ; fit.current() ; ++fit )
     {
-        KCommand *cmd = m_pKPresenterDoc->getAutoFormat()->applyAutoFormat( fit.current()->textObject() );
+        KCommand *cmd = m_pKPresenterDoc->getAutoFormat()->applyAutoFormat( fit.current() );
         if ( cmd )
         {
             createcmd= true;
@@ -6438,5 +6445,6 @@ KCommand * KPresenterView::applyAutoFormatToCurrentPage( )
         delete macro;
     return 0L;
 }
+
 
 #include <kpresenter_view.moc>
