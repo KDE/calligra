@@ -30,6 +30,8 @@
 
 #include <qdatetime.h>
 
+#include <assert.h>
+
 using namespace KexiDB;
 
 Field::FieldTypeNames Field::m_typeNames;
@@ -50,12 +52,14 @@ Field::Field(TableSchema *tableSchema)
 	setConstraints(NoConstraints);
 }
 
-Field::Field(QuerySchema *querySchema)
+Field::Field(QuerySchema *querySchema, BaseExpr* expr)
 {
 	init();
 	m_parent = querySchema;
 	m_order = querySchema->fieldCount();
 	setConstraints(NoConstraints);
+	if (expr)
+		setExpression(expr);
 }
 
 Field::Field(const QString& name, Type ctype,
@@ -87,7 +91,8 @@ Field::Field(const Field& f)
 {
 	(*this) = f;
 	if (f.m_expr) {//deep copy the expresion
-		m_expr = new BaseExpr(*f.m_expr);
+//TODO		m_expr = new BaseExpr(*f.m_expr);
+
 //		m_expr->m_field = this;
 	} else
 		m_expr = 0;
@@ -566,15 +571,13 @@ void Field::debug()
 
 void Field::setExpression(KexiDB::BaseExpr *expr)
 {
+	assert(!m_parent || dynamic_cast<QuerySchema*>(m_parent));
 	if (m_expr==expr)
 		return;
 	if (m_expr) {
 		delete m_expr;
 	}
 	m_expr = expr;
-//	if (m_expr) {
-	//	m_expr->m_field = this;
-//	}
 }
 
 //-------------------------------------------------------

@@ -32,6 +32,7 @@
 #define ECOUNT current += yyleng; ctoken = yytext
 
 extern void setError(const QString& errDesc);
+extern void setError(const QString& errName, const QString& errDesc);
 
 %}
 
@@ -140,6 +141,11 @@ real				((({digit}*\.{digit}+)|({digit}+\.{digit}*)|({digit}+))([Ee][-+]?{digit}
 	return NOT_EQUAL;
 }
 
+"==" {
+	ECOUNT;
+	return '=';
+}
+
 "<=" {
 	ECOUNT;
 	return LESS_OR_EQUAL;
@@ -184,7 +190,7 @@ real				((({digit}*\.{digit}+)|({digit}+\.{digit}*)|({digit}+))([Ee][-+]?{digit}
 	return REAL_CONST;
 }
 
-"AND" {
+("AND"|"&&") {
 	ECOUNT;
 	return AND;
 }
@@ -229,6 +235,11 @@ real				((({digit}*\.{digit}+)|({digit}+\.{digit}*)|({digit}+))([Ee][-+]?{digit}
 	return NOT;
 }
 
+"IS" {
+	ECOUNT;
+	return SQL_IS;
+}
+
 "NULL" {
 	ECOUNT;
 	return SQL_NULL;
@@ -244,6 +255,26 @@ real				((({digit}*\.{digit}+)|({digit}+\.{digit}*)|({digit}+))([Ee][-+]?{digit}
 	return OR;
 }
 
+"||" { /* also means OR for numbers (mysql) */
+	ECOUNT;
+	return CONCATENATION;
+}
+
+"<<" {
+	ECOUNT;
+	return BITWISE_SHIFT_LEFT;
+}
+
+">>" {
+	ECOUNT;
+	return BITWISE_SHIFT_RIGHT;
+}
+
+"XOR" {
+	ECOUNT;
+	return XOR;
+}
+
 "RIGHT" {
 	ECOUNT;
 	return RIGHT;
@@ -252,6 +283,11 @@ real				((({digit}*\.{digit}+)|({digit}+\.{digit}*)|({digit}+))([Ee][-+]?{digit}
 "SELECT" {
 	ECOUNT;
 	return SELECT;
+}
+
+"SIMILAR" {
+	ECOUNT;
+	return SIMILAR;
 }
 
 "TABLE" {
@@ -269,9 +305,8 @@ real				((({digit}*\.{digit}+)|({digit}+\.{digit}*)|({digit}+))([Ee][-+]?{digit}
 	ECOUNT;
 	strncpy(yylval.stringValue, yytext, yyleng + 1);
 	return CHARACTER_STRING_LITERAL;
-}
 
-{identifier}"\.\*" {
+/*{identifier}"\.\*" {
 	kdDebug() << "yytext: '" << yytext << "' (" << yyleng << ")" << endl;
 	ECOUNT;
 	strncpy(yylval.stringValue, yytext, yyleng + 1);
@@ -280,6 +315,7 @@ real				((({digit}*\.{digit}+)|({digit}+\.{digit}*)|({digit}+))([Ee][-+]?{digit}
 		return ERROR_DIGIT_BEFORE_IDENTIFIER;
 	}
 	return IDENTIFIER_DOT_ASTERISK;
+}*/
 }
 
 {identifier} {
@@ -287,8 +323,7 @@ real				((({digit}*\.{digit}+)|({digit}+\.{digit}*)|({digit}+))([Ee][-+]?{digit}
 	ECOUNT;
 	strncpy(yylval.stringValue, yytext, yyleng + 1);
 	if (yytext[0]>='0' && yytext[0]<='9') {
-//		kdDebug() << "  Invalid identifier! " << yytext << endl;
-		setError(i18n("Invalid identifier"));
+		setError(i18n("Invalid identifier"),i18n("Identifiers should start with a letter or '_' character"));
 		return ERROR_DIGIT_BEFORE_IDENTIFIER;
 	}
 	return IDENTIFIER;

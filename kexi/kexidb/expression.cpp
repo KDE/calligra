@@ -21,7 +21,11 @@
  */
 
 #include "expression.h"
+#include "parser/sqlparser.h"
+#include "parser/parser_p.h"
+
 #include <kdebug.h>
+#include <klocale.h>
 
 KEXI_DB_EXPORT QString KexiDB::exprClassName(int c)
 {
@@ -70,9 +74,22 @@ QString BaseExpr::debugString()
 	return QString("BaseExpr(%1)").arg(m_type);
 }
 
-void BaseExpr::check()
+bool BaseExpr::validate(ParseInfo& /*parseInfo*/)
 {
-//	UNIMPLEMENTED("check()");
+	return true;
+}
+
+extern const char * const tname(int type);
+
+QString BaseExpr::typeToString()
+{
+	if (m_type < 254) {
+		if (isprint(m_type))
+			return QString(QChar(uchar(m_type)));
+		else
+			return QString::number(m_type);
+	}
+	return QString(tname(m_type));
 }
 
 //=========================================
@@ -88,12 +105,23 @@ QString NArgExpr::debugString()
 {
 	QString s = QString("NArgExpr(")
 		+ "class=" + exprClassName(m_cl);
-	BaseExpr::ListIterator it(list);
-	for ( int i=0; it.current(); ++it, i++ ) {
+	for ( BaseExpr::ListIterator it(list); it.current(); ++it ) {
 		s+=", ";
 		s+=it.current()->debugString();
 	}
 	s+=")";
+	return s;
+}
+
+QString NArgExpr::toString()
+{
+	QString s;
+	s.reserve(256);
+	for ( BaseExpr::ListIterator it(list); it.current(); ++it ) {
+		if (!s.isEmpty())
+			s+=", ";
+		s+=it.current()->toString();
+	}
 	return s;
 }
 
@@ -112,13 +140,16 @@ int NArgExpr::args()
 	return list.count();
 }
 
-void NArgExpr::check()
+bool NArgExpr::validate(ParseInfo& parseInfo)
 {
-	BaseExpr::check();
-	BaseExpr *e;
-	for (BaseExpr::ListIterator it(list); (e=it.current()) ; ++it ) {
-		e->check();
+	if (!BaseExpr::validate(parseInfo))
+		return false;
+
+	for (BaseExpr::ListIterator it(list); it.current(); ++it) {
+		if (!it.current()->validate(parseInfo))
+			return false;
 	}
+	return true;
 }
 
 //=========================================
@@ -136,14 +167,33 @@ UnaryExpr::~UnaryExpr()
 
 QString UnaryExpr::debugString()
 {
-	return "UnaryExpr(" 
+	return "UnaryExpr('" 
+		+ typeToString() + "', "
 		+ (arg() ? arg()->debugString() : QString("<NONE>")) 
 		+ ")";
 }
 
-void UnaryExpr::check()
+QString UnaryExpr::toString()
 {
-	NArgExpr::check();
+	if (m_type=='(') //parentheses (special case)
+		return "(" + arg()->toString() + ")";
+	if (m_type < 255 && isprint(m_type))
+		return typeToString() + arg()->toString();
+	if (m_type==NOT)
+		return "NOT " + arg()->toString();
+	if (m_type==SQL_IS_NULL)
+		return arg()->toString() + " IS NULL";
+	if (m_type==SQL_IS_NOT_NULL)
+		return arg()->toString() + " IS NOT NULL";
+	return QString("{INVALID_OPERATOR#%1} ").arg(m_type) + arg()->toString();
+}
+
+bool UnaryExpr::validate(ParseInfo& parseInfo)
+{
+	if (!NArgExpr::validate(parseInfo))
+		return false;
+
+	return true;
 #if 0
 	BaseExpr *n = l.at(0);
 
@@ -190,8 +240,12 @@ BaseExpr *BinaryExpr::right()
 	return arg(1);
 }
 
-void BinaryExpr::check() {
-	BaseExpr::check();
+bool BinaryExpr::validate(ParseInfo& parseInfo)
+{
+	if (!NArgExpr::validate(parseInfo))
+		return false;
+
+	return true;
 }
 
 QString BinaryExpr::debugString()
@@ -199,9 +253,45 @@ QString BinaryExpr::debugString()
 	return QString("BinaryExpr(")
 		+ "class=" + exprClassName(m_cl)
 		+ "," + (left() ? left()->debugString() : QString("<NONE>")) 
-		+ "," + QString::number(m_type) + ","
+		+ ",'" + typeToString() + "',"
 		+ (right() ? right()->debugString() : QString("<NONE>")) 
 		+ ")";
+}
+
+QString BinaryExpr::toString()
+{
+#define INFIX(a) \
+		left()->toString() + " " + a + " " + right()->toString()
+
+	if (m_type < 255 && isprint(m_type))
+		return INFIX(typeToString());
+	// other arithmetic operations: << >>
+	if (m_type==BITWISE_SHIFT_RIGHT)
+		return INFIX(">>");
+	if (m_type==BITWISE_SHIFT_LEFT)
+		return INFIX("<<");
+	// other relational operations: <= >= <> (or !=) LIKE IN
+	if (m_type==LESS_OR_EQUAL)
+		return INFIX("<=");
+	if (m_type==GREATER_OR_EQUAL)
+		return INFIX(">=");
+	if (m_type==LIKE)
+		return INFIX("LIKE");
+	if (m_type==SQL_IN)
+		return INFIX("IN");
+	// other logical operations: OR (or ||) AND (or &&) XOR
+	if (m_type==OR)
+		return INFIX("OR");
+	if (m_type==AND)
+		return INFIX("AND");
+	if (m_type==XOR)
+		return INFIX("XOR");
+	// other string operations: || (as CONCATENATION)
+	if (m_type==CONCATENATION)
+		return INFIX("||");
+	// SpecialBinary "pseudo operators":
+	/* not handled here */
+	return INFIX( QString("{INVALID_BINARY_OPERATOR#%1} ").arg(m_type));
 }
 
 //=========================================
@@ -214,13 +304,33 @@ ConstExpr::ConstExpr( int type, const QVariant& val)
 
 QString ConstExpr::debugString()
 {
-	return QString("ConstExpr(") + value.typeName() + " " + value.toString() + ")";
+	return QString("ConstExpr('") + typeToString() +"'," + toString() + ")";
+}
+
+QString ConstExpr::toString()
+{
+	if (m_type==SQL_NULL)
+		return "NULL";
+	if (m_type==REAL_CONST)
+		return QString::number(value.toPoint().x())+"."+QString::number(value.toPoint().y());
+	return value.toString();
+}
+
+bool ConstExpr::validate(ParseInfo& parseInfo)
+{
+	if (!BaseExpr::validate(parseInfo))
+		return false;
+
+	return true;
 }
 
 //=========================================
 VariableExpr::VariableExpr( const QString& _name)
 : BaseExpr( 0/*undefined*/ )
 , name(_name)
+, field(0)
+, tablePositionForField(-1)
+, tableForQueryAsterisk(0)
 {
 	m_cl = KexiDBExpr_Variable;
 }
@@ -228,6 +338,158 @@ VariableExpr::VariableExpr( const QString& _name)
 QString VariableExpr::debugString()
 {
 	return QString("VariableExpr(") + name + ")";
+}
+
+QString VariableExpr::toString()
+{
+	return name;
+}
+
+#define IMPL_ERROR(errmsg) parseInfo.errMsg = "Implementation error"; parseInfo.errDescr = errmsg
+
+bool VariableExpr::validate(ParseInfo& parseInfo)
+{
+	if (!BaseExpr::validate(parseInfo))
+		return false;
+	field = 0;
+	tablePositionForField = -1;
+	tableForQueryAsterisk = 0;
+
+/* taken from parser's addColumn(): */
+	kdDebug() << "checking variable name: " << name << endl;
+	int dotPos = name.find('.');
+	QString tableName, fieldName;
+//TODO: shall we also support db name?
+	if (dotPos>0) {
+		tableName = name.left(dotPos);
+		fieldName = name.mid(dotPos+1);
+	}
+	if (tableName.isEmpty()) {//fieldname only
+		fieldName = name;
+		if (fieldName=="*") {
+//			querySchema->addAsterisk( new QueryAsterisk(querySchema) );
+			return true;
+		}
+
+		//find first table that has this field
+		Field *firstField = 0;
+		for (TableSchema::ListIterator it(*parseInfo.querySchema->tables()); it.current(); ++it) {
+			Field *f = it.current()->field(fieldName);
+			if (f) {
+				if (!firstField) {
+					firstField = f;
+				}
+				else if (f->table()!=firstField->table()) {
+					//ambiguous field name
+					parseInfo.errMsg = i18n("Ambiguous field name");
+					parseInfo.errDescr = i18n("Both table \"%1\" and \"%2\" have defined \"%3\" field. "
+						"Use \"<tableName>.%4\" notation to specify table name.")
+						.arg(firstField->table()->name()).arg(f->table()->name())
+						.arg(fieldName).arg(fieldName);
+					return false;
+				}
+			}
+		}
+		if (!firstField) {
+			parseInfo.errMsg = i18n("Field not found");
+			parseInfo.errDescr = i18n("Table containing \"%1\" field not found").arg(fieldName);
+			return false;
+		}
+		//ok
+		field = firstField; //store
+//		querySchema->addField(firstField);
+		return true;
+	}
+
+	//table.fieldname or tableAlias.fieldname
+	tableName = tableName.lower();
+	TableSchema *ts = parseInfo.querySchema->table( tableName );
+	if (ts) {//table.fieldname
+		//check if "table" is covered by an alias
+		const QValueList<int> tPositions = parseInfo.querySchema->tablePositions(tableName);
+		QValueList<int>::ConstIterator it = tPositions.begin();
+		QCString tableAlias;
+		bool covered = true;
+		for (; it!=tPositions.end() && covered; ++it) {
+			tableAlias = parseInfo.querySchema->tableAlias(*it);
+			if (tableAlias.isEmpty() || tableAlias.lower()==tableName.latin1())
+				covered = false; //uncovered
+			kdDebug() << " --" << "covered by " << tableAlias << " alias" << endl;
+		}
+		if (covered) {
+			parseInfo.errMsg = i18n("Could not access the table directly using its name");
+			parseInfo.errDescr = i18n("Table \"%1\" is covered by aliases. Instead of \"%2\", "
+				"you can write \"%3\"").arg(tableName)
+				.arg(tableName+"."+fieldName).arg(tableAlias+"."+fieldName.latin1());
+			return false;
+		}
+	}
+	
+	int tablePosition = -1;
+	if (!ts) {//try to find tableAlias
+		tablePosition = parseInfo.querySchema->tablePositionForAlias( tableName.latin1() );
+		if (tablePosition>=0) {
+			ts = parseInfo.querySchema->tables()->at(tablePosition);
+			if (ts)
+				kdDebug() << " --it's a tableAlias.name" << endl;
+		}
+	}
+
+	if (!ts) {
+		parseInfo.errMsg = i18n("Table not found");
+		parseInfo.errDescr = i18n("Unknown table \"%1\"").arg(tableName);
+		return false;
+	}
+
+	QValueList<int> *positionsList = parseInfo.repeatedTablesAndAliases[ tableName ];
+	if (!positionsList) { //for sanity
+		IMPL_ERROR(tableName + "." + fieldName + ", !positionsList ");
+		return false;
+	}
+
+	//it's a table.*
+	if (fieldName=="*") {
+		if (positionsList->count()>1) {
+			parseInfo.errMsg = i18n("Ambiguous \"%1.*\" expression").arg(tableName);
+			parseInfo.errDescr = i18n("More than one \"%1\" table or alias defined").arg(tableName);
+			return false;
+		}
+		tableForQueryAsterisk = ts;
+//			querySchema->addAsterisk( new QueryAsterisk(querySchema, ts) );
+		return true;
+	}
+
+	kdDebug() << " --it's a table.name" << endl;
+	Field *realField = ts->field(fieldName);
+	if (!realField) {
+		parseInfo.errMsg = i18n("Field not found");
+		parseInfo.errDescr = i18n("Table \"%1\" has no \"%2\" field")
+			.arg(tableName).arg(fieldName);
+		return false;
+	}
+
+	// check if table or alias is used twice and both have the same column
+	// (so the column is ambiguous)
+	int numberOfTheSameFields = 0;
+	for (QValueList<int>::iterator it = positionsList->begin();
+		it!=positionsList->end();++it)
+	{
+		TableSchema *otherTS = parseInfo.querySchema->tables()->at(*it);
+		if (otherTS->field(fieldName))
+			numberOfTheSameFields++;
+		if (numberOfTheSameFields>1) {
+			parseInfo.errMsg = i18n("Ambiguous \"%1.%2\" expression")
+				.arg(tableName).arg(fieldName);
+			parseInfo.errDescr = i18n("More than one \"%1\" table or alias defined containing \"%2\" field")
+				.arg(tableName).arg(fieldName);
+			return false;
+		}
+	}
+	field = realField; //store
+	tablePositionForField = tablePosition;
+//				querySchema->addField(realField, tablePosition);
+
+	return true;
 }
 
 //=========================================
@@ -248,6 +510,19 @@ FunctionExpr::~FunctionExpr()
 QString FunctionExpr::debugString()
 {
 	return QString("FunctionExpr(") + name + "," + args->debugString() + ")";
+}
+
+QString FunctionExpr::toString()
+{
+	return name + "(" + args->toString() + ")";
+}
+
+bool FunctionExpr::validate(ParseInfo& parseInfo)
+{
+	if (!BaseExpr::validate(parseInfo))
+		return false;
+
+	return true;
 }
 
 #if 0

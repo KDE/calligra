@@ -7,6 +7,8 @@ DEFINES += MAKE_KEXI_DB_LIB
 
 TARGET		= kexidb$$KDEBUG
 
+DEFINES += YYERROR_VERBOSE
+
 system( moc connection.h -o moc/connection.moc )
 system( moc drivermanager_p.h -o moc/drivermanager_p.moc )
 system( moc driver.h -o moc/driver.moc )
@@ -37,6 +39,7 @@ relationship.cpp \
 roweditbuffer.cpp \
 \
 parser/parser.cpp \
+parser/parser_p.cpp \
 parser/sqlparser.cpp \
 parser/sqlscanner.cpp \
 expression.cpp

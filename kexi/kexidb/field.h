@@ -143,7 +143,7 @@ class KEXI_DB_EXPORT Field
 		};
 
 		Field(TableSchema *tableSchema);
-		Field(QuerySchema *querySchema);
+		Field(QuerySchema *querySchema, BaseExpr* expr = 0);
 		Field();
 
 		Field(const QString& name, Type ctype,
@@ -463,6 +463,9 @@ class KEXI_DB_EXPORT Field
 		 This Field object becames owner of \a expr object,
 		 so you do not have to worry about deleting it later.
 		 If the \a expr is null, current field's expression is deleted, if exists.
+
+		 Because the field defines an expression, it should be assigned to a query, 
+		 not to a table.
 		*/
 		void setExpression(KexiDB::BaseExpr *expr);
 

@@ -1,25 +1,51 @@
----------- TOPIC000: GENERAL --------------
--- OK001: the same field used in two columns
+---------- TOPIC000: GENERAL ISSUES --------------
+-- OK000: the same field used in two columns
 select id, id from persons;
+-- OK001: whitespace between table-identifier, dot field-identifier/asterisk
+select persons .  id from persons;
+select persons .	* from persons;
+-- OK002: multiple asterisks
+select *, * from persons;
+-- ER003: identifier cannot start with a number
+select 1id from persons;
 
----------- TOPIC100: ALIASES --------------
--- OK101: aliases for columns
+---------- TOPIC100: ALIASES IN SELECT STATEMENT --------------
+-- OK100: aliases for columns
 select id myid from persons;
--- OK102: aliases for tables
+-- OK101: aliases for tables
 select id from persons p;
--- ER101: there's no "persons" table in this query (alias "p" covers it)
+-- ER102: there's no "persons" table in this query (alias "p" covers it)
 select persons.id from persons p;
--- OK102: alias "p" for table "persons" is used
+-- OK103: alias "p" for table "persons" is used
 select p.id from persons p;
--- OK103: multiple aliases for the same table
+-- OK104: multiple aliases for the same table
 select persons.id from persons, persons p, persons p2
--- ER102: column "id" is defined in both tables (so "id" column is ambiguous)
+-- ER105: column "id" is defined in both tables (so "id" column is ambiguous)
 select id from persons p, cars p;
--- ER103: alias "p" is used twice for tables and both have "id" column (so "p" column is ambiguous)
+-- ER106: alias "p" is used twice for tables and both have "id" column (so "p" column is ambiguous)
 select p.id from persons p, cars p;
 select p.* from persons p, cars p;
 select persons.* from persons, cars persons;
+-- ER107: alias not allowed for asterisk
+select * as c from cars;
+select cars.* as c from cars;
+
+---------- TOPIC200: EXPRESSIONS IN COLUMNS OF SELECT STATEMENT --------------
+-- OK200: like ER106, but it's ok, because we're not using fields from "p" tables
+select 1 from persons p, cars p;
+-- OK201: complex expressions support, operators precedence, and brackets
+select NULL IS NOT NULL from cars
+select 2+3*4 from cars
+select (2+3)*4 from cars
+-- OK202: support for aliases for complex-expression columns
+select (2+3)*4 from cars
+-- ER203: column names are invalidated inside a complex expressions
+select one*two from persons;
+-- ER204: like ER106, but ambiguous column is inside a complex expression
+select id*2 from persons p, cars p;
+
 
 -- TODO
--- OK104: like above, but it's ok, because we're not using fields from "p" tables
-select 1 from persons p, cars p;
+-- ER004: asterisk not allowed: no tables specified
+select *;
+-'--' comments

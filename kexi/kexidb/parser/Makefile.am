@@ -20,6 +20,7 @@ parser:
 	echo 'bool parseData(KexiDB::Parser *p, const char *data);' >> sqlparser.h; \
 	cat sqlparser.tab.h >> sqlparser.h; \
 	cat sqlparser.tab.c > sqlparser.cpp; \
+	echo "const char * const tname(int type) { return (type>=254 && type<=__LAST_TOKEN) ? yytname[type-254] : \"\"; }" >> sqlparser.cpp \
 	rm -f sqlparser.tab.h sqlparser.tab.c
 
 coffie:

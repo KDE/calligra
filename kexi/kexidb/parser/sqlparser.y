@@ -55,6 +55,8 @@
 %token BINARY
 %token BIT
 %token BIT_LENGTH
+%token BITWISE_SHIFT_LEFT
+%token BITWISE_SHIFT_RIGHT
 %token BREAK
 %token BY
 %token CASCADE
@@ -77,6 +79,7 @@
 %token COMMIT
 %token COMPUTE
 %token CONCAT
+%token CONCATENATION /* || */
 %token CONNECT
 %token CONNECTION
 %token CONSTRAINT
@@ -225,6 +228,9 @@
 %token NOT_EQUAL
 %token NOW
 %token SQL_NULL
+%token SQL_IS
+%token SQL_IS_NULL /*helper */
+%token SQL_IS_NOT_NULL /*helper */
 %token NULLIF
 %token NUMERIC
 %token OCTET_LENGTH
@@ -282,6 +288,9 @@
 %token SET
 %token SHOWOPT
 %token SIGN
+%token SIMILAR
+%token SIMILAR_TO /* helper */
+%token NOT_SIMILAR_TO /* helper */
 %token INTEGER_CONST
 %token REAL_CONST
 %token SIN
@@ -351,8 +360,10 @@
 %token WORD_WRAPPED
 %token WORK
 %token WRAPPED
+%token XOR
 %token YEAR
 %token YEARS_BETWEEN
+%token __LAST_TOKEN /* sentinel */
 
 %token '-' '+'
 %token '*'
@@ -384,6 +395,14 @@
 %type <expr> ColItem
 %type <exprList> ColViews
 %type <expr> aExpr
+%type <expr> aExpr2
+%type <expr> aExpr3
+%type <expr> aExpr4
+%type <expr> aExpr5
+%type <expr> aExpr6
+%type <expr> aExpr7
+%type <expr> aExpr8
+%type <expr> aExpr9
 %type <exprList> aExprList
 %type <expr> WhereClause
 %type <expr> FlatTable
@@ -424,23 +443,23 @@
 #include <tableschema.h>
 
 #include "parser.h"
-//#include "sqlparser.h"
+#include "parser_p.h"
 #include "sqltypes.h"
 
 //	using namespace std;
-	using namespace KexiDB;
+using namespace KexiDB;
 
 #define YY_NO_UNPUT
 #define YYSTACK_USE_ALLOCA 1
 #define YYMAXDEPTH 255
 
 Parser *parser;
-KexiDB::Field *field;
+Field *field;
 bool requiresTable;
-QPtrList<KexiDB::Field> fieldList;
-//	QPtrList<KexiDB::TableSchema> tableList;
-//	QDict<KexiDB::TableSchema> tableDict;
-//	KexiDB::TableSchema *dummy = 0;
+QPtrList<Field> fieldList;
+//	QPtrList<TableSchema> tableList;
+//	QDict<TableSchema> tableDict;
+//	TableSchema *dummy = 0;
 int current = 0;
 QString ctoken = "";
 
@@ -452,7 +471,7 @@ void yyerror(const char *str)
 {
 	kdDebug() << "error: " << str << endl;
 	kdDebug() << "at character " << current << " near tooken " << ctoken << endl;
-	parser->setOperation(KexiDB::Parser::OP_Error);
+	parser->setOperation(Parser::OP_Error);
 
 	if (parser->error().type().isEmpty() 
 		&& (strlen(str)==0 
@@ -472,14 +491,14 @@ void yyerror(const char *str)
 		if (!lexerErr.isEmpty())
 			lexerErr.prepend(": ");
 			
-		KexiDB::ParserError err(i18n("Syntax Error"), i18n("Syntax Error near \"%1\"").arg(ctoken)+lexerErr, ctoken, current);
+		ParserError err(i18n("Syntax Error"), i18n("Syntax Error near \"%1\"").arg(ctoken)+lexerErr, ctoken, current);
 		parser->setError(err);
 	}
 }
 
 void setError(const QString& errName, const QString& errDesc)
 {
-	parser->setError( KexiDB::ParserError(errName, errDesc, ctoken, current) );
+	parser->setError( ParserError(errName, errDesc, ctoken, current) );
 	yyerror(errName.latin1());
 }
 
@@ -488,19 +507,19 @@ void setError(const QString& errDesc)
 	setError("", errDesc);
 }
 
-void tableNotFoundError(const QString& tableName)
+/*void tableNotFoundError(const QString& tableName)
 {
 	setError( i18n("Table not found"), i18n("Unknown table \"%1\"").arg(tableName) );
-}
+}*/
 
 /* this is better than assert() */
 #define IMPL_ERROR(errmsg) setError("Implementation error", errmsg)
 
-bool parseData(KexiDB::Parser *p, const char *data)
+bool parseData(Parser *p, const char *data)
 {
 /* todo: remove dummy */
 //		if (!dummy)
-			//dummy = new KexiDB::TableSchema();
+			//dummy = new TableSchema();
 /* todo: make this REENTRANT */
 	parser = p;
 	parser->clear();
@@ -509,7 +528,7 @@ bool parseData(KexiDB::Parser *p, const char *data)
 	requiresTable = false;
 
 	if (!data) {
-		KexiDB::ParserError err(i18n("Error"), i18n("No query specified"), ctoken, current);
+		ParserError err(i18n("Error"), i18n("No query specified"), ctoken, current);
 		parser->setError(err);
 		yyerror("");
 		parser = 0;
@@ -524,22 +543,22 @@ bool parseData(KexiDB::Parser *p, const char *data)
 	yyparse();
 
 	bool ok = true;
-	if(parser->operation() == KexiDB::Parser::OP_Select)
+	if(parser->operation() == Parser::OP_Select)
 	{
 		kdDebug() << "parseData(): ok" << endl;
 //			kdDebug() << "parseData(): " << tableDict.count() << " loaded tables" << endl;
-/*			KexiDB::TableSchema *ts;
-			for(QDictIterator<KexiDB::TableSchema> it(tableDict); KexiDB::TableSchema *s = tableList.first(); s; s = tableList.next())
+/*			TableSchema *ts;
+			for(QDictIterator<TableSchema> it(tableDict); TableSchema *s = tableList.first(); s; s = tableList.next())
 			{
 				kdDebug() << "  " << s->name() << endl;
 			}*/
 /*removed
-			KexiDB::Field::ListIterator it = parser->select()->fieldsIterator();
-			for(KexiDB::Field *item; (item = it.current()); ++it)
+			Field::ListIterator it = parser->select()->fieldsIterator();
+			for(Field *item; (item = it.current()); ++it)
 			{
 				if(tableList.findRef(item->table()) == -1)
 				{
-					KexiDB::ParserError err(i18n("Field List Error"), i18n("Unknown table '%1' in field list").arg(item->table()->name()), ctoken, current);
+					ParserError err(i18n("Field List Error"), i18n("Unknown table '%1' in field list").arg(item->table()->name()), ctoken, current);
 					parser->setError(err);
 
 					yyerror("fieldlisterror");
@@ -562,15 +581,38 @@ bool parseData(KexiDB::Parser *p, const char *data)
 /* Adds \a column to \a querySchema. \a column can be in a form of
  table.field, tableAlias.field or field
 */
-bool addColumn( QuerySchema *querySchema, BaseExpr* column, 
-	const QDict< QValueList<int> > &repeatedTablesAndAliases )
+bool addColumn( ParseInfo& parseInfo, BaseExpr* columnExpr )
 {
-	VariableExpr *v_e = dynamic_cast<VariableExpr*>(column);
-	if (column->exprClass() != KexiDBExpr_Variable || !v_e) {
-		//err
+	if (!columnExpr->validate(parseInfo)) {
+		setError(parseInfo.errMsg, parseInfo.errDescr);
 		return false;
 	}
-	QString varName = v_e->name;
+
+	VariableExpr *v_e = dynamic_cast<VariableExpr*>(columnExpr);
+	if (columnExpr->exprClass() == KexiDBExpr_Variable && v_e) {
+		//it's a variable:
+		if (v_e->name=="*") {//all tables asterisk
+			parseInfo.querySchema->addAsterisk( new QueryAsterisk(parseInfo.querySchema) );
+		}
+		else if (v_e->tableForQueryAsterisk) {//one-table asterisk
+			parseInfo.querySchema->addAsterisk( 
+				new QueryAsterisk(parseInfo.querySchema, v_e->tableForQueryAsterisk) );
+		}
+		else if (v_e->field) {//"table.field" or "field" (bound to a table or not)
+			parseInfo.querySchema->addField(v_e->field, v_e->tablePositionForField);
+		}
+		else {
+			IMPL_ERROR("addColumn(): unknown case!");
+			return false;
+		}
+		return true;
+	}
+
+	//it's complex expression
+	Field *field = new Field(parseInfo.querySchema, columnExpr);
+	parseInfo.querySchema->addField(field);
+
+#if 0
 	kdDebug() << "found variable name: " << varName << endl;
 	int dotPos = varName.find('.');
 	QString tableName, fieldName;
@@ -582,13 +624,12 @@ bool addColumn( QuerySchema *querySchema, BaseExpr* column,
 	if (tableName.isEmpty()) {//fieldname only
 		fieldName = varName;
 		if (fieldName=="*") {
-//			querySchema->addAsterisk( new KexiDB::QueryAsterisk(parser->select()) );
-			querySchema->addAsterisk( new KexiDB::QueryAsterisk(querySchema) );
+			parseInfo.querySchema->addAsterisk( new QueryAsterisk(parseInfo.querySchema) );
 		}
 		else {
 			//find first table that has this field
 			Field *firstField = 0;
-			for (TableSchema::ListIterator it(*querySchema->tables()); it.current(); ++it) {
+			for (TableSchema::ListIterator it(*parseInfo.querySchema->tables()); it.current(); ++it) {
 				Field *f = it.current()->field(fieldName);
 				if (f) {
 					if (!firstField) {
@@ -610,20 +651,20 @@ bool addColumn( QuerySchema *querySchema, BaseExpr* column,
 					return false;
 			}
 			//ok
-			querySchema->addField(firstField);
+			parseInfo.querySchema->addField(firstField);
 		}
 	}
 	else {//table.fieldname or tableAlias.fieldname
 		tableName = tableName.lower();
-		KexiDB::TableSchema *ts = querySchema->table( tableName );
+		TableSchema *ts = parseInfo.querySchema->table( tableName );
 		if (ts) {//table.fieldname
 			//check if "table" is covered by an alias
-			const QValueList<int> tPositions = querySchema->tablePositions(tableName);
+			const QValueList<int> tPositions = parseInfo.querySchema->tablePositions(tableName);
 			QValueList<int>::ConstIterator it = tPositions.begin();
 			QCString tableAlias;
 			bool covered = true;
 			for (; it!=tPositions.end() && covered; ++it) {
-				tableAlias = querySchema->tableAlias(*it);
+				tableAlias = parseInfo.querySchema->tableAlias(*it);
 				if (tableAlias.isEmpty() || tableAlias.lower()==tableName.latin1())
 					covered = false; //uncovered
 				kdDebug() << " --" << "covered by " << tableAlias << " alias" << endl;
@@ -639,9 +680,9 @@ bool addColumn( QuerySchema *querySchema, BaseExpr* column,
 		
 		int tablePosition = -1;
 		if (!ts) {//try to find tableAlias
-			tablePosition = querySchema->tablePositionForAlias( tableName.latin1() );
+			tablePosition = parseInfo.querySchema->tablePositionForAlias( tableName.latin1() );
 			if (tablePosition>=0) {
-				ts = querySchema->tables()->at(tablePosition);
+				ts = parseInfo.querySchema->tables()->at(tablePosition);
 				if (ts)
 					kdDebug() << " --it's a tableAlias.name" << endl;
 			}
@@ -661,12 +702,11 @@ bool addColumn( QuerySchema *querySchema, BaseExpr* column,
 						i18n("More than one \"%1\" table or alias defined").arg(tableName));
 					return false;
 				}
-//				querySchema->addAsterisk( new KexiDB::QueryAsterisk(parser->select(), ts) );
-				querySchema->addAsterisk( new KexiDB::QueryAsterisk(querySchema, ts) );
+				parseInfo.querySchema->addAsterisk( new QueryAsterisk(parseInfo.querySchema, ts) );
 			}
 			else {
 				kdDebug() << " --it's a table.name" << endl;
-				KexiDB::Field *realField = ts->field(fieldName);
+				Field *realField = ts->field(fieldName);
 				if (realField) {
 					// check if table or alias is used twice and both have the same column
 					// (so the column is ambiguous)
@@ -674,7 +714,7 @@ bool addColumn( QuerySchema *querySchema, BaseExpr* column,
 					for (QValueList<int>::iterator it = positionsList->begin();
 						it!=positionsList->end();++it)
 					{
-						KexiDB::TableSchema *otherTS = querySchema->tables()->at(*it);
+						TableSchema *otherTS = parseInfo.querySchema->tables()->at(*it);
 						if (otherTS->field(fieldName))
 							numberOfTheSameFields++;
 						if (numberOfTheSameFields>1) {
@@ -684,7 +724,7 @@ bool addColumn( QuerySchema *querySchema, BaseExpr* column,
 						}
 					}
 
-					querySchema->addField(realField, tablePosition);
+					parseInfo.querySchema->addField(realField, tablePosition);
 				}
 				else {
 					setError(i18n("Field not found"), i18n("Table \"%1\" has no \"%2\" field")
@@ -698,6 +738,7 @@ bool addColumn( QuerySchema *querySchema, BaseExpr* column,
 			return false;
 		}
 	}
+#endif
 	return true;
 }
 
@@ -740,12 +781,15 @@ bool addColumn( QuerySchema *querySchema, BaseExpr* column,
 %left		UNION EXCEPT
 %left		INTERSECT
 %left		OR
-%left		AND
+%left		AND XOR
 %right	NOT
 //%right		'='
 //%nonassoc	'<' '>'
 //%nonassoc '=' '<' '>' "<=" ">=" "<>" ":=" LIKE ILIKE SIMILAR
-%nonassoc '=' LESS_THAN GREATER_THAN LESS_OR_EQUAL GREATER_OR_EQUAL NOT_EQUAL 
+//%nonassoc '=' LESS_THAN GREATER_THAN LESS_OR_EQUAL GREATER_OR_EQUAL NOT_EQUAL
+%nonassoc '=' LESS_THAN GREATER_THAN 
+%nonassoc LESS_OR_EQUAL GREATER_OR_EQUAL 
+%nonassoc NOT_EQUAL
 %nonassoc SQL_IN LIKE ILIKE SIMILAR
 //%nonassoc	LIKE ILIKE SIMILAR
 //%nonassoc	ESCAPE
@@ -784,7 +828,7 @@ StatementList
 {
 //todo: multiple statements
 //todo: not only "select" statements
-	parser->setOperation(KexiDB::Parser::OP_Select);
+	parser->setOperation(Parser::OP_Select);
 	parser->setQuerySchema($1);
 }
 ;
@@ -818,7 +862,7 @@ YYACCEPT;
 CreateTableStatement :
 CREATE TABLE IDENTIFIER
 {
-	parser->setOperation(KexiDB::Parser::OP_CreateTable);
+	parser->setOperation(Parser::OP_CreateTable);
 	parser->createTable($3);
 }
 '(' ColDefs ')'
@@ -881,27 +925,27 @@ PRIMARY KEY
 ColType:
 SQL_TYPE
 {
-	field = new KexiDB::Field();
+	field = new Field();
 	field->setType($1);
 }
 | SQL_TYPE '(' INTEGER_CONST ')'
 {
 	kdDebug() << "sql + length" << endl;
-	field = new KexiDB::Field();
+	field = new Field();
 	field->setPrecision($3);
 	field->setType($1);
 }
 | VARCHAR '(' INTEGER_CONST ')'
 {
-	field = new KexiDB::Field();
+	field = new Field();
 	field->setPrecision($3);
-	field->setType(KexiDB::Field::Text);
+	field->setType(Field::Text);
 }
 |
 {
 	// SQLITE compatibillity
-	field = new KexiDB::Field();
-	field->setType(KexiDB::Field::InvalidType);
+	field = new Field();
+	field->setType(Field::InvalidType);
 }
 ;
 
@@ -930,11 +974,11 @@ Select ColViews
 {
 //TODO: move this to all SELECT versions
 	
-	KexiDB::QuerySchema* querySchema = $1;
+	QuerySchema* querySchema = $1;
 	$$ = querySchema;
 	
 	//-------tables list
-	KexiDB::NArgExpr *tablesList = $3;
+	NArgExpr *tablesList = $3;
 	assert( tablesList ); //&& tablesList->exprClass() == KexiDBExpr_TableList );
 
 	uint columnNum = 0;
@@ -943,9 +987,8 @@ Select ColViews
 	//used to collect information about first repeated table name or alias:
 //	QDict<char> tableNamesAndTableAliases(997, false);
 //	QString repeatedTableNameOrTableAlias;
-	//collects positions of tables/aliases with the same names
-	QDict< QValueList<int> > repeatedTablesAndAliases(997, false);
-	repeatedTablesAndAliases.setAutoDelete(true);
+
+	ParseInfo parseInfo(querySchema);
 	
 	for (int i=0; i<tablesList->args(); i++, columnNum++) {
 		BaseExpr *e = tablesList->arg(i);
@@ -965,7 +1008,7 @@ Select ColViews
 		}
 		assert(t_e);
 		QCString tname = t_e->name.latin1();
-		KexiDB::TableSchema *s = parser->db()->tableSchema(tname);
+		TableSchema *s = parser->db()->tableSchema(tname);
 		if(!s) {
 			setError(i18n("Field List Error"), 
 				i18n("Table \"%1\" does not exist").arg(tname));
@@ -981,7 +1024,7 @@ Select ColViews
 		}
 		// 1. collect information about first repeated table name or alias
 		//    (potential ambiguity)
-		QValueList<int> *list = repeatedTablesAndAliases[tableOrAliasName];
+		QValueList<int> *list = parseInfo.repeatedTablesAndAliases[tableOrAliasName];
 		if (list) {
 			//another table/alias with the same name
 			list->append( i );
@@ -990,7 +1033,7 @@ Select ColViews
 		else {
 			list = new QValueList<int>();
 			list->append( i );
-			repeatedTablesAndAliases.insert( tableOrAliasName, list );
+			parseInfo.repeatedTablesAndAliases.insert( tableOrAliasName, list );
 			kdDebug() << "- first table/alias with name: " << tableOrAliasName << endl;
 		}
 /*		if (repeatedTableNameOrTableAlias.isEmpty()) {
@@ -1021,26 +1064,62 @@ Select ColViews
 		querySchema->setParentTable(querySchema->tables()->first());
 
 	//-------add fields
-	KexiDB::BaseExpr *e;
+	BaseExpr *e;
 	columnNum = 0;
-	for (KexiDB::BaseExpr::ListIterator it($2->list); (e = it.current()); ++it, columnNum++)
+	for (BaseExpr::ListIterator it($2->list); (e = it.current()); columnNum++)
 	{
-		BaseExpr *columnVariable;
-		if (e->exprClass() == KexiDBExpr_SpecialBinary && dynamic_cast<BinaryExpr*>(e)) {
-			columnVariable = dynamic_cast<BinaryExpr*>(e)->left();
+		bool moveNext = true; //used to avoid ++it when an item is taken from the list
+		BaseExpr *columnExpr = e;
+		VariableExpr* aliasVariable = 0;
+		if (e->exprClass() == KexiDBExpr_SpecialBinary && dynamic_cast<BinaryExpr*>(e)
+			&& (e->type()==AS || e->type()==0))
+		{
+			//KexiDBExpr_SpecialBinary: with alias
+			columnExpr = dynamic_cast<BinaryExpr*>(e)->left();
+//			isFieldWithAlias = true;
+			aliasVariable = dynamic_cast<VariableExpr*>(dynamic_cast<BinaryExpr*>(e)->right());
+			if (!aliasVariable) {
+				setError(i18n("Invalid column alias definition")); //ok?
+				return 0;
+			}
 		}
-		else if (e->exprClass() == KexiDBExpr_Variable) {
-			columnVariable = e;
+
+		const int c = columnExpr->exprClass();
+		const bool isExpressionField = 
+			   c == KexiDBExpr_Const
+			|| c == KexiDBExpr_Unary
+			|| c == KexiDBExpr_Arithm
+			|| c == KexiDBExpr_Logical
+			|| c == KexiDBExpr_Relational
+			|| c == KexiDBExpr_Const
+			|| c == KexiDBExpr_Function;
+
+		if (c == KexiDBExpr_Variable) {
+			//just a variable, do nothing, addColumn() will handle this
+		}
+		else if (isExpressionField) {
+			//expression object will be reused, take, will be owned, do not destroy
+			$2->list.take();
+			moveNext = false;
+		}
+		else if (aliasVariable) {
+			//take first (left) argument of the special binary expr, will be owned, do not destroy
+			dynamic_cast<BinaryExpr*>(e)->list.take(0);
 		}
 		else {
 			setError(i18n("Invalid column definition")); //ok?
 			return 0;
 		}
 
-		if (!addColumn( querySchema, columnVariable, repeatedTablesAndAliases ))
+		if (!addColumn( parseInfo, columnExpr ))
 			return 0;
 		
-		if (e->exprClass() == KexiDBExpr_SpecialBinary && dynamic_cast<BinaryExpr*>(e)
+		if (aliasVariable) {
+			kdDebug() << "ALIAS \"" << aliasVariable->name << "\" set for column " 
+				<< columnNum << endl;
+			querySchema->setColumnAlias(columnNum, aliasVariable->name.latin1());
+		}
+/*		if (e->exprClass() == KexiDBExpr_SpecialBinary && dynamic_cast<BinaryExpr*>(e)
 			&& (e->type()==AS || e->type()==0))
 		{
 			//also add alias
@@ -1053,7 +1132,10 @@ Select ColViews
 			kdDebug() << "ALIAS \"" << aliasVariable->name << "\" set for column " 
 				<< columnNum << endl;
 			querySchema->setColumnAlias(columnNum, aliasVariable->name.latin1());
-		}
+		}*/
+
+		if (moveNext)
+			++it;
 	}
 	kdDebug() << "Select ColViews=" << $2->debugString() 
 		<< " Tables=" << $3->debugString() << endl;
@@ -1079,7 +1161,7 @@ SELECT
 {
 	kdDebug() << "SELECT" << endl;
 //	parser->createSelect();
-//	parser->setOperation(KexiDB::Parser::OP_Select);
+//	parser->setOperation(Parser::OP_Select);
 	$$ = new QuerySchema();
 }
 ;
@@ -1096,93 +1178,188 @@ WHERE aExpr
 ;
 
 aExpr:
-aExpr AND aExpr
+aExpr2
+;
+
+/* --- binary logical --- */
+aExpr2:
+aExpr3 AND aExpr2
 {
 //	kdDebug() << "AND " << $3.debugString() << endl;
-	$$ = new KexiDB::BinaryExpr( KexiDBExpr_Logical, $1, AND, $3 );
+	$$ = new BinaryExpr( KexiDBExpr_Logical, $1, AND, $3 );
 }
-| aExpr OR aExpr
+| aExpr3 OR aExpr2
 {
-//	kdDebug() << "OR " << $3 << endl;
-	$$ = new KexiDB::BinaryExpr( KexiDBExpr_Logical, $1, OR, $3 );
+	$$ = new BinaryExpr( KexiDBExpr_Logical, $1, OR, $3 );
 }
-| NOT aExpr
+| aExpr3 XOR aExpr2
 {
-	$$ = new KexiDB::UnaryExpr( NOT, $2 );
-//	$$->setName($1->name() + " NOT " + $3->name());
+	$$ = new BinaryExpr( KexiDBExpr_Arithm, $1, XOR, $3 );
 }
-| aExpr '+' aExpr
+|
+aExpr3
+;
+
+/* arithm. lowest precedence */
+aExpr3:
+aExpr4 BITWISE_SHIFT_LEFT aExpr3
 {
-	$$ = new KexiDB::BinaryExpr(KexiDBExpr_Arithm, $1, '+', $3);
+	$$ = new BinaryExpr(KexiDBExpr_Arithm, $1, BITWISE_SHIFT_LEFT, $3);
 }
-| aExpr '-' aExpr
+| aExpr4 BITWISE_SHIFT_RIGHT aExpr3
 {
-	$$ = new KexiDB::BinaryExpr(KexiDBExpr_Arithm, $1, '-', $3);
+	$$ = new BinaryExpr(KexiDBExpr_Arithm, $1, BITWISE_SHIFT_RIGHT, $3);
 }
-| aExpr '/' aExpr
+|
+aExpr4
+;
+
+/* arithm. lower precedence */
+aExpr4:
+aExpr5 '+' aExpr4
 {
-	$$ = new KexiDB::BinaryExpr(KexiDBExpr_Arithm, $1, '/', $3);
+	$$ = new BinaryExpr(KexiDBExpr_Arithm, $1, '+', $3);
+	$$->debug();
 }
-| aExpr '*' aExpr
+| aExpr5 '-' aExpr4
 {
-	$$ = new KexiDB::BinaryExpr(KexiDBExpr_Arithm, $1, '*', $3);
+	$$ = new BinaryExpr(KexiDBExpr_Arithm, $1, '-', $3);
 }
-| aExpr '%' aExpr
+| aExpr5 '&' aExpr4
 {
-	$$ = new KexiDB::BinaryExpr(KexiDBExpr_Arithm, $1, '%', $3);
+	$$ = new BinaryExpr(KexiDBExpr_Arithm, $1, '&', $3);
 }
-| aExpr NOT_EQUAL aExpr
+| aExpr5 '|' aExpr4
 {
-	$$ = new KexiDB::BinaryExpr(KexiDBExpr_Relational, $1, NOT_EQUAL, $3);
+	$$ = new BinaryExpr(KexiDBExpr_Arithm, $1, '|', $3);
 }
-| aExpr GREATER_THAN %prec GREATER_OR_EQUAL aExpr
+|
+aExpr5
+;
+
+/* arithm. higher precedence */
+aExpr5:
+aExpr6 '/' aExpr5
 {
-	$$ = new KexiDB::BinaryExpr(KexiDBExpr_Relational, $1, GREATER_THAN, $3);
+	$$ = new BinaryExpr(KexiDBExpr_Arithm, $1, '/', $3);
 }
-| aExpr GREATER_OR_EQUAL aExpr
+| aExpr6 '*' aExpr5
 {
-	$$ = new KexiDB::BinaryExpr(KexiDBExpr_Relational, $1, GREATER_OR_EQUAL, $3);
+	$$ = new BinaryExpr(KexiDBExpr_Arithm, $1, '*', $3);
 }
-| aExpr LESS_THAN %prec LESS_OR_EQUAL aExpr
+| aExpr6 '%' aExpr5
 {
-	$$ = new KexiDB::BinaryExpr(KexiDBExpr_Relational, $1, LESS_THAN, $3);
+	$$ = new BinaryExpr(KexiDBExpr_Arithm, $1, '%', $3);
 }
-| aExpr LESS_OR_EQUAL aExpr
+|
+aExpr6
+;
+
+/* relational op precedence */
+aExpr6:
+aExpr7 GREATER_THAN %prec GREATER_OR_EQUAL aExpr6
 {
-	$$ = new KexiDB::BinaryExpr(KexiDBExpr_Relational, $1, LESS_OR_EQUAL, $3);
+	$$ = new BinaryExpr(KexiDBExpr_Relational, $1, GREATER_THAN, $3);
 }
-| aExpr LIKE aExpr
+| aExpr7 GREATER_OR_EQUAL aExpr6
 {
-	$$ = new KexiDB::BinaryExpr(KexiDBExpr_Relational, $1, LIKE, $3);
+	$$ = new BinaryExpr(KexiDBExpr_Relational, $1, GREATER_OR_EQUAL, $3);
 }
-| aExpr SQL_IN aExpr
+| aExpr7 LESS_THAN %prec LESS_OR_EQUAL aExpr6
 {
-	$$ = new KexiDB::BinaryExpr(KexiDBExpr_Relational, $1, SQL_IN, $3);
+	$$ = new BinaryExpr(KexiDBExpr_Relational, $1, LESS_THAN, $3);
 }
-| IDENTIFIER '(' aExprList ')'
+| aExpr7 LESS_OR_EQUAL aExpr6
 {
-	kdDebug() << "  + function: " << $1 << "(" << $3->debugString() << ")" << endl;
-	$$ = new KexiDB::FunctionExpr($1, $3);
+	$$ = new BinaryExpr(KexiDBExpr_Relational, $1, LESS_OR_EQUAL, $3);
+}
+|
+aExpr7
+;
+
+/* relational (equality) op precedence */
+aExpr7:
+aExpr8 NOT_EQUAL aExpr7
+{
+	$$ = new BinaryExpr(KexiDBExpr_Relational, $1, NOT_EQUAL, $3);
+}
+| aExpr8 LIKE aExpr7
+{
+	$$ = new BinaryExpr(KexiDBExpr_Relational, $1, LIKE, $3);
+}
+| aExpr8 SQL_IN aExpr7
+{
+	$$ = new BinaryExpr(KexiDBExpr_Relational, $1, SQL_IN, $3);
+}
+| aExpr8 SIMILAR TO aExpr7
+{
+	$$ = new BinaryExpr(KexiDBExpr_Relational, $1, SIMILAR_TO, $4);
+}
+| aExpr8 NOT SIMILAR TO aExpr7
+{
+	$$ = new BinaryExpr(KexiDBExpr_Relational, $1, NOT_SIMILAR_TO, $5);
+}
+|
+aExpr8
+;
+
+/* --- unary logical right --- */
+aExpr8:
+aExpr8 SQL_IS SQL_NULL
+{
+	$$ = new UnaryExpr( SQL_IS_NULL, $1 );
+}
+| aExpr8 SQL_IS NOT SQL_NULL
+{
+	$$ = new UnaryExpr( SQL_IS_NOT_NULL, $1 );
+}
+|
+aExpr9
+;
+
+/* parenthesis, unary operators, and terminals precedence */
+aExpr9:
+/* --- unary logical left --- */
+'-' aExpr9
+{
+	$$ = new UnaryExpr( '-', $2 );
+}
+| '+' aExpr9
+{
+	$$ = new UnaryExpr( '+', $2 );
+}
+| '~' aExpr9
+{
+	$$ = new UnaryExpr( '~', $2 );
+}
+| NOT aExpr9
+{
+	$$ = new UnaryExpr( NOT, $2 );
 }
 | IDENTIFIER
 {
-	$$ = new KexiDB::VariableExpr( QString::fromLatin1($1) );
+	$$ = new VariableExpr( QString::fromLatin1($1) );
 	
 //TODO: simplify this later if that's 'only one field name' expression
 	kdDebug() << "  + identifier: " << $1 << endl;
-//	$$ = new KexiDB::Field();
+//	$$ = new Field();
 //	$$->setName($1);
 //	$$->setTable(dummy);
 
 //	parser->select()->addField(field);
 	requiresTable = true;
 }
+| IDENTIFIER '(' aExprList ')'
+{
+	kdDebug() << "  + function: " << $1 << "(" << $3->debugString() << ")" << endl;
+	$$ = new FunctionExpr($1, $3);
+}
 /*TODO: shall we also support db name? */
 | IDENTIFIER '.' IDENTIFIER
 {
-	$$ = new KexiDB::VariableExpr( QString::fromLatin1($1) + "." + QString::fromLatin1($3) );
+	$$ = new VariableExpr( QString::fromLatin1($1) + "." + QString::fromLatin1($3) );
 	kdDebug() << "  + identifier.identifier: " << $3 << "." << $1 << endl;
-//	$$ = new KexiDB::Field();
+//	$$ = new Field();
 //	s->setTable($1);
 //	$$->setName($3);
 	//$$->setTable(parser->db()->tableSchema($1));
@@ -1191,36 +1368,36 @@ aExpr AND aExpr
 }
 | SQL_NULL
 {
-	$$ = new KexiDB::ConstExpr( SQL_NULL, QVariant() );
+	$$ = new ConstExpr( SQL_NULL, QVariant() );
 	kdDebug() << "  + NULL" << endl;
-//	$$ = new KexiDB::Field();
+//	$$ = new Field();
 	//$$->setName(QString::null);
 }
 | CHARACTER_STRING_LITERAL
 {
-	$$ = new KexiDB::ConstExpr( CHARACTER_STRING_LITERAL, $1 );
-//	$$ = new KexiDB::Field();
+	$$ = new ConstExpr( CHARACTER_STRING_LITERAL, $1 );
+//	$$ = new Field();
 //	$$->setName($1);
 //	parser->select()->addField(field);
 	kdDebug() << "  + constant \"" << $1 << "\"" << endl;
 }
 | INTEGER_CONST
 {
-	$$ = new KexiDB::ConstExpr( INTEGER_CONST, $1 );
-//	$$ = new KexiDB::Field();
+	$$ = new ConstExpr( INTEGER_CONST, $1 );
+//	$$ = new Field();
 //	$$->setName(QString::number($1));
 //	parser->select()->addField(field);
 	kdDebug() << "  + int constant: " << $1 << endl;
 }
 | REAL_CONST
 {
-	$$ = new KexiDB::ConstExpr( REAL_CONST, QPoint( $1.integer, $1.fractional ) );
+	$$ = new ConstExpr( REAL_CONST, QPoint( $1.integer, $1.fractional ) );
 	kdDebug() << "  + real constant: " << $1.integer << "." << $1.fractional << endl;
 }
 | '(' aExpr ')'
 {
 	kdDebug() << "(expr)" << endl;
-	$$ = $2;
+	$$ = new UnaryExpr('(', $2);
 }
 ;
 
@@ -1232,7 +1409,7 @@ aExprList ',' aExpr
 }
 |/* EMPTY */
 {
-	$$ = new KexiDB::NArgExpr(0, 0/*unknown*/);
+	$$ = new NArgExpr(0, 0/*unknown*/);
 }
 ;
 
@@ -1285,7 +1462,7 @@ FlatTableList ',' FlatTable
 }
 |FlatTable
 {
-	$$ = new KexiDB::NArgExpr(KexiDBExpr_TableList, IDENTIFIER); //ok?
+	$$ = new NArgExpr(KexiDBExpr_TableList, IDENTIFIER); //ok?
 	$$->add($1);
 }
 ;
@@ -1295,7 +1472,7 @@ IDENTIFIER
 {
 	kdDebug() << "FROM: '" << $1 << "'" << endl;
 
-//	KexiDB::TableSchema *schema = parser->db()->tableSchema($1);
+//	TableSchema *schema = parser->db()->tableSchema($1);
 //	parser->select()->setParentTable(schema);
 //	parser->select()->addTable(schema);
 //	requiresTable = false;
@@ -1306,8 +1483,8 @@ IDENTIFIER
 
 	/*
 //TODO: this isn't ok for more tables:
-	KexiDB::Field::ListIterator it = parser->select()->fieldsIterator();
-	for(KexiDB::Field *item; (item = it.current()); ++it)
+	Field::ListIterator it = parser->select()->fieldsIterator();
+	for(Field *item; (item = it.current()); ++it)
 	{
 		if(item->table() == dummy)
 		{
@@ -1316,10 +1493,10 @@ IDENTIFIER
 
 		if(item->table() && !item->isQueryAsterisk())
 		{
-			KexiDB::Field *f = item->table()->field(item->name());
+			Field *f = item->table()->field(item->name());
 			if(!f)
 			{
-				KexiDB::ParserError err(i18n("Field List Error"), i18n("Unknown column '%1' in table '%2'").arg(item->name()).arg(schema->name()), ctoken, current);
+				ParserError err(i18n("Field List Error"), i18n("Unknown column '%1' in table '%2'").arg(item->name()).arg(schema->name()), ctoken, current);
 				parser->setError(err);
 				yyerror("fieldlisterror");
 			}	
@@ -1329,19 +1506,19 @@ IDENTIFIER
 | IDENTIFIER IDENTIFIER
 {
 	//table + alias
-	$$ = new KexiDB::BinaryExpr(
+	$$ = new BinaryExpr(
 		KexiDBExpr_SpecialBinary, 
-		new KexiDB::VariableExpr(QString::fromLatin1($1)), 0,
-		new KexiDB::VariableExpr(QString::fromLatin1($2))
+		new VariableExpr(QString::fromLatin1($1)), 0,
+		new VariableExpr(QString::fromLatin1($2))
 	);
 }
 | IDENTIFIER AS IDENTIFIER
 {
 	//table + alias
-	$$ = new KexiDB::BinaryExpr(
+	$$ = new BinaryExpr(
 		KexiDBExpr_SpecialBinary,
-		new KexiDB::VariableExpr(QString::fromLatin1($1)), AS,
-		new KexiDB::VariableExpr(QString::fromLatin1($3))
+		new VariableExpr(QString::fromLatin1($1)), AS,
+		new VariableExpr(QString::fromLatin1($3))
 	);
 }
 ;
@@ -1357,7 +1534,7 @@ ColViews ',' ColItem
 }
 |ColItem
 {
-	$$ = new KexiDB::NArgExpr(0,0);
+	$$ = new NArgExpr(0,0);
 	$$->add( $1 );
 	kdDebug() << "ColViews: ColItem" << endl;
 }
@@ -1366,7 +1543,7 @@ ColViews ',' ColItem
 ColItem:
 ColExpression
 {
-//	$$ = new KexiDB::Field();
+//	$$ = new Field();
 //	dummy->addField($$);
 //	$$->setExpression( $1 );
 //	parser->select()->addField($$);
@@ -1380,25 +1557,25 @@ ColExpression
 }
 | ColExpression AS IDENTIFIER
 {
-//	$$ = new KexiDB::Field();
+//	$$ = new Field();
 //	$$->setExpression( $1 );
 //	parser->select()->addField($$);
-	$$ = new KexiDB::BinaryExpr(
+	$$ = new BinaryExpr(
 		KexiDBExpr_SpecialBinary, $1, AS,
-		new KexiDB::VariableExpr(QString::fromLatin1($3))
-//		new KexiDB::ConstExpr(IDENTIFIER, QString::fromLocal8Bit($3))
+		new VariableExpr(QString::fromLatin1($3))
+//		new ConstExpr(IDENTIFIER, QString::fromLocal8Bit($3))
 	);
 	kdDebug() << " added column expr: " << $$->debugString() << endl;
 }
 | ColExpression IDENTIFIER
 {
-//	$$ = new KexiDB::Field();
+//	$$ = new Field();
 //	$$->setExpression( $1 );
 //	parser->select()->addField($$);
-	$$ = new KexiDB::BinaryExpr(
+	$$ = new BinaryExpr(
 		KexiDBExpr_SpecialBinary, $1, 0, 
-		new KexiDB::VariableExpr(QString::fromLatin1($2))
-//		new KexiDB::ConstExpr(IDENTIFIER, QString::fromLocal8Bit($2))
+		new VariableExpr(QString::fromLatin1($2))
+//		new ConstExpr(IDENTIFIER, QString::fromLocal8Bit($2))
 	);
 	kdDebug() << " added column expr: " << $$->debugString() << endl;
 }
@@ -1412,7 +1589,7 @@ aExpr
 /*
 | SUM '(' ColExpression ')'
 {
-//	$$ = new KexiDB::AggregationExpr( SUM,  );
+//	$$ = new AggregationExpr( SUM,  );
 //TODO
 //	$$->setName("SUM(" + $3->name() + ")");
 //wait	$$->containsGroupingAggregate(true);
@@ -1454,24 +1631,23 @@ aExpr
 ColWildCard:
 '*'
 {
-	$$ = new KexiDB::VariableExpr("*");
+	$$ = new VariableExpr("*");
 	kdDebug() << "all columns" << endl;
 
-//	KexiDB::QueryAsterisk *ast = new KexiDB::QueryAsterisk(parser->select(), dummy);
+//	QueryAsterisk *ast = new QueryAsterisk(parser->select(), dummy);
 //	parser->select()->addAsterisk(ast);
 //	requiresTable = true;
 }
-| IDENTIFIER_DOT_ASTERISK
+| IDENTIFIER '.' '*'
 {
-	$$ = new KexiDB::VariableExpr(QString::fromLatin1($1));
-	kdDebug() << "  + all columns from " << $1 << endl;
-//	KexiDB::QueryAsterisk *ast = new KexiDB::QueryAsterisk(parser->select(), parser->db()->tableSchema($1));
-//	parser->select()->addAsterisk(ast);
-//	requiresTable = true;
+	QString s = QString::fromLatin1($1);
+	s+=".*";
+	$$ = new VariableExpr(s);
+	kdDebug() << "  + all columns from " << s << endl;
 }
 /*| ERROR_DIGIT_BEFORE_IDENTIFIER
 {
-	$$ = new KexiDB::VariableExpr($1);
+	$$ = new VariableExpr($1);
 	kdDebug() << "  Invalid identifier! " << $1 << endl;
 	setError(i18n("Invalid identifier \"%1\"").arg($1));
 }*/

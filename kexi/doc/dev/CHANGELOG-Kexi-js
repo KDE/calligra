@@ -308,13 +308,28 @@ TODO: Query designer: for queries like 'select * from a, b, c' allow to enter * 
 - remove single-char token names with chars (more readable + more effective)
 
 === 2004 LT TODO ===
-TableView
-- implement autonumber
 KexiDB Drivers
-- move to SQLITE3 (later it will be harder to do)
+- use SQLITE3 (later it will be harder to do)
 -....
 
 TODO: add kexi__toremove table, and use it to remove objects on begin connection
+
+2004-09-29
+2004-09-30
+SQL Parser highly improved
+- reduce/reduce conflicts solved: operators in expressions have now 9 valid precedence levels
+- expressions are now parsed quite well: e.g. identifier checking is recursive
+- better debugging
+- ParseInfo introduced: Data used on parsing
+KexiDB
+- Field: expressions are better supported
+- Connection: expressions are visible in selectStatement()
+
+2004-09-28
+KexiDB
+- Field: documentation added
+Kexi
+- ConstIterators used where possible
 
 2004-09-27
 SQL Parser

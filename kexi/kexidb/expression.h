@@ -25,6 +25,8 @@
 
 #include <kexidb/field.h>
 
+#include <kdebug.h>
+
 namespace KexiDB {
 
 //! classes
@@ -42,6 +44,8 @@ namespace KexiDB {
 
 KEXI_DB_EXPORT QString exprClassName(int c);
 
+class ParseInfo;
+
 //! A base class for all expressions
 class KEXI_DB_EXPORT BaseExpr
 {
@@ -54,8 +58,14 @@ public:
 	int type() const { return m_type; }
 	BaseExpr *BaseExpr::parent() const { return m_par; }
 	virtual void setParent(BaseExpr *p) { m_par = p; }
-	virtual void check();
+	virtual bool validate(ParseInfo& parseInfo);
+	virtual QString toString() = 0;
+	
+	inline void debug() { KexiDBDbg << debugString() << endl; }
 	virtual QString debugString();
+	/*! \return single character if the type is < 256 
+	 or number (for debugging). */
+	QString typeToString();
 
 	int exprClass() const { return m_cl; }
 
@@ -73,8 +83,9 @@ public:
 	void add(BaseExpr *expr);
 	BaseExpr *arg(int n);
 	int args();
-	virtual void check();
 	virtual QString debugString();
+	virtual QString toString();
+	virtual bool validate(ParseInfo& parseInfo);
 	BaseExpr::List list;
 };
 
@@ -85,8 +96,9 @@ public:
 	UnaryExpr(int type, BaseExpr *n);
 	virtual ~UnaryExpr();
 	virtual QString debugString();
+	virtual QString toString();
 	BaseExpr *arg() { return NArgExpr::arg(0); }
-	virtual void check();
+	virtual bool validate(ParseInfo& parseInfo);
 };
 
 /*! A base class for binary operation
@@ -102,9 +114,10 @@ class KEXI_DB_EXPORT BinaryExpr : public NArgExpr
 public:
 	BinaryExpr(int aClass, BaseExpr *left_expr, int type, BaseExpr *right_expr);
 	virtual QString debugString();
+	virtual QString toString();
 	BaseExpr *left();
 	BaseExpr *right();
-	virtual void check();
+	virtual bool validate(ParseInfo& parseInfo);
 };
 
 /*! String, integer, float constants also includes NULL value.
@@ -116,6 +129,8 @@ class KEXI_DB_EXPORT ConstExpr : public BaseExpr
 public:
 	ConstExpr(int type, const QVariant& val);
 	virtual QString debugString();
+	virtual QString toString();
+	virtual bool validate(ParseInfo& parseInfo);
 	QVariant value;
 };
 
@@ -125,7 +140,33 @@ class KEXI_DB_EXPORT VariableExpr : public BaseExpr
 public:
 	VariableExpr(const QString& _name);
 	virtual QString debugString();
+	virtual QString toString();
+	/*! Validation. Sets field, tablePositionForField 
+	 and tableForQueryAsterisk members. 
+	 See addColumn() in parse.y to see how it's used on column adding. */
+	virtual bool validate(ParseInfo& parseInfo);
+
+	/*! Verbatim name as returned by scanner. */
 	QString name;
+
+	/* NULL by default. After succesful validate() it will point to a field,
+	 if the variable is of a form "tablename.fieldname" or "fieldname", 
+	 otherwise (eg. for asterisks) -still NULL.
+	 Only meaningfull for column expressions within a query. */
+	Field *field;
+
+	/* -1 by default. After succesful validate() it will contain a position of a table
+	 within query that needs to be bound to the field. 
+	 This value can be either be -1 if no binding is needed.
+	 This value is used in the Parser to call 
+	  QuerySchema::addField(Field* field, int bindToTable);
+	 Only meaningfull for column expressions within a query. */
+	int tablePositionForField;
+
+	/*! NULL by default. After succesful validate() it will point to a table
+	 that is referenced by asterisk, i.e. "*.tablename". 
+	 This is set to NULL if this variable is not an asterisk of that form. */
+	TableSchema *tableForQueryAsterisk;
 };
 
 //! aggregation functions like SUM, COUNT, MAX, ...
@@ -137,6 +178,9 @@ public:
 	FunctionExpr(const QString& _name, NArgExpr* args_);
 	virtual ~FunctionExpr();
 	virtual QString debugString();
+	virtual QString toString();
+	virtual bool validate(ParseInfo& parseInfo);
+
 	QString name;
 	NArgExpr* args;
 };

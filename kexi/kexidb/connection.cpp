@@ -965,20 +965,26 @@ QString Connection::selectStatement( KexiDB::QuerySchema& querySchema ) const
 					sql += QString::fromLatin1("*");
 			}
 			else {
-				if (!f->table()) //sanity check
-					return QString::null;
-					
-				QString tableName;
-				int tablePosition = querySchema.tableBoundToColumn(number);
-				if (tablePosition>=0)
-					tableName = querySchema.tableAlias(tablePosition);
-				if (tableName.isEmpty())
-					tableName = f->table()->name();
-					
-				sql += (escapeIdentifier(tableName) + "." + escapeIdentifier(f->name()));
+				if (f->isExpression()) {
+					sql += f->expression()->toString();
+				}
+				else {
+					if (!f->table()) //sanity check
+						return QString::null;
+						
+					QString tableName;
+					int tablePosition = querySchema.tableBoundToColumn(number);
+					if (tablePosition>=0)
+						tableName = querySchema.tableAlias(tablePosition);
+					if (tableName.isEmpty())
+						tableName = f->table()->name();
+						
+					sql += (escapeIdentifier(tableName) + "." + escapeIdentifier(f->name()));
+				}
 				QString aliasString = QString(querySchema.columnAlias(number));
 				if (!aliasString.isEmpty())
 					sql += (QString::fromLatin1(" AS ") + aliasString);
+//TODO: add option that allows to omit "AS" keyword
 			}
 		}
 	}

@@ -241,7 +241,7 @@ FieldList& QuerySchema::insertField(uint position, Field *field,
 		d->tablesBoundToColumns.resize(d->tablesBoundToColumns.size()*2);
 	}
 	d->clearCachedData();
-	if (!field->isQueryAsterisk() && !field->table()) {
+	if (!field->isQueryAsterisk() && !field->isExpression() && !field->table()) {
 		KexiDBDbg << "QuerySchema::addField(): WARNING: field '"<<field->name()
 			<<"' must contain table information!" <<endl;
 		return *this;
@@ -254,7 +254,7 @@ FieldList& QuerySchema::insertField(uint position, Field *field,
 		if (field->table() && (d->tables.findRef(field->table())==-1))
 			d->tables.append(field->table());
 	}
-	else {
+	else if (field->table()) {
 		//add a table to list if doesn't exist there:
 		if (d->tables.findRef(field->table())==-1)
 			d->tables.append(field->table());

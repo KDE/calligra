@@ -110,18 +110,18 @@ class KEXI_DB_EXPORT QuerySchema : public FieldList, public SchemaData
 		
 		/*! Adds \a field to the columns list.
 		 \sa insertField() */
-		KexiDB::FieldList& addField(KexiDB::Field* field, bool visible = true);
+		FieldList& addField(Field* field, bool visible = true);
 		
 		/*! Adds \a field to the columns list. Also binds to a table 
 		 at \a bindToTable position. Use bindToTable==-1 if no table should be bound.
 		 \sa insertField()
 		 \sa tableBoundToColumn(uint columnPosition)
 		*/
-		KexiDB::FieldList& addField(KexiDB::Field* field, int bindToTable, 
+		FieldList& addField(Field* field, int bindToTable, 
 			bool visible = true);
 
 		/*! Removes field from the columns list. Use with care. */
-		virtual void removeField(KexiDB::Field *field);
+		virtual void removeField(Field *field);
 
 		/*! \return visibility flag for column at \a position. 
 		 By default column is visible. */
