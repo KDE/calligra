@@ -31,8 +31,6 @@ GUI:
 -	gradient widget: the midpoint arrows are currently hard to hit and modify
 
 REAL BUGS:
--	create an ellipse, then a rectangle. mark both and apply "round corners" =>
-	the rectangle sitn transformed, the commands history is incosistent, why?
 -	patterns dont zoom
 -	VSelectionTool has an offset error relative to the handle nodes in the VSelection.
 -	fix i18n singular/plural
@@ -69,6 +67,5 @@ MAKE IT NICE:
 -	remove V*Tool::refreshUnit(). call this directly via dialog() instead
 -	pass all dialogs a parent
 -	think about using ghostscript's flatten algo (see comments in vflatten.cc)
--	check fill/stroke commands, they feel clumsy/suboptimal?
 -	why represent opacity as float, not as short?
 
