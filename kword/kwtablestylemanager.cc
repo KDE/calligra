@@ -470,6 +470,9 @@ void KWTableStyleManager::deleteStyle()
 
 void KWTableStyleManager::moveUpStyle()
 {
+    if(m_currentTableStyle !=0L)
+        save();
+
     unsigned int pos = 0;
     QString currentStyleName=m_stylesList->currentText ();
     if ( currentStyleName.isEmpty() )
@@ -497,6 +500,9 @@ void KWTableStyleManager::moveUpStyle()
 
 void KWTableStyleManager::moveDownStyle()
 {
+    if(m_currentTableStyle !=0L)
+        save();
+
     unsigned int pos = 0;
     QString currentStyleName=m_stylesList->currentText ();
     if ( currentStyleName.isEmpty() )

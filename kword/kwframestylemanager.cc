@@ -405,6 +405,8 @@ void KWFrameStyleManager::deleteStyle()
 
 void KWFrameStyleManager::moveUpStyle()
 {
+    if(m_currentFrameStyle !=0L)
+        save();
     unsigned int pos = 0;
     QString currentStyleName=m_stylesList->currentText ();
     if ( currentStyleName.isEmpty() )
@@ -434,11 +436,12 @@ void KWFrameStyleManager::moveUpStyle()
 
 void KWFrameStyleManager::moveDownStyle()
 {
+    if(m_currentFrameStyle !=0L)
+        save();
     unsigned int pos = 0;
     QString currentStyleName=m_stylesList->currentText ();
     if ( currentStyleName.isEmpty() )
         return;
-
     for ( KWFrameStyleListItem* p = m_frameStyles.first(); p->changedFrameStyle() != 0L; p = m_frameStyles.next(), ++pos )
     {
         if ( p->changedFrameStyle()->name() == currentStyleName )
@@ -451,7 +454,6 @@ void KWFrameStyleManager::moveDownStyle()
             break;
         }
     }
-
     pos=m_stylesList->currentItem();
     noSignals=true;
     m_stylesList->changeItem( m_stylesList->text ( pos+1 ),pos);
