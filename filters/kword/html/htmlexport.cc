@@ -711,11 +711,17 @@ bool HTMLExport::filter(const QString  &filenameIn,
                 exportFilter=new ClassExportFilterXHtmlTransitional;
                 break;
             }
-        case 2:
         default:
+        case 2:
             { // "Style" XHTML 1.0
                 kdDebug(30503) << "Style XHTML option" << endl;
                 exportFilter=new ClassExportFilterXHtmlStyle;
+                break;
+            }
+        case 3:
+            { // "Full Power" XHTML 1.0
+                kdDebug(30503) << "Full Power XHTML option" << endl;
+                exportFilter=new ClassExportFilterXHtmlFullPower;
                 break;
             }
         }
@@ -737,11 +743,17 @@ bool HTMLExport::filter(const QString  &filenameIn,
                 exportFilter=new ClassExportFilterHtmlTransitional;
                 break;
             }
-        case 2:
         default:
+        case 2:
             { // "Style" HTML 4.01
                 kdDebug(30503) << "Style HTML option" << endl;
                 exportFilter=new ClassExportFilterHtmlStyle;
+                break;
+            }
+        case 3:
+            { // "Full Power" HTML 4.01
+                kdDebug(30503) << "Full Power HTML option" << endl;
+                exportFilter=new ClassExportFilterHtmlFullPower;
                 break;
             }
        }

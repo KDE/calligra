@@ -65,6 +65,8 @@ int HtmlExportDialog::getMode(void) const
         result=1;
     else if(m_dialog->radioMode3==m_dialog->buttonGroup2->selected())
         result=2;
+    else if(m_dialog->radioMode4==m_dialog->buttonGroup2->selected())
+        result=3;
     else
         result=2;
 
