@@ -183,8 +183,8 @@ void KoTextViewIface::setAlign(const QString &align)
         cmd=m_textView->setAlignCommand(Qt::AlignLeft);
     else if (align=="AlignRight")
         cmd=m_textView->setAlignCommand(Qt::AlignRight);
-    else if (align=="AlignCenter")
-        cmd=m_textView->setAlignCommand(Qt::AlignCenter);
+    else if (align=="AlignCenter" || align=="AlignHCenter")
+        cmd=m_textView->setAlignCommand(Qt::AlignHCenter);
     else if (align=="AlignJustify")
         cmd=m_textView->setAlignCommand(Qt::AlignJustify);
     else

@@ -199,6 +199,8 @@ void KoTextDocument::drawParagWYSIWYG( QPainter *p, KoTextParag *parag, int cx, 
 	useDoubleBuffer = FALSE;
     // Can't handle transparency using double-buffering, in case of rotation/scaling (due to bitBlt)
     // The test on mat is almost like isIdentity(), but allows for translation.
+    //// ##### The way to fix this: initialize the pixmap to be fully transparent instead
+    // of being white.
     QWMatrix mat = p->worldMatrix();
     if ( ( mat.m11() != 1.0 || mat.m22() != 1.0 || mat.m12() != 0.0 || mat.m21() != 0.0 )
          && brush.style() != Qt::SolidPattern )

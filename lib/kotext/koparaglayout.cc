@@ -163,7 +163,7 @@ void KoParagLayout::loadParagLayout( KoParagLayout& layout, const QDomElement& p
         if ( !flow.isEmpty() )
         {
             layout.alignment = flow=="right" ? Qt::AlignRight :
-                         flow=="center" ? Qt::AlignCenter :
+                         flow=="center" ? Qt::AlignHCenter :
                          flow=="justify" ? Qt::AlignJustify :
                          flow=="left" ? Qt::AlignLeft : Qt::AlignAuto;
 
@@ -178,8 +178,9 @@ void KoParagLayout::loadParagLayout( KoParagLayout& layout, const QDomElement& p
             }
         } else {
             flow = element.attribute( "value" ); // KWord-0.8
-            static const int flow2align[] = { Qt::AlignAuto, Qt::AlignRight, Qt::AlignCenter, Qt::AlignJustify };
-            layout.alignment = flow2align[flow.toInt()];
+            static const int flow2align[] = { Qt::AlignAuto, Qt::AlignRight, Qt::AlignHCenter, Qt::AlignJustify };
+            if ( !flow.isEmpty() && flow.toInt() < 4 )
+                layout.alignment = flow2align[flow.toInt()];
         }
     }
 
@@ -358,7 +359,7 @@ void KoParagLayout::saveParagLayout( QDomElement & parentElem, int alignment ) c
     parentElem.appendChild( element );
 
     element.setAttribute( "align", alignment==Qt::AlignRight ? "right" :
-                          alignment==Qt::AlignCenter ? "center" :
+                          alignment==Qt::AlignHCenter ? "center" :
                           alignment==Qt::AlignJustify ? "justify" :
                           alignment==Qt::AlignAuto ? "auto" : "left" ); // Note: styles can have AlignAuto. Not paragraphs.
 

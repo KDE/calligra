@@ -36,7 +36,7 @@ KoParagCounter *KoTextParag::counter()
     if ( !m_layout.counter )
         return 0L;
 
-    // Garbage collect unnneeded counters.
+    // Garbage collect un-needed counters.
     if ( m_layout.counter->numbering() == KoParagCounter::NUM_NONE )
         setNoCounter();
     return m_layout.counter;
@@ -60,6 +60,8 @@ void KoTextParag::setMargins( const double * margins )
 
 void KoTextParag::setAlign( int align )
 {
+    Q_ASSERT( align <= Qt::AlignJustify );
+    align &= Qt::AlignHorizontal_Mask;
     setAlignment( align );
     m_layout.alignment = align;
 }

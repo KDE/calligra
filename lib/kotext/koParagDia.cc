@@ -568,7 +568,7 @@ void KPagePreview2::drawContents( QPainter* p )
             case Qt::AlignLeft:
                 __x = _x + 6;
                 break;
-            case Qt::AlignCenter:
+            case Qt::AlignHCenter:
                 __x = _x + ( wid - __w ) / 2;
                 break;
             case Qt::AlignRight:
@@ -1150,7 +1150,7 @@ void KoParagAlignWidget::display( const KoParagLayout & lay )
         case Qt::AlignLeft:
             rLeft->setChecked( true );
             break;
-        case Qt::AlignCenter:
+        case Qt::AlignHCenter:
             rCenter->setChecked( true );
             break;
         case Qt::AlignRight:
@@ -1170,7 +1170,7 @@ void KoParagAlignWidget::save( KoParagLayout & lay )
 int KoParagAlignWidget::align() const
 {
     if ( rLeft->isChecked() ) return Qt::AlignLeft;
-    else if ( rCenter->isChecked() ) return Qt::AlignCenter;
+    else if ( rCenter->isChecked() ) return Qt::AlignHCenter;
     else if ( rRight->isChecked() ) return Qt::AlignRight;
     else if ( rJustify->isChecked() ) return Qt::AlignJustify;
 
@@ -1191,7 +1191,7 @@ void KoParagAlignWidget::alignLeft()
 
 void KoParagAlignWidget::alignCenter()
 {
-    prev2->setAlign( Qt::AlignCenter );
+    prev2->setAlign( Qt::AlignHCenter );
     clearAligns();
     rCenter->setChecked( true );
 }
