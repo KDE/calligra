@@ -50,7 +50,7 @@ public:
     };
 
     /**
-     * Looks for a clipart in the collection, returns 0L if not found.
+     * Looks for a clipart in the collection, returns a new KoPicture with that key if not found.
      */
     KoPicture findPicture( const KoPictureKey &key ) const;
 
