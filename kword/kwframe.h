@@ -462,6 +462,7 @@ public:
     /** get/set frameset name. For tables in particular, this _must_ be unique */
     QString getName() const { return m_name; }
     void setName( const QString &_name ) { m_name = _name; }
+    static QString UniqueName( const QString & templateName, int startNum );
 
 #ifndef NDEBUG
     void printDebug();
@@ -504,8 +505,7 @@ protected:
 class KWPictureFrameSet : public KWFrameSet
 {
 public:
-    KWPictureFrameSet( KWDocument *_doc )
-        : KWFrameSet( _doc ) {}
+    KWPictureFrameSet( KWDocument *_doc, const QString & name );
     virtual ~KWPictureFrameSet();
 
     virtual FrameType getFrameType() { return FT_PICTURE; }
@@ -536,7 +536,7 @@ class KWPartFrameSet : public KWFrameSet
 {
     Q_OBJECT
 public:
-    KWPartFrameSet( KWDocument *_doc, KWChild *_child );
+    KWPartFrameSet( KWDocument *_doc, KWChild *_child, const QString & name );
     virtual ~KWPartFrameSet();
 
     virtual FrameType getFrameType() { return FT_PART; }
@@ -589,7 +589,7 @@ class KWFormulaFrameSet : public KWFrameSet
 {
     Q_OBJECT
 public:
-    KWFormulaFrameSet( KWDocument *_doc );
+    KWFormulaFrameSet( KWDocument *_doc, const QString & name );
     virtual ~KWFormulaFrameSet();
 
     virtual FrameType getFrameType() { return FT_FORMULA; }

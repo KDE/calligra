@@ -879,7 +879,7 @@ void KWCanvas::mrCreatePixmap()
 {
     m_insRect = m_insRect.normalize();
     if ( m_insRect.width() > doc->gridX() && m_insRect.height() > doc->gridY() && !m_PixmapName.isEmpty() ) {
-        KWPictureFrameSet *frameset = new KWPictureFrameSet( doc );
+        KWPictureFrameSet *frameset = new KWPictureFrameSet( doc, QString::null /*automatic name*/ );
         frameset->setFileName( m_PixmapName, doc->zoomRect( m_insRect ).size() );
         m_insRect = m_insRect.normalize();
         KWFrame *frame = new KWFrame(frameset, m_insRect.x(), m_insRect.y(), m_insRect.width(),
@@ -908,7 +908,7 @@ void KWCanvas::mrCreateFormula()
 {
     m_insRect = m_insRect.normalize();
     if ( m_insRect.width() > doc->gridX() && m_insRect.height() > doc->gridY() ) {
-        KWFormulaFrameSet *frameset = new KWFormulaFrameSet( doc );
+        KWFormulaFrameSet *frameset = new KWFormulaFrameSet( doc, QString::null );
         KWFrame *frame = new KWFrame(frameset, m_insRect.x(), m_insRect.y(), m_insRect.width(), m_insRect.height() );
         frameset->addFrame( frame, false );
         doc->addFrameSet( frameset );
@@ -947,28 +947,12 @@ void KWCanvas::mrCreateTable()
 
 KWTableFrameSet * KWCanvas::createTable() // uses m_insRect and m_table to create the table
 {
-    KWTableFrameSet *table = new KWTableFrameSet( doc );
-
-    QString _name;
-    int numTables = 1;
-    bool same;
-    do { // need a new name for the new table.
-        same = false;
-        _name.sprintf( "table_%d", numTables);
-        QListIterator<KWFrameSet> fit = doc->framesetsIterator();
-        for ( ; fit.current(); ++fit )
-            if ( fit.current()->getName() == _name ) {
-                same = true;
-                break;
-            }
-        numTables++;
-    } while (same);
-    table->setName( _name );
+    KWTableFrameSet *table = new KWTableFrameSet( doc, QString::null /*automatic name*/ );
 
     // Create a set of cells with random-size frames.
     for ( unsigned int i = 0; i < m_table.rows; i++ ) {
         for ( unsigned int j = 0; j < m_table.cols; j++ ) {
-            KWTableFrameSet::Cell *cell = new KWTableFrameSet::Cell( table, i, j );
+            KWTableFrameSet::Cell *cell = new KWTableFrameSet::Cell( table, i, j, QString::null /*automatic name*/ );
             KWFrame *frame = new KWFrame(cell, m_insRect.x(), m_insRect.y(), m_insRect.width(), m_insRect.height(), RA_NO );
             cell->addFrame( frame, false );
             frame->setFrameBehaviour(AutoExtendFrame);

@@ -842,8 +842,7 @@ bool KWFrameDia::applyChanges()
                 doc->getFrameSet( _num )->addFrame( frame );
             } else { // create a new frameset
                 kdDebug() << "KWFrameDia::applyChanges creating a new frameset" << endl;
-                KWTextFrameSet *_frameSet = new KWTextFrameSet( doc );
-                _frameSet->setName( name );
+                KWTextFrameSet *_frameSet = new KWTextFrameSet( doc, name );
                 _frameSet->addFrame( frame );
                 doc->addFrameSet( _frameSet );
                 KWCreateFrameCommand *cmd=new KWCreateFrameCommand( i18n("Create text frame"), doc, frame) ;

@@ -64,7 +64,7 @@ public:
     {
     public:
         // constructor
-        Cell( KWTableFrameSet *table, unsigned int row, unsigned int col );
+        Cell( KWTableFrameSet *table, unsigned int row, unsigned int col, const QString & name = QString::null );
         Cell( KWTableFrameSet *table, const Cell &original );
         // destructor
         virtual ~Cell();
@@ -82,7 +82,7 @@ public:
     virtual FrameType getFrameType() { return FT_TABLE; }
 
     // constructors
-    KWTableFrameSet( KWDocument *_doc );
+    KWTableFrameSet( KWDocument *_doc, const QString & name );
     KWTableFrameSet( KWTableFrameSet &original );
     // destructor
     virtual ~KWTableFrameSet();

@@ -45,10 +45,14 @@
 //#define DEBUG_FLOW
 //#define DEBUG_FORMATS
 
-KWTextFrameSet::KWTextFrameSet( KWDocument *_doc )
+KWTextFrameSet::KWTextFrameSet( KWDocument *_doc, const QString & name )
     : KWFrameSet( _doc ), undoRedoInfo( this )
 {
     //kdDebug() << "KWTextFrameSet::KWTextFrameSet " << this << endl;
+    if ( name.isEmpty() )
+        m_name = _doc->generateFramesetName( i18n( "Text Frameset %1" ) );
+    else
+        m_name = name;
     m_availableHeight = -1;
     m_origFontSizes.setAutoDelete(true);
     textdoc = new KWTextDocument( this, 0, new KWTextFormatCollection( _doc ) );
@@ -1056,10 +1060,9 @@ void KWTextFrameSet::applyStyleChange( const QString & changedStyle )
 /*================================================================*/
 KWTextFrameSet *KWTextFrameSet::getCopy() {
     /* returns a deep copy of self */
-    KWTextFrameSet *newFS = new KWTextFrameSet(m_doc);
+    KWTextFrameSet *newFS = new KWTextFrameSet(m_doc, getName());
     newFS->setFrameInfo(getFrameInfo());
     newFS->setVisible(visible);
-    newFS->setName(getName());
     newFS->setIsRemoveableHeader(isRemoveableHeader());
     QListIterator<KWFrame> frameIt = frameIterator();
     for ( ; frameIt.current(); ++frameIt )

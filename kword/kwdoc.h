@@ -143,12 +143,23 @@ public:
     void getPageLayout( KoPageLayout& _layout, KoColumns& _cl, KoKWHeaderFooter& _hf );
     KoPageLayout pageLayout() const { return m_pageLayout; }
 
+    // Return the frameset number @p _num
     KWFrameSet *getFrameSet( unsigned int _num )
     { return frames.at( _num ); }
+
+    // Return the frameset with a given name
     KWFrameSet * getFrameSetByName( const QString & name );
+
+    // Return the frameset that intersects position mx, my (in pt)
     KWFrameSet * getFrameSet( double mx, double my );
+
+    // Return the total number of framesets
     unsigned int getNumFrameSets()
     { return frames.count(); }
+
+    // Generate a new name for a frameset. @p templateName must contain a %1 [for a number].
+    QString generateFramesetName( const QString & templateName );
+
     // Prefer this over getFrameSet(i), if iterating over all of them
     QListIterator<KWFrameSet> framesetsIterator() const { return QListIterator<KWFrameSet>(frames); }
     void addFrameSet( KWFrameSet *f );
@@ -457,7 +468,6 @@ signals:
     void sig_insertObject( KWChild *_child, KWPartFrameSet* );
     void sig_newContentsSize( int width, int height );
     void pageNumChanged();
-    void totalPageNumChanged();
 
 public slots:
     void slotRepaintChanged( KWFrameSet * frameset );

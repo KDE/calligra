@@ -2,8 +2,6 @@
     Copyright (C) 2001, S.R.Haque (srhaque@iee.org).
     This file is part of the KDE project
 
-#include "kwtableframeset.h"
-
     This library is free software; you can redistribute it and/or
     modify it under the terms of the GNU Library General Public
     License as published by the Free Software Foundation; either
@@ -25,12 +23,13 @@ DESCRIPTION
 */
 
 #include <kdebug.h>
-#include <kwdoc.h>
-#include <kwanchor.h>
-#include <kwtableframeset.h>
+#include <klocale.h>
+#include "kwdoc.h"
+#include "kwanchor.h"
+#include "kwtableframeset.h"
 #include "kwcanvas.h"
 
-KWTableFrameSet::KWTableFrameSet( KWDocument *doc ) :
+KWTableFrameSet::KWTableFrameSet( KWDocument *doc, const QString & name ) :
     KWFrameSet( doc )
 {
     m_rows = 0;
@@ -43,6 +42,10 @@ KWTableFrameSet::KWTableFrameSet( KWDocument *doc ) :
     m_cells.setAutoDelete( true );
     frames.setAutoDelete(false);
     m_anchor = 0L;
+    if ( name.isEmpty() )
+        m_name = doc->generateFramesetName( i18n( "Table %1" ) );
+    else
+        m_name = name;
 }
 
 /*================================================================*/
@@ -52,7 +55,7 @@ KWTableFrameSet::KWTableFrameSet( KWTableFrameSet &original ) :
     m_doc = original.m_doc;
     m_rows = original.m_rows;
     m_cols = original.m_cols;
-    m_name = original.m_name;
+    m_name = original.m_name + '_'; // unicity problem !
     m_showHeaderOnAllPages = original.m_showHeaderOnAllPages;
     m_hasTmpHeaders = original.m_hasTmpHeaders;
     m_active = original.m_active;
@@ -166,7 +169,7 @@ void KWTableFrameSet::addCell( Cell *cell )
 
     // Find the insertion point in the list.
     for ( i = 0; i < m_cells.count() && m_cells.at( i )->isAboveOrLeftOf( cell->m_row, cell->m_col ); i++ ) ;
-    cell->setName( m_name + ' ' + cell->m_col + ',' + cell->m_row );
+    // cell->setName( m_name + ' ' + cell->m_col + ',' + cell->m_row ); // already done in constructor
     m_cells.insert( i, cell );
 }
 
@@ -804,7 +807,7 @@ void KWTableFrameSet::insertRow( unsigned int _idx, bool _recalc, bool isAHeader
         frame->setFrameBehaviour(AutoExtendFrame);
         frame->setNewFrameBehaviour(NoFollowup);
 
-        Cell *newCell = new Cell( this, _idx, i );
+        Cell *newCell = new Cell( this, _idx, i, QString::null );
         newCell->m_cols=colSpan;
         newCell->setIsRemoveableHeader( isAHeader );
         newCell->addFrame( frame, _recalc );
@@ -863,7 +866,7 @@ void KWTableFrameSet::insertCol( unsigned int col )
             cell = getCell(i, col+1);
             height = cell->getFrame(0)->height();
         }
-        Cell *newCell = new Cell( this, i, col );
+        Cell *newCell = new Cell( this, i, col, QString::null );
         KWFrame *frame = new KWFrame(newCell, x, cell->getFrame(0)->y(), width, height, RA_NO );
         frame->setFrameBehaviour(AutoExtendFrame);
         newCell->addFrame( frame );
@@ -1134,7 +1137,6 @@ bool KWTableFrameSet::splitCell(unsigned int intoRows, unsigned int intoCols)
             if(x==0 && y==0) continue; // the orig cell takes this spot.
 
             Cell *lastFrameSet= new Cell( this, y + row, x + col );
-            lastFrameSet->setName(QString("split cell"));
 
             KWFrame *frame = new KWFrame(lastFrameSet,
                     firstFrame->left() + static_cast<int>((width+tableCellSpacing) * x),
@@ -1231,8 +1233,9 @@ void KWTableFrameSet::validate()
             }
             if(! found) {
                 kdWarning() << "Missing cell, creating a new one; ("<< row << "," << col<<")" << endl;
+                // worth it ?
+                //QString name = m_doc->generateFramesetName( i18n( "1 is table name, 2 is a number", "%1 Auto Added Cell %2" ).arg( getName() ) );
                 Cell *_frameSet = new Cell( this, row, col );
-                _frameSet->setName(QString("Auto added cell"));
                 double x=-1, y=-1, width=-1, height=-1;
                 for (unsigned int i=0; i < m_cells.count(); i++) {
                     if(m_cells.at(i)->m_row==row)
@@ -1452,8 +1455,8 @@ void KWTableFrameSet::printDebug( KWFrame * frame )
 
 /////
 
-KWTableFrameSet::Cell::Cell( KWTableFrameSet *table, unsigned int row, unsigned int col ) :
-    KWTextFrameSet( table->m_doc )
+KWTableFrameSet::Cell::Cell( KWTableFrameSet *table, unsigned int row, unsigned int col, const QString & name ) :
+    KWTextFrameSet( table->m_doc, "." /*dummy and not empty, faster*/ )
 {
     m_table = table;
     m_row = row;
@@ -1462,18 +1465,19 @@ KWTableFrameSet::Cell::Cell( KWTableFrameSet *table, unsigned int row, unsigned 
     m_cols = 1;
     setGroupManager( m_table );
     m_table->addCell( this );
-    m_name = QString("table cell %1,%2").arg(m_row).arg(m_col);
+    m_name = i18n("Hello dear translator :), 1 is the table name, 2 and 3 are row and column", "%1 Cell %2,%3")
+             .arg( table->getName() ).arg(m_row).arg(m_col);
 }
 
 KWTableFrameSet::Cell::Cell( KWTableFrameSet *table, const Cell &original ) :
-    KWTextFrameSet( table->m_doc ) // TBD: turn getCopy into copy constructor, including setting
+    KWTextFrameSet( table->m_doc, "." ) // TBD: turn getCopy into copy constructor, including setting
 {
     m_table = table;
     m_row = original.m_row;
     m_col = original.m_col;
     m_rows = original.m_rows;
     m_cols = original.m_cols;
-    setName(original.m_name);
+    setName(original.m_name+'_'); // unicity problem !
     setGroupManager( m_table );
     m_table->addCell( this );
 }

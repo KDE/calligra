@@ -40,7 +40,7 @@ class KWTextFrameSet : public KWFrameSet, public QTextFlow
     Q_OBJECT
 public:
     // constructor
-    KWTextFrameSet( KWDocument *_doc );
+    KWTextFrameSet( KWDocument *_doc, const QString & name );
     // destructor
     ~KWTextFrameSet();
 

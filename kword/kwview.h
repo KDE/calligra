@@ -238,7 +238,7 @@ public slots:
     void frameSelectedChanged();
     void docStructChanged(TypeStructDocItem _type);
 
-    void totalPageNumChanged();
+    void pageNumChanged();
 
 protected:
     void addVariableActions( int type, const QStringList & texts,

@@ -979,7 +979,7 @@ bool KWDocument::loadXML( QIODevice *, const QDomDocument & doc )
             ch->load( object, true );
             r = ch->geometry();
             insertChild( ch );
-            fs = new KWPartFrameSet( this, ch );
+            fs = new KWPartFrameSet( this, ch, QString::null /* ### do we save the name of the frameset ?*/ );
             frames.append( fs );
             QDomElement settings = embedded.namedItem( "SETTINGS" ).toElement();
             if ( !settings.isNull() )
@@ -989,6 +989,7 @@ bool KWDocument::loadXML( QIODevice *, const QDomDocument & doc )
             }
             else
                 kdError(32001) << "No <SETTINGS> tag in EMBEDDED" << endl;
+            emit sig_insertObject( ch, fs );
         } else
             kdError(32001) << "No <OBJECT> tag in EMBEDDED" << endl;
     }
@@ -1035,7 +1036,7 @@ bool KWDocument::loadXML( QIODevice *, const QDomDocument & doc )
     // create defaults if they were not in the input file.
 
     if ( !_first_header ) {
-        KWTextFrameSet *fs = new KWTextFrameSet( this );
+        KWTextFrameSet *fs = new KWTextFrameSet( this, i18n( "First Page Header" ) );
         kdDebug(32001) << "KWDocument::loadXML KWTextFrameSet created " << fs << endl;
         fs->setFrameInfo( FI_FIRST_HEADER );
         KWFrame *frame = new KWFrame(fs, ptLeftBorder(), ptTopBorder(),
@@ -1048,7 +1049,7 @@ bool KWDocument::loadXML( QIODevice *, const QDomDocument & doc )
     }
 
     if ( !_even_header ) {
-        KWTextFrameSet *fs = new KWTextFrameSet( this );
+        KWTextFrameSet *fs = new KWTextFrameSet( this, i18n( "Even Pages Header" ) );
         fs->setFrameInfo( FI_EVEN_HEADER );
         KWFrame *frame = new KWFrame(fs, ptLeftBorder(), ptTopBorder(),
             ptPaperWidth() - ptLeftBorder() - ptRightBorder(), 20 );
@@ -1059,7 +1060,7 @@ bool KWDocument::loadXML( QIODevice *, const QDomDocument & doc )
     }
 
     if ( !_odd_header ) {
-        KWTextFrameSet *fs = new KWTextFrameSet( this );
+        KWTextFrameSet *fs = new KWTextFrameSet( this, i18n( "Odd Pages Header" ) );
         fs->setFrameInfo( FI_ODD_HEADER );
         KWFrame *frame = new KWFrame(fs, ptLeftBorder(), ptTopBorder(),
             ptPaperWidth() - ptLeftBorder() - ptRightBorder(), 20 );
@@ -1070,7 +1071,7 @@ bool KWDocument::loadXML( QIODevice *, const QDomDocument & doc )
     }
 
     if ( !_first_footer ) {
-        KWTextFrameSet *fs = new KWTextFrameSet( this );
+        KWTextFrameSet *fs = new KWTextFrameSet( this, i18n( "First Page Footer" ) );
         fs->setFrameInfo( FI_FIRST_FOOTER );
         KWFrame *frame = new KWFrame(fs, ptLeftBorder(), ptPaperHeight() -
             ptTopBorder() - 20, ptPaperWidth() - ptLeftBorder() -
@@ -1082,7 +1083,7 @@ bool KWDocument::loadXML( QIODevice *, const QDomDocument & doc )
     }
 
     if ( !_even_footer ) {
-        KWTextFrameSet *fs = new KWTextFrameSet( this );
+        KWTextFrameSet *fs = new KWTextFrameSet( this, i18n( "Even Pages Footer" ) );
         fs->setFrameInfo( FI_EVEN_FOOTER );
         KWFrame *frame = new KWFrame(fs, ptLeftBorder(), ptPaperHeight() -
             ptTopBorder() - 20, ptPaperWidth() - ptLeftBorder() -
@@ -1094,7 +1095,7 @@ bool KWDocument::loadXML( QIODevice *, const QDomDocument & doc )
     }
 
     if ( !_odd_footer ) {
-        KWTextFrameSet *fs = new KWTextFrameSet( this );
+        KWTextFrameSet *fs = new KWTextFrameSet( this, i18n( "Odd Pages Footer" ) );
         fs->setFrameInfo( FI_ODD_FOOTER );
         KWFrame *frame = new KWFrame(fs, ptLeftBorder(), ptPaperHeight() -
             ptTopBorder() - 20, ptPaperWidth() - ptLeftBorder() -
@@ -1106,9 +1107,8 @@ bool KWDocument::loadXML( QIODevice *, const QDomDocument & doc )
     }
 
     if ( !_footnotes ) {
-        KWTextFrameSet *fs = new KWTextFrameSet( this );
+        KWTextFrameSet *fs = new KWTextFrameSet( this, i18n( "Footnotes" ) );
         fs->setFrameInfo( FI_FOOTNOTE );
-        fs->setName( "Footnotes" );
 
         for ( int i = 0; i < m_pages; i++ ) {
             KWFrame *frame = new KWFrame(fs, ptLeftBorder(),
@@ -1121,16 +1121,17 @@ bool KWDocument::loadXML( QIODevice *, const QDomDocument & doc )
         fs->setVisible( FALSE );
     }
 
+#if 0 // already done !
     KWChild *ch = 0L;
     for ( ch = m_lstChildren.first(); ch != 0; ch = m_lstChildren.next() ) {
         KWPartFrameSet *frameset = new KWPartFrameSet( this, ch );
-        frameset->setName( i18n( "PartFrameset %1" ).arg( frames.count() + 1 ) );
         QRect r = ch->geometry();
         KWFrame *frame = new KWFrame(frameset, r.x(), r.y(), r.width(), r.height() );
         frameset->addFrame( frame );
         frames.append( frameset );
         emit sig_insertObject( ch, frameset );
     }
+#endif
 
     m_autoFormat->addAutoFormatEntry( KWAutoFormatEntry("(C)", "©" ) );
     m_autoFormat->addAutoFormatEntry( KWAutoFormatEntry("(c)", "©" ) );
@@ -1140,7 +1141,7 @@ bool KWDocument::loadXML( QIODevice *, const QDomDocument & doc )
     // do some sanity checking on document.
     for (int i = getNumFrameSets()-1; i>-1; i--) {
         if(! getFrameSet(i)) {
-            kdWarning () << "frameset " << i << " is NULL!!" << endl;
+            kdWarning() << "frameset " << i << " is NULL!!" << endl;
             frames.remove(i);
         } else if( getFrameSet(i)->getFrameType()==FT_TABLE) {
             static_cast<KWTableFrameSet *>( getFrameSet(i))->validate();
@@ -1322,13 +1323,6 @@ void KWDocument::loadFrameSets( QDomElement framesets )
         _visible = static_cast<bool>( KWDocument::getAttribute( framesetElem, "visible", true ) );
         fsname = correctQString( KWDocument::getAttribute( framesetElem, "name", "" ) );
 
-        if ( fsname.isEmpty() ) {
-            if(frameInfo!=FI_BODY)
-                fsname = i18n( "TextFrameset %1" ).arg( frames.count() + 1 );
-            else
-                fsname = i18n( "Frameset %1" ).arg( frames.count() + 1 );
-        }
-
         switch ( frameType ) {
             case FT_TEXT: {
                 if ( !tableName.isEmpty() ) {
@@ -1343,14 +1337,11 @@ void KWDocument::loadFrameSets( QDomElement framesets )
                         }
                     }
                     if ( !table ) {
-                        table = new KWTableFrameSet( this );
-
-                        table->setName( tableName );
+                        table = new KWTableFrameSet( this, tableName );
                         frames.append( table );
                     }
-                    KWTableFrameSet::Cell *cell = new KWTableFrameSet::Cell( table, _row, _col );
+                    KWTableFrameSet::Cell *cell = new KWTableFrameSet::Cell( table, _row, _col, fsname );
                     cell->setVisible( _visible );
-                    cell->setName( fsname );
                     cell->load( framesetElem );
                     cell->setFrameInfo( frameInfo );
                     cell->setIsRemoveableHeader( removeable );
@@ -1359,9 +1350,8 @@ void KWDocument::loadFrameSets( QDomElement framesets )
                 }
                 else
                 {
-                    KWTextFrameSet *fs = new KWTextFrameSet( this );
+                    KWTextFrameSet *fs = new KWTextFrameSet( this, fsname );
                     fs->setVisible( _visible );
-                    fs->setName( fsname );
                     fs->load( framesetElem );
                     fs->setFrameInfo( frameInfo );
                     fs->setIsRemoveableHeader( removeable );
@@ -1379,15 +1369,13 @@ void KWDocument::loadFrameSets( QDomElement framesets )
                 }
             } break;
             case FT_PICTURE: {
-                KWPictureFrameSet *fs = new KWPictureFrameSet( this );
-                fs->setName( fsname );
+                KWPictureFrameSet *fs = new KWPictureFrameSet( this, fsname );
                 fs->load( framesetElem );
                 fs->setFrameInfo( frameInfo );
                 frames.append( fs );
             } break;
             case FT_FORMULA: {
-                KWFormulaFrameSet *fs = new KWFormulaFrameSet( this );
-                fs->setName( fsname );
+                KWFormulaFrameSet *fs = new KWFormulaFrameSet( this, fsname );
                 fs->load( framesetElem );
                 fs->setFrameInfo( frameInfo );
                 frames.append( fs );
@@ -1447,7 +1435,7 @@ bool KWDocument::completeLoading( KoStore *_store )
     QMapIterator<QString, KWAnchorPosition> itanch = m_anchorRequests.begin();
     for ( ; itanch != m_anchorRequests.end(); ++itanch )
     {
-        //kdDebug(32001) << "KWDocument::completeLoading anchoring frameset " << itanch.key() << endl;
+        kdDebug(32001) << "KWDocument::completeLoading anchoring frameset " << itanch.key() << endl;
         KWFrameSet * fs = getFrameSetByName( itanch.key() );
         ASSERT( fs );
         if ( fs )
@@ -1821,7 +1809,7 @@ void KWDocument::insertObject( const KoRect& rect, KoDocumentEntry& _e )
     insertChild( ch );
     setModified( TRUE );
 
-    KWPartFrameSet *frameset = new KWPartFrameSet( this, ch );
+    KWPartFrameSet *frameset = new KWPartFrameSet( this, ch, QString::null );
     KWFrame *frame = new KWFrame(frameset, rect.x(), rect.y(), rect.width(), rect.height() );
     frameset->addFrame( frame );
     addFrameSet( frameset );
@@ -1940,7 +1928,7 @@ void KWDocument::appendPage( /*unsigned int _page, bool redrawBackgroundWhenAppe
     kdDebug(32002) << "KWDocument::appendPage m_pages=" << m_pages << " so thisPageNum=" << thisPageNum << endl;
     m_pages++;
 
-    emit totalPageNumChanged();
+    emit pageNumChanged();
 
     recalcVariables( VT_PGNUM );
 
@@ -2074,6 +2062,19 @@ KWFrameSet * KWDocument::getFrameSet( double mx, double my )
     }
 
     return 0L;
+}
+
+QString KWDocument::generateFramesetName( const QString & templateName )
+{
+    QString name;
+    int num = 1;
+    bool exists;
+    do {
+        name = templateName.arg( num );
+        exists = getFrameSetByName( name );
+        ++num;
+    } while ( exists );
+    return name;
 }
 
 /*================================================================*/

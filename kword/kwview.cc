@@ -126,9 +126,7 @@ KWView::KWView( QWidget *_parent, const char *_name, KWDocument* _doc )
     initConfig();
 
     connect( doc, SIGNAL( pageNumChanged() ),
-             this, SLOT( updatePageInfo() ) );
-    connect( doc, SIGNAL ( totalPageNumChanged()),
-             this, SLOT( totalPageNumChanged() ) );
+             this, SLOT( pageNumChanged() ) );
 
     connect( QApplication::clipboard(), SIGNAL( dataChanged() ),
              this, SLOT( clipboardDataChanged() ) );
@@ -650,7 +648,7 @@ void KWView::updatePageInfo()
     }
 }
 
-void KWView::totalPageNumChanged()
+void KWView::pageNumChanged()
 {
      docStructChanged(TextFrames);
      updatePageInfo();
@@ -1713,7 +1711,7 @@ void KWView::toolsFormula()
     KWTextFrameSetEdit *edit = currentTextEdit();
     if (edit)
     {
-        KWFormulaFrameSet *frameset = new KWFormulaFrameSet( doc );
+        KWFormulaFrameSet *frameset = new KWFormulaFrameSet( doc, QString::null );
         KWFrame *frame = new KWFrame(frameset, 0, 0, 10, 10 );
         frameset->addFrame( frame, false );
         edit->insertFloatingFrameSet( frameset, i18n("Insert Formula") );

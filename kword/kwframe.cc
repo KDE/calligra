@@ -650,10 +650,10 @@ void KWFrameSet::updateFrames()
 /*================================================================*/
 bool KWFrameSet::contains( double mx, double my )
 {
-    for ( unsigned int i = 0; i < frames.count(); i++ ) {
-        if ( frames.at( i )->contains( KoPoint( mx, my ) ) )
+    QListIterator<KWFrame> frameIt = frameIterator();
+    for ( ; frameIt.current(); ++frameIt )
+        if ( frameIt.current()->contains( KoPoint( mx, my ) ) )
             return true;
-    }
 
     return false;
 }
@@ -1033,7 +1033,15 @@ KWFrameSetEdit::KWFrameSetEdit( KWFrameSet * fs, KWCanvas * canvas )
 /* Class: KWPictureFrameSet                                       */
 /******************************************************************/
 
-/*================================================================*/
+KWPictureFrameSet::KWPictureFrameSet( KWDocument *_doc, const QString & name )
+    : KWFrameSet( _doc )
+{
+    if ( name.isEmpty() )
+        m_name = _doc->generateFramesetName( i18n( "Picture Frameset %1" ) );
+    else
+        m_name = name;
+}
+
 KWPictureFrameSet::~KWPictureFrameSet() {
 }
 
@@ -1121,7 +1129,7 @@ void KWPictureFrameSet::drawContents( QPainter *painter, const QRect & crect,
 /******************************************************************/
 
 /*================================================================*/
-KWPartFrameSet::KWPartFrameSet( KWDocument *_doc, KWChild *_child )
+KWPartFrameSet::KWPartFrameSet( KWDocument *_doc, KWChild *_child, const QString & name )
     : KWFrameSet( _doc )
 {
     child = _child;
@@ -1129,6 +1137,10 @@ KWPartFrameSet::KWPartFrameSet( KWDocument *_doc, KWChild *_child )
     kdDebug() << "KWPartFrameSet::KWPartFrameSet" << endl;
     connect( child, SIGNAL( changed( KoChild * ) ),
              this, SLOT( slotChildChanged() ) );
+    if ( name.isEmpty() )
+        m_name = _doc->generateFramesetName( i18n( "Part Frameset %1" ) );
+    else
+        m_name = name;
 }
 
 /*================================================================*/
@@ -1259,12 +1271,16 @@ void KWPartFrameSetEdit::drawContents( QPainter *p, const QRect &r, QColorGroup 
 /******************************************************************/
 
 
-KWFormulaFrameSet::KWFormulaFrameSet( KWDocument *_doc )
+KWFormulaFrameSet::KWFormulaFrameSet( KWDocument *_doc, const QString & name )
     : KWFrameSet( _doc ), m_changed( false )
 {
     formula = _doc->getFormulaDocument()->createFormula();
     connect(formula, SIGNAL(formulaChanged(int, int)),
             this, SLOT(slotFormulaChanged(int, int)));
+    if ( name.isEmpty() )
+        m_name = _doc->generateFramesetName( i18n( "Part Frameset %1" ) );
+    else
+        m_name = name;
 }
 
 KWFormulaFrameSet::~KWFormulaFrameSet()
