@@ -50,6 +50,7 @@ public:
 
   void initialize ();
   void setAutoUpdate (bool flag) { doc->setAutoUpdate(flag); };
+  void setModified (bool flag = true);
 
   GDocument *document(void) const {return doc;};
 

@@ -63,6 +63,7 @@
 GPage::GPage (GDocument *adoc):
 doc(adoc),selHandle(adoc)
 {
+  connect(this, SIGNAL(wasModified(bool)),doc, SLOT(setModified(bool)));
   connect(this, SIGNAL(changed(const Rect&)),doc, SLOT(emitChanged(const Rect&)));
   connect(this, SIGNAL(changed()),doc, SLOT(emitChanged()));
   connect(this, SIGNAL(handleChanged()),doc, SLOT(emitHandleChanged()));
@@ -97,9 +98,9 @@ void GPage::initialize ()
   // add layer for Helplines
   GLayer *l = addLayer ();
   l->setInternal ();
-  l->setName (i18n("Helplines"));
+  l->setName (i18n("Helplines"));  //this layer will be for all pages...
   connect (l, SIGNAL(propertyChanged ()),
-           this, SLOT(helplineStatusChanged ()));
+           doc, SLOT(helplineStatusChanged ()));
   active_layer = addLayer ();
   active_layer->setVisible(true);
   active_layer->setPrintable(true);
@@ -108,6 +109,11 @@ void GPage::initialize ()
   selBoxIsValid = false;
   autoUpdate = true;
   emit changed ();
+}
+
+void GPage::setModified (bool flag)
+{
+  emit wasModified(flag);
 }
 
 void GPage::setPaperSize (int width, int height)
@@ -188,7 +194,7 @@ void GPage::insertObject (GObject* obj)
     connect (obj, SIGNAL(changed()), this, SLOT(objectChanged ()));
     connect (obj, SIGNAL(changed(const Rect&)),
              this, SLOT(objectChanged (const Rect&)));
-//    setModified ();
+    setModified ();
     if (autoUpdate)
         emit changed ();
 }
@@ -347,7 +353,7 @@ void GPage::deleteSelectedObjects ()
     }
     selection.clear ();
     last = 0L;
-//    setModified ();
+    setModified ();
     selBoxIsValid = false;
     if (autoUpdate)
     {
@@ -369,7 +375,7 @@ void GPage::deleteObject (GObject* obj)
     if (selected)
       selection.removeRef(obj);
     last = 0L;
-//    setModified ();
+    setModified ();
     disconnect (obj, SIGNAL(changed()), this, SLOT(objectChanged ()));
     disconnect (obj, SIGNAL(changed(const Rect&)),
                 this, SLOT(objectChanged (const Rect&)));
@@ -499,7 +505,7 @@ void GPage::objectChanged ()
       emit selectionChanged ();
     }
   }
-//  setModified ();
+  setModified ();
   if (autoUpdate)
     emit changed ();
 }
@@ -520,7 +526,7 @@ void GPage::objectChanged (const Rect& r)
     }
     */
   }
-//  setModified ();
+  setModified ();
   if (autoUpdate)
     emit changed (r);
 }
@@ -570,7 +576,7 @@ QDomElement GPage::saveToXml (QDomDocument &document)
       layer.appendChild((*oi)->writeToXml (document));
     page.appendChild(layer);
   }
-//  setModified (false);
+  setModified (false);
   return page;
 }
 
@@ -705,7 +711,7 @@ bool GPage::readFromXml (const QDomElement &page)
   QList<GObject> dummy;
   bool result = parseBody (page, dummy, false);
 
-//  setModified (false);
+  setModified (false);
   return result;
 }
 
@@ -758,7 +764,7 @@ bool GPage::readFromXmlV2 (const QDomElement &page)
   QList<GObject> dummy;
   bool result = parseBody (page, dummy, false);
 
-//  setModified (false);
+  setModified (false);
   return result;
 }
 
@@ -778,7 +784,7 @@ void GPage::insertObjectAtIndex (GObject* obj, unsigned int idx)
   connect (obj, SIGNAL(changed()), this, SLOT(objectChanged ()));
   connect (obj, SIGNAL(changed(const Rect&)),
            this, SLOT(objectChanged (const Rect&)));
-//  setModified ();
+  setModified ();
   if (autoUpdate)
   {
     emit changed ();
@@ -793,7 +799,7 @@ void GPage::moveObjectToIndex (GObject* obj, unsigned int idx)
     layer = active_layer;
   layer->moveObjectToIndex (obj, idx);
 
-//  setModified ();
+  setModified ();
   if (autoUpdate)
   {
     emit changed ();
@@ -823,7 +829,7 @@ void GPage::setPageLayout (const KoPageLayout& layout)
     paperHeight = (int) cvtInchToPt (pLayout.inchHeight);
     break;
   }
-//  modifyFlag = true;
+  setModified();
   emit sizeChanged ();
 }
 

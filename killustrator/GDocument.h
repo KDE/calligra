@@ -56,7 +56,6 @@ public:
   QString fileName () const { return filename; }
   void setFileName (const QString &s) { filename = s; }
 
-  virtual void setModified (bool flag = true);
   bool isModified () const { return modifyFlag; }
 
   /*
@@ -96,6 +95,7 @@ public:
                      bool& snap);
 
 public slots:
+  void setModified (bool flag = true);
   void helplineStatusChanged ();
   void emitChanged();
   void emitChanged(const Rect& r);
