@@ -34,9 +34,17 @@ class PropertyEditorEditor : public QWidget
 		virtual bool		eventFilter(QObject* watched, QEvent* e);
 		virtual QVariant	getValue();
 
+		void			setWidget(QWidget *w);
+
 	signals:
-		void	accept(PropertyEditorEditor *);
-		void	reject(PropertyEditorEditor *);
+		void			accept(PropertyEditorEditor *);
+		void			reject(PropertyEditorEditor *);
+
+	protected:
+		virtual void		resizeEvent(QResizeEvent *ev);
+
+	private:
+		QWidget			*m_childWidget;
 };
 
 #endif

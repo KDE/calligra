@@ -22,29 +22,42 @@
 PropertyEditorEditor::PropertyEditorEditor(QWidget *parent, QVariant::Type type, QVariant value, const char *name)
  : QWidget(parent, name)
 {
-	installEventFilter(this);
+	m_childWidget = 0;
 }
 
 bool
 PropertyEditorEditor::eventFilter(QObject* watched, QEvent* e)
 {
-	if(watched == this)
+	if(e->type() == QEvent::KeyPress)
 	{
-		if(e->type() == QEvent::KeyPress)
+		QKeyEvent* ev = static_cast<QKeyEvent*>(e);
+		if(ev->key() == Key_Escape)
 		{
-			QKeyEvent* ev = static_cast<QKeyEvent*>(e);
-
-			if(ev->key() == Key_Escape)
-			{
-				emit reject(this);
-				return false;
-			}
-		}
-		else
-		{
+			emit reject(this);
 			return false;
 		}
 	}
+	else
+	{
+		return false;
+	}
+}
+
+void
+PropertyEditorEditor::resizeEvent(QResizeEvent *ev)
+{
+	if(m_childWidget)
+	{
+		m_childWidget->resize(ev->size());
+	}
+}
+
+void
+PropertyEditorEditor::setWidget(QWidget *w)
+{
+	installEventFilter(this);
+
+	m_childWidget = w;
 }
 
 QVariant

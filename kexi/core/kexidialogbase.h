@@ -28,6 +28,8 @@
 class KexiView;
 class KexiProject;
 
+class KPrinter;
+
 class KexiDialogBase : public QWidget
 {
 	Q_OBJECT
@@ -46,6 +48,9 @@ class KexiDialogBase : public QWidget
 		KexiProject *kexiProject()const;
 		KexiView *kexiView()const;
 		bool isRegistering(){return m_registering;}
+
+		virtual void print(KPrinter &printer) {; }
+
 	signals:
 		void closing(KexiDialogBase *);
 	

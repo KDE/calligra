@@ -18,6 +18,7 @@
 */
 
 #include <qlineedit.h>
+#include <qspinbox.h>
 
 #include "propertyeditorinput.h"
 
@@ -29,12 +30,34 @@ PropertyEditorInput::PropertyEditorInput(QWidget *parent, QVariant::Type type, Q
 
 	m_lineedit->setText(value.toString());
 	m_lineedit->show();
+
+	setWidget(m_lineedit);
 }
 
 QVariant
 PropertyEditorInput::getValue()
 {
 	return QVariant(m_lineedit->text());
+}
+
+//INT
+
+PropertyEditorSpin::PropertyEditorSpin(QWidget *parent, QVariant::Type type, QVariant value, const char *name=0)
+ : PropertyEditorEditor(parent, type, value, name)
+{
+	m_spinBox = new QSpinBox(this);
+	m_spinBox->resize(width(), height());
+
+	m_spinBox->setValue(value.toInt());
+	m_spinBox->show();
+
+	setWidget(m_spinBox);
+}
+
+QVariant
+PropertyEditorSpin::getValue()
+{
+	return QVariant(m_spinBox->value());
 }
 
 #include "propertyeditorinput.moc"

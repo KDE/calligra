@@ -28,6 +28,8 @@ PropertyEditorList::PropertyEditorList(QWidget *parent, QVariant::Type type, QVa
 	
 	m_combo->setGeometry(frameGeometry());
 	m_combo->show();
+
+	setWidget(m_combo);
 }
 
 QVariant
@@ -55,7 +57,10 @@ PropertyEditorBool::PropertyEditorBool(QWidget *parent, QVariant::Type type, QVa
 QVariant
 PropertyEditorBool::getValue()
 {
-	return QVariant(false);
+	if(m_combo->currentItem() == 0)
+		return QVariant(true, 1);
+	else
+		return QVariant(false, 1);
 }
 
 #include "propertyeditorlist.moc"

@@ -27,6 +27,7 @@
 
 #include "kexidialogbase.h"
 
+class KPrinter;
 class KAction;
 class KoStore;
 class KexiQueryDesignerGuiEditor;
@@ -54,6 +55,9 @@ class KexiQueryDesigner : public KexiDialogBase
 
 		void			setCurrentQuery(const QString &query);
 		void			saveBack();
+
+		void			print(KPrinter &printer);
+
 	protected:
 		void			addTab(QPixmap pixmap, const QString &caption, QWidget *assosiated,int ID);
 		virtual void		finishUpForClosing();

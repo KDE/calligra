@@ -71,6 +71,12 @@ void KexiWorkspaceMDI::slotWindowActivated(QWidget* w)
 	}
 }
 
+KexiDialogBase *
+KexiWorkspaceMDI::activeDocumentView()
+{
+	return static_cast<KexiDialogBase*>(activeWindow());
+}
+
 KexiWorkspaceMDI::~KexiWorkspaceMDI()
 {
 }

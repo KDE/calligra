@@ -326,6 +326,7 @@ KexiQueryDesignerGuiEditor::getQuery()
 
 	return query;
 #endif
+	return QString("");
 }
 
 KexiQueryDesignerGuiEditor::~KexiQueryDesignerGuiEditor()

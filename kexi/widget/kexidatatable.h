@@ -28,6 +28,8 @@ class KexiTableItem;
 class QStatusBar;
 class QLineEdit;
 
+class KPrinter;
+
 class KexiDBRecord;
 class KExiView;
 class KexiTableView;
@@ -44,6 +46,7 @@ class KexiDataTable : public KexiDialogBase
 		void setDataSet(KexiDBRecord *rec);
 
 		virtual KXMLGUIClient *guiClient(){return new KXMLGUIClient();}
+		virtual void print(KPrinter &printer);
 
 	protected:
 		KexiTableView	*m_tableView;

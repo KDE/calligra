@@ -42,6 +42,8 @@ class QLineEdit;
 class QPopupMenu;
 class QTimer;
 
+class KPrinter;
+
 class KexiTableHeader;
 class KexiTableRM;
 class KexiTableItem;
@@ -102,6 +104,10 @@ public:
 	// properties
 	void		setBackgroundAltering(bool altering) { m_bgAltering = altering; };
 
+	// printing
+//	void		setupPrinter(KPrinter &printer);
+	void		print(KPrinter &printer);
+
 	// reimplemented for internal reasons
 	QSizePolicy	sizePolicy() const;
 	QSize		sizeHint() const;
@@ -148,7 +154,7 @@ protected:
 	// painting and layout
 	void	drawContents(QPainter *p, int cx, int cy, int cw, int ch);
 	void	createBuffer(int width, int height);
-	void	paintCell(QPainter* p, KexiTableItem *item, int col, const QRect &cr);
+	void	paintCell(QPainter* p, KexiTableItem *item, int col, const QRect &cr, bool print=false);
 	void	paintEmptyArea(QPainter *p, int cx, int cy, int cw, int ch);
 	void	updateCell(int row, int col);
 	void	updateGeometries();

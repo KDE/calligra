@@ -39,6 +39,7 @@
 #include <kglobal.h>
 #include <klocale.h>
 #include <kdebug.h>
+#include <kprinter.h>
 //#endif
 
 #include "kexitablerm.h"
@@ -503,7 +504,7 @@ void KexiTableView::drawContents( QPainter *p, int cx, int cy, int cw, int ch )
 	p->drawPixmap(cx,cy,*m_pBufferPm, 0,0,cw,ch);
 }
 
-void KexiTableView::paintCell(QPainter* p, KexiTableItem *item, int col, const QRect &cr)
+void KexiTableView::paintCell(QPainter* p, KexiTableItem *item, int col, const QRect &cr, bool print)
 {
 	int w = cr.width();
 	int h = cr.height();
@@ -512,7 +513,7 @@ void KexiTableView::paintCell(QPainter* p, KexiTableItem *item, int col, const Q
 
 //	p->setPen(colorGroup().button());
 
-	if(m_bgAltering && m_contents->findRef(item)%2 != 0)
+	if(m_bgAltering && !print && m_contents->findRef(item)%2 != 0)
 	{
 		QPen originalPen(p->pen());
 		QBrush originalBrush(p->brush());
@@ -527,7 +528,10 @@ void KexiTableView::paintCell(QPainter* p, KexiTableItem *item, int col, const Q
 
 	//	Draw our lines
 	QPen pen(p->pen());
-	p->setPen(QColor(200,200,200));
+	if(!print)
+		p->setPen(QColor(200,200,200));
+	else
+		p->setPen(black);
 
 	p->drawLine( x2, 0, x2, y2 );	// right
 	p->drawLine( 0, y2, x2, y2 );	// bottom
@@ -1297,6 +1301,68 @@ void KexiTableView::inserted()
 	else
 		m_pVerticalHeader->addLabel("", m_rowHeight);
 
+}
+
+void
+KexiTableView::print(KPrinter &printer)
+{
+//	printer.setFullPage(true);
+
+	int leftMargin = printer.margins().width() + 2 + m_rowHeight;
+	int topMargin = printer.margins().height() + 2;
+	int bottomMargin = topMargin + printer.realDrawableArea().height();
+	kdDebug() << "KexiTableView::print: bottom = " << bottomMargin << endl;
+
+	QPainter p(&printer);
+
+	KexiTableItem *i;
+	int width = leftMargin;
+	for(int col=0; col < cols(); col++)
+	{
+		p.fillRect(width, topMargin - m_rowHeight, columnWidth(col), m_rowHeight, QBrush(gray));
+		p.drawRect(width, topMargin - m_rowHeight, columnWidth(col), m_rowHeight);
+		p.drawText(width, topMargin - m_rowHeight, columnWidth(col), m_rowHeight, AlignLeft | AlignVCenter, m_pTopHeader->label(col));
+		width = width + columnWidth(col);
+	}
+
+	int yOffset = topMargin;
+	int row = 0;
+	int right = 0;
+	for(i = m_contents->first(); i; i = m_contents->next())
+	{
+		if(!i->isInsertItem())
+		{	kdDebug() << "KexiTableView::print: row = " << row << " y = " << yOffset << endl;
+			int xOffset = leftMargin;
+			for(int col=0; col < cols(); col++)
+			{
+				kdDebug() << "KexiTableView::print: col = " << col << " x = " << xOffset << endl;
+				p.saveWorldMatrix();
+				p.translate(xOffset, yOffset);
+				paintCell(&p, i, col, QRect(0, 0, columnWidth(col) + 1, m_rowHeight), true);
+				p.restoreWorldMatrix();
+//			p.drawRect(xOffset, yOffset, columnWidth(col), m_rowHeight);
+				xOffset = xOffset + columnWidth(col);
+				right = xOffset;
+			}
+		
+			row++;
+			yOffset = topMargin  + row * m_rowHeight;
+		}
+
+		if(yOffset > 900)
+		{
+			p.drawLine(leftMargin, topMargin, leftMargin, yOffset);
+			p.drawLine(leftMargin, topMargin, right - 1, topMargin);
+			printer.newPage();
+			yOffset = topMargin;
+			row = 0;
+		}
+	}
+	p.drawLine(leftMargin, topMargin, leftMargin, yOffset);
+	p.drawLine(leftMargin, topMargin, right - 1, topMargin);
+
+//	p.drawLine(60,60,120,150);
+	p.end();
 }
 
 KexiTableHeader* KexiTableView::recordMarker()

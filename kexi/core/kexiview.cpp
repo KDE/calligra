@@ -24,6 +24,7 @@
 #include <qglobal.h>
 #include <qtimer.h>
 #include <qlayout.h>
+#include <qpainter.h>
 
 #include <klocale.h>
 #include <kinstance.h>
@@ -40,6 +41,7 @@
 #include <kcmdlineargs.h>
 #include <kparts/event.h>
 #include <kocontexthelp.h>
+#include <kprinter.h>
 
 #include "kexiview.h"
 #include "kexiproject.h"
@@ -269,6 +271,34 @@ void KexiView::guiActivateEvent( KParts::GUIActivateEvent *ev )
 		
 	}
     KoView::guiActivateEvent( ev );
+}
+
+void
+KexiView::setupPrinter(KPrinter &printer)
+{
+	//FIXME: we really shouldn't do it here!!!
+	printer.setPageSelection(KPrinter::ApplicationSide);
+	printer.setCurrentPage(1);
+	printer.setMinMax(1, 1);
+	printer.setPageSize(KPrinter::A4);
+	printer.setOrientation(KPrinter::Portrait);
+}
+
+void
+KexiView::print(KPrinter &printer)
+{
+	//FIXME: IT IS GETTING REALLY; REALLY HACKY!!!!
+	//kill me. lucijan
+
+	KexiDialogBase *active = static_cast<KexiWorkspaceMDI *>(m_workspace)->activeDocumentView();
+	kdDebug() << "KexiView::print: " << active << endl;
+
+	if(active)
+		active->print(printer);
+/*	QPainter p(&printer);
+	p.drawLine(60,60,120,120);
+	p.end();
+*/
 }
 
 #include "kexiview.moc"

@@ -192,6 +192,12 @@ KexiDataTable::slotSearchChanged(const QString &findQuery)
 	m_tableView->findString(findQuery);
 }
 
+void
+KexiDataTable::print(KPrinter &printer)
+{
+	m_tableView->print(printer);
+}
+
 KexiDataTable::~KexiDataTable()
 {
 	kdDebug()<<"KexiDataTable::~KexiDataTable()"<<endl;

@@ -39,7 +39,7 @@ PropertyEditor::PropertyEditor(QWidget *parent, const char *name)
 
 	m_currentEditor = 0;
 
-	connect(this, SIGNAL(executed(QListViewItem *)), this, SLOT(slotClicked(QListViewItem *)));
+	connect(this, SIGNAL(selectionChanged(QListViewItem *)), this, SLOT(slotClicked(QListViewItem *)));
 }
 
 void
@@ -98,6 +98,10 @@ PropertyEditor::createEditor(PropertyEditorItem *i, const QRect &geometry)
 
 		case QVariant::String:
 			editor = new PropertyEditorInput(viewport(), i->type(), i->value());
+			break;
+
+		case QVariant::Int:
+			editor = new PropertyEditorSpin(viewport(), i->type(), i->value());
 			break;
 
 		default:

@@ -28,6 +28,7 @@
 #include <kaction.h>
 #include <kiconloader.h>
 #include <kdebug.h>
+#include <kprinter.h>
 
 #include <koStore.h>
 
@@ -376,6 +377,12 @@ KexiQueryDesigner::slotTabActivated(int tab)
 	{
 		m_tb->setTab(tab, true);
 	}
+}
+
+void
+KexiQueryDesigner::print(KPrinter &printer)
+{
+	m_view->print(printer);
 }
 
 KexiQueryDesigner::~KexiQueryDesigner()

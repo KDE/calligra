@@ -23,6 +23,7 @@
 #include "propertyeditoreditor.h"
 
 class QLineEdit;
+class QSpinBox;
 
 class PropertyEditorInput : public PropertyEditorEditor
 {
@@ -37,5 +38,22 @@ class PropertyEditorInput : public PropertyEditorEditor
 	protected:
 		QLineEdit		*m_lineedit;
 };
+
+//INT
+
+class PropertyEditorSpin : public PropertyEditorEditor
+{
+	Q_OBJECT
+
+	public:
+		PropertyEditorSpin(QWidget *parent, QVariant::Type type, QVariant vlaue, const char *name=0);
+		~PropertyEditorSpin() {;}
+
+		virtual QVariant	getValue();
+
+	protected:
+		QSpinBox		*m_spinBox;;
+};
+
 
 #endif
