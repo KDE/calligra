@@ -1156,7 +1156,7 @@ void KPresenterView::extraProperties()
     m_canvas->setToolEditMode( TEM_MOUSE );
 
     m_propertyEditor = new PropertyEditor( this, "PropertyEditor", m_canvas->activePage(), m_pKPresenterDoc );
-    //m_propertyEditor->setCaption( i18n( "Properties" ) );
+    m_propertyEditor->setCaption( i18n( "Properties" ) );
 
     connect( m_propertyEditor, SIGNAL( propertiesOk() ), this, SLOT( propertiesOk() ) );
     m_propertyEditor->exec();
