@@ -78,6 +78,9 @@ bool KPTRelation::load(QDomElement &element, KPTProject &project) {
     if (id == -1 || !(m_child = project.node(id)))
         return false;
 
+    if (!m_parent->legalToLink(m_child))
+        return false;
+        
     //m_timingType = element.attribute("timingtype");
     QString tr = element.attribute("timingrelation");
     if ( tr == "Finish-Start" )

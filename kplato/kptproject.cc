@@ -280,6 +280,7 @@ bool KPTProject::load(QDomElement &element) {
                 KPTRelation *child = new KPTRelation();
                 if (!child->load(e, *this)) {
                     // TODO: Complain about this
+                    kdError()<<k_funcinfo<<"Failed to load relation"<<endl;
                     delete child;
                 }
             } else if (e.tagName() == "resource-group") {
