@@ -32,7 +32,7 @@ public:
   KImageApp( int& argc, char** argv );
   ~KImageApp();
 
-  KoMainWindow* createNewShell();
+  virtual KoMainWindow* createNewShell();
 };
 
 #endif
