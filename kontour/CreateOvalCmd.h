@@ -36,7 +36,6 @@ class CreateOvalCmd : public Command
 {
 public:
   CreateOvalCmd(GDocument *aGDoc, GOval *oval);
-  CreateOvalCmd(GDocument *aGDoc, const KoPoint &p0, const KoPoint &p1, bool flag = false);
   ~CreateOvalCmd();
 
   void execute();

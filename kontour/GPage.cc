@@ -289,7 +289,6 @@ void GPage::deleteObject(GObject *obj)
   bool selected = false;
 
   GLayer *layer = obj->layer();
-//  assert(layer);
   if(layer->isEditable())
   {
     selected = obj->isSelected();

@@ -37,15 +37,6 @@ Command(aGDoc, i18n("Create Oval"))
   object = oval;
 }
 
-CreateOvalCmd::CreateOvalCmd(GDocument *aGDoc, const KoPoint &p0, const KoPoint &p1, bool flag):
-Command(aGDoc, i18n("Create Oval"))
-{
-  object = 0L;
-  spos = p0;
-  epos = p1;
-  cflag = flag;
-}
-
 CreateOvalCmd::~CreateOvalCmd()
 {
 //  if(object)
@@ -54,14 +45,6 @@ CreateOvalCmd::~CreateOvalCmd()
 
 void CreateOvalCmd::execute()
 {
-  if(!object)
-  {
-    /* Create oval */
-    object = new GOval(cflag);
-    object->startPoint(spos);
-    object->endPoint(epos);
-    //object->ref();
-  }
   document()->activePage()->insertObject(object);
 }
 

@@ -26,7 +26,9 @@
 #include "GLayer.h"
 
 #include <qdom.h>
+
 #include <klocale.h>
+#include <kdebug.h>
 
 #include "GPage.h"
 #include "GObject.h"
@@ -174,7 +176,7 @@ void GLayer::deleteObject(GObject *obj)
   GObject *o = contents.at(contents.findRef(obj));
   if(o != 0L)
   {
-    o->layer (0L);
+    o->layer(0L);
 //    o->unref (); //TODO
     contents.removeRef(o);
   }
