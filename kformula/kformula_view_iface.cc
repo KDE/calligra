@@ -246,3 +246,8 @@ void KformulaViewIface::addText( QString str )
 {
     m_view->formulaView()->addText( str );
 }
+
+QStringList KformulaViewIface::readFormulaString( QString text )
+{
+    return m_view->readFormulaString( text );
+}

@@ -36,7 +36,7 @@ namespace KFormula {
 
 #include <koView.h>
 #include <qptrlist.h>
-
+#include <qstringlist.h>
 
 /**
  * The parts view.
@@ -57,6 +57,8 @@ public:
 
     const KFormula::View* formulaView() const;
     KFormula::View* formulaView();
+
+    QStringList readFormulaString( QString text );
 
 protected:
 

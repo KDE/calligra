@@ -287,7 +287,7 @@ QString TextElement::formulaString()
     if ( isSymbol() ) {
         QString texName = getSymbolTable().name( character );
         if ( !texName.isNull() )
-            return texName;
+            return " " + texName + " ";
         return " ? ";
     }
     else {

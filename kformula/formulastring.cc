@@ -18,22 +18,27 @@
 */
 
 #include <qvariant.h>
-#include <qpushbutton.h>
-#include <qtextedit.h>
 #include <qlayout.h>
+#include <qpushbutton.h>
+#include <qstringlist.h>
+#include <qtextedit.h>
 #include <qtooltip.h>
 #include <qwhatsthis.h>
 
+#include <kmessagebox.h>
+#include <klocale.h>
+
 #include "formulastring.h"
+#include "kformula_view.h"
 
 
-FormulaString::FormulaString( QWidget* parent, const char* name, bool modal, WFlags fl )
-    : QDialog( parent, name, modal, fl )
+FormulaString::FormulaString( KFormulaPartView* parent, const char* name, bool modal, WFlags fl )
+    : QDialog( parent, name, modal, fl ), view( parent )
 {
     if ( !name )
 	setName( "FormulaString" );
     resize( 511, 282 );
-    setCaption( trUtf8( "Formula String" ) );
+    setCaption( i18n( "Formula String" ) );
     setSizeGripEnabled( TRUE );
     QVBoxLayout* FormulaStringLayout = new QVBoxLayout( this, 11, 6, "FormulaStringLayout");
 
@@ -43,7 +48,7 @@ FormulaString::FormulaString( QWidget* parent, const char* name, bool modal, WFl
     QHBoxLayout* Layout1 = new QHBoxLayout( 0, 0, 6, "Layout1");
 
     buttonHelp = new QPushButton( this, "buttonHelp" );
-    buttonHelp->setText( trUtf8( "Help" ) );
+    buttonHelp->setText( i18n( "Help" ) );
     buttonHelp->setAccel( 4144 );
     buttonHelp->setAutoDefault( TRUE );
     Layout1->addWidget( buttonHelp );
@@ -51,14 +56,14 @@ FormulaString::FormulaString( QWidget* parent, const char* name, bool modal, WFl
     Layout1->addItem( spacer );
 
     buttonOk = new QPushButton( this, "buttonOk" );
-    buttonOk->setText( trUtf8( "OK" ) );
+    buttonOk->setText( i18n( "OK" ) );
     buttonOk->setAccel( 0 );
     buttonOk->setAutoDefault( TRUE );
     buttonOk->setDefault( TRUE );
     Layout1->addWidget( buttonOk );
 
     buttonCancel = new QPushButton( this, "buttonCancel" );
-    buttonCancel->setText( trUtf8( "Cancel" ) );
+    buttonCancel->setText( i18n( "Cancel" ) );
     buttonCancel->setAccel( 0 );
     buttonCancel->setAutoDefault( TRUE );
     Layout1->addWidget( buttonCancel );
@@ -75,6 +80,17 @@ FormulaString::FormulaString( QWidget* parent, const char* name, bool modal, WFl
 FormulaString::~FormulaString()
 {
     // no need to delete child widgets, Qt does it all for us
+}
+
+void FormulaString::accept()
+{
+    QStringList errorList = view->readFormulaString( textWidget->text() );
+    if ( errorList.count() == 0 ) {
+        QDialog::accept();
+    }
+    else {
+        KMessageBox::sorry( this, errorList.join( "\n" ), i18n( "Parser Error" ) );
+    }
 }
 
 #include "formulastring.moc"

@@ -21,6 +21,7 @@
 #define FSPARSER_H
 
 #include <qstring.h>
+#include <qstringlist.h>
 #include <qdom.h>
 
 namespace KFormula { class SymbolTable; }
@@ -35,6 +36,8 @@ public:
     ~FormulaStringParser();
 
     QDomDocument parse();
+
+    QStringList errorList() const { return m_errorList; }
 
 private:
 
@@ -53,6 +56,7 @@ private:
     void readDigits();
 
     void error( QString err );
+    QStringList m_errorList;
 
     const KFormula::SymbolTable& m_symbolTable;
     QString m_formula;

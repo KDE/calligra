@@ -28,18 +28,27 @@ class QGridLayout;
 class QPushButton;
 class QTextEdit;
 
+class KFormulaPartView;
+
 class FormulaString : public QDialog
 {
     Q_OBJECT
 
 public:
-    FormulaString( QWidget* parent = 0, const char* name = 0, bool modal = FALSE, WFlags fl = 0 );
+    FormulaString( KFormulaPartView* parent = 0, const char* name = 0, bool modal = FALSE, WFlags fl = 0 );
     ~FormulaString();
 
     QTextEdit* textWidget;
     QPushButton* buttonHelp;
     QPushButton* buttonOk;
     QPushButton* buttonCancel;
+
+protected slots:
+
+    virtual void accept ();
+
+private:
+    KFormulaPartView* view;
 };
 
 #endif // FORMULASTRING_H

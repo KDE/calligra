@@ -20,6 +20,7 @@
 #include <qptrlist.h>
 
 #include <kdebug.h>
+#include <klocale.h>
 
 #include <kformuladefs.h>
 #include <symboltable.h>
@@ -48,6 +49,7 @@ public:
     virtual void buildXML( QDomDocument doc, QDomElement element );
     void setUnicode( QChar unicode ) { m_unicode = unicode; }
     void setFunctionName( bool functionName ) { m_functionName = functionName; }
+    QString primary() const { return m_primary; }
 private:
     QString m_primary;
     QChar m_unicode;
@@ -59,7 +61,7 @@ void PrimaryNode::buildXML( QDomDocument doc, QDomElement element )
     if ( m_unicode != QChar::null ) {
         QDomElement de = doc.createElement( "TEXT" );
         de.setAttribute( "CHAR", QString( m_unicode ) );
-        element.setAttribute( "SYMBOL", "3" );
+        de.setAttribute( "SYMBOL", "3" );
         element.appendChild( de );
     }
     else {
@@ -74,6 +76,23 @@ void PrimaryNode::buildXML( QDomDocument doc, QDomElement element )
             element.appendChild( de );
         }
     }
+}
+
+class UnaryMinus : public ParserNode {
+public:
+    UnaryMinus( ParserNode* primary ) : m_primary( primary ) {}
+    ~UnaryMinus() { delete m_primary; }
+    virtual void buildXML( QDomDocument doc, QDomElement element );
+private:
+    ParserNode* m_primary;
+};
+
+void UnaryMinus::buildXML( QDomDocument doc, QDomElement element )
+{
+    QDomElement de = doc.createElement( "TEXT" );
+    de.setAttribute( "CHAR", "-" );
+    element.appendChild( de );
+    m_primary->buildXML( doc, element );
 }
 
 class OperatorNode : public ParserNode {
@@ -170,25 +189,25 @@ void PowerNode::buildXML( QDomDocument doc, QDomElement element )
     element.appendChild( index );
 }
 
-class SqrtNode : public ParserNode {
-public:
-    SqrtNode( ParserNode* expr ) : m_expr( expr ) {}
-    ~SqrtNode() { delete m_expr; }
-    virtual void buildXML( QDomDocument doc, QDomElement element );
-private:
-    ParserNode* m_expr;
-};
+// class SqrtNode : public ParserNode {
+// public:
+//     SqrtNode( ParserNode* expr ) : m_expr( expr ) {}
+//     ~SqrtNode() { delete m_expr; }
+//     virtual void buildXML( QDomDocument doc, QDomElement element );
+// private:
+//     ParserNode* m_expr;
+// };
 
-void SqrtNode::buildXML( QDomDocument doc, QDomElement element )
-{
-    QDomElement root = doc.createElement( "ROOT" );
-    QDomElement content = doc.createElement( "CONTENT" );
-    QDomElement sequence = doc.createElement( "SEQUENCE" );
-    m_expr->buildXML( doc, sequence );
-    content.appendChild( sequence );
-    root.appendChild( content );
-    element.appendChild( root );
-}
+// void SqrtNode::buildXML( QDomDocument doc, QDomElement element )
+// {
+//     QDomElement root = doc.createElement( "ROOT" );
+//     QDomElement content = doc.createElement( "CONTENT" );
+//     QDomElement sequence = doc.createElement( "SEQUENCE" );
+//     m_expr->buildXML( doc, sequence );
+//     content.appendChild( sequence );
+//     root.appendChild( content );
+//     element.appendChild( root );
+// }
 
 class FunctionNode : public ParserNode {
 public:
@@ -205,20 +224,75 @@ private:
 
 void FunctionNode::buildXML( QDomDocument doc, QDomElement element )
 {
-    m_name->buildXML( doc, element );
-    QDomElement bracket = doc.createElement( "BRACKET" );
-    bracket.setAttribute( "LEFT", '(' );
-    bracket.setAttribute( "RIGHT", ')' );
-    QDomElement content = doc.createElement( "CONTENT" );
-    QDomElement sequence = doc.createElement( "SEQUENCE" );
-
-    for ( uint i = 0; i < m_args.count(); i++ ) {
-        m_args.at( i )->buildXML( doc, sequence );
+    if ( ( m_name->primary() == "sqrt" ) && ( m_args.count() == 1 ) ) {
+        QDomElement root = doc.createElement( "ROOT" );
+        QDomElement content = doc.createElement( "CONTENT" );
+        QDomElement sequence = doc.createElement( "SEQUENCE" );
+        m_args.at( 0 )->buildXML( doc, sequence );
+        content.appendChild( sequence );
+        root.appendChild( content );
+        element.appendChild( root );
     }
+    else if ( ( m_name->primary() == "pow" ) && ( m_args.count() == 2 ) ) {
+        QDomElement index = doc.createElement( "INDEX" );
+        QDomElement content = doc.createElement( "CONTENT" );
+        QDomElement sequence = doc.createElement( "SEQUENCE" );
+        m_args.at( 0 )->buildXML( doc, sequence );
+        content.appendChild( sequence );
+        index.appendChild( content );
+        QDomElement upperRight = doc.createElement( "UPPERRIGHT" );
+        sequence = doc.createElement( "SEQUENCE" );
+        m_args.at( 1 )->buildXML( doc, sequence );
+        upperRight.appendChild( sequence );
+        index.appendChild( upperRight );
+        element.appendChild( index );
+    }
+    else if ( ( m_name->primary() == "sum" ) && ( m_args.count() == 1 ) ) {
+        QDomElement symbol = doc.createElement( "SYMBOL" );
+        symbol.setAttribute( "TYPE", KFormula::Sum );
+        QDomElement content = doc.createElement( "CONTENT" );
+        QDomElement sequence = doc.createElement( "SEQUENCE" );
+        m_args.at( 0 )->buildXML( doc, sequence );
+        content.appendChild( sequence );
+        symbol.appendChild( content );
+        element.appendChild( symbol );
+    }
+    else if ( ( m_name->primary() == "prod" ) && ( m_args.count() == 1 ) ) {
+        QDomElement symbol = doc.createElement( "SYMBOL" );
+        symbol.setAttribute( "TYPE", KFormula::Product );
+        QDomElement content = doc.createElement( "CONTENT" );
+        QDomElement sequence = doc.createElement( "SEQUENCE" );
+        m_args.at( 0 )->buildXML( doc, sequence );
+        content.appendChild( sequence );
+        symbol.appendChild( content );
+        element.appendChild( symbol );
+    }
+    else if ( ( m_name->primary() == "int" ) && ( m_args.count() == 1 ) ) {
+        QDomElement symbol = doc.createElement( "SYMBOL" );
+        symbol.setAttribute( "TYPE", KFormula::Integral );
+        QDomElement content = doc.createElement( "CONTENT" );
+        QDomElement sequence = doc.createElement( "SEQUENCE" );
+        m_args.at( 0 )->buildXML( doc, sequence );
+        content.appendChild( sequence );
+        symbol.appendChild( content );
+        element.appendChild( symbol );
+    }
+    else {
+        m_name->buildXML( doc, element );
+        QDomElement bracket = doc.createElement( "BRACKET" );
+        bracket.setAttribute( "LEFT", '(' );
+        bracket.setAttribute( "RIGHT", ')' );
+        QDomElement content = doc.createElement( "CONTENT" );
+        QDomElement sequence = doc.createElement( "SEQUENCE" );
 
-    content.appendChild( sequence );
-    bracket.appendChild( content );
-    element.appendChild( bracket );
+        for ( uint i = 0; i < m_args.count(); i++ ) {
+            m_args.at( i )->buildXML( doc, sequence );
+        }
+
+        content.appendChild( sequence );
+        bracket.appendChild( content );
+        element.appendChild( bracket );
+    }
 }
 
 // void FunctionNode::output( ostream& stream )
@@ -269,25 +343,42 @@ public:
     MatrixNode( QPtrList<RowNode> rows ) : m_rows( rows ) { m_rows.setAutoDelete( true ); }
     //virtual void output( ostream& stream );
     virtual void buildXML( QDomDocument doc, QDomElement element );
+    uint columns();
+    uint rows() { return m_rows.count(); }
 private:
     QPtrList<RowNode> m_rows;
 };
 
-void MatrixNode::buildXML( QDomDocument doc, QDomElement element )
+uint MatrixNode::columns()
 {
     uint colunms = 0;
     for ( uint i = 0; i < m_rows.count(); i++ ) {
         colunms = QMAX( colunms, m_rows.at( i )->colunms() );
     }
+    return colunms;
+}
+
+void MatrixNode::buildXML( QDomDocument doc, QDomElement element )
+{
+    QDomElement bracket = doc.createElement( "BRACKET" );
+    bracket.setAttribute( "LEFT", '(' );
+    bracket.setAttribute( "RIGHT", ')' );
+    QDomElement content = doc.createElement( "CONTENT" );
+    QDomElement sequence = doc.createElement( "SEQUENCE" );
+
+    uint cols = columns();
     QDomElement matrix = doc.createElement( "MATRIX" );
     matrix.setAttribute( "ROWS", m_rows.count() );
-    matrix.setAttribute( "COLUMNS", colunms );
+    matrix.setAttribute( "COLUMNS", cols );
     for ( uint i = 0; i < m_rows.count(); i++ ) {
-        m_rows.at( i )->setRequiredColumns( colunms );
+        m_rows.at( i )->setRequiredColumns( cols );
         m_rows.at( i )->buildXML( doc, matrix );
         matrix.appendChild( doc.createComment( "end of row" ) );
     }
-    element.appendChild( matrix );
+    sequence.appendChild( matrix );
+    content.appendChild( sequence );
+    bracket.appendChild( content );
+    element.appendChild( bracket );
 }
 
 // void MatrixNode::output( ostream& stream )
@@ -321,7 +412,9 @@ QDomDocument FormulaStringParser::parse()
     nextToken();
     head = parseExpr();
     //head->output( cout );
-    kdDebug( KFormula::DEBUGID ) << endl;
+    if ( !eol() ) {
+        error( QString( i18n( "abouted parsing at %1" ) ).arg( pos ) );
+    }
 
     QDomDocument doc("KFORMULA");
     QDomElement de = doc.createElement("FORMULA");
@@ -396,13 +489,13 @@ ParserNode* FormulaStringParser::parsePrimary()
         return node;
     }
     case NAME: {
-        if ( current == "sqrt" ) {
-            nextToken();
-            expect( LP, "'(' expected" );
-            ParserNode* node = parseExpr();
-            expect( RP, "')' expected" );
-            return new SqrtNode( node );
-        }
+//         if ( current == "sqrt" ) {
+//             nextToken();
+//             expect( LP, "'(' expected" );
+//             ParserNode* node = parseExpr();
+//             expect( RP, "')' expected" );
+//             return new SqrtNode( node );
+//         }
         PrimaryNode* node = new PrimaryNode( current );
         node->setUnicode( m_symbolTable.unicode( current ) );
         nextToken();
@@ -417,16 +510,21 @@ ParserNode* FormulaStringParser::parsePrimary()
                     nextToken();
                 }
             }
-            expect( RP, "')' expected" );
+            expect( RP, QString( i18n( "')' expected at %1" ) ).arg( pos ) );
             node->setFunctionName( true );
             return new FunctionNode( node, args );
         }
         return node;
     }
+    case SUB: {
+        nextToken();
+        ParserNode* node = new UnaryMinus( parsePrimary() );
+        return node;
+    }
     case LP: {
         nextToken();
         ParserNode* node = parseExpr();
-        expect( RP, "')' expected" );
+        expect( RP, QString( i18n( "')' expected at %1" ) ).arg( pos ) );
         return node;
     }
     case LB: {
@@ -443,17 +541,24 @@ ParserNode* FormulaStringParser::parsePrimary()
                     nextToken();
                 }
             }
-            expect( RB, "']' expected" );
+            expect( RB, QString( i18n( "']' expected at %1" ) ).arg( pos ) );
             rows.append( new RowNode( row ) );
             if ( currentType == COMMA ) {
                 nextToken();
             }
         }
-        expect( RB, "']' expected" );
-        return new MatrixNode( rows );
+        expect( RB, QString( i18n( "']' expected at %1" ) ).arg( pos ) );
+        MatrixNode* node = new MatrixNode( rows );
+        if ( node->columns() == 0 ) {
+            error( QString( i18n( "null columns in Matrix at %1" ) ).arg( pos ) );
+        }
+        if ( node->rows() == 0 ) {
+            error( QString( i18n( "null rows in Matrix at %1" ) ).arg( pos ) );
+        }
+        return node;
     }
     default:
-        error( "Unexpected token" );
+        error( QString( i18n( "Unexpected token at %1" ) ).arg( pos ) );
         return new PrimaryNode( current );
     }
 }
@@ -607,5 +712,6 @@ void FormulaStringParser::readDigits()
 
 void FormulaStringParser::error( QString err )
 {
-    kdDebug( KFormula::DEBUGID ) << err << " at " << pos << " (" << currentType << "; " << current << ")" << endl;
+    kdDebug( KFormula::DEBUGID ) << err << " (" << currentType << "; " << current << ")" << endl;
+    m_errorList.push_back( err );
 }

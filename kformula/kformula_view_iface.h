@@ -23,6 +23,7 @@
 #include <KoViewIface.h>
 
 #include <qstring.h>
+#include <qstringlist.h>
 
 class KFormulaPartView;
 
@@ -84,6 +85,8 @@ k_dcop:
 
     void eraseSelection( int direction );
     void addText( QString str );
+
+    QStringList readFormulaString( QString text );
 
 private:
     KFormulaPartView *m_view;

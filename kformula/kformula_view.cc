@@ -211,11 +211,20 @@ void KFormulaPartView::formulaString()
     FormulaString dia( this );
     dia.textWidget->setText( document()->getFormula()->formulaString() );
     if ( dia.exec() ) {
-        FormulaStringParser parser( document()->getDocument()->getSymbolTable(), dia.textWidget->text() );
-        QDomDocument formula = parser.parse();
+        // How lovely.
+    }
+}
+
+QStringList KFormulaPartView::readFormulaString( QString text )
+{
+    FormulaStringParser parser( document()->getDocument()->getSymbolTable(), text );
+    QDomDocument formula = parser.parse();
+    QStringList errorList = parser.errorList();
+    if ( errorList.count() == 0 ) {
         formulaView()->slotSelectAll();
         document()->getFormula()->paste( formula, i18n( "Read Formula String" ) );
     }
+    return errorList;
 }
 
 void KFormulaPartView::configure()
