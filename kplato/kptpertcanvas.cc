@@ -83,7 +83,7 @@ void KPTPertCanvas::draw(KPTProject& project)
         drawChildren(it.current());
 	}
 
-	//project.drawPertRelations(this);
+	drawRelations(); // done _after_ all nodes are drawn
 	QSize s = canvasSize();
 	m_canvas->resize(s.width(), s.height());
     update();
@@ -141,11 +141,6 @@ void KPTPertCanvas::drawSubproject( KPTNode *node)
 		node->setDrawn( true,false);
 		//kdDebug()<<k_funcinfo<<" draw ("<<row<<","<<col<<"): "<<m_name<<endl;
 	}
-	int numRelations = node->numDependChildNodes();
-	for (int i=0; i<numRelations; i++ ) {
-		KPTRelation* relation = node->getDependChildNode(i);
-	  	drawRelation( relation );
-	}
 }
 
 
@@ -171,11 +166,6 @@ void KPTPertCanvas::drawMilestone( KPTNode *node)
 		pertItem->show();
 		node->setPertItem( pertItem );
 		node->setDrawn( true, false ); // drawn, but not recursive
-	}
-	int numRelations = node->numDependChildNodes();
-	for (int i=0; i<numRelations; i++ ) {
-		KPTRelation* relation = node->getDependChildNode(i);
-	  	drawRelation( relation );
 	}
 }
 
@@ -209,20 +199,37 @@ void KPTPertCanvas::drawTask( KPTNode *node)
 		//kdDebug()<<k_funcinfo<<" draw ("<<row<<","<<col<<"): "<<m_name<<endl;
 	}
 
-	int numRelations = node->numDependChildNodes();
-	for (int i=0; i<numRelations; i++ ) {
-	  kdDebug()<< "drawing relation #" << i <<endl;
-		KPTRelation* relation = node->getDependChildNode(i);
-	  	drawRelation( relation );
+}
+
+void KPTPertCanvas::drawRelations()
+{
+	kdDebug()<<k_funcinfo<<endl;
+    QCanvasItemList list = canvas()->allItems();
+    QCanvasItemList::Iterator it = list.begin();
+    for (; it != list.end(); ++it)
+    {
+	    if ( (*it)->rtti() == KPTPertTaskItem::RTTI ||
+			 (*it)->rtti() == KPTPertMilestoneItem::RTTI )
+		{
+			KPTPertNodeItem *item = dynamic_cast<KPTPertNodeItem *>(*it);
+			int numRelations = item->node().numDependChildNodes();
+			for (int i=0; i < numRelations; ++i)
+			{
+				drawRelation(item->node().getDependChildNode(i));
+			}
+		}
 	}
 }
 
 void KPTPertCanvas::drawRelation( KPTRelation* relation)
 {
 	kdDebug()<<k_funcinfo<<endl;
-
-	KPTRelationCanvasItem *item = new KPTRelationCanvasItem(this, relation);
-	item->show();
+	//Only draw if both nodes are shown on canvas
+	if (relation->parent()->isDrawn() && relation->child()->isDrawn())
+	{
+		KPTRelationCanvasItem *item = new KPTRelationCanvasItem(this, relation);
+		item->show();
+	}
 }
 
 

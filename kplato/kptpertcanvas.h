@@ -64,6 +64,7 @@ protected:
 	void drawSubproject( KPTNode *node);
 	void drawMilestone( KPTNode *node);
 	void drawTask( KPTNode *node);
+	void drawRelations();
 	void drawRelation( KPTRelation* relation);
 
 signals:
