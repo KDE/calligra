@@ -97,7 +97,7 @@ void KPTGanttView::draw(KPTProject &project)
     drawChildren(NULL, project);
     drawRelations();
     
-    m_currentItem = m_gantt->firstChild();
+    currentItemChanged(m_gantt->firstChild());
     if (m_currentItem)
         m_gantt->setSelected(m_currentItem, true);
     
