@@ -63,6 +63,7 @@ namespace MSWrite
 #endif
 
 
+	// [PRIVATE] don't use
 	class FormatInfo : public NeedsDevice, public NeedsHeader
 	{
 	private:
