@@ -29,6 +29,7 @@
 #include <kprinter.h>
 #include <qobjectlist.h>
 
+#include <kdeversion.h>
 #include <kstdaction.h>
 #include <kapplication.h>
 #include <kfiledialog.h>
@@ -41,10 +42,8 @@
 #include <kprogress.h>
 #include <kdebug.h>
 #include <kdebugclasses.h>
-#include <kglobalsettings.h>
 #include <ktempfile.h>
 #include <krecentdocument.h>
-
 #include <kparts/partmanager.h>
 #include <kparts/plugin.h>
 #include <kparts/event.h>
@@ -53,6 +52,10 @@
 #include <stdlib.h>
 #include <klocale.h>
 #include <kstatusbar.h>
+
+#if KDE_IS_VERSION(3,1,90)
+# include <kglobalsettings.h>
+#endif
 
 class KoPartManager : public KParts::PartManager
 {
@@ -316,10 +319,14 @@ KoMainWindow::KoMainWindow( KInstance *instance, const char* name )
     if ( !initialGeometrySet() )
     {
         // Default size
-        QRect desk = KGlobalSettings::desktopGeometry(this);
-        if (desk.width() > 1100) // very big desktop ?
+#if KDE_IS_VERSION(3,1,90)
+	const int deskWidth = KGlobalSettings::desktopGeometry(this).width();
+#else
+	const int deskWidth = QApplication::desktop()->width();
+#endif
+        if (deskWidth > 1100) // very big desktop ?
             resize( 1000, 800 );
-        if (desk.width() > 850) // big desktop ?
+        if (deskWidth > 850) // big desktop ?
             resize( 800, 600 );
         else // small (800x600, 640x480) desktop
             resize( 600, 400 );
