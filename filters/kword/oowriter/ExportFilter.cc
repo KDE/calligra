@@ -68,28 +68,34 @@ QString OOWriterWorker::escapeOOText(const QString& strText) const
 
 
 QString OOWriterWorker::escapeOOSpan(const QString& strText) const
-// We need not only to escape the classical XML stuff but also take care of spaces and tabs.
+// We need not only to escape the classical XML stuff but also to take care of spaces and tabs.
+// ### FIXME: be careful of bordercases like <tag> </tag>  or <tag> <tag2/> </tag>
 {
     QString strReturn;
     QChar ch;
-    int spaceNumber=-1; // How many spaces are *still* to write (-1 == none; 0 == we had just one space, not any further needed)
+    int spaceNumber = 0; // How many spaces should be written
 
     for (uint i=0; i<strText.length(); i++)
     {
-        ch=strText[i]; // ###TODO: would it be not better to define a QCharRef instead? (no need to copy anymore.)
+        ch=strText[i];
 
         if (ch!=' ')
         {
-            // The next character is not a space anymore
-            if (spaceNumber>1)
+            // The next character is not a space (anymore)
+            if ( spaceNumber > 0 )
             {
-                strReturn+="<text:s text:c=\"";
-                strReturn+=QString::number(spaceNumber);
-                strReturn+="\"/>";
+                strReturn += ' '; // Always write one space
+                if ( spaceNumber > 1 )
+                {
+                    strReturn += "<text:s text:c=\"";
+                    strReturn += QString::number( spaceNumber - 1 );
+                    strReturn += "\"/>";
+                }
             }
-            spaceNumber=-1;
+            spaceNumber = 0;
         }
 
+        // ### TODO: would be switch/case or if/elseif the best?
         switch (ch.unicode())
         {
         case 9: // Tab
@@ -104,14 +110,13 @@ QString OOWriterWorker::escapeOOSpan(const QString& strText) const
             }
         case 32: // Space
             {
-                if (spaceNumber>=0)
+                if ( spaceNumber > 0 )
                 {
-                    spaceNumber++;
+                    ++spaceNumber;
                 }
                 else
                 {
-                    strReturn+=' '; // The first one has to be written
-                    spaceNumber=0;
+                    spaceNumber = 1;
                 }
                 break;
             }
@@ -140,6 +145,21 @@ QString OOWriterWorker::escapeOOSpan(const QString& strText) const
                 strReturn+="&apos;";
                 break;
             }
+        case 1: // (Non-XML-compatible) replacement character from KWord 0.8
+            {
+                strReturn += '#'; //use KWord 1.[123] replacement character instead
+                break;
+            }
+        // Following characters are not allowed in XML (but some files from KWord 0.8 have some of them.)
+        case  0: case  2: case  3: case  4: case  5: case  6: case  7: case  8: case 11: case 12:
+        case 14: case 15: case 16: case 17: case 18: case 19: case 20: case 21: case 22: case 23:
+        case 24: case 25: case 26: case 27: case 28: case 29: case 30: case 31:
+            {
+                kdWarning(30518) << "Not allowed XML character: " << ch.unicode() << endl;
+                strReturn += '?';
+                break;
+            }
+        case 13: // ### TODO: what to do with it?
         default:
             {
                 strReturn+=ch;
@@ -148,9 +168,10 @@ QString OOWriterWorker::escapeOOSpan(const QString& strText) const
         }
     }
 
-    if (spaceNumber>1)
+    if ( spaceNumber > 0 )
     {
         // The last characters were spaces
+        // We do not care about writing a real space (also to avoid to have <tag> </tag>)
         strReturn+="<text:s text:c=\"";
         strReturn+=QString::number(spaceNumber);
         strReturn+="\"/>";
