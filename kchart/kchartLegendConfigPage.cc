@@ -14,6 +14,7 @@
 #include <qradiobutton.h>
 #include <qlineedit.h>
 #include "kchart_params.h"
+#include <kfontdialog.h>
 
 KChartLegendConfigPage::KChartLegendConfigPage( KChartParams* params,
                                                 QWidget* parent ) :
@@ -85,6 +86,18 @@ KChartLegendConfigPage::KChartLegendConfigPage( KChartParams* params,
   legendTextColor=new KColorButton(gb);
   grid3->addWidget(legendTextColor,1,0);
 
+  gb = new QButtonGroup( i18n("Font:"), this );
+  layout->addWidget(gb,1,1);
+
+  QGridLayout *grid4 = new QGridLayout(gb,4,2,15,7);
+  legendFontButton=new QPushButton(gb);
+  lab=new QLabel(i18n("Legend text font:"),gb);
+  grid4->addWidget(lab,0,0);
+
+  legendFontButton->setText(i18n("Legend"));
+  grid4->addWidget(legendFontButton,1,0);
+  connect( legendFontButton, SIGNAL(clicked()), this, SLOT(changeLegendFont()));
+
   //it's not good but I don't know how
   //to reduce space
   layout->addColSpacing(1,300);
@@ -128,6 +141,13 @@ void KChartLegendConfigPage::init()
     title->setText(_params->legendTitleText());
     legendTitleColor->setColor(_params->legendTitleTextColor());
     legendTextColor->setColor(_params->legendTextColor());
+    legend=_params->legendFont();
+}
+
+void KChartLegendConfigPage::changeLegendFont()
+{
+    if (KFontDialog::getFont( legend,false,this ) == QDialog::Rejected )
+        return;
 }
 
 void KChartLegendConfigPage::apply()
@@ -156,4 +176,10 @@ void KChartLegendConfigPage::apply()
     _params->setLegendTitleText(title->text());
     _params->setLegendTitleTextColor(legendTitleColor->color());
     _params->setLegendTextColor(legendTextColor->color());
+
+    if(_params->legendFont()!=legend)
+    {
+        //used real size font.
+        _params->setLegendTitleFont(legend,true);
+    }
 }

@@ -42,7 +42,6 @@ private:
     QFont label;
     QFont yaxis;
     QFont xaxis;
-    QFont legend;
     KChartColorArray extColor;
     int index;
     KoChart::Data *data;

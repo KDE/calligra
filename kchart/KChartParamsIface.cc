@@ -242,6 +242,17 @@ int KChartParamsIface::threeDLineYRotation() const
     return params->threeDLineYRotation();
 }
 
+QSize KChartParamsIface::lineMarkerSize() const
+{
+    return params->lineMarkerSize();
+}
+
+void KChartParamsIface::setLineMarkerSize( QSize size )
+{
+    params->setLineMarkerSize( size );
+}
+
+
 bool KChartParamsIface::showGrid()
 {
     return params->showGrid();
@@ -286,6 +297,16 @@ void KChartParamsIface::setAreaChartSubType(const QString &sub)
 QString KChartParamsIface::areaChartSubType() const
 {
     return params->areaChartSubTypeToString(params->areaChartSubType());
+}
+
+void KChartParamsIface::setAreaLocation(const QString & loc)
+{
+    params->setAreaLocation(params->stringToAreaLocation(loc));
+}
+
+QString KChartParamsIface::areaLocation() const
+{
+    return params->areaLocationToString( params->areaLocation());
 }
 
 void KChartParamsIface::setHiLoChartSubType(const QString &sub)
@@ -336,4 +357,14 @@ QSize KChartParamsIface::polarMarkerSize() const
 void KChartParamsIface::setPolarMarkerSize( QSize size  )
 {
     params->setPolarMarkerSize(size);
+}
+
+int KChartParamsIface::ringStart() const
+{
+    return params->ringStart();
+}
+
+void KChartParamsIface::setRingStart( int degrees )
+{
+    params->setRingStart( degrees );
 }

@@ -63,6 +63,8 @@ k_dcop:
     virtual void setThreeDLineXRotation( int degrees );
     virtual void setThreeDLineYRotation( int degrees );
     virtual int threeDLineYRotation() const;
+    virtual QSize lineMarkerSize() const;
+    virtual void setLineMarkerSize( QSize size );
 
 
     //pie config
@@ -80,6 +82,8 @@ k_dcop:
     //area chart
     virtual void setAreaChartSubType(const QString &);
     virtual QString areaChartSubType() const;
+    virtual void setAreaLocation(const QString & );
+    virtual QString areaLocation() const;
 
     //hilo chart
     virtual void setHiLoChartSubType(const QString &);
@@ -94,6 +98,11 @@ k_dcop:
     virtual bool polarRotateCircularLabels() const;
     virtual QSize polarMarkerSize() const;
     virtual void setPolarMarkerSize( QSize size  );
+
+    //ring chart
+    virtual int ringStart() const;
+    virtual void setRingStart( int degrees );
+
 
     //legend
     virtual void hideLegend();
