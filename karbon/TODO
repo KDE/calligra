@@ -10,6 +10,7 @@ TODO:
 	removing nodes, inserting nodes...
 -	allow for multiple strokes and fills in VPath. Also allow for strokes to be under
 	fills for nice special effects.
+-	Ctrl or Shift (pressed) while dragging a shape should make the shape move along only one axis
 
 REAL BUGS:
 -	select first/last segment's knot if one of each other's knot is selected
