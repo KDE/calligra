@@ -795,8 +795,8 @@ void KSpreadCanvas::slotMaxRow( int _max_row )
 
 void KSpreadCanvas::mouseMoveEvent( QMouseEvent * _ev )
 {
-  // Dont allow modifications if document is readonly.
-  if ( !m_pView->koDocument()->isReadWrite() )
+  // Dont allow modifications if document is readonly. Selecting is no modification
+  if ( (!m_pView->koDocument()->isReadWrite()) && (m_eMouseAction!=Mark))
     return;
 
   if ( m_dragging )

@@ -3358,6 +3358,10 @@ void KSpreadView::paste()
   if ( !m_pTable )
     return;
 
+  if (!koDocument()->isReadWrite()) // don't paste into a read only document
+    return;
+
+
   m_pDoc->emitBeginOperation( false );
   if ( !m_pCanvas->editor() )
   {
