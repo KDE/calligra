@@ -44,9 +44,6 @@ Suite 330, Boston, MA 02111-1307, USA.</comment>
             <property name="text">
                 <string>&amp;Automatic Recalculation</string>
             </property>
-            <property name="accel">
-                <string>Alt+A</string>
-            </property>
         </widget>
         <widget class="QCheckBox">
             <property name="name">
@@ -54,9 +51,6 @@ Suite 330, Boston, MA 02111-1307, USA.</comment>
             </property>
             <property name="text">
                 <string>Show &amp;Grid</string>
-            </property>
-            <property name="accel">
-                <string>Alt+G</string>
             </property>
         </widget>
         <widget class="QCheckBox">
@@ -66,9 +60,6 @@ Suite 330, Boston, MA 02111-1307, USA.</comment>
             <property name="text">
                 <string>Show Page &amp;Borders</string>
             </property>
-            <property name="accel">
-                <string>Alt+B</string>
-            </property>
         </widget>
         <widget class="QCheckBox">
             <property name="name">
@@ -76,9 +67,6 @@ Suite 330, Boston, MA 02111-1307, USA.</comment>
             </property>
             <property name="text">
                 <string>Show &amp;Formula</string>
-            </property>
-            <property name="accel">
-                <string>Alt+F</string>
             </property>
         </widget>
         <widget class="QCheckBox">
@@ -88,9 +76,6 @@ Suite 330, Boston, MA 02111-1307, USA.</comment>
             <property name="text">
                 <string>&amp;Hide Zero</string>
             </property>
-            <property name="accel">
-                <string>Alt+H</string>
-            </property>
         </widget>
         <widget class="QCheckBox">
             <property name="name">
@@ -98,9 +83,6 @@ Suite 330, Boston, MA 02111-1307, USA.</comment>
             </property>
             <property name="text">
                 <string>Show Formula &amp;Indicator</string>
-            </property>
-            <property name="accel">
-                <string>Alt+I</string>
             </property>
         </widget>
         <widget class="QCheckBox">
@@ -110,9 +92,6 @@ Suite 330, Boston, MA 02111-1307, USA.</comment>
             <property name="text">
                 <string>Show Column As &amp;Numbers</string>
             </property>
-            <property name="accel">
-                <string>Alt+N</string>
-            </property>
         </widget>
         <widget class="QCheckBox">
             <property name="name">
@@ -121,9 +100,6 @@ Suite 330, Boston, MA 02111-1307, USA.</comment>
             <property name="text">
                 <string>Use &amp;LC Mode</string>
             </property>
-            <property name="accel">
-                <string>Alt+L</string>
-            </property>
         </widget>
         <widget class="QCheckBox">
             <property name="name">
@@ -131,9 +107,6 @@ Suite 330, Boston, MA 02111-1307, USA.</comment>
             </property>
             <property name="text">
                 <string>&amp;Convert First Letter to Uppercase</string>
-            </property>
-            <property name="accel">
-                <string>Alt+C</string>
             </property>
         </widget>
         <spacer>
