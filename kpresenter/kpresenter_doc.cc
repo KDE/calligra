@@ -317,11 +317,15 @@ bool KPresenterDoc::saveChildren( KoStore* _store, const QString &_path )
 {
     int i = 0;
 
-    QListIterator<KoDocumentChild> it( children() );
-    for( ; it.current(); ++it ) {
-	QString internURL = QString( "%1/%2" ).arg( _path ).arg( i++ );
-	if ( !((KoDocumentChild*)(it.current()))->document()->saveToStore( _store, internURL ) )
-	    return false;
+    if ( saveOnlyPage == -1 ) // Don't save all children into template for one page
+           // ###### TODO: save objects that are on that page
+    {
+      QListIterator<KoDocumentChild> it( children() );
+      for( ; it.current(); ++it ) {
+        QString internURL = QString( "%1/%2" ).arg( _path ).arg( i++ );
+        if ( !((KoDocumentChild*)(it.current()))->document()->saveToStore( _store, internURL ) )
+        return false;
+      }
     }
     return true;
 }
@@ -570,10 +574,13 @@ bool KPresenterDoc::completeSaving( KoStore* _store )
 /*========================== load ===============================*/
 bool KPresenterDoc::loadChildren( KoStore* _store )
 {
-    QListIterator<KoDocumentChild> it( children() );
-    for( ; it.current(); ++it ) {
-	if ( !((KoDocumentChild*)it.current())->loadDocument( _store ) )
-	    return false;
+    if ( objStartY == 0 ) // Don't do this when inserting a template or a page...
+    {
+      QListIterator<KoDocumentChild> it( children() );
+      for( ; it.current(); ++it ) {
+        if ( !((KoDocumentChild*)it.current())->loadDocument( _store ) )
+          return false;
+      }
     }
 
     return true;
