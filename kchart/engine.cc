@@ -13,7 +13,7 @@
 #include "engine2.h"
 #include "enginehelper.h"
 #include "enginedraw.h"
-
+#include "kchartEngine.h"
 #include "kchartparams.h"
 
 #include <qfont.h>
@@ -31,77 +31,7 @@
 // check whether a cell has a value
 //#define CELLEXISTS( row, col ) data.cell( (row), (col) ).exists
 
-class kchartEngine {
-public:
-  KChartParameters* params;
-  KChartData* data;
-  QPainter *p;
-  int imagewidth;
-  int imageheight;  
-  int doLabels();
-  int minmaxValues( int num_points,
-		  int num_sets,
-		  float *uvol,
-		  float &highest, 
-		  float &lowest,
-		  float &vhighest,
-		  float &vlowest);
-  int out_graph();
 
-  int compute_yintervals();
-
-  inline bool CELLEXISTS( int row, int col ) {
-    return  data->cell(row,col).exists;
-  };
-  inline double CELLVALUE(int row, int col) {
-    return data->cell(row,col).value.doubleValue();
-  }
-  
-private:
-  int num_sets;
-  int num_points;
-  int graphwidth;
-  int grapheight;
-  float	xorig, yorig, vyorig;
-  float	yscl;
-  float	vyscl;
-  float	xscl;
-  float vhighest;
-  float	vlowest;
-  float	highest;
-  float	lowest;
-  float	ylbl_interval;
-  int num_lf_xlbls;
-  int xdepth_3Dtotal;
-  int ydepth_3Dtotal;
-  int xdepth_3D;		// affects PX()
-  int ydepth_3D;		// affects PY() and PV()
-  int hlf_barwdth;		// half bar widths
-  int hlf_hlccapwdth;		// half cap widths for HLC_I_CAP and DIAMOND
-  int annote_len, annote_hgt;
-
-  /* args */
-  int			setno;				// affects PX() and PY()
-  // PENDING(kalle) Get rid of this
-  float		*uvol;
-#define MAXNUMPOINTS 100
-  QColor BGColor, LineColor, PlotColor, GridColor, VolColor;
-  QColor ExtVolColor[100];
-  //  QColor ExtVolColor[num_points];  
-  QColor ThumbDColor, ThumbLblColor, ThumbUColor;
-    // ArrowDColor,ArrowUColor,
-  QColor AnnoteColor;
-  //  QColor ExtColor[num_sets][num_points];
-  QColor ExtColor[100][100];
-  // shade colors only with 3D
-  //	intExtColorShd[threeD?1:num_sets][threeD?1:num_points]; // compiler limitation
-  QColor ExtColorShd[100][100];
-  //  QColor ExtColorShd[num_sets][num_points];
-  bool hasxlabels;
-  //  QPointArray volpoly( 4 );
-
-  int init();
-};
 
 kchartEngine keng;
 
@@ -240,6 +170,63 @@ int kchartEngine::minmaxValues(
     qDebug( "done requested_* computation" );
 }
 
+void kchartEngine::titleText() {
+    if( !params->title.isEmpty() ) {
+		int	tlen;
+		QColor	titlecolor = params->TitleColor;
+	
+		cnt_nl( params->title.latin1(), &tlen );
+		p->setFont( params->titleFont() );
+		p->setPen( titlecolor );
+		// PENDING(kalle) Check whether this really does line breaks
+		QRect br = QFontMetrics( params->titleFont() ).boundingRect( 0, 0,
+																	 MAXINT,
+																	 MAXINT,
+																	 Qt::AlignCenter,
+																	 params->title );
+		p->drawText( imagewidth/2 - tlen*params->titleFontWidth()/2, // x
+					 0, // y
+					 br.width(), br.height(),
+					 Qt::AlignCenter, params->title );
+    }
+
+    qDebug( "done with the title text" );
+
+    if( !params->xtitle.isEmpty() ) {
+		QColor	titlecolor = params->XTitleColor == Qt::black ?
+			PlotColor: params->XTitleColor;
+		p->setPen( titlecolor );
+		p->setFont( params->titleFont() );
+		p->drawText( imagewidth/2 - params->xtitle.length()*params->xTitleFontWidth()/2,
+					 imageheight-params->xTitleFontHeight()-1, params->xtitle );
+    }
+}
+
+void kchartEngine::drawBorder() {
+  if( params->border ) {
+    int	x1, y1, x2, y2;
+    
+    x1 = PX(0);
+    y1 = PY(highest);
+    x2 = PX(num_points-1+(params->do_bar()?2:0));
+    y2 = PY(lowest);
+    p->setPen( LineColor );
+    p->drawLine( x1, PY(lowest), x1, y1 );
+    
+    setno = params->stack_type==KCHARTSTACKTYPE_DEPTH? num_hlc_sets? num_hlc_sets: num_sets: 1;
+    p->setPen( LineColor );
+    p->drawLine( x1, y1, PX(0), PY(highest) );
+    // if( !params->grid || do_vol || params->thumbnail )					// grid leaves right side Y open
+    {
+      p->setPen( LineColor );
+      p->drawLine( x2, y2, PX(num_points-1+(params->do_bar()?2:0)), PY(lowest) );
+      p->drawLine( PX(num_points-1+(params->do_bar()?2:0)), PY(lowest),
+		   PX(num_points-1+(params->do_bar()?2:0)), PY(highest) );
+    }
+    setno = 0;
+  }
+}
+
 int kchartEngine::init() {
   // initializations
   yscl = 0.0;
@@ -273,10 +260,75 @@ int kchartEngine::init() {
     debug( "No data" );
     return -1;
   }
+  num_hlc_sets = params->has_hlc_sets() ? num_sets : 0;
 
   // And num_points is the number of columns
   num_points = data->cols();
- 
+
+  /* idiot checks */
+  if( imagewidth <= 0 || imageheight <=0 || !p  )
+    return -1;
+  if( num_points <= 0 ) {
+    debug( "No Data Available" );
+    return -1;
+  }
+  return 1; 
+}
+
+void kchartEngine::drawAnnotation() {
+      if( params->annotation ) {	/* front half of annotation line */
+	int x1 = PX(params->annotation->point+(params->do_bar()?1:0)),
+	  y1 = PY(highest);
+	int		x2;
+	// front line
+	p->setPen( AnnoteColor );
+	p->drawLine( x1, PY(lowest)+1, x1, y1 );
+	if( params->threeD() ) { // on back plane
+	  setno = params->stack_type==KCHARTSTACKTYPE_DEPTH? num_hlc_sets? num_hlc_sets: num_sets: 1;
+			x2 = PX(params->annotation->point+(params->do_bar()?1:0));
+			// prspective line
+			p->setPen( AnnoteColor );
+			p->drawLine( x1, y1, x2, PY(highest) );
+		} else { // for 3D done with back line
+			x2 = PX(params->annotation->point+(params->do_bar()?1:0));
+			p->setPen( AnnoteColor );
+			p->drawLine( x1, y1, x1, y1-2 );
+		}
+		/* line-to and note */
+		if( *(params->annotation->note) ) {  // any note?
+			if( params->annotation->point >= (num_points/2) ) {		/* note to the left */
+				p->setPen( AnnoteColor );
+				p->drawLine( x2,              PY(highest)-2,
+							 x2-annote_hgt/2, PY(highest)-2-annote_hgt/2 );
+				// PENDING(kalle) Check whether this really does line breaks
+				p->setFont( params->titleFont() );
+				QRect br = QFontMetrics( params->titleFont() ).boundingRect( 0, 0, MAXINT,
+																					  MAXINT,
+																					  Qt::AlignRight,
+																					  params->title );
+				p->drawText(   x2-annote_hgt/2-1-annote_len - 1,
+							   PY(highest)-annote_hgt+1,
+							   br.width(), br.height(),
+							   Qt::AlignRight, params->annotation->note );
+			} else { /* note to right */
+				p->setPen( AnnoteColor );
+				p->drawLine( x2, PY(highest)-2,
+							 x2+annote_hgt/2, PY(highest)-2-annote_hgt/2 );
+				// PENDING(kalle) Check whether this really does line breaks
+				p->setFont( params->annotationFont() );
+				QRect br = QFontMetrics( params->annotationFont() ).boundingRect( 0, 0,
+																						   MAXINT,
+																						   MAXINT,
+																						   Qt::AlignLeft,
+																						   params->title );
+				p->drawText( x2+annote_hgt/2+1 + 1,
+							 PY(highest)-annote_hgt+1,
+							 br.width(), br.height(),
+							 Qt::AlignLeft, params->annotation->note );
+			}
+		}
+		setno = 0;
+    }
 }
 
 
@@ -296,40 +348,24 @@ int kchartEngine::out_graph() {
   if (init()== -1) {
     return -1;
   }
+  cerr << "Initialization successfull, proceed\n";
   doLabels();
 
-    char		num_hlc_sets = params->has_hlc_sets() ? num_sets : 0;
     //  i.e., not up against Y axes
     char		do_ylbl_fractions =   // %f format not given, or
 		( params->ylabel_fmt.isEmpty() ||					//  format doesn't have a %,g,e,E,f or F
 		  params->ylabel_fmt.length() == strcspn(params->ylabel_fmt,"%geEfF") );
-
-
-    /* idiot checks */
-    if( imagewidth <= 0 || imageheight <=0 || !p  )
-		return -1;
-    if( num_points <= 0 ) {
-		debug( "No Data Available" );
-		return 1;
-    }
-
-    debug( "done idiot checks" );
-
     if( params->thumbnail ) {
 		params->grid = FALSE;
 		params->xaxis = FALSE;
 		params->yaxis = FALSE;
     }
-
     debug( "done thumbnails" );
 
 
     /* ----- highest & lowest values ----- */
-    keng.minmaxValues(num_points, num_sets, uvol,
+    minmaxValues(num_points, num_sets, uvol,
 		 highest, lowest, vhighest, vlowest);
-
-
-
 
     /* ----- graph height and width within the gif height width ----- */
     /* grapheight/height is the actual size of the scalable graph */
@@ -339,7 +375,7 @@ int kchartEngine::out_graph() {
 			+ 2:
 			2;
 		int	xlabel_hgt = 0;
-		int	xtitle_hgt = !params->xtitle.isEmpty()? 1+params->xTitleFontHeight()+1: 0;
+		int	xtitle_hgt = !params->xtitle.isEmpty()? 1+params->xTitleFontHeight()+1: 0; 
 		int	ytitle_hgt = !params->ytitle.isEmpty()? 1+params->yTitleFontHeight()+1: 0;
 		int	vtitle_hgt = params->do_vol() && !params->ytitle2.isEmpty()? 1+params->yTitleFontHeight()+1: 0;
 		int	ylabel_wth = 0;
@@ -633,35 +669,9 @@ int kchartEngine::out_graph() {
 
 	qDebug( "done handling background images" );
 
-    if( !params->title.isEmpty() ) {
-		int	tlen;
-		QColor	titlecolor = params->TitleColor;
-	
-		cnt_nl( params->title.latin1(), &tlen );
-		p->setFont( params->titleFont() );
-		p->setPen( titlecolor );
-		// PENDING(kalle) Check whether this really does line breaks
-		QRect br = QFontMetrics( params->titleFont() ).boundingRect( 0, 0,
-																	 MAXINT,
-																	 MAXINT,
-																	 Qt::AlignCenter,
-																	 params->title );
-		p->drawText( imagewidth/2 - tlen*params->titleFontWidth()/2, // x
-					 0, // y
-					 br.width(), br.height(),
-					 Qt::AlignCenter, params->title );
-    }
 
-    qDebug( "done with the title text" );
+	titleText();
 
-    if( !params->xtitle.isEmpty() ) {
-		QColor	titlecolor = params->XTitleColor == Qt::black ?
-			PlotColor: params->XTitleColor;
-		p->setPen( titlecolor );
-		p->setFont( params->titleFont() );
-		p->drawText( imagewidth/2 - params->xtitle.length()*params->xTitleFontWidth()/2,
-					 imageheight-params->xTitleFontHeight()-1, params->xtitle );
-    }
 
     qDebug( "start drawing" );
 
@@ -1569,28 +1579,8 @@ int kchartEngine::out_graph() {
 		p->drawLine( PX(0), PY(highest), PX(num_points-1+(params->do_bar()?2:0)),  PY(highest) );
 		setno = 0;
     }
-    if( params->border ) {
-		int	x1, y1, x2, y2;
-	
-		x1 = PX(0);
-		y1 = PY(highest);
-		x2 = PX(num_points-1+(params->do_bar()?2:0));
-		y2 = PY(lowest);
-		p->setPen( LineColor );
-		p->drawLine( x1, PY(lowest), x1, y1 );
-	
-		setno = params->stack_type==KCHARTSTACKTYPE_DEPTH? num_hlc_sets? num_hlc_sets: num_sets: 1;
-		p->setPen( LineColor );
-		p->drawLine( x1, y1, PX(0), PY(highest) );
-		// if( !params->grid || do_vol || params->thumbnail )					// grid leaves right side Y open
-		{
-			p->setPen( LineColor );
-			p->drawLine( x2, y2, PX(num_points-1+(params->do_bar()?2:0)), PY(lowest) );
-			p->drawLine( PX(num_points-1+(params->do_bar()?2:0)), PY(lowest),
-						 PX(num_points-1+(params->do_bar()?2:0)), PY(highest) );
-		}
-		setno = 0;
-    }
+    drawBorder();
+
 
     if( params->shelf && params->threeD() &&								/* front of 0 shelf */
 		( (lowest < 0.0 && highest > 0.0) ||
@@ -1608,59 +1598,10 @@ int kchartEngine::out_graph() {
 		setno = 0;												// set back to foremost
     }
 
-    if( params->annotation ) {			/* front half of annotation line */
-		int		x1 = PX(params->annotation->point+(params->do_bar()?1:0)),
-			y1 = PY(highest);
-		int		x2;
-		// front line
-		p->setPen( AnnoteColor );
-		p->drawLine( x1, PY(lowest)+1, x1, y1 );
-		if( params->threeD() ) { // on back plane
-			setno = params->stack_type==KCHARTSTACKTYPE_DEPTH? num_hlc_sets? num_hlc_sets: num_sets: 1;
-			x2 = PX(params->annotation->point+(params->do_bar()?1:0));
-			// prspective line
-			p->setPen( AnnoteColor );
-			p->drawLine( x1, y1, x2, PY(highest) );
-		} else { // for 3D done with back line
-			x2 = PX(params->annotation->point+(params->do_bar()?1:0));
-			p->setPen( AnnoteColor );
-			p->drawLine( x1, y1, x1, y1-2 );
-		}
-		/* line-to and note */
-		if( *(params->annotation->note) ) {						// any note?
-			if( params->annotation->point >= (num_points/2) ) {		/* note to the left */
-				p->setPen( AnnoteColor );
-				p->drawLine( x2,              PY(highest)-2,
-							 x2-annote_hgt/2, PY(highest)-2-annote_hgt/2 );
-				// PENDING(kalle) Check whether this really does line breaks
-				p->setFont( params->titleFont() );
-				QRect br = QFontMetrics( params->titleFont() ).boundingRect( 0, 0, MAXINT,
-																					  MAXINT,
-																					  Qt::AlignRight,
-																					  params->title );
-				p->drawText(   x2-annote_hgt/2-1-annote_len - 1,
-							   PY(highest)-annote_hgt+1,
-							   br.width(), br.height(),
-							   Qt::AlignRight, params->annotation->note );
-			} else { /* note to right */
-				p->setPen( AnnoteColor );
-				p->drawLine( x2, PY(highest)-2,
-							 x2+annote_hgt/2, PY(highest)-2-annote_hgt/2 );
-				// PENDING(kalle) Check whether this really does line breaks
-				p->setFont( params->annotationFont() );
-				QRect br = QFontMetrics( params->annotationFont() ).boundingRect( 0, 0,
-																						   MAXINT,
-																						   MAXINT,
-																						   Qt::AlignLeft,
-																						   params->title );
-				p->drawText( x2+annote_hgt/2+1 + 1,
-							 PY(highest)-annote_hgt+1,
-							 br.width(), br.height(),
-							 Qt::AlignLeft, params->annotation->note );
-			}
-		}
-		setno = 0;
+    if (params->annotation) {
+      drawAnnotation();
     }
+    
 }
 
 
