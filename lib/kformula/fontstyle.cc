@@ -121,10 +121,10 @@ void Artwork::calcSizes( const ContextStyle& style,
         calcCharSize(style, mySize, verticalLineChar);
         break;
     case SlashBracket:
-        //calcCharSize(style, mySize, '/');
+        calcCharSize(style, mySize, slashChar);
         break;
     case BackSlashBracket:
-        //calcCharSize(style, mySize, '\\');
+        calcCharSize(style, mySize, backSlashChar);
         break;
     case LeftCornerBracket:
         calcCharSize(style, mySize, leftAngleBracketChar);
@@ -188,10 +188,10 @@ void Artwork::draw(QPainter& painter, const LuPixelRect& r,
         drawCharacter(painter, style, myX, myY, mySize, verticalLineChar);
         break;
     case SlashBracket:
-        //drawCharacter(painter, style, myX, myY, mySize, '/');
+        drawCharacter(painter, style, myX, myY, mySize, slashChar);
         break;
     case BackSlashBracket:
-        //drawCharacter(painter, style, myX, myY, mySize, '\\');
+        drawCharacter(painter, style, myX, myY, mySize, backSlashChar);
         break;
     case LeftCornerBracket:
         drawCharacter(painter, style, myX, myY, mySize, leftAngleBracketChar);
@@ -220,9 +220,25 @@ void Artwork::calcCharSize( const ContextStyle& style, luPt height, QChar ch )
     //QFont f = style.getSymbolFont();
     uchar c = style.symbolTable().character( ch );
     QFont f = style.symbolTable().font( ch );
+    calcCharSize( style, f, height, c );
+}
+
+
+void Artwork::drawCharacter( QPainter& painter, const ContextStyle& style,
+                             luPixel x, luPixel y,
+                             luPt height, QChar ch )
+{
+    uchar c = style.symbolTable().character( ch );
+    QFont f = style.symbolTable().font( ch );
+    drawCharacter( painter, style, f, x, y, height, c );
+}
+
+
+void Artwork::calcCharSize( const ContextStyle& style, QFont f,
+                            luPt height, uchar c )
+{
     f.setPointSizeFloat( style.layoutUnitPtToPt( height ) );
     //f.setPointSize( height );
-
     QFontMetrics fm(f);
     setWidth( style.ptToLayoutUnitPt( fm.width( c ) ) );
     LuPixelRect bound = fm.boundingRect( c );
@@ -231,11 +247,10 @@ void Artwork::calcCharSize( const ContextStyle& style, luPt height, QChar ch )
 }
 
 
-void Artwork::drawCharacter( QPainter& painter, const ContextStyle& style, luPixel x, luPixel y,
-                             luPt height, QChar ch )
+void Artwork::drawCharacter( QPainter& painter, const ContextStyle& style,
+                             QFont f,
+                             luPixel x, luPixel y, luPt height, uchar c )
 {
-    uchar c = style.symbolTable().character( ch );
-    QFont f = style.symbolTable().font( ch );
     f.setPointSizeFloat( style.layoutUnitToFontSize( height, false ) );
 
     painter.setFont( f );

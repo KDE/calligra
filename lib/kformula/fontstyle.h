@@ -108,6 +108,8 @@ const QChar verticalLineChar = 0x007C;
 const QChar rightCurlyBracketChar = 0x007D;
 const QChar leftAngleBracketChar = 0x2329;
 const QChar rightAngleBracketChar = 0x232A;
+const QChar slashChar = 0x002F;
+const QChar backSlashChar = 0x005C;
 const QChar integralChar = 0x222B;
 const QChar summationChar = 0x2211;
 const QChar productChar = 0x220F;
@@ -170,7 +172,14 @@ public:
 protected:
 
     void calcCharSize( const ContextStyle& style, luPt height, QChar ch );
-    void drawCharacter( QPainter& painter, const ContextStyle& style, luPixel x, luPixel y, luPt height, QChar ch );
+    void drawCharacter( QPainter& painter, const ContextStyle& style,
+                        luPixel x, luPixel y, luPt height, QChar ch );
+
+    void calcCharSize( const ContextStyle& style, QFont f,
+                       luPt height, uchar c );
+    void drawCharacter( QPainter& painter, const ContextStyle& style,
+                        QFont f,
+                        luPixel x, luPixel y, luPt height, uchar c );
 
     void calcRoundBracket( const ContextStyle& style, const QChar chars[], luPt height, luPt charHeight );
     void calcCurlyBracket( const ContextStyle& style, const QChar chars[], luPt height, luPt charHeight );

@@ -87,6 +87,21 @@ def main():
         writeFontTable(fn, f)
     f.close()
 
+    f = open('../cmmapping.cc', 'w')
+    write_header(f)
+    fontnames = [ "cmbx10", 
+                  "cmex10", 
+                  "cmmi10", 
+                  "cmr10", 
+                  "cmsl10", 
+                  "cmsy10", 
+                  "cmti10", 
+                  "cmtt10"
+                  ]
+    for fn in fontnames:
+        writeFontTable(fn, f)
+    f.close()
+
     f = open('../unicodenames.cc', 'w')
     write_header(f)
     print >>f, 'struct UnicodeNameTable { short unicode; const char* name; };'

@@ -24,6 +24,7 @@
 #include <kdebug.h>
 #include <koGlobal.h>
 
+#include "cmstyle.h"
 #include "contextstyle.h"
 #include "esstixfontstyle.h"
 #include "symbolfontstyle.h"
@@ -71,13 +72,18 @@ ContextStyle::~ContextStyle()
 void ContextStyle::init()
 {
     setup();
-    m_fontStyle = new EsstixFontStyle();
+    m_fontStyle = new CMStyle();
     if ( !m_fontStyle->init( this ) ) {
         delete m_fontStyle;
 
-        // The SymbolFontStyle is always expected to work.
-        m_fontStyle = new SymbolFontStyle();
-        m_fontStyle->init( this );
+        m_fontStyle = new EsstixFontStyle();
+        if ( !m_fontStyle->init( this ) ) {
+            delete m_fontStyle;
+
+            // The SymbolFontStyle is always expected to work.
+            m_fontStyle = new SymbolFontStyle();
+            m_fontStyle->init( this );
+        }
     }
 }
 
