@@ -2061,6 +2061,8 @@ void KivioView::partActivateEvent(KParts::PartActivateEvent* event)
     updateToolBars();
     clipboardDataChanged();
   }
+  
+  KoView::partActivateEvent(event);
 }
 
 void KivioView::initStatusBarProgress()
