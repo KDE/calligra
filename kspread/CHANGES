@@ -748,3 +748,8 @@ there is a bug into klocale, you can't write : 12:15 am
 you must write 12:15:08 am (save in international format)
 -Bug fix into merge cell
 -Now kspread check format into formular.
+
+2000-07-09-Montel laurent <montell@club-internet.fr>
+----------------------------------------------------
+-Now you write 11:5am, 11:5 am, 11:5:5 am 11:5:5am
+kspread test all this string and recognize a time format.

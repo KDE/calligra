@@ -3107,8 +3107,44 @@ void KSpreadCell::checkValue()
         }
     */
     QTime tmpTime;
-
+    int pos;
+    QString stringPm=i18n("pm");
+    QString stringAm=i18n("am");
+    bool valid=false;
     if(!(tmpTime=KGlobal::locale()->readTime(m_strText)).isNull())
+        {
+        valid=true;
+        }
+    else if(KGlobal::locale()->use12Clock())
+    {
+    if((pos=m_strText.find(stringPm))!=-1)
+        {
+         tmp=m_strText.mid(0,m_strText.length()-stringPm.length());
+         tmp=tmp.simplifyWhiteSpace();
+         if(!(tmpTime=KGlobal::locale()->readTime(tmp+" "+stringPm)).isNull())
+                {
+                valid=true;
+                }
+         else if(!(tmpTime=KGlobal::locale()->readTime(tmp+":00 "+stringPm)).isNull())
+                {
+                valid=true;
+                }
+        }
+    else if((pos=m_strText.find(stringAm))!=-1)
+        {
+         tmp=m_strText.mid(0,m_strText.length()-stringAm.length());
+         tmp=tmp.simplifyWhiteSpace();
+         if(!(tmpTime=KGlobal::locale()->readTime(tmp+" "+stringAm)).isNull())
+                {
+                valid=true;
+                }
+         else if(!(tmpTime=KGlobal::locale()->readTime(tmp+":00 "+stringAm)).isNull())
+                {
+                valid=true;
+                }
+        }
+    }
+    if(valid)
         {
         m_bTime = true;
         m_dValue = 0;
