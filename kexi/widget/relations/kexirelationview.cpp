@@ -127,9 +127,20 @@ KexiRelationView::addTable(KexiDB::TableSchema *t, const QRect &rect)
 		this, SIGNAL(tableContextMenuRequest(const QPoint&)));
 	
 	addChild(c, 100,100);
-//	c->setFixedSize(110, 160);
-	if (rect.isValid()) {
-		c->setGeometry(rect);
+	if (rect.isValid()) {//predefined size
+		QSize finalSize = c->size().expandedTo( c->sizeHint() );
+		QRect r = rect;
+		r.setSize( finalSize + QSize(0,10) );
+		moveChild( c, rect.left(), rect.top() );
+		//we're doing this instead of setGeometry(rect)
+		//because the geomenty might be saved on other system with bigger fonts :)
+		c->resize(c->sizeHint());
+//		c->setGeometry(r);
+//TODO
+
+//		moveChild( c, rect.left(), rect.top() ); // setGeometry(rect);
+//		c->resize( finalSize );
+//		c->updateGeometry();
 	}
 	c->show();
 	updateGeometry();

@@ -73,7 +73,9 @@ KexiRelationViewTableContainer::KexiRelationViewTableContainer(
 	m_tableView = new KexiRelationViewTable(this, parent, m_table, "KexiRelationViewTable");
 	//m_tableHeader->setFocusProxy( m_tableView );
 	m_tableView->setSizePolicy(QSizePolicy(QSizePolicy::Preferred, QSizePolicy::Minimum));
+	
 	m_tableView->setMaximumSize( m_tableView->sizeHint() );
+	
 //	m_tableView->resize( m_tableView->sizeHint() );
 	lyr->addWidget(m_tableView, 0);
 	connect(m_tableView, SIGNAL(tableScrolling()), this, SLOT(moved()));
