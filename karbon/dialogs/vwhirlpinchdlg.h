@@ -20,11 +20,11 @@
 #ifndef __VWHIRLPINCHDLG_H__
 #define __VWHIRLPINCHDLG_H__
 
-#include <kdialog.h>
+#include <kdialogbase.h>
 
 class KDoubleNumInput;
 
-class VWhirlPinchDlg : public KDialog
+class VWhirlPinchDlg : public KDialogBase
 {
 	Q_OBJECT
 

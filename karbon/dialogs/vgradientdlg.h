@@ -21,14 +21,12 @@
 #ifndef __VGRADIENTDLG_H__
 #define __VGRADIENTDLG_H__
 
-#include <kdialog.h>
+#include <kdialogbase.h>
 
-class QComboBox;
-class QLineEdit;
-class QSpinBox;
+class KComboBox;
 class KColorButton;
 
-class VGradientDlg : public KDialog
+class VGradientDlg : public KDialogBase
 {
 	Q_OBJECT
 
@@ -49,9 +47,9 @@ public:
 private:
 	KColorButton *m_startColor;
 	KColorButton *m_endColor;
-	QComboBox* m_gradientFill;
-	QComboBox* m_gradientRepeat;
-	QComboBox* m_gradientType;
+	KComboBox* m_gradientFill;
+	KComboBox* m_gradientRepeat;
+	KComboBox* m_gradientType;
 };
 
 #endif

@@ -18,68 +18,41 @@
    Boston, MA 02111-1307, USA.
 */
 
-#include <qcombobox.h>
-#include <qevent.h>
+
 #include <qgroupbox.h>
 #include <qlabel.h>
-#include <qlayout.h>
-#include <qlineedit.h>
-#include <qpainter.h>
-#include <qpushbutton.h>
-#include <qspinbox.h>
-#include <qstring.h>
-#include <qwidget.h>
 
+#include <kcombobox.h>
 #include <klocale.h>
 #include <knuminput.h>
+
 #include "vspiraldlg.h"
 
 VSpiralDlg::VSpiralDlg( QWidget* parent, const char* name )
-	: KDialog( parent, name, true, Qt::WStyle_Customize |
-		WType_Dialog | Qt::WStyle_NormalBorder | Qt::WStyle_Title )
+	: KDialogBase( parent, name, true, i18n( "Insert Spiral" ), Ok | Cancel )
 {
-	setCaption( i18n( "Insert Spiral" ) );
-
-	QBoxLayout* outerbox = new QHBoxLayout( this );
-
-	// add input fields on the left:
+	// add input fields:
 	QGroupBox* group = new QGroupBox( 2, Qt::Horizontal, i18n( "Properties" ), this );
-	outerbox->addWidget( group );
 
 	new QLabel( i18n( "Radius:" ), group );
 	m_radius = new KDoubleNumInput( 0, group );
 	new QLabel( i18n( "Segments:" ), group );
-	m_segments = new QSpinBox( group );
+	m_segments = new KIntSpinBox( group );
 	m_segments->setMinValue( 1 );
 	new QLabel( i18n( "Fade:" ), group );
 	m_fade = new KDoubleNumInput( 0, group );
 	new QLabel( i18n( "Orientation:" ), group );
-	m_clockwise = new QComboBox( false,group );
+	m_clockwise = new KComboBox( false, group );
 	m_clockwise->insertItem( i18n( "Clockwise" ), 0 );
 	m_clockwise->insertItem( i18n( "Counter Clockwise" ), 1 );
-
-	outerbox->addSpacing( 2 );
-
-	// add buttons on the right side:
-	QBoxLayout* innerbox = new QVBoxLayout( outerbox );
-
-	innerbox->addStretch();
-
-	QPushButton* okbutton = new QPushButton( i18n( "&Ok" ), this );
-	QPushButton* cancelbutton = new QPushButton( i18n( "&Cancel" ), this );
-
-	okbutton->setMaximumSize( okbutton->sizeHint() );
-	cancelbutton->setMaximumSize( cancelbutton->sizeHint() );
-
-	okbutton->setFocus();
-
-	innerbox->addWidget( okbutton );
-	innerbox->addSpacing( 2 );
-	innerbox->addWidget( cancelbutton );
+	group->setMinimumWidth( 300 );
 
 	// signals and slots:
-	connect( okbutton, SIGNAL( clicked() ), this, SLOT( accept() ) );
-	connect( cancelbutton, SIGNAL( clicked() ), this, SLOT( reject() ) );
+	connect( this, SIGNAL( okClicked() ), this, SLOT( accept() ) );
+	connect( this, SIGNAL( cancelClicked() ), this, SLOT( reject() ) );
+	
+	setMainWidget( group );
+	setFixedSize( baseSize() );
 }
 
 double
@@ -97,7 +70,7 @@ VSpiralDlg::segments() const
 double
 VSpiralDlg::fade() const
 {
-    return m_fade->value();
+	return m_fade->value();
 }
 
 bool
@@ -112,7 +85,7 @@ VSpiralDlg::clockwise() const
 void
 VSpiralDlg::setRadius( double value )
 {
-    m_radius->setValue( value );
+	m_radius->setValue( value );
 }
 
 void
@@ -124,7 +97,7 @@ VSpiralDlg::setSegments( uint value )
 void
 VSpiralDlg::setFade( double value )
 {
-    m_fade->setValue( value );
+	m_fade->setValue( value );
 }
 
 void

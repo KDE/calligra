@@ -20,11 +20,11 @@
 #ifndef __VINSERTKNOTSDLG_H__
 #define __VINSERTKNOTSDLG_H__
 
-#include <kdialog.h>
+#include <kdialogbase.h>
 
-class QSpinBox;
+class KIntSpinBox;
 
-class VInsertKnotsDlg : public KDialog
+class VInsertKnotsDlg : public KDialogBase
 {
 	Q_OBJECT
 
@@ -35,7 +35,7 @@ public:
 	void setKnots( uint value );
 
 private:
-	QSpinBox* m_knots;
+	KIntSpinBox* m_knots;
 };
 
 #endif

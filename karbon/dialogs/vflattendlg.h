@@ -20,11 +20,11 @@
 #ifndef __VFLATTENDLG_H__
 #define __VFLATTENDLG_H__
 
-#include <kdialog.h>
+#include <kdialogbase.h>
 
 class KDoubleNumInput;
 
-class VFlattenDlg : public KDialog
+class VFlattenDlg : public KDialogBase
 {
 	Q_OBJECT
 

@@ -20,11 +20,11 @@
 #ifndef __VROUNDCORNERSDLG_H__
 #define __VROUNDCORNERSDLG_H__
 
-#include <kdialog.h>
+#include <kdialogbase.h>
 
 class KDoubleNumInput;
 
-class VRoundCornersDlg : public KDialog
+class VRoundCornersDlg : public KDialogBase
 {
 	Q_OBJECT
 

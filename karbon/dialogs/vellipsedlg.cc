@@ -31,8 +31,8 @@
 VEllipseDlg::VEllipseDlg( KarbonPart*part, QWidget* parent, const char* name )
 	: KDialogBase( parent, name, true, i18n( "Insert Ellipse" ), Ok | Cancel ), m_part( part )
 {
-	// add input fields on the left:
-	QGroupBox* group = new QGroupBox( 2, Qt::Horizontal, i18n( "Ellipse Properties" ), this );
+	// add input fields:
+	QGroupBox* group = new QGroupBox( 2, Qt::Horizontal, i18n( "Properties" ), this );
 
 	// add width/height-input:
 	m_widthLabel = new QLabel( i18n( "Width(%1):" ).arg( m_part->getUnitName() ), group );
@@ -64,19 +64,19 @@ VEllipseDlg::height() const
 void
 VEllipseDlg::setWidth( double value )
 {
-    m_width->setValue(KoUnit::ptToUnit( value, m_part->getUnit() ));
+	m_width->setValue(KoUnit::ptToUnit( value, m_part->getUnit() ));
 }
 
 void
 VEllipseDlg::setHeight( double value )
 {
-    m_height->setValue( KoUnit::ptToUnit( value, m_part->getUnit() ) );
+	m_height->setValue( KoUnit::ptToUnit( value, m_part->getUnit() ) );
 }
 
 void VEllipseDlg::refreshUnit ()
 {
-    m_widthLabel->setText(i18n( "Width(%1):" ).arg(m_part->getUnitName()));
-    m_heightLabel->setText( i18n( "Height(%1):" ).arg(m_part->getUnitName()));
+	m_widthLabel->setText(i18n( "Width(%1):" ).arg(m_part->getUnitName()));
+	m_heightLabel->setText( i18n( "Height(%1):" ).arg(m_part->getUnitName()));
 }
 
 #include "vellipsedlg.moc"

@@ -21,13 +21,13 @@
 #ifndef __VSINUSDLG_H__
 #define __VSINUSDLG_H__
 
-#include <kdialog.h>
+#include <kdialogbase.h>
 
 class KDoubleNumInput;
-class QSpinBox;
+class KIntSpinBox;
 class KarbonPart;
 class QLabel;
-class VSinusDlg : public KDialog
+class VSinusDlg : public KDialogBase
 {
 	Q_OBJECT
 
@@ -40,15 +40,14 @@ public:
 	void setWidth( double value );
 	void setHeight( double value );
 	void setPeriods( uint value );
-    void refreshUnit ();
+	void refreshUnit ();
 private:
 	KDoubleNumInput* m_width;
 	KDoubleNumInput* m_height;
-	QSpinBox* m_periods;
-    KarbonPart*m_part;
-    QLabel *m_heightLabel;
-    QLabel *m_widthLabel;
-
+	KIntSpinBox* m_periods;
+	KarbonPart*m_part;
+	QLabel *m_heightLabel;
+	QLabel *m_widthLabel;
 };
 
 #endif

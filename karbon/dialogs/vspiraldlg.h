@@ -21,13 +21,13 @@
 #ifndef __VSPIRALDLG_H__
 #define __VSPIRALDLG_H__
 
-#include <kdialog.h>
+#include <kdialogbase.h>
 
-class QComboBox;
+class KComboBox;
 class KDoubleNumInput;
-class QSpinBox;
+class KIntSpinBox;
 
-class VSpiralDlg : public KDialog
+class VSpiralDlg : public KDialogBase
 {
 	Q_OBJECT
 
@@ -45,7 +45,7 @@ public:
 
 private:
 	KDoubleNumInput* m_radius;
-	QSpinBox* m_segments;
+	KIntSpinBox* m_segments;
 	KDoubleNumInput* m_fade;
 	QComboBox* m_clockwise;
 };

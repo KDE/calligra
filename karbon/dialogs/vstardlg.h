@@ -21,13 +21,13 @@
 #ifndef __VSTARDLG_H__
 #define __VSTARDLG_H__
 
-#include <kdialog.h>
+#include <kdialogbase.h>
 
 class KDoubleNumInput;
-class QSpinBox;
+class KIntSpinBox;
 class KarbonPart;
 
-class VStarDlg : public KDialog
+class VStarDlg : public KDialogBase
 {
 	Q_OBJECT
 
@@ -40,15 +40,14 @@ public:
 	void setInnerR( double value );
 	void setOuterR( double value );
 	void setEdges( uint value );
-    void refreshUnit ();
+	void refreshUnit ();
 private:
 	KDoubleNumInput* m_innerR;
 	KDoubleNumInput* m_outerR;
-	QSpinBox* m_edges;
-    KarbonPart*m_part;
-    QLabel *m_innerRLabel;
-    QLabel *m_outerRLabel;
-
+	KIntSpinBox* m_edges;
+	KarbonPart*m_part;
+	QLabel *m_innerRLabel;
+	QLabel *m_outerRLabel;
 };
 
 #endif

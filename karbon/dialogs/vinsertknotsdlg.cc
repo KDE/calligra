@@ -17,60 +17,31 @@
    Boston, MA 02111-1307, USA.
 */
 
-#include <qevent.h>
 #include <qgroupbox.h>
 #include <qlabel.h>
-#include <qlayout.h>
-#include <qpushbutton.h>
-#include <qspinbox.h>
-#include <qstring.h>
-#include <qwidget.h>
 
 #include <klocale.h>
+#include <knuminput.h>
 
 #include "vinsertknotsdlg.h"
 
 VInsertKnotsDlg::VInsertKnotsDlg( QWidget* parent, const char* name )
-	: KDialog( parent, name, true, Qt::WStyle_Customize |
-	  WType_Dialog | Qt::WStyle_NormalBorder | Qt::WStyle_Title )
+	: KDialogBase( parent, name, true,  i18n( "Insert Knots" ), Ok | Cancel )
 {
-	setCaption( i18n( "Insert Knots" ) );
-
-	QBoxLayout* outerbox = new QHBoxLayout( this );
-
-	// add input fields on the left:
-	QGroupBox* group = new QGroupBox(
-		2, Qt::Horizontal,
-		i18n( "Properties" ), this );
-
- 	outerbox->addWidget( group );
+	// add input fields:
+	QGroupBox* group = new QGroupBox( 2, Qt::Horizontal, i18n( "Properties" ), this );
 
 	new QLabel( i18n( "Knots:" ), group );
-	m_knots = new QSpinBox( group );
+	m_knots = new KIntSpinBox( group );
 	m_knots->setMinValue( 1 );
-
-	outerbox->addSpacing( 2 );
-
-	// add buttons on the right side:
-	QBoxLayout* innerbox = new QVBoxLayout( outerbox );
-
-	innerbox->addStretch();
-
-	QPushButton* okbutton = new QPushButton( i18n( "&Ok" ), this );
-	QPushButton* cancelbutton = new QPushButton( i18n( "&Cancel" ), this );
-
-	okbutton->setMaximumSize( okbutton->sizeHint() );
-	cancelbutton->setMaximumSize( cancelbutton->sizeHint() );
-
-	okbutton->setFocus();
-
-	innerbox->addWidget( okbutton );
-	innerbox->addSpacing( 2 );
-	innerbox->addWidget( cancelbutton );
+	group->setMinimumWidth( 300 );
 
 	// signals and slots:
-	connect( okbutton, SIGNAL( clicked() ), this, SLOT( accept() ) );
-	connect( cancelbutton, SIGNAL( clicked() ), this, SLOT( reject() ) );
+	connect( this, SIGNAL( okClicked() ), this, SLOT( accept() ) );
+	connect( this, SIGNAL( cancelClicked() ), this, SLOT( reject() ) );
+	
+	setMainWidget( group );
+	setFixedSize( baseSize() );
 }
 
 uint

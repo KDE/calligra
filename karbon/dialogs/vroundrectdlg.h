@@ -21,12 +21,12 @@
 #ifndef __VROUNDRECTDLG_H__
 #define __VROUNDRECTDLG_H__
 
-#include <kdialog.h>
+#include <kdialogbase.h>
 
 class KDoubleNumInput;
 class KarbonPart;
 class QLabel;
-class VRoundRectDlg : public KDialog
+class VRoundRectDlg : public KDialogBase
 {
 	Q_OBJECT
 
@@ -39,15 +39,14 @@ public:
 	void setWidth( double value );
 	void setHeight( double value );
 	void setRound( double value );
-    void refreshUnit ();
+	void refreshUnit ();
 private:
 	KDoubleNumInput* m_width;
 	KDoubleNumInput* m_height;
 	KDoubleNumInput* m_round;
-    KarbonPart*m_part;
-        QLabel *m_heightLabel;
-    QLabel *m_widthLabel;
-
+	KarbonPart*m_part;
+	QLabel *m_heightLabel;
+	QLabel *m_widthLabel;
 };
 
 #endif

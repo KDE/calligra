@@ -17,33 +17,19 @@
    Boston, MA 02111-1307, USA.
 */
 
-#include <qevent.h>
 #include <qgroupbox.h>
 #include <qlabel.h>
-#include <qlayout.h>
-#include <qlineedit.h>
-#include <qpushbutton.h>
-#include <qstring.h>
-#include <qwidget.h>
 
 #include <klocale.h>
 #include <knuminput.h>
+
 #include "vwhirlpinchdlg.h"
 
 VWhirlPinchDlg::VWhirlPinchDlg( QWidget* parent, const char* name )
-	: KDialog( parent, name, true, Qt::WStyle_Customize |
-	  WType_Dialog | Qt::WStyle_NormalBorder | Qt::WStyle_Title )
+	: KDialogBase( parent, name, true, i18n( "Whirl Pinch" ), Ok | Cancel )
 {
-	setCaption( i18n( "Whirl Pinch" ) );
-
-	QBoxLayout* outerbox = new QHBoxLayout( this );
-
-	// add input fields on the left:
-	QGroupBox* group = new QGroupBox(
-		2, Qt::Horizontal,
-		i18n( "Properties" ), this );
-
- 	outerbox->addWidget( group );
+	// add input fields:
+	QGroupBox* group = new QGroupBox( 2, Qt::Horizontal, i18n( "Properties" ), this );
 
 	new QLabel( i18n( "Angle:" ), group );
 	m_angle = new KDoubleNumInput( 0, group );
@@ -51,30 +37,14 @@ VWhirlPinchDlg::VWhirlPinchDlg( QWidget* parent, const char* name )
 	m_pinch = new KDoubleNumInput( 0, group );
 	new QLabel( i18n( "Radius:" ), group );
 	m_radius = new KDoubleNumInput( 0, group );
-
-	outerbox->addSpacing( 2 );
-
-	// add buttons on the right side:
-	QBoxLayout* innerbox = new QVBoxLayout( outerbox );
-
-	innerbox->addStretch();
-
-	QPushButton* okbutton = new QPushButton( i18n( "&Ok" ), this );
-	QPushButton* cancelbutton = new QPushButton( i18n( "&Cancel" ), this );
-
-	okbutton->setMaximumSize( okbutton->sizeHint() );
-	cancelbutton->setMaximumSize( cancelbutton->sizeHint() );
-
-	okbutton->setFocus();
-
-	innerbox->addWidget( okbutton );
-	innerbox->addSpacing( 2 );
-	innerbox->addWidget( cancelbutton );
+	group->setMinimumWidth( 300 );
 
 	// signals and slots:
-	connect( okbutton, SIGNAL( clicked() ), this, SLOT( accept() ) );
-	connect( cancelbutton, SIGNAL( clicked() ), this, SLOT( reject() ) );
-        resize( 300, 80);
+	connect( this, SIGNAL( okClicked() ), this, SLOT( accept() ) );
+	connect( this, SIGNAL( cancelClicked() ), this, SLOT( reject() ) );
+	
+	setMainWidget( group );
+	setFixedSize( baseSize() );
 }
 
 double
@@ -98,19 +68,19 @@ VWhirlPinchDlg::radius() const
 void
 VWhirlPinchDlg::setAngle( double value )
 {
-    m_angle->setValue( value);
+	m_angle->setValue( value);
 }
 
 void
 VWhirlPinchDlg::setPinch( double value )
 {
-    m_pinch->setValue(value);
+	m_pinch->setValue(value);
 }
 
 void
 VWhirlPinchDlg::setRadius( double value )
 {
-    m_radius->setValue( value);
+	m_radius->setValue( value);
 }
 
 #include "vwhirlpinchdlg.moc"

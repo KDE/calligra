@@ -21,12 +21,12 @@
 #ifndef __VPOLYGONDLG_H__
 #define __VPOLYGONDLG_H__
 
-#include <kdialog.h>
+#include <kdialogbase.h>
 
 class KDoubleNumInput;
-class QSpinBox;
+class KIntSpinBox;
 
-class VPolygonDlg : public KDialog
+class VPolygonDlg : public KDialogBase
 {
 	Q_OBJECT
 
@@ -40,7 +40,7 @@ public:
 
 private:
 	KDoubleNumInput* m_radius;
-	QSpinBox* m_edges;
+	KIntSpinBox* m_edges;
 };
 
 #endif

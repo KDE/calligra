@@ -21,13 +21,13 @@
 #ifndef __VRECTANGLEDLG_H__
 #define __VRECTANGLEDLG_H__
 
-#include <kdialog.h>
+#include <kdialogbase.h>
 
 class KDoubleNumInput;
 class KarbonPart;
 class QLabel;
 
-class VRectangleDlg : public KDialog
+class VRectangleDlg : public KDialogBase
 {
 	Q_OBJECT
 
@@ -38,13 +38,13 @@ public:
 	double height() const;
 	void setWidth( double value );
 	void setHeight( double value );
-    void refreshUnit ();
+	void refreshUnit ();
 private:
 	KDoubleNumInput* m_width;
 	KDoubleNumInput* m_height;
-    KarbonPart*m_part;
-    QLabel *m_heightLabel;
-    QLabel *m_widthLabel;
+	KarbonPart*m_part;
+	QLabel *m_heightLabel;
+	QLabel *m_widthLabel;
 
 };
 
