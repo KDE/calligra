@@ -135,7 +135,6 @@ KCommand * KPrPage::deleteObjs( bool _add )
         if(it.current()->isSelected())
 	    _objects.append( it.current() );
     }
-    m_doc->deSelectAllObj();
     if ( _add &&_objects.count() > 0 ) {
         deleteCmd = new DeleteCmd( i18n( "Delete object(s)" ), _objects, m_doc,this );
         deleteCmd->execute();

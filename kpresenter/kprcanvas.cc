@@ -4415,7 +4415,7 @@ void KPrCanvas::deleteObjs()
         macro->addCommand(cmd);
         macroCreate=true;
     }
-
+    m_view->kPresenterDoc()->deSelectAllObj();
     if(macroCreate)
         m_view->kPresenterDoc()->addCommand(macro);
     else
