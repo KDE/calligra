@@ -335,17 +335,25 @@ KWMailMergeChoosePluginDialog::KWMailMergeChoosePluginDialog( KTrader::OfferList
   QLabel *label = new QLabel( i18n( "&Available sources:" ), back );
   chooser = new QComboBox( false, back );
   label->setBuddy( chooser );
+  descriptionLabel = new QLabel( back );
+  descriptionLabel->hide();
+  descriptionLabel->setAlignment( WordBreak );
+  descriptionLabel->setFrameShape( QFrame::Box );
+  descriptionLabel->setFrameShadow( QFrame::Sunken );
+  
+  QSize old_sizeHint;
   for ( KTrader::OfferList::Iterator it = pluginOffers.begin(); *it; ++it )
+  {
     chooser->insertItem( (*it)->name() );
-
+    old_sizeHint = descriptionLabel->sizeHint();
+    descriptionLabel->setText( (*it)->comment() );
+    if (descriptionLabel->sizeHint().width()*descriptionLabel->sizeHint().height() > old_sizeHint.width()*old_sizeHint.height())
+        descriptionLabel->setMinimumSize(descriptionLabel->sizeHint() );
+  }
+  descriptionLabel->show();
+  
   connect( chooser, SIGNAL( activated( int ) ),
            this, SLOT( pluginChanged( int ) ) );
-
-	descriptionLabel = new QLabel( back );
-	descriptionLabel->setAlignment( WordBreak );
-	descriptionLabel->setFrameShape( QFrame::Box );
-	descriptionLabel->setFrameShadow( QFrame::Sunken );
-	descriptionLabel->setMinimumSize( descriptionLabel->sizeHint() );
 
   layout->addWidget( label );
   layout->addWidget( chooser );
