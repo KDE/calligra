@@ -19,7 +19,7 @@ ifeq ($(ARCH),alpha)
   COMPILER_FLAGS=CFLAGS="-O0 -mieee" CXXFLAGS="-O0 -mieee"
 else
   ifeq ($(ARCH),hppa)
-    COMPILER_FLAGS=CFLAGS="-Os -ffunction-sections" CXXFLAGS="-Os -ffunction-sections"
+    COMPILER_FLAGS=CFLAGS="-Os -ffunction-sections -Wl,--stub-group-size=50000" CXXFLAGS="-Os -ffunction-sections -Wl,--stub-group-size=50000"
   else
     COMPILER_FLAGS=CXX=g++ CC=gcc
   endif
