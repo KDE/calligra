@@ -1933,7 +1933,9 @@ void KSpreadCell::paintCell( const QRect& _rect, QPainter &_painter,
     _painter.setPen( Qt::black );
     _painter.drawLineSegments( a, 0, 3 );
     _painter.drawPoint( a[6] ); */
-      QApplication::style().drawComboButton(  &_painter, _tx + dx + 1, _ty + dy + 1, w - 2*dx - 1, h - 2*dy - 1, defaultColorGroup, selected, TRUE/*, &fill*/ );
+      QApplication::style().drawComboButton(  &_painter, _tx + dx + 1, _ty + dy + 1, w - 2*dx - 1, h - 2*dy - 1, defaultColorGroup, selected/*,  TRUE, &fill*/ );
+      
+      // QApplication::style().drawComboButton(  &_painter, _tx + dx + 1, _ty + dy + 1, w - 2*dx - 1, h - 2*dy - 1, defaultColorGroup, selected, /* TRUE, &fill*/ );
   }
 
   /**
