@@ -20,24 +20,34 @@
 #ifndef KEXIRECORDNAVIGATOR_H
 #define KEXIRECORDNAVIGATOR_H
 
-#include <qwidget.h>
+#include <qframe.h>
 
-class KexiDBRecordSet;
+class QToolButton;
+class KLineEdit;
+class QIntValidator;
+namespace KexiDB
+{
+	class Cursor;
+}
 
-class KEXIEXTWIDGETS_EXPORT KexiRecordNavigator : public QWidget
+class KEXIEXTWIDGETS_EXPORT KexiRecordNavigator : public QFrame
 {
 	Q_OBJECT
 
 	public:
-		KexiRecordNavigator(KexiDBRecordSet *record, QWidget *parent, const char *name=0);
+		KexiRecordNavigator(KexiDB::Cursor *cursor, QWidget *parent, const char *name=0);
 		~KexiRecordNavigator();
 
-	signals:
-		void	nextRecord();
-		void	prevRecord();
-		void	firstRecord();
-		void	lastRecord();
-		void	gotoRecord(int rec);
+	private:
+		QToolButton *m_navBtnFirst;
+		QToolButton *m_navBtnPrev;
+		QToolButton *m_navBtnNext;
+		QToolButton *m_navBtnLast;
+		QToolButton *m_navBtnNew;
+		KLineEdit *m_navRowNumber;
+		QIntValidator *m_navRowNumberValidator;
+		KLineEdit *m_navRowCount; //!< readonly counter
+		int m_nav1DigitWidth;
 };
 
 #endif
