@@ -49,6 +49,9 @@ class KexiRelationDialog : public KexiDialogBase
 		void			slotSave(KoStore *store);
 		void			slotAddTable();
 
+	protected:
+		virtual void		keyPressEvent(QKeyEvent *ev);
+
 	private:
 		KexiDB			*m_db;
 		QComboBox		*m_tableCombo;

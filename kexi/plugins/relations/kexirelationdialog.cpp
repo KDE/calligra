@@ -58,6 +58,9 @@ KexiRelationDialog::KexiRelationDialog(KexiView *view,QWidget *parent, const cha
 
 	m_view = new KexiRelationView(this, 0, kexiProject()->relationManager());
 	m_view->show();
+	m_view->setFocus();
+	if(!embedd)
+		setFocusProxy(m_view);
 
 	connect(kexiProject(), SIGNAL(saving(KoStore *)), this, SLOT(slotSave(KoStore *)));
 	RelationList rl = kexiProject()->relationManager()->projectRelations();
@@ -124,6 +127,13 @@ KexiRelationDialog::chooseTable(QString t)
 			slotAddTable();
 		}
 	}
+}
+
+void
+KexiRelationDialog::keyPressEvent(QKeyEvent *ev)
+{
+	kdDebug() << "KexiRelationDialog::keyPressEvent()" << endl;
+	m_view->removeSelected();
 }
 
 void

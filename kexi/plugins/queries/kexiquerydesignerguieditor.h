@@ -76,6 +76,7 @@ class KexiQueryDesignerGuiEditor : public QWidget
 		QString			getQuery();
 		void getParameters(KexiDataProvider::ParameterList &);
 		KexiParameterListEditor	*paramList() { return m_paramList; }
+		void setPrameters(KexiDataProvider::ParameterList &);
 //		QString			getParam(const QString &name, bool escape);
 
 		KexiTableView		*table()const { return m_designTable; };

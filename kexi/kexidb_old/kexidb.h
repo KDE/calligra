@@ -39,6 +39,7 @@ typedef struct SourceConnection
         QString rcvTable;
         QString srcField;
         QString rcvField;
+
 };
 
 typedef QValueList<SourceConnection> RelationList;

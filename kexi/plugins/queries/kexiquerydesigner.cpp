@@ -74,6 +74,8 @@ KexiQueryDesigner::KexiQueryDesigner(KexiView *view,QWidget *parent, const char 
 	setContextHelp(i18n("Queries"), i18n("After having set up relations you can drag fields from different tables into the \"query table\"."));
 
 	item->setClient(this);
+	m_parameters = item->parameters();
+	m_editor->setPrameters(m_parameters);
 
 	if(modeview)
 	{
@@ -147,18 +149,6 @@ void
 KexiQueryDesigner::saveBack()
 {
 	kdDebug() << "KexiQueryDesigner::saveBack() e=" << m_editor << endl;
-//	KexiDataProvider::ParameterList l;
-// 	QListViewItem *it = m_editor->paramList()->list->firstChild();
-// 	while(it->nextSibling())
-// 	{
-//		QListViewItem *it = tmp->itemAt(i);
-// 		kdDebug() << "KexiQueryDesigner::saveBack(): item: " << it->text(0) << endl;
-// 		KexiDataProvider::Parameter param(it->text(0), 1);
-// 		l.append(param);
-// 	}
-
-// 	m_item->setParameterList(l);
-//	kdDebug() << "KexiQueryDesigner::saveBack(): count = " << tmp->childCount() << endl;
 
 	if(m_currentView == 0)
 	{

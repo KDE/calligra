@@ -418,12 +418,12 @@ namespace KFormEditor {
 				if (m_activeMoveWidget)
 				{
 					int tmpx,tmpy;
-			                tmpx = (((float)(m_activeMoveWidget->x()+static_cast<QMouseEvent*>(ev)->x()-m_moveBX))/
+					tmpx = (((float)(m_activeMoveWidget->x()+static_cast<QMouseEvent*>(ev)->x()-m_moveBX))/
 						((float)m_dotSpacing)+0.5);
-			                tmpx*=m_dotSpacing;
-			                tmpy = (((float)(m_activeMoveWidget->y()+static_cast<QMouseEvent*>(ev)->y()-m_moveBY))/
+					tmpx*=m_dotSpacing;
+					tmpy = (((float)(m_activeMoveWidget->y()+static_cast<QMouseEvent*>(ev)->y()-m_moveBY))/
 						((float)m_dotSpacing)+0.5);
-			                tmpy*=m_dotSpacing;
+					tmpy*=m_dotSpacing;
 					if ((tmpx!=m_activeMoveWidget->x()) ||(tmpy!=m_activeMoveWidget->y()) )
 						m_activeMoveWidget->move(tmpx,tmpy);
 					return true;

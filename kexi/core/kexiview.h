@@ -91,7 +91,6 @@ protected:
 	void			initActions();
 	void			initMainDock();
 	void			initDocBrowser();
-	void			initHelper();
 
 	QWidget			*m_mainContent;
 	KDockWidget		*m_mainDock;
@@ -104,6 +103,7 @@ protected:
 
 
 	KAction			*m_actionRelations;
+	KToggleAction		*m_actionHelper;
 
 	QPtrList<KAction>	*m_formActionList;
 	KexiFormBase		*m_lastForm;
@@ -114,6 +114,7 @@ protected slots:
 	void			slotActiveWindowChanged(QWidget *w);
 
 	void			finalizeInit();
+	void			initHelper(bool h=true);
 
 	void			slotShowProjectProps();
 

@@ -134,16 +134,18 @@ void KexiView::initDocBrowser()
 	kdDebug() << "KexiView::initDocBrowser: done" << endl;
 }
 
-void KexiView::initHelper()
+void KexiView::initHelper(bool h)
 {
-	m_help=new KexiContextHelp(this,m_workspace,"Context Help");
-
-/*	m_help = new KoContextHelpDocker(mainWindow());
-        m_help->setResizeEnabled(true);
-        m_help->setCloseMode(QDockWindow::Always);
-//	mainWindow()->moveDockWindow(help,DockLeft);
-	mainWindow()->moveDockWindow(m_help, DockLeft);*/
-	m_help->setContextHelp(i18n("Welcome"), i18n("kexi is based on <a href=\"help://kexi#glossary-relationaldatabase\">relational databases</a>. Before you start creating tables you should think about the general database design.<br><br>Further readings:<br><ul><li><a href=\"help://kexi#databasedesign\">Relational Database Design</a></li><li><a href=\"help://kexi#entityrelationship\">The entity relationship model</a></li></ul>"));
+	if(h)
+	{
+		m_help=new KexiContextHelp(this,m_actionHelper,m_workspace, "Context Help");
+		m_help->setContextHelp(i18n("Welcome"), i18n("kexi is based on <a href=\"help://kexi#glossary-relationaldatabase\">relational databases</a>. Before you start creating tables you should think about the general database design.<br><br>Further readings:<br><ul><li><a href=\"help://kexi#databasedesign\">Relational Database Design</a></li><li><a href=\"help://kexi#entityrelationship\">The entity relationship model</a></li></ul>"));
+	}
+	else
+	{
+		if(m_help)
+			delete m_help;
+	}
 }
 
 void KexiView::initActions()
@@ -154,17 +156,18 @@ void KexiView::initActions()
 	//standard actions
 	(void*) KStdAction::preferences(this, SLOT(slotSettings()), actionCollection());
 
-//	setStandardToolBarMenuEnabled( true );
-
 	KAction *actionProjectProps = new KAction(i18n("Project Properties"), "project_props", Key_F7, actionCollection(), "project_props");
 	connect(actionProjectProps, SIGNAL(activated()), this, SLOT(slotShowProjectProps()));
 
-//	m_actionRelations = new KAction(i18n("Table Relations"), "relation", Key_F8, actionCollection(), "relations");
-//	connect(m_actionRelations, SIGNAL(activated()), this, SLOT(slotShowRelations()));
+	KToggleAction *actionNav = new KToggleAction(i18n("Show Navigator"), "", CTRL + Key_B,
+	 actionCollection(), "show_nav");
+
+	m_actionHelper = new KToggleAction(i18n("Show Context Help"), "", CTRL + Key_H,
+	 actionCollection(), "show_contexthelp");
+	m_actionHelper->setChecked(true);
+	connect(m_actionHelper, SIGNAL(toggled(bool)), this, SLOT(initHelper(bool)));
+
 	connect(m_project, SIGNAL(dbAvaible()), this, SLOT(slotDBAvaible()));
-
-//	m_actionRelations->setEnabled(m_project->dbIsAvaible());
-
 }
 
 void KexiView::slotActiveWindowChanged(QWidget *w)
@@ -257,6 +260,7 @@ void KexiView::addQDockWindow(QDockWindow *w) {
 }
 
 void KexiView::removeQDockWindow(QDockWindow * w) {
+	w->hide();
 	m_dockWins.remove(w);
 }
 

@@ -202,6 +202,15 @@ KexiQueryDesignerGuiEditor::getParameters(KexiDataProvider::ParameterList &list)
 	}
 }
 
+void
+KexiQueryDesignerGuiEditor::setPrameters(KexiDataProvider::ParameterList &l)
+{
+	for(KexiDataProvider::ParameterList::Iterator it = l.begin(); it != l.end(); ++it)
+	{
+		new KListViewItem(m_paramList->list, (*it).name, "type");
+	}
+}
+
 QString
 KexiQueryDesignerGuiEditor::getQuery()
 {

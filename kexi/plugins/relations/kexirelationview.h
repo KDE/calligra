@@ -54,6 +54,7 @@ class KexiRelationView : public QScrollView
 
 	public slots:
 		void		slotTableScrolling(QString);
+		void		removeSelected();
 
 	protected slots:
 		void		containerMoved(KexiRelationViewTableContainer *c);
@@ -62,6 +63,7 @@ class KexiRelationView : public QScrollView
 	protected:
 		void		drawContents(QPainter *p, int cx, int cy, int cw, int ch);
 		void		contentsMousePressEvent(QMouseEvent *ev);
+		virtual void	keyPressEvent(QKeyEvent *ev);
 
 	private:
 		int			m_tableCount;

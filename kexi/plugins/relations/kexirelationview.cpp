@@ -17,8 +17,6 @@
    Boston, MA 02111-1307, USA.
 */
 
-#include <kdebug.h>
-
 #include <qstringlist.h>
 #include <qlayout.h>
 #include <qlabel.h>
@@ -27,6 +25,10 @@
 #include <qpainter.h>
 #include <qstyle.h>
 #include <qlineedit.h>
+#include <qpopupmenu.h>
+
+#include <kdebug.h>
+#include <klocale.h>
 
 #include <koApplication.h>
 
@@ -51,6 +53,7 @@ KexiRelationView::KexiRelationView(KexiRelationDialog *parent, const char *name,
 	connect(relation, SIGNAL(relationListUpdated(QObject *)), this, SLOT(slotListUpdate(QObject *)));
 
 	viewport()->setPaletteBackgroundColor(colorGroup().mid());
+	setFocusPolicy(StrongFocus);
 }
 
 void
@@ -121,8 +124,8 @@ KexiRelationView::addConnection(SourceConnection conn, bool interactive)
 	kdDebug() << "KexiRelationView::addConnection(): finalSRC = " << m_tables[conn.srcTable] << endl;
 
 
-	KexiRelationViewConnection *connView = new KexiRelationViewConnection(m_tables[conn.srcTable], m_tables[conn.rcvTable],
-                                                                          conn.srcField, conn.rcvField);
+	KexiRelationViewConnection *connView = new KexiRelationViewConnection(m_tables[conn.srcTable],
+	 m_tables[conn.rcvTable], conn);
 	m_connectionViews.append(connView);
 	updateContents(connView->connectionRect());
 
@@ -217,9 +220,62 @@ KexiRelationView::contentsMousePressEvent(QMouseEvent *ev)
 			cview->setSelected(true);
 			updateContents(cview->connectionRect());
 			m_selected = cview;
+
+			if(ev->button() == RightButton)
+			{
+				kdDebug() << "KexiRelationView::contentsMousePressEvent(): context" << endl;
+				QPopupMenu m;
+				m.insertItem(i18n("Remove"), this, SLOT(removeSelected()));
+				m.exec(ev->globalPos());
+			}
+
 			return;
 		}
 	}
+}
+
+void
+KexiRelationView::keyPressEvent(QKeyEvent *ev)
+{
+	kdDebug() << "KexiRelationView::keyPressEvent()" << endl;
+
+	if(ev->key() == Key_Delete)
+		removeSelected();
+}
+
+void
+KexiRelationView::removeSelected()
+{
+	if(!m_selected)
+		return;
+
+	m_connectionViews.remove(m_selected);
+	updateContents(m_selected->connectionRect());
+
+	kdDebug() << "KexiRelationView::removeSelected()" << endl;
+
+	RelationList l = m_relation->projectRelations();
+	RelationList nl;
+	for(RelationList::Iterator it = l.begin(); it != l.end(); ++it)
+	{
+		if((*it).srcTable == m_selected->connection().srcTable && (*it).rcvTable == m_selected->connection().rcvTable &&
+		 (*it).srcField == m_selected->connection().srcField && (*it).rcvField == m_selected->connection().rcvField)
+		{
+			kdDebug() << "KexiRelationView::removeSelected(): matching found!" << endl;
+//			l.remove(it);
+		}
+		else
+		{
+			nl.append(*it);
+		}
+	}
+
+	kdDebug() << "KexiRelationView::removeSelected(): d2" << endl;
+	m_relation->updateRelationList(this, nl);
+	kdDebug() << "KexiRelationView::removeSelected(): d3" << endl;
+
+	delete m_selected;
+	m_selected = 0;
 }
 
 KexiRelationView::~KexiRelationView()

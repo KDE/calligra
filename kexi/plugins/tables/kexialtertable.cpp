@@ -27,6 +27,7 @@
 #include <qlayout.h>
 #include <qlabel.h>
 #include <qstringlist.h>
+#include <qsplitter.h>
 
 #include <klocale.h>
 #include <kdebug.h>
@@ -53,7 +54,9 @@ KexiAlterTable::initView()
 	QFrame* lineFrm = new QFrame(this);
 	lineFrm->setFrameStyle(QFrame::HLine | QFrame::Sunken);
 
-	m_fieldTable = new KexiTableView(this);
+	QSplitter *splitter = new QSplitter(Vertical, this);
+
+	m_fieldTable = new KexiTableView(splitter);
 	m_fieldTable->m_editOnDubleClick = true;
 	m_fieldTable->setRecordIndicator(true);
 	m_fieldTable->addColumn(i18n("Field Name"), QVariant::String, true);
@@ -67,7 +70,7 @@ KexiAlterTable::initView()
 	m_fieldTable->addColumn(i18n("Datatype"), QVariant::StringList, true, QVariant(strings));
 	m_fieldTable->addColumn(i18n("Primary Key"), QVariant::Bool, true);
 
-	m_propList = new PropertyEditor(this, true);
+	m_propList = new PropertyEditor(splitter, true);
 	m_propList->setFullWidth(true);
 	m_nameItem = new PropertyEditorItem(m_propList, i18n("Field Name"), QVariant::String, "");
 	m_datatypeItem = new PropertyEditorItem(m_propList, i18n("Datatype"), QVariant::StringList, KexiDBField::SQLVarchar - 1, strings);
@@ -84,8 +87,9 @@ KexiAlterTable::initView()
 	l->setMargin(KDialog::marginHint());
 	l->addWidget(tableLbl, 0, 0);
 	l->addWidget(lineFrm, 1, 0);
-	l->addWidget(m_fieldTable, 2, 0);
-	l->addWidget(m_propList, 3, 0);
+//	l->addWidget(m_fieldTable, 2, 0);
+//	l->addWidget(m_propList, 3, 0);
+	l->addWidget(splitter, 2, 0);
 
 	connect(m_fieldTable, SIGNAL(itemSelected(KexiTableItem*)), SLOT(changeShownField(KexiTableItem*)));
 	connect(m_fieldTable, SIGNAL(itemChanged(KexiTableItem *, int)), SLOT(tableItemChanged(KexiTableItem *, int)));

@@ -27,6 +27,7 @@
 
 class KexiView;
 class KexiProject;
+class QDockWindow;
 
 class KPrinter;
 
@@ -57,6 +58,8 @@ class KexiDialogBase : public QWidget
 
 		void aboutToShow();
 		void aboutToHide();
+
+		QDockWindow	*dock() { return w; }
 
 	signals:
 		void closing(KexiDialogBase *);

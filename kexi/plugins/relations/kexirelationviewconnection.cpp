@@ -24,6 +24,7 @@
 
 #include <math.h>
 
+#include <kexirelation.h>
 #include "kexirelationviewtable.h"
 #include "kexirelationviewconnection.h"
 
@@ -31,7 +32,7 @@
 #include "rn.xpm"
 
 KexiRelationViewConnection::KexiRelationViewConnection(KexiRelationViewTableContainer *srcTbl, KexiRelationViewTableContainer *rcvTbl,
-  const QString &srcFld, const QString &rcvFld)
+   SourceConnection &c)
 {
 	kdDebug() << "KexiRelationViewConnection::KexiRelationViewConnection()" << endl;
 
@@ -43,9 +44,10 @@ KexiRelationViewConnection::KexiRelationViewConnection(KexiRelationViewTableCont
 		kdDebug() << "KexiRelationViewConnection::KexiRelationViewConnection()" << rcvTbl << endl;
 	}
 
+	m_conn = c;
 	m_rcvTable = rcvTbl;
-	m_srcField = srcFld;
-	m_rcvField = rcvFld;
+	m_srcField = c.srcField;
+	m_rcvField = c.rcvField;
 
 	m_selected = false;
 }
@@ -198,10 +200,16 @@ KexiRelationViewConnection::matchesPoint(const QPoint &p, int tolerance)
 
 	if(sx > rx)
 	{
-//		y2 = y1;
-//		y1 = ry;
-		x2 = x1;
-		x1 = rx - 8;
+		kdDebug() << "KexiRelationViewConnection::matchesPoint(): sx > rx, that happens?" << endl;
+		x1 = m_rcvTable->x() + m_rcvTable->width();
+		x2 = m_srcTable->x();
+		y2 = sy;
+		y1 = ry;
+
+		kdDebug() << "KexiRelationViewConnection::matchesPoint(): x1 " << x1 << endl;
+		kdDebug() << "KexiRelationViewConnection::matchesPoint(): x2 " << x2 << endl;
+		kdDebug() << "KexiRelationViewConnection::matchesPoint(): y1 " << y1 << endl;
+		kdDebug() << "KexiRelationViewConnection::matchesPoint(): y2 " << y2 << endl;
 	}
 
 	float mx = x2-x1;

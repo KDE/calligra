@@ -25,16 +25,15 @@
 
 class QPainter;
 class KexiRelationViewTableContainer;
+class SourceConnection;
 
 
 class KexiRelationViewConnection
 {
 	public:
-	
-//		KexiRelationViewConnection(KexiRelationViewTable *srcTbl, KexiRelationViewTable *rcvTbl,
-//		  const QString &srcFld, const QString &rcvFld);
+
 		KexiRelationViewConnection(KexiRelationViewTableContainer *srcTbl,KexiRelationViewTableContainer *rcvTbl,
-		  const QString &srcFld, const QString &rcvFld);
+		  SourceConnection &);
 		~KexiRelationViewConnection();
 
 
@@ -56,6 +55,7 @@ class KexiRelationViewConnection
 		KexiRelationViewTableContainer	*rcvTable() { return m_rcvTable; }
 
 		bool matchesPoint(const QPoint &p, int tolerance=3);
+		SourceConnection	connection() { return m_conn; }
 
 	private:
 		KexiRelationViewTableContainer	*m_srcTable;
@@ -66,6 +66,7 @@ class KexiRelationViewConnection
 		QRect				m_oldRect;
 
 		bool				m_selected;
+		SourceConnection		m_conn;
 };
 
 #endif
