@@ -60,7 +60,7 @@ private:
 /**
  * Creates dependencies from the parse tree of a formula.
  */
-void makeDepends( KSContext& context, KSParseNode* node, KSpreadMap* m, KSpreadTable* t, QPtrList<KSpreadDepend>& depends )
+void makeDepends( KSContext& context, KSParseNode* node, KSpreadMap* m, KSpreadTable* t, QPtrList<KSpreadDependancy>& depends )
 {
   KSParseNodeExtra* extra = node->extra();
   if ( !extra )
@@ -69,13 +69,9 @@ void makeDepends( KSContext& context, KSParseNode* node, KSpreadMap* m, KSpreadT
     {
       KSParseNodeExtraPoint* extra = new KSParseNodeExtraPoint( node->getStringLiteral(), m, t );
       kdDebug(36002) << "-------- Got dep " << util_cellName( extra->point()->pos.x(), extra->point()->pos.y() ) << endl;
-      KSpreadDepend* d = new KSpreadDepend;
-      d->m_iColumn = extra->point()->pos.x();
-      d->m_iRow = extra->point()->pos.y();
-      d->m_iColumn2 = -1;
-      d->m_iRow2 = -1;
-      d->m_pTable = extra->point()->table;
-      if (!d->m_pTable)
+      KSpreadDependancy* d = new KSpreadDependancy(extra->point()->pos.x(), extra->point()->pos.y(),
+					       extra->point()->table);
+      if (!d->Table())
       {
         QString tmp( i18n("The expression %1 is not valid") );
         tmp = tmp.arg( node->getStringLiteral() );
@@ -88,13 +84,12 @@ void makeDepends( KSContext& context, KSParseNode* node, KSpreadMap* m, KSpreadT
     else if ( node->getType() == t_range )
     {
       KSParseNodeExtraRange* extra = new KSParseNodeExtraRange( node->getStringLiteral(), m, t );
-      KSpreadDepend* d = new KSpreadDepend;
-      d->m_iColumn = extra->range()->range.left();
-      d->m_iRow = extra->range()->range.top();
-      d->m_iColumn2 = extra->range()->range.right();
-      d->m_iRow2 = extra->range()->range.bottom();
-      d->m_pTable = extra->range()->table;
-      if (!d->m_pTable)
+      KSpreadDependancy* d = new KSpreadDependancy(extra->range()->range.left(), 
+						   extra->range()->range.top(),
+						   extra->range()->range.right(), 
+						   extra->range()->range.bottom(),
+						   extra->range()->table);
+      if (!d->Table())
       {
         QString tmp( i18n("The expression %1 is not valid") );
         tmp = tmp.arg( node->getStringLiteral() );
@@ -5417,7 +5412,7 @@ bool KSpreadInterpreter::processExtension( KSContext& context, KSParseNode* node
   return false;
 }
 
-KSParseNode* KSpreadInterpreter::parse( KSContext& context, KSpreadTable* table, const QString& formula, QPtrList<KSpreadDepend>& depends )
+KSParseNode* KSpreadInterpreter::parse( KSContext& context, KSpreadTable* table, const QString& formula, QPtrList<KSpreadDependancy>& depends )
 {
     // Create the parse tree.
     KSParser parser;

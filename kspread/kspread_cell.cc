@@ -35,8 +35,6 @@
 
 #include <kdebug.h>
 
-#define UPDATE_BEGIN bool b_update_begin = m_bDisplayDirtyFlag; m_bDisplayDirtyFlag = true;
-#define UPDATE_END if ( !b_update_begin && m_bDisplayDirtyFlag ) m_pTable->updateCell( this, m_iColumn, m_iRow );
 #define DO_UPDATE m_pTable->updateCell( this, m_iColumn, m_iRow )
 
 QChar KSpreadCell::decimal_point = '\0';
@@ -381,7 +379,7 @@ void KSpreadCell::clicked( KSpreadCanvas *_canvas )
     return;
 
   KSContext context;
-  QPtrList<KSpreadDepend> lst;
+  QPtrList<KSpreadDependancy> lst;
   lst.setAutoDelete( TRUE );
   KSParseNode* code = m_pTable->doc()->interpreter()->parse( context, m_pTable, m_strAction, lst );
   // Did a syntax error occur ?
@@ -1614,59 +1612,32 @@ bool KSpreadCell::calc( bool _makedepend )
   if ( _makedepend )
   {
     //    kdDebug(36002) << util_cellName( m_iColumn, m_iRow ) << " calc() Looking into dependencies..." << endl;
-    KSpreadDepend *dep;
+    KSpreadDependancy *dep;
     for ( dep = m_lstDepends.first(); dep != 0L; dep = m_lstDepends.next() )
     {
-      // Dependency to a rectangular area
-      if ( dep->m_iColumn2 != -1 )
+      for ( int x = dep->Left(); x <= dep->Right(); x++ )
       {
-        int left = dep->m_iColumn < dep->m_iColumn2 ? dep->m_iColumn : dep->m_iColumn2;
-        int right = dep->m_iColumn > dep->m_iColumn2 ? dep->m_iColumn : dep->m_iColumn2;
-        int top = dep->m_iRow < dep->m_iRow2 ? dep->m_iRow : dep->m_iRow2;
-        int bottom = dep->m_iRow > dep->m_iRow2 ? dep->m_iRow : dep->m_iRow2;
-        for ( int x = left; x <= right; x++ )
-          for ( int y = top; y <= bottom; y++ )
+	for ( int y = dep->Top(); y <= dep->Bottom(); y++ )
+	{
+	  KSpreadCell *cell = dep->Table()->cellAt( x, y );
+	  if ( cell == 0L )
+	    return false;
+	  if ( !cell->calc( _makedepend ) )
           {
-            KSpreadCell *cell = dep->m_pTable->cellAt( x, y );
-            if ( cell == 0L )
-              return false;
-            if ( !cell->calc( _makedepend ) )
+	    m_strFormulaOut = "####";
+	    m_bError=true;
+	    m_dataType = StringData; //correct?
+	    m_bProgressFlag = false;
+	    if ( m_style == ST_Select )
             {
-              m_strFormulaOut = "####";
-              m_bError=true;
-              m_dataType = StringData; //correct?
-              m_bProgressFlag = false;
-              if ( m_style == ST_Select )
-              {
-                  SelectPrivate *s = (SelectPrivate*)m_pPrivate;
-                  s->parse( m_strFormulaOut );
-              }
-              m_bLayoutDirtyFlag = true;
-              DO_UPDATE;
-              return false;
-            }
-          }
-      }
-      else // Dependency to a single cell
-      {
-        KSpreadCell *cell = dep->m_pTable->cellAt( dep->m_iColumn, dep->m_iRow );
-        if ( cell == 0L )
-          return false;
-        if ( !cell->calc( _makedepend ) )
-	  {
-          m_bError = true;
-          m_strFormulaOut = "####";
-          m_dataType = StringData; //correct?
-          m_bProgressFlag = false;
-          m_bLayoutDirtyFlag = true;
-          if ( m_style == ST_Select )
-          {
-              SelectPrivate *s = (SelectPrivate*)m_pPrivate;
-              s->parse( m_strFormulaOut );
-          }
-          DO_UPDATE;
-          return false;
-        }
+	      SelectPrivate *s = (SelectPrivate*)m_pPrivate;
+	      s->parse( m_strFormulaOut );
+	    }
+	    m_bLayoutDirtyFlag = true;
+	    DO_UPDATE;
+	    return false;
+	  }
+	}
       }
     }
   }
@@ -1811,6 +1782,7 @@ bool KSpreadCell::calc( bool _makedepend )
   m_bProgressFlag = false;
 
   DO_UPDATE;
+
   return true;
 }
 
@@ -3564,17 +3536,23 @@ void KSpreadCell::update()
         m_pTable->updateCell( m_pObscuringCell, m_pObscuringCell->column(), m_pObscuringCell->row() );
     }
 
-    //bool b_update_begin = m_bDisplayDirtyFlag;
     m_bDisplayDirtyFlag = true;
 
     updateDepending();
 
-    if ( /*!b_update_begin &&*/ m_bDisplayDirtyFlag )
+    if ( m_bDisplayDirtyFlag )
         m_pTable->updateCell( this, m_iColumn, m_iRow );
 }
 
 void KSpreadCell::updateDepending()
 {
+
+  /* implement this when we figure out how to get it to work
+  if ( table()->doc()->delayCalculation() )
+  {
+    return;
+  }
+  */
     kdDebug(36002) << util_cellName( m_iColumn, m_iRow ) << " updateDepending" << endl;
 
     // Every cell that references us must set its calc dirty flag
@@ -3885,22 +3863,15 @@ void KSpreadCell::setCalcDirtyFlag( KSpreadTable *_table, int _column, int _row 
 
   bool isdep = FALSE;
 
-  KSpreadDepend *dep;
+  KSpreadDependancy *dep;
   for ( dep = m_lstDepends.first(); dep != 0L; dep = m_lstDepends.next() )
   {
-    if ( dep->m_iColumn2 != -1 )
+    if (dep->Table() == _table &&
+	dep->Left() <= _column && dep->Right() >= _column &&
+	dep->Top() <= _row && dep->Bottom() >= _row)
     {
-      int left = dep->m_iColumn < dep->m_iColumn2 ? dep->m_iColumn : dep->m_iColumn2;
-      int right = dep->m_iColumn > dep->m_iColumn2 ? dep->m_iColumn : dep->m_iColumn2;
-      int top = dep->m_iRow < dep->m_iRow2 ? dep->m_iRow : dep->m_iRow2;
-      int bottom = dep->m_iRow > dep->m_iRow2 ? dep->m_iRow : dep->m_iRow2;
-      if ( _table == dep->m_pTable )
-        if ( left <= _column && _column <= right )
-          if ( top <= _row && _row <= bottom )
-            isdep = TRUE;
-    }
-    else if ( dep->m_iColumn == _column && dep->m_iRow == _row && dep->m_pTable == _table )
       isdep = TRUE;
+    }
   }
 
   if ( isdep )

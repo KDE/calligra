@@ -39,10 +39,7 @@ class KSParseNode;
 
 #include "kspread_layout.h"
 #include "kspread_global.h"
-
-
-/**
- */
+#include "kspread_depend.h"
 
 struct KSpreadConditional
 {
@@ -68,18 +65,6 @@ struct KSpreadValidity
  QDate  dateMax;
 };
 
-struct KSpreadDepend
-{
-  int m_iColumn;
-  int m_iRow;
-  KSpreadTable *m_pTable;
-  /**
-   * Column of second corner
-   *  If this is set to -1, no second corner is defined.
-   */
-  int m_iColumn2;
-  int m_iRow2;
-};
 
 class KSpreadCellPrivate : public QObject
 {
@@ -933,7 +918,7 @@ private:
     QString m_strAction;
 
 
-    QPtrList<KSpreadDepend> m_lstDepends;
+    QPtrList<KSpreadDependancy> m_lstDepends;
 
     /**
      * The value we got from calculation.

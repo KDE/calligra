@@ -4,13 +4,13 @@
 #include <koscript.h>
 
 #include "kspread_global.h"
+#include "kspread_depend.h"
 
 class KSParseNode;
 class KSContext;
 
 class KSpreadDoc;
 class KSpreadTable;
-class KSpreadDepend;
 
 class KSpreadInterpreter : public KSInterpreter
 {
@@ -19,7 +19,7 @@ public:
 
   KSpreadInterpreter( KSpreadDoc* );
 
-  KSParseNode* parse( KSContext& context, KSpreadTable* table, const QString& formula, QPtrList<KSpreadDepend>& );
+  KSParseNode* parse( KSContext& context, KSpreadTable* table, const QString& formula, QPtrList<KSpreadDependancy>& );
   bool evaluate( KSContext& context, KSParseNode*, KSpreadTable* );
 
   KSNamespace* globalNamespace() { return m_global; }

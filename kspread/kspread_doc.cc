@@ -969,11 +969,17 @@ void KSpreadDoc::emitBeginOperation()
 void KSpreadDoc::emitEndOperation()
 {
    KSpreadTable *t = NULL;
+   CellBinding* b = NULL;
    
    m_bDelayCalculation = false;
    for ( t = m_pMap->firstTable(); t != NULL; t = m_pMap->nextTable() )
    {
       t->calc(true);
+      
+      for (b = t->firstCellBinding(); b != NULL; b = t->nextCellBinding())
+      {
+	b->cellChanged(NULL);
+      }
    }
    KoDocument::emitEndOperation();
 }
