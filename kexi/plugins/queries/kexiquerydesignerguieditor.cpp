@@ -113,18 +113,34 @@ KexiDB::QuerySchema *
 KexiQueryDesignerGuiEditor::schema()
 {
 	KexiDB::QuerySchema *s = new KexiDB::QuerySchema();
+	QDict<KexiDB::TableSchema> tables;
 	for(KexiTableItem *it = m_data->first(); it; it = m_data->next())
 	{
-		if(it->at(0).toString().isEmpty() || it->at(1).toString().isEmpty())
+		QString tableName = it->at(0).toString();
+
+		if(tableName.isEmpty() || it->at(1).toString().isEmpty())
 			continue;
+
+		KexiDB::TableSchema *t = tables[it->at(0).toString()];
+		if(!t)
+		{
+			t = m_conn->tableSchema(tableName);
+			tables.insert(tableName, t);
+			s->addTable(t);
+		}
 
 		KexiDB::Field *f = new KexiDB::Field();
 		f->setName(it->at(1).toString());
-		f->setTable(m_conn->tableSchema(it->at(0).toString()));
+		f->setTable(t);
 
 		s->addField(f);
 	}
 
+//	containsRef
+
+	//this is temporary and will later be replaced by a intelligent master-table-finder in
+	//KexiDB::Connection::selectStatement()
+	s->setParentTable(s->tables()->first());
 	return s;
 }
 
