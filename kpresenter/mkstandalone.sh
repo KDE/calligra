@@ -17,26 +17,26 @@ if [ $# -ne 1 ]; then
 else
   out=$1
 ########### Data
-  mkdir $out
-  mkdir $out/share
-  mkdir $out/share/apps
+  mkdir -p $out
+  mkdir -p $out/share
+  mkdir -p $out/share/apps
   cp -r $KDEDIR/share/apps/kpresenter $out/share/apps/
   cp -r $KDEDIR/share/apps/koffice $out/share/apps/
   cp -r $KDEDIR/share/apps/kstyle $out/share/apps/
-  mkdir $out/share/config
+  mkdir -p $out/share/config
   cp $KDEDIR/share/config/kdebug.areas $out/share/config/
   cp ~/.kde/share/config/kdeglobals $out/share/config/
   cp ~/.kde/share/config/kpresenterrc $out/share/config/
   ### cp $KDEDIR/share/icons $out/share/
   cp -r $KDEDIR/share/toolbar $out/share/
-  mkdir $out/share/servicetypes
+  mkdir -p $out/share/servicetypes
   cp $KDEDIR/share/servicetypes/kofficepart.desktop $out/share/servicetypes
-  mkdir $out/share/applnk
+  mkdir -p $out/share/applnk
   cp $KDEDIR/share/applnk/KOffice/kpresenter.desktop $out/share/applnk/
 
 ########### Libraries (warning, using Linux specific ldd !)
   TMPFILE=/tmp/__kpresenter_ldd.tmp
-  mkdir $out/lib
+  mkdir -p $out/lib
   ldd $KDEDIR/bin/kpresenter | sed -e 's/.*=> \([^ ]*\).*/\1/' > $TMPFILE
   # Add style libs
   echo $KDEDIR/lib/basicstyle.so >> $TMPFILE
@@ -68,7 +68,7 @@ else
   rm -f $TMPFILE
 
 ########### Binaries
-  mkdir $out/bin
+  mkdir -p $out/bin
   cp $KDEDIR/bin/kpresenter $out/bin/
   cp $KDEDIR/bin/dcopserver $out/bin/
   # Take kded as well - we could copy the ksycoca file but we would have
@@ -79,9 +79,9 @@ else
   echo '#!/bin/sh' > $out/go.sh
   echo 'export KDEDIR=`pwd`' >> $out/go.sh
   echo 'export LD_LIBRARY_PATH=$KDEDIR/lib' >> $out/go.sh
-  echo 'mkdir ~/.kde 2>/dev/null' >> $out/go.sh
-  echo 'mkdir ~/.kde/share 2>/dev/null' >> $out/go.sh
-  echo 'mkdir ~/.kde/share/config 2>/dev/null' >> $out/go.sh
+  echo 'mkdir -p ~/.kde 2>/dev/null' >> $out/go.sh
+  echo 'mkdir -p ~/.kde/share 2>/dev/null' >> $out/go.sh
+  echo 'mkdir -p ~/.kde/share/config 2>/dev/null' >> $out/go.sh
   echo 'cp share/config/* ~/.kde/share/config' >> $out/go.sh
   echo 'bin/dcopserver 2>/dev/null' >> $out/go.sh
   echo 'sleep 1 ; bin/kded 2>/dev/null' >> $out/go.sh
