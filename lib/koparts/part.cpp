@@ -5,7 +5,7 @@
 #include <qpointarray.h>
 #include <qpainter.h>
 
-Part::Part( Part* parent, const char* name )
+Part::Part( QObject* parent, const char* name )
     : QObject( parent, name )
 {
 }
@@ -16,7 +16,10 @@ Part::~Part()
 
 Part* Part::parentPart()
 {
-    return (Part*)parent();
+    if ( parent() && parent()->inherits( "Part" ) )
+	return (Part*)parent();
+    
+    return 0;
 }
 
 QString Part::readConfigFile( const QString& filename ) const

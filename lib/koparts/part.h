@@ -21,14 +21,34 @@ class Part : public QObject
 {
     Q_OBJECT
 public:
-    Part( Part* parent = 0, const char* name = 0 );
+    Part( QObject* parent = 0, const char* name = 0 );
     ~Part();
 
+    /**
+     * @return a pointer to the parent part. If there is no parent
+     *         or if the parent is not a Part, then 0 is returned.
+     */
     Part* parentPart();
 
+    /**
+     * Create a new view for the part.
+     */
     virtual View* createView( QWidget* parent = 0, const char* name = 0 ) = 0;
+    /*
+     * Create a new toplevel shell for the part. This in turn will create
+     * a new view.
+     */
     virtual Shell* createShell() = 0;
 
+    /**
+     * @return the XML GUI configuration of the part.
+     *         This is used by the @ref Shell to construct menus and
+     *         toolbars if the Part is activated.
+     *
+     * This functionality is in the Part and not in the View since
+     * a part may be activated and have menus etc. without having a view.
+     * That is the case if the part is directly drawn on some widget.
+     */
     QString config();
 
     /**
@@ -66,7 +86,7 @@ protected:
     virtual void addView( View* );
     virtual View* firstView();
     virtual View* nextView();
-    
+
 private:
     QList<View> m_views;
     QString m_config;
