@@ -1397,13 +1397,34 @@ void KSpreadCanvas::keyPressEvent ( QKeyEvent * _ev )
     int moveHide=0;
     
     if( !((( _ev->state() & ShiftButton ) == ShiftButton)&&( _ev->state() & ControlButton ) == ControlButton) && (_ev->state() != Qt::ControlButton) )
-{
+	{
+	    MoveTo tmpMoveTo=m_pView->doc()->getMoveToValue();
+	    //if shift Button clicked inverse move direction
+	    if(_ev->state()==Qt::ShiftButton)
+		{
+		    switch( tmpMoveTo)	  
+			{
+			case Bottom:
+			    tmpMoveTo=Top;
+			    break;
+			case Top:
+			    tmpMoveTo=Bottom;
+			    break;
+			case Left:
+			    tmpMoveTo=Right;
+			    break;
+			case Right:
+			    tmpMoveTo=Left;
+			}		 
+		}
 //if( _ev->state() != Qt::ControlButton ){
       switch( _ev->key() )
       {
       case Key_Return:
       case Key_Enter:
-                switch( m_pView->doc()->getMoveToValue())
+	  
+	  
+	  switch( /*m_pView->doc()->getMoveToValue()*/ tmpMoveTo)
                         {
                         case Bottom :
                                 {
