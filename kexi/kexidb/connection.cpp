@@ -862,9 +862,9 @@ QString Connection::selectStatement( KexiDB::QuerySchema& querySchema ) const
 	
 	QString s_from;
 	for (TableSchema *table = tables->first(); table; table = tables->next()) {
-		if (!s_from.isEmpty())
-			sql += ", ";
 		s_from += table->name();
+		if(table != tables->getLast())
+			s_from += ", ";
 	}
 	sql += s_from;
 
