@@ -68,6 +68,7 @@
 #include <kfiledialog.h>
 #include <kglobal.h>
 #include <kstddirs.h>
+#include <kconfig.h>
 
 #include <koTemplateChooseDia.h>
 #include <koRuler.h>
@@ -164,7 +165,8 @@ KPresenterDoc::KPresenterDoc( QObject* parent, const char* name )
     QObject::connect( &_commands, SIGNAL( undoRedoChanged( QString, QString ) ),
 		      this, SLOT( slotUndoRedoChanged( QString, QString ) ) );
 
-  if ( name )
+
+    if ( name )
       dcopObject();
 }
 
@@ -907,6 +909,8 @@ bool KPresenterDoc::loadXML( KOMLParser& parser, KoStore* _store )
 		dynamic_cast<KPPixmapObject*>( kpobject )->reload();
 	}
     }
+
+    addToRecentlyOpenedList( url() );
 
     return true;
 }
@@ -3771,4 +3775,28 @@ void KPresenterDoc::copyPage( int num )
     out << etag << "</DOC>" << endl;
 
     cb->setText( clip_str.c_str() );
+}
+
+/*================================================================*/
+void KPresenterDoc::addToRecentlyOpenedList( const QString &file )
+{
+    if ( file.right( 3 ) == "kpt" )
+	return;
+    
+    KConfig *config = KPresenterFactory::global()->config();
+    config->setGroup( "Global" );
+    QStringList lst = config->readListEntry( "recently opened" );
+    if ( !lst.contains( file ) ) {
+	lst << file;
+	config->writeEntry( "recently opened", lst );
+	config->sync();
+    } 
+}
+
+/*================================================================*/
+QStringList KPresenterDoc::getRecentryOpenedList()
+{
+    KConfig *config = KPresenterFactory::global()->config();
+    config->setGroup( "Global" );
+    return config->readListEntry( "recently opened" );
 }

@@ -357,6 +357,9 @@ protected:
      */
     virtual QString configFile() const;
 
+    void addToRecentlyOpenedList( const QString &file );
+    QStringList getRecentryOpenedList();
+    
     // ************ variables ************
 
     struct PixCache
