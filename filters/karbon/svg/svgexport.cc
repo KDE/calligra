@@ -126,7 +126,7 @@ SvgExport::visitVDocument( VDocument& document )
 
 	*m_defs <<
 		"<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"" <<
-		rect.right() << "\" height=\"" << rect.bottom() << "\">" << endl;
+		rect.width() << "\" height=\"" << rect.height() << "\">" << endl;
 	*m_defs << "<defs>" << endl;
 
 	*m_body << "<g transform=\"scale(1, -1) translate(0, -" << rect.bottom() << ")\">" << endl;
@@ -200,8 +200,8 @@ SvgExport::getColorStops( const QPtrVector<VColorStop> &colorStops )
 	{
 		*m_defs << "<stop stop-color=\"";
 		getHexColor( m_defs, colorStops.at( i )->color );
-		*m_defs << "\" offset=\"";
-		*m_defs << QString().setNum( colorStops.at( i )->rampPoint ) << "\" />" << endl;
+		*m_defs << "\" offset=\"" << QString().setNum( colorStops.at( i )->rampPoint );
+		*m_defs << "\" stop-opacity=\"" << colorStops.at( i )->color.opacity() << "\"" << " />" << endl;
 	}
 }
 
