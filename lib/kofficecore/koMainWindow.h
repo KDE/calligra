@@ -138,6 +138,11 @@ public slots:
      */
     virtual void slotFilePrint();
 
+    /**
+     *  Show a print preview
+     */
+    void slotFilePrintPreview(); // make virtual later
+
     virtual void slotDocumentInfo();
 
     /**
@@ -172,7 +177,7 @@ public slots:
     virtual void slotRemoveView();
     virtual void slotSetOrientation();
     /**
-     * Added these as well. (TZ)
+     * Close all views
      */
     virtual void slotCloseAllViews();
 

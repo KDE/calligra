@@ -27,6 +27,7 @@
 #include <koDocumentInfo.h>
 #include <koDocumentInfoDlg.h>
 #include <koQueryTrader.h>
+#include <koPrintPreview.h>
 
 #include <qkeycode.h>
 #include <qfile.h>
@@ -52,6 +53,7 @@
 #include <kprogress.h>
 #include <kdebug.h>
 #include <kmimetype.h>
+#include <ktempfile.h>
 
 #include <kparts/partmanager.h>
 #include <kparts/plugin.h>
@@ -97,6 +99,7 @@ public:
     m_paSave = 0;
     m_paSaveAs = 0;
     m_paPrint = 0;
+    m_paPrintPreview = 0;
   }
   ~KoMainWindowPrivate()
   {
@@ -154,6 +157,7 @@ public:
   KAction *m_paSave;
   KAction *m_paSaveAs;
   KAction *m_paPrint;
+  KAction *m_paPrintPreview;
 };
 
 KoMainWindow::KoMainWindow( KInstance *instance, const char* name )
@@ -174,7 +178,9 @@ KoMainWindow::KoMainWindow( KInstance *instance, const char* name )
     // the part's plugins with this shell, even though we are using the
     // part's instance! (Simon)
 
-    setXMLFile( locate( "data", "koffice/koffice_shell.rc" ) );
+    QString doc;
+    QStringList allFiles = KGlobal::dirs()->findAllResources( "data", "koffice/koffice_shell.rc" );
+    setXMLFile( findMostRecentXMLFile( allFiles, doc ) );
     setLocalXMLFile( locateLocal( "data", "koffice/koffice_shell.rc" ) );
 
     KStdAction::openNew( this, SLOT( slotFileNew() ), actionCollection(), "file_new" );
@@ -183,6 +189,7 @@ KoMainWindow::KoMainWindow( KInstance *instance, const char* name )
     d->m_paSave = KStdAction::save( this, SLOT( slotFileSave() ), actionCollection(), "file_save" );
     d->m_paSaveAs = KStdAction::saveAs( this, SLOT( slotFileSaveAs() ), actionCollection(), "file_save_as" );
     d->m_paPrint = KStdAction::print( this, SLOT( slotFilePrint() ), actionCollection(), "file_print" );
+    d->m_paPrintPreview = KStdAction::printPreview( this, SLOT( slotFilePrintPreview() ), actionCollection(), "file_print_preview" );
     KStdAction::close( this, SLOT( slotFileClose() ), actionCollection(), "file_close" );
     KStdAction::quit( this, SLOT( slotFileQuit() ), actionCollection(), "file_quit" );
 
@@ -197,6 +204,7 @@ KoMainWindow::KoMainWindow( KInstance *instance, const char* name )
     d->m_paSaveAs->setEnabled( false );
     d->m_paSave->setEnabled( false );
     d->m_paPrint->setEnabled( false );
+    d->m_paPrintPreview->setEnabled( false );
 
     d->m_splitter=new QSplitter(Qt::Vertical, this, "funky-splitter");
     setCentralWidget( d->m_splitter );
@@ -313,6 +321,7 @@ void KoMainWindow::setRootDocument( KoDocument *doc )
   d->m_paSave->setEnabled( enable );
   d->m_paSaveAs->setEnabled( enable );
   d->m_paPrint->setEnabled( enable );
+  d->m_paPrintPreview->setEnabled( enable );
 
   updateCaption();
 
@@ -337,6 +346,7 @@ void KoMainWindow::setRootDocumentDirect( KoDocument *doc, const QList<KoView> &
   d->m_paSave->setEnabled( enable );
   d->m_paSaveAs->setEnabled( enable );
   d->m_paPrint->setEnabled( enable );
+  d->m_paPrintPreview->setEnabled( enable );
 }
 
 KoDocument* KoMainWindow::createDoc() const
@@ -656,6 +666,20 @@ void KoMainWindow::slotFilePrint()
 
     if ( printer.setup( this ) )
         rootView()->print( printer );
+}
+
+void KoMainWindow::slotFilePrintPreview()
+{
+    if ( !rootView() )
+    {
+        kdWarning() << "KoMainWindow::slotFilePrint : No root view!" << endl;
+        return;
+    }
+    QPrinter printer;
+    KTempFile tmpFile;
+    printer.setOutputFileName(tmpFile.name());
+    rootView()->print(printer);
+    KoPrintPreview::preview(this, "KoPrintPreviewDialog", tmpFile.name());
 }
 
 void KoMainWindow::slotConfigureKeys()

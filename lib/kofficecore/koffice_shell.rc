@@ -1,5 +1,5 @@
 <!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
-<kpartgui name="KOfficeShell" version="6">
+<kpartgui name="KOfficeShell" version="7">
 <MenuBar>
  <Menu name="file" noMerge="1"><text>&amp;File</text>
   <Action name="file_new" />
@@ -10,6 +10,7 @@
   <Merge />
   <Separator />
   <Action name="file_print" />
+  <Action name="file_print_preview" />
   <Separator />
   <Action name="file_documentinfo" />
   <Separator />
