@@ -4,7 +4,7 @@ INCLUDES  = $(KOFFICE_INCLUDES) -I$(interfacedir) $(all_includes)
 kgraph_LDFLAGS = $(KDE_RPATH)
 kgraph_LDADD = ../lib/kofficeui/libkofficeui.la libkgraph.la
 
-libkgraph_la_LDFLAGS = -module -avoid-version
+libkgraph_la_LDFLAGS = -module -avoid-version -no-undefined
 
 libkgraph_la_LIBADD = ../lib/kofficeui/libkofficeui.la
 
