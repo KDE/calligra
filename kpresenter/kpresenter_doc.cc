@@ -1108,11 +1108,11 @@ void KPresenterDoc::saveOasisSettings( KoXmlWriter &settingsWriter )
     settingsWriter.addConfigItem( "IsSnapToGrid", m_bSnapToGrid );
 
     //<config:config-item config:name="GridFineWidth" config:type="int">500</config:config-item>
-    settingsWriter.addConfigItem( "GridFineWidth", m_gridX );
+    settingsWriter.addConfigItem( "GridFineWidth", ( ( int ) ( KoUnit::toMM( ( m_gridX )  )*100 ) ) );
 
 
     //<config:config-item config:name="GridFineHeight" config:type="int">500</config:config-item>
-    settingsWriter.addConfigItem( "GridFineHeight", m_gridY );
+    settingsWriter.addConfigItem( "GridFineHeight", ( ( int ) ( KoUnit::toMM( ( m_gridY )  )*100 ) ) );
 
     //<config:config-item config:name="SelectedPage" config:type="short">3</config:config-item>
     //store first view parameter.
