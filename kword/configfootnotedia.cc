@@ -22,7 +22,10 @@
 #include "configfootnotedia.moc"
 
 #include <klocale.h>
-
+#include <qradiobutton.h>
+#include <qspinbox.h>
+#include <qvbuttongroup.h>
+#include <qlabel.h>
 #include <qvbox.h>
 #include <koParagDia.h>
 #include <kwvariable.h>
@@ -36,6 +39,7 @@ KWConfigFootNoteDia::KWConfigFootNoteDia( QWidget *parent, const char *name, KWD
 
     setupTab1();
     setupTab2();
+    setupTab3();
 }
 
 void KWConfigFootNoteDia::setupTab1()
@@ -55,31 +59,75 @@ void KWConfigFootNoteDia::setupTab2()
 }
 
 
+void KWConfigFootNoteDia::setupTab3()
+{
+    QVBox * page = addVBoxPage( i18n( "Separator Line" ) );
+    QVButtonGroup *bgSeparatorPosition = new QVButtonGroup( i18n( "Separator Line Position" ), page );
+    rbPosLeft = new QRadioButton( i18n("Left"), bgSeparatorPosition);
+    rbPosCentered = new QRadioButton( i18n("Centered"), bgSeparatorPosition);
+    rbPosRight = new QRadioButton( i18n("Right"), bgSeparatorPosition);
+    QLabel *lab = new QLabel(i18n("Length"), page);
+    spLength = new QSpinBox( page);
+    spLength->setValue( m_doc->footNoteSeparatorLineLength());
+
+    switch( m_doc->footNoteSeparatorLinePosition() )
+    {
+    case SLP_LEFT:
+        rbPosLeft->setChecked( true);
+        break;
+    case SLP_CENTERED:
+        rbPosCentered->setChecked( true);
+        break;
+    case SLP_RIGHT:
+        rbPosRight->setChecked( true);
+        break;
+    }
+}
+
+
 void KWConfigFootNoteDia::slotOk()
 {
-    KMacroCommand * macro = new KMacroCommand(i18n("Change End-/Footnote Variable Settings"));
-    bool createMacro = false;
-    KWChangeFootEndNoteSettingsCommand *cmd = 0L;
+    KMacroCommand * macro = 0L;
+    KCommand *cmd = 0L;
     KoParagCounter counter =static_cast<KWVariableSettings*>(m_doc->getVariableCollection()->variableSetting())->footNoteCounter();
     if (counter != m_footNoteConfig->counter() )
     {
+        macro = new KMacroCommand(i18n("Change End-/Footnote Variable Settings"));
         cmd= new KWChangeFootEndNoteSettingsCommand( i18n("Change End-/FootNote Variable Settings") , counter, m_footNoteConfig->counter() ,true ,m_doc);
         macro->addCommand(cmd );
-        createMacro = true;
     }
     counter = static_cast<KWVariableSettings*>(m_doc->getVariableCollection()->variableSetting())->endNoteCounter();
     if (counter != m_endNoteConfig->counter() )
     {
+        if ( !macro )
+            macro = new KMacroCommand(i18n("Change End-/Footnote Variable Settings"));
         cmd= new KWChangeFootEndNoteSettingsCommand( i18n("Change End-/Footnote Variable Settings") , counter, m_endNoteConfig->counter() ,false ,m_doc);
         macro->addCommand(cmd );
-        createMacro = true ;
     }
-    if ( createMacro )
+
+    int val =spLength->value();
+    SeparatorLinePos tmp = SLP_LEFT;
+    if ( rbPosRight->isChecked())
+        tmp = SLP_RIGHT;
+    else if ( rbPosCentered->isChecked())
+        tmp = SLP_CENTERED;
+    else if ( rbPosLeft->isChecked())
+        tmp = SLP_LEFT;
+
+    if ( (val != m_doc->footNoteSeparatorLineLength())||
+         tmp != m_doc->footNoteSeparatorLinePosition())
+    {
+        if ( !macro )
+            macro = new KMacroCommand(i18n("Change Foot Note Line Separator Settings"));
+        cmd = new KWChangeFootNoteLineSeparatorParametersCommand( i18n("Change Foot Note Line Separator Settings") , m_doc->footNoteSeparatorLinePosition(), tmp, m_doc->footNoteSeparatorLineLength(), val,m_doc);
+        macro->addCommand( cmd );
+    }
+
+   if ( macro )
     {
         macro->execute();
         m_doc->addCommand( macro );
     }
-    else
-        delete macro;
+
     KDialogBase::slotOk();
 }

@@ -603,6 +603,12 @@ public:
     void setCursorInProtectedArea( bool b );
     void insertFile(const QString & file );
 
+    SeparatorLinePos footNoteSeparatorLinePosition()const { return m_footNoteSeparatorLinePos;}
+    void setFootNoteSeparatorLinePosition(SeparatorLinePos _pos) {m_footNoteSeparatorLinePos = _pos;}
+
+    int footNoteSeparatorLineLength() const { return m_iFootNoteSeparatorLineLength;}
+    void setFootNoteSeparatorLineLength( int _length){  m_iFootNoteSeparatorLineLength = _length;}
+
 signals:
     void sig_insertObject( KWChild *_child, KWPartFrameSet* );
 
@@ -757,6 +763,11 @@ private:
     KWBgSpellCheck *m_bgSpellCheck;
     KSpellConfig *m_pKSpellConfig;
     KoStyleCollection *m_styleColl;
+
+    SeparatorLinePos m_footNoteSeparatorLinePos;
+    //it's a percentage of page.
+    int m_iFootNoteSeparatorLineLength;
+
     /** Page number -> section title array, for the Section variable.
      * Note that pages without a section title don't appear in the array. */
     QValueVector< QString > m_sectionTitles;

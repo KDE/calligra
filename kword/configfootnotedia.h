@@ -25,20 +25,26 @@
 class KWDocument;
 class QWidget;
 class KoCounterStyleWidget;
+class QRadioButton;
+class QSpinBox;
 
 class KWConfigFootNoteDia : public KDialogBase
 {
     Q_OBJECT
 public:
     KWConfigFootNoteDia( QWidget *parent, const char *name, KWDocument *_doc );
-
 protected:
     void setupTab1();
     void setupTab2();
-
+    void setupTab3();
+private:
     KoCounterStyleWidget *m_footNoteConfig;
     KoCounterStyleWidget *m_endNoteConfig;
     KWDocument *m_doc;
+    QRadioButton *rbPosLeft;
+    QRadioButton *rbPosCentered;
+    QRadioButton *rbPosRight;
+    QSpinBox *spLength;
 protected slots:
     virtual void slotOk();
 };

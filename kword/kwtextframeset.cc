@@ -398,7 +398,8 @@ void KWTextFrameSet::drawContents( QPainter *p, const QRect & crect, QColorGroup
         // do it here and not in drawFrame (we'd have problems with cliprect anyway).
         int pages = m_doc->getPages();
         double left = m_doc->ptLeftBorder();
-        double width = ( m_doc->ptPaperWidth() - m_doc->ptRightBorder() - left ) / 5; // ### is 1/5 ok?
+        double factor = 100.0/m_doc->footNoteSeparatorLineLength();
+        double width = ( m_doc->ptPaperWidth() - m_doc->ptRightBorder() - left ) / factor; // ### is 1/5 ok?
         int numColumns = m_doc->getColumns();
         for ( int pageNum = 0; pageNum < pages; pageNum++ )
         {

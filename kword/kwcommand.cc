@@ -318,7 +318,7 @@ void KWFrameBorderCommand::unexecute()
             case FBBottom:
                 if(cell!=0L) // is a table cell
                     cell->setBottomBorder(tmpFrameStruct->m_OldBorder);
-                else 
+                else
                     frame->setBottomBorder(tmpFrameStruct->m_OldBorder);
                 break;
             default:
@@ -1539,4 +1539,32 @@ void KWChangeFootNoteParametersCommand::changeVariableParameter( FootNoteParamet
     m_var->paragraph()->invalidate(0);
     m_var->paragraph()->setChanged( true );
     m_doc->slotRepaintVariable();
+}
+
+
+KWChangeFootNoteLineSeparatorParametersCommand::KWChangeFootNoteLineSeparatorParametersCommand( const QString &name, SeparatorLinePos _oldValuePos, SeparatorLinePos _newValuePos, int _oldLength, int _newLength, KWDocument *_doc):
+    KNamedCommand(name),
+    m_doc( _doc ),
+    m_oldValuePos(_oldValuePos),
+    m_newValuePos(_newValuePos),
+    m_oldLength(_oldLength),
+    m_newLength(_newLength)
+{
+}
+
+void KWChangeFootNoteLineSeparatorParametersCommand::execute()
+{
+    changeLineSeparatorParameter( m_newValuePos, m_newLength);
+}
+
+void KWChangeFootNoteLineSeparatorParametersCommand::unexecute()
+{
+    changeLineSeparatorParameter( m_oldValuePos, m_oldLength);
+}
+
+void KWChangeFootNoteLineSeparatorParametersCommand::changeLineSeparatorParameter( SeparatorLinePos _pos, int _length)
+{
+    m_doc->setFootNoteSeparatorLinePosition( _pos );
+    m_doc->setFootNoteSeparatorLineLength( _length);
+    m_doc->slotRepaintAllViews();
 }

@@ -58,4 +58,5 @@ enum TypeStructDocItem {Arrangement=1, Tables=2, Pictures=4, Cliparts=8, TextFra
 // Yes, if gcc was faster we would choose more modular code over compilation speed...
 enum NoteType { FootNote, EndNote };
 
+enum SeparatorLinePos { SLP_LEFT = 0, SLP_CENTERED = 1, SLP_RIGHT = 2};
 #endif

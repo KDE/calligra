@@ -173,6 +173,11 @@ KWDocument::KWDocument(QWidget *parentWidget, const char *widgetName, QObject* p
     m_defaultColumnSpacing=3;
     m_bShowRuler = true;
 
+    m_footNoteSeparatorLinePos=SLP_LEFT;
+
+    //by default it's 1/5
+    m_iFootNoteSeparatorLineLength = 20;
+
     m_viewFormattingChars = false;
 
     m_viewFormattingEndParag = true;
