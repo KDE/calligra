@@ -305,6 +305,16 @@ public:
 
     void refreshPageButton();
 
+    void extraChangeClip();
+
+    void openPopupMenuMenuPage( const QPoint & _point );
+    void openPopupMenuTextObject( const QPoint & _point );
+    void openPopupMenuPartObject( const QPoint & _point );
+    void openPopupMenuRectangleObject( const QPoint & _point );
+    void openPopupMenuGraphMenu(const QPoint & _point );
+    void openPopupMenuPieObject( const QPoint & _point );
+    void openPopupMenuClipObject(const QPoint & _point);
+
 protected slots:
     // dialog slots
     void backOk( bool );
@@ -528,6 +538,12 @@ protected:
 
     KAction *actionColorBar;
     KAction *actionExtraDefaultTemplate;
+
+
+    KAction *actionResizeTextObject;
+    KAction *actionExtendObjectHeight;
+    KAction *actionObjectProperties;
+    KAction *actionChangeClipart;
 
     DCOPObject *dcop;
 

@@ -2012,7 +2012,7 @@ void KPresenterView::setupActions()
     actionScreenAssignEffect = new KAction( i18n( "&Assign effect..." ),
 					   "effect", 0,
 					   this, SLOT( screenAssignEffect() ),
-					   actionCollection(), "screen_assigneffect" );
+					   actionCollection(), "screen_assigneffect");
 
     actionScreenStart = new KAction( i18n( "&Start" ),
 				     "1rightarrow", 0,
@@ -2075,6 +2075,18 @@ void KPresenterView::setupActions()
 					  SLOT( penChosen( const QColor & ) ),
 					  colorList,
 					  actionCollection(), "colorbar" );
+
+    actionExtendObjectHeight = new KAction( i18n( "&Extend Contents to Object Height" ),0, this, SLOT( textContentsToHeight() ), actionCollection(), "extendobjectheight" );
+
+    actionResizeTextObject = new KAction( i18n( "&Resize Object to fit the Contents" ),0, this, SLOT( textObjectToContents() ), actionCollection(), "resizetextobject" );
+
+    actionObjectProperties = new KAction( i18n( "&Properties..." ), "style", 0,
+				       this, SLOT( extraPenBrush() ),
+				       actionCollection(), "object_properties" );
+    actionChangeClipart =new KAction( i18n( "&Change Clipart..." ), "clipart", 0,
+				       this, SLOT( extraChangeClip() ),
+				       actionCollection(), "change_clipart" );
+
 }
 
 
@@ -3047,6 +3059,61 @@ void KPresenterView::viewShowSideBar()
         sidebar->hide();
     else
         sidebar->show();
+}
+
+void KPresenterView::extraChangeClip()
+{
+    page->chClip();
+}
+
+void KPresenterView::openPopupMenuMenuPage( const QPoint & _point )
+{
+    if(!koDocument()->isReadWrite() )
+        return;
+    ((QPopupMenu*)factory()->container("menupage_popup",this))->popup(_point);
+}
+
+void KPresenterView::openPopupMenuTextObject( const QPoint & _point )
+{
+    if(!koDocument()->isReadWrite() )
+        return;
+    ((QPopupMenu*)factory()->container("textobject_popup",this))->popup(_point);
+}
+
+void KPresenterView::openPopupMenuPartObject( const QPoint & _point )
+{
+    if(!koDocument()->isReadWrite() )
+        return;
+    ((QPopupMenu*)factory()->container("partobject_popup",this))->popup(_point);
+}
+
+void KPresenterView::openPopupMenuRectangleObject( const QPoint & _point )
+{
+    if(!koDocument()->isReadWrite() )
+        return;
+    ((QPopupMenu*)factory()->container("rectangleobject_popup",this))->popup(_point);
+}
+
+void KPresenterView::openPopupMenuGraphMenu(const QPoint & _point )
+{
+    if(!koDocument()->isReadWrite() )
+        return;
+    ((QPopupMenu*)factory()->container("graphmenu_popup",this))->popup(_point);
+}
+
+
+void KPresenterView::openPopupMenuPieObject( const QPoint & _point )
+{
+    if(!koDocument()->isReadWrite() )
+        return;
+    ((QPopupMenu*)factory()->container("piemenu_popup",this))->popup(_point);
+}
+
+void KPresenterView::openPopupMenuClipObject(const QPoint & _point)
+{
+    if(!koDocument()->isReadWrite() )
+        return;
+    ((QPopupMenu*)factory()->container("clipmenu_popup",this))->popup(_point);
 }
 
 #include <kpresenter_view.moc>

@@ -1,4 +1,4 @@
-<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd"><kpartgui name="KPresenter" version="9">
+<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd"><kpartgui name="KPresenter" version="10">
 <MenuBar>
  <Menu name="file"><text>&amp;File</text>
   <Separator/>
@@ -210,4 +210,184 @@
 <ToolBar name="colorBar" position="right" fullWidth="false"><Text>Color</Text>
   <Action name="colorbar"/>
 </ToolBar>
+<Menu name="menupage_popup">
+  <Action name="extra_layout"/>
+  <Action name="extra_background"/>
+  <Separator/>
+  <Action name="screen_configpages"/>
+  <Action name="screen_presstruct"/>
+  <Separator/>
+  <Action name="insert_page"/>
+  <Action name="extra_defaulttemplate"/>
+  <Action name="edit_duplicatepage"/>
+  <Action name="edit_delpage"/>
+  <Separator/> 
+  <Action name="edit_headerfooter"/>
+  <Separator/>
+  <Action name="edit_paste"/>
+</Menu>
+<Menu name="textobject_popup">
+  <Action name="edit_cut"/>
+  <Action name="edit_copy"/>
+  <Action name="edit_delete"/>
+  <Separator/>
+  <Action name="extra_rotate"/>
+  <Action name="extra_shadow"/>
+  <Action name="text_settings"/>
+  <Separator/>
+  <Action name="object_properties"/>
+  <Separator/>
+  <Action name="screen_assigneffect"/>
+  <Separator/>
+  <Menu name="Align Objects"><text>&amp;Align Objects</text>
+   <Action name="extra_alignleft"/>
+   <Separator/>
+   <Action name="extra_aligncenterh"/>
+   <Separator/>
+   <Action name="extra_alignright"/>
+   <Separator/>
+   <Action name="extra_aligntop"/>
+   <Separator/>
+   <Action name="extra_aligncenterv"/>
+   <Separator/>
+   <Action name="extra_alignbottom"/>
+  </Menu>
+  <Separator/>
+  <Action name="extendobjectheight"/>
+  <Action name="resizetextobject"/>
+</Menu>
+<Menu name="partobject_popup">
+  <Action name="edit_cut"/>
+  <Action name="edit_copy"/>
+  <Action name="edit_delete"/>
+  <Separator/>
+  <Action name="extra_rotate"/>
+  <Action name="object_properties"/>
+  <Separator/>
+  <Action name="screen_assigneffect"/>
+  <Separator/>
+  <Menu name="Align Objects"><text>&amp;Align Objects</text>
+   <Action name="extra_alignleft"/>
+   <Separator/>
+   <Action name="extra_aligncenterh"/>
+   <Separator/>
+   <Action name="extra_alignright"/>
+   <Separator/>
+   <Action name="extra_aligntop"/>
+   <Separator/>
+   <Action name="extra_aligncenterv"/>
+   <Separator/>
+   <Action name="extra_alignbottom"/>
+  </Menu>
+</Menu>
+<Menu name="rectangleobject_popup">
+  <Action name="edit_cut"/>
+  <Action name="edit_copy"/>
+  <Action name="edit_delete"/>
+  <Separator/>
+  <Action name="extra_rotate"/>
+  <Action name="extra_shadow"/>
+  <Separator/>
+  <Action name="extra_configrect"/>
+  <Separator/>
+  <Action name="object_properties"/>
+  <Separator/>
+  <Action name="screen_assigneffect"/>
+  <Separator/>
+  <Menu name="Align Objects"><text>&amp;Align Objects</text>
+   <Action name="extra_alignleft"/>
+   <Separator/>
+   <Action name="extra_aligncenterh"/>
+   <Separator/>
+   <Action name="extra_alignright"/>
+   <Separator/>
+   <Action name="extra_aligntop"/>
+   <Separator/>
+   <Action name="extra_aligncenterv"/>
+   <Separator/>
+   <Action name="extra_alignbottom"/>
+  </Menu>
+</Menu>
+<Menu name="graphmenu_popup">
+  <Action name="edit_cut"/>
+  <Action name="edit_copy"/>
+  <Action name="edit_delete"/>
+  <Separator/>
+  <Action name="extra_rotate"/>
+  <Action name="extra_shadow"/>
+  <Separator/>
+  <Action name="object_properties"/>
+  <Separator/>
+  <Action name="screen_assigneffect"/>
+  <Separator/>
+  <Menu name="Align Objects"><text>&amp;Align Objects</text>
+   <Action name="extra_alignleft"/>
+   <Separator/>
+   <Action name="extra_aligncenterh"/>
+   <Separator/>
+   <Action name="extra_alignright"/>
+   <Separator/>
+   <Action name="extra_aligntop"/>
+   <Separator/>
+   <Action name="extra_aligncenterv"/>
+   <Separator/>
+   <Action name="extra_alignbottom"/>
+  </Menu>
+</Menu>
+<Menu name="piemenu_popup">
+  <Action name="edit_cut"/>
+  <Action name="edit_copy"/>
+  <Action name="edit_delete"/>
+  <Separator/>
+  <Action name="extra_rotate"/>
+  <Action name="extra_shadow"/>
+  <Separator/>
+  <Action name="object_properties"/>
+  <Separator/>
+  <Action name="extra_configpie"/>
+  <Separator/>
+  <Action name="screen_assigneffect"/>
+  <Separator/>
+  <Menu name="Align Objects"><text>&amp;Align Objects</text>
+   <Action name="extra_alignleft"/>
+   <Separator/>
+   <Action name="extra_aligncenterh"/>
+   <Separator/>
+   <Action name="extra_alignright"/>
+   <Separator/>
+   <Action name="extra_aligntop"/>
+   <Separator/>
+   <Action name="extra_aligncenterv"/>
+   <Separator/>
+   <Action name="extra_alignbottom"/>
+  </Menu>
+</Menu>
+<Menu name="clipmenu_popup">
+  <Action name="edit_cut"/>
+  <Action name="edit_copy"/>
+  <Action name="edit_delete"/>
+  <Separator/>
+  <Action name="extra_rotate"/>
+  <Action name="extra_shadow"/>
+  <Separator/>
+  <Action name="object_properties"/>
+  <Separator/>
+  <Action name="change_clipart"/>
+  <Separator/>
+  <Action name="screen_assigneffect"/>
+  <Separator/>
+  <Menu name="Align Objects"><text>&amp;Align Objects</text>
+   <Action name="extra_alignleft"/>
+   <Separator/>
+   <Action name="extra_aligncenterh"/>
+   <Separator/>
+   <Action name="extra_alignright"/>
+   <Separator/>
+   <Action name="extra_aligntop"/>
+   <Separator/>
+   <Action name="extra_aligncenterv"/>
+   <Separator/>
+   <Action name="extra_alignbottom"/>
+  </Menu>
+</Menu>
 </kpartgui>

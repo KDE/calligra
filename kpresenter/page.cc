@@ -65,23 +65,10 @@ Page::Page( QWidget *parent, const char *name, KPresenterView *_view )
 {
     setWFlags( WResizeNoErase );
 
-    alignMenu1 = 0;
     alignMenu2 = 0;
-    alignMenu3 = 0;
-    alignMenu4 = 0;
-    alignMenu5 = 0;
-    alignMenu6 = 0;
-    alignMenu7 = 0;
-    graphMenu = 0;
-    partMenu = 0;
-    rectMenu = 0;
-    pieMenu = 0;
     picResizeMenu = 0;
     picMenu = 0;
-    clipMenu = 0;
-    txtMenu = 0;
     presMenu = 0;
-    pageMenu = 0;
 
     if ( parent ) {
         mousePressed = false;
@@ -126,23 +113,10 @@ Page::~Page()
     // deactivate possible opened textobject to avoid double deletion, KPTextObject deletes this already
     exitEditMode();
 
-    delete alignMenu1;
     delete alignMenu2;
-    delete alignMenu3;
-    delete alignMenu4;
-    delete alignMenu5;
-    delete alignMenu6;
-    delete alignMenu7;
-    delete graphMenu;
-    delete partMenu;
-    delete rectMenu;
-    delete pieMenu;
     delete picResizeMenu;
     delete picMenu;
-    delete clipMenu;
-    delete txtMenu;
     delete presMenu;
-    delete pageMenu;
 }
 
 /*============================ draw contents ====================*/
@@ -400,43 +374,42 @@ void Page::mousePressEvent( QMouseEvent *e )
                     mousePressed = false;
                     deSelectAllObj();
                     selectObj( kpobject );
-                    clipMenu->popup( pnt );
+                    view->openPopupMenuClipObject(pnt);
                 } else if ( kpobject->getType() == OT_TEXT ) {
                     if ( state )
                         deSelectAllObj();
                     selectObj( kpobject );
-                    txtMenu->popup( pnt );
+                    view->openPopupMenuTextObject(pnt);
                     mousePressed = false;
                 } else if ( kpobject->getType() == OT_PIE ) {
                     if ( state )
                         deSelectAllObj();
                     selectObj( kpobject );
-                    pieMenu->popup( pnt );
+                    view->openPopupMenuPieObject( pnt );
                     mousePressed = false;
                 } else if ( kpobject->getType() == OT_RECT ) {
                     if ( state )
                         deSelectAllObj();
                     selectObj( kpobject );
-                    rectMenu->popup( pnt );
+                    view->openPopupMenuRectangleObject( pnt );
                     mousePressed = false;
                 } else if ( kpobject->getType() == OT_PART ) {
                     if ( state )
                         deSelectAllObj();
                     selectObj( kpobject );
-                    partMenu->popup( pnt );
+                    view->openPopupMenuPartObject( pnt );
                     mousePressed = false;
                 } else {
                     if ( state )
                         deSelectAllObj();
                     selectObj( kpobject );
-                    graphMenu->popup( pnt );
+                    view->openPopupMenuGraphMenu( pnt );
                     mousePressed = false;
                 }
                 modType = MT_NONE;
             } else {
                 QPoint pnt = QCursor::pos();
-                pageMenu->setItemEnabled( delPageId, view->kPresenterDoc()->getPageNums() > 1 );
-                pageMenu->popup( pnt );
+                view->openPopupMenuMenuPage( pnt );
                 mousePressed = false;
                 modType = MT_NONE;
             }
@@ -1325,23 +1298,6 @@ void Page::setMouseSelectedObject(bool b)
 /*======================== setup menus ===========================*/
 void Page::setupMenus()
 {
-    // create right button object align menu
-    alignMenu1 = new QPopupMenu();
-    CHECK_PTR( alignMenu1 );
-    alignMenu1->insertItem( KPBarIcon( "aoleft" ), this, SLOT( alignObjLeft() ) );
-    alignMenu1->insertSeparator();
-    alignMenu1->insertItem( KPBarIcon( "aocenterh" ), this, SLOT( alignObjCenterH() ) );
-    alignMenu1->insertSeparator();
-    alignMenu1->insertItem( KPBarIcon( "aoright" ), this, SLOT( alignObjRight() ) );
-    alignMenu1->insertSeparator();
-    alignMenu1->insertItem( KPBarIcon( "aotop" ), this, SLOT( alignObjTop() ) );
-    alignMenu1->insertSeparator();
-    alignMenu1->insertItem( KPBarIcon( "aocenterv" ), this, SLOT( alignObjCenterV() ) );
-    alignMenu1->insertSeparator();
-    alignMenu1->insertItem( KPBarIcon( "aobottom" ), this, SLOT( alignObjBottom() ) );
-    alignMenu1->setMouseTracking( true );
-    alignMenu1->setCheckable( false );
-
     alignMenu2 = new QPopupMenu();
     CHECK_PTR( alignMenu2 );
     alignMenu2->insertItem( KPBarIcon( "aoleft" ), this, SLOT( alignObjLeft() ) );
@@ -1358,154 +1314,9 @@ void Page::setupMenus()
     alignMenu2->setMouseTracking( true );
     alignMenu2->setCheckable( false );
 
-    alignMenu3 = new QPopupMenu();
-    CHECK_PTR( alignMenu3 );
-    alignMenu3->insertItem( KPBarIcon( "aoleft" ), this, SLOT( alignObjLeft() ) );
-    alignMenu3->insertSeparator();
-    alignMenu3->insertItem( KPBarIcon( "aocenterh" ), this, SLOT( alignObjCenterH() ) );
-    alignMenu3->insertSeparator();
-    alignMenu3->insertItem( KPBarIcon( "aoright" ), this, SLOT( alignObjRight() ) );
-    alignMenu3->insertSeparator();
-    alignMenu3->insertItem( KPBarIcon( "aotop" ), this, SLOT( alignObjTop() ) );
-    alignMenu3->insertSeparator();
-    alignMenu3->insertItem( KPBarIcon( "aocenterv" ), this, SLOT( alignObjCenterV() ) );
-    alignMenu3->insertSeparator();
-    alignMenu3->insertItem( KPBarIcon( "aobottom" ), this, SLOT( alignObjBottom() ) );
-    alignMenu3->setMouseTracking( true );
-    alignMenu3->setCheckable( false );
 
-    alignMenu4 = new QPopupMenu();
-    CHECK_PTR( alignMenu4 );
-    alignMenu4->insertItem( KPBarIcon( "aoleft" ), this, SLOT( alignObjLeft() ) );
-    alignMenu4->insertSeparator();
-    alignMenu4->insertItem( KPBarIcon( "aocenterh" ), this, SLOT( alignObjCenterH() ) );
-    alignMenu4->insertSeparator();
-    alignMenu4->insertItem( KPBarIcon( "aoright" ), this, SLOT( alignObjRight() ) );
-    alignMenu4->insertSeparator();
-    alignMenu4->insertItem( KPBarIcon( "aotop" ), this, SLOT( alignObjTop() ) );
-    alignMenu4->insertSeparator();
-    alignMenu4->insertItem( KPBarIcon( "aocenterv" ), this, SLOT( alignObjCenterV() ) );
-    alignMenu4->insertSeparator();
-    alignMenu4->insertItem( KPBarIcon( "aobottom" ), this, SLOT( alignObjBottom() ) );
-    alignMenu4->setMouseTracking( true );
-    alignMenu4->setCheckable( false );
 
-    alignMenu5 = new QPopupMenu();
-    CHECK_PTR( alignMenu5 );
-    alignMenu5->insertItem( KPBarIcon( "aoleft" ), this, SLOT( alignObjLeft() ) );
-    alignMenu5->insertSeparator();
-    alignMenu5->insertItem( KPBarIcon( "aocenterh" ), this, SLOT( alignObjCenterH() ) );
-    alignMenu5->insertSeparator();
-    alignMenu5->insertItem( KPBarIcon( "aoright" ), this, SLOT( alignObjRight() ) );
-    alignMenu5->insertSeparator();
-    alignMenu5->insertItem( KPBarIcon( "aotop" ), this, SLOT( alignObjTop() ) );
-    alignMenu5->insertSeparator();
-    alignMenu5->insertItem( KPBarIcon( "aocenterv" ), this, SLOT( alignObjCenterV() ) );
-    alignMenu5->insertSeparator();
-    alignMenu5->insertItem( KPBarIcon( "aobottom" ), this, SLOT( alignObjBottom() ) );
-    alignMenu5->setMouseTracking( true );
-    alignMenu5->setCheckable( false );
 
-    alignMenu6 = new QPopupMenu();
-    CHECK_PTR( alignMenu6 );
-    alignMenu6->insertItem( KPBarIcon( "aoleft" ), this, SLOT( alignObjLeft() ) );
-    alignMenu6->insertSeparator();
-    alignMenu6->insertItem( KPBarIcon( "aocenterh" ), this, SLOT( alignObjCenterH() ) );
-    alignMenu6->insertSeparator();
-    alignMenu6->insertItem( KPBarIcon( "aoright" ), this, SLOT( alignObjRight() ) );
-    alignMenu6->insertSeparator();
-    alignMenu6->insertItem( KPBarIcon( "aotop" ), this, SLOT( alignObjTop() ) );
-    alignMenu6->insertSeparator();
-    alignMenu6->insertItem( KPBarIcon( "aocenterv" ), this, SLOT( alignObjCenterV() ) );
-    alignMenu6->insertSeparator();
-    alignMenu6->insertItem( KPBarIcon( "aobottom" ), this, SLOT( alignObjBottom() ) );
-    alignMenu6->setMouseTracking( true );
-    alignMenu6->setCheckable( false );
-
-    alignMenu7 = new QPopupMenu();
-    CHECK_PTR( alignMenu7 );
-    alignMenu7->insertItem( KPBarIcon( "aoleft" ), this, SLOT( alignObjLeft() ) );
-    alignMenu7->insertSeparator();
-    alignMenu7->insertItem( KPBarIcon( "aocenterh" ), this, SLOT( alignObjCenterH() ) );
-    alignMenu7->insertSeparator();
-    alignMenu7->insertItem( KPBarIcon( "aoright" ), this, SLOT( alignObjRight() ) );
-    alignMenu7->insertSeparator();
-    alignMenu7->insertItem( KPBarIcon( "aotop" ), this, SLOT( alignObjTop() ) );
-    alignMenu7->insertSeparator();
-    alignMenu7->insertItem( KPBarIcon( "aocenterv" ), this, SLOT( alignObjCenterV() ) );
-    alignMenu7->insertSeparator();
-    alignMenu7->insertItem( KPBarIcon( "aobottom" ), this, SLOT( alignObjBottom() ) );
-    alignMenu7->setMouseTracking( true );
-    alignMenu7->setCheckable( false );
-
-    // create right button graph menu
-    graphMenu = new QPopupMenu();
-    CHECK_PTR( graphMenu );
-    graphMenu->insertItem( SmallIcon("editcut"), i18n( "&Cut" ), this, SLOT( clipCut() ) );
-    graphMenu->insertItem( SmallIcon("editcopy"), i18n( "C&opy" ), this, SLOT( clipCopy() ) );
-    graphMenu->insertItem( SmallIcon("editdelete"), i18n( "&Delete" ), this, SLOT( deleteObjs() ) );
-    graphMenu->insertSeparator();
-    graphMenu->insertItem( KPBarIcon( "rotate" ), i18n( "&Rotate..." ), this, SLOT( rotateObjs() ) );
-    graphMenu->insertItem( KPBarIcon( "shadow" ), i18n( "&Shadow..." ), this, SLOT( shadowObjs() ) );
-    graphMenu->insertSeparator();
-    graphMenu->insertItem( KPBarIcon( "style" ), i18n( "&Properties..." ), this, SLOT( objProperties() ) );
-    graphMenu->insertSeparator();
-    graphMenu->insertItem( KPBarIcon( "effect" ), i18n( "&Assign effect..." ), this, SLOT( assignEffect() ) );
-    graphMenu->insertSeparator();
-    graphMenu->insertItem( KPBarIcon( "alignobjs" ), i18n( "&Align objects" ), alignMenu1 );
-    graphMenu->setMouseTracking( true );
-
-    // create right button part menu
-    partMenu = new QPopupMenu();
-    CHECK_PTR( partMenu );
-    partMenu->insertItem( SmallIcon("editcut"), i18n( "&Cut" ), this, SLOT( clipCut() ) );
-    partMenu->insertItem( SmallIcon("editcopy"), i18n( "C&opy" ), this, SLOT( clipCopy() ) );
-    partMenu->insertItem( SmallIcon("editdelete"), i18n( "&Delete" ), this, SLOT( deleteObjs() ) );
-    partMenu->insertSeparator();
-    partMenu->insertItem( KPBarIcon( "rotate" ), i18n( "&Rotate..." ), this, SLOT( rotateObjs() ) );
-    partMenu->insertSeparator();
-    partMenu->insertItem( KPBarIcon( "style" ), i18n( "&Properties..." ), this, SLOT( objProperties() ) );
-    partMenu->insertSeparator();
-    partMenu->insertItem( KPBarIcon( "effect" ), i18n( "&Assign effect..." ), this, SLOT( assignEffect() ) );
-    partMenu->insertSeparator();
-    partMenu->insertItem( KPBarIcon( "alignobjs" ), i18n( "&Align objects" ), alignMenu7 );
-    partMenu->setMouseTracking( true );
-
-  // create right button rect menu
-    rectMenu = new QPopupMenu();
-    CHECK_PTR( rectMenu );
-    rectMenu->insertItem( SmallIcon("editcut"), i18n( "&Cut" ), this, SLOT( clipCut() ) );
-    rectMenu->insertItem( SmallIcon("editcopy"), i18n( "C&opy" ), this, SLOT( clipCopy() ) );
-    rectMenu->insertItem( SmallIcon("editdelete"), i18n( "&Delete" ), this, SLOT( deleteObjs() ) );
-    rectMenu->insertSeparator();
-    rectMenu->insertItem( KPBarIcon( "rotate" ), i18n( "&Rotate..." ), this, SLOT( rotateObjs() ) );
-    rectMenu->insertItem( KPBarIcon( "shadow" ), i18n( "&Shadow..." ), this, SLOT( shadowObjs() ) );
-    rectMenu->insertSeparator();
-    rectMenu->insertItem( KPBarIcon( "style" ), i18n( "&Properties..." ), this, SLOT( objProperties() ) );
-    rectMenu->insertItem( KPBarIcon( "rectangle2" ), i18n( "&Configure Rectangle..." ), this, SLOT( objConfigRect() ) );
-    rectMenu->insertSeparator();
-    rectMenu->insertItem( KPBarIcon( "effect" ), i18n( "&Assign effect..." ), this, SLOT( assignEffect() ) );
-    rectMenu->insertSeparator();
-    rectMenu->insertItem( KPBarIcon( "alignobjs" ), i18n( "&Align objects" ), alignMenu6 );
-    rectMenu->setMouseTracking( true );
-
-  // create right button pie menu
-    pieMenu = new QPopupMenu();
-    CHECK_PTR( pieMenu );
-    pieMenu->insertItem( SmallIcon("editcut"), i18n( "&Cut" ), this, SLOT( clipCut() ) );
-    pieMenu->insertItem( SmallIcon("editcopy"), i18n( "C&opy" ), this, SLOT( clipCopy() ) );
-    pieMenu->insertItem( SmallIcon("editdelete"), i18n( "&Delete" ), this, SLOT( deleteObjs() ) );
-    pieMenu->insertSeparator();
-    pieMenu->insertItem( KPBarIcon( "rotate" ), i18n( "&Rotate..." ), this, SLOT( rotateObjs() ) );
-    pieMenu->insertItem( KPBarIcon( "shadow" ), i18n( "&Shadow..." ), this, SLOT( shadowObjs() ) );
-    pieMenu->insertSeparator();
-    pieMenu->insertItem( KPBarIcon( "style" ), i18n( "&Properties..." ), this, SLOT( objProperties() ) );
-    pieMenu->insertItem( KPBarIcon( "edit_pie" ), i18n( "&Configure Pie/Arc/Chord..." ), this, SLOT( objConfigPie() ) );
-    pieMenu->insertSeparator();
-    pieMenu->insertItem( KPBarIcon( "effect" ), i18n( "&Assign effect..." ), this, SLOT( assignEffect() ) );
-    pieMenu->insertSeparator();
-    pieMenu->insertItem( KPBarIcon( "alignobjs" ), i18n( "&Align objects" ), alignMenu5 );
-    pieMenu->setMouseTracking( true );
 
     // pic-resize menu
     picResizeMenu = new QPopupMenu();
@@ -1539,44 +1350,7 @@ void Page::setupMenus()
     picMenu->insertItem( i18n( "&Scale to show the Picture 1:1 in" ), picResizeMenu );
     picMenu->setMouseTracking( true );
 
-  // create right button clipart menu
-    clipMenu = new QPopupMenu();
-    CHECK_PTR( clipMenu );
-    clipMenu->insertItem( SmallIcon("editcut"), i18n( "&Cut" ), this, SLOT( clipCut() ) );
-    clipMenu->insertItem( SmallIcon("editcopy"), i18n( "C&opy" ), this, SLOT( clipCopy() ) );
-    clipMenu->insertItem( SmallIcon("editdelete"), i18n( "&Delete" ), this, SLOT( deleteObjs() ) );
-    clipMenu->insertSeparator();
-    clipMenu->insertItem( KPBarIcon( "rotate" ), i18n( "&Rotate..." ), this, SLOT( rotateObjs() ) );
-    clipMenu->insertItem( KPBarIcon( "shadow" ), i18n( "&Shadow..." ), this, SLOT( shadowObjs() ) );
-    clipMenu->insertSeparator();
-    clipMenu->insertItem( KPBarIcon( "clipart" ), i18n( "&Change Clipart..." ), this, SLOT( chClip() ) );
-    clipMenu->insertItem( KPBarIcon( "style" ), i18n( "&Properties..." ), this, SLOT( objProperties() ) );
-    clipMenu->insertSeparator();
-    clipMenu->insertItem( KPBarIcon( "effect" ), i18n( "&Assign effect..." ), this, SLOT( assignEffect() ) );
-    clipMenu->insertSeparator();
-    clipMenu->insertItem( KPBarIcon( "alignobjs" ), i18n( "&Align objects" ), alignMenu3 );
-    clipMenu->setMouseTracking( true );
 
-  // create right button text menu
-    txtMenu = new QPopupMenu();
-    CHECK_PTR( txtMenu );
-    txtMenu->insertItem( SmallIcon("editcut"), i18n( "&Cut" ), this, SLOT( clipCut() ) );
-    txtMenu->insertItem( SmallIcon("editcopy"), i18n( "C&opy" ), this, SLOT( clipCopy() ) );
-    txtMenu->insertItem( SmallIcon("editdelete"), i18n( "&Delete" ), this, SLOT( deleteObjs() ) );
-    txtMenu->insertSeparator();
-    txtMenu->insertItem( KPBarIcon( "rotate" ), i18n( "&Rotate..." ), this, SLOT( rotateObjs() ) );
-    txtMenu->insertItem( KPBarIcon( "shadow" ), i18n( "&Shadow..." ), this, SLOT( shadowObjs() ) );
-    txtMenu->insertSeparator();
-    txtMenu->insertItem( KPBarIcon( "style" ), i18n( "&Properties..." ), this, SLOT( objProperties() ) );
-    txtMenu->insertItem( SmallIcon( "configure" ), i18n( "&Settings..." ), view, SLOT( textSettings() ) );
-    txtMenu->insertSeparator();
-    txtMenu->insertItem( KPBarIcon( "effect" ), i18n( "&Assign effect..." ), this, SLOT( assignEffect() ) );
-    txtMenu->insertSeparator();
-    txtMenu->insertItem( KPBarIcon( "alignobjs" ), i18n( "&Align objects" ), alignMenu4 );
-    txtMenu->insertSeparator();
-    txtMenu->insertItem( i18n( "&Extend Contents to Object Height" ), this, SLOT( slotTextContents2Height() ) );
-    txtMenu->insertItem( i18n( "&Resize Object to fit the Contents" ), this, SLOT( slotTextObj2Contents() ) );
-    txtMenu->setMouseTracking( true );
 
     // create right button presentation menu
     presMenu = new QPopupMenu();
@@ -1592,24 +1366,7 @@ void Page::setupMenus()
     presMenu->setItemChecked( PM_DM, false );
     presMenu->setMouseTracking( true );
 
-  // create right button page menu
-    pageMenu = new QPopupMenu();
-    CHECK_PTR( pageMenu );
-    pageMenu->insertItem( i18n( "Pa&ge Layout..." ), this, SLOT( pageLayout() ) );
-    pageMenu->insertItem( SmallIcon("background"), i18n( "Page &Background..." ), this, SLOT( pageBackground() ) );
-    pageMenu->insertSeparator();
-    pageMenu->insertItem( i18n( "&Configure pages..." ), this, SLOT( configPages() ) );
-    pageMenu->insertItem( i18n( "&Open presentation structure viewer..." ), this, SLOT( presStructView() ) );
-    pageMenu->insertSeparator();
-    pageMenu->insertItem( i18n( "&Insert Page..." ), this, SLOT( pageInsert() ) );
-    pageMenu->insertItem( i18n( "&Use current slide as default template" ), this, SLOT( pageDefaultTemplate() ) );
-    pageMenu->insertItem( KPBarIcon( "newslide" ), i18n( "&Duplicate Page" ), this, SLOT( duplicateCopy() ) );
-    delPageId = pageMenu->insertItem( KPBarIcon( "delslide" ), i18n( "D&elete Page..." ), this, SLOT( pageDelete() ) );
-    pageMenu->insertSeparator();
-    pageMenu->insertItem( i18n( "Edit &Header/Footer..." ), this, SLOT( slotEditHF() ) );
-    pageMenu->insertSeparator();
-    pageMenu->insertItem( SmallIcon("editpaste"), i18n( "&Paste" ), this, SLOT( pagePaste() ) );
-    pageMenu->setMouseTracking( true );
+
 }
 
 /*======================== clipboard cut =========================*/
@@ -1852,8 +1609,7 @@ bool Page::haveASelectedPictureObj()
     for ( unsigned int i = 0; i < objectList()->count(); i++ )
     {
         kpobject = objectList()->at( i );
-        if ( kpobject->isSelected() && (kpobject->getType() != OT_PICTURE
-                                        && kpobject->getType() != OT_CLIPART))
+        if ( kpobject->isSelected() && kpobject->getType() != OT_CLIPART)
         {
             return false;
         }
@@ -4075,30 +3831,6 @@ void Page::slotExitPres()
 void Page::slotEditHF()
 {
     view->editHeaderFooter();
-}
-
-/*================================================================*/
-void Page::slotTextContents2Height()
-{
-    view->textContentsToHeight();
-}
-
-/*================================================================*/
-void Page::slotTextObj2Contents()
-{
-    view->textObjectToContents();
-}
-
-/*================================================================*/
-void Page::objConfigPie()
-{
-    view->extraConfigPie();
-}
-
-/*================================================================*/
-void Page::objConfigRect()
-{
-    view->extraConfigRect();
 }
 
 /*================================================================*/

@@ -230,9 +230,9 @@ protected:
     void setTextBackground( KPTextObject *obj );
 
     // variables
-    QPopupMenu *graphMenu, *picMenu, *txtMenu, *clipMenu, *presMenu;
-    QPopupMenu *alignMenu1, *alignMenu2, *alignMenu3, *alignMenu4, *alignMenu5;
-    QPopupMenu *pageMenu, *pieMenu, *rectMenu, *alignMenu6, *partMenu, *alignMenu7;
+    QPopupMenu  *clipMenu, *presMenu;
+    QPopupMenu *alignMenu1, *alignMenu2, *alignMenu3, *alignMenu5;
+    QPopupMenu *picMenu, *alignMenu6, *alignMenu7;
     QPopupMenu *picResizeMenu;
     bool mousePressed;
     ModifyType modType;
@@ -283,8 +283,6 @@ private slots:
     void toColorChanged( const QColor &color ) { emit colorChanged( color ); }
     void toAlignChanged( int a ) { emit alignChanged( a ); }
     void objProperties();
-    void objConfigPie();
-    void objConfigRect();
     void assignEffect();
     void drawingMode();
     void switchingMode();
@@ -306,8 +304,6 @@ private slots:
     void slotGotoPage();
     void slotExitPres();
     void slotEditHF();
-    void slotTextContents2Height();
-    void slotTextObj2Contents();
     void picViewOrig640x480();
     void picViewOrig800x600();
     void picViewOrig1024x768();
