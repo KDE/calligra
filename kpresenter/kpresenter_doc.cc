@@ -2060,12 +2060,23 @@ void KPresenterDoc::paintContent( QPainter& painter, const QRect& rect, bool /*t
         bool forPrint = painter.device() && painter.device()->devType() == QInternal::Printer;
         newZoomAndResolution( false, forPrint );
     }
+    //draw background
+    m_pageList.first()->background()->draw( &painter, zoomHandler(), rect, false );
     //for the moment draw first page.
     QPtrListIterator<KPObject> it( m_pageList.first()->objectList() );
     for ( ; it.current() ; ++it )
     {
         it.current()->draw( &painter, zoomHandler(), false );
     }
+    it= m_stickyPage->objectList();
+    //draw sticky obj
+    for ( ; it.current() ; ++it )
+    {
+        if( (it.current()==_header && !hasHeader())||(it.current()==_footer && !hasFooter()))
+            continue;
+        it.current()->draw( &painter, zoomHandler(), false );
+    }
+
 }
 
 
