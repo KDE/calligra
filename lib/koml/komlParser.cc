@@ -57,7 +57,7 @@ bool KOMLParser::readText( string& text )
     if ( t.isNull() )
 	return FALSE;
 
-    text = t.data().latin1();
+    text = t.data().utf8();
 
     return TRUE;
 }
@@ -81,7 +81,7 @@ bool KOMLParser::parseTag( const char *, string& name, std::vector<KOMLAttrib>& 
         {
 	    KOMLAttrib attrib;
 	    attrib.m_strName = a.name().latin1();
-	    attrib.m_strValue = a.value().latin1();
+	    attrib.m_strValue = a.value().utf8();
 	    _attribs.push_back( attrib );
 	}
     }
