@@ -39,13 +39,13 @@ VClipGroup::~VClipGroup() { }
 
 void VClipGroup::draw( VPainter* painter, const KoRect* rect ) const
 {
-	if(
+	/*if(
 		state() == deleted ||
 		state() == hidden ||
 		state() == hidden_locked )
-	{
+	{*/
 		return;
-	}
+	//}
 
 	VObjectListIterator itr = m_objects;
 
