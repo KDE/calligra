@@ -1094,6 +1094,7 @@ bool OOWriterWorker::makeTable(const FrameAnchor& anchor )
 #ifdef ALLOW_TABLE
     const QString automaticTableStyle ( makeAutomaticStyleName( "Table", m_tableNumber ) );
     const QString tableName( QString( "Table" ) + QString::number( m_tableNumber ) ); // m_tableNumber was already increased
+    const QString translatedName( i18n( "Object name", "Table %1").arg( m_tableNumber ) );
 
     kdDebug(30520) << "Processing table " << anchor.key.toString() << " => " << tableName << endl;
 
@@ -1101,7 +1102,7 @@ bool OOWriterWorker::makeTable(const FrameAnchor& anchor )
 
     *m_streamOut << "</text:p>\n"; // Close previous paragraph ### TODO: do it correctly like for HTML
     *m_streamOut << "<table:table table:name=\""
-        << escapeOOText( tableName )
+        << escapeOOText( translatedName )
         << "\" table:style-name=\""
         << escapeOOText( automaticTableStyle )
         << "\" >\n";
