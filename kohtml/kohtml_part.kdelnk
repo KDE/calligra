@@ -1,25 +1,17 @@
 # KDE Config File
 [KDE Desktop Entry]
 Name=KoHTML
-Name[eo]=Panelo
-Name[es]=KLyx
-Name[hu]=Jegyzetelõ
 Name[is]=HTML skoðari
-Name[it]=MC
 Exec=kohtml.bin --server
 Comment=KOffice HTML Viewer
 Comment[ca]=Visualitzador d'HTML KOffice
 Comment[cs]=Prohlí¾eè HTML pro KOffice
 Comment[da]=KOffice HTML-fremviser
 Comment[de]=KOffice HTML-Betrachter
-Comment[eo]=Stircentro de KDE
-Comment[es]=Visor de imágenes
 Comment[fi]=KOffice HTML -näyttäjä
 Comment[fr]=Visualiseur de fichiers HTML de KOffice
 Comment[hr]=Koffice HTML preglednik
-Comment[hu]=Fax nézõ
 Comment[is]=kohtml:  HTML skoðari KOffice vöndulsins
-Comment[it]=Visualizzatore Immagini XV
 Comment[no]=KOffice HTML-viser
 Comment[pl]=Przgl±darka HTML, element KOffice
 Comment[pt_BR]=Visualizador HTML do KOffice
