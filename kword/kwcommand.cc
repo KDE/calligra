@@ -28,7 +28,7 @@ using namespace Qt3;
 #include <kdebug.h>
 
 
-KWPasteTextCommand::KWPasteTextCommand( QTextDocument *d, int parag, int idx,
+KWPasteTextCommand::KWPasteTextCommand( KoTextDocument *d, int parag, int idx,
                                 const QCString & data )
     : QTextCommand( d ), m_parag( parag ), m_idx( idx ), m_data( data )
 {
@@ -160,7 +160,7 @@ public:
         kdDebug() << "KWPasteTextCommand::execute " << parag->paragId() << " " << start << " " << end << endl;
         for ( int i = start ; i < end ; ++i )
         {
-            QTextStringChar * ch = parag->at( i );
+            KoTextStringChar * ch = parag->at( i );
             if ( ch->isCustom() )
 	    {
 	       KoTextCustomItem* item = static_cast<KoTextCustomItem *>( ch->customItem() );
@@ -182,7 +182,7 @@ QTextCursor * KWPasteTextCommand::unexecute( QTextCursor *c )
     }
     cursor.setParag( firstParag );
     cursor.setIndex( m_idx );
-    doc->setSelectionStart( QTextDocument::Temp, &cursor );
+    doc->setSelectionStart( KoTextDocument::Temp, &cursor );
 
     Qt3::QTextParag *lastParag = doc->paragAt( m_lastParag );
     if ( !lastParag ) {
@@ -191,12 +191,12 @@ QTextCursor * KWPasteTextCommand::unexecute( QTextCursor *c )
     }
     cursor.setParag( lastParag );
     cursor.setIndex( m_lastIndex );
-    doc->setSelectionEnd( QTextDocument::Temp, &cursor );
+    doc->setSelectionEnd( KoTextDocument::Temp, &cursor );
     // Delete all custom items
     KWDeleteCustomItemVisitor visitor;
-    static_cast<KoTextDocument *>(doc)->visitSelection( QTextDocument::Temp, &visitor );
+    static_cast<KoTextDocument *>(doc)->visitSelection( KoTextDocument::Temp, &visitor );
 
-    doc->removeSelectedText( QTextDocument::Temp, c /* sets c to the correct position */ );
+    doc->removeSelectedText( KoTextDocument::Temp, c /* sets c to the correct position */ );
 
     if ( m_idx == 0 )
         static_cast<KWTextParag *>( firstParag )->setParagLayout( m_oldParagLayout );

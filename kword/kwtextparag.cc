@@ -62,7 +62,7 @@ void KWTextParag::drawFormattingChars( QPainter &painter, const QString & /*s*/,
                     QColorGroup cg2( cg );
                     //cg2.setColor( QColorGroup::Base, Qt::green ); // for debug
                     int last = length() - 1;
-                    QTextStringChar &ch = string()->at( last );
+                    KoTextStringChar &ch = string()->at( last );
                     int x = zh->layoutUnitToPixelX( ch.x ) + ch.pixelxadj;
 
                     KoTextFormat format( *lastFormat );
@@ -98,7 +98,7 @@ void KWTextParag::drawFormattingChars( QPainter &painter, const QString & /*s*/,
             int end = QMIN( start + len, length() - 1 ); // don't look at the trailing space
             for ( int i = start ; i < end ; ++i )
             {
-                QTextStringChar &ch = string()->at(i);
+                KoTextStringChar &ch = string()->at(i);
                 if ( ch.isCustom() )
                     continue;
                 if ( ch.c == ' ' )
@@ -113,7 +113,7 @@ void KWTextParag::drawFormattingChars( QPainter &painter, const QString & /*s*/,
                 }
                 else if ( ch.c == '\t' )
                 {
-                    /*QTextStringChar &nextch = string()->at(i+1);
+                    /*KoTextStringChar &nextch = string()->at(i+1);
                     int nextx = (nextch.x > ch.x) ? nextch.x : rect().width();
                     //kdDebug() << "tab x=" << ch.x << " nextch.x=" << nextch.x
                     //          << " nextx=" << nextx << " startX=" << startX << " bw=" << bw << endl;
@@ -263,7 +263,7 @@ void KWTextParag::save( QDomElement &parentElem, int from /* default 0 */,
     KoTextFormat *curFormat = paragraphFormat();
     for ( int i = from; i <= to; ++i, ++index )
     {
-        QTextStringChar & ch = string()->at(i);
+        KoTextStringChar & ch = string()->at(i);
         KoTextFormat * newFormat = static_cast<KoTextFormat *>( ch.format() );
         if ( ch.isCustom() )
         {
@@ -899,7 +899,7 @@ void KWTextParag::saveParagLayout( const KoParagLayout& layout, QDomElement & pa
     }
 }
 
-void KWTextParag::join( QTextParag *parag )
+void KWTextParag::join( Qt3::QTextParag *parag )
 {
     m_layout.pageBreaking &= ~(KoParagLayout::HardFrameBreakBefore|KoParagLayout::HardFrameBreakAfter);
     KoTextParag::join( parag );

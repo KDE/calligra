@@ -275,7 +275,7 @@ void KWDocStructRootItem::setupArrangement()
 
     KWFrameSet *frameset = 0L;
     KWTextParag *parag = 0L;
-    QTextDocument * textdoc=0L;
+    KoTextDocument * textdoc=0L;
 
     QListViewItem *item = 0L;
     QString _name;
@@ -676,7 +676,7 @@ bool KWDocStructTree::testExistTypeOfFrame(TypeStructDocItem _type)
     KWTableFrameSet *tfs=0L;
     KWTextFrameSet *tmpParag=0L;
     KWTextParag *parag = 0L;
-    QTextDocument * textdoc=0L;
+    KoTextDocument * textdoc=0L;
 
     for ( int i = doc->getNumFrameSets() - 1; i >= 0; i-- )
     {

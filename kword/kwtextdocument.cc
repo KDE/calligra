@@ -47,9 +47,9 @@ KWTextDocument::~KWTextDocument()
 {
 }
 
-Qt3::QTextParag * KWTextDocument::createParag( QTextDocument *d, Qt3::QTextParag *pr, Qt3::QTextParag *nx, bool updateIds )
+Qt3::QTextParag * KWTextDocument::createParag( Qt3::QTextDocument *d, Qt3::QTextParag *pr, Qt3::QTextParag *nx, bool updateIds )
 {
-    return new KWTextParag( d, pr, nx, updateIds );
+    return new KWTextParag( static_cast<KoTextDocument *>(d), static_cast<KoTextParag *>(pr), static_cast<KoTextParag *>(nx), updateIds );
 }
 
 #include "kwtextdocument.moc"

@@ -464,7 +464,7 @@ public:
     /** Apply the new zoom/resolution - values are to be taken from kWordDocument() */
     virtual void zoom( bool forPrint );
 
-    virtual void preparePrinting( QPainter *, QProgressDialog *, int & ) { }
+    //virtual void preparePrinting( QPainter *, QProgressDialog *, int & ) { }
 
     /** Called once the frameset has been completely loaded or constructed.
      * The default implementation calls updateFrames() and zoom(). Call the parent :) */

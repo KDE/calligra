@@ -1542,11 +1542,13 @@ void KWTableFrameSet::zoom( bool forPrint ) {
     }
 }
 
+#if 0
 void KWTableFrameSet::preparePrinting( QPainter *painter, QProgressDialog *progress, int &processedParags ) {
     for (unsigned int i =0; i < m_cells.count(); i++) {
         m_cells.at(i)->preparePrinting( painter, progress, processedParags );
     }
 }
+#endif
 
 QDomElement KWTableFrameSet::save( QDomElement &parentElem, bool saveFrames ) {
     // When saving to a file, we don't have anything specific to the frameset to save.
@@ -1936,8 +1938,8 @@ void KWTableFrameSetEdit::keyPressEvent( QKeyEvent * e )
     {
         //don't move to other cell when we try to select
         //a text
-        QTextDocument * textdoc = textframeSet->textDocument();
-        if(textdoc->hasSelection( QTextDocument::Standard ))
+        KoTextDocument * textdoc = textframeSet->textDocument();
+        if(textdoc->hasSelection( KoTextDocument::Standard ))
             moveToOtherCell=false;
     }
     KWTableFrameSet::Cell *fs = 0L;

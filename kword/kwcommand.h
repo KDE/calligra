@@ -36,7 +36,7 @@ class KWDocument;
 class KWPasteTextCommand : public QTextCommand
 {
 public:
-    KWPasteTextCommand( QTextDocument *d, int parag, int idx,
+    KWPasteTextCommand( KoTextDocument *d, int parag, int idx,
                     const QCString & data );
     ~KWPasteTextCommand() {}
     QTextCursor *execute( QTextCursor *c );

@@ -1558,7 +1558,7 @@ void KWView::deleteFrame( bool _warning )
             if ( !textfs )
                 return;
 
-            QTextDocument * textdoc = textfs->textDocument();
+            KoTextDocument * textdoc = textfs->textDocument();
             Qt3::QTextParag * parag = textdoc->firstParag();
             if ( parag && parag->string()->length() > 0 )
             {

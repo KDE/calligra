@@ -39,7 +39,7 @@ typedef KoParagLayout KWParagLayout;
 class KWTextParag : public KoTextParag
 {
 public:
-    KWTextParag( QTextDocument *d, QTextParag *pr = 0, QTextParag *nx = 0, bool updateIds = TRUE )
+    KWTextParag( KoTextDocument *d, KoTextParag *pr = 0, KoTextParag *nx = 0, bool updateIds = TRUE )
         : KoTextParag( d, pr, nx, updateIds ) { }
     ~KWTextParag() { }
 
@@ -80,7 +80,7 @@ public:
     static KoParagLayout loadParagLayout( QDomElement & parentElem, KWDocument *doc, bool useRefStyle );
     static void saveParagLayout( const KoParagLayout& layout, QDomElement & parentElem );
 
-    virtual void join( QTextParag *parag );
+    virtual void join( Qt3::QTextParag *parag );
 protected:
     virtual void drawFormattingChars( QPainter &painter, const QString &s, int start, int len,
                                       int startX, int lastY, int baseLine, int h, // in LU

@@ -89,7 +89,7 @@ public:
     };
     friend class Cell;
 
-    /** The type of frameset. Use this to differentiate between different instantiations of 
+    /** The type of frameset. Use this to differentiate between different instantiations of
      *  the framesets. Each implementation will return a different frameType.
      */
     virtual FrameSetType type() { return FT_TABLE; }
@@ -228,7 +228,7 @@ public:
     virtual void fromXML( QDomElement &framesetElem, bool loadFrames = true, bool useNames = true );
 
     virtual void zoom( bool forPrint );
-    virtual void preparePrinting( QPainter *painter, QProgressDialog *progress, int &processedParags );
+    //virtual void preparePrinting( QPainter *painter, QProgressDialog *progress, int &processedParags );
 
     /** Contribute to the document statistics */
     virtual int paragraphs();

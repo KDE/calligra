@@ -152,12 +152,12 @@ QTextCursor * KWInsertTOCCommand::removeTOC( KWTextFrameSet *fs, QTextCursor *cu
                and the first parag of the body ends up with the Contents Title style.
             start.setParag( p );
             start.setIndex( 0 );
-            textdoc->setSelectionStart( QTextDocument::Temp, &start );
+            textdoc->setSelectionStart( KoTextDocument::Temp, &start );
             ASSERT( p->next() );
             end.setParag( p->next() );
             end.setIndex( 0 );
-            textdoc->setSelectionEnd( QTextDocument::Temp, &end );
-            KCommand * cmd = fs->removeSelectedTextCommand( cursor, QTextDocument::Temp );
+            textdoc->setSelectionEnd( KoTextDocument::Temp, &end );
+            KCommand * cmd = fs->removeSelectedTextCommand( cursor, KoTextDocument::Temp );
             if ( macroCmd )
                 macroCmd->addCommand( cmd );
             */

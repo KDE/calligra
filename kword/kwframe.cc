@@ -622,7 +622,7 @@ void KWFrameSet::setAnchored( KWTextFrameSet* textfs )
 KWAnchor * KWFrameSet::findAnchor( int frameNum )
 {
     Q_ASSERT( m_anchorTextFs );
-    QPtrListIterator<QTextCustomItem> cit( m_anchorTextFs->textDocument()->allCustomItems() );
+    QPtrListIterator<Qt3::QTextCustomItem> cit( m_anchorTextFs->textDocument()->allCustomItems() );
     for ( ; cit.current() ; ++cit )
     {
         KWAnchor * anchor = dynamic_cast<KWAnchor *>( cit.current() );

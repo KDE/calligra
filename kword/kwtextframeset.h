@@ -119,7 +119,7 @@ public:
 
     virtual void zoom( bool forPrint );
     void unzoom();
-    virtual void preparePrinting( QPainter *painter, QProgressDialog *progress, int &processedParags );
+    //virtual void preparePrinting( QPainter *painter, QProgressDialog *progress, int &processedParags );
 
     /** return true if some text is selected */
     bool hasSelection() const;
