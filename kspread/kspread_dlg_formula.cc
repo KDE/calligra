@@ -1062,6 +1062,14 @@ void KSpreadDlgFormula::changeFunction()
                 tmp1+=i18n("left(\"hello\",2) returns he\nlen(\"kspread\",10) returns kspread");
 
         }
+        else if (m_funcName=="REPT" )
+        {
+                tmp1=i18n("The REPT() function repeats the first parameter\n"
+	                "as often as told by the second parameter.\n");
+                tmp1+=i18n("Syntax : %1(String,Int)\n").arg(m_funcName);
+                tmp1+=i18n("Example : \n");
+                tmp1+=i18n("REPET(\"kspread\",3) returns kspreadkspreadkspread.");
+        }
         else
         {
                 tmp1+="help";
@@ -1278,11 +1286,19 @@ void KSpreadDlgFormula::changeFunction()
                 tmp1+=i18n("multiply(12,5,7) equals 420\nmultiply(12.5,2) equals 25");
 
         }
-        else
-                {
-                tmp1="Help";
+        else if(m_funcName=="variance")
+        {
+                tmp1=i18n("The MOD() function returns the remainder\n"
+                        "after division if the second parameter\n"
+                        "is null the function returns #DIV/0\n");
                 tmp1+=tmp2;
-                }
+                tmp1+=i18n("MOD(12,5) returns 2\nMOD(5,5) returns 0");
+        }
+        else
+        {
+                tmp1="Help\n";
+                tmp1+=tmp2;
+        }
 
         tmp.help=tmp1;
   	tmp.firstElementType=type_double;
@@ -1389,8 +1405,14 @@ void KSpreadDlgFormula::changeFunction()
     {
         tmp.nb_param=1;
         tmp.firstElementLabel=i18n("int");
-        tmp.help=m_funcName+"("+"int"+")";
+        tmp1=i18n("The fact() function calculates the factorial of the\n"
+                "parameter.The mathematic expression is (value)!.\n");
+        tmp1+=i18n("Syntax : %1(Int)\n").arg(m_funcName);
+        tmp1+=i18n("Example : \n");
+        tmp1+=i18n("fact(10) returns 3628800\nfact(0) returns 1");
+        tmp.help=tmp1;
         tmp.firstElementType=type_int;
+
     }
 
     else if (m_funcName=="PERMUT"||m_funcName=="COMBIN")
@@ -1398,7 +1420,32 @@ void KSpreadDlgFormula::changeFunction()
         tmp.nb_param=2;
         tmp.firstElementLabel=i18n("int");
         tmp.secondElementLabel=i18n("int");
-        tmp.help=m_funcName+"("+"int,int"+")";
+        if(m_funcName=="COMBIN")
+        {
+                tmp1=i18n("The COMBIN() function calculates a number\n"
+                "of combination.The first parameter is the total\n"
+                "number of element.The second parameter is the number\n"
+                "of element chosen.This two parameters should be positive,\n"
+                "otherwise the function returns an error.\n"
+                "The first parameter should be bigger than the second one\n"
+                "otherwise the function returns an error, too.\n");
+                tmp1+=i18n("Syntax : %1(Int,Int)\n").arg(m_funcName);
+                tmp1+=i18n("Example : \n");
+                tmp1+=i18n("COMBIN(12,5) returns 792\nCOMBIN(5,5) returns 1");
+
+
+        }
+        else
+        {
+                tmp1=i18n("The PERMUT() function returns the number of\n"
+                        "permutations. The first parameter is the number of\n"
+                        "elements, and the second parameter is the number of\n"
+                        "elements used in the permutation.\n");
+                tmp1+=i18n("Syntax : %1(Int,Int)\n").arg(m_funcName);
+                tmp1+=i18n("Example : \n");
+                tmp1+=i18n("PERMUT(8,5) equals 6720\nPERMUT(1,1) equals 1");
+        }
+        tmp.help=tmp1;
         tmp.firstElementType=type_int;
         tmp.secondElementType=type_int;
     }
@@ -1676,9 +1723,13 @@ void KSpreadDlgFormula::changeFunction()
         tmp.nb_param=2;
         tmp.firstElementLabel=i18n("Double");
         tmp.secondElementLabel=i18n("Double");
-
-
-        tmp.help=m_funcName+"("+"Double,Double"+")";
+        tmp1=i18n("The MOD() function returns the remainder\n"
+                "after division if the second parameter is\n"
+                "null the function returns #DIV/0\n");
+        tmp1+=i18n("Syntax : %1(Double,Double)\n").arg(m_funcName);
+        tmp1+=i18n("Example : \n");
+        tmp1+=i18n("MOD(12,5) returns 2\n MOD(5,5) returns 0");
+        tmp.help=tmp1;
         tmp.firstElementType=type_double;
         tmp.secondElementType=type_double;
     }
