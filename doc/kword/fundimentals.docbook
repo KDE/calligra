@@ -1,4 +1,14 @@
 <chapter id="fundamentals">
+<chapterinfo>
+<authorgroup>
+<author>
+<firstname>Mike</firstname>
+<surname>McBride</surname>
+</author>
+<!-- TRANS:ROLES_OF_TRANSLATORS -->
+</authorgroup>
+</chapterinfo>
+
 <title>Fundamentals</title>
 <para>This section of the documentation discusses starting &kword;, introduces the user to templates and
 discusses an important difference between two major types of templates.</para>
@@ -145,9 +155,11 @@ be moved or re-sized without changing margins, &etc; Of course this also
 means that altering the margins or paper size of your document requires
 that you individually move/resize each frame.  </para>
 
-<note><para>In addition to not having a main text frame, Page Layout documents can not
-use the automatic headers or footers (though these can be added in as frames).  Additionally, 
-footnotes must be managed by hand while in Page Layout Mode.</para></note>
+<note><para>In addition to not having a main text frame, Page Layout
+documents cannot use the automatic headers or footers (though these can be
+added in as frames).  Additionally, footnotes must be managed by hand while
+in Page Layout Mode.</para></note>
+
 </listitem>
 </varlistentry>
 </variablelist>

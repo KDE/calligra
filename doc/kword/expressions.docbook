@@ -1,4 +1,14 @@
-<sect1 id="expressions"><title>Expressions </title>
+<sect1 id="expressions">
+<sect1info>
+<authorgroup>
+<author>
+<firstname>Mike</firstname>
+<surname>McBride</surname>
+</author>
+<!-- TRANS:ROLES_OF_TRANSLATORS -->
+</authorgroup>
+</sect1info>
+<title>Expressions </title>
 <indexterm><primary>expressions</primary></indexterm>
 
 <para>Expressions are a way to quickly insert common phrases into a document.  Once an expression has been selected, the

@@ -1,11 +1,20 @@
 <chapter id="kword-screen">
+<chapterinfo>
+<authorgroup>
+<author>
+<firstname>Mike</firstname>
+<surname>McBride</surname>
+</author>
+<!-- TRANS:ROLES_OF_TRANSLATORS -->
+</authorgroup>
+</chapterinfo>
 <title>The &kword; Screen</title>
 
 <sect1 id="screen-overview">
 <title>Overview</title>
 <indexterm><primary>screen</primary></indexterm>
 
-<para>&kword;, like most <acronym>GUI</acronym> based programs, divides
+<para>&kword;, like most &GUI; based programs, divides
 the screen up into several areas. Each area of the screen is used to
 perform a group of similar features.  When you examine the &kword;
 screen, it is divided into 5 major areas:</para>
@@ -21,9 +30,9 @@ screen, it is divided into 5 major areas:</para>
 Toolbars</link>.</para></listitem>
 
 <listitem><para><link linkend="da">the Document
-Area</link>, including the rulers and scroll bars.</para></listitem>
+Area</link>, including the rulers and scrollbars.</para></listitem>
 
-<listitem><para><link linkend="statb">and the Statusbar</link>.</para></listitem>
+<listitem><para><link linkend="statb">and the Status bar</link>.</para></listitem>
 
 </orderedlist>
 
@@ -34,7 +43,7 @@ Area</link>, including the rulers and scroll bars.</para></listitem>
 
 <variablelist>
 <varlistentry>
-<term><emphasis><anchor id="kde-frame"/>The KDE Titlebar.</emphasis></term>
+<term><emphasis><anchor id="kde-frame"/>The &kde; Titlebar.</emphasis></term>
 <listitem><para>The &kde; titlebar surrounds all applications run under &kde;.
 For more information on the titlebar, please see the &kde; User Guide.</para>
 </listitem>
@@ -56,11 +65,11 @@ entitled: <link linkend="basic-menubar">The Basic Menubar</link>.</para>
 </varlistentry>
 <varlistentry>
 
-<term><emphasis><anchor id="statb"/>Statusbar</emphasis></term>
-<listitem><para>The statusbar provides important information during the editing of your document.
+<term><emphasis><anchor id="statb"/>Status bar</emphasis></term>
+<listitem><para>The status bar provides important information during the editing of your document.
 In the lower left corner, &kword; gives you the current page number and the total number of pages.  There will be helpful text shown in
-the statusbar whenever you hold the mouse over a menu item.</para>
-<para>The statusbar can be toggled on and off.
+the status bar whenever you hold the mouse over a menu item.</para>
+<para>The status bar can be toggled on and off.
 See the section on <link linkend="opt-ui">Configure &kword; User Interface</link>.</para>
 </listitem>
 </varlistentry>

@@ -1,4 +1,14 @@
-<sect1 id="mail-merge"><title>Mail Merge</title>
+<sect1 id="mail-merge">
+<sect1info>
+<authorgroup>
+<author>
+<firstname>Mike</firstname>
+<surname>McBride</surname>
+</author>
+<!-- TRANS:ROLES_OF_TRANSLATORS -->
+</authorgroup>
+</sect1info>
+<title>Mail Merge</title>
 <indexterm><primary>mail merge</primary><secondary>introduction</secondary></indexterm>
 
 <para>&kword; has the ability to use data from an outside database (or internal database) to <emphasis>personalize</emphasis> your 
@@ -10,10 +20,10 @@ manual will not cover:</para>
 <listitem><para>Security issues regarding databases.</para></listitem>
 <listitem><para>Detailed instructions on SQL.  It is assumed you have some knowledge regarding SQL if you are using a 
 SQL database for your data source.</para></listitem>
-<listitem><para>Accessing the network or internet.</para></listitem>
+<listitem><para>Accessing the network or Internet.</para></listitem>
 </itemizedlist>
 
-<para>For answers to these questions, other documentation is available on the internet that is specific to the software you have chosen.</para>
+<para>For answers to these questions, other documentation is available on the Internet that is specific to the software you have chosen.</para>
 
 <para>If you want to use the internal database of &kword;, click <link linkend="mail-merge-internal">here</link>.</para>
 
@@ -26,7 +36,7 @@ SQL database for your data source.</para></listitem>
 into your copy of QT.</para>
 <para>For more information see the <link linkend="installation">installation section of this documentation</link>.</para></note>
 <para>The database can be located on the same machine as &kword;, or on any computer which is accessable through your computer 
-network or the internet.</para>
+network or the Internet.</para>
 <para>In order to use the database, you must know the following information:</para>
 <itemizedlist>
 <listitem><para>Name of the database</para></listitem>
@@ -69,15 +79,15 @@ the menubar. A dialog box will appear.</para>
 </mediaobject>
 </screenshot>
 
-<para>Enter the URL or IP address of the computer that holds the database in the text box labeled <guilabel>Hostname:</guilabel>.</para>
-<para>Select the correct driver from the dropdown box labeled <guilabel>Driver:</guilabel>.  </para>
+<para>Enter the &URL; or IP address of the computer that holds the database in the text box labeled <guilabel>Hostname:</guilabel>.</para>
+<para>Select the correct driver from the combo box labeled <guilabel>Driver:</guilabel>.  </para>
 <para>Enter the database name you were provided in the text box labeled <guilabel>Database name:</guilabel> and a
 user name in the text box labeled <guilabel>Username:</guilabel>.</para>
 <para>If the database access is through a port other than the default port enter that port number in the text box labeled 
 <guilabel>Port:</guilabel>.</para>
 <tip><para>If you are going to be using this database at other times, you can click on the button labeled
 <guibutton>Keep settings</guibutton>. &kword; will ask for a descriptive name.</para>
-<para>When you want to restore these settings on future sessions, simply select the descriptive name from the dropdown box in the 
+<para>When you want to restore these settings on future sessions, simply select the descriptive name from the combo box in the 
 upper left of the dialog box.</para>
 </tip>
 <para>When all information is correct, click <guibutton>OK</guibutton>.  &kword; will ask you for a password to that database.  Enter 
@@ -117,8 +127,7 @@ click <guibutton>Execute</guibutton>, the new query results will appear.</para>
 data.EyeColour from eMail, data where data.FirstName=eMail.FirstName and 
 data.LastName=eMail.LastName
 </userinput></para>
-<para></para>
-<para></para></note>
+</note>
 <para>Clicking <guibutton>Setup</guibutton>, will allow you to <link linkend="mail-merge-login">log into a different database</link>.</para>
 <para>When you have the correct query in the <guilabel>Query</guilabel> text box, click <guibutton>OK</guibutton> to select that query.
 </para>
@@ -197,7 +206,7 @@ in the dialog box (Name, Address, Balance Due, etc....). </para>
 <warning><para>Be <emphasis>very</emphasis> sure you have selected the correct entry name.  Once you tell &kword; to delete 
 the entry, the entry <emphasis>and all of the data within those entries will be deleted immediately</emphasis>.  You will not be
 given the option to stop or reverse the process once it is begun.</para></warning>
-<para></para>
+
 </sect4>
 <sect4 id="mail-merge-internal-data-value"><title>Entering the data into the table</title>
 <para>Now that the structure of your data is defined, you can enter the data into your entries.</para>
@@ -227,7 +236,7 @@ through the list of records.</para>
 <para>To delete a record, click the 
 <inlinemediaobject><imageobject>
 <imagedata fileref="delrecord.png" format="PNG" align="center"/></imageobject></inlinemediaobject> button.</para>
-<warning><para>Be careful when you are deleting records.  Once deleted, the record can not be retrieved.</para></warning>
+<warning><para>Be careful when you are deleting records.  Once deleted, the record cannot be retrieved.</para></warning>
 <para>Continue to enter all data until your dataset is complete.</para>  
 <para>After your dataset is complete, click <guibutton>OK</guibutton> to 
 save the changes to your dataset.  This will bring up the mail merge main dialog:</para>
@@ -270,7 +279,7 @@ you can proceed to printing your document.</para>
 
 <para>To delete a merge field, simply place the cursor at the end of the merge field, and press the &Backspace; key.  The entire 
 merge field will be deleted.</para>
-<para></para>
+
 </sect4>
 </sect3>
 

@@ -1,4 +1,13 @@
 <sect1 id="tab-stops">
+<sect1info>
+<authorgroup>
+<author>
+<firstname>Mike</firstname>
+<surname>McBride</surname>
+</author>
+<!-- TRANS:ROLES_OF_TRANSLATORS -->
+</authorgroup>
+</sect1info>
 <title>Using Tab Stops</title>
 <indexterm><primary>tab stops</primary><secondary>using</secondary></indexterm>
 <indexterm><primary>paragraph</primary><secondary>setting tab stops</secondary></indexterm>
@@ -296,7 +305,7 @@ is in the box on the left side of the dialog panel</para>
 
 <para>By default, &kword; uses the standard tab function that you are familiar with when using a typewriter or most wordprocessing programs.
 You can, however, have &kword; insert spaces or lines to fill the tab space.</para>
-<para>To change the way the tab fills work in &kword; you change the dropdown box labeled <guilabel>Filling</guilabel>.  This drop down box
+<para>To change the way the tab fills work in &kword; you change the combo box labeled <guilabel>Filling</guilabel>.  This combo box
 gives you many different line styles to choose from.</para>
 <para>You can change the thickness of the lines by using the <guilabel>Width</guilabel> text box.</para>
 

@@ -5,20 +5,29 @@ To work on this document standalone, uncomment the prolog.
 Comment it out again when you are done -->
 	
 <chapter id="menu-items">
-<title>The Menu Items/Tool Bars</title>
+<chapterinfo>
+<authorgroup>
+<author>
+<firstname>Mike</firstname>
+<surname>McBride</surname>
+</author>
+<!-- TRANS:ROLES_OF_TRANSLATORS -->
+</authorgroup>
+</chapterinfo>
+<title>The Menu Items/Toolbars</title>
 
 <sect1 id="menu-intro">
-<title>Introduction to Menu Bars and Tool Bars</title>
+<title>Introduction to Menubars and Toolbars</title>
 
 <para>The key to getting the most out of &kword;, is found in the menu
 bars and the toolbars.</para>
 
-<para>The menu bar is organized into groups of functions (&eg; file
+<para>The menubar is organized into groups of functions (&eg; file
 functions, table functions, &etc;).  Below each of these groups, is a
 submenu of actions.  Some of these submenus will have sub menus of
 their own.</para>
 
-<para>The tool bars are also organized into groups.  Each toolbar
+<para>The toolbars are also organized into groups.  Each toolbar
 consists of a set of buttons.  Each button performs a specific
 function.  The toolbars are designed to act as shortcuts for more
 commonly used functions.</para>
@@ -29,13 +38,13 @@ manipulation of &kword;'s toolbars to suit your needs.</para>
 <para>The second part of this section, takes a detailed look at each
 menubar function, and each standard toolbar button, and provides you with a
 brief summary of its action.  Most of these menubar functions and
-tool bar buttons also provide you with a link to more detailed
+toolbar buttons also provide you with a link to more detailed
 information located elsewhere in the &kword; Handbook.</para>
 
 </sect1>
 
 <sect1 id="toolbars">
-<title>Hiding, Changing, and Moving Tool Bars</title>
+<title>Hiding, Changing, and Moving Toolbars</title>
 <indexterm><primary>toolbars</primary><secondary>hiding</secondary></indexterm>
 
 <para>&kword; offers the user great flexibility when it comes to
@@ -44,7 +53,7 @@ you have for relocating, reformatting and removing toolbars from your
 desktop.</para>
 
 <sect2 id="hide-toolbar">
-<title>Hiding Tool Bars </title>
+<title>Hiding Toolbars </title>
 
 <para>When you start &kword; for the first time, all the several toolbars
 are visible.  If you don't think you will need a toolbar, and want to
@@ -73,10 +82,10 @@ listed.  Simply select the toolbar you want to hide or restore.</para>
 <guilabel>Left</guilabel> and <guilabel>Right</guilabel> refer to the
 edges of the &kword; screen.</para>
 
-<para>By locating a tool bar in the <guilabel>Bottom</guilabel>
+<para>By locating a toolbar in the <guilabel>Bottom</guilabel>
 position, for example, you move the toolbar into a horizontal position
 below the Document Area, and along the bottom of the &kword;
-window. By locating a tool bar in the <guilabel>Left</guilabel>
+window. By locating a toolbar in the <guilabel>Left</guilabel>
 position,however, you move the toolbar into a vertical position to the
 left of the Document Area, and along the left edge of the &kword;
 window.</para>
@@ -177,7 +186,7 @@ of another toolbar.</para>
 </sect1>
 
 <sect1 id="basic-menubar">
-<title>Basic Menu Bar</title>
+<title>Basic Menubar</title>
      
 <para>The Menubar contains all commands available to &kword;.  It is
 divided into 10 general categories.</para>
@@ -408,7 +417,7 @@ classification.</para>
 </menuchoice>
 </term>
 <listitem>
-<para><action>Launches your e-mail client so you can send the current file as an attachment.  The file must have been saved once before this option can be selected.</action></para> 
+<para><action>Launches your email client so you can send the current file as an attachment.  The file must have been saved once before this option can be selected.</action></para> 
 </listitem>
 </varlistentry>
 
@@ -799,7 +808,7 @@ characters.  Selecting this option will display non-printable characters
 (spaces, character returns, and tab stops).  Selecting this option again
 will turn the display of these characters off.</action></para>
 <para>Which formatting characters are visible can be configured in the 
-<link linkend="opt-misc">KWord configuration dialog</link>.</para>
+<link linkend="opt-misc">&kword; configuration dialog</link>.</para>
 </listitem>
 </varlistentry>
 
@@ -2348,8 +2357,8 @@ a task from the menubar.  Click on that task for more details. </para>
 <row><entry><inlinemediaobject><imageobject><imagedata fileref="formllind.png" format="PNG"/></imageobject></inlinemediaobject></entry><entry>Add Lower Left Index</entry></row>
 <row><entry><inlinemediaobject><imageobject><imagedata fileref="formurind.png" format="PNG"/></imageobject></inlinemediaobject></entry><entry>Add Upper Right Index</entry></row>
 <row><entry><inlinemediaobject><imageobject><imagedata fileref="formlrind.png" format="PNG"/></imageobject></inlinemediaobject></entry><entry>Add Lower Right Index</entry></row>
-<row><entry></entry><entry>Right Facing Characters</entry></row>
-<row><entry></entry><entry>Left Facing Characters</entry></row>
+<row><entry>-</entry><entry>Right Facing Characters</entry></row>
+<row><entry>-</entry><entry>Left Facing Characters</entry></row>
 <row><entry><inlinemediaobject><imageobject><imagedata fileref="formspecchar.png" format="PNG"/></imageobject></inlinemediaobject></entry><entry>Special Symbols</entry></row>
 <row><entry><inlinemediaobject><imageobject><imagedata fileref="kforminscol.png" format="PNG"/></imageobject></inlinemediaobject></entry><entry>Insert Column</entry></row>
 <row><entry><inlinemediaobject><imageobject><imagedata fileref="kformappcol.png" format="PNG"/></imageobject></inlinemediaobject></entry><entry>Append Column</entry></row>
@@ -2408,7 +2417,7 @@ specify the amount of Red, Green and Blue to be mixed to form the current color.
 <term>Palates</term>
 <listitem><para>A palate is a group of related colors.  These colors are all made available for easy selection according to a meaningful
 association.</para>
-<para>To select a new palate, click on the drop down box at the top of the palate selection area.  
+<para>To select a new palate, click on the combo box at the top of the palate selection area.  
 You will be presented with several choices:</para>
 <para><guilabel>Recent Colors</guilabel> - This is a list of the most recently used colors in your document.  You can use this palate to
 maintain consistency.  As each new color is selected, it is automatically added to the recent colors palate.</para>
@@ -2463,37 +2472,37 @@ for insertion into the document). An example is shown below.</para>
 <para>This section  will look more closely at the dialogs and detail their use.</para>
 
 <para>The large box below that shows I currently have 1 folder in this
-directory, entitled <filename>Past Work</filename>, and 3 files
+folder, entitled <filename>Past Work</filename>, and 3 files
 (<filename>Job Description</filename>, <filename>Newsletter</filename> and
 <filename>Resume</filename>).</para>
 
 <para><emphasis>Toolbar</emphasis></para>
 
-<para>This example dialog shows the current directory is <filename
+<para>This example dialog shows the current folder is <filename
 class="directory">/home/mmcbride/kword</filename>.  You can see this
-by the textbox at the top of the dialog.  If you click on this drop
-down box, you will see common and recently visited directories.  By
-selecting one of these directories, you will be immediately moved to
-that directory and the dialog box will update the file list.</para>
+by the text box at the top of the dialog.  If you click on this drop
+down box, you will see common and recently visited folders.  By
+selecting one of these folders, you will be immediately moved to
+that folder and the dialog box will update the file list.</para>
 
 <para>In the upper left corner, is a blue arrow pointed up.  This
-arrow will take you up one level in the directory structure.</para>
+arrow will take you up one level in the folder structure.</para>
 
 <para>The next two buttons are backwards and forward buttons.  These
-buttons work just like an internet browser, where you can use the back
-button to travel to the previous directory, and the forward button to
-advance into a directory you just came from.</para>
+buttons work just like an Internet browser, where you can use the back
+button to travel to the previous folder, and the forward button to
+advance into a folder you just came from.</para>
 
 <para>Next to the arrow buttons, is a button that looks like a house.
-Clicking this will take you to your home directory.</para>
+Clicking this will take you to your home folder.</para>
 
 <para>Next to the home button, is a reload button.  Clicking this
-button, causes &kword; to reload the current directory if new files have been
+button, causes &kword; to reload the current folder if new files have been
 added or deleted.</para>
 
 <para>Next to the reload button, is a button with a gray ribbon on it.
 This button allows you to set and navigate through bookmarks.  This is
-a quick way to jump to commonly accessed directories.  By clicking
+a quick way to jump to commonly accessed folders.  By clicking
 this button, a submenu appears which allows you to add bookmarks or
 jump to a new bookmark.</para>
 
@@ -2502,10 +2511,10 @@ Clicking this button brings up a sub menu with several entries:</para>
 <para>
 <variablelist>
 <varlistentry>
-<term><guimenuitem>New Directory</guimenuitem></term>
+<term><guimenuitem>New Folder</guimenuitem></term>
 <listitem>
-<para>Create a new subdirectory in the current directory.  &kword; will 
-automatically move you into this new subdirectory once it is created.</para>
+<para>Create a new subfolder in the current folder.  &kword; will 
+automatically move you into this new subfolder once it is created.</para>
 </listitem>
 </varlistentry>
 
@@ -2523,8 +2532,8 @@ document.</para>
 <para>This will bring up another submenu.  You can sort the files by
 filename, by date, or by size.  Selecting the
 <guimenuitem>Reverse</guimenuitem> option will reverse the sort
-order.  Selecting <guimenuitem>Directories First</guimenuitem> will
-place the directories above all other files in the dialog box.
+order.  Selecting <guimenuitem>Folders First</guimenuitem> will
+place the folders above all other files in the dialog box.
 Selecting <guimenuitem>Case insensitive</guimenuitem> will sort
 filenames regardless of capitalization.</para>
 </listitem>
@@ -2551,7 +2560,7 @@ file.</para>
 
 <para>There are two buttons next to the Extras Button which switch between <emphasis>Short View</emphasis> and
 <emphasis>Detailed View</emphasis></para>
-<para>Just to the left of the directory box, is the <emphasis>Preview Button</emphasis>, which toggles the preview 
+<para>Just to the left of the folder box, is the <emphasis>Preview Button</emphasis>, which toggles the preview 
 window in the dialog.  If the button is depressed, a preview box appears in the right of the dialog.  If it is not pressed, the file list 
 box is larger.</para>
 
@@ -2559,7 +2568,7 @@ box is larger.</para>
 
 <para>Along the left side of the dialog box, is a column that contains
 several icons. You can think of each of these icons as a shortcut to
-another subdirectory. If you click on an icon, you will be immediately
+another subfolder. If you click on an icon, you will be immediately
 moved to that location.</para>
 
 <para>You can add/edit or delete entries from the Location Bar.
@@ -2574,7 +2583,7 @@ filename of the currently selected file when loading new documents or files into
 &kword;.  When saving a file, you will enter the desired filename in this text box.</para>
 
 <para>The text box labled <guilabel>Filter</guilabel> shows we are only looking
-at &kword; files.  By clicking on the drop down box, you can select from several
+at &kword; files.  By clicking on the combo box, you can select from several
 different file formats.  You can also select <guilabel>All supported files</guilabel> to display
 all files that are supported by &kword;.  The file types available will change depending on
 the specific task at hand.</para>
@@ -2586,7 +2595,7 @@ document.</para>
 <para>There is an <guibutton>OK</guibutton> button, which will be used
 when we have selected the correct filename.</para>
 
-<para>Using this dialog, you can move through the directory tree to find
+<para>Using this dialog, you can move through the folder tree to find
 any location on your computer.</para>
 
 <para>To enter a folder click on that folder.  To exit that folder,

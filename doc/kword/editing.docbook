@@ -1,4 +1,13 @@
 <chapter id="guides-2">
+<chapterinfo>
+<authorgroup>
+<author>
+<firstname>Mike</firstname>
+<surname>McBride</surname>
+</author>
+<!-- TRANS:ROLES_OF_TRANSLATORS -->
+</authorgroup>
+</chapterinfo>
 <title>Detailed Guides: Editing your Document</title>
 
 <para>This section of the guide will cover more advanced features of
@@ -451,7 +460,7 @@ the toolbar.</para>
 </screenshot>
 
 <sect3><title>Basic Text Search</title>
-<para>The drop-down box labelled <guilabel>Text to Find</guilabel>,
+<para>The combo box labelled <guilabel>Text to Find</guilabel>,
 provides a place for you to enter the text of your search command. (In
 the screenshot, that box is currently filled with
 <emphasis>KDE</emphasis>)</para> <para>If you click on
@@ -517,15 +526,15 @@ certain formatting options as well as the text itself.</para>
 </screenshot>
 
 <para>You can use this dialog to select the options you want to include in your search.</para>
-<para>The left column consists of nine checkboxes.  If there is a mark in the checkbox, then &kword; will evaluate
-any searchable text for that property.  If no mark is in the checkbox, &kword; does not consider that property when performing a search.</para>
+<para>The left column consists of nine check boxes.  If there is a mark in the check box, then &kword; will evaluate
+any searchable text for that property.  If no mark is in the check box, &kword; does not consider that property when performing a search.</para>
 
 <variablelist>
 
 <varlistentry>
 <term><guilabel>Family:</guilabel></term>
 <listitem>
-<para>Use this drop down box to select the font family you want to include in your search text.</para>
+<para>Use this combo box to select the font family you want to include in your search text.</para>
 </listitem>
 </varlistentry>
 
@@ -694,7 +703,7 @@ appears.</para>
 <sect3><title>Basic Search and Replace</title>
 <indexterm><primary>replacing text</primary></indexterm>
 
-<para>The drop-down box labeled <guilabel>Text to find:</guilabel>,
+<para>The combo box labeled <guilabel>Text to find:</guilabel>,
 provides a place for you to enter the text of your search command. (In
 the screenshot, that box is currently filled with
 <emphasis>KDE</emphasis>)</para>
@@ -757,15 +766,15 @@ certain formatting options as well as the text itself.</para>
 </screenshot>
 
 <para>You can use this dialog to select the options you want to include in your search.</para>
-<para>The left column consists of nine checkboxes.  If there is a mark in the checkbox, then &kword; will evaluate
-any searchable text for that property.  If no mark is in the checkbox, &kword; does not consider that property when performing a search.</para>
+<para>The left column consists of nine check boxes.  If there is a mark in the check box, then &kword; will evaluate
+any searchable text for that property.  If no mark is in the check box, &kword; does not consider that property when performing a search.</para>
 
 <variablelist>
 
 <varlistentry>
 <term><guilabel>Family:</guilabel></term>
 <listitem>
-<para>Use this drop down box to select the font family you want to include in your search text.</para>
+<para>Use this combo box to select the font family you want to include in your search text.</para>
 </listitem>
 </varlistentry>
 
@@ -844,16 +853,16 @@ changes the text, but not the formatting of the text (bold text will remain bold
 </screenshot>
 
 <para>You can use this dialog to select the format of the replaced text.</para>
-<para>The left column consists of nine checkboxes.  If there is a mark in the checkbox, then &kword; will change
+<para>The left column consists of nine check boxes.  If there is a mark in the check box, then &kword; will change
 any replaced text to match the property selected.  
-If no mark is in the checkbox, &kword; does not consider that property when replacing text.</para>
+If no mark is in the check box, &kword; does not consider that property when replacing text.</para>
 
 <variablelist>
 
 <varlistentry>
 <term><guilabel>Family</guilabel></term>
 <listitem>
-<para>Use this drop down box to select the font family you want your replacement text to use.</para>
+<para>Use this combo box to select the font family you want your replacement text to use.</para>
 </listitem>
 </varlistentry>
 
@@ -919,7 +928,7 @@ to change the fonts to boldface or italicized fonts.</para>
 <para>This placeholder will contain the entire text string matched by the find command.</para>
 <para>For example:</para>
 <para>You create a search string, using patterns:  <emphasis>Reference \d</emphasis></para>
-<para>Now in the <guilabel>Replace With</guilabel> section of the replace dialog, you place a mark in the checkbox labeled
+<para>Now in the <guilabel>Replace With</guilabel> section of the replace dialog, you place a mark in the check box labeled
 <guilabel>Use placeholders</guilabel>.  Click the <guibutton>Insert Placeholder</guibutton> button and select
 <guilabel>Complete text found</guilabel>.  &kword; will insert a <emphasis>/0</emphasis> in the 
 <guilabel>Replacement text</guilabel> text box.</para>
@@ -1156,12 +1165,12 @@ you are entering a carrage return.</para></note>
 </varlistentry>
 
 <varlistentry>
-<term><guilabel>Whitespace</guilabel></term>
+<term><guilabel>White Space</guilabel></term>
 <listitem>
 <para>Once selected, &kword; will insert a back slash followed by a <emphasis>s</emphasis> (\s) into your string.
-&kword; will match any string of characters with a whitespace character in that portion of the string.</para>
-<note><para>Whitespace characters is a group of characters that change the flow or move the text around.
-Examples of whitespace characters are spaces, tabs, and carrage returns.</para></note>
+&kword; will match any string of characters with a white space character in that portion of the string.</para>
+<note><para>White Space characters is a group of characters that change the flow or move the text around.
+Examples of white space characters are spaces, tabs, and carrage returns.</para></note>
 </listitem>
 </varlistentry>
 
@@ -1177,7 +1186,7 @@ Examples of whitespace characters are spaces, tabs, and carrage returns.</para><
 </sect1>
 
 <sect1 id="spell-check">
-<title>Spell Checking</title>
+<title>Spellchecking</title>
 <indexterm><primary>spelling</primary><secondary>check spelling of document</secondary></indexterm>
 <para>&kword; can compare each word in your document to several commonly available dictionaries.  It will offer you 
 the opportunity to change any words it believes are misspelled.</para>
@@ -1188,7 +1197,7 @@ specific part of your document, simply <link linkend="select">select the text</l
 spelling of.</para>
 <para>To check the entire document, leave all text in the document unsellected, and &kword; will check 
 the entire document.</para></note>
-<para>The <guilabel>Spell Checking...</guilabel> command can be invoked
+<para>The <guilabel>Spellchecking...</guilabel> command can be invoked
 2 ways:</para>
 
 <itemizedlist>
@@ -1205,7 +1214,7 @@ the toolbar.</para>
 </listitem>
 </itemizedlist>
 
-<para>Spell checking your document is controlled through a dialog
+<para>spellchecking your document is controlled through a dialog
 box.</para>
 
 <screenshot>
@@ -1221,7 +1230,7 @@ box.</para>
 the spelling program has determined as possible correct spellings.</para>
 
 <para>There is a progress bar below the list of suggestions which tells
-you how much of the document has been spell checked. In this example, that is 28 percent.</para>
+you how much of the document has been spellchecked. In this example, that is 28 percent.</para>
 
 <para>From here you have eight options:</para>
 
@@ -1275,27 +1284,27 @@ ask about this word again.</para>
 <varlistentry>
 <term><guibutton>Cancel</guibutton></term>
 <listitem>
-<para>Stop spell checking.</para>
+<para>Stop spellchecking.</para>
 </listitem>
 </varlistentry>
 
 <varlistentry>
 <term><guibutton>Help</guibutton></term>
 <listitem>
-<para>Loads a help file for the spell checker.</para>
+<para>Loads a help file for the spellchecker.</para>
 </listitem>
 </varlistentry>
 </variablelist>
 
 <para>When the entire document has been checked, &kword; will return the cursor to the same spot 
-in the document that the spell checking was begun.</para>
+in the document that the spellchecking was begun.</para>
 
 <note>
 <para>If the document does not have any spelling errors, &kword; does
-not show a dialog box.  When spell checking is started, it
+not show a dialog box.  When spellchecking is started, it
 will proceed to check all of the document against the dictionary, and
-then exit the spell check dialog box.  With short documents, you may
-miss the dialog box.  &kword; has spell checked the document!</para>
+then exit the spellcheck dialog box.  With short documents, you may
+miss the dialog box.  &kword; has spellchecked the document!</para>
 </note>
 
 <para>There are several options for configuring the spelling application used.
@@ -1307,7 +1316,7 @@ For more details, please see the section entitled
 <indexterm><primary>spelling</primary><secondary>automatically mark misspelled words</secondary></indexterm>
 
 <para>&kword; can check the spelling of your document as you edit it.  It will underline in red any word which 
-it can not find in the dictionary.  This behavior can be turned on and off by the user.  See the section 
+it cannot find in the dictionary.  This behavior can be turned on and off by the user.  See the section 
 entitled <link linkend="opt-spell">Configure Spelling</link> for more information.</para>
 </sect2>
 
@@ -1337,7 +1346,7 @@ from the menubar</para></listitem>
 <imageobject><imagedata fileref="thesaurus.png" format="PNG"/></imageobject>
 </mediaobject>
 </screenshot>
-<para>The word you selected from your document appears in the drop down box labeled <guilabel>Search for:</guilabel>.</para>
+<para>The word you selected from your document appears in the combo box labeled <guilabel>Search for:</guilabel>.</para>
 <para>There are three columns of alternate words:  Synonyms, More General words, More Specific Words.</para>
 <para>If you find an appropriate alternate word, simply click on the word in the list, and this word will now be listed in the text box labeled
 <guilabel>Replace with:</guilabel>.</para>
@@ -1536,16 +1545,16 @@ of text with another.  This can be useful for special symbols, commonly
 used abbreviations that you want spelled out, or abbreviations.</para>
 
 <para>&kword; uses different autocorrection strings depending on the language.  
-Set the correct language using the drop down box labeled 
+Set the correct language using the combo box labeled 
 <guilabel>Replacement and exception for language</guilabel>.</para>
 
-<para>The checkbox labeled <guilabel>Enable word replacement</guilabel> is used to 
-toggle on and off the autoreplacement features of &kword;.  If there is no mark in the checkbox, 
+<para>The check box labeled <guilabel>Enable word replacement</guilabel> is used to 
+toggle on and off the autoreplacement features of &kword;.  If there is no mark in the check box, 
 then &kword; will not perform any autoreplacements from the list in this dialog.</para>
 
-<para>If there is a mark in the checkbox labeled <guilabel>Replace text with formatting</guilabel> 
+<para>If there is a mark in the check box labeled <guilabel>Replace text with formatting</guilabel> 
 &kword; will not only change the text when it finds a match, but it will change the formatting of the new text. 
-If there is no mark in this checkbox, then
+If there is no mark in this check box, then
 &kword; uses the same formatting options for the replaced text as it found in the search text.  For more information 
 on setting the format options for replacement text, see the section on 
 <link linkend="autocorrection-format-options">Changing the format of the autocorrection string</link>.</para>
@@ -1610,16 +1619,16 @@ button.</para>
 </mediaobject>
 </screenshot>
 <para>You can use this dialog to select the format of the replaced text.</para>
-<para>The left column consists of nine checkboxes.  If there is a mark in the checkbox, then &kword; will change
+<para>The left column consists of nine check boxes.  If there is a mark in the check box, then &kword; will change
 any replaced text to match the property selected.
-If no mark is in the checkbox, &kword; does not consider that property when replacing text.</para>
+If no mark is in the check box, &kword; does not consider that property when replacing text.</para>
 
 <variablelist>
 
 <varlistentry>
 <term><guilabel>Family</guilabel></term>
 <listitem>
-<para>Use this drop down box to select the font family you want your replacement text to use.</para>
+<para>Use this combo box to select the font family you want your replacement text to use.</para>
 </listitem>
 </varlistentry>
 
@@ -1773,8 +1782,8 @@ from the menubar.  This will bring up a dialog.</para>
 </mediaobject>
 </screenshot>
 
-<para>The first checkbox labeled <guilabel>Enable completion</guilabel> is used to toggle autocompletion on and off.</para>
-<para>The second checkbox, labeled <guilabel>Automatically add new words to completion list</guilabel> will add any word equal to or longer
+<para>The first check box labeled <guilabel>Enable completion</guilabel> is used to toggle autocompletion on and off.</para>
+<para>The second check box, labeled <guilabel>Automatically add new words to completion list</guilabel> will add any word equal to or longer
 than the <guilabel>Minimum word length</guilabel> to the list of proposed autocompletion words.</para>
 <para>The large listbox in the center of the dialog contains the current proposed list of autocompletion words.</para>
 <note><para>Not all words listed in the list box will be replaced when autocompletion is selected.</para>
@@ -1793,7 +1802,7 @@ from automatically adding short words to the completion list.   You can select a
 words into the autocompletion list.  This option is most important when
 <guilabel>Automatically add words to completion list</guilabel> is enabled.
 This option keeps the list from becoming too cumbersome. You can select any value from 1 to 500.</para>
-<para>If a mark is placed in the checkbox labeled <guilabel>Append space</guilabel>, then &kword; adds a single space to the 
+<para>If a mark is placed in the check box labeled <guilabel>Append space</guilabel>, then &kword; adds a single space to the 
 end of a word after autocompletion, this means it is not necessary to add the space manually for the next word.</para>
 <para>Click <guibutton>OK</guibutton> to save your options.  Click <guibutton>Cancel</guibutton> to abort all changes.</para>
 

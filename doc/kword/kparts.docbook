@@ -1,4 +1,13 @@
 <sect1 id="kparts">
+<sect1info>
+<authorgroup>
+<author>
+<firstname>Mike</firstname>
+<surname>McBride</surname>
+</author>
+<!-- TRANS:ROLES_OF_TRANSLATORS -->
+</authorgroup>
+</sect1info>
 <title>KOffice Data</title>
 <indexterm><primary>inserting &koffice; data</primary></indexterm>
 <indexterm><primary>&koffice;</primary><secondary>inserting data into &kword;</secondary></indexterm>

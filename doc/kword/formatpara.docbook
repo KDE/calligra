@@ -1,4 +1,13 @@
 <sect1 id="format-para">
+<sect1info>
+<authorgroup>
+<author>
+<firstname>Mike</firstname>
+<surname>McBride</surname>
+</author>
+<!-- TRANS:ROLES_OF_TRANSLATORS -->
+</authorgroup>
+</sect1info>
 <title>Formatting Paragraphs</title>
 <indexterm><primary>paragraph</primary><secondary>formatting</secondary></indexterm>
 <para>This section will detail all the options available to format paragraphs.</para>
@@ -104,9 +113,9 @@ consists of two elements:</para>
 
 <variablelist>
 <varlistentry>
-<term>Drop-down box</term>
+<term>combo box</term>
 <listitem>
-<para>The drop down box determines the spacing between lines.  There are three predefined line spacing choices:
+<para>The combo box determines the spacing between lines.  There are three predefined line spacing choices:
 <guilabel>Single</guilabel>, <guilabel>1.5 lines</guilabel> and <guilabel>Double</guilabel>.  You can
 also select <guilabel>Custom</guilabel> which will allow you to enter a specific line spacing.</para>
 <para>The values selected here will be applied to all lines within the selected paragraphs.</para>
@@ -117,7 +126,7 @@ also select <guilabel>Custom</guilabel> which will allow you to enter a specific
 <term>Text box</term>
 <listitem>
 <para>Enter a value in this text box to specify the spacing between paragraphs.  
-This value only changes the spacing when <guilabel>Custom</guilabel> is selected in the drop-down box to the left.</para>
+This value only changes the spacing when <guilabel>Custom</guilabel> is selected in the combo box to the left.</para>
 
 <note>
 <para>Changes to this entry do <emphasis>not</emphasis> affect the line
@@ -228,7 +237,7 @@ borders.</para>
 <varlistentry>
 <term><guilabel>Style</guilabel></term>
 <listitem>
-<para>Use this drop-down box to select the overall type
+<para>Use this combo box to select the overall type
 of the new border. </para>
 <para>The choices are previewed in each selection.</para>
 </listitem>

@@ -1,4 +1,23 @@
 <chapter id="guides">
+<chapterinfo>
+<authorgroup>
+<author>
+<firstname>Neil</firstname>
+<surname>Lucock</surname>
+<affiliation>
+<address><email>neil@nlucock.freeserve.co.uk</email></address>
+</affiliation>
+</author>
+<author>
+<firstname>Krishna</firstname>
+<surname>Tateneni</surname>
+<affiliation>
+<address><email>tateneni@pluto.njcc.com</email></address>
+</affiliation>
+</author>
+<!-- TRANS:ROLES_OF_TRANSLATORS -->
+</authorgroup>
+</chapterinfo>
 <title>Detailed Guides</title>
 
 <para>This chapter describes how to perform some common tasks in
@@ -151,16 +170,16 @@ button.</para>
 </screenshot>
 </step>
 
-<step><para>What we have now are new HTML and pictures directories,
+<step><para>What we have now are new HTML and pictures folders,
 created where we earlier set the path.</para>
 
 <screenshot>
-<screeninfo>The newly created HTML slideshow directories</screeninfo>
+<screeninfo>The newly created HTML slideshow folders</screeninfo>
 <mediaobject>
 <imageobject>
 <imagedata fileref="htmlshow07.png" format="PNG"/>
 </imageobject>
-<textobject><phrase>The newly created HTML slideshow directories</phrase></textobject>
+<textobject><phrase>The newly created HTML slideshow folders</phrase></textobject>
 </mediaobject>
 </screenshot>
 </step>
@@ -176,7 +195,7 @@ then works the same as a &kpresenter; slideshow.</para>
 
 <para>Each click on the screen takes you to the next slide.</para>
 
-<para>&FTP; it all to your website, remembering to keep the directory
+<para>&FTP; it all to your website, remembering to keep the folder
 structure intact, and the world can admire your work.</para>
 
 </sect1>

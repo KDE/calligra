@@ -1,10 +1,9 @@
 <?xml version="1.0" ?>
 <!DOCTYPE book PUBLIC "-//KDE//DTD DocBook XML V4.1.2-Based Variant V1.1//EN" "dtd/kdex.dtd" [
   <!ENTITY kappname "&koshell;">
-  <!ENTITY % English "INCLUDE" > <!-- change language only here -->
+  <!ENTITY package "koffice">
+  <!ENTITY % English "INCLUDE" >
   <!ENTITY % addindex "IGNORE">
-  
-  
 ]>
 
 <book lang="&language;">
@@ -14,11 +13,11 @@
 
 <authorgroup>
 <author>
-<firstname></firstname>
-<othername></othername>
-<surname></surname>
+<firstname>-</firstname>
+<othername>-</othername>
+<surname>-</surname>
 <affiliation>
-<address><email></email></address>
+<address><email>-</email></address>
 </affiliation>
 </author>
 <!-- TRANS:ROLES_OF_TRANSLATORS -->
@@ -56,9 +55,10 @@ Please respect the format of the date (DD/MM/YYYY) and of the version
 <chapter id="introduction">
 <title>Introduction</title>
 <para>The documentation for &koshell; was not finished when &kde; was installed on this computer.</para> 
-<para>If you need help, please check <ulink url="http://www.kde.org">The KDE Website</ulink> for updates, or by submitting your question to <ulink url="mailto:kde-user@kde.org">The &kde; User Mailing list</ulink>.</para>
+<para>If you need help, please check <ulink url="http://www.kde.org">The &kde; Website</ulink> for updates, or by submitting your question to <ulink url="mailto:kde-user@kde.org">The &kde; User Mailing list</ulink>.</para>
 <para><emphasis>The &kde; Team</emphasis></para>
 
+<!-- TRANS:CREDIT_FOR_TRANSLATORS -->
 &underFDL;
 &underGPL;
 

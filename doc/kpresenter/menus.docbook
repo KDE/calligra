@@ -5,6 +5,25 @@ To edit or validate this document separately, uncomment this prolog
 Be sure to comment it out again when you are done -->
 
 <chapter id="menu-items">
+<chapterinfo>
+<authorgroup>
+<author>
+<firstname>Neil</firstname>
+<surname>Lucock</surname>
+<affiliation>
+<address><email>neil@nlucock.freeserve.co.uk</email></address>
+</affiliation>
+</author>
+<author>
+<firstname>Krishna</firstname>
+<surname>Tateneni</surname>
+<affiliation>
+<address><email>tateneni@pluto.njcc.com</email></address>
+</affiliation>
+</author>
+<!-- TRANS:ROLES_OF_TRANSLATORS -->
+</authorgroup>
+</chapterinfo>
 <title>The Menu and Toolbar Items</title>
 
 <para>
@@ -73,7 +92,7 @@ shown in the screenshot below: </para>
 </screenshot>
 
 <para>
-The first few items in the pop-up menu have to do with the placement of
+The first few items in the popup menu have to do with the placement of
 the toolbar. You can choose any of the four sides of the &kpresenter;
 window, or have the toolbar <quote>float</quote> in a separate
 window. Choosing <guimenuitem>Flat</guimenuitem> hides the toolbar. (If
@@ -709,12 +728,12 @@ changes you have made remain unsaved.
 <term>
 <menuchoice>
 <guimenu>View</guimenu>
-<guimenuitem>Show Sidebar</guimenuitem>
+<guimenuitem>Show Navigation Panel</guimenuitem>
 </menuchoice>
 </term>
 <listitem>
 <para>
-<action>Toggle the display of the sidebar</action> where you can see an
+<action>Toggle the display of the navigation panel</action> where you can see an
 overview of all the slides in your presentation.
 </para>
 </listitem>
@@ -1342,19 +1361,18 @@ useful tools.</para>
  Blue). Color values can be typed into the boxes if you want to match
  a known color used in a drawing or picture.</para>
 
-<para>On the top right is a drop down box. The default display is
+<para>On the top right is a combo box. The default display is
  <guilabel>Recent Colors</guilabel>. Click the colored square you want
  in the display to choose it. <guilabel>Custom Colors</guilabel>
  allows you to maintain a separate group of colors you prefer to
  use. Once you have found a color you like, add it to this group with
  the <guibutton>Add to Custom Colors</guibutton> button underneath
  this dialog box. There is no tool provided to remove colors from
- this.<!-- Neil, can't you just right click and choose to delete them?
- --></para>
+ this.</para>
 
 <para><guilabel>40 Colors</guilabel> and <guilabel>Web
  Colors</guilabel> might be used if you wanted to make a web page with
- a small number of colors to keep the file size small for faster
+ a small number of colors to keep the filesize small for faster
  downloads. The <guilabel>Royal</guilabel> group gives colors from
  brown to purple via yellow and blue. <guilabel>Named
  Colors</guilabel> are a nice spread of colors with names.</para>
@@ -1542,7 +1560,7 @@ have typed or pasted into it.
 <para>Change the case or capitalization of the currently selected
 text.</para>
 <para>You may choose between several styles of capitalization,
-including all lower or upper case, book style capitalization where each
+including all lower or uppercase, book style capitalization where each
 word except conjunctions has an initial capital letter, and sentence
 style capitalization where the first word in a sentence is
 capitalized.</para></listitem>
@@ -1553,7 +1571,7 @@ capitalized.</para></listitem>
 <guimenu>Text</guimenu>
 <guisubmenu>Spellcheck</guisubmenu>
 </menuchoice></term>
-<listitem><para>&kpresenter; can automatically spell check text
+<listitem><para>&kpresenter; can automatically spellcheck text
 as you type it, which you can enable and disable here.</para>
 <para>If you prefer to check spelling on demand than automatically, you
 can begin a spelling check here.</para>
@@ -1777,23 +1795,23 @@ menu.</para>
 <varlistentry>
 <term><menuchoice>
 <guimenu>Settings</guimenu>
-<guimenuitem>Configure Key Bindings</guimenuitem>
+<guimenuitem>Configure Shortcuts</guimenuitem>
 </menuchoice>
 </term>
 <listitem>
 
-<para><guimenuitem>Configure Key Bindings</guimenuitem> allows you to
+<para><guimenuitem>Configure Shortcuts</guimenuitem> allows you to
 assign a keyboard shortcut to actions that &kpresenter; menus or icons
 contain.</para>
 
 <screenshot>
-<screeninfo>Customize Keybindings</screeninfo>
+<screeninfo>Customize Shortcuts</screeninfo>
 <mediaobject>
 <imageobject>
 <imagedata fileref="settings03.png" format="PNG"/>
 </imageobject>
 <textobject>
-<phrase>Customizing the key bindings</phrase>
+<phrase>Customizing the shortcuts</phrase>
 </textobject>
 </mediaobject>
 </screenshot>
@@ -1859,7 +1877,7 @@ entry gives two menu boxes.</para>
 adjust the time settings on the autosave feature. The bottom two
 sliders allow the Raster settings to be adjusted. This still needs a
 little more work. They control the minimum size of objects (such as
-boxes) drawn on screen. You may find that you can not make a box
+boxes) drawn on screen. You may find that you cannot make a box
 smaller than a certain size. </para>
 
 <para>The second icon is labelled Color </para>

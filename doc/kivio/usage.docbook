@@ -1,4 +1,18 @@
 <chapter id="usage">
+<chapterinfo>
+<authorgroup>
+<author><firstname>Ben</firstname>
+<surname>Lamb</surname>
+<affiliation>
+<address>
+<email>kde@zurgy.org</email>
+</address>
+</affiliation>
+</author>
+<!-- TRANS:ROLES_OF_TRANSLATORS -->
+</authorgroup>
+</chapterinfo>
+
 <title>Basic Usage</title>
 
 <sect1 id="starting">
@@ -58,15 +72,19 @@ The adjustments will only affect the currently selected stencil.</para>
 <sect2>
 <title>Selecting Several Stencils</title>
 <para>There are two ways to select multiple stencils in &kivio;.</para>
-<para>
-1. Click once inside the first stencil you wish to select.
+<orderedlist>
+<listitem>
+<para>Click once inside the first stencil you wish to select.
 	Hold down shift as you click inside subsequent stencils.
-	All the stencils will be shown with handles around them.
-
-2.	Move the mouse pointer to a blank area of the document near the stencils you want to select.
+	All the stencils will be shown with handles around them.</para>
+</listitem>
+<listitem>
+<para> the mouse pointer to a blank area of the document near the stencils you want to select.
 	Hold down the &LMB; and move the mouse to the other side of the stencils you want to select, drawing a square around them.
 	The square must completely encompass the stencils for them to be selected.
 </para>
+</listitem>
+</orderedlist>
 </sect2>
 
 <sect2>
@@ -116,7 +134,9 @@ The adjustments will only affect the currently selected stencil.</para>
 <sect2>
 <title>Stencil Geometry</title>
 <para>For accurately specifying the dimensions of a stencil use the Geometry docker. To display the docker select <menuchoice><guimenu>View</guimenu><guisubmenu>Docker</guisubmenu><guimenuitem>Stencil Geometry Panel</guimenuitem></menuchoice>. The panel contains four text boxes for specifying the horizontal and vertical position of the stencil and the width and height.</para>
+
 <tip><para>Although the measurements are displayed in points it is possible to enter other units into the textbox. For example, entering 2.5cm will be converted into points. Millimeters (mm) and inches (in) are also accepted.</para></tip>
+
 </sect2>
 
 </sect1>

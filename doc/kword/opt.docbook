@@ -1,4 +1,13 @@
 <chapter id="options">
+<chapterinfo>
+<authorgroup>
+<author>
+<firstname>Mike</firstname>
+<surname>McBride</surname>
+</author>
+<!-- TRANS:ROLES_OF_TRANSLATORS -->
+</authorgroup>
+</chapterinfo>
 <title>&kword; Options</title>
 <indexterm><primary>&kword;</primary><secondary>options</secondary></indexterm>
 <indexterm><primary>configuring &kword;</primary></indexterm>
@@ -28,7 +37,7 @@ Bindings</guimenuitem></menuchoice> from the menubar.</para>
 </mediaobject>
 </screenshot>
 
-<para>To edit the key bindings, the first thing you need to do is find
+<para>To edit the shortcuts, the first thing you need to do is find
 the action you want to edit.  All of the possible actions are listed in
 the combo box labled <guilabel>Action</guilabel>.  By using the
 scrollbar, locate the action you are interested in and click once with
@@ -36,7 +45,7 @@ the &LMB;.</para>
 
 <para>Once you have selected the action, you can turn your attention to
 the bottom half of the dialog box. You use the bottom half of the dialog
-box to change the key bindings.</para>
+box to change the shortcuts.</para>
 
 <variablelist>
 <varlistentry>
@@ -51,7 +60,7 @@ have any keyboard shortcut.</para>
 <term><guilabel>Default</guilabel></term>
 <listitem>
 <para>By selecting this option, the currently selected action will use
-the default key binding.  Once this option is clicked, the default keyboard shortcut
+the default shortcut.  Once this option is clicked, the default keyboard shortcut
 is listed below.</para>
 </listitem>
 </varlistentry>
@@ -90,7 +99,7 @@ fileref="clearright.png" format="PNG"/></imageobject></inlinemediaobject> button
 <para>Now type the keyboard shortcut into the keyboard.  &kword; will use this keyboard combination as the new
 keyboard shortcut.  The window will close automatically.</para>
 
-<tip><para>To prevent the window from closing automatically, simply remove the mark in the checkbox labeled
+<tip><para>To prevent the window from closing automatically, simply remove the mark in the check box labeled
 <guilabel>Auto-close</guilabel>.</para>
 
 <para>Once you have completed your entries, simply click on <guibutton>OK</guibutton>
@@ -102,7 +111,7 @@ to accept the changes or <guibutton>Cancel</guibutton> to cancel your changes.</
 <para>Multi-key keyboard shortcuts can be used when you run out of simple keyboard shortcuts.  </para>
 
 <para>Multi-key shortcuts are edited the same as simple keyboard shortcuts, except a mark is placed in the
-checkbox labeled <guilabel>Multi-key</guilabel> <emphasis>prior</emphasis> to entering the keyboard shortcut.</para>
+check box labeled <guilabel>Multi-key</guilabel> <emphasis>prior</emphasis> to entering the keyboard shortcut.</para>
 
 <para>You can now enter multiple keyboard characters for the keyboard shortcut.</para>
 
@@ -148,7 +157,7 @@ buttons around on the toolbar using this dialog.</para>
 Actions</guilabel> column.</para>
 
 <para>First select the toolbar you want to add a button to by selecting
-the toolbar from the dropdown box labeled
+the toolbar from the combo box labeled
 <guilabel>Toolbar</guilabel></para>
 
 <para>Now select the action you want to add from the combo box labeled
@@ -172,7 +181,7 @@ will change.</para>
 Actions</guilabel> column.</para>
 
 <para>First select the toolbar you want to delete a button from by selecting
-the toolbar from the dropdown box labeled
+the toolbar from the combo box labeled
 <guilabel>Toolbar</guilabel></para>
 
 <para>Select the toolbar button you want to remove the button from
@@ -191,7 +200,7 @@ will change.</para>
 <title>Moving a button on a toolbar</title>
 
 <para>First select the toolbar you want to move a button on by selecting
-the toolbar from the dropdown box labeled
+the toolbar from the combo box labeled
 <guilabel>Toolbar</guilabel></para>
 
 <para>To move a button, simply click on the button you want to move with
@@ -233,22 +242,22 @@ the following.</para>
 
 <varlistentry>
 <term><guilabel>Show status bar</guilabel></term>
-<listitem><para>Placing a mark in this checkbox makes the statusbar visible in &kword;.  See
+<listitem><para>Placing a mark in this check box makes the status bar visible in &kword;.  See
 <link linkend="kword-screen">The &kword; Screen</link> for more information.</para>
 </listitem>
 </varlistentry>
 
 <varlistentry>
 <term><guilabel>Show Scrollbar</guilabel></term>
-<listitem><para>Placing a mark in this checkbox makes the scrollbar visible in &kword;.  See
+<listitem><para>Placing a mark in this check box makes the scrollbar visible in &kword;.  See
 <link linkend="kword-screen">The &kword; Screen</link> for more information.</para>
 </listitem>
 </varlistentry>
 
 <varlistentry>
 <term><guilabel>PageUp/PageDown moves the caret</guilabel></term>
-<listitem><para>If this checkbox has a mark, then when you press the PageUp and PageDown buttons
-on the keyboard, &kword; moves the text cursor (the caret) down one page.  If there is no mark in this checkbox 
+<listitem><para>If this check box has a mark, then when you press the PageUp and PageDown buttons
+on the keyboard, &kword; moves the text cursor (the caret) down one page.  If there is no mark in this check box 
 then &kword; moves the view, but does not change the position of the text cursor. </para></listitem>
 </varlistentry>
 
@@ -369,7 +378,7 @@ left margin, etc....</para>
 </sect3>
 <sect3 id="opt-document-cursor"><title>Cursor settings</title>
 
-<para>This section of the dialog box has one checkbox labeled <guilabel>Cursor in protected area</guilabel>.  
+<para>This section of the dialog box has one check box labeled <guilabel>Cursor in protected area</guilabel>.  
 When there is a mark in this check box, and you click in a protected frame of your document, a cursor appears.  When the 
 mark is removed from this check box, and you click in a protected frame, there is no cursor visible.</para>
 
@@ -426,21 +435,21 @@ addresses often contain words run together.</para>
 
 <varlistentry>
 <term><guilabel>Dictionary:</guilabel> </term>
-<listitem><para>This dropdown box is used to select
+<listitem><para>This combo box is used to select
 the dictionary you want &kword; to use from all available dictionaries. </para></listitem>
 </varlistentry>
 
 <varlistentry>
 <term><guilabel>Encoding:</guilabel></term>
-<listitem><para>This dropdown box can be used to
+<listitem><para>This combo box can be used to
 specify which character set you want the speller to use.</para>
 </listitem>
 </varlistentry>
 
 <varlistentry>
 <term><guilabel>Client:</guilabel></term>
-<listitem><para>The dropdown box is used to specify
-the spell checking program that &kword; should use from a list of available programs.</para>
+<listitem><para>The combo box is used to specify
+the spellchecking program that &kword; should use from a list of available programs.</para>
 </listitem>
 </varlistentry>
 
@@ -502,7 +511,6 @@ values to their default values.</para>
 
 </sect2>
 <sect2 id="opt-misc"><title>Configure miscellaneous options</title>
-<para></para>
 
 <screenshot>
 <mediaobject>
@@ -528,7 +536,7 @@ this number will be forgotten.</para>
 
 <varlistentry>
 <term><guilabel>Display links</guilabel></term>
-<listitem><para>Placing a mark in this checkbox makes document links visible in &kword;. If there is no mark in this checkbox,
+<listitem><para>Placing a mark in this check box makes document links visible in &kword;. If there is no mark in this check box,
 document links will be hidden.  See
 <link linkend="links">Document links</link> for more information.</para>
 </listitem>
@@ -536,14 +544,14 @@ document links will be hidden.  See
 
 <varlistentry>
 <term><guilabel>Underline all links</guilabel></term>
-<listitem><para>Placing a mark in this checkbox will have &kword; automatically underline a document link when it is created. See
+<listitem><para>Placing a mark in this check box will have &kword; automatically underline a document link when it is created. See
 <link linkend="links">Document links</link> for more information.</para>
 </listitem>
 </varlistentry>
 
 <varlistentry>
 <term><guilabel>Display comments</guilabel></term>
-<listitem><para>Placing a mark in this checkbox makes document comments visible in &kword;.  See
+<listitem><para>Placing a mark in this check box makes document comments visible in &kword;.  See
 <link linkend="comments">Document comments</link> for more information.</para>
 </listitem>
 </varlistentry>
@@ -562,7 +570,7 @@ check box.</para></note>
 </sect3>
 <sect3 id="opt-misc-viewformatting"><title>View Formatting</title>
 
-<para>You can use these four checkboxes to determine what formatting characters are displayed when you have asked &kword; to
+<para>You can use these four check boxes to determine what formatting characters are displayed when you have asked &kword; to
 <link linkend="view-formatting-menu">show formatting characters</link>.</para>
 <variablelist>
 

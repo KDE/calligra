@@ -1,4 +1,16 @@
 <chapter id="importexport">
+<chapterinfo>
+<authorgroup>
+<author>
+<firstname>Pamela</firstname>
+<surname>Robert</surname>
+<affiliation>
+<address><email>pamroberts@blueyonder.co.uk</email></address>
+</affiliation>
+</author>
+<!-- TRANS:ROLES_OF_TRANSLATORS -->
+</authorgroup>
+</chapterinfo> 
 <title>Importing and Exporting Foreign Formats</title>
 <para>&kspread; has a limited ability to import (read) and export (write)
 spreadsheet files with foreign formats. &kspread;'s capabilities at the time
@@ -58,7 +70,7 @@ native file with <menuchoice><guimenu>File</guimenu><guimenuitem>
 Open...</guimenuitem></menuchoice>.</para>
 <para>To export a &kspread; file in a different format select <menuchoice>
 <guimenu>File</guimenu><guimenuitem>Save As...</guimenuitem></menuchoice>
-and select the format from the <guilabel>Filter:</guilabel> drop down box.
+and select the format from the <guilabel>Filter:</guilabel> combo box.
 Although &kspread; automatically adds a <literal role="extension">
 .ksp</literal> extension to the names of files saved in its native format,
 you should add the correct extension for foreign formats.</para>

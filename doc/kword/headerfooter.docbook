@@ -1,4 +1,13 @@
 <sect1 id="headers-and-footers">
+<sect1info>
+<authorgroup>
+<author>
+<firstname>Mike</firstname>
+<surname>McBride</surname>
+</author>
+<!-- TRANS:ROLES_OF_TRANSLATORS -->
+</authorgroup>
+</sect1info>
 <title>Headers/Footers</title>
 <indexterm><primary>headers</primary><secondary>using</secondary></indexterm>
 <indexterm><primary>footers</primary><secondary>using</secondary></indexterm>

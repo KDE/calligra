@@ -17,7 +17,7 @@
 <affiliation><address><email>jost@schenck.de</email></address></affiliation> 
 </author>
 <!-- TRANS:ROLES_OF_TRANSLATORS -->
-</authorgroup> 
+</authorgroup>
 
 <date>2001-06-02</date>
 <releaseinfo>0.01.01</releaseinfo>
@@ -36,33 +36,6 @@
 
 </bookinfo>
 
-<chapter id="todo">
-<title>Still to be done in this manual</title>
-
-<para>
-This is a list of things which still need work in this manual:
-</para>
-
-<itemizedlist>
-<listitem><para>
-Write this list.
-</para></listitem>
-<listitem><para>
-Just about everything else.
-</para></listitem>
-</itemizedlist>
-
-<para>
-If anyone wants to help, let me know at the email address
-below. Thanks.
-</para>
-
-<para>
-Jost <email>jost@schenck.de</email>
-</para>
-
-</chapter>
-
 
 <chapter id="introduction">
 <title>Introduction</title>
@@ -76,8 +49,6 @@ Jost <email>jost@schenck.de</email>
 <member>&kword; (a frames-based wordprocessor)</member>
 <member>&kspread; (a spreadsheet application)</member> 
 <member>&kpresenter; (screen and slide presentations)</member>
-<member>&kontour; (a vector drawing application)</member>
-
 <member>&kformula; (an editor for mathematical formulae)</member>
 <member>&kchart; (a charts/graphs drawing application)</member>
 <member>&kivio; <!-- FIXME --></member>
@@ -105,24 +76,7 @@ are common to most or all programs in the suite. For detailed information
 about the different programs, have a look at the other manuals.
 </para>
 
-<!-- 
-<sect1 id="who-reads">
-<title>What parts of this guide should I read?</title>
-
-<note><para>
-This section is not yet written.
-</para></note>
-
-</sect1>
-    
--->
-
 </chapter> 
-
-<chapter id="first-steps">
-<title>First steps in &koffice;</title>
-<para></para>
-</chapter>
 
 <chapter id="kparts">
 <title>KParts - the building blocks of &koffice;</title>
@@ -229,14 +183,14 @@ notice that:
 <itemizedlist>
 <listitem>
 <para>
-Your menu bar and tool bars have changed. They now reflect those of
+Your menubars and toolbars have changed. They now reflect those of
 &kspread;.
 </para>
 </listitem> 
 <listitem>
 <para>
 Your table frame now contains the elements of a &kspread; view, with
-scroll bars, a tab bar for the selection of tables, &etc;
+scrollbars, a tab bar for the selection of tables, &etc;
 </para>
 </listitem>
 </itemizedlist>
@@ -248,7 +202,7 @@ Try editing the table. You'll see that it's not different from using
 
 <para>
 Now click somewhere into your &kword; document, outside of the table
-area.  The menu bar and tool bars should change back to those of
+area.  The menubars and toolbars should change back to those of
 &kword;, the elements of the &kspread; view should disappear. Your table
 stays and still reflects all of the changes you've applied to it.
 </para>
@@ -364,7 +318,7 @@ functionality than saving, loading, printing, &etc;
 </para>
 
 <para> Thanks to the <quote>action</quote> concept of &Qt; and &kde;,
-you can freely customize &koffice; menu bars and tool
+you can freely customize &koffice; menubars and tool
 bars. Unfortunately, at the moment, there are no easy-to-use dialogs
 to do this. &koffice; stores its &GUI; configuration in &XML; files
 and you'll have to edit those. Hopefully, this situation will change
@@ -488,7 +442,7 @@ CVS module) to generate your own &kde; library documentation.
 </para></listitem>      
 <listitem><para>
 In the &koffice; sources you'll find an example application in the
-<filename class="directory">example</filename> directory.  
+<filename class="directory">example</filename> folder.  
 </para></listitem>
 </itemizedlist>
     
@@ -513,6 +467,7 @@ from the use of this manual.
 The other &koffice; manuals are copyrighted by their respective authors.
 </para>
 
+<!--TRANS:CREDIT_FOR_TRANSLATORS-->
 &underFDL;
 &underGPL;
 
@@ -651,7 +606,7 @@ and in working condition (excluding &koffice; of course). You can find
 the system requirements by following this link: <link
 linkend="requirements">System Requirements</link>.</para></step>
 <step><para>Download the &koffice; binary into a temporary
-directory.</para></step>
+folder.</para></step>
 <step><para>If the filename ends in <literal
 role="extension">.rpm</literal> (&RedHat; Package Management file),
 &koffice; can be installed with the following command:
@@ -718,8 +673,7 @@ the system requirements by following this link:
 <link linkend="requirements">System Requirements</link>.
 </para></step>
 <step><para>
-Download the &koffice; source file <!-- ***insert filenames (srpm and -->
-<!-- tar) here*** --> into a temporary directory.
+Download the &koffice; source file into a temporary folder.
 </para></step>
 <step><para>
 If the filename ends in <literal role="extension">.src.rpm</literal>
@@ -734,16 +688,6 @@ the source code for &koffice; can be installed with:
 <step><para>The source code for &koffice; should now be installed on
 your system.</para></step>
 </procedure>
-
-</sect1>
-
-
-<sect1 id="compiling-problems">
-<title>Problems with Compilation</title>
-
-<para>
-To be written
-</para>
 
 </sect1>
 

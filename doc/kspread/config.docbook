@@ -1,4 +1,16 @@
 <chapter id="configure">
+<chapterinfo>
+<authorgroup>
+<author>
+<firstname>Pamela</firstname>
+<surname>Robert</surname>
+<affiliation>
+<address><email>pamroberts@blueyonder.co.uk</email></address>
+</affiliation>
+</author>
+<!-- TRANS:ROLES_OF_TRANSLATORS -->
+</authorgroup>
+</chapterinfo> 
 <title>Configuring &kspread; Shortcuts and Toolbars</title>
 
 <sect1 id="configshort">
@@ -74,7 +86,7 @@ the mouse button when it is some distance from any of &kspread;'s window
 sides, and then you will get a floating toolbar, which is not locked to any 
 particular part of &kspread;'s window and can in fact be moved outside of 
 the window. To put a floating toolbar back into one of the traditional 
-positions <mousebutton>right</mousebutton> click on the its title bar to bring 
+positions <mousebutton>right</mousebutton> click on the its titlebar to bring 
 up the <guilabel>Toolbar Menu</guilabel> then choose one of the options in 
 the <guisubmenu>Orientation</guisubmenu> sub menu.</para>
 <para>You can also <quote>flatten</quote> a toolbar by <mousebutton>left
@@ -89,7 +101,7 @@ can be restored to normal by <mousebutton>left</mousebutton> clicking on it.
 <guimenu>Settings</guimenu> menu will bring up a dialog box which lets you add 
 buttons to or remove them from &kspread;'s toolbars.</para>
 <para>To use this <guilabel>Configure Toolbars</guilabel> dialog box first 
-select a toolbar from the <guilabel>Toolbar:</guilabel> drop down list. The 
+select a toolbar from the <guilabel>Toolbar:</guilabel> combo box. The 
 right hand <guilabel>Current actions:</guilabel> window will then show the 
 buttons currently present on the toolbar. You can remove a button by selecting 
 it in this window then pressing the left arrow button, or move it around by 

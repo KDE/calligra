@@ -7,6 +7,25 @@ this prolog
 -->
 
 <chapter id="prog-guide">
+<chapterinfo>
+<authorgroup>
+<author>
+<firstname>Alexander</firstname>
+<surname>Dymo</surname>
+<affiliation>
+<address><email>cloudtemple@mksat.net</email></address>
+</affiliation>
+</author>
+<author>
+<firstname>Phil</firstname>
+<surname>Thompson</surname>
+<affiliation>
+<address><email>phil@river-bank.demon.co.uk</email></address>
+</affiliation>
+</author>
+<!-- TRANS:ROLES_OF_TRANSLATORS -->
+</authorgroup>
+</chapterinfo>
 <title>Programmer's Guide</title>
 
 <sect1 id="how-to-use-in-progs">
@@ -120,7 +139,7 @@ Include files are <filename>kugarqt.h</filename> and <filename>kugar.h</filename
 for &Qt; and &kde; programs respectively.
 </para>
 <para>For a detailed example of how &kugar; classes can be used, look in the <filename class="directory">/shell</filename>
-directory in the &kugar; sources.
+folder in the &kugar; sources.
 </para>
 <para>
 The <classname>MReportViewer</classname> (and <classname>KReportViewer</classname> too)

@@ -1,4 +1,13 @@
 <sect1 id="lists">
+<sect1info>
+<authorgroup>
+<author>
+<firstname>Mike</firstname>
+<surname>McBride</surname>
+</author>
+<!-- TRANS:ROLES_OF_TRANSLATORS -->
+</authorgroup>
+</sect1info>
 <title>Lists</title>
 <indexterm><primary>lists</primary></indexterm>
 

@@ -1,4 +1,13 @@
 <chapter id="tutorial">
+<chapterinfo>
+<authorgroup>
+<author>
+<firstname>Mike</firstname>
+<surname>McBride</surname>
+</author>
+<!-- TRANS:ROLES_OF_TRANSLATORS -->
+</authorgroup>
+</chapterinfo>
 <title>Step by Step Tutorial</title>
 <indexterm><primary>tutorial</primary></indexterm>
 <para>This section is a step by step
@@ -124,7 +133,7 @@ background.  When all the text has been selected, release the &LMB;.</para>
 fileref="Tut7.png"/></imageobject>
 <textobject><phrase>Screen shot</phrase></textobject></mediaobject></para>
 <para><emphasis>This defines what text is going to be altered with Step 8.</emphasis></para>
-<para>Step 8: Click inside the text size drop down box.  Change this
+<para>Step 8: Click inside the text size combo box.  Change this
 number to 26.</para>
 
 <para><mediaobject><imageobject><imagedata format="PNG"

@@ -1,4 +1,13 @@
 <sect1 id="page-format">
+<sect1info>
+<authorgroup>
+<author>
+<firstname>Mike</firstname>
+<surname>McBride</surname>
+</author>
+<!-- TRANS:ROLES_OF_TRANSLATORS -->
+</authorgroup>
+</sect1info>
 <title>Formatting the Page</title>
 
 <para>Before delving into the specifics of formatting a page in &kword;, remember that
@@ -82,7 +91,7 @@ entry boxes (labeled <guilabel>Width:</guilabel> and
 </varlistentry>
 </variablelist>
 
-<para>Next to the paper format, in the drop-down box labeled
+<para>Next to the paper format, in the combo box labeled
 <guilabel>Orientation</guilabel> you can select either <link
 linkend="defportrait">Portrait</link> or <link
 linkend="deflandscape">Landscape</link> layout for
@@ -176,7 +185,7 @@ size and shape of all the frames individually. </para>
 
 <para>Formatting the page is usually done by selecting: <menuchoice>
 <guimenu>Format</guimenu><guimenuitem>Page Layout...</guimenuitem></menuchoice>
-from the menu bar.</para>
+from the menubar.</para>
 
 <tip>
 <para>You can also go straight to the <guimenuitem>Format
@@ -232,7 +241,7 @@ entry boxes (labeled <guilabel>Width:</guilabel> and
 </varlistentry>
 </variablelist>
 
-<para>Next to the paper format, in the drop-down box labeled
+<para>Next to the paper format, in the combo box labeled
 <guilabel>Orientation</guilabel> you can select either <link
 linkend="defportrait">Portrait</link> or <link
 linkend="deflandscape">Landscape</link> layout for

@@ -1,4 +1,13 @@
 <sect1 id="format-frame">
+<sect1info>
+<authorgroup>
+<author>
+<firstname>Mike</firstname>
+<surname>McBride</surname>
+</author>
+<!-- TRANS:ROLES_OF_TRANSLATORS -->
+</authorgroup>
+</sect1info>
 <title>Setting the Properties for a Frame</title>
 <indexterm><primary>frames</primary><secondary>configure</secondary></indexterm>
 
@@ -142,11 +151,11 @@ on every new page.</para></tip></listitem>
 
 
 
-<para>If you place a mark in the checkbox labled <guilabel>Changes will be applied to all
+<para>If you place a mark in the check box labled <guilabel>Changes will be applied to all
 frames in the frameset</guilabel>, then any changes made in the frame properties dialog box
 will automatically be applied to all frames within the frameset.</para>
 
-<para>If you place a mark in the checkbox labeled <guilabel>Protect content</guilabel>, &kword;
+<para>If you place a mark in the check box labeled <guilabel>Protect content</guilabel>, &kword;
 will not allow any changes to the text within the frame, or the formatting of the text within the frameset.</para>
 
 <note><para>You can still reshape or even delete the frame, but the content within the frame is locked.  To lock the location
@@ -181,7 +190,6 @@ make sure that text from two frames does not overlap. </para>
 </screenshot>
 
 
-<para></para>
 
 <para>As you can see from the options in the dialog box, there are three
 possible choices.</para>
@@ -217,7 +225,7 @@ this frame before continuing to display text in overlapping frames.</para>
 </variablelist>
 
 <para>You can also determine how close your frames appear by setting the
-<guilabel>Distance between frame and text</guilabel> in the text-box provided.</para>
+<guilabel>Distance between frame and text</guilabel> in the text box provided.</para>
 
 </sect3>
 <sect3 id="format-frame-connect"><title>Reconnect frames</title>
@@ -263,11 +271,11 @@ clicking on the tab labeled <guilabel>Geometry</guilabel>.</para>
 <para>This dialog box allows you to specify <emphasis>exactly</emphasis>
 where the frame goes and how large it is.</para>
 
-<para>If you put a mark in the checkbox labeled <guilabel>Frame is inline</guilabel>, the frame size and position will
+<para>If you put a mark in the check box labeled <guilabel>Frame is inline</guilabel>, the frame size and position will
 be determined by the location of the placeholder in the text.  For a definition of inline frames, click
 <glossterm linkend="definlineframe">here</glossterm>.</para>
 
-<para>If you put a mark in the checkbox labeled <guilabel>Protect size and position</guilabel>, the frame size and position will
+<para>If you put a mark in the check box labeled <guilabel>Protect size and position</guilabel>, the frame size and position will
 be fixed at their current location.  You will not be able to move the frame on the page until this box is unchecked.</para>
 
 <sect4 id="format-frame-geometry-size"><title>Determine Size and Position</title>
@@ -316,7 +324,7 @@ become 1 cm in size.</para>
 <guibutton>Background Color:</guibutton>.  The color is selected using the
 <link linkend="select-colors">Color selection dialog</link>.</para>
 
-<para>Once the color is selected, select the fill style from the drop down box labeled
+<para>Once the color is selected, select the fill style from the combo box labeled
 <guilabel>Background Style</guilabel>.</para>
 
 <para>Select <guibutton>OK</guibutton> to accept all of your changes.</para>

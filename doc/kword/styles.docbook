@@ -1,4 +1,13 @@
 <sect1 id="styles">
+<sect1info>
+<authorgroup>
+<author>
+<firstname>Mike</firstname>
+<surname>McBride</surname>
+</author>
+<!-- TRANS:ROLES_OF_TRANSLATORS -->
+</authorgroup>
+</sect1info>
 <title>Text styles</title>
 <indexterm><primary>text styles</primary><secondary>introduction</secondary></indexterm>
 
@@ -74,8 +83,8 @@ the text style from the list.</para>
 </listitem>
 
 <listitem>
-<para>You can select the text style using the drop down box on the <link linkend="paragraph-toolbar">Paragraph toolbar</link>.  
-This drop down box looks like this: <inlinemediaobject><imageobject><imagedata
+<para>You can select the text style using the combo box on the <link linkend="paragraph-toolbar">Paragraph toolbar</link>.  
+This combo box looks like this: <inlinemediaobject><imageobject><imagedata
 fileref="chstylebut.png" format="PNG"/></imageobject></inlinemediaobject>.</para>
 </listitem>
 </itemizedlist>

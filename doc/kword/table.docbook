@@ -1,4 +1,13 @@
 <sect1 id="tables">
+<sect1info>
+<authorgroup>
+<author>
+<firstname>Mike</firstname>
+<surname>McBride</surname>
+</author>
+<!-- TRANS:ROLES_OF_TRANSLATORS -->
+</authorgroup>
+</sect1info>
 <title>Tables</title>
 <indexterm><primary>tables</primary><secondary>using</secondary></indexterm>
 
@@ -20,7 +29,7 @@ document.</para></tip>
 <sect2 id="table-new"><title>Adding a new Table</title>
 <indexterm><primary>tables</primary><secondary>adding</secondary></indexterm>
 
-<para>You can create a table in KWord in one of three ways:</para>
+<para>You can create a table in &kword; in one of three ways:</para>
 
 <itemizedlist>
 
@@ -36,7 +45,7 @@ action="simul"><keycap>F5</keycap></keycombo></para>
 <listitem>
 <para>or by clicking <inlinemediaobject><imageobject><imagedata
 fileref="part-kspread.png" format="PNG"/></imageobject></inlinemediaobject>
-on the tool-bar.</para>
+on the toolbar.</para>
 </listitem>
 
 </itemizedlist>
@@ -54,10 +63,10 @@ on the tool-bar.</para>
 
 <para>The right half of the dialog box provides you a quick visual guide
 to how many rows and columns will be created in the table.  This is
-useful for laying out your table.  You can not edit
+useful for laying out your table.  You cannot edit
 your table layout here.</para>
 
-<para>The left half of the dialog box consists of two drop down boxes,
+<para>The left half of the dialog box consists of two combo boxes,
 and two number selection boxes.</para>
 
 <para>The spin box labeled <guilabel>Number of
@@ -71,7 +80,7 @@ table.</para>
 <para>While adjusting either of these two options, the preview box
 adjusts to your new settings.</para>
 
-<para>The drop down box labeled <guilabel>Cell Height</guilabel>, can be
+<para>The combo box labeled <guilabel>Cell Height</guilabel>, can be
 set to either of two options.</para>
 
 <variablelist>
@@ -103,7 +112,7 @@ inches tall. </para>
 </varlistentry>
 </variablelist>
 
-<para>The drop down box labeled <guilabel>Cell Widths</guilabel>, can be
+<para>The combo box labeled <guilabel>Cell Widths</guilabel>, can be
 set to either of two options.</para>
 
 <variablelist>
@@ -143,7 +152,7 @@ stay in the same area of the page as the text that surrounds it.</para>
 <para>Framed tables, on the other hand, need to be moved by hand on the page.  </para>
 
 <para>The check box labled <guilabel>The table is inline</guilabel> is used to determine 
-which type of table is inserted.  If there is a mark in the checkbox, the table is inserted inline.  If not, the table is 
+which type of table is inserted.  If there is a mark in the check box, the table is inserted inline.  If not, the table is 
 given a frame of its own.</para>
 
 <para>If you click on the tab labeled <guilabel>Templates</guilabel>, you can use predefined table looks to format the look of your table.  
@@ -503,7 +512,7 @@ that you need to preserve.</para></warning>
 <warning><para>If you reduce the number of columns using this dialog box, &kword; will delete the right most column(s)
 <emphasis>including the data within the columns</emphasis>.</para><para>Be sure you do not have any data in these columns
 that you need to preserve.</para></warning>
-<para>Placing a mark in the checkbox labeled <guilabel>Reapply template to table</guilabel>, will cause &kword; to re-apply the
+<para>Placing a mark in the check box labeled <guilabel>Reapply template to table</guilabel>, will cause &kword; to re-apply the
 template to the table <emphasis>after adding or deleting the specified number of rows and/or columns</emphasis>.</para>
 <para>Click <guibutton>OK</guibutton> to make changes permenant, or click <guibutton>Cancel</guibutton> to abort all
 changes.</para>
@@ -545,38 +554,38 @@ from the menubar. A dialog will appear.  Click on the tab labeled <guilabel>Temp
 <para>On the right is a preview box that
 gives an example of what a table template will look like when applied to your table.</para>
 
-<para>Below the preview box, are 5 checkboxes.</para>
+<para>Below the preview box, are 5 check boxes.</para>
 <variablelist>
 <varlistentry>
 <term><guilabel>First row</guilabel></term>
-<listitem><para>This checkbox will toggle formatting of all cells in the first row.</para></listitem>
+<listitem><para>This check box will toggle formatting of all cells in the first row.</para></listitem>
 </varlistentry>
 
 <varlistentry>
 <term><guilabel>Last row</guilabel></term>
-<listitem><para>This checkbox will toggle formatting of all cells in the last row.</para></listitem>
+<listitem><para>This check box will toggle formatting of all cells in the last row.</para></listitem>
 </varlistentry>
 
 <varlistentry>
 <term><guilabel>Body</guilabel></term>
-<listitem><para>This checkbox will toggle formatting of all cells in the body.  The body of the table is any cells which are not formatted 
+<listitem><para>This check box will toggle formatting of all cells in the body.  The body of the table is any cells which are not formatted 
 by any of the other four options.</para></listitem>
 </varlistentry>
 
 <varlistentry>
 <term><guilabel>First column</guilabel></term>
-<listitem><para>This checkbox will toggle formatting of all cells in the first column.</para></listitem>
+<listitem><para>This check box will toggle formatting of all cells in the first column.</para></listitem>
 </varlistentry>
 
 <varlistentry>
 <term><guilabel>Last column</guilabel></term>
-<listitem><para>This checkbox will toggle formatting of all cells in the last column.</para></listitem>
+<listitem><para>This check box will toggle formatting of all cells in the last column.</para></listitem>
 </varlistentry>
 </variablelist>
 
 <!--<para>The <guibutton>Customize</guibutton> is currently disabled, but will be available in future versions of &kword;.</para>-->
 
-<para>Placing a mark in the checkbox labeled <guilabel>Reapply template to table</guilabel>, will cause &kword; to re-apply the
+<para>Placing a mark in the check box labeled <guilabel>Reapply template to table</guilabel>, will cause &kword; to re-apply the
 template to the table <emphasis>after adding or deleting the specified number of rows and/or columns</emphasis>.</para>
 
 <para>Click <guibutton>OK</guibutton> to make changes permenant, or click <guibutton>Cancel</guibutton> to abort all
@@ -627,10 +636,10 @@ the name of the currently selected table style is listed in the text box labeled
 the currently selected table style is <emphasis>Plain</emphasis>.)</para>
 <para>Select the name of the table style you want to change by clicking on the name of the table styles in the listbox on the left.</para>
 
-<para>There is a dropdown box labeled <guilabel>Framestyle</guilabel> which is used to select the desired frame style.
+<para>There is a combo box labeled <guilabel>Framestyle</guilabel> which is used to select the desired frame style.
 If you want to add or alter a frame style, click the <guilabel>Change...</guilabel> button, and you will be taken to the
 <link linkend="framestyle-edit">Framestylist</link> to make those changes.</para>
-<para>Below that, is a dropdown box labeled <guilabel>Textstyle</guilabel> which is used to select the desired text style for this table style.
+<para>Below that, is a combo box labeled <guilabel>Textstyle</guilabel> which is used to select the desired text style for this table style.
 If you want to add or alter a text style, click on the <guilabel>Change...</guilabel> button, and you will be taken directly to the 
 <link linkend="style-add-dialog">Stylelist</link> to make those changes.</para>
 

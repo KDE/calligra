@@ -21,13 +21,11 @@
 
 <othercredit role="developer">
 <firstname>Ulrich</firstname>
-<othername></othername>
 <surname>K&uuml;ttler</surname>
 <contrib>Developer</contrib>
 </othercredit>
 
 <!-- TRANS:ROLES_OF_TRANSLATORS -->
-
 </authorgroup>
 
 <legalnotice>&FDLNotice;</legalnotice>
@@ -259,7 +257,7 @@ document</action></para></listitem>
 <guimenuitem>Document Information...</guimenuitem>
 </menuchoice></term>
 <listitem><para><action>Provides a dialog box where you can enter your name,
-e-mail address and a short description about the document</action></para></listitem>
+email address and a short description about the document</action></para></listitem>
 </varlistentry>
 
 <varlistentry>
@@ -267,8 +265,8 @@ e-mail address and a short description about the document</action></para></listi
 <guimenu>File</guimenu>
 <guimenuitem>Send File...</guimenuitem>
 </menuchoice></term>
-<listitem><para><action>Invokes Kmail so you can e-mail the file.
-Note: You still have to attach the file to the e-mail</action></para></listitem>
+<listitem><para><action>Invokes Kmail so you can email the file.
+Note: You still have to attach the file to the email</action></para></listitem>
 </varlistentry>
 
 <varlistentry>
@@ -747,10 +745,10 @@ icons that pertain to matrix creation and editing.</action></para></listitem>
 
 <para>The <menuchoice>
 <guimenu>Settings</guimenu><guimenuitem>Configure Shortcuts...</guimenuitem></menuchoice>
-allows you to specify key bindings</para>
+allows you to specify shortcuts.</para>
 
 
-<para>Below is an example of how to configure a short cut for making a
+<para>Below is an example of how to configure a shortcut for making a
 thick space.
 </para>
 
@@ -774,13 +772,13 @@ Next click on the primary button.
 
 <listitem><para>
 Do <userinput><keycombo
-action="seq"><keycap>CTRL</keycap><keycap>Space</keycap></keycombo></userinput>
-and the dialog should disappear. The keybinding is now entered. 
+action="seq">&Ctrl;<keycap>Space</keycap></keycombo></userinput>
+and the dialog should disappear. The shortcut is now entered. 
 </para></listitem>
 </itemizedlist>
 
 <screenshot>
-<screeninfo>Picture of keybinding  dialog</screeninfo>
+<screeninfo>Picture of shortcut  dialog</screeninfo>
 	<mediaobject>
 	  <imageobject>
 	    <imagedata fileref="shortcut1.png" format="PNG"/>
@@ -1113,7 +1111,7 @@ ftp://ftp.elsevier.nl/pub/styles/esstix/esstix.zip</ulink>
 </para>
 
 <sect1>
-<title>Installing the fonts with &kcontrol;</title>
+<title>Installing the fonts with &kcontrolcenter;</title>
 
 <para>
 After downloading the fonts, install them into a folder called
@@ -1213,12 +1211,12 @@ will install. After this you must click on the
 appear:</para>
 
 <screenshot>
-<screeninfo>Picture of &kcontrol; applying the fonts</screeninfo>
+<screeninfo>Picture of &kcontrolcenter; applying the fonts</screeninfo>
 	<mediaobject>
 	  <imageobject>
 	    <imagedata fileref="kfontinst5.png" format="PNG"/>
 	  </imageobject>
-<textobject><phrase>Picture of &kcontrol; applying the 
+<textobject><phrase>Picture of &kcontrolcenter; applying the 
 fonts</phrase></textobject>
 	</mediaobject>
 </screenshot>
@@ -1244,10 +1242,10 @@ changes now</guilabel> dialog. Installation of the Esstix fonts is complete.
 	</mediaobject>
 </screenshot>
 <para>First install the desired fonts with the Font Installer, in
-&kcontrol;. This will make them available to your computer. Next enter
-the <guilabel> Math Fonts </guilabel> section and add them using the 
+&kcontrolcenter;. This will make them available to your computer. Next enter
+the <guilabel>Math Fonts</guilabel> section and add them using the 
 <keysym>Right arrow</keysym>, as shown above. The Euclid Symbol fonts,
-that were added above, are now available in the <guilabel>Insert Symbol </guilabel>combo box.
+that were added above, are now available in the <guilabel>Insert Symbol</guilabel>combo box.
 </para>
 
 </sect1>
@@ -1263,6 +1261,7 @@ that were added above, are now available in the <guilabel>Insert Symbol </guilab
 <para>Documentation copyright 2002 Jonathan Drews
 <email>j.e.drews@att.net</email></para>
 
+<!--TRANS:CREDIT_FOR_TRANSLATORS-->
 &underFDL;
 &underGPL;
 

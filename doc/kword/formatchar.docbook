@@ -1,4 +1,13 @@
 <sect1 id="format-characters">
+<sect1info>
+<authorgroup>
+<author>
+<firstname>Mike</firstname>
+<surname>McBride</surname>
+</author>
+<!-- TRANS:ROLES_OF_TRANSLATORS -->
+</authorgroup>
+</sect1info>
 <title>Formatting Characters</title>
 <indexterm><primary>text</primary><secondary>formatting</secondary></indexterm>
 <indexterm><primary>font</primary><secondary>formatting</secondary></indexterm>
@@ -42,21 +51,21 @@ blocks of characters including:</para>
 
 
 <sect3 id="change-font-keyboard">
-<title>Using the Keyboard or Tool-bars</title>
+<title>Using the Keyboard or toolbars</title>
 
 <para>There are several keyboard shortcuts which you can use to make
 common changes to character formatting. After selecting the text, you
 can use these key combinations to toggle each attribute.</para>
 
-<para>The Basic Formatting Tool bar also has buttons which you can use to
+<para>The Basic Formatting toolbar also has buttons which you can use to
 toggle these same attributes.  </para>
 
-<para>The following table details each attribute, the tool bar buttons
+<para>The following table details each attribute, the toolbar buttons
 and the keyboard shortcuts.</para>
 
 <informaltable frame="all"><tgroup cols="3" align="left">
 <thead>
-<row><entry align="right">Attribute</entry><entry align="center">Tool bar
+<row><entry align="right">Attribute</entry><entry align="center">toolbar
 Button</entry><entry align="center">Key Combo</entry></row>
 </thead><tbody>
 <row><entry align="right">Font Size</entry><entry align="center"><inlinemediaobject><imageobject><imagedata fileref="chsizebut.png" format="PNG" align="center"/></imageobject></inlinemediaobject></entry><entry align="center">
@@ -75,7 +84,7 @@ Button</entry><entry align="center">Key Combo</entry></row>
 
 <note>
 <para>You cannot change the Character Set or add double underlines using the keyboard or the
-tool-bar, you must <link linkend="change-font-dialog">use the dialog
+toolbar, you must <link linkend="change-font-dialog">use the dialog
 box</link>.</para>
 </note>
 
@@ -130,7 +139,7 @@ inside the preview box with the &LMB;.  A text cursor will appear. You can edit 
 open this dialog.</para>
 </tip>
 
-<para>Using the checkboxes located below the preview box, you can select superscript or subscript.</para>
+<para>Using the check boxes located below the preview box, you can select superscript or subscript.</para>
 
 <para>Clicking the button labeled <guibutton>Change Color...</guibutton>
 will allow you to change the color of the text using the
@@ -149,8 +158,8 @@ will allow you to change the color of the background using the
 </mediaobject>
 </screenshot>
 
-<para>The subsection labeled <guilabel>Underlining</guilabel> has two drop down boxes.  
-In the left most drop down box select between
+<para>The subsection labeled <guilabel>Underlining</guilabel> has two combo boxes.  
+In the left most combo box select between
 no underline (Without), Single, Simple Bold or Double underlining.  </para>
 
 <screenshot>
@@ -161,13 +170,13 @@ no underline (Without), Single, Simple Bold or Double underlining.  </para>
 </mediaobject>
 </screenshot>
 
-<para>Use the right drop down box to select the style of underlining (Solid line, dashed line, etc).</para>
+<para>Use the right combo box to select the style of underlining (Solid line, dashed line, etc).</para>
 <para>Use the <guibutton>Change Color</guibutton> button to select a color for the underline using the
 <link linkend="select-colors">color selection dialog box</link>.  </para>
 
-<para>The subsection labeled <guilabel>Strikethrough</guilabel> has two drop down boxes.
-Use the left drop down box to select between
-no strikethrough (Without), Single or Double strikethrough.  Use the right drop down box to select the line style.</para>
+<para>The subsection labeled <guilabel>Strikethrough</guilabel> has two combo boxes.
+Use the left combo box to select between
+no strikethrough (Without), Single or Double strikethrough.  Use the right combo box to select the line style.</para>
 
 <screenshot>
 <mediaobject>

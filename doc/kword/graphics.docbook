@@ -1,4 +1,14 @@
-<sect1 id="graphics"><title>Graphics</title>
+<sect1 id="graphics">
+<sect1info>
+<authorgroup>
+<author>
+<firstname>Mike</firstname>
+<surname>McBride</surname>
+</author>
+<!-- TRANS:ROLES_OF_TRANSLATORS -->
+</authorgroup>
+</sect1info>
+<title>Graphics</title>
 <indexterm><primary>graphics</primary><secondary>introduction</secondary></indexterm>
 
 <para>&kword; is very good at handling textual information.  &kword; can also be used to incorporate
@@ -54,7 +64,7 @@ format="PNG"/></imageobject></inlinemediaobject> on the toolbar.</para>
 </mediaobject>
 </screenshot>
 <para>The right half of this dialog box contains a preview window.  The picture should be visible in this window.</para>
-<para>The left part of this box contains one button and two checkboxes.</para>
+<para>The left part of this box contains one button and two check boxes.</para>
 <variablelist>
 <varlistentry>
 <term><guibutton>Choose Image</guibutton></term>
@@ -63,16 +73,16 @@ new file dialog to open a different picture.</para></listitem>
 </varlistentry>
 <varlistentry>
 <term><guilabel>Insert Picture Inline</guilabel></term>
-<listitem><para>If there is a mark in this checkbox, the picture will be an inline picture.  If there is no mark, a new frame will be
+<listitem><para>If there is a mark in this check box, the picture will be an inline picture.  If there is no mark, a new frame will be
 created.  For details on the differences, see the <link linkend="graphics">introduction</link>.</para></listitem>
 </varlistentry>
 <varlistentry>
 <term><guilabel>Retain original aspect ratio</guilabel></term>
 <listitem><para><glossterm linkend="defaspectratio">Aspect ratio</glossterm> is defined in the &kword; glossary.</para>
-<para>If a there is a mark in this checkbox, &kword; will not allow any change the aspect ratio of the picture.  This prevents
+<para>If a there is a mark in this check box, &kword; will not allow any change the aspect ratio of the picture.  This prevents
 inappropriate stretching and compressing of the image.  It will still be possible to change the overall size of the image, but it 
 will not be possible to change the horizontal measurement without also changing the vertical measurement.</para>
-<para>If there is no mark in this checkbox, the horizontal and vertical sizes of the picture can be changed independently.</para>
+<para>If there is no mark in this check box, the horizontal and vertical sizes of the picture can be changed independently.</para>
 </listitem>
 </varlistentry>
 </variablelist>
@@ -96,7 +106,7 @@ entire frame.</para>
 <para>The only way to move an inline image around on the page, is to alter the flow of the text that surrounds it.  If this
 is causing problems, the picture can always be <link linkend="switch-graphics">changed to a framed picture</link>.</para>
 <para>To move a framed picture in &kword; is the same as <link linkend="move-frame">moving any frame</link> in &kword;.</para>
-<para></para>
+
 </sect2>
 <sect2 id="delete-graphics"><title>Delete Graphics</title>
 <indexterm><primary>graphics</primary><secondary>deleting</secondary></indexterm>

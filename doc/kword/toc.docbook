@@ -1,4 +1,14 @@
-<sect1 id="toc"><title>Table of Contents</title>
+<sect1 id="toc">
+<sect1info>
+<authorgroup>
+<author>
+<firstname>Mike</firstname>
+<surname>McBride</surname>
+</author>
+<!-- TRANS:ROLES_OF_TRANSLATORS -->
+</authorgroup>
+</sect1info>
+<title>Table of Contents</title>
 <indexterm><primary>table of contents</primary><secondary>introduction</secondary></indexterm>
 
 <para>When writing a large document, it is useful to include a table of contents.  This can be done automatically
@@ -51,7 +61,7 @@ using <guilabel>Contents Head 3</guilabel> paragraph style. </para>
 <para>By <link linkend="style-edit">changing the look</link> of those three styles, 
 the appearance of the
 table of contents can be radically changed.</para>
-<para></para>
+
 </sect2>
 </sect1>
 

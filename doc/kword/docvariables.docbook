@@ -1,4 +1,14 @@
-<sect1 id="variables"><title>Document Variables </title>
+<sect1 id="variables">
+<sect1info>
+<authorgroup>
+<author>
+<firstname>Mike</firstname>
+<surname>McBride</surname>
+</author>
+<!-- TRANS:ROLES_OF_TRANSLATORS -->
+</authorgroup>
+</sect1info>
+<title>Document Variables </title>
 <indexterm><primary>variables</primary><secondary>introduction</secondary></indexterm>
 
 <para>A variable is a simple way of allowing &kword; to modify the document in <emphasis>very</emphasis>
@@ -69,16 +79,16 @@ Compare this choice to <guimenuitem>Current date (fixed)</guimenuitem></para></l
 <imagedata fileref="insdate.png" format="PNG"/></imageobject>
 </mediaobject>
 </screenshot>
-<para>The top dropdown box determines the layout of the variable.  Your choices are:</para>
+<para>The top combo box determines the layout of the variable.  Your choices are:</para>
 
 <variablelist>
 <varlistentry>
 <term><guilabel>Locale</guilabel></term>
 <listitem><para>This inserts the date in the format specified in the
-KDE Control Center.</para>
-<para>To select this option, simply make sure the upper drop down box says
+&kde; Control Center.</para>
+<para>To select this option, simply make sure the upper combo box says
 <guilabel>Locale</guilabel>.  A preview of the date format will appear below the
-<guilabel>Custom</guilabel> checkbox.  If satisfied click <guibutton>OK</guibutton>.
+<guilabel>Custom</guilabel> check box.  If satisfied click <guibutton>OK</guibutton>.
 </para></listitem>
 </varlistentry>
 
@@ -86,13 +96,13 @@ KDE Control Center.</para>
 <term>Preformatted date strings</term>
 <listitem><para>&kword; comes with 12 predefined date strings. These predefined strings will
 be all that are needed in most circumstances. Simply select the predefined string in the upper
-drop down box.  A preview of the date format will appear below the <guilabel>Custom</guilabel>
-checkbox.  If satisfied click <guibutton>OK</guibutton>.</para></listitem>
+combo box.  A preview of the date format will appear below the <guilabel>Custom</guilabel>
+check box.  If satisfied click <guibutton>OK</guibutton>.</para></listitem>
 </varlistentry>
 
 <varlistentry>
 <term>Custom String</term>
-<listitem><para>If the appropriate format for the date can not be found, it is possible to create custom
+<listitem><para>If the appropriate format for the date cannot be found, it is possible to create custom
 date format strings.</para>
 <para>A date format string consists of a list of letters and numbers which follow
 specific rules (which are outlined below) to create the completed date.</para>
@@ -129,10 +139,10 @@ specific rules (which are outlined below) to create the completed date.</para>
 <note><para>It is important to remember that placeholders are case sensitive.
 <quote>DD</quote> is not a placeholder,
  only <quote>dd</quote>.</para></note>
-<para>To create a custom date string, place a mark in the <guilabel>Custom</guilabel> checkbox.</para>
-<para>Now type placeholders and separators text into the upper drop down box.  Alternatively
+<para>To create a custom date string, place a mark in the <guilabel>Custom</guilabel> check box.</para>
+<para>Now type placeholders and separators text into the upper combo box.  Alternatively
 select the format from the <guilabel>Insert:</guilabel>
-dropdown box, and the
+combo box, and the
 placeholder will be inserted into the date format string at the cursor location.</para>
 
 </listitem>
@@ -140,7 +150,7 @@ placeholder will be inserted into the date format string at the cursor location.
 </variablelist>
 
 <para>A preview of the current date
-string is visible below the <guilabel>Custom></guilabel> checkbox.  Click <guibutton>OK</guibutton> when
+string is visible below the <guilabel>Custom></guilabel> check box.  Click <guibutton>OK</guibutton> when
 the date format string is correct to insert the variable into the document.</para>
 
 <tip><para>Once the date has been inserted into the document, it can be reformatted to a different layout
@@ -189,16 +199,16 @@ Compare this choice to <guimenuitem>Current time (fixed)</guimenuitem></para></l
 <imagedata fileref="instime.png" format="PNG"/></imageobject>
 </mediaobject>
 </screenshot>
-<para>The top dropdown box determines the layout of the variable.  The choices are:</para>
+<para>The top combo box determines the layout of the variable.  The choices are:</para>
 
 <variablelist>
 <varlistentry>
 <term><guilabel>Locale</guilabel></term>
 <listitem><para>This inserts the time in the format specified in the
-KDE Control Center.</para>
-<para>To select this option, simply make sure the upper drop down box says
+&kde; Control Center.</para>
+<para>To select this option, simply make sure the upper combo box says
 <guilabel>Locale</guilabel>.  A preview of the time format will appear below the
-<guilabel>Custom</guilabel> checkbox.  If satisfied click <guibutton>OK</guibutton>.
+<guilabel>Custom</guilabel> check box.  If satisfied click <guibutton>OK</guibutton>.
 </para></listitem>
 </varlistentry>
 
@@ -206,13 +216,13 @@ KDE Control Center.</para>
 <term>Preformatted time strings</term>
 <listitem><para>&kword; comes with 5 predefined date strings. These predefined strings will
 be all that are needed in most circumstances. Simply select the predefined string in the upper
-drop down box.  A preview of the time format will appear below the <guilabel>Custom</guilabel>
-checkbox.  If satisfied click <guibutton>OK</guibutton>.</para></listitem>
+combo box.  A preview of the time format will appear below the <guilabel>Custom</guilabel>
+check box.  If satisfied click <guibutton>OK</guibutton>.</para></listitem>
 </varlistentry>
 
 <varlistentry>
 <term>Custom String</term>
-<listitem><para>If the appropriate format can not be found, a custom
+<listitem><para>If the appropriate format cannot be found, a custom
 time format string can be created.</para>
 <para>A time format string consists of a list of letters and numbers which follow
 specific rules (which are outlined below) to create the completed time.</para>
@@ -264,20 +274,20 @@ specific rules (which are outlined below) to create the completed time.</para>
 <note><para>It is important to remember that placeholders are case sensitive.
 <quote>HH</quote> is not a placeholder,
  only <quote>hh</quote></para></note>
-<para>To create a custom time string, place a mark in the <guilabel>Custom</guilabel> checkbox.</para>
-<para>Type the placeholders and separator text into the upper drop down box.  Alternatively,
+<para>To create a custom time string, place a mark in the <guilabel>Custom</guilabel> check box.</para>
+<para>Type the placeholders and separator text into the upper combo box.  Alternatively,
 you can select the format from the <guilabel>Insert:</guilabel>
-dropdown box, and the
+combo box, and the
 placeholder will be inserted into the time format string at the cursor location.</para>
 <para>A preview of the current time
-string is visible below the <guilabel>Custom></guilabel> checkbox.  Click <guibutton>OK</guibutton> when
+string is visible below the <guilabel>Custom></guilabel> check box.  Click <guibutton>OK</guibutton> when
 the time format string is correct to insert the variable into your document.</para>
 </listitem>
 </varlistentry>
 </variablelist>
 
 <para>A preview of the current time
-string is visible below the <guilabel>Custom></guilabel> checkbox.  Click <guibutton>OK</guibutton> when
+string is visible below the <guilabel>Custom></guilabel> check box.  Click <guibutton>OK</guibutton> when
 the time format string is correct to insert the variable into your document.</para>
 
 <tip><para>Once the time has been inserted into the document, it can be reformatted to a different layout
@@ -340,13 +350,13 @@ are specific to the document.  You can insert these variables by selecting
 <link linkend="documentinfo">Document information</link> box.</entry></row>
 <row><entry>City</entry><entry>Philadelphia</entry><entry>The postal code specified in the
 <link linkend="documentinfo">Document information</link> box.</entry></row>
-<row><entry>Company Name</entry><entry>KDE</entry><entry>The company name specified in the
+<row><entry>Company Name</entry><entry>&kde;</entry><entry>The company name specified in the
 <link linkend="documentinfo">Document information</link> box.</entry></row>
 <row><entry>Country</entry><entry>United States</entry><entry>The country name specified in the
 <link linkend="documentinfo">Document information</link> box.</entry></row>
-<row><entry>Directory Name</entry><entry>/home/juser/kword</entry><entry>This is the directory name for
-the document. The filename is not included in the directory name variable.</entry></row>
-<row><entry>Directory and Filename</entry><entry>/home/juser/kword/Resume.kwd</entry><entry>The directory
+<row><entry>Folder Name</entry><entry>/home/juser/kword</entry><entry>This is the folder name for
+the document. The filename is not included in the folder name variable.</entry></row>
+<row><entry>Folder and Filename</entry><entry>/home/juser/kword/Resume.kwd</entry><entry>The folder
 and filename of the current file.</entry></row>
 <row><entry>Document Abstract</entry><entry>This is a current resume.</entry>
 <entry>The document abstract specified in the

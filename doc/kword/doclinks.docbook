@@ -1,4 +1,14 @@
-<sect1 id="links"><title>Document Links </title>
+<sect1 id="links">
+<sect1info>
+<authorgroup>
+<author>
+<firstname>Mike</firstname>
+<surname>McBride</surname>
+</author>
+<!-- TRANS:ROLES_OF_TRANSLATORS -->
+</authorgroup>
+</sect1info>
+<title>Document Links </title>
 <indexterm><primary>document links</primary></indexterm>
 
 <para>&kword; has the ability to insert Internet addresses, email addresses and file locations with a descriptor.  This is most often used to
@@ -22,7 +32,7 @@ create web pages in &kword;.</para>
 
 <para>Using the icon bar on the left, choose which link type you want to insert.</para>
 <para>In the comment field, type the text you want to appear in your web document (for example:  The KOffice Web Site).</para>
-<para>In the address field, type the internet address, email address or
+<para>In the address field, type the Internet address, email address or
 file location you want the comment to be linked with (for example:  http://www.koffice.org) </para>
 <para>Click <guibutton>OK</guibutton>.</para>
 <note><para>By default, &kword; displays links underlined (as in most browsers).  You can turn this behavior on and off by

@@ -1,4 +1,14 @@
-<sect1 id="doc-structure"><title>Document Structure</title>
+<sect1 id="doc-structure">
+<sect1info>
+<authorgroup>
+<author>
+<firstname>Mike</firstname>
+<surname>McBride</surname>
+</author>
+<!-- TRANS:ROLES_OF_TRANSLATORS -->
+</authorgroup>
+</sect1info>
+<title>Document Structure</title>
 <indexterm><primary>document structure</primary></indexterm>
 
 <para>Sometimes, when editing a complicated document, it can be helpful to look at an organized view of your document.</para>
@@ -35,7 +45,7 @@ has the ability to toggle the document structure window on and off.</para>
 
 <varlistentry>
 <term><guilabel>Pictures</guilabel></term>
-<listitem><para>Within this category is a list of all frames that contain pictures, and the directory the pictures were loaded from.</para></listitem>
+<listitem><para>Within this category is a list of all frames that contain pictures, and the folder the pictures were loaded from.</para></listitem>
 </varlistentry>
 
 <varlistentry>

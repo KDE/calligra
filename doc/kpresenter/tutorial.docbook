@@ -5,6 +5,25 @@ To edit or validate this document separately, uncomment this prolog
 Be sure to comment it out again when you are done -->
    
 <chapter id="tutorial">
+<chapterinfo>
+<authorgroup>
+<author>
+<firstname>Neil</firstname>
+<surname>Lucock</surname>
+<affiliation>
+<address><email>neil@nlucock.freeserve.co.uk</email></address>
+</affiliation>
+</author>
+<author>
+<firstname>Krishna</firstname>
+<surname>Tateneni</surname>
+<affiliation>
+<address><email>tateneni@pluto.njcc.com</email></address>
+</affiliation>
+</author>
+<!-- TRANS:ROLES_OF_TRANSLATORS -->
+</authorgroup>
+</chapterinfo>
 <title>A Step-By-Step Tutorial</title>
 
 <para>
@@ -217,12 +236,12 @@ standard &kde; dialog boxes in detail, please consult the &kde;
 documentation. You can browse by clicking on <guiicon>folder</guiicon>
 icons or by using the <guiicon>browser</guiicon> style buttons on the
 toolbar (highlighted in red.) Clicking the <guiicon>up arrow</guiicon>
-takes you up one directory level.
+takes you up one folder level.
 </para>
 
 <para>
 Find the file named <filename>koffice-logo.png</filename>, which may be
-in a different directory than the one shown in the screenshot below. You
+in a different folder than the one shown in the screenshot below. You
 can also choose any other graphic file if you like! Select the file, and
 click <guibutton>Open</guibutton>.
 </para>
@@ -275,11 +294,11 @@ That's it. Now you have a picture on the title page!
 Let's continue enhancing our title page by adding a shadow
 behind the title. <mousebutton>Right</mousebutton> click anywhere on the
 title text. This achieves two things: the text box containing the title
-is selected, and a menu pops-up.
+is selected, and a menu pops up.
 </para>
 
 <para>
-Select the <guimenuitem>Shadow</guimenuitem> option in the pop-up menu.
+Select the <guimenuitem>Shadow</guimenuitem> option in the popup menu.
 </para>
 
 <screenshot>
@@ -410,7 +429,7 @@ screen, or use the <keycap>Page Down</keycap> key.
 <para>
 To exit the slide show, <mousebutton>right</mousebutton> click, and then
 select the <guimenuitem>Exit presentation</guimenuitem> option from the
-pop-up menu.
+popup menu.
 </para>
 
 </sect1>

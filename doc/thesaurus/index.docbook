@@ -17,7 +17,7 @@
 <affiliation><address><email>daniel.naber@t-online.de</email></address></affiliation> 
 </author>
 <!-- TRANS:ROLES_OF_TRANSLATORS -->
-</authorgroup> 
+</authorgroup>
 
 <date>2003-04-12</date>
 <releaseinfo>0.95.00</releaseinfo>
@@ -136,6 +136,7 @@ or have a look at the <ulink url="http://www.cogsci.princeton.edu/~wn/">&wordnet
 &kthesaurus; and this documentation is copyrighted by Daniel Naber.
 </para>
 
+<!-- TRANS:CREDIT_FOR_TRANSLATORS -->
 &underFDL;
 &underGPL;
 

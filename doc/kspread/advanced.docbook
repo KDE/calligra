@@ -1,4 +1,16 @@
 <chapter id="hardsums">
+<chapterinfo>
+<authorgroup>
+<author>
+<firstname>Pamela</firstname>
+<surname>Robert</surname>
+<affiliation>
+<address><email>pamroberts@blueyonder.co.uk</email></address>
+</affiliation>
+</author>
+<!-- TRANS:ROLES_OF_TRANSLATORS -->
+</authorgroup>
+</chapterinfo> 
 <title>Advanced &kspread;</title>
 <sect1 id="series">
 <title>Series</title>
@@ -383,7 +395,7 @@ dialog box, which lets you choose between four types of link:</para>
 
 <itemizedlist>
 <listitem><para>An <guilabel>Internet</guilabel> link cell will try to 
-open your default browser at the <acronym>URL</acronym> entered in the 
+open your default browser at the &URL; entered in the 
 <guilabel>Internet address:</guilabel> text box of the <guilabel>Insert
 Link</guilabel> dialog when it is clicked. This could be, for example, 
 <userinput>http://www.koffice.org</userinput>. 
@@ -396,8 +408,8 @@ link will open your email composer using the address entered in the
 </para></listitem>
 
 <listitem><para>A <guilabel>File</guilabel> link cell holds the path to 
-a file or directory, as entered into the <guilabel>File location:</guilabel> 
-text box, and will try to open that file or directory with a suitable 
+a file or folder, as entered into the <guilabel>File location:</guilabel> 
+text box, and will try to open that file or folder with a suitable 
 application when clicked on.
 </para></listitem>
 
@@ -424,9 +436,9 @@ a number of criteria, and pop up a message box if the data is invalid.</para>
 </menuchoice>. This will bring up &kspread;'s <guilabel>Validity</guilabel> 
 dialog box which has two tabbed pages.</para>
 <para>In the <guilabel>Values</guilabel> page select what type of data is to 
-be considered valid from the <guilabel>Allow:</guilabel> drop down list then 
+be considered valid from the <guilabel>Allow:</guilabel> combo box list then 
 define the valid range of values by choosing one of the options in the 
-<guilabel>Data:</guilabel> drop down list and entering suitable value(s) into 
+<guilabel>Data:</guilabel> combo box and entering suitable value(s) into 
 ont or both of the edit box(es).</para>
 <para>When you have done this change to the <guilabel>Error Alert</guilabel> 
 tab page. Here you can choose the type of message box (<guimenuitem>Stop
@@ -444,7 +456,7 @@ Handbook.</para>
 
 <sect2 id="splitview">
 <title>Splitting the View</title>
-<para>If your spreadsheet is so large that you can not see all of it at once, 
+<para>If your spreadsheet is so large that you cannot see all of it at once, 
 splitting &kspread;'s window into two or more views can help you work on it. 
 This is done by selecting <menuchoice><guimenu>View</guimenu><guimenuitem>
 Split View</guimenuitem></menuchoice> which will split the current view into 
@@ -492,7 +504,7 @@ should be enclosed in single quotation marks.</para>
 </userinput> then you can enter a formula such as <userinput>='fred' + 2
 </userinput> into another cell which would always give the result of adding 
 2 to the value in A1 no matter where the formula cell was copied to.</para>
-<para>Note that cell and area names are treated as being in lower case.</para>
+<para>Note that cell and area names are treated as being in lowercase.</para>
 </sect2>
 
 <sect2 id="cellcomments">

@@ -1,9 +1,9 @@
 <?xml version="1.0" ?>
-<!DOCTYPE book PUBLIC "-//KDE//DTD DocBook XML V4.1.2-Based Variant V1.1//EN" "dtd/kdex.dtd" [
-  <!ENTITY kappname "&kchart;"><!-- replace kapp here, do *not* replace kappname-->
-  <!ENTITY package "koffice"><!-- kdebase, kdeadmin, etc -->
+<!DOCTYPE book PUBLIC "-//KDE//DTD DocBook XML V4.2-Based Variant V1.1//EN" "dtd/kdex.dtd" [
+  <!ENTITY kappname "&kchart;">
+  <!ENTITY package "koffice"> 
   <!ENTITY % addindex "IGNORE">
-  <!ENTITY % English "INCLUDE"><!-- change language only here -->
+  <!ENTITY % English "INCLUDE">
 ]>
 
 <book lang="&language;">
@@ -13,36 +13,21 @@
 
 <authorgroup>
 <author>
-<firstname>Jonathan</firstname>
-<othername></othername>
-<surname>Drews</surname>
-<affiliation>
-<address><email>j.e.drews@att.net</email></address>
-</affiliation>
+&Jonathan.Drews; &Jonathan.Drews.mail;
 </author>
-</authorgroup>
-
-<!-- TRANS:ROLES_OF_TRANSLATORS -->
-
+<!-- 
 <othercredit role="developer">
-<firstname>Matthias</firstname>
-<othername>Kalle</othername>
-<surname>Dalheimer</surname>
-<affiliation>
-<address><email>kalle@kde.org</email></address>
-</affiliation>
+&Matthias.Kalle.Dalheimer; &Matthias.Kalle.Dalheimer.mail;
 <contrib>Developer</contrib>
 </othercredit>
-
-
-<!-- Translators: put here the copyright notice of the translation -->
+-->
+<!-- TRANS:ROLES_OF_TRANSLATORS -->
+</authorgroup>
 
 <legalnotice>&FDLNotice;</legalnotice>
 
 <date>2002-07-20</date>
 <releaseinfo>1.01.00</releaseinfo>
-
-<!-- Abstract about this handbook -->
 
 <abstract>
 <para>
@@ -214,7 +199,7 @@ document will look like.</action></para></listitem>
 <listitem><para><action>Opens a dialog box</action> where you can enter
 information about your chart.</para>
 <note><para>This document information will be
-displayed in the &konqueror; file browser as a tool tip. The tool tips
+displayed in the &konqueror; file browser as a tooltip. The tooltips
 are pop-ups that show the contents of a file when you move your mouse over
 the file icon.</para></note></listitem>
 </varlistentry>
@@ -223,7 +208,7 @@ the file icon.</para></note></listitem>
 <guimenu>File</guimenu>
 <guimenuitem>Send File...</guimenuitem>
 </menuchoice></term>
-<listitem><para><action></action></para>
+<listitem>
 <warning><para>This feature does not work
 properly. Do not use it.</para></warning>
 </listitem>
@@ -414,10 +399,10 @@ charting styles (Pie Chart, Bar Chart, Area Chart and so on).</action></para></l
 
 <para>The <menuchoice>
 <guimenu>Settings</guimenu><guimenuitem>Configure Shortcuts...</guimenuitem></menuchoice>
-allows you to specify key bindings</para>
+allows you to specify shortcuts.</para>
 
 
-<para>Below is an example of how to configure a short cut for opening
+<para>Below is an example of how to configure a shortcut for opening
 the chart wizard.</para>
 
 <screenshot>
@@ -441,7 +426,7 @@ Next click on the <guilabel>Primary</guilabel> button.
 <listitem><para>
 Do <userinput><keycombo
 action="seq">&Alt;&Ctrl;<keycap>W</keycap></keycombo></userinput>
-and the dialog should disappear. The key binding is now entered. 
+and the dialog should disappear. The shortcut is now entered. 
 </para></listitem>
 </itemizedlist>
 
@@ -558,7 +543,7 @@ numbers, for plotting?</para>
 &kchart;
 </para>
 <para>
-Program copyright 1998-2002 Matthias Kalle Dalheimer <email>kalle@kde.org</email>
+Program copyright 1998-2002 &Matthias.Kalle.Dalheimer; &Matthias.Kalle.Dalheimer.mail;
 </para>
 <para>
 Contributors:
@@ -571,14 +556,12 @@ Contributors:
 </para>
 
 <para>
-Documentation copyright 2002 Jonathan Drews <email>j.e.drews@att.net</email>
+Documentation copyright 2002 &Jonathan.Drews; &Jonathan.Drews.mail;
 </para>
 
 <!-- TRANS:CREDIT_FOR_TRANSLATORS -->
-
-&underFDL;               <!-- FDL: do not remove -->
-&underGPL;        	 <!-- GPL License -->
-
+&underFDL;
+&underGPL;
 
 </chapter>
 
@@ -596,12 +579,13 @@ Documentation copyright 2002 Jonathan Drews <email>j.e.drews@att.net</email>
 <title>Requirements</title>
 
 <para>
-In order to successfully use &kchart;, you need &koffice; 1.2 and Qt-3.0.5. 
+In order to successfully use this version of &kchart;, you need &koffice;
+1.3 and &Qt; 3.2
 </para>
 
 <para>
-All required libraries as well as &kchart; itself can be found
-on <ulink url="http://www.koffice.org">The &koffice; home page</ulink>.
+All required libraries as well as &kchart; itself can be found on <ulink
+url="http://www.koffice.org">The &koffice; home page</ulink>.
 </para>
 
 <!-- For a list of updates, you may refer to the application web site

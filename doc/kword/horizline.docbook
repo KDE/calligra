@@ -1,14 +1,16 @@
 <sect1 id="hline">
+<sect1info>
+<authorgroup>
+<author>
+<firstname>Mike</firstname>
+<surname>McBride</surname>
+</author>
+<!-- TRANS:ROLES_OF_TRANSLATORS -->
+</authorgroup>
+</sect1info>
 <title>Horizontal Line</title>
 <indexterm><primary>horizontal lines</primary></indexterm>
 
-<para></para>
-<para></para>
-<para></para>
-<para></para>
-<para></para>
-<para></para>
-<para></para>
-<para></para>
+<para>To be removed</para>
 
 </sect1>

@@ -1,4 +1,18 @@
 <chapter id="credits">
+<chapterinfo>
+<authorgroup>
+<author><firstname>Ben</firstname>
+<surname>Lamb</surname>
+<affiliation>
+<address>
+<email>kde@zurgy.org</email>
+</address>
+</affiliation>
+</author>
+<!-- TRANS:ROLES_OF_TRANSLATORS -->
+</authorgroup>
+</chapterinfo>
+
 <title>Credits and License</title>
 
 <para>
@@ -44,7 +58,6 @@ Current maintainer is Peter Simonsonn <email>psn@linux.se</email>.
 </itemizedlist>
 
 <!-- TRANS:CREDIT_FOR_TRANSLATORS -->
-
 &underFDL;
 &underGPL;
 

@@ -1,4 +1,14 @@
-<sect1 id="endnotes-and-footnotes"><title>Footnotes and Endnotes</title>
+<sect1 id="endnotes-and-footnotes">
+<sect1info>
+<authorgroup>
+<author>
+<firstname>Mike</firstname>
+<surname>McBride</surname>
+</author>
+<!-- TRANS:ROLES_OF_TRANSLATORS -->
+</authorgroup>
+</sect1info>
+<title>Footnotes and Endnotes</title>
 <indexterm><primary>footnotes</primary><secondary>introduction</secondary></indexterm>
 <indexterm><primary>endnotes</primary><secondary>introduction</secondary></indexterm>
 
@@ -79,7 +89,6 @@ cursor to the appropriate footnote reference.</para></listitem>
 
 <sect3 id="fn-config-fn">
 <title>Change the appearance of footnote entries</title>
-<para></para>
 
 <screenshot>
 <mediaobject>
@@ -111,7 +120,7 @@ appear <emphasis>before</emphasis> the footnote number.</para>
 <guilabel>Centered</guilabel> or <guilabel>Right</guilabel></para>
 <para>Determine the line lengths using the spin box labeled <guilabel>Separator Line Length</guilabel>.</para>
 <para>Determine the line width using the spin box labeled <guilabel>Separator Line Width</guilabel>.</para>
-<para>Use the drop down box labeled <guilabel>Separator Line Type</guilabel> to determine what kind of line is drawn.</para>
+<para>Use the combo box labeled <guilabel>Separator Line Type</guilabel> to determine what kind of line is drawn.</para>
 <para>Click <guibutton>OK</guibutton> to change the look of all footnotes or click <guibutton>Cancel</guibutton> to keep 
 the previous options.</para>
 </sect3>
@@ -155,7 +164,7 @@ footnotes.</para>
 <sect2 id="en-config">
 <title>Change the appearance of endnote entries</title>
 <indexterm><primary>endnotes</primary><secondary>change appearance</secondary></indexterm>
-<para></para>
+
 <sect3 id="en-config-en">
 <title>Change the look of endnote entries</title>
 <para>To configure the appearance of endnotes, select <menuchoice> <guimenu>Format</guimenu>

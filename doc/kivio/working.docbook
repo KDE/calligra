@@ -1,9 +1,23 @@
 <chapter id="working">
+<chapterinfo>
+<authorgroup>
+<author><firstname>Ben</firstname>
+<surname>Lamb</surname>
+<affiliation>
+<address>
+<email>kde@zurgy.org</email>
+</address>
+</affiliation>
+</author>
+<!-- TRANS:ROLES_OF_TRANSLATORS -->
+</authorgroup>
+</chapterinfo>
+
 <title>Working with &kivio;</title>
 
 <sect1 id="opening">
 <title>Opening a Document</title>
-<para>To open a previously saved document select <menuchoice><guimenu>File</guimenu><guimenuitem>Open</guimenuitem></menuchoice>, a standard KDE file dialog box will appear.</para>
+<para>To open a previously saved document select <menuchoice><guimenu>File</guimenu><guimenuitem>Open</guimenuitem></menuchoice>, a standard &kde; file dialog box will appear.</para>
 <para>Recently used documents are listed under <menuchoice><guimenu>File</guimenu><guimenuitem>Open Recent</guimenuitem></menuchoice>.</para>
 </sect1>
 
@@ -15,7 +29,7 @@
 
 <sect1 id="printing">
 <title>Printing</title>
-<para>The document can be printed by selecting <menuchoice><guimenu>File</guimenu><guimenuitem>Print</guimenuitem></menuchoice>. The standard KDE printing dialog appears. A preview of the printed output can be obtained by selecting <menuchoice><guimenu>File</guimenu><guimenuitem>Print Preview</guimenuitem></menuchoice>.</para>
+<para>The document can be printed by selecting <menuchoice><guimenu>File</guimenu><guimenuitem>Print</guimenuitem></menuchoice>. The standard &kde; printing dialog appears. A preview of the printed output can be obtained by selecting <menuchoice><guimenu>File</guimenu><guimenuitem>Print Preview</guimenuitem></menuchoice>.</para>
 </sect1>
 
 <sect1 id="import-export">
@@ -54,7 +68,7 @@
 
 <sect1 id="page-export">
 <title>Exporting a Page</title>
-<para>Individual pages can be exported as bitmap graphics files. To export the current page select <menuchoice><guimenu>Page</guimenu><guimenuitem>Export Page</guimenuitem></menuchoice>. A standard KDE file dialog box appears. The export format is determined by the name you give the file, it must end with one of the extensions listed below.</para>
+<para>Individual pages can be exported as bitmap graphics files. To export the current page select <menuchoice><guimenu>Page</guimenu><guimenuitem>Export Page</guimenuitem></menuchoice>. A standard &kde; file dialog box appears. The export format is determined by the name you give the file, it must end with one of the extensions listed below.</para>
 <para>The following formats are supported:</para>
 
 <itemizedlist>

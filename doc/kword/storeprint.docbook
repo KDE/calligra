@@ -1,4 +1,13 @@
 <chapter id="store-print">
+<chapterinfo>
+<authorgroup>
+<author>
+<firstname>Mike</firstname>
+<surname>McBride</surname>
+</author>
+<!-- TRANS:ROLES_OF_TRANSLATORS -->
+</authorgroup>
+</chapterinfo>
 <title>Detailed Guides: Document Storage and Printing</title>
 
 <para>This section of the documentation will cover everything you need
@@ -136,13 +145,13 @@ dialog box is revealed.  For more details on this dialog box refer to
 
 <sect3 id="loading-recent-doc">
 <title>Open a Recent Document</title>
-<para>&kword; keeps track of the most recently edited documents.  You can select one of these documents by using the drop-down box
+<para>&kword; keeps track of the most recently edited documents.  You can select one of these documents by using the combo box
 to the right of the radio button labeled <guilabel>Open a recent document</guilabel>.</para>
 
-<para>Once the filename is selected in this drop down box, click on <guibutton>OK</guibutton> and &kword;
+<para>Once the filename is selected in this combo box, click on <guibutton>OK</guibutton> and &kword;
 will load the template.</para>
 
-<note><para>If you delete or move a file, it will still appear in the drop down list.</para><para>If you select a deleted or otherwise unavailable file 
+<note><para>If you delete or move a file, it will still appear in the combo box.</para><para>If you select a deleted or otherwise unavailable file 
 to be opened by &kword;, the <guibutton>OK</guibutton> will turn from black to gray. This indicates you will not be 
 able to open that file.</para></note>
 
@@ -251,7 +260,7 @@ ways:</para>
 <itemizedlist>
 <listitem>
 <para>By selecting <menuchoice> <guimenu>File</guimenu><guimenuitem>Save
-As...</guimenuitem></menuchoice> from the Menu bar</para>
+As...</guimenuitem></menuchoice> from the Menubar</para>
 </listitem>
 <listitem>
 <para>or by trying to <guimenuitem>Save</guimenuitem> a file which does
@@ -296,7 +305,7 @@ systems.  Filenames can:</para>
 
 <itemizedlist spacing="compact">
 <listitem><para>be of nearly any length</para></listitem>
-<listitem><para>be any combination of upper and lower case letters</para></listitem>
+<listitem><para>be any combination of upper and lowercase letters</para></listitem>
 <listitem><para>include spaces and punctuation</para></listitem>
 </itemizedlist>
 
@@ -417,21 +426,21 @@ appear.</para>
 </mediaobject>
 </screenshot>
 
-<para>The top drop down box labeled <guilabel>Name:</guilabel> shows the
+<para>The top combo box labeled <guilabel>Name:</guilabel> shows the
 currently selected printer.  To configure this printer click on the
 <guibutton>Properties...</guibutton> button.</para>
 
-<para>To select a different printer, click on the dropdown box and
+<para>To select a different printer, click on the combo box and
 select the desired printer.</para>
 
 <para>If you want to print your output into a postscript file, to a PDF file, 
 a fax modem (to send it as a fax) or email the file as a PDF file, select
-the appropriate option from the dropdown box. Once that option has been selected, enter
+the appropriate option from the combo box. Once that option has been selected, enter
 the filename into the text box labled <guilabel>Output File:</guilabel>.</para>
 
 <para>The line labled <guilabel>Print system currently used:</guilabel> determines how
 &kword; interacts with your computer and any attached printers.  Complete setup of the
-printing system is beyond the scope of this document.  For more information see the KDE 
+printing system is beyond the scope of this document.  For more information see the &kde; 
 print web site at <ulink url="http://printing.kde.org">http://printing.kde.org</ulink>.</para>
 
 <para>If you want to print all pages of your document and only one copy, you can click 
@@ -457,7 +466,7 @@ located on (simply select <guilabel>Current</guilabel>), or print a range of pag
 <guilabel>Print Range</guilabel> option, enter your page range in the text box
 provided. (Example:  3-13)</para>
 
-<para>In the drop down box labeled <guilabel>Page Set:</guilabel> you can tell &kword; to
+<para>In the combo box labeled <guilabel>Page Set:</guilabel> you can tell &kword; to
 print the <guilabel>Even pages</guilabel>, the <guilabel>Odd pages</guilabel> or 
 <guilabel>All pages</guilabel>.</para>
 

@@ -4,6 +4,25 @@
 -->
 
 <sect1 id="kugardata-dtd">
+<sect1info>
+<authorgroup>
+<author>
+<firstname>Alexander</firstname>
+<surname>Dymo</surname>
+<affiliation>
+<address><email>cloudtemple@mksat.net</email></address>
+</affiliation>
+</author>
+<author>
+<firstname>Phil</firstname>
+<surname>Thompson</surname>
+<affiliation>
+<address><email>phil@river-bank.demon.co.uk</email></address>
+</affiliation>
+</author>
+<!-- TRANS:ROLES_OF_TRANSLATORS -->
+</authorgroup>
+</sect1info>
 <title><sgmltag class="element">KugarData</sgmltag> Document Type
 Definition</title>
 

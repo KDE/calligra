@@ -1,4 +1,14 @@
 <sect1 id="columns">
+<sect1info>
+<authorgroup>
+<author>
+<firstname>Mike</firstname>
+<surname>McBride</surname>
+</author>
+<!-- TRANS:ROLES_OF_TRANSLATORS -->
+</authorgroup>
+</sect1info>
+
 <title>Columns</title>
 <indexterm><primary>columns</primary></indexterm>
 

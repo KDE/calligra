@@ -1,4 +1,13 @@
 <sect1 id="frames">
+<sect1info>
+<authorgroup>
+<author>
+<firstname>Mike</firstname>
+<surname>McBride</surname>
+</author>
+<!-- TRANS:ROLES_OF_TRANSLATORS -->
+</authorgroup>
+</sect1info>
 <title>Working with Frames</title>
 <indexterm><primary>frames</primary><secondary>introduction</secondary></indexterm>
 <para>Since &kword; is a frames based word processor, an understanding of
@@ -90,7 +99,7 @@ Frame</guimenuitem></menuchoice> from the menubar</para>
 <listitem>
 <para>or by clicking <inlinemediaobject><imageobject><imagedata
 fileref="tfcreatebut.png"
-format="PNG"/></imageobject></inlinemediaobject> on the tool-bar.</para>
+format="PNG"/></imageobject></inlinemediaobject> on the toolbar.</para>
 </listitem>
 </itemizedlist>
 

@@ -1,4 +1,13 @@
 <sect1 id="formulas">
+<sect1info>
+<authorgroup>
+<author>
+<firstname>Mike</firstname>
+<surname>McBride</surname>
+</author>
+<!-- TRANS:ROLES_OF_TRANSLATORS -->
+</authorgroup>
+</sect1info>
 <title>Formulas</title>
 <indexterm><primary>formulas</primary></indexterm>
 
@@ -35,7 +44,7 @@ converted to a <emphasis>framed</emphasis> frame later.</para></listitem>
 <listitem><para>Formula frames automatically determine where in the line they are lined up.</para></listitem>
 </itemizedlist>
 </note>
-<para></para>
+
 </sect2>
 
 <sect2 id="formula-move"><title>Moving a formula</title>
@@ -54,7 +63,7 @@ just like any other frame in &kword;.</para>
 
 <sect2 id="formula-edit"><title>Editing a formula</title>
 <para>Editing a formula is beyond the scope of this documentation.  
-Please see the KFormula handbook for help with the editing of the formula.</para>
+Please see the &kformula; handbook for help with the editing of the formula.</para>
 </sect2>
 </sect1>
 

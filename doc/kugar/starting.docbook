@@ -6,6 +6,25 @@ this prolog
 
 -->
 <chapter id="starting">
+<chapterinfo>
+<authorgroup>
+<author>
+<firstname>Alexander</firstname>
+<surname>Dymo</surname>
+<affiliation>
+<address><email>cloudtemple@mksat.net</email></address>
+</affiliation>
+</author>
+<author>
+<firstname>Phil</firstname>
+<surname>Thompson</surname>
+<affiliation>
+<address><email>phil@river-bank.demon.co.uk</email></address>
+</affiliation>
+</author>
+<!-- TRANS:ROLES_OF_TRANSLATORS -->
+</authorgroup>
+</chapterinfo>
 <title>Starting &kugar; and &kudesigner;</title>
 <para>
 The &kugar; program takes two commandline arguments:

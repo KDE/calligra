@@ -6,6 +6,25 @@ To edit or validate this document separately, uncomment this prolog
 Be sure to comment it out again when you are done -->
 
 <chapter id="hints-and-tips">
+<chapterinfo>
+<authorgroup>
+<author>
+<firstname>Neil</firstname>
+<surname>Lucock</surname>
+<affiliation>
+<address><email>neil@nlucock.freeserve.co.uk</email></address>
+</affiliation>
+</author>
+<author>
+<firstname>Krishna</firstname>
+<surname>Tateneni</surname>
+<affiliation>
+<address><email>tateneni@pluto.njcc.com</email></address>
+</affiliation>
+</author>
+<!-- TRANS:ROLES_OF_TRANSLATORS -->
+</authorgroup>
+</chapterinfo>
 <title>General Hints and Tips for Great Presentations</title>
 
 <para>Okay, you've decided to use &kpresenter; for your
@@ -39,7 +58,7 @@ you will know what you are going to say next and how you are going to
 say it. </para>
 
 <para>&kpresenter; does not produce Speaker's Notes at the time of
-writing, but I'm happy to just use ordinary slides. Produce some
+writing, but I am happy to just use ordinary slides. Produce some
 slides for yourself, printed on plain paper, and some for use with the
 Overhead Projector. Make the text on your slides nice and big, you
 need to be able to read it at a distance. I use 14 or 16 point text,
@@ -58,7 +77,7 @@ use a pointer and point at the display screen, find a laser pointer or
 put a pencil on the transparency itself. Be warned, these tend to roll
 out of place when you nudge the table.</para>
 
-<para>Consider where you are going to stand. You can not stand in
+<para>Consider where you are going to stand. You cannot stand in
 front of your display, so off to one side is probably your best option
 if you want your audience to be able to see. I often project a picture
 onto a wipeboard and draw over the top of it. If you are using a PC
@@ -121,6 +140,6 @@ that adds to what you are saying. Finally, relax and try not to rush
 through it all. Talk to them, not at them and remember that a
 presentation is about whatever message you are trying to get
 across. &kpresenter; is a useful tool. It can help you to get that
-message over, but it can not do the job for you.</para>
+message over, but it cannot do the job for you.</para>
 
 </chapter>

@@ -1,5 +1,16 @@
-
 <chapter id="configdialog">
+<chapterinfo>
+<authorgroup>
+<author>
+<firstname>Pamela</firstname>
+<surname>Robert</surname>
+<affiliation>
+<address><email>pamroberts@blueyonder.co.uk</email></address>
+</affiliation>
+</author>
+<!-- TRANS:ROLES_OF_TRANSLATORS -->
+</authorgroup>
+</chapterinfo>
 <title>The &kspread; Configuration Dialog Box</title>
 
 <para>Selecting <menuchoice><guimenu>Settings</guimenu><guimenuitem>
@@ -9,7 +20,7 @@ which allow you to change many aspects of &kspread;'s operation.</para>
 
 <sect1 id="configpref">
 <title><guilabel>Preferences</guilabel></title>
-<para>This page has a number of checkboxes which control how items are 
+<para>This page has a number of check boxes which control how items are 
 displayed, entered or calculated:
 
 <variablelist>
@@ -64,9 +75,9 @@ zero will appear blank.
 </varlistentry>
 
 <varlistentry>
-<term><guilabel>Convert first letter to upper case</guilabel></term>
+<term><guilabel>Convert first letter to uppercase</guilabel></term>
 <listitem><para>Check this box and the first letter of any text you 
-type in will automatically be converted to upper case.
+type in will automatically be converted to uppercase.
 </para></listitem>
 </varlistentry>
 
@@ -88,7 +99,6 @@ button on this page will update it to conform to your locale settings.</para>
 <para>This page of &kspread;'s configuration dialog box (obtained by selecting 
 <guimenuitem>Configure Kspread...</guimenuitem> from the <guimenu>Settings
 </guimenu> menu) controls some more &kspread; features:</para>
-<para></para>
 
 <para><variablelist>
 <varlistentry>
@@ -143,7 +153,7 @@ worksheet.
 
 <varlistentry>
 <term><guilabel>Show tabs</guilabel></term>
-<listitem><para>This checkbox controls whether the sheet tabs are shown 
+<listitem><para>This check box controls whether the sheet tabs are shown 
 at the bottom of the worksheet.
 </para></listitem>
 </varlistentry>
@@ -155,8 +165,8 @@ at the bottom of the worksheet.
 </varlistentry>
 
 <varlistentry>
-<term><guilabel>Show statusbar</guilabel></term>
-<listitem><para>Uncheck this box if you do not want the Statusbar to appear.
+<term><guilabel>Show status bar</guilabel></term>
+<listitem><para>Uncheck this box if you do not want the status bar to appear.
 </para></listitem>
 </varlistentry>
 
@@ -280,7 +290,7 @@ alternative dictionaries.
 
 <varlistentry>
 <term><guilabel>Client:</guilabel></term>
-<listitem><para>This dropdown box lets you select between different spell 
+<listitem><para>This combo box lets you select between different spell 
 checking programs that may be present on your computer.
 </para></listitem>
 </varlistentry>

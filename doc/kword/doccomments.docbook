@@ -1,4 +1,14 @@
-<sect1 id="comments"><title>Document Comments </title>
+<sect1 id="comments">
+<sect1info>
+<authorgroup>
+<author>
+<firstname>Mike</firstname>
+<surname>McBride</surname>
+</author>
+<!-- TRANS:ROLES_OF_TRANSLATORS -->
+</authorgroup>
+</sect1info>
+<title>Document Comments </title>
 <indexterm><primary>comments</primary></indexterm>
 
 <para>Document comments are included in &kword; to allow you to have your documents read by another 

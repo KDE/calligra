@@ -16,8 +16,8 @@
 <book lang="&language;">
 <bookinfo>
 <title>The &kpresenter; User's Manual</title>
-<authorgroup>
 
+<authorgroup>
 <author>
 <firstname>Neil</firstname>
 <surname>Lucock</surname>
@@ -25,7 +25,7 @@
 <address><email>neil@nlucock.freeserve.co.uk</email></address>
 </affiliation>
 </author>
-	
+
 <author>
 <firstname>Krishna</firstname>
 <surname>Tateneni</surname>
@@ -33,9 +33,7 @@
 <address><email>tateneni@pluto.njcc.com</email></address>
 </affiliation>
 </author>
-
 <!-- TRANS:ROLES_OF_TRANSLATORS -->
-     
 </authorgroup>
 
 <date>2002-01-16</date>
@@ -128,7 +126,7 @@ suite. The components of &koffice; are:
 
 <para>
 &koffice; is a free (or open-source) software project which is
-released under the terms of the <acronym>GNU</acronym> General Public
+released under the terms of the &GNU; General Public
 License.
 </para>
 
@@ -218,7 +216,6 @@ Tateneni.  Portions are copyright 2000-2002 Neil Lucock
 </para>
 
 <!-- TRANS:CREDIT_FOR_TRANSLATORS -->
-
 &underFDL;
 &underGPL;
 

@@ -1,4 +1,13 @@
 <sect1 id="insert-file">
+<sect1info>
+<authorgroup>
+<author>
+<firstname>Mike</firstname>
+<surname>McBride</surname>
+</author>
+<!-- TRANS:ROLES_OF_TRANSLATORS -->
+</authorgroup>
+</sect1info>
 <title>Inserting files</title>
 <indexterm><primary>inserting files</primary></indexterm>
 

@@ -1,5 +1,17 @@
-
 <chapter id="introduction">
+<chapterinfo>
+<authorgroup>
+<author><firstname>Ben</firstname>
+<surname>Lamb</surname>
+<affiliation>
+<address>
+<email>kde@zurgy.org</email>
+</address>
+</affiliation>
+</author>
+<!-- TRANS:ROLES_OF_TRANSLATORS -->
+</authorgroup>
+</chapterinfo>
 <title>Introduction</title>
 
 <sect1 id="what-is">

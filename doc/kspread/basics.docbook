@@ -1,7 +1,19 @@
 <chapter id="basics">
+<chapterinfo>
+<authorgroup>
+<author>
+<firstname>Pamela</firstname>
+<surname>Robert</surname>
+<affiliation>
+<address><email>pamroberts@blueyonder.co.uk</email></address>
+</affiliation>
+</author>
+<!-- TRANS:ROLES_OF_TRANSLATORS -->
+</authorgroup>
+</chapterinfo> 
 <title>&kspread; Basics</title>
 
-<note><para>Like the rest of KDE, &kspread; is highly configurable, which can
+<note><para>Like the rest of &kde;, &kspread; is highly configurable, which can
 cause problems for readers trying to compare the text in a document such as
 this with what they see on the version of &kspread; running on their desktop.
 To cut down on some of the possibilities for confusion, it it suggested that
@@ -151,7 +163,7 @@ HH:MIN:SS am|pm format such as <userinput>9:42 am</userinput> or <userinput>
 10:30:52 pm</userinput>
 </para></listitem>
 <listitem><para>
-&kspread; defines any input data as <quote>text</quote> if it can not 
+&kspread; defines any input data as <quote>text</quote> if it cannot 
 recognize as being a number, date or time.
 </para></listitem>
 </itemizedlist>
@@ -309,7 +321,7 @@ enter more complex formulae such as <userinput>=((B10 + C3) *5 - F11) / 2
 
 <para>Cells containing a formula will be marked with a small blue triangle 
 at the bottom left corner if the <guilabel>Show formula indicator</guilabel>
-checkbox in the <guilabel>Preferences</guilabel> page of &kspread;'s 
+check box in the <guilabel>Preferences</guilabel> page of &kspread;'s 
 <link linkend="configdialog">configuration</link> dialog is checked.</para>
 <para>&kspread; also includes a large number of built-in functions for 
 applications such as statistical, trigonometrical and financial calculations. 
@@ -366,7 +378,7 @@ in this case) and choose <guimenuitem>Sort Increasing</guimenuitem> or
 <guimenuitem>Sort Decreasing</guimenuitem> from the <guimenu>Data</guimenu> 
 menu.</para>
 <para>Sorting is done alphanumerically, and is case sensitive, numbers coming 
-before upper case letters which come before lower case letters, so that cells 
+before uppercase letters which come before lowercase letters, so that cells 
 containing the entries <userinput>Cat</userinput>, <userinput>bar</userinput>, 
 <userinput>77</userinput> and <userinput>Bat</userinput> would be sorted into 
 the following order: <emphasis>77  Bat  Cat  bar</emphasis>.</para>
@@ -399,10 +411,10 @@ first row of the target area without being included in the sort operation.
 
 
 <sect1 id="statusbarsum">
-<title>The Statusbar Summary Calculator</title>
-<para>The left hand end of the Statusbar shows a summary of the values in 
+<title>The Status bar Summary Calculator</title>
+<para>The left hand end of the Status bar shows a summary of the values in 
 the selected cell(s). According to the setting of the <guilabel>Method of 
-calc:</guilabel> drop down box in the <guilabel>Misc</guilabel> page of 
+calc:</guilabel> combo box in the <guilabel>Misc</guilabel> page of 
 &kspread;'s configuration dialog the summary can be:</para>
 
 <variablelist>
@@ -449,7 +461,7 @@ values.
 </variablelist>
 <para>The method of calculation can also be changed by <mousebutton>right
 </mousebutton> clicking on the summary calculation result area of the 
-Statusbar and choosing an item from the pop up menu.</para>
+Status bar and choosing an item from the pop up menu.</para>
 
 </sect1>
 
@@ -461,7 +473,7 @@ worksheet, as a single document file.</para>
 under a different name, use <menuchoice><guimenu>File</guimenu><guimenuitem>
 Save As...</guimenuitem></menuchoice>. This will bring up &kde;'s common 
 <guilabel>Save Document As</guilabel> dialog box. 
-Choose the directory where you want to save the workbook and enter a 
+Choose the folder where you want to save the workbook and enter a 
 suitable file name into the <guilabel>Location:</guilabel> text box. &kspread; 
 documents are normally automatically saved with a <filename>.ksp</filename> 
 extension, you do not need to add this to the filename but do make sure that 
