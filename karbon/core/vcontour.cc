@@ -7,6 +7,8 @@
 
 #include "vcontour.h"
 
+#include <kdebug.h>
+
 VContour::VContour( const double width, const VLineCap cap, const VLineJoin join )
 	: VSegmentListTraverser(), m_lineWidth( width ), m_lineCap( cap ), m_lineJoin( join )
 {

@@ -40,7 +40,9 @@ VMToolSelect::drawTemporaryObject(
 	QPainter painter( view->canvasWidget()->viewport() );
 	painter.setRasterOp( Qt::NotROP );
    // already selected, so must be a handle operation (move, scale etc.)
-	if( !part()->selection().isEmpty() ) // && ( m_TransformState != NoTransform ||
+	if( !part()->selection().isEmpty()
+		&& part()->selection().getFirst()->boundingBox().contains( p ) 
+	) // && ( m_TransformState != NoTransform ||
 //		part()->selection()->boundingBox().contains( p /* view->zoomFactor() */ ) ) )
 	{
 		if( m_TransformState != Moving )
@@ -77,6 +79,8 @@ VMToolSelect::drawTemporaryObject(
 		painter.lineTo( p.x() + d1, p.y() + d2 );
 		painter.lineTo( p.x(), p.y() + d2 );
 		painter.lineTo( p.x(), p.y() );
+
+		m_TransformState = NoTransform;
 	}
 }
 
