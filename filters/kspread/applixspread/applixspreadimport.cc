@@ -39,6 +39,19 @@ APPLIXSPREADImport::APPLIXSPREADImport (KoFilter *parent, const char *name) :
 {
 }
 
+QString APPLIXSPREADImport::nextLine( QTextStream & stream )
+{
+    QString s = stream.readLine();
+    m_instep += s.length();
+    if (m_instep > m_stepsize)
+    {
+        m_instep = 0;
+        m_progress += 2;
+        emit sigProgress( m_progress );
+    }
+    return s;
+}
+
 const bool 
 APPLIXSPREADImport::filter (
    const QString &fileIn, 
@@ -77,9 +90,9 @@ APPLIXSPREADImport::filter (
 
     // QTextStream
     QTextStream stream (&in);
-    int  step  = in.size()/50;
-    int  value = 0;
-    int  i     = 0;
+    m_stepsize  = in.size()/50;
+    m_instep = 0;
+    m_progress = 0;
     int  rueck;
     int  pos;
     int  vers[3] = { 0, 0, 0 };
@@ -93,8 +106,8 @@ APPLIXSPREADImport::filter (
     t_rc my_rc;
 
     // Read Headline  
-    mystr = stream.readLine ();
-    rueck = sscanf ((const char *) mystr.latin1() , 
+    mystr = nextLine( stream );
+    rueck = sscanf (mystr.latin1(), 
                     "*BEGIN SPREADSHEETS VERSION=%d/%d ENCODING=%dBIT", 
 	             &vers[0], &vers[1], &vers[2]); 
     printf ("Versions info: %d %d %d\n", vers[0], vers[1], vers[2]); 
@@ -115,17 +128,10 @@ APPLIXSPREADImport::filter (
       return false;
     }
 
-
-
-
-
-
     while (!stream.atEnd ())
     {
-        ++i;
-        
         // Read one line
-        mystr = stream.readLine ();
+        mystr = nextLine( stream );
 
         printf ("INPUT <%s>\n", (const char *) mystr.latin1() );
  
@@ -177,7 +183,7 @@ APPLIXSPREADImport::filter (
             do
 	    {
               pos = in.at ();
-              mystrn = stream.readLine ();  
+              mystrn = nextLine( stream );
               if (mystrn[0] == ' ')
 	      {
                 mystrn.remove (0, 1);  
@@ -597,13 +603,6 @@ APPLIXSPREADImport::filter (
           str += "   </cell>\n"; 
 	}
 
-
-        if (i>step) 
-        {
-            i=0;
-            value+=2;
-            emit sigProgress (value);
-        }
     }
     emit sigProgress(100);
 
@@ -877,7 +876,7 @@ APPLIXSPREADImport::readTypefaceTable  (QTextStream &stream, QStringList &typefa
    ok = true;
    do
    {
-     mystr = stream.readLine ();
+     mystr = nextLine( stream );
      if (mystr == "END TYPEFACE TABLE" ) ok = false;
      else 
      {
@@ -909,7 +908,7 @@ APPLIXSPREADImport::readColormap (QTextStream &stream,  QList<t_mycolor> &mcol)
   do
   {
 
-     mystr = stream.readLine ();
+     mystr = nextLine( stream );
      mystr.stripWhiteSpace ();
 
      if (mystr == "END COLORMAP") ok = false;
@@ -992,7 +991,7 @@ APPLIXSPREADImport::readView (QTextStream &stream, QString instr, t_rc &rc)
    ok = true;
    do
    {
-     mystr = stream.readLine ();
+     mystr = nextLine( stream );
     
      printf ("  %s\n", (const char *) mystr.latin1());
      if (mystr.startsWith ("View End, Name:")) ok = false;

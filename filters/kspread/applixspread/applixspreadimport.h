@@ -60,6 +60,8 @@ public:
                               const QString &from, const QString &to,
                               const QString &config=QString::null);
 
+protected:
+    QString nextLine           (QTextStream &);
     QChar   specCharfind       (QChar , QChar );
     void    writePen           (QString &, int, int, QString);
     QString writeColor         (t_mycolor *);
@@ -69,6 +71,10 @@ public:
     void    filterSHFGBG       (QString, int *, int *, int *);
     void    transPenFormat     (QString, int *, int *);
 
+private:
+    int m_stepsize;
+    int m_instep;
+    int m_progress;
 };
 #endif // APPLIXSPREADIMPORT_H
 
