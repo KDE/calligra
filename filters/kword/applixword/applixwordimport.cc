@@ -29,6 +29,12 @@
 #include <applixwordimport.h>
 #include <applixwordimport.moc>
 #include <kdebug.h>
+#include <koFilterChain.h>
+#include <kgenericfactory.h>
+
+typedef KGenericFactory<APPLIXWORDImport, KoFilter> APPLIXWORDImportFactory;
+K_EXPORT_COMPONENT_FACTORY( libapplixwordimport, APPLIXWORDImportFactory( "applixwordimport" ) );
+
 
 /******************************************************************************
  *  class: APPLIXWORDImport        function: APPLIXWORDImport                 *
@@ -38,8 +44,8 @@
  *                                                                            *
  *                                                                            *
  ******************************************************************************/
-APPLIXWORDImport::APPLIXWORDImport (KoFilter *parent, const char *name) :
-                     KoFilter(parent, name)
+APPLIXWORDImport::APPLIXWORDImport (KoFilter *, const char *, const QStringList& ) :
+                     KoFilter()
 {
 }
 
@@ -80,21 +86,18 @@ APPLIXWORDImport::nextLine (QTextStream & stream)
  *                                                                            *
  *                                                                            *
  ******************************************************************************/
-bool
-APPLIXWORDImport::filter (const QString &fileIn, const QString &fileOut,
-                          const QString &from,   const QString &to,
-                          const QString &)
+KoFilter::ConversionStatus APPLIXWORDImport::convert( const QCString& from, const QCString& to )
 {
 
     if (to!="application/x-kword" || from!="application/x-applixword")
-        return false;
+        return KoFilter::NotImplemented;
 
-    QFile in(fileIn);
+    QFile in(m_chain->inputFile());
     if (!in.open (IO_ReadOnly))
     {
         kdError(30502) << "Unable to open input file!" << endl;
         in.close();
-        return false;
+        return KoFilter::FileNotFound;
     }
 
 
@@ -127,7 +130,7 @@ APPLIXWORDImport::filter (const QString &fileIn, const QString &fileOut,
     /**************************************************************************
      * Read header                                                            *
      **************************************************************************/
-    if (! readHeader (stream, in)) return false;
+    if (! readHeader (stream, in)) return KoFilter::StupidError;
 
 
     while (!stream.atEnd())
@@ -252,7 +255,7 @@ APPLIXWORDImport::filter (const QString &fileIn, const QString &fileOut,
 	  {
              pos = mystr.find ("\"", y);
 	     kdDebug()<<"POS:"<<pos<<" length:"<< mystr.length()<<" y:"<<y <<endl;
-	 
+
              kdDebug()<<"< "<<mystr<<" >\n";
              if(  (pos-1 > -1) && (mystr[pos-1] == '\\'))
              {
@@ -271,7 +274,7 @@ APPLIXWORDImport::filter (const QString &fileIn, const QString &fileOut,
           mystr.remove (0, pos+1);
           mystr.stripWhiteSpace();
 	  kdDebug() <<"Text:<" <<textstr <<" > "<< pos<<"  Rest:<"<< mystr<<"> \n";
-     
+
           // split format
           QStringList typeList;
           typeList = QStringList::split (' ', mystr);
@@ -417,22 +420,20 @@ APPLIXWORDImport::filter (const QString &fileIn, const QString &fileOut,
     str += "</DOC>\n";
     kdDebug()<<"Text "<<str.utf8()<<endl;
 
-    KoStore out = KoStore (QString(fileOut), KoStore::Write);
-    if (!out.open ("root"))
+    KoStoreDevice* out = m_chain->storageFile( "root", KoStore::Write );
+    if (!out)
     {
         kdError(30502) << "Unable to open output file!" << endl;
         in.close  ();
-        out.close ();
-        return false;
+        return KoFilter::StorageCreationError;
     }
 
     QCString cstring = str.utf8 ();
 
-    out.write ((const char*) cstring, cstring.length());
+    out->writeBlock ((const char*) cstring, cstring.length());
 
-    out.close ();
     in.close ();
-    return true;
+    return KoFilter::OK;
 }
 
 

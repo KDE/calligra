@@ -21,6 +21,7 @@
 #define APPLIXWORDIMPORT_H
 
 #include <qstring.h>
+#include <qstringlist.h>
 #include <qfile.h>
 #include <qobject.h>
 #include <qtextstream.h>
@@ -45,24 +46,22 @@ class APPLIXWORDImport : public KoFilter {
     Q_OBJECT
 
 public:
-    APPLIXWORDImport(KoFilter *parent, const char *name);
+    APPLIXWORDImport(KoFilter *parent, const char *name, const QStringList&);
     virtual ~APPLIXWORDImport() {}
-    /** filtering :) */
-    virtual bool filter(const QString &fileIn, const QString &fileOut,
-                        const QString &from,   const QString &to,
-                        const QString &config=QString::null);
+
+    virtual KoFilter::ConversionStatus convert( const QCString& from, const QCString& to );
 
 protected:
     QChar   specCharfind     (QChar , QChar );
     QString readTagLine      (QTextStream &, QFile &);
     void    replaceSpecial   (QString &);
     QString nextLine         (QTextStream &);
-    int     readHeader       (QTextStream &stream, QFile &); 
-  
+    int     readHeader       (QTextStream &stream, QFile &);
+
 private:
     int m_stepsize;
     int m_instep;
     int m_progress;
-    
+
 };
 #endif // APPLIXWORDIMPORT_H

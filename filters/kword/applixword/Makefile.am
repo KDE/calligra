@@ -7,9 +7,9 @@ libapplixwordimport_la_LDFLAGS	= $(all_libraries) -module -avoid-version -no-und
 
 kde_module_LTLIBRARIES = libapplixwordimport.la
 
-libapplixwordimport_la_SOURCES = applixwordimport.cc applixwordimport_factory.cc
+libapplixwordimport_la_SOURCES = applixwordimport.cc
 libapplixwordimport_la_LIBADD = $(KOFFICE_LIBS)
-noinst_HEADERS = applixwordimport.h applixwordimport_factory.h
+noinst_HEADERS = applixwordimport.h
 
 METASOURCES = AUTO
 
