@@ -30,6 +30,7 @@
 #include <qdir.h>
 #include <qdom.h>
 
+#include <koFilterChain.h>
 #include <KWEFStructures.h>
 #include <KWEFUtil.h>
 #include <KWEFKWordLeader.h>
@@ -40,9 +41,9 @@
 typedef KGenericFactory<DocBookExport, KoFilter> DocBookExportFactory;
 K_EXPORT_COMPONENT_FACTORY( libdocbookexport, DocBookExportFactory( "docbookexport" ) );
 
-DocBookExport::DocBookExport ( KoFilter          *parent,
-                               const char        *name,
-                               const QStringList & ) : KoFilter (parent, name)
+DocBookExport::DocBookExport ( KoFilter          *,
+                               const char        *,
+                               const QStringList & ) : KoFilter ()
 {
 }
 
@@ -792,11 +793,7 @@ bool DocBookWorker::doFullDocumentInfo ( const KWEFDocumentInfo &docInfo )
 }
 
 
-bool DocBookExport::filter ( const QString  &filenameIn,
-                             const QString  &filenameOut,
-                             const QString  &from,
-                             const QString  &to,
-                             const QString  &param        )
+KoFilter::ConversionStatus DocBookExport::convert( const QCString& from, const QCString& to )
 {
 #if 0
     kdError (30507) << "to = " << to << ", from = " << from << endl;
@@ -804,7 +801,7 @@ bool DocBookExport::filter ( const QString  &filenameIn,
 
     if ( to != "text/sgml" && to != "text/docbook" || from != "application/x-kword" )
     {
-        return false;
+        return KoFilter::NotImplemented;
     }
 
 #if 1
@@ -813,11 +810,11 @@ bool DocBookExport::filter ( const QString  &filenameIn,
 
     DocBookWorker worker;
     KWEFKWordLeader leader (&worker);
-    leader.filter (filenameIn, filenameOut, from, to, param);
+    leader.filter (m_chain->inputFile(), m_chain->outputFile(), from, to, "");
 
 #if 1
     kdError (30507) << "done here" << endl;
 #endif
 
-    return true;
+    return KoFilter::OK;
 }
