@@ -97,7 +97,7 @@ class KEXI_MYSQL_IFACE_EXPORT MySqlRecord : public KexiDBRecordSet, public MySql
 
 		KexiDBUpdateRecord *insert();
 		KexiDBUpdateRecord *updateCurrent();
-		KexiDBUpdateRecord *update(unsigned long record){}
+		KexiDBUpdateRecord *update(unsigned long record){ return 0; }
 		KexiDBUpdateRecord *update(QMap<QString,QVariant> fieldNameValueMap);
 
 		MySqlRecord *operator++();

@@ -311,6 +311,7 @@ MySqlRecord::foreignUpdate(const QString &field, const QString &value, const QSt
 	kdDebug() << "MySqlRecord::foreignUpdate(): done 1!" << endl;
 	return updateq;
 #endif
+	return QString::null;
 }
 
 QVariant
