@@ -66,7 +66,9 @@ KoTemplateCreateDia::KoTemplateCreateDia( QWidget *parent, const QString &file_,
     QVBoxLayout *left = new QVBoxLayout( layout );
     left->setSpacing( 5 );
     
-    QLabel *label = new QLabel( i18n( "Choose the Folder for the Template" ), mainview );
+    QLabel *label = new QLabel( i18n( "Choose the Folder for the Template\n"
+				      "(with a rightclick into the list you can create new folders)" ), 
+				mainview );
     left->addWidget( label );
     
     folderList = new QListView( mainview );
@@ -166,7 +168,14 @@ KoTemplateCreateDia::KoTemplateCreateDia( QWidget *parent, const QString &file_,
     
     setMainWidget( mainview );
 
-    folderList->setSelected( folderList->firstChild(), TRUE );
+    QListViewItemIterator it3( folderList );
+    for ( ; it3.current(); ++it3 ) {
+	if ( it3.current()->parent() ) {
+	    folderList->setSelected( it3.current(), TRUE );
+	    break;
+	}
+    }
+
     lined->setFocus();
     
     resize( sizeHint().width(), 300 );
@@ -204,7 +213,9 @@ void KoTemplateCreateDia::createFolder( QListViewItem *item, const QPoint &, int
 		if ( f.open( IO_WriteOnly | IO_Append ) ) {
 		    f.writeBlock( "\n" + name + "\n", name.length() + 2 );
 		    f.close();
-		    new QListViewItem( item, name );
+		    QListViewItem *f = new QListViewItem( item, name );
+		    item->setOpen( TRUE );
+		    f->setOpen( TRUE );
 		}
 	    }
 	}
@@ -217,21 +228,26 @@ void KoTemplateCreateDia::selectionChanged( QListViewItem *item )
 	( item->parent() && item->parent()->parent() ) ) ) {
 	bool firstDown = !item->parent();
 	QListViewItemIterator it( item );
-	for ( ; it.current(); firstDown ? ++it : --it )
+	for ( ; it.current(); firstDown ? ++it : --it ) {
 	    if ( it.current()->parent() &&
 		 !it.current()->parent()->parent() ) {
 		folderList->setSelected( it.current(), TRUE );
 		folderList->setCurrentItem( item );
+		folderList->setSelected( item, FALSE );
 		return;
 	    }
+	}
 	it = QListViewItemIterator( item );
-	for ( ; it.current(); firstDown ? --it : ++it )
+	for ( ; it.current(); firstDown ? --it : ++it ) {
 	    if ( it.current()->parent() &&
 		 !it.current()->parent()->parent() ) {
 		folderList->setSelected( it.current(), TRUE );
 		folderList->setCurrentItem( item );
+		folderList->setSelected( item, FALSE );
 		return;
 	    }
+	}
+	folderList->setSelected( item, FALSE );
     }
 }
 
