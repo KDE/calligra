@@ -3986,13 +3986,13 @@ void QTextParag::drawParagString( QPainter &painter, const QString &s, int start
 	    f.setPointSize( ( f.pointSize() * 2 ) / 3 );
 	    painter.setFont( f );
 	    //QT2HACK painter.drawText( startX, lastY + baseLine - ( h - painter.fontMetrics().height() ), str, start, len, dir );
-	    painter.drawText( startX, lastY + baseLine - ( h - painter.fontMetrics().height() ), str.mid(start), len );
+	    painter.drawText( startX, lastY + baseLine - ( painter.fontMetrics().height() / 2 ), str.mid(start), len );
 	} else if ( lastFormat->vAlign() == QTextFormat::AlignSubScript ) {
 	    QFont f( painter.font() );
 	    f.setPointSize( ( f.pointSize() * 2 ) / 3 );
 	    painter.setFont( f );
 	    //QT2HACK painter.drawText( startX, lastY + baseLine, str, start, len, dir );
-	    painter.drawText( startX, lastY + baseLine, str.mid(start), len );
+	    painter.drawText( startX, lastY + baseLine + ( painter.fontMetrics().height() / 6 ), str.mid(start), len );
 	}
     }
     if ( i + 1 < length() && at( i + 1 )->lineStart && at( i )->c.unicode() == 0xad ) {
