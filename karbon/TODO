@@ -49,6 +49,7 @@ TODO:
 -	use inside/intersection tests in vpath::combine() for changing winding.
 -	change flatness test in intersection code to a estimation used in gems code. otherwise
 	if the 2 input curves are the same our code runs forever.
+-	make VSelection a state pattern
 
 WISHLIST:
 -	krita export filter (with layers)
