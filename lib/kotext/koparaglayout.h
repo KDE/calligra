@@ -101,6 +101,16 @@ public:
     /** Return a set of flags showing the differences between this and 'layout' */
     int compare( const KoParagLayout & layout ) const;
 
+    /** Save this parag layout to XML.
+     * This format is used by KWord for paragraphs, and by KPresenter+KWord for styles.
+     */
+    void saveParagLayout( QDomElement & parentElem, int alignment ) const;
+
+    /** Load this parag layout from XML.
+     * This format is used by KWord for paragraphs, and by KPresenter+KWord for styles.
+     */
+    static void loadParagLayout( KoParagLayout& layout, const QDomElement& parentElem, int docVersion = 2 );
+
 private:
     KoTabulatorList m_tabList;
 
