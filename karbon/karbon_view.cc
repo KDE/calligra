@@ -834,6 +834,7 @@ void
 KarbonView::setLineWidth()
 {
     setLineWidth( m_setLineWidth->value() );
+	selectionChanged();
 }
 
 //necessary for dcop call !
