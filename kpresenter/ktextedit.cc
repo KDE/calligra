@@ -316,10 +316,9 @@ void KTextEdit::keyPressEvent( QKeyEvent *e )
 
 	break;
     default: {
-	    if ( e->text().length() &&
-		 ( e->ascii() >= 32 || ( e->text() == "\t" &&
-					 !( e->state() & ControlButton && e->key() == Key_I ) ) ) &&
-		 !( e->state() & AltButton ) ) {
+	    if ( e->text().length() && !( e->state() & AltButton ) &&
+		 ( !e->ascii() || e->ascii() >= 32 ) || 
+		 ( e->text() == "\t" && !( e->state() & ControlButton ) ) ) {
 		clearUndoRedoInfo = FALSE;
 		if ( e->key() == Key_Tab ) {
 		    if ( cursor->index() == 0 && cursor->parag()->type() != KTextEditParag::Normal ) {
