@@ -880,7 +880,7 @@ QCString KexiQueryDesignerGuiEditor::generateUniqueAlias() const
 	for (int r = 0; r<(int)d->buffers->size(); r++) {
 		KexiPropertyBuffer *buf = d->buffers->at(r);
 		if (buf) {
-			const QString a = (*buf)["alias"].value().toCString().lower();
+			const QCString a = (*buf)["alias"].value().toCString().lower();
 			if (!a.isEmpty())
 				aliases.insert(a,(char*)1);
 		}

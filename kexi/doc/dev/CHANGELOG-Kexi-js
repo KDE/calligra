@@ -406,6 +406,9 @@ Query Designer
 - registers usage of table schema
 - fixes in GUI editor
 - more checks for schema changes
+Main
+- on table schema altering or removing, user if now asked 
+  for closing windows using this table
 
 2004-11-19
 Query Designer

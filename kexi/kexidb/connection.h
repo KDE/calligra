@@ -628,6 +628,8 @@ class KEXI_DB_EXPORT Connection : public QObject, public KexiDB::Object
 		class KEXI_DB_EXPORT TableSchemaChangeListenerInterface
 		{
 			public:
+				TableSchemaChangeListenerInterface() {}
+				virtual ~TableSchemaChangeListenerInterface() {}
 				/*! Closes listening object so it will be deleted and thus no longer use 
 				 a conflicting table schema. */
 				virtual tristate closeListener() = 0;
