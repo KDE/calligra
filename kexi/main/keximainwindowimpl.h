@@ -114,6 +114,8 @@ class KEXIMAIN_EXPORT KexiMainWindowImpl : public KexiMainWindow
 		//! For convenience
 		virtual KexiDialogBase * openObject(const QString& mime, const QString& name, int viewMode = Kexi::DataViewMode);
 
+		bool saveObject( KexiDialogBase *dlg );
+
 	protected:
 		/**
 		 * Creates navigator (if it's not yet created),

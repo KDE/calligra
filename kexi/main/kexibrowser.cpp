@@ -124,7 +124,7 @@ KexiBrowser::addGroup(KexiPart::Info *info)
 //	item->setPixmap(0, SmallIcon(info->groupIcon()));
 //	item->setOpen(true);
 //	item->setSelectable(false);
-	m_baseItems.insert(info->mime().lower().latin1(), item);
+	m_baseItems.insert(info->mime().lower(), item);
 
 	kdDebug() << "KexiBrowser::addGroup()" << endl;
 //js: now it's executed by hand from keximainwindow:	slotItemListChanged(info);
@@ -136,7 +136,7 @@ KexiBrowser::addItem(KexiPart::Item *item)
 	if (!item)
 		return;
 	//part object for this item
-	KexiBrowserItem *parent = m_baseItems.find(item->mime().lower().latin1());
+	KexiBrowserItem *parent = m_baseItems.find(item->mime().lower());
 	if (!parent) //TODO: add "Other" part group for that
 		return;
 	kdDebug() << "KexiBrowser::addItem() found parent:" << parent << endl;

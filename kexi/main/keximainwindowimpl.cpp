@@ -67,6 +67,7 @@
 #include "startup/KexiNewProjectWizard.h"
 #include "startup/KexiStartup.h"
 #include "kexicontexthelp.h"
+#include "kexinamedialog.h"
 
 #if defined(Q_WS_WIN) || !KDE_IS_VERSION(3,1,9)
 # include <unistd.h>
@@ -101,6 +102,8 @@ class KexiMainWindowImpl::Private
 		KexiDialogDict dialogs;
 		KXMLGUIClient *curDialogGUIClient, *closedDialogGUIClient;
 		QGuardedPtr<KexiDialogBase> curDialog;
+
+		KexiNameDialog *nameDialog;
 
 		QTimer timer; //helper timer
 //		QPtrDict<KexiActionProxy> actionProxies;
@@ -151,6 +154,7 @@ class KexiMainWindowImpl::Private
 		prj = 0;
 		curDialogGUIClient=0;
 		closedDialogGUIClient=0;
+		nameDialog=0;
 		curDialog=0;
 		block_KMdiMainFrm_eventFilter=false;
 		focus_before_popup=0;
@@ -504,7 +508,7 @@ void KexiMainWindowImpl::startup(KexiProjectData *projectData)
 		//some recent projects data
 		projectData = new KexiProjectData( *conndata, "bigdb", "Big DB" );
 		projectData->setCaption("My Big Project");
-		projectData->setHelpText("This is my first biger project started yesterday. Have fun!");
+		projectData->setDescription("This is my first biger project started yesterday. Have fun!");
 		Kexi::recentProjects().addProjectData(projectData);
 	//</TEMP>
 
@@ -1475,6 +1479,25 @@ void KexiMainWindowImpl::closeWindow(KMdiChildView *pWnd, bool layoutTaskBar)
 	closeDialog(static_cast<KexiDialogBase *>(pWnd), layoutTaskBar);
 }
 
+bool KexiMainWindowImpl::saveObject( KexiDialogBase *dlg ) //, bool dontAsk = true )
+{
+	if (dlg->neverSaved()) {
+		if (!d->nameDialog) {
+			d->nameDialog = new KexiNameDialog(QString::null,
+				this, "nameDialog");
+		}
+		d->nameDialog->widget()->setCaptionText(dlg->partItem()->caption());
+		d->nameDialog->widget()->setNameText(dlg->partItem()->name());
+		d->nameDialog->setCaption(i18n("Save Object As"));
+		d->nameDialog->setDialogIcon( DesktopIcon( dlg->itemIcon(), KIcon::SizeMedium ) ); 
+		if (d->nameDialog->exec()!=QDialog::Accepted)
+			return false;
+
+		return dlg->storeNewData();
+	}
+	return dlg->storeData();
+}
+
 bool KexiMainWindowImpl::closeDialog(KexiDialogBase *dlg, bool layoutTaskBar)
 {
 	if (!dlg)
@@ -1491,10 +1514,12 @@ bool KexiMainWindowImpl::closeDialog(KexiDialogBase *dlg, bool layoutTaskBar)
 		if (res==KMessageBox::Cancel)
 			return false;
 		if (res==KMessageBox::Yes) {
-			if (!dlg->saveData())
-				return false;
 			//save it
-			//TODO
+//			if (!dlg->storeData())
+			if (!saveObject( dlg )) {
+//js:TODO show error info; (retry/ignore/cancel)
+				return false;
+			}
 			remove_on_closing = false;
 		}
 	}
@@ -1769,6 +1794,7 @@ bool KexiMainWindowImpl::newObject( KexiPart::Info *info )
 	if(!part)
 		return false;
 
+//js TODO: move this code
 	if(info->projectPartID() == -1)
 	{
 		KexiDB::TableSchema *ts = project()->dbConnection()->tableSchema("kexi__parts");
@@ -1809,8 +1835,9 @@ bool KexiMainWindowImpl::newObject( KexiPart::Info *info )
 	if (!fl)
 		return false;
 		
-	if (!project()->dbConnection()->insertRecord(*fl, QVariant(info->projectPartID()), QVariant(dlg->name()),
-		QVariant(dlg->caption()) ))
+	if (!project()->dbConnection()->insertRecord(
+		*fl, QVariant(info->projectPartID()), 
+		QVariant(dlg->name()), QVariant(dlg->caption()) ))
 		return false;
 
 	delete fl;
