@@ -21,7 +21,7 @@ Boston, MA 02111-1307, USA.
 #ifndef MYSQLDB_H
 #define MYSQLDB_H
 
-#include "../../kexidb.h"
+#include "../../kexiDB/kexidb.h"
 
 class MySqlDB : public KexiDB
 {

@@ -3,7 +3,7 @@ bin_PROGRAMS = kexi
 kexi_SOURCES = kexidatetableedit.cpp kmultitabbar.cpp kexitabbrowser.cpp kexiwidget.cpp kexitablerm.cpp  kexitablelist.cpp kexitableitem.cpp kexitableview.cpp kexidatatable.cpp kexistore.cpp kexidoc.cpp kexidialogbase.cpp kexibrowseritem.cpp kexiworkspace.cpp kexiformbase.cpp kexicreateproject.cpp kexibrowser.cpp keximainwindow.cpp kexiapplication.cpp main.cpp kexiproject.cpp 
 kexi_LDADD   =  $(LIB_KIO) $(LIB_KDEUI) $(LIB_KDECORE) $(LIB_QT) $(LIBSOCKET) $(LIB_KPARTS) kexiDB/libkexidb.la
 
-SUBDIRS = kexiDB . pics 
+SUBDIRS = kexiDB . interfaces pics 
 
 install-data-local:
 	$(mkinstalldirs) $(kde_appsdir)/Office/

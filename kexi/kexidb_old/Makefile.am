@@ -2,7 +2,7 @@ lib_LTLIBRARIES = libkexidb.la
 
 INCLUDES = $(all_includes)
 
-SUBDIRS = . interfaces
+SUBDIRS = .
 
 LDFLAGS = $(all_libraries) $(KDE_RPATH)
 
