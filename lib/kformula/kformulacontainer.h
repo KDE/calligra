@@ -227,7 +227,7 @@ public:
     /**
      * Sets the base font size of this formula.
      */
-    void setFontSize( int pointSize );
+    void setFontSize( int pointSize, bool forPrint = false );
 
 signals:
 

@@ -123,16 +123,19 @@ double ContextStyle::getAdjustedSize( TextStyle tstyle ) const
 double ContextStyle::getThinSpace( TextStyle tstyle ) const
 {
     return zoomItX( textStyleValues[ tstyle ].thinSpace() );
+    //return textStyleValues[ tstyle ].thinSpace();
 }
 
 double ContextStyle::getMediumSpace( TextStyle tstyle ) const
 {
     return zoomItX( textStyleValues[ tstyle ].mediumSpace() );
+    //return textStyleValues[ tstyle ].mediumSpace();
 }
 
 double ContextStyle::getThickSpace( TextStyle tstyle ) const
 {
     return zoomItX( textStyleValues[ tstyle ].thickSpace() );
+    //return textStyleValues[ tstyle ].thickSpace();
 }
 
 
@@ -141,9 +144,10 @@ double ContextStyle::getBaseSize() const
     return zoomItY( baseSize );
 }
 
-void ContextStyle::setBaseSize( int size )
+void ContextStyle::setUnzoomedBaseSize( double size )
 {
-    double newSize = unzoomItY( size );
+    //double newSize = unzoomItY( size );
+    double newSize = size;
     if ( newSize != baseSize ) {
         baseSize = newSize;
         setup();
@@ -209,10 +213,12 @@ ContextStyle::TextStyle ContextStyle::convertTextStyleIndex( TextStyle tstyle ) 
 
 void ContextStyle::setup()
 {
-    textStyleValues[ displayStyle      ].setup( getSymbolFont(), baseSize, 1. );
-    textStyleValues[ textStyle         ].setup( getSymbolFont(), baseSize, 1. );
-    textStyleValues[ scriptStyle       ].setup( getSymbolFont(), baseSize, .7 );
-    textStyleValues[ scriptScriptStyle ].setup( getSymbolFont(), baseSize, .49 );
+    //double size = getBaseSize();
+    double size = baseSize;
+    textStyleValues[ displayStyle      ].setup( getSymbolFont(), size, 1. );
+    textStyleValues[ textStyle         ].setup( getSymbolFont(), size, 1. );
+    textStyleValues[ scriptStyle       ].setup( getSymbolFont(), size, .7 );
+    textStyleValues[ scriptScriptStyle ].setup( getSymbolFont(), size, .49 );
 }
 
 KFORMULA_NAMESPACE_END

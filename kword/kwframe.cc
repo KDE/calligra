@@ -1594,6 +1594,7 @@ KWFormulaFrameSet::KWFormulaFrameSet( KWDocument *_doc, const QString & name )
     else
         m_name = name;
 
+    /*
     if ( isFloating() ) {
         // we need to look for the anchor every time, don't cache this value.
         // undo/redo creates/deletes anchors
@@ -1603,6 +1604,7 @@ KWFormulaFrameSet::KWFormulaFrameSet( KWDocument *_doc, const QString & name )
             formula->setFontSize( format->font().pointSize() );
         }
     }
+    */
 }
 
 
@@ -1626,15 +1628,21 @@ void KWFormulaFrameSet::drawFrame( KWFrame* /*frame*/, QPainter* painter, const 
         if ( resetChanged )
             m_changed = false;
 
+        /*
+          It's a bad idea to change the formula font size while drawing.
+          We need to be notified as soon as the change occurs. But this will
+          have to wait.
         if ( isFloating() ) {
             // we need to look for the anchor every time, don't cache this value.
             // undo/redo creates/deletes anchors
             KWAnchor * anchor = findAnchor( 0 );
             if ( anchor ) {
                 QTextFormat * format = anchor->format();
-                formula->setFontSize( format->font().pointSize() );
+                bool forPrint = painter->device()->devType() != QInternal::Printer;
+                formula->setFontSize( format->font().pointSize(), forPrint );
             }
         }
+        */
 
         if ( edit )
         {
@@ -1655,7 +1663,7 @@ void KWFormulaFrameSet::slotFormulaChanged( int width, int height )
         return;
 
     int newWidth = static_cast<int>( static_cast<double>( width ) /
-                                     kWordDocument()->zoomedResolutionX() ) + 3;
+                                     kWordDocument()->zoomedResolutionX() ) + 2;
     int newHeight = static_cast<int>( static_cast<double>( height ) /
                                       kWordDocument()->zoomedResolutionY() ) + 1;
 

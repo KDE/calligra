@@ -105,7 +105,7 @@ public:
 
     double getBaseSize() const;
     /** Sets the base size as point value. Unzoomed. */
-    void setBaseSize( int pointSize );
+    void setUnzoomedBaseSize( double pointSize );
 
     TextStyle getBaseTextStyle() const { return m_baseTextStyle; }
     bool isScript( TextStyle tstyle ) const { return ( tstyle == scriptStyle ) ||

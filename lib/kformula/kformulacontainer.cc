@@ -620,12 +620,19 @@ void KFormulaContainer::moveTo(int x, int y)
 }
 
 
-void KFormulaContainer::setFontSize( int pointSize )
+// This doesn't work.
+void KFormulaContainer::setFontSize( int /*pointSize*/, bool /*forPrint*/ )
 {
-    if ( rootElement()->getBaseSize() != pointSize ) {
-        rootElement()->setBaseSize( pointSize );
-        recalc();
-    }
+    // taken from KWTextFrameSet::zoom
+//     double factor = document()->getContextStyle( forPrint ).getYResolution() *
+//                     ( forPrint ? 1.0 : 72.0 / QPaintDevice::x11AppDpiY() );
+
+//     double newSize = factor*pointSize;
+//     if ( rootElement()->getBaseSize() != newSize ) {
+//         rootElement()->setBaseSize( newSize );
+//         kdDebug() << "KFormulaContainer::save " << newSize << endl;
+//         recalc();
+//     }
 }
 
 

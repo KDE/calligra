@@ -66,7 +66,7 @@ void FormulaElement::changed()
  */
 void FormulaElement::calcSizes( ContextStyle& context )
 {
-    context.setBaseSize( getBaseSize() );
+    context.setUnzoomedBaseSize( getBaseSize() );
     inherited::calcSizes( context, context.getBaseTextStyle(),
                           ContextStyle::normal );
 }
@@ -77,7 +77,7 @@ void FormulaElement::calcSizes( ContextStyle& context )
 void FormulaElement::draw( QPainter& painter, const QRect& r,
                            ContextStyle& context )
 {
-    context.setBaseSize( getBaseSize() );
+    context.setUnzoomedBaseSize( getBaseSize() );
     inherited::draw( painter, r, context, context.getBaseTextStyle(),
                      ContextStyle::normal, KoPoint() );
 }

@@ -95,8 +95,8 @@ public:
      */
     virtual QString toLatex();
 
-    int getBaseSize() const { return baseSize; }
-    void setBaseSize( int size ) { baseSize = size; }
+    double getBaseSize() const { return baseSize; }
+    void setBaseSize( double size ) { baseSize = size; }
 
 protected:
 
@@ -136,7 +136,7 @@ private:
     /**
      * The base font size.
      */
-    int baseSize;
+    double baseSize;
 };
 
 KFORMULA_NAMESPACE_END

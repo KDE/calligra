@@ -1,9 +1,5 @@
 
-This code is in pre-alpha stage.
-
-This is the new kformula library, it will use code from old koffice/kformula
-it will be used by kformula part and in the future it may replace the 
-libkformula.
+This is the new kformula library. It's used by the kformula part and kword.
 
 To test the library do
 make kformulatest
@@ -45,22 +41,5 @@ Text, numbers and operators are supported as well.
 
 Please note that the key bindings are for testing only. The library
 is meant to be used with KActions. Look at KFormulaDocument::createActions.
-
-
-And yes, we do have syntax highlighting! Just type:
-
-y = e ^ - o m e g a <space> t <space> ( a * s i n ( o m e g a <space> t <space> + b * c o s ( o m e g a <space> t
-
-or, if you prefer
-
-s i n <space> ^ 2 <space> ( a l p h a <space> <space> + c o s <space> ^ 2 <space> ( a l p h a <space> <space> = 1
-
-There is some truth in it!
-
-
-Hint: Press <space> on a name that is not a symbol to select it.
-
-Hint: If you don't want to separate your names with operators, you
-might use the backslash instead.
 
 See DESIGN to know the structure of the formulas
