@@ -126,4 +126,5 @@ void KImageFilePreview::showImage()
     imageLabel->setPixmap( pm );
 }
 
+#include <preview.moc>
 
