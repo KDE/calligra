@@ -888,7 +888,6 @@ void KWord13OasisGenerator::writeStylesXml( void )
 // Inspired by KWDocument::saveOasis
 void KWord13OasisGenerator::writeContentXml(void)
 {
-#if 1
     if ( !m_store || !m_kwordDocument )
     {
         kdError(30520) << "Not possible to generate content.xml" << endl;
@@ -936,40 +935,6 @@ void KWord13OasisGenerator::writeContentXml(void)
     {
         m_manifestWriter->addManifestEntry( "content.xml", "text/xml" );
     }
-
-#else
-    if (!m_zip)
-        return;
-
-    kdDebug(30520) << "content.xml: preparing..." << endl;
-    zipPrepareWriting("content.xml");
-
-    kdDebug(30520) << "content.xml: start file..." << endl;
-    writeStartOfFile("content");
-
-    kdDebug(30520) << "content.xml: declare fonts..." << endl;
-    // ### TODO writeFontDeclaration();
-
-    kdDebug(30520) << "content.xml: writing automatical styles..." << endl;
-    zipWriteData(" <office:automatic-styles>\n");
-
-    zipWriteData(m_contentAutomaticStyles);
-    m_contentAutomaticStyles = QString::null; // Release memory
-
-    zipWriteData(" </office:automatic-styles>\n");
-
-    kdDebug(30520) << "content.xml: writing body..." << endl;
-    zipWriteData("<office:body>\n");
-    zipWriteData(m_contentBody);
-    m_contentBody.resize( 0 ); // Release memory
-    zipWriteData("</office:body>\n");
-
-    zipWriteData( "</office:document-content>\n" );
-
-    kdDebug(30520) << "content.xml: closing file..." << endl;
-    zipDoneWriting();
-    kdDebug(30520) << "content.xml: done!" << endl;
-#endif
 }
 
 void KWord13OasisGenerator::writeMetaXml(void)
