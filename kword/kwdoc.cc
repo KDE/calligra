@@ -255,8 +255,6 @@ bool KWDocument::initDoc()
 
     m_pageColumns.columns = 1; //STANDARD_COLUMNS;
     m_pageColumns.ptColumnSpacing = tableCellSpacing;
-    m_pageColumns.mmColumnSpacing = POINT_TO_MM( tableCellSpacing );
-    m_pageColumns.inchColumnSpacing = POINT_TO_INCH( tableCellSpacing );
 
     m_pageHeaderFooter.header = HF_SAME;
     m_pageHeaderFooter.footer = HF_SAME;
@@ -298,8 +296,6 @@ void KWDocument::initEmpty()
 
     m_pageColumns.columns = 1; //STANDARD_COLUMNS;
     m_pageColumns.ptColumnSpacing = tableCellSpacing;
-    m_pageColumns.mmColumnSpacing = POINT_TO_MM( tableCellSpacing );
-    m_pageColumns.inchColumnSpacing = POINT_TO_INCH( tableCellSpacing );
 
     m_pageHeaderFooter.header = HF_SAME;
     m_pageHeaderFooter.footer = HF_SAME;
@@ -351,6 +347,8 @@ void KWDocument::setPageLayout( KoPageLayout _layout, KoColumns _cl, KoKWHeaderF
 
 void KWDocument::updateRuler()
 {
+    // Invalidate document layout
+    layout();
     //refresh koRuler in each view
     for ( KWView *viewPtr = m_lstViews.first(); viewPtr != 0; viewPtr = m_lstViews.next() )
     {
@@ -358,7 +356,6 @@ void KWDocument::updateRuler()
         viewPtr->getGUI()->getVertRuler()->setPageLayout( m_pageLayout );
         viewPtr->getGUI()->canvasWidget()->repaintAll( true );
     }
-    layout();
 }
 
 double KWDocument::ptColumnWidth() const
@@ -813,8 +810,6 @@ bool KWDocument::loadXML( QIODevice *, const QDomDocument & doc )
 
     m_pageColumns.columns = 1; //STANDARD_COLUMNS;
     m_pageColumns.ptColumnSpacing = tableCellSpacing;
-    m_pageColumns.mmColumnSpacing = POINT_TO_MM( tableCellSpacing );
-    m_pageColumns.inchColumnSpacing = POINT_TO_INCH( tableCellSpacing );
 
     m_pageHeaderFooter.header = HF_SAME;
     m_pageHeaderFooter.footer = HF_SAME;
@@ -898,7 +893,7 @@ bool KWDocument::loadXML( QIODevice *, const QDomDocument & doc )
         getPointBasedAttribute( __hf, HeaderBodySpacing, paper, "spHeadBody", 0.0 );
         getPointBasedAttribute( __hf, FooterBodySpacing, paper, "spFootBody", 0.0 );
         __columns.columns = KWDocument::getAttribute( paper, "columns", 1 );
-        getPointBasedAttribute( __columns, ColumnSpacing, paper, "columnspacing", 0.0 );
+        __columns.ptColumnSpacing = KWDocument::getAttribute( paper, "columnspacing", 0.0 );
         m_zoom = KWDocument::getAttribute( paper, "zoom", 100 );
         if(m_zoom!=100)
             setZoomAndResolution( m_zoom, QPaintDevice::x11AppDpiX(), QPaintDevice::x11AppDpiY(), false );
@@ -912,7 +907,7 @@ bool KWDocument::loadXML( QIODevice *, const QDomDocument & doc )
         if ( __hf.ptFooterBodySpacing == 0.0 )
             getPointBasedAttribute( __hf, FooterBodySpacing, paper, "ptFootBody", 0.0 );
         if ( __columns.ptColumnSpacing == 0.0 )
-            getPointBasedAttribute( __columns, ColumnSpacing, paper, "ptColumnspc", 0.0 );
+            __columns.ptColumnSpacing = KWDocument::getAttribute( paper, "ptColumnspc", 0.0 );
 
         // <PAPERBORDERS>
         QDomElement paperborders = paper.namedItem( "PAPERBORDERS" ).toElement();
