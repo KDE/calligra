@@ -33,25 +33,25 @@ class Command: public Element
 	public:
 		Command();
 		/**
-		 * Create a command which match to \today
+		 * Create a command which match to \\today
 		 */
 		Command(const char* command);
 
 		/**
-		 * Create a command which match to \renewcommand{\headrulewidth}{opt}
+		 * Create a command which match to \\renewcommand{\\headrulewidth}{opt}
 		 */
 		Command(const char* name, QPtrList<QPtrList<Element> >* groups);
 
 		/**
 		 * Create a command which match to  
-		 * \put(1,1){\circle[}}.
+		 * \\put(1,1){\\circle[}}.
 		 */
 		Command(const char* name, QPtrList<QPtrList<Param> >* options,
 				QPtrList<QPtrList<Element> >* groups);
 
 		/**
-		 * Create a command which match to \parpic(3cm,3cm)[f]{text} or
-		 * \documentclass[11pt]{guidepra}
+		 * Create a command which match to \\parpic(3cm,3cm)[f]{text} or
+		 * \\documentclass[11pt]{guidepra}
 		 */
 		Command(const char* name, QPtrList<QPtrList<Param> >* params, QPtrList<Param>* options, QPtrList<QPtrList<Element> >* groups);
 
