@@ -172,8 +172,9 @@ KoView* KIllustratorDocument::createViewInstance( QWidget* parent, const char* n
     return new KIllustratorView( parent, name, this );
 }
 
-void KIllustratorDocument::paintContent( QPainter& painter, const QRect& rect, bool transparent )
+void KIllustratorDocument::paintContent( QPainter& painter, const QRect& rect, bool transparent, double /*zoomX*/, double /*zoomY*/ )
 {
+    // TODO support zoom
     Rect r( (float)rect.x(), (float)rect.y(), (float)rect.width(), (float)rect.height() );
 
     if ( !transparent )

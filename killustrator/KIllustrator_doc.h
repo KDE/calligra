@@ -80,7 +80,7 @@ public:
     /**
      * Overloaded @ref Part::paintContent
      */
-    void paintContent( QPainter& painter, const QRect& rect, bool transparent );
+    virtual void paintContent( QPainter& painter, const QRect& rect, bool transparent = false, double zoomX = 1.0, double zoomY = 1.0 );
 
     // Killustrator stuff
     GDocument* gdoc();
