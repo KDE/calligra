@@ -2530,6 +2530,10 @@ void KPresenterView::setupActions()
                                     this, SLOT( insertPage() ),
                                     actionCollection(), "insert_page" );
 
+    new KAction( i18n( "Insert &Slide..." ), "newslide", 0,
+                                    this, SLOT( insertPage() ),
+                                    actionCollection(), "insert_page_popup" );
+
     actionInsertPicture = new KAction( i18n( "P&icture..." ), "frame_image", SHIFT+Key_F5,
                                        this, SLOT( insertPicture() ),
                                        actionCollection(), "insert_picture" );
