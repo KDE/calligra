@@ -22,8 +22,11 @@
 
 #include <qtextcodec.h>
 
-#include <kapp.h>
 #include <klocale.h>
+#include <kcharsets.h>
+#include <kglobal.h>
+#include <kdebug.h>
+#include <kapp.h>
 
 #include <ExportDialogUI.h>
 #include <ExportDialog.h>
@@ -34,11 +37,16 @@ HtmlExportDialog :: HtmlExportDialog(QWidget* parent)
 {
 
     kapp->restoreOverrideCursor();
+    
+    m_dialog->comboBoxEncoding->insertStringList(KGlobal::charsets()->availableEncodingNames());
+    //m_dialog->comboBoxEncoding->insertStringList(KGlobal::charsets()->descriptiveEncodingNames());
 
     resize(size()); // Is this right?
 
     setMainWidget(m_dialog);
 
+    connect(m_dialog->comboBoxEncoding, SIGNAL(activated(int)), this,
+        SLOT(comboBoxEncodingActivated(int)));
 }
 
 HtmlExportDialog :: ~HtmlExportDialog(void)
@@ -57,17 +65,48 @@ bool HtmlExportDialog::isXHtml(void) const
 
 QTextCodec* HtmlExportDialog::getCodec(void) const
 {
-    QTextCodec* codec;
+    QTextCodec* codec=NULL;
 
-    if(m_dialog->radioEncodingUTF8==m_dialog->buttonGroupEncoding->selected())
+    if (m_dialog->radioEncodingUTF8==m_dialog->buttonGroupEncoding->selected())
+    {
+        kdDebug(30503) << "Encoding: UTF-8" << endl;
         codec=QTextCodec::codecForName("UTF-8");
-    else if(m_dialog->radioEncodingLocal==m_dialog->buttonGroupEncoding->selected())
+    }
+    else if (m_dialog->radioEncodingLocal==m_dialog->buttonGroupEncoding->selected())
+    {
+        kdDebug(30503) << "Encoding: Locale" << endl;
         codec=QTextCodec::codecForLocale();
-    else
+    }
+    else if (m_dialog->radioEncodingOther==m_dialog->buttonGroupEncoding->selected())
+    {
+        QString strCodec=m_dialog->comboBoxEncoding->currentText();
+        kdDebug(30503) << "Encoding: " << strCodec << endl;
+        if (strCodec.isEmpty())
+        {
+            codec=QTextCodec::codecForLocale();
+        }
+        else
+        {
+            // We do not use QTextCodec::codecForName here
+            //   because we fear subtle problems
+            codec=KGlobal::charsets()->codecForName(strCodec);
+        }
+    }
+    
+    if (!codec)
+    {
         // Default: UTF-8
+        kdWarning(30503) << "No codec set, assuming UTF-8" << endl;
         codec=QTextCodec::codecForName("UTF-8");
+    }
 
     return codec;
 }
+
+void HtmlExportDialog::comboBoxEncodingActivated(int)
+{
+    m_dialog->buttonGroupEncoding->setButton(2); // Select the "other" button
+}
+
 
 #include <ExportDialog.moc>

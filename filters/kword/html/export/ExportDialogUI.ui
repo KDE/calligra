@@ -10,7 +10,7 @@
         <rect>
             <x>0</x>
             <y>0</y>
-            <width>251</width>
+            <width>254</width>
             <height>291</height>
         </rect>
     </property>
@@ -19,14 +19,14 @@
     </property>
     <widget class="QLayoutWidget">
         <property name="name">
-            <cstring>Layout4</cstring>
+            <cstring>Layout2</cstring>
         </property>
         <property name="geometry">
             <rect>
                 <x>10</x>
                 <y>11</y>
                 <width>202</width>
-                <height>238</height>
+                <height>240</height>
             </rect>
         </property>
         <vbox>
@@ -80,23 +80,6 @@
                     </widget>
                 </vbox>
             </widget>
-            <spacer>
-                <property name="name" stdset="0">
-                    <cstring>Spacer1</cstring>
-                </property>
-                <property name="orientation">
-                    <enum>Vertical</enum>
-                </property>
-                <property name="sizeType">
-                    <enum>Expanding</enum>
-                </property>
-                <property name="sizeHint">
-                    <size>
-                        <width>20</width>
-                        <height>20</height>
-                    </size>
-                </property>
-            </spacer>
             <widget class="QButtonGroup">
                 <property name="name">
                     <cstring>buttonGroupEncoding</cstring>
@@ -136,25 +119,35 @@
                             <bool>false</bool>
                         </property>
                     </widget>
+                    <widget class="QRadioButton">
+                        <property name="name">
+                            <cstring>radioEncodingOther</cstring>
+                        </property>
+                        <property name="text">
+                            <string>&amp;Other Encoding:</string>
+                        </property>
+                        <property name="checked">
+                            <bool>false</bool>
+                        </property>
+                        <property name="buttonGroupId">
+                            <number>2</number>
+                        </property>
+                    </widget>
+                    <widget class="QComboBox">
+                        <property name="name">
+                            <cstring>comboBoxEncoding</cstring>
+                        </property>
+                        <property name="sizePolicy">
+                            <sizepolicy>
+                                <hsizetype>1</hsizetype>
+                                <vsizetype>5</vsizetype>
+                                <horstretch>0</horstretch>
+                                <verstretch>0</verstretch>
+                            </sizepolicy>
+                        </property>
+                    </widget>
                 </vbox>
             </widget>
-            <spacer>
-                <property name="name" stdset="0">
-                    <cstring>Spacer4</cstring>
-                </property>
-                <property name="orientation">
-                    <enum>Vertical</enum>
-                </property>
-                <property name="sizeType">
-                    <enum>Expanding</enum>
-                </property>
-                <property name="sizeHint">
-                    <size>
-                        <width>20</width>
-                        <height>20</height>
-                    </size>
-                </property>
-            </spacer>
             <widget class="QCheckBox">
                 <property name="name">
                     <cstring>CheckBoxAuthorInfo</cstring>
