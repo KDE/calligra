@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 1998, 1999 Torben Weis <weis@kde.org>
-                 2000 Werner Trobin <wtrobin@mandrakesoft.com>
+                 2000 Werner Trobin <trobin@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -50,7 +50,7 @@ class PreviewStack;
  *
  *  @author Kalle Dalheimer <kalle@kde.org>
  *  @author Torben Weis <weis@kde.org>
- *  @author Werner Trobin <wtrobin@mandrakesoft.com>
+ *  @author Werner Trobin <trobin@kde.org>
  *  @version $Id$
  */
 class KoFilterManager
