@@ -278,7 +278,7 @@ void KarbonAIParserBase::gotEndGroup (bool clipping)
 
   if (m_groupStack.isEmpty())
   {
-    m_layer->insertObject (group);
+    m_layer->appendObject (group);
   }
   else
   {
@@ -369,7 +369,7 @@ void KarbonAIParserBase::doOutputCurrentPath2(PathOutputType type)
 
   if (m_groupStack.isEmpty())
   {
-    m_layer->insertObject(m_curKarbonPath);
+    m_layer->appendObject(m_curKarbonPath);
   }
   else
   {
