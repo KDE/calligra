@@ -84,6 +84,16 @@ namespace VGlobal
 
 
 	/**
+	 * Returns the sign of paramater a.
+	 */
+	inline int sign( double a )
+	{
+		return a < 0.0
+			   ? -1
+			   : 1;
+	}
+
+	/**
 	 * Calculates the binomial coefficient n! / ( k! * ( n - k)! ).
 	 */
 	int binomialCoeff( unsigned n, unsigned k );

@@ -219,9 +219,9 @@ VShapeTool::recalc()
 		m_d1 = last().x() - first().x();
 		m_d2 = last().y() - first().y();
 
-		const int m_sign1 = m_d1 < 0.0 ? -1 : +1;
+		const int m_sign1 = VGlobal::sign( m_d1 );
 // TODO: revert when we introduce y-mirroring:
-		const int m_sign2 = m_d2 < 0.0 ? +1 : -1;
+		const int m_sign2 = VGlobal::sign( m_d2 );
 
 		// Make unsigned:
 		if( m_d1 < 0.0 )

@@ -351,10 +351,16 @@ public:
 
 private:
 	/**
-	 * Calculates the roots y(x) = 0 for 0 <= x <= 1.
+	 * Calculates the solutions of y(x) = 0 ( 0 <= x <= 1 ).
 	 */
 // TODO: isnt finished yet.
-	void roots( QValueList<double>& params, int depth ) const;
+	void roots( QValueList<double>& params ) const;
+
+	/**
+	 * Calculates how often the control polygon crosses the y(x)=0 axis
+	 * (how often it changes the sign).
+	 */
+	int signChanges() const;
 
 
 	/**

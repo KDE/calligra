@@ -79,7 +79,64 @@ VBooleanCmd::visitVPath( VPath& path )
 	else if( m_path2 == 0L )
 	{
 		m_path2 = &path;
-		doIt();
+
+		// intersection parameters (t):
+		VParamList params1;
+		VParamList params2;
+		VParamList::iterator pItr;
+
+		double prevParam;
+
+		m_path1->first();
+
+		// ommit "begin" segment:
+		while( m_path1->next() )
+		{
+			params1.clear();
+
+			m_path2->first();
+
+			// ommit "begin" segment:
+			while( m_path2->next() )
+			{
+				params2.clear();
+			
+				recursiveSubdivision(
+					*m_path1->current(), 0.0, 1.0,
+					*m_path2->current(), 0.0, 1.0,
+					params1, params2 );
+
+				qHeapSort( params2 );
+
+				prevParam = 0.0;
+
+				// walk down all intersection params and insert knots:
+				for( pItr = params2.begin(); pItr != params2.end(); ++pItr )
+				{
+					m_path2->insert(
+						m_path2->current()->splitAt(
+							( *pItr - prevParam )/( 1.0 - prevParam ) ) );
+
+					m_path2->next();
+					prevParam = *pItr;
+				}
+			}
+
+			qHeapSort( params1 );
+
+			prevParam = 0.0;
+
+			// walk down all intersection params and insert knots:
+			for( pItr = params1.begin(); pItr != params1.end(); ++pItr )
+			{
+				m_path1->insert(
+					m_path1->current()->splitAt(
+						( *pItr - prevParam )/( 1.0 - prevParam ) ) );
+
+				m_path1->next();
+				prevParam = *pItr;
+			}
+		}
 	}
 }
 
@@ -177,71 +234,6 @@ VBooleanCmd::recursiveSubdivision(
 			recursiveSubdivision(
 				*path1.next(),    mid1, t1_1,
 				*path2.current(), mid2, t1_2, params1, params2 );
-		}
-	}
-}
-
-void
-VBooleanCmd::doIt()
-{
-	if( m_path1 == 0L || m_path2 == 0L )
-		return;
-
-	// intersection parameters (t):
-	VParamList params1;
-	VParamList params2;
-	VParamList::iterator pItr;
-
-	double prevParam;
-
-	m_path1->first();
-
-	// ommit "begin" segment:
-	while( m_path1->next() )
-	{
-		params1.clear();
-
-		m_path2->first();
-
-		// ommit "begin" segment:
-		while( m_path2->next() )
-		{
-			params2.clear();
-		
-			recursiveSubdivision(
-				*m_path1->current(), 0.0, 1.0,
-				*m_path2->current(), 0.0, 1.0,
-				params1, params2 );
-
-			qHeapSort( params2 );
-
-			prevParam = 0.0;
-
-			// walk down all intersection params and insert knots:
-			for( pItr = params2.begin(); pItr != params2.end(); ++pItr )
-			{
-				m_path2->insert(
-					m_path2->current()->splitAt(
-						( *pItr - prevParam )/( 1.0 - prevParam ) ) );
-
-				m_path2->next();
-				prevParam = *pItr;
-			}
-		}
-
-		qHeapSort( params1 );
-
-		prevParam = 0.0;
-
-		// walk down all intersection params and insert knots:
-		for( pItr = params1.begin(); pItr != params1.end(); ++pItr )
-		{
-			m_path1->insert(
-				m_path1->current()->splitAt(
-					( *pItr - prevParam )/( 1.0 - prevParam ) ) );
-
-			m_path1->next();
-			prevParam = *pItr;
 		}
 	}
 }

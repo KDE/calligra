@@ -69,8 +69,6 @@ protected:
 		const VSegment& segment2, double t0_2, double t1_2,
 		VParamList& params1, VParamList& params2 );
 
-	void doIt();
-
 
 	VSelection* m_selection;
 

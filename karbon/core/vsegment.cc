@@ -140,7 +140,7 @@ bool
 VSegment::isFlat( double flatness ) const
 {
 	if(
-		!m_prev ||
+		!prev() ||
 		m_type == begin ||
 		m_type == line )
 	{
@@ -154,7 +154,7 @@ VSegment::isFlat( double flatness ) const
 		for( int i = 0; i < degree() - 1; ++i )
 		{
 			flat =
-				height( m_prev->knot(), point( i ), knot() ) / chordLength()
+				height( prev()->knot(), point( i ), knot() ) / chordLength()
 				< flatness;
 
 			if( !flat )
@@ -182,7 +182,7 @@ VSegment::pointDerivativesAt( double t, KoPoint* p,
 							  KoPoint* d1, KoPoint* d2 ) const
 {
 	if(
-		!m_prev ||
+		!prev() ||
 		m_type == begin )
 	{
 		return;
@@ -192,10 +192,10 @@ VSegment::pointDerivativesAt( double t, KoPoint* p,
 	// Lines.
 	if( m_type == line )
 	{
-		const KoPoint diff = knot() - m_prev->knot();
+		const KoPoint diff = knot() - prev()->knot();
 
 		if( p )
-			*p = m_prev->knot() + diff * t;
+			*p = prev()->knot() + diff * t;
 
 		if( d1 )
 			*d1 = diff;
@@ -212,7 +212,7 @@ VSegment::pointDerivativesAt( double t, KoPoint* p,
 	// Copy points.
 	KoPoint* q = new KoPoint[ degree() + 1 ];
 
-	q[ 0 ] = m_prev->knot();
+	q[ 0 ] = prev()->knot();
 
 	for( int i = 0; i < degree(); ++i )
 	{
@@ -301,7 +301,7 @@ double
 VSegment::length( double t ) const
 {
 	if(
-		!m_prev ||
+		!prev() ||
 		m_type == begin ||
 		t == 0.0 )
 	{
@@ -378,14 +378,14 @@ double
 VSegment::chordLength() const
 {
 	if(
-		!m_prev ||
+		!prev() ||
 		m_type == begin )
 	{
 		return 0.0;
 	}
 
 
-	KoPoint d = knot() - m_prev->knot();
+	KoPoint d = knot() - prev()->knot();
 
 	return sqrt( d * d );
 }
@@ -394,7 +394,7 @@ double
 VSegment::polyLength() const
 {
 	if(
-		!m_prev ||
+		!prev() ||
 		m_type == begin )
 	{
 		return 0.0;
@@ -402,7 +402,7 @@ VSegment::polyLength() const
 
 
 	// Start with distance |first point - previous knot|.
-	KoPoint d = point( 0 ) - m_prev->knot();
+	KoPoint d = point( 0 ) - prev()->knot();
 
 	double length = sqrt( d * d );
 
@@ -422,7 +422,7 @@ VSegment::lengthParam( double len ) const
 {
 	if(
 		len == 0.0 ||		// We divide by len below.
-		!m_prev ||
+		!prev() ||
 		m_type == begin )
 	{
 		return 0.0;
@@ -467,7 +467,7 @@ double
 VSegment::nearestPointParam( const KoPoint& p ) const
 {
 	if(
-		!m_prev ||
+		!prev() ||
 		m_type == begin )
 	{
 		return 1.0;
@@ -526,7 +526,7 @@ VSegment::nearestPointParam( const KoPoint& p ) const
 	// Calculate the c_i = point( i ) - p.
 	KoPoint* c = new KoPoint[ degree() + 1 ];
 
-	c[ 0 ] = m_prev->knot() - p;
+	c[ 0 ] = prev()->knot() - p;
 
 	for( int i = 0; i < degree(); ++i )
 	{
@@ -537,7 +537,7 @@ VSegment::nearestPointParam( const KoPoint& p ) const
 	// Calculate the d_j = point( j + 1 ) - point( j ).
 	KoPoint* d = new KoPoint[ degree() ];
 
-	d[ 0 ] = point( 0 ) - m_prev->knot();
+	d[ 0 ] = point( 0 ) - prev()->knot();
 
 	for( int j = 0; j < degree() - 1; ++j )
 	{
@@ -577,18 +577,22 @@ VSegment::nearestPointParam( const KoPoint& p ) const
 	delete[]( c );
 
 
-	// Calculate the control points of the 2n-1th degree curve.
-	KoPoint* control = new KoPoint[ 2 * degree() ];
+	// Calculate the control points of the new 2n-1th degree curve.
+	VPath newCurve( 0L );
 
 	// Set up control points in the ( u, f(u) )-plane.
-	for( int u = 0; u <= 2 * degree(); ++u )
-	{
-		control[ u ].setX(
-			static_cast<double>( u ) / static_cast<double>( 2 * degree() ) );
+	newCurve.append( new VSegment( 2 * degree() ) );
 
-		control[ u ].setY( 0.0 );
+	for( int u = 1; u <= 2 * degree(); ++u )
+	{
+		newCurve.current()->setPoint(
+			u - 1,
+			KoPoint(
+				static_cast<double>( u ) / static_cast<double>( 2 * degree() ),
+				0.0 ) );
 	}
 
+	// Set f(u)-values.
 	for( int k = 0; k < 2 * degree() - 1; ++k )
 	{
 		int min = QMIN( k, degree() );
@@ -600,8 +604,8 @@ VSegment::nearestPointParam( const KoPoint& p ) const
 		{
 			int j = k - i;
 
-			control[ i + j ].setY(
-				control[ i + j ].y() +
+			newCurve.getLast()->m_nodes[ i + j  - 1 ].m_vector.setY(
+				newCurve.getLast()->m_nodes[ i + j  - 1 ].m_vector.y() +
 					products[ j * ( degree() + 1 ) + i ] *
 					z[ j * ( degree() + 1 ) + i ] );
 		}
@@ -612,9 +616,10 @@ VSegment::nearestPointParam( const KoPoint& p ) const
 	delete[]( z );
 
 
+	// Find roots.
+	QValueList<double> params;
 
-	// We don't need the new control points anymore.
-	delete[]( control );
+	newCurve.current()->roots( params );
 
 
 // TODO
@@ -622,8 +627,75 @@ VSegment::nearestPointParam( const KoPoint& p ) const
 }
 
 void
-VSegment::roots( QValueList<double>& /*params*/, int /*depth*/ ) const
+VSegment::roots( QValueList<double>& params ) const
 {
+	if(
+		!prev() ||
+		m_type == begin )
+	{
+		return;
+	}
+
+
+	// Evaluate the number of crossing the y=0 axis (sign changes)
+	// which is >= number of roots.
+	switch( signChanges() )
+	{
+		// No solutions.
+		case 0:
+			return;
+		// Exactly one solution.
+		case 1:
+			if( isFlat() )
+			{
+				// TODO
+				return;
+			}
+			// TODO
+			break;
+	}
+
+	// Many solutions. Do recursive subdivision.
+	QValueList<double> params1;
+	QValueList<double> params2;
+
+	// TODO
+
+	// Add params of the sub segments (if any).
+	params += params1;
+	params += params2;
+}
+
+int
+VSegment::signChanges() const
+{
+	if(
+		!prev() ||
+		m_type == begin )
+	{
+		return 0;
+	}
+
+
+	int changes = 0;
+
+	int sign = VGlobal::sign( prev()->knot().y() );
+	int oldSign;
+
+	// Check how many times the control polygon crosses the
+	// y=0 axis.
+	for( int i = 1; i <= degree(); ++i )
+	{
+		oldSign = sign;
+		sign = VGlobal::sign( point( i - 1 ).y() );
+
+		if( sign != oldSign )
+		{
+			++changes;
+		}
+	}
+
+	return changes;
 }
 
 bool
@@ -658,19 +730,19 @@ VSegment::boundingBox() const
 
 
 	// Add p0, if it exists.
-	if( m_prev )
+	if( prev() )
 	{
-		if( m_prev->knot().x() < rect.left() )
-			rect.setLeft( m_prev->knot().x() );
+		if( prev()->knot().x() < rect.left() )
+			rect.setLeft( prev()->knot().x() );
 
-		if( m_prev->knot().x() > rect.right() )
-			rect.setRight( m_prev->knot().x() );
+		if( prev()->knot().x() > rect.right() )
+			rect.setRight( prev()->knot().x() );
 
-		if( m_prev->knot().y() < rect.top() )
-			rect.setTop( m_prev->knot().y() );
+		if( prev()->knot().y() < rect.top() )
+			rect.setTop( prev()->knot().y() );
 
-		if( m_prev->knot().y() > rect.bottom() )
-			rect.setBottom( m_prev->knot().y() );
+		if( prev()->knot().y() > rect.bottom() )
+			rect.setBottom( prev()->knot().y() );
 	}
 
 
@@ -697,7 +769,7 @@ VSegment*
 VSegment::splitAt( double t )
 {
 	if(
-		!m_prev ||
+		!prev() ||
 		m_type == begin )
 	{
 		return 0L;
@@ -715,8 +787,8 @@ VSegment::splitAt( double t )
 	if( m_type == line )
 	{
 		segment->setKnot(
-			m_prev->knot() +
-			( knot() - m_prev->knot() ) * t );
+			prev()->knot() +
+			( knot() - prev()->knot() ) * t );
 
 		segment->m_type = line;
 
@@ -733,7 +805,7 @@ VSegment::splitAt( double t )
 	// Copy points.
 	KoPoint* q = new KoPoint[ degree() + 1 ];
 
-	q[ 0 ] = m_prev->knot();
+	q[ 0 ] = prev()->knot();
 
 	for( int i = 0; i < degree(); ++i )
 	{
@@ -817,7 +889,7 @@ VSegment*
 VSegment::revert() const
 {
 	if(
-		!m_prev ||
+		!prev() ||
 		m_type == begin )
 	{
 		return 0L;
@@ -837,7 +909,7 @@ VSegment::revert() const
 		segment->setPoint( i, point( degree() - 2 - i ) );
 	}
 
-	segment->setKnot( m_prev->knot() );
+	segment->setKnot( prev()->knot() );
 
 
 	// TODO swap node attributes (selected)
