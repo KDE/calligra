@@ -310,9 +310,6 @@ public:
      */
     int canvasYOffset() const;
 
-    // get fonts
-    static void getFonts( QStringList &lst );
-
 public slots:
     // Document signals
       //void slotKPresenterModified();

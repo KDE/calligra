@@ -23,7 +23,7 @@
 #include "styledia.h"
 #include "global.h"
 #include "kpresenter_doc.h"
-#include "kpresenter_view.h"
+//#include "kpresenter_view.h"
 
 #include <qtabwidget.h>
 #include <qpoint.h>
@@ -41,6 +41,7 @@
 #include <kapp.h>
 #include <kcolordlg.h>
 #include <kiconloader.h>
+#include <kfontdialog.h>
 #include <kglobal.h>
 
 #include <stdlib.h>
@@ -128,7 +129,7 @@ void KPFooterHeaderEditor::setupHeader()
     htool2->enableMoving( false );
 
     QStringList fontList;
-    KPresenterView::getFonts( fontList );
+    KFontChooser::getFontList( fontList, false );
 
     h_font = 99;
     QStrList lst;
@@ -251,7 +252,7 @@ void KPFooterHeaderEditor::setupFooter()
     ftool2->enableMoving( false );
 
     QStringList fontList;
-    KPresenterView::getFonts( fontList );
+    KFontChooser::getFontList( fontList, false );
 
     QStrList lst;
     QValueList<QString>::Iterator it = fontList.begin();

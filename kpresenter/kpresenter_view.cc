@@ -82,7 +82,6 @@
 #include <koTemplateCreateDia.h>
 #include <kcoloractions.h>
 #include <kaction.h>
-#include <qfontdatabase.h>
 
 #include <stdlib.h>
 #include <signal.h>
@@ -90,14 +89,6 @@
 #include <kstddirs.h>
 
 #include "KPresenterViewIface.h"
-
-static QFontDatabase *fontDataBase = 0;
-
-static void cleanupFontDatabase()
-{
-    delete fontDataBase;
-    fontDataBase = 0;
-}
 
 #define DEBUG
 
@@ -2935,16 +2926,6 @@ void KPresenterView::setTool( ToolEditMode toolEditMode )
 	( (KToggleAction*)actionToolsAutoform )->setChecked( true );
 	break;
     }
-}
-
-/*===================== load not KDE installed fonts =============*/
-void KPresenterView::getFonts( QStringList &lst )
-{
-    if ( !fontDataBase ) {
-	fontDataBase = new QFontDatabase();
-	qAddPostRoutine( cleanupFontDatabase );
-    }
-    lst = fontDataBase->families();
 }
 
 /*================================================================*/
