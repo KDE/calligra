@@ -159,8 +159,10 @@ KexiProject::create(bool forceOverwrite)
 	if (!t_db)
 		return false;
 
-	if (!KexiDB::replaceRow(*m_connection, t_db, "db_property", "project_caption", "db_value", QVariant( m_data->caption() ), KexiDB::Field::Text)
-	 || !KexiDB::replaceRow(*m_connection, t_db, "db_property", "project_desc", "db_value", QVariant( m_data->description() ), KexiDB::Field::Text) )
+	if (!KexiDB::replaceRow(*m_connection, t_db, "db_property", "project_caption", 
+		"db_value", QVariant( m_data->caption() ), KexiDB::Field::Text)
+	 || !KexiDB::replaceRow(*m_connection, t_db, "db_property", "project_desc", 
+		"db_value", QVariant( m_data->description() ), KexiDB::Field::Text) )
 		return false;
 
 	if (trans.active() && !m_connection->commitTransaction(trans))
@@ -228,7 +230,7 @@ KexiProject::initProject()
 	//TODO: put more props. todo - creator, created date, etc. (also to KexiProjectData)
 	KexiDB::RowData data;
 	QString sql = "select db_value from kexi__db where db_property='%1'";
-	if (m_connection->querySingleRecord( sql.arg("project_caption"), data) && !data[0].toString().isEmpty())
+	if (m_connection->querySingleRecord( sql.arg("project_caption"), data ) && !data[0].toString().isEmpty())
 		m_data->setCaption(data[0].toString());
 	if (m_connection->querySingleRecord( sql.arg("project_desc"), data) && !data[0].toString().isEmpty())
 		m_data->setDescription(data[0].toString());

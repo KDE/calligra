@@ -109,28 +109,45 @@ QString Kexi::string2FileName(const QString &s)
 	return fn;
 }
 
+static const char* string2Identifier_conv[] = {
+"Ą", "A", "Ć", "C", "Ę", "E", "Ł", "L", "Ń", "N", "Ó", "O", "Ś", "S", "Ź", "Z", "Ż", "Z",
+"ą", "a", "ć", "c", "ę", "e", "ł", "l", "ń", "n", "ó", "o", "ś", "s", "ź", "z", "ż", "z",
+0};
+
+inline char char2Identifier(const QChar& c)
+{
+	if ((c>='a' && c<='z') || (c>='A' && c<='Z') || (c>='0' && c<='9') || c=='_')
+		return c;
+	else {
+		//fix for non-latin1 chars
+		for (const char **p = string2Identifier_conv; *p; p+=2) {
+			if (QString(c)==QString::fromUtf8(*p)) {
+				p++;
+				return (*p)[0];
+			}
+		}
+	}
+	return '_';
+}
+
 QString Kexi::string2Identifier(const QString &s)
 {
 	QString r, id = s.simplifyWhiteSpace();
-	r.reserve(id.length());
 	if (id.isEmpty())
 		return id;
+	r.reserve(id.length());
 //		return "_";
-	id.replace(' ',"_"); 
-	QChar c = id[0].lower();
-	if (!(c>='a' && c<='z') && c!='_')
-		r="_";
-	else
-		r+=id[0];
-	if (c>='0' && c<='9')
+	id.replace(' ',"_");
+	QChar c = id[0];
+
+	if (c>='0' && c<='9') {
+		r+='_';
 		r+=c;
+	} else
+		r+=char2Identifier(c);
+
 	for (uint i=1; i<id.length(); i++) {
-		QChar c = id.at(i).lower();
-		if (!(c>='a' && c<='z') && !(c>='0' && c<='9') && c!='_')
-			r+='_';
-		else
-			r+=c;
-	}
+		r+=char2Identifier(id.at(i));
 	return r;
 }
 

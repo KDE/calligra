@@ -171,6 +171,9 @@ class KEXICORE_EXPORT KexiProject : public QObject, protected KexiDB::Object
 		 Use with care: Any KexiProject objects allocated for this project will become invalid! */
 		static tristate dropProject(KexiProjectData* data, KexiMessageHandler* handler, bool dontAsk = false);
 
+		/** new table \a schema created */
+		void emitTableCreated(KexiDB::TableSchema& schema) { emit tableCreated(schema); }
+
 	protected:
 //		bool			openConnection(KexiProjectConnectionData *connection);
 
@@ -213,6 +216,9 @@ class KEXICORE_EXPORT KexiProject : public QObject, protected KexiDB::Object
 
 		/** instance pointed by \a item is renamed */
 		void itemRenamed(const KexiPart::Item &item);
+
+		/** new table \a schema created */
+		void tableCreated(KexiDB::TableSchema& schema);
 
 	protected:
 		QGuardedPtr<KexiDB::Connection> m_connection;
