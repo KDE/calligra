@@ -753,7 +753,6 @@ bool OpenCalcImport::readCells( QDomElement & rowNode, KSpreadSheet  * table, in
 void OpenCalcImport::loadCondition( KSpreadCell *cell,const QDomElement &property )
 {
     kdDebug()<<"void OpenCalcImport::loadCondition( KSpreadCell *cell,const QDomElement &property )*******\n";
-    kdDebug()<<" cell has a conditional cell attribute \n";
     loadOasisCondition( cell, property );
 }
 
@@ -2895,5 +2894,5 @@ KoFilter::ConversionStatus OpenCalcImport::openFile()
 }
 
 
-#include <opencalcimport.moc>
+#include "opencalcimport.moc"
 
