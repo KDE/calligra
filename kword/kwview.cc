@@ -5864,7 +5864,12 @@ void KWView::changeFootNoteType()
 
 void KWView::autoSpellCheck()
 {
-    m_doc->changeBgSpellCheckingState( actionAllowBgSpellCheck->isChecked() );
+    autoSpellCheck( actionAllowBgSpellCheck->isChecked() );
+}
+
+void KWView::autoSpellCheck(bool b)
+{
+    m_doc->changeBgSpellCheckingState( b );
 }
 
 void KWView::goToFootEndNote()
@@ -6233,7 +6238,7 @@ void KWView::insertFile(const QString & path)
     delete store;
 }
 
-QValueList<QString> KWView::getInlineFramesets( QDomNode framesetElem)
+QValueList<QString> KWView::getInlineFramesets( const QDomNode &framesetElem)
 {
     //kdDebug()<<k_funcinfo<<" Frameset: "<<framesetElem.toElement().attribute("name")<<endl;
     QValueList<QString> list;

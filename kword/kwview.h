@@ -178,6 +178,8 @@ public:
     void updateBgSpellCheckingState();
     void updateRulerInProtectContentMode();
     void deselectAllFrames();
+    void autoSpellCheck(bool b);
+
 public slots:
     void fileStatistics();
     void editCut();
@@ -420,7 +422,7 @@ protected:
 
     void startKSpell();
 
-    QValueList<QString> getInlineFramesets( QDomNode framesetElem );
+    QValueList<QString> getInlineFramesets( const QDomNode &framesetElem );
 
     // Helper stuff for the frame adjustment;
     enum moveFrameType  { RaiseFrame, LowerFrame, BringToFront, SendToBack };
@@ -721,7 +723,7 @@ class KWStatisticsDialog : public KDialogBase
 
 public:
     KWStatisticsDialog( QWidget *_parent, KWDocument *_doc );
-    bool wasCanceled() { return m_canceled; }
+    bool wasCanceled()const { return m_canceled; }
 
 private:
     KWDocument *m_doc;

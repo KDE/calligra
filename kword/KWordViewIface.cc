@@ -352,3 +352,17 @@ bool KWordViewIface::pictureKeepRatio() const
     return view->getGUI()->canvasWidget()->pictureKeepRatio();
 }
 
+void KWordViewIface::changeAutoSpellCheckStatus(bool b)
+{
+    view->autoSpellCheck(b);
+}
+
+void KWordViewIface::deselectAllFrames()
+{
+    view->deselectAllFrames();
+}
+
+int KWordViewIface::currentPage()
+{
+    return view->currentPage();
+}

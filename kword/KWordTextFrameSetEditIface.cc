@@ -154,3 +154,8 @@ void KWordTextFrameSetEditIface::insertManualFootNote( const QString & type, con
         m_framesetedit->insertFootNote( EndNote, KWFootNoteVariable::Manual, noteText);
     }
 }
+
+void KWordTextFrameSetEditIface::selectAll()
+{
+    m_framesetedit->selectAll();
+}

@@ -112,7 +112,9 @@ k_dcop:
 
     void setPictureKeepRatio( bool _keep);
     bool pictureKeepRatio() const;
-
+    void changeAutoSpellCheckStatus(bool b);
+    void deselectAllFrames();
+    int currentPage();
 private:
     KWView *view;
 

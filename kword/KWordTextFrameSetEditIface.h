@@ -49,6 +49,7 @@ k_dcop:
     void insertComment(const QString &_comment);
     void insertAutoFootNote( const QString & type );
     void insertManualFootNote( const QString & type, const QString & noteText );
+    void selectAll();
 private:
     KWTextFrameSetEdit *m_framesetedit;
 
