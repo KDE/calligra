@@ -592,6 +592,8 @@ public:
     void equalizeColumn( double resize );
 
     void updateColumns( int from, int to );
+    
+    QSize sizeHint() const;
 
 private slots:
     void doAutoScroll();

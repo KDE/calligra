@@ -4886,6 +4886,9 @@ void KSpreadView::refreshView()
 
   d->canvas->updatePosWidget();
   
+  d->hBorderWidget->setSizePolicy( QSizePolicy::Expanding, QSizePolicy::Minimum );
+  d->hBorderWidget->setMinimumHeight( d->doc->zoomItY( KSpreadFormat::globalRowHeight() + 2 ) );  
+  
   if( table->layoutDirection() == KSpreadSheet::LeftToRight )
   {
     d->formulaBarLayout->setDirection( QBoxLayout::LeftToRight );
