@@ -118,7 +118,7 @@ void KWordShell::setDocument( KWordDocument *_doc )
 
     m_pDoc = _doc;
     m_pDoc->_ref();
-    m_pView = _doc->createWordView( getFrame() );
+    m_pView = _doc->createWordView( frame() );
     m_pView->setShell( this );
     m_pView->incRef();
     m_pView->setMode( KOffice::View::RootMode );
@@ -159,7 +159,7 @@ bool KWordShell::newDocument()
         return false;
     }
 
-    m_pView = m_pDoc->createWordView( getFrame() );
+    m_pView = m_pDoc->createWordView( frame() );
     m_pView->setShell( this );
     m_pView->incRef();
     m_pView->setMode( KOffice::View::RootMode );
@@ -207,7 +207,7 @@ bool KWordShell::openDocument( const char *_url, const char *_format )
     if ( !m_pDoc->loadFromURL( _url, _format ) )
         return false;
 
-    m_pView = m_pDoc->createWordView( getFrame() );
+    m_pView = m_pDoc->createWordView( frame() );
     m_pView->setShell( this );
     m_pView->incRef();
     m_pView->setMode( KOffice::View::RootMode );

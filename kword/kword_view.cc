@@ -1235,8 +1235,8 @@ void KWordView::toolsKSpreadTable()
 {
     gui->getPaperWidget()->mmKSpreadTable();
 
-    vector<KoDocumentEntry> vec = koQueryDocuments( "'IDL:KSpread/DocumentFactory:1.0#KSpread' in RepoIds", 1 );
-    if ( vec.size() == 0 )
+    QValueList<KoDocumentEntry> vec = KoDocumentEntry::query( "'IDL:KSpread/DocumentFactory:1.0#KSpread' in RepoIds", 1 );
+    if ( vec.isEmpty() )
     {
         cout << "Got no results" << endl;
         QMessageBox::critical( this, i18n( "Error" ), i18n( "Sorry, no table component registered" ), i18n( "OK" ) );
@@ -1254,8 +1254,8 @@ void KWordView::toolsFormula()
 {
     gui->getPaperWidget()->mmFormula();
 
-    vector<KoDocumentEntry> vec = koQueryDocuments( "'IDL:KFormula/DocumentFactory:1.0#KFormula' in RepoIds", 1 );
-    if ( vec.size() == 0 )
+    QValueList<KoDocumentEntry> vec = KoDocumentEntry::query( "'IDL:KFormula/DocumentFactory:1.0#KFormula' in RepoIds", 1 );
+    if ( vec.isEmpty() == 0 )
     {
         cout << "Got no results" << endl;
         QMessageBox::critical( this, i18n( "Error" ), i18n( "Sorry, no formula component registered" ), i18n( "OK" ) );
