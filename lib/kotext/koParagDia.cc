@@ -1910,7 +1910,7 @@ void KoParagShadowWidget::setShadowColor( const QColor &sc )
 {
     shadowColor = sc;
     m_shadowPreview->setShadowColor( shadowColor );
-    color->setColor( shadowColor );
+    color->setColor( shadowColor.isValid() ? shadowColor: black  );
 }
 
 void KoParagShadowWidget::luChanged()
