@@ -142,17 +142,17 @@ QTime GNUMERICFilter::GnumericDate::getTime( double num )
 {
   // idea copied from gnumeric: src/datetime.c
   num += HALF_SEC;
-  uint secs = (num - floor(num)) * SECS_PER_DAY;
+  int secs = qRound( (num - floor(num)) * SECS_PER_DAY );
 
   kdDebug(30521) << "***** Num: " << num << ", secs " << secs << endl;
 
-  int h = secs / 3600;
+  const int h = secs / 3600;
   secs -= h * 3600;
-  int m = secs / 60;
+  const int m = secs / 60;
   secs -= h * 60;
 
   kdDebug(30521) << "****** h: " << h << ", m: " << m << ", secs: " << secs << endl;
-  QTime time( h, m, ( secs < 0 || secs > 59 ? 0 : secs ) );
+  const QTime time( h, m, ( secs < 0 || secs > 59 ? 0 : secs ) );
 
   return time;
 }
