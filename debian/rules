@@ -144,7 +144,7 @@ install: build
 	done
 
 	# Split into separate binary packages.
-	dh_install --list-missing
+	dh_install --sourcedir=debian/tmp --list-missing
 
 	# Install standard documentation links.
 	for pkg in `dh_listpackages`; do \
