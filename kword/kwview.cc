@@ -1883,7 +1883,7 @@ void KWView::textStyleSelected( int index )
     KWTextFrameSetEdit * edit = dynamic_cast<KWTextFrameSetEdit *>(gui->canvasWidget()->currentFrameSetEdit());
     if ( edit )
         edit->applyStyle( doc->styleAt( index ) );
-    gui->canvasWidget()->setFocus(); // the style combo keeps focus...
+    gui->canvasWidget()->setFocus(); // the combo keeps focus...
 }
 
 /*======================= text size selected  ===================*/
@@ -1892,6 +1892,7 @@ void KWView::textSizeSelected( int size )
     KWTextFrameSetEdit * edit = dynamic_cast<KWTextFrameSetEdit *>(gui->canvasWidget()->currentFrameSetEdit());
     if ( edit )
         edit->setPointSize( size );
+    gui->canvasWidget()->setFocus(); // the combo keeps focus...
 }
 
 /*======================= text font selected  ===================*/
@@ -1900,6 +1901,7 @@ void KWView::textFontSelected( const QString & font )
     KWTextFrameSetEdit * edit = dynamic_cast<KWTextFrameSetEdit *>(gui->canvasWidget()->currentFrameSetEdit());
     if ( edit )
         edit->setFamily( font );
+    gui->canvasWidget()->setFocus(); // the combo keeps focus...
 }
 
 /*========================= text bold ===========================*/
