@@ -43,8 +43,13 @@ HtmlExportDialog :: HtmlExportDialog(QWidget* parent)
 
     kapp->restoreOverrideCursor();
 
-    m_dialog->comboBoxEncoding->insertStringList(KGlobal::charsets()->availableEncodingNames());
-    //m_dialog->comboBoxEncoding->insertStringList(KGlobal::charsets()->descriptiveEncodingNames());
+    QStringList encodingList;
+
+    encodingList += i18n( "Descriptive encoding name", "Recommended ( %1 )" ).arg( "UTF-8" );
+    encodingList += i18n( "Descriptive encoding name", "Locale ( %1 )" ).arg( QTextCodec::codecForLocale()->name() );
+    encodingList += KGlobal::charsets()->descriptiveEncodingNames();
+    
+    m_dialog->comboBoxEncoding->insertStringList( encodingList );
 
 
     setMainWidget(m_dialog);
@@ -83,7 +88,7 @@ QTextCodec* HtmlExportDialog::getCodec(void) const
     }
     else if (m_dialog->radioEncodingOther==m_dialog->buttonGroupEncoding->selected())
     {
-        QString strCodec=m_dialog->comboBoxEncoding->currentText();
+        const QString strCodec( KGlobal::charsets()->encodingForName( m_dialog->comboBoxEncoding->currentText() ) );
         kdDebug(30503) << "Encoding: " << strCodec << endl;
         if (strCodec.isEmpty())
         {
