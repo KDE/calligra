@@ -72,7 +72,7 @@ KChartPieConfigPage::KChartPieConfigPage( KDChartParams* params,
     depth->resize(100, depth->sizeHint().height() );
     grid->addWidget( depth,7,1);
 
-    label = new QLabel( i18n( "Explose factor (%)" ), this );
+    label = new QLabel( i18n( "Explode factor (%)" ), this );
     label->resize( label->sizeHint() );
     label->setAlignment(Qt::AlignCenter);
     grid->addWidget( label,8,1);
