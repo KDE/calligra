@@ -38,10 +38,6 @@
 		<Action name="selection_group"/>
 		<Action name="selection_ungroup"/>
 	</Menu>
-	<Menu name="text">
-		<text>&amp;Text</text>
-	<Separator/>
-	</Menu>
 	<Menu name="path">
 		<text>&amp;Path</text>
 		<Action name="path_insert_knots"/>

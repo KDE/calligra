@@ -660,6 +660,12 @@ KarbonView::zoomChanged()
 {
 	bool bOK;
 	double zoomFactor = m_zoomAction->currentText().toDouble( &bOK ) / 100.0;
+	// above 2000% probably doesnt make sense... (Rob)
+	if( zoomFactor > 20 )
+	{
+		zoomFactor = 20;
+		m_zoomAction->changeItem( m_zoomAction->currentItem(), " 2000%" );
+	}
 	setZoom( zoomFactor );
 	// TODO : I guess we should define a document size member at this point...
 	kdDebug() << "m_part->pageLayout().ptWidth :" << m_part->pageLayout().ptWidth << endl;
@@ -946,13 +952,13 @@ KarbonView::initActions()
 
 	QStringList stl;
 	stl
-		<< i18n( "25%" )
-		<< i18n( "50%" )
-		<< i18n( "100%" )
-		<< i18n( "200%" )
-		<< i18n( "300%" )
-		<< i18n( "400%" )
-		<< i18n( "800%" );
+		<< i18n( "   25%" )
+		<< i18n( "   50%" )
+		<< i18n( "  100%" )
+		<< i18n( "  200%" )
+		<< i18n( "  300%" )
+		<< i18n( "  400%" )
+		<< i18n( "  800%" );
 
 	m_zoomAction->setItems( stl );
 	m_zoomAction->setEditable( true );
