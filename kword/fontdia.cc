@@ -19,7 +19,7 @@
 
 #include <qgroupbox.h>
 
-#include "kwfont.h"
+#include "fontdia.h"
 #include "kwdoc.h"
 
 #include <kapp.h>
@@ -127,4 +127,4 @@ void KWFontDia::slotCancel()
     reject();
 }
 
-#include "kwfont.moc"
+#include "fontdia.moc"

@@ -17,8 +17,8 @@
    Boston, MA 02111-1307, USA.
 */
 
-#ifndef __kwfont__
-#define __kwfont__
+#ifndef __fontdia_h__
+#define __fontdia_h__
 
 #include <qdialog.h>
 #include <kfontdialog.h>

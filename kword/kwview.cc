@@ -55,7 +55,7 @@
 #include "kwconfig.h"
 #include "kcharselectdia.h"
 #include "kwcommand.h"
-#include "kwfont.h"
+#include "fontdia.h"
 #include "counter.h"
 
 

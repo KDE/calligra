@@ -22,7 +22,7 @@
 #include "stylist.h"
 #include "stylist.moc"
 #include "defs.h"
-#include "kwfont.h"
+#include "fontdia.h"
 
 #include <qwidget.h>
 #include <qlistbox.h>
