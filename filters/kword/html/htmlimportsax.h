@@ -79,7 +79,7 @@ public:
     }
 public:
     StackItemElementType elementType;
-    QDomNode    stackNode,stackNode2;
+    QDomElement stackElementText,stackElementFormatsPlural;
     QString     elementName; // Name of the element
 
     QString     fontName;
@@ -98,12 +98,13 @@ public:
 bool TransformCSS2ToStackItem(StackItem* stackItem, StackItem* stackCurrent, QString strStyle);
 bool StartElementSpan(StackItem* stackItem, StackItem* stackCurrent,
     const QString& strStyleLocal, const QString& strStyleAttribute);
-bool charactersElementSpan (StackItem* stackItem, const QString & ch);
+bool charactersElementSpan (StackItem* stackItem, QDomDocument& mainDocument, const QString & ch);
 bool EndElementSpan (StackItem* stackItem, StackItem* stackCurrent);
 bool StartElementP(StackItem* stackItem, StackItem* stackCurrent,
-    QDomElement& mainFramesetElement, const QString& strStyleLocal,
-    const QString& strStyleAttribute, const QString& strAlign);
-bool charactersElementP (StackItem* stackItem, const QString & ch);
+    QDomDocument& mainDocument, QDomElement& mainFramesetElement,
+    const QString& strStyleLocal, const QString& strStyleAttribute,
+    const QString& strAlign);
+bool charactersElementP (StackItem* stackItem, QDomDocument& mainDocument, const QString & ch);
 bool EndElementP (StackItem* stackItem);
 bool StartElementBR(StackItem* stackItem, StackItem* stackCurrent,
     QDomDocument& mainDocument,QDomElement& mainFramesetElement);

@@ -188,10 +188,8 @@ bool StartElementSpan(StackItem* stackItem, StackItem* stackCurrent, const QStri
         CSS2StylesMap css2StylesMap;
         PopulateProperties(stackItem,strStyle,css2StylesMap,true);
 
-        QDomNode nodeOut=stackCurrent->stackNode;
-        QDomNode nodeOut2=stackCurrent->stackNode2;
-        stackItem->stackNode=nodeOut;   // <TEXT>
-        stackItem->stackNode2=nodeOut2; // <FORMATS>
+        stackItem->stackElementText=stackCurrent->stackElementText;   // <TEXT>
+        stackItem->stackElementFormatsPlural=stackCurrent->stackElementFormatsPlural; // <FORMATS>
         stackItem->pos=stackCurrent->pos; //Propagate the position
         stackItem->elementType=ElementTypeSpan;
     }
@@ -203,71 +201,71 @@ bool StartElementSpan(StackItem* stackItem, StackItem* stackCurrent, const QStri
     return true;
 }
 
-bool charactersElementSpan (StackItem* stackItem, const QString & ch)
+bool charactersElementSpan (StackItem* stackItem, QDomDocument& mainDocument, const QString & ch)
 {
-    QDomNode nodeOut=stackItem->stackNode;
-    QDomNode nodeOut2=stackItem->stackNode2;
-    nodeOut.appendChild(nodeOut.ownerDocument().createTextNode(ch));
+    QDomElement elementText=stackItem->stackElementText;
+    QDomElement elementFormatsPlural=stackItem->stackElementFormatsPlural;
+    elementText.appendChild(mainDocument.createTextNode(ch));
 
-    QDomElement formatElementOut=nodeOut.ownerDocument().createElement("FORMAT");
+    QDomElement formatElementOut=mainDocument.createElement("FORMAT");
     formatElementOut.setAttribute("id",1); // Normal text!
     formatElementOut.setAttribute("pos",stackItem->pos); // Start position
     formatElementOut.setAttribute("len",ch.length()); // Start position
-    nodeOut2.appendChild(formatElementOut); //Append to <FORMATS>
+    elementFormatsPlural.appendChild(formatElementOut); //Append to <FORMATS>
     stackItem->pos+=ch.length(); // Adapt new starting position
 
     if (!stackItem->fontName.isEmpty())
     {
-        QDomElement fontElementOut=nodeOut.ownerDocument().createElement("FONT");
+        QDomElement fontElementOut=mainDocument.createElement("FONT");
         fontElementOut.setAttribute("name",stackItem->fontName); // Font name
         formatElementOut.appendChild(fontElementOut); //Append to <FORMAT>
     }
 
     if (stackItem->fontSize)
     {
-        QDomElement fontElementOut=nodeOut.ownerDocument().createElement("SIZE");
+        QDomElement fontElementOut=mainDocument.createElement("SIZE");
         fontElementOut.setAttribute("value",stackItem->fontSize);
         formatElementOut.appendChild(fontElementOut); //Append to <FORMAT>
     }
 
     if (stackItem->italic)
     {
-        QDomElement fontElementOut=nodeOut.ownerDocument().createElement("ITALIC");
+        QDomElement fontElementOut=mainDocument.createElement("ITALIC");
         fontElementOut.setAttribute("value",1);
         formatElementOut.appendChild(fontElementOut); //Append to <FORMAT>
     }
 
     if (stackItem->bold)
     {
-        QDomElement fontElementOut=nodeOut.ownerDocument().createElement("WEIGHT");
+        QDomElement fontElementOut=mainDocument.createElement("WEIGHT");
         fontElementOut.setAttribute("value",75);
         formatElementOut.appendChild(fontElementOut); //Append to <FORMAT>
     }
 
     if (stackItem->underline)
     {
-        QDomElement fontElementOut=nodeOut.ownerDocument().createElement("UNDERLINE");
+        QDomElement fontElementOut=mainDocument.createElement("UNDERLINE");
         fontElementOut.setAttribute("value",1);
         formatElementOut.appendChild(fontElementOut); //Append to <FORMAT>
     }
 
     if (stackItem->strikeout)
     {
-        QDomElement fontElementOut=nodeOut.ownerDocument().createElement("STRIKEOUT");
+        QDomElement fontElementOut=mainDocument.createElement("STRIKEOUT");
         fontElementOut.setAttribute("value",1);
         formatElementOut.appendChild(fontElementOut); //Append to <FORMAT>
     }
 
     if (stackItem->textPosition)
     {
-        QDomElement fontElementOut=nodeOut.ownerDocument().createElement("VERTALIGN");
+        QDomElement fontElementOut=mainDocument.createElement("VERTALIGN");
         fontElementOut.setAttribute("value",stackItem->textPosition);
         formatElementOut.appendChild(fontElementOut); //Append to <FORMAT>
     }
 
     if (stackItem->red || stackItem->green || stackItem->blue)
     {
-        QDomElement fontElementOut=nodeOut.ownerDocument().createElement("COLOR");
+        QDomElement fontElementOut=mainDocument.createElement("COLOR");
         fontElementOut.setAttribute("red",stackItem->red);
         fontElementOut.setAttribute("green",stackItem->green);
         fontElementOut.setAttribute("blue",stackItem->blue);
@@ -283,15 +281,16 @@ bool EndElementSpan (StackItem* stackItem, StackItem* stackCurrent)
         kdError(30503) << "Wrong element type!! Aborting! (</span> in StructureParser::endElement)" << endl;
         return false;
     }
-    stackItem->stackNode.toElement().normalize();
+    stackItem->stackElementText.normalize();
     stackCurrent->pos=stackItem->pos; //Propagate the position back to the parent element
     return true;
 }
 
 // Element <p>
 
-bool StartElementP(StackItem* stackItem, StackItem* stackCurrent, QDomElement& mainFramesetElement,
-        const QString& strStyleLocal, const QString& strStyleAttribute, const QString& strAlign)
+bool StartElementP(StackItem* stackItem, StackItem* stackCurrent,
+    QDomDocument& mainDocument, QDomElement& mainFramesetElement,
+    const QString& strStyleLocal, const QString& strStyleAttribute, const QString& strAlign)
 {
     QString strStyle=strStyleLocal;
     if (!strAlign.isEmpty())
@@ -302,7 +301,7 @@ bool StartElementP(StackItem* stackItem, StackItem* stackCurrent, QDomElement& m
     }
     strStyle+=strStyleAttribute;
 
-    QDomNode nodeOut=stackCurrent->stackNode;
+    QDomElement elementText=stackCurrent->stackElementText;
     //We use mainFramesetElement here not to be dependant that <section> has happened before
     QDomElement paragraphElementOut=mainFramesetElement.ownerDocument().createElement("PARAGRAPH");
     mainFramesetElement.appendChild(paragraphElementOut);
@@ -315,25 +314,25 @@ bool StartElementP(StackItem* stackItem, StackItem* stackCurrent, QDomElement& m
     PopulateProperties(stackItem,strStyle,css2StylesMap,false);
 
     stackItem->elementType=ElementTypeParagraph;
-    stackItem->stackNode=textElementOut; // <TEXT>
-    stackItem->stackNode2=formatsPluralElementOut; // <FORMATS>
+    stackItem->stackElementText=textElementOut; // <TEXT>
+    stackItem->stackElementFormatsPlural=formatsPluralElementOut; // <FORMATS>
     stackItem->pos=0; // No text characters yet
 
     // Now we populate the layout
-    QDomElement layoutElement=nodeOut.ownerDocument().createElement("LAYOUT");
+    QDomElement layoutElement=mainDocument.createElement("LAYOUT");
     paragraphElementOut.appendChild(layoutElement);
 
     QDomElement element;
-    element=layoutElement.ownerDocument().createElement("NAME");
+    element=mainDocument.createElement("NAME");
     element.setAttribute("value","Standard");
     layoutElement.appendChild(element);
 
-    element=layoutElement.ownerDocument().createElement("FOLLOWING");
+    element=mainDocument.createElement("FOLLOWING");
     element.setAttribute("value","Standard");
     layoutElement.appendChild(element);
 
     QString strFlow=css2StylesMap["text-align"].getValue();
-    element=layoutElement.ownerDocument().createElement("FLOW");
+    element=mainDocument.createElement("FLOW");
     if ((strFlow=="left") || (strFlow=="center") || (strFlow=="right") || (strFlow=="justify"))
     {
         element.setAttribute("align",strFlow);
@@ -344,41 +343,41 @@ bool StartElementP(StackItem* stackItem, StackItem* stackCurrent, QDomElement& m
     }
     layoutElement.appendChild(element);
 
-    QDomElement formatElementOut=layoutElement.ownerDocument().createElement("FORMAT");
+    QDomElement formatElementOut=mainDocument.createElement("FORMAT");
     layoutElement.appendChild(formatElementOut);
 
     if (!stackItem->fontName.isEmpty())
     {
-        element=formatElementOut.ownerDocument().createElement("FONT");
+        element=mainDocument.createElement("FONT");
         element.setAttribute("name",stackItem->fontName); // Font name
         formatElementOut.appendChild(element); //Append to <FORMAT>
     }
 
-    element=formatElementOut.ownerDocument().createElement("SIZE");
+    element=mainDocument.createElement("SIZE");
     element.setAttribute("value",(stackItem->fontSize>0)?(stackItem->fontSize):12);
     formatElementOut.appendChild(element); //Append to <FORMAT>
 
-    element=formatElementOut.ownerDocument().createElement("ITALIC");
+    element=mainDocument.createElement("ITALIC");
     element.setAttribute("value",(stackItem->italic)?1:0);
     formatElementOut.appendChild(element); //Append to <FORMAT>
 
-    element=formatElementOut.ownerDocument().createElement("WEIGHT");
+    element=mainDocument.createElement("WEIGHT");
     element.setAttribute("value",(stackItem->bold)?75:50);
     formatElementOut.appendChild(element); //Append to <FORMAT>
 
-    element=formatElementOut.ownerDocument().createElement("UNDERLINE");
+    element=mainDocument.createElement("UNDERLINE");
     element.setAttribute("value",(stackItem->underline)?1:0);
     formatElementOut.appendChild(element); //Append to <FORMAT>
 
-    element=nodeOut.ownerDocument().createElement("STRIKEOUT");
+    element=mainDocument.createElement("STRIKEOUT");
     element.setAttribute("value",(stackItem->strikeout)?1:0);
     formatElementOut.appendChild(element); //Append to <FORMAT>
 
-    element=formatElementOut.ownerDocument().createElement("VERTALIGN");
+    element=mainDocument.createElement("VERTALIGN");
     element.setAttribute("value",stackItem->textPosition);
     formatElementOut.appendChild(element); //Append to <FORMAT>
 
-    element=formatElementOut.ownerDocument().createElement("COLOR");
+    element=mainDocument.createElement("COLOR");
     element.setAttribute("red",stackItem->red);
     element.setAttribute("green",stackItem->green);
     element.setAttribute("blue",stackItem->blue);
@@ -387,11 +386,11 @@ bool StartElementP(StackItem* stackItem, StackItem* stackCurrent, QDomElement& m
     return true;
 }
 
-bool charactersElementP (StackItem* stackItem, const QString & ch)
+bool charactersElementP (StackItem* stackItem, QDomDocument& mainDocument, const QString & ch)
 {
-    QDomNode nodeOut=stackItem->stackNode;
-    QDomNode nodeOut2=stackItem->stackNode2;
-    nodeOut.appendChild(nodeOut.ownerDocument().createTextNode(ch));
+    QDomElement elementText=stackItem->stackElementText;
+
+    elementText.appendChild(mainDocument.createTextNode(ch));
 
     stackItem->pos+=ch.length(); // Adapt new starting position
 
@@ -405,7 +404,7 @@ bool EndElementP (StackItem* stackItem)
         kdError(30503) << "Wrong element type!! Aborting! (</p> in StructureParser::endElement)" << endl;
         return false;
     }
-    stackItem->stackNode.toElement().normalize();
+    stackItem->stackElementText.normalize();
     return true;
 }
 
@@ -439,9 +438,9 @@ bool StartElementBR(StackItem* stackItem, StackItem* stackCurrent,
     QDomElement formatsPluralElementOut=mainDocument.createElement("FORMATS");
     paragraphElementOut.appendChild(formatsPluralElementOut);
 
-    // We must now copy/clone the layout of nodeOut.
+    // We must now copy/clone the layout of elementText.
 
-    QDomNodeList nodeList=stackCurrent->stackNode.toElement().elementsByTagName("LAYOUT");
+    QDomNodeList nodeList=stackCurrent->stackElementText.toElement().elementsByTagName("LAYOUT");
 
     if (!nodeList.count())
     {
@@ -463,8 +462,8 @@ bool StartElementBR(StackItem* stackItem, StackItem* stackCurrent,
     // Now that we have done with the old paragraph,
     //  we can write stackCurrent with the data of the new one!
     stackCurrent->elementType=ElementTypeParagraph;
-    stackCurrent->stackNode=textElementOut; // <TEXT>
-    stackCurrent->stackNode2=formatsPluralElementOut; // <FORMATS>
+    stackCurrent->stackElementText=textElementOut; // <TEXT>
+    stackCurrent->stackElementFormatsPlural=formatsPluralElementOut; // <FORMATS>
     stackCurrent->pos=0; // No text characters yet
 
     return true;

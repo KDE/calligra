@@ -45,7 +45,7 @@ public:
         structureStack.setAutoDelete(true);
         StackItem *stackItem=new(StackItem); //TODO: memory failure recovery
         stackItem->elementType=ElementTypeBottom;
-        stackItem->stackNode=mainFramesetElement;
+        stackItem->stackElementText=mainFramesetElement;
         structureStack.push(stackItem); //Security item (not to empty the stack)
     }
     virtual ~HtmlListener(void) { }
@@ -97,7 +97,7 @@ bool HtmlListener :: doStartElement(const QString& name, const HtmlAttributes& a
 
     if (mode==modeDisplayBlock)
     {
-        success=StartElementP(stackItem,structureStack.current(),mainFramesetElement,
+        success=StartElementP(stackItem,structureStack.current(),mainDocument,mainFramesetElement,
                         mapTagIter.data().getStyle(),attributes["style"],attributes["align"]);
     }
     else if (mode==modeDisplayInline)
@@ -107,26 +107,26 @@ bool HtmlListener :: doStartElement(const QString& name, const HtmlAttributes& a
     else if (mode==modeDisplayNone)
     {
         stackItem->elementType=ElementTypeDisplayNone;
-        stackItem->stackNode=structureStack.current()->stackNode;
+        stackItem->stackElementText=structureStack.current()->stackElementText;
         success=true;
     }
     else if (name=="br")
     {
         stackItem->elementType=ElementTypeEmpty;
-        stackItem->stackNode=structureStack.current()->stackNode;
+        stackItem->stackElementText=structureStack.current()->stackElementText;
         success=StartElementBR(stackItem,structureStack.current(),mainDocument,mainFramesetElement);
     }
     else if (name=="body") // Special case (FIXME/TODO)
     {
         // Just tell that we are the <body> element.
         stackItem->elementType=ElementTypeBody; // FIXME/TODO: everything in <body> is displayable by default!
-        stackItem->stackNode=structureStack.current()->stackNode;
+        stackItem->stackElementText=structureStack.current()->stackElementText;
         success=true;
     }
     else if (structureStack.current()->elementType==ElementTypeDisplayNone)
     {
         stackItem->elementType=ElementTypeDisplayNone;
-        stackItem->stackNode=structureStack.current()->stackNode;
+        stackItem->stackElementText=structureStack.current()->stackElementText;
         success=true;
     }
     else if ((structureStack.current()->elementType==ElementTypeParagraph)||(structureStack.current()->elementType==ElementTypeSpan))
@@ -139,7 +139,7 @@ bool HtmlListener :: doStartElement(const QString& name, const HtmlAttributes& a
     {
         // We are not in a paragraph, so we must discard the element's content.
         stackItem->elementType=ElementTypeUnknown; //TODO: in theory these elements must be displayed too!
-        stackItem->stackNode=structureStack.current()->stackNode;
+        stackItem->stackElementText=structureStack.current()->stackElementText;
         success=true;
     }
 
@@ -220,11 +220,11 @@ bool HtmlListener :: doCharacters ( const QString & ch )
 
     if (stackItem->elementType==ElementTypeSpan)
     { // <span>
-        success=charactersElementSpan(stackItem,ch);
+        success=charactersElementSpan(stackItem,mainDocument,ch);
     }
     else if (stackItem->elementType==ElementTypeParagraph)
     { // <p>
-        success=charactersElementP(stackItem,ch);
+        success=charactersElementP(stackItem,mainDocument,ch);
     }
     else if (stackItem->elementType==ElementTypeEmpty)
     {
