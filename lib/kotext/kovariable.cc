@@ -42,7 +42,10 @@
 class KoVariableSettings::KoVariableSettingPrivate
 {
 public:
-    KoVariableSettingPrivate() {}
+    KoVariableSettingPrivate() 
+    {
+        m_lastPrintingDate.setTime_t(0); // Default is 1970-01-01 midnight locale time
+    }
     QDateTime m_lastPrintingDate;
     QDateTime m_creationDate;
     QDateTime m_modificationDate;
@@ -138,6 +141,8 @@ void KoVariableSettings::load( QDomElement &elem )
 
         if (e.hasAttribute("lastPrintingDate"))
             d->m_lastPrintingDate = QDateTime::fromString( e.attribute( "lastPrintingDate" ), Qt::ISODate );
+        else
+            d->m_lastPrintingDate.setTime_t(0); // 1970-01-01 00:00:00.000 locale time
 
         if (e.hasAttribute("creationDate"))
             d->m_creationDate = QDateTime::fromString( e.attribute( "creationDate" ), Qt::ISODate );
@@ -161,7 +166,7 @@ QString KoVariableDateFormat::convert( const QVariant& data ) const
     }
     QDateTime dateTime ( data.toDateTime() );
     if ( !dateTime.isValid() )
-        dateTime.setTime_t(0); // 1970-01-01 00:00:00.000 local time
+        return i18n("No date set"); // e.g. old KWord documents
 
     if (m_strFormat.lower() == "locale" || m_strFormat.isEmpty())
         return KGlobal::locale()->formatDate( dateTime.date(), false );
