@@ -48,20 +48,22 @@ m_ylist.append(y);
 
 float KivioDiaStencilSpawner::diaPointToKivio(float point, bool xpoint)
 {
+	float returnPoint = 0.0;
 if(xpoint)
 {
-	if(point > 0)
-	return fabs(m_lowestx) + fabs(point);
-	else
-	return (fabs(m_highestx) + fabs(m_lowestx)) - (fabs(m_highestx) + fabs(point));
+	//if(m_lowestx < 0)
+		returnPoint = point - m_lowestx;
+	//else
+	//	returnPoint =  (fabs(m_highestx) - fabs(m_lowestx)) - (fabs(m_highestx) + fabs(point));
 }
 else
 {
-	if(point > 0)
-	return fabs(m_lowesty) + fabs(point);
-	else
-	return (fabs(m_highesty) + fabs(m_lowesty)) - (fabs(m_highesty) + fabs(point));
+	//if(m_lowesty <  0)
+		returnPoint =point - m_lowesty;
+	//else
+	//	returnPoint =  (fabs(m_highesty) + fabs(m_lowesty)) - (fabs(m_highesty) + fabs(point));
 }
+	return returnPoint;
 }
 
 bool KivioDiaStencilSpawner::load(const QString &file)
@@ -223,6 +225,27 @@ bool KivioDiaStencilSpawner::load(const QString &file)
 
 							calculateDimensions(x.toFloat(), y.toFloat());
 						}
+						/*
+						else if((*it).contains('C') || (*it).contains('c'))
+						{
+							it++;
+							it++;
+						}
+						else if((*it).contains('S') || (*it).contains('s'))
+						{
+							it++;
+							it++;
+						}
+						else if((*it).contains('M') || (*it).contains('m'))
+						{
+							QString x, y;
+							++it;
+							x = (*it);
+							++it;
+							y = (*it);						
+							calculateDimensions(x.toFloat(), y.toFloat());	
+						}
+						*/
 					}
 				}
 			}
@@ -251,6 +274,10 @@ bool KivioDiaStencilSpawner::load(const QString &file)
 		m_lowesty = QMIN(m_lowesty, *ity);
 	}
 
+		// scale the shape to be close to 30 by 30
+	m_scale = 30.0/(m_highesty - m_lowesty);
+
+		
 	// Add KivioConnectorTarget's
 	QDomElement connectionsElement = diaMain.namedItem("connections").toElement();
 	QDomNode connectionsNode = connectionsElement.firstChild();
