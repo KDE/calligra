@@ -33,7 +33,7 @@ class QLineEdit;
 class QTextEdit;
 class QComboBox;
 class QPushButton;
-
+class QCheckBox;
 
 class KSpreadDlgValidity : public KDialogBase
 {
@@ -60,6 +60,7 @@ protected:
   QLineEdit * title;
   QTextEdit *message;
   KSpreadValidity result;
+  QCheckBox *displayMessage;
 };
 
 

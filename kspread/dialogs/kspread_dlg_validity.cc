@@ -36,7 +36,7 @@
 #include <qpushbutton.h>
 #include <qlabel.h>
 #include <qtextedit.h>
-
+#include <qcheckbox.h>
 
 KSpreadDlgValidity::KSpreadDlgValidity(KSpreadView* parent,const char* name , const QRect &_marker )
   :KDialogBase(KDialogBase::Tabbed, i18n("Validity"),User2|User1|Cancel, User1, parent, name,true,false,KStdGuiItem::ok(),i18n("Clear &All"))
@@ -134,14 +134,18 @@ KSpreadDlgValidity::KSpreadDlgValidity(KSpreadView* parent,const char* name , co
   tmpQButtonGroup = new QButtonGroup( 0, Qt::Vertical, i18n("Contents"), page2, "ButtonGroup_2" );
   tmpQButtonGroup->layout()->setSpacing(KDialog::spacingHint());
   tmpQButtonGroup->layout()->setMargin(KDialog::marginHint());
-  QGridLayout *grid2 = new QGridLayout(tmpQButtonGroup->layout(),4,2);
+  QGridLayout *grid2 = new QGridLayout(tmpQButtonGroup->layout(),5,2);
+
+  displayMessage = new QCheckBox(i18n( "Show error message when invalid values are entered" ),tmpQButtonGroup );
+  displayMessage->setChecked( true );
+  grid2->addMultiCellWidget(displayMessage,0, 0,0, 1);
 
   tmpQLabel = new QLabel( tmpQButtonGroup, "Label_5" );
   tmpQLabel->setText(i18n("Action:" ));
-  grid2->addWidget(tmpQLabel,0,0);
+  grid2->addWidget(tmpQLabel,1,0);
 
   chooseAction=new QComboBox(tmpQButtonGroup);
-  grid2->addWidget(chooseAction,0,1);
+  grid2->addWidget(chooseAction,1,1);
   QStringList list2;
   list2+=i18n("Stop");
   list2+=i18n("Warning");
@@ -150,17 +154,17 @@ KSpreadDlgValidity::KSpreadDlgValidity(KSpreadView* parent,const char* name , co
   chooseAction->setCurrentItem(0);
   tmpQLabel = new QLabel( tmpQButtonGroup, "Label_6" );
   tmpQLabel->setText(i18n("Title:" ));
-  grid2->addWidget(tmpQLabel,1,0);
+  grid2->addWidget(tmpQLabel,2,0);
 
   title=new QLineEdit(  tmpQButtonGroup);
-  grid2->addWidget(title,1,1);
+  grid2->addWidget(title,2,1);
 
   tmpQLabel = new QLabel( tmpQButtonGroup, "Label_7" );
   tmpQLabel->setText(i18n("Message:" ));
-  grid2->addWidget(tmpQLabel,2,0);
+  grid2->addWidget(tmpQLabel,3,0);
 
   message =new QTextEdit( tmpQButtonGroup);
-  grid2->addMultiCellWidget(message,2, 3,1, 1);
+  grid2->addMultiCellWidget(message,3, 4,1, 1);
   lay1->addWidget(tmpQButtonGroup);
 
   connect(choose,SIGNAL(activated(int )),this,SLOT(changeIndexCond(int)));
@@ -445,6 +449,7 @@ void KSpreadDlgValidity::init()
       choose->setCurrentItem(0);
       break;
     }
+    displayMessage->setChecked( tmpValidity->displayMessage );
   }
   changeIndexType(chooseType->currentItem()) ;
   changeIndexCond(choose->currentItem()) ;
@@ -685,6 +690,7 @@ void KSpreadDlgValidity::OkPressed()
     }
 
   }
+  result.displayMessage = displayMessage->isChecked();
 
   m_pView->doc()->emitBeginOperation( false );
   m_pView->activeTable()->setValidity( m_pView->selectionInfo(),  result);

@@ -4462,9 +4462,9 @@ bool KSpreadCell::testValidity() const
       valid= true;
     }
 
-    if(!valid &&d->extra()->validity != NULL )
+    if(!valid &&d->extra()->validity != NULL && d->extra()->validity->displayMessage)
     {
-      switch (d->extra()->validity->m_action)
+      switch (d->extra()->validity->m_action )
       {
         case Stop:
             KMessageBox::error((QWidget*)0L, d->extra()->validity->message,
@@ -4951,6 +4951,7 @@ QDomElement KSpreadCell::save( QDomDocument& doc, int _x_offset, int _y_offset, 
         param.setAttribute("allow",(int)d->extra()->validity->m_allow);
         param.setAttribute("valmin",d->extra()->validity->valMin);
         param.setAttribute("valmax",d->extra()->validity->valMax);
+        param.setAttribute("displaymessage",d->extra()->validity->displayMessage);
         validity.appendChild(param);
         QDomElement title = doc.createElement( "title" );
         title.appendChild( doc.createTextNode( d->extra()->validity->title ) );
@@ -5370,8 +5371,7 @@ void KSpreadCell::loadOasisValidation( const QString& validationName )
         if ( error.hasAttribute( "table:display" ) )
         {
             kdDebug()<<" display message :"<<error.attribute( "table:display" )<<endl;
-            //todo implement it into kspread
-            //d->extra()->validity->m_displayMessage = (error.attribute( "table:display" )=="true");
+            d->extra()->validity->displayMessage = (error.attribute( "table:display" )=="true");
         }
         QDomElement attrText = error.namedItem( "text:p" ).toElement();
         if ( !attrText.isNull() )
@@ -5506,6 +5506,10 @@ bool KSpreadCell::load( const QDomElement & cell, int _xshift, int _yshift,
             d->extra()->validity->valMax = param.attribute("valmax").toDouble( &ok );
             if ( !ok )
               return false;
+          }
+          if ( param.hasAttribute( "displaymessage" ) )
+          {
+              d->extra()->validity->displayMessage = ( bool )param.attribute("displaymessage").toInt();
           }
         }
         QDomElement title = validity.namedItem( "title" ).toElement();

@@ -56,6 +56,15 @@ class KSParseNode;
 
 struct KSpreadValidity
 {
+    KSpreadValidity()
+	{
+	    valMin = 0.0;
+	    valMax = 0.0;
+	    m_cond = None;
+	    m_action = Stop;
+	    m_allow = Allow_All;
+	    displayMessage = true;
+	};
  QString message;
  QString title;
  double valMin;
@@ -67,6 +76,7 @@ struct KSpreadValidity
  QTime  timeMax;
  QDate  dateMin;
  QDate  dateMax;
+    bool displayMessage;
 };
 
 class CellPrivate;
