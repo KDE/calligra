@@ -108,7 +108,6 @@ public:
   // This flag is used to avoid updates etc. during loading.
   bool isLoading;
 
-  QPen defaultGridPen;
   QColor pageBorderColor;
 
   QPtrList<KSpreadPlugin> plugins;
@@ -126,6 +125,7 @@ public:
   bool horizontalScrollBar;
   bool columnHeader;
   bool rowHeader;
+  QColor gridColor;
   double indentValue;
   bool showStatusBar;
   bool showTabBar;
@@ -187,10 +187,6 @@ KSpreadDoc::KSpreadDoc( QWidget *parentWidget, const char *widgetName, QObject* 
   d->isLoading = false;
   d->numOperations = 1; // don't start repainting before the GUI is done...
 
-  d->defaultGridPen.setColor( lightGray );
-  d->defaultGridPen.setWidth( 1 );
-  d->defaultGridPen.setStyle( SolidLine );
-
   initInterpreter();
 
   d->undoLocked = false;
@@ -207,6 +203,7 @@ KSpreadDoc::KSpreadDoc( QWidget *parentWidget, const char *widgetName, QObject* 
   d->horizontalScrollBar = true;
   d->columnHeader = true;
   d->rowHeader = true;
+  d->gridColor = Qt::lightGray;
   d->indentValue = 10.0;
   d->showStatusBar = true;
   d->showFormulaBar = true;
@@ -378,16 +375,6 @@ KSpreadInterpreter* KSpreadDoc::interpreter() const
 bool KSpreadDoc::isLoading() const
 {
   return d->isLoading;
-}
-
-const QPen& KSpreadDoc::defaultGridPen()
-{
-  return d->defaultGridPen;
-}
-
-void KSpreadDoc::changeDefaultGridPenColor( const QColor &_col)
-{
-  d->defaultGridPen.setColor(_col);
 }
 
 QColor KSpreadDoc::pageBorderColor() const 
@@ -823,11 +810,6 @@ bool KSpreadDoc::docData( QString const & xmlTag, QDomElement & data )
   return true;
 }
 
-void KSpreadDoc::setDefaultGridPen( const QPen& p )
-{
-  d->defaultGridPen = p;
-}
-
 void KSpreadDoc::setShowVerticalScrollBar(bool _show)
 {
   d->verticalScrollBar=_show;
@@ -871,6 +853,16 @@ void KSpreadDoc::setShowRowHeader(bool _show)
 bool KSpreadDoc::showRowHeader() const
 { 
   return  d->rowHeader; 
+}
+
+void KSpreadDoc::setGridColor( const QColor& color )
+{
+  d->gridColor = color;
+}
+
+QColor KSpreadDoc::gridColor() const
+{
+  return d->gridColor;
 }
 
 void KSpreadDoc::setCompletionMode( KGlobalSettings::Completion complMode)

@@ -699,9 +699,9 @@ colorParameters::colorParameters( KSpreadView* _view,QVBox *box , char *name )
 void colorParameters::apply()
 {
   QColor _col = gridColor->color();
-  if ( m_pView->doc()->defaultGridPen().color() != _col )
+  if ( m_pView->doc()->gridColor() != _col )
   {
-    m_pView->doc()->changeDefaultGridPenColor( _col );
+    m_pView->doc()->setGridColor( _col );
     config->setGroup( "KSpread Color" );
     config->writeEntry( "GridColor", _col );
   }

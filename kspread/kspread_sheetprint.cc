@@ -188,10 +188,10 @@ bool KSpreadSheetPrint::print( QPainter &painter, KPrinter *_printer )
     m_pSheet->setShowGrid( m_bPrintGrid );
     if ( !m_bPrintGrid )
     {
-        gridPen = m_pDoc->defaultGridPen();
+        gridPen = QPen( m_pDoc->gridColor(), 1, Qt::SolidLine );
         QPen nopen;
         nopen.setStyle( NoPen );
-        m_pDoc->setDefaultGridPen( nopen );
+        m_pDoc->setGridColor( Qt::white );
     }
 
     //Update m_dPrintRepeatColumnsWidth for repeated columns
@@ -287,7 +287,7 @@ bool KSpreadSheetPrint::print( QPainter &painter, KPrinter *_printer )
     if ( !m_bPrintGrid )
     {
         // Restore the grid pen
-        m_pDoc->setDefaultGridPen( gridPen );
+        m_pDoc->setGridColor( gridPen.color() );
     }
     m_pSheet->setShowGrid( oldShowGrid );
 

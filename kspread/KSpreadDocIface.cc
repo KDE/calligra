@@ -36,7 +36,7 @@ bool KSpreadDocIface::saveAs( const QString& )
 
 void KSpreadDocIface::changeDefaultGridPenColor( const QColor &_col)
 {
-    doc->changeDefaultGridPenColor(_col);
+    doc->setGridColor(_col);
 }
 
 QColor KSpreadDocIface::pageBorderColor() const

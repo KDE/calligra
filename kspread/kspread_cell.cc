@@ -2473,7 +2473,7 @@ void KSpreadCell::paintDefaultBorders( QPainter& painter, const KoRect &rect,
         db = ( t.width() / 2);
     }
 
-    painter.setPen( table()->doc()->defaultGridPen() );
+    painter.setPen( QPen( table()->doc()->gridColor(), 1, Qt::SolidLine ) );
 
     //If we are on paper printout, we limit the length of the lines
     //On paper, we always have full cells, on screen not
@@ -2510,7 +2510,8 @@ void KSpreadCell::paintDefaultBorders( QPainter& painter, const KoRect &rect,
         db = ( t.width() / 2);
     }
 
-    painter.setPen( table()->doc()->defaultGridPen() );
+    painter.setPen( QPen( table()->doc()->gridColor(), 1, Qt::SolidLine ) );
+    
     //If we are on paper printout, we limit the length of the lines
     //On paper, we always have full cells, on screen not
     if ( painter.device()->isExtDev() )
@@ -2545,7 +2546,8 @@ void KSpreadCell::paintDefaultBorders( QPainter& painter, const KoRect &rect,
         dr = r.width() / 2;
     }
 
-    painter.setPen( table()->doc()->defaultGridPen() );
+    painter.setPen( QPen( table()->doc()->gridColor(), 1, Qt::SolidLine ) );
+    
     //If we are on paper printout, we limit the length of the lines
     //On paper, we always have full cells, on screen not
     if ( painter.device()->isExtDev() )
@@ -2580,7 +2582,8 @@ void KSpreadCell::paintDefaultBorders( QPainter& painter, const KoRect &rect,
         dr = r.width() / 2;
     }
 
-    painter.setPen( table()->doc()->defaultGridPen() );
+    painter.setPen( QPen( table()->doc()->gridColor(), 1, Qt::SolidLine ) );
+    
     //If we are on paper printout, we limit the length of the lines
     //On paper, we always have full cells, on screen not
     if ( painter.device()->isExtDev() )

@@ -58,7 +58,6 @@ class KSpellConfig;
 #include <qmap.h>
 #include <qobject.h>
 #include <qpainter.h>
-#include <qpen.h>
 #include <qrect.h>
 #include <qstring.h>
 
@@ -296,6 +295,16 @@ public:
   bool getShowRowHeader() const { return showRowHeader(); } 
   
   /**
+   * Sets the color of the grid.
+   */
+  void setGridColor( const QColor& color );
+  
+  /**
+   * Returns the color of the grid.
+   */
+  QColor gridColor() const;
+  
+  /**
    * Sets the indentation value.
    */  
   void setIndentValue( double val );
@@ -418,10 +427,6 @@ public:
   bool dontCheckTitleCase() const;
   void setDontCheckTitleCase(bool _b);
 
-  
-    
-  void changeDefaultGridPenColor( const QColor &_col);
-
   QColor pageBorderColor() const;
   void changePageBorderColor( const QColor  & _color);
   
@@ -494,9 +499,6 @@ public:
    * @return TRUE if the document is currently loading.
    */
   bool isLoading() const;
-
-  void setDefaultGridPen( const QPen & );
-  const QPen & defaultGridPen() ;
 
   virtual void paintContent( QPainter & painter, const QRect & rect, bool transparent = false, 
                              double zoomX = 1.0, double zoomY = 1.0 );
