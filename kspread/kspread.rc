@@ -42,6 +42,11 @@
   <Action name="tableFormat"/>
  </Menu>
  <Menu name="Insert"><text>Insert</text>
+  <Menu name="Comment"><text>Comment</text>
+    <Action name="addmodifycomment"/>
+    <Action name="showcomment"/>
+    <Action name="removecomment"/>
+  </Menu>
   <Action name="insertFormula"/>
   <Action name="series"/>
   <Action name="createAnchor"/>

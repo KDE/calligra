@@ -784,7 +784,6 @@ void KSpreadView::updateReadWrite( bool readwrite )
   //  m_newView->setEnabled( true );
   m_pDoc->KXMLGUIClient::action( "newView" )->setEnabled( true );
   m_gotoCell->setEnabled( true );
-//  m_help->setEnabled( true );
   m_oszi->setEnabled( true );
 }
 
@@ -1494,13 +1493,7 @@ void KSpreadView::addTable( KSpreadTable *_t )
     QObject::connect( _t, SIGNAL( sig_polygonInvalidated( const QPointArray& ) ),
 		      this, SLOT( repaintPolygon( const QPointArray& ) ) );
     if(m_bLoading)
-    	{
-    	//m_hideGrid->setChecked( !m_pTable->getShowGrid() );
-    	m_showPageBorders->setChecked( m_pTable->isShowPageBorders());
-    	//m_showFormular->setChecked(m_pTable->getShowFormular());
-    	//m_LcMode->setChecked(m_pTable->getLcMode());
-	//m_showColumnNumber->setChecked(m_pTable->getShowColumnNumber());
-    	}
+        m_showPageBorders->setChecked( m_pTable->isShowPageBorders());
 }
 
 void KSpreadView::removeTable( KSpreadTable *_t )
@@ -1674,6 +1667,7 @@ void KSpreadView::removeComment()
   if ( !m_pTable )
 	return;
   m_pTable->setSelectionRemoveComment( QPoint( m_pCanvas->markerColumn(), m_pCanvas->markerRow() ) );
+  updateEditWidget();
 }
 
 void KSpreadView::showComment()
@@ -1858,6 +1852,7 @@ void KSpreadView::addModifyComment()
 
   KSpreadcomment* dlg = new  KSpreadcomment( this, "comment",QPoint( m_pCanvas->markerColumn(), m_pCanvas->markerRow() ));
   dlg->show();
+  updateEditWidget();
 }
 
 void KSpreadView::editCell()
