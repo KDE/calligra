@@ -203,7 +203,7 @@ bool KoDocument::saveFile()
     return false;
 
   QCString _native_format = nativeFormatMimeType();
-#ifdef HAVE_KDEPRINT
+#if KDE_VERSION >= 220
   // The output format is set by koMainWindow, and by openFile
   QCString outputMimeType = d->outputMimeType;
   ASSERT( !outputMimeType.isEmpty() );
