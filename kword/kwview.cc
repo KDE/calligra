@@ -3985,6 +3985,7 @@ void KWView::spellCheckerReady()
     m_spell.ignoreWord.clear();
     if(m_spell.macroCmdSpellCheck)
         m_doc->addCommand(m_spell.macroCmdSpellCheck);
+    m_spell.macroCmdSpellCheck=0L;
 }
 
 void KWView::spellCheckerMisspelling( const QString &old, const QStringList &, unsigned int pos )
@@ -4059,6 +4060,7 @@ void KWView::spellCheckerDone( const QString & )
         m_ignoreWord.clear();
         if(m_spell.macroCmdSpellCheck)
             m_doc->addCommand(m_spell.macroCmdSpellCheck);
+        m_spell.macroCmdSpellCheck=0L;
     }
 }
 
@@ -4091,6 +4093,7 @@ void KWView::spellCheckerFinished()
     m_ignoreWord.clear();
     if(m_spell.macroCmdSpellCheck)
         m_doc->addCommand(m_spell.macroCmdSpellCheck);
+    m_spell.macroCmdSpellCheck=0L;
 
     KWTextFrameSetEdit * edit = currentTextEdit();
     if (edit)
