@@ -765,7 +765,7 @@ don't put a </?xml...> at the end of the file!).
             instance:           An identifier that uniquely names the
                                 particular instance of the type of object
                                 being anchored.
-                                For framesets, this is the frameset number in the doc.
+                                For framesets, this is the frameset name.
 -->
 
 <!ELEMENT ANCHOR
@@ -787,9 +787,11 @@ don't put a </?xml...> at the end of the file!).
     (KEY)>
 
 <!--    Variable
+        A variable has always two child elements:
+        TYPE, and another one depending on the type.
 -->
 <!ELEMENT VARIABLE
-    (TYPE|PGNUM|DATE|TIME|CUSTOM|SERIALLETTER|FIELD|LINK|NOTE)>
+    (TYPE,(DATE|TIME|PGNUM|CUSTOM|MAILMERGE|FIELD|LINK|NOTE))>
 
 <!--    Variable type
         Attributes:
@@ -801,10 +803,11 @@ don't put a </?xml...> at the end of the file!).
             4... Page number / number of pages (uses PGNUM to save it)
             5... [currently unused]
             6... Custom (uses CUSTOM to save it)
-            7... Serial Letter (uses SERIALLETTER to save it)
+            7... Mail Merge variable (uses MAILMERGE to save it)
             8... Field (uses FIELD to save it)
-            9... Link
-            10... Note
+            9... Link (uses LINK)
+            10... Note (uses NOTE)
+            11... Footnote (uses FOOTNOTE)
 
         key  the description of the variable format used to display this variable.
             The first 4 letters identify the class of format:
@@ -825,35 +828,70 @@ don't put a </?xml...> at the end of the file!).
     key  CDATA #IMPLIED
     text CDATA #IMPLIED>
 
-<!-- TODO: document -->
+<!--   Date value contained in a date variable.
+        day...  the day number
+        month.. the month number
+        year... the year number
+        fix.... 1 if the date is fixed, 0 if it's variable ("the current date")
+          A date that is not fixed (variable) will be updated as soon as the file is loaded.
+          The value in the file is only the value that the var had when saving.
+-->
 <!ELEMENT DATE
     EMPTY>
-<!-- TODO: document ( #REQUIRED or #IMPLIED ?)-->
 <!ATTLIST DATE
     day   CDATA #REQUIRED
     month CDATA #REQUIRED
     year  CDATA #REQUIRED
     fix   CDATA #REQUIRED>
 
+<!--   Time value contained in a time variable.
+        hour...  the hour number
+        minute.. the minute number
+        second... the second number
+        fix.... 1 if the time is fixed, 0 if it's variable ("the current time")
+          A time that is not fixed (variable) will be updated as soon as the file is loaded.
+          The value in the file is only the value that the var had when saving.
+-->
 <!ELEMENT TIME
     EMPTY>
-<!-- TODO: document ( #REQUIRED or #IMPLIED ?)-->
 <!ATTLIST TIME
     hour   CDATA #REQUIRED
     minute CDATA #REQUIRED
     second CDATA #REQUIRED
     fix    CDATA #REQUIRED>
 
+<!--   Details for a page-related variable.
+         subtype... Variable subtype:
+              0... number of current page.
+              1... total number of pages.
+              2... title of the current section
+         value... The variable value, number for subtype=0/1, string for subtype=2
+-->
 <!ELEMENT PGNUM
     EMPTY>
-<!-- TODO: document ( #REQUIRED or #IMPLIED ?)-->
 <!ATTLIST PGNUM
     subtype CDATA #REQUIRED
     value   CDATA #REQUIRED>
 
-<!-- TODO CUSTOM,SERIALLETTER -->
-<!-- TODO modifiers in DATE and TIME - see #24242 (close KDE bug?)-->
-
+<!--   Details for a custom variable.
+          name... The variable name
+          value... The variable value
+       Both name and value are entered by the user, they can be anything.
+-->
+<!ELEMENT CUSTOM
+    EMPTY>
+<!ATTLIST CUSTOM
+    name   CDATA #REQUIRED
+    value  CDATA #REQUIRED>
+    
+<!--   Details for a mail-merge variable.
+          name... The variable name
+-->
+<!ELEMENT MAILMERGE
+    EMPTY>
+<!ATTLIST MAILMERGE
+    name   CDATA #REQUIRED>
+    
 <!--    A "field" variable (property of the document)
         subtype... Field subtype:
                    0... Filename
@@ -873,17 +911,39 @@ don't put a </?xml...> at the end of the file!).
     subtype CDATA #REQUIRED
     value CDATA #REQUIRED>
 
+<!--    A variable containing an hyperlink.
+        linkName... The text that appears in the document.
+        hrefName... The URL that this link points to.
+-->
 <!ELEMENT LINK
     EMPTY>
 <!ATTLIST LINK
     linkName CDATA #REQUIRED
     hrefName CDATA #REQUIRED>
 
+<!--    A comment embedded into the text.
+        note... The text of the comment
+-->
 <!ELEMENT NOTE
     EMPTY>
 <!ATTLIST NOTE
     note CDATA #REQUIRED>
 
+<!--    A footnote variable.
+        value...    The text of the variable (e.g. "1", "2")
+        notetype... "footnote" or "endnote"
+        numberingtype... "auto" or "manual"
+        frameset... The name of the text frameset that contains the text
+          associated with this footnote. The frameset must be defined,
+          and must have frameInfo = 7.
+-->
+<!ELEMENT FOOTNOTE
+    EMPTY>
+<!ATTLIST FOOTNOTE
+    value CDATA #REQUIRED
+    notetype CDATA #REQUIRED
+    numberingtype CDATA #REQUIRED
+    frameset CDATA #REQUIRED>
 
 <!--
         Pixmap collection. This list holds the keys of all the pixmaps
