@@ -36,7 +36,7 @@
                     <cstring>textLabel1</cstring>
                 </property>
                 <property name="text">
-                    <string>Please be a few seconds patient, till the appropriate plugin for your request has been loaded</string>
+                    <string>Please be patient for a few seconds, while the appropriate plugin for your request is being loaded.</string>
                 </property>
                 <property name="alignment">
                     <set>WordBreak|AlignCenter</set>
@@ -416,7 +416,7 @@
                     <cstring>textLabel4</cstring>
                 </property>
                 <property name="text">
-                    <string>You have given all information needed for importing by now. Just press the &lt;b&gt;Finish&lt;/b&gt; button to  eventually start the import process. If you changed your mind and don't want to import anything, press the &lt;b&gt;Cancel&lt;/b&gt; button.</string>
+                    <string>You have now provided all information needed for importing. Just click the &lt;b&gt;Finish&lt;/b&gt; button to eventually start the import process. If you have changed your mind and don't want to import anything, click the &lt;b&gt;Cancel&lt;/b&gt; button.</string>
                 </property>
             </widget>
         </grid>

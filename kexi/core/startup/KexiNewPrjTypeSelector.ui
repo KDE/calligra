@@ -35,7 +35,7 @@
                 </sizepolicy>
             </property>
             <property name="text">
-                <string>Kexi will create a new database project. Select a storage method which will be used to store new project.
+                <string>Kexi will create a new database project. Select a storage method which will be used to store the new project.
 </string>
             </property>
             <property name="alignment">
