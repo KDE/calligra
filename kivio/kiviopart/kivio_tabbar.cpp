@@ -588,7 +588,8 @@ void KivioTabBar::hidePage()
         removeTab( activeName );
         pagehide.append( activeName );
         // m_pView->setActivePage( m_pView->doc()->map()->findPage( tabsList.first()) );
-
+        KivioHidePageCommand * cmd = new KivioHidePageCommand(i18n("Hide page"), page);
+        m_pView->doc()->addCommand( cmd );
         emit tabChanged( tabsList.first() );
     }
     m_pView->updateMenuPage();
@@ -607,4 +608,12 @@ void KivioTabBar::addHiddenTab(const QString & text)
 {
     pagehide.append( text );
 }
+
+void KivioTabBar::hidePage(const QString& pageName )
+{
+  removeTab( pageName );
+  pagehide.append( pageName );
+  emit tabChanged( tabsList.first() );
+}
+
 #include "kivio_tabbar.moc"

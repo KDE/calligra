@@ -521,6 +521,12 @@ void KivioView::addPage( KivioPage* page )
   } else {
     m_pTabBar->addHiddenTab(page->pageName());
   }
+
+  QObject::connect( page, SIGNAL( sig_PageHidden( KivioPage* ) ),
+                    this, SLOT( slotPageHidden( KivioPage* ) ) );
+  QObject::connect( page, SIGNAL( sig_PageShown( KivioPage* ) ),
+                    this, SLOT( slotPageShown( KivioPage* ) ) );
+
 }
 
 void KivioView::removePage( KivioPage *_t )
@@ -1466,5 +1472,16 @@ void KivioView::updateButton()
   toggleSnapGuides(true && koDocument()->isReadWrite());
 
 }
+
+void KivioView::slotPageHidden( KivioPage* page )
+{
+    m_pTabBar->hidePage( page->pageName() );
+}
+
+void KivioView::slotPageShown( KivioPage* page )
+{
+    m_pTabBar->showPage( page->pageName() );
+}
+
 
 #include "kivio_view.moc"

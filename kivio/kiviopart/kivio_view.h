@@ -188,6 +188,10 @@ public slots:
   void alignStencilsDlg();
   void optionsDialog();
 
+    void slotPageHidden( KivioPage* page );
+    void slotPageShown( KivioPage* page );
+
+
 protected slots:
   void slotAddPage( KivioPage *_page );
   void slotPageRenamed( KivioPage* page, const QString& old_name );

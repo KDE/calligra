@@ -42,3 +42,24 @@ void KivioChangePageNameCommand::unexecute()
 {
     m_page->setPageName( oldPageName);
 }
+
+
+KivioHidePageCommand::KivioHidePageCommand(const QString &_name, KivioPage *_page)
+    : KNamedCommand( _name ),
+      m_page( _page )
+{
+}
+
+KivioHidePageCommand::~KivioHidePageCommand()
+{
+}
+
+void KivioHidePageCommand::execute()
+{
+    m_page->setHidePage( true );
+}
+
+void KivioHidePageCommand::unexecute()
+{
+    m_page->setHidePage( false );
+}

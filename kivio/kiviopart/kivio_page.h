@@ -155,7 +155,7 @@ public:
   void distributeStencils( DistributeData );
 
   KivioConnectorTarget *connectPointToTarget( KivioConnectorPoint *, float );
-
+    void setHidePage(bool _hide);
 public slots:
   void deleteSelectedStencils();
   void groupSelectedStencils();
@@ -172,6 +172,9 @@ signals:
   void sig_updateView( KivioPage *_page );
   void sig_updateView( KivioPage *_page, const QRect& );
   void sig_nameChanged( KivioPage* page, const QString& old_name );
+
+    void sig_PageHidden(KivioPage *_page);
+    void sig_PageShown(KivioPage *_page);
 
 protected:
   void printPage( QPainter &_painter, const QRect& page_range, const QRect& view );

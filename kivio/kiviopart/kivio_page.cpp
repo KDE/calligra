@@ -1547,5 +1547,15 @@ KivioConnectorTarget *KivioPage::connectPointToTarget( KivioConnectorPoint *p, f
    return NULL;
 }
 
+void KivioPage::setHidePage(bool _hide)
+{
+    setHidden(_hide);
+    if(_hide)
+        emit sig_PageHidden(this);
+    else
+        emit sig_PageShown(this);
+}
+
+
 #include "kivio_page.moc"
 

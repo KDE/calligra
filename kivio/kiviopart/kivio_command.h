@@ -38,6 +38,19 @@ protected:
     KivioPage * m_page;
 };
 
+class KivioHidePageCommand : public KNamedCommand
+{
+public:
+    KivioHidePageCommand( const QString &_name, KivioPage *_page );
+    ~KivioHidePageCommand();
+
+    virtual void execute();
+    virtual void unexecute();
+
+protected:
+    KivioPage * m_page;
+};
+
 
 #endif
 
