@@ -132,7 +132,8 @@ KPrCanvas::KPrCanvas( QWidget *parent, const char *name, KPresenterView *_view )
         m_drawPolyline = false;
         m_drawCubicBezierCurve = false;
         m_drawLineWithCubicBezierCurve = true;
-        m_oldCubicBezierPointArray.putPoints( 0, 4, 0,0, 0,0, 0,0, 0,0 );
+        m_oldCubicBezierPointArray.putPoints( 0, 4, (double)0,(double)0, (double)0,(double)0,
+                                              (double)0,(double)0, (double)0,(double)0 );
     } else {
         m_view = 0;
         hide();
@@ -668,7 +669,8 @@ void KPrCanvas::mousePressEvent( QMouseEvent *e )
                     m_indexPointArray += 3;
                     m_drawLineWithCubicBezierCurve = true;
                     m_oldCubicBezierPointArray = KoPointArray();
-                    m_oldCubicBezierPointArray.putPoints( 0, 4, 0.0,0.0, 0.0,0.0, 0.0,0.0, 0.0,0.0 );
+                    m_oldCubicBezierPointArray.putPoints( 0, 4, (double)0,(double)0, (double)0,(double)0,
+                                                          (double)0,(double)0, (double)0,(double)0 );
                     m_dragEndPoint = m_dragStartPoint;
                 }
 
@@ -844,7 +846,8 @@ void KPrCanvas::mousePressEvent( QMouseEvent *e )
                     m_drawCubicBezierCurve = true;
                     m_drawLineWithCubicBezierCurve = true;
                     m_indexPointArray = 0;
-                    m_oldCubicBezierPointArray.putPoints( 0, 4, 0,0, 0,0, 0,0, 0,0 );
+                    m_oldCubicBezierPointArray.putPoints( 0, 4, (double)0,(double)0, (double)0,(double)0,
+                                                          (double)0,(double)0, (double)0,(double)0 );
                     m_dragStartPoint = tmp;
                     m_dragEndPoint = m_dragStartPoint;
                     m_pointArray.putPoints( m_indexPointArray, 1, m_view->zoomHandler()->unzoomItX(m_dragStartPoint.x()), m_view->zoomHandler()->unzoomItY(m_dragStartPoint.y() ));
