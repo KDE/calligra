@@ -20,6 +20,8 @@ New functions added:
    DAYS, WEEKS, MONTHS, YEARS
  financial:
    DB, SLN, SYD, EURO
+ logical:
+   XOR
  statistical:
    CHIDIST, FDIST, TDIST, CONFIDENCE, BETADIST, GAMMADIST, 
    PHI, GAUSS, MEDIAN, POISSON, GAMMALN, NORMINV, NORMSINV, 
