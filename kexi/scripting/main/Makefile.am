@@ -1,6 +1,7 @@
 include $(top_srcdir)/kexi/Makefile.global
 
-noinst_LTLIBRARIES = libkrossmain.la
+lib_LTLIBRARIES = libkrossmain.la
+#noinst_LTLIBRARIES = libkrossmain.la
 
 libkrossmain_la_SOURCES = \
     scriptcontainer.cpp \
