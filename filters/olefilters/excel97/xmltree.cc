@@ -65,7 +65,7 @@ XMLTree::XMLTree():QObject(),table(0L), fontCount(0), footerCount(0),
 
     map = root->createElement("map");
     doc.appendChild(map);
-
+    
     // ### David: I added m_locale to xmltree.h to make this compile
     //     But setting the language on that locale isn't done at all in here...
     m_locale.setLanguage("C"); // ##### FIXME
@@ -961,6 +961,7 @@ bool XMLTree::_bottommargin(Q_UINT16, QDataStream& body)
 
 bool XMLTree::_boundsheet(Q_UINT16, QDataStream& body)
 {
+  //kdDebug() <<"New table\n";
   QDomElement *e;
   if (biff == BIFF_5_7) {
     Q_UINT8 length;
@@ -1706,32 +1707,44 @@ bool XMLTree::_window2(Q_UINT16, QDataStream & body)
     {
       if( nOpt & 0x0001 )
 	{
+	  table->setAttribute("formular",1);
 	  // Display Formulas
-	  kdDebug()<<"Show formular\n"; 
+	  //kdDebug()<<"Show formular\n"; 
 	}
       else
-	kdDebug()<<"Hide formular\n"; 
+	{
+	  table->setAttribute("formular",0);
+	  //kdDebug()<<"Hide formular\n"; 
+	}
       
       if( nOpt & 0x0002 )
 	{
 	  // Display Gridlines
-	  kdDebug()<<"Show grid\n"; 
+	  //kdDebug()<<"Show grid\n"; 
+	  table->setAttribute("grid",1);
 	}
       else
 	{
 	  // Display No Gridlines
-	  kdDebug()<<"Hide grid\n"; 
+	  //kdDebug()<<"Hide grid\n"; 
+	  table->setAttribute("grid",0);
 	}
       
       if( nOpt & 0x0004 )
 	kdDebug()<<"Show col/row hearder\n"; 
       else
-	kdDebug()<<"Hide col/row hearder\n"; 
+	kdDebug()<<"Hide col/row hearder. Not store in table\n"; 
       
       if( nOpt & 0x0010 )
-	kdDebug()<<"Show zero value\n"; 
+	{
+	  table->setAttribute("hidezero",0);
+	  //kdDebug()<<"Show zero value\n"; 
+	}
       else
-	kdDebug()<<"Hide zero value\n"; 
+	{
+	table->setAttribute("hidezero",1);
+	//kdDebug()<<"Hide zero value\n"; 
+	}
     }
   return true;
 }
