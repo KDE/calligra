@@ -300,6 +300,12 @@ private:
     bool m_hasTmpHeaders;
     bool m_active;
     QPtrList<Cell> m_cells;
+    /** The list of page boundaries.
+    *   Each page the table spans has an entry in this list which points to the last _line_ 
+    *   on a page.
+    *   For a 1 page table there is no page break; and therefor for such tables this list is 
+    *   empty.
+    */
     QValueList<unsigned int> m_pageBoundaries;
     unsigned int redrawFromCol;
     QValueList<double> m_rowPositions, m_colPositions;

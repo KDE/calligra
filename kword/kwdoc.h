@@ -589,7 +589,7 @@ private:
     /** Search the list of frames for a frame that is directly below the argument frame,
       * and return that.*/
     KWFrame *frameBelowFrame(const QPoint& nPoint, KWFrame *frame, bool *border=0L);
-    /** Search if the frame (parent) has any embedded frames we might be clickin on and
+    /** Search if the frame (parent) has any embedded frames we might have clicked on and
         return that frame if so.  The algoritm will recursively search for the deepest
         inline frame we clicked on.
     */
