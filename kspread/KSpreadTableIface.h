@@ -65,6 +65,18 @@ k_dcop:
     virtual void borderBottom(const QColor &_color );
     virtual void borderRight( const QColor &_color );
 
+    virtual bool isHidden()const;
+
+    virtual void increaseIndent();
+    virtual void decreaseIndent();
+
+    virtual bool showGrid() const;
+    virtual bool showFormula() const;
+    virtual bool lcMode() const;
+    virtual bool autoCalc() const;
+    virtual bool showColumnNumber() const;
+    virtual bool hideZero() const;
+    virtual bool firstLetterUpper() const;
 
 
 private:

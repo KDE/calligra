@@ -315,3 +315,53 @@ void KSpreadTableIface::borderRight( const QColor &_color )
 {
     m_table->borderRight( m_table->markerRect().topLeft (),_color );
 }
+
+bool KSpreadTableIface::isHidden()const
+{
+    return m_table->isHidden();
+}
+
+void KSpreadTableIface::increaseIndent()
+{
+    m_table->increaseIndent(m_table->markerRect().topLeft ());
+}
+
+void KSpreadTableIface::decreaseIndent()
+{
+    m_table->decreaseIndent(m_table->markerRect().topLeft ());
+}
+
+bool KSpreadTableIface::showGrid() const
+{
+    return m_table->getShowGrid();
+}
+
+bool KSpreadTableIface::showFormula() const
+{
+    return m_table->getShowFormula();
+}
+
+bool KSpreadTableIface::lcMode() const
+{
+    return m_table->getLcMode();
+}
+
+bool KSpreadTableIface::autoCalc() const
+{
+    return m_table->getAutoCalc();
+}
+
+bool KSpreadTableIface::showColumnNumber() const
+{
+    return m_table->getShowColumnNumber();
+}
+
+bool KSpreadTableIface::hideZero() const
+{
+    return m_table->getHideZero();
+}
+
+bool KSpreadTableIface::firstLetterUpper() const
+{
+    return m_table->getFirstLetterUpper();
+}
