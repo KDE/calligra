@@ -49,6 +49,7 @@
 #include <qregexp.h>
 #include <qimage.h>
 #include <qlayout.h>
+#include <qwhatsthis.h>
 
 #include <kdebug.h>
 #include <klocale.h>
@@ -599,6 +600,10 @@ void KPWebPresentationWizard::createWebPresentation( const QString &_config, KPr
 void KPWebPresentationWizard::setupPage1()
 {
     page1 = new QHBox( this );
+    QWhatsThis::add( page1, i18n("This page allows you to specify some of the key"
+                                 " values for how your presentation will be shown"
+                                 " in HTML. Select individual items for more help"
+                                 " on what they do.") );
     page1->setSpacing( KDialog::spacingHint() );
     page1->setMargin( KDialog::marginHint() );
 
@@ -625,32 +630,56 @@ void KPWebPresentationWizard::setupPage1()
 
     QLabel *label1 = new QLabel( i18n("Author:"), canvas );
     label1->setAlignment( Qt::AlignVCenter | Qt::AlignRight );
+    QWhatsThis::add( label1, i18n("This is where you enter the name of the person or "
+                                  "organisation that should be named as the author of "
+                                  "the presentation.") );
     layout->addWidget( label1, 2, 0 );
 
     QLabel *label2 = new QLabel( i18n("Title:"), canvas );
     label2->setAlignment( Qt::AlignVCenter | Qt::AlignRight );
+    QWhatsThis::add( label2, i18n("This is where you enter the title of the overall "
+                                  "presentation." ) );
     layout->addWidget( label2, 3, 0 );
 
     QLabel *label3 = new QLabel( i18n("Email address:"), canvas );
     label3->setAlignment( Qt::AlignVCenter | Qt::AlignRight );
+    QWhatsThis::add( label3, i18n("This is where you enter the email address of the "
+                                  "person or organisation that is responsible for "
+                                  "the presentation.") );
     layout->addWidget( label3, 4, 0 );
 
     QLabel *label4 = new QLabel( i18n("Path:"), canvas );
     label4->setAlignment( Qt::AlignVCenter | Qt::AlignRight );
+    QWhatsThis::add( label4, i18n("The value entered for the path is the directory "
+                                  "where the presentation will be saved. If it does "
+                                  "not exist, you'll be asked if you want to create "
+                                  "the directory or abort the creation.") );
     layout->addWidget( label4, 5, 0 );
 
     author = new KLineEdit( webPres.getAuthor(), canvas );
+    QWhatsThis::add( author, i18n("This is where you enter the name of the person or "
+                                  "organisation that should be named as the author of "
+                                  "the presentation.") );
     layout->addWidget( author, 2, 1 );
 
     title = new KLineEdit( webPres.getTitle(), canvas );
+    QWhatsThis::add( title, i18n("This is where you enter the title of the overall "
+                                 "presentation." ) );
     layout->addWidget( title, 3, 1 );
 
     email = new KLineEdit( webPres.getEmail(), canvas );
+    QWhatsThis::add( email, i18n("This is where you enter the email address of the "
+                                 "person or organisation that is responsible for "
+                                 "the presentation.") );
     layout->addWidget( email, 4, 1 );
 
     path=new KURLRequester( canvas );
     path->setMode( KFile::Directory);
     path->lineEdit()->setText(webPres.getPath());
+    QWhatsThis::add( path, i18n("The value entered for the path is the directory "
+                                "where the presentation will be saved. If it does "
+                                "not exist, you'll be asked if you want to create "
+                                "the directory or abort the creation.") );
     layout->addWidget( path, 5, 1 );
 
     QSpacerItem* spacer = new QSpacerItem( 1, 10,
@@ -670,6 +699,9 @@ void KPWebPresentationWizard::setupPage1()
 void KPWebPresentationWizard::setupPage2()
 {
     page2 = new QHBox( this );
+    QWhatsThis::add( page2, i18n("This page allows you to specify how the HTML "
+                                 "for your presentation will be displayed. Select "
+                                 "individual items for more help on what they do.") );
     page2->setSpacing( KDialog::spacingHint() );
     page2->setMargin( KDialog::marginHint() );
 
@@ -696,10 +728,13 @@ void KPWebPresentationWizard::setupPage2()
 
     QLabel *label1 = new QLabel( i18n("Zoom:"), canvas );
     label1->setAlignment( Qt::AlignVCenter | Qt::AlignRight );
+    QWhatsThis::add( label1, i18n( "This selection allows you to specify "
+                                   "the size of the slide image." ) );
     layout->addWidget( label1, 2, 0 );
 
     QLabel *label2 = new QLabel( i18n( "Default encoding:" ), canvas );
     label2->setAlignment( Qt::AlignVCenter | Qt::AlignRight );
+
     layout->addWidget( label2, 3, 0 );
 
     QLabel *label3 = new QLabel( i18n( "Document type:" ), canvas );
@@ -707,6 +742,8 @@ void KPWebPresentationWizard::setupPage2()
     layout->addWidget( label3, 4, 0 );
 
     zoom = new KIntNumInput( webPres.getZoom(), canvas );
+    QWhatsThis::add( zoom, i18n( "This selection allows you to specify "
+                                 "the size of the slide image." ) );
     layout->addWidget( zoom, 2, 1 );
     zoom->setSuffix( " %" );
     zoom->setRange( 25, 1000, 5 );
@@ -735,6 +772,10 @@ void KPWebPresentationWizard::setupPage2()
 void KPWebPresentationWizard::setupPage3()
 {
     page3 = new QHBox( this );
+    QWhatsThis::add( page3, i18n("This page allows you to specify the colors for "
+                                 "your presentation display. Select individual "
+                                 "items for more help on what they do.") );
+
     page3->setSpacing( KDialog::spacingHint() );
     page3->setMargin( KDialog::marginHint() );
 
@@ -789,6 +830,9 @@ void KPWebPresentationWizard::setupPage3()
 void KPWebPresentationWizard::setupPage4()
 {
     page4 = new QHBox( this );
+    QWhatsThis::add( page4, i18n("This page allows you to modify the titles of "
+                                 "each slide, if required. You normally don't need "
+                                 "to do this, but it is available if required.") );
     page4->setSpacing( KDialog::spacingHint() );
     page4->setMargin( KDialog::marginHint() );
 
@@ -825,7 +869,7 @@ void KPWebPresentationWizard::setupPage4()
 
     slideTitles = new KListView( canvas );
     layout->addMultiCellWidget( slideTitles, 2, 2, 0, 1 );
-    slideTitles->addColumn( i18n( "Slide No." ) );
+    slideTitles->addColumn( i18n( "No." ) );
     slideTitles->addColumn( i18n( "Slide Title" ) );
     connect( slideTitles, SIGNAL( selectionChanged( QListViewItem * ) ), this,
              SLOT( slideTitleChanged( QListViewItem * ) ) );
