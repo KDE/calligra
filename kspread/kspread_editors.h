@@ -3,9 +3,9 @@
 
 #include <qwidget.h>
 #include <qstring.h>
-
+#include <klineedit.h>
 #include <kformulaedit.h>
-
+#include <kcompletion.h>
 class KSpreadCell;
 class KSpreadCanvas;
 
@@ -54,7 +54,7 @@ public:
 
     void checkChoose();
     void blockCheckChoose( bool b ) { m_blockCheck = b; }
-    
+
 private slots:
     void slotTextChanged( const QString& text );
 
@@ -67,7 +67,8 @@ protected:
     bool eventFilter( QObject* o, QEvent* e );
 
 private:
-    QLineEdit* m_pEdit;
+    //QLineEdit* m_pEdit;
+    KLineEdit* m_pEdit;
     bool m_blockCheck;
 };
 

@@ -45,6 +45,7 @@ class QDomDocument;
 #include <qpainter.h>
 // #include <qprinter.h>
 #include <qpen.h>
+#include <kcompletion.h>
 
 #include "kspread_interpreter.h"
 
@@ -241,6 +242,10 @@ public:
   void addAreaName(QRect &_rect,QString name,QString tableName);
   QValueList<Reference> listArea(){return m_refs;}
   void removeArea( QString name);
+
+  KCompletion & completion(){return listCompletion;}
+  void addStringCompletion(QString stringCompletion);
+
   void changeAreaTableName(QString oldName,QString tableName);
 
 public slots:
@@ -450,6 +455,7 @@ protected:
   static int s_docId;
 
   QValueList<Reference> m_refs;
+  KCompletion listCompletion;
 };
 
 #endif

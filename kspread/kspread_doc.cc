@@ -931,6 +931,10 @@ void KSpreadDoc::changeAreaTableName(QString oldName,QString tableName)
         }
 }
 
+void KSpreadDoc::addStringCompletion(QString stringCompletion)
+{
+   listCompletion.addItem(stringCompletion);
+}
 /* obsolete - done in the libs now (Werner)
 void KSpreadDoc::newView()
 {

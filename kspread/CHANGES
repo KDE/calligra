@@ -753,3 +753,4 @@ you must write 12:15:08 am (save in international format)
 ----------------------------------------------------
 -Now you write 11:5am, 11:5 am, 11:5:5 am 11:5:5am
 kspread test all this string and recognize a time format.
+-Now there is completion mode. For the moment completion mode is automatic.

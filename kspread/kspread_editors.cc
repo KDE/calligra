@@ -2,6 +2,7 @@
 #include "kspread_canvas.h"
 #include "kspread_view.h"
 #include "kspread_cell.h"
+#include "kspread_doc.h"
 
 #include <qlineedit.h>
 #include <qlayout.h>
@@ -35,10 +36,12 @@ KSpreadCellEditor::~KSpreadCellEditor()
 KSpreadTextEditor::KSpreadTextEditor( KSpreadCell* _cell, KSpreadCanvas* _parent, const char* _name )
   : KSpreadCellEditor( _cell, _parent, _name )
 {
-  m_pEdit = new QLineEdit( this );
+  //m_pEdit = new QLineEdit( this );
+  m_pEdit = new KLineEdit( this );
   m_pEdit->installEventFilter( this );
   m_pEdit->setFrame( FALSE );
-
+  m_pEdit->setCompletionMode(KGlobalSettings::CompletionAuto  );
+  m_pEdit->setCompletionObject( &canvas()->view()->doc()->completion(),true );
   setFocusProxy( m_pEdit );
   setFontPropagation( AllChildren );
   setPalettePropagation( AllChildren );
