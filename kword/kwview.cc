@@ -2654,19 +2654,8 @@ void KWView::backgroundColor()
     // This action is disabled when no frame is selected.
     // So here we know that a frame is selected.
     QColor backColor = actionBackgroundColor->color();
-    actionTbBackgroundColor->setCurrentColor( backColor );
     if ( m_gui )
         m_gui->canvasWidget()->setFrameBackgroundColor( backColor );
-}
-
-void KWView::tbBackgroundColor()
-{
-    // This action is disabled when no frame is selected.
-    // So here we know that a frame is selected.
-    QColor backColor = actionTbBackgroundColor->color();
-    actionBackgroundColor->setCurrentColor( backColor );
-     if ( m_gui )
-         m_gui->canvasWidget()->setFrameBackgroundColor( backColor );
 }
 
 void KWView::borderSet()
