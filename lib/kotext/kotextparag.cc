@@ -1662,7 +1662,12 @@ void KoTextParag::loadOasisSpan( const QDomElement& parent, KoOasisContext& cont
         bool textFoo = tagName.startsWith( "text:" );
 
         // Try to keep the order of the tag names by probability of happening
-        if ( tagName == "text:span" )
+        if ( node.isText() )
+        {
+            QDomText t ( node.toText() );
+            textData = t.data();
+        }
+        else if ( tagName == "text:span" )
         {
             context.styleStack().save();
             context.fillStyleStack( ts, "text:style-name" );
@@ -1691,54 +1696,6 @@ void KoTextParag::loadOasisSpan( const QDomElement& parent, KoOasisContext& cont
             textData = '\n';
             //shouldWriteFormat=true;
         }
-#if 0
-        else if ( textFoo &&
-                  ( tagName == "text:footnote" || tagName == "text:endnote" ) )
-        {
-            textData = '#'; // anchor placeholder
-            importFootnote( doc, ts, outputFormats, pos, tagName );
-            // do me last, combination of variable and frameset.
-        }
-        else if ( tagName == "draw:image" )
-        {
-            textData = '#'; // anchor placeholder
-            QString frameName = appendPicture(doc, ts);
-            anchorFrameset( doc, outputFormats, pos, frameName );
-            // see KWTextParag::loadFormatting "case 6:" for inspiration
-        }
-        else if ( tagName == "draw:text-box" )
-        {
-            textData = '#'; // anchor placeholder
-            QString frameName = appendTextBox(doc, ts);
-            anchorFrameset( doc, outputFormats, pos, frameName );
-            // see KWTextParag::loadFormatting "case 6:" for inspiration
-        }
-        else if ( textFoo && tagName == "text:a" )
-        {
-            m_styleStack.save();
-            QString href( ts.attribute("xlink:href") );
-            if ( href.startsWith("#") )
-            {
-                // We have a reference to a bookmark (### TODO)
-                // As we do not support it now, treat it as a <text:span> without formatting
-                parseSpanOrSimilar( doc, ts, outputParagraph, outputFormats, paragraphText, pos);
-            }
-            else
-            {
-                // The problem is that KWord's hyperlink text is not inside the normal text, but for OOWriter it is nearly a <text:span>
-                // So we have to fake.
-                QDomElement fakeParagraph, fakeFormats;
-                uint fakePos=0;
-                QString text;
-                parseSpanOrSimilar( doc, ts, fakeParagraph, fakeFormats, text, fakePos);
-                textData = '#'; // hyperlink placeholder
-                QDomElement linkElement (doc.createElement("LINK"));
-                linkElement.setAttribute("hrefName",ts.attribute("xlink:href"));
-                linkElement.setAttribute("linkName",text);
-                appendKWordVariable(doc, outputFormats, ts, pos, "STRING", 9, linkElement);
-            }
-            m_styleStack.restore();
-        }
         else if ( textFoo &&
                   (tagName == "text:date" // fields
                    || tagName == "text:print-time"
@@ -1761,68 +1718,30 @@ void KoTextParag::loadOasisSpan( const QDomElement& parent, KoOasisContext& cont
             // TODO in kword: text:printed-by, initial-creator
         {
             textData = "#";     // field placeholder
+#if 0 // TODO
             appendField(doc, outputFormats, ts, pos);
+#endif
             // see KWTextParag::loadFormatting "case 4:" for inspiration
         }
-        else if ( textFoo && tagName == "text:bookmark" )
+        else
         {
-            // the number of <PARAGRAPH> tags in the frameset element is the parag id
-            // (-1 for starting at 0, +1 since not written yet)
-            Q_ASSERT( !m_currentFrameset.isNull() );
-            appendBookmark( doc, numberOfParagraphs( m_currentFrameset ),
-                            pos, ts.attribute( "text:name" ) );
-        }
-        else if ( textFoo && tagName == "text:bookmark-start" ) {
-            m_bookmarkStarts.insert( ts.attribute( "text:name" ),
-                                     BookmarkStart( m_currentFrameset.attribute( "name" ),
-                                                    numberOfParagraphs( m_currentFrameset ),
-                                                    pos ) );
-        }
-        else if ( textFoo && tagName == "text:bookmark-end" ) {
-            QString bkName = ts.attribute( "text:name" );
-            BookmarkStartsMap::iterator it = m_bookmarkStarts.find( bkName );
-            if ( it == m_bookmarkStarts.end() ) { // bookmark end without start. This seems to happen..
-                // insert simple bookmark then
-                appendBookmark( doc, numberOfParagraphs( m_currentFrameset ),
-                                pos, ts.attribute( "text:name" ) );
-            } else {
-                if ( (*it).frameSetName != m_currentFrameset.attribute( "name" ) ) {
-                    // Oh tell me this never happens...
-                    kdWarning(32500) << "Cross-frameset bookmark! Not supported." << endl;
-                } else {
-                    appendBookmark( doc, (*it).paragId, (*it).pos,
-                                    numberOfParagraphs( m_currentFrameset ), pos, it.key() );
-                }
-                m_bookmarkStarts.remove( it );
-            }
-        }
-#endif
-        else {
-            QDomText t ( node.toText() );
-            if ( t.isNull() ) // no textnode, we must ignore
+            bool handled = textDocument()->loadSpanTag( ts, context, textData );
+            if ( !handled )
             {
                 kdWarning(32500) << "Ignoring tag " << ts.tagName() << endl;
                 continue;
             }
-            else
-            {
-                textData = t.data();
-                //shouldWriteFormat=true;
-            }
         }
 
         const uint length = textData.length();
-        append( textData );
-        KoTextFormat f;
-        f.load( context );
-        setFormat( pos, length, document()->formatCollection()->format( &f ), TRUE );
-
-        //if (shouldWriteFormat)
-        //{
-        //    writeFormat( doc, outputFormats, 1 /* id for normal text */, pos, length );
-        //}
-
-        pos += length;
+        if ( length )
+        {
+            append( textData );
+            KoTextFormat f;
+            f.load( context );
+            setFormat( pos, length, document()->formatCollection()->format( &f ), TRUE );
+            pos += length;
+        }
     }
 }
 

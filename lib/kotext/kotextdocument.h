@@ -201,19 +201,10 @@ public:
     void clear( bool createEmptyParag = FALSE );
 
     virtual KoTextParag *createParag( KoTextDocument *d, KoTextParag *pr = 0, KoTextParag *nx = 0, bool updateIds = TRUE );
-    void insertChild( QObject *o ) { QObject::insertChild( o ); }
-    void removeChild( QObject *o ) { QObject::removeChild( o ); }
-    //void insertChild( KoTextDocument *d ) { childList.append( d ); }
-    //void removeChild( KoTextDocument *d ) { childList.removeRef( d ); }
-    //QPtrList<KoTextDocument> children() const { return childList; }
 
     void setAddMargins( bool b ) { addMargs = b; }
     int addMargins() const { return addMargs; }
 
-    //bool hasFocusParagraph() const;
-    //QString focusHref() const;
-
-    //void invalidateOriginalText() { oTextValid = FALSE; }
     void informParagraphDeleted( KoTextParag* parag );
 
 signals:
@@ -335,6 +326,17 @@ protected:
     void drawWithoutDoubleBuffer( QPainter *p, const QRect &rect, const QColorGroup &cg,
                                   KoZoomHandler* zoomHandler, const QBrush *paper = 0 );
 
+    /**
+     * Called by KoTextParag::loadOasisSpan. This allows to extend the loading mechanism
+     * for special tags no handled by kotext (bookmarks, image, textbox, link, footnotes etc.)
+     * This method is here instead of in KoTextParag because it's easier to derive from
+     * KoTextDocument.
+     * @return true (and optionally @p textData) if @p tag was handled.
+     */
+    virtual bool loadSpanTag( const QDomElement& /*tag*/, KoOasisContext& /*context*/, QString& /*textData*/ ) {
+        return false;
+    }
+
 private:
     // The zoom handler used when formatting
     // (due to the pixelx/pixelww stuff in KoTextFormatter)
@@ -369,15 +371,9 @@ private:
     bool underlLinks : 1;
     //bool nextDoubleBuffered : 1;
     bool addMargs : 1;
-    //bool oTextValid : 1;
     int nSelections;
     KoTextFlow *flow_;
     QPtrList<KoTextCustomItem> customItems;
-    //KoTextDocument *par;
-#ifdef QTEXTTABLE_AVAILABLE
-    KoTextTableCell *tc;
-#endif
-    KoTextCursor *tmpCursor;
     QBrush *backBrush;
     QPixmap *buf_pixmap;
     //Focus focusIndicator;
@@ -388,9 +384,6 @@ private:
     int align;
     int *tArray;
     int tStopWidth;
-    int uDepth; // ?
-    //QString oText;
-    //QColor linkColor;
 };
 
 inline int KoTextDocument::x() const

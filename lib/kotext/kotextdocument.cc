@@ -20,6 +20,8 @@
 #include "kotextdocument.h"
 #include "kozoomhandler.h"
 #include "kotextformatter.h"
+#include "kotextformat.h"
+#include "koparagcounter.h"
 #include <kdebug.h>
 #include <kdeversion.h>
 #if ! KDE_IS_VERSION(3,1,90)
@@ -58,6 +60,987 @@ KoTextDocument::KoTextDocument( KoZoomHandler *zoomHandler, KoTextFormatCollecti
     // Delete the KoTextParag created by KoTextDocument::init() if createInitialParag is false.
     if ( !createInitialParag )
         clear( false );
+}
+
+void KoTextDocument::init()
+{
+#if defined(PARSER_DEBUG)
+    kdDebug(32500) << debug_indent + "new KoTextDocument (%p)", this << endl;
+#endif
+    //pProcessor = 0;
+    useFC = TRUE;
+    pFormatter = 0;
+    indenter = 0;
+    fParag = 0;
+    m_pageBreakEnabled = false;
+    //minw = 0;
+    align = Qt::AlignAuto;
+    nSelections = 1;
+    addMargs = FALSE;
+
+    underlLinks = TRUE;
+    backBrush = 0;
+    buf_pixmap = 0;
+    //nextDoubleBuffered = FALSE;
+
+    //if ( par )
+//	withoutDoubleBuffer = par->withoutDoubleBuffer;
+//    else
+	withoutDoubleBuffer = FALSE;
+
+    lParag = fParag = createParag( this, 0, 0 );
+
+    //cx = 0;
+    //cy = 2;
+    //if ( par )
+	cx = cy = 0;
+    //cw = 600; // huh?
+    //vw = 0;
+    flow_ = new KoTextFlow;
+    //flow_->setWidth( cw );
+
+    leftmargin = 0; // 4 in QRT
+    rightmargin = 0; // 4 in QRT
+
+    selectionColors[ Standard ] = QApplication::palette().color( QPalette::Active, QColorGroup::Highlight );
+    selectionText[ Standard ] = TRUE;
+    commandHistory = new KoTextDocCommandHistory( 100 );
+    tStopWidth = formatCollection()->defaultFormat()->width( 'x' ) * 8;
+}
+
+KoTextDocument::~KoTextDocument()
+{
+    //if ( par )
+//	par->removeChild( this );
+    //// kotext
+    m_bDestroying = true;
+    clear( false );
+    ////
+    delete commandHistory;
+    delete flow_;
+    //if ( !par )
+	delete pFormatter;
+    delete fCollection;
+    //delete pProcessor;
+    delete buf_pixmap;
+    delete indenter;
+    delete backBrush;
+    if ( tArray )
+	delete [] tArray;
+}
+
+void KoTextDocument::clear( bool createEmptyParag )
+{
+    if ( flow_ )
+	flow_->clear();
+    while ( fParag ) {
+	KoTextParag *p = fParag->next();
+	delete fParag;
+	fParag = p;
+    }
+    fParag = lParag = 0;
+    if ( createEmptyParag )
+	fParag = lParag = createParag( this );
+    selections.clear();
+}
+
+/*
+   // Looks slow!
+int KoTextDocument::widthUsed() const
+{
+    KoTextParag *p = fParag;
+    int w = 0;
+    while ( p ) {
+	int a = p->alignment();
+	p->setAlignment( Qt::AlignLeft );
+	p->invalidate( 0 );
+	p->format();
+	w = QMAX( w, p->rect().width() );
+	p->setAlignment( a );
+	p->invalidate( 0 );
+	p = p->next();
+    }
+    return w;
+}
+*/
+
+int KoTextDocument::height() const
+{
+    int h = 0;
+    if ( lParag )
+	h = lParag->rect().top() + lParag->rect().height() + 1;
+    //int fh = flow_->boundingRect().height();
+    //return QMAX( h, fh );
+    return h;
+}
+
+
+KoTextParag *KoTextDocument::createParag( KoTextDocument *d, KoTextParag *pr, KoTextParag *nx, bool updateIds )
+{
+    return new KoTextParag( d, pr, nx, updateIds );
+}
+
+#if 0
+bool KoTextDocument::setMinimumWidth( int w, KoTextParag *p )
+{
+    if ( w == -1 ) {
+	minw = 0;
+	p = 0;
+    }
+    if ( p == minwParag ) {
+	minw = w;
+	emit minimumWidthChanged( minw );
+    } else if ( w > minw ) {
+	minw = w;
+	minwParag = p;
+	emit minimumWidthChanged( minw );
+    }
+    cw = QMAX( minw, cw );
+    return TRUE;
+}
+#endif
+
+void KoTextDocument::setPlainText( const QString &text )
+{
+    clear();
+    //preferRichText = FALSE;
+    //oTextValid = TRUE;
+    //oText = text;
+
+    int lastNl = 0;
+    int nl = text.find( '\n' );
+    if ( nl == -1 ) {
+	lParag = createParag( this, lParag, 0 );
+	if ( !fParag )
+	    fParag = lParag;
+	QString s = text;
+	if ( !s.isEmpty() ) {
+	    if ( s[ (int)s.length() - 1 ] == '\r' )
+		s.remove( s.length() - 1, 1 );
+	    lParag->append( s );
+	}
+    } else {
+	for (;;) {
+	    lParag = createParag( this, lParag, 0 );
+	    if ( !fParag )
+		fParag = lParag;
+	    QString s = text.mid( lastNl, nl - lastNl );
+	    if ( !s.isEmpty() ) {
+		if ( s[ (int)s.length() - 1 ] == '\r' )
+		    s.remove( s.length() - 1, 1 );
+		lParag->append( s );
+	    }
+	    if ( nl == 0xffffff )
+		break;
+	    lastNl = nl + 1;
+	    nl = text.find( '\n', nl + 1 );
+	    if ( nl == -1 )
+		nl = 0xffffff;
+	}
+    }
+    if ( !lParag )
+	lParag = fParag = createParag( this, 0, 0 );
+}
+
+void KoTextDocument::setText( const QString &text, const QString & /*context*/ )
+{
+    //focusIndicator.parag = 0;
+    selections.clear();
+#if 0
+    if ( txtFormat == Qt::AutoText && QStyleSheet::mightBeRichText( text ) ||
+	 txtFormat == Qt::RichText )
+	setRichText( text, context );
+    else
+#endif
+	setPlainText( text );
+}
+
+QString KoTextDocument::plainText( KoTextParag *p ) const
+{
+    if ( !p ) {
+	QString buffer;
+	QString s;
+	KoTextParag *p = fParag;
+	while ( p ) {
+	    s = p->string()->toString();
+	    s.remove( s.length() - 1, 1 );
+	    if ( p->next() )
+		s += "\n";
+	    buffer += s;
+	    p = p->next();
+	}
+	return buffer;
+    } else {
+	return p->string()->toString();
+    }
+}
+
+QString KoTextDocument::richText( KoTextParag * ) const
+{
+    QString s;
+    // TODO update from QRT if this code is needed
+    return s;
+}
+
+QString KoTextDocument::text() const
+{
+    if ( plainText().simplifyWhiteSpace().isEmpty() )
+	return QString("");
+    //if ( txtFormat == Qt::AutoText && preferRichText || txtFormat == Qt::RichText )
+    //    return richText();
+    return plainText( 0 );
+}
+
+QString KoTextDocument::text( int parag ) const
+{
+    KoTextParag *p = paragAt( parag );
+    if ( !p )
+	return QString::null;
+
+    //if ( txtFormat == Qt::AutoText && preferRichText || txtFormat == Qt::RichText )
+    //    return richText( p );
+    //else
+	return plainText( p );
+}
+
+void KoTextDocument::invalidate()
+{
+    KoTextParag *s = fParag;
+    while ( s ) {
+	s->invalidate( 0 );
+	s = s->next();
+    }
+}
+
+void KoTextDocument::informParagraphDeleted( KoTextParag* parag )
+{
+    QMap<int, KoTextDocumentSelection>::Iterator it = selections.begin();
+    for ( ; it != selections.end(); ++it )
+    {
+        if ( (*it).startCursor.parag() == parag ) {
+            if ( parag->prev() ) {
+                KoTextParag* prevP = parag->prev();
+                (*it).startCursor.setParag( prevP );
+                (*it).startCursor.setIndex( prevP->length()-1 );
+            } else
+                (*it).startCursor.setParag( parag->next() ); // sets index to 0
+        }
+        if ( (*it).endCursor.parag() == parag ) {
+            if ( parag->prev() ) {
+                KoTextParag* prevP = parag->prev();
+                (*it).endCursor.setParag( prevP );
+                (*it).endCursor.setIndex( prevP->length()-1 );
+            } else
+                (*it).endCursor.setParag( parag->next() ); // sets index to 0
+        }
+    }
+    emit paragraphDeleted( parag );
+}
+
+void KoTextDocument::selectionStart( int id, int &paragId, int &index )
+{
+    QMap<int, KoTextDocumentSelection>::Iterator it = selections.find( id );
+    if ( it == selections.end() )
+	return;
+    KoTextDocumentSelection &sel = *it;
+    paragId = !sel.swapped ? sel.startCursor.parag()->paragId() : sel.endCursor.parag()->paragId();
+    index = !sel.swapped ? sel.startCursor.index() : sel.endCursor.index();
+}
+
+KoTextCursor KoTextDocument::selectionStartCursor( int id)
+{
+    QMap<int, KoTextDocumentSelection>::Iterator it = selections.find( id );
+    if ( it == selections.end() )
+	return KoTextCursor( this );
+    KoTextDocumentSelection &sel = *it;
+    if ( sel.swapped )
+	return sel.endCursor;
+    return sel.startCursor;
+}
+
+KoTextCursor KoTextDocument::selectionEndCursor( int id)
+{
+    QMap<int, KoTextDocumentSelection>::Iterator it = selections.find( id );
+    if ( it == selections.end() )
+	return KoTextCursor( this );
+    KoTextDocumentSelection &sel = *it;
+    if ( !sel.swapped )
+	return sel.endCursor;
+    return sel.startCursor;
+}
+
+void KoTextDocument::selectionEnd( int id, int &paragId, int &index )
+{
+    QMap<int, KoTextDocumentSelection>::Iterator it = selections.find( id );
+    if ( it == selections.end() )
+	return;
+    KoTextDocumentSelection &sel = *it;
+    paragId = sel.swapped ? sel.startCursor.parag()->paragId() : sel.endCursor.parag()->paragId();
+    index = sel.swapped ? sel.startCursor.index() : sel.endCursor.index();
+}
+
+bool KoTextDocument::isSelectionSwapped( int id )
+{
+    QMap<int, KoTextDocumentSelection>::Iterator it = selections.find( id );
+    if ( it == selections.end() )
+	return false;
+    KoTextDocumentSelection &sel = *it;
+    return sel.swapped;
+}
+
+KoTextParag *KoTextDocument::selectionStart( int id )
+{
+    QMap<int, KoTextDocumentSelection>::Iterator it = selections.find( id );
+    if ( it == selections.end() )
+	return 0;
+    KoTextDocumentSelection &sel = *it;
+    if ( sel.startCursor.parag()->paragId() <  sel.endCursor.parag()->paragId() )
+	return sel.startCursor.parag();
+    return sel.endCursor.parag();
+}
+
+KoTextParag *KoTextDocument::selectionEnd( int id )
+{
+    QMap<int, KoTextDocumentSelection>::Iterator it = selections.find( id );
+    if ( it == selections.end() )
+	return 0;
+    KoTextDocumentSelection &sel = *it;
+    if ( sel.startCursor.parag()->paragId() >  sel.endCursor.parag()->paragId() )
+	return sel.startCursor.parag();
+    return sel.endCursor.parag();
+}
+
+void KoTextDocument::addSelection( int id )
+{
+    nSelections = QMAX( nSelections, id + 1 );
+}
+
+static void setSelectionEndHelper( int id, KoTextDocumentSelection &sel, KoTextCursor &start, KoTextCursor &end )
+{
+    KoTextCursor c1 = start;
+    KoTextCursor c2 = end;
+    if ( sel.swapped ) {
+	c1 = end;
+	c2 = start;
+    }
+
+    c1.parag()->removeSelection( id );
+    c2.parag()->removeSelection( id );
+    if ( c1.parag() != c2.parag() ) {
+	c1.parag()->setSelection( id, c1.index(), c1.parag()->length() - 1 );
+	c2.parag()->setSelection( id, 0, c2.index() );
+    } else {
+	c1.parag()->setSelection( id, QMIN( c1.index(), c2.index() ), QMAX( c1.index(), c2.index() ) );
+    }
+
+    sel.startCursor = start;
+    sel.endCursor = end;
+    if ( sel.startCursor.parag() == sel.endCursor.parag() )
+	sel.swapped = sel.startCursor.index() > sel.endCursor.index();
+}
+
+bool KoTextDocument::setSelectionEnd( int id, KoTextCursor *cursor )
+{
+    QMap<int, KoTextDocumentSelection>::Iterator it = selections.find( id );
+    if ( it == selections.end() )
+	return FALSE;
+    KoTextDocumentSelection &sel = *it;
+
+    KoTextCursor start = sel.startCursor;
+    KoTextCursor end = *cursor;
+
+    if ( start == end ) {
+	removeSelection( id );
+	setSelectionStart( id, cursor );
+	return TRUE;
+    }
+
+    if ( sel.endCursor.parag() == end.parag() ) {
+	setSelectionEndHelper( id, sel, start, end );
+	return TRUE;
+    }
+
+    bool inSelection = FALSE;
+    KoTextCursor c( this );
+    KoTextCursor tmp = sel.startCursor;
+    if ( sel.swapped )
+	tmp = sel.endCursor;
+    tmp.restoreState();
+    KoTextCursor tmp2 = *cursor;
+    tmp2.restoreState();
+    c.setParag( tmp.parag()->paragId() < tmp2.parag()->paragId() ? tmp.parag() : tmp2.parag() );
+    KoTextCursor old;
+    bool hadStart = FALSE;
+    bool hadEnd = FALSE;
+    bool hadStartParag = FALSE;
+    bool hadEndParag = FALSE;
+    bool hadOldStart = FALSE;
+    bool hadOldEnd = FALSE;
+    bool leftSelection = FALSE;
+    sel.swapped = FALSE;
+    for ( ;; ) {
+	if ( c == start )
+	    hadStart = TRUE;
+	if ( c == end )
+	    hadEnd = TRUE;
+	if ( c.parag() == start.parag() )
+	    hadStartParag = TRUE;
+	if ( c.parag() == end.parag() )
+	    hadEndParag = TRUE;
+	if ( c == sel.startCursor )
+	    hadOldStart = TRUE;
+	if ( c == sel.endCursor )
+	    hadOldEnd = TRUE;
+
+	if ( !sel.swapped &&
+	     ( hadEnd && !hadStart ||
+	       hadEnd && hadStart && start.parag() == end.parag() && start.index() > end.index() ) )
+	    sel.swapped = TRUE;
+
+	if ( c == end && hadStartParag ||
+	     c == start && hadEndParag ) {
+	    KoTextCursor tmp = c;
+	    tmp.restoreState();
+	    if ( tmp.parag() != c.parag() ) {
+		int sstart = tmp.parag()->selectionStart( id );
+		tmp.parag()->removeSelection( id );
+		tmp.parag()->setSelection( id, sstart, tmp.index() );
+	    }
+	}
+
+	if ( inSelection &&
+	     ( c == end && hadStart || c == start && hadEnd ) )
+	     leftSelection = TRUE;
+	else if ( !leftSelection && !inSelection && ( hadStart || hadEnd ) )
+	    inSelection = TRUE;
+
+	bool noSelectionAnymore = hadOldStart && hadOldEnd && leftSelection && !inSelection && !c.parag()->hasSelection( id ) && c.atParagEnd();
+	c.parag()->removeSelection( id );
+	if ( inSelection ) {
+	    if ( c.parag() == start.parag() && start.parag() == end.parag() ) {
+		c.parag()->setSelection( id, QMIN( start.index(), end.index() ), QMAX( start.index(), end.index() ) );
+	    } else if ( c.parag() == start.parag() && !hadEndParag ) {
+		c.parag()->setSelection( id, start.index(), c.parag()->length() - 1 );
+	    } else if ( c.parag() == end.parag() && !hadStartParag ) {
+		c.parag()->setSelection( id, end.index(), c.parag()->length() - 1 );
+	    } else if ( c.parag() == end.parag() && hadEndParag ) {
+		c.parag()->setSelection( id, 0, end.index() );
+	    } else if ( c.parag() == start.parag() && hadStartParag ) {
+		c.parag()->setSelection( id, 0, start.index() );
+	    } else {
+		c.parag()->setSelection( id, 0, c.parag()->length() - 1 );
+	    }
+	}
+
+	if ( leftSelection )
+	    inSelection = FALSE;
+
+	old = c;
+	c.gotoNextLetter();
+	if ( old == c || noSelectionAnymore )
+	    break;
+    }
+
+    if ( !sel.swapped )
+	sel.startCursor.parag()->setSelection( id, sel.startCursor.index(), sel.startCursor.parag()->length() - 1 );
+
+    sel.startCursor = start;
+    sel.endCursor = end;
+    if ( sel.startCursor.parag() == sel.endCursor.parag() )
+	sel.swapped = sel.startCursor.index() > sel.endCursor.index();
+
+    setSelectionEndHelper( id, sel, start, end );
+
+    return TRUE;
+}
+
+void KoTextDocument::selectAll( int id )
+{
+    removeSelection( id );
+
+    KoTextDocumentSelection sel;
+    sel.swapped = FALSE;
+    KoTextCursor c( this );
+
+    c.setParag( fParag );
+    c.setIndex( 0 );
+    sel.startCursor = c;
+
+    c.setParag( lParag );
+    c.setIndex( lParag->length() - 1 );
+    sel.endCursor = c;
+
+    KoTextParag *p = fParag;
+    while ( p ) {
+	p->setSelection( id, 0, p->length() - 1 );
+#ifdef QTEXTTABLE_AVAILABLE
+	for ( int i = 0; i < (int)p->length(); ++i ) {
+	    if ( p->at( i )->isCustom() && p->at( i )->customItem()->isNested() ) {
+		KoTextTable *t = (KoTextTable*)p->at( i )->customItem();
+		QPtrList<KoTextTableCell> tableCells = t->tableCells();
+		for ( KoTextTableCell *c = tableCells.first(); c; c = tableCells.next() )
+		    c->richText()->selectAll( id );
+	    }
+	}
+#endif
+	p = p->next();
+    }
+
+    selections.insert( id, sel );
+}
+
+bool KoTextDocument::removeSelection( int id )
+{
+    QMap<int, KoTextDocumentSelection>::Iterator it = selections.find( id );
+    if ( it == selections.end() )
+	return FALSE;
+
+    KoTextDocumentSelection &sel = *it;
+
+    KoTextCursor c( this );
+    KoTextCursor tmp = sel.startCursor;
+    if ( sel.swapped )
+	tmp = sel.endCursor;
+    tmp.restoreState();
+    c.setParag( tmp.parag() );
+    KoTextCursor old;
+    bool hadStart = FALSE;
+    bool hadEnd = FALSE;
+    KoTextParag *lastParag = 0;
+    bool leftSelection = FALSE;
+    bool inSelection = FALSE;
+    sel.swapped = FALSE;
+    for ( ;; ) {
+	if ( !hadStart && c.parag() == sel.startCursor.parag() )
+	    hadStart = TRUE;
+	if ( !hadEnd && c.parag() == sel.endCursor.parag() )
+	    hadEnd = TRUE;
+
+        if ( !leftSelection && !inSelection && ( c.parag() == sel.startCursor.parag() || c.parag() == sel.endCursor.parag() ) )
+	    inSelection = TRUE;
+
+	if ( inSelection &&
+	     ( c == sel.endCursor && hadStart || c == sel.startCursor && hadEnd ) ) {
+	     leftSelection = TRUE;
+             inSelection = FALSE;
+        }
+
+	bool noSelectionAnymore = leftSelection && !inSelection && !c.parag()->hasSelection( id ) && c.atParagEnd();
+
+	if ( lastParag != c.parag() )
+	    c.parag()->removeSelection( id );
+
+	old = c;
+	lastParag = c.parag();
+	c.gotoNextLetter();
+	if ( old == c || noSelectionAnymore )
+	    break;
+    }
+
+    selections.remove( id );
+    return TRUE;
+}
+
+QString KoTextDocument::selectedText( int id, bool withCustom ) const
+{
+    // ######## TODO: look at textFormat() and return rich text or plain text (like the text() method!)
+    QMap<int, KoTextDocumentSelection>::ConstIterator it = selections.find( id );
+    if ( it == selections.end() )
+	return QString::null;
+
+    KoTextDocumentSelection sel = *it;
+
+
+    KoTextCursor c1 = sel.startCursor;
+    KoTextCursor c2 = sel.endCursor;
+    if ( sel.swapped ) {
+	c2 = sel.startCursor;
+	c1 = sel.endCursor;
+    }
+
+    c2.restoreState();
+    c1.restoreState();
+
+    if ( c1.parag() == c2.parag() ) {
+	QString s;
+	KoTextParag *p = c1.parag();
+	int end = c2.index();
+	if ( p->at( QMAX( 0, end - 1 ) )->isCustom() )
+	    ++end;
+	if ( !withCustom || !p->customItems() ) {
+	    s += p->string()->toString().mid( c1.index(), end - c1.index() );
+	} else {
+	    for ( int i = c1.index(); i < end; ++i ) {
+		if ( p->at( i )->isCustom() ) {
+#ifdef QTEXTTABLE_AVAILABLE
+		    if ( p->at( i )->customItem()->isNested() ) {
+			s += "\n";
+			KoTextTable *t = (KoTextTable*)p->at( i )->customItem();
+			QPtrList<KoTextTableCell> cells = t->tableCells();
+			for ( KoTextTableCell *c = cells.first(); c; c = cells.next() )
+			    s += c->richText()->plainText() + "\n";
+			s += "\n";
+		    }
+#endif
+		} else {
+		    s += p->at( i )->c;
+		}
+		s += "\n";
+	    }
+	}
+	return s;
+    }
+
+    QString s;
+    KoTextParag *p = c1.parag();
+    int start = c1.index();
+    while ( p ) {
+	int end = p == c2.parag() ? c2.index() : p->length() - 1;
+	if ( p == c2.parag() && p->at( QMAX( 0, end - 1 ) )->isCustom() )
+	    ++end;
+	if ( !withCustom || !p->customItems() ) {
+	    s += p->string()->toString().mid( start, end - start );
+	    if ( p != c2.parag() )
+		s += "\n";
+	} else {
+	    for ( int i = start; i < end; ++i ) {
+		if ( p->at( i )->isCustom() ) {
+#ifdef QTEXTTABLE_AVAILABLE
+		    if ( p->at( i )->customItem()->isNested() ) {
+			s += "\n";
+			KoTextTable *t = (KoTextTable*)p->at( i )->customItem();
+			QPtrList<KoTextTableCell> cells = t->tableCells();
+			for ( KoTextTableCell *c = cells.first(); c; c = cells.next() )
+			    s += c->richText()->plainText() + "\n";
+			s += "\n";
+		    }
+#endif
+		} else {
+		    s += p->at( i )->c;
+		}
+		s += "\n";
+	    }
+	}
+	start = 0;
+	if ( p == c2.parag() )
+	    break;
+	p = p->next();
+    }
+    return s;
+}
+
+void KoTextDocument::setFormat( int id, const KoTextFormat *f, int flags )
+{
+    QMap<int, KoTextDocumentSelection>::ConstIterator it = selections.find( id );
+    if ( it == selections.end() )
+	return;
+
+    KoTextDocumentSelection sel = *it;
+
+    KoTextCursor c1 = sel.startCursor;
+    KoTextCursor c2 = sel.endCursor;
+    if ( sel.swapped ) {
+	c2 = sel.startCursor;
+	c1 = sel.endCursor;
+    }
+
+    c2.restoreState();
+    c1.restoreState();
+
+    if ( c1.parag() == c2.parag() ) {
+	c1.parag()->setFormat( c1.index(), c2.index() - c1.index(), f, TRUE, flags );
+	return;
+    }
+
+    c1.parag()->setFormat( c1.index(), c1.parag()->length() - c1.index(), f, TRUE, flags );
+    KoTextParag *p = c1.parag()->next();
+    while ( p && p != c2.parag() ) {
+	p->setFormat( 0, p->length(), f, TRUE, flags );
+	p = p->next();
+    }
+    c2.parag()->setFormat( 0, c2.index(), f, TRUE, flags );
+}
+
+/*void KoTextDocument::copySelectedText( int id )
+{
+#ifndef QT_NO_CLIPBOARD
+    if ( !hasSelection( id ) )
+	return;
+
+    QApplication::clipboard()->setText( selectedText( id ) );
+#endif
+}*/
+
+void KoTextDocument::removeSelectedText( int id, KoTextCursor *cursor )
+{
+    QMap<int, KoTextDocumentSelection>::Iterator it = selections.find( id );
+    if ( it == selections.end() )
+	return;
+
+    KoTextDocumentSelection sel = *it;
+
+    KoTextCursor c1 = sel.startCursor;
+    KoTextCursor c2 = sel.endCursor;
+    if ( sel.swapped ) {
+	c2 = sel.startCursor;
+	c1 = sel.endCursor;
+    }
+
+    // ### no support for editing tables yet
+    if ( c1.nestedDepth() || c2.nestedDepth() )
+	return;
+
+    c2.restoreState();
+    c1.restoreState();
+
+    *cursor = c1;
+    removeSelection( id );
+
+    if ( c1.parag() == c2.parag() ) {
+	c1.parag()->remove( c1.index(), c2.index() - c1.index() );
+	return;
+    }
+
+    // ## Qt has a strange setValid/isValid on QTextCursor, only used in the few lines below !?!?
+    bool valid = true;
+    if ( c1.parag() == fParag && c1.index() == 0 &&
+         c2.parag() == lParag && c2.index() == lParag->length() - 1 )
+        valid = FALSE;
+
+    bool didGoLeft = FALSE;
+    if (  c1.index() == 0 && c1.parag() != fParag ) {
+	cursor->gotoPreviousLetter();
+        if ( valid )
+            didGoLeft = TRUE;
+    }
+
+    c1.parag()->remove( c1.index(), c1.parag()->length() - 1 - c1.index() );
+    KoTextParag *p = c1.parag()->next();
+    int dy = 0;
+    KoTextParag *tmp;
+    while ( p && p != c2.parag() ) {
+	tmp = p->next();
+	dy -= p->rect().height();
+	delete p;
+	p = tmp;
+    }
+    c2.parag()->remove( 0, c2.index() );
+    while ( p ) {
+	p->move( dy );
+        //// kotext
+        if ( p->paragLayout().counter )
+            p->paragLayout().counter->invalidate();
+        ////
+	p->invalidate( 0 );
+	//p->setEndState( -1 );
+	p = p->next();
+    }
+
+    c1.parag()->join( c2.parag() );
+
+    if ( didGoLeft )
+	cursor->gotoNextLetter();
+}
+
+void KoTextDocument::indentSelection( int id )
+{
+    QMap<int, KoTextDocumentSelection>::Iterator it = selections.find( id );
+    if ( it == selections.end() )
+	return;
+
+    KoTextDocumentSelection sel = *it;
+    KoTextParag *startParag = sel.startCursor.parag();
+    KoTextParag *endParag = sel.endCursor.parag();
+    if ( sel.endCursor.parag()->paragId() < sel.startCursor.parag()->paragId() ) {
+	endParag = sel.startCursor.parag();
+	startParag = sel.endCursor.parag();
+    }
+
+    KoTextParag *p = startParag;
+    while ( p && p != endParag ) {
+	p->indent();
+	p = p->next();
+    }
+}
+
+void KoTextDocument::addCommand( KoTextDocCommand *cmd )
+{
+    commandHistory->addCommand( cmd );
+}
+
+KoTextCursor *KoTextDocument::undo( KoTextCursor *c )
+{
+    return commandHistory->undo( c );
+}
+
+KoTextCursor *KoTextDocument::redo( KoTextCursor *c )
+{
+    return commandHistory->redo( c );
+}
+
+bool KoTextDocument::find( const QString &expr, bool cs, bool wo, bool forward,
+			  int *parag, int *index, KoTextCursor *cursor )
+{
+    KoTextParag *p = forward ? fParag : lParag;
+    if ( parag )
+	p = paragAt( *parag );
+    else if ( cursor )
+	p = cursor->parag();
+    bool first = TRUE;
+
+    while ( p ) {
+	QString s = p->string()->toString();
+	s.remove( s.length() - 1, 1 ); // get rid of trailing space
+	int start = forward ? 0 : s.length() - 1;
+	if ( first && index )
+	    start = *index;
+	else if ( first )
+	    start = cursor->index();
+	if ( !forward && first ) {
+	    start -= expr.length() + 1;
+	    if ( start < 0 ) {
+		first = FALSE;
+		p = p->prev();
+		continue;
+	    }
+	}
+	first = FALSE;
+
+	for ( ;; ) {
+	    int res = forward ? s.find( expr, start, cs ) : s.findRev( expr, start, cs );
+	    if ( res == -1 )
+		break;
+
+	    bool ok = TRUE;
+	    if ( wo ) {
+		int end = res + expr.length();
+		if ( ( res == 0 || s[ res - 1 ].isSpace() || s[ res - 1 ].isPunct() ) &&
+		     ( end == (int)s.length() || s[ end ].isSpace() || s[ end ].isPunct() ) )
+		    ok = TRUE;
+		else
+		    ok = FALSE;
+	    }
+	    if ( ok ) {
+		cursor->setParag( p );
+		cursor->setIndex( res );
+		setSelectionStart( Standard, cursor );
+		cursor->setIndex( res + expr.length() );
+		setSelectionEnd( Standard, cursor );
+		if ( parag )
+		    *parag = p->paragId();
+		if ( index )
+		    *index = res;
+		return TRUE;
+	    }
+	    if ( forward ) {
+		start = res + 1;
+	    } else {
+		if ( res == 0 )
+		    break;
+		start = res - 1;
+	    }
+	}
+	p = forward ? p->next() : p->prev();
+    }
+
+    return FALSE;
+}
+
+bool KoTextDocument::inSelection( int selId, const QPoint &pos ) const
+{
+    QMap<int, KoTextDocumentSelection>::ConstIterator it = selections.find( selId );
+    if ( it == selections.end() )
+	return FALSE;
+
+    KoTextDocumentSelection sel = *it;
+    KoTextParag *startParag = sel.startCursor.parag();
+    KoTextParag *endParag = sel.endCursor.parag();
+    if ( sel.startCursor.parag() == sel.endCursor.parag() &&
+	 sel.startCursor.parag()->selectionStart( selId ) == sel.endCursor.parag()->selectionEnd( selId ) )
+	return FALSE;
+    if ( sel.endCursor.parag()->paragId() < sel.startCursor.parag()->paragId() ) {
+	endParag = sel.startCursor.parag();
+	startParag = sel.endCursor.parag();
+    }
+
+    KoTextParag *p = startParag;
+    while ( p ) {
+	if ( p->rect().contains( pos ) ) {
+	    bool inSel = FALSE;
+	    int selStart = p->selectionStart( selId );
+	    int selEnd = p->selectionEnd( selId );
+	    int y = 0;
+	    int h = 0;
+	    for ( int i = 0; i < p->length(); ++i ) {
+		if ( i == selStart )
+		    inSel = TRUE;
+		if ( i == selEnd )
+		    break;
+		if ( p->at( i )->lineStart ) {
+		    y = (*p->lineStarts.find( i ))->y;
+		    h = (*p->lineStarts.find( i ))->h;
+		}
+		if ( pos.y() - p->rect().y() >= y && pos.y() - p->rect().y() <= y + h ) {
+		    if ( inSel && pos.x() >= p->at( i )->x &&
+			 pos.x() <= p->at( i )->x + p->at( i )->width /*p->at( i )->format()->width( p->at( i )->c )*/ )
+			return TRUE;
+		}
+	    }
+	}
+	if ( pos.y() < p->rect().y() )
+	    break;
+	if ( p == endParag )
+	    break;
+	p = p->next();
+    }
+
+    return FALSE;
+}
+
+QPixmap *KoTextDocument::bufferPixmap( const QSize &s )
+{
+    if ( !buf_pixmap ) {
+	int w = QABS( s.width() );
+	int h = QABS( s.height() );
+	buf_pixmap = new QPixmap( w, h );
+    } else {
+	if ( buf_pixmap->width() < s.width() ||
+	     buf_pixmap->height() < s.height() ) {
+	    buf_pixmap->resize( QMAX( s.width(), buf_pixmap->width() ),
+				QMAX( s.height(), buf_pixmap->height() ) );
+	}
+    }
+
+    return buf_pixmap;
+}
+
+void KoTextDocument::registerCustomItem( KoTextCustomItem *i, KoTextParag *p )
+{
+    if ( i && i->placement() != KoTextCustomItem::PlaceInline )
+	flow_->registerFloatingItem( i );
+    p->registerFloatingItem( i );
+    i->setParagraph( p );
+    //kdDebug(32500) << "KoTextDocument::registerCustomItem " << (void*)i << endl;
+    customItems.append( i );
+}
+
+void KoTextDocument::unregisterCustomItem( KoTextCustomItem *i, KoTextParag *p )
+{
+    flow_->unregisterFloatingItem( i );
+    p->unregisterFloatingItem( i );
+    i->setParagraph( 0 );
+    customItems.removeRef( i );
+}
+
+int KoTextDocument::length() const
+{
+    int l = 0;
+    KoTextParag *p = fParag;
+    while ( p ) {
+	l += p->length() - 1; // don't count trailing space
+	p = p->next();
+    }
+    return l;
 }
 
 bool KoTextDocument::visitSelection( int selectionId, KoParagVisitor* visitor, bool forward )
@@ -226,7 +1209,6 @@ KoTextParag *KoTextDocument::drawWYSIWYG( QPainter *p, int cx, int cy, int cw, i
 	    if ( ir.intersects( crect ) )
 		p->fillRect( ir.intersect( crect ), cg.brush( QColorGroup::Base ) );
 	    if ( ir.y() > cy + ch ) {
-		//tmpCursor = 0;
                 goto floating;
 	    }
 	}
@@ -266,7 +1248,6 @@ floating:
 	buf_pixmap = 0;
     }
 
-    //tmpCursor = 0;
     return lastFormatted;
 }
 
