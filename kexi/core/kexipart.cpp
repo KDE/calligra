@@ -100,7 +100,7 @@ KexiDialogBase* Part::openInstance(KexiMainWindow *win, const KexiPart::Item &it
 		//js TODO ERROR???
 	}
 
-	if (dlg->mdiParent()->state()==KMdiChildFrm::Normal) //only resize dialog if it is in normal state
+	if (dlg->mdiParent() && dlg->mdiParent()->state()==KMdiChildFrm::Normal) //only resize dialog if it is in normal state
 		dlg->resize(dlg->sizeHint());
 
 	dlg->setMinimumSize(dlg->minimumSizeHint().width(),dlg->minimumSizeHint().height());
