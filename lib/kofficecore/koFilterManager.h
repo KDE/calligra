@@ -126,7 +126,24 @@ public:
      * @return the file name to load, either QString::null (error, QDomDocument, or KoDocument),
      * _url (no conversion) or a /tmp file (conversion)
      */
-    QString import( const QString & url, const char * native_format, KoDocument * document );
+    QString import( const QString & url, const char * native_format,
+                    KoDocument * document, const QString &storePrefix="tar:" );
+
+    /**
+     * Import a file by applying a filter. This is the same as above, but it
+     * is more suited to being called without a GUI, for example, from within
+     * another filter.
+     *
+     * @param url The URL of the file to load.
+     * @param mimeType Output the Native Format supported by the application selected
+     *                 to handle this file.
+     * @param config Configuration information for the filter. The format of this
+     *               is filter-specific.
+     * @return the file name to load, either QString::null (error, QDomDocument, or KoDocument),
+     * _url (no conversion) or a /tmp file (conversion)
+     */
+    QString import( const QString &_file, QString &mimeType,
+                    const QString &config, const QString &storePrefix="tar:" );
 
     /**
      * Export a file using a filter - don't call this one it's automatically

@@ -269,8 +269,57 @@ const int KoFilterManager::findWidget(const QString &ext) const {
         return 0;  // default Widget
 }
 
-QString KoFilterManager::import( const QString & _file, const char *_native_format,
-                                 KoDocument *document )
+QString KoFilterManager::import( const QString &_file, QString &mimeType,
+                                 const QString &config, const QString &storePrefix )
+{
+    KURL url;
+    url.setPath( _file );
+
+    // Find the mime type for the file to be imported.
+    KMimeType::Ptr t = KMimeType::findByURL( url, 0, true );
+    if ( t && t->name()!="application/octet-stream" ) {
+        kdDebug(30003) << "Found MimeType " << t->name() << endl;
+        mimeType = t->name();
+    }
+    else {
+        kdError(30003) << "No MimeType found." << endl;
+        return QString::null;
+    }
+
+    // Now find the list of filters that can deal with this file.
+    QString constr = "'";
+    constr += mimeType;
+    constr += "' in Import";
+    QValueList<KoFilterEntry> vec = KoFilterEntry::query( constr );
+    if ( vec.isEmpty() )
+    {
+        QString tmp = i18n("Could not import file of type\n%1").arg( t->name() );
+        QApplication::restoreOverrideCursor();
+        KMessageBox::error( 0L, tmp, i18n("Missing import filter") );
+        return QString::null;
+    }
+
+    // Run the filters in turn until one is found that works.
+    unsigned int i=0;
+    QString ok=QString::null;
+    d->config=config;
+    while(i<vec.count()) {
+        unsigned int j=0;
+        while(j<vec[i].export_.count()) {
+            ok=import( _file, vec[i].export_[j].local8Bit(), (KoDocument *)0L, storePrefix );
+            if (ok != QString::null)
+                return ok;
+            ++j;
+        }
+        ++i;
+    }
+
+    // Return failure.
+    return QString::null;
+}
+
+QString KoFilterManager::import( const QString &_file, const char *_native_format,
+                                 KoDocument *document, const QString &storePrefix )
 {
     KURL url;
     url.setPath( _file );
@@ -304,7 +353,7 @@ QString KoFilterManager::import( const QString & _file, const char *_native_form
         QString tmp = i18n("Could not import file of type\n%1").arg( t->name() );
         QApplication::restoreOverrideCursor();
         KMessageBox::error( 0L, tmp, i18n("Missing import filter") );
-        return "";
+        return QString::null;
     }
 
     unsigned int i=0;
@@ -328,7 +377,11 @@ QString KoFilterManager::import( const QString & _file, const char *_native_form
             if (tempFile.status() != 0)
                 return QString::null;
             tempfname=tempFile.name();
-            ok=filter->filter( file, tempfname, mimeType, _native_format, d->config );
+            if (filter->supportsEmbedding())
+                ok=filter->filter1( file, tempfname, storePrefix, mimeType, _native_format, d->config );
+            else
+                ok=filter->filter( file, tempfname, mimeType, _native_format, d->config );
+            tempfname=tempFile.name(); // hack for -DQT_NO_BLAH stuff
         }
         else if(vec[i].implemented.lower()=="qdom") {
             //kdDebug(30003) << "XXXXXXXXXXX qdom XXXXXXXXXXXXXX" << endl;
