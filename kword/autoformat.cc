@@ -263,7 +263,7 @@ void KWAutoFormat::startAutoFormat( KWTextParag */*parag*/,
 }
 
 /*================================================================*/
-bool KWAutoFormat::doAutoFormat( KWTextParag *parag, QTextFormat *fc )
+bool KWAutoFormat::doAutoFormat( KWTextParag */*parag*/, QTextFormat */*fc*/ )
 {
 
     if ( !enabled )
@@ -308,7 +308,7 @@ bool KWAutoFormat::doAutoFormat( KWTextParag *parag, QTextFormat *fc )
 }
 
 /*================================================================*/
-void KWAutoFormat::doSpellCheck( KWTextParag *parag, QTextFormat *fc )
+void KWAutoFormat::doSpellCheck( KWTextParag */*parag*/, QTextFormat */*fc*/ )
 {
     if ( !enabled || !doc->onLineSpellCheck() )
 	return;
@@ -341,12 +341,13 @@ void KWAutoFormat::endAutoFormat( KWTextParag * /*parag*/, QTextFormat */*fc*/ )
 }
 
 /*================================================================*/
-bool KWAutoFormat::doTypographicQuotes( KWTextParag *parag, QTextFormat *fc )
+bool KWAutoFormat::doTypographicQuotes( KWTextParag */*parag*/, QTextFormat */*fc*/ )
 {
     if ( !enabled )
 	return false;
-#if 0
+
     if ( !typographicQuotes.replace ) {
+#if 0
 	if ( parag->string()->data()[ fc->getTextPos() ].autoformat &&
 	     parag->string()->data()[ fc->getTextPos() ].autoformat->type == AT_TypographicQuotes ) {
 	    parag->string()->data()[ fc->getTextPos() ].c
@@ -386,13 +387,13 @@ bool KWAutoFormat::doTypographicQuotes( KWTextParag *parag, QTextFormat *fc )
 	}
 
 	return true;
-    }
 #endif
+    }
     return false;
 }
 
 /*================================================================*/
-bool KWAutoFormat::doUpperCase( KWTextParag *parag, QTextFormat *fc )
+bool KWAutoFormat::doUpperCase( KWTextParag */*parag*/, QTextFormat */*fc*/ )
 {
     if ( !enabled )
 	return false;
