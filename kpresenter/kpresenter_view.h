@@ -78,6 +78,7 @@ class Page;
 #include "shadowdia.h"
 #include "presstructview.h"
 #include "delpagedia.h"
+#include "inspagedia.h"
 #include "setbackcmd.h"
 #include "pgconfcmd.h"
 #include "pglayoutcmd.h"
@@ -319,6 +320,7 @@ protected slots:
   void shadowOk();
   void psvClosed();
   void delPageOk(int,DelPageMode);
+  void insPageOk(int,InsPageMode,InsertPos);
 
   // scrolling
   void scrollH(int);
@@ -604,6 +606,7 @@ protected:
   ShadowDia *shadowDia;
   PresStructViewer *presStructView;
   DelPageDia *delPageDia;
+  InsPageDia *insPageDia;
 
   // default pen and brush
   QPen pen;

@@ -46,6 +46,8 @@ public:
     { return filename;}
   virtual QString getPixData()
     { return data; }
+  virtual QString getPixDataNative()
+    { return string_to_native_string(data); }
   virtual QPixmap* getPixmap()
     { return &pixmap; }
   virtual QSize getSize()

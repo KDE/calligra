@@ -66,6 +66,7 @@ KPresenterView_impl::KPresenterView_impl(QWidget *_parent,const char *_name)
   shadowDia = 0;
   presStructView = 0;
   delPageDia = 0;
+  insPageDia = 0;
   xOffset = 0;
   yOffset = 0;
   v_ruler = 0;
@@ -323,8 +324,20 @@ void KPresenterView_impl::newView()
 /*====================== insert a new page ======================*/
 void KPresenterView_impl::insertPage()
 {
-  m_pKPresenterDoc->insertNewTemplate(xOffset,yOffset);
-  setRanges();
+  if (insPageDia)
+    {
+      QObject::disconnect(insPageDia,SIGNAL(insertPage(int,InsPageMode,InsertPos)),this,SLOT(insPageOk(int,InsPageMode,InsertPos)));
+      insPageDia->close();
+      delete insPageDia;
+      insPageDia = 0;
+    }
+  
+  insPageDia = new InsPageDia(0,"",m_pKPresenterDoc,getCurrPgNum());
+  insPageDia->setCaption(i18n("KPresenter - Insert Page"));
+  insPageDia->setMaximumSize(insPageDia->width(),insPageDia->height());
+  insPageDia->setMinimumSize(insPageDia->width(),insPageDia->height());
+  QObject::connect(insPageDia,SIGNAL(insertPage(int,InsPageMode,InsertPos)),this,SLOT(insPageOk(int,InsPageMode,InsertPos)));
+  insPageDia->show();
 }
 
 /*====================== insert a picture =======================*/
@@ -1444,6 +1457,14 @@ void KPresenterView_impl::psvClosed()
 void KPresenterView_impl::delPageOk(int _page,DelPageMode _delPageMode)
 {
   m_pKPresenterDoc->deletePage(_page,_delPageMode);
+  setRanges();
+}
+
+   
+/*================================================================*/
+void KPresenterView_impl::insPageOk(int _page,InsPageMode _insPageMode,InsertPos _insPos)
+{
+  m_pKPresenterDoc->insertPage(_page,_insPageMode,_insPos);
   setRanges();
 }
 

@@ -1637,6 +1637,51 @@ void KPresenterDocument_impl::deletePage(int _page,DelPageMode _delPageMode)
   repaint(false);
 }
 
+/*================================================================*/
+void KPresenterDocument_impl::insertPage(int _page,InsPageMode _insPageMode,InsertPos _insPos)
+{
+  KPObject *kpobject = 0;
+  int _h = getPageSize(0,0,0).height();
+
+  if (_insPos == IP_BEFORE) _page--;
+
+  if (_insPageMode == IPM_MOVE_OBJS)
+    {
+      for (int i = 0;i < static_cast<int>(objectList()->count());i++)
+	{
+	  kpobject = objectList()->at(i);
+	  if (getPageOfObj(i,0,0) - 1 > _page)
+	    kpobject->setOrig(kpobject->getOrig().x(),kpobject->getOrig().y() + _h);
+	}
+    }
+
+  if (_insPos == IP_BEFORE) _page++;
+
+  QString templateDir = KApplication::kde_datadir();
+
+  QString _template;
+  QString _templatePath = kapp->kde_datadir() + "/kpresenter/templates/";
+
+  if (KoTemplateChooseDia::chooseTemplate(_templatePath,_template,false))
+    {
+      QFileInfo fileInfo(_template);
+      QString fileName(_templatePath + fileInfo.dirPath(false) + "/" + fileInfo.baseName() + ".kpt");
+      _clean = false;
+
+      if (_insPos == IP_AFTER) _page++;
+      objStartY = getPageSize(_page - 1,0,0).y() + getPageSize(_page - 1,0,0).height();
+      load_template(fileName.data());
+      objStartY = 0;
+      _clean = true;
+      m_bModified = true;
+      KPBackGround *kpbackground = _backgroundList.at(_backgroundList.count() - 1);
+      _backgroundList.take(_backgroundList.count() - 1);
+      _backgroundList.insert(_page,kpbackground);
+    }
+  
+  repaint(false);
+}
+
 /*================ return number of selected objs ================*/
 int KPresenterDocument_impl::numSelected()
 {

@@ -318,6 +318,7 @@ public:
   int getBottomBorder();
   
   void deletePage(int _page,DelPageMode _delPageMode);
+  void insertPage(int _page,InsPageMode _insPageMode,InsertPos _insPos);
 
 signals:
 

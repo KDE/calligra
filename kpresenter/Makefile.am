@@ -18,7 +18,7 @@ kpresenter_bin_SOURCES = kpresenter_main.cc kpresenter_doc.cc \
 	jpeg.cc formats.cc qwmf.cc kenumlistdia.cc kcharselect.cc \
 	kcharselectdia.cc optiondia.cc pgconfdia.cc effectdia.cc \
 	kpresenter_utils.cc rotatedia.cc ksearchdialogs.cc \
-	shadowdia.cc presstructview.cc delpagedia.cc \
+	shadowdia.cc presstructview.cc delpagedia.cc inspagedia.cc \
 	kpobject.cc kplineobject.cc kprectobject.cc kpellipseobject.cc \
 	kpautoformobject.cc kpclipartobject.cc kptextobject.cc \
 	kppixmapobject.cc \
@@ -36,7 +36,7 @@ noinst_HEADERS = kpresenter_main.h kpresenter_doc.h kpresenter_view.h \
 		kenumlistdia.h kcharselect.h kcharselectdia.h optiondia.h \
 		pgconfdia.h effectdia.h kpresenter_utils.h \
 		rotatedia.h ksearchdialogs.h shadowdia.h presstructview.h \
-		delpagedia.h \
+		delpagedia.h inspagedia.h \
 		kpobject.h kplineobject.h kprectobject.h kpellipseobject.h \
 		kpautoformobject.h kpclipartobject.h kptextobject.h \
 		kppixmapobject.h \
@@ -53,7 +53,7 @@ SRCMETA =	kpresenter_main.moc kpresenter_doc.moc kpresenter_view.moc \
 		kenumlistdia.moc kcharselect.moc kcharselectdia.moc \
 		optiondia.moc pgconfdia.moc effectdia.moc \
 		rotatedia.moc ksearchdialogs.moc shadowdia.moc \
-		presstructview.moc delpagedia.moc \
+		presstructview.moc delpagedia.moc inspagedia.moc \
 		kpobject.moc kplineobject.moc kprectobject.moc kpellipseobject.moc \
 		kpautoformobject.moc kpclipartobject.moc kptextobject.moc \
 		kppixmapobject.moc \
@@ -113,6 +113,7 @@ ksearchdialogs.cc: ksearchdialogs.moc
 shadowdia.cc: shadowdia.moc
 presstructview.cc: presstructview.moc
 delpagedia.cc: delpagedia.moc
+inspagedia.cc: inspagedia.moc
 
 kpobject.cc: kpobject.moc
 kplineobject.cc: kplineobject.moc

@@ -10,66 +10,57 @@
 /* written for KDE (http://www.kde.org)                           */
 /* License: GNU GPL                                               */
 /******************************************************************/
-/* Module: delete page dialog                                     */
+/* Module: insert page dialog                                     */
 /******************************************************************/
 
 #include "kpresenter_doc.h"
 
-#include "delpagedia.h"
-#include "delpagedia.moc"
+#include "inspagedia.h"
+#include "inspagedia.moc"
 
 /******************************************************************/
-/* class DelPageDia                                               */
+/* class InsPageDia                                               */
 /******************************************************************/
 
 /*==================== constructor ===============================*/
-DelPageDia::DelPageDia(QWidget* parent,const char* name,KPresenterDocument_impl *_doc,int currPageNum)
+InsPageDia::InsPageDia(QWidget* parent,const char* name,KPresenterDocument_impl *_doc,int currPageNum)
   : QDialog(parent,name,true)
 {
   doc = _doc;
 
-  label = new QLabel(i18n("Delete Page Number: "),this);
-  label->resize(label->sizeHint());
-  label->move(20,20);
+  before = new QRadioButton(i18n("&Before page:"),this);
+  before->resize(before->sizeHint());
+  before->move(20,20);
+  connect(before,SIGNAL(clicked()),this,SLOT(beforeClicked()));
+
+  after = new QRadioButton(i18n("&After page:"),this);
+  after->resize(after->sizeHint());
+  after->move(before->x(),before->y() + before->height());
+  connect(after,SIGNAL(clicked()),this,SLOT(afterClicked()));
 
   spinBox = new KNumericSpinBox(this);
   spinBox->setRange(1,doc->getPageNums());
   spinBox->setValue(currPageNum);
   spinBox->setEditable(false);
   spinBox->resize(spinBox->sizeHint().width() / 2,spinBox->sizeHint().height());
-  spinBox->move(label->x() + label->width() + 5,label->y());
-  label->move(label->x(),label->y() + (spinBox->height() - label->height()) / 2);
+  spinBox->move(max(before->x() + before->width(),after->x() + after->width()) + 5,before->y() + before->height() / 2);
 
   leave = new QRadioButton(i18n("&Leave all objects untouched."),this);
   leave->resize(leave->sizeHint());
-  leave->move(label->x(),spinBox->y() + spinBox->height() + 20);
+  leave->move(after->x(),spinBox->y() + spinBox->height() + 20);
   connect(leave,SIGNAL(clicked()),this,SLOT(leaveClicked()));
 
-  _move = new QRadioButton(i18n("&Move the objects which are behind the deleted page \n"
-			       "one page backwards, so that they stay on their current page, \n"
-			       "and don't touch the objects, which are on the deleted page."),this);
+  _move = new QRadioButton(i18n("&Move the objects which are behind the inserted page \n"
+			       "one page forward, so that they stay on their current page."),this);
   _move->resize(_move->sizeHint());
-  _move->move(label->x(),leave->y() + leave->height() + 10);
+  _move->move(after->x(),leave->y() + leave->height() + 10);
   connect(_move,SIGNAL(clicked()),this,SLOT(moveClicked()));
-
-  del = new QRadioButton(i18n("&Delete the objects which are on the deleted page and \n"
-			       "leave the other objects untouched."),this);
-  del->resize(del->sizeHint());
-  del->move(label->x(),_move->y() + _move->height() + 10);
-  connect(del,SIGNAL(clicked()),this,SLOT(delClicked()));
-
-  move_del = new QRadioButton(i18n("M&ove the objects which are behind the deleted page \n"
-				   "one page backwards, so that they stay on their current page, \n"
-				   "and delete the objects which are on the deleted page."),this);
-  move_del->resize(move_del->sizeHint());
-  move_del->move(label->x(),del->y() + del->height() + 10);
-  connect(move_del,SIGNAL(clicked()),this,SLOT(moveDelClicked()));
 
   cancel = new QPushButton(this,"BCancel");
   cancel->setText(i18n("Cancel"));
   cancel->resize(cancel->sizeHint());
-  cancel->move(max(max(max(leave->width(),_move->width()),del->width()),move_del->width()) + leave->x() - cancel->width(),
-	       move_del->y() + move_del->height() + 20);
+  cancel->move(max(leave->width(),_move->width()) + leave->x() - cancel->width(),
+	       _move->y() + _move->height() + 20);
   connect(cancel,SIGNAL(clicked()),this,SLOT(reject()));
 
   ok = new QPushButton(this,"BOK");
@@ -84,61 +75,71 @@ DelPageDia::DelPageDia(QWidget* parent,const char* name,KPresenterDocument_impl 
   connect(ok,SIGNAL(clicked()),this,SLOT(accept()));
 
   resize(cancel->x() + cancel->width() + 20,cancel->y() + cancel->height() + 20);
-  uncheckAll();
-  move_del->setChecked(true);
-}
-
-/*================================================================*/
-void DelPageDia::uncheckAll()
-{
-  leave->setChecked(false);
-  _move->setChecked(false);
-  del->setChecked(false);
-  move_del->setChecked(false);
-}
-
-/*================================================================*/
-void DelPageDia::leaveClicked()
-{
-  uncheckAll();
-  leave->setChecked(true);
-}
-
-/*================================================================*/
-void DelPageDia::moveClicked()
-{
-  uncheckAll();
+  uncheckAllPos();
+  uncheckAllMode();
+  after->setChecked(true);
   _move->setChecked(true);
 }
 
 /*================================================================*/
-void DelPageDia::delClicked()
+void InsPageDia::uncheckAllMode()
 {
-  uncheckAll();
-  del->setChecked(true);
+  leave->setChecked(false);
+  _move->setChecked(false);
 }
 
 /*================================================================*/
-void DelPageDia::moveDelClicked()
+void InsPageDia::uncheckAllPos()
 {
-  uncheckAll();
-  move_del->setChecked(true);
+  before->setChecked(false);
+  after->setChecked(false);
 }
 
 /*================================================================*/
-void DelPageDia::okClicked()
+void InsPageDia::leaveClicked()
 {
-  DelPageMode dpl = DPM_LET_OBJS;
+  uncheckAllMode();
+  leave->setChecked(true);
+}
+
+/*================================================================*/
+void InsPageDia::moveClicked()
+{
+  uncheckAllMode();
+  _move->setChecked(true);
+}
+
+/*================================================================*/
+void InsPageDia::beforeClicked()
+{
+  uncheckAllPos();
+  before->setChecked(true);
+}
+
+/*================================================================*/
+void InsPageDia::afterClicked()
+{
+  uncheckAllPos();
+  after->setChecked(true);
+}
+
+/*================================================================*/
+void InsPageDia::okClicked()
+{
+  InsPageMode ipm = IPM_LET_OBJS;
 
   if (leave->isChecked())
-    dpl = DPM_LET_OBJS;
+    ipm = IPM_LET_OBJS;
   else if (_move->isChecked())
-    dpl = DPM_MOVE_OBJS;
-  else if (del->isChecked())
-    dpl = DPM_DEL_OBJS;
-  else if (move_del->isChecked())
-    dpl = DPM_DEL_MOVE_OBJS;
+    ipm = IPM_MOVE_OBJS;
 
-  emit deletePage(spinBox->getValue() - 1,dpl);
+  InsertPos ip = IP_AFTER;
+
+  if (before->isChecked())
+    ip = IP_BEFORE;
+  else if (after->isChecked())
+    ip = IP_AFTER;
+
+  emit insertPage(spinBox->getValue() - 1,ipm,ip);
 }
 

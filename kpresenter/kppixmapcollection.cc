@@ -28,7 +28,7 @@ QPixmap* KPPixmapCollection::getPixmap(QString _filename,QSize _size,QString &_d
     {
       KPPixmap *kppixmap = new KPPixmap(_filename,_size);
       pixmapList.append(kppixmap);
-      _data = kppixmap->getPixData();
+      _data = kppixmap->getPixDataNative();
 
 #ifdef SHOW_INFO
       debug("-------------");
@@ -64,7 +64,7 @@ QPixmap* KPPixmapCollection::getPixmap(QString _filename,QSize _size,QString &_d
       debug("-------------");
 #endif
 
-      _data = pixmapList.at(num)->getPixData();
+      _data = pixmapList.at(num)->getPixDataNative();
       if (orig)
 	return pixmapList.at(num)->getOrigPixmap();
       else
@@ -240,9 +240,8 @@ int KPPixmapCollection::inPixmapList(QString _filename,QString _data,QSize _size
       for (int i = 0;i < static_cast<int>(pixmapList.count());i++)
 	{
 	  kppixmap = pixmapList.at(i);
-	  if (kppixmap->getFilename() == _filename && kppixmap->getPixData() == _data && (kppixmap->getSize() == _size ||
-											  _size == orig_size && 
-											  kppixmap->getSize() == kppixmap->getOrigSize()))
+	  if (kppixmap->getFilename() == _filename && (kppixmap->getPixData() == _data || kppixmap->getPixDataNative() == _data ) && 
+	      (kppixmap->getSize() == _size || _size == orig_size && kppixmap->getSize() == kppixmap->getOrigSize()))
 	    return i;
 	}
       return -1;
