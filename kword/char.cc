@@ -330,6 +330,7 @@ QDomElement KWString::save( QDomDocument& d )
 	buffer = QString::null;
     }
 
+    return e;
 }
 
 /*================================================================*/
