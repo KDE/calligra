@@ -13,35 +13,47 @@ KarbonPart::KarbonPart( QWidget* parentWidget, const char* widgetName,
 {
 // <test-object> <<<<<<<<<<<<<<<<<<<<<<<<<<<<<
     VPath* path = new VPath();
-    double	x1(120.0), y1(20.33333),
-    		x2(100.0), y2(200.0),
-		x3(200.0), y3(200.0);
+    double x1, y1, x2, y2;
+
+    x1 = 40.0; y1 = 10.0;    
     path->moveTo(x1,y1);
-    path->lineTo(x2,y2);
-    path->lineTo(x3,y3);
     
-    x1 = 250.0; y1 = 50.0;
-    x2 = 0.0; y2 = 50.0;
-    x3 = 300.0; y3 = 200.0;
-    path->curveTo(x1,y1,x2,y2,x3,y3);
+    x1 = 500.0; y1 = 100.0; 
+    x2 = 500.0; y2 = 300.0; 
+    path->arcTo(x1,y1,x2,y2,100.0);
+    x1 = 500.0; y1 = 400.0; 
+    x2 = 400.0; y2 = 400.0; 
+    path->arcTo(x1,y1,x2,y2,100.0);
+    x1 = 300.0; y1 = 400.0; 
+    x2 = 200.0; y2 = 200.0; 
+    path->arcTo(x1,y1,x2,y2,60.0);
+    x1 = 200.0; y1 = 200.0; 
+    x2 = 400.0; y2 = 200.0; 
+    path->arcTo(x1,y1,x2,y2,20.0);
+    x1 = 500.0; y1 = 200.0; 
+    x2 = 500.0; y2 = 300.0; 
+    path->arcTo(x1,y1,x2,y2,60.0);
     m_objects.append( path );
 
-    // we dont have copy-ctor yet :(
+
     path = new VPath();
-    x1=120.0; y1 = 20.33333;
-    x2=100.0; y2=200.0;
-    x3=200.0; y3=200.0;
+
+    x1 = 200.0; y1 = 100.0;    
     path->moveTo(x1,y1);
-    path->lineTo(x2,y2);
-    path->lineTo(x3,y3);
     
-    x1 = 250.0; y1 = 50.0;
-    x2 = 0.0; y2 = 50.0;
-    x3 = 300.0; y3 = 200.0;
-    path->curveTo(x1,y1,x2,y2,x3,y3);
+    x1 = 240.0; y1 = 100.0; 
+    x2 = 240.0; y2 = 140.0; 
+    path->arcTo(x1,y1,x2,y2,40.0);
+    x1 = 240.0; y1 = 180.0; 
+    x2 = 200.0; y2 = 180.0; 
+    path->arcTo(x1,y1,x2,y2,40.0);
+    x1 = 160.0; y1 = 180.0; 
+    x2 = 160.0; y2 = 140.0; 
+    path->arcTo(x1,y1,x2,y2,40.0);
+    x1 = 160.0; y1 = 100.0; 
+    x2 = 200.0; y2 = 100.0; 
+    path->arcTo(x1,y1,x2,y2,40.0);
     path->close();
-    x1 = 300.0; y1=0.0;
-    path->translate( x1, y1 );
     m_objects.append( path );
 
 // </test-object> <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<

@@ -8,8 +8,8 @@
 class VPoint;
 
 /**
- * VPaths are the most common high-level objects. They consist of VLines and
- * VBeziers.
+ * VPaths are the most common high-level objects. They consist of lines and
+ * beziers.
  */
 
 // TODO: refine moveto-behaviour (should it affect last point of a primitive or not ?)
@@ -21,14 +21,19 @@ public:
     
     virtual void draw( QPainter& painter );
     
-    // postscript-like commands:
+    const VPoint* currentPoint() const;
+    
+    // postscript-compliant commands:
     void moveTo( const double& x, const double& y );
-    void rmoveTo( const double& dx, const double& dy );    
+    void rmoveTo( const double& dx, const double& dy );
     void lineTo( const double& x, const double& y );
     void rlineTo( const double& dx, const double& dy );
     void curveTo( const double& x1, const double& y1, const double& x2,
 		    const double& y2, const double& x3, const double& y3 );
-    void rcurveTo();    
+    void rcurveTo( const double& dx1, const double& dy1, const double& dx2,
+		    const double& dy2, const double& dx3, const double& dy3 );
+    void arcTo( const double& x1, const double& y1,
+		    const double& x2, const double& y2, const double& r );
 
     virtual void translate( const double& dx, const double& dy );
 
@@ -37,13 +42,12 @@ public:
 
 
 private:
-    // a path consists of segments which own at least 2 points (lines).
-    // bezier-curves have 2 additional control-points.
+    // a segment is either a line or a bezier-curve:
     struct Segment {
-	// p0 is missing to avoid multiple vpoints
-	VPoint* p1;
-	VPoint* p2;
-	VPoint* p3;	
+	// p0 is omitted to avoid multiple vpoints
+	VPoint* p1;	// control point
+	VPoint* p2;	// control point
+	VPoint* p3;	// end point	
     };
     bool m_isClosed;
     QList<Segment> m_segments;
