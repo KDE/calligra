@@ -475,6 +475,11 @@ public:
                             KWFrameSetEdit *edit ) = 0;
 
     /**
+     * Draw a margin of a specific frame of this frameSet
+     */
+    virtual void drawMargins( KWFrame *frame, QPainter *p, const QRect &fcrect , QColorGroup &cg, KWViewMode *viewMode);
+
+    /**
      * Called when our frames change, or when another frameset's frames change.
      * Framesets can reimplement it, but should always call the parent method.
      */

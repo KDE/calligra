@@ -592,6 +592,47 @@ void KWFrameSet::createEmptyRegion( const QRect & crect, QRegion & emptyRegion, 
     }
 }
 
+void KWFrameSet::drawMargins( KWFrame *frame, QPainter *p, const QRect &crect,QColorGroup &/*cg*/, KWViewMode *viewMode )
+{
+    QRect outerRect( viewMode->normalToView( frame->outerRect() ) );
+    //kdDebug(32002) << "KWFrameSet::drawFrameBorder frame: " << frame
+    //               << " outerRect: " << DEBUGRECT( outerRect ) << endl;
+
+    if ( !crect.intersects( outerRect ) )
+    {
+        kdDebug() << "KWFrameSet::drawMargins no intersection with " << DEBUGRECT(crect) << endl;
+        return;
+    }
+    QRect frameRect( viewMode->normalToView( m_doc->zoomRect(  *frame ) ) );
+    p->save();
+    QBrush bgBrush( frame->backgroundColor() );
+    bgBrush.setColor( KWDocument::resolveBgColor( bgBrush.color(), p ) );
+    p->setBrush( bgBrush );
+    if ( frame->bTop()!=0.0)
+    {
+        QRect r( frameRect.left(), frameRect.top(), frameRect.width(), m_doc->zoomItY(frame->bTop()));
+        p->fillRect( r, bgBrush );
+    }
+    if ( frame->bLeft()!=0.0)
+    {
+        QRect r( frameRect.left(), frameRect.top(), m_doc->zoomItX(frame->bLeft()), m_doc->zoomItY(frame->height()));
+        p->fillRect( r, bgBrush );
+    }
+    if ( frame->bRight()!=0.0)
+    {
+        QRect r( frameRect.right()-m_doc->zoomItX(frame->bRight()), frameRect.top(), m_doc->zoomItX(frame->bRight()), m_doc->zoomItY(frame->height()));
+        p->fillRect( r, bgBrush );
+    }
+    if ( frame->bBottom()!=0.0)
+    {
+        QRect r( frameRect.left(), frameRect.bottom()-m_doc->zoomItY(frame->bBottom()), m_doc->zoomItX(frame->width()), m_doc->zoomItY(frame->bBottom()));
+        p->fillRect( r, bgBrush );
+    }
+    p->restore();
+
+}
+
+
 void KWFrameSet::drawFrameBorder( QPainter *painter, KWFrame *frame, KWFrame *settingsFrame, const QRect &crect, KWViewMode *viewMode, KWCanvas *canvas )
 {
     QRect outerRect( viewMode->normalToView( frame->outerRect() ) );
@@ -1051,13 +1092,13 @@ void KWFrameSet::drawContents( QPainter *p, const QRect & crect, QColorGroup &cg
             {
                 p->save();
                 p->setClipRegion( reg );
+
                 p->translate( r.x() - fcrect.x(), r.y() - fcrect.y() ); // This assume that viewToNormal() is only a translation
                 p->setBrushOrigin( p->brushOrigin() + r.topLeft() - fcrect.topLeft() );
 
                 QBrush bgBrush( settingsFrame->backgroundColor() );
                 bgBrush.setColor( KWDocument::resolveBgColor( bgBrush.color(), p ) );
                 cg.setBrush( QColorGroup::Base, bgBrush );
-
                 drawFrame( frame, p, fcrect, cg, onlyChanged, resetChanged, edit );
 
                 p->restore();
@@ -1077,6 +1118,8 @@ void KWFrameSet::drawContents( QPainter *p, const QRect & crect, QColorGroup &cg
                     p->setClipRegion( reg );
                     KWFrame * settingsFrame = ( frame->isCopy() && lastRealFrame ) ? lastRealFrame : frame;
                     drawFrameBorder( p, frame, settingsFrame, r, viewMode, canvas );
+                    drawMargins( frame, p, r, cg, viewMode );
+
                     p->restore();
                 }// else kdDebug() << "KWFrameSet::drawContents not drawing border for frame " << frame << endl;
             }
@@ -1308,7 +1351,7 @@ QRegion KWFrameSet::frameClipRegion( QPainter * painter, KWFrame *frame, const Q
     if ( clipFrame )
     {
         //kdDebug(32002) << "KWFrameSet::frameClipRegion rc initially " << DEBUGRECT(rc) << endl;
-        rc &= painter->xForm( viewMode->normalToView( doc->zoomRect( frame->innerRect() ) ) ); // intersect
+        rc &= painter->xForm( viewMode->normalToView( doc->zoomRect( (*frame) ) ) ); // intersect
         //kdDebug(32002) << "KWFrameSet::frameClipRegion frame=" << DEBUGRECT(*frame)
         //               << " clip region rect=" << DEBUGRECT(rc)
         //               << " rc.isEmpty()=" << rc.isEmpty() << endl;
