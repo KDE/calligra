@@ -155,6 +155,24 @@ void StyleClusterTester::run()
   CHECK_STYLE(stylecluster.lookup(0,2), static_cast< const KSpreadStyle& > (*(m_sheet->doc()->styleManager()->defaultStyle())));
   kdDebug() << "12. check done" << endl;
 
+  stylecluster.insert(0,0, m_sheet->doc()->styleManager()->defaultStyle());
+  CHECK_STYLE(stylecluster.lookup(0,0), static_cast< const KSpreadStyle& > (*(m_sheet->doc()->styleManager()->defaultStyle())));
+  CHECK_STYLE(stylecluster.lookup(0,1), stylecluster.lookup(1,0));
+  CHECK_STYLE(stylecluster.lookup(0,1), stylecluster.lookup(1,1));
+  CHECK_STYLE(stylecluster.lookup(0,1), *style1);
+  
+  stylecluster.insert(0,1, m_sheet->doc()->styleManager()->defaultStyle());
+  stylecluster.insert(1,0, m_sheet->doc()->styleManager()->defaultStyle());
+  stylecluster.insert(1,1, m_sheet->doc()->styleManager()->defaultStyle());
+  
+//Quad tree should be totally empty now
+  
+  CHECK_STYLE(stylecluster.lookup(0,0), static_cast< const KSpreadStyle& > (*(m_sheet->doc()->styleManager()->defaultStyle())));
+  CHECK_STYLE(stylecluster.lookup(1,1), static_cast< const KSpreadStyle& > (*(m_sheet->doc()->styleManager()->defaultStyle())));
+  
+  CHECK_QUAD(stylecluster.lookupNode(0,0), stylecluster.lookupNode(1,0));
+  CHECK_QUAD(stylecluster.lookupNode(1,1), stylecluster.lookupNode(1005,20320));
+  
   if(style1->release()) {
     kdDebug() << "DELETING STYLE in test runner" << endl;
     delete style1;
@@ -162,7 +180,7 @@ void StyleClusterTester::run()
     testCount++;
   } else {
     testCount++;
-  //  fail( __FILE__, __LINE__, "Style was not correctly freed" );
+    fail( __FILE__, __LINE__, "Style was not correctly freed" );
   }
 
 
