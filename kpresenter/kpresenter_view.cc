@@ -5454,16 +5454,22 @@ void KPresenterView::viewFooter()
 {
     bool state=actionViewFooter->isChecked();
     m_pKPresenterDoc->setFooter( state );
-    m_pKPresenterDoc->terminateEditing(m_pKPresenterDoc->footer());
-    m_canvas->deSelectObj( m_pKPresenterDoc->footer() );
+    if(!state)
+    {
+        m_pKPresenterDoc->terminateEditing(m_pKPresenterDoc->footer());
+        m_canvas->deSelectObj( m_pKPresenterDoc->footer() );
+    }
 }
 
 void KPresenterView::viewHeader()
 {
     bool state=actionViewHeader->isChecked();
     m_pKPresenterDoc->setHeader( state);
-    m_pKPresenterDoc->terminateEditing(m_pKPresenterDoc->header());
-    m_canvas->deSelectObj( m_pKPresenterDoc->header() );
+    if(!state)
+    {
+        m_pKPresenterDoc->terminateEditing(m_pKPresenterDoc->header());
+        m_canvas->deSelectObj( m_pKPresenterDoc->header() );
+    }
 }
 
 #include <kpresenter_view.moc>
