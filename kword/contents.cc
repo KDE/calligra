@@ -223,7 +223,7 @@ KWStyle * KWInsertTOCCommand::findOrCreateTOCStyle( KWTextFrameSet *fs, int dept
     {
         style = new KWStyle( name );
         style->format().setBold(true);
-        style->format().setPointSize( depth==-1 ? 20 : depth==0 ? 16 : 12 );
+        style->format().setPointSize( KoTextZoomHandler::ptToLayoutUnitPt ( depth==-1 ? 20 : depth==0 ? 16 : 12 ) );
         if ( depth == -1 )
         {
             style->paragLayout().topBorder = KoBorder( Qt::black, KoBorder::SOLID, 1 );
