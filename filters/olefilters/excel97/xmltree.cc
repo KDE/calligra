@@ -294,7 +294,7 @@ void XMLTree::getPen(Q_UINT16 xf, QDomElement &f, Q_UINT16 fontid)
 	pen = root->createElement("pen");
 	pen.setAttribute("width", 0);
 	pen.setAttribute("style", 1);
-	pen.setAttribute("color", palette[(fonts[fontid]->icv) & 0x7f]);
+	pen.setAttribute("color", palette[(fonts[fontid]->icv) & 0x3f]);
 	f.appendChild(pen);
 
 	if((xfs[xf]->borderStyle & 0x0f) != 0)
