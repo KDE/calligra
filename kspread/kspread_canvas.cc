@@ -196,9 +196,12 @@ void KSpreadEditWidget::slotDoneEdit()
 void KSpreadEditWidget::keyPressEvent ( QKeyEvent* _ev )
 {
     // Dont handle special keys and accelerators
-    if ( _ev->state() & ( Qt::AltButton | Qt::ControlButton ) )
+    if ( ( _ev->state() & ( Qt::AltButton | Qt::ControlButton ) )
+         || ( _ev->state() & Qt::ShiftButton )
+         || ( _ev->key() == Key_Shift ) )
     {
         QLineEdit::keyPressEvent( _ev );
+        _ev->accept();
         return;
     }
 
@@ -206,11 +209,11 @@ void KSpreadEditWidget::keyPressEvent ( QKeyEvent* _ev )
     return;
 
   if ( !m_pCanvas->editor() )
-      {
-        // Start editing the current cell
-        m_pCanvas->createEditor( KSpreadCanvas::CellEditor,false );
-      }
-  KSpreadTextEditor* cellEditor = (KSpreadTextEditor*) m_pCanvas->editor();
+  {
+    // Start editing the current cell
+    m_pCanvas->createEditor( KSpreadCanvas::CellEditor,false );
+  }
+  KSpreadTextEditor * cellEditor = (KSpreadTextEditor*) m_pCanvas->editor();
 
   switch ( _ev->key() )
   {
@@ -238,7 +241,7 @@ void KSpreadEditWidget::keyPressEvent ( QKeyEvent* _ev )
       QLineEdit::keyPressEvent( _ev );
 
       setFocus();
-      cellEditor->blockCheckChoose( TRUE );
+      cellEditor->blockCheckChoose( TRUE );      
       cellEditor->setText( text() );
       cellEditor->blockCheckChoose( FALSE );
       cellEditor->setCursorPosition( cursorPosition() );

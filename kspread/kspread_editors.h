@@ -56,7 +56,7 @@ public:
     virtual void cut();
     virtual void paste();
     virtual void copy();
-    void checkChoose();
+    bool checkChoose();
     void blockCheckChoose( bool b ) { m_blockCheck = b; }
     bool sizeUpdate() const { return m_sizeUpdate; }
 

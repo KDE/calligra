@@ -125,7 +125,8 @@ void KSpreadTextEditor::slotTextChanged( const QString& t )
 {
   // if ( canvas->chooseCursorPosition() >= 0 )
   // m_pEdit->setCursorPosition( canvas->chooseCursorPosition() );
-  checkChoose();
+  if (!checkChoose())
+    return;
 
   if (t.length() > m_length)
   {
@@ -159,10 +160,10 @@ void KSpreadTextEditor::slotTextChanged( const QString& t )
   // canvas()->view()->editWidget()->setCursorPosition( m_pEdit->cursorPosition() );
 }
 
-void KSpreadTextEditor::checkChoose()
+bool KSpreadTextEditor::checkChoose()
 {
     if ( m_blockCheck )
-        return;
+        return false;
 
     QString t = m_pEdit->text();
     if ( t[0] != '=' )
@@ -183,6 +184,7 @@ void KSpreadTextEditor::checkChoose()
           canvas()->endChoose();
       }
     }
+    return true;
 }
 
 void KSpreadTextEditor::resizeEvent( QResizeEvent* )
