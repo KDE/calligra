@@ -1983,8 +1983,7 @@ bool KPresenterDoc::initDoc()
     } else if ( ret == KoTemplateChooseDia::File ) {
         objStartY = 0;
         _clean = true;
-        KURL url;
-        url.setPath( _template );
+        KURL url( _template );
         bool ok = openURL( url );
         return ok;
     } else if ( ret == KoTemplateChooseDia::Empty ) {
