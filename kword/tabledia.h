@@ -24,6 +24,7 @@
 #include <qlist.h>
 
 #include "defs.h"
+#include "border.h"
 
 class KWCanvas;
 class KWDocument;

@@ -62,6 +62,7 @@
 #include "counter.h"
 #include "kwchangecasedia.h"
 #include "kweditpersonnalexpressiondia.h"
+#include "splitcellsdia.h"
 
 #include <koMainWindow.h>
 #include <koDocument.h>
@@ -560,12 +561,16 @@ void KWView::setupActions()
     actionTableJoinCells = new KAction( i18n( "&Join Cells" ), 0,
                                         this, SLOT( tableJoinCells() ),
                                         actionCollection(), "table_joincells" );
-    actionTableSplitCellsVerticaly = new KAction( i18n( "&Split Cells Verticaly" ), 0,
+/*    actionTableSplitCellsVerticaly = new KAction( i18n( "&Split Cells Verticaly" ), 0,
                                          this, SLOT( tableSplitCellsVerticaly() ),
                                          actionCollection(), "table_splitcells_vertical" );
     actionTableSplitCellsHorizontaly = new KAction( i18n( "&Split Cells Horizontaly" ), 0,
                                          this, SLOT( tableSplitCellsHorizontaly() ),
                                          actionCollection(), "table_splitcells_horizontal" );
+*/
+    actionTableSplitCells= new KAction( i18n( "&Split Cells..." ), 0,
+                                         this, SLOT( tableSplitCells() ),
+                                         actionCollection(), "table_splitcells" );
 
     actionTableUngroup = new KAction( i18n( "&Ungroup Table" ), 0,
                                       this, SLOT( tableUngroupTable() ),
@@ -1105,8 +1110,9 @@ void KWView::setTool( MouseMode _mouseMode )
     }
 
     actionTableJoinCells->setEnabled( FALSE );
-    actionTableSplitCellsVerticaly->setEnabled( FALSE );
-    actionTableSplitCellsHorizontaly->setEnabled( FALSE );
+    /*actionTableSplitCellsVerticaly->setEnabled( FALSE );
+    actionTableSplitCellsHorizontaly->setEnabled( FALSE ); */
+    actionTableSplitCells->setEnabled( FALSE );
     actionFormatFrameSet->setEnabled(FALSE);
 }
 
@@ -2017,7 +2023,7 @@ void KWView::tableJoinCells()
     gui->canvasWidget()->repaintAll();
     gui->canvasWidget()->emitFrameSelectedChanged();
 }
-
+/*
 void KWView::tableSplitCellsVerticaly()
 {
     tableSplitCells(2, 1);
@@ -2026,6 +2032,15 @@ void KWView::tableSplitCellsVerticaly()
 void KWView::tableSplitCellsHorizontaly()
 {
     tableSplitCells(1, 2);
+}
+*/
+
+void KWView::tableSplitCells() {
+    KWSplitCellDia *splitDia=new KWSplitCellDia( this,"split cell" ); // TODO remember last settings..
+    if(splitDia->exec()) {
+        tableSplitCells(splitDia->cols(), splitDia->rows());
+    }
+    delete splitDia;
 }
 
 void KWView::tableSplitCells(int cols, int rows)
@@ -2796,9 +2811,10 @@ void KWView::frameSelectedChanged()
     actionTableJoinCells->setEnabled( table && (nbFrame>1));
 
     bool state=(table && nbFrame==1);
-
+/*
     actionTableSplitCellsVerticaly->setEnabled( state );
-    actionTableSplitCellsHorizontaly->setEnabled( state );
+    actionTableSplitCellsHorizontaly->setEnabled( state ); */
+    actionTableSplitCells->setEnabled( state );
 
     state=(table && nbFrame>0);
 

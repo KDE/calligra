@@ -1,4 +1,4 @@
-<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd" ><kpartgui name="KWord" version="15">
+<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd" ><kpartgui name="KWord" version="16">
 <MenuBar>
  <Menu name="file"><text>&amp;File</text>
   <Action name="extra_template"/>
@@ -82,8 +82,7 @@
   <Action name="table_delcol"/>
   <Separator/>
   <Action name="table_joincells"/>
-  <Action name="table_splitcells_vertical"/>
-  <Action name="table_splitcells_horizontal"/>
+  <Action name="table_splitcells"/>
   <Action name="table_ungroup"/>
   <Separator/>
   <Action name="table_delete"/>
@@ -225,8 +224,7 @@
  <Action name="edit_delframe"/>
  <Separator/>
  <Action name="table_joincells"/>
- <Action name="table_splitcells_vertical"/>
- <Action name="table_splitcells_horizontal"/>
+ <Action name="table_splitcells"/>
  <Separator/>
  <Action name="table_insrow"/>
  <Action name="table_inscol"/>

@@ -185,9 +185,9 @@ public slots:
     void tableDeleteRow();
     void tableDeleteCol();
     void tableJoinCells();
-    void tableSplitCellsVerticaly();
-    void tableSplitCellsHorizontaly();
-
+    void tableSplitCells();
+    //void tableSplitCellsVerticaly();
+    //void tableSplitCellsHorizontaly();
     void tableUngroupTable();
     void tableDelete();
 
@@ -372,8 +372,9 @@ private:
     KAction *actionTableInsertRow;
     KAction *actionTableInsertCol;
     KAction *actionTableJoinCells;
-    KAction *actionTableSplitCellsVerticaly;
-    KAction *actionTableSplitCellsHorizontaly;
+    KAction *actionTableSplitCells;
+/*    KAction *actionTableSplitCellsVerticaly;
+    KAction *actionTableSplitCellsHorizontaly; */
 
     KAction *actionTableUngroup;
     KAction *actionTableDelete;
