@@ -28,7 +28,7 @@ EXTRA_DIST = \
 ####                  END KDEStudio part                  ####
 #2########################################################!@#$
 libkiviozoomtool_la_LDFLAGS = -avoid-version -module -no-undefined
-libkiviozoomtool_la_LIBADD = $(all_libraries) $(top_builddir)/kivio/kiviopart/libkiviopart.la
+libkiviozoomtool_la_LIBADD = $(all_libraries) $(top_builddir)/kivio/kiviopart/libkiviopart.la -lpthread -ldb
 
 rc_DATA = kiviozoomtool.rc
 rcdir = $(kde_datadir)/kivio/kpartplugins

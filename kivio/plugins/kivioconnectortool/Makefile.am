@@ -32,7 +32,7 @@ EXTRA_DIST = \
 ####                  END KDEStudio part                  ####
 #2########################################################!@#$
 libkivioconnectortool_la_LDFLAGS = -avoid-version -module -no-undefined
-libkivioconnectortool_la_LIBADD = $(all_libraries) $(top_builddir)/kivio/kiviopart/libkiviopart.la
+libkivioconnectortool_la_LIBADD = $(all_libraries) $(top_builddir)/kivio/kiviopart/libkiviopart.la -lpthread -ldb
 
 rc_DATA = kivioconnectortool.rc
 rcdir = $(kde_datadir)/kivio/kpartplugins

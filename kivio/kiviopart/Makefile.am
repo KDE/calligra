@@ -134,7 +134,7 @@ kivio_la_SOURCES = main.cpp
 kivio_la_LDFLAGS = $(all_libraries) -module -avoid-version
 kivio_la_LIBADD = ../../lib/kofficecore/libkofficecore.la
 
-libkiviopart_la_LDFLAGS = -avoid-version -module $(LIB_KOFFICEUI) $(all_libraries)
+libkiviopart_la_LDFLAGS = -avoid-version -module $(LIB_KOFFICEUI) $(all_libraries) -lpthread -ldb
 
 bin_PROGRAMS = kivio
 kivio_SOURCES = dummy.cpp

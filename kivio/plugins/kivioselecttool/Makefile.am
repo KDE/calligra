@@ -28,7 +28,7 @@ EXTRA_DIST = \
 ####                  END KDEStudio part                  ####
 #2########################################################!@#$
 libkivioselecttool_la_LDFLAGS = -avoid-version -module -no-undefined
-libkivioselecttool_la_LIBADD = $(all_libraries) $(top_builddir)/kivio/kiviopart/libkiviopart.la
+libkivioselecttool_la_LIBADD = $(all_libraries) $(top_builddir)/kivio/kiviopart/libkiviopart.la -lpthread -ldb
 
 rc_DATA = kivioselecttool.rc
 rcdir = $(kde_datadir)/kivio/kpartplugins
