@@ -50,6 +50,7 @@ void KoStyleCollection::clear()
 {
     m_styleList.setAutoDelete( true );
     m_styleList.clear();
+    m_styleList.setAutoDelete( false );
     m_deletedStyles.clear();
 }
 
