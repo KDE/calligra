@@ -23,7 +23,7 @@
 #include <kexidb/object.h>
 
 #include <qobject.h>
-#include <qdict.h>
+#include <qasciidict.h>
 
 namespace KexiDB {
 
@@ -56,7 +56,9 @@ class KEXI_DB_EXPORT DriverManagerInternal : public QObject, public KexiDB::Obje
 		/*! decrements the refcount for the manager
 			if the refcount reaches a value less than 1 the manager is freed */
 		void decRefCount();
-	
+
+		void aboutDelete( Driver* drv );
+
 	protected slots:
 		/*! Used to destroy all drivers on QApplication quit, so even if there are 
 		 DriverManager's static instances that are destroyed on program 
@@ -76,7 +78,7 @@ class KEXI_DB_EXPORT DriverManagerInternal : public QObject, public KexiDB::Obje
 		KexiDB::DriverManager::ServicesMap m_services_lcase; //! as above but service names in lowercase
 		KexiDB::DriverManager::ServicesMap m_services_by_mimetype;
 		KexiDB::Driver::InfoMap m_driversInfo; //! used to store drivers information
-		QDict<KexiDB::Driver> m_drivers;
+		QAsciiDict<KexiDB::Driver> m_drivers;
 		ulong m_refCount;
 
 		QString m_serverErrMsg;

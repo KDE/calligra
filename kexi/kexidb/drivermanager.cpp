@@ -45,6 +45,7 @@ using namespace KexiDB;
 DriverManagerInternal::DriverManagerInternal() /* protected */
 	: QObject( 0, "KexiDB::DriverManager" )
 	, Object()
+	, m_drivers(17, false)
 	, m_refCount(0)
 	, lookupDriversNeeded(true)
 {
@@ -137,7 +138,7 @@ Driver* DriverManagerInternal::driver(const QString& name)
 	clearError();
 	KexiDBDbg << "DriverManager::driver(): loading " << name << endl;
 
-	Driver *drv = m_drivers.find(name.lower());
+	Driver *drv = m_drivers.find(name.latin1());
 	if (drv)
 		return drv; //cached
 
@@ -172,7 +173,7 @@ Driver* DriverManagerInternal::driver(const QString& name)
 //	drv->setName(srv_name.latin1());
 	drv->m_service = ptr; //store info
 	drv->m_fileDBDriverMime = ptr->property("X-Kexi-FileDBDriverMime").toString();
-	m_drivers.insert(name.lower(), drv); //cache it
+	m_drivers.insert(name.latin1(), drv); //cache it
 	return drv;
 }
 
@@ -194,6 +195,11 @@ void DriverManagerInternal::decRefCount()
 }
 
 DriverManagerInternal* DriverManagerInternal::s_self = 0L;
+
+void DriverManagerInternal::aboutDelete( Driver* drv )
+{
+	m_drivers.take(drv->name());
+}
 
 
 

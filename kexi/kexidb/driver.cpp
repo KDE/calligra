@@ -19,6 +19,8 @@
 
 #include <kexidb/driver.h>
 #include <kexidb/driver_p.h>
+#include <kexidb/drivermanager.h>
+#include <kexidb/drivermanager_p.h>
 #include "error.h"
 #include "drivermanager.h"
 #include "connection.h"
@@ -65,6 +67,7 @@ Driver::Driver( QObject *parent, const char *name, const QStringList & )
 
 Driver::~Driver()
 {
+	DriverManagerInternal::self()->aboutDelete( this );
 //	KexiDBDbg << "Driver::~Driver()" << endl;
 	QPtrDictIterator<Connection> it( m_connections );
 	Connection *conn;
