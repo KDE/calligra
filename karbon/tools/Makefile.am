@@ -2,6 +2,7 @@ INCLUDES = \
 	-I$(srcdir)/.. \
 	-I$(srcdir)/../core \
 	-I$(srcdir)/../ui \
+	-I$(srcdir)/../render \
 	-I$(srcdir)/../../lib/kofficeui \
 	$(all_includes)
 

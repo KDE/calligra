@@ -3,7 +3,8 @@
    Copyright (C) 2002, The Karbon Developers
 */
 
-#include <qpainter.h>
+#include "vpainterfactory.h"
+#include "vpainter.h"
 
 #include "karbon_view.h"
 #include "vccmd_ellipse.h"	// command
@@ -42,7 +43,7 @@ void
 VCToolEllipse::drawTemporaryObject(
 	KarbonView* view, const QPoint& p, double d1, double d2 )
 {
-	QPainter painter( view->canvasWidget()->viewport() );
+	VPainter *painter = VPainterFactory::editpainter();
 
 	VCCmdEllipse* cmd =
 		new VCCmdEllipse( part(), p.x(), p.y(), p.x() + d1, p.y() + d2 );

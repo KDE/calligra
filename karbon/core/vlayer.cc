@@ -29,7 +29,7 @@ VLayer::~VLayer()
 }
 
 void
-VLayer::draw( QPainter& painter, const QRect& rect,
+VLayer::draw( VPainter *painter, const QRect& rect,
 	const double zoomFactor )
 {
 	VObjectListIterator itr = m_objects;

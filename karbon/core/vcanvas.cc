@@ -5,6 +5,8 @@
 
 #include <qapplication.h>
 #include <qpainter.h>
+#include "vpainterfactory.h"
+#include "vpainter.h"
 #include <qpixmap.h>
 #include <kdebug.h>
 
@@ -22,7 +24,7 @@ VCanvas::VCanvas( KarbonView* view, KarbonPart* part )
 	setMouseTracking( true );
 
 	viewport()->setBackgroundColor( Qt::white );
-//	viewport()->setBackgroundMode( QWidget::NoBackground );
+	viewport()->setBackgroundMode( QWidget::NoBackground );
 
 // TODO: remove this line
 resizeContents( 800, 600 );
@@ -40,12 +42,17 @@ VCanvas::drawContents( QPainter* painter, int clipx, int clipy,
 void
 VCanvas::drawDocument( QPainter* painter, const QRect& rect )
 {
+	VPainter *p = VPainterFactory::painter();
+	p->begin();
+	//VPainter *p = VPainterFactory::painter( this, visibleWidth(), visibleHeight() );
 	erase( rect );
 
 	QPtrListIterator<VLayer> i = m_part->layers();
 	for ( ; i.current(); ++i )
 		if ( i.current()->visible() )
-			i.current()->draw( *painter, rect, m_zoomFactor );
+			i.current()->draw( p, rect, m_zoomFactor );
+
+	p->end();
 }
 
 void

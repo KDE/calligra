@@ -6,7 +6,7 @@
 #include <math.h>
 
 #include <qdom.h>
-#include <qpainter.h>
+#include "vpainter.h"
 #include <qwmatrix.h>
 
 #include <koPoint.h>
@@ -64,7 +64,7 @@ VPath::~VPath()
 }
 
 void
-VPath::draw( QPainter& painter, const QRect& rect,
+VPath::draw( VPainter *painter, const QRect& rect,
 	const double zoomFactor )
 {
 	if( state() == deleted )
@@ -73,7 +73,7 @@ VPath::draw( QPainter& painter, const QRect& rect,
 	if( !rect.intersects( boundingBox( zoomFactor ) ) )
 		return;
 
-	painter.save();
+	painter->save();
 	QPtrListIterator<VSegmentList> itr( m_segments );
 
 	if( state() != edit )
@@ -142,13 +142,13 @@ VPath::draw( QPainter& painter, const QRect& rect,
 	}
 */
 
-	painter.restore();
+	painter->restore();
 }
 
 void
-VPath::drawBox( QPainter& painter, double x, double y, uint handleSize )
+VPath::drawBox( VPainter *painter, double x, double y, uint handleSize )
 {
-	painter.drawRect( x - handleSize, y - handleSize,
+	painter->drawRect( x - handleSize, y - handleSize,
 					  handleSize*2 + 1, handleSize*2 + 1 );
 }
 

@@ -3,9 +3,10 @@ INCLUDES = \
 	-I$(srcdir)/core \
 	-I$(srcdir)/tools \
 	-I$(srcdir)/ui \
+	-I$(srcdir)/render \
 	$(all_includes)
 
-SUBDIRS = core ui tools filters . data pics
+SUBDIRS = core ui tools filters render . data pics
 
 bin_PROGRAMS = karbon
 lib_LTLIBRARIES = \
@@ -21,7 +22,8 @@ libkarbonpart_la_LDFLAGS = $(KDE_PLUGIN)
 libkarbonpart_la_LIBADD = \
 	../../koffice/lib/kofficeui/libkofficeui.la \
 	tools/libkarbontools.la \
-	core/libkarboncore.la
+	core/libkarboncore.la \
+	render/libvpainter.la
 
 libkarbonpart_la_METASOURCES = AUTO
 

@@ -3,7 +3,8 @@
    Copyright (C) 2002, The Karbon Developers
 */
 
-#include <qpainter.h>
+#include "vpainterfactory.h"
+#include "vpainter.h"
 #include <koRect.h>
 
 #include "karbon_part.h"
@@ -38,8 +39,8 @@ VMToolScale::instance( KarbonPart* part )
 void
 VMToolScale::drawTemporaryObject( KarbonView* view )
 {
-	QPainter painter( view->canvasWidget()->viewport() );
-	painter.setRasterOp( Qt::NotROP );
+	VPainter *painter = VPainterFactory::editpainter();
+	painter->setRasterOp( Qt::NotROP );
 
 	QRect rect =  part()->selection().getFirst()->boundingBox( view->zoomFactor() );
 	// already selected, so must be a handle operation (move, scale etc.)

@@ -18,6 +18,7 @@
 
 class QDomElement;
 class QWMatrix;
+class VPainter;
 
 class VPath : public VObject
 {
@@ -118,7 +119,7 @@ public:
 	void combine( const VPath& path );
 	void combineSegments( const VSegmentList& segments );
 
-	virtual void draw( QPainter& painter, const QRect& rect,
+	virtual void draw( VPainter *painter, const QRect& rect,
 		const double zoomFactor = 1.0 );
 
 	const VSegment* lastSegment() const
@@ -140,7 +141,7 @@ public:
 
 private:
 // TODO: this looks ugly somehow:
-	void drawBox( QPainter &painter, double x, double y, uint handleSize = 3 ); // helper function for draw()
+	void drawBox( VPainter *painter, double x, double y, uint handleSize = 3 ); // helper function for draw()
 
 private:
 	QPtrList<VSegmentList> m_segments;		// list of segments

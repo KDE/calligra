@@ -9,7 +9,7 @@
 #include "vfill.h"
 #include "vsegment.h"
 
-class QPainter;
+class VPainter;
 
 enum VFillRule { evenOdd = 0, winding = 1 };
 
@@ -18,7 +18,7 @@ class VPathFill : public VFill, VSegmentListTraverser
 public:
 	VPathFill();
 
-	void begin_draw( QPainter& painter, const double zoomFactor, VFillRule rule );
+	void begin_draw( VPainter *painter, const double zoomFactor, VFillRule rule );
 	void draw( const VSegmentList& list );
 	void end_draw();
 
@@ -33,7 +33,7 @@ public:
 		{ return lineTo( p ); }
 
 private:
-	QPainter* m_painter;
+	VPainter* m_painter;
 	double m_zoomFactor;
 	QPointArray m_pa;
 	VFillRule m_fillRule;

@@ -3,7 +3,8 @@
    Copyright (C) 2002, The Karbon Developers
 */
 
-#include <qpainter.h>
+#include "vpainter.h"
+#include <qcolor.h>
 #include <qpointarray.h>
 
 #include "vpath_fill.h"
@@ -14,9 +15,9 @@ VPathFill::VPathFill()
 }
 
 void
-VPathFill::begin_draw( QPainter& painter, const double zoomFactor, VFillRule rule )
+VPathFill::begin_draw( VPainter *painter, const double zoomFactor, VFillRule rule )
 {
-	m_painter = &painter;
+	m_painter = painter;
 	m_zoomFactor = zoomFactor;
 	m_pa.resize( 0 );
 	m_fillRule = rule;
@@ -38,9 +39,9 @@ VPathFill::end_draw()
 	m_painter->setRasterOp( Qt::CopyROP );
 	m_painter->setPen( Qt::NoPen );
 	m_painter->setBrush( QColor( 210, 210, 210 ) );
-	m_painter->drawPolygon(
+	/*m_painter->drawPolygon(
 		m_pa,
-		m_fillRule == evenOdd ? false : true );
+		m_fillRule == evenOdd ? false : true );*/
 }
 
 bool

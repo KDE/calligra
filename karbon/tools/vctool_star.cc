@@ -3,7 +3,8 @@
    Copyright (C) 2002, The Karbon Developers
 */
 
-#include <qpainter.h>
+#include "vpainterfactory.h"
+#include "vpainter.h"
 
 #include "karbon_view.h"
 #include "vccmd_star.h"	// command
@@ -43,7 +44,7 @@ void
 VCToolStar::drawTemporaryObject(
 	KarbonView* view, const QPoint& p, double d1, double d2 )
 {
-	QPainter painter( view->canvasWidget()->viewport() );
+	VPainter *painter = VPainterFactory::editpainter();
 	
 	VCCmdStar* cmd =
 		new VCCmdStar( part(),

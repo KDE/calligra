@@ -3,7 +3,8 @@
    Copyright (C) 2002, The Karbon Developers
 */
 
-#include <qpainter.h>
+#include "vpainterfactory.h"
+#include "vpainter.h"
 #include <koRect.h>
 
 #include "karbon_part.h"
@@ -39,8 +40,8 @@ VMToolRotate::instance( KarbonPart* part )
 void
 VMToolRotate::drawTemporaryObject( KarbonView* view )
 {
-	QPainter painter( view->canvasWidget()->viewport() );
-	painter.setRasterOp( Qt::NotROP );
+	VPainter *painter = VPainterFactory::editpainter();
+	painter->setRasterOp( Qt::NotROP );
 
 	// already selected, so must be a handle operation (move, scale etc.)
 	if( !part()->selection().isEmpty()

@@ -9,6 +9,7 @@
 #include "karbon_part.h"
 #include "karbon_view.h"
 #include "vcommand.h"
+#include "vpainterfactory.h"
 
 #include <kdebug.h>
 
@@ -24,6 +25,8 @@ KarbonPart::KarbonPart( QWidget* parentWidget, const char* widgetName,
 	// create a layer. we need at least one:
 	m_layers.append( new VLayer() );
 	m_activeLayer = m_layers.getLast();
+
+	m_painterFactory = new VPainterFactory;
 }
 
 KarbonPart::~KarbonPart()
@@ -35,6 +38,8 @@ KarbonPart::~KarbonPart()
 
 	// delete the command-history:
 	delete m_commandHistory;
+
+	delete m_painterFactory;
 }
 
 bool
@@ -46,7 +51,10 @@ KarbonPart::initDoc()
 KoView*
 KarbonPart::createViewInstance( QWidget* parent, const char* name )
 {
-	return new KarbonView( this, parent, name );
+	KarbonView *temp = new KarbonView( this, parent, name );
+	m_painterFactory->setPainter( temp->canvasWidget()->viewport(), temp->width(), temp->height() );
+	m_painterFactory->setEditpainter( temp->canvasWidget()->viewport(), parent->width(), parent->height() );
+	return temp;
 }
 
 bool

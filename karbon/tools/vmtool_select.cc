@@ -3,7 +3,8 @@
    Copyright (C) 2002, The Karbon Developers
 */
 
-#include <qpainter.h>
+#include "vpainterfactory.h"
+#include "vpainter.h"
 #include <koRect.h>
 
 #include "karbon_part.h"
@@ -38,8 +39,8 @@ VMToolSelect::instance( KarbonPart* part )
 void
 VMToolSelect::drawTemporaryObject( KarbonView* view )
 {
-	QPainter painter( view->canvasWidget()->viewport() );
-	painter.setRasterOp( Qt::NotROP );
+	VPainter *painter = VPainterFactory::editpainter();
+	painter->setRasterOp( Qt::NotROP );
 
 	// already selected, so must be a handle operation (move, scale etc.)
 	if( !part()->selection().isEmpty()
@@ -75,13 +76,13 @@ VMToolSelect::drawTemporaryObject( KarbonView* view )
 	}
 	else
 	{
-		painter.setPen( Qt::DotLine );
-
-		painter.moveTo( m_fp.x(), m_fp.y() );
+		painter->setPen( Qt::DotLine );
+		painter->drawRect( m_fp.x(), m_fp.y(), m_lp.x() - m_fp.x(), m_lp.y() - m_fp.y() );
+		/*painter.moveTo( m_fp.x(), m_fp.y() );
 		painter.lineTo( m_lp.x(), m_fp.y() );
 		painter.lineTo( m_lp.x(), m_lp.y() );
 		painter.lineTo( m_fp.x(), m_lp.y() );
-		painter.lineTo( m_fp.x(), m_fp.y() );
+		painter.lineTo( m_fp.x(), m_fp.y() );*/
 
 		m_state = normal;
 	}

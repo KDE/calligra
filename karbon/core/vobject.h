@@ -10,7 +10,7 @@
 #include <qrect.h>
 
 class QDomElement;
-class QPainter;
+class VPainter;
 class QWMatrix;
 
 class VCommand;
@@ -26,7 +26,7 @@ public:
 		: m_state( normal ) {}
 	virtual ~VObject() {}
 
-	virtual void draw( QPainter& painter, const QRect& rect,
+	virtual void draw( VPainter *painter, const QRect& rect,
 		const double zoomFactor ) = 0;
 
 	virtual VObject& transform( const QWMatrix& m ) = 0;

@@ -3,8 +3,10 @@
    Copyright (C) 2002, The Karbon Developers
 */
 
-#include <qpainter.h>
+#include "vpainter.h"
 #include <qpointarray.h>
+#include <qcolor.h>
+#include <qpen.h>
 
 #include "vpath_stroke.h"
 
@@ -16,7 +18,7 @@ VPathStroke::VPathStroke( const double width, const VLineCap cap, const VLineJoi
 }
 
 void
-VPathStroke::draw( QPainter& painter, const double zoomFactor, const VSegmentList& list,
+VPathStroke::draw( VPainter *painter, const double zoomFactor, const VSegmentList& list,
 	bool plain )
 {
 	m_zoomFactor = zoomFactor;
@@ -25,7 +27,7 @@ VPathStroke::draw( QPainter& painter, const double zoomFactor, const VSegmentLis
 
 	if( !plain )
 	{
-		int r;
+		/*int r;
 		int g;
 		int b;
 		
@@ -33,26 +35,27 @@ VPathStroke::draw( QPainter& painter, const double zoomFactor, const VSegmentLis
 
 		QPen pen(
 			QColor( r, g, b ),
-			qRound( zoomFactor * lineWidth() ) );
+			qRound( zoomFactor * lineWidth() ) );*/
 
-		if( lineCap() == cap_butt )
+		/*if( lineCap() == cap_butt )
 			pen.setCapStyle( Qt::FlatCap );
 		else if( lineCap() == cap_round )
 			pen.setCapStyle( Qt::RoundCap );
 		else if( lineCap() == cap_square )
-			pen.setCapStyle( Qt::SquareCap );
+			pen.setCapStyle( Qt::SquareCap );*/
 
-		painter.setRasterOp( Qt::CopyROP );
-		painter.setPen( pen );
+		painter->setRasterOp( Qt::CopyROP );
+		painter->setPen( *this );
+		//painter->setPen( pen );
 	}
 	else
 	{
-		painter.setRasterOp( Qt::XorROP );
-		painter.setPen( Qt::yellow );
+		painter->setRasterOp( Qt::XorROP );
+		painter->setPen( Qt::yellow );
 	}
 
-	painter.setBrush( Qt::NoBrush );
-	painter.drawPolyline( m_pa );
+	painter->setBrush( Qt::NoBrush );
+	painter->drawPolyline( m_pa );
 }
 
 bool

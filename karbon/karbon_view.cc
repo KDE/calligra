@@ -28,6 +28,8 @@
 #include "vmtool_scale.h"
 #include "vmcmd_delete.h"
 #include "vtoolcontainer.h"
+#include "vpainterfactory.h"
+#include "vpainter.h"
 
 #include <kdebug.h>
 
@@ -59,7 +61,10 @@ KarbonView::updateReadWrite( bool /*rw*/ )
 }
 
 void
-KarbonView::resizeEvent( QResizeEvent* /*event*/ ) {
+KarbonView::resizeEvent( QResizeEvent* /*event*/ )
+{
+	VPainterFactory::painter()->resize( width(), height() );
+	VPainterFactory::editpainter()->resize( width(), height() );
 	m_canvas->resize( width(), height() );
 }
 

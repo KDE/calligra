@@ -3,7 +3,8 @@
    Copyright (C) 2002, The Karbon Developers
 */
 
-#include <qpainter.h>
+#include "vpainterfactory.h"
+#include "vpainter.h"
 
 #include "karbon_view.h"
 #include "vccmd_spiral.h"	// command
@@ -44,7 +45,7 @@ void
 VCToolSpiral::drawTemporaryObject(
 	KarbonView* view, const QPoint& p, double d1, double d2 )
 {
-	QPainter painter( view->canvasWidget()->viewport() );
+	VPainter *painter = VPainterFactory::editpainter();
 	
 	VCCmdSpiral* cmd =
 		new VCCmdSpiral( part(),

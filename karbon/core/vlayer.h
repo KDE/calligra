@@ -21,7 +21,7 @@ public:
 	VLayer();
 	~VLayer();
 
-	void draw( QPainter& painter, const QRect& rect,
+	void draw( VPainter *painter, const QRect& rect,
 		const double zoomFactor );
 
 	void insertObject( const VObject* object );
