@@ -129,11 +129,11 @@ void KPTRelationDialog::slotOk()
         KMessageBox::sorry(this, i18n("You must select a relationship type"));
 	    return;
     }
-    QButton *t = timingType->selected();
-    if ( t == 0 ) {
-        KMessageBox::sorry(this, i18n("You have to select a timing type"));
-	    return;
-    }
+//     QButton *t = timingType->selected();
+//     if ( t == 0 ) {
+//         KMessageBox::sorry(this, i18n("You have to select a timing type"));
+// 	    return;
+//     }
 
     if (m_relation)
     {
