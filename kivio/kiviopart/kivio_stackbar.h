@@ -65,7 +65,6 @@ class KivioStackBar : public QDockWindow
   
   private:
     QVBoxLayout* m_layout;
-    QFrame* m_mainWidget;
     QPtrDict<QWidget> m_data;
     QWidget* m_visiblePage;
 };

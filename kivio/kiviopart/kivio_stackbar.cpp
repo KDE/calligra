@@ -46,7 +46,7 @@ KivioStackBar::~KivioStackBar()
 
 void KivioStackBar::insertPage( QWidget* w, const QString& title )
 {
-  if (w->parent() != m_mainWidget) {
+  if (w->parent() != this) {
     w->reparent(this,QPoint(0,0));
   }
 
