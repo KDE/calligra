@@ -32,6 +32,7 @@
 
 namespace KexiDB {
 
+class DriverManagerInternal;
 class Connection;
 class ConnectionData;
 class Driver;
@@ -43,44 +44,46 @@ class KEXI_DB_EXPORT DriverManager : public QObject, public KexiDB::Object
 	public:
 		typedef QMap<QString, KService::Ptr> ServicesMap;
 
-		~DriverManager();
+		DriverManager();
+		virtual ~DriverManager();
 
 		/*! Tries to load db driver \a name.
-			\return db driver, or 0 if error (then error message is also set) */
+		 \return db driver, or 0 if error (then error message is also set) */
 		Driver* driver(const QCString& name);
 
 		static DriverManager *self();
 
 		/*! returns list of available drivers names. That drivers can be loaded
-			by first use of driver() method. */
+		 by first use of driver() method. */
 		const QStringList driverNames();
 
 		/*! \return info. about driver (service info) */
 		KService::Ptr serviceInfo(const QString &name);
 
-		//! Returns a map structure of the services. Not necessary for everyday use.
-		const ServicesMap& services() { return m_services; }
+		//! \return a map structure of the services. Not necessary for everyday use.
+		const ServicesMap& services();
 
-		/*! increments the refcount for the manager*/
-		void incRefCount();
-		/*! decrements the refcount for the manager
-			if the refcount reaches a value less than 1 the manager is freed */
-		void decRefCount();
+//		/*! increments the refcount for the manager*/
+//		void incRefCount();
+//		/*! decrements the refcount for the manager
+//			if the refcount reaches a value less than 1 the manager is freed */
+//		void decRefCount();
 	protected:
-		/*! Used by self() */
-		DriverManager();
+//		/*! Used by self() */
+//		DriverManager();
 
-		void lookupDrivers();
+//		void lookupDrivers();
 
-		static DriverManager* s_self;
+//		static DriverManager* s_self;
 
-		ServicesMap m_services;
-		QDict<Driver> m_drivers;
-		ulong m_refCount;
+//		ServicesMap m_services;
+//		QDict<Driver> m_drivers;
+//		ulong m_refCount;
 
 	private:
-		class Private;
-		Private *d;
+//		class Private;
+//		Private *d;
+		DriverManagerInternal *d_int;
 };
 
 } //namespace KexiDB

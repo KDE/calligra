@@ -90,7 +90,7 @@ bool SQLiteConnection::drv_createDatabase( const QString &/*dbName*/ )
 {
 //	QFileInfo file( conn.data().fileName() );
 //	if (file.exists()) {
-//		setErrorMsg( i18n("Database file already exists.") );
+//		setError( i18n("Database file already exists.") );
 //		return false;
 
 	d->data = sqlite_open( QFile::encodeName( m_data.fileName() ), 0/*mode: unused*/, 
@@ -116,7 +116,7 @@ bool SQLiteConnection::drv_closeDatabase()
 bool SQLiteConnection::drv_dropDatabase( const QString &dbName )
 {
 	if (!QDir().remove(dbName)) {
-		setErrorMsg(ERR_ACCESS_RIGHTS, i18n("Can't remove '%1'").arg(dbName) );
+		setError(ERR_ACCESS_RIGHTS, i18n("Can't remove '%1'").arg(dbName) );
 		return false;
 	}
 	return true;

@@ -32,42 +32,82 @@
 
 #include <assert.h>
 
+namespace KexiDB {
+
+/*!
+
+*/
+class KEXI_DB_EXPORT DriverManagerInternal : public QObject, public KexiDB::Object
+{
+	public:
+		~DriverManagerInternal();
+
+		/*! Tries to load db driver \a name.
+			\return db driver, or 0 if error (then error message is also set) */
+		KexiDB::Driver* driver(const QCString& name);
+
+		static DriverManagerInternal *self();
+
+		/*! returns list of available drivers names. That drivers can be loaded
+			by first use of driver() method. */
+//		const QStringList driverNames();
+
+		/*! \return info. about driver (service info) */
+//		KService::Ptr serviceInfo(const QString &name);
+
+		//! Returns a map structure of the services. Not necessary for everyday use.
+//		const ServicesMap& services() { return m_services; }
+
+		/*! increments the refcount for the manager*/
+		void incRefCount();
+		/*! decrements the refcount for the manager
+			if the refcount reaches a value less than 1 the manager is freed */
+		void decRefCount();
+	protected:
+		/*! Used by self() */
+		DriverManagerInternal();
+
+		void lookupDrivers();
+
+		static KexiDB::DriverManagerInternal* s_self;
+
+		KexiDB::DriverManager::ServicesMap m_services;
+		QDict<KexiDB::Driver> m_drivers;
+		ulong m_refCount;
+
+	friend class DriverManager;
+};
+} //KexiDB
+
 using namespace KexiDB;
 
-DriverManager* DriverManager::s_self = 0L;
-
-DriverManager::DriverManager() /* protected */
+DriverManagerInternal::DriverManagerInternal() /* protected */
 	: QObject( 0, "KexiDB::DriverManager" )
 	, Object()
+	, m_refCount(0)
 {
-	if ( !s_self )
-		s_self = this;
+	m_drivers.setAutoDelete(true);
 	lookupDrivers();
 }
 
-DriverManager::~DriverManager()
+DriverManagerInternal::~DriverManagerInternal()
 {
-/*	Connection *conn;
-	for ( conn = m_connections.first(); conn ; conn = m_connections.next() ) {
-		conn->disconnect();
-		conn->m_driver = 0; //don't let the connection touch our driver now
-		m_connections.remove();
-		delete conn;
-	}*/
-
+	kdDebug() << "DriverManagerInternal::~DriverManagerInternal()" << endl;
+	m_drivers.clear();
 	if ( s_self == this )
 		s_self = 0;
+	kdDebug() << "DriverManagerInternal::~DriverManagerInternal() ok" << endl;
 }
 
-DriverManager *DriverManager::self()
+DriverManagerInternal *DriverManagerInternal::self()
 {
 	if (!s_self)
-		s_self = new DriverManager();
+		s_self = new DriverManagerInternal();
 
 	return s_self;
 }
 
-void DriverManager::lookupDrivers()
+void DriverManagerInternal::lookupDrivers()
 {
 	clearError();
 	KTrader::OfferList tlist = KTrader::self()->query("Kexi/DBDriver");
@@ -81,30 +121,11 @@ void DriverManager::lookupDrivers()
 
 	if (tlist.isEmpty())
 	{
-		setErrorMsg(ERR_DRIVERMANAGER, i18n("Could not find any database drivers.") );
+		setError(ERR_DRIVERMANAGER, i18n("Could not find any database drivers.") );
 	}
 }
 
-const QStringList DriverManager::driverNames()
-{
-	if (m_services.isEmpty() && error())
-		return QStringList();
-	return m_services.keys();
-}
-
-KService::Ptr DriverManager::serviceInfo(const QString &name)
-{
-	clearError();
-	if (m_services.contains(name)) {
-		return *m_services.find(name);
-	} else {
-		setErrorMsg(ERR_DRIVERMANAGER, i18n("No such driver service: '%1'.").arg(name) );
-		return 0;
-	}
-}
-
-
-Driver* DriverManager::driver(const QCString& name)
+Driver* DriverManagerInternal::driver(const QCString& name)
 {
 	clearError();
 	kdDebug() << "DriverManager::driver(): loading " << name << endl;
@@ -114,39 +135,111 @@ Driver* DriverManager::driver(const QCString& name)
 		return drv; //cached
 
 	if (!m_services.contains(name)) {
-		setErrorMsg(ERR_DRIVERMANAGER, i18n("Could not find database driver '%1'.").arg(name) );
+		setError(ERR_DRIVERMANAGER, i18n("Could not find database driver '%1'.").arg(name) );
 		return 0;
 	}
 
-	KLibLoader *libLoader = KLibLoader::self();
-	KService::Ptr d= *(m_services.find(name));
+//	KLibLoader *libLoader = KLibLoader::self();
+	KService::Ptr ptr= *(m_services.find(name));
 
-	kdDebug() << "KexiDBInterfaceManager::load(): library: "<<d->library()<<endl;
-	drv = KParts::ComponentFactory::createInstanceFromService<KexiDB::Driver>(d,
+	kdDebug() << "KexiDBInterfaceManager::load(): library: "<<ptr->library()<<endl;
+	drv = KParts::ComponentFactory::createInstanceFromService<KexiDB::Driver>(ptr,
 		this, "db", QStringList());
 
 	if (!drv) {
-		setErrorMsg(ERR_DRIVERMANAGER, i18n("Could not load database driver '%1'.").arg(name) );
+		setError(ERR_DRIVERMANAGER, i18n("Could not load database driver '%1'.").arg(name) );
 		return 0;
 	}
 	kdDebug() << "KexiDBInterfaceManager::load(): loading succeed: " << name << endl;
 
-	drv->m_service = d; //store info
+	drv->m_service = ptr; //store info
 	m_drivers.insert(name, drv); //cache it
 	return drv;
 }
-void KexiDB::DriverManager::incRefCount()
+
+void DriverManagerInternal::incRefCount()
 {
 	m_refCount++;
 }
 
-void KexiDB::DriverManager::decRefCount()
+void DriverManagerInternal::decRefCount()
 {
 	m_refCount--;
 	if (m_refCount<1) {
-		kdDebug()<<"KexiDBInterfaceManager::remRef: reached m_ref<1 -->deletelater()"<<endl;
-		s_self=0;
-		deleteLater();
+		kdDebug()<<"KexiDB::DriverManagerInternal::decRefCount(): reached m_refCount<1 -->deletelater()"<<endl;
+//		s_self=0;
+//		deleteLater();
 	}
+}
+
+DriverManagerInternal* DriverManagerInternal::s_self = 0L;
+
+
+
+// ---------------------------
+// --- DriverManager impl. ---
+// ---------------------------
+
+DriverManager::DriverManager()
+	: QObject( 0, "KexiDB::DriverManager" )
+	, Object()
+	, d_int( DriverManagerInternal::self() )
+{
+	d_int->incRefCount();
+//	if ( !s_self )
+//		s_self = this;
+//	lookupDrivers();
+}
+
+DriverManager::~DriverManager()
+{
+	kdDebug() << "DriverManager::~DriverManager()" << endl;
+/*	Connection *conn;
+	for ( conn = m_connections.first(); conn ; conn = m_connections.next() ) {
+		conn->disconnect();
+		conn->m_driver = 0; //don't let the connection touch our driver now
+		m_connections.remove();
+		delete conn;
+	}*/
+
+	d_int->decRefCount();
+	if (d_int->m_refCount==0) {
+		//delete internal drv manager!
+		delete d_int;
+	}
+//	if ( s_self == this )
+		//s_self = 0;
+	kdDebug() << "DriverManager::~DriverManager() ok" << endl;
+}
+
+const QStringList DriverManager::driverNames()
+{
+	if (d_int->m_services.isEmpty() && d_int->error())
+		return QStringList();
+	return d_int->m_services.keys();
+}
+
+KService::Ptr DriverManager::serviceInfo(const QString &name)
+{
+	clearError();
+	if (d_int->m_services.contains(name)) {
+		return *d_int->m_services.find(name);
+	} else {
+		setError(ERR_DRIVERMANAGER, i18n("No such driver service: '%1'.").arg(name) );
+		return 0;
+	}
+}
+
+const DriverManager::ServicesMap& DriverManager::services()
+{
+	return d_int->m_services;
+}
+
+Driver* DriverManager::driver(const QCString& name)
+{
+	Driver *drv = d_int->driver(name);
+	if (d_int->error())
+		setError(d_int);
+	return drv;
 }
 

@@ -17,7 +17,8 @@
    Boston, MA 02111-1307, USA.
 */
 
-#include "object.h"
+#include <kexidb/object.h>
+#include <kexidb/error.h>
 
 using namespace KexiDB;
 
@@ -27,11 +28,20 @@ Object::Object()
 	clearError();
 }
 
-void Object::setErrorMsg( int code, const QString &msg )
+void Object::setError( int code, const QString &msg )
 {
 	m_errno=code;
 	m_errMsg = msg;
-	m_hasError = !msg.isEmpty();
+	m_hasError = code!=ERR_NONE;
+}
+
+void Object::setError( KexiDB::Object *obj )
+{
+	if (obj) {
+		m_errno = obj->errorNum();
+		m_errMsg = obj->errorMsg();
+		m_hasError = obj->error();
+	}
 }
 
 Object::~Object()

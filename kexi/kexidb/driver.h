@@ -148,7 +148,7 @@ class KEXI_DB_EXPORT Driver : public QObject, public KexiDB::Object
 		QValueVector<QString> m_typeNames;
 
 	friend class Connection;
-	friend class DriverManager;
+	friend class DriverManagerInternal;
 
         private:
                 class Private;

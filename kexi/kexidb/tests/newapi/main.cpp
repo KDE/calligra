@@ -10,20 +10,20 @@
 int main(int /*argc*/, char */*argv[]*/)
 {
 	KInstance instance("newapi");
-	KexiDB::DriverManager* manager = KexiDB::DriverManager::self();
-	QStringList names = manager->driverNames();
+	KexiDB::DriverManager manager; // = KexiDB::DriverManager::self();
+	QStringList names = manager.driverNames();
 	kdDebug() << "DRIVERS: " << endl;
 	for (QStringList::iterator it = names.begin(); it != names.end() ; ++it)
 		kdDebug() << *it << endl;
-	if (manager->error()) {
-		kdDebug() << manager->errorMsg() << endl;
+	if (manager.error()) {
+		kdDebug() << manager.errorMsg() << endl;
 		return 1;
 	}
 
 	//get driver
-	KexiDB::Driver *driver = manager->driver("SQLite");
-	if (manager->error()) {
-		kdDebug() << manager->errorMsg() << endl;
+	KexiDB::Driver *driver = manager.driver("SQLite");
+	if (manager.error()) {
+		kdDebug() << manager.errorMsg() << endl;
 		return 1;
 	}
 
@@ -121,13 +121,13 @@ int main(int /*argc*/, char */*argv[]*/)
 
 #endif
 //	conn->tableNames();
-
+/*
 	if (!conn->disconnect()) {
 		kdDebug() << conn->errorMsg() << endl;
 		return 1;
-	}
-	debug("before del");
-	delete conn;
-	debug("after del");
+	}*/
+//	debug("before del");
+//	delete conn;
+//	debug("after del");
 	return 0;
 }

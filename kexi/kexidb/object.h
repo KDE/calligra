@@ -42,8 +42,14 @@ class KEXI_DB_EXPORT Object
 		int errorNum() { return m_errno; }
 
 	protected:
-		/*! Sets the (localized) error message to \a msg. Use this in subclasses. */
-		void setErrorMsg(int code,  const QString &msg );
+		/*! Sets the (localized) error code to \a code and message to \a msg. 
+		It is required to set at least nonzero error code \a code, 
+		but also adviced to set descriptive message \a msg.
+		Use this in KexiDB::Object subclasses. */
+		void setError(int code,  const QString &msg = QString::null );
+		
+		/*! Copies the (localized) error message and code from other KexiDB::Object. */
+		void setError( KexiDB::Object *obj );
 
 		/*! Clears error flag. */
 		void clearError() { m_errno = 0; m_hasError = false; m_errMsg = QString::null; }
@@ -57,7 +63,7 @@ class KEXI_DB_EXPORT Object
 
 	private:
 		class Private;
-		Private *d;
+		Private *d_object; //for future extension
 };
 
 } //namespace KexiDB

@@ -64,9 +64,9 @@ Field::Field(const QString& name, enum Type ctype,
 	: m_table(0)
 	,m_name(name)
 	,m_type(ctype)
-	,m_options(options)
 	,m_length(length)
 	,m_precision(precision)
+	,m_options(options)
 	,m_defaultValue(defaultValue)
 {
 	setConstraints(cconst);

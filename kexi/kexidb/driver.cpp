@@ -74,7 +74,7 @@ Connection *Driver::createConnection( ConnectionData &conn_data )
 	clearError();
 	if (m_isFileDriver) {
 		if (conn_data.fileName().isEmpty()) {
-			setErrorMsg(ERR_MISSING_DB_LOCATION, i18n("File name expected for file-based database driver.") );
+			setError(ERR_MISSING_DB_LOCATION, i18n("File name expected for file-based database driver.") );
 			return 0;
 		}
 	}
@@ -111,12 +111,12 @@ QString Driver::defaultSQLTypeName(int id_t)
 	return dflt_typeNames[id_t];
 }
 
-bool Driver::isSystemObjectName( const QString& n )
+bool Driver::isSystemObjectName( const QString& /*n*/ )
 {
 	return false;
 }
 
-bool Driver::isSystemFieldName( const QString& n )
+bool Driver::isSystemFieldName( const QString& /*n*/ )
 {
 	return false;
 }
