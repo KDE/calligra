@@ -518,7 +518,7 @@ void KexiTableView::drawContents( QPainter *p, int cx, int cy, int cw, int ch )
 
 //	int maxwc = QMIN(cw, (columnPos(m_numCols - 1) + columnWidth(m_numCols - 1)));
 	int maxwc = columnPos(cols() - 1) + columnWidth(cols() - 1);
-	kdDebug() << "KexiTableView::drawContents(): maxwc: " << maxwc << endl;
+//	kdDebug() << "KexiTableView::drawContents(): maxwc: " << maxwc << endl;
 
 // 	pb->fillRect(maxwc, 0, cw - maxwc, ch, colorGroup().base());
 // 	pb->fillRect(0, rowPos(rowlast) + m_rowHeight, cw, ch, colorGroup().base());
