@@ -26,6 +26,7 @@ OLEFilter::OLEFilter(KoFilter *parent, const char *name) :
     docfile=0L;
     store=0L;
     success=true;
+    numPic=0;
 }
 
 OLEFilter::~OLEFilter() {
@@ -89,8 +90,33 @@ const bool OLEFilter::filter(const QString &fileIn, const QString &fileOut,
     return success;
 }
 
-void OLEFilter::slotSavePic(Picture *) {
-    // we'll use Reggies Collection class here, soon (at least I hope so :)
+void OLEFilter::slotSavePic(const QString &extension, unsigned int length, const char *data, const QString &key, QString &id) {
+
+    if(key.isEmpty())
+        return;
+
+    QMap<QString, QString>::Iterator it=imageMap.find(key);
+
+    if(it!=imageMap.end())        // The "key-name" is already here - return the id
+        id=imageMap[key];
+    else {
+        QString value="tar:";                          // generate one...
+        for(unsigned int i=0; i<storePath.size(); ++i) {
+            value+='/';
+            value+=QString::number(static_cast<unsigned int>(storePath[i]));
+        }
+        id=QString("pictures/picture%1.%2").arg(numPic++).arg(extension);
+        imageMap.insert(key, id);           // ...and store it
+        value+=id;
+        if(!store->open(value)) {
+            success=false;
+            kdError(30510) << "OLEFilter::convert(): Could not open KoStore!" << endl;
+            return;
+        }
+        // Write it to the gzipped tar file
+        store->write(data, length);
+        store->close();
+    }
 }
 
 // Don't forget the delete [] the nameOUT string!
@@ -245,8 +271,13 @@ void OLEFilter::convert(const QString &dirname) {
         // Launch the filtering process...
         success=myFilter->filter();
         // ...and fetch the file
-        const QDomDocument * const part=myFilter->part();
-        QCString file=part->toCString();
+        QCString file;
+        if(!myFilter->plainString()) {
+            const QDomDocument * const part=myFilter->part();
+            file=part->toCString();
+        }
+        else
+            file=myFilter->CString();
         // Get the name of the part (dirname==key)
         char *tmp=0L;
         slotPart(QFile::encodeName(dirname), &tmp);
@@ -265,8 +296,8 @@ void OLEFilter::convert(const QString &dirname) {
 
 void OLEFilter::connectCommon(FilterBase **myFilter) {
 
-    QObject::connect(*myFilter, SIGNAL(signalSavePic(Picture *)), this,
-                     SLOT(slotSavePic(Picture *)));
+    QObject::connect(*myFilter, SIGNAL(signalSavePic(const QString &, unsigned int, const char *, const QString &, QString &)), this,
+                     SLOT(slotSavePic(const QString &, unsigned int, const char *, const QString &, QString &)));
     QObject::connect(*myFilter, SIGNAL(signalPart(const char *, char **)),
                      this, SLOT(slotPart(const char *, char **)));
     QObject::connect(*myFilter, SIGNAL(signalGetStream(const int &, myFile &)), this,

@@ -57,9 +57,8 @@ public:
                               const QString &config=QString::null);
 
 protected slots:
-    // [TODO] This slot creates a name for a Picture which should be
-    // saved in the KOStore (==KOffice tar storage).
-    void slotSavePic(Picture *pic);
+    // This slot saves a Picture to the KOffice tar storage.
+    void slotSavePic(const QString &extension, unsigned int length, const char *data, const QString &key, QString &id);
     // Generate a name for a part to store it in the KOffice tar storage
     // Attention: You'll have to delete [] the nameOUT string!
     void slotPart(const char *nameIN, char **nameOUT);
@@ -81,6 +80,7 @@ private:
     void connectCommon(FilterBase **myFilter);
 
     QMap<QString, QString> partMap;
+    QMap<QString, QString> imageMap;
     QArray<unsigned short> storePath;
 
     myFile olefile;

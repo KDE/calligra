@@ -29,7 +29,7 @@
 #include <qdom.h>
 #include <myfile.h>
 
-class Picture;
+class QCString;
 
 // Attention: The nameOUT Strings are allocated with new[] in the
 //            slots. Therefore you have to delete [] them!
@@ -45,23 +45,23 @@ public:
 
     // Manages the filtering process
     virtual const bool filter();
-    // Use this to get the part
+
+    // override this to return true if you want to return a plain QCString
+    virtual bool plainString() const { return false; }
+    // okay -- let's get the QDomDocument
     virtual const QDomDocument * const part() { return &m_part; }
+    // or get the plain QCString ;)
+    virtual QCString CString() const { return QCString(); }
 
 signals:
     // See olefilter.h for information
-    void signalSavePic(Picture *pic);
+    void signalSavePic(const QString &extension, unsigned int length, const unsigned char *data, const QString &key, QString &id);
     void signalPart(const char *nameIN, char **nameOUT);
     void signalGetStream(const int &handle, myFile &stream);
     // Note: might return wrong stream as names are NOT unique!!!
     // (searching only in current dir)
     void signalGetStream(const QString &name, myFile &stream);
     void sigProgress(int value);
-
-protected slots:
-    void slotSavePic(Picture *pic);
-    void slotPart(const char *nameIN, char **nameOUT);
-    void slotFilterError();
 
 protected:
     bool m_success;        // ok, the filtering process was successful

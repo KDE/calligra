@@ -31,15 +31,3 @@ const bool FilterBase::filter() {
     m_ready=true;
     return m_success;
 }
-
-void FilterBase::slotSavePic(Picture *pic) {
-    emit signalSavePic(pic);
-}
-
-void FilterBase::slotPart(const char *nameIN, char **nameOUT) {
-    emit signalPart(nameIN, nameOUT);
-}
-
-void FilterBase::slotFilterError() {
-    m_success=false;
-}
