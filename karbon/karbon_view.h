@@ -75,9 +75,9 @@ protected slots:
 	// handle-tool:
 	void handleTool();
 
-	// zooming:
+	// view:
+	void viewModeChanged();
 	void zoomChanged();
-	void slotShowWireframe();
 
 protected:
 	virtual void updateReadWrite( bool rw );
@@ -95,6 +95,7 @@ private:
 
 	// zoom action:
 	KSelectAction* m_zoomAction;
+	KSelectAction* m_viewAction;
 	// shape actions:
 	KToggleAction* m_ellipseToolAction;
 	KToggleAction* m_polygonToolAction;
@@ -107,7 +108,6 @@ private:
 	KToggleAction* m_sinusToolAction;
 	KToggleAction* m_spiralToolAction;
 	KToggleAction* m_starToolAction;
-	KToggleAction* m_wireframeAction;
 
 	//toolbox
 	VToolContainer *m_toolbox;

@@ -59,11 +59,12 @@
 		<Action name="view_zoom_in"/>
 		<Action name="view_zoom_out"/>
 		<Action name="view_zoom"/>
-        <Action name="view_wireframe"/>
+        <Action name="view_mode"/>
 	</Menu>
 	</MenuBar>
-	<ToolBar name="zoom_toolbar" fullWidth="false">
-		<Text>Zoom</Text>
+	<ToolBar name="view_toolbar" fullWidth="false">
+		<Text>View</Text>
+		<Action name="view_mode"/>
 		<Action name="view_zoom"/>
 	</ToolBar>
 </kpartgui>

@@ -270,6 +270,19 @@ KarbonView::handleTool()
 	m_canvas->viewport()->setCursor( QCursor( arrowCursor ) );
 }
 
+void
+KarbonView::viewModeChanged()
+{
+	if( m_viewAction->currentItem() == 1 )
+	{
+		m_painterFactory->setWireframePainter( canvasWidget()->viewport(), width(), height() );
+	}
+	else
+	{
+		m_painterFactory->setPainter( canvasWidget()->viewport(), width(), height() );
+	}
+	m_canvas->repaintContents( true );
+}
 
 void
 KarbonView::zoomChanged()
@@ -278,20 +291,6 @@ KarbonView::zoomChanged()
 	double zoomFactor = m_zoomAction->currentText().toDouble( &bOK ) / 100.0;
 	m_canvas->setZoomFactor( zoomFactor );
 	m_canvas->repaintContents( true );
-}
-
-void
-KarbonView::slotShowWireframe( )
-{
-    kdDebug() << "KarbonView::slotShowWireframe : " << m_wireframeAction->isChecked() << endl;
-	if( m_wireframeAction->isChecked() )
-	{
-		m_painterFactory->setWireframePainter( canvasWidget()->viewport(), width(), height() );
-	}
-	else
-	{
-		m_painterFactory->setPainter( canvasWidget()->viewport(), width(), height() );
-	}
 }
 
 void
@@ -391,14 +390,22 @@ KarbonView::initActions()
 	m_starToolAction->setExclusiveGroup( "Tools" );
 	// tools <-----
 
-	// zoom ----->
+	// view ----->
+	m_viewAction = new KSelectAction(
+		i18n( "View &Mode" ), 0, this,
+		SLOT( viewModeChanged() ), actionCollection(), "view_mode" );
+
 	m_zoomAction = new KSelectAction(
 		i18n( "&Zoom" ), 0, this,
 		SLOT( zoomChanged() ), actionCollection(), "view_zoom" );
 
-	m_wireframeAction = new KToggleAction(
-		i18n( "&Wireframe" ), 0, 0, this,
-		SLOT( slotShowWireframe() ), actionCollection(), "view_wireframe" );
+	QStringList mstl;
+	mstl
+		<< i18n( "Normal" )
+		<< i18n( "Wireframe" );
+	m_viewAction->setItems( mstl );
+	m_viewAction->setCurrentItem( 0 );
+	m_viewAction->setEditable( false );
 
 	QStringList stl;
 	stl
@@ -412,7 +419,7 @@ KarbonView::initActions()
 	m_zoomAction->setItems( stl );
 	m_zoomAction->setCurrentItem( 2 );
 	m_zoomAction->setEditable( true );
-	// zoom <-----
+	// view <-----
 
 	m_toolbox = new VToolContainer( this );
 	connect( m_toolbox, SIGNAL(selectToolActivated()),		this, SLOT(selectTool()) );
