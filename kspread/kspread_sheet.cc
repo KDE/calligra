@@ -5468,6 +5468,7 @@ struct SetValidityWorker : public KSpreadSheet::CellWorker {
                 tmpValidity->displayValidationInformation=tmp.displayValidationInformation;
                 tmpValidity->titleInfo=tmp.titleInfo;
                 tmpValidity->messageInfo=tmp.messageInfo;
+                tmpValidity->listValidity=tmp.listValidity;
 	    }
 	    cell->clearDisplayDirtyFlag();
 	}

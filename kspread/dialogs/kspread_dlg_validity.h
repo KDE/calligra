@@ -48,6 +48,8 @@ public slots:
  void changeIndexCond(int);
  void changeIndexType(int);
 protected:
+    void displayOrNotListOfValidity( bool _displayList);
+
   KSpreadView* m_pView;
   QRect  marker;
   QLineEdit *val_max;
@@ -65,6 +67,7 @@ protected:
     QCheckBox *displayHelp;
     QTextEdit *messageHelp;
     QLineEdit *titleHelp;
+    QTextEdit *validityList;
 };
 
 

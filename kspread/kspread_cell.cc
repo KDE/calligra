@@ -5699,7 +5699,7 @@ bool KSpreadCell::load( const QDomElement & cell, int _xshift, int _yshift,
           }
           if ( param.hasAttribute("listvalidity") )
           {
-              d->extra()->validity->listValidity=QStringList::split(param.attribute("listvalidity"), ";" );
+              d->extra()->validity->listValidity=QStringList::split(";", param.attribute("listvalidity") );
           }
         }
         QDomElement inputTitle = validity.namedItem( "inputtitle" ).toElement();

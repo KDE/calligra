@@ -2,7 +2,7 @@
    Copyright (C) 2002-2003 Norbert Andres <nandres@web.de>
              (C) 2002 John Dailey <dailey@vt.edu>
              (C) 2001-2002 Philipp Mueller <philipp.mueller@gmx.de>
-             (C) 1999-2002 Laurent Montel <montel@kde.org>
+             (C) 1999-2005 Laurent Montel <montel@kde.org>
              (C) 1998-1999 Torben Weis <weis@kde.org>
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -70,6 +70,7 @@ KSpreadDlgValidity::KSpreadDlgValidity(KSpreadView* parent,const char* name , co
   listType+=i18n("Date");
   listType+=i18n("Time");
   listType+=i18n("Text Length");
+  listType+=i18n("List");
   chooseType->insertStringList(listType);
   chooseType->setCurrentItem(0);
 
@@ -131,6 +132,10 @@ KSpreadDlgValidity::KSpreadDlgValidity(KSpreadView* parent,const char* name , co
   grid1->addColSpacing( 0, edit2->width() );
   edit2->setText( i18n( "Number:" ) );
   grid1->addColSpacing( 0, edit2->width() );
+
+  validityList = new QTextEdit( tmpQButtonGroup );
+  grid1->addMultiCellWidget(validityList,2, 4,0, 1);
+
 
   QFrame *page2 = addPage(i18n("&Error Alert"));
 
@@ -210,6 +215,26 @@ KSpreadDlgValidity::KSpreadDlgValidity(KSpreadView* parent,const char* name , co
   init();
 }
 
+void KSpreadDlgValidity::displayOrNotListOfValidity( bool _displayList)
+{
+    if ( _displayList )
+    {
+        validityList->show();
+        edit1->hide();
+        val_min->hide();
+        edit2->hide();
+        val_max->hide();
+    }
+    else
+    {
+        validityList->hide();
+        edit1->show();
+        val_min->show();
+        edit2->show();
+        val_max->show();
+    }
+}
+
 void KSpreadDlgValidity::changeIndexType(int _index)
 {
     bool activate = ( _index!=0 );
@@ -219,6 +244,11 @@ void KSpreadDlgValidity::changeIndexType(int _index)
     displayHelp->setEnabled(activate);
     messageHelp->setEnabled(activate);
     titleHelp->setEnabled(activate);
+    if ( _index == 7 )
+        displayOrNotListOfValidity( true );
+    else
+        displayOrNotListOfValidity( false );
+
     switch(_index)
     {
     case 0:
@@ -432,6 +462,17 @@ void KSpreadDlgValidity::init()
       if(tmpValidity->m_cond >=5 )
         val_max->setText(m_pView->doc()->locale()->formatTime(tmpValidity->timeMax,true));
       break;
+     case Allow_List:
+     {
+         chooseType->setCurrentItem(7);
+         QStringList lst =tmpValidity->listValidity;
+         QString tmp;
+         for ( QStringList::Iterator it = lst.begin(); it != lst.end(); ++it ) {
+             tmp +=( *it )+"\n";
+         }
+         validityList->setText( tmp );
+     }
+      break;
      default :
       chooseType->setCurrentItem(0);
       break;
@@ -503,6 +544,7 @@ void KSpreadDlgValidity::clearAllPressed()
   changeIndexCond(0);
   messageHelp->setText("" );
   titleHelp->setText( "" );
+  validityList->setText( "" );
   displayHelp->setChecked( false );
 }
 
@@ -574,6 +616,10 @@ void KSpreadDlgValidity::OkPressed()
       return;
     }
   }
+  else if ( chooseType->currentItem()==7 )
+  {
+      //Nothing
+  }
 
   if( chooseType->currentItem()==0)
   {//no validity
@@ -613,6 +659,9 @@ void KSpreadDlgValidity::OkPressed()
       break;
      case 6:
       result.m_allow=Allow_TextLength;
+      break;
+     case 7:
+      result.m_allow=Allow_List;
       break;
 
      default :
@@ -731,7 +780,10 @@ void KSpreadDlgValidity::OkPressed()
         }
       }
     }
-
+    else if ( chooseType->currentItem()==7 )
+    {
+        result.listValidity=QStringList::split( "\n", validityList->text() );
+    }
   }
   result.displayMessage = displayMessage->isChecked();
   result.allowEmptyCell = allowEmptyCell->isChecked();
