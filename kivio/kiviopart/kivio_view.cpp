@@ -104,8 +104,6 @@
 #include "kivio_screen_painter.h"
 #include "kivio_ps_printer.h"
 
-
-#include "tool_controller.h"
 #include "kivio_pluginmanager.h"
 
 #include "handler.h"
