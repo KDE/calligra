@@ -7083,6 +7083,13 @@ void KPresenterView::importStyle()
     }
     KPrImportStyleDia dia( m_pKPresenterDoc, lst, this, 0L );
     if ( dia.exec() ) {
+        QPtrList<KoStyle>list(dia.listOfStyleImported());
+        QPtrListIterator<KoStyle> style(  list );
+        for ( ; style.current() ; ++style )
+        {
+            m_pKPresenterDoc->styleCollection()->addStyleTemplate(style.current());
+        }
+        m_pKPresenterDoc->updateAllStyleLists();
     }
 }
 

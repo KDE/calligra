@@ -39,7 +39,6 @@ public:
 protected:
     KoStyle *findStyle( const QString & _name);
     virtual void loadFile();
-    virtual void generateStyleList();
 
 private:
     KPresenterDoc *m_doc;
