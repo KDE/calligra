@@ -98,6 +98,7 @@ public:
 
   void renderLayerIntoTile( QRect tileBoundary, const Layer *srcLay, Layer *dstLay, int dstTile );
   void moveLayer( int dx, int dy, Layer *lay = 0 );
+  void moveLayerTo( int x, int y, Layer *lay = 0 );
   void renderTileQuadrant( const Layer *srcLay, int srcTile, Layer *dstLay, int dstTile,
   int srcX, int srcY, int dstX, int dstY, int w, int h );
   void paintBrush( QPoint pt, const Brush *brush );
@@ -139,6 +140,7 @@ private:
 };
 
 #endif
+
 
 
 

@@ -60,11 +60,22 @@ void MoveCommand::moveTo( QPoint _pos )
   oldRect = m_pDoc->getCurrentLayer()->imageExtents();
   newRect = QRect( _pos, oldRect.size() );
 
-  m_pDoc->moveLayer( _pos.x(), _pos.y() );
-  updateRect = oldRect.unite( newRect );
-  m_pDoc->compositeImage( updateRect );  
+  m_pDoc->moveLayerTo( _pos.x(), _pos.y() );
 
-  m_pDoc->slotUpdateViews( updateRect );
+  if( oldRect.intersects( newRect ) )
+  {
+    updateRect = oldRect.unite( newRect );
+
+    m_pDoc->compositeImage( updateRect );
+    m_pDoc->slotUpdateViews( updateRect );
+  }
+  else
+  {
+    m_pDoc->compositeImage( oldRect );
+    m_pDoc->slotUpdateViews( oldRect );
+    m_pDoc->compositeImage( newRect );
+    m_pDoc->slotUpdateViews( newRect );
+  }
 }
 
 MoveTool::MoveTool( KImageShopDoc *doc )
@@ -82,10 +93,20 @@ void MoveTool::mousePress( const KImageShop::MouseEvent& e )
   if( !e.leftButton )
     return;
 
+  // layer is not visible
+  if( !m_pDoc->getCurrentLayer()->isVisible() )
+    return;
+
+  // mouse is not in layer
+  if( !m_pDoc->getCurrentLayer()->imageExtents().contains( QPoint( e.posX, e.posY ) ) )
+    return;
+
   m_dragging = true;
   m_dragStart.setX( e.posX );
   m_dragStart.setY( e.posY );
-} 
+  m_layerStart = m_pDoc->getCurrentLayer()->imageExtents().topLeft();
+  m_layerPosition = m_layerStart;
+}
 
 void MoveTool::mouseMove( const KImageShop::MouseEvent& e )
 {
@@ -100,6 +121,8 @@ void MoveTool::mouseMove( const KImageShop::MouseEvent& e )
     updateRect = updateRect.unite( m_pDoc->getCurrentLayer()->imageExtents() );
     m_pDoc->compositeImage( updateRect );
 
+    m_layerPosition = m_pDoc->getCurrentLayer()->imageExtents().topLeft();
+
     m_dragStart = pos;
 
     m_pDoc->slotUpdateViews( updateRect );
@@ -111,17 +134,25 @@ void MoveTool::mouseRelease( const KImageShop::MouseEvent& e )
   if( !e.leftButton )
     return;
 
-  if( m_dragStart != m_dragPosition )
+  // no dragging active
+  if( !m_dragging )
+    return;
+
+  // add command to history when layer has moved
+  if( m_layerPosition != m_layerStart )
   {
     cout << "add move command" << endl;
 
-    QPoint pos( e.posX, e.posY );
-
     MoveCommand *moveCommand = new MoveCommand( m_pDoc,
-      m_pDoc->getCurrentLayerIndex(), pos - m_dragStart, pos - m_dragPosition );
+      m_pDoc->getCurrentLayerIndex(), m_layerStart, m_layerPosition );
 
     m_pDoc->commandHistory()->addCommand( moveCommand );
   }
+
+  // leave dragging mode
   m_dragging = false;
 }
+
+
+
 

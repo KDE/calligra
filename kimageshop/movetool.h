@@ -48,6 +48,7 @@ private:
 class MoveTool : public Tool
 {
 public:
+
   MoveTool( KImageShopDoc *doc );
   ~MoveTool();
 
@@ -58,8 +59,11 @@ public:
   virtual void mouseRelease( const KImageShop::MouseEvent& e );
 
 protected:
+
   QPoint m_dragStart;
   QPoint m_dragPosition;
+  QPoint m_layerStart;
+  QPoint m_layerPosition;
   bool   m_dragging;
 };
 

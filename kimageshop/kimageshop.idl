@@ -61,7 +61,7 @@ module KImageShop
 		slot void slotActivateBrushTool();
 
     // edit menu
-    slot void slotEditUndo();
+    slot void slotEditUndo1();
     slot void slotEditUndo2();
     slot void slotEditUndo3();
     slot void slotEditUndo4();
@@ -71,7 +71,7 @@ module KImageShop
     slot void slotEditUndo8();
     slot void slotEditUndo9();
     slot void slotEditUndo10();
-    slot void slotEditRedo();
+    slot void slotEditRedo1();
     slot void slotEditRedo2();
     slot void slotEditRedo3();
     slot void slotEditRedo4();

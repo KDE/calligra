@@ -187,14 +187,14 @@ bool KImageShopView::mappingCreateToolbar( OpenPartsUI::ToolBarFactory_ptr _fact
   // undo
   text = Q2C( i18n( "Undo last action." ) );
   pix = OPICON( "undo" );
-  m_vToolBarEdit->insertButton2( pix, TBEDIT_UNDO, SIGNAL( clicked() ), this, "slotEditUndo", true, text, -1 );
+  m_vToolBarEdit->insertButton2( pix, TBEDIT_UNDO, SIGNAL( clicked() ), this, "slotEditUndo1", true, text, -1 );
   m_vToolBarEdit->setDelayedPopup( TBEDIT_UNDO, m_vTBUndoMenu );
   m_vToolBarEdit->setItemEnabled( TBEDIT_UNDO, false );
 
   // redo
   text = Q2C( i18n( "Redo last action." ) );
   pix = OPICON( "redo" );
-  m_vToolBarEdit->insertButton2( pix, TBEDIT_REDO, SIGNAL( clicked() ), this, "slotEditRedo", true, text, -1 );
+  m_vToolBarEdit->insertButton2( pix, TBEDIT_REDO, SIGNAL( clicked() ), this, "slotEditRedo1", true, text, -1 );
   m_vToolBarEdit->setDelayedPopup( TBEDIT_REDO, m_vTBRedoMenu );
   m_vToolBarEdit->setItemEnabled( TBEDIT_REDO, false );
 
@@ -275,12 +275,12 @@ bool KImageShopView::mappingCreateMenubar( OpenPartsUI::MenuBar_ptr menubar )
 
   text = Q2C( i18n( "&Undo" ) );
   pix = OPICON( "undo" );
-  m_idMenuEdit_Undo = m_vMenuEdit->insertItem3( pix, text, this, "slotEditUndo", stdAccel.undo() );
+  m_idMenuEdit_Undo = m_vMenuEdit->insertItem3( pix, text, this, "slotEditUndo1", stdAccel.undo() );
   m_vMenuEdit->setItemEnabled( m_idMenuEdit_Undo, false );
 
   text = Q2C( i18n( "&Redo" ) );
   pix = OPICON( "redo" );
-  m_idMenuEdit_Redo = m_vMenuEdit->insertItem3( pix, text, this, "slotEditRedo", stdAccel.redo() );
+  m_idMenuEdit_Redo = m_vMenuEdit->insertItem3( pix, text, this, "slotEditRedo1", stdAccel.redo() );
   m_vMenuEdit->setItemEnabled( m_idMenuEdit_Redo, false );
 
   m_vMenuEdit->insertSeparator( -1 );
@@ -819,35 +819,117 @@ void KImageShopView::slotSetBrush(const Brush *brush )
   m_pBrush = brush;
 }
 
-void KImageShopView::slotEditUndo()
+void KImageShopView::slotEditUndo1()
 {
-  m_pDoc->commandHistory()->undo();
+  undo( 1 );
 }
 
-void KImageShopView::slotEditUndo2() {}
-void KImageShopView::slotEditUndo3() {}
-void KImageShopView::slotEditUndo4() {}
-void KImageShopView::slotEditUndo5() {}
-void KImageShopView::slotEditUndo6() {}
-void KImageShopView::slotEditUndo7() {}
-void KImageShopView::slotEditUndo8() {}
-void KImageShopView::slotEditUndo9() {}
-void KImageShopView::slotEditUndo10() {}
-
-void KImageShopView::slotEditRedo()
+void KImageShopView::slotEditUndo2()
 {
-  m_pDoc->commandHistory()->redo();
+  undo( 2 );
 }
 
-void KImageShopView::slotEditRedo2() {}
-void KImageShopView::slotEditRedo3() {}
-void KImageShopView::slotEditRedo4() {}
-void KImageShopView::slotEditRedo5() {}
-void KImageShopView::slotEditRedo6() {}
-void KImageShopView::slotEditRedo7() {}
-void KImageShopView::slotEditRedo8() {}
-void KImageShopView::slotEditRedo9() {}
-void KImageShopView::slotEditRedo10() {}
+void KImageShopView::slotEditUndo3()
+{
+  undo( 3 );
+}
+
+void KImageShopView::slotEditUndo4()
+{
+  undo( 4 );
+}
+
+void KImageShopView::slotEditUndo5()
+{
+  undo( 5 );
+}
+
+void KImageShopView::slotEditUndo6()
+{
+  undo( 6 );
+}
+
+void KImageShopView::slotEditUndo7()
+{
+  undo( 7 );
+}
+
+void KImageShopView::slotEditUndo8()
+{
+  undo( 8 );
+}
+
+void KImageShopView::slotEditUndo9()
+{
+  undo( 9 );
+}
+
+void KImageShopView::slotEditUndo10()
+{
+  undo( 10 );
+}
+
+void KImageShopView::slotEditRedo1()
+{
+  redo( 1 );
+}
+
+void KImageShopView::slotEditRedo2()
+{
+  redo( 2 );
+}
+
+void KImageShopView::slotEditRedo3()
+{
+  redo( 3 );
+}
+
+void KImageShopView::slotEditRedo4()
+{
+  redo( 4 );
+}
+
+void KImageShopView::slotEditRedo5()
+{
+  redo( 5 );
+}
+
+void KImageShopView::slotEditRedo6()
+{
+  redo( 6 );
+}
+
+void KImageShopView::slotEditRedo7()
+{
+  redo( 7 );
+}
+
+void KImageShopView::slotEditRedo8()
+{
+  redo( 8 );
+}
+
+void KImageShopView::slotEditRedo9()
+{
+  redo( 9 );
+}
+
+void KImageShopView::slotEditRedo10()
+{
+  redo( 10 );
+}
+
+void KImageShopView::undo( int _number )
+{
+  for( int i = 0; i < _number; i++ )
+    m_pDoc->commandHistory()->undo();
+}
+
+void KImageShopView::redo( int _number )
+{
+  for( int i = 0; i < _number; i++ )
+    m_pDoc->commandHistory()->redo();
+}
 
 void KImageShopView::slotEditCut()
 {
@@ -936,7 +1018,7 @@ void KImageShopView::viewPreferences()
 
 void KImageShopView::changeUndo( QString _text, bool _enable )
 {
-  cout << "ImageShopView::changeUndo : ";
+  cout << "KImageShopView::changeUndo : ";
 
   CORBA::WString_var text;
 
@@ -1001,6 +1083,9 @@ void  KImageShopView::slotSetBGColor(const KColor& c)
 }
 
 #include "kimageshop_view.moc"
+
+
+
 
 
 

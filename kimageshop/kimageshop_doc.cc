@@ -55,7 +55,10 @@ KImageShopDoc::KImageShopDoc( int _width, int _height )
 
   m_lstViews.setAutoDelete(false);
 
-  QObject::connect( &m_commands, SIGNAL( undoRedoChanged( QString, QString ) ), this, SLOT( slotUndoRedoChanged( QString, QString ) ) );
+  QObject::connect( &m_commands, SIGNAL( undoRedoChanged( QString, QString ) ),
+                    this, SLOT( slotUndoRedoChanged( QString, QString ) ) );
+  QObject::connect( &m_commands, SIGNAL( undoRedoChanged( QStringList, QStringList ) ),
+                    this, SLOT( slotUndoRedoChanged( QStringList, QStringList ) ) );
 }
 
 KImageShopDoc::~KImageShopDoc()
@@ -547,6 +550,43 @@ void KImageShopDoc::slotUndoRedoChanged( QString _undo, QString _redo )
   }
 }
 
+#include <opUIUtils.h>
+
+void KImageShopDoc::slotUndoRedoChanged( QStringList _undo, QStringList _redo )
+{
+  if( !m_lstViews.isEmpty() )
+  {
+    int i;
+    KImageShopView *pView;
+
+    for( pView = m_lstViews.first(); pView != 0; pView = m_lstViews.next() )
+    {
+      while( pView->m_vTBUndoMenu->count() > 0 )
+        pView->m_vTBUndoMenu->removeItemAt( 0 );
+
+      while( pView->m_vTBRedoMenu->count() > 0 )
+        pView->m_vTBRedoMenu->removeItemAt( 0 );
+
+      QString func = "slotEditUndo%1";
+
+      for( i = 0; i < _undo.count(); i++ )
+      {
+        pView->m_vTBUndoMenu->insertItem( Q2C( *(_undo.at( i )) ), pView, func.arg( i + 1 ), 0 );
+      }
+
+      func = "slotEditRedo%1";
+
+      for( i = 0; i < _redo.count(); i++ )
+      {
+        pView->m_vTBRedoMenu->insertItem( Q2C( *(_redo.at( i )) ), pView, func.arg( i + 1 ), 0 );
+      }
+    }
+  }
+}
+
 #include "kimageshop_doc.moc"
+
+
+
 
 

@@ -102,7 +102,7 @@ public slots:
   void slotSetBGColor(const KColor&);
   void slotSetBrush(const Brush *);
   
-  virtual void slotEditUndo();
+  virtual void slotEditUndo1();
   virtual void slotEditUndo2();
   virtual void slotEditUndo3();
   virtual void slotEditUndo4();
@@ -112,7 +112,7 @@ public slots:
   virtual void slotEditUndo8();
   virtual void slotEditUndo9();
   virtual void slotEditUndo10();
-  virtual void slotEditRedo();
+  virtual void slotEditRedo1();
   virtual void slotEditRedo2();
   virtual void slotEditRedo3();
   virtual void slotEditRedo4();
@@ -141,6 +141,11 @@ public slots:
   void changeUndo( QString, bool);
   void changeRedo( QString, bool);
 
+private:
+
+  void undo( int _number );
+  void redo( int _number );
+
 protected:
 
   virtual void init();
@@ -160,9 +165,11 @@ protected:
   OpenPartsUI::ToolBar_var m_vToolBarEdit;
   OpenPartsUI::ToolBar_var m_vToolBarTools;
 
+public:
   OpenPartsUI::Menu_var m_vTBUndoMenu;
   OpenPartsUI::Menu_var m_vTBRedoMenu;
 
+protected:
   OpenPartsUI::Menu_var m_vMenuEdit;
   CORBA::Long m_idMenuEdit_Undo;
   CORBA::Long m_idMenuEdit_Redo;
@@ -208,5 +215,6 @@ private:
 };
 
 #endif
+
 
 

@@ -538,6 +538,12 @@ void Canvas::moveLayer( int _dx, int _dy, Layer *_lay )
   _lay->moveBy( _dx, _dy );
 }
 
+void Canvas::moveLayerTo( int _x, int _y, Layer *_lay )
+{
+  _lay = layerPtr( _lay );
+  _lay->moveTo( _x, _y );
+}
+
 void Canvas::convertImageToPixmap(QImage *image, QPixmap *pix)
 {
   if (visual==unknown) {
@@ -678,6 +684,8 @@ void Canvas::setBackgroundLayer( unsigned int _layer )
 }
 
 #include "canvas.moc"
+
+
 
 
 

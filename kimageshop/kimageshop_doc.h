@@ -81,6 +81,7 @@ public slots:
 
   void slotUpdateViews( const QRect &area );
   void slotUndoRedoChanged( QString _undo, QString _redo );
+  void slotUndoRedoChanged( QStringList _undo, QStringList _redo );
 
 signals:
 
