@@ -45,6 +45,7 @@
 #include <qfile.h>
 #include <qpainter.h>
 #include <qtimer.h>
+#include <kiconloader.h>
 
 // Define the protocol used here for embedded documents' URL
 // This used to "store" but KURL didn't like it,

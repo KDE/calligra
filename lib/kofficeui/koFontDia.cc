@@ -31,6 +31,7 @@
 #include <qdialog.h>
 #include <qvbox.h>
 #include <qgroupbox.h>
+#include <qpushbutton.h>
 
 KoFontChooser::KoFontChooser( QWidget* parent, const char* name, bool _withSubSuperScript )
     : QWidget( parent, name )

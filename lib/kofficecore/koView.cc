@@ -29,6 +29,7 @@
 #include <kparts/partmanager.h>
 #include <kparts/event.h>
 #include <assert.h>
+#include <kstatusbar.h>
 
 class KoViewPrivate
 {

@@ -30,6 +30,7 @@ class QLabel;
 class QPopupMenu;
 class QPushButton;
 class QRect;
+class QGridLayout;
 
 /**
  * @short A generic "find" widget.

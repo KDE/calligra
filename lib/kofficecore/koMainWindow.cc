@@ -51,6 +51,8 @@
 
 #include <unistd.h>
 #include <stdlib.h>
+#include <klocale.h>
+#include <kstatusbar.h>
 
 class KoPartManager : public KParts::PartManager
 {

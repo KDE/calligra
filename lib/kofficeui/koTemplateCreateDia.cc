@@ -42,6 +42,7 @@
 #include <kio/netaccess.h>
 
 #include <stdlib.h>
+#include <kinstance.h>
 
 
 class KoTemplateCreateDiaPrivate {

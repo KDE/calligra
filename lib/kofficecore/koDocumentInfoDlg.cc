@@ -36,6 +36,7 @@
 #include <ktar.h>
 #include <kdebug.h>
 #include <ktempfile.h>
+#include <qgrid.h>
 
 class KoDocumentInfoDlg::KoDocumentInfoDlgPrivate
 {
