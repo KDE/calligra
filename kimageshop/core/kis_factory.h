@@ -26,6 +26,7 @@
 class KInstance;
 class KisPluginServer;
 class KisBrushServer;
+class KAboutData;
 
 class KisFactory : public KLibFactory
 {
@@ -44,6 +45,7 @@ private:
     static KInstance*       s_global;
     static KisPluginServer* s_pserver;
     static KisBrushServer*  s_bserver;
+	static KAboutData*      s_aboutData;
 };
 
 #endif

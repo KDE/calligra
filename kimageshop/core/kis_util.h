@@ -38,6 +38,7 @@ const int TILE_SIZE = 64;
 // Used to make numbers round towards + or - infinity regardless of sign
 const long BIGNUM = (TILE_SIZE*10000);
 
+enum ActiveColor { NONE, FOREGROUND, BACKGROUND};
 
 
 class KisUtil

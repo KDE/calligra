@@ -22,12 +22,20 @@
 #define __kis_sidebar_h__
 
 #include <qframe.h>
-#include <qlabel.h>
-#include <kis_color.h>
+#include <qlist.h>
 
+#include <kdualcolorbtn.h>
+
+#include "kis_color.h"
+#include "kis_util.h"
+
+class KisFrameButton;
 class KDualColorButton;
 class KisBrushWidget;
+class KisPatternWidget;
 class KisBrush;
+class KisPattern;
+class KisColorChooser;
 
 class TopFrame : public QFrame
 {
@@ -36,8 +44,61 @@ class TopFrame : public QFrame
  public:
   TopFrame( QWidget* parent = 0, const char* name = 0 );
 
+ signals:
+  void hideClicked();
+  void greyClicked();
+  void rgbClicked();
+  void hsbClicked();
+  void cmykClicked();
+  void labClicked();
+
  protected:
-  virtual void drawContents ( QPainter * );
+  virtual void resizeEvent ( QResizeEvent * );
+
+ protected slots:
+  void slotHideClicked();
+  void slotGreyClicked();
+  void slotRGBClicked();
+  void slotHSBClicked();
+  void slotCMYKClicked();
+  void slotLABClicked();
+
+ private:
+  KisFrameButton *m_pHideButton, *m_pGreyButton, *m_pRGBButton, *m_pHSBButton,
+	*m_pCMYKButton, *m_pLABButton;
+  QFrame *m_pEmptyFrame;
+};
+
+class ChooserFrame : public QFrame
+{
+  Q_OBJECT
+
+ public:
+  ChooserFrame( QWidget* parent = 0, const char* name = 0 );
+
+ public slots:
+  void slotSetFGColor(const KisColor&);
+  void slotSetBGColor(const KisColor&);
+
+  void slotSetActiveColor( ActiveColor );
+
+  void slotShowGrey();
+  void slotShowRGB();
+  void slotShowHSB();
+  void slotShowCMYK();
+  void slotShowLAB();
+
+ signals:
+  void colorChanged(const KisColor&);
+
+ protected:
+  virtual void resizeEvent ( QResizeEvent * );
+
+ protected slots:
+  void slotColorSelected(const KisColor&);
+
+ private:
+  KisColorChooser   *m_pColorChooser;
 };
 
 class ControlFrame : public QFrame
@@ -46,32 +107,21 @@ class ControlFrame : public QFrame
 
  public:
   ControlFrame( QWidget* parent = 0, const char* name = 0 );
-  ~ControlFrame();
 
-  void setFGColor(const KisColor&);
-  void setBGColor(const KisColor&);
+  ActiveColor activeColor();
 
-  void setBrush(const KisBrush&);
+ public slots:
+  void slotSetFGColor(const KisColor&);
+  void slotSetBGColor(const KisColor&);
 
-  void setC1Label(const QString& c) { m_pC1Label->setText(c); }
-  void setC2Label(const QString& c) { m_pC2Label->setText(c); }
-  void setC3Label(const QString& c) { m_pC3Label->setText(c); }
-  void setC4Label(const QString& c) { m_pC4Label->setText(c); }
-  void setCALabel(const QString& c) { m_pALabel->setText(c); }
-
-  void setC1Value(const QString& c) { m_pC1Value->setText(c); }
-  void setC2Value(const QString& c) { m_pC2Value->setText(c); }
-  void setC3Value(const QString& c) { m_pC3Value->setText(c); }
-  void setC4Value(const QString& c) { m_pC4Value->setText(c); }
-  void setAValue(const QString& c) { m_pAValue->setText(c); }
-  void setXValue(const QString& c) { m_pXValue->setText(c); }
-  void setYValue(const QString& c) { m_pYValue->setText(c); }
-
-  void setColorFrame(const QColor& c) { m_pColorFrame->setBackgroundColor(c); }
+  void slotSetBrush(const KisBrush&);
+  void slotSetPattern(const KisPattern&);
 
  signals:
   void fgColorChanged(const KisColor&);
   void bgColorChanged(const KisColor&);
+
+  void activeColorChanged(ActiveColor);
 
  protected:
   virtual void resizeEvent ( QResizeEvent * );
@@ -80,12 +130,30 @@ class ControlFrame : public QFrame
   void slotFGColorSelected(const QColor&);
   void slotBGColorSelected(const QColor&);
 
+  void slotActiveColorChanged(KDualColorButton::DualColor );
+
  private:
   KDualColorButton  *m_pColorButton;
-  QLabel            *m_pC1Label, *m_pC2Label, *m_pC3Label, *m_pC4Label, *m_pALabel, *m_pXLabel, *m_pYLabel;
-  QLabel            *m_pC1Value, *m_pC2Value, *m_pC3Value, *m_pC4Value, *m_pAValue, *m_pXValue, *m_pYValue;
-  QFrame            *m_pColorFrame;
   KisBrushWidget    *m_pBrushWidget;
+  KisPatternWidget  *m_pPatternWidget;
+};
+
+class DockFrame : public QFrame
+{
+  Q_OBJECT
+
+ public:
+  DockFrame( QWidget* parent = 0, const char* name = 0 );
+
+ public:
+  void plug (QWidget* w);
+  void unplug (QWidget* w);
+
+ protected:
+  virtual void resizeEvent ( QResizeEvent * );
+
+ private:
+  QList<QWidget> m_lst;
 };
 
 class KisSideBar : public QWidget
@@ -94,14 +162,14 @@ class KisSideBar : public QWidget
 
  public:
   KisSideBar( QWidget* parent = 0, const char* name = 0 );
-  ~KisSideBar();
+
+  void plug (QWidget* w) { m_pDockFrame->plug(w); }
+  void unplug (QWidget* w) { m_pDockFrame->unplug(w); }
 
  public slots:
   void slotSetFGColor(const KisColor&);
   void slotSetBGColor(const KisColor&);
 
-  void slotSetColor(const KisColor&);
-  void slotSetPosition( const QPoint& );
   void slotSetBrush(const KisBrush&);
 
  signals:
@@ -112,12 +180,17 @@ class KisSideBar : public QWidget
   virtual void resizeEvent ( QResizeEvent * );
 
  protected slots:
-  void slotFGColorSelected(const KisColor&);
-  void slotBGColorSelected(const KisColor&);
+  void slotChooserColorSelected(const KisColor&);
+  void slotControlFGColorSelected(const KisColor&);
+  void slotControlBGColorSelected(const KisColor&);
+  void slotControlActiveColorChanged(ActiveColor);
+
 
  private:
-  TopFrame     *m_pTopFrame;
-  ControlFrame *m_pControlFrame;
+  TopFrame        *m_pTopFrame;
+  ChooserFrame    *m_pChooserFrame;
+  ControlFrame    *m_pControlFrame;
+  DockFrame       *m_pDockFrame;
 };
 
 #endif

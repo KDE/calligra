@@ -53,6 +53,7 @@ KisBrush::KisBrush(QString file)
 KisBrush::~KisBrush()
 {
   delete [] m_pData;
+  delete m_pPixmap;
 }
 
 void KisBrush::readBrushInfo(QString file)

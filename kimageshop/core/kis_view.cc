@@ -46,15 +46,14 @@
 #include "kis_gradient.h"
 #include "kis_pluginserver.h"
 
-#include "kis_dlg_color.h"
-#include "kis_dlg_layer.h"
+#include "kis_brushchooser.h"
+#include "kis_layerview.h"
+#include "kis_channelview.h"
+
 #include "kis_dlg_gradient.h"
 #include "kis_dlg_gradienteditor.h"
 #include "kis_dlg_preferences.h"
-#include "kis_dlg_brush.h"
 #include "kis_dlg_new.h"
-#include "brusheswidget.h"
-
 #include "kis_tool_select.h"
 #include "kis_tool_move.h"
 #include "kis_tool_zoom.h"
@@ -86,8 +85,8 @@ KisView::KisView( KisDoc* doc, QWidget* parent, const char* name )
   setupTabBar();
   setupActions();
   setupDialogs();
-  setupTools();
   setupSideBar();
+  setupTools();
 }
 
 void KisView::setupCanvas()
@@ -111,9 +110,32 @@ void KisView::setupCanvas()
 void KisView::setupSideBar()
 {
   m_pSideBar = new KisSideBar(this, "kis_sidebar");
-  connect(m_pSideBar, SIGNAL(fgColorChanged(const KisColor&)), this, SLOT(slotSetFGColor(const KisColor&)));
-  connect(m_pSideBar, SIGNAL(bgColorChanged(const KisColor&)), this, SLOT(slotSetBGColor(const KisColor&)));
+
+  // brush chooser
+  m_pBrushChooser = new KisBrushChooser(this);
+  m_pBrush = m_pBrushChooser->currentBrush();
+  QObject::connect(m_pBrushChooser, SIGNAL(selected(const KisBrush *)),
+				   this, SLOT(slotSetBrush(const KisBrush*)));
+ 
+  m_pSideBar->plug(m_pBrushChooser);
+
+  // channel view
+  m_pChannelView = new KisChannelView(m_pDoc, this);
+  m_pSideBar->plug(m_pChannelView);
+
+  // layer view
+  m_pLayerView = new KisLayerView(m_pDoc, this);
+  m_pSideBar->plug(m_pLayerView);
+  
+  // init sidebar
   m_pSideBar->slotSetBrush(*m_pBrush);
+  m_pSideBar->slotSetFGColor(m_fg);
+  m_pSideBar->slotSetBGColor(m_bg);
+
+  connect(m_pSideBar, SIGNAL(fgColorChanged(const KisColor&)), this,
+		  SLOT(slotSetFGColor(const KisColor&)));
+  connect(m_pSideBar, SIGNAL(bgColorChanged(const KisColor&)), this,
+		  SLOT(slotSetBGColor(const KisColor&)));
 }
 
 void KisView::setupScrollBars()
@@ -203,8 +225,6 @@ void KisView::setupTools()
 
   // color picker
   m_pColorPicker = new ColorPicker(m_pDoc, this);
-  //connect(m_pColorPicker, SIGNAL(fgColorPicked(const KisColor&)), this, SLOT(slotSetFGColor(const KisColor&)));
-  //connect(m_pColorPicker, SIGNAL(bgColorPicked(const KisColor&)), this, SLOT(slotSetBGColor(const KisColor&)));
 
   // zoom tool
   m_pZoomTool = new ZoomTool(this);
@@ -219,33 +239,30 @@ void KisView::setupTools()
 void KisView::setupDialogs()
 {
   // color dialog
-  m_pColorDialog = new ColorDialog( this );
-  m_pColorDialog->resize(254, 150);
-  m_pColorDialog->move(521, 380);
-  m_pColorDialog->hide();
-  connect( m_pColorDialog, SIGNAL( sigClosed() ), SLOT( updateToolbarButtons() ) );
+  //m_pColorDialog = new ColorDialog( this );
+  // m_pColorDialog->resize(254, 150);
+  //m_pColorDialog->move(521, 380);
+  //m_pColorDialog->hide();
+  //connect( m_pColorDialog, SIGNAL( sigClosed() ), SLOT( updateToolbarButtons() ) );
 
-  connect(m_pColorDialog, SIGNAL(fgColorChanged(const KisColor&)), this, SLOT(slotSetFGColor(const KisColor&)));
-  connect(m_pColorDialog, SIGNAL(bgColorChanged(const KisColor&)), this, SLOT(slotSetBGColor(const KisColor&)));
+  //connect(m_pColorDialog, SIGNAL(fgColorChanged(const KisColor&)),
+  //	  this, SLOT(slotSetFGColor(const KisColor&)));
+  //connect(m_pColorDialog, SIGNAL(bgColorChanged(const KisColor&)),
+  //		  this, SLOT(slotSetBGColor(const KisColor&)));
 
   // layer dialog
-  m_pLayerDialog = new LayerDialog( m_pDoc, this );
-  m_pLayerDialog->resize( 205, 267 );
-  m_pLayerDialog->move( 560, 22 );
-  m_pLayerDialog->hide();
-  connect( m_pLayerDialog, SIGNAL( sigClosed() ), SLOT( updateToolbarButtons() ) );
+  //m_pLayerDialog = new LayerDialog( m_pDoc, this );
+  //m_pLayerDialog->resize( 205, 267 );
+  //m_pLayerDialog->move( 560, 22 );
+  //m_pLayerDialog->hide();
+  //connect( m_pLayerDialog, SIGNAL( sigClosed() ), SLOT( updateToolbarButtons() ) );
 
   // brush dialog
-  m_pBrushDialog = new BrushDialog(this);
-  m_pBrushDialog->resize(185, 158);
-  m_pBrushDialog->move(523, 220);
-  m_pBrushDialog->hide();
-  connect( m_pBrushDialog, SIGNAL( sigClosed() ), SLOT( updateToolbarButtons() ) );
-
-  // brush
-  m_pBrushChooser = m_pBrushDialog->brushChooser();
-  m_pBrush = m_pBrushChooser->currentBrush();
-  QObject::connect(m_pBrushChooser, SIGNAL(selected(const KisBrush *)), this, SLOT(slotSetBrush(const KisBrush*)));
+  //m_pBrushDialog = new BrushDialog(this);
+  //m_pBrushDialog->resize(185, 158);
+  //m_pBrushDialog->move(523, 220);
+  //m_pBrushDialog->hide();
+  //connect( m_pBrushDialog, SIGNAL( sigClosed() ), SLOT( updateToolbarButtons() ) );
 
   // gradient dialog
   m_pGradientDialog = new GradientDialog( m_pDoc, this );
@@ -282,16 +299,19 @@ void KisView::setupActions()
 				SLOT( dialog_color() ),actionCollection(), "dialog_color");
   m_dialog_brush = new KToggleAction( i18n("&Brush Dialog"), KISBarIcon("brush_dialog"), 0, this,
 				SLOT( dialog_brush() ),actionCollection(), "dialog_brush");
-  m_dialog_gradient = new KToggleAction( i18n("&Gradient Dialog"), KISBarIcon("gradient_dialog"), 0, this,
+  m_dialog_gradient = new KToggleAction( i18n("&Gradient Dialog"),
+										 KISBarIcon("gradient_dialog"), 0, this,
 				   SLOT( dialog_gradient() ),actionCollection(), "dialog_gradient");
-  m_dialog_gradienteditor = new KToggleAction( i18n("Gradient &Editor"), KISBarIcon("gradienteditor_dialog"),
-					 0, this, SLOT( dialog_gradienteditor() ),
-					 actionCollection(), "dialog_gradienteditor");
+  m_dialog_gradienteditor = new KToggleAction( i18n("Gradient &Editor"),
+											   KISBarIcon("gradienteditor_dialog"),
+											   0, this, SLOT( dialog_gradienteditor() ),
+											   actionCollection(), "dialog_gradienteditor");
 
   // tool actions
 
-  m_tool_select_rect = new KToggleAction( i18n( "&Rectangular select" ), KISBarIcon( "areaselect" ), 0, this,
-                             SLOT( tool_select_rect() ), actionCollection(), "tool_select_rect" );
+  m_tool_select_rect = new KToggleAction( i18n( "&Rectangular select" ),
+										  KISBarIcon( "areaselect" ), 0, this,
+										  SLOT( tool_select_rect() ), actionCollection(), "tool_select_rect" );
   m_tool_select_rect->setExclusiveGroup( "tools" );
   m_tool_move = new KToggleAction( i18n("&Move tool"), KISBarIcon("move"), 0, this,
 			     SLOT( tool_move() ),actionCollection(), "tool_move");
@@ -537,20 +557,6 @@ void KisView::canvasGotMouseMoveEvent ( QMouseEvent *e )
 		  , QPoint(x, y)
 		  , e->globalPos(), e->button(), e->state() );
 
-  if (x > docWidth() || x < 0 || y > docHeight() || y < 0)
-    {
-      x = -1;
-      y = -1;
-      m_pSideBar->slotSetPosition( QPoint( x,y ) );
-      m_pSideBar->slotSetColor( KisColor::white() );
-    }
-  else
-    {
-      m_pSideBar->slotSetPosition( QPoint( x,y ) );
-      
-      KisColor c = m_pColorPicker->pick( x, y );
-      m_pSideBar->slotSetColor( c );
-    }
   emit canvasMouseMoveEvent( &ev );
 }
 
@@ -560,8 +566,6 @@ void KisView::canvasGotMouseReleaseEvent ( QMouseEvent *e )
 		  , QPoint(e->pos().x() - xPaintOffset() + m_pHorz->value(),
 			   e->pos().y() - yPaintOffset() + m_pVert->value())
 		  , e->globalPos(), e->button(), e->state() );
-
-  m_pSideBar->slotSetPosition( QPoint( -1, -1 ) );
 
   emit canvasMouseReleaseEvent( &ev );
 }
@@ -719,6 +723,7 @@ void KisView::paste()
 
 void KisView::dialog_layer()
 {
+  /*
   if (m_dialog_layer->isChecked())
   {
     m_pLayerDialog->show();
@@ -726,28 +731,31 @@ void KisView::dialog_layer()
   }
   else
     m_pLayerDialog->hide();
+  */
 }
 
 void KisView::dialog_color()
 {
-  if (m_dialog_color->isChecked())
+  /* if (m_dialog_color->isChecked())
   {
     m_pColorDialog->show();
     m_pColorDialog->setFocus();
   }
   else
     m_pColorDialog->hide();
+  */
 }
 
 void KisView::dialog_brush()
 {
-  if (m_dialog_brush->isChecked())
+  /* if (m_dialog_brush->isChecked())
   {
     m_pBrushDialog->show();
     m_pBrushDialog->setFocus();
   }
   else
     m_pBrushDialog->hide();
+  */
 }
 
 void KisView::dialog_gradient()
@@ -777,9 +785,9 @@ void KisView::updateToolbarButtons()
 {
   kDebugInfo( 0, "KisView::updateToolbarButtons" );
 
-  m_dialog_layer->setChecked( m_pLayerDialog->isVisible() );
-  m_dialog_color->setChecked( m_pColorDialog->isVisible() );
-  m_dialog_brush->setChecked( m_pBrushDialog->isVisible() );
+  // m_dialog_layer->setChecked( m_pLayerDialog->isVisible() );
+  //m_dialog_color->setChecked( m_pColorDialog->isVisible() );
+  //m_dialog_brush->setChecked( m_pBrushDialog->isVisible() );
   m_dialog_gradient->setChecked( m_pGradientDialog->isVisible() );
   m_dialog_gradienteditor->setChecked( m_pGradientEditorDialog->isVisible() );
 }
@@ -932,13 +940,11 @@ void KisView::slotSetBrush(const KisBrush* b)
 void KisView::slotSetFGColor(const KisColor& c)
 {
   m_fg = c;
-  m_pSideBar->slotSetFGColor( c );
 }
 
 void KisView::slotSetBGColor(const KisColor& c)
 {
   m_bg = c;
-  m_pSideBar->slotSetBGColor( c );
 }
 
 void KisView::slotUndoRedoChanged( QString undo, QString redo )

@@ -33,22 +33,23 @@ class KToggleAction;
 class KHelpMenu;
 class QPaintEvent;
 
-class BrushDialog;
 class GradientDialog;
 class GradientEditorDialog;
-class ColorDialog;
-class LayerDialog;
 
 class KisDoc;
 class KisCanvas;
 class KisTabBar;
 class KisSideBar;
+
+class KisBrushChooser;
+class KisLayerView;
+class KisChannelView;
+
 class QScrollBar;
 class KRuler;
 
 class SelectTool;
 class KisBrush;
-class BrushesWidget;
 class KisTool;
 class MoveTool;
 class BrushTool;
@@ -191,13 +192,14 @@ class KisView : public KoView
   GradientTool         *m_pGradientTool;
   ColorPicker          *m_pColorPicker;
   const KisBrush       *m_pBrush; // current brush
-  const BrushesWidget  *m_pBrushChooser;
 
-  BrushDialog          *m_pBrushDialog;
-  LayerDialog          *m_pLayerDialog;
+  // sidebar dock widgets
+  KisBrushChooser      *m_pBrushChooser;
+  KisLayerView         *m_pLayerView;
+  KisChannelView       *m_pChannelView;
+
   GradientDialog       *m_pGradientDialog;
   GradientEditorDialog *m_pGradientEditorDialog;
-  ColorDialog          *m_pColorDialog;
 
   KisCanvas            *m_pCanvas;
   KisSideBar           *m_pSideBar;

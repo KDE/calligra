@@ -20,7 +20,9 @@
 
 #include <kinstance.h>
 #include <kglobal.h>
+#include <klocale.h>
 #include <kstddirs.h>
+#include <kaboutdata.h>
 
 #include "kis_factory.h"
 #include "kis_pluginserver.h"
@@ -38,10 +40,21 @@ extern "C"
 KInstance* KisFactory::s_global = 0;
 KisPluginServer* KisFactory::s_pserver = 0;
 KisBrushServer* KisFactory::s_bserver = 0;
+KAboutData* KisFactory::s_aboutData = 0;
 
 KisFactory::KisFactory( QObject* parent, const char* name )
     : KLibFactory( parent, name )
 {
+  s_aboutData = new KAboutData( "kimageshop",
+								I18N_NOOP("KImageShop"),
+								"0.1.0",
+								I18N_NOOP("KOffice image manipulation application."),
+								KAboutData::License_GPL,
+								"(c) 1999-2000 The KImageShop team.",
+								"",
+								"http://koffice.kde.org",
+								"submit@bugs.kde.org");
+
   (void)global();
   s_pserver = new KisPluginServer;
   s_bserver = new KisBrushServer;
@@ -56,13 +69,6 @@ KisFactory::~KisFactory()
 
 QObject* KisFactory::create( QObject* parent, const char* name, const char* classname, const QStringList & )
 {
-/*
-    if ( parent && !parent->inherits("KoDocument") )
-    {
-	qDebug("KisFactory: parent does not inherit KoDocument");
-	return 0;
-    }
-*/
     bool bWantKoDocument = ( strcmp( classname, "KofficeDocument" ) == 0 );
 
     KisDoc *doc = new KisDoc( parent, name, !bWantKoDocument );
@@ -78,14 +84,20 @@ KInstance* KisFactory::global()
 {
     if ( !s_global )
     {
-      s_global = new KInstance( "kimageshop" );
+      s_global = new KInstance(s_aboutData);
 
-      s_global->dirs()->addResourceType("kis", KStandardDirs::kde_default("data") + "kimageshop/");
-      s_global->dirs()->addResourceType("kis_images", KStandardDirs::kde_default("data") + "kimageshop/images/");
-      s_global->dirs()->addResourceType("kis_brushes", KStandardDirs::kde_default("data") + "kimageshop/brushes/");
-      s_global->dirs()->addResourceType("toolbar", KStandardDirs::kde_default("data") + "koffice/toolbar/");
-      s_global->dirs()->addResourceType("kis_pics", KStandardDirs::kde_default("data") + "kimageshop/pics/");
-      s_global->dirs()->addResourceType("kis_plugins", KStandardDirs::kde_default("data") + "kimageshop/plugins/");
+      s_global->dirs()->addResourceType("kis",
+										KStandardDirs::kde_default("data") + "kimageshop/");
+      s_global->dirs()->addResourceType("kis_images",
+										KStandardDirs::kde_default("data") + "kimageshop/images/");
+      s_global->dirs()->addResourceType("kis_brushes",
+										KStandardDirs::kde_default("data") + "kimageshop/brushes/");
+      s_global->dirs()->addResourceType("kis_pics",
+										KStandardDirs::kde_default("data") + "kimageshop/pics/");
+      s_global->dirs()->addResourceType("kis_plugins",
+										KStandardDirs::kde_default("data") + "kimageshop/plugins/");
+	  s_global->dirs()->addResourceType("toolbars",
+										KStandardDirs::kde_default("data") + "koffice/toolbar/");
       
     }
     return s_global;
