@@ -42,6 +42,8 @@
 #include <koOasisStyles.h>
 #include "kooasiscontext.h"
 
+#include <koxmlwriter.h>
+
 #if KDE_IS_VERSION(3, 2, 0)
 #include <kcalendarsystem.h>
 #endif
@@ -934,6 +936,56 @@ void KoVariable::saveOasis( KoXmlWriter& writer, KoSavingContext& context ) cons
 {
     // TODO implement saving variables
     kdWarning(32500) << "Not implemented: OASIS saving of variables" << endl;
+    switch( type() )
+    {
+    case VT_DATE:
+        kdDebug()<<" variable date found \n";
+        break;
+    case VT_DATE_VAR_KWORD10:
+        kdDebug()<<" variable date found old \n";
+        break;
+    case VT_TIME:
+        kdDebug()<<" variable time found \n";
+        break;
+    case VT_TIME_VAR_KWORD10:
+        kdDebug()<<" variable time found old \n";
+        break;
+    case VT_PGNUM:
+        writer.startElement( "text:page-number" );
+        if ( subType() == KoPgNumVariable::VST_PGNUM_PREVIOUS )
+        {
+            writer.addAttribute( "text:select-page", "previous" );
+        }
+        else if ( subType() == KoPgNumVariable::VST_PGNUM_NEXT )
+        {
+            writer.addAttribute( "text:select-page", "next" );
+
+        }
+        writer.addTextNode( "<number>" );//todo fix me
+        writer.endElement();
+        kdDebug()<<" variable pgnum \n";
+        break;
+    case VT_CUSTOM:
+        kdDebug()<<" variable custom \n";
+        break;
+    case VT_MAILMERGE:
+        kdDebug()<<" variable mail merge \n";
+        break;
+    case VT_FIELD:
+        kdDebug()<<" variable field \n";
+        break;
+    case VT_LINK:
+        kdDebug()<<" variable link \n";
+        break;
+    case VT_NOTE:
+        kdDebug()<<" variable note \n";
+        break;
+    case VT_FOOTNOTE:
+        kdDebug()<<" variable footnote \n";
+        break;
+    default:
+        kdDebug()<<" variable is not implemented :"<<type()<<endl;
+    }
 }
 
 void KoVariable::setVariableFormat( KoVariableFormat *_varFormat )
