@@ -606,8 +606,6 @@ protected:
     KoRect getAlignBoundingRect() const;
 
 private:
-    QValueList<int> pages(const QString &range) const;
-    bool pagesHelper(const QString &chunk, QValueList<int> &list) const;
     void picViewOrigHelper(int x, int y);
 
     void moveObject( int x, int y, bool key );
