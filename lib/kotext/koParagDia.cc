@@ -272,21 +272,34 @@ void KoBorderPreview::drawContents( QPainter* painter )
     if ( m_topBorder.width() > 0 ) {
         painter->setPen( setBorderPen( m_topBorder ) );
         painter->drawLine( r.x() + 20, r.y() + 30, r.right() - 20, r.y() + 30 );
+        if ( m_topBorder.style==KoBorder::DOUBLE_LINE)
+            painter->drawLine( r.x() + 20, r.y() + 30+m_topBorder.width()+1, r.right() - 20, r.y() + 30+m_topBorder.width()+1 );
+
+
     }
 
     if ( m_bottomBorder.width() > 0 ) {
         painter->setPen( setBorderPen( m_bottomBorder ) );
         painter->drawLine( r.x() + 20, r.bottom() - 30, r.right() - 20, r.bottom() - 30 );
+        if ( m_bottomBorder.style==KoBorder::DOUBLE_LINE)
+            painter->drawLine( r.x() + 20, r.y() - 30-m_bottomBorder.width()-1, r.right() - 20, r.y() - 30 - m_bottomBorder.width()- 1 );
+
     }
 
     if ( m_leftBorder.width() > 0 ) {
         painter->setPen( setBorderPen( m_leftBorder ) );
         painter->drawLine( r.x() + 20, r.y() + 30, r.x() + 20, r.bottom() - 30 );
+        if ( m_leftBorder.style==KoBorder::DOUBLE_LINE)
+            painter->drawLine( r.x() + 20 - m_leftBorder.width() -1 , r.y() + 30, r.x() + 20- m_leftBorder.width() -1, r.bottom() - 30 );
+
     }
 
     if ( m_rightBorder.width() > 0 ) {
         painter->setPen( setBorderPen( m_rightBorder ) );
         painter->drawLine( r.right() - 20, r.y() + 30, r.right() - 20, r.bottom() - 30 );
+        if ( m_rightBorder.style==KoBorder::DOUBLE_LINE)
+            painter->drawLine( r.right() - 20 -m_rightBorder.width()-1, r.y() + 30, r.right() - 20-m_rightBorder.width()-1, r.bottom() - 30 );
+
     }
 }
 
