@@ -46,6 +46,7 @@ class SideBar;
 
 class KAction;
 class KToggleAction;
+class TKSelectColorAction;
 
 class PageBase : public QWidget
 {
@@ -181,6 +182,7 @@ public slots:
     void textItalic();
     void textUnderline();
     void textColor();
+    void tbTextColor();
     void textAlignLeft();
     void textAlignCenter();
     void textAlignRight();
@@ -196,8 +198,8 @@ public slots:
     void textInsertPageNum();
 
     // color bar
-    void penChosen( const QColor &c );
-    void brushChosen( const QColor &c );
+    void penChosen();
+    void brushChosen();
 
     void skipToPage( int _num );
     void nextPage();
@@ -347,7 +349,6 @@ protected slots:
 
     // textobject
     void fontChanged( const QFont & );
-    void colorChanged( const QColor & );
     void alignChanged( int );
 
     void extraLineBeginNormal();
@@ -492,7 +493,6 @@ protected:
     KAction *actionTextFont;
     KAction *actionTextFontSize;
     KAction *actionTextFontFamily;
-    KAction *actionTextColor;
     KAction *actionTextAlignLeft;
     KAction *actionTextAlignCenter;
     KAction *actionTextAlignRight;
@@ -550,6 +550,11 @@ protected:
 
     KAction *actionColorBar;
     KAction *actionExtraDefaultTemplate;
+
+    TKSelectColorAction* actionBrushColor;
+    TKSelectColorAction* actionPenColor;
+    TKSelectColorAction* actionTextColor;
+    TKSelectColorAction* actionTbTextColor;
 
 
     KAction *actionResizeTextObject;

@@ -192,7 +192,7 @@
   <Action name="text_depthMinus"/>
   <Action name="text_depthPlus"/>
   <Separator/>
-  <Action name="text_color"/>
+  <Action name="tb_text_color"/>
 </ToolBar>
 <ToolBar name="screenToolBar" position="top" fullWidth="false"><Text>Presentation</Text>
   <Action name="screen_assigneffect"/>
@@ -208,7 +208,8 @@
   <Action name="screen_pencolor"/>
 </ToolBar>
 <ToolBar name="colorBar" position="right" fullWidth="false"><Text>Color</Text>
-  <Action name="colorbar"/>
+  <Action name="brush_color"/>
+  <Action name="pen_color"/>
 </ToolBar>
 <Menu name="menupage_popup">
   <Action name="extra_layout"/>

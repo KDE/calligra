@@ -82,6 +82,7 @@
 #include <koRuler.h>
 #include <koTemplateCreateDia.h>
 #include <kcoloractions.h>
+#include <tkcoloractions.h>
 #include <kaction.h>
 #include <qspinbox.h>
 #include <qcombobox.h>
@@ -1244,13 +1245,19 @@ void KPresenterView::textUnderline()
 /*===============================================================*/
 void KPresenterView::textColor()
 {
-    if ( KColorDialog::getColor( tbColor ) ) {
-	page->setTextColor( tbColor );
-	( (KColorAction*)actionTextColor )->blockSignals( true );
-	( (KColorAction*)actionTextColor )->setColor( tbColor );
-	( (KColorAction*)actionTextColor )->blockSignals( false );
-        m_pKPresenterDoc->setModified(true);
-    }
+    tbColor = actionTextColor->color();
+    actionTbTextColor->setCurrentColor( tbColor );
+    page->setTextColor( tbColor );
+    m_pKPresenterDoc->setModified(true);
+}
+
+/*===============================================================*/
+void KPresenterView::tbTextColor()
+{
+    tbColor = actionTbTextColor->color();
+    actionTextColor->setCurrentColor( tbColor );
+    page->setTextColor( tbColor );
+    m_pKPresenterDoc->setModified(true);
 }
 
 /*===============================================================*/
@@ -1467,8 +1474,9 @@ void KPresenterView::textObjectToContents()
 }
 
 /*===============================================================*/
-void KPresenterView::penChosen( const QColor &c )
+void KPresenterView::penChosen()
 {
+    QColor c = actionPenColor->color();
     if ( !page->kTxtObj() ) {
 	bool fill = true;
 
@@ -1481,15 +1489,13 @@ void KPresenterView::penChosen( const QColor &c )
     } else {
 	tbColor = c;
 	page->setTextColor( tbColor );
-	( (KColorAction*)actionTextColor )->blockSignals( true );
-	( (KColorAction*)actionTextColor )->setColor( tbColor );
-	( (KColorAction*)actionTextColor )->blockSignals( false );
     }
 }
 
 /*===============================================================*/
-void KPresenterView::brushChosen( const QColor &c )
+void KPresenterView::brushChosen()
 {
+    QColor c = actionBrushColor->color();
     if ( !page->kTxtObj() ) {
 	bool fill = true;
 
@@ -1502,9 +1508,6 @@ void KPresenterView::brushChosen( const QColor &c )
     } else {
 	tbColor = c;
 	page->setTextColor( tbColor );
-	( (KColorAction*)actionTextColor )->blockSignals( true );
-	( (KColorAction*)actionTextColor )->setColor( tbColor );
-	( (KColorAction*)actionTextColor )->blockSignals( false );
     }
 }
 
@@ -1637,8 +1640,6 @@ void KPresenterView::createGUI()
     page = new Page( pageBase, "Page", ( KPresenterView* )this );
     QObject::connect( page, SIGNAL( fontChanged( const QFont & ) ),
 		      this, SLOT( fontChanged( const QFont & ) ) );
-    QObject::connect( page, SIGNAL( colorChanged( const QColor & ) ),
-		      this, SLOT( colorChanged( const QColor & ) ) );
     QObject::connect( page, SIGNAL( alignChanged( int ) ),
 		      this, SLOT( alignChanged( int ) ) );
     QObject::connect( page, SIGNAL( updateSideBarItem( int ) ),
@@ -1673,7 +1674,10 @@ void KPresenterView::createGUI()
 void KPresenterView::initGui()
 {
     tbColor = Qt::black;
-    ( (KColorAction*)actionTextColor )->setColor( Qt::black );
+    actionTextColor->setCurrentColor( Qt::black );
+    actionTbTextColor->setCurrentColor( Qt::black );
+    actionBrushColor->setCurrentColor( Qt::white );
+    actionPenColor->setCurrentColor( Qt::black );
     ( (KColorAction*)actionScreenPenColor )->setColor( Qt::red );
     ( (KSelectAction*)actionScreenPenWidth )->setCurrentItem( 2 );
     actionEditUndo->setEnabled( false );
@@ -1833,9 +1837,13 @@ void KPresenterView::setupActions()
 					   this, SLOT( textUnderline() ),
 					   actionCollection(), "text_underline" );
 
-    actionTextColor = new KColorAction( i18n( "&Color..." ), KColorAction::TextColor, 0,
-					this, SLOT( textColor() ),
-					actionCollection(), "text_color" );
+    actionTextColor = new TKSelectColorAction( i18n( "&Color" ), TKSelectColorAction::TextColor,
+                                               actionCollection(), "text_color", true );
+    connect( actionTextColor, SIGNAL( activated() ), SLOT( textColor() ) );
+
+    actionTbTextColor = new TKSelectColorAction( i18n( "Text Color" ), TKSelectColorAction::TextColor,
+                                                 actionCollection(), "tb_text_color", false );
+    connect( actionTbTextColor, SIGNAL( activated() ), SLOT( tbTextColor() ) );
 
     actionTextAlignLeft = new KToggleAction( i18n( "Align &Left" ), "text_left", ALT + Key_L,
 				       this, SLOT( textAlignLeft() ),
@@ -2061,20 +2069,15 @@ void KPresenterView::setupActions()
     connect( ( ( KSelectAction* )actionScreenPenWidth ), SIGNAL( activated( const QString & ) ),
 	     this, SLOT( screenPenWidth( const QString & ) ) );
 
-    // ----------------- colorbar action
-
-    QValueList<QColor> colorList;
-    colorList << white << red << green << blue << cyan << magenta << yellow
-	      << darkRed << darkGreen << darkBlue << darkCyan
-	      << darkMagenta << darkYellow << white << lightGray
-	      << gray << darkGray << black;
-
-    actionColorBar = new KColorBarAction( i18n( "Colorbar" ), 0,
-					  this,
-					  SLOT( brushChosen( const QColor & ) ),
-					  SLOT( penChosen( const QColor & ) ),
-					  colorList,
-					  actionCollection(), "colorbar" );
+     // ----------------- colorbar(Brush and Pen) action
+  
+     actionBrushColor = new TKSelectColorAction( i18n( "Brush Color" ), TKSelectColorAction::FillColor,
+                                                 actionCollection(), "brush_color", false );
+     connect( actionBrushColor, SIGNAL( activated() ), SLOT( brushChosen() ) );
+ 
+     actionPenColor = new TKSelectColorAction( i18n( "Pen Color" ), TKSelectColorAction::LineColor,
+                                               actionCollection(), "pen_color", false );
+     connect( actionPenColor, SIGNAL( activated() ), SLOT( penChosen() ) );
 
     actionExtendObjectHeight = new KAction( i18n( "&Extend Contents to Object Height" ),0, this, SLOT( textContentsToHeight() ), actionCollection(), "extendobjectheight" );
 
@@ -2141,12 +2144,15 @@ void KPresenterView::objectSelectedChanged()
     actionEditDelete->setEnabled(state);
     actionExtraRaise->setEnabled(state && m_pKPresenterDoc->numSelected()==1);
     actionExtraLower->setEnabled(state && m_pKPresenterDoc->numSelected()==1);
+    actionBrushColor->setEnabled(state);
+    actionPenColor->setEnabled(state);
 
     bool isText=page->isASelectedTextObj();
     actionTextFont->setEnabled(isText);
     actionTextFontSize->setEnabled(isText);
     actionTextFontFamily->setEnabled(isText);
     actionTextColor->setEnabled(isText);
+    actionTbTextColor->setEnabled(isText);
     actionTextAlignLeft->setEnabled(isText);
     actionTextAlignCenter->setEnabled(isText);
     actionTextAlignRight->setEnabled(isText);
@@ -2165,7 +2171,6 @@ void KPresenterView::objectSelectedChanged()
     state=state || isText;
     actionEditCopy->setEnabled(state);
     actionEditCut->setEnabled(state);
-    actionColorBar->setEnabled(state);
 
     actionExtraShadow->setEnabled(!page->haveASelectedPictureObj());
 
@@ -2242,6 +2247,8 @@ void KPresenterView::styleOk()
 	gYFactor = styleDia->getGYFactor();
 	sticky = styleDia->isSticky();
     }
+    actionBrushColor->setCurrentColor( (styleDia->getBrush()).color() );
+    actionPenColor->setCurrentColor( (styleDia->getPen()).color() );
 }
 
 /*=================== page configuration ok ======================*/
@@ -2433,15 +2440,6 @@ void KPresenterView::fontChanged( const QFont &font )
     ( (KToggleAction*) actionTextUnderline )->blockSignals( true );
     ( (KToggleAction*) actionTextUnderline )->setChecked( tbFont.underline() );
     ( (KToggleAction*) actionTextUnderline )->blockSignals( false );
-}
-
-/*====================== color changed ==========================*/
-void KPresenterView::colorChanged( const QColor &color )
-{
-    tbColor.setRgb( color.rgb() );
-    ( (KColorAction*) actionTextColor )->blockSignals( true );
-    ( (KColorAction*) actionTextColor )->setColor( tbColor );
-    ( (KColorAction*) actionTextColor )->blockSignals( false );
 }
 
 /*====================== align changed ==========================*/
