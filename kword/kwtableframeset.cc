@@ -124,7 +124,7 @@ QSize KWTableFrameSet::floatingFrameSize( int /*frameNum TODO */ )
     QSize sz = outerRect.size();
     Q_ASSERT( m_anchorTextFs );
     // Need to convert back to internal coords (in case of page breaking)
-#if 0   TODO
+#if 0  // TODO
     QPoint iPoint;
     if ( m_anchorTextFs->normalToInternal( outerRect.topLeft(), iPoint ) )
     {
