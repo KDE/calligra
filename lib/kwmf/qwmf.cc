@@ -39,6 +39,8 @@ bool qwmfDebug = false;
 #include "wmfstruct.h"
 #include "metafuncs.h"
 
+#define QWMF_DEBUG  0
+
 
 class WmfCmd
 {
@@ -120,7 +122,6 @@ QWinMetaFile::QWinMetaFile()
 {
     mValid       = false;
     mFirstCmd    = NULL;
-    mSingleStep  = false;
     mObjHandleTab = NULL;
     mDpi         = 1000;
 }
@@ -133,12 +134,6 @@ QWinMetaFile::~QWinMetaFile()
     if ( mObjHandleTab ) delete[] mObjHandleTab;
 }
 
-
-//-----------------------------------------------------------------------------
-void QWinMetaFile::singleStep( bool ss )
-{
-    mSingleStep = ss;
-}
 
 //-----------------------------------------------------------------------------
 bool QWinMetaFile::load( const QString &filename )
@@ -208,13 +203,13 @@ bool QWinMetaFile::load( QBuffer &buffer )
         mBBox.setTop( pheader.bbox.top );
         mBBox.setRight( pheader.bbox.right );
         mBBox.setBottom( pheader.bbox.bottom );
-        if ( mSingleStep )
+        mHeaderBoundingBox = mBBox;
+        if ( QWMF_DEBUG )
         {
             kdDebug() << endl << "-------------------------------------------------" << endl;
             kdDebug() << "WMF Placeable Header ( " << static_cast<int>(sizeof( pheader ) ) << "):" << endl;
-            kdDebug() << "  bbox=( " << pheader.bbox.left << "; " << pheader.bbox.top << "; " << pheader.bbox.right
-                      << "; " << pheader.bbox.bottom << ")" << endl;
-            kdDebug() << "  width=" << mBBox.width() << "  height=" << mBBox.height() << endl;
+            kdDebug() << "  bbox=( " << mBBox.left() << "; " << mBBox.top() << "; " << mBBox.width()
+                      << "; " << mBBox.height() << ")" << endl;
             kdDebug() << "  inch=" << pheader.inch << endl;
             kdDebug() << "  checksum=" << pheader.checksum << "( "
                       << (pheader.checksum==checksum?"ok":"wrong") << " )" << endl;
@@ -251,7 +246,7 @@ bool QWinMetaFile::load( QBuffer &buffer )
         st >> eheader.szlMillimeters.width;
         st >> eheader.szlMillimeters.height;
 
-        if ( mSingleStep )
+        if ( QWMF_DEBUG )
         {
             kdDebug() << endl << "-------------------------------------------------" << endl;
             kdDebug() << "WMF Extended Header:" << endl;
@@ -276,7 +271,7 @@ bool QWinMetaFile::load( QBuffer &buffer )
         st >> header.mtNoObjects;
         st >> header.mtMaxRecord;
         st >> header.mtNoParameters;
-        if ( mSingleStep ) {
+        if ( QWMF_DEBUG ) {
             kdDebug() << "WMF Header: " <<  "mtSize=" << header.mtSize << endl;
         }
     }
@@ -287,12 +282,11 @@ bool QWinMetaFile::load( QBuffer &buffer )
     {
         //----- Read Metafile Records
         last = NULL;
-        while ( !st.eof() )
+        rdFunc = -1;
+        while ( !st.eof() && (rdFunc != 0) )
         {
             st >> rdSize;
             st >> rdFunc;
-            if ( rdFunc==0 ) break;
-
             idx = findFunc( rdFunc );
             rdSize -= 3;
 
@@ -311,12 +305,10 @@ bool QWinMetaFile::load( QBuffer &buffer )
 
 
             if ( rdFunc == 0x020B ) {         // SETWINDOWORG: dimensions
-//kdDebug() << "  ORG left=" << cmd->parm[ 1 ] << "  top=" << cmd->parm[ 0 ] << endl;
                 mBBox.setLeft( cmd->parm[ 1 ] );
                 mBBox.setTop( cmd->parm[ 0 ] );
             }
             if ( rdFunc == 0x020C ) {         // SETWINDOWEXT: dimensions
-//kdDebug() << "  EXT width=" << cmd->parm[ 1 ] << "  height=" << cmd->parm[ 0 ] << endl;
                 mBBox.setWidth( cmd->parm[ 1 ] );
                 mBBox.setHeight( cmd->parm[ 0 ] );
             }
@@ -337,10 +329,6 @@ bool QWinMetaFile::load( QBuffer &buffer )
         kdDebug() << "WMF Header : incorrect header !" << endl;
     }
 
-    if ( mSingleStep ) {
-        kdDebug() << "  bbox=( " << mBBox.left() << "; " << mBBox.top() << "; " << mBBox.width()
-                      << "; " << mBBox.height() << ")" << endl;
-    }
     buffer.close();
     return mValid;
 }
@@ -351,7 +339,6 @@ bool QWinMetaFile::paint( const QPaintDevice* aTarget, bool absolute )
 {
     int idx, i;
     WmfCmd* cmd;
-    char dummy[ 16 ];
 
     if ( !mValid )  return false;
 
@@ -368,55 +355,57 @@ bool QWinMetaFile::paint( const QPaintDevice* aTarget, bool absolute )
     mAbsoluteCoord = absolute;
 
     mPainter.begin( aTarget );
+    if ( QWMF_DEBUG )  {
+        kdDebug() << "Bounding box : " << mBBox.left()
+        << " " << mBBox.top() << " " << mBBox.right() << " " << mBBox.bottom() << endl;
+    }
+
     if ( mAbsoluteCoord ) {
         mPainter.setWindow( mBBox.top(), mBBox.left(), mBBox.width(), mBBox.height() );
-        if ( mSingleStep )  {
-            kdDebug() << "Absolute drawing. Bounding box : " << mBBox.top();
-            kdDebug() << " " << mBBox.left() << " " << mBBox.right() << " " << mBBox.bottom() << endl;
-        }
     }
+    mInternalWorldMatrix.reset();
 
     for ( cmd=mFirstCmd; cmd; cmd=cmd->next )
     {
         idx = cmd->funcIndex;
-        if ( idx < 0 )
-        {
-            kdDebug() << "invalid index " << idx << endl;
-            continue;
-        }
+        ( this->*metaFuncTab[ idx ].method )( cmd->numParm, cmd->parm );
 
-        if ( mSingleStep || metaFuncTab[ idx ].method==0 )
-        {
-
-            if ( metaFuncTab[ idx ].method == 0 )
-                kdDebug() << "QWinMetaFile unimplemented : " << metaFuncTab[ idx ].name << endl;
-            else
-                kdDebug() << metaFuncTab[ idx ].name << " : "<< endl;
-
-            for ( int i=0 ; i < cmd->numParm ; i++ )
-                kdDebug() << cmd->parm[ i ] << " ";
-
-            if ( mSingleStep )
-            {
-                fflush( stderr );
-                fgets( dummy, 1, stdin );
+        if ( QWMF_DEBUG )  {
+            QString str = "", param;
+            if ( metaFuncTab[ idx ].name == NULL ) {
+                str += "UNKNOWN ";
             }
-            else
-                kdDebug() << endl;
+            if ( metaFuncTab[ idx ].method == &QWinMetaFile::noop ) {
+                str += "UNIMPLEMENTED ";
+            }
+            str += metaFuncTab[ idx ].name;
+            str += " : ";
 
-        }
-
-        if ( metaFuncTab[ idx ].method != 0 )
-        {
-            ( this->*metaFuncTab[ idx ].method )( cmd->numParm, cmd->parm );
+            for ( i=0 ; i < cmd->numParm ; i++ ) {
+                param.setNum( cmd->parm[ i ] );
+                str += param;
+                str += " ";
+            }
+            kdDebug() << str << endl;
         }
     }
+/*
+    // TODO: cleanup this code when QPicture::setBoundingBox() is possible in KOClipart (QT31)
+    // because actually QPicture::boundingBox() != mBBox()
+    mWindowsCoord += 1;
+    if ( mWindowsCoord == 2 )  {
+        kdDebug() << "DRAW ANGLES " << endl;
+        mPainter.setPen( Qt::white );
+        mPainter.drawPoint( mBBox.left(), mBBox.top()  );
+        mPainter.drawPoint( mBBox.right(), mBBox.bottom() );
+    }
+*/
     mPainter.end();
     return true;
 }
 
 
-//-----------------------------------------------------------------------------
+//----------------s-------------------------------------------------------------
 // Metafile painter methods
 //-----------------------------------------------------------------------------
 void QWinMetaFile::setWindowOrg( long, short* parm )
@@ -426,14 +415,13 @@ void QWinMetaFile::setWindowOrg( long, short* parm )
         mPainter.setWindow( parm[ 1 ], parm[ 0 ], r.width(), r.height() );
     }
     else {
-        mBBox.setLeft( parm[ 1 ] );
-        mBBox.setTop( parm[ 0 ] );
+        double dx = mInternalWorldMatrix.dx();
+        double dy = mInternalWorldMatrix.dy();
 
-        mPainter.translate( -mBBox.left(), -mBBox.top() );
-    }
-    if ( mSingleStep )  {
-        kdDebug() << "WindowsOrg: Bounding box : " << mBBox.left();
-        kdDebug() << " " << mBBox.top() << " " << mBBox.width() << " " << mBBox.height() << endl;
+        mInternalWorldMatrix.translate( -dx, -dy );
+        mInternalWorldMatrix.translate( -parm[ 1 ], -parm[ 0 ] );
+        mPainter.translate( -dx, -dy );
+        mPainter.translate( -parm[ 1 ], -parm[ 0 ] );
     }
 }
 
@@ -441,30 +429,32 @@ void QWinMetaFile::setWindowOrg( long, short* parm )
 //-----------------------------------------------------------------------------
 void QWinMetaFile::setWindowExt( long, short* parm )
 {
+    // negative value allowed for width and height : QABS() forbidden
     if ( mAbsoluteCoord ) {
         QRect r = mPainter.window();
         mPainter.setWindow( r.left(), r.top(), parm[ 1 ], parm[ 0 ] );
     }
     else {
-        // negative value allowed : QABS() forbidden
-        mBBox.setWidth( parm[ 1 ] );
-        mBBox.setHeight( parm[ 0 ] );
+        if ( (parm[ 0 ] != 0) && (parm[ 1 ] != 0) ) {
+            QRect r = mPainter.window();
+            double dx = mInternalWorldMatrix.dx();
+            double dy = mInternalWorldMatrix.dy();
+            double sx = mInternalWorldMatrix.m11();
+            double sy = mInternalWorldMatrix.m22();
 
-        QRect r = mPainter.window();
-        mPainter.translate( mBBox.left(), mBBox.top() );
-        mPainter.scale( (double)r.width() / (double)mBBox.width(),
-          (double)r.height() / (double)mBBox.height() );
-        mPainter.translate( -mBBox.left(), -mBBox.top() );
+            mInternalWorldMatrix.translate( -dx, -dy );
+            mInternalWorldMatrix.scale( 1/sx, 1/sy );
+            mPainter.translate( -dx, -dy );
+            mPainter.scale( 1/sx, 1/sy );
 
-        // TODO: cleanup this code when QPicture::setBoundingBox() is possible in KOClipart (QT31)
-        // because actually QPicture::boundingBox() != mBBox()
-//        mPainter.setPen( Qt::white );
-//        mPainter.drawPoint( mBBox.left(), mBBox.top()  );
-//        mPainter.drawPoint( mBBox.right(), mBBox.bottom() );
-    }
-    if ( mSingleStep )  {
-        kdDebug() << "WindowsExt: Bounding box : " << mBBox.left();
-        kdDebug() << " " << mBBox.top() << " " << mBBox.width() << " " << mBBox.height() << endl;
+            sx = (double)r.width() / (double)parm[ 1 ];
+            sy = (double)r.height() / (double)parm[ 0 ];
+
+            mInternalWorldMatrix.scale( sx, sy );
+            mInternalWorldMatrix.translate( dx, dy );
+            mPainter.scale( sx, sy );
+            mPainter.translate( dx, dy );
+        }
     }
 }
 
@@ -666,9 +656,10 @@ void QWinMetaFile::saveDC( long, short* )
 
 
 //-----------------------------------------------------------------------------
-void QWinMetaFile::restoreDC( long, short* )
+void QWinMetaFile::restoreDC( long, short *parm )
 {
-    mPainter.restore();
+    for ( int i=0; i > parm[ 0 ] ; i-- )
+        mPainter.restore();
 }
 
 
@@ -726,7 +717,7 @@ void QWinMetaFile::setTextAlign( long, short* parm )
 void QWinMetaFile::textOut( long num, short* parm )
 {
 
-    short *copyParm = new short[ num + 1 ];
+    short copyParm[ num + 1 ];
 
     // re-order parameters
     int idxOffset = (parm[ 0 ] / 2) + 1 + (parm[ 0 ] & 1);
@@ -737,7 +728,6 @@ void QWinMetaFile::textOut( long num, short* parm )
     memcpy( &copyParm[ 4 ], &parm[ 1 ], parm[ 0 ] );
 
     extTextOut( num + 1, copyParm );
-    delete [] copyParm;
 }
 
 
@@ -1008,8 +998,19 @@ void QWinMetaFile::createPenIndirect( long, short* parm )
     handle->pen.setColor( color( parm+3 ) );
     handle->pen.setCapStyle( Qt::RoundCap );
 
-    int width = 0;  // TODO : width of pen proportional to device context width
+    int width = 0;
+    // TODO : width of pen proportional to device context width
+    // DOESN'T WORK
+/*
+    QRect devRec;
+    devRec = mPainter.xForm( mBBox );
+    width = ( parm[ 0 ] * devRec.width() ) / mBBox.width() ;
+    kdDebug() << "CreatePenIndirect: " <<  endl;
+    kdDebug() << "   log coord. : " << mBBox.width() << "   " << mBBox.height() << endl;
+    kdDebug() << "   log. pen : " << parm[ 1 ] << "   " << parm[ 2 ] << endl;
+    kdDebug() << "   dev. pen : " << width << endl;
     handle->pen.setWidth( width );
+*/
 }
 
 
@@ -1036,12 +1037,15 @@ void QWinMetaFile::createFontIndirect( long , short* parm)
 //-----------------------------------------------------------------------------
 // Misc
 //-----------------------------------------------------------------------------
-void QWinMetaFile::escape( long, short* parm )
+void QWinMetaFile::noop( long, short* )
 {
-    if ( mSingleStep )
-    {
-//        kdDebug() << "QWinMetaFile: unimplemented ESCAPE command " << parm[ 0 ] << endl;
-    }
+}
+
+
+void QWinMetaFile::end( long, short* )
+{
+    // end of file :
+//    kdDebug() << "END bbox=( " << mBBox.left() << "; " << mBBox.top() << "; " << mBBox.width() << "; " << mBBox.height() << ")" << endl;
 }
 
 
@@ -1070,7 +1074,8 @@ int QWinMetaFile::findFunc( unsigned short aFunc ) const
     for ( i=0; metaFuncTab[ i ].name; i++ )
         if ( metaFuncTab[ i ].func == aFunc ) return i;
 
-    return -1;
+    // here : unknown function
+    return i;
 }
 
 //-----------------------------------------------------------------------------

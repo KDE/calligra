@@ -1,6 +1,7 @@
 /* Windows Meta File Loader
  *
  * Copyright ( C ) 1998 Stefan Taferner
+ * Modified 2002 thierry lorthiois
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -20,6 +21,7 @@
 
 #include <qstring.h>
 #include <qpainter.h>
+#include <qwmatrix.h>
 #include <qpointarray.h>
 #include <qpen.h>
 #include <qcolor.h>
@@ -32,6 +34,17 @@ class WinObjHandle;
 class WinObjPenHandle;
 class WinObjBrushHandle;
 struct WmfPlaceableHeader;
+
+/**
+ * QWinMetaFile is a WMF viewer based on QT toolkit
+ * How to use QWinMetaFile :
+ * #include "qwmf.h"
+ * QWinMetaFile wmf;
+ * QPicture pic;     // or QImage pic;
+ * if ( wmf.load( filename )
+ *    wmf.paint( &pic );
+ */
+
 
 class QWinMetaFile
 {
@@ -62,9 +75,6 @@ public:
      * Returns true if the metafile is enhanced.
      */
     bool isEnhanced( void ) const { return mIsEnhanced; }
-
-    /** Set single-step mode. */
-    virtual void singleStep( bool ss );
 
     /**
      * Returns bounding rectangle
@@ -154,10 +164,10 @@ public: // should be protected but cannot
     void createFontIndirect( long num, short* parms );
 
     /****************** misc *******************/
-    // Escape ( enhanced command set )
-    void escape( long num, short* parms );
-    // do nothing
-    void noop( long /*num*/, short* /*parms*/ ) { }
+    // nothing to do
+    void noop( long , short* );
+    // end of meta file
+    void end( long /*num*/, short* /*parms*/ );
     // Resolution of the image in dots per inch
     int dpi( void ) const { return mDpi; }
 
@@ -194,16 +204,22 @@ protected:
 
 protected:
     QPainter mPainter;
-    bool  mAbsoluteCoord;
-    QPointArray mPoints;
+    bool mIsPlaceable, mIsEnhanced, mValid;
+
+    // coordinate system
+    bool   mAbsoluteCoord;
+    QWMatrix  mInternalWorldMatrix;   // memorisation of WMF matrix transformation
+    QRect mHeaderBoundingBox;
+    QRect mBBox;
+
+    // informtion shared between Metafile Functions
     QColor mTextColor;
     int mTextAlign, mRotation;
-    bool mIsPlaceable, mIsEnhanced, mValid;
-    WmfCmd* mFirstCmd;
     bool mWinding;
-    QRect mBBox;
-    bool mSingleStep;
+
+    WmfCmd* mFirstCmd;
     WinObjHandle** mObjHandleTab;
+    QPointArray mPoints;
     int mDpi;
 };
 
