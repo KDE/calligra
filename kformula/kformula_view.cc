@@ -19,7 +19,7 @@
 */
 
 // has to be included first
-#include <kprinter.h>
+#include <koprinter.h>
 
 #include <qpainter.h>
 #include <qpopupmenu.h>
