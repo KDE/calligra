@@ -112,6 +112,7 @@ private:
     QString layoutToCss(const LayoutData& layoutOrigin,
         const LayoutData& layout, const bool force) const;
     QString escapeAbiWordText(const QString& strText) const;
+    bool makeTable(const FrameAnchor& anchor);
     bool makeImage(const FrameAnchor& anchor, const bool isImage);
     bool convertUnknownImage(const QString& name, QByteArray& image);
     void writeAbiProps(const TextFormatting& formatLayout, const TextFormatting& format);
@@ -634,6 +635,42 @@ QString AbiWordWorker::textFormatToAbiProps(const TextFormatting& formatOrigin,
     return strElement;
 }
 
+bool AbiWordWorker::makeTable(const FrameAnchor& anchor)
+{
+    *m_streamOut << "</p>\n"; // Close previous paragraph ### TODO: do it correctly like for HTML
+    *m_streamOut << "<table>\n";
+
+    QValueList<TableCell>::ConstIterator itCell;
+
+
+
+    for (itCell=anchor.table.cellList.begin();
+        itCell!=anchor.table.cellList.end(); itCell++)
+    {
+        // ### TODO: rowspan, colspan
+       
+        // AbiWord seems to work by attaching to the cell borders
+        *m_streamOut << "<cell props=\"";
+        *m_streamOut << "left-attach:" << (*itCell).col << "; ";
+        *m_streamOut << "right-attach:" << (*itCell).col + 1 << "; ";
+        *m_streamOut << "top-attach:" << (*itCell).row << "; ";
+        *m_streamOut << "bot-attach:" << (*itCell).row + 1;
+        *m_streamOut << "\">\n";
+        
+        if (!doFullAllParagraphs(*(*itCell).paraList))
+        {
+            return false;
+        }
+        
+        *m_streamOut << "</cell>\n";
+    }
+
+    *m_streamOut << "</table>\n";
+    *m_streamOut << "<p>\n"; // Re-open the "previous" paragraph ### TODO: do it correctly like for HTML
+
+    return true;
+}
+
 bool AbiWordWorker::makeImage(const FrameAnchor& anchor, const bool isImage)
 {
     kdDebug(30506) << "New image/clipart: " << anchor.picture.koStoreName
@@ -753,6 +790,31 @@ void AbiWordWorker::processVariable ( const QString&,
             << escapeAbiWordText(formatData.variable.getLinkName())
             << "</c></a>";
     }
+#if 0
+                else if (11==(*paraFormatDataIt).variable.m_type)
+                {
+                    // Footnote
+                    QString value = (*paraFormatDataIt).variable.getFootnoteValue();
+                    bool automatic = (*paraFormatDataIt).variable.getFootnoteAuto();
+                    QValueList<ParaData> *paraList = (*paraFormatDataIt).variable.getFootnotePara();
+                    if( paraList )
+                    {
+                        QString fstr;
+                        QValueList<ParaData>::ConstIterator it;
+                        for (it=paraList->begin();it!=paraList->end();it++)
+                            fstr += ProcessParagraphData( (*it).text, (*it).layout,(*it).formattingList);
+                        str += "{\\super ";
+                        str += automatic ? "\\chftn " : value;
+                        str += "{\\footnote ";
+                        str += "{\\super ";
+                        str += automatic ? "\\chftn " : value;
+                        str += fstr;
+                        str += " }";
+                        str += " }";
+                        str += " }";
+                    }
+                }
+#endif
     else
     {
         // Generic variable
@@ -773,6 +835,10 @@ void AbiWordWorker::processAnchor ( const QString&,
     else if (5==formatData.frameAnchor.type)
     {   // <CLIPART>
         makeImage(formatData.frameAnchor,false);
+    }
+    else if (6==formatData.frameAnchor.type)
+    {
+        makeTable(formatData.frameAnchor);
     }
     else
     {
