@@ -112,9 +112,9 @@ AC_DEFUN(KOFFICE_PKG_CHECK_MODULES, [
   fi
 ])
 
-# --- Check for KDE 3.1 ---
+# --- Check for KDE 3.2 ---
 
-AC_MSG_CHECKING([for KDE newer than 3.1.x])
+AC_MSG_CHECKING([for KDE version])
 
 AC_LANG_SAVE
 AC_LANG_CPLUSPLUS
@@ -125,20 +125,23 @@ CXXFLAGS="$CXXFLAGS $all_includes"
 
 AC_COMPILE_IFELSE([
 #include <kdeversion.h>
-#if ! ( KDE_IS_VERSION( 3, 1, 90 ) )
-#error KDE 3.1
+#if ! ( KDE_IS_VERSION( 3, 2, 90 ) )
+#error KDE 3.2
 #endif
 ],
-	old_kde_version="no"
-	AC_MSG_RESULT(yes)
+	test_kde_version="cvs head"
+	AC_MSG_RESULT([KDE CVS HEAD])
 ,
-	old_kde_version="yes"
-	AC_MSG_RESULT(no)
+	test_kde_version="3.2"
+	AC_MSG_RESULT([KDE 3.2.x])
 )
 CXXFLAGS="$kdeversion_save_CXXFLAGS"
 LIBS="$kdeversion_safe_LIBS"
 AC_LANG_RESTORE
 
-AM_CONDITIONAL(need_kde31_compatibility, test "$old_kde_version" = "yes")
+AM_CONDITIONAL(need_kde32_compatibility, test "$test_kde_version" = "3.2")
 
-# --- End KDE 3.1 check ---
+# Keep the old KDE 3.1 test, as long as it is still used
+AM_CONDITIONAL(need_kde31_compatibility, test "supported" = "no")
+
+# --- End KDE 3.2 check ---
