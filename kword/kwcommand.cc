@@ -257,7 +257,7 @@ KoTextCursor * KWOasisPasteCommand::execute( KoTextCursor *c )
     QBuffer buffer( m_data );
     QXmlInputSource source( &buffer );
     QXmlSimpleReader reader;
-    KoDocument::setupXmlReader( reader );
+    KoDocument::setupXmlReader( reader,true );
     QDomDocument domDoc;
     domDoc.setContent( &source, &reader );
     QDomElement content = domDoc.documentElement();

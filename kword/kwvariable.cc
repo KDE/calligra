@@ -608,9 +608,40 @@ void KWStatisticVariable::loadOasis( const QDomElement &elem, KoOasisContext& co
     //TODO
 }
 
-void KWStatisticVariable::saveOasis( KoXmlWriter& writer, KoSavingContext& context ) const
+void KWStatisticVariable::saveOasis( KoXmlWriter& writer, KoSavingContext& /*context*/ ) const
 {
-    //TODO
+    switch( m_subtype )
+    {
+    case VST_STATISTIC_NB_EMBEDDED:
+        writer.startElement( "text:object-count" );
+        writer.addTextNode( QString( "%1" ).arg( m_varValue.toInt() ) );
+        writer.endElement();
+        break;
+    case VST_STATISTIC_NB_TABLE:
+        writer.startElement( "text:table-count" );
+        writer.addTextNode( QString( "%1" ).arg( m_varValue.toInt() ) );
+        writer.endElement();
+        break;
+    case VST_STATISTIC_NB_PICTURE:
+        writer.startElement( "text:picture-count" );
+        writer.addTextNode( QString( "%1" ).arg( m_varValue.toInt() ) );
+        writer.endElement();
+        break;
+    case VST_STATISTIC_NB_FRAME:
+        //TODO
+        break;
+    case VST_STATISTIC_NB_WORD:
+        writer.startElement( "text:word-count" );
+        writer.addTextNode( QString( "%1" ).arg( m_varValue.toInt() ) );
+        writer.endElement();
+        break;
+    case VST_STATISTIC_NB_SENTENCE:
+        //TODO
+        break;
+    case VST_STATISTIC_NB_LINES:
+        //TODO
+        break;
+    }
 }
 
 QString KWStatisticVariable::fieldCode()
