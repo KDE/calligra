@@ -1,5 +1,5 @@
 /***************************************************************************
- * signalhandler.cpp
+ * eventmanager.cpp
  * This file is part of the KDE project
  * copyright (C)2004-2005 by Sebastian Sauer (mail@dipe.org)
  *
@@ -17,54 +17,68 @@
  * Boston, MA 02111-1307, USA.
  ***************************************************************************/
 
-#include "signalhandler.h"
+#include "eventmanager.h"
 
 #include "qtobject.h"
 #include "../main/scriptcontainer.h"
-#include "signalconnection.h"
+#include "eventsignal.h"
+#include "eventslot.h"
 
 using namespace Kross::Api;
 
-SignalHandler::SignalHandler(ScriptContainer* scriptcontainer, QtObject* qtobj)
+EventManager::EventManager(ScriptContainer* scriptcontainer, QtObject* qtobj)
     : QObject(scriptcontainer) //QObject(qtobj ? qtobj->getObject() : scriptcontainer)
     , m_scriptcontainer(scriptcontainer)
     , m_qtobj(qtobj)
 {
 }
 
-SignalHandler::~SignalHandler()
+EventManager::~EventManager()
 {
 }
 
-bool SignalHandler::connect(QObject *sender, const char *signal, const QString& functionname)
+bool EventManager::connect(QObject *sender, const char *signal, const QString& functionname)
 {
-    // create the matching SignalConnection
-    SignalConnection* conn = new SignalConnection(this, sender, signal, functionname);
+    // create the matching EventSlot
+    EventSlot* eventslot = new EventSlot(this);
 
     // and try to connect the signal
-    if(! conn->connect()) {
-        delete conn;
+    if(! eventslot->connect(sender, signal, functionname)) {
+        delete eventslot;
         return false;
     }
 
-    m_connections << conn; // remember the SignalConnection instance.
+    m_slots << eventslot; // remember the EventSlot instance.
     return true;
 }
 
-bool SignalHandler::disconnect(QObject *sender, const char *signal, const QString& functionname)
+bool EventManager::disconnect(QObject *sender, const char *signal, const QString& functionname)
 {
     bool ok = false;
-    for(QValueList<SignalConnection*>::Iterator it = m_connections.begin(); it != m_connections.end(); ++it) {
+    for(QValueList<EventSlot*>::Iterator it = m_slots.begin(); it != m_slots.end(); ++it) {
         if( (QObject*)(*it)->m_sender == sender
             && qstrcmp((*it)->m_signal, signal) == 0
             && (*it)->m_function == functionname )
         {
+            //TODO: disconnect correct slot
             if( QObject::disconnect(sender, signal, *it, SLOT(callback())) ) {
-                m_connections.remove(it);
+                m_slots.remove(it);
                 ok = true;
             }
         }
     }
     return ok;
 }
+
+/*
+void EventManager::addEventSlot(EventSlot* receiver)
+{
+    //TODO
+}
+
+void EventManager::removeEventSlot(EventSlot* receiver)
+{
+    //TODO
+}
+*/
 

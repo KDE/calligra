@@ -31,7 +31,7 @@ namespace Kross { namespace Api {
     class Object;
     class Variant;
     class ScriptContainer;
-    class SignalHandler;
+    class EventManager;
     class ScriptContrainer;
 
     /**
@@ -77,7 +77,7 @@ namespace Kross { namespace Api {
         private:
             ScriptContainer* m_scriptcontainer;
             QObject* m_object;
-            SignalHandler* m_signalhandler;
+            EventManager* m_eventmanager;
 
             // QProperty's
             Kross::Api::Object* propertyNames(Kross::Api::List*);

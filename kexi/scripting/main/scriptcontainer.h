@@ -34,7 +34,7 @@ namespace Kross { namespace Api {
     class List;
     class QtObject;
     class Script;
-    class SignalHandler;
+    class EventManager;
 
     /**
      * The ScriptContainer class represents a single scriptfile.
@@ -148,7 +148,7 @@ namespace Kross { namespace Api {
         private:
             Manager* m_manager;
             Script* m_script;
-            SignalHandler* m_signalhandler;
+            EventManager* m_eventmanager;
             QMap<QString, QtObject*> m_qtobjects;
 
             QString m_name;

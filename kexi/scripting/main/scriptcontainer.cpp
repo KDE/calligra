@@ -24,7 +24,7 @@
 #include "../api/qtobject.h"
 #include "../api/interpreter.h"
 #include "../api/script.h"
-#include "../api/signalhandler.h"
+#include "../api/eventmanager.h"
 
 using namespace Kross::Api;
 
@@ -32,14 +32,14 @@ ScriptContainer::ScriptContainer(Manager* manager, const QString& name)
     : QObject()
     , m_manager(manager)
     , m_script(0)
-    , m_signalhandler(0)
+    , m_eventmanager(0)
     , m_name(name)
 {
 }
 
 ScriptContainer::~ScriptContainer()
 {
-    delete m_signalhandler;
+    delete m_eventmanager;
     finalize();
 }
 
@@ -114,14 +114,14 @@ Kross::Api::Object* ScriptContainer::callFunction(const QString& functionname, K
 
 bool ScriptContainer::connect(QObject *sender, const char *signal, const QString& functionname)
 {
-    if(! m_signalhandler) // create instance on demand
-        m_signalhandler = new SignalHandler(this);
-    return m_signalhandler->connect(sender, signal, functionname);
+    if(! m_eventmanager) // create instance on demand
+        m_eventmanager = new EventManager(this);
+    return m_eventmanager->connect(sender, signal, functionname);
 }
 
 bool ScriptContainer::disconnect(QObject *sender, const char *signal, const QString& functionname)
 {
-    if(! m_signalhandler) return false;
-    return m_signalhandler->disconnect(sender, signal, functionname);
+    if(! m_eventmanager) return false;
+    return m_eventmanager->disconnect(sender, signal, functionname);
 }
 

@@ -1,5 +1,5 @@
 /***************************************************************************
- * signalhandler.h
+ * eventsignal.h
  * This file is part of the KDE project
  * copyright (C)2004-2005 by Sebastian Sauer (mail@dipe.org)
  *
@@ -17,8 +17,8 @@
  * Boston, MA 02111-1307, USA.
  ***************************************************************************/
 
-#ifndef KROSS_API_SIGNALHANDLER_H
-#define KROSS_API_SIGNALHANDLER_H
+#ifndef KROSS_API_EVENTSIGNAL_H
+#define KROSS_API_EVENTSIGNAL_H
 
 #include <qstring.h>
 #include <qvaluelist.h>
@@ -33,33 +33,38 @@ namespace Kross { namespace Api {
 
     // Forward declarations.
     class ScriptContainer;
+    class Object;
+    class List;
     class QtObject;
-    class SigalConnection;
+    class EventManager;
 
     /**
-     * The SignalHandler spends us the bridge between
-     * Qt QObject instances and our underlying Kross-API.
+     * Each Qt signal and slot connection between a QObject
+     * instance and a functionname is represented with
+     * a EventSignal and handled by \a EventManager.
      */
-    class SignalHandler : public QObject
+    class EventSignal : public QObject
     {
             Q_OBJECT
-            friend class SignalConnection;
+            friend class EventManager;
 
         public:
-            SignalHandler(ScriptContainer* scriptcontainer, QtObject* qtobj = 0);
-            ~SignalHandler();
 
-            bool connect(QObject *sender, const char *signal, const QString& functionname);
-            bool disconnect(QObject *sender, const char *signal, const QString& functionname);
+            /**
+             * Constructor.
+             *
+             * \param eventmanager The \a EventManager instance
+             *       used to create this EventSignal.
+             */
+            EventSignal(EventManager* eventmanager);
 
-            // we don't have a qobject-receiver, or?!
-            //void connect(const char *signal, QObject *receiver, const char *slot);
-            //bool disconnect(const char *signal, QObject *receiver, const char *slot);
+            /**
+             * Destructor.
+             */
+            virtual ~EventSignal() {}
 
         private:
-            ScriptContainer* m_scriptcontainer;
-            QtObject* m_qtobj;
-            QValueList<SignalConnection*> m_connections;
+            EventManager* m_eventmanager;
     };
 
 }}

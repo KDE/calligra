@@ -1,5 +1,5 @@
 /***************************************************************************
- * testobject.h
+ * eventsignal.cpp
  * This file is part of the KDE project
  * copyright (C)2004-2005 by Sebastian Sauer (mail@dipe.org)
  *
@@ -17,33 +17,22 @@
  * Boston, MA 02111-1307, USA.
  ***************************************************************************/
 
-#ifndef KROSS_TEST_TESTOBJECT_H
-#define KROSS_TEST_TESTOBJECT_H
+#include "eventsignal.h"
 
-#include <qobject.h>
-#include <qstring.h>
+#include "interpreter.h"
+#include "object.h"
+#include "list.h"
+#include "qtobject.h"
+#include "variant.h"
+#include "../main/scriptcontainer.h"
+#include "eventmanager.h"
 
-class TestObject : public QObject
+#include <qvaluelist.h>
+
+using namespace Kross::Api;
+
+EventSignal::EventSignal(EventManager* eventmanager)
+    : QObject(eventmanager)
+    , m_eventmanager(eventmanager)
 {
-        Q_OBJECT
-
-        //Q_PROPERTY(QString testProperty READ testProperty WRITE setTestProperty)
-
-    public:
-        TestObject(QObject* parent);
-        ~TestObject();
-
-        //QString m_prop;
-        //QString testProperty() const { return m_prop; }
-        //void setTestProperty(QString prop) { m_prop = prop; }
-
-    signals:
-        void testSignal();
-        void testSignalString(const QString&);
-    public slots:
-        void testSlot();
-    private slots:
-        void testSignalSlot();
-};
-
-#endif
+}

@@ -20,7 +20,7 @@
 #include "qtobject.h"
 #include "object.h"
 #include "variant.h"
-#include "signalhandler.h"
+#include "eventmanager.h"
 #include "../main/scriptcontainer.h"
 
 #include <qobject.h>
@@ -38,7 +38,7 @@ QtObject::QtObject(ScriptContainer* scriptcontainer, QObject* object, const QStr
     , m_scriptcontainer(scriptcontainer)
     , m_object(object)
 {
-    m_signalhandler = new SignalHandler(scriptcontainer, this);
+    m_eventmanager = new EventManager(scriptcontainer, this);
 
     addFunction("propertyNames", &QtObject::propertyNames,
         Kross::Api::ArgumentList(),
@@ -102,7 +102,7 @@ QtObject::QtObject(ScriptContainer* scriptcontainer, QObject* object, const QStr
 
 QtObject::~QtObject()
 {
-    delete m_signalhandler;
+    delete m_eventmanager;
 }
 
 const QString QtObject::getClassName() const
@@ -197,7 +197,7 @@ Kross::Api::Object* QtObject::connectSignal(Kross::Api::List* args)
 
     QString functionname = Kross::Api::Variant::toString(args->item(1));
 
-    m_signalhandler->connect(m_object, signalsignaturc, functionname);
+    m_eventmanager->connect(m_object, signalsignaturc, functionname);
     return 0;
 }
 
