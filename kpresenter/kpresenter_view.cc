@@ -56,7 +56,6 @@
 #include "textdialog.h"
 #include "sidebar.h"
 #include "insertpagedia.h"
-#include "duplicatepage.h"
 
 #include <kfiledialog.h>
 #include <kmessagebox.h>
@@ -171,7 +170,7 @@ KPresenterView::KPresenterView( KPresenterDoc* _doc, QWidget *_parent, const cha
     splitter = 0;
     pageBase = 0;
     sticky = FALSE;
-    
+
     m_pKPresenterDoc = _doc;
     //m_bKPresenterModified = true;
 
@@ -341,13 +340,10 @@ void KPresenterView::editSelectAll()
 /*===============================================================*/
 void KPresenterView::editDuplicatePage()
 {
-    DuplicatePageDia dia( this, 0, TRUE );
-    if ( dia.exec() != QDialog::Accepted )
-	return;
     QString file = getenv( "HOME" );
     file += "/.tmp.kpr";
     m_pKPresenterDoc->savePage( file, currPg );
-    InsertPos pos = dia.radioBefore ? IP_BEFORE : IP_AFTER;
+    InsertPos pos = IP_AFTER;
     int pg = m_pKPresenterDoc->insertPage( currPg, pos, FALSE, file );
     setRanges();
     sidebar->rebuildItems();
@@ -356,7 +352,7 @@ void KPresenterView::editDuplicatePage()
     sidebar->setCurrentPage( pg );
     pgNext->setEnabled( currPg < (int)m_pKPresenterDoc->getPageNums() - 1 );
     pgPrev->setEnabled( currPg > 0 );
-    
+
 }
 
 /*===============================================================*/
@@ -1710,7 +1706,7 @@ void KPresenterView::setupActions()
     actionEditDuplicatePage = new KAction( i18n( "Duplicate Page" ), "newslide",
 					   0, this, SLOT( editDuplicatePage() ),
 					   actionCollection(), "edit_duplicatepage" );
-    
+
     actionEditDelPage = new KAction( i18n( "Delete &Page..." ), "delslide", 0,
 				     this, SLOT( editDelPage() ),
 				     actionCollection(), "edit_delpage" );
@@ -2505,7 +2501,7 @@ void PageBase::resizeEvent( QResizeEvent *e )
 	QWidget::resizeEvent( e );
 
     QSize s = e ? e->size() : size();
-    
+
     if ( view->m_bShowGUI ) {
 	view->horz->show();
 	view->vert->show();
