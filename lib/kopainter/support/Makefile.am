@@ -11,6 +11,9 @@ libsupport_la_SOURCES = \
 	art_render_mask.c \
 	art_render_svp.c \
 	art_rgb.c \
+	art_svp_ops.c \
+	art_vpath_svp.c \
+	art_bpath.c \
 	art_rgb_affine.c \
 	art_rgb_affine_private.c \
 	art_rgb_affine_private.h \
