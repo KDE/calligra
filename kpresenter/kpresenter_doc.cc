@@ -102,7 +102,6 @@
 #include "koApplication.h"
 #include <koOasisStyles.h>
 #include <kooasiscontext.h>
-#include <koxmlns.h>
 
 #include "kprloadinginfo.h"
 
@@ -1063,6 +1062,7 @@ bool KPresenterDoc::saveOasis( KoStore* store, KoXmlWriter* manifestWriter )
     settingsWriter.endElement(); // config:config-item-set
 
     settingsWriter.endElement(); // office:settings
+    settingsWriter.endElement(); // Root:Element
     settingsWriter.endDocument();
     delete &settingsWriter;
 

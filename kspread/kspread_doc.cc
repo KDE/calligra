@@ -730,6 +730,7 @@ bool KSpreadDoc::saveOasis( KoStore* store, KoXmlWriter* manifestWriter )
     settingsWriter->addConfigItem("SpellCheckerIgnoreList", d->spellListIgnoreAll.join( "," ) );
     settingsWriter->endElement(); // config:config-item-set
     settingsWriter->endElement(); // office:settings
+    settingsWriter->endElement(); // Root:element
     settingsWriter->endDocument();
     delete settingsWriter;
 
