@@ -40,6 +40,7 @@ static KoUnit::Unit getUnit( const QString &_unitName, bool* ok )
     if ( _unitName == QString::fromLatin1( "pi" ) ) return KoUnit::U_PI;
     if ( _unitName == QString::fromLatin1( "dd" ) ) return KoUnit::U_DD;
     if ( _unitName == QString::fromLatin1( "cc" ) ) return KoUnit::U_CC;
+    if ( _unitName == QString::fromLatin1( "pt" ) ) return KoUnit::U_PT;
     if ( ok )
         *ok = false;
     return KoUnit::U_PT;
