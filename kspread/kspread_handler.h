@@ -5,7 +5,7 @@
 
 #include <qpoint.h>
 
-#include <koQueryTypes.h>
+#include <koQueryTrader.h>
 
 class KSpreadView;
 

@@ -1674,7 +1674,7 @@ void KWordView::toolsKSpreadTable()
 
     QValueList<KoDocumentEntry>::Iterator it = lst.begin();
     for ( ; it != lst.end(); ++it ) {
-	if ( ( *it ).name == "KSpread" ) {
+	if ( ( *it ).name() == "KSpread" ) {
 	    gui->getPaperWidget()->setPartEntry( *it );
 	    return;
 	}
@@ -1700,7 +1700,7 @@ void KWordView::toolsPart()
     gui->getPaperWidget()->mmEdit();
 
     KoDocumentEntry pe = KoPartSelectDia::selectPart( this );
-    if ( pe.name.isEmpty() )
+    if ( pe.isEmpty() )
 	return;
 
     gui->getPaperWidget()->mmPart();

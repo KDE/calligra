@@ -18,9 +18,6 @@
 */
 
 #include <koApplication.h>
-#include <koDocument.h>
-#include <koMainWindow.h>
-#include <koQueryTypes.h>
 #include <kaboutdata.h>
 #include <kcmdlineargs.h>
 #include <klocale.h>

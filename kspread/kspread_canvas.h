@@ -8,7 +8,7 @@
 #include <qstring.h>
 #include <qpen.h>
 
-#include <koQueryTypes.h>
+#include <koQueryTrader.h>
 
 class KSpreadView;
 class KSpreadEditWidget;

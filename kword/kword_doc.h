@@ -31,7 +31,7 @@ class KWContents;
 #include <koDocument.h>
 #include <koDocumentChild.h>
 #include <koPageLayoutDia.h>
-#include <koQueryTypes.h>
+#include <koQueryTrader.h>
 
 #include <iostream>
 

@@ -26,7 +26,7 @@
 
 #include <koRuler.h>
 #include <koPartSelectDia.h>
-#include <koQueryTypes.h>
+#include <koQueryTrader.h>
 
 #include "kword_doc.h"
 #include "kword_page.h"

@@ -47,7 +47,7 @@
 #include <dcopref.h>
 
 #include <koPartSelectDia.h>
-#include <koQueryTypes.h>
+#include <koQueryTrader.h>
 
 #include "kspread_map.h"
 #include "kspread_table.h"

@@ -33,7 +33,7 @@
 #include <qpixmap.h>
 #include <qpoint.h>
 
-#include <koQueryTypes.h>
+#include <koQueryTrader.h>
 
 #include "global.h"
 #include "ktextobject.h"

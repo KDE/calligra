@@ -75,7 +75,7 @@
 #include <kimageio.h>
 
 #include <koPartSelectDia.h>
-#include <koQueryTypes.h>
+#include <koQueryTrader.h>
 #include <koDocument.h>
 #include <koPageLayoutDia.h>
 #include <koRuler.h>
@@ -589,7 +589,7 @@ void KPresenterView::toolsDiagramm()
 
     QValueList<KoDocumentEntry>::Iterator it = lst.begin();
     for ( ; it != lst.end(); ++it ) {
-	if ( ( *it ).name == "KChart" ) {
+	if ( ( *it ).name() == "KChart" ) {
 	    page->setPartEntry( *it );
 	    return;
 	}
@@ -611,7 +611,7 @@ void KPresenterView::toolsTable()
 
     QValueList<KoDocumentEntry>::Iterator it = lst.begin();
     for ( ; it != lst.end(); ++it ) {
-	if ( ( *it ).name == "KSpread" ) {
+	if ( ( *it ).name() == "KSpread" ) {
 	    page->setPartEntry( *it );
 	    return;
 	}
@@ -633,7 +633,7 @@ void KPresenterView::toolsFormula()
 
     QValueList<KoDocumentEntry>::Iterator it = lst.begin();
     for ( ; it != lst.end(); ++it ) {
-	if ( ( *it ).name == "KFormula" ) {
+	if ( ( *it ).name() == "KFormula" ) {
 	    page->setPartEntry( *it );
 	    return;
 	}
@@ -683,7 +683,7 @@ void KPresenterView::toolsObject()
     page->setToolEditMode( TEM_MOUSE, FALSE );
 
     KoDocumentEntry pe = KoPartSelectDia::selectPart();
-    if ( pe.name.isEmpty() )
+    if ( pe.isEmpty() )
 	return;
 
     page->setToolEditMode( INS_OBJECT );
