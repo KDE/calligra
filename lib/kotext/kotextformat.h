@@ -81,9 +81,8 @@ public:
 protected:
     virtual void generateKey();
     QColor m_textBackColor;
-    // caching for speedup when formatting
-    QFont* m_screenFont; // font to be used when painting (zoom-dependent)
-    QFontMetrics* m_screenFontMetrics; // font metrics on screen (zoom-dependent)
+    class KoTextFormatPrivate;
+    KoTextFormatPrivate *d;
 };
 
 /**
@@ -93,7 +92,7 @@ class KoTextFormatCollection : public QTextFormatCollection
 {
 public:
     KoTextFormatCollection( const QFont & defaultFont );
-    virtual ~KoTextFormatCollection() {}
+    virtual ~KoTextFormatCollection();
 
     virtual QTextFormat *format( const QFont &f, const QColor &c );
     virtual void remove( QTextFormat *f );
@@ -104,10 +103,8 @@ public:
     virtual QTextFormat *createFormat( const QFont &f, const QColor &c ) { return new KoTextFormat( f, c, this ); }
 
 private:
-    KoTextFormat * m_cachedFormat;
-    QFont m_cfont;
-    QColor m_ccol;
-
+    class KoTextFormatCollectionPrivate;
+    KoTextFormatCollectionPrivate *d;
 };
 
 #endif

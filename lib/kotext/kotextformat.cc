@@ -22,9 +22,19 @@
 #include <kdebug.h>
 #include <assert.h>
 
-KoTextFormatCollection::KoTextFormatCollection( const QFont & defaultFont )
-    : QTextFormatCollection(), m_cachedFormat( 0L )
+class KoTextFormatCollection::KoTextFormatCollectionPrivate
 {
+public:
+    KoTextFormatCollectionPrivate() { m_cachedFormat = 0L; }
+    KoTextFormat * m_cachedFormat;
+    QFont m_cfont;
+    QColor m_ccol;
+};
+
+KoTextFormatCollection::KoTextFormatCollection( const QFont & defaultFont )
+    : QTextFormatCollection()
+{
+    d = new KoTextFormatCollectionPrivate;
     //kdDebug() << "KoTextFormatCollection::KoTextFormatCollection" << endl;
     //kdDebug() << "Deleting default format " << defaultFormat() << endl;
     delete defaultFormat();
@@ -32,11 +42,16 @@ KoTextFormatCollection::KoTextFormatCollection( const QFont & defaultFont )
     setDefaultFormat( new KoTextFormat( defaultFont, QColor(), 0L /* no coll, for no refcounting */ ) );
 }
 
+KoTextFormatCollection::~KoTextFormatCollection()
+{
+    delete d;
+}
+
 QTextFormat * KoTextFormatCollection::format( const QFont &fn, const QColor &c )
 {
-    if ( m_cachedFormat && m_cfont == fn && m_ccol == c ) {
-        m_cachedFormat->addRef();
-        return m_cachedFormat;
+    if ( d->m_cachedFormat && d->m_cfont == fn && d->m_ccol == c ) {
+        d->m_cachedFormat->addRef();
+        return d->m_cachedFormat;
     }
 
     QString key = QTextFormat::getKey( fn, c, FALSE, QString::null, QString::null, QTextFormat::AlignNormal );
@@ -51,25 +66,25 @@ QTextFormat * KoTextFormatCollection::format( const QFont &fn, const QColor &c )
     //key += '/';
     //key += QString::number( (int)fn.charSet() );
 
-    m_cachedFormat = static_cast<KoTextFormat *>( dict().find( key ) );
-    m_cfont = fn;
-    m_ccol = c;
+    d->m_cachedFormat = static_cast<KoTextFormat *>( dict().find( key ) );
+    d->m_cfont = fn;
+    d->m_ccol = c;
 
-    if ( m_cachedFormat ) {
-        m_cachedFormat->addRef();
-        return m_cachedFormat;
+    if ( d->m_cachedFormat ) {
+        d->m_cachedFormat->addRef();
+        return d->m_cachedFormat;
     }
 
-    m_cachedFormat = static_cast<KoTextFormat *>( createFormat( fn, c ) );
-    dict().insert( m_cachedFormat->key(), m_cachedFormat );
-    return m_cachedFormat;
+    d->m_cachedFormat = static_cast<KoTextFormat *>( createFormat( fn, c ) );
+    dict().insert( d->m_cachedFormat->key(), d->m_cachedFormat );
+    return d->m_cachedFormat;
 }
 
 void KoTextFormatCollection::remove( QTextFormat *f )
 {
     //kdDebug() << "KoTextFormatCollection::remove " << f << endl;
-    if ( m_cachedFormat == f )
-        m_cachedFormat = 0;
+    if ( d->m_cachedFormat == f )
+        d->m_cachedFormat = 0;
     QTextFormatCollection::remove( f );
 }
 
@@ -80,16 +95,28 @@ bool KoTextFormatCollection::hasFormat( QTextFormat *f )
 
 ///
 
-KoTextFormat::KoTextFormat()
-    : QTextFormat(), m_screenFont( 0L ), m_screenFontMetrics( 0L )
+class KoTextFormat::KoTextFormatPrivate
 {
+public:
+    KoTextFormatPrivate() : m_screenFont( 0L ), m_screenFontMetrics( 0L )
+    {}
+    // caching for speedup when formatting
+    QFont* m_screenFont; // font to be used when painting (zoom-dependent)
+    QFontMetrics* m_screenFontMetrics; // font metrics on screen (zoom-dependent)
+};
+
+KoTextFormat::KoTextFormat()
+    : QTextFormat()
+{
+    d = new KoTextFormatPrivate;
     m_textBackColor=QColor();
     // ### The parent constructor didn't call our version of generateKey()
 }
 
 KoTextFormat::KoTextFormat( const KoTextFormat & fm )
-    : QTextFormat( fm ), m_screenFont( 0L ), m_screenFontMetrics( 0L )
+    : QTextFormat( fm )
 {
+    d = new KoTextFormatPrivate;
     m_textBackColor=fm.textBackgroundColor();
     //kdDebug() << "KoTextFormat::KoTextFormat(copy of " << (void*)&fm << " " << fm.key() << ")"
     //          << " pointSizeFloat:" << fn.pointSizeFloat() << endl;
@@ -97,9 +124,23 @@ KoTextFormat::KoTextFormat( const KoTextFormat & fm )
 }
 
 KoTextFormat::KoTextFormat( const QFont &f, const QColor &c, QTextFormatCollection * coll )
-      : QTextFormat( f, c, coll ), m_screenFont( 0L ), m_screenFontMetrics( 0L )
+      : QTextFormat( f, c, coll )
 {
+    d = new KoTextFormatPrivate;
     generateKey();
+}
+
+KoTextFormat::~KoTextFormat()
+{
+    // Removing a format that is in the collection is forbidden, in fact.
+    // It should have been removed from the collection before being deleted.
+#ifndef NDEBUG
+    if ( parent() && dynamic_cast<KoTextFormatCollection*>( parent() ) )
+        assert( !static_cast<KoTextFormatCollection*>( parent() )->hasFormat( this ) );
+#endif
+    delete d->m_screenFontMetrics;
+    delete d->m_screenFont;
+    delete d;
 }
 
 void KoTextFormat::copyFormat( const QTextFormat & nf, int flags )
@@ -159,10 +200,10 @@ void KoTextFormat::generateKey()
     //kdDebug() << "generateKey textformat=" << this << " k=" << k << " pointsizefloat=" << fn.pointSizeFloat() << endl;
 
     // We also use this as a hook for update()
-    delete m_screenFontMetrics;
-    m_screenFontMetrics = 0L; // i.e. recalc at the next screenFontMetrics() call
-    delete m_screenFont;
-    m_screenFont = 0L; // i.e. recalc at the next screenFont() call
+    delete d->m_screenFontMetrics;
+    d->m_screenFontMetrics = 0L; // i.e. recalc at the next screenFontMetrics() call
+    delete d->m_screenFont;
+    d->m_screenFont = 0L; // i.e. recalc at the next screenFont() call
 }
 
 int KoTextFormat::compare( const KoTextFormat & format ) const
@@ -198,18 +239,6 @@ QColor KoTextFormat::defaultTextColor( QPainter * painter )
     return QApplication::palette().color( QPalette::Active, QColorGroup::Text );
 }
 
-KoTextFormat::~KoTextFormat()
-{
-    // Removing a format that is in the collection is forbidden, in fact.
-    // It should have been removed from the collection before being deleted.
-#ifndef NDEBUG
-    if ( parent() && dynamic_cast<KoTextFormatCollection*>( parent() ) )
-        assert( !static_cast<KoTextFormatCollection*>( parent() )->hasFormat( this ) );
-#endif
-    delete m_screenFontMetrics;
-    delete m_screenFont;
-}
-
 float KoTextFormat::screenPointSize( const KoZoomHandler* zh ) const
 {
     int pointSizeLU = font().pointSize();
@@ -225,30 +254,30 @@ QFont KoTextFormat::screenFont( const KoZoomHandler* zh )
     // Compare if this is the size for which we cached the font metrics.
     // We have to do this very dynamically, because 2 views could be painting the same
     // stuff, with different zoom levels. So no absolute caching possible.
-    if ( !m_screenFont || pointSize != m_screenFont->pointSizeFloat() )
+    if ( !d->m_screenFont || pointSize != d->m_screenFont->pointSizeFloat() )
     {
-        delete m_screenFont;
-        m_screenFont = new QFont( font() );
-        m_screenFont->setPointSizeFloat( pointSize );
+        delete d->m_screenFont;
+        d->m_screenFont = new QFont( font() );
+        d->m_screenFont->setPointSizeFloat( pointSize );
     }
-    return *m_screenFont;
+    return *d->m_screenFont;
 }
 
 QFontMetrics KoTextFormat::screenFontMetrics( const KoZoomHandler* zh )
 {
     float pointSize = screenPointSize( zh );
-    if ( !m_screenFont )
+    if ( !d->m_screenFont )
         (void)screenFont( zh ); // we need it below, and this way it'll be ready for painting
 
     // Compare if this is the size for which we cached the font metrics.
     // We have to do this very dynamically, because 2 views could be painting the same
     // stuff, with different zoom levels. So no absolute caching possible.
-    if ( !m_screenFontMetrics || pointSize != m_screenFont->pointSizeFloat() )
+    if ( !d->m_screenFontMetrics || pointSize != d->m_screenFont->pointSizeFloat() )
     {
         QFont f( font() );
         f.setPointSizeFloat( pointSize );
-        delete m_screenFontMetrics;
-        m_screenFontMetrics = new QFontMetrics( f );
+        delete d->m_screenFontMetrics;
+        d->m_screenFontMetrics = new QFontMetrics( f );
     }
-    return *m_screenFontMetrics;
+    return *d->m_screenFontMetrics;
 }

@@ -340,6 +340,8 @@ private:
     void init();
 
 private:
+    class KoTextObjectPrivate;
+    KoTextObjectPrivate* d;
     /** The text document, containing the paragraphs */
     KoTextDocument *textdoc;
 

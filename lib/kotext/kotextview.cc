@@ -30,8 +30,18 @@
 #include <krun.h>
 #include <kmessagebox.h>
 
+struct KoTextView::KoTextViewPrivate
+{
+    KoTextViewPrivate()
+    {
+        m_currentUnicodeNumber = 0;
+    }
+    int m_currentUnicodeNumber; // For the alt+0123 feature
+};
+
 KoTextView::KoTextView( KoTextObject *textobj )
 {
+    d = new KoTextViewPrivate;
     m_bReadWrite = true;
     m_textobj = textobj;
 
@@ -70,6 +80,7 @@ KoTextView::KoTextView( KoTextObject *textobj )
 KoTextView::~KoTextView()
 {
     delete m_cursor;
+    delete d;
 }
 
 void KoTextView::terminate()
@@ -209,7 +220,7 @@ void KoTextView::handleKeyPressEvent( QKeyEvent * e )
         emit cut();
         break;
     default: {
-            //kdDebug() << "KoTextView::keyPressEvent ascii=" << e->ascii() << " text=" << e->text()[0].unicode() << endl;
+            //kdDebug() << "KoTextView::keyPressEvent ascii=" << e->ascii() << " text=" << e->text()[0].unicode() << " state=" << e->state() << endl;
             if ( e->text().length() &&
 //               !( e->state() & AltButton ) &&
                  ( !e->ascii() || e->ascii() >= 32 ) ||
@@ -779,7 +790,7 @@ QPtrList<KAction> KoTextView::dataToolActionList(KInstance * instance)
     if ( m_singleWord )
         tools += KoDataToolInfo::query( "QString", "application/x-singleword", instance );
 
-    // Maybe one day we'll have tools that link to kwordpart (later: qt3), to act on formatted text
+    // Maybe one day we'll have tools that use libkotext (or qt3's qrt), to act on formatted text
     tools += KoDataToolInfo::query( "QTextString", "application/x-qrichtext", instance );
 
     return KoDataToolAction::dataToolActionList( tools, this, SLOT( slotToolActivated( const KoDataToolInfo &, const QString & ) ) );

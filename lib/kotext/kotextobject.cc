@@ -29,6 +29,11 @@
 
 #define DEBUG_FORMATS
 
+struct KoTextObject::KoTextObjectPrivate
+{
+    KoTextObjectPrivate() {}
+};
+
 KoTextObject::KoTextObject( KoZoomHandler *zh, const QFont& defaultFont, KoStyle* defaultStyle,
                             QObject* parent, const char *name )
     : QObject( parent, name ), m_defaultStyle( defaultStyle ), undoRedoInfo( this )
@@ -47,6 +52,7 @@ KoTextObject::KoTextObject( KoTextDocument* _textdoc, KoStyle* defaultStyle,
 
 void KoTextObject::init()
 {
+    d = 0; // replace with d = new KoTextObjectPrivate when needed
     m_availableHeight = -1;
     m_lastFormatted = textdoc->firstParag();
     m_highlightSelectionAdded = false;
@@ -67,6 +73,7 @@ void KoTextObject::init()
 KoTextObject::~KoTextObject()
 {
     delete textdoc; textdoc = 0;
+    delete d;
 }
 
 int KoTextObject::availableHeight() const
