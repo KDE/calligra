@@ -70,11 +70,13 @@ ContextStyle::ContextStyle()
     centerSymbol = false;
     m_syntaxHighlighting = true;
 
-    setup();
+    //setup();
 }
 
-void ContextStyle::readConfig( KConfig* config )
+void ContextStyle::init( KConfig* config )
 {
+    table.init();
+
     config->setGroup( "kformula Font" );
     QString fontName = config->readEntry( "defaultFont", defaultFont.toString() );
     defaultFont.fromString( fontName );

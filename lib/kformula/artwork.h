@@ -34,7 +34,7 @@ KFORMULA_NAMESPACE_BEGIN
 class Artwork {
 public:
 
-    Artwork(SymbolType type = Empty);
+    Artwork(SymbolType type = EmptyBracket);
     ~Artwork() {}
 
     void calcSizes( const ContextStyle& style, ContextStyle::TextStyle tstyle, luPt parentSize );
@@ -71,9 +71,9 @@ private:
 
     void calcCharSize( const ContextStyle& style, luPt height, QChar ch );
 
-    void calcRoundBracket(  const ContextStyle& style, const char chars[], luPt height, luPt charHeight );
-    void calcSquareBracket( const ContextStyle& style, const char chars[], luPt height, luPt charHeight );
-    void calcCurlyBracket(  const ContextStyle& style, const char chars[], luPt height, luPt charHeight );
+    void calcRoundBracket(  const ContextStyle& style, const QChar chars[], luPt height, luPt charHeight );
+    void calcSquareBracket( const ContextStyle& style, const QChar chars[], luPt height, luPt charHeight );
+    void calcCurlyBracket(  const ContextStyle& style, const QChar chars[], luPt height, luPt charHeight );
 
     void drawLeftRoundBracket(   QPainter& p, const ContextStyle& style, luPixel x, luPixel y, luPt height, luPt charHeight );
     void drawRightRoundBracket(  QPainter& p, const ContextStyle& style, luPixel x, luPixel y, luPt height, luPt charHeight );
@@ -81,13 +81,16 @@ private:
     void drawLeftSquareBracket(  QPainter& p, const ContextStyle& style, luPixel x, luPixel y, luPt height, luPt charHeight );
     void drawRightSquareBracket( QPainter& p, const ContextStyle& style, luPixel x, luPixel y, luPt height, luPt charHeight );
 
+    void drawLeftLineBracket( QPainter& p, const ContextStyle& style, luPixel x, luPixel y, luPt height, luPt charHeight );
+    void drawRightLineBracket( QPainter& p, const ContextStyle& style, luPixel x, luPixel y, luPt height, luPt charHeight );
+
     void drawLeftCurlyBracket(   QPainter& p, const ContextStyle& style, luPixel x, luPixel y, luPt height, luPt charHeight );
     void drawRightCurlyBracket(  QPainter& p, const ContextStyle& style, luPixel x, luPixel y, luPt height, luPt charHeight );
 
-    void drawSmallRoundBracket( QPainter& p, const ContextStyle& style, const char chars[], luPixel x, luPixel y, luPt charHeight );
-    void drawBigRoundBracket(   QPainter& p, const ContextStyle& style, const char chars[], luPixel x, luPixel y, luPt charHeight );
-    void drawSmallCurlyBracket( QPainter& p, const ContextStyle& style, const char chars[], luPixel x, luPixel y, luPt charHeight );
-    void drawBigCurlyBracket(   QPainter& p, const ContextStyle& style, const char chars[], luPixel x, luPixel y, luPt charHeight );
+    void drawSmallRoundBracket( QPainter& p, const ContextStyle& style, const QChar chars[], luPixel x, luPixel y, luPt charHeight );
+    void drawBigRoundBracket(   QPainter& p, const ContextStyle& style, const QChar chars[], luPixel x, luPixel y, luPt charHeight );
+    void drawSmallCurlyBracket( QPainter& p, const ContextStyle& style, const QChar chars[], luPixel x, luPixel y, luPt charHeight );
+    void drawBigCurlyBracket(   QPainter& p, const ContextStyle& style, const QChar chars[], luPixel x, luPixel y, luPt charHeight );
 
     LuPixelSize size;
     LuPixelPoint point;
@@ -98,14 +101,6 @@ private:
     luPixel baseline;
 
     SymbolType type;
-
-    static const char leftRoundBracket[];
-    static const char leftSquareBracket[];
-    static const char leftCurlyBracket[];
-
-    static const char rightRoundBracket[];
-    static const char rightSquareBracket[];
-    static const char rightCurlyBracket[];
 };
 
 KFORMULA_NAMESPACE_END

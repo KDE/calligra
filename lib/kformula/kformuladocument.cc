@@ -37,11 +37,12 @@ KFORMULA_NAMESPACE_BEGIN
 struct Document::Document_Impl {
 
     Document_Impl( KConfig* c )
-            : leftBracketChar('('), rightBracketChar(')'), formula(0), firstTime( true ), config( c )
+            : leftBracketChar( LeftRoundBracket ), rightBracketChar( RightRoundBracket ),
+              formula(0), firstTime( true ),
+              actionsCreated( false ), config( c )
     {
         formulae.setAutoDelete( false );
         //kdDebug( DEBUGID ) << "Document::Document_Impl " << formulae.count() << endl;
-        contextStyle.readConfig( config );
     }
 
 
@@ -91,9 +92,8 @@ struct Document::Document_Impl {
     KSelectAction* rightBracket;
     KSelectAction* symbolNamesAction;
 
-
-    char leftBracketChar;
-    char rightBracketChar;
+    SymbolType leftBracketChar;
+    SymbolType rightBracketChar;
     QString selectedName;
 
     /**
@@ -114,11 +114,6 @@ struct Document::Document_Impl {
     bool ownHistory;
 
     /**
-     * The symbols/names that are "known" to the system.
-     */
-    SymbolTable table;
-
-    /**
      * The documents context style. This is the place where all
      * the user configurable informations are stored.
      */
@@ -135,6 +130,8 @@ struct Document::Document_Impl {
      */
     bool firstTime;
 
+    bool actionsCreated;
+
     /**
      * The applications config object. We need to remember this so that
      * we don't depend on global variables. (We don't know who uses us.)
@@ -149,7 +146,7 @@ double Document::getYResolution() const { return impl->contextStyle.zoomedResolu
 //void Document::setResolution(double zX, double zY) { impl->contextStyle.setResolution(zX, zY); }
 
 KCommandHistory* Document::getHistory() const { return impl->history; }
-const SymbolTable& Document::getSymbolTable() const { return impl->table; }
+const SymbolTable& Document::getSymbolTable() const { return impl->contextStyle.symbolTable(); }
 
 KAction* Document::getAddThinSpaceAction()     { return impl->addThinSpaceAction; }
 KAction* Document::getAddMediumSpaceAction()   { return impl->addMediumSpaceAction; }
@@ -190,8 +187,8 @@ KToggleAction* Document::getSyntaxHighlightingAction() { return impl->syntaxHigh
 
 Container* Document::formula() const { return impl->formula; }
 
-char Document::leftBracketChar() const  { return impl->leftBracketChar; }
-char Document::rightBracketChar() const { return impl->rightBracketChar; }
+SymbolType Document::leftBracketChar() const  { return impl->leftBracketChar; }
+SymbolType Document::rightBracketChar() const { return impl->rightBracketChar; }
 
 
 Document::Document( KConfig* config,
@@ -269,11 +266,13 @@ Container* Document::createFormula()
 {
     if ( impl->firstTime ) {
         impl->firstTime = false;
-        impl->table.init();
+        impl->contextStyle.init( impl->config );
 
-        QStringList names = impl->table.allNames();
-        impl->symbolNamesAction->setItems(names);
-        impl->selectedName = names[0];
+        if ( impl->actionsCreated ) {
+            QStringList names = impl->contextStyle.symbolTable().allNames();
+            impl->symbolNamesAction->setItems(names);
+            impl->selectedName = names[0];
+        }
     }
     Container* f = new Container(this);
     impl->formulae.append(f);
@@ -495,6 +494,8 @@ void Document::createActions(KActionCollection* collection)
     impl->symbolNamesAction = new KSelectAction(i18n("Symbol names"),
                                           0, this, SLOT(symbolNames()),
                                           collection, "formula_symbolnames");
+
+    impl->actionsCreated = true;
 }
 
 
@@ -559,7 +560,7 @@ void Document::addDefaultBracket()
 void Document::addSquareBracket()
 {
     if (hasFormula()) {
-        BracketRequest r( '[', ']' );
+        BracketRequest r( LeftSquareBracket, RightSquareBracket );
         formula()->performRequest( &r );
     }
 }
@@ -567,7 +568,7 @@ void Document::addSquareBracket()
 void Document::addCurlyBracket()
 {
     if (hasFormula()) {
-        BracketRequest r( '{', '}' );
+        BracketRequest r( LeftCurlyBracket, RightCurlyBracket );
         formula()->performRequest( &r );
     }
 }
@@ -575,7 +576,7 @@ void Document::addCurlyBracket()
 void Document::addLineBracket()
 {
     if (hasFormula()) {
-        BracketRequest r( '|', '|' );
+        BracketRequest r( LeftLineBracket, RightLineBracket );
         formula()->performRequest( &r );
     }
 }
@@ -703,8 +704,8 @@ void Document::makeGreek()
 
 void Document::insertSymbol()
 {
-    if ( hasFormula() && impl->table.contains( impl->selectedName ) ) {
-        QChar ch = impl->table.unicode( impl->selectedName );
+    if ( hasFormula() && impl->contextStyle.symbolTable().contains( impl->selectedName ) ) {
+        QChar ch = impl->contextStyle.symbolTable().unicode( impl->selectedName );
         if ( ch != QChar::null ) {
             TextCharRequest r( ch, true );
             formula()->performRequest( &r );
@@ -776,13 +777,51 @@ void Document::toggleSyntaxHighlighting()
 void Document::delimiterLeft()
 {
     QString left = impl->leftBracket->currentText();
-    impl->leftBracketChar = left.at(0).latin1();
+    switch ( left.at(0).latin1() ) {
+    case '[':
+    case ']':
+    case '{':
+    case '}':
+    case '<':
+    case '>':
+    case '(':
+    case ')':
+    case '/':
+    case '\\':
+        impl->leftBracketChar = static_cast<SymbolType>( left.at(0).latin1() );
+        break;
+    case '|':
+        impl->leftBracketChar = LeftLineBracket;
+        break;
+    case ' ':
+        impl->leftBracketChar = EmptyBracket;
+        break;
+    }
 }
 
 void Document::delimiterRight()
 {
     QString right = impl->rightBracket->currentText();
-    impl->rightBracketChar = right.at(0).latin1();
+    switch ( right.at(0).latin1() ) {
+    case '[':
+    case ']':
+    case '{':
+    case '}':
+    case '<':
+    case '>':
+    case '(':
+    case ')':
+    case '/':
+    case '\\':
+        impl->rightBracketChar = static_cast<SymbolType>( right.at(0).latin1() );
+        break;
+    case '|':
+        impl->rightBracketChar = RightLineBracket;
+        break;
+    case ' ':
+        impl->rightBracketChar = EmptyBracket;
+        break;
+    }
 }
 
 void Document::symbolNames()

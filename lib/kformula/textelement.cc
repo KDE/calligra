@@ -188,7 +188,7 @@ QFont TextElement::getFont(const ContextStyle& context)
             return context.getDefaultFont();
         }
     }
-    return getSymbolTable().font(character);
+    return context.symbolTable().font(character);
 }
 
 
@@ -272,7 +272,10 @@ bool TextElement::readContentFromDom(QDomNode& node)
 QString TextElement::toLatex()
 {
     if ( isSymbol() ) {
-        return getSymbolTable().name( character ) + " ";
+        QString texName = getSymbolTable().name( character );
+        if ( !texName.isNull() )
+            return  + " ";
+        return  " ? ";
     }
     else {
         return character;

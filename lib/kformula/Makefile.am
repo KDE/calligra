@@ -1,7 +1,7 @@
 
 INCLUDES= $(KOFFICE_INCLUDES) $(KOTEXT_INCLUDES) $(all_includes) 
 
-SUBDIRS = pics
+SUBDIRS = pics config
 
 ####### 
 # you can add here more. This one gets installed 

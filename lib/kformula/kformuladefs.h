@@ -77,16 +77,15 @@ enum SymbolType {
     RightSquareBracket = ']',
     LeftCurlyBracket = '{',
     RightCurlyBracket = '}',
-    LineBracket = '|',
     LeftCornerBracket = '<',
     RightCornerBracket = '>',
     LeftRoundBracket = '(',
     RightRoundBracket = ')',
     SlashBracket = '/',
     BackSlashBracket = '\\',
-
-    // symbols that have no ascii character
-    Empty = 1000,
+    LeftLineBracket = 256,
+    RightLineBracket,
+    EmptyBracket = 1000,
     Integral,
     Sum,
     Product
@@ -231,11 +230,11 @@ public:
 
 
 class BracketRequest : public Request {
-    char m_left, m_right;
+    SymbolType m_left, m_right;
 public:
-    BracketRequest( char l, char r ) : Request( req_addBracket ), m_left( l ), m_right( r ) {}
-    char left() const { return m_left; }
-    char right() const { return m_right; }
+    BracketRequest( SymbolType l, SymbolType r ) : Request( req_addBracket ), m_left( l ), m_right( r ) {}
+    SymbolType left() const { return m_left; }
+    SymbolType right() const { return m_right; }
 };
 
 class SymbolRequest : public Request {

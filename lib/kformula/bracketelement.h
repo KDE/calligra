@@ -40,7 +40,8 @@ public:
 
     enum { contentPos };
 
-    BracketElement(char left = ' ', char right = ' ', BasicElement* parent = 0);
+    BracketElement(SymbolType left = EmptyBracket, SymbolType right = EmptyBracket,
+                   BasicElement* parent = 0);
     ~BracketElement();
 
     /**
@@ -175,7 +176,7 @@ private:
     /**
      * Creates a new bracket object that matches the char.
      */
-    Artwork* createBracket(char bracket);
+    Artwork* createBracket(SymbolType bracket);
 
 
     /**

@@ -52,5 +52,62 @@ def main():
 
     f.close()
 
+def make_unicode_table():
+    parser = make_parser()
+    parser.setContentHandler(ContentGenerator())
+    parser.parse("symbol.xml")
+
+    header = []
+    codes = {}
+    f = open('../config/unicode.tbl', 'r')
+    for line in f.xreadlines():
+        if line[0] == '#':
+            header.append(line.strip())
+        else:
+            break
+    for line in f.xreadlines():
+        if len(line) > 0:
+            codes[line.split(',')[0].strip()] = line
+    f.close()
+    
+    for key in table.keys():
+        pos, latexName, charClass = table[key]
+        if len(latexName) > 0:
+            codes[key] = key + ', ' + charClass + ', ' + latexName.replace('\\', '')
+        else:
+            codes[key] = key + ', ' + charClass
+            
+    f = open('../config/unicode.tbl', 'w')
+    for line in header:
+        print >> f, line
+    for key in codes:
+        print >> f, codes[key]
+    f.close()
+
+def make_symbol_table():
+    parser = make_parser()
+    parser.setContentHandler(ContentGenerator())
+    parser.parse("symbol.xml")
+
+    header = []
+    f = open('../config/symbol.font', 'r')
+    for line in f.xreadlines():
+        if line[0] == '#':
+            header.append(line.strip())
+        else:
+            break
+    f.close()
+    
+    f = open('../config/symbol.font', 'w')
+    for line in header:
+        print >> f, line
+    print >> f, "name = symbol"
+    for key in table.keys():
+        pos, latexName, charClass = table[key]
+        f.write(str(pos) + ', ' + key + '\n')
+    f.close()
+    
 if __name__ == '__main__':
     main()
+    make_unicode_table()
+    make_symbol_table()

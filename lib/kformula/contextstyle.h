@@ -32,6 +32,7 @@
 
 //Formula include
 #include "kformuladefs.h"
+#include "symboltable.h"
 
 KFORMULA_NAMESPACE_BEGIN
 
@@ -75,10 +76,15 @@ public:
      */
     ContextStyle();
 
-    void readConfig( KConfig* config );
+    void init( KConfig* config );
 
     bool edit() const { return m_edit; }
     void setEdit( bool e ) { m_edit = e; }
+
+    /**
+     * @returns our symbol table.
+     */
+    const SymbolTable& symbolTable() const { return table; }
 
     /**
      * Sets the zoom by hand. This is to be used in <code>paintContent</code>.
@@ -267,6 +273,11 @@ private:
      * Whether we are in edit mode.
      */
     bool m_edit;
+
+    /**
+     * The symbols/names that are "known" to the system.
+     */
+    SymbolTable table;
 };
 
 KFORMULA_NAMESPACE_END

@@ -161,8 +161,8 @@ public:
     KSelectAction* getSymbolNamesAction();
     KToggleAction* getSyntaxHighlightingAction();
 
-    char leftBracketChar() const;
-    char rightBracketChar() const;
+    SymbolType leftBracketChar() const;
+    SymbolType rightBracketChar() const;
 
     /**
      * Gets called when the configuration changed.

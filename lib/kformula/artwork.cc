@@ -30,42 +30,70 @@
 
 #include "artwork.h"
 #include "contextstyle.h"
+#include "symboltable.h"
 
 
 KFORMULA_NAMESPACE_BEGIN
 
-const char Artwork::leftRoundBracket[] = {
-    static_cast<char>(230), // uppercorner
-    static_cast<char>(232), // lowercorner
-    static_cast<char>(231)  // line
+const QChar spaceChar = 0x0020;
+const QChar leftParenthesisChar = 0x0028;
+const QChar rightParenthesisChar = 0x0029;
+const QChar leftSquareBracketChar = 0x005B;
+const QChar rightSquareBracketChar = 0x005D;
+const QChar leftCurlyBracketChar = 0x007B;
+const QChar verticalLineChar = 0x007C;
+const QChar rightCurlyBracketChar = 0x007D;
+const QChar leftAngleBracketChar = 0x2329;
+const QChar rightAngleBracketChar = 0x232A;
+const QChar integralChar = 0x222B;
+const QChar summationChar = 0x2211;
+const QChar productChar = 0x220F;
+
+// We claim that all chars come from the same font.
+// It's up to the font tables to ensure this.
+const QChar leftRoundBracket[] = {
+    0xF8EB, // uppercorner
+    0xF8ED, // lowercorner
+    0xF8EC  // line
 };
-const char Artwork::leftSquareBracket[] = {
-    static_cast<char>(233), // uppercorner
-    static_cast<char>(235), // lowercorner
-    static_cast<char>(234)  // line
+const QChar leftSquareBracket[] = {
+    0xF8EE, // uppercorner
+    0xF8F0, // lowercorner
+    0xF8EF  // line
 };
-const char Artwork::leftCurlyBracket[] = {
-    static_cast<char>(236), // uppercorner
-    static_cast<char>(238), // lowercorner
-    static_cast<char>(239), // line
-    static_cast<char>(237)  // middle
+const QChar leftCurlyBracket[] = {
+    0xF8F1, // uppercorner
+    0xF8F3, // lowercorner
+    0xF8F4, // line
+    0xF8F2  // middle
 };
 
-const char Artwork::rightRoundBracket[] = {
-    static_cast<char>(246), // uppercorner
-    static_cast<char>(248), // lowercorner
-    static_cast<char>(247)  // line
+const QChar leftLineBracket[] = {
+    0xF8EF, // line
+    0xF8EF, // line
+    0xF8EF  // line
 };
-const char Artwork::rightSquareBracket[] = {
-    static_cast<char>(249), // uppercorner
-    static_cast<char>(251), // lowercorner
-    static_cast<char>(250)  // line
+const QChar rightLineBracket[] = {
+    0xF8FA, // line
+    0xF8FA, // line
+    0xF8FA  // line
 };
-const char Artwork::rightCurlyBracket[] = {
-    static_cast<char>(252), // uppercorner
-    static_cast<char>(254), // lowercorner
-    static_cast<char>(239), // line
-    static_cast<char>(253)  // middle
+
+const QChar rightRoundBracket[] = {
+    0xF8F6, // uppercorner
+    0xF8F8, // lowercorner
+    0xF8F7  // line
+};
+const QChar rightSquareBracket[] = {
+    0xF8F9, // uppercorner
+    0xF8FB, // lowercorner
+    0xF8FA  // line
+};
+const QChar rightCurlyBracket[] = {
+    0xF8FC, // uppercorner
+    0xF8FE, // lowercorner
+    0xF8F4, // line
+    0xF8FD  // middle
 };
 
 
@@ -102,7 +130,7 @@ void Artwork::calcSizes( const ContextStyle& style,
             calcSquareBracket( style, leftSquareBracket, parentSize, mySize );
         }
         else {
-            calcCharSize( style, mySize, '[' );
+            calcCharSize( style, mySize, leftSquareBracketChar );
         }
         break;
     case RightSquareBracket:
@@ -110,30 +138,43 @@ void Artwork::calcSizes( const ContextStyle& style,
             calcSquareBracket( style, rightSquareBracket, parentSize, mySize );
         }
         else {
-            calcCharSize(style, mySize, ']');
+            calcCharSize(style, mySize, rightSquareBracketChar);
         }
         break;
-    case LineBracket:
-        calcCharSize(style, mySize, '|');
+    case LeftLineBracket:
+        if ( !doSimpleSquareBracket( parentSize, mySize ) ) {
+            calcSquareBracket( style, leftLineBracket, parentSize, mySize );
+        }
+        else {
+            calcCharSize(style, mySize, verticalLineChar);
+        }
+        break;
+    case RightLineBracket:
+        if ( !doSimpleSquareBracket( parentSize, mySize ) ) {
+            calcSquareBracket( style, rightLineBracket, parentSize, mySize );
+        }
+        else {
+            calcCharSize(style, mySize, verticalLineChar);
+        }
         break;
     case SlashBracket:
-        calcCharSize(style, mySize, '/');
+        //calcCharSize(style, mySize, '/');
         break;
     case BackSlashBracket:
-        calcCharSize(style, mySize, '\\');
+        //calcCharSize(style, mySize, '\\');
         break;
     case LeftCornerBracket:
-        calcCharSize(style, mySize, static_cast<char>(225));
+        calcCharSize(style, mySize, leftAngleBracketChar);
         break;
     case RightCornerBracket:
-        calcCharSize(style, mySize, static_cast<char>(241));
+        calcCharSize(style, mySize, rightAngleBracketChar);
         break;
     case LeftRoundBracket:
         if ( !doSimpleRoundBracket( parentSize, mySize ) ) {
             calcRoundBracket( style, leftRoundBracket, parentSize, mySize );
         }
         else {
-            calcCharSize(style, mySize, '(');
+            calcCharSize(style, mySize, leftParenthesisChar);
         }
         break;
     case RightRoundBracket:
@@ -141,19 +182,20 @@ void Artwork::calcSizes( const ContextStyle& style,
             calcRoundBracket( style, rightRoundBracket, parentSize, mySize );
         }
         else {
-            calcCharSize(style, mySize, ')');
+            calcCharSize(style, mySize, rightParenthesisChar);
         }
         break;
-    case Empty:
+    case EmptyBracket:
         setHeight(parentSize);
-        setWidth(style.getEmptyRectWidth());
+        //setWidth(style.getEmptyRectWidth());
+        setWidth(0);
         break;
     case LeftCurlyBracket:
         if ( !doSimpleCurlyBracket( parentSize, mySize ) ) {
             calcCurlyBracket( style, leftCurlyBracket, parentSize, mySize );
         }
         else {
-            calcCharSize(style, mySize, '{');
+            calcCharSize(style, mySize, leftCurlyBracketChar);
         }
         break;
     case RightCurlyBracket:
@@ -161,17 +203,17 @@ void Artwork::calcSizes( const ContextStyle& style,
             calcCurlyBracket( style, rightCurlyBracket, parentSize, mySize );
         }
         else {
-            calcCharSize(style, mySize, '}');
+            calcCharSize(style, mySize, rightCurlyBracketChar);
         }
         break;
     case Integral:
-        calcCharSize( style, 1.5*mySize, static_cast<char>(242) );
+        calcCharSize( style, 1.5*mySize, integralChar );
         break;
     case Sum:
-        calcCharSize( style, 1.5*mySize, static_cast<char>(229) );
+        calcCharSize( style, 1.5*mySize, summationChar );
         break;
     case Product:
-        calcCharSize( style, 1.5*mySize, static_cast<char>(213) );
+        calcCharSize( style, 1.5*mySize, productChar );
         break;
     }
 }
@@ -183,40 +225,44 @@ void Artwork::calcSizes( const ContextStyle& style,
     luPt mySize = style.getAdjustedSize( tstyle );
     switch (type) {
     case LeftSquareBracket:
-        calcCharSize(style, mySize, '[');
+        calcCharSize(style, mySize, leftSquareBracketChar);
         break;
     case RightSquareBracket:
-        calcCharSize(style, mySize, ']');
+        calcCharSize(style, mySize, rightSquareBracketChar);
         break;
-    case LineBracket:
-        calcCharSize(style, mySize, '|');
+    case LeftLineBracket:
+    case RightLineBracket:
+        calcCharSize(style, mySize, verticalLineChar);
         break;
     case SlashBracket:
-        calcCharSize(style, mySize, '/');
+        //calcCharSize(style, mySize, '/');
         break;
     case BackSlashBracket:
-        calcCharSize(style, mySize, '\\');
+        //calcCharSize(style, mySize, '\\');
         break;
     case LeftCornerBracket:
-        calcCharSize(style, mySize, static_cast<char>(225));
+        calcCharSize(style, mySize, leftAngleBracketChar);
         break;
     case RightCornerBracket:
-        calcCharSize(style, mySize, static_cast<char>(241));
+        calcCharSize(style, mySize, rightAngleBracketChar);
         break;
     case LeftRoundBracket:
-        calcCharSize(style, mySize, '(');
+        calcCharSize(style, mySize, leftParenthesisChar);
         break;
     case RightRoundBracket:
-        calcCharSize(style, mySize, ')');
+        calcCharSize(style, mySize, rightParenthesisChar);
         break;
-    case Empty:
-        calcCharSize(style, mySize, ' ');
+    case EmptyBracket:
+        //calcCharSize(style, mySize, spaceChar);
+        setHeight(0);
+        //setWidth(style.getEmptyRectWidth());
+        setWidth(0);
         break;
     case LeftCurlyBracket:
-        calcCharSize(style, mySize, '{');
+        calcCharSize(style, mySize, leftCurlyBracketChar);
         break;
     case RightCurlyBracket:
-        calcCharSize(style, mySize, '}');
+        calcCharSize(style, mySize, rightCurlyBracketChar);
         break;
     case Integral:
     case Sum:
@@ -244,7 +290,7 @@ void Artwork::draw(QPainter& painter, const LuPixelRect& r,
             drawLeftSquareBracket( painter, style, myX, myY, parentSize, mySize );
         }
         else {
-            drawCharacter(painter, style, myX, myY, mySize, '[');
+            drawCharacter(painter, style, myX, myY, mySize, leftSquareBracketChar);
         }
         break;
     case RightSquareBracket:
@@ -252,7 +298,7 @@ void Artwork::draw(QPainter& painter, const LuPixelRect& r,
             drawRightSquareBracket( painter, style, myX, myY, parentSize, mySize );
         }
         else {
-            drawCharacter(painter, style, myX, myY, mySize, ']');
+            drawCharacter(painter, style, myX, myY, mySize, rightSquareBracketChar);
         }
         break;
     case LeftCurlyBracket:
@@ -260,7 +306,7 @@ void Artwork::draw(QPainter& painter, const LuPixelRect& r,
             drawLeftCurlyBracket( painter, style, myX, myY, parentSize, mySize );
         }
         else {
-            drawCharacter(painter, style, myX, myY, mySize, '{');
+            drawCharacter(painter, style, myX, myY, mySize, leftCurlyBracketChar);
         }
         break;
     case RightCurlyBracket:
@@ -268,30 +314,43 @@ void Artwork::draw(QPainter& painter, const LuPixelRect& r,
             drawRightCurlyBracket( painter, style, myX, myY, parentSize, mySize );
         }
         else {
-            drawCharacter(painter, style, myX, myY, mySize, '}');
+            drawCharacter(painter, style, myX, myY, mySize, rightCurlyBracketChar);
         }
         break;
-    case LineBracket:
-        drawCharacter(painter, style, myX, myY, mySize, '|');
+    case LeftLineBracket:
+        if ( !doSimpleSquareBracket( parentSize, mySize ) ) {
+            drawLeftLineBracket( painter, style, myX, myY, parentSize, mySize );
+        }
+        else {
+            drawCharacter(painter, style, myX, myY, mySize, verticalLineChar);
+        }
+        break;
+    case RightLineBracket:
+        if ( !doSimpleSquareBracket( parentSize, mySize ) ) {
+            drawRightLineBracket( painter, style, myX, myY, parentSize, mySize );
+        }
+        else {
+            drawCharacter(painter, style, myX, myY, mySize, verticalLineChar);
+        }
         break;
     case SlashBracket:
-        drawCharacter(painter, style, myX, myY, mySize, '/');
+        //drawCharacter(painter, style, myX, myY, mySize, '/');
         break;
     case BackSlashBracket:
-        drawCharacter(painter, style, myX, myY, mySize, '\\');
+        //drawCharacter(painter, style, myX, myY, mySize, '\\');
         break;
     case LeftCornerBracket:
-        drawCharacter(painter, style, myX, myY, mySize, static_cast<char>(225));
+        drawCharacter(painter, style, myX, myY, mySize, leftAngleBracketChar);
         break;
     case RightCornerBracket:
-        drawCharacter(painter, style, myX, myY, mySize, static_cast<char>(241));
+        drawCharacter(painter, style, myX, myY, mySize, rightAngleBracketChar);
         break;
     case LeftRoundBracket:
         if ( !doSimpleRoundBracket( parentSize, mySize ) ) {
             drawLeftRoundBracket( painter, style, myX, myY, parentSize, mySize );
         }
         else {
-            drawCharacter(painter, style, myX, myY, mySize, '(');
+            drawCharacter(painter, style, myX, myY, mySize, leftParenthesisChar);
         }
         break;
     case RightRoundBracket:
@@ -299,20 +358,19 @@ void Artwork::draw(QPainter& painter, const LuPixelRect& r,
             drawRightRoundBracket( painter, style, myX, myY, parentSize, mySize );
         }
         else {
-            drawCharacter(painter, style, myX, myY, mySize, ')');
+            drawCharacter(painter, style, myX, myY, mySize, rightParenthesisChar);
         }
         break;
-    case Empty:
-        //drawEmpty(painter, myX, myY, getHeight());
+    case EmptyBracket:
         break;
     case Integral:
-        drawCharacter(painter, style, myX, myY, 1.5*mySize, static_cast<char>(242));
+        drawCharacter(painter, style, myX, myY, 1.5*mySize, integralChar);
         break;
     case Sum:
-        drawCharacter(painter, style, myX, myY, 1.5*mySize, static_cast<char>(229));
+        drawCharacter(painter, style, myX, myY, 1.5*mySize, summationChar);
         break;
     case Product:
-        drawCharacter(painter, style, myX, myY, 1.5*mySize, static_cast<char>(213));
+        drawCharacter(painter, style, myX, myY, 1.5*mySize, productChar);
         break;
     }
 
@@ -337,39 +395,40 @@ void Artwork::draw(QPainter& painter, const LuPixelRect& r,
 
     switch (type) {
     case LeftSquareBracket:
-        drawCharacter(painter, style, myX, myY, mySize, '[');
+        drawCharacter(painter, style, myX, myY, mySize, leftSquareBracketChar);
         break;
     case RightSquareBracket:
-        drawCharacter(painter, style, myX, myY, mySize, ']');
+        drawCharacter(painter, style, myX, myY, mySize, rightSquareBracketChar);
         break;
     case LeftCurlyBracket:
-        drawCharacter(painter, style, myX, myY, mySize, '{');
+        drawCharacter(painter, style, myX, myY, mySize, leftCurlyBracketChar);
         break;
     case RightCurlyBracket:
-        drawCharacter(painter, style, myX, myY, mySize, '}');
+        drawCharacter(painter, style, myX, myY, mySize, rightCurlyBracketChar);
         break;
-    case LineBracket:
-        drawCharacter(painter, style, myX, myY, mySize, '|');
+    case LeftLineBracket:
+    case RightLineBracket:
+        drawCharacter(painter, style, myX, myY, mySize, verticalLineChar);
         break;
     case SlashBracket:
-        drawCharacter(painter, style, myX, myY, mySize, '/');
+        //drawCharacter(painter, style, myX, myY, mySize, '/');
         break;
     case BackSlashBracket:
-        drawCharacter(painter, style, myX, myY, mySize, '\\');
+        //drawCharacter(painter, style, myX, myY, mySize, '\\');
         break;
     case LeftCornerBracket:
-        drawCharacter(painter, style, myX, myY, mySize, static_cast<char>(225));
+        drawCharacter(painter, style, myX, myY, mySize, leftAngleBracketChar);
         break;
     case RightCornerBracket:
-        drawCharacter(painter, style, myX, myY, mySize, static_cast<char>(241));
+        drawCharacter(painter, style, myX, myY, mySize, rightAngleBracketChar);
         break;
     case LeftRoundBracket:
-        drawCharacter(painter, style, myX, myY, mySize, '(');
+        drawCharacter(painter, style, myX, myY, mySize, leftParenthesisChar);
         break;
     case RightRoundBracket:
-        drawCharacter(painter, style, myX, myY, mySize, ')');
+        drawCharacter(painter, style, myX, myY, mySize, rightParenthesisChar);
         break;
-    case Empty:
+    case EmptyBracket:
         break;
     case Integral:
     case Sum:
@@ -381,12 +440,14 @@ void Artwork::draw(QPainter& painter, const LuPixelRect& r,
 
 void Artwork::calcCharSize( const ContextStyle& style, luPt height, QChar ch )
 {
-    QFont f = style.getSymbolFont();
+    //QFont f = style.getSymbolFont();
+    uchar c = style.symbolTable().character( ch );
+    QFont f = style.symbolTable().font( ch );
     f.setPointSize( height );
 
     QFontMetrics fm(f);
-    setWidth( fm.width( ch ) );
-    LuPixelRect bound = fm.boundingRect( ch );
+    setWidth( fm.width( c ) );
+    LuPixelRect bound = fm.boundingRect( c );
     setHeight( bound.height() );
     setBaseline( -bound.top() );
 }
@@ -395,13 +456,15 @@ void Artwork::calcCharSize( const ContextStyle& style, luPt height, QChar ch )
 void Artwork::drawCharacter( QPainter& painter, const ContextStyle& style, luPixel x, luPixel y,
                              luPt height, QChar ch )
 {
-    QFont f = style.getSymbolFont();
+    //QFont f = style.getSymbolFont();
+    uchar c = style.symbolTable().character( ch );
+    QFont f = style.symbolTable().font( ch );
     f.setPointSizeFloat( style.layoutUnitToFontSize( height, false ) );
 
     painter.setFont( f );
     painter.drawText( style.layoutUnitToPixelX( x ),
                       style.layoutUnitToPixelY( y+getBaseline() ),
-                      QString( ch ) );
+                      QString( QChar( c ) ) );
 
     //painter.drawRect(bound);
     //painter.drawRect(x, y, getWidth(), getHeight());
@@ -409,14 +472,15 @@ void Artwork::drawCharacter( QPainter& painter, const ContextStyle& style, luPix
 }
 
 
-void Artwork::calcRoundBracket( const ContextStyle& style, const char chars[],
+void Artwork::calcRoundBracket( const ContextStyle& style, const QChar chars[],
                                 luPt height, luPt charHeight )
 {
     //char uppercorner = chars[0];
     //char lowercorner = chars[1];
-    char line = chars[2];
+    uchar line = style.symbolTable().character( chars[2] );
 
-    QFont f = style.getSymbolFont();
+    QFont f = style.symbolTable().font( chars[0] );
+    //QFont f = style.getSymbolFont();
     f.setPointSize( charHeight );
     QFontMetrics fm( f );
     //LuRect upperBound = fm.boundingRect(uppercorner);
@@ -451,16 +515,17 @@ void Artwork::drawRightRoundBracket( QPainter& p, const ContextStyle& style, luP
     }
 }
 
-void Artwork::drawSmallRoundBracket(QPainter& p, const ContextStyle& style, const char chars[],
+void Artwork::drawSmallRoundBracket(QPainter& p, const ContextStyle& style, const QChar chars[],
                                     luPixel x, luPixel y, luPt charHeight)
 {
     //kdDebug() << "Artwork::drawSmallRoundBracket" << endl;
-    QFont f = style.getSymbolFont();
+    uchar uppercorner = style.symbolTable().character( chars[0] );
+    uchar lowercorner = style.symbolTable().character( chars[1] );
+
+    //QFont f = style.getSymbolFont();
+    QFont f = style.symbolTable().font( chars[0] );
     f.setPointSizeFloat( style.layoutUnitToFontSize( charHeight, false ) );
     p.setFont(f);
-
-    char uppercorner = chars[0];
-    char lowercorner = chars[1];
 
     QFontMetrics fm(p.fontMetrics());
     QRect upperBound = fm.boundingRect(uppercorner);
@@ -477,17 +542,18 @@ void Artwork::drawSmallRoundBracket(QPainter& p, const ContextStyle& style, cons
     p.drawText( ptX, ptY+upperBound.height()-lowerBound.top(), QString( QChar( lowercorner ) ) );
 }
 
-void Artwork::drawBigRoundBracket( QPainter& p, const ContextStyle& style, const char chars[],
+void Artwork::drawBigRoundBracket( QPainter& p, const ContextStyle& style, const QChar chars[],
                                    luPixel x, luPixel y, luPt charHeight )
 {
     //kdDebug() << "Artwork::drawBigRoundBracket" << endl;
-    QFont f = style.getSymbolFont();
+    uchar uppercorner = style.symbolTable().character( chars[0] );
+    uchar lowercorner = style.symbolTable().character( chars[1] );
+    uchar line = style.symbolTable().character( chars[2] );
+
+    //QFont f = style.getSymbolFont();
+    QFont f = style.symbolTable().font( chars[0] );
     f.setPointSizeFloat( style.layoutUnitToFontSize( charHeight, false ) );
     p.setFont(f);
-
-    char uppercorner = chars[0];
-    char lowercorner = chars[1];
-    char line = chars[2];
 
     QFontMetrics fm(f);
     QRect upperBound = fm.boundingRect(uppercorner);
@@ -523,14 +589,15 @@ void Artwork::drawBigRoundBracket( QPainter& p, const ContextStyle& style, const
 }
 
 
-void Artwork::calcSquareBracket( const ContextStyle& style, const char chars[],
+void Artwork::calcSquareBracket( const ContextStyle& style, const QChar chars[],
                                  luPt height, luPt charHeight )
 {
     //char uppercorner = chars[0];
     //char lowercorner = chars[1];
-    char line = chars[2];
+    uchar line = style.symbolTable().character( chars[2] );
 
-    QFont f = style.getSymbolFont();
+    //QFont f = style.getSymbolFont();
+    QFont f = style.symbolTable().font( chars[0] );
     f.setPointSize( charHeight );
     QFontMetrics fm( f );
     //LuRect upperBound = fm.boundingRect(uppercorner);
@@ -538,6 +605,28 @@ void Artwork::calcSquareBracket( const ContextStyle& style, const char chars[],
 
     setWidth( fm.width( QChar( line ) ) );
     setHeight( ( ( height-1 ) / charHeight + 1 ) * charHeight );
+}
+
+void Artwork::drawLeftLineBracket( QPainter& p, const ContextStyle& style, luPixel x, luPixel y,
+                                   luPt height, luPt charHeight )
+{
+    if ( height <= 2*charHeight ) {
+        drawSmallRoundBracket( p, style, leftLineBracket, x, y, charHeight );
+    }
+    else {
+        drawBigRoundBracket( p, style, leftLineBracket, x, y, charHeight );
+    }
+}
+
+void Artwork::drawRightLineBracket( QPainter& p, const ContextStyle& style, luPixel x, luPixel y,
+                                    luPt height, luPt charHeight )
+{
+    if ( height <= 2*charHeight ) {
+        drawSmallRoundBracket( p, style, rightLineBracket, x, y, charHeight );
+    }
+    else {
+        drawBigRoundBracket( p, style, rightLineBracket, x, y, charHeight );
+    }
 }
 
 void Artwork::drawLeftSquareBracket( QPainter& p, const ContextStyle& style, luPixel x, luPixel y,
@@ -563,15 +652,16 @@ void Artwork::drawRightSquareBracket( QPainter& p, const ContextStyle& style, lu
 }
 
 
-void Artwork::calcCurlyBracket( const ContextStyle& style, const char chars[],
+void Artwork::calcCurlyBracket( const ContextStyle& style, const QChar chars[],
                                 luPt height, luPt charHeight )
 {
     //char uppercorner = chars[0];
     //char lowercorner = chars[1];
-    char line = chars[2];
+    uchar line = style.symbolTable().character( chars[2] );
     //char middle = chars[3];
 
-    QFont f = style.getSymbolFont();
+    //QFont f = style.getSymbolFont();
+    QFont f = style.symbolTable().font( chars[0] );
     f.setPointSize( charHeight );
     QFontMetrics fm( f );
     //LuRect upperBound = fm.boundingRect(uppercorner);
@@ -580,7 +670,7 @@ void Artwork::calcCurlyBracket( const ContextStyle& style, const char chars[],
     //LuRect middleBound = fm.boundingRect(middle);
 
     setWidth( fm.width( QChar( line ) ) );
-    setHeight( ( ( height-1 ) / charHeight + 1 ) * charHeight );
+    setHeight( QMAX( ( height-1 ) / charHeight + 1, 3 ) * charHeight );
 }
 
 void Artwork::drawLeftCurlyBracket( QPainter& p, const ContextStyle& style, luPixel x, luPixel y,
@@ -605,17 +695,18 @@ void Artwork::drawRightCurlyBracket( QPainter& p, const ContextStyle& style, luP
     }
 }
 
-void Artwork::drawSmallCurlyBracket(QPainter& p, const ContextStyle& style, const char chars[],
+void Artwork::drawSmallCurlyBracket(QPainter& p, const ContextStyle& style, const QChar chars[],
                                     luPixel x, luPixel y, luPt charHeight)
 {
-    QFont f = style.getSymbolFont();
+    //QFont f = style.getSymbolFont();
+    QFont f = style.symbolTable().font( chars[0] );
     f.setPointSizeFloat( style.layoutUnitToFontSize( charHeight, false ) );
     p.setFont(f);
 
-    char uppercorner = chars[0];
-    char lowercorner = chars[1];
+    uchar uppercorner = style.symbolTable().character( chars[0] );
+    uchar lowercorner = style.symbolTable().character( chars[1] );
     //char line = chars[2];
-    char middle = chars[3];
+    uchar middle = style.symbolTable().character( chars[3] );
 
     QFontMetrics fm(p.fontMetrics());
     QRect upperBound = fm.boundingRect(uppercorner);
@@ -636,17 +727,18 @@ void Artwork::drawSmallCurlyBracket(QPainter& p, const ContextStyle& style, cons
                 QString( QChar( lowercorner ) ) );
 }
 
-void Artwork::drawBigCurlyBracket( QPainter& p, const ContextStyle& style, const char chars[],
+void Artwork::drawBigCurlyBracket( QPainter& p, const ContextStyle& style, const QChar chars[],
                                    luPixel x, luPixel y, luPt charHeight )
 {
-    QFont f = style.getSymbolFont();
+    //QFont f = style.getSymbolFont();
+    QFont f = style.symbolTable().font( chars[0] );
     f.setPointSizeFloat( style.layoutUnitToFontSize( charHeight, false ) );
     p.setFont(f);
 
-    char uppercorner = chars[0];
-    char lowercorner = chars[1];
-    char line = chars[2];
-    char middle = chars[3];
+    uchar uppercorner = style.symbolTable().character( chars[0] );
+    uchar lowercorner = style.symbolTable().character( chars[1] );
+    uchar line = style.symbolTable().character( chars[2] );
+    uchar middle = style.symbolTable().character( chars[3] );
 
     QFontMetrics fm(p.fontMetrics());
     QRect upperBound = fm.boundingRect(uppercorner);

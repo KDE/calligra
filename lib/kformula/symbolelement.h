@@ -35,7 +35,7 @@ public:
 
     //enum { contentPos, upperPos, lowerPos };
 
-    SymbolElement(SymbolType type = Empty, BasicElement* parent = 0);
+    SymbolElement(SymbolType type = EmptyBracket, BasicElement* parent = 0);
     ~SymbolElement();
 
     /**

@@ -33,7 +33,7 @@
 
 KFORMULA_NAMESPACE_BEGIN
 
-BracketElement::BracketElement(char l, char r, BasicElement* parent)
+BracketElement::BracketElement(SymbolType l, SymbolType r, BasicElement* parent)
     : BasicElement(parent)
 {
     content = new SequenceElement(this);
@@ -273,24 +273,10 @@ void BracketElement::selectChild(FormulaCursor* cursor, BasicElement* child)
 /**
  * Creates a new bracket object that matches the char.
  */
-Artwork* BracketElement::createBracket(char bracket)
+Artwork* BracketElement::createBracket(SymbolType bracket)
 {
     Artwork* aw = new Artwork();
-    switch (bracket) {
-    case '[':
-    case ']':
-    case '{':
-    case '}':
-    case '|':
-    case '<':
-    case '>':
-    case '(':
-    case ')':
-    case '/':
-    case '\\':
-        aw->setType(static_cast<SymbolType>(bracket));
-        break;
-    }
+    aw->setType( bracket );
     return aw;
 }
 

@@ -1032,15 +1032,15 @@ Command* SequenceElement::input( Container* container, QChar ch )
         return buildCommand( container, &r );
     }
     case '[': {
-        BracketRequest r( '[', ']' );
+        BracketRequest r( LeftSquareBracket, RightSquareBracket );
         return buildCommand( container, &r );
     }
     case '{': {
-        BracketRequest r( '{', '}' );
+        BracketRequest r( LeftCurlyBracket, RightCurlyBracket );
         return buildCommand( container, &r );
     }
     case '|': {
-        BracketRequest r( '|', '|' );
+        BracketRequest r( LeftLineBracket, RightLineBracket );
         return buildCommand( container, &r );
     }
     case '^': {
