@@ -19,7 +19,7 @@ VERSION 1
 		- put header/footer different place if
 		  it's center, ...
 		  to do that --> isCenter method for
-		  Texte class																								TODO
+		  Text class																								TODO
 	- clean codes :))	)																						DONE
 	- kdoc																												DONE
 	- footnote, endnote																						DONE
@@ -35,10 +35,13 @@ VERSION 2
 	- unicode																											DONE
 	- table																												DONE AT 80 %
 	- picture																											DONE AT 80 %
-	- (margin) note																								
+	- (margin) note																								DONE
 	- variable																										FIRST WORK
-	- wave, double undeline, ...																	TODO
-	- personalization																							DIALOG BUT NOT USED
+	- wave, double undeline, ...																	DONE
+	- personalization																							DIALOG BUT NOT ALL USED
+	- tabulation																									TODO
+	- export the documentinfo (option in the dialog box yes/no, 
+		new file or inline)																					TODO
 	- optimisation
 		o left and right border for table (multicolumn not always usefull) ;
 		o cell scan for know if there are a border => there are several ;
