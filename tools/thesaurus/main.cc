@@ -24,23 +24,25 @@
 
 /*
 FIXME:
+-Filter the (p) / (a) at the end of some adjectives
 -Fix "no mimesource" warning of QTextBrowser
--click in thesaurus doesn't always select immediately
 -See the fixme's in the source below
 
 TODO:
--Add part of speech information?
 -If no match was found, use KSpell to offer alternative spellings
 -Add back/forward buttons
 -Don't start WordNet before its tab is activated?
 -Move the edit field outside the tabs and make it work for both
--Help link about WordNet
 -Also "Replace" with text selection in m_resultbox?
 -Make dialog non-modal???
 -Be more verbose if the result is empty
 -Better table layout (no empty space on top)
 -Don't forget to insert comments for the translators if necessary
  (because WordNet is English language only)
+
+NOT TODO:
+-Add part of speech information -- I think this would blow up the 
+ filesize too much
 */
 
 #include "main.h"
@@ -67,6 +69,9 @@ Thesaurus::Thesaurus(QObject* parent, const char* name, const QStringList &)
     m_tab->setCancelButton();
     m_tab->resize(500, 350);
     m_tab->setCaption(i18n("KWord Thesaurus & WordNet"));
+
+    m_tab->setHelpButton();		// fixme: place to the left?!
+    connect(m_tab, SIGNAL(helpButtonPressed()), this, SLOT(slotHelp()));
 
     //
     // Thesaurus Tab
@@ -568,6 +573,12 @@ void Thesaurus::receivedWnStderr(KProcess *, char *result, int len)
     m_wnproc_stderr += QString::fromLocal8Bit( QCString(result, len+1) );
 }
 
+
+// Triggered when Help is pressed.
+void Thesaurus::slotHelp()
+{
+    kapp->invokeHelp(QString::null, "thesaurus");
+}
 
 //
 // Tools

@@ -36,6 +36,7 @@
 #include <qwidget.h>
 #include <qvbox.h>
 
+#include <kapplication.h>
 #include <kcombobox.h>
 #include <kcursor.h>
 #include <kdatatool.h>
@@ -71,6 +72,8 @@ protected slots:
     void wnExited(KProcess *proc);
     void receivedWnStdout(KProcess *proc, char *result, int len);
     void receivedWnStderr(KProcess *proc, char *result, int len);
+
+    void slotHelp();
 
 protected:
     enum Mode {grep, other};
