@@ -1,10 +1,10 @@
-<!DOCTYPE QConfig ><QConfig name="KGraph">
+<!DOCTYPE kpartgui><kpartgui name="KGraph">
 <MenuBar>
- <Menu name="Edit"><text>Edit</text>
-  <Action name="editcut"/>
+ <Menu name="edit"><text>&amp;Edit</text>
+  <Action name="edit_cut"/>
  </Menu>
 </MenuBar>
 <ToolBar>
-  <Action name="editcut"/>
+  <Action name="edit_cut"/>
 </ToolBar>
-</QConfig>
+</kpartgui>

@@ -34,22 +34,31 @@ class KGObjectPool {
 
 public:
     static KGObjectPool *self();   // allow only one object pool!
-    
+
     KGObject *first() { return objects.first(); }
     KGObject *last() { return objects.last(); }
     KGObject *next() { return objects.next(); }
     KGObject *prev() { return objects.prev(); }
     KGObject *current() { return objects.current(); }
     KGObject *at(const unsigned int &index) { return objects.at(index); }
+    const int find(const KGObject *object) { return objects.findRef(object); }
 
     const bool remove(const unsigned int &index);
     const bool remove(const KGObject *object);
 
     const unsigned int count() const { return objects.count(); }
     const bool isEmpty() const { return objects.isEmpty(); }
-    
+
+    const bool toFront(const KGObject *object); // moves the object to the front (last item)
+    const bool toBack(const KGObject *object);  // moves the object to the back (first item)
+    const bool forwardOne(const KGObject *object);  // moves it one step towards the user
+    const bool backwardOne(const KGObject *object); // moves it one step away form the user
+
+    KGObject *createObject(const QDomElement &e);   // load an object from XML. The Right
+                                                    // Object(tm) is created.
+
     //KGLine *createLine(); // default line (from (0|0) to (1|1))
-    //KGLine *createLine(const QDomElement &e);
+    //KGLine *createLine(const QDomElement &e);   // used to "load" a line object
     //KGLine *createLine(const QPoint &a, const QPoint &b);
 
 

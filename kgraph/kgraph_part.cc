@@ -32,7 +32,7 @@
 KGraphPart::KGraphPart(QObject *parent, const char *name, bool singleViewMode)
     : KoDocument(parent, name, singleViewMode) {
 
-    KStdAction::cut(this, SLOT( a_editcut() ), actionCollection(), "editcut" );
+    KStdAction::cut(this, SLOT( a_editcut() ), actionCollection(), "edit_cut" );
 }
 
 bool KGraphPart::initDoc() {
