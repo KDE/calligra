@@ -100,10 +100,12 @@ VPolylineTool::deactivate()
 				if ( *p3 == *p4 )
 					polyline->lineTo( *p4 );
 				else
-					polyline->curve1To( *p3, *p4 );
+					//polyline->curve1To( *p3, *p4 );
+					polyline->curveTo( *p3, *p4, *p4 );
 			else
 				if ( *p3 == *p4 )
-					polyline->curve2To( *p2, *p4 );
+					//polyline->curve2To( *p2, *p4 );
+					polyline->curveTo( *p2, *p2, *p4 );
 				else
 					polyline->curveTo( *p2, *p3, *p4 );
 			p1 = p4;
@@ -238,7 +240,7 @@ VPolylineTool::mouseButtonPress()
 
 	m_bezierPoints.append( new KoPoint( last() ) );
 	m_bezierPoints.append( new KoPoint( last() ) );
-	
+
 	drawBezierVector( m_lastVectorStart, m_lastVectorEnd );
 	draw();
 }
