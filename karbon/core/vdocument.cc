@@ -1,6 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2001, The Karbon Developers
-   Copyright (C) 2002, The Karbon Developers
+   Copyright (C) 2001, 2002, 2003 The Karbon Developers
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -251,5 +250,5 @@ QString
 VDocument::objectName( const VObject *obj ) const
 {
 	QMap<const VObject *, QString>::ConstIterator it = m_objectNames.find( obj );
-    return it == m_objectNames.end() ? 0L : it.data();
+	return it == m_objectNames.end() ? 0L : it.data();
 }

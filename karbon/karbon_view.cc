@@ -431,7 +431,7 @@ KarbonView::editPaste()
 		VObjectList selection;
 		// Use group to assemble the xml contents
 		// TODO : maybe not clone() so much
-		VGroup grp( 0L );
+		VGroup grp( &( part()->document() ) );
 		grp.load( clip );
 		VObjectListIterator itr( grp.objects() );
 		for( ; itr.current() ; ++itr )
