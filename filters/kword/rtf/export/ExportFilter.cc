@@ -1039,6 +1039,13 @@ QString RTFWorker::layoutToRtf(const LayoutData& layoutOrigin,
        if(layout.pageBreakBefore) strLayout += "\\pagebb";
     }
 
+    // Note: RTF doesn't specify "page break after"
+    // \*\pgbrk0 is used after OpenOffice.org Writer
+    if (force || (layoutOrigin.pageBreakAfter!=layout.pageBreakAfter))
+    {
+       if(layout.pageBreakAfter) strLayout += "\\*\\pgbrk0";
+    }
+
     if (force
         || (layoutOrigin.lineSpacingType!=layoutOrigin.lineSpacingType)
         || (layoutOrigin.lineSpacing!=layoutOrigin.lineSpacing))
