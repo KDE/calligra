@@ -16,6 +16,9 @@ export DH_OPTIONS
 DEB_HOST_GNU_TYPE	?= $(shell dpkg-architecture -qDEB_HOST_GNU_TYPE)
 DEB_BUILD_GNU_TYPE	?= $(shell dpkg-architecture -qDEB_BUILD_GNU_TYPE)
 
+INSTALL_DIR = install -p -d -o root -g root -m 755
+INSTALL_FILE = install -p -o root -g root -m 644
+
 objdir = $(CURDIR)/obj-$(DEB_BUILD_GNU_TYPE)
 
 ifneq (,$(findstring debug,$(DEB_BUILD_OPTIONS)))
@@ -142,11 +145,12 @@ install: build
 	done
 
 	# Install lintian overrides.
-	for i in debian/*.override; do \
-	  pkg=`basename $$i | sed -e 's#.override##'`; \
-	  dh_install -p$$pkg $$i usr/share/lintian/overrides; \
-	  mv debian/$$pkg/usr/share/lintian/overrides/$$pkg.override \
-	    debian/$$pkg/usr/share/lintian/overrides/$$pkg; \
+	for pkg in `dh_listpackages`; do \
+	  if test -e debian/$$pkg.override; then \
+	    $(INSTALL_DIR) debian/$$pkg/usr/share/lintian/overrides; \
+	    $(INSTALL_FILE) debian/$$pkg.override \
+	      debian/$$pkg/usr/share/lintian/overrides/$$pkg; \
+	  fi; \
 	done
 
 	# Fix the kivio straight_connector.ksp mess.
@@ -162,17 +166,34 @@ install: build
 binary-common:
 	dh_testdir
 	dh_testroot
-	dh_installchangelogs
+
+	# Install the correct upstream changelogs.
+	for pkg in `dh_listpackages`; do \
+	  case "$$pkg" in \
+	    kivio ) \
+	      DH_OPTIONS='' dh_installchangelogs -p$$pkg $$pkg/CHANGELOG ;; \
+	    kugar ) \
+	      DH_OPTIONS='' dh_installchangelogs -p$$pkg $$pkg/ChangeLog ;; \
+	    kchart | kpresenter | kspread | kword ) \
+	      DH_OPTIONS='' dh_installchangelogs -p$$pkg $$pkg/CHANGES ;; \
+	    * ) \
+	      DH_OPTIONS='' dh_installchangelogs -p$$pkg ;; \
+	  esac; \
+	done
+
 	dh_installdocs
 	dh_installexamples
+	dh_installman
+	dh_installmenu
+	dh_installmime
 
-	# Rename some newly installed files, and ensure all demo files
-	# are once compressed.
+	# Rename some newly installed files, ensure all demo files
+	# are once compressed and fix incorrect man page installations.
 	for pkg in `dh_listpackages`; do \
 	  case "$$pkg" in \
 	    kugar ) \
 	      mv debian/kugar/usr/share/doc/kugar/examples/kugar.examples.README \
-	        debian/kugar/usr/share/doc/kugar/examples/README.examples \
+	        debian/kugar/usr/share/doc/kugar/examples/README.examples; \
 	    ;; \
 	    kword | kspread ) \
 	      for eg in debian/$$pkg/usr/share/doc/$$pkg/examples/*.k??; do \
@@ -182,20 +203,14 @@ binary-common:
 	        fi; \
 	      done; \
 	    ;; \
+	    kpresenter ) \
+	      mv debian/kpresenter/usr/share/man/pl/man1/kprconverter.1 \
+	        debian/kpresenter/usr/share/man/man1/kprconverter.pl.1; \
+	      rm -rf debian/kpresenter/usr/share/man/pl; \
+	    ;; \
 	  esac; \
 	done
 
-	dh_installman
-
-	# Move some incorrectly installed man pages.
-	if [ -e debian/kpresenter/usr/share/man/pl ]; then \
-	  mv debian/kpresenter/usr/share/man/pl/man1/kprconverter.1 \
-	    debian/kpresenter/usr/share/man/man1/kprconverter.pl.1; \
-	  rm -rf debian/kpresenter/usr/share/man/pl; \
-	fi
-	
-	dh_installmenu
-	dh_installmime
 	dh_strip
 	dh_link
 	dh_compress -X.docbook -X.css -X-license -X.dcl -X.bz2 -X.ksp -X.kwd -X.kwt
@@ -209,15 +224,12 @@ binary-common:
 	  echo "Checking dependencies for $$pkg..."; \
 	  case "$$pkg" in \
 	    koffice | koffice-doc-html ) \
-	      DH_OPTIONS='' dh_shlibdeps -p$$pkg \
-	    ;; \
+	      DH_OPTIONS='' dh_shlibdeps -p$$pkg ;; \
 	    koffice-* ) \
-	      DH_OPTIONS='' dh_shlibdeps -p$$pkg -ldebian/koffice-libs/usr/lib \
-	    ;; \
+	      DH_OPTIONS='' dh_shlibdeps -p$$pkg -ldebian/koffice-libs/usr/lib ;; \
 	    * ) \
 	      DH_OPTIONS='' dh_shlibdeps -p$$pkg \
-	        -ldebian/koffice-libs/usr/lib:debian/$$pkg/usr/lib \
-	    ;; \
+	        -ldebian/koffice-libs/usr/lib:debian/$$pkg/usr/lib ;; \
 	  esac; \
 	done
 
