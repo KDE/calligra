@@ -201,6 +201,8 @@ KSpreadDoc::KSpreadDoc( QWidget *parentWidget, const char *widgetName, QObject* 
 
   d->undoLocked = false;
   d->commandHistory = new KoCommandHistory( actionCollection() );
+  connect( d->commandHistory, SIGNAL( commandExecuted() ), SLOT( commandExecuted() ) );
+  connect( d->commandHistory, SIGNAL( documentRestored() ), SLOT( documentRestored() ) );
 
 
   // Make us scriptable if the document has a name
@@ -1521,6 +1523,16 @@ void KSpreadDoc::undo()
 void KSpreadDoc::redo()
 {
   d->commandHistory->redo();
+}
+
+void KSpreadDoc::commandExecuted()
+{
+  setModified( true );
+}
+
+void KSpreadDoc::documentRestored()
+{
+  setModified( false );
 }
 
 void KSpreadDoc::undoLock()

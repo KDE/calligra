@@ -696,6 +696,10 @@ signals:
 
   void damagesFlushed( const QValueList<KSpread::Damage*>& damages );
 
+protected slots:
+  void commandExecuted();
+  void documentRestored();  
+  
 protected:
   KoView* createViewInstance( QWidget* parent, const char* name );
 
