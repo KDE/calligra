@@ -227,12 +227,11 @@ static void ProcessFrameTag ( QDomNode myNode, void *tagData,
         ;
     ProcessAttributes (myNode, attrProcessingList);
 
-    // ### TODO: use QColor::setRgb instead of QColor::QColor
-    frameAnchor->frame.lColor  = QColor( lRed, lGreen, lBlue );
-    frameAnchor->frame.rColor  = QColor( rRed, rGreen, rBlue );
-    frameAnchor->frame.tColor  = QColor( tRed, tGreen, tBlue );
-    frameAnchor->frame.bColor  = QColor( bRed, bGreen, bBlue );
-    frameAnchor->frame.bkColor = QColor( bkRed, bkGreen, bkBlue );
+    frameAnchor->frame.lColor.setRgb( lRed, lGreen, lBlue );
+    frameAnchor->frame.rColor.setRgb( rRed, rGreen, rBlue );
+    frameAnchor->frame.tColor.setRgb( tRed, tGreen, tBlue );
+    frameAnchor->frame.bColor.setRgb( bRed, bGreen, bBlue );
+    frameAnchor->frame.bkColor.setRgb( bkRed, bkGreen, bkBlue );
 
     AllowNoSubtags (myNode, leader);
 }
