@@ -31,49 +31,49 @@ class VLayer;
 
 class VLayerListViewItem : public QCheckListItem
 {
-	public:
-		VLayerListViewItem( QListView* parent, KarbonView* view, VLayer* layer );
+public:
+	VLayerListViewItem( QListView* parent, KarbonView* view, VLayer* layer );
 
-		VLayer* layer() { return m_layer; }
-		int pos();
-		void update();
-	
-	protected:
-		virtual void stateChange( bool on );
+	VLayer* layer() { return m_layer; }
+	int pos();
+	void update();
 
-	private:
-		KarbonView*  m_view;
-		VLayer*      m_layer;
+protected:
+	virtual void stateChange( bool on );
+
+private:
+	KarbonView*  m_view;
+	VLayer*      m_layer;
 }; // VLayerListViewItem
 
 class VLayersDocker : public VDocker
 {
-	Q_OBJECT
+Q_OBJECT
 
-	public:
-		VLayersDocker( KarbonView* view );
+public:
+	VLayersDocker( KarbonView* view );
 
-		void updatePreviews();
-		void updateLayers();
+	void updatePreviews();
+	void updateLayers();
 
-	public slots:
-		void selectionChanged( QListViewItem* item, const QPoint&, int col );
-		void renameLayer( QListViewItem* item, const QPoint&, int col );
-		void addLayer();
-		void raiseLayer();
-		void lowerLayer();
-		void deleteLayer();
-	
-	private slots:
-		void slotButtonClicked( int ID );
+public slots:
+	void selectionChanged( QListViewItem* item, const QPoint&, int col );
+	void renameLayer( QListViewItem* item, const QPoint&, int col );
+	void addLayer();
+	void raiseLayer();
+	void lowerLayer();
+	void deleteLayer();
 
-	protected:
-		VLayerListViewItem* listItem( int pos );
+private slots:
+	void slotButtonClicked( int ID );
 
-	private:	
-		QListView* m_layersListView;
-		QHButtonGroup* m_buttonGroup;
-		KarbonView* m_view;
+protected:
+	VLayerListViewItem* listItem( int pos );
+
+private:	
+	QListView* m_layersListView;
+	QHButtonGroup* m_buttonGroup;
+	KarbonView* m_view;
 
 }; // VLayersDocker
 

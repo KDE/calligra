@@ -43,7 +43,8 @@ VLayerListViewItem::VLayerListViewItem( QListView* parent, KarbonView* view, VLa
 	update();
 } // VLayerListViewItem::VLayerListViewItem
 
-void VLayerListViewItem::update()
+void
+VLayerListViewItem::update()
 {
 	KIconLoader il;
 	QPixmap preview;
@@ -72,12 +73,14 @@ void VLayerListViewItem::update()
 		setSelected( true );
 } // VLayerListViewItem::update
 
-void VLayerListViewItem::stateChange( bool on )
+void
+VLayerListViewItem::stateChange( bool on )
 {
 	m_layer->setSelected( on );
 } // VLayerListViewItem::stateChange
 
-int VLayerListViewItem::pos()
+int
+VLayerListViewItem::pos()
 {
 	VLayerListViewItem* item;
 	if( !( item = (VLayerListViewItem*)itemAbove() ) )
@@ -139,7 +142,8 @@ VLayersDocker::VLayersDocker( KarbonView* view )
 	setWidget( mainWidget );
 } // VLayerDocker::VLayerDocker
 
-void VLayersDocker::slotButtonClicked( int ID )
+void
+VLayersDocker::slotButtonClicked( int ID )
 {
 	switch( ID )
 	{
@@ -154,7 +158,8 @@ void VLayersDocker::slotButtonClicked( int ID )
 	}
 }
 
-void VLayersDocker::selectionChanged( QListViewItem* item, const QPoint &, int col )
+void
+VLayersDocker::selectionChanged( QListViewItem* item, const QPoint &, int col )
 {
 	if ( item )
 	{
@@ -170,7 +175,8 @@ void VLayersDocker::selectionChanged( QListViewItem* item, const QPoint &, int c
 	}
 } // VLayerDocker::selectionChanged
 
-void VLayersDocker::renameLayer( QListViewItem* item, const QPoint&, int col )
+void
+VLayersDocker::renameLayer( QListViewItem* item, const QPoint&, int col )
 {
 	if ( ( item ) && col == 2 ) 
 	{
@@ -186,7 +192,8 @@ void VLayersDocker::renameLayer( QListViewItem* item, const QPoint&, int col )
 	}
 } // VLayersDocker::renameLayer
 
-void VLayersDocker::addLayer()
+void
+VLayersDocker::addLayer()
 {
 	bool ok = true;
 	QString name = QInputDialog::getText( i18n( "New layer" ), i18n( "Enter the name of the new layer:" ),
@@ -202,7 +209,8 @@ void VLayersDocker::addLayer()
 	}
 } // VLayersDocker::addLayer
 
-void VLayersDocker::raiseLayer()
+void
+VLayersDocker::raiseLayer()
 {
 	VLayerListViewItem* layerItem = (VLayerListViewItem*)m_layersListView->selectedItem();
 	if( !layerItem || !layerItem->layer() )
@@ -213,35 +221,39 @@ void VLayersDocker::raiseLayer()
 	updatePreviews();
 } // VLayersDocker::raiseLayer
 
-void VLayersDocker::lowerLayer()
+void
+VLayersDocker::lowerLayer()
 {
 	VLayerListViewItem* layerItem = (VLayerListViewItem*)m_layersListView->selectedItem();
 	if( !layerItem || !layerItem->layer() )
 		return;
-	VLayerCmd* cmd = new VLayerCmd( &m_view->part()->document(), i18n( "Lower layer" ), 
-			layerItem->layer(), VLayerCmd::lowerLayer );
+	VLayer *layer = layerItem->layer();
+	VLayerCmd* cmd = new VLayerCmd( &m_view->part()->document(), i18n( "Lower layer" ), layer, VLayerCmd::lowerLayer );
 	m_view->part()->addCommand( cmd, true );
 	updatePreviews();
 } // VLayersDocker::lowerLayer
 
-void VLayersDocker::deleteLayer()
+void
+VLayersDocker::deleteLayer()
 {
 	VLayerListViewItem* layerItem = (VLayerListViewItem*)m_layersListView->selectedItem();
 	if( !layerItem || !layerItem->layer() )
 		return;
-	VLayerCmd* cmd = new VLayerCmd( &m_view->part()->document(), i18n( "Delete layer" ), 
-			layerItem->layer(), VLayerCmd::deleteLayer );
+	VLayer *layer = layerItem->layer();
+	VLayerCmd* cmd = new VLayerCmd( &m_view->part()->document(), i18n( "Delete layer" ), layer, VLayerCmd::deleteLayer );
 	m_view->part()->addCommand( cmd, true );
 	updateLayers();
 } // VLayersDocker::deleteLayer
 
-void VLayersDocker::updatePreviews()
+void
+VLayersDocker::updatePreviews()
 {
 	// TODO: Optimization: call update() on each view item...
 	updateLayers();
 } // VLayersDocker::updatePreviews
 
-void VLayersDocker::updateLayers()
+void
+VLayersDocker::updateLayers()
 {
 	m_layersListView->clear();
 	QPtrVector<VLayer> vector;
