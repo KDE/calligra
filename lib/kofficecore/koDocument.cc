@@ -232,7 +232,6 @@ bool KoDocument::saveFile()
     } else {
       // How can this happen ? m_changed = true ?
       // No -> nativeFile==m_file :) (Werner)
-      // kdDebug(30003) << "Document changed !??!?!?!!?" << endl;
       ret = true;
     }
   } else {
