@@ -244,7 +244,7 @@ class KEXI_DB_EXPORT Field
 		static bool hasEmptyProperty(uint type);
 
 		void setType(Type t);
-		void setTable(TableSchema *table);
+		virtual void setTable(TableSchema *table);
 		void setName(const QString& n);
 		void setConstraints(uint c);
 		void setLength(uint l);

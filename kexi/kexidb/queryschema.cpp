@@ -297,6 +297,7 @@ QueryAsterisk::~QueryAsterisk()
 
 void QueryAsterisk::setTable(TableSchema *table)
 {
+	kdDebug() << "QueryAsterisk::setTable()" << endl;
 	m_table=table;
 }
 

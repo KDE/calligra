@@ -819,7 +819,7 @@
 
 	void parseData(KexiDB::Parser *p, const char *data)
 	{
-		dummy = new KexiDB::TableSchema("__dummy");
+		dummy = new KexiDB::TableSchema();
 		parser = p;
 		field = 0;
 		fieldList.clear();
@@ -1121,11 +1121,11 @@ static const unsigned short yyrline[] =
        0,   473,   473,   474,   475,   480,   479,   488,   488,   494,
      503,   518,   518,   524,   529,   534,   542,   547,   554,   561,
      569,   587,   591,   598,   607,   611,   615,   619,   626,   629,
-     634,   639,   644,   649,   657,   657,   663,   684,   684,   690,
-     696,   699,   706,   716,   725,   735,   740,   747,   754,   764,
-     769,   774,   779,   784,   789,   794,   799,   804,   809,   814,
-     819,   824,   829,   834,   840,   847,   854,   861,   868,   876,
-     886
+     634,   639,   644,   649,   657,   657,   663,   686,   686,   692,
+     698,   701,   708,   718,   727,   737,   742,   749,   756,   766,
+     771,   776,   781,   786,   791,   796,   801,   806,   811,   816,
+     821,   826,   831,   836,   842,   849,   856,   863,   870,   878,
+     888
 };
 #endif
 
@@ -2322,19 +2322,21 @@ yyreduce:
 	for(KexiDB::Field *item; (item = it.current()); ++it)
 	{
 		if(item->table() == dummy)
+		{
 			item->setTable(schema);
+		}
 	}
 }
     break;
 
   case 38:
-#line 685 "sqlparser.y"
+#line 687 "sqlparser.y"
     {
 }
     break;
 
   case 39:
-#line 691 "sqlparser.y"
+#line 693 "sqlparser.y"
     {
 	kdDebug() << " adding field '" << yyvsp[0].field->name() << "'" << endl;
 	parser->select()->addField(yyvsp[0].field);
@@ -2343,13 +2345,13 @@ yyreduce:
     break;
 
   case 40:
-#line 697 "sqlparser.y"
+#line 699 "sqlparser.y"
     {
 }
     break;
 
   case 41:
-#line 700 "sqlparser.y"
+#line 702 "sqlparser.y"
     {
 	kdDebug() << " adding field '" << yyvsp[-2].field->name() << "' as '" << yyvsp[0].stringValue << "'" << endl;
 //	parser->fieldList()->append($1);
@@ -2359,7 +2361,7 @@ yyreduce:
     break;
 
   case 42:
-#line 707 "sqlparser.y"
+#line 709 "sqlparser.y"
     {
 	kdDebug() << " adding field '" << yyvsp[-1].field->name() << "' as '" << yyvsp[0].stringValue << "'" << endl;
 //	parser->fieldList()->append($1);
@@ -2369,7 +2371,7 @@ yyreduce:
     break;
 
   case 43:
-#line 717 "sqlparser.y"
+#line 719 "sqlparser.y"
     {
 	kdDebug() << "  + col " << yyvsp[0].stringValue << endl;
 	yyval.field = new KexiDB::Field();
@@ -2381,7 +2383,7 @@ yyreduce:
     break;
 
   case 44:
-#line 726 "sqlparser.y"
+#line 728 "sqlparser.y"
     {
 	kdDebug() << "  + col " << yyvsp[0].stringValue << " from " << yyvsp[-2].stringValue << endl;
 	yyval.field = new KexiDB::Field();
@@ -2394,7 +2396,7 @@ yyreduce:
     break;
 
   case 45:
-#line 736 "sqlparser.y"
+#line 738 "sqlparser.y"
     {
 	yyval.field = new KexiDB::Field();
 	yyval.field->setName(QString::null);
@@ -2402,7 +2404,7 @@ yyreduce:
     break;
 
   case 46:
-#line 741 "sqlparser.y"
+#line 743 "sqlparser.y"
     {
 	yyval.field = new KexiDB::Field();
 	yyval.field->setName(yyvsp[0].stringValue);
@@ -2412,7 +2414,7 @@ yyreduce:
     break;
 
   case 47:
-#line 748 "sqlparser.y"
+#line 750 "sqlparser.y"
     {
 	yyval.field = new KexiDB::Field();
 	yyval.field->setName(QString::number(yyvsp[0].integerValue));
@@ -2422,7 +2424,7 @@ yyreduce:
     break;
 
   case 48:
-#line 755 "sqlparser.y"
+#line 757 "sqlparser.y"
     {
 	yyval.field = new KexiDB::Field();
 	yyval.field->setName(QString::number(yyvsp[0].integerValue));
@@ -2432,7 +2434,7 @@ yyreduce:
     break;
 
   case 49:
-#line 765 "sqlparser.y"
+#line 767 "sqlparser.y"
     {
 	yyval.field = yyvsp[0].field;
 	kdDebug() << "to expression: " << yyval.field->name() << endl;
@@ -2440,7 +2442,7 @@ yyreduce:
     break;
 
   case 50:
-#line 770 "sqlparser.y"
+#line 772 "sqlparser.y"
     {
 	kdDebug() << yyvsp[-2].field->name() << " + " << yyvsp[0].field->name() << endl;
 	yyval.field->setName(yyvsp[-2].field->name() + " + " + yyvsp[0].field->name());
@@ -2448,7 +2450,7 @@ yyreduce:
     break;
 
   case 51:
-#line 775 "sqlparser.y"
+#line 777 "sqlparser.y"
     {
 	kdDebug() << yyvsp[-2].field->name() << " - " << yyvsp[0].field->name() << endl;
 	yyval.field->setName(yyvsp[-2].field->name() + " - " + yyvsp[0].field->name());
@@ -2456,7 +2458,7 @@ yyreduce:
     break;
 
   case 52:
-#line 780 "sqlparser.y"
+#line 782 "sqlparser.y"
     {
 	kdDebug() << yyvsp[-2].field->name() << " / " << yyvsp[0].field->name() << endl;
 	yyval.field->setName(yyvsp[-2].field->name() + " / " + yyvsp[0].field->name());
@@ -2464,7 +2466,7 @@ yyreduce:
     break;
 
   case 53:
-#line 785 "sqlparser.y"
+#line 787 "sqlparser.y"
     {
 	kdDebug() << yyvsp[-2].field->name() << " * " << yyvsp[0].field->name() << endl;
 	yyval.field->setName(yyvsp[-2].field->name() + " * " + yyvsp[0].field->name());
@@ -2472,7 +2474,7 @@ yyreduce:
     break;
 
   case 54:
-#line 790 "sqlparser.y"
+#line 792 "sqlparser.y"
     {
 	kdDebug() << yyvsp[-2].field->name() << " NOT " << yyvsp[0].field->name() << endl;
 	yyval.field->setName(yyvsp[-2].field->name() + " NOT " + yyvsp[0].field->name());
@@ -2480,7 +2482,7 @@ yyreduce:
     break;
 
   case 55:
-#line 795 "sqlparser.y"
+#line 797 "sqlparser.y"
     {
 	kdDebug() << yyvsp[-2].field->name() << " = " << yyvsp[0].field->name() << endl;
 	yyval.field->setName(yyvsp[-2].field->name() + " = " + yyvsp[0].field->name());
@@ -2488,7 +2490,7 @@ yyreduce:
     break;
 
   case 56:
-#line 800 "sqlparser.y"
+#line 802 "sqlparser.y"
     {
 	kdDebug() << yyvsp[-2].field->name() << " <> " << yyvsp[0].field->name() << endl;
 	yyval.field->setName(yyvsp[-2].field->name() + " <> " + yyvsp[0].field->name());
@@ -2496,7 +2498,7 @@ yyreduce:
     break;
 
   case 57:
-#line 805 "sqlparser.y"
+#line 807 "sqlparser.y"
     {
 	kdDebug() << yyvsp[-2].field->name() << " > " << yyvsp[0].field->name() << endl;
 	yyval.field->setName(yyvsp[-2].field->name() + " > " + yyvsp[0].field->name());
@@ -2504,7 +2506,7 @@ yyreduce:
     break;
 
   case 58:
-#line 810 "sqlparser.y"
+#line 812 "sqlparser.y"
     {
 	kdDebug() << yyvsp[-2].field->name() << " >= " << yyvsp[0].field->name() << endl;
 	yyval.field->setName(yyvsp[-2].field->name() + " >= " + yyvsp[0].field->name());
@@ -2512,7 +2514,7 @@ yyreduce:
     break;
 
   case 59:
-#line 815 "sqlparser.y"
+#line 817 "sqlparser.y"
     {
 	kdDebug() << yyvsp[-2].field->name() << " < " << yyvsp[0].field->name() << endl;
 	yyval.field->setName(yyvsp[-2].field->name() + " < " + yyvsp[0].field->name());
@@ -2520,7 +2522,7 @@ yyreduce:
     break;
 
   case 60:
-#line 820 "sqlparser.y"
+#line 822 "sqlparser.y"
     {
 	kdDebug() << yyvsp[-2].field->name() << " <= " << yyvsp[0].field->name() << endl;
 	yyval.field->setName(yyvsp[-2].field->name() + " <= " + yyvsp[0].field->name());
@@ -2528,7 +2530,7 @@ yyreduce:
     break;
 
   case 61:
-#line 825 "sqlparser.y"
+#line 827 "sqlparser.y"
     {
 	kdDebug() << yyvsp[-2].field->name() << " LIKE " << yyvsp[0].field->name() << endl;
 	yyval.field->setName(yyvsp[-2].field->name() + " LIKE " + yyvsp[0].field->name());
@@ -2536,7 +2538,7 @@ yyreduce:
     break;
 
   case 62:
-#line 830 "sqlparser.y"
+#line 832 "sqlparser.y"
     {
 	kdDebug() << yyvsp[-2].field->name() << " % " << yyvsp[0].field->name() << endl;
 	yyval.field->setName(yyvsp[-2].field->name() + " % " + yyvsp[0].field->name());
@@ -2544,7 +2546,7 @@ yyreduce:
     break;
 
   case 63:
-#line 835 "sqlparser.y"
+#line 837 "sqlparser.y"
     {
 	kdDebug() << "(" << yyvsp[-1].field->name() << ")" << endl;
 	yyval.field = yyvsp[-1].field;
@@ -2553,7 +2555,7 @@ yyreduce:
     break;
 
   case 64:
-#line 841 "sqlparser.y"
+#line 843 "sqlparser.y"
     {
 	yyval.field = yyvsp[-1].field;
 	yyval.field->setName("SUM(" + yyvsp[-1].field->name() + ")");
@@ -2563,7 +2565,7 @@ yyreduce:
     break;
 
   case 65:
-#line 848 "sqlparser.y"
+#line 850 "sqlparser.y"
     {
 	yyval.field = yyvsp[-1].field;
 	yyval.field->setName("MIN(" + yyvsp[-1].field->name() + ")");
@@ -2573,7 +2575,7 @@ yyreduce:
     break;
 
   case 66:
-#line 855 "sqlparser.y"
+#line 857 "sqlparser.y"
     {
 	yyval.field = yyvsp[-1].field;
 	yyval.field->setName("MAX(" + yyvsp[-1].field->name() + ")");
@@ -2583,7 +2585,7 @@ yyreduce:
     break;
 
   case 67:
-#line 862 "sqlparser.y"
+#line 864 "sqlparser.y"
     {
 	yyval.field = yyvsp[-1].field;
 	yyval.field->setName("AVG(" + yyvsp[-1].field->name() + ")");
@@ -2593,7 +2595,7 @@ yyreduce:
     break;
 
   case 68:
-#line 869 "sqlparser.y"
+#line 871 "sqlparser.y"
     {
 	yyval.field = yyvsp[-1].field;
 	yyval.field->setName("DISTINCT(" + yyvsp[-1].field->name() + ")");
@@ -2601,7 +2603,7 @@ yyreduce:
     break;
 
   case 69:
-#line 877 "sqlparser.y"
+#line 879 "sqlparser.y"
     {
 	kdDebug() << "all columns" << endl;
 //	field = new KexiDB::Field();
@@ -2614,7 +2616,7 @@ yyreduce:
     break;
 
   case 70:
-#line 887 "sqlparser.y"
+#line 889 "sqlparser.y"
     {
 	kdDebug() << "  + all columns from " << yyvsp[-2].stringValue << endl;
 	KexiDB::QueryAsterisk *ast = new KexiDB::QueryAsterisk(parser->select(), parser->db()->tableSchema(yyvsp[-2].stringValue));
@@ -2628,7 +2630,7 @@ yyreduce:
     }
 
 /* Line 999 of yacc.c.  */
-#line 2632 "y.tab.c"
+#line 2634 "y.tab.c"
 
   yyvsp -= yylen;
   yyssp -= yylen;
@@ -2822,7 +2824,7 @@ yyreturn:
 }
 
 
-#line 896 "sqlparser.y"
+#line 898 "sqlparser.y"
 
 
 

@@ -427,7 +427,7 @@
 
 	void parseData(KexiDB::Parser *p, const char *data)
 	{
-		dummy = new KexiDB::TableSchema("__dummy");
+		dummy = new KexiDB::TableSchema();
 		parser = p;
 		field = 0;
 		fieldList.clear();
@@ -673,7 +673,9 @@ USER_DEFINED_NAME
 	for(KexiDB::Field *item; (item = it.current()); ++it)
 	{
 		if(item->table() == dummy)
+		{
 			item->setTable(schema);
+		}
 	}
 }
 ;

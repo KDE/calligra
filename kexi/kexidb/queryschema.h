@@ -277,7 +277,7 @@ class KEXI_DB_EXPORT QueryAsterisk : protected Field
 
 		/*! Sets table schema for this asterisk. 
 		 \a table may be NULL - then the asterisk becames "all-tables" type asterisk. */
-		void setTable(TableSchema *table);
+		virtual void setTable(TableSchema *table);
 
 		/*! This is convenience method that returns true 
 		 if the asterisk has "all-tables" type (2nd type).*/
