@@ -105,6 +105,7 @@ public:
     m_paPrintPreview = 0;
     statusBarLabel = 0L;
     m_dcopObject = 0;
+    m_sendfile = 0;
   }
   ~KoMainWindowPrivate()
   {
@@ -142,6 +143,7 @@ public:
   KAction *m_paSaveAs;
   KAction *m_paPrint;
   KAction *m_paPrintPreview;
+  KAction *m_sendfile;
 };
 
 KoMainWindow::KoMainWindow( KInstance *instance, const char* name )
@@ -178,6 +180,9 @@ KoMainWindow::KoMainWindow( KInstance *instance, const char* name )
     KStdAction::close( this, SLOT( slotFileClose() ), actionCollection(), "file_close" );
     KStdAction::quit( this, SLOT( slotFileQuit() ), actionCollection(), "file_quit" );
 
+    d->m_sendfile = new KAction( i18n( "Send File..."), "mail_send", 0,
+                    this, SLOT( slotEmailFile() ),
+                    actionCollection(), "file_send_file");
     d->m_paDocInfo = new KAction( i18n( "&Document Information..." ), "documentinfo", 0,
                         this, SLOT( slotDocumentInfo() ),
                         actionCollection(), "file_documentinfo" );
@@ -190,6 +195,7 @@ KoMainWindow::KoMainWindow( KInstance *instance, const char* name )
     d->m_paSave->setEnabled( false );
     d->m_paPrint->setEnabled( false );
     d->m_paPrintPreview->setEnabled( false );
+    d->m_sendfile->setEnabled( false);
 
     d->m_splitter=new QSplitter(Qt::Vertical, this, "funky-splitter");
     setCentralWidget( d->m_splitter );
@@ -314,7 +320,7 @@ void KoMainWindow::setRootDocument( KoDocument *doc )
   d->m_paSaveAs->setEnabled( enable );
   d->m_paPrint->setEnabled( enable );
   d->m_paPrintPreview->setEnabled( enable );
-
+  d->m_sendfile->setEnabled( enable);
   updateCaption();
 
   d->m_manager->setActivePart( d->m_rootDoc, d->m_rootViews.current() );
@@ -339,6 +345,7 @@ void KoMainWindow::setRootDocumentDirect( KoDocument *doc, const QList<KoView> &
   d->m_paSaveAs->setEnabled( enable );
   d->m_paPrint->setEnabled( enable );
   d->m_paPrintPreview->setEnabled( enable );
+  d->m_sendfile->setEnabled( enable);
 }
 
 void KoMainWindow::addRecentURL( const KURL& url )
@@ -1202,4 +1209,21 @@ DCOPObject * KoMainWindow::dcopObject()
     return d->m_dcopObject;
 }
 
+void KoMainWindow::slotEmailFile()
+{
+
+   // Subject = Document file name
+   // Attachment = The current file
+   // Message Body = The current document in HTML export? <-- This may be an option.
+   QString fileURL = d->m_rootDoc->url().url();
+   QString theSubject = d->m_rootDoc->url().fileName(false);
+   kdDebug () << "(" << fileURL <<")" << endl;
+   if (!fileURL.isEmpty())
+   kapp->invokeMailer("mailto:?subject=" + theSubject +
+                     "&attach=" + fileURL);
+   else
+   KMessageBox::detailedSorry (0, i18n("ERROR: File not found."),
+    i18n("To send a file you must first have saved the file to the filesystem."),
+    i18n("Error: File Not Found!"));
+}
 #include <koMainWindow.moc>

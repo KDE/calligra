@@ -135,6 +135,12 @@ signals:
 
 public slots:
 
+    /** Slot for eMailing the document using KMail
+     * This is a very simple extension that will allow any document
+     * that is currently being edited to be emailed using KMail.
+     *
+     */
+    void slotEmailFile();
     /**
      *  Slot for opening a new document.
      *

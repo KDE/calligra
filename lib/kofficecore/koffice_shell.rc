@@ -13,6 +13,7 @@
   <Action name="file_print_preview" />
   <Separator />
   <Action name="file_documentinfo" />
+  <Action name="file_send_file" />
   <Separator />
   <Action name="file_close" />
   <Action name="file_quit" />
