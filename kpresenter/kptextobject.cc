@@ -605,6 +605,56 @@ KoParagLayout KPTextObject::loadParagLayout( QDomElement & parentElem)
             val=element.attribute("right").toDouble();
         layout.margins[QStyleSheetItem::MarginRight] = val;
     }
+    element = parentElem.namedItem( "LINESPACING" ).toElement();
+    if ( !element.isNull() )
+    {
+        QString value = element.attribute( "value" );
+        if ( value == "oneandhalf" )
+            layout.lineSpacing = KoParagLayout::LS_ONEANDHALF;
+        else if ( value == "double" )
+            layout.lineSpacing = KoParagLayout::LS_DOUBLE;
+        else
+            layout.lineSpacing = value.toDouble();
+    }
+
+    element = parentElem.namedItem( "OFFSETS" ).toElement();
+    if ( !element.isNull() )
+    {
+        double val =0.0;
+        if(element.hasAttribute("before"))
+            val=element.attribute("before").toDouble();
+        layout.margins[QStyleSheetItem::MarginTop] = val;
+        val = 0.0;
+        if(element.hasAttribute("after"))
+            val=element.attribute("after").toDouble();
+        layout.margins[QStyleSheetItem::MarginBottom] = val;
+    }
+
+
+
+    element = parentElem.namedItem( "LEFTBORDER" ).toElement();
+    if ( !element.isNull() )
+        layout.leftBorder = KoBorder::loadBorder( element );
+    else
+        layout.leftBorder.ptWidth = 0;
+
+    element = parentElem.namedItem( "RIGHTBORDER" ).toElement();
+    if ( !element.isNull() )
+        layout.rightBorder = KoBorder::loadBorder( element );
+    else
+        layout.rightBorder.ptWidth = 0;
+
+    element = parentElem.namedItem( "TOPBORDER" ).toElement();
+    if ( !element.isNull() )
+        layout.topBorder = KoBorder::loadBorder( element );
+    else
+        layout.topBorder.ptWidth = 0;
+
+    element = parentElem.namedItem( "BOTTOMBORDER" ).toElement();
+    if ( !element.isNull() )
+        layout.bottomBorder = KoBorder::loadBorder( element );
+    else
+        layout.bottomBorder.ptWidth = 0;
 
     element = parentElem.namedItem( "COUNTER" ).toElement();
     if ( !element.isNull() )
@@ -631,6 +681,55 @@ void KPTextObject::saveParagLayout( const KoParagLayout& layout, QDomElement & p
             element.setAttribute( "left", layout.margins[QStyleSheetItem::MarginLeft] );
         if ( layout.margins[QStyleSheetItem::MarginRight] != 0 )
             element.setAttribute( "right", layout.margins[QStyleSheetItem::MarginRight] );
+    }
+
+
+    if ( layout.margins[QStyleSheetItem::MarginTop] != 0 ||
+         layout.margins[QStyleSheetItem::MarginBottom] != 0 )
+    {
+        element = doc.createElement( "OFFSETS" );
+        parentElem.appendChild( element );
+        if ( layout.margins[QStyleSheetItem::MarginTop] != 0 )
+            element.setAttribute( "before", layout.margins[QStyleSheetItem::MarginTop] );
+        if ( layout.margins[QStyleSheetItem::MarginBottom] != 0 )
+            element.setAttribute( "after", layout.margins[QStyleSheetItem::MarginBottom] );
+    }
+
+    if ( layout.lineSpacing != 0 )
+    {
+        element = doc.createElement( "LINESPACING" );
+        parentElem.appendChild( element );
+        if ( layout.lineSpacing == KoParagLayout::LS_ONEANDHALF )
+            element.setAttribute( "value", "oneandhalf" );
+        else if ( layout.lineSpacing == KoParagLayout::LS_DOUBLE )
+            element.setAttribute( "value", "double" );
+        else
+            element.setAttribute( "value", layout.lineSpacing );
+    }
+
+    if ( layout.leftBorder.ptWidth > 0 )
+    {
+        element = doc.createElement( "LEFTBORDER" );
+        parentElem.appendChild( element );
+        layout.leftBorder.save( element );
+    }
+    if ( layout.rightBorder.ptWidth > 0 )
+    {
+        element = doc.createElement( "RIGHTBORDER" );
+        parentElem.appendChild( element );
+        layout.rightBorder.save( element );
+    }
+    if ( layout.topBorder.ptWidth > 0 )
+    {
+        element = doc.createElement( "TOPBORDER" );
+        parentElem.appendChild( element );
+        layout.topBorder.save( element );
+    }
+    if ( layout.bottomBorder.ptWidth > 0 )
+    {
+        element = doc.createElement( "BOTTOMBORDER" );
+        parentElem.appendChild( element );
+        layout.bottomBorder.save( element );
     }
 
     if ( layout.counter && layout.counter->numbering() != KoParagCounter::NUM_NONE )
@@ -765,7 +864,6 @@ KPTextView::~KPTextView()
 
 void KPTextView::terminate()
 {
-    kdDebug()<<"KPTextView::terminate()****************************************************************************************************\n";
     disconnect( textView()->textObject(), SIGNAL( selectionChanged(bool) ), m_page, SIGNAL( selectionChanged(bool) ) );
     textView()->terminate();
 }
