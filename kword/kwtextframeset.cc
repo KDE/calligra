@@ -1853,20 +1853,23 @@ void KWTextFrameSet::formatMore()
                 double pageBottom = (double) (theFrame->pageNum()+1) * m_doc->ptPaperHeight();
                 pageBottom -= m_doc->ptBottomBorder();
                 double newPosition = QMIN( wantedPosition, pageBottom );
-#ifdef DEBUG_FORMAT_MORE
-                kdDebug(32002) << "formatMore setting bottom to " << newPosition << endl;
-#endif
-
-                bool resized = theFrame->bottom() != newPosition;
 
                 if ( theFrame->getFrameSet()->isAHeader() )
                 {
                     double maxHeaderSize=footerHeaderSizeMax(  theFrame );
-                    resized=QMIN(maxHeaderSize+theFrame->top(),newPosition)==newPosition;
+                    newPosition = QMIN( newPosition, maxHeaderSize+theFrame->top() );
                 }
 
+                newPosition = QMAX( newPosition, theFrame->top() ); // avoid negative heights
+                bool resized = theFrame->bottom() != newPosition;
+
                 if ( resized )
+                {
+#ifdef DEBUG_FORMAT_MORE
+                    kdDebug(32002) << "formatMore setting bottom to " << newPosition << endl;
+#endif
                     theFrame->setBottom(newPosition);
+                }
 
                 if(newPosition < wantedPosition && (theFrame->getNewFrameBehaviour() == KWFrame::NoFollowup)) {
                     if ( resized )
