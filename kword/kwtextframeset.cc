@@ -56,6 +56,13 @@ KWTextFrameSet::KWTextFrameSet( KWDocument *_doc )
     }*/
 
     m_lastFormatted = textdoc->firstParag();
+    // Apply 'Standard' style to paragraph
+    KWStyle * style = _doc->findStyle( "Standard", true );
+    if ( m_lastFormatted && style )
+    {
+	static_cast<KWTextParag*>(m_lastFormatted)->setParagLayout( style->paragLayout() );
+        m_lastFormatted->setFormat( 0, m_lastFormatted->string()->length(), & style->format() );
+    }
 
     interval = 0;
     changeIntervalTimer = new QTimer( this );
