@@ -983,6 +983,7 @@ void KWCanvas::mrEditFrame() // Can be called from KWCanvas and from KWResizeHan
         // Frame not resized nor moved
         // doc->repaintAllViewsExcept( m_gui->getView() ); // Do we need this ?
     }
+    doc->repaintAllViews();
     mousePressed = false;
 }
 
@@ -1011,6 +1012,7 @@ void KWCanvas::mrCreatePixmap()
         frameset->addFrame( frame );
         doc->addFrameSet( frameset );
         doc->frameChanged( frame );
+        doc->repaintAllViews();
     }
     setMouseMode( MM_EDIT );
 }
@@ -1020,6 +1022,8 @@ void KWCanvas::mrCreatePart() // mouse release, when creating part or kspread ta
     m_insRect = m_insRect.normalize();
     if ( m_insRect.width() > doc->gridX() && m_insRect.height() > doc->gridY() ) {
         doc->insertObject( m_insRect, m_partEntry, contentsX(), contentsY() );
+        doc->layout();
+        doc->updateAllFrames();
     }
     setMouseMode( MM_EDIT );
 }
@@ -1033,6 +1037,7 @@ void KWCanvas::mrCreateFormula()
         frameset->addFrame( frame );
         doc->addFrameSet( frameset );
         doc->frameChanged( frame );
+        doc->repaintAllViews();
     }
     setMouseMode( MM_EDIT );
 }
@@ -1457,6 +1462,7 @@ void KWCanvas::editFrameProperties()
 
 void KWCanvas::frameDiaClosed() // get rid of this?
 {
+    doc->repaintAllViews();
 #if 0
     doc->updateAllFrames(); // already done in framedia
 #endif
