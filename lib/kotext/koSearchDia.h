@@ -270,7 +270,7 @@ private:
     KoSearchContext m_replaceContext;
     bool m_searchContextEnabled;
     bool m_doCounting;
-    bool m_lastResult;
+    bool m_bInit;
 
     KMacroCommand *m_macroCmd;
     int m_offset;

@@ -188,7 +188,7 @@ void KoFindReplace::connectFind( KFind* find )
     // Connect findNext signal - called when pressing the button in the dialog
     connect( find, SIGNAL( findNext() ),
              this, SLOT( slotFindNext() ) );
-    m_lastResult = KFind::NoMatch;
+    m_bInit = true;
 }
 
 KoFindReplace::~KoFindReplace()
@@ -235,13 +235,14 @@ bool KoFindReplace::findNext()
 {
     KFind::Result res = KFind::NoMatch;
     while ( res == KFind::NoMatch && !m_textIterator.atEnd() ) {
-        kdDebug() << "findNext loop. m_lastResult=" << m_lastResult << " needData=" << needData() << endl;
+        kdDebug() << "findNext loop. m_bInit=" << m_bInit << " needData=" << needData() << endl;
         if ( needData() ) {
-            if ( m_lastResult == KFind::Match ) {
+            if ( !m_bInit ) {
                 ++m_textIterator;
                 if ( m_textIterator.atEnd() )
                     break;
             }
+            m_bInit = false;
             QPair<int, QString> c = m_textIterator.currentTextAndIndex();
             m_offset = c.first;
             setData( c.second );
@@ -253,7 +254,6 @@ bool KoFindReplace::findNext()
         else
             res = m_replace->replace();
     }
-    m_lastResult = res;
 
     kdDebug() << k_funcinfo << "res=" << res << endl;
     if ( res == KFind::NoMatch ) // i.e. at end
@@ -263,6 +263,7 @@ bool KoFindReplace::findNext()
         if ( shouldRestart() ) {
             m_textIterator.setOptions( m_textIterator.options() & ~KFindDialog::FromCursor );
             m_textIterator.restart();
+            m_bInit = true;
             if ( m_find )
                 m_find->resetCounts();
             else
