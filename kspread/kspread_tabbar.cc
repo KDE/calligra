@@ -662,9 +662,9 @@ void TabBar::paintEvent( QPaintEvent* )
         QRect rect = d->tabRects[ p-1 ];
         if( !rect.isNull() )
         {
-            int x = rect.x();
+            int x = !d->reverseLayout ? rect.x() : rect.right()-7;
             if( d->targetTab > (int)d->tabRects.count() )
-              x = rect.right()-7;
+              x = !d->reverseLayout ? rect.right()-7 : rect.x()-3;
             d->drawMoveMarker( painter, x, rect.y() );
         }
     }
@@ -770,9 +770,19 @@ void TabBar::mouseMoveEvent( QMouseEvent* ev )
     // drag past the very latest visible tab
     // e.g move a tab to the last ordering position
     QRect r = d->tabRects[ d->tabRects.count()-1 ];
+    bool moveToLast = false;
     if( r.isValid() )
-    if( pos.x() > r.right() )
-    if( pos.x() < width() )
+    {
+        if( !d->reverseLayout )
+        if( pos.x() > r.right() )
+        if( pos.x() < width() )
+            moveToLast = true;
+        if( d->reverseLayout )
+        if( pos.x() < r.x() )
+        if( pos.x() > 0 )
+            moveToLast = true;
+    }
+    if( moveToLast )
     if( d->targetTab != (int)d->tabRects.count()+1 )
     {
         d->targetTab = d->tabRects.count()+1;
