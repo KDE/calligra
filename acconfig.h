@@ -13,6 +13,8 @@
 
 #undef HAVE_QIMGIO
 
+#undef HAVE_LIBZ
+
 #undef HAVE_LIBJPEG
 
 #undef HAVE_LIBGIF
