@@ -20,6 +20,7 @@
 
 #include <qdom.h>
 #include <qpainter.h>
+#include <qfileinfo.h>
 
 #include <kconfig.h>
 #include <kdebug.h>
@@ -85,8 +86,17 @@ KarbonPart::initDoc()
 										"*.karbon", i18n("Karbon14"), KoTemplateChooseDia::Everything, "karbon_template");
 	m_pageLayout.ptWidth = KoUnit::ptFromUnit( PG_A4_WIDTH, KoUnit::U_MM );
 	m_pageLayout.ptHeight = KoUnit::ptFromUnit( PG_A4_HEIGHT, KoUnit::U_MM );
-
-	if( result == KoTemplateChooseDia::Empty )
+        if ( result == KoTemplateChooseDia::Template )
+        {
+            QFileInfo fileInfo(file );
+            QString fileName( fileInfo.dirPath( TRUE ) + "/" + fileInfo.baseName() + ".karbon" );
+            resetURL();
+            bool ok = loadNativeFormat( fileName );
+            initUnit();
+            setEmpty();
+            return ok;
+        }
+	else if( result == KoTemplateChooseDia::Empty )
 	{
             	initUnit();
 		return true;
@@ -99,7 +109,7 @@ KarbonPart::initDoc()
 		return ok;
 	}
 
-	return true;
+	return false;
 }
 
 KoView*
