@@ -85,12 +85,9 @@ private:
 
     void encode(QString &text);
 
-    QString colour(
-        unsigned colour,
-        const char *red,
-        const char *green,
-        const char *blue,
-        unsigned defaultColour = 1) const;
+    // Color for number.
+
+    QColor colorForNumber(QString number, int defaultcolor);
 
     // Number format codes.
 
@@ -134,7 +131,6 @@ private:
         unsigned tableNumber, unsigned rowNumber, const QString texts[], const MsWordGenerated::PAP styles[],
         MsWordGenerated::TAP &row);
 
-    // Helper functions
     QColor colorForNumber(int number);
 
     // This is where the result will end up!

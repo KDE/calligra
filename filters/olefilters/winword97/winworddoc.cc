@@ -222,54 +222,11 @@ void WinWordDoc::encode(QString &text)
   text.replace(QRegExp("'"), "&apos;");
 }
 
-QColor WinWordDoc::colorForNumber(int number)
-{
-    switch(number)
-    {
-	case 0:
-	case 1:
-	    return QColor("black");
-	case 2:
-	    return QColor("blue");
-	case 3:
-	    return QColor("cyan");
-	case 4:
-	    return QColor("green");
-	case 5:
-	    return QColor("magenta");
-	case 6:
-	    return QColor("red");
-	case 7:
-	    return QColor("yellow");
-	case 8:
-	    return QColor("white");
-	case 9:
-	    return QColor("darkBlue");
-	case 10:
-	    return QColor("darkCyan");
-	case 11:
-	    return QColor("darkGreen");
-	case 12:
-	    return QColor("darkMagenta");
-	case 13:
-	    return QColor("darkRed");
-	case 14:
-	    return QColor("darkYellow");
-	case 15:
-	    return QColor("darkGray");	
-	case 16:	
-	    return QColor("lightGray");
-
-	default:
-	    return QColor("black");
-    }
-}
-
 QString WinWordDoc::generateFormat(
     const CHP *chp)
 {
     QString format;
-    QColor color = colorForNumber(chp->ico);
+    QColor color = colorForNumber(QString::number(chp->ico), -1);
 kdError() <<"------ftc="<<chp->ftc<<endl;
 kdError() <<"      ascii="<<chp->ftcAscii<<" fe="<<chp->ftcFE<<" other="<<chp->ftcOther<<endl;
     format.append(QString::fromLatin1("<COLOR red=\"%1\" green=\"%2\" blue=\"%3\"/>\n").arg(color.red()).arg(color.green()).arg(color.blue()));
@@ -740,18 +697,25 @@ void WinWordDoc::gotTableEnd(
             cell.append(QString::number(ROW_SIZE + y * ROW_SIZE));
             cell.append("\" bottom=\"");
             cell.append(QString::number(2 * ROW_SIZE + y * ROW_SIZE));
-            cell.append(
-                "\" runaround=\"1\" runaGap=\"2\" "
-                "lWidth=\"1\" lStyle=\"0\" " +
-                colour(row.rgtc[x].brcLeft.ico, "lRed", "lGreen", "lBlue") +
-                "rWidth=\"1\" rStyle=\"0\" " +
-                colour(row.rgtc[x].brcRight.ico, "rRed", "rGreen", "rBlue") +
-                "tWidth=\"1\" tStyle=\"0\" " +
-                colour(row.rgtc[x].brcTop.ico, "tRed", "tGreen", "tBlue") +
-                "bWidth=\"1\" bStyle=\"0\" " +
-                colour(row.rgtc[x].brcBottom.ico, "bRed", "bGreen", "bBlue") +
-                colour(row.rgshd[x].icoBack, "bkRed", "bkGreen", "bkBlue", 8) +
-                "bleft=\"0\" bright=\"0\" btop=\"0\" bbottom=\"0\"");
+            
+	    QColor brcLeft = colorForNumber(QString::number(row.rgtc[x].brcLeft.ico), -1);
+	    QColor brcRight = colorForNumber(QString::number(row.rgtc[x].brcRight.ico), -1);
+	    QColor brcTop = colorForNumber(QString::number(row.rgtc[x].brcTop.ico), -1);
+	    QColor brcBottom = colorForNumber(QString::number(row.rgtc[x].brcBottom.ico), -1);
+	    QColor icoBack = colorForNumber(QString::number(row.rgshd[x].icoBack), 8);
+	    
+	    cell.append(
+                QString::fromLatin1("\" runaround=\"1\" runaGap=\"2\"") +
+        	QString::fromLatin1("lWidth=\"1\" lStyle=\"0\" ") + 
+		QString::fromLatin1("lRed=\"%1\" lGreen=\"%2\" lBlue=\"%3\" ").arg(brcLeft.red()).arg(brcLeft.green()).arg(brcLeft.blue()) +
+                QString::fromLatin1("rWidth=\"1\" rStyle=\"0\" ") +
+		QString::fromLatin1("rRed=\"%1\" rGreen=\"%2\" rBlue=\"%3\" ").arg(brcRight.red()).arg(brcRight.green()).arg(brcRight.blue()) +
+                QString::fromLatin1("tWidth=\"1\" tStyle=\"0\" ") +
+		QString::fromLatin1("tRed=\"%1\" tGreen=\"%2\" tBlue=\"%3\" ").arg(brcTop.red()).arg(brcTop.green()).arg(brcTop.blue()) +
+                QString::fromLatin1("bWidth=\"1\" bStyle=\"0\" ") +
+		QString::fromLatin1("bRed=\"%1\" bGreen=\"%2\" bBlue=\"%3\" ").arg(brcBottom.red()).arg(brcBottom.green()).arg(brcBottom.blue()) +
+		QString::fromLatin1("bkRed=\"%1\" bkGreen=\"%2\" bkBlue=\"%3\" ").arg(icoBack.red()).arg(icoBack.green()).arg(icoBack.blue()) +
+                QString::fromLatin1("bleft=\"0\" bright=\"0\" btop=\"0\" bbottom=\"0\""));
             cell.append(" autoCreateNewFrame=\"0\" newFrameBehaviour=\"1\"/>\n");
             cell.append("<PARAGRAPH>\n<TEXT>");
             xml_friendly = m_table[y]->m_texts[x];
@@ -786,76 +750,50 @@ void WinWordDoc::gotTableRow(
     m_table.insert(i, newRow);
 }
 
-QString WinWordDoc::colour(
-    unsigned colour,
-    const char *red,
-    const char *green,
-    const char *blue,
-    unsigned defaultColour) const
+QColor WinWordDoc::colorForNumber(QString number, int defaultcolor)
 {
-    // Word colours are:
-    //     0 Auto
-    //     1 Black
-    //     2 Blue
-    //     3 Cyan
-    //     4 Green
-    //     5 Magenta
-    //     6 Red
-    //     7 Yellow
-    //     8 White
-    //     9 DkBlue
-    //     10 DkCyan
-    //     11 DkGreen
-    //     12 DkMagenta
-    //     13 DkRed
-    //     14 DkYellow
-    //     15 DkGray
-    //     16 LtGray
-    //
-    // I've translated these by approximately matching the Word name
-    // to an X name as indicated. I'm sure there is a more rational way
-    // to do this!
-
-    static unsigned colourTypes[17] =
+    switch(number.toInt())
     {
-        0x000000, // 0 returns the default colour.
-        0x000000, // 1 black
-        0x0000ff, // 2 blue
-        0x00ffff, // 3 cyan
-        0x00ff00, // 4 green
-        0xff00ff, // 5 magenta
-        0xff0000, // 6 red
-        0xffff00, // 7 yellow
-        0xffffff, // 8 white
-        0x483d8b, // 9 DarkSlateBlue
-        0x008b8b, // 10 cyan4
-        0x006400, // 11 DarkGreen
-        0x8b008b, // 12 magenta4
-        0x8b0000, // 13 red4
-        0x8b8b00, // 14 yellow4
-        0x3d3d3d, // 15 grey24
-        0xd3d3d3  // 16 LightGrey
-    };
+	case 0:
+	case 1:
+	    return QColor("black");
+	case 2:
+	    return QColor("blue");
+	case 3:
+	    return QColor("cyan");
+	case 4:
+	    return QColor("green");
+	case 5:
+	    return QColor("magenta");
+	case 6:
+	    return QColor("red");
+	case 7:
+	    return QColor("yellow");
+	case 8:
+	    return QColor("white");
+	case 9:
+	    return QColor("darkBlue");
+	case 10:
+	    return QColor("darkCyan");
+	case 11:
+	    return QColor("darkGreen");
+	case 12:
+	    return QColor("darkMagenta");
+	case 13:
+	    return QColor("darkRed");
+	case 14:
+	    return QColor("darkYellow");
+	case 15:
+	    return QColor("darkGray");	
+	case 16:	
+	    return QColor("lightGray");
 
-    QString result;
-
-    if (colour > 16)
-        colour = defaultColour;
-    if (colour == 0)
-        colour = defaultColour;
-    result += red;
-    result += "=\"";
-    result += QString::number((colourTypes[colour] >> 16) & 0xff);
-    result += "\" ";
-    result += green;
-    result += "=\"";
-    result += QString::number((colourTypes[colour] >> 8) & 0xff);
-    result += "\" ";
-    result += blue;
-    result += "=\"";
-    result += QString::number((colourTypes[colour]) & 0xff);
-    result += "\" ";
-    return result;
+	default:
+	    if(defaultcolor == -1)
+		return QColor("black");
+	    else
+		return colorForNumber(QString::number(defaultcolor), -1);
+    }
 }
 
 const char *WinWordDoc::justification(unsigned jc) const
