@@ -44,7 +44,7 @@ REAL BUGS:
 -	vpolylinetool creates beziers where it could create lines
 
 TODO:
--	make pattern and gradient coords absolute and not relative to the shape
+-	make pattern coords absolute and not relative to the shape
 -	VImage
 -	VPattern like VImage with embedded binaries instead of paths
 -	bring text support back, ideally using fontconfig and freetype, and no xft.
