@@ -2584,17 +2584,10 @@ bool KWDocument::saveOasis( KoStore* store, KoXmlWriter* manifestWriter )
     if ( !store->close() ) // done with content.xml
         return false;
 
-    KoGenStyle pageLayout( KoGenStyle::STYLE_PAGELAYOUT /*no family needed*/ );
-    pageLayout.addAttribute( "style:page-usage", "all" );
-    pageLayout.addPropertyPt( "fo:page-width", m_pageLayout.ptWidth );
-    pageLayout.addPropertyPt( "fo:page-height", m_pageLayout.ptHeight );
-    pageLayout.addProperty( "style:print-orientation", m_pageLayout.orientation == PG_LANDSCAPE ? "landscape" : "portrait" );
-    pageLayout.addPropertyPt( "fo:margin-left", m_pageLayout.ptLeft );
-    pageLayout.addPropertyPt( "fo:margin-top", m_pageLayout.ptTop );
-    pageLayout.addPropertyPt( "fo:margin-right", m_pageLayout.ptRight );
-    pageLayout.addPropertyPt( "fo:margin-bottom", m_pageLayout.ptBottom );
+    KoGenStyle pageLayout = m_pageLayout.saveOasis();
+    pageLayout.addAttribute( "style:page-usage", "all" ); // needed?
     // TODO (from variablesettings I guess) pageLayout.addAttribute( "style:first-page-number", ... );
-    /*QString pageLayout =*/ mainStyles.lookup( pageLayout, "pm" );
+    /*QString pageLayoutStyleName =*/ mainStyles.lookup( pageLayout, "pm" );
 
     if ( !store->open( "styles.xml" ) )
         return false;
