@@ -808,91 +808,92 @@ void IndexElement::moveToLowerRight(FormulaCursor* cursor, Direction direction)
     }
 }
 
-QDomElement IndexElement::getElementDom(QDomDocument *doc)
+
+/**
+ * Appends our attributes to the dom element.
+ */
+void IndexElement::writeDom(QDomElement& element)
 {
-    QDomElement de=doc->createElement("INDEX");
-    de.appendChild(BasicElement::getElementDom(doc));
-    
-    QDomElement cont=doc->createElement("CONTENT");
+    BasicElement::writeDom(element);
+
+    QDomDocument doc = element.ownerDocument();
+
+    QDomElement cont = doc.createElement("CONTENT");
     cont.appendChild(content->getElementDom(doc));
-    de.appendChild(cont);
+    element.appendChild(cont);
 
     if (hasUpperLeft()) {
-        QDomElement ind=doc->createElement("UPPERLEFT");
+        QDomElement ind = doc.createElement("UPPERLEFT");
         ind.appendChild(upperLeft->getElementDom(doc));
-        de.appendChild(ind);
+        element.appendChild(ind);
     }
     
     if (hasUpperRight()) {
-        QDomElement ind=doc->createElement("UPPERRIGHT");
+        QDomElement ind = doc.createElement("UPPERRIGHT");
         ind.appendChild(upperRight->getElementDom(doc));
-        de.appendChild(ind);
+        element.appendChild(ind);
     }
     if (hasLowerLeft()) {
-        QDomElement ind=doc->createElement("LOWERLEFT");
+        QDomElement ind = doc.createElement("LOWERLEFT");
         ind.appendChild(lowerLeft->getElementDom(doc));
-        de.appendChild(ind);
+        element.appendChild(ind);
     }
     if (hasLowerRight()) {
-        QDomElement ind=doc->createElement("LOWERRIGHT");
+        QDomElement ind = doc.createElement("LOWERRIGHT");
         ind.appendChild(lowerRight->getElementDom(doc));
-        de.appendChild(ind);
+        element.appendChild(ind);
     }
-  
-    return de;
+}
+    
+/**
+ * Reads our attributes from the element.
+ * Returns false if it failed.
+ */
+bool IndexElement::readAttributesFromDom(QDomElement& element)
+{
+    if (!BasicElement::readAttributesFromDom(element)) {
+        return false;
+    }
+    return true;
 }
 
-
-bool IndexElement::buildFromDom(QDomElement *elem)
+/**
+ * Reads our content from the node. Sets the node to the next node
+ * that needs to be read.
+ * Returns false if it failed.
+ */
+bool IndexElement::readContentFromDom(QDomNode& node)
 {
-    // checking
-    if (elem->tagName() != "INDEX") {
-        cerr << "Wrong tag name " << elem->tagName().latin1() << "for IndexElement.\n";
+    if (!BasicElement::readContentFromDom(node)) {
         return false;
     }
 
-    // get attributes
-
-    // read parent
-    QDomNode n = elem->firstChild();
-    if (n.isElement()) {
-        QDomElement e = n.toElement();
-        if (!BasicElement::buildFromDom(&e)) {
-            return false;
-        }
-    }
-    else {
-        return false;
-    }
-    n = n.nextSibling();
-
-    // read content
     delete content;
-    content = buildChild(n, "CONTENT");
+    content = buildChild(node, "CONTENT");
     if (content == 0) {
         cerr << "Empty content in IndexElement.\n";
         return false;
     }
-    n = n.nextSibling();
+    node = node.nextSibling();
     
-    upperLeft = buildChild(n, "UPPERLEFT");
+    upperLeft = buildChild(node, "UPPERLEFT");
     if (upperLeft != 0) {
-        n = n.nextSibling();
+        node = node.nextSibling();
     }
 
-    upperRight = buildChild(n, "UPPERRIGHT");
+    upperRight = buildChild(node, "UPPERRIGHT");
     if (upperRight != 0) {
-        n = n.nextSibling();
+        node = node.nextSibling();
     }
 
-    lowerLeft = buildChild(n, "LOWERLEFT");
+    lowerLeft = buildChild(node, "LOWERLEFT");
     if (lowerLeft != 0) {
-        n = n.nextSibling();
+        node = node.nextSibling();
     }
 
-    lowerRight = buildChild(n, "LOWERRIGHT");
+    lowerRight = buildChild(node, "LOWERRIGHT");
     if (lowerRight != 0) {
-        n = n.nextSibling();
+        node = node.nextSibling();
     }
 
     return true;

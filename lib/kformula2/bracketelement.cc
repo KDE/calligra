@@ -260,58 +260,58 @@ Artwork* BracketElement::createBracket(char bracket)
 }
 
 
-QDomElement BracketElement::getElementDom(QDomDocument *doc)
+/**
+ * Appends our attributes to the dom element.
+ */
+void BracketElement::writeDom(QDomElement& element)
 {
-    QDomElement de=doc->createElement("BRACKET");
-    de.appendChild(BasicElement::getElementDom(doc));
-    
-    QDomElement con=doc->createElement("CONTENT");
+    BasicElement::writeDom(element);
+    element.setAttribute("LEFT", left->getType());
+    element.setAttribute("RIGHT", right->getType());
+
+    QDomDocument doc = element.ownerDocument();
+
+    QDomElement con = element.ownerDocument().createElement("CONTENT");
     con.appendChild(content->getElementDom(doc));
-    de.appendChild(con);
-
-    de.setAttribute("LEFT", left->getType());
-    de.setAttribute("RIGHT", right->getType());
-    return de;
+    element.appendChild(con);
 }
-
-
-bool BracketElement::buildFromDom(QDomElement *elem)
+    
+/**
+ * Reads our attributes from the element.
+ * Returns false if it failed.
+ */
+bool BracketElement::readAttributesFromDom(QDomElement& element)
 {
-    // checking
-    if (elem->tagName() != "BRACKET") {
-        cerr << "Wrong tag name " << elem->tagName().latin1() << "for BracketElement.\n";
+    if (!BasicElement::readAttributesFromDom(element)) {
         return false;
     }
-
-    // get attributes
-    QString leftStr = elem->attribute("LEFT");
+    QString leftStr = element.attribute("LEFT");
     if(!leftStr.isNull()) {
         left->setType(static_cast<Artwork::SymbolType>(leftStr.toInt()));
     }
-    QString rightStr = elem->attribute("RIGHT");
+    QString rightStr = element.attribute("RIGHT");
     if(!rightStr.isNull()) {
         right->setType(static_cast<Artwork::SymbolType>(rightStr.toInt()));
     }
+    return true;
+}
 
-    // read parent
-    QDomNode n = elem->firstChild();
-    if (n.isElement()) {
-        QDomElement e = n.toElement();
-        if (!BasicElement::buildFromDom(&e)) {
-            return false;
-        }
-    }
-    else {
+/**
+ * Reads our content from the node. Sets the node to the next node
+ * that needs to be read.
+ * Returns false if it failed.
+ */
+bool BracketElement::readContentFromDom(QDomNode& node)
+{
+    if (!BasicElement::readContentFromDom(node)) {
         return false;
     }
-    n = n.nextSibling();
-
-    // read content
     delete content;
-    content = buildChild(n, "CONTENT");
+    content = buildChild(node, "CONTENT");
     if (content == 0) {
         cerr << "Empty content in BracketElement.\n";
         return false;
     }
+    node = node.nextSibling();
     return true;
 }

@@ -93,25 +93,56 @@ void BasicElement::goInside(FormulaCursor* cursor)
     }
 }
 
-QDomElement BasicElement::getElementDom(QDomDocument *doc)
+QDomElement BasicElement::getElementDom(QDomDocument& doc)
 {
-    QDomElement de = doc->createElement("BASIC");
-    if (relativeSize != 0) {
-        de.setAttribute("SIZE", relativeSize);
-    }	    
+    QDomElement de = doc.createElement(getTagName());
+    writeDom(de);
     return de;
 }
 
-bool BasicElement::buildFromDom(QDomElement *elem)
+bool BasicElement::buildFromDom(QDomElement& element)
 {
-    if (elem->tagName() != "BASIC") {
-        cerr << "Wrong tag name " << elem->tagName().latin1() << "for BasicElement.\n";
+    if (element.tagName() != getTagName()) {
+        cerr << "Wrong tag name " << element.tagName().latin1() << "for " << getTagName().latin1() << ".\n";
         return false;
     }
-    QString sizeStr = elem->attribute("SIZE");
+    if (!readAttributesFromDom(element)) {
+        return false;
+    }
+    QDomNode node = element.firstChild();
+    return readContentFromDom(node);
+}
+
+/**
+ * Appends our attributes to the dom element.
+ */
+void BasicElement::writeDom(QDomElement& element)
+{
+    if (relativeSize != 0) {
+        element.setAttribute("RELATIVESIZE", relativeSize);
+    }	    
+}
+    
+/**
+ * Reads our attributes from the element.
+ * Returns false if it failed.
+ */
+bool BasicElement::readAttributesFromDom(QDomElement& element)
+{
+    QString sizeStr = element.attribute("RELATIVESIZE");
     if(!sizeStr.isNull()) {
         setRelativeSize(sizeStr.toInt());
     }
+    return true;
+}
+
+/**
+ * Reads our content from the node. Sets the node to the next node
+ * that needs to be read.
+ * Returns false if it failed.
+ */
+bool BasicElement::readContentFromDom(QDomNode& node)
+{
     return true;
 }
 
@@ -130,7 +161,7 @@ SequenceElement* BasicElement::buildChild(QDomNode& node, QString name)
             if (nodeInner.isElement()) {
                 QDomElement element = nodeInner.toElement();
                 child = new SequenceElement(this);
-                if (!child->buildFromDom(&element)) {
+                if (!child->buildFromDom(element)) {
                     delete child;
                     child = 0;
                 }

@@ -252,20 +252,18 @@ public:
     int getMidline() const { return midline; }
 
 
-    //Save/load support
     /**
      * @return a QDomElement that contain as DomChildren the 
      * children, and as attribute the attribute of this
      * element.
      */
-    
-    virtual QDomElement getElementDom(QDomDocument *doc);
+    QDomElement getElementDom(QDomDocument& doc);
     
     /**
      * Set this element attribute, build children and 
      * call their buildFromDom.
      */
-    virtual bool buildFromDom(QDomElement *elem);
+    bool buildFromDom(QDomElement& element);
 
     // debug
     virtual ostream& output(ostream&);
@@ -273,6 +271,32 @@ public:
     
 protected:
 
+    //Save/load support
+    
+    /**
+     * Returns the tag name of this element type.
+     */
+    virtual QString getTagName() const { return "BASIC"; }
+    
+    /**
+     * Appends our attributes to the dom element.
+     */
+    virtual void writeDom(QDomElement& element);
+    
+    /**
+     * Reads our attributes from the element.
+     * Returns false if it failed.
+     */
+    virtual bool readAttributesFromDom(QDomElement& element);
+
+    /**
+     * Reads our content from the node. Sets the node to the next node
+     * that needs to be read.
+     * Returns false if it failed.
+     */
+    virtual bool readContentFromDom(QDomNode& node);
+
+    
     void setWidth(int width) { size.setWidth(width); }
     void setHeight(int height) { size.setHeight(height); }
     

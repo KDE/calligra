@@ -515,75 +515,79 @@ void SymbolElement::moveToLower(FormulaCursor* cursor, Direction direction)
     }
 }
 
-QDomElement SymbolElement::getElementDom(QDomDocument *doc)
-{
-    QDomElement de=doc->createElement("SYMBOL");
-    de.appendChild(BasicElement::getElementDom(doc));
 
-    de.setAttribute("TYPE", symbol.getType());
+/**
+ * Appends our attributes to the dom element.
+ */
+void SymbolElement::writeDom(QDomElement& element)
+{
+    BasicElement::writeDom(element);
+
+    element.setAttribute("TYPE", symbol.getType());
+
+    QDomDocument doc = element.ownerDocument();
     
-    QDomElement con=doc->createElement("CONTENT");
+    QDomElement con = doc.createElement("CONTENT");
     con.appendChild(content->getElementDom(doc));
-    de.appendChild(con);
+    element.appendChild(con);
 
     if(hasLower()) {
-        QDomElement ind=doc->createElement("LOWER");
+        QDomElement ind = doc.createElement("LOWER");
         ind.appendChild(lower->getElementDom(doc));
-        de.appendChild(ind);
+        element.appendChild(ind);
     }
     if(hasUpper()) {
-        QDomElement ind=doc->createElement("UPPER");
+        QDomElement ind = doc.createElement("UPPER");
         ind.appendChild(upper->getElementDom(doc));
-        de.appendChild(ind);
+        element.appendChild(ind);
     }
-    return de;
 }
-
-
-bool SymbolElement::buildFromDom(QDomElement *elem)
+    
+/**
+ * Reads our attributes from the element.
+ * Returns false if it failed.
+ */
+bool SymbolElement::readAttributesFromDom(QDomElement& element)
 {
-    // checking
-    if (elem->tagName() != "SYMBOL") {
-        cerr << "Wrong tag name " << elem->tagName().latin1() << "for SymbolElement.\n";
+    if (!BasicElement::readAttributesFromDom(element)) {
         return false;
     }
 
-    // get attributes
-    QString typeStr = elem->attribute("TYPE");
+    QString typeStr = element.attribute("TYPE");
     if(!typeStr.isNull()) {
         symbol.setType(static_cast<Artwork::SymbolType>(typeStr.toInt()));
     }
 
-    // read parent
-    QDomNode n = elem->firstChild();
-    if (n.isElement()) {
-        QDomElement e = n.toElement();
-        if (!BasicElement::buildFromDom(&e)) {
-            return false;
-        }
-    }
-    else {
+    return true;
+}
+
+/**
+ * Reads our content from the node. Sets the node to the next node
+ * that needs to be read.
+ * Returns false if it failed.
+ */
+bool SymbolElement::readContentFromDom(QDomNode& node)
+{
+    if (!BasicElement::readContentFromDom(node)) {
         return false;
     }
-    n = n.nextSibling();
-
-    // read content
+    
     delete content;
-    content = buildChild(n, "CONTENT");
+    content = buildChild(node, "CONTENT");
     if (content == 0) {
         cerr << "Empty content in BracketElement.\n";
         return false;
     }
-    n = n.nextSibling();
+    node = node.nextSibling();
 
-    lower = buildChild(n, "LOWER");
+    lower = buildChild(node, "LOWER");
     if (lower != 0) {
-        n = n.nextSibling();
+        node = node.nextSibling();
     }
 
-    upper = buildChild(n, "UPPER");
+    upper = buildChild(node, "UPPER");
     if (upper != 0) {
-        n = n.nextSibling();
+        node = node.nextSibling();
     }
     
     return true;

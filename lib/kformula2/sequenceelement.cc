@@ -214,7 +214,7 @@ void SequenceElement::drawCursor(FormulaCursor* cursor, QPainter& painter)
         int x = QMIN(posX, markX);
         int width = abs(posX - markX);
         painter.setRasterOp(Qt::XorROP);
-        painter.fillRect(point.x()+x, point.y(), width, height, Qt::white);
+        painter.fillRect(point.x()+x, point.y()-2, width, height+4, Qt::white);
         painter.setRasterOp(Qt::CopyROP);
     }
     else {
@@ -573,45 +573,6 @@ void SequenceElement::selectAllChildren(FormulaCursor* cursor)
 }
 
 
-QDomElement SequenceElement::getElementDom(QDomDocument *doc)
-{
-    QDomElement de=doc->createElement("SEQUENCE");
-    de.appendChild(BasicElement::getElementDom(doc));
-    
-    uint count = children.count();
-    getChildrenDom(*doc, de, 0, count);
-    return de;
-}
-
-
-bool SequenceElement::buildFromDom(QDomElement *elem)
-{
-    // checking
-    if (elem->tagName() != "SEQUENCE") {
-        cerr << "Wrong tag name " << elem->tagName().latin1() << "for SequenceElement.\n";
-        return false;
-    }
-
-    // get attributes
-
-    // read parent
-    QDomNode n = elem->firstChild();
-    if (n.isElement()) {
-        QDomElement e = n.toElement();
-        if (!BasicElement::buildFromDom(&e)) {
-            return false;
-        }
-    }
-    else {
-        return false;
-    }
-    n = n.nextSibling();
-
-    // read content
-    return buildChildrenFromDom(children, n);
-}
-
-
 /**
  * Stores the given childrens dom in the element.
  */
@@ -619,7 +580,7 @@ void SequenceElement::getChildrenDom(QDomDocument& doc, QDomElement& elem,
                                      uint from, uint to)
 {
     for (uint i = from; i < to; i++) {
-        QDomElement tmpEleDom=children.at(i)->getElementDom(&doc);
+        QDomElement tmpEleDom=children.at(i)->getElementDom(doc);
 	elem.appendChild(tmpEleDom);
     }
 }
@@ -654,7 +615,7 @@ bool SequenceElement::buildChildrenFromDom(QList<BasicElement>& list, QDomNode n
             
             if (child != 0) {
                 child->setParent(this);
-                if (child->buildFromDom(&e)) {
+                if (child->buildFromDom(e)) {
                     list.append(child);
                 }
                 else {
@@ -666,4 +627,43 @@ bool SequenceElement::buildChildrenFromDom(QList<BasicElement>& list, QDomNode n
         n = n.nextSibling();
     }
     return true;
+}
+
+
+/**
+ * Appends our attributes to the dom element.
+ */
+void SequenceElement::writeDom(QDomElement& element)
+{
+    BasicElement::writeDom(element);
+
+    uint count = children.count();
+    QDomDocument doc = element.ownerDocument();
+    getChildrenDom(doc, element, 0, count);
+}
+    
+/**
+ * Reads our attributes from the element.
+ * Returns false if it failed.
+ */
+bool SequenceElement::readAttributesFromDom(QDomElement& element)
+{
+    if (!BasicElement::readAttributesFromDom(element)) {
+        return false;
+    }
+    return true;
+}
+
+/**
+ * Reads our content from the node. Sets the node to the next node
+ * that needs to be read.
+ * Returns false if it failed.
+ */
+bool SequenceElement::readContentFromDom(QDomNode& node)
+{
+    if (!BasicElement::readContentFromDom(node)) {
+        return false;
+    }
+    
+    return buildChildrenFromDom(children, node);
 }

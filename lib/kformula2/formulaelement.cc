@@ -77,42 +77,37 @@ void FormulaElement::draw(QPainter& painter, ContextStyle& context)
 }
 
 
-QDomElement FormulaElement::getElementDom(QDomDocument *doc)
+/**
+ * Appends our attributes to the dom element.
+ */
+void FormulaElement::writeDom(QDomElement& element)
 {
-    QDomElement de = doc->createElement("FORMULA");
-    de.setAttribute("SIZE", size);
-    de.appendChild(SequenceElement::getElementDom(doc));
-    return de;
+    SequenceElement::writeDom(element);
+    element.setAttribute("SIZE", size);
 }
-
-bool FormulaElement::buildFromDom(QDomElement *elem)
+    
+/**
+ * Reads our attributes from the element.
+ * Returns false if it failed.
+ */
+bool FormulaElement::readAttributesFromDom(QDomElement& element)
 {
-    // checking
-    if (elem == 0) {
-        cerr << "null document\n";
+    if (!SequenceElement::readAttributesFromDom(element)) {
         return false;
     }
-    if (elem->tagName() != "FORMULA") {
-        cerr << "Wrong tag name " << elem->tagName().latin1() << "for FormulaElement.\n";
-        return false;
-    }
-
-    // get attributes
-    QString sizeStr = elem->attribute("SIZE");
+    QString sizeStr = element.attribute("SIZE");
     if(!sizeStr.isNull()) {
         size = sizeStr.toInt();
     }
-
-    // read parent
-    QDomNode n = elem->firstChild();
-    if (n.isElement()) {
-        QDomElement e = n.toElement();
-        if (!SequenceElement::buildFromDom(&e)) {
-            return false;
-        }
-    }
-    else {
-        return false;
-    }
     return true;
+}
+
+/**
+ * Reads our content from the node. Sets the node to the next node
+ * that needs to be read.
+ * Returns false if it failed.
+ */
+bool FormulaElement::readContentFromDom(QDomNode& node)
+{
+    return SequenceElement::readContentFromDom(node);
 }

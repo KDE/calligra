@@ -408,7 +408,7 @@ void KFormulaContainer::testDirty()
 QDomDocument KFormulaContainer::domData()
 {
     QDomDocument doc("KFORMULA");
-    doc.appendChild(rootElement->getElementDom(&doc));
+    doc.appendChild(rootElement->getElementDom(doc));
     return doc;
 }
 
@@ -442,12 +442,12 @@ void KFormulaContainer::load(QString file)
     QDomElement fe = doc.firstChild().toElement();
     if (!fe.isNull()) {
         FormulaElement* root = new FormulaElement(this);
-        if (root->buildFromDom(&fe)) {
+        if (root->buildFromDom(fe)) {
             delete rootElement;
             rootElement = root;
             dirty = true;
             testDirty();
-            cleanRedoStack();    
+            cleanRedoStack();
             cleanUndoStack();
 
             emit formulaLoaded(rootElement);
@@ -458,4 +458,4 @@ void KFormulaContainer::load(QString file)
         }
     }
     f.close();
-}	
+}

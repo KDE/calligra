@@ -393,58 +393,61 @@ void RootElement::setToIndex(FormulaCursor* cursor)
     cursor->setTo(this, indexPos);
 }
 
-QDomElement RootElement::getElementDom(QDomDocument *doc)
-{
-    QDomElement de=doc->createElement("ROOT");
-    de.appendChild(BasicElement::getElementDom(doc));
 
-    QDomElement con=doc->createElement("CONTENT");
+/**
+ * Appends our attributes to the dom element.
+ */
+void RootElement::writeDom(QDomElement& element)
+{
+    BasicElement::writeDom(element);
+
+    QDomDocument doc = element.ownerDocument();
+
+    QDomElement con = doc.createElement("CONTENT");
     con.appendChild(content->getElementDom(doc));
-    de.appendChild(con);
+    element.appendChild(con);
 
     if(hasIndex()) {
-        QDomElement ind=doc->createElement("INDEX");
+        QDomElement ind = doc.createElement("INDEX");
         ind.appendChild(index->getElementDom(doc));
-        de.appendChild(ind);
+        element.appendChild(ind);
     }
-
-    return de;
+}
+    
+/**
+ * Reads our attributes from the element.
+ * Returns false if it failed.
+ */
+bool RootElement::readAttributesFromDom(QDomElement& element)
+{
+    if (!BasicElement::readAttributesFromDom(element)) {
+        return false;
+    }
+    return true;
 }
 
-bool RootElement::buildFromDom(QDomElement *elem)
+/**
+ * Reads our content from the node. Sets the node to the next node
+ * that needs to be read.
+ * Returns false if it failed.
+ */
+bool RootElement::readContentFromDom(QDomNode& node)
 {
-    // checking
-    if (elem->tagName() != "ROOT") {
-        cerr << "Wrong tag name " << elem->tagName().latin1() << "for RootElement.\n";
+    if (!BasicElement::readContentFromDom(node)) {
         return false;
     }
-
-    // get attributes
-
-    // read parent
-    QDomNode n = elem->firstChild();
-    if (n.isElement()) {
-        QDomElement e = n.toElement();
-        if (!BasicElement::buildFromDom(&e)) {
-            return false;
-        }
-    }
-    else {
-        return false;
-    }
-    n = n.nextSibling();
-
+    
     delete content;
-    content = buildChild(n, "CONTENT");
+    content = buildChild(node, "CONTENT");
     if (content == 0) {
         cerr << "Empty content in RootElement.\n";
         return false;
     }
-    n = n.nextSibling();
+    node = node.nextSibling();
     
-    index = buildChild(n, "INDEX");
+    index = buildChild(node, "INDEX");
     if (index != 0) {
-        n = n.nextSibling();
+        node = node.nextSibling();
     }
 
     return true;

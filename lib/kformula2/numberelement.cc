@@ -33,34 +33,33 @@ QFont NumberElement::getFont(ContextStyle& context)
     return context.getDefaultSymbolFont();
 }
 
-QDomElement NumberElement::getElementDom(QDomDocument *doc)
+
+/**
+ * Appends our attributes to the dom element.
+ */
+void NumberElement::writeDom(QDomElement& element)
 {
-    QDomElement de=doc->createElement("NUMBER");
-    de.appendChild(TextElement::getElementDom(doc));
-    return de;
+    TextElement::writeDom(element);
+}
+    
+/**
+ * Reads our attributes from the element.
+ * Returns false if it failed.
+ */
+bool NumberElement::readAttributesFromDom(QDomElement& element)
+{
+    if (!TextElement::readAttributesFromDom(element)) {
+        return false;
+    }
+    return true;
 }
 
-bool NumberElement::buildFromDom(QDomElement *elem)
+/**
+ * Reads our content from the node. Sets the node to the next node
+ * that needs to be read.
+ * Returns false if it failed.
+ */
+bool NumberElement::readContentFromDom(QDomNode& node)
 {
-    // checking
-    if (elem->tagName() != "NUMBER") {
-        cerr << "Wrong tag name " << elem->tagName().latin1() << "for NumberElement.\n";
-        return false;
-    }
-
-    // get attributes
-
-    // read parent
-    QDomNode n = elem->firstChild();
-    if (n.isElement()) {
-        QDomElement e = n.toElement();
-        if (!TextElement::buildFromDom(&e)) {
-            return false;
-        }
-    }
-    else {
-        return false;
-    }
-    n = n.nextSibling();
-    return true;
+    return TextElement::readContentFromDom(node);
 }

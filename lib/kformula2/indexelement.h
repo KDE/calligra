@@ -211,12 +211,39 @@ public:
     ElementIndexPtr getLowerRight() { return ElementIndexPtr(new LowerRightIndex(this)); }
     
     // Save&load
-    virtual QDomElement getElementDom(QDomDocument *doc);
-    virtual bool buildFromDom(QDomElement *elem);
+    //virtual QDomElement getElementDom(QDomDocument *doc);
+    //virtual bool buildFromDom(QDomElement *elem);
         
     // debug
     virtual ostream& output(ostream&);
 
+protected:
+
+    //Save/load support
+    
+    /**
+     * Returns the tag name of this element type.
+     */
+    virtual QString getTagName() const { return "INDEX"; }
+    
+    /**
+     * Appends our attributes to the dom element.
+     */
+    virtual void writeDom(QDomElement& element);
+    
+    /**
+     * Reads our attributes from the element.
+     * Returns false if it failed.
+     */
+    virtual bool readAttributesFromDom(QDomElement& element);
+
+    /**
+     * Reads our content from the node. Sets the node to the next node
+     * that needs to be read.
+     * Returns false if it failed.
+     */
+    virtual bool readContentFromDom(QDomNode& node);
+    
 private:
 
     /**

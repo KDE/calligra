@@ -400,41 +400,42 @@ bool MatrixElement::searchElement(BasicElement* element, uint& row, uint& column
     return false;
 }
 
-QDomElement MatrixElement::getElementDom(QDomDocument *doc)
+
+/**
+ * Appends our attributes to the dom element.
+ */
+void MatrixElement::writeDom(QDomElement& element)
 {
-    QDomElement de=doc->createElement("MATRIX");
-    de.appendChild(BasicElement::getElementDom(doc));
+    BasicElement::writeDom(element);
 
     uint rows = getRows();
     uint cols = getColumns();
    
-    de.setAttribute("ROWS",rows);
-    de.setAttribute("COLUMNS",cols); 
+    element.setAttribute("ROWS", rows);
+    element.setAttribute("COLUMNS", cols); 
 
-    for (uint i = 0; i < rows; i++) {
-        for (uint j = 0; j < cols; j++) {
-    	    QDomElement tmpEleDom=getElement(i,j)->getElementDom(doc);
-            de.appendChild(tmpEleDom);
-    
+    QDomDocument doc = element.ownerDocument();
+
+    for (uint r = 0; r < rows; r++) {
+        for (uint c = 0; c < cols; c++) {
+    	    QDomElement tmp = getElement(r,c)->getElementDom(doc);
+            element.appendChild(tmp);
 	}
-        de.appendChild(doc->createComment("end of row")); 
+        element.appendChild(doc.createComment("end of row")); 
     }
-
-    return de;
 }
-
-
-bool MatrixElement::buildFromDom(QDomElement *elem)
+    
+/**
+ * Reads our attributes from the element.
+ * Returns false if it failed.
+ */
+bool MatrixElement::readAttributesFromDom(QDomElement& element)
 {
-    // checking
-    if (elem->tagName() != "MATRIX") {
-        cerr << "Wrong tag name " << elem->tagName().latin1() << "for MatrixElement.\n";
+    if (!BasicElement::readAttributesFromDom(element)) {
         return false;
     }
-
-    // get attributes
     uint rows = 0;
-    QString rowStr = elem->attribute("ROWS");
+    QString rowStr = element.attribute("ROWS");
     if(!rowStr.isNull()) {
         rows = rowStr.toInt();
     }
@@ -443,7 +444,7 @@ bool MatrixElement::buildFromDom(QDomElement *elem)
         return false;
     }
     
-    QString columnStr = elem->attribute("COLUMNS");
+    QString columnStr = element.attribute("COLUMNS");
     uint cols = 0;
     if(!columnStr.isNull()) {
         cols = columnStr.toInt();
@@ -453,39 +454,46 @@ bool MatrixElement::buildFromDom(QDomElement *elem)
         return false;
     }
 
-    // read parent
-    QDomNode n = elem->firstChild();
-    if (n.isElement()) {
-        QDomElement e = n.toElement();
-        if (!BasicElement::buildFromDom(&e)) {
-            return false;
-        }
-    }
-    else {
-        return false;
-    }
-    n = n.nextSibling();
-
-    // read content
     content.clear();
     for (uint r = 0; r < rows; r++) {
         QList<SequenceElement>* list = new QList<SequenceElement>;
         list->setAutoDelete(true);
         content.append(list);
         for (uint c = 0; c < cols; c++) {
-            if (n.isElement()) {
-                SequenceElement* element = new SequenceElement(this);
-                QDomElement e = n.toElement();
-                if (!element->buildFromDom(&e)) {
-                    delete element;
+            SequenceElement* element = new SequenceElement(this);
+            list->append(element);
+	}
+    }
+    return true;
+}
+
+/**
+ * Reads our content from the node. Sets the node to the next node
+ * that needs to be read.
+ * Returns false if it failed.
+ */
+bool MatrixElement::readContentFromDom(QDomNode& node)
+{
+    if (!BasicElement::readContentFromDom(node)) {
+        return false;
+    }
+
+    uint rows = getRows();
+    uint cols = getColumns();
+    
+    for (uint r = 0; r < rows; r++) {
+        for (uint c = 0; c < cols; c++) {
+            if (node.isElement()) {
+                SequenceElement* element = getElement(r,c);
+                QDomElement e = node.toElement();
+                if (!element->buildFromDom(e)) {
                     return false;
                 }
-                list->append(element);
             }
-            n = n.nextSibling();
+            node = node.nextSibling();
 	}
-        if (n.isComment()) {
-            n = n.nextSibling();
+        if (node.isComment()) {
+            node = node.nextSibling();
         }
     }
     return true;

@@ -130,40 +130,37 @@ void TextElement::moveRight(FormulaCursor* cursor, BasicElement*)
 }
 
 
-QDomElement TextElement::getElementDom(QDomDocument *doc)
+/**
+ * Appends our attributes to the dom element.
+ */
+void TextElement::writeDom(QDomElement& element)
 {
-    QDomElement de=doc->createElement("TEXT");
-    de.appendChild(BasicElement::getElementDom(doc));
-    
-    de.setAttribute("CHAR", QString(character));
-    return de;
+    BasicElement::writeDom(element);
+    element.setAttribute("CHAR", QString(character));
 }
-
-bool TextElement::buildFromDom(QDomElement *elem)
+    
+/**
+ * Reads our attributes from the element.
+ * Returns false if it failed.
+ */
+bool TextElement::readAttributesFromDom(QDomElement& element)
 {
-    // checking
-    if (elem->tagName() != "TEXT") {
-        cerr << "Wrong tag name " << elem->tagName().latin1() << "for TextElement.\n";
+    if (!BasicElement::readAttributesFromDom(element)) {
         return false;
     }
-
-    // get attributes
-    QString charStr = elem->attribute("CHAR");
+    QString charStr = element.attribute("CHAR");
     if(!charStr.isNull()) {
         character = charStr.at(0);
     }
-
-    // read parent
-    QDomNode n = elem->firstChild();
-    if (n.isElement()) {
-        QDomElement e = n.toElement();
-        if (!BasicElement::buildFromDom(&e)) {
-            return false;
-        }
-    }
-    else {
-        return false;
-    }
-    n = n.nextSibling();
     return true;
+}
+
+/**
+ * Reads our content from the node. Sets the node to the next node
+ * that needs to be read.
+ * Returns false if it failed.
+ */
+bool TextElement::readContentFromDom(QDomNode& node)
+{
+    return BasicElement::readContentFromDom(node);
 }

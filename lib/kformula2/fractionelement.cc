@@ -326,61 +326,63 @@ void FractionElement::selectChild(FormulaCursor* cursor, BasicElement* child)
     }
 }
 
-QDomElement FractionElement::getElementDom(QDomDocument *doc)
+
+/**
+ * Appends our attributes to the dom element.
+ */
+void FractionElement::writeDom(QDomElement& element)
 {
-    QDomElement de=doc->createElement("FRACTION");
-    de.appendChild(BasicElement::getElementDom(doc));
+    BasicElement::writeDom(element);
+
+    QDomDocument doc = element.ownerDocument();
     
-    QDomElement den=doc->createElement("NUMERATOR");
-    den.appendChild(numerator->getElementDom(doc));
-    de.appendChild(den);
+    QDomElement num = doc.createElement("NUMERATOR");
+    num.appendChild(numerator->getElementDom(doc));
+    element.appendChild(num);
     
-    QDomElement num=doc->createElement("DENOMINATOR");
-    num.appendChild(denominator->getElementDom(doc));
-    de.appendChild(num);
-         
-    return de;
+    QDomElement den = doc.createElement("DENOMINATOR");
+    den.appendChild(denominator->getElementDom(doc));
+    element.appendChild(den);
+}
+    
+/**
+ * Reads our attributes from the element.
+ * Returns false if it failed.
+ */
+bool FractionElement::readAttributesFromDom(QDomElement& element)
+{
+    if (!BasicElement::readAttributesFromDom(element)) {
+        return false;
+    }
+    return true;
 }
 
-
-bool FractionElement::buildFromDom(QDomElement *elem)
+/**
+ * Reads our content from the node. Sets the node to the next node
+ * that needs to be read.
+ * Returns false if it failed.
+ */
+bool FractionElement::readContentFromDom(QDomNode& node)
 {
-    // checking
-    if (elem->tagName() != "FRACTION") {
-        cerr << "Wrong tag name " << elem->tagName().latin1() << "for FractionElement.\n";
+    if (!BasicElement::readContentFromDom(node)) {
         return false;
     }
-
-    // get attributes
-
-    // read parent
-    QDomNode n = elem->firstChild();
-    if (n.isElement()) {
-        QDomElement e = n.toElement();
-        if (!BasicElement::buildFromDom(&e)) {
-            return false;
-        }
-    }
-    else {
-        return false;
-    }
-    n = n.nextSibling();
-
+    
     delete numerator;
-    numerator = buildChild(n, "NUMERATOR");
+    numerator = buildChild(node, "NUMERATOR");
     if (numerator == 0) {
         cerr << "Empty numerator in FractionElement.\n";
         return false;
     }
-    n = n.nextSibling();
+    node = node.nextSibling();
 
     delete denominator;
-    denominator = buildChild(n, "DENOMINATOR");
+    denominator = buildChild(node, "DENOMINATOR");
     if (denominator == 0) {
         cerr << "Empty denominator in FractionElement.\n";
         return false;
     }
-    n = n.nextSibling();
+    node = node.nextSibling();
     
     return true;
 }
