@@ -1522,8 +1522,6 @@ void KSpreadCell::setText( const char *_text )
 
 void KSpreadCell::checkValue()
 {
-    bool old_value = m_bValue;
-
     // If the input is empty, we dont have a value
     if ( m_strText.data() == 0 || m_strText.data()[0] == 0 )
     {
@@ -1607,27 +1605,27 @@ void KSpreadCell::setCalcDirtyFlag( KSpreadTable *_table, int _column, int _row 
 
 bool KSpreadCell::save( ostream& out, int _x_offset, int _y_offset )
 {
-  out << otag << "<CELL row=" << m_iRow - _y_offset
-      << " column=" << m_iColumn - _x_offset << '>' << endl;
+  out << otag << "<CELL row=\"" << m_iRow - _y_offset
+      << "\" column=\"" << m_iColumn - _x_offset << "\">" << endl;
 
-  out << indent << "<FORMAT align=" << (unsigned int)m_eAlign;
+  out << indent << "<FORMAT align=\"" << (unsigned int)m_eAlign << '"';
 
   if ( m_bgColor != white )
-    out << " bgcolor=" << m_bgColor;
+    out << " bgcolor=\"" << m_bgColor << '"';
   if ( multiRow() )
     out << " multirow";
 
   if ( isForceExtraCells() )
-    out << " colspan=" << extraXCells() << " rowspan=" << extraYCells();
+    out << " colspan=\"" << extraXCells() << "\" rowspan=\"" << extraYCells() << '"';
   
-  out << " precision=" << precision();
+  out << " precision=\"" << precision() << '"';
   if ( prefix() )
     out << " prefix=\"" << prefix() << '"';
   if ( postfix() )
     out << " postfix=\"" << postfix() << '"';
   
-  out << " float=" << (unsigned int)floatFormat() << " floatcolor=" << (unsigned int)floatColor()
-      << " faktor=" << m_dFaktor << "/>" << endl;
+  out << " float=\"" << (unsigned int)floatFormat() << "\" floatcolor=" << (unsigned int)floatColor()
+      << "\" faktor=\"" << m_dFaktor << "\"/>" << endl;
 
   if ( m_textFont != m_pTable->defaultCell()->textFont() )
     out << indent << m_textFont << endl;
@@ -1700,7 +1698,6 @@ bool KSpreadCell::load( KOMLParser &parser, vector<KOMLAttrib> &_attribs )
     if ( ( res = parser.open( 0L, tag ) ) )
     {
       KOMLParser::parseTag( tag.c_str(), name, lst );
-      vector<KOMLAttrib>::const_iterator it = lst.begin();
 
       if ( name == "FORMAT" )
         {

@@ -297,3 +297,37 @@ bool KSpreadMap::getPythonCodeFromFile()
 
     return TRUE;
 }
+
+void KSpreadMap::makeChildList( OPParts::Document_ptr _doc, const char *_path )
+{
+  QListIterator<KSpreadTable> it( m_lstTables );
+  for( ; it.current(); ++it )
+  {
+    QString path( _path );
+    path += "/";
+    path += it.current()->name();
+    it.current()->makeChildList( _doc, path );
+  }
+}
+
+bool KSpreadMap::loadChildren( OPParts::MimeMultipartDict_ptr _dict )
+{
+  QListIterator<KSpreadTable> it( m_lstTables );
+  for( ; it.current(); ++it )
+    if ( !it.current()->loadChildren( _dict ) )
+      return false;
+  
+  return true;
+}
+
+bool KSpreadMap::hasToWriteMultipart()
+{
+  QListIterator<KSpreadTable> it( m_lstTables );
+  for( ; it.current(); ++it )
+  {
+    if ( it.current()->hasToWriteMultipart() )
+      return true;
+  }
+
+  return false;
+}

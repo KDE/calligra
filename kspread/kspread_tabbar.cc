@@ -125,8 +125,8 @@ void KSpreadTabBar::paintEvent( QPaintEvent* )
     char *text;
     char *active_text = 0L;
     int active_x = -1;
-    int active_width;
-    int active_y;
+    int active_width = 0;
+    int active_y = 0;
     
     for ( text = tabsList.first(); text != 0L; text = tabsList.next() )
     {

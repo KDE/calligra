@@ -19,11 +19,12 @@
 
 #include "koIMR.h"
 
-#include <qmsgbox.h>
 #include <klocale.h>
 #include <kapp.h>
 
 #include <op_app.h>
+#include "koScanParts.h"
+#include <qmsgbox.h>
 
 /**
  * This code is inspired by micos "imr" implementation.
@@ -67,7 +68,7 @@ bool imr_create( const char* _name, const char* _mode, const char *_exec, QStrLi
 
   CORBA::ImplementationDef::RepoIdList repoids;
   repoids.length( _repoids.count() );
-  for (int i = 0; i < _repoids.count(); i++ )
+  for ( unsigned int i = 0; i < _repoids.count(); i++ )
     repoids[i] = (const char*)_repoids.at(i);
 
   CORBA::ImplementationDef_var impl = _imr->create( mode, repoids, _name, _exec );
@@ -137,13 +138,13 @@ CORBA::Object_ptr imr_activate( const char *_server, CORBA::ImplRepository_ptr _
     return CORBA::Object::_duplicate( obj );
 }
 
-OPParts::Document_ptr imr_newdoc( const char *_part_name )
+OPParts::Document_ptr imr_createDocByServerName( const char *_server_name )
 {
-  CORBA::Object_var obj = imr_activate( _part_name );
+  CORBA::Object_var obj = imr_activate( _server_name );
   if ( CORBA::is_nil( obj ) )
   {
     QString tmp;
-    tmp.sprintf( i18n("Could not start server %s" ), _part_name );
+    tmp.sprintf( i18n("Could not start server %s" ), _server_name );
     QMessageBox::critical( (QWidget*)0L, i18n("KSpread Error"), tmp, i18n( "Ok" ) );
     return 0L;
   }
@@ -164,3 +165,17 @@ OPParts::Document_ptr imr_newdoc( const char *_part_name )
 
   return doc;
 }
+
+OPParts::Document_ptr imr_createDocByMimeType( const char *_mime_type )
+{
+  QListIterator<KoPartEntry> it( *g_plstPartEntries );
+  for( ; it.current(); ++it )
+  {
+    if ( it.current()->supports( _mime_type ) )
+      return imr_createDocByServerName( it.current()->name() );
+  }
+
+  return 0L;
+}
+
+

@@ -36,6 +36,8 @@ public:
   const char *exec() { return m_strExec.data(); }
   const char *comment() { return m_strComment.data(); }
 
+  bool supports( const char *_mime_type );
+ 
   QStrListIterator repoID() { return QStrListIterator( m_strlstRepoID ); }
   QStrListIterator mimeTypes() { return QStrListIterator( m_strlstMimeTypes ); }
 

@@ -1141,7 +1141,7 @@ void KPresenterView_impl::setupMenu()
       
       // menubar
       m_rMenuBar = m_vMenuBarFactory->createMenuBar(this);
-      printf("rMenuBar %i %i\n",m_rMenuBar->refCount(),m_rMenuBar->_refcnt());
+      // printf("rMenuBar %i %i\n",m_rMenuBar->refCount(),m_rMenuBar->_refcnt());
       
       // edit menu
       m_idMenuEdit = m_rMenuBar->insertMenu(CORBA::string_dup(klocale->translate("&Edit")));

@@ -27,6 +27,7 @@
 
 bool imr_create( const char* _name, const char* _mode, const char *_exec, QStrList &_repoids, CORBA::ImplRepository_ptr _imr );
 CORBA::Object_ptr imr_activate( const char *_server, CORBA::ImplRepository_ptr imr = 0L, const char *_addr = 0L );
-OPParts::Document_ptr imr_newdoc( const char *_part_name );
+OPParts::Document_ptr imr_createDocByMimeType( const char *_mime_type );
+OPParts::Document_ptr imr_createDocByServerName( const char *_server_name );
 
 #endif

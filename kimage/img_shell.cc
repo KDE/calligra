@@ -53,7 +53,9 @@ bool ImageShell_impl::saveDocument( const char *_filename, const char *_format )
   assert( !CORBA::is_nil( m_rDoc ) );
 
   if ( _format == 0L || *_format == 0 )
-    _format = "img";
+    // HACK
+    //_format = "img";
+    _format = "ppm";
   
   return m_rDoc->saveAs( _filename, _format );
 }

@@ -30,6 +30,17 @@ public:
 
     virtual bool save( ostream& );
     virtual bool load( KOMLParser&, vector<KOMLAttrib>& );
+    virtual bool loadChildren( OPParts::MimeMultipartDict_ptr _dict );
+  
+    void makeChildList( OPParts::Document_ptr _doc, const char *_path );
+    /*
+     * @return true if one of the direct children wants to
+     *              be saved embedded. If there are no children or if
+     *              every direct child saves itself into its own file
+     *              then false is returned.
+     * 
+     */
+    bool hasToWriteMultipart();
   
     /**
      * @param _table becomes added to the map.

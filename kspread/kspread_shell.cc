@@ -2,6 +2,8 @@
 
 #include <koAboutDia.h>
 
+#include <qmsgbox.h>
+
 KSpreadShell_impl::KSpreadShell_impl()
 {
 }
@@ -39,6 +41,11 @@ void KSpreadShell_impl::fileNew()
   m_rDoc = 0L;
   
   m_rDoc = OPParts::Document::_duplicate( new KSpreadDoc );
+  if ( !m_rDoc->init() )
+  {
+    QMessageBox::critical( this, i18n("KSpread Error"), i18n("Could not init"), i18n("Ok") );
+    return;
+  }
   
   m_vView = m_rDoc->createView();
   m_vView->setPartShell( this );

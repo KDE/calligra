@@ -2,18 +2,10 @@
 
 #include <koIMR.h>
 
+#include <kurl.h>
+#include <qmsgbox.h>
+
 ImageDocument_impl::ImageDocument_impl()
-{
-  init();
-}
-
-ImageDocument_impl::ImageDocument_impl( const CORBA::BOA::ReferenceData &_refdata ) :
-  KImage::ImageDocument_skel( _refdata )
-{
-  init();
-}
-
-void ImageDocument_impl::init()
 {
   // Use CORBA mechanism for deleting views
   m_lstViews.setAutoDelete( false );
@@ -21,6 +13,11 @@ void ImageDocument_impl::init()
 
   m_bModified = false;
   m_bFitToWindow = false;
+}
+
+CORBA::Boolean ImageDocument_impl::init()
+{
+  return true;
 }
 
 ImageDocument_impl::~ImageDocument_impl()
@@ -48,24 +45,70 @@ void ImageDocument_impl::cleanUp()
   Document_impl::cleanUp();
 }
 
-CORBA::Boolean ImageDocument_impl::import( const char *_filename )
+CORBA::Boolean ImageDocument_impl::import( const char *_url )
 {
-  bool res =  m_imgImage.load( _filename );
-  if ( res )
-    emit sig_imageModified();
+  KURL u( _url );
+  if ( u.isMalformed() )
+  {
+    QMessageBox::critical( (QWidget*)0L, i18n("KImage Error"), i18n("Malformed URL"), i18n("Ok") );
+    return false;
+  }
+  if ( !u.isLocalFile() )
+  {
+    QMessageBox::critical( (QWidget*)0L, i18n("KImage Error"), i18n("Only local files are supported"), i18n("Ok") );
+    return false;
+  }
+
+  if ( !m_imgImage.load( u.path() ) )
+    return false;
   
-  return res;
+  emit sig_imageModified();
+  
+  string url = u.url().data();
+  setId( url.c_str() );
+  m_strExternFile = url.c_str();
+  
+  return true;
 }
 
-CORBA::Boolean ImageDocument_impl::export( const char *_filename, const char *_format )
+CORBA::Boolean ImageDocument_impl::export( const char *_url, const char *_format )
 {
-  return m_imgImage.save( _filename, _format );
+  KURL u( _url );
+  if ( u.isMalformed() )
+  {
+    QMessageBox::critical( (QWidget*)0L, i18n("KImage Error"), i18n("Malformed URL"), i18n("Ok") );
+    return false;
+  }
+  if ( !u.isLocalFile() )
+  {
+    QMessageBox::critical( (QWidget*)0L, i18n("KImage Error"), i18n("Only local files are supported"), i18n("Ok") );
+    return false;
+  }
+
+  return m_imgImage.save( u.path(), _format );
 }
 
-CORBA::Boolean ImageDocument_impl::open( const char *_filename )
+CORBA::Boolean ImageDocument_impl::openMimePart( OPParts::MimeMultipartDict_ptr _dict, const char *_id )
 {
+  return false;
+}
+
+CORBA::Boolean ImageDocument_impl::open( const char *_url )
+{
+  KURL u( _url );    
+  if ( u.isMalformed() )
+  {
+    QMessageBox::critical( (QWidget*)0L, i18n("KImage Error"), i18n("Malformed URL"), i18n("Ok") );
+    return false;
+  }
+  if ( !u.isLocalFile() )
+  {
+    QMessageBox::critical( (QWidget*)0L, i18n("KImage Error"), i18n("Only local files are supported"), i18n("Ok") );
+    return false;
+  }
+
   // We assume that this document is empty.
-  QString name( _filename );
+  QString name( _url );
   if ( name.right( 4 ) == ".img" )
   {
     /* Store store( _filename, IO_ReadOnly );
@@ -81,23 +124,51 @@ CORBA::Boolean ImageDocument_impl::open( const char *_filename )
   }
   else
   {    
-    if ( !m_imgImage.load( _filename ) )
+    if ( !m_imgImage.load( u.path() ) )
       return false;
+   
+    string url = u.url().data();
+
+    m_strExternFile = url;
     
     emit sig_imageModified();
     return true;
   }
-  
+}
+
+CORBA::Boolean ImageDocument_impl::saveAsMimePart( const char *_url, const char *_format, const char *_boundary )
+{
   return false;
 }
 
-CORBA::Boolean ImageDocument_impl::saveAs( const char *_filename, const char *_format )
+CORBA::Boolean ImageDocument_impl::saveAs( const char *_url, const char *_format )
 {
-  if ( strcmp( _format, "ppm" ) == 0 )
+  KURL u( _url );
+  if ( u.isMalformed() )
   {
-    return m_imgImage.save( _filename, _format );
+    QMessageBox::critical( (QWidget*)0L, i18n("KImage Error"), i18n("Malformed URL"), i18n("Ok") );
+    return false;
   }
-  else if ( strcmp( _format, "img" ) == 0 )
+  if ( !u.isLocalFile() )
+  {
+    QMessageBox::critical( (QWidget*)0L, i18n("KImage Error"), i18n("Only local files are supported"), i18n("Ok") );
+    return false;
+  }
+
+  string url = u.url().data();
+  if ( url == m_strExternFile )
+  {
+    cout << "No need to save file\n" << endl;
+    return true;
+  }
+  
+  if ( !u.isLocalFile() )
+  {
+    QMessageBox::critical( (QWidget*)0L, i18n("KImage Error"), i18n("Only local files are supported"), i18n("Ok") );
+    return false;
+  }
+  
+  if ( strcmp( _format, "img" ) == 0 )
   {    
     /* Store store( _filename, IO_WriteOnly );
     // TODO test wether opening was successful
@@ -112,11 +183,12 @@ CORBA::Boolean ImageDocument_impl::saveAs( const char *_filename, const char *_f
     */
     return true;
   }
+  else
+  {
+    return m_imgImage.save( u.path(), _format );
+  }
 
-#ifdef DEBUG
-  warning( "Unknown file format '%s'\n", _format );
-#endif
-
+  cerr << "Unknown file format " << _format << endl;
   return false;
 }
   
@@ -174,15 +246,22 @@ OPParts::View_ptr ImageDocument_impl::createView()
   
   ImageView_impl *p = new ImageView_impl( 0L );
   p->setDocument( this );
+  p->QWidget::show();
   
   return OPParts::View::_duplicate( p );
 }
 
-void ImageDocument_impl::insertObject( const QRect& _rect, const char *_part_name )
+void ImageDocument_impl::insertObject( const QRect& _rect, const char *_server_name )
 {
-  OPParts::Document_var doc = imr_newdoc( _part_name );
+  OPParts::Document_var doc = imr_createDocByServerName( _server_name );
   if ( CORBA::is_nil( doc ) )
     return;
+
+  if ( !doc->init() )
+  {
+    QMessageBox::critical( (QWidget*)0L, i18n("KImage Error"), i18n("Could not init"), i18n("Ok") );
+    return;
+  }
   
   ImageChild* ch = new ImageChild( this, _rect, doc );
   m_lstChildren.append( ch );

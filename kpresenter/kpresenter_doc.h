@@ -146,6 +146,10 @@ public:
   // open - save document
   virtual CORBA::Boolean open(const char *_filename);
   virtual CORBA::Boolean saveAs(const char *_filename,const char *_format);
+  /** Torben: Added 3 new dummy functions **/
+  virtual CORBA::Boolean init() { return true; }
+  virtual CORBA::Boolean openMimePart(class OPParts::MimeMultipartDict *, const char *) { return true; }
+  virtual CORBA::Boolean saveAsMimePart(const char *, const char *, const char *) { return true; }
 
   // create a view
   virtual OPParts::View_ptr createView();

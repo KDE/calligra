@@ -57,6 +57,11 @@ KPresenter::KPresenterView_ptr KPresenter::KPresenterView::_narrow( CORBA::Objec
       return _o;
     }
   }
+  if( _obj->_is_a_remote( "IDL:KPresenter/KPresenterView:1.0" ) ) {
+    _o = new KPresenter::KPresenterView_stub;
+    _o->CORBA::Object::operator=( *_obj );
+    return _o;
+  }
   return _nil();
 }
 
@@ -267,6 +272,21 @@ void KPresenter::KPresenterView_stub::insertText()
 void KPresenter::KPresenterView_stub::insertAutoform()
 {
   CORBA::Request_var _req = this->_request( "insertAutoform" );
+  _req->result()->value()->type( CORBA::_tc_void );
+  _req->send_oneway();
+  #ifdef HAVE_EXCEPTIONS
+  if( CORBA::Exception *_ex = _req->env()->exception() )
+    mico_throw( *_ex );
+  #else
+  if( CORBA::Exception *_ex = _req->env()->exception() )
+    CORBA::Exception::_throw_failed( _ex );
+  #endif
+}
+
+
+void KPresenter::KPresenterView_stub::insertObject()
+{
+  CORBA::Request_var _req = this->_request( "insertObject" );
   _req->result()->value()->type( CORBA::_tc_void );
   _req->send_oneway();
   #ifdef HAVE_EXCEPTIONS
@@ -1040,6 +1060,11 @@ KPresenter::KPresenterDocument_ptr KPresenter::KPresenterDocument::_narrow( CORB
       return _o;
     }
   }
+  if( _obj->_is_a_remote( "IDL:KPresenter/KPresenterDocument:1.0" ) ) {
+    _o = new KPresenter::KPresenterDocument_stub;
+    _o->CORBA::Object::operator=( *_obj );
+    return _o;
+  }
   return _nil();
 }
 
@@ -1135,6 +1160,11 @@ KPresenter::Factory_ptr KPresenter::Factory::_narrow( CORBA::Object_ptr _obj )
       _o->CORBA::Object::operator=( *_obj );
       return _o;
     }
+  }
+  if( _obj->_is_a_remote( "IDL:KPresenter/Factory:1.0" ) ) {
+    _o = new KPresenter::Factory_stub;
+    _o->CORBA::Object::operator=( *_obj );
+    return _o;
   }
   return _nil();
 }
@@ -1344,6 +1374,15 @@ bool KPresenter::KPresenterView_skel::dispatch( CORBA::ServerRequest_ptr _req, C
     _req->params( _args );
 
     insertAutoform();
+    return true;
+  }
+  if( strcmp( _req->op_name(), "insertObject" ) == 0 ) {
+    CORBA::NVList_ptr _args;
+    _orb()->create_list( 0, _args );
+
+    _req->params( _args );
+
+    insertObject();
     return true;
   }
   if( strcmp( _req->op_name(), "insertLineHidl" ) == 0 ) {

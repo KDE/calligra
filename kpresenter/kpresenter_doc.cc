@@ -201,20 +201,20 @@ bool KPresenterDocument_impl::save(const char *_url)
 /*========================== save ===============================*/
 bool KPresenterDocument_impl::save(ostream& out)
 {
-  out << otag << "<DOC author=\"" << "Reginals Stadlbauer" << "\" email=" << "reggie@kde.org" << " editor=" << "KPresenter"
-      << " mime=" << "\"application/x-kpresenter\"" << ">" << endl;
+  out << otag << "<DOC author=\"" << "Reginals Stadlbauer" << "\" email=\"" << "reggie@kde.org" << "\" editor=\"" << "KPresenter"
+      << "\" mime=\"" << "application/x-kpresenter" << "\">" << endl;
   
-  out << otag << "<PAPER format=" << pageLayout().format << " width=" << pageLayout().width
-      << " height=" << pageLayout().height << " orientation=" << pageLayout().orientation << '>' << endl;
-  out << indent << "<PAPERBORDERS left=" << pageLayout().left << " top=" << pageLayout().top << " right=" << pageLayout().right
-      << " bottom=" << pageLayout().bottom << "/>" << endl;
+  out << otag << "<PAPER format=\"" << pageLayout().format << "\" width=\"" << pageLayout().width
+      << "\" height=\"" << pageLayout().height << "\" orientation=\"" << pageLayout().orientation << "\">" << endl;
+  out << indent << "<PAPERBORDERS left=\"" << pageLayout().left << "\" top=\"" << pageLayout().top << "\" right=\"" << pageLayout().right
+      << "\" bottom=\"" << pageLayout().bottom << "\"/>" << endl;
   out << etag << "</PAPER>" << endl;
   
-  out << otag << "<BACKGROUND pages=" << _pageList.count() << ">" << endl;
+  out << otag << "<BACKGROUND pages=\"" << _pageList.count() << "\">" << endl;
   saveBackground(out);
   out << etag << "</BACKGROUND>" << endl;
 
-  out << otag << "<OBJECTS objects=" << _objList.count() << ">" << endl;
+  out << otag << "<OBJECTS objects=\"" << _objList.count() << "\">" << endl;
   saveObjects(out);
   out << etag << "</OBJECTS>" << endl;
 
@@ -238,8 +238,10 @@ void KPresenterDocument_impl::saveBackground(ostream& out)
       out << indent << "<BACKCOLOR2 red=" << pagePtr->backColor2.red() << " green=" 
 	  << pagePtr->backColor2.green() << " blue=" << pagePtr->backColor2.blue() << "/>" << endl; 
       out << indent << "<BCTYPE value=" << pagePtr->bcType << "/>" << endl; 
-      out << indent << "<BACKPIC value=\"" << pagePtr->backPic << "\"/>" << endl; 
-      out << indent << "<BACKCLIP value=\"" << pagePtr->backClip << "\"/>" << endl; 
+      if ( pagePtr->backPic )
+	out << indent << "<BACKPIC value=\"" << pagePtr->backPic << "\"/>" << endl; 
+      if ( pagePtr->backClip )
+	out << indent << "<BACKCLIP value=\"" << pagePtr->backClip << "\"/>" << endl; 
       out << etag << "</PAGE>" << endl;
     }
 }
@@ -250,11 +252,11 @@ void KPresenterDocument_impl::saveObjects(ostream& out)
   for (objPtr = _objList.first();objPtr != 0;objPtr = _objList.next())
     {
       out << otag << "<OBJECT>" << endl;
-      out << indent << "<OBJTYPE value=" << objPtr->objType << "/>" << endl; 
-      out << indent << "<ISSELECTED value=" << objPtr->isSelected << "/>" << endl; 
-      out << indent << "<OBJNUM value=" << objPtr->objNum << "/>" << endl; 
-      out << indent << "<COORDINATES x=" << objPtr->ox << " x=" << objPtr->ox
-	  << " w=" << objPtr->ow << " h=" << objPtr->oh << "/>" << endl; 
+      out << indent << "<OBJTYPE value=\"" << objPtr->objType << "\"/>" << endl; 
+      out << indent << "<ISSELECTED value=\"" << objPtr->isSelected << "\"/>" << endl; 
+      out << indent << "<OBJNUM value=\"" << objPtr->objNum << "\"/>" << endl; 
+      out << indent << "<COORDINATES x=\"" << objPtr->ox << "\" x=\"" << objPtr->ox
+	  << "\" w=\"" << objPtr->ow << "\" h=\"" << objPtr->oh << "\"/>" << endl; 
       
       if (objPtr->objType == OT_TEXT)
 	saveTxtObj(out,objPtr->textObj);
@@ -278,28 +280,28 @@ void KPresenterDocument_impl::saveTxtObj(ostream& out,KTextObject *txtPtr)
   unsigned int i,j,k;
   QFont font;
 
-  out << otag << "<TEXTOBJ objType=" << txtPtr->objType() << "/>" << endl;
-  out << indent << "<ENUMLISTTYPE type=" << txtPtr->enumListType().type << " before=\""
+  out << otag << "<TEXTOBJ objType=\"" << txtPtr->objType() << "\"/>" << endl;
+  out << indent << "<ENUMLISTTYPE type=\"" << txtPtr->enumListType().type << "\" before=\""
       << txtPtr->enumListType().before << "\" after=\"" << txtPtr->enumListType().after
-      << "\" start=" << txtPtr->enumListType().start << " family=\"" 
-      << txtPtr->enumListType().font.family() << "\" pointSize=" << txtPtr->enumListType().font.pointSize()
-      << " bold=" << txtPtr->enumListType().font.bold() << " italic=" << txtPtr->enumListType().font.italic()
-      << " underline=" << txtPtr->enumListType().font.underline() << " red=" 
-      << txtPtr->enumListType().color.red() << " green=" << txtPtr->enumListType().color.green() 
-      << " blue=" << txtPtr->enumListType().color.blue() << "/>" << endl; 
-  out << indent << "<UNSORTEDLISTTYPE type=" << " family=\"" 
-      << txtPtr->unsortListType().font.family() << "\" pointSize=" << txtPtr->unsortListType().font.pointSize()
-      << " bold=" << txtPtr->unsortListType().font.bold() << " italic=" << txtPtr->unsortListType().font.italic()
-      << " underline=" << txtPtr->unsortListType().font.underline() << " red=" 
-      << txtPtr->unsortListType().color.red() << " green=" << txtPtr->unsortListType().color.green() 
-      << " blue=" << txtPtr->unsortListType().color.blue() << " chr=" << txtPtr->unsortListType().chr
-      << "/>" << endl; 
+      << "\" start=\"" << txtPtr->enumListType().start << "\" family=\"" 
+      << txtPtr->enumListType().font.family() << "\" pointSize=\"" << txtPtr->enumListType().font.pointSize()
+      << "\" bold=\"" << txtPtr->enumListType().font.bold() << "\" italic=\"" << txtPtr->enumListType().font.italic()
+      << "\" underline=\"" << txtPtr->enumListType().font.underline() << "\" red=\"" 
+      << txtPtr->enumListType().color.red() << "\" green=\"" << txtPtr->enumListType().color.green() 
+      << "\" blue=\"" << txtPtr->enumListType().color.blue() << "\"/>" << endl; 
+  out << indent << "<UNSORTEDLISTTYPE type=\"" /** SOMETHING missing here ?? */ << "\" family=\"" 
+      << txtPtr->unsortListType().font.family() << "\" pointSize=\"" << txtPtr->unsortListType().font.pointSize()
+      << "\" bold=\"" << txtPtr->unsortListType().font.bold() << "\" italic=\"" << txtPtr->unsortListType().font.italic()
+      << "\" underline=" << txtPtr->unsortListType().font.underline() << " red=\"" 
+      << txtPtr->unsortListType().color.red() << "\" green=\"" << txtPtr->unsortListType().color.green() 
+      << "\" blue=\"" << txtPtr->unsortListType().color.blue() << "\" chr=\"" << txtPtr->unsortListType().chr
+      << "\"/>" << endl; 
 
   for (i = 0;i < txtPtr->paragraphs();i++)
     {
       txtParagraph = txtPtr->paragraphAt(i);
 
-      out << otag << "<PARAGRAPH horzAlign=" << txtParagraph->horzAlign() << "/>" << endl; 
+      out << otag << "<PARAGRAPH horzAlign=\"" << txtParagraph->horzAlign() << "\"/>" << endl; 
 
       for (j = 0;j < txtParagraph->lines();j++)
 	{
@@ -313,13 +315,13 @@ void KPresenterDocument_impl::saveTxtObj(ostream& out,KTextObject *txtPtr)
 	      font = txtObj->font();
 	      
 	      out << otag << "<OBJ>" << endl;
-	      out << indent << "<TYPE value=" << txtObj->type() << "/>" << endl;
-	      out << indent << "<FONT family=\"" << font.family() << "\" pointSize="
-		  << font.pointSize() << " bold=" << font.bold() << " italic=" << font.italic()
-		  << " underline=" << font.underline() << "/>" << endl;
-	      out << indent << "<COLOR red=" << txtObj->color().red() << " green="
-		  << txtObj->color().green() << " blue=" << txtObj->color().blue() << "/>" << endl;
-	      out << indent << "<VERTALIGN value=" << txtObj->vertAlign() << "/>" << endl;
+	      out << indent << "<TYPE value=\"" << txtObj->type() << "\"/>" << endl;
+	      out << indent << "<FONT family=\"" << font.family() << "\" pointSize=\""
+		  << font.pointSize() << "\" bold=\"" << font.bold() << "\" italic=\"" << font.italic()
+		  << "\" underline=\"" << font.underline() << "\"/>" << endl;
+	      out << indent << "<COLOR red=\"" << txtObj->color().red() << "\" green=\""
+		  << txtObj->color().green() << "\" blue=\"" << txtObj->color().blue() << "\"/>" << endl;
+	      out << indent << "<VERTALIGN value=\"" << txtObj->vertAlign() << "\"/>" << endl;
 	      out << indent << "<TEXT value=\"" << txtObj->text() << "\"/>" << endl;
 	      out << etag << "</OBJ>" << endl;
 	    }
@@ -355,7 +357,7 @@ bool KPresenterDocument_impl::load(const char *_url)
       return false;
     }
 
-  KOMLStreamFeed feed(&in);
+  KOMLStreamFeed feed( in );
   KOMLParser parser(&feed);
   
   string tag;
@@ -702,9 +704,9 @@ void KPresenterDocument_impl::removeView(KPresenterView_impl *_view)
 }
 
 /*========================= insert an object =====================*/
-void KPresenterDocument_impl::insertObject(const QRect& _rect,const char* _part_name)
+void KPresenterDocument_impl::insertObject(const QRect& _rect, const char* _server_name)
 {
-  OPParts::Document_var doc = imr_newdoc(_part_name);
+  OPParts::Document_var doc = imr_createDocByServerName( _server_name);
   if (CORBA::is_nil(doc))
     return;
   

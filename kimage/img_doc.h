@@ -46,22 +46,25 @@ class ImageDocument_impl : public QObject,
   Q_OBJECT
 public:
   // C++
-  ImageDocument_impl( const CORBA::BOA::ReferenceData &refdata );
   ImageDocument_impl();
   ~ImageDocument_impl();
   
 protected:
-  virtual void init();
   virtual void cleanUp();
   
 public:
   // IDL
+  virtual CORBA::Boolean init();
   virtual CORBA::Boolean open( const char *_filename );
+  virtual CORBA::Boolean openMimePart( OPParts::MimeMultipartDict_ptr _dict, const char *_id );
   virtual CORBA::Boolean saveAs( const char *_filename, const char *_format );
+  virtual CORBA::Boolean saveAsMimePart( const char *_filename, const char *_format, const char *_boundary );
 
+  // C++
   virtual CORBA::Boolean import( const char *_filename );
   virtual CORBA::Boolean export( const char *_filename, const char *_format );
   
+  // IDL
   virtual OPParts::View_ptr createView();
 
   virtual void viewList( OPParts::Document::ViewList*& _list );
@@ -139,7 +142,8 @@ signals:
 
 protected:
   QImage m_imgImage;
-
+  string m_strExternFile;
+  
   QList<ImageView_impl> m_lstViews;
 
   QList<ImageChild> m_lstChildren;

@@ -168,4 +168,14 @@ KoPartEntry::KoPartEntry( const char *_name, const char *_exec, const char *_mod
   m_strlstRepoID = _repos;
 }
 
+bool KoPartEntry::supports( const char *_mime_type ) 
+{
+  const char *s;
+  for( s = m_strlstMimeTypes.first(); s != 0L; s = m_strlstMimeTypes.next() )
+    if ( strcmp( _mime_type, s ) == 0 )
+      return true;
+  
+  return false;
+}
+
 QList<KoPartEntry> *g_plstPartEntries = 0L;

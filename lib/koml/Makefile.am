@@ -1,15 +1,15 @@
 
 lib_LTLIBRARIES = libkoml.la
 LDFLAGS = -version-info 1:0:0
-INCLUDES = $(MICO_INCLUDES)
+INCLUDES = $(MICO_INCLUDES) -I$(idldir) $(all_includes)
 
 ####### Files
 
 libkoml_la_SOURCES = komlParser.cc komlFeed.cc komlFileFeed.cc \
-	komlWriter.cc komlStreamFeed.cc torben.cc
+	komlWriter.cc komlStreamFeed.cc torben.cc komlMime.cc
 
 include_HEADERS = komlParser.h komlFeed.h komlFileFeed.h \
-	komlWriter.h torben.h komlStreamFeed.h
+	komlWriter.h torben.h komlStreamFeed.h komlMime.h
 
 SUFFIXES = .h .moc
 

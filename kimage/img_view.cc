@@ -39,6 +39,8 @@ ImageView_impl::ImageView_impl( QWidget *_parent = 0L, const char *_name = 0L ) 
   m_bRectSelection = false;
 
   m_lstFrames.setAutoDelete( true );  
+
+  setGeometry( 5000, 5000, 100, 100 );
 }
 
 ImageView_impl::~ImageView_impl()
@@ -206,7 +208,6 @@ void ImageView_impl::createGUI()
   {
     // Menubar
     m_rMenuBar = m_vMenuBarFactory->createMenuBar( this );
-    printf("rMenuBar %i %i\n",m_rMenuBar->refCount(), m_rMenuBar->_refcnt() );
 
     // Edit
     m_idMenuEdit = m_rMenuBar->insertMenu( CORBA::string_dup( "&Edit" ) );

@@ -2,6 +2,10 @@
 
 #include <stdlib.h>
 
+#include <qimage.h>
+#include <qimageio.h>
+#include <qiodev.h>
+
 ostream& operator<< ( ostream& outs, const QRect &_rect )
 {
   outs << "<RECT x=" << _rect.left() << " y=" << _rect.top() << " w=" << _rect.width() << " h=" << _rect.height() << " />";
@@ -202,3 +206,41 @@ QFont tagToFont( vector<KOMLAttrib>& _attribs )
   return f;
 }
 
+class QIO2CPP : public QIODevice
+{
+public: 
+  QIO2CPP( ostream &_out) : m_out( _out )
+  {
+    setType( IO_Sequential );
+    setMode( IO_WriteOnly );
+    setState( IO_Open );
+    setStatus( IO_Ok );
+  }
+  ~QIO2CPP() { };
+
+  bool open( int mode ) { return true; }
+  void close() { }
+  void flush() { m_out.flush(); }
+  
+  uint size() const { return 0xffffffff; }
+  int readBlock( char *data, uint len ) { return 0; }
+  int writeBlock( const char *data, uint len ) { m_out.write( data, len ); return len; }
+  int readLine( char *data, uint maxlen ) { return 0; };
+  
+  int getch() { return 0; };
+  int putch( int _c ) { m_out.put( _c ); return _c; }
+  int ungetch( int ) { return 0; }
+
+protected:
+  ostream &m_out;
+};
+
+ostream& operator<< ( ostream& outs, const QImage &_img )
+{
+  QIO2CPP out( outs );
+  QImageIO io( &out, "BMP" );
+  io.setImage( _img );
+  io.write();
+
+  return outs;
+}       

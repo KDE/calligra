@@ -15,11 +15,11 @@
 
 // Generate forward declarations for this scope
 
-#include "/usr/local/kde/include/idl/kom.h"
+#include "/opt/kde/include/idl/kom.h"
 
-#include "/usr/local/kde/include/idl/controls.h"
+#include "/opt/kde/include/idl/controls.h"
 
-#include "/usr/local/kde/include/idl/parts.h"
+#include "/opt/kde/include/idl/parts.h"
 
 // Module KPresenter
 #ifndef MICO_NO_TOPLEVEL_MODULES
@@ -74,6 +74,7 @@ class KPresenterView :
     virtual void insertCircleOrEllipse() = 0;
     virtual void insertText() = 0;
     virtual void insertAutoform() = 0;
+    virtual void insertObject() = 0;
     virtual void insertLineHidl() = 0;
     virtual void insertLineVidl() = 0;
     virtual void insertLineD1idl() = 0;
@@ -148,6 +149,7 @@ class KPresenterView_stub : virtual public KPresenterView,
     void insertCircleOrEllipse();
     void insertText();
     void insertAutoform();
+    void insertObject();
     void insertLineHidl();
     void insertLineVidl();
     void insertLineD1idl();

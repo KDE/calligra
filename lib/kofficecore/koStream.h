@@ -18,6 +18,10 @@
 #include <qpen.h>
 #include <qfont.h>
 
+class QImage;
+
+#include <iostream.h>
+
 ostream& operator<< ( ostream& outs, const QRect &_rect );
 QRect tagToRect( vector<KOMLAttrib>& _attribs );
 
@@ -31,4 +35,9 @@ QPen tagToPen( vector<KOMLAttrib>& _attribs );
 ostream& operator<< ( ostream& outs, const QFont &_font );
 QFont tagToFont( vector<KOMLAttrib>& _attribs );
 
+ostream& operator<< ( ostream& outs, const QImage &_img );
+
 #endif
+
+
+

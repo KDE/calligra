@@ -41,19 +41,27 @@ public:
     KSpreadDoc();
     ~KSpreadDoc();
 
-    virtual bool save( const char *_url );
+    /**
+     * @param _boundary may be 0L, otherwise the document is saved as part of a Mime-Multipart-File.
+     *                  using '_boundary' to mark the end of this document.
+     */
+    virtual bool save( const char *_url, const char *_format, int _mode = ( ios::trunc | ios::out ),
+		       const char* _boundary = 0L );
     virtual bool save( ostream& );
-    virtual bool load( const char *_url );
+    virtual bool load( const char *_url, int _offset = -1, const char *_boundary = 0L );
     virtual bool load( KOMLParser& );
   
     virtual void cleanUp();
 
-    void removeView( KSpreadView* _view );
+    virtual void removeView( KSpreadView* _view );
   
     // IDL
+    virtual CORBA::Boolean init();
     virtual CORBA::Boolean open( const char *_filename );
+    virtual CORBA::Boolean openMimePart( OPParts::MimeMultipartDict_ptr _dict, const char *_id );
     virtual CORBA::Boolean saveAs( const char *_filename, const char *_format );
-
+    virtual CORBA::Boolean saveAsMimePart( const char *_filename, const char *_format, const char *_boundary );
+  
     virtual OPParts::View_ptr createView();
   
     virtual void viewList( OPParts::Document::ViewList*& _list );
@@ -200,6 +208,17 @@ signals:
     void sig_updateView();
   
 protected:
+    virtual void KSpreadDoc::makeChildListIntern( OPParts::Document_ptr _root, const char *_path );
+  
+    /*
+     * @return true if one of the direct children wants to
+     *              be saved embedded. If there are no children or if
+     *              every direct child saves itself into its own file
+     *              then false is returned.
+     * 
+     */
+    virtual bool hasToWriteMultipart();
+
     void initPython();
 
     /**

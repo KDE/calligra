@@ -8,14 +8,14 @@
 class KOMLStreamFeed : public KOMLFeed
 {
 public:
-  KOMLStreamFeed( istream* );
+  KOMLStreamFeed( istream& ); 
   virtual ~KOMLStreamFeed();
 
   virtual KOMLData* read();
   virtual void free( KOMLData* _data );
   
 protected:
-  istream *m_pStream;
+  istream &m_in;
 };
 
 #endif

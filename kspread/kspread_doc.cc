@@ -3,8 +3,10 @@
 #include <komlParser.h>
 #include <komlStreamFeed.h>
 #include <komlWriter.h>
+#include <komlMime.h>
 
 #include <fstream>
+#include <string>
 
 #include <unistd.h>
 #include <qmsgbox.h>
@@ -71,14 +73,19 @@ KSpreadDoc::KSpreadDoc()
     
     m_pMap = new KSpreadMap( this );
     
-    KSpreadTable *t = createTable();
-    m_pMap->addTable( t );
-
     m_pUndoBuffer = new KSpreadUndo( this );
     
     m_bModified = FALSE;
 
     m_lstViews.setAutoDelete( false );
+}
+
+CORBA::Boolean KSpreadDoc::init()
+{
+  KSpreadTable *t = createTable();
+  m_pMap->addTable( t );
+
+  return true;
 }
 
 void KSpreadDoc::cleanUp()
@@ -88,6 +95,7 @@ void KSpreadDoc::cleanUp()
 
   assert( m_lstViews.count() == 0 );
   
+  m_lstAllChildren.clear();
   // m_lstChildren.clear();
 
   Document_impl::cleanUp();
@@ -101,6 +109,8 @@ void KSpreadDoc::removeView( KSpreadView* _view )
 OPParts::View_ptr KSpreadDoc::createView()
 {
   KSpreadView *p = new KSpreadView( 0L, 0L, this );
+  p->setGeometry( 5000, 5000, 100, 100 );
+  p->QWidget::show();
   m_lstViews.append( p );
   
   return OPParts::View::_duplicate( p );
@@ -118,17 +128,51 @@ void KSpreadDoc::viewList( OPParts::Document::ViewList*& _list )
   }
 }
 
+void KSpreadDoc::makeChildListIntern( OPParts::Document_ptr _root, const char *_path )
+{
+  m_pMap->makeChildList( _root, _path );
+}
+
+bool KSpreadDoc::hasToWriteMultipart()
+{
+  return m_pMap->hasToWriteMultipart();
+}
+
 CORBA::Boolean KSpreadDoc::open( const char *_filename )
 {
   return load( _filename );
 }
 
-CORBA::Boolean KSpreadDoc::saveAs( const char *_filename, const char *_format )
+CORBA::Boolean KSpreadDoc::openMimePart( OPParts::MimeMultipartDict_ptr _dict, const char *_id )
 {
-  return save( _filename );
+  OPParts::MimeMultipartEntity_var e = _dict->find( _id );
+  if ( CORBA::is_nil( e ) )
+  {
+    cerr << "Unknown ID " << _id << endl;
+    return false;
+  }
+  
+  CORBA::String_var bound = _dict->boundary();
+  CORBA::Long start = e->start();
+  CORBA::String_var filename = _dict->filename();
+  
+  QString url( "file:" );
+  url += filename;
+  
+  return load( url, start, bound );
 }
 
-bool KSpreadDoc::save( const char *_url )
+CORBA::Boolean KSpreadDoc::saveAs( const char *_filename, const char *_format )
+{
+  return save( _filename, _format, ios::out | ios::trunc, 0L );
+}
+
+CORBA::Boolean KSpreadDoc::saveAsMimePart( const char *_filename, const char *_format, const char *_boundary )
+{
+  return save( _filename, _format, ios::out | ios::app, _boundary );
+}
+
+bool KSpreadDoc::save( const char *_url, const char *_format, int _mode, const char* _boundary )
 {
   KURL u( _url );
   if ( u.isMalformed() )
@@ -143,7 +187,7 @@ bool KSpreadDoc::save( const char *_url )
     return false;
   }
 
-  ofstream out( u.path() );
+  ofstream out( u.path(), _mode );
   if ( !out )
   {
     QString tmp;
@@ -153,10 +197,48 @@ bool KSpreadDoc::save( const char *_url )
     return false;
   }
 
+  Document_impl::makeChildListIntern();
+
+  string boundary = createBoundary();
+  
+  // Save as "MimePart" ?
+  if ( _boundary != 0L )
+  {
+    boundary = _boundary;
+    CORBA::String_var i = id();
+    writeBodyHeader( out, "application/x-kspread", 0L, i, 0L, "kspread (c) Torben Weis, <weis@kde.org> 1998" );
+  }
+  else if ( hasToWriteMultipart() )
+  {
+    writeMagic( out, "application/x-kspread" );
+    writeMimeHeader( out, boundary.c_str() );
+    
+    out << "Das sollte jetzt das dict sein!" << endl;
+    out << "--" << boundary << endl;
+    
+    writeBodyHeader( out, "application/x-kspread", 0L, "mime:/", 0L, "kspread (c) Torben Weis, <weis@kde.org> 1998" );
+  }
+
   out << "<?xml version=\"1.0\"?>" << endl;
   
   save( out );
-  
+
+  if ( _boundary != 0L )
+  {
+    out << "--" << _boundary << endl;
+    out.close();
+  }  
+  else if ( hasToWriteMultipart() )
+  {
+    out << "--" << boundary << endl;
+    out.close();
+
+    saveChildren( u.path(), boundary.c_str() );
+    m_lstAllChildren.clear();
+  }
+  else
+    out.close();
+
   m_strFileURL = _url;
     
   return true;
@@ -164,16 +246,16 @@ bool KSpreadDoc::save( const char *_url )
 
 bool KSpreadDoc::save( ostream& out )
 {
-  out << otag << "<DOC author=\"" << "Torben Weis" << "\" email=" << "weis@kde.org" << " editor=" << "KSpread"
-      << " mime=" << "\"application/x-kspread\"" << " >" << endl;
+  out << otag << "<DOC author=\"" << "Torben Weis" << "\" email=\"" << "weis@kde.org" << "\" editor=\"" << "KSpread"
+      << "\" mime=\"" << "application/x-kspread" << "\" >" << endl;
   
   if ( m_pEditor && !m_editorBuffer.isNull() && m_editorBuffer.length() > 0 )
     m_pEditor->saveBuffer( m_editorBuffer );
   m_pMap->getPythonCodeFromFile();
 
-  out << otag << "<PAPER format=" << paperFormatString() << " orientation=" << orientationString() << '>' << endl;
-  out << indent << "<PAPERBORDERS left=" << leftBorder() << " top=" << topBorder() << " right=" << rightBorder()
-      << " bottom=" << bottomBorder() << "/>" << endl;
+  out << otag << "<PAPER format=\"" << paperFormatString() << "\" orientation=\"" << orientationString() << "\">" << endl;
+  out << indent << "<PAPERBORDERS left=\"" << leftBorder() << "\" top=\"" << topBorder() << "\" right=\"" << rightBorder()
+      << " bottom=\"" << bottomBorder() << "\"/>" << endl;
   out << indent << "<HEAD left=\"" << headLeft() << "\" center=\"" << headMid() << "\" right=\"" << headRight() << "\"/>" << endl;
   out << indent << "<FOOT left=\"" << footLeft() << "\" center=\"" << footMid() << "\" right=\"" << footRight() << "\"/>" << endl;
   out << etag << "</PAPER>" << endl;
@@ -192,11 +274,16 @@ bool KSpreadDoc::save( ostream& out )
   return true;
 }
 
-bool KSpreadDoc::load( const char *_url )
+bool KSpreadDoc::load( const char *_url, int _mime_part_offset, const char *_boundary )
 {
+  cout << "bool KSpreadDoc::load( const char *" << _url << ", int " << _mime_part_offset << ", const char *" << _boundary << ")" << endl;
+  
   KURL u( _url );
   if ( u.isMalformed() )
-    return FALSE;
+  {
+    cerr << "Malformed URL " << _url << endl;
+    return false;
+  }
   
   if ( !u.isLocalFile() )
   {
@@ -211,13 +298,142 @@ bool KSpreadDoc::load( const char *_url )
     return false;
   }
 
-  KOMLStreamFeed feed( &in );
-  KOMLParser parser( &feed );
+  // Is it just part of a Mime Multipart file ?
+  if ( _mime_part_offset >= 0 )
+  {
+    in.seekg( _mime_part_offset );
+
+    // HACK
+    // Assume the root doc follows as next part
+    KOMLHeaderParser h( in );
+    if ( !h.parse() )
+    {
+      cerr << "Parse Error in KSpread Body Part" << endl;
+      return false;
+    }
+    cout << "Type=" << h.mimeType() << endl;
+    cout << "++++++++++++++++++++++++++++++++++++++++++++++++++++" << endl;
+    if ( strcasecmp( h.mimeType(), "application/x-kspread" ) != 0L )
+    {
+      cerr << "Unknown MimeType " << h.mimeType() << endl;
+      cerr << "Not supported by kspread" << endl;
+      return false;
+    }
+      
+    KOMLBodyIStream bs( in, _boundary );
+    
+    KOMLStreamFeed feed( bs );
+    KOMLParser parser( &feed );
+    
+    if ( !load( parser ) )
+      return false;
+  }
+  else
+  {  
+    // Try to find out wether it is a mime multi part file
+    string magic;
+    getline( in, magic );
   
+    // Standalone XML ?
+    if ( strncasecmp( magic.c_str(), "<?xml", 5 ) == 0 )
+    {
+      KOMLStreamFeed feed( in );
+      KOMLParser parser( &feed );
+      
+      if ( !load( parser ) )
+	return false;
+
+      cout << "!!!!!!!!!!!!!!!!!!!! CHILDREN !!!!!!!!!!!!!!!!!!!!" << endl;
+      
+      OPParts::MimeMultipartDict_var dict = new KOMLDict;
+  
+      if ( !m_pMap->loadChildren( dict ) )
+      {	  
+	cerr << "ERROR: Could not load children" << endl;
+	return false;
+      }
+    }
+    // Mime Multipart ?
+    else if ( strncasecmp( magic.c_str(), "MIME-Version: 1.0", 17 ) == 0 ||
+	      strncasecmp( magic.c_str(), "Magic-Line: application/x-kspread", 33 ) == 0 )
+    {
+      // Read Mime-Header
+      KOMLHeaderParser hp( in );
+      if ( !hp.parse() )
+      {
+	cerr << "Parse Error in MimeType Header" << endl;
+	return false;
+      }
+      cout << "Type=" << hp.mimeType() << endl;
+      cout << "Boundary=" << hp.boundary() << endl;
+      cout << "++++++++++++++++++++++++++++++++++++++++++++++++++++" << endl;
+      
+      // HACK
+      // Skip the dict right now
+      KOMLBodyIStream d( in, hp.boundary() );
+      pump p( d, cout );
+      p.run();
+      
+      cout << "!!!!!!!!!!!!!!!!!!!!! DICT !!!!!!!!!!!!!!!!!!!!!!!!!!" << endl;
+      
+      // Read in the dict of all bodies
+      int pos = in.tellg();
+      OPParts::MimeMultipartDict_var dict = new KOMLDict( in, u.path(), hp.boundary() );
+      in.seekg( pos );
+      
+      cout << "!!!!!!!!!!!!!!!!!!!!! PARSE !!!!!!!!!!!!!!!!!!!!!!!!!!" << endl;
+
+      // HACK
+      // Assume the root doc follows as next part
+      KOMLHeaderParser h( in );
+      if ( !h.parse() )
+      {
+	cerr << "Parse Error in KSpread Body Part" << endl;
+	return false;
+      }
+      cout << "Type=" << h.mimeType() << endl;
+      cout << "++++++++++++++++++++++++++++++++++++++++++++++++++++" << endl;
+      if ( strcasecmp( h.mimeType(), "application/x-kspread" ) != 0L )
+      {
+	cerr << "Unknown MimeType " << h.mimeType() << endl;
+	cerr << "Not supported by kspread" << endl;
+	return false;
+      }
+      
+      KOMLBodyIStream bs( in, hp.boundary() );
+      
+      KOMLStreamFeed feed( bs );
+      KOMLParser parser( &feed );
+      
+      if ( !load( parser ) )
+	return false;
+
+      cout << "!!!!!!!!!!!!!!!!!!!! CHILDREN !!!!!!!!!!!!!!!!!!!!" << endl;
+      
+      if ( !m_pMap->loadChildren( dict ) )
+      {
+	cerr << "ERROR: Could not load children" << endl;
+	return false;
+      }
+    }
+    else
+    {
+      cerr << "Unknown document format in " << _url << endl;
+      return false;
+    }
+  }
+  
+  m_strFileURL = _url;
+  
+  return true;
+}
+
+bool KSpreadDoc::load( KOMLParser& parser )
+{
   string tag;
   vector<KOMLAttrib> lst;
   string name;
-
+ 
   // DOC
   if ( !parser.open( "DOC", tag ) )
   {
@@ -238,23 +454,7 @@ bool KSpreadDoc::load( const char *_url )
       }
     }
   }
-
-  if ( !load( parser ) )
-    return false;
     
-  parser.close( tag );
-
-  m_strFileURL = _url;
-  
-  return true;
-}
-
-bool KSpreadDoc::load( KOMLParser& parser )
-{
-  string tag;
-  vector<KOMLAttrib> lst;
-  string name;
-  
   // PAPER, MAP
   while( parser.open( 0L, tag ) )
   {
@@ -366,52 +566,9 @@ bool KSpreadDoc::load( KOMLParser& parser )
     }
   }
 
+  parser.close( tag ); 
+
   return true;
-
-  /*
-    KSpreadMap *map2 = new XclMap( this );
-
-    printf("Loading map ....\n");
-
-    // For use as values in the ObjectType property
-    TYPE t_map = _korb->findType( "KDE:kxcl:Map" );
-    if ( !t_map || !KPart::load( _korb, _map, t_map ) )
-	return FALSE;
-    
-    bool ret = map2->load( _korb, _map );
-
-    if ( ret )
-    {
-	tableId = 1;
-	
-	printf("Adding to gui\n");
-
-	if ( pGui )
-	    pGui->removeAllKSpreadTables();
-	delete pMap;
-
-	pMap = map2;
-
-	if ( pGui )
-	{
-	    KSpreadTable *t;
-	    for ( t = pMap->firstKSpreadTable(); t != 0L; t = pMap->nextTable() )
-		pGui->addKSpreadTable( t );
-	}
-	
-	pMap->initAfterLoading();
-	tableId = pMap->count() + 1;
-	
-	if ( pGui )
-	    pGui->setActiveKSpreadTable( pMap->firstTable() );
-    }
-    else
-	delete map2;
-
-    printf("... Done map\n");
-
-    return TRUE;
-*/
 }
 
 

@@ -1,8 +1,7 @@
 #include "komlStreamFeed.h"
 
-KOMLStreamFeed::KOMLStreamFeed( istream *_stream )
+KOMLStreamFeed::KOMLStreamFeed( istream &_stream ) : m_in( _stream )
 {
-  m_pStream = _stream;
 }
 
 KOMLStreamFeed::~KOMLStreamFeed()
@@ -11,22 +10,19 @@ KOMLStreamFeed::~KOMLStreamFeed()
 
 KOMLData* KOMLStreamFeed::read()
 {
-  if ( !m_pStream || !(*m_pStream) )
+  if ( !m_in )
     return 0L;
   
+  // HACK make buffer larger
   char* buffer = new char[ 11 ];
-  streampos p1 = m_pStream->tellg();
-  m_pStream->read( buffer, 10 );
-  streampos p2 = m_pStream->tellg();
-  if ( ( p2 - p1 ) == 0 )
-  {
-    m_pStream = 0L;
+  m_in.read( buffer, 10 );
+  int anz = m_in.gcount();
+  if ( anz == 0 )
     return 0L;
-  }
   
-  buffer[ p2 - p1 ] = 0;
+  buffer[ anz ] = 0;
   
-  return new KOMLData( buffer, p2 - p1 );
+  return new KOMLData( buffer, anz );
 }
 
 void KOMLStreamFeed::free( KOMLData* _data )

@@ -508,7 +508,6 @@ void KSpreadView::deleteColumn()
 
 void KSpreadView::deleteRow()
 {
-  int mx,my;
   if ( !m_pTable )
     return;
   m_pTable->deleteRow( m_iMarkerRow ); 
@@ -737,6 +736,8 @@ CORBA::Boolean KSpreadView::printDlg()
   // Print the table and tell that m_pDoc is NOT embedded.
   m_pTable->print( painter, FALSE, &prt );
   painter.end();
+
+  return true;
 }
 
 void KSpreadView::insertChart( const QRect& _geometry )
@@ -802,15 +803,15 @@ void KSpreadView::slotInsertChild( KSpreadChild *_child )
 
   cout << "SYNC3\n" << endl;
   KSpreadChildFrame *p = new KSpreadChildFrame( this, _child );
-  cout << "SYNC4\n" << endl;
-  p->attach( v );
-  cout << "SYNC5\n" << endl;
-  p->setGeometry( _child->geometry() );
-  cout << "SYNC6\n" << endl;
+  cout << "SYNC3b\n" << endl;
   p->show();
-  cout << "SYNC7\n" << endl;
+  cout << "SYNC4\n" << endl;
+  p->setGeometry( _child->geometry() );
+  cout << "SYNC5\n" << endl;
+  p->attach( v );
+  cout << "SYNC6\n" << endl;
+
   m_lstFrames.append( p );
-  // CORBA::release( p );
   
   QObject::connect( p, SIGNAL( sig_geometryEnd( PartFrame_impl* ) ),
 		    this, SLOT( slotChildGeometryEnd( PartFrame_impl* ) ) );
@@ -877,6 +878,10 @@ void KSpreadView::keyPressEvent ( QKeyEvent* _ev )
 
 void KSpreadView::resizeEvent( QResizeEvent * )
 {
+  // HACK
+  if ( x() == 5000 && y() == 5000 )
+    return;
+  
   if ( m_bShowGUI )
   { 
     m_pToolWidget->show();
@@ -1835,9 +1840,6 @@ void KSpreadCanvas::mouseMoveEvent( QMouseEvent * _ev )
     // markerIsVisible = FALSE;
   }
     
-  // Make a backup
-  QRect r = selection;
-  
   // Set the new lower right corner of the selection
   selection.setRight( col );
   selection.setBottom( row );
@@ -2076,9 +2078,6 @@ void KSpreadCanvas::mousePressEvent( QMouseEvent * _ev )
     // Auto fill ?
     if ( _ev->button() == LeftButton )
     {
-      // Make backup
-      QRect r( selection );
-      
       m_eMouseAction = AutoFill;
       // Do we have a selection already ?
       if ( selection.left() != 0 && selection.right() != 0x7fff && selection.bottom() != 0x7fff )
@@ -2176,6 +2175,10 @@ void KSpreadCanvas::mousePressEvent( QMouseEvent * _ev )
 
 void KSpreadCanvas::paintEvent( QPaintEvent* _ev )
 {
+  // HACK
+  if ( x() == 5000 && y() == 5000 )
+    return;
+
   KSpreadTable *table = m_pView->activeTable();
   if ( !table )
     return;
@@ -2725,7 +2728,6 @@ void KSpreadVBorder::mouseMoveEvent( QMouseEvent * _ev )
     int y = 0;
     int row = table->topRow( _ev->pos().y(), y, m_pView );
     QRect selection = table->selection();
-    QRect r( selection );
     
     if ( row < m_iSelectionAnchor )
     {

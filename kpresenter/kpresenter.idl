@@ -7,13 +7,13 @@ module KPresenter
 {
   interface KPresenterView : OPParts::View
     {
-      oneway void editCut();
-      oneway void editCopy();
-      oneway void editPaste();
-      oneway void editDelete();
-      oneway void editSelectAll();
+      slot void editCut();
+      slot void editCopy();
+      slot void editPaste();
+      slot void editDelete();
+      slot void editSelectAll();
       
-      oneway void newView();
+      slot void newView();
       
       oneway void insertPage();
       oneway void insertPicture();

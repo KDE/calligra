@@ -17,6 +17,7 @@ class QPainter;
 
 #include <iostream.h>
 #include <komlParser.h>
+#include <komlMime.h>
 
 #include <document_impl.h>
 
@@ -75,20 +76,70 @@ class KSpreadChild
 {
 public:
   KSpreadChild( KSpreadDoc *_spread, KSpreadTable *_table, const QRect& _rect, OPParts::Document_ptr _doc );
+  KSpreadChild( KSpreadDoc *_spread, KSpreadTable *_table );
   ~KSpreadChild();
   
   const QRect& geometry() { return m_geometry; }
   OPParts::Document_ptr document() { return OPParts::Document::_duplicate( m_rDoc ); }
   KSpreadDoc* parent() { return m_pDoc; }
   KSpreadTable* table() { return m_pTable; }
+  const char* source() { return m_strSource.c_str(); }
   
   void setGeometry( const QRect& _rect ) { m_geometry = _rect; }
-  
+
+  /**
+   * Writes the OBJECT tag, but does NOT write the content of the
+   * embedded document. Saveing the embedded documents themselves
+   * is done in @ref Document_impl. This function just stores information
+   * about the position and id of the embedded document.
+   */
+  bool save( ostream& out );
+  /**
+   * Parses the OBJECT tag. This does NOT mean creating the child documents.
+   * AFTER the 'parser' finished parsing, you must use @ref #loadDocument
+   * or @ref #loadDocumentMimePart to actually load the embedded documents.
+   */
+  bool load( KOMLParser& parser, vector<KOMLAttrib>& _attribs );
+  bool loadDocument( OPParts::MimeMultipartDict_ptr _dict );
+
 protected:
+  /**
+   * Creates a new document and loads it with the data in @ref #m_strSource.
+   *
+   * Use this function to load a document that has been saved in its
+   * own file.
+   *
+   * Use only if you constructed the object with the "2 parameter constructor".
+   * It tries then to load the document from @ref #m_strSource.
+   */
+  bool loadDocument();
+  /**
+   * Creates a new document and loads it from the data stored in an
+   * mime multipart file.
+   * 
+   * Use this function to load a document that has been saved embedded,
+   * this means in a mime multipart file.
+   *
+   * Use only if you constructed the object with the "2 parameter constructor".
+   * It tries then to load the document from @ref #m_strSource.
+   */
+  bool loadDocumentAsMimePart( OPParts::MimeMultipartDict_ptr _dict, OPParts::MimeMultipartEntity_ptr _entity );
+
   KSpreadDoc *m_pDoc;
   KSpreadTable *m_pTable;
   Document_ref m_rDoc;
+  /**
+   * The geometry is assumed to be always unzoomed.
+   */
   QRect m_geometry;
+  /**
+   * Holds the source of this object, for example "file:/home/weis/image.gif" or
+   * "mime:/table1/2" if it stored in a compound document. If this string
+   * is empty then the document was created from scratch and not saved yet.
+   * Those documents are usually stored in a compound document later.
+   */
+  string m_strSource;
+  string m_strMimeType;
 };
 
 /**
@@ -99,12 +150,24 @@ class KSpreadTable : public QObject
   
     Q_OBJECT
 public:    
+    // C++
     KSpreadTable( KSpreadDoc *_doc, const char *_name );
     ~KSpreadTable();
 
     virtual bool save( ostream& );
     virtual bool load( KOMLParser&, vector<KOMLAttrib>& );
-  
+    virtual bool loadChildren( OPParts::MimeMultipartDict_ptr _dict );
+ 
+    virtual void makeChildList( OPParts::Document_ptr _doc, const char *_path );
+    /*
+     * @return true if one of the direct children wants to
+     *              be saved embedded. If there are no children or if
+     *              every direct child saves itself into its own file
+     *              then false is returned.
+     * 
+     */
+    virtual bool hasToWriteMultipart();
+
     /**
      * This event handler is called if the table becomes the active table,
      * that means that the table becomes visible and may fill the GUIs 
@@ -350,6 +413,8 @@ signals:
     void sig_removeChild( KSpreadChild *_child );
 
 protected:
+    void insertChild( KSpreadChild *_child );
+  
     /**
      * Prints the page specified by 'page_range'.
      *

@@ -150,7 +150,7 @@ int RowLayout::height( KSpreadView *_view )
 
 bool RowLayout::save( ostream &out )
 {
-  out << indent << "<ROW height=" << m_fHeight << " row=" << m_iRow << "/>" << endl;
+  out << indent << "<ROW height=\"" << m_fHeight << "\" row=\"" << m_iRow << "\"/>" << endl;
 
   return true;
 }
@@ -273,7 +273,7 @@ int ColumnLayout::width( KSpreadView *_view )
 
 bool ColumnLayout::save( ostream &out )
 {
-  out << indent << "<COLUMN width=" << m_fWidth << " column=" << m_iColumn << "/>" << endl;
+  out << indent << "<COLUMN width=\"" << m_fWidth << "\" column=\"" << m_iColumn << "\"/>" << endl;
 
   return true;
 }
