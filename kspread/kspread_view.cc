@@ -6524,7 +6524,7 @@ void KSpreadView::handleDamages( const QValueList<Damage*>& damages )
 void KSpreadView::runInternalTests()
 {
     // run various tests, only for developers
-    KSpread::TestRunner* runner = new KSpread::TestRunner(di, d->activeSheet);
+    KSpread::TestRunner* runner = new KSpread::TestRunner();
     runner->exec();
     delete runner;
 }

@@ -22,13 +22,8 @@
 
 #include <kdialogbase.h>
 
-class KLocale;
-class KSpreadSheet;
-
 namespace KSpread
 {
-
-struct DocInfo;
 
 class Tester;
 
@@ -37,7 +32,7 @@ class TestRunner : public KDialogBase
 Q_OBJECT
 
 public:
-  TestRunner(DocInfo *di, KSpreadSheet *sheet);
+  TestRunner();
   ~TestRunner();
   
   void addTester( Tester* tester );

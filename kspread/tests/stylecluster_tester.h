@@ -26,15 +26,13 @@
 
 #include <kspread_value.h>
 
-class KSpreadSheet;
-
 namespace KSpread
 {
 
 class StyleClusterTester: public Tester
 {
 public:
-  StyleClusterTester(KSpreadSheet *sheet);
+  StyleClusterTester();
   virtual QString name();
   virtual void run();
 private:
@@ -42,7 +40,6 @@ private:
   void check_ptr( const char *file, int line, const char* msg, const T& result, const T& expected );
   void check_value( const char *file, int line, const char* msg, void * result, void * expected );
   void check_fails_value( const char *file, int line, const char* msg, void * result, void * expected );
-  KSpreadSheet *m_sheet;
 };
 
 
