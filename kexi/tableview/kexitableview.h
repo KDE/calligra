@@ -96,6 +96,7 @@ public:
 	int		rowAt(int pos) const;
 
 	void		updateCell(int row, int col);
+//	void		updateRow(int row);
 	int		sorting();
 	void		clear();
 	void		clearAll();
@@ -103,7 +104,8 @@ public:
 	void		remove(KexiTableItem *item, bool moveCursor=true);
 
 	// properties
-	void		setBackgroundAltering(bool altering) { m_bgAltering = altering; };
+	void		setBackgroundAltering(bool altering) { m_bgAltering = altering; }
+	void		setRecordIndicator(bool indicator) { m_recordIndicator = indicator; }
 
 	// printing
 //	void		setupPrinter(KPrinter &printer);
@@ -219,6 +221,8 @@ protected:
 	KexiTableHeader		*m_pVerticalHeader;
 	KexiTableRM		*m_pRecordMarker;
 	KexiTableEdit	*m_pEditor;
+
+	bool			m_recordIndicator;
 
 	int			m_numRows;
 	int			m_numCols;

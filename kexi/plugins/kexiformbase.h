@@ -60,6 +60,9 @@ class KexiFormBase : public KexiDialogBase
 		friend class ViewGUIClient;
 		static ViewGUIClient *m_viewGUIClient;
 		KexiDBWidgetContainer *topLevelEditor;
+		QString m_source;
+		KexiProject *m_project;
+
 	protected slots:
 		void slotWidgetLabel();
 		void slotWidgetLineEdit();

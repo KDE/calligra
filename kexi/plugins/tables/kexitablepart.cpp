@@ -93,7 +93,7 @@ KexiTablePart::getTables()
 	for ( QStringList::Iterator it = m_tableNames.begin(); it != m_tableNames.end(); ++it )
 	{
 		kdDebug() << "KexiTablePart::getTables() added " << (*it) << endl;
-		list->insert(*it,new KexiProjectHandlerItem(this, (*it), "kexi/table", (*it)));
+		list->insert("kexi/table/" + (*it), new KexiProjectHandlerItem(this, (*it), "kexi/table", "kexi/table/" + (*it)));
 	}
 
 
@@ -109,10 +109,11 @@ KexiTablePart::embeddReadOnly(QWidget *w, KexiView *v)
 KexiDBRecord *KexiTablePart::records(const QString& identifier,Parameters params)
 {
 	kdDebug()<<"KexiDBRecord *KexiTablePart::records(const QString& identifier,Parameters params)"<<endl;
+
 	KexiDBRecord *m_record=0;
         try
         {
-                m_record = kexiProject()->db()->queryRecord("select * from "+identifier, false);
+                m_record = kexiProject()->db()->queryRecord("select * from " + items()->find(identifier)->name(), false);
         }
         catch(KexiDBError &err)
         {

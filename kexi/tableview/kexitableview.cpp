@@ -132,6 +132,7 @@ KexiTableView::KexiTableView(QWidget *parent, const char *name, KexiTableList *c
 	connect(m_pTopHeader, SIGNAL(clicked(int)), this, SLOT(columnSort(int)));
 
 	connect(m_pUpdateTimer, SIGNAL(timeout()), this, SLOT(slotUpdate()));
+	m_recordIndicator = false;
 }
 
 void KexiTableView::addDropFilter(const QString &filter)
@@ -538,10 +539,17 @@ void KexiTableView::paintCell(QPainter* p, KexiTableItem *item, int col, const Q
 	p->setPen(pen);
 
 	//	If we are in the focus cell, draw indication
-	if (m_pCurrentItem == item && col == m_curCol)
+	if(m_pCurrentItem == item && col == m_curCol && !m_recordIndicator)
 	{
 		if (hasFocus() || viewport()->hasFocus())
 			p->drawRect(0, 0, x2, y2);
+	}
+
+	if(m_pCurrentItem == item && m_recordIndicator)
+	{
+		p->setBrush(colorGroup().highlight());
+		p->setPen(colorGroup().highlight());
+		p->drawRect(0, 0, x2, y2);
 	}
 
 	int x = 2;
@@ -698,7 +706,7 @@ void KexiTableView::contentsMousePressEvent( QMouseEvent* e )
 	{
 		int cw = columnWidth( m_curCol );
 		int rh = rowHeight( m_curRow );
-		updateCell( m_curRow, m_curCol );
+  updateCell( m_curRow, m_curCol );
 		ensureVisible( columnPos( m_curCol ) + cw / 2, rowPos( m_curRow ) + rh / 2, cw / 2, rh / 2 );
 		updateCell( oldRow, oldCol );
 		m_pVerticalHeader->setCurrentRow(m_curRow);
@@ -1067,8 +1075,19 @@ void KexiTableView::contentsDropEvent(QDropEvent *ev)
 
 void KexiTableView::updateCell(int row, int col)
 {
-	QRect r(cellGeometry(row, col));
-	updateContents(r);
+
+	if(!m_recordIndicator)
+	{
+		updateContents(cellGeometry(row, col));
+	}
+	else
+	{
+		for(int i = 0; i < m_numCols; i++)
+		{
+			updateContents(cellGeometry(row, i));
+		}
+	}
+
 }
 
 void KexiTableView::columnSort(int col)

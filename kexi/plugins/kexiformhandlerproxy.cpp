@@ -76,6 +76,7 @@ KexiFormHandlerProxy::slotCreate()
 	KexiDataSourceDlg *d = new KexiDataSourceDlg(m_view->project(), kexiView());
 	if(d->exec() == QDialog::Accepted)
 	{
+		kdDebug() << "KexiFormHandlerProxy::slotCreate(): source: " << d->source() << endl;
 		QString name = d->name();
 		KexiFormHandlerItem *i = new KexiFormHandlerItem(part(), name, name);
 		part()->items()->insert(name, i);

@@ -198,6 +198,7 @@ KexiAlterTable::initView()
 	lineFrm->setFrameStyle(QFrame::HLine | QFrame::Sunken);
 
 	m_fieldTable = new KexiTableView(this);
+	m_fieldTable->setRecordIndicator(true);
 	m_fieldTable->addColumn(i18n("Field Name"), QVariant::String, true);
 	QStringList strings;
 

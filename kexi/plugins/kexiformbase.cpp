@@ -35,6 +35,8 @@
 #include <qtimer.h>
 #include <kurlrequester.h>
 #include <qdockwindow.h>
+#include <qmap.h>
+#include <qstatusbar.h>
 
 #include <qobjectlist.h>
 
@@ -43,6 +45,10 @@
 #include "kexiformhandleritem.h"
 #include "kexiformbase.h"
 #include "kexiview.h"
+#include "kexiproject.h"
+#include "kexitablepart.h"
+#include "kexidataprovider.h"
+#include "kexirecordnavigator.h"
 #include "formeditor/widgetcontainer.h"
 #include "formeditor/container_frame.h"
 #include "formeditor/container_tabwidget.h"
@@ -149,6 +155,9 @@ KexiFormBase::KexiFormBase(KexiView *view, KexiFormHandlerItem *item, QWidget *p
 
 //	initActions();
 
+	m_source = s;
+	m_project = view->project();
+
 	setCaption(i18n("%1 [Edit Mode]").arg(identifier));
 
 	KIconLoader *iloader = KGlobal::iconLoader();
@@ -173,6 +182,10 @@ KexiFormBase::KexiFormBase(KexiView *view, KexiFormHandlerItem *item, QWidget *p
 	peditor->show();
 	connect(topLevelEditor, SIGNAL(activated(QObject *)), peditor, SLOT(setObject(QObject *)));
 
+	QStatusBar *status = new QStatusBar(this);
+	KexiRecordNavigator *nv = new KexiRecordNavigator(0, this);
+	status->addWidget(nv, 2, true);
+//	status->setFixedWidth(20);
 
 //	mainWindow()->guiFactory()->addClient(guiClient());
 //	activateActions();
@@ -233,6 +246,12 @@ void KexiFormBase::slotToggleFormMode(bool state)
 {
 	kdDebug() << "KexiFormBase::slotToggleFormMode()" << endl;
 	topLevelEditor->setEditMode(state);
+	if(!state)
+	{
+		kdDebug() << "KexiFormBase::slotToggleFormMode() source: " << m_source << endl;
+		KexiTablePart *p = static_cast<KexiTablePart*>(m_project->handlerForMime("kexi/table"));
+		KexiDBRecord *rec = p->records(m_source, QMap<QString,QString>());
+	}
 }
 
 KexiFormBase::~KexiFormBase(){
