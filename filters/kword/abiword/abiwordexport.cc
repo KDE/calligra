@@ -72,7 +72,9 @@ ABIWORDExport::ABIWORDExport(KoFilter *parent, const char *name) :
 class CounterData
 {
 public:
-    CounterData() {}
+    CounterData()
+        : numbering (NUM_NONE), style (STYLE_NONE), depth(0), start(0), customCharacter(0)
+        {}
 
     enum Numbering
     {
