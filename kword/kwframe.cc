@@ -24,7 +24,6 @@
 #include "kwcommand.h"
 #include "kwframe.h"
 #include "defs.h"
-#include <koUtils.h>
 #include "kwtextframeset.h"
 #include "kwtableframeset.h"
 #include "kwanchor.h"
