@@ -10,7 +10,8 @@ kde-config --prefix
 
 # Check for the binary
 found=0
-for dir in `kde-config --path exe`; do
+exedirs=`kde-config --path exe`
+for dir in $exedirs; do
   if [ -f "$dir/kword" ]; then
     echo "kword found in $dir"
     found=1
@@ -18,7 +19,7 @@ for dir in `kde-config --path exe`; do
 done
 
 if [ $found -eq 0 ]; then
-    echo "ERROR: kword not found"
+    echo "ERROR: kword not found - looked at $exedirs"
 fi
 
 mimelnks=`kde-config --path mime`
