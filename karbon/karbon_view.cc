@@ -585,6 +585,7 @@ KarbonView::rotateTool()
 	m_currentTool = m_rotateTool;
 	m_currentTool->activate();
 	m_rotateToolAction->setChecked( true );
+	m_canvas->repaintAll();
 }
 
 void
@@ -609,6 +610,7 @@ KarbonView::shearTool()
 	m_currentTool = m_shearTool;
 	m_currentTool->activate();
 	m_shearToolAction->setChecked( true );
+	m_canvas->repaintAll();
 }
 
 void
