@@ -322,6 +322,8 @@ public:
      */
     QString text() const { return m_strText; }
 
+    QString strOutText() const {return m_strOutText;}
+
     void setAction( const QString& _action ) { m_strAction = _action; }
 
     ////////////////////////////////
