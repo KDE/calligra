@@ -1,0 +1,41 @@
+<!DOCTYPE autocorrection>
+<Word>
+ <items>
+  <item find="(C)" replace="©" />
+  <item find="(R)" replace="®" />
+  <item find="(c)" replace="©" />
+  <item find="(r)" replace="®" />	
+ </items>
+ <UpperCaseExceptions>
+  <word exception="viz." />
+  <word exception="aď" />
+  <word exception="tj." />
+ </UpperCaseExceptions>
+ <TwoUpperLetterExceptions>
+  <word exception="KOffice" />
+  <word exception="KWord" />
+  <word exception="KSpread" />
+  <word exception="KPresenter" />
+  <word exception="KMail" />
+  <word exception="KTuberling" />
+  <word exception="KNode" />
+  <word exception="KStars" />
+  <word exception="KDevelop" />
+  <word exception="KBabel" />
+  <word exception="KPat" />
+  <word exception="MHz" />
+  <word exception="MWh" />
+  <word exception="GHz" />
+  <word exception="MW" />
+  <word exception="GW" />
+  <word exception="GWh" />
+  <word exception="MJ" />
+  <word exception="MT" />
+ </TwoUpperLetterExceptions>
+ <DoubleQuote>
+  <doublequote begin="&#8222;" end="&#8220;" />
+ </DoubleQuote>
+ <SimpleQuote>
+  <simplequote begin="&#8218;" end="&#8216;" />
+ </SimpleQuote>
+</Word>
