@@ -754,11 +754,13 @@ bool KoDocument::saveToStore( KoStore* _store, const QString & _path )
 
 void KoDocument::savePreview( KoStore* store )
 {
-    QPixmap pix = generatePreview(QSize(128, 128));
-
+    QPixmap pix = generatePreview(QSize(256, 256));
+    // Reducing to 8bpp reduces file sizes quite a lot.
+    QImage image = pix.convertToImage().convertDepth(8, Qt::AvoidDither | Qt::DiffuseDither);
+    
     QByteArray imageData;
     QDataStream imageStream(imageData, IO_WriteOnly);
-    imageStream << pix;
+    imageStream << image;
     store->write( imageData );
 }
 
