@@ -47,7 +47,12 @@ bool KoBorder::operator!=( const KoBorder _brd ) const {
 void KoBorder::setPenWidth(double _w)
 {
     ptPenWidth = _w;
-    ptWidth = _w;
+    if ( style==KoBorder::DOUBLE_LINE)
+    {
+        ptWidth = 2 * ptPenWidth + 1;
+    }
+    else
+        ptWidth = _w;
 }
 
 QPen KoBorder::borderPen( const KoBorder & _brd, int width, QColor defaultColor )
@@ -113,7 +118,8 @@ KoBorder::BorderStyle KoBorder::getStyle( const QString &style )
         return KoBorder::DASH_DOT;
     if ( style == "___ _ _ ___" )
         return KoBorder::DASH_DOT_DOT;
-
+    if ( style == "===========" )
+        return KoBorder::DOUBLE_LINE;
     // default
     return KoBorder::SOLID;
 }
@@ -132,6 +138,8 @@ QString KoBorder::getStyle( const BorderStyle &style )
         return "___ _ ___ _";
     case KoBorder::DASH_DOT_DOT:
         return "___ _ _ ___";
+    case KoBorder::DOUBLE_LINE:
+        return "===========";
     }
 
     // Keep compiler happy.
@@ -176,7 +184,15 @@ void KoBorder::drawBorders( QPainter& painter, KoZoomHandler * zoomHandler, QRec
         else
             painter.setPen( defaultPen );
         int y = rect.top() - topBorderWidth + topBorderWidth/2;
-        painter.drawLine( rect.left()-leftBorderWidth, y, rect.right()+rightBorderWidth, y );
+        if ( topBorder.style==KoBorder::DOUBLE_LINE)
+        {
+            y = rect.top() - topBorderWidth + topBorderPenWidth/2;
+            painter.drawLine( rect.left()-leftBorderPenWidth, y, rect.right()+rightBorderPenWidth, y );
+            y += topBorderPenWidth + 1;
+            painter.drawLine( rect.left()-leftBorderPenWidth, y, rect.right()+rightBorderPenWidth, y );
+        }
+        else
+            painter.drawLine( rect.left()-leftBorderWidth, y, rect.right()+rightBorderWidth, y );
     }
     if ( bottomBorderWidth > 0 )
     {
@@ -187,7 +203,16 @@ void KoBorder::drawBorders( QPainter& painter, KoZoomHandler * zoomHandler, QRec
 	//kdDebug() << "bottomBorderWidth=" << bottomBorderWidth << " bottomBorderWidth/2=" << (int)bottomBorderWidth/2 << endl;
         int y = rect.bottom() + bottomBorderWidth - (bottomBorderWidth-1)/2;
 	//kdDebug() << "   -> bottom=" << rect.bottom() << " y=" << y << endl;
-        painter.drawLine( rect.left()-leftBorderWidth, y, rect.right()+rightBorderWidth, y );
+        if ( bottomBorder.style==KoBorder::DOUBLE_LINE)
+        {
+            y = rect.bottom() + bottomBorderWidth - (bottomBorderPenWidth-1)/2;
+            painter.drawLine( rect.left()-leftBorderPenWidth, y, rect.right()+rightBorderPenWidth, y );
+            y-= bottomBorderPenWidth + 1;
+            painter.drawLine( rect.left()-leftBorderPenWidth, y, rect.right()+rightBorderPenWidth, y );
+
+        }
+        else
+            painter.drawLine( rect.left()-leftBorderWidth, y, rect.right()+rightBorderWidth, y );
     }
     if ( leftBorderWidth > 0 )
     {
@@ -196,7 +221,15 @@ void KoBorder::drawBorders( QPainter& painter, KoZoomHandler * zoomHandler, QRec
         else
             painter.setPen( defaultPen );
         int x = rect.left() - leftBorderWidth + leftBorderWidth/2;
-        painter.drawLine( x, rect.top()-topBorderWidth, x, rect.bottom()+bottomBorderWidth );
+        if ( leftBorder.style==KoBorder::DOUBLE_LINE)
+        {
+            x = rect.left() - leftBorderWidth + leftBorderPenWidth/2;
+            painter.drawLine( x, rect.top()-topBorderPenWidth, x, rect.bottom()+bottomBorderPenWidth );
+            x+= leftBorderPenWidth + 1;
+            painter.drawLine( x, rect.top()-topBorderPenWidth, x, rect.bottom()+bottomBorderPenWidth );
+        }
+        else
+            painter.drawLine( x, rect.top()-topBorderWidth, x, rect.bottom()+bottomBorderWidth );
     }
     if ( rightBorderWidth > 0 )
     {
@@ -205,6 +238,15 @@ void KoBorder::drawBorders( QPainter& painter, KoZoomHandler * zoomHandler, QRec
         else
             painter.setPen( defaultPen );
         int x = rect.right() + rightBorderWidth - (rightBorderWidth-1)/2;
-        painter.drawLine( x, rect.top()-topBorderWidth, x, rect.bottom()+bottomBorderWidth );
+        if ( rightBorder.style==KoBorder::DOUBLE_LINE)
+        {
+            x = rect.right() + rightBorderWidth - (rightBorderPenWidth-1)/2;
+            painter.drawLine( x, rect.top()-topBorderPenWidth, x, rect.bottom()+bottomBorderPenWidth );
+            x-= leftBorderPenWidth + 1;
+            painter.drawLine( x, rect.top()-topBorderPenWidth, x, rect.bottom()+bottomBorderPenWidth );
+
+        }
+        else
+            painter.drawLine( x, rect.top()-topBorderWidth, x, rect.bottom()+bottomBorderWidth );
     }
 }

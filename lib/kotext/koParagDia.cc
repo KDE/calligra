@@ -313,6 +313,9 @@ QPen KoBorderPreview::setBorderPen( KoBorder _brd )
     case KoBorder::DASH_DOT_DOT:
         pen.setStyle( DashDotDotLine );
         break;
+    case KoBorder::DOUBLE_LINE:
+        pen.setStyle( SolidLine );
+        break;
     }
 
     return QPen( pen );
@@ -855,6 +858,7 @@ KoParagBorderWidget::KoParagBorderWidget( QWidget * parent, const char * name )
     cStyle->insertItem( KoBorder::getStyle( KoBorder::DOT ) );
     cStyle->insertItem( KoBorder::getStyle( KoBorder::DASH_DOT ) );
     cStyle->insertItem( KoBorder::getStyle( KoBorder::DASH_DOT_DOT ) );
+    cStyle->insertItem( KoBorder::getStyle( KoBorder::DOUBLE_LINE  ) );
     grid->addWidget( cStyle, 1, 0 );
     //connect( cStyle, SIGNAL( activated( const QString & ) ), this, SLOT( brdStyleChanged( const QString & ) ) );
 
