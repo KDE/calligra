@@ -780,13 +780,22 @@ bool KoTextView::insertParagraph(const QPoint &pos)
     bool createParag = (nbParag > 0 );
     if ( createParag )
     {
-        int nbSpace = pos.x()/f->width(' ');
-        QString tmp;
-        for (int i = 0; i< nbSpace; i++)
+        if ( pos.x() + f->width(' ') >= textDocument()->width())
         {
-            tmp+=' ';
+            //FIXME me bidi.
+            //change parag alignment => right alignment
+            last->setAlignment( Qt::AlignRight );
         }
-        last->insert( 0, tmp );
+        else
+        {
+            int nbSpace = pos.x()/f->width(' ');
+            QString tmp;
+            for (int i = 0; i< nbSpace; i++)
+            {
+                tmp+=' ';
+            }
+            last->insert( 0, tmp );
+        }
     }
     return createParag;
 
@@ -798,7 +807,11 @@ bool KoTextView::placeCursor( const QPoint &pos, bool insertDirectCursor )
     m_cursor->restoreState();
     if ( insertDirectCursor && (pos.y()>textDocument()->height()) )
         addParag = insertParagraph(pos);
-    KoTextParag *s = textDocument()->firstParag();
+    KoTextParag *s = 0L;
+    if ( addParag )
+        s = textDocument()->lastParag();
+    else
+        s = textDocument()->firstParag();
     m_cursor->place( pos, s, false, &variablePosition );
     updateUI( true );
     return addParag;
