@@ -43,7 +43,7 @@ VSpiralTool::~VSpiralTool()
 	delete( m_dialog );
 }
 
-VPath*
+VComposite*
 VSpiralTool::shape( bool interactive ) const
 {
 	if( interactive )

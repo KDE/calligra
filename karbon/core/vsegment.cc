@@ -24,8 +24,8 @@
 
 #include "vglobal.h"
 #include "vpainter.h"
+#include "vpath.h"
 #include "vsegment.h"
-#include "vsegmentlist.h"
 
 #include <kdebug.h>
 
@@ -83,7 +83,7 @@ VSegment::VSegment( VSegmentType type )
 VSegment::VSegment( const VSegment& segment )
 {
 	// Copying m_prev/m_next has some advantages ( see vsegment::length() ).
-	// Inserting a segment into a vsegmentlist overwrites these anyway:
+	// Inserting a segment into a path overwrites these anyway:
 	m_prev = segment.m_prev;
 	m_next = segment.m_next;
 
@@ -99,9 +99,9 @@ VSegment::VSegment( const VSegment& segment )
 	m_nodeEdited[1] = segment.m_nodeEdited[1];
 	m_nodeEdited[2] = segment.m_nodeEdited[2];
 
-	m_state = normal;
-
+	m_state = segment.m_state;
 	m_type = segment.m_type;
+
 	m_ctrlPointFixing = segment.m_ctrlPointFixing;
 	m_smooth = segment.m_smooth;
 }
@@ -274,18 +274,18 @@ VSegment::length( double t ) const
 		// and add up the subresults.
 
 
-		// "Copy segment" splitted at t into a vsegmentlist:
-		VSegmentList list( 0L );
-		list.moveTo( prev()->knot() );
+		// "Copy segment" splitted at t into a path:
+		VPath path( 0L );
+		path.moveTo( prev()->knot() );
 
 		// Optimize a bit: most of the time we'll need the
 		// length of the whole segment:
 		if( t == 1.0 )
-			list.append( this->clone() );
+			path.append( this->clone() );
 		else
 		{
 			VSegment* copy = this->clone();
-			list.append( copy->splitAt( t ) );
+			path.append( copy->splitAt( t ) );
 			delete copy;
 		}
 
@@ -295,23 +295,23 @@ VSegment::length( double t ) const
 
 		double length = 0.0;
 
-		while( list.current() )
+		while( path.current() )
 		{
-			chord = list.current()->chordLength();
-			poly  = list.current()->polyLength();
+			chord = path.current()->chordLength();
+			poly  = path.current()->polyLength();
 
 			if(
 				poly &&
 				( poly - chord ) / poly > VGlobal::lengthTolerance )
 			{
 				// Split at midpoint:
-				list.insert(
-					list.current()->splitAt( 0.5 ) );
+				path.insert(
+					path.current()->splitAt( 0.5 ) );
 			}
 			else
 			{
 				length += 0.5 * poly + 0.5 * chord;
-				list.next();
+				path.next();
 			}
 		}
 
@@ -555,6 +555,7 @@ VSegment::revert() const
 		return 0L;
 
 	VSegment* segment = new VSegment();
+	segment->m_state = m_state;
 	segment->m_type = m_type;
 
 	// Swap points:

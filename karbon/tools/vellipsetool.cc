@@ -47,7 +47,7 @@ void VEllipseTool::refreshUnit()
     m_dialog->refreshUnit();
 }
 
-VPath*
+VComposite*
 VEllipseTool::shape( bool interactive ) const
 {
 	if( interactive )

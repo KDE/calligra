@@ -21,16 +21,18 @@
 #ifndef __VSHAPECMD_H__
 #define __VSHAPECMD_H__
 
+
 #include "vcommand.h"
 
-class VPath;
+class VComposite;
+
 
 // Provides a common base class for creation commands since they all have
-// a similar execute / unexecute behaviour and all build a VPath.
+// a similar execute / unexecute behaviour and all build a VComposite.
 class VShapeCmd : public VCommand
 {
 public:
-	VShapeCmd( VDocument* doc, const QString& name, VPath* path );
+	VShapeCmd( VDocument* doc, const QString& name, VComposite* composite );
 	virtual ~VShapeCmd() {}
 
 	virtual void execute();
@@ -38,7 +40,7 @@ public:
 
 protected:
 	/// Pointer to the created shape.
-	VPath* m_path;
+	VComposite* m_composite;
 };
 
 #endif

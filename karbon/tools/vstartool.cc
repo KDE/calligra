@@ -48,7 +48,7 @@ VStarTool::~VStarTool()
 	delete( m_dialog );
 }
 
-VPath*
+VComposite*
 VStarTool::shape( bool interactive ) const
 {
 	if( interactive )

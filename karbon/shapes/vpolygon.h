@@ -21,9 +21,9 @@
 #ifndef __VPOLYGON_H__
 #define __VPOLYGON_H__
 
-#include "vpath.h"
+#include "vcomposite.h"
 
-class VPolygon : public VPath
+class VPolygon : public VComposite
 {
 public:
 	VPolygon( VObject* parent,

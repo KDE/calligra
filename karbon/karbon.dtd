@@ -13,24 +13,24 @@
 >
 
 <!--
-    the document is grouped by layers
+    The document is grouped by layers.
 -->
 
-<!ELEMENT LAYER (PATH*) >
+<!ELEMENT LAYER (COMPOSITE*) >
 <!ATTLIST LAYER name  CDATA #IMPLIED
                visible ( 0 | 1 ) "1"
 >
 
 <!--
-    the basic element
+    A composite path.
 -->
 
-<!ELEMENT PATH (STROKE? FILL? SEGMENTS+) >
-<!ATTLIST PATH fillrule ( 0 | 1 ) "0"
+<!ELEMENT COMPOSITE (STROKE? FILL? PATH+) >
+<!ATTLIST COMPOSITE fillrule ( 0 | 1 ) "0"
 >
 
 <!--
-    stroke mode and color
+    Stroke mode and color.
 -->
 
 <!ELEMENT STROKE (COLOR) >
@@ -41,13 +41,13 @@
 >
 
 <!--
-    fill mode and color
+    Fill mode and color.
 -->
 
 <!ELEMENT FILL (COLOR) >
 
 <!--
-    color data 
+    Color data.
 -->
 
 <!ELEMENT COLOR EMPTY >
@@ -59,15 +59,15 @@
 >
 
 <!--
-    path segment
+    A path.
 -->
 
-<!ELEMENT SEGMENTS MOVE ( LINE | CURVE )+ >
-<!ATTLIST SEGMENTS isClosed ( 0 | 1 ) "1"
+<!ELEMENT PATH MOVE ( LINE | CURVE )+ >
+<!ATTLIST PATH isClosed ( 0 | 1 ) "1"
 >
 
 <!--
-    path element data
+    Path segment data.
 -->
 
 <!ELEMENT MOVE EMPTY >

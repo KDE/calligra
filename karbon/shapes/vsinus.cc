@@ -27,7 +27,7 @@
 
 VSinus::VSinus( VObject* parent,
 		const KoPoint& topLeft, double width, double height, uint periods )
-	: VPath( parent )
+	: VComposite( parent )
 {
 	// We want at least 1 period:
 	if( periods < 1 )

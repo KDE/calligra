@@ -29,7 +29,7 @@
 
 VRoundRect::VRoundRect( VObject* parent,
 		const KoPoint& topLeft, double width, double height, double edgeRadius )
-	: VPath( parent )
+	: VComposite( parent )
 {
 	setDrawCenterNode();
 

@@ -17,11 +17,11 @@
    Boston, MA 02111-1307, USA.
 */
 
+#include "vcomposite.h"
 #include "vdocument.h"
 #include "vgroup.h"
 #include "vlayer.h"
 #include "vpath.h"
-#include "vsegmentlist.h"
 #include "vvisitor.h"
 
 bool
@@ -57,15 +57,15 @@ VVisitor::visitVLayer( VLayer& layer )
 }
 
 void
-VVisitor::visitVPath( VPath& path )
+VVisitor::visitVComposite( VComposite& composite )
 {
-	VSegmentListListIterator itr( path.segmentLists() );
+	VPathListIterator itr( composite.paths() );
 	for( ; itr.current(); ++itr )
 		itr.current()->accept( *this );
 }
 
 void
-VVisitor::visitVSegmentList( VSegmentList& /*segmentList*/ )
+VVisitor::visitVPath( VPath& /*path*/ )
 {
 }
 

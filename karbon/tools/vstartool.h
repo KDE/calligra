@@ -21,8 +21,8 @@
 #ifndef __VSTARTOOL_H__
 #define __VSTARTOOL_H__
 
-#include "vshapetool.h"
 
+#include "vshapetool.h"
 
 class VStarDlg;
 
@@ -33,7 +33,7 @@ public:
 	VStarTool( KarbonView* view );
 	virtual ~VStarTool();
 
-	virtual VPath* shape( bool interactive = false ) const;
+	virtual VComposite* shape( bool interactive = false ) const;
 
 	virtual void showDialog() const;
     void refreshUnit();

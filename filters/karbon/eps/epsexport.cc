@@ -34,6 +34,7 @@
 #include "epsexport.h"
 #include "epsexportdlg.h"
 #include "vcolor.h"
+#include "vcomposite.h"
 #include "vdashpattern.h"
 #include "vdocument.h"
 #include "vfill.h"
@@ -41,7 +42,6 @@
 #include "vlayer.h"
 #include "vpath.h"
 #include "vsegment.h"
-#include "vsegmentlist.h"
 #include "vselection.h"
 #include "vstroke.h"
 
@@ -233,23 +233,23 @@ EpsExport::visitVDocument( VDocument& document )
 }
 
 void
-EpsExport::visitVPath( VPath& path )
+EpsExport::visitVComposite( VComposite& composite )
 {
-	VVisitor::visitVPath( path );
+	VVisitor::visitVComposite( composite );
 
-	getFill( *path.fill() );
-	getStroke( *path.stroke() );
+	getFill( *composite.fill() );
+	getStroke( *composite.stroke() );
 
 	*m_stream << endl;
 }
 
 void
-EpsExport::visitVSegmentList( VSegmentList& segmentList )
+EpsExport::visitVPath( VPath& path )
 {
 	*m_stream << l1_newpath << "\n";
 
 	// Export segments:
-	VSegmentListIterator itr( segmentList );
+	VPathIterator itr( path );
 	for( ; itr.current(); ++itr )
 	{
 		switch( itr.current()->type() )
@@ -281,7 +281,7 @@ EpsExport::visitVSegmentList( VSegmentList& segmentList )
 		}
 	}
 
-	if( segmentList.isClosed() )
+	if( path.isClosed() )
 		*m_stream << l1_closepath << "\n";
 }
 

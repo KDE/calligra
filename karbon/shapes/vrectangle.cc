@@ -24,7 +24,7 @@
 
 VRectangle::VRectangle( VObject* parent,
 		const KoPoint& topLeft, double width, double height )
-	: VPath( parent )
+	: VComposite( parent )
 {
 	setDrawCenterNode();
 

@@ -1,5 +1,4 @@
 /* This file is part of the KDE project
-   Copyright (C) 2001, The Karbon Developers
    Copyright (C) 2002, The Karbon Developers
 
    This library is free software; you can redistribute it and/or
@@ -21,118 +20,60 @@
 #ifndef __VPATH_H__
 #define __VPATH_H__
 
-#include <qptrlist.h>
 
 #include <koPoint.h>
 
 #include "vobject.h"
-#include "vsegmentlist.h"
-
 
 class QDomElement;
 class QWMatrix;
-class VPainter;
 class VSegment;
 class VVisitor;
 
 
-typedef QPtrList<VSegmentList> VSegmentListList;
-typedef QPtrListIterator<VSegmentList> VSegmentListListIterator;
+// The general list stuff is stolen from Qt.
 
+class VPathIteratorList;
 
 class VPath : public VObject
 {
+friend class VPathIterator;
+
 public:
-	VPath( VObject* parent, VState state = normal );
-	VPath( const VPath& path );
+	VPath( VObject* parent );
+	VPath( const VPath& list );
+	VPath( const VSegment& segment );
 	virtual ~VPath();
 
 	const KoPoint& currentPoint() const;
 
-	// postscript-like commands:
 	bool moveTo( const KoPoint& p );
 	bool lineTo( const KoPoint& p );
-
-	/*
-	curveTo():
-
-	   p1          p2
-	    O   ____   O
-	    : _/    \_ :
-	    :/        \:
-	    x          x
-	currP          p3
-	*/
-
 	bool curveTo(
 		const KoPoint& p1, const KoPoint& p2, const KoPoint& p3 );
-
-	/*
-	curve1To():
-
-	               p2
-	         ____  O
-	      __/    \ :
-	     /        \:
-	    x          x
-	currP          p3
-	*/
-
-	bool curve1To( const KoPoint& p2, const KoPoint& p3 );
-
-	/*
-	curve2To():
-
-	   p1
-	    O  ____
-	    : /    \__
-	    :/        \
-	    x          x
-	currP          p3
-	*/
-
-	bool curve2To( const KoPoint& p1, const KoPoint& p3 );
-
-	/**
-	 * A convenience function to aproximate a circular arc with a
-	 * bezier curve. Input: 2 tangent vectors and a radius (same as in PostScript).
-	 */
-
-	/*
-	arcTo():
-	
-	   p1 x....__--x....x p2
-	      :  _/
-	      : /
-	      :/
-	      |
-	      x
-	      |
-	      |
-	      x currP
-	 */
+	bool curve1To(
+		const KoPoint& p2, const KoPoint& p3 );
+	bool curve2To(
+		const KoPoint& p1, const KoPoint& p3 );
 	bool arcTo(
-		const KoPoint& p1, const KoPoint& p2, double r );
+		const KoPoint& p1, const KoPoint& p2, const double r );
 
+	bool isClosed() const { return m_isClosed; }
 	void close();
-	bool isClosed() const;
 
 	/**
-	 * Combines two paths. For example, the letter "O" is a combination
-	 * of a larger and a smaller ellipitical path.
+	 * Returns false if segmentlist is oriented clockwise.
 	 */
-	void combine( const VPath& path );
-	void combineSegmentList( const VSegmentList& segmentList );
+	bool counterClockwise() const;
 
-	virtual void draw( VPainter *painter, const KoRect* rect = 0L ) const;
+	/**
+	 * Reverts the winding orientation.
+	 */
+	void revert();
 
-	const VSegment* lastSegment() const
-		{ return m_segmentLists.getLast()->getLast(); }
-
-	const VSegmentListList& segmentLists() const
-		{ return m_segmentLists; }
-
-	/// Applies an affine transformation.
+	/**
+	 * Applies an affine transformation matrix to all segments.
+	 */
 	virtual void transform( const QWMatrix& m );
 
 	virtual const KoRect& boundingBox() const;
@@ -144,15 +85,63 @@ public:
 
 	virtual void accept( VVisitor& visitor );
 
-	bool drawCenterNode() const { return m_drawCenterNode; }
-	void setDrawCenterNode( bool drawCenterNode = true )
-		{ m_drawCenterNode = drawCenterNode; }
+
+	// general list stuff:
+	VPath& operator=( const VPath& list );
+
+	bool insert( const VSegment* segment );
+	bool insert( uint i, const VSegment* segment );
+	void prepend( const VSegment* segment );
+	void append( const VSegment* segment );
+	void clear();
+
+	uint count() const { return m_number; }
+
+	VSegment* current() const { return m_current; }
+	VSegment* getFirst() const { return m_first; }
+	VSegment* getLast() const { return m_last; }
+	VSegment* first();
+	VSegment* last();
+	VSegment* prev();
+	VSegment* next();
 
 private:
-	VSegmentListList m_segmentLists;		// list of segmentList
+	VSegment* locate( uint index );
 
-	/// Should a center node be drawn?
-	bool m_drawCenterNode;
+	bool m_isClosed;
+
+	VSegment* m_first;
+	VSegment* m_last;
+	VSegment* m_current;
+
+	int m_currentIndex;
+	uint m_number;
+
+	VPathIteratorList* m_iteratorList;
+};
+
+
+class VPathIterator
+{
+friend class VPathIteratorList;
+
+public:
+	VPathIterator( const VPath& list );
+	VPathIterator( const VPathIterator& itr );
+	~VPathIterator();
+
+	VPathIterator& operator=( const VPathIterator& itr );
+
+	VSegment* current() const { return m_current; }
+	VSegment* operator()();
+	VSegment* operator++();
+	VSegment* operator+=( uint i );
+	VSegment* operator--();
+	VSegment* operator-=( uint i );
+
+private:
+	VPath* m_list;
+	VSegment* m_current;
 };
 
 #endif

@@ -47,7 +47,7 @@ void VRoundRectTool::refreshUnit()
     m_dialog->refreshUnit();
 }
 
-VPath*
+VComposite*
 VRoundRectTool::shape( bool interactive ) const
 {
 	if( interactive )

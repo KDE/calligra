@@ -30,7 +30,7 @@
 VStar::VStar( VObject* parent,
 		const KoPoint& center, double outerRadius, double innerRadius,
 		uint edges, double angle )
-	: VPath( parent )
+	: VComposite( parent )
 {
 	setDrawCenterNode();
 

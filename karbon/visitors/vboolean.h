@@ -51,7 +51,7 @@ public:
 		{ return false; }
 	bool visit( VObject& object1, VObject& object2 );
 
-	virtual void visitVSegmentList( VSegmentList& segmentList );
+	virtual void visitVPath( VPath& path );
 
 private:
 	void doIt();
@@ -63,8 +63,8 @@ private:
 		VParamList& params1, VParamList& params2 );
 
 	VBooleanType m_type;
-	VSegmentList* m_list1;
-	VSegmentList* m_list2;
+	VPath* m_path1;
+	VPath* m_path2;
 };
 
 #endif

@@ -88,10 +88,12 @@
 #include <tkfloatspinboxaction.h>
 
 #include <kdebug.h>
+
+
 // TODO: only for testing
 #include "vsegment.h"
-#include "vsegmentlist.h"
 #include "vpath.h"
+
 
 KarbonView::KarbonView( KarbonPart* part, QWidget* parent, const char* name )
 	: KoView( part, parent, name ), m_part( part )
@@ -402,7 +404,7 @@ KarbonView::dummyForTesting()
 {
 kdDebug() << "KarbonView::dummyForTesting()" << endl;
 
-	VSegmentList s( 0L );
+	VPath s( 0L );
 	s.moveTo( KoPoint(100,100) );
 	s.lineTo( KoPoint(100,300) );
 	s.lineTo( KoPoint(400,300) );
@@ -410,7 +412,7 @@ kdDebug() << "KarbonView::dummyForTesting()" << endl;
 	s.close();
 kdDebug() << "***" << s.counterClockwise() << endl;
 
-	VSegmentList t( 0L );
+	VPath t( 0L );
 	t.moveTo( KoPoint(100,100) );
 	t.lineTo( KoPoint(100,300) );
 	t.lineTo( KoPoint(400,300) );

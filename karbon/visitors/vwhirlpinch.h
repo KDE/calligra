@@ -23,7 +23,6 @@
 
 #include <koPoint.h>
 
-#include "vpath.h"
 #include "vvisitor.h"
 
 
@@ -52,8 +51,8 @@ public:
 	double radius() const { return m_radius; }
 	void setRadius( double radius ) { m_radius = radius; }
 
+	virtual void visitVComposite( VComposite& composite );
 	virtual void visitVPath( VPath& path );
-	virtual void visitVSegmentList( VSegmentList& segmentList );
 
 private:
 	KoPoint m_center;

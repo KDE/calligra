@@ -47,7 +47,7 @@ void VSinusTool::refreshUnit()
     m_dialog->refreshUnit();
 }
 
-VPath*
+VComposite*
 VSinusTool::shape( bool interactive ) const
 {
 	if( interactive )

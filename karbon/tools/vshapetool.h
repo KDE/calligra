@@ -28,7 +28,7 @@
 #include "vtool.h"
 
 
-class VPath;
+class VComposite;
 
 
 class VShapeTool : public VTool
@@ -59,7 +59,7 @@ protected:
 	// Make it "abstract":
 	virtual ~VShapeTool() {}
 
-	virtual VPath* shape( bool interactive = false ) const = 0;
+	virtual VComposite* shape( bool interactive = false ) const = 0;
 
 	/**
 	 * Output coordinates.

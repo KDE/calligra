@@ -32,7 +32,7 @@ public:
 	VPolygonTool( KarbonView* view );
 	virtual ~VPolygonTool();
 
-	virtual VPath* shape( bool interactive = false ) const;
+	virtual VComposite* shape( bool interactive = false ) const;
 
 	virtual void showDialog() const;
 

@@ -33,7 +33,7 @@ public:
 	VSinusTool( KarbonView* view );
 	virtual ~VSinusTool();
 
-	virtual VPath* shape( bool interactive = false ) const;
+	virtual VComposite* shape( bool interactive = false ) const;
 
 	virtual void showDialog() const;
     void refreshUnit();

@@ -6,7 +6,7 @@ Object hierarchy:
 
         +- vdocument
         |
-        +- vpath--+- (shapes)
+        +- vcomposite--+- (shapes)
         |
 vobject-+- vtext
         |

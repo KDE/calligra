@@ -33,7 +33,6 @@
 #include "vrotatetool.h"
 #include "vpainter.h"
 #include "vpainterfactory.h"
-#include "vpath.h"
 #include "vtransformcmd.h"
 
 #include <kdebug.h>

@@ -28,7 +28,7 @@
 #include "aicolor.h"
 
 #include <koPoint.h>
-#include <core/vpath.h>
+#include <core/vcomposite.h>
 #include <core/vlayer.h>
 #include <core/vgroup.h>
 #include <core/vfill.h>
@@ -135,10 +135,10 @@ public:
 
   bool parse (QIODevice& fin, QDomDocument &doc);
 private:
-  VPath *m_curKarbonPath;
+  VComposite *m_curKarbonPath;
   VDocument *m_document;
   VLayer *m_layer;
-  VPath *m_combination;
+  VComposite *m_combination;
   QPtrStack<VGroup> m_groupStack;
 
   FillMode m_fm;

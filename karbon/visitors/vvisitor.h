@@ -21,12 +21,12 @@
 #define __VVISITOR_H__
 
 
+class VComposite;
 class VDocument;
 class VGroup;
 class VLayer;
 class VObject;
 class VPath;
-class VSegmentList;
 class VText;
 
 
@@ -38,11 +38,11 @@ public:
 
 	virtual bool visit( VObject& object );
 
+	virtual void visitVComposite( VComposite& composite );
 	virtual void visitVDocument( VDocument& document );
 	virtual void visitVGroup( VGroup& group );
 	virtual void visitVLayer( VLayer& layer );
 	virtual void visitVPath( VPath& path );
-	virtual void visitVSegmentList( VSegmentList& segmentList );
 	virtual void visitVText( VText& text );
 
 protected:

@@ -23,8 +23,8 @@
 
 #include "koRect.h"
 
+#include "vcomposite.h"
 #include "vgroup.h"
-#include "vpath.h"
 #include "vvisitor.h"
 
 
@@ -46,8 +46,8 @@ public:
 
 	virtual void visitVGroup( VGroup& group )
 		{ visitVObject( group ); }
-	virtual void visitVPath( VPath& path )
-		{ visitVObject( path ); }
+	virtual void visitVComposite( VComposite& composite )
+		{ visitVObject( composite ); }
 
 private:
 	void visitVObject( VObject& object );

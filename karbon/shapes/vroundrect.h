@@ -21,9 +21,9 @@
 #ifndef __VROUNDRECT_H__
 #define __VROUNDRECT_H__
 
-#include "vpath.h"
+#include "vcomposite.h"
 
-class VRoundRect : public VPath
+class VRoundRect : public VComposite
 {
 public:
 	VRoundRect( VObject* parent,

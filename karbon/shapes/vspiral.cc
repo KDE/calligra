@@ -31,7 +31,7 @@
 VSpiral::VSpiral( VObject* parent,
 		const KoPoint& center, double radius, uint segments, double fade,
 		bool clockwise, double angle )
-	: VPath( parent )
+	: VComposite( parent )
 {
 	setDrawCenterNode();
 

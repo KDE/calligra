@@ -98,11 +98,11 @@ void KontourImport::convert()
     layer.setAttribute( "name", "Layer" );
     layer.setAttribute( "visible", "1" );
 		
-	QDomElement path = outdoc.createElement( "PATH" );
-	layer.appendChild( path );
+	QDomElement composite = outdoc.createElement( "COMPOSITE" );
+	layer.appendChild( composite );
 	
 	QDomElement stroke = outdoc.createElement( "STROKE" );
-	path.appendChild( stroke );
+	composite.appendChild( stroke );
 	
 	QDomElement lay = page.namedItem( "layer" ).toElement();
 	QDomElement rect = lay.namedItem( "rectangle" ).toElement();
@@ -126,12 +126,12 @@ void KontourImport::convert()
 	color.setAttribute( "colorSpace", "0" );
 		
 	QDomElement fill = outdoc.createElement( "FILL" );	
-	path.appendChild( fill );	
+	composite.appendChild( fill );	
 	
 	QDomElement segment = outdoc.createElement( "SEGMENTS");
 	QDomElement seg = docElem.namedItem( "seg" ).toElement();
 	int kind = seg.attribute( "kind" ).toInt();
-	path.appendChild( segment );
+	composite.appendChild( segment );
 	segment.setAttribute( "isClosed", kind );
 	QDomElement move = outdoc.createElement( "MOVE" );
 	int x = rect.attribute( "x" ).toInt();

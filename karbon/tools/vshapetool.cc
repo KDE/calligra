@@ -24,10 +24,10 @@
 
 #include "karbon_part.h"
 #include "karbon_view.h"
+#include "vcomposite.h"
 #include "vglobal.h"
 #include "vpainter.h"
 #include "vpainterfactory.h"
-#include "vpath.h"
 #include "vshapecmd.h"
 #include "vshapetool.h"
 
@@ -54,10 +54,10 @@ VShapeTool::draw()
 	view()->canvasWidget()->setYMirroring( true );
 	painter->setRasterOp( Qt::NotROP );
 
-	VPath* path = shape();
-	path->setState( VPath::edit );
-	path->draw( painter, &path->boundingBox() );
-	delete( path );
+	VComposite* composite = shape();
+	composite->setState( VComposite::edit );
+	composite->draw( painter, &composite->boundingBox() );
+	delete( composite );
 }
 
 void
@@ -74,14 +74,14 @@ VShapeTool::mouseButtonRelease()
 {
 	recalc();
 
-	VPath* path = shape( true );
+	VComposite* composite = shape( true );
 
-	if( path )
+	if( composite )
 	{
 		VShapeCmd* cmd = new VShapeCmd(
 			&view()->part()->document(),
 			name(),
-			path );
+			composite );
 
 		view()->part()->addCommand( cmd, true );
 		view()->selectionChanged();

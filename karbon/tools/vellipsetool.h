@@ -33,7 +33,7 @@ public:
 	VEllipseTool( KarbonView* view );
 	virtual ~VEllipseTool();
 
-	virtual VPath* shape( bool interactive = false ) const;
+	virtual VComposite* shape( bool interactive = false ) const;
     void refreshUnit();
 
 private:

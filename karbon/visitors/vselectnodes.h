@@ -40,7 +40,7 @@ public:
 		m_rect = rect;
 	}
 
-	virtual void visitVSegmentList( VSegmentList& segmentList );
+	virtual void visitVPath( VPath& path );
 
 private:
 	bool m_select;

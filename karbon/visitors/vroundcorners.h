@@ -35,7 +35,7 @@ public:
 	double radius() const { return m_radius; }
 	void setRadius( double radius );
 
-	virtual void visitVSegmentList( VSegmentList& segmentList );
+	virtual void visitVPath( VPath& path );
 
 private:
 	/// The "radius" of the round corners.

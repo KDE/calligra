@@ -40,8 +40,8 @@ class VPainter;
 
 class VSegment
 {
-friend class VSegmentList;
-friend class VSegmentListIterator;
+friend class VPath;
+friend class VPathIterator;
 
 public:
 	/**
@@ -132,13 +132,13 @@ public:
 
 	/**
 	 * Returns a pointer to the previous not deleted segment, if stored in a
-	 * VSegmentList.
+	 * VPath.
 	 */
 	VSegment* prev() const;
 
 	/**
 	 * Returns a pointer to the next not deleted segment, if stored in a
-	 * VSegmentList.
+	 * VPath.
 	 */
 	VSegment* next() const;
 

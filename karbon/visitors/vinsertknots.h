@@ -35,7 +35,7 @@ public:
 	uint knots() const { return m_knots; }
 	void setKnots( uint knots );
 
-	virtual void visitVSegmentList( VSegmentList& segmentList );
+	virtual void visitVPath( VPath& path );
 
 private:
 	uint m_knots;

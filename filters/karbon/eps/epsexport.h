@@ -20,19 +20,19 @@
 #ifndef __EPSEXPORT_H__
 #define __EPSEXPORT_H__
 
+
 #include <koFilter.h>
 
 #include "vvisitor.h"
 
-
 class QTextStream;
 class VColor;
+class VComposite;
 class VDocument;
 class VFill;
 class VGroup;
 class VLayer;
 class VPath;
-class VSegmentList;
 class VStroke;
 class VText;
 
@@ -48,9 +48,9 @@ public:
 	virtual KoFilter::ConversionStatus convert( const QCString& from, const QCString& to );
 
 private:
+	virtual void visitVComposite( VComposite& composite );
 	virtual void visitVDocument( VDocument& document );
 	virtual void visitVPath( VPath& path );
-	virtual void visitVSegmentList( VSegmentList& segmentList );
 
 	void getStroke( const VStroke& stroke );
 	void getFill( const VFill& fill );

@@ -21,9 +21,9 @@
 #ifndef __VELLIPSE_H__
 #define __VELLIPSE_H__
 
-#include "vpath.h"
+#include "vcomposite.h"
 
-class VEllipse : public VPath
+class VEllipse : public VComposite
 {
 public:
 	VEllipse( VObject* parent,

@@ -21,9 +21,9 @@
 #ifndef __VSPIRAL_H__
 #define __VSPIRAL_H__
 
-#include "vpath.h"
+#include "vcomposite.h"
 
-class VSpiral : public VPath
+class VSpiral : public VComposite
 {
 public:
 	VSpiral( VObject* parent,

@@ -17,19 +17,20 @@
    Boston, MA 02111-1307, USA.
 */
 
+
 #include <qptrlist.h>
 #include <qvaluelist.h>
 
 #include "vboolean.h"
+#include "vpath.h"
 #include "vsegment.h"
-#include "vsegmentlist.h"
 
 
 bool
 VBoolean::visit( VObject& object1, VObject& object2 )
 {
-	m_list1 = 0L;
-	m_list2 = 0L;
+	m_path1 = 0L;
+	m_path2 = 0L;
 	object1.accept( *this );
 	object2.accept( *this );
 
@@ -37,13 +38,13 @@ VBoolean::visit( VObject& object1, VObject& object2 )
 }
 
 void
-VBoolean::visitVSegmentList( VSegmentList& segmentList )
+VBoolean::visitVPath( VPath& path )
 {
-	if( m_list1 == 0L )
-		m_list1 = &segmentList;
-	else if( m_list2 == 0L )
+	if( m_path1 == 0L )
+		m_path1 = &path;
+	else if( m_path2 == 0L )
 	{
-		m_list2 = &segmentList;
+		m_path2 = &path;
 		doIt();
 	}
 }
@@ -91,57 +92,57 @@ VBoolean::recursiveSubdivision(
 		else
 		{
 			// "copy segment" and split it at midpoint:
-			VSegmentList list2( segment2 );
-			list2.insert( list2.current()->splitAt( 0.5 ) );
+			VPath path2( segment2 );
+			path2.insert( path2.current()->splitAt( 0.5 ) );
 
 			double mid2 = 0.5 * ( t0_2 + t1_2 );
 
 			recursiveSubdivision(
-				*list2.current(), t0_2, mid2,
+				*path2.current(), t0_2, mid2,
 				segment1,         t0_1, t1_1, params2, params1 );
 			recursiveSubdivision(
-				*list2.next(),    mid2, t1_2,
+				*path2.next(),    mid2, t1_2,
 				segment1,         t0_1, t1_1, params2, params1 );
 		}
 	}
 	else
 	{
 		// "copy segment" and split it at midpoint:
-		VSegmentList list1( segment1 );
-		list1.insert( list1.current()->splitAt( 0.5 ) );
+		VPath path1( segment1 );
+		path1.insert( path1.current()->splitAt( 0.5 ) );
 
 		double mid1 = 0.5 * ( t0_1 + t1_1 );
 
 		if( segment2.isFlat() )
 		{
 			recursiveSubdivision(
-				*list1.current(), t0_1, mid1,
+				*path1.current(), t0_1, mid1,
 				segment2,         t0_2, t1_2, params1, params2 );
 			recursiveSubdivision(
-				*list1.next(),    mid1, t1_1,
+				*path1.next(),    mid1, t1_1,
 				segment2,         t0_2, t1_2, params1, params2 );
 		}
 		else
 		{
 			// "copy segment" and split it at midpoint:
-			VSegmentList list2( segment2 );
-			list2.insert( list2.current()->splitAt( 0.5 ) );
+			VPath path2( segment2 );
+			path2.insert( path2.current()->splitAt( 0.5 ) );
 
 			double mid2 = 0.5 * ( t0_2 + t1_2 );
 
 			recursiveSubdivision(
-				*list1.current(), t0_1, mid1,
-				*list2.current(), t0_2, mid2, params1, params2 );
+				*path1.current(), t0_1, mid1,
+				*path2.current(), t0_2, mid2, params1, params2 );
 			recursiveSubdivision(
-				*list1.next(),    mid1, t1_1,
-				*list2.current(), t0_2, mid2, params1, params2 );
+				*path1.next(),    mid1, t1_1,
+				*path2.current(), t0_2, mid2, params1, params2 );
 
 			recursiveSubdivision(
-				*list1.prev(),    t0_1, mid1,
-				*list2.next(),    mid2, t1_2, params1, params2 );
+				*path1.prev(),    t0_1, mid1,
+				*path2.next(),    mid2, t1_2, params1, params2 );
 			recursiveSubdivision(
-				*list1.next(),    mid1, t1_1,
-				*list2.current(), mid2, t1_2, params1, params2 );
+				*path1.next(),    mid1, t1_1,
+				*path2.current(), mid2, t1_2, params1, params2 );
 		}
 	}
 }
@@ -149,7 +150,7 @@ VBoolean::recursiveSubdivision(
 void
 VBoolean::doIt()
 {
-	if( m_list1 == 0L || m_list2 == 0L )
+	if( m_path1 == 0L || m_path2 == 0L )
 		return;
 
 	// intersection parameters (t):
@@ -159,23 +160,23 @@ VBoolean::doIt()
 
 	double prevParam;
 
-	m_list1->first();
+	m_path1->first();
 
 	// ommit "begin" segment:
-	while( m_list1->next() )
+	while( m_path1->next() )
 	{
 		params1.clear();
 
-		m_list2->first();
+		m_path2->first();
 
 		// ommit "begin" segment:
-		while( m_list2->next() )
+		while( m_path2->next() )
 		{
 			params2.clear();
 		
 			recursiveSubdivision(
-				*m_list1->current(), 0.0, 1.0,
-				*m_list2->current(), 0.0, 1.0,
+				*m_path1->current(), 0.0, 1.0,
+				*m_path2->current(), 0.0, 1.0,
 				params1, params2 );
 
 			qHeapSort( params2 );
@@ -185,11 +186,11 @@ VBoolean::doIt()
 			// walk down all intersection params and insert knots:
 			for( pItr = params2.begin(); pItr != params2.end(); ++pItr )
 			{
-				m_list2->insert(
-					m_list2->current()->splitAt(
+				m_path2->insert(
+					m_path2->current()->splitAt(
 						( *pItr - prevParam )/( 1.0 - prevParam ) ) );
 
-				m_list2->next();
+				m_path2->next();
 				prevParam = *pItr;
 			}
 		}
@@ -201,11 +202,11 @@ VBoolean::doIt()
 		// walk down all intersection params and insert knots:
 		for( pItr = params1.begin(); pItr != params1.end(); ++pItr )
 		{
-			m_list1->insert(
-				m_list1->current()->splitAt(
+			m_path1->insert(
+				m_path1->current()->splitAt(
 					( *pItr - prevParam )/( 1.0 - prevParam ) ) );
 
-			m_list1->next();
+			m_path1->next();
 			prevParam = *pItr;
 		}
 	}

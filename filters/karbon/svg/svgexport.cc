@@ -30,6 +30,7 @@
 
 #include "svgexport.h"
 #include "vcolor.h"
+#include "vcomposite.h"
 #include "vdashpattern.h"
 #include "vdocument.h"
 #include "vfill.h"
@@ -38,7 +39,6 @@
 #include "vlayer.h"
 #include "vpath.h"
 #include "vsegment.h"
-#include "vsegmentlist.h"
 #include "vselection.h"
 #include "vstroke.h"
 //#include "vtext.h"
@@ -135,27 +135,27 @@ SvgExport::visitVDocument( VDocument& document )
 }
 
 void
-SvgExport::visitVPath( VPath& path )
+SvgExport::visitVComposite( VComposite& composite )
 {
 	*m_body << "<path";
 
-	VVisitor::visitVPath( path );
+	VVisitor::visitVComposite( composite );
 
-	getFill( *( path.fill() ) );
-	getStroke( *( path.stroke() ) );
+	getFill( *( composite.fill() ) );
+	getStroke( *( composite.stroke() ) );
 
 	*m_body << " />" << endl;
 
 }
 
 void
-SvgExport::visitVSegmentList( VSegmentList& segmentList )
+SvgExport::visitVPath( VPath& path )
 {
 
 	*m_body << " d=\"";
 
 	// export segments:
-	VSegmentListIterator itr( segmentList );
+	VPathIterator itr( path );
 	for( ; itr.current(); ++itr )
 	{
 		switch( itr.current()->type() )
@@ -184,7 +184,7 @@ SvgExport::visitVSegmentList( VSegmentList& segmentList )
 		}
 	}
 
-	if( segmentList.isClosed() )
+	if( path.isClosed() )
 		*m_body << "Z";
 
 	*m_body << "\"";

@@ -33,7 +33,7 @@ public:
 	VRoundRectTool( KarbonView* view );
 	virtual ~VRoundRectTool();
 
-	virtual VPath* shape( bool interactive = false ) const;
+	virtual VComposite* shape( bool interactive = false ) const;
 
 	virtual void showDialog() const;
     void refreshUnit();

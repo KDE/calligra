@@ -21,9 +21,9 @@
 #ifndef __VSTAR_H__
 #define __VSTAR_H__
 
-#include "vpath.h"
+#include "vcomposite.h"
 
-class VStar : public VPath
+class VStar : public VComposite
 {
 public:
 	VStar( VObject* parent,

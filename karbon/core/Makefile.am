@@ -10,6 +10,7 @@ noinst_LTLIBRARIES = libkarboncore.la
 noinst_HEADERS = \
 	vcanvas.h \
 	vcolor.h \
+	vcomposite.h \
 	vdashpattern.h \
 	vdocument.h \
 	vfill.h \
@@ -21,7 +22,6 @@ noinst_HEADERS = \
 	vobject.h \
 	vpath.h \
 	vsegment.h \
-	vsegmentlist.h \
 	vselection.h \
 	vstroke.h
 #	vtext.h
@@ -29,6 +29,7 @@ noinst_HEADERS = \
 libkarboncore_la_SOURCES = \
 	vcanvas.cc \
 	vcolor.cc \
+	vcomposite.cc \
 	vdashpattern.cc \
 	vdocument.cc \
 	vfill.cc \
@@ -39,7 +40,6 @@ libkarboncore_la_SOURCES = \
 	vobject.cc \
 	vpath.cc \
 	vsegment.cc \
-	vsegmentlist.cc \
 	vselection.cc \
 	vstroke.cc
 #	vtext.cc

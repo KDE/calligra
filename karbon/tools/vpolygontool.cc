@@ -41,7 +41,7 @@ VPolygonTool::~VPolygonTool()
 	delete( m_dialog );
 }
 
-VPath*
+VComposite*
 VPolygonTool::shape( bool interactive ) const
 {
 	if( interactive )

@@ -21,8 +21,8 @@
 #ifndef __VSPIRALTOOL_H__
 #define __VSPIRALTOOL_H__
 
-#include "vshapetool.h"
 
+#include "vshapetool.h"
 
 class VSpiralDlg;
 
@@ -33,7 +33,7 @@ public:
 	VSpiralTool( KarbonView* view );
 	virtual ~VSpiralTool();
 
-	virtual VPath* shape( bool interactive = false ) const;
+	virtual VComposite* shape( bool interactive = false ) const;
 
 	virtual void showDialog() const;
 

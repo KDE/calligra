@@ -21,9 +21,9 @@
 #ifndef __VRECTANGLE_H__
 #define __VRECTANGLE_H__
 
-#include "vpath.h"
+#include "vcomposite.h"
 
-class VRectangle : public VPath
+class VRectangle : public VComposite
 {
 public:
 	VRectangle( VObject* parent,

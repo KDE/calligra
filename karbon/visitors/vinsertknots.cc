@@ -17,11 +17,12 @@
    Boston, MA 02111-1307, USA.
 */
 
+
 #include <qptrlist.h>
 
 #include "vinsertknots.h"
+#include "vpath.h"
 #include "vsegment.h"
-#include "vsegmentlist.h"
 
 
 void
@@ -32,19 +33,19 @@ VInsertKnots::setKnots( uint knots )
 }
 
 void
-VInsertKnots::visitVSegmentList( VSegmentList& segmentList )
+VInsertKnots::visitVPath( VPath& path )
 {
-	segmentList.first();
+	path.first();
 
 	// ommit "begin" segment:
-	while( segmentList.next() )
+	while( path.next() )
 	{
 		for( uint i = m_knots; i > 0; --i )
 		{
-			segmentList.insert(
-				segmentList.current()->splitAt( 1.0 / ( i + 1.0 ) ) );
+			path.insert(
+				path.current()->splitAt( 1.0 / ( i + 1.0 ) ) );
 
-			segmentList.next();
+			path.next();
 		}
 
 		if( !success() )

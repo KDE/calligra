@@ -43,7 +43,7 @@ KarbonAIParserBase::KarbonAIParserBase() : m_pot(POT_Other), m_ptt (PTT_Output)
 
   m_fm = FM_NonZero;
 
-  m_curKarbonPath = new VPath( 0L );
+  m_curKarbonPath = new VComposite( 0L );
 
   m_document = new VDocument();
   m_layer = NULL;
@@ -384,7 +384,7 @@ void KarbonAIParserBase::doOutputCurrentPath2(PathOutputType type)
     else
       m_combination->combine (*m_curKarbonPath);
 
-    m_curKarbonPath = new VPath( 0L );
+    m_curKarbonPath = new VComposite( 0L );
 
     return;
   }
@@ -400,7 +400,7 @@ void KarbonAIParserBase::doOutputCurrentPath2(PathOutputType type)
     m_groupStack.top()->append( m_curKarbonPath );
   }
 
-  m_curKarbonPath = new VPath( 0L );
+  m_curKarbonPath = new VComposite( 0L );
 }
 
 bool KarbonAIParserBase::parse (QIODevice& fin, QDomDocument &doc)

@@ -17,11 +17,12 @@
    Boston, MA 02111-1307, USA.
 */
 
+
 #include <qptrlist.h>
 
 #include "vroundcorners.h"
+#include "vpath.h"
 #include "vsegment.h"
-#include "vsegmentlist.h"
 
 
 void
@@ -32,46 +33,55 @@ VRoundCorners::setRadius( double radius )
 }
 
 void
-VRoundCorners::visitVSegmentList( VSegmentList& segmentList )
+VRoundCorners::visitVPath( VPath& path )
 {
-	// Note: we change segments from segmentList. that doesnt hurt, since we
-	// replace segmentList with newList afterwards.
+	// Note: we change segments from path. that doesnt hurt, since we
+	// replace path with newPath afterwards.
 
-	// Temporary list:
-	VSegmentList newList( 0L );
+	// Temporary path:
+	VPath newPath( 0L );
 
-	segmentList.first();
+	path.first();
 	// skip "begin":
-	segmentList.next();
+	path.next();
 
 	// Description of the algorithm:
+	// -----------------------------
 	//
-	// Let's assume segmentList is closed and contains segments which build
-	// a rectangle:
+	// Without restricting generality, let's assume the path is closed and contains segments
+	// which build a rectangle.
 	//
 	//           3
 	//    X------------X
 	//    |            |
-	//   4|            |2      (numbers mean the segments' order
-	//    |            |        in segmentList. we neglect the "begin"
-	//    X------------X        segment)
+	//   4|            |2      (Numbers mean the segments' order
+	//    |            |        in the path. We neglect the "begin"
+	//    X------------X        segment here.)
 	//           1
 	//
-	// We want to round the corners with "radius" m_radius (the algorithm
-	// doesn't really produce circular arcs with fixed radii).
-	// We need to process three different steps:
+	// We want to round the corners with "radius" m_radius. Note: the algorithm
+	// doesn't really produce circular arcs, but that's ok since the algorithm
+	// achieves nice looking results and can be applied to all kind of paths.
+	// Note also, that this algorithm doesn't touch curve/curve joins, since they
+	// are usually smooth enough.
+	//
+	// We'll manipulate the input path for bookkeeping purposes and construct a new path in 
+	// parallel. We finally replace the input path with the new path.
+	//
+	// There are three unique steps to process. The second step is processed
+	// many times in a loop.
 	//
 	// 1) Begin
 	//    -----
-	//    Split the first segment of segmentList (called "segmentList[1]" here)
-	//    at parameter t and move newList to this new knot. While
+	//    Split the first segment of path (called "path[1]" here)
+	//    at parameter t and move newPath to this new knot. While
 	//
-	//        t = segmentList[1]->param( m_radius )
+	//        t = path[1]->param( m_radius )
 	//
-	//    as long as segmentList[1] isnt too small (smaller than 2 * m_radius).
+	//    as long as path[1] isnt too small (smaller than 2 * m_radius).
 	//    In this case we set t = 0.5.
 	//
-	//    segmentList:          newList:
+	//    path:          newPath:
 	//
 	//           3
 	//    X------------X
@@ -84,17 +94,17 @@ VRoundCorners::visitVSegmentList( VSegmentList& segmentList )
 	// 2) Loop
 	//    ----
 	//    This step is repeated for each following segment.
-	//    Split the current segment segmentList[n] at parameter t
-	//    and add the first subsegment to newList. While
+	//    Split the current segment path[n] at parameter t
+	//    and add the first subsegment to newPath. While
 	//
-	//        t = segmentList[n]->param( segmentList[n]->length() - m_radius )
+	//        t = path[n]->param( path[n]->length() - m_radius )
 	//
-	//    as long as segmentList[n] isnt too small (smaller than 2 * m_radius).
+	//    as long as path[n] isnt too small (smaller than 2 * m_radius).
 	//    In this case we set t = 0.5.
 	//
 // TODO: round corner.
 	//
-	//    segmentList:          newList:
+	//    path:          newPath:
 	//
 	//           3
 	//    X------------X
@@ -108,7 +118,7 @@ VRoundCorners::visitVSegmentList( VSegmentList& segmentList )
 	//    ---
 // TODO: end.
 	//
-	//    segmentList:          newList:
+	//    path:          newPath:
 	//
 	//           3                     5
 	//    X--X------X--X        6 .X------X. 4
@@ -118,139 +128,135 @@ VRoundCorners::visitVSegmentList( VSegmentList& segmentList )
 	//    X--X------X--X        ...X------X. 2
 	//           1                     1
 	//
-	// Further details:
-	//
-	// - We dont touch bezier/bezier joins, that's senseless.
-
 
 	double length;
 	double param;
 
 	// begin:
 	if(
-		segmentList.isClosed() &&
+		path.isClosed() &&
 		!(
-			segmentList.current()->type() == VSegment::curve &&
-			segmentList.getLast()->type() == VSegment::curve ) )
+			path.current()->type() == VSegment::curve &&
+			path.getLast()->type() == VSegment::curve ) )
 	{
-		length = segmentList.current()->length();
+		length = path.current()->length();
 
 		param = length > 2 * m_radius
-			? segmentList.current()->param( m_radius )
+			? path.current()->param( m_radius )
 			: param = 0.5;
 
 
-		segmentList.insert(
-			segmentList.current()->splitAt( param ) );
+		path.insert(
+			path.current()->splitAt( param ) );
 
-		newList.moveTo(
-			segmentList.current()->knot() );
+		newPath.moveTo(
+			path.current()->knot() );
 
-		segmentList.next();
+		path.next();
 	}
 	else
 	{
-		newList.moveTo(
-			segmentList.current()->prev()->knot() );
+		newPath.moveTo(
+			path.current()->prev()->knot() );
 	}
 
 
 	// middle part:
 	while(
-		segmentList.current() &&
-		segmentList.current()->next() )
+		path.current() &&
+		path.current()->next() )
 	{
 		if(
 			!(
-				segmentList.current()->type() == VSegment::curve &&
-				segmentList.current()->next()->type() == VSegment::curve ) )
+				path.current()->type() == VSegment::curve &&
+				path.current()->next()->type() == VSegment::curve ) )
 		{
-			length = segmentList.current()->length();
+			length = path.current()->length();
 
 			param = length > 2 * m_radius
-				? segmentList.current()->param( length - m_radius )
+				? path.current()->param( length - m_radius )
 				: 0.5;
 
-			segmentList.insert(
-				segmentList.current()->splitAt( param ) );
-			newList.append(
-				segmentList.current()->clone() );
-			segmentList.next();
+			path.insert(
+				path.current()->splitAt( param ) );
+			newPath.append(
+				path.current()->clone() );
+			path.next();
 
 
-			segmentList.next();
+			path.next();
 
 
-			length = segmentList.current()->length();
+			length = path.current()->length();
 
 			param = length > 2 * m_radius
-				? segmentList.current()->param( m_radius )
+				? path.current()->param( m_radius )
 				: 0.5;
 
-			segmentList.insert(
-				segmentList.current()->splitAt( param ) );
+			path.insert(
+				path.current()->splitAt( param ) );
 
 
 			// Round corner:
-			newList.curveTo(
-				segmentList.current()->prev()->point( 0.5 ),
-				segmentList.current()->point( 0.5 ),
-				segmentList.current()->knot() );
+			newPath.curveTo(
+				path.current()->prev()->point( 0.5 ),
+				path.current()->point( 0.5 ),
+				path.current()->knot() );
 		}
 		else
-			newList.append( segmentList.current()->clone() );
+			newPath.append( path.current()->clone() );
 
 
 		if( !success() )
 			setSuccess();
 
 
-		segmentList.next();
+		path.next();
 	}
 
 
 	// end:
-	if( segmentList.isClosed() )
+	if( path.isClosed() )
 	{
 		if(
 			!(
-				segmentList.current()->type() == VSegment::curve &&
-				segmentList.getFirst()->next()->type() == VSegment::curve ) )
+				path.current()->type() == VSegment::curve &&
+				path.getFirst()->next()->type() == VSegment::curve ) )
 		{
-			length = segmentList.current()->length();
+			length = path.current()->length();
 
 			param = length > 2 * m_radius
-				? segmentList.current()->param( length - m_radius )
+				? path.current()->param( length - m_radius )
 				: 0.5;
 
-			segmentList.insert(
-				segmentList.current()->splitAt( param ) );
-			newList.append(
-				segmentList.current()->clone() );
-			segmentList.next();
+			path.insert(
+				path.current()->splitAt( param ) );
+			newPath.append(
+				path.current()->clone() );
+			path.next();
 
 
-			segmentList.first();
-			segmentList.next();
+			path.first();
+			path.next();
 
 			// Round corner:
-			newList.curveTo(
-				segmentList.getLast()->point( 0.5 ),
-				segmentList.current()->point( 0.5 ),
-				segmentList.current()->knot() );
+			newPath.curveTo(
+				path.getLast()->point( 0.5 ),
+				path.current()->point( 0.5 ),
+				path.current()->knot() );
 		}
 		else
-			newList.append( segmentList.current()->clone() );
+			newPath.append( path.current()->clone() );
 
-		newList.close();
+		newPath.close();
 	}
 	else
-		newList.append( segmentList.current()->clone() );
+		newPath.append( path.current()->clone() );
 
 
-	segmentList = newList;
+	path = newPath;
 
 	// invalidate bounding box once:
-	segmentList.invalidateBoundingBox();
+	path.invalidateBoundingBox();
 }
 

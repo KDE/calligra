@@ -22,10 +22,10 @@
 
 #include <koRect.h>
 
+#include "vcomposite.h"
 #include "vfill.h"
 #include "vgroup.h"
 #include "vlayer.h"
-#include "vpath.h"
 #include "vstroke.h"
 #include "vvisitor.h"
 
@@ -172,11 +172,11 @@ VGroup::load( const QDomElement& element )
 		{
 			QDomElement e = list.item( i ).toElement();
 
-			if( e.tagName() == "PATH" )
+			if( e.tagName() == "COMPOSITE" )
 			{
-				VPath* path = new VPath( this );
-				path->load( e );
-				append( path );
+				VComposite* composite = new VComposite( this );
+				composite->load( e );
+				append( composite );
 			}
 			else if( e.tagName() == "TEXT" )
 			{

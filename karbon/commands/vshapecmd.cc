@@ -18,43 +18,45 @@
    Boston, MA 02111-1307, USA.
 */
 
+
+#include "vcomposite.h"
 #include "vdocument.h"
-#include "vpath.h"
 #include "vselection.h"
 #include "vshapecmd.h"
 
-VShapeCmd::VShapeCmd( VDocument* doc, const QString& name, VPath* path )
-	: VCommand( doc, name ), m_path( path )
+
+VShapeCmd::VShapeCmd( VDocument* doc, const QString& name, VComposite* composite )
+	: VCommand( doc, name ), m_composite( composite )
 {
 }
 
 void
 VShapeCmd::execute()
 {
-	if( !m_path )
+	if( !m_composite )
 		return;
 
-	if( m_path->state() == VObject::deleted )
-		m_path->setState( VObject::normal );
+	if( m_composite->state() == VObject::deleted )
+		m_composite->setState( VObject::normal );
 	else
 	{
-		m_path->setState( VObject::normal );
-		m_doc->applyDefaultColors( *m_path );
+		m_composite->setState( VObject::normal );
+		m_doc->applyDefaultColors( *m_composite );
 
 		// Add path:
-		m_doc->append( m_path );
+		m_doc->append( m_composite );
 		m_doc->selection()->clear();
-		m_doc->selection()->append( m_path );
+		m_doc->selection()->append( m_composite );
 	}
 }
 
 void
 VShapeCmd::unexecute()
 {
-	if( !m_path )
+	if( !m_composite )
 		return;
 
-	m_doc->selection()->take( *m_path );
-	m_path->setState( VObject::deleted );
+	m_doc->selection()->take( *m_composite );
+	m_composite->setState( VObject::deleted );
 }
 

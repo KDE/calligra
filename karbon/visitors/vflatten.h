@@ -21,7 +21,6 @@
 #define __VFLATTE_H__
 
 
-#include "vpath.h"
 #include "vvisitor.h"
 
 
@@ -33,7 +32,7 @@ public:
 	double flatness() const { return m_flatness; }
 	void setFlatness( double flatness );
 
-	virtual void visitVSegmentList( VSegmentList& segmentList );
+	virtual void visitVPath( VPath& path );
 
 private:
 	double m_flatness;

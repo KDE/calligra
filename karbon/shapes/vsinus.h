@@ -21,9 +21,9 @@
 #ifndef __VSINUS_H__
 #define __VSINUS_H__
 
-#include "vpath.h"
+#include "vcomposite.h"
 
-class VSinus : public VPath
+class VSinus : public VComposite
 {
 public:
 	VSinus( VObject* parent,

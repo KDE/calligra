@@ -17,59 +17,61 @@
    Boston, MA 02111-1307, USA.
 */
 
+
+#include "vpath.h"
 #include "vsegment.h"
-#include "vsegmentlist.h"
 #include "vselectnodes.h"
 
+
 void
-VSelectNodes::visitVSegmentList( VSegmentList& segmentList )
+VSelectNodes::visitVPath( VPath& path )
 {
-	segmentList.first();
+	path.first();
 
 	// skip "begin":
-	while( segmentList.next() )
+	while( path.next() )
 	{
 		if( m_rect.isEmpty() )
 		{
-			segmentList.current()->selectCtrlPoint1( m_select );
-			segmentList.current()->selectCtrlPoint2( m_select );
-			segmentList.current()->selectKnot( m_select );
+			path.current()->selectCtrlPoint1( m_select );
+			path.current()->selectCtrlPoint2( m_select );
+			path.current()->selectKnot( m_select );
 
 			setSuccess();
 		}
 		else
 		{
 			if(
-				segmentList.current()->ctrlPointFixing() != VSegment::first &&
-				m_rect.contains( segmentList.current()->ctrlPoint1() ) )
+				path.current()->ctrlPointFixing() != VSegment::first &&
+				m_rect.contains( path.current()->ctrlPoint1() ) )
 			{
 				// select first control point, when previous knot is selected:
 				if(
-					segmentList.current()->prev() &&
-					segmentList.current()->prev()->knotSelected() )
+					path.current()->prev() &&
+					path.current()->prev()->knotSelected() )
 				{
-					segmentList.current()->selectCtrlPoint1( m_select );
+					path.current()->selectCtrlPoint1( m_select );
 
 					setSuccess();
 				}
 			}
 
 			if(
-				segmentList.current()->ctrlPointFixing() != VSegment::second &&
-				m_rect.contains( segmentList.current()->ctrlPoint2() ) )
+				path.current()->ctrlPointFixing() != VSegment::second &&
+				m_rect.contains( path.current()->ctrlPoint2() ) )
 			{
 				// select second control point, when knot is selected:
-				if( segmentList.current()->knotSelected() )
+				if( path.current()->knotSelected() )
 				{
-					segmentList.current()->selectCtrlPoint2( m_select );
+					path.current()->selectCtrlPoint2( m_select );
 
 					setSuccess();
 				}
 			}
 
-			if( m_rect.contains( segmentList.current()->knot() ) )
+			if( m_rect.contains( path.current()->knot() ) )
 			{
-				segmentList.current()->selectKnot( m_select );
+				path.current()->selectKnot( m_select );
 
 				setSuccess();
 			}

@@ -46,7 +46,7 @@ void VRectangleTool::refreshUnit()
     m_dialog->refreshUnit();
 }
 
-VPath*
+VComposite*
 VRectangleTool::shape( bool interactive ) const
 {
 	if( interactive )

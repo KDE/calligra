@@ -29,7 +29,7 @@
 
 VPolygon::VPolygon( VObject* parent,
 		const KoPoint& center, double radius, uint edges, double angle )
-	: VPath( parent )
+	: VComposite( parent )
 {
 	setDrawCenterNode();
 

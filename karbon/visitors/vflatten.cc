@@ -20,8 +20,8 @@
 #include <qptrlist.h>
 
 #include "vflatten.h"
+#include "vpath.h"
 #include "vsegment.h"
-#include "vsegmentlist.h"
 
 
 // TODO: Think about if we want to adapt this:
@@ -60,22 +60,22 @@ VFlatten::setFlatness( double flatness )
 }
 
 void
-VFlatten::visitVSegmentList( VSegmentList& segmentList )
+VFlatten::visitVPath( VPath& path )
 {
-	segmentList.first();
+	path.first();
 
 	// ommit "begin" segment:
-	while( segmentList.next() )
+	while( path.next() )
 	{
-		while( !segmentList.current()->isFlat( m_flatness )  )
+		while( !path.current()->isFlat( m_flatness )  )
 		{
 			// split at midpoint:
-			segmentList.insert(
-				segmentList.current()->splitAt( 0.5 ) );
+			path.insert(
+				path.current()->splitAt( 0.5 ) );
 		}
 
 		// convert to line:
-		segmentList.current()->setType( VSegment::line );
+		path.current()->setType( VSegment::line );
 
 		if( !success() )
 			setSuccess();

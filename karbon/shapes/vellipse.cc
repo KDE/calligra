@@ -24,7 +24,7 @@
 
 VEllipse::VEllipse( VObject* parent,
 		const KoPoint& topLeft, double width, double height )
-	: VPath( parent )
+	: VComposite( parent )
 {
 	setDrawCenterNode();
 

@@ -17,44 +17,45 @@
    Boston, MA 02111-1307, USA.
 */
 
+
 #include <math.h>
 
 #include <qptrlist.h>
 #include <qwmatrix.h>
 
+#include "vcomposite.h"
 #include "vglobal.h"
 #include "vinsertknots.h"
 #include "vpath.h"
 #include "vsegment.h"
-#include "vsegmentlist.h"
 #include "vwhirlpinch.h"
 
 
 void
-VWhirlPinch::visitVPath( VPath& path )
+VWhirlPinch::visitVComposite( VComposite& composite )
 {
 	// first subdivide:
 	VInsertKnots insertKnots( 2 );
-	insertKnots.visit( path );
+	insertKnots.visit( composite );
 
-	VVisitor::visitVPath( path );
+	VVisitor::visitVComposite( composite );
 }
 
 void
-VWhirlPinch::visitVSegmentList( VSegmentList& segmentList )
+VWhirlPinch::visitVPath( VPath& path )
 {
 	QWMatrix m;
 	KoPoint delta;
 	double dist;
 
-	segmentList.first();
+	path.first();
 
-	while( segmentList.current() )
+	while( path.current() )
 	{
-		segmentList.current()->convertToCurve();
+		path.current()->convertToCurve();
 
 
-		delta = segmentList.current()->knot() - m_center;
+		delta = path.current()->knot() - m_center;
 		dist = sqrt( delta.x() * delta.x() + delta.y() * delta.y() );
 
 		if( dist < m_radius )
@@ -72,11 +73,11 @@ VWhirlPinch::visitVSegmentList( VSegmentList& segmentList )
 			m.rotate( m_angle * ( 1.0 - dist ) * ( 1.0 - dist ) );
 			m.translate( m_center.x(), m_center.y() );
 
-			segmentList.current()->setKnot( delta.transform( m ) );
+			path.current()->setKnot( delta.transform( m ) );
 		}
 
 
-		delta = segmentList.current()->ctrlPoint1() - m_center;
+		delta = path.current()->ctrlPoint1() - m_center;
 		dist = sqrt( delta.x() * delta.x() + delta.y() * delta.y() );
 
 		if( dist < m_radius )
@@ -94,11 +95,11 @@ VWhirlPinch::visitVSegmentList( VSegmentList& segmentList )
 			m.rotate( m_angle * ( 1.0 - dist ) * ( 1.0 - dist ) );
 			m.translate( m_center.x(), m_center.y() );
 
-			segmentList.current()->setCtrlPoint1( delta.transform( m ) );
+			path.current()->setCtrlPoint1( delta.transform( m ) );
 		}
 
 
-		delta = segmentList.current()->ctrlPoint2() - m_center;
+		delta = path.current()->ctrlPoint2() - m_center;
 		dist = sqrt( delta.x() * delta.x() + delta.y() * delta.y() );
 
 		if( dist < m_radius )
@@ -116,7 +117,7 @@ VWhirlPinch::visitVSegmentList( VSegmentList& segmentList )
 			m.rotate( m_angle * ( 1.0 - dist ) * ( 1.0 - dist ) );
 			m.translate( m_center.x(), m_center.y() );
 
-			segmentList.current()->setCtrlPoint2( delta.transform( m ) );
+			path.current()->setCtrlPoint2( delta.transform( m ) );
 		}
 
 
@@ -124,10 +125,10 @@ VWhirlPinch::visitVSegmentList( VSegmentList& segmentList )
 			setSuccess();
 
 
-		segmentList.next();
+		path.next();
 	}
 
 	// invalidate bounding box once:
-	segmentList.invalidateBoundingBox();
+	path.invalidateBoundingBox();
 }
 

@@ -17,8 +17,9 @@
    Boston, MA 02111-1307, USA.
 */
 
+
+#include "vpath.h"
 #include "vsegment.h"
-#include "vsegmentlist.h"
 #include "vtransformnodes.h"
 
 
@@ -28,49 +29,49 @@ VTransformNodes::VTransformNodes( const QWMatrix& m )
 }
 
 void
-VTransformNodes::visitVSegmentList( VSegmentList& segmentList )
+VTransformNodes::visitVPath( VPath& path )
 {
-	segmentList.first();
+	path.first();
 
 	// skip "begin":
-	while( segmentList.next() )
+	while( path.next() )
 	{
 		if(
-			segmentList.current()->prev() &&
-			segmentList.current()->prev()->edited( 2 ) )
+			path.current()->prev() &&
+			path.current()->prev()->edited( 2 ) )
 		{
 			// Do nothing.
 		}
-		else if( segmentList.current()->edited( 0 ) )
+		else if( path.current()->edited( 0 ) )
 		{
-			segmentList.current()->setCtrlPoint1(
-				segmentList.current()->ctrlPoint1().transform( m_matrix ) );
+			path.current()->setCtrlPoint1(
+				path.current()->ctrlPoint1().transform( m_matrix ) );
 		}
 
-		if( segmentList.current()->edited( 2 ) )
+		if( path.current()->edited( 2 ) )
 		{
-			segmentList.current()->setCtrlPoint2(
-				segmentList.current()->ctrlPoint2().transform( m_matrix ) );
-			segmentList.current()->setKnot(
-				segmentList.current()->knot().transform( m_matrix ) );
+			path.current()->setCtrlPoint2(
+				path.current()->ctrlPoint2().transform( m_matrix ) );
+			path.current()->setKnot(
+				path.current()->knot().transform( m_matrix ) );
 
-			if( segmentList.current() == segmentList.getLast() )
+			if( path.current() == path.getLast() )
 			{
-				segmentList.getFirst()->setKnot(
-					segmentList.getFirst()->knot().transform( m_matrix ) );
-				segmentList.getFirst()->next()->setCtrlPoint1(
-					segmentList.getFirst()->next()->ctrlPoint1().transform( m_matrix ) );
+				path.getFirst()->setKnot(
+					path.getFirst()->knot().transform( m_matrix ) );
+				path.getFirst()->next()->setCtrlPoint1(
+					path.getFirst()->next()->ctrlPoint1().transform( m_matrix ) );
 			}
 			else
 			{
-				segmentList.current()->next()->setCtrlPoint1(
-					segmentList.current()->next()->ctrlPoint1().transform( m_matrix ) );
+				path.current()->next()->setCtrlPoint1(
+					path.current()->next()->ctrlPoint1().transform( m_matrix ) );
 			}
 		}
-		else if( segmentList.current()->edited( 1 ) )
+		else if( path.current()->edited( 1 ) )
 		{
-			segmentList.current()->setCtrlPoint2(
-				segmentList.current()->ctrlPoint2().transform( m_matrix ) );
+			path.current()->setCtrlPoint2(
+				path.current()->ctrlPoint2().transform( m_matrix ) );
 		}
 
 		if( !success() )

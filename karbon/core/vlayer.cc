@@ -23,10 +23,10 @@
 #include <klocale.h>
 #include <koRect.h>
 
+#include "vcomposite.h"
+#include "vgroup.h"
 #include "vlayer.h"
 #include "vobject.h"
-#include "vpath.h"
-#include "vgroup.h"
 //#include "vtext.h"
 #include "vvisitor.h"
 
@@ -147,11 +147,11 @@ VLayer::load( const QDomElement& element )
 		{
 			QDomElement e = list.item( i ).toElement();
 
-			if( e.tagName() == "PATH" )
+			if( e.tagName() == "COMPOSITE" )
 			{
-				VPath* path = new VPath( this );
-				path->load( e );
-				append( path );
+				VComposite* composite = new VComposite( this );
+				composite->load( e );
+				append( composite );
 			}
 			else if( e.tagName() == "GROUP" )
 			{
