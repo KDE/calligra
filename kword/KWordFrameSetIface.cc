@@ -125,3 +125,27 @@ bool KWordFrameSetIface::isCopy()const
 {
     return m_frame->frame(0)->isCopy();
 }
+
+void KWordFrameSetIface::setPtMarginLeft(double val)
+{
+    m_frame->frame( 0 )->setBLeft(val);
+    m_frame->kWordDocument()->layout();
+}
+
+void KWordFrameSetIface::setPtMarginRight(double val)
+{
+    m_frame->frame( 0 )->setBRight(val);
+    m_frame->kWordDocument()->layout();
+
+}
+void KWordFrameSetIface::setPtMarginTop(double val)
+{
+    m_frame->frame( 0 )->setBTop(val);
+    m_frame->kWordDocument()->layout();
+}
+
+void KWordFrameSetIface::setPtMarginBottom(double val)
+{
+    m_frame->frame( 0 )->setBBottom(val);
+    m_frame->kWordDocument()->layout();
+}

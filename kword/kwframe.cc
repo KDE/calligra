@@ -1281,6 +1281,11 @@ bool KWFrameSet::isAFooter() const
     return ( m_info == FI_FIRST_FOOTER || m_info == FI_EVEN_FOOTER || m_info == FI_ODD_FOOTER );
 }
 
+bool KWFrameSet::isFootEndNote() const
+{
+    return m_info == FI_FOOTNOTE;
+}
+
 bool KWFrameSet::isAWrongHeader( KoHFType t ) const
 {
     switch ( m_info ) {

@@ -361,13 +361,14 @@ public:
                 FI_FIRST_FOOTER = 4, FI_ODD_FOOTER = 5, FI_EVEN_FOOTER = 6,
                 FI_FOOTNOTE = 7 };
     /** Returns the type of TextFrameSet this is */
-    Info frameSetInfo() { return m_info; }
+    Info frameSetInfo()const { return m_info; }
     /** Set the type of TextFrameSet this is */
     void setFrameSetInfo( Info fi ) { m_info = fi; }
 
     bool isAHeader() const;
     bool isAFooter() const;
     bool isHeaderOrFooter() const { return isAHeader() || isAFooter(); }
+    bool isFootEndNote() const;
 
     bool isAWrongHeader( KoHFType t ) const;
     bool isAWrongFooter( KoHFType t ) const;

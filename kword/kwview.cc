@@ -4490,11 +4490,11 @@ void KWView::slotFrameSetEditChanged()
     actionInsertExpression->setEnabled(state);
 
     //frameset different of header/footer
-    state= state && edit && edit->frameSet() && !edit->frameSet()->isHeaderOrFooter() && !edit->frameSet()->getGroupManager();
+    state= state && edit && edit->frameSet() && !edit->frameSet()->isHeaderOrFooter() && !edit->frameSet()->getGroupManager() && !edit->frameSet()->isFootEndNote();
 
     actionInsertContents->setEnabled(state);
     actionInsertFrameBreak->setEnabled( state );
-
+    actionInsertFootEndNote->setEnabled( state );
     slotUpdateRuler();
 }
 

@@ -54,6 +54,12 @@ k_dcop:
     virtual double ptMarginRight()const;
     virtual double ptMarginTop()const;
     virtual double ptMarginBottom()const;
+
+    virtual void setPtMarginLeft(double val);
+    virtual void setPtMarginRight(double val);
+    virtual void setPtMarginTop(double val);
+    virtual void setPtMarginBottom(double val);
+
     virtual bool isCopy()const;
 
 private:
