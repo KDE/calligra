@@ -28,9 +28,9 @@ SideBar::SideBar( QWidget *parent, KPresenterDoc *d, KPresenterView *v )
     setSizePolicy( QSizePolicy( QSizePolicy::Minimum, QSizePolicy::Expanding ) );
     connect( this, SIGNAL( currentChanged( QListViewItem * ) ), this, SLOT( itemClicked( QListViewItem * ) ) );
     connect( this, SIGNAL( moved( QListViewItem *, QListViewItem *, QListViewItem * ) ),
-	     this, SLOT( movedItems( QListViewItem *, QListViewItem *, QListViewItem * ) ) );
+             this, SLOT( movedItems( QListViewItem *, QListViewItem *, QListViewItem * ) ) );
     connect( this, SIGNAL( rightButtonPressed( QListViewItem *, const QPoint &, int ) ),
-	     this, SLOT( rightButtonPressed( QListViewItem *, const QPoint &, int ) ) );
+             this, SLOT( rightButtonPressed( QListViewItem *, const QPoint &, int ) ) );
     setAcceptDrops( TRUE );
     setDropVisualizer( TRUE );
     setDragEnabled( TRUE );
@@ -49,12 +49,12 @@ void SideBar::rebuildItems()
     clear();
     // Rebuild all the items
     for ( int i = doc->getPageNums() - 1; i >= 0; --i ) {
-	QCheckListItem *item = new SideBarItem( this );
-	QString title = doc->getPageTitle( i, i18n( "Slide %1" ).arg( i + 1 ) );
+        QCheckListItem *item = new SideBarItem( this );
+        QString title = doc->getPageTitle( i, i18n( "Slide %1" ).arg( i + 1 ) );
         //kdDebug() << "SideBar::rebuildItems slide " << i+1 << " selected:" << doc->isSlideSelected( i ) << endl;
-        item->setOn( doc->isSlideSelected( i ) );
-	item->setText( 1, QString::number( i + 1 ) ); // page number
-	item->setText( 0, title );
+        item->setOn( doc->isSlideSelected( i ) ); // calls itemStateChange !
+        item->setText( 1, QString::number( i + 1 ) ); // page number
+        item->setText( 0, title );
     }
 }
 
@@ -64,11 +64,13 @@ void SideBar::updateItem( int pagenr /* 0-based */)
     QListViewItemIterator it( this );
     for ( ; it.current(); ++it )
     {
-	if ( it.current()->text(1).toInt() == pagenr+1 )
+        if ( it.current()->text(1).toInt() == pagenr+1 )
         {
             QString title = doc->getPageTitle( pagenr, i18n( "Slide %1" ).arg( pagenr + 1 ) );
             it.current()->setText( 0, title );
+            it.current()->setText( 1, QString::null ); // hack, to make itemStateChange do nothing
             static_cast<SideBarItem*>(it.current())->setOn( doc->isSlideSelected( pagenr ) );
+            it.current()->setText( 1, QString::number( pagenr + 1 ) ); // page number
             return;
         }
     }
@@ -77,13 +79,15 @@ void SideBar::updateItem( int pagenr /* 0-based */)
 
 void SideBar::itemStateChange( SideBarItem * item, bool state )
 {
-    emit selectPage( item->text( 1 ).toInt() - 1, state );
+    QString text = item->text( 1 );
+    if ( !text.isEmpty() ) // empty if we are called from rebuildItems
+        emit selectPage( text.toInt() - 1, state );
 }
 
 void SideBar::itemClicked( QListViewItem *i )
 {
     if ( !i )
-	return;
+        return;
     emit showPage( i->text( 1 ).toInt() - 1 );
 }
 
@@ -92,10 +96,10 @@ void SideBar::setCurrentPage( int pg )
 {
     QListViewItemIterator it( this );
     for ( ; it.current(); ++it ) {
-	if ( it.current()->text( 1 ).toInt() - 1 == pg ) {
-	    setCurrentItem( it.current() );
-	    setSelected( it.current(), TRUE );
-	}
+        if ( it.current()->text( 1 ).toInt() - 1 == pg ) {
+            setCurrentItem( it.current() );
+            setSelected( it.current(), TRUE );
+        }
     }
 }
 
@@ -103,10 +107,10 @@ void SideBar::setOn( int pg, bool on )
 {
     QListViewItemIterator it( this );
     for ( ; it.current(); ++it ) {
-	if ( it.current()->text( 1 ).toInt() - 1 == pg ) {
-	    ( (QCheckListItem*)it.current() )->setOn( on );
-	    return;
-	}
+        if ( it.current()->text( 1 ).toInt() - 1 == pg ) {
+            ( (QCheckListItem*)it.current() )->setOn( on );
+            return;
+        }
     }
 }
 
@@ -130,11 +134,11 @@ void SideBar::doMoveItems()
     int num = movedItem->text( 1 ).toInt() - 1;
     int numNow;
     if ( !movedAfter ) {
-	numNow = 0;
+        numNow = 0;
     } else {
-	numNow = movedAfter->text( 1 ).toInt();
-	if ( numNow > num )
-	    numNow--;
+        numNow = movedAfter->text( 1 ).toInt();
+        if ( numNow > num )
+            numNow--;
     }
     emit movePage( num, numNow );
 }
