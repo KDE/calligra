@@ -1,1 +1,1 @@
-SUBDIRS = xfig msod wmf applixgraphics
+SUBDIRS = svg xfig msod wmf applixgraphics
