@@ -234,7 +234,7 @@ QDomElement KSpreadLayout::save( QDomDocument& doc ) const
 	format.setAttribute( "faktor", m_dFaktor );
     if ( hasProperty( PFont ) )
 	format.appendChild( createElement( "font", m_textFont, doc ) );
-    if ( hasProperty( PTextPen ) )
+    if ( hasProperty( PTextPen ) && m_textPen.color().isValid())
 	format.appendChild( createElement( "pen", m_textPen, doc ) );
     if ( hasProperty( PBackgroundBrush ) )
     {
@@ -701,7 +701,10 @@ void KSpreadLayout::setGoUpDiagonalWidth( int _w )
 
 void KSpreadLayout::setBackGroundBrush( const QBrush& _p)
 {
-    setProperty( PBackgroundBrush );
+    if ( _p.style() == Qt::NoBrush )
+        clearProperty( PBackgroundBrush );
+    else
+        setProperty( PBackgroundBrush );
 
     m_backGroundBrush = _p;
     layoutChanged();
