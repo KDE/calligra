@@ -89,7 +89,8 @@ protected:
     KoBGSpell m_bgSpell;
 
 private:
-    KSpellConfig * m_pKSpellConfig;
+    class KoBgSpellCheckPrivate;
+    KoBgSpellCheckPrivate *d;
     QStringList m_spellListIgnoreAll;
     bool m_bSpellCheckEnabled;
     bool m_bDontCheckUpperWord;

@@ -30,9 +30,26 @@
 
 //#define DEBUG_BGSPELLCHECKING
 
+class KoBgSpellCheck::KoBgSpellCheckPrivate
+{
+public:
+    KSpellConfig * m_pKSpellConfig;
+    QTimer * startTimer;
+    QTimer * nextParagraphTimer;
+};
+
 KoBgSpellCheck::KoBgSpellCheck()
 {
-    m_pKSpellConfig=0L;
+    //kdDebug(32500) << "KoBgSpellCheck::KoBgSpellCheck " << this << endl;
+    d = new KoBgSpellCheck::KoBgSpellCheckPrivate;
+    d->m_pKSpellConfig=0L;
+    d->startTimer = new QTimer( this );
+    connect( d->startTimer, SIGNAL( timeout() ),
+             this, SLOT( startBackgroundSpellCheck() ) );
+    d->nextParagraphTimer = new QTimer( this );
+    connect( d->nextParagraphTimer, SIGNAL( timeout() ),
+             this, SLOT( spellCheckNextParagraph() ) );
+
     m_bgSpell.kspell=0L;
     m_bDontCheckUpperWord=false;
     m_bSpellCheckEnabled=false;
@@ -45,7 +62,8 @@ KoBgSpellCheck::KoBgSpellCheck()
 KoBgSpellCheck::~KoBgSpellCheck()
 {
     delete m_bgSpell.kspell;
-    delete m_pKSpellConfig;
+    delete d->m_pKSpellConfig;
+    delete d;
 }
 
 void KoBgSpellCheck::addPersonalDictonary( const QString & word )
@@ -122,7 +140,7 @@ void KoBgSpellCheck::startBackgroundSpellCheck()
     }
     if ( !m_bgSpell.currentTextObj )
     {
-        QTimer::singleShot( 1000, this, SLOT( startBackgroundSpellCheck() ) );
+        d->startTimer->start( 1000, true );
         return;
     }
 #ifdef DEBUG_BGSPELLCHECKING
@@ -132,7 +150,9 @@ void KoBgSpellCheck::startBackgroundSpellCheck()
     m_bgSpell.currentParag = m_bgSpell.currentTextObj->textDocument()->firstParag();
     nextParagraphNeedingCheck();
 
-    //kdDebug(32500) << "fs=" << m_bgSpell.currentTextObj << " parag=" << m_bgSpell.currentParag << endl;
+#ifdef DEBUG_BGSPELLCHECKING
+    kdDebug(32500) << "fs=" << m_bgSpell.currentTextObj << " parag=" << m_bgSpell.currentParag << endl;
+#endif
 
     if ( !m_bgSpell.currentTextObj || !m_bgSpell.currentParag ) {
         if ( m_bgSpell.currentTextObj )
@@ -141,15 +161,17 @@ void KoBgSpellCheck::startBackgroundSpellCheck()
                 m_bgSpell.currentTextObj->setNeedSpellCheck(false);
         }
         // Might be better to launch again upon document modification (key, pasting, etc.) instead of right now
-        //kdDebug(32500) << "KWDocument::startBackgroundSpellCheck nothing to check this time." << endl;
-        QTimer::singleShot( 1000, this, SLOT( startBackgroundSpellCheck() ) );
+#ifdef DEBUG_BGSPELLCHECKING
+        kdDebug(32500) << "KoBgSpellCheck::startBackgroundSpellCheck nothing to check this time." << endl;
+#endif
+        d->startTimer->start( 1000, true );
         return;
     }
 
     bool needsWait = false;
     if ( !m_bgSpell.kspell ) // reuse if existing
     {
-        m_bgSpell.kspell = new KoSpell(0L, this, SLOT( spellCheckerReady() ), m_pKSpellConfig );
+        m_bgSpell.kspell = new KoSpell(0L, this, SLOT( spellCheckerReady() ), d->m_pKSpellConfig );
 
         needsWait = true; // need to wait for ready()
         connect( m_bgSpell.kspell, SIGNAL( death() ),
@@ -172,8 +194,10 @@ void KoBgSpellCheck::spellCheckerReady()
     if (m_bgSpell.currentTextObj)
         m_bgSpell.currentParag = m_bgSpell.currentTextObj->textDocument()->firstParag();
 
-    //kdDebug(32500) << "KWDocument::spellCheckerReady" << endl;
-    QTimer::singleShot( 10, this, SLOT( spellCheckNextParagraph() ) );
+#ifdef DEBUG_BGSPELLCHECKING
+    kdDebug(32500) << "KoBgSpellCheck::spellCheckerReady textobj=" << m_bgSpell.currentTextObj << endl;
+#endif
+    d->nextParagraphTimer->start( 10, true );
 }
 
 // Input: currentTextObj non-null, and currentParag set to the last parag checked
@@ -181,7 +205,7 @@ void KoBgSpellCheck::spellCheckerReady()
 void KoBgSpellCheck::nextParagraphNeedingCheck()
 {
 #ifdef DEBUG_BGSPELLCHECKING
-    kdDebug(32500) << "KoBgSpellCheck::nextParagraphNeedingCheck" <<m_bgSpell.currentTextObj <<endl;
+    kdDebug(32500) << "KoBgSpellCheck::nextParagraphNeedingCheck textobj=" <<m_bgSpell.currentTextObj <<endl;
 #endif
     if ( !m_bgSpell.currentTextObj ) {
         m_bgSpell.currentParag = 0L;
@@ -221,9 +245,9 @@ void KoBgSpellCheck::nextParagraphNeedingCheck()
     if( !m_bgSpell.currentParag)
     {
         KoTextObject *obj=m_bgSpell.currentTextObj;
-        //kdDebug()<<" obj :"<<obj<<endl;
+        //kdDebug(32500)<<" obj :"<<obj<<endl;
         m_bgSpell.currentTextObj=nextTextObject( m_bgSpell.currentTextObj );
-        //kdDebug()<<" m_bgSpell.currentTextObj !"<<m_bgSpell.currentTextObj<<endl;
+        //kdDebug(32500)<<" m_bgSpell.currentTextObj="<<m_bgSpell.currentTextObj<<endl;
         if ( m_bgSpell.currentTextObj && m_bgSpell.currentTextObj!=obj)
         {
             m_bgSpell.currentParag = m_bgSpell.currentTextObj->textDocument()->firstParag();
@@ -237,17 +261,19 @@ void KoBgSpellCheck::nextParagraphNeedingCheck()
             m_bgSpell.currentParag = 0L;
         }
     }
-    //kdDebug()<<" KoBgSpellCheck::nextParagraphNeedingCheck() : m_bgSpell.currentParag :"<<m_bgSpell.currentParag<<endl;
+    //kdDebug(32500)<<" KoBgSpellCheck::nextParagraphNeedingCheck() : m_bgSpell.currentParag :"<<m_bgSpell.currentParag<<endl;
 
 }
 
 void KoBgSpellCheck::spellCheckNextParagraph()
 {
-    //kdDebug(32500) << "KoBgSpellCheck::spellCheckNextParagraph" << endl;
+#ifdef DEBUG_BGSPELLCHECKING
+    kdDebug(32500) << "KoBgSpellCheck::spellCheckNextParagraph" << endl;
+#endif
 
     nextParagraphNeedingCheck();
 #ifdef DEBUG_BGSPELLCHECKING
-    kdDebug(32500) << "fs=" << m_bgSpell.currentTextObj << " parag=" << m_bgSpell.currentParag << endl;
+    kdDebug(32500) << "textobj=" << m_bgSpell.currentTextObj << " parag=" << m_bgSpell.currentParag << endl;
 #endif
     if ( !m_bgSpell.currentTextObj || !m_bgSpell.currentParag )
     {
@@ -256,7 +282,7 @@ void KoBgSpellCheck::spellCheckNextParagraph()
 #endif
         // We arrived to the end of the paragraphs. Jump to startBackgroundSpellCheck,
         // it will check if we still have something to do.
-        QTimer::singleShot( 100, this, SLOT( startBackgroundSpellCheck() ));
+        d->startTimer->start( 100, true );
         return;
     }
     // First remove any misspelled format from the paragraph
@@ -276,12 +302,12 @@ void KoBgSpellCheck::spellCheckNextParagraph()
 
 void KoBgSpellCheck::spellCheckerMisspelling(const QString &old, int pos )
 {
+    KoTextObject * textobj = m_bgSpell.currentTextObj;
 #ifdef DEBUG_BGSPELLCHECKING
-    kdDebug(32500) << "KoBgSpellCheck::spellCheckerMisspelling old=" << old << " pos=" << pos << endl;
+    kdDebug(32500) << "KoBgSpellCheck::spellCheckerMisspelling textobj=" << textobj << " old=" << old << " pos=" << pos << endl;
 #endif
-    KoTextObject * fs = m_bgSpell.currentTextObj;
-    //Q_ASSERT( fs );
-    if ( !fs ) return;
+    Q_ASSERT( textobj );
+    if ( !textobj ) return;
     KoTextParag* parag = m_bgSpell.currentParag;
     if ( !parag ) return;
 #ifdef DEBUG_BGSPELLCHECKING
@@ -307,7 +333,7 @@ void KoBgSpellCheck::spellCheckerDone()
     if( m_bgSpell.currentTextObj && m_bgSpell.currentParag==m_bgSpell.currentTextObj->textDocument()->lastParag())
         m_bgSpell.currentTextObj->setNeedSpellCheck(false);
     // Done checking the current paragraph, schedule the next one
-    QTimer::singleShot( 10, this, SLOT( spellCheckNextParagraph() ) );
+    d->nextParagraphTimer->start( 10, true );
 }
 
 void KoBgSpellCheck::spellCheckerFinished()
@@ -341,9 +367,9 @@ void KoBgSpellCheck::spellCheckerFinished()
 
 KSpellConfig* KoBgSpellCheck::spellConfig()
 {
-  if ( !m_pKSpellConfig )
-    m_pKSpellConfig = new KSpellConfig();
-  return m_pKSpellConfig;
+  if ( !d->m_pKSpellConfig )
+    d->m_pKSpellConfig = new KSpellConfig();
+  return d->m_pKSpellConfig;
 }
 
 void KoBgSpellCheck::setKSpellConfig(KSpellConfig _kspell)
@@ -351,20 +377,25 @@ void KoBgSpellCheck::setKSpellConfig(KSpellConfig _kspell)
   (void)spellConfig();
   stopSpellChecking();
 
-  m_pKSpellConfig->setNoRootAffix(_kspell.noRootAffix ());
-  m_pKSpellConfig->setRunTogether(_kspell.runTogether ());
-  m_pKSpellConfig->setDictionary(_kspell.dictionary ());
-  m_pKSpellConfig->setDictFromList(_kspell.dictFromList());
-  m_pKSpellConfig->setEncoding(_kspell.encoding());
-  m_pKSpellConfig->setClient(_kspell.client());
+  d->m_pKSpellConfig->setNoRootAffix(_kspell.noRootAffix ());
+  d->m_pKSpellConfig->setRunTogether(_kspell.runTogether ());
+  d->m_pKSpellConfig->setDictionary(_kspell.dictionary ());
+  d->m_pKSpellConfig->setDictFromList(_kspell.dictFromList());
+  d->m_pKSpellConfig->setEncoding(_kspell.encoding());
+  d->m_pKSpellConfig->setClient(_kspell.client());
   m_bSpellCheckConfigure = false;
   startBackgroundSpellCheck();
 }
 
 void KoBgSpellCheck::stopSpellChecking()
 {
+#ifdef DEBUG_BGSPELLCHECKING
+  kdDebug(32500) << "KoBgSpellCheck::stopSpellChecking" << endl;
+#endif
   delete m_bgSpell.kspell;
   m_bgSpell.kspell = 0;
   m_bgSpell.currentParag = 0;
   m_bgSpell.currentTextObj = 0;
+  d->startTimer->stop();
+  d->nextParagraphTimer->stop();
 }

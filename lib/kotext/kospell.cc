@@ -394,20 +394,23 @@ KoSpell::Spelling KoSpell::parseLine(const QString &line, QString &word, int &po
 
 bool KoSpell::check(const QString &buffer)
 {
-//	kdDebug(32500) << "KoSpell::check(\"" << buffer << "\")" << endl;
+	//kdDebug(32500) << "KoSpell::check(\"" << buffer << "\")" << endl;
 	if(buffer.isEmpty())
 	{
-		//kdDebug(32500) << "Empty -> KoSpell::done()" << endl;
-		emit done();
-		return true;
+            //kdDebug(32500) << "Empty -> KoSpell::done()" << endl;
+            emit done();
+            return true;
 	}
 
-	// we need a fifo here !!
-	m_buffer << buffer;
+        // replace '\n' with ' '
+        QString buf( buffer );
+        buf.replace( '\n', ' ' );
 
-	// replace '\n' with ' ' ?
+	// we need a fifo here !!
+	m_buffer << buf;
+
 	proc->fputs("^", false);
-	proc->fputs(buffer);
+	proc->fputs(buf);
 
 	return true;
 }
@@ -415,7 +418,7 @@ bool KoSpell::check(const QString &buffer)
 // invoked by KProcIO when read from ispell
 void KoSpell::check2(KProcIO *)
 {
-//	kdDebug(32500) << "KoSpell::check2()" << endl;
+    //kdDebug(32500) << "KoSpell::check2()" << endl;
     QString line;
     int bytes;
     while((bytes=proc->fgets(line, true)) >= 0)
@@ -477,8 +480,10 @@ void KoSpell::check2(KProcIO *)
         }
 
         case SpellingDone:
-//				kdDebug(32500) << "KoSpell::done()" << endl;
-            m_buffer.pop_front();
+            //kdDebug(32500) << "KoSpell::check2() DONE" << endl;
+            Q_ASSERT(!m_buffer.isEmpty());
+            if (!m_buffer.isEmpty())
+                m_buffer.pop_front();
             emit done();
             break;
         case SpellingIgnore:
