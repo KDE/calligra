@@ -251,6 +251,7 @@ KPresenterView::KPresenterView( KPresenterDoc* _doc, QWidget *_parent, const cha
     pageBase = 0;
     sticky = FALSE;
     protect = FALSE;
+    keepRatio = FALSE;
     m_canvas = 0L;
     m_spell.kspell = 0;
     automaticScreenPresFirstTimer = true;
@@ -980,7 +981,6 @@ void KPresenterView::extraPenBrush()
     {
         styleDia->setSize( m_canvas->getSelectedObj()->getRect());
     }
-
     //now all sticky object are stored in sticky page
     styleDia->setSticky( stickyPage()->getSticky( sticky ) );
     styleDia->setProtected( page->getProtect( protect ) );
@@ -3325,6 +3325,7 @@ void KPresenterView::styleOk()
 	gXFactor = styleDia->getGXFactor();
 	gYFactor = styleDia->getGYFactor();
 	sticky = bSticky;
+        keepRatio = styleDia->isSticky();
         actionBrushColor->setCurrentColor( (styleDia->getBrush()).color() );
         actionPenColor->setCurrentColor( (styleDia->getPen()).color() );
         protect = styleDia->isProtected();
