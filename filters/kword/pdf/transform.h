@@ -24,21 +24,48 @@
 
 namespace PDFImport
 {
-    // check for special char
+    // check for special char (numerical values should be < 256)
     enum CharType {
         Unknown = 0,
-        Misc = 1, AlphaNumeric = 4, MiscSymbol = 5,
+        Punctuation = 1,
+        SymbolChar = 2,
+        Digit = 3,
+        Letter = 4,
 
-        Accent = 6,         // can serve as accent (latex)
-        Hyphen = 7,         // can be an hyphen (can also be a bullet)
-        SuperScript = 8,
-        LatexSpecial = 9,   // special case of needed Symbol->Times mapping
-                            // only '\' (0x005C)
-        CanHaveAccent = 2,  // letter that can have an accent (latex)
+        Hyphen = 5,        // symbol that can be an hyphen or a bullet
+        Bullet = 6,        // symbol that can be a bullet
+        SuperScript = 7,
+        SpecialSymbol = 8, // symbol that appears in Times font (0x22??)
+        Ligature = 13,
 
-        SpecialSymbol = 10, // char exits but do Times->Symbol mapping
-        Bullet = 11         // can be a list bullet
+        // latex
+        Punctuation_Accent = 9, // punctuation that can be an accent
+        Accent = 10,            // other accent
+        Letter_CanHaveAccent = 11, // letter that can have an accent
+
+        LatexSpecial = 12 // special case of needed Symbol->Times mapping
+                          // only '\' (0x005C)
     };
+
+    inline bool isPunctuation(CharType type) {
+        return ( type==Punctuation || type==Hyphen
+                 || type==Punctuation_Accent );
+    }
+    inline bool isSymbol(CharType type) {
+        return ( type==SymbolChar || type==Hyphen || type==Bullet
+                 || type==SpecialSymbol || type==Accent
+                 || type==LatexSpecial );
+    }
+    inline bool isLetter(CharType type) {
+        return ( type==Letter || type==Letter_CanHaveAccent );
+    }
+    inline bool isAlphaNumeric(CharType type) {
+        return ( type==Digit || isLetter(type) );
+    }
+    inline bool isAccent(CharType type) {
+        return ( type==Punctuation_Accent || type==Accent );
+    }
+
     bool checkLigature(Unicode, Unicode &res1, Unicode &res2);
     CharType checkSpecial(Unicode, Unicode &res);
 

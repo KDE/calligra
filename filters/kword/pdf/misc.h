@@ -81,6 +81,12 @@ namespace PDFImport
         DPath() {}
 
         bool isSegment() const { return size()==2; }
+        bool isHorizontalSegment() const {
+            return isSegment() && equal(at(0).y, at(1).y);
+        }
+        bool isVerticalSegment() const {
+            return isSegment() && equal(at(0).x, at(1).y);
+        }
         bool isRectangle() const;
         DRect boundingRect() const;
     };

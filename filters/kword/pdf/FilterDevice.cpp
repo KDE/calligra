@@ -291,23 +291,38 @@ void FilterDevice::updateStrokeColor(GfxState *state)
     _strokeColor = toColor(rgb);
 }
 
-void FilterDevice::stroke(GfxState *state)
+void FilterDevice::stroke(GfxState */*state*/)
 {
     kdDebug(30516) << "stroke" << endl;
-    convertPath(state);
+//    DPathVector path = convertPath(state);
+//    for (uint i=0; i<path.size(); i++) {
+//        if ( path[i].isHorizontalSegment() ) {
+//            kdDebug(30516) << "  horizontal segment" << endl;
+            // #### FIXME correctly draw the line
+//            if ( !_currentImage.image.isNull() ) addImage();
+//            _currentImage.rect = path[i].boundingRect();
+//            _currentImage.rect.bottom+=1;
+//            _currentImage.image =
+//                QImage(qRound(_currentImage.rect.width()),
+//                       qRound(_currentImage.rect.height()), 32);
+//            _currentImage.image.fill(_fillColor.pixel());
+//            addImage();
+//        } else if ( path[i].isVerticalSegment() ) {
+//            kdDebug(30516) << "  vertical segment" << endl;
+//        }
+//    }
 }
 
-void FilterDevice::fill(GfxState *state)
+void FilterDevice::fill(GfxState */*state*/)
 {
     kdDebug(30516) << "fill" << endl;
-    convertPath(state);
 //    doFill(state);
 }
 
-void FilterDevice::eoFill(GfxState *state)
+void FilterDevice::eoFill(GfxState */*state*/)
 {
     kdDebug(30516) << "eoFill" << endl;
-    convertPath(state);
+//    convertPath(state);
 //    doFill(state);
 }
 

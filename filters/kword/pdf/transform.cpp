@@ -6,27 +6,121 @@
 namespace PDFImport
 {
 
-// first 256 Unicode characters
-// numbers correspond to CharType of each character
-static const char TABLE_0[256] = {
-    0,0,0,0,0,0,0,0,0,1,1,0,0,0,0,0, 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+// classification of some Unicode characters
+static const uint TABLE_SIZE = 0x0100;
+static const uint NB_TABLES = 5;
+static const uint OFFSET[NB_TABLES] = {
+    0x00, 0x01, 0x20, 0x21, 0x22
+};
+static const char TABLE[NB_TABLES][TABLE_SIZE] = {
+#define U Unknown
+#define P Punctuation
+#define S SymbolChar
+#define D Digit
+#define L Letter
+
+#define H Hyphen
+#define B Bullet
+#define I SuperScript
+#define Y SpecialSymbol
+#define G Ligature
+
+#define A Accent
+#define E Punctuation_Accent
+#define C Letter_CanHaveAccent
+
+#define X LatexSpecial
+//-------------------------------------------------------------------
+{ // 0x0000 to 0x00FF
+    U,U,U,U,U,U,U,U,U,P,P,U,U,U,U,U, U,U,U,U,U,U,U,U,U,U,U,U,U,U,U,U,
 //
-    1,1,6,5,5,5,5,1,1,1,5,5,6,7,6,5, 4,4,4,4,4,4,4,4,4,4,1,1,5,5,5,1,
+    P,P,E,S,S,S,S,P,P,P,S,S,E,H,E,S, D,D,D,D,D,D,D,D,D,D,P,P,S,S,S,P,
 //    ! " # $ % & ' ( ) * + , - . /  0 1 2 3 4 5 6 7 8 9 : ; < = > ?
-    5,2,4,2,4,2,4,2,2,2,2,2,2,4,2,2, 4,4,2,2,2,2,4,2,4,2,2,5,9,5,6,6,
+    S,C,L,C,L,C,L,C,C,C,C,C,C,L,C,C, L,L,C,C,C,C,L,C,L,C,C,S,X,S,A,A,
 //  @ A B C D E F G H I J K L M N O  P Q R S T U V W X Y Z [ \ ] ^ _
-    6,2,4,2,4,2,4,2,2,2,2,2,2,4,2,2, 4,4,2,2,2,2,4,2,4,2,2,5,5,5,6,0,
+    E,C,L,C,L,C,L,C,C,C,C,C,C,L,C,C, L,L,C,C,C,C,L,C,L,C,C,S,S,S,A,U,
 //  ` a b c d e f g h i j k l m n o  p q r s t u v w x y z { | } ~
-    0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+    U,U,U,U,U,U,U,U,U,U,U,U,U,U,U,U, U,U,U,U,U,U,U,U,U,U,U,U,U,U,U,U,
 //
-    0,0,5,5,5,5,5,5,6,5,0,1,0,7,5,6, 6,5,8,8,6,0,0,5,6,8,0,1,5,5,5,1,
+    U,U,S,S,S,S,S,S,A,S,U,P,U,H,S,A, A,S,I,I,E,U,U,S,A,I,U,P,S,S,S,P,
 //      ¢ £ ¤     § ¨     « ¬        ° ± ² ³   µ ¶ ·   ¹   » ¼     ¿
-    4,4,4,4,4,4,2,4,4,4,4,4,4,4,4,4, 4,4,4,4,4,4,4,5,2,4,4,4,4,4,4,4,
+    L,L,L,L,L,L,C,L,L,L,L,L,L,L,L,L, L,L,L,L,L,L,L,S,C,L,L,L,L,L,L,L,
 //      Â   Ä           Ê Ë     Î Ï          Ô   Ö                 ß
-    4,4,4,4,4,4,2,4,4,4,4,4,4,4,4,4, 4,4,4,4,4,4,4,5,2,4,4,4,4,4,4,4
+    L,L,L,L,L,L,C,L,L,L,L,L,L,L,L,L, L,L,L,L,L,L,L,S,C,L,L,L,L,L,L,L
 //  à   â   ä   æ ç è é ê ë     î ï  ð       ô   ö   ø           þ
+},
+//-------------------------------------------------------------------
+{ // 0x0100 to 0x01FF
+    L,L,L,L,L,L,L,L,L,L,L,L,L,L,L,L, L,L,L,L,L,L,L,L,L,L,L,L,L,L,L,L,
+    L,L,L,L,L,L,L,L,L,L,L,L,L,L,L,L, L,C,L,L,L,L,L,L,L,L,L,L,L,L,L,L,
+    L,L,L,L,L,L,L,L,L,L,L,L,L,L,L,L, L,L,L,L,L,L,L,L,L,L,L,L,L,L,L,L,
+    L,L,L,L,L,L,L,L,L,L,L,L,L,L,L,L, L,L,L,L,L,L,L,L,L,L,L,L,L,L,L,U,
+    U,U,U,U,U,U,U,U,U,U,U,U,U,U,S,U, U,U,U,U,U,U,U,U,U,U,U,U,U,U,U,U,
+    L,L,U,U,U,U,U,L,L,S,U,U,U,U,L,L, L,U,U,U,U,L,L,U,U,U,U,U,U,U,U,U,
+    U,U,S,P,U,U,U,U,U,U,U,U,U,L,L,L, L,L,L,L,L,L,L,L,L,L,L,L,L,L,L,L,
+    L,L,L,L,L,L,L,L,L,L,L,L,L,L,U,U, L,U,U,U,L,L,U,U,L,L,L,L,L,L,L,L
+},
+//-------------------------------------------------------------------
+{ // 0x2000 to 0x20FF
+    U,U,U,U,U,U,U,U,U,U,U,U,U,U,U,U, U,U,U,U,U,U,U,U,P,P,P,P,P,P,P,P,
+    S,S,B,U,U,U,P,U,U,U,U,U,U,U,U,U, S,U,P,P,U,U,U,U,U,Y,Y,U,U,U,U,U,
+    U,U,U,U,Y,U,U,U,U,U,U,U,U,U,U,U, U,U,U,U,U,U,U,U,U,U,U,U,U,U,U,U,
+    U,U,U,U,U,U,U,U,U,U,U,U,U,U,U,U, U,U,U,U,U,U,U,U,U,U,U,U,U,U,U,U,
+    U,U,U,U,U,U,U,U,U,U,U,U,U,U,U,U, U,U,U,U,U,U,U,U,U,U,U,U,U,U,U,U,
+    U,U,U,U,U,U,U,U,U,U,U,U,S,U,U,U, U,U,U,U,U,U,U,U,U,U,U,U,U,U,U,U,
+    U,U,U,U,U,U,U,U,U,U,U,U,U,U,U,U, U,U,U,U,U,U,U,U,U,U,U,U,U,U,U,U,
+    U,U,U,U,U,U,U,U,U,U,U,U,U,U,U,U, U,U,U,U,U,U,U,U,U,U,U,U,U,U,U,U
+},
+//-------------------------------------------------------------------
+{ // 0x2100 to 0x21FF
+    U,U,U,G,U,U,U,U,U,G,U,U,U,U,U,U, U,U,U,U,U,U,U,U,U,U,U,U,U,U,U,U,
+    U,U,S,U,U,U,U,U,U,U,Y,Y,U,U,U,U, U,U,U,U,U,U,U,U,U,U,U,U,U,U,U,U,
+    U,U,U,U,U,U,U,U,U,U,U,U,U,U,U,U, U,U,U,U,U,U,U,U,U,U,U,U,U,U,U,U,
+    U,U,U,U,U,U,U,U,U,U,U,U,U,U,U,U, U,U,U,U,U,U,U,U,U,U,U,U,U,U,U,U,
+    U,U,U,U,U,U,U,U,U,U,U,U,U,U,U,U, Y,Y,Y,Y,Y,U,U,U,U,U,Y,Y,U,U,U,U,
+    U,U,U,U,U,U,U,U,U,U,U,U,U,U,Y,U, U,U,U,U,U,Y,U,U,U,U,U,U,U,U,U,U,
+    U,U,U,U,U,U,U,U,U,U,U,U,U,Y,Y,Y, Y,Y,Y,Y,Y,U,U,U,U,U,U,U,U,U,U,U,
+    U,U,U,U,U,U,U,U,U,U,U,U,U,U,U,U, U,U,U,U,U,U,U,U,U,U,U,U,U,U,U,U
+},
+//-------------------------------------------------------------------
+{ // 0x2200 to 0x22FF
+    Y,U,Y,Y,Y,Y,Y,Y,Y,Y,Y,Y,Y,Y,U,Y, U,Y,Y,U,U,Y,U,Y,U,Y,Y,U,U,Y,Y,U,
+    Y,U,U,U,U,U,U,Y,Y,Y,Y,Y,U,U,U,U, U,U,U,U,Y,Y,Y,U,U,U,U,U,Y,U,U,U,
+    U,Y,U,U,U,Y,U,Y,Y,Y,U,U,U,U,U,U, U,U,U,U,U,U,U,U,U,Y,Y,U,U,U,U,U,
+    Y,Y,Y,U,Y,Y,U,U,U,U,U,U,U,U,Y,Y, Y,Y,U,U,U,U,U,U,U,U,U,U,U,U,U,U,
+    U,U,Y,Y,Y,Y,Y,Y,Y,Y,U,U,U,U,U,U, U,U,U,U,U,Y,U,Y,U,U,U,U,U,U,U,U,
+    U,U,U,U,Y,Y,U,U,U,U,U,U,U,U,U,U, U,U,U,U,U,U,U,U,U,U,U,U,U,U,U,U,
+    U,U,U,U,U,Y,U,U,U,U,U,U,U,U,U,U, U,U,U,U,U,U,U,U,U,U,U,U,U,U,U,U,
+    U,U,U,U,U,U,U,U,U,U,U,U,U,U,U,U, U,U,U,U,U,U,U,U,U,U,U,U,U,U,U,U
+}
+//-------------------------------------------------------------------
+#undef U
+#undef P
+#undef S
+#undef D
+#undef L
+
+#undef H
+#undef B
+#undef I
+#undef Y
+
+#undef A
+#undef E
+#undef C
+#undef X
 };
 
+CharType quickCheck(Unicode u)
+{
+    uint offset = u / TABLE_SIZE;
+    uint index = u % TABLE_SIZE;
+    for (uint i=0; i<NB_TABLES; i++) {
+        if ( offset==OFFSET[i] ) return (CharType)TABLE[i][index];
+        if ( offset<OFFSET[i] ) break;
+    }
+    return Unknown;
+}
 
 //-----------------------------------------------------------------------------
 static const Unicode LIGATURE_DATA[][3] = {
@@ -39,8 +133,7 @@ static const Unicode LIGATURE_DATA[][3] = {
 
 bool checkLigature(Unicode u, Unicode &res1, Unicode &res2)
 {
-    // quick check
-    if ( u<0xFB01 || u>0xFB06 ) return false;
+    if ( quickCheck(u)!=Ligature && (u<0xFB01 || u>0xFB06) ) return false;
 
     uint i = 0;
     while ( LIGATURE_DATA[i][0]!=0 ) {
@@ -51,6 +144,7 @@ bool checkLigature(Unicode u, Unicode &res1, Unicode &res2)
         }
         i++;
     }
+    kdDebug(30516) << "undefined ligature !!" << endl;
     return false;
 }
 
@@ -63,46 +157,26 @@ static const Unicode SUPER_DATA[][2] = {
     { 0x0000, 0x0000 }
 };
 
-struct SpecialData {
-    Unicode     u;
-    CharType    type;
-    Unicode     res;
+static const Unicode BULLET_DATA[][2] = {
+    { 0x2022, 0x00B7 }, // full circle
+    { 0x0000, 0x0000 }
 };
-// also known :
-// 0x0131 is 'i' without dot
-static const SpecialData SPECIAL_DATA[] = {
-    { 0x2022, Bullet,        0x00B7 }, // full circle
 
-    // #### FIXME : add missing characters (table 0x20 to 0x22)
-    { 0x2190, SpecialSymbol, 0x00AC }, // <-
-    { 0x2192, SpecialSymbol, 0x00AE }, // ->
-    { 0x2212, SpecialSymbol, 0x002D }, // -
-    { 0x2217, SpecialSymbol, 0x002A }, // *
-    { 0x221A, SpecialSymbol, 0x00D6 }, // squareroot
-    { 0x2229, SpecialSymbol, 0x00C7 }, // intersection
-    { 0x222A, SpecialSymbol, 0x00C8 }, // union
-
-    { 0x0000, Unknown,       0x0000 }
-};
+//static const SpecialData SPECIAL_DATA[] = {
+// #### FIXME : add missing characters (table 0x20 to 0x22)
+//    { 0x2190, SpecialSymbol, 0x00AC }, // <-
+//    { 0x2192, SpecialSymbol, 0x00AE }, // ->
+//    { 0x2212, SpecialSymbol, 0x002D }, // -
+//    { 0x2217, SpecialSymbol, 0x002A }, // *
+//    { 0x221A, SpecialSymbol, 0x00D6 }, // squareroot
+//    { 0x2229, SpecialSymbol, 0x00C7 }, // intersection
+//    { 0x222A, SpecialSymbol, 0x00C8 }, // union
+//    { 0x0000, Unknown,       0x0000 }
+//};
 
 CharType checkSpecial(Unicode u, Unicode &res)
 {
-    // find character type
-    CharType type;
-    res = u;
-    if ( u<=0x00FF ) type = (CharType)TABLE_0[u];
-    else {
-        uint i = 0;
-        while ( SPECIAL_DATA[i].u!=0 ) {
-            if ( SPECIAL_DATA[i].u==u ) {
-                type = SPECIAL_DATA[i].type;
-                res = SPECIAL_DATA[i].res;
-                break;
-            }
-            i++;
-        }
-        if ( SPECIAL_DATA[i].u==0 ) type = Unknown;
-    }
+    CharType type = quickCheck(u);
 
     // special mapping
     switch (type) {
@@ -113,7 +187,10 @@ CharType checkSpecial(Unicode u, Unicode &res)
     case SuperScript: {
         uint i = 0;
         for (;;) {
-            Q_ASSERT( SUPER_DATA[i][0] );
+            if ( SUPER_DATA[i][0]==0 ) {
+                kdDebug(30516) << "undefined superscript !!" << endl;
+                break;
+            }
             if ( SUPER_DATA[i][0]==u ) {
                 res = SUPER_DATA[i][1];
                 break;
@@ -122,6 +199,22 @@ CharType checkSpecial(Unicode u, Unicode &res)
         }
         break;
     }
+    case Bullet:{
+        uint i = 0;
+        for (;;) {
+            if ( BULLET_DATA[i][0]==0 ) {
+                kdDebug(30516) << "undefined bullet !!" << endl;
+                break;
+            }
+            if ( BULLET_DATA[i][0]==u ) {
+                res = BULLET_DATA[i][1];
+                break;
+            }
+            i++;
+        }
+        break;
+    }
+
     default:
         break;
     }
@@ -326,11 +419,8 @@ static const SpecialCombiData SPECIAL_COMBI_DATA[] = {
 Unicode checkCombi(Unicode letter, Unicode accent)
 {
     // quick check
-    if ( accent>0x00FF ) return 0;
-    if ( (CharType)TABLE_0[accent]!=Accent ) return 0;
-    if ( letter<=0x00FF ) {
-        if ( (CharType)TABLE_0[letter]!=CanHaveAccent ) return 0;
-    } else if ( letter!=0x0131 ) return 0; // I without dot
+    if ( !isAccent( quickCheck(accent) ) ) return 0;
+    if ( quickCheck(letter)!=Letter_CanHaveAccent ) return 0;
 
     // find accent
     uint i = 0;

@@ -10,12 +10,9 @@ Small things:
 - check below/above accent+letter combination.
 - check "..." and replace with appropriate symbol.
 
-Speed issues:
-- array for unicode characters conversion : done for first table (ie the
-  first 256 chars) ; need for other tables ?
-
 Bigger things:
-- fix height offset (by setting linespacing ?)
+- fix height offsets (difficult to do for KOffice 1.2 : I need to
+  tell kword the height of a paragraph).
 - compute columns of text : compute main frame size with reasonnable
   margins. Suppress uneeded line breaks. Use some kind of heuristic
   on several pages and take care of right/left page...

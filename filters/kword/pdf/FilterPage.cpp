@@ -71,6 +71,8 @@ FilterString::FilterString(GfxState *state, double x0, double y0,
     GfxFont *font = state->getFont();
     GString *gname = (font ? font->getName() : 0);
     QString name = (gname ? gname->getCString() : 0);
+    if ( fontSize<1 ) kdDebug(30516) << "very small font size=" << fontSize
+                                     << endl;
     _font = FilterFont(name, qRound(fontSize), toColor(rgb));
 }
 
@@ -187,11 +189,13 @@ void FilterPage::endString()
 void FilterPage::addString(TextString *str)
 {
 //    kdDebug(30516) << "addString..." << endl;
+//    if ( str->len==0 ) kdDebug(30516) << "empty string !" << endl;
     if (_lastStr) _lastStr->checkCombination(str);
     _lastStr = (str->len==0 ? 0 : static_cast<FilterString *>(str));
 //    QString s;
 //    for (int i=0; i<str->len; i++) s += QChar(str->text[i]);
-//    kdDebug(30516) << "string: " << s <<endl;
+//    kdDebug(30516) << "string: " << s << " ("
+//                   << (str->len>0 ? s[0].unicode() : 0) << ")" << endl;
     TextPage::addString(str);
 //    kdDebug(30516) << " ...addString done" << endl;
 }
@@ -201,7 +205,7 @@ QChar FilterPage::checkSpecial(QChar c, const FilterFont &font,
 {
     family = Nb_Family;
 
-    Unicode res;
+    Unicode res = 0;
     switch ( ::checkSpecial(c.unicode(), res) ) {
     case Hyphen:
         kdDebug(30516) << "found hyphen ?" << endl;
@@ -225,9 +229,10 @@ QChar FilterPage::checkSpecial(QChar c, const FilterFont &font,
         family = Times;
         return c;
     case SpecialSymbol:
-        kdDebug(30516) << "found symbol=" << res << endl;
-        family = Symbol;
-        return res;
+        kdDebug(30516) << "found symbol=" << c.unicode() << endl;
+        family = Times;
+        //family = Symbol;
+        break;
     default:
         break;
     }
@@ -343,7 +348,7 @@ void FilterPage::prepare()
                     _pars[i].blocks.push_back(b);
 
                     QFontMetrics fm( b.font.font() );
-                    lineHeight = kMax(lineHeight, fm.lineSpacing());
+                    lineHeight = kMax(lineHeight, fm.height());
                 }
 
                 prevBlk = blk;
