@@ -129,16 +129,14 @@ void HelplineDialog::initLists () {
     PStateManager::instance ()->defaultMeasurementUnit ();
 
   for (i = horizLines.begin (); i != horizLines.end (); ++i) {
-    float value = *i;
-    buf=QString::number(cvtPtToUnit (unit, value), 'f', 3);
+    buf=QString::number(cvtPtToUnit (unit, *i), 'f', 3);
     buf+=" ";
     buf+=unitToString (unit);
     horizList->insertItem (buf);
   }
 
   for (i = vertLines.begin (); i != vertLines.end (); ++i) {
-    float value = *i;
-    buf=QString::number(cvtPtToUnit (unit, value), 'f', 3);
+    buf=QString::number(cvtPtToUnit (unit, *i), 'f', 3);
     buf+=" ";
     buf+=unitToString (unit);
     vertList->insertItem (buf);
@@ -156,59 +154,67 @@ void HelplineDialog::addHorizLine () {
 }
 
 void HelplineDialog::updateHorizLine () {
-  int idx = horizList->currentItem ();
-  kdDebug() << "updateHorizLine: idx=" << idx << endl;
-  if (idx != -1) {
-    float value = horizValue->getValue ();
-    MeasurementUnit unit =
-      PStateManager::instance ()->defaultMeasurementUnit ();
-    QString buf=QString::number(cvtPtToUnit (unit, value), 'f', 3);
-    buf+=" ";
-    buf+=unitToString (unit);
-    horizList->changeItem (buf, idx);
-    horizLines[idx] = value;
-  }
+    if(horizLines.isEmpty())
+        return;
+    int idx = horizList->currentItem ();
+    kdDebug() << "updateHorizLine: idx=" << idx << endl;
+    if (idx != -1) {
+        float value = horizValue->getValue ();
+        MeasurementUnit unit =
+            PStateManager::instance ()->defaultMeasurementUnit ();
+        QString buf=QString::number(cvtPtToUnit (unit, value), 'f', 3);
+        buf+=" ";
+        buf+=unitToString (unit);
+        horizList->changeItem (buf, idx);
+        horizLines[idx] = value;
+    }
 }
 
 void HelplineDialog::deleteHorizLine () {
-  int idx = horizList->currentItem ();
-  if (idx != -1) {
-    horizLines.remove(horizLines.at(idx));
-    horizList->removeItem (idx);
-  }
+    if(horizLines.isEmpty())
+        return;
+    int idx = horizList->currentItem ();
+    if (idx != -1) {
+        horizLines.remove(horizLines.at(idx));
+        horizList->removeItem(idx);
+    }
 }
 
 void HelplineDialog::addVertLine () {
-  float value = vertValue->getValue ();
-  vertLines.append(value);
-  MeasurementUnit unit =
-    PStateManager::instance ()->defaultMeasurementUnit ();
-  QString buf=QString::number(cvtPtToUnit (unit, value), 'f', 3);
-  buf+=" ";
-  buf+=unitToString (unit);
-  vertList->insertItem (buf);
-}
-
-void HelplineDialog::updateVertLine () {
-  int idx = vertList->currentItem ();
-  if (idx != -1) {
     float value = vertValue->getValue ();
+    vertLines.append(value);
     MeasurementUnit unit =
-      PStateManager::instance ()->defaultMeasurementUnit ();
+        PStateManager::instance ()->defaultMeasurementUnit ();
     QString buf=QString::number(cvtPtToUnit (unit, value), 'f', 3);
     buf+=" ";
     buf+=unitToString (unit);
-    vertList->changeItem (buf, idx);
-    vertLines[idx] = value;
-  }
+    vertList->insertItem (buf);
+}
+
+void HelplineDialog::updateVertLine () {
+    if(vertLines.isEmpty())
+        return;
+    int idx = vertList->currentItem ();
+    if (idx != -1) {
+        float value = vertValue->getValue ();
+        MeasurementUnit unit =
+            PStateManager::instance ()->defaultMeasurementUnit ();
+        QString buf=QString::number(cvtPtToUnit (unit, value), 'f', 3);
+        buf+=" ";
+        buf+=unitToString (unit);
+        vertList->changeItem (buf, idx);
+        vertLines[idx] = value;
+    }
 }
 
 void HelplineDialog::deleteVertLine () {
-  int idx = vertList->currentItem ();
-  if (idx != -1) {
-      vertLines.remove(vertLines.at(idx));
-      vertList->removeItem (idx);
-  }
+    if(vertLines.isEmpty())
+        return;
+    int idx = vertList->currentItem ();
+    if (idx != -1) {
+        vertLines.remove(vertLines.at(idx));
+        vertList->removeItem (idx);
+    }
 }
 
 void HelplineDialog::horizLineSelected (int idx) {

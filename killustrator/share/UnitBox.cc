@@ -26,13 +26,13 @@
 
 #include <qcombobox.h>
 #include <qlayout.h>
-#include <knuminput.h>
+#include <kmynuminput.h>
 
 MeasurementUnit UnitBox::defaultUnit = UnitPoint;
 
 UnitBox::UnitBox (QWidget* parent, const char* name) : QHBox(parent, name) {
 
-    valueBox = new KDoubleNumInput(this, "valueBox");
+    valueBox = new KMyDoubleNumInput(this, "valueBox");
     ptMinVal=1.0;
     ptMaxVal=10.0;
     m_step=1.0;
@@ -63,9 +63,9 @@ void UnitBox::setFormatString (const char* fmt) {
 
 float UnitBox::getValue () {
     if(isUnitEnabled)
-        return cvtUnitToPt (unit, valueBox->value ());
+        return cvtUnitToPt (unit, valueBox->value(true));
     else
-        return valueBox->value ();
+        return valueBox->value(true);
 }
 
 void UnitBox::setValue (float value) {

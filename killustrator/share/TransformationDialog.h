@@ -32,7 +32,7 @@ class QCheckBox;
 
 class GDocument;
 class CommandHistory;
-class KDoubleNumInput;
+class KMyDoubleNumInput;
 class UnitBox;
 
 class TransformationDialog : public KDialogBase {
@@ -77,7 +77,7 @@ private:
   UnitBox *vertPosition;
   QCheckBox *relativePosition;
 
-  KDoubleNumInput *rotAngle;
+  KMyDoubleNumInput *rotAngle;
   UnitBox *horizRotCenter;
   UnitBox *vertRotCenter;
   QCheckBox *relativeRotCenter;

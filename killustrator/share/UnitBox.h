@@ -29,7 +29,7 @@
 #include <units.h>
 
 class QComboBox;
-class KDoubleNumInput;
+class KMyDoubleNumInput;
 
 class UnitBox : public QHBox {
   Q_OBJECT
@@ -61,7 +61,7 @@ protected slots:
   void slotValueChanged(double f);
 
 private:
-  KDoubleNumInput *valueBox;
+  KMyDoubleNumInput *valueBox;
   bool isUnitEnabled;
   QComboBox *unitCombo;
   MeasurementUnit unit;
