@@ -35,12 +35,13 @@ using namespace std;
 #include <qpainter.h>
 
 KChartPart::KChartPart( QWidget *parentWidget, const char *widgetName, QObject* parent, const char* name, bool singleViewMode )
-  : KoDocument( parentWidget, widgetName, parent, name, singleViewMode ),
+  : KoChart::Part( parentWidget, widgetName, parent, name, singleViewMode ),
     _params( 0 ),
     _parentWidget( parentWidget )
 {
   m_bLoading = false;
   kdDebug(35001) << "Constructor started!" << endl;
+  (void)new WizardExt( this );
   initDoc();
   // hack
   setModified(true);
@@ -73,9 +74,7 @@ void KChartPart::initRandomData()
     currentData.expand(4,4);
     for (row = 0;row < 4;row++)
       for (col = 0;col < 4;col++) {
-	KChartValue t;
-	t.exists= true;
-	t.value = (double)row+col;
+        KoChart::Value t( (double)row+col );
 	// kdDebug(35001) << "Set cell for " << row << "," << col << endl;
 	currentData.setCell(row,col,t);
       }
@@ -134,7 +133,7 @@ void KChartPart::paintContent( QPainter& painter, const QRect& rect, bool transp
 }
 
 
-void KChartPart::setPart( const KChartData& data )
+void KChartPart::setData( const KoChart::Data& data )
 {
   currentData = data;
   //  initLabelAndLegend();
@@ -215,7 +214,7 @@ QDomDocument KChartPart::saveXML() {
   for (unsigned int row = 0;row < currentData.rows();row++) {
     for (unsigned int col = 0;col < currentData.cols();col++) {
       // later we need a value
-      KChartValue t = currentData.cell(row, col);
+      KoChart::Value t = currentData.cell(row, col);
       QDomElement e = doc.createElement("cell");
       // Only query arrays missing and explode if they are large
       // enough (e.g., for all charts except pies, the array is not
@@ -228,7 +227,7 @@ QDomDocument KChartPart::saveXML() {
 	e.setAttribute("dist", _params->explode[currentData.cols()*col+row]);
       else
 	e.setAttribute( "dist", false );
-      e.setAttribute("value", t.value.toDouble());
+      e.setAttribute("value", t.toDouble());
       /*
 	if ( e.isNull() )
 	return e;
@@ -471,9 +470,7 @@ bool KChartPart::loadXML( QIODevice *, const QDomDocument& doc )
 	double val = e.attribute("value").toDouble(&ok);
 	if (!ok)  {  return false; }
 	kdDebug(35001) << i << " " << j << "=" << val << endl;
-	KChartValue t;
-	t.exists= true;
-	t.value = val;
+        KoChart::Value t( val );
 	// kdDebug(35001) << "Set cell for " << row << "," << col << endl;
 	currentData.setCell(i,j,t);
 	if ( e.hasAttribute( "hide" ) ) {
@@ -959,6 +956,9 @@ QFont KChartPart::toFont( QDomElement &element ) const
 
   /**
    * $Log$
+   * Revision 1.47  2000/08/10 09:40:39  kalle
+   * Fixed #7834 and #7380
+   *
    * Revision 1.46  2000/07/19 00:51:08  kalle
    * Brushed up the wizard. Still not very nice, but sort of working.
    * Fixed the font config page. Legend color box needs either rework or removal.

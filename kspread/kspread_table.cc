@@ -58,8 +58,9 @@
 
 #include <strstream.h>
 #include <kdebug.h>
+#include <assert.h>
 
-#include "../kchart/kchart_part.h"
+#include <koChart.h>
 
 /*****************************************************************************
  *
@@ -120,19 +121,18 @@ void ChartBinding::cellChanged( KSpreadCell* )
 
     kdDebug(36001) << "with=" << m_rctDataArea.width() << "  height=" << m_rctDataArea.height() << endl;
 
-    KChartData matrix( m_rctDataArea.height(), m_rctDataArea.width() );
+    KoChart::Data matrix( m_rctDataArea.height(), m_rctDataArea.width() );
 
     for ( int y = 0; y < m_rctDataArea.height(); y++ )
         for ( int x = 0; x < m_rctDataArea.width(); x++ )
         {
             KSpreadCell* cell = m_pTable->cellAt( m_rctDataArea.left() + x, m_rctDataArea.top() + y );
-            matrix.cell( y, x ).exists = TRUE;
             if ( cell && cell->isValue() )
-                matrix.cell( y, x ).value = cell->valueDouble();
+                matrix.cell( y, x ) = KoChart::Value( cell->valueDouble() );
             else if ( cell )
-                matrix.cell( y, x ).value = cell->valueString();
+                matrix.cell( y, x ) = KoChart::Value( cell->valueString() );
             else
-                matrix.cell( y, x ).exists = FALSE;
+                matrix.cell( y, x ) = KoChart::Value();
         }
 
     // ######### Kalle may be interested in that, too
@@ -143,7 +143,7 @@ void ChartBinding::cellChanged( KSpreadCell* )
        range.bottom = m_rctDataArea.bottom();
        range.table = m_pTable->name(); */
 
-    m_child->chart()->setPart( matrix );
+    m_child->chart()->setData( matrix );
 
     // Force a redraw of the chart on all views
     table()->emit_polygonInvalidated( m_child->framePointArray() );
@@ -5134,7 +5134,9 @@ void KSpreadTable::insertChart( const QRect& _rect, KoDocumentEntry& _e, const Q
     // m_pDoc->insertChild( ch );
     insertChild( ch );
 
-    ch->chart()->showWizard();
+    KoChart::WizardExtension *wiz = ch->chart()->wizardExtension();
+    if ( wiz )
+        wiz->show();
 }
 
 void KSpreadTable::insertChild( const QRect& _rect, KoDocumentEntry& _e )
@@ -5382,9 +5384,10 @@ bool ChartChild::loadDocument( KoStore* _store )
     return true;
 }
 
-KChartPart* ChartChild::chart()
+KoChart::Part* ChartChild::chart()
 {
-    return (KChartPart*)document();
+    assert( document()->inherits( "KoChart::Part" ) );
+    return static_cast<KoChart::Part *>( document() );
 }
 
 #include "kspread_table.moc"

@@ -137,7 +137,7 @@ int out_graph( short		gifwidth,
 			   short		gifheight,
 			   QPainter*	p, // paint here
 			   KChartParameters* params,
-			   const KChartData& data );
+                           const KoChart::Data& data );
 /* expected params (...) for each chart type:
 GDC_LINE
 GDC_BAR

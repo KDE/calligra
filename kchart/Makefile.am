@@ -1,4 +1,4 @@
-INCLUDES  = $(KOFFICE_INCLUDES) -I$(interfacedir) $(all_includes)
+INCLUDES  = $(KOFFICE_INCLUDES) -I$(top_srcdir)/interfaces -I$(interfacedir) $(all_includes)
 
 ####### Files
 
@@ -46,7 +46,8 @@ libkchartpart_la_SOURCES = kchart_shell.cc kchart_part.cc \
 	sheetdlg.cc \
 	table.cc
 libkchartpart_la_LDFLAGS = -avoid-version -module -no-undefined
-libkchartpart_la_LIBADD = ../lib/kofficeui/libkofficeui.la
+libkchartpart_la_LIBADD = $(top_builddir)/interfaces/libkochart.la \
+                          $(top_builddir)/lib/kofficeui/libkofficeui.la
 
 kchart_la_SOURCES = main.cc
 kchart_la_LDFLAGS = $(all_libraries) -avoid-version -module

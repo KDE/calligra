@@ -106,7 +106,7 @@ void KChartView::createTempData()
   int row, col;
   int nbrow,nbcol;
 
-  KChartData *dat = ((KChartPart*)koDocument())->data();
+  KoChart::Data *dat = ((KChartPart*)koDocument())->data();
 
   // initialize some data, if there is none
   nbrow=4;
@@ -119,9 +119,7 @@ void KChartView::createTempData()
 	    for (col = 0;col < nbcol;col++)
 		  {
 			//	  _widget->fillCell(row,col,row+col);
-			KChartValue t;
-			t.exists= true;
-			t.value = (double)row+col;
+                        KoChart::Value t( (double)row+col );
 			kdDebug(35001) << "Set cell for " << row << "," << col << endl;
 			dat->setCell(row,col,t);
 		  }
@@ -174,7 +172,7 @@ void KChartView::edit()
   kchartDataEditor ed;
   KChartParameters* params=((KChartPart*)koDocument())->params();
 
-  KChartData *dat = (( (KChartPart*)koDocument())->data());
+  KoChart::Data *dat = (( (KChartPart*)koDocument())->data());
   ed.setData(dat);
   ed.setLegend(params->legend);
   ed.setXLabel(params->xlbl);

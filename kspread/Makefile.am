@@ -1,5 +1,6 @@
 INCLUDES  = $(KOFFICE_INCLUDES) -I$(interfacedir) \
--I$(top_srcdir)/lib/koscript -I$(top_builddir)/lib/koscript -I$(top_srcdir)/lib/kformula $(all_includes)
+-I$(top_srcdir)/lib/koscript -I$(top_builddir)/lib/koscript -I$(top_srcdir)/lib/kformula \
+-I$(top_srcdir)/interfaces $(all_includes)
 
 ####### Files
 
@@ -29,7 +30,7 @@ libkspreadpart_la_SOURCES = kspread_canvas.cc \
 	kspread_cluster.cc
 
 libkspreadpart_la_LDFLAGS = -avoid-version -module -no-undefined
-libkspreadpart_la_LIBADD = $(all_libraries) ../kchart/libkchartpart.la ../lib/koscript/libkoscript.la ../lib/kofficeui/libkofficeui.la ../lib/kformula/libkformula.la
+libkspreadpart_la_LIBADD = $(all_libraries) $(top_builddir)/interfaces/libkochart.la ../lib/koscript/libkoscript.la ../lib/kofficeui/libkofficeui.la ../lib/kformula/libkformula.la
 libkspreadpart_la_METASOURCES = AUTO
 
 kspread_la_SOURCES = main.cc

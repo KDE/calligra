@@ -7,24 +7,12 @@
 #ifndef KCHART_PART_H
 #define KCHART_PART_H
 
-#include <koDocument.h>
-#include <ktable.h>
+#include <koChart.h>
 #include <kconfig.h>
-
-#include <qvariant.h>
 
 class KChartParameters;
 
-struct KChartValue {
-    QVariant value; // either a string (then it is interpreted as a
-                    // label) or a double (then it is interpreted as a value
-    bool exists;
-};
-
-
-typedef KTable<QString,QString,KChartValue> KChartData;
-
-class KChartPart : public KoDocument
+class KChartPart : public KoChart::Part
 {
   Q_OBJECT
     public:
@@ -39,13 +27,13 @@ class KChartPart : public KoDocument
 
   virtual QCString mimeType() const;
 
-  void setPart( const KChartData& data );
+  virtual void setData( const KoChart::Data& data );
   void showWizard();
   void initLabelAndLegend();
   void loadConfig(KConfig *conf);
   void saveConfig(KConfig *conf);
   void defaultConfig();
-  KChartData *data() {return &currentData; };
+  KoChart::Data *data() {return &currentData; };
   KChartParameters* params() const { return _params; };
   // save and load
   virtual QDomDocument saveXML();
@@ -65,9 +53,18 @@ class KChartPart : public KoDocument
  private:
   QDomElement createElement(const QString &tagName, const QFont &font, QDomDocument &doc) const;
   QFont toFont(QDomElement &element) const;
-  KChartData currentData;
+  KoChart::Data currentData;
   KChartParameters* _params;
   QWidget* _parentWidget;
+};
+
+class WizardExt : public KoChart::WizardExtension
+{
+public:
+    WizardExt( KoChart::Part *part )
+        : KoChart::WizardExtension( part ) {};
+
+    virtual void show() { static_cast<KChartPart *>( part() )->showWizard(); }
 };
 
 #endif

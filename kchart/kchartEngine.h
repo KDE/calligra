@@ -4,7 +4,7 @@
 class KChartEngine {
 public:
   KChartParameters* params;
-  KChartData const * data;
+  KoChart::Data const * data;
   QPainter *p;
   int imagewidth;
   int imageheight;
@@ -60,10 +60,10 @@ public:
   // other stuff
 
   inline bool CELLEXISTS( int row, int col ) {
-    return  data->cell(row,col).exists;
+    return  data->cell(row,col).isValid();
   };
   inline double CELLVALUE(int row, int col) {
-    return data->cell(row,col).value.toDouble();
+    return data->cell(row,col).toDouble();
   }
   
 private:

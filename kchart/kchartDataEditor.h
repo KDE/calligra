@@ -11,8 +11,8 @@ class kchartDataEditor : public KDialog {
    Q_OBJECT
      public:
      kchartDataEditor();
-   void setData(KChartData* dat);
-   void getData(KChartData* dat);
+   void setData(KoChart::Data* dat);
+   void getData(KoChart::Data* dat);
    void getLegend(KChartParameters* params);
    void setLegend(QStringList legend);
    void getXLabel(KChartParameters* params);

@@ -2210,7 +2210,7 @@ void KSpreadView::insertChart()
         KMessageBox::error( this, i18n("Area too large!"));
         return;
     }
-    QValueList<KoDocumentEntry> vec = KoDocumentEntry::query( "'KChart' in ServiceTypes" );
+    QValueList<KoDocumentEntry> vec = KoDocumentEntry::query( "'KOfficeChart' in ServiceTypes" );
     if ( vec.isEmpty() )
     {
         KMessageBox::error( this, i18n("Sorry, no charting component registered") );

@@ -37,7 +37,7 @@ int out_graph( short imagewidth,         // no check for an output device that's
            short imageheight,        // needed info (labels, etc), could core dump
            QPainter* p,              // paint into this painter
            KChartParameters* params, // the parameters of the chart
-           const KChartData& data
+           const KoChart::Data& data
            )
 {  // temporary stuff for initializing the engine
   keng.params = params;

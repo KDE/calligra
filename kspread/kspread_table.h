@@ -125,7 +125,7 @@ protected:
  ********************************************************************/
 
 class ChartChild;
-class KChartPart;
+namespace KoChart { class Part; }
 
 class ChartBinding : public CellBinding
 {
@@ -165,7 +165,7 @@ public:
      */
     bool loadDocument( KoStore* _store );
 
-    KChartPart* chart();
+    KoChart::Part* chart();
 
 private:
     ChartBinding *m_pBinding;
