@@ -14,7 +14,7 @@
   <Action name="formula_formulastring"/>
  </Menu>
  <Menu name="Element"><text>E&amp;lement</text>
-  <Menu name="Add"><text>Add...</text>
+  <Menu name="Add"><text>Add</text>
   <Action name="formula_addtext"/>
   <Action name="formula_addroot"/>
   <Action name="formula_addfrac"/>
@@ -54,7 +54,7 @@
   <Action name="textbold"/>
   <Action name="textitalic"/>
   <Action name="textunder"/>
-  <Menu name="scale"><text>Increase/Decrease options..</text>
+  <Menu name="scale"><text>Increase/Decrease Options..</text>
   <Action name="fontelement"/>
   <Action name="fontindex"/>
   <Action name="fontchild"/>

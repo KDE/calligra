@@ -560,7 +560,7 @@ void Document::createActions(KActionCollection* collection)
                                            /*CTRL + Key_I*/0,
                                            this, SLOT(insertSymbol()),
                                            collection, "formula_insertsymbol");
-    impl->symbolNamesAction = new SymbolAction(i18n("Symbol names"),
+    impl->symbolNamesAction = new SymbolAction(i18n("Symbol Names"),
                                                0, this, SLOT(symbolNames()),
                                                collection, "formula_symbolnames");
 
