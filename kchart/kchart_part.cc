@@ -502,7 +502,7 @@ bool KChartPart::loadOldXML( const QDomDocument& doc )
     kdDebug(35001) << "Ok, it is a chart" << endl;
 
     QDomElement chart = doc.documentElement();
-    if ( chart.attribute( "mime" ) != "application/x-kchart" )
+    if ( chart.attribute( "mime" ) != "application/x-kchart" && chart.attribute( "mime" ) != "application/vnd.kde.kchart" )
         return false;
 
     kdDebug(35001) << "Mimetype ok" << endl;
