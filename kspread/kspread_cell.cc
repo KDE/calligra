@@ -61,12 +61,12 @@ namespace KSpreadCell_LNS
 using namespace KSpreadCell_LNS;
 
 
-// Some variables are placed in CellExtra because normally they're not required
-// in simple case of cell(s). For example, most plain text cells don't need
+// Some variables are placed in CellExtra because normally they're not required 
+// in simple case of cell(s). For example, most plain text cells don't need 
 // to store information about spanned columns and rows, as this is only
 // the case with merged cells.
-// When the cell is getting complex (e.g. merged with other cells, contains
-// rich text, has validation criteria, etc), this CellExtra is allocated by
+// When the cell is getting complex (e.g. merged with other cells, contains 
+// rich text, has validation criteria, etc), this CellExtra is allocated by 
 // CellPrivate and starts to be available. Otherwise, it won't exist at all.
 
 class CellExtra
@@ -163,8 +163,8 @@ public:
     ~CellPrivate();
 
     CellExtra* extra();
-
-private:
+    
+private:    
     // "extra stuff", see explanation for CellExtra
     CellExtra* cellExtra;
 };
@@ -1439,7 +1439,7 @@ void KSpreadCell::setOutputText()
   }
   else if( isDate() )
   {
-    d->strOutText = util_dateFormat( locale(), valueDate(), formatType() );
+    d->strOutText = util_dateFormat( locale(), value().asDate(), formatType() );
   }
   else if( isTime() )
   {
@@ -4395,27 +4395,27 @@ bool KSpreadCell::testValidity() const
 	switch( d->extra()->validity->m_cond)
 	{
 	  case Equal:
-	    valid = (valueTime() == d->extra()->validity->timeMin);
+	    valid = (value().asTime() == d->extra()->validity->timeMin);
 	    break;
 	  case Superior:
-	    valid = (valueTime() > d->extra()->validity->timeMin);
+	    valid = (value().asTime() > d->extra()->validity->timeMin);
 	    break;
 	  case Inferior:
-	    valid = (valueTime() < d->extra()->validity->timeMin);
+	    valid = (value().asTime() < d->extra()->validity->timeMin);
 	    break;
 	  case SuperiorEqual:
-	    valid = (valueTime() >= d->extra()->validity->timeMin);
+	    valid = (value().asTime() >= d->extra()->validity->timeMin);
 	    break;
 	  case InferiorEqual:
-	    valid = (valueTime() <= d->extra()->validity->timeMin);
+	    valid = (value().asTime() <= d->extra()->validity->timeMin);
 	    break;
 	  case Between:
-	    valid = (valueTime() >= d->extra()->validity->timeMin &&
-		     valueTime() <= d->extra()->validity->timeMax);
+	    valid = (value().asTime() >= d->extra()->validity->timeMin &&
+		     value().asTime() <= d->extra()->validity->timeMax);
 	    break;
   	  case Different:
-	    valid = (valueTime() < d->extra()->validity->timeMin ||
-		     valueTime() > d->extra()->validity->timeMax);
+	    valid = (value().asTime() < d->extra()->validity->timeMin ||
+		     value().asTime() > d->extra()->validity->timeMax);
 	    break;
 	  default :
 	    break;
@@ -4427,27 +4427,27 @@ bool KSpreadCell::testValidity() const
 	switch( d->extra()->validity->m_cond)
 	{
 	  case Equal:
-	    valid = (valueDate() == d->extra()->validity->dateMin);
+	    valid = (value().asDate() == d->extra()->validity->dateMin);
 	    break;
 	  case Superior:
-	    valid = (valueDate() > d->extra()->validity->dateMin);
+	    valid = (value().asDate() > d->extra()->validity->dateMin);
 	    break;
 	  case Inferior:
-	    valid = (valueDate() < d->extra()->validity->dateMin);
+	    valid = (value().asDate() < d->extra()->validity->dateMin);
 	    break;
 	  case SuperiorEqual:
-	    valid = (valueDate() >= d->extra()->validity->dateMin);
+	    valid = (value().asDate() >= d->extra()->validity->dateMin);
 	    break;
 	  case InferiorEqual:
-	    valid = (valueDate() <= d->extra()->validity->dateMin);
+	    valid = (value().asDate() <= d->extra()->validity->dateMin);
 	    break;
 	  case Between:
-	    valid = (valueDate() >= d->extra()->validity->dateMin &&
-		     valueDate() <= d->extra()->validity->dateMax);
+	    valid = (value().asDate() >= d->extra()->validity->dateMin &&
+		     value().asDate() <= d->extra()->validity->dateMax);
 	    break;
 	  case Different:
-	    valid = (valueDate() < d->extra()->validity->dateMin ||
-		     valueDate() > d->extra()->validity->dateMax);
+	    valid = (value().asDate() < d->extra()->validity->dateMin ||
+		     value().asDate() > d->extra()->validity->dateMax);
 	    break;
 	  default :
 	    break;
@@ -4542,16 +4542,6 @@ bool KSpreadCell::isTime() const
   // workaround, since date/time is stored as floating-point
   return d->value.isNumber()
     && ( ( (ft >= Time) && (ft <= Time_format8) ) );
-}
-
-QDate KSpreadCell::valueDate() const
-{
-  return d->value.asDateTime().date();
-}
-
-QTime KSpreadCell::valueTime() const
-{
-  return d->value.asDateTime().time();
 }
 
 void KSpreadCell::setCalcDirtyFlag()
@@ -5143,6 +5133,7 @@ bool KSpreadCell::loadOasis( const QDomElement &element, const KoOasisStyles& oa
                 setCellText( value ? i18n("True") : i18n("False" ) );
             }
         }
+
         // integer and floating-point value
         else if( valuetype == "float" )
         {
@@ -5150,20 +5141,7 @@ bool KSpreadCell::loadOasis( const QDomElement &element, const KoOasisStyles& oa
             double value = element.attribute( "table:value" ).toDouble( &ok );
             if( ok ) setValue( value );
         }
-        else if ( valuetype == "boolean" )
-        {
-            QString value = element.attribute( "table:value" );
 
-            if ( value.isEmpty() )
-                value = element.attribute( "table:boolean-value" );
-
-            kdDebug(30518) << "Type: boolean" << endl;
-            if ( value == "true" )
-                setValue( true );
-            else
-                setValue( false );
-            setFormatType( KSpreadFormat::Custom );
-        }
         // currency value
         else if( valuetype == "currency" )
         {
@@ -5194,7 +5172,7 @@ bool KSpreadCell::loadOasis( const QDomElement &element, const KoOasisStyles& oa
             kdDebug() << "Type: date, value: " << value << endl;
 
             // "1980-10-15"
-            int year=0, month=0, day=0;
+            int year, month, day;
             bool ok = false;
 
             int p1 = value.find( '-' );
@@ -5714,8 +5692,8 @@ bool KSpreadCell::loadCellData(const QDomElement & text, Operation op )
         int month = t.mid(pos+1,((pos1-1)-pos)).toInt();
         int day = t.right(t.length()-pos1-1).toInt();
         d->value.setValue( QDate(year,month,day) );
-        if ( valueDate().isValid() ) // Should always be the case for new docs
-          d->strText = locale()->formatDate( valueDate(), true );
+        if ( value().asDate().isValid() ) // Should always be the case for new docs
+          d->strText = locale()->formatDate( value().asDate(), true );
         else // This happens with old docs, when format is set wrongly to date
         {
           d->strText = pasteOperation( t, d->strText, op );
@@ -5736,8 +5714,8 @@ bool KSpreadCell::loadCellData(const QDomElement & text, Operation op )
         minutes = t.mid(pos+1,((pos1-1)-pos)).toInt();
         second = t.right(t.length()-pos1-1).toInt();
         d->value.setValue( QTime(hours,minutes,second) );
-        if ( valueTime().isValid() ) // Should always be the case for new docs
-          d->strText = locale()->formatTime( valueTime(), true );
+        if ( value().asTime().isValid() ) // Should always be the case for new docs
+          d->strText = locale()->formatTime( value().asTime(), true );
         else  // This happens with old docs, when format is set wrongly to time
         {
           d->strText = pasteOperation( t, d->strText, op );
@@ -5784,7 +5762,7 @@ QTime KSpreadCell::toTime(const QDomElement &element)
     minutes = t.mid(pos+1,((pos1-1)-pos)).toInt();
     second = t.right(t.length()-pos1-1).toInt();
     d->value.setValue( KSpreadValue( QTime(hours,minutes,second)) );
-    return valueTime();
+    return value().asTime();
 }
 
 QDate KSpreadCell::toDate(const QDomElement &element)
@@ -5801,7 +5779,7 @@ QDate KSpreadCell::toDate(const QDomElement &element)
     month = t.mid(pos+1,((pos1-1)-pos)).toInt();
     day = t.right(t.length()-pos1-1).toInt();
     d->value.setValue( KSpreadValue( QDate(year,month,day) ) );
-    return valueDate();
+    return value().asDate();
 }
 
 QString KSpreadCell::pasteOperation( const QString &new_text, const QString &old_text, Operation op )
@@ -5965,7 +5943,7 @@ bool KSpreadCell::operator > ( const KSpreadCell & cell ) const
   else if(isDate())
   {
      if( cell.isDate() )
-        return valueDate() > cell.valueDate();
+        return value().asDate() > cell.value().asDate();
      else if (cell.value().isNumber())
         return true;
      else
@@ -5974,7 +5952,7 @@ bool KSpreadCell::operator > ( const KSpreadCell & cell ) const
   else if(isTime())
   {
      if( cell.isTime() )
-        return valueTime() > cell.valueTime();
+        return value().asTime() > cell.value().asTime();
      else if( cell.isDate())
         return true; //time are always > than date
      else if( cell.value().isNumber())

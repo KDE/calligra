@@ -447,9 +447,6 @@ public:
     bool isDate() const;
     bool isTime() const;
 
-    QDate valueDate() const;
-    QTime valueTime() const;
-
     void setDate( QString const & dateString );
     void setDate( QDate const & date );
     void setTime( QTime const & time );

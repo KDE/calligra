@@ -519,9 +519,9 @@ bool kspreadfunc_indirect( KSContext & context )
     else if ( cell->value().isBoolean() )
       context.setValue( new KSValue( cell->value().asBoolean() ) );
     else if ( cell->isDate() )
-      context.setValue( new KSValue( cell->valueDate() ) );
+      context.setValue( new KSValue( cell->value().asDate() ) );
     else if ( cell->isTime() )
-      context.setValue( new KSValue( cell->valueTime() ) );
+      context.setValue( new KSValue( cell->value().asTime() ) );
     else if ( cell->value().isEmpty() || cell->isEmpty() || cell->isDefault() )
       context.setValue( new KSValue( (int) 0 ) );
     else

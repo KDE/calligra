@@ -2354,13 +2354,13 @@ double KSpreadCanvas::getDouble( KSpreadCell * cell )
   cell->setFactor( 1.0 );
   if ( cell->isDate() )
   {
-    QDate date = cell->valueDate();
+    QDate date = cell->value().asDate();
     QDate dummy(1900, 1, 1);
     return (dummy.daysTo( date ) + 1);
   }
   if ( cell->isTime() )
   {
-    QTime time  = cell->valueTime();
+    QTime time  = cell->value().asTime();
     QTime dummy;
     return dummy.secsTo( time );
   }
