@@ -187,7 +187,7 @@ bool KPresenterDoc::save( ostream& out, const char* /* format */ )
       << "\" bottom=\"" << pageLayout().bottom << "\"/>" << endl;
   out << etag << "</PAPER>" << endl;
   
-  out << otag << "<BACKGROUND" << " rastX=\"" << _rastX << "\" rastY=\""
+  out << otag << "<BACKGROUND" << " rastX=\"" << _rastX << "\" rastY=\"" << _rastY
       << "\" bred=\"" << _txtBackCol.red() << "\" bgreen=\"" << _txtBackCol.green() << "\" bblue=\"" << _txtBackCol.blue() << "\">" << endl;
   saveBackground(out);
   out << etag << "</BACKGROUND>" << endl;
@@ -502,6 +502,9 @@ bool KPresenterDoc::loadXML( KOMLParser& parser, KOStore::Store_ptr _store )
 	}
     }
 
+  if (_rastX == 0) _rastX = 10;
+  if (_rastY == 0) _rastY = 10;
+
   setPageLayout(__pgLayout,0,0);
 
   return true;
@@ -768,12 +771,13 @@ bool KPresenterDoc::insertNewTemplate(int diffx,int diffy,bool clean=false)
   QString templateDir = KApplication::kde_datadir();
 
   QString _template;
-  QString _templatePath = kapp->kde_datadir() + "/kpresenter/templates/";
+  QString _globalTemplatePath = kapp->kde_datadir() + "/kpresenter/templates/";
+  QString _personalTemplatePath = kapp->localkdedir() + "/share/apps/kpresenter/templates/";
 
-  if (KoTemplateChooseDia::chooseTemplate(_templatePath,_template,true))
+  if (KoTemplateChooseDia::chooseTemplate(_globalTemplatePath,_personalTemplatePath,_template,true))
     {
       QFileInfo fileInfo(_template);
-      QString fileName(_templatePath + fileInfo.dirPath(false) + "/" + fileInfo.baseName() + ".kpt");
+      QString fileName(fileInfo.dirPath(true) + "/" + fileInfo.baseName() + ".kpt");
       _clean = clean;
       objStartY = getPageSize(_backgroundList.count() - 1,0,0).y() + getPageSize(_backgroundList.count() - 1,0,0).height();
       load_template(fileName.data());
@@ -1962,12 +1966,13 @@ void KPresenterDoc::insertPage(int _page,InsPageMode _insPageMode,InsertPos _ins
   QString templateDir = KApplication::kde_datadir();
 
   QString _template;
-  QString _templatePath = kapp->kde_datadir() + "/kpresenter/templates/";
+  QString _globalTemplatePath = kapp->kde_datadir() + "/kpresenter/templates/";
+  QString _personalTemplatePath = kapp->localkdedir() + "/share/apps/kpresenter/templates/";
 
-  if (KoTemplateChooseDia::chooseTemplate(_templatePath,_template,false))
+  if (KoTemplateChooseDia::chooseTemplate(_globalTemplatePath,_personalTemplatePath,_template,true))
     {
       QFileInfo fileInfo(_template);
-      QString fileName(_templatePath + fileInfo.dirPath(false) + "/" + fileInfo.baseName() + ".kpt");
+      QString fileName(fileInfo.dirPath(true) + "/" + fileInfo.baseName() + ".kpt");
       _clean = false;
 
       if (_insPos == IP_AFTER) _page++;
