@@ -212,6 +212,7 @@ Bugfixes:
 - No header/footer configuration in DTP mode
 - No page layout, frame resizing etc. in the text view mode.
 - More robustness in DCOP calls (to prevent crashes)
+- Faster pasting of text
 
 KoText library fixes:
 - Fixed preview in paragraph dialog (was truncated)

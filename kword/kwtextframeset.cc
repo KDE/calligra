@@ -1924,7 +1924,10 @@ void KWTextFrameSet::slotAfterFormatting( int bottom, KoTextParag *lastFormatted
                     // fall through to AutoCreateNewFrame
                 } else {
                     if ( resized )
+                    {
                         frameResized( theFrame, false );
+                        *abort = false;
+                    }
                     break;
                 }
             }
@@ -2665,7 +2668,6 @@ void KWTextFrameSetEdit::paste()
         if ( !text.isEmpty() )
             textObject()->pasteText( cursor(), text, currentFormat(), true );
     }
-    frameSet()->layout();
 }
 
 void KWTextFrameSetEdit::cut()
