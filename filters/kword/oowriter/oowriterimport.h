@@ -27,7 +27,7 @@
 #include <qdom.h>
 #include <stylestack.h>
 
-class KoStore;
+class KZip;
 
 class OoWriterImport : public KoFilter
 {
@@ -52,6 +52,7 @@ private:
     void createStyles( QDomDocument &doc );
     void createDocumentInfo( QDomDocument &docinfo );
     void createDocumentContent( QDomDocument &doccontent, QDomElement& mainFramesetElement );
+    KoFilter::ConversionStatus loadAndParse(const QString& filename, QDomDocument& doc);
     KoFilter::ConversionStatus openFile();
     bool createStyleMap( const QDomDocument & styles );
     void insertStyles( const QDomElement& element );
@@ -72,7 +73,7 @@ private:
     StyleStack m_styleStack;
     
     uint m_pictureNumber; // Number of the picture (increment *before* use)
-    KoStore* m_oostore; // Input KoStore
+    KZip* m_zip; // Input KZip file
 };
 
 #endif
