@@ -29,6 +29,8 @@
 #include <kconfig.h>
 #include <kglobal.h>
 #include <kdebug.h>
+#include <kkeydialog.h>
+#include <kedittoolbar.h>
 
 #include "kexibrowser.h"
 #include "kexidialogbase.h"
@@ -54,14 +56,40 @@ KexiMainWindow::KexiMainWindow()
 	QTimer::singleShot(0, this, SLOT(parseCmdLineOptions()));
 }
 
+
+KexiMainWindow::~KexiMainWindow()
+{
+}
+
 void
 KexiMainWindow::initActions()
 {
+	//FILE MENU
 	new KAction(i18n("&New"), "filenew", KStdAccel::shortcut(KStdAccel::New), this, SLOT(fileNew()), actionCollection(), "file_new");
 	new KAction(i18n("&Open"), "fileopen", KStdAccel::shortcut(KStdAccel::Open), this, SLOT(fileNew()), actionCollection(), "file_open");
 	new KAction(i18n("&Save"), "filesave", KStdAccel::shortcut(KStdAccel::Save), this, SLOT(fileNew()), actionCollection(), "file_save");
 	new KAction(i18n("Save &As"), "filesaveas", 0, this, SLOT(fileNew()), actionCollection(), "file_save_as");
 	new KAction(i18n("&Quit"), "exit", KStdAccel::shortcut(KStdAccel::Quit), qApp, SLOT(quit()), actionCollection(), "file_quit");
+
+	//SETTINGS MENU
+	(void*) KStdAction::preferences(this, SLOT(slotSettings()), actionCollection());
+
+    KStdAction::keyBindings( this, SLOT( slotConfigureKeys() ), actionCollection() );
+    KStdAction::configureToolbars( this, SLOT( slotConfigureToolbars() ), actionCollection() );
+	
+	KAction *actionSettings = new KAction(i18n("Configure Kexi..."), "configure", 0,
+	 actionCollection(), "kexi_settings");
+	connect(actionSettings, SIGNAL(activated()), this, SLOT(slotShowSettings()));
+
+	//VIEW MENU
+	m_actionBrowser = new KToggleAction(i18n("Show Navigator"), "", CTRL + Key_B,
+	 actionCollection(), "show_nav");
+
+#ifndef KEXI_NO_CTXT_HELP
+	m_actionHelper = new KToggleAction(i18n("Show Context Help"), "", CTRL + Key_H,
+	 actionCollection(), "show_contexthelp");
+#endif
+
 }
 
 void
@@ -72,7 +100,8 @@ KexiMainWindow::initBrowser()
 	if(!m_browser)
 	{
 		m_browser = new KexiBrowser(this, "kexi/db", 0);
-		addToolWindow(m_browser, KDockWidget::DockLeft, m_pMdi, 20/*, lv, 35, "2"*/);
+		addToolWindow(m_browser, KDockWidget::DockLeft, getMainDockWidget(), 20/*, lv, 35, "2"*/);
+//		addToolWindow(m_browser, KDockWidget::DockLeft, m_pMdi, 20/*, lv, 35, "2"*/);
 	}
 
 
@@ -87,6 +116,10 @@ KexiMainWindow::initBrowser()
 			m_browser->addGroup(it);
 		}
 	}
+	
+	m_actionBrowser->setChecked(m_browser->isVisible());
+//TODO	m_browser->plugToggleAction(m_actionBrowser);
+
 }
 
 void
@@ -178,9 +211,29 @@ KexiMainWindow::activeWindowChanged(KMdiChildView *v)
 	factory()->addClient(dlg);
 }
 
-KexiMainWindow::~KexiMainWindow()
+void
+KexiMainWindow::slotShowSettings()
 {
+//TODO	KexiSettings s(this);
+//	s.exec();
 }
+
+void
+KexiMainWindow::slotConfigureKeys()
+{
+    KKeyDialog dlg;
+    dlg.insert( actionCollection() );
+    dlg.configure();
+}
+
+void
+KexiMainWindow::slotConfigureToolbars()
+{
+    KEditToolbar edit(factory());
+//    connect(&edit,SIGNAL(newToolbarConfig()),this,SLOT(slotNewToolbarConfig()));
+    (void) edit.exec();
+}
+
 
 #include "keximainwindow.moc"
 

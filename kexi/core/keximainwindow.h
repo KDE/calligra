@@ -21,12 +21,13 @@
 #define KEXIMAINWINDOW_H
 
 #include <kmdimainfrm.h>
-#include <kmdidefines.h>
+//#include <kmdidefines.h>
 
 class KexiProject;
 class KexiBrowser;
 class KMdiChildView;
 class KexiDialogBase;
+class KToggleAction;
 
 /**
  * @short Kexi's main window
@@ -88,7 +89,16 @@ class KexiMainWindow : public KMdiMainFrm
 		 */
 		void		activeWindowChanged(KMdiChildView *dlg);
 
+		void slotShowSettings();
+		void slotConfigureKeys();
+		void slotConfigureToolbars();
+
 	private:
+#ifndef KEXI_NO_CTXT_HELP
+		KToggleAction *m_actionHelper;
+#endif
+		KToggleAction *m_actionBrowser;
+		
 		KexiProject	*m_project;
 		KexiBrowser	*m_browser;
 };

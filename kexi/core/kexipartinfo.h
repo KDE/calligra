@@ -93,7 +93,7 @@ class Info
 		/**
 		 * @sets the project-part-id
 		 */
-		void 			setProjectPartID(int id) { m_projectPartID; }
+		void 			setProjectPartID(int id) { m_projectPartID=id; }
 
 		/**
 		 * sets the broken flag

@@ -32,7 +32,7 @@ static const char *description =
 KAboutData *newKexiAboutData()
 {
 	KAboutData *aboutData=new KAboutData( "kexi", KEXI_APP_NAME,
-		KEXI_VERSION, description, KAboutData::License_LGPL,
+		KEXI_VERSION_STRING, description, KAboutData::License_LGPL,
 		I18N_NOOP(	"(c) 2002, 2003, Kexi Team\n"
 					"(c) 2003, OpenOffice Polska Ltd.\n"), 
 		I18N_NOOP(	"This software is developed by Kexi Team - an international group\n"
