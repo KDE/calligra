@@ -51,7 +51,7 @@ public:
     KWCanvas *getCanvas() const { return m_canvas; }
 
     bool isResizingEnabled() const;
-
+    void applyCursorType();
 protected:
     virtual void mouseMoveEvent( QMouseEvent *e );
     virtual void mousePressEvent( QMouseEvent *e );

@@ -297,6 +297,14 @@ void KWFrame::repaintResizeHandles() {
     }
 }
 
+void KWFrame::updateCursorType()
+{
+    for (unsigned int i=0; i< handles.count(); i++) {
+        handles.at(i)->applyCursorType();
+    }
+}
+
+
 void KWFrame::frameBordersChanged() {
 	invalidateParentFrameset();
 	if (isSelected()) {

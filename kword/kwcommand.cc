@@ -954,6 +954,7 @@ void KWFrameSetPropertyCommand::setValue( const QString &value )
         else
             m_pFrameSet->setProtectSize( false );
         m_pFrameSet->kWordDocument()->repaintResizeHandles();
+        m_pFrameSet->kWordDocument()->updateCursorType();
         break;
     }
 

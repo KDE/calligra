@@ -36,75 +36,9 @@ KWResizeHandle::KWResizeHandle( KWCanvas * p, Direction d, KWFrame *frm )
     mousePressed = FALSE;
     setMouseTracking( TRUE );
     //setBackgroundMode( PaletteHighlight );
-    bool protect = frame->frameSet()->isProtectSize();
     if ( isResizingEnabled() )
     {
-        switch ( direction ) {
-        case LeftUp:
-        {
-            if ( protect )
-                setCursor( Qt::forbiddenCursor );
-            else
-                setCursor( Qt::sizeFDiagCursor );
-            break;
-        }
-        case Up:
-        {
-            if ( protect )
-                setCursor( Qt::forbiddenCursor );
-            else
-                setCursor( Qt::sizeVerCursor );
-            break;
-        }
-        case RightUp:
-        {
-            if ( protect )
-                setCursor( Qt::forbiddenCursor );
-            else
-                setCursor( Qt::sizeBDiagCursor );
-            break;
-        }
-        case Right:
-        {
-            if ( protect )
-                setCursor( Qt::forbiddenCursor );
-            else
-                setCursor( Qt::sizeHorCursor );
-            break;
-        }
-        case RightDown:
-        {
-            if ( protect )
-                setCursor( Qt::forbiddenCursor );
-            else
-                setCursor( Qt::sizeFDiagCursor );
-            break;
-        }
-        case Down:
-        {
-            if (!protect )
-                setCursor( Qt::forbiddenCursor );
-            else
-                setCursor( Qt::sizeVerCursor );
-            break;
-        }
-        case LeftDown:
-        {
-            if ( protect )
-                setCursor( Qt::forbiddenCursor );
-            else
-                setCursor( Qt::sizeBDiagCursor );
-            break;
-        }
-        case Left:
-        {
-            if ( protect )
-                setCursor( Qt::forbiddenCursor );
-            else
-                setCursor( Qt::sizeHorCursor );
-            break;
-        }
-        }
+        applyCursorType();
     }
 
     updateGeometry();
@@ -114,6 +48,78 @@ KWResizeHandle::KWResizeHandle( KWCanvas * p, Direction d, KWFrame *frm )
 KWResizeHandle::~KWResizeHandle()
 {
     //kdDebug() << "KWResizeHandle::~KWResizeHandle " << this << endl;
+}
+
+void KWResizeHandle::applyCursorType()
+{
+    bool protect = frame->frameSet()->isProtectSize();
+    switch ( direction )
+    {
+    case LeftUp:
+    {
+        if ( protect )
+            setCursor( Qt::forbiddenCursor );
+        else
+            setCursor( Qt::sizeFDiagCursor );
+        break;
+    }
+    case Up:
+    {
+        if ( protect )
+            setCursor( Qt::forbiddenCursor );
+        else
+            setCursor( Qt::sizeVerCursor );
+        break;
+    }
+    case RightUp:
+    {
+        if ( protect )
+            setCursor( Qt::forbiddenCursor );
+        else
+            setCursor( Qt::sizeBDiagCursor );
+        break;
+    }
+    case Right:
+    {
+        if ( protect )
+            setCursor( Qt::forbiddenCursor );
+        else
+            setCursor( Qt::sizeHorCursor );
+        break;
+    }
+    case RightDown:
+    {
+        if ( protect )
+            setCursor( Qt::forbiddenCursor );
+        else
+            setCursor( Qt::sizeFDiagCursor );
+        break;
+    }
+    case Down:
+    {
+        if (!protect )
+            setCursor( Qt::forbiddenCursor );
+        else
+            setCursor( Qt::sizeVerCursor );
+        break;
+    }
+    case LeftDown:
+    {
+        if ( protect )
+            setCursor( Qt::forbiddenCursor );
+        else
+            setCursor( Qt::sizeBDiagCursor );
+        break;
+    }
+    case Left:
+    {
+        if ( protect )
+            setCursor( Qt::forbiddenCursor );
+        else
+            setCursor( Qt::sizeHorCursor );
+        break;
+    }
+    }
 }
 
 void KWResizeHandle::mouseMoveEvent( QMouseEvent *e )

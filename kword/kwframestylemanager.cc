@@ -338,7 +338,7 @@ void KWFrameStyleManager::save() {
 void KWFrameStyleManager::importFromFile()
 {
     QStringList lst;
-    for ( int i = 0; i<m_stylesList->count();i++)
+    for ( int i = 0; i<(int)m_stylesList->count();i++)
     {
         lst << m_stylesList->text(i );
     }

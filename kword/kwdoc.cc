@@ -3571,6 +3571,16 @@ void KWDocument::updateResizeHandles( )
    updateRulerFrameStartEnd();
 }
 
+void KWDocument::updateCursorType( )
+{
+   QPtrList<KWFrame> selectedFrames = getSelectedFrames();
+   KWFrame *frame=0L;
+   for(frame=selectedFrames.first(); frame != 0; frame=selectedFrames.next() )
+   {
+       frame->updateCursorType();
+   }
+}
+
 void KWDocument::deleteTable( KWTableFrameSet *table )
 {
     if ( !table )

@@ -602,6 +602,9 @@ public:
     //when we change protect size attribute handle was not repainting
     void repaintResizeHandles();
 
+    //necessary when we undo/Redo change protect content.
+    void updateCursorType( );
+
     // Tell all views to stop editing this frameset, if they were doing so
     void terminateEditing( KWFrameSet * frameSet )
     { emit sig_terminateEditing( frameSet ); }

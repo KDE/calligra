@@ -230,6 +230,7 @@ public:
     void updateResizeHandles();
     void repaintResizeHandles();
     void updateRulerHandles();
+    void updateCursorType();
 
     QBrush backgroundColor() const { return m_backgroundColor; }
     void setBackgroundColor( const QBrush &_color ) { m_backgroundColor = _color; }
