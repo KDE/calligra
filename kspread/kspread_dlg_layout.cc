@@ -122,8 +122,8 @@ GeneralTab::GeneralTab( QWidget* parent, CellFormatDlg * dlg )
   QGroupBox * groupBox = new QGroupBox( this, "groupBox1" );
   groupBox->setColumnLayout(0, Qt::Vertical );
   groupBox->setTitle( i18n( "Style" ) );
-  groupBox->layout()->setSpacing( 6 );
-  groupBox->layout()->setMargin( 11 );
+  groupBox->layout()->setSpacing( KDialog::spacingHint() );
+  groupBox->layout()->setMargin( KDialog::marginHint() );
 
   QGridLayout * groupBoxLayout = new QGridLayout( groupBox->layout() );
   groupBoxLayout->setAlignment( Qt::AlignTop );

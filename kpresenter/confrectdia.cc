@@ -63,14 +63,14 @@ ConfRectDia::ConfRectDia( QWidget* parent, const char* name )
 
     // ------------------------ layout
     QVBoxLayout *layout = new QVBoxLayout( this, 0 );
-    layout->setMargin( 5 );
-    layout->setSpacing( 5 );
+    layout->setMargin( KDialog::marginHint() );
+    layout->setSpacing( KDialog::spacingHint() );
 
     QHBoxLayout *hbox = new QHBoxLayout( layout );
-    hbox->setSpacing( 5 );
+    hbox->setSpacing( KDialog::spacingHint() );
 
     QVBoxLayout *left = new QVBoxLayout(hbox);
-    left->setSpacing(5);
+    left->setSpacing( KDialog::spacingHint() );
 
     // ------------------------ settings
     gSettings = new QGroupBox( 4, Qt::Vertical, i18n( "Rounding" ), this );

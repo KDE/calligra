@@ -14,6 +14,7 @@
 #include <kiconloader.h>
 #include <kglobal.h>
 #include <klocale.h>
+#include <kdialog.h>
 
 #include "kchart_params.h"
 
@@ -28,8 +29,8 @@ KChartWizardSelectChartSubTypePage::KChartWizardSelectChartSubTypePage( QWidget*
     QGridLayout *grid1 = new QGridLayout(this,2,2,15,15);
 
     QVBoxLayout *lay1 = new QVBoxLayout(  );
-    lay1->setMargin( 5 );
-    lay1->setSpacing( 10 );
+    lay1->setMargin( KDialog::marginHint() );
+    lay1->setSpacing( KDialog::spacingHint() );
 
     QButtonGroup *grp = new QButtonGroup( 1, QGroupBox::Horizontal, i18n( "Chart Sub Type" ),this );
     grp->setRadioButtonExclusive( TRUE );

@@ -25,6 +25,7 @@
 #include <qpushbutton.h>
 
 #include <klocale.h>
+#include <kdialog.h>
 
 #include "kexiproject.h"
 #include "kexidatasourcedlg.h"
@@ -48,7 +49,7 @@ KexiDataSourceDlg::KexiDataSourceDlg(KexiProject *p, QWidget *parent, const char
 	connect(btnCancel, SIGNAL(clicked()), this, SLOT(reject()));
 
 	QGridLayout *g = new QGridLayout(this);
-	g->setSpacing(5);
+	g->setSpacing(KDialog::spacingHint());
 	g->addWidget(lDs,		0, 0);
 	g->addWidget(lName,		1, 0);
 	g->addMultiCellWidget(m_ds,	0, 0, 1, 2);

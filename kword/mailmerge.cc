@@ -347,7 +347,7 @@ KWMailMergeConfigDialog::KWMailMergeConfigDialog(QWidget *parent,KWMailMergeData
     layout->setMargin( KDialog::spacingHint() );
 
 //    QVBox *row1 = new QVBox( back );
-//    row1->setSpacing( 5 );
+//    row1->setSpacing( KDialog::spacingHint() );
 
     QLabel *l = new QLabel( i18n( "Datasource:" ),back );
 //    l->setMaximumHeight( l->sizeHint().height() );

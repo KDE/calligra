@@ -137,17 +137,17 @@ ConfPenDia::ConfPenDia( QWidget* parent, const char* name, int flags)
     QVBoxLayout *layout = new QVBoxLayout( this );
     QHBoxLayout *config = new QHBoxLayout( layout );
 
-    layout->setMargin( 5 );
-    layout->setSpacing( 15 );
-    config->setSpacing( 5 );
+    layout->setMargin( KDialog::marginHint() );
+    layout->setSpacing( KDialog::spacingHint() );
+    config->setSpacing( KDialog::spacingHint() );
 
     QVBox *left = new QVBox( this );
     config->addWidget( left );
     QVBox *right = new QVBox( this );
     config->addWidget( right );
 
-    left->setSpacing( 5 );
-    right->setSpacing( 5 );
+    left->setSpacing( KDialog::spacingHint() );
+    right->setSpacing( KDialog::spacingHint() );
 
     QLabel *l = new QLabel( i18n( "Pen color:" ), left );
     l->setFixedHeight( l->sizeHint().height() );
@@ -384,7 +384,7 @@ ConfBrushDia::ConfBrushDia( QWidget* parent, const char* name, int flags)
     QVBox *left = new QVBox( this );
     grid->addWidget( left, 0, 0 );
 
-    left->setSpacing( 5 );
+    left->setSpacing( KDialog::spacingHint() );
 
     QLabel *l = new QLabel( i18n( "Fill type:" ), left );
     l->setFixedHeight( l->sizeHint().height() );
@@ -404,7 +404,7 @@ ConfBrushDia::ConfBrushDia( QWidget* parent, const char* name, int flags)
              stack, SLOT( raiseWidget( int ) ) );
 
     QVBox *brushConfig = new QVBox( stack );
-    brushConfig->setSpacing( 5 );
+    brushConfig->setSpacing( KDialog::spacingHint() );
     stack->addWidget( brushConfig, 0 );
 
     l = new QLabel( i18n( "Brush color:" ), brushConfig );
@@ -450,7 +450,7 @@ ConfBrushDia::ConfBrushDia( QWidget* parent, const char* name, int flags)
 
     QVBox *gradientConfig = new QVBox( left );
     stack->addWidget( gradientConfig, 1 );
-    gradientConfig->setSpacing( 5 );
+    gradientConfig->setSpacing( KDialog::spacingHint() );
 
     l = new QLabel( i18n( "Gradient colors:" ), gradientConfig );
     l->setFixedHeight( l->sizeHint().height() );
@@ -954,8 +954,8 @@ void StyleDia::setupTabGeometry()
 {
     QWidget *tab = new QWidget( this );
     QVBoxLayout *layout = new QVBoxLayout( tab );
-    layout->setMargin( 5 );
-    layout->setSpacing( 5 );
+    layout->setMargin( KDialog::marginHint() );
+    layout->setSpacing( KDialog::spacingHint() );
 
     protect= new QCheckBox( i18n("Protect size and position"), tab);
     layout->addWidget(protect);

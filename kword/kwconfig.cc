@@ -237,7 +237,7 @@ ConfigureInterfacePage::ConfigureInterfacePage( KWView *_view, QVBox *box, char 
     config = KWFactory::global()->config();
     KoUnit::Unit unit = m_pView->kWordDocument()->getUnit();
     QVGroupBox* gbInterfaceGroup = new QVGroupBox( i18n("Interface"), box, "GroupBox" );
-    gbInterfaceGroup->setMargin( 10 );
+    gbInterfaceGroup->setMargin( KDialog::marginHint() );
     gbInterfaceGroup->setInsideSpacing( KDialog::spacingHint() );
 
     double ptGridX=10.0;
@@ -411,7 +411,7 @@ ConfigureMiscPage::ConfigureMiscPage( KWView *_view, QVBox *box, char *name )
     config = KWFactory::global()->config();
     KoUnit::Unit unit = m_pView->kWordDocument()->getUnit();
     QVGroupBox* gbMiscGroup = new QVGroupBox( i18n("Misc"), box, "GroupBox" );
-    gbMiscGroup->setMargin( 10 );
+    gbMiscGroup->setMargin( KDialog::marginHint() );
     gbMiscGroup->setInsideSpacing( KDialog::spacingHint() );
 
     m_oldNbRedo=30;
@@ -498,7 +498,7 @@ ConfigureMiscPage::ConfigureMiscPage( KWView *_view, QVBox *box, char *name )
 
 
     QVGroupBox* gbViewFormatting = new QVGroupBox( i18n("View Formatting"), box, "view_formatting" );
-    gbViewFormatting->setMargin( 10 );
+    gbViewFormatting->setMargin( KDialog::marginHint() );
     gbViewFormatting->setInsideSpacing( KDialog::spacingHint() );
 
     m_oldFormattingEndParag = doc->viewFormattingEndParag();
@@ -683,7 +683,7 @@ ConfigureDefaultDocPage::ConfigureDefaultDocPage( KWView *_view, QVBox *box, cha
     KWDocument * doc = m_pView->kWordDocument();
     config = KWFactory::global()->config();
     QVGroupBox* gbDocumentDefaults = new QVGroupBox( i18n("Document Defaults"), box, "GroupBox" );
-    gbDocumentDefaults->setMargin( 10 );
+    gbDocumentDefaults->setMargin( KDialog::marginHint() );
     gbDocumentDefaults->setInsideSpacing( KDialog::spacingHint() );
 
     double ptColumnSpacing=3;
@@ -763,7 +763,7 @@ ConfigureDefaultDocPage::ConfigureDefaultDocPage( KWView *_view, QVBox *box, cha
     m_autoHyphenation->setChecked( m_oldHyphenation );
 
     QVGroupBox* gbDocumentSettings = new QVGroupBox( i18n("Document Settings"), box );
-    gbDocumentSettings->setMargin( 10 );
+    gbDocumentSettings->setMargin( KDialog::marginHint() );
     gbDocumentSettings->setInsideSpacing( KDialog::spacingHint() );
 
     autoSave = new KIntNumInput( oldAutoSaveValue, gbDocumentSettings );
@@ -799,7 +799,7 @@ ConfigureDefaultDocPage::ConfigureDefaultDocPage( KWView *_view, QVBox *box, cha
     m_tabStopWidth->setValue( KoUnit::ptToUnit( m_oldTabStopWidth, doc->getUnit() ));
 
     QVGroupBox* gbDocumentCursor = new QVGroupBox( i18n("Cursor"), box );
-    gbDocumentCursor->setMargin( 10 );
+    gbDocumentCursor->setMargin( KDialog::marginHint() );
     gbDocumentCursor->setInsideSpacing( KDialog::spacingHint() );
 
     m_cursorInProtectedArea= new QCheckBox(i18n("Cursor in protected area"),gbDocumentCursor);
@@ -922,7 +922,7 @@ ConfigurePathPage::ConfigurePathPage( KWView *_view, QVBox *box, char *name )
     KWDocument * doc = m_pView->kWordDocument();
     config = KWFactory::global()->config();
     QVGroupBox* gbPathGroup = new QVGroupBox( i18n("Path"), box, "GroupBox" );
-    gbPathGroup->setMargin( 10 );
+    gbPathGroup->setMargin( KDialog::marginHint() );
     gbPathGroup->setInsideSpacing( KDialog::spacingHint() );
 
     m_pPathView = new KListView( gbPathGroup );

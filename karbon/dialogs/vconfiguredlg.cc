@@ -188,11 +188,11 @@ VConfigMiscPage::VConfigMiscPage( KarbonView* view, QVBox* box, char* name )
 
     KoUnit::Unit unit = view->part()->unit();
 
-    QGroupBox* tmpQGroupBox = new QGroupBox( box, "GroupBox" );
-    tmpQGroupBox->setTitle( i18n( "Misc" ) );
+    QGroupBox* tmpQGroupBox = new QGroupBox( 0, Qt::Vertical, i18n( "Misc" ), box, "GroupBox" );
+    tmpQGroupBox->layout()->setSpacing(KDialog::spacingHint());
+    tmpQGroupBox->layout()->setMargin(KDialog::marginHint());
 
-    QGridLayout* grid = new QGridLayout(
-        tmpQGroupBox, 4, 2, KDialog::marginHint() + 7, KDialog::spacingHint() );
+    QGridLayout* grid = new QGridLayout(tmpQGroupBox->layout(), 4, 2 );
 
     m_oldUndoRedo = 30;
 
@@ -344,7 +344,7 @@ VConfigDefaultPage::VConfigDefaultPage( KarbonView* view,
 
     QVGroupBox* gbDocumentSettings = new QVGroupBox(
         i18n( "Document Settings" ), box );
-    gbDocumentSettings->setMargin( 10 );
+    gbDocumentSettings->setMargin( KDialog::marginHint() );
     gbDocumentSettings->setInsideSpacing( KDialog::spacingHint() );
 
     m_oldAutoSave = m_view->part()->defaultAutoSave() / 60;

@@ -92,9 +92,9 @@ BackDia::BackDia( QWidget* parent, const char* name,
 
 
     QHBoxLayout *hbox = new QHBoxLayout( layout );
-    hbox->setSpacing( 5 );
+    hbox->setSpacing( KDialog::spacingHint() );
     QVBoxLayout *vbox = new QVBoxLayout( hbox );
-    vbox->setSpacing( 5 );
+    vbox->setSpacing( KDialog::spacingHint() );
 
     vbox->addWidget( new QLabel( i18n( "Background type:" ), page ) );
 
@@ -113,7 +113,7 @@ BackDia::BackDia( QWidget* parent, const char* name,
     // color/gradient tab ---------------
 
     QVBox *colorTab = new QVBox( tabWidget );
-    colorTab->setSpacing( 5 );
+    colorTab->setSpacing( KDialog::spacingHint() );
     colorTab->setMargin( 5 );
 
     cType = new QComboBox( false, colorTab );
@@ -162,7 +162,7 @@ BackDia::BackDia( QWidget* parent, const char* name,
     // picture tab ---------------------
 
     QVBox *picTab = new QVBox( tabWidget );
-    picTab->setSpacing( 5 );
+    picTab->setSpacing( KDialog::spacingHint() );
     picTab->setMargin( 5 );
 
     QLabel *l = new QLabel( i18n( "View mode:" ), picTab );

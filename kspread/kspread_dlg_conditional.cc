@@ -50,8 +50,8 @@ KSpreadConditionalWidget::KSpreadConditionalWidget( QWidget* parent, const char*
 
   QGroupBox * groupBox1_3 = new QGroupBox( this, "groupBox1_3" );
   groupBox1_3->setColumnLayout(0, Qt::Vertical );
-  groupBox1_3->layout()->setSpacing( 6 );
-  groupBox1_3->layout()->setMargin( 11 );
+  groupBox1_3->layout()->setSpacing( KDialog::spacingHint() );
+  groupBox1_3->layout()->setMargin( KDialog::marginHint() );
   QGridLayout * groupBox1_3Layout = new QGridLayout( groupBox1_3->layout() );
   groupBox1_3Layout->setAlignment( Qt::AlignTop );
 
@@ -85,8 +85,8 @@ KSpreadConditionalWidget::KSpreadConditionalWidget( QWidget* parent, const char*
 
   QGroupBox * groupBox1_2 = new QGroupBox( this, "groupBox1_2" );
   groupBox1_2->setColumnLayout(0, Qt::Vertical );
-  groupBox1_2->layout()->setSpacing( 6 );
-  groupBox1_2->layout()->setMargin( 11 );
+  groupBox1_2->layout()->setSpacing( KDialog::spacingHint() );
+  groupBox1_2->layout()->setMargin( KDialog::marginHint() );
 
   QGridLayout * groupBox1_2Layout = new QGridLayout( groupBox1_2->layout() );
   groupBox1_2Layout->setAlignment( Qt::AlignTop );
@@ -121,8 +121,8 @@ KSpreadConditionalWidget::KSpreadConditionalWidget( QWidget* parent, const char*
 
   QGroupBox * groupBox1_1 = new QGroupBox( this, "groupBox1_1" );
   groupBox1_1->setColumnLayout(0, Qt::Vertical );
-  groupBox1_1->layout()->setSpacing( 6 );
-  groupBox1_1->layout()->setMargin( 11 );
+  groupBox1_1->layout()->setSpacing( KDialog::spacingHint() );
+  groupBox1_1->layout()->setMargin( KDialog::marginHint() );
 
   QGridLayout * groupBox1_1Layout = new QGridLayout( groupBox1_1->layout() );
   groupBox1_1Layout->setAlignment( Qt::AlignTop );

@@ -68,8 +68,8 @@ KSpreadSortDlg::KSpreadSortDlg( KSpreadView * parent,  const char * name,
   QGroupBox * sort1Box = new QGroupBox( m_page1, "sort1Box" );
   sort1Box->setTitle( i18n( "Sort By" ) );
   sort1Box->setColumnLayout(0, Qt::Vertical );
-  sort1Box->layout()->setSpacing( 6 );
-  sort1Box->layout()->setMargin( 11 );
+  sort1Box->layout()->setSpacing( KDialog::spacingHint() );
+  sort1Box->layout()->setMargin( KDialog::marginHint() );
   QHBoxLayout * sort1BoxLayout = new QHBoxLayout( sort1Box->layout() );
   sort1BoxLayout->setAlignment( Qt::AlignTop );
 
@@ -86,8 +86,8 @@ KSpreadSortDlg::KSpreadSortDlg( KSpreadView * parent,  const char * name,
   QGroupBox * sort2Box = new QGroupBox( m_page1, "sort2Box" );
   sort2Box->setTitle( i18n( "Then By" ) );
   sort2Box->setColumnLayout(0, Qt::Vertical );
-  sort2Box->layout()->setSpacing( 6 );
-  sort2Box->layout()->setMargin( 11 );
+  sort2Box->layout()->setSpacing( KDialog::spacingHint() );
+  sort2Box->layout()->setMargin( KDialog::marginHint() );
   QHBoxLayout * sort2BoxLayout = new QHBoxLayout( sort2Box->layout() );
   sort2BoxLayout->setAlignment( Qt::AlignTop );
 
@@ -105,8 +105,8 @@ KSpreadSortDlg::KSpreadSortDlg( KSpreadView * parent,  const char * name,
   QGroupBox * sort3Box = new QGroupBox( m_page1, "sort3Box" );
   sort3Box->setTitle( i18n( "Then By" ) );
   sort3Box->setColumnLayout(0, Qt::Vertical );
-  sort3Box->layout()->setSpacing( 6 );
-  sort3Box->layout()->setMargin( 11 );
+  sort3Box->layout()->setSpacing( KDialog::spacingHint() );
+  sort3Box->layout()->setMargin( KDialog::marginHint() );
   QHBoxLayout * sort3BoxLayout = new QHBoxLayout( sort3Box->layout() );
   sort3BoxLayout->setAlignment( Qt::AlignTop );
 
@@ -133,8 +133,8 @@ KSpreadSortDlg::KSpreadSortDlg( KSpreadView * parent,  const char * name,
   QGroupBox * firstKeyBox = new QGroupBox( m_page2, "firstKeyBox" );
   firstKeyBox->setTitle( i18n( "First Key" ) );
   firstKeyBox->setColumnLayout(0, Qt::Vertical );
-  firstKeyBox->layout()->setSpacing( 6 );
-  firstKeyBox->layout()->setMargin( 11 );
+  firstKeyBox->layout()->setSpacing( KDialog::spacingHint() );
+  firstKeyBox->layout()->setMargin( KDialog::marginHint() );
   QVBoxLayout * firstKeyBoxLayout = new QVBoxLayout( firstKeyBox->layout() );
   firstKeyBoxLayout->setAlignment( Qt::AlignTop );
 
@@ -152,8 +152,8 @@ KSpreadSortDlg::KSpreadSortDlg( KSpreadView * parent,  const char * name,
   QButtonGroup * orientationGroup = new QButtonGroup( m_page2, "orientationGroup" );
   orientationGroup->setTitle( i18n( "Orientation" ) );
   orientationGroup->setColumnLayout(0, Qt::Vertical );
-  orientationGroup->layout()->setSpacing( 6 );
-  orientationGroup->layout()->setMargin( 11 );
+  orientationGroup->layout()->setSpacing( KDialog::spacingHint() );
+  orientationGroup->layout()->setMargin( KDialog::marginHint() );
   QGridLayout * orientationGroupLayout = new QGridLayout( orientationGroup->layout() );
   orientationGroupLayout->setAlignment( Qt::AlignTop );
 
@@ -183,8 +183,8 @@ KSpreadSortDlg::KSpreadSortDlg( KSpreadView * parent,  const char * name,
   QGroupBox * resultToBox = new QGroupBox( m_page2, "resultToBox" );
   resultToBox->setTitle( i18n( "Put Results To" ) );
   resultToBox->setColumnLayout(0, Qt::Vertical );
-  resultToBox->layout()->setSpacing( 6 );
-  resultToBox->layout()->setMargin( 11 );
+  resultToBox->layout()->setSpacing( KDialog::spacingHint() );
+  resultToBox->layout()->setMargin( KDialog::marginHint() );
   QHBoxLayout * resultToBoxLayout = new QHBoxLayout( resultToBox->layout() );
   resultToBoxLayout->setAlignment( Qt::AlignTop );
 

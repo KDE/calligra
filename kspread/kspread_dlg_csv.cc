@@ -76,8 +76,8 @@ KSpreadCSVDialog::KSpreadCSVDialog( KSpreadView * parent, const char * name, QRe
   m_delimiterBox->setSizePolicy( QSizePolicy( (QSizePolicy::SizeType)1, (QSizePolicy::SizeType)1, 0, 0, m_delimiterBox->sizePolicy().hasHeightForWidth() ) );
   m_delimiterBox->setTitle( i18n( "Delimiter" ) );
   m_delimiterBox->setColumnLayout(0, Qt::Vertical );
-  m_delimiterBox->layout()->setSpacing( 6 );
-  m_delimiterBox->layout()->setMargin( 11 );
+  m_delimiterBox->layout()->setSpacing( KDialog::spacingHint() );
+  m_delimiterBox->layout()->setMargin( KDialog::marginHint() );
   m_delimiterBoxLayout = new QGridLayout( m_delimiterBox->layout() );
   m_delimiterBoxLayout->setAlignment( Qt::AlignTop );
   MyDialogLayout->addMultiCellWidget( m_delimiterBox, 0, 2, 0, 0 );
@@ -119,8 +119,8 @@ KSpreadCSVDialog::KSpreadCSVDialog( KSpreadView * parent, const char * name, QRe
   m_formatBox->setSizePolicy( QSizePolicy( (QSizePolicy::SizeType)1, (QSizePolicy::SizeType)1, 0, 0, m_formatBox->sizePolicy().hasHeightForWidth() ) );
   m_formatBox->setTitle( i18n( "Format" ) );
   m_formatBox->setColumnLayout(0, Qt::Vertical );
-  m_formatBox->layout()->setSpacing( 6 );
-  m_formatBox->layout()->setMargin( 11 );
+  m_formatBox->layout()->setSpacing( KDialog::spacingHint() );
+  m_formatBox->layout()->setMargin( KDialog::marginHint() );
   m_formatBoxLayout = new QGridLayout( m_formatBox->layout() );
   m_formatBoxLayout->setAlignment( Qt::AlignTop );
   MyDialogLayout->addMultiCellWidget( m_formatBox, 0, 2, 1, 1 );

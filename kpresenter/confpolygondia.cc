@@ -121,11 +121,11 @@ ConfPolygonDia::ConfPolygonDia( QWidget *parent, const char *name )
 {
     // ------------------------ layout
     QVBoxLayout *layout = new QVBoxLayout( this, 0 );
-    layout->setMargin( 5 );
-    layout->setSpacing( 5 );
+    layout->setMargin( KDialog::marginHint() );
+    layout->setSpacing( KDialog::spacingHint() );
 
     QHBoxLayout *hbox = new QHBoxLayout( layout );
-    hbox->setSpacing( 5 );
+    hbox->setSpacing( KDialog::spacingHint() );
 
     // ------------------------ settings
     gSettings = new QGroupBox( 1, Qt::Horizontal, i18n( "Settings" ), this );

@@ -64,7 +64,7 @@ void KoVariableNameDia::init()
     back = makeVBoxMainWidget();
 
     QHBox *row1 = new QHBox( back );
-    row1->setSpacing( 5 );
+    row1->setSpacing( KDialog::spacingHint() );
 
     QLabel *l = new QLabel( i18n( "Name:" ), row1 );
     l->setFixedSize( l->sizeHint() );
@@ -295,13 +295,13 @@ void KoCustomVarDialog::init()
 {
     back = makeVBoxMainWidget();
     QHBox *row1 = new QHBox( back );
-    row1->setSpacing( 5 );
+    row1->setSpacing( KDialog::spacingHint() );
     QLabel *ln = new QLabel( i18n( "Name:" ), row1 );
     ln->setFixedSize( ln->sizeHint() );
     m_name = new KLineEdit( row1 );
 
     QHBox *row2 = new QHBox( back );
-    row2->setSpacing( 5 );
+    row2->setSpacing( KDialog::spacingHint() );
     QLabel *lv = new QLabel( i18n( "Value:" ), row2 );
     lv->setFixedSize( lv->sizeHint() );
     m_value = new KLineEdit( row2 );

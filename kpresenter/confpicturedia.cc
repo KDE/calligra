@@ -34,6 +34,7 @@ Boston, MA 02111-1307, USA.
 #include <knuminput.h>
 #include <klocale.h>
 #include <kbuttonbox.h>
+#include <kdialog.h>
 
 #include <stdlib.h>
 #include <math.h>
@@ -298,11 +299,11 @@ ConfPictureDia::ConfPictureDia( QWidget *parent, const char *name)
 {
     // ------------------------ layout
     QVBoxLayout *layout = new QVBoxLayout( this, 0 );
-    layout->setMargin( 5 );
-    layout->setSpacing( 5 );
+    layout->setMargin( KDialog::marginHint() );
+    layout->setSpacing( KDialog::spacingHint() );
 
     QHBoxLayout *hbox = new QHBoxLayout( layout );
-    hbox->setSpacing( 5 );
+    hbox->setSpacing( KDialog::spacingHint() );
 
     // ------------------------ settings
     gSettings = new QGroupBox( 1, Qt::Horizontal, i18n( "Settings" ), this );

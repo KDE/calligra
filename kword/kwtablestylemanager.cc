@@ -265,8 +265,8 @@ void KWTableStyleManager::setupWidget(const QPtrList<KWTableStyle> & styleList)
 void KWTableStyleManager::setupMain()
 {
     QGridLayout *mainLayout = new QGridLayout( main );
-    mainLayout->setSpacing( 6 );
-    mainLayout->setMargin( 11 );
+    mainLayout->setSpacing( KDialog::spacingHint() );
+    mainLayout->setMargin( KDialog::marginHint() );
 
     preview = new KWTableStylePreview( i18n("Preview"), i18n("Tablestyles preview"), main );
     preview->resize(preview->sizeHint());
@@ -286,10 +286,10 @@ void KWTableStyleManager::setupMain()
 
     mainLayout->addWidget( nameLabel, 0, 0 );
 
-    QGroupBox *adjustBox = new QGroupBox( i18n("Adjust"), main);
-    QGridLayout *adjustLayout = new QGridLayout( adjustBox );
-    adjustLayout->setSpacing( 6 );
-    adjustLayout->setMargin( 11 );
+    QGroupBox *adjustBox = new QGroupBox( 0, Qt::Vertical, i18n("Adjust"), main);
+    adjustBox->layout()->setSpacing(KDialog::spacingHint());
+    adjustBox->layout()->setMargin(KDialog::marginHint());
+    QGridLayout *adjustLayout = new QGridLayout( adjustBox->layout() );
 
     QLabel *frameStyleLabel = new QLabel( adjustBox );
     frameStyleLabel->setText( i18n( "Framestyle:" ) );

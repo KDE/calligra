@@ -31,7 +31,7 @@
 #include <kbuttonbox.h>
 #include <qstrlist.h>
 #include <qptrlist.h>
-
+#include <kdialog.h>
 
 KivioPageShow::KivioPageShow( KivioView* parent, const char* name )
 : QDialog( parent, name,TRUE )
@@ -40,8 +40,8 @@ KivioPageShow::KivioPageShow( KivioView* parent, const char* name )
 
 
   QVBoxLayout *lay1 = new QVBoxLayout( this );
-  lay1->setMargin( 5 );
-  lay1->setSpacing( 10 );
+  lay1->setMargin( KDialog::marginHint() );
+  lay1->setSpacing( KDialog::spacingHint() );
   list=new QListBox(this);
   lay1->addWidget( list );
 

@@ -219,13 +219,13 @@ void KWFrameStyleManager::addGeneralTab()
     QWidget *tab = new QWidget( m_tabs );
 
     QGridLayout *tabLayout = new QGridLayout( tab );
-    tabLayout->setSpacing( 6 );
-    tabLayout->setMargin( 11 );
+    tabLayout->setSpacing( KDialog::spacingHint() );
+    tabLayout->setMargin( KDialog::marginHint() );
 
     previewBox = new QGroupBox( i18n( "Preview" ), tab );
     QGridLayout *previewLayout = new QGridLayout( previewBox );
-//    previewLayout->setSpacing( 6 );
-    previewLayout->setMargin( 20 );
+//    previewLayout->setSpacing( KDialog::spacingHint() );
+    previewLayout->setMargin( KDialog::marginHint() );
 
     preview = new KWFrameStylePreview( previewBox );
     preview->resize(preview->sizeHint());

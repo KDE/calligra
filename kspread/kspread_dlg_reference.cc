@@ -42,8 +42,8 @@ KSpreadreference::KSpreadreference( KSpreadView* parent, const char* name )
 {
   m_pView = parent;
   QVBoxLayout *lay1 = new QVBoxLayout( this );
-  lay1->setMargin( 5 );
-  lay1->setSpacing( 10 );
+  lay1->setMargin( KDialog::marginHint() );
+  lay1->setSpacing( KDialog::spacingHint() );
   m_list = new QListBox(this);
   lay1->addWidget( m_list );
 

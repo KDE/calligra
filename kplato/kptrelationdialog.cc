@@ -76,22 +76,26 @@ void KPTRelationDialog::init()
     layout->addWidget(l, 1, 0);
 
     //layout->addMultiCellWidget(relationType = new QButtonGroup(box), 0, 5, 0, 1);
-    relationType = new QButtonGroup(i18n("Relation Type"),page);
+    relationType = new QButtonGroup(0, Qt::Vertical, i18n("Relation Type"),page);
+    relationType->layout()->setSpacing(KDialog::spacingHint());
+    relationType->layout()->setMargin(KDialog::marginHint());
     layout->addWidget(relationType, 2, 0);
-    
-    QGridLayout *relationTypeLayout = new QGridLayout(relationType, 6, 1, marginHint()+5, spacingHint());
-    
+
+    QGridLayout *relationTypeLayout = new QGridLayout(relationType->layout(), 6, 1);
+
     QRadioButton *b = new QRadioButton(QString("Finish-Start"), relationType);
     relationTypeLayout->addWidget(b, 0, 0);
     b = new QRadioButton(QString("Finish-Finish"), relationType);
     relationTypeLayout->addWidget(b, 1, 0);
     b = new QRadioButton(QString("Start-Start"), relationType);
     relationTypeLayout->addWidget(b, 2, 0);
-    
-    timingType = new QButtonGroup(i18n("Timing Type"),page);
+
+    timingType = new QButtonGroup(0, Qt::Vertical,i18n("Timing Type"),page);
+    timingType->layout()->setSpacing(KDialog::spacingHint());
+    timingType->layout()->setMargin(KDialog::marginHint());
     layout->addWidget(timingType, 2, 1);
-    
-    QGridLayout *timingTypeLayout = new QGridLayout(timingType, 6, 1, marginHint()+5, spacingHint());
+
+    QGridLayout *timingTypeLayout = new QGridLayout(timingType->layout(), 6, 1);
     
     b = new QRadioButton(QString("Start On Date"), timingType);
     timingTypeLayout->addWidget(b, 0, 0);

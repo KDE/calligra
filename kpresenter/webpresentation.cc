@@ -587,8 +587,8 @@ void KPWebPresentationWizard::createWebPresentation( const QString &_config, KPr
 void KPWebPresentationWizard::setupPage1()
 {
     page1 = new QHBox( this );
-    page1->setSpacing( 5 );
-    page1->setMargin( 5 );
+    page1->setSpacing( KDialog::spacingHint() );
+    page1->setMargin( KDialog::marginHint() );
 
     QLabel* sidebar = new QLabel( page1 );
     sidebar->setMinimumSize( 106, 318 );
@@ -658,8 +658,8 @@ void KPWebPresentationWizard::setupPage1()
 void KPWebPresentationWizard::setupPage2()
 {
     page2 = new QHBox( this );
-    page2->setSpacing( 6 );
-    page2->setMargin( 6 );
+    page2->setSpacing( KDialog::spacingHint() );
+    page2->setMargin( KDialog::marginHint() );
 
     QLabel* sidebar = new QLabel( page2 );
     sidebar->setMinimumSize( 106, 318 );
@@ -723,8 +723,8 @@ void KPWebPresentationWizard::setupPage2()
 void KPWebPresentationWizard::setupPage3()
 {
     page3 = new QHBox( this );
-    page3->setSpacing( 6 );
-    page3->setMargin( 6 );
+    page3->setSpacing( KDialog::spacingHint() );
+    page3->setMargin( KDialog::marginHint() );
 
     QLabel* sidebar = new QLabel( page3 );
     sidebar->setMinimumSize( 106, 318 );
@@ -777,8 +777,8 @@ void KPWebPresentationWizard::setupPage3()
 void KPWebPresentationWizard::setupPage4()
 {
     page4 = new QHBox( this );
-    page4->setSpacing( 5 );
-    page4->setMargin( 5 );
+    page4->setSpacing( KDialog::spacingHint() );
+    page4->setMargin( KDialog::marginHint() );
 
     QLabel* sidebar = new QLabel( page4 );
     sidebar->setMinimumSize( 106, 318 );
@@ -1045,7 +1045,7 @@ void KPWebPresentationCreateDialog::createMainPage()
 void KPWebPresentationCreateDialog::setupGUI()
 {
     back = new QVBox( this );
-    back->setMargin( 10 );
+    back->setMargin( KDialog::marginHint() );
 
     QFrame *line;
 
@@ -1055,7 +1055,7 @@ void KPWebPresentationCreateDialog::setupGUI()
 
     step1 = new QLabel( i18n( "Initialize (create file structure, etc.)" ), back );
     step2 = new QLabel( i18n( "Create Pictures of the Slides" ), back );
-    step3 = new QLabel( i18n( "Create HTML pages for the slides" ), back );
+    step3 = new QLabel( i18n( "Create HTML pages for the Slides" ), back );
     step4 = new QLabel( i18n( "Create Main Page (Table of Contents)" ), back );
 
     line = new QFrame( back );

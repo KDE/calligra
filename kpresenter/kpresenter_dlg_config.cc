@@ -302,8 +302,8 @@ configureColorBackground::configureColorBackground( KPresenterView* _view, QWidg
     oldBgColor = m_pView->kPresenterDoc()->txtBackCol();
     oldGridColor = m_pView->kPresenterDoc()->gridColor();
     QVBoxLayout *box = new QVBoxLayout( this );
-    box->setMargin( 5 );
-    box->setSpacing( 10 );
+    box->setMargin( KDialog::marginHint() );
+    box->setSpacing( KDialog::spacingHint() );
 
     QGroupBox* tmpQGroupBox = new QGroupBox( 0, Qt::Vertical, i18n("Colors"), this );
     tmpQGroupBox->layout()->setSpacing(KDialog::spacingHint());
@@ -427,10 +427,10 @@ ConfigureMiscPage::ConfigureMiscPage( KPresenterView *_view, QVBox *box, char *n
 {
     m_pView=_view;
     config = KPresenterFactory::global()->config();
-    QGroupBox* tmpQGroupBox = new QGroupBox( box, "GroupBox" );
-    tmpQGroupBox->setTitle(i18n("Misc"));
-
-    QGridLayout *grid = new QGridLayout( tmpQGroupBox , 8, 1, KDialog::marginHint()+7, KDialog::spacingHint() );
+    QGroupBox* tmpQGroupBox = new QGroupBox( 0, Qt::Vertical, i18n("Misc"), box, "GroupBox" );
+    tmpQGroupBox->layout()->setSpacing(KDialog::spacingHint());
+    tmpQGroupBox->layout()->setMargin(KDialog::marginHint());
+    QGridLayout *grid = new QGridLayout( tmpQGroupBox->layout(), 8, 1 );
 
     m_oldNbRedo=30;
     m_printNotes=true;
@@ -469,10 +469,10 @@ ConfigureMiscPage::ConfigureMiscPage( KPresenterView *_view, QVBox *box, char *n
     m_cbPrintNotes->setChecked(m_printNotes);
     grid->addWidget(m_cbPrintNotes,7,0);
 
-    tmpQGroupBox = new QGroupBox( box, "GroupBox" );
-    tmpQGroupBox->setTitle(i18n("Grid"));
-
-    grid = new QGridLayout( tmpQGroupBox, 8, 1, KDialog::marginHint()+7, KDialog::spacingHint() );
+    tmpQGroupBox = new QGroupBox( 0, Qt::Vertical, i18n("Grid"), box, "GroupBox" );
+    tmpQGroupBox->layout()->setSpacing(KDialog::spacingHint());
+    tmpQGroupBox->layout()->setMargin(KDialog::marginHint());
+    grid = new QGridLayout( tmpQGroupBox->layout(), 8, 1 );
 
     KoRect rect = doc->stickyPage()->getPageRect();
     QLabel *lab=new QLabel(i18n("Resolution X (%1):").arg(doc->getUnitName()), tmpQGroupBox);
@@ -602,7 +602,7 @@ ConfigureDefaultDocPage::ConfigureDefaultDocPage(KPresenterView *_view, QVBox *b
     }
 
     QVGroupBox* gbDocumentDefaults = new QVGroupBox( i18n("Document Defaults"), box, "GroupBox" );
-    gbDocumentDefaults->setMargin( 10 );
+    gbDocumentDefaults->setMargin( KDialog::marginHint() );
     gbDocumentDefaults->setInsideSpacing( 5 );
 
     QWidget *fontContainer = new QWidget(gbDocumentDefaults);
@@ -649,7 +649,7 @@ ConfigureDefaultDocPage::ConfigureDefaultDocPage(KPresenterView *_view, QVBox *b
     m_autoHyphenation->setChecked( m_oldHyphenation );
 
     QVGroupBox* gbDocumentSettings = new QVGroupBox( i18n("Document Settings"), box );
-    gbDocumentSettings->setMargin( 10 );
+    gbDocumentSettings->setMargin( KDialog::marginHint() );
     gbDocumentSettings->setInsideSpacing( KDialog::spacingHint() );
 
     m_createBackupFile = new QCheckBox( i18n("Create backup file"), gbDocumentSettings);
@@ -677,7 +677,7 @@ ConfigureDefaultDocPage::ConfigureDefaultDocPage(KPresenterView *_view, QVBox *b
     m_tabStopWidth->setValue( KoUnit::ptToUnit( m_oldTabStopWidth, doc->getUnit() ));
 
     QVGroupBox* gbDocumentCursor = new QVGroupBox( i18n("Cursor"), box );
-    gbDocumentCursor->setMargin( 10 );
+    gbDocumentCursor->setMargin( KDialog::marginHint() );
     gbDocumentCursor->setInsideSpacing( KDialog::spacingHint() );
 
     m_cursorInProtectedArea= new QCheckBox(i18n("Cursor in protected area"),gbDocumentCursor);
@@ -797,8 +797,8 @@ ConfigureToolsPage::ConfigureToolsPage( KPresenterView *_view, QVBox *box, char 
     m_pView->getCanvas()->deSelectAllObj();
 
     QTabWidget *tab = new QTabWidget(box);
-    box->setMargin( 5 );
-    box->setSpacing( 10 );
+    box->setMargin( KDialog::marginHint() );
+    box->setSpacing( KDialog::spacingHint() );
 
     m_confPenDia = new ConfPenDia(tab, 0, StyleDia::SdAll);
     m_confPenDia->setPen(m_pView->getPen());
@@ -894,7 +894,7 @@ ConfigurePathPage::ConfigurePathPage( KPresenterView *_view, QVBox *box, char *n
     KPresenterDoc* doc = m_pView->kPresenterDoc();
     config = KPresenterFactory::global()->config();
     QVGroupBox* gbPathGroup = new QVGroupBox( i18n("Path"), box, "GroupBox" );
-    gbPathGroup->setMargin( 10 );
+    gbPathGroup->setMargin( KDialog::marginHint() );
     gbPathGroup->setInsideSpacing( KDialog::spacingHint() );
 
     m_pPathView = new KListView( gbPathGroup );
