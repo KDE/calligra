@@ -27,6 +27,7 @@
 
 DeleteCmd::DeleteCmd (GDocument* doc) : Command(i18n("Delete")) {
   document = doc;
+#ifdef NO_LAYERS
   QListIterator<GObject> it (doc->getSelection ());
   for (; it.current (); ++it) {
     it.current ()->ref ();
@@ -34,6 +35,16 @@ DeleteCmd::DeleteCmd (GDocument* doc) : Command(i18n("Delete")) {
     int pos = doc->findIndexOfObject (it.current ());
     objects.push_back (pair<int, GObject*> (pos, it.current ()));
   }
+#else
+  for (list<GObject*>::iterator it = doc->getSelection ().begin ();
+       it != doc->getSelection ().end (); it++) {
+    GObject *o = *it;
+    o->ref ();
+    // store the old position of the object
+    int pos = doc->findIndexOfObject (o);
+    objects.push_back (pair<int, GObject*> (pos, o));
+  }
+#endif
 }
 
 DeleteCmd::~DeleteCmd () {

@@ -257,25 +257,28 @@ float Canvas::scaleFactor () const {
 
 void Canvas::updateView () {
   Painter p;
-  
+
+  // setup the painter  
   p.begin (pixmap);
   p.setBackgroundColor (white);
   pixmap->fill (backgroundColor ());
 
+  // clear the canvas
   p.scale (scaleFactor (), scaleFactor ());
   p.eraseRect (0, 0, document->getPaperWidth (),
 	       document->getPaperHeight ());
 
+  // draw the grid
   if (gridIsOn)
     drawGrid (p);
-  
-  QListIterator<GObject> it = document->getObjects ();
-  for (; it.current (); ++it) {
-    it.current ()->draw (p, drawBasePoints);
-  }
-  if (! document->selectionIsEmpty ()) {
+
+  // next the document contents
+  document->drawContents (p, drawBasePoints);
+
+  // and finally the handle
+  if (! document->selectionIsEmpty ())
     document->handle ().draw (p);
-  }
+
   p.end ();
   repaint ();
 }
@@ -302,9 +305,7 @@ void Canvas::printDocument () {
     Painter paint;
     paint.begin (&printer);
     
-    QListIterator<GObject> it = document->getObjects ();
-    for (; it.current (); ++it) 
-      it.current ()->draw (paint);
+    document->drawContents (paint);
 
     paint.end ();
   }
@@ -382,9 +383,7 @@ void Canvas::printPSDocument () {
     psStream << "%%EndSetup\n";
 
     // write objects
-    QListIterator<GObject> it = document->getObjects ();
-    for (; it.current (); ++it) 
-      it.current ()->writeToPS (psStream);
+    document->writeToPS (psStream);
     psStream << "showpage\n%%EOF" << endl;
     psStream.close ();
 

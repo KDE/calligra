@@ -28,11 +28,13 @@
 #include <set>
 #include <string>
 #include <vector>
+#include <list>
 
 #include <qobject.h>
 #include <qlist.h>
 #include <qfile.h>
 
+#include "Painter.h"
 #include "Handle.h"
 #include "GObject.h"
 #include "GLayer.h"
@@ -50,6 +52,7 @@ public:
   ~GDocument ();
 
   void initialize ();
+  void setAutoUpdate (bool flag);
 
   const QString& fileName () const { return filename; }
 
@@ -59,6 +62,8 @@ public:
 
   void setModified (bool flag = true);
   bool isModified () const { return modifyFlag; }
+
+  void drawContents (Painter& p, bool withBasePoints = false);
 
   /*
    * Layer management
@@ -93,7 +98,8 @@ public:
   
   GObject* lastObject () { return last; }
   void setLastObject (GObject* obj);
-  
+
+#ifdef NO_LAYERS
   QListIterator<GObject> getObjects () { 
     return QListIterator<GObject> (objects); }
   QListIterator<GObject> getSelection () { 
@@ -101,8 +107,13 @@ public:
   
   bool selectionIsEmpty () const { return selection.isEmpty (); }
   unsigned int selectionCount () const { return selection.count (); }
+#else
+  list<GObject*>& getSelection () { return selection; }
+  bool selectionIsEmpty () const { return selection.empty (); }
+  unsigned int selectionCount () const { return selection.size (); }
+#endif
 
-  unsigned int objectCount () const { return objects.count (); }
+  unsigned int objectCount () const;
 
   Rect boundingBoxForSelection ();
   Rect boundingBoxForAllObjects ();
@@ -131,6 +142,7 @@ public:
 
   bool requiredFonts (set<string>& fonts);
 
+  void writeToPS (ostream& os);
   static const char* getPSFont (const QFont& qfont);
   static bool writePSProlog (ostream& os);
 
@@ -139,6 +151,7 @@ protected:
   
 public slots:
   void objectChanged ();
+  void layerChanged ();
   
 signals:
   void changed ();
@@ -146,19 +159,23 @@ signals:
   void sizeChanged ();
 
 private:
+  bool autoUpdate;
   bool modifyFlag;
   QString filename;
   int paperWidth, paperHeight; // pt
+#ifdef NO_LAYERS
   QList<GObject> objects;
   QList<GObject> selection;
+#else
+  vector<GLayer*> layers; // the array of all layers
+  list<GObject*> selection;
+  GLayer* active_layer;     // the current layer
+#endif
   GObject *last;
   Handle selHandle;
   Rect selBox;
   bool selBoxIsValid;
   KoPageLayout pLayout;
-
-  vector<GLayer*> layers; // the array of all layers
-  GLayer* active_layer;     // the current layer
 
   static QString psPrologPath;
   static QDict<QString> fontMap;

@@ -30,6 +30,10 @@
 
 #include <iostream.h>
 
+#define CELL_HEIGHT 25
+#define CELL1_WIDTH 25
+#define CELL2_WIDTH 100
+
 LayerView::LayerView (QWidget *parent, const char *name) 
   : QTableView (parent, name) {
   setNumCols (5);
@@ -42,7 +46,7 @@ LayerView::LayerView (QWidget *parent, const char *name)
   pixmaps[1] = loader->loadIcon ("eye.xpm");
   pixmaps[2] = loader->loadIcon ("freehandtool.xpm");
   pixmaps[3] = loader->loadIcon ("fileprint.xpm");
-  setMinimumSize (4 * 25 + 100, 6 * 25);
+  setMinimumSize (4 * CELL1_WIDTH + CELL2_WIDTH, 5 * CELL_HEIGHT);
   setTableFlags (Tbl_autoScrollBars | Tbl_smoothScrolling);
   setFrameStyle (QFrame::Panel | QFrame::Sunken);
   setLineWidth (2);
@@ -64,11 +68,11 @@ void LayerView::showLayers (const vector<GLayer*>& lvec) {
 }
 
 int LayerView::cellWidth (int col) {
-  return (col == 4 ? 100 : 25);
+  return (col == 4 ? CELL2_WIDTH : CELL1_WIDTH);
 }
 
 int LayerView::cellHeight (int row) {
-  return QMAX (25, fontMetrics ().lineSpacing () + 1);
+  return QMAX (CELL_HEIGHT, fontMetrics ().lineSpacing () + 1);
 }
 
 void LayerView::paintCell (QPainter *p, int row, int col) {
@@ -80,38 +84,38 @@ void LayerView::paintCell (QPainter *p, int row, int col) {
     if (document->activeLayer () == layer)
       p->drawPixmap (2, 2, pixmaps[col]);
     else
-      p->eraseRect (0, 0, 25, cellHeight (row));
+      p->eraseRect (0, 0, CELL1_WIDTH, cellHeight (row));
     break;
   case 1:
     // visible
     if (layer->isVisible ())
       p->drawPixmap (2, 2, pixmaps[col]);
     else
-      p->eraseRect (0, 0, 25, cellHeight (row));
+      p->eraseRect (0, 0, CELL1_WIDTH, cellHeight (row));
     break;
   case 2:
     // editable
     if (layer->isEditable ())
       p->drawPixmap (2, 2, pixmaps[col]);
     else
-      p->eraseRect (0, 0, 25, cellHeight (row));
+      p->eraseRect (0, 0, CELL1_WIDTH, cellHeight (row));
     break;
   case 3:
     // printable
     if (layer->isPrintable ())
       p->drawPixmap (2, 2, pixmaps[col]);
     else
-      p->eraseRect (0, 0, 25, cellHeight (row));
+      p->eraseRect (0, 0, CELL1_WIDTH, cellHeight (row));
     break;
   case 4:
     {
       // name
-      QFontMetrics fm = p->fontMetrics();
-      int yPos;                       // vertical text position
-      if ( 25 < fm.height())
+      QFontMetrics fm = p->fontMetrics ();
+      int yPos;
+      if (CELL_HEIGHT < fm.height ())
 	yPos = fm.ascent () + fm.leading () / 2;
       else
-	yPos = (25 - fm.height ()) / 2 + fm.ascent ();
+	yPos = (CELL_HEIGHT - fm.height ()) / 2 + fm.ascent ();
       p->drawText (5, yPos, layer->name ());
       break;
     }
@@ -131,6 +135,7 @@ void LayerView::mousePressEvent (QMouseEvent *event) {
     
     switch (col) {
     case 0:
+    case 4:
       document->setActiveLayer (layer);
       break;
     case 1:

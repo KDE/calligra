@@ -40,6 +40,7 @@
 #include <values.h>
 #include <stack>
 #include <vector>
+#include <algorithm>
 
 #include "xmlutils/XmlWriter.h"
 #include "xmlutils/XmlReader.h"
@@ -47,6 +48,19 @@
 // default papersize in mm
 #define PAPER_WIDTH 210.0
 #define PAPER_HEIGHT 298.0
+
+template<class T>
+struct del_obj {
+  void operator () (T* obj) {
+    delete obj;
+  }
+};
+
+struct unselect_obj {
+  void operator () (GObject* obj) {
+    obj->select (false);
+  }
+};
 
 QString GDocument::psPrologPath = 
      kapp->kde_datadir () + "/killustrator/prolog.ps";
@@ -57,12 +71,24 @@ GDocument::GDocument () {
 }
 
 GDocument::~GDocument () {
+#ifdef NO_LAYERS
   if (! objects.isEmpty ()) {
     QListIterator<GObject> it (objects);
     for (; it.current (); ++it)
       it.current ()->unref ();
     objects.clear ();
   }
+#else
+  for_each (layers.begin (), layers.end (), del_obj<GLayer> ()); 
+  layers.clear ();
+  selection.clear ();
+#endif
+}
+
+void GDocument::setAutoUpdate (bool flag) { 
+  autoUpdate = flag; 
+  if (autoUpdate)
+    emit changed ();
 }
 
 void GDocument::initialize () {
@@ -80,6 +106,7 @@ void GDocument::initialize () {
   modifyFlag = false;
   filename = UNNAMED_FILE;
 
+#ifdef NO_LAYERS
   if (! selection.isEmpty ())
     selection.clear ();
   if (! objects.isEmpty ()) {
@@ -88,16 +115,19 @@ void GDocument::initialize () {
       it.current ()->unref ();
     objects.clear ();
   }
-
+#else
+  selection.clear ();
   if (! layers.empty ()) {
-      vector<GLayer*>::iterator i = layers.begin ();
-      for (; i != layers.end (); i++)
-	  delete *i;
-      layers.clear ();
+    vector<GLayer*>::iterator i = layers.begin ();
+    for (; i != layers.end (); i++)
+      delete *i;
+    layers.clear ();
   }
   active_layer = addLayer ();
 
+#endif
   selBoxIsValid = false;
+  autoUpdate = true;
   emit changed ();
 }
 
@@ -118,15 +148,52 @@ int GDocument::getPaperHeight () const {
   return paperHeight;
 }
 
+void GDocument::drawContents (Painter& p, bool withBasePoints) {
+#ifdef NO_LAYERS
+  QListIterator<GObject> it = getObjects ();
+  for (; it.current (); ++it)
+    it.current ()->draw (p, withBasePoints);
+#else
+  vector<GLayer*>::iterator i = layers.begin ();
+  for (; i != layers.end (); i++) {
+    GLayer* layer = *i;
+    if (layer->isVisible ()) {
+      const list<GObject*>& contents = layer->objects ();
+      for (list<GObject*>::const_iterator oi = contents.begin ();
+	   oi != contents.end (); oi++)
+	(*oi)->draw (p, withBasePoints);
+    }
+  }
+#endif
+}
+
+unsigned int GDocument::objectCount () const { 
+#ifdef NO_LAYERS
+  return objects.count (); 
+#else
+  unsigned int num = 0;
+  vector<GLayer*>::const_iterator i = layers.begin ();
+  for (; i != layers.end (); i++) 
+    num += (*i)->objectCount ();
+  return num;
+#endif
+}
+
 void GDocument::insertObject (GObject* obj) {
   obj->ref ();
+#ifdef NO_LAYERS
   objects.append (obj);
+#else
+  active_layer->insertObject (obj);
+#endif
   connect (obj, SIGNAL(changed()), this, SLOT(objectChanged ()));
   setModified ();
-  emit changed ();
+  if (autoUpdate)
+    emit changed ();
 }
 
 void GDocument::selectObject (GObject* obj) {
+#ifdef NO_LAYERS
   if (selection.findRef (obj) == -1) {
     obj->select (true);
     selection.append (obj);
@@ -135,9 +202,23 @@ void GDocument::selectObject (GObject* obj) {
     emit changed ();
     emit selectionChanged ();
   }
+#else
+  list<GObject*>::iterator i = find (selection.begin (), selection.end (),
+				     obj);
+  if (i == selection.end ()) {
+    // object isn't yet in selection list
+    obj->select (true);
+    selection.push_back (obj);
+    selBoxIsValid = false;
+    updateHandle ();
+    emit changed ();
+    emit selectionChanged ();
+  }
+#endif
 }
 
 void GDocument::unselectObject (GObject* obj) {
+#ifdef NO_LAYERS
   if (selection.removeRef (obj)) {
     obj->select (FALSE);
     selBoxIsValid = false;
@@ -145,9 +226,23 @@ void GDocument::unselectObject (GObject* obj) {
     emit changed ();
     emit selectionChanged ();
   }
+#else
+  list<GObject*>::iterator i = find (selection.begin (), selection.end (),
+				     obj);
+  if (i != selection.end ()) {
+    // remove object from the selection list
+    obj->select (false);
+    selection.erase (i);
+    selBoxIsValid = false;
+    updateHandle ();
+    emit changed ();
+    emit selectionChanged ();
+  }
+#endif
 }
 
 void GDocument::unselectAllObjects () {
+#ifdef NO_LAYERS
   if (selection.isEmpty ())
     return;
 
@@ -156,18 +251,42 @@ void GDocument::unselectAllObjects () {
     it.current ()->select (false);
   }
   selection.clear ();
+#else
+  if (selection.empty ())
+    return;
+
+  for_each (selection.begin (), selection.end (), unselect_obj ());
+  selection.clear ();
+#endif
   selBoxIsValid = false;
   emit changed ();
   emit selectionChanged ();
 }
 
 void GDocument::selectAllObjects () {
+#ifdef NO_LAYERS
   selection.clear ();
   QListIterator<GObject> it (objects);
   for (; it.current (); ++it) {
     it.current ()->select (true);
     selection.append (it.current ());
   }
+#else
+  selection.clear ();
+  vector<GLayer*>::const_iterator i = layers.begin ();
+  for (; i != layers.end (); i++) {
+    GLayer* layer = *i;
+    if (layer->isEditable ()) {
+      list<GObject*>& contents = layer->objects ();
+      for (list<GObject*>::iterator oi = contents.begin ();
+	   oi != contents.end (); oi++) {
+	GObject* obj = *oi;
+	obj->select (true);
+	selection.push_back (obj);
+      }
+    }
+  }
+#endif
   selBoxIsValid = false;
   updateHandle ();
   emit changed ();
@@ -175,13 +294,18 @@ void GDocument::selectAllObjects () {
 }
 
 void GDocument::setLastObject (GObject* obj) {
+#ifdef NO_LAYERS
   if (obj == NULL || objects.findRef (obj) != -1) 
     last = obj;
+#else
+  if (obj == 0L || obj->getLayer () != 0L)
+    last = obj;
+#endif
 }
 
 void GDocument::updateHandle () {
   Rect r = boundingBoxForSelection ();
-  if (r.empty ())
+  if (selectionIsEmpty ())
     selHandle.show (false);
   else
     selHandle.setBox (r);
@@ -190,11 +314,18 @@ void GDocument::updateHandle () {
 Rect GDocument::boundingBoxForSelection () {
   if (! selBoxIsValid) {
     if (! selectionIsEmpty ()) {
+#ifdef NO_LAYERS
       QListIterator<GObject> it (selection);
       selBox = it.current ()->boundingBox ();
       ++it;
       for (; it.current (); ++it)
         selBox = selBox.unite (it.current ()->boundingBox ());
+#else
+      list<GObject*>::iterator i = selection.begin ();
+      selBox = (*i++)->boundingBox ();
+      for (; i != selection.end (); i++)
+        selBox = selBox.unite ((*i)->boundingBox ());
+#endif
     }
     else {
       selBox = Rect ();
@@ -207,16 +338,36 @@ Rect GDocument::boundingBoxForSelection () {
 Rect GDocument::boundingBoxForAllObjects () {
   Rect box;
 
+#ifdef NO_LAYERS
   QListIterator<GObject> it (objects);
   box = it.current ()->boundingBox ();
   ++it;
   for (; it.current (); ++it)
     box = box.unite (it.current ()->boundingBox ());
+#else
+  bool init = false;
+
+  for (vector<GLayer*>::iterator li = layers.begin (); 
+       li != layers.end (); li++) {
+    GLayer* layer = *li;
+    if (layer->isEditable ()) {
+      list<GObject*>& contents = layer->objects ();
+      list<GObject*>::iterator oi = contents.begin ();
+      if (! init) {
+	box = (*oi++)->boundingBox ();
+	init = true;
+      }
+      for (; oi != contents.end (); oi++)
+	box = box.unite ((*oi)->boundingBox ());
+    }
+  }
+#endif
   return box;
 }
 
 void GDocument::deleteSelectedObjects () {
   if (! selectionIsEmpty ()) {
+#ifdef NO_LAYERS
     GObject* obj = objects.first ();
     while (obj != NULL) {
       if (obj->isSelected ()) {
@@ -228,9 +379,16 @@ void GDocument::deleteSelectedObjects () {
       else
 	obj = objects.next ();
     }
-    //    selection.setAutoDelete (true);
+#else
+    // TODO
+    for (list<GObject*>::iterator i = selection.begin ();
+	 i != selection.end (); i++) {
+      GObject* obj = *i;
+      disconnect (obj, SIGNAL(changed()), this, SLOT(objectChanged ()));
+      obj->getLayer ()->deleteObject (obj);
+    }
+#endif
     selection.clear ();
-    //    selection.setAutoDelete (false);
     last = 0L;
     setModified ();
     selBoxIsValid = false;
@@ -242,6 +400,7 @@ void GDocument::deleteSelectedObjects () {
 void GDocument::deleteObject (GObject* obj) {
   bool selected = false;
 
+#ifdef NO_LAYERS
   if (objects.findRef (obj) != -1) {
     if (obj->isSelected ()) {
       selected = true;
@@ -258,6 +417,23 @@ void GDocument::deleteObject (GObject* obj) {
     }
     emit changed ();
   }
+#else
+  GLayer* layer = obj->getLayer ();
+  if (layer->isEditable ()) {
+    selected = obj->isSelected ();
+    if (selected) 
+      selection.remove (obj);
+    last = 0L;
+    disconnect (obj, SIGNAL(changed()), this, SLOT(objectChanged ()));
+    layer->deleteObject (obj);
+    if (selected) {
+      selBoxIsValid = false;
+      updateHandle ();
+      emit selectionChanged ();
+    }
+    emit changed ();
+  } 
+#endif
 }
 
 /**
@@ -271,8 +447,10 @@ bool GDocument::findNearestObject (const char* otype, int x, int y,
 				   float max_dist, GObject*& obj, int& pidx) {
   float d, distance = MAXFLOAT;
   obj = 0L;
-  QListIterator<GObject> it (objects);
   Coord p (x, y);
+
+#ifdef NO_LAYERS
+  QListIterator<GObject> it (objects);
 
   for (; it.current (); ++it) {
     if (otype == 0L || it.current ()->isA (otype)) {
@@ -283,12 +461,32 @@ bool GDocument::findNearestObject (const char* otype, int x, int y,
       }
     }
   }
+#else
+  for (vector<GLayer*>::reverse_iterator li = layers.rbegin (); 
+       li != layers.rend (); li++) {
+    GLayer* layer = *li;
+    if (layer->isEditable ()) {
+      list<GObject*>& contents = layer->objects ();
+      for (list<GObject*>::iterator oi = contents.begin ();
+	   oi != contents.end (); oi++) {
+	if (otype == 0L || (*oi)->isA (otype)) {
+	  if ((*oi)->findNearestPoint (p, max_dist, d, pidx) &&
+	      d < distance) {
+	    obj = *oi;
+	    distance = d;
+	  }
+	}
+      }
+    }
+  }
+#endif
   if (obj == 0L)
     pidx = -1;
   return obj != 0L;
 }
 
 GObject* GDocument::findContainingObject (int x, int y) {
+#ifdef NO_LAYERS
   QListIterator<GObject> it (objects);
   // We are looking for the most relevant object, that means the object 
   // in front of all others. So, we have to start at the end of the
@@ -298,26 +496,70 @@ GObject* GDocument::findContainingObject (int x, int y) {
     if (it.current ()->contains (Coord (x, y)))
       return it.current ();
   }
-  // nothing found
-  return 0;
+#else
+  GObject* result = 0L;
+  // We are looking for the most relevant object, that means the object 
+  // in front of all others. So, we have to start at the upper layer
+  vector<GLayer*>::reverse_iterator i = layers.rbegin ();
+  for (; i != layers.rend (); i++) {
+    GLayer* layer = *i;
+    if (layer->isEditable ()) {
+      result = layer->findContainingObject (x, y);
+      if (result)
+	break;
+    }
+  }
+#endif
+  return result;
 }
 
 bool GDocument::findContainingObjects (int x, int y, QList<GObject>& olist) {
+#ifdef NO_LAYERS
   QListIterator<GObject> it (objects);
   for (; it.current (); ++it) {
     if (it.current ()->contains (Coord (x, y)))
       olist.append (it.current ());
   }
+#else
+  Coord coord (x, y);
+  for (vector<GLayer*>::iterator li = layers.begin (); 
+       li != layers.end (); li++) {
+    if ((*li)->isEditable ()) {
+      list<GObject*>& contents = (*li)->objects ();
+      for (list<GObject*>::iterator oi = contents.begin ();
+	   oi != contents.end (); oi++)
+	if ((*oi)->contains (coord))
+	  olist.append (*oi);
+    }
+  }
+#endif
   return olist.count () > 0;
 }
 
 bool GDocument::findObjectsContainedIn (const Rect& r, QList<GObject>& olist) {
+#ifdef NO_LAYERS
   QListIterator<GObject> it (objects);
   for (; it.current (); ++it) {
     if (r.contains (it.current ()->boundingBox ()))
       olist.append (it.current ());
   }
+#else
+  for (vector<GLayer*>::iterator li = layers.begin (); 
+       li != layers.end (); li++) {
+    if ((*li)->isEditable ()) {
+      list<GObject*>& contents = (*li)->objects ();
+      for (list<GObject*>::iterator oi = contents.begin ();
+	   oi != contents.end (); oi++)
+	if (r.contains ((*oi)->boundingBox ()))
+	  olist.append (*oi);
+    }
+  }
+#endif
   return olist.count () > 0;
+}
+
+void GDocument::layerChanged () {
+  emit changed ();
 }
 
 void GDocument::objectChanged () {
@@ -358,18 +600,29 @@ bool GDocument::saveToXml (const char* fname) {
   xml.addAttribute ("tmargin", pLayout.top);
   xml.addAttribute ("rmargin", pLayout.right);
   xml.addAttribute ("bmargin", pLayout.bottom);
-  //  xml.addAttribute ("unit", "pt");
   xml.closeTag (true);
 
   xml.endTag (); // </head>
 
+#ifdef NO_LAYERS
   QListIterator<GObject> it (objects);
   for (; it.current (); ++it) 
     it.current ()->writeToXml (xml);
+#else
+  // TODO: save layer information
+  for (vector<GLayer*>::iterator li = layers.begin (); 
+       li != layers.end (); li++) {
+    list<GObject*>& contents = (*li)->objects ();
+    for (list<GObject*>::iterator oi = contents.begin ();
+	 oi != contents.end (); oi++)
+      (*oi)->writeToXml (xml);
+  }
+#endif
 
   xml.endTag (); // </kiml>
 
   setModified (false);
+  filename = fname;
   return ! os.fail ();
 }
 
@@ -393,6 +646,7 @@ bool GDocument::readFromXml (const char* fname) {
   if (! xml.readElement (elem) || elem.tag () != "kiml") return false;
   if (! xml.readElement (elem) || elem.tag () != "head") return false;
 
+  setAutoUpdate (false);
   do {
     if (! xml.readElement (elem))
       return false;
@@ -430,8 +684,6 @@ bool GDocument::readFromXml (const char* fname) {
 	  pLayout.right = (*first).floatValue ();
         else if ((*first).name () == "bmargin")
 	  pLayout.bottom = (*first).floatValue ();
-	//        else if ((*first).name () == "unit")
-	//	  ;
         first++;
       }
     }
@@ -452,10 +704,10 @@ bool GDocument::readFromXml (const char* fname) {
 
   do {
     if (! xml.readElement (elem))
-      return false;
+      break;
     if (elem.tag () == "kiml") {
       if (! elem.isEndTag ())
-        return false;
+        break;
       else
         endOfBody = true;
     }
@@ -484,7 +736,7 @@ bool GDocument::readFromXml (const char* fname) {
 	obj = new GText (elem.attributes ());
 	// read font attributes 
 	if (! xml.readElement (elem) || elem.tag () != "font") 
-	  return false;
+	  break;
 
 	list<XmlAttribute>::const_iterator first = elem.attributes ().begin ();
 	QFont font = QFont::defaultFont ();
@@ -509,7 +761,7 @@ bool GDocument::readFromXml (const char* fname) {
 	do {
 	  if (! xml.readElement (elem))
 	    // something goes wrong
-	    return false;
+	    break;
 	  if (elem.tag () == "#PCDATA")
 	    text_str += xml.getText ().c_str ();
 	  else if (elem.tag () == "font" && elem.isEndTag ()) 
@@ -567,25 +819,38 @@ bool GDocument::readFromXml (const char* fname) {
 
   setModified (false);
   filename = fname;
-
+  setAutoUpdate (true);
   return true;
 }
 
 unsigned int GDocument::findIndexOfObject (GObject *obj) {
+#ifdef NO_LAYERS
   return objects.findRef (obj);
+#else
+  return obj->getLayer ()->findIndexOfObject (obj);
+#endif
 }
 
 void GDocument::insertObjectAtIndex (GObject* obj, unsigned int idx) {
+#ifdef NO_LAYERS
   if (idx > objects.count ())
     idx = objects.count ();
   objects.insert (idx, obj);
   connect (obj, SIGNAL(changed()), this, SLOT(objectChanged ()));
+#else
+  GLayer* layer = obj->getLayer ();
+  if (layer == 0L)
+    layer = active_layer;
+  layer->insertObjectAtIndex (obj, idx);
+  connect (obj, SIGNAL(changed()), this, SLOT(objectChanged ()));
+#endif
   setModified ();
   emit changed ();
   emit selectionChanged ();
 }
 
 void GDocument::moveObjectToIndex (GObject* obj, unsigned int idx) {
+#ifdef NO_LAYERS
   int pos;
 
   if ((pos = objects.findRef (obj)) == -1)
@@ -593,6 +858,13 @@ void GDocument::moveObjectToIndex (GObject* obj, unsigned int idx) {
   
   objects.take (pos);
   objects.insert (idx, obj);
+
+#else
+  GLayer* layer = obj->getLayer ();
+  if (layer == 0L)
+    layer = active_layer;
+  layer->moveObjectToIndex (obj, idx);
+#endif
 
   setModified ();
   emit changed ();
@@ -612,6 +884,7 @@ void GDocument::setPageLayout (const KoPageLayout& layout) {
 }
 
 bool GDocument::requiredFonts (set<string>& fonts) {
+#ifdef NO_LAYERS
   QListIterator<GObject> it (objects);
   for (; it.current (); ++it) {
     if (it.current ()->isA ("GText")) {
@@ -620,6 +893,23 @@ bool GDocument::requiredFonts (set<string>& fonts) {
       fonts.insert (getPSFont (font));
     }
   }
+#else
+  for (vector<GLayer*>::iterator li = layers.begin (); 
+       li != layers.end (); li++) {
+    GLayer* layer = *li;
+    if (layer->isPrintable ()) {
+      list<GObject*>& contents = layer->objects ();
+      for (list<GObject*>::iterator oi = contents.begin ();
+	   oi != contents.end (); oi++) {
+	if ((*oi)->isA ("GText")) {
+	  GText* tobj = (GText *) (*oi);
+	  const QFont& font = tobj->getFont ();
+	  fonts.insert (getPSFont (font));
+	}
+      }
+    }
+  }
+#endif
   return ! fonts.empty ();
 }
 
@@ -680,91 +970,135 @@ bool GDocument::writePSProlog (ostream& os) {
   return true;
 }
 
-// get an array with all layers of the document
-const vector<GLayer*>& GDocument::getLayers () {
-    return layers;
-}
-
-// set the active layer where further actions take place
-void GDocument::setActiveLayer (GLayer *layer) {
-    vector<GLayer*>::iterator i = layers.begin ();
-    for (; i != layers.end (); i++) {
-	if (*i == layer) {
-	    active_layer = layer;
-	    break;
-	}
+void GDocument::writeToPS (ostream& os) {
+#ifdef NO_LAYERS
+  QListIterator<GObject> it = getObjects ();
+  for (; it.current (); ++it) 
+    it.current ()->writeToPS (os);
+#else
+  for (vector<GLayer*>::iterator li = layers.begin (); 
+       li != layers.end (); li++) {
+    GLayer* layer = *li;
+    if (layer->isPrintable ()) {
+      list<GObject*>& contents = layer->objects ();
+      for (list<GObject*>::iterator oi = contents.begin ();
+	   oi != contents.end (); oi++) {
+	(*oi)->writeToPS (os);
+      }
     }
+  }
+#endif
 }
 
-// retrieve the active layer
+/*
+ * Get an array with all layers of the document
+ */
+const vector<GLayer*>& GDocument::getLayers () {
+  return layers;
+}
+
+/*
+ * Set the active layer where further actions take place
+ */
+void GDocument::setActiveLayer (GLayer *layer) {
+  vector<GLayer*>::iterator i = layers.begin ();
+  for (; i != layers.end (); i++) {
+    if (*i == layer) {
+      active_layer = layer;
+      break;
+    }
+  }
+}
+
+/*
+ * Retrieve the active layer
+ */
 GLayer* GDocument::activeLayer () {
     return active_layer;
 }
 
-// raise the given layer
+/*
+ * Raise the given layer
+ */
 void GDocument::raiseLayer (GLayer *layer) {
-    if (layer == layers.back ())
-	// layer is already on top
-	return;
-
-    vector<GLayer*>::iterator i = layers.begin ();
-    for (; i != layers.end (); i++) {
-	if (*i == layer) {
-	    vector<GLayer*>::iterator j = layers.erase (i);
-	    layers.insert (++j, layer);
-	    break;
-	}
+  if (layer == layers.back ())
+    // layer is already on top
+    return;
+  
+  vector<GLayer*>::iterator i = layers.begin ();
+  for (; i != layers.end (); i++) {
+    if (*i == layer) {
+      vector<GLayer*>::iterator j = layers.erase (i);
+      layers.insert (++j, layer);
+      break;
     }
+  }
+  emit changed ();
 }
 
-// lower the given layer
+/*
+ * Lower the given layer
+ */
 void GDocument::lowerLayer (GLayer *layer) {
-    if (layer == layers.front ())
-	// layer is already on top
-	return;
-
-    vector<GLayer*>::iterator i = layers.begin ();
-    for (; i != layers.end (); i++) {
-	if (*i == layer) {
-	    vector<GLayer*>::iterator j = layers.erase (i);
-	    layers.insert (--j, layer);
-	    break;
-	}
+  if (layer == layers.front ())
+    // layer is already at bottom
+    return;
+  
+  vector<GLayer*>::iterator i = layers.begin ();
+  for (; i != layers.end (); i++) {
+    if (*i == layer) {
+      vector<GLayer*>::iterator j = layers.erase (i);
+      layers.insert (--j, layer);
+      break;
     }
+  }
+  emit changed ();
 }
 
-// add a new layer on top of existing layers
+/*
+ * Add a new layer on top of existing layers
+ */
 GLayer* GDocument::addLayer () {
-    GLayer* layer = new GLayer ();
-    layers.push_back (layer);
-    return layer;
+  GLayer* layer = new GLayer ();
+  connect (layer, SIGNAL(propertyChanged ()), this, SLOT(layerChanged ()));
+  layers.push_back (layer);
+  return layer;
 }
 
-// delete the given layer as well as all contained objects
+/*
+ * Delete the given layer as well as all contained objects
+ */
 void GDocument::deleteLayer (GLayer *layer) {
-    bool update = (active_layer == layer);
+  if (layers.size () == 1)
+    // we need at least one layer
+    return;
 
-    vector<GLayer*>::iterator i = layers.begin ();
-    for (; i != layers.end (); i++) {
-	if (*i == layer) {
-	    // remove the layer from the array
-	    vector<GLayer*>::iterator n = layers.erase (i);
-	    // and delete the layer
-	    delete layer;
+  bool update = (active_layer == layer);
 
-	    if (update) {
-		// the removed layer was the active layer !
-
-		if (n == layers.end ()) {
-		    // this was the upper layer, so the
-		    // the active layer to the last one
-		    active_layer = layers.back ();
-		}
-		else
-		    active_layer = *n;
-	    }
-	    break;
+  vector<GLayer*>::iterator i = layers.begin ();
+  for (; i != layers.end (); i++) {
+    if (*i == layer) {
+      // remove the layer from the array
+      vector<GLayer*>::iterator n = layers.erase (i);
+      // and delete the layer
+      disconnect (layer, SIGNAL(propertyChanged ()), 
+		  this, SLOT(layerChanged ()));
+      delete layer;
+      
+      if (update) {
+	// the removed layer was the active layer !
+	
+	if (n == layers.end ()) {
+	  // this was the upper layer, so the
+	  // the active layer to the last one
+	  active_layer = layers.back ();
 	}
+	else
+	  active_layer = *n;
+      }
+      break;
     }
+  }
+  emit changed ();
 }
 

@@ -41,6 +41,7 @@
 #include "xmlutils/XmlElement.h"
 
 class GOState;
+class GLayer;
 
 /**
  * The base class for all graphical objects.
@@ -254,6 +255,9 @@ public:
    */
   const Rect& boundingBox () const { return box; }
 
+  void setLayer (GLayer* l);
+  GLayer* getLayer () { return layer; }
+
   virtual void writeToPS (ostream& os);
 
   void writePropertiesToXml (XmlWriter& xml);
@@ -325,6 +329,7 @@ protected:
   OutlineInfo outlineInfo;
   FillInfo fillInfo;
   unsigned int rcount;
+  GLayer *layer;
 
   static QDict<GObject> prototypes;
 

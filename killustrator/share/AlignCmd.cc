@@ -50,13 +50,24 @@ void AlignCmd::execute () {
   if (nobjs > 1) {
     // alignment is possible only for two or more objects
 
+#ifdef NO_LAYERS
     QListIterator<GObject> it = document->getSelection ();
     it += (nobjs - 1);
     alignObject = it.current ();
+#else
+    list<GObject*>::iterator it = document->getSelection ().begin ();
+    alignObject = document->getSelection ().back ();
+#endif
     alignBox = alignObject->boundingBox ();
 
+#ifdef NO_LAYERS
     for (i = 0, it.toFirst (); it.current (); ++it, ++i) {
       GObject* obj = it.current ();
+#else
+    for (i = 0, it = document->getSelection ().begin ();
+	 it != document->getSelection ().end (); it++, i++) {
+      GObject* obj = *it;
+#endif
       if (obj == alignObject)
         break;
 
@@ -114,9 +125,15 @@ void AlignCmd::execute () {
     QWMatrix matrix;
     matrix.translate (pcenter.x () - bcenter.x (),
 		      pcenter.y () - bcenter.y ());
+#ifdef NO_LAYERS
     QListIterator<GObject> it = document->getSelection ();
     for (; it.current (); ++it) {
       it.current ()->transform (matrix, true);
     }
+#else
+    for (list<GObject*>::iterator it = document->getSelection ().begin ();
+	 it != document->getSelection ().end (); it++)
+      (*it)->transform (matrix, true);
+#endif
   }
 }

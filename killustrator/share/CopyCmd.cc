@@ -30,11 +30,20 @@ CopyCmd::CopyCmd (GDocument* doc, QList<GObject>& cboard)
 {
   document = doc;
   clipboard = &cboard;
+#ifdef NO_LAYERS
   QListIterator<GObject> it (doc->getSelection ());
   for (; it.current (); ++it) {
     it.current ()->ref ();
     objects.append (it.current ());
   }
+#else
+  for (list<GObject*>::iterator it = doc->getSelection ().begin ();
+       it != doc->getSelection ().end (); it++) {
+    GObject* o = *it;
+    o->ref ();
+    objects.append (o);
+  }
+#endif
 }
 
 CopyCmd::~CopyCmd () {

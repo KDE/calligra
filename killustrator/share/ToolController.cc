@@ -24,6 +24,7 @@
 
 #include "ToolController.h"
 #include "ToolController.moc"
+#include "GDocument.h"
 
 ToolController::ToolController (MainView* view) {
   activeTool = 0;
@@ -43,7 +44,7 @@ Tool* ToolController::getActiveTool () {
 
 void ToolController::delegateEvent (QEvent *e, GDocument *doc, 
 				    Canvas *canvas) {
-  if (activeTool)
+  if (doc->activeLayer ()->isEditable () && activeTool)
     activeTool->processEvent (e, doc, canvas);
 }
 

@@ -65,6 +65,7 @@ GObject::FillInfo GObject::getDefaultFillInfo () {
 
 GObject::GObject () {
   sflag = false;
+  layer = 0L;
 
   outlineInfo = defaultOutlineInfo;
   outlineInfo.mask = OutlineInfo::Color | OutlineInfo::Style | 
@@ -110,6 +111,7 @@ GObject::GObject (const GObject& obj) : QObject()
   fillInfo = obj.fillInfo;
   tMatrix = obj.tMatrix;
   tmpMatrix = tMatrix;
+  layer = obj.layer;
 
   rcount = 1;
 }
@@ -263,6 +265,10 @@ bool GObject::contains (const Coord& p) {
 }
 
 void GObject::draw (Painter&, bool) {
+}
+
+void GObject::setLayer (GLayer* l) {
+  layer = l;
 }
 
 void GObject::writeToPS (ostream& os) {

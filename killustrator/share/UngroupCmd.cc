@@ -27,6 +27,7 @@
 
 UngroupCmd::UngroupCmd (GDocument* doc) : Command(i18n("Ungroup ???")) {
   document = doc;
+#ifdef NO_LAYERS
   QListIterator<GObject> it (doc->getSelection ());
   for (; it.current (); ++it) {
     GObject* o = it.current ();
@@ -36,6 +37,17 @@ UngroupCmd::UngroupCmd (GDocument* doc) : Command(i18n("Ungroup ???")) {
       groups.append (gobj);
     }
   }
+#else
+  for (list<GObject*>::iterator it = doc->getSelection ().begin ();
+       it != doc->getSelection ().end (); it++) {
+    GObject* o = *it;
+    if (o->isA ("GGroup")) {
+      GGroup* gobj = (GGroup *) o;
+      gobj->ref ();
+      groups.append (gobj);
+    }
+  }
+#endif
 }
 
 UngroupCmd::~UngroupCmd () {

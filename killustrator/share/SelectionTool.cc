@@ -37,6 +37,15 @@
 #include <kapp.h>
 #include <klocale.h>
 
+#include <list>
+#include <algorithm>
+
+struct is_a : public binary_function<GObject*, const char*, bool> {
+  bool operator () (GObject* obj, const char* tname) {
+    return obj->isA (tname);
+  }
+};
+
 SelectionTool::SelectionTool (CommandHistory *history) : Tool (history) {
   state = S_Init;
 }
@@ -279,8 +288,8 @@ void SelectionTool::processButtonPressEvent (QMouseEvent *me, GDocument *doc,
     else {
       // no object
       state = S_Rubberband;
-      selPoint[0].x(me->x ());
-      selPoint[0].y(me->y ());
+      selPoint[0].x(me->x ()); selPoint[0].y(me->y ());
+      selPoint[1].x(me->x ()); selPoint[1].y(me->y ());
     }
   }
   /************
@@ -301,10 +310,21 @@ void SelectionTool::processButtonPressEvent (QMouseEvent *me, GDocument *doc,
 	  // a ugly workaround, because cliparts cannot be rotated (WHY NOT ?)
 	  //
 	  if (doc->selectionCount () == 1) {
+#ifdef NO_LAYERS
 	    QListIterator<GObject> iter = doc->getSelection ();
 	    // the selected object is a clipart, so don't show rotation handles
 	    if (iter.current ()->isA ("GClipart"))
 	      return;
+#else
+	    list<GObject*>::iterator it =
+	      find_if (doc->getSelection ().begin (),
+		       doc->getSelection ().end (),
+		       bind2nd (is_a (), "GClipart"));
+	    if (it != doc->getSelection ().end ())
+	      // the selected object is a clipart, 
+	      // so don't show rotation handles
+	      return;
+#endif
 	  }
 
 	  // the object is already selected
@@ -328,8 +348,8 @@ void SelectionTool::processButtonPressEvent (QMouseEvent *me, GDocument *doc,
 	
 	// and switch to rubberband mode
 	state = S_Rubberband;
-	selPoint[0].x(me->x ());
-	selPoint[0].y(me->y ());
+	selPoint[0].x(me->x ()); selPoint[0].y(me->y ());
+	selPoint[1].x(me->x ()); selPoint[1].y(me->y ());
       }
     }
   }
@@ -400,11 +420,19 @@ void SelectionTool::translate (GDocument* doc, int dx, int dy,
   else {
     QWMatrix m;
     m.translate (dx, dy);
+#ifdef NO_LAYERS
     QListIterator<GObject> it = doc->getSelection ();
     for (; it.current (); ++it) {
       it.current ()->initTmpMatrix ();
       it.current ()->ttransform (m, true);
     }
+#else
+    for (list<GObject*>::iterator it = doc->getSelection ().begin (); 
+	 it != doc->getSelection ().end (); it++) {
+      (*it)->initTmpMatrix ();
+      (*it)->ttransform (m, true);
+    }
+#endif
   }
 }
 
@@ -439,7 +467,8 @@ void SelectionTool::rotate (GDocument* doc, int dx, int dy,
     m1.translate (-rotCenter.x (), -rotCenter.y ());
     m2.rotate (angle);
     m3.translate (rotCenter.x (), rotCenter.y ());
-    
+
+#ifdef NO_LAYERS    
     QListIterator<GObject> it (doc->getSelection ());
     for (; it.current (); ++it) {
       it.current ()->initTmpMatrix ();
@@ -447,6 +476,15 @@ void SelectionTool::rotate (GDocument* doc, int dx, int dy,
       it.current ()->ttransform (m2);
       it.current ()->ttransform (m3, true);
     }
+#else
+    for (list<GObject*>::iterator it = doc->getSelection ().begin (); 
+	 it != doc->getSelection ().end (); it++) {
+      (*it)->initTmpMatrix ();
+      (*it)->ttransform (m1);
+      (*it)->ttransform (m2);
+      (*it)->ttransform (m3, true);
+    }
+#endif
   }
 }
 
@@ -482,6 +520,7 @@ void SelectionTool::scale (GDocument* doc, int mask, int dx, int dy,
     m2.scale (sx, sy);
     m3.translate (xback, yback);
     
+#ifdef NO_LAYERS
     QListIterator<GObject> it (doc->getSelection ());
     for (; it.current (); ++it) {
       it.current ()->initTmpMatrix ();
@@ -490,6 +529,16 @@ void SelectionTool::scale (GDocument* doc, int mask, int dx, int dy,
       it.current ()->ttransform (m2);
       it.current ()->ttransform (m3, true);
     }
+#else
+    for (list<GObject*>::iterator it = doc->getSelection ().begin (); 
+	 it != doc->getSelection ().end (); it++) {
+      (*it)->initTmpMatrix ();
+      
+      (*it)->ttransform (m1);
+      (*it)->ttransform (m2);
+      (*it)->ttransform (m3, true);
+    }
+#endif
   }
 }
 

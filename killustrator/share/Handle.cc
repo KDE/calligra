@@ -22,6 +22,7 @@
 
 */
 
+#include <iostream.h>
 #include "Handle.h"
 #include "Handle.moc"
 

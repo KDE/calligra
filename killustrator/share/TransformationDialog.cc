@@ -369,6 +369,7 @@ void TransformationDialog::translate (bool onDuplicate) {
     yval -= r.top ();
   }
   if (onDuplicate) {
+#ifdef NO_LAYERS
     QListIterator<GObject> it (document->getSelection ());
     QList<GObject> duplicates;
     duplicates.setAutoDelete (false);
@@ -380,7 +381,19 @@ void TransformationDialog::translate (bool onDuplicate) {
       obj->transform (m, true);
       duplicates.append (obj);
     }
+#else
+    QList<GObject> duplicates;
+    duplicates.setAutoDelete (false);
 
+    for (list<GObject*>::iterator it = document->getSelection ().begin (); 
+	 it != document->getSelection ().end (); it++) {
+      GObject* obj = (*it)->copy ();
+      QWMatrix m;
+      m.translate (xval, yval);
+      obj->transform (m, true);
+      duplicates.append (obj);
+    }
+#endif
     InsertObjCmd* cmd = new InsertObjCmd (document, duplicates);
     history->addCommand (cmd, true);
   }
@@ -411,6 +424,7 @@ void TransformationDialog::scale (bool onDuplicate) {
     Rect box = document->boundingBoxForSelection ();
     float xoff = box.x (), yoff = box.y ();
 
+#ifdef NO_LAYERS
     QListIterator<GObject> it (document->getSelection ());
     QList<GObject> duplicates;
     duplicates.setAutoDelete (false);
@@ -428,7 +442,25 @@ void TransformationDialog::scale (bool onDuplicate) {
       obj->transform (m3, true);
       duplicates.append (obj);
     }
+#else
+    QList<GObject> duplicates;
+    duplicates.setAutoDelete (false);
 
+    for (list<GObject*>::iterator it = document->getSelection ().begin (); 
+	 it != document->getSelection ().end (); it++) {
+      GObject* obj = (*it)->copy ();
+      QWMatrix m1, m2, m3;
+
+      m1.translate (-xoff, -yoff);
+      m2.scale (xval, yval);
+      m3.translate (xoff, yoff);
+      
+      obj->transform (m1);
+      obj->transform (m2);
+      obj->transform (m3, true);
+      duplicates.append (obj);
+    }
+#endif
     InsertObjCmd* cmd = new InsertObjCmd (document, duplicates);
     history->addCommand (cmd, true);
   }
@@ -453,6 +485,7 @@ void TransformationDialog::rotate (bool onDuplicate) {
     ycenter += r.top ();
   }
   if (onDuplicate) {
+#ifdef NO_LAYERS
     QListIterator<GObject> it (document->getSelection ());
     QList<GObject> duplicates;
     duplicates.setAutoDelete (false);
@@ -467,6 +500,23 @@ void TransformationDialog::rotate (bool onDuplicate) {
       obj->transform (m3, true);
       duplicates.append (obj);
     }
+#else
+    QList<GObject> duplicates;
+    duplicates.setAutoDelete (false);
+
+    for (list<GObject*>::iterator it = document->getSelection ().begin (); 
+	 it != document->getSelection ().end (); it++) {
+      GObject* obj = (*it)->copy ();
+      QWMatrix m1, m2, m3;
+      m1.translate (-xcenter, -ycenter);
+      m2.rotate (angle);
+      m3.translate (xcenter, ycenter);
+      obj->transform (m1);
+      obj->transform (m2);
+      obj->transform (m3, true);
+      duplicates.append (obj);
+    }
+#endif
     InsertObjCmd* cmd = new InsertObjCmd (document, duplicates);
     history->addCommand (cmd, true);
   }
@@ -488,6 +538,7 @@ void TransformationDialog::mirror (bool onDuplicate) {
     Rect box = document->boundingBoxForSelection ();
     float xoff = box.x (), yoff = box.y ();
 
+#ifdef NO_LAYERS
     QListIterator<GObject> it (document->getSelection ());
     QList<GObject> duplicates;
     duplicates.setAutoDelete (false);
@@ -505,7 +556,25 @@ void TransformationDialog::mirror (bool onDuplicate) {
       obj->transform (m3, true);
       duplicates.append (obj);
     }
+#else
+    QList<GObject> duplicates;
+    duplicates.setAutoDelete (false);
 
+    for (list<GObject*>::iterator it = document->getSelection ().begin (); 
+	 it != document->getSelection ().end (); it++) {
+      GObject* obj = (*it)->copy ();
+      QWMatrix m1, m2, m3;
+
+      m1.translate (-xoff, -yoff);
+      m2.scale (sx, sy);
+      m3.translate (xoff, yoff);
+      
+      obj->transform (m1);
+      obj->transform (m2);
+      obj->transform (m3, true);
+      duplicates.append (obj);
+    }
+#endif
     InsertObjCmd* cmd = new InsertObjCmd (document, duplicates);
     history->addCommand (cmd, true);
   }

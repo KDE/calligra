@@ -25,6 +25,8 @@
 #ifndef GLayer_h_
 #define GLayer_h_
 
+#include <list>
+#include <qobject.h>
 #include "GObject.h"
 
 class GLayer : public QObject {
@@ -33,16 +35,32 @@ public:
   GLayer (const char* text = 0L);
   ~GLayer ();
 
+  /*
+   * Layer properties
+   */    
+  const char* name () const;
+  void setName (const char* text);
+
   bool isVisible () const { return visibleFlag; }
   bool isPrintable () const { return printableFlag; }
   bool isEditable () const { return editableFlag; }
 
-  const char* name () const;
-  void setName (const char* text);
-
   void setVisible (bool flag);
   void setPrintable (bool flag);
   void setEditable (bool flag);
+
+  /*
+   * Content management
+   */
+  list<GObject*>& objects () { return contents; }
+  unsigned int objectCount () const { return contents.size (); }
+  void insertObject (GObject* obj);
+  void deleteObject (GObject* obj);
+  GObject* findContainingObject (int x, int y);
+
+  int findIndexOfObject (GObject *obj);
+  void insertObjectAtIndex (GObject* obj, unsigned int idx);
+  void moveObjectToIndex (GObject* obj, unsigned int idx);
 
 signals:
   void propertyChanged ();
@@ -53,6 +71,8 @@ private:
   bool visibleFlag, // layer is visible
     printableFlag,  // layer is printable
     editableFlag;   // layer is editable
+
+  list<GObject*> contents; // the list of objects
 
   static int lastID;
 };  

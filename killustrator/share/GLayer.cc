@@ -22,6 +22,7 @@
 
 */
 
+#include <algorithm>
 #include <stdio.h>
 
 #include <kapp.h>
@@ -31,9 +32,17 @@
 
 int GLayer::lastID = 1;
 
+struct unref_obj {
+  void operator () (GObject* obj) {
+    obj->setLayer (0L);
+    obj->unref ();
+  }
+};
+
+
 GLayer::GLayer (const char* text) : visibleFlag (true), printableFlag (true), 
   editableFlag (true) {
-  if (text == NULL) {
+  if (text == 0L) {
     char buf[20];
 
     sprintf (buf, "%s #%d", i18n("Layer"), lastID++);
@@ -42,6 +51,8 @@ GLayer::GLayer (const char* text) : visibleFlag (true), printableFlag (true),
 }
 
 GLayer::~GLayer () {
+  for_each (contents.begin (), contents.end (), unref_obj ());
+  contents.clear ();
 }
 
 const char* GLayer::name () const {
@@ -55,6 +66,8 @@ void GLayer::setName (const char* text) {
 void GLayer::setVisible (bool flag) {
   if (visibleFlag != flag) {
     visibleFlag = flag;
+    if (!visibleFlag)
+      editableFlag = false;
     emit propertyChanged ();
   }
 }
@@ -69,7 +82,59 @@ void GLayer::setPrintable (bool flag) {
 void GLayer::setEditable (bool flag) {
   if (editableFlag != flag) {
     editableFlag = flag;
+    if (editableFlag)
+      visibleFlag = true;
     emit propertyChanged ();
   }
 }
 
+void GLayer::insertObject (GObject* obj) {
+  obj->setLayer (this);
+  contents.push_back (obj);
+}
+
+void GLayer::deleteObject (GObject* obj) {
+  list<GObject*>::iterator i = find (contents.begin (), contents.end (),
+				     obj);
+  if (i != contents.end ()) {
+    (*i)->unref ();
+    contents.erase (i);
+  }
+}
+
+GObject* GLayer::findContainingObject (int x, int y) {
+  // We are looking for the most relevant object, that means the object 
+  // in front of all others. So, we have to start at the end of the
+  // list ... 
+  list<GObject*>::reverse_iterator i = contents.rbegin ();
+  for (; i != contents.rend (); i++)
+    if ((*i)->contains (Coord (x, y)))
+      return *i;
+  // nothing found
+  return 0L;
+}
+
+int GLayer::findIndexOfObject (GObject *obj) {
+  list<GObject*>::iterator i = find (contents.begin (), contents.end (), obj);
+  if (i == contents.end ())
+    return -1;
+  else
+    return distance (contents.begin (), i);
+}
+
+void GLayer::insertObjectAtIndex (GObject* obj, unsigned int idx) {
+  list<GObject*>::iterator i = contents.begin ();
+  advance (i, idx);
+  contents.insert (i, obj);
+}
+
+void GLayer::moveObjectToIndex (GObject* obj, unsigned int idx) {
+  list<GObject*>::iterator i = find (contents.begin (), contents.end (), obj);
+  if (i == contents.end ())
+    return;
+  contents.erase (i);
+
+  i = contents.begin ();
+  advance (i, idx);
+  contents.insert (i, obj);
+}

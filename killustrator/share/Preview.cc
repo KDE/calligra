@@ -60,10 +60,7 @@ bool kilPreviewHandler (const KFileInfo* fInfo, const QString fileName,
       p.eraseRect (0, 0, tmpDoc->getPaperWidth (),
 		   tmpDoc->getPaperHeight ());
 
-      QListIterator<GObject> it = tmpDoc->getObjects ();
-      for (; it.current (); ++it) {
-	it.current ()->draw (p, false);
-      }
+      tmpDoc->drawContents (p, false);
       p.end ();
 
       res = true;

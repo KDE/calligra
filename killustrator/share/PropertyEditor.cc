@@ -69,6 +69,7 @@ PropertyEditor::PropertyEditor (CommandHistory* history, GDocument* doc,
   text = "Text";
 
   if (haveObjects) {
+#ifdef NO_LAYERS
     QListIterator<GObject> it (document->getSelection ());
     for (; it.current (); ++it) {
       if (it.current ()->isA ("GText")) {
@@ -87,6 +88,26 @@ PropertyEditor::PropertyEditor (CommandHistory* history, GDocument* doc,
 	  haveRectangleObjects = true;
       }
     }
+#else
+    for (list<GObject*>::iterator it = document->getSelection ().begin ();
+	 it != document->getSelection ().end (); it++) {
+      GObject* o = *it;
+      if (o->isA ("GText")) {
+	haveTextObjects = true;
+	GText* tobj = (GText *) o;
+	text = tobj->line (0);
+      }
+      else if (o->isA ("GPolyline") || o->isA ("GBezier"))
+	haveLineObjects = true;
+      else if (o->isA ("GOval"))
+	haveEllipseObjects = true;
+      else if (o->isA ("GPolygon")) {
+	GPolygon* polygon = (GPolygon *) o;
+	if (polygon->isRectangle ())
+	  haveRectangleObjects = true;
+      }
+    }
+#endif
   }
   cmdHistory = history;
 
@@ -462,9 +483,12 @@ void PropertyEditor::readProperties () {
     const char* ustr = unitToString (munit);
     
     if (document->selectionCount () == 1) {
+#ifdef NO_LAYERS
       QListIterator<GObject> it (document->getSelection ());
       GObject* object = it.current ();
-
+#else
+      GObject* object = document->getSelection ().front ();
+#endif
       // Info tab
       Rect boundingBox = object->boundingBox ();
       infoLabel[0]->setText (object->typeName ());

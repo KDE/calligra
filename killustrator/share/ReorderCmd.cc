@@ -30,11 +30,20 @@ ReorderCmd::ReorderCmd (GDocument* doc, ReorderPosition pos)
   objects.resize (doc->selectionCount ());
   oldpos.resize (doc->selectionCount ());
 
+#ifdef NO_LAYERS
   QListIterator<GObject> it (doc->getSelection ());
   for (unsigned int i = 0; it.current (); ++it, ++i) {
     it.current ()->ref ();
     objects.insert (i, it.current ());
   }
+#else
+  list<GObject*>::iterator it = doc->getSelection ().begin ();
+  for (unsigned int i = 0; it != doc->getSelection ().end (); it++, i++) {
+    GObject *o = *it;
+    o->ref ();
+    objects.insert (i, o);
+  }
+#endif
   document = doc;
   position = pos;
 }
@@ -52,13 +61,13 @@ void ReorderCmd::execute () {
     unsigned int idx = document->findIndexOfObject (objects[i]);
     oldpos[i] = idx;
     if (position == RP_ToFront || position == RP_ForwardOne) {
-      if (idx == document->objectCount () - 1)
+      if (idx == objects[i]->getLayer ()->objectCount () - 1)
 	// already at the first position
 	continue;
 
       // move the object
       if (position == RP_ToFront)
-	newidx = document->objectCount () - 1;
+	newidx = objects[i]->getLayer ()->objectCount () - 1;
       else
 	newidx = idx + 1;
     }

@@ -24,12 +24,18 @@
 
 #include "GroupCmd.h"
 
-GroupCmd::GroupCmd (GDocument* doc) : Command(i18n("Group ???")) {
+GroupCmd::GroupCmd (GDocument* doc) : Command(i18n("Group Objects")) {
   document = doc;
   group = 0L;
+#ifdef NO_LAYERS
   QListIterator<GObject> it (doc->getSelection ());
   for (; it.current (); ++it) 
     objects.append (it.current ());
+#else
+  for (list<GObject*>::iterator it = doc->getSelection ().begin ();
+       it != doc->getSelection ().end (); it++)
+    objects.append (*it);
+#endif
 }
 
 GroupCmd::~GroupCmd () {
