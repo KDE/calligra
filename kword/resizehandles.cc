@@ -177,6 +177,12 @@ void KWResizeHandle::updateGeometry()
 bool KWResizeHandle::isResizingEnabled() const
 {
     KWFrameSet *fs = frame->getFrameSet();
+    if ( !fs )
+    {
+        kdWarning() << "KWResizeHandle: Frame has been deleted !  " << frame << endl;
+        return false;
+    }
+
     if ( fs->isMainFrameset() )
         return false;
 

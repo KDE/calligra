@@ -43,7 +43,8 @@
 
 KWFrame::KWFrame(KWFrame * frame)
 {
-    kdDebug() << "KWFrame::KWFrame this=" << this << " frame=" << frame << endl;
+    handles.setAutoDelete(true);
+    m_minFrameHeight=0;
     copySettings( frame );
 }
 
@@ -77,7 +78,7 @@ KWFrame::KWFrame(KWFrameSet *fs, double left, double top, double width, double h
 
 KWFrame::~KWFrame()
 {
-    kdDebug() << "KWFrame::~KWFrame " << this << endl;
+    //kdDebug() << "KWFrame::~KWFrame " << this << endl;
     if (selected)
         removeResizeHandles();
 }
@@ -141,7 +142,7 @@ KWFrame *KWFrame::getCopy() {
 
 void KWFrame::copySettings(KWFrame *frm)
 {
-    kdDebug() << "KWFrame::copySettings this=" << this << " frm=" << frm << endl;
+    //kdDebug() << "KWFrame::copySettings this=" << this << " frm=" << frm << endl;
     //necessary to reapply these parameters
     setFrameSet( frm->getFrameSet() );
     setRect(frm->x(), frm->y(), frm->width(), frm->height());
@@ -169,7 +170,6 @@ void KWFrame::copySettings(KWFrame *frm)
 
 // Insert all resize handles
 void KWFrame::createResizeHandles() {
-    removeResizeHandles();
     QList <KWView> pages = getFrameSet()->kWordDocument()->getAllViews();
     for (int i=pages.count() -1; i >= 0; i--)
         createResizeHandlesForPage(pages.at(i)->getGUI()->canvasWidget());
@@ -223,6 +223,7 @@ void KWFrame::setSelected( bool _selected )
 {
     bool s = selected;
     selected = _selected;
+    //kdDebug() << "KWFrame::setSelected(" << _selected << ") - was selected:" << s << endl;
     if ( selected )
         createResizeHandles();
     else if ( s )
@@ -455,7 +456,7 @@ void KWFrameSet::delFrame( unsigned int _num )
 
 void KWFrameSet::delFrame( KWFrame *frm, bool remove )
 {
-    kdDebug() << "KWFrameSet::delFrame " << frm << " " << remove << endl;
+    //kdDebug() << "KWFrameSet::delFrame " << frm << " " << remove << endl;
     int _num = frames.findRef( frm );
     ASSERT( _num != -1 );
     if ( _num == -1 )
