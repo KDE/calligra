@@ -1,10 +1,9 @@
 <!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
-<kpartgui name="kexi" version="121">
+<kpartgui name="kexi" version="122">
 <MenuBar>
   <Menu name="file" noMerge="0">
     <text>&amp;Project</text>
     <Action name="project_new" />
-    <Separator />
     <Action name="project_open"/>
     <Action name="project_open_recent"/>
     <!-- Menu name="project_open_recent">
@@ -101,12 +100,12 @@
     <Action name="options_show_statusbar"/>
     <MergeLocal name="show_merge"/>
     <Separator/>
-    <Menu name="options_show_other">
+    <!-- Menu name="options_show_other">
       <Text>&amp;Other</Text>
-      <!-- Action name="options_show_nav"/ -->
+      <Action name="options_show_nav"/>
       <Action name="options_show_contexthelp"/>
       <Action name="options_enable_forms"/>
-    </Menu>
+    </Menu -->
     <Separator/>
     <Action name="options_configure_keybinding"/>
     <Action name="options_configure_toolbars"/>
