@@ -63,6 +63,12 @@ public:
 private:
     QString openSpan(const FormatData& formatOrigin, const FormatData& format);
     QString closeSpan(const FormatData& formatOrigin, const FormatData& format);
+    /** 
+     * Encodes the @p text into
+     * RTF seven bit ASCII. This affects any 8 bit characters.
+     * They are encoded either with \\' or with \\u
+     * @return the escape string
+     */
     QString escapeRtfText ( const QString& text ) const;
     QString ProcessParagraphData ( const QString &paraText,
         const LayoutData& layout, const ValueListFormatData &paraFormatDataList);
