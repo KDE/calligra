@@ -722,6 +722,18 @@ configureLayoutPage::configureLayoutPage( KSpreadView* _view,QWidget *parent , c
   defaultOrientationPage->insertStringList(listType);
   defaultOrientationPage->setCurrentItem(0);
   grid1->addWidget(defaultOrientationPage,3,0);
+
+  label=new QLabel(tmpQGroupBox);
+  label->setText(i18n("Default page unit:"));
+  grid1->addWidget(label,4,0);
+  defaultUnit=new QComboBox( tmpQGroupBox);
+  listType.clear();
+  listType=i18n( "Millimeters ( mm )" ) ;
+  listType+=i18n( "Points ( pt )" ) ;
+  listType+=i18n( "Inches ( in )" );
+  defaultUnit->insertStringList(listType);
+  defaultUnit->setCurrentItem(0);
+  grid1->addWidget(defaultUnit,5,0);
   initCombo();
   box->addWidget( tmpQGroupBox);
 
@@ -731,20 +743,24 @@ void configureLayoutPage::slotDefault()
 {
   defaultSizePage->setCurrentItem(1);
   defaultOrientationPage->setCurrentItem(0);
+  defaultUnit->setCurrentItem(0);
 }
 
 void configureLayoutPage::initCombo()
 {
   paper=0;
   orientation=0;
+  unit=0;
   if( config->hasGroup("Parameters" ))
         {
         config->setGroup( "Parameters" );
 	paper=config->readNumEntry( "Default size page" ,0);
 	orientation=config->readNumEntry( "Default orientation page" ,0);
+	unit=config->readNumEntry( "Default unit page" ,0);
 	}
   defaultSizePage->setCurrentItem(paper);
   defaultOrientationPage->setCurrentItem(orientation);
+  defaultUnit->setCurrentItem(unit);
 }
 
 
@@ -763,6 +779,12 @@ void configureLayoutPage::apply()
      unsigned int orientationPage=defaultOrientationPage->currentItem();
      config->writeEntry( "Default orientation page", orientationPage);
      m_pView->doc()->setPaperOrientation((KoOrientation)orientationPage);
+   }
+ if(unit!=defaultUnit->currentItem())
+   {
+     unsigned int unitPage=defaultUnit->currentItem();
+     config->writeEntry( "Default unit page", unitPage);
+     m_pView->doc()->setPaperUnit((KoUnit)unitPage);
    }
 }
 

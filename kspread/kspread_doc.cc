@@ -96,6 +96,7 @@ KSpreadDoc::KSpreadDoc( QWidget *parentWidget, const char *widgetName, QObject* 
   m_topBorder = 20.0;
   m_bottomBorder = 20.0;
   m_paperFormat = PG_DIN_A4;
+  m_paperUnit = PG_MM;
   m_paperWidth = PG_A4_WIDTH;
   m_paperHeight = PG_A4_HEIGHT;
   calcPaperSize();
@@ -801,13 +802,25 @@ void KSpreadDoc::paperLayoutDlg()
     KoPageLayout pl;
     pl.format = paperFormat();
     pl.orientation = orientation();
-    pl.unit = PG_MM;
+    pl.unit = paperUnit();
     pl.mmWidth = m_paperWidth;
     pl.mmHeight = m_paperHeight;
     pl.mmLeft = leftBorder();
     pl.mmRight = rightBorder();
     pl.mmTop = topBorder();
     pl.mmBottom = bottomBorder();
+    pl.ptWidth = MM_TO_POINT( m_paperWidth );
+    pl.ptHeight = MM_TO_POINT( m_paperHeight );
+    pl.ptLeft = MM_TO_POINT( leftBorder() );
+    pl.ptRight = MM_TO_POINT(  rightBorder() );
+    pl.ptTop = MM_TO_POINT(  topBorder() );
+    pl.ptBottom = MM_TO_POINT(  bottomBorder() );
+    pl.inchWidth = MM_TO_INCH( m_paperWidth );
+    pl.inchHeight = MM_TO_INCH( m_paperHeight );
+    pl.inchLeft = MM_TO_INCH( leftBorder() );
+    pl.inchRight = MM_TO_INCH(  rightBorder() );
+    pl.inchTop = MM_TO_INCH(  topBorder() );
+    pl.inchBottom = MM_TO_INCH(  bottomBorder() );
 
     KoHeadFoot hf;
     hf.headLeft = headLeft();

@@ -499,7 +499,7 @@ if( config->hasGroup("Parameters" ))
 	    m_pDoc->setPaperFormat((KoFormat)config->readNumEntry("Default size page",0));
 	    
 	    m_pDoc->setPaperOrientation((KoOrientation)config->readNumEntry("Default orientation page",0));
-	    
+	    m_pDoc->setPaperUnit((KoUnit)config->readNumEntry("Default unit page",0));
 	  }
 	m_pDoc->setShowCommentIndicator(config->readBoolEntry("Comment Indicator",true));
 	

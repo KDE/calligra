@@ -130,10 +130,11 @@ protected:
   KSpreadView* m_pView;
   QComboBox *defaultOrientationPage;
   QComboBox *defaultSizePage;
-  
+  QComboBox *defaultUnit;
   //store old config
   int paper;
   int orientation;
+  int unit;
   
   KConfig* config;
 } ;
