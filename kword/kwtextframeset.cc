@@ -180,6 +180,7 @@ KWTextDocument * KWTextFrameSet::kwTextDocument() const
 
 void KWTextFrameSet::slotAvailableHeightNeeded()
 {
+    Q_ASSERT( isVisible() );
     kdDebug() << "KWTextFrameSet::slotAvailableHeightNeeded " << getName() << endl;
     updateFrames( 0 ); // only do the available-height determination
 }
@@ -1569,7 +1570,8 @@ void KWTextFrameSet::updateFrames( int flags )
     }
 
     m_textobj->setAvailableHeight( m_doc->ptToLayoutUnitPixY( availHeight ) );
-    //kdDebug(32002) << this << " (" << getName() << ") KWTextFrameSet::updateFrames availHeight=" << availHeight << " (LU: " << availableHeight() << ")" << endl;
+    //kdDebug(32002) << this << " (" << getName() << ") KWTextFrameSet::updateFrames availHeight=" << availHeight
+    //               << " (LU: " << m_doc->ptToLayoutUnitPixY( availHeight ) << ")" << endl;
     frames.setAutoDelete( true );
 
     KWFrameSet::updateFrames( flags );

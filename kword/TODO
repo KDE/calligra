@@ -12,6 +12,12 @@ and then kotextformatter needs to move down by that height if .... hmm done.
 - footnotes: check move to next page, endnotes
 - anything else that http://bugs.kde.org mentions ;)
 
+Differences with OO that ought to be fixed:
+-------------------------------------------
+- space above and below paragraphs is QMAX()ed indeed, like QRichText originally did.
+- offsetFromBaseline should be a % (of the font size) instead of an absolute pt value,
+  even in the GUI (which currently limits to +/- 9pt).
+
 Missing or incomplete stuff:
 ----------------------------
 - Even/odd pages

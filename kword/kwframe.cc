@@ -145,7 +145,7 @@ int KWFrame::pageNum( KWDocument* doc ) const
     int page = static_cast<int>(y() / doc->ptPaperHeight());
     return page;
     // Circular dependency. KWDoc uses pageNum to calculate the number of pages!
-    //return QMIN( page, doc->numPages()-1 );
+    //return KMIN( page, doc->numPages()-1 );
 }
 
 MouseMeaning KWFrame::getMouseMeaning( const KoPoint & docPoint, MouseMeaning defaultMeaning )
@@ -559,19 +559,19 @@ KoRect KWFrame::innerRect() const
 {
     KoRect inner( this->normalize());
     inner.moveBy( bLeft(), bTop());
-    inner.setWidth( inner.width() - bLeft() - bRight() );
-    inner.setHeight( inner.height() - bTop() - bBottom() );
+    inner.setWidth( innerWidth() );
+    inner.setHeight( innerHeight() );
     return inner;
 }
 
 double KWFrame::innerWidth() const
 {
-    return width() - bLeft() - bRight();
+    return KMAX( 0.0, width() - bLeft() - bRight() );
 }
 
 double KWFrame::innerHeight() const
 {
-    return height() - bTop() - bBottom();
+    return KMAX( 0.0, height() - bTop() - bBottom() );
 }
 
 void KWFrame::setFrameMargins( double _left, double _top, double _right, double _bottom)
@@ -1072,8 +1072,8 @@ void KWFrameSet::updateFrames( int flags )
         QPtrListIterator<KWFrame> fIt( frameIterator() );
         for ( ; fIt.current(); ++fIt ) {
             int pg = fIt.current()->pageNum();
-            m_firstPage = QMIN( m_firstPage, pg );
-            lastPage = QMAX( lastPage, pg );
+            m_firstPage = KMIN( m_firstPage, pg );
+            lastPage = KMAX( lastPage, pg );
         }
         //kdDebug(32001) << "firstPage=" << m_firstPage << " lastPage=" << lastPage << endl;
 
@@ -1081,7 +1081,7 @@ void KWFrameSet::updateFrames( int flags )
         int oldSize = m_framesInPage.size();
         m_framesInPage.resize( lastPage - m_firstPage + 1 );
         // Clear the old elements
-        int oldElements = QMIN( oldSize, (int)m_framesInPage.size() );
+        int oldElements = KMIN( oldSize, (int)m_framesInPage.size() );
         for ( int i = 0 ; i < oldElements ; ++i )
             m_framesInPage[i]->clear();
         // Initialize the new elements.
