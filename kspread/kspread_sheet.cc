@@ -1993,9 +1993,10 @@ void KSpreadSheet::changeCellTabName( QString const & old_name, QString const & 
 
 bool KSpreadSheet::shiftRow( const QRect &rect,bool makeUndo )
 {
+    KSpreadUndoInsertCellRow * undo = 0;
     if ( !m_pDoc->undoBuffer()->isLocked()  &&makeUndo)
     {
-        KSpreadUndoInsertCellRow *undo = new KSpreadUndoInsertCellRow( m_pDoc, this,rect );
+        undo = new KSpreadUndoInsertCellRow( m_pDoc, this, rect );
         m_pDoc->undoBuffer()->appendUndo( undo );
     }
 
@@ -2013,8 +2014,11 @@ bool KSpreadSheet::shiftRow( const QRect &rect,bool makeUndo )
     QPtrListIterator<KSpreadSheet> it( map()->tableList() );
     for( ; it.current(); ++it )
     {
-        for(int i=rect.top();i<=rect.bottom();i++)
-            it.current()->changeNameCellRef( QPoint(rect.left(),i), false, KSpreadSheet::ColumnInsert, name() ,(rect.right()-rect.left()+1));
+        for(int i = rect.top(); i <= rect.bottom(); i++ )
+            it.current()->changeNameCellRef( QPoint( rect.left(), i ), false,
+                                             KSpreadSheet::ColumnInsert, name(),
+                                             ( rect.right() - rect.left() + 1),
+                                             undo);
     }
     refreshChart(QPoint(rect.left(),rect.top()), false, KSpreadSheet::ColumnInsert);
     recalc();
@@ -2026,9 +2030,10 @@ bool KSpreadSheet::shiftRow( const QRect &rect,bool makeUndo )
 
 bool KSpreadSheet::shiftColumn( const QRect& rect,bool makeUndo )
 {
+    KSpreadUndoInsertCellCol * undo = 0;
     if ( !m_pDoc->undoBuffer()->isLocked()  &&makeUndo)
     {
-        KSpreadUndoInsertCellCol *undo = new KSpreadUndoInsertCellCol( m_pDoc, this,rect);
+        undo = new KSpreadUndoInsertCellCol( m_pDoc, this,rect);
         m_pDoc->undoBuffer()->appendUndo( undo );
     }
 
@@ -2048,7 +2053,10 @@ bool KSpreadSheet::shiftColumn( const QRect& rect,bool makeUndo )
     for( ; it.current(); ++it )
     {
         for(int i=rect.left();i<=rect.right();i++)
-            it.current()->changeNameCellRef( QPoint(i,rect.top()), false, KSpreadSheet::RowInsert, name() ,(rect.bottom()-rect.top()+1));
+            it.current()->changeNameCellRef( QPoint( i, rect.top() ), false,
+                                             KSpreadSheet::RowInsert, name(),
+                                             ( rect.bottom() - rect.top() + 1 ),
+                                             undo );
     }
     refreshChart(/*marker*/QPoint(rect.left(),rect.top()), false, KSpreadSheet::RowInsert);
     recalc();
@@ -2060,9 +2068,10 @@ bool KSpreadSheet::shiftColumn( const QRect& rect,bool makeUndo )
 
 void KSpreadSheet::unshiftColumn( const QRect & rect,bool makeUndo )
 {
-    if ( !m_pDoc->undoBuffer()->isLocked()  &&makeUndo)
+    KSpreadUndoRemoveCellCol * undo = 0;
+    if ( !m_pDoc->undoBuffer()->isLocked() && makeUndo )
     {
-        KSpreadUndoRemoveCellCol *undo = new KSpreadUndoRemoveCellCol( m_pDoc, this,rect);
+        undo = new KSpreadUndoRemoveCellCol( m_pDoc, this, rect );
         m_pDoc->undoBuffer()->appendUndo( undo );
     }
 
@@ -2077,7 +2086,10 @@ void KSpreadSheet::unshiftColumn( const QRect & rect,bool makeUndo )
     QPtrListIterator<KSpreadSheet> it( map()->tableList() );
     for( ; it.current(); ++it )
         for(int i=rect.left();i<=rect.right();i++)
-                it.current()->changeNameCellRef( QPoint(i,rect.top()), false, KSpreadSheet::RowRemove, name(),(rect.bottom()-rect.top()+1) );
+                it.current()->changeNameCellRef( QPoint( i, rect.top() ), false,
+                                                 KSpreadSheet::RowRemove, name(),
+                                                 ( rect.bottom() - rect.top() + 1 ),
+                                                 undo );
 
     refreshChart( QPoint(rect.left(),rect.top()), false, KSpreadSheet::RowRemove );
     refreshMergedCell();
@@ -2087,10 +2099,11 @@ void KSpreadSheet::unshiftColumn( const QRect & rect,bool makeUndo )
 
 void KSpreadSheet::unshiftRow( const QRect & rect,bool makeUndo )
 {
-    if ( !m_pDoc->undoBuffer()->isLocked() &&makeUndo)
+    KSpreadUndoRemoveCellRow * undo = 0;
+    if ( !m_pDoc->undoBuffer()->isLocked() && makeUndo )
     {
-            KSpreadUndoRemoveCellRow *undo = new KSpreadUndoRemoveCellRow( m_pDoc, this,rect );
-            m_pDoc->undoBuffer()->appendUndo( undo );
+        undo = new KSpreadUndoRemoveCellRow( m_pDoc, this, rect );
+        m_pDoc->undoBuffer()->appendUndo( undo );
     }
     for(int i =rect.top();i<=rect.bottom();i++)
         for(int j=rect.left();j<=rect.right();j++)
@@ -2103,7 +2116,10 @@ void KSpreadSheet::unshiftRow( const QRect & rect,bool makeUndo )
     QPtrListIterator<KSpreadSheet> it( map()->tableList() );
     for( ; it.current(); ++it )
         for(int i=rect.top();i<=rect.bottom();i++)
-                it.current()->changeNameCellRef( QPoint(rect.left(),i), false, KSpreadSheet::ColumnRemove, name(),(rect.right()-rect.left()+1) );
+                it.current()->changeNameCellRef( QPoint( rect.left(), i ), false,
+                                                 KSpreadSheet::ColumnRemove, name(),
+                                                 ( rect.right() - rect.left() + 1 ),
+                                                 undo);
 
     refreshChart(QPoint(rect.left(),rect.top()), false, KSpreadSheet::ColumnRemove );
     refreshMergedCell();
@@ -2113,9 +2129,10 @@ void KSpreadSheet::unshiftRow( const QRect & rect,bool makeUndo )
 
 bool KSpreadSheet::insertColumn( int col, int nbCol, bool makeUndo )
 {
+    KSpreadUndoInsertColumn * undo = 0;
     if ( !m_pDoc->undoBuffer()->isLocked() && makeUndo)
     {
-        KSpreadUndoInsertColumn *undo = new KSpreadUndoInsertColumn( m_pDoc, this, col, nbCol );
+        undo = new KSpreadUndoInsertColumn( m_pDoc, this, col, nbCol );
         m_pDoc->undoBuffer()->appendUndo( undo );
     }
 
@@ -2137,7 +2154,9 @@ bool KSpreadSheet::insertColumn( int col, int nbCol, bool makeUndo )
 
     QPtrListIterator<KSpreadSheet> it( map()->tableList() );
     for( ; it.current(); ++it )
-        it.current()->changeNameCellRef( QPoint( col, 1 ), true, KSpreadSheet::ColumnInsert, name(), nbCol+1 );
+        it.current()->changeNameCellRef( QPoint( col, 1 ), true,
+                                         KSpreadSheet::ColumnInsert, name(),
+                                         nbCol + 1, undo );
 
     //update print settings
     m_pPrint->insertColumn( col, nbCol );
@@ -2153,9 +2172,10 @@ bool KSpreadSheet::insertColumn( int col, int nbCol, bool makeUndo )
 
 bool KSpreadSheet::insertRow( int row, int nbRow, bool makeUndo )
 {
+    KSpreadUndoInsertRow *undo = 0;
     if ( !m_pDoc->undoBuffer()->isLocked() && makeUndo)
     {
-        KSpreadUndoInsertRow *undo = new KSpreadUndoInsertRow( m_pDoc, this, row, nbRow );
+        undo = new KSpreadUndoInsertRow( m_pDoc, this, row, nbRow );
         m_pDoc->undoBuffer()->appendUndo( undo );
     }
 
@@ -2177,7 +2197,9 @@ bool KSpreadSheet::insertRow( int row, int nbRow, bool makeUndo )
 
     QPtrListIterator<KSpreadSheet> it( map()->tableList() );
     for( ; it.current(); ++it )
-        it.current()->changeNameCellRef( QPoint( 1, row ), true, KSpreadSheet::RowInsert, name(), nbRow+1 );
+        it.current()->changeNameCellRef( QPoint( 1, row ), true,
+                                         KSpreadSheet::RowInsert, name(),
+                                         nbRow + 1, undo );
 
     //update print settings
     m_pPrint->insertRow( row, nbRow );
@@ -2193,9 +2215,10 @@ bool KSpreadSheet::insertRow( int row, int nbRow, bool makeUndo )
 
 void KSpreadSheet::removeColumn( int col, int nbCol, bool makeUndo )
 {
+    KSpreadUndoRemoveColumn *undo = 0;
     if ( !m_pDoc->undoBuffer()->isLocked() && makeUndo)
     {
-        KSpreadUndoRemoveColumn *undo = new KSpreadUndoRemoveColumn( m_pDoc, this, col, nbCol );
+        undo = new KSpreadUndoRemoveColumn( m_pDoc, this, col, nbCol );
         m_pDoc->undoBuffer()->appendUndo( undo );
     }
 
@@ -2213,7 +2236,9 @@ void KSpreadSheet::removeColumn( int col, int nbCol, bool makeUndo )
 
     QPtrListIterator<KSpreadSheet> it( map()->tableList() );
     for( ; it.current(); ++it )
-        it.current()->changeNameCellRef( QPoint( col, 1 ), true, KSpreadSheet::ColumnRemove, name(), nbCol+1 );
+        it.current()->changeNameCellRef( QPoint( col, 1 ), true,
+                                         KSpreadSheet::ColumnRemove, name(),
+                                         nbCol + 1, undo );
 
     //update print settings
     m_pPrint->removeColumn( col, nbCol );
@@ -2227,9 +2252,10 @@ void KSpreadSheet::removeColumn( int col, int nbCol, bool makeUndo )
 
 void KSpreadSheet::removeRow( int row, int nbRow, bool makeUndo )
 {
+    KSpreadUndoRemoveRow *undo = 0;
     if ( !m_pDoc->undoBuffer()->isLocked() && makeUndo )
     {
-        KSpreadUndoRemoveRow *undo = new KSpreadUndoRemoveRow( m_pDoc, this, row, nbRow );
+        undo = new KSpreadUndoRemoveRow( m_pDoc, this, row, nbRow );
         m_pDoc->undoBuffer()->appendUndo( undo );
     }
 
@@ -2247,7 +2273,9 @@ void KSpreadSheet::removeRow( int row, int nbRow, bool makeUndo )
 
     QPtrListIterator<KSpreadSheet> it( map()->tableList() );
     for( ; it.current(); ++it )
-        it.current()->changeNameCellRef( QPoint( 1, row ), true, KSpreadSheet::RowRemove, name(), nbRow+1 );
+        it.current()->changeNameCellRef( QPoint( 1, row ), true,
+                                         KSpreadSheet::RowRemove, name(),
+                                         nbRow + 1, undo );
 
     //update print settings
     m_pPrint->removeRow( row, nbRow );
@@ -2466,16 +2494,19 @@ void KSpreadSheet::refreshMergedCell()
 }
 
 
-void KSpreadSheet::changeNameCellRef(const QPoint & pos, bool fullRowOrColumn, ChangeRef ref, QString tabname, int nbCol)
+void KSpreadSheet::changeNameCellRef( const QPoint & pos, bool fullRowOrColumn,
+                                      ChangeRef ref, QString tabname, int nbCol,
+                                      KSpreadUndoInsertRemoveAction * undo )
 {
   bool correctDefaultTableName = (tabname == name()); // for cells without table ref (eg "A1")
   KSpreadCell* c = m_cells.firstCell();
   for( ;c; c = c->nextCell() )
   {
-    if(c->isFormula())
+    if( c->isFormula() )
     {
       QString origText = c->text();
       unsigned int i = 0;
+      bool error = false;
       QString newText;
 
       bool correctTableName = correctDefaultTableName;
@@ -2516,52 +2547,77 @@ void KSpreadSheet::changeNameCellRef(const QPoint & pos, bool fullRowOrColumn, C
           {
             // Parse it
             KSpreadPoint point( str );
-            if (point.isValid())
+            if ( point.isValid() )
             {
               int col = point.pos.x();
               int row = point.pos.y();
+              QString newPoint;
 
               // Update column
               if ( point.columnFixed )
-                newText += '$';
+                newPoint = '$';
 
-              if(ref==ColumnInsert
-                 && correctTableName
-                 && col>=pos.x()     // Column after the new one : +1
-                 && ( fullRowOrColumn || row == pos.y() ) ) // All rows or just one
+              if( ref == ColumnInsert
+                  && correctTableName
+                  && col + nbCol <= KS_colMax
+                  && col >= pos.x()     // Column after the new one : +1
+                  && ( fullRowOrColumn || row == pos.y() ) ) // All rows or just one
               {
-                newText += util_encodeColumnLabelText( col+nbCol );
+                newPoint += util_encodeColumnLabelText( col + nbCol );
               }
-              else if(ref==ColumnRemove
-                      && correctTableName
-                      && col > pos.x() // Column after the deleted one : -1
-                      && ( fullRowOrColumn || row == pos.y() ) ) // All rows or just one
+              else if( ref == ColumnRemove
+                       && correctTableName
+                       && col > pos.x() // Column after the deleted one : -1
+                       && ( fullRowOrColumn || row == pos.y() ) ) // All rows or just one
               {
-                newText += util_encodeColumnLabelText( col-nbCol );
+                newPoint += util_encodeColumnLabelText( col - nbCol );
               }
               else
-                newText += util_encodeColumnLabelText( col );
+                newPoint += util_encodeColumnLabelText( col );
 
               // Update row
               if ( point.rowFixed )
-                newText += '$';
+                newPoint += '$';
 
-              if(ref==RowInsert
-                 && correctTableName
-                 && row >= pos.y() // Row after the new one : +1
-                 && ( fullRowOrColumn || col == pos.x() ) ) // All columns or just one
+              if( ref == RowInsert
+                  && correctTableName
+                  && row + nbCol <= KS_rowMax
+                  && row >= pos.y() // Row after the new one : +1
+                  && ( fullRowOrColumn || col == pos.x() ) ) // All columns or just one
               {
-                newText += QString::number( row+nbCol );
+                newPoint += QString::number( row + nbCol );
               }
-              else if(ref==RowRemove
-                      && correctTableName
-                      && row > pos.y() // Column after the deleted one : -1
-                      && ( fullRowOrColumn || col == pos.x() ) ) // All columns or just one
+              else if( ref == RowRemove
+                       && correctTableName
+                       && row > pos.y() // Row after the deleted one : -1
+                       && ( fullRowOrColumn || col == pos.x() ) ) // All columns or just one
               {
-                newText += QString::number( row-nbCol );
+                newPoint += QString::number( row - nbCol );
               }
               else
-                newText += QString::number( row );
+                newPoint += QString::number( row );
+
+              if( correctTableName &&
+                  ( ( ref == ColumnRemove
+                      && col == pos.x() // Column is the deleted one : error
+                      && ( fullRowOrColumn || row == pos.y() ) ) ||
+                    ( ref == RowRemove
+                      && row == pos.y() // Row is the deleted one : error
+                      && ( fullRowOrColumn || col == pos.x() ) ) ||
+                    ( ref == ColumnInsert
+                      && col + nbCol > KS_colMax
+                      && col >= pos.x()     // Column after the new one : +1
+                      && ( fullRowOrColumn || row == pos.y() ) ) ||
+                    ( ref == RowInsert
+                      && row + nbCol > KS_rowMax
+                      && row >= pos.y() // Row after the new one : +1
+                      && ( fullRowOrColumn || col == pos.x() ) ) ) )
+              {
+                newPoint = "#" + i18n("Dependency") + "!";
+                error = true;
+              }
+
+              newText += newPoint;
             }
             else // Not a cell ref
             {
@@ -2574,7 +2630,27 @@ void KSpreadSheet::changeNameCellRef(const QPoint & pos, bool fullRowOrColumn, C
           }
         }
       }
-      c->setCellText(newText, false /* no recalc deps for each, done independently */ );
+
+      if ( error && undo != 0 ) //Save the original formula, as we cannot calculate the undo of broken formulas
+      {
+          QString formulaText = c->text();
+          int origCol = c->column();
+          int origRow = c->row();
+
+          if ( ref == ColumnInsert && origCol >= pos.x() )
+              origCol -= nbCol;
+          if ( ref == RowInsert && origRow >= pos.y() )
+              origRow -= nbCol;
+
+          if ( ref == ColumnRemove && origCol >= pos.x() )
+              origCol += nbCol;
+          if ( ref == RowRemove && origRow >= pos.y() )
+              origRow += nbCol;
+
+          undo->saveFormulaReference( this, origCol, origRow, formulaText );
+      }
+
+      c->setCellText( newText, false /* no recalc deps for each, done independently */ );
     }
   }
 }

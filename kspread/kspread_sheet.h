@@ -34,6 +34,7 @@ class KSpreadPoint;
 class KSpreadMap;
 class KSpreadCanvas;
 class KSpreadDoc;
+class KSpreadUndoInsertRemoveAction;
 class KoDocumentEntry;
 
 class QStingList;
@@ -722,8 +723,11 @@ public:
      *                        if false, we inserted or removed a cell
      * @param ref see ChangeRef
      * @param tabname completes the pos specification by giving the table name
+     * @param undo is the handler of the undo class in case of lost cell references
      */
-    void changeNameCellRef(const QPoint & pos, bool fullRowOrColumn, ChangeRef ref,QString tabname,int NbCol=1);
+    void changeNameCellRef( const QPoint & pos, bool fullRowOrColumn,
+                            ChangeRef ref, QString tabname, int NbCol = 1,
+                            KSpreadUndoInsertRemoveAction * undo = 0 );
 
 
     void refreshRemoveAreaName(const QString &_areaName);

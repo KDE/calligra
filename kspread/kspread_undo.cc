@@ -166,12 +166,55 @@ void KSpreadMacroUndoAction::redo()
 
 /****************************************************************************
  *
+ * KSpreadUndoInsertRemoveAction
+ *
+ ***************************************************************************/
+
+KSpreadUndoInsertRemoveAction::KSpreadUndoInsertRemoveAction( KSpreadDoc * _doc ) :
+    KSpreadUndoAction( _doc )
+{
+}
+
+KSpreadUndoInsertRemoveAction::~KSpreadUndoInsertRemoveAction()
+{
+
+}
+
+void KSpreadUndoInsertRemoveAction::saveFormulaReference( KSpreadSheet *_table,
+                                             int col, int row, QString & formula )
+{
+    if ( _table == 0 )
+        return;
+    QString tableName = _table->tableName();
+
+    m_lstFormulaCells.append( FormulaOfCell( tableName, col, row, formula ) );
+}
+
+void KSpreadUndoInsertRemoveAction::undoFormulaReference()
+{
+    QValueList<FormulaOfCell>::iterator it;
+    for ( it = m_lstFormulaCells.begin(); it != m_lstFormulaCells.end(); ++it )
+    {
+        KSpreadSheet* table = doc()->map()->findTable( (*it).tableName() );
+        if ( table )
+        {
+            KSpreadCell * cell = table->cellAt( (*it).col(), (*it).row() );
+            if ( cell && !cell->isDefault() )
+            {
+                cell->setCellText( (*it).formula(), true );
+            }
+        }
+    }
+}
+
+/****************************************************************************
+ *
  * KSpreadUndoRemoveColumn
  *
  ***************************************************************************/
 
 KSpreadUndoRemoveColumn::KSpreadUndoRemoveColumn( KSpreadDoc *_doc, KSpreadSheet *_table, int _column,int _nbCol ) :
-    KSpreadUndoAction( _doc )
+    KSpreadUndoInsertRemoveAction( _doc )
 {
     name=i18n("Remove Columns");
     m_tableName = _table->tableName();
@@ -221,6 +264,8 @@ void KSpreadUndoRemoveColumn::undo()
     table->print()->setPrintRepeatColumns( m_printRepeatColumns );
 
     doc()->undoBuffer()->unlock();
+
+    undoFormulaReference();
 }
 
 void KSpreadUndoRemoveColumn::redo()
@@ -243,7 +288,7 @@ void KSpreadUndoRemoveColumn::redo()
  ***************************************************************************/
 
 KSpreadUndoInsertColumn::KSpreadUndoInsertColumn( KSpreadDoc *_doc, KSpreadSheet *_table, int _column, int _nbCol ) :
-    KSpreadUndoAction( _doc )
+    KSpreadUndoInsertRemoveAction( _doc )
 {
     name=i18n("Insert Columns");
     m_tableName = _table->tableName();
@@ -264,6 +309,8 @@ void KSpreadUndoInsertColumn::undo()
     doc()->undoBuffer()->lock();
     table->removeColumn( m_iColumn,m_iNbCol );
     doc()->undoBuffer()->unlock();
+
+    undoFormulaReference();
 }
 
 void KSpreadUndoInsertColumn::redo()
@@ -284,7 +331,7 @@ void KSpreadUndoInsertColumn::redo()
  ***************************************************************************/
 
 KSpreadUndoRemoveRow::KSpreadUndoRemoveRow( KSpreadDoc *_doc, KSpreadSheet *_table, int _row,int _nbRow) :
-    KSpreadUndoAction( _doc )
+    KSpreadUndoInsertRemoveAction( _doc )
 {
     name=i18n("Remove Rows");
 
@@ -343,6 +390,8 @@ void KSpreadUndoRemoveRow::undo()
     if(table->getAutoCalc()) table->recalc();
 
     doc()->undoBuffer()->unlock();
+
+    undoFormulaReference();
 }
 
 void KSpreadUndoRemoveRow::redo()
@@ -365,7 +414,7 @@ void KSpreadUndoRemoveRow::redo()
  ***************************************************************************/
 
 KSpreadUndoInsertRow::KSpreadUndoInsertRow( KSpreadDoc *_doc, KSpreadSheet *_table, int _row,int _nbRow ) :
-    KSpreadUndoAction( _doc )
+    KSpreadUndoInsertRemoveAction( _doc )
 {
     name=i18n("Insert Rows");
     m_tableName = _table->tableName();
@@ -386,6 +435,8 @@ void KSpreadUndoInsertRow::undo()
     doc()->undoBuffer()->lock();
     table->removeRow( m_iRow,m_iNbRow );
     doc()->undoBuffer()->unlock();
+
+    undoFormulaReference();
 }
 
 void KSpreadUndoInsertRow::redo()
@@ -2251,7 +2302,7 @@ void KSpreadUndoAutofill::redo()
  ***************************************************************************/
 
 KSpreadUndoInsertCellRow::KSpreadUndoInsertCellRow( KSpreadDoc *_doc, KSpreadSheet *_table, const QRect &_rect ) :
-    KSpreadUndoAction( _doc )
+    KSpreadUndoInsertRemoveAction( _doc )
 {
     name=i18n("Insert Cell");
 
@@ -2272,6 +2323,8 @@ void KSpreadUndoInsertCellRow::undo()
     doc()->undoBuffer()->lock();
     table->unshiftRow( m_rect);
     doc()->undoBuffer()->unlock();
+
+    undoFormulaReference();
 }
 
 void KSpreadUndoInsertCellRow::redo()
@@ -2293,7 +2346,7 @@ void KSpreadUndoInsertCellRow::redo()
 
 
 KSpreadUndoInsertCellCol::KSpreadUndoInsertCellCol( KSpreadDoc *_doc, KSpreadSheet *_table, const QRect &_rect ) :
-    KSpreadUndoAction( _doc )
+    KSpreadUndoInsertRemoveAction( _doc )
 {
     name=i18n("Insert Cell");
 
@@ -2314,6 +2367,8 @@ void KSpreadUndoInsertCellCol::undo()
     doc()->undoBuffer()->lock();
     table->unshiftColumn( m_rect);
     doc()->undoBuffer()->unlock();
+
+    undoFormulaReference();
 }
 
 void KSpreadUndoInsertCellCol::redo()
@@ -2334,7 +2389,7 @@ void KSpreadUndoInsertCellCol::redo()
  ***************************************************************************/
 
 KSpreadUndoRemoveCellRow::KSpreadUndoRemoveCellRow( KSpreadDoc *_doc, KSpreadSheet *_table, const QRect &rect ) :
-    KSpreadUndoAction( _doc )
+    KSpreadUndoInsertRemoveAction( _doc )
 {
     name=i18n("Remove Cell");
 
@@ -2371,6 +2426,8 @@ void KSpreadUndoRemoveCellRow::undo()
     table->shiftRow( m_rect );
     table->paste( m_data, m_rect );
     doc()->undoBuffer()->unlock();
+
+    undoFormulaReference();
 }
 
 void KSpreadUndoRemoveCellRow::redo()
@@ -2391,7 +2448,7 @@ void KSpreadUndoRemoveCellRow::redo()
  ***************************************************************************/
 
 KSpreadUndoRemoveCellCol::KSpreadUndoRemoveCellCol( KSpreadDoc *_doc, KSpreadSheet *_table, const QRect &_rect ) :
-    KSpreadUndoAction( _doc )
+    KSpreadUndoInsertRemoveAction( _doc )
 {
     name=i18n("Remove Cell");
 
@@ -2428,6 +2485,8 @@ void KSpreadUndoRemoveCellCol::undo()
     table->shiftColumn( m_rect );
     table->paste( m_data, m_rect );
     doc()->undoBuffer()->unlock();
+
+    undoFormulaReference();
 }
 
 void KSpreadUndoRemoveCellCol::redo()

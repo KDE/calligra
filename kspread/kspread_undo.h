@@ -83,6 +83,26 @@ struct styleCell {
   QString action;
 };
 
+class FormulaOfCell
+{
+public:
+    FormulaOfCell(): m_tableName(0) {}
+    FormulaOfCell( QString & tableName, int col, int row, QString & formula )
+        : m_tableName( tableName ), m_col( col ), m_row( row ), m_formula( formula )
+    {}
+
+    QString tableName() const { return m_tableName; }
+    QString formula() const { return m_formula; }
+    int col() { return m_col; }
+    int row() { return m_row; }
+
+private:
+    QString m_tableName;
+    int m_col;
+    int m_row;
+    QString m_formula;
+};
+
 /**
  * Abstract base class. Every undo/redo action must
  * derive from this class.
@@ -110,7 +130,7 @@ protected:
 class KSpreadMacroUndoAction : public KSpreadUndoAction
 {
 public:
-    KSpreadMacroUndoAction( KSpreadDoc *_doc,const QString& _name );
+    KSpreadMacroUndoAction( KSpreadDoc * _doc, const QString & _name );
     virtual ~KSpreadMacroUndoAction();
 
     void addCommand(KSpreadUndoAction *command);
@@ -122,7 +142,20 @@ protected:
     QPtrList<KSpreadUndoAction> m_commands;
 };
 
-class KSpreadUndoRemoveColumn : public KSpreadUndoAction
+class KSpreadUndoInsertRemoveAction : public KSpreadUndoAction
+{
+public:
+    KSpreadUndoInsertRemoveAction( KSpreadDoc *_doc );
+    virtual ~KSpreadUndoInsertRemoveAction();
+
+    void saveFormulaReference( KSpreadSheet *_table, int col, int row, QString & formula );
+
+protected:
+    void undoFormulaReference();
+    QValueList<FormulaOfCell> m_lstFormulaCells;
+};
+
+class KSpreadUndoRemoveColumn : public KSpreadUndoInsertRemoveAction
 {
 public:
     KSpreadUndoRemoveColumn( KSpreadDoc *_doc, KSpreadSheet *_table, int _column,int _nbCol=0 );
@@ -140,7 +173,7 @@ protected:
     QPair<int, int> m_printRepeatColumns;
 };
 
-class KSpreadUndoInsertColumn : public KSpreadUndoAction
+class KSpreadUndoInsertColumn : public KSpreadUndoInsertRemoveAction
 {
 public:
     KSpreadUndoInsertColumn( KSpreadDoc *_doc, KSpreadSheet *_table, int _column,int _nbCol=0 );
@@ -155,7 +188,7 @@ protected:
     int m_iNbCol;
 };
 
-class KSpreadUndoRemoveRow : public KSpreadUndoAction
+class KSpreadUndoRemoveRow : public KSpreadUndoInsertRemoveAction
 {
 public:
     KSpreadUndoRemoveRow( KSpreadDoc *_doc, KSpreadSheet *_table, int _row,int _nbRow=0 );
@@ -173,7 +206,7 @@ protected:
     QPair<int, int> m_printRepeatRows;
 };
 
-class KSpreadUndoInsertRow : public KSpreadUndoAction
+class KSpreadUndoInsertRow : public KSpreadUndoInsertRemoveAction
 {
 public:
     KSpreadUndoInsertRow( KSpreadDoc *_doc, KSpreadSheet *_table, int _row,int _nbRow=0 );
@@ -529,7 +562,7 @@ protected:
     QString m_tableName;
 };
 
-class KSpreadUndoInsertCellCol : public KSpreadUndoAction
+class KSpreadUndoInsertCellCol : public KSpreadUndoInsertRemoveAction
 {
 public:
     KSpreadUndoInsertCellCol( KSpreadDoc *_doc, KSpreadSheet *_table, const QRect &_rect );
@@ -543,7 +576,7 @@ protected:
     QRect m_rect;
 };
 
-class KSpreadUndoInsertCellRow : public KSpreadUndoAction
+class KSpreadUndoInsertCellRow : public KSpreadUndoInsertRemoveAction
 {
 public:
     KSpreadUndoInsertCellRow( KSpreadDoc *_doc, KSpreadSheet *_table,const QRect &_rect );
@@ -557,7 +590,7 @@ protected:
     QRect m_rect;
 };
 
-class KSpreadUndoRemoveCellCol : public KSpreadUndoAction
+class KSpreadUndoRemoveCellCol : public KSpreadUndoInsertRemoveAction
 {
 public:
     KSpreadUndoRemoveCellCol( KSpreadDoc *_doc, KSpreadSheet *_table, const QRect &_rect );
@@ -572,7 +605,7 @@ protected:
     QCString m_data;
 };
 
-class KSpreadUndoRemoveCellRow : public KSpreadUndoAction
+class KSpreadUndoRemoveCellRow : public KSpreadUndoInsertRemoveAction
 {
 public:
     KSpreadUndoRemoveCellRow( KSpreadDoc *_doc, KSpreadSheet *_table, const QRect &_rect );
