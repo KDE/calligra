@@ -197,13 +197,13 @@ bool KoDocumentChild::load( const QDomElement& element )
 	    int x, y, w, h;
 	    x=y=w=h=0;
 	    if ( e.hasAttribute( "x" ) )
-		x = e.attribute( "x" ).toInt();
+		x = e.attribute( "x" ).toInt(&brect);
 	    if ( e.hasAttribute( "y" ) )
-		y = e.attribute( "y" ).toInt();
+		y = e.attribute( "y" ).toInt(&brect);
 	    if ( e.hasAttribute( "w" ) )
-		w = e.attribute( "w" ).toInt();
+		w = e.attribute( "w" ).toInt(&brect);
 	    if ( e.hasAttribute( "h" ) )
-		h = e.attribute( "h" ).toInt();	
+		h = e.attribute( "h" ).toInt(&brect);
 	    m_tmpGeometry = QRect(x, y, w, h);
 	}
     }
