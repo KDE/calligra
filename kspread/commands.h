@@ -28,6 +28,44 @@ class KSpreadDoc;
 class KSpreadSheet;
 class KSpreadUndoAction;
 
+/** \page commands Commands
+
+To implement undo and redo functionality, every possible action
+by the user for editing and manipulating the document is encapsulated
+in a command (based on KCommand). 
+There is one command class (which will be instantiated) for every unique 
+action. You need to reimplement the execute() and unexecute() methods 
+of KCommand.
+ 
+Each command is created from the user interface, and then added 
+to the command history (see KSpreadDoc::commandHistory) using 
+KSpreadDoc::addCommand method. Because the command is not immediately 
+executed, you also need to call the execute() method of that command.
+This is an example of typical use of command:
+ 
+\code
+KCommand* command = new RenameSheetCommand( sheet, name );
+doc->addCommand( command );
+command->execute();
+\endcode
+ 
+Then whenever the user triggers an "undo", the corresponding 
+unexecute() method of the command is called by the undo action,
+thereby reverting the previously executed command. Similar thing 
+happens for the "redo".
+
+Alphabetical list of commands:
+ 
+\li AddSheetCommand
+\li RemoveSheetCommand
+\li RenameSheetCommand
+
+
+\sa KSpreadDoc::addCommand
+\sa KoCommandHistory
+ 
+*/
+
 /**
  * Class UndoWrapperCommand is used to help migration from custom
  * KSpreadUndoAction to KCommand-based system.
