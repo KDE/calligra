@@ -113,3 +113,12 @@ a fourth value (for creating area or bar ) and a second axis
 (axis Y2 at right)
 Now it works.
 
+2000-06-24 - Montel laurent <montell@club-internet.fr>
+------------------------------------------------------
+-Add new icons created by  jp.martin <jpmartin@iroise.com>
+add hicolor icons but it's just locolor.
+I can't load lo32 icon when I used
+  setPixmap( BarIcon( icon_name,KIcon::SizeMedium));
+When I used this function, I can load just hicolor.
+
+So anybody has a idea ?

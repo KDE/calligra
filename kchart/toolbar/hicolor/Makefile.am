@@ -1,0 +1,2 @@
+KDE_ICON=AUTO
+

@@ -28,7 +28,7 @@ void kchartWizardSelectChartTypePage::addButton(QString name,
   pushbutton->resize( buttonframe->contentsRect().width(),
 		      buttonframe->contentsRect().height() );
   _typeBG->insert( pushbutton, type );
-  pushbutton->setPixmap( BarIcon( icon_name, KChartFactory::global() ) );
+  pushbutton->setPixmap( BarIcon( icon_name,KIcon::SizeMedium));// KChartFactory::global() ) );
 
   QLabel* label = new QLabel( i18n( name ), this );
   label->setGeometry( 10+pos1*xstep,
@@ -90,8 +90,8 @@ kchartWizardSelectChartTypePage::kchartWizardSelectChartTypePage( QWidget* paren
   addButton("3DAREA","3DAREA", KCHARTTYPE_3DAREA);
 
   addButton("3DLINE","3DLINE", KCHARTTYPE_3DLINE);
-  addButton("3DPIE","3DPIE", KCHARTTYPE_3DPIE);
-  addButton("2DPIE","2DPIE", KCHARTTYPE_2DPIE);
+  addButton("3DPIE","chart_pie3D", KCHARTTYPE_3DPIE);
+  addButton("2DPIE","chart_pie2D", KCHARTTYPE_2DPIE);
 
   QPushButton *current = ((QPushButton*)_typeBG->find( _chart->params()->type ));
   if (current != NULL) {
