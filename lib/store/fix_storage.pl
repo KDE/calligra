@@ -5,10 +5,15 @@ use strict;
 # A small script to convert current-style KOffice tar storages to storages
 # compatible with KOffice 1.0 and KOffice 1.1(.1)
 
+# Note to developers:
+#  Add the PID (in Perl: $$ ) to all fixed temporary directory/file names,
+#  so that this script can be run multiple times at once.
+
 # Holds the directory tree
 my @rootdir;
-my $tmpdir = "/tmp/kofficeconverter";
-# Holds the soucre/dest of the files to fix
+my $tmpdir = "/tmp/kofficeconverter$$" ;
+print "Using temporary directory... $tmpdir\n";
+# Holds the source/dest of the files to fix
 my @needFixing;
 
 # Walk the whole archive and collect information about the files
@@ -102,6 +107,15 @@ sub fixLine {
     }
     return $tmp;
   }
+# Replace pictures by images, as cliparts will never work with only this script.
+  elsif($line =~ m%\s*\<PICTURE%) {
+      $line =~ s%\<PICTURES\>%\<PIXMAPS\>% ;
+      $line =~ s%\<PICTURE\>%\<IMAGE\>% ;
+  }
+  elsif($line =~ m%\s*\</PICTURE%) {
+      $line =~ s%\</PICTURES\>%\</PIXMAPS\>% ;
+      $line =~ s%\</PICTURE\>%\</IMAGE\>% ;
+  }
   return $line;
 }
 
@@ -189,8 +203,9 @@ fixMainDocument();
 
 print "Creating the archive...\n";
 chdir($tmpdir);
-system("tar czf tmp.tgz *");
-system("mv tmp.tgz $cwd/$ARGV[1]");
+system("tar czf tmp$$.tgz *");
+chdir ($cwd);
+system("mv $tmpdir/tmp$$.tgz $ARGV[1]");
 
 print "Cleaning up...\n";
 # clean up properly
