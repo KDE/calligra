@@ -355,7 +355,6 @@ void KPresenterDoc::addCommand( KCommand * cmd )
 bool KPresenterDoc::saveChildren( KoStore* _store, const QString &_path )
 {
     int i = 0;
-    //KPObject *kpobject = 0L;
 
     if ( saveOnlyPage == -1 ) // Don't save all children into template for one page
            // ###### TODO: save objects that are on that page
@@ -374,6 +373,7 @@ bool KPresenterDoc::saveChildren( KoStore* _store, const QString &_path )
                        dynamic_cast<KPPartObject*>( oIt.current() )->getChild() == it.current() )
                   {
                       QString internURL = QString( "%1/%2" ).arg( _path ).arg( i++ );
+                      kdDebug()<<" internURL :"<<internURL<<endl;
                       if (((KoDocumentChild*)(it.current()))->document()!=0)
                           if ( !((KoDocumentChild*)(it.current()))->document()->saveToStore( _store, internURL ) )
                               return false;
@@ -465,7 +465,6 @@ QDomDocument KPresenterDoc::saveXML()
         }
         presenter.appendChild(element);
     }
-
     // Write "OBJECT" tag for every child
     QPtrListIterator<KoDocumentChild> chl( children() );
     for( ; chl.current(); ++chl ) {
@@ -491,7 +490,7 @@ QDomDocument KPresenterDoc::saveXML()
                     {
                         if ( setOIt.current()->getType() == OT_PART &&
                              dynamic_cast<KPPartObject*>( setOIt.current() )->getChild() == curr )
-                            settings.appendChild(kpobject->save( doc,offset ));
+                            settings.appendChild(setOIt.current()->save( doc,offset ));
                     }
                     embedded.appendChild(settings);
                     presenter.appendChild(embedded);
@@ -775,13 +774,10 @@ bool KPresenterDoc::loadXML( const QDomDocument &doc )
                 ch->load(object, true);  // true == uppercase
                 r = ch->geometry();
                 insertChild( ch );
-                //FIXME**************************
-#if 0
                 kppartobject = new KPPartObject( ch );
-                kppartobject->setOrig( r.x(), r.y() );
+                kppartobject->setOrig( r.x(), 0 );
                 kppartobject->setSize( r.width(), r.height() );
-                _objectList->append( kppartobject );
-#endif
+                insertObjectInPage(r.y(), kppartobject);
                 //emit sig_insertObject( ch, kppartobject );
             }
             QDomElement settings=elem.namedItem("SETTINGS").toElement();
