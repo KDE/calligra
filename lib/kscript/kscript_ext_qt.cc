@@ -2,7 +2,7 @@
 #include "kscript_ext_qwidget.h"
 #include "kscript_ext_qdialog.h"
 #include "kscript_ext_qapplication.h"
-#include "kscript_ext_qrect.h"
+// #include "kscript_ext_qrect.h"
 #include "kscript_ext_qlineedit.h"
 #include "kscript_ext_qbutton.h"
 #include "kscript_ext_qcheckbox.h"
@@ -12,6 +12,7 @@
 #include "kscript_ext_qlabel.h"
 #include "kscript_ext_qvboxlayout.h"
 #include "kscript_ext_qbuttongroup.h"
+#include "kscript_ext_qstructs.h"
 #include "kscript_value.h"
 #include "kscript_util.h"
 #include "kscript.h"
@@ -27,7 +28,7 @@ KSModule::Ptr ksCreateModule_Qt( KSInterpreter* interp )
   module->addObject( "QWidget", new KSValue( new KSClass_QWidget( module ) ) );
   module->addObject( "QDialog", new KSValue( new KSClass_QDialog( module ) ) );
   module->addObject( "QApplication", new KSValue( new KSClass_QApplication( module ) ) );
-  module->addObject( "QRect", new KSValue( new KSClass_QRect( module ) ) );
+  // module->addObject( "QRect", new KSValue( new KSClass_QRect( module ) ) );
   module->addObject( "QLineEdit", new KSValue( new KSClass_QLineEdit( module ) ) );
   module->addObject( "QButton", new KSValue( new KSClass_QButton( module ) ) );
   module->addObject( "QRadioButton", new KSValue( new KSClass_QRadioButton( module ) ) );
@@ -37,7 +38,8 @@ KSModule::Ptr ksCreateModule_Qt( KSInterpreter* interp )
   module->addObject( "QLabel", new KSValue( new KSClass_QLabel( module ) ) );
   module->addObject( "QVBoxLayout", new KSValue( new KSClass_QVBoxLayout( module ) ) );
   module->addObject( "QButtonGroup", new KSValue( new KSClass_QButtonGroup( module ) ) );
-	
+  module->addObject( "QRect", new KSValue( new KSQt::Rect( module, "QRect" ) ) );
+  
   return module;
 }
 
@@ -216,7 +218,7 @@ bool KS_Qt_Object::destructor()
 {
     if ( status() == Dead )
 	return TRUE;
-    
+
     qDebug("KS_Qt_Object::destructor");
     bool b = KSScriptObject::destructor();
 
@@ -278,13 +280,13 @@ bool KS_Qt_Object::KSQObject_destroy( KSContext& context )
   }
 
   KS_Qt_Callback::self()->disconnect( this );
-    
+
   if ( object() )
   {
       delete object();
       setObject( 0 );
   }
-  
+
   // In the constructor there is an extra reference count.
   // That is dropped upon calling "destroy".
   if ( deref() ) delete this;
@@ -458,9 +460,9 @@ bool KS_Qt_Object::checkType( KSContext& context, KSValue* v, KS_Qt_Object::Type
   case DoubleType:
     return KSUtil::checkType( context, v, KSValue::DoubleType, _fatal );
   case RectType:
-    if ( !KSUtil::checkType( context, v, KSValue::ObjectType, _fatal ) )
+    if ( !KSUtil::checkType( context, v, KSValue::StructType, _fatal ) )
       return false;
-    if ( v->objectValue()->inherits( "KSObject_QRect" ) )
+    if ( v->structValue()->getClass()->name() == "QRect" )
       return true;
     KSUtil::castingError( context, "Object", "QRect" );
     return false;

@@ -6,7 +6,6 @@
 #endif
 
 #include "kscript_ext_qpushbutton.h"
-#include "kscript_ext_qrect.h"
 #include "kscript_context.h"
 #include "kscript_util.h"
 
@@ -45,7 +44,7 @@ bool KSObject_QPushButton::ksQPushButton( KSContext& context )
     return false;
 
   QValueList<KSValue::Ptr>& args = context.value()->listValue();
-    
+
   QWidget* parent = 0;
   QString name;
 

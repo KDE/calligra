@@ -174,7 +174,7 @@ public:
   KSContext( KSContext& c, bool leftexpr = false );
   ~KSContext();
 
-  void setValue( KSValue::Ptr& p ) { m_value = p; }
+  void setValue( const KSValue::Ptr& p ) { m_value = p; }
   /**
    * Assumes that the value already has an increased refernce count. That means you
    * can pass new created values or values gotten from @ref #shareValue to this
@@ -208,6 +208,11 @@ public:
 
   void setLeftExpr( bool b ) { m_bLeftExpr = b; }
   bool leftExpr() { return m_bLeftExpr; }
+
+  /**
+   * This is a convenience function which calls scope()->module()
+   */
+  KSModule* module() { return m_scope->module(); }
 
   KSInterpreter* interpreter() { return m_scope->module()->interpreter(); }
 

@@ -2,7 +2,6 @@
 #include "kscript_context.h"
 #include "kscript_func.h"
 #include "kscript_class.h"
-#include "kscript_corba.h"
 #include "kscript.h"
 #include "kscript_ext_qt.h"
 
@@ -30,12 +29,6 @@ KSInterpreter::KSInterpreter()
   KSNamespace::Iterator end = m->nameSpace()->end();
   for(; it != end; ++it )
     m_global->insert( it.key(), it.data() );
-
-#if 0
-  // Load the CORBA module
-  m = ksCreateModule_Corba( this );
-  m_modules.insert( m->name(), m );
-#endif
 
   m_globalContext.setScope( new KSScope( m_global, 0 ) );
 }

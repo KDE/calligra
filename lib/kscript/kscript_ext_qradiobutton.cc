@@ -2,7 +2,6 @@
 // NOT YET FUNCTIONAL, ONLY FOR TESTING
 
 #include "kscript_ext_qradiobutton.h"
-#include "kscript_ext_qrect.h"
 #include "kscript_context.h"
 #include "kscript_util.h"
 #include <stdio.h>
@@ -39,7 +38,7 @@ bool KSObject_QRadioButton::ksQRadioButton( KSContext& context )
     return false;
 
   QValueList<KSValue::Ptr>& args = context.value()->listValue();
-    
+
   QWidget* parent = 0;
   QString name;
 
@@ -72,7 +71,7 @@ KSValue::Ptr KSObject_QRadioButton::member( KSContext& context, const QString& n
 {
   CHECK_LEFTEXPR( context, name );
 
-  RETURN_LEFTEXPR( "geometry", new KSValue( new KSObject_QRect( WIDGET->geometry() ) ) );
+  // RETURN_LEFTEXPR( "geometry", new KSValue( new KSObject_QRect( WIDGET->geometry() ) ) );
 
   return KSObject_QButton::member( context, name );
 }

@@ -6,7 +6,6 @@
 #endif
 
 #include "kscript_ext_qcombobox.h"
-#include "kscript_ext_qrect.h"
 #include "kscript_context.h"
 #include "kscript_util.h"
 
@@ -49,7 +48,7 @@ bool KSObject_QComboBox::ksQComboBox( KSContext& context )
     return false;
 
   QValueList<KSValue::Ptr>& args = context.value()->listValue();
-    
+
   QWidget* parent = 0;
   QString name;
 

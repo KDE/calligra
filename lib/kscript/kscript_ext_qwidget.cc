@@ -1,5 +1,5 @@
 #include "kscript_ext_qwidget.h"
-#include "kscript_ext_qrect.h"
+#include "kscript_ext_qstructs.h"
 #include "kscript_context.h"
 #include "kscript_util.h"
 
@@ -18,7 +18,6 @@ KSClass_QWidget::KSClass_QWidget( KSModule* m, const char* name ) : KSClass_QObj
 {
   nameSpace()->insert( "QWidget", new KSValue( (KSBuiltinMethod)&KSObject_QWidget::ksQWidget ) );
   nameSpace()->insert( "show", new KSValue( (KSBuiltinMethod)&KSObject_QWidget::ksQWidget_show ) );
-  // nameSpace()->insert( "destroy", new KSValue( (KSBuiltinMethod)&KSObject_QWidget::ksQWidget_delete ) );
 }
 
 KSScriptObject* KSClass_QWidget::createObject( KSClass* c )
@@ -110,7 +109,7 @@ KSValue::Ptr KSObject_QWidget::member( KSContext& context, const QString& name )
   CHECK_LEFTEXPR( context, name );
 
   RETURN_LEFTEXPR( "caption", new KSValue( WIDGET->caption() ) );
-  RETURN_LEFTEXPR( "geometry", new KSValue( new KSObject_QRect( WIDGET->geometry() ) ) );
+  RETURN_LEFTEXPR( "geometry", KSQt::Rect::convert( context, WIDGET->geometry() ) );
 
   return KS_Qt_Object::member( context, name );
 }
@@ -118,7 +117,7 @@ KSValue::Ptr KSObject_QWidget::member( KSContext& context, const QString& name )
 bool KSObject_QWidget::setMember( KSContext& context, const QString& name, const KSValue::Ptr& v )
 {
   SET_PROP( "caption", WIDGET->setCaption( v->stringValue() ), StringType )
-  SET_PROP( "geometry", WIDGET->setGeometry( *KSObject_QRect::convert( v ) ), RectType )
+  SET_PROP( "geometry", WIDGET->setGeometry( KSQt::Rect::convert( context, v ) ), RectType )
 
   return KS_Qt_Object::setMember( context, name, v );
 }

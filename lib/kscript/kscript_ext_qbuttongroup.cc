@@ -7,7 +7,6 @@
 
 #include "kscript_ext_qbuttongroup.h"
 #include "kscript_ext_qbutton.h"
-#include "kscript_ext_qrect.h"
 #include "kscript_context.h"
 #include "kscript_util.h"
 
@@ -49,7 +48,7 @@ bool KSObject_QButtonGroup::ksQButtonGroup( KSContext& context )
     return false;
 
   QValueList<KSValue::Ptr>& args = context.value()->listValue();
-    
+
   QWidget* parent = 0;
   QString name;
 
@@ -97,14 +96,14 @@ bool KSObject_QButtonGroup::ksQButtonGroup_insert( KSContext& context )
     return false;
 
   // TODO: add parameter int id = -1 and remove the checkArgumentsCount line
-  
+
   if ( !KSUtil::checkArgumentsCount( context, 1, "QButtonGroup::insert" ) )
     return false;
 
   QValueList<KSValue::Ptr>& args = context.value()->listValue();
   QButton* button = 0;
   int id = -1;
-  
+
   if ( args.count() >= 1 )
   {
       if ( !checkArguments( context, context.value(), "QButtonGroup::QButtonGroup", KS_Qt_Object::WidgetType ) )
@@ -121,7 +120,7 @@ bool KSObject_QButtonGroup::ksQButtonGroup_insert( KSContext& context )
   {
       KSUtil::tooFewArgumentsError( context, "QButtonGroup::QButtonGroup" );
       return FALSE;
-  }  
+  }
 
   if ( !checkType( context, args[0], KS_Qt_Object::WidgetType ) ) // ButtonType?
       return false;

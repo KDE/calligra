@@ -1,5 +1,4 @@
 #include "kscript_ext_qlabel.h"
-#include "kscript_ext_qrect.h"
 #include "kscript_context.h"
 #include "kscript_util.h"
 
@@ -36,10 +35,10 @@ bool KSObject_QLabel::ksQLabel( KSContext& context )
     return false;
 
   QValueList<KSValue::Ptr>& args = context.value()->listValue();
-    
+
   QWidget* parent = 0;
   QString name;
-  
+
   if ( args.count() >= 1 )
   {
       if ( !checkArguments( context, context.value(), "QLabel::QLabel", KS_Qt_Object::WidgetType ) )

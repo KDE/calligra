@@ -6,7 +6,6 @@
 #endif
 
 #include "kscript_ext_qdialog.h"
-#include "kscript_ext_qrect.h"
 #include "kscript_context.h"
 #include "kscript_util.h"
 
@@ -47,7 +46,7 @@ bool KSObject_QDialog::ksQDialog( KSContext& context )
     return false;
 
   QValueList<KSValue::Ptr>& args = context.value()->listValue();
-    
+
   QWidget* parent = 0;
   QString name;
   bool modal = FALSE;
@@ -120,7 +119,7 @@ KSValue::Ptr KSObject_QDialog::member( KSContext& context, const QString& name )
 
 bool KSObject_QDialog::setMember( KSContext& context, const QString& name, const KSValue::Ptr& v )
 {
-  SET_PROP( "geometry", WIDGET->setGeometry( *KSObject_QRect::convert( v ) ), RectType) // is reimplemented in QDialog, so we need it here, too
+    // SET_PROP( "geometry", WIDGET->setGeometry( *KSObject_QRect::convert( v ) ), RectType) // is reimplemented in QDialog, so we need it here, too
 
   return KSObject_QWidget::setMember( context, name, v );
 }

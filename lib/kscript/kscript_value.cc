@@ -620,14 +620,16 @@ QString KSValue::toString() const
       break;
     case StructType:
       {
+	KSContext c;
 	QString tmp( "{ Struct %1 { " );
 	tmp = tmp.arg( structValue()->getClass()->name() );
-	KSNamespace::ConstIterator it2 = structValue()->instanceNameSpace()->begin();
-	KSNamespace::ConstIterator end = structValue()->instanceNameSpace()->end();
-	for( ; it2 != end; ++it2 )
+	const QStringList& lst = structValue()->getClass()->vars();
+	QStringList::ConstIterator it2 = lst.begin();
+	for( ; it2 != lst.end(); ++it2 )
 	{
 	  QString s("( %1, %2 ), ");
-	  s = s.arg( it2.key() ).arg( it2.data()->toString() );
+	  KSValue::Ptr ptr = ((KSStruct*)val.ptr)->member( c, *it2 );
+	  s = s.arg( *it2 ).arg( ptr->toString() );
 	  tmp += s;
 	}
 	tmp += "} }";
@@ -718,7 +720,7 @@ QString KSValue::toString() const
 }
 
 void KSValue::suck( KSValue* v )
-{ 
+{
   if ( v->mode() != Temp )
   {
     *this = *v;
@@ -726,7 +728,7 @@ void KSValue::suck( KSValue* v )
   }
 
   clear();
-  
+
   typ = v->type();
   val = v->val;
 

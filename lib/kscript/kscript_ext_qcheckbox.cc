@@ -1,5 +1,4 @@
 #include "kscript_ext_qcheckbox.h"
-#include "kscript_ext_qrect.h"
 #include "kscript_context.h"
 #include "kscript_util.h"
 #include <stdio.h>
@@ -79,6 +78,6 @@ bool KSObject_QCheckBox::setMember( KSContext& context, const QString& name, con
 {
   SET_PROP( "text", WIDGET->setText( v->stringValue() ), StringType )
   SET_PROP( "checked", WIDGET->setChecked( v->boolValue() ), BoolType )
-      
+
   return KSObject_QButton::setMember( context, name, v );
 }

@@ -38,7 +38,7 @@ public:
   void addVariable( const QString& v ) { m_vars.append( v ); }
   void setVariables( const QStringList& l ) { m_vars = l; }
   bool hasVariable( const QString& v ) { return m_vars.contains( v ); }
-    
+
   const QString name() const { return m_name; }
 
   /**
@@ -81,28 +81,53 @@ public:
   KSNamespace* instanceNameSpace() { return &m_space; }
   const KSNamespace* instanceNameSpace() const { return &m_space; }
 
+  /**
+   * This function is used in @ref KSBuiltinStruct. We put that in here
+   * to avoid casting to KSBuiltinStruct all the time.
+   */
+  virtual void* object() { return 0; }
+  virtual const void* object() const { return 0; }
+    
 private:
   KSStructClass* m_class;
   KSNamespace m_space;
 };
 
+class KSBuiltinStruct;
+
 class KSBuiltinStructClass : public KSStructClass
 {
+    friend KSBuiltinStruct;
 public:
     KSBuiltinStructClass( KSModule* module, const QString& name );
     virtual ~KSBuiltinStructClass() { }
 
     virtual bool constructor( KSContext& c ) = 0;
-    virtual bool destructor( KSContext& c ) = 0;
-    virtual KSStruct* clone() = 0;
-    
-    typedef KSValue::Ptr (*MethodPtr)( void* instance, KSContext&, const QValueList<KSValue::Ptr>& args );
+    virtual bool destructor( void* object ) = 0;
+    virtual KSStruct* clone( KSBuiltinStruct* ) = 0;
+
+    typedef bool (*MethodPtr)( void* object, KSContext&, const QValueList<KSValue::Ptr>& args );
 
     void addMethod( const QString& name, MethodPtr func, const QCString& signature );
     bool hasMethod( const QString& ) const;
-    
+
     bool call( void* instance, KSContext& context, const QString& name );
-    
+
+protected:
+    /*
+     * It can not happen that @p name is not the name of a variable, since @ref KSBuiltinStruct
+     * checks wether @p name is really a variable of this struct before calling.
+     */
+    virtual KSValue::Ptr property( void* object, const QString& name ) = 0;
+    /**
+     * If the type does not match the property, you must give an exception.
+     * If the property is readonly just return 0 and dont give an exception.
+     *
+     * It can not happen that @p name is not the name of a variable, since @ref KSBuiltinStruct
+     * checks wether @p name is really a variable of this struct before calling.
+     */
+    virtual bool setProperty( KSContext& context, void* object, const QString& name, const KSValue::Ptr value ) = 0;
+
 private:
     struct Method
     {
@@ -118,14 +143,36 @@ class KSBuiltinStruct : public KSStruct
 {
 public:
     KSBuiltinStruct( KSStructClass* c, void* object );
+    /**
+     * Destroys the struct and the associated C++ object.
+     *
+     * @see KSBuiltinStructClass::destructor
+     */
     virtual ~KSBuiltinStruct();
 
     virtual KSValue::Ptr member( KSContext&, const QString& name );
     virtual bool setMember( KSContext&, const QString& name, const KSValue::Ptr& v );
 
+    /**
+     * This is the universal method dispatcher.
+     *
+     * @see KSBuiltinStructClass::call
+     */
     bool call( KSContext& context, const QString& name );
 
+    /**
+     * Make a real copy of the struct. That means that the C++ object
+     * is cloned, too.
+     *
+     * @see KSBuiltinStructClass::clone
+     */
     KSStruct* clone();
+
+    /**
+     * @return a pointer to the C++ object that holds the real data of this struct.
+     */
+    void* object();
+    const void* object() const;
     
 private:
     void* m_object;

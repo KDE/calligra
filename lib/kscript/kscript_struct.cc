@@ -119,6 +119,10 @@ void KSBuiltinStructClass::addMethod( const QString& name, KSBuiltinStructClass:
 
 bool KSBuiltinStructClass::call( void* object, KSContext& context, const QString& name )
 {
+    QMap<QString,Method>::Iterator it = m_methods.find( name );
+    ASSERT( it != m_methods.end() );
+    
+    return it.data().m_method( object, context, context.value()->listValue() );
 }
 
 /***************************************************
@@ -135,7 +139,7 @@ KSBuiltinStruct::KSBuiltinStruct( KSStructClass* c, void* object )
 
 KSBuiltinStruct::~KSBuiltinStruct()
 {
-    ((KSBuiltinStructClass*)getClass())->destructor( module()->interpreter()->context() );
+    ((KSBuiltinStructClass*)getClass())->destructor( m_object );
 }
 
 KSValue::Ptr KSBuiltinStruct::member( KSContext& context, const QString& name )
@@ -159,21 +163,7 @@ KSValue::Ptr KSBuiltinStruct::member( KSContext& context, const QString& name )
 
     // Is it a variable ?
     if ( getClass()->hasVariable( name ) )
-    {
-	// Call the get method
-	KSContext l( context );
-	l.setValue( new KSValue( KSValue::ListType ) );
-	    
-	call( l, name );
-
-	if ( l.exception() )
-        {
-	    context.setException( l.shareException() );
-	    return 0;
-	}
-	
-	return KSValue::Ptr( l.shareValue() );
-    }
+	return( ((KSBuiltinStructClass*)getClass())->property( m_object, name ) );
     
     QString tmp( "Unknown symbol '%1' in object of struct '%2'" );
     context.setException( new KSException( "UnknownName", tmp.arg( name ).arg( getClass()->name() ) ) );
@@ -184,25 +174,25 @@ bool KSBuiltinStruct::setMember( KSContext& context, const QString& name, const 
 {
     if ( !getClass()->vars().contains( name ) )
     {
-	QString tmp( "Unknown symbol '%1' in object of struct '%2'" );
+	QString tmp( "Unknown variable '%1' in object of struct '%2'" );
 	context.setException( new KSException( "UnknownName", tmp.arg( name ).arg( getClass()->name() ) ) );
-	return false;
-    }
-    
-    // Call the set method
-    KSContext l( context );
-    l.setValue( new KSValue( KSValue::ListType ) );
-    l.value()->listValue().append( v );
-    
-    bool b = call( l, name );
-
-    if ( l.exception() )
-    {
-	context.setException( l.shareException() );
 	return FALSE;
     }
 
-    return b;
+    bool b = ((KSBuiltinStructClass*)getClass())->setProperty( context, m_object, name, v );
+
+    // Some exception ? -> return
+    if ( !b && context.exception() )
+	return FALSE;
+    // Standard error: The variable is readonly
+    if ( !b )
+    {
+	QString tmp( "The variable '%1' in object of struct '%2' is readonly" );
+	context.setException( new KSException( "ReadOnly", tmp.arg( name ).arg( getClass()->name() ) ) );
+	return FALSE;
+    }
+	
+    return TRUE;
 }
 
 bool KSBuiltinStruct::call( KSContext& context, const QString& name )
@@ -212,5 +202,15 @@ bool KSBuiltinStruct::call( KSContext& context, const QString& name )
 
 KSStruct* KSBuiltinStruct::clone()
 {
-    return ((KSBuiltinStructClass*)getClass())->clone();
+    return ((KSBuiltinStructClass*)getClass())->clone( this );
+}
+
+void* KSBuiltinStruct::object()
+{
+    return m_object;
+}
+
+const void* KSBuiltinStruct::object() const
+{
+    return m_object;
 }

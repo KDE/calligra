@@ -2284,4 +2284,6 @@ extern bool KSEval_from( KSParseNode* node, KSContext& context )
 	    context.scope()->module()->addObject( *sit, v );
 	}
     }
+    
+    return TRUE;
 }
