@@ -41,13 +41,13 @@ struct tileDescriptor
 // when the channel has to do some internal resizing/reallocation
 // the value returned by this method is updated
 
-class ChannelData
+class KisChannelData
 {
   
  public:
   enum cSpace { ALPHA, GRAY, RGB, HSV, CMYK, LAB };
   
-  ChannelData(int _numChannels, enum cSpace _cspace);
+  KisChannelData(int _numChannels, enum cSpace _cspace);
   
   void loadViaQImage(QImage img);
   void allocateRect(QRect newRect);

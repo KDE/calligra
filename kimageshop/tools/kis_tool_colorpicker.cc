@@ -23,16 +23,16 @@
 #include "kis_view.h"
 #include "kis_cursor.h"
 
-ColorPicker::ColorPicker(kisDoc *doc, kisView *view)
+ColorPicker::ColorPicker(KisDoc *doc, KisView *view)
   : Tool(doc, view)
 {
-  m_Cursor = KImageShopCursor::pickerCursor();
+  m_Cursor = KisCursor::pickerCursor();
   m_dragging = false;
 }
 
 ColorPicker::~ColorPicker() {}
 
-KColor ColorPicker::pick(int x, int y)
+KisColor ColorPicker::pick(int x, int y)
 {
   Layer *lay = m_pDoc->getCurrentLayer();
   uint pixel = lay->getPixel(x, y);
@@ -42,7 +42,7 @@ KColor ColorPicker::pick(int x, int y)
   uchar g = *ptr++;
   uchar r = *ptr++;
   
-  return KColor((int)r, (int)g, (int)b, RGB);
+  return KisColor((int)r, (int)g, (int)b, RGB);
 }
 
 void ColorPicker::mousePress(QMouseEvent *e)

@@ -27,11 +27,11 @@
 #include "kis_tool.h"
 #include "kis_undo.h"
 
-class MoveCommand : public KImageShopCommand
+class MoveCommand : public KisCommand
 {
 public:
 
-  MoveCommand( kisDoc *_doc, int _layer, QPoint _oldpos, QPoint _newpos );
+  MoveCommand( KisDoc *_doc, int _layer, QPoint _oldpos, QPoint _newpos );
 
   virtual void execute();
   virtual void unexecute();
@@ -49,7 +49,7 @@ class MoveTool : public Tool
 {
 public:
 
-  MoveTool( kisDoc *doc );
+  MoveTool( KisDoc *doc );
   ~MoveTool();
 
   virtual QString toolName() { return QString( "MoveTool" ); }

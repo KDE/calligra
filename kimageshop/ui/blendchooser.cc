@@ -26,7 +26,7 @@
 BlendChooser::BlendChooser( QWidget *parent, const char *name )
   : QComboBox( parent, name )
 {
-  insertStringList( KImageShopConfig::blendings(), 0 );
+  insertStringList( KisConfig::blendings(), 0 );
   connect( this, SIGNAL( activated(int) ), SLOT( slotBlendChanged(int) ) );
 }
 
@@ -36,12 +36,12 @@ BlendChooser::~BlendChooser()
 }
 
 
-KImageShopConfig::Blending BlendChooser::currentBlending() const
+KisConfig::Blending BlendChooser::currentBlending() const
 {
-  return (KImageShopConfig::Blending) currentItem();
+  return (KisConfig::Blending) currentItem();
 }
 
-void BlendChooser::setCurrentBlending( KImageShopConfig::Blending blending )
+void BlendChooser::setCurrentBlending( KisConfig::Blending blending )
 {
   setCurrentItem( blending );
 }
@@ -50,7 +50,7 @@ void BlendChooser::setCurrentBlending( KImageShopConfig::Blending blending )
 
 void BlendChooser::slotBlendChanged(int item)
 {
-  emit blendingActivated( (KImageShopConfig::Blending) item );
+  emit blendingActivated( (KisConfig::Blending) item );
 }
 
 

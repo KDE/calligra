@@ -29,8 +29,8 @@ Layer::Layer(int ch)
   visible=true;
   linked=false;
   
-  dataChannels=new ChannelData(ch, ChannelData::RGB);
-  alphaChannel=new ChannelData( 1, ChannelData::ALPHA);
+  dataChannels=new KisChannelData(ch, KisChannelData::RGB);
+  alphaChannel=new KisChannelData( 1, KisChannelData::ALPHA);
 }
 
 Layer::~Layer()

@@ -27,19 +27,19 @@
 #include "kis_dlg_brush.h"
 
 
-BrushDialog::BrushDialog( QWidget* parent, const char* name,WFlags /*flags*/ )
+KisBrushDialog::KisBrushDialog( QWidget* parent, const char* name,WFlags /*flags*/ )
   : KFloatingTabDialog( parent, name )
 {
-  setCaption( i18n( "Brushes" ) );
+  setCaption( i18n( "KisBrushes" ) );
 
-  brushesTab = new BrushesWidget( this, "brushes widget" );
+  brushesTab = new KisBrushesWidget( this, "brushes widget" );
   // more tabs to come in the future
 
-  addTab( brushesTab, i18n( "Brushes" ) );
+  addTab( brushesTab, i18n( "KisBrushes" ) );
 }
 
 
-BrushDialog::~BrushDialog()
+KisBrushDialog::~KisBrushDialog()
 {
   delete brushesTab;
 }

@@ -30,12 +30,12 @@ class ColorPicker : public Tool
 {
 
  public:
-  ColorPicker(kisDoc *doc, kisView *view);
+  ColorPicker(KisDoc *doc, KisView *view);
   ~ColorPicker();
   
   QString toolName() { return QString("Color picker"); }
 
-  KColor pick(int x, int y);
+  KisColor pick(int x, int y);
 
  public slots:
   virtual void mousePress(QMouseEvent*); 

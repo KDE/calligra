@@ -26,7 +26,7 @@
 #include "kis_channeldata.h"
 #include "kis_util.h"
 
-ChannelData::ChannelData(int _numChannels, enum cSpace _cspace)
+KisChannelData::KisChannelData(int _numChannels, enum cSpace _cspace)
   : colorSpace (_cspace)
   , channels (_numChannels)
 {
@@ -35,7 +35,7 @@ ChannelData::ChannelData(int _numChannels, enum cSpace _cspace)
   tileInfo = 0;
 }
 
-void ChannelData::loadViaQImage(QImage img)
+void KisChannelData::loadViaQImage(QImage img)
 {
   qDebug("loadViaQImage %dx%d c=%d\n",img.width(),img.height(), channels);
   
@@ -56,7 +56,7 @@ void ChannelData::loadViaQImage(QImage img)
     }
 }
 
-void ChannelData::setPixel(int x, int y, uint pixel)
+void KisChannelData::setPixel(int x, int y, uint pixel)
 {
   // assumes imageRect.contains(QPoint(x,y)) for speed
 
@@ -93,7 +93,7 @@ void ChannelData::setPixel(int x, int y, uint pixel)
     }
 }
 
-uint ChannelData::getPixel(int x, int y)
+uint KisChannelData::getPixel(int x, int y)
 {
   uint pixel;
 
@@ -107,7 +107,7 @@ uint ChannelData::getPixel(int x, int y)
   int tileNo = (y / TILE_SIZE) * xTilesNo + x / TILE_SIZE;
 
   if (tileInfo[tileNo] == 0)
-    return(0); // XXX fix this return some sort of undef (or bg) via KColor
+    return(0); // XXX fix this return some sort of undef (or bg) via KisColor
   
   // get a pointer to the points tile data
   uchar *ptr = tileInfo[tileNo] + ((y % TILE_SIZE) * TILE_SIZE + x % TILE_SIZE) * channels;
@@ -135,13 +135,13 @@ uint ChannelData::getPixel(int x, int y)
   return(pixel);
 }
 
-int ChannelData::lastTileOffsetX()
+int KisChannelData::lastTileOffsetX()
 {
   int lastTileXOffset = TILE_SIZE - ( tilesRect.right() - imageRect.right());
   return((lastTileXOffset) ? lastTileXOffset :  TILE_SIZE);
 }
 
-int ChannelData::lastTileOffsetY()
+int KisChannelData::lastTileOffsetY()
 {
   int lastTileYOffset = TILE_SIZE - (tilesRect.bottom() - imageRect.bottom());
   return((lastTileYOffset) ? lastTileYOffset :  TILE_SIZE);
@@ -151,7 +151,7 @@ int ChannelData::lastTileOffsetY()
 // Resize the channel so that it includes the rectangle newRect (canvasCoords)
 // and allocates space for all the pixels in newRect
 
-void ChannelData::allocateRect(QRect newRect)
+void KisChannelData::allocateRect(QRect newRect)
 {
   if (newRect.isNull())
     return;
@@ -263,11 +263,11 @@ void ChannelData::allocateRect(QRect newRect)
       }
 }
 
-void ChannelData::dumpTileBlock()
+void KisChannelData::dumpTileBlock()
 {
   qDebug("====dumpTileBlock====");
-  kisUtil::printRect(imageRect, "imageRect");
-  kisUtil::printRect(tilesRect, "tilesRect");
+  KisUtil::printRect(imageRect, "imageRect");
+  KisUtil::printRect(tilesRect, "tilesRect");
   qDebug("xTilesNo: %d", xTilesNo);
   qDebug("yTilesNo: %d", yTilesNo);
   for(int y=0;y<yTilesNo;y++)
@@ -279,13 +279,13 @@ void ChannelData::dumpTileBlock()
   puts("");
 }
 
-void ChannelData::moveBy(int dx, int dy)
+void KisChannelData::moveBy(int dx, int dy)
 {
   imageRect.moveBy(dx, dy);
   tilesRect.moveBy(dx, dy);
 }
 
-void ChannelData::moveTo(int x, int y)
+void KisChannelData::moveTo(int x, int y)
 {
   int dx=x-imageRect.x();
   int dy=y-imageRect.y();
@@ -293,7 +293,7 @@ void ChannelData::moveTo(int x, int y)
   tilesRect.moveBy(dx,dy);
 }
 
-QRect ChannelData::tileRect(int tileNo)
+QRect KisChannelData::tileRect(int tileNo)
 {
   int xTile=tileNo%xTilesNo;
   int yTile=tileNo/xTilesNo;
@@ -303,7 +303,7 @@ QRect ChannelData::tileRect(int tileNo)
 }
 
 
-void ChannelData::rotate180()
+void KisChannelData::rotate180()
 {
   uchar *tmp, tmpC;
   uchar **newTileInfo=new uchar* [xTilesNo*yTilesNo];
@@ -338,7 +338,7 @@ void ChannelData::rotate180()
 		   (tilesRect.bottom()-imageRect.bottom()));
 }
 
-void ChannelData::rotateRight90()
+void KisChannelData::rotateRight90()
 {
   uchar **newTileInfo=new uchar* [xTilesNo*yTilesNo];
   int tmpI;
@@ -380,7 +380,7 @@ void ChannelData::rotateRight90()
 		  tilesRect.height(), tilesRect.width());
 }
 
-void ChannelData::rotateLeft90()
+void KisChannelData::rotateLeft90()
 {
   uchar **newTileInfo=new uchar* [xTilesNo*yTilesNo];
   int tmpI;
@@ -422,7 +422,7 @@ void ChannelData::rotateLeft90()
 		  tilesRect.height(), tilesRect.width());
 }
 
-void ChannelData::mirrorX()
+void KisChannelData::mirrorX()
 {
   uchar *tmp, tmpC;
   
@@ -458,7 +458,7 @@ void ChannelData::mirrorX()
 		   (tilesRect.right()-imageRect.right()) , 0);
 }
 
-void ChannelData::mirrorY()
+void KisChannelData::mirrorY()
 {
   uchar *tmp, buf[TILE_SIZE*channels];
   

@@ -22,7 +22,7 @@
 
 #include "kis_color.h"
 
-KColor::KColor()
+KisColor::KisColor()
 {
   // initialise to black
   m_native = RGB;
@@ -37,7 +37,7 @@ KColor::KColor()
   m_L = m_a = m_b = 0;
 }
 
-void KColor::rgbChanged() const
+void KisColor::rgbChanged() const
 {
   m_RGBvalid = true;
   m_HSVvalid = false;
@@ -45,7 +45,7 @@ void KColor::rgbChanged() const
   m_LABvalid = false;
 }
 
-void KColor::hsvChanged() const
+void KisColor::hsvChanged() const
 {
   m_RGBvalid = false;
   m_HSVvalid = true;
@@ -53,7 +53,7 @@ void KColor::hsvChanged() const
   m_LABvalid = false;
 }
 
-void KColor::cmykChanged() const
+void KisColor::cmykChanged() const
 {
   m_RGBvalid = false;
   m_HSVvalid = false;
@@ -61,7 +61,7 @@ void KColor::cmykChanged() const
   m_LABvalid = false;
 }
 
-void KColor::labChanged() const
+void KisColor::labChanged() const
 {
   m_RGBvalid = false;
   m_HSVvalid = false;
@@ -69,7 +69,7 @@ void KColor::labChanged() const
   m_LABvalid = true;
 }
 
-KColor::KColor(int a, int b, int c, colorModel m)
+KisColor::KisColor(int a, int b, int c, colorModel m)
 {
   switch (m)
 	{
@@ -102,7 +102,7 @@ KColor::KColor(int a, int b, int c, colorModel m)
 	}
 }
 
-KColor::KColor(int c, int m, int y, int k)
+KisColor::KisColor(int c, int m, int y, int k)
 {
   m_C = c;
   m_M = m;
@@ -112,7 +112,7 @@ KColor::KColor(int c, int m, int y, int k)
   cmykChanged();
 }
 
-KColor::KColor(const QColor& c)
+KisColor::KisColor(const QColor& c)
 {
   m_R = c.red();
   m_G = c.green();
@@ -121,7 +121,7 @@ KColor::KColor(const QColor& c)
   rgbChanged();
 }
 
-void KColor::setRGB (int R, int G, int B)
+void KisColor::setRGB (int R, int G, int B)
 {
   m_R = R;
   m_G = G;
@@ -130,7 +130,7 @@ void KColor::setRGB (int R, int G, int B)
   rgbChanged();
 }
 
-void KColor::setHSV (int H, int S, int V)
+void KisColor::setHSV (int H, int S, int V)
 {
   m_H = H;
   m_S = S;
@@ -139,7 +139,7 @@ void KColor::setHSV (int H, int S, int V)
   hsvChanged();
 }
 
-void KColor::setLAB (int L, int a, int b)
+void KisColor::setLAB (int L, int a, int b)
 {
   m_L = L;
   m_a = a;
@@ -148,7 +148,7 @@ void KColor::setLAB (int L, int a, int b)
   labChanged();
 }
 
-void KColor::setCMYK (int C, int M, int Y, int K)
+void KisColor::setCMYK (int C, int M, int Y, int K)
 {
   m_C = C;
   m_M = M;
@@ -158,7 +158,7 @@ void KColor::setCMYK (int C, int M, int Y, int K)
   cmykChanged();
 }
 
-void KColor::setColor (const QColor& c)
+void KisColor::setColor (const QColor& c)
 {
   m_R = c.red();
   m_G = c.green();
@@ -167,7 +167,7 @@ void KColor::setColor (const QColor& c)
   rgbChanged();
 }
 
-void KColor::rgb (int *R, int *G, int *B) const
+void KisColor::rgb (int *R, int *G, int *B) const
 {
   if ( !m_RGBvalid )
     calcRGB();
@@ -177,7 +177,7 @@ void KColor::rgb (int *R, int *G, int *B) const
   *B = m_B;
 }
 
-void KColor::hsv (int *H, int *S, int *V) const
+void KisColor::hsv (int *H, int *S, int *V) const
 {
   if ( !m_HSVvalid )
     calcHSV();
@@ -187,7 +187,7 @@ void KColor::hsv (int *H, int *S, int *V) const
   *V = m_V;
 }
 
-void KColor::lab (int *L, int *a, int *b) const
+void KisColor::lab (int *L, int *a, int *b) const
 {
   if ( !m_LABvalid )
     calcLAB();
@@ -197,7 +197,7 @@ void KColor::lab (int *L, int *a, int *b) const
   *b = m_b;
 }
 
-void KColor::cmyk (int *C, int *M, int *Y, int *K) const
+void KisColor::cmyk (int *C, int *M, int *Y, int *K) const
 {
   if ( !m_CMYKvalid )
     calcCMYK();
@@ -208,14 +208,14 @@ void KColor::cmyk (int *C, int *M, int *Y, int *K) const
   *K = m_K;
 }
 
-QColor KColor::color() const
+QColor KisColor::color() const
 {
   if ( !m_RGBvalid)
     calcRGB();
   return QColor(m_R, m_G, m_B);
 }
 
-void KColor::calcRGB() const
+void KisColor::calcRGB() const
 {
   if ( m_RGBvalid )
     return;
@@ -240,7 +240,7 @@ void KColor::calcRGB() const
   m_RGBvalid = true;
 }
 
-void KColor::calcHSV() const
+void KisColor::calcHSV() const
 {
   if( m_HSVvalid)
     return;
@@ -266,7 +266,7 @@ void KColor::calcHSV() const
   m_HSVvalid = true;
 }
 
-void KColor::calcLAB() const
+void KisColor::calcLAB() const
 {
   if( m_LABvalid )
     return;
@@ -292,7 +292,7 @@ void KColor::calcLAB() const
   m_LABvalid = true;
 }
 
-void KColor::calcCMYK() const
+void KisColor::calcCMYK() const
 {
   if( m_CMYKvalid)
     return;
@@ -317,9 +317,9 @@ void KColor::calcCMYK() const
   m_CMYKvalid = true;
 }
 
-void KColor::RGBtoHSV(int R, int G, int B, int *H, int *S, int *V)
+void KisColor::RGBtoHSV(int R, int G, int B, int *H, int *S, int *V)
 {
-  qDebug("KColor::RGBtoHSV");
+  qDebug("KisColor::RGBtoHSV");
   unsigned int max = R;
   unsigned int min = R;
   unsigned char maxValue = 0; // r=0, g=1, b=2
@@ -364,9 +364,9 @@ void KColor::RGBtoHSV(int R, int G, int B, int *H, int *S, int *V)
     }
 }
 
-void KColor::RGBtoLAB(int R, int G, int B, int *L, int *a, int *b)
+void KisColor::RGBtoLAB(int R, int G, int B, int *L, int *a, int *b)
 {
-  qDebug("KColor::RGBtoLAB");
+  qDebug("KisColor::RGBtoLAB");
   // Convert between RGB and CIE-Lab color spaces
   // Uses ITU-R recommendation BT.709 with D65 as reference white.
   // algorithm contributed by "Mark A. Ruzon" <ruzon@CS.Stanford.EDU>
@@ -406,9 +406,9 @@ void KColor::RGBtoLAB(int R, int G, int B, int *L, int *a, int *b)
   *b = static_cast<int>(200.0*(fY - fZ) + 0.5);
 }
 
-void KColor::RGBtoCMYK(int R, int G, int B, int *C, int *M, int *Y, int *K)
+void KisColor::RGBtoCMYK(int R, int G, int B, int *C, int *M, int *Y, int *K)
 {
-  qDebug("KColor::RGBtoCMYK");
+  qDebug("KisColor::RGBtoCMYK");
   int min = (R < G) ? R : G;
   *K = (min < B) ? min : B;
   
@@ -417,9 +417,9 @@ void KColor::RGBtoCMYK(int R, int G, int B, int *C, int *M, int *Y, int *K)
   *Y = 255-(B - *K);
 }
 
-void KColor::HSVtoRGB(int H, int S, int V, int *R, int *G, int *B)
+void KisColor::HSVtoRGB(int H, int S, int V, int *R, int *G, int *B)
 {
-  qDebug("KColor::HSVtoRGB");
+  qDebug("KisColor::HSVtoRGB");
   *R = *G = *B = V;
   
   if (S != 0 && H != -1) // chromatic
@@ -455,23 +455,23 @@ void KColor::HSVtoRGB(int H, int S, int V, int *R, int *G, int *B)
 	}
 }
 
-void KColor::HSVtoLAB(int H, int S, int V, int *L, int *a, int *b)
+void KisColor::HSVtoLAB(int H, int S, int V, int *L, int *a, int *b)
 {
   int R, G, B;
   HSVtoRGB(H, S, V, &R, &G, &B);
   RGBtoLAB(R, G, B, L, a, b);
 }
 
-void KColor::HSVtoCMYK(int H, int S, int V, int *C, int *M, int *Y, int*K)
+void KisColor::HSVtoCMYK(int H, int S, int V, int *C, int *M, int *Y, int*K)
 {
   int R, G, B;
   HSVtoRGB(H, S, V, &R, &G, &B);
   RGBtoCMYK(R, G, B, C, M, Y, K);
 }
 
-void KColor::LABtoRGB(int L, int a, int b, int *R, int *G, int *B)
+void KisColor::LABtoRGB(int L, int a, int b, int *R, int *G, int *B)
 {
-  qDebug("KColor::LABtoRGB");
+  qDebug("KisColor::LABtoRGB");
   // Convert between RGB and CIE-Lab color spaces
   // Uses ITU-R recommendation BT.709 with D65 as reference white.
   // algorithm contributed by "Mark A. Ruzon" <ruzon@CS.Stanford.EDU>
@@ -514,52 +514,52 @@ void KColor::LABtoRGB(int L, int a, int b, int *R, int *G, int *B)
   *B = BB < 0 ? 0 : BB > 255 ? 255 : BB;
 }
 
-void KColor::LABtoHSV(int L, int a, int b, int *H, int *S, int *V)
+void KisColor::LABtoHSV(int L, int a, int b, int *H, int *S, int *V)
 {
   int R, G, B;
   LABtoRGB(L, a, b, &R, &G, &B);
   RGBtoHSV(R, G, B, H, S, V);
 }
 
-void KColor::LABtoCMYK(int L, int a, int b, int *C, int *M, int *Y, int*K)
+void KisColor::LABtoCMYK(int L, int a, int b, int *C, int *M, int *Y, int*K)
 {
   int R, G, B;
   LABtoRGB(L, a, b, &R, &G, &B);
   RGBtoCMYK(R, G, B, C, M, Y, K);
 }
 
-void KColor::CMYKtoRGB(int C, int M, int Y, int K, int *R, int *G, int *B)
+void KisColor::CMYKtoRGB(int C, int M, int Y, int K, int *R, int *G, int *B)
 {
-  qDebug("KColor::CMYKtoRGB");
+  qDebug("KisColor::CMYKtoRGB");
   *R = 255-(C+K);
   *G = 255-(M+K);
   *B = 255-(Y+K);
 }
 
-void KColor::CMYKtoHSV(int C, int M, int Y, int K, int *H, int *S, int *V)
+void KisColor::CMYKtoHSV(int C, int M, int Y, int K, int *H, int *S, int *V)
 {
   int R, G, B;
   CMYKtoRGB(C, M, Y, K, &R, &G, &B);
   RGBtoHSV(R, G, B, H, S, V);
 }
 
-void KColor::CMYKtoLAB(int C, int M, int Y, int K, int *L, int *a, int *b)
+void KisColor::CMYKtoLAB(int C, int M, int Y, int K, int *L, int *a, int *b)
 {
   int R, G, B;
   CMYKtoRGB(C, M, Y, K, &R, &G, &B);
   RGBtoLAB(R, G, B, L, a, b);
 }
 
-int KColor::R() const { if( !m_RGBvalid ) calcRGB(); return m_R; }
-int KColor::G() const { if( !m_RGBvalid ) calcRGB(); return m_G; }
-int KColor::B() const { if( !m_RGBvalid ) calcRGB(); return m_B; }
-int KColor::h() const { if( !m_HSVvalid ) calcHSV(); return m_H; }
-int KColor::s() const { if( !m_HSVvalid ) calcHSV(); return m_S; }
-int KColor::v() const { if( !m_HSVvalid ) calcHSV(); return m_V; }
-int KColor::l() const { if( !m_LABvalid ) calcLAB(); return m_L; }
-int KColor::a() const { if( !m_LABvalid ) calcLAB(); return m_a; }
-int KColor::b() const { if( !m_LABvalid ) calcLAB(); return m_b; }
-int KColor::c() const { if( !m_CMYKvalid ) calcCMYK(); return m_C; }
-int KColor::m() const { if( !m_CMYKvalid ) calcCMYK(); return m_M; }
-int KColor::y() const { if( !m_CMYKvalid ) calcCMYK(); return m_Y; }
-int KColor::k() const { if( !m_CMYKvalid ) calcCMYK(); return m_K; }
+int KisColor::R() const { if( !m_RGBvalid ) calcRGB(); return m_R; }
+int KisColor::G() const { if( !m_RGBvalid ) calcRGB(); return m_G; }
+int KisColor::B() const { if( !m_RGBvalid ) calcRGB(); return m_B; }
+int KisColor::h() const { if( !m_HSVvalid ) calcHSV(); return m_H; }
+int KisColor::s() const { if( !m_HSVvalid ) calcHSV(); return m_S; }
+int KisColor::v() const { if( !m_HSVvalid ) calcHSV(); return m_V; }
+int KisColor::l() const { if( !m_LABvalid ) calcLAB(); return m_L; }
+int KisColor::a() const { if( !m_LABvalid ) calcLAB(); return m_a; }
+int KisColor::b() const { if( !m_LABvalid ) calcLAB(); return m_b; }
+int KisColor::c() const { if( !m_CMYKvalid ) calcCMYK(); return m_C; }
+int KisColor::m() const { if( !m_CMYKvalid ) calcCMYK(); return m_M; }
+int KisColor::y() const { if( !m_CMYKvalid ) calcCMYK(); return m_Y; }
+int KisColor::k() const { if( !m_CMYKvalid ) calcCMYK(); return m_K; }

@@ -25,20 +25,20 @@
 
 #include "kfloatingtabdialog.h"
 
-class BrushesWidget;
+class KisBrushesWidget;
 
-class BrushDialog : public KFloatingTabDialog
+class KisBrushDialog : public KFloatingTabDialog
 {
   Q_OBJECT
 
 public:
-  BrushDialog( QWidget* parent=0, const char* name=0, WFlags flags=0 );
-  ~BrushDialog();
+  KisBrushDialog( QWidget* parent=0, const char* name=0, WFlags flags=0 );
+  ~KisBrushDialog();
   
-  const BrushesWidget *brushChooser() 	const 	{ return brushesTab; }
+  const KisBrushesWidget *brushChooser() 	const 	{ return brushesTab; }
   
 private:
-  BrushesWidget *brushesTab;
+  KisBrushesWidget *brushesTab;
 
 };
 

@@ -25,13 +25,13 @@
  * 2D/3D vector class
  */
 
-class KVector
+class KisVector
 {
  public:
-  KVector();
-  KVector(double x, double y, double z = 0);
-  KVector(int x, int y, int z = 0);
-  KVector(long x, long y, long z = 0);
+  KisVector();
+  KisVector(double x, double y, double z = 0);
+  KisVector(int x, int y, int z = 0);
+  KisVector(long x, long y, long z = 0);
 
   bool isNull()	const;
 
@@ -44,33 +44,33 @@ class KVector
   void   setY(double);
   void   setZ(double);
 
-  KVector &normalize();
-  KVector &crossProduct(const KVector &);
-  double  dotProduct(const KVector &) const;
+  KisVector &normalize();
+  KisVector &crossProduct(const KisVector &);
+  double  dotProduct(const KisVector &) const;
 
-  KVector &operator+=(const KVector &);
-  KVector &operator-=(const KVector &);
-  KVector &operator*=(int);
-  KVector &operator*=(long);
-  KVector &operator*=(double);
-  KVector &operator/=(int);
-  KVector &operator/=(long);
-  KVector &operator/=(double);
+  KisVector &operator+=(const KisVector &);
+  KisVector &operator-=(const KisVector &);
+  KisVector &operator*=(int);
+  KisVector &operator*=(long);
+  KisVector &operator*=(double);
+  KisVector &operator/=(int);
+  KisVector &operator/=(long);
+  KisVector &operator/=(double);
 
-  friend inline bool operator==(const KVector &, const KVector &);
-  friend inline bool operator!=(const KVector &, const KVector &);
-  friend inline KVector operator+(const KVector &, const KVector &);
-  friend inline KVector operator-(const KVector &, const KVector &);
-  friend inline KVector operator*(const KVector &, int);
-  friend inline KVector operator*(int, const KVector &);
-  friend inline KVector operator*(const KVector &, long);
-  friend inline KVector operator*(long, const KVector &);
-  friend inline KVector operator*(const KVector &, double);
-  friend inline KVector operator*(double, const KVector &);
-  friend inline KVector operator-(const KVector &);
-  friend inline KVector operator/(const KVector &, int);
-  friend inline KVector operator/(const KVector &, long);
-  friend inline KVector operator/(const KVector &, double);
+  friend inline bool operator==(const KisVector &, const KisVector &);
+  friend inline bool operator!=(const KisVector &, const KisVector &);
+  friend inline KisVector operator+(const KisVector &, const KisVector &);
+  friend inline KisVector operator-(const KisVector &, const KisVector &);
+  friend inline KisVector operator*(const KisVector &, int);
+  friend inline KisVector operator*(int, const KisVector &);
+  friend inline KisVector operator*(const KisVector &, long);
+  friend inline KisVector operator*(long, const KisVector &);
+  friend inline KisVector operator*(const KisVector &, double);
+  friend inline KisVector operator*(double, const KisVector &);
+  friend inline KisVector operator-(const KisVector &);
+  friend inline KisVector operator/(const KisVector &, int);
+  friend inline KisVector operator/(const KisVector &, long);
+  friend inline KisVector operator/(const KisVector &, double);
    
  private:
   double m_x;
@@ -78,94 +78,94 @@ class KVector
   double m_z;
 };
 
-inline KVector::KVector()
+inline KisVector::KisVector()
 { m_x=0; m_y=0; m_z=0; }
 
-inline KVector::KVector(double x, double y, double z)
+inline KisVector::KisVector(double x, double y, double z)
 { m_x=x; m_y=y; m_z=z; }
 
-inline KVector::KVector(int x, int y, int z)
+inline KisVector::KisVector(int x, int y, int z)
 { m_x=static_cast<double>(x); m_y=static_cast<double>(y); m_z=static_cast<double>(z); }
 
-inline KVector::KVector(long x, long y, long z)
+inline KisVector::KisVector(long x, long y, long z)
 { m_x=static_cast<double>(x); m_y=static_cast<double>(y); m_z=static_cast<double>(z); }
 
-inline bool KVector::isNull() const
+inline bool KisVector::isNull() const
 { return m_x == 0 && m_y == 0 && m_z == 0; }
 
-inline double KVector::length() const
+inline double KisVector::length() const
 {  return (sqrt(m_x*m_x + m_y*m_y + m_z*m_z)); }
 
-inline double KVector::dotProduct(const KVector &v) const
+inline double KisVector::dotProduct(const KisVector &v) const
 { return m_x*v.m_x + m_y*v.m_y + m_z*v.m_z; }
 
-inline double KVector::x() const
+inline double KisVector::x() const
 { return m_x; }
 
-inline double KVector::y() const
+inline double KisVector::y() const
 { return m_y; }
 
-inline double KVector::z() const
+inline double KisVector::z() const
 { return m_z; }
 
-inline void KVector::setX(double x)
+inline void KisVector::setX(double x)
 { m_x=x; }
 
-inline void KVector::setY(double y)
+inline void KisVector::setY(double y)
 { m_y=y; }
 
-inline void KVector::setZ(double z)
+inline void KisVector::setZ(double z)
 { m_z=z; }
 
-inline KVector &KVector::operator+=(const KVector &v)
+inline KisVector &KisVector::operator+=(const KisVector &v)
 { m_x+=v.m_x; m_y+=v.m_y; m_z+=v.m_z; return *this; }
 
-inline KVector &KVector::operator-=(const KVector &v)
+inline KisVector &KisVector::operator-=(const KisVector &v)
 { m_x-=v.m_x; m_y-=v.m_y; m_z-=v.m_z; return *this; }
 
-inline KVector &KVector::operator*=(int c)
+inline KisVector &KisVector::operator*=(int c)
 { m_x*=c; m_y*=c; m_z*=c; return *this; }
 
-inline KVector &KVector::operator*=(long c)
+inline KisVector &KisVector::operator*=(long c)
 { m_x*=c; m_y*=c; m_z*=c; return *this; }
 
-inline KVector &KVector::operator*=(double c)
+inline KisVector &KisVector::operator*=(double c)
 { m_x*=c; m_y*=c; m_z*=c; return *this; }
 
-inline bool operator==(const KVector &v1, const KVector &v2)
+inline bool operator==(const KisVector &v1, const KisVector &v2)
 { return v1.m_x == v2.m_x && v1.m_y == v2.m_y && v1.m_z == v2.m_z; }
 
-inline bool operator!=(const KVector &v1, const KVector &v2)
+inline bool operator!=(const KisVector &v1, const KisVector &v2)
 { return v1.m_x != v2.m_x || v1.m_y != v2.m_y || v1.m_z != v2.m_z; }
 
-inline KVector operator+(const KVector &v1, const KVector &v2)
-{ return KVector(v1.m_x+v2.m_x, v1.m_y+v2.m_y, v1.m_z+v2.m_z); }
+inline KisVector operator+(const KisVector &v1, const KisVector &v2)
+{ return KisVector(v1.m_x+v2.m_x, v1.m_y+v2.m_y, v1.m_z+v2.m_z); }
 
-inline KVector operator-(const KVector &v1, const KVector &v2)
-{ return KVector(v1.m_x-v2.m_x, v1.m_y-v2.m_y, v1.m_z-v2.m_z); }
+inline KisVector operator-(const KisVector &v1, const KisVector &v2)
+{ return KisVector(v1.m_x-v2.m_x, v1.m_y-v2.m_y, v1.m_z-v2.m_z); }
 
-inline KVector operator*(const KVector &v, int c)
-{ return KVector((v.m_x*c), (v.m_y*c), (v.m_z*c)); }
+inline KisVector operator*(const KisVector &v, int c)
+{ return KisVector((v.m_x*c), (v.m_y*c), (v.m_z*c)); }
 
-inline KVector operator*(int c, const KVector &v)
-{ return KVector((v.m_x*c), (v.m_y*c), (v.m_z*c)); }
+inline KisVector operator*(int c, const KisVector &v)
+{ return KisVector((v.m_x*c), (v.m_y*c), (v.m_z*c)); }
 
-inline KVector operator*(const KVector &v, long c)
-{ return KVector((v.m_x*c), (v.m_y*c), (v.m_z*c)); }
+inline KisVector operator*(const KisVector &v, long c)
+{ return KisVector((v.m_x*c), (v.m_y*c), (v.m_z*c)); }
 
-inline KVector operator*(long c, const KVector &v)
-{ return KVector((v.m_x*c), (v.m_y*c), (v.m_z*c)); }
+inline KisVector operator*(long c, const KisVector &v)
+{ return KisVector((v.m_x*c), (v.m_y*c), (v.m_z*c)); }
 
-inline KVector operator*(const KVector &v, double c)
-{ return KVector(v.m_x*c, v.m_y*c, v.m_z*c); }
+inline KisVector operator*(const KisVector &v, double c)
+{ return KisVector(v.m_x*c, v.m_y*c, v.m_z*c); }
 
-inline KVector operator*(double c, const KVector &v)
-{ return KVector(v.m_x*c, v.m_y*c, v.m_z*c); }
+inline KisVector operator*(double c, const KisVector &v)
+{ return KisVector(v.m_x*c, v.m_y*c, v.m_z*c); }
 
-inline KVector operator-(const KVector &v)
-{ return KVector(-v.m_x, -v.m_y, -v.m_z); }
+inline KisVector operator-(const KisVector &v)
+{ return KisVector(-v.m_x, -v.m_y, -v.m_z); }
 
-inline KVector &KVector::operator/=(int c)
+inline KisVector &KisVector::operator/=(int c)
 {
   if (!c == 0)
     {
@@ -176,7 +176,7 @@ inline KVector &KVector::operator/=(int c)
     return *this;
 }
 
-inline KVector &KVector::operator/=(long c)
+inline KisVector &KisVector::operator/=(long c)
 {
   if (!c == 0)
     {
@@ -187,7 +187,7 @@ inline KVector &KVector::operator/=(long c)
     return *this;
 }
 
-inline KVector &KVector::operator/=(double c)
+inline KisVector &KisVector::operator/=(double c)
 {
   if (!c == 0)
     {

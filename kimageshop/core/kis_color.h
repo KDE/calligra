@@ -25,14 +25,14 @@
 
 enum colorModel { INDEXED, RGB, HSV, LAB, CMYK };
 
-class KColor
+class KisColor
 {
  public:
 
-  KColor();
-  KColor(int a, int b, int c,  colorModel m = RGB);
-  KColor(int c, int m, int y,  int k);
-  KColor(const QColor&);
+  KisColor();
+  KisColor(int a, int b, int c,  colorModel m = RGB);
+  KisColor(int c, int m, int y,  int k);
+  KisColor(const QColor&);
 
   void setRGB (int R, int G, int B);
   void setHSV (int H, int S, int V);
@@ -78,23 +78,23 @@ class KColor
   static void CMYKtoHSV(int C, int M, int Y, int K, int *H, int *S, int *V);
   static void CMYKtoLAB(int C, int M, int Y, int K, int *L, int *a, int *b);
 
-  static const KColor black();
-  static const KColor white();
-  static const KColor gray();
-  static const KColor lightGray();
-  static const KColor darkGray();
-  static const KColor red();
-  static const KColor darkRed();
-  static const KColor green();
-  static const KColor darkGreen();
-  static const KColor blue();
-  static const KColor darkBlue();
-  static const KColor cyan();
-  static const KColor darkCyan();
-  static const KColor magenta();
-  static const KColor darkMagenta();
-  static const KColor yellow();
-  static const KColor darkYellow();
+  static const KisColor black();
+  static const KisColor white();
+  static const KisColor gray();
+  static const KisColor lightGray();
+  static const KisColor darkGray();
+  static const KisColor red();
+  static const KisColor darkRed();
+  static const KisColor green();
+  static const KisColor darkGreen();
+  static const KisColor blue();
+  static const KisColor darkBlue();
+  static const KisColor cyan();
+  static const KisColor darkCyan();
+  static const KisColor magenta();
+  static const KisColor darkMagenta();
+  static const KisColor yellow();
+  static const KisColor darkYellow();
 
  protected:
   void calcRGB() const;
@@ -110,7 +110,7 @@ class KColor
  private:
   /*
    * Mutable to make it possible for const objects to transform the native cModel
-   * in functions like KColor::rgb(...) to the requested.
+   * in functions like KisColor::rgb(...) to the requested.
    */
   mutable int m_R, m_G, m_B;      // RGB
   mutable int m_C, m_M, m_Y, m_K; // CMYK
@@ -125,55 +125,55 @@ class KColor
   colorModel m_native; 
 };
 
-inline const KColor KColor::white()
-{ return KColor(255,255,255,RGB); }
+inline const KisColor KisColor::white()
+{ return KisColor(255,255,255,RGB); }
 
-inline const KColor KColor::black()
-{ return KColor(0,0,0,RGB); }
+inline const KisColor KisColor::black()
+{ return KisColor(0,0,0,RGB); }
 
-inline const KColor KColor::gray()
-{ return KColor(160,160,164,RGB); }
+inline const KisColor KisColor::gray()
+{ return KisColor(160,160,164,RGB); }
 
-inline const KColor KColor::lightGray()
-{ return KColor(192,192,192,RGB); }
+inline const KisColor KisColor::lightGray()
+{ return KisColor(192,192,192,RGB); }
 
-inline const KColor KColor::darkGray()
-{ return KColor(128,128,128,RGB); }
+inline const KisColor KisColor::darkGray()
+{ return KisColor(128,128,128,RGB); }
 
-inline const KColor KColor::red()
-{ return KColor(255,0,0,RGB); }
+inline const KisColor KisColor::red()
+{ return KisColor(255,0,0,RGB); }
 
-inline const KColor KColor::darkRed()
-{ return KColor(128,0,0,RGB); }
+inline const KisColor KisColor::darkRed()
+{ return KisColor(128,0,0,RGB); }
 
-inline const KColor KColor::green()
-{ return KColor(0,255,0,RGB); }
+inline const KisColor KisColor::green()
+{ return KisColor(0,255,0,RGB); }
 
-inline const KColor KColor::darkGreen()
-{ return KColor(0,128,0,RGB); }
+inline const KisColor KisColor::darkGreen()
+{ return KisColor(0,128,0,RGB); }
 
-inline const KColor KColor::blue()
-{ return KColor(0,0,255,RGB); }
+inline const KisColor KisColor::blue()
+{ return KisColor(0,0,255,RGB); }
 
-inline const KColor KColor::darkBlue()
-{ return KColor(0,0,128,RGB); }
+inline const KisColor KisColor::darkBlue()
+{ return KisColor(0,0,128,RGB); }
 
-inline const KColor KColor::cyan()
-{ return KColor(0,255,255,RGB); }
+inline const KisColor KisColor::cyan()
+{ return KisColor(0,255,255,RGB); }
 
-inline const KColor KColor::darkCyan()
-{ return KColor(0,128,128,RGB); }
+inline const KisColor KisColor::darkCyan()
+{ return KisColor(0,128,128,RGB); }
 
-inline const KColor KColor::magenta()
-{ return KColor(255,0,255,RGB); }
+inline const KisColor KisColor::magenta()
+{ return KisColor(255,0,255,RGB); }
 
-inline const KColor KColor::darkMagenta()
-{ return KColor(128,0,128,RGB); }
+inline const KisColor KisColor::darkMagenta()
+{ return KisColor(128,0,128,RGB); }
 
-inline const KColor KColor::yellow()
-{ return KColor(255,255,0,RGB); }
+inline const KisColor KisColor::yellow()
+{ return KisColor(255,255,0,RGB); }
 
-inline const KColor KColor::darkYellow()
-{ return KColor(128,128,0,RGB); }
+inline const KisColor KisColor::darkYellow()
+{ return KisColor(128,128,0,RGB); }
 
 #endif

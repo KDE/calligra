@@ -32,33 +32,33 @@
 #include "kis_doc.h"
 #include "kis_factory.h"
 
-KImageShopShell::KImageShopShell( QWidget* parent, const char* name )
+KisShell::KisShell( QWidget* parent, const char* name )
     : KoMainWindow( parent, name )
 {
   resize(800, 600);
 }
 
-KImageShopShell::~KImageShopShell()
+KisShell::~KisShell()
 {
 }
 
-QString KImageShopShell::configFile() const
+QString KisShell::configFile() const
 {
-    return readConfigFile( locate("kis", "kimageshop_shell.rc", KImageShopFactory::global()));
+    return readConfigFile( locate("kis", "kimageshop_shell.rc", KisFactory::global()));
 }
 
-KoDocument* KImageShopShell::createDoc()
+KoDocument* KisShell::createDoc()
 {
-    return new kisDoc;
+    return new KisDoc;
 }
 
-void KImageShopShell::slotFileNew()
+void KisShell::slotFileNew()
 {
-  kisDoc* doc = (kisDoc*)document();
+  KisDoc* doc = (KisDoc*)document();
 
   if ( !doc )
     {
-      doc = (kisDoc*)createDoc();
+      doc = (KisDoc*)createDoc();
       if ( !doc->initDoc() )
 	{
 	  delete doc;
@@ -72,7 +72,7 @@ void KImageShopShell::slotFileNew()
     }
 }
 
-void KImageShopShell::slotFileOpen()
+void KisShell::slotFileOpen()
 {
   QString filter = "*.kis|KImageShop picture\n" + KImageIO::pattern( KImageIO::Reading );
 
@@ -81,7 +81,7 @@ void KImageShopShell::slotFileOpen()
   if ( file.isNull() )
     return;
 
-  kisDoc* doc = (kisDoc*)document();
+  KisDoc* doc = (KisDoc*)document();
   
   if (!doc->loadImage(file))
     {

@@ -36,12 +36,12 @@ public:
   BlendChooser( QWidget *parent=0, const char *name=0 );
   ~BlendChooser();
 
-  KImageShopConfig::Blending currentBlending()	const;
-  void 			     setCurrentBlending( KImageShopConfig::Blending );
+  KisConfig::Blending currentBlending()	const;
+  void 			     setCurrentBlending( KisConfig::Blending );
 
 
 signals:
-  void 			     blendingActivated( KImageShopConfig::Blending );
+  void 			     blendingActivated( KisConfig::Blending );
 
 
 private slots:

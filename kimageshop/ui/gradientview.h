@@ -7,7 +7,7 @@
 #include <qpixmap.h>
 #include <qsize.h>
 
-//#warning "TODO: convert QColor -> KColor"
+//#warning "TODO: convert QColor -> KisColor"
 // Why? The Gradients are RGB only, so use QColor.
 struct GradientItem
 {

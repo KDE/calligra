@@ -25,14 +25,14 @@
 
 #include "kis_tool.h"
 
-class kisDoc;
+class KisDoc;
 class Gradient;
 
 class GradientTool : public Tool
 {
 public:
 
-  GradientTool( kisDoc *_doc, Gradient *_gradient );
+  GradientTool( KisDoc *_doc, Gradient *_gradient );
   ~GradientTool();
 
   virtual QString toolName() { return QString("GradientTool"); }

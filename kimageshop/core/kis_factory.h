@@ -25,12 +25,12 @@
 
 class KInstance;
 
-class KImageShopFactory : public KLibFactory
+class KisFactory : public KLibFactory
 {
     Q_OBJECT
 public:
-    KImageShopFactory( QObject* parent = 0, const char* name = 0 );
-    ~KImageShopFactory();
+    KisFactory( QObject* parent = 0, const char* name = 0 );
+    ~KisFactory();
 
     virtual QObject* create( QObject* parent = 0, const char* name = 0, const char* classname = "QObject", const QStringList &args = QStringList() );
 

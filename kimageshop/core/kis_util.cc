@@ -21,39 +21,39 @@
 
 #include "kis_util.h"
 
-struct timeval kisUtil::tv1, kisUtil::tv2;
-struct timezone kisUtil::tz;
+struct timeval KisUtil::tv1, KisUtil::tv2;
+struct timezone KisUtil::tz;
 
-kisUtil::kisUtil() {}
+KisUtil::KisUtil() {}
 
-void kisUtil::printRect( const QRect& r, const QString& name )
+void KisUtil::printRect( const QRect& r, const QString& name )
 {
   qDebug("%s:: l:%d t:%d r:%d b:%d w:%d h:%d", name.latin1(), r.left(), r.top(), r.right(),
 	 r.bottom(), r.width(), r.height());
 }
 
-void kisUtil::printPoint( const QPoint& p, const QString& name )
+void KisUtil::printPoint( const QPoint& p, const QString& name )
 {
   qDebug("%s:: x:%d y:%d", name.latin1(), p.x(), p.y()); 
 }
 
-void kisUtil::startTimer()
+void KisUtil::startTimer()
 {
   gettimeofday( &tv1, &tz );
 }
 
-void kisUtil::stopTimer( const QString& text )
+void KisUtil::stopTimer( const QString& text )
 {
   gettimeofday( &tv2, &tz );
   float time = float( tv2.tv_sec - tv1.tv_sec ) + ( tv2.tv_usec - tv1.tv_usec ) / 1000000.;
   qDebug( "%s took %5.6f seconds\n", text.latin1(), time );
 }
 
-void kisUtil::enlargeRectToContainPoint( QRect& r, QPoint p )
+void KisUtil::enlargeRectToContainPoint( QRect& r, QPoint p )
 {
   if (r.contains(p))
     {
-      qDebug("kisUtil::enlargeRectToContainPoint: point already contained\n");	
+      qDebug("KisUtil::enlargeRectToContainPoint: point already contained\n");	
       return;
     }
   if (p.x()<r.left())   r.setLeft(p.x());
@@ -64,7 +64,7 @@ void kisUtil::enlargeRectToContainPoint( QRect& r, QPoint p )
 
 // Find a rectangle which encloses r whose coordinates are divisible
 // by TILE_SIZE (ie no remainder)
-QRect kisUtil::findTileExtents( QRect r )
+QRect KisUtil::findTileExtents( QRect r )
 {
   r.setLeft(((r.left()+BIGNUM)/TILE_SIZE)*TILE_SIZE-BIGNUM);
   r.setTop(((r.top()+BIGNUM)  /TILE_SIZE)*TILE_SIZE-BIGNUM);

@@ -32,10 +32,10 @@
 #include "kis_layer.h"
 #include "kis_image.h"
 
-class Brush;
+class KisBrush;
 class NewDialog;
 
-class kisDoc : public KoDocument
+class KisDoc : public KoDocument
 {
     Q_OBJECT
 
@@ -43,8 +43,8 @@ public:
     enum {RGB=0, CMYK, LAB, GREYSCALE } ColorModel;
     enum {BACKGROUND=0, FOREGROUND, WHITE, TRANSPARENT } BgColor;
 
-    kisDoc( KoDocument* parent = 0, const char* name = 0 );
-    ~kisDoc();
+    KisDoc( KoDocument* parent = 0, const char* name = 0 );
+    ~KisDoc();
 
     virtual bool loadFromURL( const QString& );
     
@@ -98,15 +98,15 @@ public:
     void mergeLinkedLayers();
     void mergeLayers(QList<Layer>);
 
-    kisImage* newImage(const QString& _name, int w, int h, int colorModel = RGB, int backgroundMode = WHITE);
-    bool saveImage( const QString& file, kisImage *img );
+    KisImage* newImage(const QString& _name, int w, int h, int colorModel = RGB, int backgroundMode = WHITE);
+    bool saveImage( const QString& file, KisImage *img );
     bool saveCurrentImage( const QString& file );
     bool loadImage( const QString& file );
-    void removeImage( kisImage *img );
+    void removeImage( KisImage *img );
     
     QString currentImage();
 
-    void setCurrentImage(kisImage *img);
+    void setCurrentImage(KisImage *img);
     void setCurrentImage(const QString& _name);
 
     QStringList images();
@@ -135,8 +135,8 @@ protected:
   KoCommandHistory m_commands;
 
 private:
-  QList <kisImage> m_Images;
-  kisImage *m_pCurrent;
+  QList <KisImage> m_Images;
+  KisImage *m_pCurrent;
   NewDialog       *m_pNewDialog;
 };
 

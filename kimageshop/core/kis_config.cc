@@ -29,31 +29,31 @@
 
 
 // define static attributes and members
-bool 			KImageShopConfig::doInit 	= true;
-KConfig *		KImageShopConfig::kc 		= 0L;
-QList<KImageShopConfig>	KImageShopConfig::instanceList;
-QFont 			KImageShopConfig::m_smallFont;
-QFont 			KImageShopConfig::m_tinyFont;
-QStringList 		KImageShopConfig::m_blendList;
+bool 			KisConfig::doInit 	= true;
+KConfig *		KisConfig::kc 		= 0L;
+QList<KisConfig>	KisConfig::instanceList;
+QFont 			KisConfig::m_smallFont;
+QFont 			KisConfig::m_tinyFont;
+QStringList 		KisConfig::m_blendList;
 
 
-KImageShopConfig * KImageShopConfig::getNewConfig()
+KisConfig * KisConfig::getNewConfig()
 {
   if ( doInit ) {
-    return ( new KImageShopConfig() );
+    return ( new KisConfig() );
   }
 
   else {
     if ( instanceList.count() == 0 ) {
-      return ( new KImageShopConfig() );
+      return ( new KisConfig() );
     }
 
-    return ( new KImageShopConfig( *instanceList.first() ) );
+    return ( new KisConfig( *instanceList.first() ) );
   }
 }
 
 
-KImageShopConfig::KImageShopConfig() : QObject( 0L, "kimageshop config" )
+KisConfig::KisConfig() : QObject( 0L, "kimageshop config" )
 {
   // load and init global settings only once
   if ( doInit ) {
@@ -67,7 +67,7 @@ KImageShopConfig::KImageShopConfig() : QObject( 0L, "kimageshop config" )
 }
 
 
-KImageShopConfig::KImageShopConfig( const KImageShopConfig& /*config*/ )
+KisConfig::KisConfig( const KisConfig& /*config*/ )
   : QObject()
 {
   instanceList.append( this );
@@ -76,7 +76,7 @@ KImageShopConfig::KImageShopConfig( const KImageShopConfig& /*config*/ )
 }
 
 
-KImageShopConfig::~KImageShopConfig()
+KisConfig::~KisConfig()
 {
   instanceList.remove( this );
 
@@ -88,7 +88,7 @@ KImageShopConfig::~KImageShopConfig()
 }
 
 
-void KImageShopConfig::initStatic()
+void KisConfig::initStatic()
 {
   kc = KGlobal::config();
 
@@ -118,7 +118,7 @@ void KImageShopConfig::initStatic()
 
 
 // a convenience method - load all document specific configuration
-void KImageShopConfig::loadConfig()
+void KisConfig::loadConfig()
 {
   loadDialogSettings();
   // ...
@@ -126,16 +126,16 @@ void KImageShopConfig::loadConfig()
 
 
 // save all document specific configuration
-void KImageShopConfig::saveConfig()
+void KisConfig::saveConfig()
 {
   saveDialogSettings();
   // ...
 }
 
 
-void KImageShopConfig::saveAll()
+void KisConfig::saveAll()
 {
-  KImageShopConfig *config = 0L;
+  KisConfig *config = 0L;
   for ( config = instanceList.first(); config; config = instanceList.next() ) {
     config->saveConfig();
   }
@@ -144,7 +144,7 @@ void KImageShopConfig::saveAll()
 }
 
 
-void KImageShopConfig::loadGlobalSettings()
+void KisConfig::loadGlobalSettings()
 {
   // read some fonts
   QFont font = KGlobal::generalFont();
@@ -159,7 +159,7 @@ void KImageShopConfig::loadGlobalSettings()
 }
 
 
-void KImageShopConfig::saveGlobalSettings()
+void KisConfig::saveGlobalSettings()
 {
   kc->setGroup( "General Settings" );
 
@@ -170,25 +170,25 @@ void KImageShopConfig::saveGlobalSettings()
 }
 
 
-void KImageShopConfig::loadDialogSettings()
+void KisConfig::loadDialogSettings()
 {
   //m_pLayerDlgConfig->loadConfig( kc );
   // ...
 }
 
 
-void KImageShopConfig::saveDialogSettings()
+void KisConfig::saveDialogSettings()
 {
   //m_pLayerDlgConfig->saveConfig( kc );
   // ...
 }
 
 
-const QStringList& KImageShopConfig::blendings()
+const QStringList& KisConfig::blendings()
 {
   if ( doInit )
-    KImageShopConfig::initStatic();
-  return KImageShopConfig::m_blendList;
+    KisConfig::initStatic();
+  return KisConfig::m_blendList;
 }
 
 // The base configuration class

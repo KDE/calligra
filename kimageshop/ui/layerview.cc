@@ -47,13 +47,13 @@ LayerView::LayerView( QWidget* _parent, const char* _name )
   init( 0 );
 }
 
-LayerView::LayerView( kisDoc* doc, QWidget* _parent, const char* _name )
+LayerView::LayerView( KisDoc* doc, QWidget* _parent, const char* _name )
   : QTableView( _parent, _name )
 {
   init( doc );
 }
 
-void LayerView::init( kisDoc* doc )
+void LayerView::init( KisDoc* doc )
 {
   setTableFlags( Tbl_autoHScrollBar | Tbl_autoVScrollBar );
 
@@ -266,7 +266,7 @@ void LayerView::slotAddLayer()
 {
   cout << "LayerView::slotAddLayer()" << endl;
 
-  QString image = locate( "kis_images", "cam9b.jpg", KImageShopFactory::global() );	
+  QString image = locate( "kis_images", "cam9b.jpg", KisFactory::global() );	
   m_doc->addRGBLayer( image );
   m_doc->setLayerOpacity( 255 );
 

@@ -53,8 +53,8 @@ class ColorDialog : public KFloatingDialog
   ~ColorDialog();
 
  signals:
-  void fgColorChanged(const KColor&);
-  void bgColorChanged(const KColor&);
+  void fgColorChanged(const KisColor&);
+  void bgColorChanged(const KisColor&);
 
  public slots:
   void slotFGColorChanged(const QColor&);
@@ -105,7 +105,7 @@ class ColorChooserWidget : public QWidget
   LABWidget        *m_pLABWidget;
   GreyWidget       *m_pGreyWidget;
   KDualColorButton *m_pColorButton;
-  KColor            m_fg, m_bg;
+  KisColor            m_fg, m_bg;
 };
 
 class RGBWidget : public QWidget

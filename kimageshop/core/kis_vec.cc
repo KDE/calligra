@@ -20,7 +20,7 @@
 
 #include "kis_vec.h"
 
-KVector& KVector::normalize()
+KisVector& KisVector::normalize()
 {
   double length, ilength;
   
@@ -37,7 +37,7 @@ KVector& KVector::normalize()
   return *this;
 }
 
-KVector& KVector::crossProduct(const KVector &v)
+KisVector& KisVector::crossProduct(const KisVector &v)
 {
   double x,y,z;
   

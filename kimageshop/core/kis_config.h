@@ -31,7 +31,7 @@ class QFont;
 class KConfig;
 
 class LayerDlgConfig;
-class BrushDlgConfig;
+class KisBrushDlgConfig;
 class ColorDlgConfig;
 class GradientDlgConfig;
 class GradientEditorConfig;
@@ -55,7 +55,7 @@ class GradientEditorConfig;
  * @author Carsten Pfeiffer <pfeiffer@kde.org>
  * @version $Id$
  */
-class KImageShopConfig : public QObject
+class KisConfig : public QObject
 {
   Q_OBJECT
 
@@ -66,9 +66,9 @@ public:
    * each new KImageShopView instance
    * Notice: make sure you delete the object when you don't need it anymore!
    */
-  static KImageShopConfig *getNewConfig();
+  static KisConfig *getNewConfig();
 
-  ~KImageShopConfig();
+  ~KisConfig();
 
   /**
    * saves all document specific settings to disk - but for this instance only
@@ -127,19 +127,19 @@ public:
 protected:
 
   /**
-   * This constructor creates the first KImageShopConfig object and loads
+   * This constructor creates the first KisConfig object and loads
    * the settings from disk. Subsequent objects get these settings from this
    * object thru the copy constructor, but transparently (@see #getNewConfig)
    */
-  KImageShopConfig();
+  KisConfig();
 
   /**
-   *  A copy constructor for the KImageShopConfig class (doh)
+   *  A copy constructor for the KisConfig class (doh)
    *
-   * Used by @see #getNewConfig to create a new KImageShopConfig object for a
+   * Used by @see #getNewConfig to create a new KisConfig object for a
    * new KImageShopView
    */
-  KImageShopConfig( const KImageShopConfig& );
+  KisConfig( const KisConfig& );
 
   /**
    * This method initializes all static members
@@ -163,7 +163,7 @@ private:
   // KImageShopDoc objects
   static KConfig 	*kc;
   static bool		doInit;
-  static QList<KImageShopConfig> 	instanceList;
+  static QList<KisConfig> 	instanceList;
 
   static QFont 		m_smallFont;
   static QFont		m_tinyFont;

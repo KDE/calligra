@@ -31,20 +31,20 @@
 
 #include "kis_layer.h"
 
-class Brush;
+class KisBrush;
 
 struct canvasTileDescriptor
 {
   QPixmap pix;
 };
 
-class kisImage : public QObject
+class KisImage : public QObject
 {
     Q_OBJECT
 
  public:
-    kisImage( const QString& _name, int w = 512, int h = 512 );
-    ~kisImage();
+    KisImage( const QString& _name, int w = 512, int h = 512 );
+    ~KisImage();
 
     QString name()                { return m_name; }
     void setName(const QString& _name) { m_name = _name; }

@@ -29,13 +29,13 @@ extern "C"
 {
     void* init_libkimageshop()
     {
-	return new KImageShopFactory;
+	return new KisFactory;
     }
 };
 
-KInstance* KImageShopFactory::s_global = 0;
+KInstance* KisFactory::s_global = 0;
 
-KImageShopFactory::KImageShopFactory( QObject* parent, const char* name )
+KisFactory::KisFactory( QObject* parent, const char* name )
     : KLibFactory( parent, name )
 {
   s_global = new KInstance( "kimageshop" );
@@ -52,25 +52,25 @@ KImageShopFactory::KImageShopFactory( QObject* parent, const char* name )
 				    KStandardDirs::kde_default("data") + "kimageshop/pics/");
 }
 
-KImageShopFactory::~KImageShopFactory()
+KisFactory::~KisFactory()
 {
   delete s_global;
 }
 
-QObject* KImageShopFactory::create( QObject* parent, const char* name, const char* /*classname*/, const QStringList & )
+QObject* KisFactory::create( QObject* parent, const char* name, const char* /*classname*/, const QStringList & )
 {
     if ( parent && !parent->inherits("KoDocument") )
     {
-	qDebug("KImageShopFactory: parent does not inherit KoDocument");
+	qDebug("KisFactory: parent does not inherit KoDocument");
 	return 0;
     }
     
-    kisDoc *doc = new kisDoc( (KoDocument*)parent, name );
+    KisDoc *doc = new KisDoc( (KoDocument*)parent, name );
     emit objectCreated(doc);
     return doc;
 }
 
-KInstance* KImageShopFactory::global()
+KInstance* KisFactory::global()
 {
     return s_global;
 }

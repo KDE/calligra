@@ -11,7 +11,7 @@
 #include "gradientview.h"
 #include "kis_dlg_gradienteditor.h"
 
-GradientEditorDialog::GradientEditorDialog( kisDoc *_doc, QWidget *_parent, const char *_name )
+GradientEditorDialog::GradientEditorDialog( KisDoc *_doc, QWidget *_parent, const char *_name )
   : KFloatingDialog( _parent, _name )
   , m_pDoc( _doc )
 {

@@ -23,11 +23,11 @@
 #include "kis_tool.h"
 #include "kis_cursor.h"
 
-Tool::Tool(kisDoc *doc, kisView *view)
+Tool::Tool(KisDoc *doc, KisView *view)
 {
   m_pDoc = doc;
   m_pView = view;
-  m_Cursor = KImageShopCursor::arrowCursor();
+  m_Cursor = KisCursor::arrowCursor();
 }
 
 Tool::~Tool() {}

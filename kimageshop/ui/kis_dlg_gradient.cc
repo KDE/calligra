@@ -10,7 +10,7 @@
 #include "integerwidget.h"
 #include "blendchooser.h"
 
-GradientDialog::GradientDialog( kisDoc *_doc, QWidget *_parent, const char *_name )
+GradientDialog::GradientDialog( KisDoc *_doc, QWidget *_parent, const char *_name )
   : KFloatingDialog( _parent, _name )
   , m_pDoc( _doc )
 {

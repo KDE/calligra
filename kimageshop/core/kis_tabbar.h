@@ -26,15 +26,15 @@
 #include <qpainter.h>
 #include <qstrlist.h>
 
-class kisView;
-class kisDoc;
+class KisView;
+class KisDoc;
 
-class kisTabBar : public QWidget
+class KisTabBar : public QWidget
 {
     Q_OBJECT
 
 public:
-    kisTabBar( kisView *_view, kisDoc *_doc );
+    KisTabBar( KisView *_view, KisDoc *_doc );
 
     /**
      * Adds a tab to the bar and paints it. The tab does not become active.
@@ -101,8 +101,8 @@ protected:
     
     void openPopupMenu( QPoint &_global );
     
-    kisView  *m_pView;
-    kisDoc  *m_pDoc;
+    KisView  *m_pView;
+    KisDoc  *m_pDoc;
     
     enum { autoScrollNo = 0, autoScrollLeft, autoScrollRight };
     enum { moveTabNo = 0, moveTabBefore, moveTabAfter };

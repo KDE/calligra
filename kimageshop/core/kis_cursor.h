@@ -23,12 +23,12 @@
 
 class QCursor;
 
-class KImageShopCursor
+class KisCursor
 {
 
 public:
 
-  KImageShopCursor();
+  KisCursor();
 
   // Predefined Qt cursors.
   static QCursor arrowCursor();         // standard arrow cursor

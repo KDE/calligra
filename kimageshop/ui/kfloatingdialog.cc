@@ -62,19 +62,19 @@ KFloatingDialog::KFloatingDialog(QWidget *parent, const char* name) : QFrame(par
   
   // setup title buttons
   m_pCloseButton = new QPushButton(this);
-  QPixmap close_pm( locate("kis_pics", "close.png", KImageShopFactory::global()));
+  QPixmap close_pm( locate("kis_pics", "close.png", KisFactory::global()));
   m_pCloseButton->setPixmap(close_pm);
   m_pCloseButton->setGeometry(width()-FRAMEBORDER-13, FRAMEBORDER+1, 12, 12);
   connect(m_pCloseButton, SIGNAL(clicked()), this, SLOT(slotClose()));
   
   m_pMinButton = new QPushButton(this);
-  QPixmap min_pm( locate("kis_pics", "minimize.png", KImageShopFactory::global()));
+  QPixmap min_pm( locate("kis_pics", "minimize.png", KisFactory::global()));
   m_pMinButton->setPixmap(min_pm);
   m_pMinButton->setGeometry(width()-FRAMEBORDER-26, FRAMEBORDER+1, 12, 12);
   connect(m_pMinButton, SIGNAL(clicked()), this, SLOT(slotMinimize()));
   
   m_pDockButton = new QPushButton(this);
-  QPixmap dock_pm( locate("kis_pics", "dock.png", KImageShopFactory::global()));
+  QPixmap dock_pm( locate("kis_pics", "dock.png", KisFactory::global()));
   m_pDockButton->setPixmap(dock_pm);
   m_pDockButton->setGeometry(width()-FRAMEBORDER-39, FRAMEBORDER+1, 12, 12);
   connect(m_pDockButton, SIGNAL(clicked()), this, SLOT(slotDock()));

@@ -86,7 +86,7 @@ class Layer : public QObject {
 
  private:
 	uchar opacityVal;
-	ChannelData *alphaChannel, *dataChannels;
+	KisChannelData *alphaChannel, *dataChannels;
 	int channels;
 	QString nameVal;
 	bool visible, linked;

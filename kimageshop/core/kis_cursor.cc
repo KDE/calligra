@@ -23,77 +23,77 @@
 
 #include "kis_cursor.h"
 
-KImageShopCursor::KImageShopCursor() {}
+KisCursor::KisCursor() {}
 
 /*
  * Predefined Qt cursors
  */
-QCursor KImageShopCursor::arrowCursor()
+QCursor KisCursor::arrowCursor()
 {
   return Qt::arrowCursor;
 }
 
-QCursor KImageShopCursor::upArrowCursor()
+QCursor KisCursor::upArrowCursor()
 {
   return Qt::upArrowCursor;
 }
 
-QCursor KImageShopCursor::crossCursor()
+QCursor KisCursor::crossCursor()
 {
   return Qt::crossCursor;
 }
 
-QCursor KImageShopCursor::waitCursor()
+QCursor KisCursor::waitCursor()
 {
   return Qt::waitCursor;
 }
 
-QCursor KImageShopCursor::ibeamCursor()
+QCursor KisCursor::ibeamCursor()
 {
   return Qt::ibeamCursor;
 }
 
-QCursor KImageShopCursor::sizeVerCursor()
+QCursor KisCursor::sizeVerCursor()
 {
   return Qt::sizeVerCursor;
 }
 
-QCursor KImageShopCursor::sizeHorCursor()
+QCursor KisCursor::sizeHorCursor()
 {
   return Qt::sizeHorCursor;
 }
 
-QCursor KImageShopCursor::sizeBDiagCursor()
+QCursor KisCursor::sizeBDiagCursor()
 {
   return Qt::sizeBDiagCursor;
 }
 
-QCursor KImageShopCursor::sizeFDiagCursor()
+QCursor KisCursor::sizeFDiagCursor()
 {
   return Qt::sizeFDiagCursor;
 }
 
-QCursor KImageShopCursor::sizeAllCursor()
+QCursor KisCursor::sizeAllCursor()
 {
   return Qt::sizeAllCursor;
 }
 
-QCursor KImageShopCursor::blankCursor()
+QCursor KisCursor::blankCursor()
 {
   return Qt::blankCursor;
 }
 
-QCursor KImageShopCursor::splitVCursor()
+QCursor KisCursor::splitVCursor()
 {
   return Qt::splitVCursor;
 }
 
-QCursor KImageShopCursor::splitHCursor()
+QCursor KisCursor::splitHCursor()
 {
   return Qt::splitHCursor;
 }
 
-QCursor KImageShopCursor::pointingHandCursor()
+QCursor KisCursor::pointingHandCursor()
 {
   return Qt::pointingHandCursor;
 }
@@ -102,7 +102,7 @@ QCursor KImageShopCursor::pointingHandCursor()
  * Custom KImageShop cursors. Use the X utility "bitmap" to create new cursors.
  */
 
-QCursor KImageShopCursor::pickerCursor()
+QCursor KisCursor::pickerCursor()
 {
   static QCursor *picker_cursor = 0;
   
@@ -130,19 +130,19 @@ QCursor KImageShopCursor::pickerCursor()
   return *picker_cursor;
 }
 
-QCursor KImageShopCursor::penCursor()
+QCursor KisCursor::penCursor()
 {
   // TODO
   return Qt::arrowCursor;
 }
 
-QCursor KImageShopCursor::brushCursor()
+QCursor KisCursor::brushCursor()
 {
   // TODO
   return Qt::arrowCursor;
 }
 
-QCursor KImageShopCursor::moveCursor()
+QCursor KisCursor::moveCursor()
 {
   // TODO
   return Qt::arrowCursor;

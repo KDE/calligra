@@ -28,11 +28,11 @@
 class QPoint;
 class QPixmap;
 
-class Brush : public IconItem
+class KisBrush : public IconItem
 {
  public:
-  Brush(QString file);
-  virtual ~Brush();
+  KisBrush(QString file);
+  virtual ~KisBrush();
 
   void 	    setSpacing(int s)                 { m_spacing = s;     }
   int       spacing()   	      const { return m_spacing;  }

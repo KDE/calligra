@@ -36,7 +36,7 @@ QPixmap *LayerDialog::m_eyeIcon, *LayerDialog::m_linkIcon;
 QRect LayerDialog::m_eyeRect, LayerDialog::m_linkRect;
 QRect LayerDialog::m_previewRect;
 
-LayerTab::LayerTab( kisDoc *_doc, QWidget *_parent, const char *_name , WFlags _flags )
+LayerTab::LayerTab( KisDoc *_doc, QWidget *_parent, const char *_name , WFlags _flags )
   : QWidget( _parent, _name, _flags )
 {
   QVBoxLayout *layout = new QVBoxLayout( this );
@@ -81,7 +81,7 @@ LayerTab::LayerTab( kisDoc *_doc, QWidget *_parent, const char *_name , WFlags _
 
 }
 
-ChannelTab::ChannelTab( kisDoc *_doc, QWidget *_parent, const char *_name , WFlags _flags )
+ChannelTab::ChannelTab( KisDoc *_doc, QWidget *_parent, const char *_name , WFlags _flags )
   : QWidget( _parent, _name, _flags )
 {
   QVBoxLayout *layout = new QVBoxLayout( this );
@@ -110,13 +110,13 @@ ChannelTab::ChannelTab( kisDoc *_doc, QWidget *_parent, const char *_name , WFla
   connect( pbDown, SIGNAL( clicked() ), channelview, SLOT( slotLowerChannel() ) );
 }
 
-LayerDialog::LayerDialog( kisDoc *_doc, QWidget *_parent )
+LayerDialog::LayerDialog( KisDoc *_doc, QWidget *_parent )
   : KFloatingTabDialog( _parent, "layerdialog" )
 {
   setCaption( i18n( "Layers&Channels" ) );
   if( !m_eyeIcon )
   {
-    QString _icon = locate( "kis_pics", "eye.png", KImageShopFactory::global() );
+    QString _icon = locate( "kis_pics", "eye.png", KisFactory::global() );
     m_eyeIcon = new QPixmap;
     if( !m_eyeIcon->load( _icon ) )
       QMessageBox::critical( this, "Canvas", "Can't find eye.png" );
@@ -124,7 +124,7 @@ LayerDialog::LayerDialog( kisDoc *_doc, QWidget *_parent )
   }
   if( !m_linkIcon )
   {
-    QString _icon = locate( "kis_pics", "link.png", KImageShopFactory::global() );
+    QString _icon = locate( "kis_pics", "link.png", KisFactory::global() );
     m_linkIcon = new QPixmap;
     if( !m_linkIcon->load( _icon ) )
       QMessageBox::critical( this, "Canvas", "Can't find link.png" );

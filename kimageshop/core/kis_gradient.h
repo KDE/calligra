@@ -23,14 +23,14 @@
 
 #include <qobject.h>
 
-class Gradient : public QObject 
+class KisGradient : public QObject 
 {
   Q_OBJECT
 
 public:
 
-  Gradient();
-  ~Gradient();
+  KisGradient();
+  ~KisGradient();
 
 private:
 

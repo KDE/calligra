@@ -24,11 +24,11 @@
 
 #include "kis_undo.h"
 
-KImageShopCommand::KImageShopCommand( const QString& name, kisDoc* doc )
+KisCommand::KisCommand( const QString& name, KisDoc* doc )
   : KoCommand( name )
   , m_pDoc( doc )
 {
 }
 
-KImageShopCommand::~KImageShopCommand(){}
+KisCommand::~KisCommand(){}
 

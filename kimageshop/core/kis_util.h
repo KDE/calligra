@@ -29,7 +29,7 @@
 #include <kiconloader.h>
 #include "kis_factory.h"
 
-#define KISBarIcon( x ) BarIcon( x, KImageShopFactory::global() )
+#define KISBarIcon( x ) BarIcon( x, KisFactory::global() )
 
 // size for graphic blocks - must be a power of 2
 const int TILE_SIZE = 128;
@@ -38,10 +38,10 @@ const int TILE_SIZE = 128;
 // Used to make numbers round towards + or - infinity regardless of sign
 const long BIGNUM = (TILE_SIZE*10000);
 
-class kisUtil
+class KisUtil
 {
  public:
-  kisUtil();
+  KisUtil();
 
   static void printRect( const QRect&, const QString& name = "Rect" );
   static void printPoint( const QPoint&, const QString& name = "Point" );

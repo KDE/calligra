@@ -56,7 +56,7 @@
 #include "kis_tool_colorpicker.h"
 #include "kis_tool_eraser.h"
 
-kisView::kisView( kisDoc* doc, QWidget* parent, const char* name )
+KisView::KisView( KisDoc* doc, QWidget* parent, const char* name )
   : ContainerView( doc, parent, name )
   , m_pDoc(doc)
 {
@@ -65,8 +65,8 @@ kisView::kisView( kisDoc* doc, QWidget* parent, const char* name )
   QObject::connect( m_pDoc, SIGNAL( docUpdated( const QRect& ) ),
                     this, SLOT( slotDocUpdated ( const QRect& ) ) );
 
-  m_fg = KColor::black();
-  m_bg = KColor::white();
+  m_fg = KisColor::black();
+  m_bg = KisColor::white();
 
   setupCanvas();
   setupScrollBars();
@@ -77,9 +77,9 @@ kisView::kisView( kisDoc* doc, QWidget* parent, const char* name )
   setupTools();
 }
 
-void kisView::setupCanvas()
+void KisView::setupCanvas()
 {
-  m_pCanvas = new kisCanvas(this, "kis_canvas");
+  m_pCanvas = new KisCanvas(this, "kis_canvas");
 
   QObject::connect( m_pCanvas, SIGNAL( mousePressed( QMouseEvent* ) ),
                     this, SLOT( canvasGotMousePressEvent ( QMouseEvent* ) ) );
@@ -95,7 +95,7 @@ void kisView::setupCanvas()
   
 }
 
-void kisView::setupScrollBars()
+void KisView::setupScrollBars()
 {
   m_pVert = new QScrollBar( QScrollBar::Vertical, this );
   m_pHorz = new QScrollBar( QScrollBar::Horizontal, this );
@@ -112,7 +112,7 @@ void kisView::setupScrollBars()
 
 }
 
-void kisView::setupRulers()
+void KisView::setupRulers()
 {
   m_pHRuler = new KRuler(KRuler::horizontal, this);
   m_pVRuler = new KRuler(KRuler::vertical, this);
@@ -127,10 +127,10 @@ void kisView::setupRulers()
   m_pHRuler->setRulerStyle(KRuler::pixel);
 }
 
-void kisView::setupTabBar()
+void KisView::setupTabBar()
 {
   // tabbar
-  m_pTabBar = new kisTabBar(this, m_pDoc);
+  m_pTabBar = new KisTabBar(this, m_pDoc);
 
   QStringList images = m_pDoc->images();
   if (!images.isEmpty())
@@ -168,36 +168,36 @@ void kisView::setupTabBar()
   QObject::connect( m_pTabLast, SIGNAL( clicked() ), this, SLOT( slotScrollToLastTab() ) );
 }
 
-void kisView::setupTools()
+void KisView::setupTools()
 {
   // move tool
   m_pMoveTool = new MoveTool(m_pDoc);
   
   // brush tool
-  m_pBrushTool = new BrushTool(m_pDoc, this, m_pBrush);
+  m_pKisBrushTool = new KisBrushTool(m_pDoc, this, m_pKisBrush);
 
   // airbrush tool
-  m_pAirBrushTool = new AirBrushTool(m_pDoc, this, m_pBrush);
+  m_pAirKisBrushTool = new AirKisBrushTool(m_pDoc, this, m_pKisBrush);
   
   // pen tool
-  m_pPenTool = new PenTool(m_pDoc, this, m_pBrush);
+  m_pPenTool = new PenTool(m_pDoc, this, m_pKisBrush);
 
   // eraser tool
-  m_pEraserTool = new EraserTool(m_pDoc, this, m_pBrush);
+  m_pEraserTool = new EraserTool(m_pDoc, this, m_pKisBrush);
   
   // color picker
   m_pColorPicker = new ColorPicker(m_pDoc, this);
-  //connect(m_pColorPicker, SIGNAL(fgColorPicked(const KColor&)), this, SLOT(slotSetFGColor(const KColor&)));
-  //connect(m_pColorPicker, SIGNAL(bgColorPicked(const KColor&)), this, SLOT(slotSetBGColor(const KColor&)));
+  //connect(m_pColorPicker, SIGNAL(fgColorPicked(const KisColor&)), this, SLOT(slotSetFGColor(const KisColor&)));
+  //connect(m_pColorPicker, SIGNAL(bgColorPicked(const KisColor&)), this, SLOT(slotSetBGColor(const KisColor&)));
   
   // zoom tool
   m_pZoomTool = new ZoomTool(this);
   
   m_tool_brush->setChecked( true );
-  activateTool(m_pBrushTool);
+  activateTool(m_pKisBrushTool);
 }
 
-void kisView::setupDialogs()
+void KisView::setupDialogs()
 {
   // color dialog
   m_pColorDialog = new ColorDialog( this );
@@ -206,8 +206,8 @@ void kisView::setupDialogs()
   m_pColorDialog->hide();
   connect( m_pColorDialog, SIGNAL( sigClosed() ), SLOT( updateToolbarButtons() ) );
 
-  connect(m_pColorDialog, SIGNAL(fgColorChanged(const KColor&)), this, SLOT(slotSetFGColor(const KColor&)));
-  connect(m_pColorDialog, SIGNAL(bgColorChanged(const KColor&)), this, SLOT(slotSetBGColor(const KColor&)));
+  connect(m_pColorDialog, SIGNAL(fgColorChanged(const KisColor&)), this, SLOT(slotSetFGColor(const KisColor&)));
+  connect(m_pColorDialog, SIGNAL(bgColorChanged(const KisColor&)), this, SLOT(slotSetBGColor(const KisColor&)));
 
   // layer dialog
   m_pLayerDialog = new LayerDialog( m_pDoc, this );
@@ -217,16 +217,16 @@ void kisView::setupDialogs()
   connect( m_pLayerDialog, SIGNAL( sigClosed() ), SLOT( updateToolbarButtons() ) );
 
   // brush dialog
-  m_pBrushDialog = new BrushDialog(this);
-  m_pBrushDialog->resize(185, 158);
-  m_pBrushDialog->move(523, 220);
-  m_pBrushDialog->hide();
-  connect( m_pBrushDialog, SIGNAL( sigClosed() ), SLOT( updateToolbarButtons() ) );
+  m_pKisBrushDialog = new KisBrushDialog(this);
+  m_pKisBrushDialog->resize(185, 158);
+  m_pKisBrushDialog->move(523, 220);
+  m_pKisBrushDialog->hide();
+  connect( m_pKisBrushDialog, SIGNAL( sigClosed() ), SLOT( updateToolbarButtons() ) );
 
   // brush
-  m_pBrushChooser = m_pBrushDialog->brushChooser();
-  m_pBrush = m_pBrushChooser->currentBrush();
-  QObject::connect(m_pBrushChooser, SIGNAL(selected(const Brush *)), this, SLOT(slotSetBrush(const Brush*)));
+  m_pKisBrushChooser = m_pKisBrushDialog->brushChooser();
+  m_pKisBrush = m_pKisBrushChooser->currentKisBrush();
+  QObject::connect(m_pKisBrushChooser, SIGNAL(selected(const KisBrush *)), this, SLOT(slotSetKisBrush(const KisBrush*)));
 
   // gradient dialog
   m_pGradientDialog = new GradientDialog( m_pDoc, this );
@@ -245,7 +245,7 @@ void kisView::setupDialogs()
   updateToolbarButtons();
 }
 
-void kisView::setupActions()
+void KisView::setupActions()
 {
   // edit actions
   
@@ -266,7 +266,7 @@ void kisView::setupActions()
 				SLOT( dialog_layer() ),actionCollection(), "dialog_layer");
   m_dialog_color = new KToggleAction( i18n("&Color Dialog"), KISBarIcon("color_dialog"), 0, this,
 				SLOT( dialog_color() ),actionCollection(), "dialog_color");
-  m_dialog_brush = new KToggleAction( i18n("&Brush Dialog"), KISBarIcon("brush_dialog"), 0, this,
+  m_dialog_brush = new KToggleAction( i18n("&KisBrush Dialog"), KISBarIcon("brush_dialog"), 0, this,
 				SLOT( dialog_brush() ),actionCollection(), "dialog_brush");
   m_dialog_gradient = new KToggleAction( i18n("&Gradient Dialog"), KISBarIcon("gradient_dialog"), 0, this,
 				   SLOT( dialog_gradient() ),actionCollection(), "dialog_gradient");
@@ -285,7 +285,7 @@ void kisView::setupActions()
   m_tool_pen = new KToggleAction( i18n("&Pen tool"), KISBarIcon("pencil"), 0, this,
 			      SLOT( tool_pen() ),actionCollection(), "tool_pen");
   m_tool_pen->setExclusiveGroup( "tools" );
-  m_tool_brush = new KToggleAction( i18n("&Brush tool"), KISBarIcon("paintbrush"), 0, this,
+  m_tool_brush = new KToggleAction( i18n("&KisBrush tool"), KISBarIcon("paintbrush"), 0, this,
 			      SLOT( tool_brush() ),actionCollection(), "tool_brush");
   m_tool_brush->setExclusiveGroup( "tools" );
   m_tool_airbrush = new KToggleAction( i18n("&Airbrush tool"), KISBarIcon("airbrush"), 0, this,
@@ -333,19 +333,19 @@ void kisView::setupActions()
 			       SLOT( preferences() ),actionCollection(), "preferences");
 }
 
-void kisView::slotTabSelected(const QString& name)
+void KisView::slotTabSelected(const QString& name)
 {
   m_pDoc->setCurrentImage(name);
   resizeEvent(0L);
 }
 
-void kisView::slotImageAdded(const QString& name)
+void KisView::slotImageAdded(const QString& name)
 {
   m_pTabBar->addTab(name);
   m_pTabBar->setActiveTab(name);
 }
 
-void kisView::resizeEvent(QResizeEvent*)
+void KisView::resizeEvent(QResizeEvent*)
 {
   // ruler geometry
   m_pHRuler->setGeometry(20, 0, width()-20, 20);
@@ -357,7 +357,7 @@ void kisView::resizeEvent(QResizeEvent*)
   m_pTabRight->setGeometry(32, height()-16, 16, 16);
   m_pTabLast->setGeometry(48, height()-16, 16, 16);
 
-  // kisView heigth/width - ruler heigth/width
+  // KisView heigth/width - ruler heigth/width
   int canH = m_pCanvas->height();
   int canW = m_pCanvas->width();
   int viewH = height() - 20 - 16;
@@ -423,25 +423,25 @@ void kisView::resizeEvent(QResizeEvent*)
     m_pHRuler->setOffset(-xPaintOffset());
 }
 
-void kisView::scrollH(int)
+void KisView::scrollH(int)
 {
   m_pHRuler->setOffset(m_pHorz->value());
   m_pCanvas->repaint();
 }
 
-void kisView::scrollV(int)
+void KisView::scrollV(int)
 {
   m_pVRuler->setOffset(m_pVert->value());
   m_pCanvas->repaint();
 }
 
-void kisView::slotDocUpdated()
+void KisView::slotDocUpdated()
 {
-  //qDebug("kisView::slotDocUpdated");
+  //qDebug("KisView::slotDocUpdated");
   m_pCanvas->repaint();
 }
 
-void kisView::slotDocUpdated(const QRect& rect)
+void KisView::slotDocUpdated(const QRect& rect)
 {
   QRect r = rect;
 
@@ -452,7 +452,7 @@ void kisView::slotDocUpdated(const QRect& rect)
   int xt = xPaintOffset() + r.x() - m_pHorz->value();
   int yt = yPaintOffset() + r.y() - m_pVert->value();
 
-  //qDebug("kisView::slotDocUpdated l: %d; t: %d; r: %d; b: %d"
+  //qDebug("KisView::slotDocUpdated l: %d; t: %d; r: %d; b: %d"
   //	 ,r.left(), r.top(), r.right(), r.bottom());
 
   QPainter p;
@@ -465,7 +465,7 @@ void kisView::slotDocUpdated(const QRect& rect)
   p.end();
 }
 
-void kisView::canvasGotMousePressEvent( QMouseEvent *e )
+void KisView::canvasGotMousePressEvent( QMouseEvent *e )
 {
   QMouseEvent ev( QEvent::MouseButtonPress
 		  , QPoint(e->pos().x() - xPaintOffset() + m_pHorz->value(),
@@ -475,7 +475,7 @@ void kisView::canvasGotMousePressEvent( QMouseEvent *e )
   emit canvasMousePressEvent( &ev );
 }
 
-void kisView::canvasGotMouseMoveEvent ( QMouseEvent *e )
+void KisView::canvasGotMouseMoveEvent ( QMouseEvent *e )
 {
   QMouseEvent ev( QEvent::MouseMove
 		  , QPoint(e->pos().x() - xPaintOffset() + m_pHorz->value(),
@@ -485,7 +485,7 @@ void kisView::canvasGotMouseMoveEvent ( QMouseEvent *e )
   emit canvasMouseMoveEvent( &ev );
 }
 
-void kisView::canvasGotMouseReleaseEvent ( QMouseEvent *e )
+void KisView::canvasGotMouseReleaseEvent ( QMouseEvent *e )
 {
   QMouseEvent ev( QEvent::MouseButtonRelease
 		  , QPoint(e->pos().x() - xPaintOffset() + m_pHorz->value(),
@@ -495,12 +495,12 @@ void kisView::canvasGotMouseReleaseEvent ( QMouseEvent *e )
   emit canvasMouseReleaseEvent( &ev );
 }
 
-void kisView::canvasGotPaintEvent( QPaintEvent*e )
+void KisView::canvasGotPaintEvent( QPaintEvent*e )
 {
   QRect ur = e->rect();
   QPainter p;
 
-  //qDebug("kisView::canvasGotPaintEvent l: %d; t: %d; r: %d; b: %d"
+  //qDebug("KisView::canvasGotPaintEvent l: %d; t: %d; r: %d; b: %d"
   //	 , e->rect().left(), e->rect().top(), e->rect().right(), e->rect().bottom());
 
   p.begin( m_pCanvas );
@@ -534,7 +534,7 @@ void kisView::canvasGotPaintEvent( QPaintEvent*e )
   p.end();
 }
 
-void kisView::activateTool(Tool* t)
+void KisView::activateTool(Tool* t)
 {
   if (!t)
     return;
@@ -562,42 +562,42 @@ void kisView::activateTool(Tool* t)
  * tool action slots
  */
 
-void kisView::tool_move()
+void KisView::tool_move()
 {
   activateTool(m_pMoveTool);
 }
 
-void kisView::tool_zoom()
+void KisView::tool_zoom()
 {
   activateTool(m_pZoomTool);
 }
 
-void kisView::tool_brush()
+void KisView::tool_brush()
 {
-  activateTool(m_pBrushTool);
+  activateTool(m_pKisBrushTool);
 }
 
-void kisView::tool_airbrush()
+void KisView::tool_airbrush()
 {
-  activateTool(m_pAirBrushTool);
+  activateTool(m_pAirKisBrushTool);
 }
 
-void kisView::tool_eraser()
+void KisView::tool_eraser()
 {
   activateTool(m_pEraserTool);
 }
 
-void kisView::tool_pen()
+void KisView::tool_pen()
 {
   activateTool(m_pPenTool);
 }
 
-void kisView::tool_colorpicker()
+void KisView::tool_colorpicker()
 {
   activateTool(m_pColorPicker);
 }
 
-void kisView::tool_gradient()
+void KisView::tool_gradient()
 {
 }
 
@@ -605,27 +605,27 @@ void kisView::tool_gradient()
  * edit action slots
  */
 
-void kisView::undo()
+void KisView::undo()
 {
     qDebug("UNDO called");
 }
 
-void kisView::redo()
+void KisView::redo()
 {
     qDebug("REDO called");
 }
 
-void kisView::copy()
+void KisView::copy()
 {
     qDebug("COPY called");
 }
 
-void kisView::cut()
+void KisView::cut()
 {
     qDebug("CUT called");
 }
 
-void kisView::paste()
+void KisView::paste()
 {
     qDebug("PASTE called");
 }
@@ -634,7 +634,7 @@ void kisView::paste()
  * dialog action slots
  */
 
-void kisView::dialog_layer()
+void KisView::dialog_layer()
 {
   if (m_dialog_layer->isChecked())
   {
@@ -645,7 +645,7 @@ void kisView::dialog_layer()
     m_pLayerDialog->hide();
 }
 
-void kisView::dialog_color()
+void KisView::dialog_color()
 {
   if (m_dialog_color->isChecked())
   {
@@ -656,18 +656,18 @@ void kisView::dialog_color()
     m_pColorDialog->hide();
 }
 
-void kisView::dialog_brush()
+void KisView::dialog_brush()
 {
   if (m_dialog_brush->isChecked())
   {
-    m_pBrushDialog->show();
-    m_pBrushDialog->setFocus();
+    m_pKisBrushDialog->show();
+    m_pKisBrushDialog->setFocus();
   }
   else
-    m_pBrushDialog->hide();
+    m_pKisBrushDialog->hide();
 }
 
-void kisView::dialog_gradient()
+void KisView::dialog_gradient()
 {
   if (m_dialog_gradient->isChecked())
   {
@@ -679,7 +679,7 @@ void kisView::dialog_gradient()
 }
 
 
-void kisView::dialog_gradienteditor()
+void KisView::dialog_gradienteditor()
 {
   if (m_dialog_gradienteditor->isChecked())
   {
@@ -690,13 +690,13 @@ void kisView::dialog_gradienteditor()
     m_pGradientEditorDialog->hide();
 }
 
-void kisView::updateToolbarButtons()
+void KisView::updateToolbarButtons()
 {
-  kdebug( KDEBUG_INFO, 0, "kisView::updateToolbarButtons" );
+  kdebug( KDEBUG_INFO, 0, "KisView::updateToolbarButtons" );
   
   m_dialog_layer->setChecked( m_pLayerDialog->isVisible() );
   m_dialog_color->setChecked( m_pColorDialog->isVisible() );
-  m_dialog_brush->setChecked( m_pBrushDialog->isVisible() );
+  m_dialog_brush->setChecked( m_pKisBrushDialog->isVisible() );
   m_dialog_gradient->setChecked( m_pGradientDialog->isVisible() );
   m_dialog_gradienteditor->setChecked( m_pGradientEditorDialog->isVisible() );
 }
@@ -705,27 +705,27 @@ void kisView::updateToolbarButtons()
  * layer action slots
  */
 
-void kisView::layer_rotate180()
+void KisView::layer_rotate180()
 {
   m_pDoc->rotateLayer180(0);
 }
 
-void kisView::layer_rotateleft90()
+void KisView::layer_rotateleft90()
 {
   m_pDoc->rotateLayerLeft90(0);
 }
 
-void kisView::layer_rotateright90()
+void KisView::layer_rotateright90()
 {
   m_pDoc->rotateLayerRight90(0);
 }
 
-void kisView::layer_mirrorX()
+void KisView::layer_mirrorX()
 {
   m_pDoc->mirrorLayerX(0);
 }
 
-void kisView::layer_mirrorY()
+void KisView::layer_mirrorY()
 {
   m_pDoc->mirrorLayerY(0);
 }
@@ -734,17 +734,17 @@ void kisView::layer_mirrorY()
  * image action slots
  */
 
-void kisView::merge_all_layers()
+void KisView::merge_all_layers()
 {
   m_pDoc->mergeAllLayers();
 }
 
-void kisView::merge_visible_layers()
+void KisView::merge_visible_layers()
 {
   m_pDoc->mergeVisibleLayers();
 }
 
-void kisView::merge_linked_layers()
+void KisView::merge_linked_layers()
 {
   m_pDoc->mergeLinkedLayers();
 }
@@ -753,22 +753,22 @@ void kisView::merge_linked_layers()
  * misc action slots
  */
 
-void kisView::preferences()
+void KisView::preferences()
 {
     qDebug("PREFERENCES called");
 }
 
-int kisView::docWidth()
+int KisView::docWidth()
 {
   return m_pDoc->width();
 }
 
-int kisView::docHeight()
+int KisView::docHeight()
 {
   return m_pDoc->height();
 }
 
-int kisView::xPaintOffset()
+int KisView::xPaintOffset()
 {
   // FIXME : make this configurable
   return 0;
@@ -779,7 +779,7 @@ int kisView::xPaintOffset()
   return v;
 }
 
-int kisView::yPaintOffset()
+int KisView::yPaintOffset()
 {
   // FIXME : make this configurable
   return 0;
@@ -790,50 +790,50 @@ int kisView::yPaintOffset()
   return v;
 }
 
-float kisView::zoomFactor()
+float KisView::zoomFactor()
 {
   return 2.0; // FIXME
 }
 
-void kisView::slotSetBrush(const Brush* b)
+void KisView::slotSetKisBrush(const KisBrush* b)
 {
-  m_pBrush = b;
-  if (m_pBrushTool)
-    m_pBrushTool->setBrush(b);
+  m_pKisBrush = b;
+  if (m_pKisBrushTool)
+    m_pKisBrushTool->setKisBrush(b);
   if (m_pPenTool)
-    m_pPenTool->setBrush(b);
-  if (m_pAirBrushTool)
-    m_pAirBrushTool->setBrush(b);
+    m_pPenTool->setKisBrush(b);
+  if (m_pAirKisBrushTool)
+    m_pAirKisBrushTool->setKisBrush(b);
   if (m_pEraserTool)
-    m_pEraserTool->setBrush(b);
+    m_pEraserTool->setKisBrush(b);
 }
 
-void kisView::slotSetFGColor(const KColor& c)
+void KisView::slotSetFGColor(const KisColor& c)
 {
   m_fg = c;
 }
 
-void kisView::slotSetBGColor(const KColor& c)
+void KisView::slotSetBGColor(const KisColor& c)
 {
   m_bg = c;
 }
 
-void kisView::slotScrollToFirstTab()
+void KisView::slotScrollToFirstTab()
 {
   m_pTabBar->scrollFirst();
 }
 
-void kisView::slotScrollToLeftTab()
+void KisView::slotScrollToLeftTab()
 {
   m_pTabBar->scrollLeft();
 }
 
-void kisView::slotScrollToRightTab()
+void KisView::slotScrollToRightTab()
 {
   m_pTabBar->scrollRight();
 }
 
-void kisView::slotScrollToLastTab()
+void KisView::slotScrollToLastTab()
 {
   m_pTabBar->scrollLast();
 }

@@ -1,7 +1,7 @@
 /*
  *  brusheswidget.h - part of KImageShop
  *
- *  A chooser for Brushes. Makes use of the IconChooser class and maintains
+ *  A chooser for KisBrushes. Makes use of the IconChooser class and maintains
  *  all available brushes for KIS.
  *
  *  Copyright (c) 1999 Carsten Pfeiffer <pfeiffer@kde.org>
@@ -35,18 +35,18 @@ class QLabel;
 class IconChooser;
 class IntegerWidget;
 
-class BrushesWidget : public QWidget
+class KisBrushesWidget : public QWidget
 {
   Q_OBJECT
 
 public:
-  BrushesWidget( QWidget *parent, const char *name );
-  ~BrushesWidget();
+  KisBrushesWidget( QWidget *parent, const char *name );
+  ~KisBrushesWidget();
 
-  void 		loadBrushes();
-  const Brush	*loadBrush( const QString& filename ) const;
-  const Brush	*currentBrush()	const;
-  void 		setCurrentBrush( const Brush * );
+  void 		loadKisBrushes();
+  const KisBrush	*loadKisBrush( const QString& filename ) const;
+  const KisBrush	*currentKisBrush()	const;
+  void 		setCurrentKisBrush( const KisBrush * );
 
 
 protected:
@@ -63,11 +63,11 @@ private:
 
 private slots:
   void 		slotItemSelected( IconItem * );
-  void 		slotSetBrushSpacing( int );
+  void 		slotSetKisBrushSpacing( int );
 
 
 signals:
-  void 		selected( const Brush * );
+  void 		selected( const KisBrush * );
 
 
 };

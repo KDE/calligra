@@ -20,11 +20,11 @@
 
 #include "kis_gradient.h"
 
-Gradient::Gradient()
+KisGradient::KisGradient()
 {
 }
 
-Gradient::~Gradient()
+KisGradient::~KisGradient()
 {
 }
 

@@ -28,7 +28,7 @@
 class ZoomTool : public Tool
 {
  public:
-  ZoomTool(kisView *view);
+  ZoomTool(KisView *view);
   ~ZoomTool();
 
   virtual QString toolName() { return QString("ZoomTool"); }

@@ -23,12 +23,12 @@
 
 #include <koMainWindow.h>
 
-class KImageShopShell : public KoMainWindow
+class KisShell : public KoMainWindow
 {
     Q_OBJECT
 public:
-    KImageShopShell( QWidget* parent = 0, const char* name = 0 );
-    ~KImageShopShell();
+    KisShell( QWidget* parent = 0, const char* name = 0 );
+    ~KisShell();
 
     /**
      * Change these according to your native mimetype.

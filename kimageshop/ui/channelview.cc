@@ -40,13 +40,13 @@ ChannelView::ChannelView( QWidget* _parent, const char* _name )
   init( 0 );
 }
 
-ChannelView::ChannelView( kisDoc* doc, QWidget* _parent, const char* _name )
+ChannelView::ChannelView( KisDoc* doc, QWidget* _parent, const char* _name )
   : QTableView( _parent, _name )
 {
   init( doc );
 }
 
-void ChannelView::init( kisDoc* doc )
+void ChannelView::init( KisDoc* doc )
 {
   setTableFlags( Tbl_autoHScrollBar | Tbl_autoVScrollBar );
 

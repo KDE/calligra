@@ -26,23 +26,23 @@
 #include "kis_cursor.h"
 #include "kis_util.h"
 
-AirBrushTool::AirBrushTool(kisDoc *doc, kisView *view, const Brush *_brush)
+AirKisBrushTool::AirKisBrushTool(KisDoc *doc, KisView *view, const KisBrush *_brush)
   : Tool(doc, view)
 {
   m_dragging = false;
-  m_Cursor = KImageShopCursor::brushCursor();
-  m_pBrush = _brush;
+  m_Cursor = KisCursor::brushCursor();
+  m_pKisBrush = _brush;
   m_dragdist = 0;
 }
 
-AirBrushTool::~AirBrushTool() {}
+AirKisBrushTool::~AirKisBrushTool() {}
 
-void AirBrushTool::setBrush(const Brush *_brush)
+void AirKisBrushTool::setKisBrush(const KisBrush *_brush)
 {
-  m_pBrush = _brush;
+  m_pKisBrush = _brush;
 }
 
-void AirBrushTool::mousePress(QMouseEvent *e)
+void AirKisBrushTool::mousePress(QMouseEvent *e)
 {
   if (e->button() != QMouseEvent::LeftButton)
     return;
@@ -56,20 +56,20 @@ void AirBrushTool::mousePress(QMouseEvent *e)
 
   paint(e->pos());
   
-  QRect updateRect(e->pos() - m_pBrush->hotSpot(), m_pBrush->size());
+  QRect updateRect(e->pos() - m_pKisBrush->hotSpot(), m_pKisBrush->size());
   m_pDoc->compositeImage(updateRect);
 }
 
-bool AirBrushTool::paint(QPoint pos)
+bool AirKisBrushTool::paint(QPoint pos)
 {
-  if (!m_pBrush)
+  if (!m_pKisBrush)
     return false;
 
-  QPoint start = pos - m_pBrush->hotSpot();
+  QPoint start = pos - m_pKisBrush->hotSpot();
   int startx = start.x();
   int starty = start.y();
 
-  QRect clipRect(startx, starty, m_pBrush->width(), m_pBrush->width());
+  QRect clipRect(startx, starty, m_pKisBrush->width(), m_pKisBrush->width());
 
   if (!clipRect.intersects(m_pDoc->getCurrentLayer()->imageExtents()))
     return false;
@@ -95,7 +95,7 @@ bool AirBrushTool::paint(QPoint pos)
 
   for (int y = sy; y <= ey; y++)
     {
-      sl = m_pBrush->scanline(y);
+      sl = m_pKisBrush->scanline(y);
 
       for (int x = sx; x <= ex; x++)
 	{
@@ -133,9 +133,9 @@ bool AirBrushTool::paint(QPoint pos)
   return true;
 }
 
-void AirBrushTool::mouseMove(QMouseEvent *e)
+void AirKisBrushTool::mouseMove(QMouseEvent *e)
 {
-  int spacing = m_pBrush->spacing();
+  int spacing = m_pKisBrush->spacing();
 
   if (spacing <= 0) spacing = 1;
 
@@ -144,10 +144,10 @@ void AirBrushTool::mouseMove(QMouseEvent *e)
       if( !m_pDoc->getCurrentLayer()->isVisible() )
 	return;
 
-      KVector end(e->x(), e->y());
-      KVector start(m_dragStart.x(), m_dragStart.y());
+      KisVector end(e->x(), e->y());
+      KisVector start(m_dragStart.x(), m_dragStart.y());
             
-      KVector dragVec = end - start;
+      KisVector dragVec = end - start;
       float saved_dist = m_dragdist;
       float new_dist = dragVec.length();
       float dist = saved_dist + new_dist;
@@ -163,7 +163,7 @@ void AirBrushTool::mouseMove(QMouseEvent *e)
 
       dragVec.normalize();
 
-      KVector step = start;
+      KisVector step = start;
 
       QRect updateRect;
       while (dist >= spacing)
@@ -179,7 +179,7 @@ void AirBrushTool::mouseMove(QMouseEvent *e)
 	  QPoint p(step.x(), step.y());
 	  	  
 	  if (paint(p))
-	    updateRect = updateRect.unite(QRect(p - m_pBrush->hotSpot(), m_pBrush->size()));
+	    updateRect = updateRect.unite(QRect(p - m_pKisBrush->hotSpot(), m_pKisBrush->size()));
 	  dist -= spacing;
 	}
       if (!updateRect.isEmpty())
@@ -191,7 +191,7 @@ void AirBrushTool::mouseMove(QMouseEvent *e)
     }
 }
 
-void AirBrushTool::mouseRelease(QMouseEvent *e)
+void AirKisBrushTool::mouseRelease(QMouseEvent *e)
 {
   if (e->button() != LeftButton)
     return;

@@ -25,7 +25,7 @@
 
 #include "kis_brush.h"
 
-Brush::Brush(QString file)
+KisBrush::KisBrush(QString file)
   : IconItem()
 {
   m_valid    = false;
@@ -36,12 +36,12 @@ Brush::Brush(QString file)
   m_hotSpot = QPoint( width()/2, height()/2 );
 }
 
-Brush::~Brush()
+KisBrush::~KisBrush()
 {
   delete [] m_pData;
 }
 
-void Brush::loadViaQImage(QString file)
+void KisBrush::loadViaQImage(QString file)
 {
   // load via QImage
   QImage img(file);
@@ -74,14 +74,14 @@ void Brush::loadViaQImage(QString file)
     }
  
   m_valid = true;
-  qDebug("Brush: %s loaded.",file.latin1());
+  qDebug("KisBrush: %s loaded.",file.latin1());
 }
 
-QPixmap& Brush::pixmap(){
+QPixmap& KisBrush::pixmap(){
   return *m_pPixmap;
 }
 
-void Brush::setHotSpot(QPoint pt)
+void KisBrush::setHotSpot(QPoint pt)
 {
   int x = pt.x();
   int y = pt.y();
@@ -99,12 +99,12 @@ void Brush::setHotSpot(QPoint pt)
   m_hotSpot = QPoint(x,y);
 }
 
-uchar Brush::value(int x, int y) const
+uchar KisBrush::value(int x, int y) const
 {
   return m_pData[m_w * y + x];
 }
 
-uchar* Brush::scanline(int i) const
+uchar* KisBrush::scanline(int i) const
 {
   if (i < 0)
     i = 0;
@@ -113,14 +113,14 @@ uchar* Brush::scanline(int i) const
   return (m_pData + m_w * i);
 }
 
-uchar* Brush::bits() const
+uchar* KisBrush::bits() const
 {
   return m_pData;
 }
 
-void Brush::dump() const
+void KisBrush::dump() const
 {
-  qDebug("Brush data:\n");
+  qDebug("KisBrush data:\n");
 
   for (int h = 0; h < m_h; h++) {
     for (int w = 0; w < m_w; w++) {

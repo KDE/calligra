@@ -60,13 +60,13 @@ ColorDialog::~ColorDialog()
 
 void ColorDialog::slotFGColorChanged(const QColor& c)
 {
-  emit fgColorChanged(KColor(c));
+  emit fgColorChanged(KisColor(c));
 }
 
 
 void ColorDialog::slotBGColorChanged(const QColor& c)
 {
-  emit bgColorChanged(KColor(c));
+  emit bgColorChanged(KisColor(c));
 }
 
 ColorChooserWidget::ColorChooserWidget(QWidget *parent) : QWidget(parent)

@@ -32,24 +32,24 @@ class KAction;
 class KToggleAction;
 class QPaintEvent;
 
-class BrushDialog;
+class KisBrushDialog;
 class GradientDialog;
 class GradientEditorDialog;
 class ColorDialog;
 class LayerDialog;
 
-class kisDoc;
-class kisCanvas;
-class kisTabBar;
+class KisDoc;
+class KisCanvas;
+class KisTabBar;
 class QScrollBar;
 class KRuler;
 
-class Brush;
-class BrushesWidget;
+class KisBrush;
+class KisBrushesWidget;
 class Tool;
 class MoveTool;
-class BrushTool;
-class AirBrushTool;
+class KisBrushTool;
+class AirKisBrushTool;
 class EraserTool;
 class PenTool;
 class ZoomTool;
@@ -57,23 +57,23 @@ class GradientTool;
 class ColorPicker;
 class QButton;
 
-class kisView : public ContainerView
+class KisView : public ContainerView
 {
   Q_OBJECT;
 
  public:
-  kisView( kisDoc* doc, QWidget* parent = 0, const char* name = 0 );
+  KisView( KisDoc* doc, QWidget* parent = 0, const char* name = 0 );
 
-  KColor& fgColor() { return m_fg; }
-  KColor& bgColor() { return m_bg; }
+  KisColor& fgColor() { return m_fg; }
+  KisColor& bgColor() { return m_bg; }
 
  public slots:
   void slotDocUpdated();
   void slotDocUpdated(const QRect&);
-  void slotSetBrush(const Brush *);
+  void slotSetKisBrush(const KisBrush *);
 
-  void slotSetFGColor(const KColor&);
-  void slotSetBGColor(const KColor&);
+  void slotSetFGColor(const KisColor&);
+  void slotSetBGColor(const KisColor&);
   void slotScrollToFirstTab();
   void slotScrollToLeftTab();
   void slotScrollToRightTab();
@@ -172,31 +172,31 @@ class kisView : public ContainerView
   // image actions
   KAction *m_merge_all_layers, *m_merge_visible_layers, *m_merge_linked_layers;
 
-  kisDoc               *m_pDoc;
+  KisDoc               *m_pDoc;
   Tool                 *m_pTool; // currently active tool
   MoveTool             *m_pMoveTool;
-  BrushTool            *m_pBrushTool;
+  KisBrushTool            *m_pKisBrushTool;
   EraserTool           *m_pEraserTool;
-  AirBrushTool         *m_pAirBrushTool;
+  AirKisBrushTool         *m_pAirKisBrushTool;
   PenTool              *m_pPenTool;
   ZoomTool             *m_pZoomTool;
   GradientTool         *m_pGradientTool;
   ColorPicker          *m_pColorPicker;
-  const Brush          *m_pBrush; // current brush
-  const BrushesWidget  *m_pBrushChooser;
+  const KisBrush          *m_pKisBrush; // current brush
+  const KisBrushesWidget  *m_pKisBrushChooser;
 
-  BrushDialog          *m_pBrushDialog;
+  KisBrushDialog          *m_pKisBrushDialog;
   LayerDialog          *m_pLayerDialog;
   GradientDialog       *m_pGradientDialog;
   GradientEditorDialog *m_pGradientEditorDialog;
   ColorDialog          *m_pColorDialog;
 
-  kisCanvas            *m_pCanvas;
+  KisCanvas            *m_pCanvas;
   QScrollBar           *m_pHorz, *m_pVert;
   KRuler               *m_pHRuler, *m_pVRuler;
-  KColor                m_fg, m_bg;
+  KisColor                m_fg, m_bg;
 
-  kisTabBar            *m_pTabBar;
+  KisTabBar            *m_pTabBar;
   QButton              *m_pTabFirst, *m_pTabLeft, *m_pTabRight, *m_pTabLast;
 };
 
