@@ -1796,11 +1796,13 @@ KoTextCursor * KPrOasisPasteTextCommand::execute( KoTextCursor *c )
         kdError(30518) << "No office:body found!" << endl;
         return 0;
     }
-    body = body.namedItem( "office:text" ).toElement();
+    body = body.namedItem( "office:presentation" ).toElement();
+#if 0 //don't test it otherwise we can't copy/paste from kword
     if ( body.isNull() ) {
         kdError(30518) << "No office:text found!" << endl;
         return 0;
     }
+#endif
     KPrTextDocument * textdoc = static_cast<KPrTextDocument *>(c->parag()->document());
 
     KoOasisStyles oasisStyles;
@@ -1842,7 +1844,7 @@ KoTextCursor * KPrOasisPasteTextCommand::unexecute( KoTextCursor *c )
 
     cursor.setParag( lastParag );
     cursor.setIndex( m_lastIndex );
-#if 0
+#if 0 //kword specific code
     doc->setSelectionEnd( KoTextDocument::Temp, &cursor );
     // Delete all custom items
     KWDeleteCustomItemVisitor visitor;

@@ -2309,7 +2309,7 @@ KPrTextDrag * KPTextView::newDrag( QWidget * parent )
     QFile* tmpFile = contentTmpFile.file();
     KoXmlWriter contentTmpWriter( tmpFile, 1 );
     contentTmpWriter.startElement( "office:body" );
-    contentTmpWriter.startElement( "office:text" );
+    contentTmpWriter.startElement( "office:presentation" );
 
     const QString plainText = textDocument()->copySelection( contentTmpWriter, savingContext, KoTextDocument::Standard );
 

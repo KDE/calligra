@@ -1,9 +1,5 @@
 BUGS :
 ======
-- Text editor :
-  - selecting several lines : first line gets unselected
-  - When selecting a whole line and changing attribs, a word in next and/or prev line
-    is changed too
 - Placing of objects is not precise
 
 TO FINISH:
