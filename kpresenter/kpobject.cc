@@ -1447,10 +1447,12 @@ QString KPShadowObject::saveOasisStrokeStyle( KoGenStyles& mainStyles )
         stroke.addAttribute( "draw:dots1-length", "0.508cm" );
         stroke.addAttribute( "draw:dots2-length", "0.508cm" );
         stroke.addAttribute( "draw:distance", "0.508cm" );
+        break;
     case Qt::DotLine:
         stroke.addAttribute( "draw:style", "rect" );
         stroke.addAttribute( "draw:dots1", "1" );
         stroke.addAttribute( "draw:distance", "0.257cm" );
+        break;
     case Qt::DashDotLine:
         stroke.addAttribute( "draw:style", "rect" );
         stroke.addAttribute( "draw:dots1", "1" );
@@ -1458,12 +1460,14 @@ QString KPShadowObject::saveOasisStrokeStyle( KoGenStyles& mainStyles )
         stroke.addAttribute( "draw:dots1-length", "0.051cm" );
         stroke.addAttribute( "draw:dots2-length", "0.254cm" );
         stroke.addAttribute( "draw:distance", "0.127cm" );
+        break;
     case Qt::DashDotDotLine:
         stroke.addAttribute( "draw:style", "rect" );
         stroke.addAttribute( "draw:dots1", "2" );
         stroke.addAttribute( "draw:dots2", "1" );
         stroke.addAttribute( "draw:dots2-length", "0.203cm" );
         stroke.addAttribute( "draw:distance", "0.203cm" );
+        break;
     }
     return mainStyles.lookup( stroke, "stroke" );
     //    <draw:stroke-dash draw:name="Fine Dotted" draw:style="rect" draw:dots1="1" draw:distance="0.457cm"/>
@@ -1477,9 +1481,9 @@ void KPShadowObject::loadOasis(const QDomElement &element, KoOasisContext & cont
     if ( styleStack.hasAttribute( "draw:stroke", QString::null,"graphic" ))
     {
         if ( styleStack.attribute( "draw:stroke", QString::null,"graphic" ) == "none" )
-            pen.setStyle(static_cast<Qt::PenStyle>( 0 ) );
+            pen.setStyle(Qt::NoPen );
         else if ( styleStack.attribute( "draw:stroke", QString::null,"graphic" ) == "solid" )
-            pen.setStyle(static_cast<Qt::PenStyle>( 1 ) );
+            pen.setStyle(Qt::SolidLine );
         else if ( styleStack.attribute( "draw:stroke", QString::null,"graphic" ) == "dash" )
         {
             QString style = styleStack.attribute( "draw:stroke-dash", QString::null,"graphic" );
@@ -1492,20 +1496,37 @@ void KPShadowObject::loadOasis(const QDomElement &element, KoOasisContext & cont
             if ( draw )
             {
                 //FIXME
+                if ( draw->attribute( "draw:style" )=="rect" )
+                {
+                    if ( draw->attribute( "draw:dots1" )=="1" &&
+                         draw->attribute( "draw:dots2" )=="1" &&
+                         draw->attribute( "draw:dots1-length" )=="0.508cm" &&
+                         draw->attribute( "draw:dots2-length" )=="0.508cm" &&
+                         draw->attribute( "draw:distance" )=="0.508cm" )
+                        pen.setStyle( Qt::DashLine );
+                    else if ( draw->attribute( "draw:dots1" )=="1" &&
+                              draw->attribute( "draw:distance" )=="0.257cm" )
+                        pen.setStyle(Qt::DotLine );
+                    else if ( draw->attribute( "draw:dots1" )=="1" &&
+                         draw->attribute( "draw:dots2" )=="1" &&
+                         draw->attribute( "draw:dots1-length" )=="0.051cm" &&
+                         draw->attribute( "draw:dots2-length" )=="0.254cm" &&
+                         draw->attribute( "draw:distance" )=="0.127cm" )
+                        pen.setStyle(Qt::DashDotLine );
+                    else if ( draw->attribute( "draw:dots1" )=="1" &&
+                         draw->attribute( "draw:dots2" )=="2" &&
+                         draw->attribute( "draw:dots1-length" )=="0.203cm" &&
+                         draw->attribute( "draw:distance" )=="0.203cm" )
+                        pen.setStyle(Qt::DashDotDotLine );
+                    else
+                    {
+                        kdDebug()<<" stroke style undefined \n";
+                        pen.setStyle(Qt::SolidLine );
+                    }
+
+                }
             }
-
-            if ( style == "Ultrafine Dashed" || style == "Fine Dashed" ||
-                 style == "Fine Dashed (var)" || style == "Dashed (var)" )
-                pen.setStyle(static_cast<Qt::PenStyle>( 2 ) );
-            else if ( style == "Fine Dotted" || style == "Ultrafine Dotted (var)" ||
-                      style == "Line with Fine Dots" )
-                pen.setStyle(static_cast<Qt::PenStyle>( 3 ) );
-            else if ( style == "3 Dashes 3 Dots (var)" || style == "Ultrafine 2 Dots 3 Dashes" )
-                pen.setStyle(static_cast<Qt::PenStyle>( 4 ) );
-            else if ( style == "2 Dots 1 Dash" )
-                pen.setStyle(static_cast<Qt::PenStyle>( 5 ) );
         }
-
         //FIXME witdh pen style is not good :(
         if ( styleStack.hasAttribute( "svg:stroke-width", QString::null,"graphic" ) )
             pen.setWidth( (int) KoUnit::parseValue( styleStack.attribute( "svg:stroke-width" ) ) );
