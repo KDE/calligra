@@ -106,7 +106,7 @@ KSpreadView::KSpreadView( QWidget *_parent, const char *_name, KSpreadDoc* doc )
     m_pPopupColumn = 0;
     m_pPopupRow = 0;
     m_dcop = 0;
-
+    m_bLoading =false;
     // Vert. Scroll Bar
     m_pVertScrollBar = new QScrollBar( this, "ScrollBar_2" );
     m_pVertScrollBar->setRange( 0, 4096 );
@@ -144,7 +144,7 @@ KSpreadView::KSpreadView( QWidget *_parent, const char *_name, KSpreadDoc* doc )
     m_pPosWidget = new QLabel( m_pToolWidget );
     m_pPosWidget->setAlignment( AlignCenter );
     m_pPosWidget->setFrameStyle( QFrame::WinPanel|QFrame::Sunken );
-    m_pPosWidget->setMinimumWidth( 50 );
+    m_pPosWidget->setMinimumWidth( 100 );
     hbox->addWidget( m_pPosWidget );
     hbox->addSpacing( 6 );
 
@@ -258,6 +258,9 @@ KSpreadView::KSpreadView( QWidget *_parent, const char *_name, KSpreadDoc* doc )
     connect( m_hideGrid, SIGNAL( toggled( bool ) ), this, SLOT( toggleGrid( bool ) ) );
     m_showFormular = new KToggleAction( i18n("Show formular"), 0, actionCollection(), "showFormular");
     connect( m_showFormular, SIGNAL( toggled( bool ) ), this, SLOT( toggleFormular( bool ) ) );
+    m_LcMode = new KToggleAction( i18n("LC mode"), 0, actionCollection(), "LcMode");
+    connect( m_LcMode, SIGNAL( toggled( bool ) ), this, SLOT( toggleLcMode( bool ) ) );
+
     m_editGlobalScripts = new KAction( i18n("Edit Global Scripts..."), 0, this, SLOT( editGlobalScripts() ),
 				       actionCollection(), "editGlobalScripts" );
     m_editLocalScripts = new KAction( i18n("Edit Local Scripts..."), 0, this, SLOT( editLocalScripts() ), actionCollection(), "editLocalScripts" );
@@ -388,11 +391,12 @@ void KSpreadView::initialPosition()
     m_hideGrid->setChecked( !m_pTable->getShowGrid() );
     m_showPageBorders->setChecked( m_pTable->isShowPageBorders());
     m_showFormular->setChecked(m_pTable->getShowFormular());
-
+    m_LcMode->setChecked(m_pTable->getLcMode());
     /*recalc all dependent after loading*/
     KSpreadTable *tbl;
     for ( tbl = m_pDoc->map()->firstTable(); tbl != 0L; tbl = m_pDoc->map()->nextTable() )
 	tbl->recalc(true);
+    m_bLoading =true;
 }
 
 /*
@@ -1404,7 +1408,13 @@ void KSpreadView::addTable( KSpreadTable *_t )
     QObject::connect( _t, SIGNAL( sig_maxRow( int ) ), m_pCanvas, SLOT( slotMaxRow( int ) ) );
     QObject::connect( _t, SIGNAL( sig_polygonInvalidated( const QPointArray& ) ),
 		      this, SLOT( repaintPolygon( const QPointArray& ) ) );
-
+    if(m_bLoading)
+    	{
+    	m_hideGrid->setChecked( !m_pTable->getShowGrid() );
+    	m_showPageBorders->setChecked( m_pTable->isShowPageBorders());
+    	m_showFormular->setChecked(m_pTable->getShowFormular());
+    	m_LcMode->setChecked(m_pTable->getLcMode());
+    	}
 }
 
 void KSpreadView::removeTable( KSpreadTable *_t )
@@ -1477,6 +1487,7 @@ void KSpreadView::changeTable( const QString& _name )
     m_hideGrid->setChecked( !m_pTable->getShowGrid() );
     m_showPageBorders->setChecked( m_pTable->isShowPageBorders());
     m_showFormular->setChecked(m_pTable->getShowFormular());
+    m_LcMode->setChecked(m_pTable->getLcMode());
 
 }
 
@@ -1756,6 +1767,14 @@ void KSpreadView::toggleFormular( bool mode)
   m_pTable->recalc();
   m_pCanvas->repaint();
 
+}
+
+void KSpreadView::toggleLcMode( bool mode)
+{
+  if ( !m_pTable )
+       return;
+  m_pTable->setLcMode(mode);
+  m_pCanvas->repaint();
 }
 
 void KSpreadView::editCell()

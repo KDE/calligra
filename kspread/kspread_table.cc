@@ -229,8 +229,9 @@ KSpreadTable::KSpreadTable( KSpreadMap *_map, const char *_name )
   m_sort = FALSE;
 
   setHide(false);
-  showGrid=true;
-  showFormular=false;
+  m_bShowGrid=true;
+  m_bShowFormular=false;
+  m_bLcMode=false;
   //init currency
   currency = KGlobal::locale()->currencySymbol();
   // Get a unique name so that we can offer scripting
@@ -4066,10 +4067,11 @@ QDomElement KSpreadTable::save( QDomDocument& doc )
 {
   QDomElement table = doc.createElement( "table" );
   table.setAttribute( "name", m_strName );
-  table.setAttribute( "grid", (int)showGrid);
-  table.setAttribute( "hide", (int)m_tableHide);
-  table.setAttribute( "formular", (int)showFormular);
+  table.setAttribute( "grid", (int)m_bShowGrid);
+  table.setAttribute( "hide", (int)m_bTableHide);
+  table.setAttribute( "formular", (int)m_bShowFormular);
   table.setAttribute( "borders", (int)m_bShowPageBorders);
+  table.setAttribute( "lcmode", (int)m_bLcMode);
   // Save all cells.
   QIntDictIterator<KSpreadCell> it( m_dctCells );
   for ( ; it.current(); ++it )
@@ -4134,22 +4136,27 @@ bool KSpreadTable::loadXML( const QDomElement& table )
     return false;
   if(table.hasAttribute("grid"))
   {
-    showGrid = (int)table.attribute("grid").toInt( &ok );
+    m_bShowGrid = (int)table.attribute("grid").toInt( &ok );
     // we just ignore 'ok' - if it didn't work, go on
   }
   if(table.hasAttribute("hide"))
   {
-    m_tableHide = (int)table.attribute("hide").toInt( &ok );
+    m_bTableHide = (int)table.attribute("hide").toInt( &ok );
     // we just ignore 'ok' - if it didn't work, go on
   }
   if(table.hasAttribute("formular"))
   {
-    showFormular = (int)table.attribute("formular").toInt( &ok );
+    m_bShowFormular = (int)table.attribute("formular").toInt( &ok );
     // we just ignore 'ok' - if it didn't work, go on
   }
   if(table.hasAttribute("borders"))
   {
     m_bShowPageBorders = (int)table.attribute("borders").toInt( &ok );
+    // we just ignore 'ok' - if it didn't work, go on
+  }
+  if(table.hasAttribute("lcmode"))
+  {
+    m_bLcMode = (int)table.attribute("lcmode").toInt( &ok );
     // we just ignore 'ok' - if it didn't work, go on
   }
 

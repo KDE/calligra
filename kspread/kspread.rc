@@ -60,6 +60,7 @@
   <Action name="hideGrid"/>
   <Action name="showArea"/>
   <Action name="showFormular"/>
+  <Action name="LcMode"/>
  </Menu>
  <Menu name="Data"><text>Data</text>
   <Action name="sort"/>

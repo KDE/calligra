@@ -178,6 +178,7 @@ public slots:
     void togglePageBorders( bool );
     void toggleGrid( bool );
     void toggleFormular( bool);
+    void toggleLcMode( bool);
     void gotoCell();
     void replace();
     void conditional();
@@ -441,6 +442,7 @@ private:
     KAction* m_areaName;
     KAction* m_showArea;
     KToggleAction* m_showFormular;
+    KToggleAction* m_LcMode;
     /**
      * Pointer to the last popup menu.
      * Since only one popup menu can be opened at once, its pointer is stored here.
@@ -497,6 +499,10 @@ private:
    QList<ToolEntry> m_lstTools;
 
    static KSpreadScripts *m_pGlobalScriptsDialog;
+   //used to allow to refresh menubar
+   //otherwise kspread crash when I try to refresh menubar 
+   //when I start kspread
+   bool m_bLoading;
 };
 
 #endif

@@ -457,3 +457,11 @@ Bug report by jp.martin <jpmartin@iroise.com> thanks
 (idea given by jp.martin <jpmartin@iroise.com> thanks )
 -Bug fix in kspread_dlg_layout bug reported by jp.martin <jpmartin@iroise.com>
 thanks
+
+2000-05-06 -Montel laurent <montell@club-internet.fr>
+-----------------------------------------------------
+-Now you can show area selected example A1:B5
+(idea given by jp.martin <jpmartin@iroise.com> thanks )
+-Now there is LC mode => you can show area selected 
+as 3Lx5C, L1C1 (A1)
+-bug fix

@@ -1497,8 +1497,62 @@ void KSpreadCanvas::drawMarker( QPainter * _painter )
     delete _painter;
   }
 
-  char buffer[ 20 ];
-  sprintf( buffer, "%s%d", activeTable()->columnLabel( m_iMarkerColumn ), m_iMarkerRow );
+  //char buffer[ 20 ];
+  //sprintf( buffer, "%s%d", activeTable()->columnLabel( m_iMarkerColumn ), m_iMarkerRow );
+  QString buffer;
+  QString tmp;
+  if ( (selection.left() == selection.right() ) && (selection.top() ==
+  selection.bottom() ))
+  	{
+  	if(activeTable()->getLcMode())
+  		{
+  		buffer="L"+tmp.setNum(m_iMarkerRow); 
+	  	buffer+="C"+tmp.setNum(m_iMarkerColumn);
+  		}
+  	else
+  		{
+  		buffer=activeTable()->columnLabel( m_iMarkerColumn );
+  		buffer+=tmp.setNum(m_iMarkerRow);
+  		}
+  	}
+  else if(selection.right() != 0x7fff && selection.bottom() != 0x7fff )
+  	{
+ 	if(activeTable()->getLcMode())
+  		{
+  		buffer=tmp.setNum( (selection.bottom()-m_iMarkerRow+1) )+"Lx";
+		buffer+=tmp.setNum((selection.right()-m_iMarkerColumn+1))+"C";
+		}
+	else
+		{
+  		buffer=activeTable()->columnLabel( m_iMarkerColumn );
+  		buffer+=tmp.setNum(m_iMarkerRow);
+  		buffer+=":";
+  		buffer+=activeTable()->columnLabel( selection.right() );
+  		buffer+=tmp.setNum(selection.bottom());
+  		}
+  	}
+  else
+  	{
+  	
+  	if(activeTable()->getLcMode())
+  		{
+ 	 	buffer="L"+tmp.setNum(m_iMarkerRow); 
+	  	buffer+="C"+tmp.setNum(m_iMarkerColumn);	
+  		}
+  	else
+  		{
+	  	//Problem columnLabel return @@@@ when column >26*26
+ 	 	//=> it's not a good display
+  		//=> for the moment I display pos of marker
+  		//buffer=activeTable()->columnLabel( selection.left() );
+  		//buffer+=tmp.setNum(selection.top());
+  		//buffer+=":";
+  		//buffer+=activeTable()->columnLabel( selection.right() );
+  		//buffer+=tmp.setNum(selection.bottom());
+  		buffer=activeTable()->columnLabel( m_iMarkerColumn );
+  		buffer+=tmp.setNum(m_iMarkerRow);
+  		}
+  	}
 
   m_pPosWidget->setText(buffer);
 }

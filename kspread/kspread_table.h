@@ -421,13 +421,18 @@ public:
 
     void setConditional( const QPoint &_marker,KSpreadConditional tmp[3] );
 
-    bool getShowGrid() {return showGrid;}
+    bool getShowGrid() {return m_bShowGrid;}
 
-    void setShowGrid(bool _showGrid) {showGrid=_showGrid;}
+    void setShowGrid(bool _showGrid) {m_bShowGrid=_showGrid;}
 
-    bool getShowFormular() {return showFormular;}
+    bool getShowFormular() {return m_bShowFormular;}
 
-    void setShowFormular(bool _showFormular) {showFormular=_showFormular;}
+    void setShowFormular(bool _showFormular) {m_bShowFormular=_showFormular;}
+
+    bool getLcMode() {return m_bLcMode;}
+
+    void setLcMode(bool _lcMode) {m_bLcMode=_lcMode;}
+
 
     // ########### Nameing error
     QString Currency(){return currency;}
@@ -446,12 +451,12 @@ public:
     void changeNameCellRef2(const QPoint & pos,ChangeRef ref,QString tabname);
 
     // ############ Naming error
-    bool isHide(){return m_tableHide;}
+    bool isHide(){return m_bTableHide;}
 
     /**
      * change m_tableHide
      */
-    void setHide(bool _m_tableHide){m_tableHide=_m_tableHide;}
+    void setHide(bool _tableHide){m_bTableHide=_tableHide;}
     /**
      * Unselects all selected columns/rows/cells and redraws these cells.
      */
@@ -751,15 +756,16 @@ protected:
     bool m_sort;
 
     DCOPObject* m_dcop;
-    bool m_tableHide;
+    bool m_bTableHide;
 
     static int s_id;
     static QIntDict<KSpreadTable>* s_mapTables;
 
     static QString currency;
 
-    bool showGrid;
-    bool showFormular;
+    bool m_bShowGrid;
+    bool m_bShowFormular;
+    bool m_bLcMode;
 };
 
 #endif
