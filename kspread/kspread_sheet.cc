@@ -6321,26 +6321,26 @@ bool KSpreadSheet::loadTableStyleFormat( QDomElement *style )
 
     if ( !header.isNull() )
     {
-        kdDebug(30518) << "Header exists" << endl;
+        kdDebug() << "Header exists" << endl;
         QDomNode part = header.namedItem( "style:region-left" );
         if ( !part.isNull() )
         {
             hleft = getPart( part );
-            kdDebug(30518) << "Header left: " << hleft << endl;
+            kdDebug() << "Header left: " << hleft << endl;
         }
         else
-            kdDebug(30518) << "Style:region:left doesn't exist!" << endl;
+            kdDebug() << "Style:region:left doesn't exist!" << endl;
         part = header.namedItem( "style:region-center" );
         if ( !part.isNull() )
         {
             hmiddle = getPart( part );
-            kdDebug(30518) << "Header middle: " << hmiddle << endl;
+            kdDebug() << "Header middle: " << hmiddle << endl;
         }
         part = header.namedItem( "style:region-right" );
         if ( !part.isNull() )
         {
             hright = getPart( part );
-            kdDebug(30518) << "Header right: " << hright << endl;
+            kdDebug() << "Header right: " << hright << endl;
         }
     }
 
@@ -6352,19 +6352,19 @@ bool KSpreadSheet::loadTableStyleFormat( QDomElement *style )
         if ( !part.isNull() )
         {
             fleft = getPart( part );
-            kdDebug(30518) << "Footer left: " << fleft << endl;
+            kdDebug() << "Footer left: " << fleft << endl;
         }
         part = footer.namedItem( "style:region-center" );
         if ( !part.isNull() )
         {
             fmiddle = getPart( part );
-            kdDebug(30518) << "Footer middle: " << fmiddle << endl;
+            kdDebug() << "Footer middle: " << fmiddle << endl;
         }
         part = footer.namedItem( "style:region-right" );
         if ( !part.isNull() )
         {
             fright = getPart( part );
-            kdDebug(30518) << "Footer right: " << fright << endl;
+            kdDebug() << "Footer right: " << fright << endl;
         }
     }
 
@@ -6418,6 +6418,7 @@ QString KSpreadSheet::getPart( const QDomNode & part )
     if ( !macro.isNull() )
       replaceMacro( text, macro.text(), "<file>" );
 
+    //add support for multi line into kspread
     if ( !result.isEmpty() )
       result += '\n';
     result += text;
@@ -6455,6 +6456,13 @@ bool KSpreadSheet::loadOasis( const QDomElement& tableElement, const KoOasisStyl
                 QDomElement *masterStyle = oasisStyles.masterPages()[masterPageStyleName];
                 kdDebug()<<"oasisStyles.styles()[masterPageStyleName] :"<<masterStyle<<endl;
                 loadTableStyleFormat( masterStyle );
+                if ( masterStyle->hasAttribute( "style:page-master-name" ) )
+                {
+                    QString masterPageLayoutStyleName=masterStyle->attribute( "style:page-master-name" );
+                    kdDebug()<<"masterPageLayoutStyleName :"<<masterPageLayoutStyleName<<endl;
+                    QDomElement *masterLayoutStyle = oasisStyles.styles()[masterPageLayoutStyleName];
+                    kdDebug()<<"masterLayoutStyle :"<<masterLayoutStyle<<endl;
+                }
             }
         }
     }
