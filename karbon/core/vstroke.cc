@@ -70,6 +70,11 @@ VStroke::save( QDomElement& element ) const
 		// save gradient:
 		m_gradient.save( me );
 	}
+	else if( m_type == patt )
+	{
+		// save pattern:
+		m_pattern.save( me );
+	}
 
 	// save dashpattern:
 	m_dashPattern.save( me );
@@ -128,6 +133,11 @@ VStroke::load( const QDomElement& element )
 				m_type = grad;
 				m_gradient.load( e );
 			}
+			else if( e.tagName() == "PATTERN" )
+			{
+				m_type = patt;
+				m_pattern.load( e );
+			}
 		}
 	}
 }
@@ -152,6 +162,7 @@ VStroke::operator=( const VStroke& stroke )
 		m_color = stroke.m_color;
 		m_dashPattern = stroke.m_dashPattern;
 		m_gradient = stroke.m_gradient;
+		m_pattern = stroke.m_pattern;
 	}
 
 	return *this;

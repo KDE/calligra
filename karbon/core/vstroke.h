@@ -11,6 +11,7 @@
 #include "vcolor.h"
 #include "vdashpattern.h"
 #include "vgradient.h"
+#include "vpattern.h"
 
 
 class QDomElement;
@@ -35,7 +36,8 @@ public:
 		none     = 0,	/// no stroke at all
 		solid    = 1,	/// solid stroke
 		grad     = 2,	/// gradient as stroke
-		unknown  = 3
+		patt     = 3,	/// pattern as stroke
+		unknown  = 4
 	};
 
 	enum VLineCap
@@ -83,6 +85,9 @@ public:
 	VGradient& gradient() { return m_gradient; }
 	const VGradient& gradient() const { return m_gradient; }
 
+	VPattern& pattern() { return m_pattern; }
+	const VPattern& pattern() const { return m_pattern; }
+
 	VDashPattern& dashPattern() { return m_dashPattern; }
 	const VDashPattern& dashPattern() const { return m_dashPattern; }
 
@@ -99,6 +104,7 @@ private:
 
 	VColor m_color;
 	VGradient m_gradient;
+	VPattern m_pattern;
 	float m_lineWidth;
 	VLineCap m_lineCap;
 	VLineJoin m_lineJoin;

@@ -455,6 +455,8 @@ VKoPainter::drawVPath( ArtVpath *vec )
 	{
 		if( m_stroke && m_stroke->type() == VStroke::grad )
 			applyGradient( strokeSvp, false );
+		else if( m_stroke && m_stroke->type() == VStroke::patt )
+			applyPattern( strokeSvp, false );
 		else
 		{
 			clampToViewport( *strokeSvp, x0, y0, x1, y1 );
@@ -495,7 +497,7 @@ VKoPainter::applyPattern( ArtSVP *svp, bool fill )
 
 	ArtRender *render = 0L;
 
-	VPattern pat = m_fill->pattern();// : m_stroke->pattern();
+	VPattern pat = fill ? m_fill->pattern() : m_stroke->pattern();
 
 	ArtPattern *pattern = new ArtPattern;
 
