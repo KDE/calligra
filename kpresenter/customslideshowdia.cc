@@ -33,13 +33,14 @@
 #include <kmessagebox.h>
 #include <klocale.h>
 
+#include "kprpage.h"
 #include "kpresenter_doc.h"
 
 #include "customslideshowdia.h"
 
 
 CustomSlideShowDia::CustomSlideShowDia( QWidget* parent, KPresenterDoc *_doc, const char* name )
-    : KDialogBase( parent, name, true, i18n("Custom Slide Show"), Ok|Cancel )
+    : KDialogBase( parent, name, true, i18n("Custom Slide Show"), Ok|Cancel ), m_doc( _doc )
 {
   QWidget* page = new QWidget( this );
   setMainWidget( page );
@@ -83,6 +84,8 @@ void CustomSlideShowDia::init()
     //todo
     //init qmap
     //m_customListMap
+    for( unsigned i = 0; i < m_doc->pageList().count(); i++ )
+        listPageName.append( m_doc->pageList().at( i )->pageTitle() );
 }
 
 void CustomSlideShowDia::updateButton()
@@ -106,9 +109,7 @@ void CustomSlideShowDia::slotDoubleClicked(QListBoxItem *)
 
 void CustomSlideShowDia::slotAdd()
 {
-    //todo fix list
-    QStringList lst;
-    DefineCustomSlideShow * dlg = new DefineCustomSlideShow( this, lst );
+    DefineCustomSlideShow * dlg = new DefineCustomSlideShow( this, listPageName );
     if ( dlg->exec() )
     {
         //insert new element
@@ -141,8 +142,7 @@ void CustomSlideShowDia::slotModify()
     QListBoxItem *item = list->selectedItem();
     if ( item )
     {
-        QStringList lst;
-        DefineCustomSlideShow * dlg = new DefineCustomSlideShow( this, item->text(), lst, m_customListMap[item->text()]);
+        DefineCustomSlideShow * dlg = new DefineCustomSlideShow( this, item->text(), listPageName, m_customListMap[item->text()]);
         if ( dlg->exec() )
         {
             //insert new element
@@ -260,9 +260,10 @@ void DefineCustomSlideShow::init()
   connect( m_moveUpSlide, SIGNAL(clicked()), this, SLOT( slotMoveUpSlide() ) );
   connect( m_moveDownSlide, SIGNAL(clicked()), this, SLOT(slotMoveDownSlide()) );
   connect(  m_name, SIGNAL( textChanged ( const QString & ) ), this, SLOT( slideNameChanged( const QString & ) ) );
+  connect( listSlideShow, SIGNAL( clicked ( QListBoxItem * ) ), this, SLOT( updateButton() ) );
 
-  m_insertSlide->setIconSet( SmallIconSet( ( QApplication::reverseLayout()? "back" : "forward" ) ) );
-  m_removeSlide->setIconSet( SmallIconSet( (QApplication::reverseLayout()? "forward" : "back") ) );
+  m_insertSlide->setIconSet( SmallIconSet( ( QApplication::reverseLayout() ? "back" : "forward" ) ) );
+  m_removeSlide->setIconSet( SmallIconSet( ( QApplication::reverseLayout() ? "forward" : "back") ) );
   m_moveUpSlide->setIconSet( SmallIconSet( "up" ) );
   m_moveDownSlide->setIconSet( SmallIconSet( "down" ) );
 
@@ -326,8 +327,7 @@ void DefineCustomSlideShow::slotMoveInsertSlide()
     QListBoxItem *item = listSlide->firstItem();
     while ( item ) {
         if ( item->isSelected() ) {
-            listSlideShow->insertItem( item, 0 );
-            listSlideShow->setCurrentItem( item );
+            listSlideShow->insertItem( item->text(), 0 );
         }
         item = item->next();
     }

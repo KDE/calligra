@@ -60,6 +60,7 @@ protected:
     bool m_bChanged;
     KPresenterDoc *m_doc;
     CustomListMap m_customListMap;
+    QStringList listPageName;
 };
 
 class DefineCustomSlideShow : public KDialogBase
@@ -73,15 +74,15 @@ public:
     QStringList customListSlideShow();
 
 protected slots:
-void slotMoveUpSlide();
+    void slotMoveUpSlide();
     void slotMoveDownSlide();
     void slotMoveRemoveSlide();
     void slotMoveInsertSlide();
     void slideNameChanged( const QString & _name);
+    void updateButton();
 
 protected:
     void init();
-    void updateButton();
 
     QListBox *listSlide;
     QListBox *listSlideShow;
