@@ -1,10 +1,16 @@
 [Desktop Entry]
 Type=Service
 Name=KWord Applixword Import Filter
+Name[cs]=KWord importní filtr pro Applixword
+Name[el]=Φίλτρο Εισαγωγής Abiword του KWord
+Name[eo]=Applixword-import-filtrilo por Verkilo
+Name[fi]=KWord Applixword -tuontisuodin
+Name[he]=KWord-ל Applixword אוביי ןנסמ
+Name[ja]=KWord Applixword インポートフィルター
+Name[ro]=Filtru de import Applixword pentru KWord
+Name[ru]=фильтр импорта Applixword в KWord
 Export=application/x-kword
-ExportDescription=KWord
 Import=application/x-applix
-ImportDescription=Applixword
 Implemented=file
 X-KDE-Library=libapplixwordimport
 X-KDE-LibraryMajor=1
