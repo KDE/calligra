@@ -132,7 +132,8 @@ protected:
 
     KoAutoFormatExceptionWidget *abbreviation;
     KoAutoFormatExceptionWidget *twoUpperLetter;
-
+    bool noSignal;
+    bool changeLanguage;
 protected slots:
     virtual void slotOk();
     void slotBulletStyleToggled( bool );
@@ -159,6 +160,7 @@ protected slots:
     void defaultBulletStyle();
     void slotChangeTextFormatEntry();
     void slotResetConf();
+    void changeAutoformatLanguage(const QString & );
 
 };
 

@@ -171,16 +171,18 @@ void KoAutoFormat::loadListOfWordCompletion()
     m_listCompletion->insertItems(config.readListEntry( "list" ));
 }
 
-void KoAutoFormat::readConfig()
+void KoAutoFormat::readConfig(bool force)
 {
     // Read the autoformat configuration
     // This is done on demand (when typing the first char, or when opening the config dialog)
     // so that loading is faster and to avoid doing it for readonly documents.
-    if ( m_configRead )
+    if ( m_configRead && !force )
         return;
     KConfig config("kofficerc");
     KConfigGroupSaver cgs( &config, "AutoFormat" );
-    m_autoFormatLanguage = config.readEntry("formatLanguage", QString::null);
+    //when we force don't load format language.
+    if ( !force)
+        m_autoFormatLanguage = config.readEntry("formatLanguage", QString::null);
 
     m_convertUpperCase = config.readBoolEntry( "ConvertUpperCase", false );
     m_convertUpperUpper = config.readBoolEntry( "ConvertUpperUpper", false );
@@ -223,6 +225,13 @@ void KoAutoFormat::readConfig()
     m_nbMaxCompletionWord = config.readUnsignedNumEntry( "NbMaxCompletionWord", 100 );
     m_addCompletionWord = config.readBoolEntry( "AddCompletionWord", true );
 
+    if ( force )
+    {
+        m_entries.clear();
+        m_upperCaseExceptions.clear();
+        m_twoUpperLetterException.clear();
+
+    }
 
     Q_ASSERT( m_entries.isEmpty() ); // readConfig is only called once...
     config.setGroup( "AutoFormatEntries" );
@@ -230,7 +239,6 @@ void KoAutoFormat::readConfig()
     bool fileNotFound = false;
     QFile xmlFile;
     KLocale klocale(m_doc->instance()->instanceName());
-    kdDebug()<<" m_autoFormatLanguage.isEmpty() :"<<m_autoFormatLanguage.isEmpty()<<endl;
 
     if ( m_autoFormatLanguage.isEmpty() )
     {

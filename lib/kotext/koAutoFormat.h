@@ -267,7 +267,7 @@ public:
         { return m_superScriptEntries.count(); }
 
     // Read/save config ( into kwordrc )
-    void readConfig();
+    void readConfig(bool force = false);
     void saveConfig();
 
     static bool isUpper( const QChar &c );

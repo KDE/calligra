@@ -183,12 +183,15 @@ KoAutoFormatDia::KoAutoFormatDia( QWidget *parent, const char *name,
       m_autoFormat( *autoFormat ),
       m_docAutoFormat( autoFormat )
 {
+    noSignal=true;
     setupTab1();
     setupTab2();
     setupTab3();
     setupTab4();
     setInitialSize( QSize(500, 300) );
     connect( this, SIGNAL( user1Clicked() ), this, SLOT(slotResetConf()));
+    noSignal=false;
+    changeLanguage = false;
 }
 
 void KoAutoFormatDia::slotResetConf()
@@ -485,7 +488,6 @@ void KoAutoFormatDia::setupTab3()
     {
         path =*it;
     }
-    kdDebug()<<" path :"<<path<<endl;
     delete standard;
     QDir dir( path);
     tmp =dir.entryList (QDir::Files);
@@ -495,6 +497,8 @@ void KoAutoFormatDia::setupTab3()
             lst<<(*it).left((*it).length()-4);
     }
     autoFormatLanguage->insertStringList(lst);
+
+    connect(autoFormatLanguage, SIGNAL(highlighted ( const QString & )), this, SLOT(changeAutoformatLanguage(const QString & )));
 
     grid->addMultiCellWidget( autoFormatLanguage, 0, 0, 4, 6 );
     QLabel *lblAutoFormatLanguage = new QLabel( i18n("Remplacement and exeption for language"), tab3);
@@ -592,10 +596,29 @@ void KoAutoFormatDia::initTab3()
     {
         ( void )new QListViewItem( m_pListView, it.currentKey(), it.current()->replace() );
     }
-    if ( m_autoFormat.getConfigAutoFormatLanguage( ).isEmpty() )
-        autoFormatLanguage->setCurrentItem(0);
-    else
-        autoFormatLanguage->setCurrentText(m_autoFormat.getConfigAutoFormatLanguage( ));
+    if ( !changeLanguage )
+    {
+        if ( m_autoFormat.getConfigAutoFormatLanguage( ).isEmpty() )
+            autoFormatLanguage->setCurrentItem(0);
+        else
+            autoFormatLanguage->setCurrentText(m_autoFormat.getConfigAutoFormatLanguage( ));
+    }
+}
+
+void KoAutoFormatDia::changeAutoformatLanguage(const QString & text)
+{
+    if ( !noSignal )
+    {
+        changeLanguage=true;
+        if ( text==i18n("Default"))
+            m_autoFormat.configAutoFormatLanguage( QString::null);
+        else
+            m_autoFormat.configAutoFormatLanguage( text);
+        m_autoFormat.readConfig( true );
+        initTab3();
+        initTab4();
+        changeLanguage=false;
+    }
 }
 
 void KoAutoFormatDia::setupTab4()
@@ -623,10 +646,13 @@ void KoAutoFormatDia::setupTab4()
 
 void KoAutoFormatDia::initTab4()
 {
-    abbreviation->setListException( m_docAutoFormat->listException() );
-    abbreviation->setAutoInclude( m_docAutoFormat->getConfigIncludeAbbreviation() );
-    twoUpperLetter->setListException( m_docAutoFormat->listTwoUpperLetterException() );
-    twoUpperLetter->setAutoInclude( m_docAutoFormat->getConfigIncludeTwoUpperUpperLetterException() );
+    abbreviation->setListException( changeLanguage ? m_autoFormat.listException(): m_docAutoFormat->listException() );
+    if ( !changeLanguage )
+    {
+        abbreviation->setAutoInclude( m_docAutoFormat->getConfigIncludeAbbreviation() );
+        twoUpperLetter->setAutoInclude( m_docAutoFormat->getConfigIncludeTwoUpperUpperLetterException() );
+    }
+    twoUpperLetter->setListException( changeLanguage ? m_autoFormat.listException():m_docAutoFormat->listTwoUpperLetterException() );
 }
 
 void KoAutoFormatDia::slotChangeTextFormatEntry()
