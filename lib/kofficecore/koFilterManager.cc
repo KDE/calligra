@@ -248,43 +248,6 @@ namespace  // in order not to mess with the global namespace ;)
         }
     }
 
-    // sorts a list of mimetypes alphabetically so that they are displayed to the
-    // user in a meaningful order (of course the native mimetype stays on top)
-    // FIXME: terribly slow sort - we should actually just add to a sorted list in
-    // the first place!
-    QStringList sortMimeList (QStringList inlist)
-    {
-        Q_ASSERT (!inlist.isEmpty());
-        QStringList outlist;
-
-        // native mimetype comes first
-        outlist.append (inlist.front ());
-        inlist.pop_front ();
-
-        while (!inlist.isEmpty ())
-        {
-            QStringList::Iterator bestIt = inlist.begin ();
-            QString bestComment = KMimeType::mimeType ((*bestIt))->comment ();
-
-            QStringList::Iterator it = inlist.at (1);
-            while (it != inlist.end ())
-            {
-                QString comment = KMimeType::mimeType (*it)->comment ();
-                if (comment < bestComment)
-                {
-                    bestIt = it;
-                    bestComment = comment;
-                }
-                it++;
-            }
-
-            outlist += (*bestIt);
-            inlist.erase (bestIt);
-        }
-
-        return outlist;
-    }
-
     // This method runs a BFS on the graph to determine the connected
     // nodes. Make sure that the graph is "cleared" (the colors of the
     // nodes are all white)
@@ -316,7 +279,6 @@ namespace  // in order not to mess with the global namespace ;)
             connected.append( v->mimeType() );
         }
         return connected;
-        //return sortMimeList (connected);
     }
 }
 
