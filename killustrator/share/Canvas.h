@@ -105,6 +105,7 @@ signals:
 
 public slots:
   void updateView ();
+  void updateRegion (const Rect& r);
   void ensureVisibility (bool flag);
   void calculateSize ();
 

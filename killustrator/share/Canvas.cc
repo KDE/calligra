@@ -54,6 +54,8 @@ Canvas::Canvas (GDocument* doc, float res, QwViewport* vp, QWidget* parent,
   viewport = vp;
 
   connect (document, SIGNAL (changed ()), this, SLOT (updateView ()));
+  connect (document, SIGNAL (changed (const Rect&)), 
+	   this, SLOT (updateRegion (const Rect&)));
   connect (document, SIGNAL (sizeChanged ()), this, SLOT (calculateSize ()));
   connect (&(document->handle ()), SIGNAL (handleChanged ()),
 	   this, SLOT (updateView ()));
@@ -257,6 +259,7 @@ float Canvas::scaleFactor () const {
 
 void Canvas::updateView () {
   Painter p;
+  float s = scaleFactor ();
 
   // setup the painter  
   p.begin (pixmap);
@@ -264,7 +267,7 @@ void Canvas::updateView () {
   pixmap->fill (backgroundColor ());
 
   // clear the canvas
-  p.scale (scaleFactor (), scaleFactor ());
+  p.scale (s, s);
   p.eraseRect (0, 0, document->getPaperWidth (),
 	       document->getPaperHeight ());
 
@@ -281,6 +284,41 @@ void Canvas::updateView () {
 
   p.end ();
   repaint ();
+}
+
+void Canvas::updateRegion (const Rect& r) {
+  Painter p;
+  float s = scaleFactor ();
+
+  // compute the clipping region
+  QWMatrix m;
+  m.scale (s, s);
+  QRect clip = m.map (QRect (int (r.left ()), int (r.top ()), 
+			     int (r.width ()), int (r.height ())));
+
+  // setup the painter  
+  p.begin (pixmap);
+  p.setBackgroundColor (white);
+  // setup the clip region
+  p.setClipRect (clip);
+
+  // clear the canvas
+  p.scale (s, s);
+  p.eraseRect (r.left (), r.top (), r.width (), r.height ());
+
+  // draw the grid
+  if (gridIsOn)
+    drawGrid (p);
+
+  // next the document contents
+  document->drawContentsInRegion (p, r, drawBasePoints);
+
+  // and finally the handle
+  if (! document->selectionIsEmpty ())
+    document->handle ().draw (p);
+
+  p.end ();
+  repaint (clip, false);
 }
 
 void Canvas::drawGrid (Painter& p) {

@@ -132,27 +132,36 @@ void Ruler::updatePointer (int x, int y) {
   if (! buffer)
     return;
 
+  QRect r1, r2;
+  int pos = 0;
+
   if (orientation == Horizontal) {
-    if (currentPosition != -1)
-      bitBlt (buffer, currentPosition * zoom - MARKER_WIDTH / 2, 1, bg, 
-    	      0, 0, MARKER_WIDTH, MARKER_HEIGHT);
+    if (currentPosition != -1) {
+      pos = int (currentPosition * zoom - MARKER_WIDTH / 2);
+      r1 = QRect (pos, 1, MARKER_WIDTH, MARKER_HEIGHT);
+      bitBlt (buffer, pos, 1, bg, 0, 0, MARKER_WIDTH, MARKER_HEIGHT);
+    }
     if (x != -1) {
-      bitBlt (buffer, x * zoom - MARKER_WIDTH / 2, 1, marker, 
-	      0, 0, MARKER_WIDTH, MARKER_HEIGHT);
+      pos = int (x * zoom - MARKER_WIDTH / 2);
+      r2 = QRect (pos, 1, MARKER_WIDTH, MARKER_HEIGHT);
+      bitBlt (buffer, pos, 1, marker, 0, 0, MARKER_WIDTH, MARKER_HEIGHT);
       currentPosition = x;
     }
   }
   else {
-    if (currentPosition != -1)
-      bitBlt (buffer, 1, currentPosition * zoom - MARKER_HEIGHT / 2, bg, 
-    	      0, 0, MARKER_HEIGHT, MARKER_WIDTH);
+    if (currentPosition != -1) {
+      pos = int (currentPosition * zoom - MARKER_HEIGHT / 2);
+      r1 = QRect (1, pos, MARKER_HEIGHT, MARKER_WIDTH);
+      bitBlt (buffer, 1, pos, bg, 0, 0, MARKER_HEIGHT, MARKER_WIDTH);
+    }
     if (y != -1) {
-      bitBlt (buffer, 1, y * zoom - MARKER_HEIGHT / 2, marker, 
-	      0, 0, MARKER_HEIGHT, MARKER_WIDTH);
+      pos = int (y * zoom - MARKER_HEIGHT / 2);
+      r2 = QRect (1, pos, MARKER_HEIGHT, MARKER_WIDTH);
+      bitBlt (buffer, 1, pos, marker, 0, 0, MARKER_HEIGHT, MARKER_WIDTH);
       currentPosition = y;
     }
   }
-  repaint ();
+  repaint (r1.unite (r2));
 }
 
 void Ruler::updateVisibleArea (int xpos, int ypos) {

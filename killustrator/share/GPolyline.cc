@@ -43,7 +43,6 @@ GPolyline::GPolyline () {
   points.setAutoDelete (true);
   sArrow = eArrow = 0L;
   sAngle = eAngle = 0;
-  //  outlineInfo.ckind = GObject::OutlineInfo::Custom_Line;
 }
 
 GPolyline::GPolyline (const list<XmlAttribute>& attribs) : GObject (attribs) {
@@ -52,7 +51,6 @@ GPolyline::GPolyline (const list<XmlAttribute>& attribs) : GObject (attribs) {
   points.setAutoDelete (true);
   sArrow = eArrow = 0L;
   sAngle = eAngle = 0;
-  //  outlineInfo.ckind = GObject::OutlineInfo::Custom_Line;
 
   list<XmlAttribute>::const_iterator first = attribs.begin ();
 	
@@ -186,8 +184,7 @@ bool GPolyline::contains (const Coord& p) {
   float x1, x2, y1, y2, m, n, xp, yp;
 
   if (box.contains (p)) {
-    QWMatrix mi = tMatrix.invert ();
-    QPoint pp = mi.map (QPoint ((int) p.x (), (int) p.y ()));
+    QPoint pp = iMatrix.map (QPoint ((int) p.x (), (int) p.y ()));
 
     for (unsigned int i = 1; i < points.count (); i++) {
       x1 = points.at (i - 1)->x ();
@@ -234,39 +231,33 @@ bool GPolyline::contains (const Coord& p) {
 }
 
 void GPolyline::setPoint (int idx, const Coord& p) {
-  QWMatrix mi = tMatrix.invert ();
-  Coord np = p.transform (mi);
+  Coord np = p.transform (iMatrix);
 
   points.at (idx)->x (np.x ());
   points.at (idx)->y (np.y());
-  calcBoundingBox ();
-  emit changed ();
+
+  updateRegion ();
 }
 
 void GPolyline::removePoint (int idx, bool update) {
   points.remove (idx);
-  if (update) {
-    calcBoundingBox ();
-    emit changed ();
-  }
+  if (update) 
+    updateRegion ();
 }
 
 void GPolyline::addPoint (int idx, const Coord& p, bool update) {
-  QWMatrix mi = tMatrix.invert ();
-  Coord np = p.transform (mi);
+  Coord np = p.transform (iMatrix);
 
   points.insert (idx, new Coord (np));
 
-  if (update) {
-    calcBoundingBox ();
-    emit changed ();
-  }
+  if (update) 
+    updateRegion ();
 }
 
 void GPolyline::_addPoint (int idx, const Coord& p) {
   points.insert (idx, new Coord (p));
-  calcBoundingBox ();
-  emit changed ();
+
+  updateRegion ();
 }
 
 const Coord& GPolyline::getPoint (int idx) {
@@ -282,14 +273,13 @@ void GPolyline::movePoint (int idx, float dx, float dy) {
   float y = points.at (idx)->y ();
   float ndx, ndy;
 
-  QWMatrix mi = tMatrix.invert ();
-  ndx = dx * mi.m11 () + dy * mi.m21 ();
-  ndy = dy * mi.m22 () + dx * mi.m12 ();
+  ndx = dx * iMatrix.m11 () + dy * iMatrix.m21 ();
+  ndy = dy * iMatrix.m22 () + dx * iMatrix.m12 ();
 
   points.at (idx)->x (x + ndx);
   points.at (idx)->y (y + ndy);
-  calcBoundingBox ();
-  emit changed ();
+
+  updateRegion ();
 }
 
 
@@ -363,9 +353,6 @@ void GPolyline::calcBoundingBox () {
 }
 
 void GPolyline::updateProperties () {
-  //  if (outlineInfo.ckind != GObject::OutlineInfo::Custom_Line)
-  //    return;
-
   if ((sArrow == 0L && outlineInfo.startArrowId > 0) ||
       (sArrow && sArrow->arrowID () != outlineInfo.startArrowId) ||
       (eArrow == 0L && outlineInfo.endArrowId > 0) ||
@@ -374,8 +361,7 @@ void GPolyline::updateProperties () {
 	      Arrow::getArrow (outlineInfo.startArrowId) : 0L);
     eArrow = (outlineInfo.endArrowId > 0 ? 
 	      Arrow::getArrow (outlineInfo.endArrowId) : 0L);
-    calcBoundingBox (); // for computing angles of arrows
-    emit changed ();
+    updateRegion ();
   }
 }
 
@@ -400,8 +386,7 @@ bool GPolyline::findNearestPoint (const Coord& p, float max_dist,
   float dx, dy, d1, d2;
   pidx = -1;
 
-  QWMatrix mi = tMatrix.invert ();
-  Coord np = p.transform (mi);
+  Coord np = p.transform (iMatrix);
 
   dx = points.at (0)->x () - np.x ();
   dy = points.at (0)->y () - np.y ();

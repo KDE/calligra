@@ -102,3 +102,31 @@ bool Rect::contains (const Coord& p) const {
 bool Rect::contains (const Rect& r) const {
   return r.x1_ >= x1_ && r.x2_ <= x2_ && r.y1_ >= y1_ && r.y2_ <= y2_;
 }
+
+bool Rect::intersects (const Rect& r) const {
+/*
+  return this->contains (r.topLeft ()) || this->contains (r.bottomRight ())
+    || this->contains (r.topRight ()) || this->contains (r.bottomLeft ()) 
+    || r.contains (topLeft ()) || r.contains (bottomRight ())
+    || r.contains (topRight ()) || r.contains (bottomLeft ())
+    || r.contains (*this);
+*/
+  float x1, x2, y1, y2;
+  x1 = QMAX(x1_, r.x1_);
+  y1 = QMAX(y1_, r.y1_);
+  x2 = QMIN(x2_, r.x2_);
+  y2 = QMIN(y2_, r.y2_);
+  return (x2 > x1 && y2 > y1);
+}
+
+void Rect::enlarge (float v) {
+  x1_ -= v; y1_ -= v;
+  x2_ += v; y2_ += v;
+}
+
+ostream& operator<< (ostream& os, const Rect& r) {
+    os << '[' << r.left () << ", " << r.top () << " - " 
+       << r.right () << ", " << r.bottom () << ']';
+    return os;
+}
+

@@ -64,6 +64,8 @@ public:
   bool isModified () const { return modifyFlag; }
 
   void drawContents (Painter& p, bool withBasePoints = false);
+  void drawContentsInRegion (Painter& p, const Rect& r,
+			     bool withBasePoints = false);
 
   /*
    * Layer management
@@ -151,10 +153,12 @@ protected:
   
 public slots:
   void objectChanged ();
+  void objectChanged (const Rect& r);
   void layerChanged ();
   
 signals:
   void changed ();
+  void changed (const Rect& r);
   void selectionChanged ();
   void sizeChanged ();
 

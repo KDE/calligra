@@ -27,6 +27,7 @@
 
 #include <qdstream.h>
 #include <qwmatrix.h>
+#include <iostream.h>
 
 class Coord {
 public:
@@ -96,15 +97,23 @@ public:
   bool contains (const Coord& p) const;
   bool contains (const Rect& r) const;
 
+  bool intersects (const Rect& r) const;
+
   bool empty () const { return x1_ == 0 && x2_ == 0 && y1_ == 0 && y2_ == 0; }
 
   Coord topLeft () const { return Coord (x1_, y1_); }
   Coord bottomRight () const { return Coord (x2_, y2_); }
+  Coord topRight () const { return Coord (x2_, y1_); }
+  Coord bottomLeft () const { return Coord (x1_, y2_); }
 
   Coord center () const { return Coord ((x1_ + x2_) / 2, (y1_ + y2_) / 2); }
+
+  void enlarge (float v);
 
 private:
   float x1_, y1_, x2_, y2_;
 };
+
+ostream& operator<< (ostream& os, const Rect& r);
 
 #endif

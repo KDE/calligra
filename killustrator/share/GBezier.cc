@@ -139,15 +139,14 @@ GBezier::GBezier (const GBezier& obj) : GPolyline (obj) {
 }
   
 void GBezier::setPoint (int idx, const Coord& p) {
-  QWMatrix mi = tMatrix.invert ();
-  Coord np = p.transform (mi);
+  Coord np = p.transform (iMatrix);
 
   points.at (idx)->x (np.x ());
   points.at (idx)->y (np.y());
-  if (! isEndPoint (idx))
+  if (! isEndPoint (idx)) 
     updateBasePoint (cPoint (idx));
-  calcBoundingBox ();
-  emit changed ();
+  else 
+    updateRegion ();
 }
 
 void GBezier::movePoint (int idx, float dx, float dy) {
@@ -155,9 +154,8 @@ void GBezier::movePoint (int idx, float dx, float dy) {
   float y = points.at (idx)->y ();
   float ndx, ndy;
 
-  QWMatrix mi = tMatrix.invert ();
-  ndx = dx * mi.m11 () + dy * mi.m21 ();
-  ndy = dy * mi.m22 () + dx * mi.m12 ();
+  ndx = dx * iMatrix.m11 () + dy * iMatrix.m21 ();
+  ndy = dy * iMatrix.m22 () + dx * iMatrix.m12 ();
 
   points.at (idx)->x (x + ndx);
   points.at (idx)->y (y + ndy);
@@ -166,12 +164,10 @@ void GBezier::movePoint (int idx, float dx, float dy) {
     points.at (idx - 1)->y (points.at (idx - 1)->y () + ndy);
     points.at (idx + 1)->x (points.at (idx + 1)->x () + ndx);
     points.at (idx + 1)->y (points.at (idx + 1)->y () + ndy);
+    updateRegion ();
   }
-  else {
+  else
     updateBasePoint (cPoint (idx));
-  }
-  calcBoundingBox ();
-  emit changed ();
 }
 
 const char* GBezier::typeName () {
@@ -269,8 +265,7 @@ void GBezier::drawHelpLinesForWorkingSegment (Painter& p) {
 
 bool GBezier::contains (const Coord& p) {
   if (box.contains (p)) {
-    QWMatrix mi = tMatrix.invert ();
-    Coord pc = p.transform (mi);
+    Coord pc = p.transform (iMatrix);
 
     for (unsigned int i = 1; i + 3 < points.count (); i += 3) {
       // detect the containing curve segment
@@ -309,7 +304,7 @@ void GBezier::initBasePoint (int idx) {
   float dy = epoint.y ();
   points.at (idx)->x (2 * dx - points.at (idx + 2)->x ());
   points.at (idx)->y (2 * dy - points.at (idx + 2)->y ());
-  emit changed ();
+  updateRegion (false);
 }
 
 void GBezier::updateBasePoint (int idx) {
@@ -325,33 +320,32 @@ void GBezier::updateBasePoint (int idx) {
   float dy = epoint.y ();
   points.at (idx)->x (2 * dx - points.at (cPoint (idx))->x ());
   points.at (idx)->y (2 * dy - points.at (cPoint (idx))->y ());
-  emit changed ();
+  updateRegion ();
 }
 
 void GBezier::setWorkingSegment (int seg) {
   wSegment = seg;
-  emit changed ();
+  updateRegion (false);
 }
 
 void GBezier::calcBoundingBox () {
-  // don't include first and last base point in bounding box computation
   Rect r;
   unsigned int num = points.count ();
-  if (num > 1) {
-    Coord p = points.at (1)->transform (tmpMatrix);
+  Coord p = points.at (0)->transform (tmpMatrix);
 
-    r.left (p.x ());
-    r.top (p.y ());
-    r.right (p.x ());
-    r.bottom (p.y ());
-  }
-  for (unsigned int i = 2; i < num - 1; i++) {
+  r.left (p.x ());
+  r.top (p.y ());
+  r.right (p.x ());
+  r.bottom (p.y ());
+  for (unsigned int i = 1; i < num; i++) {
     Coord p = points.at (i)->transform (tmpMatrix);
 
-    r.left (QMIN(p.x (), r.left ()));
-    r.top (QMIN(p.y (), r.top ()));
-    r.right (QMAX(p.x (), r.right ()));
-    r.bottom (QMAX(p.y (), r.bottom ()));
+    if (p.x () != MAXFLOAT && p.y () != MAXFLOAT) {
+      r.left (QMIN(p.x (), r.left ()));
+      r.top (QMIN(p.y (), r.top ()));
+      r.right (QMAX(p.x (), r.right ()));
+      r.bottom (QMAX(p.y (), r.bottom ()));
+    }
   }
 
   if (sArrow != 0L) {
@@ -365,6 +359,7 @@ void GBezier::calcBoundingBox () {
     eAngle = calcArrowAngle (p1, p2, 1);
   }
 
+  r.enlarge (2); // for the help lines
   updateBoundingBox (r);
 }
 
@@ -409,8 +404,7 @@ bool GBezier::findNearestPoint (const Coord& p, float max_dist,
   float dx, dy, d1, d2;
   pidx = -1;
 
-  QWMatrix mi = tMatrix.invert ();
-  Coord np = p.transform (mi);
+  Coord np = p.transform (iMatrix);
 
   dx = points.at (1)->x () - np.x ();
   dy = points.at (1)->y () - np.y ();

@@ -204,13 +204,13 @@ void GText::setCursor (int x, int y) {
     cursx = x;
   else
     cursx = text.at (y)->length () - 1;
-  emit changed ();
+  updateRegion (false);
+  //  emit changed ();
 }
 
 void GText::setOrigin (const Coord& p) {
   opos = p;
-  calcBoundingBox ();
-  emit changed ();
+  updateRegion ();
 }
 
 void GText::setText (const QString& s) {
@@ -229,8 +229,7 @@ void GText::setText (const QString& s) {
       text.append (new QString (sub));
     }
   } while (pos2 != -1);
-  calcBoundingBox ();
-  emit changed ();
+  updateRegion ();
 }
 
 QString GText::getText () const {
@@ -258,9 +257,7 @@ void GText::deleteChar () {
   }
   else
     s.remove (cursx, 1);
-
-  calcBoundingBox ();
-  emit changed ();
+  updateRegion ();
 }
 
 void GText::deleteBackward () {
@@ -282,8 +279,7 @@ void GText::deleteBackward () {
     cursy--;
     cursx = oldpos;
   }
-  calcBoundingBox ();
-  emit changed ();
+  updateRegion ();
 }
 
 void GText::insertChar (char c) {
@@ -299,19 +295,17 @@ void GText::insertChar (char c) {
     s.insert (cursx, c);
     cursx++;
   }
-  calcBoundingBox ();
-  emit changed ();
+  updateRegion ();
 }
 
 void GText::showCursor (bool flag) {
   cursorActive = flag;
-  emit changed ();
+  updateRegion (false);
 }
 
 void GText::updateCursor (const Coord& p) {
   if (box.contains (p)) {
-    QWMatrix mi = tMatrix.invert ();
-    QPoint pp = mi.map (QPoint ((int) p.x (), (int) p.y ()));
+    QPoint pp = iMatrix.map (QPoint ((int) p.x (), (int) p.y ()));
 
     Coord c = opos;
     cursy = (int) ((pp.y () - c.y ()) / fm->height ());
@@ -333,8 +327,7 @@ void GText::setFont (const QFont& f) {
   textInfo.font = f;
   if (fm) delete fm;
   fm = new QFontMetrics (textInfo.font);
-  calcBoundingBox ();
-  emit changed ();
+  updateRegion ();
 }
 
 void GText::calcBoundingBox () {

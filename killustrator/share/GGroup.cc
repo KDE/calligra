@@ -60,8 +60,7 @@ const char* GGroup::typeName () {
 bool GGroup::contains (const Coord& p) {
   QListIterator<GObject> it (members);
 
-  QWMatrix im = tMatrix.invert ();
-  Coord np = p.transform (im);
+  Coord np = p.transform (iMatrix);
   for (; it.current (); ++it)
     if (it.current ()->contains (np))
       return true;
@@ -71,8 +70,7 @@ bool GGroup::contains (const Coord& p) {
 void GGroup::addObject (GObject* obj) {
   obj->ref ();
   members.append (obj);
-  calcBoundingBox ();
-  emit changed ();
+  updateRegion ();
 }
 
 void GGroup::draw (Painter& p, bool withBasePoints) {

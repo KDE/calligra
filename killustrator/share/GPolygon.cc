@@ -96,14 +96,12 @@ static bool intersects (const Coord& p11, const Coord& p12,
 GPolygon::GPolygon (GPolygon::Kind pkind) : GPolyline () {
   points.setAutoDelete (true);
   kind = pkind;
-  //  outlineInfo.ckind = GObject::OutlineInfo::Custom_Rectangle;
 }
   
 GPolygon::GPolygon (const list<XmlAttribute>& attribs, Kind pkind) 
   : GPolyline (attribs) {
   points.setAutoDelete (true);
   kind = pkind;
-  //  outlineInfo.ckind = GObject::OutlineInfo::Custom_Rectangle;
   if (kind != PK_Polygon) {
     list<XmlAttribute>::const_iterator first = attribs.begin ();
     float x = 0, y = 0, w = 0, h = 0;
@@ -250,8 +248,7 @@ void GPolygon::writeToPS (ostream& os) {
 
 bool GPolygon::contains (const Coord& p) {
   if (box.contains (p)) {
-    QWMatrix mi = tMatrix.invert ();
-    QPoint pp = mi.map (QPoint ((int) p.x (), (int) p.y ()));
+    QPoint pp = iMatrix.map (QPoint ((int) p.x (), (int) p.y ()));
     if (kind != PK_Polygon) {
       // the simplest case: the polygon is a square or a rectangle
       Rect r (*(points.at (0)), *(points.at (2)));
@@ -287,8 +284,7 @@ void GPolygon::setEndPoint (const Coord& p) {
     p2 = p;
   setPoint (1, Coord (p2.x (), p0.y ()));
   setPoint (3, Coord (p0.x (), p2.y ()));
-  calcBoundingBox ();
-  emit changed ();
+  updateRegion ();
 }
 
 void GPolygon::setSymmetricPolygon (const Coord& sp, const Coord& ep, 
@@ -332,9 +328,7 @@ void GPolygon::setSymmetricPolygon (const Coord& sp, const Coord& ep,
       points.append (new Coord (xp + xoff,  yp + yoff));
     }
   }
-
-  calcBoundingBox ();
-  emit changed ();
+  updateRegion ();
 }
 
 void GPolygon::movePoint (int idx, float dx, float dy) {
@@ -351,8 +345,7 @@ void GPolygon::movePoint (int idx, float dx, float dy) {
     Roundness += off;
     if (Roundness < 0) Roundness = 0;
     if (Roundness > 100) Roundness = 100;
-    calcBoundingBox ();
-    emit changed ();
+    updateRegion ();
   }
 }
 

@@ -74,7 +74,6 @@ GObject::GObject () {
   outlineInfo.shape = OutlineInfo::DefaultShape;
   outlineInfo.startArrowId = outlineInfo.endArrowId = 0;
 
-  //  outlineInfo.ckind = OutlineInfo::Custom_None;
   fillInfo = defaultFillInfo;
   fillInfo.mask = FillInfo::Color | FillInfo::Style;
 
@@ -89,6 +88,7 @@ GObject::GObject (const list<XmlAttribute>& attribs) {
     const string& attr = (*first).name ();
     if (attr == "matrix") {
       tMatrix = (*first).matrixValue ();
+      iMatrix = tMatrix.invert ();
       tmpMatrix = tMatrix;
     }
     else if (attr == "strokecolor")
@@ -112,6 +112,7 @@ GObject::GObject (const GObject& obj) : QObject()
   fillInfo = obj.fillInfo;
   tMatrix = obj.tMatrix;
   tmpMatrix = tMatrix;
+  iMatrix = obj.iMatrix;
   layer = obj.layer;
 
   rcount = 1;
@@ -129,13 +130,29 @@ void GObject::unref () {
     delete this;
 }
 
+void GObject::updateRegion (bool recalcBBox) {
+  Rect newbox = box;
+  
+  if (recalcBBox) {
+    Rect oldbox = box;
+    calcBoundingBox ();
+    newbox = box.unite (oldbox);
+  }
+
+  if (isSelected ())
+    // the object is selected, so enlarge the update region in order
+    // to redraw the handle
+    newbox.enlarge (8);
+
+  emit changed (newbox);
+}
+
 void GObject::transform (const QWMatrix& m, bool update) {
   tMatrix = tMatrix * m;
+  iMatrix = tMatrix.invert ();
   initTmpMatrix ();
-  if (update) {
-    calcBoundingBox ();
-    emit changed ();
-  }
+  if (update) 
+    updateRegion ();
 }
 
 void GObject::initTmpMatrix () {
@@ -144,10 +161,8 @@ void GObject::initTmpMatrix () {
 
 void GObject::ttransform (const QWMatrix& m, bool update) {
   tmpMatrix = tmpMatrix * m;
-  if (update) {
-    calcBoundingBox ();
-    emit changed ();
-  }
+  if (update) 
+    updateRegion ();
 }
 
 void GObject::setOutlineInfo (const GObject::OutlineInfo& info) {
@@ -162,25 +177,8 @@ void GObject::setOutlineInfo (const GObject::OutlineInfo& info) {
     outlineInfo.shape = info.shape;
     outlineInfo.startArrowId = info.startArrowId;
     outlineInfo.endArrowId = info.endArrowId;
-#if 0
-    outlineInfo.ckind = info.ckind;
-    switch (info.ckind) {
-    case OutlineInfo::Custom_Line:
-      outlineInfo.custom.arrow.startId = info.custom.arrow.startId;
-      outlineInfo.custom.arrow.endId = info.custom.arrow.endId;
-      break;
-    case OutlineInfo::Custom_Rectangle:
-      outlineInfo.custom.roundness = info.custom.roundness;
-      break;
-    case OutlineInfo::Custom_Ellipse:
-      outlineInfo.custom.shape = info.custom.shape;
-      break;
-    default:
-      break;
-    }
-#endif
   }
-  emit changed ();
+  updateRegion (false);
   emit propertiesChanged ();
 }
 
@@ -189,26 +187,26 @@ GObject::OutlineInfo GObject::getOutlineInfo () const {
 }
   
 void GObject::setOutlineShape (OutlineInfo::Shape s) {
-    outlineInfo.shape = s;
-  emit changed ();
+  outlineInfo.shape = s;
+  updateRegion ();
   emit propertiesChanged ();
 }
 
 void GObject::setOutlineColor (const QColor& color) {
   outlineInfo.color = color;
-  emit changed ();
+  updateRegion (false);
   emit propertiesChanged ();
 }
 
 void GObject::setOutlineStyle (PenStyle style) {
   outlineInfo.style = style;
-  emit changed ();
+  updateRegion (false);
   emit propertiesChanged ();
 }
 
 void GObject::setOutlineWidth (float width) {
   outlineInfo.width = width;
-  emit changed ();
+  updateRegion (false);
   emit propertiesChanged ();
 }
 
@@ -229,7 +227,7 @@ void GObject::setFillInfo (const GObject::FillInfo& info) {
     fillInfo.color = info.color;
   if (info.mask & FillInfo::Style)
     fillInfo.style = info.style;
-  emit changed ();
+  updateRegion (false);
   emit propertiesChanged ();
 }
 
@@ -239,7 +237,7 @@ GObject::FillInfo GObject::getFillInfo () const {
   
 void GObject::setFillColor (const QColor& color) {
   fillInfo.color = color;
-  emit changed ();
+  updateRegion (false);
   emit propertiesChanged ();
 }
 
@@ -249,7 +247,7 @@ const QColor& GObject::getFillColor () const {
 
 void GObject::setFillStyle (BrushStyle b) {
   fillInfo.style = b;
-  emit changed ();
+  updateRegion (false);
   emit propertiesChanged ();
 }
 
@@ -314,11 +312,12 @@ void GObject::initState (GOState* state) {
 
 void GObject::restoreState (GOState* state) {
   tMatrix = state->matrix;
+  iMatrix = tMatrix.invert ();
   tmpMatrix = tMatrix;
   setFillInfo (state->fInfo);
   setOutlineInfo (state->oInfo);
-  calcBoundingBox ();
-  emit changed ();
+
+  updateRegion ();
 }
 
 void GObject::calcUntransformedBoundingBox (const Coord& tleft, 

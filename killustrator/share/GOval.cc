@@ -39,8 +39,6 @@
 
 GOval::GOval (bool cFlag) : circleFlag (cFlag) {
   sAngle = eAngle = 270;
-  //  outlineInfo.ckind = GObject::OutlineInfo::Custom_Ellipse;
-  //  outlineInfo.custom.shape = GObject::OutlineInfo::EK_Default;
 }
 
 GOval::GOval (const list<XmlAttribute>& attribs, bool cFlag) 
@@ -49,8 +47,6 @@ GOval::GOval (const list<XmlAttribute>& attribs, bool cFlag)
   float x = 0, y = 0, rx = 0, ry = 0;
 
   sAngle = eAngle = 270;
-  //  outlineInfo.ckind = GObject::OutlineInfo::Custom_Ellipse;
-  //  outlineInfo.custom.shape = GObject::OutlineInfo::EK_Default;
 
   while (first != attribs.end ()) {
     const string& attr = (*first).name ();
@@ -172,8 +168,7 @@ bool GOval::contains (const Coord& p) {
   float x1, y1, x2, y2;
 
   if (box.contains (p)) {
-    QWMatrix mi = tMatrix.invert ();
-    QPoint pp = mi.map (QPoint ((int) p.x (), (int) p.y ()));
+    QPoint pp = iMatrix.map (QPoint ((int) p.x (), (int) p.y ()));
 
     x1 = sPoint.x (); x2 = ePoint.x ();
     if (x1 >= x2) {
@@ -209,8 +204,7 @@ void GOval::setAngles (float a1, float a2) {
 
 void GOval::setStartPoint (const Coord& p) {
   sPoint = p;
-  calcBoundingBox ();
-  emit changed ();
+  updateRegion ();
 }
 
 void GOval::setEndPoint (const Coord& p) {
@@ -230,8 +224,7 @@ void GOval::setEndPoint (const Coord& p) {
   }
   else
     ePoint = p;
-  calcBoundingBox ();
-  emit changed ();
+  updateRegion ();
 }
 
 void GOval::calcBoundingBox () {
@@ -313,8 +306,7 @@ void GOval::movePoint (int idx, float dx, float dy) {
   else if (outlineInfo.shape == GObject::OutlineInfo::DefaultShape)
     outlineInfo.shape = GObject::OutlineInfo::ArcShape;
 
-  calcBoundingBox ();
-  emit changed ();
+  updateRegion ();
 }
 
 void GOval::update_segments () {

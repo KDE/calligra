@@ -60,6 +60,8 @@ protected:
 
   virtual void initState (GOState* state);
 
+  void updateRegion (bool recalcBBox = true);
+
 public:
   struct OutlineInfo {
     enum { 
@@ -311,6 +313,7 @@ public:
 
 signals:
   void changed ();
+  void changed (const Rect& r);
   void propertiesChanged ();
   
 protected:
@@ -326,6 +329,7 @@ protected:
   Rect box;         // the bounding box
   QWMatrix tMatrix;   // transformation matrix
   QWMatrix tmpMatrix; // temporary transformation matrix
+  QWMatrix iMatrix;   // inverted transformation matrix
   OutlineInfo outlineInfo;
   FillInfo fillInfo;
   unsigned int rcount;

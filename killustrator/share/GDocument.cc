@@ -176,6 +176,25 @@ void GDocument::drawContents (Painter& p, bool withBasePoints) {
 #endif
 }
 
+void GDocument::drawContentsInRegion (Painter& p, 
+				      const Rect& r, bool withBasePoints) {
+  vector<GLayer*>::iterator i = layers.begin ();
+  for (; i != layers.end (); i++) {
+    GLayer* layer = *i;
+    if (layer->isVisible ()) {
+      const list<GObject*>& contents = layer->objects ();
+      for (list<GObject*>::const_iterator oi = contents.begin ();
+	   oi != contents.end (); oi++) {
+	// draw the object only if its bounding box 
+	// intersects the active region 
+	const Rect& bbox = (*oi)->boundingBox ();
+	if (r.intersects (bbox))
+	  (*oi)->draw (p, withBasePoints);
+      }
+    }
+  }
+}
+
 unsigned int GDocument::objectCount () const { 
 #ifdef NO_LAYERS
   return objects.count (); 
@@ -196,6 +215,8 @@ void GDocument::insertObject (GObject* obj) {
   active_layer->insertObject (obj);
 #endif
   connect (obj, SIGNAL(changed()), this, SLOT(objectChanged ()));
+  connect (obj, SIGNAL(changed(const Rect&)), 
+	   this, SLOT(objectChanged (const Rect&)));
   setModified ();
   if (autoUpdate)
     emit changed ();
@@ -585,6 +606,25 @@ void GDocument::objectChanged () {
   setModified ();
   if (autoUpdate)
       emit changed ();
+}
+
+void GDocument::objectChanged (const Rect& r) {
+  if (!autoUpdate)
+    return;
+
+  if (! selectionIsEmpty ()) {
+    selBoxIsValid = false;
+    updateHandle ();
+    /*
+    GObject* obj = (GObject *) sender ();
+    if (obj->isSelected () && autoUpdate) {
+      emit selectionChanged ();
+    }
+    */
+  }
+  setModified ();
+  if (autoUpdate)
+      emit changed (r);
 }
 
 bool GDocument::saveToXml (const char* fname) {
