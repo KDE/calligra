@@ -167,24 +167,27 @@ void KSpreadTabBar::scrollLast()
     int i = tabsList.count();
     int x = 0;
 
+	cout << "i: " << i << " rt: " << m_rightTab << "\n";
+
 	if ( m_rightTab == i )
 	return;
 	
     QStringList::Iterator it;
-    for ( it = tabsList.end(); it != tabsList.begin(); it-- ) 
-    {
+	it = tabsList.end(); 
+	do
+	{
+		--it;
 		QFontMetrics fm = painter.fontMetrics();
-	
+		
 	    x += 10 + fm.width( *it );
 		if ( x > width() )
 		{
-			leftTab = i + 2;
+			leftTab = i + 1;
 			break;
 		}
 		--i;
-    }
+    } while ( it != tabsList.begin() );
     painter.end();
-    
     repaint( false );
 }
 
@@ -435,7 +438,7 @@ void KSpreadTabBar::mouseReleaseEvent( QMouseEvent* _ev )
 		moveTab( activeTab - 1, m_moveTab - 1, m_moveTabFlag == moveTabBefore );
 		
 		m_moveTabFlag = moveTabNo;
-		if ( activeTab < m_moveTab )
+		if ( activeTab < m_moveTab && m_moveTabFlag == moveTabBefore )
 			m_moveTab--;
 		activeTab = m_moveTab;
 	
@@ -534,13 +537,12 @@ void KSpreadTabBar::mouseMoveEvent( QMouseEvent* _ev )
 			i++;
 	    }
 		--i;
-		cout << "x: " << x << " pos: " << _ev->pos().x() << " i: " << i << "\n";
+		
 		if ( x + 10 <= _ev->pos().x() && _ev->pos().x() < size().width() ) 
 		{
 			if ( activeTab != i && m_moveTabFlag != moveTabAfter )
 			{
 				m_moveTabFlag = moveTabAfter;
-//				m_moveTab = tabsList.count();
 				m_moveTab = i;
 				repaint( false );
 			}
