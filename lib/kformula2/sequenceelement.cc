@@ -39,7 +39,7 @@
 using namespace std;
 
 SequenceElement::SequenceElement(BasicElement* parent)
-        : BasicElement(parent), parseTree(0), relativeSize(0)
+        : BasicElement(parent), parseTree(0)
 {
     children.setAutoDelete(true);
 }
@@ -97,12 +97,6 @@ BasicElement* SequenceElement::goToPos(FormulaCursor* cursor, bool& handled,
         return this;
     }
     return 0;
-}
-
-
-void SequenceElement::setSizeReduction(const ContextStyle& context)
-{
-    relativeSize = context.getSizeReduction();
 }
 
 

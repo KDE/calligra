@@ -87,8 +87,8 @@ void BracketElement::calcSizes(const ContextStyle& style, ContextStyle::TextStyl
     int contentHeight = 2 * QMAX(content->getMidline(),
                                  content->getHeight() - content->getMidline());
 
-    left->calcSizes(style, contentHeight + style.getSizeReduction());
-    right->calcSizes(style, contentHeight + style.getSizeReduction());
+    left->calcSizes(style, contentHeight);
+    right->calcSizes(style, contentHeight);
 
     // width
     setWidth(left->getWidth() + content->getWidth() + right->getWidth());
@@ -126,9 +126,9 @@ void BracketElement::draw(QPainter& painter, const QRect& r,
     int contentHeight = 2 * QMAX(content->getMidline(),
                                  content->getHeight() - content->getMidline());
 
-    left->draw(painter, r, style, contentHeight + style.getSizeReduction(), myPos);
+    left->draw(painter, r, style, contentHeight, myPos);
     content->draw(painter, r, style, tstyle, istyle, myPos);
-    right->draw(painter, r, style, contentHeight + style.getSizeReduction(), myPos);
+    right->draw(painter, r, style, contentHeight, myPos);
 }
 
 

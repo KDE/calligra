@@ -86,14 +86,13 @@ BasicElement* RootElement::goToPos(FormulaCursor* cursor, bool& handled,
  */
 void RootElement::calcSizes(const ContextStyle& style, ContextStyle::TextStyle tstyle, ContextStyle::IndexStyle istyle)
 {
-    content->calcSizes(style, tstyle, 
+    content->calcSizes(style, tstyle,
 		       style.convertIndexStyleLower(istyle));
 
     int indexWidth = 0;
     int indexHeight = 0;
     if (hasIndex()) {
-        index->setSizeReduction(style);
-        index->calcSizes(style, 
+	index->calcSizes(style,
 			 style.convertTextStyleIndex(tstyle),
 			 style.convertIndexStyleUpper(istyle));
         indexWidth = index->getWidth();
@@ -154,7 +153,7 @@ void RootElement::draw(QPainter& painter, const QRect& r,
     content->draw(painter, r, style, tstyle,
 		  style.convertIndexStyleLower(istyle), myPos);
     if (hasIndex()) {
-        index->draw(painter, r, style, 
+        index->draw(painter, r, style,
 		    style.convertTextStyleIndex(tstyle),
 		    style.convertIndexStyleUpper(istyle), myPos);
     }

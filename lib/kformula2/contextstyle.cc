@@ -39,7 +39,6 @@ ContextStyle::ContextStyle()
     m_scriptStyleReduction = .7;
     m_scriptScriptStyleReduction = .49;
     minimumSize = 8;
-    sizeReduction = 2;
     lineWidth = 1;
     emptyRectWidth = 10;
     emptyRectHeight = 10;
@@ -111,11 +110,6 @@ int ContextStyle::getAdjustedSize( TextStyle tstyle ) const
     return static_cast<int>( zoomItY( unzoomed ) );
 }
 
-
-int ContextStyle::getSizeReduction() const
-{
-    return zoomItY( sizeReduction );
-}
 
 int ContextStyle::getLineWidth() const
 {

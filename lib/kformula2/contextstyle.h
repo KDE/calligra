@@ -97,7 +97,6 @@ public:
      * Takes into account the current zoom factor.
      **/
     int getAdjustedSize( TextStyle tstyle ) const;
-    int getSizeReduction() const;
     int getLineWidth() const;
 
     int getEmptyRectWidth() const;
@@ -230,11 +229,6 @@ private:
      * The smallest font size we use. Sometimes things have to be readable...
      */
     int minimumSize;
-
-    /**
-     * The amount the indexes are smaller that their parent.
-     */
-    int sizeReduction;
 
     /**
      * The thickness of our lines.

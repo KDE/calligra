@@ -311,13 +311,6 @@ private:
      */
     ElementType* parseTree;
 
-    /**
-     * Our size relative to those of our parent.
-     * That's needed only in the sequence because it is to
-     * support smaller indexes and indexes are always a sequence
-     * with some content.
-     */
-    int relativeSize;
 };
 
 #endif // SEQUENCEELEMENT_H
