@@ -561,9 +561,8 @@ void QTextCursor::insert( const QString &str, bool checkNewLine, QMemArray<QText
 		string->prev()->format( -1, FALSE );
 	    }
 	    QString s = *it;
-	    if ( s.isEmpty() )
-		continue;
-	    string->insert( idx, s );
+	    if ( !s.isEmpty() )
+                string->insert( idx, s );
 	    if ( formatting ) {
 		int len = s.length();
 		if ( it != --lst.end() )
