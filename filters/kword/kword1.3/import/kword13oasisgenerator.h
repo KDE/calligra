@@ -50,7 +50,9 @@ protected: // ZIP methods
     bool zipWriteData(const QString& str); ///< Assumes UTF-8
     void writeStartOfFile( const QString& type );
     void writeContentXml( void );
+    void writeMetaXml( void );
 protected:
+    KWord13Document* m_kwordDocument;
     KZip* m_zip; ///< Output OOWriter file
     uint m_size; ///< Size of ZIP entry
     QTextStream* m_streamOut;

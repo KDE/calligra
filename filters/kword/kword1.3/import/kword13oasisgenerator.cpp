@@ -25,11 +25,13 @@
 #include <kdebug.h>
 #include <kzip.h>
 
-#include <kword13document.h>
+#include <kofficeversion.h>
+
+#include "kword13document.h"
 
 #include "kword13oasisgenerator.h"
 
-KWord13OasisGenerator::KWord13OasisGenerator( void ) : m_zip( 0 ), m_streamOut( 0 )
+KWord13OasisGenerator::KWord13OasisGenerator( void ) : m_kwordDocument( 0 ), m_zip( 0 ), m_streamOut( 0 )
 {
 }
 
@@ -361,6 +363,94 @@ void KWord13OasisGenerator::writeContentXml(void)
     kdDebug(30520) << "content.xml: done!" << endl;
 }
 
+void KWord13OasisGenerator::writeMetaXml(void)
+{
+    if ( !m_zip || !m_kwordDocument )
+        return;
+
+    zipPrepareWriting("meta.xml");
+
+    writeStartOfFile("meta");
+
+    zipWriteData(" <office:meta>\n");
+
+    // Tell who we are in case that we have a bug in our filter output!
+    zipWriteData( "  <meta:generator>KOffice " );
+    zipWriteData( escapeOOText( KOFFICE_VERSION_STRING ) );
+    zipWriteData( " / KWord's OOWriter Export Filter " );
+    zipWriteData( QString( "$Revision$" ).remove( '$' ) );
+
+    zipWriteData("</meta:generator>\n");
+
+    // ### TODO
+#if 0
+    if (!m_docInfo.title.isEmpty())
+    {
+        zipWriteData("  <dc:title>");
+        zipWriteData(escapeOOText(m_docInfo.title));
+        zipWriteData("</dc:title>\n");
+    }
+    if (!m_docInfo.abstract.isEmpty())
+    {
+        zipWriteData("  <dc:description>");
+        zipWriteData(escapeOOText(m_docInfo.abstract));
+        zipWriteData("</dc:description>\n");
+    }
+#endif
+
+    QDateTime dt;
+    
+    dt = m_kwordDocument->creationDate();
+    if ( dt.isValid() )
+    {
+        zipWriteData("  <meta:creation-date>");
+        zipWriteData( escapeOOText( dt.toString( Qt::ISODate) ) );
+        zipWriteData("</meta:creation-date>\n");
+    }
+
+    dt = m_kwordDocument->modificationDate();
+    if ( dt.isValid() )
+    {
+        zipWriteData("  <dc:date>");
+        zipWriteData( escapeOOText( dt.toString( Qt::ISODate ) ) );
+        zipWriteData("</dc:date>\n");
+    }
+
+    dt = m_kwordDocument->lastPrintingDate();
+    if ( dt.isValid() )
+    {
+        zipWriteData("  <meta:print-date>");
+        zipWriteData( escapeOOText( dt.toString( Qt::ISODate ) ) );
+        zipWriteData("</meta:print-date>\n");
+    }
+
+#if 0
+    zipWriteData( "  <meta:document-statistic" );
+
+    // KWord files coming from import filters mostly do not have no page count
+    if ( m_numPages > 0 )
+    {
+        zipWriteData( " meta:page-count=\"" );
+        zipWriteData( QString::number ( m_numPages ) );
+        zipWriteData( "\"" );
+    }
+
+    zipWriteData( " meta:image-count=\"" ); // This is not specified in the OO specification section 2.1.19, fixed in OASIS (### TODO)
+    zipWriteData( QString::number ( m_pictureNumber ) );
+    zipWriteData( "\"" );
+
+    zipWriteData( " meta:table-count=\"" );
+    zipWriteData( QString::number ( m_tableNumber ) );
+    zipWriteData( "\"" );
+
+    zipWriteData( "/>\n" ); // meta:document-statistic
+#endif
+    zipWriteData(" </office:meta>\n");
+    zipWriteData("</office:document-meta>\n");
+
+    zipDoneWriting();
+}
+
 
 bool KWord13OasisGenerator::generate ( const QString& fileName, KWord13Document& kwordDocument )
 {
@@ -368,6 +458,13 @@ bool KWord13OasisGenerator::generate ( const QString& fileName, KWord13Document&
     m_streamOut->setEncoding( QTextStream::UnicodeUTF8 );
     
     // ### TODO
+    
+    if ( m_kwordDocument && ( (void*) m_kwordDocument ) != ( (void*) &kwordDocument ) )
+    {
+        kdWarning(30520) << "KWord Document is different!" <<endl;
+    }
+    
+    m_kwordDocument = &kwordDocument;
     
     m_zip = new KZip( fileName ); // How to check failure?
 

@@ -27,6 +27,7 @@ class QIODevice;
 #include <qstring.h>
 #include <qmap.h>
 #include <qptrlist.h>
+#include <qdatetime.h>
 
 #include "kword13frameset.h"
 
@@ -38,7 +39,15 @@ public:
     
 public:
     void xmldump( QIODevice* io );
-
+    /// Get the "last printed" date/time
+    QDateTime lastPrintingDate( void ) const;
+    /// Get the "creation" date/time
+    QDateTime creationDate( void ) const;
+    /// Get the "modification" date/time
+    QDateTime modificationDate( void ) const;
+protected:
+    /// Get one of the document property
+    QString getProperty( const QString& name ) const;
 public:
     QMap<QString, QString> m_documentProperties;
     QValueList<KWord13Layout> m_styles;

@@ -21,6 +21,8 @@
 
 #include <qiodevice.h>
 
+#include <kdebug.h>
+
 #include "kword13utils.h"
 #include "kword13layout.h"
 #include "kword13document.h"
@@ -110,4 +112,72 @@ void KWord13Document::xmldump( QIODevice* io )
     iostream << " </styles>\n";
     
     iostream << "</kworddocument>\n";
+}
+
+QString KWord13Document::getProperty( const QString& name ) const
+{
+    QMap<QString,QString>::ConstIterator it ( m_documentProperties.find( name ) );
+    if ( it == m_documentProperties.end() )
+    {
+        // Property does not exist
+        return QString::null;
+    }
+    else
+    {
+        return it.data();
+    }
+}
+
+QDateTime KWord13Document::lastPrintingDate( void ) const
+{
+    const QString strDate( getProperty( "VARIABLESETTINGS:lastPrintingDate" ) );
+    
+    QDateTime dt;
+    
+    if ( strDate.isEmpty() )
+    {
+        // ### TODO: check if version
+        kdDebug(30520) << "No syntax 3 printing date!" << endl;
+    }
+    else
+    {
+        dt = QDateTime::fromString( strDate, Qt::ISODate );
+    }
+    return dt;
+}
+
+QDateTime KWord13Document::creationDate( void ) const
+{
+    const QString strDate( getProperty( "VARIABLESETTINGS:creationDate" ) );
+    
+    QDateTime dt;
+    
+    if ( strDate.isEmpty() )
+    {
+        // ### TODO: check if version
+        kdDebug(30520) << "No syntax 3 creation date!" << endl;
+    }
+    else
+    {
+        dt = QDateTime::fromString( strDate, Qt::ISODate );
+    }
+    return dt;
+}
+
+QDateTime KWord13Document::modificationDate( void ) const
+{
+    const QString strDate( getProperty( "VARIABLESETTINGS:modificationDate" ) );
+    
+    QDateTime dt;
+    
+    if ( strDate.isEmpty() )
+    {
+        // ### TODO: check if version
+        kdDebug(30520) << "No syntax 3 modification date!" << endl;
+    }
+    else
+    {
+        dt = QDateTime::fromString( strDate, Qt::ISODate );
+    }
+    return dt;
 }
