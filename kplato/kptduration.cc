@@ -36,10 +36,11 @@ KPTDuration::KPTDuration(const KPTDuration &d) {
 
 KPTDuration::KPTDuration(unsigned d, unsigned h, unsigned m, unsigned s, unsigned ms) {
     m_ms = ms;
-    m_ms += s * 1000;
-    m_ms += m * 60 * 1000;
-    m_ms += h * 60 * 60 * 1000;
-    m_ms += d * 24 * 60 * 60 * 1000;
+    m_ms += static_cast<Q_INT64>(s) * 1000; // cast to avoid potential overflow problem
+    m_ms += static_cast<Q_INT64>(m) * 60 * 1000;
+    m_ms += static_cast<Q_INT64>(h) * 60 * 60 * 1000;
+    m_ms += static_cast<Q_INT64>(d) * 24 * 60 * 60;
+    kdDebug()<<k_funcinfo<<toString(Format_Hour)<<endl;
 }
 
 KPTDuration::KPTDuration(unsigned seconds) {
@@ -112,7 +113,7 @@ QString KPTDuration::toString(Format format) const {
         case Format_Hour:
             ms = m_ms;
             hours = ms / (1000 * 60 * 60);
-            ms -= hours * (1000 * 60 * 60);
+            ms -= (Q_INT64)hours * (1000 * 60 * 60);
             minutes = ms / (1000 * 60);
             result = QString("%1h%2m").arg(hours).arg(minutes);
             break;
@@ -123,9 +124,9 @@ QString KPTDuration::toString(Format format) const {
         case Format_DayTime:
             ms = m_ms;
             days = m_ms / (1000 * 60 * 60 * 24);
-            ms -= (int)days * (1000 * 60 * 60 * 24);
+            ms -= (Q_INT64)days * (1000 * 60 * 60 * 24);
             hours = ms / (1000 * 60 * 60);
-            ms -= hours * (1000 * 60 * 60);
+            ms -= (Q_INT64)hours * (1000 * 60 * 60);
             minutes = ms / (1000 * 60);
             ms -= minutes * (1000 * 60);
             seconds = ms / (1000);
@@ -146,12 +147,18 @@ KPTDuration::KPTDuration KPTDuration::fromString(const QString &s, Format format
     if (s[1].isLetter())
     {
         QDateTime zero(QDate(0, 1, 1));
-	int seconds = zero.secsTo(QDateTime::fromString(s));
+        int seconds = zero.secsTo(QDateTime::fromString(s));
         return KPTDuration(seconds);
     }
     QRegExp matcher;
     KPTDuration tmp;
     switch (format) {
+        case Format_Hour:
+            matcher.setPattern("^(\\d*)h(\\d*)m$" );
+            matcher.search(s);
+            tmp.addHours(matcher.cap(1).toUInt());
+            tmp.addMinutes(matcher.cap(2).toUInt());
+            break;
         case Format_DayTime:
             matcher.setPattern("^(\\d*) (\\d*):(\\d*):(\\d*)\\.(\\d*)$" );
             matcher.search(s);

@@ -45,28 +45,29 @@ class KPTDuration {
         /**
          * Adds @param delta to *this. If @param delta > *this, *this is set to zeroDuration.
          */
-        void addMilliseconds(int delta)  { add(delta); }
+        void addMilliseconds(Q_INT64 delta)  { add(delta); }
 
         /**
          * Adds @param delta to *this. If @param delta > *this, *this is set to zeroDuration.
          */
-        void addSeconds(int delta) { addMilliseconds(delta * 1000); }
+        void addSeconds(Q_INT64 delta) { addMilliseconds(delta * 1000); }
 
         /**
          * Adds @param delta to *this. If @param delta > *this, *this is set to zeroDuration.
          */
-        void addMinutes(int delta) { addSeconds(delta * 60); }
+        void addMinutes(Q_INT64 delta) { addSeconds(delta * 60); }
 
         /**
          * Adds @param delta to *this. If @param delta > *this, *this is set to zeroDuration.
          */
-        void addHours(int delta) { addMinutes(delta * 60); }
+        void addHours(Q_INT64 delta) { addMinutes(delta * 60); }
 
         /**
          * Adds @param delta to *this. If @param delta > *this, *this is set to zeroDuration.
          */
-        void addDays(int delta) { addHours(delta * 24); }
+        void addDays(Q_INT64 delta) { addHours(delta * 24); }
 
+        //FIXME: overflow problem
         Q_INT64 milliseconds() const { return m_ms; }
         unsigned seconds() const { return m_ms / 1000; }
         unsigned minutes() const { return seconds() / 60; }
