@@ -928,15 +928,15 @@ KarbonView::selectionChanged()
 
 	if( count > 0 )
 	{
-		VGroup * group = dynamic_cast<VGroup *>( part()->document().selection()->objects().getFirst() );
+		VGroup *group = dynamic_cast<VGroup *>( part()->document().selection()->objects().getFirst() );
 		m_groupObjects->setEnabled( count > 1 );
 		m_ungroupObjects->setEnabled( group && ( count == 1 ) );
+		VObject *obj = part()->document().selection()->objects().getFirst();
 
 		if( count == 1 )
 		{
-			m_strokeFillPreview->update( *part()->document().selection()->objects().getFirst()->stroke(),
-										 *part()->document().selection()->objects().getFirst()->fill() );
-			m_strokeDocker->setStroke( *( part()->document().selection()->objects().getFirst()->stroke() ) );
+			m_strokeFillPreview->update( *obj->stroke(), *obj->fill() );
+			m_strokeDocker->setStroke( *( obj->stroke() ) );
 		}
 		else
 		{
@@ -946,21 +946,13 @@ KarbonView::selectionChanged()
 			m_strokeFillPreview->update( stroke, fill );
 		}
 
-		part()->document().selection()->setStroke( *( part()->document().selection()->objects().getFirst()->stroke() ) );
-		part()->document().selection()->setFill( *( part()->document().selection()->objects().getFirst()->fill() ) );
+		part()->document().selection()->setStroke( *obj->stroke() );
+		part()->document().selection()->setFill( *obj->fill() );
 		m_setLineWidth->setEnabled( true );
-		m_setLineWidth->updateValue( part()->document().selection()->objects().getFirst()->stroke()->lineWidth() );
+		m_setLineWidth->updateValue( obj->stroke()->lineWidth() );
 
-		if( m_ColorManager->isStrokeDocker() )
-		{
-			VColor * c = new VColor ( part()->document().selection()->objects().getFirst()->stroke()->color() );
-			m_ColorManager->setColor( c );
-		}
-		else
-		{
-			VColor *c = new VColor ( part()->document().selection()->objects().getFirst()->fill()->color() );
-			m_ColorManager->setColor( c );
-		}
+		VColor *c = new VColor( m_ColorManager->isStrokeDocker() ? obj->stroke()->color() : obj->fill()->color() );
+		m_ColorManager->setColor( c );
 	}
 	else
 	{
