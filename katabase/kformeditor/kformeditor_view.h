@@ -45,6 +45,11 @@ public:
   virtual void cleanUp();
   CORBA::Boolean printDlg();
 
+  void editUndo();
+  void editRedo();
+  void editCut();
+  void editCopy();
+  void editPaste();
   void editFormSize();
   void editBackground();
   void insertButton();
@@ -52,7 +57,14 @@ public:
   void insertLineEdit();
   void insertListBox();
   void insertCheckBox();
+  void orientationFitViewToForm();
   void orientationCenter();
+  void orientationLeft();
+  void orientationHorizontalCenter();
+  void orientationRight();
+  void orientationTop();
+  void orientationVerticalCenter();
+  void orientationBottom();
 
 signals:
   void unselectAll();
@@ -76,8 +88,37 @@ protected:
 private:
 
   OpenPartsUI::Menu_var m_vMenuEdit;
+  CORBA::Long m_idMenuEdit_Undo;
+  CORBA::Long m_idMenuEdit_Redo;
+  CORBA::Long m_idMenuEdit_Cut;
+  CORBA::Long m_idMenuEdit_Copy;
+  CORBA::Long m_idMenuEdit_Paste;
   CORBA::Long m_idMenuEdit_FormSize;
   CORBA::Long m_idMenuEdit_Background;
+
+  OpenPartsUI::Menu_var m_vMenuInsert;
+  CORBA::Long m_idMenuInsert_Button;
+  CORBA::Long m_idMenuInsert_Label;
+  CORBA::Long m_idMenuInsert_LineEdit;
+  CORBA::Long m_idMenuInsert_ListBox;
+  CORBA::Long m_idMenuInsert_CheckBox;
+
+  OpenPartsUI::Menu_var m_vMenuOrientation;
+  CORBA::Long m_idMenuOrientation_FitViewToForm;
+  CORBA::Long m_idMenuOrientation_Center;
+  CORBA::Long m_idMenuOrientation_Left;
+  CORBA::Long m_idMenuOrientation_HorizontalCenter;
+  CORBA::Long m_idMenuOrientation_Right;
+  CORBA::Long m_idMenuOrientation_Top;
+  CORBA::Long m_idMenuOrientation_VerticalCenter;
+  CORBA::Long m_idMenuOrientation_Bottom;
+
+  OpenPartsUI::ToolBar_var m_vToolBarEdit;
+  CORBA::Long m_idToolBarEdit_Undo;
+  CORBA::Long m_idToolBarEdit_Redo;
+  CORBA::Long m_idToolBarEdit_Cut;
+  CORBA::Long m_idToolBarEdit_Copy;
+  CORBA::Long m_idToolBarEdit_Paste;
 
   OpenPartsUI::ToolBar_var m_vToolBarInsert;
   CORBA::Long m_idToolBarInsert_Button;
@@ -87,14 +128,17 @@ private:
   CORBA::Long m_idToolBarInsert_CheckBox;
 
   OpenPartsUI::ToolBar_var m_vToolBarOrientation;
-  CORBA::Long m_idToolBarOrientation_HorizontalLeft;
-  CORBA::Long m_idToolBarOrientation_HorizontalCenter;
-  CORBA::Long m_idToolBarOrientation_HorizontalRight;
-  CORBA::Long m_idToolBarOrientation_VerticalTop;
-  CORBA::Long m_idToolBarOrientation_VerticalCenter;
-  CORBA::Long m_idToolBarOrientation_VerticalBottom;
+  CORBA::Long m_idToolBarOrientation_FitViewToForm;
   CORBA::Long m_idToolBarOrientation_Center;
+  CORBA::Long m_idToolBarOrientation_Left;
+  CORBA::Long m_idToolBarOrientation_HorizontalCenter;
+  CORBA::Long m_idToolBarOrientation_Right;
+  CORBA::Long m_idToolBarOrientation_Top;
+  CORBA::Long m_idToolBarOrientation_VerticalCenter;
+  CORBA::Long m_idToolBarOrientation_Bottom;
 
+  OpenPartsUI::StatusBar_var m_vStatusBar;
+  
   KformEditorDoc* m_pDoc;  
 };
 

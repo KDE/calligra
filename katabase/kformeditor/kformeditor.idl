@@ -28,6 +28,11 @@ module KformEditor
 {
   interface View : KOffice::View
   {
+    void editUndo();
+    void editRedo();
+    void editCut();
+    void editCopy();
+    void editPaste();
     void editFormSize();
     void editBackground();
 
@@ -37,7 +42,14 @@ module KformEditor
     void insertListBox();
     void insertCheckBox();
 
+    void orientationFitViewToForm();
     void orientationCenter();
+    void orientationLeft();
+    void orientationHorizontalCenter();
+    void orientationRight();
+    void orientationTop();
+    void orientationVerticalCenter();
+    void orientationBottom();
   };
 
   interface Document : KOffice::Document, KOffice::Print

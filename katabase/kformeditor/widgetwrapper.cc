@@ -33,12 +33,18 @@ WidgetWrapper::WidgetWrapper( QWidget* _widget, WFlags f )
   : m_widget( _widget )
   , m_selected ( FALSE )
 {
-  _widget->reparent( this, f, QPoint( 0, 0 ), TRUE );
+  m_widget->reparent( this, f, QPoint( 0, 0 ), TRUE );
+  //reparent( m_widget, f, QPoint( 0, 0 ), TRUE );
 
-  setFixedSize( _widget->size() );
+  setFixedSize( m_widget->size() );
+
+  //m_widget->setBackgroundMode( NoBackground );
+  setBackgroundMode( NoBackground );
+
+  // TODO: child widget may not process events (only paint events)
 
   // only for debugging
-  _widget->hide();
+  //m_widget->hide();
 }
  
 WidgetWrapper::~WidgetWrapper()
@@ -78,6 +84,8 @@ void WidgetWrapper::resizeEvent( QResizeEvent* _event )
 
 void WidgetWrapper::paintEvent( QPaintEvent* _event )
 {
+  m_widget->repaint();
+
   if( m_selected )
   {
     QPainter p;

@@ -14,6 +14,8 @@ kformeditor_SOURCES = \
  kformeditor_main.cc \
  kformeditor_shell.cc \
  widgetwrapper.cc \
+ formsizedlg.cc \
+ backgrounddlg.cc \
  formobject.cc
 
 noinst_HEADERS = \
@@ -23,6 +25,8 @@ noinst_HEADERS = \
  kformeditor_doc.h \
  kformeditor_view.h \
  widgetwrapper.h \
+ formsizedlg.h \
+ backgrounddlg.h \
  formobject.h
 
 METASOURCES = \
@@ -30,6 +34,8 @@ METASOURCES = \
  kformeditor_shell.moc \
  kformeditor_doc.moc \
  kformeditor_view.moc \
+ formsizedlg.moc \
+ backgrounddlg.moc \
  widgetwrapper.moc
 
 idl_DATA = kformeditor.idl
