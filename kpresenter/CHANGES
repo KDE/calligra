@@ -8,6 +8,7 @@ Fixes:
 - Fixed redrawing of lines in drawing mode in case of a repaint event
 - Fixed aligning of rotated lines and line with pen.width() > 1
 - Fixed that the width/height of an rotated object could be negative
+- Fixed copy and paste when one pic is in the copied objects
 
 Changes:
 - If a page is shown more than once during a presentation add the time for 

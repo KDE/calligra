@@ -529,9 +529,6 @@ void KPresenterView::editPaste()
             skipToPage( currPg );
             updateSideBarMenu();
         }
-        else if (QImageDrag::canDecode (data)) {
-            m_canvas->dropImage( data );
-        }
         else if ( data->provides( KoStoreDrag::mimeType("application/x-kpresenter" ) ))
         {
             // TODO: it would be nice to have no offset when pasting onto a different page...
@@ -541,6 +538,9 @@ void KPresenterView::editPaste()
 
             m_canvas->setMouseSelectedObject(true);
             emit objectSelectedChanged();
+        }
+        else if (QImageDrag::canDecode (data)) {
+            m_canvas->dropImage( data );
         }
     } else {
         if ( !m_canvas->currentTextObjectView()->kpTextObject()->isProtectContent())
