@@ -45,6 +45,7 @@ SvgImport::SvgImport(KoFilter *, const char *, const QStringList&) :
     KoFilter(),
     outdoc( "DOC" )
 {
+	m_gc.setAutoDelete( true );
 }
 
 SvgImport::~SvgImport()
@@ -597,7 +598,7 @@ SvgImport::parseGroup( VGroup *grp, const QDomElement &e )
 				grp->append( group );
 			else
 				m_document.append( group );
-			m_gc.pop();
+			delete( m_gc.pop() );
 			continue;
 		}
 		if( b.tagName() == "defs" )
@@ -690,7 +691,7 @@ SvgImport::parseGroup( VGroup *grp, const QDomElement &e )
 		else if( b.tagName() == "text" )
 		{
 			continue; // TODO : remove when text loading works
-			VText *text = new VText( &m_document );
+			/*VText *text = new VText( &m_document );
 			text->setText( b.text() );
 			VPath base( 0L );
 			double x = parseUnit( b.attribute( "x" ) );
@@ -706,8 +707,8 @@ SvgImport::parseGroup( VGroup *grp, const QDomElement &e )
 				grp->append( text );
 			else
 				m_document.append( text );
-			m_gc.pop();
-			continue;
+			delete( m_gc.pop() );
+			continue;*/
 		}
 		if( !obj ) continue;
 		VTransformCmd trafo( 0L, m_gc.current()->matrix );
@@ -717,7 +718,7 @@ SvgImport::parseGroup( VGroup *grp, const QDomElement &e )
 			grp->append( obj );
 		else
 			m_document.append( obj );
-		m_gc.pop();
+		delete( m_gc.pop() );
 	}
 }
 
