@@ -85,6 +85,9 @@
   <Action name="deleteColumn"/>
   <Action name="deleteRow"/>
   <Separator/>
+  <Action name="insertCell"/>
+  <Action name="removeCell"/>
+  <Separator/>
   <Action name="consolidate"/>
   <Action name="oszi"/>
  </Menu>

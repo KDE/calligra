@@ -1885,9 +1885,10 @@ QPainter painter;
 KSpreadCell* cell = activeTable()->cellAt( marker() );
 QString tmp;
 int pos=0;
+int pos1=0;
 int index=0;
 int line=0;
-
+int start=0;
 if(labelComment)
         {
         delete labelComment;
@@ -1899,14 +1900,19 @@ int len=tmp.length();
 do
 {
   pos=tmp.find("\n",pos);
-  index=QMAX((pos-index),index);
+  if(QMAX((pos-pos1),index)!=index)
+        {
+        index=QMAX((pos-pos1),index);
+        start=pos1;
+        }
   pos++;
+  pos1=pos;
   line++;
 }
 while(pos!=len);
 painter.begin( this );
 
-len = painter.fontMetrics().width("b")*index;
+len = painter.fontMetrics().width(tmp.mid(start,index));
 int hei =painter.fontMetrics().height()*line;
 painter.end();
 
@@ -1915,7 +1921,7 @@ labelComment->setBackgroundColor( yellow );
 int xpos = activeTable()->columnPos( markerColumn(), this );
 int ypos = activeTable()->rowPos( markerRow(), this );
 int w = cell->width( markerColumn(), this );
-labelComment->setGeometry(xpos +w +10, ypos + 10,len, hei+10 ) ;
+labelComment->setGeometry(xpos +w +10, ypos + 10,len+10, hei+10 ) ;
 labelComment->setAlignment(Qt::AlignVCenter);
 labelComment->setText(tmp);
 labelComment->show();

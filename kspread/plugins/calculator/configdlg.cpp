@@ -26,7 +26,8 @@
 
 #include "configdlg.h"
 
-#include <qcolordialog.h>
+//#include <qcolordialog.h>
+#include <kcolordlg.h>
 
 // Undefine HAVE_LONG_DOUBLE for Beta 4 since RedHat 5.0 comes with a borken
 // glibc
@@ -192,22 +193,23 @@ void ConfigDlg::cancelbutton()
 
 void ConfigDlg::set_fore_color(){
 
-    QColor c = QColorDialog::getColor( defst->forecolor, this );
-    if ( c.isValid() )
-    {
-	defst->forecolor = c;
-	qframe1->setBackgroundColor(defst->forecolor);
-    }
+    //QColor c = QColorDialog::getColor( defst->forecolor, this );
+    if(KColorDialog::getColor( defst->forecolor ) )
+        qframe1->setBackgroundColor(defst->forecolor);
+
 }
 
 void ConfigDlg::set_background_color(){
 
-    QColor c = QColorDialog::getColor( defst->backcolor, this );
-    if ( c.isValid() )
-    {
-	defst->backcolor = c;
-	qframe2->setBackgroundColor(defst->backcolor);
-    }
+    //QColor c = QColorDialog::getColor( defst->backcolor, this );
+    if(KColorDialog::getColor( defst->backcolor ))
+        qframe2->setBackgroundColor(defst->backcolor);
+        /*if ( c.isValid() )
+                {
+	        defst->backcolor = c;
+	        qframe2->setBackgroundColor(defst->backcolor);
+                }*/
+
 }
 
 #include "configdlg.moc"

@@ -568,3 +568,10 @@ lo22-action-remove cell) created by jp.martin <jpmartin@iroise.com> thanks
 -----------------------------------------------------
 -Correct bug when I reload comment, correction gived by simon Hausmann
 thanks a lot
+
+2000-05-27 -Montel laurent <montell@club-internet.fr>
+-----------------------------------------------------
+-Bug fix in comment
+-Add new icons (lo22-action-inserttable,lo22-action-cell_edit,
+lo22-action-deletecell) made by jp.martin <jpmartin@iroise.com> thanks
+(improved other icons)

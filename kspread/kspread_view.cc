@@ -244,8 +244,8 @@ KSpreadView::KSpreadView( QWidget *_parent, const char *_name, KSpreadDoc* doc )
     m_paste = KStdAction::paste( this, SLOT( paste() ), actionCollection(), "paste" );
     m_cut = KStdAction::cut( this, SLOT( cutSelection() ), actionCollection(), "cut" );
     m_specialPaste = new KAction( i18n("Special Paste..."), 0, this, SLOT( specialPaste() ), actionCollection(), "specialPaste" );
-    m_editCell = new KAction( i18n("Edit Cell"), CTRL + Key_E, this, SLOT( editCell() ), actionCollection(), "editCell" );
-    m_delete = new KAction( i18n("Delete"), 0, this, SLOT( deleteSelection() ), actionCollection(), "delete" );
+    m_editCell = new KAction( i18n("Edit Cell"),KSBarIcon("cell_edit"), CTRL + Key_E, this, SLOT( editCell() ), actionCollection(), "editCell" );
+    m_delete = new KAction( i18n("Delete"),KSBarIcon("deletecell"), 0, this, SLOT( deleteSelection() ), actionCollection(), "delete" );
     m_clear = new KAction( i18n("Clear"), 0, this, SLOT( clearSelection() ), actionCollection(), "clear" );
     m_adjust = new KAction( i18n("Adjust row and column"), 0, this, SLOT( adjust() ), actionCollection(), "adjust" );
     m_default = new KAction( i18n("Default"), 0, this, SLOT( defaultSelection() ), actionCollection(), "default" );
@@ -266,7 +266,7 @@ KSpreadView::KSpreadView( QWidget *_parent, const char *_name, KSpreadDoc* doc )
     m_redo = KStdAction::redo( this, SLOT( redo() ), actionCollection(), "redo" );
     m_redo->setEnabled( FALSE );
     m_paperLayout = new KAction( i18n("Paper Layout..."), 0, this, SLOT( paperLayoutDlg() ), actionCollection(), "paperLayout" );
-    m_insertTable = new KAction( i18n("Insert Table"), 0, this, SLOT( insertTable() ), actionCollection(), "insertTable" );
+    m_insertTable = new KAction( i18n("Insert Table"),KSBarIcon("inserttable"), 0, this, SLOT( insertTable() ), actionCollection(), "insertTable" );
     m_removeTable = new KAction( i18n("Remove Table"), 0, this, SLOT( removeTable() ), actionCollection(), "removeTable" );
     m_showTable = new KAction(i18n("Show Table"),0 ,this,SLOT( showTable()), actionCollection(), "showTable" );
     m_hideTable = new KAction(i18n("Hide Table"),0 ,this,SLOT( hideTable()), actionCollection(), "hideTable" );
@@ -281,14 +281,14 @@ KSpreadView::KSpreadView( QWidget *_parent, const char *_name, KSpreadDoc* doc )
 				       actionCollection(), "editGlobalScripts" );
     m_editLocalScripts = new KAction( i18n("Edit Local Scripts..."), 0, this, SLOT( editLocalScripts() ), actionCollection(), "editLocalScripts" );
     m_reloadScripts = new KAction( i18n("Reload Scripts"), 0, this, SLOT( reloadScripts() ), actionCollection(), "reloadScripts" );
-    m_gotoCell = new KAction( i18n("Goto Cell..."), 0, this, SLOT( gotoCell() ), actionCollection(), "gotoCell" );
+    m_gotoCell = new KAction( i18n("Goto Cell..."),KSBarIcon("goto"), 0, this, SLOT( gotoCell() ), actionCollection(), "gotoCell" );
     m_showPageBorders = new KToggleAction( i18n("Show page borders"), 0, actionCollection(), "showPageBorders");
     connect( m_showPageBorders, SIGNAL( toggled( bool ) ), this, SLOT( togglePageBorders( bool ) ) );
-    m_replace = new KAction( i18n("Replace..."), KSBarIcon("find"),0, this, SLOT( replace() ), actionCollection(), "replace" );
+    m_replace = new KAction( i18n("Find and Replace..."), KSBarIcon("find"),CTRL + Key_F, this, SLOT( replace() ), actionCollection(), "replace" );
     m_conditional = new KAction( i18n("Relational cell attributes..."), 0, this, SLOT( conditional() ), actionCollection(), "conditional" );
     m_sort = new KAction( i18n("Sort"), 0, this, SLOT( sort() ), actionCollection(), "sort" );
     m_consolidate = new KAction( i18n("Consolidate..."), 0, this, SLOT( consolidate() ), actionCollection(), "consolidate" );
-    //m_help = new KAction( i18n("KSpread Help..."), 0, this, SLOT( help() ), actionCollection(), "help" );
+
     m_multiRow = new KToggleAction( i18n("Multi Row"), KSBarIcon("multirow"), 0, actionCollection(), "multiRow" );
     connect( m_multiRow, SIGNAL( toggled( bool ) ), this, SLOT( multiRow( bool ) ) );
     m_selectFont = new KFontAction( i18n("Select Font"), 0, actionCollection(), "selectFont" );
@@ -303,6 +303,10 @@ KSpreadView::KSpreadView( QWidget *_parent, const char *_name, KSpreadDoc* doc )
 				  actionCollection(), "insertColumn" );
     m_insertRow = new KAction( i18n("Insert Row"), KSBarIcon("rowin"), 0, this, SLOT( insertRow() ),
 			       actionCollection(), "insertRow" );
+    m_insertCell = new KAction( i18n("Insert Cell"), KSBarIcon("insertcell"), 0, this, SLOT( slotInsert() ),
+			       actionCollection(), "insertCell" );
+    m_removeCell = new KAction( i18n("Remove Cell"), KSBarIcon("removecell"), 0, this, SLOT( slotInsert() ),
+			       actionCollection(), "removeCell" );
     m_cellLayout = new KAction( i18n("Cell Layout..."), CTRL + Key_L, this, SLOT( layoutDlg() ),
 			       actionCollection(), "cellLayout" );
     m_formulaPower = new KAction( i18n("Formula Power"), "rsup", 0, this, SLOT( formulaPower() ),
@@ -403,11 +407,8 @@ void KSpreadView::initialPosition()
     m_pCanvas->gotoLocation( col, row );
 
     //init toggle button
-//    m_hideGrid->setChecked( !m_pTable->getShowGrid() );
     m_showPageBorders->setChecked( m_pTable->isShowPageBorders());
-//    m_showFormular->setChecked(m_pTable->getShowFormular());
-//    m_LcMode->setChecked(m_pTable->getLcMode());
-//    m_showColumnNumber->setChecked(m_pTable->getShowColumnNumber());
+
     /*recalc all dependent after loading*/
     KSpreadTable *tbl;
     for ( tbl = m_pDoc->map()->firstTable(); tbl != 0L; tbl = m_pDoc->map()->nextTable() )
@@ -585,7 +586,7 @@ bool KSpreadView::eventKeyPressed( QKeyEvent* _event, bool choose )
 
     case Key_Left:
 	(m_pCanvas->*hideMarker)();
-	
+
 	if ( selection.left() == 0 && make_select )
 	    selection = QRect( marker_column, marker_row, 1, 1 );
 
@@ -669,7 +670,7 @@ bool KSpreadView::eventKeyPressed( QKeyEvent* _event, bool choose )
 	}
 	else if ( choose )
 	    m_pTable->setChooseRect( QRect( m_pCanvas->chooseMarkerColumn(), m_pCanvas->chooseMarkerRow(), 1, 1 ) );
-	
+
 	(m_pCanvas->*showMarker)();
 
 	if ( !choose )
@@ -739,6 +740,16 @@ void KSpreadView::updateEditWidget()
     else
     	m_money->setChecked( FALSE );
 
+    if( cell->getComment().isEmpty())
+        {
+        m_showComment->setEnabled(FALSE);
+        m_removeComment->setEnabled(FALSE);
+        }
+    else
+        {
+        m_showComment->setEnabled(TRUE);
+        m_removeComment->setEnabled(TRUE);
+        }
     m_toolbarLock = FALSE;
 }
 
@@ -925,7 +936,7 @@ void KSpreadView::autoSum()
 	    cell = activeTable()->cellAt( --c, m_pCanvas->markerRow() );
 	}
 	while ( cell && cell->isValue() );
-	
+
 	if ( c + 1 < m_pCanvas->markerColumn() )
         {
 	    m_pTable->setChooseRect( QRect( c + 1, m_pCanvas->markerRow(), m_pCanvas->markerColumn() - c - 1, 1 ) );
@@ -2085,22 +2096,13 @@ void KSpreadView::openPopupMenu( const QPoint & _point )
     m_adjust->plug( m_pPopupMenu );
     m_default->plug( m_pPopupMenu );
     m_areaName->plug( m_pPopupMenu );
-    /* m_pPopupMenu->insertItem( i18n("Layout"), this, SLOT( layoutDlg() ) );
-    m_pPopupMenu->insertItem( i18n("Copy"), this, SLOT( slotCopy() ) );
-    m_pPopupMenu->insertItem( i18n("Cut"), this, SLOT( slotCut() ) );
-    m_pPopupMenu->insertItem( i18n("Paste"), this, SLOT( slotPaste() ) );
-    m_pPopupMenu->insertItem( i18n("Special Paste"), this,SLOT(slotSpecialPaste() ) );
-    m_pPopupMenu->insertItem(i18n("Delete"), this, SLOT(slotDelete() ) );
-    m_pPopupMenu->insertItem( i18n("Adjust"),this,SLOT(slotAdjust()));
-    m_pPopupMenu->insertItem(i18n("Clear"),this,SLOT(slotClear())); */
-
     // If there is no selection
     QRect selection( m_pTable->selectionRect() );
     if(selection.left()==0 && koDocument()->isReadWrite() )
     {
     	m_pPopupMenu->insertSeparator();
-        m_pPopupMenu->insertItem( KSBarIcon("insertcell"),i18n("Insert Cell"),this,SLOT(slotInsert()));
-    	m_pPopupMenu->insertItem( KSBarIcon("removecell"),i18n("Remove Cell"),this,SLOT(slotRemove()));
+        m_insertCell->plug( m_pPopupMenu );
+        m_removeCell->plug( m_pPopupMenu );
     }
     KSpreadCell *cell = m_pTable->cellAt( m_pCanvas->markerColumn(), m_pCanvas->markerRow() );
     m_pPopupMenu->insertSeparator();
@@ -2315,7 +2317,7 @@ void KSpreadView::equalizeColumn()
     if(selection.right()==0x7FFF)
     	KMessageBox::error( this, i18n("Area too large!"));
     else
-    	{	
+    	{
 	canvasWidget()->equalizeColumn();
     	}
 }

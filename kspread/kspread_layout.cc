@@ -100,8 +100,6 @@ void KSpreadLayout::copy( KSpreadLayout &_l )
   m_goUpDiagonalPen.setWidth( _l.goUpDiagonalWidth() );
   m_backGroundBrush.setStyle( _l.backGroundBrushStyle());
   m_backGroundBrush.setColor( _l.backGroundBrushColor());
-
-
   m_dFaktor = _l.faktor();
   m_bMultiRow = _l.multiRow();
   m_textColor = _l.textColor();
@@ -114,6 +112,7 @@ void KSpreadLayout::copy( KSpreadLayout &_l )
   setTextFontStrike( _l.textFontStrike() );
   setPrefix( _l.prefix() );
   setPostfix( _l.postfix() );
+  m_strComment = _l.getComment();
 }
 
 QString KSpreadLayout::prefix() const

@@ -173,6 +173,7 @@ void KSpreadCell::copyLayout( int _column, int _row )
   	tmpCondition->fontcond=o->getThirdCondition(0)->fontcond;
   	tmpCondition->m_cond=o->getThirdCondition(0)->m_cond;
     }
+    setComment(o->getComment());
 }
 
 void KSpreadCell::copyAll( KSpreadCell *cell )
@@ -1861,14 +1862,14 @@ void KSpreadCell::paintEvent( KSpreadCanvas *_canvas, const QRect& _rect, QPaint
     _painter.setBrush(m_backGroundBrush);
     _painter.drawRect( _tx + left, _ty + top, w-left-BORDER_SPACE, h - top - BORDER_SPACE);
     }
-  if( !comment.isEmpty())
+  if( !m_strComment.isEmpty())
     {
     QPointArray point( 3 );
     point.setPoint( 0,_tx+w-10, _ty + dy );
     point.setPoint( 1, _tx+w,_ty + dy);
     point.setPoint( 2,_tx+w,_ty + dy +10 );
     _painter.setBrush( QBrush(Qt::red  ) );
-    //_painter.setPen( Qt::red );
+    _painter.setPen( Qt::NoPen );
     _painter.drawPolygon( point );
     }
   static QColorGroup g( Qt::black, Qt::white, Qt::white, Qt::darkGray, Qt::lightGray, Qt::black, Qt::black );
@@ -2171,7 +2172,7 @@ void KSpreadCell::print( QPainter &_painter, int _tx, int _ty, int _col, int _ro
 			tmpCondition=m_thirdCondition;
 			break;
 		}
-	
+
         _painter.setFont( tmpCondition->fontcond );
       	}
       else
@@ -2424,7 +2425,7 @@ Qt::PenStyle KSpreadCell::rightBorderStyle( int _col, int _row )
     {
 	RowLayout *rl = m_pTable->rowLayout( _row );
 	ColumnLayout *cl = m_pTable->columnLayout( _col + 1 );
-	
+
 	if ( rl->time() > cl->time() )
 	    return rl->leftBorderStyle();
 	else
@@ -3158,10 +3159,10 @@ QDomElement KSpreadCell::save( QDomDocument& doc, int _x_offset, int _y_offset )
   		}
   	cell.appendChild( condition );
   	}
-  if ( !comment.isEmpty() )
+  if ( !m_strComment.isEmpty() )
         {
         QDomElement comment = doc.createElement( "comment" );
-        comment.appendChild( doc.createCDATASection( getComment() ) );
+        comment.appendChild( doc.createCDATASection( m_strComment ) );
         cell.appendChild( comment );
         }
   if ( !m_strText.isEmpty() )

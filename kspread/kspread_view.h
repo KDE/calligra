@@ -432,7 +432,6 @@ private:
     KAction* m_cellLayout;
     KAction* m_hideTable;
     KAction* m_showTable;
-//    KToggleAction* m_hideGrid;
     KAction* m_borderLeft;
     KAction* m_borderRight;
     KAction* m_borderTop;
@@ -463,6 +462,8 @@ private:
     KAction* m_addModifyComment;
     KAction* m_showComment;
     KAction* m_removeComment;
+    KAction* m_insertCell;
+    KAction* m_removeCell;
     /**
      * Pointer to the last popup menu.
      * Since only one popup menu can be opened at once, its pointer is stored here.
