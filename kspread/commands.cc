@@ -19,7 +19,7 @@
 */
 
 #include "commands.h"
-
+#include "damages.h"
 #include "kspread_doc.h"
 #include "kspread_locale.h"
 #include "kspread_map.h"
@@ -28,6 +28,8 @@
 #include "kspread_util.h"
 
 #include "kspread_sheetprint.h"
+
+using namespace KSpread;
 
 // ----- UndoWrapperCommand -----
 
@@ -258,6 +260,109 @@ void RemoveSheetCommand::unexecute()
 QString RemoveSheetCommand::name() const
 {
     return i18n("Remove Sheet");
+}
+
+// ----- SheetPropertiesCommand -----
+
+SheetPropertiesCommand::SheetPropertiesCommand( KSpreadDoc* d, KSpreadSheet* s )
+{
+    sheet = s;
+    doc = d;
+    oldDirection = newDirection = sheet->layoutDirection();
+    oldAutoCalc = newAutoCalc = sheet->getAutoCalc();
+    oldShowGrid = newShowGrid = sheet->getShowGrid();
+    oldShowPageBorders = newShowPageBorders = sheet->isShowPageBorders();
+    oldShowFormula = newShowFormula = sheet->getShowFormula();
+    oldHideZero = newHideZero = sheet->getHideZero();
+    oldShowFormulaIndicator = newShowFormulaIndicator = sheet->getShowFormulaIndicator();
+    oldColumnAsNumber = newColumnAsNumber = sheet->getShowColumnNumber();
+    oldLcMode = newLcMode = sheet->getLcMode();
+    oldCapitalizeFirstLetter = newCapitalizeFirstLetter = sheet->getFirstLetterUpper();  
+}
+
+QString SheetPropertiesCommand::name() const
+{
+    return i18n("Change Sheet Properties");
+}
+
+void SheetPropertiesCommand::setLayoutDirection( KSpreadSheet::LayoutDirection dir )
+{
+    newDirection = dir;
+}
+
+void SheetPropertiesCommand::setAutoCalc( bool b )
+{
+    newAutoCalc = b;
+}
+
+void SheetPropertiesCommand::setShowGrid( bool b )
+{
+    newShowGrid = b;
+}
+
+void SheetPropertiesCommand::setShowPageBorders( bool b )
+{
+    newShowPageBorders = b;
+}
+
+void SheetPropertiesCommand::setShowFormula( bool b )
+{
+    newShowFormula = b;
+}
+
+void SheetPropertiesCommand::setHideZero( bool b  )
+{
+    newHideZero = b;
+}
+
+void SheetPropertiesCommand::setShowFormulaIndicator( bool b )
+{
+    newShowFormulaIndicator = b;
+}
+
+void SheetPropertiesCommand::setColumnAsNumber( bool b  )
+{
+    newColumnAsNumber = b;
+}
+
+void SheetPropertiesCommand::setLcMode( bool b  )
+{
+    newLcMode = b;
+}
+
+void SheetPropertiesCommand::setCapitalizeFirstLetter( bool b )
+{
+    newCapitalizeFirstLetter = b;
+}
+
+void SheetPropertiesCommand::execute()
+{
+    sheet->setLayoutDirection( newDirection );
+    sheet->setAutoCalc( newAutoCalc );
+    sheet->setShowGrid( newShowGrid );
+    sheet->setShowPageBorders( newShowPageBorders );
+    sheet->setShowFormula( newShowFormula );
+    sheet->setHideZero( newHideZero );
+    sheet->setShowFormulaIndicator( newShowFormulaIndicator );
+    sheet->setShowColumnNumber( newColumnAsNumber );
+    sheet->setLcMode( newLcMode );
+    sheet->setFirstLetterUpper( newCapitalizeFirstLetter );
+    doc->addDamage( new SheetDamage( sheet, SheetDamage::PropertiesChanged ) );
+}
+
+void SheetPropertiesCommand::unexecute()
+{
+    sheet->setLayoutDirection( oldDirection );
+    sheet->setAutoCalc( oldAutoCalc );
+    sheet->setShowGrid( oldShowGrid );
+    sheet->setShowPageBorders( oldShowPageBorders );
+    sheet->setShowFormula( oldShowFormula );
+    sheet->setHideZero( oldHideZero );
+    sheet->setShowFormulaIndicator( oldShowFormulaIndicator );
+    sheet->setShowColumnNumber( oldColumnAsNumber );
+    sheet->setLcMode( oldLcMode );
+    sheet->setFirstLetterUpper( oldCapitalizeFirstLetter );
+    doc->addDamage( new SheetDamage( sheet, SheetDamage::PropertiesChanged ) );
 }
 
 

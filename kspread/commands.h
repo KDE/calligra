@@ -32,9 +32,10 @@
 #include <qptrlist.h>
 #include <qvaluelist.h>
 
-class KSpreadDoc;
-class KSpreadSheet;
+#include "kspread_sheet.h"
+
 class KSpreadCell;
+class KSpreadDoc;
 class KSpreadUndoAction;
 
 /** \page commands Commands
@@ -215,6 +216,45 @@ public:
 protected:
     KSpreadSheet* sheet;
     KSpreadDoc* doc;
+};
+
+
+/**
+ * Class SheetPropertiesCommand implements a command for changing sheet properties.
+ */
+
+class SheetPropertiesCommand : public KCommand
+{
+public:
+  SheetPropertiesCommand( KSpreadDoc* doc, KSpreadSheet* sheet );
+  void setLayoutDirection( KSpreadSheet::LayoutDirection direction );
+  void setAutoCalc( bool b );
+  void setShowGrid( bool b );
+  void setShowPageBorders( bool b );
+  void setShowFormula( bool b );
+  void setHideZero( bool b );
+  void setShowFormulaIndicator( bool b );
+  void setColumnAsNumber( bool b );
+  void setLcMode( bool b );
+  void setCapitalizeFirstLetter( bool b );
+
+  virtual void execute();
+  virtual void unexecute();
+  virtual QString name() const;
+
+protected:
+  KSpreadSheet* sheet;
+  KSpreadDoc* doc;
+  KSpreadSheet::LayoutDirection oldDirection, newDirection;
+  bool oldAutoCalc, newAutoCalc;
+  bool oldShowGrid, newShowGrid;
+  bool oldShowPageBorders, newShowPageBorders;
+  bool oldShowFormula, newShowFormula;
+  bool oldHideZero, newHideZero;
+  bool oldShowFormulaIndicator, newShowFormulaIndicator;
+  bool oldColumnAsNumber, newColumnAsNumber;
+  bool oldLcMode, newLcMode;
+  bool oldCapitalizeFirstLetter, newCapitalizeFirstLetter;
 };
 
 
