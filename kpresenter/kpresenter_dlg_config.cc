@@ -56,6 +56,10 @@ KPConfig::KPConfig( KPresenterView* parent )
                         BarIcon("spellcheck", KIcon::SizeMedium) );
     _spellPage=new ConfigureSpellPage(parent, page);
 
+    page = addVBoxPage( i18n("Misc"), i18n("Misc"),
+                        BarIcon("misc", KIcon::SizeMedium) );
+    _miscPage=new ConfigureMiscPage(parent, page);
+
     connect( this, SIGNAL( okClicked() ),this, SLOT( slotApply() ) );
 }
 
@@ -64,6 +68,7 @@ void KPConfig::slotApply()
     _interfacePage->apply();
     _colorBackground->apply();
     _spellPage->apply();
+    _miscPage->apply();
 }
 
 void KPConfig::slotDefault()
@@ -77,6 +82,10 @@ void KPConfig::slotDefault()
             break;
         case 2:
             _spellPage->slotDefault();
+            break;
+        case 3:
+           _miscPage->slotDefault();
+            break;
         default:
             break;
     }
@@ -295,16 +304,16 @@ void ConfigureSpellPage::apply()
   config->writeEntry ("KSpell_DictFromList",(int)  _spellConfig->dictFromList());
   config->writeEntry ("KSpell_Encoding", (int)  _spellConfig->encoding());
   config->writeEntry ("KSpell_Client",  _spellConfig->client());
-
-  m_pView->kPresenterDoc()->setKSpellConfig(*_spellConfig);
+  KPresenterDoc *doc=m_pView->kPresenterDoc();
+  doc->setKSpellConfig(*_spellConfig);
 
   bool state=_dontCheckUpperWord->isChecked();
   config->writeEntry ("KSpell_dont_check_upper_word",(int)state);
-  m_pView->kPresenterDoc()->setDontCheckUpperWord(state);
+  doc->setDontCheckUpperWord(state);
 
   state=_dontCheckTilteCase->isChecked();
   config->writeEntry("KSpell_dont_check_title_case",(int)state);
-  m_pView->kPresenterDoc()->setDontCheckTitleCase(state);
+  doc->setDontCheckTitleCase(state);
 }
 
 void ConfigureSpellPage::slotDefault()
@@ -319,6 +328,46 @@ void ConfigureSpellPage::slotDefault()
     _dontCheckTilteCase->setChecked(false);
 
 }
+
+ConfigureMiscPage::ConfigureMiscPage( KPresenterView *_view, QVBox *box, char *name )
+ : QObject( box->parent(), name )
+{
+    m_pView=_view;
+    config = KPresenterFactory::global()->config();
+    QGroupBox* tmpQGroupBox = new QGroupBox( box, "GroupBox" );
+    tmpQGroupBox->setTitle(i18n("Misc"));
+
+    QGridLayout *grid = new QGridLayout( tmpQGroupBox , 8, 1, KDialog::marginHint()+7, KDialog::spacingHint() );
+
+    m_oldNbRedo=30;
+    if( config->hasGroup("Misc") )
+    {
+        config->setGroup( "Misc" );
+        m_oldNbRedo=config->readNumEntry("UndoRedo",m_oldNbRedo);
+    }
+
+    m_undoRedoLimit=new KIntNumInput( m_oldNbRedo, tmpQGroupBox );
+    m_undoRedoLimit->setLabel(i18n("Undo/redo limit:"));
+    m_undoRedoLimit->setRange(10, 60, 1);
+    grid->addWidget(m_undoRedoLimit,0,0);
+}
+
+void ConfigureMiscPage::apply()
+{
+    config->setGroup( "Misc" );
+    int newUndo=m_undoRedoLimit->value();
+    if(newUndo!=m_oldNbRedo)
+    {
+        config->writeEntry("UndoRedo",newUndo);
+        m_pView->kPresenterDoc()->setUndoRedoLimit(newUndo);
+    }
+}
+
+void ConfigureMiscPage::slotDefault()
+{
+   m_undoRedoLimit->setValue(30);
+}
+
 
 
 #include <kpresenter_dlg_config.moc>

@@ -367,6 +367,9 @@ public:
     // Get KPresenterView
     KPresenterView *getKPresenterView() const { return m_kpresenterView; }
 
+    int undoRedoLimit();
+    void setUndoRedoLimit(int _val);
+
 public slots:
     void movePage( int from, int to );
     void copyPage( int from, int to );

@@ -272,6 +272,13 @@ void KPresenterDoc::initConfig()
         setDontCheckTitleCase(config->readBoolEntry("KSpell_dont_check_title_case",false));
     }
 
+    if(config->hasGroup("Misc" ) )
+    {
+        config->setGroup( "Misc" );
+        int undo=config->readNumEntry("UndoRedo",-1);
+        if(undo!=-1)
+            setUndoRedoLimit(undo);
+    }
 
     // Apply configuration, without creating an undo/redo command
     replaceObjs( false );
@@ -3116,7 +3123,7 @@ void KPresenterDoc::deletePage( int _page )
     QPtrListIterator<KoView> it( views() );
     for (; it.current(); ++it )
         static_cast<KPresenterView*>(it.current())->updateSideBar();
-    
+
     //update statusbar
     emit pageNumChanged();
 }
@@ -4042,5 +4049,17 @@ void KPresenterDoc::pageNoteDelete( unsigned int _pageNum )
 {
     noteTextList.remove( noteTextList.at( _pageNum ) );
 }
+
+int KPresenterDoc::undoRedoLimit()
+{
+    return m_commandHistory->undoLimit();
+}
+
+void KPresenterDoc::setUndoRedoLimit(int val)
+{
+    m_commandHistory->setUndoLimit(val);
+    m_commandHistory->setRedoLimit(val);
+}
+
 
 #include <kpresenter_doc.moc>

@@ -92,3 +92,8 @@ int KPresenterDocIface::maxRecentFiles()
 {
     return doc->maxRecentFiles();
 }
+
+void KPresenterDocIface::setUndoRedoLimit(int val)
+{
+    doc->setUndoRedoLimit(val);
+}

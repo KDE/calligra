@@ -49,6 +49,7 @@ k_dcop:
     virtual void setDontCheckTitleCase(bool _b);
     virtual int maxRecentFiles();
 
+    virtual void setUndoRedoLimit(int val);
 private:
     KPresenterDoc *doc;
 

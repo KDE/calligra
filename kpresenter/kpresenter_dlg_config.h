@@ -79,6 +79,20 @@ private:
     KConfig* config;
 };
 
+class ConfigureMiscPage : public QObject
+{
+    Q_OBJECT
+public:
+    ConfigureMiscPage( KPresenterView  *_view, QVBox *box, char *name = 0 );
+    void apply();
+    void slotDefault();
+private:
+    KPresenterView* m_pView;
+    KConfig* config;
+    KIntNumInput* m_undoRedoLimit;
+    int m_oldNbRedo;
+};
+
 class KPConfig : public KDialogBase
 {
     Q_OBJECT
@@ -91,6 +105,7 @@ private:
     configureInterfacePage *_interfacePage;
     configureColorBackground *_colorBackground;
     ConfigureSpellPage *_spellPage;
+    ConfigureMiscPage *_miscPage;
 };
 
 #endif
