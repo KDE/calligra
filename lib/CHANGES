@@ -1,5 +1,10 @@
 Changes after KOffice-1.3
 =========================
+KOfficeCore:
+- Changed .desktop file setup so that changes to the K menu structure,
+  to file-program associations, or other distribution customizations cannot
+  prevent KOffice applications from starting.
+
 KoText:
 - Date variables for printing-date, last-modified, and creation-date were
   not loaded correctly.

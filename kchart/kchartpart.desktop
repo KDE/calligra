@@ -1,13 +1,16 @@
 [Desktop Entry]
 Encoding=UTF-8
-Name=KOffice Chart Component
-Name[cy]=Cydran Siart KOffice 
-Name[da]=KOffice diagramkomponent
-Name[es]=Componente de gráfica de KOffice
-Name[et]=KOffice'i diagrammikomponent
-Name[hu]=KOffice grafikonkészítő komponens
-Name[ru]=Компонент диаграмм KOffice
-Name[sv]=Koffice-diagramkomponent
+Name=KChart
+Name[af]=Kchart
+Name[cy]=KSiart
+Name[eo]=Diagramilo
+Name[is]=Rit
+Name[lo]=ແຜນພູມิ K
+Name[pt_BR]=KChart - Gerador de diagramas
+Name[sv]=Kchart
+Name[th]=แผนภูมิ K
+Name[ven]=Tshati ya K
+Name[xx]=xxKChartxx
 X-KDE-Library=libkchartpart
 Type=Service
 MimeType=application/x-kchart

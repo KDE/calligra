@@ -1,12 +1,9 @@
 [Desktop Entry]
-Name=KOffice Scalable Graphics Component
-Name[cy]=Cydran Graffeg Graddadwy KOffice
-Name[da]=Koffice skalérbar grafikkomponent
-Name[es]=Componente de gráfico escalable de KOffice
-Name[et]=KOffice'i Scalable Graphics komponent
-Name[hu]=KOffice vektoros rajzolókomponens
-Name[ru]=Компонент векторных рисунков KOffice
-Name[sv]=Koffice skalbar grafikkomponent
+Name=Karbon14
+Name[eo]=Karbono14
+Name[lo]=ຄາຣ໌ບອບ14
+Name[th]=คาร์บอน14
+Name[xx]=xxKarbon14xx
 X-KDE-Library=libkarbonpart
 MimeType=application/x-karbon;application/illustrator;image/x-eps;application/postscript
 # kghostview has 6 for application/postscript, we need to be under that...
