@@ -427,11 +427,10 @@ public:
     virtual void save( QDomElement &parentElem, bool saveFrames = true );
     virtual void load( QDomElement &framesetElem, bool loadFrames = true );
 
-    /** returns page number of the numbered frame */
-    int getPageOfFrame( int i ) { return frames.at( i )->pageNum(); }
-
     /** Apply the new zoom/resolution - values are to be taken from kWordDocument() */
-    virtual void zoom();
+    virtual void zoom( bool forPrint );
+
+    virtual void preparePrinting( QPainter * ) { }
 
     /** Called once the frameset has been completely loaded or constructed.
      * The default implementation calls updateFrames() and zoom(). Call the parent :) */
@@ -694,7 +693,7 @@ public:
     virtual void load( QDomElement &attributes, bool loadFrames = true );
 
     /** Apply the new zoom/resolution - values are to be taken from kWordDocument() */
-    virtual void zoom();
+    virtual void zoom( bool forPrint );
 
     KFormula::KFormulaContainer* getFormula() const { return formula; }
 

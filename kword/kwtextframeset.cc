@@ -1110,7 +1110,7 @@ void KWTextFrameSet::save( QDomElement &parentElem, bool saveFrames )
         start = static_cast<KWTextParag *>( start->next() );
     }
 
-    zoom();
+    zoom( false );
 }
 
 void KWTextFrameSet::load( QDomElement &attributes, bool loadFrames )
@@ -1149,14 +1149,17 @@ void KWTextFrameSet::load( QDomElement &attributes, bool loadFrames )
     //kdDebug(32001) << "KWTextFrameSet::load done" << endl;
 }
 
-void KWTextFrameSet::zoom()
+void KWTextFrameSet::zoom( bool forPrint )
 {
     if ( !m_origFontSizes.isEmpty() )
         unzoom();
     QTextFormatCollection * coll = textdoc->formatCollection();
     // This is because we are setting pt sizes (so Qt applies x11AppDpiY already)
     // If you change this, fix zoomedFontSize too.
-    double factor = kWordDocument()->zoomedResolutionY() * 72.0 / QPaintDevice::x11AppDpiY();
+    double factor = kWordDocument()->zoomedResolutionY() *
+                    ( forPrint ? 1.0 : 72.0 / QPaintDevice::x11AppDpiY() );
+    kdDebug() << "KWTextFrameSet::zoom factor=" << factor << endl;
+
 #ifdef DEBUG_FORMATS
     kdDebug(32002) << this << " KWTextFrameSet::zoom " << factor << " coll=" << coll << " " << coll->dict().count() << " items " << endl;
     kdDebug(32002) << this << " firstparag:" << textdoc->firstParag()
@@ -1205,7 +1208,7 @@ void KWTextFrameSet::zoom()
     m_lastFormatted = textdoc->firstParag();
     m_availableHeight = -1; // to be recalculated
     //emit ensureCursorVisible(); // not here. We don't want this when saving.
-    KWFrameSet::zoom();
+    KWFrameSet::zoom( forPrint );
 }
 
 void KWTextFrameSet::unzoom()
@@ -1236,6 +1239,11 @@ void KWTextFrameSet::unzoom()
     m_origFontSizes.clear();
 }
 
+void KWTextFrameSet::preparePrinting( QPainter *painter )
+{
+    textdoc->doLayout( painter, textdoc->width() );
+}
+
 int KWTextFrameSet::docFontSize( QTextFormat * format ) const
 {
     ASSERT( format );
@@ -1262,6 +1270,7 @@ float KWTextFrameSet::zoomedFontSize( int docFontSize ) const
               << " -> " << static_cast<float>( docFontSize ) * kWordDocument()->zoomedResolutionY()
               << endl;
 #endif
+    // Has to be the same calculation as in zoom(), except that here we are never printing
     double factor = kWordDocument()->zoomedResolutionY() * 72.0 / QPaintDevice::x11AppDpiY();
     return static_cast<float>( docFontSize ) * factor;
 }
@@ -1359,7 +1368,7 @@ void KWTextFrameSet::applyStyleChange( KWStyle * changedStyle, int paragLayoutCh
         }
         p = static_cast<KWTextParag *>(p->next());
     }
-    zoom();
+    zoom( false );
     //setLastFormattedParag( textdoc->firstParag() ); // done by zoom
     formatMore();
     emit repaintChanged( this );
@@ -3397,7 +3406,7 @@ KWTextDrag * KWTextFrameSetEdit::newDrag( QWidget * parent ) const
         text += c2.parag()->string()->toString().left( c2.index() );
         static_cast<KWTextParag *>(c2.parag())->save( elem, 0, c2.index()-1 );
     }
-    textFrameSet()->zoom();
+    textFrameSet()->zoom( false );
 
     KWTextDrag *kd = new KWTextDrag( parent );
     kd->setPlain( text );

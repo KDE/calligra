@@ -1000,14 +1000,20 @@ void KWView::print( KPrinter &prt )
         if ( fit.current()->type() == FT_PART )
             doZoom = false;
 
+
     int oldZoom = m_doc->zoom();
     // We don't get valid metrics from the printer - and we want a better resolution
     // anyway (it's the PS driver that takes care of the printer resolution).
     QPaintDeviceMetrics metrics( &prt );
-    //m_doc->setZoomAndResolution( 100, metrics.logicalDpiX(), metrics.logicalDpiY(), false );
-    if ( doZoom )
-        m_doc->setZoomAndResolution( 100, 300, 300, false );
-    //kdDebug() << "KWView::print zoom&res set" << endl;
+
+    //int dpiX = metrics.logicalDpiX();
+    //int dpiY = metrics.logicalDpiY();
+    int dpiX = doZoom ? 300 : QPaintDevice::x11AppDpiX();
+    int dpiY = doZoom ? 300 : QPaintDevice::x11AppDpiY();
+    m_doc->setZoomAndResolution( 100, dpiX, dpiY, false, true /* for printing */ );
+
+    //kdDebug() << "KWView::print metrics: " << metrics.logicalDpiX() << "," << metrics.logicalDpiY() << endl;
+    //kdDebug() << "x11AppDPI: " << QPaintDevice::x11AppDpiX() << "," << QPaintDevice::x11AppDpiY() << endl;
 
     bool serialLetter = FALSE;
 #if 0
@@ -1046,8 +1052,20 @@ void KWView::print( KPrinter &prt )
     if ( !serialLetter ) {
         QPainter painter;
         painter.begin( &prt );
-        if ( doZoom )
-            painter.scale( metrics.logicalDpiX() / 300.0, metrics.logicalDpiY() / 300.0 );
+
+        kdDebug(32001) << "KWView::print scaling by " << (double)metrics.logicalDpiX() / (double)dpiX
+                       << "," << (double)metrics.logicalDpiY() / (double)dpiY << endl;
+        painter.scale( (double)metrics.logicalDpiX() / (double)dpiX,
+                       (double)metrics.logicalDpiY() / (double)dpiY );
+
+#define KW_PASS_PAINTER_TO_QRT
+#ifdef KW_PASS_PAINTER_TO_QRT
+        QListIterator<KWFrameSet> fit = m_doc->framesetsIterator();
+        for ( ; fit.current() ; ++fit )
+            if ( fit.current()->isVisible() )
+                fit.current()->preparePrinting( &painter );
+#endif
+
         m_gui->canvasWidget()->print( &painter, &prt );
         painter.end();
     } else {
@@ -1068,8 +1086,15 @@ void KWView::print( KPrinter &prt )
     if ( pgLayout.format == PG_SCREEN )
         m_doc->setPageLayout( oldPGLayout, cl, hf );
 
-    m_doc->setZoomAndResolution( oldZoom, QPaintDevice::x11AppDpiX(), QPaintDevice::x11AppDpiY(), false );
-    //kdDebug() << "KWView::print zoom&res reset" << endl;
+#ifdef KW_PASS_PAINTER_TO_QRT
+    fit = m_doc->framesetsIterator();
+    for ( ; fit.current() ; ++fit )
+        if ( fit.current()->isVisible() )
+            fit.current()->preparePrinting( 0L );
+#endif
+
+    m_doc->setZoomAndResolution( oldZoom, QPaintDevice::x11AppDpiX(), QPaintDevice::x11AppDpiY(), false, false );
+    kdDebug() << "KWView::print zoom&res reset" << endl;
 
     m_gui->canvasWidget()->setUpdatesEnabled(true);
     m_gui->canvasWidget()->viewport()->setCursor( ibeamCursor );
@@ -1609,7 +1634,7 @@ void KWView::viewZoom( const QString &s )
 
 void KWView::setZoom( int zoom, bool updateViews )
 {
-    m_doc->setZoomAndResolution( zoom, QPaintDevice::x11AppDpiX(), QPaintDevice::x11AppDpiY(), updateViews );
+    m_doc->setZoomAndResolution( zoom, QPaintDevice::x11AppDpiX(), QPaintDevice::x11AppDpiY(), updateViews, false );
     m_gui->getHorzRuler()->setZoom( m_doc->zoomedResolutionX() );
     m_gui->getVertRuler()->setZoom( m_doc->zoomedResolutionY() );
 }

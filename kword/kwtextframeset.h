@@ -97,8 +97,9 @@ public:
     virtual void save( QDomElement &parentElem, bool saveFrames = true );
     virtual void load( QDomElement &attributes, bool loadFrames = true );
 
-    virtual void zoom();
+    virtual void zoom( bool forPrint );
     void unzoom();
+    virtual void preparePrinting( QPainter *painter );
 
     // Return the user-visible (document) font size for this format
     // (since fonts are zoomed in the formats)

@@ -1108,7 +1108,7 @@ bool KWFrameSet::isAWrongFooter( KoHFType t ) const
     }
 }
 
-void KWFrameSet::zoom()
+void KWFrameSet::zoom( bool )
 {
 }
 
@@ -1116,7 +1116,7 @@ void KWFrameSet::finalize()
 {
     //kdDebug() << "KWFrameSet::finalize ( calls updateFrames + zoom ) " << this << endl;
     updateFrames();
-    zoom();
+    zoom( false );
 }
 
 // This determines where to clip the painter to draw the contents of a given frame
@@ -1614,12 +1614,12 @@ void KWFormulaFrameSet::load(QDomElement& attributes, bool loadFrames)
     }
 }
 
-void KWFormulaFrameSet::zoom()
+void KWFormulaFrameSet::zoom( bool forPrint )
 {
     if ( !frames.isEmpty() )
     {
         formula->recalc();
-        KWFrameSet::zoom();
+        KWFrameSet::zoom( forPrint );
     }
 }
 

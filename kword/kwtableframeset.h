@@ -217,7 +217,8 @@ public:
     /** override save so we save in table style.. */
     virtual void save( QDomElement &parentElem, bool saveFrames = true );
 
-    virtual void zoom();
+    virtual void zoom( bool forPrint );
+    virtual void preparePrinting( QPainter *painter );
 
     /** Contribute to the document statistics */
     virtual int paragraphs();

@@ -25,14 +25,14 @@
 KWZoomHandler::KWZoomHandler()
 {
     // Note that this calls the method below, not the derived one
-    setZoomAndResolution( 100, QPaintDevice::x11AppDpiX(), QPaintDevice::x11AppDpiY(), false );
+    setZoomAndResolution( 100, QPaintDevice::x11AppDpiX(), QPaintDevice::x11AppDpiY(), false, false );
 }
 
 KWZoomHandler::~KWZoomHandler()
 {
 }
 
-void KWZoomHandler::setZoomAndResolution( int zoom, int dpiX, int dpiY, bool )
+void KWZoomHandler::setZoomAndResolution( int zoom, int dpiX, int dpiY, bool, bool )
 {
     m_zoom = zoom;
     // m_resolution[XY] is in pixel per pt

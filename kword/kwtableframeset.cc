@@ -506,7 +506,7 @@ void KWTableFrameSet::recalcRows(int _col, int _row)
 
     // do positioning of frames
     double y, nextY = getCell( 0, 0 )->getFrame( 0 )->y();
-    unsigned int doingPage = getCell(0,0)->getPageOfFrame(0);
+    unsigned int doingPage = getCell(0,0)->getFrame(0)->pageNum();
     m_pageBoundaries.clear();
     m_pageBoundaries.append(0);
     for ( unsigned int j = 0; j < m_rows; j++ ) {
@@ -1522,9 +1522,15 @@ void KWTableFrameSet::drawContents( QPainter * painter, const QRect & crect,
 
 }
 
-void KWTableFrameSet::zoom() {
+void KWTableFrameSet::zoom( bool forPrint ) {
     for (unsigned int i =0; i < m_cells.count(); i++) {
-        m_cells.at(i)->zoom();
+        m_cells.at(i)->zoom( forPrint );
+    }
+}
+
+void KWTableFrameSet::preparePrinting( QPainter *painter ) {
+    for (unsigned int i =0; i < m_cells.count(); i++) {
+        m_cells.at(i)->preparePrinting( painter );
     }
 }
 

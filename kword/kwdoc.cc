@@ -212,20 +212,20 @@ KWDocument::KWDocument(QWidget *parentWidget, const char *widgetName, QObject* p
     addStyleTemplate( standardStyle );
 }
 
-void KWDocument::setZoomAndResolution( int zoom, int dpiX, int dpiY, bool updateViews )
+void KWDocument::setZoomAndResolution( int zoom, int dpiX, int dpiY, bool updateViews, bool forPrint )
 {
-    KWZoomHandler::setZoomAndResolution( zoom, dpiX, dpiY, updateViews );
-    newZoomAndResolution( updateViews );
+    KWZoomHandler::setZoomAndResolution( zoom, dpiX, dpiY, updateViews, forPrint );
+    newZoomAndResolution( updateViews, forPrint );
 }
 
-void KWDocument::newZoomAndResolution( bool updateViews )
+void KWDocument::newZoomAndResolution( bool updateViews, bool forPrint )
 {
     getFormulaDocument()->setResolution( m_zoomedResolutionX, m_zoomedResolutionY );
 
     // Update all fonts
     QListIterator<KWFrameSet> fit = framesetsIterator();
     for ( ; fit.current() ; ++fit )
-        fit.current()->zoom();
+        fit.current()->zoom( forPrint );
 
     layout();
     updateAllFrames();
@@ -981,7 +981,7 @@ bool KWDocument::loadXML( QIODevice *, const QDomDocument & doc )
         __columns.ptColumnSpacing = KWDocument::getAttribute( paper, "columnspacing", 0.0 );
         m_zoom = KWDocument::getAttribute( paper, "zoom", 100 );
         if(m_zoom!=100)
-            setZoomAndResolution( m_zoom, QPaintDevice::x11AppDpiX(), QPaintDevice::x11AppDpiY(), false );
+            setZoomAndResolution( m_zoom, QPaintDevice::x11AppDpiX(), QPaintDevice::x11AppDpiY(), false, false );
         // Support the undocumented syntax actually used by KDE 2.0 for some of the above (:-().
         if ( __pgLayout.ptWidth == 0.0 )
             getPointBasedAttribute( __pgLayout, Width, paper, "ptWidth", 0.0 );
@@ -1897,7 +1897,7 @@ void KWDocument::paintContent( QPainter& painter, const QRect& _rect, bool trans
     {
         m_zoomedResolutionX = zoomX;
         m_zoomedResolutionY = zoomY;
-        newZoomAndResolution( false );
+        newZoomAndResolution( false, painter.device() && painter.device()->devType() == QInternal::Printer );
     }
 
     QRect rect( _rect );

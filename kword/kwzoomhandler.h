@@ -34,7 +34,7 @@ public:
     KWZoomHandler();
     virtual ~KWZoomHandler();
 
-    virtual void setZoomAndResolution( int zoom, int dpiX, int dpiY, bool updateViews );
+    virtual void setZoomAndResolution( int zoom, int dpiX, int dpiY, bool updateViews, bool forPrint );
 
     /**
      * @return the conversion factor between pt and pixel, that

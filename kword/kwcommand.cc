@@ -358,7 +358,7 @@ QTextCursor * KWPasteTextCommand::execute( QTextCursor *c )
     // In case of any inline frameset
     doc->pasteFrames( elem, 0 );
 
-    textFs->zoom();
+    textFs->zoom( false );
 
     m_lastParag = c->parag()->paragId();
     m_lastIndex = c->index();

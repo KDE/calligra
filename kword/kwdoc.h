@@ -368,7 +368,7 @@ public:
      * The same call combines both so that all the updating done behind
      * the scenes is done only once, even if both zoom and DPI must be changed.
      */
-    virtual void setZoomAndResolution( int zoom, int dpiX, int dpiY, bool updateViews );
+    virtual void setZoomAndResolution( int zoom, int dpiX, int dpiY, bool updateViews, bool forPrint );
 
     // useless method
     static QString getAttribute(QDomElement &element, const char *attributeName, const QString &defaultValue)
@@ -467,7 +467,7 @@ public:
 
     void refreshMenuExpression();
 
-    void refreshMenuCustomVariable();	
+    void refreshMenuCustomVariable();
 
     // Convert a color into a color to be displayed for it
     // (when using color schemes, we still want to print black on white)
@@ -505,7 +505,7 @@ protected:
     void loadFrameSets( QDomElement framesets );
     void loadStyleTemplates( QDomElement styles );
 
-    void newZoomAndResolution( bool updateViews );
+    void newZoomAndResolution( bool updateViews, bool forPrint );
 
 private:
     QList<KWView> m_lstViews;
