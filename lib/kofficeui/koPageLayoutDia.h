@@ -86,6 +86,9 @@ protected:
 /**
  *  With this dialog the user can specify the layout of this papaer during printing.
  */
+
+class KoPageLayoutDiaPrivate;
+
 class KoPageLayoutDia : public KDialogBase
 {
     Q_OBJECT
@@ -161,6 +164,7 @@ protected:
     // setup tabs
     void setupTab1();
     void setValuesTab1();
+    void setValuesTab1Helper();
     void setupTab2();
     void setupTab3();
     void setupTab4();
@@ -169,31 +173,6 @@ protected:
     void updatePreview( KoPageLayout );
 
     // dialog objects
-    QGroupBox *formatFrame;
-    QGroupBox *borderFrame;
-    QButtonGroup *gHeader;
-    QButtonGroup *gFooter;
-    QWidget *tab1;
-    QWidget *tab2;
-    QWidget *tab3;
-    QWidget *tab4;
-    QGridLayout *grid1;
-    QGridLayout *grid3;
-    QGridLayout *formatGrid;
-    QGridLayout *borderGrid;
-    QGridLayout *grid2;
-    QGridLayout *grid4;
-    QGridLayout *footerGrid;
-    QGridLayout *headerGrid;
-    QLabel *lpgFormat;
-    QLabel *lpgOrientation;
-    QLabel *lpgUnit;
-    QLabel *lpgWidth;
-    QLabel *lpgHeight;
-    QLabel *lbrLeft;
-    QLabel *lbrRight;
-    QLabel *lbrTop;
-    QLabel *lbrBottom;
     QComboBox *cpgFormat;
     QComboBox *cpgOrientation;
     QComboBox *cpgUnit;
@@ -205,19 +184,9 @@ protected:
     QLineEdit *ebrBottom;
     KoPagePreview *pgPreview;
     KoPagePreview *pgPreview2;
-    QLabel *lHeadLeft;
-    QLabel *lHeadMid;
-    QLabel *lHeadRight;
-    QLabel *lHead;
     QLineEdit *eHeadLeft;
     QLineEdit *eHeadMid;
     QLineEdit *eHeadRight;
-    QLabel *lFootLeft;
-    QLabel *lFootMid;
-    QLabel *lFootRight;
-    QLabel *lFoot;
-    QLabel *lMacros1;
-    QLabel *lMacros2;
     QLineEdit *eFootLeft;
     QLineEdit *eFootMid;
     QLineEdit *eFootRight;
@@ -225,10 +194,6 @@ protected:
     QLineEdit *nCSpacing;
     QLineEdit *nHSpacing;
     QLineEdit *nFSpacing;
-    QLabel *lColumns;
-    QLabel *lCSpacing;
-    QLabel *lHSpacing;
-    QLabel *lFSpacing;
     QRadioButton *rhSame;
     QRadioButton *rhFirst;
     QRadioButton *rhEvenOdd;
@@ -268,6 +233,8 @@ private slots:
     void nColChanged( int );
     void nSpaceChanged( const QString & );
 
+private:
+    KoPageLayoutDiaPrivate *d;
 };
 
 #endif

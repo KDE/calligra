@@ -329,10 +329,11 @@ KoKWHeaderFooter KoPageLayoutDia::getKWHeaderFooter()
 /*================ setup format and borders tab ==================*/
 void KoPageLayoutDia::setupTab1()
 {
-    tab1 = addPage(i18n( "Format and Borders" ));
+    QWidget *tab1 = addPage(i18n( "Format and Borders" ));
 
-    grid1 = new QGridLayout( tab1, 5, 2, 15, 7 );
+    QGridLayout *grid1 = new QGridLayout( tab1, 5, 2, 15, 7 );
 
+    QLabel *lpgUnit;
     if ( !( flags & DISABLE_UNIT ) ) {
 	// ------------- unit _______________
 	// label unit
@@ -360,15 +361,15 @@ void KoPageLayoutDia::setupTab1()
     }
 
     // -------------- page format -----------------
-    formatFrame = new QGroupBox( i18n( "Page Format" ), tab1 );
-    formatGrid = new QGridLayout( formatFrame, 4, 2, 15, 7 );
+    QGroupBox *formatFrame = new QGroupBox( i18n( "Page Format" ), tab1 );
+    QGridLayout *formatGrid = new QGridLayout( formatFrame, 4, 2, 15, 7 );
 
     // label format
-    lpgFormat = new QLabel( i18n( "\nFormat:" ), formatFrame );
+    QLabel *lpgFormat = new QLabel( i18n( "\nFormat:" ), formatFrame );
     formatGrid->addWidget( lpgFormat, 0, 0 );
 
     // label orientation
-    lpgOrientation = new QLabel( i18n( "\nOrientation:" ), formatFrame );
+    QLabel *lpgOrientation = new QLabel( i18n( "\nOrientation:" ), formatFrame );
     formatGrid->addWidget( lpgOrientation, 0, 1 );
 
     // combo format
@@ -395,7 +396,7 @@ void KoPageLayoutDia::setupTab1()
     connect( cpgOrientation, SIGNAL( activated( int ) ), this, SLOT( orientationChanged( int ) ) );
 
     // label width
-    lpgWidth = new QLabel( i18n( "Width:" ), formatFrame );
+    QLabel *lpgWidth = new QLabel( i18n( "Width:" ), formatFrame );
     formatGrid->addWidget( lpgWidth, 2, 0 );
 
     // linedit width
@@ -413,7 +414,7 @@ void KoPageLayoutDia::setupTab1()
     connect( epgWidth, SIGNAL( textChanged( const QString& ) ), this, SLOT( widthChanged() ) );
 
     // label height
-    lpgHeight = new QLabel( i18n( "Height:" ), formatFrame );
+    QLabel *lpgHeight = new QLabel( i18n( "Height:" ), formatFrame );
     formatGrid->addWidget( lpgHeight, 2, 1 );
 
     // linedit height
@@ -453,11 +454,11 @@ void KoPageLayoutDia::setupTab1()
     grid1->addWidget( formatFrame, 2, 0 );
 
     // --------------- page borders ---------------
-    borderFrame = new QGroupBox( i18n( "Page Borders" ), tab1 );
-    borderGrid = new QGridLayout( borderFrame, 4, 2, 15, 7 );
+    QGroupBox *borderFrame = new QGroupBox( i18n( "Page Borders" ), tab1 );
+    QGridLayout *borderGrid = new QGridLayout( borderFrame, 4, 2, 15, 7 );
 
     // label left
-    lbrLeft = new QLabel( i18n( "\nLeft:" ), borderFrame );
+    QLabel *lbrLeft = new QLabel( i18n( "\nLeft:" ), borderFrame );
     borderGrid->addWidget( lbrLeft, 0, 0 );
 
     // linedit left
@@ -474,7 +475,7 @@ void KoPageLayoutDia::setupTab1()
     if ( !enableBorders ) ebrLeft->setEnabled( false );
 
     // label right
-    lbrRight = new QLabel( i18n( "\nRight:" ), borderFrame );
+    QLabel *lbrRight = new QLabel( i18n( "\nRight:" ), borderFrame );
     borderGrid->addWidget( lbrRight, 0, 1 );
 
     // linedit right
@@ -491,7 +492,7 @@ void KoPageLayoutDia::setupTab1()
     if ( !enableBorders ) ebrRight->setEnabled( false );
 
     // label top
-    lbrTop = new QLabel( i18n( "Top:" ), borderFrame );
+    QLabel *lbrTop = new QLabel( i18n( "Top:" ), borderFrame );
     borderGrid->addWidget( lbrTop, 2, 0 );
 
     // linedit top
@@ -508,7 +509,7 @@ void KoPageLayoutDia::setupTab1()
     if ( !enableBorders ) ebrTop->setEnabled( false );
 
     // label bottom
-    lbrBottom = new QLabel( i18n( "Bottom:" ), borderFrame );
+    QLabel *lbrBottom = new QLabel( i18n( "Bottom:" ), borderFrame );
     borderGrid->addWidget( lbrBottom, 2, 1 );
 
     // linedit bottom
@@ -583,7 +584,14 @@ void KoPageLayoutDia::setValuesTab1()
     // orientation
     cpgOrientation->setCurrentItem( layout.orientation );
 
-    QString tmp1, tmp2, tmp3, tmp4, tmp5, tmp6;
+    setValuesTab1Helper();
+
+    pgPreview->setPageLayout( layout );
+}
+
+void KoPageLayoutDia::setValuesTab1Helper() {
+
+        QString tmp1, tmp2, tmp3, tmp4, tmp5, tmp6;
 
     switch ( layout.unit ) {
 	case PG_MM: {
@@ -618,36 +626,34 @@ void KoPageLayoutDia::setValuesTab1()
     ebrRight->setText( tmp4 );
     ebrTop->setText( tmp5 );
     ebrBottom->setText( tmp6 );
-
-    pgPreview->setPageLayout( layout );
 }
 
 /*================ setup header and footer tab ===================*/
 void KoPageLayoutDia::setupTab2()
 {
-    tab2 = addPage(i18n( "Header and Footer" ));
+    QWidget *tab2 = addPage(i18n( "Header and Footer" ));
 
-    grid2 = new QGridLayout( tab2, 7, 3, 6, 6 );
+    QGridLayout *grid2 = new QGridLayout( tab2, 7, 3, 6, 6 );
 
     // ------------- header ---------------
-    lHead = new QLabel( i18n( "Head line:" ), tab2 );
+    QLabel *lHead = new QLabel( i18n( "Head line:" ), tab2 );
     grid2->addWidget( lHead, 0, 0 );
 
-    lHeadLeft = new QLabel( i18n( "Left:" ), tab2 );
+    QLabel *lHeadLeft = new QLabel( i18n( "Left:" ), tab2 );
     grid2->addWidget( lHeadLeft, 1, 0 );
 
     eHeadLeft = new QLineEdit( tab2 );
     grid2->addWidget( eHeadLeft, 2, 0 );
     eHeadLeft->setText( hf.headLeft );
 
-    lHeadMid = new QLabel( i18n( "Mid:" ), tab2 );
+    QLabel *lHeadMid = new QLabel( i18n( "Mid:" ), tab2 );
     grid2->addWidget( lHeadMid, 1, 1 );
 
     eHeadMid = new QLineEdit( tab2 );
     grid2->addWidget( eHeadMid, 2, 1 );
     eHeadMid->setText( hf.headMid );
 
-    lHeadRight = new QLabel( i18n( "Right:" ), tab2 );
+    QLabel *lHeadRight = new QLabel( i18n( "Right:" ), tab2 );
     grid2->addWidget( lHeadRight, 1, 2 );
 
     eHeadRight = new QLineEdit( tab2 );
@@ -655,31 +661,31 @@ void KoPageLayoutDia::setupTab2()
     eHeadRight->setText( hf.headRight );
 
     // ------------- footer ---------------
-    lFoot = new QLabel( i18n( "\nFoot line:" ), tab2 );
+    QLabel *lFoot = new QLabel( i18n( "\nFoot line:" ), tab2 );
     grid2->addWidget( lFoot, 3, 0 );
 
-    lFootLeft = new QLabel( i18n( "Left:" ), tab2 );
+    QLabel *lFootLeft = new QLabel( i18n( "Left:" ), tab2 );
     grid2->addWidget( lFootLeft, 4, 0 );
 
     eFootLeft = new QLineEdit( tab2 );
     grid2->addWidget( eFootLeft, 5, 0 );
     eFootLeft->setText( hf.footLeft );
 
-    lFootMid = new QLabel( i18n( "Mid:" ), tab2 );
+    QLabel *lFootMid = new QLabel( i18n( "Mid:" ), tab2 );
     grid2->addWidget( lFootMid, 4, 1 );
 
     eFootMid = new QLineEdit( tab2 );
     grid2->addWidget( eFootMid, 5, 1 );
     eFootMid->setText( hf.footMid );
 
-    lFootRight = new QLabel( i18n( "Right:" ), tab2 );
+    QLabel *lFootRight = new QLabel( i18n( "Right:" ), tab2 );
     grid2->addWidget( lFootRight, 4, 2 );
 
     eFootRight = new QLineEdit( tab2 );
     grid2->addWidget( eFootRight, 5, 2 );
     eFootRight->setText( hf.footRight );
 
-    lMacros2 = new QLabel( "<qt>You can insert several tags in the text:"
+    QLabel *lMacros2 = new QLabel( "<qt>You can insert several tags in the text:"
 			   "<ul><li>&lt;page&gt;: The current page</li>"
 			   "<li>&lt;name&gt;: The filename or URL</li>"
 			   "<li>&lt;file&gt;: The filename with complete path or the URL</li>"
@@ -694,11 +700,11 @@ void KoPageLayoutDia::setupTab2()
 /*================================================================*/
 void KoPageLayoutDia::setupTab3()
 {
-    tab3 = addPage(i18n( "Columns" ));
+    QWidget *tab3 = addPage(i18n( "Columns" ));
 
-    grid3 = new QGridLayout( tab3, 5, 2, 15, 7 );
+    QGridLayout *grid3 = new QGridLayout( tab3, 5, 2, 15, 7 );
 
-    lColumns = new QLabel( i18n( "Columns:" ), tab3 );
+    QLabel *lColumns = new QLabel( i18n( "Columns:" ), tab3 );
     grid3->addWidget( lColumns, 0, 0 );
 
     nColumns = new QSpinBox( 1, 16, 1, tab3 );
@@ -713,7 +719,7 @@ void KoPageLayoutDia::setupTab3()
     case PG_INCH: str = "inch"; break;
     }
 
-    lCSpacing = new QLabel( i18n( QString( "Columns Spacing ( " + str + " ):" ) ), tab3 );
+    QLabel *lCSpacing = new QLabel( i18n( QString( "Columns Spacing ( " + str + " ):" ) ), tab3 );
     grid3->addWidget( lCSpacing, 2, 0 );
 
     nCSpacing = new QLineEdit( tab3, "" );
@@ -766,12 +772,12 @@ void KoPageLayoutDia::setupTab4()
     case PG_INCH: str = "inch"; break;
     }
 
-    tab4 = addPage(i18n( "Header and Footer" ));
-    grid4 = new QGridLayout( tab4, 3, 1, 15, 7 );
+    QWidget *tab4 = addPage(i18n( "Header and Footer" ));
+    QGridLayout *grid4 = new QGridLayout( tab4, 3, 1, 15, 7 );
 
-    gHeader = new QButtonGroup( i18n( "Header" ), tab4 );
+    QButtonGroup *gHeader = new QButtonGroup( i18n( "Header" ), tab4 );
     gHeader->setExclusive( true );
-    headerGrid = new QGridLayout( gHeader, 5, 2, 15, 7 );
+    QGridLayout *headerGrid = new QGridLayout( gHeader, 5, 2, 15, 7 );
 
     rhSame = new QRadioButton( i18n( "Same header for all pages" ), gHeader );
     gHeader->insert( rhSame );
@@ -788,7 +794,7 @@ void KoPageLayoutDia::setupTab4()
     headerGrid->addMultiCellWidget( rhEvenOdd, 3, 3, 0, 1 );
     if ( kwhf.header == HF_EO_DIFF ) rhEvenOdd->setChecked( true );
 
-    lHSpacing = new QLabel( i18n( QString( "Spacing between header and body ( " + str + " ):" ) ), gHeader );
+    QLabel *lHSpacing = new QLabel( i18n( QString( "Spacing between header and body ( " + str + " ):" ) ), gHeader );
     lHSpacing->setAlignment( AlignRight | AlignVCenter );
     headerGrid->addWidget( lHSpacing, 4, 0 );
 
@@ -833,9 +839,9 @@ void KoPageLayoutDia::setupTab4()
 
     grid4->addWidget( gHeader, 0, 0 );
 
-    gFooter = new QButtonGroup( i18n( "Footer" ), tab4 );
+    QButtonGroup *gFooter = new QButtonGroup( i18n( "Footer" ), tab4 );
     gFooter->setExclusive( true );
-    footerGrid = new QGridLayout( gFooter, 5, 2, 15, 7 );
+    QGridLayout *footerGrid = new QGridLayout( gFooter, 5, 2, 15, 7 );
 
     rfSame = new QRadioButton( i18n( "Same footer for all pages" ), gFooter );
     gFooter->insert( rfSame );
@@ -852,7 +858,7 @@ void KoPageLayoutDia::setupTab4()
     footerGrid->addMultiCellWidget( rfEvenOdd, 3, 3, 0, 1 );
     if ( kwhf.footer == HF_EO_DIFF ) rfEvenOdd->setChecked( true );
 
-    lFSpacing = new QLabel( i18n( QString( "Spacing between footer and body ( " + str + " ):" ) ), gFooter );
+    QLabel *lFSpacing = new QLabel( i18n( QString( "Spacing between footer and body ( " + str + " ):" ) ), gFooter );
     lFSpacing->setAlignment( AlignRight | AlignVCenter );
     footerGrid->addWidget( lFSpacing, 4, 0 );
 
@@ -920,51 +926,7 @@ void KoPageLayoutDia::updatePreview( KoPageLayout )
 void KoPageLayoutDia::unitChanged( int _unit )
 {
     layout.unit = static_cast<KoUnit>( _unit );
-
-    // FIXME: put that into a separate private method! (dup.code)
-    QString tmp1, tmp2, tmp3, tmp4, tmp5, tmp6;
-
-    switch ( layout.unit ) {
-	case PG_MM: {
-	    tmp1=QString::number(layout.mmWidth, 'f', 2);
-	    tmp2=QString::number(layout.mmHeight, 'f', 2);
-	    tmp3=QString::number(layout.mmLeft, 'f', 2);
-	    tmp4=QString::number(layout.mmRight, 'f', 2);
-	    tmp5=QString::number(layout.mmTop, 'f', 2);
-	    tmp6=QString::number(layout.mmBottom, 'f', 2);
-	} break;
-	case PG_PT: {
-	    tmp1=QString::number(layout.ptWidth, 'f', 2);
-	    tmp2=QString::number(layout.ptHeight, 'f', 2);
-	    tmp3=QString::number(layout.ptLeft, 'f', 2);
-	    tmp4=QString::number(layout.ptRight, 'f', 2);
-	    tmp5=QString::number(layout.ptTop, 'f', 2);
-	    tmp6=QString::number(layout.ptBottom, 'f', 2);
-	} break;
-	case PG_INCH: {
-	    tmp1=QString::number(layout.inchWidth, 'f', 2);
-	    tmp2=QString::number(layout.inchHeight, 'f', 2);
-	    tmp3=QString::number(layout.inchLeft, 'f', 2);
-	    tmp4=QString::number(layout.inchRight, 'f', 2);
-	    tmp5=QString::number(layout.inchTop, 'f', 2);
-	    tmp6=QString::number(layout.inchBottom, 'f', 2);
-	} break;
-    }
-
-    epgWidth->setText( tmp1 );
-    epgHeight->setText( tmp2 );
-    ebrLeft->setText( tmp3 );
-    ebrRight->setText( tmp4 );
-    ebrTop->setText( tmp5 );
-    ebrBottom->setText( tmp6 );
-
-    epgWidth->setText( tmp1 );
-    epgHeight->setText( tmp2 );
-    ebrLeft->setText( tmp3 );
-    ebrRight->setText( tmp4 );
-    ebrTop->setText( tmp5 );
-    ebrBottom->setText( tmp6 );
-
+    setValuesTab1Helper();
     updatePreview( layout );
 }
 
