@@ -8,6 +8,7 @@ VStateButton::VStateButton( QWidget* parent, const char* name )
 		: QPushButton( parent, name )
 {
 	m_index = 0;
+	m_pixmaps.setAutoDelete( true );
 }
 
 VStateButton::~VStateButton()
