@@ -459,11 +459,11 @@ public:
    */
   QRect getSelectionHandleArea(KSpreadCanvas* canvas);
 
-    void setSelection( const QRect &_rect, KSpreadCanvas *_canvas = 0L );
-    void setSelection( const QRect &_rect, const QPoint& marker,
+    void setSelection( QRect _rect, KSpreadCanvas *_canvas = 0L );
+    void setSelection( QRect _rect, QPoint marker,
                        KSpreadCanvas *_canvas = 0L );
 
-    void setMarker( const QPoint& _point, KSpreadCanvas *_canvas = 0L );
+    void setMarker( QPoint _point, KSpreadCanvas *_canvas = 0L );
 
     void setSelectionFont( const QPoint &_marker, const char *_font = 0L, int _size = -1,
                            signed char _bold = -1, signed char _italic = -1, signed char _underline = -1,

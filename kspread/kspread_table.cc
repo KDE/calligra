@@ -684,12 +684,19 @@ void KSpreadTable::unselect()
     emit sig_unselect( this, r );
 }
 
-void KSpreadTable::setMarker( const QPoint& _point, KSpreadCanvas *_canvas )
+void KSpreadTable::setMarker( QPoint _point, KSpreadCanvas *_canvas )
 {
-  KSpreadCell* cell = cellAt(_point);
-  QPoint botRight(_point.x() + cell->extraXCells(),
-                  _point.y() + cell->extraYCells());
-  setSelection( QRect(_point, botRight), _point, _canvas );
+  QPoint topLeft(_point);
+  KSpreadCell* cell = cellAt(topLeft);
+  if (cell->isObscured() && cell->isObscuringForced())
+  {
+    cell = cell->obscuringCells().getFirst();
+    topLeft = QPoint(cell->column(), cell->row());
+  }
+
+  QPoint botRight(topLeft.x() + cell->extraXCells(),
+                  topLeft.y() + cell->extraYCells());
+  setSelection( QRect(topLeft, botRight), topLeft, _canvas );
 }
 
 
@@ -712,7 +719,7 @@ bool KSpreadTable::singleCellSelection() const
           (m_rctSelection.height() - 1 == cell->extraYCells()));
 }
 
-void KSpreadTable::setSelection( const QRect &_sel, KSpreadCanvas *canvas )
+void KSpreadTable::setSelection( QRect _sel, KSpreadCanvas *canvas )
 {
   Q_ASSERT(_sel.left() != 0);
 
@@ -726,10 +733,22 @@ void KSpreadTable::setSelection( const QRect &_sel, KSpreadCanvas *canvas )
   }
 }
 
-void KSpreadTable::setSelection( const QRect &newSelection,
-                                 const QPoint& newMarker,
+void KSpreadTable::setSelection( QRect  newSelection, QPoint newMarker,
                                  KSpreadCanvas */*_canvas*/ )
 {
+
+  KSpreadCell* cell = cellAt(newMarker);
+  if (cell->isObscured() && cell->isObscuringForced())
+  {
+    cell = cell->obscuringCells().getFirst();
+    newMarker = QPoint(cell->column(), cell->row());
+  }
+
+  newSelection = selectionCellMerged(newSelection);
+
+  Q_ASSERT(newSelection.contains(newMarker));
+
+  /* see if we've actually changed anything */
   if ( newSelection == m_rctSelection && newMarker == m_marker )
     return;
 
