@@ -30,7 +30,7 @@
 #include <kwordwrap.h>
 #include <kmessagebox.h>
 #include <klocale.h>
-#include <klineeditdlg.h>
+#include <kinputdialog.h>
 #include <knotifyclient.h>
 #include <kiconview.h>
 #include <kdebug.h>
@@ -968,8 +968,8 @@ void Outline::renamePageTitle()
     bool ok = false;
     QString activeTitle = item->text( 0 );
     QRegExpValidator validator( QRegExp( ".*" ), 0 ); // we want to allow empty titles. Empty == automatic.
-    QString newTitle = KLineEditDlg::getText( i18n("Rename Slide"),
-                                              i18n("Slide title:"), activeTitle, &ok, this,
+    QString newTitle = KInputDialog::getText( i18n("Rename Slide"),
+                                              i18n("Slide title:"), activeTitle, &ok, this, 0,
                                               &validator );
 
     // Have a different name ?
