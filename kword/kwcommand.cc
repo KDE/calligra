@@ -727,6 +727,47 @@ void KWFrameResizeCommand::unexecute()
 }
 
 
+KWFramePartMoveCommand::KWFramePartMoveCommand( const QString &name, FrameIndex _frameIndex, FrameResizeStruct _frameMove ) :
+    KCommand(name),
+    m_indexFrame(_frameIndex),
+    m_frameMove(_frameMove)
+{
+}
+
+void KWFramePartMoveCommand::execute()
+{
+    KWFrameSet *frameSet = m_indexFrame.m_pFrameSet;
+    ASSERT( frameSet );
+    KWFrame *frame = frameSet->getFrame(m_indexFrame.m_iFrameIndex);
+    ASSERT( frame );
+    frame->setCoords(m_frameMove.sizeOfEnd.left(),m_frameMove.sizeOfEnd.top(),m_frameMove.sizeOfEnd.right(),m_frameMove.sizeOfEnd.bottom());
+
+    KWDocument * doc = frameSet->kWordDocument();
+
+    frame->updateRulerHandles();
+    doc->frameChanged( frame );
+}
+
+void KWFramePartMoveCommand::unexecute()
+{
+    KWFrameSet *frameSet =m_indexFrame.m_pFrameSet;
+    ASSERT( frameSet );
+    KWFrame *frame=frameSet->getFrame(m_indexFrame.m_iFrameIndex);
+    ASSERT( frame );
+    frame->setCoords(m_frameMove.sizeOfBegin.left(),m_frameMove.sizeOfBegin.top(),m_frameMove.sizeOfBegin.right(),m_frameMove.sizeOfBegin.bottom());
+
+    KWDocument * doc = frameSet->kWordDocument();
+    frame->updateRulerHandles();
+
+    //update frames
+    doc->frameChanged( frame );
+}
+
+bool KWFramePartMoveCommand::frameMoved()
+{
+    return  (m_frameMove.sizeOfBegin!=m_frameMove.sizeOfEnd);
+}
+
 KWFrameMoveCommand::KWFrameMoveCommand( const QString &name, QList<FrameIndex> &_frameIndex, QList<FrameResizeStruct>&_frameMove  ) :
     KCommand(name),
     m_indexFrame(_frameIndex),

@@ -54,6 +54,7 @@ class QRegion;
 class QSize;
 class QProgressDialog;
 class KWTextFrameSet;
+class KWFramePartMoveCommand;
 
 /**
  * This class represents a single frame.
@@ -712,9 +713,11 @@ public:
     virtual void mousePressEvent( QMouseEvent *, const QPoint &, const KoPoint & );
     virtual void mouseDoubleClickEvent( QMouseEvent *, const QPoint &, const KoPoint & );
 
-
+private:
+    KWFramePartMoveCommand *m_cmdMoveChild;
 protected slots:
     void slotChildChanged();
+    void slotChildActivated(bool);
 };
 
 /******************************************************************/

@@ -278,6 +278,25 @@ protected:
     KWFrame *m_frameAfter;
 };
 
+
+/**
+ * Command created when one part is moved or resized
+ */
+class KWFramePartMoveCommand : public KCommand
+{
+public:
+    KWFramePartMoveCommand( const QString &name,FrameIndex _frameIndex,FrameResizeStruct _frameMove ) ;
+    ~KWFramePartMoveCommand() {}
+
+    void execute();
+    void unexecute();
+    FrameResizeStruct & listFrameMoved() { return m_frameMove; }
+    bool frameMoved();
+protected:
+    FrameIndex m_indexFrame;
+    FrameResizeStruct m_frameMove;
+};
+
 /**
  * Command created when a frameset is made floating or fixed using the frame dialog
  */

@@ -1579,8 +1579,11 @@ KWFrameSetEdit * KWPartFrameSet::createFrameSetEdit( KWCanvas * canvas )
 KWPartFrameSetEdit::KWPartFrameSetEdit( KWPartFrameSet * fs, KWCanvas * canvas )
     : KWFrameSetEdit( fs, canvas )
 {
+    m_cmdMoveChild=0L;
     QObject::connect( partFrameSet()->getChild(), SIGNAL( changed( KoChild * ) ),
                       this, SLOT( slotChildChanged() ) );
+    QObject::connect( m_canvas->gui()->getView() ,SIGNAL(activated( bool ))
+                      ,this,SLOT(slotChildActivated(bool) ) );
 }
 
 KWPartFrameSetEdit::~KWPartFrameSetEdit()
@@ -1588,6 +1591,18 @@ KWPartFrameSetEdit::~KWPartFrameSetEdit()
     kdDebug() << "KWPartFrameSetEdit::~KWPartFrameSetEdit" << endl;
 }
 
+
+void KWPartFrameSetEdit::slotChildActivated(bool b)
+{
+    //we store command when we desactivate child.
+    if( b)
+        return;
+    if(m_cmdMoveChild && m_cmdMoveChild->frameMoved())
+        partFrameSet()->kWordDocument()->addCommand(m_cmdMoveChild);
+    else
+        delete m_cmdMoveChild;
+    m_cmdMoveChild=0L;
+}
 
 void KWPartFrameSetEdit::slotChildChanged()
 {
@@ -1610,6 +1625,9 @@ void KWPartFrameSetEdit::slotChildChanged()
         kdDebug() << "KWPartFrameSet::slotChildChanged child's geometry " << DEBUGRECT(partFrameSet()->getChild()->geometry() )
                   << " frame set to " << DEBUGRECT( *frame ) << endl;
         partFrameSet()->kWordDocument()->frameChanged( frame );
+        //there is just a frame
+        if(m_cmdMoveChild)
+            m_cmdMoveChild->listFrameMoved().sizeOfEnd = frame->normalize();
     }
 }
 
@@ -1636,6 +1654,14 @@ void KWPartFrameSetEdit::mousePressEvent( QMouseEvent *e, const QPoint &, const 
     view->partManager()->addPart( part, false );
     view->partManager()->setActivePart( part, view );
 
+    //create undo/redo move command
+    FrameIndex index( frame );
+    FrameResizeStruct tmpMove;
+    tmpMove.sizeOfBegin = frame->normalize();
+    tmpMove.sizeOfEnd = KoRect();
+
+    if(!m_cmdMoveChild)
+        m_cmdMoveChild=new KWFramePartMoveCommand( i18n("Move Frame"), index, tmpMove );
 }
 
 void KWPartFrameSetEdit::mouseDoubleClickEvent( QMouseEvent *, const QPoint &, const KoPoint & )
