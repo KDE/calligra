@@ -312,7 +312,8 @@ public:
     int flddst; // support for recursive fields
     QString inFileName; // File name of the source file.
 protected:
-    QTextCodec* textCodec;
+    QTextCodec* textCodec; // currently used QTextCodec by the RTF file
+    QTextCodec* utf8TextCodec; // QTextCodec for UTF-8 (used in \u)
 };
 
 #endif

@@ -271,7 +271,7 @@ static const char *borderN[4]	= { "LEFTBORDER", "RIGHTBORDER", "TOPBORDER", "BOT
 
 
 RTFImport::RTFImport( KoFilter *, const char *, const QStringList& )
-    : KoFilter(), textCodec(NULL)
+    : KoFilter(), textCodec(0), utf8TextCodec(0)
 {
     for (uint i=0; i < sizeof(propertyTable) /sizeof(propertyTable[0]); i++)
     {
@@ -371,6 +371,9 @@ KoFilter::ConversionStatus RTFImport::convert( const QCString& from, const QCStr
     emptyCell = state.tableCell;
     state.format.uc=1;
     state.ignoreGroup = false;
+
+    utf8TextCodec=QTextCodec::codecForName("UTF-8");
+    kdDebug(30515) << "UZF-8 asked, given: " << (utf8TextCodec?utf8TextCodec->name():QString("-none-")) << endl;
 
     // Parse RTF document
     while (true)
@@ -1067,7 +1070,11 @@ void RTFImport::insertUTF8( int ch )
     *text++ = 0;
 
     QTextCodec* oldCodec=textCodec;
-    textCodec=QTextCodec::codecForName("UTF-8");
+
+    if (utf8TextCodec)
+        textCodec=utf8TextCodec;
+    else
+        kdError(30515) << "No UTF-8 QTextCodec available" << endl;
 
     (this->*destination.destproc)(0L);
 
