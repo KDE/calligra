@@ -18,6 +18,7 @@
 */
 
 #include <qpainter.h>
+#include <qevent.h>
 
 //#include <kaction.h>
 #include <kstdaction.h>
@@ -45,6 +46,30 @@ bool GraphitePart::initDoc() {
 
 QCString GraphitePart::mimeType() const {
     return "application/x-graphite";
+}
+
+void GraphitePart::mouseMoveEvent(QMouseEvent */*e*/, GraphiteView */*view*/) {
+    //kdDebug(37001) << "MM x=" << e->x() << " y=" << e->y() << endl;
+}
+
+void GraphitePart::mousePressEvent(QMouseEvent *e, GraphiteView */*view*/) {
+    kdDebug(37001) << "MP x=" << e->x() << " y=" << e->y() << endl;
+}
+
+void GraphitePart::mouseReleaseEvent(QMouseEvent *e, GraphiteView */*view*/) {
+    kdDebug(37001) << "MR x=" << e->x() << " y=" << e->y() << endl;
+}
+
+void GraphitePart::mouseDoubleClickEvent(QMouseEvent *e, GraphiteView */*view*/) {
+    kdDebug(37001) << "MDC x=" << e->x() << " y=" << e->y() << endl;
+}
+
+void GraphitePart::keyPressEvent(QKeyEvent *e, GraphiteView */*view*/) {
+    kdDebug(37001) << "KP key=" << e->key() << endl;
+}
+
+void GraphitePart::keyReleaseEvent(QKeyEvent *e, GraphiteView */*view*/) {
+    kdDebug(37001) << "KR key=" << e->key() << endl;
 }
 
 KoView *GraphitePart::createView(QWidget *parent, const char *name) {

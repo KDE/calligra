@@ -18,7 +18,7 @@
 */
 
 #include <gcanvas.h>
-//#include <kdebug.h>
+#include <kdebug.h>
 
 GCanvas::GCanvas(GraphiteView *view, GraphitePart *doc)
     : QScrollView(reinterpret_cast<QWidget*>(view), "GCanvas", WNorthWestGravity),
@@ -30,8 +30,40 @@ GCanvas::GCanvas(GraphiteView *view, GraphitePart *doc)
     viewport()->setMouseTracking(true);
     setFocus();
     setBackgroundMode(NoBackground);
+    //resizeContents(2000, 2000);
 }
 
 GCanvas::~GCanvas() {
+}
+
+void GCanvas::viewportPaintEvent(QPaintEvent */*e*/) {
+
+    // TODO: 1 - define the region which has to be
+    //           repainted (soon we'll have to subtract
+    //           our Children (other KParts) from that
+    // 	         region). Don't forget to add the offset!
+    //       2 - call m_doc->painContent()
+    //       3 - let all the children (in the region we
+    //           have to repaint draw themselves)
+    // - m_doc->paintContent() is responsilbe to traverse
+    //   the tree of gobject's and let them paint themselves.
+    // - Each object decides if it has to repaint itself
+    //   depending on it's position. If the transparent
+    //   flag is false each object is authorized to use
+    //   a double buffer! (Normally we won't use dbuffers
+    //   unless there are *real* problems (flickering,...)
+    // - Double buffers are invalidated via: zoomfactor
+    //   changes, background changes,...
+    /*kdDebug(37001) << "paintEvent: x=" << e->rect().x()
+		   << " y=" << e->rect().y()
+		   << " width=" << e->rect().width()
+		   << " height=" << e->rect().height()
+		   << " erased=" << e->erased()
+		   << " | contents: width=" << contentsWidth()
+		   << " height=" << contentsHeight()
+		   << " | visible: width=" << visibleWidth()
+		   << " height=" << visibleHeight()
+		   << " | x-offset=" << contentsX()
+		   << " y-offet=" << contentsY() << endl;*/
 }
 #include <gcanvas.moc>

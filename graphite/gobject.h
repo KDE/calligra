@@ -46,16 +46,15 @@ class GObjectM9r;
 class GObject {
 
 public:
-    enum State { Visible, Handles, Rot_Handles, Invisible, Deleted }; // all possible states
-    enum FillStyle { Brush, GradientFilled };                    // all possible fill styles
-    enum Position { First, Last, Current };          // where to insert the new child object
+    enum State { Visible, Handles, Rot_Handles, Deleted };   // all possible states
+    enum FillStyle { Brush, GradientFilled };           // all possible fill styles
+    enum Position { First, Last, Current }; // where to insert the new child object
 
     virtual ~GObject();
 
     virtual GObject *clone() const = 0;           // exact copy of "this" (calls the Copy-CTOR)
-    // create an object and initialize it with the given XML
+    // create an object and initialize it with the given XML (calls the XML-CTOR)
     virtual GObject *instantiate(const QDomElement &element) const = 0;
-    virtual void init(const QDomElement &element);  // init this object
 
     const GObject *parent() const { return m_parent; }
     void setParent(GObject *parent);               // parent==0L - no parent, parent==this - illegal
@@ -74,25 +73,22 @@ public:
     virtual const GObject *prevChild() { return 0L; }
     virtual const GObject *current() { return 0L; }
 
-    virtual QDomElement save(QDomDocument &doc) const; // save the object to xml
+    virtual QDomElement save(QDomDocument &doc) const; // save the object (and all its children) to xml
 
     // toPrinter is set when we print the document - this means we don't
     // have to paint "invisible" (normally they are colored gray) objects
-    virtual void draw(const QPainter &p, const bool toPrinter=false) const = 0;  // guess :)
-    // (TODO) Do we need more args?
-    
+    virtual void draw(const QPainter &p, const QRegion &reg, const bool toPrinter=false) const = 0;
+
     const int zoom() const { return m_zoom; }
     virtual void setZoom(const short &zoom=100); // don't forget to set it for all children!
-    // Note: Check, if the zoom is equal to the last one - don't "change" it, then...
-    
-    virtual const GObject *hit(const QPoint &p) const = 0;   // does the object contain this point?
+    // Note: Check, if the zoom is equal to the last one - don't change it, then...
+
+    // does the object contain this point? (Note: finds the most nested child which is hit!)
+    virtual const GObject *hit(const QPoint &p) const = 0;
     virtual const bool intersects(const QRect &r) const = 0;  // does the object intersect the rectangle?
     virtual const QRect &boundingRect() const = 0;            // the bounding rectangle of this object
 
     virtual GObjectM9r *createM9r();        // create a Manipulator (M9r :) for that object
-
-    //const KActionCollection *popupActions() const { return popup; } // return all the actions provided by
-    // (TODO) Use Simon's new magic actionList stuff for that (plain XML instead of actions)
 
     const QString &name() const { return m_name; }       // name of the object (e.g. "Line001")
     void setName(const QString &name) { m_name=name; }   // set the name
@@ -102,6 +98,8 @@ public:
     virtual void moveX(const int &dx) = 0;
     virtual void moveY(const int &dy) = 0;
     virtual void move(const int &dx, const int &dy) = 0;
+    virtual void rotate(const QPoint &center, const double &angle) = 0;
+    virtual void scale(const double &xfactor, const double &yfactor, const QPoint &origin) = 0;
 
     const State state() const { return m_state; }               // what's the current state?
     virtual void setState(const State state) { m_state=state; } // set the state
@@ -117,13 +115,13 @@ public:
 
 signals:
     void requestRepaint();                     // request a complete repaint
-    void requestRepaint(const QRect &);        // request a repaint for this rect
+    void requestRepaint(const QRegion &);      // request a repaint for this region
 
 protected:
     GObject(const QString &name=QString::null);
     GObject(const GObject &rhs);
     GObject(const QDomElement &element);
-    
+
     const double zoomIt(const double &value) const;
     const int zoomIt(const int &value) const;
     const unsigned int zoomIt(const unsigned int &value) const;
@@ -185,7 +183,7 @@ public:
 
     virtual const bool keyPressEvent(QKeyEvent */*e*/) { return false; }
     virtual const bool keyReleaseEvent(QKeyEvent */*e*/) { return false; }
-
+    
 private:
     GObjectM9r &operator=(GObjectM9r &rhs);  // no nasty tricks, please :)
 };

@@ -23,9 +23,9 @@
 #define gcanvas_h
 
 #include <qscrollview.h>
+#include <graphitepart.h>
 
 class GraphiteView;
-class GraphitePart;
 
 
 class GCanvas : public QScrollView {
@@ -36,12 +36,16 @@ public:
     virtual ~GCanvas();
 
 protected:
-    //virtual void viewportPaintEvent(QPaintEvent *e);
+    virtual void viewportPaintEvent(QPaintEvent *e);
+    // TODO: Do we need a resizeEvent?
     // virtual void viewportResizeEvent(QResizeEvent *e);
-    // virtual void viewportMousePressEvent(QMouseEvent *e);
-    // virtual void viewportMouseReleaseEvent(QMouseEvent *e);
-    // virtual void viewportMouseDoubleClickEvent(QMouseEvent *e);
-    // virtual void viewportMouseMoveEvent(QMouseEvent *e);
+    virtual void contentsMousePressEvent(QMouseEvent *e) { m_doc->mousePressEvent(e, m_view); }
+    virtual void contentsMouseReleaseEvent(QMouseEvent *e) { m_doc->mouseReleaseEvent(e, m_view); }
+    virtual void contentsMouseDoubleClickEvent(QMouseEvent *e) { m_doc->mouseDoubleClickEvent(e, m_view); }
+    virtual void contentsMouseMoveEvent(QMouseEvent *e) { m_doc->mouseMoveEvent(e, m_view); }
+
+    virtual void keyPressEvent(QKeyEvent *e) { m_doc->keyPressEvent(e, m_view); }
+    virtual void keyReleaseEvent(QKeyEvent *e) { m_doc->keyReleaseEvent(e, m_view); }
 private:
     GraphiteView *m_view;
     GraphitePart *m_doc;

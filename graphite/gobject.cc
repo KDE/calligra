@@ -26,9 +26,6 @@
 GObject::~GObject() {
 }
 
-void GObject::init(const QDomElement &/*element*/) {
-}
-
 QDomElement GObject::save(QDomDocument &doc) const {
 
     // A GObject is saved to a node which is stored inside
@@ -87,47 +84,61 @@ GObject::GObject(const GObject &rhs) :  m_name(rhs.name()),
 GObject::GObject(const QDomElement &element) {
 
     bool ok;
+    static QString tagName=QString::fromLatin1("name");
+    static QString tagState=QString::fromLatin1("state");
+    static QString tagFormat=QString::fromLatin1("format");
+    static QString tagFillStyle=QString::fromLatin1("fillStyle");
+    static QString tagBrushStyle=QString::fromLatin1("brushStyle");
+    static QString tagBrushColor=QString::fromLatin1("brushColor");
+    static QString tagGradient=QString::fromLatin1("gradient");
+    static QString tagColorA=QString::fromLatin1("colorA");
+    static QString tagColorB=QString::fromLatin1("colorB");
+    static QString tagType=QString::fromLatin1("type");
+    static QString tagXFactor=QString::fromLatin1("xfactor");
+    static QString tagYFactor=QString::fromLatin1("yfactor");
+    static QString tagNCols=QString::fromLatin1("ncols");
+    static QString tagPen=QString::fromLatin1("pen");
 
-    if(element.hasAttribute("name"))
-	m_name=element.attribute("name");
+    if(element.hasAttribute(tagName))
+	m_name=element.attribute(tagName);
     else
-	m_name="no valid name";
+	m_name="no name";
 
-    m_state=static_cast<State>(element.attribute("state").toInt(&ok));
+    m_state=static_cast<State>(element.attribute(tagState).toInt(&ok));
     if(!ok)
 	m_state=Visible;
 
-    QDomElement format=element.namedItem("format").toElement();
+    QDomElement format=element.namedItem(tagFormat).toElement();
     if(!format.isNull()) {
-	m_fillStyle=static_cast<FillStyle>(format.attribute("fillStyle").toInt(&ok));
+	m_fillStyle=static_cast<FillStyle>(format.attribute(tagFillStyle).toInt(&ok));
 	if(!ok)
 	    m_fillStyle=Brush;
 	
-	int tmp=format.attribute("brushStyle").toInt(&ok);
+	int tmp=format.attribute(tagBrushStyle).toInt(&ok);
 	if(!ok)
 	    tmp=0;
 	m_brush.setStyle(static_cast<QBrush::BrushStyle>(tmp));
-	if(format.hasAttribute("brushColor"))
-	    m_brush.setColor(QColor(format.attribute("brushColor")));
+	if(format.hasAttribute(tagBrushColor))
+	    m_brush.setColor(QColor(format.attribute(tagBrushColor)));
 	
-	QDomElement gradient=format.namedItem("gradient").toElement();
+	QDomElement gradient=format.namedItem(tagGradient).toElement();
 	if(!gradient.isNull()) {
-	    if(gradient.hasAttribute("colorA"))
-		m_gradient.ca=QColor(gradient.attribute("colorA"));
-	    if(gradient.hasAttribute("colorB"))
-		m_gradient.cb=QColor(gradient.attribute("colorB"));
+	    if(gradient.hasAttribute(tagColorA))
+		m_gradient.ca=QColor(gradient.attribute(tagColorA));
+	    if(gradient.hasAttribute(tagColorB))
+		m_gradient.cb=QColor(gradient.attribute(tagColorB));
 	
-	    m_gradient.type=static_cast<KImageEffect::GradientType>(gradient.attribute("type").toInt(&ok));
+	    m_gradient.type=static_cast<KImageEffect::GradientType>(gradient.attribute(tagType).toInt(&ok));
 	    if(!ok)
 		m_gradient.type=static_cast<KImageEffect::GradientType>(0);
 	
-	    m_gradient.xfactor=gradient.attribute("xfactor").toInt(&ok);
+	    m_gradient.xfactor=gradient.attribute(tagXFactor).toInt(&ok);
 	    if(!ok)
 		m_gradient.xfactor=1;
-	    m_gradient.yfactor=gradient.attribute("yfactor").toInt(&ok);
+	    m_gradient.yfactor=gradient.attribute(tagYFactor).toInt(&ok);
 	    if(!ok)
 		m_gradient.yfactor=1;
-	    m_gradient.ncols=gradient.attribute("ncols").toInt(&ok);
+	    m_gradient.ncols=gradient.attribute(tagNCols).toInt(&ok);
 	    if(!ok)
 		m_gradient.ncols=1;	
 	}
@@ -138,7 +149,7 @@ GObject::GObject(const QDomElement &element) {
 	    m_gradient.ncols=1;
 	}
 	
-	QDomElement pen=format.namedItem("pen").toElement();
+	QDomElement pen=format.namedItem(tagPen).toElement();
 	if(!pen.isNull())
 	    m_pen=pen.toPen();	
     }
