@@ -46,6 +46,8 @@ public:
     virtual bool doFullDefineStyle(LayoutData& layout);
     virtual bool doFullPaperFormat(const int format,
         const double width, const double height, const int orientation);
+    virtual bool doFullPaperBorders (const double top, const double left,
+        const double bottom, const double right); // Like KWord's <PAPERBORDERS>
 protected:
     virtual QString getStartOfListOpeningTag(const CounterData::Style typeList, bool& ordered);
     virtual void openParagraph(const QString& strTag, const LayoutData& layout);
@@ -60,6 +62,7 @@ private:
         const TextFormatting& formatData, const bool force) const;
 private:
     QString m_strPageSize;
+    QString m_strPaperBorders;
     StyleMap m_styleMap;
 };
 

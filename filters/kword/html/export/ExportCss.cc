@@ -538,6 +538,25 @@ bool HtmlCssWorker::doFullPaperFormat(const int format,
     return true;
 }
 
+bool HtmlCssWorker::doFullPaperBorders (const double top, const double left,
+    const double bottom, const double right)
+{
+    m_strPaperBorders="  margin-top: ";
+    m_strPaperBorders+=QString::number(top);
+    m_strPaperBorders+="pt;\n";
+    m_strPaperBorders+="  margin-left: ";
+    m_strPaperBorders+=QString::number(left);
+    m_strPaperBorders+="pt;\n";
+    m_strPaperBorders+="  margin-bottom: ";
+    m_strPaperBorders+=QString::number(bottom);
+    m_strPaperBorders+="pt;\n";
+    m_strPaperBorders+="  margin-right: ";
+    m_strPaperBorders+=QString::number(right);
+    m_strPaperBorders+="pt;\n";
+
+    return true;
+}
+
 bool HtmlCssWorker::doOpenStyles(void)
 {
     *m_streamOut << "<style type=\"text/css\">\n";
@@ -573,8 +592,9 @@ bool HtmlCssWorker::doCloseStyles(void)
     {
         *m_streamOut << "@page\n{\n  ";
         *m_streamOut << m_strPageSize;
-        // TODO: margins
-        *m_streamOut << "\n}\n";
+        *m_streamOut << "\n";
+        *m_streamOut << m_strPaperBorders; // ends with a LF
+        *m_streamOut << "}\n";
     }
 
     if (!isXML())
