@@ -826,15 +826,15 @@ static void ProcessLinespacingTag (QDomNode myNode, void *tagData, KWEFKWordLead
     double spacingValue;
 
     QValueList<AttrProcessing> attrProcessingList;
-    attrProcessingList << AttrProcessing ("value" , "QString", (void *) &oldValue );
-    attrProcessingList << AttrProcessing ("type" , "QString", (void *) &spacingType );
-    attrProcessingList << AttrProcessing ("spacingvalue"  , "double", (void *) &spacingValue  );
+    attrProcessingList << AttrProcessing ( "value",         oldValue );
+    attrProcessingList << AttrProcessing ( "type",          spacingType );
+    attrProcessingList << AttrProcessing ( "spacingvalue" , spacingValue  );
     ProcessAttributes (myNode, attrProcessingList);
 
-    // KWord pre-1.2 uses "value" attribute (stored in oldValue)
-    // while 1.2 uses "type" and "spacingvalue"
+    // KWord pre-1.2 uses only the "value" attribute (stored in oldValue)
+    // while 1.2 uses mainly "type" and "spacingvalue", while keeping "value" for compatibility
 
-    if( !oldValue.isEmpty() )
+    if ( spacingType.isEmpty() )
     {
         // for old format
         if( oldValue == "oneandhalf" )
