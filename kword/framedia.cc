@@ -753,7 +753,7 @@ void KWFrameDia::setupTab3(){ // TAB Frameset
     }
     //we can't create a new frame when we select
     //multi frame!!!!
-    if ( amount > 1 ) {
+    if ( allFrames.count() > 1 ) {
         rNewFrameset->setChecked(false);
         rNewFrameset->setEnabled(false);
     }
