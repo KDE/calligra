@@ -1045,6 +1045,20 @@ void Page::mouseDoubleClickEvent( QMouseEvent *e )
 	}
     }
 }
+
+/*====================== mouse wheel event =========================*/
+void Page::wheelEvent( QWheelEvent *e )
+{
+    if ( !editMode ) {
+        if ( e->delta() == -120 )     // wheel down
+            view->screenNext();
+        else if ( e->delta() == 120 ) // wheel up
+            view->screenPrev();
+    }
+    e->accept();
+}
+
+
 /*====================== key press event =========================*/
 void Page::keyPressEvent( QKeyEvent *e )
 {

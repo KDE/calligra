@@ -50,6 +50,7 @@ class QDragMoveEvent;
 class QDropEvent;
 class QFocusEvent;
 class QMouseEvent;
+class QWheelEvent;
 class QKeyEvent;
 class KPPixmapObject;
 class KPBackGround;
@@ -150,6 +151,7 @@ protected:
     void mouseReleaseEvent( QMouseEvent *e );
     void mouseMoveEvent( QMouseEvent *e );
     void mouseDoubleClickEvent( QMouseEvent *e );
+    void wheelEvent( QWheelEvent *e );
     void resizeEvent( QResizeEvent *e );
     int getObjectAt( int x, int y );
     void focusInEvent( QFocusEvent* ) {}
