@@ -1,9 +1,7 @@
 INCLUDES = $(KOFFICE_INCLUDES) $(KOPAINTER_INCLUDES) \
 	-I$(srcdir)/.. \
-	-I$(srcdir)/../visitors \
-	-I$(srcdir)/../dockers \
-	-I$(srcdir)/../tools \
 	-I$(srcdir)/../render \
+	-I$(srcdir)/../visitors \
 	$(LIBFREETYPE_CFLAGS) $(all_includes)
 
 noinst_LTLIBRARIES = libkarboncore.la
