@@ -133,7 +133,6 @@ bool KoPicture::loadWmf(QIODevice* io)
     QPicture picture(KoPictureType::formatVersionQPicture);
     KoPictureClipart* picClip;
     m_base=picClip=new KoPictureClipart();
-    m_base->setExtension("wmf");
 
     // "QPIC" at start of the file?
     if ((array[0]=='Q') && (array[1]=='P') &&(array[2]=='I') && (array[3]=='C'))
@@ -141,9 +140,14 @@ bool KoPicture::loadWmf(QIODevice* io)
         // We have found the signature of a QPicture file
         kdDebug(30003) << "QPicture file format!" << endl;
         QBuffer buffer(array);
-        if (!picture.load(&buffer,NULL))
-            return false;
-        return picClip->loadQPicture(picture);
+        buffer.open(IO_ReadWrite);
+        bool check = false;
+        if (picture.load(&buffer,NULL)) {
+            check = picClip->loadQPicture(picture);
+            m_base->setExtension("wmf");
+        }
+        buffer.close();
+        return check;
     }
     else
     {
@@ -151,14 +155,17 @@ bool KoPicture::loadWmf(QIODevice* io)
         // TODO: create KoPictureWmf and give the control to that class
         kdDebug(30003) << "Real WMF file format!" << endl;
         QBuffer buffer(array);
+        buffer.open(IO_ReadWrite);
+        bool check = false;
         QWinMetaFile wmf;
         if (wmf.load(buffer))
         {
             wmf.paint(&picture);
-            return picClip->loadQPicture(picture);
+            check = picClip->loadQPicture(picture);
+            m_base->setExtension("wmf");
         }
-        else
-            return false;
+        buffer.close();
+        return check;
     }
 }
 
@@ -190,10 +197,11 @@ bool KoPicture::loadXpm(QIODevice* io)
     // Now that the XPM file is corrected, we need to load it.
 
     m_base=new KoPictureImage();
-    m_base->setExtension("xpm");
 
     QBuffer buffer(array);
-    return m_base->load(&buffer);
+    bool check = m_base->load(&buffer);
+    m_base->setExtension("xpm");
+    return check;
 }
 
 bool KoPicture::save(QIODevice* io)
@@ -230,7 +238,6 @@ void KoPicture::clearAndSetMode(const QString& newMode)
     {   // TODO: test if QImageIO really knows the file format
         m_base=new KoPictureImage();
     }
-    m_base->setExtension(mode);
 }
 
 QString KoPicture::getExtension(void) const
@@ -251,6 +258,7 @@ bool KoPicture::load(QIODevice* io, const QString& extension)
     {
         clearAndSetMode(extension);
         flag=load(io);
+        m_base->setExtension(extension.lower());
     }
     if (!flag)
     {

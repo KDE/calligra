@@ -89,6 +89,14 @@ public:
 
     virtual QPixmap generatePixmap(const QSize& size);
 
+    virtual QString getExtension(void) const;
+
+    virtual void setExtension(const QString& extension);
+
+    virtual QSize getSize(void) const;
+
+    virtual void setSize(const QSize& size);
+
 protected:
     QPixmap getPixmap(QImage& image);
     void scaleAndCreatePixmap(const QSize& size, bool fastMode=false) const;

@@ -41,6 +41,8 @@ public:
     // No idea why it is a mutable, but as it was in KoImage I suppose that there is a reason.
     mutable QPixmap m_cachedPixmap;
     QSize m_cachedSize;
+    QSize m_size;
+    QString m_extension;
 };
 
 
@@ -197,6 +199,7 @@ bool KoPictureImage::load(QIODevice* io)
 
     // Second, create the original image
     QBuffer buffer(d->m_rawData);
+    buffer.open(IO_ReadWrite);
     QImageIO imageIO(&buffer,NULL); // JPEG
 
     if (!imageIO.read())
@@ -205,7 +208,7 @@ bool KoPictureImage::load(QIODevice* io)
         d=NULL;
         return false;
     }
-
+    buffer.close();
     d->m_originalImage=imageIO.image();
 
     return true;
@@ -235,4 +238,30 @@ QPixmap KoPictureImage::generatePixmap(const QSize& size)
         return d->m_cachedPixmap;
     }
     return QPixmap();
+}
+
+QString KoPictureImage::getExtension(void) const
+{
+    if ( !d )
+        return "null";
+    return d->m_extension;
+}
+
+void KoPictureImage::setExtension(const QString& extension)
+{
+    if ( d )
+        d->m_extension = extension;
+}
+
+QSize KoPictureImage::getSize(void) const
+{
+    if ( !d )
+        return QSize( -1, -1 );
+    return d->m_size;
+}
+
+void KoPictureImage::setSize(const QSize& size)
+{
+    if ( d )
+        d->m_size = size;
 }

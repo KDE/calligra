@@ -37,6 +37,8 @@ public:
 public:
     QPicture m_clipart;
     QByteArray m_rawData;
+    QSize m_size;
+    QString m_extension;
 };
 
 
@@ -128,7 +130,7 @@ bool KoPictureClipart::load(QIODevice* io)
     // Second, create the original clipart
     kdDebug(30003) << "Trying to load clipart... (Size:" << d->m_rawData.size() << ")" << endl;
     QBuffer buffer(d->m_rawData);
-    if (m_extension=="svg")
+    if (d->m_extension=="svg")
     {
         if (!d->m_clipart.load(&buffer, "svg"))
         {
@@ -173,3 +175,28 @@ QSize KoPictureClipart::getOriginalSize(void) const
     return d->m_clipart.boundingRect().size();
 }
 
+QString KoPictureClipart::getExtension(void) const
+{
+    if ( !d )
+        return "null";
+    return d->m_extension;
+}
+
+void KoPictureClipart::setExtension(const QString& extension)
+{
+    if ( d )
+        d->m_extension = extension;
+}
+
+QSize KoPictureClipart::getSize(void) const
+{
+    if ( !d )
+        return QSize( -1, -1 );
+    return d->m_size;
+}
+
+void KoPictureClipart::setSize(const QSize& size)
+{
+    if ( d )
+        d->m_size = size;
+}

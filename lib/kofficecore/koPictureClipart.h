@@ -94,6 +94,14 @@ public:
 
     virtual QSize getOriginalSize(void) const;
 
+    virtual QString getExtension(void) const;
+
+    virtual void setExtension(const QString& extension);
+
+    virtual QSize getSize(void) const;
+
+    virtual void setSize(const QSize& size);
+
 protected:
     QPixmap getPixmap(QImage& image);
     /**
