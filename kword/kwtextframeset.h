@@ -190,8 +190,11 @@ public:
     /** Called by KWTextFrameSet. Implements page breaking, breaking around frames, etc. */
     int formatVertically( Qt3::QTextParag *parag );
 
-    /** Make sure this paragraph is formatted */
-    void ensureFormatted( Qt3::QTextParag * parag );
+    /** Make sure this paragraph is formatted
+     * If formatting happens, the afterFormatting signal will only be emitted if emitAfterFormatting is true.
+     * This prevents re-entrancy if ensureFormatting is called by canRemovePage (from another frameset's
+     * slotAfterFormatting) */
+    void ensureFormatted( Qt3::QTextParag * parag, bool emitAfterFormatting = true );
 
     /** The viewmode that was passed to drawContents. Special hook for KWAnchor. Don't use. */
     KWViewMode * currentViewMode() const { return m_currentViewMode; }

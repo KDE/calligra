@@ -1459,11 +1459,11 @@ void KWTextFrameSet::slotNewCommand( KCommand *cmd )
     m_doc->addCommand( cmd );
 }
 
-void KWTextFrameSet::ensureFormatted( Qt3::QTextParag * parag )
+void KWTextFrameSet::ensureFormatted( Qt3::QTextParag * parag, bool emitAfterFormatting )
 {
     if (!isVisible())
         return;
-    m_textobj->ensureFormatted( parag );
+    m_textobj->ensureFormatted( parag, emitAfterFormatting );
 }
 
 void KWTextFrameSet::slotAfterFormatting( int bottom, Qt3::QTextParag *lastFormatted, bool* abort )
@@ -1745,7 +1745,7 @@ void KWTextFrameSet::frameResized( KWFrame *theFrame )
 bool KWTextFrameSet::isFrameEmpty( KWFrame * theFrame )
 {
     Qt3::QTextParag * lastParag = textDocument()->lastParag();
-    ensureFormatted( lastParag );
+    ensureFormatted( lastParag, false );
     int bottom = lastParag->rect().top() + lastParag->rect().height();
 
     if ( theFrame->frameSet() == this ) // safety check
@@ -1769,6 +1769,7 @@ bool KWTextFrameSet::canRemovePage( int num )
     for ( ; frameIt.current(); ++frameIt )
     {
         KWFrame * theFrame = frameIt.current();
+        //kdDebug() << "canRemovePage: looking at " << theFrame << endl;
         Q_ASSERT( theFrame->pageNum() == num );
         Q_ASSERT( theFrame->frameSet() == this );
         bool isEmpty = isFrameEmpty( theFrame );
@@ -1786,6 +1787,7 @@ bool KWTextFrameSet::canRemovePage( int num )
 
 void KWTextFrameSet::delFrame( KWFrame *frm, bool remove )
 {
+    //kdDebug() << "KWTextFrameSet(" << this << ")::delFrame " << frm << endl;
     emit frameDeleted( frm );
     KWFrameSet::delFrame( frm, remove );
 }
