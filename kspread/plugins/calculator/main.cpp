@@ -126,6 +126,7 @@ bool Calculator::eventFilter( QObject*, QEvent* ev )
     {
 	KSpreadSelectionChanged* event = (KSpreadSelectionChanged*)ev;
 	
+	// Selection cleared ?
 	if ( event->rect().left() == 0 )
 	    return FALSE;
 
@@ -133,6 +134,7 @@ bool Calculator::eventFilter( QObject*, QEvent* ev )
 	if ( !table )
 	    return FALSE;
 
+	// A single cell selected ?
 	if ( event->rect().left() == event->rect().right() &&
 	     event->rect().top() == event->rect().bottom() )
         {
@@ -140,12 +142,17 @@ bool Calculator::eventFilter( QObject*, QEvent* ev )
 	    if ( !cell )
 		return FALSE;
 	
-	    double d = cell->valueDouble();
+	    double d;
+	    if ( cell->isEmpty() )
+		d = 0;
+	    else
+		d = cell->valueDouble();
 	    m_calc->setValue( d );
 
 	    return FALSE;
 	}
 
+	// Multiple cells selected ?
 	m_calc->setData( event->rect(), event->table() );
 	QString str = util_rangeName( table, event->rect() );
 	m_calc->setLabel( str );
