@@ -202,22 +202,29 @@ void KChartView::edit()
     KoChart::Data *dat = (( (KChartPart*)koDocument())->data());
     kdDebug(35001)<<"***Before calling editor: cols ="<<dat->cols()<<" , rows = "<<dat->rows()<<" , usedCols = "<<dat->usedCols()<<"  usedRows = "<<dat->usedRows()<<endl;
     ed.setData(dat);
+    //TODO: Replace following with passing document pointer to the constructor of the dialog
+    ed.setAxisLabelTextShort( ( (KChartPart*)koDocument() )->axisLabelTextShort() );
+    ed.setAxisLabelTextLong( ( (KChartPart*)koDocument() )->axisLabelTextLong() );
+
     QStringList lst;
-    for(int i =0;i<dat->rows();i++)
+    for( uint i =0; i < dat->rows(); i++ )
         lst<<params->legendText( i );
     ed.setLegend(lst);
 
-    KDChartAxisParams bottomparms = params->axisParams( KDChartAxisParams::AxisPosBottom );
-    if(bottomparms.axisLabelStringList())
+    //TODO: Following should be done in the init part of the dialog, when doc pointer is passed in constructor
+    QStringList *axisLabelTextLong = ( ( (KChartPart*)koDocument() )->axisLabelTextLong() );
+    if( axisLabelTextLong )
     {
-        QStringList lstLabel(*bottomparms.axisLabelStringList());
+        QStringList lstLabel( *axisLabelTextLong );
         ed.setXLabel( lstLabel );
     }
     if( ed.exec() != QDialog::Accepted ) {
         return;
     }
+
     ed.getData(dat);
     ed.getLegend(params);
+    //TODO: Should be done in the desctuctor of the dialog
     ed.getXLabel(params );
     kdDebug(35001)<<"***After calling editor: cols ="<<dat->cols()<<" , rows = "<<dat->rows()<<" , usedCols = "<<dat->usedCols()<<"  usedRows = "<<dat->usedRows()<<endl;
     repaint();

@@ -22,6 +22,10 @@ class KChartPart : public KoChart::Part
   virtual bool initDoc();
 
   virtual void setData( const KoChart::Data& data );
+
+  QStringList *axisLabelTextLong() { return &longLabels; }
+  QStringList *axisLabelTextShort() { return &shortLabels; }
+  
   bool showWizard();
   void initLabelAndLegend();
   void loadConfig(KConfig *conf);
@@ -51,9 +55,10 @@ class KChartPart : public KoChart::Part
   QDomElement createElement(const QString &tagName, const QFont &font, QDomDocument &doc) const;
   QFont toFont(QDomElement &element) const;
   KoChart::Data currentData;
+  QStringList longLabels, shortLabels;
   KChartParams* _params;
   QWidget* _parentWidget;
-    bool m_bCanChangeValue;
+  bool m_bCanChangeValue;
 };
 
 class WizardExt : public KoChart::WizardExtension

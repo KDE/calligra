@@ -122,7 +122,98 @@ void KChartPart::paintContent( QPainter& painter, const QRect& rect, bool transp
 
 void KChartPart::setData( const KoChart::Data& data )
 {
-    currentData = data;
+    // FIXME(khz): replace this when automatic string detection works in KDChart
+    //currentData = data;
+
+    uint col, row;
+
+    //Does the top/left cell contain a srting?
+    bool isStringTopLeft = data.cell( 0, 0 ).isString();
+    
+    //Does the first row (without first cell) contain only strings
+    bool isStringFirstRow = TRUE;
+    for( uint col = 1; isStringFirstRow && col < data.cols(); col++ )
+    {
+        isStringFirstRow = data.cell( 0, col ).isString();
+    }
+    //Just in case, we only have 1 row, we never use it for label text => prevents crash
+    if( data.rows() == 1 )
+        isStringFirstRow = FALSE;
+    
+    //Does the first column (without first cell) contain only strings
+    bool isStringFirstCol = TRUE;
+    for( uint row = 1; isStringFirstCol && row < data.rows(); row++ )
+    {
+        isStringFirstCol = data.cell( row, 0 ).isString();
+    }
+    //Just in case, we only have 1 column, we never use it for axis label text => prevents crash
+    if( data.cols() == 1 )
+        isStringFirstRow = FALSE;
+
+    uint colStart = 0;
+    uint rowStart = 0;
+    bool hasColHeader = FALSE;
+    bool hasRowHeader = FALSE;
+    
+    //Let's check if we have a full axis label text column
+    if( isStringFirstCol && isStringTopLeft || isStringFirstCol && isStringFirstRow )
+    {
+        hasColHeader = TRUE;
+        colStart = 1;
+    }
+
+    //Let's check if we have a full label text row
+    if( isStringFirstRow && isStringTopLeft || isStringFirstCol && isStringFirstRow )
+    {
+        hasRowHeader = TRUE;
+        rowStart = 1;
+    }
+
+    if( hasColHeader )
+    {
+        _params->setLegendSource( KDChartParams::LegendManual );
+        for( row = rowStart; row < data.rows(); row++ )
+        {
+            _params->setLegendText( row - rowStart, data.cell( row, 0 ).stringValue() );
+        }
+    }
+    else
+        _params->setLegendSource( KDChartParams::LegendAutomatic );
+    
+    if( hasRowHeader )
+    {
+        KDChartAxisParams bottomparms = _params->axisParams( KDChartAxisParams::AxisPosBottom );
+        longLabels.clear();
+        shortLabels.clear();
+        for( uint col = colStart; col < data.cols(); col++ )
+        {
+            longLabels << data.cell( 0, col ).stringValue();
+            shortLabels << data.cell( 0, col ).stringValue().left( 3 );
+        }
+        bottomparms.setAxisLabelStringLists( &longLabels, &shortLabels );
+        _params->setAxisParams( KDChartAxisParams::AxisPosBottom, bottomparms );
+    }
+    else
+    {
+        longLabels.clear();
+        shortLabels.clear();
+    }
+    
+    if( hasColHeader || hasRowHeader )
+    {
+        KoChart::Data matrix( data.rows() - rowStart, data.cols() - colStart );
+        for( col = colStart; col < data.cols(); col++ )
+        {
+            for( row = rowStart; row < data.rows(); row++ )
+            {
+                matrix.setCell( row - rowStart, col - colStart, KoChart::Value( data.cell( row, col ).doubleValue() ) );
+            }
+        }
+        currentData = matrix;
+    }
+    else
+        currentData = data;
+    
     //  initLabelAndLegend();
     emit docChanged();
 }

@@ -19,8 +19,13 @@ public:
     void setLegend(const QStringList &legend);
     void getXLabel(KChartParams* params);
     void setXLabel(const QStringList &xlbl);
+    void setAxisLabelTextLong( QStringList *_longLabels ) { longLabels = _longLabels; }
+    void setAxisLabelTextShort( QStringList *_shortLabels ){ shortLabels = _shortLabels; }
+
 private:
     SheetDlg *_widget;
+    QStringList *longLabels;
+    QStringList *shortLabels;
 };
 
 
