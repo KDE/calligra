@@ -6456,7 +6456,7 @@ bool KSpreadSheet::loadColumnFormat(const QDomElement& column, const KoOasisStyl
     if ( styleStack.hasAttribute( "style:column-width" ) )
     {
         width = KoUnit::parseValue( styleStack.attribute( "style:column-width" ) , -1 );
-        kdDebug()<<" properties style:row-height : height :"<<width<<endl;
+        kdDebug()<<" style:column-width : width :"<<width<<endl;
     }
     if ( number>30 )
         number = 30; //todo fixme !
@@ -6466,7 +6466,7 @@ bool KSpreadSheet::loadColumnFormat(const QDomElement& column, const KoOasisStyl
         kdDebug()<<"index col :"<<indexCol<<endl;
         ColumnFormat * col = new ColumnFormat( this, indexCol );
         col->copy( layout );
-        col->setMMWidth( width );
+        col->setWidth( width );
 
         // if ( insertPageBreak )
         //   col->setPageBreak( true )
