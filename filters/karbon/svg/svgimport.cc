@@ -67,7 +67,7 @@ KoFilter::ConversionStatus SvgImport::convert(const QCString& from, const QCStri
 	convert();
 
 	KoStoreDevice* out = m_chain->storageFile( "root", KoStore::Write );
-	if( !out ) 
+	if( !out )
 	{
 		kdError(30502) << "Unable to open output file!" << endl;
 		return KoFilter::StorageCreationError;
@@ -251,7 +251,12 @@ SvgImport::parseGroup( VGroup *grp, const QDomElement &e )
 		VObject *obj = 0L;
 		if( b.tagName() == "g" )
 		{
-			VGroup *group = new VGroup( grp ? grp : &m_document );
+			VGroup *group;
+                        if ( grp )
+                            group = new VGroup( grp );
+                        else
+                            group = new VGroup( &m_document );
+
 			parseStyle( group, b );
 			parseGroup( group, b );
 			if( grp )
