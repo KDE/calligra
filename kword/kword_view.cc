@@ -193,6 +193,8 @@ void KWordView::initGui()
     KToolBar *tb = shell()->viewToolBar( "frame_toolbar" );
     if ( tb )
 	tb->hide();
+    if ( ( (KoMainWindow*)shell() )->fileToolBar() )
+	( (KoMainWindow*)shell() )->fileToolBar()->setBarPos( KToolBar::Left );
 }
 
 /*================================================================*/

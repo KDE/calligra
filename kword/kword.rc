@@ -93,7 +93,7 @@
  </Menu>
 </MenuBar>
 <ToolBars>
- <ToolBar name="edit_toolbar">
+ <ToolBar name="edit_toolbar" position="right">
   <Action name="edit_undo"/>
   <Action name="edit_redo"/>
   <Separator/>
@@ -104,13 +104,13 @@
   <Action name="extra_spellcheck"/>
   <Action name="edit_find"/>
  </ToolBar>
- <ToolBar name="insert_toolbar">
+ <ToolBar name="insert_toolbar" position="right" >
   <Action name="insert_picture"/>
   <Action name="insert_clipart"/>
   <Separator/>
   <Action name="insert_specialchar"/>
  </ToolBar>
- <ToolBar name="tools_toolbar">
+ <ToolBar name="tools_toolbar" position="left">
   <Action name="tools_edit"/>
   <Action name="tools_editframes"/>
   <Separator/>
@@ -122,13 +122,13 @@
   <Action name="tools_formula"/>
   <Action name="tools_part"/>
  </ToolBar>
- <ToolBar name="table_toolbar">
+ <ToolBar name="table_toolbar" position="right">
   <Action name="table_insrow"/>
   <Action name="table_inscol"/>
   <Action name="table_delrow"/>
   <Action name="table_delcol"/>
  </ToolBar>
- <ToolBar name="format_toolbar">
+ <ToolBar name="format_toolbar" position="top">
   <Action name="format_style"/>
   <Action name="format_fontsize"/>
   <Action name="format_fontfamily"/>
@@ -160,7 +160,7 @@
   <Action name="format_brdwidth"/>
   <Action name="format_brdstyle"/>
  </ToolBar>
- <ToolBar name="frame_toolbar">
+ <ToolBar name="frame_toolbar" position="top">
   <Action name="frame_brdleft"/>
   <Action name="frame_brdright"/>
   <Action name="frame_brdtop"/>
@@ -170,7 +170,7 @@
   <Action name="frame_brdstyle"/>
   <Action name="frame_backcolor"/>
  </ToolBar>
- <ToolBar name="formula_toolbar">
+ <ToolBar name="formula_toolbar" position="bottom">
   <Action name="formula_power"/>
   <Action name="formula_subscript"/>
   <Action name="formula_parentheses"/>
