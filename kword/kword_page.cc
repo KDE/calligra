@@ -3578,9 +3578,9 @@ void KWPage::tabListChanged( QList<KoTabulator> *_tablist )
 }
 
 /*================================================================*/
-bool KWPage::find( QString _expr, KWSearchDia::KWSearchEntry *_format, 
+bool KWPage::find( QString _expr, KWSearchDia::KWSearchEntry *_format,
 		   bool _first, bool _cs, bool _whole,
-                   bool _regexp, bool _wildcard, 
+                   bool _regexp, bool _wildcard,
 		   bool &_addlen, bool _select )
 {
     if ( _first || !currFindParag )
@@ -3650,9 +3650,9 @@ bool KWPage::find( QString _expr, KWSearchDia::KWSearchEntry *_format,
 }
 
 /*================================================================*/
-bool KWPage::findRev( QString _expr, KWSearchDia::KWSearchEntry *_format, 
+bool KWPage::findRev( QString _expr, KWSearchDia::KWSearchEntry *_format,
 		      bool _first, bool _cs, bool _whole,
-                      bool _regexp, bool _wildcard, 
+                      bool _regexp, bool _wildcard,
 		      bool &_addlen, bool _select )
 {
     _addlen = false;
@@ -4331,7 +4331,7 @@ void KWPage::dragLeaveEvent( QDragLeaveEvent * )
 }
 
 /*================================================================*/
-void KWPage::dropEvent( QDropEvent * )
+void KWPage::dropEvent( QDropEvent *e )
 {
     //debug( "void KWPage::dropEvent( QDropEvent *e )" );
 

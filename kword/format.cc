@@ -15,9 +15,9 @@
 /******************************************************************/
 
 /*================================================================*/
-KWFormat::KWFormat( KWordDocument *_doc, const QColor& _color, 
+KWFormat::KWFormat( KWordDocument *_doc, const QColor& _color,
 		    KWUserFont *_font, int _font_size, int _weight,
-                    char _italic, char _underline, 
+                    char _italic, char _underline,
 		    VertAlign _vertAlign, char _math, char _direct )
 {
     doc = _doc;
@@ -39,6 +39,11 @@ KWFormat::KWFormat( KWordDocument *_doc )
     doc = _doc;
     setDefaults( _doc );
     ref = 0;
+}
+
+/*================================================================*/
+KWFormat::KWFormat( const KWFormat& _format )
+{
 }
 
 /*================================================================*/
