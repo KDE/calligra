@@ -1940,20 +1940,40 @@ void KSpreadCell::paintCell( const QRect& rect, QPainter &painter,
        while already drawing the obscuring cell -- don't want to cause an
        infinite loop
     */
-    // Determine the dimension of the cell.
+    
+    /*
+      Store the obscuringCells list in a list of QPoint(column, row)
+      This avoids crashes during the iteration through obscuringCells,
+      when the cells may get non valid or the list itself gets changed
+      during a call of obscuringCell->paintCell (this happens e.g. when
+      there is an updateDepend)
+    */
+    QValueList<QPoint> listPoints;
     QValueList<KSpreadCell*>::iterator it = m_ObscuringCells.begin();
     QValueList<KSpreadCell*>::iterator end = m_ObscuringCells.end();
-    for ( ; it != end; ++it ) {
+    for ( ; it != end; ++it )
+    {
       KSpreadCell *obscuringCell = *it;
-      QPoint obscuringCellRef( obscuringCell->column(), obscuringCell->row() );
-      double x = m_pTable->dblColumnPos( obscuringCell->column() );
-      double y = m_pTable->dblRowPos( obscuringCell->row() );
-      QPair<double,double> corner = qMakePair( x, y );
-      painter.save();
+      listPoints.append( QPoint( obscuringCell->column(), obscuringCell->row() ) );
+    }
 
-      obscuringCell->paintCell( rect, painter, view,
-                                corner, obscuringCellRef );
-      painter.restore();
+    QValueList<QPoint>::iterator it1 = listPoints.begin();
+    QValueList<QPoint>::iterator end1 = listPoints.end();
+    for ( ; it1 != end1; ++it1 )
+    {
+      QPoint obscuringCellRef = *it1;
+      KSpreadCell *obscuringCell = m_pTable->cellAt( obscuringCellRef.x(), obscuringCellRef.y() );
+      if( obscuringCell != 0 )
+      {
+        double x = m_pTable->dblColumnPos( obscuringCellRef.x() );
+        double y = m_pTable->dblRowPos( obscuringCellRef.y() );
+        QPair<double,double> corner = qMakePair( x, y );
+        painter.save();
+
+        obscuringCell->paintCell( rect, painter, view,
+                                  corner, obscuringCellRef );
+        painter.restore();
+      }
     }
   }
 
