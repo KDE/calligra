@@ -23,7 +23,7 @@ class KDiagrammShell;
 
 /**
  */
-class KDiagrammView : public KoDiagramm,
+class KDiagrammView : public KoDiagrammView,
 		    virtual public KoViewIf,
 		    virtual public KDiagramm::View_skel
 {
@@ -34,7 +34,6 @@ public:
 
     KDiagrammDoc* doc() { return m_pDoc; }
   
-
     /**
      * ToolBar
      */
@@ -57,7 +56,14 @@ public:
      */
     void editData();
   
+    /**
+     * MenuBar
+     */
+    void pageLayout();
+
     virtual void cleanUp();
+
+    CORBA::Boolean printDlg();
   
 public slots:
     // Document signals
@@ -87,13 +93,12 @@ protected:
     CORBA::Long m_idMenuEdit_Bars;
     CORBA::Long m_idMenuEdit_Cakes;
     CORBA::Long m_idMenuEdit_Data;
+    CORBA::Long m_idMenuEdit_Page;
     OpenPartsUI::Menu_var m_vMenuHelp;
     CORBA::Long m_idMenuHelp_About;
     CORBA::Long m_idMenuHelp_Using;
     
     KDiagrammDoc *m_pDoc;  
-
-    KoDiagramm::dia_type m_type;
 };
 
 #endif

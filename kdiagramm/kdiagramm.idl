@@ -16,9 +16,10 @@ module KDiagramm
 		slot void modeCakes();
 
 		slot void editData();
+		slot void pageLayout();
 	};
 
-	interface Document : KOffice::Document, Chart::SimpleChart
+	interface Document : KOffice::Document, KOffice::Print, Chart::SimpleChart
 	{
 	};
 };

@@ -6,6 +6,7 @@
 #include <iostream.h>
 #include <stdlib.h>
 #include <qkeycode.h>
+#include <qprndlg.h>
 
 #include <opUIUtils.h>
 #include <opMainWindow.h>
@@ -25,14 +26,13 @@
  *****************************************************************************/
 
 KDiagrammView::KDiagrammView( QWidget *_parent, const char *_name, KDiagrammDoc* _doc ) :
-  KoDiagramm( _parent ), KoViewIf( _doc ), OPViewIf( _doc ), KDiagramm::View_skel()
+  KoDiagrammView( _parent ), KoViewIf( _doc ), OPViewIf( _doc ), KDiagramm::View_skel()
 {
   setWidget( this );
 
   OPPartIf::setFocusPolicy( OpenParts::Part::ClickFocus ); 
 
   m_pDoc = _doc;
-  m_type = KoDiagramm::DT_LINIEN;
 
   QObject::connect( m_pDoc, SIGNAL( sig_updateView() ), this, SLOT( slotUpdateView() ) );
 }
@@ -180,6 +180,10 @@ bool KDiagrammView::mappingCreateMenubar( OpenPartsUI::MenuBar_ptr _menubar )
   
   m_idMenuEdit_Data = m_vMenuEdit->insertItem( i18n("&Edit Data..."), this, "editData", CTRL + Key_E );
 
+  m_vMenuEdit->insertSeparator( -1 );
+  
+  m_idMenuEdit_Page = m_vMenuEdit->insertItem( i18n("&Page Layout"), this, "pageLayout", CTRL + Key_L );
+
   return true;
 }      
 
@@ -193,6 +197,22 @@ void KDiagrammView::helpUsing()
   kapp->invokeHTMLHelp( "kdiagramm/kdiagramm.html", 0 );
 }
 
+CORBA::Boolean KDiagrammView::printDlg()
+{
+  QPrinter prt;
+  if ( QPrintDialog::getPrinterSetup( &prt ) )
+  {    
+    m_pDoc->print( &prt );
+  }
+  
+  return true;
+}
+
+void KDiagrammView::pageLayout()
+{
+  m_pDoc->paperLayoutDlg();
+}
+  
 void KDiagrammView::newView()
 {
   assert( (m_pDoc != 0L) );
@@ -204,31 +224,27 @@ void KDiagrammView::newView()
 
 void KDiagrammView::modeLines()
 {
-  m_type = KoDiagramm::DT_LINIEN;
-  slotUpdateView();
+  m_pDoc->setDiaType( KoDiagramm::DT_LINIEN );
 }
 
 void KDiagrammView::modeAreas()
 {
-  m_type = KoDiagramm::DT_AREA;
-  slotUpdateView();
+  m_pDoc->setDiaType( KoDiagramm::DT_AREA );
 }
 
 void KDiagrammView::modeBars()
 {
-  m_type = KoDiagramm::DT_SAEULEN;
-  slotUpdateView();
+  m_pDoc->setDiaType( KoDiagramm::DT_SAEULEN );
 }
 
 void KDiagrammView::modeCakes()
 {
-  m_type = KoDiagramm::DT_KREIS;
-  slotUpdateView();
+  m_pDoc->setDiaType( KoDiagramm::DT_KREIS );
 }
 
 void KDiagrammView::slotUpdateView()
 {
-  setData( m_pDoc->data(), "", KoDiagramm::DAT_NUMMER, m_type );
+  m_diagramm.setData( m_pDoc->data(), "", KoDiagramm::DAT_NUMMER, m_pDoc->diaType() );
 
   update();
 }

@@ -36,13 +36,9 @@ struct table_t
 #include <qstring.h>
 #include <qpainter.h>
 
-class KoDiagramm : public QWidget
+class KoDiagramm
 {
-  Q_OBJECT
 public:
-  KoDiagramm( QWidget* _parent );
-  virtual ~KoDiagramm();
-
   enum dia_type { DT_KREIS, DT_SAEULEN,	DT_KREIS_ODER_SAEULEN, DT_LINIEN, DT_AREA };
   enum data_type { DAT_NUMMER, DAT_GEB,	DAT_DAUER };
 
@@ -50,14 +46,12 @@ public:
 		dia_type diaType = DT_KREIS_ODER_SAEULEN);
   void clearData();
 
-  // Generated message map functions
-protected:
-  void paintEvent( QPaintEvent *_ev );
-  void resizeEvent( QResizeEvent *_ve );
+  void paint( QPainter& painter, int width, int height );
   
-  void drawDiagrammKreis( QPainter& painter );
-  void drawDiagrammLinien( QPainter& painter );
-  void drawDiagrammSaeulen( QPainter& painter );
+protected:  
+  void drawDiagrammKreis( QPainter& painter, int _width, int _height );
+  void drawDiagrammLinien( QPainter& painter, int _width, int _height );
+  void drawDiagrammSaeulen( QPainter& painter, int _width, int _height );
 
   /* void FormatAnzahl ( double val, QString& out );
   void FormatGebuehr ( double val, QString& out );
@@ -70,6 +64,22 @@ protected:
   QString m_curTitle;
   dia_type m_diaType;
   data_type m_dataType;
+};
+
+class KoDiagrammView : public QWidget
+{
+  Q_OBJECT
+public:
+  KoDiagrammView( QWidget* _parent );
+  virtual ~KoDiagrammView();
+
+  KoDiagramm& diagramm() { return m_diagramm; }
+
+  void paintEvent( QPaintEvent *_ev );
+  void resizeEvent( QResizeEvent *_ve );
+  
+protected:
+  KoDiagramm m_diagramm;
 };
 
 #endif
