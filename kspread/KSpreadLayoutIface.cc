@@ -19,9 +19,9 @@
 
 #include "KSpreadLayoutIface.h"
 #include <qbrush.h>
-#include "kspread_layout.h"
+#include "kspread_format.h"
 
-KSpreadLayoutIface::KSpreadLayoutIface(KSpreadLayout *_layout)
+KSpreadLayoutIface::KSpreadLayoutIface(KSpreadFormat *_layout)
 {
     layout=_layout;
 }
@@ -68,29 +68,29 @@ void KSpreadLayoutIface::setMultiRow(bool _multi)
 
 void KSpreadLayoutIface::setAlign( const QString& _Align )
 {
-    KSpreadLayout::Align Align;
+    KSpreadFormat::Align Align;
     if(_Align=="Left")
-        Align=KSpreadLayout::Left;
+        Align=KSpreadFormat::Left;
     else if(_Align=="Right")
-        Align=KSpreadLayout::Right;
+        Align=KSpreadFormat::Right;
     else if(_Align=="Center")
-        Align=KSpreadLayout::Center;
+        Align=KSpreadFormat::Center;
     else
-        Align=KSpreadLayout::Undefined;
+        Align=KSpreadFormat::Undefined;
     layout->setAlign( Align);
 }
 
 void KSpreadLayoutIface::setAlignY( const QString& _AlignY )
 {
-    KSpreadLayout::AlignY AlignY;
+    KSpreadFormat::AlignY AlignY;
     if(_AlignY=="Top")
-        AlignY=KSpreadLayout::Top;
+        AlignY=KSpreadFormat::Top;
     else if(_AlignY=="Middle")
-        AlignY=KSpreadLayout::Middle;
+        AlignY=KSpreadFormat::Middle;
     else if(_AlignY=="Bottom")
-        AlignY=KSpreadLayout::Bottom;
+        AlignY=KSpreadFormat::Bottom;
     else
-        AlignY=KSpreadLayout::Middle;
+        AlignY=KSpreadFormat::Middle;
     layout->setAlignY( AlignY);
 }
 
@@ -106,48 +106,48 @@ void KSpreadLayoutIface::setPrefix(const QString &_prefix)
 
 void KSpreadLayoutIface::setFormatType(const QString &_formatType)
 {
-    KSpreadLayout::FormatType format;
+    KSpreadFormat::FormatType format;
     layout->setFactor( 1.0);
     layout->setPrecision(2);
     if(_formatType=="Number")
-        format=KSpreadLayout::Number;
+        format=KSpreadFormat::Number;
     else if(_formatType=="Money")
-        format=KSpreadLayout::Money;
+        format=KSpreadFormat::Money;
     else if(_formatType=="Percentage")
         {
-        format=KSpreadLayout::Percentage;
+        format=KSpreadFormat::Percentage;
         layout->setFactor( 100.0);
         }
     else if(_formatType=="Scientific")
-        format=KSpreadLayout::Scientific;
+        format=KSpreadFormat::Scientific;
     else if(_formatType=="ShortDate")
-        format=KSpreadLayout::ShortDate;
+        format=KSpreadFormat::ShortDate;
     else if(_formatType=="TextDate")
-        format=KSpreadLayout::TextDate;
+        format=KSpreadFormat::TextDate;
     else if(_formatType=="Time")
-        format=KSpreadLayout::Time;
+        format=KSpreadFormat::Time;
     else if(_formatType=="SecondeTime")
-        format=KSpreadLayout::SecondeTime;
+        format=KSpreadFormat::SecondeTime;
     else if(_formatType=="fraction_half")
-        format=KSpreadLayout::fraction_half;
+        format=KSpreadFormat::fraction_half;
     else if(_formatType=="fraction_quarter")
-        format=KSpreadLayout::fraction_quarter;
+        format=KSpreadFormat::fraction_quarter;
     else if(_formatType=="fraction_eighth")
-        format=KSpreadLayout::fraction_eighth;
+        format=KSpreadFormat::fraction_eighth;
     else if(_formatType=="fraction_sixteenth")
-        format=KSpreadLayout::fraction_sixteenth;
+        format=KSpreadFormat::fraction_sixteenth;
     else if(_formatType=="fraction_tenth")
-        format=KSpreadLayout::fraction_tenth;
+        format=KSpreadFormat::fraction_tenth;
     else if(_formatType=="fraction_hundredth")
-        format=KSpreadLayout::fraction_hundredth;
+        format=KSpreadFormat::fraction_hundredth;
     else if(_formatType=="fraction_one_digit")
-        format=KSpreadLayout::fraction_one_digit;
+        format=KSpreadFormat::fraction_one_digit;
     else if(_formatType=="fraction_two_digits")
-        format=KSpreadLayout::fraction_two_digits;
+        format=KSpreadFormat::fraction_two_digits;
     else if(_formatType=="fraction_three_digits")
-        format=KSpreadLayout::fraction_three_digits;
+        format=KSpreadFormat::fraction_three_digits;
     else
-        format=KSpreadLayout::Number;
+        format=KSpreadFormat::Number;
     layout->setFormatType( format);
 }
 

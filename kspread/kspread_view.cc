@@ -1847,13 +1847,13 @@ void KSpreadView::updateButton( KSpreadCell *cell, int column, int row)
     m_underline->setChecked( cell->textFontUnderline( column, row ) );
     m_strikeOut->setChecked( cell->textFontStrike( column, row ) );
 
-    m_alignLeft->setChecked( cell->align( column, row ) == KSpreadLayout::Left );
-    m_alignCenter->setChecked( cell->align( column, row ) == KSpreadLayout::Center );
-    m_alignRight->setChecked( cell->align( column, row ) == KSpreadLayout::Right );
+    m_alignLeft->setChecked( cell->align( column, row ) == KSpreadFormat::Left );
+    m_alignCenter->setChecked( cell->align( column, row ) == KSpreadFormat::Center );
+    m_alignRight->setChecked( cell->align( column, row ) == KSpreadFormat::Right );
 
-    m_alignTop->setChecked( cell->alignY( column, row ) == KSpreadLayout::Top );
-    m_alignMiddle->setChecked( cell->alignY( column, row ) == KSpreadLayout::Middle );
-    m_alignBottom->setChecked( cell->alignY( column, row ) == KSpreadLayout::Bottom );
+    m_alignTop->setChecked( cell->alignY( column, row ) == KSpreadFormat::Top );
+    m_alignMiddle->setChecked( cell->alignY( column, row ) == KSpreadFormat::Middle );
+    m_alignBottom->setChecked( cell->alignY( column, row ) == KSpreadFormat::Bottom );
 
     m_verticalText->setChecked( cell->verticalText( column,row ) );
 
@@ -2229,7 +2229,7 @@ void KSpreadView::showSelColumns()
 
     int i;
     QRect rect = m_selectionInfo->selection();
-    ColumnLayout * col;
+    ColumnFormat * col;
     QValueList<int>hiddenCols;
 
     m_pDoc->emitBeginOperation(false);
@@ -2238,14 +2238,14 @@ void KSpreadView::showSelColumns()
     {
       if (i == 2) // "B"
       {
-        col = activeTable()->columnLayout( 1 );
+        col = activeTable()->columnFormat( 1 );
         if ( col->isHide() )
         {
           hiddenCols.append( 1 );
         }
       }
 
-      col = m_pTable->columnLayout( i );
+      col = m_pTable->columnFormat( i );
       if ( col->isHide() )
       {
 	hiddenCols.append(i);
@@ -2297,7 +2297,7 @@ void KSpreadView::showSelRows()
 
     int i;
     QRect rect = m_selectionInfo->selection();
-    RowLayout * row;
+    RowFormat * row;
     QValueList<int>hiddenRows;
 
     m_pDoc->emitBeginOperation(false);
@@ -2306,14 +2306,14 @@ void KSpreadView::showSelRows()
     {
       if (i == 2)
       {
-        row = activeTable()->rowLayout( 1 );
+        row = activeTable()->rowFormat( 1 );
         if ( row->isHide() )
         {
           hiddenRows.append(1);
         }
       }
 
-      row = m_pTable->rowLayout( i );
+      row = m_pTable->rowFormat( i );
       if ( row->isHide() )
       {
 	hiddenRows.append(i);
@@ -4069,14 +4069,14 @@ void KSpreadView::popupColumnMenu(const QPoint & _point)
     m_showSelColumns->setEnabled(false);
 
     int i;
-    ColumnLayout * col;
+    ColumnFormat * col;
     QRect rect = m_selectionInfo->selection();
     //kdDebug(36001) << "Column: L: " << rect.left() << endl;
     for ( i = rect.left(); i <= rect.right(); ++i )
     {
       if (i == 2) // "B"
       {
-        col = activeTable()->columnLayout( 1 );
+        col = activeTable()->columnFormat( 1 );
         if ( col->isHide() )
         {
           m_showSelColumns->setEnabled(true);
@@ -4085,7 +4085,7 @@ void KSpreadView::popupColumnMenu(const QPoint & _point)
         }
       }
 
-      col = activeTable()->columnLayout( i );
+      col = activeTable()->columnFormat( i );
 
       if ( col->isHide() )
       {
@@ -4146,14 +4146,14 @@ void KSpreadView::popupRowMenu(const QPoint & _point )
     m_showSelColumns->setEnabled(false);
 
     int i;
-    RowLayout * row;
+    RowFormat * row;
     QRect rect = m_selectionInfo->selection();
     for ( i = rect.top(); i <= rect.bottom(); ++i )
     {
         //kdDebug(36001) << "popupRow: " << rect.top() << endl;
       if (i == 2)
       {
-        row = activeTable()->rowLayout( 1 );
+        row = activeTable()->rowFormat( 1 );
         if ( row->isHide() )
         {
           m_showSelRows->setEnabled(true);
@@ -4162,7 +4162,7 @@ void KSpreadView::popupRowMenu(const QPoint & _point )
         }
       }
 
-      row = activeTable()->rowLayout( i );
+      row = activeTable()->rowFormat( i );
       if ( row->isHide() )
       {
         m_showSelRows->setEnabled(true);
@@ -4243,7 +4243,7 @@ void KSpreadView::slotListChoosePopupMenu( )
 
  if(id==0)
    return;
- RowLayout *rl = m_pTable->rowLayout( m_pCanvas->markerRow());
+ RowFormat *rl = m_pTable->rowFormat( m_pCanvas->markerRow());
  double tx = m_pTable->dblColumnPos( m_pCanvas->markerColumn(), m_pCanvas );
  double ty = m_pTable->dblRowPos(m_pCanvas->markerRow(), m_pCanvas );
  double h = rl->dblHeight( m_pCanvas );
@@ -4591,7 +4591,7 @@ void KSpreadView::layoutDlg()
   QRect selection( m_selectionInfo->selection() );
 
   m_pDoc->emitBeginOperation(false);
-  CellLayoutDlg dlg( this, m_pTable, selection.left(), selection.top(),
+  CellFormatDlg dlg( this, m_pTable, selection.left(), selection.top(),
                      selection.right(), selection.bottom() );
   m_pDoc->emitEndOperation();
 }
@@ -4663,10 +4663,10 @@ void KSpreadView::alignLeft( bool b )
   {
     if ( !b )
       m_pTable->setSelectionAlign( selectionInfo(),
-                                   KSpreadLayout::Undefined );
+                                   KSpreadFormat::Undefined );
     else
       m_pTable->setSelectionAlign( selectionInfo(),
-                                   KSpreadLayout::Left );
+                                   KSpreadFormat::Left );
   }
   m_pDoc->emitEndOperation();
 }
@@ -4680,9 +4680,9 @@ void KSpreadView::alignRight( bool b )
   if ( m_pTable != 0L )
   {
     if ( !b )
-      m_pTable->setSelectionAlign( selectionInfo(), KSpreadLayout::Undefined );
+      m_pTable->setSelectionAlign( selectionInfo(), KSpreadFormat::Undefined );
     else
-      m_pTable->setSelectionAlign( selectionInfo(), KSpreadLayout::Right );
+      m_pTable->setSelectionAlign( selectionInfo(), KSpreadFormat::Right );
   }
   m_pDoc->emitEndOperation();
 }
@@ -4696,9 +4696,9 @@ void KSpreadView::alignCenter( bool b )
   if ( m_pTable != 0L )
   {
     if ( !b )
-      m_pTable->setSelectionAlign( selectionInfo(), KSpreadLayout::Undefined );
+      m_pTable->setSelectionAlign( selectionInfo(), KSpreadFormat::Undefined );
     else
-      m_pTable->setSelectionAlign( selectionInfo(), KSpreadLayout::Center );
+      m_pTable->setSelectionAlign( selectionInfo(), KSpreadFormat::Center );
   }
   m_pDoc->emitEndOperation();
 }
@@ -4719,7 +4719,7 @@ void KSpreadView::alignTop( bool b )
   }
 
   if ( m_pTable != 0L )
-    m_pTable->setSelectionAlignY( selectionInfo(), KSpreadLayout::Top );
+    m_pTable->setSelectionAlignY( selectionInfo(), KSpreadFormat::Top );
 
   m_pDoc->emitEndOperation();
 }
@@ -4739,7 +4739,7 @@ void KSpreadView::alignBottom( bool b )
   }
 
   if ( m_pTable != 0L )
-    m_pTable->setSelectionAlignY( selectionInfo(), KSpreadLayout::Bottom );
+    m_pTable->setSelectionAlignY( selectionInfo(), KSpreadFormat::Bottom );
 
   m_pDoc->emitEndOperation();
 }
@@ -4758,7 +4758,7 @@ void KSpreadView::alignMiddle( bool b )
   }
 
   if ( m_pTable != 0L )
-    m_pTable->setSelectionAlignY( selectionInfo(), KSpreadLayout::Middle );
+    m_pTable->setSelectionAlignY( selectionInfo(), KSpreadFormat::Middle );
 
   m_pDoc->emitEndOperation();
 }

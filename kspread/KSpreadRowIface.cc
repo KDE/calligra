@@ -19,10 +19,10 @@
 
 #include "KSpreadLayoutIface.h"
 #include "KSpreadRowIface.h"
-#include "kspread_layout.h"
+#include "kspread_format.h"
 #include <qbrush.h>
 
-KSpreadRowIface::KSpreadRowIface(RowLayout *_lay)
+KSpreadRowIface::KSpreadRowIface(RowFormat *_lay)
     :KSpreadLayoutIface(_lay)
 {
     m_rowLayout=_lay;

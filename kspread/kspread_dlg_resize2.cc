@@ -27,7 +27,6 @@
 
 #include <kspread_dlg_resize2.h>
 #include <kspread_global.h>
-#include <kspread_layout.h>
 #include <kspread_canvas.h>
 #include <kspread_table.h>
 #include <kspread_doc.h>
@@ -44,7 +43,7 @@ KSpreadResizeRow::KSpreadResizeRow( KSpreadView* parent, const char* name )
     QVBoxLayout *lay = new QVBoxLayout( page, 0, spacingHint() );
 
     QRect selection( m_pView->selection() );
-    RowLayout* rl = m_pView->activeTable()->rowLayout( selection.top() );
+    RowFormat* rl = m_pView->activeTable()->rowFormat( selection.top() );
     rowHeight = rl->dblHeight();
 
     m_pHeight = new KDoubleNumInput( page );
@@ -107,7 +106,7 @@ KSpreadResizeColumn::KSpreadResizeColumn( KSpreadView* parent, const char* name 
     QVBoxLayout *lay = new QVBoxLayout( page, 0, spacingHint() );
 
     QRect selection( m_pView->selection() );
-    ColumnLayout* cl = m_pView->activeTable()->columnLayout( selection.left() );
+    ColumnFormat* cl = m_pView->activeTable()->columnFormat( selection.left() );
     columnWidth = cl->dblWidth();
 
     m_pWidth = new KDoubleNumInput( page );

@@ -786,7 +786,7 @@ KSpreadCell* KSpreadCluster::getNextCellRight(int col, int row) const
 KSpreadColumnCluster::KSpreadColumnCluster()
     : m_first( 0 ), m_autoDelete( FALSE )
 {
-    m_cluster = (ColumnLayout***)malloc( KSPREAD_CLUSTER_LEVEL1 * sizeof( ColumnLayout** ) );
+    m_cluster = (ColumnFormat***)malloc( KSPREAD_CLUSTER_LEVEL1 * sizeof( ColumnFormat** ) );
 
     for( int x = 0; x < KSPREAD_CLUSTER_LEVEL1; ++x )
 	m_cluster[ x ] = 0;
@@ -796,7 +796,7 @@ KSpreadColumnCluster::~KSpreadColumnCluster()
 {
     for( int x = 0; x < KSPREAD_CLUSTER_LEVEL1; ++x )
     {
-	ColumnLayout** cl = m_cluster[ x ];
+	ColumnFormat** cl = m_cluster[ x ];
 	if ( cl )
         {
 	    free( cl );
@@ -806,10 +806,10 @@ KSpreadColumnCluster::~KSpreadColumnCluster()
 
     if ( m_autoDelete )
     {
-	ColumnLayout* cell = m_first;
+	ColumnFormat* cell = m_first;
 	while( cell )
         {
-	    ColumnLayout* n = cell->next();
+	    ColumnFormat* n = cell->next();
 	    delete cell;
 	    cell = n;
 	}
@@ -819,7 +819,7 @@ KSpreadColumnCluster::~KSpreadColumnCluster()
     free( m_cluster );
 }
 
-ColumnLayout* KSpreadColumnCluster::lookup( int col )
+ColumnFormat* KSpreadColumnCluster::lookup( int col )
 {
     if ( col >= KSPREAD_CLUSTER_MAX || col < 0 )
     {
@@ -831,14 +831,14 @@ ColumnLayout* KSpreadColumnCluster::lookup( int col )
     int cx = col / KSPREAD_CLUSTER_LEVEL2;
     int dx = col % KSPREAD_CLUSTER_LEVEL2;
 
-    ColumnLayout** cl = m_cluster[ cx ];
+    ColumnFormat** cl = m_cluster[ cx ];
     if ( !cl )
 	return 0;
 
     return cl[ dx ];
 }
 
-const ColumnLayout* KSpreadColumnCluster::lookup( int col ) const
+const ColumnFormat* KSpreadColumnCluster::lookup( int col ) const
 {
     if ( col >= KSPREAD_CLUSTER_MAX || col < 0 )
     {
@@ -850,7 +850,7 @@ const ColumnLayout* KSpreadColumnCluster::lookup( int col ) const
     int cx = col / KSPREAD_CLUSTER_LEVEL2;
     int dx = col % KSPREAD_CLUSTER_LEVEL2;
 
-    ColumnLayout** cl = m_cluster[ cx ];
+    ColumnFormat** cl = m_cluster[ cx ];
     if ( !cl )
 	return 0;
 
@@ -861,7 +861,7 @@ void KSpreadColumnCluster::clear()
 {
     for( int x = 0; x < KSPREAD_CLUSTER_LEVEL1; ++x )
     {
-	ColumnLayout** cl = m_cluster[ x ];
+	ColumnFormat** cl = m_cluster[ x ];
 	if ( cl )
         {
 	    free( cl );
@@ -871,10 +871,10 @@ void KSpreadColumnCluster::clear()
 
     if ( m_autoDelete )
     {
-	ColumnLayout* cell = m_first;
+	ColumnFormat* cell = m_first;
 	while( cell )
         {
-	    ColumnLayout* n = cell->next();
+	    ColumnFormat* n = cell->next();
 	    delete cell;
 	    cell = n;
 	}
@@ -883,7 +883,7 @@ void KSpreadColumnCluster::clear()
     m_first = 0;
 }
 
-void KSpreadColumnCluster::insertElement( ColumnLayout* lay, int col )
+void KSpreadColumnCluster::insertElement( ColumnFormat* lay, int col )
 {
     if ( col >= KSPREAD_CLUSTER_MAX || col < 0 )
     {
@@ -895,10 +895,10 @@ void KSpreadColumnCluster::insertElement( ColumnLayout* lay, int col )
     int cx = col / KSPREAD_CLUSTER_LEVEL2;
     int dx = col % KSPREAD_CLUSTER_LEVEL2;
 
-    ColumnLayout** cl = m_cluster[ cx ];
+    ColumnFormat** cl = m_cluster[ cx ];
     if ( !cl )
     {
-	cl = (ColumnLayout**)malloc( KSPREAD_CLUSTER_LEVEL2 * sizeof( ColumnLayout*  ) );
+	cl = (ColumnFormat**)malloc( KSPREAD_CLUSTER_LEVEL2 * sizeof( ColumnFormat*  ) );
 	m_cluster[ cx ] = cl;
 
 	for( int a = 0; a < KSPREAD_CLUSTER_LEVEL2; ++a )
@@ -930,11 +930,11 @@ void KSpreadColumnCluster::removeElement( int col )
     int cx = col / KSPREAD_CLUSTER_LEVEL2;
     int dx = col % KSPREAD_CLUSTER_LEVEL2;
 
-    ColumnLayout** cl = m_cluster[ cx ];
+    ColumnFormat** cl = m_cluster[ cx ];
     if ( !cl )
 	return;
 
-    ColumnLayout* c = cl[ dx ];
+    ColumnFormat* c = cl[ dx ];
     if ( !c )
 	return;
 
@@ -973,7 +973,7 @@ bool KSpreadColumnCluster::insertColumn( int col )
 
     // Is there a column layout at the right most position ?
     // In this case the shift is impossible.
-    ColumnLayout** cl = m_cluster[ KSPREAD_CLUSTER_LEVEL1 - 1 ];
+    ColumnFormat** cl = m_cluster[ KSPREAD_CLUSTER_LEVEL1 - 1 ];
     if ( cl && cl[ KSPREAD_CLUSTER_LEVEL2 - 1 ] )
 	return FALSE;
 
@@ -982,7 +982,7 @@ bool KSpreadColumnCluster::insertColumn( int col )
 
     for( int i = KSPREAD_CLUSTER_LEVEL1 - 1; i >= cx ; --i )
     {
-	ColumnLayout** cl = m_cluster[ i ];
+	ColumnFormat** cl = m_cluster[ i ];
 	if ( cl )
         {
 	    int left = 0;
@@ -993,7 +993,7 @@ bool KSpreadColumnCluster::insertColumn( int col )
 		right = KSPREAD_CLUSTER_LEVEL2 - 2;
 	    for( int k = right; k >= left; --k )
 	    {
-		ColumnLayout* c = cl[ k ];
+		ColumnFormat* c = cl[ k ];
 		if ( c )
 	        {
 		    removeElement( c->column() );
@@ -1028,7 +1028,7 @@ bool KSpreadColumnCluster::removeColumn( int column )
 
     for( int i = cx; i < KSPREAD_CLUSTER_LEVEL1; ++i )
     {
-	ColumnLayout** cl = m_cluster[ i ];
+	ColumnFormat** cl = m_cluster[ i ];
 	if ( cl )
         {
 	    int left = 0;
@@ -1037,7 +1037,7 @@ bool KSpreadColumnCluster::removeColumn( int column )
 	    int right = KSPREAD_CLUSTER_LEVEL2 - 1;
 	    for( int k = left; k <= right; ++k )
 	    {
-		ColumnLayout* c = cl[ k ];
+		ColumnFormat* c = cl[ k ];
 		if ( c )
 	        {
 		    removeElement( c->column() );
@@ -1072,7 +1072,7 @@ bool KSpreadColumnCluster::autoDelete() const
 KSpreadRowCluster::KSpreadRowCluster()
     : m_first( 0 ), m_autoDelete( FALSE )
 {
-    m_cluster = (RowLayout***)malloc( KSPREAD_CLUSTER_LEVEL1 * sizeof( RowLayout** ) );
+    m_cluster = (RowFormat***)malloc( KSPREAD_CLUSTER_LEVEL1 * sizeof( RowFormat** ) );
 
     for( int x = 0; x < KSPREAD_CLUSTER_LEVEL1; ++x )
 	    m_cluster[ x ] = 0;
@@ -1082,7 +1082,7 @@ KSpreadRowCluster::~KSpreadRowCluster()
 {
     for( int x = 0; x < KSPREAD_CLUSTER_LEVEL1; ++x )
     {
-	RowLayout** cl = m_cluster[ x ];
+	RowFormat** cl = m_cluster[ x ];
 	if ( cl )
         {
 	    free( cl );
@@ -1092,10 +1092,10 @@ KSpreadRowCluster::~KSpreadRowCluster()
 
     if ( m_autoDelete )
     {
-	RowLayout* cell = m_first;
+	RowFormat* cell = m_first;
 	while( cell )
         {
-	    RowLayout* n = cell->next();
+	    RowFormat* n = cell->next();
 	    delete cell;
 	    cell = n;
 	}
@@ -1104,7 +1104,7 @@ KSpreadRowCluster::~KSpreadRowCluster()
     free( m_cluster );
 }
 
-const RowLayout* KSpreadRowCluster::lookup( int row ) const
+const RowFormat* KSpreadRowCluster::lookup( int row ) const
 {
     if ( row >= KSPREAD_CLUSTER_MAX || row < 0 )
     {
@@ -1116,14 +1116,14 @@ const RowLayout* KSpreadRowCluster::lookup( int row ) const
     int cx = row / KSPREAD_CLUSTER_LEVEL2;
     int dx = row % KSPREAD_CLUSTER_LEVEL2;
 
-    RowLayout** cl = m_cluster[ cx ];
+    RowFormat** cl = m_cluster[ cx ];
     if ( !cl )
 	return 0;
 
     return cl[ dx ];
 }
 
-RowLayout* KSpreadRowCluster::lookup( int row )
+RowFormat* KSpreadRowCluster::lookup( int row )
 {
     if ( row >= KSPREAD_CLUSTER_MAX || row < 0 )
     {
@@ -1135,7 +1135,7 @@ RowLayout* KSpreadRowCluster::lookup( int row )
     int cx = row / KSPREAD_CLUSTER_LEVEL2;
     int dx = row % KSPREAD_CLUSTER_LEVEL2;
 
-    RowLayout** cl = m_cluster[ cx ];
+    RowFormat** cl = m_cluster[ cx ];
     if ( !cl )
 	return 0;
 
@@ -1146,7 +1146,7 @@ void KSpreadRowCluster::clear()
 {
     for( int x = 0; x < KSPREAD_CLUSTER_LEVEL1; ++x )
     {
-	RowLayout** cl = m_cluster[ x ];
+	RowFormat** cl = m_cluster[ x ];
 	if ( cl )
         {
 	    free( cl );
@@ -1156,10 +1156,10 @@ void KSpreadRowCluster::clear()
 
     if ( m_autoDelete )
     {
-	RowLayout* cell = m_first;
+	RowFormat* cell = m_first;
 	while( cell )
         {
-	    RowLayout* n = cell->next();
+	    RowFormat* n = cell->next();
 	    delete cell;
 	    cell = n;
 	}
@@ -1168,7 +1168,7 @@ void KSpreadRowCluster::clear()
     m_first = 0;
 }
 
-void KSpreadRowCluster::insertElement( RowLayout* lay, int row )
+void KSpreadRowCluster::insertElement( RowFormat* lay, int row )
 {
     if ( row >= KSPREAD_CLUSTER_MAX || row < 0 )
     {
@@ -1180,10 +1180,10 @@ void KSpreadRowCluster::insertElement( RowLayout* lay, int row )
     int cx = row / KSPREAD_CLUSTER_LEVEL2;
     int dx = row % KSPREAD_CLUSTER_LEVEL2;
 
-    RowLayout** cl = m_cluster[ cx ];
+    RowFormat** cl = m_cluster[ cx ];
     if ( !cl )
     {
-	cl = (RowLayout**)malloc( KSPREAD_CLUSTER_LEVEL2 * sizeof( RowLayout*  ) );
+	cl = (RowFormat**)malloc( KSPREAD_CLUSTER_LEVEL2 * sizeof( RowFormat*  ) );
 	m_cluster[ cx ] = cl;
 
 	for( int a = 0; a < KSPREAD_CLUSTER_LEVEL2; ++a )
@@ -1215,11 +1215,11 @@ void KSpreadRowCluster::removeElement( int row )
     int cx = row / KSPREAD_CLUSTER_LEVEL2;
     int dx = row % KSPREAD_CLUSTER_LEVEL2;
 
-    RowLayout** cl = m_cluster[ cx ];
+    RowFormat** cl = m_cluster[ cx ];
     if ( !cl )
 	return;
 
-    RowLayout* c = cl[ dx ];
+    RowFormat* c = cl[ dx ];
     if ( !c )
 	return;
 
@@ -1258,7 +1258,7 @@ bool KSpreadRowCluster::insertRow( int row )
 
     // Is there a row layout at the bottom most position ?
     // In this case the shift is impossible.
-    RowLayout** cl = m_cluster[ KSPREAD_CLUSTER_LEVEL1 - 1 ];
+    RowFormat** cl = m_cluster[ KSPREAD_CLUSTER_LEVEL1 - 1 ];
     if ( cl && cl[ KSPREAD_CLUSTER_LEVEL2 - 1 ] )
 	return FALSE;
 
@@ -1267,7 +1267,7 @@ bool KSpreadRowCluster::insertRow( int row )
 
     for( int i = KSPREAD_CLUSTER_LEVEL1 - 1; i >= cx ; --i )
     {
-	RowLayout** cl = m_cluster[ i ];
+	RowFormat** cl = m_cluster[ i ];
 	if ( cl )
         {
 	    int left = 0;
@@ -1278,7 +1278,7 @@ bool KSpreadRowCluster::insertRow( int row )
 		right = KSPREAD_CLUSTER_LEVEL2 - 2;
 	    for( int k = right; k >= left; --k )
 	    {
-		RowLayout* c = cl[ k ];
+		RowFormat* c = cl[ k ];
 		if ( c )
 	        {
 		    removeElement( c->row() );
@@ -1313,7 +1313,7 @@ bool KSpreadRowCluster::removeRow( int row )
 
     for( int i = cx; i < KSPREAD_CLUSTER_LEVEL1; ++i )
     {
-	RowLayout** cl = m_cluster[ i ];
+	RowFormat** cl = m_cluster[ i ];
 	if ( cl )
         {
 	    int left = 0;
@@ -1322,7 +1322,7 @@ bool KSpreadRowCluster::removeRow( int row )
 	    int right = KSPREAD_CLUSTER_LEVEL2 - 1;
 	    for( int k = left; k <= right; ++k )
 	    {
-		RowLayout* c = cl[ k ];
+		RowFormat* c = cl[ k ];
 		if ( c )
 	        {
 		    removeElement( c->row() );

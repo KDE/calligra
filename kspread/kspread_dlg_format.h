@@ -33,7 +33,7 @@ class QLabel;
 class QDomDocument;
 
 class KSpreadView;
-class KSpreadLayout;
+class KSpreadFormat;
 
 class KSpreadFormatDlg : public KDialogBase
 {
@@ -41,14 +41,14 @@ class KSpreadFormatDlg : public KDialogBase
 public:
     KSpreadFormatDlg( KSpreadView* view, const char* name = 0 );
     ~KSpreadFormatDlg();
-    
+
 private slots:
     void slotActivated( int index );
     void slotOk();
 
 private:
     bool parseXML( const QDomDocument& doc );
-	
+
     QComboBox* m_combo;
     QLabel* m_label;
     KSpreadView* m_view;
@@ -62,7 +62,7 @@ private:
     };
     QValueList<Entry> m_entries;
 
-    KSpreadLayout* m_cells[ 16 ];
+    KSpreadFormat* m_cells[ 16 ];
 };
 
 #endif

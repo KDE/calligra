@@ -112,7 +112,7 @@ DCOPRef KSpreadSheetIface::column( int _col )
     if(_col <1)
         return DCOPRef();
     return DCOPRef( kapp->dcopClient()->appId(),
-		    m_table->nonDefaultColumnLayout( _col )->dcopObject()->objId() );
+		    m_table->nonDefaultColumnFormat( _col )->dcopObject()->objId() );
 
 }
 
@@ -122,7 +122,7 @@ DCOPRef KSpreadSheetIface::row( int _row )
     if(_row <1)
         return DCOPRef();
     return DCOPRef( kapp->dcopClient()->appId(),
-		    m_table->nonDefaultRowLayout( _row )->dcopObject()->objId() );
+		    m_table->nonDefaultRowFormat( _row )->dcopObject()->objId() );
 }
 
 

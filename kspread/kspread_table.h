@@ -24,8 +24,8 @@
 
 class KSpreadSheet;
 
-class ColumnLayout;
-class RowLayout;
+class ColumnFormat;
+class RowFormat;
 class KSpreadCell;
 class KSpreadView;
 class KSpreadPoint;
@@ -56,7 +56,7 @@ class KPrinter;
 #define BORDER_SPACE 1
 
 #include "kspread_autofill.h"
-#include "kspread_layout.h"
+#include "kspread_format.h"
 #include "kspread_cell.h"
 #include "kspread_global.h"
 #include "kspread_cluster.h"
@@ -287,23 +287,23 @@ public:
     void setDefaultHeight( double height );
     void setDefaultWidth( double width );
 
-    const ColumnLayout* columnLayout( int _column ) const;
-    ColumnLayout* columnLayout( int _column );
+    const ColumnFormat* columnFormat( int _column ) const;
+    ColumnFormat* columnFormat( int _column );
     /**
-     * If no special @ref ColumnLayout exists for this column, then a new one is created.
+     * If no special @ref ColumnFormat exists for this column, then a new one is created.
      *
-     * @return a non default ColumnLayout for this column.
+     * @return a non default ColumnFormat for this column.
      */
-    ColumnLayout* nonDefaultColumnLayout( int _column, bool force_creation = TRUE );
+    ColumnFormat* nonDefaultColumnFormat( int _column, bool force_creation = TRUE );
 
-    const RowLayout* rowLayout( int _row ) const;
-    RowLayout* rowLayout( int _row );
+    const RowFormat* rowFormat( int _row ) const;
+    RowFormat* rowFormat( int _row );
     /**
-     * If no special @ref RowLayout exists for this row, then a new one is created.
+     * If no special @ref RowFormat exists for this row, then a new one is created.
      *
-     * @return a non default RowLayout for this row.
+     * @return a non default RowFormat for this row.
      */
-    RowLayout* nonDefaultRowLayout( int _row, bool force_creation = TRUE );
+    RowFormat* nonDefaultRowFormat( int _row, bool force_creation = TRUE );
 
     /**
      * @return the first cell of this table. Next cells can
@@ -311,9 +311,9 @@ public:
      */
     KSpreadCell* firstCell() const;
 
-    RowLayout* firstRow() const;
+    RowFormat* firstRow() const;
 
-    ColumnLayout* firstCol() const;
+    ColumnFormat* firstCol() const;
 
     KSpreadCell* cellAt( int _column, int _row ) const;
     /**
@@ -354,8 +354,8 @@ public:
 
     KSpreadCell* defaultCell()const { return m_pDefaultCell; }
 
-    KSpreadLayout* defaultLayout() { return m_defaultLayout; };
-    const KSpreadLayout* defaultLayout() const { return m_defaultLayout; }
+    KSpreadFormat* defaultFormat() { return m_defaultFormat; };
+    const KSpreadFormat* defaultFormat() const { return m_defaultFormat; }
 
     int topRow( int _ypos, double &_top, const KSpreadCanvas *_canvas = 0L ) const;
     int bottomRow( int _ypos, const KSpreadCanvas *_canvas = 0L ) const;
@@ -461,9 +461,9 @@ public:
 
     void setSelectionMoneyFormat( KSpreadSelection* selectionInfo, bool b );
     void setSelectionAlign( KSpreadSelection* selectionInfo,
-                            KSpreadLayout::Align _align );
+                            KSpreadFormat::Align _align );
     void setSelectionAlignY( KSpreadSelection* selectionInfo,
-                             KSpreadLayout::AlignY _alignY );
+                             KSpreadFormat::AlignY _alignY );
     void setSelectionPrecision( KSpreadSelection* selectionInfo, int _delta );
     void setSelectionPercent( KSpreadSelection* selectionInfo, bool b );
     void setSelectionMultiRow( KSpreadSelection* selectionInfo, bool enable );
@@ -560,21 +560,21 @@ public:
     void sortByRow( const QRect &area, int ref_row, SortingOrder );
     void sortByRow( const QRect &area, int key1, int key2, int key3,
                     SortingOrder order1, SortingOrder order2, SortingOrder order3,
-                    QStringList const * firstKey, bool copyLayout, bool headerRow,
+                    QStringList const * firstKey, bool copyFormat, bool headerRow,
                     KSpreadPoint const & outputPoint );
     void sortByColumn( const QRect &area, int ref_column, SortingOrder );
     void sortByColumn( const QRect &area, int key1, int key2, int key3,
                        SortingOrder order1, SortingOrder order2, SortingOrder order3,
-                       QStringList const * firstKey, bool copyLayout, bool headerRow,
+                       QStringList const * firstKey, bool copyFormat, bool headerRow,
                        KSpreadPoint const & outputPoint );
-    void swapCells( int x1, int y1, int x2, int y2, bool cpLayout );
+    void swapCells( int x1, int y1, int x2, int y2, bool cpFormat );
 
     /**
      * @param x1, y1: values from source cell,
      * @param x2, y2: values from target cell
-     * @param cpLayout: if true: cell layout (format) gets copied, too
+     * @param cpFormat: if true: cell format gets copied, too
      */
-  void copyCells( int x1, int y1, int x2, int y2, bool cpLayout );
+  void copyCells( int x1, int y1, int x2, int y2, bool cpFormat );
     void setSeries( const QPoint &_marker, double start, double end, double step, Series mode, Series type );
 
     /**
@@ -763,7 +763,7 @@ public:
     /**
      * @return a painter for the hidden widget ( @ref #widget ).
      *
-     * This function is useful while making layouts where you
+     * This function is useful while making formats where you
      * need some QPainter related functions.
      */
     QPainter& painter() { return *m_pPainter; }
@@ -832,13 +832,13 @@ public:
      *
      * @see KSpreadUndoDeleteColumn
      */
-    void insertColumnLayout( ColumnLayout *_l );
+    void insertColumnFormat( ColumnFormat *_l );
     /**
      * Used by Undo.
      *
      * @see KSpreadUndoDeleteRow
      */
-    void insertRowLayout( RowLayout *_l );
+    void insertRowFormat( RowFormat *_l );
 
     /**
      * @see #copy
@@ -986,8 +986,8 @@ public:
      */
     void refreshView(const QRect& rect);
 
-    void emit_updateRow( RowLayout *_layout, int _row );
-    void emit_updateColumn( ColumnLayout *_layout, int _column );
+    void emit_updateRow( RowFormat *_format, int _row );
+    void emit_updateColumn( ColumnFormat *_format, int _column );
 
     /**
      * Needed for @ref KSpreadCell::leftBorderPen and friends, since we can not
@@ -1168,8 +1168,8 @@ protected:
     KSpreadColumnCluster m_columns;
 
     KSpreadCell* m_pDefaultCell;
-    RowLayout* m_pDefaultRowLayout;
-    ColumnLayout* m_pDefaultColumnLayout;
+    RowFormat* m_pDefaultRowFormat;
+    ColumnFormat* m_pDefaultColumnFormat;
 
     /**
      * The name of the table. This name shows in the tab bar on the bottom of the window.
@@ -1260,7 +1260,7 @@ protected:
     bool m_bHideZero;
     bool m_bFirstLetterUpper;
 
-    KSpreadLayout* m_defaultLayout;
+    KSpreadFormat* m_defaultFormat;
 
     /**
      * @see #emptyPen
@@ -1645,9 +1645,9 @@ public:
 	virtual class KSpreadUndoAction* createUndoAction( KSpreadDoc* doc, KSpreadSheet* table, QRect& r ) =0;
 
 	// these are only needed for type A
-	virtual bool testCondition( RowLayout* ) { return false; }
-	virtual void doWork( RowLayout* ) { }
-	virtual void doWork( ColumnLayout* ) { }
+	virtual bool testCondition( RowFormat* ) { return false; }
+	virtual void doWork( RowFormat* ) { }
+	virtual void doWork( ColumnFormat* ) { }
 	virtual void prepareCell( KSpreadCell* ) { }
 
 	// these are needed in all CellWorkers

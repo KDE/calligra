@@ -20,8 +20,8 @@
 #ifndef KSPREAD_ROWLAYOUT_IFACE_H
 #define KSPREAD_ROWLAYOUT_IFACE_H
 
-class KSpreadLayout;
-class RowLayout;
+class KSpreadFormat;
+class RowFormat;
 #include "KSpreadLayoutIface.h"
 #include <qcolor.h>
 #include <dcopobject.h>
@@ -31,7 +31,7 @@ class KSpreadRowIface : virtual public KSpreadLayoutIface
 {
     K_DCOP
 public:
-    KSpreadRowIface(RowLayout *_lay);
+    KSpreadRowIface(RowFormat *_lay);
     virtual void update();
 k_dcop:
     virtual int row();
@@ -41,7 +41,7 @@ k_dcop:
     virtual int height();
 
 private:
-    RowLayout *m_rowLayout;
+    RowFormat *m_rowLayout;
 };
 
 #endif

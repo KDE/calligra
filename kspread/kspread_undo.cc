@@ -421,10 +421,10 @@ KSpreadUndoHideRow::~KSpreadUndoHideRow()
 
 void KSpreadUndoHideRow::createList( QValueList<int>&list,KSpreadSheet *tab )
 {
-RowLayout *rl;
+RowFormat *rl;
 for(int i=m_iRow;i<=(m_iRow+m_iNbRow);i++)
         {
-        rl= tab->nonDefaultRowLayout( i );
+        rl= tab->nonDefaultRowFormat( i );
         if(!rl->isHide())
                 list.append(rl->row());
         }
@@ -478,10 +478,10 @@ KSpreadUndoHideColumn::~KSpreadUndoHideColumn()
 
 void KSpreadUndoHideColumn::createList( QValueList<int>&list,KSpreadSheet *tab )
 {
-ColumnLayout *cl;
+ColumnFormat *cl;
 for(int i=m_iColumn;i<=(m_iColumn+m_iNbCol);i++)
   {
-    cl= tab->nonDefaultColumnLayout( i );
+    cl= tab->nonDefaultColumnFormat( i );
     if(!cl->isHide())
       list.append(cl->column());
   }
@@ -535,10 +535,10 @@ KSpreadUndoShowRow::~KSpreadUndoShowRow()
 
 void KSpreadUndoShowRow::createList( QValueList<int>&list,KSpreadSheet *tab )
 {
-RowLayout *rl;
+RowFormat *rl;
 for(int i=m_iRow;i<=(m_iRow+m_iNbRow);i++)
         {
-        rl= tab->nonDefaultRowLayout( i );
+        rl= tab->nonDefaultRowFormat( i );
         if(rl->isHide())
                 list.append(rl->row());
         }
@@ -592,10 +592,10 @@ KSpreadUndoShowColumn::~KSpreadUndoShowColumn()
 
 void KSpreadUndoShowColumn::createList( QValueList<int>&list,KSpreadSheet *tab )
 {
-ColumnLayout *cl;
+ColumnFormat *cl;
 for(int i=m_iColumn;i<=(m_iColumn+m_iNbCol);i++)
   {
-    cl= tab->nonDefaultColumnLayout( i );
+    cl= tab->nonDefaultColumnFormat( i );
     if(cl->isHide())
       list.append(cl->column());
   }
@@ -876,27 +876,27 @@ void KSpreadUndoSetTableName::redo()
 
 /****************************************************************************
  *
- * KSpreadUndoCellLayout
+ * KSpreadUndoCellFormat
  *
  ***************************************************************************/
 
-KSpreadUndoCellLayout::KSpreadUndoCellLayout( KSpreadDoc * _doc,
+KSpreadUndoCellFormat::KSpreadUndoCellFormat( KSpreadDoc * _doc,
                                               KSpreadSheet * _table,
                                               const QRect & _selection,
                                               const QString & _name ) :
   KSpreadUndoAction( _doc )
 {
   if ( _name.isEmpty())
-    name = i18n("Change Layout");
+    name = i18n("Change Format");
   else
     name = _name;
 
   m_rctRect   = _selection;
   m_tableName = _table->tableName();
-  copyLayout( m_lstLayouts, m_lstColLayouts, m_lstRowLayouts, _table );
+  copyFormat( m_lstFormats, m_lstColFormats, m_lstRowFormats, _table );
 }
 
-void KSpreadUndoCellLayout::copyLayout(QValueList<layoutCell> & list,
+void KSpreadUndoCellFormat::copyFormat(QValueList<layoutCell> & list,
                                        QValueList<layoutColumn> & listCol,
                                        QValueList<layoutRow> & listRow,
                                        KSpreadSheet * table )
@@ -919,8 +919,8 @@ void KSpreadUndoCellLayout::copyLayout(QValueList<layoutCell> & list,
       {
       layoutColumn tmplayout;
       tmplayout.col = i;
-      tmplayout.l = new ColumnLayout( table, i );
-      tmplayout.l->copy( *(table->columnLayout( i )) );
+      tmplayout.l = new ColumnFormat( table, i );
+      tmplayout.l->copy( *(table->columnFormat( i )) );
       listCol.append(tmplayout);
       }
     */
@@ -928,8 +928,8 @@ void KSpreadUndoCellLayout::copyLayout(QValueList<layoutCell> & list,
     {
       layoutColumn tmplayout;
       tmplayout.col = c;
-      tmplayout.l = new ColumnLayout( table, c );
-      tmplayout.l->copy( *(table->columnLayout( c )) );
+      tmplayout.l = new ColumnFormat( table, c );
+      tmplayout.l->copy( *(table->columnFormat( c )) );
       listCol.append(tmplayout);
 
       cell = table->getFirstCellColumn( c );
@@ -944,7 +944,7 @@ void KSpreadUndoCellLayout::copyLayout(QValueList<layoutCell> & list,
         layoutCell tmplayout;
         tmplayout.col = c;
         tmplayout.row = cell->row();
-        tmplayout.l = new KSpreadLayout( table );
+        tmplayout.l = new KSpreadFormat( table );
         tmplayout.l->copy( *(table->cellAt( tmplayout.col, tmplayout.row )) );
         list.append(tmplayout);
 
@@ -962,7 +962,7 @@ void KSpreadUndoCellLayout::copyLayout(QValueList<layoutCell> & list,
         layoutCell tmplayout;
         tmplayout.col = c->column();
         tmplayout.row = c->row();
-        tmplayout.l = new KSpreadLayout( table );
+        tmplayout.l = new KSpreadFormat( table );
         tmplayout.l->copy( *(table->cellAt( tmplayout.col, tmplayout.row )) );
         list.append(tmplayout);
       }
@@ -975,8 +975,8 @@ void KSpreadUndoCellLayout::copyLayout(QValueList<layoutCell> & list,
     {
       layoutRow tmplayout;
       tmplayout.row = row;
-      tmplayout.l = new RowLayout( table, row );
-      tmplayout.l->copy( *(table->rowLayout( row )) );
+      tmplayout.l = new RowFormat( table, row );
+      tmplayout.l->copy( *(table->rowFormat( row )) );
       listRow.append(tmplayout);
 
       cell = table->getFirstCellRow( row );
@@ -990,7 +990,7 @@ void KSpreadUndoCellLayout::copyLayout(QValueList<layoutCell> & list,
         layoutCell tmplayout;
         tmplayout.col = cell->column();
         tmplayout.row = row;
-        tmplayout.l = new KSpreadLayout( table );
+        tmplayout.l = new KSpreadFormat( table );
         tmplayout.l->copy( *(table->cellAt( cell->column(), row )) );
         list.append(tmplayout);
 
@@ -1008,7 +1008,7 @@ void KSpreadUndoCellLayout::copyLayout(QValueList<layoutCell> & list,
         layoutCell tmplayout;
         tmplayout.col = c->column();
         tmplayout.row = c->row();
-        tmplayout.l = new KSpreadLayout( table );
+        tmplayout.l = new KSpreadFormat( table );
         tmplayout.l->copy( *(table->cellAt( tmplayout.col, tmplayout.row )) );
         list.append(tmplayout);
       }
@@ -1026,7 +1026,7 @@ void KSpreadUndoCellLayout::copyLayout(QValueList<layoutCell> & list,
           layoutCell tmplayout;
           tmplayout.col = x;
           tmplayout.row = y;
-          tmplayout.l = new KSpreadLayout( table );
+          tmplayout.l = new KSpreadFormat( table );
           tmplayout.l->copy( *(table->cellAt( x, y )) );
           list.append(tmplayout);
         }
@@ -1034,51 +1034,51 @@ void KSpreadUndoCellLayout::copyLayout(QValueList<layoutCell> & list,
   }
 }
 
-KSpreadUndoCellLayout::~KSpreadUndoCellLayout()
+KSpreadUndoCellFormat::~KSpreadUndoCellFormat()
 {
     QValueList<layoutCell>::Iterator it2;
-    for ( it2 = m_lstLayouts.begin(); it2 != m_lstLayouts.end(); ++it2 )
+    for ( it2 = m_lstFormats.begin(); it2 != m_lstFormats.end(); ++it2 )
     {
         delete (*it2).l;
     }
-    m_lstLayouts.clear();
+    m_lstFormats.clear();
 
-    for ( it2 = m_lstRedoLayouts.begin(); it2 != m_lstRedoLayouts.end(); ++it2 )
+    for ( it2 = m_lstRedoFormats.begin(); it2 != m_lstRedoFormats.end(); ++it2 )
     {
         delete (*it2).l;
     }
-    m_lstRedoLayouts.clear();
+    m_lstRedoFormats.clear();
 
     QValueList<layoutColumn>::Iterator it3;
-    for ( it3 = m_lstColLayouts.begin(); it3 != m_lstColLayouts.end(); ++it3 )
+    for ( it3 = m_lstColFormats.begin(); it3 != m_lstColFormats.end(); ++it3 )
     {
         delete (*it3).l;
     }
-    m_lstColLayouts.clear();
+    m_lstColFormats.clear();
 
-    for ( it3 = m_lstRedoColLayouts.begin(); it3 != m_lstRedoColLayouts.end(); ++it3 )
+    for ( it3 = m_lstRedoColFormats.begin(); it3 != m_lstRedoColFormats.end(); ++it3 )
     {
         delete (*it3).l;
     }
-    m_lstRedoColLayouts.clear();
+    m_lstRedoColFormats.clear();
 
     QValueList<layoutRow>::Iterator it4;
-    for ( it4 = m_lstRowLayouts.begin(); it4 != m_lstRowLayouts.end(); ++it4 )
+    for ( it4 = m_lstRowFormats.begin(); it4 != m_lstRowFormats.end(); ++it4 )
     {
         delete (*it4).l;
     }
-    m_lstRowLayouts.clear();
+    m_lstRowFormats.clear();
 
-    for ( it4 = m_lstRedoRowLayouts.begin(); it4 != m_lstRedoRowLayouts.end(); ++it4 )
+    for ( it4 = m_lstRedoRowFormats.begin(); it4 != m_lstRedoRowFormats.end(); ++it4 )
     {
         delete (*it4).l;
     }
-    m_lstRedoRowLayouts.clear();
+    m_lstRedoRowFormats.clear();
 
 
 }
 
-void KSpreadUndoCellLayout::undo()
+void KSpreadUndoCellFormat::undo()
 {
   KSpreadSheet * table = doc()->map()->findTable( m_tableName );
   if ( !table )
@@ -1086,28 +1086,28 @@ void KSpreadUndoCellLayout::undo()
 
   doc()->undoBuffer()->lock();
   doc()->emitBeginOperation();
-  copyLayout( m_lstRedoLayouts, m_lstRedoColLayouts, m_lstRedoRowLayouts, table );
+  copyFormat( m_lstRedoFormats, m_lstRedoColFormats, m_lstRedoRowFormats, table );
   if( util_isColumnSelected( m_rctRect ) )
   {
     QValueList<layoutColumn>::Iterator it2;
-    for ( it2 = m_lstColLayouts.begin(); it2 != m_lstColLayouts.end(); ++it2 )
+    for ( it2 = m_lstColFormats.begin(); it2 != m_lstColFormats.end(); ++it2 )
     {
-      ColumnLayout * col = table->nonDefaultColumnLayout( (*it2).col );
+      ColumnFormat * col = table->nonDefaultColumnFormat( (*it2).col );
       col->copy( *(*it2).l );
     }
   }
   else if( util_isRowSelected( m_rctRect ) )
   {
     QValueList<layoutRow>::Iterator it2;
-    for ( it2 = m_lstRowLayouts.begin(); it2 != m_lstRowLayouts.end(); ++it2 )
+    for ( it2 = m_lstRowFormats.begin(); it2 != m_lstRowFormats.end(); ++it2 )
     {
-      RowLayout * row = table->nonDefaultRowLayout( (*it2).row );
+      RowFormat * row = table->nonDefaultRowFormat( (*it2).row );
       row->copy( *(*it2).l );
     }
   }
 
   QValueList<layoutCell>::Iterator it2;
-  for ( it2 = m_lstLayouts.begin(); it2 != m_lstLayouts.end(); ++it2 )
+  for ( it2 = m_lstFormats.begin(); it2 != m_lstFormats.end(); ++it2 )
   {
     KSpreadCell *cell = table->nonDefaultCell( (*it2).col,(*it2).row );
     cell->copy( *(*it2).l );
@@ -1122,7 +1122,7 @@ void KSpreadUndoCellLayout::undo()
   doc()->undoBuffer()->unlock();
 }
 
-void KSpreadUndoCellLayout::redo()
+void KSpreadUndoCellFormat::redo()
 {
   KSpreadSheet* table = doc()->map()->findTable( m_tableName );
   if ( !table )
@@ -1134,24 +1134,24 @@ void KSpreadUndoCellLayout::redo()
   if ( util_isColumnSelected( m_rctRect ) )
   {
     QValueList<layoutColumn>::Iterator it2;
-    for ( it2 = m_lstRedoColLayouts.begin(); it2 != m_lstRedoColLayouts.end(); ++it2 )
+    for ( it2 = m_lstRedoColFormats.begin(); it2 != m_lstRedoColFormats.end(); ++it2 )
     {
-      ColumnLayout * col = table->nonDefaultColumnLayout( (*it2).col );
+      ColumnFormat * col = table->nonDefaultColumnFormat( (*it2).col );
       col->copy( *(*it2).l );
     }
   }
   else if( util_isRowSelected( m_rctRect ) )
   {
     QValueList<layoutRow>::Iterator it2;
-    for ( it2 = m_lstRedoRowLayouts.begin(); it2 != m_lstRedoRowLayouts.end(); ++it2 )
+    for ( it2 = m_lstRedoRowFormats.begin(); it2 != m_lstRedoRowFormats.end(); ++it2 )
     {
-      RowLayout * row = table->nonDefaultRowLayout( (*it2).row );
+      RowFormat * row = table->nonDefaultRowFormat( (*it2).row );
       row->copy( *(*it2).l );
     }
   }
 
   QValueList<layoutCell>::Iterator it2;
-  for ( it2 = m_lstRedoLayouts.begin(); it2 != m_lstRedoLayouts.end(); ++it2 )
+  for ( it2 = m_lstRedoFormats.begin(); it2 != m_lstRedoFormats.end(); ++it2 )
   {
     KSpreadCell * cell = table->nonDefaultCell( (*it2).col,(*it2).row );
     cell->copy( *(*it2).l );
@@ -1177,7 +1177,7 @@ KSpreadUndoChangeAngle::KSpreadUndoChangeAngle( KSpreadDoc * _doc,
   KSpreadUndoAction( _doc )
 {
   name = i18n("Change Angle");
-  m_layoutUndo = new KSpreadUndoCellLayout( _doc, _table, _selection, QString::null );
+  m_layoutUndo = new KSpreadUndoCellFormat( _doc, _table, _selection, QString::null );
   m_resizeUndo = new KSpreadUndoResizeColRow( _doc, _table, _selection );
 }
 
@@ -1212,7 +1212,7 @@ KSpreadUndoSort::KSpreadUndoSort( KSpreadDoc * _doc, KSpreadSheet * _table, cons
 
   m_rctRect   = _selection;
   m_tableName = _table->tableName();
-  copyAll( m_lstLayouts, m_lstColLayouts, m_lstRowLayouts, _table );
+  copyAll( m_lstFormats, m_lstColFormats, m_lstRowFormats, _table );
 }
 
 void KSpreadUndoSort::copyAll(QValueList<layoutTextCell> & list, QValueList<layoutColumn> & listCol,
@@ -1232,8 +1232,8 @@ void KSpreadUndoSort::copyAll(QValueList<layoutTextCell> & list, QValueList<layo
     {
       layoutColumn tmplayout;
       tmplayout.col = col;
-      tmplayout.l = new ColumnLayout( table, col );
-      tmplayout.l->copy( *(table->columnLayout( col )) );
+      tmplayout.l = new ColumnFormat( table, col );
+      tmplayout.l->copy( *(table->columnFormat( col )) );
       listCol.append(tmplayout);
 
       c = table->getFirstCellColumn( col );
@@ -1244,7 +1244,7 @@ void KSpreadUndoSort::copyAll(QValueList<layoutTextCell> & list, QValueList<layo
           layoutTextCell tmplayout;
           tmplayout.col = col;
           tmplayout.row = c->row();
-          tmplayout.l = new KSpreadLayout( table );
+          tmplayout.l = new KSpreadFormat( table );
           tmplayout.l->copy( *(table->cellAt( tmplayout.col, tmplayout.row )) );
           tmplayout.text = c->text();
           list.append(tmplayout);
@@ -1261,8 +1261,8 @@ void KSpreadUndoSort::copyAll(QValueList<layoutTextCell> & list, QValueList<layo
     {
       layoutRow tmplayout;
       tmplayout.row = row;
-      tmplayout.l = new RowLayout( table, row );
-      tmplayout.l->copy( *(table->rowLayout( row )) );
+      tmplayout.l = new RowFormat( table, row );
+      tmplayout.l->copy( *(table->rowFormat( row )) );
       listRow.append(tmplayout);
 
       c = table->getFirstCellRow( row );
@@ -1273,7 +1273,7 @@ void KSpreadUndoSort::copyAll(QValueList<layoutTextCell> & list, QValueList<layo
           layoutTextCell tmplayout;
           tmplayout.col = c->column();
           tmplayout.row = row;
-          tmplayout.l   = new KSpreadLayout( table );
+          tmplayout.l   = new KSpreadFormat( table );
           tmplayout.l->copy( *(table->cellAt( tmplayout.col, tmplayout.row )) );
           tmplayout.text = c->text();
           list.append(tmplayout);
@@ -1296,7 +1296,7 @@ void KSpreadUndoSort::copyAll(QValueList<layoutTextCell> & list, QValueList<layo
           layoutTextCell tmplayout;
           tmplayout.col = x;
           tmplayout.row = y;
-          tmplayout.l   = new KSpreadLayout( table );
+          tmplayout.l   = new KSpreadFormat( table );
           tmplayout.l->copy( *(table->cellAt( x, y )) );
           tmplayout.text = cell->text();
           list.append(tmplayout);
@@ -1308,43 +1308,43 @@ void KSpreadUndoSort::copyAll(QValueList<layoutTextCell> & list, QValueList<layo
 KSpreadUndoSort::~KSpreadUndoSort()
 {
     QValueList<layoutTextCell>::Iterator it2;
-    for ( it2 = m_lstLayouts.begin(); it2 != m_lstLayouts.end(); ++it2 )
+    for ( it2 = m_lstFormats.begin(); it2 != m_lstFormats.end(); ++it2 )
     {
         delete (*it2).l;
     }
-    m_lstLayouts.clear();
+    m_lstFormats.clear();
 
-    for ( it2 = m_lstRedoLayouts.begin(); it2 != m_lstRedoLayouts.end(); ++it2 )
+    for ( it2 = m_lstRedoFormats.begin(); it2 != m_lstRedoFormats.end(); ++it2 )
     {
         delete (*it2).l;
     }
-    m_lstRedoLayouts.clear();
+    m_lstRedoFormats.clear();
 
     QValueList<layoutColumn>::Iterator it3;
-    for ( it3 = m_lstColLayouts.begin(); it3 != m_lstColLayouts.end(); ++it3 )
+    for ( it3 = m_lstColFormats.begin(); it3 != m_lstColFormats.end(); ++it3 )
     {
         delete (*it3).l;
     }
-    m_lstColLayouts.clear();
+    m_lstColFormats.clear();
 
-    for ( it3 = m_lstRedoColLayouts.begin(); it3 != m_lstRedoColLayouts.end(); ++it3 )
+    for ( it3 = m_lstRedoColFormats.begin(); it3 != m_lstRedoColFormats.end(); ++it3 )
     {
         delete (*it3).l;
     }
-    m_lstRedoColLayouts.clear();
+    m_lstRedoColFormats.clear();
 
     QValueList<layoutRow>::Iterator it4;
-    for ( it4 = m_lstRowLayouts.begin(); it4 != m_lstRowLayouts.end(); ++it4 )
+    for ( it4 = m_lstRowFormats.begin(); it4 != m_lstRowFormats.end(); ++it4 )
     {
         delete (*it4).l;
     }
-    m_lstRowLayouts.clear();
+    m_lstRowFormats.clear();
 
-    for ( it4 = m_lstRedoRowLayouts.begin(); it4 != m_lstRedoRowLayouts.end(); ++it4 )
+    for ( it4 = m_lstRedoRowFormats.begin(); it4 != m_lstRedoRowFormats.end(); ++it4 )
     {
         delete (*it4).l;
     }
-    m_lstRedoRowLayouts.clear();
+    m_lstRedoRowFormats.clear();
 
 }
 
@@ -1357,30 +1357,30 @@ void KSpreadUndoSort::undo()
   doc()->undoBuffer()->lock();
   doc()->emitBeginOperation();
 
-  copyAll( m_lstRedoLayouts, m_lstRedoColLayouts,
-           m_lstRedoRowLayouts, table );
+  copyAll( m_lstRedoFormats, m_lstRedoColFormats,
+           m_lstRedoRowFormats, table );
 
   if ( util_isColumnSelected( m_rctRect ) )
   {
     QValueList<layoutColumn>::Iterator it2;
-    for ( it2 = m_lstColLayouts.begin(); it2 != m_lstColLayouts.end(); ++it2 )
+    for ( it2 = m_lstColFormats.begin(); it2 != m_lstColFormats.end(); ++it2 )
     {
-      ColumnLayout * col = table->nonDefaultColumnLayout( (*it2).col );
+      ColumnFormat * col = table->nonDefaultColumnFormat( (*it2).col );
       col->copy( *(*it2).l );
     }
   }
   else if( util_isRowSelected( m_rctRect ) )
   {
     QValueList<layoutRow>::Iterator it2;
-    for ( it2 = m_lstRowLayouts.begin(); it2 != m_lstRowLayouts.end(); ++it2 )
+    for ( it2 = m_lstRowFormats.begin(); it2 != m_lstRowFormats.end(); ++it2 )
     {
-      RowLayout *row= table->nonDefaultRowLayout( (*it2).row );
+      RowFormat *row= table->nonDefaultRowFormat( (*it2).row );
       row->copy( *(*it2).l );
     }
   }
 
   QValueList<layoutTextCell>::Iterator it2;
-  for ( it2 = m_lstLayouts.begin(); it2 != m_lstLayouts.end(); ++it2 )
+  for ( it2 = m_lstFormats.begin(); it2 != m_lstFormats.end(); ++it2 )
   {
     KSpreadCell *cell = table->nonDefaultCell( (*it2).col,(*it2).row );
     if ( (*it2).text.isEmpty() )
@@ -1416,24 +1416,24 @@ void KSpreadUndoSort::redo()
     if( util_isColumnSelected( m_rctRect ) )
     {
       QValueList<layoutColumn>::Iterator it2;
-      for ( it2 = m_lstRedoColLayouts.begin(); it2 != m_lstRedoColLayouts.end(); ++it2 )
+      for ( it2 = m_lstRedoColFormats.begin(); it2 != m_lstRedoColFormats.end(); ++it2 )
       {
-        ColumnLayout *col= table->nonDefaultColumnLayout( (*it2).col );
+        ColumnFormat *col= table->nonDefaultColumnFormat( (*it2).col );
         col->copy( *(*it2).l );
       }
     }
     else if( util_isRowSelected( m_rctRect ) )
     {
       QValueList<layoutRow>::Iterator it2;
-      for ( it2 = m_lstRedoRowLayouts.begin(); it2 != m_lstRedoRowLayouts.end(); ++it2 )
+      for ( it2 = m_lstRedoRowFormats.begin(); it2 != m_lstRedoRowFormats.end(); ++it2 )
       {
-        RowLayout *row= table->nonDefaultRowLayout( (*it2).row );
+        RowFormat *row= table->nonDefaultRowFormat( (*it2).row );
         row->copy( *(*it2).l );
       }
     }
 
     QValueList<layoutTextCell>::Iterator it2;
-    for ( it2 = m_lstRedoLayouts.begin(); it2 != m_lstRedoLayouts.end(); ++it2 )
+    for ( it2 = m_lstRedoFormats.begin(); it2 != m_lstRedoFormats.end(); ++it2 )
     {
       KSpreadCell *cell = table->nonDefaultCell( (*it2).col,(*it2).row );
 
@@ -1484,7 +1484,7 @@ void KSpreadUndoDelete::createListCell( QCString &listCell,QValueList<columnSize
     {
         for( int y =m_selection.left() ; y <=m_selection.right() ; ++y )
         {
-           ColumnLayout *cl=table->columnLayout(y);
+           ColumnFormat *cl=table->columnFormat(y);
            if(!cl->isDefault())
                 {
                 columnSize tmpSize;
@@ -1500,7 +1500,7 @@ void KSpreadUndoDelete::createListCell( QCString &listCell,QValueList<columnSize
         //save size of row(s)
         for( int y =m_selection.top() ; y <=m_selection.bottom() ; ++y )
         {
-           RowLayout *rw=table->rowLayout(y);
+           RowFormat *rw=table->rowFormat(y);
            if(!rw->isDefault())
                 {
                 rowSize tmpSize;
@@ -1547,7 +1547,7 @@ void KSpreadUndoDelete::undo()
         QValueList<columnSize>::Iterator it2;
         for ( it2 = m_lstColumn.begin(); it2 != m_lstColumn.end(); ++it2 )
         {
-           ColumnLayout *cl=table->nonDefaultColumnLayout((*it2).columnNumber);
+           ColumnFormat *cl=table->nonDefaultColumnFormat((*it2).columnNumber);
            cl->setWidth(int((*it2).columnWidth));
         }
     }
@@ -1556,7 +1556,7 @@ void KSpreadUndoDelete::undo()
         QValueList<rowSize>::Iterator it2;
         for ( it2 = m_lstRow.begin(); it2 != m_lstRow.end(); ++it2 )
         {
-           RowLayout *rw=table->nonDefaultRowLayout((*it2).rowNumber);
+           RowFormat *rw=table->nonDefaultRowFormat((*it2).rowNumber);
            rw->setHeight(int((*it2).rowHeight));
         }
     }
@@ -1585,7 +1585,7 @@ void KSpreadUndoDelete::redo()
         QValueList<columnSize>::Iterator it2;
         for ( it2 = m_lstRedoColumn.begin(); it2 != m_lstRedoColumn.end(); ++it2 )
         {
-           ColumnLayout *cl=table->nonDefaultColumnLayout((*it2).columnNumber);
+           ColumnFormat *cl=table->nonDefaultColumnFormat((*it2).columnNumber);
            cl->setWidth(int((*it2).columnWidth));
         }
     }
@@ -1594,7 +1594,7 @@ void KSpreadUndoDelete::redo()
         QValueList<rowSize>::Iterator it2;
         for ( it2 = m_lstRedoRow.begin(); it2 != m_lstRedoRow.end(); ++it2 )
         {
-           RowLayout *rw=table->nonDefaultRowLayout((*it2).rowNumber);
+           RowFormat *rw=table->nonDefaultRowFormat((*it2).rowNumber);
            rw->setHeight(int((*it2).rowHeight));
         }
     }
@@ -1636,7 +1636,7 @@ void KSpreadUndoResizeColRow::createList( QValueList<columnSize> &listCol,QValue
     {
     for( int y = m_rctRect.left(); y <= m_rctRect.right(); y++ )
         {
-           ColumnLayout *cl=table->columnLayout(y);
+           ColumnFormat *cl=table->columnFormat(y);
 	   if(!cl->isHide())
 	     {
 	       columnSize tmpSize;
@@ -1650,7 +1650,7 @@ void KSpreadUndoResizeColRow::createList( QValueList<columnSize> &listCol,QValue
     {
     for( int y = m_rctRect.top(); y <= m_rctRect.bottom(); y++ )
         {
-           RowLayout *rw=table->rowLayout(y);
+           RowFormat *rw=table->rowFormat(y);
 	   if(!rw->isHide())
 	     {
 	       rowSize tmpSize;
@@ -1664,7 +1664,7 @@ void KSpreadUndoResizeColRow::createList( QValueList<columnSize> &listCol,QValue
     {
     for( int y = m_rctRect.left(); y <= m_rctRect.right(); y++ )
         {
-           ColumnLayout *cl=table->columnLayout(y);
+           ColumnFormat *cl=table->columnFormat(y);
 	   if(!cl->isHide())
 	     {
 	       columnSize tmpSize;
@@ -1675,7 +1675,7 @@ void KSpreadUndoResizeColRow::createList( QValueList<columnSize> &listCol,QValue
         }
     for( int y = m_rctRect.top(); y <= m_rctRect.bottom(); y++ )
         {
-           RowLayout *rw=table->rowLayout(y);
+           RowFormat *rw=table->rowFormat(y);
 	   if(!rw->isHide())
 	     {
 	       rowSize tmpSize;
@@ -1707,7 +1707,7 @@ void KSpreadUndoResizeColRow::undo()
     QValueList<columnSize>::Iterator it2;
     for ( it2 = m_lstColumn.begin(); it2 != m_lstColumn.end(); ++it2 )
         {
-           ColumnLayout *cl=table->columnLayout((*it2).columnNumber);
+           ColumnFormat *cl=table->columnFormat((*it2).columnNumber);
            cl->setWidth((int)(*it2).columnWidth);
         }
     }
@@ -1716,7 +1716,7 @@ void KSpreadUndoResizeColRow::undo()
     QValueList<rowSize>::Iterator it2;
     for ( it2 = m_lstRow.begin(); it2 != m_lstRow.end(); ++it2 )
         {
-           RowLayout *rw=table->rowLayout((*it2).rowNumber);
+           RowFormat *rw=table->rowFormat((*it2).rowNumber);
            rw->setHeight((int)(*it2).rowHeight);
         }
     }
@@ -1725,13 +1725,13 @@ void KSpreadUndoResizeColRow::undo()
     QValueList<columnSize>::Iterator it2;
     for ( it2 = m_lstColumn.begin(); it2 != m_lstColumn.end(); ++it2 )
         {
-           ColumnLayout *cl=table->columnLayout((*it2).columnNumber);
+           ColumnFormat *cl=table->columnFormat((*it2).columnNumber);
            cl->setWidth((int)(*it2).columnWidth);
         }
     QValueList<rowSize>::Iterator it1;
     for ( it1 = m_lstRow.begin(); it1 != m_lstRow.end(); ++it1 )
         {
-           RowLayout *rw=table->rowLayout((*it1).rowNumber);
+           RowFormat *rw=table->rowFormat((*it1).rowNumber);
            rw->setHeight((int)(*it1).rowHeight);
         }
     }
@@ -1751,7 +1751,7 @@ void KSpreadUndoResizeColRow::redo()
     QValueList<columnSize>::Iterator it2;
     for ( it2 = m_lstRedoColumn.begin(); it2 != m_lstRedoColumn.end(); ++it2 )
         {
-           ColumnLayout *cl=table->columnLayout((*it2).columnNumber);
+           ColumnFormat *cl=table->columnFormat((*it2).columnNumber);
            cl->setWidth((int)(*it2).columnWidth);
         }
     }
@@ -1760,7 +1760,7 @@ void KSpreadUndoResizeColRow::redo()
     QValueList<rowSize>::Iterator it2;
     for ( it2 = m_lstRedoRow.begin(); it2 != m_lstRedoRow.end(); ++it2 )
         {
-           RowLayout *rw=table->rowLayout((*it2).rowNumber);
+           RowFormat *rw=table->rowFormat((*it2).rowNumber);
            rw->setHeight((int)(*it2).rowHeight);
         }
     }
@@ -1769,13 +1769,13 @@ void KSpreadUndoResizeColRow::redo()
     QValueList<columnSize>::Iterator it2;
     for ( it2 = m_lstRedoColumn.begin(); it2 != m_lstRedoColumn.end(); ++it2 )
         {
-           ColumnLayout *cl=table->columnLayout((*it2).columnNumber);
+           ColumnFormat *cl=table->columnFormat((*it2).columnNumber);
            cl->setWidth((int)(*it2).columnWidth);
         }
     QValueList<rowSize>::Iterator it1;
     for ( it1 = m_lstRedoRow.begin(); it1 != m_lstRedoRow.end(); ++it1 )
         {
-           RowLayout *rw=table->rowLayout((*it1).rowNumber);
+           RowFormat *rw=table->rowFormat((*it1).rowNumber);
            rw->setHeight((int)(*it1).rowHeight);
         }
     }
@@ -2459,7 +2459,7 @@ void KSpreadUndoCellPaste::createListCell( QCString &listCell,QValueList<columnS
         //save size of columns
         for( int y = 1; y <=nbCol ; ++y )
         {
-           ColumnLayout *cl=table->columnLayout(y);
+           ColumnFormat *cl=table->columnFormat(y);
            if(!cl->isDefault())
                 {
                 columnSize tmpSize;
@@ -2494,7 +2494,7 @@ void KSpreadUndoCellPaste::createListCell( QCString &listCell,QValueList<columnS
         //save size of columns
         for( int y = 1; y <=nbRow ; ++y )
         {
-           RowLayout *rw=table->rowLayout(y);
+           RowFormat *rw=table->rowFormat(y);
            if(!rw->isDefault())
                 {
                 rowSize tmpSize;
@@ -2550,7 +2550,7 @@ void KSpreadUndoCellPaste::undo()
                 QValueList<columnSize>::Iterator it2;
                 for ( it2 = m_lstColumn.begin(); it2 != m_lstColumn.end(); ++it2 )
                         {
-                        ColumnLayout *cl=table->nonDefaultColumnLayout((*it2).columnNumber);
+                        ColumnFormat *cl=table->nonDefaultColumnFormat((*it2).columnNumber);
                         cl->setWidth(int((*it2).columnWidth));
                         }
                 }
@@ -2572,7 +2572,7 @@ void KSpreadUndoCellPaste::undo()
                 QValueList<rowSize>::Iterator it2;
                 for ( it2 = m_lstRow.begin(); it2 != m_lstRow.end(); ++it2 )
                         {
-                        RowLayout *rw=table->nonDefaultRowLayout((*it2).rowNumber);
+                        RowFormat *rw=table->nonDefaultRowFormat((*it2).rowNumber);
                         rw->setHeight(int((*it2).rowHeight));
                         }
                 }
@@ -2626,7 +2626,7 @@ void KSpreadUndoCellPaste::redo()
         QValueList<columnSize>::Iterator it2;
          for ( it2 = m_lstRedoColumn.begin(); it2 != m_lstRedoColumn.end(); ++it2 )
                 {
-                ColumnLayout *cl=table->nonDefaultColumnLayout((*it2).columnNumber);
+                ColumnFormat *cl=table->nonDefaultColumnFormat((*it2).columnNumber);
                 cl->setWidth(int((*it2).columnWidth));
                 }
 
@@ -2647,7 +2647,7 @@ void KSpreadUndoCellPaste::redo()
         QValueList<rowSize>::Iterator it2;
         for ( it2 = m_lstRedoRow.begin(); it2 != m_lstRedoRow.end(); ++it2 )
                 {
-                RowLayout *rw=table->nonDefaultRowLayout((*it2).rowNumber);
+                RowFormat *rw=table->nonDefaultRowFormat((*it2).rowNumber);
                  rw->setHeight(int((*it2).rowHeight));
                  }
     }

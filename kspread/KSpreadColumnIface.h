@@ -20,8 +20,8 @@
 #ifndef KSPREAD_COLUMN_IFACE_H
 #define KSPREAD_COLUMN_IFACE_H
 
-class KSpreadLayout;
-class ColumnLayout;
+class KSpreadFormat;
+class ColumnFormat;
 #include "KSpreadLayoutIface.h"
 #include <qcolor.h>
 #include <dcopobject.h>
@@ -31,7 +31,7 @@ class KSpreadColumnIface : virtual public KSpreadLayoutIface
 {
     K_DCOP
 public:
-    KSpreadColumnIface(ColumnLayout *_lay);
+    KSpreadColumnIface(ColumnFormat *_lay);
     virtual void update();
 k_dcop:
     virtual int column();
@@ -41,7 +41,7 @@ k_dcop:
     virtual void setWidth( int _w );
 
 private:
-    ColumnLayout *m_colLayout;
+    ColumnFormat *m_colLayout;
 };
 
 #endif

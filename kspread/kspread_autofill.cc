@@ -419,7 +419,7 @@ void AutoFillSequence::fillCell( KSpreadCell *src, KSpreadCell *dest, AutoFillDe
     {
         QString f = dest->decodeFormula( sequence.first()->getString() );
         dest->setCellText( f, true );
-        dest->copyLayout( src );
+        dest->copyFormat( src );
         return;
     }
 
@@ -437,7 +437,7 @@ void AutoFillSequence::fillCell( KSpreadCell *src, KSpreadCell *dest, AutoFillDe
     }
 
     dest->setCellText( erg, true );
-    dest->copyLayout( src );
+    dest->copyFormat( src );
 }
 
 /**********************************************************************************
@@ -773,7 +773,7 @@ bool KSpreadSheet::FillSequenceWithInterval(QPtrList<KSpreadCell>& _srcList,
         }
 
         dest->setCellText( res, true );
-        dest->copyLayout( src );
+        dest->copyFormat( src );
         dest->setFormatType( src->formatType() );
 
         if (down)
@@ -971,7 +971,7 @@ void KSpreadSheet::FillSequenceWithCopy(QPtrList<KSpreadCell>& _srcList,
       else if(_srcList.at( s )->value().isNumber() && _srcList.count()==1)
       {
 	double val;
-        if ( _srcList.at( s )->formatType() == KSpreadLayout::Percentage )
+        if ( _srcList.at( s )->formatType() == KSpreadFormat::Percentage )
             factor = 0.01;
         if (!down)
           val = (_srcList.at( s )->value().asFloat() - (incr * factor));
@@ -1042,7 +1042,7 @@ void KSpreadSheet::FillSequenceWithCopy(QPtrList<KSpreadCell>& _srcList,
     else
       cell->setCellText( "", true );
 
-    cell->copyLayout( _srcList.at( s ) );
+    cell->copyFormat( _srcList.at( s ) );
 
     if (down)
     {

@@ -840,14 +840,14 @@ void KSpreadDoc::PaintRegion(QPainter &painter, const KoRect &viewRegion,
         y <= paintRegion.bottom() && dblCurrentCellPos.y() <= viewRegion.bottom();
         y++ )
   {
-    const RowLayout* row_lay = table->rowLayout( y );
+    const RowFormat* row_lay = table->rowFormat( y );
     dblCurrentCellPos.setX( dblCorner.x() );
 
     for ( int x = paintRegion.left();
           x <= paintRegion.right() && dblCurrentCellPos.x() <= viewRegion.right();
           x++ )
     {
-      const ColumnLayout *col_lay = table->columnLayout( x );
+      const ColumnFormat *col_lay = table->columnFormat( x );
       KSpreadCell* cell = table->cellAt( x, y );
 
       QPoint cellRef( x, y );
@@ -997,14 +997,14 @@ void KSpreadDoc::retrieveMarkerInfo( const QRect &marker,
 
   double x = table->dblColumnPos( marker.right() ) -
              view->canvasWidget()->xOffset();
-  const ColumnLayout *columnLayout = table->columnLayout( marker.right() );
-  double tw = columnLayout->dblWidth( );
+  const ColumnFormat *columnFormat = table->columnFormat( marker.right() );
+  double tw = columnFormat->dblWidth( );
   double w = ( x - xpos ) + tw;
 
   double y = table->dblRowPos( marker.bottom() ) -
              view->canvasWidget()->yOffset();
-  const RowLayout* rowLayout = table->rowLayout( marker.bottom() );
-  double th = rowLayout->dblHeight( );
+  const RowFormat* rowFormat = table->rowFormat( marker.bottom() );
+  double th = rowFormat->dblHeight( );
   double h = ( y - ypos ) + th;
 
   /* left, top, right, bottom */

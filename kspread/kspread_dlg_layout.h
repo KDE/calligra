@@ -39,7 +39,7 @@ class QDate;
 class QTime;
 class QLabel;
 class QWidget;
-class CellLayoutDlg;
+class CellFormatDlg;
 class KSpreadSheet;
 class KLineEdit;
 class QFrame;
@@ -108,16 +108,16 @@ protected:
 
 /**
  */
-class CellLayoutPageFont : public QWidget
+class CellFormatPageFont : public QWidget
 {
     Q_OBJECT
 public:
-    CellLayoutPageFont( QWidget* parent, CellLayoutDlg *_dlg );
+    CellFormatPageFont( QWidget* parent, CellFormatDlg *_dlg );
 
     void apply( KSpreadCell *_cell );
-    void apply( ColumnLayout *_col );
-    void apply( RowLayout *_row );
-    void applyLayout( KSpreadLayout *_obj );
+    void apply( ColumnFormat *_col );
+    void apply( RowFormat *_row );
+    void applyFormat( KSpreadFormat *_obj );
 
 signals:
     /**
@@ -170,7 +170,7 @@ private:
     QFont         selFont;
     QCheckBox* strike;
     QCheckBox* underline;
-    CellLayoutDlg *dlg;
+    CellFormatDlg *dlg;
     QColor textColor;
     bool bTextColorUndefined;
     KColorButton *textColorButton;
@@ -179,16 +179,16 @@ private:
     bool fontChanged;
 };
 
-class CellLayoutPageMisc : public QWidget
+class CellFormatPageMisc : public QWidget
 {
     Q_OBJECT
 public:
-    CellLayoutPageMisc( QWidget *parent, CellLayoutDlg *_dlg );
+    CellFormatPageMisc( QWidget *parent, CellFormatDlg *_dlg );
 
     void apply( KSpreadCell *_cell );
     void applyColumn();
     void applyRow();
-    void applyLayout( KSpreadCell *_obj );
+    void applyFormat( KSpreadCell *_obj );
     KSpreadCell::Style getStyle();
     bool getDontPrintTextValue(){return dontPrintText->isChecked();}
 
@@ -203,24 +203,24 @@ protected:
 
     QLineEdit* actionText;
     QCheckBox *dontPrintText;
-    CellLayoutDlg *dlg;
+    CellFormatDlg *dlg;
 };
 
 /**
- * KSpreadLayout of numbers.
- * This widget is part of the layout dialog.
+ * KSpreadFormat of numbers.
+ * This widget is part of the format dialog.
  * It allows the user to cinfigure the way numbers are formatted.
  */
-class CellLayoutPageFloat : public QWidget
+class CellFormatPageFloat : public QWidget
 {
     Q_OBJECT
 public:
-    CellLayoutPageFloat( QWidget *parent, CellLayoutDlg *_dlg );
+    CellFormatPageFloat( QWidget *parent, CellFormatDlg *_dlg );
 
     void apply( KSpreadCell *_cell );
-    void apply( ColumnLayout *_col );
-    void apply( RowLayout *_row );
-    void applyLayout( KSpreadLayout *_obj );
+    void apply( ColumnFormat *_col );
+    void apply( RowFormat *_row );
+    void applyFormat( KSpreadFormat *_obj );
 
 public slots:
     void slotChangeState();
@@ -249,7 +249,7 @@ protected:
     QRadioButton *textFormat;
     QListBox *listFormat;
     QLabel *exampleLabel;
-    CellLayoutDlg *dlg;
+    CellFormatDlg *dlg;
     KSpreadCell::FormatType cellFormatType;
     //test if value changed
     bool m_bFormatTypeChanged;
@@ -258,16 +258,16 @@ protected:
 
 
 
-class CellLayoutPagePosition : public QWidget
+class CellFormatPagePosition : public QWidget
 {
     Q_OBJECT
 public:
-    CellLayoutPagePosition( QWidget *parent, CellLayoutDlg *_dlg );
+    CellFormatPagePosition( QWidget *parent, CellFormatDlg *_dlg );
 
     void apply( KSpreadCell *_cell );
-    void apply( ColumnLayout *_col );
-    void apply( RowLayout *_row );
-    void applyLayout( KSpreadLayout *_obj );
+    void apply( ColumnFormat *_col );
+    void apply( RowFormat *_row );
+    void applyFormat( KSpreadFormat *_obj );
 
     double getSizeHeight();
     double getSizeWidth();
@@ -293,7 +293,7 @@ protected:
     QCheckBox *vertical;
     KDoubleNumInput *width;
     KDoubleNumInput *height;
-    CellLayoutDlg *dlg;
+    CellFormatDlg *dlg;
     QCheckBox *defaultWidth;
     QCheckBox *defaultHeight;
     QCheckBox *mergeCell;
@@ -345,16 +345,16 @@ public:
 
 };
 
-class CellLayoutPageBorder : public QWidget
+class CellFormatPageBorder : public QWidget
 {
   Q_OBJECT
 public:
-    CellLayoutPageBorder( QWidget *parent, CellLayoutDlg *_dlg );
+    CellFormatPageBorder( QWidget *parent, CellFormatDlg *_dlg );
 
     void applyOutline();
     void invertState(KSpreadBorderButton *_button);
     QPixmap paintFormatPixmap(PenStyle _style);
-    void applyOutline(KSpreadLayout * layout);
+    void applyOutline(KSpreadFormat * format);
 
 public slots:
     void changeState(KSpreadBorderButton *_this);
@@ -386,7 +386,7 @@ protected:
   QCheckBox* customize;
   QColor currentColor;
   KSpreadBorder *area;
-  CellLayoutDlg *dlg;
+  CellFormatDlg *dlg;
 private:
 
   /*some helper functions to space some tasks apart */
@@ -432,16 +432,16 @@ protected:
 };
 
 
-class CellLayoutPagePattern : public QWidget
+class CellFormatPagePattern : public QWidget
 {
     Q_OBJECT
 public:
-    CellLayoutPagePattern( QWidget *parent, CellLayoutDlg *_dlg );
+    CellFormatPagePattern( QWidget *parent, CellFormatDlg *_dlg );
 
     void apply( KSpreadCell *_cell );
-    void apply( ColumnLayout *_col );
-    void apply( RowLayout *_row );
-    void applyLayout( KSpreadLayout *_obj );
+    void apply( ColumnFormat *_col );
+    void apply( RowFormat *_row );
+    void applyFormat( KSpreadFormat *_obj );
 
     void init();
 public slots:
@@ -475,31 +475,31 @@ protected:
     bool bBgColorUndefined;
     KColorButton *bgColorButton;
     bool b_notAnyColor;
-    CellLayoutDlg *dlg;
+    CellFormatDlg *dlg;
 };
 
 
 /**
  */
-class CellLayoutDlg : public QObject
+class CellFormatDlg : public QObject
 {
     Q_OBJECT
 public:
     /**
-     * Create a layout dlg for the rectangular area in '_table'.
+     * Create a format dlg for the rectangular area in '_table'.
      */
-    CellLayoutDlg( KSpreadView *_view, KSpreadSheet *_table, int _left, int _top, int _right, int _bottom );
+    CellFormatDlg( KSpreadView *_view, KSpreadSheet *_table, int _left, int _top, int _right, int _bottom );
 
-    ~CellLayoutDlg();
+    ~CellFormatDlg();
 
     void init();
-    void initParameters(KSpreadLayout *_obj,int column,int row);
-    void checkBorderRight(KSpreadLayout *obj,int x,int y);
-    void checkBorderLeft(KSpreadLayout *obj,int x,int y);
-    void checkBorderTop(KSpreadLayout *obj,int x,int y);
-    void checkBorderBottom(KSpreadLayout *obj,int x,int y);
-    void checkBorderVertical(KSpreadLayout *obj,int x,int y);
-    void checkBorderHorizontal(KSpreadLayout *obj,int x,int y);
+    void initParameters(KSpreadFormat *_obj,int column,int row);
+    void checkBorderRight(KSpreadFormat *obj,int x,int y);
+    void checkBorderLeft(KSpreadFormat *obj,int x,int y);
+    void checkBorderTop(KSpreadFormat *obj,int x,int y);
+    void checkBorderBottom(KSpreadFormat *obj,int x,int y);
+    void checkBorderVertical(KSpreadFormat *obj,int x,int y);
+    void checkBorderHorizontal(KSpreadFormat *obj,int x,int y);
     /**
      * Run the dialogs event loop and return when closed.
      */
@@ -511,7 +511,7 @@ public:
 
     KLocale* locale()const {return m_pView->doc()->locale();}
 
-    struct CellBorderLayout
+    struct CellBorderFormat
     {
       int width;
       bool bStyle;
@@ -520,8 +520,8 @@ public:
       PenStyle style;
     };
 
-    // The layout of the selected area
-    CellBorderLayout borders[BorderType_END];
+    // The format of the selected area
+    CellBorderFormat borders[BorderType_END];
 
     BrushStyle brushStyle;
     QColor brushColor;
@@ -615,12 +615,12 @@ protected:
     QPixmap* paintFormatPixmap( const char *_string1, const QColor & _color1,
 				const char *_string2, const QColor & _color2 );
 
-    CellLayoutPageFloat *floatPage;
-    CellLayoutPageBorder *borderPage;
-    CellLayoutPageMisc *miscPage;
-    CellLayoutPageFont *fontPage;
-    CellLayoutPagePosition *positionPage;
-    CellLayoutPagePattern *patternPage;
+    CellFormatPageFloat *floatPage;
+    CellFormatPageBorder *borderPage;
+    CellFormatPageMisc *miscPage;
+    CellFormatPageFont *fontPage;
+    CellFormatPagePosition *positionPage;
+    CellFormatPagePattern *patternPage;
     QTabDialog *tab;
 
     /**

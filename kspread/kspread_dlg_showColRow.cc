@@ -47,7 +47,7 @@ KSpreadShowColRow::KSpreadShowColRow( KSpreadView* parent, const char* name,Show
   bool showColNumber=m_pView->activeTable()->getShowColumnNumber();
   if(_type==Column)
         {
-        ColumnLayout *col=m_pView->activeTable()->firstCol();
+        ColumnFormat *col=m_pView->activeTable()->firstCol();
 
         QString text;
         QStringList listCol;
@@ -69,7 +69,7 @@ KSpreadShowColRow::KSpreadShowColRow( KSpreadView* parent, const char* name,Show
         }
   else if(_type==Row)
         {
-        RowLayout *row=m_pView->activeTable()->firstRow();
+        RowFormat *row=m_pView->activeTable()->firstRow();
 
         QString text;
         QStringList listRow;

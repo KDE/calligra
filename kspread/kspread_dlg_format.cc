@@ -134,8 +134,8 @@ void KSpreadFormatDlg::slotOk()
 
     if ( !m_view->doc()->undoBuffer()->isLocked() )
     {
-        QString title=i18n("Change layout");
-        KSpreadUndoCellLayout *undo = new KSpreadUndoCellLayout( m_view->doc(), m_view->activeTable(), r ,title);
+        QString title=i18n("Change format");
+        KSpreadUndoCellFormat *undo = new KSpreadUndoCellFormat( m_view->doc(), m_view->activeTable(), r ,title);
         m_view->doc()->undoBuffer()->appendUndo( undo );
     }
     //
@@ -156,7 +156,7 @@ void KSpreadFormatDlg::slotOk()
         {
         cell->copy( *m_cells[ pos ] );
 
-	KSpreadLayout* c;
+	KSpreadFormat* c;
 	if ( x == r.right() )
 	    c = m_cells[2];
 	else
@@ -188,7 +188,7 @@ void KSpreadFormatDlg::slotOk()
         {
         cell->copy( *m_cells[ pos ] );
 
-	KSpreadLayout* c;
+	KSpreadFormat* c;
 	if ( y == r.bottom() )
 	    c = m_cells[8];
 	else
@@ -217,7 +217,7 @@ void KSpreadFormatDlg::slotOk()
             {
             cell->copy( *m_cells[ pos ] );
 
-	    KSpreadLayout* c;
+	    KSpreadFormat* c;
 	    if ( x == r.left() + 1 )
 		c = m_cells[ 5 + ( ( y - r.top() - 1 ) % 2 ) * 4 ];
 	    else
@@ -304,7 +304,7 @@ bool KSpreadFormatDlg::parseXML( const QDomDocument& doc )
 	if ( e.tagName() == "cell" )
         {
 	    KSpreadSheet* table = m_view->activeTable();
-	    KSpreadLayout* cell = new KSpreadLayout( table );
+	    KSpreadFormat* cell = new KSpreadFormat( table );
 
 	    if ( !cell->load( e.namedItem("format").toElement(),Normal ) )
 		return false;

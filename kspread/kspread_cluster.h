@@ -57,8 +57,8 @@ a lot of rows than columns. Maybe something like LEVEL1=128/256 and LEVEL2=256/1
 #define kspread_cluster_h
 
 class KSpreadCell;
-class ColumnLayout;
-class RowLayout;
+class ColumnFormat;
+class RowFormat;
 
 class QPoint;
 
@@ -250,12 +250,12 @@ public:
     KSpreadColumnCluster();
     ~KSpreadColumnCluster();
 
-    const ColumnLayout* lookup( int col ) const;
-    ColumnLayout* lookup( int col );
+    const ColumnFormat* lookup( int col ) const;
+    ColumnFormat* lookup( int col );
 
     void clear();
 
-    void insertElement( ColumnLayout*, int col );
+    void insertElement( ColumnFormat*, int col );
     void removeElement( int col );
 
     bool insertColumn( int col );
@@ -264,11 +264,11 @@ public:
     void setAutoDelete( bool );
     bool autoDelete() const;
 
-    ColumnLayout* first()const { return m_first; }
+    ColumnFormat* first()const { return m_first; }
 
 private:
-    ColumnLayout*** m_cluster;
-    ColumnLayout* m_first;
+    ColumnFormat*** m_cluster;
+    ColumnFormat* m_first;
     bool m_autoDelete;
 };
 
@@ -278,12 +278,12 @@ public:
     KSpreadRowCluster();
     ~KSpreadRowCluster();
 
-    const RowLayout* lookup( int col ) const;
-    RowLayout* lookup( int col );
+    const RowFormat* lookup( int col ) const;
+    RowFormat* lookup( int col );
 
     void clear();
 
-    void insertElement( RowLayout*, int row );
+    void insertElement( RowFormat*, int row );
     void removeElement( int row );
 
     bool insertRow( int row );
@@ -292,11 +292,11 @@ public:
     void setAutoDelete( bool );
     bool autoDelete() const;
 
-    RowLayout* first()const { return m_first; }
+    RowFormat* first()const { return m_first; }
 
 private:
-    RowLayout*** m_cluster;
-    RowLayout* m_first;
+    RowFormat*** m_cluster;
+    RowFormat* m_first;
     bool m_autoDelete;
 };
 

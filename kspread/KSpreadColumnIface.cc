@@ -19,10 +19,10 @@
 
 #include "KSpreadLayoutIface.h"
 #include "KSpreadColumnIface.h"
-#include "kspread_layout.h"
+#include "kspread_format.h"
 #include <qbrush.h>
 
-KSpreadColumnIface::KSpreadColumnIface(ColumnLayout *_lay)
+KSpreadColumnIface::KSpreadColumnIface(ColumnFormat *_lay)
     :KSpreadLayoutIface(_lay)
 {
     m_colLayout=_lay;

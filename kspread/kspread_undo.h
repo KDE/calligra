@@ -23,10 +23,10 @@
 class KSpreadUndo;
 class KSpreadUndoAction;
 class KSpreadSheet;
-class KSpreadLayout;
+class KSpreadFormat;
 class KSpreadDoc;
-class ColumnLayout;
-class RowLayout;
+class ColumnFormat;
+class RowFormat;
 
 #include "kspread_cell.h"
 #include "koGlobal.h"
@@ -56,24 +56,24 @@ QString text;
 struct layoutTextCell {
 int row;
 int col;
-KSpreadLayout * l;
+KSpreadFormat * l;
 QString text;
 };
 
 struct layoutCell {
 int row;
 int col;
-KSpreadLayout *l;
+KSpreadFormat *l;
 };
 
 struct layoutColumn {
 int col;
-ColumnLayout *l;
+ColumnFormat *l;
 };
 
 struct layoutRow {
 int row;
-RowLayout *l;
+RowFormat *l;
 };
 
 struct styleCell {
@@ -325,25 +325,25 @@ protected:
     KSpreadCell::FormatType m_eFormatTypeRedo;
 };
 
-class KSpreadUndoCellLayout : public KSpreadUndoAction
+class KSpreadUndoCellFormat : public KSpreadUndoAction
 {
 public:
-    KSpreadUndoCellLayout( KSpreadDoc *_doc, KSpreadSheet *_table, const QRect &_selection, const QString &_title );
-    virtual ~KSpreadUndoCellLayout();
+    KSpreadUndoCellFormat( KSpreadDoc *_doc, KSpreadSheet *_table, const QRect &_selection, const QString &_title );
+    virtual ~KSpreadUndoCellFormat();
 
     virtual void undo();
     virtual void redo();
 
 protected:
-    void copyLayout( QValueList<layoutCell> &list,QValueList<layoutColumn> &listCol,QValueList<layoutRow> &listRow, KSpreadSheet* table );
+    void copyFormat( QValueList<layoutCell> &list,QValueList<layoutColumn> &listCol,QValueList<layoutRow> &listRow, KSpreadSheet* table );
 
     QRect m_rctRect;
-    QValueList<layoutCell> m_lstLayouts;
-    QValueList<layoutCell> m_lstRedoLayouts;
-    QValueList<layoutColumn> m_lstColLayouts;
-    QValueList<layoutColumn> m_lstRedoColLayouts;
-    QValueList<layoutRow> m_lstRowLayouts;
-    QValueList<layoutRow> m_lstRedoRowLayouts;
+    QValueList<layoutCell> m_lstFormats;
+    QValueList<layoutCell> m_lstRedoFormats;
+    QValueList<layoutColumn> m_lstColFormats;
+    QValueList<layoutColumn> m_lstRedoColFormats;
+    QValueList<layoutRow> m_lstRowFormats;
+    QValueList<layoutRow> m_lstRedoRowFormats;
 
     QString m_tableName;
 };
@@ -361,7 +361,7 @@ public:
 
 protected:
 
-   KSpreadUndoCellLayout* m_layoutUndo;
+   KSpreadUndoCellFormat* m_layoutUndo;
    KSpreadUndoResizeColRow* m_resizeUndo;
 
 };
@@ -455,12 +455,12 @@ protected:
                   QValueList<layoutRow> & listRow, KSpreadSheet * table );
 
     QRect m_rctRect;
-    QValueList<layoutTextCell> m_lstLayouts;
-    QValueList<layoutTextCell> m_lstRedoLayouts;
-    QValueList<layoutColumn> m_lstColLayouts;
-    QValueList<layoutColumn> m_lstRedoColLayouts;
-    QValueList<layoutRow> m_lstRowLayouts;
-    QValueList<layoutRow> m_lstRedoRowLayouts;
+    QValueList<layoutTextCell> m_lstFormats;
+    QValueList<layoutTextCell> m_lstRedoFormats;
+    QValueList<layoutColumn> m_lstColFormats;
+    QValueList<layoutColumn> m_lstRedoColFormats;
+    QValueList<layoutRow> m_lstRowFormats;
+    QValueList<layoutRow> m_lstRedoRowFormats;
 
     QString m_tableName;
 };

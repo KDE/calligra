@@ -20,7 +20,6 @@
 #include "kspread_condition.h"
 #include "kspread_cell.h"
 #include "kspread_table.h"
-#include "kspread_layout.h"
 #include <qdom.h>
 #include <kdebug.h>
 #include <float.h>

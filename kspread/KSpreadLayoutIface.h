@@ -20,7 +20,7 @@
 #ifndef KSPREAD_LAYOUT_IFACE_H
 #define KSPREAD_LAYOUT_IFACE_H
 
-class KSpreadLayout;
+class KSpreadFormat;
 #include <qcolor.h>
 #include <dcopobject.h>
 
@@ -28,7 +28,7 @@ class KSpreadLayoutIface : virtual public DCOPObject
 {
     K_DCOP
 public:
-    KSpreadLayoutIface(KSpreadLayout *_layout);
+    KSpreadLayoutIface(KSpreadFormat *_layout);
     virtual void update(){;}
 k_dcop:
 
@@ -91,7 +91,7 @@ k_dcop:
     //don't print text
     virtual void setDontPrintText ( bool _b);
 private:
-    KSpreadLayout *layout;
+    KSpreadFormat *layout;
 };
 
 #endif

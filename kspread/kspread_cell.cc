@@ -47,7 +47,7 @@ QChar KSpreadCell::decimal_point = '\0';
  *****************************************************************************/
 
 KSpreadCell::KSpreadCell( KSpreadSheet *_table, int _column, int _row )
-  : KSpreadLayout( _table ),
+  : KSpreadFormat( _table ),
     conditions(this),
     m_bShrinkToSize(false)
 {
@@ -116,12 +116,12 @@ int KSpreadCell::column() const
   return m_iColumn;
 }
 
-void KSpreadCell::copyLayout( KSpreadCell *_cell )
+void KSpreadCell::copyFormat( KSpreadCell *_cell )
 {
-    copyLayout( _cell->column(), _cell->row() );
+    copyFormat( _cell->column(), _cell->row() );
 }
 
-void KSpreadCell::copyLayout( int _column, int _row )
+void KSpreadCell::copyFormat( int _column, int _row )
 {
     const KSpreadCell * cell = m_pTable->cellAt( _column, _row );
 
@@ -161,7 +161,7 @@ void KSpreadCell::copyLayout( int _column, int _row )
 void KSpreadCell::copyAll( KSpreadCell *cell )
 {
     Q_ASSERT( !isDefault() ); // trouble ahead...
-    copyLayout( cell );
+    copyFormat( cell );
     copyContent( cell );
 }
 
@@ -189,7 +189,7 @@ void KSpreadCell::copyContent( KSpreadCell* cell )
 
 void KSpreadCell::defaultStyle()
 {
-  defaultStyleLayout();
+  defaultStyleFormat();
 
   QValueList<KSpreadConditional> emptyList;
   conditions.setConditionList(emptyList);
@@ -198,19 +198,19 @@ void KSpreadCell::defaultStyle()
   m_Validity = 0L;
 }
 
-void KSpreadCell::layoutChanged()
+void KSpreadCell::formatChanged()
 {
   setFlag(Flag_LayoutDirty);
 }
 
-KSpreadLayout* KSpreadCell::fallbackLayout( int, int row )
+KSpreadFormat* KSpreadCell::fallbackFormat( int, int row )
 {
-    return table()->rowLayout( row );
+    return table()->rowFormat( row );
 }
 
-const KSpreadLayout* KSpreadCell::fallbackLayout( int, int row ) const
+const KSpreadFormat* KSpreadCell::fallbackFormat( int, int row ) const
 {
-    return table()->rowLayout( row );
+    return table()->rowFormat( row );
 }
 
 void KSpreadCell::forceExtraCells( int _col, int _row, int _x, int _y )
@@ -404,7 +404,7 @@ void KSpreadCell::clicked( KSpreadCanvas *_canvas )
         popup->insertItem( *it, id++ );
     QObject::connect( popup, SIGNAL( activated( int ) ),
                       s, SLOT( slotItemSelected( int ) ) );
-    RowLayout *rl = m_pTable->rowLayout( row() );
+    RowFormat *rl = m_pTable->rowFormat( row() );
     int tx = m_pTable->columnPos( column(), _canvas );
     double ty = m_pTable->dblRowPos( row(), _canvas );
     double h = rl->dblHeight( _canvas );
@@ -698,8 +698,8 @@ void KSpreadCell::makeLayout( QPainter &_painter, int _col, int _row )
     /* but reobscure the ones that are forced obscuring */
     forceExtraCells( m_iColumn, m_iRow, m_iMergedXCells, m_iMergedYCells );
 
-    ColumnLayout *cl1 = m_pTable->columnLayout( _col );
-    RowLayout *rl1 = m_pTable->rowLayout( _row );
+    ColumnFormat *cl1 = m_pTable->columnFormat( _col );
+    RowFormat *rl1 = m_pTable->rowFormat( _row );
     if( cl1->isHide() || ( rl1->dblHeight() <= m_pTable->doc()->unzoomItY( 2 ) ) )
     {
         clearFlag( Flag_LayoutDirty );
@@ -725,7 +725,7 @@ void KSpreadCell::makeLayout( QPainter &_painter, int _col, int _row )
                 ende = true;
             else
             {
-                ColumnLayout *cl = m_pTable->columnLayout( c );
+                ColumnFormat *cl = m_pTable->columnFormat( c );
                 max_width += cl->dblWidth();
 
                 // Can we make use of extra cells ?
@@ -755,7 +755,7 @@ void KSpreadCell::makeLayout( QPainter &_painter, int _col, int _row )
         {
             KSpreadCell *cell = m_pTable->nonDefaultCell( c, _row );
             cell->obscure( this );
-            ColumnLayout *cl = m_pTable->columnLayout( c );
+            ColumnFormat *cl = m_pTable->columnFormat( c );
             max_width += cl->dblWidth();
             if ( max_width >= w )
                 ende = true;
@@ -796,7 +796,7 @@ void KSpreadCell::makeLayout( QPainter &_painter, int _col, int _row )
                     KSpreadCell *cell = m_pTable->nonDefaultCell( c, r );
                     cell->obscure( this );
                 }
-                RowLayout *rl = m_pTable->rowLayout( r );
+                RowFormat *rl = m_pTable->rowFormat( r );
                 max_height += rl->dblHeight();
                 if ( max_height >= h )
                     ende = true;
@@ -844,8 +844,8 @@ void KSpreadCell::makeLayout( QPainter &_painter, int _col, int _row )
     //
     // Calculate the size of the cell
     //
-    RowLayout *rl = m_pTable->rowLayout( m_iRow );
-    ColumnLayout *cl = m_pTable->columnLayout( m_iColumn );
+    RowFormat *rl = m_pTable->rowFormat( m_iRow );
+    ColumnFormat *cl = m_pTable->columnFormat( m_iColumn );
 
     double w = cl->dblWidth();
     double h = rl->dblHeight();
@@ -857,12 +857,12 @@ void KSpreadCell::makeLayout( QPainter &_painter, int _col, int _row )
     {
         for ( int x = _col + 1; x <= _col + m_iExtraXCells; x++ )
         {
-            ColumnLayout *cl = m_pTable->columnLayout( x );
+            ColumnFormat *cl = m_pTable->columnFormat( x );
             w += cl->dblWidth() ;
         }
         for ( int y = _row + 1; y <= _row + m_iExtraYCells; y++ )
         {
-            RowLayout *rl = m_pTable->rowLayout( y );
+            RowFormat *rl = m_pTable->rowFormat( y );
             h += rl->dblHeight() ;
         }
     }
@@ -960,7 +960,7 @@ void KSpreadCell::makeLayout( QPainter &_painter, int _col, int _row )
 
     if( verticalText( _col, _row ) || getAngle( _col, _row ) != 0 )
     {
-       RowLayout *rl = m_pTable->rowLayout( _row );
+       RowFormat *rl = m_pTable->rowFormat( _row );
 
        if( m_dOutTextHeight >= rl->dblHeight() )
        {
@@ -977,7 +977,7 @@ void KSpreadCell::makeLayout( QPainter &_painter, int _col, int _row )
       // Find free cells right hand to this one
       while ( !end )
       {
-        ColumnLayout *cl2 = m_pTable->columnLayout( c + 1 );
+        ColumnFormat *cl2 = m_pTable->columnFormat( c + 1 );
         KSpreadCell *cell = m_pTable->visibleCellAt( c + 1, m_iRow );
         if ( cell->isEmpty() )
         {
@@ -1032,7 +1032,7 @@ void KSpreadCell::makeLayout( QPainter &_painter, int _col, int _row )
     }
 
     // Do we have to occupy additional cells at the bottom ?
-    if ( ( m_pQML || multiRow( _col, _row ) ) && 
+    if ( ( m_pQML || multiRow( _col, _row ) ) &&
          m_dOutTextHeight > h - 2 * BORDER_SPACE -
          topBorderWidth( _col, _row ) - bottomBorderWidth( _col, _row ) )
     {
@@ -1041,7 +1041,7 @@ void KSpreadCell::makeLayout( QPainter &_painter, int _col, int _row )
       // Find free cells bottom to this one
       while ( !end )
       {
-        RowLayout *rl2 = m_pTable->rowLayout( r + 1 );
+        RowFormat *rl2 = m_pTable->rowFormat( r + 1 );
         KSpreadCell *cell = m_pTable->visibleCellAt( m_iColumn, r + 1 );
         if ( cell->isEmpty() )
         {
@@ -1337,8 +1337,8 @@ QString KSpreadCell::createFormat( double value, int _col, int _row )
 void KSpreadCell::offsetAlign( int _col, int _row )
 {
     int a = align( _col, _row );
-    RowLayout *rl = m_pTable->rowLayout( _row );
-    ColumnLayout *cl = m_pTable->columnLayout( _col );
+    RowFormat *rl = m_pTable->rowFormat( _row );
+    ColumnFormat *cl = m_pTable->columnFormat( _col );
 
     double w = cl->dblWidth();
     double h = rl->dblHeight();
@@ -1874,10 +1874,10 @@ void KSpreadCell::paintCell( const KoRect& rect, QPainter &painter,
            !isDefault()));
 
 
-  ColumnLayout* colLayout = m_pTable->columnLayout( cellRef.x() );
-  RowLayout* rowLayout = m_pTable->rowLayout( cellRef.y() );
-  double width = m_iExtraXCells ? m_dExtraWidth : colLayout->dblWidth();
-  double height = m_iExtraYCells ? m_dExtraHeight : rowLayout->dblHeight();
+  ColumnFormat* colFormat = m_pTable->columnFormat( cellRef.x() );
+  RowFormat* rowFormat = m_pTable->rowFormat( cellRef.y() );
+  double width = m_iExtraXCells ? m_dExtraWidth : colFormat->dblWidth();
+  double height = m_iExtraYCells ? m_dExtraHeight : rowFormat->dblHeight();
   const KoRect cellRect = KoRect( coordinate.x(), coordinate.y(), width, height );
   bool selected = false;
 
@@ -1980,7 +1980,7 @@ void KSpreadCell::paintCell( const KoRect& rect, QPainter &painter,
        while already drawing the obscuring cell -- don't want to cause an
        infinite loop
     */
-    
+
     /*
       Store the obscuringCells list in a list of QPoint(column, row)
       This avoids crashes during the iteration through obscuringCells,
@@ -2070,11 +2070,11 @@ void KSpreadCell::paintObscuredCells(const KoRect& rect, QPainter& painter,
     for( int y = 0; y <= extraYCells(); ++y )
     {
       double xpos = cellRect.x();
-      RowLayout* rl = m_pTable->rowLayout( cellRef.y() + y );
+      RowFormat* rl = m_pTable->rowFormat( cellRef.y() + y );
 
       for( int x = 0; x <= extraXCells(); ++ x )
       {
-        ColumnLayout* cl = m_pTable->columnLayout( cellRef.x() + x );
+        ColumnFormat* cl = m_pTable->columnFormat( cellRef.x() + x );
         if ( y != 0 || x != 0 )
         {
           KSpreadCell* cell = m_pTable->cellAt( cellRef.x() + x,
@@ -2364,7 +2364,7 @@ void KSpreadCell::paintCommentIndicator( QPainter& painter,
   {
     QColor penColor = Qt::red;
     //If background has high red part, switch to blue
-    if( qRed( backgroundColor.rgb() ) > 127 && 
+    if( qRed( backgroundColor.rgb() ) > 127 &&
         qGreen( backgroundColor.rgb() ) < 80 &&
         qBlue( backgroundColor.rgb() ) < 80 )
     {
@@ -2399,7 +2399,7 @@ void KSpreadCell::paintFormulaIndicator( QPainter& painter,
 
     QColor penColor = Qt::blue;
     //If background has high blue part, switch to red
-    if( qRed( backgroundColor.rgb() ) < 80 && 
+    if( qRed( backgroundColor.rgb() ) < 80 &&
         qGreen( backgroundColor.rgb() ) < 80 &&
         qBlue( backgroundColor.rgb() ) > 127 )
     {
@@ -2436,7 +2436,7 @@ void KSpreadCell::paintMoreTextIndicator( QPainter& painter,
 
     QColor penColor = Qt::red;
     //If background has high red part, switch to blue
-    if( qRed( backgroundColor.rgb() ) > 127 && 
+    if( qRed( backgroundColor.rgb() ) > 127 &&
         qGreen( backgroundColor.rgb() ) < 80 &&
         qBlue( backgroundColor.rgb() ) < 80 )
     {
@@ -2461,7 +2461,7 @@ void KSpreadCell::paintText( QPainter& painter,
 {
   KSpreadDoc* doc = table()->doc();
 
-  ColumnLayout* colLayout = m_pTable->columnLayout( cellRef.x() );
+  ColumnFormat* colFormat = m_pTable->columnFormat( cellRef.x() );
 
   QColorGroup defaultColorGroup = QApplication::palette().active();
   QColor textColorPrint = textColor( cellRef.x(), cellRef.y() );
@@ -2535,7 +2535,7 @@ void KSpreadCell::paintText( QPainter& painter,
     m_strOutText = QString::null;
   }
 
-  if( colLayout->isHide() || ( cellRect.height() <= 2 ) )
+  if( colFormat->isHide() || ( cellRect.height() <= 2 ) )
   {
     //clear extra cell if column or row is hidden
     freeAllObscuredCells();  /* TODO: This looks dangerous...must check when I
@@ -2674,7 +2674,7 @@ void KSpreadCell::paintText( QPainter& painter,
     m_strOutText = tmpText;
   }
 
-  if( colLayout->isHide() || ( cellRect.height() <= 2 ) )
+  if( colFormat->isHide() || ( cellRect.height() <= 2 ) )
     m_strOutText = tmpText;
 
 }
@@ -3060,7 +3060,7 @@ QString KSpreadCell::textDisplaying( QPainter &_painter )
     double len = 0.0;
     for ( int i = column(); i <= column() + m_iExtraXCells; i++ )
     {
-      ColumnLayout *cl2 = m_pTable->columnLayout( i );
+      ColumnFormat *cl2 = m_pTable->columnFormat( i );
       len += cl2->dblWidth() - 1.0; //-1.0 because the pixel in between 2 cells is shared between both cells
     }
 
@@ -3077,7 +3077,7 @@ QString KSpreadCell::textDisplaying( QPainter &_painter )
             if( getAngle( column(), row() ) != 0 )
             {
                 QString tmp2;
-                RowLayout *rl = m_pTable->rowLayout( row() );
+                RowFormat *rl = m_pTable->rowFormat( row() );
                 if( m_dOutTextHeight > rl->dblHeight() )
                 {
                     for ( int j = m_strOutText.length(); j != 0; j-- )
@@ -3101,13 +3101,13 @@ QString KSpreadCell::textDisplaying( QPainter &_painter )
   }
   else if( verticalText( column(), row() ) )
   {
-    RowLayout *rl = m_pTable->rowLayout( row() );
+    RowFormat *rl = m_pTable->rowFormat( row() );
     double tmpIndent = 0.0;
     //not enough space but align to left
     double len = 0.0;
     for( int i = column(); i <= column() + m_iExtraXCells; i++ )
     {
-        ColumnLayout *cl2 = m_pTable->columnLayout( i );
+        ColumnFormat *cl2 = m_pTable->columnFormat( i );
         len += cl2->dblWidth() - 1.0; //-1.0 because the pixel in between 2 cells is shared between both cells
     }
     if( !isEmpty() )
@@ -3125,7 +3125,7 @@ QString KSpreadCell::textDisplaying( QPainter &_painter )
     return QString( "" );
  }
 
- ColumnLayout *cl = m_pTable->columnLayout( column() );
+ ColumnFormat *cl = m_pTable->columnFormat( column() );
  double w = ( m_dExtraWidth == 0.0 ) ? cl->dblWidth() : m_dExtraWidth;
 
  if( m_value.isNumber())
@@ -3221,14 +3221,14 @@ double KSpreadCell::dblWidth( int _col, const KSpreadCanvas *_canvas ) const
     if ( testFlag(Flag_ForceExtra) )
       return m_dExtraWidth;
 
-    const ColumnLayout *cl = m_pTable->columnLayout( _col );
+    const ColumnFormat *cl = m_pTable->columnFormat( _col );
     return cl->dblWidth( _canvas );
   }
 
   if ( testFlag(Flag_ForceExtra) )
     return m_dExtraWidth;
 
-  const ColumnLayout *cl = m_pTable->columnLayout( _col );
+  const ColumnFormat *cl = m_pTable->columnFormat( _col );
   return cl->dblWidth();
 }
 
@@ -3247,14 +3247,14 @@ double KSpreadCell::dblHeight( int _row, const KSpreadCanvas *_canvas ) const
     if ( testFlag(Flag_ForceExtra) )
       return m_dExtraHeight;
 
-    const RowLayout *rl = m_pTable->rowLayout( _row );
+    const RowFormat *rl = m_pTable->rowFormat( _row );
     return rl->dblHeight( _canvas );
   }
 
   if ( testFlag(Flag_ForceExtra) )
     return m_dExtraHeight;
 
-  const RowLayout *rl = m_pTable->rowLayout( _row );
+  const RowFormat *rl = m_pTable->rowFormat( _row );
   return rl->dblHeight();
 }
 
@@ -3266,7 +3266,7 @@ int KSpreadCell::height( int _row, const KSpreadCanvas *_canvas ) const
 ///////////////////////////////////////////
 //
 // Misc Properties.
-// Reimplementation of KSpreadLayout methods.
+// Reimplementation of KSpreadFormat methods.
 //
 ///////////////////////////////////////////
 
@@ -3278,7 +3278,7 @@ const QBrush& KSpreadCell::backGroundBrush( int _col, int _row ) const
     return cell->backGroundBrush( cell->column(), cell->row() );
   }
 
-  return KSpreadLayout::backGroundBrush( _col, _row );
+  return KSpreadFormat::backGroundBrush( _col, _row );
 }
 
 const QColor& KSpreadCell::bgColor( int _col, int _row ) const
@@ -3289,13 +3289,13 @@ const QColor& KSpreadCell::bgColor( int _col, int _row ) const
     return cell->bgColor( cell->column(), cell->row() );
   }
 
-  return KSpreadLayout::bgColor( _col, _row );
+  return KSpreadFormat::bgColor( _col, _row );
 }
 
 ///////////////////////////////////////////
 //
 // Borders.
-// Reimplementation of KSpreadLayout methods.
+// Reimplementation of KSpreadFormat methods.
 //
 ///////////////////////////////////////////
 
@@ -3306,7 +3306,7 @@ void KSpreadCell::setLeftBorderPen( const QPen& p )
          && m_pTable->cellAt( column(), row() ) == this )
         cell->clearProperty( PRightBorder );
 
-    KSpreadLayout::setLeftBorderPen( p );
+    KSpreadFormat::setLeftBorderPen( p );
 }
 
 void KSpreadCell::setTopBorderPen( const QPen& p )
@@ -3316,7 +3316,7 @@ void KSpreadCell::setTopBorderPen( const QPen& p )
          && m_pTable->cellAt( column(), row() ) == this )
         cell->clearProperty( PBottomBorder );
 
-    KSpreadLayout::setTopBorderPen( p );
+    KSpreadFormat::setTopBorderPen( p );
 }
 
 void KSpreadCell::setRightBorderPen( const QPen& p )
@@ -3329,7 +3329,7 @@ void KSpreadCell::setRightBorderPen( const QPen& p )
          && m_pTable->cellAt( column(), row() ) == this )
         cell->clearProperty( PLeftBorder );
 
-    KSpreadLayout::setRightBorderPen( p );
+    KSpreadFormat::setRightBorderPen( p );
 }
 
 void KSpreadCell::setBottomBorderPen( const QPen& p )
@@ -3342,7 +3342,7 @@ void KSpreadCell::setBottomBorderPen( const QPen& p )
          && m_pTable->cellAt( column(), row() ) == this )
         cell->clearProperty( PTopBorder );
 
-    KSpreadLayout::setBottomBorderPen( p );
+    KSpreadFormat::setBottomBorderPen( p );
 }
 
 const QPen& KSpreadCell::rightBorderPen( int _col, int _row ) const
@@ -3355,7 +3355,7 @@ const QPen& KSpreadCell::rightBorderPen( int _col, int _row ) const
             return cell->leftBorderPen( _col + 1, _row );
     }
 
-    return KSpreadLayout::rightBorderPen( _col, _row );
+    return KSpreadFormat::rightBorderPen( _col, _row );
 }
 
 const QPen& KSpreadCell::leftBorderPen( int _col, int _row ) const
@@ -3367,7 +3367,7 @@ const QPen& KSpreadCell::leftBorderPen( int _col, int _row ) const
             return cell->rightBorderPen( _col - 1, _row );
     }
 
-    return KSpreadLayout::leftBorderPen( _col, _row );
+    return KSpreadFormat::leftBorderPen( _col, _row );
 }
 
 const QPen& KSpreadCell::bottomBorderPen( int _col, int _row ) const
@@ -3379,7 +3379,7 @@ const QPen& KSpreadCell::bottomBorderPen( int _col, int _row ) const
             return cell->topBorderPen( _col, _row + 1 );
     }
 
-    return KSpreadLayout::bottomBorderPen( _col, _row );
+    return KSpreadFormat::bottomBorderPen( _col, _row );
 }
 
 const QPen& KSpreadCell::topBorderPen( int _col, int _row ) const
@@ -3392,7 +3392,7 @@ const QPen& KSpreadCell::topBorderPen( int _col, int _row ) const
             return cell->bottomBorderPen( _col, _row - 1 );
     }
 
-    return KSpreadLayout::topBorderPen( _col, _row );
+    return KSpreadFormat::topBorderPen( _col, _row );
 }
 
 ///////////////////////////////////////////
@@ -3779,29 +3779,29 @@ void KSpreadCell::setValue( const KSpreadValue& v )
 }
 
 
-bool KSpreadCell::isDate() const 
-{ 
+bool KSpreadCell::isDate() const
+{
   // workaround, since date/time is stored as floating-point
-  return m_value.isNumber() && 
+  return m_value.isNumber() &&
   ( ( (formatType()>=date_format1) && (formatType()<=date_format26) ) ||
     formatType()==CustomDate );
 }
 
-bool KSpreadCell::isTime() const 
-{ 
+bool KSpreadCell::isTime() const
+{
   // workaround, since date/time is stored as floating-point
-  return m_value.isNumber() && 
+  return m_value.isNumber() &&
   ( ( (formatType()>=Time_format1) && (formatType()<=Time_format6) ) ||
     formatType()==CustomTime );
 }
 
-QDate KSpreadCell::valueDate() const 
-{ 
+QDate KSpreadCell::valueDate() const
+{
   return m_value.asDateTime().date();
 }
 
-QTime KSpreadCell::valueTime() const 
-{ 
+QTime KSpreadCell::valueTime() const
+{
   return m_value.asDateTime().time();
 }
 
@@ -3879,7 +3879,7 @@ void KSpreadCell::checkTextInput()
     else if ( isFormula() )
         str = m_strFormulaOut;
 
-    // If the text is empty, we don't have a value 
+    // If the text is empty, we don't have a value
     // If the user stated explicitely that he wanted text (using the format or using a quote),
     // then we don't parse as a value, but as string.
     if ( str.isEmpty() || formatType() == Text_format || str.at(0)=='\'' )
@@ -4164,7 +4164,7 @@ QDomElement KSpreadCell::save( QDomDocument& doc, int _x_offset, int _y_offset, 
     //
     // Save the formatting information
     //
-    QDomElement format = KSpreadLayout::save( doc, m_iColumn, m_iRow, force );
+    QDomElement format = KSpreadFormat::save( doc, m_iColumn, m_iRow, force );
     if ( format.hasChildNodes() || format.attributes().length() ) // don't save empty tags
         cell.appendChild( format );
 
@@ -4376,7 +4376,7 @@ bool KSpreadCell::load( const QDomElement& cell, int _xshift, int _yshift, Paste
          && ( (pm == Normal) || (pm == Format) || (pm == NoBorder) ) )
     {
         // send pm parameter. Didn't load Borders if pm==NoBorder
-        if ( !KSpreadLayout::load( f,pm ) )
+        if ( !KSpreadFormat::load( f,pm ) )
             return false;
 
         if ( f.hasAttribute( "colspan" ) )
@@ -4638,7 +4638,7 @@ bool KSpreadCell::loadCellData(const QDomElement &text, Operation op )
 
 	if ( formatType() == Percentage )
         {
-          setFactor(100.0); // should have been already done by loadLayout
+          setFactor(100.0); // should have been already done by loadFormat
           t = locale->formatNumber(m_value.asFloat() * m_dFactor, precision);
 	  m_strText = pasteOperation( t, m_strText, op );
           m_strText += '%';

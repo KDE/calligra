@@ -214,7 +214,7 @@ KSpreadSheet::KSpreadSheet( KSpreadMap *_map, const QString &tableName, const ch
   m_id = s_id++;
   s_mapTables->insert( m_id, this );
 
-  m_defaultLayout = new KSpreadLayout( this );
+  m_defaultFormat = new KSpreadFormat( this );
 
   m_emptyPen.setStyle( Qt::NoPen );
 
@@ -233,10 +233,10 @@ KSpreadSheet::KSpreadSheet( KSpreadMap *_map, const QString &tableName, const ch
   m_columns.setAutoDelete( true );
 
   m_pDefaultCell = new KSpreadCell( this, 0, 0 );
-  m_pDefaultRowLayout = new RowLayout( this, 0 );
-  m_pDefaultRowLayout->setDefault();
-  m_pDefaultColumnLayout = new ColumnLayout( this, 0 );
-  m_pDefaultColumnLayout->setDefault();
+  m_pDefaultRowFormat = new RowFormat( this, 0 );
+  m_pDefaultRowFormat->setDefault();
+  m_pDefaultColumnFormat = new ColumnFormat( this, 0 );
+  m_pDefaultColumnFormat->setDefault();
 
 
   m_pWidget = new QWidget();
@@ -245,8 +245,8 @@ KSpreadSheet::KSpreadSheet( KSpreadMap *_map, const QString &tableName, const ch
 
   m_iMaxColumn = 256;
   m_iMaxRow = 256;
-  m_dSizeMaxX = KS_colMax * m_pDefaultColumnLayout->dblWidth(); // default is max cols * default width
-  m_dSizeMaxY = KS_rowMax * m_pDefaultRowLayout->dblHeight(); // default is max rows * default height
+  m_dSizeMaxX = KS_colMax * m_pDefaultColumnFormat->dblWidth(); // default is max cols * default width
+  m_dSizeMaxY = KS_rowMax * m_pDefaultRowFormat->dblHeight(); // default is max rows * default height
 
   m_bScrollbarUpdates = true;
 
@@ -300,50 +300,50 @@ bool KSpreadSheet::isEmpty( unsigned long int x, unsigned long int y ) const
   return false;
 }
 
-const ColumnLayout* KSpreadSheet::columnLayout( int _column ) const
+const ColumnFormat* KSpreadSheet::columnFormat( int _column ) const
 {
-    const ColumnLayout *p = m_columns.lookup( _column );
+    const ColumnFormat *p = m_columns.lookup( _column );
     if ( p != 0L )
         return p;
 
-    return m_pDefaultColumnLayout;
+    return m_pDefaultColumnFormat;
 }
 
-ColumnLayout* KSpreadSheet::columnLayout( int _column )
+ColumnFormat* KSpreadSheet::columnFormat( int _column )
 {
-    ColumnLayout *p = m_columns.lookup( _column );
+    ColumnFormat *p = m_columns.lookup( _column );
     if ( p != 0L )
         return p;
 
-    return m_pDefaultColumnLayout;
+    return m_pDefaultColumnFormat;
 }
 
-const RowLayout* KSpreadSheet::rowLayout( int _row ) const
+const RowFormat* KSpreadSheet::rowFormat( int _row ) const
 {
-    const RowLayout *p = m_rows.lookup( _row );
+    const RowFormat *p = m_rows.lookup( _row );
     if ( p != 0L )
         return p;
 
-    return m_pDefaultRowLayout;
+    return m_pDefaultRowFormat;
 }
 
-RowLayout* KSpreadSheet::rowLayout( int _row )
+RowFormat* KSpreadSheet::rowFormat( int _row )
 {
-    RowLayout *p = m_rows.lookup( _row );
+    RowFormat *p = m_rows.lookup( _row );
     if ( p != 0L )
         return p;
 
-    return m_pDefaultRowLayout;
+    return m_pDefaultRowFormat;
 }
 
 void KSpreadSheet::setDefaultHeight( double height )
 {
-  m_pDefaultRowLayout->setHeight( (int)height );
+  m_pDefaultRowFormat->setHeight( (int)height );
 }
 
 void KSpreadSheet::setDefaultWidth( double width )
 {
-  m_pDefaultColumnLayout->setWidth( (int)width );
+  m_pDefaultColumnFormat->setWidth( (int)width );
 }
 
 int KSpreadSheet::leftColumn( int _xpos, double &_left,
@@ -358,7 +358,7 @@ int KSpreadSheet::leftColumn( int _xpos, double &_left,
         _left = 0.0;
 
     int col = 1;
-    double x = columnLayout( col )->dblWidth( _canvas );
+    double x = columnFormat( col )->dblWidth( _canvas );
     while ( x < _xpos )
     {
         // Should never happen
@@ -367,9 +367,9 @@ int KSpreadSheet::leftColumn( int _xpos, double &_left,
 	    kdDebug(36001) << "KSpreadSheet:leftColumn: invalid column (col: " << col + 1 << ")" << endl;
 	    return KS_colMax + 1; //Return out of range value, so other code can react on this
 	}
-        _left += columnLayout( col )->dblWidth( _canvas );
+        _left += columnFormat( col )->dblWidth( _canvas );
         col++;
-        x += columnLayout( col )->dblWidth( _canvas );
+        x += columnFormat( col )->dblWidth( _canvas );
     }
 
     return col;
@@ -390,7 +390,7 @@ int KSpreadSheet::rightColumn( int _xpos, const KSpreadCanvas *_canvas ) const
 	    kdDebug(36001) << "KSpreadSheet:rightColumn: invalid column (col: " << col << ")" << endl;
             return KS_colMax + 1; //Return out of range value, so other code can react on this
 	}
-        x += columnLayout( col )->dblWidth( _canvas );
+        x += columnFormat( col )->dblWidth( _canvas );
         col++;
     }
 
@@ -409,7 +409,7 @@ int KSpreadSheet::topRow( int _ypos, double & _top,
         _top = 0;
 
     int row = 1;
-    double y = rowLayout( row )->dblHeight( _canvas );
+    double y = rowFormat( row )->dblHeight( _canvas );
     while ( y < _ypos )
     {
         // Should never happen
@@ -418,9 +418,9 @@ int KSpreadSheet::topRow( int _ypos, double & _top,
             kdDebug(36001) << "KSpreadSheet:topRow: invalid row (row: " << row + 1 << ")" << endl;
             return KS_rowMax + 1; //Return out of range value, so other code can react on this
         }
-        _top += rowLayout( row )->dblHeight( _canvas );
+        _top += rowFormat( row )->dblHeight( _canvas );
         row++;
-        y += rowLayout( row )->dblHeight( _canvas );
+        y += rowFormat( row )->dblHeight( _canvas );
     }
 
     return row;
@@ -441,7 +441,7 @@ int KSpreadSheet::bottomRow( int _ypos, const KSpreadCanvas *_canvas ) const
 	    kdDebug(36001) << "KSpreadSheet:bottomRow: invalid row (row: " << row << ")" << endl;
             return KS_rowMax + 1; //Return out of range value, so other code can react on this
 	}
-        y += rowLayout( row )->dblHeight( _canvas );
+        y += rowFormat( row )->dblHeight( _canvas );
         row++;
     }
 
@@ -462,7 +462,7 @@ double KSpreadSheet::dblColumnPos( int _col, const KSpreadCanvas *_canvas ) cons
             return x;
 	}
 
-        x += columnLayout( col )->dblWidth( _canvas );
+        x += columnFormat( col )->dblWidth( _canvas );
     }
 
     return x;
@@ -489,7 +489,7 @@ double KSpreadSheet::dblRowPos( int _row, const KSpreadCanvas *_canvas ) const
             return y;
 	}
 
-        y += rowLayout( row )->dblHeight( _canvas );
+        y += rowFormat( row )->dblHeight( _canvas );
     }
 
     return y;
@@ -525,12 +525,12 @@ KSpreadCell* KSpreadSheet::firstCell() const
     return m_cells.firstCell();
 }
 
-RowLayout* KSpreadSheet::firstRow() const
+RowFormat* KSpreadSheet::firstRow() const
 {
     return m_rows.first();
 }
 
-ColumnLayout* KSpreadSheet::firstCol() const
+ColumnFormat* KSpreadSheet::firstCol() const
 {
     return m_columns.first();
 }
@@ -568,30 +568,30 @@ KSpreadCell* KSpreadSheet::cellAt( int _column, int _row, bool _scrollbar_update
   return m_pDefaultCell;
 }
 
-ColumnLayout* KSpreadSheet::nonDefaultColumnLayout( int _column, bool force_creation )
+ColumnFormat* KSpreadSheet::nonDefaultColumnFormat( int _column, bool force_creation )
 {
-    ColumnLayout *p = m_columns.lookup( _column );
+    ColumnFormat *p = m_columns.lookup( _column );
     if ( p != 0L || !force_creation )
         return p;
 
-    p = new ColumnLayout( this, _column );
-    // TODO: copy the default ColumnLayout here!!
-    p->setWidth( m_pDefaultColumnLayout->width() );
+    p = new ColumnFormat( this, _column );
+    // TODO: copy the default ColumnFormat here!!
+    p->setWidth( m_pDefaultColumnFormat->width() );
 
     m_columns.insertElement( p, _column );
 
     return p;
 }
 
-RowLayout* KSpreadSheet::nonDefaultRowLayout( int _row, bool force_creation )
+RowFormat* KSpreadSheet::nonDefaultRowFormat( int _row, bool force_creation )
 {
-    RowLayout *p = m_rows.lookup( _row );
+    RowFormat *p = m_rows.lookup( _row );
     if ( p != 0L || !force_creation )
         return p;
 
-    p = new RowLayout( this, _row );
-    // TODO: copy the default RowLayout here!!
-    p->setHeight( m_pDefaultRowLayout->height() );
+    p = new RowFormat( this, _row );
+    // TODO: copy the default RowLFormat here!!
+    p->setHeight( m_pDefaultRowFormat->height() );
 
     m_rows.insertElement( p, _row );
 
@@ -671,12 +671,12 @@ void KSpreadSheet::recalc()
  post undo object (always a KSpreadUndoCellLayout; difference in title only)
  { rows selected:
    if condition Y clear properties X,X' of cells;
-   set properties X,X' of rowlayouts
+   set properties X,X' of rowformats
    emit complete update;
  }
  { columns selected:
    if condition Y clear properties X,X' of cells;
-   set properties X,X' of columnlayouts;
+   set properties X,X' of columnformats;
    for all rows with properties X,X':
      create cells if necessary and set properties X,X'
    emit complete update;
@@ -757,7 +757,7 @@ void KSpreadSheet::recalc()
 class KSpreadUndoAction* KSpreadSheet::CellWorkerTypeA::createUndoAction( KSpreadDoc* doc, KSpreadSheet* table, QRect& r )
 {
     QString title = getUndoTitle();
-    return new KSpreadUndoCellLayout( doc, table, r, title );
+    return new KSpreadUndoCellFormat( doc, table, r, title );
 }
 
 /*
@@ -773,7 +773,7 @@ KSpreadSheet::SelectionType KSpreadSheet::workOnCells( const QPoint& _marker, Ce
     KSpreadCell *cell;
     if ( !worker.type_B && selected && isColumnSelected() )
     {
-	for ( RowLayout* rw =m_rows.first(); rw; rw = rw->next() )
+	for ( RowFormat* rw =m_rows.first(); rw; rw = rw->next() )
 	{
 	    if ( !rw->isDefault() && worker.testCondition( rw ) )
 	    {
@@ -820,10 +820,10 @@ KSpreadSheet::SelectionType KSpreadSheet::workOnCells( const QPoint& _marker, Ce
 	    if ( worker.emit_signal )
 		emit sig_updateView( this, r );
 	} else {
-            // for type A now work on row layouts
+            // for type A now work on row formats
 	    for ( int i=m_rctSelection.top(); i<=m_rctSelection.bottom(); i++ )
 	    {
-		RowLayout *rw=nonDefaultRowLayout(i);
+		RowFormat *rw=nonDefaultRowFormat(i);
 		worker.doWork( rw );
 	    }
 	    if ( worker.emit_signal )
@@ -850,14 +850,14 @@ KSpreadSheet::SelectionType KSpreadSheet::workOnCells( const QPoint& _marker, Ce
 	    if ( worker.emit_signal )
 		emit sig_updateView( this, r );
 	} else {
-	    // for type A now work on column layouts
+	    // for type A now work on column formats
 	    for ( int i=m_rctSelection.left(); i<=m_rctSelection.right(); i++ )
 	    {
-		ColumnLayout *cl=nonDefaultColumnLayout(i);
+		ColumnFormat *cl=nonDefaultColumnFormat(i);
 		worker.doWork( cl );
 	    }
 	    KSpreadCell *cell;
-	    for ( RowLayout* rw =m_rows.first(); rw; rw = rw->next() )
+	    for ( RowFormat* rw =m_rows.first(); rw; rw = rw->next() )
 	    {
 		if ( !rw->isDefault() && worker.testCondition( rw ) )
 		{
@@ -927,7 +927,7 @@ KSpreadSheet::SelectionType KSpreadSheet::workOnCells( KSpreadSelection* selecti
   KSpreadCell * cell;
   if ( !worker.type_B && selected && util_isColumnSelected(selection) )
   {
-    for ( RowLayout * rw = m_rows.first(); rw; rw = rw->next() )
+    for ( RowFormat * rw = m_rows.first(); rw; rw = rw->next() )
     {
       if ( !rw->isDefault() && worker.testCondition( rw ) )
       {
@@ -974,10 +974,10 @@ KSpreadSheet::SelectionType KSpreadSheet::workOnCells( KSpreadSelection* selecti
     }
     else
     {
-      // for type A now work on row layouts
+      // for type A now work on row formats
       for ( int i = top; i <= bottom; ++i )
       {
-        RowLayout * rw = nonDefaultRowLayout(i);
+        RowFormat * rw = nonDefaultRowFormat(i);
         worker.doWork( rw );
       }
     }
@@ -1009,14 +1009,14 @@ KSpreadSheet::SelectionType KSpreadSheet::workOnCells( KSpreadSelection* selecti
     }
     else
     {
-      // for type A now work on column layouts
+      // for type A now work on column formats
       for ( int i = left; i <= right; ++i )
       {
-        ColumnLayout * cl = nonDefaultColumnLayout( i );
+        ColumnFormat * cl = nonDefaultColumnFormat( i );
         worker.doWork( cl );
       }
 
-      for ( RowLayout * rw = m_rows.first(); rw; rw = rw->next() )
+      for ( RowFormat * rw = m_rows.first(); rw; rw = rw->next() )
       {
         if ( !rw->isDefault() && worker.testCondition( rw ) )
         {
@@ -1075,10 +1075,10 @@ struct SetSelectionFontWorker : public KSpreadSheet::CellWorkerTypeA
 	: _font( font ), _size( size ), _bold( bold ), _italic( italic ), _underline( underline ), _strike( strike ) { }
 
     QString getUndoTitle() { return i18n("Change Font"); }
-    bool testCondition( RowLayout* rw ) {
+    bool testCondition( RowFormat* rw ) {
         return ( rw->hasProperty( KSpreadCell::PFont ) );
     }
-    void doWork( RowLayout* rw ) {
+    void doWork( RowFormat* rw ) {
 	if ( _font )
 	    rw->setTextFontFamily( _font );
 	if ( _size > 0 )
@@ -1092,7 +1092,7 @@ struct SetSelectionFontWorker : public KSpreadSheet::CellWorkerTypeA
 	if ( _strike >= 0 )
 	    rw->setTextFontStrike( (bool)_strike );
     }
-    void doWork( ColumnLayout* cl ) {
+    void doWork( ColumnFormat* cl ) {
 	if ( _font )
 	    cl->setTextFontFamily( _font );
 	if ( _size > 0 )
@@ -1147,13 +1147,13 @@ struct SetSelectionSizeWorker : public KSpreadSheet::CellWorkerTypeA {
     SetSelectionSizeWorker( int __size, int size2 ) : _size( __size ), size( size2 ) { }
 
     QString getUndoTitle() { return i18n("Change Font"); }
-    bool testCondition( RowLayout* rw ) {
+    bool testCondition( RowFormat* rw ) {
         return ( rw->hasProperty( KSpreadCell::PFont ) );
     }
-    void doWork( RowLayout* rw ) {
+    void doWork( RowFormat* rw ) {
 	rw->setTextFontSize( size + _size) ;
     }
-    void doWork( ColumnLayout* cl ) {
+    void doWork( ColumnFormat* cl ) {
 	cl->setTextFontSize( size + _size );
     }
     void prepareCell( KSpreadCell* cell ) {
@@ -1248,7 +1248,7 @@ struct SetSelectionVerticalTextWorker : public KSpreadSheet::CellWorker {
 
     class KSpreadUndoAction* createUndoAction( KSpreadDoc* doc, KSpreadSheet* table, QRect& r ) {
         QString title=i18n("Vertical Text");
-	return new KSpreadUndoCellLayout( doc, table, r, title );
+	return new KSpreadUndoCellFormat( doc, table, r, title );
     }
     bool testCondition( KSpreadCell* cell ) {
 	return ( !cell->isObscuringForced() );
@@ -1276,7 +1276,7 @@ struct SetSelectionCommentWorker : public KSpreadSheet::CellWorker {
 
     class KSpreadUndoAction* createUndoAction( KSpreadDoc* doc, KSpreadSheet* table, QRect& r ) {
         QString title=i18n("Add Comment");
-	return new KSpreadUndoCellLayout( doc, table, r, title );
+	return new KSpreadUndoCellFormat( doc, table, r, title );
     }
     bool testCondition( KSpreadCell* cell ) {
 	return ( !cell->isObscuringForced() );
@@ -1305,13 +1305,13 @@ struct SetSelectionAngleWorker : public KSpreadSheet::CellWorkerTypeA {
         return new KSpreadUndoChangeAngle( doc, table, r );
     }
 
-    bool testCondition( RowLayout* rw ) {
+    bool testCondition( RowFormat* rw ) {
         return ( rw->hasProperty( KSpreadCell::PAngle ) );
     }
-    void doWork( RowLayout* rw ) {
+    void doWork( RowFormat* rw ) {
 	rw->setAngle( _value );
     }
-    void doWork( ColumnLayout* cl ) {
+    void doWork( ColumnFormat* cl ) {
 	cl->setAngle( _value );
     }
     void prepareCell( KSpreadCell* cell ) {
@@ -1345,7 +1345,7 @@ struct SetSelectionRemoveCommentWorker : public KSpreadSheet::CellWorker {
 
     class KSpreadUndoAction* createUndoAction( KSpreadDoc* doc, KSpreadSheet* table, QRect& r ) {
         QString title=i18n("Remove Comment");
-	return new KSpreadUndoCellLayout( doc, table, r, title );
+	return new KSpreadUndoCellFormat( doc, table, r, title );
     }
     bool testCondition( KSpreadCell* cell ) {
 	return ( !cell->isObscuringForced() );
@@ -1371,13 +1371,13 @@ struct SetSelectionTextColorWorker : public KSpreadSheet::CellWorkerTypeA {
     SetSelectionTextColorWorker( const QColor& _tb_Color ) : tb_Color( _tb_Color ) { }
 
     QString getUndoTitle() { return i18n("Change Text Color"); }
-    bool testCondition( RowLayout* rw ) {
+    bool testCondition( RowFormat* rw ) {
         return ( rw->hasProperty( KSpreadCell::PTextPen ) );
     }
-    void doWork( RowLayout* rw ) {
+    void doWork( RowFormat* rw ) {
 	rw->setTextColor( tb_Color );
     }
-    void doWork( ColumnLayout* cl ) {
+    void doWork( ColumnFormat* cl ) {
 	cl->setTextColor( tb_Color );
     }
     void prepareCell( KSpreadCell* cell ) {
@@ -1409,13 +1409,13 @@ struct SetSelectionBgColorWorker : public KSpreadSheet::CellWorkerTypeA {
     SetSelectionBgColorWorker( const QColor& _bg_Color ) : bg_Color( _bg_Color ) { }
 
     QString getUndoTitle() { return i18n("Change Background Color"); }
-    bool testCondition( RowLayout* rw ) {
+    bool testCondition( RowFormat* rw ) {
         return ( rw->hasProperty( KSpreadCell::PBackgroundColor ) );
     }
-    void doWork( RowLayout* rw ) {
+    void doWork( RowFormat* rw ) {
 	rw->setBgColor( bg_Color );
     }
-    void doWork( ColumnLayout* cl ) {
+    void doWork( ColumnFormat* cl ) {
 	cl->setBgColor( bg_Color );
     }
     void prepareCell( KSpreadCell* cell ) {
@@ -1448,7 +1448,7 @@ struct SetSelectionBorderColorWorker : public KSpreadSheet::CellWorker {
 
     class KSpreadUndoAction* createUndoAction( KSpreadDoc* doc, KSpreadSheet* table, QRect& r ) {
         QString title=i18n("Change Border Color");
-	return new KSpreadUndoCellLayout( doc, table, r, title );
+	return new KSpreadUndoCellFormat( doc, table, r, title );
     }
     bool testCondition( KSpreadCell* cell ) {
 	return ( !cell->isObscuringForced() );
@@ -1742,15 +1742,15 @@ struct SetSelectionPercentWorker : public KSpreadSheet::CellWorkerTypeA {
     SetSelectionPercentWorker( bool _b ) : b( _b ) { }
 
     QString getUndoTitle() { return i18n("Format Percent"); }
-    bool testCondition( RowLayout* rw ) {
+    bool testCondition( RowFormat* rw ) {
         return ( rw->hasProperty( KSpreadCell::PFactor ) );
     }
-    void doWork( RowLayout* rw ) {
+    void doWork( RowFormat* rw ) {
 	rw->setFactor( b ? 100.0 : 1.0 );
 	//rw->setPrecision( 0 );
 	rw->setFormatType( b ? KSpreadCell::Percentage : KSpreadCell::Number);
     }
-    void doWork( ColumnLayout* cl ) {
+    void doWork( ColumnFormat* cl ) {
 	cl->setFactor( b ? 100.0 : 1.0 );
 	cl->setFormatType( b ? KSpreadCell::Percentage : KSpreadCell::Number);
     }
@@ -1977,7 +1977,7 @@ bool KSpreadSheet::insertColumn( int col, int nbCol, bool makeUndo )
     for( int i=0; i<=nbCol; i++ )
     {
         // Recalculate range max (minus size of last column)
-        m_dSizeMaxX -= columnLayout( KS_colMax )->dblWidth();
+        m_dSizeMaxX -= columnFormat( KS_colMax )->dblWidth();
 
         result = m_cells.insertColumn( col );
         m_columns.insertColumn( col );
@@ -1985,7 +1985,7 @@ bool KSpreadSheet::insertColumn( int col, int nbCol, bool makeUndo )
             res = false;
 
         //Recalculate range max (plus size of new column)
-        m_dSizeMaxX += columnLayout( col+i )->dblWidth();
+        m_dSizeMaxX += columnFormat( col+i )->dblWidth();
     }
 
     QPtrListIterator<KSpreadSheet> it( map()->tableList() );
@@ -2031,7 +2031,7 @@ bool KSpreadSheet::insertRow( int row, int nbRow, bool makeUndo )
     for( int i=0; i<=nbRow; i++ )
     {
         // Recalculate range max (minus size of last row)
-        m_dSizeMaxY -= rowLayout( KS_rowMax )->dblHeight();
+        m_dSizeMaxY -= rowFormat( KS_rowMax )->dblHeight();
 
         result = m_cells.insertRow( row );
         m_rows.insertRow( row );
@@ -2039,7 +2039,7 @@ bool KSpreadSheet::insertRow( int row, int nbRow, bool makeUndo )
             res = false;
 
         //Recalculate range max (plus size of new row)
-        m_dSizeMaxY += rowLayout( row )->dblHeight();
+        m_dSizeMaxY += rowFormat( row )->dblHeight();
     }
 
     QPtrListIterator<KSpreadSheet> it( map()->tableList() );
@@ -2083,13 +2083,13 @@ void KSpreadSheet::removeColumn( int col, int nbCol, bool makeUndo )
     for( int i=0; i<=nbCol; i++ )
     {
         // Recalculate range max (minus size of removed column)
-        m_dSizeMaxX -= columnLayout( col )->dblWidth();
+        m_dSizeMaxX -= columnFormat( col )->dblWidth();
 
         m_cells.removeColumn( col );
         m_columns.removeColumn( col );
 
         //Recalculate range max (plus size of new column)
-        m_dSizeMaxX += columnLayout( KS_colMax )->dblWidth();
+        m_dSizeMaxX += columnFormat( KS_colMax )->dblWidth();
     }
 
     QPtrListIterator<KSpreadSheet> it( map()->tableList() );
@@ -2148,13 +2148,13 @@ void KSpreadSheet::removeRow( int row, int nbRow, bool makeUndo )
     for( int i=0; i<=nbRow; i++ )
     {
         // Recalculate range max (minus size of removed row)
-        m_dSizeMaxY -= rowLayout( row )->dblHeight();
+        m_dSizeMaxY -= rowFormat( row )->dblHeight();
 
         m_cells.removeRow( row );
         m_rows.removeRow( row );
 
         //Recalculate range max (plus size of new row)
-        m_dSizeMaxY += rowLayout( KS_rowMax )->dblHeight();
+        m_dSizeMaxY += rowFormat( KS_rowMax )->dblHeight();
     }
 
     QPtrListIterator<KSpreadSheet> it( map()->tableList() );
@@ -2214,12 +2214,12 @@ void KSpreadSheet::hideRow( int _row, int nbRow, QValueList<int>_list )
       m_pDoc->undoBuffer()->appendUndo( undo  );
     }
 
-    RowLayout *rl;
+    RowFormat *rl;
     if( nbRow!=-1 )
     {
 	for( int i=0; i<=nbRow; i++ )
 	{
-	    rl=nonDefaultRowLayout( _row+i );
+	    rl=nonDefaultRowFormat( _row+i );
 	    rl->setHide(true);
 	}
     }
@@ -2228,7 +2228,7 @@ void KSpreadSheet::hideRow( int _row, int nbRow, QValueList<int>_list )
 	QValueList<int>::Iterator it;
 	for( it = _list.begin(); it != _list.end(); ++it )
 	{
-	    rl=nonDefaultRowLayout( *it );
+	    rl=nonDefaultRowFormat( *it );
 	    rl->setHide(true);
 	}
     }
@@ -2253,12 +2253,12 @@ void KSpreadSheet::showRow( int _row, int nbRow, QValueList<int>_list )
       m_pDoc->undoBuffer()->appendUndo( undo );
     }
 
-    RowLayout *rl;
+    RowFormat *rl;
     if( nbRow!=-1 )
       {
 	for( int i=0; i<=nbRow; i++ )
 	  {
-	    rl=nonDefaultRowLayout( _row + i );
+	    rl=nonDefaultRowFormat( _row + i );
 	    rl->setHide( false );
 	  }
       }
@@ -2267,7 +2267,7 @@ void KSpreadSheet::showRow( int _row, int nbRow, QValueList<int>_list )
 	QValueList<int>::Iterator it;
 	for( it = _list.begin(); it != _list.end(); ++it )
 	  {
-	    rl=nonDefaultRowLayout( *it );
+	    rl=nonDefaultRowFormat( *it );
 	    rl->setHide( false );
 	  }
       }
@@ -2288,12 +2288,12 @@ void KSpreadSheet::hideColumn( int _col, int nbCol, QValueList<int>_list )
         m_pDoc->undoBuffer()->appendUndo( undo );
     }
 
-    ColumnLayout *cl;
+    ColumnFormat *cl;
     if( nbCol != -1 )
     {
 	for( int i=0; i<=nbCol; i++ )
 	{
-	    cl=nonDefaultColumnLayout( _col + i );
+	    cl=nonDefaultColumnFormat( _col + i );
 	    cl->setHide( true );
 	}
     }
@@ -2302,7 +2302,7 @@ void KSpreadSheet::hideColumn( int _col, int nbCol, QValueList<int>_list )
 	QValueList<int>::Iterator it;
 	for( it = _list.begin(); it != _list.end(); ++it )
 	{
-	    cl=nonDefaultColumnLayout( *it );
+	    cl=nonDefaultColumnFormat( *it );
 	    cl->setHide( true );
 	}
     }
@@ -2328,12 +2328,12 @@ void KSpreadSheet::showColumn( int _col, int nbCol, QValueList<int>_list )
       m_pDoc->undoBuffer()->appendUndo( undo );
     }
 
-    ColumnLayout *cl;
+    ColumnFormat *cl;
     if( nbCol != -1 )
     {
       for( int i=0; i<=nbCol; i++ )
       {
-	cl=nonDefaultColumnLayout( _col + i );
+	cl=nonDefaultColumnFormat( _col + i );
 	cl->setHide( false );
       }
     }
@@ -2342,7 +2342,7 @@ void KSpreadSheet::showColumn( int _col, int nbCol, QValueList<int>_list )
        QValueList<int>::Iterator it;
        for( it = _list.begin(); it != _list.end(); ++it )
        {
-	   cl=nonDefaultColumnLayout( *it );
+	   cl=nonDefaultColumnFormat( *it );
 	   cl->setHide( false );
        }
     }
@@ -2670,8 +2670,8 @@ void KSpreadSheet::borderBottom( KSpreadSelection* selectionInfo,
     if ( !m_pDoc->undoBuffer()->isLocked() )
     {
       QString title = i18n("Change Border");
-      KSpreadUndoCellLayout * undo =
-        new KSpreadUndoCellLayout( m_pDoc, this, selection, title );
+      KSpreadUndoCellFormat * undo =
+        new KSpreadUndoCellFormat( m_pDoc, this, selection, title );
       m_pDoc->undoBuffer()->appendUndo( undo );
     }
 
@@ -2685,7 +2685,7 @@ void KSpreadSheet::borderBottom( KSpreadSelection* selectionInfo,
       c = getNextCellRight( c->column(), row );
     }
 
-    RowLayout * rw = nonDefaultRowLayout(selection.bottom());
+    RowFormat * rw = nonDefaultRowFormat(selection.bottom());
     rw->setBottomBorderPen(pen);
 
     emit sig_updateView( this );
@@ -2702,8 +2702,8 @@ void KSpreadSheet::borderBottom( KSpreadSelection* selectionInfo,
     if ( !m_pDoc->undoBuffer()->isLocked() )
     {
       QString title=i18n("Change Border");
-      KSpreadUndoCellLayout *undo =
-        new KSpreadUndoCellLayout( m_pDoc, this, selection,title );
+      KSpreadUndoCellFormat *undo =
+        new KSpreadUndoCellFormat( m_pDoc, this, selection,title );
       m_pDoc->undoBuffer()->appendUndo( undo );
     }
 
@@ -2737,8 +2737,8 @@ void KSpreadSheet::borderRight( KSpreadSelection* selectionInfo,
     if ( !m_pDoc->undoBuffer()->isLocked() )
     {
       QString title = i18n("Change Border");
-      KSpreadUndoCellLayout * undo =
-        new KSpreadUndoCellLayout( m_pDoc, this, selection, title );
+      KSpreadUndoCellFormat * undo =
+        new KSpreadUndoCellFormat( m_pDoc, this, selection, title );
       m_pDoc->undoBuffer()->appendUndo( undo );
     }
 
@@ -2754,9 +2754,9 @@ void KSpreadSheet::borderRight( KSpreadSelection* selectionInfo,
       c = getNextCellDown( col, c->row() );
     }
 
-    RowLayout * rw = m_rows.first();
+    RowFormat * rw = m_rows.first();
 
-    ColumnLayout * cl = nonDefaultColumnLayout(selection.right());
+    ColumnFormat * cl = nonDefaultColumnFormat(selection.right());
     cl->setRightBorderPen(pen);
 
     KSpreadCell * cell;
@@ -2781,8 +2781,8 @@ void KSpreadSheet::borderRight( KSpreadSelection* selectionInfo,
     if ( !m_pDoc->undoBuffer()->isLocked() )
     {
       QString title=i18n("Change Border");
-      KSpreadUndoCellLayout *undo =
-        new KSpreadUndoCellLayout( m_pDoc, this, selection, title );
+      KSpreadUndoCellFormat *undo =
+        new KSpreadUndoCellFormat( m_pDoc, this, selection, title );
       m_pDoc->undoBuffer()->appendUndo( undo );
     }
 
@@ -2808,12 +2808,12 @@ void KSpreadSheet::borderLeft( KSpreadSelection* selectionInfo,
   // Complete columns selected ?
   if ( util_isColumnSelected(selection) )
   {
-    RowLayout* rw =m_rows.first();
+    RowFormat* rw =m_rows.first();
 
     if ( !m_pDoc->undoBuffer()->isLocked() )
     {
-      KSpreadUndoCellLayout *undo =
-        new KSpreadUndoCellLayout( m_pDoc, this, selection, title );
+      KSpreadUndoCellFormat *undo =
+        new KSpreadUndoCellFormat( m_pDoc, this, selection, title );
       m_pDoc->undoBuffer()->appendUndo( undo );
     }
 
@@ -2828,7 +2828,7 @@ void KSpreadSheet::borderLeft( KSpreadSelection* selectionInfo,
     }
 
 
-    ColumnLayout * cl = nonDefaultColumnLayout( col );
+    ColumnFormat * cl = nonDefaultColumnFormat( col );
     cl->setLeftBorderPen(pen);
 
     KSpreadCell * cell;
@@ -2852,7 +2852,7 @@ void KSpreadSheet::borderLeft( KSpreadSelection* selectionInfo,
   {
     if ( !m_pDoc->undoBuffer()->isLocked() )
     {
-      KSpreadUndoCellLayout *undo = new KSpreadUndoCellLayout( m_pDoc, this,
+      KSpreadUndoCellFormat *undo = new KSpreadUndoCellFormat( m_pDoc, this,
                                                                selection,title );
       m_pDoc->undoBuffer()->appendUndo( undo );
     }
@@ -2883,8 +2883,8 @@ void KSpreadSheet::borderTop( KSpreadSelection* selectionInfo,
   {
     if ( !m_pDoc->undoBuffer()->isLocked() )
     {
-      KSpreadUndoCellLayout * undo =
-        new KSpreadUndoCellLayout( m_pDoc, this, selection, title );
+      KSpreadUndoCellFormat * undo =
+        new KSpreadUndoCellFormat( m_pDoc, this, selection, title );
       m_pDoc->undoBuffer()->appendUndo( undo );
     }
 
@@ -2898,7 +2898,7 @@ void KSpreadSheet::borderTop( KSpreadSelection* selectionInfo,
       c = getNextCellRight( c->column(), row );
     }
 
-    RowLayout * rw = nonDefaultRowLayout( row );
+    RowFormat * rw = nonDefaultRowFormat( row );
     rw->setTopBorderPen( pen );
 
     emit sig_updateView( this );
@@ -2910,8 +2910,8 @@ void KSpreadSheet::borderTop( KSpreadSelection* selectionInfo,
   {
     if ( !m_pDoc->undoBuffer()->isLocked() )
     {
-      KSpreadUndoCellLayout *undo =
-        new KSpreadUndoCellLayout( m_pDoc, this, selection, title );
+      KSpreadUndoCellFormat *undo =
+        new KSpreadUndoCellFormat( m_pDoc, this, selection, title );
       m_pDoc->undoBuffer()->appendUndo( undo );
     }
 
@@ -2934,7 +2934,7 @@ void KSpreadSheet::borderOutline( KSpreadSelection* selectionInfo,
   if ( !m_pDoc->undoBuffer()->isLocked() )
   {
     QString title = i18n("Change Border");
-    KSpreadUndoCellLayout *undo = new KSpreadUndoCellLayout( m_pDoc, this,
+    KSpreadUndoCellFormat *undo = new KSpreadUndoCellFormat( m_pDoc, this,
                                                              selection, title );
     m_pDoc->undoBuffer()->appendUndo( undo );
   }
@@ -2964,9 +2964,9 @@ void KSpreadSheet::borderOutline( KSpreadSelection* selectionInfo,
       c = getNextCellRight( c->column(), row );
     }
 
-    RowLayout * rw = nonDefaultRowLayout( selection.top() );
+    RowFormat * rw = nonDefaultRowFormat( selection.top() );
     rw->setTopBorderPen(pen);
-    rw=nonDefaultRowLayout(selection.bottom());
+    rw=nonDefaultRowFormat(selection.bottom());
     rw->setBottomBorderPen(pen);
     KSpreadCell* cell;
     int bottom = selection.bottom();
@@ -3002,9 +3002,9 @@ void KSpreadSheet::borderOutline( KSpreadSelection* selectionInfo,
       c = getNextCellDown( col, c->row() );
     }
 
-    ColumnLayout *cl=nonDefaultColumnLayout(selection.left());
+    ColumnFormat *cl=nonDefaultColumnFormat(selection.left());
     cl->setLeftBorderPen(pen);
-    cl=nonDefaultColumnLayout(selection.right());
+    cl=nonDefaultColumnFormat(selection.right());
     cl->setRightBorderPen(pen);
     KSpreadCell* cell;
     for ( int x = selection.left(); x <= selection.right(); x++ )
@@ -3036,19 +3036,19 @@ struct SetSelectionBorderAllWorker : public KSpreadSheet::CellWorkerTypeA {
     SetSelectionBorderAllWorker( const QColor& color ) : pen( color, 1, QPen::SolidLine ) { }
 
     QString getUndoTitle() { return i18n("Change Border"); }
-    bool testCondition( RowLayout* rw ) {
+    bool testCondition( RowFormat* rw ) {
 	return ( rw->hasProperty( KSpreadCell::PRightBorder )
 		 || rw->hasProperty( KSpreadCell::PLeftBorder )
 		 || rw->hasProperty( KSpreadCell::PTopBorder )
 		 || rw->hasProperty( KSpreadCell::PBottomBorder ) );
     }
-    void doWork( RowLayout* rw ) {
+    void doWork( RowFormat* rw ) {
 	rw->setTopBorderPen( pen );
         rw->setRightBorderPen( pen );
         rw->setLeftBorderPen( pen );
         rw->setBottomBorderPen( pen );
     }
-    void doWork( ColumnLayout* cl ) {
+    void doWork( ColumnFormat* cl ) {
 	cl->setTopBorderPen( pen );
         cl->setRightBorderPen( pen );
         cl->setLeftBorderPen( pen );
@@ -3089,7 +3089,7 @@ struct SetSelectionBorderRemoveWorker : public KSpreadSheet::CellWorkerTypeA {
     QPen pen;
     SetSelectionBorderRemoveWorker() : pen( Qt::black, 1, Qt::NoPen  ) { }
     QString getUndoTitle() { return i18n("Change Border"); }
-    bool testCondition( RowLayout* rw ) {
+    bool testCondition( RowFormat* rw ) {
 	return ( rw->hasProperty( KSpreadCell::PRightBorder )
 		 || rw->hasProperty( KSpreadCell::PLeftBorder )
 		 || rw->hasProperty( KSpreadCell::PTopBorder )
@@ -3097,7 +3097,7 @@ struct SetSelectionBorderRemoveWorker : public KSpreadSheet::CellWorkerTypeA {
 		 || rw->hasProperty( KSpreadCell::PFallDiagonal )
 		 || rw->hasProperty( KSpreadCell::PGoUpDiagonal ) );
     }
-    void doWork( RowLayout* rw ) {
+    void doWork( RowFormat* rw ) {
 	rw->setTopBorderPen( pen );
         rw->setRightBorderPen( pen );
         rw->setLeftBorderPen( pen );
@@ -3105,7 +3105,7 @@ struct SetSelectionBorderRemoveWorker : public KSpreadSheet::CellWorkerTypeA {
         rw->setFallDiagonalPen( pen );
         rw->setGoUpDiagonalPen (pen );
     }
-    void doWork( ColumnLayout* cl ) {
+    void doWork( ColumnFormat* cl ) {
 	cl->setTopBorderPen( pen );
         cl->setRightBorderPen( pen );
         cl->setLeftBorderPen( pen );
@@ -3200,7 +3200,7 @@ void KSpreadSheet::checkCellContent(KSpreadCell * cell1, KSpreadCell * cell2, in
 void KSpreadSheet::sortByRow( const QRect &area, int key1, int key2, int key3,
                               SortingOrder order1, SortingOrder order2,
                               SortingOrder order3,
-                              QStringList const * firstKey, bool copyLayout,
+                              QStringList const * firstKey, bool copyFormat,
                               bool headerRow, KSpreadPoint const & outputPoint )
 {
   QRect r( area );
@@ -3269,7 +3269,7 @@ void KSpreadSheet::sortByRow( const QRect &area, int key1, int key2, int key3,
       {
         // from - to
         copyCells( sourceLeft + x, sourceTop + y,
-                   targetLeft + x, targetTop + y, copyLayout );
+                   targetLeft + x, targetTop + y, copyFormat );
       }
     }
   }
@@ -3521,13 +3521,13 @@ void KSpreadSheet::sortByRow( const QRect &area, int key1, int key2, int key3,
       for( int y = target.bottom(); y >= top; --y )
       {
         if ( y != key1 && y != key2 && y != key3 )
-          swapCells( d, y, bestX, y, copyLayout );
+          swapCells( d, y, bestX, y, copyFormat );
       }
       if (key3 > 0)
-        swapCells( d, key3, bestX, key3, copyLayout );
+        swapCells( d, key3, bestX, key3, copyFormat );
       if (key2 > 0)
-        swapCells( d, key2, bestX, key2, copyLayout );
-      swapCells( d, key1, bestX, key1, copyLayout );
+        swapCells( d, key2, bestX, key2, copyFormat );
+      swapCells( d, key1, bestX, key1, copyFormat );
     }
   } // for (d = ...; ...; ++d)
 
@@ -3537,7 +3537,7 @@ void KSpreadSheet::sortByRow( const QRect &area, int key1, int key2, int key3,
 void KSpreadSheet::sortByColumn( const QRect &area, int key1, int key2, int key3,
                                  SortingOrder order1, SortingOrder order2,
                                  SortingOrder order3,
-                                 QStringList const * firstKey, bool copyLayout,
+                                 QStringList const * firstKey, bool copyFormat,
                                  bool headerRow,
                                  KSpreadPoint const & outputPoint )
 {
@@ -3606,7 +3606,7 @@ void KSpreadSheet::sortByColumn( const QRect &area, int key1, int key2, int key3
       {
         // from - to
         copyCells( sourceLeft + x, sourceTop + y,
-                   targetLeft + x, targetTop + y, copyLayout );
+                   targetLeft + x, targetTop + y, copyFormat );
       }
     }
   }
@@ -3873,20 +3873,20 @@ void KSpreadSheet::sortByColumn( const QRect &area, int key1, int key2, int key3
       for (int x = target.left(); x <= target.right(); ++x)
       {
         if ( x != key1 && x != key2 && x != key3)
-          swapCells( x, d, x, bestY, copyLayout );
+          swapCells( x, d, x, bestY, copyFormat );
       }
       if (key3 > 0)
-        swapCells( key3, d, key3, bestY, copyLayout );
+        swapCells( key3, d, key3, bestY, copyFormat );
       if (key2 > 0)
-        swapCells( key2, d, key2, bestY, copyLayout );
-      swapCells( key1, d, key1, bestY, copyLayout );
+        swapCells( key2, d, key2, bestY, copyFormat );
+      swapCells( key1, d, key1, bestY, copyFormat );
     }
   } // for (d = ...; ...; ++d)
   doc()->emitEndOperation();
 }
 
-// from - to - copyLayout
-void KSpreadSheet::copyCells( int x1, int y1, int x2, int y2, bool cpLayout )
+// from - to - copyFormat
+void KSpreadSheet::copyCells( int x1, int y1, int x2, int y2, bool cpFormat )
 {
   KSpreadCell * sourceCell = cellAt( x1, y1 );
   KSpreadCell * targetCell = cellAt( x2, y2 );
@@ -3915,9 +3915,9 @@ void KSpreadSheet::copyCells( int x1, int y1, int x2, int y2, bool cpLayout )
   }
   */
 
-  if (cpLayout)
+  if (cpFormat)
   {
-    targetCell->copyLayout( sourceCell );
+    targetCell->copyFormat( sourceCell );
     /*
     targetCell->setAlign( sourceCell->align( x1, y1 ) );
     targetCell->setAlignY( sourceCell->alignY( x1, y1 ) );
@@ -3950,7 +3950,7 @@ void KSpreadSheet::copyCells( int x1, int y1, int x2, int y2, bool cpLayout )
   }
 }
 
-void KSpreadSheet::swapCells( int x1, int y1, int x2, int y2, bool cpLayout )
+void KSpreadSheet::swapCells( int x1, int y1, int x2, int y2, bool cpFormat )
 {
   KSpreadCell * ref1 = cellAt( x1, y1 );
   KSpreadCell * ref2 = cellAt( x2, y2 );
@@ -3975,7 +3975,7 @@ void KSpreadSheet::swapCells( int x1, int y1, int x2, int y2, bool cpLayout )
   // Dummy cell used for swapping cells.
   // In fact we copy only content and no layout
   // information. Imagine sorting in a table. Swapping
-  // the layout while sorting is not what you would expect
+  // the format while sorting is not what you would expect
   // as a user.
   if (!ref1->isFormula() && !ref2->isFormula())
   {
@@ -4019,13 +4019,13 @@ void KSpreadSheet::swapCells( int x1, int y1, int x2, int y2, bool cpLayout )
           ref1->calc(false);
         }
 
-  if (cpLayout)
+  if (cpFormat)
   {
-    KSpreadLayout::Align a = ref1->align( ref1->column(), ref1->row() );
+    KSpreadFormat::Align a = ref1->align( ref1->column(), ref1->row() );
     ref1->setAlign( ref2->align( ref2->column(), ref2->row() ) );
     ref2->setAlign(a);
 
-    KSpreadLayout::AlignY ay = ref1->alignY( ref1->column(), ref1->row() );
+    KSpreadFormat::AlignY ay = ref1->alignY( ref1->column(), ref1->row() );
     ref1->setAlignY( ref2->alignY( ref2->column(), ref2->row() ) );
     ref2->setAlignY(ay);
 
@@ -4081,11 +4081,11 @@ void KSpreadSheet::swapCells( int x1, int y1, int x2, int y2, bool cpLayout )
     ref1->setPostfix( ref2->postfix( ref2->column(), ref2->row() ) );
     ref2->setPostfix(postfix);
 
-    KSpreadLayout::FloatFormat f = ref1->floatFormat( ref1->column(), ref1->row() );
+    KSpreadFormat::FloatFormat f = ref1->floatFormat( ref1->column(), ref1->row() );
     ref1->setFloatFormat( ref2->floatFormat( ref2->column(), ref2->row() ) );
     ref2->setFloatFormat(f);
 
-    KSpreadLayout::FloatColor c = ref1->floatColor( ref1->column(), ref1->row() );
+    KSpreadFormat::FloatColor c = ref1->floatColor( ref1->column(), ref1->row() );
     ref1->setFloatColor( ref2->floatColor( ref2->column(), ref2->row() ) );
     ref2->setFloatColor(c);
 
@@ -4125,7 +4125,7 @@ void KSpreadSheet::swapCells( int x1, int y1, int x2, int y2, bool cpLayout )
     ref1->setAngle( ref2->getAngle( ref2->column(), ref2->row() ) );
     ref2->setAngle(angle);
 
-    KSpreadLayout::FormatType form = ref1->getFormatType( ref1->column(), ref1->row() );
+    KSpreadFormat::FormatType form = ref1->getFormatType( ref1->column(), ref1->row() );
     ref1->setFormatType( ref2->getFormatType( ref2->column(), ref2->row() ) );
     ref2->setFormatType(form);
   }
@@ -4259,7 +4259,7 @@ struct SetSelectionMultiRowWorker : public KSpreadSheet::CellWorker
   class KSpreadUndoAction* createUndoAction( KSpreadDoc * doc, KSpreadSheet * table, QRect & r )
   {
     QString title = i18n("Multirow");
-    return new KSpreadUndoCellLayout( doc, table, r, title );
+    return new KSpreadUndoCellFormat( doc, table, r, title );
   }
 
   bool testCondition( KSpreadCell * cell )
@@ -4286,16 +4286,16 @@ void KSpreadSheet::setSelectionMultiRow( KSpreadSelection* selectionInfo,
 
 
 struct SetSelectionAlignWorker : public KSpreadSheet::CellWorkerTypeA {
-    KSpreadLayout::Align _align;
-    SetSelectionAlignWorker( KSpreadLayout::Align align ) : _align( align ) { }
+    KSpreadFormat::Align _align;
+    SetSelectionAlignWorker( KSpreadFormat::Align align ) : _align( align ) { }
     QString getUndoTitle() { return i18n("Change Horizontal Alignment"); }
-    bool testCondition( RowLayout* rw ) {
+    bool testCondition( RowFormat* rw ) {
 	return ( rw->hasProperty( KSpreadCell::PAlign ) );
     }
-    void doWork( RowLayout* rw ) {
+    void doWork( RowFormat* rw ) {
 	rw->setAlign( _align );
     }
-    void doWork( ColumnLayout* cl ) {
+    void doWork( ColumnFormat* cl ) {
 	cl->setAlign( _align );
     }
     void prepareCell( KSpreadCell* c ) {
@@ -4316,7 +4316,7 @@ struct SetSelectionAlignWorker : public KSpreadSheet::CellWorkerTypeA {
 
 
 void KSpreadSheet::setSelectionAlign( KSpreadSelection* selectionInfo,
-                                      KSpreadLayout::Align _align )
+                                      KSpreadFormat::Align _align )
 {
     SetSelectionAlignWorker w( _align );
     workOnCells( selectionInfo, w );
@@ -4324,16 +4324,16 @@ void KSpreadSheet::setSelectionAlign( KSpreadSelection* selectionInfo,
 
 
 struct SetSelectionAlignYWorker : public KSpreadSheet::CellWorkerTypeA {
-    KSpreadLayout::AlignY _alignY;
-    SetSelectionAlignYWorker( KSpreadLayout::AlignY alignY ) : _alignY( alignY ) { }
+    KSpreadFormat::AlignY _alignY;
+    SetSelectionAlignYWorker( KSpreadFormat::AlignY alignY ) : _alignY( alignY ) { }
     QString getUndoTitle() { return i18n("Change Vertical Alignment"); }
-    bool testCondition( RowLayout* rw ) {
+    bool testCondition( RowFormat* rw ) {
 	return ( rw->hasProperty( KSpreadCell::PAlignY ) );
     }
-    void doWork( RowLayout* rw ) {
+    void doWork( RowFormat* rw ) {
 	rw->setAlignY( _alignY );
     }
-    void doWork( ColumnLayout* cl ) {
+    void doWork( ColumnFormat* cl ) {
 	cl->setAlignY( _alignY );
     }
     void prepareCell( KSpreadCell* c ) {
@@ -4354,7 +4354,7 @@ struct SetSelectionAlignYWorker : public KSpreadSheet::CellWorkerTypeA {
 
 
 void KSpreadSheet::setSelectionAlignY( KSpreadSelection* selectionInfo,
-                                       KSpreadLayout::AlignY _alignY )
+                                       KSpreadFormat::AlignY _alignY )
 {
     SetSelectionAlignYWorker w( _alignY );
     workOnCells( selectionInfo, w );
@@ -4367,7 +4367,7 @@ struct SetSelectionPrecisionWorker : public KSpreadSheet::CellWorker {
 
     class KSpreadUndoAction* createUndoAction( KSpreadDoc* doc, KSpreadSheet* table, QRect& r ) {
         QString title=i18n("Change Precision");
-	return new KSpreadUndoCellLayout( doc, table, r, title );
+	return new KSpreadUndoCellFormat( doc, table, r, title );
     }
     bool testCondition( KSpreadCell* cell ) {
 	return ( !cell->isObscuringForced() );
@@ -4395,17 +4395,17 @@ struct SetSelectionMoneyFormatWorker : public KSpreadSheet::CellWorkerTypeA {
     KSpreadDoc *m_pDoc;
     SetSelectionMoneyFormatWorker( bool _b,KSpreadDoc* _doc ) : b( _b ), m_pDoc(_doc) { }
     QString getUndoTitle() { return i18n("Format Money"); }
-    bool testCondition( RowLayout* rw ) {
+    bool testCondition( RowFormat* rw ) {
 	return ( rw->hasProperty( KSpreadCell::PFormatType )
 		 || rw->hasProperty( KSpreadCell::PPrecision )
 		 || rw->hasProperty( KSpreadCell::PFactor ) );
     }
-    void doWork( RowLayout* rw ) {
+    void doWork( RowFormat* rw ) {
 	rw->setFormatType( b ? KSpreadCell::Money : KSpreadCell::Number );
 	rw->setFactor( 1.0 );
 	rw->setPrecision( b ? m_pDoc->locale()->fracDigits() : 0 );
     }
-    void doWork( ColumnLayout* cl ) {
+    void doWork( ColumnFormat* cl ) {
 	cl->setFormatType( b ? KSpreadCell::Money : KSpreadCell::Number );
 	cl->setFactor( 1.0 );
 	cl->setPrecision( b ? m_pDoc->locale()->fracDigits() : 0 );
@@ -4445,14 +4445,14 @@ struct IncreaseIndentWorker : public KSpreadSheet::CellWorkerTypeA {
     double tmpIndent, valIndent;
     IncreaseIndentWorker( double _tmpIndent, double _valIndent ) : tmpIndent( _tmpIndent ), valIndent( _valIndent ) { }
     QString getUndoTitle() { return i18n("Increase Indent"); }
-    bool testCondition( RowLayout* rw ) {
+    bool testCondition( RowFormat* rw ) {
 	return ( rw->hasProperty( KSpreadCell::PIndent ) );
     }
-    void doWork( RowLayout* rw ) {
+    void doWork( RowFormat* rw ) {
 	rw->setIndent( tmpIndent+valIndent );
 	rw->setAlign( KSpreadCell::Left );
     }
-    void doWork( ColumnLayout* cl ) {
+    void doWork( ColumnFormat* cl ) {
 	cl->setIndent( tmpIndent+valIndent );
 	cl->setAlign( KSpreadCell::Left );
     }
@@ -4499,13 +4499,13 @@ struct DecreaseIndentWorker : public KSpreadSheet::CellWorkerTypeA {
     double tmpIndent, valIndent;
     DecreaseIndentWorker( double _tmpIndent, double _valIndent ) : tmpIndent( _tmpIndent ), valIndent( _valIndent ) { }
     QString getUndoTitle() { return i18n("Decrease Indent"); }
-    bool testCondition( RowLayout* rw ) {
+    bool testCondition( RowFormat* rw ) {
 	return ( rw->hasProperty( KSpreadCell::PIndent ) );
     }
-    void doWork( RowLayout* rw ) {
+    void doWork( RowFormat* rw ) {
         rw->setIndent( QMAX( 0.0, tmpIndent - valIndent ) );
     }
-    void doWork( ColumnLayout* cl ) {
+    void doWork( ColumnFormat* cl ) {
         cl->setIndent( QMAX( 0.0, tmpIndent - valIndent ) );
     }
     void prepareCell( KSpreadCell* c ) {
@@ -4781,7 +4781,7 @@ struct DefaultSelectionWorker : public KSpreadSheet::CellWorker {
 
     class KSpreadUndoAction* createUndoAction( KSpreadDoc* doc, KSpreadSheet* table, QRect& r ) {
         QString title=i18n("Default Parameters");
-	return new KSpreadUndoCellLayout( doc, table, r, title );
+	return new KSpreadUndoCellFormat( doc, table, r, title );
     }
     bool testCondition( KSpreadCell* ) {
 	return true;
@@ -4798,18 +4798,18 @@ void KSpreadSheet::defaultSelection( KSpreadSelection* selectionInfo )
   SelectionType st = workOnCells( selectionInfo, w );
   switch ( st ) {
   case CompleteRows:
-    RowLayout *rw;
+    RowFormat *rw;
     for ( int i = selection.top(); i <= selection.bottom(); i++ ) {
-      rw = nonDefaultRowLayout( i );
-      rw->defaultStyleLayout();
+      rw = nonDefaultRowFormat( i );
+      rw->defaultStyleFormat();
     }
     emit sig_updateView( this, selection );
     return;
   case CompleteColumns:
-    ColumnLayout *cl;
+    ColumnFormat *cl;
     for ( int i = selection.left(); i <= selection.right(); i++ ) {
-      cl=nonDefaultColumnLayout( i );
-      cl->defaultStyleLayout();
+      cl=nonDefaultColumnFormat( i );
+      cl->defaultStyleFormat();
     }
     emit sig_updateView( this, selection );
     return;
@@ -5025,15 +5025,15 @@ QString KSpreadSheet::copyAsText( KSpreadSelection* selectionInfo )
         if( !cell->isDefault() )
         {
             int l = max - cell->strOutText().length();
-            if (cell->align(x, y) == KSpreadLayout::Right
-                || cell->defineAlignX() == KSpreadLayout::Right )
+            if (cell->align(x, y) == KSpreadFormat::Right
+                || cell->defineAlignX() == KSpreadFormat::Right )
             {
               for ( int i = 0; i < l; ++i )
                 result += " ";
               result += cell->strOutText();
             }
-            else if (cell->align(x, y) == KSpreadLayout::Left
-                     || cell->defineAlignX() == KSpreadLayout::Left )
+            else if (cell->align(x, y) == KSpreadFormat::Left
+                     || cell->defineAlignX() == KSpreadFormat::Left )
             {
               result += " ";
               result += cell->strOutText();
@@ -5261,15 +5261,15 @@ bool KSpreadSheet::loadSelection( const QDomDocument& doc, const QRect &pasteAre
             }
         }
 
-        // Insert column layouts
+        // Insert column formats
         QDomElement c = e.firstChild().toElement();
         for( ; !c.isNull(); c = c.nextSibling().toElement() )
         {
             if ( c.tagName() == "column" )
             {
-                ColumnLayout *cl = new ColumnLayout( this, 0 );
+                ColumnFormat *cl = new ColumnFormat( this, 0 );
                 if ( cl->load( c, _xshift,sp ) )
-                    insertColumnLayout( cl );
+                    insertColumnFormat( cl );
                 else
                     delete cl;
             }
@@ -5288,15 +5288,15 @@ bool KSpreadSheet::loadSelection( const QDomDocument& doc, const QRect &pasteAre
             m_rows.removeElement( _yshift + i );
         }
 
-        // Insert row layouts
+        // Insert row formats
         QDomElement c = e.firstChild().toElement();
         for( ; !c.isNull(); c = c.nextSibling().toElement() )
         {
             if ( c.tagName() == "row" )
             {
-                RowLayout *cl = new RowLayout( this, 0 );
+                RowFormat *cl = new RowFormat( this, 0 );
                 if ( cl->load( c, _yshift,sp ) )
-                    insertRowLayout( cl );
+                    insertRowFormat( cl );
                 else
                     delete cl;
             }
@@ -5771,14 +5771,14 @@ void KSpreadSheet::print( QPainter &painter, KPrinter *_printer )
     {
         //When we need repeated columns, reservate space for them
         for ( int i = m_printRepeatColumns.first; i <= m_printRepeatColumns.second; i++)
-            offsetX += columnLayout( i )->dblWidth();
+            offsetX += columnFormat( i )->dblWidth();
     }
     //Calculate offsetY for repeated rows
     if ( m_printRepeatRows.first != 0 )
     {
         //When we need repeated rows, reservate space for them
         for ( int i = m_printRepeatRows.first; i <= m_printRepeatRows.second; i++)
-            offsetY += rowLayout( i )->dblHeight();
+            offsetY += rowFormat( i )->dblHeight();
     }
 
     //
@@ -5812,7 +5812,7 @@ void KSpreadSheet::print( QPainter &painter, KPrinter *_printer )
             page_range.setTop( top );
 
             int col = left;
-            double x = columnLayout( col )->dblWidth();
+            double x = columnFormat( col )->dblWidth();
 
             //Check if we have to repeat some columns
             if ( ( m_printRepeatColumns.first != 0 ) && ( col > m_printRepeatColumns.first ) )
@@ -5826,7 +5826,7 @@ void KSpreadSheet::print( QPainter &painter, KPrinter *_printer )
             while ( ( x < rect.width() ) && ( col <= m_printRange.right() ) )
             {
                 col++;
-                x += columnLayout( col )->dblWidth();
+                x += columnFormat( col )->dblWidth();
             }
 
             // We want to print at least one column
@@ -5835,7 +5835,7 @@ void KSpreadSheet::print( QPainter &painter, KPrinter *_printer )
             page_range.setRight( col - 1 );
 
             int row = top;
-            double y = rowLayout( row )->dblHeight();
+            double y = rowFormat( row )->dblHeight();
 
             //Check if we have to repeat some rows
             if ( ( m_printRepeatRows.first != 0 ) && ( row > m_printRepeatRows.first ) )
@@ -5849,7 +5849,7 @@ void KSpreadSheet::print( QPainter &painter, KPrinter *_printer )
             while ( ( y < rect.height() ) && ( row <= m_printRange.bottom() ) )
             {
                 row++;
-                y += rowLayout( row )->dblHeight();
+                y += rowFormat( row )->dblHeight();
             }
 
             // We want to print at least one row
@@ -5876,15 +5876,15 @@ void KSpreadSheet::print( QPainter &painter, KPrinter *_printer )
             KoRect view = KoRect( KoPoint( dblColumnPos( page_range.left() ),
                                            dblRowPos( page_range.top() ) ),
                                   KoPoint( dblColumnPos( col-1 ) +
-                                           columnLayout( col-1 )->dblWidth(),
+                                           columnFormat( col-1 )->dblWidth(),
                                            dblRowPos( row-1 ) +
-                                           rowLayout( row-1 )->dblHeight() ) );
+                                           rowFormat( row-1 )->dblHeight() ) );
             QRect intView = QRect( QPoint( doc()->zoomItX( dblColumnPos( page_range.left() ) ),
                                            doc()->zoomItY( dblRowPos( page_range.top() ) ) ),
                                    QPoint( doc()->zoomItX( dblColumnPos( col-1 ) +
-                                                           columnLayout( col-1 )->dblWidth() ),
+                                                           columnFormat( col-1 )->dblWidth() ),
                                            doc()->zoomItY( dblRowPos( row-1 ) +
-                                                           rowLayout( row-1 )->dblHeight() ) ) );
+                                                           rowFormat( row-1 )->dblHeight() ) ) );
             QPtrListIterator<KoDocumentChild> it( m_pDoc->children() );
             for( ; empty && it.current(); ++it )
             {
@@ -6021,8 +6021,8 @@ void KSpreadSheet::printPage( QPainter &_painter, const QRect& page_range, const
     double ypos;
     double ypos_Start;
     KSpreadCell *cell;
-    RowLayout *row_lay;
-    ColumnLayout *col_lay;
+    RowFormat *row_lay;
+    ColumnFormat *col_lay;
 
     //Check if we have to repeat some rows and columns
     xpos = 0.0;
@@ -6034,12 +6034,12 @@ void KSpreadSheet::printPage( QPainter &_painter, const QRect& page_range, const
     {
         for ( int y = m_printRepeatRows.first; y <= m_printRepeatRows.second; y++ )
         {
-            row_lay = rowLayout( y );
+            row_lay = rowFormat( y );
             xpos = 0.0;
 
             for ( int x = m_printRepeatColumns.first; x <= m_printRepeatColumns.second; x++ )
             {
-                col_lay = columnLayout( x );
+                col_lay = columnFormat( x );
 
                 cell = cellAt( x, y );
                 KoRect r( 0.0, 0.0, view.width(), view.height() );
@@ -6069,12 +6069,12 @@ void KSpreadSheet::printPage( QPainter &_painter, const QRect& page_range, const
     {
         for ( int y = m_printRepeatRows.first; y <= m_printRepeatRows.second; y++ )
         {
-            row_lay = rowLayout( y );
+            row_lay = rowFormat( y );
             xpos = xpos_Start;
 
             for ( int x = page_range.left(); x <= page_range.right(); x++ )
             {
-                col_lay = columnLayout( x );
+                col_lay = columnFormat( x );
 
                 cell = cellAt( x, y );
                 KoRect r( 0.0, 0.0, view.width() + xpos, view.height() );
@@ -6103,12 +6103,12 @@ void KSpreadSheet::printPage( QPainter &_painter, const QRect& page_range, const
     {
         for ( int y = page_range.top(); y <= page_range.bottom(); y++ )
         {
-            row_lay = rowLayout( y );
+            row_lay = rowFormat( y );
             xpos = 0.0;
 
             for ( int x = m_printRepeatColumns.first; x <= m_printRepeatColumns.second; x++ )
             {
-                col_lay = columnLayout( x );
+                col_lay = columnFormat( x );
 
                 cell = cellAt( x, y );
                 KoRect r( 0.0, 0.0, view.width() + xpos, view.height() + ypos );
@@ -6135,12 +6135,12 @@ void KSpreadSheet::printPage( QPainter &_painter, const QRect& page_range, const
     ypos = ypos_Start;
     for ( int y = page_range.top(); y <= page_range.bottom(); y++ )
     {
-        row_lay = rowLayout( y );
+        row_lay = rowFormat( y );
         xpos = xpos_Start;
 
         for ( int x = page_range.left(); x <= page_range.right(); x++ )
         {
-            col_lay = columnLayout( x );
+            col_lay = columnFormat( x );
 
             cell = cellAt( x, y );
             KoRect r( 0.0, 0.0, view.width() + xpos, view.height() + ypos );
@@ -6220,11 +6220,11 @@ QDomDocument KSpreadSheet::saveCellRect( const QRect &_rect )
         }
 
         // ##### Inefficient
-        // Save the row layouts if there are any
-        RowLayout* lay;
+        // Save the row formats if there are any
+        RowFormat* lay;
         for( int y = _rect.top(); y <= _rect.bottom(); ++y )
         {
-            lay = rowLayout( y );
+            lay = rowFormat( y );
             if ( lay && !lay->isDefault() )
             {
                 QDomElement e = lay->save( doc, _rect.top() - 1 );
@@ -6258,11 +6258,11 @@ QDomDocument KSpreadSheet::saveCellRect( const QRect &_rect )
         }
 
         // ##### Inefficient
-        // Save the column layouts if there are any
-        ColumnLayout* lay;
+        // Save the column formats if there are any
+        ColumnFormat* lay;
         for( int x = _rect.left(); x <= _rect.right(); ++x )
         {
-            lay = columnLayout( x );
+            lay = columnFormat( x );
             if ( lay && !lay->isDefault() )
             {
                 QDomElement e = lay->save( doc, _rect.left() - 1 );
@@ -6277,7 +6277,7 @@ QDomDocument KSpreadSheet::saveCellRect( const QRect &_rect )
     // Save all cells.
     //store all cell
     //when they don't exist we created them
-    //because it's necessary when there is a  layout on a column/row
+    //because it's necessary when there is a  format on a column/row
     //but I remove cell which is inserted.
     KSpreadCell *cell;
     bool insert;
@@ -6423,8 +6423,8 @@ QDomElement KSpreadSheet::saveXML( QDomDocument& doc )
         }
     }
 
-    // Save all RowLayout objects.
-    RowLayout* rl = m_rows.first();
+    // Save all RowFormat objects.
+    RowFormat* rl = m_rows.first();
     for( ; rl; rl = rl->next() )
     {
         if ( !rl->isDefault() )
@@ -6436,8 +6436,8 @@ QDomElement KSpreadSheet::saveXML( QDomDocument& doc )
         }
     }
 
-    // Save all ColumnLayout objects.
-    ColumnLayout* cl = m_columns.first();
+    // Save all ColumnFormat objects.
+    ColumnFormat* cl = m_columns.first();
     for( ; cl; cl = cl->next() )
     {
         if ( !cl->isDefault() )
@@ -6677,17 +6677,17 @@ bool KSpreadSheet::loadXML( const QDomElement& table )
         }
         else if ( !e.isNull() && e.tagName() == "row" )
         {
-            RowLayout *rl = new RowLayout( this, 0 );
+            RowFormat *rl = new RowFormat( this, 0 );
             if ( rl->load( e ) )
-                insertRowLayout( rl );
+                insertRowFormat( rl );
             else
                 delete rl;
         }
         else if ( !e.isNull() && e.tagName() == "column" )
         {
-            ColumnLayout *cl = new ColumnLayout( this, 0 );
+            ColumnFormat *cl = new ColumnFormat( this, 0 );
             if ( cl->load( e ) )
-                insertColumnLayout( cl );
+                insertColumnFormat( cl );
             else
                 delete cl;
         }
@@ -6784,7 +6784,7 @@ bool KSpreadSheet::isOnNewPageX( int _column )
     if ( _column > m_lnewPageListX.last() ) //this columns hasn't been calculated before
     {
         int col = m_lnewPageListX.last();
-        float x = columnLayout( col )->mmWidth();
+        float x = columnFormat( col )->mmWidth();
         //Add repeated column width, when necessary
         if ( col > m_printRepeatColumns.first )
             x += m_dPrintRepeatColumnsWidth;
@@ -6799,14 +6799,14 @@ bool KSpreadSheet::isOnNewPageX( int _column )
                     return TRUE;
                 else
                 {
-                    x = columnLayout( col )->mmWidth();
+                    x = columnFormat( col )->mmWidth();
                     if ( col >= m_printRepeatColumns.first )
                         x += m_dPrintRepeatColumnsWidth;
                 }
             }
 
             col++;
-            x += columnLayout( col )->mmWidth();
+            x += columnFormat( col )->mmWidth();
         }
     }
     return FALSE;
@@ -6834,7 +6834,7 @@ bool KSpreadSheet::isOnNewPageY( int _row )
     if ( _row > m_lnewPageListY.last() ) //this columns hasn't been calculated before
     {
         int row = m_lnewPageListY.last();
-        float y = rowLayout( row )->mmHeight();
+        float y = rowFormat( row )->mmHeight();
         //Add repeated row height, when necessary
         if ( row > m_printRepeatRows.first )
             y += m_dPrintRepeatRowsHeight;
@@ -6849,13 +6849,13 @@ bool KSpreadSheet::isOnNewPageY( int _row )
                     return TRUE;
                 else
                 {
-                    y = rowLayout( row )->mmHeight();
+                    y = rowFormat( row )->mmHeight();
                     if ( row >= m_printRepeatRows.first )
                         y += m_dPrintRepeatRowsHeight;
                 }
             }
             row++;
-            y += rowLayout( row )->mmHeight();
+            y += rowFormat( row )->mmHeight();
         }
     }
 
@@ -6960,12 +6960,12 @@ void KSpreadSheet::insertCell( KSpreadCell *_cell )
   }
 }
 
-void KSpreadSheet::insertColumnLayout( ColumnLayout *l )
+void KSpreadSheet::insertColumnFormat( ColumnFormat *l )
 {
   m_columns.insertElement( l, l->column() );
 }
 
-void KSpreadSheet::insertRowLayout( RowLayout *l )
+void KSpreadSheet::insertRowFormat( RowFormat *l )
 {
   m_rows.insertElement( l, l->row() );
 }
@@ -6994,7 +6994,7 @@ void KSpreadSheet::updateCell( KSpreadCell */*cell*/, int _column, int _row )
   updateCellArea(cellArea);
 }
 
-void KSpreadSheet::emit_updateRow( RowLayout *_layout, int _row )
+void KSpreadSheet::emit_updateRow( RowFormat *_format, int _row )
 {
     if ( doc()->isLoading() )
         return;
@@ -7007,10 +7007,10 @@ void KSpreadSheet::emit_updateRow( RowLayout *_layout, int _row )
     emit sig_updateVBorder( this );
     emit sig_updateView( this );
     emit sig_maxRow(maxRow());
-    _layout->clearDisplayDirtyFlag();
+    _format->clearDisplayDirtyFlag();
 }
 
-void KSpreadSheet::emit_updateColumn( ColumnLayout *_layout, int _column )
+void KSpreadSheet::emit_updateColumn( ColumnFormat *_format, int _column )
 {
     if ( doc()->isLoading() )
         return;
@@ -7023,7 +7023,7 @@ void KSpreadSheet::emit_updateColumn( ColumnLayout *_layout, int _column )
     emit sig_updateHBorder( this );
     emit sig_updateView( this );
     emit sig_maxColumn( maxColumn() );
-    _layout->clearDisplayDirtyFlag();
+    _format->clearDisplayDirtyFlag();
 }
 
 void KSpreadSheet::insertChart( const QRect& _rect, KoDocumentEntry& _e, const QRect& _data )
@@ -7144,10 +7144,10 @@ KSpreadSheet::~KSpreadSheet()
     delete m_pPainter;
     delete m_pWidget;
 
-    delete m_defaultLayout;
+    delete m_defaultFormat;
     delete m_pDefaultCell;
-    delete m_pDefaultRowLayout;
-    delete m_pDefaultColumnLayout;
+    delete m_pDefaultRowFormat;
+    delete m_pDefaultColumnFormat;
     delete m_dcop;
 }
 
@@ -7695,7 +7695,7 @@ void KSpreadSheet::updatePrintRepeatColumnsWidth()
     {
         for ( int i = m_printRepeatColumns.first; i <= m_printRepeatColumns.second; i++)
         {
-            m_dPrintRepeatColumnsWidth += columnLayout( i )->mmWidth();
+            m_dPrintRepeatColumnsWidth += columnFormat( i )->mmWidth();
         }
     }
 }
@@ -7708,7 +7708,7 @@ void KSpreadSheet::updatePrintRepeatRowsHeight()
     {
         for ( int i = m_printRepeatRows.first; i <= m_printRepeatRows.second; i++)
         {
-            m_dPrintRepeatRowsHeight += rowLayout( i )->mmHeight();
+            m_dPrintRepeatRowsHeight += rowFormat( i )->mmHeight();
         }
     }
 }

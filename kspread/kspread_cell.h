@@ -37,7 +37,7 @@ class KSParseNode;
 #include <qstrlist.h>
 #include <qdatetime.h>
 
-#include "kspread_layout.h"
+#include "kspread_format.h"
 #include "kspread_global.h"
 #include "kspread_depend.h"
 #include "kspread_condition.h"
@@ -101,14 +101,14 @@ public slots:
 /**
  * For every cell in the spread sheet there is a KSpreadCell object.
  *
- * KSpreadCell contains layout information and algorithm and it
+ * KSpreadCell contains format information and algorithm and it
  * contains the calculation algorithm.
  *
  * However, all empty cells are represented by one instace, called the
  * default cell. @ref #isDefault tells wether a cell is the default one
  * or not.
  */
-class KSpreadCell : public KSpreadLayout
+class KSpreadCell : public KSpreadFormat
 {
   friend class SelectPrivate;
   friend class KSpreadConditions;
@@ -161,7 +161,7 @@ public:
      * Save this cell.
      * @param _x_offset ...
      * @param _y_offset ...
-     * @param force if set to true, all the properties of the layout are stored (used for "Copy")
+     * @param force if set to true, all the properties of the format are stored (used for "Copy")
      * Usually this is false, to only store the properties explicitely set.
      */
     QDomElement save( QDomDocument& doc, int _x_offset = 0, int _y_offset = 0, bool force = false );
@@ -173,24 +173,24 @@ public:
     QDate toDate(const QDomElement &element);
 
     /**
-     * Copyies the layout from the cell at the position (_column|_row).
+     * Copyies the format from the cell at the position (_column|_row).
      *
      * @see #copyAll
      */
-    void copyLayout( int _column, int _row );
+    void copyFormat( int _column, int _row );
     /**
      * A convenience function.
      *
      * @see #copyAll
      */
-    void copyLayout( KSpreadCell *_cell );
+    void copyFormat( KSpreadCell *_cell );
     void copyContent( KSpreadCell *_cell );
     /**
-     * Copies the layout and the content. It does not copy the @ref #m_row and @ref #m_column attributes.
+     * Copies the format and the content. It does not copy the @ref #m_row and @ref #m_column attributes.
      * Besides that all persistent attributes are copied. @ref #setCellText is called to set the real
      * content.
      *
-     * @see #copyLayout
+     * @see #copyFormat
      */
     void copyAll( KSpreadCell *cell);
 
@@ -340,7 +340,7 @@ public:
 
     ////////////////////////////////
     //
-    // Methods for querying layout stuff.
+    // Methods for querying format stuff.
     //
     ////////////////////////////////
 
@@ -376,7 +376,7 @@ public:
 
     ////////////////////////////////
     //
-    // Methods for setting layout stuff.
+    // Methods for setting format stuff.
     //
     ////////////////////////////////
 
@@ -421,7 +421,7 @@ public:
 
     /**
      * Return the format of this cell.
-     * Convenience method for KSpreadLayout::getFormatType
+     * Convenience method for KSpreadFormat::getFormatType
      * Note that this is "how the user would like the data to be displayed if possible".
      * If he selects a date format, and the cell contains a string, we won't apply that format.
      */
@@ -503,9 +503,9 @@ public:
     void NotifyDepending( int col, int row, KSpreadSheet* table, bool isDepending );
 
     /**
-     * Causes the layout to be recalculated when the cell is drawn next time.
+     * Causes the format to be recalculated when the cell is drawn next time.
      * This flag is for example set if the width of the column changes or if
-     * some cell specific layout value like font or text change.
+     * some cell specific format value like font or text change.
      */
     virtual void setLayoutDirtyFlag();
     bool layoutDirtyFlag() const;
@@ -699,7 +699,7 @@ public:
 
     /* descriptions of the flags are just below */
     enum CellFlags{
-    /* this uses the same flags variable as KSpreadLayout.  The least significant
+    /* this uses the same flags variable as KSpreadFormat.  The least significant
        16 bits are reserved for the base class, and the most significant 16
        have been left for this subclass to use. */
       Flag_LayoutDirty           = 0x00010000,
@@ -774,15 +774,15 @@ protected:
     /**
      * @reimp
      */
-    void layoutChanged();
+    void formatChanged();
     /**
      * @reimp
      */
-    KSpreadLayout* fallbackLayout( int col, int row );
+    KSpreadFormat* fallbackFormat( int col, int row );
     /**
      * @reimp
      */
-    const KSpreadLayout* fallbackLayout( int col, int row ) const;
+    const KSpreadFormat* fallbackFormat( int col, int row ) const;
 
     /**
      * Format a numeric value (isNumeric()==true) using the user-specified format
@@ -802,7 +802,7 @@ protected:
     void offsetAlign( int _col, int _row );
 
     /**
-     * Called from @ref #makeLayout to determine the space
+     * Called from @ref #makeFormat to determine the space
      * needed for the text.
      */
     void textSize( QPainter &_paint );
