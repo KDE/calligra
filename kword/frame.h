@@ -49,7 +49,8 @@ class KWordFrame;
 class KWGroupManager;
 
 enum FrameType {FT_BASE = 0,FT_TEXT = 1,FT_PICTURE = 2,FT_PART};
-enum FrameInfo {FI_BODY = 0,FI_FIRST_HEADER = 1,FI_ODD_HEADER = 2,FI_EVEN_HEADER = 3,FI_FIRST_FOOTER = 4,FI_ODD_FOOTER = 5,FI_EVEN_FOOTER = 6};
+enum FrameInfo {FI_BODY = 0,FI_FIRST_HEADER = 1,FI_ODD_HEADER = 2,FI_EVEN_HEADER = 3,FI_FIRST_FOOTER = 4,FI_ODD_FOOTER = 5,FI_EVEN_FOOTER = 6,\
+		FI_FOOTNOTE = 7};
 enum RunAround {RA_NO = 0,RA_BOUNDINGRECT = 1,RA_CONTUR = 2};
 
 /******************************************************************/
@@ -440,7 +441,7 @@ public:
 
   bool joinCells(QPainter &_painter);
   bool splitCell(QPainter &_painter);
-  
+
 protected:
   QList<Cell> cells;
   unsigned int rows,cols;

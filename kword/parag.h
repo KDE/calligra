@@ -178,8 +178,6 @@ public:
   Info getInfo() { return info; }
   void setInfo(Info _info) { info = _info; }
 
-  bool doAutoFormat(KWFormatContext *fc);
-
 protected:
   /**
    * Pointer to the previous paragraph or 0L if this is the first one.

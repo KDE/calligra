@@ -40,6 +40,7 @@ class QPrinter;
 #include "kword_undo.h"
 #include "variable.h"
 #include "footnote.h"
+#include "autoformat.h"
 
 #include <qlist.h>
 #include <qobject.h>
@@ -396,6 +397,8 @@ public:
   void setNoteType(KWFootNoteManager::NoteType nt) { footNoteManager.setNoteType(nt); }
   KWFootNoteManager::NoteType getNoteType() { return footNoteManager.getNoteType(); }
 
+  KWAutoFormat &getAutoFormat() { return autoFormat; }
+  
 signals:
   void sig_imageModified();
   void sig_insertObject(KWordChild *_child,KWPartFrameSet*);
@@ -498,7 +501,8 @@ protected:
   KWCommandHistory history;
   QIntDict<KWVariableFormat> varFormats;
   KWFootNoteManager footNoteManager;
-
+  KWAutoFormat autoFormat;
+  
 };
 
 #endif

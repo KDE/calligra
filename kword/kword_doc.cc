@@ -72,7 +72,7 @@ KWordChild::~KWordChild()
 /*================================================================*/
 KWordDocument::KWordDocument()
   : formatCollection(this), imageCollection(this), selStart(this,1), selEnd(this,1),
-    ret_pix(ICON("return.xpm")), unit("mm"), numParags(0), footNoteManager(this)
+    ret_pix(ICON("return.xpm")), unit("mm"), numParags(0), footNoteManager(this), autoFormat(this)
 {
   ADD_INTERFACE("IDL:KOffice/Print:1.0");
 
@@ -1306,7 +1306,7 @@ bool KWordDocument::save(ostream &out,const char* /* _format */)
   out << otag << "<FOOTNOTEMGR>" << endl;
   footNoteManager.save(out);
   out << etag << "</FOOTNOTEMGR>" << endl;
-    
+
   out << otag << "<FRAMESETS>" << endl;
 
   KWFrameSet *frameSet = 0L;

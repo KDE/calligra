@@ -587,8 +587,3 @@ void KWParag::replace(int _pos,int _len,QString _text,KWFormat &_format)
   insertText(_pos,_text);
   setFormat(_pos,_text.length(),_format);
 }
-
-/*================================================================*/
-bool KWParag::doAutoFormat(KWFormatContext *fc)
-{
-}

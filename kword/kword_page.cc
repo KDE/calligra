@@ -1891,7 +1891,7 @@ void KWPage::keyPressEvent(QKeyEvent *e)
 
 	recalcCursor(false,0);
 
-	fc->getParag()->doAutoFormat(fc);
+	doc->getAutoFormat().doAutoFormat(fc->getParag(),fc);
 
 	buffer.fill(white);
 	redrawAllWhileScrolling = true;
@@ -1983,7 +1983,7 @@ void KWPage::keyPressEvent(QKeyEvent *e)
 	QPaintDevice *dev = painter.device();
 	painter.end();
 
-	fc->getParag()->doAutoFormat(fc);
+	doc->getAutoFormat().doAutoFormat(fc->getParag(),fc);
 
 	painter.begin(dev);
 
@@ -2142,7 +2142,7 @@ void KWPage::keyPressEvent(QKeyEvent *e)
 	QPaintDevice *dev = painter.device();
 	painter.end();
 
-	fc->getParag()->doAutoFormat(fc);
+	doc->getAutoFormat().doAutoFormat(fc->getParag(),fc);
 
 	painter.begin(dev);
 
@@ -2334,7 +2334,7 @@ void KWPage::keyPressEvent(QKeyEvent *e)
 	    QPaintDevice *dev = painter.device();
 	    painter.end();
 
-	    fc->getParag()->doAutoFormat(fc);
+	    doc->getAutoFormat().doAutoFormat(fc->getParag(),fc);
 
 	    painter.begin(dev);
 
