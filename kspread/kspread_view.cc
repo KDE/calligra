@@ -332,6 +332,7 @@ KSpreadView::KSpreadView( QWidget *_parent, const char *_name, KSpreadDoc* doc )
     m_pHorzScrollBar->setOrientation( QScrollBar::Horizontal );
 
     m_pTabBar = new KSpread::TabBar( this );
+    m_pTabBar->setReadOnly( !m_pDoc->isReadWrite() );
     QObject::connect( m_pTabBar, SIGNAL( tabChanged( const QString& ) ), this, SLOT( changeTable( const QString& ) ) );
     QObject::connect( m_pTabBar, SIGNAL( contextMenu( const QPoint& ) ),
       this, SLOT( popupTabBarMenu( const QPoint& ) ) );

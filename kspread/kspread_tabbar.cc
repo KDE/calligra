@@ -58,6 +58,9 @@ public:
     QToolButton* scrollLeftButton;
     QToolButton* scrollRightButton;
 
+    // read-only: no mouse drag, double-click, right-click
+    bool readOnly;
+
     // list of visible tabs, in order of appearance
     QStringList visibleTabs;
 
@@ -302,6 +305,7 @@ TabBar::TabBar( KSpreadView *view, const char* name )
     d = new TabBarPrivate;
     d->view = view;
     d->tabbar = this;
+    d->readOnly = false;
     d->leftTab = 1;
     d->rightTab = 0;
     d->activeTab = 0;
@@ -383,6 +387,16 @@ QStringList TabBar::visibleTabs()
 QStringList TabBar::hiddenTabs()
 {
     return d->hiddenTabs;
+}
+
+bool TabBar::readOnly() const
+{
+    return d->readOnly;
+}
+
+void TabBar::setReadOnly( bool ro )
+{
+    d->readOnly = ro;
 }
 
 bool TabBar::canScrollLeft() const
@@ -600,14 +614,14 @@ void TabBar::mousePressEvent( QMouseEvent* ev )
         emit tabChanged( d->visibleTabs[ d->activeTab-1] );
     }
 
-    if ( ev->button() == RightButton )
+    if( ev->button() == RightButton )
+    if( !d->readOnly )
         emit contextMenu( ev->globalPos() );
 }
 
 void TabBar::mouseReleaseEvent( QMouseEvent* ev )
 {
-    if ( !d->view->koDocument()->isReadWrite())
-        return;
+    if ( d->readOnly ) return;
 
     d->autoScroll = false;
 
@@ -624,8 +638,7 @@ void TabBar::mouseReleaseEvent( QMouseEvent* ev )
 
 void TabBar::mouseMoveEvent( QMouseEvent* ev )
 {
-    if ( !d->view->koDocument()->isReadWrite() )
-         return;
+    if ( d->readOnly ) return;
 
     QPoint pos = ev->pos() - QPoint( d->offset,0 );
 
@@ -676,6 +689,7 @@ void TabBar::mouseMoveEvent( QMouseEvent* ev )
 void TabBar::mouseDoubleClickEvent( QMouseEvent* ev )
 {
     if( ev->pos().x() > d->offset )
+    if( !d->readOnly )
         emit doubleClicked();
 }
 

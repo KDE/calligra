@@ -138,6 +138,18 @@ public:
      */
     QStringList hiddenTabs();
 
+    /**
+     * Sets the tab bar to be read only. This means, no dragging
+     * for reordering the tabs is possible.
+     * Signal contextMenu and doubleClicked would not be emitted.
+     */
+    void setReadOnly( bool ro );
+
+    /**
+     * Returns true if the tab bar is read only.
+     */
+    bool readOnly() const;
+
 public slots:
     void scrollLeft();
     void scrollRight();
