@@ -288,7 +288,9 @@ unsigned int KPresenterDocument_impl::insertNewPage(int diffx,int diffy)
   pagePtr->pic->move(getPageSize(pagePtr->pageNum,diffx,diffy).x(),
  		     getPageSize(pagePtr->pageNum,diffx,diffy).y());
   pagePtr->pic->hide();
-  pagePtr->backColor.operator=(white);
+  pagePtr->backColor1.operator=(white);
+  pagePtr->backColor2.operator=(white);
+  pagePtr->bcType = BCT_PLAIN;
   _pageList.append(pagePtr);
   spPCPtr = new SpPageConfiguration;
   spPCPtr->time = 0;
@@ -298,13 +300,15 @@ unsigned int KPresenterDocument_impl::insertNewPage(int diffx,int diffy)
 }
 
 /*==================== set background color ======================*/
-void KPresenterDocument_impl::setBackColor(unsigned int pageNum,QColor backColor)
+void KPresenterDocument_impl::setBackColor(unsigned int pageNum,QColor backColor1,QColor backColor2,BCType bcType)
 {
   for (pagePtr=_pageList.first();pagePtr != 0;pagePtr=_pageList.next())
     {
       if (pagePtr->pageNum == pageNum)
 	{
-	  pagePtr->backColor.operator=(backColor);
+	  pagePtr->backColor1.operator=(backColor1);
+	  pagePtr->backColor2.operator=(backColor2);
+	  pagePtr->bcType = bcType;
 	  return;
 	}
     }
@@ -434,12 +438,28 @@ const char* KPresenterDocument_impl::getBackClip(unsigned int pageNum)
   return 0;
 }
 
-/*=================== get background color =======================*/
-QColor KPresenterDocument_impl::getBackColor(unsigned int pageNum)
+/*=================== get background color 1 ======================*/
+QColor KPresenterDocument_impl::getBackColor1(unsigned int pageNum)
 {
   for (pagePtr=_pageList.first();pagePtr != 0;pagePtr=_pageList.next())
-    if (pagePtr->pageNum == pageNum) return pagePtr->backColor;
+    if (pagePtr->pageNum == pageNum) return pagePtr->backColor1;
   return white;
+}
+
+/*=================== get background color 2 ======================*/
+QColor KPresenterDocument_impl::getBackColor2(unsigned int pageNum)
+{
+  for (pagePtr=_pageList.first();pagePtr != 0;pagePtr=_pageList.next())
+    if (pagePtr->pageNum == pageNum) return pagePtr->backColor2;
+  return white;
+}
+
+/*=================== get background color type ==================*/
+BCType KPresenterDocument_impl::getBackColorType(unsigned int pageNum)
+{
+  for (pagePtr=_pageList.first();pagePtr != 0;pagePtr=_pageList.next())
+    if (pagePtr->pageNum == pageNum) return pagePtr->bcType;
+  return BCT_PLAIN;
 }
 
 /*========================= get pen ==============================*/

@@ -37,11 +37,14 @@
 #include <qpoint.h>
 #include <qpntarry.h>
 #include <qpopmenu.h>
+#include <qimage.h>
 
 #include "ktextobject.h"
 #include "graphobj.h"
 #include "global.h"
 #include "qwmf.h"
+
+#include <dither.h>
 
 class KPresenterView_impl;
 class KPresenterDocument_impl;
@@ -119,6 +122,8 @@ protected:
   bool spManualSwitch() {return view->KPresenterDoc()->spManualSwitch();}
   QList<SpPageConfiguration> *spPageConfig() {return view->KPresenterDoc()->spPageConfig();}
   QRect getPageSize(unsigned int p) {return view->KPresenterDoc()->getPageSize(p,diffx(),diffy());}
+
+  void drawBackColor(QColor,QColor,BCType,QRect,QPainter*,QRect);
 
   // variables
   QPopupMenu *graphMenu,*picMenu,*txtMenu,*clipMenu;

@@ -21,7 +21,6 @@
 #include <qdialog.h>
 #include <qlabel.h>
 #include <qgrpbox.h>
-#include <qframe.h>
 #include <qradiobt.h>
 #include <qpushbt.h>
 #include <qcolor.h>
@@ -35,7 +34,7 @@
 #include <qpicture.h>
 #include <qpainter.h>
 
-#include <kcolordlg.h>
+#include <kcolorbtn.h>
 
 #include "qwmf.h"
 #include "global.h"
@@ -91,13 +90,16 @@ public:
 
   // constructor - destructor
   BackDia(QWidget* parent=0,const char* name=0,    
-	  BackType backType=BT_COLOR,QColor backColor=white,
+	  BackType backType=BT_COLOR,QColor backColor1=white,
+	  QColor backColor2=white,BCType _bcType=BCT_PLAIN,
 	  const char *backPic=0,const char *backClip=0,
 	  BackView backPicView=BV_TILED);
   ~BackDia();                                      
   
   // get values
-  QColor getBackColor() {return chosenColor;}     
+  QColor getBackColor1() {return color1Choose->color();}     
+  QColor getBackColor2() {return color2Choose->color();}     
+  BCType getBackColorType() {return bcType;}
   BackType getBackType();
   const char *getBackPic() {return chosenPic;}
   const char *getBackClip() {return chosenClip;}
@@ -107,23 +109,22 @@ private:
 
   // dialog objects
   QLabel *lPicName,*picPreview,*lClipName;        
-  QFrame *colorShow;
   QGroupBox *grp1,*grp2,*grp3;
   QRadioButton *radioColor,*radioPic,*vTiled,*vCenter,*vZoom,*radioClip;
-  QPushButton *colorChoose,*okBut,*applyBut,*applyGlobalBut,*cancelBut;
+  QPushButton *okBut,*applyBut,*applyGlobalBut,*cancelBut;
   QPushButton *picChoose,*clipChoose;
   QButtonGroup *buttGrp,*buttGrp2,*buttGrp3;
+  KColorButton *color1Choose,*color2Choose;
 
   // values
-  QColor chosenColor;           
   char *chosenPic;
   char *chosenClip;
   ClipPreview *clipPreview;
-
+  BCType bcType;
+  
 private slots:
 
   // dialog slots
-  void selectColor();
   void selectPic(); 
   void selectClip();
   void openPic(const char*);

@@ -287,7 +287,9 @@ void KPresenterView_impl::extraBackground()
       backDia = 0;
     }
   backDia = new BackDia(0,"InfoDia",m_pKPresenterDoc->getBackType(getCurrPgNum()),
-			m_pKPresenterDoc->getBackColor(getCurrPgNum()),
+			m_pKPresenterDoc->getBackColor1(getCurrPgNum()),
+			m_pKPresenterDoc->getBackColor2(getCurrPgNum()),
+			m_pKPresenterDoc->getBackColorType(getCurrPgNum()),
 			m_pKPresenterDoc->getBackPic(getCurrPgNum()),
 			m_pKPresenterDoc->getBackClip(getCurrPgNum()),
 			m_pKPresenterDoc->getBPicView(getCurrPgNum()));
@@ -749,7 +751,9 @@ void KPresenterView_impl::backOk(bool takeGlobal)
 
   if (!takeGlobal)
     {
-      m_pKPresenterDoc->setBackColor(getCurrPgNum(),backDia->getBackColor());
+      m_pKPresenterDoc->setBackColor(getCurrPgNum(),backDia->getBackColor1(),
+				     backDia->getBackColor2(),
+				     backDia->getBackColorType());
       m_pKPresenterDoc->setBackPic(getCurrPgNum(),backDia->getBackPic());
       m_pKPresenterDoc->setBackClip(getCurrPgNum(),backDia->getBackClip());
       m_pKPresenterDoc->setBPicView(getCurrPgNum(),backDia->getBPicView());
@@ -759,7 +763,9 @@ void KPresenterView_impl::backOk(bool takeGlobal)
     {
       for (i = 1;i <= m_pKPresenterDoc->getPageNums();i++)
 	{
-	  m_pKPresenterDoc->setBackColor(i,backDia->getBackColor());
+	  m_pKPresenterDoc->setBackColor(i,backDia->getBackColor1(),
+					 backDia->getBackColor2(),
+					 backDia->getBackColorType());
 	  m_pKPresenterDoc->setBackPic(i,backDia->getBackPic());
 	  m_pKPresenterDoc->setBackClip(i,backDia->getBackClip());
 	  m_pKPresenterDoc->setBPicView(i,backDia->getBPicView());

@@ -172,7 +172,7 @@ public:
   unsigned int objNums() {return _objNums;}
 
   // background
-  void setBackColor(unsigned int,QColor);
+  void setBackColor(unsigned int,QColor,QColor,BCType);
   void setBackPic(unsigned int,const char*);
   void setBackClip(unsigned int,const char*);
   void setBPicView(unsigned int,BackView);
@@ -182,7 +182,9 @@ public:
   BackView getBPicView(unsigned int);
   const char* getBackPic(unsigned int);
   const char* getBackClip(unsigned int);
-  QColor getBackColor(unsigned int);
+  QColor getBackColor1(unsigned int);
+  QColor getBackColor2(unsigned int);
+  BCType getBackColorType(unsigned int);
   QPen getPen(QPen);
   QBrush getBrush(QBrush);
 

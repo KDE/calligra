@@ -62,7 +62,8 @@ void ClipPreview::paintEvent(QPaintEvent*)
 
 /*==================== constructor ===============================*/
 BackDia::BackDia(QWidget* parent=0,const char* name=0,BackType backType=BT_COLOR,
-		 QColor backColor=white,const char *backPic=0,const char *backClip=0,
+		 QColor backColor1=white,QColor backColor2=white,BCType _bcType=BCT_PLAIN,
+		 const char *backPic=0,const char *backClip=0,
 		 BackView backPicView=BV_TILED)
   :QDialog(parent,name,true)
 {
@@ -88,20 +89,17 @@ BackDia::BackDia(QWidget* parent=0,const char* name=0,BackType backType=BT_COLOR
   grp1 = new QGroupBox(this);
   grp1->move(radioColor->x(),radioColor->y()+radioColor->height()+20);
   
-  colorChoose = new QPushButton("Choose Color...",grp1,"colorChoose");
-  colorChoose->move(10,10);
-  colorChoose->resize(colorChoose->sizeHint());
-  connect(colorChoose,SIGNAL(clicked()),this,SLOT(selectColor()));
+  color1Choose = new KColorButton(backColor1,grp1);
+  color1Choose->move(10,10);
+  color1Choose->resize(color1Choose->sizeHint());
 
-  chosenColor.operator=(backColor);
-  colorShow = new QFrame(grp1,"colorShow");
-  colorShow->setFrameStyle(QFrame::Panel|QFrame::Sunken);
-  colorShow->setBackgroundColor(chosenColor);
-  colorShow->move(colorChoose->x(),colorChoose->y()+colorChoose->height()+20);
-  colorShow->resize(colorChoose->width(),colorChoose->height());
+  color2Choose = new KColorButton(backColor2,grp1);
+  color2Choose->move(10,color1Choose->y()+color1Choose->height()+10);
+  color2Choose->resize(color2Choose->sizeHint());
+  
 
-  grp1->resize(2*colorChoose->x()+colorChoose->width(),
-	       2*colorChoose->y()+20+colorChoose->height()+colorShow->height());
+  grp1->resize(2*color1Choose->x()+color1Choose->width(),
+	       2*color1Choose->y()+20+color1Choose->height()+color2Choose->height());
 
   radioPic = new QRadioButton("Picture (Pixel-Graphic)",this,"radioPic");
   radioPic->move(grp1->x()+grp1->width()+20,radioColor->y());
@@ -226,8 +224,8 @@ BackDia::BackDia(QWidget* parent=0,const char* name=0,BackType backType=BT_COLOR
 /*===================== destructor ===============================*/
 BackDia::~BackDia()
 {
-  delete colorShow;
-  delete colorChoose;
+  delete color1Choose;
+  delete color2Choose;
   delete radioColor;
   delete picPreview;
   delete picChoose;
@@ -266,15 +264,6 @@ BackView BackDia::getBPicView()
   return BV_TILED;
 }
 
-/*=================== choose a color =============================*/
-void BackDia::selectColor()
-{
-  radioColor->setChecked(true);
-  radioPic->setChecked(false);
-  radioClip->setChecked(false);
-  if (KColorDialog::getColor(chosenColor))
-    colorShow->setBackgroundColor(chosenColor);
-}
 /*=================== choose a picture ===========================*/
 void BackDia::selectPic()
 {

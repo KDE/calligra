@@ -62,34 +62,34 @@ void Page::paintEvent(QPaintEvent* paintEvent)
 /*====================== paint background ========================*/
 void Page::paintBackground(QPainter *painter,QRect rect)
 {
-  QBrush brush(white);
-  QPen pen(red);
   int i,j,pw,ph;
-  
+
+  painter->setPen(NoPen);
+  painter->setBrush(white);
+  painter->drawRect(0,0,width(),20);
+  painter->drawRect(0,0,20,height());
   QRect r = painter->viewport();
   for (pagePtr=pageList()->first();pagePtr != 0;pagePtr=pageList()->next())
     {
       painter->setViewport(r);
       painter->resetXForm();
       r = painter->viewport();
-      brush.setColor(pagePtr->backColor);
       if (rect.intersects(QRect(getPageSize(pagePtr->pageNum))))
 	{
 	  switch (pagePtr->backType)
 	    {
 	    case BT_COLOR: /* background color */ 
 	      {
+		drawBackColor(pagePtr->backColor1,pagePtr->backColor2,pagePtr->bcType,
+			      getPageSize(pagePtr->pageNum),painter,rect);
 		pagePtr->pic->hide();
-		painter->setBrush(brush);
-		painter->setPen(pen);
-		painter->drawRect(getPageSize(pagePtr->pageNum));
 	      } break;
 	    case BT_PIC:  /* background picture */
 	      {
+		if (pagePtr->backPicView == BV_CENTER)
+		  drawBackColor(pagePtr->backColor1,pagePtr->backColor2,pagePtr->bcType,
+				getPageSize(pagePtr->pageNum),painter,rect);
 		pagePtr->pic->hide();
-		painter->setBrush(brush);
-		painter->setPen(pen);
-		painter->drawRect(getPageSize(pagePtr->pageNum));
 		switch (pagePtr->backPicView)
 		  {
 		  case BV_ZOOM:
@@ -140,9 +140,8 @@ void Page::paintBackground(QPainter *painter,QRect rect)
 	      } break;
 	    case BT_CLIP: /* background clipart */ 
 	      {
-		painter->setBrush(brush);
-		painter->setPen(pen);
-		painter->drawRect(getPageSize(pagePtr->pageNum));
+		drawBackColor(pagePtr->backColor1,pagePtr->backColor2,pagePtr->bcType,
+			      getPageSize(pagePtr->pageNum),painter,rect);
 		r = painter->viewport();
 		painter->setViewport(getPageSize(pagePtr->pageNum).x(),
 				     getPageSize(pagePtr->pageNum).y(),
@@ -154,8 +153,28 @@ void Page::paintBackground(QPainter *painter,QRect rect)
 		painter->resetXForm();
 	      } break;
 	    }
+	  painter->setViewport(r);
+	  painter->resetXForm();
+	  r = painter->viewport();
 	}
+      painter->setPen(NoPen);
+      painter->setBrush(white);
+      painter->drawRect(0,getPageSize(pagePtr->pageNum).y()+getPageSize(pagePtr->pageNum).height(),
+			width(),20);
+      painter->setPen(QPen(red,1,SolidLine));
+      painter->setBrush(NoBrush);
+      painter->drawRect(getPageSize(pagePtr->pageNum));
     }
+  if (pageList() && !pageList()->isEmpty())
+      {
+	unsigned int num = pageList()->count();
+	painter->setPen(NoPen);
+	painter->setBrush(white);
+	painter->drawRect(0,getPageSize(num).y()+getPageSize(num).height()+1,
+			  width(),height());
+ 	painter->drawRect(getPageSize(num).x()+getPageSize(num).width(),0,
+ 			  width(),height());
+      }
 }
 
 /*====================== paint objects ==========================*/
@@ -463,15 +482,16 @@ void Page::mouseMoveEvent(QMouseEvent *e)
 		      oy = oy - diffy();
 		      oox = oox - diffx();
 		      ooy = ooy - diffy();
-		      repaint(ox,oy,ow,oh,true);
-		      if (ox > oox) repaint(oox,oy,ox-oox,oh,true);
-		      if (oy > ooy) repaint(ox,ooy,ow,oy-ooy,true);
-		      if (oox > ox) repaint(ox+ow,oy,oox-ox,oh,true);
-		      if (ooy > oy) repaint(ox,oy+oh,ow,ooy-oy,true);
-		      if ((ox > oox) && (oy > ooy)) repaint(oox,ooy,ox-oox,oy-ooy,true);
-		      if ((ox > oox) && (oy < ooy)) repaint(oox,oy+oh,ox-oox,ooy-oy,true);
-		      if ((ox < oox) && (oy > ooy)) repaint(ox+ow,ooy,oox-ox,oy-ooy,true);
-		      if ((ox < oox) && (oy < ooy)) repaint(ox+ow,oy+oh,oox-ox,ooy-oy,true);
+		      drawBack = true;
+		      repaint(ox,oy,ow,oh,false);
+ 		      if (ox > oox) repaint(oox,oy,ox-oox,oh,false);
+ 		      if (oy > ooy) repaint(ox,ooy,ow,oy-ooy,false);
+ 		      if (oox > ox) repaint(ox+ow,oy,oox-ox,oh,false);
+ 		      if (ooy > oy) repaint(ox,oy+oh,ow,ooy-oy,false);
+ 		      if ((ox > oox) && (oy > ooy)) repaint(oox,ooy,ox-oox,oy-ooy,false);
+ 		      if ((ox > oox) && (oy < ooy)) repaint(oox,oy+oh,ox-oox,ooy-oy,false);
+ 		      if ((ox < oox) && (oy > ooy)) repaint(ox+ow,ooy,oox-ox,oy-ooy,false);
+ 		      if ((ox < oox) && (oy < ooy)) repaint(ox+ow,oy+oh,oox-ox,ooy-oy,false);
 		    }
 		}
 	    }
@@ -694,8 +714,9 @@ void Page::resizeObjTop(int diff,PageObjects* obj)
       ox = ox - diffx();
       oy = oy - diffy();
       ooy = ooy - diffy();
-      repaint(ox,oy,ow,oh,true);
-      if (oh < ooh) repaint(ox,ooy,ow,ooh-oh,true); 
+      drawBack = true;
+      repaint(ox,oy,ow,oh,false);
+      if (oh < ooh) repaint(ox,ooy,ow,ooh-oh,false); 
     }
 }
 
@@ -721,8 +742,9 @@ void Page::resizeObjLeft(int diff,PageObjects* obj)
       ox = ox - diffx();
       oy = oy - diffy();
       oox = oox - diffx();
-      repaint(ox,oy,ow,oh,true);
-      if (ow < oow) repaint(oox,oy,oow-ow,oh,true); 
+      drawBack = true;
+      repaint(ox,oy,ow,oh,false);
+      if (ow < oow) repaint(oox,oy,oow-ow,oh,false); 
     }
 }
 
@@ -746,8 +768,9 @@ void Page::resizeObjBot(int diff,PageObjects* obj)
       ow = obj->ow; oh = obj->oh;
       ox = ox - diffx();
       oy = oy - diffy();
-      repaint(ox,oy,ow,oh,true);
-      if (oh < ooh) repaint(ox,oy+oh,ow,ooh-oh,true); 
+      drawBack = true;
+      repaint(ox,oy,ow,oh,false);
+      if (oh < ooh) repaint(ox,oy+oh,ow,ooh-oh,false); 
     }
 }
 
@@ -771,8 +794,9 @@ void Page::resizeObjRight(int diff,PageObjects* obj)
       ow = obj->ow; oh = obj->oh;
       ox = ox - diffx();
       oy = oy - diffy();
-      repaint(ox,oy,ow,oh,true);
-      if (ow < oow) repaint(ox+ow,oy,oow-ow,oh,true); 
+      drawBack = true;
+      repaint(ox,oy,ow,oh,false);
+      if (ow < oow) repaint(ox+ow,oy,oow-ow,oh,false); 
     }
 }
 
@@ -951,3 +975,122 @@ void Page::setTextAlign(TxtParagraph::HorzAlign align)
     txtPtr->setHorzAlign(align);
 }
 
+/*======================== draw back color =======================*/
+void Page::drawBackColor(QColor cb,QColor ca,BCType bcType,QRect rect,
+			 QPainter* painter,QRect viewRect)
+{
+  int ncols = 4;
+  int depth = QColor::numBitPlanes();
+
+  bcType = BCT_GHORZ;
+
+  switch (bcType)
+    {
+    case BCT_PLAIN:
+      {
+  	painter->setPen(NoPen);
+  	painter->setBrush(cb);
+  	painter->drawRect(rect);
+      } break;
+    case BCT_GHORZ: case BCT_GVERT:
+      {
+	if (ca == cb)
+	  {
+	    painter->setPen(NoPen);
+	    painter->setBrush(cb);
+	    painter->drawRect(rect);
+	    break;
+	  }
+
+	QPixmap pmCrop;
+	QColor cRow;
+	int ySize;
+	int rca, gca, bca;
+	int rDiff, gDiff, bDiff;
+	float rat;
+	uint *p;
+	uint rgbRow;
+		
+	if (bcType == BCT_GHORZ)
+	  ySize = rect.height();
+	else
+	  ySize = rect.width();
+    
+	pmCrop.resize(30,ySize);
+	QImage image(30,ySize,32);
+    
+	rca = ca.red();
+	gca = ca.green();
+	bca = ca.blue();
+	rDiff = cb.red() - ca.red();
+	gDiff = cb.green() - ca.green();
+	bDiff = cb.blue() - ca.blue();
+    
+	for (int y = ySize - 1;y > 0;y--) 
+	  {
+	    p = (unsigned int*) image.scanLine(ySize - y - 1);
+	    rat = 1.0 * y / ySize;
+	    
+	    cRow.setRgb(rca + (int)(rDiff * rat),
+			gca + (int)(gDiff * rat), 
+			bca + (int)(bDiff * rat));
+	    
+	    rgbRow = cRow.rgb();
+	    
+	    for(int x = 0;x < 30;x++) 
+	      {
+		*p = rgbRow;
+		p++;
+	      }
+	  }
+	
+	if (depth <= 16)
+	  {
+	    if(depth == 16) ncols = 32;
+	    if (ncols < 2 || ncols > 256) ncols = 3;
+
+	    QColor *dPal = new QColor[ncols];
+	    for (int i = 0;i < ncols;i++) 
+	      {
+		dPal[i].setRgb(rca + rDiff * i / (ncols - 1),
+			       gca + gDiff * i / (ncols - 1),
+			       bca + bDiff * i / (ncols - 1));
+	      }
+
+	    kFSDither dither(dPal,ncols);
+	    QImage dImage = dither.dither(image);
+	    pmCrop.convertFromImage(dImage);
+	    
+	    delete [] dPal;	
+		
+	  } 
+	else 
+	  pmCrop.convertFromImage(image);
+	
+	int s;
+	int sSize = 20;
+	int sOffset = 5;
+	
+	if (bcType == BCT_GHORZ)
+	  s = rect.width() / sSize + 1;
+	else
+	  s = rect.height() / sSize + 1;
+	
+	if (bcType == BCT_GHORZ)	
+	  for(int i = 0;i < s;i++)
+	    {
+	      if (viewRect.intersects(QRect(sSize*i+rect.x(),rect.y(),sSize,ySize)))
+		painter->drawPixmap(sSize*i+rect.x(),rect.y(),pmCrop,sOffset,0,sSize,ySize);
+	    }
+	else 
+	  {
+	    QWMatrix matrix;
+	    matrix.translate((float)rect.width(),0.0);
+	    matrix.rotate(90.0);
+	    painter->setWorldMatrix(matrix);
+	    for(int i=0;i < s;i++)
+	      painter->drawPixmap(sSize*i+rect.y(),rect.x(),pmCrop,sOffset,0,sSize,ySize);
+	}
+      } break;
+    }
+}

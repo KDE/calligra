@@ -42,12 +42,16 @@ struct SpPageConfiguration
 };
 
 // page background
+enum BCType {BCT_PLAIN,BCT_GHORZ,BCT_GVERT};
+
 struct Background
 {
   unsigned int pageNum;  
   BackType backType; 
   BackView backPicView; 
-  QColor backColor; 
+  QColor backColor1;
+  QColor backColor2;
+  BCType bcType;
   const char *backPic;
   const char *backClip; 
   QPixmap backPix;
