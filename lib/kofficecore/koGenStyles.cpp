@@ -108,6 +108,20 @@ KoGenStyle* KoGenStyles::styleForModification( const QString& name )
     return const_cast<KoGenStyle *>( style( name ) );
 }
 
+// Returns -1, 0 (equal) or 1
+static int compareMap( const QMap<QString, QString>& map1, const QMap<QString, QString>& map2 )
+{
+    QMap<QString, QString>::const_iterator it = map1.begin();
+    QMap<QString, QString>::const_iterator oit = map2.begin();
+    for ( ; it != map1.end(); ++it, ++oit ) { // both maps have been checked for size already
+        if ( it.key() != oit.key() )
+            return it.key() < oit.key() ? -1 : +1;
+        if ( it.data() != oit.data() )
+            return it.data() < oit.data() ? -1 : +1;
+    }
+    return 0; // equal
+}
+
 ////
 
 void KoGenStyle::writeStyle( KoXmlWriter* writer, KoGenStyles& styles, const char* elementName, const QString& name, const char* propertiesElementName, bool closeElement, bool drawElement ) const
@@ -190,6 +204,20 @@ void KoGenStyle::writeStyle( KoXmlWriter* writer, KoGenStyles& styles, const cha
         }
         writer->endElement();
     }
+    // And now the style maps
+    for ( uint i = 0; i < m_maps.count(); ++i ) {
+        bool writeit = true;
+        if ( parentStyle && compareMap( m_maps[i], parentStyle->m_maps[i] ) == 0 )
+            writeit = false;
+        if ( writeit ) {
+            writer->startElement( "style:map" );
+            QMap<QString, QString>::const_iterator it = m_maps[i].begin();
+            for ( ; it != m_maps[i].end(); ++it ) {
+                writer->addAttribute( it.key().utf8(), it.data().utf8() );
+            }
+            writer->endElement(); // style:map
+        }
+    }
     if ( closeElement )
         writer->endElement();
 }
@@ -232,6 +260,65 @@ void KoGenStyle::printDebug() const
     for( QMap<QString,QString>::ConstIterator it = m_attributes.begin(); it != m_attributes.end(); ++it ) {
         kdDebug() << "     " << it.key() << " = " << it.data() << endl;
     }
+    kdDebug() << m_maps.count() << " maps." << endl;
+    for ( uint i = 0; i < m_maps.count(); ++i ) {
+        kdDebug() << "map " << i << ":" << endl;
+        for( QMap<QString,QString>::ConstIterator it = m_maps[i].begin(); it != m_maps[i].end(); ++it ) {
+            kdDebug() << "     " << it.key() << " = " << it.data() << endl;
+        }
+    }
     kdDebug() << endl;
 }
 #endif
+
+bool KoGenStyle::operator<( const KoGenStyle &other ) const
+{
+    if ( m_type != other.m_type ) return m_type < other.m_type;
+    if ( m_parentName != other.m_parentName ) return m_parentName < other.m_parentName;
+    for ( uint i = 0 ; i < N_NumTypes ; ++i )
+        if ( m_properties[i].count() != other.m_properties[i].count() )
+            return m_properties[i].count() < other.m_properties[i].count();
+    if ( m_attributes.count() != other.m_attributes.count() ) return m_attributes.count() < other.m_attributes.count();
+    if ( m_maps.count() != other.m_maps.count() ) return m_maps.count() < other.m_maps.count();
+    // Same number of properties and attributes, no other choice than iterating
+    for ( uint i = 0 ; i < N_NumTypes ; ++i ) {
+        int comp = compareMap( m_properties[i], other.m_properties[i] );
+        if ( comp != 0 )
+            return comp < 0;
+    }
+    int comp = compareMap( m_attributes, other.m_attributes );
+    if ( comp != 0 )
+        return comp < 0;
+    for ( uint i = 0 ; i < m_maps.count() ; ++i ) {
+        int comp = compareMap( m_maps[i], other.m_maps[i] );
+        if ( comp != 0 )
+            return comp < 0;
+    }
+    return false;
+}
+
+bool KoGenStyle::operator==( const KoGenStyle &other ) const
+{
+    if ( m_type != other.m_type ) return false;
+    if ( m_parentName != other.m_parentName ) return false;
+    for ( uint i = 0 ; i < N_NumTypes ; ++i )
+        if ( m_properties[i].count() != other.m_properties[i].count() )
+            return false;
+    if ( m_attributes.count() != other.m_attributes.count() ) return false;
+    if ( m_maps.count() != other.m_maps.count() ) return false;
+    // Same number of properties and attributes, no other choice than iterating
+    for ( uint i = 0 ; i < N_NumTypes ; ++i ) {
+        int comp = compareMap( m_properties[i], other.m_properties[i] );
+        if ( comp != 0 )
+            return false;
+    }
+    int comp = compareMap( m_attributes, other.m_attributes );
+    if ( comp != 0 )
+        return false;
+    for ( uint i = 0 ; i < m_maps.count() ; ++i ) {
+        int comp = compareMap( m_maps[i], other.m_maps[i] );
+        if ( comp != 0 )
+            return false;
+    }
+    return true;
+}

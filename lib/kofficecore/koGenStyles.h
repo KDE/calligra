@@ -279,6 +279,14 @@ public:
     }
 
     /**
+     * @brief Add a style:map to the style.
+     * @param styleMap the attributes for the map, associated as (name,value).
+     */
+    void addStyleMap( const QMap<QString, QString>& styleMap ) {
+        m_maps.append( styleMap );
+    }
+
+    /**
      *  Write the definition of this style to @p writer, using the OASIS format.
      *  @param writer the KoXmlWriter in which @p elementName will be created and filled in
      *  @param styles the styles collection, used to look up the parent style
@@ -300,60 +308,10 @@ public:
      *  Solutions with only a hash value (not representative of the whole data)
      *  require us to write a hashtable by hand....
      */
-    bool operator<( const KoGenStyle &other ) const {
-        if ( m_type != other.m_type ) return m_type < other.m_type;
-        if ( m_parentName != other.m_parentName ) return m_parentName < other.m_parentName;
-        for ( uint i = 0 ; i < N_NumTypes ; ++i )
-            if ( m_properties[i].count() != other.m_properties[i].count() )
-                return m_properties[i].count() < other.m_properties[i].count();
-        if ( m_attributes.count() != other.m_attributes.count() ) return m_attributes.count() < other.m_attributes.count();
-        // Same number of properties and attributes, no other choice than iterating
-        for ( uint i = 0 ; i < N_NumTypes ; ++i ) {
-            QMap<QString, QString>::const_iterator it = m_properties[i].begin();
-            QMap<QString, QString>::const_iterator oit = other.m_properties[i].begin();
-            for ( ; it != m_properties[i].end(); ++it, ++oit ) {
-                if ( it.key() != oit.key() )
-                    return it.key() < oit.key();
-                if ( it.data() != oit.data() )
-                    return it.data() < oit.data();
-            }
-        }
-        QMap<QString, QString>::const_iterator it = m_attributes.begin();
-        QMap<QString, QString>::const_iterator oit = other.m_attributes.begin();
-        for ( ; it != m_attributes.end(); ++it, ++oit ) {
-            if ( it.key() != oit.key() )
-                return it.key() < oit.key();
-            if ( it.data() != oit.data() )
-                return it.data() < oit.data();
-        }
-        return false;
-    }
+    bool operator<( const KoGenStyle &other ) const;
 
     /// Not needed for QMap, but can still be useful
-    bool operator==( const KoGenStyle &other ) const {
-        if ( m_type != other.m_type ) return false;
-        if ( m_parentName != other.m_parentName ) return false;
-        for ( uint i = 0 ; i < N_NumTypes ; ++i )
-            if ( m_properties[i].count() != other.m_properties[i].count() )
-                return false;
-        if ( m_attributes.count() != other.m_attributes.count() ) return false;
-        // Same number of properties and attributes, no other choice than iterating
-        for ( uint i = 0 ; i < N_NumTypes ; ++i ) {
-            QMap<QString, QString>::const_iterator it = m_properties[i].begin();
-            QMap<QString, QString>::const_iterator oit = other.m_properties[i].begin();
-            for ( ; it != m_properties[i].end(); ++it, ++oit ) {
-                if ( it.key() != oit.key() || it.data() != oit.data() )
-                    return false;
-            }
-        }
-        QMap<QString, QString>::const_iterator it = m_attributes.begin();
-        QMap<QString, QString>::const_iterator oit = other.m_attributes.begin();
-        for ( ; it != m_attributes.end(); ++it, ++oit ) {
-            if ( it.key() != oit.key() || it.data() != oit.data() )
-                return false;
-        }
-        return true;
-    }
+    bool operator==( const KoGenStyle &other ) const;
 
 private:
     QString property( const QString& propName, PropertyType type ) const {
@@ -383,6 +341,8 @@ private:
     /// We use QMaps since they provide automatic sorting on the key (important for unicity!)
     QMap<QString, QString> m_properties[N_NumTypes];
     QMap<QString, QString> m_attributes;
+    typedef QMap<QString, QString> StyleMap;
+    QValueVector<StyleMap> m_maps; // we can't really sort the maps between themselves...
 
     // For lookup
     friend class KoGenStyles;

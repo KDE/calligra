@@ -26,10 +26,18 @@ int main( int, char** ) {
 
     KoGenStyles coll;
 
+    QMap<QString, QString> map1;
+    map1.insert( "map1key", "map1value" );
+    QMap<QString, QString> map2;
+    map2.insert( "map2key1", "map2value1" );
+    map2.insert( "map2key2", "map2value2" );
+
     KoGenStyle first( KoGenStyle::STYLE_AUTO, "paragraph" );
     first.addAttribute( "style:master-page-name", "Standard" );
     first.addProperty( "style:page-number", "0" );
     first.addProperty( "style:foobar", "2", KoGenStyle::TextType );
+    first.addStyleMap( map1 );
+    first.addStyleMap( map2 );
 
     QString firstName = coll.lookup( first );
     kdDebug() << "The first style got assigned the name " << firstName << endl;
@@ -40,6 +48,8 @@ int main( int, char** ) {
     second.addAttribute( "style:master-page-name", "Standard" );
     second.addProperty( "style:page-number", "0" );
     second.addProperty( "style:foobar", "2", KoGenStyle::TextType );
+    second.addStyleMap( map1 );
+    second.addStyleMap( map2 );
 
     QString secondName = coll.lookup( second );
     kdDebug() << "The second style got assigned the name " << secondName << endl;
@@ -74,6 +84,8 @@ int main( int, char** ) {
     sameAsParent.addAttribute( "style:master-page-name", "Standard" );
     sameAsParent.addProperty( "style:page-number", "0" );
     sameAsParent.addProperty( "style:foobar", "2", KoGenStyle::TextType );
+    sameAsParent.addStyleMap( map1 );
+    sameAsParent.addStyleMap( map2 );
     QString sapName = coll.lookup( sameAsParent, "foobar" );
     kdDebug() << "The 'same as parent' style got assigned the name " << sapName << endl;
 
@@ -85,7 +97,7 @@ int main( int, char** ) {
 
     TEST_BEGIN( 0, 0 );
     first.writeStyle( &writer, coll, "style:style", firstName, "style:paragraph-properties" );
-    TEST_END( "XML for first/second style", "<r>\n <style:style style:name=\"A1\" style:family=\"paragraph\" style:master-page-name=\"Standard\">\n  <style:paragraph-properties style:page-number=\"0\"/>\n  <style:text-properties style:foobar=\"2\"/>\n </style:style>\n</r>\n" );
+    TEST_END( "XML for first/second style", "<r>\n <style:style style:name=\"A1\" style:family=\"paragraph\" style:master-page-name=\"Standard\">\n  <style:paragraph-properties style:page-number=\"0\"/>\n  <style:text-properties style:foobar=\"2\"/>\n  <style:map map1key=\"map1value\"/>\n  <style:map map2key1=\"map2value1\" map2key2=\"map2value2\"/>\n </style:style>\n</r>\n" );
 
     TEST_BEGIN( 0, 0 );
     third.writeStyle( &writer, coll, "style:style", thirdName, "style:paragraph-properties" );
