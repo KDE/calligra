@@ -87,7 +87,7 @@ SVGPathParser::getCoord( const char *ptr, double &number )
 }
 
 void
-SVGPathParser::parseSVG( const QString &s )
+SVGPathParser::parseSVG( const QString &s, bool process )
 {
 	QString d = s;
 	d = d.replace( QRegExp( "," ), " ");
@@ -122,12 +122,15 @@ SVGPathParser::parseSVG( const QString &s )
 					ptr = getCoord( ptr, tox );
 					ptr = getCoord( ptr, toy );
 
-					subpathx = curx = relative ? curx + tox : tox;
-					subpathy = cury = relative ? cury + toy : toy;
+					if( process )
+					{
+						subpathx = curx = relative ? curx + tox : tox;
+						subpathy = cury = relative ? cury + toy : toy;
 
-					//if( lastCommand == 'z' || lastCommand == 'Z' )
-					//	path->close();
-					svgMoveTo( curx, cury );
+						svgMoveTo( curx, cury );
+					}
+					else
+						svgMoveTo( tox, toy, !relative );
 					break;
 				}
 				case 'l':
@@ -137,46 +140,74 @@ SVGPathParser::parseSVG( const QString &s )
 					ptr = getCoord( ptr, tox );
 					ptr = getCoord( ptr, toy );
 
-					curx = relative ? curx + tox : tox;
-					cury = relative ? cury + toy : toy;
+					if( process )
+					{
+						curx = relative ? curx + tox : tox;
+						cury = relative ? cury + toy : toy;
 
-					svgLineTo( curx, cury );
+						svgLineTo( curx, cury );
+					}
+					else
+						svgLineTo( tox, toy, !relative );
 					break;
 				}
 				case 'h':
 				{
 					ptr = getCoord( ptr, tox );
-					curx = curx + tox;
-					svgLineTo( curx, cury );
+					if( process )
+					{
+						curx = curx + tox;
+						svgLineTo( curx, cury );
+					}
+					else
+						svgLineToHorizontal( tox, false );
 					break;
 				}
 				case 'H':
 				{
 					ptr = getCoord( ptr, tox );
-					curx = tox;
-					svgLineTo( curx, cury );
+					if( process )
+					{
+						curx = tox;
+						svgLineTo( curx, cury );
+					}
+					else
+						svgLineToHorizontal( tox );
 					break;
 				}
 				case 'v':
 				{
 					ptr = getCoord( ptr, toy );
-					cury = cury + toy;
-					svgLineTo( curx, cury );
+					if( process )
+					{
+						cury = cury + toy;
+						svgLineTo( curx, cury );
+					}
+					else
+						svgLineToVertical( toy, false );
 					break;
 				}
 				case 'V':
 				{
 					ptr = getCoord( ptr, toy );
-					cury = toy;
-					svgLineTo( curx, cury );
+					if( process )
+					{
+						cury = toy;
+						svgLineTo( curx, cury );
+					}
+					else
+						svgLineToVertical( toy );
 					break;
 				}
 				case 'z':
 				case 'Z':
 				{
 					// reset curx, cury for next path
-					curx = subpathx;
-					cury = subpathy;
+					if( process )
+					{
+						curx = subpathx;
+						cury = subpathy;
+					}
 					svgClosePath();
 					break;
 				}
@@ -191,19 +222,24 @@ SVGPathParser::parseSVG( const QString &s )
 					ptr = getCoord( ptr, tox );
 					ptr = getCoord( ptr, toy );
 
-					px1 = relative ? curx + x1 : x1;
-					py1 = relative ? cury + y1 : y1;
-					px2 = relative ? curx + x2 : x2;
-					py2 = relative ? cury + y2 : y2;
-					px3 = relative ? curx + tox : tox;
-					py3 = relative ? cury + toy : toy;
+					if( process )
+					{
+						px1 = relative ? curx + x1 : x1;
+						py1 = relative ? cury + y1 : y1;
+						px2 = relative ? curx + x2 : x2;
+						py2 = relative ? cury + y2 : y2;
+						px3 = relative ? curx + tox : tox;
+						py3 = relative ? cury + toy : toy;
 
-					svgCurveTo( px1, py1, px2, py2, px3, py3 );
+						svgCurveToCubic( px1, py1, px2, py2, px3, py3 );
 
-					contrlx = relative ? curx + x2 : x2;
-					contrly = relative ? cury + y2 : y2;
-					curx = relative ? curx + tox : tox;
-					cury = relative ? cury + toy : toy;
+						contrlx = relative ? curx + x2 : x2;
+						contrly = relative ? cury + y2 : y2;
+						curx = relative ? curx + tox : tox;
+						cury = relative ? cury + toy : toy;
+					}
+					else
+						svgCurveToCubic( x1, y1, x2, y2, tox, toy, !relative );
 
 					break;
 				}
@@ -216,19 +252,24 @@ SVGPathParser::parseSVG( const QString &s )
 					ptr = getCoord( ptr, tox );
 					ptr = getCoord( ptr, toy );
 
-					px1 = 2 * curx - contrlx;
-					py1 = 2 * cury - contrly;
-					px2 = relative ? curx + x2 : x2;
-					py2 = relative ? cury + y2 : y2;
-					px3 = relative ? curx + tox : tox;
-					py3 = relative ? cury + toy : toy;
+					if( process )
+					{
+						px1 = 2 * curx - contrlx;
+						py1 = 2 * cury - contrly;
+						px2 = relative ? curx + x2 : x2;
+						py2 = relative ? cury + y2 : y2;
+						px3 = relative ? curx + tox : tox;
+						py3 = relative ? cury + toy : toy;
 
-					svgCurveTo( px1, py1, px2, py2, px3, py3 );
+						svgCurveToCubic( px1, py1, px2, py2, px3, py3 );
 
-					contrlx = relative ? curx + x2 : x2;
-					contrly = relative ? cury + y2 : y2;
-					curx = relative ? curx + tox : tox;
-					cury = relative ? cury + toy : toy;
+						contrlx = relative ? curx + x2 : x2;
+						contrly = relative ? cury + y2 : y2;
+						curx = relative ? curx + tox : tox;
+						cury = relative ? cury + toy : toy;
+					}
+					else
+						svgCurveToCubicSmooth( x2, y2, tox, toy, !relative );
 					break;
 				}
 				case 'q':
@@ -240,47 +281,56 @@ SVGPathParser::parseSVG( const QString &s )
 					ptr = getCoord( ptr, tox );
 					ptr = getCoord( ptr, toy );
 
-					px1 = relative ? (curx + 2 * (x1 + curx)) * (1.0 / 3.0) : (curx + 2 * x1) * (1.0 / 3.0);
-					py1 = relative ? (cury + 2 * (y1 + cury)) * (1.0 / 3.0) : (cury + 2 * y1) * (1.0 / 3.0);
-					px2 = relative ? ((curx + tox) + 2 * (x1 + curx)) * (1.0 / 3.0) : (tox + 2 * x1) * (1.0 / 3.0);
-					py2 = relative ? ((cury + toy) + 2 * (y1 + cury)) * (1.0 / 3.0) : (toy + 2 * y1) * (1.0 / 3.0);
-					px3 = relative ? curx + tox : tox;
-					py3 = relative ? cury + toy : toy;
+					if( process )
+					{
+						px1 = relative ? (curx + 2 * (x1 + curx)) * (1.0 / 3.0) : (curx + 2 * x1) * (1.0 / 3.0);
+						py1 = relative ? (cury + 2 * (y1 + cury)) * (1.0 / 3.0) : (cury + 2 * y1) * (1.0 / 3.0);
+						px2 = relative ? ((curx + tox) + 2 * (x1 + curx)) * (1.0 / 3.0) : (tox + 2 * x1) * (1.0 / 3.0);
+						py2 = relative ? ((cury + toy) + 2 * (y1 + cury)) * (1.0 / 3.0) : (toy + 2 * y1) * (1.0 / 3.0);
+						px3 = relative ? curx + tox : tox;
+						py3 = relative ? cury + toy : toy;
 
-					svgCurveTo( px1, py1, px2, py2, px3, py3 );
+						svgCurveToCubic( px1, py1, px2, py2, px3, py3 );
 
-					contrlx = relative ? curx + x1 : (tox + 2 * x1) * (1.0 / 3.0);
-					contrly = relative ? cury + y1 : (toy + 2 * y1) * (1.0 / 3.0);
-					curx = relative ? curx + tox : tox;
-					cury = relative ? cury + toy : toy;
+						contrlx = relative ? curx + x1 : (tox + 2 * x1) * (1.0 / 3.0);
+						contrly = relative ? cury + y1 : (toy + 2 * y1) * (1.0 / 3.0);
+						curx = relative ? curx + tox : tox;
+						cury = relative ? cury + toy : toy;
+					}
+					else
+						svgCurveToQuadratic( x1, y1, tox, toy, !relative );
 					break;
 				}
 				case 't':
 					relative = true;
 				case 'T':
 				{
-					xc = 2 * curx - contrlx;
-	                yc = 2 * cury - contrly;
-
 					ptr = getCoord(ptr, tox);
 					ptr = getCoord(ptr, toy);
 
-					px1 = relative ? (curx + 2 * xc) * (1.0 / 3.0) : (curx + 2 * xc) * (1.0 / 3.0);
-					py1 = relative ? (cury + 2 * yc) * (1.0 / 3.0) : (cury + 2 * yc) * (1.0 / 3.0);
-					px2 = relative ? ((curx + tox) + 2 * xc) * (1.0 / 3.0) : (tox + 2 * xc) * (1.0 / 3.0);
-					py2 = relative ? ((cury + toy) + 2 * yc) * (1.0 / 3.0) : (toy + 2 * yc) * (1.0 / 3.0);
-					px3 = relative ? curx + tox : tox;
-					py3 = relative ? cury + toy : toy;
+					if( process )
+					{
+						xc = 2 * curx - contrlx;
+						yc = 2 * cury - contrly;
 
-					svgCurveTo( px1, py1, px2, py2, px3, py3 );
+						px1 = relative ? (curx + 2 * xc) * (1.0 / 3.0) : (curx + 2 * xc) * (1.0 / 3.0);
+						py1 = relative ? (cury + 2 * yc) * (1.0 / 3.0) : (cury + 2 * yc) * (1.0 / 3.0);
+						px2 = relative ? ((curx + tox) + 2 * xc) * (1.0 / 3.0) : (tox + 2 * xc) * (1.0 / 3.0);
+						py2 = relative ? ((cury + toy) + 2 * yc) * (1.0 / 3.0) : (toy + 2 * yc) * (1.0 / 3.0);
+						px3 = relative ? curx + tox : tox;
+						py3 = relative ? cury + toy : toy;
 
-					contrlx = xc;
-					contrly = yc;
-					curx = relative ? curx + tox : tox;
-					cury = relative ? cury + toy : toy;
+						svgCurveToCubic( px1, py1, px2, py2, px3, py3 );
+
+						contrlx = xc;
+						contrly = yc;
+						curx = relative ? curx + tox : tox;
+						cury = relative ? cury + toy : toy;
+					}
+					else
+						svgCurveToQuadraticSmooth( tox, toy, !relative );
 					break;
 				}
-				// TODO : arc support
 				case 'a':
 					relative = true;
 				case 'A':
@@ -291,14 +341,16 @@ SVGPathParser::parseSVG( const QString &s )
 					ptr = getCoord( ptr, ry );
 					ptr = getCoord( ptr, angle );
 					ptr = getCoord( ptr, tox );
-
 					largeArc = tox == 1;
 					ptr = getCoord( ptr, tox );
 					sweep = tox == 1;
 					ptr = getCoord( ptr, tox );
 					ptr = getCoord( ptr, toy );
 
-					calculateArc( relative, curx, cury, angle, tox, toy, rx, ry, largeArc, sweep );
+					if( process )
+						calculateArc( relative, curx, cury, angle, tox, toy, rx, ry, largeArc, sweep );
+					else
+						svgArcTo( tox, toy, rx, ry, angle, largeArc, sweep, relative );
 				}
 			}
 
@@ -454,7 +506,7 @@ SVGPathParser::calculateArc(bool relative, double &curx, double &cury, double an
 			x2 = x3 + t * sin(_th1);
 			y2 = y3 - t * cos(_th1);
 
-			svgCurveTo( a00 * x1 + a01 * y1, a10 * x1 + a11 * y1, a00 * x2 + a01 * y2, a10 * x2 + a11 * y2, a00 * x3 + a01 * y3, a10 * x3 + a11 * y3 );
+			svgCurveToCubic( a00 * x1 + a01 * y1, a10 * x1 + a11 * y1, a00 * x2 + a01 * y2, a10 * x2 + a11 * y2, a00 * x3 + a01 * y3, a10 * x3 + a11 * y3 );
 		}
 	}
 
@@ -467,5 +519,35 @@ SVGPathParser::calculateArc(bool relative, double &curx, double &cury, double an
 		cury = y;
 	else
 		cury += y;	
+}
+
+void
+SVGPathParser::svgLineToHorizontal( double, bool )
+{
+}
+
+void
+SVGPathParser::svgLineToVertical( double, bool )
+{
+}
+
+void
+SVGPathParser::svgCurveToCubicSmooth( double, double, double, double, bool )
+{
+}
+
+void
+SVGPathParser::svgCurveToQuadratic( double, double, double, double, bool )
+{
+}
+
+void
+SVGPathParser::svgCurveToQuadraticSmooth( double, double, bool )
+{
+}
+
+void
+SVGPathParser::svgArcTo( double, double, double, double, double, bool, bool, bool )
+{
 }
 

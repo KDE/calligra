@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2002, The Karbon Developers
+   Copyright (C) 2002, 2003 The Karbon Developers
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -22,13 +22,32 @@
 
 class QString;
 
+/**
+ * Parser for svg path data, contained in the d attribute.
+ *
+ * The parser delivers encountered commands and parameters by calling
+ * methods that correspond to those commands. Clients have to derive
+ * from this class and implement the abstract command methods.
+ *
+ * There are two operating modes. By default the parser just delivers unaltered
+ * svg path data commands and parameters. In the second mode, it will convert all
+ * relative coordinates to absolute ones, and convert all curves to cubic beziers.
+ */
 class SVGPathParser
 {
 public:
-	void parseSVG( const QString & );
-	virtual void svgMoveTo( double x1, double y1 ) = 0;
-	virtual void svgLineTo( double x1, double y1 ) = 0;
-	virtual void svgCurveTo( double x1, double y1, double x2, double y2, double x3, double y3 ) = 0;
+	void parseSVG( const QString &d, bool process = false );
+
+protected:
+	virtual void svgMoveTo( double x1, double y1, bool abs = true ) = 0;
+	virtual void svgLineTo( double x1, double y1, bool abs = true ) = 0;
+	virtual void svgLineToHorizontal( double x, bool abs = true );
+	virtual void svgLineToVertical( double y, bool abs = true );
+	virtual void svgCurveToCubic( double x1, double y1, double x2, double y2, double x, double y, bool abs = true ) = 0;
+	virtual void svgCurveToCubicSmooth( double x, double y, double x2, double y2, bool abs = true );
+	virtual void svgCurveToQuadratic( double x, double y, double x1, double y1, bool abs = true );
+	virtual void svgCurveToQuadraticSmooth( double x, double y, bool abs = true );
+	virtual void svgArcTo( double x, double y, double r1, double r2, double angle, bool largeArcFlag, bool sweepFlag, bool abs = true );
 	virtual void svgClosePath() = 0;
 
 private:

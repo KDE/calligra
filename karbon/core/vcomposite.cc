@@ -387,7 +387,7 @@ void
 VComposite::loadSvgPath( const QString &d )
 {
 	QTime s;s.start();
-	parseSVG( d );
+	parseSVG( d, true );
 	//kdDebug() << "Parsing time : " << s.elapsed() << endl;
 }
 
@@ -404,21 +404,21 @@ VComposite::saveSvgPath( QString &d ) const
 }
 
 void
-VComposite::svgMoveTo( double x1, double y1 )
+VComposite::svgMoveTo( double x1, double y1, bool )
 {
 	moveTo( KoPoint( x1, y1 ) );
 }
 
 void
-VComposite::svgLineTo( double x1, double y1 )
+VComposite::svgLineTo( double x1, double y1, bool )
 {
 	lineTo( KoPoint( x1, y1 ) );
 }
 
 void
-VComposite::svgCurveTo( double x1, double y1, double x2, double y2, double x3, double y3 )
+VComposite::svgCurveToCubic( double x1, double y1, double x2, double y2, double x, double y, bool )
 {
-	curveTo( KoPoint( x1, y1 ), KoPoint( x2, y2 ), KoPoint( x3, y3 ) );
+	curveTo( KoPoint( x1, y1 ), KoPoint( x2, y2 ), KoPoint( x, y ) );
 }
 
 void
