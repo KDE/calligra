@@ -17,6 +17,7 @@ Bugfixes:
 - Fix autoscroll on selection with mouse, when mouse is not moved
 - Fix printout of thick borders on page borders
 - Fix flicker of embedded objects
+- Fix applying changes for bold and italic attribute with cell layout dialog
 
 
 Changes from 1.1 to 1.2
