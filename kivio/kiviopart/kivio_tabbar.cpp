@@ -371,7 +371,7 @@ void KivioTabBar::slotRename()
                  // Recursion
                  slotRename();
              }
-             KivioChangePageNameCommand *cmd = new KivioChangePageNameCommand(i18n("Rename page"), activeName, newName, page);
+             KivioChangePageNameCommand *cmd = new KivioChangePageNameCommand(i18n("Rename Page"), activeName, newName, page);
              m_pView->doc()->addCommand( cmd );
         }
     }

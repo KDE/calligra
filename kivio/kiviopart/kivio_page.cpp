@@ -1138,7 +1138,7 @@ bool KivioPage::removeCurrentLayer()
         return false;
     }
 
-    KivioRemoveLayerCommand * cmd = new KivioRemoveLayerCommand( i18n("Remove layer"), this , m_pCurLayer , m_lstLayers.findRef(m_pCurLayer) );
+    KivioRemoveLayerCommand * cmd = new KivioRemoveLayerCommand( i18n("Remove Layer"), this , m_pCurLayer , m_lstLayers.findRef(m_pCurLayer) );
     doc()->addCommand( cmd );
     takeLayer( m_pCurLayer );
 /*

@@ -954,8 +954,8 @@ void SelectTool::buildPopupMenu()
 
   m_pMenu->popupMenu()->insertSeparator();
 
-  m_pMenu->insert( new KAction( i18n("Bring To Front"), "bring_stencil_to_front", 0, m_pView, SLOT(bringStencilToFront()), actionCollection(), "bringStencilToFront" ) );
-  m_pMenu->insert( new KAction( i18n("Send To Back"), "send_stencil_to_back", 0, m_pView, SLOT(sendStencilToBack()), actionCollection(), "sendStencilToBack" ) );
+  m_pMenu->insert( new KAction( i18n("Bring to Front"), "bring_stencil_to_front", 0, m_pView, SLOT(bringStencilToFront()), actionCollection(), "bringStencilToFront" ) );
+  m_pMenu->insert( new KAction( i18n("Send to Back"), "send_stencil_to_back", 0, m_pView, SLOT(sendStencilToBack()), actionCollection(), "sendStencilToBack" ) );
 
 }
 

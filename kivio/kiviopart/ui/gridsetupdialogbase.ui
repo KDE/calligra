@@ -98,7 +98,7 @@
                             </property>
                             <property stdset="1">
                                 <name>text</name>
-                                <string>Place Horizontal grid lines every:</string>
+                                <string>Place horizontal grid lines every:</string>
                             </property>
                         </widget>
                         <widget row="1"  column="0" >
@@ -109,7 +109,7 @@
                             </property>
                             <property stdset="1">
                                 <name>text</name>
-                                <string>Place Vertical grid lines every:</string>
+                                <string>Place vertical grid lines every:</string>
                             </property>
                         </widget>
                         <widget row="0"  column="1" >
@@ -169,7 +169,7 @@
                             </property>
                             <property stdset="1">
                                 <name>text</name>
-                                <string>Snap to grid Horizontal distance:</string>
+                                <string>Snap to grid horizontal distance:</string>
                             </property>
                         </widget>
                         <widget row="1"  column="0" >
@@ -180,7 +180,7 @@
                             </property>
                             <property stdset="1">
                                 <name>text</name>
-                                <string>Snap to grid Vertical distance:</string>
+                                <string>Snap to grid vertical distance:</string>
                             </property>
                         </widget>
                         <widget row="0"  column="1" >

@@ -1,301 +1,196 @@
-<!DOCTYPE UI><UI>
+<!DOCTYPE UI><UI version="3.0" stdsetdef="1">
 <class>ExportPageDialogBase</class>
-<widget>
-    <class>QDialog</class>
-    <property stdset="1">
-        <name>name</name>
+<widget class="QDialog">
+    <property name="name">
         <cstring>ExportPageDialogBase</cstring>
     </property>
-    <property stdset="1">
-        <name>geometry</name>
+    <property name="geometry">
         <rect>
             <x>0</x>
             <y>0</y>
-            <width>182</width>
-            <height>215</height>
+            <width>296</width>
+            <height>236</height>
         </rect>
     </property>
-    <property stdset="1">
-        <name>baseSize</name>
+    <property name="baseSize">
         <size>
             <width>0</width>
             <height>0</height>
         </size>
     </property>
-    <property stdset="1">
-        <name>caption</name>
+    <property name="caption">
         <string>Export Page</string>
     </property>
-    <widget>
-        <class>QLabel</class>
-        <property stdset="1">
-            <name>name</name>
-            <cstring>TextLabel2</cstring>
+    <grid>
+        <property name="name">
+            <cstring>unnamed</cstring>
         </property>
-        <property stdset="1">
-            <name>geometry</name>
-            <rect>
-                <x>10</x>
-                <y>120</y>
-                <width>50</width>
-                <height>20</height>
-            </rect>
+        <property name="margin">
+            <number>11</number>
         </property>
-        <property stdset="1">
-            <name>text</name>
-            <string>Quality:</string>
+        <property name="spacing">
+            <number>6</number>
         </property>
-    </widget>
-    <widget>
-        <class>QLabel</class>
-        <property stdset="1">
-            <name>name</name>
-            <cstring>TextLabel3</cstring>
-        </property>
-        <property stdset="1">
-            <name>geometry</name>
-            <rect>
-                <x>10</x>
-                <y>150</y>
-                <width>40</width>
-                <height>20</height>
-            </rect>
-        </property>
-        <property stdset="1">
-            <name>text</name>
-            <string>Border:</string>
-        </property>
-    </widget>
-    <widget>
-        <class>QButtonGroup</class>
-        <property stdset="1">
-            <name>name</name>
-            <cstring>ButtonGroup1</cstring>
-        </property>
-        <property stdset="1">
-            <name>geometry</name>
-            <rect>
-                <x>10</x>
-                <y>0</y>
-                <width>170</width>
-                <height>110</height>
-            </rect>
-        </property>
-        <property stdset="1">
-            <name>title</name>
-            <string>Export</string>
-        </property>
-        <widget>
-            <class>QRadioButton</class>
-            <property stdset="1">
-                <name>name</name>
-                <cstring>m_radioFullPage</cstring>
+        <widget class="QLabel" row="1" column="0">
+            <property name="name">
+                <cstring>TextLabel2</cstring>
             </property>
-            <property stdset="1">
-                <name>geometry</name>
-                <rect>
-                    <x>10</x>
-                    <y>20</y>
-                    <width>94</width>
-                    <height>20</height>
-                </rect>
+            <property name="text">
+                <string>Quality:</string>
             </property>
-            <property stdset="1">
-                <name>text</name>
-                <string>&amp;All Stencils</string>
+        </widget>
+        <widget class="QLabel" row="2" column="0">
+            <property name="name">
+                <cstring>TextLabel3</cstring>
             </property>
-            <property stdset="1">
-                <name>checked</name>
-                <bool>true</bool>
+            <property name="text">
+                <string>Border:</string>
             </property>
-            <property stdset="1">
-                <name>buttonGroupId</name>
-                <number>1</number>
+        </widget>
+        <widget class="QButtonGroup" row="0" column="0" rowspan="1" colspan="3">
+            <property name="name">
+                <cstring>ButtonGroup1</cstring>
             </property>
-            <property>
-                <name>toolTip</name>
-                <string>Export all stencils on the current page</string>
+            <property name="title">
+                <string>Export</string>
             </property>
-            <property>
-                <name>whatsThis</name>
-                <string>&lt;b&gt;All Stencils&lt;/b&gt;&lt;br&gt;
+            <widget class="QRadioButton">
+                <property name="name">
+                    <cstring>m_radioFullPage</cstring>
+                </property>
+                <property name="geometry">
+                    <rect>
+                        <x>10</x>
+                        <y>20</y>
+                        <width>246</width>
+                        <height>20</height>
+                    </rect>
+                </property>
+                <property name="text">
+                    <string>&amp;All stencils</string>
+                </property>
+                <property name="checked">
+                    <bool>true</bool>
+                </property>
+                <property name="buttonGroupId">
+                    <number>1</number>
+                </property>
+                <property name="toolTip" stdset="0">
+                    <string>Export all stencils on the current page</string>
+                </property>
+                <property name="whatsThis" stdset="0">
+                    <string>&lt;b&gt;All Stencils&lt;/b&gt;&lt;br&gt;
 This will cause the entire page to be exported to the file. This means that &lt;i&gt;all&lt;/i&gt; stencils will be exported.</string>
-            </property>
-        </widget>
-        <widget>
-            <class>QRadioButton</class>
-            <property stdset="1">
-                <name>name</name>
-                <cstring>m_radioSelectedStencils</cstring>
-            </property>
-            <property stdset="1">
-                <name>geometry</name>
-                <rect>
-                    <x>10</x>
-                    <y>40</y>
-                    <width>120</width>
-                    <height>20</height>
-                </rect>
-            </property>
-            <property stdset="1">
-                <name>text</name>
-                <string>&amp;Selected Stencils</string>
-            </property>
-            <property>
-                <name>toolTip</name>
-                <string>Export the selected stencils on the current page</string>
-            </property>
-            <property>
-                <name>whatsThis</name>
-                <string>&lt;b&gt;Selected Stencils&lt;/b&gt;&lt;br&gt;
+                </property>
+            </widget>
+            <widget class="QRadioButton">
+                <property name="name">
+                    <cstring>m_radioSelectedStencils</cstring>
+                </property>
+                <property name="geometry">
+                    <rect>
+                        <x>10</x>
+                        <y>40</y>
+                        <width>249</width>
+                        <height>20</height>
+                    </rect>
+                </property>
+                <property name="text">
+                    <string>&amp;Selected stencils</string>
+                </property>
+                <property name="toolTip" stdset="0">
+                    <string>Export the selected stencils on the current page</string>
+                </property>
+                <property name="whatsThis" stdset="0">
+                    <string>&lt;b&gt;Selected Stencils&lt;/b&gt;&lt;br&gt;
 Export only the selected stencils to file.</string>
-            </property>
-        </widget>
-        <widget>
-            <class>QCheckBox</class>
-            <property stdset="1">
-                <name>name</name>
-                <cstring>m_checkCrop</cstring>
-            </property>
-            <property stdset="1">
-                <name>enabled</name>
-                <bool>false</bool>
-            </property>
-            <property stdset="1">
-                <name>geometry</name>
-                <rect>
-                    <x>10</x>
-                    <y>80</y>
-                    <width>150</width>
-                    <height>20</height>
-                </rect>
-            </property>
-            <property stdset="1">
-                <name>text</name>
-                <string>Crop picture to edges</string>
-            </property>
-            <property>
-                <name>toolTip</name>
-                <string>Don't export extra blank space to file</string>
-            </property>
-            <property>
-                <name>whatsThis</name>
-                <string>&lt;b&gt;Crop picture to edges&lt;/b&gt;&lt;br&gt;
+                </property>
+            </widget>
+            <widget class="QCheckBox">
+                <property name="name">
+                    <cstring>m_checkCrop</cstring>
+                </property>
+                <property name="enabled">
+                    <bool>false</bool>
+                </property>
+                <property name="geometry">
+                    <rect>
+                        <x>9</x>
+                        <y>80</y>
+                        <width>242</width>
+                        <height>20</height>
+                    </rect>
+                </property>
+                <property name="text">
+                    <string>Crop picture to edges</string>
+                </property>
+                <property name="toolTip" stdset="0">
+                    <string>Don't export extra blank space to file</string>
+                </property>
+                <property name="whatsThis" stdset="0">
+                    <string>&lt;b&gt;Crop picture to edges&lt;/b&gt;&lt;br&gt;
 This will eliminate all blank portions of the drawing. The picture will only be as large as the stencils it contains. If your stencils are located in the upper right corner of the page, then only the upper right corner will be exported.</string>
+                </property>
+            </widget>
+        </widget>
+        <widget class="QSpinBox" row="1" column="1" rowspan="1" colspan="2">
+            <property name="name">
+                <cstring>m_spinQuality</cstring>
+            </property>
+            <property name="maxValue">
+                <number>100</number>
+            </property>
+            <property name="value">
+                <number>100</number>
+            </property>
+            <property name="toolTip" stdset="0">
+                <string>The higher the quality, the more space the file takes up.</string>
+            </property>
+            <property name="whatsThis" stdset="0">
+                <string>&lt;b&gt;Quality&lt;/b&gt;&lt;br&gt;
+Not all file formats use this. But for those that do, this affects the quality of the image that gets exported. 100 is the maximum quality. The higher the number, the better the picture looks. The downside is the higher the number, the larger the filesize.</string>
             </property>
         </widget>
-    </widget>
-    <widget>
-        <class>QSpinBox</class>
-        <property stdset="1">
-            <name>name</name>
-            <cstring>m_spinQuality</cstring>
-        </property>
-        <property stdset="1">
-            <name>geometry</name>
-            <rect>
-                <x>60</x>
-                <y>120</y>
-                <width>120</width>
-                <height>23</height>
-            </rect>
-        </property>
-        <property stdset="1">
-            <name>maxValue</name>
-            <number>100</number>
-        </property>
-        <property stdset="1">
-            <name>value</name>
-            <number>100</number>
-        </property>
-        <property>
-            <name>toolTip</name>
-            <string>The higher the quality, the more space the file takes up.</string>
-        </property>
-        <property>
-            <name>whatsThis</name>
-            <string>&lt;b&gt;Quality&lt;/b&gt;&lt;br&gt;
-Not all file formats use this. But for those that do, this affects the quality of the image that gets exported. 100 is the maximum quality. The higher the number, the better the picture looks. The downside is the higher the number, the larger the filesize.</string>
-        </property>
-    </widget>
-    <widget>
-        <class>QSpinBox</class>
-        <property stdset="1">
-            <name>name</name>
-            <cstring>m_spinBorder</cstring>
-        </property>
-        <property stdset="1">
-            <name>geometry</name>
-            <rect>
-                <x>60</x>
-                <y>150</y>
-                <width>120</width>
-                <height>23</height>
-            </rect>
-        </property>
-        <property stdset="1">
-            <name>maxValue</name>
-            <number>10000</number>
-        </property>
-        <property>
-            <name>toolTip</name>
-            <string>An optional border of whitespace around the page, in pixels</string>
-        </property>
-        <property>
-            <name>whatsThis</name>
-            <string>&lt;b&gt;Border&lt;/b&gt;&lt;br&gt;
+        <widget class="QSpinBox" row="2" column="1" rowspan="1" colspan="2">
+            <property name="name">
+                <cstring>m_spinBorder</cstring>
+            </property>
+            <property name="maxValue">
+                <number>10000</number>
+            </property>
+            <property name="toolTip" stdset="0">
+                <string>An optional border of whitespace around the page, in pixels</string>
+            </property>
+            <property name="whatsThis" stdset="0">
+                <string>&lt;b&gt;Border&lt;/b&gt;&lt;br&gt;
 Places a blank border around the edges of the image. This can be used if for one reason or another, the stencils don't fit into the export page with a 0-pixel border (default).</string>
-        </property>
-    </widget>
-    <widget>
-        <class>QPushButton</class>
-        <property stdset="1">
-            <name>name</name>
-            <cstring>m_cancel</cstring>
-        </property>
-        <property stdset="1">
-            <name>geometry</name>
-            <rect>
-                <x>100</x>
-                <y>180</y>
-                <width>80</width>
-                <height>28</height>
-            </rect>
-        </property>
-        <property stdset="1">
-            <name>text</name>
-            <string>&amp;Cancel</string>
-        </property>
-        <property>
-            <name>whatsThis</name>
-            <string>&lt;b&gt;Cancel&lt;/b&gt;&lt;br&gt;
+            </property>
+        </widget>
+        <widget class="QPushButton" row="3" column="2">
+            <property name="name">
+                <cstring>m_cancel</cstring>
+            </property>
+            <property name="text">
+                <string>&amp;Cancel</string>
+            </property>
+            <property name="whatsThis" stdset="0">
+                <string>&lt;b&gt;Cancel&lt;/b&gt;&lt;br&gt;
 Abort the page export.</string>
-        </property>
-    </widget>
-    <widget>
-        <class>QPushButton</class>
-        <property stdset="1">
-            <name>name</name>
-            <cstring>m_ok</cstring>
-        </property>
-        <property stdset="1">
-            <name>geometry</name>
-            <rect>
-                <x>10</x>
-                <y>180</y>
-                <width>80</width>
-                <height>28</height>
-            </rect>
-        </property>
-        <property stdset="1">
-            <name>text</name>
-            <string>&amp;Ok</string>
-        </property>
-        <property>
-            <name>whatsThis</name>
-            <string>&lt;b&gt;Ok&lt;/b&gt;&lt;br&gt;
+            </property>
+        </widget>
+        <widget class="QPushButton" row="3" column="0" rowspan="1" colspan="2">
+            <property name="name">
+                <cstring>m_ok</cstring>
+            </property>
+            <property name="text">
+                <string>&amp;Ok</string>
+            </property>
+            <property name="whatsThis" stdset="0">
+                <string>&lt;b&gt;Ok&lt;/b&gt;&lt;br&gt;
 Export the page with the current settings.</string>
-        </property>
-    </widget>
+            </property>
+        </widget>
+    </grid>
 </widget>
+<layoutdefaults spacing="6" margin="11"/>
 </UI>

@@ -60,7 +60,7 @@
                     </property>
                     <property stdset="1">
                         <name>text</name>
-                        <string>Margins:</string>
+                        <string>Margins</string>
                     </property>
                 </widget>
                 <widget row="8"  column="0" >
