@@ -1,7 +1,6 @@
 <!DOCTYPE UI><UI version="3.1" stdsetdef="1">
 <class>ExportDialogUI</class>
 <comment>Export dialog for KWord's HTML export filter</comment>
-<author>Nicolas GOUTTE &lt;goutte@kde.org&gt;</author>
 <widget class="QWidget">
     <property name="name">
         <cstring>ExportDialogUI</cstring>
