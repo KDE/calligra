@@ -116,6 +116,7 @@ public:
     void initEmpty();
 
     virtual void addView( KoView *_view );
+    virtual void removeView( KoView *_view );
 
     // page layout
     void setPageLayout( const KoPageLayout &);

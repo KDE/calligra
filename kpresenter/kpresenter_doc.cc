@@ -3320,4 +3320,13 @@ void KPresenterDoc::addView( KoView *_view )
         static_cast<KPresenterView*>(it.current())->closeTextObject();
 }
 
+void KPresenterDoc::removeView( KoView *_view )
+{
+    KoDocument::removeView( _view );
+    QPtrListIterator<KoView> it( views() );
+    for (; it.current(); ++it )
+        static_cast<KPresenterView*>(it.current())->deSelectAllObject();
+}
+
+
 #include <kpresenter_doc.moc>

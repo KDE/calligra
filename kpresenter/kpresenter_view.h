@@ -579,6 +579,7 @@ public:
     void changeVerticalAlignmentStatus(VerticalAlignmentType _type );
 
     void closeTextObject();
+    void deSelectAllObject();
 
 protected slots:
     // dialog slots

@@ -7230,5 +7230,9 @@ void KPresenterView::closeTextObject()
     }
 }
 
+void KPresenterView::deSelectAllObject()
+{
+    m_canvas->deSelectAllObj();
+}
 
 #include <kpresenter_view.moc>
