@@ -1460,7 +1460,6 @@ void KWDocument::loadEmbedded( QDomElement embedded )
 void KWDocument::loadStyleTemplates( QDomElement stylesElem )
 {
     QValueList<QString> followingStyles;
-    QPtrList<KWStyle> m_styleList(m_styleColl->styleList());
     QDomNodeList listStyles = stylesElem.elementsByTagName( "STYLE" );
     if( listStyles.count() > 0) { // we are going to import at least one style.
         KWStyle *s = m_styleColl->findStyle("Standard");
@@ -1481,7 +1480,7 @@ void KWDocument::loadStyleTemplates( QDomElement stylesElem )
         if ( !nameElem.isNull() )
         {
             sty->setName( nameElem.attribute("value") );
-            //kdDebug() << "KWStyle created " << this << " name=" << m_name << endl;
+            //kdDebug() << "KWStyle created  name=" << sty->name() << endl;
         } else
             kdWarning() << "No NAME tag in LAYOUT -> no name for this style!" << endl;
 
@@ -1495,10 +1494,9 @@ void KWDocument::loadStyleTemplates( QDomElement stylesElem )
             kdWarning(32001) << "No FORMAT tag in <STYLE>" << endl; // This leads to problems in applyStyle().
 
         // Style created, now let's try to add it
-
         sty = m_styleColl->addStyleTemplate( sty );
 
-        if(m_styleList.count() > followingStyles.count() )
+        if(m_styleColl->styleList().count() > followingStyles.count() )
         {
             QString following = styleElem.namedItem("FOLLOWING").toElement().attribute("name");
             followingStyles.append( following );
@@ -1507,7 +1505,7 @@ void KWDocument::loadStyleTemplates( QDomElement stylesElem )
             kdWarning () << "Found duplicate style declaration, overwriting former " << sty->name() << endl;
     }
 
-    Q_ASSERT( followingStyles.count() == m_styleList.count() );
+    Q_ASSERT( followingStyles.count() == m_styleColl->styleList().count() );
 
     unsigned int i=0;
     for( QValueList<QString>::Iterator it = followingStyles.begin(); it != followingStyles.end(); ++it ) {
