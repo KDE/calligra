@@ -61,7 +61,7 @@ int main(int argc, char *argv[])
 		
 		if (args->count())
 		{
-        kudesigner->openDocumentFile(args->arg(0));
+        kudesigner->openDocumentFile(args->url(0));
 		}
 		else
 		{
