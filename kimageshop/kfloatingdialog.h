@@ -24,6 +24,10 @@
 #include <qpoint.h>
 #include <qframe.h>
 
+#define TITLE_HEIGHT 18
+#define GRADIENT_HEIGHT 14
+#define FRAMEBORDER 2
+
 class KFloatingDialog : public QFrame
 {
   Q_OBJECT
@@ -32,23 +36,36 @@ class KFloatingDialog : public QFrame
   KFloatingDialog(QWidget *parent = 0L);
   ~KFloatingDialog();
 
+  // usable client space:
+  int _left() { return FRAMEBORDER; }
+  int _top() { return TITLE_HEIGHT; }
+  int _width() { return width() - 2*FRAMEBORDER; }
+  int _height() { return height() - TITLE_HEIGHT - FRAMEBORDER; }
+
  protected:
   virtual void paintEvent(QPaintEvent *);
   virtual void resizeEvent(QResizeEvent *);
+  virtual void leaveEvent(QEvent *);
   virtual void mousePressEvent(QMouseEvent *);
   virtual void mouseMoveEvent(QMouseEvent *);
   virtual void mouseReleaseEvent(QMouseEvent *);
   virtual void mouseDoubleClickEvent (QMouseEvent *); 
 
+  const QRect titleRect()  { return QRect(0,0, width(), TITLE_HEIGHT); }
+  const QRect bottomRect() { return QRect(FRAMEBORDER, height()-FRAMEBORDER, width()-2*FRAMEBORDER, FRAMEBORDER); }
+  const QRect rightRect() { return QRect(width()-FRAMEBORDER, FRAMEBORDER, FRAMEBORDER, height() - 2*FRAMEBORDER); }
+  const QRect lowerRightRect() { return QRect(width()-FRAMEBORDER, height()-FRAMEBORDER , FRAMEBORDER, FRAMEBORDER); }
+  
  protected:
+  enum resizeMode { horizontal, vertical, diagonal };
   bool     m_dragging;
   bool     m_resizing;
   bool     m_shaded;
+  bool     m_cursor;
 
-  QPoint   m_resizeStart;
-  QPoint   m_dragStart;
-
+  QPoint   m_start;
   int      m_unshadedHeight;
+  int      m_resizeMode;
 
   QWidget  *m_pParent;
 };

@@ -40,22 +40,22 @@ class KVector
   double	 x() const;
   double	 y() const;
   double	 z() const;
-  void   setX(double x);
-  void   setY(double y);
-  void   setZ(double Z);
+  void   setX(double);
+  void   setY(double);
+  void   setZ(double);
 
   KVector &normalize();
-  KVector &crossProduct(const KVector &v);
-  double  dotProduct(const KVector &v);
+  KVector &crossProduct(const KVector &);
+  double  dotProduct(const KVector &);
 
-  KVector &operator+=(const KVector &v);
-  KVector &operator-=(const KVector &v);
-  KVector &operator*=(int c);
-  KVector &operator*=(long c);
-  KVector &operator*=(double c);
-  KVector &operator/=(int c);
-  KVector &operator/=(long c);
-  KVector &operator/=(double c);
+  KVector &operator+=(const KVector &);
+  KVector &operator-=(const KVector &);
+  KVector &operator*=(int);
+  KVector &operator*=(long);
+  KVector &operator*=(double);
+  KVector &operator/=(int);
+  KVector &operator/=(long);
+  KVector &operator/=(double);
 
   friend inline bool operator==(const KVector &, const KVector &);
   friend inline bool operator!=(const KVector &, const KVector &);
