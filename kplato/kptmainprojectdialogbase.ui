@@ -1,0 +1,235 @@
+<!DOCTYPE UI><UI version="3.2" stdsetdef="1">
+<class>KPTMainProjectDialogBase</class>
+<author>Dag Andersen &lt;danders@get2net.dk&gt;</author>
+<widget class="QWidget">
+    <property name="name">
+        <cstring>KPTMainProjectDialogBase</cstring>
+    </property>
+    <property name="geometry">
+        <rect>
+            <x>0</x>
+            <y>0</y>
+            <width>643</width>
+            <height>400</height>
+        </rect>
+    </property>
+    <property name="caption">
+        <string>KPTProjectDialogBase</string>
+    </property>
+    <vbox>
+        <property name="name">
+            <cstring>unnamed</cstring>
+        </property>
+        <widget class="QTabWidget">
+            <property name="name">
+                <cstring>daTabs</cstring>
+            </property>
+            <widget class="QWidget">
+                <property name="name">
+                    <cstring>tab</cstring>
+                </property>
+                <attribute name="title">
+                    <string>&amp;General</string>
+                </attribute>
+                <grid>
+                    <property name="name">
+                        <cstring>unnamed</cstring>
+                    </property>
+                    <widget class="QLayoutWidget" row="0" column="0">
+                        <property name="name">
+                            <cstring>layout5</cstring>
+                        </property>
+                        <grid>
+                            <property name="name">
+                                <cstring>unnamed</cstring>
+                            </property>
+                            <widget class="QLineEdit" row="0" column="1" rowspan="1" colspan="2">
+                                <property name="name">
+                                    <cstring>namefield</cstring>
+                                </property>
+                                <property name="toolTip" stdset="0">
+                                    <string></string>
+                                </property>
+                                <property name="whatsThis" stdset="0">
+                                    <string>Give a name to the project to identify it. Example can be 'rewrite explorer' or 'housing project C2'</string>
+                                </property>
+                            </widget>
+                            <widget class="QLabel" row="1" column="0">
+                                <property name="name">
+                                    <cstring>textLabel2</cstring>
+                                </property>
+                                <property name="text">
+                                    <string>Project &amp;leader:</string>
+                                </property>
+                                <property name="buddy" stdset="0">
+                                    <cstring>leaderfield</cstring>
+                                </property>
+                            </widget>
+                            <widget class="QLineEdit" row="1" column="1">
+                                <property name="name">
+                                    <cstring>leaderfield</cstring>
+                                </property>
+                            </widget>
+                            <widget class="QLabel" row="0" column="0">
+                                <property name="name">
+                                    <cstring>textLabel1</cstring>
+                                </property>
+                                <property name="text">
+                                    <string>Project n&amp;ame:</string>
+                                </property>
+                                <property name="buddy" stdset="0">
+                                    <cstring>namefield</cstring>
+                                </property>
+                            </widget>
+                            <widget class="QPushButton" row="1" column="2">
+                                <property name="name">
+                                    <cstring>chooseLeader</cstring>
+                                </property>
+                                <property name="text">
+                                    <string>&amp;Choose...</string>
+                                </property>
+                                <property name="accel">
+                                    <string>Alt+C</string>
+                                </property>
+                            </widget>
+                        </grid>
+                    </widget>
+                    <widget class="QButtonGroup" row="1" column="0">
+                        <property name="name">
+                            <cstring>schedulingGroup</cstring>
+                        </property>
+                        <property name="title">
+                            <string>Scheduling</string>
+                        </property>
+                        <grid>
+                            <property name="name">
+                                <cstring>unnamed</cstring>
+                            </property>
+                            <widget class="QLayoutWidget" row="0" column="0">
+                                <property name="name">
+                                    <cstring>layout5</cstring>
+                                </property>
+                                <hbox>
+                                    <property name="name">
+                                        <cstring>unnamed</cstring>
+                                    </property>
+                                    <widget class="QLayoutWidget">
+                                        <property name="name">
+                                            <cstring>layout3</cstring>
+                                        </property>
+                                        <vbox>
+                                            <property name="name">
+                                                <cstring>unnamed</cstring>
+                                            </property>
+                                            <widget class="QRadioButton">
+                                                <property name="name">
+                                                    <cstring>bStartDate</cstring>
+                                                </property>
+                                                <property name="text">
+                                                    <string>Start date</string>
+                                                </property>
+                                            </widget>
+                                            <widget class="QRadioButton">
+                                                <property name="name">
+                                                    <cstring>bEndDate</cstring>
+                                                </property>
+                                                <property name="text">
+                                                    <string>End date</string>
+                                                </property>
+                                            </widget>
+                                        </vbox>
+                                    </widget>
+                                    <widget class="QLayoutWidget">
+                                        <property name="name">
+                                            <cstring>layout4</cstring>
+                                        </property>
+                                        <vbox>
+                                            <property name="name">
+                                                <cstring>unnamed</cstring>
+                                            </property>
+                                            <widget class="QDateTimeEdit">
+                                                <property name="name">
+                                                    <cstring>startDateTime</cstring>
+                                                </property>
+                                            </widget>
+                                            <widget class="QDateTimeEdit">
+                                                <property name="name">
+                                                    <cstring>endDateTime</cstring>
+                                                </property>
+                                            </widget>
+                                        </vbox>
+                                    </widget>
+                                    <spacer>
+                                        <property name="name">
+                                            <cstring>spacer2</cstring>
+                                        </property>
+                                        <property name="orientation">
+                                            <enum>Horizontal</enum>
+                                        </property>
+                                        <property name="sizeType">
+                                            <enum>Expanding</enum>
+                                        </property>
+                                        <property name="sizeHint">
+                                            <size>
+                                                <width>40</width>
+                                                <height>20</height>
+                                            </size>
+                                        </property>
+                                    </spacer>
+                                </hbox>
+                            </widget>
+                        </grid>
+                    </widget>
+                    <spacer row="2" column="0">
+                        <property name="name">
+                            <cstring>spacer3</cstring>
+                        </property>
+                        <property name="orientation">
+                            <enum>Vertical</enum>
+                        </property>
+                        <property name="sizeType">
+                            <enum>Expanding</enum>
+                        </property>
+                        <property name="sizeHint">
+                            <size>
+                                <width>20</width>
+                                <height>40</height>
+                            </size>
+                        </property>
+                    </spacer>
+                </grid>
+            </widget>
+            <widget class="QWidget">
+                <property name="name">
+                    <cstring>tab</cstring>
+                </property>
+                <attribute name="title">
+                    <string>&amp;Notes</string>
+                </attribute>
+                <vbox>
+                    <property name="name">
+                        <cstring>unnamed</cstring>
+                    </property>
+                    <widget class="QLabel">
+                        <property name="name">
+                            <cstring>textLabel5</cstring>
+                        </property>
+                        <property name="text">
+                            <string>&amp;Project notes and summary:</string>
+                        </property>
+                        <property name="buddy" stdset="0">
+                            <cstring>descriptionfield</cstring>
+                        </property>
+                    </widget>
+                    <widget class="QTextEdit">
+                        <property name="name">
+                            <cstring>descriptionfield</cstring>
+                        </property>
+                    </widget>
+                </vbox>
+            </widget>
+        </widget>
+    </vbox>
+</widget>
+<layoutdefaults spacing="6" margin="11"/>
+</UI>

@@ -21,6 +21,7 @@
 #include "kptfactory.h"
 #include "kptpart.h"
 #include "kptproject.h"
+#include "kptmainprojectdialog.h"
 #include "kptprojectdialog.h"
 #include "kpttask.h"
 #include "kpttaskdialog.h"
@@ -263,7 +264,7 @@ void KPTView::slotViewResources() {
 }
 
 void KPTView::slotProjectEdit() {
-    KPTProjectDialog *dia = new KPTProjectDialog(getPart()->getProject());
+    KPTMainProjectDialog *dia = new KPTMainProjectDialog(getProject());
     if (dia->exec())
 	    slotUpdate(true);
 
