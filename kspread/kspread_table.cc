@@ -1806,7 +1806,7 @@ bool KSpreadTable::insertRow( int row,int nbRow,bool makeUndo )
     return res;
 }
 
-void KSpreadTable::removeColumn( int col,int nbCol,bool makeUndo )
+void KSpreadTable::removeColumn( int col, int nbCol, bool makeUndo )
 {
     if ( !m_pDoc->undoBuffer()->isLocked() && makeUndo)
     {
@@ -2085,7 +2085,7 @@ else
   return selection;
 }
 
-void KSpreadTable::changeNameCellRef(const QPoint & pos, bool fullRowOrColumn, ChangeRef ref, QString tabname,int nbCol)
+void KSpreadTable::changeNameCellRef(const QPoint & pos, bool fullRowOrColumn, ChangeRef ref, QString tabname, int nbCol)
 {
   bool correctDefaultTableName = (tabname == name()); // for cells without table ref (eg "A1")
   KSpreadCell* c = m_cells.firstCell();
@@ -2113,12 +2113,16 @@ void KSpreadTable::changeNameCellRef(const QPoint & pos, bool fullRowOrColumn, C
         {
           // Collect everything that forms a name (cell name or table name)
           QString str;
-          for( ; i < origText.length() &&
-                  (origText[i].isLetter() || origText[i].isDigit()
-                   || origText[i].isSpace() || origText[i] == '$')
-                   ; ++i )
+          bool tableNameFound = false; //Table names need spaces
+          for( ; ( i < origText.length() ) &&  // until the end
+                 (  ( origText[i].isLetter() || origText[i].isDigit() || origText[i] == '$' ) ||  // all Text and numbers are welcome
+                     ( tableNameFound && origText[i].isSpace() ) )
+               ; ++i )
+          {
             str += origText[i];
-
+            if ( origText[i] == '!' )
+              tableNameFound = true;
+          }
           // Was it a table name ?
           if ( origText[i] == '!' )
           {
@@ -2134,58 +2138,57 @@ void KSpreadTable::changeNameCellRef(const QPoint & pos, bool fullRowOrColumn, C
             {
               int col = point.pos.x();
               int row = point.pos.y();
+
               // Update column
               if ( point.columnFixed )
-                newText += '$' + util_encodeColumnLabelText( col );
-              else
+                newText += '$';
+
+              if(ref==ColumnInsert
+                 && correctTableName
+                 && col>=pos.x()     // Column after the new one : +1
+                 && ( fullRowOrColumn || row == pos.y() ) ) // All rows or just one
               {
-                if(ref==ColumnInsert
-                   && correctTableName
-                   && col>=pos.x()     // Column after the new one : +1
-                   && ( fullRowOrColumn || row == pos.y() ) ) // All rows or just one
-                {
-                  newText += util_encodeColumnLabelText( col+nbCol );
-                }
-                else if(ref==ColumnRemove
-                        && correctTableName
-                        && col > pos.x() // Column after the deleted one : -1
-                        && ( fullRowOrColumn || row == pos.y() ) ) // All rows or just one
-                {
-                  newText += util_encodeColumnLabelText( col-nbCol );
-                }
-                else
-                  newText += util_encodeColumnLabelText( col );
+                newText += util_encodeColumnLabelText( col+nbCol );
               }
+              else if(ref==ColumnRemove
+                      && correctTableName
+                      && col > pos.x() // Column after the deleted one : -1
+                      && ( fullRowOrColumn || row == pos.y() ) ) // All rows or just one
+              {
+                newText += util_encodeColumnLabelText( col-nbCol );
+              }
+              else
+                newText += util_encodeColumnLabelText( col );
+
               // Update row
               if ( point.rowFixed )
-                newText += '$' + QString::number( row );
-              else
+                newText += '$';
+
+              if(ref==RowInsert
+                 && correctTableName
+                 && row >= pos.y() // Row after the new one : +1
+                 && ( fullRowOrColumn || col == pos.x() ) ) // All columns or just one
               {
-                if(ref==RowInsert
-                   && correctTableName
-                   && row >= pos.y() // Row after the new one : +1
-                   && ( fullRowOrColumn || col == pos.x() ) ) // All columns or just one
-                {
-                  newText += QString::number( row+nbCol );
-                }
-                else if(ref==RowRemove
-                        && correctTableName
-                        && row > pos.y() // Column after the deleted one : -1
-                        && ( fullRowOrColumn || col == pos.x() ) ) // All columns or just one
-                {
-                  newText += QString::number( row-nbCol );
-                }
-                else
-                  newText += QString::number( row );
+                newText += QString::number( row+nbCol );
               }
+              else if(ref==RowRemove
+                      && correctTableName
+                      && row > pos.y() // Column after the deleted one : -1
+                      && ( fullRowOrColumn || col == pos.x() ) ) // All columns or just one
+              {
+                newText += QString::number( row-nbCol );
+              }
+              else
+                newText += QString::number( row );
             }
             else // Not a cell ref
             {
-              //kdDebug(36001) << "Copying (unchanged) : " << str << endl;
+              kdDebug(36001) << "Copying (unchanged) : '" << str << "'" << endl;
               newText += str;
             }
             // Copy the char that got us to stop
-            newText += origText[i];
+            if ( i < origText.length() )
+              newText += origText[i];
           }
         }
       }
