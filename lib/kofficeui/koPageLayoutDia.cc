@@ -668,7 +668,7 @@ void KoPageLayoutDia::setupTab4()
     grid4->addWidget( gFooter, 2, 0 );
 
     QButtonGroup *gFootNote = new QButtonGroup( i18n( "Foot-/Endnote" ), tab4 );
-    QGridLayout *footNoteGrid = new QGridLayout( gFootNote, 2, 2, KDialog::marginHint(), KDialog::spacingHint() );
+    QGridLayout *footNoteGrid = new QGridLayout( gFootNote, 2, 2, 2*KDialog::marginHint(), KDialog::spacingHint() );
 
     QLabel *lFNSpacing = new QLabel( i18n("Spacing between footnote and body (%1):").arg(str), gFootNote );
     lFNSpacing->setAlignment( AlignRight | AlignVCenter );
