@@ -139,6 +139,7 @@ void KSpreadCell::copyLayout( int _column, int _row )
     setVerticalText( o->verticalText( _column, _row ) );
     setStyle( o->style());
     setDontPrintText(o->getDontprintText(_column, _row ) );
+    setIndent( o->getIndent(_column, _row ) );
 
     KSpreadConditional *tmpCondition;
     if( o->getFirstCondition(0) )
