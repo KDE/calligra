@@ -1,3 +1,6 @@
+2002-01-10 Lukas Tinkl <lukas@kde.org>
+	* implemented 19 new statistical functions (BETADIST, GAMMADIST, POISSON, etc.)
+	
 2001-11-25  David Faure  <faure@kde.org>
 
 	* Implemented visual feedback during search & search-replace
