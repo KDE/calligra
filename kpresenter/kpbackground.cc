@@ -188,7 +188,6 @@ QDomElement KPBackGround::save( QDomDocument &doc, const bool saveAsKOffice1Dot1
     if ( soundEffect || !soundFileName.isEmpty() ) {
         element = doc.createElement( "PGSOUNDEFFECT" );
         element.setAttribute( "soundEffect", static_cast<int>(soundEffect) );
-        element.setAttribute( "soundFileNmae", soundFileName ); // old typo, keep saving for compat
         element.setAttribute( "soundFileName", soundFileName );
         page.appendChild( element );
     }

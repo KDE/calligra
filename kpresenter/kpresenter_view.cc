@@ -5979,7 +5979,7 @@ void KPresenterView::changeZoomMenu( int zoom )
         QStringList itemsList = actionViewZoom->items();
         for (QStringList::Iterator it = itemsList.begin() ; it != itemsList.end() ; ++it)
         {
-            z = (*it).replace( QRegExp( "%" ), "" );
+            z = (*it).replace( "%", "" );
             z = z.simplifyWhiteSpace();
             val=z.toInt(&ok);
             //zoom : limit inferior=10
@@ -6047,7 +6047,7 @@ void KPresenterView::viewZoom( const QString &s )
     }
     else
     {
-        z = z.replace( QRegExp( "%" ), "" );
+        z = z.replace( "%", "" );
         z = z.simplifyWhiteSpace();
         zoom = z.toInt(&ok);
     }

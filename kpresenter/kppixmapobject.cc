@@ -305,8 +305,6 @@ QPixmap KPPixmapObject::generatePixmap(KoZoomHandler*_zoomHandler)
     QPainter paint;
 
     paint.begin( &pixmap );
-
-    paint.setBackgroundMode(Qt::TransparentMode);
     pixmap.fill( Qt::white );
 
     // Draw background
@@ -344,7 +342,6 @@ void KPPixmapObject::draw( QPainter *_painter, KoZoomHandler*_zoomHandler,
                            SelectionMode selectionMode, bool drawContour )
 {
     if ( image.isNull() ) return;
-
 
     if ( shadowDistance > 0 && !drawContour )
         drawShadow(_painter, _zoomHandler);
