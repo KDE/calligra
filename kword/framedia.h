@@ -21,7 +21,7 @@
 #define framedia_h
 
 #include <kdialogbase.h>
-#include "kwunit.h"
+#include <koUnit.h>
 
 class KWFrame;
 class KWDocument;
@@ -134,7 +134,7 @@ protected:
     double oldX, oldY, oldW, oldH;
 
     int /*FrameBehaviour*/ frameBehaviour;
-    KWUnit::Unit frameUnits;
+    KoUnit::Unit frameUnits;
     QString oldFrameSetName;
     QBrush newBrushStyle;
 

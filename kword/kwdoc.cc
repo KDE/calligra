@@ -1119,14 +1119,8 @@ bool KWDocument::loadXML( QIODevice *, const QDomDocument & doc )
         unitName = "pt";
     }
     m_unit = KoUnit::unit( unitName );
-    switch ( m_unit ) {
-    case KoUnit::U_MM: __pgLayout.unit = KoUnit::U_MM;
-        break;
-    case KoUnit::U_PT: __pgLayout.unit = KoUnit::U_PT;
-        break;
-    case KoUnit::U_INCH: __pgLayout.unit = KoUnit::U_INCH;
-        break;
-    }
+    __pgLayout.unit = m_unit;
+
     setPageLayout( __pgLayout, __columns, __hf );
 
     emit sigProgress(10);
@@ -2166,15 +2160,7 @@ void KWDocument::repaintAllViewsExcept( KWView *_view, bool erase )
 void KWDocument::setUnit( KoUnit::Unit _unit )
 {
     m_unit = _unit;
-    switch ( m_unit ) {
-    case KoUnit::U_MM: m_pageLayout.unit = KoUnit::U_MM;
-        break;
-    case KoUnit::U_PT: m_pageLayout.unit = KoUnit::U_PT;
-        break;
-    case KoUnit::U_INCH: m_pageLayout.unit = KoUnit::U_INCH;
-        break;
-    }
-
+    m_pageLayout.unit=m_unit;
     for ( KWView *viewPtr = m_lstViews.first(); viewPtr != 0; viewPtr = m_lstViews.next() ) {
         if ( viewPtr->getGUI() ) {
             viewPtr->getGUI()->getHorzRuler()->setUnit( KoUnit::unitName( m_unit ) );
