@@ -330,6 +330,10 @@ KexiDB/parser
 	code readability
 - more safe and readable code: $$ is now used instead of changing global variables
 - realType added
+- loadDataBlock(), storeDataBlock(), removeDataBlock() moved to Connection class
+- Connection::querySchema() methods now use parser
+- Connection::createTable() now also allows table replacing
+- Connection::storeObjectSchemaData() now reuses schema's id if > 0
 NEWAPI Test
 - now KCmdLineOptions are used, see README
 - "parser" test added

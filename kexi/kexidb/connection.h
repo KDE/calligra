@@ -338,7 +338,7 @@ class KEXI_DB_EXPORT Connection : public QObject, public KexiDB::Object
 		 for this connection.
 		 There is an attempt to close the cursor with Cursor::close() if it was opened. 
 		 Anyway, at last cursor is deleted. 
-		 \returns true if cursor is properly closed before deletion. */
+		 \return true if cursor is properly closed before deletion. */
 		bool deleteCursor(Cursor *cursor);
 
 		/*! \return schema of a table pointed by \a tableId, retrieved from currently 
@@ -427,10 +427,17 @@ class KEXI_DB_EXPORT Connection : public QObject, public KexiDB::Object
 		 inserted to Connection structures - it is owned by Connection object now, 
 		 so you shouldn't destroy the tableSchema object by hand 
 		 (or declare it as local-scope variable). 
+
+		 If \a replaceExisting is false (the default) and table with the same name 
+		 (as tableSchema->name()) exists, error is returned. 
+		 If \a replaceExisting is true, a table schema with the same name (if exists) 
+		 is overwritten, then a new table schema gets the same identifier 
+		 as existing table schema's identifier.
+
 		 Note: on error, \a tableSchema is not inserted into Connection structures,
 		 so you are still owner of this object.
 		*/
-		bool createTable( TableSchema* tableSchema );
+		bool createTable( TableSchema* tableSchema, bool replaceExisting = false );
 
 		/*! Drops a table defined by \a tableSchema.
 		 If true is returned, schema information \a tableSchema is destoyed
@@ -536,7 +543,7 @@ class KEXI_DB_EXPORT Connection : public QObject, public KexiDB::Object
 		 Only use this method if you really need. */
 		bool executeSQL( const QString& statement );
 
-		/*! returns "SELECT ..." statement's string needed for executing query 
+		/*! \return "SELECT ..." statement's string needed for executing query 
 		 defined by \a querySchema.
 
 		 Note: The statement string can be specific for this connection's driver database, 
@@ -554,7 +561,8 @@ class KEXI_DB_EXPORT Connection : public QObject, public KexiDB::Object
 		 and obtained, unique object identifier is assigned to \a sdata 
 		 (see SchemaData::id()).
 		 
-		 If \a newObject is false, it's expected that entry on the backend already exists,
+		 If \a newObject is false (or sdata.id() is >0), 
+		 it's expected that entry on the backend already exists,
 		 so it's updated (changes to identifier are not allowed).
 		 \return true on success. */
 		bool storeObjectSchemaData( SchemaData &sdata, bool newObject );
@@ -615,7 +623,7 @@ class KEXI_DB_EXPORT Connection : public QObject, public KexiDB::Object
 		 consider reimplementing drv_databaseExists() instead. 
 		 The mehod should return true only if there was no error on getting database names 
 		 list from the server.
-		 Default implementation puts empty liost into \a list and returns true. */
+		 Default implementation puts empty list into \a list and returns true. */
 		virtual bool drv_getDatabasesList( QStringList &list );
 
 		/*! For optional reimplemenation: asks server if database \a dbName exists.
@@ -662,7 +670,7 @@ class KEXI_DB_EXPORT Connection : public QObject, public KexiDB::Object
 			anymore. */
 		virtual bool drv_dropDatabase( const QString &dbName = QString::null ) = 0;
 
-		/*! returns "CREATE TABLE ..." statement string needed for \a tableSchema
+		/*! \return "CREATE TABLE ..." statement string needed for \a tableSchema
 		 creation in the database. 
 		 
 		 Note: The statement string can be specific for this connection's driver database, 
@@ -671,7 +679,7 @@ class KEXI_DB_EXPORT Connection : public QObject, public KexiDB::Object
 		QString createTableStatement( const TableSchema& tableSchema ) const;
 
 
-		/*! returns "SELECT ..." statement's string needed for executing query 
+		/*! \return "SELECT ..." statement's string needed for executing query 
 		 defined by "select * from <table_name>" where <table_name> is \a tableSchema's name.
 		 This method's variant can be useful when there is no appropriate QuerySchema defined.
 
@@ -701,7 +709,7 @@ class KEXI_DB_EXPORT Connection : public QObject, public KexiDB::Object
 //			(used mostly for SELECT query). */
 //		virtual bool drv_executeQuery( const QString& statement ) = 0;
 
-		/*! Returns unique identifier of last inserted row. 
+		/*! \return unique identifier of last inserted row. 
 		 Typically this is just primary key value. 
 		 This identifier could be reused when we want to reference
 		 just inserted row.

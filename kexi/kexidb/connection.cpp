@@ -752,13 +752,13 @@ inline QString Connection::internal_valueToSQL( Field::Type ftype, const QVarian
 
 QString Connection::valueToSQL( const Field::Type ftype, const QVariant& v ) const
 {
-	kdDebug() << "valueToSQL(" << (m_driver ? m_driver->sqlTypeName(ftype) : "??") << ", " << Connection_valueToSQL( ftype, v ) <<")" << endl;
+//	kdDebug() << "valueToSQL(" << (m_driver ? m_driver->sqlTypeName(ftype) : "??") << ", " << Connection_valueToSQL( ftype, v ) <<")" << endl;
 	return Connection_valueToSQL( ftype, v );
 }
 
 QString Connection::valueToSQL( const Field *field, const QVariant& v ) const
 {
-	kdDebug() << "valueToSQL(" << (m_driver ? ( field ? m_driver->sqlTypeName(field->type()): "!field") : "??") << ", " << Connection_valueToSQL( (field ? field->type() : Field::InvalidType), v ) <<")" << endl;
+//	kdDebug() << "valueToSQL(" << (m_driver ? ( field ? m_driver->sqlTypeName(field->type()): "!field") : "??") << ", " << Connection_valueToSQL( (field ? field->type() : Field::InvalidType), v ) <<")" << endl;
 	return Connection_valueToSQL( (field ? field->type() : Field::InvalidType), v );
 }
 #endif
@@ -847,8 +847,6 @@ C_INS_REC_ALL
 	{ \
 		QString value; \
 		Field::List *flist = fields.fields(); \
-		kdDebug() << "# of fields: " << flist->count() <<endl; \
-		kdDebug() <<  fields.fields()->first()->table() << endl; \
 		vals \
 		return executeSQL( \
 			QString("INSERT INTO ") + \
@@ -1048,7 +1046,7 @@ int Connection::lastInsertedAutoIncValue(const QString& aiFieldName, const KexiD
 	return lastInsertedAutoIncValue(aiFieldName,table.name());
 }
 
-bool Connection::createTable( KexiDB::TableSchema* tableSchema )
+bool Connection::createTable( KexiDB::TableSchema* tableSchema, bool replaceExisting )
 {
 	if (!tableSchema || !checkIsDatabaseUsed())
 		return false;
@@ -1063,16 +1061,44 @@ bool Connection::createTable( KexiDB::TableSchema* tableSchema )
 			.arg(tableSchema->name()));
 		return false;
 	}
-	{
-		Field *sys_field = findSystemFieldName(tableSchema);
-		if (sys_field) {
-			setError(ERR_SYSTEM_NAME_RESERVED, 
-				i18n("System name \"%1\" cannot be used as one of fields in \"%2\" table.")
-				.arg(sys_field->name()).arg(tableSchema->name()));
+	Field *sys_field = findSystemFieldName(tableSchema);
+	if (sys_field) {
+		setError(ERR_SYSTEM_NAME_RESERVED, 
+			i18n("System name \"%1\" cannot be used as one of fields in \"%2\" table.")
+			.arg(sys_field->name()).arg(tableSchema->name()));
+		return false;
+	}
+
+	const QString &tableName = tableSchema->name().lower();
+
+	if (replaceExisting) {
+		//get previous table (do not retrieve, though)
+		KexiDB::TableSchema *existingTable = m_tables_byname[tableName];
+		if (existingTable) {
+			if (existingTable == tableSchema) {
+				setError(ERR_OBJECT_EXISTS, i18n("Could not create the same table \"%1\" twice.").arg(tableSchema->name()) );
+				return false;
+			}
+//TODO(js): update any structure (e.g. queries) that depend on this table!
+			if (existingTable->id()>0)
+				tableSchema->m_id = existingTable->id(); //copy id from existing table
+			if (!dropTable( existingTable ))
+				return false;
+		}
+	}
+	else {
+		if (this->tableSchema( tableSchema->name() ) != 0) {
+			setError(ERR_OBJECT_EXISTS, i18n("Table \"%1\" already exists.").arg(tableSchema->name()) );
 			return false;
 		}
 	}
-	
+
+/*	if (replaceExisting) {
+	//get previous table (do not retrieve, though)
+	KexiDB::TableSchema *existingTable = m_tables_byname.take(name);
+	if (oldTable) {
+	}*/
+
 	Transaction trans;
 	if (!beginAutoCommitTransaction(trans))
 		return false;
@@ -1081,7 +1107,7 @@ bool Connection::createTable( KexiDB::TableSchema* tableSchema )
 	if (!drv_createTable(*tableSchema))
 		createTable_ERR;
 	
-	//add schema info to kexi__* tables
+	//add schema data to kexi__* tables
 	if (!storeObjectSchemaData( *tableSchema, true ))
 		createTable_ERR;
 /*	TableSchema *ts = m_tables_byname["kexi__objects"];
@@ -1151,6 +1177,13 @@ bool Connection::createTable( KexiDB::TableSchema* tableSchema )
 	}
 	delete fl;
 		
+	//finally:
+/*	if (replaceExisting) {
+		if (existingTable) {
+			m_tables.take(existingTable->id());
+			delete existingTable;
+		}
+	}*/
 	//store objects locally:
 	m_tables.insert(tableSchema->m_id, tableSchema);
 	m_tables_byname.insert(tableSchema->m_name.lower(), tableSchema);
@@ -1201,7 +1234,7 @@ bool Connection::dropTable( KexiDB::TableSchema* tableSchema )
 		return false;
 	}
 
-//TODO(js): update any structure (e.g. query) that depend on this table!
+//TODO(js): update any structure (e.g. queries) that depend on this table!
 	m_tables_byname.remove(tableSchema->name().lower());
 	m_tables.remove(tableSchema->id());
 
@@ -1614,30 +1647,26 @@ bool Connection::storeObjectSchemaData( SchemaData &sdata, bool newObject )
 	TableSchema *ts = m_tables_byname["kexi__objects"];
 	if (!ts)
 		return false;
-	if (newObject) {
-		FieldList *fl = ts->subList("o_type", "o_name", "o_caption", "o_desc");
-		if (!fl)
-			return false;
-		kdDebug() <<" ************* " <<endl;
-		kdDebug() << ts->field(1)->table() <<endl;
-		kdDebug() << fl->fields()->first()->table() <<endl;
-		fl->fields()->first()->debug();
-		kdDebug() <<" ************* " <<endl;
-		fl->debug();
-		if (!insertRecord(*fl, QVariant(sdata.type()), QVariant(sdata.name()),
-			QVariant(sdata.caption()), QVariant(sdata.description()) ))
+	if (newObject && sdata.id()<=0) {
+		FieldList *fl;
+		bool ok;
+		fl = ts->subList("o_type", "o_name", "o_caption", "o_desc");
+		ok = fl!=0;
+		if (ok && !insertRecord(*fl, QVariant(sdata.type()), QVariant(sdata.name()),
+		QVariant(sdata.caption()), QVariant(sdata.description()) ))
+			ok = false;
+		delete fl;
+		if (!ok)
 			return false;
 		//fetch newly assigned ID
 		int obj_id = lastInsertedAutoIncValue("o_id",*ts);
-		KexiDBDbg << "######## obj_id == " << obj_id << endl;
+		KexiDBDbg << "######## NEW obj_id == " << obj_id << endl;
 		if (obj_id<=0)
 			return false;
 		sdata.m_id = obj_id;
 		return true;
 	}
-	FieldList *fl = ts->subList("o_id", "o_type", "o_name", "o_caption", "o_desc");
-	if (!fl)
-		return false;
+	//existing object:
 	return executeSQL(QString("update kexi__objects set o_type=%2, o_caption=%3, o_desc=%4 where o_id=%1")
 		.arg(sdata.id()).arg(sdata.type())
 		.arg(m_driver->valueToSQL(KexiDB::Field::Text, sdata.caption()))
@@ -2154,7 +2183,7 @@ bool Connection::insertRow(QuerySchema &query, RowData& data, RowEditBuffer& buf
 		QueryFieldInfo::ListIterator fi_it(*aif_list);
 		QueryFieldInfo *fi;
 		for (uint i=0; (fi = fi_it.current()); ++fi_it, i++) {
-			kdDebug() << "Connection::insertRow(): AUTOINCREMENTED FIELD " << fi->field->name() << " == " 
+			KexiDBDbg << "Connection::insertRow(): AUTOINCREMENTED FIELD " << fi->field->name() << " == " 
 				<< aif_data[i].toInt() << endl;
 			data[ fieldsOrder[ fi ] ] = aif_data[i];
 		}
