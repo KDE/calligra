@@ -4,7 +4,6 @@
 #include <qwidget.h>
 #include <qstring.h>
 #include <klineedit.h>
-#include <kformulaedit.h>
 #include <kcompletion.h>
 class KSpreadCell;
 class KSpreadCanvas;

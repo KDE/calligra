@@ -3,6 +3,7 @@
 #include "kspread_view.h"
 #include "kspread_cell.h"
 #include "kspread_doc.h"
+#include <kformulaedit.h>
 
 #include <qlineedit.h>
 #include <qlayout.h>
@@ -73,7 +74,7 @@ void KSpreadTextEditor::slotTextChanged( const QString& t )
 void KSpreadTextEditor::checkChoose()
 {
     if ( m_blockCheck )
-	return;
+        return;
 
     QString t = m_pEdit->text();
     if ( t[0] != '=' )
@@ -83,17 +84,17 @@ void KSpreadTextEditor::checkChoose()
       QChar r = t[ m_pEdit->cursorPosition() - 1 - canvas()->chooseTextLen() ];
       kdDebug(36001) << "r='" << QString(r) << "'" << endl;
       if ( ( r == '*' || r == '|' || r == '&' || r == '-' ||
-	     r == '+' || r == '/' || r == '!' || r == '(' ||
-	     r == '^' || r == ',' || r == '%' || r == '[' ||
-	     r == '{' || r == '~' || r == '=' ) )
+             r == '+' || r == '/' || r == '!' || r == '(' ||
+             r == '^' || r == ',' || r == '%' || r == '[' ||
+             r == '{' || r == '~' || r == '=' ) )
       {
-	  kdDebug(36001) << "Start CHOOSE" << endl;
-	  canvas()->startChoose();
+          kdDebug(36001) << "Start CHOOSE" << endl;
+          canvas()->startChoose();
       }
       else
       {
-	  kdDebug(36001) << "End CHOOSE" << endl;
-	  canvas()->endChoose();
+          kdDebug(36001) << "End CHOOSE" << endl;
+          canvas()->endChoose();
       }
     }
 }
@@ -117,7 +118,7 @@ QString KSpreadTextEditor::text() const
 void KSpreadTextEditor::setText(QString text)
 {
     if(m_pEdit !=0)
-	m_pEdit->setText(text);
+        m_pEdit->setText(text);
 }
 
 int KSpreadTextEditor::cursorPosition() const
@@ -140,33 +141,33 @@ bool KSpreadTextEditor::eventFilter( QObject* o, QEvent* e )
 {
     // Only interested in QLineEdit
     if ( o != m_pEdit )
-	return FALSE;
+        return FALSE;
 
     if ( e->type() == QEvent::FocusOut )
     {
-	canvas()->setLastEditorWithFocus( KSpreadCanvas::CellEditor );
-	return FALSE;
+        canvas()->setLastEditorWithFocus( KSpreadCanvas::CellEditor );
+        return FALSE;
     }
 
     if ( e->type() == QEvent::KeyPress || e->type() == QEvent::KeyRelease )
     {
-	QKeyEvent* k = (QKeyEvent*)e;
-	if ( k->key() == Key_Right || k->key() == Key_Left || k->key() == Key_Up ||
-	     k->key() == Key_Down || k->key() == Key_Next || k->key() == Key_Prior ||
-	     k->key() == Key_Escape )
+        QKeyEvent* k = (QKeyEvent*)e;
+        if ( k->key() == Key_Right || k->key() == Key_Left || k->key() == Key_Up ||
+             k->key() == Key_Down || k->key() == Key_Next || k->key() == Key_Prior ||
+             k->key() == Key_Escape )
         {
-	    // Send directly to canvas
-	    QApplication::sendEvent( parent(), e );
-	    return TRUE;
-	}
+            // Send directly to canvas
+            QApplication::sendEvent( parent(), e );
+            return TRUE;
+        }
 
-	// End choosing. May be restarted by KSpreadTextEditor::slotTextChanged
-	if ( e->type() == QEvent::KeyPress && !k->text().isEmpty() )
+        // End choosing. May be restarted by KSpreadTextEditor::slotTextChanged
+        if ( e->type() == QEvent::KeyPress && !k->text().isEmpty() )
         {
-	    kdDebug(36001) << "eventFilter End Choose" << endl;
-	    canvas()->endChoose();
-	    kdDebug(36001) << "Cont" << endl;
-	}
+            kdDebug(36001) << "eventFilter End Choose" << endl;
+            canvas()->endChoose();
+            kdDebug(36001) << "Cont" << endl;
+        }
     }
 
     return FALSE;
@@ -198,6 +199,8 @@ KSpreadFormulaEditor::KSpreadFormulaEditor( KSpreadCell* _cell, KSpreadCanvas* _
 
 KSpreadFormulaEditor::~KSpreadFormulaEditor()
 {
+    delete m_pEdit;
+    m_pEdit=0L;
 }
 
 void KSpreadFormulaEditor::resizeEvent( QResizeEvent* )
@@ -222,7 +225,7 @@ QString KSpreadFormulaEditor::text() const
 void KSpreadFormulaEditor::setText(QString text)
 {
     if(m_pEdit !=0)
-	m_pEdit->setText(text);
+        m_pEdit->setText(text);
 }
 int KSpreadFormulaEditor::cursorPosition() const
 {
