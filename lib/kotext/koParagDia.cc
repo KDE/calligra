@@ -1424,7 +1424,7 @@ void KoParagCounterWidget::save( KoParagLayout & lay ) {
 }
 
 KoTabulatorsLineEdit::KoTabulatorsLineEdit( QWidget * parent, const char * name)
-    :QLineEdit ( parent, name )
+    :KDoubleNumInput ( parent, name )
 {
 }
 
@@ -1436,7 +1436,7 @@ void KoTabulatorsLineEdit::keyPressEvent ( QKeyEvent *ke )
         emit keyReturnPressed();
         return;
     }
-    QLineEdit::keyPressEvent (ke);
+    KDoubleNumInput::keyPressEvent (ke);
 }
 
 KoParagTabulatorsWidget::KoParagTabulatorsWidget( KoUnit::Unit unit, double frameWidth,QWidget * parent, const char * name )
@@ -1483,7 +1483,6 @@ KoParagTabulatorsWidget::KoParagTabulatorsWidget( KoUnit::Unit unit, double fram
 
     sTabPos = new KoTabulatorsLineEdit( gPosition);
     sTabPos->setMaximumSize( QSize( 100, 32767 ) );
-    sTabPos->setValidator( new KFloatValidator( 0, frameWidth, true, sTabPos ) );
     Layout5->addWidget( sTabPos );
     QSpacerItem* spacer = new QSpacerItem( 20, 20, QSizePolicy::Expanding, QSizePolicy::Minimum );
     Layout5->addItem( spacer );
@@ -1600,7 +1599,7 @@ KoParagTabulatorsWidget::KoParagTabulatorsWidget( KoUnit::Unit unit, double fram
     Layout4->addItem( spacer_5 );
     Form1Layout->addLayout( Layout4 );
 
-    connect(sTabPos,SIGNAL(textChanged( const QString & )), this, SLOT(slotTabValueChanged( const QString & )));
+    connect(sTabPos,SIGNAL(valueChanged(double)), this, SLOT(slotTabValueChanged(double )));
     connect(sTabPos,SIGNAL( keyReturnPressed()),this,SLOT(newClicked()));
     connect(sAlignChar,SIGNAL(textChanged( const QString & )), this, SLOT(slotAlignCharChanged( const QString & )));
     connect(bNew,SIGNAL(clicked ()),this,SLOT(newClicked()));
@@ -1613,10 +1612,10 @@ KoParagTabulatorsWidget::KoParagTabulatorsWidget( KoUnit::Unit unit, double fram
     noSignals=false;
 }
 
-void KoParagTabulatorsWidget::slotTabValueChanged( const QString &text ) {
+void KoParagTabulatorsWidget::slotTabValueChanged( double val ) {
     if(noSignals) return;
     noSignals=true;
-    m_tabList[lstTabs->currentItem()].ptPos = KoUnit::fromUserValue( text, m_unit );
+    m_tabList[lstTabs->currentItem()].ptPos = KoUnit::ptFromUnit( val, m_unit );
     lstTabs->changeItem(tabToString(&m_tabList[lstTabs->currentItem()]), lstTabs->currentItem());
 
     sortLists();
@@ -1665,7 +1664,7 @@ void KoParagTabulatorsWidget::deleteClicked() {
     int selected = lstTabs->currentItem();
     if (selected < 0) return;
     noSignals=true;
-    sTabPos->clear();
+    sTabPos->setValue(0.0);
     noSignals=false;
     lstTabs->removeItem(selected);
     m_tabList.remove(m_tabList[selected]);
@@ -1683,7 +1682,7 @@ void KoParagTabulatorsWidget::deleteClicked() {
 void KoParagTabulatorsWidget::deleteAllClicked()
 {
     noSignals=true;
-    sTabPos->clear();
+    sTabPos->setValue(0.0);
     noSignals=false;
     lstTabs->clear();
     m_tabList.clear();
@@ -1726,7 +1725,7 @@ void KoParagTabulatorsWidget::setActiveItem(int selected) {
             cFilling->setCurrentItem(0);
     }
     eWidth->setValue( KoUnit::ptToUnit( selectedTab->ptWidth, m_unit ) );
-    sTabPos->setText( tabToString(selectedTab));
+    sTabPos->setValue( KoUnit::ptToUnit(selectedTab->ptPos, m_unit));
     bDelete->setEnabled(true);
     bDeleteAll->setEnabled(true);
     gPosition->setEnabled(true);;

@@ -30,7 +30,7 @@
 #include <qlineedit.h>
 #include "koparaglayout.h"
 #include "koparagcounter.h"
-
+#include <knuminput.h>
 class KButtonBox;
 class KColorButton;
 class KoTextDocument;
@@ -311,7 +311,7 @@ private:
 /**
  *
  */
-class KoTabulatorsLineEdit : public QLineEdit
+class KoTabulatorsLineEdit : public KDoubleNumInput
 {
     Q_OBJECT
 public:
@@ -342,7 +342,7 @@ public:
     void setCurrentTab( double tabPos );
 
 protected slots:
-    void slotTabValueChanged( const QString &_text );
+    void slotTabValueChanged( double );
     void slotAlignCharChanged( const QString &_text );
     void newClicked();
     void deleteClicked();
