@@ -38,7 +38,7 @@ int main(int argc,char **argv)
 	static KCmdLineOptions options[] = {
 		{"d <data>", I18N_NOOP("The XML data file."),0},
 		{"r <reportURL>", I18N_NOOP("The XML template file URL."),0},
-		{0, 0, 0}
+		KCmdLineLastOption
 	};
 
 	KCmdLineArgs::init(argc,argv,&about);

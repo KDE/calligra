@@ -24,7 +24,7 @@
 static KCmdLineOptions options[] =
 {
   { "+[File]", I18N_NOOP("file to open"), 0 },
-  { 0, 0, 0 }
+  KCmdLineLastOption
   // INSERT YOUR COMMANDLINE OPTIONS HERE
 };
 
@@ -41,4 +41,4 @@ int main(int argc, char *argv[])
 	if (!app.start()) return 1;
 
 	app.exec();
-}  
+}

@@ -29,7 +29,7 @@
 static const KCmdLineOptions options[]=
 {
 	{"+[url]", I18N_NOOP("URL to open"),0},
-	{0,0,0}
+	KCmdLineLastOption
 };
 
 int main( int argc, char **argv )

@@ -29,7 +29,7 @@
 static KCmdLineOptions options[] =
 {
 	{ "+[term]",   I18N_NOOP("Term to search for when starting up"), 0 },
-	{ 0, 0, 0 }
+	KCmdLineLastOption
 };
 
 int main(int argc, char **argv)
