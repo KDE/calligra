@@ -67,10 +67,15 @@ KoFilter::ConversionStatus OoWriterImport::convert( QCString const & from, QCStr
     prepareDocument( mainDocument, framesetsElem );
     createPageDocument( mainDocument, framesetsElem );
 
+
     KoStoreDevice* out = m_chain->storageFile( "maindoc.xml", KoStore::Write );
-    if ( out ) {
+    if ( !out ) {
+        kdError(30502) << "Unable to open output file!" << endl;
+        return KoFilter::StorageCreationError;
+    }
+    else
+    {
         QCString cstr = mainDocument.toCString();
-        kdDebug()<<" cstr :"<<cstr<<endl;
         // WARNING: we cannot use KoStore::write(const QByteArray&) because it gives an extra NULL character at the end.
         out->writeBlock( cstr, cstr.length() );
     }
