@@ -306,13 +306,13 @@ void KIllustratorView::setupPopups()
     m_cut->plug( objMenu );
     m_delete->plug(objMenu);
     objMenu->insertSeparator ();
-    m_properties->plug( objMenu );
-    objMenu->insertSeparator ();
     m_distribute->plug( objMenu );
     m_toFront->plug( objMenu );
     m_toBack->plug( objMenu );
     m_forwardOne->plug( objMenu );
     m_backOne->plug( objMenu );
+    objMenu->insertSeparator ();
+    m_properties->plug( objMenu );
 }
 
 void KIllustratorView::setupCanvas()
