@@ -5253,8 +5253,7 @@ void KPresenterView::showParagraphDialog(int initialPage, double initialTabPos)
         m_paragDlg->setCaption( i18n( "Paragraph Settings" ) );
 
         // Initialize the dialog from the current paragraph's settings
-        KoParagLayout lay = static_cast<KoTextParag *>(edit->cursor()->parag())->paragLayout();
-        m_paragDlg->setParagLayout( lay );
+        m_paragDlg->setParagLayout( edit->cursor()->parag()->paragLayout() );
         // Set initial page and initial tabpos if necessary
         if ( initialPage != -1 )
         {
@@ -5384,8 +5383,7 @@ void KPresenterView::slotApplyParag()
 
     // Set "oldLayout" in KoParagDia from the current paragraph's settings
     // Otherwise "isBlahChanged" will return wrong things when doing A -> B -> A
-    KoParagLayout lay = static_cast<KoTextParag *>(edit->cursor()->parag())->paragLayout();
-    m_paragDlg->setParagLayout( lay );
+    m_paragDlg->setParagLayout( edit->cursor()->parag()->paragLayout() );
 }
 
 void KPresenterView::textDefaultFormat()

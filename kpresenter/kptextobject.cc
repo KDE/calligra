@@ -917,11 +917,13 @@ KoParagLayout KPTextObject::loadParagLayout( QDomElement & parentElem, KPresente
         layout.margins[QStyleSheetItem::MarginFirstLine] = val;
         val=0.0;
         if(element.hasAttribute( "left"))
-            val=element.attribute( "left").toDouble();
+            // The GUI prevents a negative indent, so let's fixup broken docs too
+            val=QMAX(0, element.attribute( "left").toDouble());
         layout.margins[QStyleSheetItem::MarginLeft] = val;
         val=0.0;
         if(element.hasAttribute("right"))
-            val=element.attribute("right").toDouble();
+            // The GUI prevents a negative indent, so let's fixup broken docs too
+            val=QMAX(0, element.attribute("right").toDouble());
         layout.margins[QStyleSheetItem::MarginRight] = val;
     }
     element = parentElem.namedItem( "LINESPACING" ).toElement();
@@ -983,11 +985,11 @@ KoParagLayout KPTextObject::loadParagLayout( QDomElement & parentElem, KPresente
     {
         double val =0.0;
         if(element.hasAttribute("before"))
-            val=element.attribute("before").toDouble();
+            val=QMAX(0, element.attribute("before").toDouble());
         layout.margins[QStyleSheetItem::MarginTop] = val;
         val = 0.0;
         if(element.hasAttribute("after"))
-            val=element.attribute("after").toDouble();
+            val=QMAX(0, element.attribute("after").toDouble());
         layout.margins[QStyleSheetItem::MarginBottom] = val;
     }
 
@@ -1193,7 +1195,7 @@ void KPTextObject::recalcPageNum( KPrPage *page )
                                kPresenterDocument()->getVariableCollection()->variableSetting()->startingPage());
                 break;
             case KPrPgNumVariable::VST_PGNUM_NEXT:
-                var->setPgNum( QMIN( m_doc->getPageNums(), pgnum +1) +
+                var->setPgNum( QMIN( (int)m_doc->getPageNums(), pgnum+1 ) +
                                kPresenterDocument()->getVariableCollection()->variableSetting()->startingPage());
                 break;
             default:
