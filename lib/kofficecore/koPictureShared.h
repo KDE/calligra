@@ -33,7 +33,10 @@ class QSize;
 class KoPictureBase;
 
 /**
- * KoPictureShared is the class that has the shared part of KoPicture
+ * @internal
+ * KoPictureShared is the class that contains the shared part for KoPicture
+ *
+ * As with all QShared objects, the sharing is neither automatic nor transparent!
  */
 class KoPictureShared : public QShared
 {
@@ -50,11 +53,15 @@ public:
 
     /**
      * Copy constructor
+     *
+     * This makes a deep copy. Do not use if you want to share!
      */
     KoPictureShared(const KoPictureShared &other);
 
     /**
      * Assignment operator
+     *
+     * This makes a deep copy. Do not use if you want to share!
      */
     KoPictureShared& operator=(const KoPictureShared& other);
 
@@ -67,12 +74,8 @@ public:
 
     /**
      * Draw the image in a painter.
-     * No, this isn't as simple as painter.drawPixmap().
-     * This method ensures that the best quality is used when printing, scaling the painter.
      *
-     * The parameters @p width, @p height define the desired size for the image
-     * Note that the image is being scaled to that size using scale() - except when printing.
-     * This avoids scaling the image at each paint event.
+     * The parameters @p width, @p height define the desired size for the picture
      *
      * The other parameters are very similar to QPainter::drawPixmap :
      * (@p x, @p y) define the position in the painter,
@@ -99,7 +102,7 @@ public:
     /**
      * Clear and set the mode of this KoPictureShared
      *
-     * @p newMode is a file extension (like "png") giing the wanted mode
+     * @p newMode is a file extension (like "png") giving the wanted mode
      */
     void clearAndSetMode(const QString& newMode);
 
@@ -108,6 +111,11 @@ public:
      */
     void clear(void);
 
+    /*
+     * Load a file
+     *
+     * @p fileName is the name of the file to load
+     */
     bool loadFromFile(const QString& fileName);
 
     /**
@@ -118,7 +126,8 @@ public:
     /**
      * @deprecated
      * Returns a QPixmap from an image
-     * Returns an empty QPixmap if the KoPictureShared is not an image.
+     *
+     * @p size is the wanted size for the QPixmap
      */
     QPixmap generatePixmap(const QSize& size);
 
