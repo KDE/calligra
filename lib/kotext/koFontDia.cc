@@ -357,7 +357,9 @@ KoFontChooser::KoFontChooser( QWidget* parent, const char* name, bool _withSubSu
     : QTabWidget( parent, name )
 {
     d = new KoFontChooserPrivate;
+#ifdef HAVE_LIBKSPELL2
     d->m_broker = broker;
+#endif
     setupTab1( fontListCriteria );
     setupTab2( _withSubSuperScript );
     // More modular solution: one widget per tab....
