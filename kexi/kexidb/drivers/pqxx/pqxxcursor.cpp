@@ -76,7 +76,7 @@ bool pqxxSqlCursor::drv_open(const QString& statement)
 		m_afterLast=false;
 		m_records_in_buf = m_res->size();
 		m_buffering_completed = true;
-		return true;m_buffering_completed = true;
+		return true;
 	}
 	catch (const std::exception &e)
     	{
