@@ -119,12 +119,18 @@ QValueList<Variable>::Iterator varListIt; // iterator for variables list
                   if ( (*paraFormatDataIt).text.italic )
                       outputText += "\\i";
 
-                  if ( (*paraFormatDataIt).text.underline )
+                  if ( (*paraFormatDataIt).text.underline=="1" )
                       outputText += "\\ul";
 
-                  if ( (*paraFormatDataIt).text.strikeout )
-                      outputText += "\\strike{";
+                  if ( (*paraFormatDataIt).text.underline=="double" )
+                      outputText += "\\uldb";
 
+                  if ( (*paraFormatDataIt).text.strikeout=="1" )
+                  {
+                      outputText += "\\strike{";
+                  }
+                  if ( (*paraFormatDataIt).text.strikeout=="double" )
+                      outputText += "\\striked{";
                   if ( (*paraFormatDataIt).text.vertalign == 1 )  // Subscript
                       outputText += "\\sub{";
 
@@ -161,10 +167,10 @@ QValueList<Variable>::Iterator varListIt; // iterator for variables list
                   if ( (*paraFormatDataIt).text.vertalign == 1 )  // end Subscript
                       outputText += "}";
 
-                  if ( (*paraFormatDataIt).text.strikeout )  // end strikeout
+                  if ( (*paraFormatDataIt).text.strikeout=="1" || (*paraFormatDataIt).text.strikeout=="double" )  // end strikeout
                       outputText += "}";
 
-                  if ( (*paraFormatDataIt).text.underline )
+                  if ( (*paraFormatDataIt).text.underline=="1" || (*paraFormatDataIt).text.underline=="double" )
                       outputText += "\\ul0";  // delimit underline
 
                   if ( (*paraFormatDataIt).text.italic )
@@ -497,7 +503,7 @@ static bool ProcessStoreFile ( QIODevice* subFile,
         subFile->close();
 
         QDomNode docNode = doc.documentElement();
-        
+
         FilterData filterData;
         filterData.storeFileName = QString::null;
         filterData.exportFileName = exportFileName;
@@ -812,7 +818,7 @@ QString escapeRTFsymbols(const QString& text)
 
 /***************************************************************************/
 // The following function encodes the kword unicode characters into
-// RTF seven bit ASCII. This affects any 8 bit characters. 
+// RTF seven bit ASCII. This affects any 8 bit characters.
 // They are encoded either with \' or with \u
 QString encodeSevenBit ( QString text )
 {
@@ -1174,10 +1180,15 @@ QValueList < FormatData > combineFormatData(  QValueList<FormatData> &paraFormat
             {
             (*formatIt).text.italic  = (*paraFormatDataIt).text.italic ;
             }
-         if( (*formatIt).text.underline == false )
+         if( (*formatIt).text.underline == "")
             {
             (*formatIt).text.underline  = (*paraFormatDataIt).text.underline ;
             }
+         if( (*formatIt).text.strikeout == "")
+            {
+            (*formatIt).text.strikeout  = (*paraFormatDataIt).text.strikeout ;
+            }
+
          if( (*formatIt).text.fontName == "" )
             {
             (*formatIt).text.fontName  = (*paraFormatDataIt).text.fontName ;

@@ -556,6 +556,23 @@ void ProcessItalicTag ( QDomNode   myNode,
     AllowNoSubtags (myNode);
 }  // end ProcessItalicTag
 
+void ProcessStrikeUnderlineTag ( QDomNode   myNode,
+                        void      *tagData,
+                        QString   &         )
+
+// used for italic and underline tags - sets indicator if value=1
+{
+    QString *doubleStrikeUnderline = (QString *) tagData;
+
+    *doubleStrikeUnderline = "";
+
+    QValueList<AttrProcessing> attrProcessingList;
+    attrProcessingList << AttrProcessing ( "value", "QString", (void *) doubleStrikeUnderline );
+    ProcessAttributes (myNode, attrProcessingList);
+    AllowNoSubtags (myNode);
+}  // end ProcessDoubleStrikeUnderlineTag
+
+
 /***************************************************************************/
 
 
@@ -732,22 +749,21 @@ void ProcessFormatTag ( QDomNode   myNode,
              int     vertalign    = -1;
              QString fontName = "";
              bool    italic    = false;
-             bool    underline = false;
-             bool    strikeout = false;
+             QString underline = "";
+             QString strikeout = "";
              VariableData variable;
 
              QValueList<TagProcessing> tagProcessingList;
              tagProcessingList << TagProcessing ( "SIZE",      ProcessIntValueTag,  (void *) &fontSize   )
                                << TagProcessing ( "WEIGHT",    ProcessIntValueTag,  (void *) &fontWeight )
-                               << TagProcessing ( "UNDERLINE", ProcessItalicTag,    (void *) &underline  )
-                               << TagProcessing ( "STRIKEOUT", ProcessItalicTag,    (void *) &strikeout  )
+                               << TagProcessing ( "UNDERLINE", ProcessStrikeUnderlineTag,    (void *) &underline  )
+                               << TagProcessing ( "STRIKEOUT", ProcessStrikeUnderlineTag,    (void *) &strikeout  )
                                << TagProcessing ( "FONT",      ProcessFontTag,      (void *) &fontName   )
                                << TagProcessing ( "VERTALIGN", ProcessIntValueTag,  (void *) &vertalign  )
                                << TagProcessing ( "COLOR",     ProcessColorTag,     (void *) &color      )
                                << TagProcessing ( "ITALIC",    ProcessItalicTag,    (void *) &italic     )
                                << TagProcessing ( "VARIABLE",  ProcessVariableTag,  &variable);
              ProcessSubtags (myNode, tagProcessingList, outputText);
-
              FormatData formatData( TextFormatting (formatId, formatPos,
              formatLen, fontSize, fontWeight, fontName, italic, underline, strikeout,
              vertalign, color.red, color.blue, color.green));

@@ -161,8 +161,9 @@ class TextFormatting
 {
    public:
       TextFormatting () {formatId = 1; pos = -1; len = -1; fontSize = -1; fontWeight = -1;
-                         fontName = ""; italic = false; underline = false; strikeout = false;
-                         vertalign = -1; red = 0; blue = 0; green = 0;}
+                         fontName = ""; italic = false; underline = ""; strikeout = "";
+                         vertalign = -1; red = 0; blue = 0; green = 0;
+}
 
       TextFormatting ( int     id,
                        int     p,
@@ -171,12 +172,12 @@ class TextFormatting
                        int     w,
                        QString f,
                        bool    i,
-                       bool    u,
-                       bool    so,
+                       QString    u,
+                       QString    so,
                        int     v,
                        int     r,
                        int     b,
-                       int     g ) : formatId (id), pos (p), len (l), fontSize (s), fontWeight (w),
+                       int     g) : formatId (id), pos (p), len (l), fontSize (s), fontWeight (w),
                        fontName (f), italic (i), underline (u), strikeout (so), vertalign(v),
                        red (r), blue (b), green (g){}
 
@@ -187,12 +188,13 @@ class TextFormatting
       int     fontWeight;
       QString fontName;
       bool    italic;
-      bool    underline;
-      bool    strikeout;
+      QString    underline;
+      QString    strikeout;
       int     vertalign;
       int     red;
       int     blue;
       int     green;
+
       VariableData    variable;
 };
 
@@ -514,6 +516,11 @@ void ProcessLayoutTag ( QDomNode   myNode,
 void ProcessItalicTag ( QDomNode   myNode,
                         void      *tagData,
                         QString   &         );
+
+void ProcessStrikeUnderlineTag ( QDomNode   myNode,
+                        void      *tagData,
+                                       QString   &         );
+
 
 void ProcessFontTag ( QDomNode    myNode,
                       void       *tagData,
