@@ -11,6 +11,8 @@ REAL BUGS:
 -	HSB color model doesn't display correctly (VColor.cc)
 
 TODO:
+-	move the stuff from PAPER to DOC. PAGE would be better than PAPER, and since we have a
+	single page format...
 -	remove defaultFill/Stroke stuff from VDocument and just use VSelection's fill/stroke.
 -	select first/last segment's knot if one of each other's knot is selected
 -	don't create tools while being a r/o part
