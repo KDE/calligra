@@ -59,10 +59,11 @@ class KoAutoFormatExceptionWidget : public QWidget
     Q_OBJECT
 
 public:
-    KoAutoFormatExceptionWidget(QWidget *_parent, const QString &name,const QStringList &_list,bool _abbreviation=false);
+    KoAutoFormatExceptionWidget(QWidget *_parent, const QString &name,const QStringList &_list, bool _autoInclude, bool _abbreviation=false);
 
 
     QStringList getListException(){return m_listException;}
+    bool autoInclude();
 protected slots:
     void slotAddException();
     void slotRemoveException();
@@ -71,7 +72,7 @@ protected slots:
     QListBox *exceptionList;
     KoAutoFormatLineEdit *exceptionLine;
     QPushButton *pbAddException,*pbRemoveException;
-
+    QCheckBox *cbAutoInclude;
     QStringList m_listException;
     bool m_bAbbreviation;
 };
@@ -110,7 +111,6 @@ protected:
                 *pbSpecialChar1, *pbSpecialChar2, *pbBulletStyle, *pbDefaultBulletStyle;
 
     QPushButton *pbSimpleQuote1, *pbSimpleQuote2, *pbSimpleDefault;
-    QCheckBox *cbAutoIncludeUpperUpperException;
     QPushButton *pbRemoveCompletionEntry;
     QPushButton *pbSaveCompletionEntry;
 

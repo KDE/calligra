@@ -134,6 +134,8 @@ public:
 
     void configIncludeTwoUpperUpperLetterException( bool b);
 
+    void configIncludeAbbreviation( bool b );
+
     TypographicQuotes getConfigTypographicSimpleQuotes() const
     { return m_typographicSimpleQuotes; }
 
@@ -187,6 +189,9 @@ public:
 
     bool getConfigIncludeTwoUpperUpperLetterException() const
     { return m_includeTwoUpperLetterException; }
+
+    bool getConfigIncludeAbbreviation() const
+    { return m_includeAbbreviation; }
 
     // Add/remove entries, called by the dialog
     void addAutoFormatEntry( const QString &key, const KoAutoFormatEntry &entry ) {
@@ -253,7 +258,7 @@ protected:
     void doUseNumberStyle(QTextCursor * /*textEditCursor*/, KoTextParag *parag, KoTextObject *txtObj );
 
     void doAutoIncludeUpperUpper(QTextCursor *textEditCursor, KoTextParag *parag, KoTextObject *txtObj );
-
+    void doAutoIncludeAbreviation(QTextCursor *textEditCursor, KoTextParag *parag, KoTextObject *txtObj );
 private:
     void detectStartOfLink(const QString &word);
     void autoFormatIsActive();
@@ -272,6 +277,7 @@ private:
     bool m_completionAppendSpace;
     bool m_addCompletionWord;
     bool m_includeTwoUpperLetterException;
+    bool m_includeAbbreviation;
 
     QChar bulletStyle;
 

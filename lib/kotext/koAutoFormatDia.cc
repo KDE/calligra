@@ -60,7 +60,7 @@ void KoAutoFormatLineEdit::keyPressEvent ( QKeyEvent *ke )
 /* Class: KoAutoFormatExceptionWidget                             */
 /******************************************************************/
 
-KoAutoFormatExceptionWidget::KoAutoFormatExceptionWidget(QWidget *parent, const QString &name,const QStringList &_list,bool _abreviation)
+KoAutoFormatExceptionWidget::KoAutoFormatExceptionWidget(QWidget *parent, const QString &name,const QStringList &_list, bool _autoInclude, bool _abreviation)
     :QWidget( parent )
 {
     m_bAbbreviation=_abreviation;
@@ -83,10 +83,14 @@ KoAutoFormatExceptionWidget::KoAutoFormatExceptionWidget(QWidget *parent, const 
 
     exceptionList=new QListBox(this);
     exceptionList->insertStringList(m_listException);
-    grid->addMultiCellWidget(exceptionList,2,6,0,0);
+    grid->addMultiCellWidget(exceptionList,2,5,0,0);
     pbRemoveException->setEnabled(m_listException.count()>0);
     connect(exceptionLine ,SIGNAL(textChanged ( const QString & )),this,SLOT(textChanged ( const QString & )));
     pbAddException->setEnabled(false);
+
+    cbAutoInclude = new QCheckBox( i18n("Auto includes"), this );
+    grid->addMultiCellWidget(cbAutoInclude,6,6,0,1);
+    cbAutoInclude->setChecked( _autoInclude );
 }
 
 
@@ -122,6 +126,11 @@ void KoAutoFormatExceptionWidget::slotRemoveException()
         pbRemoveException->setEnabled(m_listException.count()>0);
         exceptionList->insertStringList(m_listException);
     }
+}
+
+bool KoAutoFormatExceptionWidget::autoInclude()
+{
+    return cbAutoInclude->isChecked();
 }
 
 /******************************************************************/
@@ -398,13 +407,10 @@ void KoAutoFormatDia::setupTab4()
     QVBoxLayout *grid = new QVBoxLayout(tab4, 5, 5);
     grid->setAutoAdd( true );
 
-    abbreviation=new KoAutoFormatExceptionWidget(tab4,i18n("Do not treat as the end of a sentence:"),m_autoFormat.listException(),true);
+    abbreviation=new KoAutoFormatExceptionWidget(tab4,i18n("Do not treat as the end of a sentence:"),m_autoFormat.listException(),m_autoFormat.getConfigIncludeAbbreviation() , true);
     ( void )new QWidget( tab4 );
-    twoUpperLetter=new KoAutoFormatExceptionWidget(tab4,i18n("Accept two uppercase letters in:"),m_autoFormat.listTwoUpperLetterException());
+    twoUpperLetter=new KoAutoFormatExceptionWidget(tab4,i18n("Accept two uppercase letters in:"),m_autoFormat.listTwoUpperLetterException(),m_autoFormat.getConfigIncludeTwoUpperUpperLetterException());
     ( void )new QWidget( tab4 );
-    cbAutoIncludeUpperUpperException = new QCheckBox( i18n("Auto includes"), tab4 );
-    cbAutoIncludeUpperUpperException->setChecked( m_autoFormat.getConfigIncludeTwoUpperUpperLetterException());
-
 }
 
 void KoAutoFormatDia::setupTab5()
@@ -653,7 +659,8 @@ bool KoAutoFormatDia::applyConfig()
     m_docAutoFormat->configNbMaxCompletionWord( m_maxNbWordCompletion->value () );
     m_docAutoFormat->configAddCompletionWord( cbAddCompletionWord->isChecked());
 
-    m_docAutoFormat->configIncludeTwoUpperUpperLetterException( cbAutoIncludeUpperUpperException->isChecked());
+    m_docAutoFormat->configIncludeTwoUpperUpperLetterException( twoUpperLetter->autoInclude());
+    m_docAutoFormat->configIncludeAbbreviation( abbreviation->autoInclude());
 
     // Save to config file
     m_docAutoFormat->saveConfig();
