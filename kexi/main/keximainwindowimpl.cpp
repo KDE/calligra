@@ -2019,11 +2019,13 @@ bool KexiMainWindowImpl::eventFilter( QObject *obj, QEvent * e )
 			if (!d->focus_before_popup.isNull()) {
 				d->focus_before_popup->setFocus();
 				d->focus_before_popup=0;
+				invalidateSharedActions();
 			} else {
-				if (focus_w)
+				if (focus_w) {
 					focus_w->setFocus();
+					invalidateSharedActions();
+				}
 			}
-			invalidateSharedActions();
 		}
 		return false;
 	}
