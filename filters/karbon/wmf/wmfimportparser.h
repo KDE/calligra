@@ -91,10 +91,9 @@ private:
     void  drawPolygon( const QPointArray &pa, bool winding=FALSE );
     /**
      * drawPolyPolygon draw the XOR of a list of polygons
-     * pa : a table of polygon
-     * numberPoly : the number of polygons in the table
+     * listPa : list of polygons
      */
-    void  drawPolyPolygon( int numberPoly, const QPointArray pa[], bool winding=FALSE );
+    void  drawPolyPolygon( QPtrList<QPointArray>& listPa, bool winding=FALSE );
     void  drawImage( int x, int y, const QImage &, int sx = 0, int sy = 0, int sw = -1, int sh = -1 );
 
     // Text drawing 

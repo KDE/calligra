@@ -68,7 +68,7 @@ KoFilter::ConversionStatus WMFImport::convert( const QCString& from, const QCStr
     }
     QDomDocument outdoc = document.saveXML();
     QCString content = outdoc.toCString();
-//    kdDebug() << " content : " << content << endl;
+    // kdDebug() << " content : " << content << endl;
     out->writeBlock( content , content.length() );
 
     return KoFilter::OK;

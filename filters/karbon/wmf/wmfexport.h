@@ -19,20 +19,54 @@
 #ifndef WMFEXPORT_H
 #define WMFEXPORT_H
 
+#include <qpen.h>
+#include <qbrush.h>
+#include <qptrlist.h>
+#include <qpointarray.h>
 #include <koFilter.h>
-#include <koStore.h>
+#include "vvisitor.h"
 
+class KoWmfWrite;
+class VComposite;
+class VDocument;
+class VPath;
+class VText;
 
-class WMFExport : public KoFilter
+class WmfExport : public KoFilter, private VVisitor
 {
     Q_OBJECT
 
 public:
-    WMFExport( KoFilter *parent, const char *name, const QStringList&);
-    virtual ~WMFExport();
+    WmfExport( KoFilter *parent, const char *name, const QStringList&);
+    virtual ~WmfExport();
 
     virtual KoFilter::ConversionStatus convert( const QCString& from, const QCString& to );
 
+private:
+    void visitVComposite( VComposite& composite );
+    void visitVDocument( VDocument& document );
+    void visitVPath( VPath& path );
+    void visitVText( VText& text );
+    void flattenPath( VPath& segment, double flatness );
+    void getBrush( QBrush& brush, const VFill *fill );
+    void getPen( QPen& pen, const VStroke *stroke );
+    
+    // coordinate transformation
+    // translate origin from (left,bottom) to (left,top) -> scale to wmf size 
+    // Wmf origin is (left,top) corner
+    // Karbon origin is (left,bottom) corner
+    int coordX( double left ) 
+            { return (int)(left * mScaleX); }
+    int coordY( double top ) 
+            { return (int)((mDoc->height() - top) * mScaleY); }
+    
+private:
+    KoWmfWrite *mWmf;
+    VDocument *mDoc;
+    int       mDpi;
+    double    mScaleX;
+    double    mScaleY;
+    QPtrList<QPointArray> mListPa;
 };
 
 #endif

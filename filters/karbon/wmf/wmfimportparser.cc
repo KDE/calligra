@@ -25,6 +25,10 @@
 
 #include "wmfimportparser.h"
 
+/*
+bug : epaisseur des traits ? voir table14.wmf
+bug : génère des points infinis ? voir motar.wmf
+*/
 
 WMFImportParser::WMFImportParser() : KoWmfRead() {
 }
@@ -56,10 +60,12 @@ bool WMFImportParser::begin() {
         mDoc->setHeight( bounding.height() ); 
     }
     else {
-        // Placeable Wmf : size (in mm) == karbon document size
+        // Placeable Wmf store the boundingRect() in pixel and the default DPI
+        // The placeable format doesn't have informations on witch Unit to use
+        // so we choose millimeters by default
         mDoc->setUnit( KoUnit::U_MM );
-        mDoc->setWidth( MM_TO_POINT( (bounding.width()*25.4)/defaultDpi() ) );  
-        mDoc->setHeight( MM_TO_POINT( (bounding.height()*25.4)/defaultDpi() ) ); 
+        mDoc->setWidth( INCH_TO_POINT( (double)bounding.width() / defaultDpi() ) );  
+        mDoc->setHeight( INCH_TO_POINT( (double)bounding.height() / defaultDpi() ) ); 
     }
     if ( (bounding.width() != 0) && (bounding.height() != 0) ) {
         mScaleX = mDoc->width() / (double)bounding.width();
@@ -256,21 +262,24 @@ void WMFImportParser::drawPolygon( const QPointArray &pa, bool ) {
 }
 
 
-void WMFImportParser::drawPolyPolygon( int numberPoly, const QPointArray pa[], bool ) {
+void WMFImportParser::drawPolyPolygon( QPtrList<QPointArray>& listPa, bool ) {
     VComposite *path = new VComposite( mDoc );
-    appendPen( *path );
-    appendBrush( *path );
-    appendPoints( *path, pa[0] );
-    path->close();
     
-    for ( int i=1 ; i < numberPoly ; i++ ) {
-        VComposite *newPath = new VComposite( mDoc );
-        appendPoints( *newPath, pa[i] );
-        newPath->close();
-        path->combine( *newPath ); 
+    if ( listPa.count() > 0 ) {
+        appendPen( *path );
+        appendBrush( *path );
+        appendPoints( *path, *listPa.first() );
+        path->close();
+
+        while ( listPa.next() ) {
+            VComposite *newPath = new VComposite( mDoc );
+            appendPoints( *newPath, *listPa.current() );
+            newPath->close();
+            path->combine( *newPath ); 
+        }
+
+        mDoc->append( path );
     }
-    
-    mDoc->append( path );
 }
 
 
