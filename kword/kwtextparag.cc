@@ -643,7 +643,7 @@ void KWTextParag::printRTDebug( int info )
         kdDebug() << "  Is moved down" << endl;
     /*
       static const char * dm[] = { "DisplayBlock", "DisplayInline", "DisplayListItem", "DisplayNone" };
-      QVector<QStyleSheetItem> vec = styleSheetItems();
+      QPtrVector<QStyleSheetItem> vec = styleSheetItems();
       for ( uint i = 0 ; i < vec.size() ; ++i )
       {
       QStyleSheetItem * item = vec[i];

@@ -223,7 +223,7 @@ private:
 
     // Cached info for optimization
     /** This array provides a direct access to the frames on page N */
-    QVector< QPtrList<KWFrame> > m_framesInPage;
+    QPtrVector< QPtrList<KWFrame> > m_framesInPage;
     /** always equal to m_framesInPage[0].first()->pageNum() :) */
     int m_firstPage;
     /** always empty, for convenience in @ref framesInPage */
