@@ -44,7 +44,6 @@
 #include "kformuladocument.h"
 #include "kformulamathmlread.h"
 #include "kformulamimesource.h"
-#include "kformulawidget.h"
 #include "matrixelement.h"
 #include "rootelement.h"
 #include "sequenceelement.h"
