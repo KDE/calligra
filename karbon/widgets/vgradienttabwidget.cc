@@ -21,7 +21,7 @@
 #include <qlabel.h>
 #include <qframe.h>
 
-#include <kstandarddirs.h> 
+#include <kstandarddirs.h>
 #include <kcolorbutton.h>
 #include <kcombobox.h>
 #include <klocale.h>
@@ -32,7 +32,7 @@
 #include <qtabwidget.h>
 #include <klistbox.h>
 #include <qpushbutton.h>
-#include <qdom.h>    
+#include <qdom.h>
 #include <qfile.h>
 #include <qfileinfo.h>
 #include <qpixmap.h>
@@ -109,7 +109,7 @@ void VGradientListItem::paint( QPainter* painter )
 
 VGradientPreview::VGradientPreview( VGradient*& gradient, QWidget* parent, const char* name )
 		: QWidget( parent, name ), m_lpgradient( &gradient )
-{  
+{
 	setBackgroundMode( Qt::NoBackground );
 	setMinimumSize( 70, 70 );
 } // VGradientPreview::VGradientPreview
@@ -151,9 +151,9 @@ void VGradientPreview::paintEvent( QPaintEvent* )
 	gp.lineTo( KoPoint( 2, 2 ) );
 	gp.fillPath();
 	gp.end();
-	
+
 	QPainter p( &pixmap );
-	
+
 	p.setPen( colorGroup().light() );
 	p.moveTo( 1, height() - 1 );
 	p.lineTo( 1, 1 );
@@ -166,7 +166,7 @@ void VGradientPreview::paintEvent( QPaintEvent* )
 	p.lineTo( width() - 1, 0 );
 	p.moveTo( width() - 2, 2 );
 	p.lineTo( width() - 2, height() - 2 );
-	p.lineTo( 2, height() - 2 );    
+	p.lineTo( 2, height() - 2 );
 	bitBlt( this, 0, 0, &pixmap, 0, 0, width(), height() );
 } // VGradientPreview::paintEvent
 
@@ -226,8 +226,7 @@ void VGradientTabWidget::setupConnections()
 	connect( m_gradientRepeat,		SIGNAL( activated( int ) ),				this, SLOT( combosChange( int ) ) );
 	connect( m_gradientWidget,		SIGNAL( changed() ),					m_gradientPreview, SLOT( update() ) );
 	connect( m_addToPredefs,		SIGNAL( clicked() ),					this, SLOT( addGradientToPredefs() ) );
-	connect( m_predefGradientsView, SIGNAL( executed( QListBoxItem* ) ),	this, SLOT( changeToPredef( QListBoxItem* ) ) );
-	connect( m_predefGradientsView, SIGNAL( highlighted( QListBoxItem* ) ), this, SLOT( predefSelected( QListBoxItem* ) ) );
+	connect( m_predefGradientsView, SIGNAL( doubleClicked( QListBoxItem *, const QPoint & ) ),	this, SLOT( changeToPredef( QListBoxItem* ) ) );
 	connect( m_predefDelete,		SIGNAL( clicked() ),					this, SLOT( deletePredef() ) );
 } // VGradientTabWidget::setupConnection
 
@@ -251,7 +250,7 @@ const VGradient* VGradientTabWidget::gradient()
 void VGradientTabWidget::setGradient( VGradient& gradient )
 {
 	m_gradient = &gradient;
-	
+
 	initUI();
 } // VGradientTabWidget::setGradient
 
@@ -269,7 +268,7 @@ void VGradientTabWidget::combosChange( int )
 {
 	m_gradient->setType( (VGradient::VGradientType)m_gradientType->currentItem() );
 	m_gradient->setRepeatMethod( (VGradient::VGradientRepeatMethod)m_gradientRepeat->currentItem() );
-	
+
 	m_gradientPreview->update();
 } // VGradientTabWidget::combosChange
 
@@ -288,7 +287,7 @@ void VGradientTabWidget::predefSelected( QListBoxItem* item )
 	}
 } // VGradientTabWidget::predefSelected
 
-void VGradientTabWidget::changeToPredef( QListBoxItem* item ) 
+void VGradientTabWidget::changeToPredef( QListBoxItem* item )
 {
 	if( item )
 	{
