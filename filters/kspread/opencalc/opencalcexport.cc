@@ -1061,6 +1061,11 @@ void OpenCalcExport::convertPart( QString const & part, QDomDocument & doc,
     }
     ++i;
   }
+  if ( !text.isEmpty() || !var.isEmpty() )
+  {
+      //we don't have var at the end =>store it
+      addText( text+var, doc, parent );
+  }
 }
 
 void insertBracket( QString & s )
