@@ -160,7 +160,7 @@ void KoHTMLJob::slotJobListEntry( int id, UDSEntry &entry )
 {
   UDSEntry::iterator it = entry.begin();
 
-  string name;
+  QString name;
   QString size;
   long type = 0;
   
@@ -175,13 +175,13 @@ void KoHTMLJob::slotJobListEntry( int id, UDSEntry &entry )
   QString listing = "<tr><td>";
   listing += "<a href=""";
   listing += m_strURL + "/";
-  listing += name.c_str();
+  listing += name;
   
   if ( S_ISDIR( type ) )
     listing += "/";  
   
   listing += """>";
-  listing += name.c_str();
+  listing += name;
   listing += "</a>";
   listing += "</td><td>";
   listing += size;

@@ -51,7 +51,7 @@ OpenURLDlg::OpenURLDlg()
   QHBoxLayout *hLayout = new QHBoxLayout();
   layout->addLayout( hLayout );
   
-  urlEdit = new KLined(this, "lineEdit");
+  urlEdit = new KLineEdit(this, "lineEdit");
   urlEdit->setMinimumSize( urlEdit->sizeHint().width()*4, urlEdit->sizeHint().height() );
   hLayout->addWidget( urlEdit, 5 );
   

@@ -41,7 +41,7 @@ protected slots:
   void chooseFile();  
     
 private:
-   KLined *urlEdit;
+   KLineEdit *urlEdit;
    KURLCompletion *completion;
 };
 

@@ -88,7 +88,7 @@ void SettingsDlg::setupMiscTab()
 
   completion = new KURLCompletion;
   
-  KLined *lineEdit = new KLined( homePage ); 
+  KLineEdit *lineEdit = new KLineEdit( homePage ); 
   
   connect(lineEdit, SIGNAL(completion()),
           completion, SLOT(make_completion()));
