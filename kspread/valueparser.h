@@ -23,11 +23,11 @@
 
 #include <qdatetime.h>
 
-#include "docbase.h"
 #include "kspread_global.h"
 #include "kspread_value.h"
 
 class KSpreadCell;
+class KLocale;
 
 namespace KSpread {
 
@@ -37,10 +37,10 @@ The ValueParser parses a text input from the user, generating
 KSpreadValue in the desired format.
 */
 
-class ValueParser : public DocBase {
+class ValueParser {
  public:
   /** constructor */
-  ValueParser (DocInfo *docinfo);
+  ValueParser (KLocale *locale);
   
   /** try to parse the text in a given cell and set value accordingly */
   void parse (const QString& str, KSpreadCell *cell);
@@ -53,6 +53,8 @@ class ValueParser : public DocBase {
   KSpreadValue tryParseDate (const QString& str, bool *ok = 0);
   KSpreadValue tryParseTime (const QString& str, bool *ok = 0);
  protected:
+ 
+  KLocale* locale;
 
   // Try to parse the text as a bool/number/date/time/etc.
   // Helpers for parse.
