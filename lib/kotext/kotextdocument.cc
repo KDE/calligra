@@ -1459,10 +1459,12 @@ KoTextParag * KoTextDocument::loadOasisText( const QDomElement &bodyElem, KoOasi
         QDomElement tag = text.toElement();
         const QString tagName = tag.tagName();
         const bool textFoo = tagName.startsWith( "text:" );
-
+        kdDebug ()<<" textFoo : "<<textFoo<<endl;
+        kdDebug()<<" tagName :"<<tagName<<endl;
         if ( textFoo )
         {
             if ( tagName == "text:p" ) {  // text paragraph
+                kdDebug()<<" text paragraph \n";
                 context.fillStyleStack( tag, "text:style-name" );
 
                 KoTextParag *parag = createParag( this, lastParagraph );
@@ -1475,6 +1477,7 @@ KoTextParag * KoTextDocument::loadOasisText( const QDomElement &bodyElem, KoOasi
             }
             else if ( tagName == "text:h" ) // heading
             {
+                kdDebug()<<" heading \n";
                 context.fillStyleStack( tag, "text:style-name" );
                 int level = tag.attribute( "text:level" ).toInt();
                 bool listOK = false;
@@ -1507,6 +1510,7 @@ KoTextParag * KoTextDocument::loadOasisText( const QDomElement &bodyElem, KoOasi
             else if ( tagName == "text:unordered-list" || tagName == "text:ordered-list" // OOo-1.1
                       || tagName == "text:list" )  // OASIS
             {
+                kdDebug ()<<" list \n";
                 lastParagraph = loadList( tag, context, lastParagraph, _styleCol );
                 context.styleStack().restore();
                 continue;
@@ -1540,6 +1544,7 @@ KoTextParag * KoTextDocument::loadOasisText( const QDomElement &bodyElem, KoOasi
             }
             else if ( tagName == "draw:image" )
             {
+                kdDebug ()<<" append image \n";
                 appendImage( context, tag );
             }
 #if 0 // TODO OASIS table:table
@@ -1552,6 +1557,7 @@ KoTextParag * KoTextDocument::loadOasisText( const QDomElement &bodyElem, KoOasi
 #endif
             else if ( tagName == "draw:text-box" )
             {
+                kdDebug()<<" append text-box\n";
                 appendTextBox( context,  tag );
             }
             else
