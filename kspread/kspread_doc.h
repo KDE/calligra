@@ -87,8 +87,47 @@ class KSpreadDoc : public KoDocument, public KoZoomHandler
   Q_PROPERTY( bool dontCheckTitleCase READ dontCheckTitleCase WRITE setDontCheckTitleCase)
 
 public:
+
+  /**
+   * Creates a new document.
+   */
   KSpreadDoc( QWidget *parentWidget = 0, const char *widgetName = 0, QObject* parent = 0, const char* name = 0, bool singleViewMode = false );
+  
+  /**
+   * Destroys the document.
+   */
   ~KSpreadDoc();
+
+  /**
+   * Returns the workbook which holds all the sheets.
+   */
+  KSpreadMap* workbook() const; 
+   
+  /**
+   * Same as workbook().
+   * This function is obsolete and will be removed in future version.
+   */
+  KSpreadMap * map() const;
+  
+  /**
+   * Returns the MIME type of KSpread document.
+   */
+  virtual QCString mimeType() const { return MIME_TYPE; }  
+
+  /**
+   * Undo the last operation.
+   */
+  void undo();
+
+  /**
+   * Redo the last undo.
+   */
+  void redo();
+
+  /*
+   * Returns the style manager for this document.
+   */  
+  KSpreadStyleManager * styleManager();
 
   virtual QDomDocument saveXML();
 
@@ -100,7 +139,6 @@ public:
 
   virtual bool initDoc();
 
-  virtual QCString mimeType() const { return MIME_TYPE; }
 
   /**
    * @return a pointer to a new KSpreadSheet. The KSpreadSheet is not added to the map
@@ -116,9 +154,6 @@ public:
    * @see KSpreadMap
    */
   void addTable( KSpreadSheet * _table );
-
-  KSpreadMap * map() const;
-  KSpreadStyleManager * styleManager();
 
   /**
    * @return the locale which was used for creating this document.
@@ -156,16 +191,6 @@ public:
    *         This function does remove any exception from the context.
    */
   KSContext & context() { m_context.setException( 0 ); return m_context; }
-
-  /**
-   * Undo the last operation.
-   */
-  void undo();
-
-  /**
-   * Redo the last undo.
-   */
-  void redo();
 
   /**
    * @return the object that is respnsible for keeping track
