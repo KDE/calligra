@@ -849,10 +849,9 @@ don't put a </?xml...> at the end of the file!).
                 Depth of 1 is 1.1, 1.2, 1.3 etc.
 
         start   The first used number in the numbering (usually 1).
+                List numbering starts at <start> initially, or when restart is set to true.
         numberingtype
                 0 = list numbering, 1 = chapter numbering.
-                List numbering starts at <start> everytime another list is used (everytime a
-                non numbering paragraph has been used)
                 Chapter numbering is used throughout the whole document (in future throughout books)
         lefttext
                 The text that is printed left of the first numeral
