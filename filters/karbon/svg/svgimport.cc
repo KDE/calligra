@@ -686,7 +686,7 @@ SvgImport::parseGroup( VGroup *grp, const QDomElement &e )
 			setupTransform( b );
 			parseStyle( text, b );
 			text->setFont( m_gc.current()->font );
-			if( text )
+			if( grp )
 				grp->append( text );
 			else
 				m_document.append( text );
