@@ -233,6 +233,7 @@ ConfigureInterfacePage::ConfigureInterfacePage( KWView *_view, QVBox *box, char 
     bool bShowRuler=true;
     bool oldShowStatusBar = true;
     bool oldPgUpDownMovesCaret = false;
+    bool oldShowScrollBar = true;
     oldNbRecentFiles=10;
     int nbPagePerRow=4;
     if( config->hasGroup("Interface") )
@@ -246,6 +247,7 @@ ConfigureInterfacePage::ConfigureInterfacePage( KWView *_view, QVBox *box, char 
         nbPagePerRow=config->readNumEntry("nbPagePerRow", nbPagePerRow);
         oldShowStatusBar = config->readBoolEntry( "ShowStatusBar", true );
         oldPgUpDownMovesCaret = config->readBoolEntry( "PgUpDownMovesCaret", false );
+        oldShowScrollBar = config->readBoolEntry("ShowScrollBar", true);
     }
 
 
@@ -258,6 +260,9 @@ ConfigureInterfacePage::ConfigureInterfacePage( KWView *_view, QVBox *box, char 
 
     showStatusBar = new QCheckBox(i18n("Show status bar"),gbInterfaceGroup);
     showStatusBar->setChecked(oldShowStatusBar);
+
+    showScrollBar = new QCheckBox( i18n("Show Scrollbar"), gbInterfaceGroup);
+    showScrollBar->setChecked(oldShowScrollBar);
 
     pgUpDownMovesCaret = new QCheckBox(i18n("PageUp/PageDown moves the caret"),gbInterfaceGroup);
     pgUpDownMovesCaret->setChecked(oldPgUpDownMovesCaret);
@@ -316,7 +321,7 @@ void ConfigureInterfacePage::apply()
     int nbRecent=recentFiles->value();
     bool ruler=showRuler->isChecked();
     bool statusBar=showStatusBar->isChecked();
-
+    bool scrollBar = showScrollBar->isChecked();
     config->setGroup( "Interface" );
     if(valX!=doc->gridX())
     {
@@ -357,6 +362,13 @@ void ConfigureInterfacePage::apply()
         refreshGUI=true;
     }
 
+    if( scrollBar != doc->showScrollBar() )
+    {
+        config->writeEntry( "ShowScrollBar", scrollBar );
+        doc->setShowScrollBar( scrollBar );
+        refreshGUI=true;
+    }
+
     bool b = pgUpDownMovesCaret->isChecked();
     if ( b != doc->pgUpDownMovesCaret() )
     {
@@ -390,6 +402,7 @@ void ConfigureInterfacePage::slotDefault()
     showRuler->setChecked(true);
     showStatusBar->setChecked(true);
     pgUpDownMovesCaret->setChecked(false);
+    showScrollBar->setChecked( true);
 }
 
 

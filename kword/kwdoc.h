@@ -442,6 +442,9 @@ public:
     bool showStatusBar() const { return m_bShowStatusBar;}
     void setShowStatusBar( bool _status ) { m_bShowStatusBar = _status;}
 
+    bool showScrollBar() const { return m_bShowScrollBar; }
+    void setShowScrollBar( bool _status ) { m_bShowScrollBar = _status;}
+
     bool pgUpDownMovesCaret() const { return m_pgUpDownMovesCaret; }
     void setPgUpDownMovesCaret( bool b ) { m_pgUpDownMovesCaret = b; }
 
@@ -657,6 +660,7 @@ private:
     bool m_pgUpDownMovesCaret;
 
     bool m_bAllowAutoFormat;
+    bool m_bShowScrollBar;
 
     // The document that is used by all formulas
     KFormula::Document* m_formulaDocument;

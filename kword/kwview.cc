@@ -5080,6 +5080,17 @@ void KWGUI::reorganize()
             view->statusBar()->hide();
     }
 
+    if ( view->kWordDocument()->showScrollBar())
+    {
+        canvas->setVScrollBarMode(QScrollView::Auto);
+        canvas->setHScrollBarMode(QScrollView::Auto);
+    }
+    else
+    {
+        canvas->setVScrollBarMode(QScrollView::AlwaysOff);
+        canvas->setHScrollBarMode(QScrollView::AlwaysOff);
+    }
+
     panner->setGeometry( 0, 0, width(), height() );
     canvas->setGeometry( space, space, left->width() - space, left->height() - space );
     r_horz->setGeometry( space, 0, left->width() - space, space );

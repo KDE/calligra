@@ -153,7 +153,7 @@ KWDocument::KWDocument(QWidget *parentWidget, const char *widgetName, QObject* p
     m_bShowStatusBar = true;
     m_bAllowAutoFormat = true;
     m_pgUpDownMovesCaret = false;
-
+    m_bShowScrollBar = true;
 
     m_lastViewMode="ModeNormal";
 
@@ -300,6 +300,8 @@ void KWDocument::initConfig()
       m_lastViewMode= config->readEntry( "viewmode","ModeNormal");
       setShowStatusBar( config->readBoolEntry( "ShowStatusBar" , true ));
       setAllowAutoFormat( config->readBoolEntry( "AllowAutoFormat" , true ));
+      setShowScrollBar( config->readBoolEntry( "ShowScrollBar", true ));
+
   }
   else
       m_zoom = 100;

@@ -179,6 +179,9 @@ k_dcop:
     virtual void saveConfig();
     virtual void initUnit();
 
+    bool showScrollBar()const;
+    void setShowScrollBar( bool _status );
+
 private:
     KWDocument *doc;
 

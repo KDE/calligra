@@ -604,3 +604,14 @@ QStringList KWordDocIface::spellListIgnoreAll() const
     return doc->spellListIgnoreAll();
 }
 
+
+bool KWordDocIface::showScrollBar()const
+{
+    return doc->showScrollBar();
+}
+
+void KWordDocIface::setShowScrollBar( bool _status )
+{
+    doc->setShowScrollBar(_status );
+    doc->reorganizeGUI();
+}

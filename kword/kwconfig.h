@@ -65,7 +65,7 @@ private:
     KDoubleNumInput* gridX,*gridY;
     KDoubleNumInput* indent;
     KIntNumInput* recentFiles;
-    QCheckBox *showRuler, *showStatusBar, *pgUpDownMovesCaret;
+    QCheckBox *showRuler, *showStatusBar, *showScrollBar, *pgUpDownMovesCaret;
     int oldNbRecentFiles;
     KConfig* config;
     KIntNumInput *m_nbPagePerRow;
