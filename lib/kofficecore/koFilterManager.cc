@@ -142,6 +142,7 @@ QString KoFilterManager::fileSelectorList( const Direction &direction,
             }
             else // The filter desktop file talks about an unknown mimetype... This shouldn't happen.
             {
+                kdError() << "Unknown mimetype " << mime << " in " << vec[i].service()->desktopEntryPath() << endl;
                 if ( !ret.isEmpty() )
                     ret += "\n";
                 ret += "*|";

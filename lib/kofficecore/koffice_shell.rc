@@ -19,11 +19,13 @@
  </Menu>
  <Merge />
  <Menu name="settings" noMerge="1"><text>&amp;Settings</text>
-  <Merge />
+  <DefineGroup name="settings_top"/>
+  <Merge/>
   <ActionList name="toolbarlist"/>
   <Separator/>
   <Action name="configurekeys"/>
   <Action name="configuretoolbars"/>
+  <DefineGroup name="settings_configure"/>
  </Menu>
  <Menu name="help" noMerge="1"><text>&amp;Help</text>
   <Merge />

@@ -137,6 +137,11 @@ public:
    */
   static QValueList<KoFilterEntry> query( const QString & _constr = QString::null );
 
+  /**
+   * @internal for debugging purposes
+   */
+  KService::Ptr service() const { return m_service; }
+
 private:
   KService::Ptr m_service;
 };
@@ -173,7 +178,7 @@ public:
    *                 components.
    */
   static QValueList<KoFilterDialogEntry> query( const QString & _constr = QString::null );
-
+ 
 private:
   KService::Ptr m_service;
 };
