@@ -154,15 +154,29 @@ void KWordView_impl::setFormat(KWFormat &_format,bool _check = true)
     m_rToolBarText->setCurrentComboItem(m_idComboText_FontSize,_format.getPTFontSize() - 4);
   
   if (_format.getWeight() != -1)
-    m_rToolBarText->setButton(m_idButtonText_Bold,_format.getWeight() == QFont::Bold);
+    {
+      m_rToolBarText->setButton(m_idButtonText_Bold,_format.getWeight() == QFont::Bold);
+      tbFont.setBold(_format.getWeight() == QFont::Bold);
+    }
   if (_format.getItalic() != -1)
-    m_rToolBarText->setButton(m_idButtonText_Italic,_format.getItalic() == 1);
+    {
+      m_rToolBarText->setButton(m_idButtonText_Italic,_format.getItalic() == 1);
+      tbFont.setItalic(_format.getItalic() == 1);
+    }
   if (_format.getUnderline() != -1)
-    m_rToolBarText->setButton(m_idButtonText_Underline,_format.getUnderline() == 1);
+    {
+      m_rToolBarText->setButton(m_idButtonText_Underline,_format.getUnderline() == 1);
+      tbFont.setUnderline(_format.getUnderline() == 1);
+    }
 
   if (_format.getColor().isValid())
-    m_rToolBarText->setButtonPixmap(m_idButtonText_Color,CORBA::string_dup(colorToPixString(_format.getColor())));
+    {
+      m_rToolBarText->setButtonPixmap(m_idButtonText_Color,CORBA::string_dup(colorToPixString(_format.getColor())));
+      tbColor = QColor(_format.getColor());
+    }
 
+  format = _format;
+  
   gui->getPaperWidget()->formatChanged(format);
 }
 

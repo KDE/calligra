@@ -376,43 +376,46 @@ void KWPage::keyPressEvent(QKeyEvent *e)
       break;
     default:
       {
-	if (has_to_copy) copyBuffer();
-
-	draw_buffer = true;
-	char tmpString[2] = {0,0};
-	tmpString[0] = (char)e->ascii();
-	unsigned int tmpTextPos = fc->getTextPos();
-	fc->getParag()->insertText(fc->getTextPos(),tmpString);
-	fc->getParag()->setFormat(fc->getTextPos(),1,format);
-	fc->makeLineLayout(painter);
-	KWFormatContext paintfc(doc);
-	paintfc = *fc;
-	bool bend = false;
-	
-	while (!bend)
+	if (e->ascii() && e->ascii() > 31)
 	  {
-	    painter.fillRect(paintfc.getPTLeft() - xOffset,
-			     paintfc.getPTY() - yOffset,
-			     paintfc.getPTWidth(),
-			     paintfc.getPTMaxAscender() + paintfc.getPTMaxDescender(),
-			     QBrush(white));
-	    doc->printLine(paintfc,painter,xOffset,yOffset);
-	    bend = !paintfc.makeNextLineLayout(painter);
-	    if (paintfc.getPage() > lastVisiblePage || 
-		(int)paintfc.getPTY() + (int)paintfc.getPTMaxAscender() + (int)paintfc.getPTMaxDescender() 
-		- (int)yOffset > height() + (int)paintfc.getPTMaxAscender() + (int)paintfc.getPTMaxDescender())
-	      bend = true; 
+	    if (has_to_copy) copyBuffer();
+	    
+	    draw_buffer = true;
+	    char tmpString[2] = {0,0};
+	    tmpString[0] = (char)e->ascii();
+	    unsigned int tmpTextPos = fc->getTextPos();
+	    fc->getParag()->insertText(fc->getTextPos(),tmpString);
+	    fc->getParag()->setFormat(fc->getTextPos(),1,format);
+	    fc->makeLineLayout(painter);
+	    KWFormatContext paintfc(doc);
+	    paintfc = *fc;
+	    bool bend = false;
+	    
+	    while (!bend)
+	      {
+		painter.fillRect(paintfc.getPTLeft() - xOffset,
+				 paintfc.getPTY() - yOffset,
+				 paintfc.getPTWidth(),
+				 paintfc.getPTMaxAscender() + paintfc.getPTMaxDescender(),
+				 QBrush(white));
+		doc->printLine(paintfc,painter,xOffset,yOffset);
+		bend = !paintfc.makeNextLineLayout(painter);
+		if (paintfc.getPage() > lastVisiblePage || 
+		    (int)paintfc.getPTY() + (int)paintfc.getPTMaxAscender() + (int)paintfc.getPTMaxDescender() 
+		    - (int)yOffset > height() + (int)paintfc.getPTMaxAscender() + (int)paintfc.getPTMaxDescender())
+		  bend = true; 
+	      }
+	    
+	    if (tmpTextPos + 1 <= fc->getLineEndPos())
+	      fc->cursorGotoPos(tmpTextPos + 1,painter);
+	    else 
+	      {
+		fc->cursorGotoNextLine(painter);
+		fc->cursorGotoPos(tmpTextPos + 1,painter);
+	      }
+	    
+	    doc->updateAllViews(gui->getView());
 	  }
-	
-	if (tmpTextPos + 1 <= fc->getLineEndPos())
-	  fc->cursorGotoPos(tmpTextPos + 1,painter);
-	else 
-	  {
-	    fc->cursorGotoNextLine(painter);
-	    fc->cursorGotoPos(tmpTextPos + 1,painter);
-	  }
-
-	doc->updateAllViews(gui->getView());
       }  break;
     }
   painter.end();

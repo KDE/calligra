@@ -62,3 +62,7 @@ Reggie, 14.9.1998:
 - Improoved speed of deleting/inserting text and scrolling the canvas
   (now only the visible text is repainted) 
 - Some bugfixes in the KWFormatContext and in printing lines
+
+Reggie, 15.9.1998:
+------------------
+- Fixed a bug with setting formats
