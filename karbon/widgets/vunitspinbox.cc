@@ -116,3 +116,28 @@ VUnitDoubleLineEdit::setUnit( KoUnit::Unit unit )
 	changeValue( KoUnit::ptToUnit( KoUnit::ptFromUnit( m_value, old ), unit ) );
 }
 
+
+VUnitDoubleComboBox::VUnitDoubleComboBox( QWidget *parent, double lower, double upper, double value, unsigned int precision, const char *name )
+	: QComboBox( true, parent, name ), VUnitDoubleBase( precision ), m_value( value )
+{
+	lineEdit()->setAlignment( Qt::AlignRight );
+	m_validator = new KoUnitDoubleValidator( this, this );
+	lineEdit()->setValidator( m_validator );
+	changeValue( value );
+}
+
+void
+VUnitDoubleComboBox::changeValue( double value )
+{
+	setValue( value );
+	lineEdit()->setText( QString( "%1%2").arg( KGlobal::locale()->formatNumber( value, m_precision ) ).arg( KoUnit::unitName( m_unit ) ) );
+}
+
+void
+VUnitDoubleComboBox::setUnit( KoUnit::Unit unit )
+{
+	KoUnit::Unit old = m_unit;
+	m_unit = unit;
+	changeValue( KoUnit::ptToUnit( KoUnit::ptFromUnit( m_value, old ), unit ) );
+}
+
