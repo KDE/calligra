@@ -906,13 +906,13 @@ bool KWTextFrameSet::statistics( QProgressDialog *progress, ulong & charsWithSpa
         for ( QStringList::Iterator it = wordlist.begin(); it != wordlist.end(); ++it ) {
             QString word = *it;
             re.setPattern("[!?.,:_\"-]");    // clean word from punctuation
-            word.replace(re, "");
+            word.remove(re);
             if ( word.length() <= 3 ) {  // extension to the original algorithm
                 syllables++;
                 continue;
             }
             re.setPattern("e$");
-            word.replace(re, "");
+            word.remove(re);
             re.setPattern("[^aeiouy]+");
             QStringList syls = QStringList::split(re, word);
             int word_syllables = 0;
