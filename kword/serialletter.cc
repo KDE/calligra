@@ -28,6 +28,7 @@
 #include <qspinbox.h>
 #include <qtooltip.h>
 
+#include <kdebug.h>
 #include <klocale.h>
 #include <kbuttonbox.h>
 #include <kiconloader.h>
@@ -173,10 +174,10 @@ void KWSerialLetterDataBase::load( KOMLParser &parser, vector<KOMLAttrib> &lst )
 			    addEntry( QString::fromUtf8( ( *it ).m_strValue.c_str() ) );
 		    }
 		} else
-		    cerr << "Unknown tag '" << tag << "' in SAMPLE" << endl;
+	            kdError(32001) << "Unknown tag '" << tag.c_str() << "' in SAMPLE" << endl;
 
 		if ( !parser.close( tag ) ) {
-		    cerr << "ERR: Closing Child" << endl;
+		    kdError(32001) << "Closing " << tag.c_str() << endl;
 		    return;
 		}
 	    }
@@ -206,26 +207,26 @@ void KWSerialLetterDataBase::load( KOMLParser &parser, vector<KOMLAttrib> &lst )
 				    setValue( key, QString::fromUtf8( ( *it ).m_strValue.c_str() ), db.count() - 1 );
 			    }
 			} else
-			    cerr << "Unknown tag '" << tag << "' in RECORD" << endl;
+	                    kdError(32001) << "Unknown tag '" << tag.c_str() << "' in RECORD" << endl;
 
 			if ( !parser.close( tag ) ) {
-			    cerr << "ERR: Closing Child" << endl;
+			    kdError(32001) << "Closing " << tag.c_str() << endl;
 			    return;
 			}
 		    }
 		} else
-		    cerr << "Unknown tag '" << tag << "' in DB" << endl;
+	            kdError(32001) << "Unknown tag '" << tag.c_str() << "' in DB" << endl;
 
 		if ( !parser.close( tag ) ) {
-		    cerr << "ERR: Closing Child" << endl;
+		    kdError(32001) << "Closing " << tag.c_str() << endl;
 		    return;
 		}
 	    }
 	} else
-	    cerr << "Unknown tag '" << tag << "' in SERIALL" << endl;
+	    kdError(32001) << "Unknown tag '" << tag.c_str() << "' in SERIALL" << endl;
 
 	if ( !parser.close( tag ) ) {
-	    cerr << "ERR: Closing Child" << endl;
+	    kdError(32001) << "Closing " << tag.c_str() << endl;
 	    return;
 	}
     }

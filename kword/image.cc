@@ -22,6 +22,7 @@
 #include "defs.h"
 #include "kword_utils.h"
 
+#include <kdebug.h>
 #include <komlMime.h>
 #include <strstream>
 #include <fstream>
@@ -85,11 +86,11 @@ void KWImage::load( KOMLParser& parser, vector<KOMLAttrib>& lst, KWordDocument *
         }
 
         else
-            cerr << "Unknown tag '" << tag << "' in IMAGE" << endl;
+	    kdError(32001) << "Unknown tag '" << tag.c_str() << "' in IMAGE" << endl;
 
         if ( !parser.close( tag ) )
         {
-            cerr << "ERR: Closing Child" << endl;
+	    kdError(32001) << "Closing " << tag.c_str() << endl;
             return;
         }
     }

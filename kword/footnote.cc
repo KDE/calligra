@@ -28,6 +28,7 @@
 
 #include <klocale.h>
 
+#include <kdebug.h>
 #include <komlMime.h>
 #include <strstream>
 #include <fstream>
@@ -249,10 +250,10 @@ void KWFootNoteManager::load( KOMLParser &parser, vector<KOMLAttrib> &lst )
 	}
 
 	else
-	    cerr << "Unknown tag '" << tag << "' in FOOTNOTEMGR" << endl;
+	    kdError(32001) << "Unknown tag '" << tag.c_str() << "' in FOOTNOTEMGR" << endl;
 
 	if ( !parser.close( tag ) ) {
-	    cerr << "ERR: Closing Child" << endl;
+	    kdError(32001) << "Closing " << tag.c_str() << endl;
 	    return;
 	}
     }
@@ -477,10 +478,10 @@ void KWFootNote::load( string name, string tag, KOMLParser &parser, vector<KOMLA
 		}
 		parts.append( part );
 	    } else
-		cerr << "Unknown tag '" << tag << "' in INTERNAL" << endl;
+	        kdError(32001) << "Unknown tag '" << tag.c_str() << "' in INTERNAL" << endl;
 
 	    if ( !parser.close( tag ) ) {
-		cerr << "ERR: Closing Child" << endl;
+	        kdError(32001) << "Closing " << tag.c_str() << endl;
 		return;
 	    }
 	}
