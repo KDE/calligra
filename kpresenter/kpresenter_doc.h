@@ -49,7 +49,6 @@ class DCOPObject;
 #include "commandhistory.h"
 
 #include <komlParser.h>
-#include <komlStreamFeed.h>
 #include <komlWriter.h>
 #include <ktempfile.h>
 

@@ -28,7 +28,6 @@
 #include <qregion.h>
 
 #include <komlParser.h>
-#include <komlStreamFeed.h>
 #include <komlWriter.h>
 
 #include <kapp.h>
