@@ -159,12 +159,12 @@ VKoPainter::end()
 void
 VKoPainter::blit( const QRect &r )
 {
-	kdDebug() << "m_width : " << m_width << endl;
-	kdDebug() << "m_height : " << m_height << endl;
+	//kdDebug() << "m_width : " << m_width << endl;
+	//kdDebug() << "m_height : " << m_height << endl;
 	int x		= QMAX( 0, r.x() );
 	int y		= QMAX( 0, r.y() );
-	int width	= QMIN( m_width, r.x() + r.width() );
-	int height	= QMIN( m_height, r.y() + r.height() );
+	int width	= QMIN( int( m_width ),		r.x() + r.width() );
+	int height	= QMIN( int( m_height ),	r.y() + r.height() );
 	/*kdDebug() << "!!!x : " << x << endl;
 	kdDebug() << "!!!y : " << y << endl;
 	kdDebug() << "!!!width : " << width << endl;
@@ -602,7 +602,7 @@ VKoPainter::applyPattern( ArtSVP *svp, bool fill )
 	pattern->twidth = pat.tileWidth();
 	pattern->theight = pat.tileHeight();
 	pattern->buffer = pat.pixels();
-	pattern->opacity = fill ? m_fill->color().opacity() * 255.0 : m_stroke->color().opacity() * 255.0;
+	pattern->opacity = fill ? short( m_fill->color().opacity() * 255.0 ) : short( m_stroke->color().opacity() * 255.0 );
 	pattern->angle = atan2( dy, dx );
 
 	if( x0 != x1 && y0 != y1 )
@@ -643,7 +643,7 @@ VKoPainter::applyGradient( ArtSVP *svp, bool fill )
 		_y1 = m_matrix.m22() * _y1 + m_matrix.dy() / m_zoomFactor;
 		double _y2 = gradient.origin().y();
 		_y2 = m_matrix.m22() * _y2 + m_matrix.dy() / m_zoomFactor;
-		kdDebug() << "_y1 : " << _y1 << ", _y2 " << _y2 << endl;
+		//kdDebug() << "_y1 : " << _y1 << ", _y2 " << _y2 << endl;
 		double dy = ( _y1 - _y2 ) * m_zoomFactor;
 		double scale = 1.0 / ( dx * dx + dy * dy );
 
@@ -770,7 +770,7 @@ VKoPainter::buildStopArray( VGradient &gradient, int &offsets )
 	for( int offset = 0 ; offset < offsets ; offset++ )
 	{
 		double ramp = colorStops[ offset ]->rampPoint;
-		double mid  = colorStops[ offset ]->midPoint;
+		//double mid  = colorStops[ offset ]->midPoint;
 		(*stopArray)[ offset * 2 ].offset = ramp;
 		//kdDebug() << " (*stopArray)[ offset * 2 ].offset : " <<  (*stopArray)[ offset * 2 ].offset << endl;
 
