@@ -97,7 +97,7 @@ Please respect the format of the date (DD/MM/YYYY) and of the version
 
 <chapter ID="Introduction"><title>Introduction</title>
 
-<sect1>
+<sect1 ID="Introduction1">
 <title>Introduction</title>
 <para>KWord, is a full featured WYSIWYG (What You See Is What You Get) Wordprocessor/Desktop Publishing Program. </para>
 <para> KWord is part of the KOffice productivity suite for the K Dekstop Environment.  Other applications in KOffice include</para>
@@ -385,7 +385,7 @@ the left mouse button.  Drag the mouse diagonally.  An outline will appear which
 </sect1>
 </chapter>
 <chapter id="KWordScreen"><title>The KWord Screen</title>
-<sect1><title>Overview</title>
+<sect1 id="Overview"><title>Overview</title>
 <para>KWord, like most GUI based programs, divides the screen up into several areas. Each area of the screen is used to perform a group of similar features
 .  When you start the KWord screen, it is initially divided into 4 major areas:</para>
 <orderedlist numeration="arabic">
