@@ -58,7 +58,7 @@ void KarbonAIParserBase::parsingFinished(){
 QString KarbonAIParserBase::getHeader(){
   QString data;
   data += "<!DOCTYPE DOC>\n";
-  data += "<DOC mime=\"application/x-karbon\" version=\"0.1\" editor=\"aiimport 0.0.1\">\n";
+  data += "<DOC mime=\"application/x-karbon\" syntaxVersion=\"0.1\" editor=\"aiimport 0.0.1\">\n";
   data += " <LAYER name=\"\" visible=\"1\">\n";
   return data;
 }

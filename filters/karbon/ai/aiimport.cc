@@ -27,7 +27,7 @@ public:
 protected:
 	virtual void setupTranslations( void )
 	{
-		KGlobal::locale()->insertCatalogue( "karbonepsfilter" );
+		KGlobal::locale()->insertCatalogue( "karbonaifilter" );
 	}
 };
 
@@ -45,10 +45,11 @@ AiImport::~AiImport()
 KoFilter::ConversionStatus
 AiImport::convert( const QCString& from, const QCString& to )
 {
-	if ( from != "application/illustrator" || to != "application/x-karbon" )
+	if( from != "application/illustrator" || to != "application/x-karbon" )
 	{
 		return KoFilter::NotImplemented;
 	}
+
 	QFile fileIn( m_chain->inputFile() );
 	if( !fileIn.open( IO_ReadOnly ) )
 	{
@@ -56,14 +57,14 @@ AiImport::convert( const QCString& from, const QCString& to )
 		return KoFilter::FileNotFound;
 	}
 
-        if (!parse (fileIn))
-        {
+	if( !parse( fileIn ) )
+	{
 		fileIn.close();
 		return KoFilter::CreationError;
-        }
+	}
 	m_result = getHeader() + m_result + getFooter();
 
-        kdDebug() << m_result << endl;
+kdDebug() << m_result << endl;
 	KoStoreDevice* storeOut = m_chain->storageFile( "root", KoStore::Write );
 	if( !storeOut )
 	{

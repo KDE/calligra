@@ -3,7 +3,6 @@
 */
 
 #include <qcstring.h>
-#include <qdom.h>
 #include <qfile.h>
 #include <qstring.h>
 
@@ -39,6 +38,11 @@ EpsImport::EpsImport( KoFilter*, const char*, const QStringList& )
 {
 }
 
+EpsImport::~EpsImport()
+{
+	stopProc();
+}
+
 KoFilter::ConversionStatus
 EpsImport::convert( const QCString& from, const QCString& to )
 {
@@ -63,16 +67,52 @@ EpsImport::convert( const QCString& from, const QCString& to )
 	QByteArray byteArrayIn = storeIn->read( storeIn->size() );
 	storeIn->close();
 
-	QDomDocument domIn;
-	domIn.setContent( byteArrayIn );
-	QDomElement docNode = domIn.documentElement();
+	// initialize ghostscript:
+	m_proc = new KProcess();
+	*m_proc << "gs - -q -dNOPAUSE -dSAFER -dNODISPLAY ps2ai.ps";
 
-	KProcess proc;
-	proc << "gs - -q -dNOPAUSE -dSAFER -dNODISPLAY ps2ai.ps";
+	connect( m_proc, SIGNAL( processExited( KProcess* ) ),
+		this, SLOT( procExited( KProcess* ) ) );
+	connect( m_proc, SIGNAL( receivedStdout( KProcess*, char*, int ) ),
+		this, SLOT( procOutput( KProcess*, char*, int ) ) );
+
+	// start ghostscript:
+	m_proc->start( KProcess::DontCare, KProcess::All );
+
+	// write data to ghostscript:
+	m_proc->writeStdin( byteArrayIn, byteArrayIn.size() );
+	m_proc->closeStdin();
 
 	fileOut.close();
 	delete storeIn;
 	return KoFilter::OK;
+}
+
+void
+EpsImport::procOutput( KProcess* proc, char* buffer, int len)
+{
+	QString line = QString::fromLocal8Bit( buffer, len );
+
+kdDebug() << line << endl;
+}
+
+void
+EpsImport::procFailed()
+{
+	stopProc();
+}
+
+void
+EpsImport::procExited( KProcess* proc )
+{
+	delete m_proc;
+}
+
+void
+EpsImport::stopProc()
+{
+	delete( m_proc );
+	m_proc = 0L;
 }
 
 #include "epsimport.moc"
