@@ -345,9 +345,18 @@ void KoTemplateCreateDia::slotRemove() {
     if(!item)
 	return;
 
-    QString what=item->depth()==0 ? i18n("group") : i18n("template");
-    if(KMessageBox::warningYesNo(this, i18n("Do you really want to remove that %1?").arg(what),
-				 i18n("Remove %1?").arg(what))==KMessageBox::No) {
+    QString what;
+	QString removed;
+	if (item->depth()==0) {
+		what =  i18n("Do you really want to remove that group");
+		removed = i18n("Remove group");
+	} else {
+		what =  i18n("Do you really want to remove that template");
+        removed = i18n("Remove template");     
+	}
+	
+    if(KMessageBox::warningYesNo(this, what,
+				 removed)==KMessageBox::No) {
 	d->m_name->setFocus();
 	return;
     }
