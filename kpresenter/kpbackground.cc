@@ -19,7 +19,6 @@
 
 #include "kpbackground.h"
 #include "kpresenter_doc.h"
-#include <qwmf.h>
 #include <qapplication.h>
 #include "kpgradientcollection.h"
 #include "kptextobject.h"

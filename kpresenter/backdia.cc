@@ -38,7 +38,6 @@
 #include <kfiledialog.h>
 #include <kimageio.h>
 #include <kbuttonbox.h>
-#include <kio/netaccess.h>
 
 #include <koPicture.h>
 
