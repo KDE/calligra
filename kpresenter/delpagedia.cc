@@ -28,47 +28,47 @@ DelPageDia::DelPageDia(QWidget* parent,const char* name,KPresenterDoc *_doc,int 
 {
   doc = _doc;
 
+  grid = new QGridLayout(this,7,5,15,7);
+
   label = new QLabel(i18n("Delete Page Number: "),this);
   label->resize(label->sizeHint());
-  label->move(20,20);
+  grid->addWidget(label,0,0);
 
   spinBox = new QSpinBox(1,doc->getPageNums(),1,this);
   spinBox->setValue(currPageNum);
   spinBox->resize(spinBox->sizeHint());
-  spinBox->move(label->x() + label->width() + 5,label->y());
-  label->move(label->x(),label->y() + (spinBox->height() - label->height()) / 2);
+  grid->addWidget(spinBox,0,1);
 
   leave = new QRadioButton(i18n("&Leave all objects untouched."),this);
   leave->resize(leave->sizeHint());
-  leave->move(label->x(),spinBox->y() + spinBox->height() + 20);
   connect(leave,SIGNAL(clicked()),this,SLOT(leaveClicked()));
-
+  grid->addMultiCellWidget(leave,1,1,0,4);
+  
   _move = new QRadioButton(i18n("&Move the objects which are behind the deleted page \n"
 			       "one page backwards, so that they stay on their current page, \n"
 			       "and don't touch the objects, which are on the deleted page."),this);
   _move->resize(_move->sizeHint());
-  _move->move(label->x(),leave->y() + leave->height() + 10);
   connect(_move,SIGNAL(clicked()),this,SLOT(moveClicked()));
-
+  grid->addMultiCellWidget(_move,2,2,0,4);
+  
   del = new QRadioButton(i18n("&Delete the objects which are on the deleted page and \n"
 			       "leave the other objects untouched."),this);
   del->resize(del->sizeHint());
-  del->move(label->x(),_move->y() + _move->height() + 10);
   connect(del,SIGNAL(clicked()),this,SLOT(delClicked()));
-
+  grid->addMultiCellWidget(del,3,3,0,4);
+  
   move_del = new QRadioButton(i18n("M&ove the objects which are behind the deleted page \n"
 				   "one page backwards, so that they stay on their current page, \n"
 				   "and delete the objects which are on the deleted page."),this);
   move_del->resize(move_del->sizeHint());
-  move_del->move(label->x(),del->y() + del->height() + 10);
   connect(move_del,SIGNAL(clicked()),this,SLOT(moveDelClicked()));
+  grid->addMultiCellWidget(move_del,4,4,0,4);
 
   cancel = new QPushButton(this,"BCancel");
   cancel->setText(i18n("Cancel"));
   cancel->resize(cancel->sizeHint());
-  cancel->move(max(max(max(leave->width(),_move->width()),del->width()),move_del->width()) + leave->x() - cancel->width(),
-	       move_del->y() + move_del->height() + 20);
   connect(cancel,SIGNAL(clicked()),this,SLOT(reject()));
+  grid->addWidget(cancel,6,4);
 
   ok = new QPushButton(this,"BOK");
   ok->setText(i18n("OK"));
@@ -77,11 +77,29 @@ DelPageDia::DelPageDia(QWidget* parent,const char* name,KPresenterDoc *_doc,int 
   ok->setAutoDefault(true);
   ok->setDefault(true);
   ok->resize(cancel->size());
-  ok->move(cancel->x() - ok->width() - 10,cancel->y());
   connect(ok,SIGNAL(clicked()),this,SLOT(okClicked()));
   connect(ok,SIGNAL(clicked()),this,SLOT(accept()));
+  grid->addWidget(ok,6,3);
 
-  resize(cancel->x() + cancel->width() + 20,cancel->y() + cancel->height() + 20);
+  grid->addRowSpacing(0,spinBox->height());
+  grid->addRowSpacing(1,leave->height());
+  grid->addRowSpacing(2,_move->height());
+  grid->addRowSpacing(3,del->height());
+  grid->addRowSpacing(4,move_del->height());
+  grid->addRowSpacing(5,0);
+  grid->addRowSpacing(6,ok->height());
+  grid->setRowStretch(5,1);
+
+  grid->addColSpacing(0,label->width());
+  grid->addColSpacing(1,spinBox->width());
+  grid->addColSpacing(2,max(max(leave->width(),_move->width()),max(del->width(),move_del->width())) -
+		      (label->width() + spinBox->width() + ok->width() + cancel->width() + 30));
+  grid->addColSpacing(3,ok->width());
+  grid->addColSpacing(4,cancel->width());
+  grid->setColStretch(2,1);
+  
+  grid->activate();
+
   uncheckAll();
   move_del->setChecked(true);
 }

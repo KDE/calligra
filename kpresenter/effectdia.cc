@@ -32,6 +32,7 @@ EffectDia::EffectDia(QWidget* parent,const char* name,int _pageNum,int _objNum,K
   lNum = new QLabel(i18n("Number: "),this);
   lNum->move(10,10);
   lNum->resize(lNum->sizeHint());
+  lNum->setAlignment(AlignVCenter);
 
   eNum =  new KRestrictedLine(this,"eNum","0123456789");
   eNum->move(lNum->width()+15,10);
@@ -39,10 +40,12 @@ EffectDia::EffectDia(QWidget* parent,const char* name,int _pageNum,int _objNum,K
   char str[5];
   sprintf(str,"%d",view->kPresenterDoc()->objectList()->at(_objNum)->getPresNum());
   eNum->setText(str);
+  lNum->resize(lNum->width(),eNum->height());
 
   lEffect = new QLabel(i18n("Effect (appearing): "),this);
   lEffect->move(10,eNum->y()+eNum->height()+20);
   lEffect->resize(lEffect->sizeHint());
+  lEffect->setAlignment(AlignVCenter);
 
   cEffect = new QComboBox(false,this,"cEffect");
   cEffect->insertItem(i18n("No Effect"));
@@ -59,12 +62,14 @@ EffectDia::EffectDia(QWidget* parent,const char* name,int _pageNum,int _objNum,K
   cEffect->insertItem(i18n("Wipe from top"));
   cEffect->insertItem(i18n("Wipe from bottom"));
   cEffect->setCurrentItem(static_cast<int>(view->kPresenterDoc()->objectList()->at(_objNum)->getEffect()));
-  cEffect->move(max(lEffect->width(),lNum->width())+15,lEffect->y()-5);
+  cEffect->move(max(lEffect->width(),lNum->width())+15,lEffect->y());
   cEffect->resize(cEffect->sizeHint());
+  lEffect->resize(lEffect->width(),cEffect->height());
 
   lEffect2 = new QLabel(i18n("Effect (object specific): "),this);
   lEffect2->move(cEffect->x()+cEffect->width()+20,eNum->y()+eNum->height()+20);
   lEffect2->resize(lEffect2->sizeHint());
+  lEffect2->setAlignment(AlignVCenter);
 
   cEffect2 = new QComboBox(false,this,"cEffect2");
   cEffect2->insertItem(i18n("No Effect"));
@@ -91,8 +96,9 @@ EffectDia::EffectDia(QWidget* parent,const char* name,int _pageNum,int _objNum,K
 	}
     }
 
-  cEffect2->move(lEffect2->x()+lEffect2->width()+5,lEffect2->y()-5);
+  cEffect2->move(lEffect2->x()+lEffect2->width()+5,lEffect2->y());
   cEffect2->resize(cEffect2->sizeHint());
+  lEffect2->resize(lEffect2->width(),cEffect2->height());
 
   resize(cEffect2->x()+cEffect2->width()+10,cEffect->y()+cEffect->height()+10);
 

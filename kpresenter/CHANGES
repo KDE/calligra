@@ -29,3 +29,7 @@ Reggie, 30.1.1999:
 Reggie, 31.1.1999:
 ------------------
 - After playing a screen presentation it was not possible to actiavate embedded parts - I fixed that.
+
+Reggie, 3.2.1999:
+-----------------
+- Some fixes and cleanups in the dialogs

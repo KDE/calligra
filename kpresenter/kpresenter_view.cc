@@ -347,8 +347,7 @@ void KPresenterView::editDelPage()
     {
       delPageDia = new DelPageDia(0,"",m_pKPresenterDoc,getCurrPgNum());
       delPageDia->setCaption(i18n("KPresenter - Delete Page"));
-      delPageDia->setMaximumSize(delPageDia->width(),delPageDia->height());
-      delPageDia->setMinimumSize(delPageDia->width(),delPageDia->height());
+      delPageDia->resize(delPageDia->minimumSize());
       QObject::connect(delPageDia,SIGNAL(deletePage(int,DelPageMode)),this,SLOT(delPageOk(int,DelPageMode)));
       delPageDia->show();
     }
@@ -425,8 +424,7 @@ void KPresenterView::insertPage()
   
   insPageDia = new InsPageDia(0,"",m_pKPresenterDoc,getCurrPgNum());
   insPageDia->setCaption(i18n("KPresenter - Insert Page"));
-  insPageDia->setMaximumSize(insPageDia->width(),insPageDia->height());
-  insPageDia->setMinimumSize(insPageDia->width(),insPageDia->height());
+  insPageDia->resize(insPageDia->minimumSize());
   QObject::connect(insPageDia,SIGNAL(insertPage(int,InsPageMode,InsertPos)),this,SLOT(insPageOk(int,InsPageMode,InsertPos)));
   insPageDia->show();
 }

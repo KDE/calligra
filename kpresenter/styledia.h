@@ -30,6 +30,7 @@
 #include <qcolor.h>
 #include <ksize.h>
 #include <qradiobutton.h>
+#include <qspinbox.h>
 
 #include <kcolordlg.h>
 #include <kcolorbtn.h>
@@ -121,7 +122,8 @@ private:
   QWidget *penFrame,*brushFrame;  
   QPushButton *choosePCol,*chooseBCol;
   QLabel *penStyle,*brushStyle,*penWidth,*llineBegin,*llineEnd;
-  QComboBox *choosePStyle,*chooseBStyle,*choosePWidth,*clineBegin,*clineEnd;
+  QComboBox *choosePStyle,*chooseBStyle,*clineBegin,*clineEnd;
+  QSpinBox *choosePWidth;
   QPushButton *okBut,*applyBut,*cancelBut;
   PBPreview *penPrev,*brushPrev,*gPrev;
   QRadioButton *fillStyle,*fillGradient;

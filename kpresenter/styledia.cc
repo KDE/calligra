@@ -109,20 +109,10 @@ StyleDia::StyleDia(QWidget* parent = 0,const char* name = 0,int flags = SD_PEN |
   penWidth->move(choosePCol->x(),choosePStyle->y()+choosePStyle->height()+20);
   penWidth->resize(penWidth->sizeHint());
 
-  choosePWidth = new QComboBox(false,penFrame,"PWidth");
+  choosePWidth = new QSpinBox(1,10,1,penFrame);
   choosePWidth->move(choosePCol->x(),penWidth->y()+penWidth->height()+10);
   choosePWidth->resize(choosePStyle->width(),choosePWidth->sizeHint().height());
-  choosePWidth->insertItem("1");
-  choosePWidth->insertItem("2");
-  choosePWidth->insertItem("3");
-  choosePWidth->insertItem("4");
-  choosePWidth->insertItem("5");
-  choosePWidth->insertItem("6");
-  choosePWidth->insertItem("7");
-  choosePWidth->insertItem("8");
-  choosePWidth->insertItem("9");
-  choosePWidth->insertItem("10");
-  connect(choosePWidth,SIGNAL(activated(int)),this,SLOT(changePWidth(int)));
+  connect(choosePWidth,SIGNAL(valueChanged(int)),this,SLOT(changePWidth(int)));
 
   pen = QPen(black,1,SolidLine);
   
@@ -308,7 +298,7 @@ void StyleDia::setPen(QPen _pen)
     case DashDotLine: choosePStyle->setCurrentItem(3); break;  
     case DashDotDotLine: choosePStyle->setCurrentItem(4); break;  
     }
-  choosePWidth->setCurrentItem(pen.width()-1);
+  choosePWidth->setValue(pen.width());
 }
 
 /*========================= set brush =============================*/
@@ -451,7 +441,7 @@ void StyleDia::changeBStyle(int item)
 /*====================== change pen-width =========================*/
 void StyleDia::changePWidth(int item)
 {
-  pen.setWidth(item+1);
+  pen.setWidth(item);
   penPrev->setPen(pen);
 }
 

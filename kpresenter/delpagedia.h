@@ -48,6 +48,7 @@ protected:
 
   KPresenterDoc *doc;
   
+  QGridLayout *grid;
   QLabel *label;
   QSpinBox *spinBox;
   QRadioButton *leave,*_move,*del,*move_del;
