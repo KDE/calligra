@@ -963,7 +963,7 @@ bool XMLTree::invokeHandler(Q_UINT16 opcode, Q_UINT32 bytes, QDataStream &operan
         { "LABELSST",       0x00fd, &XMLTree::_labelsst },
         { "LABEL",          0x0004, &XMLTree::_label },
         { "LEFTMARGIN",     0x0026, &XMLTree::_leftmargin },
-        { "MERGECELL",      0x00e5, 0 /* XMLTree::_mergecell */ },
+        { "MERGECELL",      0x00e5, &XMLTree::_mergecell },
 	{ "MULBLANK",       0x00be, &XMLTree::_mulblank },
         { "MULRK",          0x00bd, &XMLTree::_mulrk },
         { "NAME",           0x0018, &XMLTree::_name },
@@ -1501,6 +1501,57 @@ bool XMLTree::_leftmargin(Q_UINT32, QDataStream &body)
   body >> value;
   borders.setAttribute("left", (value*2.54));
 
+  return true;
+}
+
+bool XMLTree::_mergecell(Q_UINT32, QDataStream &body)
+{
+  Q_UINT16 count, firstrow, lastrow, firstcol, lastcol;
+  bool foundcell = false;
+  body >> count;
+  
+  for (int i=0; i < count; ++i) {
+    foundcell = false;
+    body >> firstrow >> lastrow >> firstcol >> lastcol;    
+    QDomElement map = root->documentElement().namedItem("map").toElement();
+    QDomNode n = map.firstChild();
+    while (!n.isNull() && !foundcell)
+    {
+	QDomElement e = n.toElement();
+	if (!e.isNull() && e.tagName() == "table")
+	{
+	    QDomNode n2 = e.firstChild();  
+	    while (!n2.isNull() && !foundcell)
+	    {
+		QDomElement e2 = n2.toElement();
+		if (!e2.isNull() && e2.tagName() == "cell")
+		{
+		    QDomNode n3 = e2.firstChild();
+		    while (!n3.isNull() && !foundcell)
+		    {
+			QDomElement e3 = n3.toElement();
+			if (!e3.isNull() && e3.tagName() == "format")
+			{
+			    int row = e2.attribute("row").toInt();
+			    int col = e2.attribute("column").toInt();
+			    if (row == (firstrow + 1) && col == (firstcol + 1))
+			    {
+				e3.setAttribute("rowspan", QString::number(lastrow - firstrow));
+		    		e3.setAttribute("colspan", QString::number(lastcol - firstcol));
+				foundcell = true;
+			    }
+			}
+			n3 = n3.nextSibling();
+		    }
+		}
+		n2 = n2.nextSibling();
+	    }
+	}
+	n = n.nextSibling();
+    }
+    if(!foundcell)
+	kdWarning() << "WARNING: Cell " << firstrow + 1 << " " << firstcol + 1 << " not found!" << endl;
+  }
   return true;
 }
 

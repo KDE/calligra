@@ -142,6 +142,7 @@ private:
   bool _label(Q_UINT32 size, QDataStream &body);
   bool _labelsst(Q_UINT32 size, QDataStream &body);
   bool _leftmargin(Q_UINT32 size, QDataStream &body);
+  bool _mergecell(Q_UINT32 size, QDataStream &body);
   bool _mulblank(Q_UINT32 size, QDataStream &body);
   bool _mulrk(Q_UINT32 size, QDataStream &body);
   bool _name(Q_UINT32 size, QDataStream &body);
