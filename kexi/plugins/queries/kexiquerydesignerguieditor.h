@@ -34,6 +34,13 @@ class KexiQueryDesignerGuiEditor : public QWidget
 		KexiQueryDesignerGuiEditor(QWidget *parent, KexiMainWindow *win);
 		~KexiQueryDesignerGuiEditor();
 
+	protected:
+		void			initTable();
+		void			addRow(const QString &tbl, const QString &field);
+
+	protected slots:
+		void			slotDropped(QDropEvent *ev);
+
 	private:
 		KexiTableViewData	*m_data;
 		KexiTableView		*m_table;

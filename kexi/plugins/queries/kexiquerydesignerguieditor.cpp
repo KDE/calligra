@@ -28,7 +28,9 @@
 #include <keximainwindow.h>
 #include <kexirelationpart.h>
 #include <kexitableview.h>
+#include <kexitableitem.h>
 #include <kexitableviewdata.h>
+#include "kexidragobjects.h"
 
 #include "kexiquerydesignerguieditor.h"
 
@@ -38,18 +40,71 @@ KexiQueryDesignerGuiEditor::KexiQueryDesignerGuiEditor(QWidget *parent, KexiMain
 	QSplitter *s = new QSplitter(Vertical, this);
 	KexiRelationPart *p = win->relationPart();
 	if(p)
-		p->createWidget(s);
+		p->createWidget(s, win);
 
 	m_data = new KexiTableViewData();
-	KexiDB::Field *f = new KexiDB::Field(i18n("Table"), KexiDB::Field::Text);
-	KexiTableViewColumn *col = new KexiTableViewColumn(*f);
-	m_data->addColumn(col);
+	initTable();
 	kdDebug() << "KexiQueryDesignerGuiEditor::KexiQueryDesignerGuiEditor() data = " << m_data << endl;
 	m_table = new KexiTableView(m_data, s, "designer");
 	QVBoxLayout *l = new QVBoxLayout(this);
 	l->addWidget(s);
+	m_table->addDropFilter("kexi/field");
+
+	connect(m_table, SIGNAL(dropped(QDropEvent *)), this, SLOT(slotDropped(QDropEvent *)));
+	m_table->setNavigatorEnabled(false);
+	addRow("", "");
 }
 
+void
+KexiQueryDesignerGuiEditor::initTable()
+{
+	KexiDB::Field *f = new KexiDB::Field(i18n("Table"), KexiDB::Field::Text);
+	KexiTableViewColumn *col = new KexiTableViewColumn(*f);
+	m_data->addColumn(col);
+
+	KexiDB::Field *f2 = new KexiDB::Field(i18n("Field"), KexiDB::Field::Text);
+	KexiTableViewColumn *col2 = new KexiTableViewColumn(*f2);
+	m_data->addColumn(col2);
+
+	KexiDB::Field *f3 = new KexiDB::Field(i18n("Shown"), KexiDB::Field::Boolean);
+	f3->setDefaultValue(QVariant(true));
+	KexiTableViewColumn *col3 = new KexiTableViewColumn(*f3);
+	m_data->addColumn(col3);
+
+	KexiDB::Field *f4 = new KexiDB::Field(i18n("Condition"), KexiDB::Field::Text);
+	KexiTableViewColumn *col4 = new KexiTableViewColumn(*f4);
+	m_data->addColumn(col4);
+}
+
+void
+KexiQueryDesignerGuiEditor::addRow(const QString &tbl, const QString &field)
+{
+	kdDebug() << "KexiQueryDesignerGuiEditor::addRow(" << tbl << ", " << field << ")" << endl;
+	KexiTableItem *item = new KexiTableItem(0);
+
+//	 = QVariant(tbl);
+	item->push_back(QVariant(tbl));
+	item->push_back(QVariant(field));
+	item->push_back(QVariant(false));
+	item->push_back(QVariant());
+	m_data->append(item);
+
+	//TODO: this should deffinitly not go here :)
+	m_table->updateContents();
+}
+
+void
+KexiQueryDesignerGuiEditor::slotDropped(QDropEvent *ev)
+{
+	//TODO: better check later if the source is really a table
+	QString srcTable;
+	QString srcField;
+	QString dummy;
+
+	KexiFieldDrag::decode(ev,dummy,srcTable,srcField);
+	addRow(srcTable, srcField);
+}
+	
 KexiQueryDesignerGuiEditor::~KexiQueryDesignerGuiEditor()
 {
 }

@@ -157,12 +157,18 @@ KexiQueryDesigner::viewChanged(QWidget *w)
 	}
 */
 
-	if(m_tab->indexOf(w) != 1)
+	kdDebug() << "KexiQueryDesigner::viewChanged(): index of W = " << m_tab->indexOf(w) << endl;
+
+	//this is really ugly, however we might switch back to toolbar stuff anyway...
+	if(m_tab->indexOf(w) == 2)
 	{
-		m_statement = m_sql->getQuery();
-		m_currentView = 1;
-		query();
+		if(m_currentView == 1)
+		{
+			m_statement = m_sql->getQuery();
+			query();
+		}
 	}
+	m_currentView = m_tab->indexOf(w);
 }
 
 void
