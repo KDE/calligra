@@ -155,7 +155,7 @@ public:
 	 */
 	const VLayerList& layers() const { return m_layers; }
 
-	void saveXML( QDomDocument & ) const;
+	QDomDocument saveXML() const;
 	bool loadXML( const QDomElement& doc );
 	virtual void save( QDomElement& me ) const;
 	virtual void load( const QDomElement& me );

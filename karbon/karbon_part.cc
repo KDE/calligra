@@ -156,9 +156,7 @@ KarbonPart::loadXML( QIODevice*, const QDomDocument& document )
 QDomDocument
 KarbonPart::saveXML()
 {
-	QDomDocument doc = createDomDocument( "DOC", CURRENT_DTD_VERSION );
-	m_doc.saveXML( doc );
-	return doc;
+	return m_doc.saveXML();
 }
 
 void
