@@ -63,7 +63,7 @@ BasicElement *BasicElement::isInside(QPoint point)
 	{
           if(child[i]!=0) 
 	    {
-	      //warning("Child!!");
+	      warning("Child %i",i);
 	      if((aValue=child[i]->isInside(point))!=0L) 
 		return aValue;
 	    }
@@ -74,6 +74,7 @@ BasicElement *BasicElement::isInside(QPoint point)
 
 void BasicElement::draw(QPoint drawPoint,int resolution=72)
 {
+warning("Basic Drawing");
   QPainter *pen;
   pen=formula->painter();
   //  QRect globalArea;

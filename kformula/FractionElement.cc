@@ -123,7 +123,7 @@ if (next!=0L)
  
  familySize.moveBy(0,offsetY);
  familySize.setLeft(familySize.left()-3);  
- familySize.setRight(familySize.right()+4);
+ familySize.setRight(familySize.right()+3);
   localSize=familySize;
   checkIndexesSize();  //This will change localSize adding Indexes Size
   familySize.moveBy(-localSize.left(),0);
