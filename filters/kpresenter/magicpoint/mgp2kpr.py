@@ -12,6 +12,7 @@ Author: Lukas Tinkl <lukas@kde.org>, 2002
 TODO (in order of priority):
 DONE: support linespacing
 DONE: support bullets
+DONE: support bold/italic faces
 - support parsing the document defaults (%default and %tab)
 - support horizontal bars (hard to position them properly)
 - make it use the ZIP store instead of a plain XML file (needed for images below)
@@ -275,6 +276,13 @@ class MgpImporter:
     elem.setAttribute("family", self.fontName)
     elem.setAttribute("pointSize", str(self.fontSize))
     elem.setAttribute("color", self.textColor)
+
+    if (self.fontBold!=0):
+      elem.setAttribute("bold", "1")
+
+    if (self.fontItalic!=0):
+      elem.setAttribute("italic", "1")
+    
     text=self.document.createTextNode(unicode(line, self.charset, 'ignore'))
     elem.appendChild(text)
     pElem.appendChild(elem)
