@@ -82,14 +82,14 @@ public:
 
     /**
      * The pattern of the native file format, for example "*.ksp".
-     */
     QString nativeFormatPattern();
+     */
 
     /**
      * The name of the native file format. Usually the name of
      * your component, for example i18n("KSpread") or i18n("KWord").
-     */
     QString nativeFormatName();
+     */
 
     virtual KParts::PartManager *partManager();
 
@@ -260,8 +260,7 @@ protected:
     virtual void resizeEvent( QResizeEvent * e );
     virtual bool queryClose();
 
-    bool openDocumentInternal( KoFilterManager * filterManager, const KURL & url,
-                               KoDocument * newdoc = 0L );
+    virtual bool openDocumentInternal( const KURL & url, KoDocument * newdoc = 0L );
 
     void saveRecentFiles();
 

@@ -21,6 +21,7 @@
 
 #include <koQueryTrader.h>
 #include <koDocument.h>
+#include <koFilter.h>
 #include <ktrader.h>
 #include <kservicetype.h>
 #include <kdebug.h>
@@ -99,7 +100,7 @@ KoDocumentEntry KoDocumentEntry::queryByMimeType( const QString & mimetype )
         constr = "'";
         constr += mimetype;
         constr += "' in Import";
-        QValueList<KoFilterEntry> filters = KoFilterEntry::query( constr );
+        QValueList<KoFilterEntry::Ptr> filters = KoFilterEntry::query( constr );
         if ( !filters.isEmpty() )
         {
           kdDebug(30003) << "Found at least one filter which can handle '" << mimetype << "'" << endl;
@@ -107,7 +108,7 @@ KoDocumentEntry KoDocumentEntry::queryByMimeType( const QString & mimetype )
           // this recursion would stop in every single case
           for ( unsigned int i=0; i < filters.count(); ++i )
           {
-            QStringList exp = filters[i].export_;
+            QStringList exp = filters[i]->export_;
             QStringList::ConstIterator it=exp.begin();
             while(it!=exp.end())
             {
@@ -145,8 +146,8 @@ QValueList<KoDocumentEntry> KoDocumentEntry::query( const QString & _constr )
     kdWarning(30003) << "KoDocumentEntry::query " << _constr << " got " << max << " offers!" << endl;
   for( unsigned int i = 0; i < max; i++ )
   {
-    kdDebug(30003) << "   desktopEntryPath=" << (*it)->desktopEntryPath()
-                   << "   library=" << (*it)->library() << endl;
+    //kdDebug(30003) << "   desktopEntryPath=" << (*it)->desktopEntryPath()
+    //               << "   library=" << (*it)->library() << endl;
     // Parse the service
     KoDocumentEntry d( *it );
 
@@ -172,27 +173,25 @@ KoFilterEntry::KoFilterEntry( KService::Ptr service )
   export_ = service->property( "X-KDE-Export" ).toStringList();
   int w = service->property( "X-KDE-Weight" ).toString().toInt();
   weight = w < 0 ? UINT_MAX : static_cast<unsigned int>( w );
-  // soon to disappear
-  implemented = service->property( "Implemented" ).toString();
+  available = service->property( "X-KDE-Available" ).toString();
 }
 
-QValueList<KoFilterEntry> KoFilterEntry::query( const QString & _constr )
+QValueList<KoFilterEntry::Ptr> KoFilterEntry::query( const QString & _constr )
 {
-  kdDebug(30003) << "KoFilterEntry::query( " << _constr << ")" << endl;
-  QValueList<KoFilterEntry> lst;
+  kdDebug(30500) << "KoFilterEntry::query( " << _constr << " )" << endl;
+  QValueList<KoFilterEntry::Ptr> lst;
 
   KTrader::OfferList offers = KTrader::self()->query( "KOfficeFilter", _constr );
 
   KTrader::OfferList::ConstIterator it = offers.begin();
   unsigned int max = offers.count();
-  kdDebug(30003) << "Query returned " << max << " offers" << endl;
+  //kdDebug(30500) << "Query returned " << max << " offers" << endl;
   for( unsigned int i = 0; i < max; i++ )
   {
-    kdDebug(30003) << "   desktopEntryPath=" << (*it)->desktopEntryPath()
-                   << "   library=" << (*it)->library() << endl;
-    KoFilterEntry f( *it );
+    //kdDebug(30500) << "   desktopEntryPath=" << (*it)->desktopEntryPath()
+    //               << "   library=" << (*it)->library() << endl;
     // Append converted offer
-    lst.append( f );
+    lst.append( new KoFilterEntry( *it ) );
     // Next service
     it++;
   }
@@ -200,11 +199,11 @@ QValueList<KoFilterEntry> KoFilterEntry::query( const QString & _constr )
   return lst;
 }
 
-KoFilter* KoFilterEntry::createFilter( QObject* parent, const char* name )
+KoFilter* KoFilterEntry::createFilter( KoFilterChain* chain, QObject* parent, const char* name )
 {
-    KLibFactory* factory = KLibLoader::self()->factory( QFile::encodeName(m_service->library()) );
+    KLibFactory* factory = KLibLoader::self()->factory( QFile::encodeName( m_service->library() ) );
 
-    if( !factory )
+    if ( !factory )
         return 0;
 
     QObject* obj = factory->create( parent, name, "KoFilter" );
@@ -214,5 +213,7 @@ KoFilter* KoFilterEntry::createFilter( QObject* parent, const char* name )
         return 0;
     }
 
-    return (KoFilter*)obj;
+    KoFilter* filter = static_cast<KoFilter*>( obj );
+    filter->m_chain = chain;
+    return filter;
 }

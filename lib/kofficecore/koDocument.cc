@@ -266,31 +266,19 @@ bool KoDocument::saveFile()
         //cmd = QString("cp %1 %2~").arg( url.path() ).arg( url.path() );
         //system( cmd.local8Bit() );
   }
-  bool ret;
+
+  bool ret = false;
   if ( outputMimeType != _native_format ) {
     kdDebug(30003) << "Saving to format " << outputMimeType << " in " << m_file << endl;
     // Not native format : save using export filter
     d->m_changed=false;
     if ( !d->filterManager )
-        d->filterManager = new KoFilterManager();
-    QString nativeFile = d->filterManager->prepareExport( m_file, _native_format, outputMimeType, this);
-    kdDebug(30003) << "Temp native file " << nativeFile << endl;
+        d->filterManager = new KoFilterManager( this );
 
-    if(d->m_changed==false && nativeFile!=m_file) {
-        ret = saveNativeFormat( nativeFile );
-        if ( !ret )
-            kdError(30003) << "Couldn't save in native format!" << endl;
-        else
-            ret = d->filterManager->export_();
-    } else {
-      // How can this happen ? m_changed = true ?
-      // No -> nativeFile==m_file :) (Werner)
-      ret = true;
-    }
-  } else {
+    ret = d->filterManager->exp0rt( m_file, outputMimeType ) == KoFilter::OK;
+  } else
     // Native format => normal save
     ret = saveNativeFormat( m_file );
-  }
 
   if ( ret )
   {
@@ -320,13 +308,6 @@ QCString KoDocument::outputMimeType() const
 {
     return d->outputMimeType;
 }
-
-void KoDocument::setFilterManager( KoFilterManager * manager )
-{
-    delete d->filterManager;
-    d->filterManager = manager;
-}
-
 
 void KoDocument::slotAutoSave()
 {
@@ -736,7 +717,7 @@ QString KoDocument::autoSaveFile( const QString & path ) const
 
 bool KoDocument::openURL( const KURL & _url )
 {
-  kdDebug() << "KoDocument::openURL url=" << _url.url() << endl;
+  kdDebug(30003) << "KoDocument::openURL url=" << _url.url() << endl;
   d->lastErrorMessage = QString::null;
 
   // Reimplemented, to add a check for autosave files and to improve error reporting
@@ -826,33 +807,46 @@ bool KoDocument::openFile()
 
   d->m_changed=false;
   QCString _native_format = nativeFormatMimeType();
+  QString importedFile = m_file;
 
-  // Launch a filter if we need one for this url ?
-  if ( !d->filterManager )
-      d->filterManager = new KoFilterManager();
-  QString importedFile = d->filterManager->import( m_file, _native_format, this );
+  KURL u;
+  u.setPath( m_file );
+  KMimeType::Ptr t = KMimeType::findByURL( u, 0, true );
+  if ( t->name() == "application/octet-stream" ) {
+      kdError(30003) << "No mimetype found for " << m_file << endl;
+      return false;
+  }
 
-  kdDebug(30003) << "KoDocument::openFile - importedFile " << importedFile << endl;
+  if ( t->name().latin1() != _native_format ) {
+      if ( !d->filterManager )
+          d->filterManager = new KoFilterManager( this );
+      KoFilter::ConversionStatus status;
+      importedFile = d->filterManager->import( m_file, status );
+      if ( status != KoFilter::OK )
+          return false;
+      kdDebug(30003) << "KoDocument::openFile - importedFile " << importedFile
+                     << ", status: " << static_cast<int>( status ) << endl;
+  }
 
   QApplication::restoreOverrideCursor();
-   
+
   bool ok = true;
 
   if (!importedFile.isEmpty()) // Something to load (tmp or native file) ?
   {
-    // The filter, if any, has been applied. It's all native format now.
-    if ( !loadNativeFormat( importedFile ) )
-    {
-      ok = false;
-      if ( d->lastErrorMessage.isEmpty() )
-          KMessageBox::error( 0L, i18n( "Could not open\n%1" ).arg( url().prettyURL() ) );
-      else if ( d->lastErrorMessage != "USER_CANCELED" )
-          KMessageBox::error( 0L, i18n( "Could not open %1\nReason: %2" ).arg( url().prettyURL() ).arg( d->lastErrorMessage ) );
-    }
+      // The filter, if any, has been applied. It's all native format now.
+      if ( !loadNativeFormat( importedFile ) )
+      {
+          ok = false;
+          if ( d->lastErrorMessage.isEmpty() )
+              KMessageBox::error( 0L, i18n( "Could not open\n%1" ).arg( url().prettyURL() ) );
+          else if ( d->lastErrorMessage != "USER_CANCELED" )
+              KMessageBox::error( 0L, i18n( "Could not open %1\nReason: %2" ).arg( url().prettyURL() ).arg( d->lastErrorMessage ) );
+      }
   }
   else {
-    // The filter did it all. Ok if it changed something...
-    ok = d->m_changed;
+      // The filter did it all. Ok if it changed something...
+      ok = d->m_changed;
   }
 
   if ( importedFile != m_file )
@@ -1049,14 +1043,14 @@ void KoDocument::emitBeginOperation()
    {
       emit sigBeginOperation();
    }
-   
+
    d->m_numOperations++;
 }
 
 void KoDocument::emitEndOperation()
 {
    d->m_numOperations--;
-   
+
    /* don't end the operation till we've cleared all the nested operations */
    if (d->m_numOperations == 0)
    {

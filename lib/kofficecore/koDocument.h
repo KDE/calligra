@@ -173,12 +173,6 @@ public:
   QCString outputMimeType() const;
 
   /**
-   * Set the filter-manager to be used for the next load/save operation.
-   * Called by KoMainWindow when a file dialog was used to select the file and set options.
-   */
-  void setFilterManager( KoFilterManager * manager );
-
-  /**
    * Sets the error message to be shown to the user (use i18n()!)
    * when loading or saving fails.
    * If you asked the user about something and he chose "Cancel",

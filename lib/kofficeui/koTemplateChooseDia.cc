@@ -384,8 +384,10 @@ void KoTemplateChooseDia::chooseFile()
 
     KFileDialog *dialog=new KFileDialog(dir, QString::null, 0L, "file dialog", true);
     dialog->setCaption( i18n("Open document") );
-    KoFilterManager::self()->prepareDialog(dialog, KoFilterManager::Import, d->m_format,
-                                           d->m_nativePattern, d->m_nativeName, true);
+    dialog->setMimeFilter( KoFilterManager::mimeFilter( d->m_format, KoFilterManager::Import ) );
+    // ##### CHECK
+    //KoFilterManager::self()->prepareDialog(dialog, KoFilterManager::Import, d->m_format,
+    //                                       d->m_nativePattern, d->m_nativeName, true);
     KURL u;
 
     if(dialog->exec()==QDialog::Accepted)
@@ -398,7 +400,6 @@ void KoTemplateChooseDia::chooseFile()
         if (bTemplates) openTemplate();
     }
 
-    KoFilterManager::self()->cleanUp();
     delete dialog;
 
     QString filename = u.path();

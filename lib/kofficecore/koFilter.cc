@@ -1,5 +1,5 @@
 /* This file is part of the KDE libraries
-   Copyright (C) 2000 Werner Trobin <trobin@kde.org>
+   Copyright (C) 2001 Werner Trobin <trobin@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -18,43 +18,17 @@
 
 #include <koFilter.h>
 
-
-KoFilter::KoFilter(KoFilter *parent, const char *name) : QObject(parent, name) {
+KoFilter::KoFilter() : QObject( 0, 0 ), m_chain( 0 )
+{
 }
 
-bool KoFilter::filter(const QString &, const QString &,
-                      const QString &, const QString &,
-                      const QString &) {
-    return false;
+KoFilter::~KoFilter()
+{
 }
 
-bool KoFilter::filter(const QString &,
-                       const QString &, const QString &,
-                       const QString &, const QString &,
-                       const QString &) {
-    return false;
-}
-
-bool KoFilter::supportsEmbedding() {
-    return false;
-}
-
-bool KoFilter::filterImport(const QString &, const QString &,
-                        QDomDocument &, const QString &,
-                        const QString &) {
-    return false;
-}
-
-bool KoFilter::filterImport(const QString &, KoDocument *,
-                        const QString &, const QString &,
-                        const QString &) {
-    return false;
-}
-
-bool KoFilter::filterExport(const QString &, KoDocument * ,
-                        const QString &, const QString &,
-                        const QString &) {
-    return false;
+QString KoFilter::currentEmbeddedFile()
+{
+    return QString::null;
 }
 
 #include <koFilter.moc>

@@ -419,24 +419,20 @@ KParts::PartManager *KoMainWindow::partManager()
 
 bool KoMainWindow::openDocument( const KURL & url )
 {
-    return openDocumentInternal( 0L, url );
+    return openDocumentInternal( url );
 }
 
 bool KoMainWindow::openDocument( KoDocument *newdoc, const KURL & url )
 {
-    return openDocumentInternal( 0L, url, newdoc );
+    return openDocumentInternal( url, newdoc );
 }
 
-bool KoMainWindow::openDocumentInternal( KoFilterManager * filterManager, const KURL & url, KoDocument *newdoc )
+bool KoMainWindow::openDocumentInternal( const KURL & url, KoDocument *newdoc )
 {
     //kdDebug(30003) << "KoMainWindow::openDocument " << url.url() << endl;
 
     if ( !newdoc )
         newdoc = createDoc();
-
-    // Pass the filterManager to the document (who will own it from now on)
-    if ( filterManager )
-        newdoc->setFilterManager( filterManager );
 
     d->m_firstTime=true;
     connect(newdoc, SIGNAL(sigProgress(int)), this, SLOT(slotProgress(int)));
@@ -445,9 +441,6 @@ bool KoMainWindow::openDocumentInternal( KoFilterManager * filterManager, const 
     if(!newdoc || !newdoc->openURL(url))
     {
         delete newdoc;
-        disconnect(newdoc, SIGNAL(sigProgress(int)), this, SLOT(slotProgress(int)));
-        disconnect(newdoc, SIGNAL(completed()), this, SLOT(slotLoadCompleted()));
-        disconnect(newdoc, SIGNAL(canceled( const QString & )), this, SLOT(slotLoadCanceled( const QString & )));
         return false;
     }
     return true;
@@ -513,10 +506,8 @@ bool KoMainWindow::saveDocument( bool saveas )
         dialog->setCaption( i18n("Save document as") );
         dialog->setKeepLocation( true );
         dialog->setOperationMode( KFileDialog::Saving );
-        KoFilterManager * filterManager = new KoFilterManager();
-        filterManager->prepareDialog(dialog, KoFilterManager::Export,
-                                     _native_format, nativeFormatPattern(),
-                                     nativeFormatName(), true);
+        dialog->setMimeFilter( KoFilterManager::mimeFilter( _native_format, KoFilterManager::Export ),
+                               _native_format );
         KURL newURL;
         QCString outputFormat = _native_format;
         kdDebug(30003) << "KoMainWindow::saveDocument outputFormat = " << outputFormat << endl;
@@ -555,10 +546,7 @@ bool KoMainWindow::saveDocument( bool saveas )
                                                   i18n("Warning") ) == KMessageBox::Yes;
             }
         } while ( !bOk );
-        // Get the options from the dialog
-        filterManager->cleanUp();
-        // Pass the filterManager to the document (who will own it from now on)
-        pDoc->setFilterManager( filterManager );
+
         delete dialog;
         if (bOk) {
             addRecentURL( newURL );
@@ -581,7 +569,6 @@ bool KoMainWindow::saveDocument( bool saveas )
                 if (res == KMessageBox::Cancel )
                     return false;
             }
-
 
             ret = pDoc->saveAs( newURL );
 
@@ -650,10 +637,10 @@ bool KoMainWindow::queryClose()
       }
       if ( name.isEmpty() )
           name = rootDocument()->url().fileName();
-	   
+
       if ( name.isEmpty() )
           name = i18n( "Untitled" );
-        
+
       int res = KMessageBox::warningYesNoCancel( 0L,
                     i18n( "The document <b>'%1'</b> has been modified.\nDo you want to save it ?" ).arg(name));
 
@@ -703,29 +690,19 @@ void KoMainWindow::slotFileOpen()
 {
     KFileDialog *dialog=new KFileDialog(QString::null, QString::null, 0L, "file dialog", true);
     dialog->setCaption( i18n("Open document") );
-    KoFilterManager * filterManager = new KoFilterManager;
-    filterManager->prepareDialog(dialog, KoFilterManager::Import,
-                                 KoDocument::readNativeFormatMimeType(),
-                                 nativeFormatPattern(), nativeFormatName(), true);
-    KURL url;
-    if(dialog->exec()==QDialog::Accepted) {
-        url=dialog->selectedURL();
-    }
-    else
-    {
-        delete filterManager;
+    dialog->setMimeFilter( KoFilterManager::mimeFilter( KoDocument::readNativeFormatMimeType(),
+                                                        KoFilterManager::Import ) );
+    if(dialog->exec()!=QDialog::Accepted) {
+        delete dialog;
         return;
     }
-
-    filterManager->cleanUp();
+    KURL url( dialog->selectedURL() );
     delete dialog;
-    if ( url.isEmpty() )
-    {
-        delete filterManager;
-        return;
-    }
 
-    (void) openDocumentInternal( filterManager, url, 0L );
+    if ( url.isEmpty() )
+        return;
+
+    (void) openDocumentInternal( url, 0L );
 }
 
 void KoMainWindow::slotFileOpenRecent( const KURL & url )
@@ -1148,6 +1125,7 @@ QLabel * KoMainWindow::statusBarLabel()
   return d->statusBarLabel;
 }
 
+/*
 QString KoMainWindow::nativeFormatName()
 {
     QString serviceType;
@@ -1167,7 +1145,9 @@ QString KoMainWindow::nativeFormatName()
 
     return mimeType->comment();
 }
+*/
 
+/*
 QString KoMainWindow::nativeFormatPattern()
 {
     QString serviceType;
@@ -1187,6 +1167,7 @@ QString KoMainWindow::nativeFormatPattern()
 
     return *mimeType->patterns().begin();
 }
+*/
 
 void KoMainWindow::setMaxRecentItems(uint _number)
 {
@@ -1205,7 +1186,6 @@ DCOPObject * KoMainWindow::dcopObject()
 
 void KoMainWindow::slotEmailFile()
 {
-
    // Subject = Document file name
    // Attachment = The current file
    // Message Body = The current document in HTML export? <-- This may be an option.
@@ -1213,11 +1193,12 @@ void KoMainWindow::slotEmailFile()
    QString theSubject = d->m_rootDoc->url().fileName(false);
    kdDebug(30003) << "(" << fileURL <<")" << endl;
    if (!fileURL.isEmpty())
-   kapp->invokeMailer("mailto:?subject=" + theSubject +
-                     "&attach=" + fileURL);
+       kapp->invokeMailer("mailto:?subject=" + theSubject +
+                          "&attach=" + fileURL);
    else
-   KMessageBox::detailedSorry (0, i18n("ERROR: File not found."),
-    i18n("To send a file you must first have saved the file to the filesystem."),
-    i18n("Error: File Not Found!"));
+       KMessageBox::detailedSorry (0, i18n("ERROR: File not found."),
+                                   i18n("To send a file you must first have saved the file to the filesystem."),
+                                   i18n("Error: File Not Found!"));
 }
+
 #include <koMainWindow.moc>

@@ -21,12 +21,14 @@
 #define __ko_query_trader_h__
 
 #include <kservice.h>
+#include <ksharedptr.h>
 #include <qvaluelist.h>
 
 class QObject;
 class QStringList;
 class KoDocument;
 class KoFilter;
+class KoFilterChain;
 
 /**
  *  Represents an available koffice component
@@ -36,7 +38,6 @@ class KoDocumentEntry
 {
 
 public:
-
   KoDocumentEntry() { m_service = 0L; } // for QValueList
   KoDocumentEntry( KService::Ptr _service );
   ~KoDocumentEntry() { }
@@ -88,47 +89,48 @@ private:
 /**
  *  Represents an available filter.
  */
-class KoFilterEntry
+class KoFilterEntry : public KShared
 {
 
 public:
+  typedef KSharedPtr<KoFilterEntry> Ptr;
+
   KoFilterEntry() : weight( 0 ) { m_service = 0L; } // for QValueList
   KoFilterEntry( KService::Ptr service );
   ~KoFilterEntry() { }
 
-  KoFilter* createFilter( QObject* parent = 0, const char* name = 0);
+  KoFilter* createFilter( KoFilterChain* chain, QObject* parent = 0, const char* name = 0 );
 
   /**
-   *  The imported mimetype.
+   *  The imported mimetype(s).
    */
   QStringList import;
 
   /**
-   *    The exported mimetype.
+   *  The exported mimetype(s).
    */
   QStringList export_;
 
   /**
-   *  Which one of the filter methods is implemented?
-   *  This will disappear soon...
-   */
-  QString implemented;
-
-  /**
-   * The "weight" of this filter path. Has to be > 0 to be valid.
+   *  The "weight" of this filter path. Has to be > 0 to be valid.
    */
   unsigned int weight;
 
   /**
+   *  Do we have to check during runtime?.
+   */
+  QString available;
+
+  /**
    *  @return TRUE if the filter can imports the requested mimetype.
    */
-  bool imports( const QString & _mimetype ) const
+  bool imports( const QString& _mimetype ) const
   { return ( import.contains( _mimetype ) ); }
 
   /**
    *  @return TRUE if the filter can exports the requested mimetype.
    */
-  bool exports( const QString & _m ) const
+  bool exports( const QString& _m ) const
   { return ( export_.contains( _m ) ); }
 
   /**
@@ -138,11 +140,8 @@ public:
    *                 You can use it to set additional restrictions on the available
    *                 components.
    */
-  static QValueList<KoFilterEntry> query( const QString & _constr = QString::null );
+  static QValueList<KoFilterEntry::Ptr> query( const QString& _constr = QString::null );
 
-  /**
-   * @internal for debugging purposes
-   */
   KService::Ptr service() const { return m_service; }
 
 private:

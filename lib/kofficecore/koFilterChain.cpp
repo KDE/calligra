@@ -16,26 +16,360 @@
    Boston, MA 02111-1307, USA.
 */
 
+#include <ktempfile.h>
 #include <koFilterChain.h>
 #include <koQueryTrader.h>
+#include <koFilterManager.h>  // KoFilterManager::filterAvailable, private API
+#include <koDocument.h>
 #include <kdebug.h>
 
 #include <priorityqueue.h>
 
 #include <limits.h> // UINT_MAX
 
+
+KoFilterChain::ChainLink::ChainLink( KoFilterChain* chain, KoFilterEntry::Ptr filterEntry,
+                                     const QCString& from, const QCString& to ) :
+    m_chain( chain ), m_filterEntry( filterEntry ),  m_from( from ),  m_to( to ),  d( 0 )
+{
+}
+
+KoFilter::ConversionStatus KoFilterChain::ChainLink::invokeFilter()
+{
+    if ( !m_filterEntry ) {
+        kdError( 30500 ) << "This filter entry is null. Strange stuff going on." << endl;
+        return KoFilter::CreationError;
+    }
+
+    KoFilter* filter = m_filterEntry->createFilter( m_chain, 0, 0 );
+
+    if ( !filter ) {
+        kdError( 30500 ) << "Couldn't create the filter." << endl;
+        return KoFilter::CreationError;
+    }
+
+    QObject::connect( filter, SIGNAL( sigProgress( int ) ),
+                      m_chain->manager(), SIGNAL( sigProgress( int ) ) );
+
+    KoFilter::ConversionStatus status = filter->convert( m_from, m_to );
+    delete filter;
+    return status;
+}
+
+void KoFilterChain::ChainLink::dump() const
+{
+    kdDebug( 30500 ) << "   Link: " << m_filterEntry->service()->name() << endl;
+}
+
+
+KoFilterChain::KoFilterChain( const KoFilterManager* manager ) :
+    m_manager( manager ), m_state( Beginning ), m_inputStorage( 0 ),
+    m_inputStorageDevice( 0 ), m_outputStorage( 0 ), m_outputStorageDevice( 0 ),
+    m_inputDocument( 0 ), m_outputDocument( 0 ), m_inputTempFile( 0 ),
+    m_outputTempFile( 0 ), m_inputQueried( false ), m_outputQueried( false ), d( 0 )
+{
+    // We "own" our chain links, the filter entries are implicitly shared
+    m_chainLinks.setAutoDelete( true );
+}
+
+KoFilterChain::~KoFilterChain()
+{
+    manageIO(); // Called for the 2nd time in a row -> clean up
+}
+
+void KoFilterChain::appendChainLink( KoFilterEntry::Ptr filterEntry, const QCString& from, const QCString& to )
+{
+    m_chainLinks.append( new ChainLink( this, filterEntry, from, to ) );
+}
+
+void KoFilterChain::prependChainLink( KoFilterEntry::Ptr filterEntry, const QCString& from, const QCString& to )
+{
+    m_chainLinks.prepend( new ChainLink( this, filterEntry, from, to ) );
+}
+
+KoFilter::ConversionStatus KoFilterChain::invokeChain()
+{
+    KoFilter::ConversionStatus status = KoFilter::OK;
+
+    m_state = Beginning;
+    int count = m_chainLinks.count();
+
+    QPtrListIterator<ChainLink> it( m_chainLinks );
+    for ( ; count > 1 && it.current() && status == KoFilter::OK; ++it, --count ) {
+        status = it.current()->invokeFilter();
+        m_state = Middle;
+        manageIO();
+    }
+
+    if ( !it.current() ) {
+        kdWarning( 35000 ) << "Huh?? Found a null pointer in the chain" << endl;
+        return KoFilter::StupidError;
+    }
+
+    if ( status == KoFilter::OK ) {
+        if ( m_state & Beginning )
+            m_state |= End;
+        else
+            m_state = End;
+        status = it.current()->invokeFilter();
+        manageIO();
+    }
+
+    m_state = Done;
+    return status;
+}
+
+QString KoFilterChain::chainOutput() const
+{
+    if ( m_state == Done )  // ###### FIXME: We need to check if we actually had a temp file!
+        return m_inputFile; // as we already called manageIO()
+    return QString::null;
+}
+
+QString KoFilterChain::inputFile()
+{
+    if ( m_inputQueried ) {
+        kdWarning( 35000 ) << "You already asked for some source." << endl;
+        return QString::null;
+    }
+    m_inputQueried = true;
+
+    if ( m_state & Beginning ) {
+        if ( static_cast<KoFilterManager::Direction>( filterManagerDirection() ) ==
+             KoFilterManager::Import )
+            m_inputFile = filterManagerImportFile();
+        else
+            inputFileHelper( filterManagerKoDocument(), filterManagerExportFile() );
+    }
+    else
+        if ( m_inputFile.isEmpty() )
+            inputFileHelper( m_inputDocument, QString::null );
+
+    return m_inputFile;
+}
+
+QString KoFilterChain::outputFile()
+{
+    if ( m_outputQueried ) {
+        kdWarning( 35000 ) << "You already asked for some destination." << endl;
+        return QString::null;
+    }
+    m_outputQueried = true;
+
+    if ( m_state & End ) {
+        if ( static_cast<KoFilterManager::Direction>( filterManagerDirection() ) ==
+             KoFilterManager::Import )
+            outputFileHelper( false );  // This (last) one gets deleted by the caller
+        else
+            m_outputFile = filterManagerExportFile();
+    }
+    else
+        outputFileHelper( true );
+
+    return m_outputFile;
+}
+
+KoStoreDevice* KoFilterChain::storageFile( const QString& name, KoStore::Mode mode )
+{
+    if ( m_inputQueried && mode == KoStore::Read &&
+         m_inputStorage && m_inputStorage->mode() == KoStore::Read )
+        return storageNewStreamHelper( &m_inputStorage, &m_inputStorageDevice, name );
+    else if ( m_outputQueried && mode == KoStore::Write &&
+              m_outputStorage && m_outputStorage->mode() == KoStore::Write )
+        return storageNewStreamHelper( &m_outputStorage, &m_outputStorageDevice, name );
+    else if ( !m_inputQueried && mode == KoStore::Read )
+        return storageHelper( inputFile(), name, KoStore::Read,
+                              &m_inputStorage, &m_inputStorageDevice );
+    else if ( !m_outputQueried && mode == KoStore::Write )
+        return storageHelper( outputFile(), name, KoStore::Write,
+                              &m_outputStorage, &m_outputStorageDevice );
+    else {
+        kdWarning( 35000 ) << "Oooops, how did we get here?" << endl;
+        return 0;
+    }
+}
+
+KoDocument* KoFilterChain::inputDocument()
+{
+    return 0; // ###### TODO
+}
+
+KoDocument* KoFilterChain::outputDocument()
+{
+    return 0; // ###### TODO
+}
+
+void KoFilterChain::dump() const
+{
+    kdDebug( 30500 ) << "########## KoFilterChain with " << m_chainLinks.count() << " members:" << endl;
+    QPtrListIterator<ChainLink> it( m_chainLinks );
+    for ( ; it.current(); ++it )
+        it.current()->dump();
+    kdDebug( 30500 ) << "########## KoFilterChain (done) ##########" << endl;
+}
+
+QString KoFilterChain::filterManagerImportFile() const
+{
+    return m_manager->importFile();
+}
+
+QString KoFilterChain::filterManagerExportFile() const
+{
+    return m_manager->exportFile();
+}
+
+KoDocument* KoFilterChain::filterManagerKoDocument() const
+{
+    return m_manager->document();
+}
+
+int KoFilterChain::filterManagerDirection() const
+{
+    return m_manager->direction();
+}
+
+void KoFilterChain::manageIO()
+{
+    m_inputQueried = false;
+    m_outputQueried = false;
+
+    delete m_inputStorageDevice;
+    m_inputStorageDevice = 0;
+    if ( m_inputStorage ) {
+        m_inputStorage->close();
+        delete m_inputStorage;
+        m_inputStorage = 0;
+    }
+    if ( m_inputTempFile ) {
+        m_inputTempFile->close();
+        delete m_inputTempFile;  // autodelete
+        m_inputTempFile = 0;
+    }
+    m_inputFile = QString::null;
+
+    if ( !m_outputFile.isEmpty() ) {
+        m_inputFile = m_outputFile;
+        m_outputFile = QString::null;
+        m_inputTempFile = m_outputTempFile;
+        m_outputTempFile = 0;
+
+        delete m_outputStorageDevice;
+        m_outputStorageDevice = 0;
+        if ( m_outputStorage ) {
+            m_outputStorage->close();
+            delete m_outputStorage;
+            m_outputStorage = 0;
+        }
+    }
+
+    // ###### TODO: Assign/Delete documents!
+}
+
+bool KoFilterChain::createTempFile( KTempFile** tempFile, bool autoDelete )
+{
+    if ( *tempFile ) {
+        kdError( 35000 ) << "Ooops, why is there already a temp file???" << endl;
+        return false;
+    }
+    *tempFile = new KTempFile();
+    ( *tempFile )->setAutoDelete( autoDelete );
+    return ( *tempFile )->status() == 0;
+}
+
+void KoFilterChain::inputFileHelper( KoDocument* document, const QString& alternativeFile )
+{
+    if ( document ) {
+        if ( !createTempFile( &m_inputTempFile ) ) {
+            delete m_inputTempFile;
+            m_inputTempFile = 0;
+            m_inputFile = QString::null;
+            return;
+        }
+        if ( !document->saveNativeFormat( m_inputTempFile->name() ) ) {
+            delete m_inputTempFile;
+            m_inputTempFile = 0;
+            m_inputFile = QString::null;
+            return;
+        }
+        m_inputFile = m_inputTempFile->name();
+    }
+    else
+        m_inputFile = alternativeFile;
+}
+
+void KoFilterChain::outputFileHelper( bool autoDelete )
+{
+    if ( !createTempFile( &m_outputTempFile, autoDelete ) ) {
+        delete m_outputTempFile;
+        m_outputTempFile = 0;
+        m_outputFile = QString::null;
+    }
+    else
+        m_outputFile = m_outputTempFile->name();
+}
+
+KoStoreDevice* KoFilterChain::storageNewStreamHelper( KoStore** storage, KoStoreDevice** device,
+                                                      const QString& name )
+{
+    delete *device;
+    *device = 0;
+    ( *storage )->close();
+
+    if ( ( *storage )->bad() )
+        return storageCleanupHelper( storage );
+    if ( !( *storage )->open( name ) )
+        return storageCleanupHelper( storage );
+
+    *device = new KoStoreDevice( *storage );
+    return *device;
+}
+
+KoStoreDevice* KoFilterChain::storageHelper( const QString& file, const QString& streamName,
+                                             KoStore::Mode mode, KoStore** storage,
+                                             KoStoreDevice** device )
+{
+    if ( file.isEmpty() )
+        return 0;
+    if ( *storage ) {
+        kdDebug( 35000 ) << "Uh-oh, we forgot to clean up..." << endl;
+        return 0;
+    }
+
+    *storage = new KoStore( file, mode );
+    if ( ( *storage )->bad() )
+        return storageCleanupHelper( storage );
+    if ( !( *storage )->open( streamName ) )
+        return storageCleanupHelper( storage );
+
+    if ( *device ) {
+        kdDebug( 35000 ) << "Uh-oh, we forgot to clean up the storage device!" << endl;
+        ( *storage )->close();
+        return storageCleanupHelper( storage );
+    }
+    *device = new KoStoreDevice( *storage );
+    return *device;
+}
+
+KoStoreDevice* KoFilterChain::storageCleanupHelper( KoStore** storage )
+{
+    delete *storage;
+    *storage = 0;
+    return 0;
+}
+
+
 namespace KOffice {
 
-    Edge::Edge( Vertex* vertex, const QString& libName, unsigned int weight ) :
-        m_vertex( vertex ), m_libName( libName ), m_weight( weight )
+    Edge::Edge( Vertex* vertex, KoFilterEntry::Ptr filterEntry ) :
+        m_vertex( vertex ), m_filterEntry( filterEntry ), d( 0 )
     {
     }
 
     void Edge::relax( const Vertex* predecessor, PriorityQueue<Vertex>& queue )
     {
-        if ( !m_vertex || !predecessor )
+        if ( !m_vertex || !predecessor || !m_filterEntry )
             return;
-        if ( m_vertex->setKey( predecessor->key() + m_weight ) ) {
+        if ( m_vertex->setKey( predecessor->key() + m_filterEntry->weight ) ) {
             queue.keyDecreased( m_vertex ); // maintain the heap property
             m_vertex->setPredecessor( predecessor );
         }
@@ -44,14 +378,16 @@ namespace KOffice {
     void Edge::dump( const QCString& indent ) const
     {
         if ( m_vertex )
-            kdDebug() << indent << "Edge -> '" << m_vertex->mimeType() << "' (" << m_weight << ")" << endl;
+            kdDebug( 30500 ) << indent << "Edge -> '" << m_vertex->mimeType()
+                             << "' (" << m_filterEntry->weight << ")" << endl;
         else
-            kdDebug() << indent << "Edge -> '(null)' (" << m_weight << ")" << endl;
+            kdDebug( 30500 ) << indent << "Edge -> '(null)' ("
+                             << m_filterEntry->weight << ")" << endl;
     }
 
 
     Vertex::Vertex( const QCString& mimeType ) : m_predecessor( 0 ), m_mimeType( mimeType ),
-        m_weight( UINT_MAX ), m_index( -1 )
+        m_weight( UINT_MAX ), m_index( -1 ), d( 0 )
     {
         m_edges.setAutoDelete( true );  // we take ownership of added edges
     }
@@ -59,17 +395,23 @@ namespace KOffice {
     bool Vertex::setKey( unsigned int key )
     {
         if ( m_weight > key ) {
-            m_weight=key;
+            m_weight = key;
             return true;
         }
         return false;
     }
 
+    void Vertex::reset()
+    {
+        m_weight = UINT_MAX;
+        m_predecessor = 0;
+    }
+
     void Vertex::addEdge( const Edge* edge )
     {
-        if ( !edge || edge->weight()==0)
+        if ( !edge || edge->weight() == 0 )
             return;
-        m_edges.append(edge);
+        m_edges.append( edge );
     }
 
     const Edge* Vertex::findEdge( const Vertex* vertex ) const
@@ -107,7 +449,7 @@ namespace KOffice {
 
     void Vertex::dump( const QCString& indent ) const
     {
-        kdDebug() << indent << "Vertex: " << m_mimeType << " (" << m_weight << "):" << endl;
+        kdDebug( 30500 ) << indent << "Vertex: " << m_mimeType << " (" << m_weight << "):" << endl;
         QCString i( indent + "   " );
         QPtrListIterator<Edge> it( m_edges );
         for ( ; it.current(); ++it )
@@ -115,36 +457,106 @@ namespace KOffice {
     }
 
 
-    Graph::Graph( const QCString& from ) : m_vertices( 42 ), m_from( from ), m_graphValid( false )
+    Graph::Graph( const QCString& from ) : m_vertices( 47 ), m_from( from ),
+                                           m_graphValid( false ), d( 0 )
     {
         m_vertices.setAutoDelete( true );
         buildGraph();
-        shortestPath();
+        shortestPaths();  // Will return after a single lookup if "from" is invalid (->no check here)
+    }
+
+    void Graph::setSourceMimeType( const QCString& from )
+    {
+        if ( from == m_from )
+            return;
+        m_from = from;
+        m_graphValid = false;
+
+        // Initialize with "infinity" ...
+        QAsciiDictIterator<Vertex> it( m_vertices );
+        for ( ; it.current(); ++it )
+            it.current()->reset();
+
+        // ...and re-run the shortest path search for the new source mime
+        shortestPaths();
+    }
+
+    KoFilterChain::Ptr Graph::chain( const KoFilterManager* manager, QCString& to ) const
+    {
+        if ( !isValid() || !manager )
+            return 0;
+
+        if ( to.isEmpty() ) {  // if the destination is empty we search the closest KOffice part
+            to = findKOfficePart();
+            if ( to.isEmpty() )  // still empty? strange stuff...
+                return 0;
+        }
+
+        const Vertex* vertex = m_vertices[ to ];
+        if ( !vertex || vertex->key() == UINT_MAX )
+            return 0;
+
+        KoFilterChain::Ptr ret = new KoFilterChain( manager );
+
+        // Fill the filter chain with all filters on the path
+        const Vertex* tmp = vertex->predecessor();
+        while ( tmp ) {
+            const Edge* edge = tmp->findEdge( vertex );
+            Q_ASSERT( edge );
+            ret->prependChainLink( edge->filterEntry(), tmp->mimeType(), vertex->mimeType() );
+            vertex = tmp;
+            tmp = tmp->predecessor();
+        }
+        return ret;
+    }
+
+    void Graph::dump() const
+    {
+        kdDebug( 30500 ) << "+++++++++ Graph::dump +++++++++" << endl;
+        kdDebug( 30500 ) << "From: " << m_from << endl;
+        QAsciiDictIterator<Vertex> it( m_vertices );
+        for ( ; it.current(); ++it )
+            it.current()->dump( "   " );
+        kdDebug( 30500 ) << "+++++++++ Graph::dump (done) +++++++++" << endl;
     }
 
     // Query the trader and create the vertices and edges representing
-    // mime types and filters.
+    // available mime types and filters.
     void Graph::buildGraph()
     {
-        QValueList<KoFilterEntry> filters = KoFilterEntry::query(); // no constraint here - we want *all* :)
-        QValueList<KoFilterEntry>::ConstIterator it = filters.begin();
-        QValueList<KoFilterEntry>::ConstIterator end = filters.end();
-        for ( ; it!=end; ++it ) {
+        // Make sure that all available parts are added to the graph
+        QValueList<KoDocumentEntry> parts( KoDocumentEntry::query() );
+        QValueList<KoDocumentEntry>::ConstIterator partIt( parts.begin() );
+        QValueList<KoDocumentEntry>::ConstIterator partEnd( parts.end() );
+
+        while ( partIt != partEnd ) {
+            QCString key( ( *partIt ).service()->property( "X-KDE-NativeMimeType" ).toString().latin1() );
+            if ( !key.isEmpty() )
+                m_vertices.insert( key, new Vertex( key ) );
+            ++partIt;
+        }
+
+        QValueList<KoFilterEntry::Ptr> filters( KoFilterEntry::query() ); // no constraint here - we want *all* :)
+        QValueList<KoFilterEntry::Ptr>::ConstIterator it = filters.begin();
+        QValueList<KoFilterEntry::Ptr>::ConstIterator end = filters.end();
+
+        for ( ; it != end; ++it ) {
             // First add the "starting points" to the dict
-            QStringList::ConstIterator importIt = ( *it ).import.begin();
-            QStringList::ConstIterator importEnd = ( *it ).import.end();
-            for ( ; importIt!=importEnd; ++importIt ) {
+            QStringList::ConstIterator importIt = ( *it )->import.begin();
+            QStringList::ConstIterator importEnd = ( *it )->import.end();
+            for ( ; importIt != importEnd; ++importIt ) {
                 QCString key = ( *importIt ).latin1();  // latin1 is okay here (werner)
                 // already there?
                 if ( !m_vertices[ key ] )
                     m_vertices.insert( key, new Vertex( key ) );
             }
 
-            // Now add end vertices (if neccessary) and create edges from
-            // the start vertex
-            QStringList::ConstIterator exportIt = ( *it ).export_.begin();
-            QStringList::ConstIterator exportEnd = ( *it ).export_.end();
-            for ( ; exportIt!=exportEnd; ++exportIt ) {
+            // Are we allowed to use this filter at all?
+            if ( KoFilterManager::filterAvailable( *it ) ) {
+                QStringList::ConstIterator exportIt = ( *it )->export_.begin();
+                QStringList::ConstIterator exportEnd = ( *it )->export_.end();
+
+            for ( ; exportIt != exportEnd; ++exportIt ) {
                 // First make sure the export vertex is in place
                 QCString key = ( *exportIt ).latin1();  // latin1 is okay here
                 Vertex* exp = m_vertices[ key ];
@@ -153,15 +565,13 @@ namespace KOffice {
                     m_vertices.insert( key, exp );
                 }
                 // Then create the appropriate edges
-                importIt = ( *it ).import.begin();
-                KService::Ptr service( ( *it ).service() );
-                QString library;
-                if ( service )
-                    library = service->library();
-                int weight = ( *it ).weight;
-                for ( ; importIt!=importEnd; ++importIt )
-                    m_vertices[ ( *importIt ).latin1() ]->addEdge( new Edge( exp, library, weight ) );
+                    importIt = ( *it )->import.begin();
+                for ( ; importIt != importEnd; ++importIt )
+                        m_vertices[ ( *importIt ).latin1() ]->addEdge( new Edge( exp, *it ) );
+                }
             }
+            else
+                kdDebug( 30500 ) << "Filter: " << ( *it )->service()->name() << " not available." << endl;
         }
     }
 
@@ -173,7 +583,7 @@ namespace KOffice {
     // the algorithm is we don't find any node with a weight != Infinity
     // (==UINT_MAX), as this means that the remaining nodes in the queue
     // aren't connected anyway.
-    void Graph::shortestPath()
+    void Graph::shortestPaths()
     {
         // Is the requested start mime type valid?
         Vertex* from = m_vertices[ m_from ];
@@ -196,13 +606,42 @@ namespace KOffice {
         m_graphValid = true;
     }
 
-    void Graph::dump() const
+    QCString Graph::findKOfficePart() const
     {
-        kdDebug() << "+++++++++ Graph::dump +++++++++" << endl;
-        QAsciiDictIterator<Vertex> it( m_vertices );
-        for ( ; it.current(); ++it )
-            it.current()->dump( "   " );
-        kdDebug() << "+++++++++ Graph::dump (done) +++++++++" << endl;
+        // Here we simply try to find the closest KOffice mimetype
+        QValueList<KoDocumentEntry> parts( KoDocumentEntry::query() );
+        QValueList<KoDocumentEntry>::ConstIterator partIt( parts.begin() );
+        QValueList<KoDocumentEntry>::ConstIterator partEnd( parts.end() );
+
+        Vertex *v = 0;
+
+        // Be sure that v gets initialized correctly
+        while ( !v && partIt != partEnd ) {
+            QString key( ( *partIt ).service()->property( "X-KDE-NativeMimeType" ).toString() );
+            if ( !key.isEmpty() )
+                v = m_vertices[ key.latin1() ];
+            ++partIt;
+        }
+        if ( !v )
+            return "";
+
+        // Now we try to find the "cheapest" KOffice vertex
+        while ( partIt != partEnd ) {
+            QString key( ( *partIt ).service()->property( "X-KDE-NativeMimeType" ).toString() );
+            Vertex* tmp = 0;
+            if ( !key.isEmpty() )
+                tmp = m_vertices[ key.latin1() ];
+
+            if ( tmp && tmp->key() < v->key() )
+                v = tmp;
+            ++partIt;
+        }
+
+        // It seems it already is a KOffice part
+        if ( v->key() == 0 )
+            return "";
+
+        return v->mimeType();
     }
 
 } // namespace KOffice
