@@ -68,7 +68,7 @@ bool KoDocumentInfo::load( const QDomDocument& doc )
 
 bool KoDocumentInfo::loadOasis( const QDomDocument& metaDoc )
 {
-    kdDebug()<<" metaDoc.toString() :"<<metaDoc.toString()<<endl;
+    //kdDebug()<<" metaDoc.toString() :"<<metaDoc.toString()<<endl;
     QStringList lst = pages();
     QStringList::ConstIterator it = lst.begin();
     for( ; it != lst.end(); ++it )
@@ -76,11 +76,8 @@ bool KoDocumentInfo::loadOasis( const QDomDocument& metaDoc )
         KoDocumentInfoPage* p = page( *it );
         Q_ASSERT( p );
 
-        //TODO fixme it ! It doesn't work :(((
         QDomNode meta   = KoDom::namedItemNS( metaDoc, KoXmlNS::office, "document-meta" );
         QDomNode office = KoDom::namedItemNS( meta, KoXmlNS::office, "meta" );
-        kdDebug()<<" meta.isNull()"<< meta.isNull()<<endl;
-        kdDebug()<<" office.isNull()"<< office.isNull()<<endl;
 
         if ( office.isNull() )
             return false;
