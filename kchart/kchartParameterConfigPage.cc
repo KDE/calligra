@@ -143,7 +143,7 @@ KChartParameterConfigPage::KChartParameterConfigPage( KDChartParams* params,
     font = new QPushButton( gb3);
     font->setText(i18n("Font"));
     grid3->addWidget( font,6,0);
-
+    gb3->setEnabled(false);
     layout->addWidget(gb1,0,0);
     layout->addWidget(gb2,0,1);
     layout->addWidget(gb3,0,2);
