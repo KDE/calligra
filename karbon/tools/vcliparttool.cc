@@ -144,7 +144,7 @@ VClipartWidget::VClipartWidget( QPtrList<VClipartIconItem>* clipartItems, Karbon
 	for( item = clipartItems->first(); item; item = clipartItems->next() )
 		m_clipartChooser->addItem( item );
 
-	m_clipartItem = clipartItems->first()->clone();
+	m_clipartItem = ( clipartItems->first() ) ? clipartItems->first()->clone() : 0;
 }
 
 VClipartWidget::~VClipartWidget()
