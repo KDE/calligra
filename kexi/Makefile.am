@@ -47,14 +47,20 @@ INCLUDES = $(LIB_KEXI_KMDI_INCLUDES) $(all_includes)
 
 METASOURCES = AUTO
 
+# Note: koffice/kexi/formeditor should be kept out of kexi.pot
+# as it might get moved out of Kexi.
+#
+# If a second directory must be "pruned", the syntax becomes:
+# find . \( -name formeditor -o -name test \) -prune , -name \*.ui
+# (The comma is needed or the pruned directory name would be printed to stdout)
 messages: rc.cpp
 	rm -f tips.cpp
 	(cd data && $(PREPARETIPS) > ../tips.cpp)
-	LIST="data/*.rc `find . -name \*.ui`"; \
+	LIST="data/*.rc `find . -name formeditor -prune , -name \*.ui`"; \
 	if test -n "$$LIST"; then \
 	 $(EXTRACTRC) $$LIST >> rc.cpp; \
 	fi; \
-	LIST=`find . -name \*.h -o -name \*.hh -o -name \*.H -o -name \*.hxx -o -name \*.hpp -o -name \*.cpp -o -name \*.cc -o -name \*.cxx -o -name \*.ecpp -o -name \*.C`; \
+	LIST=`find . -name formeditor -prune , -name \*.h -o -name \*.cpp`; \
 	if test -n "$$LIST"; then \
 	 $(XGETTEXT) $$LIST -o $(podir)/kexi.pot; \
 	fi
