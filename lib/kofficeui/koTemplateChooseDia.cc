@@ -325,8 +325,11 @@ void KoTemplateChooseDia::setupRecentDialog(QWidget * widgetbase, QGridLayout * 
                 value=d->m_instance->config()->readPathEntry( key );
                 if ( !value.isEmpty() ) {
                         KURL url(value);
-                        KFileItem *item = new KFileItem( KFileItem::Unknown, KFileItem::Unknown, url );
-                        d->m_recent->insertItem(item);
+
+                        if(!url.isLocalFile() || QFile::exists(url.path())) {
+                                KFileItem *item = new KFileItem( KFileItem::Unknown, KFileItem::Unknown, url );
+                                d->m_recent->insertItem(item);
+                        }
                 }
                 i++;
         } while ( !value.isEmpty() || i<=10 );
