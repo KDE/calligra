@@ -460,10 +460,10 @@ VKoPainter::drawVPath( ArtVpath *vec )
 		else
 		{
 			clampToViewport( *strokeSvp, x0, y0, x1, y1 );
-			if( x0 != y0 && x1 != y1 )
+			if( x0 != x1 && y0 != y1 )
 				art_rgb_svp_alpha_( strokeSvp, x0, y0, x1, y1, strokeColor, a, m_buffer + x0 * 4 + y0 * m_width * 4, m_width * 4, 0 );
-			art_svp_free( strokeSvp );
 		}
+		art_svp_free( strokeSvp );
 	}
 
 	if( fillSvp )
@@ -477,8 +477,8 @@ VKoPainter::drawVPath( ArtVpath *vec )
 			clampToViewport( *fillSvp, x0, y0, x1, y1 );
 			if( x0 != x1 && y0 != y1 )
 				art_rgb_svp_alpha_( fillSvp, x0, y0, x1, y1, fillColor, a, m_buffer + x0 * 4 + y0 * m_width * 4, m_width * 4, 0 );
-			art_svp_free( fillSvp );
 		}
+		art_svp_free( fillSvp );
 	}
 
 	delete m_stroke;
