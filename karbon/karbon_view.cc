@@ -212,7 +212,7 @@ KarbonView::createContainer( QWidget *parent, int index, const QDomElement &elem
 				m_toolFactory = new VToolFactory( this );
 		}
 		else
-			m_toolbox = shell()->toolBar( "Tools" );
+			m_toolbox = dynamic_cast<VToolBox *>( shell()->toolBar( "Tools" ) );
 
 		m_toolbox->setupTools();
 		m_currentTool = 0L;
