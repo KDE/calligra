@@ -35,8 +35,10 @@
  *   \<office:settings\>
  *      \<config:config-item-set config:name="view-settings"\>
  *         \<config:config-item-map-indexed config:name="Views"\>
- *           \<config:config-item config:name="SnapLinesDrawing" config:type="string"\>value\</config:config-item\>
+ *           \<config:config-item-map-entry\>
+ *             \<config:config-item config:name="SnapLinesDrawing" config:type="string"\>value\</config:config-item\>
  *           .....
+ *           \</config:config-item-map-entry\>
  *         \</config:config-item-map-indexed\>
  *         \<config:config-item-map-indexed config:name="Interface"\>
  *         .......
