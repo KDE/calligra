@@ -243,7 +243,7 @@ void KexiProjectSelectorDialog::init(KexiProjectSet* prj_set, bool showProjectNa
 	m_sel->setFocus();
 	
 	connect(m_sel,SIGNAL(projectExecuted(KexiProjectData*)),this,SLOT(slotProjectExecuted(KexiProjectData*)));
-	CENTER_ME;
+	KDialog::centerOnScreen(this);
 }
 
 KexiProjectData* KexiProjectSelectorDialog::selectedProjectData() const

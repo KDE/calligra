@@ -123,6 +123,8 @@ public:
 		prj_selector = 0;
 		chkDoNotShow = 0;
 		openExistingConnWidget = 0;
+		templatesWidget = 0;
+		templatesWidget_IconListBox = 0;
 	}
 	~KexiStartupDialogPrivate()
 	{}
@@ -164,11 +166,22 @@ public:
 	bool singlePage : 1;
 };
 
+bool dlgSinglePage(int type)
+{
+	return (type==KexiStartupDialog::Templates) 
+	|| (type==KexiStartupDialog::OpenExisting) 
+	|| (type==KexiStartupDialog::OpenRecent);
+}
+
 QString captionForDialogType(int type)
 {
-	if (type==KexiStartupDialog::OpenExisting) {
+	if (type==KexiStartupDialog::Templates)
+		return I18N_NOOP("Create Project");
+	else if (type==KexiStartupDialog::OpenExisting)
 		return I18N_NOOP("Open Existing Project");
-	}
+	else if (type==KexiStartupDialog::OpenRecent)
+		return I18N_NOOP("Open Recent Project");
+	
 	return I18N_NOOP("Choose a project");
 }
 	
@@ -185,7 +198,7 @@ KexiStartupDialog::KexiStartupDialog(
 	KexiDBConnectionSet& connSet, KexiProjectSet& recentProjects,
 	QWidget *parent, const char *name )
  : KDialogBase( 
- 	dialogType==OpenExisting ? Plain : Tabbed
+ 	dlgSinglePage(dialogType) ? Plain : Tabbed
 	,captionForDialogType(dialogType)
  	,Help | Ok | Cancel, Ok, parent, name )
  , d(new KexiStartupDialogPrivate())
@@ -194,7 +207,7 @@ KexiStartupDialog::KexiStartupDialog(
 	d->connSet = &connSet;
 	d->dialogType = dialogType;
 	d->dialogOptions = dialogOptions;
- 	d->singlePage = (dialogType==OpenExisting);
+ 	d->singlePage = dlgSinglePage(dialogType);
 	
 	if (dialogType==OpenExisting) {//this dialog has "open" tab only!
 		setIcon(DesktopIcon("fileopen"));
@@ -218,13 +231,16 @@ KexiStartupDialog::KexiStartupDialog(
 	if (d->dialogType & OpenRecent) {
 		setupPageOpenRecent();
 		d->pageOpenRecentID = id++;
+		if (d->singlePage)
+			d->prj_selector->setFocus();
+	}
+	
+	if (!d->singlePage) {
+		connect(this, SIGNAL(aboutToShowPage(QWidget*)), this, SLOT(tabShown(QWidget*)));
+		d->templatesWidget->setFocus();
 	}
 	showPage(0);
 	adjustSize();
-
-	if (!d->singlePage) {
-		connect(this, SIGNAL(aboutToShowPage(QWidget*)), this, SLOT(tabShown(QWidget*)));
-	}
 }
 
 KexiStartupDialog::~KexiStartupDialog()
@@ -244,7 +260,7 @@ void KexiStartupDialog::show()
 	d->selectedTemplateKey=QString::null;
 	d->existingFileToOpen=QString::null;
 	
-	CENTER_ME;
+	KDialog::centerOnScreen(this);
 	KDialogBase::show();
 }
 
@@ -301,7 +317,7 @@ void KexiStartupDialog::reject()
 
 void KexiStartupDialog::setupPageTemplates()
 {
-	d->pageTemplates = d->pageTemplates = addPage( i18n("&Create Project") );
+	d->pageTemplates = addPage( i18n("&Create Project") );
 	QVBoxLayout *lyr = new QVBoxLayout( d->pageTemplates, 0, KDialogBase::spacingHint() );
 	
     d->templatesWidget = new KJanusWidget( 
@@ -434,6 +450,8 @@ void KexiStartupDialog::updateSelectedTemplateKeyInfo()
 
 void KexiStartupDialog::tabShown(QWidget *w)
 {
+	kdDebug() << "KexiStartupDialog::tabShown " << (long)w << " "<< long(d->pageTemplates)<<endl;
+	
 	updateDialogOKButton(w);
 }
 
@@ -461,7 +479,7 @@ void KexiStartupDialog::updateDialogOKButton(QWidget *w)
 #endif
 	}
 	else if (w==d->pageOpenExisting) {
-		enable = !d->openExistingFileDlg->selectedFile().isEmpty();
+		enable = !d->openExistingFileDlg->currentURL().path().isEmpty();
 	}
 	else if (w==d->pageOpenRecent) {
 		enable = (d->prj_selector->selectedProjectData()!=0);

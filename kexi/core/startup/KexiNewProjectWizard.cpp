@@ -186,7 +186,7 @@ KexiNewProjectWizard::~KexiNewProjectWizard()
 	
 void KexiNewProjectWizard::show()
 {
-	CENTER_ME;
+	KDialog::centerOnScreen(this);
 	KWizard::show();
 }
 

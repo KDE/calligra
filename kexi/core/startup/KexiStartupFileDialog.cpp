@@ -55,6 +55,8 @@ KexiStartupFileDialog::KexiStartupFileDialog(
 		((QPushButton*)obj)->hide();
 	}
 	delete l;
+	
+	setFocusProxy( locationWidget() );
 }
 	
 void KexiStartupFileDialog::setMode(KexiStartupFileDialog::Mode mode)
@@ -113,8 +115,10 @@ void KexiStartupFileDialog::show()
 KURL KexiStartupFileDialog::currentURL()
 {
 	setResult( QDialog::Accepted ); // selectedURL tests for it
-	KURL url = KFileDialog::selectedURL();
-	QString path = url.path().stripWhiteSpace();
+	
+//	KURL url = KFileDialog::selectedURL();
+	QString path = locationEdit->currentText().stripWhiteSpace(); //url.path().stripWhiteSpace();
+	kdDebug() << "KFileDialog::selectedURL() == " << KFileDialog::selectedURL().path() <<endl;
 	
 	if (!currentFilter().isEmpty()) {
 		if (m_mode == KexiStartupFileDialog::SavingFileBasedDB) {
@@ -128,7 +132,7 @@ KURL KexiStartupFileDialog::currentURL()
 			}
 		}
 	}
-	kdDebug() << "KexiStartupFileDialog::currentURL() == " << KFileDialog::selectedURL().path() <<endl;
+	kdDebug() << "KexiStartupFileDialog::currentURL() == " << path <<endl;
 	return KFileDialog::selectedURL();
 }
 

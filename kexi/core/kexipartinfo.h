@@ -17,10 +17,8 @@
    Boston, MA 02111-1307, USA.
 */
 
-//#ifndef KEXIPARTINFO_H
-//#define KEXIPARTINFO_H
-#ifndef KEXIPROJECTPART_H
-#define KEXIPROJECTPART_H
+#ifndef KEXIPARTINFO_H
+#define KEXIPARTINFO_H
 
 #include "kexipartmanager.h"
 
@@ -61,7 +59,7 @@ class Info
 		const QString 		itemIcon();
 
 		/**
-		 * @returns the name object name assoisated with this part (e.g. "tables")
+		 * @returns the name object name associated with this part (e.g. "tables")
 		 */
 		const QString 		objectName();
 

@@ -69,7 +69,7 @@ KexiBrowser::addGroup(KexiPart::Info *info)
 	item->setPixmap(0, SmallIcon(info->groupIcon()));
 	item->setOpen(true);
 	item->setSelectable(false);
-	m_baseItems.insert(info->mime(), item);
+	m_baseItems.insert(info->mime().lower(), item);
 	kdDebug() << "KexiBrowser::addGroup()" << endl;
 	slotItemListChanged(info);
 }
@@ -77,6 +77,15 @@ KexiBrowser::addGroup(KexiPart::Info *info)
 void
 KexiBrowser::addItem(KexiPart::Item item)
 {
+	//part object
+	KexiBrowserItem *parent = m_baseItems.find(item.mime().lower());
+	if (!parent) //TODO: add "Other" part group for that
+		return;
+	kdDebug() << "KexiBrowser::addItem() found parent:" << parent << endl;
+	KexiBrowserItem *bitem = new KexiBrowserItem(parent, item.mime(), item.name(), item.identifier());
+	bitem->setPixmap(0, SmallIcon(parent->info()->itemIcon()));
+
+#if 0 //nonsense since we have no multi tab bar now
 	if(m_mime == "kexi/db" && m_baseItems.find(item.mime()))
 	{
 		//part object
@@ -92,6 +101,7 @@ KexiBrowser::addItem(KexiPart::Item item)
 		if(m_part)
 			bitem->setPixmap(0, SmallIcon(m_part->itemIcon()));
 	}
+#endif
 }
 
 void

@@ -99,6 +99,7 @@ Manager::info(const QString &mime)
 void
 Manager::checkProject(KexiDB::Connection *conn)
 {
+//TODO: catch errors!
 	if(!conn->isDatabaseUsed())
 		return;
 

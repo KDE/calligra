@@ -65,9 +65,6 @@ namespace Kexi
 
 }
 
-//! for use inside QWidget's subclasses: centers the widget on the screen
-#define CENTER_ME move((qApp->desktop()->width()-width())/2,(qApp->desktop()->height()-height())/2)
-
 //! sometimes we leave a space in the form of empty QFrame and want to insert here
 //! a widget that must be instantiated by hand.
 //! This macro inserts a widget \a what into a frame \a where.
