@@ -1556,11 +1556,11 @@ KSpreadView::KSpreadView( QWidget *_parent, const char *_name, KSpreadDoc* doc )
     d->insertHandler = 0L;
     d->specialCharDlg = 0;
 
+    setInstance( KSpreadFactory::global() );
     if ( doc->isReadWrite() )
       setXMLFile( "kspread.rc" );
     else
       setXMLFile( "kspread_readonly.rc" );
-    setInstance( KSpreadFactory::global() );
 
     // build the DCOP object
     dcopObject();
