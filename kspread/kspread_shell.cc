@@ -1,3 +1,4 @@
+#include <qprinter.h>
 #include "kspread_shell.h"
 
 #include <koAboutDia.h>

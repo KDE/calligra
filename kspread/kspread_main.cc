@@ -1,3 +1,4 @@
+#include <qprinter.h>
 #include "kspread_main.h"
 #include <koScanParts.h>
 #include <factory_impl.h>

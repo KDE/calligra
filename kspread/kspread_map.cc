@@ -1,3 +1,5 @@
+#include <qprinter.h>
+
 #include "kspread_map.h"
 #include "kspread_doc.h"
 

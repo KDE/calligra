@@ -1,3 +1,4 @@
+#include <qprinter.h>
 #include "kspread_doc.h"
 
 #include <komlParser.h>

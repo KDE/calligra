@@ -1,3 +1,4 @@
+#include <qprinter.h>
 #include "kspread_undo.h"
 
 #include "kspread_table.h"

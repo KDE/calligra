@@ -1,3 +1,4 @@
+#include <qprinter.h>
 #include "kspread_view.h"
 
 #include <utils.h>
