@@ -44,7 +44,7 @@
 KWFrame::KWFrame(KWFrame * frame)
 {
     kdDebug() << "KWFrame::KWFrame this=" << this << " frame=" << frame << endl;
-    frame->copySettings( this );
+    copySettings( frame );
 }
 
 KWFrame::KWFrame(KWFrameSet *fs, double left, double top, double width, double height, RunAround _ra, double _gap )
@@ -145,28 +145,28 @@ void KWFrame::copySettings(KWFrame *frm)
 {
     kdDebug() << "KWFrame::copySettings this=" << this << " frm=" << frm << endl;
     //necessary to reapply these parameters
-    frm->setFrameSet( getFrameSet() );
-    frm->setRect(x(), y(), width(), height());
-    frm->setRunAroundGap( runAroundGap());
-    frm->setRunAround( runAround());
+    setFrameSet( frm->getFrameSet() );
+    setRect(frm->x(), frm->y(), frm->width(), frm->height());
+    setRunAroundGap( frm->runAroundGap());
+    setRunAround( frm->runAround());
 
     //
-    frm->setBackgroundColor( getBackgroundColor() );
-    frm->setFrameBehaviour(getFrameBehaviour());
-    frm->setNewFrameBehaviour(getNewFrameBehaviour());
-    frm->setSheetSide(getSheetSide());
-    //frm->setPageNum(pageNum());
-    frm->setLeftBorder(leftBorder());
-    frm->setRightBorder(rightBorder());
-    frm->setTopBorder(topBorder());
-    frm->setBottomBorder(bottomBorder());
-    frm->setBLeft(getBLeft());
-    frm->setBRight(getBRight());
-    frm->setBTop(getBTop());
-    frm->setBBottom(getBBottom());
-    frm->setCopy(isCopy());
-    /*if(anchor())
-        frm->setAnchor(anchor());*/
+    setBackgroundColor( frm->getBackgroundColor() );
+    setFrameBehaviour(frm->getFrameBehaviour());
+    setNewFrameBehaviour(frm->getNewFrameBehaviour());
+    setSheetSide(frm->getSheetSide());
+    //setPageNum(frm->pageNum());
+    setLeftBorder(frm->leftBorder());
+    setRightBorder(frm->rightBorder());
+    setTopBorder(frm->topBorder());
+    setBottomBorder(frm->bottomBorder());
+    setBLeft(frm->getBLeft());
+    setBRight(frm->getBRight());
+    setBTop(frm->getBTop());
+    setBBottom(frm->getBBottom());
+    setCopy(frm->isCopy());
+    /*if(frm->anchor())
+        setAnchor(frm->anchor());*/
 }
 
 // Insert all resize handles
