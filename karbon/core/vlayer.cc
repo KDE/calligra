@@ -10,6 +10,7 @@
 
 #include "vlayer.h"
 #include "vobject.h"
+#include "vpath.h"
 
 #include <kdebug.h>
 
@@ -80,6 +81,7 @@ VLayer::save( QDomElement& element ) const
 {
 	QDomElement me = element.ownerDocument().createElement( "LAYER" );
 	element.appendChild( me );
+
 	me.setAttribute( "name", m_name );
 	me.setAttribute( "visible", m_visible );
 
@@ -92,4 +94,26 @@ VLayer::save( QDomElement& element ) const
 void
 VLayer::load( const QDomElement& element )
 {
+	m_objects.setAutoDelete( true );
+	m_objects.clear();
+	m_objects.setAutoDelete( false );
+
+	m_name = element.attribute( "name" );
+	m_visible = element.attribute( "visible" ) == 0 ? false : true;
+
+	QDomNodeList list = element.childNodes();
+	for( uint i = 0; i < list.count(); ++i )
+	{
+		if( list.item( i ).isElement() )
+		{
+			QDomElement e = list.item( i ).toElement();
+
+			if( e.tagName() == "PATH" )
+			{
+				VPath* path = new VPath();
+				path->load( e );
+				insertObject( path );
+			}
+		}
+	}
 }

@@ -29,7 +29,7 @@ public:
 
 	virtual bool initDoc();
 
-	virtual bool loadXML( QIODevice*, const QDomDocument& );
+	virtual bool loadXML( QIODevice*, const QDomDocument& document );
 	virtual QDomDocument saveXML();
 
 	// manipulate selection:

@@ -320,13 +320,13 @@ VPath::close()
 	if( closed() ) return *this;
 
 // TODO: add tolerance
-	if( currentPoint() != m_segments.getLast()->getFirst()->point( 3 ) )
-	{
+//	if( currentPoint() != m_segments.getLast()->getFirst()->point( 3 ) )
+//	{
 		VSegment* s = new VSegment();
 		s->setType( VSegment::end );
 		s->setPoint( 3, m_segments.getLast()->getFirst()->point( 3 ) );
 		m_segments.getLast()->append( s );
-	}
+//	}
 
 	m_closed = true;
 
@@ -348,24 +348,27 @@ VPath::booleanOp( const VPath* path, int /*type*/ ) const
 void
 VPath::combine( const VPath& path )
 {
-// TODO: inside/intersection checks needed
+	QPtrListIterator<VSegmentList> itr( path.m_segments );
+	for( ; itr.current(); ++itr )
+	{
+		combineSegments( *( itr.current() ) );
+	}
+}
+
+void
+VPath::combineSegments( const VSegmentList& segments )
+{
 	VSegmentList* list = new VSegmentList();
 	list->setAutoDelete( true );
 
-	QPtrListIterator<VSegmentList> itr( path.m_segments );
-	for( itr.toFirst(); itr.current(); ++itr )
+	VSegmentListIterator itr( segments );
+	for( ; itr.current() ; ++itr )
 	{
-		list = new VSegmentList();
-		list->setAutoDelete( true );
-
-		VSegmentListIterator itr2( *( itr.current() ) );
-		for( ; itr2.current() ; ++itr2 )
-		{
-			list->append( new VSegment( *( itr2.current() ) ) );
-		}
-
-		m_segments.append( list );
+// TODO: intersection checks needed?
+		list->append( new VSegment( *( itr.current() ) ) );
 	}
+
+	m_segments.append( list );
 }
 
 VObject&
@@ -427,6 +430,7 @@ VPath::save( QDomElement& element ) const
 	{
 		QDomElement me = element.ownerDocument().createElement( "PATH" );
 		element.appendChild( me );
+
 		me.setAttribute( "closed", m_closed );
 
 		QPtrListIterator<VSegmentList> itr( m_segments );
@@ -447,4 +451,41 @@ VPath::save( QDomElement& element ) const
 void
 VPath::load( const QDomElement& element )
 {
+	m_segments.clear();
+
+	setState( normal );
+	m_closed = element.attribute( "closed" ) == 0 ? false : true;
+
+	QDomNodeList list = element.childNodes();
+	for( uint i = 0; i < list.count(); ++i )
+	{
+		if( list.item( i ).isElement() )
+		{
+			QDomElement segments = list.item( i ).toElement();
+
+			if( segments.tagName() == "SEGMENTS" )
+			{
+				VSegmentList sl;
+				sl.setAutoDelete( true );
+
+				QDomNodeList sublist = segments.childNodes();
+				for( uint j = 0; j < sublist.count(); ++j )
+				{
+					if( sublist.item( j ).isElement() )
+					{
+						QDomElement segment = sublist.item( j ).toElement();
+
+						VSegment* s = new VSegment();
+						s->load( segment );
+						sl.append( s );
+					}
+				}
+
+				combineSegments( sl );
+			}
+		}
+	}
+
+	if( m_closed )
+		close();
 }

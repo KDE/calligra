@@ -116,6 +116,7 @@ public:
 	VPath* booleanOp( const VPath* path, int type = 0 ) const;
 
 	void combine( const VPath& path );
+	void combineSegments( const VSegmentList& segments );
 
 	virtual void draw( QPainter& painter, const QRect& rect,
 		const double zoomFactor = 1.0 );

@@ -121,7 +121,7 @@ VSegment::save( QDomElement& element ) const
 		me.setAttribute( "x3", m_point[2].x() );
 		me.setAttribute( "y3", m_point[2].y() );
 	}
-	else if( type() == line || type() == end )
+	else if( type() == line )
 	{
 		me = element.ownerDocument().createElement( "LINE" );
 		me.setAttribute( "x", m_point[2].x() );
@@ -133,6 +133,8 @@ VSegment::save( QDomElement& element ) const
 		me.setAttribute( "x", m_point[2].x() );
 		me.setAttribute( "y", m_point[2].y() );
 	}
+	else
+		return;
 
 	element.appendChild( me );
 
@@ -141,4 +143,42 @@ VSegment::save( QDomElement& element ) const
 void
 VSegment::load( const QDomElement& element )
 {
+	if( element.tagName() == "CURVE" )
+	{
+		m_type = curve;
+		m_point[0].setX( element.attribute( "x1" ).toDouble() );
+		m_point[0].setY( element.attribute( "y1" ).toDouble() );
+		m_point[1].setX( element.attribute( "x2" ).toDouble() );
+		m_point[1].setY( element.attribute( "y2" ).toDouble() );
+		m_point[2].setX( element.attribute( "x3" ).toDouble() );
+		m_point[2].setY( element.attribute( "y3" ).toDouble() );
+	}
+	else if( element.tagName() == "CURVE1" )
+	{
+		m_type = curve1;
+		m_point[1].setX( element.attribute( "x2" ).toDouble() );
+		m_point[1].setY( element.attribute( "y2" ).toDouble() );
+		m_point[2].setX( element.attribute( "x3" ).toDouble() );
+		m_point[2].setY( element.attribute( "y3" ).toDouble() );
+	}
+	else if( element.tagName() == "CURVE2" )
+	{
+		m_type = curve2;
+		m_point[0].setX( element.attribute( "x1" ).toDouble() );
+		m_point[0].setY( element.attribute( "y1" ).toDouble() );
+		m_point[2].setX( element.attribute( "x3" ).toDouble() );
+		m_point[2].setY( element.attribute( "y3" ).toDouble() );
+	}
+	else if( element.tagName() == "LINE" )
+	{
+		m_type = line;
+		m_point[2].setX( element.attribute( "x" ).toDouble() );
+		m_point[2].setY( element.attribute( "y" ).toDouble() );
+	}
+	else if( element.tagName() == "MOVE" )
+	{
+		m_type = begin;
+		m_point[2].setX( element.attribute( "x" ).toDouble() );
+		m_point[2].setY( element.attribute( "y" ).toDouble() );
+	}
 }

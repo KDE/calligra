@@ -12,12 +12,6 @@
 
 #include <kdebug.h>
 
-// TODO: remove these after debugging:
-#include "vpath.h"
-#include <qwmatrix.h>
-#include "vccmd_ellipse.h"
-#include "vccmd_star.h"
-#include "vccmd_rectangle.h"
 
 KarbonPart::KarbonPart( QWidget* parentWidget, const char* widgetName,
 	QObject* parent, const char* name, bool singleViewMode )
@@ -44,67 +38,6 @@ KarbonPart::~KarbonPart()
 bool
 KarbonPart::initDoc()
 {
-// TODO: remove the whole test code:
-
-	VCCmdRectangle w(this, 100, 100, 200, 150 );
-	VPath *spi = w.createPath();
-
-	insertObject(spi);
-
-
-	VCCmdEllipse e( this, 100, 100, 200, 200 );
-	VPath* elly = e.createPath();
-
-	VCCmdEllipse r( this, 120, 140, 140, 160 );
-	VPath* rect = r.createPath();
-
-	elly->combine( *rect );
-	delete( rect );
-
-	VCCmdEllipse s( this, 140, 120, 160, 140 );
-	rect = s.createPath();
-
-	elly->combine( *rect );
-	delete( rect );
-
-	VCCmdEllipse t( this, 160, 140, 180, 160 );
-	rect = t.createPath();
-
-	elly->combine( *rect );
-	delete( rect );
-
-	VCCmdEllipse u( this, 140, 160, 160, 180 );
-	rect = u.createPath();
-
-	elly->combine( *rect );
-	delete( rect );
-
-	insertObject( elly );
-//	insertObject( rect );
-
-
-/*
-	VPath* obj = elly->booleanOp( rect, 0 );
-
-	if ( obj )
-	{
-		QWMatrix m;
-		m.translate( 250, 200 );
-		obj->transform( m );
-		insertObject( obj );
-	}
-
-	obj = rect->booleanOp( elly, 0 );
-
-	if ( obj )
-	{
-		QWMatrix m;
-		m.translate( 250, 0 );
-		obj->transform( m );
-		insertObject( obj );
-	}
-*/
-
 	return true;
 }
 
@@ -115,36 +48,60 @@ KarbonPart::createViewInstance( QWidget* parent, const char* name )
 }
 
 bool
-KarbonPart::loadXML( QIODevice*, const QDomDocument& )
+KarbonPart::loadXML( QIODevice*, const QDomDocument& document )
 {
-	// TODO load the document from the QDomDocument
+	QDomElement doc = document.documentElement();
+
+	if(
+		doc.attribute( "mime" ) != "application/x-karbon" ||
+		doc.attribute( "version" ) != "0.1" )
+	{
+		return false;
+	}
+
+	QDomNodeList list = doc.childNodes();
+	for( uint i = 0; i < list.count(); ++i )
+	{
+		if( list.item( i ).isElement() )
+		{
+			QDomElement e = list.item( i ).toElement();
+
+			if( e.tagName() == "LAYER" )
+			{
+				VLayer* layer = new VLayer();
+				layer->load( e );
+				m_layers.append( layer );
+			}
+		}
+	}
+
 	return true;
 }
 
 QDomDocument
 KarbonPart::saveXML()
 {
-	QDomDocument doc( "DOC" );
+	QDomDocument document( "DOC" );
 
-	doc.appendChild(
-		doc.createProcessingInstruction(
+	document.appendChild(
+		document.createProcessingInstruction(
 			"xml",
 			"version=\"0.1\" encoding=\"UTF-8\"") );
 
-	QDomElement app = doc.createElement( "DOC" );
-	app.setAttribute( "editor", "karbon14 0.0.1" );
-	app.setAttribute( "mime", "application/x-karbon" );
-	app.setAttribute( "version", "0.1" );
-	doc.appendChild( app );
+	QDomElement doc = document.createElement( "DOC" );
+	doc.setAttribute( "editor", "karbon14 0.0.1" );
+	doc.setAttribute( "mime", "application/x-karbon" );
+	doc.setAttribute( "version", "0.1" );
+	document.appendChild( doc );
 
 	// save layers:
 	QPtrListIterator<VLayer> itr( m_layers );
 	for ( ; itr.current(); ++itr )
 	{
-		itr.current()->save( app );
+		itr.current()->save( doc );
 	}
 
-	return doc;
+	return document;
 }
 
 void
