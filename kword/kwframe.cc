@@ -419,7 +419,7 @@ void KWFrameSet::deleteAnchor( KWAnchor * anchor )
     QTextCursor c( m_anchorTextFs->textDocument() );
     c.setParag( anchor->paragraph() );
     c.setIndex( anchor->index() );
-    anchor->setDeleted( true );
+    anchor->setDeleted( true ); // this sets m_anchorTextFs to 0L
     c.parag()->at( c.index() )->loseCustomItem();
     c.remove(); // This deletes the character where the anchor was
     // We don't delete the anchor since it might be in a customitemmap in a text-insert command
@@ -430,6 +430,10 @@ void KWFrameSet::deleteAnchor( KWAnchor * anchor )
 void KWFrameSet::deleteAnchors()
 {
     kdDebug() << "KWFrameSet::deleteAnchors" << endl;
+    KWTextFrameSet * textfs = m_anchorTextFs;
+    ASSERT( textfs );
+    if ( !textfs )
+        return;
     QListIterator<KWFrame> frameIt = frameIterator();
     int frameNum = 0;
     // At the moment there's only one anchor per frameset
@@ -443,8 +447,7 @@ void KWFrameSet::deleteAnchors()
         KWAnchor * anchor = findAnchor( frameNum );
         deleteAnchor( anchor );
     }
-
-    emit repaintChanged( m_anchorTextFs );
+    emit repaintChanged( textfs );
 }
 
 void KWFrameSet::moveFloatingFrame( int frameNum, const KoPoint &position )
