@@ -562,6 +562,8 @@ void KSpreadCell::forceExtraCells( int _col, int _row, int _x, int _y )
         d->extra()->mergedXCells = 0;
         d->extra()->mergedYCells = 0;
       }
+      //refresh the layout
+      setFlag( Flag_LayoutDirty );
       return;
   }
 
