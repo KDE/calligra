@@ -62,8 +62,8 @@ protected slots:
 
 protected:
   // C++
-  virtual KoDocument* document();
-  virtual KoViewIf* view();
+  virtual KOffice::Document_ptr document();
+  virtual KOffice::View_ptr view();
 
   virtual bool printDlg();
   virtual void helpAbout();

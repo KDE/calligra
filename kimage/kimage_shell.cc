@@ -363,14 +363,14 @@ void KImageShell::slotFileQuit()
   kapp->exit();
 }
 
-KoDocument* KImageShell::document()
+KOffice::Document_ptr KImageShell::document()
 {
-  return m_pDoc;
+  return KOffice::Document::_duplicate( m_pDoc );
 }
 
-KoViewIf* KImageShell::view()
+KOffice::View_ptr KImageShell::view()
 {
-  return m_pView;
+  return KOffice::View::_duplicate( m_pView );
 }
 
 #include "kimage_shell.moc"

@@ -364,12 +364,12 @@ void KoHTMLShell::slotFileQuit()
   kapp->exit();
 }
 
-KoDocument *KoHTMLShell::document()
+KOffice::Document_ptr KoHTMLShell::document()
 {
-  return m_pDoc;
+  return KOffice::Document::_duplicate( m_pDoc );
 }
 
-KoViewIf *KoHTMLShell::view()
+KOffice::View_ptr KoHTMLShell::view()
 {
-  return m_pView;
+  return KOffice::View::_duplicate( m_pView );
 }

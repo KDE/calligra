@@ -363,14 +363,14 @@ void KDiagrammShell::slotFileQuit()
   kapp->exit();
 }
 
-KoDocument* KDiagrammShell::document()
+KOffice::Document_ptr KDiagrammShell::document()
 {
-  return m_pDoc;
+  return KOffice::Document::_duplicate( m_pDoc );
 }
 
-KoViewIf* KDiagrammShell::view()
+KOffice::View_ptr KDiagrammShell::view()
 {
-  return m_pView;
+  return KOffice::View::_duplicate( m_pView );
 }
 
 #include "kdiagramm_shell.moc"

@@ -27,7 +27,7 @@ class KoDocumentEntry : public KoComponentEntry
 {
 public:
   KoDocumentEntry() { }
-  KoDocumentEntry( const KoComponentEntry _e );
+  KoDocumentEntry( const KoComponentEntry& _e );
   
   QStrList mimeTypes;
 

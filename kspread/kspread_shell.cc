@@ -87,6 +87,7 @@ void KSpreadShell::setDocument( KSpreadDoc *_doc )
   
   opToolBar()->setItemEnabled( TOOLBAR_PRINT, true );
   opToolBar()->setItemEnabled( TOOLBAR_SAVE, true );
+  opToolBar()->setFullWidth(false);
 }
 
 bool KSpreadShell::newDocument()
@@ -125,6 +126,7 @@ bool KSpreadShell::newDocument()
   
   opToolBar()->setItemEnabled( TOOLBAR_PRINT, true );
   opToolBar()->setItemEnabled( TOOLBAR_SAVE, true );
+  opToolBar()->setFullWidth(false);
 
   cerr << "*2) VIEW void KOMBase::refcnt() = " << m_pView->_refcnt() << endl;
 
@@ -169,7 +171,8 @@ bool KSpreadShell::openDocument( const char *_url, const char *_format )
   
   opToolBar()->setItemEnabled( TOOLBAR_PRINT, true );
   opToolBar()->setItemEnabled( TOOLBAR_SAVE, true );
-  
+  opToolBar()->setFullWidth(false);
+
   return true;
 }
 
@@ -373,14 +376,14 @@ void KSpreadShell::slotFileQuit()
   kapp->exit();
 }
 
-KoDocument* KSpreadShell::document()
+KOffice::Document_ptr KSpreadShell::document()
 {
-  return m_pDoc;
+  return KOffice::Document::_duplicate( m_pDoc );
 }
 
-KoViewIf* KSpreadShell::view()
+KOffice::View_ptr KSpreadShell::view()
 {
-  return m_pView;
+  return KOffice::View::_duplicate( m_pView );
 }
 
 #include "kspread_shell.moc"

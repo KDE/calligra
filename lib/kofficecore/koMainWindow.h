@@ -30,8 +30,8 @@ public:
   
   virtual void cleanUp();
 
-  virtual KoDocument* document() = 0L;
-  virtual KoViewIf* view() = 0L;
+  virtual KOffice::Document_ptr document() = 0L;
+  virtual KOffice::View_ptr view() = 0L;
 
 protected slots:
   virtual void slotActivePartChanged( unsigned long _new_part_id, unsigned long _old_opart_id );  

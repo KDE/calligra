@@ -21,5 +21,5 @@ MimeTypes=application/x-killustrator,
 RepoID=IDL:KIllustrator/DocumentFactory:1.0,
 ActivationMode=shared
 Type=OpenPart
-Icon=unknown.xpm
-MiniIcon=unknown.xpm
+Icon=killustrator.xpm
+MiniIcon=killustrator.xpm

@@ -1,0 +1,26 @@
+/* XPM */
+static char *kspread2[] = {
+/* width height num_colors chars_per_pixel */
+"    22    17        3            1",
+/* colors */
+"a c None",
+". c #000000",
+"# c #e8ece8",
+/* pixels */
+"aaaaaaaaaaaaaaaaaaaaaa",
+"aaaaaaaaaaaaaaaaaaaaaa",
+"aaaaaaaaaaaaaaaaaaaaaa",
+"aaaaaaaaaaaaaaaaaaaaaa",
+"aaaaaaaaaaa.aaaaaaa.aa",
+"aaaaaaaaaa.a.aaaa...aa",
+"aaaaaaaaaa.a.aaaaaa.aa",
+"aaaaaaaaa.aaa.aaaaa.aa",
+"a.....aaa.aaa.aaaaa.aa",
+"aaaaaaaaa.....aaaaa.aa",
+"a.....aa.aaaaa.aaaa.aa",
+"aaaaaaaa.aaaaa.aaaa.aa",
+"aaaaaaaa.aaaaa.aaaa.aa",
+"aaaaaaaaaaaaaaaaaaaaaa",
+"aaaaaaaaaaaaaaaaaaaaaa",
+"aaaaaaaaaaaaaaaaaaaaaa",
+"aaaaaaaaaaaaaaaaaaaaaa"};

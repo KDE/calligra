@@ -417,7 +417,8 @@ void KSpreadTable::setSelection( const QRect &_sel )
     return;
   
   // We want to see wether a single cell was clicked like a button.
-  if ( _sel.left() == 0 && _sel.right() == 0 && _sel.top() == 0 && _sel.bottom() == 0 )
+  // This is only of interest if no cell was selected before
+  if ( _sel.left() == 0 )
   {    
     // So we test first wether only a single cell was selected
     KSpreadCell *cell = cellAt( m_rctSelection.left(), m_rctSelection.top() );
@@ -444,12 +445,54 @@ void KSpreadTable::setSelectionFont( const QPoint &_marker, const char *_font, i
     // Complete rows selected ?
     if ( selected && m_rctSelection.right() == 0x7FFF )
     {
-      // TODO
+      QIntDictIterator<KSpreadCell> it( m_dctCells );
+      for ( ; it.current(); ++it )
+      {
+	long l = it.currentKey();
+	int row = l & 0xFFFF;
+	if ( m_rctSelection.top() <= row && m_rctSelection.bottom() >= row )
+	{
+	  it.current()->setDisplayDirtyFlag();
+	  if ( _font )
+	    it.current()->setTextFontFamily( _font );
+	  if ( _size > 0 )
+	    it.current()->setTextFontSize( _size );
+	  if ( _italic >= 0 )
+	    it.current()->setTextFontItalic( !it.current()->textFontItalic() );
+	  if ( _bold >= 0 )
+	    it.current()->setTextFontBold( !it.current()->textFontBold() );
+	  it.current()->clearDisplayDirtyFlag();
+	}
+      }
+
+      emit sig_updateView( this, m_rctSelection );
+      return;
     }
     // Complete columns selected ?
     else if ( selected && m_rctSelection.bottom() == 0x7FFF )
     {
-      // TODO
+      QIntDictIterator<KSpreadCell> it( m_dctCells );
+      for ( ; it.current(); ++it )
+      {
+	long l = it.currentKey();
+	int col = l >> 16;
+	if ( m_rctSelection.left() <= col && m_rctSelection.right() >= col )
+	{
+	  it.current()->setDisplayDirtyFlag();
+	  if ( _font )
+	    it.current()->setTextFontFamily( _font );
+	  if ( _size > 0 )
+	    it.current()->setTextFontSize( _size );
+	  if ( _italic >= 0 )
+	    it.current()->setTextFontItalic( !it.current()->textFontItalic() );
+	  if ( _bold >= 0 )
+	    it.current()->setTextFontBold( !it.current()->textFontBold() );
+	  it.current()->clearDisplayDirtyFlag();
+	}
+      }
+
+      emit sig_updateView( this, m_rctSelection );
+      return;
     }
     else
     {
@@ -503,12 +546,46 @@ void KSpreadTable::setSelectionPercent( const QPoint &_marker )
     // Complete rows selected ?
     if ( selected && m_rctSelection.right() == 0x7FFF )
     {
-      // TODO
+      QIntDictIterator<KSpreadCell> it( m_dctCells );
+      for ( ; it.current(); ++it )
+      {
+	long l = it.currentKey();
+	int row = l & 0xFFFF;
+	if ( m_rctSelection.top() <= row && m_rctSelection.bottom() >= row )
+	{
+	  it.current()->setDisplayDirtyFlag();
+	  it.current()->setFaktor( 100.0 );
+	  it.current()->setPrecision( 0 );
+	  it.current()->setPostfix( "%" );
+	  it.current()->setPrefix( "" );
+	  it.current()->clearDisplayDirtyFlag();
+	}
+      }
+
+      emit sig_updateView( this, m_rctSelection );
+      return;
     }
     // Complete columns selected ?
     else if ( selected && m_rctSelection.bottom() == 0x7FFF )
     {
-      // TODO
+      QIntDictIterator<KSpreadCell> it( m_dctCells );
+      for ( ; it.current(); ++it )
+      {
+	long l = it.currentKey();
+	int col = l >> 16;
+	if ( m_rctSelection.left() <= col && m_rctSelection.right() >= col )
+	{
+	  it.current()->setDisplayDirtyFlag();
+	  it.current()->setFaktor( 100.0 );
+	  it.current()->setPrecision( 0 );
+	  it.current()->setPostfix( "%" );
+	  it.current()->setPrefix( "" );
+	  it.current()->clearDisplayDirtyFlag();
+	}
+      }
+
+      emit sig_updateView( this, m_rctSelection );
+      return;
     }
     else
     {
@@ -556,12 +633,40 @@ void KSpreadTable::setSelectionMultiRow( const QPoint &_marker)
     // Complete rows selected ?
     if ( selected && m_rctSelection.right() == 0x7FFF )
     {
-      // TODO
+      QIntDictIterator<KSpreadCell> it( m_dctCells );
+      for ( ; it.current(); ++it )
+      {
+	long l = it.currentKey();
+	int row = l & 0xFFFF;
+	if ( m_rctSelection.top() <= row && m_rctSelection.bottom() >= row )
+	{
+	  it.current()->setDisplayDirtyFlag();
+	  it.current()->setMultiRow( !it.current()->multiRow() );
+	  it.current()->clearDisplayDirtyFlag();
+	}
+      }
+
+      emit sig_updateView( this, m_rctSelection );
+      return;
     }
     // Complete columns selected ?
     else if ( selected && m_rctSelection.bottom() == 0x7FFF )
     {
-      // TODO
+      QIntDictIterator<KSpreadCell> it( m_dctCells );
+      for ( ; it.current(); ++it )
+      {
+	long l = it.currentKey();
+	int col = l >> 16;
+	if ( m_rctSelection.left() <= col && m_rctSelection.right() >= col )
+	{
+	  it.current()->setDisplayDirtyFlag();
+	  it.current()->setMultiRow( !it.current()->multiRow() );
+	  it.current()->clearDisplayDirtyFlag();
+	}
+      }
+
+      emit sig_updateView( this, m_rctSelection );
+      return;
     }
     else
     {
@@ -606,10 +711,40 @@ void KSpreadTable::setSelectionAlign( const QPoint &_marker, KSpreadLayout::Alig
     // Complete rows selected ?
     if ( selected && m_rctSelection.right() == 0x7FFF )
     {
+      QIntDictIterator<KSpreadCell> it( m_dctCells );
+      for ( ; it.current(); ++it )
+      {
+	long l = it.currentKey();
+	int row = l & 0xFFFF;
+	if ( m_rctSelection.top() <= row && m_rctSelection.bottom() >= row )
+	{
+	  it.current()->setDisplayDirtyFlag();
+	  it.current()->setAlign( _align );
+	  it.current()->clearDisplayDirtyFlag();
+	}
+      }
+
+      emit sig_updateView( this, m_rctSelection );
+      return;
     }
     // Complete columns selected ?
     else if ( selected && m_rctSelection.bottom() == 0x7FFF )
     {
+      QIntDictIterator<KSpreadCell> it( m_dctCells );
+      for ( ; it.current(); ++it )
+      {
+	long l = it.currentKey();
+	int col = l >> 16;
+	if ( m_rctSelection.left() <= col && m_rctSelection.right() >= col )
+	{
+	  it.current()->setDisplayDirtyFlag();
+	  it.current()->setAlign( _align );
+	  it.current()->clearDisplayDirtyFlag();
+	}
+      }
+
+      emit sig_updateView( this, m_rctSelection );
+      return;
     }
     else
     {
@@ -654,12 +789,46 @@ void KSpreadTable::setSelectionPrecision( const QPoint &_marker, int _delta )
     // Complete rows selected ?
     if ( selected && m_rctSelection.right() == 0x7FFF )
     {
-      // TODO
+      QIntDictIterator<KSpreadCell> it( m_dctCells );
+      for ( ; it.current(); ++it )
+      {
+	long l = it.currentKey();
+	int row = l & 0xFFFF;
+	if ( m_rctSelection.top() <= row && m_rctSelection.bottom() >= row )
+	{
+	  it.current()->setDisplayDirtyFlag();
+	  if ( _delta == 1 )
+	    it.current()->setPrecision( it.current()->precision() + 1 );
+	  else if ( it.current()->precision() >= 0 )
+	    it.current()->setPrecision( it.current()->precision() - 1 );
+	  it.current()->clearDisplayDirtyFlag();
+	}
+      }
+
+      emit sig_updateView( this, m_rctSelection );
+      return;
     }
     // Complete columns selected ?
     else if ( selected && m_rctSelection.bottom() == 0x7FFF )
     {
-      // TODO
+      QIntDictIterator<KSpreadCell> it( m_dctCells );
+      for ( ; it.current(); ++it )
+      {
+	long l = it.currentKey();
+	int col = l >> 16;
+	if ( m_rctSelection.left() <= col && m_rctSelection.right() >= col )
+	{
+	  it.current()->setDisplayDirtyFlag();
+	  if ( _delta == 1 )
+	    it.current()->setPrecision( it.current()->precision() + 1 );
+	  else if ( it.current()->precision() >= 0 )
+	    it.current()->setPrecision( it.current()->precision() - 1 );
+	  it.current()->clearDisplayDirtyFlag();
+	}
+      }
+
+      emit sig_updateView( this, m_rctSelection );
+      return;
     }
     else
     {
@@ -689,14 +858,9 @@ void KSpreadTable::setSelectionPrecision( const QPoint &_marker, int _delta )
 		cell->setDisplayDirtyFlag();
 
 		if ( _delta == 1 )
-		{
-		    if ( cell->precision() >= 0 )
-			cell->setPrecision( cell->precision() + 1 );
-		    else
-			cell->setPrecision( 0 );
-		}
+		  cell->setPrecision( cell->precision() + 1 );
 		else if ( cell->precision() >= 0 )
-		    cell->setPrecision( cell->precision() - 1 );
+		  cell->setPrecision( cell->precision() - 1 );
 
 		cell->clearDisplayDirtyFlag();
 	    }
@@ -714,12 +878,44 @@ void KSpreadTable::setSelectionMoneyFormat( const QPoint &_marker )
     // Complete rows selected ?
     if ( selected && m_rctSelection.right() == 0x7FFF )
     {
-      // TODO
+      QIntDictIterator<KSpreadCell> it( m_dctCells );
+      for ( ; it.current(); ++it )
+      {
+	long l = it.currentKey();
+	int row = l & 0xFFFF;
+	if ( m_rctSelection.top() <= row && m_rctSelection.bottom() >= row )
+	{
+	  it.current()->setDisplayDirtyFlag();
+	  it.current()->setPostfix( " DM" );
+	  it.current()->setPrefix( "" );
+	  it.current()->setPrecision( 2 );
+	  it.current()->clearDisplayDirtyFlag();
+	}
+      }
+
+      emit sig_updateView( this, m_rctSelection );
+      return;
     }
     // Complete columns selected ?
     else if ( selected && m_rctSelection.bottom() == 0x7FFF )
     {
-      // TODO
+      QIntDictIterator<KSpreadCell> it( m_dctCells );
+      for ( ; it.current(); ++it )
+      {
+	long l = it.currentKey();
+	int col = l >> 16;
+	if ( m_rctSelection.left() <= col && m_rctSelection.right() >= col )
+	{
+	  it.current()->setDisplayDirtyFlag();
+	  it.current()->setPostfix( " DM" );
+	  it.current()->setPrefix( "" );
+	  it.current()->setPrecision( 2 );
+	  it.current()->clearDisplayDirtyFlag();
+	}
+      }
+
+      emit sig_updateView( this, m_rctSelection );
+      return;
     }
     else
     {
@@ -1395,132 +1591,133 @@ void KSpreadTable::print( QPainter &painter, QPrinter *_printer )
   QPen gridPen;
   gridPen.setStyle( NoPen );
   
-    unsigned int pages = 1;
+  unsigned int pages = 1;
 
-    QRect cell_range;
-    cell_range.setCoords( 1, 1, 1, 1 );
+  QRect cell_range;
+  cell_range.setCoords( 1, 1, 1, 1 );
 
-    // Find maximum right/bottom cell with content
-    QIntDictIterator<KSpreadCell> it( m_dctCells );
-    for ( ; it.current(); ++it ) 
-    {
-	if ( it.current()->column() > cell_range.right() )
-	    cell_range.setRight( it.current()->column() );
-	if ( it.current()->row() > cell_range.bottom() )
-	    cell_range.setBottom( it.current()->row() );
-    }
+  // Find maximum right/bottom cell with content
+  QIntDictIterator<KSpreadCell> it( m_dctCells );
+  for ( ; it.current(); ++it ) 
+  {
+    if ( it.current()->column() > cell_range.right() )
+      cell_range.setRight( it.current()->column() );
+    if ( it.current()->row() > cell_range.bottom() )
+      cell_range.setBottom( it.current()->row() );
+  }
 
-    QList<QRect> page_list;
-    page_list.setAutoDelete( TRUE );
+  QList<QRect> page_list;
+  page_list.setAutoDelete( TRUE );
     
-    QRect rect;
-    rect.setCoords( 0, 0, (int)m_pDoc->printableWidth(), (int)m_pDoc->printableHeight() );
+  QRect rect;
+  rect.setCoords( 0, 0, MM_TO_POINT * (int)m_pDoc->printableWidth(),
+		  MM_TO_POINT * (int)m_pDoc->printableHeight() );
     
-    // Up to this row everything is already printed
-    int bottom = 0;
+  // Up to this row everything is already printed
+  int bottom = 0;
+  // Start of the next page
+  int top = 1;
+  // Calculate all pages, but if we are embedded, print only the first one
+  while ( bottom < cell_range.bottom() && page_list.count() == 0 )
+  {
+    // Up to this column everything is already printed
+    int right = 0;
     // Start of the next page
-    int top = 1;
-    // Calculate all pages, but if we are embedded, print only the first one
-    while ( bottom < cell_range.bottom() && page_list.count() == 0 )
+    int left = 1;
+    while ( right < cell_range.right() )
     {
-	// Up to this column everything is already printed
-	int right = 0;
-	// Start of the next page
-	int left = 1;
-	while ( right < cell_range.right() )
-	{
-	    QRect *page_range = new QRect;
-	    page_list.append( page_range );
-	    page_range->setLeft( left );
-	    page_range->setTop( top );
+      QRect *page_range = new QRect;
+      page_list.append( page_range );
+      page_range->setLeft( left );
+      page_range->setTop( top );
 
-	    int col = left;
-	    int x = columnLayout( col )->width();
-	    while ( x < rect.width() )
-	    {
-		col++;
-		x += columnLayout( col )->width();
-	    }
-	    // We want to print at least one column
-	    if ( col == left )
-		col = left + 1;
-	    page_range->setRight( col - 1 );
+      int col = left;
+      int x = columnLayout( col )->width();
+      while ( x < rect.width() )
+      {
+	col++;
+	x += columnLayout( col )->width();
+      }
+      // We want to print at least one column
+      if ( col == left )
+	col = left + 1;
+      page_range->setRight( col - 1 );
 	    
-	    int row = top;
-	    int y = rowLayout( row )->height();
-	    while ( y < rect.height() )
-	    {
-		row++;
-		y += rowLayout( row )->height();
-	    }
-	    // We want to print at least one row
-	    if ( row == top )
-		row = top + 1;
-	    page_range->setBottom( row - 1 );
+      int row = top;
+      int y = rowLayout( row )->height();
+      while ( y < rect.height() )
+      {
+	row++;
+	y += rowLayout( row )->height();
+      }
+      // We want to print at least one row
+      if ( row == top )
+	row = top + 1;
+      page_range->setBottom( row - 1 );
 
-	    right = page_range->right();
-	    left = page_range->right() + 1;
-	    bottom = page_range->bottom();
-	}
-	
-	top = bottom + 1;
+      right = page_range->right();
+      left = page_range->right() + 1;
+      bottom = page_range->bottom();
     }
     
-    int pagenr = 1;
+    top = bottom + 1;
+  }
     
-    // Print all pages in the list
-    QRect *p;
-    for ( p = page_list.first(); p != 0L; p = page_list.next() )
-    {
-	// print head line
-      QFont font( "Times", 10 );
-      painter.setFont( font );
-      QFontMetrics fm = painter.fontMetrics();
-      int w = fm.width( m_pDoc->headLeft( pagenr, m_strName ) );
-      if ( w > 0 )
-	painter.drawText( (int)( MM_TO_POINT * m_pDoc->leftBorder() ),
-			  (int)( MM_TO_POINT * 10.0 ), m_pDoc->headLeft( pagenr, m_strName ) );
-      w = fm.width( m_pDoc->headMid( pagenr, m_strName ) );
-      if ( w > 0 )
-	painter.drawText( (int)( MM_TO_POINT * m_pDoc->leftBorder() +
-				 ( MM_TO_POINT * m_pDoc->printableWidth() - (float)w ) / 2.0 ),
-			  (int)( MM_TO_POINT * 10.0 ), m_pDoc->headMid( pagenr, m_strName ) );
-      w = fm.width( m_pDoc->headRight( pagenr, m_strName ) );
-      if ( w > 0 )
-	painter.drawText( (int)( MM_TO_POINT * m_pDoc->leftBorder() +
-				 MM_TO_POINT * m_pDoc->printableWidth() - (float)w ),
-			  (int)( MM_TO_POINT * 10.0 ), m_pDoc->headRight( pagenr, m_strName ) );
-      
-      // print foot line
-      w = fm.width( m_pDoc->footLeft( pagenr, m_strName ) );
-      if ( w > 0 )
-	painter.drawText( (int)( MM_TO_POINT * m_pDoc->leftBorder() ),
-			  (int)( MM_TO_POINT * ( m_pDoc->paperHeight() - 10.0 ) ),
-			  m_pDoc->footLeft( pagenr, m_strName ) );
-      w = fm.width( m_pDoc->footMid( pagenr, m_strName ) );
-      if ( w > 0 )
-	painter.drawText( (int)( MM_TO_POINT * m_pDoc->leftBorder() +
-				 ( MM_TO_POINT * m_pDoc->printableWidth() - (float)w ) / 2.0 ),
-			  (int)( MM_TO_POINT * ( m_pDoc->paperHeight() - 10.0 ) ),
-			  m_pDoc->footMid( pagenr, m_strName ) );
-      w = fm.width( m_pDoc->footRight( pagenr, m_strName ) );
-      if ( w > 0 )
-	painter.drawText( (int)( MM_TO_POINT * m_pDoc->leftBorder() +
-				 MM_TO_POINT * m_pDoc->printableWidth() - (float)w ),
-			  (int)( MM_TO_POINT * ( m_pDoc->paperHeight() - 10.0 ) ),
-			  m_pDoc->footRight( pagenr, m_strName ) );
+  int pagenr = 1;
+    
+  // Print all pages in the list
+  QRect *p;
+  for ( p = page_list.first(); p != 0L; p = page_list.next() )
+  {
+    // print head line
+    QFont font( "Times", 10 );
+    painter.setFont( font );
+    QFontMetrics fm = painter.fontMetrics();
+    int w = fm.width( m_pDoc->headLeft( pagenr, m_strName ) );
+    if ( w > 0 )
+      painter.drawText( (int)( MM_TO_POINT * m_pDoc->leftBorder() ),
+			(int)( MM_TO_POINT * 10.0 ), m_pDoc->headLeft( pagenr, m_strName ) );
+    w = fm.width( m_pDoc->headMid( pagenr, m_strName ) );
+    if ( w > 0 )
+      painter.drawText( (int)( MM_TO_POINT * m_pDoc->leftBorder() +
+			       ( MM_TO_POINT * m_pDoc->printableWidth() - (float)w ) / 2.0 ),
+			(int)( MM_TO_POINT * 10.0 ), m_pDoc->headMid( pagenr, m_strName ) );
+    w = fm.width( m_pDoc->headRight( pagenr, m_strName ) );
+    if ( w > 0 )
+      painter.drawText( (int)( MM_TO_POINT * m_pDoc->leftBorder() +
+			       MM_TO_POINT * m_pDoc->printableWidth() - (float)w ),
+			(int)( MM_TO_POINT * 10.0 ), m_pDoc->headRight( pagenr, m_strName ) );
+    
+    // print foot line
+    w = fm.width( m_pDoc->footLeft( pagenr, m_strName ) );
+    if ( w > 0 )
+      painter.drawText( (int)( MM_TO_POINT * m_pDoc->leftBorder() ),
+			(int)( MM_TO_POINT * ( m_pDoc->paperHeight() - 10.0 ) ),
+			m_pDoc->footLeft( pagenr, m_strName ) );
+    w = fm.width( m_pDoc->footMid( pagenr, m_strName ) );
+    if ( w > 0 )
+      painter.drawText( (int)( MM_TO_POINT * m_pDoc->leftBorder() +
+			       ( MM_TO_POINT * m_pDoc->printableWidth() - (float)w ) / 2.0 ),
+			(int)( MM_TO_POINT * ( m_pDoc->paperHeight() - 10.0 ) ),
+			m_pDoc->footMid( pagenr, m_strName ) );
+    w = fm.width( m_pDoc->footRight( pagenr, m_strName ) );
+    if ( w > 0 )
+      painter.drawText( (int)( MM_TO_POINT * m_pDoc->leftBorder() +
+			       MM_TO_POINT * m_pDoc->printableWidth() - (float)w ),
+			(int)( MM_TO_POINT * ( m_pDoc->paperHeight() - 10.0 ) ),
+			m_pDoc->footRight( pagenr, m_strName ) );
 	
-      painter.translate( MM_TO_POINT * m_pDoc->leftBorder(),
-			 MM_TO_POINT * m_pDoc->rightBorder() );
-      // Print the page
-      printPage( painter, p, gridPen );
-      painter.translate( - MM_TO_POINT * m_pDoc->leftBorder(),
-			 - MM_TO_POINT * m_pDoc->rightBorder() );
+    painter.translate( MM_TO_POINT * m_pDoc->leftBorder(),
+		       MM_TO_POINT * m_pDoc->rightBorder() );
+    // Print the page
+    printPage( painter, p, gridPen );
+    painter.translate( - MM_TO_POINT * m_pDoc->leftBorder(),
+		       - MM_TO_POINT * m_pDoc->rightBorder() );
       
-      if ( pages < page_list.count() )
-	_printer->newPage();
-      pagenr++;
-    }
+    if ( pages < page_list.count() )
+      _printer->newPage();
+    pagenr++;
+  }
 }
 
 void KSpreadTable::printPage( QPainter &_painter, QRect *page_range, const QPen& _grid_pen )
@@ -1721,7 +1918,10 @@ bool KSpreadTable::loadChildren( KOStore::Store_ptr _store )
 void KSpreadTable::setShowPageBorders( bool _b ) 
 {
   if ( _b != m_bShowPageBorders )
+  {
+    m_bShowPageBorders = _b;
     emit sig_updateView( this );
+  }
 }
 
 bool KSpreadTable::isOnNewPageX( int _column )

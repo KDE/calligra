@@ -420,14 +420,14 @@ void KPresenterShell::slotFileQuit()
   kapp->exit();
 }
 
-KoDocument* KPresenterShell::document()
+KOffice::Document_ptr KPresenterShell::document()
 {
-  return m_pDoc;
+  return KOffice::Document::_duplicate( m_pDoc );
 }
 
-KoViewIf* KPresenterShell::view()
+KOffice::View_ptr KPresenterShell::view()
 {
-  return m_pView;
+  return KOffice::View::_duplicate( m_pView );
 }
 
 #include "kpresenter_shell.moc"

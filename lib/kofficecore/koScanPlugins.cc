@@ -425,15 +425,18 @@ void KoPluginManager::fillToolBar( OpenPartsUI::ToolBarFactory_ptr _factory )
     for( ; it.current() != 0L; ++it )
     {
       if ( CORBA::is_nil( m_vToolBar ) )
+      {  
 	m_vToolBar = _factory->create( OpenPartsUI::ToolBarFactory::Transient );
+	m_vToolBar->setFullWidth(false);
+      }
       if ( !it.current()->entry()->m_strMiniIcon.isEmpty() )
       {
 	QString tmp = it.current()->entry()->m_strMiniIcon.data();
 	if ( tmp[0] != '/' )
 	{
 	  QString t2 = tmp;
-	  tmp = kapp->kde_icondir();
-	  tmp += "/mini/";
+	  tmp = kapp->kde_datadir();
+	  tmp += "/koffice/toolbar/";
 	  tmp += t2;
 	}
 	OpenPartsUI::Pixmap_var pix = OPUIUtils::loadPixmap( tmp );

@@ -363,14 +363,14 @@ void KFormulaShell::slotFileQuit()
   kapp->exit();
 }
 
-KoDocument* KFormulaShell::document()
+KOffice::Document_ptr KFormulaShell::document()
 {
-  return m_pDoc;
+  return KOffice::Document::_duplicate( m_pDoc );
 }
 
-KoViewIf* KFormulaShell::view()
+KOffice::View_ptr KFormulaShell::view()
 {
-  return m_pView;
+  return KOffice::View::_duplicate( m_pView );
 }
 
 #include "kformula_shell.moc"

@@ -697,7 +697,7 @@ void Trader::import( const char* type, const char* constr, const char* pref, con
 	  cerr << "Could not open " << filename << endl;
 	  continue;
 	}
-
+	
 	char *p = new char[ size + 1 ];
 	int n = fread( p, 1, size, f );
 	p[n] = 0;

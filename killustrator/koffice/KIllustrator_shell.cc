@@ -466,3 +466,13 @@ void KIllustratorShell::releaseDocument () {
   m_pView = 0L;
   m_pDoc = 0L;
 }
+
+KOffice::Document_ptr KIllustratorShell::document()
+{
+  return KOffice::Document::_duplicate( m_pDoc );
+}
+
+KOffice::View_ptr KIllustratorShell::view()
+{
+  return KOffice::View::_duplicate( m_pView );
+}

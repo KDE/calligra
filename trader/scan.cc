@@ -108,18 +108,27 @@ void koScanPartFile( Trader *_trader, const char* _file, CORBA::ImplRepository_p
     koScanPartsError( _file, "Exec" );
     return;
   }
-  QString icon = config.readEntry( "Icon" );
-  if ( icon.isEmpty() )
+
+  QString tmp = config.readEntry( "Icon" );
+  if ( tmp.isEmpty() )
   {
     koScanPartsError( _file, "Icon" );
     return;
   }
-  QString mini_icon = config.readEntry( "MiniIcon" );
-  if ( mini_icon.isEmpty() )
+  QString icon = kapp->kde_icondir().data();
+  icon += "/";
+  icon += tmp;
+  
+  tmp = config.readEntry( "MiniIcon" );
+  if ( tmp.isEmpty() )
   {
     koScanPartsError( _file, "MiniIcon" );
     return;
   }
+  QString mini_icon = kapp->kde_icondir().data();
+  mini_icon += "/mini/";
+  mini_icon += tmp;
+  
   QStrList repoids;
   if ( config.readListEntry( "RepoID", repoids ) == 0 || repoids.isEmpty() )
   {

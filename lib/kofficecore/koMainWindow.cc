@@ -80,6 +80,9 @@ KoMainWindowIf* KoMainWindow::koInterface()
 
 void KoMainWindow::setRootPart( unsigned long _part_id )
 {
+  if ( !m_pFrame )
+    return;
+  
   OpenParts::Part_var part;
   if ( _part_id != 0 )
   {    
@@ -92,6 +95,7 @@ void KoMainWindow::setRootPart( unsigned long _part_id )
   if ( _part_id != 0 )
   {
     KOffice::View_var view = KOffice::View::_narrow( part );    
+    assert( !CORBA::is_nil( view ) );
     m_pFrame->attachView( view );
   }
 }
@@ -221,12 +225,12 @@ void KoMainWindowIf::setMarkedPart( OpenParts::Id id )
 
 KOffice::Document_ptr KoMainWindowIf::document()
 {
-  return KOffice::Document::_duplicate( m_pKoMainWindow->document() );  
+  return m_pKoMainWindow->document();
 }
 
 KOffice::View_ptr KoMainWindowIf::view()
 {
-  return KOffice::View::_duplicate( m_pKoMainWindow->view() );  
+  return m_pKoMainWindow->view();  
 }
 
 CORBA::Boolean KoMainWindowIf::partClicked( OpenParts::Id _part_id, CORBA::Long /* _button */ )

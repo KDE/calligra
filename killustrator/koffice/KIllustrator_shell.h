@@ -67,8 +67,8 @@ protected slots:
 
 protected:
   // C++
-  virtual KoDocument* document () { return m_pDoc; }
-  virtual KoViewIf* view () { return m_pView; }
+  virtual KOffice::Document_ptr document ();
+  virtual KOffice::View_ptr view ();
   void releaseDocument ();
   virtual bool printDlg ();
   int documentCount ();

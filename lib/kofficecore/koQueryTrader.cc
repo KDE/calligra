@@ -53,7 +53,7 @@ void koQueryTrader( const char *_service_type, const char *_constr, unsigned int
   /***
    * DEBUG
    ****/
-  if ( offers != 0L )
+  /* if ( offers != 0L )
     cout << "Got " <<  offers->length() << " results" << endl;
   else
     cout << "Got no results" << endl;
@@ -79,7 +79,7 @@ void koQueryTrader( const char *_service_type, const char *_constr, unsigned int
       else
 	cout << endl;
     }
-  }
+    } */
   /***
    * END DEBUG
    ****/
@@ -227,7 +227,7 @@ vector<KoDocumentEntry> koQueryDocuments( const char *_constr, int _count )
   return lst;
 }
 
-KoDocumentEntry::KoDocumentEntry( const KoComponentEntry _e )
+KoDocumentEntry::KoDocumentEntry( const KoComponentEntry& _e )
 {
   comment = _e.comment;
   name = _e.name;

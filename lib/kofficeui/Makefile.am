@@ -12,15 +12,18 @@ lib_LTLIBRARIES = libkofficeui.la
 
 libkofficeui_la_SOURCES = koAboutDia.cc koPageLayoutDia.cc \
 	koPartSelectDia.cc koPartSelectDia_data.cc koPrintDia.cc \
-	koRuler.cc koTemplateChooseDia.cc koTabChooser.cc
+	koRuler.cc koTemplateChooseDia.cc koTabChooser.cc \
+	koKoolBar.cc
 
 include_HEADERS = koAboutDia.h koPageLayoutDia.h \
 	koPartSelectDia.h koPartSelectDia_data.h koPrintDia.h \
-	koRuler.h koTemplateChooseDia.h koTabChooser.h
+	koRuler.h koTemplateChooseDia.h koTabChooser.h \
+	koKoolBar.h
 
 SRCMETA = koAboutDia.moc koPageLayoutDia.moc koPartSelectDia.moc \
 	koPartSelectDia_data.moc koPrintDia.moc \
-	koRuler.moc koTemplateChooseDia.moc koTabChooser.moc
+	koRuler.moc koTemplateChooseDia.moc koTabChooser.moc \
+	koKoolBar.moc
 
 SUFFIXES = .h .moc
 
@@ -35,3 +38,4 @@ koPrintDia.cc: koPrintDia.moc
 koRuler.cc: koRuler.moc
 koTemplateChooseDia.cc: koTemplateChooseDia.moc
 koTabChooser.cc: koTabChooser.moc
+koKoolBar.cc: koKoolBar.moc

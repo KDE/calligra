@@ -419,14 +419,14 @@ void KWordShell::slotFileQuit()
   kapp->exit();
 }
 
-KoDocument* KWordShell::document()
+KOffice::Document_ptr KWordShell::document()
 {
-  return m_pDoc;
+  return KOffice::Document::_duplicate( m_pDoc );
 }
 
-KoViewIf* KWordShell::view()
+KOffice::View_ptr KWordShell::view()
 {
-  return m_pView;
+  return KOffice::View::_duplicate( m_pView );
 }
 
 #include "kword_shell.moc"

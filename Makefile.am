@@ -1,5 +1,5 @@
 
-SUBDIRS = lib kspread kpresenter kword kformula kdiagramm killustrator kimage kohtml tools plugins trader po pics
+SUBDIRS = lib kspread kpresenter kword kformula kdiagramm killustrator kimage kohtml tools plugins trader koshell po pics
 
 acinclude.m4: admin/acinclude.m4.in admin/libtool.m4.in
 	@cat admin/acinclude.m4.in admin/libtool.m4.in   > acinclude.m4 
