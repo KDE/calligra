@@ -34,15 +34,15 @@
 #include <koMainWindow.h>
 #include <koView.h>
 #include <openparts.h>
+#include <koPageLayoutDia.h>
 
 class KWordDocument;
 class KWordChild;
 class KWordFrame;
 
 enum FrameType {FT_BASE = 0,FT_TEXT = 1,FT_PICTURE = 2,FT_PART};
-enum FrameInfo {FI_BODY = 0,FI_HEADER = 1,FI_FOOTER = 2};
+enum FrameInfo {FI_BODY = 0,FI_FIRST_HEADER = 1,FI_ODD_HEADER = 2,FI_EVEN_HEADER = 3,FI_FIRST_FOOTER = 4,FI_ODD_FOOTER = 5,FI_EVEN_FOOTER = 6};
 enum RunAround {RA_NO = 0,RA_BOUNDINGRECT = 1,RA_CONTUR = 2};
-enum OnPage {OP_FIRST = 1,OP_EVEN = 0,OP_ODD = 1};
 
 /******************************************************************/
 /* Class: KWFrame                                                 */
@@ -86,10 +86,6 @@ public:
   bool isMostRight() { return mostRight; }
   void setMostRight(bool _mr) { mostRight = _mr; }
 
-  void setOnPage(OnPage _onPage)
-    { onPage = _onPage; }
-  OnPage getOnPage() { return onPage; }
-
   void setPageNum(int i) { pageNum = i; }
   int getPageNum() { return pageNum; }
 
@@ -98,7 +94,6 @@ protected:
   bool selected;
   int runAroundGap;
   bool mostRight;
-  OnPage onPage;
   int pageNum;
 
   QList<KRect> intersections;
@@ -160,6 +155,9 @@ public:
   int getNext(KRect _rect);
   int getPageOfFrame(int i) { return frames.at(i)->getPageNum(); }
 
+  void setCurrent(int i) { current = i; }
+  int getCurrent() { return current; }
+
 protected:
   virtual void init()
     {;}
@@ -171,7 +169,8 @@ protected:
   QList<KWFrame> frames;
 
   FrameInfo frameInfo;
-
+  int current;
+  
 };
 
 /******************************************************************/
@@ -196,8 +195,8 @@ public:
    * If another parag becomes the first one it uses this function
    * to tell the document about it.
    */
-  void setFirstParag(KWParag *_parag,int _frame = -1);
-  KWParag* getFirstParag(int _frame = -1);
+  void setFirstParag(KWParag *_parag);
+  KWParag* getFirstParag();
 
   virtual bool isPTYInFrame(unsigned int _frame,unsigned int _ypos);
 
@@ -215,13 +214,11 @@ public:
   void updateCounters();
   void updateAllStyles();
 
-  void updateParagOrder(KoHFType _type);
-
 protected:
   virtual void init();
 
   // pointer to the first parag of the list of parags
-  KWParag *parags,*even,*odd,*first;
+  KWParag *parags;
   bool autoCreateNewFrame;
 
 };
@@ -299,5 +296,10 @@ protected:
   OpenParts::Id parentID;
 
 };
+
+bool isAHeader(FrameInfo fi);
+bool isAFooter(FrameInfo fi);
+bool isAWrongHeader(FrameInfo fi,KoHFType t);
+bool isAWrongFooter(FrameInfo fi,KoHFType t);
 
 #endif

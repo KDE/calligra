@@ -537,3 +537,11 @@ Reggie, 21.12.1998:
 -------------------
 - Fixes with loading/saving docs
 - More work on the internals of headers/footers (don't try it out yet - it crashes very often)
+
+Reggie, 22.12.1998:
+-------------------
+- Simple headers/footers are working
+- Implemented printing headers/footers
+- Text of parags should be saved with <TEXT>Some Text here</TEXT> now and not with <TEXT value="Some Text here"/> anymore.
+  The old version (<TEXT value="..."/>) is still supported for compatibility, but really shouldn't be used anymore.
+  (Of course KWord itself saves text with <TEXT>...</TEXT> now too :-)

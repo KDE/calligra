@@ -220,7 +220,7 @@ void KWPage::mouseMoveEvent(QMouseEvent *e)
 		  
 		  if (my < frame->top() + frame->height() / 2)
 		    {
-		      if (doc->getFrameSet(frameset)->getFrameInfo() == FI_HEADER) break;
+		      if (isAHeader(doc->getFrameSet(frameset)->getFrameInfo())) break;
 		      frame->setHeight(frame->height() + (oldMy - my)); 
 		      frame->moveBy(0,my - oldMy);
 		      if (frame->x() < 0 || 
@@ -237,7 +237,7 @@ void KWPage::mouseMoveEvent(QMouseEvent *e)
 		    }
 		  else
 		    {
-		      if (doc->getFrameSet(frameset)->getFrameInfo() == FI_FOOTER) break;
+		      if (isAFooter(doc->getFrameSet(frameset)->getFrameInfo())) break;
 		      frame->setHeight(frame->height() + (my - oldMy)); 
 		      if (frame->x() < 0 || 
 			  frame->y() < getPageOfRect(KRect(frame->x(),frame->y(),frame->width(),frame->height())) * 
@@ -527,6 +527,10 @@ void KWPage::mousePressEvent(QMouseEvent *e)
 		  fc->cursorGotoPixelLine(mx,my,_painter);
 		  fc->cursorGotoPixelInLine(mx,my,_painter);
 		  
+		  _painter.end();
+		  scrollToCursor(*fc);
+		  _painter.begin(this);
+
 		  doc->drawMarker(*fc,&_painter,xOffset,yOffset);
 		  markerIsVisible = true;
 		  
@@ -949,8 +953,8 @@ void KWPage::recalcWholeText(bool _cursor = false)
 /*================================================================*/
 void KWPage::footerHeaderDisappeared()
 {
-  if (doc->getFrameSet(fc->getFrameSet() - 1)->getFrameInfo() == FI_HEADER ||
-      doc->getFrameSet(fc->getFrameSet() - 1)->getFrameInfo() == FI_FOOTER)
+  if (isAHeader(doc->getFrameSet(fc->getFrameSet() - 1)->getFrameInfo()) ||
+      isAFooter(doc->getFrameSet(fc->getFrameSet() - 1)->getFrameInfo()))
     { 
       fc->setFrameSet(1);
       QPainter p;
@@ -1101,8 +1105,10 @@ void KWPage::paintEvent(QPaintEvent* e)
 	  } break;
 	case FT_TEXT:
 	  {
-	    if ((dynamic_cast<KWTextFrameSet*>(doc->getFrameSet(i))->getFrameInfo() == FI_HEADER && !doc->hasHeader()) ||
-		(dynamic_cast<KWTextFrameSet*>(doc->getFrameSet(i))->getFrameInfo() == FI_FOOTER && !doc->hasFooter()))
+	    if (isAHeader(doc->getFrameSet(i)->getFrameInfo()) && !doc->hasHeader() ||
+		isAFooter(doc->getFrameSet(i)->getFrameInfo()) && !doc->hasFooter() ||
+		isAWrongHeader(doc->getFrameSet(i)->getFrameInfo(),doc->getHeaderType()) ||
+		isAWrongFooter(doc->getFrameSet(i)->getFrameInfo(),doc->getFooterType()))
 	      break;
 
 	    if (doc->getFrameSet(i)->getFrameInfo() == FI_BODY)
@@ -1155,7 +1161,7 @@ void KWPage::paintEvent(QPaintEvent* e)
 		    
 		    r.moveBy(0,fs->getFrame(frm)->height() + 1);
 
-		    p = dynamic_cast<KWTextFrameSet*>(fs)->getFirstParag(frm);
+		    p = dynamic_cast<KWTextFrameSet*>(fs)->getFirstParag();
 		    paintfc->setFrameSet(i + 1);
 		    paintfc->init(p,painter,true,true,frm + 1,fs->getFrame(frm)->getPageNum() + 1);
 		    
@@ -2273,9 +2279,10 @@ void KWPage::drawBorders(QPainter &_painter,KRect v_area)
 	    _painter.setPen(blue);
 	  
 	  frameset = doc->getFrameSet(i);
-	  if (frameset->getFrameType() == FT_TEXT && 
-	      ((dynamic_cast<KWTextFrameSet*>(frameset)->getFrameInfo() == FI_HEADER && !doc->hasHeader()) ||
-	      (dynamic_cast<KWTextFrameSet*>(frameset)->getFrameInfo() == FI_FOOTER && !doc->hasFooter())))
+	  if (isAHeader(doc->getFrameSet(i)->getFrameInfo()) && !doc->hasHeader() ||
+	      isAFooter(doc->getFrameSet(i)->getFrameInfo()) && !doc->hasFooter() ||
+	      isAWrongHeader(doc->getFrameSet(i)->getFrameInfo(),doc->getHeaderType()) ||
+	      isAWrongFooter(doc->getFrameSet(i)->getFrameInfo(),doc->getFooterType()))
 	    continue;
 	  for (unsigned int j = 0;j < frameset->getNumFrames();j++)
 	    {

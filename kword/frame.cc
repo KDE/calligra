@@ -184,6 +184,7 @@ KWFrameSet::KWFrameSet(KWordDocument *_doc)
   doc = _doc; 
   frames.setAutoDelete(true); 
   frameInfo = FI_BODY;
+  current = 0;
 }
 
 /*================================================================*/
@@ -310,9 +311,6 @@ int KWFrameSet::getNext(KRect _rect)
 void KWTextFrameSet::init()
 {
   parags = 0L;
-  even = 0L;
-  odd = 0L;
-  first = 0L;
 
   autoCreateNewFrame = true;
 
@@ -331,10 +329,6 @@ void KWTextFrameSet::init()
 //       format->setDefaults(doc);
 //       p->setFormat(0,strlen("Hallo Tester, ich frage mich manchmal, ob das alles so in Ordnung ist, ich meine, dass ich hier so einen Mist erzaehle, in meiner eigenen Textverarbeitung. Und noch mehr dummes Gesülze auf diesem Äther. Ich liebe dummes Geschwätz! Jetzt langt es aber für den 2. Paragraphen. Und noch mehr dummes Gesülze auf diesem Äther. Ich liebe dummes Geschwätz! Jetzt langt es aber für den 2. Paragraphen. Und noch mehr dummes Gesülze auf diesem Äther. Ich liebe dummes Geschwätz! Jetzt langt es aber für den 2. Paragraphen."),*format);
 //     }
-
-  first = parags;
-  even = parags;
-  odd = parags;
 
   updateCounters();
 }
@@ -359,12 +353,6 @@ void KWTextFrameSet::update()
 	{
 	  if (frames.at(j)->intersects(pageRect))
 	    {
-	      if (i == 0)
-		frames.at(j)->setOnPage(OP_FIRST);
-	      else if ((i / 2) * 2 == i)
-		frames.at(j)->setOnPage(OP_EVEN);
-	      else
-		frames.at(j)->setOnPage(OP_ODD);
 	      frames.at(j)->setPageNum(i);
 	      l->append(frames.at(j));
 	    }
@@ -441,113 +429,14 @@ void KWTextFrameSet::update()
 }
 
 /*================================================================*/
-void KWTextFrameSet::setFirstParag(KWParag *_parag,int _frame = -1)
+void KWTextFrameSet::setFirstParag(KWParag *_parag)
 { 
   parags = _parag;
-  if (_frame >= 0 && frameInfo == FI_HEADER)
-    {
-      if (doc->getHeaderType() == HF_SAME)
-	{
-	  even = _parag;
-	  odd = _parag;
-	  first = _parag;
-	}
-      else if (doc->getHeaderType() == HF_FIRST_DIFF)
-	{
-	  if (frames.at(_frame)->getOnPage() == OP_FIRST)
-	    first = _parag;
-	  else
-	    {
-	      even = _parag;
-	      odd = _parag;
-	    }
-	}
-      else if (doc->getHeaderType() == HF_EO_DIFF)
-	{
-	  if (frames.at(_frame)->getOnPage() == OP_EVEN)
-	    even = _parag;
-	  else
-	    {
-	      odd = _parag;
-	      first = _parag;
-	    }
-	}
-    }
-  else if (_frame >= 0 && frameInfo == FI_FOOTER)
-    {
-      if (doc->getFooterType() == HF_SAME)
-	{
-	  even = _parag;
-	  odd = _parag;
-	  first = _parag;
-	}
-      else if (doc->getFooterType() == HF_FIRST_DIFF)
-	{
-	  if (frames.at(_frame)->getOnPage() == OP_FIRST)
-	    first = _parag;
-	  else
-	    {
-	      even = _parag;
-	      odd = _parag;
-	    }
-	}
-      else if (doc->getFooterType() == HF_EO_DIFF)
-	{
-	  if (frames.at(_frame)->getOnPage() == OP_EVEN)
-	    even = _parag;
-	  else
-	    {
-	      odd = _parag;
-	      first = _parag;
-	    }
-	}
-    }
 }
 
 /*================================================================*/
-KWParag* KWTextFrameSet::getFirstParag(int _frame = -1) 
+KWParag* KWTextFrameSet::getFirstParag() 
 { 
-  if (_frame == -1 || frameInfo == FI_BODY)
-    return parags;
-  else if (_frame >= 0 && frameInfo == FI_HEADER)
-    {
-      if (doc->getHeaderType() == HF_SAME)
-	return even;
-      else if (doc->getHeaderType() == HF_FIRST_DIFF)
-	{
-	  if (frames.at(_frame)->getOnPage() == OP_FIRST)
-	    return first;
-	  else
-	    return even;
-	}
-      else if (doc->getHeaderType() == HF_EO_DIFF)
-	{
-	  if (frames.at(_frame)->getOnPage() == OP_EVEN)
-	    return even;
-	  else
-	    return odd;
-	}
-    }
-  else if (_frame >= 0 && frameInfo == FI_FOOTER)
-    {
-      if (doc->getFooterType() == HF_SAME)
-	return even;
-      else if (doc->getFooterType() == HF_FIRST_DIFF)
-	{
-	  if (frames.at(_frame)->getOnPage() == OP_FIRST)
-	    return first;
-	  else
-	    return even;
-	}
-      else if (doc->getFooterType() == HF_EO_DIFF)
-	{
-	  if (frames.at(_frame)->getOnPage() == OP_EVEN)
-	    return even;
-	  else
-	    return odd;
-	}
-    }
-
   return parags;
 }
 
@@ -745,11 +634,6 @@ void KWTextFrameSet::load(KOMLParser& parser,vector<KOMLAttrib>& lst)
 	}
     }
 
-  // Reggie: For now - this HAS to be replaced for working headers/footers!
-  first = parags;
-  even = parags;
-  odd = parags;
-
   updateCounters();
 }
 
@@ -865,62 +749,6 @@ void KWTextFrameSet::updateAllStyles()
     }
 
   updateCounters();
-}
-
-/*================================================================*/
-void KWTextFrameSet::updateParagOrder(KoHFType _type)
-{
-  if (getFrameInfo() != FI_BODY)
-    {
-      if (even == odd && even == first)
-	delete even;
-      else if (first != odd && first != even && even == odd)
-	{
-	  delete first;
-	  delete even;
-	}
-      if (odd == first && even != odd)
-	{
-	  delete even;
-	  delete odd;
-	}
-
-      KWFormat *format = new KWFormat(doc);
-      format->setDefaults(doc);
-
-      switch (_type)
- 	{
- 	case HF_SAME:
- 	  {
-	    first = new KWParag(this,doc,0L,0L,doc->getDefaultParagLayout());
-	    first->insertText(0," ");
-	    first->setFormat(0,1,*format);
-	    even = first;
-	    odd = first;
-	  } break;
-	case HF_FIRST_DIFF:
-	  {
-	    first = new KWParag(this,doc,0L,0L,doc->getDefaultParagLayout());
-	    first->insertText(0," ");
-	    first->setFormat(0,1,*format);
-	    even = new KWParag(this,doc,0L,0L,doc->getDefaultParagLayout());
-	    even->insertText(0," ");
-	    even->setFormat(0,1,*format);
-	    odd = even;
-	  } break;
-	case HF_EO_DIFF:
-	  {
-	    first = new KWParag(this,doc,0L,0L,doc->getDefaultParagLayout());
-	    first->insertText(0," ");
-	    first->setFormat(0,1,*format);
-	    odd = first;
-	    even = new KWParag(this,doc,0L,0L,doc->getDefaultParagLayout());
-	    even->insertText(0," ");
-	    even->setFormat(0,1,*format);
-	  } break;
-	}
-      parags = first;
-    }
 }
 
 /******************************************************************/
@@ -1069,4 +897,66 @@ void KWPartFrameSet::deactivate()
 void KWPartFrameSet::update()
 {
   child->setGeometry(QRect(frames.at(0)->x(),frames.at(0)->y(),frames.at(0)->width(),frames.at(0)->height()));
+}
+
+/*================================================================*/
+bool isAHeader(FrameInfo fi) 
+{ 
+  return (fi == FI_FIRST_HEADER || fi == FI_EVEN_HEADER || fi == FI_ODD_HEADER); 
+}
+
+/*================================================================*/
+bool isAFooter(FrameInfo fi) 
+{ 
+  return (fi == FI_FIRST_FOOTER || fi == FI_EVEN_FOOTER || fi == FI_ODD_FOOTER); 
+}
+
+/*================================================================*/
+bool isAWrongHeader(FrameInfo fi,KoHFType t)
+{
+  switch (fi)
+    {
+    case FI_FIRST_HEADER:
+      {
+	if (t == HF_FIRST_DIFF) return false;
+	return true;
+      } break;
+    case FI_EVEN_HEADER:
+      {
+	return false;
+      } break;
+    case FI_ODD_HEADER:
+      {
+	if (t == HF_EO_DIFF) return false;
+	return true;
+      } break;
+    default: return false;
+    }
+
+  return false;
+}
+
+/*================================================================*/
+bool isAWrongFooter(FrameInfo fi,KoHFType t)
+{
+  switch (fi)
+    {
+    case FI_FIRST_FOOTER:
+      {
+	if (t == HF_FIRST_DIFF) return false;
+	return true;
+      } break;
+    case FI_EVEN_FOOTER:
+      {
+	return false;
+      } break;
+    case FI_ODD_FOOTER:
+      {
+	if (t == HF_EO_DIFF) return false;
+	return true;
+      } break;
+    default: return false;
+    }
+
+  return false;
 }

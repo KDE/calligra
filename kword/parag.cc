@@ -190,7 +190,7 @@ void KWParag::setFormat( unsigned int _pos, unsigned int _len, const KWFormat &_
 
 void KWParag::save(ostream &out)
 {
-  out << indent << "<TEXT value=\"" << text << "\"/>" << endl;
+  out << indent << "<TEXT>" << text << "</TEXT>" << endl;
   out << otag << "<FORMATS>" << endl;
   text.saveFormat(out);
   out << etag << "</FORMATS>" << endl;
@@ -203,6 +203,9 @@ void KWParag::load(KOMLParser& parser,vector<KOMLAttrib>& lst)
 {
   string tag;
   string name;
+  string tmp;
+  
+  QString tmp2;
 
   while (parser.open(0L,tag))
     {
@@ -216,11 +219,18 @@ void KWParag::load(KOMLParser& parser,vector<KOMLAttrib>& lst)
 	  for(;it != lst.end();it++)
 	    {
 	      if ((*it).m_strName == "value")
-		{
-		  if (text.size() == 1 && (*it).m_strValue.length() > 0) text.remove(0);
-		  text.insert(text.size(),(*it).m_strValue.c_str());
-		}
+		tmp2 = (*it).m_strValue.c_str();
 	    }
+
+	   if (parser.readText(tmp))
+	     {
+	       QString s = tmp.c_str();
+	       if (s.simplifyWhiteSpace().length() > 0)
+		 tmp2 = tmp.c_str();
+	     }
+
+	   if (text.size() == 1 && tmp2.length() > 0) text.remove(0);
+	   text.insert(text.size(),tmp2);
 	}
 
       // format

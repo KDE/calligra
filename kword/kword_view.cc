@@ -86,7 +86,7 @@ KWordView::KWordView( QWidget *_parent, const char *_name, KWordDocument* _doc )
   tmpBrd.color = white;
   tmpBrd.style = KWParagLayout::SOLID;
   tmpBrd.ptWidth = 0;
-  _viewFormattingChars = true;
+  _viewFormattingChars = false;
   _viewFrameBorders = true;
 
   m_pKWordDoc = _doc;
@@ -1274,7 +1274,7 @@ bool KWordView::mappingCreateMenubar( OpenPartsUI::MenuBar_ptr _menubar )
   m_idMenuView_Footer = m_vMenuView->insertItem4( i18n("F&ooter"), this, "viewFooter", 0, -1, -1 );
 
   m_vMenuView->setCheckable(true);
-  m_vMenuView->setItemChecked(m_idMenuView_FormattingChars,true);
+  //m_vMenuView->setItemChecked(m_idMenuView_FormattingChars,true);
   m_vMenuView->setItemChecked(m_idMenuView_FrameBorders,true);
 
   // insert menu

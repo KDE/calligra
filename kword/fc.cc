@@ -53,7 +53,7 @@ void KWFormatContext::init( KWParag *_parag, QPainter &_painter, bool _updateCou
     {
       // Offset from the top of the page
       ptY = document->getFrameSet(frameSet - 1)->getFrame(0)->top();
-      if (_frame != -1 && _page != -1)
+      if (_frame != -1 && _page != -1 && doc->getFrameSet(frameSet - 1)->getFrameInfo() != FI_BODY)
 	{
 	  frame = _frame;
 	  page = _page;
@@ -111,7 +111,7 @@ void KWFormatContext::enterNextParag( QPainter &_painter, bool _updateCounters =
       }
     }
     else
-      parag = dynamic_cast<KWTextFrameSet*>(document->getFrameSet(frameSet - 1))->getFirstParag(frame - 1);
+      parag = dynamic_cast<KWTextFrameSet*>(document->getFrameSet(frameSet - 1))->getFirstParag();
     // On which page are we now ...
     parag->setStartPage( page );
     parag->setEndPage( page );
@@ -632,12 +632,7 @@ void KWFormatContext::cursorGotoPixelLine(unsigned int mx,unsigned int my,QPaint
 {
   textPos = 0;
 
-  if (document->getFrameSet(frameSet - 1)->getFrameInfo() == FI_BODY)
-    init(dynamic_cast<KWTextFrameSet*>(document->getFrameSet(frameSet - 1))->getFirstParag(),_painter);
-  else
-    init(dynamic_cast<KWTextFrameSet*>(document->getFrameSet(frameSet - 1))->getFirstParag(frame - 1),_painter,true,true,
-	 document->getFrameSet(frameSet - 1)->getFrame(mx,my) + 1,
-	 document->getFrameSet(frameSet - 1)->getFrame(document->getFrameSet(frameSet - 1)->getFrame(mx,my))->getPageNum() + 1);
+  init(dynamic_cast<KWTextFrameSet*>(document->getFrameSet(frameSet - 1))->getFirstParag(),_painter);
 
   if (ptY <= my && ptY + getLineHeight() >= my &&
       ptLeft <= mx && ptLeft + ptWidth >= mx)
@@ -647,7 +642,7 @@ void KWFormatContext::cursorGotoPixelLine(unsigned int mx,unsigned int my,QPaint
       return;
     }
 
-  KWParag *_p = dynamic_cast<KWTextFrameSet*>(document->getFrameSet(frameSet - 1))->getFirstParag(frame - 1);
+  KWParag *_p = dynamic_cast<KWTextFrameSet*>(document->getFrameSet(frameSet - 1))->getFirstParag();
   while (_p->getPTYEnd() < my && _p->getNext())
     _p = _p->getNext();
 
