@@ -13,6 +13,7 @@ noinst_HEADERS = \
 	vcommand.h \
 	vdeletecmd.h \
 	vfillcmd.h \
+	vflattencmd.h \
 	vgroupcmd.h \
 	vdeletenodescmd.h \
 	vlayercmd.h \
@@ -30,6 +31,7 @@ libkarboncommands_la_SOURCES = \
 	vcommand.cc \
 	vdeletecmd.cc \
 	vfillcmd.cc \
+	vflattencmd.cc \
 	vgroupcmd.cc \
 	vdeletenodescmd.cc \
 	vlayercmd.cc \

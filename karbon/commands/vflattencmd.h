@@ -17,43 +17,23 @@
    Boston, MA 02111-1307, USA.
 */
 
-#ifndef __FLATTENPATHPLUGIN_H__
-#define __FLATTENPATHPLUGIN_H__
+#ifndef __FLATTENCMD_H__
+#define __FLATTENCMD_H__
 
-#include <kparts/plugin.h>
-#include <kdialogbase.h>
+#include <commands/vreplacingcmd.h>
 
-class KarbonViewBase;
-class VFlattenDlg;
+class VPath;
 
-class FlattenPathPlugin : public KParts::Plugin
+class VFlattenCmd : public VReplacingCmd
 {
-	Q_OBJECT
 public:
-	FlattenPathPlugin( KarbonViewBase *parent, const char* name, const QStringList & );
-	virtual ~FlattenPathPlugin() {}
+	VFlattenCmd( VDocument *doc, double flatness );
+	virtual ~VFlattenCmd() {}
 
-private slots:
-	void slotFlattenPath();
+	virtual void visitVPath( VPath& path );
 
-private:
-	VFlattenDlg	*m_flattenPathDlg;
-};
-
-class KDoubleNumInput;
-
-class VFlattenDlg : public KDialogBase
-{
-	Q_OBJECT
-
-public:
-	VFlattenDlg( QWidget* parent = 0L, const char* name = 0L );
-
-	double flatness() const;
-	void setFlatness( double value );
-
-private:
-	KDoubleNumInput* m_flatness;
+protected:
+	double m_flatness;
 };
 
 #endif
