@@ -4,6 +4,11 @@
    AC_CHECK_LIB(aspell, new_aspell_config, [LIBASPELL="-laspell"])
    AC_CHECK_HEADER(aspell.h)
    if test -z "$ac_cv_header_aspell_h"; then
+       echo ""
+       echo "Your aspell version is not good or not installed."
+       echo "You must download aspell-0.50.2"
+       echo "http://aspell.net/"
+       echo ""
        LIBASPELL=""
        LIBKOSPELL=""
    else
