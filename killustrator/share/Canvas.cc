@@ -269,13 +269,26 @@ void Canvas::updateView () {
 void Canvas::drawGrid (Painter& p) {
   int pw = document->getPaperWidth ();
   int ph = document->getPaperHeight ();
+  int h, v;
+
+  QPen pen1 (blue, 0, DotLine);
 
   p.save ();
-  p.setPen (blue);
-  for (int h = 0; h <= pw; h += hGridDistance) 
-    for (int v = 0; v <= ph; v += vGridDistance) 
-      p.drawPoint (h, v);
+  p.setPen (pen1);
+  for (h = hGridDistance; h < pw; h += hGridDistance)
+    p.drawLine (h, 0, h, ph);
+  for (v = vGridDistance; v < ph; v += vGridDistance)
+    p.drawLine (0, v, pw, v);
 
+  /*
+  QPen pen2 (blue);
+  p.setPen (pen2);
+  for (h = 0; h <= pw; h += hGridDistance) 
+    for (v = 0; v <= ph; v += vGridDistance) {
+      p.drawLine (h - 1, v, h + 1, v);
+      p.drawLine (h, v - 1, h, v + 1);
+    }
+    */
   p.restore ();
 }
 
