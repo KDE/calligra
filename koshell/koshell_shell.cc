@@ -205,7 +205,7 @@ void KoShellWindow::updateCaption()
         }
         if ( name.isEmpty() )
           // Fall back to document URL
-          name = rootDocument()->url().filename();
+          name = rootDocument()->url().fileName();
 
         if ( !name.isEmpty() ) // else keep No name
         {
