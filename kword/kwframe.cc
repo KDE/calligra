@@ -1335,6 +1335,7 @@ KWFrame *KWPictureFrameSet::frameByBorder( const QPoint & nPoint )
         if ( outerRect.contains( nPoint ) )
             return frameIt.current();
     }
+    return 0L;
 }
 
 /******************************************************************/
@@ -1417,6 +1418,7 @@ KWFrame *KWClipartFrameSet::frameByBorder( const QPoint & nPoint )
         if ( outerRect.contains( nPoint ) )
             return frameIt.current();
     }
+    return 0L;
 }
 
 /******************************************************************/
