@@ -1,5 +1,5 @@
-#ifndef KFORMULA_PART_H
-#define KFORMULA_PART_H
+#ifndef KFORMULA_DOC_H
+#define KFORMULA_DOC_H
 
 class KFormulaDoc;
 class BasicElement;
