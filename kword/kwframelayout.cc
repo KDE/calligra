@@ -457,11 +457,11 @@ void KWFrameLayout::resizeOrCreateHeaderFooter( KWTextFrameSet* headerFooter, ui
         }
         else
             frame->setNewFrameBehavior( KWFrame::NoFollowup );
-        headerFooter->addFrame( frame );
+        headerFooter->addFrame( frame, false /*no recalc*/ );
     }
     // This updates e.g. availableHeight. Very important in the case
     // of the footnote frameset with 2 frames.
-    headerFooter->updateFrames();
+    headerFooter->updateFrames( 0 /*fast one*/ );
 }
 
 // Called at beginning and end of the layout for a given page,
