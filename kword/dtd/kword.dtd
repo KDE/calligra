@@ -462,8 +462,9 @@ don't put a </?xml...> at the end of the file!).
         other than its text and formatting.
 -->
 <!ELEMENT LAYOUT
-    (FLOW|INDENTS|OFFSETS|LINESPACING|LEFTBORDER|COUNTER
-        RIGHTBORDER|TOPBORDER|BOTTOMBORDER|FORMAT|TABULATOR|COUNTERSTART)*>
+    (FLOW|INDENTS|OFFSETS|LINESPACING|
+     LEFTBORDER|RIGHTBORDER|TOPBORDER|BOTTOMBORDER|
+     COUNTER|FORMAT|TABULATOR|COUNTERSTART)*>
 
 <!-- COUNTERSTART
         Initialises this paragraph to a specific counter start.
