@@ -124,7 +124,7 @@ class LayoutData
 {
 public:
     LayoutData():indentFirst(0.0), indentLeft(0.0), indentRight(0.0), marginBottom(0.0), marginTop(0.0),
-        lineSpacingType(10), lineSpacing(0.0)
+        lineSpacingType(10), lineSpacing(0.0), pageBreakBefore(false), pageBreakAfter(false)
         { }
 
     QString styleName;
