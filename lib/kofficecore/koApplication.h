@@ -35,7 +35,7 @@ public:
     KoApplication( int &argc, char **argv, const QString& rAppName = 0);
     virtual ~KoApplication();
 
-	virtual KoMainWindow* createNewShell() = 0;
+	virtual KoMainWindow* createNewShell() { return 0; };
 	virtual void start();
 	
 private:

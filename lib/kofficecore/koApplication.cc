@@ -66,8 +66,13 @@ void KoApplication::start()
     if( openFiles.isEmpty() )
     {
       pShell = createNewShell();
-      pShell->show();
-      pShell->newDocument();
+      if( !pShell )
+      {
+        pShell->show();
+        pShell->newDocument();
+      }
+      else
+        kdebug( KDEBUG_FATAL, 30003, "Cannot create new shell. KoApplication::createNewShell() has to be overloded" );
     }
     else
     {
@@ -76,8 +81,13 @@ void KoApplication::start()
       for( it = openFiles.begin() ; it != openFiles.end() ; ++it )
       {
         pShell = createNewShell();
-        pShell->show();
-        pShell->openDocument( *it, "" );
+        if( !pShell )
+        {
+          pShell->show();
+          pShell->openDocument( *it, "" );
+        }
+        else
+          kdebug( KDEBUG_FATAL, 30003, "Cannot create new shell. KoApplication::createNewShell() has to be overloded" );
       }
     }
   }
