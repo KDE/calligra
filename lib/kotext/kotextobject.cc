@@ -1412,6 +1412,12 @@ KoTextFormat * KoTextObject::currentFormat() const
     return static_cast<KoTextFormat *>(ch->format());
 }
 
+const KoParagLayout * KoTextObject::currentParagLayoutFormat() const
+{
+    KoTextParag * parag=static_cast<KoTextParag *>(textDocument()->firstParag());
+    return &(parag->paragLayout());
+}
+
 void KoTextObject::setFormat( KoTextFormat * newFormat, int flags, bool zoomFont )
 {
     // This pointer will be modified by setFormatCommand, so we need a holder,

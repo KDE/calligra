@@ -74,6 +74,11 @@ public:
     virtual KoTextFormat * currentFormat() const { return m_currentFormat; }
     void setCurrentFormat( KoTextFormat *fmt ) { m_currentFormat = fmt; }
 
+    /**
+     * Use this format for displaying the properties (Align/counter/...) of the object
+     */
+    virtual const KoParagLayout * currentParagLayoutFormat() const;
+
     /** Implement the KoTextFormatInterface */
     virtual void setFormat( KoTextFormat * newFormat, int flags, bool zoomFont );
 

@@ -48,6 +48,8 @@ public:
     /** Interface for setting the modified format */
     virtual void setFormat( KoTextFormat * newFormat, int flags, bool zoomFont = false ) = 0;
 
+    virtual const KoParagLayout * currentParagLayoutFormat() const =0;
+
     void setBold(bool on);
     void setItalic(bool on);
     void setUnderline(bool on);
@@ -204,6 +206,12 @@ public:
      * Interface for accessing the current format
      */
     virtual KoTextFormat * currentFormat() const;
+
+    /**
+     * Use this format for displaying the properties (Align/counter/...) of the object
+     */
+    virtual const KoParagLayout * currentParagLayoutFormat() const;
+
     /**
      * Support for changing the format in the whole textobject
      */

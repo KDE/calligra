@@ -879,4 +879,10 @@ void KoTextView::insertLink(const QString &_linkName, const QString & hrefName)
     textObject()->insert( cursor(), &format, _linkName+" " , false , true, i18n("Insert Link") );
 }
 
+const KoParagLayout * KoTextView::currentParagLayoutFormat() const
+{
+    KoTextParag * parag = static_cast<KoTextParag *>(m_cursor->parag());
+    return &(parag->paragLayout());
+}
+
 #include "kotextview.moc"
