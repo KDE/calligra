@@ -169,7 +169,7 @@ KexiDBFactory::KexiDBFactory(QObject *parent, const char *name, const QStringLis
 	wLabel->addAlternateClassName("QLabel", true/*override*/);
 	wLabel->setIncludeFileName("qlabel.h");
 	wLabel->setName(i18n("Text Label"));
-	wLabel->setNamePrefix(i18n("Widget name (see above)", "Label"));
+	wLabel->setNamePrefix(i18n("Widget name (see above)", "TextLabel"));
 	wLabel->setDescription(i18n("A widget to display text"));
 	m_classes.append(wLabel);
 
