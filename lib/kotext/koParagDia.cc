@@ -1525,6 +1525,8 @@ KoParagTabulatorsWidget::KoParagTabulatorsWidget( KoUnit::Unit unit, double fram
     cFilling->insertItem( i18n( "Blank" ) );
     cFilling->insertItem( i18n( "Dots" ) );
     cFilling->insertItem( i18n( "Line" ) );
+    cFilling->insertItem( i18n( "DashLine" ) );
+    cFilling->insertItem( i18n( "DashDotLine" ) );
     fillingGrid->addWidget( cFilling, 0, 1 );
 
     QString unitName = KoUnit::unitName( m_unit );
@@ -1661,6 +1663,10 @@ void KoParagTabulatorsWidget::setActiveItem(int selected) {
             cFilling->setCurrentItem(1); break;
         case TF_LINE:
             cFilling->setCurrentItem(2); break;
+        case TF_DASH:
+            cFilling->setCurrentItem(3); break;
+        case TF_DASH_DOT:
+            cFilling->setCurrentItem(4); break;
         case TF_BLANK:
         default:
             cFilling->setCurrentItem(0);
@@ -1713,6 +1719,10 @@ void KoParagTabulatorsWidget::updateFilling(int selected) {
             selectedTab->filling=TF_DOTS; break;
         case 2:
             selectedTab->filling=TF_LINE; break;
+        case 3:
+            selectedTab->filling=TF_DASH; break;
+        case 4:
+            selectedTab->filling=TF_DASH_DOT; break;
         case 0:
         default:
             selectedTab->filling=TF_BLANK;

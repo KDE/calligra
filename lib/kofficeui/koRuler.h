@@ -35,7 +35,7 @@
 class QPainter;
 
 enum KoTabulators { T_LEFT = 0, T_CENTER = 1, T_RIGHT = 2, T_DEC_PNT = 3 };
-enum KoTabulatorFilling { TF_BLANK = 0, TF_DOTS = 1, TF_LINE = 2 };
+enum KoTabulatorFilling { TF_BLANK = 0, TF_DOTS = 1, TF_LINE = 2, TF_DASH = 3, TF_DASH_DOT = 4};
 
 /**
  * Struct: KoTabulator
