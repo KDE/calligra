@@ -112,7 +112,7 @@ RotateDia::RotateDia( QWidget* parent, const char* name )
 
     custom = new KDoubleNumInput(0.0, angle);
     custom->setRange(0.0, 360.0);
-    custom->setSuffix(" °");
+    custom->setSuffix("°");
 
     hbox->addWidget( angle );
 
