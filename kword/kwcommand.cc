@@ -419,7 +419,7 @@ void KWTextFormatCommand::resizeCustomItem()
     doc->setSelectionEnd( QTextDocument::Temp, &end );
 
 
-    if ( start == end )
+    if ( start.parag() == end.parag() )
     {
         QString text = start.parag()->string()->toString().mid( start.index(), end.index() - start.index() );
         for ( int i = start.index(); i < end.index(); ++i )

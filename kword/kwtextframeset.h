@@ -138,9 +138,13 @@ public:
                  CustomItemsMap customItemsMap = CustomItemsMap() );
     void removeSelectedText( QTextCursor * cursor, int selectionId = QTextDocument::Standard,
                              const QString & cmdName = QString::null );
-    void replaceSelection( QTextCursor * cursor, const QString & replacement,
+    KCommand *  replaceSelection( QTextCursor * cursor, const QString & replacement,
                            int selectionId, const QString & cmdName );
     KCommand * removeSelectedTextCommand( QTextCursor * cursor, int selectionId );
+
+    void changeCaseOfText(QTextCursor *cursor,TypeOfCase _type);
+
+    QString textChangedCase(const QString _text,TypeOfCase _type);
 
     void undo();
     void redo();

@@ -427,7 +427,7 @@ void KWFindReplace::replace( const QString &, int matchingIndex,
     cursor.setParag( m_currentParag );
     cursor.setIndex( index );
 
-    m_currentFrameSet->replaceSelection( &cursor,m_replaceDlg->replacement(),KWTextFrameSet::HighlightSelection, i18n("Insert Replacement"));
+    m_canvas->kWordDocument()->addCommand(m_currentFrameSet->replaceSelection( &cursor,m_replaceDlg->replacement(),KWTextFrameSet::HighlightSelection, i18n("Insert Replacement")));
 
 }
 

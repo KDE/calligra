@@ -2923,8 +2923,8 @@ void KWView::spellCheckerCorrected( QString old, QString corr, unsigned pos )
     QTextCursor cursor( fs->textDocument() );
     cursor.setParag( p );
     cursor.setIndex( pos );
-    fs->replaceSelection( &cursor, corr, KWTextFrameSet::HighlightSelection,
-                          i18n("Correct misspelled word") );
+    m_doc->addCommand(fs->replaceSelection( &cursor, corr, KWTextFrameSet::HighlightSelection,
+                          i18n("Correct misspelled word") ));
 }
 
 void KWView::spellCheckerDone( const QString & )

@@ -2682,8 +2682,8 @@ KCommand * KWTextFrameSet::removeSelectedTextCommand( QTextCursor * cursor, int 
     return macroCmd;
 }
 
-void KWTextFrameSet::replaceSelection( QTextCursor * cursor, const QString & replacement,
-                                       int selectionId, const QString & cmdName )
+KCommand* KWTextFrameSet::replaceSelection( QTextCursor * cursor, const QString & replacement,
+                                       int selectionId, const QString & cmdName)
 {
     emit hideCursor();
     KMacroCommand * macroCmd = new KMacroCommand( cmdName );
@@ -2711,7 +2711,9 @@ void KWTextFrameSet::replaceSelection( QTextCursor * cursor, const QString & rep
 
     format->removeRef();
 
-    kWordDocument()->addCommand( macroCmd );
+
+
+    //kWordDocument()->addCommand( macroCmd );
 
     setLastFormattedParag( c1.parag() );
     formatMore();
@@ -2719,7 +2721,246 @@ void KWTextFrameSet::replaceSelection( QTextCursor * cursor, const QString & rep
     emit ensureCursorVisible();
     emit updateUI( true );
     emit showCursor();
+    return macroCmd;
 }
+
+QString KWTextFrameSet::textChangedCase(const QString _text,TypeOfCase _type)
+{
+    QString text(_text);
+    switch(_type)
+    {
+        case UpperCase:
+            text=text.upper();
+            break;
+        case LowerCase:
+            text=text.lower();
+            break;
+        case TitleCase:
+            for(uint i=0;i<text.length();i++)
+            {
+                if(text.at(i)!=' ')
+                {
+                    text=text.replace(i, 1, text.at(i).upper() );
+                    break;
+                }
+            }
+            break;
+        case ToggleCase:
+            for(uint i=0;i<text.length();i++)
+            {
+                QString repl=QString(text.at(i));
+                if(text.at(i)!=text.at(i).upper())
+                    repl=repl.upper();
+                else if(text.at(i).lower()!=text.at(i))
+                    repl=repl.lower();
+                text=text.replace(i, 1, repl );
+            }
+            break;
+        default:
+            kdDebug()<<"Error in changeCaseOfText !\n";
+            break;
+
+    }
+    return text;
+}
+
+void KWTextFrameSet::changeCaseOfText(QTextCursor *cursor,TypeOfCase _type)
+{
+    KMacroCommand * macroCmd = new KMacroCommand( i18n("Change case") );
+
+    QTextCursor start = textdoc->selectionStartCursor( QTextDocument::Standard );
+    QTextCursor end = textdoc->selectionEndCursor( QTextDocument::Standard );
+
+    int posStart=0;
+    int posEnd=0;
+    QTextCursor c1( textdoc );
+    QTextCursor c2( textdoc );
+    QString repl;
+    QString text;
+    if ( start.parag() == end.parag() )
+    {
+        text = start.parag()->string()->toString().mid( start.index(), end.index() - start.index() );
+        for ( int i = start.index(); i < end.index(); ++i )
+        {
+            if( start.parag()->at(i)->isCustom())
+            {
+                posEnd=i-1;
+                c1.setParag(start.parag()  );
+                c1.setIndex( posStart );
+                c2.setParag( start.parag() );
+                c2.setIndex( posEnd );
+
+
+                repl=text.mid(posStart,posEnd-posStart);
+                textdoc->setSelectionStart( QTextDocument::Temp, &c1 );
+                textdoc->setSelectionEnd( QTextDocument::Temp, &c2 );
+                macroCmd->addCommand(replaceSelection( cursor,textChangedCase(repl,_type),
+                                                       QTextDocument::Temp, "" ));
+                do
+                {
+                    ++i;
+                }
+                while( start.parag()->at(i)->isCustom() && i != end.index());
+                posStart=i;
+                posEnd=i;
+            }
+        }
+        //change last word
+        c1.setParag(start.parag()  );
+        c1.setIndex( posStart );
+        c2.setParag( start.parag() );
+        c2.setIndex( end.index() );
+
+        textdoc->setSelectionStart( QTextDocument::Temp, &c1 );
+        textdoc->setSelectionEnd( QTextDocument::Temp, &c2 );
+        repl=text.mid(posStart,end.index()-posStart);
+        macroCmd->addCommand(replaceSelection( cursor,textChangedCase(repl,_type) ,
+                                                       QTextDocument::Temp, "" ));
+    }
+    else
+    {
+        int i;
+        text = start.parag()->string()->toString().mid( start.index(), start.parag()->length() - 1 - start.index() );
+        for ( i = start.index(); i < start.parag()->length(); ++i )
+        {
+            if( start.parag()->at(i)->isCustom())
+            {
+                posEnd=i-1;
+
+                c1.setParag( start.parag() );
+                c1.setIndex( posStart );
+
+                c2.setParag(start.parag() );
+                c2.setIndex( posEnd );
+
+                textdoc->setSelectionStart( QTextDocument::Temp, &c1 );
+                textdoc->setSelectionEnd( QTextDocument::Temp, &c2 );
+                repl=text.mid(posStart,posEnd-posStart);
+                macroCmd->addCommand(replaceSelection( cursor,textChangedCase(repl,_type) ,
+                                                       QTextDocument::Temp, "" ));
+                do
+                {
+                    ++i;
+                }
+                while( start.parag()->at(i)->isCustom() && i != end.index());
+                posStart=i;
+                posEnd=i;
+            }
+        }
+        //change last word
+        c1.setParag(start.parag()  );
+        c1.setIndex( posStart );
+        c2.setParag( start.parag() );
+        c2.setIndex( text.length() );
+
+        textdoc->setSelectionStart( QTextDocument::Temp, &c1 );
+        textdoc->setSelectionEnd( QTextDocument::Temp, &c2 );
+        repl=text.mid(posStart,text.length()-posStart);
+        macroCmd->addCommand(replaceSelection( cursor,textChangedCase(repl,_type) ,
+                                                       QTextDocument::Temp, "" ));
+
+        QTextParag *p = start.parag()->next();
+        while ( p && p != end.parag() )
+        {
+            posStart=0;
+            posEnd=0;
+	    text = p->string()->toString().left( p->length() - 1 );
+            for ( i = 0; i < p->length(); ++i )
+            {
+                if( p->at(i)->isCustom())
+                {
+                    posEnd=i-1;
+
+                    c1.setParag( p );
+                    c1.setIndex( posStart );
+                    c2.setParag(p );
+                    c2.setIndex( posEnd );
+
+                    textdoc->setSelectionStart( QTextDocument::Temp, &c1 );
+                    textdoc->setSelectionEnd( QTextDocument::Temp, &c2 );
+                    repl=text.mid(posStart,posEnd-posStart);
+                    macroCmd->addCommand(replaceSelection( cursor,textChangedCase(repl,_type),
+                                                           QTextDocument::Temp, "" ));
+                    do
+                    {
+                        ++i;
+                    }
+                    while( p->at(i)->isCustom() && i != end.index());
+                    posStart=i;
+                    posEnd=i;
+
+                }
+            }
+            //change last word
+            c1.setParag(p  );
+            c1.setIndex( posStart );
+            c2.setParag( p );
+            c2.setIndex( text.length() );
+
+            textdoc->setSelectionStart( QTextDocument::Temp, &c1 );
+            textdoc->setSelectionEnd( QTextDocument::Temp, &c2 );
+            repl=text.mid(posStart,text.length()-posStart);
+            macroCmd->addCommand(replaceSelection( cursor,textChangedCase(repl,_type) ,
+                                                       QTextDocument::Temp, "" ));
+
+            p = p->next();
+        }
+        //change last word
+        c1.setParag(p  );
+        c1.setIndex( posStart );
+        c2.setParag( p );
+        c2.setIndex( text.length() );
+
+        textdoc->setSelectionStart( QTextDocument::Temp, &c1 );
+        textdoc->setSelectionEnd( QTextDocument::Temp, &c2 );
+        repl=text.mid(posStart,end.index()-posStart);
+        macroCmd->addCommand(replaceSelection( cursor, textChangedCase(repl,_type),
+                                                       QTextDocument::Temp, "" ));
+
+        text = end.parag()->string()->toString().left( end.index() );
+        posStart=0;
+        posEnd=0;
+        for ( i = 0; i < end.index(); ++i )
+        {
+            if( end.parag()->at(i)->isCustom())
+            {
+                posEnd=i-1;
+
+                c1.setParag( end.parag() );
+                c1.setIndex( posStart );
+                c2.setParag(end.parag() );
+                c2.setIndex( posEnd );
+
+                textdoc->setSelectionStart( QTextDocument::Temp, &c1 );
+                textdoc->setSelectionEnd( QTextDocument::Temp, &c2 );
+                repl=text.mid(posStart,posEnd-posStart);
+                macroCmd->addCommand(replaceSelection( cursor,textChangedCase(repl,_type) ,
+                                                       QTextDocument::Temp, "" ));
+                do
+                {
+                    ++i;
+                }
+                while( p->at(i)->isCustom() && i != end.index());
+                posStart=i;
+                posEnd=i;
+            }
+        }
+        //change last word
+        c1.setParag(end.parag()  );
+        c1.setIndex( posStart );
+        c2.setParag( end.parag() );
+        c2.setIndex( end.index() );
+
+        textdoc->setSelectionStart( QTextDocument::Temp, &c1 );
+        textdoc->setSelectionEnd( QTextDocument::Temp, &c2 );
+        repl=text.mid(posStart,end.index()-posStart);
+        macroCmd->addCommand(replaceSelection( cursor,textChangedCase(repl,_type) ,
+                                               QTextDocument::Temp, "" ));
+
+    }
+    m_doc->addCommand( macroCmd);
+}
+
 
 void KWTextFrameSet::insert( QTextCursor * cursor, KWTextFormat * currentFormat,
                              const QString &txt, bool checkNewLine,
@@ -4462,7 +4703,7 @@ void KWTextFrameSetEdit::slotToolActivated( const KoDataToolInfo & info, const Q
             if ( !textFrameSet()->hasSelection() )
                 selectWordUnderCursor();
             // replace selection with 'text'
-            textFrameSet()->replaceSelection( cursor, text, QTextDocument::Standard, i18n("Replace word") );
+            textFrameSet()->kWordDocument()->addCommand(textFrameSet()->replaceSelection( cursor, text, QTextDocument::Standard, i18n("Replace word") ));
         }
     }
 
@@ -4474,44 +4715,12 @@ void KWTextFrameSetEdit::changeCaseOfText(TypeOfCase _type)
     QString text;
     if ( textFrameSet()->hasSelection() )
         text = textFrameSet()->selectedText();
-    if(!text.isEmpty())
+    if(!text.isEmpty()&& text.find(KWTextFrameSet::customItemChar())==-1)
     {
-        switch(_type)
-        {
-            case UpperCase:
-                text=text.upper();
-                break;
-            case LowerCase:
-                text=text.lower();
-                break;
-            case TitleCase:
-                for(uint i=0;i<text.length();i++)
-                {
-                    if(text.at(i)!=' ')
-                    {
-                        text=text.replace(i, 1, text.at(i).upper() );
-                        break;
-                    }
-                }
-                break;
-            case ToggleCase:
-                for(uint i=0;i<text.length();i++)
-                {
-                    QString repl;
-                    if(text.at(i).upper()!=text.at(i))
-                        repl=text.at(i).upper();
-                    else if(text.at(i).lower()!=text.at(i))
-                        repl=text.at(i).lower();
-                    text=text.replace(i, 1, repl );
-                }
-                break;
-            default:
-                kdDebug()<<"Error in changeCaseOfText !\n";
-                break;
-        }
-        textFrameSet()->replaceSelection( cursor, text, QTextDocument::Standard, i18n("Change case") );
-
+        textFrameSet()->kWordDocument()->addCommand(textFrameSet()->replaceSelection( cursor, textFrameSet()->textChangedCase(text,_type), QTextDocument::Standard, i18n("Change case") ));
     }
+    else if(!text.isEmpty())
+        textFrameSet()->changeCaseOfText(cursor,_type);
 }
 
 #include "kwtextframeset.moc"
