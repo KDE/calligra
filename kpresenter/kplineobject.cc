@@ -114,11 +114,13 @@ void KPLineObject::paint( QPainter* _painter, KoZoomHandler*_zoomHandler,
     int _w = pen.width();
 
     QPen pen2;
-    if ( drawContour )
+    if ( drawContour ) {
 	pen2 = QPen( Qt::black, 1, Qt::DotLine );
+        _painter->setRasterOp( Qt::NotXorROP );
+    }
     else {
 	pen2 = pen;
-	pen2.setWidth( (int)_zoomHandler->zoomItX( pen.width() ) );
+	pen2.setWidth( _zoomHandler->zoomItX( pen.width() ) );
    }
     _painter->setPen( pen2 );
 

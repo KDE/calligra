@@ -172,6 +172,7 @@ public:
 
     bool haveASelectedPictureObj();
     bool haveASelectedPartObj();
+    bool haveASelectedGroupObj();
 
     KPTextView *currentTextObjectView() const { return m_currentTextObjectView; }
 

@@ -127,19 +127,19 @@ void KPClipartObject::draw( QPainter *_painter, KoZoomHandler*_zoomHandler,
     _painter->save();
 
     QPen pen2;
-    if ( drawContour )
+    if ( drawContour ) {
 	pen2 = QPen( Qt::black, 1, Qt::DotLine );
+        _painter->setRasterOp( Qt::NotXorROP );
+    }
     else
 	pen2 = pen;
     _painter->setPen( pen2 );
     int penw = pen.width() / 2;
 
     if ( angle == 0 ) {
-
-	if ( !drawContour ) {
-	    _painter->setPen( Qt::NoPen );
+        _painter->setPen( Qt::NoPen );
+	if ( !drawContour )
 	    _painter->setBrush( brush );
-	}
 
         if ( fillType == FT_BRUSH || !gradient || drawContour )
             _painter->drawRect( _zoomHandler->zoomItX (ox + penw),

@@ -143,6 +143,7 @@ void KPPieObject::paint( QPainter* _painter, KoZoomHandler*_zoomHandler,
     if ( drawContour ) {
 	QPen pen3( Qt::black, 1, Qt::DotLine );
 	_painter->setPen( pen3 );
+        _painter->setRasterOp( Qt::NotXorROP );
     }
     else {
 	QPen pen2( pen );

@@ -264,10 +264,10 @@ void KPrPage::ungroupObjects()
     KPObject *kpobject = getSelectedObj();
 
     if ( kpobject && kpobject->getType() == OT_GROUP ) {
-	UnGroupObjCmd *unGroupObjCmd = new UnGroupObjCmd( i18n( "Ungroup Objects" ),
-							  (KPGroupObject*)kpobject, m_doc, this );
-	m_doc->addCommand( unGroupObjCmd );
-	unGroupObjCmd->execute();
+        UnGroupObjCmd *unGroupObjCmd = new UnGroupObjCmd( i18n( "Ungroup Objects" ),
+                                                          (KPGroupObject*)kpobject, m_doc, this );
+        m_doc->addCommand( unGroupObjCmd );
+        unGroupObjCmd->execute();
     }
 }
 
@@ -3016,8 +3016,7 @@ QDomElement KPrPage::saveObjects( QDomDocument &doc, QDomElement &objects, doubl
             yoffset=0;
         //add yoffset to compatibility with koffice 1.1
         object.appendChild(oIt.current()->save( doc, yoffset ));
-        if ( saveOnlyPage != -1 )
-            oIt.current()->setOrig( orig );
+
         objects.appendChild(object);
     }
     return objects;
@@ -3062,6 +3061,16 @@ bool KPrPage::haveASelectedPartObj()
     QPtrListIterator<KPObject> it( m_objectList );
     for ( ; it.current(); ++it ) {
         if ( it.current()->isSelected() && it.current()->getType() == OT_PART )
+            return true;
+    }
+    return false;
+}
+
+bool KPrPage::haveASelectedGroupObj()
+{
+    QPtrListIterator<KPObject> it( m_objectList );
+    for ( ; it.current(); ++it ) {
+        if ( it.current()->isSelected() && it.current()->getType() == OT_GROUP )
             return true;
     }
     return false;

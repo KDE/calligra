@@ -2273,6 +2273,14 @@ bool KPrCanvas::haveASelectedPartObj()
     return stickyPage()->haveASelectedPartObj();
 }
 
+bool KPrCanvas::haveASelectedGroupObj()
+{
+    bool state = m_activePage->haveASelectedGroupObj();
+    if ( state )
+        return true;
+    return stickyPage()->haveASelectedGroupObj();
+}
+
 QPtrList<KPTextObject> KPrCanvas::applicableTextObjects() const
 {
     QPtrList<KPTextObject> lst;

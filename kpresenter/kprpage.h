@@ -222,6 +222,7 @@ public:
     bool isOneObjectSelected();
     bool haveASelectedPictureObj();
     bool haveASelectedPartObj();
+    bool haveASelectedGroupObj();
     KoRect getBoundingRect(const KoRect &rect, KPresenterDoc *doc);
 
     bool chPic( KPresenterView *_view);

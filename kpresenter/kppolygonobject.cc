@@ -228,12 +228,13 @@ void KPPolygonObject::paint( QPainter* _painter,KoZoomHandler*_zoomHandler,
     if ( drawContour ) {
 	QPen pen3( Qt::black, 1, Qt::DotLine );
 	_painter->setPen( pen3 );
+        _painter->setRasterOp( Qt::NotXorROP );
 	_painter->drawConvexPolygon( pointArray );
 	return;
     }
 
     QPen pen2( pen );
-    pen2.setWidth( (int)_zoomHandler->zoomItX( pen.width() ) );
+    pen2.setWidth( _zoomHandler->zoomItX( pen.width() ) );
 
     if ( drawingShadow || fillType == FT_BRUSH || !gradient ) {
         _painter->setPen( pen2 );

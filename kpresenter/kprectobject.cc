@@ -106,6 +106,7 @@ void KPRectObject::paint( QPainter* _painter,KoZoomHandler*_zoomHandler,
     if ( drawContour ) {
 	QPen pen3( Qt::black, 1, Qt::DotLine );
 	_painter->setPen( pen3 );
+        _painter->setRasterOp( Qt::NotXorROP );
 
 	_painter->drawRoundRect( _zoomHandler->zoomItX(pw), _zoomHandler->zoomItY(pw),
 				 _zoomHandler->zoomItX(ow - 2 * pw),

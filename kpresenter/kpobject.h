@@ -209,7 +209,7 @@ protected:
     /**
      * Modifies x and y to add the shadow offsets
      */
-    void getShadowCoords( double& _x, double& _y,KoZoomHandler *_zoomHandler ) const;
+    void getShadowCoords( double& _x, double& _y ) const;
 
     virtual void doDelete();
 

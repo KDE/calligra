@@ -468,6 +468,9 @@ void KPresenterView::editPaste()
         if ( data->provides( "text/uri-list" ) )
         {
             m_pKPresenterDoc->pastePage( data, currPg );
+            setRanges();
+            skipToPage( currPg );
+            updateSideBarMenu();
         }
         else if ( data->provides( "application/x-kpresenter-selection" ) )
         {
@@ -3003,7 +3006,7 @@ void KPresenterView::objectSelectedChanged()
 
     actionExtraAlignObjs->setEnabled(state && !headerfooterselected);
     actionExtraGroup->setEnabled(state && m_canvas->numberOfObjectSelected()>1);
-    actionExtraUnGroup->setEnabled(state);
+    actionExtraUnGroup->setEnabled(state && m_canvas->haveASelectedGroupObj());
     actionExtraAlignObjLeft->setEnabled(state &&  !headerfooterselected);
     actionExtraAlignObjCenterH->setEnabled(state &&  !headerfooterselected);
     actionExtraAlignObjRight->setEnabled(state &&  !headerfooterselected);

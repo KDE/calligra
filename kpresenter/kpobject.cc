@@ -290,7 +290,7 @@ KoRect KPObject::getBoundingRect( KoZoomHandler *_zoomHandler ) const
     if ( shadowDistance > 0 )
     {
         double sx = r.x(), sy = r.y();
-        getShadowCoords( sx, sy, _zoomHandler );
+        getShadowCoords( sx, sy );
         KoRect r2( sx, sy, r.width(), r.height() );
         r = r.unite( r2 );
     }
@@ -350,7 +350,7 @@ void KPObject::rotateObjectWithShadow(QPainter *paint,KoZoomHandler *_zoomHandle
 
     double sx = 0;
     double sy = 0;
-    getShadowCoords( sx, sy,_zoomHandler );
+    getShadowCoords( sx, sy );
 
     QWMatrix m;
     m.translate( _zoomHandler->zoomItX(pw / 2.0), _zoomHandler->zoomItY(ph / 2.0) );
@@ -473,58 +473,52 @@ QCursor KPObject::getCursor( const KoPoint &_point, ModifyType &_modType, KPrese
 }
 
 /*====================== get shadow coordinates ==================*/
-void KPObject::getShadowCoords( double& _x, double& _y ,KoZoomHandler *_zoomHandler) const
+void KPObject::getShadowCoords( double& _x, double& _y ) const
 {
     double sx = 0, sy = 0;
-    double shadowDir=_zoomHandler->zoomItX(shadowDistance); // ######## ????????
-    // The above looks wrong (DF).
-    // If shadowDistance is in pixels, it has to be unzoomed, not zoomed.
-    // But that's not good anyway, we don't want a constant number of pixels.
-    // I think shadowDistance should be a 'double' - then the parameter
-    // _zoomHandler can be removed.
 
     switch ( shadowDirection )
     {
-    case SD_LEFT_UP:
-    {
-        sx = _x - shadowDir;
-        sy = _y - shadowDir;
-    } break;
-    case SD_UP:
-    {
-        sx = _x;
-        sy = _y - shadowDir;
-    } break;
-    case SD_RIGHT_UP:
-    {
-        sx = _x + shadowDir;
-        sy = _y - shadowDir;
-    } break;
-    case SD_RIGHT:
-    {
-        sx = _x + shadowDir;
-        sy = _y;
-    } break;
-    case SD_RIGHT_BOTTOM:
-    {
-        sx = _x + shadowDir;
-        sy = _y + shadowDir;
-    } break;
-    case SD_BOTTOM:
-    {
-        sx = _x;
-        sy = _y + shadowDir;
-    } break;
-    case SD_LEFT_BOTTOM:
-    {
-        sx = _x - shadowDir;
-        sy = _y + shadowDir;
-    } break;
-    case SD_LEFT:
-    {
-        sx = _x - shadowDir;
-        sy = _y;
-    } break;
+        case SD_LEFT_UP:
+        {
+            sx = _x - shadowDistance;
+            sy = _y - shadowDistance;
+        } break;
+        case SD_UP:
+        {
+            sx = _x;
+            sy = _y - shadowDistance;
+        } break;
+        case SD_RIGHT_UP:
+        {
+            sx = _x + shadowDistance;
+            sy = _y - shadowDistance;
+        } break;
+        case SD_RIGHT:
+        {
+            sx = _x + shadowDistance;
+            sy = _y;
+        } break;
+        case SD_RIGHT_BOTTOM:
+        {
+            sx = _x + shadowDistance;
+            sy = _y + shadowDistance;
+        } break;
+        case SD_BOTTOM:
+        {
+            sx = _x;
+            sy = _y + shadowDistance;
+        } break;
+        case SD_LEFT_BOTTOM:
+        {
+            sx = _x - shadowDistance;
+            sy = _y + shadowDistance;
+        } break;
+        case SD_LEFT:
+        {
+            sx = _x - shadowDistance;
+            sy = _y;
+        } break;
     }
 
     _x = sx; _y = sy;
@@ -540,6 +534,7 @@ void KPObject::paintSelection( QPainter *_painter, KoZoomHandler *_zoomHandler, 
     _painter->translate( _zoomHandler->zoomItX(orig.x()), _zoomHandler->zoomItY(orig.y()) );
     _painter->setPen( QPen::NoPen );
     _painter->setBrush( kapp->palette().color( QPalette::Active, QColorGroup::Highlight ) );
+    _painter->setRasterOp( Qt::NotXorROP );
 
     KoRect r = rotateRectObject(_zoomHandler );
     int x = _zoomHandler->zoomItX( r.left() - orig.x());
@@ -785,9 +780,9 @@ void KPShadowObject::draw( QPainter *_painter, KoZoomHandler*_zoomHandler,
         {
             double sx = ox;
             double sy = oy;
-            getShadowCoords( sx, sy, _zoomHandler );
+            getShadowCoords( sx, sy );
 
-            _painter->translate( _zoomHandler->zoomItX(sx), _zoomHandler->zoomItY( sy) );
+            _painter->translate( _zoomHandler->zoomItX( sx ), _zoomHandler->zoomItY( sy ) );
             paint( _painter, _zoomHandler, true, drawContour );
         }
         else

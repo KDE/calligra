@@ -260,6 +260,7 @@ void KPTextObject::paint( QPainter *_painter, KoZoomHandler*_zoomHandler,
     if ( drawContour ) {
 	QPen pen3( Qt::black, 1, Qt::DotLine );
 	_painter->setPen( pen3 );
+        _painter->setRasterOp( Qt::NotXorROP );
         _painter->drawRect( _zoomHandler->zoomItX(pw), _zoomHandler->zoomItY(pw), _zoomHandler->zoomItX(ow), _zoomHandler->zoomItY( oh) );
 
 	return;
@@ -311,8 +312,9 @@ void KPTextObject::paint( QPainter *_painter, KoZoomHandler*_zoomHandler,
     {
         _painter->save();
 
-        _painter->setPen( QPen( Qt::black, 1, Qt::DotLine ) );
+        _painter->setPen( QPen( Qt::gray, 1, Qt::DotLine ) );
         _painter->setBrush( Qt::NoBrush );
+        _painter->setRasterOp( Qt::NotXorROP );
         _painter->drawRect( 0, 0, _zoomHandler->zoomItX(ow), _zoomHandler->zoomItY( oh) );
 
         _painter->restore();
