@@ -95,7 +95,6 @@ void PasswordPrompt::ok() {
 
 void PasswordPrompt::cancel() {
    emit setPassword(QString::null);
-   delete this;
    reject();
 }
 
