@@ -23,8 +23,11 @@
 #include <kdebug.h>		/* for kdDebug() stream */
 #include <qptrstack.h>		/* for getFormula() */
 #include <qdom.h>
-#include <kformulamimesource.h>
 #include "formula.h"
+#include <kapplication.h>
+
+#include <kformuladocument.h>
+#include <kformulamimesource.h>
 
 /*******************************************/
 /* Constructor                             */
@@ -147,11 +150,19 @@ void Formula::analyseParamFrame(const QDomNode balise)
 void Formula::generate(QTextStream &out)
 {
 	kdDebug() << "FORMULA GENERATION" << endl;
-	QDomDocument *doc = new QDomDocument();
-	doc->setContent(_formula);
-// 	KFormula::MimeSource *formula =
-// 		new KFormula::MimeSource(0, *doc);
-// 	kdDebug() << QString(formula->encodedData("text/x-tex")) << endl;
-// 	out << "$" << QString(formula->encodedData("text/x-tex")) << "$";
+	QDomDocument doc;
+	doc.setContent(_formula);
+
+        // a new KFormula::Document for every formula is not the best idea.
+        // better to have only one such beast for the whole document.
+        KFormula::Document formulaDoc( kapp->sessionConfig() );
+
+        KFormula::Container* formula = formulaDoc.createFormula();
+        if ( !formula->load( doc ) ) {
+            kdError() << "Failed." << endl;
+        }
+
+ 	out << "$" << formula->texString() << "$";
+        delete formula;
 }
 
