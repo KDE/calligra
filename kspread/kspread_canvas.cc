@@ -501,10 +501,12 @@ void KSpreadCanvas::gotoLocation( QPoint const & location, KSpreadSheet* table,
 
   if (extendSelection)
   {
+    ElapsedTime es( "extendSelection" );
     extendCurrentSelection(location);
   }
   else
   {
+    ElapsedTime es( "!extendSelection" );
     QPoint topLeft(location);
     KSpreadCell* cell = table->cellAt(location);
     if ( cell->isObscured() && cell->isObscuringForced() )
@@ -519,12 +521,14 @@ void KSpreadCanvas::gotoLocation( QPoint const & location, KSpreadSheet* table,
     }
     else
     {
+      ElapsedTime si( "setSelection" );
       /* anchor and marker should be on the same cell here */
       selectionInfo()->setSelection(topLeft, topLeft, table);
     }
   }
   scrollToCell(location);
 
+  ElapsedTime up( "Updating view parts" );
   // Perhaps the user is entering a value in the cell.
   // In this case we may not touch the EditWidget
   if ( !m_pEditor && !m_bChoose )
@@ -903,6 +907,8 @@ void KSpreadCanvas::mouseMoveEvent( QMouseEvent * _ev )
 
 void KSpreadCanvas::mouseReleaseEvent( QMouseEvent* _ev )
 {
+  ElapsedTime et( "KSpreadCanvas::mouseReleaseEvent" );
+
   if ( m_scrollTimer->isActive() )
     m_scrollTimer->stop();
 
@@ -1044,6 +1050,8 @@ void KSpreadCanvas::processLeftClickAnchor()
 
 void KSpreadCanvas::mousePressEvent( QMouseEvent * _ev )
 {
+  ElapsedTime et( "KSpreadCanvas::mousePressEvent" );
+
   if ( _ev->button() == LeftButton )
     m_bMousePressed = true;
 
@@ -1083,7 +1091,7 @@ void KSpreadCanvas::mousePressEvent( QMouseEvent * _ev )
 
   // Did we click in the lower right corner of the marker/marked-area ?
   if ( selectionInfo()->selectionHandleArea().contains( QPoint( doc()->zoomItX( ev_PosX ),
-                                                               doc()->zoomItY( ev_PosY ) ) ) )
+                                                                doc()->zoomItY( ev_PosY ) ) ) )
   {
     processClickSelectionHandle( _ev );
     return;
@@ -1096,6 +1104,7 @@ void KSpreadCanvas::mousePressEvent( QMouseEvent * _ev )
   int row  = table->topRow( ev_PosY, ypos );
 
   {
+    ElapsedTime st( "Start the drag part" );
     // start drag ?
     double width  = 0.0;
     double height = 0.0;
@@ -1144,6 +1153,7 @@ void KSpreadCanvas::mousePressEvent( QMouseEvent * _ev )
   if ( m_pView->koDocument()->isReadWrite() && selection.right() != KS_colMax &&
        selection.bottom() != KS_rowMax && _ev->state() & ShiftButton )
   {
+    ElapsedTime gl( "gotoLocation1" );
     gotoLocation( QPoint( col, row ), activeTable(), true );
     return;
   }
@@ -1161,17 +1171,20 @@ void KSpreadCanvas::mousePressEvent( QMouseEvent * _ev )
   // Start a marking action ?
   if ( !m_strAnchor.isEmpty() && _ev->button() == LeftButton )
   {
+    ElapsedTime gl( "Start a marking action" );
     processLeftClickAnchor();
     updatePosWidget();
   }
   else if ( _ev->button() == LeftButton )
   {
+    ElapsedTime gl( "LeftButtonMarkClick" );
     m_eMouseAction = Mark;
     gotoLocation( QPoint( col, row ), activeTable(), false );
   }
   else if ( _ev->button() == RightButton &&
             !selection.contains( QPoint( col, row ) ) )
   {
+    ElapsedTime gl( "RightButtonClick" );
     // No selection or the mouse press was outside of an existing selection ?
     gotoLocation( QPoint( col, row ), activeTable(), false );
   }
@@ -1179,16 +1192,18 @@ void KSpreadCanvas::mousePressEvent( QMouseEvent * _ev )
   // Paste operation with the middle button ?
   if ( _ev->button() == MidButton )
   {
-      if ( m_pView->koDocument()->isReadWrite() && !table->isProtected() )
-      {
-          selectionInfo()->setMarker( QPoint( col, row ), table );
-          table->paste( QRect(marker(), marker()) );
-          table->setRegionPaintDirty(QRect(marker(), marker()));
-      }
-      updatePosWidget();
+    ElapsedTime gl( "MiddelButtonClick" );
+    if ( m_pView->koDocument()->isReadWrite() && !table->isProtected() )
+    {
+      selectionInfo()->setMarker( QPoint( col, row ), table );
+      table->paste( QRect(marker(), marker()) );
+      table->setRegionPaintDirty(QRect(marker(), marker()));
+    }
+    updatePosWidget();
   }
 
-  // Update the edit box
+  ElapsedTime el2( "update view parts" );
+  // Update the edit box  
   m_pView->updateEditWidgetOnPress();
 
   // Context menu ?

@@ -5963,7 +5963,7 @@ void KSpreadView::slotChangeSelection( KSpreadSheet *_table,
                                        const QRect &oldSelection,
                                        const QPoint& /* oldMarker*/ )
 {
-    m_pDoc->emitBeginOperation(false);
+    m_pDoc->emitBeginOperation( false );
     QRect newSelection = m_selectionInfo->selection();
 
     // Emit a signal for internal use
@@ -6012,11 +6012,11 @@ void KSpreadView::slotChangeSelection( KSpreadSheet *_table,
       return;
     }
 
-    m_pCanvas->setSelectionChangePaintDirty(m_pTable, oldSelection, newSelection);
+    m_pCanvas->setSelectionChangePaintDirty( m_pTable, oldSelection, newSelection );
 
     m_pVBorderWidget->update();
     m_pHBorderWidget->update();
-    m_pDoc->emitEndOperation();
+    m_pDoc->emitEndOperation( KSpreadDoc::Paint, newSelection );
 }
 
 void KSpreadView::resultOfCalc()
