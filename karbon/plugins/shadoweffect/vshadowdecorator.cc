@@ -50,6 +50,8 @@ VShadowDecorator::draw( VPainter* painter, const KoRect* rect ) const
 		return;
 	}
 
+	if( state() != VObject::edit )
+	{
 	int shadowDx = int( m_distance * cos( m_angle / 360. * 6.2832 ) );
 	int shadowDy = int( m_distance * sin( m_angle / 360. * 6.2832 ) );
 
@@ -66,6 +68,7 @@ VShadowDecorator::draw( VPainter* painter, const KoRect* rect ) const
 	m_object->setFill( *fill );
 	m_object->setStroke( *stroke );
 	painter->setWorldMatrix( mat.translate( -shadowDx* painter->zoomFactor() , shadowDy * painter->zoomFactor() ) );
+	}
 	m_object->draw( painter, rect );
 }
 
