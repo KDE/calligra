@@ -37,6 +37,16 @@ class KOFFICECORE_EXPORT KoChild : public QObject
 {
   Q_OBJECT
 public:
+  
+  /**
+   * The gadget generally identifies where a child has been hit (generally
+   * by the mouse pointer).
+   * Based on this information different actions can be taken, for example
+   * moving the child or opening a context menu. NoGadget means that
+   * this child has not been hit.
+   * 
+   * @see #gadgetHitTest
+   */
   enum Gadget { NoGadget, TopLeft, TopMid, TopRight, MidLeft, MidRight,
 		BottomLeft, BottomMid, BottomRight, Move };
 
@@ -162,8 +172,12 @@ public:
    */
   virtual void transform( QPainter& painter );
 
-  /// @todo ### make virtual
-  void setContentsPos( int x, int y );
+  /**
+   * Sets the position of the content relative to the child frame.
+   * This can be used to create a border between the frame border
+   * and the actual content.
+   */
+  virtual void setContentsPos( int x, int y );
 
   /**
    * @return the contents rectangle that is visible.
@@ -174,33 +188,114 @@ public:
    */
   virtual QRect contentRect() const;
 
+  /**
+   * @return the region of the child frame.
+   *         If solid is set to true the complete area of the child region
+   *         is returned, otherwise only the child border is returned.
+   */
   virtual QRegion frameRegion( const QWMatrix& matrix, bool solid = false ) const;
 
+  /**
+   * @return the frame geometry including a border (6 pixels) as a point
+   *         array with 4 points, one for each corner, transformed by given matrix.
+   */.
   virtual QPointArray framePointArray( const QWMatrix &matrix = QWMatrix() ) const;
 
+  /**
+   * @return the current transformation of this child as matrix.
+   *         This includes translation, scale, rotation, shearing.
+   * 
+   * @see #updateMatrix
+   */
   virtual QWMatrix matrix() const;
 
+  /**
+   * Locks this child and stores the current transformation.
+   * A locked child does not emit changed signals.
+   * 
+   * This is useful if a series of changes are done on this
+   * child and only the final result is of interest (GUI updating,...).
+   * 
+   * @see #locked #unlock
+   */
   virtual void lock();
 
+  /**
+   * Unlocks this child and emits a changed signal.
+   */
   virtual void unlock();
 
-  bool locked() const;
+  /**
+   * If the child is locked, geometry changes
+   * (including scaling, rotation, ...) are not backed up.
+   * 
+   * As long as this child is locked, the backed up
+   * geometry state can be recovered with oldPointArray.
+   * 
+   * @return true when this child is locked.
+   * 
+   * @see #locked #unlock #oldPointArray
+   */
+  bool locked() const;  //TODO should this be made virtual?
 
+  /**
+   * @return the backed up geometry transformed by given matrix.
+   */
   virtual QPointArray oldPointArray( const QWMatrix &matrix );
 
+  /**
+   * Marks this child as either transparent or not.
+   * @param transparent set this child to transparent (true)
+   *           or opaque (false).
+   * 
+   * @see #isTransparent
+   */
   virtual void setTransparent( bool transparent );
 
+  /**
+   * It might be interesting for view updates and repainting in general
+   * whether a child is transparent or not.
+   * @return true when this child is marked as transparent.
+   */
   virtual bool isTransparent() const;
 
+  /**
+   * Different actions are taken depending on where a child frame is
+   * hit. Two gadgets are known: one for the border (5 pixels) and one
+   * for the inner area.
+   * @return the gadget identification for the hit area.
+   * @param p the hit position.
+   * @param matrix the transformation for p.
+   *
+   * @see #Gadget
+   */
   virtual Gadget gadgetHitTest( const QPoint& p, const QWMatrix& matrix );
 
 signals:
+
+  /**
+   * Emitted every time this child changes, but only if this child is not
+   * locked.
+   * @see #locked
+   */
   void changed( KoChild *thisChild );
 
 protected:
 
+  /**
+   * @return point array with the 4 corners of given rectangle, which is
+   *         transformed by given matrix.
+   * 
+   *  @param matrix the transformation of r.
+   *  @param r the rectangle for which the point array should be created.
+   */
   virtual QPointArray pointArray( const QRect& r, const QWMatrix& matrix ) const;
 
+  /**
+   * Stores the current transformation of this child into a matrix.
+   * 
+   * @see #matrix
+   */
   virtual void updateMatrix();
 private:
 
