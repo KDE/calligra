@@ -37,7 +37,7 @@
 KisSideBar::KisSideBar( QWidget* parent, const char* name ) 
     : KFloatingDialog( parent, name )
 {
-    kdDebug() << "KisSideBar::KisSideBar" << endl; //jwc
+    kdDebug() << "KisSideBar::KisSideBar" << endl; 
 
     m_pTopFrame = new TopFrame(this);
     m_pChooserFrame = new ChooserFrame(this);
@@ -72,7 +72,7 @@ KisSideBar::KisSideBar( QWidget* parent, const char* name )
     connect(m_pControlFrame, SIGNAL(activeColorChanged(ActiveColor)), this,
 	    SLOT(slotControlActiveColorChanged(ActiveColor)));
 
-    kdDebug() << "KisSideBar::KisSideBar leaving" << endl; //jwc          
+    kdDebug() << "KisSideBar::KisSideBar leaving" << endl;           
 }
 
 void KisSideBar::resizeEvent ( QResizeEvent * )
@@ -161,7 +161,7 @@ void KisSideBar::slotHideChooserFrame( )
 
 /*
     Top Frame - really just a selector for the color chooser to show,
-    or to hide the color choose entirely
+    or to hide the color chooser entirely
 */
 
 TopFrame::TopFrame( QWidget* parent, const char* name ) : QFrame( parent, name )
@@ -295,7 +295,8 @@ void TopFrame::slotLABClicked()
     Dock Frame - contains tabs for brushes, layers, channels
 */
 
-DockFrame::DockFrame( QWidget* parent, const char* name ) : QFrame( parent, name )
+DockFrame::DockFrame( QWidget* parent, const char* name ) 
+    : QFrame( parent, name )
 {
     setFrameStyle(Panel | Raised);
     setLineWidth(1);
@@ -398,7 +399,8 @@ void DockFrame::resizeEvent ( QResizeEvent * )
     different color modes
 */
 
-ChooserFrame::ChooserFrame( QWidget* parent, const char* name ) : QFrame( parent, name )
+ChooserFrame::ChooserFrame( QWidget* parent, const char* name ) 
+    : QFrame( parent, name )
 {
     setFrameStyle(Panel | Raised);
     setLineWidth(1);
@@ -465,7 +467,8 @@ void ChooserFrame::slotColorSelected(const KisColor& c)
     color selector, brushes, patterns, and preview 
 */
 
-ControlFrame::ControlFrame( QWidget* parent, const char* name ) : QFrame( parent, name )
+ControlFrame::ControlFrame( QWidget* parent, const char* name ) 
+    : QFrame( parent, name )
 {
     QString defaultPattern = getenv("KDEDIR") + QString("/")
         + KStandardDirs::kde_default("data") 
@@ -477,7 +480,7 @@ ControlFrame::ControlFrame( QWidget* parent, const char* name ) : QFrame( parent
     m_pColorButton = new KDualColorButton(this);
     m_pBrushWidget = new KisBrushWidget(this);
     m_pPatternWidget = new KisPatternWidget(this, defaultPattern.latin1()); 
-
+    
     connect(m_pColorButton, SIGNAL(fgChanged(const QColor &)), this,
 	    SLOT(slotFGColorSelected(const QColor &)));
 
@@ -516,14 +519,14 @@ void ControlFrame::slotSetBrush(const KisBrush& b)
 
 void ControlFrame::slotSetPattern(const KisPattern& b)
 {
-    m_pPatternWidget->slotSetPattern(b); //jwc
+    m_pPatternWidget->slotSetPattern(b); 
 }
 
 void ControlFrame::resizeEvent ( QResizeEvent * )
 {
     m_pColorButton->setGeometry( 4, 4, 34, 34 );
     m_pBrushWidget->setGeometry( 42, 4, 34, 34 );
-    m_pPatternWidget->setGeometry( 80, 4, 34, 34 ); //jwc
+    m_pPatternWidget->setGeometry( 80, 4, 34, 34 ); 
 }
 
 void ControlFrame::slotSetFGColor(const KisColor& c)

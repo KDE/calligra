@@ -34,13 +34,15 @@
 /*
     KisPainter allows use of QPainter methods to indirectly draw into
     Krayon's layers.  While there is some overhead in using QPainter
-    instead of native methods, this is a useful tenative solution to
-    use existing routines for lines, ellipses, polgons, curves and
-    other shapes, and text rendering.  Most of these will eventually
-    be replaced with native methods which draw directly into krayon's
-    layers for performance, except text and curved line segments which 
+    instead of native methods, this is a useful tenative solution 
+    for lines, ellipses, polgons, curves and other shapes, and 
+    text rendering.  Most of these will eventually be replaced with 
+    native methods which draw directly into krayon's layers for 
+    performance, except perhaps text and curved line segments which 
     have been well implemented by Qt and/or for which killustrator can 
-    be used as an embedded part within krayon.  
+    be used as an embedded part within krayon.  All matrix and other
+    transformations available to Qt can be used with these kis_painter
+    routines without inferfering at all with native krayon methods.
 */ 
 
 KisPainter::KisPainter(KisDoc *doc, KisView *view)
@@ -113,7 +115,7 @@ bool KisPainter::toLayer(QRect paintRect)
     
     bool grayscale = false;    
     bool blending = false;
-    bool alpha = false; 
+    bool alpha = (img->colorMode() == cm_RGBA); 
     
     QRect clipRect(paintRect);
 
@@ -129,6 +131,7 @@ bool KisPainter::toLayer(QRect paintRect)
 
     uchar r, g, b, a;
     int bv = 0;
+    int opacity = 255;
     
     int fgRed     = pView->fgColor().R();
     int fgGreen   = pView->fgColor().G();
@@ -172,13 +175,19 @@ bool KisPainter::toLayer(QRect paintRect)
 		            if (v > 255 ) v = 255;
 		            a = (uchar) v; 
 			    }
-                
+                else
+                {
+                    int v = a + opacity;
+		            if (v < 0 ) v = 0;
+		            if (v > 255 ) v = 255;
+		            a = (uchar) v; 
+			    }
+                                
 		        lay->setPixel(3, x, y, a);
 	        }
 	    } 
     }
 
-    // pView->updateCanvas(clipRect);    
     img->markDirty(clipRect);
     clearRectangle(clipRect);
 
@@ -197,14 +206,13 @@ void KisPainter::drawLine(int x1, int y1, int x2, int y2)
     
     /* establish rectangle with values ascending from
     left to right and top to bottom for copying into 
-    layer image - also need to account for scroll offset */
+    layer image - not needed with rectangle and ellipse */
     
     swap(&x1, &x2);
     swap(&y1, &y2);
         
     QRect ur = QRect( QPoint(x1, y1), QPoint(x2, y2) );
-    if(!toLayer(ur))
-        kdDebug() << "error drawing line" << endl; 
+    if(!toLayer(ur)) kdDebug() << "error drawing line" << endl; 
 }
 
 
@@ -214,8 +222,7 @@ void KisPainter::drawRectangle(QRect & rect)
     p.setPen(Qt::black);
     p.drawRect(rect);
 
-    if(!toLayer(rect)) 
-        kdDebug() << "error drawing rectangle" << endl;     
+    if(!toLayer(rect)) kdDebug() << "error drawing rectangle" << endl;     
 }
 
 
@@ -236,8 +243,7 @@ void KisPainter::drawEllipse(QRect & rect)
     p.setPen(Qt::black);
     p.drawEllipse(rect);
 
-    if(!toLayer(rect))
-        kdDebug() << "error drawing ellipse" << endl;          
+    if(!toLayer(rect)) kdDebug() << "error drawing ellipse" << endl;          
 }
 
 
@@ -248,7 +254,7 @@ void KisPainter::drawEllipse(int x, int y, int w, int h)
     p.drawEllipse(x, y, w, h);
 
     if(!toLayer(QRect(x, y, w, h)))
-        kdDebug() << "error drawing ellipse" << endl;          
+         kdDebug() << "error drawing ellipse" << endl;          
 }
 
 //#include "kis_painter.moc"

@@ -71,8 +71,20 @@ KisBrushChooser::KisBrushChooser( QWidget *parent, const char *name )
     initGUI();
 
     const KisBrush *brush = currentBrush();
-    if ( brush )
-        slSpacing->setValue( brush->spacing() );
+    if ( brush ) slSpacing->setValue( brush->spacing() );
+}
+
+void KisBrushChooser::initGUI()
+{
+    QVBoxLayout *mainLayout = new QVBoxLayout( this, 2, -1, "main layout" );
+    QHBoxLayout *spacingLayout = new QHBoxLayout( -1, "spacing layout" );
+
+    mainLayout->addWidget( frame, 10 );
+    mainLayout->addLayout( spacingLayout, 1 );
+
+    spacingLayout->addWidget( lbSpacing, 0 );
+    spacingLayout->addStretch();
+    spacingLayout->addWidget( slSpacing, 1 );
 }
 
 
@@ -102,18 +114,6 @@ const KisBrush * KisBrushChooser::currentBrush() const
 }
 
 
-void KisBrushChooser::initGUI()
-{
-    QVBoxLayout *mainLayout = new QVBoxLayout( this, 2, -1, "main layout" );
-    QHBoxLayout *spacingLayout = new QHBoxLayout( -1, "spacing layout" );
-
-    mainLayout->addWidget( frame, 10 );
-    mainLayout->addLayout( spacingLayout, 1 );
-
-    spacingLayout->addWidget( lbSpacing, 0 );
-    spacingLayout->addStretch();
-    spacingLayout->addWidget( slSpacing, 1 );
-}
 
 
 // called when an item is selected in the chooser

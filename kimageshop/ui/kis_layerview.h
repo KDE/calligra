@@ -39,85 +39,109 @@ class QPixmap;
 class IntegerWidget;
 class LayerTable;
 class KisLayer;
+class QHBox;
+class KisFrameButton;
 
 class KisLayerView : public QWidget
 {
-  Q_OBJECT
+    Q_OBJECT
 
 public:
-  KisLayerView( KisDoc* doc, QWidget* _parent = 0,  const char* _name = 0 );
-  void showScrollBars();
+    KisLayerView( KisDoc* doc, QWidget* _parent = 0,  const char* _name = 0 );
+    ~KisLayerView();
+
+    void showScrollBars();
+    LayerTable *layerTable() { return layertable; }
+    QHBox *getFrame() { return frame; };
+     
+private:
+    void initGUI();
+    LayerTable *layertable;
+    QHBox *frame;
+    QHBox *buttons;
+    
+    KisFrameButton *pbAddLayer;
+    KisFrameButton *pbRemoveLayer;
+    KisFrameButton *pbUp;
+    KisFrameButton *pbDown;
 };
 
 class LayerTable : public QTableView
 {
-  Q_OBJECT
+    Q_OBJECT
 
 public:
 
-  enum action { VISIBLE, SELECTION, LINKING, PROPERTIES, ADDLAYER, REMOVELAYER, ADDMASK, REMOVEMASK, UPPERLAYER, LOWERLAYER, FRONTLAYER, BACKLAYER };
+    enum action { VISIBLE, SELECTION, LINKING, PROPERTIES, ADDLAYER, REMOVELAYER, ADDMASK, REMOVEMASK, UPPERLAYER, LOWERLAYER, FRONTLAYER, BACKLAYER };
 
-  LayerTable(QWidget* _parent = 0, const char* _name = 0 );
-  LayerTable(KisDoc* doc, QWidget* _parent = 0, const char* name = 0 );
+    // these are not used
+    LayerTable(QWidget* _parent = 0, const char* _name = 0 );
+    LayerTable(KisDoc* doc, QWidget* _parent = 0, const char* name = 0 );
+    
+    // this one is used because it keeps a reference to the LayerView  
+    LayerTable(KisDoc* doc, QWidget* _parent = 0, 
+        KisLayerView *_layerview = 0, const char* name = 0 );
 
-  void updateTable();
-  void updateAllCells();
-  void update_contextmenu( int _index );
+    void updateTable();
+    void updateAllCells();
+    void update_contextmenu( int _index );
 
-  void swapLayers( int a, int b );
-  void selectLayer( int _index );
-  void slotInverseVisibility( int _index );
-  void slotInverseLinking( int _index );
-  void slotProperties();
+    void swapLayers( int a, int b );
+    void selectLayer( int _index );
+    void slotInverseVisibility( int _index );
+    void slotInverseLinking( int _index );
+    void slotProperties();
 
-  virtual QSize sizeHint() const;
+    virtual QSize sizeHint() const;
 
 public slots:
 
-  void slotMenuAction( int );
-  void slotAddLayer();
-  void slotRemoveLayer();
-  void slotRaiseLayer();
-  void slotLowerLayer();
-  void slotFrontLayer();
-  void slotBackgroundLayer();
+    void slotMenuAction( int );
+    void slotAddLayer();
+    void slotRemoveLayer();
+    void slotRaiseLayer();
+    void slotLowerLayer();
+    void slotFrontLayer();
+    void slotBackgroundLayer();
 
-  void slotDocUpdated();
+    void slotDocUpdated();
 
 protected:
 
-  virtual void paintCell( QPainter*, int _row, int _col );
-  virtual void mousePressEvent( QMouseEvent* _event );
-  virtual void mouseDoubleClickEvent( QMouseEvent* _event );
+    virtual void paintCell( QPainter*, int _row, int _col );
+    virtual void mousePressEvent( QMouseEvent* _event );
+    virtual void mouseDoubleClickEvent( QMouseEvent* _event );
 
 private:
 
-  void init(KisDoc* doc);
+    void init(KisDoc* doc);
 
-  KisDoc* m_doc;
-  KisView* m_view;
-  KisLayerView* m_layerview;
+    KisDoc* m_doc;
+    KisView* m_view;
+    KisLayerView* pLayerView;
   
-  int m_items, m_selected;
-  QPopupMenu* m_contextmenu;
-  QPixmap *m_eyeIcon, *m_linkIcon;
-  QRect m_eyeRect, m_linkRect, m_previewRect;
+    int m_items, m_selected;
+    QPopupMenu* m_contextmenu;
+    QPixmap *mVisibleIcon, *mNovisibleIcon;
+    QPixmap *mLinkedIcon,  *mUnlinkedIcon;
+    QRect mVisibleRect, mLinkedRect, mPreviewRect;
 };
 
 class LayerPropertyDialog : QDialog
 {
-  Q_OBJECT
+    Q_OBJECT
 
 public:
 
-  static bool editProperties( KisLayer& _layer );
+    static bool editProperties( KisLayer& _layer );
 
 protected:
 
-  LayerPropertyDialog( QString _layername, uchar _opacity, QWidget *_parent, const char *_name );
+    LayerPropertyDialog( QString _layername, uchar _opacity, 
+    QWidget *_parent, const char *_name );
 
-  QLineEdit *m_name;
-  IntegerWidget *m_opacity;
+    QLineEdit *m_name;
+    IntegerWidget *m_opacity;
 };
 
 #endif // __kis_layerview_h__

@@ -1,8 +1,8 @@
 
 /*
- *  kis_tool_brush.h - part of KImageShop
+ *  kis_tool_brush.h - part of Krayon
  *
- *  Copyright (c) 1999 Matthias Elter
+ *  Copyright (c) 2001 John Califf
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -32,14 +32,17 @@ class KisSelection;
 class PasteTool : public KisTool
 {
  public:
-    PasteTool(KisDoc *doc, KisView *view, const KisSelection *_selection);
+    PasteTool(KisDoc *doc, KisView *view, 
+        KisCanvas *canvas, const KisSelection *selection);
     ~PasteTool();
   
-    QString toolName() { return QString("PasteTool"); }
+    QString toolName() { return QString("Paste Tool"); }
     void setOpacity(int opacity);
     bool pasteMonochrome(QPoint pos);
     bool pasteColor(QPoint pos);
-
+    bool pasteToCanvas(QPoint pos);
+    bool setClip();
+    
  public slots:
  
     virtual void mousePress(QMouseEvent*); 
@@ -51,11 +54,26 @@ class PasteTool : public KisTool
     /* contains selection rectangle definition, status, etc. 
     This will also contain effects and raster operations to
     be performed on selection and/or area pasted to */
+    
     const KisSelection	*m_pSelection; 
     KisView     *m_pView;
+    KisCanvas   *m_pCanvas;
+    QImage      clipImage;
+    QPixmap     clipPix;   
+
+    QPoint      oldp;
+    QPoint      mHotSpot;
+    int         mHotSpotX;
+    int         mHotSpotY;
+    
+    QSize       mClipSize;
+    int         clipWidth;
+    int         clipHeight;
+
     QPoint 	    m_dragStart;
     bool        m_dragging;
     float       m_dragdist;
+    
 };
 
-#endif //__brushtool_h__
+#endif //__pastetool_h__

@@ -40,16 +40,15 @@ class KisBrushChooser : public QWidget
   Q_OBJECT
 
 public:
-  KisBrushChooser( QWidget *parent, const char *name = 0 );
-  ~KisBrushChooser();
+    KisBrushChooser( QWidget *parent, const char *name = 0 );
+    ~KisBrushChooser();
 
-  const KisBrush  *currentBrush()	const;
-  void 		  setCurrentBrush( const KisBrush * );
+    const KisBrush  *currentBrush()	const;
+    void  setCurrentBrush( const KisBrush * );
 
 protected:
-  void 		initGUI();
-
-  IconChooser 	*chooser;
+    void initGUI();
+    IconChooser 	*chooser;
 
 private:
     QHBox 	*frame;
@@ -58,11 +57,11 @@ private:
     IntegerWidget *slSpacing;
 
 private slots:
-  void 		slotItemSelected( IconItem * );
-  void 		slotSetBrushSpacing( int );
+    void slotItemSelected( IconItem * );
+    void slotSetBrushSpacing( int );
 
 signals:
-  void 		selected( const KisBrush * );
+    void selected( const KisBrush * );
 
 };
 

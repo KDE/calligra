@@ -121,22 +121,27 @@ bool StampTool::stampToCanvas(QPoint pos)
     p.scale( m_pView->zoomFactor(), m_pView->zoomFactor() );
 
     QRect ur(pos.x(), pos.y(), m_pPattern->width(), m_pPattern->height());
+    
+#if 0
     ur.moveBy( - m_pView->xPaintOffset() + m_pView->xScrollOffset() , 
                - m_pView->yPaintOffset() + m_pView->yScrollOffset());
-    ur = ur.intersect(img->imageExtents());
+#endif
 
+    ur = ur.intersect(img->imageExtents());
     ur.setBottom(ur.bottom()+1);
     ur.setRight(ur.right()+1);
 
-    if (ur.top() > img->height()
-    || ur.left() > img->width())
+    if (ur.top() - mHotSpotY > img->height()
+    || ur.left() - mHotSpotX > img->width()
+    || ur.bottom() - mHotSpotY < 0
+    || ur.right() -  mHotSpotX < 0)
     {
-       p.end();
-       return false;
+        p.end();
+        return false;
     }
 
-    int xt = m_pView->xPaintOffset() - m_pView->xScrollOffset();
-    int yt = m_pView->yPaintOffset() - m_pView->yScrollOffset();
+    int xt = m_pView->xPaintOffset()- m_pView->xScrollOffset();
+    int yt = m_pView->yPaintOffset()- m_pView->yScrollOffset();
 
     p.translate(xt, yt);
 
@@ -280,9 +285,7 @@ void StampTool::mouseMove(QMouseEvent *e)
     KisImage * img = m_pDoc->current();
     if (!img) return;
 
-    // need to set spacing for patterns, currently
-    // patterns have no spacing member 
-    int spacing = 10; // m_pPattern->spacing();
+    int spacing = m_pPattern->spacing();
     if (spacing <= 0) spacing = 10;
     
     if(true)
@@ -343,7 +346,11 @@ void StampTool::mouseMove(QMouseEvent *e)
                 Refresh first - markDirty relies on timer, 
                 so we need force by directly updating the canvas. */
                 
-                QRect ur(oldp - mHotSpot, m_pPattern->size());
+                QRect ur(oldp.x() - mHotSpotX - m_pView->xScrollOffset() -2, 
+                         oldp.y() - mHotSpotY - m_pView->yScrollOffset() -2, 
+                         m_pPattern->width()  + 2, 
+                         m_pPattern->height() + 2);
+                         
                 m_pView->updateCanvas(ur);
                 
                 // after old spot is refreshed, stamp image into canvas

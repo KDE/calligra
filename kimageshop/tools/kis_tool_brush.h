@@ -29,26 +29,27 @@ class KisBrush;
 
 class BrushTool : public KisTool
 {
- public:
-  BrushTool(KisDoc *doc, KisView *view, const KisBrush *_brush);
-  ~BrushTool();
+public:
+    BrushTool(KisDoc *doc, KisView *view, const KisBrush *_brush);
+    ~BrushTool();
   
-  QString toolName() { return QString("BrushTool"); }
+    QString toolName() { return QString("Brush Tool"); }
 
-  void setBrush(const KisBrush *_brush);
-  bool paintMonochrome(QPoint pos);
-  bool paintColor(QPoint pos);
+    void setBrush(const KisBrush *_brush);
+    bool paintMonochrome(QPoint pos);
+    bool paintColor(QPoint pos);
+    bool paintCanvas(QPoint pos);
 
- public slots:
-  virtual void mousePress(QMouseEvent*); 
-  virtual void mouseMove(QMouseEvent*);
-  virtual void mouseRelease(QMouseEvent*);
+public slots:
+    virtual void mousePress(QMouseEvent*); 
+    virtual void mouseMove(QMouseEvent*);
+    virtual void mouseRelease(QMouseEvent*);
 
  protected:
-  QPoint 	m_dragStart;
-  bool   	m_dragging;
-  const     KisBrush  	*m_pBrush;
-  float     m_dragdist;
+    QPoint 	m_dragStart;
+    bool   	m_dragging;
+    const   KisBrush *m_pBrush;
+    float   m_dragdist;
 };
 
 #endif //__brushtool_h__

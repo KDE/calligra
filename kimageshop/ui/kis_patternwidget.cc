@@ -23,6 +23,8 @@
 #include "kis_pattern.h"
 #include "kis_patternwidget.h"
 
+#define ITEMSIZE 34
+
 KisPatternWidget::KisPatternWidget( QWidget* parent, const char* name ) 
     : QFrame( parent, name )
 {
@@ -48,22 +50,28 @@ void KisPatternWidget::drawContents ( QPainter *p )
   
     int x = 0;
     int y = 0;
-
-#if 0
-    if (m_pPattern->width() < contentsRect().x())
-        x = (contentsRect().x() - m_pPattern->width()) / 2;
-
-    if (m_pPattern->height() < contentsRect().y())
-        y = (contentsRect().y() - m_pPattern->height()) / 2;
-#endif
-
-    if (m_pPattern->width() < contentsRect().x() 
-    ||  m_pPattern->height() < contentsRect().y())
+    
+    IconItem *item = (IconItem *)m_pPattern;
+    
+    if ((m_pPattern->width() < ITEMSIZE && m_pPattern->height() < ITEMSIZE)
+    || (!item->hasValidThumb()))
     {
+        if (m_pPattern->width() < ITEMSIZE)
+            x = (ITEMSIZE - m_pPattern->width()) / 2;
+
+        if (m_pPattern->height() < ITEMSIZE)
+            y = (ITEMSIZE - m_pPattern->height()) / 2;
+
         p->drawPixmap(x, y, m_pPattern->pixmap()); 
     }    
-    else
+    else if (item->hasValidThumb())
     {    
+        if (m_pPattern->thumbPixmap().width() < ITEMSIZE)
+            x = (ITEMSIZE - m_pPattern->thumbPixmap().width()) / 2;
+
+        if (m_pPattern->thumbPixmap().height() < ITEMSIZE)
+            y = (ITEMSIZE - m_pPattern->thumbPixmap().height()) / 2;
+
         p->drawPixmap(x, y, m_pPattern->thumbPixmap()); 
     }    
 }

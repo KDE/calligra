@@ -23,6 +23,8 @@
 #include "kis_brush.h"
 #include "kis_brushwidget.h"
 
+#define ITEMSIZE 34
+
 KisBrushWidget::KisBrushWidget( QWidget* parent, const char* name ) 
     : QFrame( parent, name )
 {
@@ -44,11 +46,11 @@ void KisBrushWidget::drawContents ( QPainter *p )
     int x = 0;
     int y = 0;
 
-    if (m_pBrush->width() < contentsRect().x())
-        x = (contentsRect().x() - m_pBrush->width()) / 2;
+    if (m_pBrush->pixmap().width() < ITEMSIZE)
+        x = (ITEMSIZE - m_pBrush->pixmap().width()) / 2;
 
-    if (m_pBrush->height() < contentsRect().y())
-        y = (contentsRect().y() - m_pBrush->height()) / 2;
+    if (m_pBrush->pixmap().height() < ITEMSIZE)
+        y = (ITEMSIZE - m_pBrush->pixmap().height()) / 2;
 
     p->drawPixmap(x, y, m_pBrush->pixmap()); 
 }

@@ -94,7 +94,7 @@ KisPatternChooser::~KisPatternChooser()
 void KisPatternChooser::setCurrentPattern( const KisPattern *pattern )
 {
     chooser->setCurrentItem( (IconItem *) pattern );
-    slSpacing->setValue( /* pattern->spacing() */ 5 );
+    slSpacing->setValue( pattern->spacing() );
 }
 
 

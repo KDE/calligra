@@ -30,15 +30,14 @@
 #include "kis_util.h"
 
 
-AirBrushTool::AirBrushTool(KisDoc *doc, KisView *view, const KisBrush *_brush)
+AirBrushTool::AirBrushTool(KisDoc *doc, KisView *view, const KisBrush *brush)
   :KisTool(doc, view)
 {
     m_dragging = false;
     m_Cursor = KisCursor::brushCursor();
-    m_pBrush = _brush;
     m_dragdist = 0;
-    
     density = 64;
+    setBrush(brush);
     
     pos.setX(-1);
     pos.setY(-1);
@@ -63,9 +62,9 @@ void AirBrushTool::timeoutPaint()
     }
 }
 
-void AirBrushTool::setBrush(const KisBrush *_brush)
+void AirBrushTool::setBrush(const KisBrush *brush)
 {
-    m_pBrush = _brush;
+    m_pBrush = brush;
     brushWidth =  (unsigned int) m_pBrush->width();
     brushHeight = (unsigned int) m_pBrush->height();
     

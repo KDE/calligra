@@ -287,7 +287,7 @@ void KisView::setupTools()
 {
 
     m_pSelectTool = new SelectTool( m_pDoc, this, m_pCanvas );
-    m_pPasteTool = new PasteTool( m_pDoc, this, NULL );
+    m_pPasteTool = new PasteTool( m_pDoc, this, m_pCanvas, NULL );
     m_pMoveTool = new MoveTool(m_pDoc);
     m_pBrushTool = new BrushTool(m_pDoc, this, m_pBrush);
     m_pAirBrushTool = new AirBrushTool(m_pDoc, this, m_pBrush);
@@ -305,7 +305,9 @@ void KisView::setupTools()
     
     // start with pen as active tool
     m_tool_pen->setChecked( true );
+    slotSetBrush(m_pBrush);
     activateTool(m_pPenTool);
+    
 }
 
 
@@ -1201,8 +1203,10 @@ void KisView::removeSelection()
 void KisView::paste()
 {
     kdDebug() << "PASTE called" << endl;
+    
     if(m_pDoc->getClipImage())
     {
+        m_pPasteTool->setClip();
         activateTool(m_pPasteTool);
 
         /* refresh canvas */
@@ -1331,47 +1335,85 @@ void KisView::updateToolbarButtons()
 
 
 /*
- *  layer action slots
+ *   layer action slots
  */
 
+
 /* 
-    Copy current image into a layer of another image
+    Properties dialog for the current layer
 */
 
-void KisView::insert_layer()
+void KisView::layer_properties()
 {
-    KMessageBox::sorry(NULL, "Please use layers tab on sidebar.", "", FALSE); 
+    KisImage * img = m_pDoc->current();
+    if (!img)  return;    
+
+    KisLayer *lay = img->getCurrentLayer();
+    if (!lay)  return;    
+
+    if(LayerPropertyDialog::editProperties(*(lay)))
+    {
+        QRect updateRect = lay->imageExtents();
+        m_pLayerView->layerTable()->updateAllCells( );
+        img->markDirty( updateRect );
+    }
 }
 
+/*
+    insert new layer into the current image - we need a
+    "new layer" dialog for layer size, properties, etc.
+*/
+void KisView::insert_layer()
+{
+    m_pLayerView->layerTable()->slotAddLayer();
+}
+
+/*
+    remove current layer - to remove other layers, a user must
+    access the layers tableview in a dialog or sidebar widget
+*/
 void KisView::remove_layer()
 {
-    KMessageBox::sorry(NULL, "Please use layers tab on sidebar.", "", FALSE); 
+    m_pLayerView->layerTable()->slotRemoveLayer(); 
 }
+
+/*
+    hide/show the current layer - to hide other layers, a user must
+    access the layers tableview in a dialog or sidebar widget
+*/
 
 void KisView::hide_layer()
 {
     KMessageBox::sorry(NULL, "Please use layers tab on sidebar.", "", FALSE); 
 }
 
+/*
+    link/unlink the current layer - to link other layers, a user must
+    access the layers tableview in a dialog or sidebar widget
+*/
 void KisView::link_layer()
 {
     KMessageBox::sorry(NULL, "Please use layers tab on sidebar.", "", FALSE); 
 }
 
+/*
+    make the next layer in the layers list the active one and
+    bring it to the front of the view
+*/
 void KisView::next_layer()
 {
     KMessageBox::sorry(NULL, "Please use layers tab on sidebar.", "", FALSE); 
 }
 
+/*
+    make the previous layer in the layers list the active one and
+    bring it to the front of the view
+*/
 void KisView::previous_layer()
 {
     KMessageBox::sorry(NULL, "Please use layers tab on sidebar.", "", FALSE); 
 }
 
-void KisView::layer_properties()
-{
-    KMessageBox::sorry(NULL, "Please use layers tab on sidebar.", "", FALSE); 
-}
 
 /*
     Insert a standard image like png or jpg into the current layer.

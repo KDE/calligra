@@ -30,6 +30,7 @@
 #include "kis_util.h"
 #include "kapp.h"
 
+
 BrushTool::BrushTool(KisDoc *doc, KisView *view, const KisBrush *_brush)
   : KisTool(doc, view)
 {
@@ -73,17 +74,22 @@ void BrushTool::mousePress(QMouseEvent *e)
     }
 }
 
+bool BrushTool::paintCanvas(QPoint pos)
+{
+    return true;
+}
+
 
 bool BrushTool::paintMonochrome(QPoint pos)
 {
     KisImage * img = m_pDoc->current();
+    if (!img) return false;    
+
     KisLayer *lay = img->getCurrentLayer();
+    if (!lay) return false;
 
-    if (!img)	        return false;
-    if (!lay)           return false;
-    if (!m_pBrush)      return false;
+    if (!m_pBrush) return false;
 
-    // FIXME: Implement this for non-RGB modes.
     if (!img->colorMode() == cm_RGB && !img->colorMode() == cm_RGBA)
 	    return false;
     
@@ -91,7 +97,6 @@ bool BrushTool::paintMonochrome(QPoint pos)
     int starty = (pos - m_pBrush->hotSpot()).y();
     
     QRect zoomedExtents = img->getCurrentLayer()->imageExtents();
-    
     QRect clipRect(startx, starty, m_pBrush->width(), m_pBrush->height());
     
     if (!clipRect.intersects(zoomedExtents))
@@ -163,7 +168,7 @@ void BrushTool::mouseMove(QMouseEvent *e)
     if (!img) return;
 
     int spacing = m_pBrush->spacing();
-    if (spacing <= 0) spacing = 1;
+    if (spacing <= 0) spacing = 3;
 
     if(m_dragging)
     {
@@ -188,7 +193,6 @@ void BrushTool::mouseMove(QMouseEvent *e)
 
         if ((int)dist < spacing)
 	    {
-            // save for next movevent        
 	        m_dragdist += new_dist; 
 	        m_dragStart = pos;
 	        return;
@@ -216,9 +220,9 @@ void BrushTool::mouseMove(QMouseEvent *e)
 
  	        dist -= spacing;
 	    }
-        //save for next movevent
+
         if (dist > 0) m_dragdist = dist; 
-        m_dragStart = pos;
+            m_dragStart = pos;
     }
 }
 
