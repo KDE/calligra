@@ -1,8 +1,8 @@
-// $Header$
+//
 
 /*
    This file is part of the KDE project
-   Copyright (C) 2001, 2002 Nicolas GOUTTE <goutte@kde.org>
+   Copyright (C) 2001, 2002, 2004 Nicolas GOUTTE <goutte@kde.org>
    Copyright (c) 2001 IABG mbH. All rights reserved.
                       Contact: Wolf-Michael Bolle <Bolle@IABG.de>
 
@@ -396,7 +396,7 @@ public:
 
 
     enum { LS_CUSTOM = 0, LS_SINGLE = 10, LS_ONEANDHALF = 15, LS_DOUBLE = 20,
-      LS_ATLEAST = 30, LS_MULTIPLE = 40 };
+      LS_ATLEAST = 30, LS_MULTIPLE = 40, LS_FIXED = 50 };
 
     QString     styleName;
     QString     styleFollowing;
