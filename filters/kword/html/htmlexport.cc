@@ -1262,7 +1262,118 @@ QString ClassExportFilterHtmlTransitional::getParagraphElement(const QString& st
     strElement+=strTag;
     strElement+=strAlign;
     strElement+='>';
+
+   // Opening elements
+
+    QString fontName = layout.formatData.fontName;
+
+    // Will a potential <font> tag have attributes?
+    QString fontAttributes;
+
+    if ( !fontName.isEmpty() )
+    {
+        fontAttributes+=" face=\"";
+        fontAttributes+=fontName; // TODO: add alternative font names
+        fontAttributes+="\"";
+    }
+    // Give the font size relatively (be kind with people with impered vision)
+    // TODO: option to give absolute font sizes
+    int size=layout.formatData.fontSize;
+    // 12pt is considered the normal size // TODO: relative to layout!
+    if (size>0)
+    {
+        size /= 4;
+        size -= 3;
+        //if (size<-4) size=-4; // Cannot be triggered
+        if (size>4) size=4;
+        if (size)
+        {
+            fontAttributes+=" size=\""; // in XML numbers must be quoted!
+            if (size>0)
+            {
+                fontAttributes+="+";
+            }
+            fontAttributes+=QString::number(size,10);
+            fontAttributes+="\"";
+        }
+    }
+    if ( layout.formatData.colour.isValid() )
+    {
+        // Give colour
+        fontAttributes+=" color=\"";
+        // QColor::name() does all the job :)
+        fontAttributes+=layout.formatData.colour.name();
+        fontAttributes+="\"";
+    }
+
+    if (!fontAttributes.isEmpty())
+    {
+        // We have font attributes, so we must have a <font> element
+        strElement+="<font";
+        strElement+=fontAttributes;
+        strElement+=">";
+    }
+
+    if ( layout.formatData.weight >= 75 )
+    {
+        strElement+="<b>";
+    }
+    if ( layout.formatData.italic )
+    {
+        strElement+="<i>";
+    }
+    if ( layout.formatData.underline )
+    {
+        strElement+="<u>";
+    }
+    if ( layout.formatData.strikeout )
+    {
+        strElement+="<s>";
+    }
+    if ( 1==layout.formatData.verticalAlignment )
+    {
+        strElement+="<sub>"; //Subscript
+    }
+    if ( 2==layout.formatData.verticalAlignment )
+    {
+        strElement+="<sup>"; //Superscript
+    }
+
+    // The text
     strElement+=strParagraphText;
+
+    // Closing elements
+
+    if ( 2==layout.formatData.verticalAlignment )
+    {
+        strElement+="</sup>"; //Superscript
+    }
+    if ( 1==layout.formatData.verticalAlignment )
+    {
+        strElement+="</sub>"; //Subscript
+    }
+    if ( layout.formatData.strikeout )
+    {
+        strElement+="</s>";
+    }
+    if ( layout.formatData.underline )
+    {
+        strElement+="</u>";
+    }
+    if ( layout.formatData.italic )
+    {
+        strElement+="</i>";
+    }
+    if ( layout.formatData.weight >= 75 )
+    {
+        strElement+="</b>";
+    }
+
+    if (!fontAttributes.isEmpty())
+    {
+        strElement+="</font>";
+    }
+
     strElement+="</";
     strElement+=strTag;
     strElement+=">\n";
@@ -1704,7 +1815,13 @@ QString ClassExportFilterHtmlStyle::getStartOfListOpeningTag(const CounterData::
 
 QString ClassExportFilterHtmlStyle::getParagraphElement(const QString& strTag, const QString& strParagraphText, LayoutData& layout)
 {
-    QString strAlign;
+    QString strElement;
+    strElement+='<';
+    strElement+=strTag;
+    strElement+='>';
+
+    // Opening elements
+    strElement+="<span style=\"";
 
     if (strTag!="li")
     {
@@ -1712,16 +1829,99 @@ QString ClassExportFilterHtmlStyle::getParagraphElement(const QString& strTag, c
         if (( layout.alignment== "right") || (layout.alignment=="center") || (layout.alignment=="justify"))
         {
 
-            strAlign=QString(" style=\"text-align:%1\"").arg(layout.alignment);
+            strElement+=QString("text-align:%1;").arg(layout.alignment);
         }
     }
+    // Font name
+    QString fontName = layout.formatData.fontName;
+    if ( !fontName.isEmpty() )
+    {
+        strElement+="font-family: ";
+        strElement+=fontName; // TODO: add alternative font names
+        strElement+="; ";
+    }
 
-    QString strElement;
-    strElement+='<';
-    strElement+=strTag;
-    strElement+=strAlign;
-    strElement+='>';
+    // Font style
+    strElement+="font-style: ";
+    if ( layout.formatData.italic )
+    {
+        strElement+="italic";
+    }
+    else
+    {
+        strElement+="normal";
+    }
+    strElement+="; ";
+
+    strElement+="font-weight: ";
+    if ( layout.formatData.weight >= 75 )
+    {
+        strElement+="bold";
+    }
+    else
+    {
+        strElement+="normal";
+    }
+    strElement+="; ";
+
+    // Give the font size relatively (be kind with people with impered vision)
+    // TODO: option to give absolute font sizes
+    int size=layout.formatData.fontSize;
+    // 12pt is considered the normal size // TODO: relative to layout!
+    if (size>0)
+    {
+        // We use absolute font sizes.
+        strElement+="font-size: ";
+        strElement+=QString::number(size,10);
+        strElement+="pt; ";
+    }
+
+    if ( layout.formatData.colour.isValid() )
+    {
+        // Give colour
+        strElement+="color: ";
+        // QColor::name() does all the job :)
+        strElement+=layout.formatData.colour.name();
+        strElement+="; ";
+    }
+
+    strElement+="text-decoration: ";
+    if ( layout.formatData.underline )
+    {
+        strElement+="underline";
+    }
+    else if ( layout.formatData.strikeout )
+    {
+        strElement+="line-through";
+    }
+    else
+    {
+        strElement+="none";
+    }
+    //strElement+="; ";
+    strElement+="\">"; // close span opening tag
+    if ( 1==layout.formatData.verticalAlignment )
+    {
+        strElement+="<sub>"; //Subscript
+    }
+    if ( 2==layout.formatData.verticalAlignment )
+    {
+        strElement+="<sup>"; //Superscript
+    }
+
+    // The text
     strElement+=strParagraphText;
+    // Closing elements
+
+    if ( 2==layout.formatData.verticalAlignment )
+    {
+        strElement+="</sup>"; //Superscript
+    }
+    if ( 1==layout.formatData.verticalAlignment )
+    {
+        strElement+="</sub>"; //Subscript
+    }
+    strElement+="</span>";
     strElement+="</";
     strElement+=strTag;
     strElement+=">\n";
