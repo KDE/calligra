@@ -212,6 +212,11 @@ public:
     void deSelectObj( KPObject *kpobject );
     QDomElement saveObjects( QDomDocument &doc, QDomElement &objects, int yoffset, KoZoomHandler* zoomHandler, int saveOnlyPage );
 
+    bool oneObjectTextExist();
+    bool isOneObjectSelected();
+    bool haveASelectedPictureObj();
+    KoRect getBoundingRect(const KoRect &rect, KoZoomHandler *zoomhandler);
+
 protected:
 
 private:

@@ -808,7 +808,6 @@ void KPrCanvas::mouseReleaseEvent( QMouseEvent *e )
 
                 rubber = rubber.normalize();
                 rubber.moveBy(diffx(),diffy());
-                //KPObject *kpobject = 0;
 
                 QPtrListIterator<KPObject> it( getObjectList() );
                 for ( ; it.current() ; ++it )
@@ -1040,14 +1039,10 @@ void KPrCanvas::mouseReleaseEvent( QMouseEvent *e )
     ratio = 0.0;
     keepRatio = false;
     m_boundingRect = KoRect();
-    QPtrListIterator<KPObject> it( getObjectList() );
-    for ( ; it.current() ; ++it )
-    {
-        if(it.current()->isSelected())
-        {
-            m_boundingRect|=it.current()->getBoundingRect(m_view->zoomHandler());
-        }
-    }
+
+    m_boundingRect=m_activePage->getBoundingRect(m_boundingRect, m_view->zoomHandler());
+    m_boundingRect=m_view->kPresenterDoc()->stickyPage()->getBoundingRect(m_boundingRect, m_view->zoomHandler());
+
 }
 
 /*==================== handle mouse moved ========================*/
@@ -1964,17 +1959,12 @@ void KPrCanvas::printRTDebug( int info )
 }
 #endif
 
-/*================================================================*/
 bool KPrCanvas::haveASelectedPictureObj()
 {
-
-    QPtrListIterator<KPObject> it( getObjectList() );
-    for ( ; it.current() ; ++it )
-    {
-        if(it.current()->isSelected() && it.current()->getType() != OT_CLIPART)
-            return false;
-    }
-    return true;
+    bool state=m_activePage->haveASelectedPictureObj();
+    if(!state)
+        return false;
+    return m_view->kPresenterDoc()->stickyPage();
 }
 
 QPtrList<KPTextObject> KPrCanvas::applicableTextObjects() const
@@ -2278,12 +2268,10 @@ bool KPrCanvas::canAssignEffect( QPtrList<KPObject> &objs ) const
 /*================================================================*/
 bool KPrCanvas::isOneObjectSelected()
 {
-    QPtrListIterator<KPObject> oIt( getObjectList() );
-    for (; oIt.current(); ++oIt )
-        if ( oIt.current()->isSelected() )
-            return true;
-
-    return false;
+    bool state=m_activePage->isOneObjectSelected();
+    if( state)
+        return true;
+    return m_view->kPresenterDoc()->stickyPage();
 }
 
 /*================================================================*/
@@ -5047,13 +5035,10 @@ QPtrList<KoTextObject> KPrCanvas::objectText()
 
 bool KPrCanvas::oneObjectTextExist()
 {
-    QPtrListIterator<KPObject> it( getObjectList() );
-    for ( ; it.current() ; ++it )
-    {
-        if (  it.current()->getType()==OT_TEXT)
-            return true;
-    }
-    return false;
+    bool state=m_activePage->oneObjectTextExist();
+    if(state)
+        return true;
+    return m_view->kPresenterDoc()->stickyPage();
 }
 
 KPrPage* KPrCanvas::activePage()

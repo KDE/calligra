@@ -3029,3 +3029,49 @@ QDomElement KPrPage::saveObjects( QDomDocument &doc, QDomElement &objects, int y
     }
     return objects;
 }
+
+bool KPrPage::oneObjectTextExist()
+{
+    QPtrListIterator<KPObject> it( m_objectList );
+    for ( ; it.current() ; ++it )
+    {
+        if (  it.current()->getType()==OT_TEXT)
+            return true;
+    }
+    return false;
+}
+
+bool KPrPage::isOneObjectSelected()
+{
+    QPtrListIterator<KPObject> oIt( m_objectList );
+    for (; oIt.current(); ++oIt )
+        if ( oIt.current()->isSelected() )
+            return true;
+
+    return false;
+}
+
+bool KPrPage::haveASelectedPictureObj()
+{
+    QPtrListIterator<KPObject> it( m_objectList );
+    for ( ; it.current() ; ++it )
+    {
+        if(it.current()->isSelected() && it.current()->getType() != OT_CLIPART)
+            return false;
+    }
+    return true;
+}
+
+KoRect KPrPage::getBoundingRect(const KoRect &rect, KoZoomHandler *zoomhandler)
+{
+    KoRect boundingRect =rect ;
+    QPtrListIterator<KPObject> it( m_objectList );
+    for ( ; it.current() ; ++it )
+    {
+        if(it.current()->isSelected())
+        {
+            boundingRect|=it.current()->getBoundingRect(zoomhandler);
+        }
+    }
+    return boundingRect;
+}
