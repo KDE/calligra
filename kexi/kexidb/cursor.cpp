@@ -376,14 +376,14 @@ bool Cursor::getNextRecord()
 //					KexiDBDbg<<"==== buffering: drv_getNextRecord() ===="<<endl;
 					drv_getNextRecord();
 				}
-				if (m_result != FetchOK) {//there is no record
+				if ((FetchResult) m_result != FetchOK) {//there is no record
 					m_buffering_completed = true; //no more records for buffer
 //					KexiDBDbg<<"m_result != FetchOK ********"<<endl;
 					m_validRecord = false;
 					m_afterLast = true;
 //js					m_at = m_records_in_buf;
 					m_at = -1; //position is invalid now and will not be used
-					if (m_result == FetchEnd) {
+					if ((FetchResult) m_result == FetchEnd) {
 						return false;
 					}
 					setError(ERR_CURSOR_RECORD_FETCHING, i18n("Cannot fetch next record."));
@@ -401,12 +401,12 @@ bool Cursor::getNextRecord()
 		if (!m_readAhead) {//we have no record that was read ahead
 //			KexiDBDbg<<"==== no prefetched record ===="<<endl;
 			drv_getNextRecord();
-			if (m_result != FetchOK) {//there is no record
+			if ((FetchResult)m_result != FetchOK) {//there is no record
 //				KexiDBDbg<<"m_result != FetchOK ********"<<endl;
 				m_validRecord = false;
 				m_afterLast = true;
 				m_at = -1;
-				if (m_result == FetchEnd) {
+				if ((FetchResult) m_result == FetchEnd) {
 					return false;
 				}
 				setError(ERR_CURSOR_RECORD_FETCHING, i18n("Cannot fetch next record."));
