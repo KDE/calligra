@@ -54,16 +54,20 @@ QObject* KChartFactory::create( QObject* parent, const char* name, const char *c
     return part;
 }
 
+KAboutData* KChartFactory::aboutData()
+{
+    KAboutData *aboutData = new KAboutData("kchart", I18N_NOOP("KChart"),
+        version, description, KAboutData::License_GPL,
+        "(c) 1998-2000, Kalle Dalheimer");
+    aboutData->addAuthor("Kalle Dalheimer",0, "kalle@kde.org");
+    return aboutData;
+}
+
 KInstance* KChartFactory::global()
 {
     if ( !s_global )
     {
-         KAboutData *aboutData = new KAboutData("kchart", I18N_NOOP("KChart"),
-             version, description, KAboutData::License_GPL,
-             "(c) 1998-2000, Kalle Dalheimer");
-         aboutData->addAuthor("Kalle Dalheimer",0, "kalle@kde.org");
-     
-         s_global = new KInstance(aboutData);
+         s_global = new KInstance(aboutData());
     }
     return s_global;
 }

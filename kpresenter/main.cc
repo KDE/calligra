@@ -41,7 +41,7 @@ extern "C"
 
 int main( int argc, char **argv )
 {
-    KCmdLineArgs::init( argc, argv, KPresenterFactory::global()->aboutData());
+    KCmdLineArgs::init( argc, argv, KPresenterFactory::aboutData());
     KCmdLineArgs::addCmdLineOptions( options );
        
     KoApplication app; 

@@ -47,8 +47,7 @@ int main( int argc, char **argv )
     KCmdLineArgs::init( argc, argv, &aboutData );
     KCmdLineArgs::addCmdLineOptions( options );
 
-    KoApplication app( argc, argv, "kimageshop" );
-    //KoApplication app;
+    KoApplication app;
 
     app.dcopClient()->attach();
     app.dcopClient()->registerAs( "kimageshop" );

@@ -52,16 +52,20 @@ QObject* KImageFactory::create( QObject* parent, const char* name, const char*cl
     return doc;
 }
 
-KInstance* KImageFactory::global()
+KAboutData* KImageFactory::aboutData()
 {
-   if ( !s_global )
-   {
      KAboutData *aboutData= new KAboutData( "kimage", I18N_NOOP("KImage"),
                                             version, description, KAboutData::License_GPL,
                                             "(c) 1998-2000, Michael Koch");
      aboutData->addAuthor("Michael Koch",0, "koch@kde.org");
-   
-     s_global = new KInstance(aboutData);
+     return aboutData;
+}
+
+KInstance* KImageFactory::global()
+{
+   if ( !s_global )
+   {
+     s_global = new KInstance(aboutData());
    }
    return s_global;
 }

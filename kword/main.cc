@@ -40,7 +40,7 @@ extern "C"
 
 int main( int argc, char **argv )
 {
-    KCmdLineArgs::init( argc, argv, KWordFactory::global()->aboutData());
+    KCmdLineArgs::init( argc, argv, KWordFactory::aboutData());
     KCmdLineArgs::addCmdLineOptions( options );
 
     KoApplication app;

@@ -49,16 +49,22 @@ QObject* ExampleFactory::create( QObject* parent, const char* name, const char* 
     return part;
 }
 
+KAboutData* ExampleFactory::aboutData()
+{
+    // Change this, of course
+    KAboutData *aboutData = new KAboutData( "example", I18N_NOOP("Example"),
+        version, description, KAboutData::License_GPL,
+        "(c) 1998-2000, Torben Weis");
+    aboutData->addAuthor("Torben Weis",0, "weis@kde.org");
+    return aboutData;
+}
+
 KInstance* ExampleFactory::global()
 {
     if ( !s_global )
     {
-        KAboutData *aboutData = new KAboutData( "example", I18N_NOOP("Example"),
-            version, description, KAboutData::License_GPL,
-            "(c) 1998-2000, Torben Weis");
-        aboutData->addAuthor("Torben Weis",0, "weis@kde.org");
-
-        s_global = new KInstance( aboutData );
+        s_global = new KInstance( aboutData() );
+        // Add any application-specific resource directories here
     }
     
     return s_global;

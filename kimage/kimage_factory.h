@@ -16,6 +16,9 @@ public:
 
     static KInstance* global();
 
+    // _Creates_ a KAboutData but doesn't keep ownership
+    static KAboutData* aboutData();
+
 private:
     static KInstance* s_global;
 };

@@ -6,6 +6,7 @@
 #include <klocale.h>
 #include <kinstance.h>
 #include <kstddirs.h>
+#include <kdebug.h>
 
 static const char* description=I18N_NOOP("KOffice Spreadsheet Application");
 static const char* version="0.1";
@@ -23,14 +24,19 @@ KInstance* KSpreadFactory::s_global = 0;
 KSpreadFactory::KSpreadFactory( QObject* parent, const char* name )
     : KLibFactory( parent, name )
 {
+    kdDebug() << "KSpreadFactory::KSpreadFactory()" << endl;
     (void)global(); 
     (void)new KSpreadAppIface;
 }
 
 KSpreadFactory::~KSpreadFactory()
 {
+  kdDebug() << "KSpreadFactory::~KSpreadFactory()" << endl;
   if ( s_global )
+  {
+    delete s_global->aboutData();
     delete s_global;
+  }
 }
 
 QObject* KSpreadFactory::create( QObject* parent, const char* name, const char* classname, const QStringList & )
@@ -55,16 +61,20 @@ QObject* KSpreadFactory::create( QObject* parent, const char* name, const char* 
   return doc;
 }
 
+KAboutData* KSpreadFactory::aboutData()
+{
+  KAboutData * aboutData = new KAboutData( "kspread", I18N_NOOP("KSpread"),
+        version, description, KAboutData::License_GPL,
+        "(c) 1998-2000, Torben Weis");
+  aboutData->addAuthor("Torben Weis",0, "weis@kde.org");
+  return aboutData;
+}
+
 KInstance* KSpreadFactory::global()
 {
     if ( !s_global )
     {
-      KAboutData *aboutData= new KAboutData( "kspread", I18N_NOOP("KSpread"),
-        version, description, KAboutData::License_GPL,
-        "(c) 1998-2000, Torben Weis");
-      aboutData->addAuthor("Torben Weis",0, "weis@kde.org");
-      
-      s_global = new KInstance(aboutData);
+      s_global = new KInstance(aboutData());
       s_global->dirs()->addResourceType( "toolbar",
 				         KStandardDirs::kde_default("data") + "koffice/toolbar/");
       s_global->dirs()->addResourceType( "extensions", KStandardDirs::kde_default("data") + "koffice/extensions/");

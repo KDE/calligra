@@ -29,18 +29,6 @@
 #include <kcmdlineargs.h>
 #include <kdebug.h>
 
-KoApplication::KoApplication(int &argc, char **argv, const QCString& rAppName )
-    : KApplication(argc, argv, rAppName)
-{ // Depricated thanks to KAboutData
-    KGlobal::locale()->insertCatalogue("koffice");
-    KGlobal::dirs()->addResourceType("toolbar", KStandardDirs::kde_default("data") + "/koffice/toolbar/");
-    KGlobal::dirs()->addResourceType("toolbar", KStandardDirs::kde_default("data") + "/koffice/pics/");
-
-    kimgioRegister();
-
-    connect( this, SIGNAL( lastWindowClosed() ), this, SLOT( quit() ) );
-}
-
 KoApplication::KoApplication()
 	: KApplication()
 {

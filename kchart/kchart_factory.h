@@ -10,6 +10,7 @@
 #include <klibloader.h>
 
 class KInstance;
+class KAboutData;
 
 class KChartFactory : public KLibFactory
 {
@@ -21,6 +22,9 @@ public:
     virtual QObject* create( QObject* parent = 0, const char* name = 0, const char* classname = "QObject", const QStringList &args = QStringList() );
 
     static KInstance* global();
+ 
+    // _Creates_ a KAboutData but doesn't keep ownership
+    static KAboutData* aboutData();
 
 private:
     static KInstance* s_global;

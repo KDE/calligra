@@ -43,7 +43,7 @@ static const KCmdLineOptions options[]=
 
 int main( int argc, char **argv )
 {
-  KCmdLineArgs::init( argc, argv, KImageFactory::global()->aboutData());
+  KCmdLineArgs::init( argc, argv, KImageFactory::aboutData());
   KCmdLineArgs::addCmdLineOptions( options );
   
   KoApplication app;
