@@ -355,7 +355,11 @@ KPTDateTime KPTTask::calculateForward(int use) {
     // First, calculate all predecessors
     QPtrListIterator<KPTRelation> it = dependParentNodes();
     for (; it.current(); ++it) {
-        KPTDateTime time = it.current()->parent()->calculateForward(use) + it.current()->lag();
+        KPTDateTime time = it.current()->parent()->calculateForward(use);
+        if (it.current()->timingRelation() != FINISH_START) {
+            time = it.current()->parent()->getEarliestStart();
+        }
+        time += it.current()->lag();
         if (time > earliestStart)
             earliestStart = time;
     }
@@ -403,7 +407,11 @@ KPTDateTime KPTTask::calculateBackward(int use) {
     // First, calculate all successors
     QPtrListIterator<KPTRelation> it = dependChildNodes();
     for (; it.current(); ++it) {
-        KPTDateTime time = it.current()->child()->calculateBackward(use) - it.current()->lag();
+        KPTDateTime time = it.current()->child()->calculateBackward(use);
+        if (it.current()->timingRelation() != FINISH_START) {
+            time = it.current()->child()->getLatestFinish();
+        }
+        time -= it.current()->lag();
         if (time < latestFinish)
             latestFinish = time;
     }
@@ -451,9 +459,13 @@ KPTDateTime &KPTTask::scheduleForward(KPTDateTime &earliest, int use) {
     // First, calculate all predecessors
     QPtrListIterator<KPTRelation> it = dependParentNodes();
     for (; it.current(); ++it) {
-        // get the predecessors endtime (which we can use as our starttime)
+        // schedule the predecessors
         KPTDateTime earliest = it.current()->parent()->getEarliestStart();
         KPTDateTime time = it.current()->parent()->scheduleForward(earliest, use);
+        if (it.current()->timingRelation() != FINISH_START) {
+            time = it.current()->parent()->startTime();
+        }
+        time += it.current()->lag();
         if (time > m_startTime)
             m_startTime = time;
     }
@@ -527,6 +539,10 @@ KPTDateTime &KPTTask::scheduleBackward(KPTDateTime &latest, int use) {
         // get the successors starttime
         KPTDateTime latest = it.current()->child()->getLatestFinish();
         KPTDateTime time = it.current()->child()->scheduleBackward(latest, use);
+        if (it.current()->timingRelation() != FINISH_START) {
+            time = it.current()->child()->endTime();
+        }
+        time -= it.current()->lag();
         if (time < m_endTime)
             m_endTime = time;
     }
