@@ -17,7 +17,7 @@ toolbar_DATA = 121.png \
 	spacing.png delslide.png newslide.png line_begin.png line_end.png \
 	line_arrow_begin.png line_circle_begin.png line_rect_begin.png line_normal_begin.png \
 	line_arrow_end.png line_circle_end.png line_rect_end.png line_normal_end.png \
-	table.png chart.png formula.png webpres.png
+	table.png chart.png formula.png webpres.png group.png ungroup.png
 
 toolbardir = $(kde_datadir)/kpresenter/toolbar
 

@@ -169,7 +169,9 @@ public slots:
     virtual void extraLineBegin();
     virtual void extraLineEnd();
     virtual void extraWebPres();
-
+    virtual void extraGroup();
+    virtual void extraUnGroup();
+    
     virtual void extraAlignObjLeft();
     virtual void extraAlignObjCenterH();
     virtual void extraAlignObjRight();
@@ -531,7 +533,9 @@ protected:
     QAction *actionExtraWebPres;
     QAction *actionExtraLineBegin;
     QAction *actionExtraLineEnd;
-
+    QAction *actionExtraGroup;
+    QAction *actionExtraUnGroup;
+    
     QAction *actionScreenConfigPages;
     QAction *actionScreenPresStructView;
     QAction *actionScreenAssignEffect;

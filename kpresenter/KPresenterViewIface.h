@@ -84,6 +84,8 @@ k_dcop:
     virtual void extraLineBegin();
     virtual void extraLineEnd();
     virtual void extraWebPres();
+    virtual void extraGroup();
+    virtual void extraUnGroup();
 
     virtual void extraAlignObjLeft();
     virtual void extraAlignObjCenterH();

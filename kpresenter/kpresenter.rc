@@ -75,6 +75,9 @@
   <Action name="extra_rotate"/>
   <Action name="extra_shadow"/>
   <Separator/>
+  <Action name="extra_group"/>
+  <Action name="extra_ungroup"/>
+  <Separator/>
   <Menu name="Align Objects"><text>Align Objects</text>
    <Action name="extra_alignleft"/>
    <Separator/>
@@ -115,7 +118,7 @@
  </Menu>
 </MenuBar>
 <ToolBars>
- <ToolBar position="left">
+ <ToolBar position="right">
   <Action name="edit_undo"/>
   <Action name="edit_redo"/>
   <Separator/>
@@ -125,7 +128,7 @@
   <Separator/>
   <Action name="edit_delete"/>
  </ToolBar>
- <ToolBar position="right">
+ <ToolBar position="bottom">
   <Action name="insert_page"/>
   <Separator/>
   <Action name="insert_picture"/>
@@ -178,6 +181,9 @@
   <Separator/>
   <Action name="extra_rotate"/>
   <Action name="extra_shadow"/>
+  <Separator/>
+  <Action name="extra_group"/>
+  <Action name="extra_ungroup"/>
   <Separator/>
   <Action name="extra_webpres"/>
  </ToolBar>

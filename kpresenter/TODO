@@ -22,5 +22,6 @@ MISSING FEATURES, todo :
 - Rewrite autoforms (using XML)
 - Insert pagenumber into txt objs
 - Group objects
+- Possibility to print 1, 2 or 4 slides / page
 
 Reginald Stadlbauer <reggie@kde.org>

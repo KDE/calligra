@@ -847,6 +847,16 @@ void KPresenterView::extraLineEnd()
     rb_lend->popup( pnt );
 }
 
+/*===============================================================*/
+void KPresenterView::extraGroup()
+{
+}
+
+/*===============================================================*/
+void KPresenterView::extraUnGroup()
+{
+}
+
 /*========================== screen config pages ================*/
 void KPresenterView::screenConfigPages()
 {
@@ -1187,9 +1197,9 @@ void KPresenterView::mtextFont()
  	( (KFontAction*)actionTextFontFamily )->blockSignals( TRUE );
  	( (KFontAction*)actionTextFontFamily )->setFont( tbFont.family() );
  	( (KFontAction*)actionTextFontFamily )->blockSignals( FALSE );
- 	( (KFontSizeAction*)actionTextFontFamily )->blockSignals( TRUE );
- 	( (KFontSizeAction*)actionTextFontFamily )->setFontSize( tbFont.pointSize() );
- 	( (KFontSizeAction*)actionTextFontFamily )->blockSignals( FALSE );
+ 	( (KFontSizeAction*)actionTextFontSize )->blockSignals( TRUE );
+ 	( (KFontSizeAction*)actionTextFontSize )->setFontSize( tbFont.pointSize() );
+ 	( (KFontSizeAction*)actionTextFontSize )->blockSignals( FALSE );
     }
 }
 
@@ -1797,6 +1807,16 @@ void KPresenterView::setupActions()
 				      KPBarIcon( "line_end" ), 0,
 				      this, SLOT( extraLineEnd() ),
 				      actionCollection(), "extra_lineend" );
+
+    actionExtraGroup = new KAction( i18n( "&Group Objects" ),
+				    KPBarIcon( "group" ), 0,
+				    this, SLOT( extraGroup() ),
+				    actionCollection(), "extra_group" );
+
+    actionExtraGroup = new KAction( i18n( "&Ungroup Objects" ),
+				    KPBarIcon( "ungroup" ), 0,
+				    this, SLOT( extraUnGroup() ),
+				    actionCollection(), "extra_ungroup" );
 
     // ----------------- screenpresentation actions
 
@@ -2876,7 +2896,7 @@ int KPresenterView::getCurrentPresPage()
 {
     if ( !presStarted )
 	return -1;
-    
+
     return page->presPage();
 }
 
@@ -2885,7 +2905,7 @@ int KPresenterView::getCurrentPresStep()
 {
     if ( !presStarted )
 	return -1;
-    
+
     return page->presStep();
 }
 
@@ -2894,7 +2914,7 @@ int KPresenterView::getPresStepsOfPage()
 {
     if ( !presStarted )
 	return -1;
-    
+
     return page->numPresSteps();
 }
 
@@ -2903,7 +2923,7 @@ int KPresenterView::getNumPresPages()
 {
     if ( !presStarted )
 	return -1;
-    
+
     return page->numPresPages();
 }
 
@@ -2912,7 +2932,7 @@ bool KPresenterView::gotoPresPage( int pg )
 {
     if ( !presStarted )
 	return FALSE;
-    
+
     page->gotoPage( pg );
     return TRUE;
 }

@@ -270,6 +270,16 @@ void KPresenterViewIface::extraAlignObjs()
     view->extraAlignObjs();
 }
 
+void KPresenterViewIface::extraGroup()
+{
+    view->extraGroup();
+}
+
+void KPresenterViewIface::extraUnGroup()
+{
+    view->extraUnGroup();
+}
+
 void KPresenterViewIface::screenConfigPages()
 {
     view->screenConfigPages();

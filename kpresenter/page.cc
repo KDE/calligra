@@ -1085,11 +1085,9 @@ int Page::diffy( int /*i*/ )
 /*======================= select object ==========================*/
 void Page::selectObj( int num )
 {
-    if ( num < static_cast<int>( objectList()->count() ) )
-    {
+    if ( num < static_cast<int>( objectList()->count() ) ) {
 	selectObj( objectList()->at( num ) );
-	if ( objectList()->at( num )->getType() == OT_TEXT )
-	{
+	if ( objectList()->at( num )->getType() == OT_TEXT ) {
 	    KPTextObject *kptextobject = dynamic_cast<KPTextObject*>( objectList()->at( num ) );
 	    QFont *f = new QFont( kptextobject->getKTextObject()->font() );
 	    QColor *c = new QColor( kptextobject->getKTextObject()->color() );
@@ -1113,8 +1111,7 @@ void Page::deSelectObj( int num )
 void Page::selectObj( KPObject *kpobject )
 {
     kpobject->setSelected( true );
-    if ( kpobject->getType() == OT_TEXT )
-    {
+    if ( kpobject->getType() == OT_TEXT ) {
 	KPTextObject *kptextobject = dynamic_cast<KPTextObject*>( kpobject );
 	QFont *f = new QFont( kptextobject->getKTextObject()->font() );
 	QColor *c = new QColor( kptextobject->getKTextObject()->color() );
