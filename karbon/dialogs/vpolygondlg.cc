@@ -13,7 +13,7 @@
 #include <qspinbox.h>
 #include <qstring.h>
 #include <qwidget.h>
-
+#include <knuminput.h>
 #include <klocale.h>
 
 #include "vpolygondlg.h"
@@ -32,7 +32,7 @@ VPolygonDlg::VPolygonDlg( QWidget* parent, const char* name )
  	outerbox->addWidget( group );
 
 	new QLabel( i18n( "Radius:" ), group );
-	m_radius = new QLineEdit( 0, group );
+	m_radius = new KDoubleNumInput( 0, group );
 	new QLabel( i18n( "Edges:" ), group );
 	m_edges = new QSpinBox( group );
 	m_edges->setMinValue( 3 );
@@ -64,7 +64,7 @@ VPolygonDlg::VPolygonDlg( QWidget* parent, const char* name )
 double
 VPolygonDlg::radius() const
 {
-	return m_radius->text().toDouble();
+	return m_radius->value();
 }
 
 uint
@@ -76,9 +76,7 @@ VPolygonDlg::edges() const
 void
 VPolygonDlg::setRadius( double value )
 {
-	QString s;
-	s.setNum( value, 'f', 3 );
-	m_radius->setText( s );
+    m_radius->setValue( value );
 }
 
 void

@@ -15,7 +15,7 @@
 #include <qwidget.h>
 
 #include <klocale.h>
-
+#include <knuminput.h>
 #include "vstardlg.h"
 
 VStarDlg::VStarDlg( QWidget* parent, const char* name )
@@ -32,9 +32,9 @@ VStarDlg::VStarDlg( QWidget* parent, const char* name )
 
 	// add width/height-input:
 	new QLabel( i18n( "Outer Radius:" ), group );
-	m_outerR = new QLineEdit( 0, group );
+	m_outerR = new KDoubleNumInput( 0, group );
 	new QLabel( i18n( "Inner Radius:" ), group );
-	m_innerR = new QLineEdit( 0, group );
+	m_innerR = new KDoubleNumInput( 0, group );
 	new QLabel( i18n( "Edges:" ), group );
 	m_edges = new QSpinBox( group );
 	m_edges->setMinValue( 3 );
@@ -61,18 +61,19 @@ VStarDlg::VStarDlg( QWidget* parent, const char* name )
 	// signals and slots:
 	connect( okbutton, SIGNAL( clicked() ), this, SLOT( accept() ) );
 	connect( cancelbutton, SIGNAL( clicked() ), this, SLOT( reject() ) );
+        resize( 300, 80);
 }
 
 double
 VStarDlg::innerR() const
 {
-	return m_innerR->text().toDouble();
+	return m_innerR->value();
 }
 
 double
 VStarDlg::outerR() const
 {
-	return m_outerR->text().toDouble();
+	return m_outerR->value();
 }
 
 uint
@@ -84,17 +85,13 @@ VStarDlg::edges() const
 void
 VStarDlg::setInnerR( double value )
 {
-	QString s;
-	s.setNum( value, 'f', 3 );
-	m_innerR->setText( s );
+    m_innerR->setValue( value );
 }
 
 void
 VStarDlg::setOuterR( double value )
 {
-	QString s;
-	s.setNum( value, 'f', 3 );
-	m_outerR->setText( s );
+    m_outerR->setValue( value);
 }
 
 void

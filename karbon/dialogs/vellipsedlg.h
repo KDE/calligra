@@ -8,7 +8,7 @@
 
 #include <kdialog.h>
 
-class QLineEdit;
+class KDoubleNumInput;
 
 class VEllipseDlg : public KDialog
 {
@@ -23,8 +23,8 @@ public:
 	void setHeight( double value );
 
 private:
-	QLineEdit* m_width;
-	QLineEdit* m_height;
+	KDoubleNumInput* m_width;
+	KDoubleNumInput* m_height;
 };
 
 #endif

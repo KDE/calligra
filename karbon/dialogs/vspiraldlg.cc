@@ -16,7 +16,7 @@
 #include <qwidget.h>
 
 #include <klocale.h>
-
+#include <knuminput.h>
 #include "vspiraldlg.h"
 
 VSpiralDlg::VSpiralDlg( QWidget* parent, const char* name )
@@ -32,12 +32,12 @@ VSpiralDlg::VSpiralDlg( QWidget* parent, const char* name )
 	outerbox->addWidget( group );
 
 	new QLabel( i18n( "Radius:" ), group );
-	m_radius = new QLineEdit( 0, group );
+	m_radius = new KDoubleNumInput( 0, group );
 	new QLabel( i18n( "Segments:" ), group );
 	m_segments = new QSpinBox( group );
 	m_segments->setMinValue( 1 );
 	new QLabel( i18n( "Fade:" ), group );
-	m_fade = new QLineEdit( 0, group );
+	m_fade = new KDoubleNumInput( 0, group );
 	new QLabel( i18n( "Orientation:" ), group );
 	m_clockwise = new QComboBox( false,group );
 	m_clockwise->insertItem( i18n( "Clockwise" ), 0 );
@@ -70,7 +70,7 @@ VSpiralDlg::VSpiralDlg( QWidget* parent, const char* name )
 double
 VSpiralDlg::radius() const
 {
-	return m_radius->text().toDouble();
+	return m_radius->value();
 }
 
 uint
@@ -82,7 +82,7 @@ VSpiralDlg::segments() const
 double
 VSpiralDlg::fade() const
 {
-	return m_fade->text().toDouble();
+    return m_fade->value();
 }
 
 bool
@@ -97,9 +97,7 @@ VSpiralDlg::clockwise() const
 void
 VSpiralDlg::setRadius( double value )
 {
-	QString s;
-	s.setNum( value, 'f', 3 );
-	m_radius->setText( s );
+    m_radius->setValue( value );
 }
 
 void
@@ -111,9 +109,7 @@ VSpiralDlg::setSegments( uint value )
 void
 VSpiralDlg::setFade( double value )
 {
-	QString s;
-	s.setNum( value, 'f', 3 );
-	m_fade->setText( s );
+    m_fade->setValue( value );
 }
 
 void

@@ -12,7 +12,7 @@
 #include <qwidget.h>
 
 #include <klocale.h>
-
+#include <knuminput.h>
 #include "vflattendlg.h"
 
 
@@ -32,7 +32,7 @@ VFlattenDlg::VFlattenDlg( QWidget* parent, const char* name )
  	outerbox->addWidget( group );
 
 	new QLabel( i18n( "Flatness:" ), group );
-	m_flatness = new QLineEdit( 0, group );
+	m_flatness = new KDoubleNumInput( 0, group );
 
 	outerbox->addSpacing( 2 );
 
@@ -56,20 +56,19 @@ VFlattenDlg::VFlattenDlg( QWidget* parent, const char* name )
 	// signals and slots:
 	connect( okbutton, SIGNAL( clicked() ), this, SLOT( accept() ) );
 	connect( cancelbutton, SIGNAL( clicked() ), this, SLOT( reject() ) );
+        resize( 300, 60);
 }
 
 double
 VFlattenDlg::flatness() const
 {
-	return m_flatness->text().toDouble();
+	return m_flatness->value();
 }
 
 void
 VFlattenDlg::setFlatness( double value )
 {
-	QString s;
-	s.setNum( value, 'f', 3 );
-	m_flatness->setText( s );
+    m_flatness->setValue( value);
 }
 
 #include "vflattendlg.moc"

@@ -8,7 +8,7 @@
 
 #include <kdialog.h>
 
-class QLineEdit;
+class KDoubleNumInput;
 class QSpinBox;
 
 class VPolygonDlg : public KDialog
@@ -24,7 +24,7 @@ public:
 	void setEdges( uint value );
 
 private:
-	QLineEdit* m_radius;
+	KDoubleNumInput* m_radius;
 	QSpinBox* m_edges;
 };
 

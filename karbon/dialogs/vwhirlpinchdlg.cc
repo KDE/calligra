@@ -12,7 +12,7 @@
 #include <qwidget.h>
 
 #include <klocale.h>
-
+#include <knuminput.h>
 #include "vwhirlpinchdlg.h"
 
 VWhirlPinchDlg::VWhirlPinchDlg( QWidget* parent, const char* name )
@@ -31,11 +31,11 @@ VWhirlPinchDlg::VWhirlPinchDlg( QWidget* parent, const char* name )
  	outerbox->addWidget( group );
 
 	new QLabel( i18n( "Angle:" ), group );
-	m_angle = new QLineEdit( 0, group );
+	m_angle = new KDoubleNumInput( 0, group );
 	new QLabel( i18n( "Pinch:" ), group );
-	m_pinch = new QLineEdit( 0, group );
+	m_pinch = new KDoubleNumInput( 0, group );
 	new QLabel( i18n( "Radius:" ), group );
-	m_radius = new QLineEdit( 0, group );
+	m_radius = new KDoubleNumInput( 0, group );
 
 	outerbox->addSpacing( 2 );
 
@@ -59,48 +59,43 @@ VWhirlPinchDlg::VWhirlPinchDlg( QWidget* parent, const char* name )
 	// signals and slots:
 	connect( okbutton, SIGNAL( clicked() ), this, SLOT( accept() ) );
 	connect( cancelbutton, SIGNAL( clicked() ), this, SLOT( reject() ) );
+        resize( 300, 80);
 }
 
 double
 VWhirlPinchDlg::angle() const
 {
-	return m_angle->text().toDouble();
+	return m_angle->value();
 }
 
 double
 VWhirlPinchDlg::pinch() const
 {
-	return m_pinch->text().toDouble();
+	return m_pinch->value();
 }
 
 double
 VWhirlPinchDlg::radius() const
 {
-	return m_radius->text().toDouble();
+	return m_radius->value();
 }
 
 void
 VWhirlPinchDlg::setAngle( double value )
 {
-	QString s;
-	s.setNum( value, 'f', 3 );
-	m_angle->setText( s );
+    m_angle->setValue( value);
 }
 
 void
 VWhirlPinchDlg::setPinch( double value )
 {
-	QString s;
-	s.setNum( value, 'f', 3 );
-	m_pinch->setText( s );
+    m_pinch->setValue(value);
 }
 
 void
 VWhirlPinchDlg::setRadius( double value )
 {
-	QString s;
-	s.setNum( value, 'f', 3 );
-	m_radius->setText( s );
+    m_radius->setValue( value);
 }
 
 #include "vwhirlpinchdlg.moc"

@@ -14,7 +14,7 @@
 #include <qwidget.h>
 
 #include <klocale.h>
-
+#include <knuminput.h>
 #include "vellipsedlg.h"
 
 VEllipseDlg::VEllipseDlg( QWidget* parent, const char* name )
@@ -32,9 +32,9 @@ VEllipseDlg::VEllipseDlg( QWidget* parent, const char* name )
 
 	// add width/height-input:
 	new QLabel( i18n( "Width:" ), group );
-	m_width = new QLineEdit( 0, group );
+	m_width = new KDoubleNumInput( 0, group );
 	new QLabel( i18n( "Height:" ), group );
-	m_height = new QLineEdit( 0, group );
+	m_height = new KDoubleNumInput( 0, group );
 
 	outerbox->addSpacing( 2 );
 
@@ -58,34 +58,31 @@ VEllipseDlg::VEllipseDlg( QWidget* parent, const char* name )
 	// signals and slots:
 	connect( okbutton, SIGNAL( clicked() ), this, SLOT( accept() ) );
 	connect( cancelbutton, SIGNAL( clicked() ), this, SLOT( reject() ) );
+        resize( 300, 80);
 }
 
 double
 VEllipseDlg::width() const
 {
-	return m_width->text().toDouble();
+	return m_width->value();
 }
 
 double
 VEllipseDlg::height() const
 {
-	return m_height->text().toDouble();
+	return m_height->value();
 }
 
 void
 VEllipseDlg::setWidth( double value )
 {
-	QString s;
-	s.setNum( value, 'f', 3 );
-	m_width->setText( s );
+    m_width->setValue(value);
 }
 
 void
 VEllipseDlg::setHeight( double value )
 {
-	QString s;
-	s.setNum( value, 'f', 3 );
-	m_height->setText( s );
+    m_height->setValue( value );
 }
 
 #include "vellipsedlg.moc"

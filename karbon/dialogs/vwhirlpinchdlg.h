@@ -7,7 +7,7 @@
 
 #include <kdialog.h>
 
-class QLineEdit;
+class KDoubleNumInput;
 
 class VWhirlPinchDlg : public KDialog
 {
@@ -24,9 +24,9 @@ public:
 	void setRadius( double value );
 
 private:
-	QLineEdit* m_angle;
-	QLineEdit* m_pinch;
-	QLineEdit* m_radius;
+	KDoubleNumInput* m_angle;
+	KDoubleNumInput* m_pinch;
+	KDoubleNumInput* m_radius;
 };
 
 #endif

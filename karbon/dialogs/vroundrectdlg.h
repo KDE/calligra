@@ -8,7 +8,7 @@
 
 #include <kdialog.h>
 
-class QLineEdit;
+class KDoubleNumInput;
 
 class VRoundRectDlg : public KDialog
 {
@@ -25,9 +25,9 @@ public:
 	void setRound( double value );
 
 private:
-	QLineEdit* m_width;
-	QLineEdit* m_height;
-	QLineEdit* m_round;
+	KDoubleNumInput* m_width;
+	KDoubleNumInput* m_height;
+	KDoubleNumInput* m_round;
 };
 
 #endif

@@ -7,7 +7,7 @@
 
 #include <kdialog.h>
 
-class QLineEdit;
+class KDoubleNumInput;
 
 class VRoundCornersDlg : public KDialog
 {
@@ -20,7 +20,7 @@ public:
 	void setRadius( double value );
 
 private:
-	QLineEdit* m_radius;
+	KDoubleNumInput* m_radius;
 };
 
 #endif

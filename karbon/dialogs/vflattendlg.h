@@ -7,7 +7,7 @@
 
 #include <kdialog.h>
 
-class QLineEdit;
+class KDoubleNumInput;
 
 class VFlattenDlg : public KDialog
 {
@@ -20,7 +20,7 @@ public:
 	void setFlatness( double value );
 
 private:
-	QLineEdit* m_flatness;
+	KDoubleNumInput* m_flatness;
 };
 
 #endif

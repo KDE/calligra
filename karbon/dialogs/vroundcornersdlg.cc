@@ -12,7 +12,7 @@
 #include <qwidget.h>
 
 #include <klocale.h>
-
+#include <knuminput.h>
 #include "vroundcornersdlg.h"
 
 
@@ -32,7 +32,7 @@ VRoundCornersDlg::VRoundCornersDlg( QWidget* parent, const char* name )
  	outerbox->addWidget( group );
 
 	new QLabel( i18n( "Round Corners:" ), group );
-	m_radius = new QLineEdit( 0, group );
+	m_radius = new KDoubleNumInput( 0, group );
 
 	outerbox->addSpacing( 2 );
 
@@ -56,20 +56,19 @@ VRoundCornersDlg::VRoundCornersDlg( QWidget* parent, const char* name )
 	// signals and slots:
 	connect( okbutton, SIGNAL( clicked() ), this, SLOT( accept() ) );
 	connect( cancelbutton, SIGNAL( clicked() ), this, SLOT( reject() ) );
+        resize ( 300,60);
 }
 
 double
 VRoundCornersDlg::radius() const
 {
-	return m_radius->text().toDouble();
+    return m_radius->value();
 }
 
 void
 VRoundCornersDlg::setRadius( double value )
 {
-	QString s;
-	s.setNum( value, 'f', 3 );
-	m_radius->setText( s );
+    m_radius->setValue(value);
 }
 
 #include "vroundcornersdlg.moc"

@@ -8,7 +8,7 @@
 
 #include <kdialog.h>
 
-class QLineEdit;
+class KDoubleNumInput;
 class QSpinBox;
 
 class VSinusDlg : public KDialog
@@ -26,8 +26,8 @@ public:
 	void setPeriods( uint value );
 
 private:
-	QLineEdit* m_width;
-	QLineEdit* m_height;
+	KDoubleNumInput* m_width;
+	KDoubleNumInput* m_height;
 	QSpinBox* m_periods;
 };
 

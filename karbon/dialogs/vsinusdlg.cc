@@ -15,7 +15,7 @@
 #include <qwidget.h>
 
 #include <klocale.h>
-
+#include <knuminput.h>
 #include "vsinusdlg.h"
 
 VSinusDlg::VSinusDlg( QWidget* parent, const char* name )
@@ -32,9 +32,9 @@ VSinusDlg::VSinusDlg( QWidget* parent, const char* name )
 
 	// add width/height-input:
 	new QLabel( i18n( "Width:" ), group );
-	m_width = new QLineEdit( 0, group );
+	m_width = new KDoubleNumInput( 0, group );
 	new QLabel( i18n( "Height:" ), group );
-	m_height = new QLineEdit( 0, group );
+	m_height = new KDoubleNumInput( 0, group );
 	new QLabel( i18n( "Periods:" ), group );
 	m_periods = new QSpinBox( group );
 	m_periods->setMinValue( 1 );
@@ -66,13 +66,13 @@ VSinusDlg::VSinusDlg( QWidget* parent, const char* name )
 double
 VSinusDlg::width() const
 {
-	return m_width->text().toDouble();
+	return m_width->value();
 }
 
 double
 VSinusDlg::height() const
 {
-	return m_height->text().toDouble();
+	return m_height->value();
 }
 
 uint
@@ -84,17 +84,13 @@ VSinusDlg::periods() const
 void
 VSinusDlg::setWidth( double value )
 {
-	QString s;
-	s.setNum( value, 'f', 3 );
-	m_width->setText( s );
+    m_width->setValue( value );
 }
 
 void
 VSinusDlg::setHeight( double value )
 {
-	QString s;
-	s.setNum( value, 'f', 3 );
-	m_height->setText( s );
+    m_height->setValue( value );
 }
 
 void

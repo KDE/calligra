@@ -9,7 +9,7 @@
 #include <kdialog.h>
 
 class QComboBox;
-class QLineEdit;
+class KDoubleNumInput;
 class QSpinBox;
 
 class VSpiralDlg : public KDialog
@@ -29,9 +29,9 @@ public:
 	void setClockwise( bool value );
 
 private:
-	QLineEdit* m_radius;
+	KDoubleNumInput* m_radius;
 	QSpinBox* m_segments;
-	QLineEdit* m_fade;
+	KDoubleNumInput* m_fade;
 	QComboBox* m_clockwise;
 };
 

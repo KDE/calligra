@@ -8,8 +8,7 @@
 
 #include <kdialog.h>
 
-class QLineEdit;
-
+class KDoubleNumInput;
 class VRectangleDlg : public KDialog
 {
 	Q_OBJECT
@@ -23,8 +22,8 @@ public:
 	void setHeight( double value );
 
 private:
-	QLineEdit* m_width;
-	QLineEdit* m_height;
+	KDoubleNumInput* m_width;
+	KDoubleNumInput* m_height;
 };
 
 #endif
