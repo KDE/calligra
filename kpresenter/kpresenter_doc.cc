@@ -1136,8 +1136,9 @@ bool KPresenterDoc::insertNewTemplate( int /*diffx*/, int /*diffy*/, bool clean 
 	bool ok = loadNativeFormat( fileName );
 	objStartY = 0;
 	_clean = true;
-	setModified(true);
+	setModified(true); // why?
 	resetURL();
+        setEmpty();
 	return ok;
     } else if ( ret == KoTemplateChooseDia::File ) {
 	objStartY = 0;
@@ -1151,9 +1152,10 @@ bool KPresenterDoc::insertNewTemplate( int /*diffx*/, int /*diffy*/, bool clean 
 				 KPresenterFactory::global() ) );
 	objStartY = 0;
 	_clean = true;
-	setModified(true);
+	setModified(true); // why?
 	bool ok = loadNativeFormat( fileName );
 	resetURL();
+        setEmpty();
 	return ok;
     } else
 	return false;
