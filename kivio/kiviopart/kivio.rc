@@ -6,24 +6,6 @@
    <Action name="pasteStencil"/>
    <Separator/>
  </Menu>
- <Menu name="Page"><text>P&amp;age</text>
-   <Action name="insertPage"/>
-   <Action name="removePage"/>
-   <Action name="hidePage"/>
-   <Action name="showPage"/>
- </Menu>
- <Menu name="Selection"><text>&amp;Selection</text>
-   <Action name="selectAllStencils"/>
-   <Action name="unselectAllStencils"/>
-   <Separator/>
-   <Action name="groupStencils"/>
-   <Action name="ungroupStencils"/>
-   <Separator/>
-   <Action name="sendStencilToBack"/>
-   <Action name="bringStencilToFront"/>
-   <Separator/>
-   <Action name="alignStencils"/>
- </Menu>
  <Menu name="View"><text>&amp;View</text>
    <Action name="view_newview"/>
    <ActionList name="view_closeallviews"/>
@@ -48,6 +30,23 @@
      <Action name="birdEye"/>
      <Action name="protection"/>
    </Menu>
+ </Menu> <Menu name="Page"><text>P&amp;age</text>
+   <Action name="insertPage"/>
+   <Action name="removePage"/>
+   <Action name="hidePage"/>
+   <Action name="showPage"/>
+ </Menu>
+ <Menu name="Selection"><text>&amp;Selection</text>
+   <Action name="selectAllStencils"/>
+   <Action name="unselectAllStencils"/>
+   <Separator/>
+   <Action name="groupStencils"/>
+   <Action name="ungroupStencils"/>
+   <Separator/>
+   <Action name="sendStencilToBack"/>
+   <Action name="bringStencilToFront"/>
+   <Separator/>
+   <Action name="alignStencils"/>
  </Menu>
  <Menu name="settings"><text>&amp;Settings</text>
    <Action name="options"/>
