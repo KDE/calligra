@@ -27,7 +27,11 @@
 #include "kexipartitem.h"
 #include "kexipartinfo.h"
 #include "kexipropertybuffer.h"
+#include "kexiproject.h"
 #include "kexi_utils.h"
+
+#include <kexidb/connection.h>
+#include <kexidb/utils.h>
 
 #include <qwidgetstack.h>
 #include <qobjectlist.h>
@@ -342,6 +346,39 @@ bool KexiDialogBase::storeData()
 	if (!v)
 		return false;
 	return v->storeData() != 0;
+}
+
+bool KexiDialogBase::storeDataBlock( const QString &dataString, const QString& dataID )
+{
+	KexiDB::Connection *conn = m_parentWindow->project()->dbConnection();
+	KexiDB::Driver *drv = conn->driver();
+	
+	QString sql = "select kexi__objectdata.o_id where o_id=" + QString::number(id());
+	QString sql_sub = KexiDB::sqlWhere(drv, KexiDB::Field::Text, "o_sub_id", dataID);
+
+	bool ok, exists;
+	exists = conn->resultExists(sql + sql_sub, ok);
+	if (!ok)
+		return false;
+	if (exists) {
+		return conn->drv_executeSQL( "update kexi__objectdata set o_data="
+			+ drv->valueToSQL( KexiDB::Field::BLOB, dataString )
+			+ " where o_id=" + QString::number(id()) + sql_sub );
+	}
+	return conn->drv_executeSQL( 
+		"insert into kexi__objectdata (o_id, o_data, o_sub_id) values ("
+		+ QString::number(id()) +"," + drv->valueToSQL( KexiDB::Field::BLOB, dataString )
+		+ "," + drv->valueToSQL( KexiDB::Field::Text, dataID ) );
+}
+
+bool KexiDialogBase::loadDataBlock( QString &dataString, const QString& dataID )
+{
+	KexiDB::Connection *conn = m_parentWindow->project()->dbConnection();
+	KexiDB::Driver *drv = conn->driver();
+
+	return conn->querySingleString(
+		QString("select o_data from kexi__objectdata where o_id=") + QString::number(id())
+		+ " and " + KexiDB::sqlWhere(drv, KexiDB::Field::Text, "o_sub_id", dataID), dataString );
 }
 
 #include "kexidialogbase.moc"

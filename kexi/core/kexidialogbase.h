@@ -194,6 +194,19 @@ class KEXICORE_EXPORT KexiDialogBase : public KMdiChildView, public KexiActionPr
 
 		void dirtyChanged();
 
+		/*! Stores large string data \a dataString, block (e.g. xml form's representation) 
+		 at the backend. Block will be stored in "kexi__objectdata" table pointed by
+		 this object's id and an optional \a dataID identifier. 
+		 If there is already such record in the table, it's simply overwritten.
+		 \return true on success
+		*/
+		bool storeDataBlock( const QString &dataString, const QString& dataID = QString::null );
+
+		/*! Loads large string data \a dataString, block (e.g. xml form's representation).
+		 \return true on success
+		 \sa storeDataBlock(). */
+		bool loadDataBlock( QString &dataString, const QString& dataID = QString::null);
+
 	private:
 		KexiMainWindow *m_parentWindow;
 		bool m_isRegistered;
