@@ -381,7 +381,6 @@ void KWTextParag::drawParagString( QPainter &painter, const QString &s, int star
     // Resolve the color before calling the default implementation of drawParagString
     if ( lastFormat && !lastFormat->color().isValid() )
     {
-        kdDebug() << "KWTextParag::drawParagString " << this << endl;
         localFormat = new QTextFormat( *lastFormat );
         localFormat->setColor( KWDocument::defaultTextColor( &painter ) );
         lastFormat = localFormat;
