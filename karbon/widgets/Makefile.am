@@ -18,6 +18,7 @@ noinst_HEADERS = \
 	vstrokefillpreview.h \
 	vtranslate.h \
 	vstatebutton.h \
+	vtoolbox.h \
 	tkfloatspinbox.h \
 	tkunits.h \
 	tkfloatspinboxaction.h
@@ -32,6 +33,7 @@ libkarbonwidgets_la_SOURCES = \
 	vstrokefillpreview.cc \
 	vtranslate.cc \
 	vstatebutton.cc \
+	vtoolbox.cc \
 	tkfloatspinbox.cpp \
 	tkunits.cpp \
 	tkfloatspinboxaction.cpp

@@ -71,7 +71,7 @@ class VStroke;
 class VStrokeDocker;
 class VStrokeFillPreview;
 class VTool;
-class VToolDocker;
+class VToolBox;
 class VToolOptionsDocker;
 class VTransformDlg;
 class VWhirlPinchDlg;
@@ -267,7 +267,7 @@ private:
 	//toolbox
 	DCOPObject* m_dcop;
 
-	VToolDocker *m_toolbox;
+	VToolBox *m_toolbox;
 
 	//status bar message
 	QLabel* m_status;

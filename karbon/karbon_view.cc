@@ -34,8 +34,7 @@
 #include <kstatusbar.h>
 #include <kstdaction.h>
 
-#include "vtooloptionsdocker.h"
-#include "vcontexthelpdocker.h"
+#include "vtoolbox.h"
 
 // Tools.
 #include "vellipsetool.h"
@@ -81,7 +80,6 @@
 #include "vcolordocker.h"
 #include "vcontexthelpdocker.h"
 #include "vstrokedocker.h"
-#include "vtooldocker.h"
 #include "vlayersdocker.h"
 #include "vtooloptionsdocker.h"
 #include "vcontexthelpdocker.h"
@@ -176,9 +174,6 @@ KarbonView::KarbonView( KarbonPart* p, QWidget* parent, const char* name )
 	m_ColorManager = 0L;
 	m_strokeDocker = 0L;
 
-	//VToolDocker* toolContainer = part()->toolContainer();
-
-	kdDebug() << "done" << endl;
 	if( shell() )
 	{
 		//Create Dockers
@@ -252,7 +247,7 @@ KarbonView::createContainer( QWidget *parent, int index, const QDomElement &elem
 		//if( !m_toolbox )
 		//{
 		kdDebug() << "GOT IT! toolbar :" << toolbar << endl;
-			m_toolbox = new VToolDocker( m_part, toolbar );
+			m_toolbox = new VToolBox( m_part, toolbar );
 			connect( m_toolbox, SIGNAL( selectToolActivated() ),		this, SLOT( selectTool() ) );
 			connect( m_toolbox, SIGNAL( selectNodesToolActivated() ),	this, SLOT( selectNodesTool() ) );
 			connect( m_toolbox, SIGNAL( rotateToolActivated() ),		this, SLOT( rotateTool() ) );
