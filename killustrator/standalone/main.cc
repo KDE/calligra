@@ -1,5 +1,3 @@
-// GAH GETOPT_LONG IS EVIL USE A FRIGGING PORTABLE GETOPT
-
 /* -*- C++ -*-
 
   $Id$
@@ -52,14 +50,7 @@
 #define KDEMAXPATHLEN 4095
 #endif
 
-#include <getopt.h>
-
-static struct option kill_options[] = {
-  {"help", 0, 0, 0 }, 
-  {"version", 0, 0, 0 }, 
-  {"export", 2, 0, 0 },
-  { 0, 0, 0, 0 }
-};
+#include <unistd.h>
 
 int main (int argc, char** argv) {
 #ifdef __FreeBSD__
@@ -76,8 +67,7 @@ int main (int argc, char** argv) {
   if (argc != 1) {
     opterr = 0;
     while (1) {
-      int c = getopt_long_only (argc, argv, "hve::", 
-				kill_options, &option_index);
+      int c = getopt (argc, argv, "hve::");
       if (c == -1)
 	break;
       switch (c) {
@@ -115,7 +105,7 @@ int main (int argc, char** argv) {
   if (PStateManager::instance ()->showSplashScreen ())
 #ifdef NEWKDE
     new StartupScreen( KGlobal::dirs()->findResource( "appdata",
-                "pics/killustrator-intro.gif" ), 5 );
+                "pics/killustrator-intro.gif" ), 5);
 #else
     new StartupScreen (kapp->kde_datadir() + 
 		       "/killustrator/pics/killustrator-intro.gif", 5);
