@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 1998-2002 The KSpread Team
+   Copyright (C) 1998-2003 The KSpread Team
                            www.koffice.org/kspread
 
    This library is free software; you can redistribute it and/or
@@ -55,6 +55,7 @@ bool kspreadfunc_eomonth( KSContext& context );
 bool kspreadfunc_hour( KSContext& context );
 bool kspreadfunc_hours( KSContext& context );
 bool kspreadfunc_isLeapYear ( KSContext& context );
+bool kspreadfunc_isoWeekNum( KSContext& context );
 bool kspreadfunc_minute( KSContext& context );
 bool kspreadfunc_minutes( KSContext& context );
 bool kspreadfunc_month( KSContext& context );
@@ -76,7 +77,7 @@ bool kspreadfunc_years( KSContext& context );
 void KSpreadRegisterDateTimeFunctions()
 {
   // missing: Excel:    WORKDAY, NETWORKDAYS, WEEKNUM, DATEDIF
-  //          Gnumeric: ISOWEEKNUM, UNIX2DATE, DATE2UNIX
+  //          Gnumeric: UNIX2DATE, DATE2UNIX
   KSpreadFunctionRepository* repo = KSpreadFunctionRepository::self();
   repo->registerFunction( "CURRENTDATE",  kspreadfunc_currentDate );
   repo->registerFunction( "CURRENTDATETIME",  kspreadfunc_currentDateTime );
@@ -90,11 +91,13 @@ void KSpreadRegisterDateTimeFunctions()
   repo->registerFunction( "DAYS360",  kspreadfunc_days360 );
   repo->registerFunction( "DAYSINMONTH",  kspreadfunc_daysInMonth );
   repo->registerFunction( "DAYSINYEAR",  kspreadfunc_daysInYear );
+  repo->registerFunction( "EASTERSUNDAY",  kspreadfunc_easterSunday );
   repo->registerFunction( "EDATE",  kspreadfunc_edate );
   repo->registerFunction( "EOMONTH",  kspreadfunc_eomonth );
   repo->registerFunction( "HOUR",  kspreadfunc_hour );
   repo->registerFunction( "HOURS",  kspreadfunc_hours );
   repo->registerFunction( "ISLEAPYEAR",  kspreadfunc_isLeapYear );
+  repo->registerFunction( "ISOWEEKNUM",  kspreadfunc_isoWeekNum );
   repo->registerFunction( "MINUTE",  kspreadfunc_minute );
   repo->registerFunction( "MINUTES",  kspreadfunc_minutes );
   repo->registerFunction( "MONTH",  kspreadfunc_month );
@@ -112,7 +115,6 @@ void KSpreadRegisterDateTimeFunctions()
   repo->registerFunction( "WEEKSINYEAR",  kspreadfunc_weeksInYear );
   repo->registerFunction( "YEAR",   kspreadfunc_year );
   repo->registerFunction( "YEARS",  kspreadfunc_years );
-  repo->registerFunction( "EASTERSUNDAY",  kspreadfunc_easterSunday );
 }
 
 // Function: EDATE
@@ -1176,6 +1178,7 @@ bool kspreadfunc_weeksInYear( KSContext& context )
   return true;
 }
 
+// Function: easterSunday
 bool kspreadfunc_easterSunday( KSContext& context )
 {
     QValueList<KSValue::Ptr>& args = context.value()->listValue();
@@ -1206,5 +1209,29 @@ bool kspreadfunc_easterSunday( KSContext& context )
 
     context.setValue( new KSValue( KGlobal::locale()->formatDate( QDate(nYear, nMonth, nDay) ) ) );
 
+    return true;
+}
+
+// Function: isoWeekNum
+bool kspreadfunc_isoWeekNum( KSContext& context )
+{
+    QValueList<KSValue::Ptr>& args = context.value()->listValue();
+    if ( !KSUtil::checkArgumentsCount( context,1,"isoWeekNum",true ) )
+        return false;
+
+    QDate tmpDate;
+
+    if (!getDate(context, args[0], tmpDate))
+        return false;
+
+    if (!tmpDate.isValid())
+        return false;
+
+    int result = tmpDate.weekNumber();
+
+    if (result==0)
+        return false;
+
+    context.setValue( new KSValue(result) );
     return true;
 }
