@@ -70,7 +70,7 @@ KoTextCursor * KWPasteTextCommand::execute( KoTextCursor *c )
             listParagraphs.append( paragraph );
         }
     }
-    //kdDebug() << "KWPasteTextCommand::execute Inserting text: '" << text << "'" << endl;
+    kdDebug() << "KWPasteTextCommand::execute Inserting text: '" << text << "'" << endl;
     KWTextDocument * textdoc = static_cast<KWTextDocument *>(c->parag()->document());
     KWTextFrameSet * textFs = textdoc->textFrameSet();
     textFs->unzoom();
@@ -136,11 +136,11 @@ KoTextCursor * KWPasteTextCommand::execute( KoTextCursor *c )
         //kdDebug() << "KWPasteTextCommand::execute going to next parag: " << parag << endl;
     }
     textFs->zoom( false );
-    textFs->renumberFootNotes();
     // In case loadFormatting queued any image request
     KWDocument * doc = textFs->kWordDocument();
     doc->processImageRequests();
 
+    kdDebug() << "KWPasteTextCommand::execute calling doc->pasteFrames" << endl;
     // In case of any inline frameset
     doc->pasteFrames( elem, 0 );
 

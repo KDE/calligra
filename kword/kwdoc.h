@@ -134,6 +134,7 @@ public:
     virtual QDomDocument saveXML();
     void processImageRequests();
     void processAnchorRequests();
+    bool processFootNoteRequests();
 
     int syntaxVersion( ) const { return m_syntaxVersion; }
 

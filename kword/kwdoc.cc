@@ -1391,6 +1391,7 @@ bool KWDocument::completeLoading( KoStore *_store )
 
     processImageRequests();
     processAnchorRequests();
+    processFootNoteRequests();
 
     // Save memory
     m_urlIntern = QString::null;
@@ -1456,14 +1457,18 @@ void KWDocument::processAnchorRequests()
             fs->setAnchored( itanch.data().textfs, itanch.data().paragId, itanch.data().index, true );
     }
     m_anchorRequests.clear();
+}
 
+bool KWDocument::processFootNoteRequests()
+{
+    bool ret = false;
     QMapIterator<QString, KWFootNoteVariable *> itvar = m_footnoteVarRequests.begin();
     for ( ; itvar != m_footnoteVarRequests.end(); ++itvar )
     {
         QString fsname = itvar.key();
         if ( m_pasteFramesetsMap && m_pasteFramesetsMap->contains( fsname ) )
             fsname = (*m_pasteFramesetsMap)[ fsname ];
-        kdDebug(32001) << "KWDocument::processAnchorRequests binding footnote var and frameset " << fsname << endl;
+        //kdDebug(32001) << "KWDocument::processFootNoteRequests binding footnote var " << itvar.data() << " and frameset " << fsname << endl;
         KWFrameSet * fs = frameSetByName( fsname );
         Q_ASSERT( fs );
         Q_ASSERT( fs->type() == FT_TEXT );
@@ -1473,8 +1478,11 @@ void KWDocument::processAnchorRequests()
         {
             fnfs->setFootNoteVariable( itvar.data() );
             itvar.data()->setFrameSet( fnfs );
+            ret = true;
         }
     }
+    m_footnoteVarRequests.clear();
+    return ret;
 }
 
 void KWDocument::pasteFrames( QDomElement topElem, KMacroCommand * macroCmd )
@@ -1519,7 +1527,7 @@ void KWDocument::pasteFrames( QDomElement topElem, KMacroCommand * macroCmd )
             } while ( frameSetByName( newName ) );
 
             m_pasteFramesetsMap->insert( oldName, newName ); // remember the name transformation
-            //kdDebug(32001) << "KWDocument::pasteFrames new frame : " << oldName << "->" << newName << endl;
+            kdDebug(32001) << "KWDocument::pasteFrames new frame : " << oldName << "->" << newName << endl;
             FrameSetType frameSetType = static_cast<FrameSetType>( KWDocument::getAttribute( elem, "frameType", FT_BASE ) );
             switch ( frameSetType ) {
             case FT_TABLE: {
@@ -1537,6 +1545,7 @@ void KWDocument::pasteFrames( QDomElement topElem, KMacroCommand * macroCmd )
                 break;
             default:
                 fs = loadFrameSet( elem, false );
+                kdDebug() << "KWDocument::pasteFrames created frame " << newName << endl;
                 fs->setName( newName );
                 frameElem = elem.namedItem( "FRAME" ).toElement();
             }
@@ -1599,6 +1608,14 @@ void KWDocument::pasteFrames( QDomElement topElem, KMacroCommand * macroCmd )
     }
     processImageRequests();
     processAnchorRequests();
+    if ( processFootNoteRequests() )
+    {
+        // We pasted footnotes. Renumber them, and relayout frames.
+        KWFrameSet *frameset = m_lstFrameSet.getFirst();
+        if ( frameset && frameset->type() == FT_TEXT )
+            static_cast<KWTextFrameSet *>(frameset)->renumberFootNotes();
+        recalcFrames();
+    }
 
     // Finalize afterwards - especially in case of inline frames, made them inline in processAnchorRequests
     for ( QPtrListIterator<KWFrameSet> fit( frameSetsToFinalize ); fit.current(); ++fit )

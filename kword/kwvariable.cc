@@ -296,7 +296,7 @@ void KWFootNoteVariable::move( int x, int y )
 {
     KoVariable::move( x, y );
 
-    Q_ASSERT( m_frameset );
+    Q_ASSERT( m_frameset ); // hmm, 0 when pasting...
     if (!m_frameset )
         return;
     Q_ASSERT( !m_frameset->isDeleted() );

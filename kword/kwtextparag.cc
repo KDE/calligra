@@ -340,27 +340,29 @@ void KWTextParag::save( QDomElement &parentElem, int from /* default 0 */,
 
             QDomElement formatElem = saveFormat( doc, newFormat, paragraphFormat(), index, 1 );
             formatsElem.appendChild( formatElem );
-            formatElem.setAttribute( "id", static_cast<KoTextCustomItem *>( ch.customItem() )->typeId() );
-            static_cast<KoTextCustomItem *>( ch.customItem() )->save( formatElem );
+            KoTextCustomItem* customItem = ch.customItem();
+            formatElem.setAttribute( "id", customItem->typeId() );
+            customItem->save( formatElem );
             startPos = -1;
             curFormat = paragraphFormat();
             // Save the contents of the frameset inside the anchor
             // This is NOT used when saving, but it is used when copying an inline frame
-            if ( saveAnchorsFramesets && dynamic_cast<KWAnchor *>( ch.customItem() ) )
+            if ( saveAnchorsFramesets )
             {
-                KWFrameSet* inlineFs = static_cast<KWAnchor *>( ch.customItem() )->frameSet();
-                //inlineFs->toXML( parentElem );
-                // Save inline framesets at the toplevel. Necessary when copying a textframeset that
-                // itself includes an inline frameset - we want all frameset tags at the toplevel.
+                KWFrameSet* inlineFs = 0L;
+                if ( dynamic_cast<KWAnchor *>( customItem )  )
+                    inlineFs = static_cast<KWAnchor *>( customItem )->frameSet();
+                else if ( dynamic_cast<KWFootNoteVariable *>( customItem ) )
+                    inlineFs = static_cast<KWFootNoteVariable *>( customItem )->frameSet();
 
-                // Qt bug! (found by Simon)   QDomElement elem = doc.documentElement();
-                // Workaround:
-                QDomNode n = parentElem;
-                while ( !n.isDocument() && !n.isNull() )
-                    n = n.parentNode();
-                QDomElement elem = n.toDocument().documentElement();
-                kdDebug() << " saving into " << elem.tagName() << endl;
-                inlineFs->toXML( elem );
+                if ( inlineFs )
+                {
+                    // Save inline framesets at the toplevel. Necessary when copying a textframeset that
+                    // itself includes an inline frameset - we want all frameset tags at the toplevel.
+                    QDomElement elem = doc.documentElement();
+                    kdDebug() << " saving into " << elem.tagName() << endl;
+                    inlineFs->toXML( elem );
+                }
             }
         }
         else
