@@ -975,9 +975,9 @@ bool KoDocument::saveNativeFormat( const QString & _file )
 
 bool KoDocument::saveToStream( QIODevice * dev )
 {
-    QDomDocument doc = saveXML();
+    const QDomDocument doc( saveXML() );
     // Save to buffer
-    QCString s = doc.toCString() ; // utf8 already
+    const QCString s ( doc.toCString() ); // utf8 already
     const int len = s.length();
     int nwritten = dev->writeBlock( s.data(), len );
     if ( nwritten != len )
