@@ -97,6 +97,92 @@ void ProcessLayoutFlowTag ( QDomNode myNode, void *tagData, QString &, KWEFBaseC
     AllowNoSubtags (myNode);
 }
 
+static void ProcessLayoutTabulatorTag ( QDomNode myNode, void *tagData, QString &, KWEFBaseClass*)
+{
+    LayoutData *layout = (LayoutData *) tagData;
+
+    double ptPos;
+    int type;
+
+    QValueList<AttrProcessing> attrProcessingList;
+
+    attrProcessingList.append ( AttrProcessing ( "ptpos", "double",(void *)&ptPos ) );
+    attrProcessingList.append ( AttrProcessing ( "type", "int", (void *) &type ) );
+    ProcessAttributes (myNode, attrProcessingList);
+    if(layout->tabulator.isEmpty())
+        layout->tabulator=QString::number(ptPos);
+    else
+        layout->tabulator+=","+QString::number(ptPos);
+    layout->tabulator+="pt";
+
+    switch(type)
+    {
+    case 0:
+        layout->tabulator+="/L0";
+        break;
+    case 1:
+        layout->tabulator+="/C0";
+        break;
+    case 2:
+        layout->tabulator+="/R0";
+        break;
+    case 3:
+        layout->tabulator+="/D0";
+        break;
+    default:
+        layout->tabulator+="/L0";
+        break;
+    }
+    AllowNoSubtags (myNode);
+}
+
+static void ProcessLayoutOffsetTag( QDomNode myNode, void *tagData, QString &, KWEFBaseClass*)
+{
+    LayoutData *layout = (LayoutData *) tagData;
+    QValueList<AttrProcessing> attrProcessingList;
+
+    attrProcessingList.append ( AttrProcessing ("after" , "double", (void *)&layout->marginBottom ) );
+    attrProcessingList.append ( AttrProcessing ("before" , "double", (void *)&layout->marginTop ) );
+
+    ProcessAttributes (myNode, attrProcessingList);
+    AllowNoSubtags (myNode);
+}
+
+static void ProcessLayoutLineSpacingTag( QDomNode myNode, void *tagData, QString &, KWEFBaseClass*)
+{
+    LayoutData *layout = (LayoutData *) tagData;
+    QValueList<AttrProcessing> attrProcessingList;
+    QString line;
+    attrProcessingList.append ( AttrProcessing ("value" , "QString", (void *)&line ) );
+    ProcessAttributes (myNode, attrProcessingList);
+
+    if( line=="oneandhalf")
+      layout->lineSpacing=1.5;
+    else if( line=="double")
+      layout->lineSpacing=2.0;
+    else
+      layout->lineSpacing=line.toDouble();
+    AllowNoSubtags (myNode);
+}
+
+static void ProcessLineBreakingTag ( QDomNode myNode, void *tagData, QString &, KWEFBaseClass*)
+{
+    LayoutData *layout = (LayoutData *) tagData;
+
+    QString strBefore, strAfter;
+
+    QValueList<AttrProcessing> attrProcessingList;
+    attrProcessingList.append ( AttrProcessing ( "linesTogether", "", NULL ) );
+    attrProcessingList.append ( AttrProcessing ( "hardFrameBreak", "QString", (void *) &strBefore) );
+    attrProcessingList.append ( AttrProcessing ( "hardFrameBreakAfter", "QString", (void *) &strAfter) );
+    ProcessAttributes (myNode, attrProcessingList);
+
+    layout->pageBreakBefore=(strBefore=="true");
+    layout->pageBreakAfter =(strAfter =="true");
+
+    AllowNoSubtags (myNode);
+}
+
 void ProcessCounterTag ( QDomNode myNode, void *tagData, QString &, KWEFBaseClass* )
 {
     CounterData *counter = (CounterData *) tagData;
@@ -296,12 +382,12 @@ void ProcessLayoutTag ( QDomNode myNode, void *tagData, QString &outputText, KWE
     tagProcessingList.append ( TagProcessing ( "FOLLOWING",   NULL,                     NULL            ) );
     tagProcessingList.append ( TagProcessing ( "COUNTER",     ProcessCounterTag,        (void*) &layout->counter ) );
     tagProcessingList.append ( TagProcessing ( "FORMAT",      ProcessSingleFormatTag,   (void*) &layout->formatData ) );
-    tagProcessingList.append ( TagProcessing ( "TABULATOR",   NULL,                     NULL            ) );
+    tagProcessingList.append ( TagProcessing ( "TABULATOR",   ProcessLayoutTabulatorTag,(void*) layout  ) );
     tagProcessingList.append ( TagProcessing ( "FLOW",        ProcessLayoutFlowTag,     (void*) layout  ) );
     tagProcessingList.append ( TagProcessing ( "INDENTS",     ProcessIndentsTag,        (void*) layout  ) );
-    tagProcessingList.append ( TagProcessing ( "OFFSETS",     NULL,                     NULL            ) );
-    tagProcessingList.append ( TagProcessing ( "LINESPACING", NULL,                     NULL            ) );
-    tagProcessingList.append ( TagProcessing ( "PAGEBREAKING",NULL,                     NULL            ) );
+    tagProcessingList.append ( TagProcessing ( "OFFSETS",     ProcessLayoutOffsetTag,   (void*) layout  ) );
+    tagProcessingList.append ( TagProcessing ( "LINESPACING", ProcessLayoutLineSpacingTag,(void*) layout ) );
+    tagProcessingList.append ( TagProcessing ( "PAGEBREAKING",ProcessLineBreakingTag,   (void*) layout  ) );
     ProcessSubtags (myNode, tagProcessingList, outputText, exportFilter);
 }
 
