@@ -1938,6 +1938,27 @@ static bool kspreadfunc_decbin( KSContext& context )
   return true;
 }
 
+static bool kspreadfunc_bindec( KSContext& context )
+{
+  QValueList<KSValue::Ptr>& args = context.value()->listValue();
+
+  if ( !KSUtil::checkArgumentsCount( context, 1, "BINDEC", true ) )
+    return false;
+
+  if ( !KSUtil::checkType( context, args[0], KSValue::StringType, true ) )
+    return false;
+
+  QString tmp=args[0]->stringValue();
+  bool ok;
+  long val=tmp.toLong(&ok,2);
+  if(!ok)
+        context.setValue( new KSValue( QString(i18n("Err") )));
+  else
+        context.setValue( new KSValue(val));
+
+  return true;
+}
+
 
 static bool kspreadfunc_rounddown( KSContext& context )
 {
@@ -2204,6 +2225,7 @@ static KSModule::Ptr kspreadCreateModule_KSpread( KSInterpreter* interp )
   module->addObject( "ROUNDDOWN", new KSValue( new KSBuiltinFunction( module,"ROUNDDOWN",kspreadfunc_rounddown) ) );
   module->addObject( "ROUNDUP", new KSValue( new KSBuiltinFunction( module,"ROUNDUP",kspreadfunc_roundup) ) );
   module->addObject( "ROUND", new KSValue( new KSBuiltinFunction( module,"ROUND",kspreadfunc_round) ) );
+  module->addObject( "BINDEC", new KSValue( new KSBuiltinFunction( module,"BINDEC",kspreadfunc_bindec) ) );
   return module;
 }
 
