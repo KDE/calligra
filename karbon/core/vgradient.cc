@@ -33,17 +33,14 @@ VGradient::save( QDomElement& element ) const
 	me.setAttribute( "spreadMethod", m_spreadMethod );
 
 	// save stops
-	QDomElement stops = element.ownerDocument().createElement( "COLORSTOPS" );
 	QValueListConstIterator<VColorStop> itr;
 	for( itr = m_colorStops.begin(); itr != m_colorStops.end(); ++itr )
 	{
 		QDomElement stop = element.ownerDocument().createElement( "COLORSTOP" );
 		(*itr).color.save( stop );
-		stop.setAttribute( "rampPoint", (*itr).rampPoint );
-		stops.appendChild( stop );
+		stop.setAttribute( "ramppoint", (*itr).rampPoint );
+		me.appendChild( stop );
 	}
-
-	me.appendChild( stops );
 
 	element.appendChild( me );
 }
@@ -66,26 +63,14 @@ VGradient::load( const QDomElement& element )
 	{
 		if( list.item( i ).isElement() )
 		{
-			QDomElement child = list.item( i ).toElement();
+			QDomElement colorstop = list.item( i ).toElement();
 
-			if( child.tagName() == "COLORSTOPS" )
+			if( colorstop.tagName() == "COLORSTOP" )
 			{
-				QDomNodeList colorstops = child.childNodes();
-				for( uint j = 0; j < colorstops.count(); ++j )
-				{
-					if( colorstops.item( j ).isElement() )
-					{
-						QDomElement colorstop = colorstops.item( j ).toElement();
-
-						if( colorstop.tagName() == "COLORSTOP" )
-						{
-							VColorStop stop;
-							stop.color.load( colorstop.firstChild().toElement() );
-							stop.rampPoint = colorstop.attribute( "rampPoint", "0.0" ).toDouble();
-							m_colorStops.append( stop );
-						}
-					}
-				}
+				VColorStop stop;
+				stop.color.load( colorstop.firstChild().toElement() );
+				stop.rampPoint = colorstop.attribute( "ramppoint", "0.0" ).toDouble();
+				m_colorStops.append( stop );
 			}
 		}
 	}
