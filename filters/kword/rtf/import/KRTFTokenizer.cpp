@@ -25,7 +25,7 @@ KRTFToken* KRTFTokenizer::nextToken()
     QString param;
     KRTFToken* token = new KRTFToken( this );
     int ch = _file->getch();
-    
+
     // skip leading whitespace
     while( isspace( ch ) && !_file->atEnd() )
 	ch=_file->getch();
@@ -54,7 +54,7 @@ KRTFToken* KRTFTokenizer::nextToken()
     } else if( ch == '}' ) {
 	token->_type = CloseGroup;
     } else {
-	token->_type = PlainText;
+	token->_type = ::PlainText;
 	_file->ungetch( ch );
     }
 
@@ -104,7 +104,3 @@ void KRTFTokenizer::pushBack( KRTFToken* token )
     _pushbackstack.push( token );
 }
 
-	
-		
-
-    
