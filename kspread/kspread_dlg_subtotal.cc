@@ -84,7 +84,6 @@ void KSpreadSubtotalDlg::slotOk()
   int mainCol = left + m_dialog->m_columnBox->currentItem();
   int bottom = m_selection.bottom();
   int top    = m_selection.top();
-  int right  = m_selection.right();
   left       = m_selection.left();
   QString oldText = m_pTable->cellAt( mainCol, top )->strOutText();
   QString newText;
@@ -256,15 +255,15 @@ void KSpreadSubtotalDlg::fillColumnBoxes()
 void KSpreadSubtotalDlg::fillFunctionBox()
 {
     QStringList lst;
-    lst <<i18n( "Average" );
-    lst <<i18n( "Count" );
-    lst <<i18n( "CountA" );
-    lst <<i18n( "Max" );
+    lst << i18n( "Average" );
+    lst << i18n( "Count" );
+    lst << i18n( "CountA" );
+    lst << i18n( "Max" );
     lst << i18n( "Min" );
     lst << i18n( "Product" );
     lst << i18n( "StDev" );
     lst << i18n( "StDevP" );
-    lst <<i18n( "Sum" );
+    lst << i18n( "Sum" );
     lst << i18n( "Var" );
     lst << i18n( "VarP" );
     m_dialog->m_functionBox->insertStringList(lst);
