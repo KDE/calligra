@@ -111,7 +111,7 @@ KisTimer::start();
               templ,
               "application/x-krayon", "*.kra",
               i18n("Krayon"),
-              KoTemplateChooseDia::Everything,
+              KoTemplateChooseDia::NoTemplates,
               "krayon_template");
 
     // create document from template - use default
