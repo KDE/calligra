@@ -43,6 +43,7 @@ class KEXI_DB_EXPORT QuerySchema : public FieldList, public SchemaData
 	public:
 		/*! Creates empty query object (without fields). */
 		QuerySchema();
+
 		/*! Creates query schema object that is equivalent to "SELECT * FROM table" 
 		 sql command. Schema of \a table is used to contruct this query.
 		 If \a name is omitted, query will inherit its name from 

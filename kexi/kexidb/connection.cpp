@@ -530,7 +530,7 @@ QString Connection::valueToSQL( const Field::Type ftype, const QVariant& v ) con
 	return QString::null;
 }
 
-QString Connection::createTableStatement( const KexiDB::TableSchema& tableSchema )
+QString Connection::createTableStatement( const KexiDB::TableSchema& tableSchema ) const
 {
 	QString sql = "CREATE TABLE " + tableSchema.name() + " (";
 	bool first=true;
@@ -625,10 +625,16 @@ bool Connection::insertRecord(KexiDB::TableSchema &tableSchema, QValueList<QVari
 	);
 }
 
-QString Connection::queryStatement( const KexiDB::QuerySchema& querySchema )
+QString Connection::queryStatement( KexiDB::QuerySchema& querySchema ) const
 {
 	//todo
 	return QString::null;
+}
+
+QString Connection::queryStatement( KexiDB::TableSchema& tableSchema ) const
+{
+	QuerySchema qs( &tableSchema );
+	return queryStatement( qs );
 }
 
 #define createTable_ERR \
@@ -943,6 +949,26 @@ Cursor* Connection::executeQuery( const QString& statement, uint cursor_options 
 		return 0;
 	}
 	return c;
+}
+
+Cursor* Connection::executeQuery( QuerySchema& query, uint cursor_options )
+{
+	return executeQuery( queryStatement( query ), cursor_options );
+}
+
+Cursor* Connection::executeQuery( TableSchema& table, uint cursor_options )
+{
+	return executeQuery( queryStatement( table ), cursor_options );
+}
+
+Cursor* Connection::prepareQuery( QuerySchema& query, uint cursor_options )
+{
+	return prepareQuery( queryStatement( query ), cursor_options );
+}
+
+Cursor* Connection::prepareQuery( TableSchema& table, uint cursor_options )
+{
+	return prepareQuery( queryStatement( table ), cursor_options );
 }
 
 bool Connection::deleteCursor(Cursor *cursor)

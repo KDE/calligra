@@ -268,17 +268,37 @@ class KEXI_DB_EXPORT Connection : public QObject, public KexiDB::Object
 		 (one of more selected from KexiDB::Cursor::Options).
 		 Preparation means that returned cursor is created but not opened.
 		 Open this when you would like to do it with Cursor::open().
+
 		 Note that you can create "not configured" cursor when you omit 
 		 \a statement parameter. Then you will need a parameter for
 		 Cursor::open(). */
 		virtual Cursor* prepareQuery( const QString& statement = QString::null, uint cursor_options = 0) = 0;
+
+		/*! \overload prepareQuery( const QString& statement = QString::null, uint cursor_options = 0)
+		 Statement is build from data provided by \a query schema.
+		*/
+		Cursor* prepareQuery( QuerySchema& query, uint cursor_options = 0);
+
+		/*! \overload prepareQuery( const QString& statement = QString::null, uint cursor_options = 0)
+		 Statement is build from data provided by \a table schema, 
+		 it is like "select * from table_name".*/
+		Cursor* prepareQuery( TableSchema& table, uint cursor_options = 0);
 
 		/*! Executes query described by \a statement.
 		 \return opened cursor created for results of this query
 		 or NULL if there was any error on the cursor creation or opening.
 		 Cursor can have optionally applied \a cursor_options 
 		 (one of more selected from KexiDB::Cursor::Options).*/
-		Cursor* executeQuery( const QString& statement, uint cursor_options = 0);
+		Cursor* executeQuery( const QString& statement, uint cursor_options = 0 );
+
+		/*! \overload executeQuery( const QString& statement, uint cursor_options = 0 )
+		 Statement is build from data provided by \a query schema.*/
+		Cursor* executeQuery( QuerySchema& query, uint cursor_options = 0 );
+
+		/*! \overload executeQuery( const QString& statement, uint cursor_options = 0 )
+		 Statement is build from data provided by \a table schema, 
+		 it is like "select * from table_name".*/
+		Cursor* executeQuery( TableSchema& table, uint cursor_options = 0 );
 
 		/*! Deletes cursor \a cursor previously created by functions like executeQuery() 
 		 for this connection.
@@ -337,7 +357,7 @@ class KEXI_DB_EXPORT Connection : public QObject, public KexiDB::Object
 		 null if there are no such field.
 		 For checking Driver::isSystemFieldName() is used, so this check can 
 		 be driver-dependent. */
-		Field* Connection::findSystemFieldName(KexiDB::FieldList *fieldlist);
+		Field* findSystemFieldName(KexiDB::FieldList *fieldlist);
 
 	protected:
 		/*! Used by Driver */
@@ -392,15 +412,30 @@ class KEXI_DB_EXPORT Connection : public QObject, public KexiDB::Object
 			anymore. */
 		virtual bool drv_dropDatabase( const QString &dbName = QString::null ) = 0;
 
-		/*! returns "CREATE TABLE ..." statement's string needed for \a tableSchema
-		 creation in the database.
+		/*! returns "CREATE TABLE ..." statement string needed for \a tableSchema
+		 creation in the database. 
+		 
+		 Note: The statement string can be specific for this connection's driver database, 
+		 and thus not reusable in general.
 		*/
-		QString createTableStatement( const KexiDB::TableSchema& tableSchema );
+		QString createTableStatement( const KexiDB::TableSchema& tableSchema ) const;
 
 		/*! returns "SELECT ..." statement's string needed for executing query 
 		 defined by \a querySchema.
+
+		 Note: The statement string can be specific for this connection's driver database, 
+		 and thus not reusable in general.
 		*/
-		QString queryStatement( const KexiDB::QuerySchema& querySchema );
+		QString queryStatement( KexiDB::QuerySchema& querySchema ) const;
+
+		/*! returns "SELECT ..." statement's string needed for executing query 
+		 defined by "select * from <table_name>" where <table_name> is \a tableSchema's name.
+		 This method's variant can be useful when there is no appropriate QuerySchema defined.
+
+		 Note: The statement string can be specific for this connection's driver database, 
+		 and thus not reusable in general.
+		*/
+		QString queryStatement( KexiDB::TableSchema& tableSchema ) const;
 
 		/*! Creates table using \a tableSchema information.
 		 \return true on success. Default implementation 
