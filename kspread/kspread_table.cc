@@ -5374,7 +5374,7 @@ bool KSpreadTable::loadSelection( const QDomDocument& doc, const QRect &pasteAre
     return true;
 }
 
-void KSpreadTable::loadSelectionUndo( const QDomDocument & doc, QRect loadArea,
+void KSpreadTable::loadSelectionUndo( const QDomDocument & doc, const QRect &loadArea,
                                       int _xshift, int _yshift, bool insert,
                                       int insertTo)
 {
@@ -5631,7 +5631,7 @@ void KSpreadTable::changeMergedCell( int m_iCol, int m_iRow, int m_iExtraX, int 
    mergeCells(rect);
 }
 
-void KSpreadTable::mergeCells( QRect area, bool makeUndo)
+void KSpreadTable::mergeCells( const QRect &area, bool makeUndo)
 {
   if( area.width() == 1 && area.height() == 1)
     return;
@@ -5657,7 +5657,7 @@ void KSpreadTable::mergeCells( QRect area, bool makeUndo)
   emit sig_updateView( this, area );
 }
 
-void KSpreadTable::dissociateCell( QPoint cellRef, bool makeUndo)
+void KSpreadTable::dissociateCell( const QPoint &cellRef, bool makeUndo)
 {
   QPoint marker(cellRef);
   KSpreadCell *cell = nonDefaultCell( marker );

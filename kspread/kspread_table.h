@@ -664,8 +664,8 @@ public:
 
     void setFirstLetterUpper(bool _firstUpper) {m_bFirstLetterUpper=_firstUpper;}
 
-    void mergeCells( QRect area, bool makeUndo=true );
-    void dissociateCell( QPoint cellRef, bool makeUndo=true );
+    void mergeCells( const QRect &area, bool makeUndo=true );
+    void dissociateCell( const QPoint &cellRef, bool makeUndo=true );
     void changeMergedCell( int m_iCol, int m_iRow, int m_iExtraX, int m_iExtraY);
 
     void increaseIndent( KSpreadSelection* selectionInfo );
@@ -827,7 +827,7 @@ public:
      */
     bool loadSelection( const QDomDocument& doc, const QRect &pasteArea, int _xshift, int _yshift,bool makeUndo,PasteMode = Normal, Operation = OverWrite,bool insert=false,int insertTo=0 );
 
-    void loadSelectionUndo( const QDomDocument & doc, QRect loadArea,
+    void loadSelectionUndo( const QDomDocument & doc, const QRect &loadArea,
                             int _xshift, int _yshift,bool insert,int insertTo);
 
     /**
