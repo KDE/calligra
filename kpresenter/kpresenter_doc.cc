@@ -1777,22 +1777,29 @@ QRect KPresenterDoc::getPageRect( bool decBorders ) const
 }
 
 /*================================================================*/
-int KPresenterDoc::getLeftBorder()
+int KPresenterDoc::getLeftBorder() const
 {
     return static_cast<int>(_pageLayout.ptLeft);
 }
 
 /*================================================================*/
-int KPresenterDoc::getTopBorder()
+int KPresenterDoc::getTopBorder() const
 {
     return static_cast<int>(_pageLayout.ptTop);
 }
 
 /*================================================================*/
-int KPresenterDoc::getBottomBorder()
+int KPresenterDoc::getBottomBorder() const
 {
     return static_cast<int>(_pageLayout.ptBottom);
 }
+
+int KPresenterDoc::getRightBorder() const
+{
+    return static_cast<int>(_pageLayout.ptRight);
+}
+
+
 
 /*================================================================*/
 void KPresenterDoc::deletePage( int _page )

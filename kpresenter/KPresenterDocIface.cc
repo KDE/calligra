@@ -18,7 +18,7 @@
 */
 
 #include "KPresenterDocIface.h"
-
+#include "kptextobject.h"
 #include "kpresenter_doc.h"
 #include "kpresenter_view.h"
 
@@ -257,22 +257,22 @@ void KPresenterDocIface::saveConfig()
     doc->saveConfig();
 }
 
-QString KPresenterDocIface::selectedForPrinting()
+QString KPresenterDocIface::selectedForPrinting()const
 {
     return doc->selectedForPrinting();
 }
 
-int KPresenterDocIface::leftBorder()
+int KPresenterDocIface::leftBorder() const
 {
     return doc->getLeftBorder();
 }
 
-int KPresenterDocIface::topBorder()
+int KPresenterDocIface::topBorder() const
 {
     return doc->getTopBorder();
 }
 
-int KPresenterDocIface::bottomBorder()
+int KPresenterDocIface::bottomBorder() const
 {
     return doc->getBottomBorder();
 }
@@ -282,4 +282,38 @@ bool KPresenterDocIface::isSlideSelected( int pgNum)
     if( pgNum>= doc->getPageNums())
         return false;
     return doc->isSlideSelected(pgNum);
+}
+
+bool KPresenterDocIface::hasFooter() const
+{
+    return doc->hasFooter();
+}
+
+bool KPresenterDocIface::hasHeader() const
+{
+    return doc->hasHeader();
+}
+
+//Return a reference to header textobj
+DCOPRef KPresenterDocIface::header()
+{
+    if(doc->header())
+    {
+        return DCOPRef( kapp->dcopClient()->appId(),
+                       doc->header()->dcopObject()->objId() );
+    }
+    else
+        return DCOPRef();
+}
+
+//Return a reference to footer textobj
+DCOPRef KPresenterDocIface::footer()
+{
+    if(doc->footer())
+    {
+        return DCOPRef( kapp->dcopClient()->appId(),
+                       doc->footer()->dcopObject()->objId() );
+    }
+    else
+        return DCOPRef();
 }

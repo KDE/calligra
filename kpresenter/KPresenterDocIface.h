@@ -83,14 +83,21 @@ k_dcop:
     virtual void initConfig();
     virtual void saveConfig();
 
-    virtual QString selectedForPrinting();
+    virtual QString selectedForPrinting() const;
 
-    virtual int leftBorder();
-    virtual int topBorder();
-    virtual int bottomBorder();
+    virtual int leftBorder() const;
+    virtual int topBorder() const;
+    virtual int bottomBorder() const;
 
     //Be carefull ! when pgNum > num of page we return false
     virtual bool isSlideSelected( int pgNum);
+
+
+    virtual bool hasFooter() const;
+    virtual bool hasHeader() const;
+    virtual DCOPRef header();
+    virtual DCOPRef footer();
+
 
 private:
     KPresenterDoc *doc;

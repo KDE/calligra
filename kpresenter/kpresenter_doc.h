@@ -213,10 +213,10 @@ public:
     bool getPageSoundEffect( unsigned int );
     QString getPageSoundFileName( unsigned int );
 
-    int getLeftBorder();
-    int getTopBorder();
-    int getBottomBorder();
-
+    int getLeftBorder() const;
+    int getTopBorder() const;
+    int getBottomBorder() const;
+    int getRightBorder() const;
 
     void enableEmbeddedParts( bool f );
 
