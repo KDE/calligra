@@ -645,6 +645,11 @@ void KSpreadSheetPrint::updateNewPageX( int _column )
     {
         if( _column > m_maxCheckedNewPageX )
             m_maxCheckedNewPageX = _column;
+        if ( _column > m_printRange.right() )
+        {
+            if ( m_lnewPageListX.last().endItem()==0 )
+                m_lnewPageListX.last().setEndItem( m_printRange.right() );
+        }
         return;
     }
 
@@ -756,6 +761,11 @@ void KSpreadSheetPrint::updateNewPageY( int _row )
     {
         if( _row > m_maxCheckedNewPageY )
             m_maxCheckedNewPageY = _row;
+        if ( _row > m_printRange.bottom() )
+        {
+            if ( m_lnewPageListY.last().endItem()==0 )
+                m_lnewPageListY.last().setEndItem( m_printRange.bottom() );
+        }
         return;
     }
 
