@@ -325,6 +325,7 @@ KWDocument::~KWDocument()
     // formula frames have to be deleted before m_formulaDocument
     m_lstFrameSet.clear();
     m_bookmarkList.clear();
+    m_tmpBookMarkList.clear();
     delete m_autoFormat;
     delete m_formulaDocument;
     delete m_commandHistory;
@@ -1076,9 +1077,9 @@ bool KWDocument::loadXML( QIODevice *, const QDomDocument & doc )
 
     QDomElement mailmerge = word.namedItem( "MAILMERGE" ).toElement();
     if (mailmerge!=QDomElement())
-        {
-             m_slDataBase->load(mailmerge);
-        }
+    {
+        m_slDataBase->load(mailmerge);
+    }
 
     emit sigProgress(15);
 
@@ -1105,30 +1106,26 @@ bool KWDocument::loadXML( QIODevice *, const QDomDocument & doc )
 
     emit sigProgress(20);
 
-
-#if 0
-
     QDomElement bookmark = word.namedItem( "BOOKMARKS" ).toElement();
     if( !bookmark.isNull() )
     {
-        QDomElement bookmarkitem=word.namedItem("BOOKMARKITEM").toElement();
+        QDomElement bookmarkitem=word.namedItem("BOOKMARKS").toElement();
         bookmarkitem=bookmarkitem.firstChild().toElement();
+
         while ( !bookmarkitem.isNull() )
         {
-            KWBookMark *book =new KWBookMark( bookmarkitem.attribute("name"));
-            book->setBookmarkIndex(bookmarkitem.attribute("cursorIndex").toInt());
-            KWFrameSet * frameSet()const{ return m_frameSet;}
-            void setFrameSet(KWFrameSet * _frame) { m_frameSet = _frame;}
-            KWTextParag *parag() const { return m_parag;}
-            void setParag( KWTextParag *_parag ) { m_parag = _parag;}
-            void setBookmarkIndex( int _pos ) { m_index = _pos;}
-            int bookmarkIndex() const  { return m_index ; }
-
-
+            if ( bookmarkitem.tagName()=="BOOKMARKITEM" )
+            {
+                bookMark tmp;
+                tmp.bookname=bookmarkitem.attribute("name");
+                tmp.cursorIndex=bookmarkitem.attribute("cursorIndex").toInt();
+                tmp.frameSetName=bookmarkitem.attribute("frameset");
+                tmp.paragIndex = bookmarkitem.attribute("parag").toInt();
+                m_tmpBookMarkList.append(&tmp);
+            }
             bookmarkitem=bookmarkitem.nextSibling().toElement();
         }
     }
-#endif
 
     QDomElement spellCheckIgnore = word.namedItem( "SPELLCHECKIGNORELIST" ).toElement();
     if( !spellCheckIgnore.isNull() )
@@ -1205,7 +1202,7 @@ bool KWDocument::loadXML( QIODevice *, const QDomDocument & doc )
         //kdDebug(32001) << "KWDocument::loadXML KWTextFrameSet created " << fs << endl;
         fs->setFrameSetInfo( KWFrameSet::FI_FIRST_HEADER );
         KWFrame *frame = new KWFrame(fs, ptLeftBorder(), ptTopBorder(),
-            ptPaperWidth() - ptLeftBorder() - ptRightBorder(), 20 );
+                                     ptPaperWidth() - ptLeftBorder() - ptRightBorder(), 20 );
         //kdDebug(32001) << "KWDocument::loadXML KWFrame created " << frame << endl;
         frame->setFrameBehavior( KWFrame::AutoExtendFrame );
         frame->setNewFrameBehavior( KWFrame::Copy );
@@ -1217,7 +1214,7 @@ bool KWDocument::loadXML( QIODevice *, const QDomDocument & doc )
         KWTextFrameSet *fs = new KWTextFrameSet( this, i18n( "Even Pages Header" ) );
         fs->setFrameSetInfo( KWFrameSet::FI_EVEN_HEADER );
         KWFrame *frame = new KWFrame(fs, ptLeftBorder(), ptTopBorder(),
-            ptPaperWidth() - ptLeftBorder() - ptRightBorder(), 20 );
+                                     ptPaperWidth() - ptLeftBorder() - ptRightBorder(), 20 );
         frame->setFrameBehavior( KWFrame::AutoExtendFrame );
         frame->setNewFrameBehavior( KWFrame::Copy );
         fs->addFrame( frame );
@@ -1228,7 +1225,7 @@ bool KWDocument::loadXML( QIODevice *, const QDomDocument & doc )
         KWTextFrameSet *fs = new KWTextFrameSet( this, i18n( "Odd Pages Header" ) );
         fs->setFrameSetInfo( KWFrameSet::FI_ODD_HEADER );
         KWFrame *frame = new KWFrame(fs, ptLeftBorder(), ptTopBorder(),
-            ptPaperWidth() - ptLeftBorder() - ptRightBorder(), 20 );
+                                     ptPaperWidth() - ptLeftBorder() - ptRightBorder(), 20 );
         frame->setFrameBehavior( KWFrame::AutoExtendFrame );
         frame->setNewFrameBehavior( KWFrame::Copy );
         fs->addFrame( frame );
@@ -1239,8 +1236,8 @@ bool KWDocument::loadXML( QIODevice *, const QDomDocument & doc )
         KWTextFrameSet *fs = new KWTextFrameSet( this, i18n( "First Page Footer" ) );
         fs->setFrameSetInfo( KWFrameSet::FI_FIRST_FOOTER );
         KWFrame *frame = new KWFrame(fs, ptLeftBorder(), ptPaperHeight() -
-            ptTopBorder() - 20, ptPaperWidth() - ptLeftBorder() -
-            ptRightBorder(), 20 );
+                                     ptTopBorder() - 20, ptPaperWidth() - ptLeftBorder() -
+                                     ptRightBorder(), 20 );
         frame->setFrameBehavior( KWFrame::AutoExtendFrame );
         frame->setNewFrameBehavior( KWFrame::Copy );
         fs->addFrame( frame );
@@ -1251,8 +1248,8 @@ bool KWDocument::loadXML( QIODevice *, const QDomDocument & doc )
         KWTextFrameSet *fs = new KWTextFrameSet( this, i18n( "Even Pages Footer" ) );
         fs->setFrameSetInfo( KWFrameSet::FI_EVEN_FOOTER );
         KWFrame *frame = new KWFrame(fs, ptLeftBorder(), ptPaperHeight() -
-            ptTopBorder() - 20, ptPaperWidth() - ptLeftBorder() -
-            ptRightBorder(), 20 );
+                                     ptTopBorder() - 20, ptPaperWidth() - ptLeftBorder() -
+                                     ptRightBorder(), 20 );
         frame->setFrameBehavior( KWFrame::AutoExtendFrame );
         frame->setNewFrameBehavior( KWFrame::Copy );
         fs->addFrame( frame );
@@ -1263,8 +1260,8 @@ bool KWDocument::loadXML( QIODevice *, const QDomDocument & doc )
         KWTextFrameSet *fs = new KWTextFrameSet( this, i18n( "Odd Pages Footer" ) );
         fs->setFrameSetInfo( KWFrameSet::FI_ODD_FOOTER );
         KWFrame *frame = new KWFrame(fs, ptLeftBorder(), ptPaperHeight() -
-            ptTopBorder() - 20, ptPaperWidth() - ptLeftBorder() -
-            ptRightBorder(), 20 );
+                                     ptTopBorder() - 20, ptPaperWidth() - ptLeftBorder() -
+                                     ptRightBorder(), 20 );
         frame->setFrameBehavior( KWFrame::AutoExtendFrame );
         frame->setNewFrameBehavior( KWFrame::Copy );
         fs->addFrame( frame );
@@ -1288,12 +1285,12 @@ bool KWDocument::loadXML( QIODevice *, const QDomDocument & doc )
                 KWFrame *frame = fs->frame(f);
                 if(frame->height() < static_cast <int>(minFrameHeight)) {
                     kdWarning() << "frame height is so small no text will fit, adjusting (was: "
-                      << frame->height() << " is: " << minFrameHeight << ")" << endl;
+                                << frame->height() << " is: " << minFrameHeight << ")" << endl;
                     frame->setHeight(minFrameHeight);
                 }
                 if(frame->width() < static_cast <int>(minFrameWidth)) {
                     kdWarning() << "frame width is so small no text will fit, adjusting (was: "
-                     << frame->width() << " is: " << minFrameWidth  << ")" << endl;
+                                << frame->width() << " is: " << minFrameWidth  << ")" << endl;
                     frame->setWidth(minFrameWidth);
                 }
             }
@@ -4033,6 +4030,42 @@ void KWDocument::paragraphDeleted( KoTextParag *_parag,  KWFrameSet *frm)
         }
     }
     return;
+}
+
+void KWDocument::initBookmarkList()
+{
+    QPtrListIterator<bookMark> book(m_tmpBookMarkList);
+    kdDebug()<<" m_tmpBookMarkList.count() :"<<m_tmpBookMarkList.count()<<endl;
+    for ( ; book.current() ; ++book )
+    {
+        KWFrameSet * fs = 0L;
+        QString fsName = book.current()->bookname;
+        if ( !fsName.isEmpty() )
+            fs = frameSetByName( fsName );
+        if ( fs )
+        {
+            KWBookMark *tmp =new KWBookMark( book.current()->bookname);
+            tmp->setFrameSet(fs);
+            KWTextFrameSet *frm = dynamic_cast<KWTextFrameSet *>(fs);
+            if ( frm)
+            {
+                KWBookMark *tmp =new KWBookMark( book.current()->bookname);
+                tmp->setFrameSet(frm);
+                KWTextParag* parag = dynamic_cast<KWTextParag*>(frm->textDocument()->paragAt( book.current()->paragIndex ));
+                if ( !parag )
+                {
+                    delete tmp;
+                }
+                else
+                {
+                    tmp->setParag( parag );
+                    tmp->setBookmarkIndex( book.current()->cursorIndex);
+                    m_bookmarkList.append( tmp );
+                }
+            }
+        }
+    }
+    m_tmpBookMarkList.clear();
 }
 
 #include "kwdoc.moc"

@@ -127,6 +127,7 @@ KWCanvas::KWCanvas(KWViewMode* viewMode, QWidget *parent, KWDocument *d, KWGUI *
         }
     }
     m_doc->deleteInitialEditingInfo();
+    m_doc->initBookmarkList();
 }
 
 KWCanvas::~KWCanvas()

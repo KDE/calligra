@@ -101,6 +101,13 @@ protected:
 
 };
 
+struct bookMark
+{
+    QString bookname;
+    int paragIndex;
+    QString frameSetName;
+    int cursorIndex;
+};
 
 class KWBookMark
 {
@@ -651,7 +658,7 @@ public:
     QStringList listOfBookmarkName()const;
 
     void paragraphDeleted( KoTextParag *_parag, KWFrameSet *frm);
-
+    void initBookmarkList();
 signals:
     void sig_insertObject( KWChild *_child, KWPartFrameSet* );
 
@@ -835,7 +842,8 @@ private:
     InitialEditing *m_initialEditing;
 
     QPtrList<KWBookMark>m_bookmarkList;
-
+    //necessary before when we load bookmark.
+    QPtrList<bookMark>m_tmpBookMarkList;
 };
 
 
