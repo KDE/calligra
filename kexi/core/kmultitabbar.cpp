@@ -237,7 +237,6 @@ KMultiTabBarTab::KMultiTabBarTab(const QPixmap& pic, const QString& text,
 		f.setPointSize( f.pointSize() * 85 / 100 );
 	else
 		f.setPixelSize( f.pixelSize() * 85 / 100 );
-	f.setBold(true);
 	setFont(f);
 }
 
