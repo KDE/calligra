@@ -349,6 +349,8 @@ public:
 
     void addIgnoreWordAll( const QString & word);
     void clearIgnoreWordAll( );
+    void addIgnoreWordAllList( const QStringList & _lst)
+        { m_spellListIgnoreAll = _lst;}
     QStringList spellListIgnoreAll() const { return m_spellListIgnoreAll;}
 
     void setDisplayTable(KSpreadSheet *_Table );

@@ -32,6 +32,7 @@ class QCheckBox;
 class QComboBox;
 class QPushButton;
 class KColorButton;
+class KoSpellConfigWidget;
 
 class preference : public QObject
 {
@@ -163,15 +164,10 @@ public:
   configureSpellPage( KSpreadView* _view, QVBox *box, char *name = 0 );
   void apply();
   void slotDefault();
-private slots:
-    void slotClearIgnoreAllHistory();
 protected:
   KSpreadView * m_pView;
-  KSpellConfig * _spellConfig;
   KConfig * config;
-  QCheckBox * m_dontCheckUpperWord;
-  QCheckBox * m_dontCheckTitleCase;
-    QPushButton * clearIgnoreAllHistory;
+    KoSpellConfigWidget *m_spellConfigWidget;
 } ;
 
 class KSpreadpreference : public KDialogBase

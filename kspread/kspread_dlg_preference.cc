@@ -36,7 +36,7 @@
 #include <kmessagebox.h>
 #include <kdeversion.h>
 #include <kcolorbutton.h>
-
+#include <koSpellConfig.h>
 
 KSpreadpreference::KSpreadpreference( KSpreadView* parent, const char* /*name*/)
   : KDialogBase(KDialogBase::IconList,i18n("Configure KSpread") ,
@@ -911,43 +911,25 @@ configureSpellPage::configureSpellPage( KSpreadView* _view,QVBox *box , char *na
   m_pView = _view;
 
   config = KSpreadFactory::global()->config();
-  QGroupBox* tmpQGroupBox = new QGroupBox( i18n("Spelling"), box, "GroupBox" );
-  QGridLayout *grid1 = new QGridLayout(tmpQGroupBox,4,1, KDialog::marginHint()+10, KDialog::spacingHint());
-  grid1->addRowSpacing( 0, KDialog::marginHint() + 5 );
-  grid1->setRowStretch( 4, 10 );
-
-  _spellConfig  = new KSpellConfig(tmpQGroupBox, 0L ,m_pView->doc()->getKSpellConfig(), false );
-  grid1->addWidget(_spellConfig,1,0);
-
-  m_dontCheckUpperWord= new QCheckBox(i18n("Ignore uppercase words"),tmpQGroupBox);
-  grid1->addWidget(m_dontCheckUpperWord,2,0);
-
-  m_dontCheckTitleCase= new QCheckBox(i18n("Ignore title case words"),tmpQGroupBox);
-  grid1->addWidget(m_dontCheckTitleCase,3,0);
-
-  clearIgnoreAllHistory= new QPushButton( i18n("Clear Ignore All Word History..."),tmpQGroupBox);
-  grid1->addMultiCellWidget(clearIgnoreAllHistory,5,5,0,1);
-  connect( clearIgnoreAllHistory, SIGNAL(clicked()),this, SLOT(slotClearIgnoreAllHistory()));
 
 
-  if( config->hasGroup("KSpell kspread") )
-  {
-    config->setGroup( "KSpell kspread" );
-    m_dontCheckUpperWord->setChecked(config->readBoolEntry("KSpell_IgnoreUppercaseWords", false));
-    m_dontCheckTitleCase->setChecked(config->readBoolEntry("KSpell_IgnoreTitleCaseWords", false));
-  }
+    m_spellConfigWidget = new KoSpellConfigWidget( box, m_pView->doc()->getKSpellConfig(), false);
+
+    if( config->hasGroup("KSpell kspread") )
+    {
+        config->setGroup( "KSpell kspread" );
+        m_spellConfigWidget->setDontCheckUpperWord(config->readBoolEntry("KSpell_dont_check_upper_word",false));
+        m_spellConfigWidget->setDontCheckTitleCase(config->readBoolEntry("KSpell_dont_check_title_case",false));
+    }
+
+    m_spellConfigWidget->addIgnoreList( m_pView->doc()->spellListIgnoreAll() );
 }
 
-void configureSpellPage::slotClearIgnoreAllHistory()
-{
-    int ret = KMessageBox::warningContinueCancel(0L,
-                                                 i18n("Warning! You are about to erase the entire ignore word history."));
-    if (ret == KMessageBox::Continue)
-        m_pView->doc()->clearIgnoreWordAll();
-}
 
 void configureSpellPage::apply()
 {
+
+  KSpellConfig *_spellConfig = m_spellConfigWidget->spellConfig();
   config->setGroup( "KSpell kspread" );
   config->writeEntry ("KSpell_NoRootAffix",(int) _spellConfig->noRootAffix ());
   config->writeEntry ("KSpell_RunTogether", (int) _spellConfig->runTogether ());
@@ -955,26 +937,23 @@ void configureSpellPage::apply()
   config->writeEntry ("KSpell_DictFromList",(int)  _spellConfig->dictFromList());
   config->writeEntry ("KSpell_Encoding", (int)  _spellConfig->encoding());
   config->writeEntry ("KSpell_Client",  _spellConfig->client());
+  KSpreadDoc* doc = m_pView->doc();
+  doc->setKSpellConfig(*_spellConfig);
 
-  bool state = m_dontCheckUpperWord->isChecked();
-  m_pView->doc()->setDontCheckUpperWord(state);
-  config->writeEntry ("KSpell_IgnoreUppercaseWords", (int) state );
+  bool state=m_spellConfigWidget->dontCheckUpperWord();
+  config->writeEntry ("KSpell_dont_check_upper_word",(int)state);
+  doc->setDontCheckUpperWord(state);
 
-  state = m_dontCheckTitleCase->isChecked();
-  m_pView->doc()->setDontCheckTitleCase(state);
-  config->writeEntry ("KSpell_IgnoreTitleCaseWords", (int) state );
+  state=m_spellConfigWidget->dontCheckTitleCase();
+  config->writeEntry("KSpell_dont_check_title_case",(int)state);
+  doc->setDontCheckTitleCase(state);
+  m_pView->doc()->addIgnoreWordAllList( m_spellConfigWidget->ignoreList() );
 
-  m_pView->doc()->setKSpellConfig(*_spellConfig);
 }
 
 void configureSpellPage::slotDefault()
 {
-    _spellConfig->setNoRootAffix( 0);
-    _spellConfig->setRunTogether(0);
-    _spellConfig->setDictionary( "");
-    _spellConfig->setDictFromList( FALSE);
-    _spellConfig->setEncoding (KS_E_ASCII);
-    _spellConfig->setClient (KS_CLIENT_ISPELL);
+    m_spellConfigWidget->setDefault();
 }
 
 #include "kspread_dlg_preference.moc"
