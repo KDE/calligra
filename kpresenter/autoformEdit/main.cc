@@ -20,7 +20,7 @@
 
 int main(int argc, char *argv[])
 {
-  KGlobal::dirs()->addResourceType("toolbar", KStandardDirs::kde_data_relative() + "kpresenter/toolbar/");
+  KGlobal::dirs()->addResourceType("toolbar", KStandardDirs::kde_default("data") + "kpresenter/toolbar/");
   KApplication a(argc,argv,"AutoformEditor"); 
   AEditWin *aEditWin;
   aEditWin = new AEditWin;

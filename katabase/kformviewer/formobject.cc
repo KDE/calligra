@@ -57,7 +57,7 @@ FormObject::FormObject( Type _type, int _posx, int _posy, int _sizex, int _sizey
 {
 }
 
-FormObject::FormObject( const FormObject& _to_copy )
+FormObject::FormObject( const FormObject& _to_copy ) : QObject()
 {
   m_type   = _to_copy.m_type;
   m_posx   = _to_copy.m_posx;
@@ -94,7 +94,7 @@ FormObject::Type FormObject::type()
   return m_type;
 }
 
-QWidget* FormObject::create( QWidget* _parent = 0L, const char* _name = 0L )
+QWidget* FormObject::create( QWidget* _parent, const char* _name)
 {
   QWidget* widget;
 
