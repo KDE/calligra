@@ -37,6 +37,7 @@
 
 #include <kozoomhandler.h>
 #include <koUnitWidgets.h>
+#include <koGlobal.h>
 
 class KoLineWidthAction::KoLineWidthActionPrivate
 {
