@@ -215,12 +215,8 @@ bool AbiWordWorker::doCloseDocument(void)
         for (it=m_mapData.begin(); it!=m_mapData.end(); it++)
         {
             QByteArray image;
-            bool isImage=false;
 
-            if (m_kwordLeader)
-                isImage=m_kwordLeader->loadKoStoreFile(it.key(),image);
-
-            if (isImage)
+            if (loadKoStoreFile(it.key(),image))
             {
                 QString strExtension=it.key();
                 const int result=it.key().findRev(".");

@@ -227,13 +227,8 @@ bool HtmlWorker::makeImage(const FrameAnchor& anchor)
     }
 
     QByteArray image;
-    bool isImage=false;
 
-    // TODO: verify return value!
-    if (m_kwordLeader)
-        isImage=m_kwordLeader->loadKoStoreFile(anchor.picture.koStoreName,image);
-
-    if (isImage)
+    if (loadKoStoreFile(anchor.picture.koStoreName,image))
     {
         QFile file(strImageName);
 
