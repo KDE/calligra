@@ -21,7 +21,7 @@
 #include "kwcanvas.h"
 #include "kwdoc.h"
 #include "kwtextframeset.h"
-
+#include "kwtableframeset.h"
 #include <kdebug.h>
 #include <kdebugclasses.h>
 
@@ -407,6 +407,7 @@ bool KWViewModeText::isFrameSetVisible( const KWFrameSet *fs )
     if ( fs == textfs )
         return true;
     const KWFrameSet* parentFrameset = fs;
+    parentFrameset = fs->getGroupManager() ? fs->getGroupManager() : fs;
     while ( parentFrameset->isFloating() ) {
         parentFrameset = parentFrameset->anchorFrameset();
         if ( parentFrameset == textfs )
