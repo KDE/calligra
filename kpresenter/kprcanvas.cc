@@ -2530,7 +2530,7 @@ void KPrCanvas::savePicture()
     stickyPage()->savePicture(m_view);
 }
 
-void KPrCanvas::setFont(const QFont &font, bool _subscript, bool _superscript,  const QColor &col, const QColor &backGroundColor, const QColor & underlineColor, KoTextFormat::UnderlineLineType underlineType, KoTextFormat::UnderlineLineStyle underlineStyle, KoTextFormat::StrikeOutLineType strikeOutType , KoTextFormat::StrikeOutLineStyle strikeOutStyle, KoTextFormat::AttributeStyle _att, bool _shadowText, double _relativeSize, int _offsetFromBaseLine, bool _wordByWord, const QString &_lang, int flags)
+void KPrCanvas::setFont(const QFont &font, int fontFlags,  const QColor &col, const QColor &backGroundColor, const QColor & underlineColor, KoTextFormat::UnderlineLineType underlineType, KoTextFormat::UnderlineLineStyle underlineStyle, KoTextFormat::StrikeOutLineType strikeOutType , KoTextFormat::StrikeOutLineStyle strikeOutStyle, KoTextFormat::AttributeStyle _att, double _relativeSize, int _offsetFromBaseLine, const QString &_lang, int flags)
 {
     QPtrList<KoTextFormatInterface> lst = applicableTextInterfaces();
     if ( lst.isEmpty() ) return;
@@ -2538,8 +2538,7 @@ void KPrCanvas::setFont(const QFont &font, bool _subscript, bool _superscript,  
     QPtrListIterator<KoTextFormatInterface> it( lst );
     for ( ; it.current() ; ++it ) {
         KCommand *cmd = it.current()->setFontCommand(font,
-                                                     _subscript,
-                                                     _superscript,
+                                                     fontFlags,
                                                      col,
                                                      backGroundColor,
                                                      underlineColor,
@@ -2548,10 +2547,8 @@ void KPrCanvas::setFont(const QFont &font, bool _subscript, bool _superscript,  
                                                      strikeOutType,
                                                      strikeOutStyle,
                                                      _att,
-                                                     _shadowText,
                                                      _relativeSize,
                                                      _offsetFromBaseLine,
-                                                     _wordByWord,
                                                      _lang,
                                                      flags);
 
@@ -3115,7 +3112,7 @@ void KPrCanvas::startScreenPresentation( float presFakt, int curPgNum /* 1-based
        int slideno = *it + 1;
        slideList.append( slideno );
     }
-    
+
     // no slide selected ? end the slide show immediately...
     if( !slideList.count() )
     {
@@ -3123,7 +3120,7 @@ void KPrCanvas::startScreenPresentation( float presFakt, int curPgNum /* 1-based
         stopScreenPresentation();
         return;
     }
-    
+
     // find first selected slide after curPgNum
     unsigned slide = 0;
     for( unsigned i = 0; i<slideList.count(); i++ )
@@ -3132,7 +3129,7 @@ void KPrCanvas::startScreenPresentation( float presFakt, int curPgNum /* 1-based
             slide = slideList[i];
             break;
         }
-    
+
     setCursor( blankCursor );
 
     currPresPage = (unsigned int) -1; // force gotoPage to do something

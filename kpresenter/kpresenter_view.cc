@@ -1519,7 +1519,7 @@ void KPresenterView::startScreenPres( int pgNum /*1-based*/ )
     // no slide is selected ?
     if( !kPresenterDoc()->selectedSlides().count() )
     {
-        KMessageBox::sorry( this, i18n("You do not select any slides at all." ), 
+        KMessageBox::sorry( this, i18n("You do not select any slides at all." ),
             i18n("No Slide") );
         return;
     }
@@ -1899,11 +1899,20 @@ void KPresenterView::mtextFont()
         delete m_fontDlg;
         m_fontDlg = 0L;
     }
+    uint fontAttributeFlags = 0;
+    if ( actionFormatSub->isChecked() )
+        fontAttributeFlags |= KoFontDia::FontAttributeSubscript;
+    if( actionFormatSuper->isChecked() )
+        fontAttributeFlags |= KoFontDia::FontAttributeSuperScript;
+    if( textIface->textShadow() )
+        fontAttributeFlags |= KoFontDia::FontAttributeShadowText;
+    if( textIface->wordByWord() )
+        fontAttributeFlags |= KoFontDia::FontAttributeWordByWord;
+    /*if( textIface->hyphenation() )
+        fontAttributeFlags |= KoFontDia::FontAttributeHyphenation;
+    */
     m_fontDlg = new KoFontDia( this, "", textIface->textFont(),
-                               actionFormatSub->isChecked(),
-                               actionFormatSuper->isChecked(),
-                               textIface->textShadow(),
-                               textIface->wordByWord(),
+                               (KoFontDia::FontAttributeFlags)fontAttributeFlags,
                                textIface->textColor(),
                                col,
                                textIface->textUnderlineColor(),
@@ -1929,10 +1938,22 @@ void KPresenterView::slotApplyFont()
     int flags = m_fontDlg->changedFlags();
     if ( flags )
     {
-        // The "change all the format" call
+        uint fontAttributeFlags = 0;
+        if ( m_fontDlg->getSubScript() )
+            fontAttributeFlags |= KoFontDia::FontAttributeSubscript;
+        if( m_fontDlg->getSuperScript() )
+            fontAttributeFlags |= KoFontDia::FontAttributeSuperScript;
+        if( m_fontDlg->getShadowText() )
+            fontAttributeFlags |= KoFontDia::FontAttributeShadowText;
+        if( m_fontDlg->getWordByWord() )
+            fontAttributeFlags |= KoFontDia::FontAttributeWordByWord;
+        if( m_fontDlg->getHyphenation() )
+            fontAttributeFlags |= KoFontDia::FontAttributeHyphenation;
+
+
+// The "change all the format" call
         m_canvas->setFont(m_fontDlg->getNewFont(),
-                          m_fontDlg->getSubScript(),
-                          m_fontDlg->getSuperScript(),
+                          (int)fontAttributeFlags,
                           m_fontDlg->color(),
                           m_fontDlg->backGroundColor(),
                           m_fontDlg->underlineColor(),
@@ -1941,10 +1962,8 @@ void KPresenterView::slotApplyFont()
                           m_fontDlg->getStrikeOutLineType(),
                           m_fontDlg->getStrikeOutLineStyle(),
                           m_fontDlg->getFontAttribute(),
-                          m_fontDlg->getShadowText(),
                           m_fontDlg->getRelativeTextSize(),
                           m_fontDlg->getOffsetFromBaseLine(),
-                          m_fontDlg->getWordByWord(),
                           m_fontDlg->getLanguage(),
                           flags);
     }
