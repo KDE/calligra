@@ -1486,6 +1486,7 @@ QRegion KWFrameSet::frameClipRegion( QPainter * painter, KWFrame *frame, const Q
 {
     KWDocument * doc = kWordDocument();
     QRect rc = painter->xForm( crect );
+    KoRect clipKoRect = doc->unzoomRect(viewMode->viewToNormal(crect));
 #ifdef DEBUG_DRAW
     kdDebug(32002) << "KWFrameSet::frameClipRegion rc initially " << rc << endl;
 #endif
@@ -1511,9 +1512,17 @@ QRegion KWFrameSet::frameClipRegion( QPainter * painter, KWFrame *frame, const Q
         KWFrameSet *parentFrameset= this;
         KWFrame *parentFrame=frame;
         while (parentFrameset->isFloating()) {
+	    // FIXME: this doesnt clip enough yet when the given crect
+            // doesn't overlap with any parent frame.
             parentFrameset=parentFrameset->anchorFrameset();
             KWFrame *oldParentFrame = parentFrame;
-            parentFrame=parentFrameset->frameAtPos(parentFrame->x(), parentFrame->y());
+	    KoRect searchRect = *parentFrame;
+	    if (searchRect.intersects(clipKoRect))
+	    	searchRect = searchRect.intersect(clipKoRect);
+	    else {
+	    	kdDebug(32002) << "WARNING: searchRect doesnt intersect with clipKoRect. clipping will go wrong" << endl;
+	    }
+            parentFrame=parentFrameset->frameAtPos(searchRect.x(), searchRect.y());
             if( parentFrame)
             {
                 QRect r = painter->xForm( viewMode->normalToView( doc->zoomRect(parentFrame->innerRect()) ) );
