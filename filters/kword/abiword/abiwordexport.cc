@@ -80,7 +80,7 @@ class AbiWordWorker : public KWEFBaseWorker
 {
 public:
     AbiWordWorker(void);
-    virtual ~AbiWordWorker(void) { delete m_streamOut; }
+    virtual ~AbiWordWorker(void) { delete m_streamOut; delete m_ioDevice; }
 public:
     virtual bool doOpenFile(const QString& filenameOut, const QString& to);
     virtual bool doCloseFile(void); // Close file in normal conditions
@@ -207,6 +207,8 @@ bool AbiWordWorker::doOpenFile(const QString& filenameOut, const QString& )
 
 bool AbiWordWorker::doCloseFile(void)
 {
+    delete m_streamOut;
+    m_streamOut=NULL;
     if (m_ioDevice)
         m_ioDevice->close();
     return (m_ioDevice);

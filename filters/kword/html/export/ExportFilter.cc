@@ -488,7 +488,9 @@ bool HtmlWorker::doOpenFile(const QString& filenameOut, const QString& /*to*/)
 
 bool HtmlWorker::doCloseFile(void)
 {
-  kdDebug(30503) << __FILE__ << ":" << __LINE__ << endl;
+    kdDebug(30503) << __FILE__ << ":" << __LINE__ << endl;
+    delete m_streamOut;
+    m_streamOut=NULL;
     if (m_ioDevice)
         m_ioDevice->close();
     return true;

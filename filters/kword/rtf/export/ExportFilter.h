@@ -40,7 +40,7 @@ class RTFWorker : public KWEFBaseWorker
 {
 public:
     RTFWorker(void);
-    virtual ~RTFWorker(void) { }
+    virtual ~RTFWorker(void) { delete m_streamOut; delete m_ioDevice; }
 public:
     virtual bool doOpenFile(const QString& filenameOut, const QString& to);
     virtual bool doCloseFile(void); // Close file in normal conditions

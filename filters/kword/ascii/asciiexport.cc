@@ -74,7 +74,7 @@ public:
 
     virtual ~ASCIIWorker()
     {
-        delete m_streamOut;
+        delete m_streamOut; delete m_ioDevice;
     }
 
 public:
@@ -156,6 +156,8 @@ bool ASCIIWorker::doOpenFile(const QString& filenameOut, const QString& /*to*/)
 
 bool ASCIIWorker::doCloseFile(void)
 {
+    delete m_streamOut;
+    m_streamOut=NULL;
     if (m_ioDevice)
         m_ioDevice->close();
     return (m_ioDevice);
