@@ -1,5 +1,7 @@
 To install the KOffice-UserInterface library do:
 
+First of all compile and install the kofficecore library.
+
 cd pics
 make install
 cd ..
@@ -14,6 +16,8 @@ cd test
 make depend
 make all
 ./test
+
+Before all dialogs in 'test' run, you must install the KParts.
 
 Reginald Stadlbauer
 <reggie@kde.org>

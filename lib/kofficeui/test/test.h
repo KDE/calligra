@@ -5,6 +5,7 @@
 #ifndef __kofficelib_test__
 #define __kofficelib_test__
 
+#include "../koPartSelectDia.h"
 #include "../koAboutDia.h"
 #include "../koPageLayoutDia.h"
 
@@ -30,7 +31,7 @@ public slots:
   void aKPresenter() {KoAboutDia::about(KoAboutDia::KPresenter,"0.0.1");}
   void aKAutoformEdit() {KoAboutDia::about(KoAboutDia::KAutoformEdit,"0.0.1");}
   void pgLayout() {KoPageLayoutDia::pageLayout(layout,hf,FORMAT_AND_BORDERS | HEADER_AND_FOOTER);}
-
+  void selectPart() {KoPartSelectDia::selectPart();}
 };
 
 #endif
