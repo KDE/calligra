@@ -58,10 +58,10 @@
 
 #include <assert.h>
 
-#ifdef __GNUC__
-#undef k_funcinfo
-#define k_funcinfo "[\033[36m" << __PRETTY_FUNCTION__ << "\033[m] "
-#endif
+// #ifdef __GNUC__
+// #undef k_funcinfo
+// #define k_funcinfo "[\033[36m" << __PRETTY_FUNCTION__ << "\033[m] "
+// #endif
 
 /******************************************************************/
 /* Class: KWFormulaFrameSet                                       */
@@ -416,7 +416,9 @@ void KWFormulaFrameSetEdit::mouseReleaseEvent( QMouseEvent* event,
 void KWFormulaFrameSetEdit::focusInEvent()
 {
     //kdDebug(32001) << "KWFormulaFrameSetEdit::focusInEvent" << endl;
-    formulaView->focusInEvent(0);
+    if ( formulaView != 0 ) {
+        formulaView->focusInEvent(0);
+    }
 }
 
 void KWFormulaFrameSetEdit::focusOutEvent()

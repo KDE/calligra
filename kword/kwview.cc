@@ -3842,7 +3842,8 @@ void KWView::insertFormula( QMimeSource* source )
             QByteArray data = source->encodedData( KFormula::MimeSource::selectionMimeType() );
             QDomDocument formula;
             formula.setContent( data );
-            frameset->paste( formula );
+            QDomElement formulaElem = formula.namedItem("KFORMULA").toElement();
+            frameset->paste( formulaElem );
         }
         KWFrame *frame = new KWFrame(frameset, 0, 0, 10, 10 );
         frame->setZOrder( m_doc->maxZOrder( frame->pageNum(m_doc) ) + 1 ); // make sure it's on top
