@@ -271,7 +271,10 @@ bool KSpreadDoc::loadXML( const QDomDocument& doc, KoStore* )
   QDomElement spread = doc.documentElement();
 
   if ( spread.attribute( "mime" ) != "application/x-kspread" )
+  {
+    m_bLoading = false;
     return false;
+  }
 
   // <paper>
   QDomElement paper = spread.namedItem( "paper" ).toElement();
@@ -283,7 +286,10 @@ bool KSpreadDoc::loadXML( const QDomDocument& doc, KoStore* )
     // <borders>
     QDomElement borders = paper.namedItem( "borders" ).toElement();
     if ( borders.isNull() )
+    {
+      m_bLoading = false;
       return false;
+    }
     bool ok;
     float left = borders.attribute( "left" ).toFloat( &ok );
     if ( !ok ) { m_bLoading = false; return false; }
@@ -338,6 +344,9 @@ bool KSpreadDoc::loadXML( const QDomDocument& doc, KoStore* )
       return false;
     }
 
+  m_bLoading = false;
+  m_pMap->update();
+  setModified( FALSE );
   return true;
 }
 
