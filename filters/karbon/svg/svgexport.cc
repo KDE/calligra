@@ -333,7 +333,7 @@ SvgExport::getHexColor( QTextStream *stream, const VColor& color )
 	VColor copy( color );
 	copy.setColorSpace( VColor::rgb );
 
-	Output.sprintf( "#%02x%02x%02x", copy[0] * 255, copy[1] * 255, copy[2] * 255 );
+	Output.sprintf( "#%02x%02x%02x", int( copy[0] * 255.0 ), int( copy[1] * 255.0 ), int( copy[2] * 255.0 ) );
 
 	*stream << Output;
 }
