@@ -692,6 +692,7 @@ KoParagLayout KWTextParag::loadParagLayout( QDomElement & parentElem, KWDocument
             tabList.append( tab );
         }
     }
+    qHeapSort( tabList );
     layout.setTabList( tabList );
     layout.alignment = Qt::AlignLeft;
     element = parentElem.namedItem( "FLOW" ).toElement(); // Flow is what is now called alignment internally
