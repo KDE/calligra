@@ -547,9 +547,13 @@ void KWView::setupActions()
     actionTableJoinCells = new KAction( i18n( "&Join Cells" ), 0,
                                         this, SLOT( tableJoinCells() ),
                                         actionCollection(), "table_joincells" );
-    actionTableSplitCells = new KAction( i18n( "&Split Cells" ), 0,
-                                         this, SLOT( tableSplitCells() ),
-                                         actionCollection(), "table_splitcells" );
+    actionTableSplitCellsVerticaly = new KAction( i18n( "&Split Cells Verticaly" ), 0,
+                                         this, SLOT( tableSplitCellsVerticaly() ),
+                                         actionCollection(), "table_splitcells_vertical" );
+    actionTableSplitCellsHorizontaly = new KAction( i18n( "&Split Cells Horizontaly" ), 0,
+                                         this, SLOT( tableSplitCellsHorizontaly() ),
+                                         actionCollection(), "table_splitcells_horizontal" );
+
     actionTableUngroup = new KAction( i18n( "&Ungroup Table" ), 0,
                                       this, SLOT( tableUngroupTable() ),
                                       actionCollection(), "table_ungroup" );
@@ -1063,7 +1067,8 @@ void KWView::setTool( MouseMode _mouseMode )
     actionTableDelRow->setEnabled( FALSE );
     actionTableDelCol->setEnabled( FALSE );
     actionTableJoinCells->setEnabled( FALSE );
-    actionTableSplitCells->setEnabled( FALSE );
+    actionTableSplitCellsVerticaly->setEnabled( FALSE );
+    actionTableSplitCellsHorizontaly->setEnabled( FALSE );
     actionTableDelete->setEnabled( FALSE );
     actionTableUngroup->setEnabled( FALSE );
     actionBackgroundColor->setEnabled(FALSE);
@@ -2082,7 +2087,17 @@ void KWView::tableJoinCells()
     }
 }
 
-void KWView::tableSplitCells()
+void KWView::tableSplitCellsVerticaly()
+{
+    tableSplitCells(2, 1);
+}
+
+void KWView::tableSplitCellsHorizontaly()
+{
+    tableSplitCells(1, 2);
+}
+
+void KWView::tableSplitCells(int cols, int rows)
 {
     gui->canvasWidget()->setMouseMode( MM_EDIT_FRAME );
 
@@ -2100,7 +2115,7 @@ void KWView::tableSplitCells()
         return;
     }
 
-    int rows=1, cols=2;
+    //int rows=1, cols=2;
     if ( !table->splitCell(rows,cols) ) {
         KMessageBox::sorry( this,
                             i18n("You have to select a joined cell."),
@@ -2818,7 +2833,8 @@ void KWView::frameSelectedChanged()
     KWTableFrameSet *table = gui->canvasWidget()->getCurrentTable();
     int nbFrame=doc->getSelectedFrames().count();
     actionTableJoinCells->setEnabled( table && (nbFrame>1));
-    actionTableSplitCells->setEnabled( table && (nbFrame==1) );
+    actionTableSplitCellsVerticaly->setEnabled( table && (nbFrame==1) );
+    actionTableSplitCellsHorizontaly->setEnabled( table && (nbFrame==1) );
     actionFormatFrameSet->setEnabled( !currentTextEdit() && (nbFrame>=1));
     actionEditDelFrame->setEnabled(!currentTextEdit() && (nbFrame==1));
 }

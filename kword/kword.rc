@@ -85,7 +85,8 @@
   <Action name="table_delcol"/>
   <Separator/>
   <Action name="table_joincells"/>
-  <Action name="table_splitcells"/>
+  <Action name="table_splitcells_vertical"/>
+  <Action name="table_splitcells_horizontal"/>
   <Action name="table_ungroup"/>
   <Separator/>
   <Action name="table_delete"/>
@@ -228,7 +229,8 @@
  <Action name="edit_delframe"/>
  <Separator/>
  <Action name="table_joincells"/>
- <Action name="table_splitcells"/>
+ <Action name="table_splitcells_vertical"/>
+ <Action name="table_splitcells_horizontal"/>
 </Menu>
 </kpartgui>
 

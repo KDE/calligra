@@ -185,7 +185,9 @@ public slots:
     void tableDeleteRow();
     void tableDeleteCol();
     void tableJoinCells();
-    void tableSplitCells();
+    void tableSplitCellsVerticaly();
+    void tableSplitCellsHorizontaly();
+
     void tableUngroupTable();
     void tableDelete();
 
@@ -270,6 +272,8 @@ protected:
 
     void borderShowValues();
     void borderSet();
+
+    void tableSplitCells(int col, int row);
 
 private:
     KWDocument *doc;
@@ -360,7 +364,9 @@ private:
     KAction *actionTableInsertRow;
     KAction *actionTableInsertCol;
     KAction *actionTableJoinCells;
-    KAction *actionTableSplitCells;
+    KAction *actionTableSplitCellsVerticaly;
+    KAction *actionTableSplitCellsHorizontaly;
+
     KAction *actionTableUngroup;
     KAction *actionTableDelete;
 
