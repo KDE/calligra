@@ -555,7 +555,8 @@ KoFilter::ConversionStatus RTFExport::convert( const QCString& from, const QCStr
 
     // Compose the RTF file
     // Begin rtf document
-    stringBufOut += "{\\rtf1\\ansi \\deff1\n";
+    // uc0: we do not provide replacment for Unicode characters ( \u )
+    stringBufOut += "{\\rtf1\\ansi\\uc0 \\deff1\n";
 
     stringBufOut += "{\\fonttbl";
     stringBufOut += fontHeader; // insert the font table into the header
@@ -811,39 +812,38 @@ QString escapeRTFsymbols( QString text)
 
 /***************************************************************************/
 // The following function encodes the kword unicode characters into
-// RTF seven bit ansi. This affects any 8 bit characters. They are encoded
-// as 4 byte escapes in the form of \'XX where XX is the 2 byte hex conversion of the
-// 8 bit character.
-QString encodeSevenBit( QString text)
-   {
-   QString escapedText;
-   int     i;
-   int     length;
-   uchar   ch;
-   QChar   Qch;
-   const uchar limit = 127;
-
+// RTF seven bit ASCII. This affects any 8 bit characters. 
+// They are encoded either with \' or with \u
+QString encodeSevenBit ( QString text )
+{
    // initialize strings
-   escapedText =    "";
-   length = (int) text.length();
-   for( i = 0; i < length; i++ )
+   QString escapedText;
+   uint length = text.length();
+   QChar Qch;
+   for ( uint i = 0; i < length; i++ )
+   {
+      QChar Qch ( text.at( i ) );  // get out one unicode char from the string
+      ushort ch = Qch.unicode();  // take unicode value of the char
+
+      if ( false ) // check if the (non-ASCII) character would be in the codepage
       {
-      Qch = text.at( (uint)i );  // get out one unicode char from the string
-      ch = Qch.cell();  // take lower byte of unicode char
-
-      if( ch > limit )   // check for a character in the upper page
-         {
+         // ### TODO: how do we check that we can use \'
          escapedText += "\\\'";   // escape upper page character to 7 bit
-         escapedText += QString::number( (uint)ch, 16 );
-         }  // end if( ch > limit )
+         escapedText += QString::number ( ch, 16 );
+      }
+      else if ( ch >= 127 ) // check for a non-ASCII character (127 is already non-ASCII)
+      {
+         escapeText += "\\u";
+         escapeText += QString::number ( ch, 10 );
+      }
+      else
+         escapedText += Qch ;
 
-      else escapedText += QString( Qch );
-
-      }  // end for( i = 0; ...
+   }  // end for( i = 0; ...
 
    return escapedText;
 
-   }  // end encodeSevenBit()
+}  // end encodeSevenBit()
 
 /***************************************************************************/
 
