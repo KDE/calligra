@@ -43,16 +43,16 @@ public:
   // Initialize the entries common to all function types.
   GBool init(Dict *dict);
 
-  virtual Function *copy() = 0;
+  virtual Function *copy() const = 0;
 
   // Return size of input and output tuples.
-  int getInputSize() { return m; }
-  int getOutputSize() { return n; }
+  int getInputSize() const { return m; }
+  int getOutputSize() const { return n; }
 
   // Transform an input tuple into an output tuple.
-  virtual void transform(double *in, double *out) = 0;
+  virtual void transform(const double *in, double *out) const = 0;
 
-  virtual GBool isOk() = 0;
+  virtual GBool isOk() const = 0;
 
 protected:
 
@@ -73,9 +73,9 @@ public:
 
   IdentityFunction();
   virtual ~IdentityFunction();
-  virtual Function *copy() { return new IdentityFunction(); }
-  virtual void transform(double *in, double *out);
-  virtual GBool isOk() { return gTrue; }
+  virtual Function *copy() const { return new IdentityFunction(); }
+  virtual void transform(const double *in, double *out) const;
+  virtual GBool isOk() const { return gTrue; }
 
 private:
 };
@@ -89,13 +89,13 @@ public:
 
   SampledFunction(Object *funcObj, Dict *dict);
   virtual ~SampledFunction();
-  virtual Function *copy() { return new SampledFunction(this); }
-  virtual void transform(double *in, double *out);
-  virtual GBool isOk() { return ok; }
+  virtual Function *copy() const { return new SampledFunction(this); }
+  virtual void transform(const double *in, double *out) const;
+  virtual GBool isOk() const { return ok; }
 
 private:
 
-  SampledFunction(SampledFunction *func);
+  SampledFunction(const SampledFunction *func);
 
   int				// number of samples for each domain element
     sampleSize[funcMaxInputs];
@@ -116,13 +116,13 @@ public:
 
   ExponentialFunction(Object *funcObj, Dict *dict);
   virtual ~ExponentialFunction();
-  virtual Function *copy() { return new ExponentialFunction(this); }
-  virtual void transform(double *in, double *out);
-  virtual GBool isOk() { return ok; }
+  virtual Function *copy() const { return new ExponentialFunction(this); }
+  virtual void transform(const double *in, double *out) const;
+  virtual GBool isOk() const { return ok; }
 
 private:
 
-  ExponentialFunction(ExponentialFunction *func);
+  ExponentialFunction(const ExponentialFunction *func);
 
   double c0[funcMaxOutputs];
   double c1[funcMaxOutputs];
@@ -139,13 +139,13 @@ public:
 
   StitchingFunction(Object *funcObj, Dict *dict);
   virtual ~StitchingFunction();
-  virtual Function *copy() { return new StitchingFunction(this); }
-  virtual void transform(double *in, double *out);
-  virtual GBool isOk() { return ok; }
+  virtual Function *copy() const { return new StitchingFunction(this); }
+  virtual void transform(const double *in, double *out) const;
+  virtual GBool isOk() const { return ok; }
 
 private:
 
-  StitchingFunction(StitchingFunction *func);
+  StitchingFunction(const StitchingFunction *func);
 
   int k;
   Function **funcs;
@@ -163,17 +163,17 @@ public:
 
   PostScriptFunction(Object *funcObj, Dict *dict);
   virtual ~PostScriptFunction();
-  virtual Function *copy() { return new PostScriptFunction(this); }
-  virtual void transform(double *in, double *out);
-  virtual GBool isOk() { return ok; }
+  virtual Function *copy() const { return new PostScriptFunction(this); }
+  virtual void transform(const double *in, double *out) const;
+  virtual GBool isOk() const { return ok; }
 
 private:
 
-  PostScriptFunction(PostScriptFunction *func);
+  PostScriptFunction(const PostScriptFunction *func);
   GBool parseCode(Stream *str, int *codePtr);
   GString *getToken(Stream *str);
   void resizeCode(int newSize);
-  void exec(PSStack *stack, int codePtr);
+  void exec(PSStack *stack, int codePtr) const;
 
   PSObject *code;
   int codeSize;

@@ -41,6 +41,7 @@ public:
     Device(Data &data);
     ~Device();
 
+    void init();
     void dumpPage(uint i);
 
     //-----

@@ -90,7 +90,7 @@ GfxColorSpace *GfxColorSpace::parse(Object *csObj) {
 }
 
 void GfxColorSpace::getDefaultRanges(double *decodeLow, double *decodeRange,
-                                     int /*maxImgPixel*/) {
+                                     int /*maxImgPixel*/) const {
   int i;
 
   for (i = 0; i < getNComps(); ++i) {
@@ -109,19 +109,19 @@ GfxDeviceGrayColorSpace::GfxDeviceGrayColorSpace() {
 GfxDeviceGrayColorSpace::~GfxDeviceGrayColorSpace() {
 }
 
-GfxColorSpace *GfxDeviceGrayColorSpace::copy() {
+GfxColorSpace *GfxDeviceGrayColorSpace::copy() const {
   return new GfxDeviceGrayColorSpace();
 }
 
-void GfxDeviceGrayColorSpace::getGray(GfxColor *color, double *gray) {
+void GfxDeviceGrayColorSpace::getGray(const GfxColor *color, double *gray) const {
   *gray = clip01(color->c[0]);
 }
 
-void GfxDeviceGrayColorSpace::getRGB(GfxColor *color, GfxRGB *rgb) {
+void GfxDeviceGrayColorSpace::getRGB(const GfxColor *color, GfxRGB *rgb) const {
   rgb->r = rgb->g = rgb->b = clip01(color->c[0]);
 }
 
-void GfxDeviceGrayColorSpace::getCMYK(GfxColor *color, GfxCMYK *cmyk) {
+void GfxDeviceGrayColorSpace::getCMYK(const GfxColor *color, GfxCMYK *cmyk) const {
   cmyk->c = cmyk->m = cmyk->y = 0;
   cmyk->k = clip01(1 - color->c[0]);
 }
@@ -139,7 +139,7 @@ GfxCalGrayColorSpace::GfxCalGrayColorSpace() {
 GfxCalGrayColorSpace::~GfxCalGrayColorSpace() {
 }
 
-GfxColorSpace *GfxCalGrayColorSpace::copy() {
+GfxColorSpace *GfxCalGrayColorSpace::copy() const {
   GfxCalGrayColorSpace *cs;
 
   cs = new GfxCalGrayColorSpace();
@@ -198,15 +198,15 @@ GfxColorSpace *GfxCalGrayColorSpace::parse(Array *arr) {
   return cs;
 }
 
-void GfxCalGrayColorSpace::getGray(GfxColor *color, double *gray) {
+void GfxCalGrayColorSpace::getGray(const GfxColor *color, double *gray) const {
   *gray = clip01(color->c[0]);
 }
 
-void GfxCalGrayColorSpace::getRGB(GfxColor *color, GfxRGB *rgb) {
+void GfxCalGrayColorSpace::getRGB(const GfxColor *color, GfxRGB *rgb) const {
   rgb->r = rgb->g = rgb->b = clip01(color->c[0]);
 }
 
-void GfxCalGrayColorSpace::getCMYK(GfxColor *color, GfxCMYK *cmyk) {
+void GfxCalGrayColorSpace::getCMYK(const GfxColor *color, GfxCMYK *cmyk) const {
   cmyk->c = cmyk->m = cmyk->y = 0;
   cmyk->k = clip01(1 - color->c[0]);
 }
@@ -221,23 +221,23 @@ GfxDeviceRGBColorSpace::GfxDeviceRGBColorSpace() {
 GfxDeviceRGBColorSpace::~GfxDeviceRGBColorSpace() {
 }
 
-GfxColorSpace *GfxDeviceRGBColorSpace::copy() {
+GfxColorSpace *GfxDeviceRGBColorSpace::copy() const {
   return new GfxDeviceRGBColorSpace();
 }
 
-void GfxDeviceRGBColorSpace::getGray(GfxColor *color, double *gray) {
+void GfxDeviceRGBColorSpace::getGray(const GfxColor *color, double *gray) const {
   *gray = clip01(0.299 * color->c[0] +
 		 0.587 * color->c[1] +
 		 0.114 * color->c[2]);
 }
 
-void GfxDeviceRGBColorSpace::getRGB(GfxColor *color, GfxRGB *rgb) {
+void GfxDeviceRGBColorSpace::getRGB(const GfxColor *color, GfxRGB *rgb) const {
   rgb->r = clip01(color->c[0]);
   rgb->g = clip01(color->c[1]);
   rgb->b = clip01(color->c[2]);
 }
 
-void GfxDeviceRGBColorSpace::getCMYK(GfxColor *color, GfxCMYK *cmyk) {
+void GfxDeviceRGBColorSpace::getCMYK(const GfxColor *color, GfxCMYK *cmyk) const {
   double c, m, y, k;
 
   c = clip01(1 - color->c[0]);
@@ -272,7 +272,7 @@ GfxCalRGBColorSpace::GfxCalRGBColorSpace() {
 GfxCalRGBColorSpace::~GfxCalRGBColorSpace() {
 }
 
-GfxColorSpace *GfxCalRGBColorSpace::copy() {
+GfxColorSpace *GfxCalRGBColorSpace::copy() const {
   GfxCalRGBColorSpace *cs;
   int i;
 
@@ -356,19 +356,19 @@ GfxColorSpace *GfxCalRGBColorSpace::parse(Array *arr) {
   return cs;
 }
 
-void GfxCalRGBColorSpace::getGray(GfxColor *color, double *gray) {
+void GfxCalRGBColorSpace::getGray(const GfxColor *color, double *gray) const {
   *gray = clip01(0.299 * color->c[0] +
 		 0.587 * color->c[1] +
 		 0.114 * color->c[2]);
 }
 
-void GfxCalRGBColorSpace::getRGB(GfxColor *color, GfxRGB *rgb) {
+void GfxCalRGBColorSpace::getRGB(const GfxColor *color, GfxRGB *rgb) const {
   rgb->r = clip01(color->c[0]);
   rgb->g = clip01(color->c[1]);
   rgb->b = clip01(color->c[2]);
 }
 
-void GfxCalRGBColorSpace::getCMYK(GfxColor *color, GfxCMYK *cmyk) {
+void GfxCalRGBColorSpace::getCMYK(const GfxColor *color, GfxCMYK *cmyk) const {
   double c, m, y, k;
 
   c = clip01(1 - color->c[0]);
@@ -397,18 +397,18 @@ GfxDeviceCMYKColorSpace::GfxDeviceCMYKColorSpace() {
 GfxDeviceCMYKColorSpace::~GfxDeviceCMYKColorSpace() {
 }
 
-GfxColorSpace *GfxDeviceCMYKColorSpace::copy() {
+GfxColorSpace *GfxDeviceCMYKColorSpace::copy() const {
   return new GfxDeviceCMYKColorSpace();
 }
 
-void GfxDeviceCMYKColorSpace::getGray(GfxColor *color, double *gray) {
+void GfxDeviceCMYKColorSpace::getGray(const GfxColor *color, double *gray) const {
   *gray = clip01(1 - color->c[3]
 		 - 0.299 * color->c[0]
 		 - 0.587 * color->c[1]
 		 - 0.114 * color->c[2]);
 }
 
-void GfxDeviceCMYKColorSpace::getRGB(GfxColor *color, GfxRGB *rgb) {
+void GfxDeviceCMYKColorSpace::getRGB(const GfxColor *color, GfxRGB *rgb) const {
   double c, m, y, aw, ac, am, ay, ar, ag, ab;
 
   c = clip01(color->c[0] + color->c[3]);
@@ -427,7 +427,7 @@ void GfxDeviceCMYKColorSpace::getRGB(GfxColor *color, GfxRGB *rgb) {
 		  0.4863*ab);
 }
 
-void GfxDeviceCMYKColorSpace::getCMYK(GfxColor *color, GfxCMYK *cmyk) {
+void GfxDeviceCMYKColorSpace::getCMYK(const GfxColor *color, GfxCMYK *cmyk) const {
   cmyk->c = clip01(color->c[0]);
   cmyk->m = clip01(color->c[1]);
   cmyk->y = clip01(color->c[2]);
@@ -456,7 +456,7 @@ GfxLabColorSpace::GfxLabColorSpace() {
 GfxLabColorSpace::~GfxLabColorSpace() {
 }
 
-GfxColorSpace *GfxLabColorSpace::copy() {
+GfxColorSpace *GfxLabColorSpace::copy() const {
   GfxLabColorSpace *cs;
 
   cs = new GfxLabColorSpace();
@@ -544,7 +544,7 @@ GfxColorSpace *GfxLabColorSpace::parse(Array *arr) {
   return cs;
 }
 
-void GfxLabColorSpace::getGray(GfxColor *color, double *gray) {
+void GfxLabColorSpace::getGray(const GfxColor *color, double *gray) const {
   GfxRGB rgb;
 
   getRGB(color, &rgb);
@@ -553,7 +553,7 @@ void GfxLabColorSpace::getGray(GfxColor *color, double *gray) {
 		 0.114 * rgb.b);
 }
 
-void GfxLabColorSpace::getRGB(GfxColor *color, GfxRGB *rgb) {
+void GfxLabColorSpace::getRGB(const GfxColor *color, GfxRGB *rgb) const {
   double X, Y, Z;
   double t1, t2;
   double r, g, b;
@@ -590,7 +590,7 @@ void GfxLabColorSpace::getRGB(GfxColor *color, GfxRGB *rgb) {
   rgb->b = pow(clip01(b * kb), 0.5);
 }
 
-void GfxLabColorSpace::getCMYK(GfxColor *color, GfxCMYK *cmyk) {
+void GfxLabColorSpace::getCMYK(const GfxColor *color, GfxCMYK *cmyk) const {
   GfxRGB rgb;
   double c, m, y, k;
 
@@ -612,7 +612,7 @@ void GfxLabColorSpace::getCMYK(GfxColor *color, GfxCMYK *cmyk) {
 }
 
 void GfxLabColorSpace::getDefaultRanges(double *decodeLow, double *decodeRange,
-                                        int /*maxImgPixel*/) {
+                                        int /*maxImgPixel*/) const {
   decodeLow[0] = 0;
   decodeRange[0] = 100;
   decodeLow[1] = aMin;
@@ -626,7 +626,7 @@ void GfxLabColorSpace::getDefaultRanges(double *decodeLow, double *decodeRange,
 //------------------------------------------------------------------------
 
 GfxICCBasedColorSpace::GfxICCBasedColorSpace(int nCompsA, GfxColorSpace *altA,
-					     Ref *iccProfileStreamA) {
+					     const Ref *iccProfileStreamA) {
   nComps = nCompsA;
   alt = altA;
   iccProfileStream = *iccProfileStreamA;
@@ -638,7 +638,7 @@ GfxICCBasedColorSpace::~GfxICCBasedColorSpace() {
   delete alt;
 }
 
-GfxColorSpace *GfxICCBasedColorSpace::copy() {
+GfxColorSpace *GfxICCBasedColorSpace::copy() const {
   GfxICCBasedColorSpace *cs;
   int i;
 
@@ -719,21 +719,21 @@ GfxColorSpace *GfxICCBasedColorSpace::parse(Array *arr) {
   return cs;
 }
 
-void GfxICCBasedColorSpace::getGray(GfxColor *color, double *gray) {
+void GfxICCBasedColorSpace::getGray(const GfxColor *color, double *gray) const {
   alt->getGray(color, gray);
 }
 
-void GfxICCBasedColorSpace::getRGB(GfxColor *color, GfxRGB *rgb) {
+void GfxICCBasedColorSpace::getRGB(const GfxColor *color, GfxRGB *rgb) const {
   alt->getRGB(color, rgb);
 }
 
-void GfxICCBasedColorSpace::getCMYK(GfxColor *color, GfxCMYK *cmyk) {
+void GfxICCBasedColorSpace::getCMYK(const GfxColor *color, GfxCMYK *cmyk) const {
   alt->getCMYK(color, cmyk);
 }
 
 void GfxICCBasedColorSpace::getDefaultRanges(double *decodeLow,
 					     double *decodeRange,
-                         int /*maxImgPixel*/) {
+                         int /*maxImgPixel*/) const {
   int i;
 
   for (i = 0; i < nComps; ++i) {
@@ -759,7 +759,7 @@ GfxIndexedColorSpace::~GfxIndexedColorSpace() {
   gfree(lookup);
 }
 
-GfxColorSpace *GfxIndexedColorSpace::copy() {
+GfxColorSpace *GfxIndexedColorSpace::copy() const {
   GfxIndexedColorSpace *cs;
 
   cs = new GfxIndexedColorSpace(base->copy(), indexHigh);
@@ -834,7 +834,7 @@ GfxColorSpace *GfxIndexedColorSpace::parse(Array *arr) {
   return NULL;
 }
 
-void GfxIndexedColorSpace::getGray(GfxColor *color, double *gray) {
+void GfxIndexedColorSpace::getGray(const GfxColor *color, double *gray) const {
   Guchar *p;
   GfxColor color2;
   double low[gfxColorMaxComps], range[gfxColorMaxComps];
@@ -849,7 +849,7 @@ void GfxIndexedColorSpace::getGray(GfxColor *color, double *gray) {
   base->getGray(&color2, gray);
 }
 
-void GfxIndexedColorSpace::getRGB(GfxColor *color, GfxRGB *rgb) {
+void GfxIndexedColorSpace::getRGB(const GfxColor *color, GfxRGB *rgb) const {
   Guchar *p;
   GfxColor color2;
   double low[gfxColorMaxComps], range[gfxColorMaxComps];
@@ -864,7 +864,7 @@ void GfxIndexedColorSpace::getRGB(GfxColor *color, GfxRGB *rgb) {
   base->getRGB(&color2, rgb);
 }
 
-void GfxIndexedColorSpace::getCMYK(GfxColor *color, GfxCMYK *cmyk) {
+void GfxIndexedColorSpace::getCMYK(const GfxColor *color, GfxCMYK *cmyk) const {
   Guchar *p;
   GfxColor color2;
   double low[gfxColorMaxComps], range[gfxColorMaxComps];
@@ -881,7 +881,7 @@ void GfxIndexedColorSpace::getCMYK(GfxColor *color, GfxCMYK *cmyk) {
 
 void GfxIndexedColorSpace::getDefaultRanges(double *decodeLow,
 					    double *decodeRange,
-					    int maxImgPixel) {
+					    int maxImgPixel) const {
   decodeLow[0] = 0;
   decodeRange[0] = maxImgPixel;
 }
@@ -904,7 +904,7 @@ GfxSeparationColorSpace::~GfxSeparationColorSpace() {
   delete func;
 }
 
-GfxColorSpace *GfxSeparationColorSpace::copy() {
+GfxColorSpace *GfxSeparationColorSpace::copy() const {
   return new GfxSeparationColorSpace(name->copy(), alt->copy(), func->copy());
 }
 
@@ -950,21 +950,21 @@ GfxColorSpace *GfxSeparationColorSpace::parse(Array *arr) {
   return NULL;
 }
 
-void GfxSeparationColorSpace::getGray(GfxColor *color, double *gray) {
+void GfxSeparationColorSpace::getGray(const GfxColor *color, double *gray) const {
   GfxColor color2;
 
   func->transform(color->c, color2.c);
   alt->getGray(&color2, gray);
 }
 
-void GfxSeparationColorSpace::getRGB(GfxColor *color, GfxRGB *rgb) {
+void GfxSeparationColorSpace::getRGB(const GfxColor *color, GfxRGB *rgb) const {
   GfxColor color2;
 
   func->transform(color->c, color2.c);
   alt->getRGB(&color2, rgb);
 }
 
-void GfxSeparationColorSpace::getCMYK(GfxColor *color, GfxCMYK *cmyk) {
+void GfxSeparationColorSpace::getCMYK(const GfxColor *color, GfxCMYK *cmyk) const {
   GfxColor color2;
 
   func->transform(color->c, color2.c);
@@ -993,7 +993,7 @@ GfxDeviceNColorSpace::~GfxDeviceNColorSpace() {
   delete func;
 }
 
-GfxColorSpace *GfxDeviceNColorSpace::copy() {
+GfxColorSpace *GfxDeviceNColorSpace::copy() const {
   GfxDeviceNColorSpace *cs;
   int i;
 
@@ -1062,21 +1062,21 @@ GfxColorSpace *GfxDeviceNColorSpace::parse(Array *arr) {
   return NULL;
 }
 
-void GfxDeviceNColorSpace::getGray(GfxColor *color, double *gray) {
+void GfxDeviceNColorSpace::getGray(const GfxColor *color, double *gray) const {
   GfxColor color2;
 
   func->transform(color->c, color2.c);
   alt->getGray(&color2, gray);
 }
 
-void GfxDeviceNColorSpace::getRGB(GfxColor *color, GfxRGB *rgb) {
+void GfxDeviceNColorSpace::getRGB(const GfxColor *color, GfxRGB *rgb) const {
   GfxColor color2;
 
   func->transform(color->c, color2.c);
   alt->getRGB(&color2, rgb);
 }
 
-void GfxDeviceNColorSpace::getCMYK(GfxColor *color, GfxCMYK *cmyk) {
+void GfxDeviceNColorSpace::getCMYK(const GfxColor *color, GfxCMYK *cmyk) const {
   GfxColor color2;
 
   func->transform(color->c, color2.c);
@@ -1097,7 +1097,7 @@ GfxPatternColorSpace::~GfxPatternColorSpace() {
   }
 }
 
-GfxColorSpace *GfxPatternColorSpace::copy() {
+GfxColorSpace *GfxPatternColorSpace::copy() const {
   return new GfxPatternColorSpace(under ? under->copy() :
 				          (GfxColorSpace *)NULL);
 }
@@ -1125,15 +1125,15 @@ GfxColorSpace *GfxPatternColorSpace::parse(Array *arr) {
   return cs;
 }
 
-void GfxPatternColorSpace::getGray(GfxColor */*color*/, double *gray) {
+void GfxPatternColorSpace::getGray(const GfxColor */*color*/, double *gray) const {
   *gray = 0;
 }
 
-void GfxPatternColorSpace::getRGB(GfxColor */*color*/, GfxRGB *rgb) {
+void GfxPatternColorSpace::getRGB(const GfxColor */*color*/, GfxRGB *rgb) const {
   rgb->r = rgb->g = rgb->b = 0;
 }
 
-void GfxPatternColorSpace::getCMYK(GfxColor */*color*/, GfxCMYK *cmyk) {
+void GfxPatternColorSpace::getCMYK(const GfxColor */*color*/, GfxCMYK *cmyk) const {
   cmyk->c = cmyk->m = cmyk->y = 0;
   cmyk->k = 1;
 }
@@ -1613,8 +1613,8 @@ GfxImageColorMap::GfxImageColorMap(int bitsA, Object *decode,
   GfxIndexedColorSpace *indexedCS;
   GfxSeparationColorSpace *sepCS;
   int maxPixel, indexHigh;
-  Guchar *lookup2;
-  Function *sepFunc;
+  const Guchar *lookup2;
+  const Function *sepFunc;
   Object obj;
   double x[gfxColorMaxComps];
   double y[gfxColorMaxComps];
@@ -2046,7 +2046,7 @@ GfxState::~GfxState() {
 }
 
 // Used for copy();
-GfxState::GfxState(GfxState *state) {
+GfxState::GfxState(const GfxState *state) {
   memcpy(this, state, sizeof(GfxState));
   if (fillColorSpace) {
     fillColorSpace = state->fillColorSpace->copy();
@@ -2068,7 +2068,7 @@ GfxState::GfxState(GfxState *state) {
 }
 
 void GfxState::getUserClipBBox(double *xMin, double *yMin,
-			       double *xMax, double *yMax) {
+			       double *xMax, double *yMax) const {
   double ictm[6];
   double xMin1, yMin1, xMax1, yMax1, det, tx, ty;
 

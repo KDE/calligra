@@ -22,7 +22,7 @@
 // OutputDev
 //------------------------------------------------------------------------
 
-void OutputDev::setDefaultCTM(double *ctm) {
+void OutputDev::setDefaultCTM(const double *ctm) {
   int i;
   double det;
 

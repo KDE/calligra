@@ -54,6 +54,7 @@ class Document
 
     void initDevice(Data &);
     void treatPage(uint i);
+    void init();
     void dumpPage(uint i);
 
  private:

@@ -142,11 +142,12 @@ Dialog::Dialog(uint nbPages, bool isEncrypted, QWidget *widget)
     _images = new QCheckBox(i18n("Import images"), plainPage());
     _images->setChecked(true);
     top->addWidget(_images);
-    _returns = new QCheckBox(i18n("Remove carriage returns..."), plainPage());
+    _returns = new QCheckBox(i18n("\"Smart\" mode"), plainPage());
     QWhatsThis::add(_returns,
-                    i18n("The import filter will also try to remove hyphen "
-                         "and to compute the paragraph alignment."
-                         "Note that the layout of each page can "
+                    i18n("The import filter will remove returns and"
+                         "hyphens at end of line. It will also try"
+                         "to compute the paragraph alignment."
+                         "Note that the layout of some pages can "
                          "be more or less messed up."));
     top->addWidget(_returns);
 

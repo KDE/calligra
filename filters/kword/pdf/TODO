@@ -3,7 +3,6 @@ Small things:
 - find code for ligature 'ff' and find the other 3 ligatures.
 - check for underscores '_' drawn as a stroke by latex.
 - correctly detect and layout list bullets.
-- correctly detect soft hyphens.
 - correctly layout superscript characters.
 - complete "latexsymbol" conversion table (?)
 - complete accent+letter conversion table.
@@ -13,20 +12,11 @@ Small things:
 
 Bigger things:
 - fix height offsets (difficult to do for KOffice 1.2 : I need to
-  tell kword the height of a paragraph).
-- compute columns of text : compute main frame size with reasonnable
-  margins. Suppress uneeded line breaks. Use some kind of heuristic
-  on several pages and take care of right/left page (not supported in kword ?)
+  tell kword the height of a paragraph but there is something wrong anyway).
+- compute columns of text.
 - correctly detect and layout superscript.
 - correctly detect and layout underline and strokeline.
 
 Hard things:
 - detect footnotes.
 - detect chapter title/numbering.
-- detect header/footer.
-
-GUI:
-- add option to remove carriage return and to add soft hyphen.
-
-Cleanup:
-- no more text in Blocks (link text in Link ?)

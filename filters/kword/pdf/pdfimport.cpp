@@ -105,6 +105,7 @@ KoFilter::ConversionStatus PdfImport::convert(const QCString& from,
     SelectionRangeIterator it(_options.range);
     for (uint k=0; k<2; k++) {
         data.pageIndex = 0;
+        if ( k==1 ) _doc.init();
         for (it.toFirst(); it.current()!=it.end(); it.next()) {
             QString s = (k==0 ? i18n("First pass: page #%1...")
                          : i18n("Second pass: page #%1..."));

@@ -49,10 +49,75 @@ void Device::clear()
     _images.clear();
 }
 
+void Device::init()
+{
+    // get some global infos on frames size
+    const double maxH = _data.pageRect().bottom();
+    const double maxR = _data.pageRect().right();
+
+    double maxHeaderBottom = 0;
+    double minBodyTop = maxH;
+    double minHeaderBodyDelta = maxH;
+    double maxBodyBottom = 0;
+    double minFooterTop = maxH;
+    double minBodyFooterDelta = maxH;
+    double minLeft = maxR;
+    double maxRight = 0;
+
+    for (Page *page = _pages.first(); page; page = _pages.next()) {
+        const DRect &hr = page->rects()[Header];
+        const DRect &br = page->rects()[Body];
+        if ( hr.isValid() ) {
+            maxHeaderBottom = kMax(maxHeaderBottom, hr.bottom());
+            minHeaderBodyDelta =
+                kMin(minHeaderBodyDelta, br.top() - hr.bottom());
+        }
+        minBodyTop = kMin(minBodyTop, br.top());
+        const DRect &fr = page->rects()[Footer];
+        if ( fr.isValid() ) {
+            minFooterTop = kMin(minFooterTop, fr.top());
+            minBodyFooterDelta =
+                kMin(minBodyFooterDelta, fr.top() - br.bottom());
+        }
+        maxBodyBottom = kMax(maxBodyBottom, br.bottom());
+        minLeft = kMin(minLeft, br.left());
+        minLeft = kMin(minLeft, hr.left());
+        minLeft = kMin(minLeft, fr.left());
+        maxRight = kMax(maxRight, br.right());
+        maxRight = kMax(maxRight, hr.right());
+        maxRight = kMax(maxRight, fr.right());
+    }
+
+    // set minimal top and maximal bottom to body frame
+    double minTop = kMax(maxHeaderBottom+minHeaderBodyDelta, minBodyTop);
+    double maxBottom = kMin(minFooterTop-minBodyFooterDelta, maxBodyBottom);
+    for (Page *page = _pages.first(); page; page = _pages.next()) {
+        DRect &r = page->rects()[Body];
+        if ( r.top()>minTop ) r.setTop(minTop);
+        if ( r.bottom()<maxBottom ) r.setBottom(maxBottom);
+    }
+
+    // set minimal left and maximal right for header and for footer
+    for (Page *page = _pages.first(); page; page = _pages.next()) {
+        DRect &hr = page->rects()[Header];
+        if ( hr.isValid() ) {
+            if ( hr.left()>minLeft ) hr.setLeft(minLeft);
+            if ( hr.right()<maxRight ) hr.setRight(maxRight);
+        }
+        DRect &fr = page->rects()[Footer];
+        if ( fr.isValid() ) {
+            if ( fr.left()>minLeft ) fr.setLeft(minLeft);
+            if ( fr.right()<maxRight ) fr.setRight(maxRight);
+        }
+    }
+}
+
+
 void Device::dumpPage(uint i)
 {
-    _data.startPage();
-    _pages.at(i)->dump();
+    Page *page = _pages.at(i);
+    _data.initPage(page->rects());
+    page->dump();
 }
 
 void Device::startPage(int, GfxState *)
@@ -63,7 +128,7 @@ void Device::startPage(int, GfxState *)
 void Device::endPage()
 {
     if ( !_currentImage.image.isNull() ) addImage();
-    _data.endPage( _pages.getLast()->rect() );
+    _pages.getLast()->endPage();
     clear();
     kdDebug(30516) << "-- end page --------------------------" << endl;
 }
@@ -99,11 +164,7 @@ void Device::drawLink(::Link* link, Catalog *cat)
     cvtUserToDev(x1, y1, &ux1, &uy1);
     cvtUserToDev(x2, y2, &ux2, &uy2);
 
-    DRect r;
-    r.left = kMin(ux1, ux2);
-    r.right = kMax(ux1, ux2);
-    r.top = kMin(uy1, uy2);
-    r.bottom = kMax(uy1, uy2);
+    DRect r(kMin(ux1, ux2), kMax(ux1, ux2), kMin(uy1, uy2), kMax(uy1, uy2));
     Link *l = new Link(r, *link->getAction(), *cat);
     _pages.getLast()->addLink(l);
 }
@@ -174,16 +235,16 @@ void Device::computeGeometry(GfxState *state, Image &image)
     double xt, yt, wt, ht;
     state->transform(0, 0, &xt, &yt);
     state->transformDelta(1, 1, &wt, &ht);
-    image.rect.left = xt + (wt>0 ? 0 : wt);
-    image.rect.right = image.rect.left + fabs(wt);
-    image.rect.top = yt + (ht>0 ? 0 : ht);
-    image.rect.bottom = image.rect.top + fabs(ht);
+    image.rect.setLeft(xt + (wt>0 ? 0 : wt));
+    image.rect.setRight(image.rect.left() + fabs(wt));
+    image.rect.setTop(yt + (ht>0 ? 0 : ht));
+    image.rect.setBottom(image.rect.top() + fabs(ht));
 
     // #### TODO : take care of image transform (rotation,...)
 }
 
 uint Device::initImage(GfxState *state, int width, int height,
-                             bool withMask)
+                       bool withMask)
 {
     // get image geometry
     Image image;
@@ -193,9 +254,9 @@ uint Device::initImage(GfxState *state, int width, int height,
     // check if new image
     if ( !_currentImage.image.isNull() &&
          (_currentImage.image.width()!=width
-          || !equal(image.rect.left, _currentImage.rect.left)
-          || !equal(image.rect.right, _currentImage.rect.right)
-          || !equal(image.rect.top, _currentImage.rect.bottom)
+          || !equal(image.rect.left(), _currentImage.rect.left())
+          || !equal(image.rect.right(), _currentImage.rect.right())
+          || !equal(image.rect.top(), _currentImage.rect.bottom())
           || !equal(image.mask, _currentImage.mask)) )
         addImage();
 
@@ -210,7 +271,7 @@ uint Device::initImage(GfxState *state, int width, int height,
             for (int i=0; i<width; i++) newPix[i] = pix[i];
         }
         _currentImage.image = image.image;
-        _currentImage.rect.bottom = image.rect.bottom;
+        _currentImage.rect.setBottom( image.rect.bottom() );
     } else _currentImage = image;
     return offset;
 }

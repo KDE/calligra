@@ -1,11 +1,11 @@
-0.5 (22 January 2003)
+0.5 (25 January 2003)
 * option to disable image importing.
 * fix links detection.
 * fix standard fonts detection.
 * -huge- optimisation by replacing vector by list !!
 * option to remove returns at end of lines. Also replace '-' by soft hyphen
   and try to guess paragraph alignments.
-* first try at computing margins
+* compute body, header and footer frame sizes (now use DTP mode of kword)
 
 0.4 (15 January 2003)
 * fix crach in link processing [reported by Volker Augustin].

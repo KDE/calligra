@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002 Nicolas HADACEK (hadacek@kde.org)
+ * Copyright (c) 2002-2003 Nicolas HADACEK (hadacek@kde.org)
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -21,100 +21,56 @@
 
 #include "TextOutputDev.h"
 
-#include <qvaluevector.h>
-#include <qdom.h>
 #include <qdatetime.h>
 #include <qptrlist.h>
 
-#include "misc.h"
+#include "fstring.h"
 
 
 namespace PDFImport
 {
 
-class Page;
+class Paragraph;
 class Data;
 
-//-----------------------------------------------------------------------------
-class Block
-{
-public:
-    Block() : link(0), pos(0) {}
-
-public:
-    Font    font;
-    const Link *link;
-    uint    pos;
-    QString text;
-};
-
-//-----------------------------------------------------------------------------
-enum Align { AlignLeft, AlignRight, AlignCenter, AlignBlock };
-
-class Paragraph
-{
-public:
-    Paragraph()
-        : nbLines(1), firstIndent(0), leftIndent(0), align(AlignLeft) {}
-
-public:
-    uint                 nbLines, frameIndex;
-    double               firstIndent, leftIndent, offset;
-    Align                align;
-    QValueVector<double> tabs;
-    QValueList<Block>    blocks;
-
-public:
-    int findTab(double xMin, double epsilon, bool firstLine) const;
-    uint findNbTabs(uint i, double prevXMax) const;
-    int charFromEnd(uint dec, uint &blockIndex);
-};
-
-//-----------------------------------------------------------------------------
-class String : public TextString
-{
-public:
-    String(GfxState *state, double x0, double y0,
-           double fontSize, uint frameIndex);
-
-    uint frameIndex() const { return _frameIndex; }
-    const Font &font() const { return _font; }
-    DRect rect() const;
-    bool checkCombination(TextString *s);
-
-public:
-    const Link *link;
-
-private:
-    void addChar(GfxState *state, double x, double y,
-                 double dx, double dy, Unicode u);
-
-private:
-    Font _font;
-    uint _frameIndex;
-};
-
-//-----------------------------------------------------------------------------
 class Page : public TextPage
 {
 public:
     Page(Data &data);
 
+    QValueVector<DRect> &rects() { return _rects; }
+    bool hasHeader() const;
+    bool hasFooter() const;
+
+    void clear();
+
+    // first pass
     void beginString(GfxState *, double x0, double y0);
     void addString(TextString *);
     void endString();
-    void dump();
     void addLink(Link *link) { _links.append(link); }
-    void clear();
+    void endPage();
 
-    const DRect &rect() const { return _rect; }
+    // second pass
+    void dump();
 
 private:
-    FontFamily checkSpecial(Block &, uint index) const;
-    static TextBlock *findLastBlock(TextLine *);
+    FontFamily checkSpecial(QChar &, const Font &) const;
+    static TextBlock *block(TextLine *, int index);
     static bool isLastParagraphLine(TextLine *);
+
+    // first pass
     void createParagraphs();
+    void checkHeader();
+    void checkFooter();
+
+    // second pass
+    void initParagraph(Paragraph &) const;
+    void fillParagraph(Paragraph &, double &offset) const;
+    void checkSpecialChars(Paragraph &) const;
+    void coalesce(Paragraph &) const;
     void prepare();
+    void dump(const Paragraph &);
 
 private:
     Data &_data;
@@ -122,7 +78,7 @@ private:
     QPtrList<Link> _links;
     String *_lastStr;
     QTime _time; // debug
-    DRect _rect;
+    QValueVector<DRect> _rects;
 };
 
 }; // namespace

@@ -135,17 +135,12 @@ DRect Document::paperSize(KoFormat &format) const
 {
     KoOrientation orientation = paperOrientation();
 
-    DRect rect;
-    rect.top = 0;
-    rect.left = 0;
     double w, h;
     if ( nbPages()==0 ) {
         format = PG_DIN_A4;
         w = mmToPoint(KoPageFormat::width(format, orientation));
         h = mmToPoint(KoPageFormat::height(format, orientation));
-        rect.right = w;
-        rect.bottom = h;
-        return rect;
+        return DRect(0, w, 0, h);
     }
 
     w = _document->getPageWidth(1);
@@ -170,16 +165,18 @@ DRect Document::paperSize(KoFormat &format) const
             }
         }
     }
-
-    rect.bottom = height;
-    rect.right = width;
-    return rect;
+    return DRect(0, width, 0, height);
 }
 
 void Document::initDevice(Data &data)
 {
     Q_ASSERT( _device==0 );
     _device = new Device(data);
+}
+
+void Document::init()
+{
+    _device->init();
 }
 
 void Document::treatPage(uint i)

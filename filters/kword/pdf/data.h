@@ -43,26 +43,22 @@ public:
 
     QDomElement createElement(const QString &name)
         { return _document.createElement(name); }
-    QDomElement createParagraph(const QString &text,
-                                const QValueVector<QDomElement> &layouts,
-                                const QValueVector<QDomElement> &formats);
+    void createParagraph(const QString &text, ParagraphType type,
+                         const QValueVector<QDomElement> &layouts,
+                         const QValueVector<QDomElement> &formats);
 
     KoFilterChain *chain() const { return _chain; }
     const Options &options() const { return _options; }
     QDomDocument document() const { return _document; }
     const DRect &pageRect() const { return _pageRect; }
-    double deltaX() const { return _marginRect.left - _pageRect.left; }
-    double deltaY() const { return _marginRect.top - _pageRect.top; }
     uint imageIndex() const { return _imageIndex; }
     uint textIndex() const { return _textIndex; }
     QDomElement bookmarks() const { return _bookmarks; }
     QDomElement pictures() const { return _pictures; }
 
-    void checkTextFrameset();
     QDomElement pictureFrameset(const DRect &);
 
-    void startPage();
-    void endPage(const DRect &marginRect);
+    void initPage(const QValueVector<DRect> &);
     void endDump();
 
 public:
@@ -70,7 +66,7 @@ public:
 
 private:
     enum FramesetType { Text, Picture };
-    QDomElement createFrameset(FramesetType);
+    QDomElement createFrameset(FramesetType, const QString &name);
     QDomElement createFrame(FramesetType, const DRect &,
                             bool forceMainFrameset);
 
@@ -78,9 +74,8 @@ private:
     KoFilterChain *_chain;
     QDomDocument   _document;
     uint           _imageIndex, _textIndex;
-    bool           _needNewTextFrameset;
     QDomElement    _mainElement, _framesets, _pictures, _bookmarks, _paper;
-    QDomElement    _textFrameset, _mainTextFrameset, _lastMainLayout;
+    QValueVector<QDomElement> _textFramesets;
     DRect          _pageRect, _marginRect;
     const Options &_options;
 };

@@ -21,12 +21,14 @@
 #include <math.h>
 #include <qregexp.h>
 #include <qfontmetrics.h>
+#include <qfontdatabase.h>
 #include <kglobal.h>
 #include <kdebug.h>
 
 #include "Link.h"
 #include "Catalog.h"
 #include "GfxState.h"
+#include "GfxFont.h"
 
 
 namespace PDFImport
@@ -41,30 +43,35 @@ QColor toColor(GfxRGB &rgb)
 //-----------------------------------------------------------------------------
 bool DRect::operator ==(const DRect &r) const
 {
-    return ( equal(top, r.top) && equal(bottom, r.bottom)
-             && equal(left, r.left) && equal(right, r.right) );
+    return ( equal(_top, r._top) && equal(_bottom, r._bottom)
+             && equal(_left, r._left) && equal(_right, r._right) );
 }
 
 bool DRect::isInside(const DRect &r, double percent) const
 {
-    return ( more(r.top, top, percent) && less(r.bottom, bottom, percent)
-             && more(r.left, left, percent) && less(r.right, right, percent) );
+    return ( more(r._top, _top, percent) && less(r._bottom, _bottom, percent)
+             && more(r._left, _left, percent)
+             && less(r._right, _right, percent) );
 }
 
-DRect DRect::getUnion(const DRect &r) const
+void DRect::unite(const DRect &r)
 {
-    DRect rect;
-    rect.left = kMin(left, r.left);
-    rect.right = kMax(right, r.right);
-    rect.top = kMin(top, r.top);
-    rect.bottom = kMax(bottom, r.bottom);
-    return rect;
+    if ( !r.isValid() ) return;
+    if ( !isValid() ) {
+        *this = r;;
+        return;
+    }
+    _left = kMin(_left, r._left);
+    _right = kMax(_right, r._right);
+    _top = kMin(_top, r._top);
+    _bottom = kMax(_bottom, r._bottom);
 }
 
 QString DRect::toString() const
 {
-    return QString("left=%1 right=%2 top=%3 bottom=%4").arg(left).arg(right)
-        .arg(top).arg(bottom);
+    if ( !isValid() ) return "invalid rect";
+    return QString("left=%1 right=%2 top=%3 bottom=%4").arg(_left).arg(_right)
+        .arg(_top).arg(_bottom);
 }
 
 bool DPath::isRectangle() const
@@ -78,17 +85,13 @@ bool DPath::isRectangle() const
 
 DRect DPath::boundingRect() const
 {
-    DRect r;
-    if ( size()==0 ) return r;
-    r.top = at(0).y;
-    r.bottom = at(0).y;
-    r.left = at(0).x;
-    r.right = at(0).x;
+    if ( size()==0 ) return DRect();
+    DRect r(at(0).x, at(0).x, at(0).y, at(0).y);
     for (uint i=1; i<size(); i++) {
-        r.top = kMin(r.top, at(i).y);
-        r.bottom = kMax(r.bottom, at(i).y);
-        r.left = kMin(r.left, at(i).x);
-        r.right = kMax(r.right, at(i).x);
+        r.setTop( kMin(r.top(), at(i).y) );
+        r.setBottom( kMax(r.bottom(), at(i).y) );
+        r.setLeft( kMin(r.left(), at(i).x) );
+        r.setRight( kMax(r.right(), at(i).x) );
     }
     return r;
 }
@@ -113,9 +116,27 @@ void Font::cleanup()
     _dict = 0;
 }
 
-Font::Font(const QString &name, uint size, const QColor &color)
-    : _pointSize(size), _color(color)
+Font::Font()
+    : _pointSize(12), _color(Qt::black)
 {
+    init("times-roman");
+}
+
+Font::Font(const GfxState *state, double size)
+{
+    if ( size<1 ) kdDebug(30516) << "very small font size=" << size << endl;
+    _pointSize = qRound(size);
+
+    GfxRGB rgb;
+    state->getFillRGB(&rgb);
+    _color = toColor(rgb);
+
+    GfxFont *font = state->getFont();
+    GString *gname = (font ? font->getName() : 0);
+    QString name = (gname ? gname->getCString() : 0);
+//    kdDebug(30516) << "font: " << name << endl;
+    name = name.section('+', 1, 1).lower();
+    if ( name.isEmpty() ) name = "##dummy"; // dummy name
     init(name);
 }
 
@@ -142,13 +163,13 @@ static const KnownData KNOWN_DATA[] = {
     { "symbol",                Symbol,      Regular,    false },
 
     // some latex fonts
-    { "+cmr",                  Times,       Regular,    true  },
-    { "+cmbx",                 Times,       Bold,       true  },
-    { "+cmcsc",                Times,       Regular,    true  }, // small caps
-    { "+cmmi",                 Times,       Italic,     true  },
-    { "+cmtt",                 Courier,     Regular,    true  },
-    { "+cmsy",                 Symbol,      Regular,    true  },
-    { "+msbm",                 Times,       Regular,    true  }, // math caps
+    { "cmr",                   Times,       Regular,    true  },
+    { "cmbx",                  Times,       Bold,       true  },
+    { "cmcsc",                 Times,       Regular,    true  }, // small caps
+    { "cmmi",                  Times,       Italic,     true  },
+    { "cmtt",                  Courier,     Regular,    true  },
+    { "cmsy",                  Symbol,      Regular,    true  },
+    { "msbm",                  Times,       Regular,    true  }, // math caps
 
     { 0,                       Nb_Family,   Regular,    false }
 };
@@ -158,19 +179,17 @@ void Font::init(const QString &n)
     // check if font already parsed
     _data = _dict->find(n);
     if ( _data==0 ) {
-        kdDebug(30516) << "font " << n << endl;
-        // replace "Oblique" by "Italic"
-        QString name = n.lower();
+//        kdDebug(30516) << "font " << n << endl;
+        QString name = n;
         name.replace(QRegExp("oblique"), "italic"); // QRegExp(...) for Qt 3.0
 
         // check if known font
         _data = new Data;
-        kdDebug(30516) << "data " << _data << endl;
         uint i = 0;
         while ( KNOWN_DATA[i].name!=0 ) {
             if ( name.find(KNOWN_DATA[i].name)!=-1 ) {
-                kdDebug(30516) << "found " << KNOWN_DATA[i].name
-                               << " " << isBold(KNOWN_DATA[i].style) << endl;
+//                kdDebug(30516) << "found " << KNOWN_DATA[i].name
+//                               << " " << isBold(KNOWN_DATA[i].style) << endl;
                 _data->family = FAMILY_DATA[KNOWN_DATA[i].family];
                 _data->style = KNOWN_DATA[i].style;
                 _data->latex = KNOWN_DATA[i].latex;
@@ -180,6 +199,7 @@ void Font::init(const QString &n)
         }
 
         if ( _data->family.isEmpty() ) { // let's try harder
+            // simple heuristic
             kdDebug(30516) << "unknown font : " << n << endl;
             if ( name.find("times")!=-1 )
             _data->family = FAMILY_DATA[Times];
@@ -189,9 +209,18 @@ void Font::init(const QString &n)
                 _data->family = FAMILY_DATA[Courier];
             else if ( name.find("symbol")!=-1 )
                 _data->family = FAMILY_DATA[Symbol];
-            else {
-                kdDebug(30516) << "really unknown font !" << endl;
-                _data->family = name;
+            else { // with Qt
+                QFontDatabase fdb;
+                QStringList list = fdb.families();
+                list = list.grep(name, false);
+                if ( !list.isEmpty() ) {
+                    _data->family = list[0];
+                    kdDebug(30516) << "in Qt database as " << list[0] << endl;
+                }
+                else {
+                    kdDebug(30516) << "really unknown font !" << endl;
+                    _data->family = name;
+                }
             }
 
             bool italic = ( name.find("italic")!=-1 );
@@ -200,14 +229,11 @@ void Font::init(const QString &n)
             _data->latex = false;
         }
 
-        if ( name.isEmpty() ) name = "##unknown"; // dummy name
         _dict->insert(name, _data);
     }
 
     // check if QFont already created
     if ( !_data->height.contains(_pointSize) ) {
-        kdDebug(30516) << "font " << _data
-                       << "bold=" << isBold(_data->style) << endl;
         QFont font(_data->family, _pointSize,
                    (isBold(_data->style) ? QFont::Bold : QFont::Normal),
                    isItalic(_data->style));

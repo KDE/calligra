@@ -31,10 +31,25 @@
 class LinkAction;
 class Catalog;
 class GfxRGB;
-
+class GfxState;
 
 namespace PDFImport
 {
+
+// FIX for Qt 3.0
+// qvaluevector bug - qheapsort uses 'count' but qvaluevector has only 'size'
+template <class Container>
+inline void qHeapSort2( Container &c )
+{
+    if ( c.begin() == c.end() )
+        return;
+
+    // The second last parameter is a hack to retrieve the value type
+    // Do the real sorting here
+    qHeapSortHelper( c.begin(), c.end(), *(c.begin()), (uint)c.size() );
+}
+
+enum ParagraphType { Body = 0, Header, Footer, Nb_ParagraphTypes };
 
 //-----------------------------------------------------------------------------
 enum FontFamily { Times = 0, Helvetica, Courier, Symbol, Nb_Family };
@@ -72,16 +87,32 @@ QColor toColor(GfxRGB &);
 //-----------------------------------------------------------------------------
 class DRect {
 public:
-    double width() const { return right - left; }
-    double height() const { return bottom - top; }
+    DRect() : _left(0), _right(0), _top(0), _bottom(0) {}
+    DRect(double left, double right, double top, double bottom)
+        : _left(left), _right(right), _top(top), _bottom(bottom) {}
+
+    bool isValid() const { return ( _right>_left && _bottom>_top ); }
+
+    void setTop(double top) { _top = top; }
+    void setBottom(double bottom) { _bottom = bottom; }
+    void setRight(double right) { _right = right; }
+    void setLeft(double left) { _left = left; }
+
+    double top() const { return _top; }
+    double bottom() const { return _bottom; }
+    double left() const { return _left; }
+    double right() const { return _right; }
+
+    double width() const { return _right - _left; }
+    double height() const { return _bottom - _top; }
 
     bool operator ==(const DRect &) const;
     bool isInside(const DRect &, double percent = 0.01) const;
-    DRect getUnion(const DRect &) const;
+    void unite(const DRect &);
     QString toString() const;
 
-public:
-    double top, bottom, right, left;
+private:
+    double _left, _right, _top, _bottom;
 };
 
 struct DPoint {
@@ -110,8 +141,8 @@ typedef QValueVector<DPath> DPathVector;
 class Font
 {
 public:
-    Font(const QString &name = "Times-Roman",
-         uint size = 12, const QColor &color = Qt::black);
+    Font();
+    Font(const GfxState *, double size);
 
     bool operator ==(const Font &) const;
     bool format(QDomDocument &, QDomElement &format, uint pos, uint len,

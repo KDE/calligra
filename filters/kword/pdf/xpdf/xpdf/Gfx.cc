@@ -1197,11 +1197,12 @@ void Gfx::doPatternFill(GBool eoFill) {
   GfxPatternColorSpace *patCS;
   GfxPattern *pattern;
   GfxTilingPattern *tPat;
-  GfxColorSpace *cs;
+  const GfxColorSpace *cs;
   double xMin, yMin, xMax, yMax, x, y, x1, y1;
   double cxMin, cyMin, cxMax, cyMax;
   int xi0, yi0, xi1, yi1, xi, yi;
-  double *ctm, *btm, *ptm;
+  const double *ctm;
+  double *btm, *ptm;
   double m[6], ictm[6], m1[6], imb[6];
   double det;
   double xstep, ystep;
@@ -1636,7 +1637,7 @@ void Gfx::doRadialShFill(GfxRadialShading *shading) {
   double xa, ya, xb, yb, ra, rb;
   double ta, tb, sa, sb;
   int ia, ib, k, n;
-  double *ctm;
+  const double *ctm;
   double angle, t;
 
   // get the shading info
@@ -2041,7 +2042,7 @@ void Gfx::doShowText(GString *s) {
   double x, y, dx, dy, dx2, dy2, curX, curY, tdx, tdy;
   double originX, originY, tOriginX, tOriginY;
   double oldCTM[6], newCTM[6];
-  double *mat;
+  const double *mat;
   Object charProc;
   Dict *resDict;
   Parser *oldParser;
@@ -2472,7 +2473,7 @@ void Gfx::doAnnot(Object *str, double xMin, double yMin,
   Object matrixObj, bboxObj, resObj;
   Object obj1;
   double m[6], bbox[6], ictm[6];
-  double *ctm;
+  const double *ctm;
   double formX0, formY0, formX1, formY1;
   double annotX0, annotY0, annotX1, annotY1;
   double det, x, y, sx, sy;

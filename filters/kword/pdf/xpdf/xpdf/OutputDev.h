@@ -58,7 +58,7 @@ public:
   //----- initialization and control
 
   // Set default transform matrix.
-  virtual void setDefaultCTM(double *ctm);
+  virtual void setDefaultCTM(const double *ctm);
 
   // Start a page.
   virtual void startPage(int /*pageNum*/, GfxState */*state*/) {}

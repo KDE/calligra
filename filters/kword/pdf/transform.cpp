@@ -45,9 +45,9 @@ static const char TABLE[NB_TABLES][TABLE_SIZE] = {
     U,U,S,S,S,S,S,S,A,S,U,P,U,H,S,A, A,S,I,I,E,U,U,S,A,I,U,P,S,S,S,P,
 //      ¢ £ ¤     § ¨     « ¬        ° ± ² ³   µ ¶ ·   ¹   » ¼     ¿
     L,L,L,L,L,L,C,L,L,L,L,L,L,L,L,L, L,L,L,L,L,L,L,S,C,L,L,L,L,L,L,L,
-//      Â   Ä           Ê Ë     Î Ï          Ô   Ö                 ß
+//      Â   Ä           Ê Ë     Î Ï          Ô   Ö         Û Ü     ß
     L,L,L,L,L,L,C,L,L,L,L,L,L,L,L,L, L,L,L,L,L,L,L,S,C,L,L,L,L,L,L,L
-//  à   â   ä   æ ç è é ê ë     î ï  ð       ô   ö   ø           þ
+//  à   â   ä   æ ç è é ê ë     î ï  ð       ô   ö   ø     û ü   þ ÿ
 },
 //-------------------------------------------------------------------
 { // 0x0100 to 0x01FF
