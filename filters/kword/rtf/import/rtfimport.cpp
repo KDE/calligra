@@ -1443,7 +1443,10 @@ void RTFImport::parseField( RTFProperty * )
 		int i=list[j].find('"')+1;
 		QString format=list[j].mid(i, list[j].find('"', i)-i);
 		format.replace("am/pm", "ap");
+		format.replace("a/p", "ap"); // Approximation
 		format.replace("AM/PM", "AP");
+		format.replace("A/P", "AP"); // Approximation
+		format.remove("'"); // KWord 1.3 cannot protect text in date/time
 		for(unsigned int k=0;k<format.length();k++)
 		{
 		    if((format[k]=='y')||(format[k]=='M')||(format[k]=='d'))
