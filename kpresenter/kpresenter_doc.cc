@@ -757,7 +757,7 @@ bool KPresenterDoc::loadXML( const QDomDocument &doc )
                             show=static_cast<bool>(slide.attribute("show").toInt());
                         if ( nr >= 0 )
                         {
-                            //kdDebug() << "KPresenterDoc::loadXML m_selectedSlides nr=" << nr << " show=" << show << endl;
+                            //kdDebug(33001) << "KPresenterDoc::loadXML m_selectedSlides nr=" << nr << " show=" << show << endl;
                             ASSERT( nr == (int)m_selectedSlides.count() );
                             m_selectedSlides.append( show );
                         } else kdWarning() << "Parse error. No nr in <SLIDE> !" << endl;
@@ -803,7 +803,7 @@ bool KPresenterDoc::loadXML( const QDomDocument &doc )
 
         // Not sure this is necessary anymore.
         if ( allSlides ) {
-            //kdDebug() << "KPresenterDoc::loadXML allSlides" << endl;
+            //kdDebug(33001) << "KPresenterDoc::loadXML allSlides" << endl;
             QValueList<bool>::Iterator sit = m_selectedSlides.begin();
             for ( ; sit != m_selectedSlides.end(); ++sit )
                 (*sit) = true;
@@ -817,7 +817,7 @@ bool KPresenterDoc::loadXML( const QDomDocument &doc )
 /*====================== load background =========================*/
 void KPresenterDoc::loadBackground( const QDomElement &element )
 {
-    kdDebug() << "KPresenterDoc::loadBackground" << endl;
+    kdDebug(33001) << "KPresenterDoc::loadBackground" << endl;
     QDomElement page=element.firstChild().toElement();
     while(!page.isNull()) {
         insertNewPage( 0, 0, false ); // appends an entry to _backgroundList
@@ -2582,7 +2582,7 @@ void KPresenterDoc::insertPicture( QString filename, int diffx, int diffy, int _
 void KPresenterDoc::insertClipart( QString filename, int diffx, int diffy )
 {
     KPClipartKey key = _clipartCollection.loadClipart( filename ).key();
-    kdDebug() << "KPresenterDoc::insertClipart key=" << key.toString() << endl;
+    kdDebug(33001) << "KPresenterDoc::insertClipart key=" << key.toString() << endl;
 
     KPClipartObject *kpclipartobject = new KPClipartObject( &_clipartCollection, key );
     kpclipartobject->setOrig( ( ( diffx + 10 ) / _rastX ) * _rastX, ( ( diffy + 10 ) / _rastY ) * _rastY );
@@ -2908,7 +2908,7 @@ int KPresenterDoc::getBottomBorder()
 /*================================================================*/
 void KPresenterDoc::deletePage( int _page )
 {
-    kdDebug() << "KPresenterDoc::deletePage " << _page << endl;
+    kdDebug(33001) << "KPresenterDoc::deletePage " << _page << endl;
     KPObject *kpobject = 0;
     int _h = getPageRect( 0, 0, 0 ).height();
 
@@ -2948,7 +2948,7 @@ void KPresenterDoc::deletePage( int _page )
 /*================================================================*/
 int KPresenterDoc::insertPage( int _page, InsertPos _insPos, bool chooseTemplate, const QString &theFile )
 {
-    kdDebug() << "KPresenterDoc::insertPage " << _page << endl;
+    kdDebug(33001) << "KPresenterDoc::insertPage " << _page << endl;
     KPObject *kpobject = 0;
     int _h = getPageRect( 0, 0, 0 ).height();
 
@@ -3010,9 +3010,9 @@ int KPresenterDoc::insertPage( int _page, InsertPos _insPos, bool chooseTemplate
     _backgroundList.insert( _page, kpbackground );
     if ( _page < (int)m_selectedSlides.count() )
     {
-        kdDebug() << "KPresenterDoc::insertPage inserting in m_selectedSlides at position " << _page << endl;
+        kdDebug(33001) << "KPresenterDoc::insertPage inserting in m_selectedSlides at position " << _page << endl;
         m_selectedSlides.insert( m_selectedSlides.at(_page), true );
-        kdDebug() << "KPresenterDoc::insertPage count is now " << m_selectedSlides.count() << endl;
+        kdDebug(33001) << "KPresenterDoc::insertPage count is now " << m_selectedSlides.count() << endl;
     }
     else
         m_selectedSlides.append( true );
@@ -3432,7 +3432,7 @@ void KPresenterDoc::slotUndoRedoChanged( QString _undo, QString _redo )
 	((KPresenterView*)it.current())->changeUndo( _undo, !_undo.isEmpty() );
 	((KPresenterView*)it.current())->changeRedo( _redo, !_redo.isEmpty() );
     }
-    kdDebug() << "slotUndoRedoChanged " << _undo << endl;
+    kdDebug(33001) << "slotUndoRedoChanged " << _undo << endl;
     if ( !_undo.isEmpty() )
         setModified(true);
 }
@@ -3635,7 +3635,7 @@ void KPresenterDoc::ungroupObjects()
 
 void KPresenterDoc::movePage( int from, int to )
 {
-    kdDebug() << "KPresenterDoc::movePage from=" << from << " to=" << to << endl;
+    kdDebug(33001) << "KPresenterDoc::movePage from=" << from << " to=" << to << endl;
     bool wasSelected = isSlideSelected( from );
     KTempFile tempFile( QString::null, ".kpr" );
     tempFile.setAutoDelete( true );
@@ -3647,7 +3647,7 @@ void KPresenterDoc::movePage( int from, int to )
 
 void KPresenterDoc::copyPage( int from, int to )
 {
-    kdDebug() << "KPresenterDoc::copyPage from=" << from << " to=" << to << endl;
+    kdDebug(33001) << "KPresenterDoc::copyPage from=" << from << " to=" << to << endl;
     bool wasSelected = isSlideSelected( from );
     KTempFile tempFile( QString::null, ".kpr" );
     tempFile.setAutoDelete( true );
@@ -3662,7 +3662,7 @@ void KPresenterDoc::copyPageToClipboard( int pgnum )
     // Yes it's a hack but at least we don't hit the clipboard size limit :)
     // (and we don't have to implement copy-tar-structure-to-clipboard)
     // In fact it even allows copying a [1-page] kpr in konq and pasting it in kpresenter :))
-    kdDebug() << "KPresenterDoc::copyPageToClipboard pgnum=" << pgnum << endl;
+    kdDebug(33001) << "KPresenterDoc::copyPageToClipboard pgnum=" << pgnum << endl;
     KTempFile tempFile( QString::null, ".kpr" );
     savePage( tempFile.name(), pgnum );
     KURL url; url.setPath( tempFile.name() );
@@ -3686,7 +3686,7 @@ void KPresenterDoc::clipboardDataChanged()
 {
     if ( !m_tempFileInClipboard.isEmpty() )
     {
-        kdDebug() << "KPresenterDoc::clipboardDataChanged, deleting temp file " << m_tempFileInClipboard << endl;
+        kdDebug(33001) << "KPresenterDoc::clipboardDataChanged, deleting temp file " << m_tempFileInClipboard << endl;
         unlink( QFile::encodeName( m_tempFileInClipboard ) );
         m_tempFileInClipboard = QString::null;
     }
@@ -3702,7 +3702,7 @@ void KPresenterDoc::selectPage( int pgNum /* 0-based */, bool select )
     ASSERT( pgNum >= 0 );
     ASSERT( pgNum < (int)m_selectedSlides.count() );
     m_selectedSlides[ pgNum ] = select;
-    kdDebug() << "KPresenterDoc::selectPage pgNum=" << pgNum << " select=" << select << endl;
+    kdDebug(33001) << "KPresenterDoc::selectPage pgNum=" << pgNum << " select=" << select << endl;
     setModified(true);
     // Update the views
     QListIterator<KoView> it( views() );

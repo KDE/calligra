@@ -79,7 +79,7 @@ void SideBar::rebuildItems()
     for ( int i = doc->getPageNums() - 1; i >= 0; --i ) {
         QCheckListItem *item = new SideBarItem( this );
         QString title = doc->getPageTitle( i, i18n( "Slide %1" ).arg( i + 1 ) );
-        //kdDebug() << "SideBar::rebuildItems slide " << i+1 << " selected:" << doc->isSlideSelected( i ) << endl;
+        //kdDebug(33001) << "SideBar::rebuildItems slide " << i+1 << " selected:" << doc->isSlideSelected( i ) << endl;
         item->setOn( doc->isSlideSelected( i ) ); // calls itemStateChange !
         item->setText( 1, QString::number( i + 1 ) ); // page number
         item->setText( 0, title );

@@ -109,7 +109,7 @@ void KPWebPresentation::loadConfig()
     title = cfg.readEntry( "Title", title );
     email = cfg.readEntry( "EMail", email );
     unsigned int num = cfg.readNumEntry( "Slides", slideInfos.count() );
-    //kdDebug() << "KPWebPresentation::loadConfig num=" << num << endl;
+    //kdDebug(33001) << "KPWebPresentation::loadConfig num=" << num << endl;
 
     if ( num <= slideInfos.count() ) {
         for ( unsigned int i = 0; i < num; i++ )
@@ -119,8 +119,8 @@ void KPWebPresentation::loadConfig()
             {
                 // We'll assume that the selected pages haven't changed... Hmm.
                 slideInfos[ i ].slideTitle = cfg.readEntry( key );
-                kdDebug() << "KPWebPresentation::loadConfig key=" << key << " data=" << slideInfos[i].slideTitle << endl;
-            } else kdDebug() << " key not found " << key << endl;
+                kdDebug(33001) << "KPWebPresentation::loadConfig key=" << key << " data=" << slideInfos[i].slideTitle << endl;
+            } else kdDebug(33001) << " key not found " << key << endl;
         }
     }
 
@@ -618,7 +618,7 @@ void KPWebPresentationWizard::setupPage3()
     for ( int i = infos.count() - 1; i >= 0; --i ) {
         QListViewItem *item = new QListViewItem( slideTitles );
         item->setText( 0, QString::number( i + 1 ) );
-        //kdDebug() << "KPWebPresentationWizard::setupPage3 " << infos[ i ].slideTitle << endl;
+        //kdDebug(33001) << "KPWebPresentationWizard::setupPage3 " << infos[ i ].slideTitle << endl;
         item->setText( 1, infos[ i ].slideTitle );
     }
 

@@ -180,7 +180,7 @@ void KPAutoformObject::load(const QDomElement &element)
             filename="Connections/.source/Connection1.atf";
         // workaround for a bug in the (very) old file format
         if(filename[0]=='/') {
-            kdDebug() << "rubbish ahead! cleaning up..." << endl;
+            kdDebug(33001) << "rubbish ahead! cleaning up..." << endl;
             // remove the leading absolute path (i.e. to create Arrow/Arrow1.atf)
             filename=filename.mid(filename.findRev('/', filename.findRev('/')-1)+1);
         }

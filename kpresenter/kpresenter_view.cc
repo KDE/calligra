@@ -1035,7 +1035,7 @@ void KPresenterView::startScreenPres( int pgNum /*1-based*/ )
 			   static_cast<float>( pgRect.height() )
 			   : 1.0;
 	float _presFakt = QMIN(_presFaktW,_presFaktH);
-        kdDebug() << "KPresenterView::startScreenPres page->setPresFakt " << _presFakt << endl;
+        kdDebug(33001) << "KPresenterView::startScreenPres page->setPresFakt " << _presFakt << endl;
 
 	xOffsetSaved = xOffset;
 	yOffsetSaved = yOffset;
@@ -1044,7 +1044,7 @@ void KPresenterView::startScreenPres( int pgNum /*1-based*/ )
 
         // Center the slide in the screen, if it's smaller...
         pgRect = kPresenterDoc()->getPageRect( 0, 0, 0, _presFakt, false );
-        kdDebug() << "                                pgRect: " << pgRect.x() << "," << pgRect.y()
+        kdDebug(33001) << "                                pgRect: " << pgRect.x() << "," << pgRect.y()
                   << " " << pgRect.width() << "x" << pgRect.height() << endl;
 	if ( deskw > pgRect.width() )
 	    xOffset -= ( deskw - pgRect.width() ) / 2;
@@ -1197,7 +1197,7 @@ void KPresenterView::sizeSelected()
 {
     tbFont.setPointSize( ( (KFontSizeAction*)actionTextFontSize )->fontSize() );
     page->setTextPointSize( tbFont.pointSize() );
-    kdDebug() << "sizeSelected() " << tbFont.pointSize() << endl;
+    kdDebug(33001) << "sizeSelected() " << tbFont.pointSize() << endl;
 }
 
 /*===============================================================*/
@@ -1205,7 +1205,7 @@ void KPresenterView::fontSelected()
 {
     tbFont.setFamily( ( (KFontAction*)actionTextFontFamily )->currentText() );
     page->setTextFamily( tbFont.family() );
-    kdDebug() << "fontSelected() " << tbFont.family() << endl;
+    kdDebug(33001) << "fontSelected() " << tbFont.family() << endl;
 }
 
 /*===============================================================*/
@@ -3032,7 +3032,7 @@ void KPresenterView::updateSideBar()
 
 void KPresenterView::updateSideBarItem( int pagenr )
 {
-    //kdDebug() << "KPresenterView::updateSideBarItem " << pagenr << endl;
+    //kdDebug(33001) << "KPresenterView::updateSideBarItem " << pagenr << endl;
     if (sidebar)
         sidebar->updateItem( pagenr );
 }

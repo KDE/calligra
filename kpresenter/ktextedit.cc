@@ -1596,11 +1596,11 @@ void KTextEditCommandHistory::addCommand( KTextEditCommand *cmd )
         cmdAction=i18n("Inserting Text");
     }
     else if(cmd->type()==KTextEditCommand::Delete) {
-        kdDebug() << "KTextEditCommandHistory::addCommand -- delete text" << endl;
+        kdDebug(33001) << "KTextEditCommandHistory::addCommand -- delete text" << endl;
         cmdAction=i18n("Deleting Text");
     }
     else {
-        kdDebug() << "KTextEditCommandHistory::addCommand -- formatting" << endl;
+        kdDebug(33001) << "KTextEditCommandHistory::addCommand -- formatting" << endl;
         cmdAction=i18n("Formatting Text");
     }
     document->commands()->addCommand(new TextCmd(cmdAction, document, kptextobject));
