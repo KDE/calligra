@@ -127,6 +127,7 @@ public:
   
   // save
   virtual bool save(ostream&);
+  virtual bool exportHTML(QString _filename);
 
   // load
   virtual bool load_template(const char *_url);

@@ -24,6 +24,7 @@ KPresenterShell_impl::KPresenterShell_impl()
 {
   filename = 0;
   format = 0;
+  kp_doc = 0;
 }
 
 /*======================= destrcutor =============================*/
@@ -47,6 +48,7 @@ void KPresenterShell_impl::fileSave()
 void KPresenterShell_impl::setDocument(KPresenterDocument_impl *_doc)
 {
   m_rDoc = OPParts::Document::_duplicate(_doc);
+  kp_doc = _doc;
 
   m_vView = _doc->createView();  
   m_vView->setPartShell(this);
@@ -86,17 +88,27 @@ bool KPresenterShell_impl::openDocument(const char *_filename)
 /*========================== save document =======================*/
 bool KPresenterShell_impl::saveDocument(const char *_filename,const char *_format)
 {
+  QFileInfo fileInfo(_filename);
+  if (_format == 0L || *_format == 0)
+    {
+      if (fileInfo.extension().isEmpty()) _format = "kpr";
+      else _format = qstrdup(fileInfo.extension());
+    }
+ 
   assert(!CORBA::is_nil(m_rDoc));
 
-  if (_format == 0L || *_format == 0) _format = "kpr";
-  
   if (filename) delete filename;
   if (format) delete format;
 
   filename = qstrdup(_filename);
   format = qstrdup(_format);
   
-  return m_rDoc->saveAs(_filename,_format);
+  if (strcmp(format,"kpr") == 0 || strcmp(format,"kpt") == 0)
+    return m_rDoc->saveAs(_filename,_format);
+  else if (strcmp(format,"html") == 0 || strcmp(format,"htm") == 0)
+    return kp_doc->exportHTML(_filename);
+
+  return false;
 }
 
 /*========================= file new ============================*/
@@ -104,7 +116,8 @@ void KPresenterShell_impl::fileNew()
 {
   m_rDoc = 0L;
   
-  m_rDoc = OPParts::Document::_duplicate(new KPresenterDocument_impl);
+  kp_doc = new KPresenterDocument_impl;
+  m_rDoc = OPParts::Document::_duplicate(kp_doc);
   
   if (!m_rDoc->init())
     {
@@ -151,3 +164,5 @@ bool KPresenterShell_impl::printDlg()
 
   return m_vView->printDlg();
 }
+
+

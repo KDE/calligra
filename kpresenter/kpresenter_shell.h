@@ -61,6 +61,7 @@ protected:
 
   // reference to a document
   Document_ref m_rDoc;
+  KPresenterDocument_impl *kp_doc;
   OPParts::View_var m_vView;
   const char *filename,*format;
 

@@ -233,6 +233,13 @@ bool KPresenterDocument_impl::save(ostream& out)
   return true;
 }
 
+/*====================== export HTML ============================*/
+bool KPresenterDocument_impl::exportHTML(QString _filename)
+{
+  QMessageBox::critical((QWidget*)0L,i18n("KPresenter Error"),i18n("HTML export is not implemented!"),i18n("OK"));
+  return true;
+}
+
 /*========================== save background ====================*/
 void KPresenterDocument_impl::saveBackground(ostream& out)
 {
