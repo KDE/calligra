@@ -266,7 +266,6 @@ void KSpreadPoint::init(const QString & _str)
 	}
     }
 
-    //int y = atoi( str.mid( p2, p-p2 ).latin1() );
     bool ok;
     int y = str.mid( p2, p-p2 ).toInt( &ok );
     if ( !ok )
