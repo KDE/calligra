@@ -196,6 +196,8 @@ void KoOasisStyles::importDataStyle( const QDomElement& parent )
     bool ok = false;
     int i = 0;
     QDomElement e;
+    QString prefix;
+    QString suffix;
     forEachElement( e, parent )
     {
         if ( e.namespaceURI() != KoXmlNS::number )
@@ -233,6 +235,10 @@ void KoOasisStyles::importDataStyle( const QDomElement& parent )
             format += "ap";
         } else if ( localName == "text" ) { // litteral
             format += e.text();
+        } else if ( localName == "suffix" ) {
+            suffix = e.text();
+        } else if ( localName == "prefix" ) {
+            prefix = e.text();
         } else if ( localName == "currency-symbol" ) {
             format += e.text();
             //TODO
@@ -367,7 +373,32 @@ void KoOasisStyles::importDataStyle( const QDomElement& parent )
 
     const QString styleName = parent.attributeNS( KoXmlNS::style, "name", QString::null );
     kdDebug(30518) << "datetime style: " << styleName << " qt format=" << format << endl;
-    m_dataFormats.insert( styleName, format );
+    if ( !prefix.isEmpty() )
+    {
+        kdDebug()<<" format.left( prefix.length() ) :"<<format.left( prefix.length() )<<" prefix :"<<prefix<<endl;
+        if ( format.left( prefix.length() )==prefix )
+        {
+            format = format.right( format.length()-prefix.length() );
+        }
+        else
+            prefix = QString::null;
+    }
+    if ( !suffix.isEmpty() )
+    {
+        kdDebug()<<"format.right( suffix.length() ) :"<<format.right( suffix.length() )<<" suffix :"<<suffix<<endl;
+        if ( format.right( suffix.length() )==suffix )
+        {
+            format = format.left( format.length()-suffix.length() );
+        }
+        else
+            suffix = QString::null;
+    }
+    NumericStyleFormat numeric;
+    numeric.formatStr=format;
+    numeric.prefix=prefix;
+    numeric.suffix=suffix;
+
+    m_dataFormats.insert( styleName, numeric );
 }
 
 #define addTextNumber( text, elementWriter ) { \

@@ -128,7 +128,7 @@ void KSpreadStyle::loadOasisStyle( KoOasisStyles& oasisStyles, const QDomElement
     if ( styleStack.hasAttributeNS( KoXmlNS::style, "data-style-name" ) )
     {
         kdDebug()<<"styleStack.attribute( style:data-style-name ) :"<<styleStack.attributeNS( KoXmlNS::style, "data-style-name" )<<endl;
-        kdDebug()<< " oasisStyles.dataFormats()[...] :"<< oasisStyles.dataFormats()[styleStack.attributeNS( KoXmlNS::style, "data-style-name" )]<<endl;
+        //kdDebug()<< " oasisStyles.dataFormats()[...] :"<< oasisStyles.dataFormats()[styleStack.attributeNS( KoXmlNS::style, "data-style-name" )]<<endl;
     }
     if ( styleStack.hasAttributeNS( KoXmlNS::style, "font-name" ) )
     {

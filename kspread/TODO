@@ -374,6 +374,7 @@ Done:
 -> save/load cell border attribute
 -> save/load settings (cursor position, active table, view options)
 -> save/load print setup
+-> save numeric style for cell
 
 Fixe todo:
 ----------

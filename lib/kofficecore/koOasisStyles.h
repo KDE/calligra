@@ -63,8 +63,16 @@ public:
     /// @return draw styles ("draw:name" element), hashed by name
     const QDict<QDomElement>& drawStyles() const { return m_drawStyles; }
 
+    //Prefix and suffix are always included into formatStr. Having them as separate fields simply
+    //allows to extract them from formatStr, to display them in separate widgets.
+    struct NumericStyleFormat
+    {
+        QString formatStr;
+        QString prefix;
+        QString suffix;
+    };
 
-    typedef QMap<QString, QString> DataFormatsMap;
+    typedef QMap<QString, NumericStyleFormat> DataFormatsMap;
     /// Value (date/time/number...) formats found while parsing styles. Used e.g. for fields.
     /// Key: format name. Value:
     const DataFormatsMap& dataFormats() const { return m_dataFormats; }
