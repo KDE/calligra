@@ -23,21 +23,23 @@
 #include "kformula_view.h"
 #include "kformula_factory.h"
 
-#include <qpopupmenu.h>
-#include <qdom.h>
-#include <qwmatrix.h>
-#include <qcolor.h>
 #include <qbitmap.h>
+#include <qcolor.h>
+#include <qdom.h>
 #include <qpainter.h>
+#include <qpopupmenu.h>
 #include <qprinter.h>
+#include <qstring.h>
+#include <qwmatrix.h>
 
-#include <unistd.h>
 #include <config.h>
+#include <unistd.h>
 
 #include <kaboutdialog.h>
 #include <kaction.h>
 #include <kapp.h>
 #include <kdebug.h>
+#include <koGlobal.h>
 #include <kiconloader.h>
 #include <klocale.h>
 #include <kstdaction.h>
@@ -58,6 +60,9 @@ KFormulaDoc::KFormulaDoc(QWidget *parentWidget, const char *widgetName, QObject*
     history = new KCommandHistory(actionCollection());
     document = new KFormulaDocument(actionCollection(), history);
     formula = new KFormulaContainer(document);
+
+    document->setResolution( POINT_TO_INCH( static_cast<double>( QPaintDevice::x11AppDpiX() ) ),
+                             POINT_TO_INCH( static_cast<double>( QPaintDevice::x11AppDpiY() ) ) );
 
     // the modify flag
     connect(history, SIGNAL(commandExecuted()), this, SLOT(commandExecuted()));
