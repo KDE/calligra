@@ -404,6 +404,8 @@ QString KPTNode::constraintToString() const {
         return QString("FinishNotLater");
     else if (m_constraint == MustStartOn)
         return QString("MustStartOn");
+    else if (m_constraint == MustFinishOn)
+        return QString("MustFinishOn");
     else if (m_constraint == FixedInterval)
         return QString("FixedInterval");
 

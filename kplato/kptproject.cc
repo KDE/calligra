@@ -217,8 +217,8 @@ bool KPTProject::load(QDomElement &element) {
     QString c = element.attribute("scheduling","0");
     m_constraint = (KPTNode::ConstraintType)c.toInt(&ok);
     if (!ok)
-        KPTNode::setConstraint(c); // hmmm, why do I need KPTNode::?
-    if (m_constraint != KPTNode::MustStartOn ||
+        setConstraint(c);
+    if (m_constraint != KPTNode::MustStartOn &&
         m_constraint != KPTNode::MustFinishOn) {
         kdError()<<k_funcinfo<<"Illegal constraint: "<<constraintToString()<<endl;
         setConstraint(KPTNode::MustStartOn);
