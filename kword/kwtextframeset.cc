@@ -119,30 +119,28 @@ QPoint KWTextFrameSet::contentsToInternal( QPoint p, bool onlyY ) const
     return p;
 }
 
-QPoint KWTextFrameSet::internalToContents( QPoint p, int * pageNum ) const
+KWFrame * KWTextFrameSet::internalToContents( QPoint iPoint, QPoint & cPoint ) const
 {
     int totalHeight = 0;
-    int pg = 0;
     QListIterator<KWFrame> frameIt( frameIterator() );
     for ( ; frameIt.current(); ++frameIt )
     {
         KWFrame *frame = frameIt.current();
         QRect r (*frame);
         r.moveBy( -frame->left(), -frame->top() + totalHeight );   // frame in qrt coords
-        if ( r.contains( p ) ) // both r and p are in "qrt coordinates"
+        if ( r.contains( iPoint ) ) // both r and p are in "qrt coordinates"
         {
-            p.rx() += frame->left();
-            p.ry() += frame->top() - totalHeight;
-            if (pageNum) *pageNum = pg;
-            return p;
+            cPoint.setX( iPoint.x() + frame->left() );
+            cPoint.setY( iPoint.y() + frame->top() - totalHeight );
+            return frame;
         }
         totalHeight += frame->height();
-        ++pg;
     }
 
-    kdWarning() << "KWTextFrameSet::internalToContents " << p.x() << "," << p.y()
+    kdWarning() << "KWTextFrameSet::internalToContents " << iPoint.x() << "," << iPoint.y()
                 << " not in any frame of " << (void*)this << endl;
-    return p;
+    cPoint = iPoint; // bah
+    return 0L;
 }
 
 void KWTextFrameSet::drawContents( QPainter *p, const QRect & crect, QColorGroup &gb, bool onlyChanged, bool drawCursor, QTextCursor *cursor )
@@ -229,12 +227,12 @@ void KWTextFrameSet::drawCursor( QPainter *p, QTextCursor *cursor, bool cursorVi
         rf = rf.intersect( cursor->topParag()->rect() );
         if ( !rf.isEmpty() )
         {
-            QPoint topLeft = cursor->topParag()->rect().topLeft();                    // in QRT coords
-            int h = cursor->parag()->lineHeightOfChar( cursor->index() );             //
-            QPoint real = p->xForm( internalToContents( topLeft ) );                  // from QRT to contents to viewport
-            QRect clip = QRect( real.x() + cursor->x() - 5, real.y() + cursor->y(), 10, h );  // very small clipping around the cursor
+            QPoint topLeft = cursor->topParag()->rect().topLeft();                                  // in QRT coords
+            int h = cursor->parag()->lineHeightOfChar( cursor->index() );                           //
+            QPoint cPoint( topLeft.x() + frame->left(), topLeft.y() + frame->top() - totalHeight ); // from QRT to contents
+            QRect clip = QRect( cPoint.x() + cursor->x() - 5, cPoint.y() + cursor->y(), 10, h );  // very small clipping around the cursor
 
-            //kdDebug() << "KWTextFrameSet::drawCursor topLeft=(" << topLeft.x() << "," << topLeft.y() << ")  h=" << h << "  real=(" << real.x() << "," << real.y() << ")" << endl;
+            //kdDebug() << "KWTextFrameSet::drawCursor topLeft=(" << topLeft.x() << "," << topLeft.y() << ")  h=" << h << endl;
             //kdDebug() << this << " Clip for cursor: " << DEBUGRECT(clip) << endl;
 
             QRegion reg = frameClipRegion( p, frame, clip );
@@ -282,7 +280,8 @@ void KWTextFrameSet::setWidth( int w )
 int KWTextFrameSet::adjustLMargin( int yp, int margin, int space )
 {
     //kdDebug() << "KWTextFrameSet " << this << " adjustLMargin m_width=" << m_width << endl;
-    QPoint p = internalToContents( QPoint(0, yp) );
+    QPoint p;
+    (void) internalToContents( QPoint(0, yp), p ); // we could use the frame returned, maybe
     int middle = m_width / 2;
     int newMargin = 0;
 
@@ -302,7 +301,8 @@ int KWTextFrameSet::adjustLMargin( int yp, int margin, int space )
 
 int KWTextFrameSet::adjustRMargin( int yp, int margin, int space )
 {
-    QPoint p = internalToContents( QPoint(0, yp) );
+    QPoint p;
+    (void) internalToContents( QPoint(0, yp), p ); // we could use the frame returned, maybe
     int middle = m_width / 2;
     int newMargin = 0;
 
@@ -1865,9 +1865,11 @@ void KWTextFrameSetEdit::ensureCursorVisible()
     y += parag->rect().y() + cursor->offsetY();
     int w = 1;
     int pg;
-    QPoint p = textFrameSet()->internalToContents( QPoint( x, y ), &pg );
+    QPoint p;
     m_canvas->ensureVisible( p.x(), p.y() + h / 2, w, h / 2 + 2 );
-    m_canvas->gui()->getView()->showPageNum( pg + 1 );
+    KWFrame * frame = textFrameSet()->internalToContents( QPoint(x, y), p );
+    if ( frame )
+        m_canvas->gui()->getView()->showPageNum( frame->getPageNum() + 1 );
 }
 
 void KWTextFrameSetEdit::startDrag()
@@ -2062,7 +2064,7 @@ void KWTextFrameSetEdit::doAutoScroll( QPoint pos )
     showCursor();
 }
 
-void KWTextFrameSetEdit::placeCursor( const QPoint &pos, QTextCursor *c )
+void KWTextFrameSetEdit::placeCursor( const QPoint &pos, QTextCursor *c /*currently unused*/)
 {
     if ( !c )
 	c = cursor;

@@ -125,12 +125,14 @@ void KWContents::createContents()
         // TODO pl->setTabList( &tabList );
         // TODO parag->insertTab( txt.length() );
 
-        // Find page number for paragraph - maybe not the best way !
-        int paragY = fs->internalToContents( QPoint(0, p->rect().top()) ).y();
-        kdDebug() << "KWContents::createContents paragY=" << paragY << endl;
-        int pgNum = paragY / m_doc->ptPaperWidth();
-        parag->append( "         " ); // HACK, should be a tab
-        parag->append( QString::number( pgNum ) );
+        // Find page number for paragraph
+        QPoint pt;
+        KWFrame * frame = fs->internalToContents( QPoint(0, p->rect().top()), pt );
+        if ( frame ) // let's be safe
+        {
+            parag->append( "         " ); // HACK, should be a tab
+            parag->append( QString::number( frame->getPageNum() ) );
+        }
 
         // Apply style
         int depth = p->counter()->depth();    // we checked for p->counter() before putting in the map
