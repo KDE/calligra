@@ -1124,7 +1124,7 @@ KWPictureFrameSet::KWPictureFrameSet( KWDocument *_doc, const QString & name )
     : KWFrameSet( _doc )
 {
     if ( name.isEmpty() )
-        m_name = _doc->generateFramesetName( i18n( "Picture Frameset %1" ) );
+        m_name = _doc->generateFramesetName( i18n( "Picture %1" ) );
     else
         m_name = name;
 }
@@ -1210,7 +1210,7 @@ KWPartFrameSet::KWPartFrameSet( KWDocument *_doc, KWChild *_child, const QString
     connect( child, SIGNAL( changed( KoChild * ) ),
              this, SLOT( slotChildChanged() ) );
     if ( name.isEmpty() )
-        m_name = _doc->generateFramesetName( i18n( "Part Frameset %1" ) );
+        m_name = _doc->generateFramesetName( i18n( "Object %1" ) );
     else
         m_name = name;
 }
@@ -1340,7 +1340,7 @@ KWFormulaFrameSet::KWFormulaFrameSet( KWDocument *_doc, const QString & name )
     connect(formula, SIGNAL(formulaChanged(int, int)),
             this, SLOT(slotFormulaChanged(int, int)));
     if ( name.isEmpty() )
-        m_name = _doc->generateFramesetName( i18n( "Formula Frameset %1" ) );
+        m_name = _doc->generateFramesetName( i18n( "Formula %1" ) );
     else
         m_name = name;
 }
