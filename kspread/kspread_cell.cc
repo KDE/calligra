@@ -62,8 +62,9 @@
 #include "kspread_interpreter.h"
 #include "kspread_locale.h"
 #include "kspread_view.h"
-
 #include "kspread_value.h"
+#include "valueparser.h"
+
 #include <koxmlwriter.h>
 
 #include <kmessagebox.h>
@@ -4172,50 +4173,15 @@ void KSpreadCell::decPrecision()
 }
 
 //NOT USED ANYWHERE YET - date setting done by checkTextInput
-void KSpreadCell::setDate( QString const & dateString )
+void KSpreadCell::setDate( QString const & )
 {
-  QString str( dateString );
-
-  if ( tryParseDate( dateString ) )
-  {
-    //tryParseDate has already called setValue(), so we needn't worry about that
-
-    FormatType tmpFormat = formatType();
-    if ( tmpFormat != TextDate_format &&
-         !(tmpFormat >= 200 && tmpFormat <= 216)) // ###
-    {
-      //test if it's a short date or text date.
-      if ((locale()->formatDate( value().asDateTime().date(), false) == dateString))
-        setFormatType(TextDate_format);
-      else
-        setFormatType(ShortDate_format);
-    }
-  }
-  else
-  {
-    setValue( KSpreadValue( dateString ) );
-
-    // convert first letter to uppercase ?
-    if (m_pTable->getFirstLetterUpper() && !d->strText.isEmpty())
-    {
-        str = value().asString();
-        setValue( KSpreadValue( str[0].upper()
-                                + str.right( str.length() - 1 ) ) );
-    }
-  }
-  d->strText = str;
-  d->content = Text;
-
-  setCalcDirtyFlag();
+//NOT USED
 }
 
 //NOT USED ANYWHERE YET
 void KSpreadCell::setDate( QDate const & date )
 {
-  setValue( KSpreadValue( date ) );
-
-  d->strText = locale()->formatDate( date, true );
-  checkNumberFormat();
+//NOT USED
 }
 
 //set numerical value
@@ -4623,284 +4589,33 @@ bool KSpreadCell::updateChart(bool refresh)
 
 void KSpreadCell::checkTextInput()
 {
-    // Goal of this method: determine the value of the cell
-    clearAllErrors();
+  // Goal of this method: determine the value of the cell
+  clearAllErrors();
 
-    d->value = KSpreadValue::empty();
+  d->value = KSpreadValue::empty();
 
-    Q_ASSERT( d->content == Text );
+  Q_ASSERT( d->content == Text );
 
-    // Get the text from that cell
-    QString str = d->strText;
+  // Get the text from that cell
+  QString str = d->strText;
 
-    // If the text is empty, we don't have a value
-    // If the user stated explicitly that he wanted text (using the format or using a quote),
-    // then we don't parse as a value, but as string.
-    if ( str.isEmpty() || formatType() == Text_format || str.at(0)=='\'' )
-    {
-        if(m_pTable->getFirstLetterUpper() && !d->strText.isEmpty())
-            d->strText=d->strText[0].upper()+d->strText.right(d->strText.length()-1);
-
-        setValue(d->strText);
-        //setFormatType(Text_format); // shouldn't be necessary. Won't apply with StringData anyway.
-        return;
-    }
-
-    // Try parsing as various datatypes, to find the type of the cell
-    // First as bool
-    if ( tryParseBool( str ) )
-        return;
-
-    // Then as a number
-    QString strStripped = str.stripWhiteSpace();
-    if ( tryParseNumber( strStripped ) )
-    {
-        if ( strStripped.contains('E') || strStripped.contains('e') )
-            setFormatType(Scientific_format);
-        else
-            checkNumberFormat();
-        return;
-    }
-
-    // Test if text is a percent value, ending with a '%'
-    // It's a bit dirty to do this here, but we have to because the % gets
-    // saved into the XML file. It would be cleaner to save only the numerical value
-    // and treat the trailing % as pure formatting.
-    if( str.at(str.length()-1)=='%')
-    {
-        QString strTrimmed = str.left(str.length()-1);
-        if ( tryParseNumber( strTrimmed ) )
-        {
-            setValue( KSpreadValue( value().asFloat()/ 100.0 ) );
-            if ( formatType() != Percentage_format )
-            {
-                setFormatType(Percentage_format);
-                setPrecision(0); // Only set the precision if the format wasn't percentage.
-            }
-            setFactor(100.0);
-            return;
-        }
-    }
-
-    // Test for money number
-    bool ok;
-    double money = locale()->readMoney(str, &ok);
-    if ( ok )
-    {
-        setFormatType(Money_format);
-        setFactor(1.0);
-        setPrecision(2);
-        setValue( KSpreadValue( money ) );
-        return;
-    }
-
-    if ( tryParseDate( str ) )
-    {
-        FormatType tmpFormat = formatType();
-        if ( tmpFormat != TextDate_format &&
-           !(tmpFormat >= 200 && tmpFormat <= 216)) // ###
-        {
-            //test if it's a short date or text date.
-            if ((locale()->formatDate( value().asDateTime().date(), false) == str))
-                setFormatType(TextDate_format);
-            else
-                setFormatType(ShortDate_format);
-        }
-
-        d->strText = str;
-        return;
-    }
-
-    if ( tryParseTime( str ) )
-    {
-        // Force default time format if format isn't time
-        FormatType tmpFormat = formatType();
-        if ( tmpFormat != SecondeTime_format && tmpFormat != Time_format1
-             && tmpFormat != Time_format2 && tmpFormat != Time_format3
-             && tmpFormat != Time_format4 && tmpFormat != Time_format6
-             && tmpFormat != Time_format5 && tmpFormat != Time_format7
-             && tmpFormat != Time_format8 )
-          setFormatType(Time_format);
-
-        // Parsing as time acts like an autoformat: we even change d->strText
-        if ( tmpFormat != Time_format7 ) // [h]:mm:ss -> might get set by tryParseTime(str)
-          d->strText = locale()->formatTime( value().asDateTime().time(), true);
-        return;
-    }
-
-    // Nothing particular found, then this is simply a string
-    setValue( KSpreadValue( d->strText ) );
-
-    // convert first letter to uppercase ?
-    if (m_pTable->getFirstLetterUpper() && !d->strText.isEmpty())
-    {
-        QString str = value().asString();
-        setValue( KSpreadValue( str[0].upper() + str.right( str.length()-1 ) ) );
-    }
+  KSpread::ValueParser::self()->parse (str, this);
+  
+  // Parsing as time acts like an autoformat: we even change d->strText
+  // [h]:mm:ss -> might get set by ValueParser
+  if (isTime() && (formatType() != Time_format7))
+    d->strText = locale()->formatTime( value().asDateTime().time(), true);
+  
+  // convert first letter to uppercase ?
+  if (m_pTable->getFirstLetterUpper() && value().isString() && 
+      (!d->strText.isEmpty()))
+  {
+    QString str = value().asString();
+    setValue( KSpreadValue( str[0].upper() + str.right( str.length()-1 ) ) );
+  }
 }
 
-bool KSpreadCell::tryParseBool( const QString& str )
-{
-    if ( str.lower() == "true" || str.lower() == i18n("True").lower() )
-    {
-        setValue( KSpreadValue( true ) );
-        return true;
-    }
-    if ( str.lower() == "false" || str.lower() == i18n("false").lower() )
-    {
-        setValue( KSpreadValue( false ) );
-        return true;
-    }
-    return false;
-}
-
-bool KSpreadCell::tryParseNumber( const QString& str )
-{
-    // First try to understand the number using the locale
-    bool ok = false;
-    double value = locale()->readNumber(str, &ok);
-    // If not, try with the '.' as decimal separator
-    if ( !ok )
-        value = str.toDouble(&ok);
-
-    if ( ok )
-    {
-        kdDebug(36001) << "KSpreadCell::tryParseNumber '" << str << "' successfully parsed as number: " << value << endl;
-        setValue( KSpreadValue( value ) );
-        return true;
-    }
-
-    return false;
-}
-
-bool KSpreadCell::tryParseDate( const QString& str )
-{
-    bool valid = false;
-    QDate tmpDate = locale()->readDate(str, &valid);
-    if (!valid)
-    {
-        // Try without the year
-        // The tricky part is that we need to remove any separator around the year
-        // For instance %Y-%m-%d becomes %m-%d and %d/%m/%Y becomes %d/%m
-        // If the year is in the middle, say %m-%Y/%d, we'll remove the sep. before it (%m/%d).
-        QString fmt = locale()->dateFormatShort();
-        int yearPos = fmt.find( "%Y", 0, false );
-        if ( yearPos > -1 )
-        {
-            if ( yearPos == 0 )
-            {
-                fmt.remove( 0, 2 );
-                while ( fmt[0] != '%' )
-                    fmt.remove( 0, 1 );
-            } else
-            {
-                fmt.remove( yearPos, 2 );
-                for ( ; yearPos > 0 && fmt[yearPos-1] != '%'; --yearPos )
-                    fmt.remove( yearPos, 1 );
-            }
-            //kdDebug(36001) << "KSpreadCell::tryParseDate short format w/o date: " << fmt << endl;
-            tmpDate = locale()->readDate( str, fmt, &valid );
-        }
-    }
-    if (valid)
-    {
-        // Note: if shortdate format only specifies 2 digits year, then 3/4/1955 will
-  // be treated as in year 3055, while 3/4/55 as year 2055 (because 55 < 69,
-  // see KLocale) and thus there's no way to enter for year 1995
-
-  // The following fixes the problem, 3/4/1955 will always be 1955
-
-  QString fmt = locale()->dateFormatShort();
-  if( ( fmt.contains( "%y" ) == 1 ) && ( tmpDate.year() > 2999 ) )
-             tmpDate = tmpDate.addYears( -1900 );
-
-        // this is another HACK !
-        // with two digit years, 0-69 is treated as year 2000-2069 (see KLocale)
-        // however, in Excel only 0-29 is year 2000-2029, 30 or later is 1930 onwards
-
-        // the following provides workaround for KLocale so we're compatible with Excel
-        // (e.g 3/4/45 is Mar 4, 1945 not Mar 4, 2045)
-        if( ( tmpDate.year() >= 2030 ) && ( tmpDate.year() <= 2069 ) )
-        {
-            QString yearFourDigits = QString::number( tmpDate.year() );
-            QString yearTwoDigits = QString::number( tmpDate.year() % 100 );
-
-            // if year is 2045, check to see if "2045" isn't there --> actual input is "45"
-            if( ( str.contains( yearTwoDigits ) >= 1 ) && ( str.contains( yearFourDigits ) == 0 ) )
-                tmpDate = tmpDate.addYears( -100 );
-        }
-    }
-    if (valid)
-    {
-        Q_ASSERT( tmpDate.isValid() );
-
-        //KLocale::readDate( QString ) doesn't support long dates...
-        // (David: it does now...)
-        // _If_ the input is a long date, check if the first character isn't a number...
-        // (David: why? this looks specific to some countries)
-
-        // Deactivating for now. If you reactivate, please explain better (David).
-        //if ( str.contains( ' ' ) == 0 )  //No spaces " " in short dates...
-        {
-            setValue( KSpreadValue( tmpDate ) );
-            return true;
-        }
-    }
-    return false;
-}
-
-bool KSpreadCell::tryParseTime( const QString& str )
-{
-    bool valid    = false;
-    bool duration = false;
-
-    QDateTime tmpTime = util_readTime(str, locale(), true, &valid, duration);
-    if (!tmpTime.isValid())
-      tmpTime = util_readTime(str, locale(), false, &valid, duration);
-
-    if (!valid)
-    {
-        QTime tm;
-        if(locale()->use12Clock())
-        {
-            QString stringPm=i18n("pm");
-            QString stringAm=i18n("am");
-            int pos=0;
-            if((pos=str.find(stringPm))!=-1)
-            {
-                QString tmp=str.mid(0,str.length()-stringPm.length());
-                tmp=tmp.simplifyWhiteSpace();
-                tm = locale()->readTime(tmp+" "+stringPm, &valid);
-                if (!valid)
-                    tm = locale()->readTime(tmp+":00 "+stringPm, &valid);
-            }
-            else if((pos=str.find(stringAm))!=-1)
-            {
-                QString tmp = str.mid(0,str.length()-stringAm.length());
-                tmp = tmp.simplifyWhiteSpace();
-                tm = locale()->readTime(tmp+" "+stringAm, &valid);
-                if (!valid)
-                    tm = locale()->readTime(tmp+":00 "+stringAm, &valid);
-            }
-        }
-        if ( valid )
-          setValue( KSpreadValue( tm ) );
-        return valid;
-    }
-    if (valid)
-    {
-      if ( duration )
-      {
-        setValue( KSpreadValue( tmpTime ) );
-        setFormatType( Time_format7 );
-      }
-      else
-        setValue( KSpreadValue( tmpTime.time() ) );
-    }
-    return valid;
-}
-
-//used in calc, setDate, setNumber, checkTextInput
+//used in calc, setDate, setNumber, ValueParser
 void KSpreadCell::checkNumberFormat()
 {
     if ( formatType() == Number_format && value().isNumber() )

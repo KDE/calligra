@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
    Copyright 2004 Tomas Mecir <mecirt@gmail.com>
+   Copyright (C) 1998, 1999 Torben Weis <weis@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -20,15 +21,48 @@
 #ifndef KSPREAD_VALUEPARSER
 #define KSPREAD_VALUEPARSER
 
+#include <qdatetime.h>
+
+#include "kspread_value.h"
+
+class KSpreadCell;
+class KLocale;
 
 namespace KSpread {
 
 
-/** the ValueParser parses a text input from the user, generating
-KSpreadValue in the desired format */
+/**
+The ValueParser parses a text input from the user, generating
+KSpreadValue in the desired format.
+It follows the Singleton pattern.
+*/
 
 class ValueParser {
-  //TODO: copy stuff from KSpreadCell and kspread_util.*
+ public:
+  /** returns an instance of this class */
+  static ValueParser *self();
+  /** destructor */
+  ~ValueParser ();
+  
+  /** try to parse the text in a given cell and set value accordingly */
+  void parse (const QString& str, KSpreadCell *cell);
+ protected:
+  ValueParser() {};
+  static ValueParser *_self;
+
+  // Try to parse the text as a bool/number/date/time/etc.
+  // Helpers for parse.
+  bool tryParseBool (const QString& str, KSpreadCell *cell);
+  bool tryParseNumber (const QString& str, KSpreadCell *cell);
+  bool tryParseDate (const QString& str, KSpreadCell *cell);
+  bool tryParseTime (const QString& str, KSpreadCell *cell);
+  
+  /** converts a string to a date/time value */
+  QDateTime readTime (const QString & intstr, KLocale * locale,
+      bool withSeconds, bool * ok, bool & duration);
+
+  /** a helper function to read integers */
+  int readInt (const QString &str, uint &pos);
 };
 
 

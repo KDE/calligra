@@ -19,5 +19,21 @@
 
 #include "valueformatter.h"
 
+using namespace KSpread;
+
+ValueFormatter* ValueFormatter::_self = 0;
+
+ValueFormatter::~ValueFormatter ()
+{
+  _self = 0;
+}
+
+ValueFormatter * ValueFormatter::self ()
+{
+  if (!_self)
+    _self = new ValueFormatter;
+  return _self;
+}
+
 //TODO
 

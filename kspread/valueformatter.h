@@ -23,11 +23,22 @@
 namespace KSpread {
 
 
-/** The ValueFormatter class generates a textual representation of
-data stored in a KSpreadValue, with a given formatting */
+/**
+The ValueFormatter class generates a textual representation of
+data stored in a KSpreadValue, with a given formatting
+It follows the Singleton pattern.
+*/
 
 class ValueFormatter {
-  //TODO: copy stuff from KSpreadCell and kspread_util.*
+ public:
+   /** returns an instance of this class */
+ static ValueFormatter *self ();
+  /** destructor */
+  ~ValueFormatter ();
+ 
+ protected:
+  ValueFormatter () {};
+  static ValueFormatter *_self;
 };
 
 

@@ -835,13 +835,6 @@ protected:
      */
     void checkTextInput();
 
-    // Try to parse the text as a bool/number/date/time/etc.
-    // Helpers for checkTextInput.
-    bool tryParseBool( const QString& str );
-    bool tryParseNumber( const QString& str );
-    bool tryParseDate( const QString& str );
-    bool tryParseTime( const QString& str );
-
     /**
      * Automatically chooses between a number format and
      * a scientific format (if the number is too big)
