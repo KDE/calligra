@@ -11,13 +11,9 @@
         <rect>
             <x>0</x>
             <y>0</y>
-            <width>385</width>
-            <height>196</height>
+            <width>412</width>
+            <height>214</height>
         </rect>
-    </property>
-    <property stdset="1">
-        <name>caption</name>
-        <string>Align and Distribute</string>
     </property>
     <property stdset="1">
         <name>sizePolicy</name>
@@ -25,6 +21,10 @@
             <hsizetype>4</hsizetype>
             <vsizetype>4</vsizetype>
         </sizepolicy>
+    </property>
+    <property stdset="1">
+        <name>caption</name>
+        <string>Align and Distribute</string>
     </property>
     <property>
         <name>layoutMargin</name>
@@ -47,8 +47,8 @@
             <property stdset="1">
                 <name>sizePolicy</name>
                 <sizepolicy>
-                    <hsizetype>4</hsizetype>
-                    <vsizetype>4</vsizetype>
+                    <hsizetype>7</hsizetype>
+                    <vsizetype>7</vsizetype>
                 </sizepolicy>
             </property>
             <property>
@@ -197,13 +197,6 @@
                                         <height>20</height>
                                     </size>
                                 </property>
-                                <property>
-                                    <name>sizeHint</name>
-                                    <size>
-                                        <width>20</width>
-                                        <height>20</height>
-                                    </size>
-                                </property>
                             </spacer>
                             <spacer row="0"  column="3" >
                                 <property>
@@ -225,13 +218,6 @@
                                         <height>20</height>
                                     </size>
                                 </property>
-                                <property>
-                                    <name>sizeHint</name>
-                                    <size>
-                                        <width>20</width>
-                                        <height>20</height>
-                                    </size>
-                                </property>
                             </spacer>
                             <spacer row="0"  column="5" >
                                 <property>
@@ -245,13 +231,6 @@
                                 <property stdset="1">
                                     <name>sizeType</name>
                                     <enum>Expanding</enum>
-                                </property>
-                                <property>
-                                    <name>sizeHint</name>
-                                    <size>
-                                        <width>20</width>
-                                        <height>20</height>
-                                    </size>
                                 </property>
                                 <property>
                                     <name>sizeHint</name>
@@ -310,6 +289,13 @@
                                     <name>pixmap</name>
                                     <pixmap>image3</pixmap>
                                 </property>
+                                <property stdset="1">
+                                    <name>alignment</name>
+                                    <set>AlignTop|AlignLeft</set>
+                                </property>
+                                <property>
+                                    <name>vAlign</name>
+                                </property>
                             </widget>
                             <widget row="4"  column="1"  rowspan="1"  colspan="2" >
                                 <class>QCheckBox</class>
@@ -335,6 +321,13 @@
                                 <property stdset="1">
                                     <name>pixmap</name>
                                     <pixmap>image4</pixmap>
+                                </property>
+                                <property stdset="1">
+                                    <name>alignment</name>
+                                    <set>AlignBottom|AlignLeft</set>
+                                </property>
+                                <property>
+                                    <name>vAlign</name>
                                 </property>
                             </widget>
                             <widget row="2"  column="1"  rowspan="1"  colspan="2" >
@@ -383,13 +376,6 @@
                                         <height>20</height>
                                     </size>
                                 </property>
-                                <property>
-                                    <name>sizeHint</name>
-                                    <size>
-                                        <width>20</width>
-                                        <height>20</height>
-                                    </size>
-                                </property>
                             </spacer>
                             <spacer row="3"  column="1" >
                                 <property>
@@ -403,13 +389,6 @@
                                 <property stdset="1">
                                     <name>sizeType</name>
                                     <enum>Expanding</enum>
-                                </property>
-                                <property>
-                                    <name>sizeHint</name>
-                                    <size>
-                                        <width>20</width>
-                                        <height>20</height>
-                                    </size>
                                 </property>
                                 <property>
                                     <name>sizeHint</name>
@@ -444,13 +423,6 @@
                         <property stdset="1">
                             <name>sizeType</name>
                             <enum>Expanding</enum>
-                        </property>
-                        <property>
-                            <name>sizeHint</name>
-                            <size>
-                                <width>20</width>
-                                <height>20</height>
-                            </size>
                         </property>
                         <property>
                             <name>sizeHint</name>
@@ -616,12 +588,12 @@
                             <cstring>ButtonGroup9</cstring>
                         </property>
                         <property stdset="1">
-                            <name>title</name>
-                            <string></string>
-                        </property>
-                        <property stdset="1">
                             <name>frameShape</name>
                             <enum>NoFrame</enum>
+                        </property>
+                        <property stdset="1">
+                            <name>title</name>
+                            <string></string>
                         </property>
                         <property>
                             <name>layoutMargin</name>
@@ -832,14 +804,22 @@
                             <height>20</height>
                         </size>
                     </property>
-                    <property>
-                        <name>sizeHint</name>
-                        <size>
-                            <width>20</width>
-                            <height>20</height>
-                        </size>
-                    </property>
                 </spacer>
+		<widget>
+                    <class>QPushButton</class>
+                    <property stdset="1">
+                        <name>name</name>
+                        <cstring>okButton</cstring>
+                    </property>
+                    <property stdset="1">
+                        <name>text</name>
+                        <string>OK</string>
+                    </property>
+                    <property stdset="1">
+                        <name>default</name>
+                        <bool>true</bool>
+                    </property>
+                </widget>
                 <widget>
                     <class>QPushButton</class>
                     <property stdset="1">
@@ -851,21 +831,7 @@
                         <string>Cancel</string>
                     </property>
                 </widget>
-                <widget>
-                    <class>QPushButton</class>
-                    <property stdset="1">
-                        <name>name</name>
-                        <cstring>okButton</cstring>
-                    </property>
-                    <property stdset="1">
-                        <name>text</name>
-                        <string>Ok</string>
-                    </property>
-                    <property stdset="1">
-                        <name>default</name>
-                        <bool>true</bool>
-                    </property>
-                </widget>
+                
             </hbox>
         </widget>
     </vbox>
@@ -873,59 +839,59 @@
 <images>
     <image>
         <name>image0</name>
-        <data format="XPM.GZ" length="409">789cd3d7528808f055d0d2e72a2e492cc94c5648ce482c52d04a29cdcdad8c8eb5ade6523234530022630543251d2e2565856405bffcbc54103b11c85636000310570fc4b53000413057191580c512e100490ca6825a6258ecc0e616a846a83284185800220a1583290133a0762099969888531d76f3b0db8becbe5a6b2e00b0ff4d5b</data>
+        <data format="XPM.GZ" length="409">789cd3d7528808f055d0d2e72a2e492cc94c5648ce482c52d04a29cdcdad8c8eb5ade6523234530022630543251d2e2565856405bffcbc54103b11c85636000310570fc4b530b630b4300673955101582c110e90c4602aa82586c50e6c6e816a842a4388810520a25031981230036a079269898938d561370fbbbdc8eeabb5e60200b9f04d62</data>
     </image>
     <image>
         <name>image1</name>
-        <data format="XPM.GZ" length="409">789cd3d7528808f055d0d2e72a2e492cc94c5648ce482c52d04a29cdcdad8c8eb5ade6523234530022630543251d2e253d856405bffcbc54103b11c856360003105719c4b5300041b04a285086d250b144105006930831b83a2a8961b1039b5bc0ba9413d1c4809a944104b29ba17ae1e641a4a1e62526e25487dd3cecf622bbafd69a0b000a275443</data>
+        <data format="XPM.GZ" length="409">789cd3d7528808f055d0d2e72a2e492cc94c5648ce482c52d04a29cdcdad8c8eb5ade6523234530022630543251d2e253d856405bffcbc54103b11c856360003105719c4b530b630b43006ab840265280d154b04016530891083aba39218163bb0b905ac4b39114d0ca849194420bb19aa176e1e441a6a5e62224e75d8cdc36e2fb2fb6aadb9001318544a</data>
     </image>
     <image>
         <name>image2</name>
-        <data format="XPM.GZ" length="409">789cd3d7528808f055d0d2e72a2e492cc94c5648ce482c52d04a29cdcdad8c8eb5ade6523234530022630543251d2e253d856405bffcbc54103b11c856360003105719c4b5300041b04a54a00c174b8403243198326a8961b1039b5bc02a31dc07236062898970c530b14424e312f1a8c36a1e767b91dd576bcd050006995443</data>
+        <data format="XPM.GZ" length="409">789cd3d7528808f055d0d2e72a2e492cc94c5648ce482c52d04a29cdcdad8c8eb5ade6523234530022630543251d2e253d856405bffcbc54103b11c856360003105719c4b530b630b43006ab4405ca70b1443840128329a39618163bb0b905ac12c37d300226969808570c134b44322e118f3aace661b717d97db5d65c000f8a544a</data>
     </image>
     <image>
         <name>image3</name>
-        <data format="XPM.GZ" length="409">789cd3d7528808f055d0d2e72a2e492cc94c5648ce482c52d04a29cdcdad8c8eb5ade6523234530022630543251d2e2565856405bffcbc54103b11c85636000310570fc4b530004130170d80750341229800036554310801154b04f3098a4105088981d950fda48ac1cd437633dc216080e23ec262c842d8c56aadb9006e164d5b</data>
+        <data format="XPM.GZ" length="409">789cd3d7528808f055d0d2e72a2e492cc94c5648ce482c52d04a29cdcdad8c8eb5ade6523234530022630543251d2e2565856405bffcbc54103b11c85636000310570fc4b530b630b4300673d10058371024820930504615831050b144309fa01854809018980dd54faa18dc3c6437c31d020628ee232c862c845dacd69a0b0077074d62</data>
     </image>
     <image>
         <name>image4</name>
-        <data format="XPM.GZ" length="409">789cd3d7528808f055d0d2e72a2e492cc94c5648ce482c52d04a29cdcdad8c8eb5ade6523234530022630543251d2e253d856405bffcbc54105b19c856360003103711c4b5300041b04a0450061184c594c18204c59421182ca60c066862087d209a1c316ce6611543761f5e3124ffc2dc8c24968806946aadb9004a7d4b75</data>
+        <data format="XPM.GZ" length="409">789cd3d7528808f055d0d2e72a2e492cc94c5648ce482c52d04a29cdcdad8c8eb5ade6523234530022630543251d2e253d856405bffcbc54105b19c856360003103711c4b530b630b43006ab4400651041584c192c48504c1982c162ca60802686d007a2c911c3661e563164f7e11543f22fcccd4862896840a9d69a0b00536e4b7c</data>
     </image>
     <image>
         <name>image5</name>
-        <data format="XPM.GZ" length="409">789cd3d7528808f055d0d2e72a2e492cc94c5648ce482c52d04a29cdcdad8c8eb5ade6523234530022630543251d2e253d856405bffcbc54105b19c856360003103711c4b5300041b04a0450061138c594c1002ca40c178329c12206112628a60cb506ec3434804b1df17660713392d730c50884011a50aab5e602001e1c4ba1</data>
+        <data format="XPM.GZ" length="409">789cd3d7528808f055d0d2e72a2e492cc94c5648ce482c52d04a29cdcdad8c8eb5ade6523234530022630543251d2e253d856405bffcbc54105b19c856360003103711c4b530b630b43006ab4400651081534c190cc042ca703198122c6210618262ca506bc04e4303b8d4116f07163723790d538c4018a001a55a6b2e00270d4ba8</data>
     </image>
     <image>
         <name>image6</name>
-        <data format="XPM.GZ" length="409">789cd3d7528808f055d0d2e72a2e492cc94c5648ce482c52d04a29cdcdad8c8eb5ade6523234530022630543251d2e253d856405bffcbc54103b11c856360003105719c4b5300041b04a3d3d653d280031e06289409e72228a582214105287d53c7431b049e86220f3c815c3621edc5e88249a18d81032c520e6d55a73010097cc51fb</data>
+        <data format="XPM.GZ" length="409">789cd3d7528808f055d0d2e72a2e492cc94c5648ce482c52d04a29cdcdad8c8eb5ade6523234530022630543251d2e253d856405bffcbc54103b11c856360003105719c4b530b630b43006abd4d353d6830210032e9608e42927a288254201217558cd4317039b842e06328f5c312ce6c1ed8548a289810d21530c625ead351700a0bd5202</data>
     </image>
     <image>
         <name>image7</name>
-        <data format="XPM.GZ" length="409">789cd3d7528808f055d0d2e72a2e492cc94c5648ce482c52d04a29cdcdad8c8eb5ade6523234530022630543251d2e253d856405bffcbc54103b11c856360003105719c4b5300041b04a653d288030a06289409e72228a582214105287d53c2c6260c3d0c5802cb2c5b09807b7172c892e0632845c31b079b5d65c00817e51cf</data>
+        <data format="XPM.GZ" length="409">789cd3d7528808f055d0d2e72a2e492cc94c5648ce482c52d04a29cdcdad8c8eb5ade6523234530022630543251d2e253d856405bffcbc54103b11c856360003105719c4b530b630b43006ab54d6830208032a9608e42927a288254201217558cdc32206360c5d0cc8225b0c8b79707bc192e8622043c815039b576bcd05008a6f51d6</data>
     </image>
     <image>
         <name>image8</name>
-        <data format="XPM.GZ" length="409">789cd3d7528808f055d0d2e72a2e492cc94c5648ce482c52d04a29cdcdad8c8eb5ade6523234530022630543251d2e253d856405bffcbc54103b11c856360003105719c4b5300041b04a3050062310808a292742c41295a1628960001283b070a9c3611ea618dc3c643120836c312ce6c1ed054ba28b810c21570c625ead3517005f63529b</data>
+        <data format="XPM.GZ" length="409">789cd3d7528808f055d0d2e72a2e492cc94c5648ce482c52d04a29cdcdad8c8eb5ade6523234530022630543251d2e253d856405bffcbc54103b11c856360003105719c4b530b630b43006ab040365300201a8987222442c51192a9608062031080b973a1ce6618ac1cd43160332c816c3621edc5eb024ba18c81072c520e6d55a730100685452a2</data>
     </image>
     <image>
         <name>image9</name>
-        <data format="XPM.GZ" length="409">789cd3d7528808f055d0d2e72a2e492cc94c5648ce482c52d04a29cdcdad8c8eb5ade6523234530022630543251d2e253d856405bffcbc54103b11c856360003105719c4b5300041b04a1050d68302653d24b144a0b072228a582214105287d53cec6298e601c540985c31847950268abd502de489a19b576bcd05008ade51cf</data>
+        <data format="XPM.GZ" length="409">789cd3d7528808f055d0d2e72a2e492cc94c5648ce482c52d04a29cdcdad8c8eb5ade6523234530022630543251d2e253d856405bffcbc54103b11c856360003105719c4b530b630b43006ab0401653d2850d643124b040a2b27a288254201217558cdc32e86691e500c84c91543980765a2d80bd5429e18ba79b5d65c0093cf51d6</data>
     </image>
     <image>
         <name>image10</name>
-        <data format="XPM.GZ" length="409">789cd3d7528808f055d0d2e72a2e492cc94c5648ce482c52d04a29cdcdad8c8eb5ade6523234530022630543251d2e2565856405bffcbc54103b11c85636000310570fc4b530004130170d807583402208806865658418048324d0c5f412f530c450f562310f0a50f442018a1d7041885e6c6e86190f036031a833c812c3629e321a50aab5e602004f4f4bcb</data>
+        <data format="XPM.GZ" length="409">789cd3d7528808f055d0d2e72a2e492cc94c5648ce482c52d04a29cdcdad8c8eb5ade6523234530022630543251d2e2565856405bffcbc54103b11c85636000310570fc4b530b630b4300673d1005837082482008856564688413048025d4c2f510f430c552f16f3a000452f14a0d8011784e8c5e66698f1300016833a832c312ce629a301a55a6b2e0058404bd2</data>
     </image>
     <image>
         <name>image11</name>
-        <data format="XPM.GZ" length="409">789cd3d7528808f055d0d2e72a2e492cc94c5648ce482c52d04a29cdcdad8c8eb5ade6523234530022630543251d2e253d856405bffcbc54105b19c856360003103711c4b5300041b04a340017530601743128868a25828032140301863a654cf34004babd40fd1862287af188c1f42239176e079273e17a919c0b77338a3aa8df90cd43090364b15a6b2e0048874f13</data>
+        <data format="XPM.GZ" length="409">789cd3d7528808f055d0d2e72a2e492cc94c5648ce482c52d04a29cdcdad8c8eb5ade6523234530022630543251d2e253d856405bffcbc54105b19c856360003103711c4b530b630b43006ab44037031651040178362a85822082843311060a853c6340f44a0db0bd48f2186a2178f184c2f9273e176203917ae17c9b97037a3a883fa0dd93c94304016abb5e6020051784f1a</data>
     </image>
     <image>
         <name>image12</name>
-        <data format="XPM.GZ" length="409">789cd3d7528808f055d0d2e72a2e492cc94c5648ce482c52d04a29cdcdad8c8eb5ade6523234530022630543251d2e253d856405bffcbc54105b19c856360003103711c4b5300041b04a64a0aca7071753060174310446174b544ec410031980cbbc443480e1163d243bd0c4b0e985198fec0f9873a1d66388c1dc8c2c06d78bc53c8cb0aab5e60200b16d4fb3</data>
+        <data format="XPM.GZ" length="409">789cd3d7528808f055d0d2e72a2e492cc94c5648ce482c52d04a29cdcdad8c8eb5ade6523234530022630543251d2e253d856405bffcbc54105b19c856360003103711c4b530b630b43006ab4406ca7a7a703165104017436074b144e5440c319001b8cc4b4403186ed143b2034d0c9b5e98f1c8fe8039176a3d8618cccdc86270bd58ccc308ab5a6b2e00ba5e4fba</data>
     </image>
     <image>
         <name>image13</name>
-        <data format="XPM.GZ" length="409">789cd3d7528808f055d0d2e72a2e492cc94c5648ce482c52d04a29cdcdad8c8eb5ade6523234530022630543251d2e253d856405bffcbc54105b19c856360003103711c4b5300041b04a3400d60102e862409a6c312ce625a2010cb72843d4a108014d41174b544e4488c12c42d6ab8cc0e862a87a2118c50e34f330dc5c6bcd05003cfa4fdf</data>
+        <data format="XPM.GZ" length="409">789cd3d7528808f055d0d2e72a2e492cc94c5648ce482c52d04a29cdcdad8c8eb5ade6523234530022630543251d2e253d856405bffcbc54105b19c856360003103711c4b530b630b43006ab4403601d20802e06a4c916c3625e221ac0708b32441d8a10d01474b144e5448418cc2264bdca088c2e86aa178251ec40330fc3cdb5d65c0045eb4fe6</data>
     </image>
 </images>
 <connections>
