@@ -845,16 +845,30 @@ void OoWriterImport::writeFormat( QDomDocument& doc, QDomElement& formats, int i
         }
         format.appendChild( fontAttrib );
     }
-     if (m_styleStack.hasAttribute("fo:language")) // 3.10.17
-     {
-         QDomElement lang = doc.createElement("LANGUAGE");
-         QString tmp = m_styleStack.attribute("fo:language");
-         if (tmp=="en")
-             lang.setAttribute("value", "en_US");
-         else
-             lang.setAttribute("value", tmp);
-         format.appendChild(lang);
-     }
+
+    if (m_styleStack.hasAttribute("fo:language")) // 3.10.17
+    {
+        QDomElement lang = doc.createElement("LANGUAGE");
+        QString tmp = m_styleStack.attribute("fo:language");
+        if (tmp=="en")
+            lang.setAttribute("value", "en_US");
+        else
+            lang.setAttribute("value", tmp);
+        format.appendChild(lang);
+    }
+
+    if (m_styleStack.hasAttribute("style:text-background-color")) // 3.10.28
+    {
+        QDomElement bgCol = doc.createElement("TEXTBACKGROUNDCOLOR");
+        QColor tmp = m_styleStack.attribute("style:text-background-color");
+        if (tmp != "transparent")
+        {
+            bgCol.setAttribute("red", tmp.red());
+            bgCol.setAttribute("green", tmp.green());
+            bgCol.setAttribute("blue", tmp.blue());
+            format.appendChild(bgCol);
+        }
+    }
 
     /*
       Missing properties:
@@ -867,12 +881,10 @@ void OoWriterImport::writeFormat( QDomDocument& doc, QDomElement& formats, int i
       style:font-charset, 3.10.14 - not necessary with Qt
       style:font-size-rel, 3.10.15 - TODO in StyleStack::fontSize()
       fo:letter-spacing, 3.10.16 - not implemented in kotext
-      fo:text-language, 3.10.17 - TODO
       style:text-relief, 3.10.20 - not implemented in kotext
       style:text-shadow, 3.10.21 - TODO
       style:letter-kerning, 3.10.20 - not implemented in kotext
       style:text-blinking, 3.10.27 - not implemented in kotext IIRC
-      style:text-background-color, 3.10.28 - TODO
       style:text-combine, 3.10.29/30 - what is it?
       style:text-emphasis, 3.10.31 - not implemented in kotext
       style:text-autospace, 3.10.32 - not implemented in kotext
