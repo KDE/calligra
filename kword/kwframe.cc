@@ -731,84 +731,25 @@ KWPictureFrameSet::~KWPictureFrameSet() {
 }
 
 /*================================================================*/
-/*
-void KWPictureFrameSet::setFileName( QString _filename )
-{
-    int dashdash = _filename.findRev( "--" );
-    if ( dashdash != -1 )
-        _filename == _filename.left( dashdash );
-
-    filename = _filename;
-
-    bool del = false;
-    // retrieve image from imageCollection
-    KWImage *_image = doc->getImageCollection()->getImage( filename );
-    if ( !_image ) {
-        del = true;
-        _image = new KWImage( doc, filename );
-    }
-
-    QString key;
-    image = doc->getImageCollection()->getImage( *_image, key );
-
-    if ( del )
-        delete _image;
-}
-*/
-/*================================================================*/
-void KWPictureFrameSet::setFileName( QString _filename, QSize _imgSize )
+void KWPictureFrameSet::setFileName( const QString &_filename, const QSize &_imgSize )
 {
     KoImageCollection *collection = doc->imageCollection();
 
-    m_image = collection->image( KoImage::Key( _filename ) );
-    if ( !m_image.isValid() )
+    m_image = collection->image( _filename );
+    if ( !m_image.isNull() )
     {
         QImage img( _filename );
         if ( !img.isNull() )
-            m_image = collection->insertImage( KoImage::Key( _filename ), img );
+            m_image = collection->insertImage( _filename, img );
     }
 
     m_image = m_image.scale( _imgSize );
-
-    /*
-    int dashdash = _filename.findRev( "--" );
-    if ( dashdash != -1 )
-        _filename == _filename.left( dashdash );
-
-    if ( image ) {
-        image->decRef();
-        image = 0L;
-    }
-
-    filename = _filename;
-
-    bool del = false;
-    KWImage *_image = doc->getImageCollection()->getImage( filename );
-    if ( !_image ) {
-        del = true;
-        _image = new KWImage( doc, filename );
-    }
-
-    QString key;
-    image = doc->getImageCollection()->getImage( *_image, key, _imgSize );
-
-    if ( del )
-        delete _image;
-    */
 }
 
 /*================================================================*/
 void KWPictureFrameSet::setSize( QSize _imgSize )
 {
     m_image = m_image.scale( _imgSize );
-    /*
-    if ( image && _imgSize == image->size() ) return;
-
-    QString key;
-    image = doc->getImageCollection()->getImage( *image, key, _imgSize );
-    if ( !image )
-        setFileName( filename, _imgSize );
-    */
 }
 
 /*================================================================*/
@@ -824,10 +765,9 @@ void KWPictureFrameSet::save( QDomElement & parentElem )
 
     QDomElement imageElem = parentElem.ownerDocument().createElement( "IMAGE" );
     framesetElem.appendChild( imageElem );
-//    image->save( imageElem );
     QDomElement elem = parentElem.ownerDocument().createElement( "FILENAME" );
     imageElem.appendChild( elem );
-    elem.setAttribute( "value", correctQString( m_image.key().m_filename ) );
+    elem.setAttribute( "value", correctQString( m_image.fileName() ) );
 }
 
 /*================================================================*/
@@ -863,8 +803,6 @@ void KWPictureFrameSet::drawContents( QPainter *painter, int cx, int cy, int cw,
         m_image = m_image.scale( r.size() );
 
     painter->drawPixmap( r.left(), r.top(), m_image.pixmap() );
-//    QImage img = m_image.image().smoothScale( r.width(), r.height() );
-//    painter->drawImage( r.left(), r.top(), img, cx, cy, cw, ch );
 }
 
 /******************************************************************/

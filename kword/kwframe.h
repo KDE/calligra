@@ -412,11 +412,10 @@ public:
     void setImage( const KoImage &image ) { m_image = image; }
     KoImage image() const { return m_image; }
 
-//    void setFileName( QString _filename );
-    void setFileName( QString _filename, QSize _imgSize );
-    void setSize( QSize _imgSize );
+    KoImage::Key key() const { return m_image.key(); }
 
-//    QString getFileName() { return filename; }
+    void setFileName( const QString &_filename, const QSize &_imgSize );
+    void setSize( QSize _imgSize );
 
     virtual void save( QDomElement &parentElem );
     virtual void load( QDomElement &attributes );

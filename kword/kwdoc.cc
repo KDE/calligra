@@ -1538,9 +1538,10 @@ QDomDocument KWDocument::saveXML()
     QValueList<KoImage::Key> keys;
     int i = 0;
     for ( ; it != end; ++it ) {
-        if ( keys.contains( it.key() ) || images.contains( it.key().m_filename ) )
+        QString fileName = it.key().fileName;
+        if ( keys.contains( it.key() ) || images.contains( fileName ) )
             continue;
-        QString format = QFileInfo( it.key().m_filename ).extension().upper();
+        QString format = QFileInfo( fileName ).extension().upper();
         if ( format == "JPG" )
             format = "JPEG";
         if ( QImage::outputFormats().find( QFile::encodeName(format) ) == -1 )
@@ -1551,11 +1552,11 @@ QDomDocument KWDocument::saveXML()
 
         QDomElement key = doc.createElement( "KEY" );
         pixmaps.appendChild( key );
-        key.setAttribute( "key", it.key().m_filename );
+        key.setAttribute( "key", fileName );
         key.setAttribute( "name", pictureName );
 
         keys.append( it.key() );
-        images.append( it.key().m_filename );
+        images.append( fileName );
     }
 
     // Not needed anymore
@@ -1623,10 +1624,11 @@ bool KWDocument::completeSaving( KoStore *_store )
     int i = 0;
 
     for( ; it != end; ++it ) {
-        if ( keys.contains( it.key() ) || images.contains( it.key().m_filename ) )
+        QString fileName = it.key().fileName;
+        if ( keys.contains( it.key() ) || images.contains( fileName ) )
             continue;
 
-        QString format = QFileInfo( it.key().m_filename ).extension().upper();
+        QString format = QFileInfo( fileName ).extension().upper();
         if ( format == "JPG" )
             format = "JPEG";
         if ( QImage::outputFormats().find( QFile::encodeName(format) ) == -1 )
@@ -1646,7 +1648,7 @@ bool KWDocument::completeSaving( KoStore *_store )
             _store->close();
         }
         keys.append( it.key() );
-        images.append( it.key().m_filename );
+        images.append( fileName );
     }
 
     return TRUE;
