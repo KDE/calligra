@@ -907,12 +907,18 @@ bool KPresenterDoc::saveOasis( KoStore* store, KoXmlWriter* manifestWriter )
     recalcVariables( VT_DATE );
     recalcVariables( VT_TIME );
 
-    if ( !store->open( "maindoc.xml" ) )
+    if ( !store->open( "content.xml" ) )
         return false;
 
     KoStoreDevice dev( store );
     KoXmlWriter xmlWriter( &dev, "office:document-content" );
     xmlWriter.startElement( "office:body" );
+
+    //save page
+    for ( int i = 0; i < static_cast<int>( m_pageList.count() ); i++ )
+    {
+        m_pageList.at( i )->saveOasisPage( xmlWriter );
+    }
 
     xmlWriter.endElement();
     xmlWriter.endElement(); // root element
@@ -928,6 +934,14 @@ bool KPresenterDoc::saveOasis( KoStore* store, KoXmlWriter* manifestWriter )
 
     //todo add manifest line for style.xml
 
+    if ( saveOnlyPage == -1 )
+        emit sigProgress( 90 );
+
+    // Save sound file list.
+//todo ????
+    makeUsedSoundFileList();
+
+    setModified( false );
 
     kdError() << "KPresenterDoc::saveOasis not implemented (for the moment :) )" << endl;
     return true;

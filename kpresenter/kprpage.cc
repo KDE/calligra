@@ -59,6 +59,7 @@
 #include <korichtext.h>
 #include <qbuffer.h>
 #include <qregexp.h>
+#include <koxmlwriter.h>
 
 KPrPage::KPrPage(KPresenterDoc *_doc )
 {
@@ -71,6 +72,7 @@ KPrPage::KPrPage(KPresenterDoc *_doc )
     m_manualTitle=QString::null;
     m_noteText=QString::null;
     m_selectedSlides=true;
+    //don't create dcopobject by default
     //dcopObject();
 }
 
@@ -90,6 +92,18 @@ DCOPObject* KPrPage::dcopObject()
         dcop = new KPresenterPageIface( this );
 
     return dcop;
+}
+
+
+bool KPrPage::saveOasisPage( KoXmlWriter &xmlWriter /*add style*/ )
+{
+    xmlWriter.startElement( "draw:page" );
+    xmlWriter.addAttribute( "draw:name", m_manualTitle );
+    //xmlWriter.addAttribute( "draw:style-name", style );
+    //xmlWriter.addAttribute( "draw:id", id ); ???? FIXME
+    //xmlWriter.addAttribute( "draw:master-page-name", master-page-name); ??? FIXME
+    xmlWriter.endElement();
+    return true;
 }
 
 KPObject *KPrPage::getObject(int num)
@@ -1229,7 +1243,7 @@ KCommand* KPrPage::setPen( const QPen &pen, LineEnd lb, LineEnd le, int flags )
         cmd = new PenCmd( i18n( "Apply Styles" ), _objects, _newPen, m_doc, this, flags );
         cmd->execute();
     }
-    
+
     return cmd;
 }
 
@@ -1265,7 +1279,7 @@ KCommand * KPrPage::setBrush( const QBrush &brush, FillType ft, const QColor &g1
         cmd = new BrushCmd( i18n( "Apply Styles" ), _objects, _newBrush, m_doc, this, flags );
         cmd->execute();
     }
-    
+
     return cmd;
 }
 
@@ -2000,7 +2014,7 @@ QValueList<int> KPrPage::getEffectSteps() const
             stepmap[it.current()->getDisappearStep()] = true;
         }
     }
-    
+
     return stepmap.keys();
 }
 
@@ -2282,7 +2296,7 @@ KCommand *KPrPage::rotateSelectedObjects( float _newAngle, bool addAngle )
         cmd = new RotateCmd( i18n( "Change Rotation" ), _newAngle, _objects, m_doc, addAngle );
         cmd->execute();
     }
-    
+
     return cmd;
 }
 

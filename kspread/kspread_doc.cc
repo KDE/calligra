@@ -577,7 +577,7 @@ bool KSpreadDoc::saveOasis( KoStore* store, KoXmlWriter* manifestWriter )
         for (; it.current(); ++it )
             static_cast<KSpreadView *>( it.current() )->deleteEditor( true );
     }
-    if ( !store->open( "maindoc.xml" ) )
+    if ( !store->open( "content.xml" ) )
         return false;
 
     KoStoreDevice dev( store );
@@ -600,6 +600,7 @@ bool KSpreadDoc::saveOasis( KoStore* store, KoXmlWriter* manifestWriter )
 
     //todo add manifest line for style.xml
 
+    setModified( false );
 
     kdError() << "KSpreadDoc::saveOasis not implemented (for the moment :) )" << endl;
     return true;

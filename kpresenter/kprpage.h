@@ -47,6 +47,9 @@ class KPPixmapObject;
 class KPPartObject;
 class KPBackGround;
 
+class KoXmlWriter;
+
+
 class KPrPage
 {
 public:
@@ -143,7 +146,7 @@ public:
     bool getProtectContent(bool prot) const;
 
     KCommand* setPen( const QPen &pen, LineEnd lb, LineEnd le, int flags );
-    KCommand* setBrush( const QBrush &brush, FillType ft, const  QColor& g1, const QColor &g2, 
+    KCommand* setBrush( const QBrush &brush, FillType ft, const  QColor& g1, const QColor &g2,
                         BCType gt, bool unbalanced, int xfactor, int yfactor, int flags );
 
     QPen getPen( const QPen & pen ) const;
@@ -152,7 +155,7 @@ public:
      * Insert an object into the page
      */
     void insertObject( const QString &name, KPObject * object, const KoRect &r );
-    
+
     virtual KPPartObject* insertObject( const KoRect&, KoDocumentEntry& );
 
     void insertRectangle( const KoRect &r, const QPen & pen, const QBrush &brush, FillType ft,
@@ -292,6 +295,10 @@ public:
 
     void getAllObjectSelectedList(QPtrList<KPObject> &lst,bool force = false );
     void getAllEmbeddedObjectSelected(QPtrList<KoDocumentChild> &embeddedObjects );
+
+    bool saveOasisPage( KoXmlWriter &xmlWriter );
+
+
 protected:
 
 private:
