@@ -337,16 +337,11 @@ void configure::apply()
             m_pView->posWidget()->hide();
         doc->setShowFormulaBar(active);
     }
+    
     active=showStatusBar->isChecked();
-    if(m_pView->statusBar() && m_pView->statusBar()->isVisible()!=active)
-    {
-        config->writeEntry( "Status bar",active);
-        if(active)
-            m_pView->statusBar()->show();
-        else
-            m_pView->statusBar()->hide();
-        doc->setShowStatusBar(active);
-    }
+    config->writeEntry( "Status bar",active);
+    m_pView->showStatusBar( active );
+    
     int val=nbRecentFile->value();
     if( oldRecent!= val)
     {
