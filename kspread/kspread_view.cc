@@ -320,9 +320,11 @@ public:
     QScrollBar *vertScrollBar;
     KoTabBar *tabBar;
     KStatusBarLabel* calcLabel;
+    
     // formulabar, consists of:
     QHBoxLayout* formulaBarLayout;
     KSpreadComboboxLocationEditWidget *posWidget;
+    QButton* formulaButton;
     QButton *okButton;
     QButton *cancelButton;
     KSpreadEditWidget *editWidget;
@@ -1386,6 +1388,8 @@ void ViewPrivate::adjustActions( bool mode )
   actions->showFormulaBar->setChecked( doc->showFormulaBar() );
   actions->showCommentIndicator->setChecked( doc->showCommentIndicator() );
 
+  formulaButton->setEnabled( mode );
+  
   if ( activeSheet )
     view->canvasWidget()->gotoLocation( selectionInfo->marker(), activeSheet );
 }
@@ -1689,6 +1693,11 @@ void KSpreadView::initView()
     d->posWidget->setMinimumWidth( 100 );
     d->formulaBarLayout->addWidget( d->posWidget );
     d->formulaBarLayout->addSpacing( 6 );
+    
+    d->formulaButton = d->newIconButton( "funct", TRUE, d->toolWidget );
+    d->formulaBarLayout->addWidget( d->formulaButton );
+    d->formulaBarLayout->addSpacing( 2 );
+    connect( d->formulaButton, SIGNAL( clicked() ), SLOT( insertMathExpr() ) );
 
     d->cancelButton = d->newIconButton( "cancel", TRUE, d->toolWidget );
     d->formulaBarLayout->addWidget( d->cancelButton );
