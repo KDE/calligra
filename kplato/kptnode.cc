@@ -51,7 +51,6 @@ void KPTNode::init() {
     m_effort = 0;
     m_resourceOverbooked = false;
     m_resourceError = false;
-    m_deleted = false;
     m_visitedForward = false;
     m_visitedBackward = false;
 }
@@ -330,8 +329,6 @@ QPtrList<KPTAppointment> KPTNode::appointments(const KPTNode *node) {
 }
 
 void KPTNode::makeAppointments() {
-    if (m_deleted)
-        return;
     QPtrListIterator<KPTNode> nit(m_nodes);
     for ( ; nit.current(); ++nit ) {
         nit.current()->makeAppointments();

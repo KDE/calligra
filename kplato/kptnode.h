@@ -398,8 +398,6 @@ protected:
 
     int m_id; // unique id
     
-    bool m_deleted;
-
     bool m_visitedForward;
     bool m_visitedBackward;
     

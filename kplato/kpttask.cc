@@ -117,8 +117,6 @@ int KPTTask::workUnits() const {
 }
 
 void KPTTask::makeAppointments() {
-    if (m_deleted)
-        return;
     if (type() == KPTNode::Type_Task) {
         if (m_requests) 
             m_requests->makeAppointments(this);
@@ -473,7 +471,7 @@ KPTDateTime KPTTask::calculateBackward(int use) {
 
 KPTDateTime &KPTTask::scheduleForward(KPTDateTime &earliest, int use) {
     //kdDebug()<<k_funcinfo<<m_name<<" earliest="<<earliest<<endl;
-    if (m_visitedForward || m_deleted)
+    if (m_visitedForward)
         return m_endTime;
     m_startTime = earliest > earliestStart ? earliest : earliestStart;
     // First, calculate all predecessors
@@ -559,7 +557,7 @@ KPTDateTime &KPTTask::scheduleForward(KPTDateTime &earliest, int use) {
 
 KPTDateTime &KPTTask::scheduleBackward(KPTDateTime &latest, int use) {
     //kdDebug()<<k_funcinfo<<m_name<<": latest="<<latest<<endl;
-    if (m_visitedBackward || m_deleted)
+    if (m_visitedBackward)
         return m_startTime;
     m_endTime = latest < latestFinish ? latest : latestFinish;
     // First, calculate all successors
