@@ -11,10 +11,6 @@
 #include <stdlib.h>
 #include <math.h>
 
-#ifndef F_PI
-#define F_PI            3.14159265358979323846
-#endif
-
 static double fact( double val, double end )
 {
   /* fact =i*(i-1)*(i-2)*...*1 */
@@ -539,7 +535,7 @@ static double GetGamma(double x)
   double G = GammaHelp(x, bReflect);
   G = pow(x+5.5,x+0.5)*G/exp(x+5.5);
   if (bReflect)
-    G = F_PI*x/(G*sin(F_PI*x));
+    G = M_PI*x/(G*sin(M_PI*x));
   return G;
 }
 
@@ -651,7 +647,7 @@ static double GetLogGamma(double x)
   double G = GammaHelp(x, bReflect);
   G = (x+0.5)*log(x+5.5)+log(G)-(x+5.5);
   if (bReflect)
-    G = log(F_PI*x)-G-log(sin(F_PI*x));
+    G = log(M_PI*x)-G-log(sin(M_PI*x));
   return G;
 }
 
