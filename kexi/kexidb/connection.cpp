@@ -1338,6 +1338,9 @@ TableSchema* Connection::newKexiDBSystemTableSchema(const QString& tsname)
 	
 bool Connection::setupKexiDBSystemSchema()
 {
+	if (!m_kexiDBSystemtables.isEmpty())
+		return true; //already set up
+	
 	TableSchema *t_objects = newKexiDBSystemTableSchema("kexi__objects");
 	t_objects->addField( new Field("o_id", Field::Integer, Field::PrimaryKey | Field::AutoInc, Field::Unsigned) )
 	.addField( new Field("o_type", Field::Byte, 0, Field::Unsigned) )
