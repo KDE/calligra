@@ -8,7 +8,7 @@ kexi_la_LDFLAGS = $(all_libraries) -module $(KDE_PLUGIN)
 kexi_la_LIBADD = core/libkexicore.la
 
 #SUBDIRS= 3rdparty kexidb core tableview . data widget plugins tests
-SUBDIRS= 3rdparty kexidb core tableview widget plugins data . 
+SUBDIRS= 3rdparty kexidb core tableview widget plugins data pics . 
 
 kdelnkdir = $(kde_appsdir)/Office
 kdelnk_DATA = kexi.desktop
