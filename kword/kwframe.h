@@ -30,11 +30,6 @@
 #include "kwstyle.h"
 #include "koborder.h"
 
-namespace KFormula {
-    class Container;
-    class View;
-}
-class FormulaView;
 
 class KCommand;
 class KWAnchor;
@@ -516,6 +511,8 @@ public:
     void resizeFrameSetCoords( KWFrame* frame, double newLeft, double newTop, double newRight, double newBottom, bool finalSize );
     /** Called when the user resizes a frame. Reimplemented by KWPictureFrameSet. */
     virtual void resizeFrame( KWFrame* frame, double newWidth, double newHeight, bool finalSize );
+    /** Called when the user moves a frame. */
+    virtual void moveFrame( KWFrame* ) {}
 
     /** True if the frameset was deleted (but not destroyed, since it's in the undo/redo) */
     bool isDeleted() const { return frames.isEmpty(); }
@@ -884,124 +881,6 @@ protected:
     bool m_keepAspectRatio;
     /// Cache the finalSize parameter of the method resizeFrame for drawFrame
     bool m_finalSize;
-};
-
-/******************************************************************/
-/* Class: KWFormulaFrameSet                                       */
-/******************************************************************/
-
-class KWFormulaFrameSet : public KWFrameSet
-{
-    Q_OBJECT
-public:
-    KWFormulaFrameSet( KWDocument *_doc, const QString & name );
-    virtual ~KWFormulaFrameSet();
-
-    virtual KWordFrameSetIface* dcopObject();
-
-    /** The type of frameset. Use this to differentiate between different instantiations of
-     *  the framesets. Each implementation will return a different frameType.
-     */
-    virtual FrameSetType type() { return FT_FORMULA; }
-    virtual void addFrame( KWFrame *_frame, bool recalc = true );
-
-    virtual KWFrameSetEdit* createFrameSetEdit(KWCanvas*);
-
-    /**
-     * Paint this frameset
-     */
-    virtual void drawFrameContents(KWFrame *, QPainter*, const QRect&,
-                                   const QColorGroup&, bool onlyChanged, bool resetChanged,
-                                   KWFrameSetEdit *edit, KWViewMode *viewMode);
-
-    virtual QDomElement save( QDomElement &parentElem, bool saveFrames = true );
-    virtual void load( QDomElement &attributes, bool loadFrames = true );
-    void paste( QDomNode& formulaElem );
-
-    /** Apply the new zoom/resolution - values are to be taken from kWordDocument() */
-    virtual void zoom( bool forPrint );
-
-    KFormula::Container* getFormula() const { return formula; }
-
-    void setChanged() { m_changed = true; }
-
-    virtual void moveFloatingFrame( int frameNum, const KoPoint &position );
-    virtual int floatingFrameBaseline( int /*frameNum*/ );
-
-    virtual void setAnchorFormat( KoTextFormat* format, int /*frameNum*/ );
-
-    void showPopup( KWFrame *, KWView *view, const QPoint &point );
-
-protected slots:
-
-    void slotFormulaChanged( int width, int height );
-    void slotFormulaChanged( double width, double height );
-    void slotErrorMessage( const QString& msg );
-
-private:
-    KFormula::Container* formula;
-    bool m_changed;
-    QPixmap buffer;
-};
-
-
-class KWFormulaFrameSetEdit : public QObject, public KWFrameSetEdit
-{
-    Q_OBJECT
-public:
-    KWFormulaFrameSetEdit(KWFormulaFrameSet* fs, KWCanvas* canvas);
-    virtual ~KWFormulaFrameSetEdit();
-
-    KWFormulaFrameSet* formulaFrameSet() const
-    {
-        return static_cast<KWFormulaFrameSet*>(frameSet());
-    }
-
-    const KFormula::View* getFormulaView() const;
-    KFormula::View* getFormulaView();
-
-    virtual DCOPObject* dcopObject();
-
-    // Events forwarded by the canvas (when being in "edit" mode)
-    virtual void keyPressEvent(QKeyEvent*);
-    virtual void mousePressEvent(QMouseEvent*, const QPoint & n, const KoPoint & d );
-    virtual void mouseMoveEvent(QMouseEvent*, const QPoint & n, const KoPoint & d); // only called if button is pressed
-    virtual void mouseReleaseEvent(QMouseEvent*, const QPoint & n, const KoPoint & d);
-    //virtual void mouseDoubleClickEvent( QMouseEvent *, const QPoint & n, const KoPoint & d ) {}
-    //virtual void dragEnterEvent( QDragEnterEvent * ) {}
-    //virtual void dragMoveEvent( QDragMoveEvent *, const QPoint &, const KoPoint & ) {}
-    //virtual void dragLeaveEvent( QDragLeaveEvent * ) {}
-    //virtual void dropEvent( QDropEvent *, const QPoint &, const KoPoint & ) {}
-    virtual void focusInEvent();
-    virtual void focusOutEvent();
-    virtual void copy();
-    virtual void cut();
-    virtual void paste();
-    virtual void selectAll();
-
-    /** Moves the cursor to the first position */
-    void moveHome();
-    /** Moves the cursor to the last position */
-    void moveEnd();
-
-    /** Gets called if the cursor ties to leave the formula at its begin. */
-    void exitLeft();
-
-    /** Gets called if the cursor ties to leave the formula at its end. */
-    void exitRight();
-
-    void removeFormula();
-
-protected slots:
-
-    /**
-     * Make sure the cursor can be seen at its new position.
-     */
-    void cursorChanged( bool visible, bool selecting );
-
-private:
-    FormulaView* formulaView;
-    DCOPObject *dcop;
 };
 
 

@@ -71,7 +71,9 @@ class KOSpellConfig;
 
 namespace KFormula {
     class Document;
-}
+    class DocumentWrapper;
+};
+
 class KoTextParag;
 
 #include <koDocument.h>
@@ -963,7 +965,6 @@ private:
      */
     int m_syntaxVersion;
 
-
     QFont m_defaultFont;
     bool m_headerVisible, m_footerVisible;
     bool m_viewFrameBorders;
@@ -987,8 +988,9 @@ private:
     bool m_viewFormattingTabs;
     bool m_viewFormattingBreak;
 
-/// The document that is used by all formulas
-    KFormula::Document* m_formulaDocument;
+    /// The wrapper that contains the formula's document and its
+    /// actions. It owns the real document.
+    KFormula::DocumentWrapper* m_formulaDocumentWrapper;
 
     double m_indent; // in pt
     double m_defaultColumnSpacing;

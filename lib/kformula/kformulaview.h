@@ -125,20 +125,6 @@ public:
     void eraseSelection( Direction direction = beforeCursor );
     void addText( QString str );
 
-    /** Gets called if the cursor ties to leave the formula at its begin. */
-    virtual void exitLeft();
-
-    /** Gets called if the cursor ties to leave the formula at its end. */
-    virtual void exitRight();
-
-    /**
-     * Gets called if the whole formula should be removed.
-     * There are perfectly good reasons to handle this inside
-     * the document. But kword seems to prefer the view to
-     * trigger the action. (I might be wrong...)
-     */
-    virtual void removeFormula();
-
 signals:
 
     /**
@@ -169,8 +155,6 @@ protected slots:
      */
     void slotElementWillVanish(BasicElement*);
 
-    void slotLeaveFormula( Container*, FormulaCursor* cursor, int cmd );
-
 protected:
 
     virtual bool cursorVisible();
@@ -182,11 +166,11 @@ private:
      */
     void emitCursorChanged();
 
-    FormulaCursor* cursor() const;
     bool& cursorHasChanged();
     bool& smallCursor();
     Container* container() const;
     const ContextStyle& contextStyle() const;
+    FormulaCursor* cursor() const;
 
     struct View_Impl;
     View_Impl* impl;

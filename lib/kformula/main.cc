@@ -139,10 +139,10 @@ void TestWidget::keyPressEvent(QKeyEvent* event)
 
     if ( ( state & Qt::ShiftButton ) && ( state & Qt::ControlButton ) ) {
         switch (event->key()) {
-            case Qt::Key_B: document->document()->appendColumn(); return;
-            case Qt::Key_I: document->document()->insertColumn(); return;
-            case Qt::Key_R: document->document()->removeColumn(); return;
-            case Qt::Key_Z: document->document()->redo(); return;
+            case Qt::Key_B: document->document()->wrapper()->appendColumn(); return;
+            case Qt::Key_I: document->document()->wrapper()->insertColumn(); return;
+            case Qt::Key_R: document->document()->wrapper()->removeColumn(); return;
+            case Qt::Key_Z: document->document()->wrapper()->redo(); return;
 
             case Qt::Key_M: saveMathML( document, "test.mml" ); return;
             case Qt::Key_O: {
@@ -163,33 +163,33 @@ void TestWidget::keyPressEvent(QKeyEvent* event)
     }
     else if (state & Qt::ControlButton) {
         switch (event->key()) {
-            case Qt::Key_1: document->document()->addSum(); return;
-            case Qt::Key_2: document->document()->addProduct(); return;
-            case Qt::Key_3: document->document()->addIntegral(); return;
-            case Qt::Key_4: document->document()->addRoot(); return;
-            case Qt::Key_5: document->document()->addFraction(); return;
-            case Qt::Key_6: document->document()->addMatrix(); return;
-	    case Qt::Key_7: document->document()->addOneByTwoMatrix(); return;
-	    case Qt::Key_8: document->document()->addOverline(); return;
-	    case Qt::Key_9: document->document()->addUnderline(); return;
+            case Qt::Key_1: document->document()->wrapper()->addSum(); return;
+            case Qt::Key_2: document->document()->wrapper()->addProduct(); return;
+            case Qt::Key_3: document->document()->wrapper()->addIntegral(); return;
+            case Qt::Key_4: document->document()->wrapper()->addRoot(); return;
+            case Qt::Key_5: document->document()->wrapper()->addFraction(); return;
+            case Qt::Key_6: document->document()->wrapper()->addMatrix(); return;
+	    case Qt::Key_7: document->document()->wrapper()->addOneByTwoMatrix(); return;
+	    case Qt::Key_8: document->document()->wrapper()->addOverline(); return;
+	    case Qt::Key_9: document->document()->wrapper()->addUnderline(); return;
             case Qt::Key_A: slotSelectAll(); return;
-            case Qt::Key_B: document->document()->appendRow(); return;
-            case Qt::Key_C: document->document()->copy(); return;
-            case Qt::Key_D: document->document()->removeEnclosing(); return;
-            case Qt::Key_G: document->document()->makeGreek(); return;
-            case Qt::Key_I: document->document()->insertRow(); return;
-            case Qt::Key_R: document->document()->removeRow(); return;
-            case Qt::Key_K: document->document()->addMultiline(); return;
-            case Qt::Key_L: document->document()->addGenericLowerIndex(); return;
+            case Qt::Key_B: document->document()->wrapper()->appendRow(); return;
+            case Qt::Key_C: document->document()->wrapper()->copy(); return;
+            case Qt::Key_D: document->document()->wrapper()->removeEnclosing(); return;
+            case Qt::Key_G: document->document()->wrapper()->makeGreek(); return;
+            case Qt::Key_I: document->document()->wrapper()->insertRow(); return;
+            case Qt::Key_R: document->document()->wrapper()->removeRow(); return;
+            case Qt::Key_K: document->document()->wrapper()->addMultiline(); return;
+            case Qt::Key_L: document->document()->wrapper()->addGenericLowerIndex(); return;
             case Qt::Key_M: loadMathML( document, "test.mml" ); return;
             case Qt::Key_O: load( document->document(), "test.xml" ); return;
             case Qt::Key_Q: kapp->quit(); return;
             case Qt::Key_S: save( "test.xml", document->document()->saveXML() ); return;
             case Qt::Key_T: std::cout << document->texString().latin1() << std::endl; return;
-            case Qt::Key_U: document->document()->addGenericUpperIndex(); return;
-            case Qt::Key_V: document->document()->paste(); return;
-            case Qt::Key_X: document->document()->cut(); return;
-            case Qt::Key_Z: document->document()->undo(); return;
+            case Qt::Key_U: document->document()->wrapper()->addGenericUpperIndex(); return;
+            case Qt::Key_V: document->document()->wrapper()->paste(); return;
+            case Qt::Key_X: document->document()->wrapper()->cut(); return;
+            case Qt::Key_Z: document->document()->wrapper()->undo(); return;
             default:
                 //std::cerr << "Key: " << event->key() << std::endl;
                 break;
@@ -248,7 +248,9 @@ int main(int argc, char** argv)
 
     app.connect(&app, SIGNAL(lastWindowClosed()), &app, SLOT(quit()));
 
-    Document* document = new Document( kapp->config() );
+    DocumentWrapper* wrapper = new DocumentWrapper( kapp->config(), 0 );
+    Document* document = new Document;
+    wrapper->document( document );
     Container* container1 = document->createFormula();
 
     ScrollView* scrollview1a = new ScrollView;
@@ -262,7 +264,7 @@ int main(int argc, char** argv)
     int result = app.exec();
 
     delete container1;
-    delete document;
+    delete wrapper;
 
     // Make sure there are no elements in the clipboard.
     // Okey for a debug app.

@@ -37,6 +37,7 @@ KFORMULA_NAMESPACE_BEGIN
 class FormulaCursor;
 class Container;
 class Document;
+class DocumentWrapper;
 
 KFORMULA_NAMESPACE_END
 
@@ -94,6 +95,8 @@ private:
      * Right now we only have one, but this might change.
      */
     KFormula::Document* document;
+
+    KFormula::DocumentWrapper* wrapper;
 };
 
 #endif

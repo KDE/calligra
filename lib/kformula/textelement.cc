@@ -401,9 +401,9 @@ bool TextElement::readAttributesFromDom(QDomElement element)
         charFamily( anyFamily );
     }
 
-    kdDebug() << "charStyle=" << charStyle()
-              << "  charFamily=" << charFamily()
-              << "  format=" << int( format() ) << endl;
+//     kdDebug() << "charStyle=" << charStyle()
+//               << "  charFamily=" << charFamily()
+//               << "  format=" << int( format() ) << endl;
 
     return true;
 }

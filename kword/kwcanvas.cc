@@ -20,6 +20,7 @@
 #include "kwcanvas.h"
 #include "kwtableframeset.h"
 #include "kwpartframeset.h"
+#include "kwformulaframe.h"
 #include "kwdoc.h"
 #include "kwview.h"
 #include "kwviewmode.h"
@@ -1265,6 +1266,8 @@ void KWCanvas::mrEditFrame( QMouseEvent *e, const QPoint &nPoint ) // Can be cal
                         cmdMoveFrame->listFrameMoved().at(i)->sizeOfEnd = frame->normalize();
                         i++;
                     }
+                    // Needed for evaluatable formulas
+                    fs->moveFrame( frame );
                     if ( frame && fs->type() == FT_PART )
                         static_cast<KWPartFrameSet *>( fs )->updateChildGeometry( viewMode() );
                 }

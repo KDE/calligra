@@ -29,6 +29,7 @@
 #include "kwanchor.h"
 #include "kwcommand.h"
 #include "kwdrag.h"
+#include "kwformulaframe.h"
 #include <koparagcounter.h>
 #include "contents.h"
 #include <koVariableDlgs.h>

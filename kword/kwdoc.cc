@@ -24,6 +24,7 @@
 #include <kapplication.h> // for KDE_VERSION
 #include <kdebug.h>
 #include <kdebugclasses.h>
+#include <klibloader.h>
 #include <klocale.h>
 #include <kstandarddirs.h>
 #include <kmessagebox.h>
@@ -48,6 +49,7 @@
 #include "kwcanvas.h"
 #include "kwcommand.h"
 #include "kwdoc.h"
+#include "kwformulaframe.h"
 #include "kwframelayout.h"
 #include "kwpartframeset.h"
 #include "kwtableframeset.h"
@@ -292,8 +294,6 @@ KWDocument::KWDocument(QWidget *parentWidget, const char *widgetName, QObject* p
 
     m_bgSpellCheck = new KWBgSpellCheck(this);
 
-    m_formulaDocument = 0L; // created on demand
-
     m_slDataBase = new KWMailMergeDataBase( this );
     slRecordNum = -1;
 
@@ -303,6 +303,13 @@ KWDocument::KWDocument(QWidget *parentWidget, const char *widgetName, QObject* p
     m_pKOSpellConfig = 0;
 #endif
     m_hasTOC=false;
+
+    // It's important to call this to have the kformula actions
+    // created. The real document is still to be created if needed.
+    m_formulaDocumentWrapper =
+        new KFormula::DocumentWrapper( instance()->config(),
+                                       actionCollection(),
+                                       m_commandHistory );
 
     initConfig();
 
@@ -346,9 +353,6 @@ KWDocument::KWDocument(QWidget *parentWidget, const char *widgetName, QObject* p
     if ( name )
         dcopObject();
     connect(m_varColl,SIGNAL(repaintVariable()),this,SLOT(slotRepaintVariable()));
-
-    // It's important to call this to have the kformula actions created.
-    getFormulaDocument();
 }
 
 /*==============================================================*/
@@ -366,12 +370,12 @@ KWDocument::~KWDocument()
     //don't save config when kword is embedded into konqueror
     if(isReadWrite())
         saveConfig();
-    // formula frames have to be deleted before m_formulaDocument
+    // formula frames have to be deleted before m_formulaDocumentWrapper
     m_lstFrameSet.clear();
     m_bookmarkList.clear();
     m_tmpBookMarkList.clear();
     delete m_autoFormat;
-    delete m_formulaDocument;
+    delete m_formulaDocumentWrapper;
     delete m_commandHistory;
     delete m_varColl;
     delete m_varFormatCollection;
@@ -519,8 +523,8 @@ void KWDocument::saveConfig()
 void KWDocument::setZoomAndResolution( int zoom, int dpiX, int dpiY )
 {
     KoZoomHandler::setZoomAndResolution( zoom, dpiX, dpiY );
-    if ( m_formulaDocument )
-        m_formulaDocument->setZoomAndResolution( zoom, dpiX, dpiY );
+    if ( KFormula::Document* formulaDocument = m_formulaDocumentWrapper->document() )
+        formulaDocument->setZoomAndResolution( zoom, dpiX, dpiY );
 }
 
 KWTextFrameSet * KWDocument::textFrameSet ( unsigned int _num ) const
@@ -542,8 +546,8 @@ KWTextFrameSet * KWDocument::textFrameSet ( unsigned int _num ) const
 
 void KWDocument::newZoomAndResolution( bool updateViews, bool forPrint )
 {
-    if ( m_formulaDocument )
-        m_formulaDocument->newZoomAndResolution( updateViews,forPrint );
+    if ( KFormula::Document* formulaDocument = m_formulaDocumentWrapper->document() )
+        formulaDocument->newZoomAndResolution( updateViews,forPrint );
 #if 0
     QPtrListIterator<KWFrameSet> fit = framesetsIterator();
     for ( ; fit.current() ; ++fit )
@@ -2628,8 +2632,8 @@ void KWDocument::paintContent( QPainter& painter, const QRect& _rect, bool trans
         setResolution( zoomX, zoomY );
         bool forPrint = painter.device() && painter.device()->devType() == QInternal::Printer;
         newZoomAndResolution( false, forPrint );
-        if ( m_formulaDocument )
-            m_formulaDocument->setZoomAndResolution( m_zoom, zoomX, zoomY, false, forPrint );
+        if ( KFormula::Document* formulaDocument = m_formulaDocumentWrapper->document() )
+            formulaDocument->setZoomAndResolution( m_zoom, zoomX, zoomY, false, forPrint );
     }
 
     QRect rect( _rect );
@@ -2671,8 +2675,8 @@ QPixmap KWDocument::generatePreview( const QSize& size )
     setResolution( oldZoomX, oldZoomY );
     newZoomAndResolution( false, false );
 
-    if ( m_formulaDocument ) {
-        m_formulaDocument->setZoomAndResolution( oldZoom, oldZoomX, oldZoomY );
+    if ( KFormula::Document* formulaDocument = m_formulaDocumentWrapper->document() ) {
+        formulaDocument->setZoomAndResolution( oldZoom, oldZoomX, oldZoomY );
     }
     return pix;
 }
@@ -3914,16 +3918,20 @@ void KWDocument::invalidate(const KWFrameSet *skipThisFrameSet)
 
 KFormula::Document* KWDocument::getFormulaDocument()
 {
-    if (!m_formulaDocument) {
-        /// ##### kapp->config()? Shouldn't that be instance()->config() instead?
-        // Otherwise it depends on which app is embedding us (David).
-        m_formulaDocument = new KFormula::Document( kapp->config(), actionCollection(), m_commandHistory );
-        m_formulaDocument->setZoomAndResolution( m_zoom,
-                                                 qRound(INCH_TO_POINT( m_resolutionX )), // re-calculate dpiX and dpiY
-                                                 qRound(INCH_TO_POINT( m_resolutionY )) );
-        m_formulaDocument->newZoomAndResolution(false,false);
+    KFormula::Document* formulaDocument = m_formulaDocumentWrapper->document();
+    if (!formulaDocument) {
+        kdDebug() << k_funcinfo << endl;
+        formulaDocument = new KFormula::Document;
+        m_formulaDocumentWrapper->document( formulaDocument );
+        if ( formulaDocument != 0 ) {
+            // re-calculate dpiX and dpiY
+            formulaDocument->setZoomAndResolution( m_zoom,
+                                                   qRound(INCH_TO_POINT( m_resolutionX )),
+                                                   qRound(INCH_TO_POINT( m_resolutionY )) );
+            formulaDocument->newZoomAndResolution(false,false);
+        }
     }
-    return m_formulaDocument;
+    return formulaDocument;
 }
 
 

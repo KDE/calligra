@@ -32,6 +32,8 @@
  * The items for the SymbolCombos. *
  */
 
+KFORMULA_NAMESPACE_BEGIN
+
 class SymbolComboItem : public QListBoxItem
 {
 public:
@@ -168,3 +170,5 @@ void SymbolAction::updateItems( int id )
         }
     }
 }
+
+KFORMULA_NAMESPACE_END

@@ -25,6 +25,10 @@
 #include <qstringlist.h>
 #include <qmemarray.h>
 
+#include "kformuladefs.h"
+
+KFORMULA_NAMESPACE_BEGIN
+
 class SymbolAction : public KSelectAction
 {
 public:
@@ -41,5 +45,7 @@ private:
     QValueList<QFont> m_fonts;
     QMemArray<uchar> m_chars;
 };
+
+KFORMULA_NAMESPACE_END
 
 #endif // _SYMBOLACTION_H_

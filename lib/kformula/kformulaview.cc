@@ -46,8 +46,6 @@ struct View::View_Impl {
                 view, SLOT(slotFormulaLoaded(FormulaElement*)));
         connect(document, SIGNAL(cursorMoved(FormulaCursor*)),
                 view, SLOT(slotCursorMoved(FormulaCursor*)));
-        connect( document, SIGNAL( leaveFormula( Container*, FormulaCursor*, int ) ),
-                 view, SLOT( slotLeaveFormula( Container*, FormulaCursor*, int ) ) );
 
         cursor = document->createCursor();
     }
@@ -255,13 +253,6 @@ void View::slotCursorMoved(FormulaCursor* c)
     }
 }
 
-// void View::slotCursorChanged(FormulaCursor* c)
-// {
-//     if ( c == cursor() ) {
-//         C->calcCursorSize( contextStyle(), smallCursor() );
-//     }
-// }
-
 void View::slotFormulaLoaded(FormulaElement* formula)
 {
     cursor()->formulaLoaded(formula);
@@ -271,23 +262,6 @@ void View::slotElementWillVanish(BasicElement* element)
 {
     cursor()->elementWillVanish(element);
     emitCursorChanged();
-}
-
-void View::slotLeaveFormula( Container*, FormulaCursor* c, int cmd )
-{
-    if ( cursor() == c ) {
-        switch ( cmd ) {
-        case Container::EXIT_LEFT:
-            exitLeft();
-            break;
-        case Container::EXIT_RIGHT:
-            exitRight();
-            break;
-        case Container::REMOVE_FORMULA:
-            removeFormula();
-            break;
-        }
-    }
 }
 
 void View::slotSelectAll()
@@ -361,20 +335,6 @@ void View::addText( QString str )
 {
     TextRequest r( str );
     container()->performRequest( &r );
-}
-
-void View::exitLeft()
-{
-    //kdDebug( DEBUGID ) << "View::exitLeft" << endl;
-}
-
-void View::exitRight()
-{
-    //kdDebug( DEBUGID ) << "View::exitRight" << endl;
-}
-
-void View::removeFormula()
-{
 }
 
 void View::emitCursorChanged()

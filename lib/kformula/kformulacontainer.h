@@ -145,12 +145,22 @@ public:
      */
     void cursorHasMoved( FormulaCursor* );
 
+    /**
+     * Inside the formula occured an event that must be handled
+     * outside.
+     */
     void moveOutLeft( FormulaCursor* );
     void moveOutRight( FormulaCursor* );
     void moveOutAbove( FormulaCursor* );
     void moveOutBelow( FormulaCursor* );
     void tell( const QString& msg );
     void removeFormula( FormulaCursor* );
+
+    /**
+     * Register and unregister this formula with its document.
+     */
+    void registerFormula( int pos=-1 );
+    void unregisterFormula();
 
     /**
      * The base size changed. If not owned it uses the default one now.
@@ -160,7 +170,8 @@ public:
     /**
      * Draws the whole thing.
      */
-    void draw( QPainter& painter, const QRect& r, const QColorGroup& cg, bool edit=false );
+    void draw( QPainter& painter, const QRect& r,
+               const QColorGroup& cg, bool edit=false );
 
     /**
      * Draws the whole thing.
@@ -222,7 +233,7 @@ public:
     /**
      * @returns the formula's size.
      */
-    QRect boundingRect();
+    QRect boundingRect() const;
 
     /**
      * @returns the formula's size including its active cursor.

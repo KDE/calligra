@@ -20,6 +20,7 @@
 #include "KWordFormulaFrameSetIface.h"
 #include "KWordViewIface.h"
 #include "kwframe.h"
+#include "kwformulaframe.h"
 #include "kwview.h"
 #include "kwcanvas.h"
 #include "kwdoc.h"

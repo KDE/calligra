@@ -50,17 +50,6 @@ static const char * CURRENT_DTD_VERSION = "1.3";
 static OrdinaryCreationStrategy creationStrategy;
 
 
-/**
- * small utility class representing a sortable (by x,y position) list of formulas
- * you can use sort() and inSort(item)
- **/
-class FormulaList: public QPtrList<Container>
-{
-protected:
-    virtual int compareItems( QPtrCollection::Item a, QPtrCollection::Item b );
-};
-
-
 int FormulaList::compareItems( QPtrCollection::Item a, QPtrCollection::Item b )
 {
     double ya = static_cast<Container*>( a )->getDocumentY();
@@ -77,251 +66,38 @@ int FormulaList::compareItems( QPtrCollection::Item a, QPtrCollection::Item b )
 }
 
 
-struct Document::Document_Impl {
-
-    Document_Impl()
-            : leftBracketChar( LeftRoundBracket ), rightBracketChar( RightRoundBracket ),
-              formula( 0 ), history( 0 ), ownHistory( false ), firstTime( true ),
-              actionsCreated( false ), config( 0 )
-    {
-        SequenceElement::setCreationStrategy( &creationStrategy );
-        formulae.setAutoDelete( false );
-        //kdDebug( DEBUGID ) << "Document::Document_Impl " << formulae.count() << endl;
-    }
-
-
-    ~Document_Impl()
-    {
-        clear();
-        if (ownHistory) {
-            delete history;
-        }
-    }
-
-    void clear() {
-        // Destroy remaining formulae. We do it backward because
-        // the formulae remove themselves from this document upon
-        // destruction.
-        int count = formulae.count();
-        for ( int i=count-1; i>=0; --i ) {
-            delete formulae.at( i );
-        }
-    }
-
-    // We know our actions, maybe a client is interessted...
-
-    KAction* addNegThinSpaceAction;
-    KAction* addThinSpaceAction;
-    KAction* addMediumSpaceAction;
-    KAction* addThickSpaceAction;
-    KAction* addQuadSpaceAction;
-    KAction* addBracketAction;
-    KAction* addSBracketAction;
-    KAction* addCBracketAction;
-    KAction* addAbsAction;
-    KAction* addFractionAction;
-    KAction* addRootAction;
-    KAction* addSumAction;
-    KAction* addProductAction;
-    KAction* addIntegralAction;
-    KAction* addMatrixAction;
-    KAction* addOneByTwoMatrixAction;
-    KAction* addUpperLeftAction;
-    KAction* addLowerLeftAction;
-    KAction* addUpperRightAction;
-    KAction* addLowerRightAction;
-    KAction* addGenericUpperAction;
-    KAction* addGenericLowerAction;
-    KAction* addOverlineAction;
-    KAction* addUnderlineAction;
-    KAction* addMultilineAction;
-    KAction* removeEnclosingAction;
-    KAction* makeGreekAction;
-    KAction* insertSymbolAction;
-
-    KAction* appendColumnAction;
-    KAction* insertColumnAction;
-    KAction* removeColumnAction;
-    KAction* appendRowAction;
-    KAction* insertRowAction;
-    KAction* removeRowAction;
-
-    KToggleAction* syntaxHighlightingAction;
-    KToggleAction* formatBoldAction;
-    KToggleAction* formatItalicAction;
-
-    KSelectAction* leftBracket;
-    KSelectAction* rightBracket;
-    SymbolAction* symbolNamesAction;
-
-    KSelectAction* fontFamily;
-
-    SymbolType leftBracketChar;
-    SymbolType rightBracketChar;
-    QString selectedName;
-
-    /**
-     * The active formula.
-     */
-    Container* formula;
-
-    /**
-     * Our undo stack. We don't own it. The stack belongs to
-     * our parent and might contain not formula related commands
-     * as well.
-     */
-    KoCommandHistory* history;
-
-    /**
-     * Tells whether we are responsible to remove our history.
-     */
-    bool ownHistory;
-
-    /**
-     * The documents context style. This is the place where all
-     * the user configurable informations are stored.
-     */
-    ContextStyle contextStyle;
-
-    /**
-     * All formulae that belong to this document.
-     */
-    FormulaList formulae;
-
-    /**
-     * Lazy initialization. Read the symbol table only if
-     * we create a container.
-     */
-    bool firstTime;
-
-    bool actionsCreated;
-
-    /**
-     * The applications config object. We need to remember this so that
-     * we don't depend on global variables. (We don't know who uses us.)
-     */
-    KConfig* config;
-};
-
-
-double Document::getXResolution() const { return impl->contextStyle.zoomedResolutionX(); }
-double Document::getYResolution() const { return impl->contextStyle.zoomedResolutionY(); }
-
-KoCommandHistory* Document::getHistory() const { return impl->history; }
-const SymbolTable& Document::getSymbolTable() const { return impl->contextStyle.symbolTable(); }
-
-KAction* Document::getAddNegThinSpaceAction()  { return impl->addNegThinSpaceAction; }
-KAction* Document::getAddThinSpaceAction()     { return impl->addThinSpaceAction; }
-KAction* Document::getAddMediumSpaceAction()   { return impl->addMediumSpaceAction; }
-KAction* Document::getAddThickSpaceAction()    { return impl->addThickSpaceAction; }
-KAction* Document::getAddQuadSpaceAction()     { return impl->addQuadSpaceAction; }
-KAction* Document::getAddBracketAction()       { return impl->addBracketAction; }
-KAction* Document::getAddSBracketAction()      { return impl->addSBracketAction;}
-KAction* Document::getAddCBracketAction()      { return impl->addCBracketAction;}
-KAction* Document::getAddAbsAction()           { return impl->addAbsAction;}
-KAction* Document::getAddFractionAction()      { return impl->addFractionAction; }
-KAction* Document::getAddRootAction()          { return impl->addRootAction; }
-KAction* Document::getAddSumAction()           { return impl->addSumAction; }
-KAction* Document::getAddProductAction()       { return impl->addProductAction; }
-KAction* Document::getAddIntegralAction()      { return impl->addIntegralAction; }
-KAction* Document::getAddMatrixAction()        { return impl->addMatrixAction; }
-KAction* Document::getAddOneByTwoMatrixAction(){ return impl->addOneByTwoMatrixAction; }
-KAction* Document::getAddUpperLeftAction()     { return impl->addUpperLeftAction; }
-KAction* Document::getAddLowerLeftAction()     { return impl->addLowerLeftAction; }
-KAction* Document::getAddUpperRightAction()    { return impl->addUpperRightAction; }
-KAction* Document::getAddLowerRightAction()    { return impl->addLowerRightAction; }
-KAction* Document::getAddGenericUpperAction()  { return impl->addGenericUpperAction; }
-KAction* Document::getAddGenericLowerAction()  { return impl->addGenericLowerAction; }
-KAction* Document::getAddOverlineAction()      { return impl->addOverlineAction; }
-KAction* Document::getAddUnderlineAction()     { return impl->addUnderlineAction; }
-KAction* Document::getAddMultilineAction()     { return impl->addMultilineAction; }
-KAction* Document::getRemoveEnclosingAction()  { return impl->removeEnclosingAction; }
-KAction* Document::getMakeGreekAction()        { return impl->makeGreekAction; }
-KAction* Document::getInsertSymbolAction()     { return impl->insertSymbolAction; }
-
-KAction* Document::getAppendColumnAction()     { return impl->appendColumnAction; }
-KAction* Document::getInsertColumnAction()     { return impl->insertColumnAction; }
-KAction* Document::getRemoveColumnAction()     { return impl->removeColumnAction; }
-KAction* Document::getAppendRowAction()        { return impl->appendRowAction; }
-KAction* Document::getInsertRowAction()        { return impl->insertRowAction; }
-KAction* Document::getRemoveRowAction()        { return impl->removeRowAction; }
-
-KSelectAction* Document::getLeftBracketAction()  { return impl->leftBracket; }
-KSelectAction* Document::getRightBracketAction() { return impl->rightBracket; }
-KSelectAction* Document::getSymbolNamesAction()  { return impl->symbolNamesAction; }
-KToggleAction* Document::getSyntaxHighlightingAction() { return impl->syntaxHighlightingAction; }
-KToggleAction* Document::getFormatBoldAction()   { return impl->formatBoldAction; }
-KToggleAction* Document::getFormatItalicAction() { return impl->formatItalicAction; }
-
-KSelectAction* Document::getFontFamilyAction() { return impl->fontFamily; }
-
-Container* Document::formula() const { return impl->formula; }
-
-SymbolType Document::leftBracketChar() const  { return impl->leftBracketChar; }
-SymbolType Document::rightBracketChar() const { return impl->rightBracketChar; }
-
-
-Document::Document( QObject *parent, const char *name, const QStringList &/*args*/ )
-    : QObject( parent, name )
+Document::Document( QObject *parent, const char *name,
+                    const QStringList &/*args*/ )
+    : QObject( parent, name ), m_wrapper( 0 ), m_formula( 0 )
 {
-    impl = new Document_Impl;
-}
-
-
-Document::Document( KConfig* config,
-                    KActionCollection* collection,
-                    KoCommandHistory* his )
-{
-    impl = new Document_Impl;
-
-    setConfig( config );
-    createActions( collection );
-    setCommandStack( his );
-}
-
-
-Document::Document( KConfig* config, KoCommandHistory* his )
-{
-    impl = new Document_Impl;
-
-    setConfig( config );
-    setCommandStack( his );
+    m_contextStyle = new ContextStyle;
+    SequenceElement::setCreationStrategy( &creationStrategy );
+    formulae.setAutoDelete( false );
 }
 
 
 Document::~Document()
 {
-    delete impl;
+    // Destroy remaining formulae. We do it backward because
+    // the formulae remove themselves from this document upon
+    // destruction.
+    int count = formulae.count();
+    for ( int i=count-1; i>=0; --i ) {
+        delete formulae.at( i );
+    }
+    delete m_contextStyle;
 }
 
 
-void Document::setConfig( KConfig* config )
+bool Document::hasFormula()
 {
-    impl->config = config;
-    impl->contextStyle.readConfig( config );
+    return ( m_formula != 0 ) && ( m_formula->activeCursor() != 0 );
 }
 
 
-void Document::setCommandStack( KoCommandHistory* his )
+Container* Document::createFormula( int pos, bool registerMe )
 {
-    if ( impl->ownHistory ) {
-        delete impl->history;
-    }
-
-    if ( his == 0 ) {
-        impl->history = new KoCommandHistory;
-        impl->ownHistory = true;
-    }
-    else {
-        impl->history = his;
-        impl->ownHistory = false;
-    }
-}
-
-
-Container* Document::createFormula( int pos )
-{
-    Container* formula = new Container( this, pos );
+    Container* formula = new Container( this, pos, registerMe );
     formula->initialize();
     return formula;
 }
@@ -329,31 +105,31 @@ Container* Document::createFormula( int pos )
 
 QPtrListIterator<Container> Document::formulas()
 {
-    return QPtrListIterator<Container>( impl->formulae );
+    return QPtrListIterator<Container>( formulae );
 }
 
 
 int Document::formulaPos( Container* formula )
 {
-    return impl->formulae.find( formula );
+    return formulae.find( formula );
 }
 
 
 Container* Document::formulaAt( uint pos )
 {
-    return impl->formulae.at( pos );
+    return formulae.at( pos );
 }
 
 
 int Document::formulaCount()
 {
-    return impl->formulae.count();
+    return formulae.count();
 }
 
 
 bool Document::loadXML( QDomDocument doc )
 {
-    //impl->clear();
+    //clear();
     QDomElement root = doc.documentElement();
 
     // backward compatiblity
@@ -384,7 +160,7 @@ bool Document::loadXML( QDomDocument doc )
         }
         node = node.nextSibling();
     }
-    return impl->formulae.count() > 0;
+    return formulae.count() > 0;
 }
 
 bool Document::loadDocumentPart( QDomElement /*node*/ )
@@ -397,9 +173,9 @@ QDomDocument Document::saveXML()
     QDomDocument doc = createDomDocument();
     QDomElement root = doc.documentElement();
     root.appendChild( saveDocumentPart( doc ) );
-    uint count = impl->formulae.count();
+    uint count = formulae.count();
     for ( uint i=0; i<count; ++i ) {
-        impl->formulae.at( i )->save( root );
+        formulae.at( i )->save( root );
     }
     return doc;
 }
@@ -414,95 +190,75 @@ QDomElement Document::saveDocumentPart( QDomDocument doc )
 
 QDomDocument Document::createDomDocument()
 {
-    return KoDocument::createDomDocument( "kformula", "KFORMULA", CURRENT_DTD_VERSION );
+    return KoDocument::createDomDocument( "kformula", "KFORMULA",
+                                          CURRENT_DTD_VERSION );
 }
 
 void Document::registerFormula( Container* f, int pos )
 {
-    lazyInit();
-    if ( ( pos > -1 ) && ( static_cast<uint>( pos ) < impl->formulae.count() ) ) {
-        impl->formulae.insert( pos, f );
+    if ( ( pos > -1 ) &&
+         ( static_cast<uint>( pos ) < formulae.count() ) ) {
+        formulae.insert( pos, f );
         //emit sigInsertFormula( f, pos );
     }
     else {
-        impl->formulae.append( f );
-        //emit sigInsertFormula( f, impl->formulae.count()-1 );
+        formulae.append( f );
+        //emit sigInsertFormula( f, formulae.count()-1 );
     }
+}
+
+void Document::unregisterFormula( Container* f )
+{
+    if ( m_formula == f ) {
+        m_formula = 0;
+    }
+    formulae.remove( f );
 }
 
 void Document::activate(Container* f)
 {
-    impl->formula = f;
-}
-
-void Document::formulaDies( Container* formula )
-{
-    if ( formula == impl->formula ) {
-        impl->formula = 0;
-    }
-    impl->formulae.remove( formula );
+    m_formula = f;
 }
 
 
 void Document::sortFormulaList()
 {
-    impl->formulae.sort();
+    formulae.sort();
 }
 
 
 Container* Document::newFormula( uint number )
 {
-    if ( number < impl->formulae.count() ) {
-        return impl->formulae.at( number );
+    if ( number < formulae.count() ) {
+        return formulae.at( number );
     }
     return createFormula();
 }
 
 
-void Document::lazyInit()
+double Document::getXResolution() const
 {
-    if ( impl->firstTime ) {
-        kdDebug( DEBUGID ) << "Document::lazyInit" << endl;
-        impl->firstTime = false;
-        impl->contextStyle.init();
-
-        initSymbolNamesAction();
-    }
+    return m_contextStyle->zoomedResolutionX();
+}
+double Document::getYResolution() const
+{
+    return m_contextStyle->zoomedResolutionY();
 }
 
-void Document::initSymbolNamesAction()
+const SymbolTable& Document::getSymbolTable() const
 {
-    if ( impl->actionsCreated ) {
-        const SymbolTable& st = impl->contextStyle.symbolTable();
-
-        QStringList names = st.allNames();
-        //QStringList i18nNames;
-        QValueList<QFont> fonts;
-        QMemArray<uchar> chars( names.count() );
-
-        int i = 0;
-        for ( QStringList::Iterator it = names.begin(); it != names.end(); ++it, ++i ) {
-            QChar ch = st.unicode( *it );
-            //i18nNames.push_back( i18n( ( *it ).latin1() ) );
-
-            fonts.append( st.font( ch ) );
-            chars[ i ] = st.character( ch );
-            //kdDebug( DEBUGID ) << "Document::initSymbolNamesAction: " << *it << " " << st.font( ch ).family() << " " << QString( ch ) << endl;
-        }
-        impl->symbolNamesAction->setSymbols( names, fonts, chars );
-        impl->selectedName = names[0];
-    }
+    return m_contextStyle->symbolTable();
 }
 
 ContextStyle& Document::getContextStyle( bool edit )
 {
-    impl->contextStyle.setEdit( edit );
-    return impl->contextStyle;
+    m_contextStyle->setEdit( edit );
+    return *m_contextStyle;
 }
 
 void Document::setZoomAndResolution( int zoom, int dpiX, int dpiY )
 {
-    impl->contextStyle.setZoomAndResolution( zoom, dpiX, dpiY );
+    m_contextStyle->setZoomAndResolution( zoom, dpiX, dpiY );
 }
 
 void Document::newZoomAndResolution( bool updateViews, bool /*forPrint*/ )
@@ -512,7 +268,9 @@ void Document::newZoomAndResolution( bool updateViews, bool /*forPrint*/ )
     }
 }
 
-void Document::setZoomAndResolution( int zoom, double zoomX, double zoomY, bool updateViews, bool forPrint )
+void Document::setZoomAndResolution( int zoom,
+                                     double zoomX, double zoomY,
+                                     bool updateViews, bool forPrint )
 {
     if ( getContextStyle( !forPrint ).setZoomAndResolution( zoom, zoomX, zoomY, updateViews, forPrint ) && updateViews ) {
         recalc();
@@ -520,249 +278,345 @@ void Document::setZoomAndResolution( int zoom, double zoomX, double zoomY, bool 
 }
 
 
+SymbolType Document::leftBracketChar()
+{
+    return m_wrapper->leftBracketChar();
+}
+
+SymbolType Document::rightBracketChar()
+{
+    return m_wrapper->rightBracketChar();
+}
+
+
 void Document::setEnabled( bool enabled )
 {
     //kdDebug( DEBUGID ) << "Document::setEnabled " << enabled << endl;
-    getAddNegThinSpaceAction()->setEnabled( enabled );
-    getMakeGreekAction()->setEnabled( enabled );
-    getAddGenericUpperAction()->setEnabled( enabled );
-    getAddGenericLowerAction()->setEnabled( enabled );
-    getAddOverlineAction()->setEnabled( enabled );
-    getAddUnderlineAction()->setEnabled( enabled );
-    getRemoveEnclosingAction()->setEnabled( enabled );
-    getInsertSymbolAction()->setEnabled( enabled );
-    getAddThinSpaceAction()->setEnabled( enabled );
-    getAddMediumSpaceAction()->setEnabled( enabled );
-    getAddThickSpaceAction()->setEnabled( enabled );
-    getAddQuadSpaceAction()->setEnabled( enabled );
-    getAddBracketAction()->setEnabled( enabled );
-    getAddSBracketAction()->setEnabled( enabled );
-    getAddCBracketAction()->setEnabled( enabled );
-    getAddAbsAction()->setEnabled(enabled);
-    getAddFractionAction()->setEnabled( enabled );
-    getAddRootAction()->setEnabled( enabled );
-    getAddSumAction()->setEnabled( enabled );
-    getAddProductAction()->setEnabled( enabled );
-    getAddIntegralAction()->setEnabled( enabled );
-    getAddMatrixAction()->setEnabled( enabled );
-    getAddOneByTwoMatrixAction()->setEnabled( enabled );
-    getAddUpperLeftAction()->setEnabled( enabled );
-    getAddLowerLeftAction()->setEnabled( enabled );
-    getAddUpperRightAction()->setEnabled( enabled );
-    getAddLowerRightAction()->setEnabled( enabled );
-    getAppendColumnAction()->setEnabled( enabled );
-    getInsertColumnAction()->setEnabled( enabled );
-    getRemoveColumnAction()->setEnabled( enabled );
-    getAppendRowAction()->setEnabled( enabled );
-    getInsertRowAction()->setEnabled( enabled );
-    getRemoveRowAction()->setEnabled( enabled );
+    m_wrapper->getAddNegThinSpaceAction()->setEnabled( enabled );
+    m_wrapper->getMakeGreekAction()->setEnabled( enabled );
+    m_wrapper->getAddGenericUpperAction()->setEnabled( enabled );
+    m_wrapper->getAddGenericLowerAction()->setEnabled( enabled );
+    m_wrapper->getAddOverlineAction()->setEnabled( enabled );
+    m_wrapper->getAddUnderlineAction()->setEnabled( enabled );
+    m_wrapper->getRemoveEnclosingAction()->setEnabled( enabled );
+    m_wrapper->getInsertSymbolAction()->setEnabled( enabled );
+    m_wrapper->getAddThinSpaceAction()->setEnabled( enabled );
+    m_wrapper->getAddMediumSpaceAction()->setEnabled( enabled );
+    m_wrapper->getAddThickSpaceAction()->setEnabled( enabled );
+    m_wrapper->getAddQuadSpaceAction()->setEnabled( enabled );
+    m_wrapper->getAddBracketAction()->setEnabled( enabled );
+    m_wrapper->getAddSBracketAction()->setEnabled( enabled );
+    m_wrapper->getAddCBracketAction()->setEnabled( enabled );
+    m_wrapper->getAddAbsAction()->setEnabled(enabled);
+    m_wrapper->getAddFractionAction()->setEnabled( enabled );
+    m_wrapper->getAddRootAction()->setEnabled( enabled );
+    m_wrapper->getAddSumAction()->setEnabled( enabled );
+    m_wrapper->getAddProductAction()->setEnabled( enabled );
+    m_wrapper->getAddIntegralAction()->setEnabled( enabled );
+    m_wrapper->getAddMatrixAction()->setEnabled( enabled );
+    m_wrapper->getAddOneByTwoMatrixAction()->setEnabled( enabled );
+    m_wrapper->getAddUpperLeftAction()->setEnabled( enabled );
+    m_wrapper->getAddLowerLeftAction()->setEnabled( enabled );
+    m_wrapper->getAddUpperRightAction()->setEnabled( enabled );
+    m_wrapper->getAddLowerRightAction()->setEnabled( enabled );
+    m_wrapper->getAppendColumnAction()->setEnabled( enabled );
+    m_wrapper->getInsertColumnAction()->setEnabled( enabled );
+    m_wrapper->getRemoveColumnAction()->setEnabled( enabled );
+    m_wrapper->getAppendRowAction()->setEnabled( enabled );
+    m_wrapper->getInsertRowAction()->setEnabled( enabled );
+    m_wrapper->getRemoveRowAction()->setEnabled( enabled );
 
     if ( enabled ) {
-        getAddGenericUpperAction()->setShortcut( KShortcut( CTRL + Key_U ) );
-        getAddGenericLowerAction()->setShortcut( KShortcut( CTRL + Key_L ) );
-        getRemoveEnclosingAction()->setShortcut( KShortcut( CTRL + Key_R ) );
-        getMakeGreekAction()->setShortcut( KShortcut( CTRL + Key_G ) );
-        getInsertSymbolAction()->setShortcut( KShortcut( CTRL + Key_I ) );
+        m_wrapper->getAddGenericUpperAction()->
+            setShortcut( KShortcut( CTRL + Key_U ) );
+        m_wrapper->getAddGenericLowerAction()->
+            setShortcut( KShortcut( CTRL + Key_L ) );
+        m_wrapper->getRemoveEnclosingAction()->
+            setShortcut( KShortcut( CTRL + Key_R ) );
+        m_wrapper->getMakeGreekAction()->
+            setShortcut( KShortcut( CTRL + Key_G ) );
+        m_wrapper->getInsertSymbolAction()->
+            setShortcut( KShortcut( CTRL + Key_I ) );
     }
     else {
-        getAddGenericUpperAction()->setShortcut( KShortcut() );
-        getAddGenericLowerAction()->setShortcut( KShortcut() );
-        getRemoveEnclosingAction()->setShortcut( KShortcut() );
-        getMakeGreekAction()->setShortcut( KShortcut() );
-        getInsertSymbolAction()->setShortcut( KShortcut() );
+        m_wrapper->getAddGenericUpperAction()->setShortcut( KShortcut() );
+        m_wrapper->getAddGenericLowerAction()->setShortcut( KShortcut() );
+        m_wrapper->getRemoveEnclosingAction()->setShortcut( KShortcut() );
+        m_wrapper->getMakeGreekAction()->setShortcut( KShortcut() );
+        m_wrapper->getInsertSymbolAction()->setShortcut( KShortcut() );
     }
 }
 
 
-void Document::createActions(KActionCollection* collection)
+KoCommandHistory* Document::getHistory() const
 {
-    KGlobal::dirs()->addResourceType("toolbar",
-                                     KStandardDirs::kde_default("data") + "kformula/pics/");
+    return m_wrapper->getHistory();
+}
 
-    impl->addNegThinSpaceAction = new KAction( i18n( "Add Negative Thin Space" ),
+
+void Document::recalc()
+{
+    for ( Container* f = formulae.first();
+          f != 0;
+          f=formulae.next() ) {
+        f->recalc();
+    }
+}
+
+
+void Document::updateConfig()
+{
+    m_wrapper->updateConfig();
+    recalc();
+}
+
+
+void Document::introduceWrapper( DocumentWrapper* wrapper )
+{
+    m_wrapper = wrapper;
+    m_contextStyle->readConfig( wrapper->config() );
+    m_contextStyle->init();
+}
+
+
+//////////////////////////////////////////////////////////////////////////////
+
+DocumentWrapper::DocumentWrapper( KConfig* config,
+                                  KActionCollection* collection,
+                                  KoCommandHistory* history )
+    : m_document( 0 ),
+      m_leftBracketChar( LeftRoundBracket ),
+      m_rightBracketChar( RightRoundBracket ),
+      m_config( config ),
+      m_hasActions( collection != 0 )
+{
+    if ( m_hasActions ) {
+        createActions( collection );
+    }
+    setCommandStack( history );
+}
+
+
+DocumentWrapper::~DocumentWrapper()
+{
+    delete m_document;
+    if ( m_ownHistory ) {
+        delete m_history;
+    }
+}
+
+
+void DocumentWrapper::document( Document* document )
+{
+    m_document = document;
+    m_document->introduceWrapper( this );
+    initSymbolNamesAction();
+}
+
+
+void DocumentWrapper::setCommandStack( KoCommandHistory* history )
+{
+    if ( history == 0 ) {
+        m_history = new KoCommandHistory;
+        m_ownHistory = true;
+    }
+    else {
+        m_history = history;
+        m_ownHistory = false;
+    }
+}
+
+
+void DocumentWrapper::createActions( KActionCollection* collection )
+{
+    KGlobal::dirs()->addResourceType( "toolbar",
+                                      KStandardDirs::kde_default("data") +
+                                      "kformula/pics/" );
+
+    m_addNegThinSpaceAction = new KAction( i18n( "Add Negative Thin Space" ),
                                     0,
                                     this, SLOT( addNegThinSpace() ),
                                     collection, "formula_addnegthinspace") ;
-    impl->addThinSpaceAction = new KAction( i18n( "Add Thin Space" ),
+    m_addThinSpaceAction = new KAction( i18n( "Add Thin Space" ),
                                     0,
                                     this, SLOT( addThinSpace() ),
                                     collection, "formula_addthinspace") ;
-    impl->addMediumSpaceAction = new KAction( i18n( "Add Medium Space" ),
+    m_addMediumSpaceAction = new KAction( i18n( "Add Medium Space" ),
                                     0,
                                     this, SLOT( addMediumSpace() ),
                                     collection, "formula_addmediumspace" );
-    impl->addThickSpaceAction = new KAction( i18n( "Add Thick Space" ),
+    m_addThickSpaceAction = new KAction( i18n( "Add Thick Space" ),
                                     0,
                                     this, SLOT( addThickSpace() ),
                                     collection, "formula_addthickspace" );
-    impl->addQuadSpaceAction = new KAction( i18n( "Add Quad Space" ),
+    m_addQuadSpaceAction = new KAction( i18n( "Add Quad Space" ),
                                     0,
                                     this, SLOT( addQuadSpace() ),
                                     collection, "formula_addquadspace" );
 
-    impl->addIntegralAction = new KAction(i18n("Add Integral"),
+    m_addIntegralAction = new KAction(i18n("Add Integral"),
                                     "int",
                                     0,
                                     this, SLOT(addIntegral()),
                                     collection, "formula_addintegral");
-    impl->addSumAction      = new KAction(i18n("Add Sum"),
+    m_addSumAction      = new KAction(i18n("Add Sum"),
                                     "sum",
                                     0,
                                     this, SLOT(addSum()),
                                     collection, "formula_addsum");
-    impl->addProductAction  = new KAction(i18n("Add Product"),
+    m_addProductAction  = new KAction(i18n("Add Product"),
                                     "prod",
                                     0,
                                     this, SLOT(addProduct()),
                                     collection, "formula_addproduct");
-    impl->addRootAction     = new KAction(i18n("Add Root"),
+    m_addRootAction     = new KAction(i18n("Add Root"),
                                     "sqrt",
                                     0,
                                     this, SLOT(addRoot()),
                                     collection, "formula_addroot");
-    impl->addFractionAction = new KAction(i18n("Add Fraction"),
+    m_addFractionAction = new KAction(i18n("Add Fraction"),
                                     "frac",
                                     0,
                                     this, SLOT(addFraction()),
                                     collection, "formula_addfrac");
-    impl->addBracketAction  = new KAction(i18n("Add Bracket"),
+    m_addBracketAction  = new KAction(i18n("Add Bracket"),
                                     "paren",
                                     0,
                                     this, SLOT(addDefaultBracket()),
                                     collection,"formula_addbra");
-    impl->addSBracketAction = new KAction(i18n("Add Square Bracket"),
+    m_addSBracketAction = new KAction(i18n("Add Square Bracket"),
                                     "brackets",
                                     0,
                                     this, SLOT(addSquareBracket()),
                                     collection,"formula_addsqrbra");
-    impl->addCBracketAction = new KAction(i18n("Add Curly Bracket"),
+    m_addCBracketAction = new KAction(i18n("Add Curly Bracket"),
                                     "math_brace",
                                     0,
                                     this, SLOT(addCurlyBracket()),
                                     collection,"formula_addcurbra");
-    impl->addAbsAction      = new KAction(i18n("Add Abs"),
+    m_addAbsAction      = new KAction(i18n("Add Abs"),
                                     "abs",
                                     0,
                                     this, SLOT(addLineBracket()),
                                     collection,"formula_addabsbra");
 
-    impl->addMatrixAction   = new KAction(i18n("Add Matrix..."),
+    m_addMatrixAction   = new KAction(i18n("Add Matrix..."),
                                     "matrix",
                                     0,
                                     this, SLOT(addMatrix()),
                                     collection, "formula_addmatrix");
 
-    impl->addOneByTwoMatrixAction   = new KAction(i18n("Add 1x2 Matrix"),
+    m_addOneByTwoMatrixAction   = new KAction(i18n("Add 1x2 Matrix"),
                                     "onetwomatrix",
                                     0,
                                     this, SLOT(addOneByTwoMatrix()),
                                     collection, "formula_add_one_by_two_matrix");
 
 
-    impl->addUpperLeftAction  = new KAction(i18n("Add Upper Left Index"),
+    m_addUpperLeftAction  = new KAction(i18n("Add Upper Left Index"),
                                       "lsup",
                                       0,
                                       this, SLOT(addUpperLeftIndex()),
                                       collection, "formula_addupperleft");
-    impl->addLowerLeftAction  = new KAction(i18n("Add Lower Left Index"),
+    m_addLowerLeftAction  = new KAction(i18n("Add Lower Left Index"),
                                       "lsub",
                                       0,
                                       this, SLOT(addLowerLeftIndex()),
                                       collection, "formula_addlowerleft");
-    impl->addUpperRightAction = new KAction(i18n("Add Upper Right Index"),
+    m_addUpperRightAction = new KAction(i18n("Add Upper Right Index"),
                                       "rsup",
                                       0,
                                       this, SLOT(addUpperRightIndex()),
                                       collection, "formula_addupperright");
-    impl->addLowerRightAction = new KAction(i18n("Add Lower Right Index"),
+    m_addLowerRightAction = new KAction(i18n("Add Lower Right Index"),
                                       "rsub",
                                       0,
                                       this, SLOT(addLowerRightIndex()),
                                       collection, "formula_addlowerright");
 
-    impl->addGenericUpperAction = new KAction(i18n("Add Upper Index"),
+    m_addGenericUpperAction = new KAction(i18n("Add Upper Index"),
                                               /*CTRL + Key_U*/0,
                                       this, SLOT(addGenericUpperIndex()),
                                       collection, "formula_addupperindex");
-    impl->addGenericLowerAction = new KAction(i18n("Add Lower Index"),
+    m_addGenericLowerAction = new KAction(i18n("Add Lower Index"),
                                       0,
                                       this, SLOT(addGenericLowerIndex()),
                                       collection, "formula_addlowerindex");
 
-    impl->addOverlineAction = new KAction(i18n("Add Overline"),
+    m_addOverlineAction = new KAction(i18n("Add Overline"),
                                           "over",
                                           0,
                                           this, SLOT(addOverline()),
                                           collection, "formula_addoverline");
-    impl->addUnderlineAction = new KAction(i18n("Add Underline"),
+    m_addUnderlineAction = new KAction(i18n("Add Underline"),
                                            "under",
                                            0,
                                            this, SLOT(addUnderline()),
                                            collection, "formula_addunderline");
 
-    impl->addMultilineAction = new KAction(i18n("Add Multiline"),
+    m_addMultilineAction = new KAction(i18n("Add Multiline"),
                                            "multiline",
                                            0,
                                            this, SLOT(addMultiline()),
                                            collection, "formula_addmultiline");
 
-    impl->removeEnclosingAction = new KAction(i18n("Remove Enclosing Element"),
+    m_removeEnclosingAction = new KAction(i18n("Remove Enclosing Element"),
                                         0,
                                         this, SLOT(removeEnclosing()),
                                         collection, "formula_removeenclosing");
 
-    impl->makeGreekAction = new KAction(i18n("Convert to Greek"),
+    m_makeGreekAction = new KAction(i18n("Convert to Greek"),
                                   0,
                                   this, SLOT(makeGreek()),
                                   collection, "formula_makegreek");
 
-    impl->appendColumnAction = new KAction( i18n( "Append Column" ),
+    m_appendColumnAction = new KAction( i18n( "Append Column" ),
                                             "inscol",
                                             0,
                                             this, SLOT( appendColumn() ),
                                             collection, "formula_appendcolumn" );
-    impl->insertColumnAction = new KAction( i18n( "Insert Column" ),
+    m_insertColumnAction = new KAction( i18n( "Insert Column" ),
                                             "inscol",
                                             0,
                                             this, SLOT( insertColumn() ),
                                             collection, "formula_insertcolumn" );
-    impl->removeColumnAction = new KAction( i18n( "Remove Column" ),
+    m_removeColumnAction = new KAction( i18n( "Remove Column" ),
                                             "remcol",
                                             0,
                                             this, SLOT( removeColumn() ),
                                             collection, "formula_removecolumn" );
-    impl->appendRowAction = new KAction( i18n( "Append Row" ),
+    m_appendRowAction = new KAction( i18n( "Append Row" ),
                                          "insrow",
                                          0,
                                          this, SLOT( appendRow() ),
                                          collection, "formula_appendrow" );
-    impl->insertRowAction = new KAction( i18n( "Insert Row" ),
+    m_insertRowAction = new KAction( i18n( "Insert Row" ),
                                          "insrow",
                                          0,
                                          this, SLOT( insertRow() ),
                                          collection, "formula_insertrow" );
-    impl->removeRowAction = new KAction( i18n( "Remove Row" ),
+    m_removeRowAction = new KAction( i18n( "Remove Row" ),
                                          "remrow",
                                          0,
                                          this, SLOT( removeRow() ),
                                          collection, "formula_removerow" );
 
-    impl->syntaxHighlightingAction = new KToggleAction(i18n("Syntax Highlighting"),
+    m_syntaxHighlightingAction = new KToggleAction(i18n("Syntax Highlighting"),
                                                  0,
                                                  this, SLOT(toggleSyntaxHighlighting()),
                                                  collection, "formula_syntaxhighlighting");
-    impl->syntaxHighlightingAction->setChecked( impl->contextStyle.syntaxHighlighting() );
+    //m_syntaxHighlightingAction->setChecked( m_contextStyle->syntaxHighlighting() );
 
-    impl->formatBoldAction = new KToggleAction( i18n( "&Bold" ), "text_bold",
+    m_formatBoldAction = new KToggleAction( i18n( "&Bold" ), "text_bold",
                                                 0, //CTRL + Key_B,
                                                 this, SLOT( textBold() ),
                                                 collection, "formula_format_bold" );
-    impl->formatItalicAction = new KToggleAction( i18n( "&Italic" ), "text_italic",
+    m_formatItalicAction = new KToggleAction( i18n( "&Italic" ), "text_italic",
                                                   0, //CTRL + Key_I,
                                                   this, SLOT( textItalic() ),
                                                   collection, "formula_format_italic" );
-    impl->formatBoldAction->setEnabled( false );
-    impl->formatItalicAction->setEnabled( false );
+    m_formatBoldAction->setEnabled( false );
+    m_formatItalicAction->setEnabled( false );
 
     QStringList delimiter;
     delimiter.append(QString("("));
@@ -777,10 +631,10 @@ void Document::createActions(KActionCollection* collection)
     delimiter.append(QString("]"));
     delimiter.append(QString("}"));
     delimiter.append(QString(">"));
-    impl->leftBracket = new KSelectAction(i18n("Left Delimiter"),
+    m_leftBracket = new KSelectAction(i18n("Left Delimiter"),
                                     0, this, SLOT(delimiterLeft()),
                                     collection, "formula_typeleft");
-    impl->leftBracket->setItems(delimiter);
+    m_leftBracket->setItems(delimiter);
     //leftBracket->setCurrentItem(0);
 
     delimiter.clear();
@@ -796,18 +650,18 @@ void Document::createActions(KActionCollection* collection)
     delimiter.append(QString("["));
     delimiter.append(QString("{"));
     delimiter.append(QString("<"));
-    impl->rightBracket = new KSelectAction(i18n("Right Delimiter"),
+    m_rightBracket = new KSelectAction(i18n("Right Delimiter"),
                                      0, this, SLOT(delimiterRight()),
                                      collection, "formula_typeright");
-    impl->rightBracket->setItems(delimiter);
+    m_rightBracket->setItems(delimiter);
     //rightBracket->setCurrentItem(0);
 
-    impl->insertSymbolAction = new KAction(i18n("Insert Symbol"),
+    m_insertSymbolAction = new KAction(i18n("Insert Symbol"),
                                            "key_enter",
                                            /*CTRL + Key_I*/0,
                                            this, SLOT(insertSymbol()),
                                            collection, "formula_insertsymbol");
-    impl->symbolNamesAction = new SymbolAction(i18n("Symbol Names"),
+    m_symbolNamesAction = new SymbolAction(i18n("Symbol Names"),
                                                0, this, SLOT(symbolNames()),
                                                collection, "formula_symbolnames");
 
@@ -816,66 +670,74 @@ void Document::createActions(KActionCollection* collection)
     ff.append( i18n( "Script" ) );
     ff.append( i18n( "Fraktur" ) );
     ff.append( i18n( "Double Struck" ) );
-    impl->fontFamily = new KSelectAction(i18n("Font Family"),
+    m_fontFamily = new KSelectAction(i18n("Font Family"),
                                          0, this, SLOT(fontFamily()),
                                          collection, "formula_fontfamily");
-    impl->fontFamily->setItems( ff );
-    impl->fontFamily->setEnabled( false );
-
-    impl->actionsCreated = true;
+    m_fontFamily->setItems( ff );
+    m_fontFamily->setEnabled( false );
 }
 
 
-void Document::paste()
+void DocumentWrapper::paste()
 {
     if (hasFormula()) {
         formula()->paste();
     }
 }
 
-void Document::copy()
+void DocumentWrapper::copy()
 {
     if (hasFormula()) {
         formula()->copy();
     }
 }
 
-void Document::cut()
+void DocumentWrapper::cut()
 {
     if (hasFormula()) {
         formula()->cut();
     }
 }
 
-void Document::addNegThinSpace()
+void DocumentWrapper::undo()
+{
+    m_history->undo();
+}
+
+void DocumentWrapper::redo()
+{
+    m_history->redo();
+}
+
+void DocumentWrapper::addNegThinSpace()
 {
     if (hasFormula()) {
         SpaceRequest r( NEGTHIN );
         formula()->performRequest( &r );
     }
 }
-void Document::addThinSpace()
+void DocumentWrapper::addThinSpace()
 {
     if (hasFormula()) {
         SpaceRequest r( THIN );
         formula()->performRequest( &r );
     }
 }
-void Document::addMediumSpace()
+void DocumentWrapper::addMediumSpace()
 {
     if (hasFormula()) {
         SpaceRequest r( MEDIUM );
         formula()->performRequest( &r );
     }
 }
-void Document::addThickSpace()
+void DocumentWrapper::addThickSpace()
 {
     if (hasFormula()) {
         SpaceRequest r( THICK );
         formula()->performRequest( &r );
     }
 }
-void Document::addQuadSpace()
+void DocumentWrapper::addQuadSpace()
 {
     if (hasFormula()) {
         SpaceRequest r( QUAD );
@@ -883,15 +745,15 @@ void Document::addQuadSpace()
     }
 }
 
-void Document::addDefaultBracket()
+void DocumentWrapper::addDefaultBracket()
 {
     if (hasFormula()) {
-        BracketRequest r( impl->leftBracketChar, impl->rightBracketChar );
+        BracketRequest r( m_leftBracketChar, m_rightBracketChar );
         formula()->performRequest( &r );
     }
 }
 
-void Document::addBracket( SymbolType left, SymbolType right )
+void DocumentWrapper::addBracket( SymbolType left, SymbolType right )
 {
     if (hasFormula()) {
         BracketRequest r( left, right );
@@ -899,7 +761,7 @@ void Document::addBracket( SymbolType left, SymbolType right )
     }
 }
 
-void Document::addParenthesis()
+void DocumentWrapper::addParenthesis()
 {
     if (hasFormula()) {
         BracketRequest r( LeftRoundBracket, RightRoundBracket );
@@ -907,7 +769,7 @@ void Document::addParenthesis()
     }
 }
 
-void Document::addSquareBracket()
+void DocumentWrapper::addSquareBracket()
 {
     if (hasFormula()) {
         BracketRequest r( LeftSquareBracket, RightSquareBracket );
@@ -915,7 +777,7 @@ void Document::addSquareBracket()
     }
 }
 
-void Document::addCurlyBracket()
+void DocumentWrapper::addCurlyBracket()
 {
     if (hasFormula()) {
         BracketRequest r( LeftCurlyBracket, RightCurlyBracket );
@@ -923,7 +785,7 @@ void Document::addCurlyBracket()
     }
 }
 
-void Document::addLineBracket()
+void DocumentWrapper::addLineBracket()
 {
     if (hasFormula()) {
         BracketRequest r( LeftLineBracket, RightLineBracket );
@@ -931,7 +793,7 @@ void Document::addLineBracket()
     }
 }
 
-void Document::addFraction()
+void DocumentWrapper::addFraction()
 {
     if (hasFormula()) {
         Request r( req_addFraction );
@@ -939,7 +801,7 @@ void Document::addFraction()
     }
 }
 
-void Document::addRoot()
+void DocumentWrapper::addRoot()
 {
     if (hasFormula()) {
         Request r( req_addRoot );
@@ -947,7 +809,7 @@ void Document::addRoot()
     }
 }
 
-void Document::addIntegral()
+void DocumentWrapper::addIntegral()
 {
     if (hasFormula()) {
         SymbolRequest r( Integral );
@@ -955,7 +817,7 @@ void Document::addIntegral()
     }
 }
 
-void Document::addProduct()
+void DocumentWrapper::addProduct()
 {
     if (hasFormula()) {
         SymbolRequest r( Product );
@@ -963,7 +825,7 @@ void Document::addProduct()
     }
 }
 
-void Document::addSum()
+void DocumentWrapper::addSum()
 {
     if (hasFormula()) {
         SymbolRequest r( Sum );
@@ -971,7 +833,7 @@ void Document::addSum()
     }
 }
 
-void Document::addMatrix( uint rows, uint columns )
+void DocumentWrapper::addMatrix( uint rows, uint columns )
 {
     if (hasFormula()) {
         MatrixRequest r( rows, columns );
@@ -979,7 +841,7 @@ void Document::addMatrix( uint rows, uint columns )
     }
 }
 
-void Document::addOneByTwoMatrix()
+void DocumentWrapper::addOneByTwoMatrix()
 {
     if (hasFormula()) {
         Request r( req_addOneByTwoMatrix );
@@ -987,7 +849,7 @@ void Document::addOneByTwoMatrix()
     }
 }
 
-void Document::addNameSequence()
+void DocumentWrapper::addNameSequence()
 {
     if (hasFormula()) {
         Request r( req_addNameSequence );
@@ -995,7 +857,7 @@ void Document::addNameSequence()
     }
 }
 
-void Document::addLowerLeftIndex()
+void DocumentWrapper::addLowerLeftIndex()
 {
     if (hasFormula()) {
         IndexRequest r( lowerLeftPos );
@@ -1003,7 +865,7 @@ void Document::addLowerLeftIndex()
     }
 }
 
-void Document::addUpperLeftIndex()
+void DocumentWrapper::addUpperLeftIndex()
 {
     if (hasFormula()) {
         IndexRequest r( upperLeftPos );
@@ -1011,7 +873,7 @@ void Document::addUpperLeftIndex()
     }
 }
 
-void Document::addLowerRightIndex()
+void DocumentWrapper::addLowerRightIndex()
 {
     if (hasFormula()) {
         IndexRequest r( lowerRightPos );
@@ -1019,7 +881,7 @@ void Document::addLowerRightIndex()
     }
 }
 
-void Document::addUpperRightIndex()
+void DocumentWrapper::addUpperRightIndex()
 {
     if (hasFormula()) {
         IndexRequest r( upperRightPos );
@@ -1027,7 +889,7 @@ void Document::addUpperRightIndex()
     }
 }
 
-void Document::addGenericLowerIndex()
+void DocumentWrapper::addGenericLowerIndex()
 {
     if (hasFormula()) {
         IndexRequest r( lowerMiddlePos );
@@ -1035,7 +897,7 @@ void Document::addGenericLowerIndex()
     }
 }
 
-void Document::addGenericUpperIndex()
+void DocumentWrapper::addGenericUpperIndex()
 {
     if (hasFormula()) {
         IndexRequest r( upperMiddlePos );
@@ -1043,7 +905,7 @@ void Document::addGenericUpperIndex()
     }
 }
 
-void Document::addOverline()
+void DocumentWrapper::addOverline()
 {
     if (hasFormula()) {
         Request r( req_addOverline );
@@ -1051,7 +913,7 @@ void Document::addOverline()
     }
 }
 
-void Document::addUnderline()
+void DocumentWrapper::addUnderline()
 {
     if (hasFormula()) {
         Request r( req_addUnderline );
@@ -1059,7 +921,7 @@ void Document::addUnderline()
     }
 }
 
-void Document::addMultiline()
+void DocumentWrapper::addMultiline()
 {
     if (hasFormula()) {
         Request r( req_addMultiline );
@@ -1067,7 +929,7 @@ void Document::addMultiline()
     }
 }
 
-void Document::removeEnclosing()
+void DocumentWrapper::removeEnclosing()
 {
     if (hasFormula()) {
         DirectedRemove r( req_removeEnclosing, beforeCursor );
@@ -1075,7 +937,7 @@ void Document::removeEnclosing()
     }
 }
 
-void Document::makeGreek()
+void DocumentWrapper::makeGreek()
 {
     if (hasFormula()) {
         Request r( req_makeGreek );
@@ -1083,36 +945,39 @@ void Document::makeGreek()
     }
 }
 
-void Document::insertSymbol()
+void DocumentWrapper::insertSymbol()
 {
-    if ( hasFormula() && impl->contextStyle.symbolTable().contains( impl->selectedName ) ) {
-        QChar ch = impl->contextStyle.symbolTable().unicode( impl->selectedName );
+    if ( hasFormula() &&
+         m_document->m_contextStyle->symbolTable().contains( m_selectedName ) ) {
+        QChar ch = m_document->m_contextStyle->symbolTable().unicode( m_selectedName );
         if ( ch != QChar::null ) {
             TextCharRequest r( ch, true );
             formula()->performRequest( &r );
         }
         else {
-            TextRequest r( impl->selectedName );
+            TextRequest r( m_selectedName );
             formula()->performRequest( &r );
         }
     }
 }
 
-void Document::insertSymbol( QString name )
+void DocumentWrapper::insertSymbol( QString name )
 {
-    if ( hasFormula() && impl->contextStyle.symbolTable().contains( name ) ) {
-        QChar ch = impl->contextStyle.symbolTable().unicode( name );
-        if ( ch != QChar::null ) {
-            TextCharRequest r( ch, true );
-            formula()->performRequest( &r );
-            return;
+    if ( hasFormula() ) {
+        if ( m_document->m_contextStyle->symbolTable().contains( name ) ) {
+            QChar ch = m_document->m_contextStyle->symbolTable().unicode( name );
+            if ( ch != QChar::null ) {
+                TextCharRequest r( ch, true );
+                formula()->performRequest( &r );
+                return;
+            }
         }
+        TextRequest r( name );
+        formula()->performRequest( &r );
     }
-    TextRequest r( name );
-    formula()->performRequest( &r );
 }
 
-void Document::appendColumn()
+void DocumentWrapper::appendColumn()
 {
     if ( hasFormula() ) {
         Request r( req_appendColumn );
@@ -1120,7 +985,7 @@ void Document::appendColumn()
     }
 }
 
-void Document::insertColumn()
+void DocumentWrapper::insertColumn()
 {
     if ( hasFormula() ) {
         Request r( req_insertColumn );
@@ -1128,7 +993,7 @@ void Document::insertColumn()
     }
 }
 
-void Document::removeColumn()
+void DocumentWrapper::removeColumn()
 {
     if ( hasFormula() ) {
         Request r( req_removeColumn );
@@ -1136,7 +1001,7 @@ void Document::removeColumn()
     }
 }
 
-void Document::appendRow()
+void DocumentWrapper::appendRow()
 {
     if ( hasFormula() ) {
         Request r( req_appendRow );
@@ -1144,7 +1009,7 @@ void Document::appendRow()
     }
 }
 
-void Document::insertRow()
+void DocumentWrapper::insertRow()
 {
     if ( hasFormula() ) {
         Request r( req_insertRow );
@@ -1152,7 +1017,7 @@ void Document::insertRow()
     }
 }
 
-void Document::removeRow()
+void DocumentWrapper::removeRow()
 {
     if ( hasFormula() ) {
         Request r( req_removeRow );
@@ -1160,16 +1025,14 @@ void Document::removeRow()
     }
 }
 
-void Document::toggleSyntaxHighlighting()
+void DocumentWrapper::toggleSyntaxHighlighting()
 {
-    //kdDebug( DEBUGID ) << "Document::toggleSyntaxHighlighting" << endl;
-    impl->contextStyle.setSyntaxHighlighting( impl->syntaxHighlightingAction->isChecked() );
+    m_document->m_contextStyle->setSyntaxHighlighting( m_syntaxHighlightingAction->isChecked() );
     // Only to notify all views. We don't expect to get new values.
-    // Here is a really bad bug.
-    recalc();
+    m_document->recalc();
 }
 
-void Document::textBold()
+void DocumentWrapper::textBold()
 {
     if ( hasFormula() ) {
         CharStyleRequest r( req_formatBold,
@@ -1179,7 +1042,7 @@ void Document::textBold()
     }
 }
 
-void Document::textItalic()
+void DocumentWrapper::textItalic()
 {
     if ( hasFormula() ) {
         CharStyleRequest r( req_formatItalic,
@@ -1189,9 +1052,9 @@ void Document::textItalic()
     }
 }
 
-void Document::delimiterLeft()
+void DocumentWrapper::delimiterLeft()
 {
-    QString left = impl->leftBracket->currentText();
+    QString left = m_leftBracket->currentText();
     switch ( left.at(0).latin1() ) {
     case '[':
     case ']':
@@ -1203,20 +1066,20 @@ void Document::delimiterLeft()
     case ')':
     case '/':
     case '\\':
-        impl->leftBracketChar = static_cast<SymbolType>( left.at(0).latin1() );
+        m_leftBracketChar = static_cast<SymbolType>( left.at(0).latin1() );
         break;
     case '|':
-        impl->leftBracketChar = LeftLineBracket;
+        m_leftBracketChar = LeftLineBracket;
         break;
     case ' ':
-        impl->leftBracketChar = EmptyBracket;
+        m_leftBracketChar = EmptyBracket;
         break;
     }
 }
 
-void Document::delimiterRight()
+void DocumentWrapper::delimiterRight()
 {
-    QString right = impl->rightBracket->currentText();
+    QString right = m_rightBracket->currentText();
     switch ( right.at(0).latin1() ) {
     case '[':
     case ']':
@@ -1228,27 +1091,27 @@ void Document::delimiterRight()
     case ')':
     case '/':
     case '\\':
-        impl->rightBracketChar = static_cast<SymbolType>( right.at(0).latin1() );
+        m_rightBracketChar = static_cast<SymbolType>( right.at(0).latin1() );
         break;
     case '|':
-        impl->rightBracketChar = RightLineBracket;
+        m_rightBracketChar = RightLineBracket;
         break;
     case ' ':
-        impl->rightBracketChar = EmptyBracket;
+        m_rightBracketChar = EmptyBracket;
         break;
     }
 }
 
-void Document::symbolNames()
+void DocumentWrapper::symbolNames()
 {
-    impl->selectedName = impl->symbolNamesAction->currentText();
+    m_selectedName = m_symbolNamesAction->currentText();
 }
 
 
-void Document::fontFamily()
+void DocumentWrapper::fontFamily()
 {
     if ( hasFormula() ) {
-        int i = impl->fontFamily->currentItem();
+        int i = m_fontFamily->currentItem();
         CharFamily cf = anyFamily;
         switch( i ) {
         case 0: cf = normalFamily; break;
@@ -1262,36 +1125,39 @@ void Document::fontFamily()
 }
 
 
-void Document::undo()
+void DocumentWrapper::initSymbolNamesAction()
 {
-    getHistory()->undo();
-}
+    if ( m_hasActions ) {
+        const SymbolTable& st = m_document->m_contextStyle->symbolTable();
 
-void Document::redo()
-{
-    getHistory()->redo();
-}
+        QStringList names = st.allNames();
+        //QStringList i18nNames;
+        QValueList<QFont> fonts;
+        QMemArray<uchar> chars( names.count() );
 
-bool Document::hasFormula()
-{
-    return ( formula() != 0 ) && ( formula()->activeCursor() != 0 );
-}
+        int i = 0;
+        for ( QStringList::Iterator it = names.begin();
+              it != names.end();
+              ++it, ++i ) {
+            QChar ch = st.unicode( *it );
+            //i18nNames.push_back( i18n( ( *it ).latin1() ) );
 
-void Document::recalc()
-{
-    //kdDebug( DEBUGID ) << "Document::recalc " << impl->formulae.count() << endl;
-    for ( Container* f = impl->formulae.first(); f != 0; f=impl->formulae.next() ) {
-        f->recalc();
+            fonts.append( st.font( ch ) );
+            chars[ i ] = st.character( ch );
+        }
+        m_symbolNamesAction->setSymbols( names, fonts, chars );
+        m_selectedName = names[0];
     }
 }
 
-void Document::updateConfig()
+
+void DocumentWrapper::updateConfig()
 {
-    lazyInit();
-    impl->syntaxHighlightingAction->setChecked( impl->contextStyle.syntaxHighlighting() );
+    m_syntaxHighlightingAction->
+        setChecked( m_document->m_contextStyle->syntaxHighlighting() );
     initSymbolNamesAction();
-    recalc();
 }
+
 
 KFORMULA_NAMESPACE_END
 

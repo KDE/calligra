@@ -76,9 +76,9 @@ KFormulaPartView::KFormulaPartView(KFormulaDoc* _doc, QWidget* _parent, const ch
     KFormula::Document* document = m_pDoc->getDocument();
 
     // copy&paste
-    cutAction   = KStdAction::cut(document, SLOT(cut()), actionCollection());
-    copyAction  = KStdAction::copy(document, SLOT(copy()), actionCollection());
-    pasteAction = KStdAction::paste(document, SLOT(paste()), actionCollection());
+    cutAction   = KStdAction::cut(document->wrapper(), SLOT(cut()), actionCollection());
+    copyAction  = KStdAction::copy(document->wrapper(), SLOT(copy()), actionCollection());
+    pasteAction = KStdAction::paste(document->wrapper(), SLOT(paste()), actionCollection());
     cutAction->setEnabled(false);
     copyAction->setEnabled(false);
 
@@ -86,20 +86,20 @@ KFormulaPartView::KFormulaPartView(KFormulaDoc* _doc, QWidget* _parent, const ch
     KStdAction::tipOfDay( this, SLOT( slotShowTip() ), actionCollection() );
 
     // elements
-    addBracketAction      = document->getAddBracketAction();
-    addFractionAction     = document->getAddFractionAction();
-    addRootAction         = document->getAddRootAction();
-    addSumAction          = document->getAddSumAction();
-    addProductAction      = document->getAddProductAction();
-    addIntegralAction     = document->getAddIntegralAction();
-    addMatrixAction       = document->getAddMatrixAction();
-    addUpperLeftAction    = document->getAddUpperLeftAction();
-    addLowerLeftAction    = document->getAddLowerLeftAction();
-    addUpperRightAction   = document->getAddUpperRightAction();
-    addLowerRightAction   = document->getAddLowerRightAction();
-    addGenericUpperAction = document->getAddGenericUpperAction();
-    addGenericLowerAction = document->getAddGenericLowerAction();
-    removeEnclosingAction = document->getRemoveEnclosingAction();
+    addBracketAction      = document->wrapper()->getAddBracketAction();
+    addFractionAction     = document->wrapper()->getAddFractionAction();
+    addRootAction         = document->wrapper()->getAddRootAction();
+    addSumAction          = document->wrapper()->getAddSumAction();
+    addProductAction      = document->wrapper()->getAddProductAction();
+    addIntegralAction     = document->wrapper()->getAddIntegralAction();
+    addMatrixAction       = document->wrapper()->getAddMatrixAction();
+    addUpperLeftAction    = document->wrapper()->getAddUpperLeftAction();
+    addLowerLeftAction    = document->wrapper()->getAddLowerLeftAction();
+    addUpperRightAction   = document->wrapper()->getAddUpperRightAction();
+    addLowerRightAction   = document->wrapper()->getAddLowerRightAction();
+    addGenericUpperAction = document->wrapper()->getAddGenericUpperAction();
+    addGenericLowerAction = document->wrapper()->getAddGenericLowerAction();
+    removeEnclosingAction = document->wrapper()->getRemoveEnclosingAction();
 
     (void) KStdAction::selectAll(formulaWidget, SLOT(slotSelectAll()), actionCollection());
 
@@ -238,13 +238,13 @@ void KFormulaPartView::cursorChanged(bool visible, bool selecting)
     }
 
     KFormula::Document* doc = document()->getDocument();
-    doc->getFormatBoldAction()->setEnabled( selecting );
-    doc->getFormatItalicAction()->setEnabled( selecting );
-    doc->getFontFamilyAction()->setEnabled( selecting );
+    doc->wrapper()->getFormatBoldAction()->setEnabled( selecting );
+    doc->wrapper()->getFormatItalicAction()->setEnabled( selecting );
+    doc->wrapper()->getFontFamilyAction()->setEnabled( selecting );
     if ( !selecting ) {
-        doc->getFormatBoldAction()->setChecked( false );
-        doc->getFormatItalicAction()->setChecked( false );
-        doc->getFontFamilyAction()->setCurrentItem( 0 );
+        doc->wrapper()->getFormatBoldAction()->setChecked( false );
+        doc->wrapper()->getFormatItalicAction()->setChecked( false );
+        doc->wrapper()->getFontFamilyAction()->setCurrentItem( 0 );
     }
 }
 

@@ -67,6 +67,7 @@ struct Container::Container_Impl {
     {
         delete internCursor;
         delete rootElement;
+        document = 0;
     }
 
     /**
@@ -109,14 +110,15 @@ Container::Container( Document* doc, int pos, bool registerMe )
     impl = new Container_Impl( doc );
     impl->rootElement = 0;
     if ( registerMe ) {
-        doc->registerFormula( this, pos );
+        registerFormula( pos );
     }
 }
 
 Container::~Container()
 {
-    document()->formulaDies(this);
+    unregisterFormula();
     delete impl;
+    impl = 0;
 }
 
 
@@ -199,6 +201,18 @@ void Container::removeFormula( FormulaCursor* cursor )
 {
     emit leaveFormula( this, cursor, REMOVE_FORMULA );
 }
+
+
+void Container::registerFormula( int pos )
+{
+    document()->registerFormula( this, pos );
+}
+
+void Container::unregisterFormula()
+{
+    document()->unregisterFormula( this );
+}
+
 
 void Container::baseSizeChanged( int size, bool owned )
 {
@@ -389,7 +403,7 @@ void Container::execute(KCommand* command)
 }
 
 
-QRect Container::boundingRect()
+QRect Container::boundingRect() const
 {
     const ContextStyle& context = document()->getContextStyle();
     return QRect( context.layoutUnitToPixelX( rootElement()->getX() ),

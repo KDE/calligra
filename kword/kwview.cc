@@ -43,6 +43,7 @@
 #include "splitcellsdia.h"
 #include "tabledia.h"
 #include "kwstylemanager.h"
+#include "kwformulaframe.h"
 #include "kwframestylemanager.h"
 #include "kwframestyle.h"
 #include "kwtablestylemanager.h"

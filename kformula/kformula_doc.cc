@@ -57,7 +57,11 @@ KFormulaDoc::KFormulaDoc(QWidget *parentWidget, const char *widgetName, QObject*
     //kdDebug(39001) << "General Settings" << endl;
 
     history = new KoCommandHistory( actionCollection() );
-    document = new KFormula::Document( kapp->config(), actionCollection(), history );
+    wrapper = new KFormula::DocumentWrapper( kapp->config(),
+                                             actionCollection(),
+                                             history );
+    document = new KFormula::Document;
+    wrapper->document( document );
     formula = document->createFormula();
 
     document->setEnabled( true );
@@ -70,9 +74,8 @@ KFormulaDoc::KFormulaDoc(QWidget *parentWidget, const char *widgetName, QObject*
 
 KFormulaDoc::~KFormulaDoc()
 {
-    delete formula;
-    delete document;
     delete history;
+    delete wrapper;
 }
 
 

@@ -40,7 +40,8 @@ libkwordpart_la_SOURCES = kwcanvas.cc kwframe.cc \
 		configfootnotedia.cc kwcreatebookmarkdia.cc kwimportstyledia.cc \
 		KWordFootNoteFrameSetIface.skel KWordFootNoteFrameSetIface.cc \
         kwcreatebookmarkdiabase.ui  kwselectbookmarkdiabase.ui KWordHorizontalLineFrameSetIface.skel KWordHorizontalLineFrameSetIface.cc \
-		kwinserthorizontallinedia.cc sortdia.cc kwinsertpagedia.cc
+		kwinserthorizontallinedia.cc sortdia.cc kwinsertpagedia.cc \
+		kwformulaframe.cc
 
 
 libkwordpart_la_LDFLAGS = $(all_libraries) $(KDE_PLUGIN)
