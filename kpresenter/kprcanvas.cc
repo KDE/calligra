@@ -2380,34 +2380,21 @@ void KPrCanvas::deSelectObj( KPObject *kpobject )
 
 void KPrCanvas::selectAllObj()
 {
-    int nbObj=objectList().count()+stickyPage()->objectList().count();
-    if(nbObj==(stickyPage()->numSelected()+m_activePage->numSelected()))
-        return;
-
-    QProgressDialog progress( i18n( "Selecting..." ), 0,
-                              nbObj, this );
-    int i=0;
     QPtrListIterator<KPObject> it( stickyPage()->objectList() );
     for ( ; it.current() ; ++it )
     {
         if ( !objectIsAHeaderFooterHidden(it.current()) )
-            selectObj(it.current());
-        progress.setProgress( i );
-        kapp->processEvents();
-        i++;
+            it.current()->setSelected( true );
     }
 
     it= m_activePage->objectList();
     for ( ; it.current() ; ++it )
     {
-        selectObj(it.current());
-        progress.setProgress( i );
-
-        kapp->processEvents();
-        i++;
+        it.current()->setSelected( true );
     }
 
     mouseSelectedObject = true;
+    _repaint( false );
     emit objectSelectedChanged();
 }
 
