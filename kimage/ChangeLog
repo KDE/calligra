@@ -1,6 +1,0 @@
-Wed Apr 22 16:34:15 1998  Torben Weis  <weis@localhost>
-
-	* img_view.cc (createGUI): Works with Beta4 now.
-
-	* img_doc.cc (insertObject): Fixed seg fault.
-
