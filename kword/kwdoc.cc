@@ -1116,12 +1116,12 @@ bool KWDocument::loadXML( QIODevice *, const QDomDocument & doc )
         {
             if ( bookmarkitem.tagName()=="BOOKMARKITEM" )
             {
-                bookMark tmp;
-                tmp.bookname=bookmarkitem.attribute("name");
-                tmp.cursorIndex=bookmarkitem.attribute("cursorIndex").toInt();
-                tmp.frameSetName=bookmarkitem.attribute("frameset");
-                tmp.paragIndex = bookmarkitem.attribute("parag").toInt();
-                m_tmpBookMarkList.append(&tmp);
+                bookMark *tmp=new bookMark;
+                tmp->bookname=bookmarkitem.attribute("name");
+                tmp->cursorIndex=bookmarkitem.attribute("cursorIndex").toInt();
+                tmp->frameSetName=bookmarkitem.attribute("frameset");
+                tmp->paragIndex = bookmarkitem.attribute("parag").toInt();
+                m_tmpBookMarkList.append(tmp);
             }
             bookmarkitem=bookmarkitem.nextSibling().toElement();
         }
@@ -4035,17 +4035,14 @@ void KWDocument::paragraphDeleted( KoTextParag *_parag,  KWFrameSet *frm)
 void KWDocument::initBookmarkList()
 {
     QPtrListIterator<bookMark> book(m_tmpBookMarkList);
-    kdDebug()<<" m_tmpBookMarkList.count() :"<<m_tmpBookMarkList.count()<<endl;
     for ( ; book.current() ; ++book )
     {
         KWFrameSet * fs = 0L;
-        QString fsName = book.current()->bookname;
+        QString fsName = book.current()->frameSetName;
         if ( !fsName.isEmpty() )
             fs = frameSetByName( fsName );
         if ( fs )
         {
-            KWBookMark *tmp =new KWBookMark( book.current()->bookname);
-            tmp->setFrameSet(fs);
             KWTextFrameSet *frm = dynamic_cast<KWTextFrameSet *>(fs);
             if ( frm)
             {
