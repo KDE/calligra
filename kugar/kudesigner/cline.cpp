@@ -29,21 +29,22 @@ CanvasLine::CanvasLine(int x, int y, int width, int height, QCanvas * canvas):
     propValues.second.clear();
 
     propValues.first = QString("%1").arg(y);
-    propValues.second << i18n("Y1 coordinate");
+    propValues.second << i18n("Y1 coordinate concerning to section");
     propValues.second << "int";
     props["Y"] = propValues;
     propValues.second.clear();
 
     propValues.first = QString("%1").arg(x + width);
-    propValues.second << i18n("X2 coordinate");
+    propValues.second << i18n("X2 coordinate concerning to section");
     propValues.second << "int";
     props["X2"] = propValues;
     propValues.second.clear();
 
     propValues.first = QString("%1").arg(y + height);
-    propValues.second << i18n("Y2 coordinate");
+    propValues.second << i18n("Y2 coordinate concerning to section");
     propValues.second << "int";
     props["Y2"] = propValues;
+    propValues.second.clear();
 
     propValues.first = "255,255,255";
     propValues.second << i18n("Color");

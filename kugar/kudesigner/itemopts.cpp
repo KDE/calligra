@@ -18,6 +18,7 @@
 #include <qstring.h>
 #include <qstringlist.h>
 #include <qpushbutton.h>
+#include <qlineedit.h>
 #include "dlgoptions.h"
 #include "itemopts.h"
 
@@ -26,8 +27,8 @@ void dlgItemOptions::commitProps()
 {
     for (int i = 0; i < taProps->numRows(); i++)
     {
-	QString a = taProps->item(i, 0)->text();
-	(*props)[a].first = taProps->item(i, 1)->text();
+        QString a = taProps->item(i, 0)->text();
+        (*props)[a].first = taProps->item(i, 1)->text();
     }
 }
 
@@ -36,6 +37,8 @@ dlgItemOptions::dlgItemOptions(std::map<QString, std::pair<QString, QStringList>
 	    dlgOptions(parent, name, f)
 {
     taProps->setLeftMargin(0);
+    taProps->setColumnReadOnly(0, TRUE);
+    connect(taProps, SIGNAL(currentChanged(int, int)), this, SLOT(showPropertyTip(int, int)));
 
     //show properties in list view
     props = p;
@@ -48,7 +51,16 @@ dlgItemOptions::dlgItemOptions(std::map<QString, std::pair<QString, QStringList>
 	taProps->setText(j, 0, i->first);
 	taProps->setText(j, 1, i->second.first);
     }
+    
+    //delete the last empty row if exists
+    if (taProps->text(taProps->numRows()-1, 0) == "")
+    	taProps->removeRow(taProps->numRows()-1);
+    
+    connect(buttonOk, SIGNAL(clicked()), this, SLOT(commitProps()));    
+}
 
-    connect(buttonOk, SIGNAL(clicked()), this, SLOT(commitProps()));
+void dlgItemOptions::showPropertyTip(int row, int col)
+{
+    LineEdit1->setText((*props)[taProps->text(row, 0)].second[0]);
 }
 #include "itemopts.moc"

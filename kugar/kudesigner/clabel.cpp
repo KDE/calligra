@@ -51,6 +51,7 @@ CanvasLabel::CanvasLabel(int x, int y, int width, int height, QCanvas * canvas):
     propValues.second << i18n("Height");
     propValues.second << "int";
     props["Height"] = propValues;
+    propValues.second.clear();
 
     propValues.first = "255,255,255";
     propValues.second << i18n("Background color");

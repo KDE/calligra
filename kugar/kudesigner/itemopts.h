@@ -31,6 +31,7 @@ public:
 private:
     std::map<QString, std::pair<QString, QStringList> > *props;
 public slots:
+    void showPropertyTip(int row, int col);
     void commitProps();
 };
 
