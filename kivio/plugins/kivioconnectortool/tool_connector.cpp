@@ -21,6 +21,7 @@
 #include <qcursor.h>
 #include <kiconloader.h>
 #include <kstddirs.h>
+#include <kdebug.h>
 
 #include "kivio_view.h"
 #include "kivio_canvas.h"

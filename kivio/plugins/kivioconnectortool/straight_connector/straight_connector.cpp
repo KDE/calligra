@@ -34,6 +34,7 @@
 
 #include <qcolor.h>
 #include <qpixmap.h>
+#include <kdebug.h>
 
 #include "straight_connector.xpm"
 

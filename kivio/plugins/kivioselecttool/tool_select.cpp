@@ -38,6 +38,7 @@
 
 #include <kaction.h>
 #include <kpopupmenu.h>
+#include <kdebug.h>
 
 SelectTool::SelectTool( KivioView* view )
 :Tool(view,"Select")

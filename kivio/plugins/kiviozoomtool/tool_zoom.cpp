@@ -29,6 +29,7 @@
 #include <klocale.h>
 #include <kpopupmenu.h>
 #include <ktoolbar.h>
+#include <kdebug.h>
 
 #include <qapplication.h>
 #include <qcursor.h>
@@ -127,14 +128,14 @@ void ZoomTool::processEvent( QEvent* e )
         }
         break;
       case QEvent::MouseButtonRelease:
-  	    m_pCanvas->endRectDraw();
+            m_pCanvas->endRectDraw();
         m_bDrawRubber = false;
         m_bLockKeyboard = false;
         zoomRect(m_pCanvas->rect());
         break;
       case QEvent::MouseMove:
-  	    if (m_bDrawRubber)
-    	    m_pCanvas->continueRectDraw( ((QMouseEvent*)e)->pos(), KivioCanvas::Rubber );
+            if (m_bDrawRubber)
+            m_pCanvas->continueRectDraw( ((QMouseEvent*)e)->pos(), KivioCanvas::Rubber );
         break;
       default:
         break;
