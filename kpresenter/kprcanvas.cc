@@ -1079,12 +1079,8 @@ void KPrCanvas::mouseMoveEvent( QMouseEvent *e )
 	} else if ( mousePressed ) {
 	    int mx = e->x()+diffx();
 	    int my = e->y()+diffy();
-            kdDebug() << "KPrCanvas::mouseMoveEvent" <<mx<<" my " <<my<< endl;
-            kdDebug()<< "diffx :"<<diffx()<<" diffy() :"<<diffy()<<endl;
-            kdDebug()<<"oldMx :"<<oldMx<<" oldMy :"<<oldMy<<endl;
 	    mx = ( mx / rastX() ) * rastX();
 	    my = ( my / rastY() ) * rastY();
-            kdDebug() << "apres KPrCanvas::mouseMoveEvent" <<mx<<" my " <<my<< endl;
 	    switch ( toolEditMode ) {
 	    case TEM_MOUSE: {
 		oldMx = ( oldMx / rastX() ) * rastX();
@@ -1097,8 +1093,8 @@ void KPrCanvas::mouseMoveEvent( QMouseEvent *e )
 			p.setRasterOp( NotROP );
 			p.setPen( QPen( black, 0, DotLine ) );
 			p.drawRect( rubber );
-			rubber.setRight( e->x()-diffx() );
-			rubber.setBottom( e->y()-diffy() );
+			rubber.setRight( e->x() );
+			rubber.setBottom( e->y() );
 			p.drawRect( rubber );
 			p.end();
 		    }
@@ -4597,11 +4593,11 @@ void KPrCanvas::moveObject( int x, int y, bool key )
             oldKoBoundingRect.setRect( _dx, _dy, _dw, _dh );
             QRect oldBoundingRect = m_view->zoomHandler()->zoomRect( oldKoBoundingRect );
 
-            it.current()->moveBy(m_view->zoomHandler()->unzoomItX(+diffx()),m_view->zoomHandler()->unzoomItY(+diffy()));
+            //it.current()->moveBy(m_view->zoomHandler()->unzoomItX(diffx()),m_view->zoomHandler()->unzoomItY(diffy()));
             it.current()->paintSelection( &p, m_view->zoomHandler() );
             it.current()->moveBy( _move );
             it.current()->paintSelection( &p, m_view->zoomHandler() );
-            it.current()->moveBy(m_view->zoomHandler()->unzoomItX(-diffx()),m_view->zoomHandler()->unzoomItY(-diffy()));
+            //it.current()->moveBy(m_view->zoomHandler()->unzoomItX(-diffx()),m_view->zoomHandler()->unzoomItY(-diffy()));
             p.end();
             _objects.append( it.current() );
             _repaint( oldBoundingRect );
