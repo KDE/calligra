@@ -5837,19 +5837,11 @@ KPrPage* KPrCanvas::activePage() const
     return m_activePage;
 }
 
-void KPrCanvas::setActivePage( KPrPage* _active)
+void KPrCanvas::setActivePage( KPrPage* active )
 {
-    Q_ASSERT(_active);
-    //kdDebug(33001)<<"KPrCanvas::setActivePage( KPrPage* _active) :"<<_active<<endl;
-    m_activePage=_active;
-    m_view->kPresenterDoc()->recalcPageNum();
-}
-
-void KPrCanvas::slotSetActivePage( KPrPage* _active)
-{
-    Q_ASSERT(_active);
-    //kdDebug(33001)<<"void KPrCanvas::slotSetActivePage( KPrPage* _active) :"<<_active<<endl;
-    m_activePage=_active;
+    Q_ASSERT(active);
+    //kdDebug(33001)<<"KPrCanvas::setActivePage( KPrPage* active) :"<<active<<endl;
+    m_activePage = active;
     m_view->kPresenterDoc()->recalcPageNum();
 }
 

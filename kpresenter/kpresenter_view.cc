@@ -349,9 +349,6 @@ KPresenterView::KPresenterView( KPresenterDoc* _doc, QWidget *_parent, const cha
     connect( m_pKPresenterDoc, SIGNAL( sigStartProgressForSaveFile() ), this, SLOT( slotStartProgressForSaveFile() ) );
     connect( m_pKPresenterDoc, SIGNAL( sigStopProgressForSaveFile() ), this, SLOT( slotStopProgressForSaveFile() ) );
 
-    //change table active.
-    connect( m_pKPresenterDoc, SIGNAL( sig_changeActivePage( KPrPage* ) ), m_canvas, SLOT( slotSetActivePage( KPrPage* ) ) );
-
     KStatusBar * sb = statusBar();
     m_sbPageLabel = 0L;
     if ( sb ) // No statusbar in e.g. konqueror
@@ -4475,9 +4472,10 @@ void KPresenterView::skipToPage( int num )
     emit currentPageChanged( currPg );
     if( sidebar )
         sidebar->setCurrentPage( currPg );
-    m_canvas->setActivePage( m_pKPresenterDoc->pageList().at(currPg));
+    KPrPage* page = m_pKPresenterDoc->pageList().at( currPg );
+    m_canvas->setActivePage( page );
     if ( notebar ) {
-        QString text = m_pKPresenterDoc->pageList().at(currPg)->noteText( );
+        QString text = page->noteText( );
         notebar->setCurrentNoteText( text );
     }
     refreshPageButton();
@@ -4486,10 +4484,11 @@ void KPresenterView::skipToPage( int num )
     m_canvas->deSelectAllObj();
     m_pKPresenterDoc->repaint( FALSE );
 
-    m_pKPresenterDoc->displayActivePage(m_pKPresenterDoc->pageList().at(currPg));
+    m_pKPresenterDoc->displayActivePage( page );
 
     updatePageParameter();
 }
+
 //update color gradient etc... when we skip page
 void KPresenterView::updatePageParameter()
 {
@@ -5369,7 +5368,7 @@ void KPresenterView::spellCheckerMisspelling( const QString &old, const QStringL
     Q_ASSERT( p );
     if ( !p ) return;
     //kdDebug(33001) << "KPresenterView::spellCheckerMisspelling p=" << p->paragId() << " pos=" << pos << " length=" << old.length() << endl;
-    textobj->highlightPortion( p, pos, old.length(), m_canvas );
+    textobj->highlightPortion( p, pos, old.length(), m_canvas, true /*repaint*/ );
 }
 
 void KPresenterView::spellCheckerCorrected( const QString &old, const QString &corr, unsigned int pos )
@@ -5388,7 +5387,7 @@ void KPresenterView::spellCheckerCorrected( const QString &old, const QString &c
     }
     Q_ASSERT( p );
     if ( !p ) return;
-    textobj->highlightPortion( p, pos, old.length(), m_canvas );
+    textobj->highlightPortion( p, pos, old.length(), m_canvas, true /*repaint*/ );
     KoTextCursor cursor( textobj->textDocument() );
     cursor.setParag( p );
     cursor.setIndex( pos );
@@ -6032,7 +6031,8 @@ void KPresenterView::editFind()
         m_searchEntry = new KoSearchContext();
     KPTextView * edit = m_canvas->currentTextObjectView();
     bool hasSelection = edit && (edit->kpTextObject())->textObject()->hasSelection();
-    KoSearchDia dialog( m_canvas, "find", m_searchEntry, hasSelection );
+    bool hasCursor = edit != 0;
+    KoSearchDia dialog( m_canvas, "find", m_searchEntry, hasSelection, hasCursor );
 
     /// KoFindReplace needs a QValueList<KoTextObject *>...
     QValueList<KoTextObject *> list;
@@ -6047,7 +6047,7 @@ void KPresenterView::editFind()
     if ( dialog.exec() == QDialog::Accepted )
     {
         delete m_findReplace;
-        m_findReplace = new KPrFindReplace( m_canvas, &dialog, list, edit );
+        m_findReplace = new KPrFindReplace( this, m_canvas, &dialog, list, edit );
         editFindNext();
     }
 }
@@ -6060,8 +6060,9 @@ void KPresenterView::editReplace()
         m_replaceEntry = new KoSearchContext();
 
     KPTextView * edit = m_canvas->currentTextObjectView();
-    bool hasSelection=edit && (edit->kpTextObject())->textObject()->hasSelection();
-    KoReplaceDia dialog( m_canvas, "replace", m_searchEntry, m_replaceEntry,hasSelection );
+    bool hasSelection = edit && (edit->kpTextObject())->textObject()->hasSelection();
+    bool hasCursor = edit != 0;
+    KoReplaceDia dialog( m_canvas, "replace", m_searchEntry, m_replaceEntry, hasSelection, hasCursor );
 
     /// KoFindReplace needs a QValueList<KoTextObject *>...
     QValueList<KoTextObject *> list;
@@ -6076,7 +6077,7 @@ void KPresenterView::editReplace()
     if ( dialog.exec() == QDialog::Accepted )
     {
         delete m_findReplace;
-        m_findReplace = new KPrFindReplace( m_canvas, &dialog, list, edit );
+        m_findReplace = new KPrFindReplace( this, m_canvas, &dialog, list, edit );
         editFindNext();
     }
 }

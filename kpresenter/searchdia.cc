@@ -28,21 +28,21 @@
 #include <koSearchDia.h>
 #include "kprtextdocument.h"
 
-KPrFindReplace::KPrFindReplace( KPrCanvas * canvas, KoSearchDia * dialog, const QValueList<KoTextObject *> & lstObjects, KPTextView *textView)
-    :KoFindReplace( canvas, dialog, lstObjects, textView )
+KPrFindReplace::KPrFindReplace( QWidget* parent, KPrCanvas * canvas, KoSearchDia * dialog, const QValueList<KoTextObject *> & lstObjects, KPTextView *textView)
+    : KoFindReplace( parent, dialog, lstObjects, textView )
 {
     m_canvas = canvas;
 }
 
-KPrFindReplace::KPrFindReplace( KPrCanvas * canvas, KoReplaceDia * dialog, const QValueList<KoTextObject *> & lstObjects, KPTextView *textView )
-    :KoFindReplace( canvas, dialog, lstObjects, textView )
+KPrFindReplace::KPrFindReplace( QWidget* parent, KPrCanvas * canvas, KoReplaceDia * dialog, const QValueList<KoTextObject *> & lstObjects, KPTextView *textView )
+    : KoFindReplace( parent, dialog, lstObjects, textView )
 {
     m_canvas = canvas;
 }
 
 KPrFindReplace::~KPrFindReplace()
 {
-    //kdDebug(33001)() << "KWFindReplace::~KWFindReplace m_destroying=" << m_destroying << endl;
+    //kdDebug(33001)() << "KPrFindReplace::~KPrFindReplace m_destroying=" << m_destroying << endl;
 }
 
 void KPrFindReplace::emitNewCommand(KCommand *cmd)
@@ -52,7 +52,10 @@ void KPrFindReplace::emitNewCommand(KCommand *cmd)
 
 void KPrFindReplace::highlightPortion(KoTextParag * parag, int index, int length, KoTextDocument *_textdoc)
 {
-    KPrTextDocument *textdoc=static_cast<KPrTextDocument *>(_textdoc);
-    textdoc->textObject()->highlightPortion( parag, index, length,m_canvas );
+    bool repaint = isReplace() ? options() & KReplaceDialog::PromptOnReplace : true;
+    KPrTextDocument *textdoc = static_cast<KPrTextDocument *>(_textdoc);
+    KPTextObject* textobj = textdoc->textObject();
+    textobj->highlightPortion( parag, index, length, m_canvas, repaint );
 }
+
 #include "searchdia.moc"

@@ -361,8 +361,6 @@ public:
     KPrPage * findSideBarPage(KPObject *object);
     KPrPage * findSideBarPage(QPtrList<KPObject> &objects);
 
-    void emitSigChangedActivePage(KPrPage *page) {sig_changeActivePage(page );}
-
     void refreshAllNoteBar(int page, const QString &text, KPresenterView *exceptView);
 
 
@@ -496,7 +494,6 @@ signals:
     void pageNumChanged();
     void sig_updateRuler();
     void sig_terminateEditing( KPTextObject * );
-    void sig_changeActivePage( KPrPage* );
     void sig_updateMenuBar();
     void sigStartProgressForSaveFile();
     void sigStopProgressForSaveFile();

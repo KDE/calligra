@@ -25,6 +25,7 @@
 KPrTextDocument::KPrTextDocument( KPTextObject * textobj, KoTextFormatCollection *fc, KoTextFormatter *formatter )
     : KoTextDocument( textobj->kPresenterDocument()->zoomHandler(), fc, formatter, true ), m_textobj( textobj )
 {
+    kdDebug() << "KPrTextDocument constructed " << this << "  KPTextObject:" << textobj << endl;
 }
 
 KPrTextDocument::~KPrTextDocument()

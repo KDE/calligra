@@ -258,7 +258,6 @@ KPresenterDoc::KPresenterDoc( QWidget *parentWidget, const char *widgetName, QOb
 
     KPrPage *newpage=new KPrPage(this);
     m_pageList.insert( 0,newpage);
-    emit sig_changeActivePage(newpage );
     m_stickyPage=new KPrPage(this);
     m_bInsertDirectCursor = false;
 
@@ -2207,8 +2206,7 @@ void KPresenterDoc::insertPage( KPrPage *_page, int position)
     if ( m_deletedPageList.findRef( _page ) )
         m_deletedPageList.remove( _page );
     m_pageList.insert( position,_page);
-    //active this page
-    emit sig_changeActivePage(_page );
+    //activate this page in all views
     QPtrListIterator<KoView> it( views() );
     for (; it.current(); ++it )
         static_cast<KPresenterView*>(it.current())->skipToPage(position);
@@ -2220,12 +2218,6 @@ void KPresenterDoc::takePage(KPrPage *_page)
     int pos=m_pageList.findRef(_page);
     m_pageList.take( pos);
     m_deletedPageList.append( _page );
-
-
-    //active previous page
-    emit sig_changeActivePage(_page );
-
-    //repaint( false );
 
     QPtrListIterator<KoView> it( views() );
     for (; it.current(); ++it )
@@ -2638,6 +2630,7 @@ void KPresenterDoc::selectPage( int pgNum /* 0-based */, bool select )
     emit pageNumChanged();
 }
 
+// TOGO remove SideBar from the name, it's a general helper (object->page)
 KPrPage * KPresenterDoc::findSideBarPage(KPObject *object)
 {
     if ( object->isSticky() ) {
@@ -2655,6 +2648,7 @@ KPrPage * KPresenterDoc::findSideBarPage(KPObject *object)
     return 0L;
 }
 
+// TOGO remove SideBar from the name, it's a general helper (object->page)
 KPrPage * KPresenterDoc::findSideBarPage(QPtrList<KPObject> &objects)
 {
     KPObject *object;
@@ -3377,12 +3371,10 @@ void KPresenterDoc::insertFile(const QString & file )
     _clean = clean;
     updatePresentationButton();
 
-    //active this page
-    emit sig_changeActivePage(m_pageList.at( newPos ) );
+    //activate this page in all views (...)
     QPtrListIterator<KoView>it2( views() );
     for (; it2.current(); ++it2 )
         static_cast<KPresenterView*>(it2.current())->skipToPage(newPos);
-    emit sig_changeActivePage(m_pageList.at( newPos ) );
 }
 
 void KPresenterDoc::spellCheckParagraphDeleted( KoTextParag *_parag,  KPTextObject *frm)

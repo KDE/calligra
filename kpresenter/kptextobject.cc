@@ -109,7 +109,7 @@ KPTextObject::KPTextObject(  KPresenterDoc *doc )
     if ( m_doc->tabStopValue() != -1 )
         textdoc->setTabStops( m_doc->zoomHandler()->ptToLayoutUnitPixX( m_doc->tabStopValue() ));
 
-    m_textobj = new KoTextObject( textdoc, m_doc->styleCollection()->findStyle( "Standard" ));
+    m_textobj = new KoTextObject( textdoc, m_doc->styleCollection()->findStyle( "Standard" ), this );
 
     brush = Qt::NoBrush;
     brush.setColor(QColor());
@@ -147,7 +147,6 @@ KPTextObject::~KPTextObject()
 {
     textDocument()->takeFlow();
     m_doc = 0L;
-    delete m_textobj;
 }
 
 DCOPObject* KPTextObject::dcopObject()
@@ -1369,16 +1368,40 @@ void KPTextObject::removeHighlight ()
     m_textobj->removeHighlight( true /*repaint*/ );
 }
 
-void KPTextObject::highlightPortion( KoTextParag * parag, int index, int length, KPrCanvas* m_canvas )
+void KPTextObject::highlightPortion( KoTextParag * parag, int index, int length, KPrCanvas* canvas, bool repaint )
 {
-    m_textobj->highlightPortion( parag, index, length, true /*repaint*/ );
-    QRect rect = m_doc->zoomHandler()->zoomRect( getRect());
-    QRect expose = m_doc->zoomHandler()->layoutUnitToPixel( parag->rect() );
-    expose.moveBy( rect.x(), rect.y());
-    m_canvas->ensureVisible( (expose.left()+expose.right()) / 2,  // point = center of the rect
-                           (expose.top()+expose.bottom()) / 2,
-                           (expose.right()-expose.left()) / 2,  // margin = half-width of the rect
-                           (expose.bottom()-expose.top()) / 2);
+    m_textobj->highlightPortion( parag, index, length, repaint );
+    if ( repaint )
+    {
+        KPresenterDoc* doc = canvas->getView()->kPresenterDoc();
+
+        // Is this object in the current active page?
+        if ( canvas->activePage()->findTextObject( this ) ||
+             (isSticky() && doc->stickyPage()->findTextObject( this ) ) )
+        {
+            kdDebug() << k_funcinfo << "object in current page" << endl;
+        }
+        else
+        {
+            // No -> find the right page and activate it
+            // ** slow method **
+            KPrPage* page = doc->findSideBarPage( this );
+            if ( page ) {
+                int pageNum = doc->pageList().findRef( page );
+                Q_ASSERT( pageNum > -1 );
+                canvas->getView()->skipToPage( pageNum );
+            } else
+                kdWarning(33001) << "object " << this << " not found in any page!?" << endl;
+        }
+        // Now ensure text is fully visible
+        QRect rect = m_doc->zoomHandler()->zoomRect( getRect() );
+        QRect expose = m_doc->zoomHandler()->layoutUnitToPixel( parag->rect() );
+        expose.moveBy( rect.x(), rect.y() );
+        canvas->ensureVisible( (expose.left()+expose.right()) / 2,  // point = center of the rect
+                                 (expose.top()+expose.bottom()) / 2,
+                                 (expose.right()-expose.left()) / 2,  // margin = half-width of the rect
+                                 (expose.bottom()-expose.top()) / 2);
+    }
 }
 
 KCommand * KPTextObject::pasteKPresenter( KoTextCursor * cursor, const QCString & data, bool removeSelected )

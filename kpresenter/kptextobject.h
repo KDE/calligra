@@ -107,8 +107,8 @@ public:
     KPTextView * createKPTextView( KPrCanvas * );
     void applyStyleChange( StyleChangeDefMap changed );
 
-    void removeHighlight ();
-    void highlightPortion( KoTextParag * parag, int index, int length, KPrCanvas */*_canvas*/ );
+    void removeHighlight();
+    void highlightPortion( KoTextParag * parag, int index, int length, KPrCanvas *canvas, bool repaint );
 
     KCommand * pasteKPresenter( KoTextCursor * cursor, const QCString & data, bool removeSelected );
 

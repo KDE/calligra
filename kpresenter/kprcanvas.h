@@ -153,7 +153,6 @@ public:
     void gotoPage( int pg );
 
     KPrPage* activePage() const;
-    void setActivePage( KPrPage* _active);
 
     bool oneObjectTextExist() const;
     bool oneObjectTextSelected() const;
@@ -332,8 +331,7 @@ public slots:
     void picViewOrig1280x1024();
     void picViewOrig1600x1200();
     void picViewOrigFactor();
-    void slotSetActivePage( KPrPage* _active);
-
+    void setActivePage( KPrPage* active );
 
 signals:
 
