@@ -1918,12 +1918,19 @@ void KSpreadVBorder::mousePressEvent( QMouseEvent * _ev )
     m_iResizeAnchor = table->topRow( _ev->pos().y() - 3, tmp, m_pCanvas );
     m_iResizePos = _ev->pos().y();
 
-    QString tmpSize;
+    QString tmpSize,tmp2;
     int y = table->rowPos( m_iResizeAnchor, m_pCanvas );
     size=new QLabel(m_pCanvas);
-    size->setText(tmpSize.setNum(m_iResizePos-y));
-    size->setGeometry(3,y+3,20,15);
     size->setBackgroundColor( yellow );
+    tmpSize=i18n("Height : ");
+    tmpSize+=tmp2.setNum(m_iResizePos-y);
+    painter.begin(this);
+    int len = painter.fontMetrics().width(tmpSize );
+    int hei =painter.fontMetrics().height( );    
+    painter.end();
+    size->setGeometry(3,y+3,len+2, hei+2 ) ;
+    size->setAlignment(Qt::AlignVCenter);
+    size->setText(tmpSize);
     size->show();
   }
   else
@@ -2061,18 +2068,26 @@ void KSpreadVBorder::mouseMoveEvent( QMouseEvent * _ev )
       m_iResizePos = y + twenty;
     painter.drawLine( 0, m_iResizePos, m_pCanvas->width(), m_iResizePos );
     painter.end();
-    QString tmp;
+    QString tmpSize,tmp2;
+    tmpSize=i18n("Height : ");
+    tmpSize+=tmp2.setNum(m_iResizePos-y);
+    painter.begin(this);
+    int len = painter.fontMetrics().width(tmpSize );
+    int hei =painter.fontMetrics().height( );
+    painter.end();
     if(!size)
     	{
-    	size=new QLabel(m_pCanvas);
-    	size->setText(tmp.setNum(m_iResizePos-y));
-    	size->setGeometry(3,y+3,20,15);
-    	size->setBackgroundColor( yellow );
-    	size->show();
+	  size=new QLabel(m_pCanvas);
+	  size->setBackgroundColor( yellow );
+	  size->setGeometry(3,3+y,len+2, hei+2 ) ;
+	  size->setAlignment(Qt::AlignVCenter);
+	  size->setText(tmpSize);
+	  size->show();    	
     	}
     else
-    	{
-    	size->setText(tmp.setNum(m_iResizePos-y));
+    	{ 
+	  size->setGeometry(3,3+y,len+2, hei+2 );
+	  size->setText(tmpSize);
     	}
   }
   // The button is pressed and we are selecting ?
@@ -2182,10 +2197,11 @@ void KSpreadVBorder::paintEvent( QPaintEvent* _ev )
       painter.setPen( white );
     else
       painter.setPen( colorGroup().text() );
-
-    painter.drawText( 3, ypos +
-                      ( row_lay->height( m_pCanvas ) + painter.fontMetrics().ascent() - painter.fontMetrics().descent() ) / 2, buffer );
-
+    int len = painter.fontMetrics().width(buffer );
+    //painter.drawText( 3, ypos +
+    //                ( row_lay->height( m_pCanvas ) + painter.fontMetrics().ascent() - painter.fontMetrics().descent() ) / 2, buffer );
+    painter.drawText( (YBORDER_WIDTH-len)/2+1, ypos +
+                    ( row_lay->height( m_pCanvas ) + painter.fontMetrics().ascent() - painter.fontMetrics().descent() ) / 2, buffer );
     ypos += row_lay->height( m_pCanvas );
   }
 
@@ -2245,13 +2261,21 @@ void KSpreadHBorder::mousePressEvent( QMouseEvent * _ev )
     m_iResizePos = _ev->pos().x();
     
     int x = table->columnPos( m_iResizeAnchor, m_pCanvas );
-    QString tmpSize;
+ 
+    QString tmpSize,tmp2;
+    tmpSize=i18n("Width : ");
+    tmpSize+=tmp2.setNum(m_iResizePos-x);
     size=new QLabel(m_pCanvas);
-    size->setGeometry(x+3,3,20,15);
+    size->show();
+    painter.begin(this);
+    int len = painter.fontMetrics().width( tmpSize);
+    int hei =painter.fontMetrics().height( );    
+    painter.end();
+    size->setGeometry(x+3,3,len+2, hei+2 ) ;
     size->setBackgroundColor( yellow );
     size->setAlignment(Qt::AlignVCenter);
-    size->setText(tmpSize.setNum(_ev->pos().x()-x));
-    size->show();
+    size->setText(tmpSize);
+    
   }
   else
   {
@@ -2416,19 +2440,28 @@ void KSpreadHBorder::mouseMoveEvent( QMouseEvent * _ev )
       m_iResizePos = x + twenty;
     painter.drawLine( m_iResizePos, 0, m_iResizePos, m_pCanvas->height() );
     painter.end();
+    QString tmp2;
     QString tmpSize;
+    tmpSize=i18n("Width : ");
+    tmpSize+=tmp2.setNum(m_iResizePos-x);
+    painter.begin(this);
+    int len = painter.fontMetrics().width(tmpSize );
+    int hei =painter.fontMetrics().height( );    
+    painter.end();
     if(!size)
     	{
     	size=new QLabel(m_pCanvas);
-    	size->setGeometry(x+3,3,20,15);
-    	size->setBackgroundColor( yellow );
-    	size->setAlignment(Qt::AlignVCenter);
-    	size->setText(tmpSize.setNum(m_iResizePos-x));
+	size->setGeometry(x+3,3,len+2, hei+2 ) ;
+	size->setBackgroundColor( yellow );
+	size->setAlignment(Qt::AlignVCenter);
+	size->setText(tmpSize);
     	size->show();
     	}
     else
-    	{
-    	size->setText(tmpSize.setNum(m_iResizePos-x));
+    	{ 
+	size->setGeometry(x+3,3,len+2, hei+2 ) ;
+	//size->setAlignment(Qt::AlignVCenter);
+	size->setText(tmpSize);
     	}
   }
   else if ( m_bSelection )

@@ -348,7 +348,7 @@ KSpreadView::KSpreadView( QWidget *_parent, const char *_name, KSpreadDoc* doc )
                         actionCollection(), "insertPart");
     (void) new KAction( i18n("Chart"), KSBarIcon("chart"), 0, this, SLOT( insertChart() ), actionCollection(), "insertChart" );
 
-    m_autoSum = new KAction( i18n("AutoSum"), KSBarIcon("black-sum"), 0, this, SLOT( autoSum() ),
+    m_autoSum = new KAction( i18n("AutoSum"), KSBarIcon("black_sum"), 0, this, SLOT( autoSum() ),
                              actionCollection(), "autoSum" );
     m_sortDec = new KAction( i18n("Sort descreasing"), KSBarIcon("sort_decrease"), 0, this, SLOT( sortDec() ),
                              actionCollection(), "sortDec" );
