@@ -155,6 +155,8 @@ k_dcop:
     bool configIncludeAbbreviation() const;
     void setConfigIncludeAbbreviation( bool b);
 
+    bool displayComment()const;
+    void setDisplayComment( bool b);
 
 private:
     KPresenterDoc *doc;

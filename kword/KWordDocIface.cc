@@ -557,3 +557,14 @@ void KWordDocIface::setConfigIncludeAbbreviation( bool b)
 {
     doc->getAutoFormat()->configIncludeAbbreviation( b );
 }
+
+bool KWordDocIface::displayComment() const
+{
+    return doc->getVariableCollection()->variableSetting()->displayComment();
+}
+
+void KWordDocIface::setDisplayComment( bool b)
+{
+    doc->getVariableCollection()->variableSetting()->setDisplayComment( b );
+    doc->recalcVariables(VT_NOTE);
+}

@@ -161,6 +161,9 @@ k_dcop:
     bool configIncludeAbbreviation() const;
     void setConfigIncludeAbbreviation( bool b);
 
+    bool displayComment()const;
+    void setDisplayComment( bool b);
+
     //init/save config
     virtual void initConfig();
     virtual void saveConfig();

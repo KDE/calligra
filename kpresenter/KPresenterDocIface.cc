@@ -521,3 +521,13 @@ void KPresenterDocIface::setConfigIncludeAbbreviation( bool b)
     doc->getAutoFormat()->configIncludeAbbreviation( b );
 }
 
+bool KPresenterDocIface::displayComment() const
+{
+    return doc->getVariableCollection()->variableSetting()->displayComment();
+}
+
+void KPresenterDocIface::setDisplayComment( bool b)
+{
+    doc->getVariableCollection()->variableSetting()->setDisplayComment( b );
+    doc->recalcVariables(VT_NOTE);
+}
