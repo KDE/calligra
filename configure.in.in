@@ -11,5 +11,5 @@ KDE_CHECK_KIMGIO
 AC_C_BIGENDIAN
 AC_CHECK_KDEMAXPATHLEN
 
-CPPFLAGS="$CPPFLAGS -DUSE_QFD"
+dnl AC_DEFINE(USE_QFD, 1, [Define if you prefer the Qt provided file dialog])
 
