@@ -59,6 +59,8 @@ public:
 
 public slots:
     void repaintAllViews( bool erase = false );
+    void slotDocumentRestored();
+    void slotCommandExecuted();
 
 protected:
 	virtual KoView* createViewInstance( QWidget* parent, const char* name );

@@ -25,6 +25,9 @@ KarbonPart::KarbonPart( QWidget* parentWidget, const char* widgetName,
 	// create a layer. we need at least one:
 	m_layers.append( new VLayer() );
 	m_activeLayer = m_layers.getLast();
+        connect( m_commandHistory, SIGNAL( documentRestored() ), this, SLOT( slotDocumentRestored() ) );
+        connect( m_commandHistory, SIGNAL( commandExecuted() ), this, SLOT( slotCommandExecuted() ) );
+
 }
 
 KarbonPart::~KarbonPart()
@@ -163,7 +166,7 @@ void
 KarbonPart::moveSelectionToTop()
 {
 	VLayer *topLayer = m_layers.getLast();
-	// 
+	//
 	VObjectListIterator itr( m_selection );
 	for ( ; itr.current() ; ++itr )
 	{
@@ -194,7 +197,7 @@ void
 KarbonPart::moveSelectionToBottom()
 {
 	VLayer *bottomLayer = m_layers.getFirst();
-	// 
+	//
 	VObjectListIterator itr( m_selection );
 	for ( ; itr.current() ; ++itr )
 	{
@@ -252,7 +255,7 @@ KarbonPart::deselectAllObjects()
 	{
 		itr.current()->setState( state_normal );
 	}
-	
+
 	m_selection.clear();
 }
 
@@ -265,6 +268,17 @@ KarbonPart::addCommand( VCommand* cmd, bool repaint  )
 	if( repaint )
 		repaintAllViews();
 }
+
+void KarbonPart::slotDocumentRestored()
+{
+    setModified( false );
+}
+
+void KarbonPart::slotCommandExecuted()
+{
+    setModified( true );
+}
+
 
 void
 KarbonPart::purgeHistory()
