@@ -57,6 +57,7 @@ public:
   virtual bool initDoc();
   virtual QCString mimeType() const;
 
+  float printableWidth();
   float printableHeight();
   float paperHeight();
   float paperWidth();

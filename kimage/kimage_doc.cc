@@ -90,14 +90,13 @@ Shell* KImageDocument::createShell()
   return shell;
 }
 
+// Why is this method needed ??????
 void KImageDocument::paintContent( QPainter& _painter, const QRect& /* _rect */, bool /* _transparent */ )
 {
   // TODO : paint image here
   // draw only the rect given in _rect
   
   //paintPixmap( &_painter, _rect);
-
-  cout << "MICHAEL : KImageDocument::paintContent()" << endl;
 
   QPixmap pix;
   pix.convertFromImage( m_image );
@@ -118,10 +117,10 @@ QString KImageDocument::configFile() const
 }
 
 /*
-bool KImageDocument::save( ostream& out, const char* / * format * / )
+bool KImageDocument::save( ostream& out, const char* format )
 {
   out << "<?xml version=\"1.0\"?>" << endl;
-  out << otag << "<DOC author=\"" << "Torben Weis" << "\" email=\"" << "weis@kde.org" << "\" editor=\"" << "kimage"
+  out << otag << "<DOC author=\"" << "Michael Koch" << "\" email=\"" << "koch@kde.org" << "\" editor=\"" << "kimage"
       << "\" mime=\"" << "application/x-kimage" << "\" >" << endl;
 
   out << otag << "<PAPER format=\"" << paperFormatString().ascii() << "\" orientation=\"" << orientationString().ascii() << "\">" << endl;
@@ -711,7 +710,6 @@ QString KImageDocument::orientationString()
 */
 
 bool KImageDocument::openDocument( const char* _url )
-//bool KImageDocument::openDocument( const QString & _filename, const char *_format )
 {
   if ( !m_image.load( _url ) )
     return false;
@@ -725,8 +723,8 @@ bool KImageDocument::openDocument( const char* _url )
 
   emit sigUpdateView();
 
-  setModified( true );
-  m_bEmpty = false;
+  //setModified( true );
+  //m_bEmpty = false;
 
   return true;
 }
@@ -754,7 +752,6 @@ void KImageDocument::transformImage( const QWMatrix& matrix )
   kdebug( KDEBUG_INFO, 0, "Image manipulated with matrix" );
 }
 
-/*
 float KImageDocument::printableWidth()
 {
   return m_paperWidth - m_leftBorder - m_rightBorder;
@@ -794,7 +791,6 @@ float KImageDocument::bottomBorder()
 {
   return m_bottomBorder;
 }
-*/
 
 KoOrientation KImageDocument::orientation()
 {

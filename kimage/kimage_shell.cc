@@ -22,6 +22,7 @@
 #include <kapp.h>
 #include <klocale.h>
 #include <kstddirs.h>
+#include <kmimemagic.h>
 
 #include <koAboutDia.h>
 #include <koFilterManager.h>
@@ -52,25 +53,33 @@ KoDocument* KImageShell::createDoc()
   return new KImageDocument;
 }
 
-// FIXME: is this really neccassary here to support mor then one MimeType ?
-
+// FIXME: is this really neccassary here to support more then one MimeType ?
 void KImageShell::slotFileOpen()
 {
-  /*
+/*
   QString filter = KoFilterManager::self()->fileSelectorList( KoFilterManager::Import,
 								nativeFormatMimeType(), nativeFormatPattern(),
 							        nativeFormatName(), TRUE );
-  */
+*/
 
-  QString filter = "*.jpg|JPEG (*.jpeg)\n*.bmp|Bitmap (*.bmp)\n*.png|PNG (*.png)\n*.*|All files (*.*)";
+  QString filter = "*.kim|KImage (*.kim)\n*.jpg|JPEG (*.jpeg)\n*.bmp|Bitmap (*.bmp)\n*.png|PNG (*.png)\n*.gif|GIF (*.gif)\n*.*|All files (*.*)";
 
   QString file = KFileDialog::getOpenFileName( getenv( "HOME" ), filter );
   if ( file.isNull() )
     return;
 
-  file = KoFilterManager::self()->import( file, nativeFormatMimeType() );
-  if ( file.isNull() )
-    return;
+  KMimeMagic *mimemagic = KMimeMagic::self();
+  KMimeMagicResult *result = mimemagic->findFileType( file );
+
+  if( ( result->mimeType() != "image/jpeg" ) &&
+      ( result->mimeType() != "image/bmp" ) &&
+      ( result->mimeType() != "image/png" ) &&
+      ( result->mimeType() != "image/gif" ) )
+  {
+    file = KoFilterManager::self()->import( file, nativeFormatMimeType() );
+    if ( file.isNull() )
+      return;
+  }
 
   if ( !openDocument( file ) )
   {
@@ -80,27 +89,10 @@ void KImageShell::slotFileOpen()
   }
 }
 
+// Do I need this ?
 bool KImageShell::openDocument( const char* _url )
-//bool KImageDocument::openDocument( const QString & _filename, const char *_format )
 {
   return ((KImageDocument*) document())->openDocument( _url );
-
-/*
-  if ( !m_image.load( _url ) )
-    return false;
-
-  if ( _format )
-    m_strImageFormat = _format;
-  else
-    m_strImageFormat = QImage::imageFormat( _filename );
-
-  emit sigUpdateView();
-
-  setModified( true );
-  m_bEmpty = false;
-
-  return true;
-*/
 }
 
 #include "kimage_shell.moc"
