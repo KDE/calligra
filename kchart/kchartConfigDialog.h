@@ -54,7 +54,8 @@ public:
                         QWidget* parent, int flags,
 			KoChart::Data *dat, KChartAuxiliary *aux );
 
-    void initSubtypePage();
+    void subtypePage();
+
 signals:
     void dataChanged();
 
@@ -78,7 +79,9 @@ protected:
     //KChartComboPage *_hlcChart;
     KChartLine3dConfigPage *_linepage3d;
     KChartParameterPolarConfigPage *_polarpage;
+
 protected slots:
+    void         init();
     virtual void apply();
     virtual void defaults();
 };

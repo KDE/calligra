@@ -1,5 +1,12 @@
 2005-03-12  Inge Wallin  <inge@lysator.liu.se>
 
+	Remove the defaults button from the config dialog.  It wasn't
+	working anyway.
+	* kchartConfigDialog.cc (KChartConfigDialog): Disable the Defaults
+	button.
+
+	----------------------------------------------------------------
+
 	Grant wish 99391: Should be possible to select linear or
 	logarithmic axes.
 	* kchartParameterConfigPage.h (KChartParameterConfigPage::lin and

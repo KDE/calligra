@@ -105,14 +105,7 @@ void KChartDataConfigPage::init()
 
 void KChartDataConfigPage::defaults()
 {
-    // FIXME: KChartConfigEditor calls defaults() on init.  It should
-    // call init() instead.  Until that is fixed, we will have to call
-    // init here as well.
-#if 0
     m_rowMajor->setChecked(true);
-#else
-    init();
-#endif
 }
 
 

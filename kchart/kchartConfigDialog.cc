@@ -79,7 +79,7 @@ KChartConfigDialog::KChartConfigDialog( KChartParams* params,
     // Color page
     if (flags & KC_SUBTYPE)
     {
-        initSubtypePage();
+        subtypePage();
     }
     else if(flags & KC_HEADERFOOTER)
     {
@@ -113,7 +113,7 @@ KChartConfigDialog::KChartConfigDialog( KChartParams* params,
         addTab( m_datapage, i18n( "&Data" ) );
 
 	// The subtype page
-        initSubtypePage();
+        subtypePage();
 
 	// The Header/Footer page
         m_headerfooterpage=new KChartHeaderFooterConfigPage(m_params, this);
@@ -173,15 +173,19 @@ KChartConfigDialog::KChartConfigDialog( KChartParams* params,
     }
 
     //init
-    defaults();
+    init();
 
     // setup buttons
     setOKButton( i18n( "&OK" ) );
     setApplyButton( i18n( "&Apply" ) );
+#if 0
     setDefaultButton( i18n( "&Defaults" ) );
+#else
+    setDefaultButton( QString::null );
+#endif
     setCancelButton( i18n( "&Cancel" ) );
 
-    connect( this, SIGNAL( applyButtonPressed() ), this, SLOT( apply() ) );
+    connect( this, SIGNAL( applyButtonPressed() ),   this, SLOT( apply() ) );
     connect( this, SIGNAL( defaultButtonPressed() ), this, SLOT( defaults() ) );
 }
 
@@ -285,19 +289,15 @@ void KChartConfigDialog::apply()
     if( _polarpage)
         _polarpage->apply();
 
-
-
-
     // data in the params struct has changed; notify application
     emit dataChanged();
-
 }
 
-void KChartConfigDialog::defaults()
+void KChartConfigDialog::init()
 {
     // Data page
     if (m_datapage)
-        m_datapage->defaults();
+        m_datapage->init();
 
     // Color page
     if(_colorpage)
@@ -371,7 +371,7 @@ void KChartConfigDialog::defaults()
 }
 
 
-void KChartConfigDialog::initSubtypePage()
+void KChartConfigDialog::subtypePage()
 {
     switch( m_params->chartType() ) {
     case KDChartParams::Bar:
@@ -396,5 +396,12 @@ void KChartConfigDialog::initSubtypePage()
     }
     addTab( m_subTypePage, i18n( "Chart &Subtype" ) );
 }
+
+
+void KChartConfigDialog::defaults()
+{
+  //FIXME: NYI
+}
+
 
 }  //KChart namespace

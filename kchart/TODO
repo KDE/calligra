@@ -1,6 +1,14 @@
 Before release of KOffice 1.4
 -----------------------------
 
+Legend
+
+DONE		Task is all done
+done		This part of the task is done
+KDCH		Must be fixed in KDChart (new version is on its way).
+KSPR		Must be fixed in KSpread
+
+
 Item								   Prio Status
 ------------------------------------------------------------------------------
 
@@ -68,13 +76,28 @@ Item								   Prio Status
   + Make Data page work.						DONE
   + Pie settings at the same place as Subtype?			      1 ----
   + Check *all* subpages.					     S1 ----
-    - Axes page is ugly.					     S1 --
-    - Font page is ugly.					     S1 --
-  + Check handling of defaults.					      1 ----
+    - BackgroundPixmap						     S1 --
+    - Bar							     S1 --
+    - Color							     S1 --
+    - Combo							     S1 --
+    - Data							     S1 --
+    - Font		Ugly					     S1 --
+    - Geometry							     S1 --
+    - HeaderFooter						     S1 --
+    - Legend							     S1 --
+    - Line3d							     S1 --
+    - Parameter3d						     S1 --
+    - Parameter (Axes)	Ugly					     S1 done
+    - ParameterPie						     S1 --
+    - ParameterPolar						     S1 --
+    - Pie							     S1 --
+    - SubtypeChartPage						     S1 --
+  + Check handling of defaults.					      1 DONE
 
 * Wizard
+  + New data page?						     S1 ----
   + Pages:
-    - "Select Chart Type" page: Reorder like the toolbark		DONE
+    - "Select Chart Type" page: Reorder like the toolbar		DONE
   + Make Help button work or disable it.			      1 ----
   + The Back button should be in the same place on all pages.	      3 ----
   + Subtype page should have icons for subtypes like config dialog.   2 ----
@@ -84,6 +107,11 @@ Item								   Prio Status
   + Describe stand-alone charting.				     S1 ----
   + New screen shots.						     S1 ----
   + Other enhancements?						     S2 ----
+
+* KDChart
+  - (Bar) charts are drawn wrong when Y axis is logarithmic.		KDCH
+  - Font for X axis labels changes when Polar chart is chosen.		KDCH
+  - Strange looks when negative values.					KDCH
 
 
 After release of KOffice 1.4
