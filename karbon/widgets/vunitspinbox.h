@@ -98,6 +98,9 @@ public:
 	void setValue( double value ) { m_value = value; }
 	double value() { return m_value; }
 
+protected:
+	 bool eventFilter( QObject* obj, QEvent* ev );
+
 private:
 	KoUnitDoubleValidator *m_validator;
 	double	m_value;

@@ -141,3 +141,17 @@ VUnitDoubleComboBox::setUnit( KoUnit::Unit unit )
 	changeValue( KoUnit::ptToUnit( KoUnit::ptFromUnit( m_value, old ), unit ) );
 }
 
+bool
+VUnitDoubleComboBox::eventFilter( QObject* o, QEvent* ev )
+{
+	if( ev->type() == QEvent::FocusOut || ev->type() == QEvent::Leave || ev->type() == QEvent::Hide )
+	{
+		bool ok;
+		double value = lineEdit()->text().replace( ',', "." ).toDouble( &ok );
+		changeValue( value );
+		return false;
+	}
+	else
+		return QComboBox::eventFilter( o, ev );
+}
+
