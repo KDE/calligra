@@ -26,16 +26,16 @@
 //#define DEBUG_FORMATTER
 
 // Heavily based on QTextFormatterBreakWords::format()
-int KoTextFormatter::format( QTextDocument *doc, Qt3::QTextParag *parag,
+int KoTextFormatter::format( Qt3::QTextDocument *doc, Qt3::QTextParag *parag,
                              int start, const QMap<int, QTextParagLineStart*> & )
 {
-    QTextStringChar *c = 0;
+    KoTextStringChar *c = 0;
     start = 0;
     if ( start == 0 )
 	c = &parag->string()->at( 0 );
 
-    QTextStringChar *firstChar = 0;
-    QTextString *string = parag->string();
+    KoTextStringChar *firstChar = 0;
+    KoTextString *string = parag->string();
     int left = doc ? parag->leftMargin() + doc->leftMargin() : 0;
     int x = left + ( doc ? parag->firstLineMargin() : 0 );
     int curLeft = left;
@@ -97,7 +97,7 @@ int KoTextFormatter::format( QTextDocument *doc, Qt3::QTextParag *parag,
 	    firstChar = c;
 	}
 
-	if ( c->isCustom() && c->customItem()->placement() != QTextCustomItem::PlaceInline )
+	if ( c->isCustom() && c->customItem()->placement() != KoTextCustomItem::PlaceInline )
 	    lastWasNonInlineCustom = TRUE;
 	else
 	    lastWasNonInlineCustom = FALSE;
@@ -114,7 +114,7 @@ int KoTextFormatter::format( QTextDocument *doc, Qt3::QTextParag *parag,
                 // Pixel size - we want the metrics of the font that's going to be used.
                 KoTextFormat *origFormat = static_cast<KoTextFormat *>(c->format()); // remember it
 
-                // Code from QTextString::width, duplicated to avoid having to set the format
+                // Code from KoTextString::width, duplicated to avoid having to set the format
                 int r = c->c.row();
                 if( r < 0x06 || r > 0x1f )
                 {
@@ -483,8 +483,8 @@ int KoTextFormatter::format( QTextDocument *doc, Qt3::QTextParag *parag,
 
 QTextParagLineStart *KoTextFormatter::formatLineKo(
     KoZoomHandler *zh,
-    Qt3::QTextParag * /*parag*/, QTextString *string, QTextParagLineStart *line,
-    QTextStringChar *startChar, QTextStringChar *lastChar, int align, int space )
+    Qt3::QTextParag * /*parag*/, KoTextString *string, QTextParagLineStart *line,
+    KoTextStringChar *startChar, KoTextStringChar *lastChar, int align, int space )
 {
 //QT2HACK
 //    if( string->isBidi() )
@@ -507,7 +507,7 @@ QTextParagLineStart *KoTextFormatter::formatLineKo(
 	}
 	int toAdd = 0;
 	for ( int k = start + 1; k <= last; ++k ) {
-            QTextStringChar &chr = string->at( k );
+            KoTextStringChar &chr = string->at( k );
             if ( toAdd != 0 )
             {
                 int pixelx = chr.pixelxadj + zh->layoutUnitToPixelX( chr.x );

@@ -38,6 +38,12 @@
 #include "qrichtext_p.h"
 
 using namespace Qt3;
+#define QTextCustomItem Qt3::QTextCustomItem
+#define QTextFlow Qt3::QTextFlow
+#define QTextDocument Qt3::QTextDocument
+#define QTextParag Qt3::QTextParag
+
+void QTextCustomItem::setPainter( QPainter*, bool adjust ){ if ( adjust ) width = 0; }
 
 bool QTextCustomItem::enter( QTextCursor *, QTextDocument *&doc, QTextParag *&parag, int &idx, int &ox, int &oy, bool atEnd )
 {
@@ -65,6 +71,9 @@ bool QTextCustomItem::up( QTextCursor *, QTextDocument *&doc, QTextParag *&parag
     doc = doc; parag = parag; idx = idx; ox = ox; oy = oy; return TRUE;
 }
 
+void QTextFlow::setPageSize( int ps ) { pagesize = ps; }
+bool QTextFlow::isEmpty() { return leftItems.isEmpty() && rightItems.isEmpty(); }
+
 #ifdef QTEXTTABLE_AVAILABLE
 void QTextTableCell::invalidate() { cached_width = -1; cached_sizehint = -1; }
 
@@ -73,13 +82,8 @@ void QTextTable::invalidate() { cachewidth = -1; }
 
 int QTextCursor::x() const
 {
-    QTextStringChar *c = string->at( idx );
+    KoTextStringChar *c = string->at( idx );
     int curx = c->x;
-    /*if ( !c->rightToLeft &&
-         c->c.isSpace() &&
-         idx > 0 &&
-         ( string->alignment() & Qt3::AlignJustify ) == Qt3::AlignJustify )
-        curx = string->at( idx - 1 )->x + string->string()->width( idx - 1 );*/
     if ( c->rightToLeft )
         curx += c->width; //string->string()->width( idx );
     return curx;
@@ -92,6 +96,11 @@ int QTextCursor::y() const
     return string->lineY( line );
 }
 
+bool QTextDocument::hasSelection( int id ) const
+{
+    return selections.find( id ) != selections.end();
+}
+
 void QTextDocument::setSelectionStart( int id, QTextCursor *cursor )
 {
     QTextDocumentSelection sel;
@@ -101,7 +110,7 @@ void QTextDocument::setSelectionStart( int id, QTextCursor *cursor )
     selections[ id ] = sel;
 }
 
-Qt3::QTextParag *QTextDocument::paragAt( int i ) const
+QTextParag *QTextDocument::paragAt( int i ) const
 {
     QTextParag *s = fParag;
     while ( s ) {
@@ -248,6 +257,7 @@ QTextFormat& QTextFormat::operator=( const QTextFormat &f )
 
 void QTextFormat::update()
 {
+    //qDebug("%p QTextFormat::update %s %d",this, fn.family().latin1(),fn.pointSize());
     fm = QFontMetrics( fn );
     leftBearing = fm.minLeftBearing();
     rightBearing = fm.minRightBearing();
@@ -406,15 +416,26 @@ void QTextFormat::updateStyleFlags()
 	different |= Bold;
 }
 
-QString QTextString::toString( const QMemArray<QTextStringChar> &data )
+QString KoTextString::toString( const QMemArray<KoTextStringChar> &data )
 {
     QString s;
     int l = data.size();
     s.setUnicode( 0, l );
-    QTextStringChar *c = data.data();
+    KoTextStringChar *c = data.data();
     QChar *uc = (QChar *)s.unicode();
     while ( l-- ) {
 	*uc = c->c;
+	// ### workaround so that non-breaking whitespaces are drawn
+	// properly, actually this should be fixed in QFont somewhere
+	if ( *uc == (char)0xa0 )
+	    *uc = 0x20;
+#if 0
+	// ### workaround so that \n are not drawn, actually this should be
+	// fixed in QFont somewhere (under Windows you get ugly boxes
+	// otherwise)
+	if ( *uc == '\n' )
+	    *uc = 0x20;
+#endif
 	uc++;
 	c++;
     }
@@ -422,15 +443,26 @@ QString QTextString::toString( const QMemArray<QTextStringChar> &data )
     return s;
 }
 
-QString QTextString::toReverseString() const
+QString KoTextString::toReverseString() const
 {
     QString s;
     int l = length();
     s.setUnicode(0, l);
-    QTextStringChar *c = data.data() + (l-1);
+    KoTextStringChar *c = data.data() + (l-1);
     QChar *uc = (QChar *)s.unicode();
     while ( l-- ) {
 	*uc = c->c;
+	// ### workaround so that non-breaking whitespaces are drawn
+	// properly, actually this should be fixed in QFont somewhere
+	if ( *uc == (char)0xa0 )
+	    *uc = 0x20;
+#if 0
+	// ### workaround so that \n are not drawn, actually this should be
+	// fixed in QFont somewhere (under Windows you get ugly boxes
+	// otherwise)
+	if ( *uc == '\n' )
+	    *uc = 0x20;
+#endif
 	uc++;
 	c--;
     }
@@ -438,10 +470,10 @@ QString QTextString::toReverseString() const
     return s;
 }
 
-void Qt3::QTextParag::setSelection( int id, int start, int end )
+void QTextParag::setSelection( int id, int start, int end )
 {
-    QMap<int, QTextParagSelection>::ConstIterator it = selections.find( id );
-    if ( it != selections.end() ) {
+    QMap<int, QTextParagSelection>::ConstIterator it = selections().find( id );
+    if ( it != mSelections->end() ) {
 	if ( start == ( *it ).start && end == ( *it ).end )
 	    return;
     }
@@ -449,51 +481,60 @@ void Qt3::QTextParag::setSelection( int id, int start, int end )
     QTextParagSelection sel;
     sel.start = start;
     sel.end = end;
-    selections[ id ] = sel;
+    (*mSelections)[ id ] = sel;
     setChanged( TRUE, TRUE );
 }
 
-void Qt3::QTextParag::removeSelection( int id )
+void QTextParag::removeSelection( int id )
 {
     if ( !hasSelection( id ) )
 	return;
-    selections.remove( id );
+    if ( mSelections )
+	mSelections->remove( id );
     setChanged( TRUE, TRUE );
 }
 
-int Qt3::QTextParag::selectionStart( int id ) const
+int QTextParag::selectionStart( int id ) const
 {
-    QMap<int, QTextParagSelection>::ConstIterator it = selections.find( id );
-    if ( it == selections.end() )
+    if ( !mSelections )
+	return -1;
+    QMap<int, QTextParagSelection>::ConstIterator it = mSelections->find( id );
+    if ( it == mSelections->end() )
 	return -1;
     return ( *it ).start;
 }
 
-int Qt3::QTextParag::selectionEnd( int id ) const
+int QTextParag::selectionEnd( int id ) const
 {
-    QMap<int, QTextParagSelection>::ConstIterator it = selections.find( id );
-    if ( it == selections.end() )
+    if ( !mSelections )
+	return -1;
+    QMap<int, QTextParagSelection>::ConstIterator it = mSelections->find( id );
+    if ( it == mSelections->end() )
 	return -1;
     return ( *it ).end;
 }
 
-bool Qt3::QTextParag::hasSelection( int id ) const
+bool QTextParag::hasSelection( int id ) const
 {
-    QMap<int, QTextParagSelection>::ConstIterator it = selections.find( id );
-    if ( it == selections.end() )
+    if ( !mSelections )
+	return FALSE;
+    QMap<int, QTextParagSelection>::ConstIterator it = mSelections->find( id );
+    if ( it == mSelections->end() )
 	return FALSE;
     return ( *it ).start != ( *it ).end || length() == 1;
 }
 
-bool Qt3::QTextParag::fullSelected( int id ) const
+bool QTextParag::fullSelected( int id ) const
 {
-    QMap<int, QTextParagSelection>::ConstIterator it = selections.find( id );
-    if ( it == selections.end() )
+    if ( !mSelections )
+	return FALSE;
+    QMap<int, QTextParagSelection>::ConstIterator it = mSelections->find( id );
+    if ( it == mSelections->end() )
 	return FALSE;
     return ( *it ).start == 0 && ( *it ).end == str->length() - 1;
 }
 
-int Qt3::QTextParag::lineY( int l ) const
+int QTextParag::lineY( int l ) const
 {
     if ( l > (int)lineStarts.count() - 1 ) {
 	qWarning( "QTextParag::lineY: line %d out of range!", l );
@@ -509,7 +550,7 @@ int Qt3::QTextParag::lineY( int l ) const
     return ( *it )->y;
 }
 
-int Qt3::QTextParag::lineBaseLine( int l ) const
+int QTextParag::lineBaseLine( int l ) const
 {
     if ( l > (int)lineStarts.count() - 1 ) {
 	qWarning( "QTextParag::lineBaseLine: line %d out of range!", l );
@@ -525,7 +566,7 @@ int Qt3::QTextParag::lineBaseLine( int l ) const
     return ( *it )->baseLine;
 }
 
-int Qt3::QTextParag::lineHeight( int l ) const
+int QTextParag::lineHeight( int l ) const
 {
     if ( l > (int)lineStarts.count() - 1 ) {
 	qWarning( "QTextParag::lineHeight: line %d out of range!", l );
@@ -541,7 +582,7 @@ int Qt3::QTextParag::lineHeight( int l ) const
     return ( *it )->h;
 }
 
-void Qt3::QTextParag::lineInfo( int l, int &y, int &h, int &bl ) const
+void QTextParag::lineInfo( int l, int &y, int &h, int &bl ) const
 {
     if ( l > (int)lineStarts.count() - 1 ) {
 	qWarning( "QTextParag::lineInfo: line %d out of range!", l );
@@ -563,38 +604,42 @@ void Qt3::QTextParag::lineInfo( int l, int &y, int &h, int &bl ) const
     bl = ( *it )->baseLine;
 }
 
-int Qt3::QTextParag::alignment() const
+int QTextParag::alignment() const
 {
     if ( align != -1 )
 	return align;
     QStyleSheetItem *item = style();
     if ( !item )
 	return Qt::AlignAuto;
-    for ( int i = 0; i < (int)styleSheetItemsVec.size(); ++i ) {
-	item = styleSheetItemsVec[ i ];
-	if ( item->alignment() != QStyleSheetItem::Undefined )
-	    return item->alignment();
+    if ( mStyleSheetItemsVec ) {
+	for ( int i = 0; i < (int)mStyleSheetItemsVec->size(); ++i ) {
+	    item = (*mStyleSheetItemsVec)[ i ];
+	    if ( item->alignment() != QStyleSheetItem::Undefined )
+		return item->alignment();
+	}
     }
     return Qt::AlignAuto;
 }
 
-QPtrVector<QStyleSheetItem> Qt3::QTextParag::styleSheetItems() const
+QPtrVector<QStyleSheetItem> QTextParag::styleSheetItems() const
 {
     QPtrVector<QStyleSheetItem> vec;
-    vec.resize( styleSheetItemsVec.size() );
-    for ( int i = 0; i < (int)vec.size(); ++i )
-	vec.insert( i, styleSheetItemsVec[ i ] );
+    if ( mStyleSheetItemsVec ) {
+	vec.resize( mStyleSheetItemsVec->size() );
+	for ( int i = 0; i < (int)vec.size(); ++i )
+	    vec.insert( i, (*mStyleSheetItemsVec)[ i ] );
+    }
     return vec;
 }
 
-QStyleSheetItem *Qt3::QTextParag::style() const
+QStyleSheetItem *QTextParag::style() const
 {
-    if ( styleSheetItemsVec.size() == 0 )
+    if ( !mStyleSheetItemsVec || mStyleSheetItemsVec->size() == 0 )
 	return 0;
-    return styleSheetItemsVec[ styleSheetItemsVec.size() - 1 ];
+    return (*mStyleSheetItemsVec)[ mStyleSheetItemsVec->size() - 1 ];
 }
 
-int Qt3::QTextParag::numberOfSubParagraph() const
+int QTextParag::numberOfSubParagraph() const
 {
     if ( list_val != -1 )
 	return list_val;
@@ -602,13 +647,15 @@ int Qt3::QTextParag::numberOfSubParagraph() const
  	return numSubParag;
     int n = 0;
     QTextParag *p = (QTextParag*)this;
-    while ( p && ( styleSheetItemsVec.size() >= p->styleSheetItemsVec.size() &&
-	    styleSheetItemsVec[ (int)p->styleSheetItemsVec.size() - 1 ] == p->style() ||
-		   p->styleSheetItemsVec.size() >= styleSheetItemsVec.size() &&
-		   p->styleSheetItemsVec[ (int)styleSheetItemsVec.size() - 1 ] == style() ) ) {
-	if ( p->style() == style() && listStyle() != p->listStyle() )
+    while ( p && ( styleSheetItemsVec().size() >= p->styleSheetItemsVec().size() &&
+	    styleSheetItemsVec()[ (int)p->styleSheetItemsVec().size() - 1 ] == p->style() ||
+		   p->styleSheetItemsVec().size() >= styleSheetItemsVec().size() &&
+		   p->styleSheetItemsVec()[ (int)styleSheetItemsVec().size() - 1 ] == style() ) ) {
+	if ( p->style() == style() && listStyle() != p->listStyle()
+	     && p->styleSheetItemsVec().size() == styleSheetItemsVec().size() )
 	    break;
-	if ( p->style()->name() == "li" && p->style() != style() || styleSheetItemsVec.size() == p->styleSheetItemsVec.size() )
+	if ( p->style()->displayMode() == QStyleSheetItem::DisplayListItem
+	     && p->style() != style() || styleSheetItemsVec().size() == p->styleSheetItemsVec().size() )
 	    ++n;
 	p = p->prev();
     }
@@ -616,7 +663,7 @@ int Qt3::QTextParag::numberOfSubParagraph() const
     return n;
 }
 
-void Qt3::QTextParag::setFormat( QTextFormat *fm )
+void QTextParag::setFormat( QTextFormat *fm )
 {
     bool doUpdate = FALSE;
     if (defFormat && (defFormat != formatCollection()->defaultFormat()))
@@ -630,7 +677,7 @@ void Qt3::QTextParag::setFormat( QTextFormat *fm )
     }
 }
 
-QTextFormatter *Qt3::QTextParag::formatter() const
+QTextFormatter *QTextParag::formatter() const
 {
     if ( doc )
 	return doc->formatter();
@@ -640,25 +687,25 @@ QTextFormatter *Qt3::QTextParag::formatter() const
     return 0L;
 }
 
-void Qt3::QTextParag::setFormatter( QTextFormatter *f )
+void QTextParag::setFormatter( QTextFormatter *f )
 {
     if ( doc ) return;
     if ( pFormatter ) delete pFormatter;
     pFormatter = f;
 }
 
-int Qt3::QTextParag::minimumWidth() const
+int QTextParag::minimumWidth() const
 {
     return doc ? doc->minimumWidth() : 0;
 }
 
-void Qt3::QTextParag::setTabArray( int *a )
+void QTextParag::setTabArray( int *a )
 {
     delete [] tArray;
     tArray = a;
 }
 
-void Qt3::QTextParag::setTabStops( int tw )
+void QTextParag::setTabStops( int tw )
 {
     if ( doc )
 	doc->setTabStops( tw );
@@ -666,17 +713,34 @@ void Qt3::QTextParag::setTabStops( int tw )
 	tabStopWidth = tw;
 }
 
-QTextStringChar::~QTextStringChar()
+QMap<int, QTextParagSelection> &QTextParag::selections() const
+{
+    if ( !mSelections )
+	((QTextParag *)this)->mSelections = new QMap<int, QTextParagSelection>;
+    return *mSelections;
+}
+
+QPtrVector<QStyleSheetItem> &QTextParag::styleSheetItemsVec() const
+{
+    if ( !mStyleSheetItemsVec )
+	((QTextParag *)this)->mStyleSheetItemsVec = new QPtrVector<QStyleSheetItem>;
+    return *mStyleSheetItemsVec;
+}
+
+QPtrList<QTextCustomItem> &QTextParag::floatingItems() const
+{
+    if ( !mFloatingItems )
+	((QTextParag *)this)->mFloatingItems = new QPtrList<QTextCustomItem>;
+    return *mFloatingItems;
+}
+
+KoTextStringChar::~KoTextStringChar()
 {
     if ( format() )
 	format()->removeRef();
     switch ( type ) {
 	case Custom:
 	    delete d.custom; break;
-	case Mark:
-	    delete d.mark; break;
-	case Shaped:
-	    delete d.shaped; break;
 	default:
 	    break;
     }

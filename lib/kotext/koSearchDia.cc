@@ -305,11 +305,11 @@ void KoFindReplace::proceed()
         firstTextObj =edit->textObject();
         if ( !firstParag ) // not set by 'from cursor'
         {
-            QTextCursor c1 = firstTextObj->textDocument()->selectionStartCursor( QTextDocument::Standard );
+            QTextCursor c1 = firstTextObj->textDocument()->selectionStartCursor( KoTextDocument::Standard );
             firstParag = c1.parag();
             firstIndex = c1.index();
         }
-        QTextCursor c2 = firstTextObj->textDocument()->selectionEndCursor( QTextDocument::Standard );
+        QTextCursor c2 = firstTextObj->textDocument()->selectionEndCursor( KoTextDocument::Standard );
         // Find in the selection
         findInFrameSet( firstTextObj, firstParag, firstIndex, c2.parag(), c2.index() );
         //todo fix it
@@ -442,7 +442,7 @@ void KoFindReplace::replace( const QString &, int matchingIndex,
 #endif
     highlightPortion(m_currentParag, index,matchedLength , m_currentTextObj->textDocument());
 
-    QTextDocument * textdoc = m_currentTextObj->textDocument();
+    KoTextDocument * textdoc = m_currentTextObj->textDocument();
     QTextCursor cursor( textdoc );
     cursor.setParag( m_currentParag );
     cursor.setIndex( index );

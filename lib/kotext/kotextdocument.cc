@@ -56,7 +56,7 @@ KoTextDocument::~KoTextDocument()
 
 Qt3::QTextParag * KoTextDocument::createParag( QTextDocument *d, Qt3::QTextParag *pr, Qt3::QTextParag *nx, bool updateIds )
 {
-    return new KoTextParag( d, pr, nx, updateIds );
+    return new KoTextParag( static_cast<KoTextDocument *>(d), static_cast<KoTextParag *>(pr), static_cast<KoTextParag *>(nx), updateIds );
 }
 
 bool KoTextDocument::visitSelection( int selectionId, KoParagVisitor* visitor, bool forward )
@@ -299,10 +299,12 @@ void KoTextDocument::drawParagWYSIWYG( QPainter *p, KoTextParag *parag, int cx, 
     }
 
     int docright = zoomHandler->layoutUnitToPixelX( parag->document()->x() + parag->document()->width() );
-    if ( rect.x() + rect.width() < docright ) {
-	p->fillRect( rect.x() + rect.width(), rect.y(),
-		     docright - ( rect.x() + rect.width() ),
-		     rect.height(), cg.brush( QColorGroup::Base ) );
+    if ( useDoubleBuffer ) {
+        if ( rect.x() + rect.width() < docright ) {
+            p->fillRect( rect.x() + rect.width(), rect.y(),
+                         docright - ( rect.x() + rect.width() ),
+                         rect.height(), cg.brush( QColorGroup::Base ) );
+        }
     }
 
     //parag->document()->nextDoubleBuffered = FALSE;

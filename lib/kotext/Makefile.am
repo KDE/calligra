@@ -2,7 +2,7 @@ INCLUDES= $(KOFFICEUI_INCLUDES) $(KOFFICECORE_INCLUDES) $(all_includes)
 
 lib_LTLIBRARIES = libkotext.la
 libkotext_la_SOURCES = qcomplextext.cpp qrichtext.cpp qrichtext_p.cpp \
-        qstylesheet.cpp mocstuff.cpp \
+        mocstuff.cpp \
 	kozoomhandler.cc koborder.cc \
 	kotextformat.cc koparagcounter.cc kostyle.cc kocommand.cc \
 	kotextparag.cc kotextdocument.cc kotextformatter.cc koparaglayout.cc \

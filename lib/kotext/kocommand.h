@@ -55,7 +55,7 @@ protected:
 class KoTextDeleteCommand : public QTextDeleteCommand
 {
 public:
-    KoTextDeleteCommand( QTextDocument *d, int i, int idx, const QMemArray<QTextStringChar> &str,
+    KoTextDeleteCommand( KoTextDocument *d, int i, int idx, const QMemArray<KoTextStringChar> &str,
                          const CustomItemsMap & customItemsMap,
                          const QValueList<KoParagLayout> & oldParagLayouts );
     QTextCursor *execute( QTextCursor *c );
@@ -71,7 +71,7 @@ protected:
 class KoTextInsertCommand : public KoTextDeleteCommand
 {
 public:
-    KoTextInsertCommand( QTextDocument *d, int i, int idx, const QMemArray<QTextStringChar> &str,
+    KoTextInsertCommand( KoTextDocument *d, int i, int idx, const QMemArray<KoTextStringChar> &str,
                          const CustomItemsMap & customItemsMap,
                          const QValueList<KoParagLayout> &oldParagLayouts )
         : KoTextDeleteCommand( d, i, idx, str, customItemsMap, oldParagLayouts ) {}
@@ -86,7 +86,7 @@ public:
 class KoTextParagCommand : public QTextCommand
 {
 public:
-    KoTextParagCommand( QTextDocument *d, int fParag, int lParag,
+    KoTextParagCommand( KoTextDocument *d, int fParag, int lParag,
                         const QValueList<KoParagLayout> &oldParagLayouts,
                         KoParagLayout newParagLayout,
                         int /*KoParagLayout::Flags*/ flags,
@@ -110,7 +110,7 @@ protected:
 class KoParagFormatCommand : public QTextCommand
 {
 public:
-    KoParagFormatCommand( QTextDocument *d, int fParag, int lParag,
+    KoParagFormatCommand( KoTextDocument *d, int fParag, int lParag,
                           const QValueList<QTextFormat *> &oldFormats,
                           QTextFormat * newFormat );
     ~KoParagFormatCommand();
@@ -128,7 +128,7 @@ protected:
 class KoTextFormatCommand : public QTextFormatCommand
 {
 public:
-    KoTextFormatCommand( QTextDocument *d, int sid, int sidx, int eid, int eidx, const QMemArray<QTextStringChar> &old, QTextFormat *f, int fl );
+    KoTextFormatCommand( KoTextDocument *d, int sid, int sidx, int eid, int eidx, const QMemArray<KoTextStringChar> &old, QTextFormat *f, int fl );
     virtual ~KoTextFormatCommand();
 
     QTextCursor *execute( QTextCursor *c );

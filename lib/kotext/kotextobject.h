@@ -127,10 +127,10 @@ public:
     void clearUndoRedoInfo();
 
     /** return true if some text is selected */
-    bool hasSelection() const { return textdoc->hasSelection( QTextDocument::Standard ); }
+    bool hasSelection() const { return textdoc->hasSelection( KoTextDocument::Standard ); }
     /** returns the selected text [without formatting] if hasSelection() */
     QString selectedText() const {
-        return textdoc->selectedText( QTextDocument::Standard );
+        return textdoc->selectedText( KoTextDocument::Standard );
     }
 
     /**
@@ -153,7 +153,7 @@ public:
      * @param selectionId which selection to remove (usually Standard)
      * @param cmdName the name to give the undo/redo command, if we haven't created it already
      */
-    void removeSelectedText( QTextCursor * cursor, int selectionId = QTextDocument::Standard,
+    void removeSelectedText( QTextCursor * cursor, int selectionId = KoTextDocument::Standard,
                              const QString & cmdName = QString::null );
 
     KCommand * replaceSelectionCommand( QTextCursor * cursor, const QString & replacement,
@@ -172,7 +172,7 @@ public:
 
     /** Set format changes on selection or current cursor.
         Returns a command if the format was applied to a selection */
-    KCommand *setFormatCommand( QTextCursor * cursor, KoTextFormat * & currentFormat, KoTextFormat *format, int flags, bool zoomFont = false, int selectionId = QTextDocument::Standard );
+    KCommand *setFormatCommand( QTextCursor * cursor, KoTextFormat * & currentFormat, KoTextFormat *format, int flags, bool zoomFont = false, int selectionId = KoTextDocument::Standard );
 
     /** Selections ids */
     enum SelectionIds {
@@ -190,17 +190,17 @@ public:
     void doKeyboardAction( QTextCursor * cursor, KoTextFormat * & currentFormat, KeyboardAction action );
 
     // -- Paragraph settings --
-    KCommand * setCounterCommand( QTextCursor * cursor, const KoParagCounter & counter, int selectionId = QTextDocument::Standard );
-    KCommand * setAlignCommand( QTextCursor * cursor, int align , int selectionId = QTextDocument::Standard);
-    KCommand * setLineSpacingCommand( QTextCursor * cursor, double spacing, int selectionId = QTextDocument::Standard );
-    KCommand * setBordersCommand( QTextCursor * cursor, const KoBorder& leftBorder, const KoBorder& rightBorder, const KoBorder& topBorder, const KoBorder& bottomBorder, int selectionId = QTextDocument::Standard );
-    KCommand * setMarginCommand( QTextCursor * cursor, QStyleSheetItem::Margin m, double margin, int selectionId = QTextDocument::Standard);
-    KCommand* setTabListCommand( QTextCursor * cursor,const KoTabulatorList & tabList , int selectionId = QTextDocument::Standard );
+    KCommand * setCounterCommand( QTextCursor * cursor, const KoParagCounter & counter, int selectionId = KoTextDocument::Standard );
+    KCommand * setAlignCommand( QTextCursor * cursor, int align , int selectionId = KoTextDocument::Standard);
+    KCommand * setLineSpacingCommand( QTextCursor * cursor, double spacing, int selectionId = KoTextDocument::Standard );
+    KCommand * setBordersCommand( QTextCursor * cursor, const KoBorder& leftBorder, const KoBorder& rightBorder, const KoBorder& topBorder, const KoBorder& bottomBorder, int selectionId = KoTextDocument::Standard );
+    KCommand * setMarginCommand( QTextCursor * cursor, QStyleSheetItem::Margin m, double margin, int selectionId = KoTextDocument::Standard);
+    KCommand* setTabListCommand( QTextCursor * cursor,const KoTabulatorList & tabList , int selectionId = KoTextDocument::Standard );
 
-    KCommand * setShadowCommand( QTextCursor * cursor,double dist, short int direction, const QColor &col,int selectionId= QTextDocument::Standard  );
+    KCommand * setShadowCommand( QTextCursor * cursor,double dist, short int direction, const QColor &col,int selectionId= KoTextDocument::Standard  );
 
     void applyStyle( QTextCursor * cursor, const KoStyle * style,
-                     int selectionId = QTextDocument::Standard,
+                     int selectionId = KoTextDocument::Standard,
                      int paragLayoutFlags = KoParagLayout::All, int formatFlags = QTextFormat::Format,
                      bool createUndoRedo = true, bool interactive = true );
     /** Update the paragraph that use the given style, after this style was changed.
@@ -263,7 +263,7 @@ public:
     void emitNewCommand(KCommand *cmd);
 
     void changeCaseOfText(QTextCursor *cursor,KoChangeCaseDia::TypeOfCase _type);
-    QString textChangedCase(const QString _text,KoChangeCaseDia::TypeOfCase _type);	
+    QString textChangedCase(const QString _text,KoChangeCaseDia::TypeOfCase _type);
     KCommand *changeCaseOfTextParag(int cursorPosStart, int cursorPosEnd,KoChangeCaseDia::TypeOfCase _type,QTextCursor *cursor, KoTextParag *parag);
 
 #ifndef NDEBUG
@@ -302,7 +302,7 @@ signals:
     void ensureCursorVisible();
     /** Tell the views that the selection changed (for cut/copy...) */
     void selectionChanged( bool hasSelection );
-    
+
     void showFormatObject(const KoTextFormat &);
 
 public slots:
@@ -313,7 +313,7 @@ public: // made public for KWTextFrameSet...
     /** This prepares undoRedoInfo for a paragraph formatting change
      * If this does too much, we could pass an enum flag to it.
      * But the main point is to avoid too much duplicated code */
-    void storeParagUndoRedoInfo( QTextCursor * cursor, int selectionId = QTextDocument::Standard );
+    void storeParagUndoRedoInfo( QTextCursor * cursor, int selectionId = KoTextDocument::Standard );
     /** Copies a formatted char, <parag, position>, into undoRedoInfo.text, at position <index>. */
     void copyCharFormatting( Qt3::QTextParag *parag, int position, int index /*in text*/, bool moveCustomItems );
     void readFormats( QTextCursor &c1, QTextCursor &c2, bool copyParagLayouts = false, bool moveCustomItems = false );
@@ -340,7 +340,7 @@ public: // made public for KWTextFrameSet...
         void clear();
         bool valid() const;
 
-        QTextString text; // storage for formatted text
+        KoTextString text; // storage for formatted text
         int id; // id of first parag
         int eid; // id of last parag
         int index; // index (for insertion/deletion)

@@ -34,7 +34,7 @@ void KoTextCommand::unexecute()
 }
 
 KoTextDeleteCommand::KoTextDeleteCommand(
-    QTextDocument *d, int i, int idx, const QMemArray<QTextStringChar> &str,
+    KoTextDocument *d, int i, int idx, const QMemArray<KoTextStringChar> &str,
     const CustomItemsMap & customItemsMap,
     const QValueList<KoParagLayout> &oldParagLayouts )
     : QTextDeleteCommand( d, i, idx, str,
@@ -62,7 +62,7 @@ QTextCursor * KoTextDeleteCommand::execute( QTextCursor *c )
     // want them to be deleted
     for ( int i = 0; i < len; ++i )
     {
-        QTextStringChar * ch = cursor.parag()->at( cursor.index() );
+        KoTextStringChar * ch = cursor.parag()->at( cursor.index() );
         if ( ch->isCustom() )
         {
             static_cast<KoTextCustomItem *>( ch->customItem() )->setDeleted( true );
@@ -110,7 +110,7 @@ QTextCursor * KoTextDeleteCommand::unexecute( QTextCursor *c )
     return cr;
 }
 
-KoTextParagCommand::KoTextParagCommand( QTextDocument *d, int fParag, int lParag,
+KoTextParagCommand::KoTextParagCommand( KoTextDocument *d, int fParag, int lParag,
                                         const QValueList<KoParagLayout> &oldParagLayouts,
                                         KoParagLayout newParagLayout,
                                         int flags,
@@ -149,6 +149,7 @@ QTextCursor * KoTextParagCommand::execute( QTextCursor *c )
 
 QTextCursor * KoTextParagCommand::unexecute( QTextCursor *c )
 {
+    kdDebug() << "KoTextParagCommand::unexecute" << endl;
     KoTextParag *p = static_cast<KoTextParag *>(doc->paragAt( firstParag ));
     if ( !p )
     {
@@ -181,7 +182,7 @@ QTextCursor * KoTextParagCommand::unexecute( QTextCursor *c )
 
 //////////
 
-KoParagFormatCommand::KoParagFormatCommand( QTextDocument *d, int fParag, int lParag,
+KoParagFormatCommand::KoParagFormatCommand( KoTextDocument *d, int fParag, int lParag,
                                                           const QValueList<QTextFormat *> &oldFormats,
                                                           QTextFormat * newFormat )
     : QTextCommand( d ), firstParag( fParag ), lastParag( lParag ), m_oldFormats( oldFormats ),
@@ -219,6 +220,7 @@ QTextCursor * KoParagFormatCommand::execute( QTextCursor *c )
 
 QTextCursor * KoParagFormatCommand::unexecute( QTextCursor *c )
 {
+    kdDebug() << "KoParagFormatCommand::unexecute" << endl;
     Qt3::QTextParag *p = doc->paragAt( firstParag );
     if ( !p )
     {
@@ -241,7 +243,7 @@ QTextCursor * KoParagFormatCommand::unexecute( QTextCursor *c )
     return c;
 }
 
-KoTextFormatCommand::KoTextFormatCommand(QTextDocument *d, int sid, int sidx, int eid, int eidx, const QMemArray<QTextStringChar> &old, QTextFormat *f, int fl )
+KoTextFormatCommand::KoTextFormatCommand(KoTextDocument *d, int sid, int sidx, int eid, int eidx, const QMemArray<KoTextStringChar> &old, QTextFormat *f, int fl )
     : QTextFormatCommand(d, sid, sidx, eid, eidx, old, f, fl)
 {
 }
@@ -265,8 +267,8 @@ void KoTextFormatCommand::resizeCustomItems()
     end.setParag( ep );
     end.setIndex( endIndex );
 
-    doc->setSelectionStart( QTextDocument::Temp, &start );
-    doc->setSelectionEnd( QTextDocument::Temp, &end );
+    doc->setSelectionStart( KoTextDocument::Temp, &start );
+    doc->setSelectionEnd( KoTextDocument::Temp, &end );
 
     // TODO use the visitor pattern (some 'ResizeCustomItemVisitor')
 
@@ -324,7 +326,9 @@ QTextCursor *KoTextFormatCommand::execute( QTextCursor *c )
 
 QTextCursor *KoTextFormatCommand::unexecute( QTextCursor *c )
 {
+    kdDebug() << "KoTextFormatCommand::unexecute c:" << c << " index:" << c->index() << endl;
     c = QTextFormatCommand::unexecute( c );
+    kdDebug() << "KoTextFormatCommand::unexecute after QTextFormatCommand c:" << c << " index:" << c->index() << endl;
     resizeCustomItems();
     return c;
 }

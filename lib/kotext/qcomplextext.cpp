@@ -233,7 +233,7 @@ QComplexText::Shape QComplexText::glyphVariantLogical( const QString &str, int p
 // The unicode to unicode shaping codec.
 // does only presentation forms B at the moment, but that should be enough for
 // simple display
-static const ushort arabicUnicodeMapping[256][4] = {
+static const ushort arabicUnicodeMapping[256][2] = {
     // base of shaped forms, and number-1 of them ( 0 for non shaping,
     // 1 for right binding and 3 for dual binding
     { 0x0600, 0 }, // 0x600
@@ -251,7 +251,7 @@ static const ushort arabicUnicodeMapping[256][4] = {
     { 0x060c, 0 }, // 0x60c     Arabic comma
     { 0x060d, 0 }, // 0x60d
     { 0x060e, 0 }, // 0x60e
-    { 0x060f, 0xfffd, 0xfffd, 0xfffd }, // 0x60f
+    { 0x060f, 0 }, // 0x60f
 
     { 0x0610, 0 }, // 0x610
     { 0x0611, 0 }, // 0x611
@@ -525,7 +525,34 @@ static const ushort arabicUnicodeLamAlefMapping[6][4] = {
     { 0xfffd, 0xfffd, 0xfefb, 0xfefc } // 0x627         R       Alef
 };
 
-QString QComplexText::shapedString(const QString& uc, int from, int len, QPainter::TextDirection dir )
+static inline int getShape( const QChar * /* base */, uchar cell, int shape,
+			    const QFontMetrics * /* fm */ )
+{
+    uint ch = arabicUnicodeMapping[cell][0] + shape;
+    /*
+    // we revert to the unshaped glyph in case the shaped version doesn't exist
+    if ( fm && !fm->inFont( ch ) ) {
+    switch( shape ) {
+    case QComplexText::XIsolated:
+    break; // try base form
+    case QComplexText::XFinal:
+    ch -= 1; // try isolated form
+    break;
+    case QComplexText::XInitial:
+    ch += 1; // try medial form
+    break;
+    case QComplexText::XMedial:
+    ch -= 1; // try initial form
+    break;
+    }
+    if ( !fm->inFont( ch ) )
+    ch = *base;
+    }
+    */
+    return ch;
+}
+
+QString QComplexText::shapedString(const QString& uc, int from, int len, QPainter::TextDirection dir, const QFontMetrics *fm )
 {
     if( len < 0 )
 	len = uc.length() - from;
@@ -565,7 +592,10 @@ QString QComplexText::shapedString(const QString& uc, int from, int len, QPainte
 	uchar r = ch->row();
 	uchar c = ch->cell();
 	if ( r != 0x06 ) {
-	    *data = *ch;
+	    if ( dir == QPainter::RTL && ch->mirrored() )
+		*data = ch->mirroredChar();
+	    else
+		*data = *ch;
 	    data++;
 	    lenOut++;
 	} else {
@@ -606,7 +636,7 @@ QString QComplexText::shapedString(const QString& uc, int from, int len, QPainte
 		default:
 		    break;
 	    }
-	    map = arabicUnicodeMapping[c][0] + shape;
+	    map = getShape( ch, c, shape, fm );
 	next:
 	    *data = map;
 	    data++;
@@ -658,7 +688,7 @@ QString QComplexText::shapedString(const QString& uc, int from, int len, QPainte
     return QConstString( shapeBuffer, lenOut ).string();
 }
 
-QChar QComplexText::shapedCharacter( const QString &str, int pos )
+QChar QComplexText::shapedCharacter( const QString &str, int pos, const QFontMetrics *fm )
 {
     const QChar *ch = str.unicode() + pos;
     if ( ch->row() != 0x06 )
@@ -693,11 +723,12 @@ QChar QComplexText::shapedCharacter( const QString &str, int pos )
 	    default:
 		break;
 	}
-	return QChar(arabicUnicodeMapping[ch->cell()][0] + shape);
+	return QChar( getShape( ch, ch->cell(), shape, fm ) );
     }
 }
 
-#if 0 // we don't have QFontPrivate, and positionMarks isn't called from QRT anyway
+// Avoid using QFontPrivate, to which we don't have access. We don't use positionMarks() anyway
+#if 0
 QPointArray QComplexText::positionMarks( QFontPrivate *f, const QString &str,
 					 int pos, QRect *boundingRect )
 {
@@ -825,8 +856,8 @@ QPointArray QComplexText::positionMarks( QFontPrivate *f, const QString &str,
 }
 #endif
 
-#define BIDI_DEBUG 0
-#if (BIDI_DEBUG-0 >= 1)
+#define BIDI_DEBUG 0 // 2
+#if (BIDI_DEBUG >= 1)
 #include <iostream>
 #endif
 
@@ -860,7 +891,8 @@ static QChar::Direction basicDirection(const QString &str, int start = 0)
 
 // transforms one line of the paragraph to visual order
 // the caller is responisble to delete the returned list of QTextRuns.
-QPtrList<QTextRun> *QComplexText::bidiReorderLine( QBidiControl *control, const QString &text, int start, int len )
+QPtrList<QTextRun> *QComplexText::bidiReorderLine( QBidiControl *control, const QString &text, int start, int len,
+						   QChar::Direction basicDir )
 {
     int last = start + len - 1;
     //printf("doing BiDi reordering from %d to %d!\n", start, last);
@@ -873,10 +905,13 @@ QPtrList<QTextRun> *QComplexText::bidiReorderLine( QBidiControl *control, const 
 	// first line
 	if( start != 0 )
 	    qDebug( "bidiReorderLine::internal error");
-	if( text.isRightToLeft() )
+	if( basicDir == QChar::DirR || (basicDir == QChar::DirON && text.isRightToLeft() ) ) {
 	    context = new QBidiContext( 1, QChar::DirR );
-	else
+	    control->status.last = QChar::DirR;
+	} else {
 	    context = new QBidiContext( 0, QChar::DirL );
+	    control->status.last = QChar::DirL;
+	}
     }
 
     QBidiStatus status = control->status;
@@ -894,12 +929,12 @@ QPtrList<QTextRun> *QComplexText::bidiReorderLine( QBidiControl *control, const 
 		c = c->parent;
 	    dirCurrent = c->dir;
 	} else if ( current == last ) {
-	    dirCurrent = basicDirection( text, current );
+	    dirCurrent = ( basicDir != QChar::DirON ? basicDir : basicDirection( text, current ) );
 	} else
 	    dirCurrent = text.at(current).direction();
 
 
-#if (BIDI_DEBUG-0 >= 2)
+#if (BIDI_DEBUG >= 2)
 	cout << "directions: dir=" << dir << " current=" << dirCurrent << " last=" << status.last << " eor=" << status.eor << " lastStrong=" << status.lastStrong << " embedding=" << context->dir << " level =" << (int)context->level << endl;
 #endif
 
@@ -1277,7 +1312,7 @@ QPtrList<QTextRun> *QComplexText::bidiReorderLine( QBidiControl *control, const 
 	++current;
     }
 
-#if (BIDI_DEBUG-0 >= 1)
+#if (BIDI_DEBUG >= 1)
     cout << "reached end of line current=" << current << ", eor=" << eor << endl;
 #endif
     eor = current - 1; // remove dummy char
@@ -1307,7 +1342,7 @@ QPtrList<QTextRun> *QComplexText::bidiReorderLine( QBidiControl *control, const 
     // reversing is only done up to the lowest odd level
     if(!(levelLow%2)) levelLow++;
 
-#if (BIDI_DEBUG-0 >= 1)
+#if (BIDI_DEBUG >= 1)
     cout << "reorderLine: lineLow = " << (uint)levelLow << ", lineHigh = " << (uint)levelHigh << endl;
     cout << "logical order is:" << endl;
     QPtrListIterator<QTextRun> it2(*runs);
@@ -1345,7 +1380,7 @@ QPtrList<QTextRun> *QComplexText::bidiReorderLine( QBidiControl *control, const 
 	levelHigh--;
     }
 
-#if (BIDI_DEBUG-0 >= 1)
+#if (BIDI_DEBUG >= 1)
     cout << "visual order is:" << endl;
     QPtrListIterator<QTextRun> it3(*runs);
     QTextRun *r3;
@@ -1364,7 +1399,8 @@ QPtrList<QTextRun> *QComplexText::bidiReorderLine( QBidiControl *control, const 
 
 QString QComplexText::bidiReorderString( const QString &str, QChar::Direction /*basicDir*/ )
 {
-    // ### fix basic direction
+
+// ### fix basic direction
     QBidiControl control;
     int lineStart = 0;
     int lineEnd = 0;
@@ -1379,6 +1415,7 @@ QString QComplexText::bidiReorderString( const QString &str, QChar::Direction /*
 	    ch++;
 	    lineEnd++;
 	}
+	lineEnd++;
 	QPtrList<QTextRun> *runs = bidiReorderLine( &control, str, lineStart, lineEnd - lineStart );
 
 	// reorder the content of the line, and output to visual
@@ -1389,6 +1426,8 @@ QString QComplexText::bidiReorderString( const QString &str, QChar::Direction /*
 		int pos = r->stop;
 		while(pos >= r->start) {
 		    *vch = str[pos];
+		    if ( vch->mirrored() )
+			*vch = vch->mirroredChar();
 		    vch++;
 		    pos--;
 		}
@@ -1430,7 +1469,7 @@ QTextRun::QTextRun(int _start, int _stop, QBidiContext *context, QChar::Directio
 	else if( dir == QChar::DirAN )
 	    level += 2;
     }
-#if (BIDI_DEBUG-0 >= 1)
+#if (BIDI_DEBUG >= 1)
     printf("new run: dir=%d from %d, to %d level = %d\n", dir, _start, _stop, level);
 #endif
 }

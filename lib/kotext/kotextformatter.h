@@ -36,13 +36,13 @@ public:
     KoTextFormatter() {}
     virtual ~KoTextFormatter() {}
 
-    virtual int format( QTextDocument *doc, Qt3::QTextParag *parag, int start, const QMap<int, QTextParagLineStart*> &oldLineStarts );
+    virtual int format( Qt3::QTextDocument *doc, Qt3::QTextParag *parag, int start, const QMap<int, QTextParagLineStart*> &oldLineStarts );
 
 protected:
     QTextParagLineStart *formatLineKo(
         KoZoomHandler *zh,
-        Qt3::QTextParag * /*parag*/, QTextString *string, QTextParagLineStart *line,
-        QTextStringChar *startChar, QTextStringChar *lastChar, int align, int space );
+        Qt3::QTextParag * /*parag*/, KoTextString *string, QTextParagLineStart *line,
+        KoTextStringChar *startChar, KoTextStringChar *lastChar, int align, int space );
 };
 
 #endif

@@ -29,8 +29,8 @@
 
 /////
 
-KoTextParag::KoTextParag( QTextDocument *d, QTextParag *pr, QTextParag *nx, bool updateIds)
-    : QTextParag( d, pr, nx, updateIds )
+KoTextParag::KoTextParag( KoTextDocument *d, KoTextParag *pr, KoTextParag *nx, bool updateIds)
+    : Qt3::QTextParag( d, pr, nx, updateIds )
 {
     //kdDebug() << "KoTextParag::KoTextParag " << this << endl;
     m_item = 0L;
@@ -493,8 +493,11 @@ void KoTextParag::drawParagStringInternal( QPainter &painter, const QString &s, 
     painter.setPen( QPen( textColor ) );
     painter.setFont( font );
 
-    QTextDocument* doc = document();
+    Qt3::QTextDocument* doc = document();
     if ( doc && lastFormat->isAnchor() && !lastFormat->anchorHref().isEmpty() && lastFormat->useLinkColor() ) {
+        if ( doc->linkColor.isValid() )
+            painter.setPen( doc->linkColor );
+        else
 	painter.setPen( QPen( cg.link()  ) );
 	if ( doc->underlineLinks() ) {
 	    font.setUnderline( TRUE );
@@ -509,7 +512,7 @@ void KoTextParag::drawParagStringInternal( QPainter &painter, const QString &s, 
 	    if ( i > selectionStarts[ j ] && i <= selectionEnds[ j ] ) {
 		if ( !doc || doc->invertSelectionText( j ) )
 		    painter.setPen( QPen( cg.color( QColorGroup::HighlightedText ) ) );
-		if ( j == QTextDocument::Standard )
+		if ( j == KoTextDocument::Standard )
 		    painter.fillRect( startX, lastY, bw, h, cg.color( QColorGroup::Highlight ) );
 		else
 		    painter.fillRect( startX, lastY, bw, h, doc ? doc->selectionColor( j ) : cg.color( QColorGroup::Highlight ) );
@@ -518,6 +521,9 @@ void KoTextParag::drawParagStringInternal( QPainter &painter, const QString &s, 
     }
 
     QPainter::TextDirection dir = rightToLeft ? QPainter::RTL : QPainter::LTR;
+
+    if ( dir != QPainter::RTL && start + len == length() ) // don't draw the last character (trailing space)
+       len--;
 
     if ( str[ start ] != '\t' && str[ start ].unicode() != 0xad ) {
 	if ( lastFormat->vAlign() == QTextFormat::AlignNormal ) {
@@ -554,7 +560,9 @@ void KoTextParag::drawParagStringInternal( QPainter &painter, const QString &s, 
 
     i -= len;
     if ( doc && lastFormat->isAnchor() && !lastFormat->anchorHref().isEmpty() &&
-	 doc->isFocusForParagString( this, i, len ) ) {
+         doc->focusIndicator.parag == this &&
+         doc->focusIndicator.start >= i &&
+         doc->focusIndicator.start + doc->focusIndicator.len <= i + len ) {
 	painter.drawWinFocusRect( QRect( startX, lastY, bw, h ) );
     }
 }
@@ -660,7 +668,7 @@ int KoTextParag::nextTab( int chnum, int x )
                     // We include the trailing space in the calculation because QRT actually formats it
                     while ( c < string()->length() - 1 && string()->at( c ).c != '\t' )
                     {
-                        QTextStringChar & ch = string()->at( c );
+                        KoTextStringChar & ch = string()->at( c );
                         // Determine char width (same code as the one in QTextFormatterBreak[In]Words::format())
                         if ( ch.c.unicode() >= 32 || ch.isCustom() )
                             w += string()->width( c );
@@ -669,9 +677,9 @@ int KoTextParag::nextTab( int chnum, int x )
                         ++c;
                     }
                     if ( type == T_RIGHT )
-                        return tArray[ i ] - w - 1; // -1 is due to qrt's nx-x+1
+                        return tArray[ i ] - w;
                     else // T_CENTER
-                        return tArray[ i ] - w/2 - 1; // -1 is due to qrt's nx-x+1
+                        return tArray[ i ] - w/2;
                 }
                 case T_DEC_PNT:
                 {
@@ -683,7 +691,7 @@ int KoTextParag::nextTab( int chnum, int x )
                     bool digitFound = false;
                     while ( c < string()->length()-1 && string()->at( c ).c != '\t' )
                     {
-                        QTextStringChar & ch = string()->at( c );
+                        KoTextStringChar & ch = string()->at( c );
                         if ( ch.c.isDigit() )
                             digitFound = true;
                         else if ( digitFound && ( ch.c == '.' || ch.c.unicode() == decimalPoint ) )
@@ -702,10 +710,10 @@ int KoTextParag::nextTab( int chnum, int x )
 
                         ++c;
                     }
-                    return tArray[ i ] - w - 1; // -1 is due to qrt's nx-x+1
+                    return tArray[ i ] - w;
                 }
                 default: // case T_LEFT:
-                    return tArray[ i ] - 1; // -1 is due to qrt's nx-x+1
+                    return tArray[ i ];
                 }
             }
             ++i;
@@ -820,19 +828,19 @@ void KoTextParag::setCustomItem( int index, KoTextCustomItem * custom, QTextForm
 void KoTextParag::removeCustomItem( int index )
 {
     Q_ASSERT( at( index )->isCustom() );
-    QTextCustomItem * item = at( index )->customItem();
+    Qt3::QTextCustomItem * item = at( index )->customItem();
     at( index )->loseCustomItem();
     QTextParag::removeCustomItem();
     document()->unregisterCustomItem( item, this );
 }
 
 
-int KoTextParag::findCustomItem( const QTextCustomItem * custom ) const
+int KoTextParag::findCustomItem( const KoTextCustomItem * custom ) const
 {
     int len = string()->length();
     for ( int i = 0; i < len; ++i )
     {
-        QTextStringChar & ch = string()->at(i);
+        KoTextStringChar & ch = string()->at(i);
         if ( ch.isCustom() && ch.customItem() == custom )
             return i;
     }
@@ -852,8 +860,8 @@ void KoTextParag::printRTDebug( int info )
         kdWarning() << "  Next paragraph " << next() << " has ID " << next()->paragId() << endl;
     if ( !next() )
         kdDebug() << "  next is 0L" << endl;
-    if ( isMovedDown() )
-        kdDebug() << "  Is moved down" << endl;
+    if ( wasMovedDown() )
+        kdDebug() << "  was moved down" << endl;
     /*
       static const char * dm[] = { "DisplayBlock", "DisplayInline", "DisplayListItem", "DisplayNone" };
       QPtrVector<QStyleSheetItem> vec = styleSheetItems();
@@ -892,10 +900,10 @@ void KoTextParag::printRTDebug( int info )
         kdDebug() << "  Paragraph format=" << paragFormat() << " " << paragFormat()->key()
                   << " fontsize:" << dynamic_cast<KoTextFormat *>(paragFormat())->font().pointSize() << endl;
 
-        QTextString * s = string();
+        KoTextString * s = string();
         for ( int i = 0 ; i < s->length() ; ++i )
         {
-            QTextStringChar & ch = s->at(i);
+            KoTextStringChar & ch = s->at(i);
             kdDebug() << i << ": '" << QString(ch.c) << "' (" << ch.c.unicode() << ")"
                       << " x(LU)=" << ch.x
                       << " w(LU)=" << ch.width//s->width(i)
@@ -910,7 +918,7 @@ void KoTextParag::printRTDebug( int info )
                       << endl;
             if ( ch.isCustom() )
             {
-                QTextCustomItem * item = ch.customItem();
+                Qt3::QTextCustomItem * item = ch.customItem();
                 kdDebug() << " - custom item " << item
                           << " ownline=" << item->ownLine()
                           << " size=" << item->width << "x" << item->height

@@ -192,7 +192,7 @@ void KoAutoFormat::saveConfig()
 QString KoAutoFormat::getLastWord(KoTextParag *parag, int index)
 {
     QString lastWord;
-    QTextString *s = parag->string();
+    KoTextString *s = parag->string();
     for ( int i = index - 1; i >= 0; --i )
     {
         QChar ch = s->at( i ).c;
@@ -244,7 +244,7 @@ bool KoAutoFormat::doAutoCorrect( QTextCursor* textEditCursor, KoTextParag *para
     QString * wordArray = new QString[m_maxFindLength+1];
     {
         QString word;
-        QTextString *s = parag->string();
+        KoTextString *s = parag->string();
         for ( int i = index - 1; i >= 0; --i )
         {
             QChar ch = s->at( i ).c;

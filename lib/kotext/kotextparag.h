@@ -40,7 +40,7 @@ class KoTextCustomItem;
 class KoTextParag : public Qt3::QTextParag
 {
 public:
-    KoTextParag( QTextDocument *d, QTextParag *pr = 0, QTextParag *nx = 0, bool updateIds = TRUE );
+    KoTextParag( KoTextDocument *d, KoTextParag *pr = 0, KoTextParag *nx = 0, bool updateIds = TRUE );
     ~KoTextParag();
 
     KoTextDocument * textDocument() const;
@@ -130,7 +130,7 @@ public:
 
     /** Find a custom item that we know is somewhere in this paragraph
      * Returns the index in the paragraph */
-    int findCustomItem( const QTextCustomItem * custom ) const;
+    int findCustomItem( const KoTextCustomItem * custom ) const;
 
 
     /** Reimplemented from QTextParag to implement non-left-aligned tabs */

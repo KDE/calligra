@@ -31,7 +31,7 @@ class KoTextParag;
 /**
  * This is our QTextDocument reimplementation, to create KoTextParags instead of QTextParags,
  */
-class KoTextDocument : public QTextDocument
+class KoTextDocument : public Qt3::QTextDocument
 {
     Q_OBJECT
 public:
@@ -55,7 +55,7 @@ public:
     ~KoTextDocument();
 
     /** Factory method for paragraphs */
-    virtual Qt3::QTextParag * createParag( QTextDocument *d, Qt3::QTextParag *pr = 0, Qt3::QTextParag *nx = 0, bool updateIds = TRUE );
+    virtual Qt3::QTextParag * createParag( Qt3::QTextDocument *d, Qt3::QTextParag *pr = 0, Qt3::QTextParag *nx = 0, bool updateIds = TRUE );
 
     /** Return the zoom handler associated with this document,
      * used when formatting. Don't use for any other purpose, it might disappear. */
@@ -149,10 +149,10 @@ class KMacroCommand;
  * - inline images ( KWTextImage, kwtextimage.h ) (to be removed)
  * - in kword: anchors, i.e. floating frames ( KWAnchor, kwanchor.h )
  */
-class KoTextCustomItem : public QTextCustomItem
+class KoTextCustomItem : public Qt3::QTextCustomItem
 {
 public:
-    KoTextCustomItem( KoTextDocument *textdoc ) : QTextCustomItem( textdoc )
+    KoTextCustomItem( KoTextDocument *textdoc ) : Qt3::QTextCustomItem( textdoc )
     { m_deleted = false; }
 
     /** The text document in which this customitem is */
@@ -194,7 +194,7 @@ public:
 
 
 protected:
-    virtual void adjustToPainter( QPainter* ) { resize(); }
+    virtual void setPainter( QPainter*, bool ) { resize(); }
     bool m_deleted;
 };
 

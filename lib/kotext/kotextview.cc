@@ -92,41 +92,41 @@ KoTextView::~KoTextView()
 void KoTextView::terminate(bool removeselection)
 {
     textObject()->clearUndoRedoInfo();
-    if ( removeselection && textDocument()->removeSelection( QTextDocument::Standard ) )
+    if ( removeselection && textDocument()->removeSelection( KoTextDocument::Standard ) )
         textObject()->selectionChangedNotify();
     hideCursor();
 }
 
 void KoTextView::deleteWordForward()
 {
-    if ( textDocument()->hasSelection( QTextDocument::Standard ) ) {
+    if ( textDocument()->hasSelection( KoTextDocument::Standard ) ) {
         textObject()->removeSelectedText( m_cursor );
         return;
     }
-    textDocument()->setSelectionStart( QTextDocument::Standard, m_cursor );
+    textDocument()->setSelectionStart( KoTextDocument::Standard, m_cursor );
 
     do {
         m_cursor->gotoRight();
     } while ( !m_cursor->atParagEnd()
               && !m_cursor->parag()->at( m_cursor->index() )->c.isSpace() );
-    textDocument()->setSelectionEnd( QTextDocument::Standard, m_cursor );
-    textObject()->removeSelectedText( m_cursor, QTextDocument::Standard, i18n("Remove word") );
+    textDocument()->setSelectionEnd( KoTextDocument::Standard, m_cursor );
+    textObject()->removeSelectedText( m_cursor, KoTextDocument::Standard, i18n("Remove word") );
 }
 
 void KoTextView::deleteWordBack()
 {
-    if ( textDocument()->hasSelection( QTextDocument::Standard ) ) {
+    if ( textDocument()->hasSelection( KoTextDocument::Standard ) ) {
         textObject()->removeSelectedText( m_cursor );
         return;
     }
-    textDocument()->setSelectionStart( QTextDocument::Standard, m_cursor );
+    textDocument()->setSelectionStart( KoTextDocument::Standard, m_cursor );
 
     do {
         m_cursor->gotoLeft();
     } while ( !m_cursor->atParagStart()
               && !m_cursor->parag()->at( m_cursor->index()-1 )->c.isSpace() );
-    textDocument()->setSelectionEnd( QTextDocument::Standard, m_cursor );
-    textObject()->removeSelectedText( m_cursor, QTextDocument::Standard, i18n("Remove word") );
+    textDocument()->setSelectionEnd( KoTextDocument::Standard, m_cursor );
+    textObject()->removeSelectedText( m_cursor, KoTextDocument::Standard, i18n("Remove word") );
 }
 
 void KoTextView::handleKeyPressEvent( QKeyEvent * e )
@@ -180,7 +180,7 @@ void KoTextView::handleKeyPressEvent( QKeyEvent * e )
         moveCursor( e->state() & ControlButton ? MovePgDown : MoveViewportDown, e->state() & ShiftButton );
         break;
     case Key_Return: case Key_Enter:
-        if ( textDocument()->hasSelection( QTextDocument::Standard ) )
+        if ( textDocument()->hasSelection( KoTextDocument::Standard ) )
             textObject()->removeSelectedText( m_cursor );
         clearUndoRedoInfo = FALSE;
         textObject()->doKeyboardAction( m_cursor, m_currentFormat, KoTextObject::ActionReturn );
@@ -190,7 +190,7 @@ void KoTextView::handleKeyPressEvent( QKeyEvent * e )
                           m_cursor->parag()->prev()->length() - 1, '\n' );
         break;
     case Key_Delete:
-        if ( textDocument()->hasSelection( QTextDocument::Standard ) ) {
+        if ( textDocument()->hasSelection( KoTextDocument::Standard ) ) {
             textObject()->removeSelectedText( m_cursor );
             break;
         }
@@ -200,7 +200,7 @@ void KoTextView::handleKeyPressEvent( QKeyEvent * e )
         clearUndoRedoInfo = FALSE;
         break;
     case Key_Backspace:
-        if ( textDocument()->hasSelection( QTextDocument::Standard ) ) {
+        if ( textDocument()->hasSelection( KoTextDocument::Standard ) ) {
             textObject()->removeSelectedText( m_cursor );
             break;
         }
@@ -323,17 +323,17 @@ void KoTextView::moveCursor( CursorAction action, bool select )
 {
     hideCursor();
     if ( select ) {
-        if ( !textDocument()->hasSelection( QTextDocument::Standard ) )
-            textDocument()->setSelectionStart( QTextDocument::Standard, m_cursor );
+        if ( !textDocument()->hasSelection( KoTextDocument::Standard ) )
+            textDocument()->setSelectionStart( KoTextDocument::Standard, m_cursor );
         moveCursor( action );
-        if ( textDocument()->setSelectionEnd( QTextDocument::Standard, m_cursor ) ) {
+        if ( textDocument()->setSelectionEnd( KoTextDocument::Standard, m_cursor ) ) {
             //      m_cursor->parag()->document()->nextDoubleBuffered = TRUE; ##### we need that only if we have nested items/documents
             textObject()->selectionChangedNotify();
         } else {
             showCursor();
         }
     } else {
-        bool redraw = textDocument()->removeSelection( QTextDocument::Standard );
+        bool redraw = textDocument()->removeSelection( KoTextDocument::Standard );
         moveCursor( action );
         if ( redraw ) {
             //m_cursor->parag()->document()->nextDoubleBuffered = TRUE; // we need that only if we have nested items/documents
@@ -422,8 +422,8 @@ QTextCursor KoTextView::selectWordUnderCursor()
     if ( !m_cursor->parag()->at( m_cursor->index() )->c.isSpace() && !m_cursor->atParagEnd() && !m_cursor->parag()->at( m_cursor->index() )->isCustom())
         c2.gotoWordRight();
 
-    textDocument()->setSelectionStart( QTextDocument::Standard, &c1 );
-    textDocument()->setSelectionEnd( QTextDocument::Standard, &c2 );
+    textDocument()->setSelectionStart( KoTextDocument::Standard, &c1 );
+    textDocument()->setSelectionEnd( KoTextDocument::Standard, &c2 );
     return c2;
 }
 
@@ -433,8 +433,8 @@ QTextCursor KoTextView::selectParagUnderCursor()
     QTextCursor c2 = *m_cursor;
     c1.setIndex(0);
     c2.setIndex(c1.parag()->string()->length() - 1);
-    textDocument()->setSelectionStart( QTextDocument::Standard, &c1 );
-    textDocument()->setSelectionEnd( QTextDocument::Standard, &c2 );
+    textDocument()->setSelectionStart( KoTextDocument::Standard, &c1 );
+    textDocument()->setSelectionEnd( KoTextDocument::Standard, &c2 );
     return c2;
 }
 
@@ -459,8 +459,8 @@ void KoTextView::handleMousePressEvent( QMouseEvent *e, const QPoint &iPoint )
         return;
     }
 
-    QTextDocument * textdoc = textDocument();
-    if ( textdoc->inSelection( QTextDocument::Standard, iPoint ) ) {
+    KoTextDocument * textdoc = textDocument();
+    if ( textdoc->inSelection( KoTextDocument::Standard, iPoint ) ) {
         mightStartDrag = TRUE;
         m_textobj->emitShowCursor();
         dragStartTimer->start( QApplication::startDragTime(), TRUE );
@@ -469,19 +469,19 @@ void KoTextView::handleMousePressEvent( QMouseEvent *e, const QPoint &iPoint )
     }
 
     bool redraw = FALSE;
-    if ( textdoc->hasSelection( QTextDocument::Standard ) ) {
+    if ( textdoc->hasSelection( KoTextDocument::Standard ) ) {
         if ( !( e->state() & ShiftButton ) ) {
-            redraw = textdoc->removeSelection( QTextDocument::Standard );
-            textdoc->setSelectionStart( QTextDocument::Standard, m_cursor );
+            redraw = textdoc->removeSelection( KoTextDocument::Standard );
+            textdoc->setSelectionStart( KoTextDocument::Standard, m_cursor );
         } else {
-            redraw = textdoc->setSelectionEnd( QTextDocument::Standard, m_cursor ) || redraw;
+            redraw = textdoc->setSelectionEnd( KoTextDocument::Standard, m_cursor ) || redraw;
         }
     } else {
         if ( !( e->state() & ShiftButton ) ) {
-            textdoc->setSelectionStart( QTextDocument::Standard, m_cursor );
+            textdoc->setSelectionStart( KoTextDocument::Standard, m_cursor );
         } else {
-            textdoc->setSelectionStart( QTextDocument::Standard, &oldCursor );
-            redraw = textdoc->setSelectionEnd( QTextDocument::Standard, m_cursor ) || redraw;
+            textdoc->setSelectionStart( KoTextDocument::Standard, &oldCursor );
+            redraw = textdoc->setSelectionEnd( KoTextDocument::Standard, m_cursor ) || redraw;
         }
     }
 
@@ -527,10 +527,10 @@ void KoTextView::handleMouseMoveEvent( QMouseEvent*, const QPoint& iPoint )
     }
 
     bool redraw = FALSE;
-    if ( textDocument()->hasSelection( QTextDocument::Standard ) )
-        redraw = textDocument()->setSelectionEnd( QTextDocument::Standard, m_cursor ) || redraw;
+    if ( textDocument()->hasSelection( KoTextDocument::Standard ) )
+        redraw = textDocument()->setSelectionEnd( KoTextDocument::Standard, m_cursor ) || redraw;
     else // it may be that the initial click was out of the frame
-        textDocument()->setSelectionStart( QTextDocument::Standard, m_cursor );
+        textDocument()->setSelectionStart( KoTextDocument::Standard, m_cursor );
 
     if ( redraw )
         textObject()->selectionChangedNotify( false );
@@ -548,8 +548,8 @@ void KoTextView::handleMouseReleaseEvent()
     }
     else
     {
-        if ( textDocument()->selectionStartCursor( QTextDocument::Standard ) == textDocument()->selectionEndCursor( QTextDocument::Standard ) )
-            textDocument()->removeSelection( QTextDocument::Standard );
+        if ( textDocument()->selectionStartCursor( KoTextDocument::Standard ) == textDocument()->selectionEndCursor( KoTextDocument::Standard ) )
+            textDocument()->removeSelection( KoTextDocument::Standard );
 
         textObject()->selectionChangedNotify();
 
@@ -790,7 +790,7 @@ QPtrList<KAction> KoTextView::dataToolActionList(KInstance * instance)
         if(text.find(KoTextObject::customItemChar()) == -1)
         {
             textObject()->textSelectedIsAnLink(m_refLink);
-            textDocument()->removeSelection( QTextDocument::Standard );
+            textDocument()->removeSelection( KoTextDocument::Standard );
             m_singleWord = true;
             m_wordUnderCursor = text;
         }
@@ -835,7 +835,7 @@ QPtrList<KAction> KoTextView::dataToolActionList(KInstance * instance)
         tools += KDataToolInfo::query( "QString", "application/x-singleword", instance );
     }
     // Maybe one day we'll have tools that use libkotext (or qt3's qrt), to act on formatted text
-    tools += KDataToolInfo::query( "QTextString", "application/x-qrichtext", instance );
+    tools += KDataToolInfo::query( "KoTextString", "application/x-qrichtext", instance );
 
     return KDataToolAction::dataToolActionList( tools, this, SLOT( slotToolActivated( const KDataToolInfo &, const QString & ) ) );
 }
@@ -860,7 +860,7 @@ void KoTextView::slotToolActivated( const KDataToolInfo & info, const QString & 
 
     // Preferred type is richtext
     QString mimetype = "application/x-qrichtext";
-    QString datatype = "QTextString";
+    QString datatype = "KoTextString";
     // If unsupported, try text/plain
     if ( !info.mimeTypes().contains( mimetype ) )
     {
@@ -883,7 +883,7 @@ void KoTextView::slotToolActivated( const KDataToolInfo & info, const QString & 
                 selectWordUnderCursor();
             // replace selection with 'text'
             textObject()->emitNewCommand( textObject()->replaceSelectionCommand(
-                cursor(), text, QTextDocument::Standard, i18n("Replace word") ));
+                cursor(), text, KoTextDocument::Standard, i18n("Replace word") ));
         }
     }
 
@@ -910,7 +910,7 @@ void KoTextView::insertSpecialChar(QChar _c)
 {
     if(textObject()->hasSelection() )
         textObject()->emitNewCommand(textObject()->replaceSelectionCommand(
-            cursor(), _c, QTextDocument::Standard, i18n("Insert Special Char")));
+            cursor(), _c, KoTextDocument::Standard, i18n("Insert Special Char")));
     else
         textObject()->insert( cursor(), currentFormat(), _c, false /* no newline */, true, i18n("Insert Special Char") );
 }
@@ -946,7 +946,7 @@ void KoTextView::setParagLayoutFormat( KoParagLayout *newLayout,int flags,int ma
         cmd= textObject()->setTabListCommand( m_cursor, newLayout->tabList() );
         break;
     case KoParagLayout::Margins:
-        cmd= textObject()->setMarginCommand(m_cursor,(Qt3::QStyleSheetItem::Margin)marginIndex, newLayout->margins[marginIndex] );
+        cmd= textObject()->setMarginCommand(m_cursor,(QStyleSheetItem::Margin)marginIndex, newLayout->margins[marginIndex] );
         break;
     case KoParagLayout::BulletNumber:
         cmd= textObject()->setCounterCommand( m_cursor, c  );
