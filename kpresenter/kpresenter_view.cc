@@ -6354,8 +6354,7 @@ void KPresenterView::textStyleSelected( int index )
             return; // nope, no frames are selected.
         // yes, indeed frames are selected.
         QPtrListIterator<KPTextObject> it( selectedFrames );
-        KMacroCommand *globalCmd = new KMacroCommand( selectedFrames.count() == 1 ? i18n("Apply Style to Frame") :
-                                                      i18n("Apply Style to Frames"));
+        KMacroCommand *globalCmd = 0L;
         for ( ; it.current() ; ++it )
         {
             KoTextObject *textObject = it.current()->textObject();
@@ -6365,9 +6364,15 @@ void KPresenterView::textStyleSelected( int index )
                                                     true, true );
             textObject->textDocument()->removeSelection( KoTextDocument::Temp );
             if (cmd)
+            {
+                if ( !globalCmd)
+                    globalCmd = new KMacroCommand( selectedFrames.count() == 1 ? i18n("Apply Style to Frame") :
+                                                      i18n("Apply Style to Frames"));
                 globalCmd->addCommand( cmd );
+            }
         }
-        m_pKPresenterDoc->addCommand( globalCmd );
+        if ( globalCmd )
+            m_pKPresenterDoc->addCommand( globalCmd );
     }
 
 }
