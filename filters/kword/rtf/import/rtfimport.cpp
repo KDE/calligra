@@ -548,19 +548,19 @@ KoFilter::ConversionStatus RTFImport::convert( const QCString& from, const QCStr
 	{
 	    mainDoc.addFrameSet( "First Page Header", 1, 1 );
 	      mainDoc.addFrame( leftMargin, state.section.headerMargin,
-			(paperWidth - rightMargin), (topMargin - 80), 2, 2, 0 );
+			(paperWidth - rightMargin), (topMargin - 80), 0, 2, 0 );
 	      mainDoc.closeNode( "FRAME" );
 	      mainDoc.appendNode( firstPageHeader.node );
 	    mainDoc.closeNode( "FRAMESET" );
 	    mainDoc.addFrameSet( "Odd Pages Header", 1, 2 );
 	      mainDoc.addFrame( leftMargin, state.section.headerMargin,
-			(paperWidth - rightMargin), (topMargin - 80), 2, 2, 1 );
+			(paperWidth - rightMargin), (topMargin - 80), 0, 2, 1 );
 	      mainDoc.closeNode( "FRAME" );
 	      mainDoc.appendNode( oddPagesHeader.node );
 	    mainDoc.closeNode( "FRAMESET" );
 	    mainDoc.addFrameSet( "Even Pages Header", 1, 3 );
 	      mainDoc.addFrame( leftMargin, state.section.headerMargin,
-			(paperWidth - rightMargin), (topMargin - 80), 2, 2, 2 );
+			(paperWidth - rightMargin), (topMargin - 80), 0, 2, 2 );
 	      mainDoc.closeNode( "FRAME" );
 	      mainDoc.appendNode( evenPagesHeader.node );
 	    mainDoc.closeNode( "FRAMESET" );
@@ -570,19 +570,19 @@ KoFilter::ConversionStatus RTFImport::convert( const QCString& from, const QCStr
 	{
 	    mainDoc.addFrameSet( "First Page Footer", 1, 4 );
 	      mainDoc.addFrame( leftMargin, state.section.headerMargin,
-			(paperWidth - rightMargin), (topMargin - 80), 2, 2, 0 );
+			(paperWidth - rightMargin), (topMargin - 80), 0, 2, 0 );
 	      mainDoc.closeNode( "FRAME" );
 	      mainDoc.appendNode( firstPageFooter.node );
 	    mainDoc.closeNode( "FRAMESET" );
 	    mainDoc.addFrameSet( "Odd Pages Footer", 1, 5 );
 	      mainDoc.addFrame( leftMargin, state.section.headerMargin,
-			(paperWidth - rightMargin), (topMargin - 80), 2, 2, 1 );
+			(paperWidth - rightMargin), (topMargin - 80), 0, 2, 1 );
 	      mainDoc.closeNode( "FRAME" );
 	      mainDoc.appendNode( oddPagesFooter.node );
 	    mainDoc.closeNode( "FRAMESET" );
 	    mainDoc.addFrameSet( "Even Pages Footer", 1, 6 );
 	      mainDoc.addFrame( leftMargin, state.section.headerMargin,
-			(paperWidth - rightMargin), (topMargin - 80), 2, 2, 2 );
+			(paperWidth - rightMargin), (topMargin - 80), 0, 2, 2 );
 	      mainDoc.closeNode( "FRAME" );
 	      mainDoc.appendNode( evenPagesFooter.node );
 	    mainDoc.closeNode( "FRAMESET" );
