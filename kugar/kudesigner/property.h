@@ -21,6 +21,7 @@
 class QWidget;
 class QString;
 class PropertyEditor;
+class CanvasBox;
 
 /**
   *@author Alexander Dymo
@@ -49,7 +50,8 @@ enum PropertyType {
     Color,         /*color*/
     Symbol,        /*unicode symbol's code*/
     FontName,      /*font name - "times new roman"*/
-    LineStyle      /*combobox with lines at the place of combo items descriptions */
+    LineStyle,     /*combobox with lines at the place of combo items descriptions */
+    FieldName      /*normally behaves like a StringValue, but can be overriden */
 };
 
 /**
@@ -87,7 +89,7 @@ public:
     void setCorrespList(std::map<QString, QString> list);
     std::map<QString, QString> correspList;    
     
-    virtual QWidget *editorOfType(const PropertyEditor *editor);
+    virtual QWidget *editorOfType(PropertyEditor *editor,const CanvasBox *item);
 
 protected:
     int m_type;

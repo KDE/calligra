@@ -86,7 +86,7 @@ void Property::setDescription(QString description)
     m_description = description;
 }
 
-QWidget *Property::editorOfType(const PropertyEditor *editor)
+QWidget *Property::editorOfType(PropertyEditor *editor, const CanvasBox* cb)
 {
     PSpinBox *s;
     PLineEdit *l;
@@ -96,6 +96,10 @@ QWidget *Property::editorOfType(const PropertyEditor *editor)
     PLineStyle *i;
     PComboBox *b;
     
+    QWidget *w=0;
+    editor->createPluggedInEditor(w, editor,type(),name(),value(),cb);
+    if (w) return w;
+
     switch (type())
     {
         case IntegerValue:
@@ -122,6 +126,7 @@ QWidget *Property::editorOfType(const PropertyEditor *editor)
             b = new PComboBox(editor, name(), value(), &correspList, false, 0, 0);
             return b;
 
+	case FieldName:
         case StringValue:
         default:
             l = new PLineEdit((PropertyEditor *)editor, name(), value(), (QWidget*)0);

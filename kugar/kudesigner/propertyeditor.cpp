@@ -51,7 +51,7 @@ PropertyEditor::PropertyEditor( Place p, QWidget * parent, const char * name, WF
 PropertyEditor::~PropertyEditor(){
 }
 
-void PropertyEditor::populateProperties(std::map<QString, PropPtr > *v_props)
+void PropertyEditor::populateProperties(std::map<QString, PropPtr > *v_props,const CanvasBox* item)
 {
     props = v_props;
 
@@ -64,7 +64,7 @@ void PropertyEditor::populateProperties(std::map<QString, PropPtr > *v_props)
 
         table->setText(row-1, 0, (*it).first);
 
-        QWidget *w = (*it).second->editorOfType(this);
+        QWidget *w = (*it).second->editorOfType(this,item);
         table->setCellWidget(row-1, 1, w);
     }
 }

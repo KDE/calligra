@@ -324,8 +324,8 @@ void KudesignerView::guiActivateEvent( KParts::GUIActivateEvent *ev )
 	        shell()->addDockWindow(pe, DockRight);
 	        pe->show();
 	    
-	        connect(rc, SIGNAL( selectionMade(std::map<QString, PropPtr >*) ), pe,
-        	    SLOT( populateProperties(std::map<QString, PropPtr >*) ));
+	        connect(rc, SIGNAL( selectionMade(std::map<QString, PropPtr >*,const CanvasBox*) ), pe,
+        	    SLOT( populateProperties(std::map<QString, PropPtr >*,const CanvasBox*) ));
 	        connect(rc, SIGNAL( selectionClear() ), pe, SLOT( clearProperties() ));
     		connect(pe, SIGNAL(propertyChanged(QString, QString)), rc, SLOT(updateProperty(QString, QString)));
 	    }

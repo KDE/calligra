@@ -19,7 +19,8 @@
 #define PROPERTYEDITOR_H
 
 #include <qdockwindow.h>
-
+#include <qwidget.h>
+#include <qstring.h>
 #include <map>
 
 #include "property.h"
@@ -27,7 +28,7 @@
 class QWidget;
 class QTable;
 class QString;
-
+class CanvasBox;
 /**
   *@author Alexander Dymo
   Docked window that contains property editor - QTable with customized editors
@@ -41,7 +42,7 @@ public:
     ~PropertyEditor();
 
 public slots:
-    void populateProperties(std::map<QString, PropPtr> *v_props);
+    void populateProperties(std::map<QString, PropPtr> *v_props, const CanvasBox *item); //if this should be more generic perhaps void*
     void clearProperties();
 
     void emitPropertyChange(QString name, QString newValue);
@@ -53,6 +54,16 @@ private:
 signals:
     /** property name, new property value */
     void propertyChanged(QString name, QString newValue);
+
+
+#undef signals
+#define signals public
+signals:
+#undef signals
+#define signals protected
+    void createPluggedInEditor(QWidget* retVal, const PropertyEditor *editor,
+	int type,QString name,QString value,const CanvasBox *cb);
+
 };
 
 #endif

@@ -83,6 +83,7 @@ private:
     QPtrList<CanvasBox> selected;
 
     void fixMinValues(double &pos,double minv,double &offset);
+    void fixMaxValues(double &pos,double size,double maxv,double &offset);
 
 //    std::map<QString, PropPtr > selProps;
 
@@ -96,7 +97,7 @@ be unchecked. */
 
   /** Emitted when selection is made, so that property editor can display properties
       for the selected items. */
-  void selectionMade(std::map<QString, PropPtr > *v_props);
+  void selectionMade(std::map<QString, PropPtr > *v_props,const CanvasBox*);
   void selectionClear();
 
 public slots:

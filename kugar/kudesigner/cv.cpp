@@ -370,6 +370,30 @@ void ReportCanvas::fixMinValues(double &pos,double minv,double &offset)
 	}
 }
 
+void ReportCanvas::fixMaxValues(double &pos,double size,double maxv,double &offset)
+{
+	double tmpMax=pos+size;
+	if (tmpMax>maxv)
+	{
+		offset=offset+tmpMax-maxv;
+		pos=maxv-size;
+	}
+	else
+	{
+		if (offset>0)
+		{
+			offset=offset+tmpMax-maxv;
+			if (offset>0)
+				pos=maxv-size;
+			else
+			{
+				pos=offset+maxv-size;
+				offset=0;
+			}
+		}
+	}
+}
+
 void ReportCanvas::contentsMouseMoveEvent(QMouseEvent* e)
 {
     QPoint p = inverseWorldMatrix().map(e->pos());
@@ -393,10 +417,10 @@ void ReportCanvas::contentsMouseMoveEvent(QMouseEvent* e)
 	double newYPos=moving->y()+p.y()-moving_start.y();
 	fixMinValues(newYPos,moving->parentSection->y(),moving_offsetY);
 	fixMinValues(newXPos,moving->parentSection->x(),moving_offsetX);
+	fixMaxValues(newYPos,moving->height(),moving->parentSection->y()+moving->parentSection->height(),moving_offsetY);
+	fixMaxValues(newXPos,moving->width(),moving->parentSection->x()+moving->parentSection->width(),moving_offsetX);
 
 	moving->move(newXPos,newYPos);
-        //moving->moveBy(p.x() - moving_start.x(),
-        //    p.y() - moving_start.y());
 /*	attempt to prevent item collisions
         QCanvasItemList l=canvas()->collisions(moving->rect());
 	if (l.count() > 2)
@@ -414,9 +438,18 @@ void ReportCanvas::contentsMouseMoveEvent(QMouseEvent* e)
     if (resizing)
     {
         QCanvasRectangle *r = (QCanvasRectangle *)resizing;
-        int w = r->width() + p.x() - moving_start.x();
-        int h = r->height() + p.y() - moving_start.y();
-        if (((w > 10) && (h > 10)) || (resizing->rtti() == RttiCanvasLine))
+        double w = r->width() + p.x() - moving_start.x();
+        double h = r->height() + p.y() - moving_start.y();
+	if (resizing->rtti() !=RttiCanvasLine)
+	{
+		fixMinValues(h,10,moving_offsetY);
+		fixMinValues(w,10,moving_offsetX);
+	}
+
+	fixMaxValues(h,resizing->y(),resizing->parentSection->y()+resizing->parentSection->height(),moving_offsetY);
+	fixMaxValues(w,resizing->x(),resizing->parentSection->x()+resizing->parentSection->width(),moving_offsetX);
+
+//        if (((w > 10) && (h > 10)) || (resizing->rtti() == RttiCanvasLine))
             r->setSize(w, h);
         moving_start = p;
         resizing->updateGeomProps();
@@ -591,10 +624,10 @@ void ReportCanvas::finishSelection()
             }*/
 
             std::map<QString, PropPtr > *x = new std::map<QString, PropPtr >(curr);
-            emit selectionMade(x);
+            emit selectionMade(x,0);
         }
         else
-            emit selectionMade(&(selected.first()->props));
+            emit selectionMade(&(selected.first()->props),selected.first());
 
 /*  CanvasBox *b;
     for (b = selected.first(); b; b = selected.next())
