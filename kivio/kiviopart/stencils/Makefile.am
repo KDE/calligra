@@ -1,4 +1,2 @@
-SUBDIRS = Dia Flowcharting UML #Electrical
-
-
+SUBDIRS = Dia Flowcharting UML Geographic Miscellaneous
 
