@@ -50,7 +50,7 @@ KSpreadComment::KSpreadComment( KSpreadView* parent, const char* name,const QPoi
 
     KButtonBox *bb = new KButtonBox( this );
     bb->addStretch();
-    m_pOk = bb->addButton( i18n("Ok") );
+    m_pOk = bb->addButton( i18n("OK") );
     m_pOk->setDefault( TRUE );
     m_pClose = bb->addButton( i18n( "Close" ) );
     bb->layout();

@@ -476,7 +476,7 @@ LayerPropertyDialog::LayerPropertyDialog( QString _layername, uchar _opacity, QW
 
   (void) new QWidget( buttons );
 
-  QPushButton *pbOk = new QPushButton( i18n( "Ok" ), buttons );
+  QPushButton *pbOk = new QPushButton( i18n( "OK" ), buttons );
   pbOk->setDefault( true );
   QObject::connect( pbOk, SIGNAL( clicked() ), this, SLOT( accept() ) );
 

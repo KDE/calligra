@@ -78,7 +78,7 @@ DocumentInfo::DocumentInfo (GDocument* doc, QWidget* parent,
 
   // the standard buttons
   KButtonBox *bbox = new KButtonBox (this);
-  button = bbox->addButton (i18n ("Ok"));
+  button = bbox->addButton (i18n ("OK"));
   connect (button, SIGNAL (clicked ()), this, SLOT (acceptClicked() ));
   button = bbox->addButton (i18n ("Cancel"));
   connect (button, SIGNAL (clicked ()), SLOT (reject ()));

@@ -66,7 +66,7 @@ KSpreadConsolidate::KSpreadConsolidate( KSpreadView* parent, const char* name )
   m_pRefs = new QListBox( this );
   m_pRefs->setGeometry( 10, 170, 150, 80 );
 
-  m_pOk = new QPushButton( i18n("Ok"), this );
+  m_pOk = new QPushButton( i18n("OK"), this );
   m_pOk->setGeometry( 180, 20, 100, 30 );
   m_pOk->setEnabled( false );
   m_pClose = new QPushButton( i18n("Cancel"), this );
