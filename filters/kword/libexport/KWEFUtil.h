@@ -28,8 +28,8 @@ namespace KWEFUtil
 
 QString EscapeSgmlText(const QTextCodec* codec, const QString& strIn,
     const bool quot = false, const bool apos = false );
-
-
+void GetNativePaperFormat(const int format,
+    QString& width, QString& height, QString& units);
 };
 
 // Depreciated! Use KWEFUtil::EscapeSgmlText
