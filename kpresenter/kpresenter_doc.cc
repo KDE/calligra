@@ -1042,7 +1042,10 @@ void KPresenterDoc::loadObjects( const QDomElement &element,bool paste )
                     addCommand( insertCmd );
                 }
                 else if( m_pageWhereLoadObject &&!paste)
+                {
                     m_pageWhereLoadObject->appendObject(kplineobject);
+                    kplineobject->setOrig(kplineobject->getOrig().x(),offset);
+                }
                 else
                     insertObjectInPage(offset, kplineobject);
             } break;
@@ -1056,7 +1059,10 @@ void KPresenterDoc::loadObjects( const QDomElement &element,bool paste )
                     addCommand( insertCmd );
                 }
                 else if( m_pageWhereLoadObject &&!paste)
+                {
                     m_pageWhereLoadObject->appendObject(kprectobject);
+                    kprectobject->setOrig(kprectobject->getOrig().x(),offset);
+                }
                 else
                     insertObjectInPage(offset, kprectobject);
             } break;
@@ -1070,7 +1076,10 @@ void KPresenterDoc::loadObjects( const QDomElement &element,bool paste )
                     addCommand( insertCmd );
                 }
                 else if( m_pageWhereLoadObject &&!paste)
+                {
                     m_pageWhereLoadObject->appendObject(kpellipseobject);
+                    kpellipseobject->setOrig(kpellipseobject->getOrig().x(),offset);
+                }
                 else
                     insertObjectInPage(offset, kpellipseobject);
             } break;
@@ -1084,7 +1093,10 @@ void KPresenterDoc::loadObjects( const QDomElement &element,bool paste )
                     addCommand( insertCmd );
                 }
                 else if( m_pageWhereLoadObject &&!paste)
+                {
                     m_pageWhereLoadObject->appendObject(kppieobject);
+                    kppieobject->setOrig(kppieobject->getOrig().x(),offset);
+                }
                 else
                     insertObjectInPage(offset, kppieobject);
             } break;
@@ -1098,7 +1110,10 @@ void KPresenterDoc::loadObjects( const QDomElement &element,bool paste )
                     addCommand( insertCmd );
                 }
                 else if( m_pageWhereLoadObject &&!paste)
+                {
                     m_pageWhereLoadObject->appendObject(kpautoformobject);
+                    kpautoformobject->setOrig(kpautoformobject->getOrig().x(),offset);
+                }
                 else
                     insertObjectInPage(offset, kpautoformobject);
             } break;
@@ -1113,7 +1128,10 @@ void KPresenterDoc::loadObjects( const QDomElement &element,bool paste )
                     kpclipartobject->reload();
                 }
                 else if( m_pageWhereLoadObject &&!paste)
+                {
                     m_pageWhereLoadObject->appendObject(kpclipartobject);
+                    kpclipartobject->setOrig(kpclipartobject->getOrig().x(),offset);
+                }
                 else
                     insertObjectInPage(offset, kpclipartobject);
             } break;
@@ -1127,7 +1145,10 @@ void KPresenterDoc::loadObjects( const QDomElement &element,bool paste )
                     addCommand( insertCmd );
                 }
                 else if( m_pageWhereLoadObject &&!paste)
+                {
                     m_pageWhereLoadObject->appendObject(kptextobject);
+                    kptextobject->setOrig(kptextobject->getOrig().x(),offset);
+                }
                 else
                     insertObjectInPage(offset, kptextobject);
             } break;
@@ -1142,7 +1163,10 @@ void KPresenterDoc::loadObjects( const QDomElement &element,bool paste )
                     kppixmapobject->reload();
                 }
                 else if( m_pageWhereLoadObject &&!paste)
+                {
                     m_pageWhereLoadObject->appendObject(kppixmapobject);
+                    kppixmapobject->setOrig(kppixmapobject->getOrig().x(),offset);
+                }
                 else
                     insertObjectInPage(offset, kppixmapobject);
             } break;
@@ -1156,7 +1180,10 @@ void KPresenterDoc::loadObjects( const QDomElement &element,bool paste )
                     addCommand( insertCmd );
                 }
                 else if( m_pageWhereLoadObject &&!paste)
+                {
                     m_pageWhereLoadObject->appendObject(kpfreehandobject);
+                    kpfreehandobject->setOrig(kpfreehandobject->getOrig().x(),offset);
+                }
                 else
                     insertObjectInPage(offset,kpfreehandobject);
             } break;
@@ -1170,7 +1197,10 @@ void KPresenterDoc::loadObjects( const QDomElement &element,bool paste )
                     addCommand( insertCmd );
                 }
                 else if( m_pageWhereLoadObject &&!paste)
+                {
                     m_pageWhereLoadObject->appendObject(kppolylineobject);
+                    kppolylineobject->setOrig(kppolylineobject->getOrig().x(),offset);
+                }
                 else
                     insertObjectInPage(offset, kppolylineobject);
             } break;
@@ -1184,7 +1214,10 @@ void KPresenterDoc::loadObjects( const QDomElement &element,bool paste )
                     addCommand( insertCmd );
                 }
                 else if( m_pageWhereLoadObject &&!paste)
+                {
                     m_pageWhereLoadObject->appendObject(kpQuadricBezierCurveObject);
+                    kpQuadricBezierCurveObject->setOrig(kpQuadricBezierCurveObject->getOrig().x(),offset);
+                }
                 else
                     insertObjectInPage(offset, kpQuadricBezierCurveObject);
             } break;
@@ -1198,7 +1231,10 @@ void KPresenterDoc::loadObjects( const QDomElement &element,bool paste )
                     addCommand( insertCmd );
                 }
                 else if( m_pageWhereLoadObject &&!paste)
+                {
                     m_pageWhereLoadObject->appendObject(kpCubicBezierCurveObject);
+                    kpCubicBezierCurveObject->setOrig(kpCubicBezierCurveObject->getOrig().x(),offset);
+                }
                 else
                     insertObjectInPage(offset, kpCubicBezierCurveObject);
             } break;
@@ -1212,7 +1248,10 @@ void KPresenterDoc::loadObjects( const QDomElement &element,bool paste )
                     addCommand( insertCmd );
                 }
                 else if( m_pageWhereLoadObject &&!paste)
+                {
                     m_pageWhereLoadObject->appendObject(kpPolygonObject);
+                    kpPolygonObject->setOrig(kpPolygonObject->getOrig().x(),offset);
+                }
                 else
                     insertObjectInPage(offset, kpPolygonObject);
             } break;
@@ -1226,7 +1265,10 @@ void KPresenterDoc::loadObjects( const QDomElement &element,bool paste )
                     addCommand( insertCmd );
                 }
                 else if( m_pageWhereLoadObject &&!paste)
+                {
                     m_pageWhereLoadObject->appendObject(kpgroupobject);
+                    kpgroupobject->setOrig(kpgroupobject->getOrig().x(),offset);
+                }
                 else
                     insertObjectInPage(offset, kpgroupobject);
             } break;
