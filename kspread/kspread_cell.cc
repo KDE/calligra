@@ -93,6 +93,34 @@ public:
     
     int mergedXCells;
     int mergedYCells;
+    
+    // result of "fm.ascent()" in makeLayout. used in offsetAlign.
+    int fmAscent;
+
+    // If a cell overlapps other cells, then we have the cells width stored here.
+    // This value does not mean anything unless extraXCells is different from 0.
+    double extraWidth;
+    
+    // If a cell overlapps other cells, then we have the cells height stored here.
+    // This value does not mean anything unless extraYCells is different from 0.
+    double extraHeight;
+
+    // A list of cells that obscure this one.
+    // If this list is not empty, then this cell is obscured by another
+    // enlarged object. This means that we have to call this object in order
+    // of painting it for example instead of painting 'this'.
+    QValueList<KSpreadCell*> obscuringCells;
+           
+    // list of cells that must be calculated in order to calculate this cell
+    QPtrList<KSpreadDependency> m_lstDepends;
+
+    // list of cells that require this cell's value to be calculated
+    QPtrList<KSpreadDependency> m_lstDependingOnMe;
+     
+    // The value we got from calculation.
+    // If @ref isFormula() is TRUE, @ref makeLayout() will use @ref m_strFormulaOut
+    // instead of @ref m_strText since m_strText stores the formula the user entered.
+    QString m_strFormulaOut;
 };
 
 
@@ -104,8 +132,6 @@ public:
 
 KSpreadCell::KSpreadCell( KSpreadSheet * _table, int _column, int _row )
   : KSpreadFormat( _table, _table->doc()->styleManager()->defaultStyle() ),
-    m_dExtraWidth( 0.0 ),
-    m_dExtraHeight( 0.0 ),
     m_style( ST_Normal ),
     m_pPrivate( 0 ),
     m_content( Text ),
@@ -129,8 +155,8 @@ KSpreadCell::KSpreadCell( KSpreadSheet * _table, int _column, int _row )
   d->extraYCells = 0;
   d->mergedXCells = 0;
   d->mergedYCells = 0;
-
-  m_ObscuringCells.clear();
+  d->extraWidth = 0.0;
+  d->extraHeight = 0.0;
 
   m_lstDepends.setAutoDelete( true );
   m_lstDependingOnMe.setAutoDelete( true );
@@ -140,8 +166,6 @@ KSpreadCell::KSpreadCell( KSpreadSheet * _table, int _column, int _row )
 
 KSpreadCell::KSpreadCell( KSpreadSheet * _table, KSpreadStyle * _style, int _column, int _row )
   : KSpreadFormat( _table, _style ),
-    m_dExtraWidth( 0.0 ),
-    m_dExtraHeight( 0.0 ),
     m_style( ST_Normal ),
     m_pPrivate( 0 ),
     m_content( Text ),
@@ -165,8 +189,8 @@ KSpreadCell::KSpreadCell( KSpreadSheet * _table, KSpreadStyle * _style, int _col
   d->extraYCells = 0;
   d->mergedXCells = 0;
   d->mergedYCells = 0;
-
-  m_ObscuringCells.clear();
+  d->extraWidth = 0.0;
+  d->extraHeight = 0.0;
 
   m_lstDepends.setAutoDelete( true );
   m_lstDependingOnMe.setAutoDelete( true );
@@ -176,8 +200,6 @@ KSpreadCell::KSpreadCell( KSpreadSheet * _table, KSpreadStyle * _style, int _col
 
 KSpreadCell::KSpreadCell( KSpreadSheet *_table, QPtrList<KSpreadDependency> _deponme, int _column, int _row )
   : KSpreadFormat( _table, _table->doc()->styleManager()->defaultStyle() ),
-    m_dExtraWidth( 0.0 ),
-    m_dExtraHeight( 0.0 ),
     m_style( ST_Normal ),
     m_pPrivate( 0 ),
     m_content( Text ),
@@ -201,8 +223,8 @@ KSpreadCell::KSpreadCell( KSpreadSheet *_table, QPtrList<KSpreadDependency> _dep
   d->extraYCells = 0;
   d->mergedXCells = 0;
   d->mergedYCells = 0;
-
-  m_ObscuringCells.clear();
+  d->extraWidth = 0.0;
+  d->extraHeight = 0.0;
 
   m_lstDepends.setAutoDelete( true );
   m_lstDependingOnMe = _deponme ;
@@ -369,8 +391,8 @@ void KSpreadCell::forceExtraCells( int _col, int _row, int _x, int _y )
       clearFlag( Flag_ForceExtra );
       d->extraXCells  = 0;
       d->extraYCells  = 0;
-      m_dExtraWidth   = 0.0;
-      m_dExtraHeight  = 0.0;
+      d->extraWidth   = 0.0;
+      d->extraHeight  = 0.0;
       d->mergedXCells = 0;
       d->mergedYCells = 0;
       return;
@@ -407,7 +429,7 @@ void KSpreadCell::move( int col, int row )
     //int ex = extraXCells();
     //int ey = extraYCells();
 
-    m_ObscuringCells.clear();
+    d->obscuringCells.clear();
 
     // Unobscure the objects we obscure right now
     for( int x = d->column; x <= d->column + d->extraXCells; ++x )
@@ -437,8 +459,8 @@ void KSpreadCell::setLayoutDirtyFlag( bool format )
     if ( format )
         setFlag( Flag_TextFormatDirty );
 
-    QValueList<KSpreadCell*>::iterator it  = m_ObscuringCells.begin();
-    QValueList<KSpreadCell*>::iterator end = m_ObscuringCells.end();
+    QValueList<KSpreadCell*>::iterator it  = d->obscuringCells.begin();
+    QValueList<KSpreadCell*>::iterator end = d->obscuringCells.end();
     for ( ; it != end; ++it )
     {
 	(*it)->setLayoutDirtyFlag( format );
@@ -470,13 +492,13 @@ bool KSpreadCell::isEmpty() const
 
 bool KSpreadCell::isObscured() const
 {
-    return !( m_ObscuringCells.isEmpty() );
+    return !( d->obscuringCells.isEmpty() );
 }
 
 bool KSpreadCell::isObscuringForced() const
 {
-  QValueList<KSpreadCell*>::const_iterator it = m_ObscuringCells.begin();
-  QValueList<KSpreadCell*>::const_iterator end = m_ObscuringCells.end();
+  QValueList<KSpreadCell*>::const_iterator it = d->obscuringCells.begin();
+  QValueList<KSpreadCell*>::const_iterator end = d->obscuringCells.end();
   for ( ; it != end; ++it )
   {
     KSpreadCell *cell = *it;
@@ -496,22 +518,27 @@ bool KSpreadCell::isObscuringForced() const
   return false;
 }
 
+QValueList<KSpreadCell*> KSpreadCell::obscuringCells() const
+{
+    return d->obscuringCells; 
+}
+
 void KSpreadCell::clearObscuringCells()
 {
-    m_ObscuringCells.clear();
+    d->obscuringCells.clear();
 }
 
 void KSpreadCell::obscure( KSpreadCell *cell, bool isForcing )
 {
-  m_ObscuringCells.remove( cell ); // removes *all* occurrences
+  d->obscuringCells.remove( cell ); // removes *all* occurrences
   cell->clearObscuringCells();
   if ( isForcing )
   {
-    m_ObscuringCells.prepend( cell );
+    d->obscuringCells.prepend( cell );
   }
   else
   {
-    m_ObscuringCells.append( cell );
+    d->obscuringCells.append( cell );
   }
   setFlag(Flag_LayoutDirty);
   m_pTable->setRegionPaintDirty( cellRect() );
@@ -519,7 +546,7 @@ void KSpreadCell::obscure( KSpreadCell *cell, bool isForcing )
 
 void KSpreadCell::unobscure( KSpreadCell * cell )
 {
-  m_ObscuringCells.remove( cell );
+  d->obscuringCells.remove( cell );
   setFlag( Flag_LayoutDirty );
   m_pTable->setRegionPaintDirty( cellRect() );
 }
@@ -549,7 +576,7 @@ void KSpreadCell::clicked( KSpreadCanvas * _canvas )
     double ty = m_pTable->dblRowPos( row(), _canvas );
     double h = rl->dblHeight( _canvas );
     if ( d->extraYCells )
-      h = m_dExtraHeight;
+      h = d->extraHeight;
     ty += h;
 
     QPoint p( tx, int( ty ) );
@@ -954,7 +981,7 @@ void KSpreadCell::makeLayout( QPainter &_painter, int _col, int _row )
         }
         else
         {
-            m_dExtraWidth = max_width;
+            d->extraWidth = max_width;
         }
         // Occupy the needed extra cells in vertical direction
         double max_height = dblHeight( _row );
@@ -1001,7 +1028,7 @@ void KSpreadCell::makeLayout( QPainter &_painter, int _col, int _row )
         }
         else
         {
-            m_dExtraHeight = max_height;
+            d->extraHeight = max_height;
         }
         clearFlag( Flag_LayoutDirty );
 
@@ -1027,7 +1054,7 @@ void KSpreadCell::makeLayout( QPainter &_painter, int _col, int _row )
     double h = rl->dblHeight();
 
     // Calculate the extraWidth and extraHeight if we are forced to.
-    /* Use m_dExtraWidth/height here? Isn't it already calculated?*/
+    /* Use d->extraWidth/height here? Isn't it already calculated?*/
     /* No, they are calculated here only (beside of QML part above) Philipp */
     if ( testFlag( Flag_ForceExtra ) )
     {
@@ -1042,8 +1069,8 @@ void KSpreadCell::makeLayout( QPainter &_painter, int _col, int _row )
             h += rl->dblHeight() ;
         }
     }
-    m_dExtraWidth = w;
-    m_dExtraHeight = h;
+    d->extraWidth = w;
+    d->extraHeight = h;
 
     // Some space for the little button of the combo box
     if ( m_style == ST_Select )
@@ -1123,7 +1150,7 @@ void KSpreadCell::makeLayout( QPainter &_painter, int _col, int _row )
         }
         while ( i != -1 );
     }
-    m_fmAscent = fm.ascent();
+    d->fmAscent = fm.ascent();
 
     // Calculate d->textX and d->textY
     offsetAlign( _col, _row );
@@ -1184,7 +1211,7 @@ void KSpreadCell::makeLayout( QPainter &_painter, int _col, int _row )
         if( c - d->column > d->mergedXCells )
         {
           d->extraXCells = c - d->column;
-          m_dExtraWidth = w;
+          d->extraWidth = w;
           for( int i = d->column + 1; i <= c; ++i )
           {
             KSpreadCell *cell = m_pTable->nonDefaultCell( i, d->row );
@@ -1240,7 +1267,7 @@ void KSpreadCell::makeLayout( QPainter &_painter, int _col, int _row )
       if( r - d->row > d->mergedYCells )
       {
         d->extraYCells = r - d->row;
-        m_dExtraHeight = h;
+        d->extraHeight = h;
         for( int i = d->row + 1; i <= r; ++i )
         {
           KSpreadCell *cell = m_pTable->nonDefaultCell( d->column, i );
@@ -1578,23 +1605,23 @@ void KSpreadCell::offsetAlign( int _col, int _row )
     double h = rl->dblHeight();
 
     if ( d->extraXCells )
-        w = m_dExtraWidth;
+        w = d->extraWidth;
     if ( d->extraYCells )
-        h = m_dExtraHeight;
+        h = d->extraHeight;
 
     switch( ay )
     {
      case KSpreadCell::Top:
       if ( tmpAngle == 0 )
         d->textY = tmpTopBorderWidth + BORDER_SPACE
-          + (double) m_fmAscent / m_pTable->doc()->zoomedResolutionY();
+          + (double) d->fmAscent / m_pTable->doc()->zoomedResolutionY();
       else
       {
         if ( tmpAngle < 0 )
           d->textY = tmpTopBorderWidth + BORDER_SPACE;
         else
           d->textY = tmpTopBorderWidth + BORDER_SPACE +
-            (double)m_fmAscent * cos( tmpAngle * M_PI / 180 ) /
+            (double)d->fmAscent * cos( tmpAngle * M_PI / 180 ) /
             m_pTable->doc()->zoomedResolutionY();
       }
       break;
@@ -1613,7 +1640,7 @@ void KSpreadCell::offsetAlign( int _col, int _row )
             d->textY = h - BORDER_SPACE - d->textHeight - effBottomBorderPen( _col, _row ).width();
           else
             d->textY = h - BORDER_SPACE - d->textHeight - effBottomBorderPen( _col, _row ).width()
-              + (double) m_fmAscent * cos( tmpAngle * M_PI / 180 ) / m_pTable->doc()->zoomedResolutionY();
+              + (double) d->fmAscent * cos( tmpAngle * M_PI / 180 ) / m_pTable->doc()->zoomedResolutionY();
         }
         else
         {
@@ -1621,7 +1648,7 @@ void KSpreadCell::offsetAlign( int _col, int _row )
             d->textY = tmpTopBorderWidth + BORDER_SPACE ;
           else
             d->textY = tmpTopBorderWidth + BORDER_SPACE
-              + (double) m_fmAscent * cos( tmpAngle * M_PI / 180 ) / m_pTable->doc()->zoomedResolutionY();
+              + (double) d->fmAscent * cos( tmpAngle * M_PI / 180 ) / m_pTable->doc()->zoomedResolutionY();
         }
       }
       else if ( tmpMultiRow )
@@ -1633,22 +1660,22 @@ void KSpreadCell::offsetAlign( int _col, int _row )
           d->textY = h - BORDER_SPACE - d->textHeight * tmpline - effBottomBorderPen( _col, _row ).width();
         else
           d->textY = tmpTopBorderWidth + BORDER_SPACE
-            + (double) m_fmAscent / m_pTable->doc()->zoomedResolutionY();
+            + (double) d->fmAscent / m_pTable->doc()->zoomedResolutionY();
       }
       else
         if ( h - BORDER_SPACE - d->textHeight - effBottomBorderPen( _col, _row ).width() > 0 )
           d->textY = h - BORDER_SPACE - d->textHeight - effBottomBorderPen( _col, _row ).width()
-            + (double)m_fmAscent / m_pTable->doc()->zoomedResolutionY();
+            + (double)d->fmAscent / m_pTable->doc()->zoomedResolutionY();
         else
           d->textY = tmpTopBorderWidth + BORDER_SPACE
-            + (double) m_fmAscent / m_pTable->doc()->zoomedResolutionY();
+            + (double) d->fmAscent / m_pTable->doc()->zoomedResolutionY();
       break;
 
      case KSpreadCell::Middle:
      case KSpreadCell::UndefinedY:
       if ( !tmpVerticalText && !tmpMultiRow && !tmpAngle )
       {
-        d->textY = ( h - d->textHeight ) / 2 + (double) m_fmAscent / m_pTable->doc()->zoomedResolutionY();
+        d->textY = ( h - d->textHeight ) / 2 + (double) d->fmAscent / m_pTable->doc()->zoomedResolutionY();
       }
       else if ( tmpAngle != 0 )
       {
@@ -1658,7 +1685,7 @@ void KSpreadCell::offsetAlign( int _col, int _row )
             d->textY = ( h - d->textHeight ) / 2 ;
           else
             d->textY = ( h - d->textHeight ) / 2 +
-              (double) m_fmAscent * cos( tmpAngle * M_PI / 180 ) /
+              (double) d->fmAscent * cos( tmpAngle * M_PI / 180 ) /
               m_pTable->doc()->zoomedResolutionY();
         }
         else
@@ -1667,7 +1694,7 @@ void KSpreadCell::offsetAlign( int _col, int _row )
             d->textY = tmpTopBorderWidth + BORDER_SPACE;
           else
             d->textY = tmpTopBorderWidth + BORDER_SPACE
-              + (double)m_fmAscent * cos( tmpAngle * M_PI / 180 ) / m_pTable->doc()->zoomedResolutionY();
+              + (double)d->fmAscent * cos( tmpAngle * M_PI / 180 ) / m_pTable->doc()->zoomedResolutionY();
         }
       }
       else if ( tmpMultiRow )
@@ -1677,17 +1704,17 @@ void KSpreadCell::offsetAlign( int _col, int _row )
           tmpline = 1;
         if ( h - d->textHeight * tmpline > 0 )
           d->textY = ( h - d->textHeight * tmpline ) / 2
-            + (double) m_fmAscent / m_pTable->doc()->zoomedResolutionY();
+            + (double) d->fmAscent / m_pTable->doc()->zoomedResolutionY();
         else
           d->textY = tmpTopBorderWidth + BORDER_SPACE
-            + (double) m_fmAscent / m_pTable->doc()->zoomedResolutionY();
+            + (double) d->fmAscent / m_pTable->doc()->zoomedResolutionY();
       }
       else
         if ( h - d->textHeight > 0 )
-          d->textY = ( h - d->textHeight ) / 2 + (double)m_fmAscent / m_pTable->doc()->zoomedResolutionY();
+          d->textY = ( h - d->textHeight ) / 2 + (double)d->fmAscent / m_pTable->doc()->zoomedResolutionY();
         else
           d->textY = tmpTopBorderWidth + BORDER_SPACE
-            + (double)m_fmAscent / m_pTable->doc()->zoomedResolutionY();
+            + (double)d->fmAscent / m_pTable->doc()->zoomedResolutionY();
       break;
     }
 
@@ -2143,7 +2170,7 @@ void KSpreadCell::paintCell( const KoRect & rect, QPainter & painter,
 
   /* if we're working on drawing an obscured cell, that means this cell
      should have a cell that obscured it. */
-  Q_ASSERT(!(paintingObscured > 0 && m_ObscuringCells.isEmpty()));
+  Q_ASSERT(!(paintingObscured > 0 && d->obscuringCells.isEmpty()));
 
   /* the cellref passed in should be this cell -- except if this is the default
      cell */
@@ -2154,8 +2181,8 @@ void KSpreadCell::paintCell( const KoRect & rect, QPainter & painter,
 
   ColumnFormat * colFormat = m_pTable->columnFormat( cellRef.x() );
   RowFormat    * rowFormat = m_pTable->rowFormat( cellRef.y() );
-  double width  = d->extraXCells ? m_dExtraWidth  : colFormat->dblWidth();
-  double height = d->extraYCells ? m_dExtraHeight : rowFormat->dblHeight();
+  double width  = d->extraXCells ? d->extraWidth  : colFormat->dblWidth();
+  double height = d->extraYCells ? d->extraHeight : rowFormat->dblHeight();
 
   if ( m_pTable->isRightToLeft() && view && view->canvasWidget() )
     left = view->canvasWidget()->width() - coordinate.x() - width;
@@ -2274,8 +2301,8 @@ void KSpreadCell::paintCell( const KoRect & rect, QPainter & painter,
       there is an updateDepend)
     */
     QValueList<QPoint> listPoints;
-    QValueList<KSpreadCell*>::iterator it = m_ObscuringCells.begin();
-    QValueList<KSpreadCell*>::iterator end = m_ObscuringCells.end();
+    QValueList<KSpreadCell*>::iterator it = d->obscuringCells.begin();
+    QValueList<KSpreadCell*>::iterator end = d->obscuringCells.end();
     for ( ; it != end; ++it )
     {
       KSpreadCell *obscuringCell = *it;
@@ -2493,8 +2520,8 @@ void KSpreadCell::paintDefaultBorders( QPainter& painter, const KoRect &rect,
   paintBottom = ( paintBorderBottom && table()->getShowGrid()
                   && bottomPen.style() == Qt::NoPen );
 
-  QValueList<KSpreadCell*>::const_iterator it  = m_ObscuringCells.begin();
-  QValueList<KSpreadCell*>::const_iterator end = m_ObscuringCells.end();
+  QValueList<KSpreadCell*>::const_iterator it  = d->obscuringCells.begin();
+  QValueList<KSpreadCell*>::const_iterator end = d->obscuringCells.end();
   for ( ; it != end; ++it )
   {
     KSpreadCell *cell = *it;
@@ -3107,8 +3134,8 @@ void KSpreadCell::paintCellBorders( QPainter& painter, const KoRect& rect,
   // paintRight  = paintRight  && ( extraXCells() == 0 );
   // paintBottom = paintBottom && ( extraYCells() == 0 );
 
-  QValueList<KSpreadCell*>::const_iterator it  = m_ObscuringCells.begin();
-  QValueList<KSpreadCell*>::const_iterator end = m_ObscuringCells.end();
+  QValueList<KSpreadCell*>::const_iterator it  = d->obscuringCells.begin();
+  QValueList<KSpreadCell*>::const_iterator end = d->obscuringCells.end();
   for ( ; it != end; ++it )
   {
     KSpreadCell* cell = *it;
@@ -3532,7 +3559,7 @@ QString KSpreadCell::textDisplaying( QPainter &_painter )
  }
 
  ColumnFormat *cl = m_pTable->columnFormat( column() );
- double w = ( m_dExtraWidth == 0.0 ) ? cl->dblWidth() : m_dExtraWidth;
+ double w = ( d->extraWidth == 0.0 ) ? cl->dblWidth() : d->extraWidth;
 
  if( m_value.isNumber())
  {
@@ -3626,14 +3653,14 @@ double KSpreadCell::dblWidth( int _col, const KSpreadCanvas *_canvas ) const
   if ( _canvas )
   {
     if ( testFlag(Flag_ForceExtra) )
-      return m_dExtraWidth;
+      return d->extraWidth;
 
     const ColumnFormat *cl = m_pTable->columnFormat( _col );
     return cl->dblWidth( _canvas );
   }
 
   if ( testFlag(Flag_ForceExtra) )
-    return m_dExtraWidth;
+    return d->extraWidth;
 
   const ColumnFormat *cl = m_pTable->columnFormat( _col );
   return cl->dblWidth();
@@ -3652,14 +3679,14 @@ double KSpreadCell::dblHeight( int _row, const KSpreadCanvas *_canvas ) const
   if ( _canvas )
   {
     if ( testFlag(Flag_ForceExtra) )
-      return m_dExtraHeight;
+      return d->extraHeight;
 
     const RowFormat *rl = m_pTable->rowFormat( _row );
     return rl->dblHeight( _canvas );
   }
 
   if ( testFlag(Flag_ForceExtra) )
-    return m_dExtraHeight;
+    return d->extraHeight;
 
   const RowFormat *rl = m_pTable->rowFormat( _row );
   return rl->dblHeight();
@@ -3679,9 +3706,9 @@ int KSpreadCell::height( int _row, const KSpreadCanvas *_canvas ) const
 
 const QBrush& KSpreadCell::backGroundBrush( int _col, int _row ) const
 {
-  if ( !m_ObscuringCells.isEmpty() )
+  if ( !d->obscuringCells.isEmpty() )
   {
-    const KSpreadCell* cell = m_ObscuringCells.first();
+    const KSpreadCell* cell = d->obscuringCells.first();
     return cell->backGroundBrush( cell->column(), cell->row() );
   }
 
@@ -3690,9 +3717,9 @@ const QBrush& KSpreadCell::backGroundBrush( int _col, int _row ) const
 
 const QColor& KSpreadCell::bgColor( int _col, int _row ) const
 {
-  if ( !m_ObscuringCells.isEmpty() )
+  if ( !d->obscuringCells.isEmpty() )
   {
-    const KSpreadCell* cell = m_ObscuringCells.first();
+    const KSpreadCell* cell = d->obscuringCells.first();
     return cell->bgColor( cell->column(), cell->row() );
   }
 
@@ -3818,7 +3845,7 @@ const QPen& KSpreadCell::effLeftBorderPen( int col, int row ) const
 {
   if ( isObscuringForced() )
   {
-    KSpreadCell * cell = m_ObscuringCells.first();
+    KSpreadCell * cell = d->obscuringCells.first();
     return cell->effLeftBorderPen( cell->column(), cell->row() );
   }
 
@@ -3833,7 +3860,7 @@ const QPen& KSpreadCell::effTopBorderPen( int col, int row ) const
 {
   if ( isObscuringForced() )
   {
-    KSpreadCell * cell = m_ObscuringCells.first();
+    KSpreadCell * cell = d->obscuringCells.first();
     return cell->effTopBorderPen( cell->column(), cell->row() );
   }
 
@@ -3848,7 +3875,7 @@ const QPen& KSpreadCell::effRightBorderPen( int col, int row ) const
 {
   if ( isObscuringForced() )
   {
-    KSpreadCell * cell = m_ObscuringCells.first();
+    KSpreadCell * cell = d->obscuringCells.first();
     return cell->effRightBorderPen( cell->column(), cell->row() );
   }
 
@@ -3863,7 +3890,7 @@ const QPen& KSpreadCell::effBottomBorderPen( int col, int row ) const
 {
   if ( isObscuringForced() )
   {
-    KSpreadCell * cell = m_ObscuringCells.first();
+    KSpreadCell * cell = d->obscuringCells.first();
     return cell->effBottomBorderPen( cell->column(), cell->row() );
   }
 
@@ -3896,7 +3923,7 @@ uint KSpreadCell::effBottomBorderValue( int col, int row ) const
 {
   if ( isObscuringForced() )
   {
-    KSpreadCell * cell = m_ObscuringCells.first();
+    KSpreadCell * cell = d->obscuringCells.first();
     return cell->effBottomBorderValue( cell->column(), cell->row() );
   }
 
@@ -3910,7 +3937,7 @@ uint KSpreadCell::effRightBorderValue( int col, int row ) const
 {
   if ( isObscuringForced() )
   {
-    KSpreadCell * cell = m_ObscuringCells.first();
+    KSpreadCell * cell = d->obscuringCells.first();
     return cell->effRightBorderValue( cell->column(), cell->row() );
   }
 
@@ -3924,7 +3951,7 @@ uint KSpreadCell::effLeftBorderValue( int col, int row ) const
 {
   if ( isObscuringForced() )
   {
-    KSpreadCell * cell = m_ObscuringCells.first();
+    KSpreadCell * cell = d->obscuringCells.first();
     return cell->effLeftBorderValue( cell->column(), cell->row() );
   }
 
@@ -3938,7 +3965,7 @@ uint KSpreadCell::effTopBorderValue( int col, int row ) const
 {
   if ( isObscuringForced() )
   {
-    KSpreadCell * cell = m_ObscuringCells.first();
+    KSpreadCell * cell = d->obscuringCells.first();
     return cell->effTopBorderValue( cell->column(), cell->row() );
   }
 
@@ -4449,6 +4476,16 @@ int KSpreadCell::extraXCells() const
 int KSpreadCell::extraYCells() const 
 { 
     return d->extraYCells;
+}
+
+double KSpreadCell::extraWidth() const
+{ 
+    return d->extraWidth;
+}
+
+double KSpreadCell::extraHeight() const 
+{ 
+    return d->extraHeight;
 }
 
 const KSpreadValue KSpreadCell::value() const

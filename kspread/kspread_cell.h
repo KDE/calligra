@@ -578,8 +578,7 @@ public:
     /**
      * @return the obscuring cell list (might be empty)
      */
-    QValueList<KSpreadCell*> const obscuringCells() const
-      { return m_ObscuringCells; }
+    QValueList<KSpreadCell*> obscuringCells() const;
 
     void clearObscuringCells();
 
@@ -622,8 +621,8 @@ public:
      */
     int extraYCells() const;
     
-    double extraWidth() const { return m_dExtraWidth; }
-    double extraHeight() const { return m_dExtraHeight; }
+    double extraWidth() const;
+    double extraHeight() const;
 
     bool isFormula() const { return m_content == Formula; }
 
@@ -891,31 +890,6 @@ protected:
 private:
 
     CellPrivate* d;
-
-    /**
-     * Result of "fm.ascent()" in makeLayout.
-     * used in offsetAlign.
-     */
-    int m_fmAscent;
-
-    /**
-     * If a cell overlapps other cells, then we have the cells width stored here.
-     * This value does not mean anything unless @ref #m_iExtraXCells is different from 0.
-     */
-    double m_dExtraWidth;
-    /**
-     * If a cell overlapps other cells, then we have the cells height stored here.
-     * This value does not mean anything unless @ref m_iExtraYCells is different from 0.
-     */
-    double m_dExtraHeight;
-
-    /**
-     * A list of @ref KSpreadCell type pointers that obscure this one.
-     * If this list is not empty, then this cell is obscured by another
-     * enlarged object. This means that we have to call this object in order
-     * of painting it for example instead of painting 'this'.
-     */
-    QValueList<KSpreadCell*> m_ObscuringCells;
 
     /**
      * Tells wether the cell is a button, combobox etc.
