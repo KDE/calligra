@@ -1007,11 +1007,13 @@ void KWPartFrameSetEdit::mouseDoubleClickEvent( QMouseEvent * )
     partFrameSet()->activate( m_canvas->gui()->getView() );
 }
 
+
+
 /******************************************************************/
 /* Class: KWFormulaFrameSet                                       */
 /******************************************************************/
 
-/*================================================================*/
+
 KWFormulaFrameSet::KWFormulaFrameSet( KWDocument *_doc, QWidget */*parent*/ )
     : KWFrameSet( _doc )
 
@@ -1019,26 +1021,13 @@ KWFormulaFrameSet::KWFormulaFrameSet( KWDocument *_doc, QWidget */*parent*/ )
     formula = doc->getFormulaDocument()->createFormula();
     connect(formula, SIGNAL(formulaChanged(int, int)),
             this, SLOT(slotFormulaChanged(int, int)));
-    //formulaEdit = new KFormulaEdit( ( (QScrollView*)parent )->viewport() );
-    //( (QScrollView*)parent )->addChild( formulaEdit );
-#if 0
-    if ( pic )
-        delete pic;
-    pic = new QPicture;
-    QPainter p;
-    p.begin( pic );
-    formulaEdit->getFormula()->redraw( p );
-    p.end();
-#endif
 }
 
-/*================================================================*/
 KWFormulaFrameSet::KWFormulaFrameSet( KWDocument *_doc )
         : KWFrameSet( _doc ), formula(0)
 {
 }
 
-/*================================================================*/
 KWFormulaFrameSet::~KWFormulaFrameSet()
 {
     delete formula;
@@ -1049,13 +1038,6 @@ KWFrameSetEdit* KWFormulaFrameSet::createFrameSetEdit(KWCanvas* canvas)
     return new KWFormulaFrameSetEdit(this, canvas);
 }
 
-#if 0
-QPicture *KWFormulaFrameSet::getPicture()
-{
-    return pic;
-}
-#endif
-
 void KWFormulaFrameSet::drawContents( QPainter* painter, const QRect& crect,
                                       QColorGroup& cg, bool /*onlyChanged*/ )
 {
@@ -1064,7 +1046,6 @@ void KWFormulaFrameSet::drawContents( QPainter* painter, const QRect& crect,
     if ( !reg.isEmpty() ) {
         painter->save();
         painter->setClipRegion( reg );
-        //painter->fillRect( reg.boundingRect(), cg.base() );
         painter->fillRect( crect, cg.base() );
         formula->draw( *painter, crect );
         painter->restore();
@@ -1080,65 +1061,20 @@ void KWFormulaFrameSet::drawContents( QPainter* painter, const QRect& crect,
     if ( !reg.isEmpty() ) {
         painter->save();
         painter->setClipRegion( reg );
-        //formulaView->draw(*painter, reg.boundingRect(), cg);
         formulaView->draw( *painter, crect, cg );
         painter->restore();
     }
 }
 
-/*================================================================*/
-#if 0
-void KWFormulaFrameSet::setFormat( const QFont &f, const QColor &c )
-{
-    font = f;
-    color = c;
-    if ( formulaEdit && formulaEdit->isVisible() ) {
-        formulaEdit->getFormula()->setFont( font );
-        formulaEdit->getFormula()->setBackColor( frames.at( 0 )->getBackgroundColor().color() );
-        formulaEdit->getFormula()->setForeColor( color );
-        formulaEdit->getFormula()->makeDirty();
-        formulaEdit->redraw( TRUE );
-    }
-    updateFrames();
-}
-#endif
 
-/*================================================================*/
 void KWFormulaFrameSet::activate( QWidget */*_widget*/ )
 {
-#if 0
-    if ( formulaEdit->parent() != ( (QScrollView*)_widget )->viewport() )
-        formulaEdit->reparent( ( (QScrollView*)_widget )->viewport(), 0, QPoint( 0, 0 ), FALSE );
-
-    formulaEdit->getFormula()->setBackColor( frames.at( 0 )->getBackgroundColor().color() );
-    formulaEdit->redraw( TRUE );
-    formulaEdit->setBackgroundColor( frames.at( 0 )->getBackgroundColor().color() );
-    formulaEdit->resize( frames.at( 0 )->width(), frames.at( 0 )->height() );
-    ( (QScrollView*)_widget )->moveChild( formulaEdit, frames.at( 0 )->x(), frames.at( 0 )->y() );
-    formulaEdit->show();
-    ( (QScrollView*)_widget )->viewport()->setFocusProxy( formulaEdit );
-    _widget->setFocusProxy( formulaEdit );
-    formulaEdit->setFocus();
-#endif
 }
 
-/*================================================================*/
 void KWFormulaFrameSet::deactivate()
 {
-#if 0
-    formulaEdit->hide();
-
-    if ( pic )
-        delete pic;
-    pic = new QPicture;
-    QPainter p;
-    p.begin( pic );
-    formulaEdit->getFormula()->redraw( p );
-    p.end();
-#endif
 }
 
-/*================================================================*/
 void KWFormulaFrameSet::create( QWidget */*parent*/ )
 {
     if ( formula != 0 ) {
@@ -1149,30 +1085,29 @@ void KWFormulaFrameSet::create( QWidget */*parent*/ )
     formula = doc->getFormulaDocument()->createFormula();
     connect(formula, SIGNAL(formulaChanged(int, int)),
             this, SLOT(slotFormulaChanged(int, int)));
-#if 0
-    ( (QScrollView*)parent )->addChild( formulaEdit );
-    formulaEdit->getFormula()->setFont( font );
-    formulaEdit->getFormula()->setBackColor( frames.at( 0 )->getBackgroundColor().color() );
-    formulaEdit->getFormula()->setForeColor( color );
-    formulaEdit->hide();
-    formulaEdit->setText( text );
-#endif
     updateFrames();
 }
 
 void KWFormulaFrameSet::slotFormulaChanged(int width, int height)
 {
-    //kdDebug(32001) << "KWFormulaFrameSet::slotFormulaChanged" << endl;
-
-    // zooming!!!
+    // Did I tell you that assignment to parameters is evil?
+    width = static_cast<int>( width / kWordDocument()->zoomedResolutionX() ) + 5;
+    height = static_cast<int>( height / kWordDocument()->zoomedResolutionY() ) + 5;
+    
+    int oldWidth = frames.first()->width();
+    int oldHeight = frames.first()->height();
+    
     frames.first()->setWidth( width );
     frames.first()->setHeight( height );
 
+    if ( ( oldWidth > width ) || ( oldHeight > height ) ) {
+        kWordDocument()->repaintAllViews( true );
+    }
+    
     updateFrames();
     emit repaintChanged( this );
 }
 
-/*================================================================*/
 void KWFormulaFrameSet::updateFrames()
 {
     KWFrameSet::updateFrames();
@@ -1181,19 +1116,8 @@ void KWFormulaFrameSet::updateFrames()
 
     formula->moveTo( kWordDocument()->zoomItX( frames.at(0)->x() ),
                      kWordDocument()->zoomItY( frames.at(0)->y() ) );
-
-#if 0
-    if ( pic )
-        delete pic;
-    pic = new QPicture;
-    QPainter p;
-    p.begin( pic );
-    formulaEdit->getFormula()->redraw( p );
-    p.end();
-#endif
 }
 
-/*================================================================*/
 void KWFormulaFrameSet::save(QDomElement& parentElem)
 {
     QDomElement framesetElem = parentElem.ownerDocument().createElement("FRAMESET");
@@ -1209,12 +1133,10 @@ void KWFormulaFrameSet::save(QDomElement& parentElem)
     formula->save(formulaElem);
 }
 
-/*================================================================*/
 void KWFormulaFrameSet::load(QDomElement& attributes)
 {
     KWFrameSet::load(attributes);
 
-    // <IMAGE>
     QDomElement formulaElem = attributes.namedItem("FORMULA").toElement();
     if (!formulaElem.isNull()) {
         if (formula == 0) {
@@ -1233,10 +1155,12 @@ void KWFormulaFrameSet::load(QDomElement& attributes)
 
 void KWFormulaFrameSet::zoom()
 {
-    //kWordDocument()
+    formula->recalc();
 }
 
+
 /*================================================================*/
+
 KWFormulaFrameSetEdit::KWFormulaFrameSetEdit(KWFormulaFrameSet* fs, KWCanvas* canvas)
         : KWFrameSetEdit(fs, canvas)
 {
@@ -1251,7 +1175,6 @@ KWFormulaFrameSetEdit::KWFormulaFrameSetEdit(KWFormulaFrameSet* fs, KWCanvas* ca
     focusInEvent();
 }
 
-/*================================================================*/
 KWFormulaFrameSetEdit::~KWFormulaFrameSetEdit()
 {
     kdDebug(32001) << "KWFormulaFrameSetEdit::~KWFormulaFrameSetEdit" << endl;
@@ -1271,69 +1194,58 @@ void KWFormulaFrameSetEdit::drawContents(QPainter* painter, const QRect& rect,
     formulaFrameSet()->drawContents(painter, rect, gc, onlyChanged, formulaView);
 }
 
-/*================================================================*/
 void KWFormulaFrameSetEdit::keyPressEvent(QKeyEvent* event)
 {
     //kdDebug(32001) << "KWFormulaFrameSetEdit::keyPressEvent" << endl;
     formulaView->keyPressEvent(event);
 }
 
-/*================================================================*/
 void KWFormulaFrameSetEdit::mousePressEvent(QMouseEvent* event)
 {
     formulaView->mousePressEvent(event);
 }
 
-/*================================================================*/
 void KWFormulaFrameSetEdit::mouseMoveEvent(QMouseEvent* event)
 {
     formulaView->mouseMoveEvent(event);
 }
 
-/*================================================================*/
 void KWFormulaFrameSetEdit::mouseReleaseEvent(QMouseEvent* event)
 {
     formulaView->mouseReleaseEvent(event);
 }
 
-/*================================================================*/
 void KWFormulaFrameSetEdit::focusInEvent()
 {
     //kdDebug(32001) << "KWFormulaFrameSetEdit::focusInEvent" << endl;
     formulaView->focusInEvent(0);
 }
 
-/*================================================================*/
 void KWFormulaFrameSetEdit::focusOutEvent()
 {
     //kdDebug(32001) << "KWFormulaFrameSetEdit::focusOutEvent" << endl;
     formulaView->focusOutEvent(0);
 }
 
-/*================================================================*/
 void KWFormulaFrameSetEdit::doAutoScroll(QPoint)
 {
 }
 
-/*================================================================*/
 void KWFormulaFrameSetEdit::copy()
 {
     formulaView->getDocument()->copy();
 }
 
-/*================================================================*/
 void KWFormulaFrameSetEdit::cut()
 {
     formulaView->getDocument()->cut();
 }
 
-/*================================================================*/
 void KWFormulaFrameSetEdit::paste()
 {
     formulaView->getDocument()->paste();
 }
 
-/*================================================================*/
 void KWFormulaFrameSetEdit::selectAll()
 {
     formulaView->slotSelectAll();

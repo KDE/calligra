@@ -225,6 +225,7 @@ void KWDocument::setZoomAndResolution( int zoom, int dpiX, int dpiY, bool update
               << " m_resolutionX=" << m_resolutionX << " m_zoomedResolutionX=" << m_zoomedResolutionX
               << " m_resolutionY=" << m_resolutionY << " m_zoomedResolutionY=" << m_zoomedResolutionY << endl;
 
+    getFormulaDocument()->setResolution( m_zoomedResolutionX, m_zoomedResolutionY );
 
     // Update all fonts
     QListIterator<KWFrameSet> fit = framesetsIterator();
