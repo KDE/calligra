@@ -1441,7 +1441,7 @@ void KWTextFrameSet::setLineSpacing( QTextCursor * cursor, KWUnit spacing )
 }
 
 
-void KWTextFrameSet::setBorders( QTextCursor * cursor, Border leftBorder, Border rightBorder, Border bottomBorder, Border topBorder )
+void KWTextFrameSet::setBorders( QTextCursor * cursor, Border leftBorder, Border rightBorder, Border topBorder, Border bottomBorder )
 {
   QTextDocument * textdoc = textDocument();
   if ( !textdoc->hasSelection( QTextDocument::Standard ) &&
@@ -2630,7 +2630,7 @@ void KWTextFrameSetEdit::updateUI()
 	m_paragLayout.rightBorder = parag->rightBorder();
 	m_paragLayout.topBorder = parag->topBorder();
 	m_paragLayout.bottomBorder = parag->bottomBorder();
-	m_canvas->gui()->getView()->showParagBorders( m_paragLayout.leftBorder, m_paragLayout.rightBorder, m_paragLayout.bottomBorder, m_paragLayout.topBorder );
+	m_canvas->gui()->getView()->showParagBorders( m_paragLayout.leftBorder, m_paragLayout.rightBorder, m_paragLayout.topBorder, m_paragLayout.bottomBorder );
     }
 
     if ( m_paragLayout.styleName() != parag->styleName() )

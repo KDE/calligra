@@ -130,7 +130,7 @@ public:
     void setAlign( QTextCursor * cursor, int align );
     void setLineSpacing( QTextCursor * cursor, KWUnit spacing );
     void setPageBreaking( QTextCursor * cursor, bool linesTogether );
-    void setBorders( QTextCursor * cursor, Border leftBorder, Border rightBorder, Border bottomBorder, Border topBorder );
+    void setBorders( QTextCursor * cursor, Border leftBorder, Border rightBorder, Border topBorder, Border bottomBorder );
     void setMargin( QTextCursor * cursor, QStyleSheetItem::Margin m, KWUnit margin );
     void applyStyle( QTextCursor * cursor, const KWStyle * style, int selectionId = QTextDocument::Standard );
     void applyStyleChange( const QString & changedStyle );

@@ -2297,7 +2297,7 @@ void KWView::borderSet()
         KWTextFrameSetEdit *edit = dynamic_cast<KWTextFrameSetEdit *>(gui->canvasWidget()->currentFrameSetEdit());
         if ( edit )
         {
-            edit->setBorders( m_border.left, m_border.right, m_border.bottom, m_border.top );
+            edit->setBorders( m_border.left, m_border.right, m_border.top, m_border.bottom );
         }
     }
 }
