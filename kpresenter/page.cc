@@ -274,7 +274,10 @@ void Page::drawObjects( QPainter *painter, QRect rect )
 /*==================== handle mouse pressed ======================*/
 void Page::mousePressEvent( QMouseEvent *e )
 {
-    if ( e->state() & ControlButton )
+  if(!view->koDocument()->isReadWrite())
+    return;
+
+  if ( e->state() & ControlButton )
         keepRatio = true;
 
     KPObject *kpobject = 0;
@@ -993,6 +996,9 @@ void Page::mouseMoveEvent( QMouseEvent *e )
 /*==================== mouse double click ========================*/
 void Page::mouseDoubleClickEvent( QMouseEvent *e )
 {
+ if(!view->koDocument()->isReadWrite())
+    return;
+
     if ( toolEditMode != TEM_MOUSE || !editMode ) return;
 
     deSelectAllObj();
