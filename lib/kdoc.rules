@@ -4,13 +4,16 @@
 #
 # -Taj (Apr 1999)
 
-kde_MODULES = koml store kofficecore kofficeui kscript
+kde_MODULES = koml store koparts kofficecore kofficeui kscript
 
 koml_FILES = *.h
 koml_LIBS = -lqt
 
 store_FILES = *.h
 store_LIBS = -lkdecore -lqt
+
+koparts_FILES = *.h
+koparts_LIBS = -lkdeui -lkdecore -lqt
 
 kofficecore_FILES = *.h
 kofficecore_LIBS = -lkparts -lkdecore -lqt
