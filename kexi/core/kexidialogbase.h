@@ -67,6 +67,13 @@ class KEXICORE_EXPORT KexiDialogBase : public KMdiChildView, public KexiActionPr
 		//! Kexi part's gui client
 		inline KexiPart::GUIClient* guiClient() const { return m_part ? m_part->instanceGuiClient() : 0; }
 
+		/*! Tries to close the dialog. \return true if closing is accepted 
+		 (sometimes, user may not want to close the dialog by pressing cancel). 
+		 If \a dontSaveChanges if true, changes are not saved iven if this dialog is dirty. */
+		bool tryClose(bool dontSaveChanges);
+
+		virtual QString itemIcon();
+
 	public slots:
 //		virtual void detach();
 
@@ -81,6 +88,14 @@ class KEXICORE_EXPORT KexiDialogBase : public KMdiChildView, public KexiActionPr
 		virtual void attachToGUIClient();
 		virtual void detachFromGUIClient();
 		virtual void closeEvent( QCloseEvent * e );
+
+		/*! True if contents (data) of the dialog is dirty and need to be saved
+		 This may or not be used, depending if changes in the dialog 
+		 are saved immediately (e.g. like in datatableview) or saved by hand (by user)
+		 (e.g. like in alter-table dialog).
+		 Default implementation always return false. Reimplement this if you e.g. want reuse "dirty" 
+		 flag from internal structures that may be changed. */
+		virtual bool dirty();
 
 	private:
 		KexiMainWindow *m_parentWindow;

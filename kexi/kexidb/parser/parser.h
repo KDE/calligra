@@ -36,7 +36,7 @@ class Field;
 /**
  * class wich contains detailed i18n'ed error describtion
  */
-class ParserError
+class KEXI_DB_EXPORT ParserError
 {
 	public:
 		ParserError();

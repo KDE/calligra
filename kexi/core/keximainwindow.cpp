@@ -160,11 +160,6 @@ KexiMainWindow::KexiMainWindow()
 
 	d->origAppCaption = caption();
 	initContextHelp();
-	
-
-//	initBrowser();
-	//TODO:new KexiProject();
-//	connect(d->prj, SIGNAL(dbAvailable()), this, SLOT(initBrowser()));
 
 	restoreSettings();
 
@@ -488,8 +483,9 @@ bool KexiMainWindow::openProject(KexiProjectData *projectData)
 {
 	if (!projectData)
 		return false;
-	d->prj = new KexiProject( projectData );
-	connect(d->prj, SIGNAL(error(const QString&,KexiDB::Object*)), this, SLOT(showErrorMessage(const QString&,KexiDB::Object*)));
+	createKexiProject( projectData );
+//	d->prj = new KexiProject( projectData );
+//	connect(d->prj, SIGNAL(error(const QString&,KexiDB::Object*)), this, SLOT(showErrorMessage(const QString&,KexiDB::Object*)));
 	if (!d->prj->open()) {
 		delete d->prj;
 		d->prj = 0;
@@ -502,7 +498,7 @@ bool KexiMainWindow::openProject(KexiProjectData *projectData)
 	QString not_found_msg;
 	//ok, now open "autoopen: objects
 	for (QValueList< QPair<QString,QString> >::Iterator it = projectData->autoopenObjects.begin(); it != projectData->autoopenObjects.end(); ++it ) {
-		openObject(QString("kexi/")+(*it).first,(*it).second);
+//		openObject(QString("kexi/")+(*it).first,(*it).second);
 		KexiPart::Info *i = Kexi::partManager().info( QString("kexi/")+(*it).first );
 		if (!i) {
 			not_found_msg += ( (*it).second + " - " + i18n("unknown object type \"%1\"").arg((*it).first)+"<br>" );
@@ -587,6 +583,8 @@ KexiMainWindow::initNavigator()
 		connect(d->nav,SIGNAL(openItem(KexiPart::Item*,bool)),this,SLOT(openObject(KexiPart::Item*,bool)));
 		connect(d->nav,SIGNAL(newItem( KexiPart::Info* )),this,SLOT(newObject(KexiPart::Info*)));
 		connect(d->nav,SIGNAL(removeItem(KexiPart::Item*)),this,SLOT(removeObject(KexiPart::Item*)));
+		if (d->prj)//connect to project
+			connect(d->prj, SIGNAL(itemRemoved(const KexiPart::Item&)), d->nav, SLOT(slotRemoveItem(const KexiPart::Item&)));
 
 //		connect(d->nav,SIGNAL(actionAvailable(const char*,bool)),this,SLOT(actionAvailable(const char*,bool)));
 
@@ -941,6 +939,15 @@ KexiMainWindow::slotProjectNew()
 	createBlankDatabase();
 }
 
+void
+KexiMainWindow::createKexiProject(KexiProjectData* new_data)
+{
+	d->prj = new KexiProject( new_data );
+	connect(d->prj, SIGNAL(error(const QString&,KexiDB::Object*)), this, SLOT(showErrorMessage(const QString&,KexiDB::Object*)));
+	if (d->nav)
+		connect(d->prj, SIGNAL(itemRemoved(const KexiPart::Item&)), d->nav, SLOT(slotRemoveItem(const KexiPart::Item&)));
+}
+
 bool
 KexiMainWindow::createBlankDatabase()
 {
@@ -966,8 +973,9 @@ KexiMainWindow::createBlankDatabase()
 	else
 		return false;
 
-	d->prj = new KexiProject( new_data );
-	connect(d->prj, SIGNAL(error(const QString&,KexiDB::Object*)), this, SLOT(showErrorMessage(const QString&,KexiDB::Object*)));
+	createKexiProject( new_data );
+//	d->prj = new KexiProject( new_data );
+//	connect(d->prj, SIGNAL(error(const QString&,KexiDB::Object*)), this, SLOT(showErrorMessage(const QString&,KexiDB::Object*)));
 	if (!d->prj->create()) {
 		delete d->prj;
 		d->prj = 0;
@@ -1197,14 +1205,16 @@ void KexiMainWindow::detachWindow(KMdiChildView *pWnd,bool bShow)
 {
 	KMdiMainFrm::detachWindow(pWnd,bShow);
 	// update icon
-	pWnd->setIcon( DesktopIcon( static_cast<KexiDialogBase *>(pWnd)->part()->info()->itemIcon() ) );
+	pWnd->setIcon( DesktopIcon( static_cast<KexiDialogBase *>(pWnd)->itemIcon() ) );
+//	pWnd->setIcon( DesktopIcon( static_cast<KexiDialogBase *>(pWnd)->part()->info()->itemIcon() ) );
 }
 
 void KexiMainWindow::attachWindow(KMdiChildView *pWnd,bool bShow,bool bAutomaticResize)
 {
 	KMdiMainFrm::attachWindow(pWnd,true,bAutomaticResize);
 	// update icon
-	pWnd->mdiParent()->setIcon( SmallIcon( static_cast<KexiDialogBase *>(pWnd)->part()->info()->itemIcon() ) );
+	pWnd->mdiParent()->setIcon( SmallIcon( static_cast<KexiDialogBase *>(pWnd)->itemIcon() ) );
+//	pWnd->mdiParent()->setIcon( SmallIcon( static_cast<KexiDialogBase *>(pWnd)->part()->info()->itemIcon() ) );
 }
 
 bool KexiMainWindow::isWindow(QObject *o)
@@ -1340,12 +1350,15 @@ KexiMainWindow::openObject(KexiPart::Item* item, bool designMode)
 	if (activateWindow(item->identifier()))
 		return true;
 
+	return d->prj->openObject(this, *item, designMode);
+/*
 	KexiPart::Part *part = Kexi::partManager().part(item->mime());
 	if (!part) {
 		//TODO js: error msg
 		return false;
 	}
 	return part->openInstance(this, *item, designMode) != 0;
+	*/
 }
 
 bool KexiMainWindow::newObject( KexiPart::Info *info )
@@ -1362,15 +1375,24 @@ bool KexiMainWindow::removeObject( KexiPart::Item *item )
 		return false;
 
 	KexiPart::Part *part = Kexi::partManager().part(item->mime());
-	QString typeName;
-	if (part)
-		typeName = part->instanceName();
-
-	if (KMessageBox::questionYesNo(this, "<b>"+i18n("Do you want to remove:")
-		+"<p>"+typeName+" \""+ item->name() + "\"?</b>",
-		0, KStdGuiItem::yes(), KStdGuiItem::no(), "askBeforeDeletePartItem"/*config entry*/)==KMessageBox::No)
+	if (!part)
 		return false;
 
+	if (KMessageBox::questionYesNo(this, "<b>"+i18n("Do you want to remove:")
+		+"<p>"+part->instanceName()+" \""+ item->name() + "\"?</b>",
+		0, KStdGuiItem::yes(), KStdGuiItem::no(), "askBeforeDeletePartItem"/*config entry*/)==KMessageBox::No)
+		return true;//cancelled
+
+	KexiDialogBase *dlg = d->dialogs[item->identifier()];
+	if (dlg) {//close existing window
+		if (!dlg->tryClose(true/*dontSaveChanges*/))
+			return true; //ok - close cancelled
+	}
+
+	if (!d->prj->removeObject(this, *item)) {
+		//TODO(js) some msg
+		return false;
+	}
 	return true;
 }
 

@@ -29,7 +29,7 @@ class QWidget;
 /**
  * this is a virtual prototype for the relation implementation
  */
-class KexiRelationPart : public QObject
+class KEXICORE_EXPORT KexiRelationPart : public QObject
 {
 	Q_OBJECT
 

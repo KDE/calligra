@@ -59,6 +59,7 @@ class KEXICORE_EXPORT KexiBrowser : public KexiDockBase
 	public slots:
 		void		addGroup(KexiPart::Info *info);
 		void		addItem(KexiPart::Item *item);
+		void		slotRemoveItem(const KexiPart::Item &item);
 
 		void clear();
 

@@ -29,6 +29,7 @@
 #include <kexidb/cursor.h>
 #include <kexidb/global.h>
 #include <kexidb/roweditbuffer.h>
+#include <kexidb/utils.h>
 
 #include <qfileinfo.h>
 #include <qguardedptr.h>
@@ -1007,6 +1008,46 @@ bool Connection::createTable( KexiDB::TableSchema* tableSchema )
 	return commitAutoCommitTransaction(trans);
 }
 
+bool Connection::dropTable( KexiDB::TableSchema* tableSchema )
+{
+	if (!tableSchema)
+		return false;
+
+	//sanity checks:
+	if (m_driver->isSystemObjectName( tableSchema->name() )) {
+		setError(ERR_SYSTEM_NAME_RESERVED, i18n("Table \"%1\" cannot be removed.")
+			.arg(tableSchema->name()));
+		return false;
+	}
+
+	if (!drv_executeSQL("DROP TABLE " + tableSchema->name()))
+		return false;
+
+	//remove table schema from kexi__* tables
+	TableSchema *ts;
+	ts = m_tables_byname["kexi__objects"];
+	if (!KexiDB::deleteRow(*this, *ts, "o_id", tableSchema->id())) //schema entry
+		return false;
+
+	ts = m_tables_byname["kexi__fields"];
+	if (!KexiDB::deleteRow(*this, *ts, "t_id", tableSchema->id())) //field entries
+		return false;
+
+//TODO(js): update any structure (e.g. query) that depend on this table!
+	m_tables_byname.remove(tableSchema->name().lower());
+	m_tables.remove(tableSchema->id());
+	return true;
+}
+
+bool Connection::dropTable( const QString& table )
+{
+	TableSchema* ts = tableSchema( table );
+	if (!ts) {
+		return false;
+	}
+	return dropTable(ts);
+}
+
 bool Connection::drv_createTable( const KexiDB::TableSchema& tableSchema )
 {
 	QString sql = createTableStatement(tableSchema);
@@ -1395,21 +1436,13 @@ TableSchema* Connection::tableSchema( const QString& tableName )
 	TableSchema *t = m_tables_byname[m_tableName];
 	if (t)
 		return t;
-
-/*	KexiDB::Cursor *cursor;
-	if (!(cursor = executeQuery( QString("select * from kexi__objects where o_name='%1'").arg(m_tableName) )))
-		return false;
-	if (!cursor->moveFirst() || cursor->eof()) {
-		deleteCursor(cursor);
-		return 0;
-	}*/
 	//not found: retrieve schema
 	RowData data;
 	if (!querySingleRecord(QString("select * from kexi__objects where o_name='%1' and o_type=%2")
 			.arg(m_tableName).arg(KexiDB::TableObjectType), data))
 		return 0;
 	
-	return setupTableSchema(data);//cursor);
+	return setupTableSchema(data);
 }
 
 TableSchema* Connection::tableSchema( const int tableId )

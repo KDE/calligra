@@ -101,31 +101,46 @@ KexiTablePart::execute(KexiMainWindow *win, const KexiPart::Item &item)
 KexiDialogBase*
 KexiTablePart::createInstance(KexiMainWindow *win, const KexiPart::Item &item, bool designMode)
 {
+	if (!win || !win->project() || !win->project()->dbConnection())
+		return 0;
+
 	KexiDB::TableSchema *sch = win->project()->dbConnection()->tableSchema(item.name());
 	kdDebug() << "KexiTablePart::execute(): schema is " << sch << endl;
-	if(!sch)
+	if(!sch) {
+		//js TODO add error msg
 		return 0;
+	}
 
 	KexiDB::Cursor *c = win->project()->dbConnection()->prepareQuery(*sch);
 
 	kdDebug() << "KexiTablePart::execute(): cursor is " << c << endl;
-	if(!c)
+	if(!c) {
+		//js TODO add error msg
 		return 0;
+	}
 
 	KexiDataTable *t = new KexiDataTable(win, c); //QString("%1 - %2").arg(item.name()).arg(instanceName()), c);
 	return t;
 }
 
-/*QString KexiTablePart::instanceName() const
+bool KexiTablePart::remove(KexiMainWindow *win, const KexiPart::Item &item)
 {
-	return i18n("Table");
-}*/
+	if (!win || !win->project() || !win->project()->dbConnection())
+		return false;
 
-/*moved to Part:
-void
-KexiTablePart::createGUIClient(KexiMainWindow *win) {
-	(void)new KexiPart::GUIClient(win, this, instanceName());
-}*/
+	KexiDB::Connection *conn = win->project()->dbConnection();
+	KexiDB::TableSchema *sch = conn->tableSchema(item.name());
+	if(!sch) {
+		//js TODO add error msg
+		return false;
+	}
+
+	if (!conn->dropTable( sch )) {
+		//js TODO add error msg
+		return false;
+	}
+	return true;
+}
 
 
 K_EXPORT_COMPONENT_FACTORY( kexihandler_table, KGenericFactory<KexiTablePart> )

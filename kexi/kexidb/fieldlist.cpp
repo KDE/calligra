@@ -86,6 +86,8 @@ void FieldList::debug() const
 	Field::ListIterator it( m_fields );
 	Field *field;
 	bool start = true;
+	if (!it.current())
+		dbg = "<NO FIELDS>";
 	for (; (field = it.current())!=0; ++it) {
 		if (!start)
 			dbg += ",\n";

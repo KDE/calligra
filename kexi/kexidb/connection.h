@@ -374,6 +374,16 @@ class KEXI_DB_EXPORT Connection : public QObject, public KexiDB::Object
 		*/
 		bool createTable( KexiDB::TableSchema* tableSchema );
 
+		/*! Drops table defined by \a tableSchema.
+		 Schema information \a tableSchema is destoyed (because it's owned), so don't keep this anymore!
+		*/
+//TODO(js): update any structure (e.g. query) that depend on this table!
+		bool dropTable( KexiDB::TableSchema* tableSchema );
+
+		/*! It is a convenience function, does exactly the same as 
+		 bool dropTable( KexiDB::TableSchema* tableSchema ) */
+		bool dropTable( const QString& table );
+
 		/*! \return first field from \a fieldlist that has system name, 
 		 null if there are no such field.
 		 For checking Driver::isSystemFieldName() is used, so this check can 

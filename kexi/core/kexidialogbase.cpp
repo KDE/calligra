@@ -103,5 +103,30 @@ void KexiDialogBase::closeEvent( QCloseEvent * e )
 	KMdiChildView::closeEvent(e);
 }
 
+bool KexiDialogBase::tryClose(bool dontSaveChanges)
+{
+	if (!dontSaveChanges && dirty()) {
+/*TODO		if (KMessageBox::questionYesNo(this, "<b>"+i18n("Do you want save:")
+		+"<p>"+typeName+" \""+ item->name() + "\"?</b>",
+		0, KStdGuiItem::yes(), KStdGuiItem::no(), ???????)==KMessageBox::No)
+		return false;*/
+		//js TODO: save data using saveChanges()
+	}
+	close(true);
+	return true;
+}
+
+bool KexiDialogBase::dirty()
+{
+	return false;
+}
+
+QString KexiDialogBase::itemIcon()
+{
+	if (!m_part || !m_part->info())
+		return QString::null;
+	return m_part->info()->itemIcon();
+}
+
 #include "kexidialogbase.moc"
 

@@ -44,6 +44,8 @@ namespace KexiPart
 	class Info;
 }
 
+class KexiMainWindow;
+
 /**
  * this class represents a project it contains data about connections, 
  * current file state etc..
@@ -112,6 +114,9 @@ class KexiProject : public QObject, public KexiDB::Object
 
 		KexiProjectData *data() const { return m_data; }
 
+		bool openObject(KexiMainWindow *wnd, const KexiPart::Item& item, bool designMode);
+		bool removeObject(KexiMainWindow *wnd, const KexiPart::Item& item);
+
 
 	protected:
 //		bool			openConnection(KexiProjectConnectionData *connection);
@@ -138,6 +143,9 @@ class KexiProject : public QObject, public KexiDB::Object
 
 		/** signal emitted on error */
 		void error(const QString &title, KexiDB::Object *obj);
+
+		/** instance pointed by \a item is removed */
+		void itemRemoved(const KexiPart::Item &item);
 
 	private:
 //		KexiDB::DriverManager		*m_drvManager;

@@ -210,6 +210,9 @@ class KEXICORE_EXPORT KexiMainWindow : public KMdiMainFrm
 		void showErrorMessage(const QString&,KexiDB::Object *obj);
 		void showErrorMessage(const QString &title, const QString &details = QString::null);
 
+		//! internal - creates and initializes kexi project
+		void createKexiProject(KexiProjectData* new_data);
+
 		void setActionAvailable(const char *name, bool avail);
 		void slotAction(const QString& act_id);
 

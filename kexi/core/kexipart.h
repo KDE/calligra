@@ -46,12 +46,20 @@ class KEXICORE_EXPORT Part : public QObject
 		Part(QObject *parent, const char *name, const QStringList &);
 		virtual ~Part();
 
+		/*! "Opens" an instance that the part provides, pointed by \a item. 
+		 It is in design mode if \a designMode is true. */
 		KexiDialogBase* openInstance(KexiMainWindow *win, const KexiPart::Item &item, bool designMode=false);
+
+		/*! "Removes" any stored data pointed by \a item (example: table is dropped for table part). 
+		 From now this data is inaccesible, and \a item disappear.
+		 For this, a database connection associated with kexi project owned by \a win can be used.
+		*/
+		virtual bool remove(KexiMainWindow *win, const KexiPart::Item &item) = 0;
 
 		/*! i18n'd iunstance name usable for displaying in gui.
 		 @todo move this to Info class when the name could be moved as localised property 
 		 to service's .desktop file. */
-		QString instanceName() const { return m_names["instance"]; }
+		inline QString instanceName() const { return m_names["instance"]; }
 		
 		inline Info *info() const { return m_info; }
 
@@ -61,6 +69,7 @@ class KEXICORE_EXPORT Part : public QObject
 
 	protected:
 		virtual KexiDialogBase* createInstance(KexiMainWindow *win, const KexiPart::Item &item, bool designMode=false) = 0;
+
 
 		//! Creates GUICLient for this part, attached to \a win
 		//! This method is called from KexiMainWindow

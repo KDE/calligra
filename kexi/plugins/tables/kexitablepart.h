@@ -34,6 +34,8 @@ class KexiTablePart : public KexiPart::Part
 		KexiTablePart(QObject *parent, const char *name, const QStringList &);
 		~KexiTablePart();
 
+		virtual bool remove(KexiMainWindow *win, const KexiPart::Item &item);
+
 //		virtual void execute(KexiMainWindow *win, const KexiPart::Item &);
 //moved to Part:		virtual void createGUIClient(KexiMainWindow *win);
 

@@ -137,6 +137,20 @@ KexiBrowser::addItem(KexiPart::Item *item)
 //	bitem->setPixmap(0, SmallIcon(parent->info()->itemIcon()));
 }
 
+void 
+KexiBrowser::slotRemoveItem(const KexiPart::Item &item)
+{
+	KexiBrowserItem *it = static_cast<KexiBrowserItem*>(m_list->selectedItem());
+	QListViewItem *new_item = it->itemBelow();//nearest item to select
+	if (!new_item || new_item->parent()!=it->parent()) {
+		new_item = it->itemAbove();
+	}
+	if (it->item()==&item)
+		delete it;
+	if (new_item)
+		m_list->setSelected(new_item, true);
+}
+
 void
 KexiBrowser::slotContextMenu(KListView *list, QListViewItem *item, const QPoint &pos)
 {

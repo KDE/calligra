@@ -32,11 +32,13 @@
 #include <kexidb/cursor.h>
 #include <kexidb/utils.h>
 
+#include "kexiproject.h"
 #include "kexipartmanager.h"
 #include "kexipartitem.h"
 #include "kexipartinfo.h"
-#include "kexiproject.h"
+#include "kexipart.h"
 #include "kexi.h"
+#include "keximainwindow.h"
 
 #include <assert.h>
 
@@ -298,6 +300,42 @@ void KexiProject::setError( KexiDB::Object *obj )
 	Object::setError(obj);
 	if (Object::error())
 		emit error(m_error_title, obj);
+}
+
+bool KexiProject::openObject(KexiMainWindow *wnd, const KexiPart::Item& item, bool designMode)
+{
+	KexiPart::Part *part = Kexi::partManager().part(item.mime());
+	if (!part) {
+//js TODO:		setError(&Kexi::partManager());
+		return false;
+	}
+	if (!part->openInstance(wnd, item, designMode)) {
+		//js TODO check for errors
+		return false;
+	}
+	return true;
+}
+
+bool KexiProject::removeObject(KexiMainWindow *wnd, const KexiPart::Item& item)
+{
+	KexiPart::Part *part = Kexi::partManager().part(item.mime());
+	if (!part) {
+//js TODO:		setError(&Kexi::partManager());
+		return false;
+	}
+	if (!part->remove(wnd, item)) {
+		//js TODO check for errors
+		return false;
+	}
+	emit itemRemoved(item);
+	//now: remove this item from cache
+	if (part->info()) {
+		KexiPart::ItemDict *dict = m_itemDictsCache[ part->info()->projectPartID() ];
+		if (dict) {
+			dict->remove( item.identifier() );
+		}
+	}
+	return true;
 }
 
 #include "kexiproject.moc"

@@ -212,11 +212,32 @@ TODO: on Connection::updateRow(): pass field's name together with error message
 
 TODO: win32: Fix saving config files via KConfig (now are ugly overwritten)
 
+2004-01-05
+- QueryAsterisk: 
+  -setTable() added - a must for parser to work
+  -debug improoved
+- Connection: dropTable() added
+
+- Query Part ported to win32
+
 2004-01-04
 - KexiActionProxy: "action" term in methods substituted by more readable: "sharedAction"
 - some actions (in browser) marked as KEXI_UNFINISHED
 - KexiMainWindow: KStdActions are now also acceptable as shared actions
 - copy/cut/paste actions are shared now; added to edit menu
+- "relations" action reintroduced
+- closing() convenient signal added to KexiDialogBase
+- on Table closing - any edits that are in progress are accepted (thx to lucijan for report)
+- KexiTableView: 
+  -fixed crash while counting minimum size for columnless tableview
+  -preventing from crash when no data is set before constructing is finished
+- KexiProject: openObject() and removeObject() added so we will be able to catch kexidb errors
+
+- KexiPart items are now removable! (both from GUI and db backend)
+- Kexi Browser is items are removed if required
+- KexiDialog: now has itemIcon() possible for reimpl. and Kexi Relation View reimpl this, since 
+  it has no KexiPart
+- Kexi Relation View: small crash fixed
 
 2004-01-03
 - KexiDB, core:
