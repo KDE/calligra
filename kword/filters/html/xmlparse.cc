@@ -405,8 +405,8 @@ void ErrorAtChar(
 */
 typedef struct Er Er;
 struct Er {
-  char *zName;     /* The name of this entity reference.  ex:  "amp" */
-  char *zValue;    /* The value for this entity.          ex:  "&" */
+  const char *zName;     /* The name of this entity reference.  ex:  "amp" */
+  const char *zValue;    /* The value for this entity.          ex:  "&" */
   Er *pNext;       /* Next entity with the same hash on zName */
 };
 
@@ -461,10 +461,9 @@ static Er er_sequences[] = {
 /* Initialize the entity reference hash table
 */
 static void ErInit(void){
-  int i;  /* For looping thru the list of entity references */
   int h;  /* The hash on a entity */
 
-  for(i=0; i<sizeof(er_sequences)/sizeof(er_sequences[0]); i++){
+  for(uint i=0; i<sizeof(er_sequences)/sizeof(er_sequences[0]); i++){
     h = ErHash(er_sequences[i].zName);
     er_sequences[i].pNext = apErHash[h];
     apErHash[h] = &er_sequences[i];
@@ -1166,7 +1165,7 @@ void RestrictArgs(char *zFile, Markup *pM, ...){
 
   va_start(ap,pM);
   z = "";
-  for(N=0; z!=0 && N<sizeof(azAllow)/sizeof(azAllow[0]); N++){
+  for(N=0; z!=0 && N<sizeof(azAllow)/sizeof(azAllow[0]); N++) {
     z = va_arg(ap,char*);
     azAllow[N] = z;
   }

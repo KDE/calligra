@@ -175,7 +175,7 @@ void InitListMarkup(ListMarkup *pListMarkup) {
     pListMarkup->pNext = 0;
 }
 
-ListMarkup *MakeNewMarkup(char *zMarkup, ListMarkup **pCurrent) {
+ListMarkup *MakeNewMarkup(const char *zMarkup, ListMarkup **pCurrent) {
     ListMarkup *pTemp;
     pTemp = (ListMarkup *)malloc(sizeof(ListMarkup));
     InitListMarkup(pTemp);
@@ -202,7 +202,6 @@ tTableText *GetTableText(tTableText *pTableText) {
 
 void SearchText(Token *pToken, HTMLTree *pHTMLTree, char *Scratch) {
 
-    char *zText;
     char *Start;
     int iCount;
     Token *pSaveToken;
@@ -600,7 +599,6 @@ void SearchText(Token *pToken, HTMLTree *pHTMLTree, char *Scratch) {
         Format *pFormat;
         tTableText *pTableText;
         tTextStruct *pTextStruct;
-        char *zText;
         int iFoundRed = 0;
         int iFoundGreen = 0;
         int iFoundBlue = 0;
@@ -651,7 +649,6 @@ void SearchText(Token *pToken, HTMLTree *pHTMLTree, char *Scratch) {
     }
     else if(!(strcmp(pToken->zText,"WEIGHT"))) {
         Arg *pArg;
-        char *zText;
         tTableText *pTableText;
         tTextStruct *pTextStruct;
         Format *pFormat;
@@ -697,7 +694,6 @@ void SearchText(Token *pToken, HTMLTree *pHTMLTree, char *Scratch) {
         Arg *pArg;
         Format *pFormat;
         tTableText *pTableText;
-        char *zText;
         tTextStruct *pTextStruct;
         if(pHTMLTree->ObjectType == HTML_Table) {
             tTable *pTable;
@@ -743,8 +739,7 @@ void SearchText(Token *pToken, HTMLTree *pHTMLTree, char *Scratch) {
                 }
             }
             if(!pFormat->iFontItalic) {
-                fprintf(stderr,"Error.  ITALIC markup must contain a font
-direction.\n");
+                fprintf(stderr,"Error.  ITALIC markup must contain a font direction.\n");
                 exit(1);
             }
             SearchText(pToken->pNext,pHTMLTree,Start);
@@ -926,15 +921,13 @@ direction.\n");
 HTMLTree *ProcessTableAndText(HTMLTree *pHTMLTree,HTMLObject egObject,
                               char *Scratch, FILE *Outfile) {
     ListMarkup *pCurrentListMarkup = 0;
-    int i;
-    tTextStruct sTextStruct;
+    // tTextStruct sTextStruct;
     tTable *pCurrentTableCell;
     int iMarginIncrease = 0;
     char *zWeight;
     char *zWeightEnd;
     char *zItalic;
     char *zItalicEnd;
-    char *zText;
     int iCurrentCol = 0;
     int iCurrentRow = 0;
     int iPosition = 0;
@@ -1236,8 +1229,8 @@ HTMLTree *ProcessTableAndText(HTMLTree *pHTMLTree,HTMLObject egObject,
 #ifdef SPARTAN
                             fprintf(Outfile,"<H1>%d.  %s</H1>\n",iNumHead1s,Scratch);
 #else
-                            fprintf(Outfile,"<H1>%s%s<FONT COLOR=#%.2x%.2x%.2x>%d.
-%s</FONT>%s%s</H1>\n",zItalic,zWeight,pFormat->iRed,
+                            fprintf(Outfile,"<H1>%s%s<FONT COLOR=#%.2x%.2x%.2x>%d.\n"
+				    "%s</FONT>%s%s</H1>\n",zItalic,zWeight,pFormat->iRed,
                                     pFormat->iGreen,pFormat->iBlue,iNumHead1s,Scratch,
                                     zWeightEnd,zItalicEnd);
 #endif
@@ -1251,8 +1244,8 @@ HTMLTree *ProcessTableAndText(HTMLTree *pHTMLTree,HTMLObject egObject,
 #ifdef SPARTAN
                             fprintf(Outfile,"<H2>%d.%d.%s</H2>\n",iNumHead1s,iNumHead2s,Scratch);
 #else
-                            fprintf(Outfile,"<H2>%s%s<FONT COLOR=#%.2x%.2x%.2x>%d.%d.
-%s</FONT>%s%s</H2>\n",zItalic,zWeight,
+                            fprintf(Outfile,"<H2>%s%s<FONT COLOR=#%.2x%.2x%.2x>%d.%d.\n"
+				    "%s</FONT>%s%s</H2>\n",zItalic,zWeight,
                                     pFormat->iRed,pFormat->iGreen,pFormat->iBlue,
                                     iNumHead1s,iNumHead2s,Scratch,zWeightEnd,zItalicEnd);
 #endif
@@ -1263,8 +1256,8 @@ HTMLTree *ProcessTableAndText(HTMLTree *pHTMLTree,HTMLObject egObject,
                             fprintf(Outfile,"<H3>%d.%d.%d. %s</H3>\n",iNumHead1s,iNumHead2s,
                                     iNumHead3s,Scratch);
 #else
-                            fprintf(Outfile,"<H3>%s%s<FONT COLOR=#%.2x%.2x%.2x>%d.%d.%d.
-%s</FONT>%s%s</H3>\n",zItalic,zWeight,
+                            fprintf(Outfile,"<H3>%s%s<FONT COLOR=#%.2x%.2x%.2x>%d.%d.%d.\n"
+				    "%s</FONT>%s%s</H3>\n",zItalic,zWeight,
                                     pFormat->iRed,pFormat->iGreen,pFormat->iBlue,
                                     iNumHead1s,iNumHead2s,iNumHead3s,Scratch,zWeightEnd,
                                     zItalicEnd);
@@ -1732,8 +1725,8 @@ HTMLTree *ProcessTableAndText(HTMLTree *pHTMLTree,HTMLObject egObject,
 #ifdef SPARTAN
                                 fprintf(Outfile,"<H1>%d.  %s</H1>\n",iNumHead1s,Scratch);
 #else
-                                fprintf(Outfile,"<H1>%s%s<FONT COLOR=#%.2x%.2x%.2x>%d.
-%s</FONT>%s%s</H1>\n",zItalic,zWeight,pFormat->iRed,
+                                fprintf(Outfile,"<H1>%s%s<FONT COLOR=#%.2x%.2x%.2x>%d.\n"
+					"%s</FONT>%s%s</H1>\n",zItalic,zWeight,pFormat->iRed,
                                         pFormat->iGreen,pFormat->iBlue,iNumHead1s,Scratch,
                                         zWeightEnd,zItalicEnd);
 #endif
@@ -1747,8 +1740,8 @@ HTMLTree *ProcessTableAndText(HTMLTree *pHTMLTree,HTMLObject egObject,
 #ifdef SPARTAN
                                 fprintf(Outfile,"<H2>%d.%d.%s</H2>\n",iNumHead1s,iNumHead2s,Scratch);
 #else
-                                fprintf(Outfile,"<H2>%s%s<FONT COLOR=#%.2x%.2x%.2x>%d.%d.
-%s</FONT>%s%s</H2>\n",zItalic,zWeight,
+                                fprintf(Outfile,"<H2>%s%s<FONT COLOR=#%.2x%.2x%.2x>%d.%d.\n"
+					"%s</FONT>%s%s</H2>\n",zItalic,zWeight,
                                         pFormat->iRed,pFormat->iGreen,pFormat->iBlue,
                                         iNumHead1s,iNumHead2s,Scratch,zWeightEnd,zItalicEnd);
 #endif
@@ -1759,8 +1752,8 @@ HTMLTree *ProcessTableAndText(HTMLTree *pHTMLTree,HTMLObject egObject,
                                 fprintf(Outfile,"<H3>%d.%d.%d. %s</H3>\n",iNumHead1s,iNumHead2s,
                                         iNumHead3s,Scratch);
 #else
-                                fprintf(Outfile,"<H3>%s%s<FONT COLOR=#%.2x%.2x%.2x>%d.%d.%d.
-%s</FONT>%s%s</H3>\n",zItalic,zWeight,
+                                fprintf(Outfile,"<H3>%s%s<FONT COLOR=#%.2x%.2x%.2x>%d.%d.%d.\n"
+					"%s</FONT>%s%s</H3>\n",zItalic,zWeight,
                                         pFormat->iRed,pFormat->iGreen,pFormat->iBlue,
                                         iNumHead1s,iNumHead2s,iNumHead3s,Scratch,zWeightEnd,
                                         zItalicEnd);
@@ -1964,7 +1957,7 @@ HTMLTree *ProcessTableAndText(HTMLTree *pHTMLTree,HTMLObject egObject,
     return (pHTMLTree->pNext);
 }
 
-HTMLTree *ProcessImage(HTMLTree *pHTMLTree,HTMLObject egObject,FILE *Outfile) {
+HTMLTree *ProcessImage(HTMLTree *pHTMLTree,HTMLObject /*egObject*/,FILE *Outfile) {
     /* We've got a picture in a frame.  For now, default to center
     ** alignment.
   */
@@ -1992,16 +1985,16 @@ HTMLTree *ProcessImage(HTMLTree *pHTMLTree,HTMLObject egObject,FILE *Outfile) {
 ** specify the output file names.
 */
 void mainFunc( const char *data ) {
-    ListMarkup *pCurrentListMarkup = 0;
-    int i,iSizeXmlFile;
-    tTextStruct sTextStruct;
-    int iMarginIncrease = 0;
+  // ListMarkup *pCurrentListMarkup = 0;
+    int iSizeXmlFile;
+    // tTextStruct sTextStruct;
+    // int iMarginIncrease = 0;
 #ifdef SPARTAN
-    char Usage[]="Usage:  xml2html_sp file1 <file2...fileN> output file1\n"
-                 "        <output file2...output fileN>\n";
+    const char *Usage="Usage:  xml2html_sp file1 <file2...fileN> output file1\n"
+      "        <output file2...output fileN>\n";
 #else
-    char Usage[]="Usage:  xml2html file1 <file2...fileN> output file1\n"
-                 "        <output file2...output fileN>\n";
+    const char *Usage="Usage:  xml2html file1 <file2...fileN> output file1\n"
+      "        <output file2...output fileN>\n";
 #endif
     const char *zXmlFile;
     FILE *OutputFile;
