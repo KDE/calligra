@@ -4820,16 +4820,17 @@ void KPresenterView::editReplace()
 
     KPTextView * edit = m_canvas->currentTextObjectView();
     bool hasSelection=edit && (edit->kpTextObject())->textObject()->hasSelection();
-
     KoReplaceDia dialog( m_canvas, "replace", m_searchEntry, m_replaceEntry,hasSelection );
     QPtrList<KoTextObject> list=m_canvas->objectText();
     if( list.count()==0)
+    {
         KMessageBox::sorry( this, i18n( "Sorry, there is not text object!" ) );
-    return;
+        return;
+    }
     m_searchPage=m_pKPresenterDoc->pageList().findRef(m_canvas->activePage());
     if ( dialog.exec() == QDialog::Accepted )
     {
-
+        kdDebug() << "KPresenterView::editReplace" << endl;
         m_findReplace = new KPrFindReplace( m_canvas, &dialog,edit ,m_canvas->objectText());
         doFindReplace();
     }
