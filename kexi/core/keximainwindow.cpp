@@ -97,7 +97,7 @@ class KexiMainWindow::Private
 		int action_open_recent_more_id;
 
 		//! edit menu
-		KAction *action_edit_delete, *action_edit_delete_record,
+		KAction *action_edit_delete, *action_edit_delete_row,
 			*action_edit_cut, *action_edit_copy, *action_edit_paste;
 		// view menu
 		KAction *action_view_nav;
@@ -244,8 +244,8 @@ KexiMainWindow::initActions()
 	d->action_edit_paste = KStdAction::paste( this, SLOT( slotEditPaste() ), actionCollection(), "edit_paste" );
 
 	d->action_edit_delete = createSharedAction(i18n("&Delete"), "button_cancel", Key_Delete, "edit_delete");
-	d->action_edit_delete_record = createSharedAction(i18n("Delete Record"), 0/*SmallIcon("button_cancel")*/, 
-		CTRL+Key_Delete, "edit_delete_record");
+	d->action_edit_delete_row = createSharedAction(i18n("Delete Row"), 0/*SmallIcon("button_cancel")*/, 
+		SHIFT+Key_Delete, "edit_delete_row");
 
 	//VIEW MENU
 	d->action_view_nav = new KAction(i18n("Navigator"), "", ALT + Key_1,
@@ -718,7 +718,7 @@ KexiMainWindow::storeSettings()
 	saveWindowSize( config ); //instance()->config() );
 	saveMainWindowSettings( config );
 	config->writeEntry("MDIMode", mdiMode());
-	config->sync();
+//	config->sync();
 }
 
 void

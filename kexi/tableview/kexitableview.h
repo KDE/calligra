@@ -52,7 +52,7 @@ class KexiTableViewPrivate;
 class KActionCollection;
 
 /*
-	this class provides a tablewidget ;)
+	This class provides a table view widget.
 */
 
 class KEXIDATATABLE_EXPORT KexiTableView : public QScrollView
@@ -219,11 +219,11 @@ public:
 //	void		setInsertItem(KexiTableItem *i);
 //	KexiTableItem	*insertItem() const;
 
-	enum AdditionPolicy
+	enum InsertionPolicy
 	{
-		NoAdd,
-		AutoAdd,
-		SignalAdd
+		NoInsert,
+		AutoInsert,
+		SignalInsert
 	};
 
 	enum DeletionPolicy
@@ -234,10 +234,12 @@ public:
 		SignalDelete
 	};
 
-	virtual void	setAdditionPolicy(AdditionPolicy policy);
-	AdditionPolicy	additionPolicy() const;
+	virtual void	setInsertionPolicy(InsertionPolicy policy);
+	/*! \return deletion policy for the table view. The default (after allocating) is AutoInsert. */
+	InsertionPolicy	insertionPolicy() const;
 
 	virtual void	setDeletionPolicy(DeletionPolicy policy);
+	/*! \return deletion policy for the table view. The default (after allocating) is AskDelete. */
 	DeletionPolicy	deletionPolicy() const;
 
 	//! single shot after 1ms for contents updatinh
@@ -254,8 +256,9 @@ public:
 	virtual bool eventFilter( QObject *o, QEvent *e );
 
 	/*! Plugs action \a a for this table view. The action will be later looked up (by name) 
-	 on key press event, to get proper shortcut. If not found, default shortcut will be used 
-	 (example: Shift+Enter key for "data_save_row" action). \sa shortCutPressed()
+	 on key press event, to get proper shortcut. If found, we know that the action is already 
+	 performed at main window's level, so we should give up. Otherwise - default shortcut 
+	 will be used (example: Shift+Enter key for "data_save_row" action). \sa shortCutPressed()
 	*/
 	void plugSharedAction(KAction* a);
 
@@ -271,12 +274,21 @@ public slots:
 	void setSortingEnabled(bool set);
 	//! Sorts all rows by column selected with setSorting()
 	void sort();
-	void setCursor(int row, int col = -1);
+	/*! Moves cursor to \a row and \a col. If \a col is -1, current column number is used.
+	 If forceSet is true, cursor position is updated even if \a row and \a col doesn't 
+	 differ from actual position. */
+	void setCursor(int row, int col = -1, bool forceSet = false);
 	void selectRow(int row);
 	void selectNextRow();
 	void selectPrevRow();
 	void selectFirstRow();
 	void selectLastRow();
+
+	/*! Ensures that cell at \a row and \a col is visible. 
+	 If \a col is -1, current column number is used. \a row and \a col (if not -1) must 
+	 be between 0 and rows() (or cols() accordingly). */
+	void ensureCellVisible(int row, int col/*=-1*/);
+
 //	void			gotoNext();
 //js	int			findString(const QString &string);
 	
@@ -375,7 +387,9 @@ protected:
 	bool focusNextPrevChild(bool next);
 
 	/*! Used in key event: \return true if event \a e should execute action \a action_name.
-	 Actions' shortcuts defined by shortCutPressed() are reused, if present.
+	 Action shortcuts defined by shortCutPressed() are reused, if present, and if \a e matches 
+	 given action's shortcut - false is returned (beause action is already performed at main 
+	 window's level).
 	*/
 	bool shortCutPressed( QKeyEvent *e, const QCString &action_name );
 
@@ -399,7 +413,13 @@ protected:
 		QPainter *pb, int r, int rowp, int cx, int cy, 
 		int colfirst, int collast, int maxwc);
 
-	void deleteItem(KexiTableItem *item, bool moveCursor=true);
+	/*! Deletes \a item. Used by deleteCurrentRow(). Calls beforeDeleteItem() before deleting, 
+	 to double-check if deleting is allowed. \return true on success. */
+	bool deleteItem(KexiTableItem *item);//, bool moveCursor=true);
+
+	/*! For reimplementation: called by deleteItem(). If returns false, deleting is aborted.
+	 Default implementation just returns true. */
+	virtual bool beforeDeleteItem(KexiTableItem *item);
 
 	virtual void setHBarGeometry( QScrollBar & hbar, int x, int y, int w, int h );
 

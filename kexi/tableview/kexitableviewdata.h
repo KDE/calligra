@@ -178,7 +178,10 @@ public:
 	inline KexiDB::RowEditBuffer* rowEditBuffer() const { return m_pRowEditBuffer; }
 
 	bool saveRowChanges(KexiTableItem& item);
+
 	bool saveNewRow(KexiTableItem& item);
+
+	bool deleteRow(KexiTableItem& item);
 
 protected:
 	virtual int compareItems(Item item1, Item item2);

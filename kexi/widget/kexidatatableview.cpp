@@ -214,10 +214,10 @@ KexiDataTableView::readOnly()
 	return true;
 }
 
+#if 0
 void
 KexiDataTableView::insertNext()
 {
-#if 0
 	if((m_maxRecord + 1) == m_records && !m_record->readOnly()) {
 		appendInsertItem();
 		return;
@@ -231,8 +231,8 @@ KexiDataTableView::insertNext()
 	}
 	it->setHint(QVariant(m_maxRecord));
 	m_maxRecord++;
-#endif
 }
+#endif
 
 /*jsvoid
 KexiDataTableView::appendInsertItem()
@@ -242,11 +242,11 @@ KexiDataTableView::appendInsertItem()
 	m_maxRecord++;
 }*/
 
+#if 0
 void
 KexiDataTableView::slotItemChanged(KexiTableItem *i, int col,QVariant oldValue)
 {
 	kdDebug() << "KexiDataTableView::slotItemChanged()" << endl;
-#if 0
 	if(i->isInsertItem())
 	{
 		i->setInsertItem(false);
@@ -289,23 +289,6 @@ KexiDataTableView::slotItemChanged(KexiTableItem *i, int col,QVariant oldValue)
 			m_record->writeOut();
 		}
 	}
-#endif
-}
-
-#if 0 //js
-void
-KexiDataTableView::slotMoving(int)
-{
-	int newRow = rowAt(contentsY(), true) + 100;
-	if(newRow > m_records)
-		newRow = m_records;
-
-	verticalHeader()->setUpdatesEnabled(false);
-	while(m_maxRecord < newRow)
-	{
-		insertNext();
-	}
-	verticalHeader()->setUpdatesEnabled(true);
 }
 #endif
 
@@ -314,21 +297,5 @@ KexiDataTableView::tableSize() const
 {
 	return QSize(KexiTableView::tableSize().width(), m_records * rowHeight());
 }*/
-
-#if 0
-void
-KexiDataTableView::recordInsertFinished(KexiDBUpdateRecord *ur)
-{
-	kdDebug() << "KexiDataTableView::recordInsertFinished()" << endl;
-	if (m_insertMapping.contains(ur))
-	{
-		KexiTableItem *it = m_insertMapping[ur];
-		m_insertMapping.remove(ur);
-		for (int i=0; i < cols(); i++)
-			it->setValue(i, ur->value(i));
-	}
-	kdDebug() << "KexiDataTableView::recordInsertFinished(): end" << endl;
-}
-#endif
 
 #include "kexidatatableview.moc"

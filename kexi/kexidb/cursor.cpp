@@ -437,6 +437,14 @@ bool Cursor::insertRow(RowData& data, RowEditBuffer& buf)
 	return m_conn->insertRow(*m_query, data, buf);
 }
 
+bool Cursor::deleteRow(RowData& data)
+{
+//TODO: doesn't update cursor's buffer YET!
+	if (!m_query)
+		return false;
+	return m_conn->deleteRow(*m_query, data);
+}
+
 QString Cursor::debugString() const
 {
 	QString dbg = "CURSOR( ";

@@ -207,6 +207,17 @@ TODO: on Connection::updateRow(): pass field's name together with error message
     -additional mapping is needed, eg QMap<QString,QString> err;
     err["KexiDB::Field::name"]="ID";
 
+TODO: win32: Fix saving config files via KConfig (now are ugly overwritten)
+
+2004-01-02
+2004-01-03
+- table view:
+	-in key event - we give up with executing actions that are shared with main window, because
+	these actions are executed at main window's level. These actions are declared using plugSharedAction().
+  -row deleting works
+- actions: MSA-like "Delete Record" substituted by "Delete Row"
+
+TODO: show posible errors (as well as for INSERTs and UPDATEs)!!!
 
 2003-12-30
 ** Many cleanups and behavioral fixes

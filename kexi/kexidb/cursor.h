@@ -176,6 +176,8 @@ class KEXI_DB_EXPORT Cursor: public Object
 
 		bool insertRow(RowData& data, RowEditBuffer& buf);
 
+		bool deleteRow(RowData& data);
+
 		/*! \return a code of last executed operation's result at the server side.
 		 This code is engine dependent and may be even engine-version dependent.
 		 It can be visible in applications mainly after clicking a "Details>>" button

@@ -353,3 +353,17 @@ bool KexiTableViewData::saveNewRow(KexiTableItem& item)
 	return saveRow(item, true /*insert*/);
 }
 
+bool KexiTableViewData::deleteRow(KexiTableItem& item)
+{
+	if (isDBAware()) {
+		if (!m_cursor->deleteRow( static_cast<KexiDB::RowData&>(item) ))
+			return false;
+	}
+
+	if (!removeRef(&item)) {
+		//aah - this shouldn't be!
+		kdWarning() << "KexiTableViewData::deleteRow(): !removeRef() - IMPL. ERROR?" << endl;
+		return false;
+	}
+	return true;
+}

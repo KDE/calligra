@@ -1652,4 +1652,47 @@ bool Connection::insertRow(QuerySchema &query, RowData& data, RowEditBuffer& buf
 	return res;
 }
 
+bool Connection::deleteRow(QuerySchema &query, RowData& data)
+{
+	KexiDBDrvDbg << "Connection::deleteRow.." << endl;
+	if (!query.parentTable()) {
+		KexiDBDrvDbg << " -- NO PARENT TABLE!" << endl;
+		return false;
+	}
+	IndexSchema *pkey = query.parentTable()->primaryKey();
+	if (!pkey || pkey->fields()->isEmpty())
+		KexiDBDrvDbg << " -- WARNING: NO PARENT TABLE's PKEY" << endl;
+	
+	//update the record:
+	QString sql = "DELETE FROM " + query.parentTable()->name() + " WHERE ";
+	QString sqlwhere;
+	QValueVector<uint> pkeyFieldsOrder = query.pkeyFieldsOrder();
+	if (pkey->fieldCount()>0) {
+		uint i=0;
+		for (Field::ListIterator it = pkey->fieldsIterator(); it.current(); i++, ++it) {
+			if (!sqlwhere.isEmpty())
+				sqlwhere+=" AND ";
+			QVariant val = data[ pkeyFieldsOrder[i] ];
+			if (val.isNull() || !val.isValid()) {
+				setError(ERR_UPDATE_NULL_PKEY_FIELD, i18n("Field cannot be empty"));
+//js todo: pass the field's name somewhere!
+				return false;
+			}
+			sqlwhere += ( it.current()->name() + "=" 
+				+ m_driver->valueToSQL( it.current(), val ) );
+		}
+	}
+	sql += sqlwhere;
+	KexiDBDrvDbg << " -- SQL == " << sql << endl;
+
+	bool res = drv_executeSQL(sql);
+
+	if (!res) {
+//TODO: js: we would like to know a reason of failures...
+		return false;
+	}
+
+	return res;
+}
+
 #include "connection.moc"

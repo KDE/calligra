@@ -47,6 +47,7 @@
 #include <kdebug.h>
 #include <kapp.h>
 #include <kiconloader.h>
+#include <kmessagebox.h>
 
 #ifndef KEXI_NO_PRINT
 # include <kprinter.h>
@@ -122,10 +123,6 @@ KexiTableView::KexiTableView(KexiTableViewData* data, QWidget* parent, const cha
 		d->rowHeight = 17;
 
 	d->pUpdateTimer = new QTimer(this);
-
-//	deletionPolicy = NoDelete;
-	//m_additionPolicy = NoAdd;
-	setAdditionPolicy( NoAdd );
 
 //	setMargins(14, fontMetrics().height() + 4, 0, 0);
 
@@ -404,16 +401,38 @@ void KexiTableView::setFont(const QFont &f)
 	updateContents();
 }
 
-void KexiTableView::deleteItem(KexiTableItem *item, bool moveCursor)
+bool KexiTableView::beforeDeleteItem(KexiTableItem *item)
 {
-	if(m_data->removeRef(item))
-	{
-		d->pVerticalHeader->removeLabel();//TODO
-		if(moveCursor)
-			setCursor(d->curRow);
-//		selectPrev();
-		d->pUpdateTimer->start(1,true);
+	//always return
+	return true;
+}
+
+bool KexiTableView::deleteItem(KexiTableItem *item)/*, bool moveCursor)*/
+{
+	if (!item || !beforeDeleteItem(item))
+		return false;
+//	if (m_data->removeRef(item))
+
+	if (!m_data->deleteRow(*d->pCurrentItem)) {
+		//error
+		return false;
 	}
+	else {
+		d->pCurrentItem = m_data->current();
+	}
+
+	if (!isInsertingEnabled())
+		setCursor(d->curRow-1); //move up
+	else
+		setCursor(d->curRow, d->curCol, true/*forceSet*/);
+
+	d->pVerticalHeader->removeLabel();
+//		if(moveCursor)
+//		selectPrev();
+//		d->pUpdateTimer->start(1,true);
+	updateRow(d->curRow);
+
+	return true;
 }
 
 void KexiTableView::deleteCurrentRow()
@@ -422,22 +441,30 @@ void KexiTableView::deleteCurrentRow()
 		cancelRowEdit();
 		return;
 	}
-	if (!isDeleteEnabled() || d->pCurrentItem == d->pInsertItem)
+	if (!isDeleteEnabled() || !d->pCurrentItem || d->pCurrentItem == d->pInsertItem)
 		return;
-	if (d->deletionPolicy == ImmediateDelete && d->pCurrentItem) {
-		deleteItem(d->pCurrentItem);
-	} else if (d->deletionPolicy == AskDelete) {
-		//TODO(js)
-	} else if (d->deletionPolicy == SignalDelete) {
+	switch (d->deletionPolicy) {
+	case NoDelete:
+		return;
+	case ImmediateDelete:
+		break;
+	case AskDelete:
+		if (KMessageBox::questionYesNo(this, i18n("Do you want to delete selected row?"), 0, 
+			KStdGuiItem::yes(), KStdGuiItem::no(), "askBeforeDeleteRow"/*config entry*/)==KMessageBox::No)
+			return;
+		break;
+	case SignalDelete:
 		emit itemDeleteRequest(d->pCurrentItem);
 		emit currentItemDeleteRequest();
+		return;
+	default:
+		return;
+	}
+
+	if (!deleteItem(d->pCurrentItem)) {
+		//show error
 	}
 }
-
-/*void KexiTableView::addRecord()
-{
-	emit addRecordRequest();
-}*/
 
 void KexiTableView::clearData(bool repaint)
 {
@@ -1427,14 +1454,22 @@ void KexiTableView::plugSharedAction(KAction* a)
 bool KexiTableView::shortCutPressed( QKeyEvent *e, const QCString &action_name )
 {
 	KAction *action = d->sharedActions[action_name];
-	if (action_name=="data_save_row") {
-		if (!action) //default shortcut
-			return (e->key() == Key_Return || e->key() == Key_Enter) && e->state()==ShiftButton;
+	if (action) {
+		if (!action->isEnabled())//this action is disabled - don't process it!
+			return false; 
+		if (action->shortcut() == KShortcut( KKey(e) ))
+			return false;//this shortcut is owned by shared action - don't process it!
 	}
-	else
-		return false;
 
-	return action->shortcut() == KShortcut( KKey(e) );
+	//check default shortcut
+	if (action_name=="data_save_row")
+		return (e->key() == Key_Return || e->key() == Key_Enter) && e->state()==ShiftButton;
+	if (action_name=="edit_delete_row")
+		return e->key() == Key_Delete && e->state()==ShiftButton;
+	if (action_name=="edit_delete")
+		return e->key() == Key_Delete && e->state()==NoButton;
+
+	return false;
 }
 
 void KexiTableView::keyPressEvent(QKeyEvent* e)
@@ -1494,21 +1529,27 @@ void KexiTableView::keyPressEvent(QKeyEvent* e)
 	const bool nobtn = e->state()==NoButton;
 	bool printable = false;
 
+	//check shared shortcuts
+	if (shortCutPressed(e, "edit_delete_row")) {
+		deleteCurrentRow();
+		e->accept();
+		return;
+	} else if (shortCutPressed(e, "edit_delete")) {
+		deleteAndStartEditCurrentCell();
+		e->accept();
+		return;
+	}
+
 	switch (e->key())
 	{
-	case Key_Delete:
+/*	case Key_Delete:
 		if (e->state()==Qt::ControlButton) {//remove current row
 			deleteCurrentRow();
 		}
-		else {//remove contents of the current cell
+		else if (nobtn) {//remove contents of the current cell
 			deleteAndStartEditCurrentCell();
-/*			if(columnType(curCol) != KexiDB::Field::Boolean && columnEditable(curCol))
-				createEditor(curRow, curCol, QString::null, false);*/
-/*			if (d->pEditor && d->pEditor->isA("KexiInputTableEdit")) {
-				static_cast<KexiInputTableEdit*>(d->pEditor)->clear();
-			}*/
 		}
-		break;
+		break;*/
 
 	case Key_Shift:
 	case Key_Alt:
@@ -2009,7 +2050,16 @@ int KexiTableView::cols() const
 	return m_data->columns.count();
 }
 
-void KexiTableView::setCursor(int row, int col/*=-1*/)
+void KexiTableView::ensureCellVisible(int row, int col/*=-1*/)
+{
+	//quite clever: ensure the cell is visible:
+	QPoint pcenter = QRect( 
+		columnPos(col==-1 ? d->curCol : col), rowPos(row), 
+		columnWidth(col==-1 ? d->curCol : col), rowHeight()).center();
+	ensureVisible(pcenter.x(), pcenter.y(), columnWidth(col==-1 ? d->curCol : col)/2, rowHeight()/2);
+}
+
+void KexiTableView::setCursor(int row, int col/*=-1*/, bool forceSet)
 {
 	int newrow = row;
 	int newcol = col;
@@ -2038,7 +2088,7 @@ void KexiTableView::setCursor(int row, int col/*=-1*/)
 //	d->pCurrentItem = itemAt(d->curRow);
 //	kdDebug(44021) << "setCursor(): d->curRow=" << d->curRow << " oldRow=" << oldRow << " d->curCol=" << d->curCol << " oldCol=" << oldCol << endl;
 
-	if ( d->curRow != newrow || d->curCol != newcol )
+	if ( forceSet || d->curRow != newrow || d->curCol != newcol )
 	{
 		kdDebug(44021) << "setCursor(): " <<QString("old:%1,%2 new:%3,%4").arg(d->curCol).arg(d->curRow).arg(newcol).arg(newrow) << endl;
 		
@@ -2072,7 +2122,7 @@ void KexiTableView::setCursor(int row, int col/*=-1*/)
 		d->curCol = newcol;
 
 //		int cw = columnWidth( d->curCol );
-		int rh = rowHeight();
+//		int rh = rowHeight();
 //		ensureVisible( columnPos( d->curCol ) + cw / 2, rowPos( d->curRow ) + rh / 2, cw / 2, rh / 2 );
 //		center(columnPos(d->curCol) + cw / 2, rowPos(d->curRow) + rh / 2, cw / 2, rh / 2);
 //	kdDebug(44021) << " contentsY() = "<< contentsY() << endl;
@@ -2083,9 +2133,9 @@ void KexiTableView::setCursor(int row, int col/*=-1*/)
 //js		ensureVisible(columnPos(d->curCol), rowPos(d->curRow), columnWidth(d->curCol), rh);
 
 		//quite clever: ensure the cell is visible:
-		QPoint pcenter = QRect( columnPos(d->curCol), rowPos(d->curRow), columnWidth(d->curCol), rh).center();
-		ensureVisible(pcenter.x(), pcenter.y(), columnWidth(d->curCol)/2, rh/2);
-
+		ensureCellVisible(d->curRow, d->curCol);
+//		QPoint pcenter = QRect( columnPos(d->curCol), rowPos(d->curRow), columnWidth(d->curCol), rh).center();
+//		ensureVisible(pcenter.x(), pcenter.y(), columnWidth(d->curCol)/2, rh/2);
 
 //		ensureVisible(columnPos(d->curCol), rowPos(d->curRow) - contentsY(), columnWidth(d->curCol), rh);
 		d->pVerticalHeader->setCurrentRow(d->curRow);
@@ -2099,6 +2149,7 @@ void KexiTableView::setCursor(int row, int col/*=-1*/)
 		}
 		else {
 			kdDebug(44021) << QString("NOW item at %1 (%2) is current").arg(d->curRow).arg((ulong)itemAt(d->curRow)) << endl;
+//NOT EFFECTIVE!!!!!!!!!!!
 			d->pCurrentItem = itemAt(d->curRow);
 		}
 		emit itemSelected(d->pCurrentItem);
@@ -2296,15 +2347,15 @@ void KexiTableView::cancelRowEdit()
 	kdDebug(44021) << "EDIT ROW CANCELLED." << endl;
 }
 
-void KexiTableView::setAdditionPolicy(AdditionPolicy policy)
+void KexiTableView::setInsertionPolicy(InsertionPolicy policy)
 {
-	d->additionPolicy = policy;
+	d->insertionPolicy = policy;
 //	updateContextMenu();
 }
 
-KexiTableView::AdditionPolicy KexiTableView::additionPolicy() const
+KexiTableView::InsertionPolicy KexiTableView::insertionPolicy() const
 {
-	return d->additionPolicy;
+	return d->insertionPolicy;
 }
 
 void KexiTableView::setDeletionPolicy(DeletionPolicy policy)

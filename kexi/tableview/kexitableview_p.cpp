@@ -35,7 +35,9 @@ KexiTableViewPrivate::KexiTableViewPrivate()
 //	numCols = 0;
 	editOnDoubleClick = true;
 	pBufferPm = 0;
-	deletionPolicy = KexiTableView::NoDelete;
+//	deletionPolicy = KexiTableView::NoDelete;
+	deletionPolicy = KexiTableView::AskDelete;
+	insertionPolicy = KexiTableView::AutoInsert;
 	disableDrawContents = false;
 	readOnly = -1; //don't know
 	insertingEnabled = -1; //don't know

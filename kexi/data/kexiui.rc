@@ -36,7 +36,7 @@
   <Menu name="edit" noMerge="1">
     <text>&amp;Edit</text>
     <Action name="edit_delete"/>
-    <Action name="edit_delete_record"/>
+    <Action name="edit_delete_row"/>
     <DefineGroup name="edit_find"/>
     <Separator/>
     <Merge/>

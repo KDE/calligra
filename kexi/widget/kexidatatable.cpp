@@ -78,10 +78,13 @@ KexiDataTable::initActions()
 	new KAction(i18n("Filter"), "filter", 0, this, SLOT(filter()), actionCollection(), "tablepart_filter");
 	setXMLFile("kexidatatableui.rc");
 */
-//	m_popup = new KPopupMenu(this, "KexiDataTable_popup");
-	plugAction("edit_delete_record", m_view, SLOT(deleteCurrentRow()));
-	plugAction("edit_delete_record", m_view->popup());
+	plugAction("edit_delete_row", m_view, SLOT(deleteCurrentRow()));
+	plugAction("edit_delete_row", m_view->popup());
+	m_view->plugSharedAction(action("edit_delete_row")); //for proper shortcut
+
 	plugAction("edit_delete",m_view, SLOT(deleteAndStartEditCurrentCell()));
+	m_view->plugSharedAction(action("edit_delete")); //for proper shortcut
+
 	plugAction("data_save_row",m_view, SLOT(acceptRowEdit()));
 	m_view->plugSharedAction(action("data_save_row")); //for proper shortcut
 }
@@ -115,7 +118,7 @@ QSize KexiDataTable::sizeHint() const
 
 void KexiDataTable::slotCellSelected(int col, int row)
 {
-	setAvailable("edit_delete_record", !(m_view->isInsertingEnabled() && row==m_view->rows()) );
+	setAvailable("edit_delete_row", !(m_view->isInsertingEnabled() && row==m_view->rows()) );
 }
 
 #include "kexidatatable.moc"

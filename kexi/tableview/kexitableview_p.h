@@ -79,7 +79,7 @@ class KexiTableViewPrivate
 //	int sortedColumn;
 //	bool sortOrder;
 
-	KexiTableView::AdditionPolicy additionPolicy;
+	KexiTableView::InsertionPolicy insertionPolicy;
 	KexiTableView::DeletionPolicy deletionPolicy;
 
 	QPixmap			*pBufferPm;

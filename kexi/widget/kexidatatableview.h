@@ -81,12 +81,15 @@ class KEXIEXTWIDGETS_EXPORT KexiDataTableView : public KexiTableView
 //		virtual QSize	tableSize() const;
 //js		void		appendInsertItem();
 
+		/*! Reimplemented: called by deleteItem() - we are deleting data associated with \a item. */
+//		virtual bool beforeDeleteItem(KexiTableItem *item);
+
 	protected slots:
 //		void		recordInsertFinished(KexiDBUpdateRecord*);
 //js		void		slotMoving(int);
-		void		insertNext();
+//js		void		insertNext();
 
-		void		slotItemChanged(KexiTableItem*, int, QVariant);
+//js		void		slotItemChanged(KexiTableItem*, int, QVariant);
 
 	private:
 		//db stuff
