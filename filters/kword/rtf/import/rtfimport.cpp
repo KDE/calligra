@@ -451,11 +451,12 @@ KoFilter::ConversionStatus RTFImport::convert( const QCString& from, const QCStr
 		{
 		    // Skip unknown {\* ...} destination
 		    changeDestination( properties["@*"] );
+		    debugUnknownKeywords[token.text]++;
 		}
 	    }
             else
             {
-                //kdWarning(30515) << "Unknown control word: " << token.text << endl;
+                debugUnknownKeywords[token.text]++;
             }
 	}
 	else if (token.type == RTFTokenizer::PlainText || token.type == RTFTokenizer::BinaryData)
@@ -650,6 +651,10 @@ KoFilter::ConversionStatus RTFImport::convert( const QCString& from, const QCStr
     in.close();
 
     kdDebug(30515) << "RTF FILTER TIME: " << debugTime.elapsed() << endl;
+
+    for (QMap<QString,int>::ConstIterator it=debugUnknownKeywords.begin();
+        it!=debugUnknownKeywords.end();it++)
+        kdDebug(30515) << "Unknown keyword: " << it.key() << " * " << it.data() << endl;
 
     return KoFilter::OK;
 }

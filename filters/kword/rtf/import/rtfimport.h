@@ -314,6 +314,7 @@ public:
 protected:
     QTextCodec* textCodec; // currently used QTextCodec by the RTF file
     QTextCodec* utf8TextCodec; // QTextCodec for UTF-8 (used in \u)
+    QMap<QString,int> debugUnknownKeywords;
 };
 
 #endif
