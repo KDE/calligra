@@ -73,7 +73,7 @@ protected:
 
 private:
 	enum { normal, moving, scaling, rotating } m_state;
-	enum { none, lockx, locky } m_lock;
+	bool m_lock;
 
 	double m_s1;
 	double m_s2;

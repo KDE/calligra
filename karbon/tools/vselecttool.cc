@@ -59,7 +59,7 @@ void VSelectOptionsWidget::modeChange( int mode )
 VSelectTool::VSelectTool( KarbonView* view )
 	: VTool( view ), m_state( normal )
 {
-	m_lock = none;
+	m_lock = false;
 	m_objects.setAutoDelete( true );
 	m_optionsWidget = new VSelectOptionsWidget( view );
 }
@@ -210,8 +210,6 @@ VSelectTool::mouseButtonRelease()
 void
 VSelectTool::mouseDragRelease()
 {
-	//draw();
-
 	if( m_state == normal )
 	{
 		// Y mirroring
@@ -229,12 +227,19 @@ VSelectTool::mouseDragRelease()
 	else if( m_state == moving )
 	{
 		m_state = normal;
-		view()->part()->addCommand(
-			new VTranslateCmd(
-				&view()->part()->document(),
-				qRound( last().x() - first().x() ),
-				qRound( last().y() - first().y() ) ),
-			true );
+		double distx = last().x() - first().x();
+		double disty = last().y() - first().y();
+		if( m_lock )
+			view()->part()->addCommand(
+				 new VTranslateCmd(
+					&view()->part()->document(),
+					abs( int( distx ) ) >= abs( int( disty ) ) ? qRound( distx ) : 0,
+					abs( int( distx ) ) <= abs( int( disty ) ) ? qRound( disty ) : 0 ),
+				true );
+		else
+			view()->part()->addCommand(
+				new VTranslateCmd( &view()->part()->document(), qRound( distx ), qRound( disty ) ),
+				true );
 	}
 	else if( m_state == scaling )
 	{
@@ -244,6 +249,7 @@ VSelectTool::mouseDragRelease()
 			true );
 		m_s1 = m_s2 = 1;
 	}
+	m_lock = false;
 	updateStatusBar();
 }
 
@@ -285,13 +291,13 @@ VSelectTool::updateStatusBar() const
 void
 VSelectTool::mouseDragCtrlPressed()
 {
-	m_lock = lockx;
+	m_lock = true;
 }
 
 void
 VSelectTool::mouseDragCtrlReleased()
 {
-	m_lock = none;
+	m_lock = false;
 }
 
 void
@@ -307,9 +313,13 @@ VSelectTool::recalc()
 
 		if( m_state == moving )
 		{
-			cmd = new VTranslateCmd( 0L,
-				last().x() - first().x(),
-				last().y() - first().y() );
+			double distx = last().x() - first().x();
+			double disty = last().y() - first().y();
+			if( m_lock )
+				cmd = new VTranslateCmd( 0L, abs( int( distx ) ) >= abs( int( disty ) ) ? distx : 0,
+											 abs( int( distx ) ) <= abs( int( disty ) ) ? disty : 0 );
+			else
+				cmd = new VTranslateCmd( 0L, distx, disty );
 		}
 		else
 		{
