@@ -261,42 +261,43 @@ SvgImport::parseColorStops( VGradient *gradient, const QDomElement &e )
 void
 SvgImport::parseGradient( const QDomElement &e )
 {
-	VGradient gradient;
-	gradient.clearStops();
-	gradient.setRepeatMethod( VGradient::none );
+	GradientHelper gradhelper;
+	gradhelper.gradient.clearStops();
+	gradhelper.gradient.setRepeatMethod( VGradient::none );
 
 	QString href = e.attribute( "xlink:href" );
 	if( !href.isEmpty() )
 	{
 		//kdDebug() << "Indexing with href : " << href.latin1() << endl;
-		gradient = m_gradients[ href ];
+		gradhelper.gradient = m_gradients[ href ].gradient;
 	}
 
 	if( e.tagName() == "linearGradient" )
 	{
-		gradient.setOrigin( KoPoint( e.attribute( "x1" ).toDouble(), e.attribute( "y1" ).toDouble() ) );
-		gradient.setVector( KoPoint( e.attribute( "x2" ).toDouble(), e.attribute( "y2" ).toDouble() ) );
+		gradhelper.gradient.setOrigin( KoPoint( e.attribute( "x1" ).toDouble(), e.attribute( "y1" ).toDouble() ) );
+		gradhelper.gradient.setVector( KoPoint( e.attribute( "x2" ).toDouble(), e.attribute( "y2" ).toDouble() ) );
 	}
 	else
 	{
-		gradient.setOrigin( KoPoint( e.attribute( "cx" ).toDouble(), e.attribute( "cy" ).toDouble() ) );
-		gradient.setVector( KoPoint( e.attribute( "cx" ).toDouble() + e.attribute( "r" ).toDouble(),
+		gradhelper.gradient.setOrigin( KoPoint( e.attribute( "cx" ).toDouble(), e.attribute( "cy" ).toDouble() ) );
+		gradhelper.gradient.setVector( KoPoint( e.attribute( "cx" ).toDouble() + e.attribute( "r" ).toDouble(),
 									 e.attribute( "cy" ).toDouble() ) );
-		gradient.setType( VGradient::radial );
+		gradhelper.gradient.setType( VGradient::radial );
 	}
 	// handle spread method
 	QString spreadMethod = e.attribute( "spreadMethod" );
 	if( !spreadMethod.isEmpty() )
 	{
 		if( spreadMethod == "reflect" )
-			gradient.setRepeatMethod( VGradient::reflect );
+			gradhelper.gradient.setRepeatMethod( VGradient::reflect );
 		else if( spreadMethod == "repeat" )
-			gradient.setRepeatMethod( VGradient::repeat );
+			gradhelper.gradient.setRepeatMethod( VGradient::repeat );
 	}
-	parseColorStops( &gradient, e );
+	parseColorStops( &gradhelper.gradient, e );
 	//gradient.setGradientTransform( parseTransform( e.attribute( "gradientTransform" ) ) );
-	m_gradientTransforms.insert( e.attribute( "id" ), parseTransform( e.attribute( "gradientTransform" ) ) );
-	m_gradients.insert( e.attribute( "id" ), gradient );
+	gradhelper.gradientTransform = parseTransform( e.attribute( "gradientTransform" ) );
+	gradhelper.bbox = e.attribute( "gradientUnits" ) != "userSpaceOnUse";
+	m_gradients.insert( e.attribute( "id" ), gradhelper );
 }
 
 void
@@ -314,8 +315,8 @@ SvgImport::parsePA( GraphicsContext *gc, const QString &command, const QString &
 			unsigned int start = params.find("#") + 1;
 			unsigned int end = params.findRev(")");
 			QString key = params.mid( start, end - start );
-			gc->fill.gradient() = m_gradients[ key ];
-			gc->fill.gradient().transform( m_gradientTransforms[ key ] );
+			gc->fill.gradient() = m_gradients[ key ].gradient;
+			gc->fill.gradient().transform( m_gradients[ key ].gradientTransform );
 			gc->fill.gradient().transform( gc->matrix );
 			gc->fill.setType( VFill::grad );
 		}
@@ -341,8 +342,8 @@ SvgImport::parsePA( GraphicsContext *gc, const QString &command, const QString &
 			unsigned int start = params.find("#") + 1;
 			unsigned int end = params.findRev(")");
 			QString key = params.mid( start, end - start );
-			gc->stroke.gradient() = m_gradients[ key ];
-			gc->stroke.gradient().transform( m_gradientTransforms[ key ] );
+			gc->stroke.gradient() = m_gradients[ key ].gradient;
+			gc->stroke.gradient().transform( m_gradients[ key ].gradientTransform );
 			gc->stroke.gradient().transform( gc->matrix );
 			gc->stroke.setType( VStroke::grad );
 		}

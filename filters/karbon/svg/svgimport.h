@@ -59,6 +59,18 @@ protected:
 		QFont		font;
 	};
 
+	class GradientHelper
+	{
+	public:
+		GradientHelper()
+		{
+			bbox = true;
+		}
+		VGradient	gradient;
+		bool		bbox;
+		QWMatrix	gradientTransform;
+	};
+
 	void parseGroup( VGroup *, const QDomElement & );
 	void parseStyle( VObject *, const QDomElement & );
 	void parsePA( GraphicsContext *, const QString &, const QString & );
@@ -72,10 +84,9 @@ protected:
 	void convert();
 
 private:
-	VDocument					m_document;
-	QPtrStack<GraphicsContext>	m_gc;
-	QMap<QString, VGradient>	m_gradients;
-	QMap<QString, QWMatrix>		m_gradientTransforms;
+	VDocument						m_document;
+	QPtrStack<GraphicsContext>		m_gc;
+	QMap<QString, GradientHelper>	m_gradients;
 };
 
 #endif
