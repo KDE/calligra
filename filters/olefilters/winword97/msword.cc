@@ -1107,12 +1107,19 @@ void MsWord::parse()
             const U8 *prmPtr;
             U8 sprm[3];
 
-            unicode = ((data.fc & codepage1252mask) != codepage1252mask);
-            //unicode = unicode || m_fib.fExtChar;
-            if (!unicode)
+            if (m_fib.nFib > s_maxWord6Version)
             {
-                data.fc &= ~ codepage1252mask;
-                data.fc /= 2;
+                unicode = ((data.fc & codepage1252mask) != codepage1252mask);
+                //unicode = unicode || m_fib.fExtChar;
+                if (!unicode)
+                {
+                    data.fc &= ~codepage1252mask;
+                    data.fc /= 2;
+                }
+            }
+            else
+            {
+                unicode = false;
             }
 
             // Get the relevant property modifier(s).
@@ -1443,14 +1450,13 @@ unsigned MsWord::read(U16 lid, const U8 *in, QString *out, unsigned count, bool 
     *out = QString("");
 
     // Word6 always uses codepages rather than unicode.
-    //if (nFib <= s_maxWord6Version)
-    //    unicode = false;
+    if (nFib <= s_maxWord6Version)
+        unicode = false;
     if (unicode)
     {
         for (unsigned i = 0; i < count; i++)
         {
-            if (nFib > s_maxWord6Version)
-                bytes += MsWordGenerated::read(in + bytes, &char16);
+            bytes += MsWordGenerated::read(in + bytes, &char16);
             *out += QChar(char16);
         }
     }
@@ -1462,6 +1468,7 @@ unsigned MsWord::read(U16 lid, const U8 *in, QString *out, unsigned count, bool 
             *out += char2unicode(lid, char8);
         }
     }
+//kdDebug(s_area) << "unicode: " << unicode << " " << *out << endl;
     return bytes;
 }
 
@@ -1473,8 +1480,8 @@ unsigned MsWord::read(U16 lid, const U8 *in, QString *out, bool unicode, U16 nFi
     *out = QString("");
 
     // Word6 always uses codepages rather than unicode.
-    //if (nFib <= s_maxWord6Version)
-    //    unicode = false;
+    if (nFib <= s_maxWord6Version)
+        unicode = false;
     if (unicode)
     {
         U16 length;
