@@ -21,7 +21,7 @@
 #define __VSELECTNODESTOOL_H__
 
 #include "vtool.h"
-
+#include "vselection.h"
 
 class VSelectNodesTool : public VTool
 {
@@ -35,10 +35,20 @@ protected:
 	virtual void draw();
 
 	virtual void setCursor() const;
+
+	virtual void mouseButtonPress();
 	virtual void mouseDragRelease();
+	virtual void mouseDrag();
 
 private:
 	enum { normal, dragging, moving } m_state;
+
+	void recalc();
+
+	// A list of temporary objects:
+	VObjectList m_objects;
+
+	KoPoint m_current;
 };
 
 #endif

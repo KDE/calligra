@@ -30,7 +30,6 @@
 #include "karbon_view.h"
 #include "vpainter.h"
 #include "vpainterfactory.h"
-#include "vselection.h"
 #include "vselectnodestool.h"
 #include "vtransformcmd.h"
 #include "vtransformnodes.h"
@@ -60,6 +59,8 @@ void
 VSelectNodesTool::draw()
 {
 	VPainter *painter = view()->painterFactory()->editpainter();
+	view()->canvasWidget()->setYMirroring( true );
+	painter->setZoomFactor( view()->zoom() );
 	painter->setRasterOp( Qt::NotROP );
 
 	double tolerance = 1.0 / view()->zoom();
@@ -84,51 +85,30 @@ VSelectNodesTool::draw()
 					2 * tolerance + 1.0 ).normalize(),
 				false );
 			m_state = moving;
+			recalc();
 		}
 
-		// move operation
-		QWMatrix mat;
-		mat.translate(	( last().x() - first().x() ) / view()->zoom(),
-						( last().y() - first().y() ) / view()->zoom() );
-
-		VTransformNodes op( mat );
-
-		// TODO :  makes a copy of the selection, do assignment operator instead
-		VObjectListIterator itr = view()->part()->document().selection()->objects();
-		VObjectList list;
-		list.setAutoDelete( true );
-		for( ; itr.current() ; ++itr )
-		{
-			list.append( itr.current()->clone() );
+		VObjectListIterator itr = m_objects;
+        for( ; itr.current(); ++itr )
+        {
+			itr.current()->draw( painter, &itr.current()->boundingBox() );
 		}
-
-		VObjectListIterator itr2 = list;
-		painter->setZoomFactor( view()->zoom() );
-		for( ; itr2.current() ; ++itr2 )
-		{
-			itr2.current()->setState( VObject::edit );
-			op.visit( *itr2.current() );
-
-			itr2.current()->draw( painter, &itr2.current()->boundingBox() );
-		}
-
-		painter->setZoomFactor( 1.0 );
 	}
 	else
 	{
 		painter->setPen( Qt::DotLine );
 		painter->newPath();
 		painter->moveTo( KoPoint( first().x(), first().y() ) );
-		painter->lineTo( KoPoint( last().x(), first().y() ) );
-		painter->lineTo( KoPoint( last().x(), last().y() ) );
-		painter->lineTo( KoPoint( first().x(), last().y() ) );
+		painter->lineTo( KoPoint( m_current.x(), first().y() ) );
+		painter->lineTo( KoPoint( m_current.x(), m_current.y() ) );
+		painter->lineTo( KoPoint( first().x(), m_current.y() ) );
 		painter->lineTo( KoPoint( first().x(), first().y() ) );
 		painter->strokePath();
 
 		m_state = dragging;
 	}
 
-	view()->painterFactory()->painter()->end();
+	//view()->painterFactory()->painter()->end();
 }
 
 void
@@ -149,6 +129,28 @@ VSelectNodesTool::setCursor() const
 	}
 	else
 		view()->canvasWidget()->viewport()->setCursor( QCursor( Qt::arrowCursor ) );
+}
+
+void
+VSelectNodesTool::mouseButtonPress()
+{
+	m_current = first();
+
+	m_state = normal;
+
+	recalc();
+
+	draw();
+}
+
+void
+VSelectNodesTool::mouseDrag()
+{
+	draw();
+
+	recalc();
+
+	draw();
 }
 
 void
@@ -189,5 +191,39 @@ VSelectNodesTool::mouseDragRelease()
 		view()->selectionChanged();
 		view()->part()->repaintAllViews();
 		m_state = normal;
+	}
+}
+
+void
+VSelectNodesTool::recalc()
+{
+	if( m_state == dragging )
+	{
+		m_current = last();
+	}
+	else if( m_state == moving )
+	{
+		// move operation
+		QWMatrix mat;
+		mat.translate(	( last().x() - first().x() ) / view()->zoom(),
+						( last().y() - first().y() ) / view()->zoom() );
+
+		// Copy selected objects and transform:
+		m_objects.clear();
+		VObject* copy;
+
+		VTransformNodes op( mat );
+
+		VObjectListIterator itr = view()->part()->document().selection()->objects();
+		for ( ; itr.current() ; ++itr )
+		{
+			if( itr.current()->state() != VObject::deleted )
+			{
+				copy = itr.current()->clone();
+				copy->setState( VObject::edit );
+				op.visit( *copy );
+				m_objects.append( copy );
+			}
+		}
 	}
 }
