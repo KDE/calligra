@@ -1916,7 +1916,7 @@ bool KWDocument::processFootNoteRequests()
     return ret;
 }
 
-void KWDocument::pasteFrames( QDomElement topElem, KMacroCommand * macroCmd,bool insertFile )
+void KWDocument::pasteFrames( QDomElement topElem, KMacroCommand * macroCmd,bool copyFootNote )
 {
     m_pasteFramesetsMap = new QMap<QString, QString>();
     QPtrList<KWFrameSet> frameSetsToFinalize;
@@ -1984,7 +1984,7 @@ void KWDocument::pasteFrames( QDomElement topElem, KMacroCommand * macroCmd,bool
                 frameElem = elem.namedItem( "FRAME" ).toElement();
             }
             //when we paste a header/footer we transforme it in a body frame
-            if(fs->isHeaderOrFooter() || ( !insertFile && fs->isFootEndNote()))
+            if(fs->isHeaderOrFooter() || ( !copyFootNote && fs->isFootEndNote()))
                 fs->setFrameSetInfo(KWFrameSet::FI_BODY);
         }
         // Test commented out since the toplevel element can contain "PARAGRAPH" now
@@ -2007,9 +2007,7 @@ void KWDocument::pasteFrames( QDomElement topElem, KMacroCommand * macroCmd,bool
                 rect.setBottom( KWDocument::getAttribute( frameElem, "bottom", 0.0 ) + offs );
                 KWFrame * frame = new KWFrame( fs, rect.x(), rect.y(), rect.width(), rect.height() );
                 frame->load( frameElem, fs->isHeaderOrFooter(), KWDocument::CURRENT_SYNTAX_VERSION );
-                kdDebug()<<" maxZOrder( frame->pageNum(this) ) :"<<maxZOrder( frame->pageNum(this) )<<endl;
                 frame->setZOrder( maxZOrder( frame->pageNum(this) ) + 1 +nb ); // make sure it's on top
-                kdDebug()<<" apres maxZOrder( frame->pageNum(this) ) :"<<maxZOrder( frame->pageNum(this) )<<endl;
                 nb++;
                 fs->addFrame( frame, false );
                 if ( macroCmd )
