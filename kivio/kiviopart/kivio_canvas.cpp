@@ -1325,7 +1325,7 @@ void KivioCanvas::updateGuidesCursor()
 
 bool KivioCanvas::eventFilter(QObject* o, QEvent* e)
 {
-  if ((o == m_pVRuler || o == m_pHRuler) && (e->type() == QEvent::MouseMove || e->type() == QEvent::MouseButtonRelease)) {
+  if ((o == m_pVRuler || o == m_pHRuler) && (e->type() == QEvent::MouseMove || e->type() == QEvent::MouseButtonRelease) && m_pView->isShowGuides()) {
 
     QMouseEvent* me = (QMouseEvent*)e;
     QPoint p = mapFromGlobal(me->globalPos());
