@@ -122,7 +122,7 @@ void PopulateProperties(StackItem* stackItem, const QString& strStyleProps,
     }
 
     QString strFontFamily=abiPropsMap["font-family"].getValue();
-    if (!strFontFamily.isEmpty())
+    if (!strFontFamily.isEmpty() && (strFontFamily!="(null)"))
     {
         // TODO: transform the font-family in a font that we have on the system on which KWord runs.
         stackItem->fontName=strFontFamily;
