@@ -5,14 +5,13 @@
   <item find="(R)" replace="®" />
   <item find="(c)" replace="©" />
   <item find="(r)" replace="®" />
-  <item find="X Windows" replace="X Window" />
   <item find="é" replace="è" />
-  <item find="É" replace="È" />
-  <item find="E'" replace="È" />
-  <item find="E`" replace="È" />
+  <item find="e'" replace="è" />
+  <item find="e`" replace="è" />
   <item find="pò" replace="po'" />
   <item find="perchè" replace="perché" />
   <item find="poichè" replace="poiché" />
+  <item find="affinchè" replace="affinché" />
  </items>
  <UpperCaseExceptions>
   <word exception="es." />
