@@ -89,7 +89,7 @@
 #include <kglobalsettings.h>
 #include <kocommandhistory.h>
 
-#if HAVE_LIBASPELL
+#ifdef HAVE_LIBASPELL
 #include <koSconfig.h>
 #endif
 
@@ -206,7 +206,7 @@ KPresenterDoc::KPresenterDoc( QWidget *parentWidget, const char *widgetName, QOb
     _txtBackCol = lightGray;
     _otxtBackCol = lightGray;
     m_pKSpellConfig=0;
-#if HAVE_LIBASPELL
+#ifdef HAVE_LIBASPELL
     m_pKOSpellConfig = 0;
 #endif
 
@@ -379,7 +379,7 @@ void KPresenterDoc::initConfig()
     }
 
     KSpellConfig ksconfig;
-#if HAVE_LIBASPELL
+#ifdef HAVE_LIBASPELL
   KOSpellConfig kosconfig;
 #endif
 
@@ -393,7 +393,7 @@ void KPresenterDoc::initConfig()
         ksconfig.setEncoding(config->readNumEntry ("KSpell_Encoding", KS_E_ASCII));
         ksconfig.setClient(config->readNumEntry ("KSpell_Client", KS_CLIENT_ISPELL));
         setKSpellConfig(ksconfig);
-#if HAVE_LIBASPELL
+#ifdef HAVE_LIBASPELL
         kosconfig.setNoRootAffix(config->readNumEntry ("KSpell_NoRootAffix", 0));
         kosconfig.setRunTogether(config->readNumEntry ("KSpell_RunTogether", 0));
         kosconfig.setDictionary(config->readEntry ("KSpell_Dictionary", ""));
@@ -463,7 +463,7 @@ KPresenterDoc::~KPresenterDoc()
     delete m_bgSpellCheck;
     delete m_styleColl;
     delete m_pKSpellConfig;
-#if HAVE_LIBASPELL
+#ifdef HAVE_LIBASPELL
     delete m_pKOSpellConfig;
 #endif
 
@@ -3388,7 +3388,7 @@ void KPresenterDoc::addWordToDictionary( const QString & word)
         m_bgSpellCheck->addPersonalDictonary( word );
 }
 
-#if HAVE_LIBASPELL
+#ifdef HAVE_LIBASPELL
 void KPresenterDoc::setKOSpellConfig(KOSpellConfig _kspell)
 {
   if(m_pKOSpellConfig==0)

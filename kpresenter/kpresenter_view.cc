@@ -141,7 +141,7 @@
 #include <kurldrag.h>
 #include <config.h>
 
-#if HAVE_LIBASPELL
+#ifdef HAVE_LIBASPELL
 #include <koSpell.h>
 #endif
 
@@ -264,7 +264,7 @@ KPresenterView::KPresenterView( KPresenterDoc* _doc, QWidget *_parent, const cha
     protectContent = FALSE;
     m_canvas = 0L;
     m_spell.kspell = 0;
-#if HAVE_LIBASPELL
+#ifdef HAVE_LIBASPELL
     m_spell.kospell = 0;
 #endif
 
@@ -395,7 +395,7 @@ KPresenterView::~KPresenterView()
         config->writeEntry("Notebar", notebar->isVisible());
     }
 
-#if HAVE_LIBASPELL
+#ifdef HAVE_LIBASPELL
     if(m_spell.kospell)
     {
         KPTextObject * objtxt = 0L;
@@ -5152,7 +5152,7 @@ void KPresenterView::extraAutoFormat()
 
 void KPresenterView::extraSpelling()
 {
-#if HAVE_LIBASPELL
+#ifdef HAVE_LIBASPELL
     if (m_spell.kospell) return; // Already in progress
 #else
     if (m_spell.kspell) return; // Already in progress
@@ -5231,7 +5231,7 @@ void KPresenterView::spellCheckerReplaceAll( const QString &orig, const QString 
 
 void KPresenterView::startKSpell()
 {
-#if HAVE_LIBASPELL
+#ifdef HAVE_LIBASPELL
     // m_spellCurrFrameSetNum is supposed to be set by the caller of this method
     if(m_pKPresenterDoc->getKSpellConfig())
     {
@@ -5313,7 +5313,7 @@ void KPresenterView::spellCheckerReady()
             continue;
         text += '\n'; // end of last paragraph
         text += '\n'; // empty line required by kspell
-#if HAVE_LIBASPELL
+#ifdef HAVE_LIBASPELL
         m_spell.kospell->check( text);
 #else
         m_spell.kspell->check( text );
@@ -5328,7 +5328,7 @@ void KPresenterView::spellCheckerReady()
     {
         // Done
         m_pKPresenterDoc->setReadWrite(true);
-#if HAVE_LIBASPELL
+#ifdef HAVE_LIBASPELL
         delete m_spell.kospell;
         m_spell.kospell=0;
 #else
@@ -5414,7 +5414,7 @@ void KPresenterView::spellCheckerDone( const QString & )
             textobj->removeHighlight();
     }
     int result;
-#if HAVE_LIBASPELL
+#ifdef HAVE_LIBASPELL
     result= m_spell.kospell->dlgResult();
     //delete m_spell.kospell;
     //m_spell.kospell = 0;
@@ -5437,7 +5437,7 @@ void KPresenterView::spellCheckerDone( const QString & )
         }
         else
         {
-#if HAVE_LIBASPELL
+#ifdef HAVE_LIBASPELL
             spellCheckerReady();
 #else
             // Try to check another frameset
@@ -5462,7 +5462,7 @@ void KPresenterView::spellCheckerFinished()
     KSpell::spellStatus status = m_spell.kspell->status();
     bool kspellNoConfigured=false;
 
-#if HAVE_LIBASPELL
+#ifdef HAVE_LIBASPELL
     delete m_spell.kospell;
     m_spell.kospell = 0;
     //FIXME
@@ -7503,7 +7503,7 @@ void KPresenterView::spellAddAutoCorrect (const QString & originalword, const QS
 
 QPtrList<KAction> KPresenterView::listOfResultOfCheckWord( const QString &word )
 {
-#if HAVE_LIBASPELL
+#ifdef HAVE_LIBASPELL
     KOSpell *tmpSpell = new KOSpell( m_pKPresenterDoc->getKOSpellConfig());
     QStringList lst = tmpSpell->resultCheckWord(word );
     QPtrList<KAction> listAction=QPtrList<KAction>();

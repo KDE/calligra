@@ -41,7 +41,7 @@ class KoStyle;
 class KPrBgSpellCheck;
 class KoTextParag;
 
-#if HAVE_LIBASPELL
+#ifdef HAVE_LIBASPELL
 class KOSpellConfig;
 #endif
 
@@ -286,7 +286,7 @@ public:
     void setKSpellConfig(KSpellConfig _kspell);
     KSpellConfig * getKSpellConfig()const {return m_pKSpellConfig;}
 
-#if HAVE_LIBASPELL
+#ifdef HAVE_LIBASPELL
     void setKOSpellConfig(KOSpellConfig _kspell);
     KOSpellConfig * getKOSpellConfig()const {return m_pKOSpellConfig;}
 #endif
@@ -588,7 +588,7 @@ protected:
     QFont m_defaultFont;
     KoAutoFormat * m_autoFormat;
     KSpellConfig *m_pKSpellConfig;
-#if HAVE_LIBASPELL
+#ifdef HAVE_LIBASPELL
     KOSpellConfig *m_pKOSpellConfig;
 #endif
 
