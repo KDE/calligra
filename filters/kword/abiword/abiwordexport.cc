@@ -34,6 +34,9 @@
 
 #include <qmap.h>
 #include <qregexp.h>
+#include <qiodevice.h>
+#include <qbuffer.h>
+#include <qimage.h>
 #include <qtextstream.h>
 #include <qdom.h>
 
@@ -56,6 +59,13 @@
 typedef KGenericFactory<ABIWORDExport, KoFilter> ABIWORDExportFactory;
 K_EXPORT_COMPONENT_FACTORY( libabiwordexport, ABIWORDExportFactory( "kwordabiwordexport" ) );
 
+class StyleMap : public QMap<QString,LayoutData>
+{
+public:
+    StyleMap(void) {}
+    ~StyleMap(void) {}
+};
+
 class AbiWordWorker : public KWEFBaseWorker
 {
 public:
@@ -77,15 +87,22 @@ public:
     virtual bool doCloseStyles(void); // AbiWord's </styles>
     virtual bool doFullDefineStyle(LayoutData& layout); // AbiWord's <s></s>
 private:
-    void ProcessParagraphData (const QString& paraText, const ValueListFormatData& paraFormatDataList);
-    QString textFormatToAbiProps(const TextFormatting& formatData) const;
+    void processParagraphData (const QString& paraText,
+        const TextFormatting& formatLayout,
+        const ValueListFormatData& paraFormatDataList);
+    QString textFormatToAbiProps(const TextFormatting& formatOrigin,
+        const TextFormatting& formatData, const bool force) const;
+    QString AbiWordWorker::layoutToCss(const LayoutData& layoutOrigin,
+        const LayoutData& layout, const bool force) const;
     QString escapeAbiWordText(const QString& strText) const;
     bool makeImage(const FrameAnchor& anchor);
+    bool convertUnknownImage(const QString& name, QByteArray& image);
 private:
     QIODevice* m_ioDevice;
     QTextStream* m_streamOut;
     QString m_pagesize; // Buffer for the <pagesize> tag
     QMap<QString,QString> m_mapData;
+    StyleMap m_styleMap;
 };
 
 QString AbiWordWorker::escapeAbiWordText(const QString& strText) const
@@ -181,9 +198,12 @@ bool AbiWordWorker::doOpenDocument(void)
 
     // First magic: "<abiword"
     *m_streamOut << "<abiword";
-    *m_streamOut << " xmlns:awml=\"http://www.abisource.com/awml.dtd\"";
+    // AbiWord CVS 2002-02-23 defines a default namespace.
+    *m_streamOut << " xmlns=\"http://www.abisource.com/awml.dtd\"";
+    // As we do not use xmlns:awml, do we need to define it?
+    // *m_streamOut << " xmlns:awml=\"http://www.abisource.com/awml.dtd\"";
     *m_streamOut << " xmlns:xlink=\"http://www.w3.org/1999/xlink\"";
-    // AbiWord CVS HEAD 2002-02-22 defines other namesapces, which we are not using.
+    // AbiWord CVS 2002-02-22 defines other namesapces, which we are not using.
     *m_streamOut << " version=\"\" fileformat=\"1.0\" styles=\"unlocked\">\n";
     // Second magic: "<!-- This file is an AbiWord document."
     // TODO/FIXME: write as much space as AbiWord does for the following line.
@@ -206,6 +226,38 @@ bool AbiWordWorker::doOpenDocument(void)
     return true;
 }
 
+bool AbiWordWorker::convertUnknownImage(const QString& strName, QByteArray& image)
+{
+    QIODevice* io=getSubFileDevice(strName);
+    if (!io)
+    {
+        // NO message error, as there must be already one
+        return false;
+    }
+
+    QImageIO imageIO(io,NULL);
+
+    if (!imageIO.read())
+    {
+        kdWarning(30506) << "Could not read image: " << strName << " (AbiWordWorker::convertUnknownImage)" << endl;
+        return false;
+    }
+
+    kdDebug(30506) << "Image: " << strName << " has format " << imageIO.format() << endl;
+
+    QBuffer buffer(image); // A QBuffer is a QIODevice
+    imageIO.setIODevice(&buffer);
+    imageIO.setFormat("PNG");
+
+    if (!imageIO.write())
+    {
+        kdWarning(30506) << "Could not wire converted image! (AbiWordWorker::convertUnknownImage)" << endl;
+        return false;
+    }
+
+    return true;
+}
+
 bool AbiWordWorker::doCloseDocument(void)
 {
     // Before writing the <data> element,
@@ -221,39 +273,39 @@ bool AbiWordWorker::doCloseDocument(void)
         {
             QByteArray image;
 
-            if (loadKoStoreFile(it.key(),image))
+            QString strExtension=it.key();
+            const int result=it.key().findRev(".");
+            if (result>=0)
             {
-                QString strExtension=it.key();
-                const int result=it.key().findRev(".");
-                if (result>=0)
-                {
-                    strExtension=it.key().mid(result+1);
-                }
+                strExtension=it.key().mid(result+1);
+            }
 
-                QString strMime;
-                if (strExtension=="png")
-                {
-                    strMime="image/png";
-                }
-                else if ((strExtension=="jpg") || (strExtension=="jpeg"))
-                {
-                    strMime="image/jpeg";
-                }
-                // TODO: AbiWord cannot handle BMP directly (only PNG and JPEG)
-                else if (strExtension=="bmp")
-                {
-                    kdWarning(30506) << "Unknown extension! BMP is not supported!" << endl;
-                    strMime="image/x-bmp";
-                }
-                // TODO: mathml and svg
-                else
-                {
-                    kdWarning(30506) << "Unknown extension! Image type not supported!" << endl;
-                    strMime="application/octet-stream"; // AbiWord eats this without crashing
-                }
+            bool isImageLoaded=false;
 
-                kdDebug(30506) << "Image " << it.key() << " Type: " << strMime << endl;
+            QString strMime;
+            if (strExtension=="png")
+            {
+                strMime="image/png";
+                isImageLoaded=loadKoStoreFile(it.key(),image);
+            }
+            else if ((strExtension=="jpg") || (strExtension=="jpeg"))
+            {
+                strMime="image/jpeg";
+                isImageLoaded=loadKoStoreFile(it.key(),image);
+            }
+            // TODO: mathml and svg
+            else
+            {
+                // TODO: convert image to PNG with QImageIO
+                kdWarning(30506) << "Unknown extension! Image type unknown!" << endl;
+                strMime="image/png";
+                isImageLoaded=convertUnknownImage(it.key(),image);
+            }
 
+            kdDebug(30506) << "Image " << it.key() << " Type: " << strMime << endl;
+
+            if (isImageLoaded)
+            {
                 *m_streamOut << "<d name=\"" << it.data() << "\""
                     << " base64=\"yes\"" // For now, we always encode (TODO: not for mathml and svg)
                     << " mime=\"" << strMime << "\">\n";
@@ -301,109 +353,132 @@ bool AbiWordWorker::doCloseStyles(void)
     return true;
 }
 
-QString AbiWordWorker::textFormatToAbiProps(const TextFormatting& formatData) const
+QString AbiWordWorker::textFormatToAbiProps(const TextFormatting& formatOrigin,
+    const TextFormatting& formatData, const bool force) const
 {
     // TODO: rename variable formatData
     QString strElement; // TODO: rename this variable
 
     // Font name
     QString fontName = formatData.fontName;
-    if ( !fontName.isEmpty() )
+    if ( !fontName.isEmpty()
+        && (force || (formatOrigin.fontName!=formatData.fontName)))
     {
         strElement+="font-family: ";
         strElement+=fontName; // TODO: add alternative font names
         strElement+="; ";
     }
 
-    // Font style
-    strElement+="font-style: ";
-    if ( formatData.italic )
+    if (force || (formatOrigin.italic!=formatData.italic))
     {
-        strElement+="italic";
-    }
-    else
-    {
-        strElement+="normal";
-    }
-    strElement+="; ";
-
-    strElement+="font-weight: ";
-    if ( formatData.weight >= 75 )
-    {
-        strElement+="bold";
-    }
-    else
-    {
-        strElement+="normal";
-    }
-    strElement+="; ";
-
-    const int size=formatData.fontSize;
-    if (size>0)
-    {
-        // We use absolute font sizes.
-        strElement+="font-size: ";
-        strElement+=QString::number(size,10);
-        strElement+="pt; ";
-    }
-
-    if ( formatData.fgColor.isValid() )
-    {
-        // Give colour
-        strElement+="color: ";
-
-        // No leading # (unlike CSS2)
-        // We must have two hex digits for each colour channel!
-        const int red=formatData.fgColor.red();
-        strElement += QString::number((red&0xf0)>>4,16);
-        strElement += QString::number(red&0x0f,16);
-
-        const int green=formatData.fgColor.green();
-        strElement += QString::number((green&0xf0)>>4,16);
-        strElement += QString::number(green&0x0f,16);
-
-        const int blue=formatData.fgColor.blue();
-        strElement += QString::number((blue&0xf0)>>4,16);
-        strElement += QString::number(blue&0x0f,16);
-
-        strElement+="; ";
-    }
-    if ( formatData.bgColor.isValid() )
-    {
-        // Give background colour
-        strElement+="bgcolor: ";
-
-        // No leading # (unlike CSS2)
-        // We must have two hex digits for each colour channel!
-        const int red=formatData.bgColor.red();
-        strElement += QString::number((red&0xf0)>>4,16);
-        strElement += QString::number(red&0x0f,16);
-
-        const int green=formatData.bgColor.green();
-        strElement += QString::number((green&0xf0)>>4,16);
-        strElement += QString::number(green&0x0f,16);
-
-        const int blue=formatData.bgColor.blue();
-        strElement += QString::number((blue&0xf0)>>4,16);
-        strElement += QString::number(blue&0x0f,16);
-
+        // Font style
+        strElement+="font-style: ";
+        if ( formatData.italic )
+        {
+            strElement+="italic";
+        }
+        else
+        {
+            strElement+="normal";
+        }
         strElement+="; ";
     }
 
-    strElement+="text-decoration: ";
-    if ( formatData.underline )
+    if (force || ((formatOrigin.weight>=75)!=(formatData.weight>=75)))
     {
-        strElement+="underline";
+        strElement+="font-weight: ";
+        if ( formatData.weight >= 75 )
+        {
+            strElement+="bold";
+        }
+        else
+        {
+            strElement+="normal";
+        }
+        strElement+="; ";
     }
-    else if ( formatData.strikeout )
+
+    if (force || (formatOrigin.fontSize!=formatData.fontSize))
     {
-        strElement+="line-through";
+        const int size=formatData.fontSize;
+        if (size>0)
+        {
+            // We use absolute font sizes.
+            strElement+="font-size: ";
+            strElement+=QString::number(size,10);
+            strElement+="pt; ";
+        }
     }
-    else
+
+    if (force || (formatOrigin.fgColor!=formatData.fgColor))
     {
-        strElement+="none";
+        if ( formatData.fgColor.isValid() )
+        {
+            // Give colour
+            strElement+="color: ";
+
+            // No leading # (unlike CSS2)
+            // We must have two hex digits for each colour channel!
+            const int red=formatData.fgColor.red();
+            strElement += QString::number((red&0xf0)>>4,16);
+            strElement += QString::number(red&0x0f,16);
+
+            const int green=formatData.fgColor.green();
+            strElement += QString::number((green&0xf0)>>4,16);
+            strElement += QString::number(green&0x0f,16);
+
+            const int blue=formatData.fgColor.blue();
+            strElement += QString::number((blue&0xf0)>>4,16);
+            strElement += QString::number(blue&0x0f,16);
+
+            strElement+="; ";
+        }
     }
-    strElement+="; ";
+
+    if (force || (formatOrigin.bgColor!=formatData.bgColor))
+    {
+        if ( formatData.bgColor.isValid() )
+        {
+            // Give background colour
+            strElement+="bgcolor: ";
+
+            // No leading # (unlike CSS2)
+            // We must have two hex digits for each colour channel!
+            const int red=formatData.bgColor.red();
+            strElement += QString::number((red&0xf0)>>4,16);
+            strElement += QString::number(red&0x0f,16);
+
+            const int green=formatData.bgColor.green();
+            strElement += QString::number((green&0xf0)>>4,16);
+            strElement += QString::number(green&0x0f,16);
+
+            const int blue=formatData.bgColor.blue();
+            strElement += QString::number((blue&0xf0)>>4,16);
+            strElement += QString::number(blue&0x0f,16);
+
+            strElement+="; ";
+        }
+    }
+
+    if (force || (formatOrigin.underline!=formatData.underline)
+        || (formatOrigin.strikeout!=formatData.strikeout))
+    {
+        strElement+="text-decoration: ";
+        if ( formatData.underline )
+        {
+            strElement+="underline";
+        }
+        else if ( formatData.strikeout )
+        {
+            strElement+="line-through";
+        }
+        else
+        {
+            strElement+="none";
+        }
+        strElement+="; ";
+    }
+
     return strElement;
 }
 
@@ -411,7 +486,7 @@ bool AbiWordWorker::makeImage(const FrameAnchor& anchor)
 {
     kdDebug(30506) << "New image: " << anchor.picture.koStoreName
         << " , " << anchor.picture.key << endl;
-        
+
     double height=anchor.bottom - anchor.top;
     double width =anchor.right  - anchor.left;
 
@@ -425,12 +500,8 @@ bool AbiWordWorker::makeImage(const FrameAnchor& anchor)
     return true;
 }
 
-
-// ProcessParagraphData () mangles the pure text through the
-// formatting information stored in the FormatData list and prints it
-// out to the export file.
-
-void AbiWordWorker::ProcessParagraphData ( const QString &paraText,
+void AbiWordWorker::processParagraphData ( const QString &paraText,
+    const TextFormatting& formatLayout,
     const ValueListFormatData &paraFormatDataList)
 {
     if ( paraText.length () > 0 )
@@ -456,7 +527,7 @@ void AbiWordWorker::ProcessParagraphData ( const QString &paraText,
                 else
                 { // Text with properties, so use a <c> element!
 
-                    QString abiprops=textFormatToAbiProps((*paraFormatDataIt).text);
+                    QString abiprops=textFormatToAbiProps(formatLayout,(*paraFormatDataIt).text,false);
 
                     // Erase the last semi-comma (as in CSS2, semi-commas only separate instructions and do not terminate them)
                     const int result=abiprops.findRev(";");
@@ -506,57 +577,75 @@ void AbiWordWorker::ProcessParagraphData ( const QString &paraText,
     }
 }
 
-bool AbiWordWorker::doFullParagraph(const QString& paraText, const LayoutData& layout,
-    const ValueListFormatData& paraFormatDataList)
+QString AbiWordWorker::layoutToCss(const LayoutData& layoutOrigin,
+    const LayoutData& layout, const bool force) const
 {
     QString props;
-    QString style;
 
-    style=layout.styleName;
-
-    // Check if the current alignment is a valid one for AbiWord.
-    if ( (layout.alignment == "left") || (layout.alignment == "right")
-        || (layout.alignment == "center")  || (layout.alignment == "justify"))
+    if (force || (layoutOrigin.alignment!=layout.alignment))
     {
-        props += "text-align:";
-        props += layout.alignment;
-        props += "; ";
-    }
-    else
-    {
-        kdWarning(30506) << "Unknown alignment: " << layout.alignment << endl;
+        // Check if the current alignment is a valid one for AbiWord.
+        if ((layout.alignment == "left") || (layout.alignment == "right")
+            || (layout.alignment == "center")  || (layout.alignment == "justify"))
+        {
+            props += "text-align:";
+            props += layout.alignment;
+            props += "; ";
+        }
+        else
+        {
+            kdWarning(30506) << "Unknown alignment: " << layout.alignment << endl;
+        }
     }
 
-    if ( !layout.tabulator.isEmpty() )
+    // TODO/FIXME: what if all tabulators must be erased?
+    if (!layout.tabulator.isEmpty()
+        && (force || (layoutOrigin.tabulator!=layout.tabulator)))
     {
         props += "tabstops:";
         props += layout.tabulator;
         props += "; ";
     }
 
-    if ( layout.indentLeft>=0.0 )
+
+    if ((layout.indentLeft>=0.0)
+        && (force || (layoutOrigin.indentLeft!=layout.indentLeft)))
     {
         props += QString("margin-left:%1pt; ").arg(layout.indentLeft);
     }
 
-    if ( layout.indentRight>=0.0 )
+    if ((layout.indentRight>=0.0)
+        && (force || (layoutOrigin.indentRight!=layout.indentRight)))
     {
         props += QString("margin-right:%1pt; ").arg(layout.indentRight);
     }
 
-    props += QString("text-indent:%1pt; ").arg(layout.indentFirst);
+    if (force || (layoutOrigin.indentLeft!=layout.indentLeft))
+    {
+        props += "text-indent: ";
+        props += QString::number(layout.indentFirst);
+        props += "; ";
+    }
 
-    if( layout.marginBottom>=0.0)
+    if ((layout.marginBottom>=0.0)
+        && (force || (layoutOrigin.indentRight!=layout.indentRight)))
     {
        props += QString("margin-bottom:%1pt; ").arg(layout.marginBottom);
     }
 
-    if( layout.marginTop>=0.0  )
+    if ((layout.marginTop>=0.0)
+        && (force || (layoutOrigin.indentRight!=layout.indentRight)))
     {
        props += QString("margin-top:%1pt; ").arg(layout.marginTop);
     }
 
-    if ( !layout.lineSpacingType )
+    if (!force
+        && (layoutOrigin.lineSpacingType==layoutOrigin.lineSpacingType)
+        && (layoutOrigin.lineSpacing==layoutOrigin.lineSpacing))
+    {
+        // Do nothing!
+    }
+    else if (!layout.lineSpacingType)
     {
         // We have a custom line spacing (in points)
         props += QString("line-height:%1pt; ").arg(layout.lineSpacing);
@@ -575,7 +664,19 @@ bool AbiWordWorker::doFullParagraph(const QString& paraText, const LayoutData& l
     }
 
     // Add all AbiWord properties collected in the <FORMAT> element
-    props += textFormatToAbiProps(layout.formatData.text);
+    props += textFormatToAbiProps(layoutOrigin.formatData.text,layout.formatData.text,force);
+
+    return props;
+}
+
+bool AbiWordWorker::doFullParagraph(const QString& paraText, const LayoutData& layout,
+    const ValueListFormatData& paraFormatDataList)
+{
+    QString style=layout.styleName;
+
+    const LayoutData& styleLayout=m_styleMap[style];
+
+    QString props=layoutToCss(styleLayout,layout,false);
 
     *m_streamOut << "<p";
     if (!style.isEmpty())
@@ -604,7 +705,7 @@ bool AbiWordWorker::doFullParagraph(const QString& paraText, const LayoutData& l
         *m_streamOut << "<pbr/>";
     }
 
-    ProcessParagraphData ( paraText, paraFormatDataList );
+    processParagraphData(paraText, layout.formatData.text, paraFormatDataList);
 
     // Before closing the paragraph, test if we have a page break
     if (layout.pageBreakAfter)
@@ -619,6 +720,9 @@ bool AbiWordWorker::doFullParagraph(const QString& paraText, const LayoutData& l
 
 bool AbiWordWorker::doFullDefineStyle(LayoutData& layout)
 {
+    //Register style in the style map
+    m_styleMap[layout.styleName]=layout;
+
     *m_streamOut << "<s";
 
     // TODO: cook the style name to the standard style names in AbiWord
@@ -633,8 +737,7 @@ bool AbiWordWorker::doFullDefineStyle(LayoutData& layout)
         *m_streamOut << "\"";
     }
 
-    // Add all AbiWord properties collected in the <FORMAT> element
-    QString abiprops = textFormatToAbiProps(layout.formatData.text);
+    QString abiprops=layoutToCss(layout,layout,true);
 
     const int result=abiprops.findRev(";");
     if (result>=0)
@@ -643,8 +746,6 @@ bool AbiWordWorker::doFullDefineStyle(LayoutData& layout)
         abiprops.remove(result,2);
     }
 
-    //TODO: other layout things
-    // TODO/FIXME: what if abiprops might is empty!
     *m_streamOut << " props=\"" << abiprops << "\"";
 
     *m_streamOut << "/>\n";
@@ -685,11 +786,11 @@ bool AbiWordWorker::doFullPaperFormat(const int format,
 
             QString strWidth, strHeight, strUnits;
             KWEFUtil::GetNativePaperFormat(format, strWidth, strHeight, strUnits);
-            outputText+="\" width\"";
+            outputText+="\" width=\"";
             outputText+=strWidth;
-            outputText+="\" height\"";
+            outputText+="\" height=\"";
             outputText+=strHeight;
-            outputText+="\" units\"";
+            outputText+="\" units=\"";
             outputText+=strUnits;
             outputText+="\" ";
             break;
