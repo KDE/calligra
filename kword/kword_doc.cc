@@ -1494,8 +1494,12 @@ bool KWordDocument::completeSaving( KOStore::Store_ptr _store )
 	QBuffer buffer;
 	buffer.open( IO_WriteOnly );
 	{
-	    QDataStream str( &buffer );
-	    str << *it.current();
+	    // QDataStream str( &buffer );
+	    // str << *it.current();
+	    QImageIO iio( &buffer, format );
+	    iio.setImage( *it.current() );
+	    // iio.setFormat( format );
+	    iio.write();
 	}
 	buffer.close();
 	
