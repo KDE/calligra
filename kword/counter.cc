@@ -468,7 +468,7 @@ int Counter::width( const KWTextParag *paragraph )
         text( paragraph );
 
     // Now calculate width.
-    QTextFormat *format = paragraph->paragFormat();
+    QTextFormat *format = paragraph->at( 0 )->format();/*paragraph->paragFormat()*/;
     m_cache.width = 0;
     QString text = m_cache.text;
     if ( !text.isEmpty() )
