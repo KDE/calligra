@@ -29,7 +29,6 @@
 
 #include <kdebug.h>
 #include <klocale.h>
-#include <kbuttonbox.h>
 #include <kiconloader.h>
 
 #include "kwdoc.h"
@@ -216,11 +215,11 @@ void KWSerialLetterDataBase::load( QDomElement& /*elem*/ )
  ******************************************************************/
 
 KWSerialLetterVariableInsertDia::KWSerialLetterVariableInsertDia( QWidget *parent, KWSerialLetterDataBase *db )
-    : QDialog( parent, "", TRUE )
+    : KDialogBase(Plain, i18n( "Serial Letter - Variable Name" ), Ok | Cancel, Ok, parent, "", true )
 {
-    setCaption( i18n( "Serial Letter - Variable Name" ) );
-
-    back = new QVBox( this );
+    QWidget *page = plainPage();
+  
+    back = new QVBox( page );
     back->setSpacing( 5 );
     back->setMargin( 5 );
 
@@ -235,21 +234,7 @@ KWSerialLetterVariableInsertDia::KWSerialLetterVariableInsertDia( QWidget *paren
     for ( ; it != db->getRecordEntries().end(); ++it )
         names->insertItem( it.key(), -1 );
 
-    KButtonBox *bb = new KButtonBox( back );
-    bb->addStretch();
-    QPushButton *ok = bb->addButton( i18n( "&OK"  ) );
-    ok->setDefault( TRUE );
-    if ( names->count() == 0 )
-        ok->setEnabled( FALSE );
-    QPushButton *cancel = bb->addButton( i18n( "&Cancel"  ) );
-    bb->layout();
-
-    connect( ok, SIGNAL( clicked() ),
-             this, SLOT( accept() ) );
-    connect( cancel, SIGNAL( clicked() ),
-             this, SLOT( reject() ) );
-
-    resize( 350, 400 );
+    setInitialSize( QSize( 350, 400 ) );
 }
 
 QString KWSerialLetterVariableInsertDia::getName() const
@@ -411,11 +396,11 @@ void KWSerialLetterEditorList::displayRecord( int i )
  ******************************************************************/
 
 KWSerialLetterEditor::KWSerialLetterEditor( QWidget *parent, KWSerialLetterDataBase *db_ )
-    : QDialog( parent, "", TRUE ), db( db_ )
-{
-    setCaption( i18n( "Serial Letter - Editor" ) );
+    : KDialogBase( Plain, i18n( "Serial Letter - Editor" ), Ok | Cancel, Ok, parent, "", true ), db( db_ )
+{    
+    QWidget *page = plainPage();
 
-    back = new QVBox( this );
+    back = new QVBox( page );
     back->setSpacing( 5 );
     back->setMargin( 5 );
 
@@ -492,7 +477,7 @@ KWSerialLetterEditor::KWSerialLetterEditor( QWidget *parent, KWSerialLetterDataB
         deleteRecord->setEnabled(false);
         records->setEnabled(true);
     }
-    resize( 600, 400 );
+    setInitialSize( QSize( 600, 400 ) );
 }
 
 void KWSerialLetterEditor::resizeEvent( QResizeEvent *e )

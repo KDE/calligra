@@ -20,10 +20,11 @@
 #ifndef serialletter_h
 #define serialletter_h
 
+#include <kdialogbase.h>
+
 #include <qmap.h>
 #include <qstring.h>
 #include <qstringlist.h>
-#include <qdialog.h>
 #include <qvbox.h>
 #include <qlistview.h>
 #include <qspinbox.h>
@@ -80,7 +81,7 @@ protected:
  *
  ******************************************************************/
 
-class KWSerialLetterVariableInsertDia : public QDialog
+class KWSerialLetterVariableInsertDia : public KDialogBase
 {
     Q_OBJECT
 
@@ -157,7 +158,7 @@ protected:
  *
  ******************************************************************/
 
-class KWSerialLetterEditor : public QDialog
+class KWSerialLetterEditor : public KDialogBase
 {
     Q_OBJECT
 
