@@ -240,7 +240,8 @@ void
 KexiView::slotShowProjectProps()
 {
 	KexiProjectProperties *p = new KexiProjectProperties(this);
-	p->show();
+	p->exec();
+        delete p;
 }
 
 KexiView::~KexiView(){
