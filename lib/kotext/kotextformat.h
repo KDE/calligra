@@ -196,6 +196,12 @@ public:
     static AttributeStyle stringToAttributeFont( const QString & _str );
 
     QString displayedString( const QString& c )const;
+    static QStringList underlineStyleList();
+    static QStringList strikeOutStyleList();
+    static QStringList fontAttributeList();
+    static QStringList underlineLineStyleList();
+    static QStringList strikeOutLineStyleList();
+
 #ifndef NDEBUG
     void printDebug();
 #endif

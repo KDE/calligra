@@ -561,27 +561,19 @@ KoFormatDia::KoFormatDia( QWidget* parent, const QString & _caption, KoSearchCon
 
     m_checkUnderline = new QCheckBox( i18n( "Underline:" ), page);
     m_underlineItem = new QComboBox( page );
-    m_underlineItem->insertItem( i18n( "Without" ), -1 );
-    m_underlineItem->insertItem( i18n( "Simple" ), -1 );
-    m_underlineItem->insertItem( i18n( "Double" ), -1 );
-    m_underlineItem->insertItem( i18n( "Simple Bold" ), -1 );
+    m_underlineItem->insertStringList( KoTextFormat::underlineStyleList());
     m_underlineItem->setCurrentItem( (int)m_ctx->m_underline );
 
     m_checkStrikeOut= new QCheckBox( i18n( "Strikeout:" ), page);
 
     m_strikeOutItem = new QComboBox( page );
-    m_strikeOutItem->insertItem( i18n( "Without" ), -1 );
-    m_strikeOutItem->insertItem( i18n( "Simple" ), -1 );
-    m_strikeOutItem->insertItem( i18n( "Double" ), -1 );
-    m_strikeOutItem->insertItem( i18n( "Simple Bold" ), -1 );
+    m_strikeOutItem->insertStringList( KoTextFormat::strikeOutStyleList());
     m_strikeOutItem->setCurrentItem( (int)m_ctx->m_strikeOut );
 
 
     m_checkFontAttribute = new QCheckBox( i18n( "Attribute:" ), page);
     m_fontAttributeItem = new QComboBox( page );
-    m_fontAttributeItem->insertItem( i18n("Without"), -1 );
-    m_fontAttributeItem->insertItem( i18n("Uppercase"), -1 );
-    m_fontAttributeItem->insertItem( i18n("LowerCase"), -1 );
+    m_fontAttributeItem->insertStringList( KoTextFormat::fontAttributeList());
     m_fontAttributeItem->setCurrentItem( (int)m_ctx->m_attribute );
 
     m_checkLanguage = new QCheckBox( i18n( "Language:" ), page);

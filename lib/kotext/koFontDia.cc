@@ -34,6 +34,7 @@
 #include <knuminput.h>
 #include <koGlobal.h>
 
+
 class KoFontChooser::KoFontChooserPrivate
 {
 public:
@@ -154,22 +155,11 @@ void KoFontChooser::setupTab2()
     m_underlining = new QComboBox( grp );
     grid->addWidget( m_underlining, 1, 0);
 
-    QStringList lst;
-    lst <<i18n("Without");
-    lst <<i18n("Single");
-    lst <<i18n("Simple Bold");
-    lst <<i18n("Double");
-    m_underlining->insertStringList( lst );
+    m_underlining->insertStringList( KoTextFormat::underlineStyleList() );
 
     m_underlineType = new QComboBox(grp );
     grid->addWidget( m_underlineType, 1, 1);
-    QStringList lstType;
-    lstType <<i18n("Solid Line");
-    lstType <<i18n("Dash Line");
-    lstType <<i18n("Dot Line");
-    lstType <<i18n("Dash Dot Line");
-    lstType <<i18n("Dash Dot Dot Line");
-    m_underlineType->insertStringList( lstType );
+    m_underlineType->insertStringList( KoTextFormat::underlineLineStyleList() );
 
 
     m_underlineColorButton = new QPushButton( i18n( "Change Color..." ), grp );
@@ -178,20 +168,14 @@ void KoFontChooser::setupTab2()
 
     lab = new QLabel( i18n("Strikethrough:"), grp);
     grid->addWidget( lab, 2, 0);
-    lst.clear();
-    lst <<i18n("Without");
-    lst <<i18n("Single");
-    lst <<i18n("Simple Bold");
-    lst <<i18n("Double");
-
     d->m_strikeOut = new QComboBox( grp );
     grid->addWidget( d->m_strikeOut, 3, 0);
-    d->m_strikeOut->insertStringList( lst );
+    d->m_strikeOut->insertStringList( KoTextFormat::strikeOutStyleList() );
 
 
     m_strikeOutType= new QComboBox(grp );
     grid->addWidget( m_strikeOutType, 3, 1);
-    m_strikeOutType->insertStringList( lstType );
+    m_strikeOutType->insertStringList( KoTextFormat::strikeOutLineStyleList() );
 
     d->m_shadow= new QCheckBox( i18n("Shadow"), grp);
     grid->addWidget( d->m_shadow, 4, 0);
@@ -205,12 +189,7 @@ void KoFontChooser::setupTab2()
     d->m_fontAttribute = new QComboBox( grp );
     grid->addWidget( d->m_fontAttribute, 7, 0);
 
-    lst.clear();
-    lst <<i18n("Without");
-    lst <<i18n("Uppercase");
-    lst <<i18n("LowerCase");
-    lst <<i18n("Small caps");
-    d->m_fontAttribute->insertStringList( lst );
+    d->m_fontAttribute->insertStringList( KoTextFormat::fontAttributeList() );
 
     lab = new QLabel( i18n("Language:"), grp);
     grid->addWidget( lab, 8, 0);

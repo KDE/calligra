@@ -21,7 +21,7 @@
 #include "qrichtext_p.h" // for KoTextFormat
 #include "kozoomhandler.h"
 #include <kdebug.h>
-
+#include <klocale.h>
 void KoTextFormat::KoTextFormatPrivate::clearCache()
 {
     delete m_screenFontMetrics; m_screenFontMetrics = 0L;
@@ -549,6 +549,59 @@ void KoTextFormat::setLanguage( const QString & _lang)
     m_language = _lang;
     update();
 }
+
+QStringList KoTextFormat::underlineStyleList()
+{
+    QStringList lst;
+    lst <<i18n("Without");
+    lst <<i18n("Single");
+    lst <<i18n("Simple Bold");
+    lst <<i18n("Double");
+    return lst;
+}
+
+QStringList KoTextFormat::strikeOutStyleList()
+{
+    QStringList lst;
+    lst <<i18n("Without");
+    lst <<i18n("Single");
+    lst <<i18n("Simple Bold");
+    lst <<i18n("Double");
+    return lst;
+}
+
+QStringList KoTextFormat::fontAttributeList()
+{
+    QStringList lst;
+    lst <<i18n("Without");
+    lst <<i18n("Uppercase");
+    lst <<i18n("LowerCase");
+    lst <<i18n("Small caps");
+    return lst;
+}
+
+QStringList KoTextFormat::underlineLineStyleList()
+{
+    QStringList lst;
+    lst <<i18n("Solid Line");
+    lst <<i18n("Dash Line");
+    lst <<i18n("Dot Line");
+    lst <<i18n("Dash Dot Line");
+    lst <<i18n("Dash Dot Dot Line");
+    return lst;
+}
+
+QStringList KoTextFormat::strikeOutLineStyleList()
+{
+    QStringList lst;
+    lst <<i18n("Solid Line");
+    lst <<i18n("Dash Line");
+    lst <<i18n("Dot Line");
+    lst <<i18n("Dash Dot Line");
+    lst <<i18n("Dash Dot Dot Line");
+    return lst;
+}
+
 
 #ifndef NDEBUG
 void KoTextFormat::printDebug()
