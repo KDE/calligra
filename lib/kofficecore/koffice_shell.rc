@@ -1,4 +1,4 @@
-<!DOCTYPE kpartgui>
+<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
 <kpartgui name="KOfficeShell">
 <MenuBar>
  <Menu name="file"><text>&amp;File</text>
