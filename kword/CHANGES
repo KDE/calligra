@@ -616,3 +616,4 @@ Reggie, 6.1.1998:
 Reggie, 7.1.1999:
 -----------------
 - Added filedialog preview widgets for pictures and cliparts
+- Started with replacing text (with the dialog - somehow I have to decrease the size of this dialog)

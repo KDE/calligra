@@ -78,10 +78,11 @@ public:
   };
 
   KWSearchDia(QWidget *parent,const char *name,KWordDocument *_doc,KWPage *_page,KWordView *_view,
-	      KWSearchEntry *_searchEntry,QStrList _fontlist);
+	      KWSearchEntry *_searchEntry,KWSearchEntry *_replaceEntry,QStrList _fontlist);
 
 protected:
   void setupTab1();
+  void setupTab2();
   void closeEvent(QCloseEvent *e) { emit cancelButtonPressed(); }
 
   QWidget *tab1;
@@ -95,10 +96,22 @@ protected:
   QPushButton *bSearchFirst,*bSearchNext,*bSearchAll;
   QLineEdit *eSearch;
 
+  QWidget *tab2;
+  QGridLayout *grid2,*rGrid;
+  QGroupBox *gReplace;
+  QCheckBox *rcRegExp,*rcFamily,*rcSize,*rcColor,*rcBold,*rcItalic,*rcUnderline,*rcVertAlign,*rcmBold,*rcmItalic,*rcmUnderline,*rcCase,
+    *rcWholeWords,*rcRev;
+  QComboBox *rcmFamily,*rcmSize,*rcmVertAlign;
+  KColorButton *rbColor;
+  QLabel *lReplace;
+  KButtonBox *bbReplace;
+  QPushButton *bReplaceFirst,*bReplaceNext,*bReplaceAllWA,*bReplaceAllWoA;
+  QLineEdit *eReplace;
+
   KWordDocument *doc;
   KWPage *page;
   KWordView *view;
-  KWSearchEntry *searchEntry;
+  KWSearchEntry *searchEntry,*replaceEntry;
   QStrList fontlist;
 
 protected slots:
@@ -118,6 +131,22 @@ protected slots:
   void slotItalic();
   void slotUnderline();
   void slotVertAlign(int);
+  void rsearchFirst();
+  void rsearchNext();
+  void rslotCheckFamily();
+  void rslotCheckColor();
+  void rslotCheckSize();
+  void rslotCheckBold();
+  void rslotCheckItalic();
+  void rslotCheckUnderline();
+  void rslotCheckVertAlign();
+  void rslotFamily(const char*);
+  void rslotSize(const char*);
+  void rslotColor(const QColor&);
+  void rslotBold();
+  void rslotItalic();
+  void rslotUnderline();
+  void rslotVertAlign(int);
   void saveSettings();
 
 };

@@ -192,6 +192,7 @@ public:
   void hideAllFrames();
 
   void setSearchEntry(KWSearchDia::KWSearchEntry *e) { searchEntry = e; }
+  void setReplaceEntry(KWSearchDia::KWSearchEntry *e) { replaceEntry = e; }
 
 public slots:
   void slotInsertObject(KWordChild *_child,KWPartFrameSet *_kwpf);
@@ -355,7 +356,7 @@ protected:
   KWParagLayout::Flow flow;
   KWFormat::VertAlign vertAlign;
   KWParagLayout::Border left,right,top,bottom,tmpBrd;
-  KWSearchDia::KWSearchEntry *searchEntry;
+  KWSearchDia::KWSearchEntry *searchEntry,*replaceEntry;
 
   KWParagDia *paragDia;
   KWStyleManager *styleManager;

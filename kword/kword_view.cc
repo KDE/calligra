@@ -89,6 +89,7 @@ KWordView::KWordView( QWidget *_parent, const char *_name, KWordDocument* _doc )
   _viewFormattingChars = false;
   _viewFrameBorders = true;
   searchEntry = 0L;
+  replaceEntry = 0L;
   searchDia = 0L;
 
   m_pKWordDoc = _doc;
@@ -618,7 +619,7 @@ void KWordView::editFind()
 {
   if (searchDia) return;
 
-  searchDia = new KWSearchDia(0L,"",m_pKWordDoc,gui->getPaperWidget(),this,searchEntry,fontList);
+  searchDia = new KWSearchDia(0L,"",m_pKWordDoc,gui->getPaperWidget(),this,searchEntry,replaceEntry,fontList);
   searchDia->setCaption(i18n("KWord - Search & Replace"));
   QObject::connect(searchDia,SIGNAL(cancelButtonPressed()),this,SLOT(searchDiaClosed()));
   searchDia->show();
