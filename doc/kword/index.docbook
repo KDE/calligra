@@ -63,7 +63,7 @@
 
 <legalnotice>&FDLNotice;</legalnotice>
 
-<date>2002-06-18</date>
+<date>2002-06-23</date>
 <releaseinfo>1.02.00</releaseinfo>
 
 <abstract>
@@ -718,10 +718,11 @@ main ftp site of the &kde; project. </para>
 <listitem>
 <para>&Qt; Toolkit 3.0.2 or later.  This can be obtained from <ulink
 url="http://www.trolltech.com">Trolltech</ulink>.</para>
+
 </listitem>
 
 <listitem>
-<para>&kde; 3.0 libraries (kdelibs) and the &kde; 3.0 base package
+<para>&kde; 3.0.1 libraries (kdelibs) and the &kde; 3.0.1 base package
 (kdebase).  These can be obtained from the <ulink
 url="http://www.kde.org">&kde; web page.</ulink></para>
 </listitem>
@@ -736,10 +737,15 @@ your installations documentation.</para>
 </listitem>
 </itemizedlist>
 
-<para>All required libraries as well as &kword; itself can be found on
+<para>All required libraries (kdelibs and kdebase) as well as &kword; itself can be found on
 <ulink url="http://kword.koffice.org">The &kword; home
 page</ulink>.</para>
 
+<note><para>In order to use external databases for mail merging documents, you must have
+the QT toolkit compiled with SQL support.  To add SQL support (as a plugin), simply include
+<option>--plugin-sql-<replaceable>driver</replaceable></option> in your configure line.</para>
+<para><replaceable>driver</replaceable> should be replaced with <replaceable>mysql</replaceable>, <replaceable>odbc</replaceable>,
+<replaceable>CVS</replaceable>, or <replaceable>psql</replaceable> as is appropriate for your database needs.</para></note>
 </sect1>
 
 <sect1 id="compilation">

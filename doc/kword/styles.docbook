@@ -310,4 +310,22 @@ style.</para>
 
 </sect2>
 
+<sect2 id="style-import">
+<title>Import a text style</title>
+<para>&kword; has the ability to import a text style from one &kword; document and include it in the 
+list of text styles in another &kword; document.</para>
+<para>To import a text style, select <menuchoice><guimenu>Format</guimenu><guimenuitem>Import Style</guimenuitem></menuchoice>
+from the menubar.</para><para>This will bring up an empty dialog box.</para>
+<para>Click on the <guibutton>Load</guibutton> button.  This will bring up a 
+<link linkend="file-dialog">file selection dialog</link>.  Choose the &kword; file you want to import the text style from and click 
+<guibutton>OK</guibutton>.</para>
+<para>The dialog box will now fill with all available text styles available for import.</para>
+<tip><para>If &kword; encounters a duplicate text style name in the selected file, it will append a number to the end of the
+text style name to identify the imported style.</para>
+<para>As an example, if you import the <emphasis>Standard</emphasis> text style from another &kword; file, &kword; will change
+the text style name to <emphasis>Standard-1</emphasis>.</para></tip>
+<para>Select <emphasis>all</emphasis> the text style you want to import.  Then click
+<guibutton>OK</guibutton>.</para>
+</sect2>
+
 </sect1>

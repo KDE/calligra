@@ -1294,7 +1294,10 @@ automatically, while you are editing your document.</para>
 <para>To toggle autocorrection on and off, select <menuchoice>
 <guimenu>Tools</guimenu><guimenuitem>AutoFormat</guimenuitem>
 <guimenuitem>Enable Autocorrection</guimenuitem></menuchoice>
-from the menubar. </para>
+from the menubar.  When enabled, autocorrection makes changes to your document <emphasis>as you type</emphasis>.  You can
+determine which changes to make by <link linkend="configure-autocorrection">configuring autocorrection</link></para>
+<para>If disabled, autocorrection changes are not made. You can, however,
+<link linkend="autoformat">apply autocorrection manually</link>.</para>
 </sect2>
 
 <sect2 id="configure-autocorrection">
@@ -1526,26 +1529,26 @@ this instance, text entered in these boxes will stay double capital letters.</pa
 and click on the <guibutton>Remove</guibutton> button.</para>
 </sect3>
 </sect2>
-</sect1>
 
-<sect1 id="autoformat">
-<title>Autoformatting</title>
-<para>Autoformatting is a different method of applying <link linkend="autocorrect">autocorrection</link> to a &kword; document.</para>
-<para>To apply autoformatting, first configure your options by using the <link linkend="configure-autocorrection">autocorrection dialogs</link>.</para>
+<sect2 id="autoformat">
+<title>Manually applying autocorrection</title>
+<para>If autocorrection is turned off in your document, you can mannually enable <link linkend="autocorrect">autocorrection</link>.</para>
+<para>To manually apply autocorrection, first configure your options by using the
+<link linkend="configure-autocorrection">autocorrection dialogs</link>.</para>
 <para>Then select <menuchoice>
-<guimenu>Tools</guimenu><guimenuitem>Autoformat</guimenuitem><guimenuitem>Apply Autocorrection</guimenuitem></menuchoice>
+<guimenu>Tools</guimenu><guimenuitem>Autocorrection</guimenuitem><guimenuitem>Apply Autocorrection</guimenuitem></menuchoice>
 from the menubar.</para>
 <para>&kword; will start at the beginning of the document and apply all selected autocorrection options to the entire document.</para>
 <para>When &kword; is finished, it will return you to your document for further editing.</para>
-<para>For more information on autocorrection, see <link linkend="autocorrect">Autocorrection</link>.</para>
-<para>For more information on enabling and disabling autocorrection, 
+<para>For more information on enabling and disabling autocorrection,
 see <link linkend="autocorrection-enable">Enable/Disable Autocorrection</link>.</para>
 
+</sect2>
 </sect1>
 
 <sect1 id="autocomplete">
 <title>Autocompletion</title>
-<para>Autocompletion allows you to type the first few letters of a commonly 
+<para>Autocompletion allows you to type the first few letters of a commonly
 used word (often technical or job specific), and tell &kword; to
 finish typing the word for you.  This is often very useful when you have lengthy technical words.</para>
 <sect2 id="autocomplete-using">

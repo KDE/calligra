@@ -10,7 +10,84 @@
 
 <sect2 id="mail-merge-internal">
 <title>Using an internal representation of tabular data to create documents</title>
+<para>For small sets of data, or when you do not currently have a database containing the merge data, &kword; 
+offers you the ability to enter the data <emphasis>directly into &kword;</emphasis> in tabular form.  This internal data 
+structure can then be used to create documents with this data inserted at predefined locations.</para>
+<para>Using an internal representation of the data to create personalized documents is a three step process:</para>
+<orderedlist>
+<listitem><para><link linkend="mail-merge-internal-data">Enter the data</link> into &kword;</para></listitem>
+<listitem><para><link linkend="mail-merge-internal-fields">Insert the merge fields</link> to tell &kword; 
+what data goes where in the documents</para></listitem>
+<listitem><para><link linkend="mail-merge-internal-print">Print</link> the personalized documents.</para></listitem>
+</orderedlist>
+<para>After the data has been created once, you can go back and change the data as needed, and produce another set of
+personalized documents from that data.</para>
+
+<sect3 id="mail-merge-internal-data">
+<title>Enter the data</title>
+<para>To begin, select <menuchoice>
+<guimenu>Tools</guimenu><guimenuitem>Configure Mail Merge...</guimenuitem></menuchoice> from
+the menubar. A dialog box will appear.</para>
+
+<screenshot>
+<mediaobject>
+<imageobject>
+<imagedata fileref="mmerge1.png" format="PNG"/></imageobject>
+</mediaobject>
+</screenshot>
+
+<para>Click on <guibutton>Create New...</guibutton>.  Another small dialog will appear.</para>
+<para>There is currently only one option in this dialog box <guilabel>Internal storage</guilabel>. Click on
+<guibutton>OK</guibutton>.  A new dialog box will appear.</para>
+
+<screenshot>
+<mediaobject>
+<imageobject>
+<imagedata fileref="mmerge2.png" format="PNG"/></imageobject>
+</mediaobject>
+</screenshot>
+
+<para>This is a record card for creating your tabular data file.  Along the top is a toolbar and the main part of the dialog is space to hold
+your entry/data pairs.</para>
+<sect4 id="mail-merge-internal-data-entry"><title>Defining the structure of your data table</title>
+<para>First, we need to add one or more entries (merge fields).  This is accomplished by clicking the
+<inlinemediaobject><imageobject><imagedata
+fileref="addentry.png" format="PNG"
+align="center"/></imageobject></inlinemediaobject> (<guilabel>Add entry</guilabel>)
+button (third button from the right along the toolbar). A small dialog box will appear.  Type a descriptive name of your entry
+in the dialog box (Name, Address, Balance Due, etc....). </para>
+<note><para>This is for the name of the entry, not the data that is contained within the entry.</para></note>
+<para>Click <guibutton>OK</guibutton>, and the entry is added to the card.</para>
+<para>Repeat this process until all needed entries are visible on this first card.</para>
+</sect4>
+<sect4 id="mail-merge-internal-data-value"><title>Entering the data into the table</title>
+<para>Now that the structure of your data is defined, you can enter the data into your entries.</para>
 <para></para>
+<para></para>
+<para></para>
+<para></para>
+<para></para>
+</sect4>
+
+</sect3>
+
+<sect3 id="mail-merge-internal-fields">
+<title>Insert data fields in document</title>
+<para></para>
+<para></para>
+</sect3>
+
+<sect3 id="mail-merge-internal-print">
+<title>Previewing and printing the merged document</title>
+<para></para>
+<para></para>
+</sect3>
+
+<sect3 id="mail-merge-internal-edit">
+<title>Edit the data files</title>
+<para></para>
+<para></para>
+</sect3>
 </sect2>
 
 </sect1>
