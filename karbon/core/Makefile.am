@@ -31,8 +31,7 @@ noinst_HEADERS = \
 	vlayer_iface.h \
 	vtext.h \
 	vtext_iface.h \
-	vclipgroup.h \
-	svgpathparser.h
+	vclipgroup.h
 
 libkarboncore_la_SOURCES = \
 	vcolor.cc \
@@ -64,8 +63,7 @@ libkarboncore_la_SOURCES = \
 	vtext.cc \
 	vtext_iface.cc \
 	vtext_iface.skel \
-	vclipgroup.cc \
-	svgpathparser.cc
+	vclipgroup.cc
 
 libkarboncore_la_METASOURCES = \
 	AUTO
