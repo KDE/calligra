@@ -5547,7 +5547,7 @@ void KWView::configureCompletion()
 void KWView::applyAutoFormat()
 {
     m_doc->getAutoFormat()->readConfig();
-    KMacroCommand *macro = new KMacroCommand( i18n("Apply Autoformat"));
+    KMacroCommand *macro = 0L;
     bool createcmd=false;
     QPtrList<KoTextObject> list(m_doc->frameTextObject());
     QPtrListIterator<KoTextObject> fit(list);
@@ -5556,16 +5556,13 @@ void KWView::applyAutoFormat()
         KCommand *cmd = m_doc->getAutoFormat()->applyAutoFormat( fit.current() );
         if ( cmd )
         {
-            createcmd= true;
+            if ( !macro )
+                macro = new KMacroCommand( i18n("Apply Autoformat"));
             macro->addCommand( cmd );
         }
     }
-    if ( createcmd )
-    {
+    if ( macro )
         m_doc->addCommand( macro );
-    }
-    else
-        delete macro;
 }
 
 void KWView::createStyleFromSelection()
