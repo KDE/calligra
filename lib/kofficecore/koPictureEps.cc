@@ -78,6 +78,7 @@ QImage KoPictureEps::scaleWithGhostScript(const QSize& size, const int resolutio
         return QImage();
     }
 
+    // ### TODO: do not call GhostScript up to three times for each re-scaling (one call of GhostScript should be enough to know which device is available: gs --help)
     // PNG16m is better, but not always available -> fallback to bmp16m, then fallback to ppm (256 colors)
     QImage img;
     int ret = tryScaleWithGhostScript(img, size, resolutionx, resolutiony, "png16m");
@@ -152,6 +153,7 @@ int KoPictureEps::tryScaleWithGhostScript(QImage &image, const QSize& size, cons
         return 0; // error
     }
 
+    // The translation is needed as GhostScript (7.07) cannot handle negative values in the bounding box otherwise.
     fprintf (ghostfd, "\n%d %d translate\n", -qRound(m_boundingBox.left()*xScale), -qRound(m_boundingBox.top()*yScale));
     fprintf (ghostfd, "%g %g scale\n", xScale, yScale);
 
@@ -316,6 +318,7 @@ bool KoPictureEps::load(const QByteArray& array, const QString& /* extension */ 
     {
         line=stream.readLine();
         kdDebug(30003) << "Checking line: " << line << endl;
+        // ### TODO: it seems that the bounding box can be delayed in the trailer (GhostScript 7.07 does not support it either.)
         if (line.startsWith("%%BoundingBox:"))
         {
             lineBox=line;
@@ -330,6 +333,7 @@ bool KoPictureEps::load(const QByteArray& array, const QString& /* extension */ 
         return false;
     }
     QRegExp exp("(\\-?[0-9]+\\.?[0-9]*)\\s(\\-?[0-9]+\\.?[0-9]*)\\s(\\-?[0-9]+\\.?[0-9]*)\\s(\\-?[0-9]+\\.?[0-9]*)");
+    // ### FIXME: check return value of search, as the bounding box could be marked as "delayed" (What is the exact text then?)
     exp.search(lineBox);
     kdDebug(30003) << "Reg. Exp. Found: " << exp.capturedTexts() << endl;
     rect.setLeft((int)exp.cap(1).toDouble());
@@ -344,7 +348,7 @@ bool KoPictureEps::load(const QByteArray& array, const QString& /* extension */ 
 
 bool KoPictureEps::save(QIODevice* io)
 {
-    // We save the raw data, to avoid damaging the file by many load/save cyvles (especially for JPEG)
+    // We save the raw data, to avoid damaging the file by many load/save cycles
     Q_ULONG size=io->writeBlock(m_rawData); // WARNING: writeBlock returns Q_LONG but size() Q_ULONG!
     return (size==m_rawData.size());
 }
