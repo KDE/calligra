@@ -33,7 +33,7 @@
 #include <kdebug.h>
 
 KSpreadinsert::KSpreadinsert( KSpreadView* parent, const char* name,const QPoint &_marker,Mode _mode)
-	: QDialog( parent, name )
+	: QDialog( parent, name,TRUE )
 {
   m_pView = parent;
   marker=_marker;

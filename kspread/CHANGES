@@ -426,3 +426,5 @@ and atan2
 -Now "Show page Border" is saved
 -Now init toggle button in initialPosition() because used QTimer::singleShot
 => all is init before change state of button.
+-Add caption to kspread_dlg_format
+-Add modal for all dialogbox

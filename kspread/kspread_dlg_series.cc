@@ -33,7 +33,7 @@
 #include <knumvalidator.h>
 
 KSpreadseries::KSpreadseries( KSpreadView* parent, const char* name,const QPoint &_marker)
-	: QDialog( parent, name )
+	: QDialog( parent, name,TRUE )
 {
   m_pView = parent;
   marker=_marker;

@@ -36,7 +36,7 @@
 #include <kmessagebox.h>
 
 KSpreadarea::KSpreadarea( KSpreadView* parent, const char* name,const QPoint &_marker )
-	: QDialog( parent, name )
+	: QDialog( parent, name,TRUE )
 {
   m_pView = parent;
   marker=_marker;

@@ -33,7 +33,7 @@
 
 
 KSpreadanchor::KSpreadanchor( KSpreadView* parent, const char* name,const QPoint &_marker)
-	: QDialog( parent, name )
+	: QDialog( parent, name,TRUE )
 {
   m_pView = parent;
   marker= _marker;
@@ -88,8 +88,7 @@ void KSpreadanchor::slotOk()
 KSpreadCell *cell = m_pView->activeTable()->cellAt( m_pView->canvasWidget()->markerColumn(), m_pView->canvasWidget()->markerRow() );
 if(l_cell->text().isEmpty()||text->text().isEmpty())
 	{
-	QMessageBox::warning( 0L, i18n("Error"), i18n("Area Text or cell is empty!"),
-			   i18n("Ok") );
+	QMessageBox::warning( 0L, i18n("Error"), i18n("Area Text or cell is empty!"),i18n("Ok") );
 	}
 else if(!cell->isDefault())
 	{

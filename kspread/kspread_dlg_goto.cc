@@ -35,7 +35,7 @@
 
 
 KSpreadgoto::KSpreadgoto( KSpreadView* parent, const char* name )
-	: QDialog( parent, name )
+	: QDialog( parent, name,TRUE )
 {
   m_pView = parent;
 

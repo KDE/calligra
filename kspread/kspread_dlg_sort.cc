@@ -33,7 +33,7 @@
 
 
 KSpreadsort::KSpreadsort( KSpreadView* parent, const char* name)
-	: QDialog( parent, name )
+	: QDialog( parent, name,TRUE )
 {
   m_pView = parent;
   setCaption( i18n("Sort") );

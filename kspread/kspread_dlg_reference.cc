@@ -37,7 +37,7 @@
 
 
 KSpreadreference::KSpreadreference( KSpreadView* parent, const char* name )
-	: QDialog( parent, name )
+	: QDialog( parent, name,TRUE )
 {
   m_pView = parent;
   QVBoxLayout *lay1 = new QVBoxLayout( this );

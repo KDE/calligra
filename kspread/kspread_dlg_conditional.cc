@@ -290,7 +290,7 @@ return result;
 }
 
 KSpreadconditional::KSpreadconditional( KSpreadView* parent, const char* name,const QRect &_marker)
-	: QDialog( parent, name )
+	: QDialog( parent, name,TRUE )
 {
   m_pView = parent;
   marker=_marker;

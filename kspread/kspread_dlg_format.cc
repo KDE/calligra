@@ -22,7 +22,7 @@ KSpreadFormatDlg::KSpreadFormatDlg( KSpreadView* view, const char* name )
     : QDialog( view, name, TRUE )
 {
     m_view = view;
-
+    setCaption( i18n("Table Style") );
     QVBoxLayout* vbox = new QVBoxLayout( this, 6, 6 );
     m_combo = new QComboBox( this );
     m_label = new QLabel( this );
