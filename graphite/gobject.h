@@ -46,14 +46,16 @@ class GObjectM9r;
 class GObject {
 
 public:
-    enum State { Visible, Handles, Rot_Handles, Invisible, Deleted };  // all possible states
-    enum FillStyle { Brush, GradientFilled };                     // all possible fill styles
-    enum Position { First, Last, Current };
+    enum State { Visible, Handles, Rot_Handles, Invisible, Deleted }; // all possible states
+    enum FillStyle { Brush, GradientFilled };                    // all possible fill styles
+    enum Position { First, Last, Current };          // where to insert the new child object
 
     virtual ~GObject();
 
     virtual GObject *clone() const = 0;           // exact copy of "this" (calls the Copy-CTOR)
-    virtual GObject *instantiate(const QDomElement /*&element*/) {}  // used in the object factory
+    // create an object and initialize it with the given XML
+    virtual GObject *instantiate(const QDomElement &element) const = 0;
+    virtual void init(const QDomElement &element);  // init this object
 
     const GObject *parent() const { return m_parent; }
     void setParent(GObject *parent);               // parent==0L - no parent, parent==this - illegal
@@ -64,7 +66,8 @@ public:
     virtual const bool unplugChild(GObject */*child*/, const Position &/*pos*/=Current) { return false; }
 
     // These methods are used to access the object's children
-    // Implemented via QListIterator - Leaf classes
+    // Implemented via QListIterator - Leaf classes don't reimplement
+    // that default behavior...
     virtual const GObject *firstChild() { return 0L; }
     virtual const GObject *nextChild() { return 0L; }
     virtual const GObject *lastChild() { return 0L; }
@@ -76,8 +79,12 @@ public:
     // toPrinter is set when we print the document - this means we don't
     // have to paint "invisible" (normally they are colored gray) objects
     virtual void draw(const QPainter &p, const bool toPrinter=false) const = 0;  // guess :)
-    // (TODO) Do we need more/other args?
-
+    // (TODO) Do we need more args?
+    
+    const int zoom() const { return m_zoom; }
+    virtual void setZoom(const short &zoom=100); // don't forget to set it for all children!
+    // Note: Check, if the zoom is equal to the last one - don't "change" it, then...
+    
     virtual const GObject *hit(const QPoint &p) const = 0;   // does the object contain this point?
     virtual const bool intersects(const QRect &r) const = 0;  // does the object intersect the rectangle?
     virtual const QRect &boundingRect() const = 0;            // the bounding rectangle of this object
@@ -115,10 +122,16 @@ signals:
 protected:
     GObject(const QString &name=QString::null);
     GObject(const GObject &rhs);
+    GObject(const QDomElement &element);
+    
+    const double zoomIt(const double &value) const;
+    const int zoomIt(const int &value) const;
+    const unsigned int zoomIt(const unsigned int &value) const;
 
     QString m_name;                              // name of the object
     State m_state;                               // are there handles to draw or not?
     GObject *m_parent;
+    int m_zoom;                                  // zoom value 100 -> 100% -> 1
 
     mutable bool boundingRectDirty;              // is the cached bounding rect still correct?
     mutable QRect bounds;                        // bounding rect (cache)
@@ -132,20 +145,39 @@ private:
     GObject &operator=(const GObject &rhs);    // don't assign the objects, clone them
 };
 
+inline const double GObject::zoomIt(const double &value) const {
+    if(m_zoom==100)
+	return value;
+    return (static_cast<double>(m_zoom)*value)/100.0;
+}
+
+inline const int GObject::zoomIt(const int &value) const {
+    if (m_zoom==100)
+	return value;
+    return (m_zoom*value)/100;
+}
+
+inline const unsigned int GObject::zoomIt(const unsigned int &value) const {
+    if (m_zoom==100)
+	return value;
+    return (m_zoom*value)/100;
+}
+
 
 // This is the manipulator class for GObject. Manipulators (M9r's)
 // are used to handle the selection, movement, rotation,... of objects.
-// The pure virtual GObject::createM9r() method ensures that the correct
-// manipulator is created :)
-// The M9r is used every time a user wants to change an object. First the
-// object is "hit" - then a M9r is created and this M9r is used as a kind
-// of EventFilter. Every Event is forwarded to the M9r. If the M9r handles
-// the event, it returns true. If the Event remains unhandled, the M9r
-// returns false and the Event has to be processed  by the calling method.
+// The pure virtual GObject::createM9r() factory method ensures that
+// the correct manipulator is created :) (factory method pattern)
+// The M9r is used every time a user wants to change an object interactively.
+// First the object is "hit" - then a M9r is created and this M9r is used as
+// a kind of EventFilter. Every Event is forwarded to the M9r. If the M9r
+// decides to handle the event, it returns true afterwards. If the Event
+// remains unhandled, the M9r returns false and the Event has to be processed
+// by the calling method. (some Event stuff in the GCanvas)
 class GObjectM9r {
 public:
     virtual ~GObjectM9r() {}
-    
+
     virtual const bool mouseMoveEvent(QMouseEvent */*e*/) { return false; }
     virtual const bool mousePressEvent(QMouseEvent */*e*/) { return false; }
     virtual const bool mouseReleaseEvent(QMouseEvent */*e*/) { return false; }

@@ -26,6 +26,9 @@
 GObject::~GObject() {
 }
 
+void GObject::init(const QDomElement &/*element*/) {
+}
+
 QDomElement GObject::save(QDomDocument &doc) const {
 
     // A GObject is saved to a node which is stored inside
@@ -61,6 +64,10 @@ void GObject::setParent(GObject *parent) {
 	m_parent=parent;
 }
 
+void GObject::setZoom(const short &zoom) {
+    m_zoom=zoom;
+}
+
 GObjectM9r *GObject::createM9r() {
     return new GObjectM9r;
 }
@@ -77,8 +84,6 @@ GObject::GObject(const GObject &rhs) :  m_name(rhs.name()),
     m_brush(rhs.brush()), m_gradient(rhs.gradient()), m_pen(rhs.pen()) {
 }
 
-/*
-// (TODO) move that code to instantiate...
 GObject::GObject(const QDomElement &element) {
 
     bool ok;
@@ -145,4 +150,3 @@ GObject::GObject(const QDomElement &element) {
 	m_gradient.ncols=1;	
     }	
 }
-*/
