@@ -200,11 +200,12 @@ KexiPropertyEditorItem::paintCell(QPainter *p, const QColorGroup & cg, int colum
 		p->drawText(QRect(margin,0,width, height()-1), Qt::AlignVCenter, text(0));
 		p->restore();
 		
-		p->setPen(cg.background());
-		p->drawLine(width-1, 0, width-1, height());
+		p->setPen( QColor(200,200,200) ); //like in t.v.
+//		p->setPen(cg.background());
+		p->drawLine(width-1, 0, width-1, height()-1);
 	}
 	
-	p->setPen(cg.background());
+	p->setPen( QColor(200,200,200) ); //like in t.v.
 	p->drawLine(-50, height()-1, width, height()-1 );
 }
 
