@@ -85,8 +85,15 @@ void KSpreadUndo::clear()
 void KSpreadUndo::undo()
 {
     if ( m_stckUndo.isEmpty() )
-	return;
+        return;
 
+    //Don't show error dialogs on undo
+    bool origErrorMessages = true;
+    if ( m_pDoc )
+    {
+        origErrorMessages = m_pDoc->getShowMessageError();
+        m_pDoc->setShowMessageError( false );
+    }
 
     KSpreadUndoAction *a = m_stckUndo.pop();
     a->undo();
@@ -94,8 +101,9 @@ void KSpreadUndo::undo()
 
     if ( m_pDoc )
     {
-	m_pDoc->enableUndo( hasUndoActions() );
-	m_pDoc->enableRedo( hasRedoActions() );
+        m_pDoc->setShowMessageError( origErrorMessages  );
+        m_pDoc->enableUndo( hasUndoActions() );
+        m_pDoc->enableRedo( hasRedoActions() );
     }
 }
 
