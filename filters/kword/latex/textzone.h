@@ -28,18 +28,12 @@
 
 #include <qtextstream.h>
 #include <qstring.h>
-#include "format.h"
+#include "textformat.h"
 
-class Para;
-
-class TextZone: public Format
+class TextZone: public TextFormat
 {
-
 	/* TEXT MARKUP */
 	QString _texte;
-
-	/* USEFULL DATA */
-	Para*   _para;
 
 	public:
 		TextZone(Para *para = 0);
@@ -48,7 +42,9 @@ class TextZone: public Format
 
 		/* Specify if the text must be formated */
 		bool useFormat() const;
-
+		QString getTexte() const { return _texte; }
+		void setTexte(QString texte) { _texte = texte; }
+		//void setPara(Para* para) { _para = para; }
 		QString escapeLatin1(QString);
 		
 		void analyse(const Markup*);

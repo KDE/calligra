@@ -36,7 +36,8 @@ class Texte: public Element
 	bool     _runaround;
 
 	/* CHILD MARKUP */
-	ListPara _liste;
+	ListPara  _parags;
+	ListPara* _footnotes;
 
 	public:
 		Texte();
@@ -46,6 +47,8 @@ class Texte: public Element
 		bool  hasColor();
 		bool  hasUline();
 		
+		Para* searchFootnote(const QString);
+	
 		void analyse(const Markup*);
 		void generate(QTextStream&);
 

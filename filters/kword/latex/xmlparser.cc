@@ -24,7 +24,7 @@
 #include "xmlparser.h"
 
 /* Init static data */
-Header* XmlParser::_header = 0;
+FileHeader* XmlParser::_fileHeader = 0;
 
 XmlParser::XmlParser(const char *data)
 {

@@ -26,7 +26,7 @@
 #include <qtextstream.h>
 #include "xmlparser.h"
 
-enum _SType
+enum SType
 {
 	ST_AUCUN,
 	ST_IMAGE,
@@ -34,27 +34,22 @@ enum _SType
 	ST_PARTS
 };
 
-typedef enum _SType SType;
-
-enum _SSect
+enum SSect
 {
-	SS_AUCUN,
-	SS_ENTETE,
-	SS_PIEDS,
-	SS_CORPS
+	SS_NONE,
+	SS_HEADERS,
+	SS_FOOTERS,
+	SS_BODY,
+	SS_FOOTNOTES
 };
 
-typedef enum _SSect SSect;
-
-enum _SInfo
+enum SInfo
 {
 	SI_NONE,
 	SI_FIRST,
 	SI_ODD,
 	SI_EVEN
 };
-
-typedef enum _SInfo SInfo;
 
 class Element: public XmlParser
 {

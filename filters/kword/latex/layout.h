@@ -25,17 +25,17 @@
 
 #include <qtextstream.h>
 #include <qstring.h>
-#include "format.h"
+#include "textformat.h"
 
 enum _EType
 {
 	TL_STANDARD,
-	TL_ARABIC,		/* 1, 2, ... */
+	TL_ARABIC,	/* 1, 2, ... */
 	TL_LLETTER,	/* a, b, ... */
 	TL_CLETTER,	/* A, B, ... */
 	TL_LLNUMBER,	/* i, ii, ... */
 	TL_CLNUMBER,	/* I, II, ... */
-	TL_BULLET		/* - */
+	TL_BULLET	/* - */
 };
 
 enum _EEnv
@@ -49,7 +49,7 @@ enum _EEnv
 typedef enum _EType EType;
 typedef enum _EEnv EEnv;
 
-class Layout: public Format
+class Layout: public TextFormat
 {
 	QString      _name;
 	QString      _following;

@@ -25,51 +25,7 @@
 #ifndef __KWORD_LISTPARA_H__
 #define __KWORD_LISTPARA_H__
 
-#include <qstring.h>
-#include "xmlparser.h"
-#include "listetextzone.h"
-#include "layout.h"
-#include "element.h"
-
-class Texte;
-
-class Para: public Layout
-{
-	/* MARKUP DATA */
-	QString        _texte;
-	ListeTextZone* _liste;
-
-	/* TO MANAGE THE LIST */
-	Para*          _next;
-	Para*          _previous;
-
-	/* USEFULL DATA */
-	Texte*         _element;
-
-	public:
-		Para(Texte *texte = 0);
-		virtual ~Para();
-
-		bool isColored    () const;
-		bool isUlined     () const;
-		Para* getNext     () const { return _next;      }
-		Para* getPrevious () const { return _previous;  }
-		SSect getFrameType() const;
-		
-		void setNext    (Para *p)  { _next      = p;    }
-		void setPrevious(Para *p)  { _previous  = p;    }
-
-		void analyse         (const Markup*);
-		void generate        (QTextStream&);
-		void generateDebut   (QTextStream&);
-		void generateFin     (QTextStream&);
-
-	private:
-		void analyseParam    (const Markup *);
-		void analyseFormats  (const Markup *);
-
-		void generateTitle(QTextStream&);
-};
+#include "para.h"
 
 class ListPara: public Para
 {

@@ -23,7 +23,7 @@
 
 #include <kdebug.h>	/* for kdDebug() stream */
 
-#include "header.h"	/* for _header use */
+#include "fileheader.h"	/* for _header use */
 #include "layout.h"
 
 /* Static Datas */
@@ -80,7 +80,7 @@ void Layout::analyseLayout(const Markup * balise_initiale)
 		else if(strcmp(balise->token.zText, "FORMAT")== 0)
 		{
 			kdDebug() << "FORMAT : " << endl;
-			analyseFormat(balise);
+			Format::analyse(balise);
 		}
 	}
 	kdDebug() << "END OF A LAYOUT" << endl;
@@ -148,8 +148,8 @@ void Layout::analyseCounter(const Markup *balise)
 			setCounterType(atoi(arg->zValue));
 			if(getCounterType() > TL_ARABIC && getCounterType() < TL_BULLET)
 			{
-				kdDebug() << "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!" << getCounterType() << endl;
-				_header->useEnumerate();
+				kdDebug() <<  getCounterType() << endl;
+				_fileHeader->useEnumerate();
 			}
 		}
 		else if(strcmp(arg->zName, "DEPTH")== 0)

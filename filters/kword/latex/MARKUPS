@@ -131,8 +131,8 @@
 	bbottominch="0"
 
 <PARAGRAPH>
-	- <TEXT>		ANALYSE	SUPPORTE :))
-	- <NAME>
+	- <TEXT>		SUPORTED :))
+	- <NAME>		ANLYSED
 		- name="Footnote/Endnote_1"
 	<INFO>
 		- info="0"
@@ -145,7 +145,7 @@
 
 	<FORMATS>
 		- <FORMAT>
-			- id="1"
+			- id="1"	ANALYSED
 				- 0...none (mustn't be in a file)
 				- 1..."normal" text
 				- 2...a picture
@@ -189,7 +189,7 @@
 			- <VERTALIGN value="0"/>
 			- </FRMAT>
 
-		- <FORMAT id="5"...>
+		- <FORMAT id="5"...>	ANALYSED
 			- <INTERNAL>
 			- <PART from="1" to="-1" space="-"/>
 			- </INTERNAL>

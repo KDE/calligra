@@ -23,70 +23,44 @@
 #ifndef __KWORD_FORMAT_H__
 #define __KWORD_FORMAT_H__
 
+#include <qtextstream.h>
 #include <qstring.h>
 #include <qcolor.h>
 #include "xmlparser.h"
 
-enum _EAlign
+enum _EFormat
 {
-	EA_NONE,
-	EA_SUB,
-	EA_SUPER
+	EF_ERROR,		/* 0 */
+	EF_TEXTZONE,		/* 1 */
+	EF_PICTURE,		/* 2 */
+	EF_TABULATOR,		/* 3 */
+	EF_VARIABLE,		/* 4 */
+	EF_FOOTNOTE		/* 5 */
 };
 
-typedef enum _EAlign EAlign;
+typedef enum _EFormat EFormat;
+
+class Para;
 
 class Format: public XmlParser
 {
-	QString  _police;
-	int      _id;
-	int      _pos;
-	int      _taille;	/* Length of the string */
-	int      _size;		/* Size of the police */
-	int      _weight;
-	bool     _italic;
-	bool     _underline;
-	EAlign   _vertalign;
-	QColor*  _textcolor;
+	EFormat _id;
+	
+	/* USEFULL DATA */
+	Para*   _para;
 
 	public:
-		Format(): _id(0), _pos(0), _taille(0), _size(11), _weight(0), _italic(false), _underline(false)
-		{
-			_textcolor = 0;
-		}
+		Format(Para *para= 0): _id((EFormat) 0), _para(para) {}
 		virtual ~Format() {}
 
-		int    getPos       () const { return _pos;       }
-		int    getLength    () const { return _taille;    }
-		int    getSize      () const { return _size;      }
-		int    getWeight    () const { return _weight;    }
-		bool   isItalic     () const { return _italic;    }
-		bool   isUnderlined () const { return _underline; }
-		EAlign getAlign     () const { return _vertalign; }
-		bool   isColor      () const { return (_textcolor!= 0); }
-		int    getColorBlue () const;
-		int    getColorGreen() const;
-		int    getColorRed  () const;
-
-		void setId         (const int id)  { _id        = id;   }
-		void setPos        (const int pos) { _pos       = pos;  }
-		void setTaille     (const int t)   { _taille    = t; }
-		void setSize       (const int t)   { _size      = t; }
-		void setWeight     (const int w)   { _weight    = w; }
-		void setItalic     (const bool i)  { _italic    = i; }
-		void setUnderlined (const bool u)  { _underline = u; }
-		void setPolice     (const char *p) { _police    = p; }
-		void setAlign      (const int a)   { _vertalign = (EAlign) a; }
-		void setColor (const int, const int, const int);
-
-		void analyseFormat    (const Markup*);
-		void analyseParam     (const Markup*);
-		void analyseFont      (const Markup*);
-		void analyseItalic    (const Markup*);
-		void analyseUnderlined(const Markup*);
-		void analyseWeigth    (const Markup*);
-		void analyseAlign     (const Markup*);
-		void analyseColor     (const Markup*);
+		Para*   getPara      () const { return _para; }
+		EFormat getFormatType() const { return _id;   }
+		//int getPos()
+		//int get	
+		void setId(int id) { _id = (EFormat) id; }
+		void setPara(Para* para) { _para = para; }
+		virtual void analyse(const Markup*);
+		virtual void generate(QTextStream&) = 0;
 };
 
 #endif /* __KWORD_FORMAT_H__ */

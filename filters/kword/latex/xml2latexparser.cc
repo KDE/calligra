@@ -29,7 +29,7 @@ Xml2LatexParser::Xml2LatexParser(QString filename, const char *data): XmlParser(
 {
 	kdDebug() << filename.latin1() << endl;
 	_filename = filename;
-	_document.setHeader(&_header);
+	_document.setFileHeader(_fileHeader);
 }
 
 void Xml2LatexParser::analyse()

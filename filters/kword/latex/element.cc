@@ -23,6 +23,9 @@
 #include <kdebug.h>
 #include "element.h"
 
+/*******************************************/
+/* Constructor                             */
+/*******************************************/
 Element::Element()
 {
 	_type    = ST_AUCUN;
@@ -31,13 +34,19 @@ Element::Element()
 	_suivant = 0;
 }
 
+/*******************************************/
+/* Destructor                              */
+/*******************************************/
 Element::~Element()
 {
 	kdDebug() << "Element Destructor" << endl;
 	if(_name != 0)
 		delete _name;
 }
-	
+
+/*******************************************/
+/* Analyse                                 */
+/*******************************************/
 void Element::analyse(const Markup * balise_initiale)
 {
 	// ANALYSE A FRAMESET MARKUP
@@ -47,6 +56,9 @@ void Element::analyse(const Markup * balise_initiale)
 	analyseParam(balise_initiale);
 }
 
+/*******************************************/
+/* AnalyseParam                            */
+/*******************************************/
 void Element::analyseParam(const Markup *balise)
 {
 	// <FRAMESET frameType="1" frameInfo="0" removable="0" visible="1"
@@ -71,29 +83,30 @@ void Element::analyseParam(const Markup *balise)
 			kdDebug() << "INFO :" << arg->zValue << endl;
 			switch(atoi(arg->zValue))
 			{
-				case 0: _section = SS_CORPS;
+				case 0: _section = SS_BODY;
 					break;
-				case 1: _section = SS_ENTETE;
+				case 1: _section = SS_HEADERS;
 					_hinfo   = SI_FIRST;
 					break;
-				case 2: _section = SS_ENTETE;
+				case 2: _section = SS_HEADERS;
 					_hinfo   = SI_ODD;
 					break;
-				case 3: _section = SS_ENTETE;
+				case 3: _section = SS_HEADERS;
 					_hinfo   = SI_EVEN;
 					break;
-				case 4: _section = SS_PIEDS;
+				case 4: _section = SS_FOOTERS;
 					_hinfo   = SI_FIRST;
 					break;
-				case 5: _section = SS_PIEDS;
+				case 5: _section = SS_FOOTERS;
 					_hinfo   = SI_ODD;
 					break;
-				case 6: _section = SS_PIEDS;
+				case 6: _section = SS_FOOTERS;
 					_hinfo   = SI_EVEN;
 					break;
-				case 7: _section = SS_ENTETE;
+				case 7: _section = SS_FOOTNOTES;
 					break;
 				default:
+					_section = SS_NONE;
 					kdDebug() << "error : frameinfo unknown!" << endl;
 			}
 		}

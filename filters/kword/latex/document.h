@@ -1,4 +1,3 @@
-
 /*
 ** Header file for inclusion with kword_xml2latex.c
 **
@@ -23,43 +22,65 @@
 #ifndef __KWORD_DOCUMENT_H__
 #define __KWORD_DOCUMENT_H__
 
-#include "header.h"
-#include "listelement.h"
 #include <qtextstream.h>
 
-enum _EGenerate
+#include "fileheader.h"		/* class header file.      */
+#include "listelement.h"	/* list of children frame. */
+
+enum EGenerate
 {
 	E_LATEX,
 	E_KWORD,
 	E_CONFIG
 };
 
-typedef enum _EGenerate EGenerate;
+/***********************************************************************/
+/* Class: Document                                                     */
+/***********************************************************************/
 
+/**
+ * This class hold a whole document with its headers, footers, footnotes, endnotes,
+ * content, ... It can generate a latex file.
+ */
 class Document: public XmlParser
 {
-	Header*     _header;
-	ListElement _enTete;
+	ListElement _header;
 	ListElement _footer;
 	ListElement _corps;
 	EGenerate   _generation;
 
 	public:
+		/**
+		 * Constructor
+		 *
+		 * Creates a new instance of Document.
+		 */
 		Document();
 
+		/**
+		 * Destructor
+		 *
+		 * Remove the list of headers, footers and the body.
+		 */
 		virtual ~Document();
 
+		/**
+		 * Accessors
+		 */
+		/**
+		 * @return the next frame type (header, footer, body, footnote).
+		 */
 		SType getTypeFrameset(const Markup *);
-		Header* getHeader() const { return _header; }
+		//FileHeader* getFileHeader() const { return _fileHeader; }
+		//void setFileHeader(FileHeader *h) { _fileHeader = h; }
 
-		void setHeader(Header *h) { _header = h; }
-
-		void  generate(QTextStream&);
 		void  analyse(const Markup *);
 
+		void  generate(QTextStream&);
+
 	private:
-		void generateTypeHeader(QTextStream&, Element*);
-		void generateTypeFooter(QTextStream&, Element*);
+		void  generateTypeHeader(QTextStream&, Element*);
+		void  generateTypeFooter(QTextStream&, Element*);
 };
 
 #endif /* __KWORD_DOCUMENT_H__ */

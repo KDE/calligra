@@ -27,17 +27,18 @@
 #include <qregexp.h>		/* for QRegExp() --> escapeLatin1 */
 
 #include "textzone.h"
-#include "listepara.h"
+#include "para.h"
 
 #define CSTART 0xC0
 
-TextZone::TextZone(Para *para): _para(para)
+TextZone::TextZone(Para *para)
 {
-
+	setPara(para);
 }
 
-TextZone::TextZone(QString texte, Para *para): _texte(texte), _para(para)
+TextZone::TextZone(QString texte, Para *para): _texte(texte)
 {
+	setPara(para);
 }
 
 TextZone::~TextZone()
@@ -51,7 +52,7 @@ bool TextZone::useFormat() const
 	 *   - the user wants that
 	 *   - it's not a title
 	 */
-	return !_para->isChapter();
+	return !getPara()->isChapter();
 }
 
 /* Convert special caracters (unicode) in latex usable caracters */
@@ -150,8 +151,9 @@ void TextZone::convert(QString& texte, char unicode, const char* escape)
 void TextZone::analyse(const Markup * balise_initiale)
 {
 	kdDebug() << "FORMAT" << endl;
+	// Get header information (size, position)
 	// Get infos. to format the text
-	analyseFormat(balise_initiale);
+	analyseTextFormat(balise_initiale);
 	
 	// Format the text
 	_texte = _texte.mid(getPos(), getLength());

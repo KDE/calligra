@@ -24,18 +24,24 @@
 #include "document.h"
 #include "texte.h"
 
-/* CONSTRUCTORS */
+/*******************************************/
+/* Constructor                             */
+/*******************************************/
 Document::Document()
 {
 }
 
-/* DESTRUCTORS */
+/*******************************************/
+/* Destructor                              */
+/*******************************************/
 Document::~Document()
 {
 	kdDebug() << "Corps Destructor" << endl;
 }
 
-
+/*******************************************/
+/* Analyse                                 */
+/*******************************************/
 void Document::analyse(const Markup * balise_initiale)
 {
 	Markup *balise = 0;
@@ -74,14 +80,16 @@ void Document::analyse(const Markup * balise_initiale)
 			kdDebug() << "INFO : " << elt->getSection();
 			switch(elt->getSection())
 			{
-				case SS_PIEDS: kdDebug() << "FOOTER" <<endl;
+				case SS_FOOTERS: kdDebug() << " FOOTER" <<endl;
 					       _footer.add(elt);
 					       break;
-				case SS_ENTETE: kdDebug() << " HEADER" << endl;
-						_enTete.add(elt);
+				case SS_HEADERS: kdDebug() << " HEADER" << endl;
+						_header.add(elt);
 					break;
-				case SS_CORPS: 	_corps.add(elt);
+				case SS_BODY: 	_corps.add(elt);
 						kdDebug() << " BODY" << endl;
+					break;
+				case SS_FOOTNOTES: /* Just for the new kwd file version */
 					break;
 				default: kdDebug() << "UNKNOWN" << endl;
 					break;
@@ -89,17 +97,11 @@ void Document::analyse(const Markup * balise_initiale)
 		}
 		kdDebug() << "END OF ANALYSE OF A FRAMESET" << endl;
 	}
-	/* TEST IF AT LEAST ONE ELEMENT USE COLOR OR UNDERLINED
-	 * _header->useColor() and _header->useUnderline()
-	 */
-	// utilisation of _header in Format class
-	//kdDebug() << "Test color and underline" << endl;
-	/*if(_corps.getFirst()->hasColor())
-		_header->useColor();
-	if(_corps.getFirst()->hasUline())
-		_header->useUnderline();*/
 }
 
+/*******************************************/
+/* getTypeFrameset                         */
+/*******************************************/
 SType Document::getTypeFrameset(const Markup *balise)
 {
 	Arg*  arg  = 0;
@@ -119,6 +121,9 @@ SType Document::getTypeFrameset(const Markup *balise)
 	return type;
 }
 
+/*******************************************/
+/* Generate                                */
+/*******************************************/
 void Document::generate(QTextStream &out)
 {
 	ElementIter iter1;
@@ -128,10 +133,10 @@ void Document::generate(QTextStream &out)
 	kdDebug() << "DOC. GENERATION." << endl;
 	
 	/* For each header */
-	if(getHeader()->hasHeader())
+	if(getFileHeader()->hasHeader())
 	{
-		kdDebug() << "header : " << _enTete.getSize() << endl;
-		iter1.setList(&_enTete);
+		kdDebug() << "header : " << _header.getSize() << endl;
+		iter1.setList(&_header);
 
 		while(!iter1.isTerminate())
 		{
@@ -141,9 +146,9 @@ void Document::generate(QTextStream &out)
 	}
 	
 	/* For each footer */
-	if(getHeader()->hasFooter())
+	if(getFileHeader()->hasFooter())
 	{
-		kdDebug() << "footer : " << _enTete.getSize() << endl;
+		kdDebug() << "footer : " << _header.getSize() << endl;
 		iter2.setList(&_footer);
 
 		while(!iter2.isTerminate())
@@ -152,20 +157,25 @@ void Document::generate(QTextStream &out)
 			iter2.next();
 		}
 	}
-	if(getHeader()->hasHeader() || getHeader()->hasFooter())
+	if(getFileHeader()->hasHeader() || getFileHeader()->hasFooter())
 		out << "\\pagestyle{fancy}" << endl;
 
 	/* Body */
 	kdDebug() << endl << "body : " << _corps.getSize() << endl;
 
 	out << "\\begin{document}" << endl;
-	_corps.getFirst()->generate(out);
+	if(_corps.getFirst() != 0)
+		_corps.getFirst()->generate(out);
 	out << "\\end{document}" << endl;
 }
 
+/*******************************************/
+/* GenerateTypeHeader                      */
+/*******************************************/
 void Document::generateTypeHeader(QTextStream &out, Element *header)
 {
-	if(_header->getHeadType() == TH_ALL && header->getInfo() == SI_EVEN)
+	kdDebug() << "generate header" << endl;
+	if(_fileHeader->getHeadType() == TH_ALL && header->getInfo() == SI_EVEN)
 	{
 		out << "\\lhead{}" << endl;
 		out << "\\chead{";
@@ -173,7 +183,7 @@ void Document::generateTypeHeader(QTextStream &out, Element *header)
 		out << "}" << endl;
 		out << "\\rhead{}" << endl;
 	}
-	else if(_header->getHeadType() == TH_EVODD)
+	if(_fileHeader->getHeadType() == TH_EVODD)
 	{
 		switch(header->getInfo())
 		{
@@ -181,29 +191,37 @@ void Document::generateTypeHeader(QTextStream &out, Element *header)
 			case SI_FIRST:
 				break;
 			case SI_ODD:
+				out << "\\fancyhead[RO]{}" << endl;
 				out << "\\fancyhead[CO]{";
 				header->generate(out);
 				out << "}" << endl;
+				out << "\\fancyhead[LO]{}" << endl;
 				break;
 			case SI_EVEN:
+				out << "\\fancyhead[RE]{}" << endl;
 				out << "\\fancyhead[CE]{";
 				header->generate(out);
 				out << "}" << endl;
+				out << "\\fancyhead[LE]{}" << endl;
 				break;
 		}
 	}
-	else if(_header->getHeadType() == TH_FIRST && header->getInfo() == SI_FIRST)
+	//if(_fileHeader->getHeadType() == TH_FIRST && header->getInfo() == SI_FIRST)
+	if(header->getInfo() == SI_FIRST)
 	{
 		out << "\\markright{";
 		header->generate(out);
 		out << "}" << endl;
-		out << "\\thispagestyle{heading}" << endl;
+		out << "\\thispagestyle{fancy}" << endl;
 	}
 }
 
+/*******************************************/
+/* GenerateTypeFooter                      */
+/*******************************************/
 void Document::generateTypeFooter(QTextStream &out, Element *footer)
 {
-	if(_header->getFootType() == TH_ALL && footer->getInfo() == SI_EVEN)
+	if(_fileHeader->getFootType() == TH_ALL && footer->getInfo() == SI_EVEN)
 	{
 		out << "\\lfoot{}" << endl;
 		out << "\\cfoot{";
@@ -211,7 +229,7 @@ void Document::generateTypeFooter(QTextStream &out, Element *footer)
 		out << "}" << endl;
 		out << "\\rfoot{}" << endl;
 	}
-	else if(_header->getFootType() == TH_EVODD)
+	else if(_fileHeader->getFootType() == TH_EVODD)
 	{
 		switch(footer->getInfo())
 		{
@@ -230,7 +248,7 @@ void Document::generateTypeFooter(QTextStream &out, Element *footer)
 				break;
 		}
 	}
-	else if(_header->getFootType() == TH_FIRST && footer->getInfo() == SI_FIRST)
+	else if(_fileHeader->getFootType() == TH_FIRST && footer->getInfo() == SI_FIRST)
 	{
 		//out << "\\markright{}" << endl;
 		//out << "\\thispagestyle{heading}" << endl;

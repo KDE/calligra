@@ -30,9 +30,10 @@ Texte::Texte()
 	_top       = 0;
 	_bottom    = 0;
 	_runaround = false;
+	_footnotes = 0;
 
 	setType(ST_TEXTE);
-	setSection(SS_CORPS);
+	setSection(SS_BODY);
 }
 
 /* Return TRUE if there is at least one parag. which use color */
@@ -42,7 +43,7 @@ bool Texte::hasColor()
 	ParaIter iter;
 
 	color = false;
-	iter.setList(_liste);
+	iter.setList(_parags);
 	kdDebug() << "TEST COLOR USE" << endl;
 	while(!iter.isTerminate() && !color)
 	{
@@ -60,7 +61,7 @@ bool Texte::hasUline()
 	ParaIter iter;
 
 	uline = false;
-	iter.setList(_liste);
+	iter.setList(_parags);
 	kdDebug() << "TEST ULINE USE" << endl;
 	while(!iter.isTerminate() && !uline)
 	{
@@ -68,6 +69,25 @@ bool Texte::hasUline()
 		iter.next();
 	}
 	return uline;
+}
+
+Para* Texte::searchFootnote(const QString name)
+{
+	ParaIter iter;
+
+	if(_footnotes != 0)
+	{
+		iter.setList(*_footnotes);
+		while(!iter.isTerminate())
+		{
+			QString* string = iter.getCourant()->getName();
+			kdDebug() << *string << endl;
+			if(*string == name)
+				return iter.getCourant();
+			iter.next();
+		}
+	}
+	return 0;
 }
 
 void Texte::analyse(const Markup * balise_initiale)
@@ -96,8 +116,18 @@ void Texte::analyse(const Markup * balise_initiale)
 			Para *prg = new Para(this);
 			// 2. Add the informations :
 			prg->analyse(balise);
-			// 3. add this parag. in the list
-			_liste.add(prg);
+			if(prg->getInfo() == EP_FOOTNOTE)
+			{
+				// 3. add this parag. in the footnote list
+				if(_footnotes == 0)
+					_footnotes = new ListPara;
+				_footnotes->add(prg);
+			}
+			else
+			{
+				// 3. add this parag. in the text list
+				_parags.add(prg);
+			}
 			kdDebug() << "PARA ADDED" << endl;
 		}
 		
@@ -136,8 +166,8 @@ void Texte::generate(QTextStream &out)
 {
 	ParaIter iter;
 	kdDebug() << "TEXT GENERATION" << endl;
-	kdDebug() << "NB PARA " << _liste.getSize() << endl;
-	iter.setList(_liste);
+	kdDebug() << "NB PARA " << _parags.getSize() << endl;
+	iter.setList(_parags);
 	while(!iter.isTerminate())
 	{
 		//iter.getCourant()->setFrameType(getSection());
