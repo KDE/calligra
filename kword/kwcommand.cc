@@ -131,7 +131,7 @@ KoTextCursor * KWPasteTextCommand::execute( KoTextCursor *c )
             parag->setFormat( 0, len, parag->paragFormat(), TRUE );
             parag->loadFormatting( paragElem, 0, (textFs->isMainFrameset()) );
         }
-        parag->format();
+        parag->invalidate(0); // the formatting will be done by caller (either KWTextFrameSet::pasteKWord or KoTextObject::undo/redo)
         parag->setChanged( TRUE );
         parag = static_cast<KWTextParag *>(parag->next());
         //kdDebug() << "KWPasteTextCommand::execute going to next parag: " << parag << endl;
