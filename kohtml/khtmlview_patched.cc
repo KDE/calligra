@@ -9,50 +9,8 @@
 
 KHTMLView_Patched::KHTMLView_Patched(QWidget *parent = 0L, const char *name = 0L, int flags = 0,
                     KHTMLView_Patched *parent_view = 0L)
-:KHTMLView(parent, name, flags, parent_view)
+:KHTMLView(parent, name, flags, parent_view, (new KHTMLWidget_Patched(0L, "" )) )
 {
-  cout << "KHTMLView_Patched::KHTMLView_Patched " << endl;
-
-  delete view;    
-    
-  view = new KHTMLWidget_Patched( this, "" );
-  CHECK_PTR( view );
-  view->setView( this );
-  setFocusProxy( view );
-    
-  connect( view, SIGNAL( scrollVert( int ) ), SLOT( slotInternScrollVert( int ) ) );
-  connect( view, SIGNAL( scrollHorz( int ) ), SLOT( slotInternScrollHorz( int ) ) );
-
-  connect( vert, SIGNAL(valueChanged(int)), view, SLOT(slotScrollVert(int)) );
-  connect( horz, SIGNAL(valueChanged(int)), view, SLOT(slotScrollHorz(int)) );
-
-  connect( view, SIGNAL( documentChanged() ), SLOT( slotDocumentChanged() ) );
-  connect( view, SIGNAL( setTitle( const char* ) ),
-           this, SLOT( slotSetTitle( const char * ) ) );
-  connect( view, SIGNAL( URLSelected( const char*, int, const char* ) ),
-           this, SLOT( slotURLSelected( const char *, int, const char* ) ) );    
-  connect( view, SIGNAL( onURL( const char* ) ),
-           this, SLOT( slotOnURL( const char * ) ) );
-  connect( view, SIGNAL( textSelected( bool ) ),
-           this, SLOT( slotTextSelected( bool ) ) );
-  connect( view, SIGNAL( popupMenu( const char*, const QPoint & ) ),
-           this, SLOT( slotPopupMenu( const char *, const QPoint & ) ) );
-  connect( view, SIGNAL( fileRequest( const char* ) ),
-           this, SLOT( slotImageRequest( const char * ) ) );
-  connect( view, SIGNAL( cancelFileRequest( const char* ) ),
-           this, SLOT( slotCancelImageRequest( const char * ) ) );
-  connect( view, SIGNAL( formSubmitted( const char *, const char*, const char* , const char *) ),
-           this, SLOT( slotFormSubmitted( const char *, const char*, const char*, const char * ) ) );
-  connect( view, SIGNAL( documentStarted() ),
-           this, SLOT( slotDocumentStarted() ) );
-  connect( view, SIGNAL( documentDone() ),
-           this, SLOT( slotDocumentDone() ) );
-  connect( view, SIGNAL( goUp() ), this, SLOT( slotGoUp() ) );
-  connect( view, SIGNAL( goLeft() ), this, SLOT( slotGoLeft() ) );
-  connect( view, SIGNAL( goRight() ), this, SLOT( slotGoRight() ) );
-
-  view->setURLCursor( upArrowCursor );
-  view->raise();
 }
 
 KHTMLView_Patched::~KHTMLView_Patched()

@@ -33,14 +33,6 @@
 #include "khtmlwidget_patched.h"
 #include "kfileio.h"
 
-// HACK until KFM III arrives in CVS
-#include <kfm.h>
-void openFileManagerWindow(const char *url)
-{
-  KFM kfm;
-  kfm.openURL(url);
-}
-
 KoHTMLChild::KoHTMLChild(KoHTMLDoc *doc, const KRect &rect, KOffice::Document_ptr koDoc)
 :KoDocumentChild(rect, koDoc)
 {
