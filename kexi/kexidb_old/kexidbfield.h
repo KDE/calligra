@@ -58,7 +58,7 @@ class KexiDBField
 {
 
 	public:
-		KexiDBField(QString table, QString filed, int field);
+		KexiDBField(QString table, unsigned int field);
 		~KexiDBField();
 
 		virtual QString		name() const;

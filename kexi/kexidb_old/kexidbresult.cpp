@@ -18,12 +18,26 @@ Boston, MA 02111-1307, USA.
 */
 
 #include "kexidbresult.h"
+#include "kexidbfield.h"
 
 #include <qvariant.h>
 
 KexiDBResult::KexiDBResult(QObject *parent) : QObject(parent, 0)
 {
 }
+
+KexiDBField*
+KexiDBResult::fieldInfo(unsigned int)
+{
+	return new KexiDBField(QString::null, 0);
+}
+
+KexiDBField*
+KexiDBResult::fiedlInfo(QString)
+{
+	return new KexiDBField(QString::null, 0);
+}
+
 
 QVariant
 KexiDBResult::value(unsigned int)

@@ -23,11 +23,16 @@ Boston, MA 02111-1307, USA.
 
 #include <qobject.h>
 
+class KexiDBField;
+
 class KexiDBResult : public QObject
 {
 	Q_OBJECT
 	
 	public:
+		/*! you mostly won't construct a field by your self
+		 *  even drivers use their own (mostly)
+		 */
 		KexiDBResult(QObject *parent);
 		~KexiDBResult();
 
@@ -35,6 +40,15 @@ class KexiDBResult : public QObject
 		virtual QVariant	value(unsigned int field);
 		/*! returns the value of "field" */
 		virtual QVariant	value(QString);
+
+		/*! returns usefull information about a field/column
+		 * @ref KexiDBField. arg: column
+		 */
+		virtual KexiDBField	*fieldInfo(unsigned int field);
+		/*! returns usefull information about a field/column
+		 *  @ref KexiDBField. agr: columnName
+		 */
+		virtual KexiDBField	*fiedlInfo(QString field);
 
 		/*! returns true as long as the table is not at the end
 		 *  use it in a while @code while(result->next())

@@ -20,7 +20,7 @@
 
 #include "kexidbfield.h"
 
-KexiDBField::KexiDBField(QString table, QString filed, int field)
+KexiDBField::KexiDBField(QString table, unsigned int field)
 {
 }
 
