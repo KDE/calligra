@@ -1441,6 +1441,7 @@ void KWordDocument::loadFrameSets( KOMLParser& parser, vector<KOMLAttrib>& lst )
             parser.parseTag( tag.c_str(), name, lst );
             vector<KOMLAttrib>::const_iterator it = lst.begin();
             for( ; it != lst.end(); it++ ) {
+                // else if constructs please...
                 if ( ( *it ).m_strName == "frameType" )
                     frameType = static_cast<FrameType>( atoi( ( *it ).m_strValue.c_str() ) );
                 if ( ( *it ).m_strName == "frameInfo" )
@@ -1452,6 +1453,8 @@ void KWordDocument::loadFrameSets( KOMLParser& parser, vector<KOMLAttrib>& lst )
                 if ( ( *it ).m_strName == "col" )
                     _col = atoi( ( *it ).m_strValue.c_str() );
                 if ( ( *it ).m_strName == "removeable" )
+                    removeable = static_cast<bool>( atoi( ( *it ).m_strValue.c_str() ) );
+                if ( ( *it ).m_strName == "removable" )
                     removeable = static_cast<bool>( atoi( ( *it ).m_strValue.c_str() ) );
                 if ( ( *it ).m_strName == "rows" )
                     _rows = atoi( ( *it ).m_strValue.c_str() );
@@ -1602,11 +1605,8 @@ bool KWordDocument::saveToStream( QIODevice * dev )
     syntaxVersion = CURRENT_SYNTAX_VERSION;
     out << "<?xml version=\"1.0\" encoding=\"UTF-8\"?>" << endl;
     //out << "<!DOCTYPE DOC SYSTEM \"" << kapp->kde_datadir() << "/kword/dtd/kword.dtd\"/>" << endl;
-    out << otag << "<DOC author=\"" << "Reginald Stadlbauer and Torben Weis" << "\" email=\""
-        << "reggie@kde.org and weis@kde.org"
-        << "\" editor=\"" << "KWord" << "\" mime=\"" << "application/x-kword"
-        << "\" syntaxVersion=\"" << syntaxVersion << "\">"
-        << endl;
+    out << otag << "<DOC editor=\"" << "KWord" << "\" mime=\"" << "application/x-kword"
+        << "\" syntaxVersion=\"" << syntaxVersion << "\">" << endl;
     out << otag << "<PAPER format=\"" << static_cast<int>( pageLayout.format ) << "\" ptWidth=\"" << pageLayout.ptWidth
         << "\" ptHeight=\"" << pageLayout.ptHeight
         << "\" mmWidth =\"" << pageLayout.mmWidth << "\" mmHeight=\"" << pageLayout.mmHeight
@@ -3259,7 +3259,7 @@ void KWordDocument::paste( KWFormatContext *_fc, QString _string, KWPage *_page,
 }
 
 /*================================================================*/
-void KWordDocument::appendPage( unsigned int /*_page*/, bool /*redrawBackgroundWhenAppendPage*/ )
+void KWordDocument::appendPage( unsigned int /*_page*/, bool redrawBackgroundWhenAppendPage )
 {
     //QRect pageRect( 0, _page * getPTPaperHeight(), getPTPaperWidth(), getPTPaperHeight() );
     kdDebug() <<"KWordDocument::appendPage" << endl;
@@ -3285,29 +3285,32 @@ void KWordDocument::appendPage( unsigned int /*_page*/, bool /*redrawBackgroundW
               (frame->getPageNum() == thisPageNum -1 && frame->getSheetSide() != AnySide) &&
               frame->getNewFrameBehaviour()==Reconnect  ||
               frame->getNewFrameBehaviour()==Copy ) {
-                // make a new frame.
-                KWFrame *frm = new KWFrame(frameSet, frame->x(), frame->y() + getPTPaperHeight(), frame->width(), frame->height(), frame->getRunAround(),
-                frame->getRunAroundGap() );
-                frm->setLeftBorder( frame->getLeftBorder2() );
-                frm->setRightBorder( frame->getRightBorder2() );
-                frm->setTopBorder( frame->getTopBorder2() );
-                frm->setBottomBorder( frame->getBottomBorder2() );
-                frm->setBLeft( frame->getBLeft() );
-                frm->setBRight( frame->getBRight() );
-                frm->setBTop( frame->getBTop() );
-                frm->setBBottom( frame->getBBottom() );
-                frm->setBackgroundColor( QBrush( frame->getBackgroundColor() ) );
-                frm->setPageNum( pages+1);
-                frm->setNewFrameBehaviour(frame->getNewFrameBehaviour());
-                frm->setFrameBehaviour(frame->getFrameBehaviour());
-                frm->setSheetSide(frame->getSheetSide());
-                frameSet->addFrame( frm );
+
+                switch(frameSet->getFrameType()) {
+                    case FT_TEXT:  {
+
+                        // make a new frame.
+                        KWFrame *frm = new KWFrame(frame->getFrameSet(), frame->x(), frame->y() + getPTPaperHeight(), frame->width(), frame->height(), frame->getRunAround(), frame->getRunAroundGap() );
+                        frm->setBackgroundColor( QBrush( frame->getBackgroundColor() ) );
+                        frm->setPageNum( frame->getPageNum()+1 );
+                        frm->setNewFrameBehaviour(frame->getNewFrameBehaviour());
+                        frm->setFrameBehaviour(frame->getFrameBehaviour());
+                        frm->setSheetSide(frame->getSheetSide());
+                        frame->getFrameSet()->addFrame( frm );
+                        } break;
+                    case FT_PICTURE:  { // can not be copied at the moment.
+                        } break;
+                    case FT_PART: {  // can never be copied ?
+                        } break;
+                    case FT_FORMULA: {  // can never be copied ?
+                        } break;
+                }
             }
         }
     }
 
-//     if ( redrawBackgroundWhenAppendPage )
-//      drawAllBorders();
+     if ( redrawBackgroundWhenAppendPage )
+      drawAllBorders();
     updateAllFrames();
     updateAllViewportSizes();
 

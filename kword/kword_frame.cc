@@ -436,16 +436,8 @@ FrameType KWFrame::getFrameType()
 /*================================================================*/
 KWFrame *KWFrame::getCopy() {
     /* returns a deep copy of self */
-    KWFrame *frm = new KWFrame(0L, x(), y(),width(), height(), getRunAround(), getRunAroundGap() );
-    //frm->setLeftBorder( getLeftBorder() );
-    //frm->setRightBorder( getRightBorder() );
-    //frm->setTopBorder( getTopBorder() );
-    //frm->setBottomBorder( getBottomBorder() );
-    //frm->setBLeft( getBLeft() );
-    //frm->setBRight( getBRight() );
-    //frm->setBTop( getBTop() );
-    //frm->setBBottom( getBBottom() );
-    //frm->setBackgroundColor(getBackgroundColor());
+    KWFrame *frm = new KWFrame(getFrameSet(), x(), y(),width(), height(), getRunAround(), getRunAroundGap() );
+    frm->setBackgroundColor( QBrush( getBackgroundColor() ) );
     frm->setFrameBehaviour(getFrameBehaviour());
     frm->setNewFrameBehaviour(getNewFrameBehaviour());
     frm->setSheetSide(getSheetSide());
@@ -957,7 +949,7 @@ void KWTextFrameSet::save( QTextStream&out )
 
     out << otag << "<FRAMESET frameType=\"" << static_cast<int>( getFrameType() )
         << "\" frameInfo=\""
-        << static_cast<int>( frameInfo ) << correctQString( grp ).latin1() << "\" removeable=\""
+        << static_cast<int>( frameInfo ) << correctQString( grp ).latin1() << "\" removable=\""
         << static_cast<int>( removeableHeader )
         << "\" visible=\"" << static_cast<int>( visible ) << "\" name=\"" << correctQString( name ).latin1()
         << "\">" << endl;
@@ -2461,6 +2453,16 @@ void KWGroupManager::recalcRows()
         unsigned int i = 0;
         bool _addRow = false;
 
+/*  TODO Check if all cells fit on page.
+    
+    At the end of a row rerun row and check if all fit on the page. If they don't fit
+    put them on the next page by 
+    1) inserting a header and 
+    2) moving all frames on the row to top of the standard-WP-frame pos.
+
+    ps this will work for joined cells as well ;-)
+  */
+    
         //if ( doc->getProcessingType() == KWordDocument::DTP ) {
             // will this row fit on the page?
             if ( j > 0 && y + getFrameSet( j, i )->getFrame( 0 )->height() >

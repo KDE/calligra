@@ -4,9 +4,9 @@ TODO-List:
 
 Bugs; in order or importance:
 
+- Opening frame properties for headers and footers should not be possible.
 - Frame Run around is the wrong way around.. Framedia does it correct now. 
   still needs to be done correctly in kword_doc
-- Deleting the first frameset crashes kword (can only be done in DTP)
 - Page Preview image forgets about orientation when changing page size. (always shows  portrait)
 - deleting pictures-frames should also delete the picture (from the tar) (imageCollection)
   (we have a problem with reference counts in the creation of a new image)
@@ -29,6 +29,14 @@ Missing or incomplete stuff:
 - Sideheads
 - split frame
 - Toolbars in the settings menu are not updated if they are not shown/reshown
+
+
+cleanup:
+--------
+isAHeader is a global function; move to frameset class.
+isAFooter is a global function; move to frameset class.
+what does int frameset in the fc.cc do??
+
 
 Optimations:
 ----------------------------------------

@@ -180,7 +180,7 @@
         col:                    Just guess :)
         rows:                   Size of this cell in rows (only for "table-frames").
         cols:                   Just guess :)
-        removeable:             Whether the header-frame is removable or not (notice the typo!).
+        removable:              Whether the header-frame is removable or not.
                                     0...no
                                     1...yes
 
