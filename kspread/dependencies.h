@@ -17,8 +17,8 @@
    Boston, MA 02111-1307, USA.
 */
 
-#ifndef _dependencies_h
-#define _dependencies_h
+#ifndef KSPREAD_DEPENDENCIES
+#define KSPREAD_DEPENDENCIES
 
 #include <qvaluelist.h>
 
@@ -143,5 +143,5 @@ class DependencyManager {
 //end of namespace
 };
 
-#endif //_dependencies_h
+#endif // KSPREAD_DEPENDENCIES
 
