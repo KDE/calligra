@@ -326,6 +326,7 @@ bool KivioDoc::saveOasis(KoStore* store, KoXmlWriter* manifestWriter)
 
 bool KivioDoc::loadOasis( const QDomDocument& doc, KoOasisStyles& oasisStyles, KoStore* )
 {
+  kdDebug(43000) << "Start loading OASIS document..." << endl;
   m_bLoading = true;
   
   QDomElement contents = doc.documentElement();
@@ -333,18 +334,39 @@ bool KivioDoc::loadOasis( const QDomDocument& doc, KoOasisStyles& oasisStyles, K
   
   if(body.isNull()) {
     kdDebug(43000) << "No office:body found!" << endl;
+    setErrorMessage(i18n("Invalid OASIS document. No office:body tag found."));
     m_bLoading = false;
     return false;
   }
   
-  body = body.namedItem("office:draw").toElement();
+  body = body.namedItem("office:drawing").toElement();
 
   if(body.isNull()) {
-    kdDebug(43000) << "No office:draw found!" << endl;
+    kdDebug(43000) << "No office:drawing found!" << endl;
+    setErrorMessage(i18n("Invalid OASIS document. No office:drawing tag found."));
     m_bLoading = false;
     return false;
   }
+
+  QDomNode node = body.firstChild();
+  QString nodeName;
+  
+  while(!node.isNull()) {
+    nodeName = node.nodeName();
     
+    if(nodeName == "draw:page") {
+      KivioPage* p = createPage();
+      addPage(p);
+      
+      if(!p->loadOasis(node.toElement(), oasisStyles)) {
+        m_bLoading = false;
+        return false;
+      }
+    }
+    
+    node = node.nextSibling();
+  }
+  
   return true;
 }
 

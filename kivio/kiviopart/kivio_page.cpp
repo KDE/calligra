@@ -50,6 +50,7 @@
 #include <kapplication.h>
 #include <koxmlwriter.h>
 #include <koStore.h>
+#include <koOasisStyles.h>
 
 #include "kivio_page.h"
 #include "kivio_map.h"
@@ -306,6 +307,47 @@ bool KivioPage::loadXML( const QDomElement& pageE )
        pLayer = m_lstLayers.next();
     }
 
+  return true;
+}
+
+bool KivioPage::loadOasis(const QDomElement& page, KoOasisStyles& oasisStyles)
+{
+  m_strName = page.attribute("draw:name");
+  QDomElement* masterPage = oasisStyles.masterPages()[page.attribute("draw:master-page-name")];
+  
+  if(!masterPage) {
+    return false;
+  }
+  
+  QDomElement *masterPageStyle = oasisStyles.styles()[masterPage->attribute( "style:page-layout-name" )];
+  
+  if(!masterPageStyle) {
+    return false;
+  }
+
+  QDomElement properties(masterPageStyle->namedItem( "style:page-layout-properties" ).toElement());
+  double width = KoUnit::parseValue(properties.attribute("fo:page-width"));
+  double height = KoUnit::parseValue(properties.attribute("fo:page-height"));
+  
+  if(width <= 1e-13 || height <= 1e-13) {
+    return false;
+  }
+  
+  m_pPageLayout.orientation = ((properties.attribute("style:print-orientation") == "landscape") ? PG_LANDSCAPE : PG_PORTRAIT);
+  m_pPageLayout.ptWidth = width;
+  m_pPageLayout.ptHeight = height;
+  m_pPageLayout.ptLeft = KoUnit::parseValue(properties.attribute("fo:margin-left"));
+  m_pPageLayout.ptTop = KoUnit::parseValue(properties.attribute("fo:margin-top"));
+  m_pPageLayout.ptRight = KoUnit::parseValue(properties.attribute("fo:margin-right"));
+  m_pPageLayout.ptBottom = KoUnit::parseValue(properties.attribute("fo:margin-bottom"));
+  
+  // guessFormat takes millimeters
+  if (m_pPageLayout.orientation == PG_LANDSCAPE) {
+    m_pPageLayout.format = KoPageFormat::guessFormat(POINT_TO_MM(height), POINT_TO_MM(width));
+  } else {
+    m_pPageLayout.format = KoPageFormat::guessFormat(POINT_TO_MM(width), POINT_TO_MM(height));
+  }
+  
   return true;
 }
 

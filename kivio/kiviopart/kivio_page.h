@@ -90,6 +90,7 @@ class KivioPage : public QObject
     virtual QDomElement save( QDomDocument& );
     virtual void saveOasis(KoStore* store, KoXmlWriter* docWriter);
     virtual bool loadXML( const QDomElement& );
+    bool loadOasis(const QDomElement& page, KoOasisStyles& oasisStyles);
     bool isLoading();
 
     void saveLayout(KoXmlWriter* styleWriter);
