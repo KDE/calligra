@@ -13,6 +13,9 @@
 
 #include <qstringlist.h>
 
+static const char* description=I18N_NOOP("KOffice Formula Editor");
+static const char* version="0.2";
+
 extern "C"
 {
     void* init_libkformulapart()
@@ -25,8 +28,8 @@ KInstance* KFormulaFactory::s_global = 0;
 
 KAboutData* KFormulaFactory::aboutData()
 {
-      KAboutData *aboutData= new KAboutData( "kformula","KFormula",
-        "0.2", "KDE formulaeditor", KAboutData::License_GPL,
+      KAboutData *aboutData= new KAboutData( "kformula","I18N_NOOP("KFormula")",
+        version, description, KAboutData::License_GPL,
         "(c) 1998-2000, Andrea Rizzi");
       aboutData->addAuthor("Andrea Rizzi",0, "rizzi@kde.org");
       return aboutData;
@@ -36,10 +39,9 @@ KAboutData* KFormulaFactory::aboutData()
 KFormulaFactory::KFormulaFactory( QObject* parent, const char* name )
     : KoFactory( parent, name )
 {
+    // Create our instance, so that it becomes KGlobal::instance if the
+    // main app is KFormula.
     (void)global();
-    /*s_global = new KInstance( "kformula" );
-    // Tell the iconloader about share/apps/koffice/icons
-    s_global->iconLoader()->addAppDir("koffice");*/
 }
 
 KFormulaFactory::~KFormulaFactory()
@@ -49,7 +51,6 @@ KFormulaFactory::~KFormulaFactory()
     delete s_global->aboutData();
     delete s_global;
   }
-   // delete s_global;
 }
 
 KParts::Part* KFormulaFactory::createPart( QWidget *parentWidget, const char *widgetName, QObject* parent, const char* name, const char* classname, const QStringList & )
