@@ -87,6 +87,7 @@ public:
         modifiedAfterAutosave( false ),
         m_autosaving( false ),
         m_shouldCheckAutoSaveFile( true ),
+        m_autoErrorHandlingEnabled( true ),
         m_backupFile( true ),
         m_backupPath( QString::null ),
         m_doNotSaveExtDoc( false ),
@@ -114,10 +115,11 @@ public:
     bool m_bSingleViewMode;
     bool m_autosaving;
     bool m_shouldCheckAutoSaveFile; // usually true
+    bool m_autoErrorHandlingEnabled; // usually true
     bool m_backupFile;
     QString m_backupPath;
     bool m_doNotSaveExtDoc; // makes it possible to save only internally stored child documents
-    bool m_current; 
+    bool m_current;
 };
 
 // Used in singleViewMode
@@ -353,6 +355,11 @@ int KoDocument::specialOutputFlag() const
 void KoDocument::setCheckAutoSaveFile( bool b )
 {
     d->m_shouldCheckAutoSaveFile = b;
+}
+
+void KoDocument::setAutoErrorHandlingEnabled( bool b )
+{
+    d->m_autoErrorHandlingEnabled = b;
 }
 
 void KoDocument::slotAutoSave()
@@ -601,7 +608,7 @@ void KoDocument::paintChild( KoDocumentChild *child, QPainter &painter, KoView *
 {
     if ( child->isDeleted() )
         return;
-        
+
     // QRegion rgn = painter.clipRegion();
 
     child->transform( painter );
@@ -687,7 +694,7 @@ bool KoDocument::saveChildren( KoStore* _store )
         KoDocument* childDoc = it.current()->document();
         if (childDoc && !it.current()->isDeleted())
         {
-            if ( !childDoc->isStoredExtern() ) 
+            if ( !childDoc->isStoredExtern() )
             {
                 //kdDebug(32001) << "KoDocument::saveChildren internal url:" << childDoc->url().url() << endl;
                 if ( !childDoc->saveToStore( _store, QString::number( i++ ) ) )
@@ -695,7 +702,7 @@ bool KoDocument::saveChildren( KoStore* _store )
                 childDoc->setModified( false );
             }
             //else kdDebug()<<k_funcinfo<<" external (don't save) url:" << childDoc->url().url()<<endl;
-        } 
+        }
     }
     return true;
 }
@@ -704,12 +711,12 @@ bool KoDocument::saveExternalChildren()
 {
     if ( d->m_doNotSaveExtDoc )
     {
-        //kdDebug()<<k_funcinfo<<" Don't save external docs in doc='"<<url().url()<<"'"<<endl;    
+        //kdDebug()<<k_funcinfo<<" Don't save external docs in doc='"<<url().url()<<"'"<<endl;
         d->m_doNotSaveExtDoc = false;
         return true;
     }
-        
-    //kdDebug()<<k_funcinfo<<" checking children of doc='"<<url().url()<<"'"<<endl;    
+
+    //kdDebug()<<k_funcinfo<<" checking children of doc='"<<url().url()<<"'"<<endl;
     KoDocument *doc;
     KoDocumentChild *ch;
     QPtrListIterator<KoDocumentChild> it = children();
@@ -722,11 +729,11 @@ bool KoDocument::saveExternalChildren()
             {
                 kdDebug()<<k_funcinfo<<" save external doc='"<<url().url()<<"'"<<endl;
                 doc->setDoNotSaveExtDoc(); // Only save doc + it's internal children
-                if ( !doc->save() ) 
+                if ( !doc->save() )
                     return false; // error
             }
             //kdDebug()<<k_funcinfo<<" not modified doc='"<<url().url()<<"'"<<endl;
-            // save possible external docs inside doc 
+            // save possible external docs inside doc
             if ( !doc->saveExternalChildren() )
                 return false;
         }
@@ -807,9 +814,9 @@ bool KoDocument::saveNativeFormat( const QString & _file )
     bool ret = completeSaving( store );
     kdDebug(30003) << "Saving done of url: " << url().url() << endl;
     delete store;
-    
+
     if ( !saveExternalChildren() )
-    {        
+    {
         return false;
     }
     return ret;
@@ -1041,8 +1048,9 @@ bool KoDocument::openFile()
     if ( ! QFile::exists(m_file) )
     {
         QApplication::restoreOverrideCursor();
-        // Maybe offer to create a new document with that name ?
-        KMessageBox::error(0L, i18n("The file %1 doesn't exist.").arg(m_file) );
+        if ( d->m_autoErrorHandlingEnabled )
+            // Maybe offer to create a new document with that name ?
+            KMessageBox::error(0L, i18n("The file %1 doesn't exist.").arg(m_file) );
         return false;
     }
 
@@ -1078,7 +1086,8 @@ bool KoDocument::openFile()
     if ( typeName == KMimeType::defaultMimeType() ) {
         kdError(30003) << "No mimetype found for " << m_file << endl;
         QApplication::restoreOverrideCursor();
-        KMessageBox::error( 0L, i18n( "Could not open\n%1" ).arg( url().prettyURL() ) );
+        if ( d->m_autoErrorHandlingEnabled )
+            KMessageBox::error( 0L, i18n( "Could not open\n%1" ).arg( url().prettyURL() ) );
         return false;
     }
 
@@ -1090,7 +1099,7 @@ bool KoDocument::openFile()
         if ( status != KoFilter::OK )
         {
             QApplication::restoreOverrideCursor();
-            if ( status != KoFilter::UserCancelled )
+            if ( status != KoFilter::UserCancelled && d->m_autoErrorHandlingEnabled )
                 // Any way of passing a better error message from the filter?
                 KMessageBox::error( 0L, i18n( "Could not open\n%1" ).arg( url().prettyURL() ) );
             return false;
@@ -1109,10 +1118,13 @@ bool KoDocument::openFile()
         if ( !loadNativeFormat( importedFile ) )
         {
             ok = false;
-            if ( d->lastErrorMessage.isEmpty() )
-                KMessageBox::error( 0L, i18n( "Could not open\n%1" ).arg( url().prettyURL() ) );
-            else if ( d->lastErrorMessage != "USER_CANCELED" )
-                KMessageBox::error( 0L, i18n( "Could not open %1\nReason: %2" ).arg( url().prettyURL() ).arg( d->lastErrorMessage ) );
+            if ( d->m_autoErrorHandlingEnabled )
+            {
+                if ( d->lastErrorMessage.isEmpty() )
+                    KMessageBox::error( 0L, i18n( "Could not open\n%1" ).arg( url().prettyURL() ) );
+                else if ( d->lastErrorMessage != "USER_CANCELED" )
+                    KMessageBox::error( 0L, i18n( "Could not open %1\nReason: %2" ).arg( url().prettyURL() ).arg( d->lastErrorMessage ) );
+            }
         }
     }
 
@@ -1378,11 +1390,11 @@ void KoDocument::setModified( bool mod )
 {
     //kdDebug()<<k_funcinfo<<" url:" << m_url.path() << endl;
     //kdDebug()<<k_funcinfo<<" mod="<<mod<<" MParts mod="<<KParts::ReadWritePart::isModified()<<" isModified="<<isModified()<<endl;
-    
+
     d->modifiedAfterAutosave=mod;
     if ( mod == KParts::ReadWritePart::isModified() )
         return;
-    
+
     KParts::ReadWritePart::setModified( mod );
 
     if ( mod )
@@ -1393,8 +1405,8 @@ void KoDocument::setModified( bool mod )
 }
 
 void KoDocument::setDoNotSaveExtDoc( bool on )
-{ 
-    d->m_doNotSaveExtDoc = on; 
+{
+    d->m_doNotSaveExtDoc = on;
 }
 
 int KoDocument::queryCloseDia()
@@ -1411,7 +1423,7 @@ int KoDocument::queryCloseDia()
 
     if ( name.isEmpty() )
         name = i18n( "Untitled" );
-    
+
     int res = KMessageBox::warningYesNoCancel( 0L,
                     i18n( "<p>The document <b>'%1'</b> has been modified.</p><p>Do you want to save it?</p>" ).arg(name));
 
@@ -1444,10 +1456,10 @@ int KoDocument::queryCloseExternalChildren()
             KoDocument *doc = it.current()->document();
             if ( doc )
             {
-                if ( it.current()->isStoredExtern() ) //###TODO: Handle non-native mimetype docs 
+                if ( it.current()->isStoredExtern() ) //###TODO: Handle non-native mimetype docs
                 {
                     if ( doc->isModified() )
-                    {   
+                    {
                         kdDebug()<<k_funcinfo<<" found modified child: "<<doc->url().url()<<endl;
                         if ( doc->queryCloseDia() == KMessageBox::Cancel )
                             return  KMessageBox::Cancel;
@@ -1492,7 +1504,7 @@ void KoDocument::setTitleModified()
         }
         if ( caption.isEmpty() )
             caption = url().prettyURL();             // Fall back to document URL
-            
+
         //kdDebug()<<k_funcinfo<<" url: "<<url().url()<<" caption: "<<caption<<endl;
         if ( doc )
         {
@@ -1688,12 +1700,12 @@ void KoDocument::setCurrent( bool on )
     {
         if ( !isStoredExtern() )
         {
-            // internal doc so set next external to current (for safety) 
+            // internal doc so set next external to current (for safety)
             doc->setCurrent( true );
             return;
         }
         // only externally stored docs shall have file name in title
-        d->m_current = on;    
+        d->m_current = on;
         if ( !on )
         {
             doc->setCurrent( true );    // let my next external parrent take over
@@ -1703,7 +1715,7 @@ void KoDocument::setCurrent( bool on )
     }
     else
         d->m_current = on;
-        
+
     setTitleModified();
 }
 

@@ -409,6 +409,13 @@ public:
     void setCheckAutoSaveFile( bool b );
 
     /**
+     * Set whether the next openURL call should show error message boxes in case
+     * of errors. This is usually the case, but e.g. not when generating thumbnail
+     * previews.
+     */
+    void setAutoErrorHandlingEnabled( bool b );
+
+    /**
      * Retrieve the default value for autosave in seconds.
      * Called by the applications to use the correct default in their config
      */
@@ -498,7 +505,7 @@ public:
      * Returns true if this document or any of its internal child documents are modified.
      */
     bool isModified();
-    
+
     int queryCloseExternalChildren();
     int queryCloseDia();
 
@@ -508,32 +515,32 @@ public:
      * go on to save external children. Typically used by query close.
      * Use:
      *      doc->setDoNotSaveExtDoc();
-     *      doc->save();    // saves doc and its internal children, 
+     *      doc->save();    // saves doc and its internal children,
      *                            //also calls saveExternalChildren() which sets setDoNotSaveExtDoc(false)
      *      doc->saveExternalChildren();
      *
      */
     void setDoNotSaveExtDoc( bool on = true );
-    
+
     void setBackupPath( const QString & );
 
     QString backupPath()const;
 
     /**
-     * Indicates that this document is currently viewed 
+     * Indicates that this document is currently viewed
      * and thus should control the title caption.
      * Also resets current flag for all parents.
      */
     void setCurrent( bool on = true );
-    
+
     /**
      * Sets current flag for this document and all its parents
      */
     void forceCurrent( bool on );
     bool isCurrent() const;
-    
+
     void setTitleModified( const QString caption, bool mod );
-        
+
 signals:
     /**
      * This signal is emitted, if a direct or indirect child document changes
@@ -649,12 +656,12 @@ protected:
     KoPageLayout m_pageLayout;
 
     /**
-     *  Saves all externally stored children. 
+     *  Saves all externally stored children.
      *  Returns true on success.
      * @see #saveChildren for internal children
      */
     bool saveExternalChildren(); // BCI: make this virtual
-            
+
 private slots:
     void slotChildChanged( KoChild *c );
     void slotChildDestroyed();
