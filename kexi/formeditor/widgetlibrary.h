@@ -36,12 +36,12 @@ class QDomElement;
 
 namespace KFormDesigner {
 
-class Widget;
+class WidgetInfo;
 class WidgetFactory;
 class Container;
 class ObjectTreeItem;
 
-typedef QDict<Widget> Widgets;
+typedef QDict<WidgetInfo> Widgets;
 typedef QPtrList<KAction> Actions;
 
 /**

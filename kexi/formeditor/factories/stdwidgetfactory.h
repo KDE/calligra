@@ -58,8 +58,7 @@ class StdWidgetFactory : public KFormDesigner::WidgetFactory
 		StdWidgetFactory(QObject *parent, const char *name, const QStringList &args);
 		~StdWidgetFactory();
 
-		virtual QString				name();
-		virtual KFormDesigner::WidgetList	classes();
+		virtual KFormDesigner::WidgetInfoList	classes();
 		virtual QWidget				*create(const QString &, QWidget *, const char *, KFormDesigner::Container *);
 
 		virtual bool				createMenuActions(const QString &classname, QWidget *w, QPopupMenu *menu,
@@ -84,7 +83,7 @@ class StdWidgetFactory : public KFormDesigner::WidgetFactory
 		void readListItem(QDomElement &node, QListViewItem *parent, KListView *listview);
 
 	private:
-		KFormDesigner::WidgetList		m_classes;
+		KFormDesigner::WidgetInfoList		m_classes;
 		KFormDesigner::Container		*m_container;
 		QWidget 				*m_widget;
 };

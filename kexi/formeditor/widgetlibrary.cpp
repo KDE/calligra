@@ -43,8 +43,8 @@ WidgetLibrary::addFactory(WidgetFactory *f)
 	if(!f)
 		return;
 
-	WidgetList widgets = f->classes();
-	for(Widget *w = widgets.first(); w; w = widgets.next())
+	WidgetInfoList widgets = f->classes();
+	for(WidgetInfo *w = widgets.first(); w; w = widgets.next())
 	{
 		kdDebug() << "WidgetLibrary::addFactory(): adding class " << w->className() << endl;
 		m_widgets.insert(w->className(), w);
@@ -100,7 +100,7 @@ WidgetLibrary::createXML()
 	QDomElement menu = doc.createElement("Menu");
 	menu.setAttribute("name", "widgets");
 
-	QDictIterator<Widget> it(m_widgets);
+	QDictIterator<WidgetInfo> it(m_widgets);
 	int i = 0;
 	for(; it.current(); ++it)
 	{
@@ -119,7 +119,7 @@ Actions
 WidgetLibrary::createActions(KActionCollection *parent,  QObject *receiver, const char *slot)
 {
 	Actions actions;
-	QDictIterator<Widget> it(m_widgets);
+	QDictIterator<WidgetInfo> it(m_widgets);
 	for(; it.current(); ++it)
 	{
 		LibActionWidget *a = new LibActionWidget(*it, parent);
@@ -134,7 +134,7 @@ WidgetLibrary::createActions(KActionCollection *parent,  QObject *receiver, cons
 QWidget*
 WidgetLibrary::createWidget(const QString &w, QWidget *parent, const char *name, Container *c)
 {
-	Widget *wfactory = m_widgets[w];
+	WidgetInfo *wfactory = m_widgets[w];
 	kdDebug() << "WidgetLibrary::createWidget(): " << w << "  " << name << endl;
 	if(!wfactory)
 		return 0;
@@ -145,7 +145,7 @@ WidgetLibrary::createWidget(const QString &w, QWidget *parent, const char *name,
 bool
 WidgetLibrary::createMenuActions(const QString &c, QWidget *w, QPopupMenu *menu, KFormDesigner::Container *container, QValueVector<int> *menuIds)
 {
-	Widget *wfactory = m_widgets[c];
+	WidgetInfo *wfactory = m_widgets[c];
 	if(!wfactory)
 		return false;
 
@@ -155,7 +155,7 @@ WidgetLibrary::createMenuActions(const QString &c, QWidget *w, QPopupMenu *menu,
 void
 WidgetLibrary::startEditing(const QString &classname, QWidget *w, Container *container)
 {
-	Widget *wfactory = m_widgets[classname];
+	WidgetInfo *wfactory = m_widgets[classname];
 	if(!wfactory)
 		return ;
 
@@ -165,7 +165,7 @@ WidgetLibrary::startEditing(const QString &classname, QWidget *w, Container *con
 void
 WidgetLibrary::previewWidget(const QString &classname, QWidget *widget, Container *container)
 {
-	Widget *wfactory = m_widgets[classname];
+	WidgetInfo *wfactory = m_widgets[classname];
 	if(!wfactory)
 		return ;
 
@@ -193,7 +193,7 @@ WidgetLibrary::namePrefix(const QString &classname)
 QString
 WidgetLibrary::textForWidgetName(const QString &name, const QString &className)
 {
-	Widget *widget = m_widgets[className];
+	WidgetInfo *widget = m_widgets[className];
 	if(!widget)
 		return QString::null;
 

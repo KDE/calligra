@@ -88,7 +88,7 @@ KexiSubForm::setFormName(const QString &name)
 KexiDBFactory::KexiDBFactory(QObject *parent, const char *name, const QStringList &)
  : KFormDesigner::WidgetFactory(parent, name)
 {
-	KFormDesigner::Widget *wView = new KFormDesigner::Widget(this);
+	KFormDesigner::WidgetInfo *wView = new KFormDesigner::WidgetInfo(this);
 	wView->setPixmap("form");
 	wView->setClassName("KexiDBForm");
 	wView->setName(i18n("Database Form"));
@@ -96,7 +96,7 @@ KexiDBFactory::KexiDBFactory(QObject *parent, const char *name, const QStringLis
 	wView->setDescription(i18n("A db-aware form widget"));
 	m_classes.append(wView);
 
-	KFormDesigner::Widget *wSubForm = new KFormDesigner::Widget(this);
+	KFormDesigner::WidgetInfo *wSubForm = new KFormDesigner::WidgetInfo(this);
 	wSubForm->setPixmap("form");
 	wSubForm->setClassName("KexiSubForm");
 	wSubForm->setName(i18n("Sub Form"));
@@ -111,7 +111,7 @@ KexiDBFactory::name()
 	return("kexidbwidgets");
 }
 
-KFormDesigner::WidgetList
+KFormDesigner::WidgetInfoList
 KexiDBFactory::classes()
 {
 	return m_classes;

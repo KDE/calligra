@@ -60,7 +60,7 @@ class KexiDBFactory : public KFormDesigner::WidgetFactory
 		~KexiDBFactory();
 
 		virtual QString				name();
-		virtual KFormDesigner::WidgetList	classes();
+		virtual KFormDesigner::WidgetInfoList	classes();
 		virtual QWidget				*create(const QString &, QWidget *, const char *, KFormDesigner::Container *);
 
 		virtual bool				createMenuActions(const QString &classname, QWidget *w, QPopupMenu *menu,
@@ -79,7 +79,7 @@ class KexiDBFactory : public KFormDesigner::WidgetFactory
 		virtual void   resizeEditor(QWidget *widget, const QString &classname);*/
 
 	private:
-		KFormDesigner::WidgetList		m_classes;
+		KFormDesigner::WidgetInfoList		m_classes;
 		QWidget *m_widget;
 		KFormDesigner::Container *m_container;
 };

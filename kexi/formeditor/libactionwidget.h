@@ -27,7 +27,7 @@
 namespace KFormDesigner
 {
 
-class Widget;
+class WidgetInfo;
 
 /**
  * KToggleAction subclass which remembers the matching class name.
@@ -36,9 +36,9 @@ class KFORMEDITOR_EXPORT LibActionWidget : public KToggleAction
 {
 	Q_OBJECT
 	public:
-		/** LibActionWidget object is initialized to be mutually 
+		/** LibActionWidget object is initialized to be mutually
 			exclusive with all other LibActionWidget objects */
-		LibActionWidget(Widget *, KActionCollection *collection);
+		LibActionWidget(WidgetInfo *, KActionCollection *collection);
 		virtual ~LibActionWidget();
 
 	signals:
@@ -50,7 +50,7 @@ class KFORMEDITOR_EXPORT LibActionWidget : public KToggleAction
 	protected slots:
 		/** reimplemented from KToggleAction */
 		virtual void slotActivated();
-		
+
 	private:
 		QString m_className;
 };

@@ -47,37 +47,31 @@ class ObjectTreeItem;
 /**
  * this class holds properties of widgets
  */
-class KFORMEDITOR_EXPORT Widget
+class KFORMEDITOR_EXPORT WidgetInfo
 {
 	public:
-		Widget(WidgetFactory *f=0) {m_factory = f; }
-		virtual ~Widget() { }
+		WidgetInfo(WidgetFactory *f=0) {m_factory = f; }
+		virtual ~WidgetInfo() { }
 
-		/**
-		 * returns a pixmap associated with the widget
-		 */
-		virtual QString	pixmap() { return m_pixmap; }
+		//! \return a pixmap associated with the widget
+		virtual QString	pixmap() const { return m_pixmap; }
 
-		/**
-		 * returns the class name of a widget e.g. 'QLineEdit'
-		 */
-		virtual QString	className() { return m_class; }
+		//! \return the class name of a widget e.g. 'QLineEdit'
+		virtual QString	className() const { return m_class; }
 
-		/* \return the name used to name widget, that will appear eg in scripts (must not contain spaces
+		/*! \return the name used to name widget, that will appear eg in scripts (must not contain spaces
 		  nor non-latin1 characters) */
-		virtual QString	namePrefix() { return m_prefixName; }
-		/**
-		 * returns the real name e.g. 'Line Edit', showed eg in ObjectTreeView
-		 */
-		virtual QString	name() { return m_name; }
+		virtual QString	namePrefix() const { return m_prefixName; }
+		//! \return the real name e.g. 'Line Edit', showed eg in ObjectTreeView
+		virtual QString	name() const { return m_name; }
 
-		virtual QString description() { return m_desc; }
+		virtual QString description() const { return m_desc; }
 
-		virtual QString  includeFile() { return m_include; }
+		virtual QString  includeFile() const { return m_include; }
 
-		virtual QString  alternateClassName() { return m_alternate; }
+		virtual QString  alternateClassName() const { return m_alternate; }
 
-		virtual WidgetFactory *factory() { return m_factory; }
+		virtual WidgetFactory *factory() const { return m_factory; }
 
 		void		setPixmap(const QString &p) { m_pixmap = p; }
 		void		setClassName(const QString &s) { m_class = s; }
@@ -98,11 +92,11 @@ class KFORMEDITOR_EXPORT Widget
 		QString		m_desc;
 		QString		m_include;
 		QString		m_alternate;
-		WidgetFactory	*m_factory;
+		QGuardedPtr<WidgetFactory>	m_factory;
 
 };
 
-typedef QPtrList<Widget> WidgetList;
+typedef QPtrList<WidgetInfo> WidgetInfoList;
 
 /*! This helper function install an event filter on \a object and all of its children, directed to \a container.
   This is necessary to filter events for composed widgets. */
@@ -115,40 +109,39 @@ void KFORMEDITOR_EXPORT installRecursiveEventFilter(QObject *object, QObject *co
  to implement if you want more features.\n \n
 
   <b>Widget Creation</b>\n
-  To be able to create widgets, you need to implement the \ref create() function, and \ref classes(),
-  which should return all the widgets supported by this factory.
-  The \ref name() function also need to be inplemented.\n \n
+  To be able to create widgets, you need to implement the create() function, an classes(),
+  which should return all the widgets supported by this factory.\n \n
 
   <b>GUI Integration</b>\n
   The following functions allow you to customize even more the look-n-feel of your widgets inside KFormDesigner.
-  You can use \ref createMenuActions() to add custom items in widget's context menu. The \ref previewWidget()
-  is called when the Form gets in Preview mode, and and you have a last opportunity to remove all editing-related
+  You can use createMenuActions() to add custom items in widget's context menu. The previewWidget()
+  is called when the Form gets in Preview mode, and you have a last opportunity to remove all editing-related
   stuff (see eg \ref Spring class).\n
   You can also choose which properties to show in the Property Editor. By default, all properties are shown,
-  but you can hide some using \ref showProperty(). To add new properties, just define new Q_PROPERTY
+  but you can hide some using showProperty(). To add new properties, just define new Q_PROPERTY
   in widget class definition.\n \n
 
   <b>Inline editing</b>\n
   KFormDesigner allow you to edit the widget's contents inside Form, without using a dialog.
-  You can of course customize the behaviour of your widgets, using \ref startEditing(). There are some editing
+  You can of course customize the behaviour of your widgets, using startEditing(). There are some editing
   modes already implemented in WidgetFactroy, but you can create your own if you want:
-  \li Editing using a line edit (\ref createEditor()): a line edit is created on top of widget,
-  where the user inputs text. As the text changes, \ref changeText() is called
-  (where you should set your widget's text and resize widget to fit the text if needed) and \ref resizeEditor()
+  \li Editing using a line edit (createEditor()): a line edit is created on top of widget,
+  where the user inputs text. As the text changes, changeText() is called
+  (where you should set your widget's text and resize widget to fit the text if needed) and resizeEditor()
   to update editor's position when widget is moved/resized.\n
-  \li Editing by disabling event filter: if you call \ref disableFilter(), the event filter
-   on the object is temporaryly disabled, so the widget behaves as usual. This
+  \li Editing by disabling event filter: if you call disableFilter(), the event filter
+   on the object is temporarily disabled, so the widget behaves as usual. This
   can be used for more complex widgets, such as spinbox, date/time edit, etc.
-  \li Other modes: there are 3 other modes, to edit a string list: \ref editList()
-  (for combo box, listbox), to edit rich text: \ref editRichText() (for labels, etc.)
-  and to edit a listview: \ref editListView(). \n \n
+  \li Other modes: there are 3 other modes, to edit a string list: editList()
+  (for combo box, listbox), to edit rich text: editRichText() (for labels, etc.)
+  and to edit a listview: editListView(). \n \n
 
   <b>Widget saving/loading</b>\n
   You can also control how your widget are saved/loaded. You can choose which properties to save
-   (see \ref autoSaveProperties()), and save/load custom properties, ie
+   (see autoSaveProperties()), and save/load custom properties, ie
   properties that are not Q_PORPERTY but you want to save in the UI file. This is used eg to
-   save combo box or listview contents (see \ref saveSpecialProperty() and
-  \ref readSpecialProperty()). \n \n
+   save combo box or listview contents (see saveSpecialProperty() and
+  readSpecialProperty()). \n \n
 
   See the standard factories in formeditor/factories for an example of factories,
   and how to deal with complex widgets (eg tabwidget).
@@ -161,14 +154,9 @@ class KFORMEDITOR_EXPORT WidgetFactory : public QObject
 		virtual ~WidgetFactory();
 
 		/**
-		 * \return the name of the factory
-		 */
-		virtual QString		name()=0;
-
-		/**
 		 * \return all classes which are provided by this factory
 		 */
-		virtual	WidgetList	classes()=0;
+		virtual	WidgetInfoList	classes()=0;
 
 		/*!
 		 * Creates a widget (and if needed a \ref Container)
@@ -204,7 +192,7 @@ class KFORMEDITOR_EXPORT WidgetFactory : public QObject
 		 */
 		virtual void	saveSpecialProperty(const QString &classname, const QString &name, const QVariant &value, QWidget *w,
 		         QDomElement &parentNode,  QDomDocument &parent);
-		/*! This function is called when FormIO fins a property or an unknown
+		/*! This function is called when FormIO finds a property or an unknown
 		element in a .ui file. You can this way load a special property, for
 		  example the contents of a listbox.
 		   \sa saveSpecialProperty()
@@ -248,7 +236,7 @@ class KFORMEDITOR_EXPORT WidgetFactory : public QObject
 		columns and list items. The listview is automatically  updated if the user presses "Ok".*/
 		void  editListView(QListView *listview);
 
-		/*! This function destroys the editor when it looses focus or Enter is pressed. */
+		/*! This function destroys the editor when it loses focus or Enter is pressed. */
 		virtual bool  eventFilter(QObject *obj, QEvent *ev);
 		/*! This function is used to modify a property of a widget (eg after editing it).
 		Please use it instead of w->setProperty() to allow sync inside PropertyEditor.
@@ -265,7 +253,7 @@ class KFORMEDITOR_EXPORT WidgetFactory : public QObject
 	protected slots:
 		/*! You have to implement this function for editing inside the Form to work. This slot is
 		called when the line edit text changes, and you have to make it really change the good
-		property of the widget using \ref changeProperty() (text, or title, etc.).
+		property of the widget using changeProperty() (text, or title, etc.).
 		 */
 		virtual void  changeText(const QString &newText);
 		/*! This slot is called when the editor has lost focus or the user pressed Enter.

@@ -214,12 +214,12 @@ InsertPageCommand::name() const
 
 /////   The factory /////////////////////////
 
-ContainerFactory::ContainerFactory(QObject *parent, const char *name, const QStringList &)
- : KFormDesigner::WidgetFactory(parent, name)
+ContainerFactory::ContainerFactory(QObject *parent, const char *, const QStringList &)
+ : KFormDesigner::WidgetFactory(parent, "containers")
 {
 	m_classes.setAutoDelete(true);
 
-	KFormDesigner::Widget *wBtnGroup = new KFormDesigner::Widget(this);
+	KFormDesigner::WidgetInfo *wBtnGroup = new KFormDesigner::WidgetInfo(this);
 	wBtnGroup->setPixmap("frame");
 	wBtnGroup->setClassName("QButtonGroup");
 	wBtnGroup->setName(i18n("Button Group"));
@@ -227,7 +227,7 @@ ContainerFactory::ContainerFactory(QObject *parent, const char *name, const QStr
 	wBtnGroup->setDescription(i18n("A simple container to group buttons"));
 	m_classes.append(wBtnGroup);
 
-	KFormDesigner::Widget *wTabWidget = new KFormDesigner::Widget(this);
+	KFormDesigner::WidgetInfo *wTabWidget = new KFormDesigner::WidgetInfo(this);
 	wTabWidget->setPixmap("tabwidget");
 	wTabWidget->setClassName("KTabWidget");
 	#if KDE_IS_VERSION(3,1,9) //TMP
@@ -239,7 +239,7 @@ ContainerFactory::ContainerFactory(QObject *parent, const char *name, const QStr
 	wTabWidget->setDescription(i18n("A widget to display multiple pages using tabs"));
 	m_classes.append(wTabWidget);
 
-	KFormDesigner::Widget *wWidget = new KFormDesigner::Widget(this);
+	KFormDesigner::WidgetInfo *wWidget = new KFormDesigner::WidgetInfo(this);
 	wWidget->setPixmap("frame");
 	wWidget->setClassName("QWidget");
 	wWidget->setName(i18n("Basic container"));
@@ -247,7 +247,7 @@ ContainerFactory::ContainerFactory(QObject *parent, const char *name, const QStr
 	wWidget->setDescription(i18n("An empty container with no frame"));
 	m_classes.append(wWidget);
 
-	KFormDesigner::Widget *wGroupBox = new KFormDesigner::Widget(this);
+	KFormDesigner::WidgetInfo *wGroupBox = new KFormDesigner::WidgetInfo(this);
 	wGroupBox->setPixmap("groupbox");
 	wGroupBox->setClassName("QGroupBox");
 	wGroupBox->setName(i18n("Group Box"));
@@ -255,7 +255,7 @@ ContainerFactory::ContainerFactory(QObject *parent, const char *name, const QStr
 	wGroupBox->setDescription(i18n("A container to group some widgets"));
 	m_classes.append(wGroupBox);
 
-	KFormDesigner::Widget *wFrame = new KFormDesigner::Widget(this);
+	KFormDesigner::WidgetInfo *wFrame = new KFormDesigner::WidgetInfo(this);
 	wFrame->setPixmap("frame");
 	wFrame->setClassName("QFrame");
 	wFrame->setName(i18n("Frame"));
@@ -263,7 +263,7 @@ ContainerFactory::ContainerFactory(QObject *parent, const char *name, const QStr
 	wFrame->setDescription(i18n("A very simple container"));
 	m_classes.append(wFrame);
 
-	KFormDesigner::Widget *wWidgetStack = new KFormDesigner::Widget(this);
+	KFormDesigner::WidgetInfo *wWidgetStack = new KFormDesigner::WidgetInfo(this);
 	wWidgetStack->setPixmap("widgetstack");
 	wWidgetStack->setClassName("QWidgetStack");
 	wWidgetStack->setName(i18n("Widget Stack"));
@@ -271,7 +271,7 @@ ContainerFactory::ContainerFactory(QObject *parent, const char *name, const QStr
 	wWidgetStack->setDescription(i18n("A container with multiple pages"));
 	m_classes.append(wWidgetStack);
 
-	KFormDesigner::Widget *wHBox = new KFormDesigner::Widget(this);
+	KFormDesigner::WidgetInfo *wHBox = new KFormDesigner::WidgetInfo(this);
 	wHBox->setPixmap("frame");
 	wHBox->setClassName("HBox");
 	wHBox->setName(i18n("Horizontal Box"));
@@ -279,7 +279,7 @@ ContainerFactory::ContainerFactory(QObject *parent, const char *name, const QStr
 	wHBox->setDescription(i18n("A simple container to group widgets horizontally"));
 	m_classes.append(wHBox);
 
-	KFormDesigner::Widget *wVBox = new KFormDesigner::Widget(this);
+	KFormDesigner::WidgetInfo *wVBox = new KFormDesigner::WidgetInfo(this);
 	wVBox->setPixmap("frame");
 	wVBox->setClassName("VBox");
 	wVBox->setName(i18n("Vertical Box"));
@@ -287,7 +287,7 @@ ContainerFactory::ContainerFactory(QObject *parent, const char *name, const QStr
 	wVBox->setDescription(i18n("A simple container to group widgets vertically"));
 	m_classes.append(wVBox);
 
-	KFormDesigner::Widget *wGrid = new KFormDesigner::Widget(this);
+	KFormDesigner::WidgetInfo *wGrid = new KFormDesigner::WidgetInfo(this);
 	wGrid->setPixmap("frame");
 	wGrid->setClassName("Grid");
 	wGrid->setName(i18n("Grid Box"));
@@ -296,13 +296,7 @@ ContainerFactory::ContainerFactory(QObject *parent, const char *name, const QStr
 	m_classes.append(wGrid);
 }
 
-QString
-ContainerFactory::name()
-{
-	return("containers");
-}
-
-KFormDesigner::WidgetList
+KFormDesigner::WidgetInfoList
 ContainerFactory::classes()
 {
 	return m_classes;
