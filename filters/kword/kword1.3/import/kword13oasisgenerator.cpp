@@ -841,7 +841,7 @@ void KWord13OasisGenerator::writePreviewFile(void)
     }
 
     // We have a 256x256x8 preview and we need a 128x128x32 preview with alpha channel
-    const QImage preview( image.convertDepth( 32, Qt::ColorOnly ).smoothScale( 128, 128 ) );
+    QImage preview( image.convertDepth( 32, Qt::ColorOnly ).smoothScale( 128, 128 ) );
     if ( preview.isNull() )
     {
         kdWarning(30520) << "Could not create preview!" << endl;
@@ -849,13 +849,12 @@ void KWord13OasisGenerator::writePreviewFile(void)
     }
     if ( !preview.hasAlphaBuffer() )
     {
-        // ### TODO: this probably sets garbage as alpha
-        //preview.setAlphaBuffer( true );
+        preview.setAlphaBuffer( true );
     }
     m_store->open("Thumbnails/thumbnail.png");
     KoStoreDevice io ( m_store );
     io.open( IO_WriteOnly );  // ### TODO: check error!
-    preview.save( &io, "PNG" ); // ### TODO What is -9 in quality terms?
+    preview.save( &io, "PNG", 0 );
     io.close();
     m_store->close();
 
@@ -961,6 +960,10 @@ bool KWord13OasisGenerator::generate ( const QString& fileName, KWord13Document&
     if ( kwordDocument.m_previewFile )
     {
         writePreviewFile();
+    }
+    else
+    {
+        kdDebug(30520) << "No preview file available to make an OASIS thumbnail!" << endl;
     }
 
 

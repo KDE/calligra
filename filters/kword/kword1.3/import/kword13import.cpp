@@ -162,7 +162,7 @@ KoFilter::ConversionStatus KWord13Import::convert( const QCString& from, const Q
         ioMain.close();
         store->close();
         
-        if ( store->open( "preview.xml" ) )
+        if ( store->open( "preview.png" ) )
         {
             
             kdDebug(30520) << "Preview found!" << endl;
