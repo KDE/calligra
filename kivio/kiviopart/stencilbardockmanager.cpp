@@ -114,8 +114,10 @@ void StencilBarDockManager::insertStencilSet( QWidget* w, const QString& caption
           sizes = split1->sizes();
           split1->moveToFirst(bar);
           newSizes << 1; // We want the minimum size of the stencilbar, but we haven't loaded the stencils yet...
-          newSizes << (split1->width() - 1 - sizes[1]);
-          newSizes << sizes[1];
+          newSizes << sizes[0] - 1;
+          if(sizes.count() > 1) {
+            newSizes << sizes[1];
+          }
           split1->setSizes(newSizes);
         }
         if (pos==Top) {
