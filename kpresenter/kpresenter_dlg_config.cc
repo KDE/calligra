@@ -1,7 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 1998, 1999 Reginald Stadlbauer <reggie@kde.org>
 
-#include "kpresenter_dlg_config.h"
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -613,9 +612,9 @@ ConfigureDefaultDocPage::ConfigureDefaultDocPage(KPresenterView *_view, QVBox *b
     new QLabel(i18n("Starting page number:"), gbDocumentSettings);
     KPresenterDoc* doc = m_pView->kPresenterDoc();
     m_oldStartingPage=doc->getVariableCollection()->variableSetting()->startingPage();
-    m_variableNumberOffset=new QLineEdit(gbDocumentSettings);
-    m_variableNumberOffset->setValidator(new KIntValidator(0,9999,m_variableNumberOffset));
-    m_variableNumberOffset->setText(QString::number(m_oldStartingPage));
+    m_variableNumberOffset=new KIntNumInput(gbDocumentSettings);
+    m_variableNumberOffset->setRange(1, 9999, 1, false);
+    m_variableNumberOffset->setValue(m_oldStartingPage);
 }
 
 ConfigureDefaultDocPage::~ConfigureDefaultDocPage()
@@ -636,7 +635,7 @@ void ConfigureDefaultDocPage::apply()
         m_pView->kPresenterDoc()->setAutoSave( autoSaveVal*60 );
         oldAutoSaveValue=autoSaveVal;
     }
-    int newStartingPage=m_variableNumberOffset->text().toInt();
+    int newStartingPage=m_variableNumberOffset->value();
     if(newStartingPage!=m_oldStartingPage)
     {
         KPrChangeStartingPageCommand *cmd = new KPrChangeStartingPageCommand( i18n("Change Starting Page Number"), doc, m_oldStartingPage,newStartingPage );
@@ -650,7 +649,7 @@ void ConfigureDefaultDocPage::apply()
 void ConfigureDefaultDocPage::slotDefault()
 {
     autoSave->setValue( m_pView->kPresenterDoc()->defaultAutoSave()/60 );
-    m_variableNumberOffset->setText(QString::number(1));
+    m_variableNumberOffset->setValue(1);
 
 }
 

@@ -119,7 +119,7 @@ private:
     QFont *font;
     QLabel *fontName;
     KIntNumInput* autoSave;
-    QLineEdit* m_variableNumberOffset;
+    KIntNumInput* m_variableNumberOffset;
 };
 
 class ConfigureToolsPage : public QObject
