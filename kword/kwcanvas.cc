@@ -60,6 +60,7 @@ KWCanvas::KWCanvas(KWViewMode* viewMode, QWidget *parent, KWDocument *d, KWGUI *
     m_table.height = KWTableFrameSet::TblAuto;
     m_table.floating = true;
     m_table.tableTemplateName=QString::null;
+    m_table.format=31;
 
     m_tableSplit.nbRows=1;
     m_tableSplit.nbCols=1;
@@ -639,7 +640,7 @@ void KWCanvas::contentsMousePressEvent( QMouseEvent *e )
 void KWCanvas::createTable( unsigned int rows, unsigned int cols,
                             int wid, int hei,
                             bool isFloating,
-                            KWTableTemplate *tt )
+                            KWTableTemplate *tt, int format )
 {
     // Remember for next time in any case
     m_table.rows = rows;
@@ -647,6 +648,7 @@ void KWCanvas::createTable( unsigned int rows, unsigned int cols,
     m_table.width = wid;
     m_table.height = hei;
     m_table.floating = isFloating;
+    m_table.format = format;
 
     m_table.tableTemplateName = tt ? tt->translatedName():QString::null;
     m_table.tt = tt;

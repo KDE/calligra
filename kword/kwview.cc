@@ -3423,7 +3423,8 @@ void KWView::insertTable()
                                            canvas->tableWidthMode(),
                                            canvas->tableHeightMode(),
                                            canvas->tableIsFloating(),
-                                           canvas->tableTemplateName());
+                                           canvas->tableTemplateName(),
+                                           canvas->tableFormat());
     tableDia->setCaption( i18n( "Insert Table" ) );
     if ( tableDia->exec() == QDialog::Rejected )
         canvas->setMouseMode( KWCanvas::MM_EDIT );
@@ -3474,7 +3475,8 @@ void KWView::tableProperties()
                                                canvas->tableWidthMode(),
                                                canvas->tableHeightMode(),
                                                canvas->tableIsFloating(),
-                                               canvas->tableTemplateName());
+                                               canvas->tableTemplateName(),
+                                               canvas->tableFormat());
         tableDia->setCaption( i18n( "Adjust Table" ) );
         if ( tableDia->exec() == QDialog::Rejected )
             canvas->setMouseMode( KWCanvas::MM_EDIT );

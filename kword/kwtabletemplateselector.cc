@@ -518,7 +518,7 @@ void KWTableTemplatePreview::cbBodyChanged( bool enable )
 /* Class: KWTableTemplateSelector                                    */
 /******************************************************************/
 
-KWTableTemplateSelector::KWTableTemplateSelector( KWDocument *_doc, QWidget *_parent, const QString & _tableTemplate, const char *_name)
+KWTableTemplateSelector::KWTableTemplateSelector( KWDocument *_doc, QWidget *_parent, const QString & _tableTemplate, int _type,const char *_name)
     : QWidget( _parent, _name )
 {
     m_doc = _doc;
@@ -559,12 +559,6 @@ KWTableTemplateSelector::KWTableTemplateSelector( KWDocument *_doc, QWidget *_pa
     cbFirstCol = new QCheckBox( i18n( "First column" ), bgCustomize );
     cbLastCol = new QCheckBox( i18n( "Last column" ), bgCustomize );
 
-    cbFirstRow->setChecked(true);
-    cbFirstCol->setChecked(true);
-    cbLastRow->setChecked(true);
-    cbLastCol->setChecked(true);
-    cbBody->setChecked(true);
-
     grid->addWidget( bgCustomize, 2, 1 );
 
     grid->setRowStretch( 0, 0 );
@@ -591,6 +585,8 @@ KWTableTemplateSelector::KWTableTemplateSelector( KWDocument *_doc, QWidget *_pa
       selectedTableTemplate = 0L;
       lbTemplates->setSelected( index, true );
     }
+    initFormat( _type );
+
 }
 
 void KWTableTemplateSelector::changeTableTemplate()
@@ -604,3 +600,55 @@ KWTableTemplate* KWTableTemplateSelector::getTableTemplate() const
   return (selectedTableTemplate) ? preview->getTableTemplate() : 0L;
 }
 
+void KWTableTemplateSelector::initFormat( int _format)
+{
+    if ( _format & firstRow)
+    {
+        cbFirstRow->setChecked( true );
+    }
+    if ( _format & firstColumn)
+    {
+        cbFirstCol->setChecked( true );
+    }
+    if ( _format & lastRow)
+    {
+        cbLastRow->setChecked( true );
+    }
+    if ( _format & lastCol)
+    {
+        cbLastCol->setChecked( true );
+    }
+    if ( _format & body)
+    {
+        cbBody->setChecked( true );
+    }
+}
+
+int KWTableTemplateSelector::getFormatType() const
+{
+    int type = 0;
+    if ( cbFirstRow->isChecked())
+    {
+        type = type | firstRow;
+    }
+    if ( cbFirstCol->isChecked())
+    {
+        type = type |firstColumn;
+
+    }
+    if ( cbLastRow->isChecked())
+    {
+        type = type | lastRow;
+
+    }
+    if ( cbLastCol->isChecked())
+    {
+        type = type | lastCol;
+    }
+    if ( cbBody->isChecked())
+    {
+        type = type | body;
+    }
+    kdDebug()<<" type :"<<type<<endl;
+    return type;
+}

@@ -72,11 +72,11 @@ public:
     typedef int CellSize; // in fact KWTableFrameSet::CellSize, which is an enum
     enum UseMode{ NEW, EDIT };
     KWTableDia( QWidget *parent, const char *name, UseMode _useMode, KWCanvas *_canvas, KWDocument *_doc,
-		int rows, int cols, CellSize wid, CellSize hei, bool floating , const QString & _templateName);
+		int rows, int cols, CellSize wid, CellSize hei, bool floating , const QString & _templateName,  int format);
 
 protected:
     void setupTab1( int rows, int cols, CellSize wid, CellSize hei, bool floating );
-    void setupTab2( const QString &_templateName);
+    void setupTab2( const QString &_templateName,  int format);
 
     QWidget *tab1;
     QLabel *lRows, *lCols, *lWid, *lHei;

@@ -139,6 +139,9 @@ public:
     int tableWidthMode()const { return m_table.width; }
     int tableHeightMode()const { return m_table.height; }
     bool tableIsFloating()const { return m_table.floating; }
+    int tableFormat()const { return m_table.format;}
+
+    void setTableFormat(int _nb){ m_table.format=_nb;}
 
     unsigned int splitCellRows()const{return m_tableSplit.nbRows;}
     unsigned int splitCellCols()const{return m_tableSplit.nbCols;}
@@ -152,7 +155,7 @@ public:
     void createTable( unsigned int rows, unsigned int cols,
                       int /*KWTableFrameSet::CellSize*/ wid, int /*KWTableFrameSet::CellSize*/ hei,
                       bool isFloating,
-                      KWTableTemplate *tt=0L );
+                      KWTableTemplate *tt=0L, int format=31 );
     KWTableFrameSet * getTable();
 
     KWTableFrameSet *getCurrentTable()const { return curTable; }
@@ -299,6 +302,7 @@ private:
     {
         unsigned int cols;
         unsigned int rows;
+        int format;
         int /*KWTableFrameSet::CellSize*/ width;
         int /*KWTableFrameSet::CellSize*/ height;
         bool floating;

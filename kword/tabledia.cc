@@ -67,7 +67,7 @@ void KWTablePreview::paintEvent( QPaintEvent * )
 /******************************************************************/
 
 KWTableDia::KWTableDia( QWidget* parent, const char* name, UseMode _useMode, KWCanvas *_canvas, KWDocument *_doc,
-			int rows, int cols, CellSize wid, CellSize hei, bool floating , const QString & _templateName)
+			int rows, int cols, CellSize wid, CellSize hei, bool floating , const QString & _templateName, int format)
     : KDialogBase( Tabbed, i18n("Table Settings"), Ok | Cancel, Ok, parent, name, true)
 {
     m_useMode = _useMode;
@@ -75,7 +75,7 @@ KWTableDia::KWTableDia( QWidget* parent, const char* name, UseMode _useMode, KWC
     doc = _doc;
 
     setupTab1( rows, cols, wid, hei, floating );
-    setupTab2( _templateName );
+    setupTab2( _templateName,format );
 
     setInitialSize( QSize(500, 480) );
 
@@ -193,13 +193,13 @@ void KWTableDia::setupTab1( int rows, int cols, CellSize wid, CellSize hei, bool
     connect( nCols, SIGNAL( valueChanged( int ) ), this, SLOT( colsChanged( int ) ) );
 }
 
-void KWTableDia::setupTab2(const QString & _templateName )
+void KWTableDia::setupTab2(const QString & _templateName, int format )
 {
     QWidget *tab2 = addPage( i18n("Templates"));
 
     QGridLayout *grid = new QGridLayout( tab2, 2, 1, KDialog::marginHint(), KDialog::spacingHint() );
 
-    tableTemplateSelector = new KWTableTemplateSelector( doc, tab2, _templateName );
+    tableTemplateSelector = new KWTableTemplateSelector( doc, tab2, _templateName,format );
     grid->addWidget(tableTemplateSelector, 0, 0);
 
     if (m_useMode==EDIT)
@@ -222,7 +222,8 @@ void KWTableDia::slotOk()
                              cWid->currentItem(),
                              cHei->currentItem(),
                              cbIsFloating->isChecked(),
-                             tableTemplateSelector->getTableTemplate() );
+                             tableTemplateSelector->getTableTemplate(),
+                             tableTemplateSelector->getFormatType());
     else
     {
         KWTableFrameSet *table = canvas->getCurrentTable();
