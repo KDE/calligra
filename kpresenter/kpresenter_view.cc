@@ -67,6 +67,8 @@ KPresenterView_impl::KPresenterView_impl(QWidget *_parent,const char *_name)
   presStructView = 0;
   xOffset = 0;
   yOffset = 0;
+  v_ruler = 0;
+  h_ruler = 0;
   pen = QPen(black,1,SolidLine);
   brush = QBrush(white,SolidPattern);
   lineBegin = L_NORMAL;
@@ -1416,6 +1418,8 @@ void KPresenterView_impl::scrollH(int _value)
       
       xOffset = _value;
       page->scroll(xo - _value,0);
+      if (h_ruler)
+	h_ruler->setOffset(xOffset,0);
     }
 }
 
@@ -1428,6 +1432,9 @@ void KPresenterView_impl::scrollV(int _value)
       
       yOffset = _value;
       page->scroll(0,yo - _value);
+
+      if (v_ruler)
+	v_ruler->setOffset(0,-KPresenterDoc()->getPageSize(getCurrPgNum() - 1,xOffset,yOffset,1.0,false).y());
     }
 }
 

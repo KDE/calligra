@@ -21,7 +21,7 @@
 /*================================================================*/
 KoRuler::KoRuler(QWidget *_parent,QWidget *_canvas,Orientation _orientation,
 		 KoPageLayout _layout,int _flags)
-  : QFrame(_parent)
+  : QFrame(_parent), buffer(width(),height())
 {
   setFrameStyle(Box | Sunken);
 
@@ -44,6 +44,7 @@ KoRuler::KoRuler(QWidget *_parent,QWidget *_canvas,Orientation _orientation,
   mposX = 0;
   mposY = 0;
   hasToDelete = false;
+  whileMovingBorderLeft = whileMovingBorderRight = false;
 }
 
 /*================================================================*/
@@ -86,6 +87,11 @@ void KoRuler::setMousePos(int mx,int my)
 /*================================================================*/
 void KoRuler::drawHorizontal(QPainter *_painter)
 {
+  buffer.fill(backgroundColor());
+
+  QPainter p;
+  p.begin(&buffer);
+
   int dist;
   int j = 0;
   int wid = static_cast<int>(layout.width * 100) / 100;
@@ -94,53 +100,116 @@ void KoRuler::drawHorizontal(QPainter *_painter)
   QFont font = QFont("helvetica",8);
   QFontMetrics fm(font);
 
-  _painter->setPen(QPen(black,1,SolidLine));
-  _painter->setBrush(white);
+  p.setPen(QPen(black,1,SolidLine));
+  p.setBrush(white);
 
-  QRect r = QRect(-diffx + (layout.left * 100 * _MM_TO_POINT) / 100,0,pw - (layout.left * 100 * _MM_TO_POINT) / 100 -
-		  (layout.right * 100 * _MM_TO_POINT) / 100,height());
+  QRect r; 
+  if (!whileMovingBorderLeft)
+    r.setLeft(-diffx + static_cast<int>(layout.left) * static_cast<int>(100 * _MM_TO_POINT) / 100);
+  else
+    r.setLeft(oldMx);
+  r.setTop(0);
+  if (!whileMovingBorderRight)
+    r.setRight(-diffx + pw - static_cast<int>(layout.right) * 
+	       static_cast<int>(100 * _MM_TO_POINT) / 100);
+  else
+    r.setRight(oldMx);
+  r.setBottom(height());
 
-  _painter->drawRect(r);
+  p.drawRect(r);
 
-  _painter->setPen(QPen(black,1,SolidLine));
-  _painter->setFont(font);
+  p.setPen(QPen(black,1,SolidLine));
+  p.setFont(font);
   dist = static_cast<int>((1000 * _MM_TO_POINT) / 100);
 
   for (int i = 0;i <= (layout.width * 100 * _MM_TO_POINT) / 100;i+= dist)
     {    
       str.sprintf("%d",j++);
-      _painter->drawText(i - diffx - fm.width(str) / 2,(height() - fm.height()) / 2,fm.width(str),height(),AlignLeft | AlignTop,str);
+      p.drawText(i - diffx - fm.width(str) / 2,(height() - fm.height()) / 2,fm.width(str),height(),AlignLeft | AlignTop,str);
     }
 
   for (int i = dist / 2;i <= (layout.width * 100 * _MM_TO_POINT) / 100;i+= dist)
-    _painter->drawLine(i - diffx,5,i - diffx,height() - 5);
+    p.drawLine(i - diffx,5,i - diffx,height() - 5);
 
   for (int i = dist / 4;i <= (layout.width * 100 * _MM_TO_POINT) / 100;i+= dist / 2)
-    _painter->drawLine(i - diffx,7,i - diffx,height() - 7);
+    p.drawLine(i - diffx,7,i - diffx,height() - 7);
 
-  _painter->setPen(QPen(black));
-  _painter->drawLine(pw - diffx - 1,1,pw - diffx - 1,height() - 1);
-  _painter->drawLine(pw - diffx + 1,1,pw - diffx + 1,height() - 1);
-  _painter->setPen(QPen(white));
-  _painter->drawLine(pw - diffx,1,pw - diffx,height() - 1);
+  p.setPen(QPen(black));
+  p.drawLine(pw - diffx - 1,1,pw - diffx - 1,height() - 1);
+  p.drawLine(pw - diffx + 1,1,pw - diffx + 1,height() - 1);
+  p.setPen(QPen(white));
+  p.drawLine(pw - diffx,1,pw - diffx,height() - 1);
 
   if (action == A_NONE && showMPos)
     {
-      _painter->setPen(QPen(black,1,SolidLine));
-      _painter->drawLine(mposX,1,mposX,height() - 1);
+      p.setPen(QPen(black,1,SolidLine));
+      p.drawLine(mposX,1,mposX,height() - 1);
     }
   hasToDelete = false;
+
+  p.end();
+  _painter->drawPixmap(0,0,buffer);
 }
 
 /*================================================================*/
 void KoRuler::drawVertical(QPainter *_painter)
 {
+  buffer.fill(backgroundColor());
+
+  QPainter p;
+  p.begin(&buffer);
+
+  int dist;
+  int j = 0;
+  int hei = static_cast<int>(layout.height * 100) / 100;
+  int ph = hei * static_cast<int>(_MM_TO_POINT * 100) / 100;
+  QString str;
+  QFont font = QFont("helvetica",8);
+  QFontMetrics fm(font);
+
+  p.setPen(QPen(black,1,SolidLine));
+  p.setBrush(white);
+
+  QRect r;
+
+  r.setTop(-diffy + static_cast<int>(layout.top) * static_cast<int>(100 * _MM_TO_POINT) / 100);
+  r.setLeft(0);
+  r.setBottom(-diffy + ph - static_cast<int>(layout.bottom) * 
+	      static_cast<int>(100 * _MM_TO_POINT) / 100);
+  r.setRight(width());
+  p.drawRect(r);
+
+  p.setPen(QPen(black,1,SolidLine));
+  p.setFont(font);
+  dist = static_cast<int>((1000 * _MM_TO_POINT) / 100);
+
+  for (int i = 0;i <= (layout.height * 100 * _MM_TO_POINT) / 100;i+= dist)
+    {    
+      str.sprintf("%d",j++);
+      p.drawText((width() - fm.width(str)) / 2,i - diffy - fm.height() / 2,width(),fm.height(),AlignLeft | AlignTop,str);
+    }
+
+  for (int i = dist / 2;i <= (layout.height * 100 * _MM_TO_POINT) / 100;i+= dist)
+    p.drawLine(5,i - diffy,width() - 5,i - diffy);
+
+  for (int i = dist / 4;i <= (layout.height * 100 * _MM_TO_POINT) / 100;i+= dist / 2)
+    p.drawLine(7,i - diffy,width() - 7,i - diffy);
+
+  p.setPen(QPen(black));
+  p.drawLine(1,ph - diffy - 1,width() - 1,ph - diffy - 1);
+  p.drawLine(1,ph - diffy + 1,width() - 1,ph - diffy + 1);
+  p.setPen(QPen(white));
+  p.drawLine(1,ph - diffy,width() - 1,ph - diffy);
+
   if (action == A_NONE && showMPos)
     {
-      _painter->setPen(QPen(black,1,SolidLine));
-      _painter->drawLine(1,mposY,width() - 1,mposY);
+      p.setPen(QPen(black,1,SolidLine));
+      p.drawLine(1,mposY,width() - 1,mposY);
     }
   hasToDelete = false;
+
+  p.end();
+  _painter->drawPixmap(0,0,buffer);
 }
 
 /*================================================================*/
@@ -152,12 +221,19 @@ void KoRuler::mousePressEvent(QMouseEvent *e)
 
   if (action == A_BR_RIGHT || action == A_BR_LEFT)
     {
+      if (action == A_BR_RIGHT)
+	whileMovingBorderRight = true;
+      else
+	whileMovingBorderLeft = true;
+
       QPainter p;
       p.begin(canvas);
       p.setRasterOp(NotROP);
       p.setPen(QPen(black,1,SolidLine));
       p.drawLine(oldMx,0,oldMx,canvas->height());
       p.end();
+
+      repaint(false);
     }
 }
 
@@ -168,6 +244,9 @@ void KoRuler::mouseReleaseEvent(QMouseEvent *e)
 
   if (action == A_BR_RIGHT || action == A_BR_LEFT)
     {
+      whileMovingBorderRight = false;
+      whileMovingBorderLeft = false;
+
       QPainter p;
       p.begin(canvas);
       p.setRasterOp(NotROP);
@@ -175,6 +254,7 @@ void KoRuler::mouseReleaseEvent(QMouseEvent *e)
       p.drawLine(oldMx,0,oldMx,canvas->height());
       p.end();
 
+      repaint(false);
       emit newPageLayout(layout);
     }
 }
@@ -203,12 +283,12 @@ void KoRuler::mouseMoveEvent(QMouseEvent *e)
 	  {
 	    setCursor(ArrowCursor);
 	    action = A_NONE;
-	    if (mx > left - 5 && mx < left + 5)
+	    if (mx > left - 5 + diffx && mx < left + 5 + diffx)
 	      {
 		setCursor(sizeHorCursor);
 		action = A_BR_LEFT;
 	      }
-	    else if (mx > right - 5 && mx < right + 5)
+	    else if (mx > right - 5 + diffx && mx < right + 5 + diffx)
 	      {
 		setCursor(sizeHorCursor);
 		action = A_BR_RIGHT;
@@ -230,7 +310,9 @@ void KoRuler::mouseMoveEvent(QMouseEvent *e)
 		      p.drawLine(mx,0,mx,canvas->height());
 		      p.end();
 		      layout.left = (static_cast<float>(mx + 1) * _POINT_TO_MM * 100) / 100;
-		      repaint(true);
+		      oldMx = e->x() - diffx;
+		      oldMy = e->y() - diffy;
+		      repaint(false);
 		    }
 		} break;
 	      case A_BR_RIGHT:
@@ -245,7 +327,9 @@ void KoRuler::mouseMoveEvent(QMouseEvent *e)
 		      p.drawLine(mx,0,mx,canvas->height());
 		      p.end();
 		      layout.right = (static_cast<float>(pw - mx - 1) * _POINT_TO_MM * 100) / 100;
-		      repaint(true);
+		      oldMx = e->x() - diffx;
+		      oldMy = e->y() - diffy;
+		      repaint(false);
 		    }
 		} break;
 	      default: break;
@@ -260,4 +344,11 @@ void KoRuler::mouseMoveEvent(QMouseEvent *e)
 
   oldMx = e->x() - diffx;
   oldMy = e->y() - diffy;
+}
+
+/*================================================================*/
+void KoRuler::resizeEvent(QResizeEvent *e)
+{
+  QFrame::resizeEvent(e);
+  buffer.resize(size());
 }

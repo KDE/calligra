@@ -28,6 +28,7 @@
 #include <qrect.h>
 #include <qevent.h>
 #include <qcursor.h>
+#include <qpixmap.h>
 
 #define _MM_TO_POINT 2.83465
 #define _POINT_TO_MM 0.3527772388    
@@ -51,11 +52,14 @@ public:
   ~KoRuler();
 
   void setPageLayout(KoPageLayout _layout)
-    { layout = _layout; repaint(true); }
+    { layout = _layout; repaint(false); }
 
   void showMousePos(bool _showMPos)
-    { showMPos = _showMPos; hasToDelete = false; mposX = -1; mposY = -1; repaint(true); }
+    { showMPos = _showMPos; hasToDelete = false; mposX = -1; mposY = -1; repaint(false); }
   void setMousePos(int mx,int my);
+
+  void setOffset(int _diffx,int _diffy)
+    { diffx = _diffx; diffy = _diffy; repaint(false); }
 
 signals:
   void newPageLayout(KoPageLayout);
@@ -76,6 +80,8 @@ protected:
   void mouseDoubleClickEvent(QMouseEvent*)
     { emit openPageLayoutDia(); }
 
+  void resizeEvent(QResizeEvent *e);
+
   Orientation orientation;
   QWidget *canvas;
   KoPageLayout layout;
@@ -88,6 +94,8 @@ protected:
   bool mousePressed;
   Action action;
   bool hasToDelete;
+  QPixmap buffer;
+  bool whileMovingBorderLeft,whileMovingBorderRight;
 
 };
 
