@@ -38,9 +38,9 @@ KAboutData * newKWordAboutData()
                                            KWORD_VERSION, KWORD_DESCRIPTION, KAboutData::License_LGPL,
                                            I18N_NOOP("(c) 1998-2004, The KWord Team"), 0,
 					   "http://www.koffice.org/kword/" );
+    aboutData->addAuthor("David Faure", 0, "faure@kde.org");
     aboutData->addAuthor("Reginald Stadlbauer", 0, "reggie@kde.org");
     aboutData->addAuthor("Thomas Zander");
-    aboutData->addAuthor("David Faure", 0, "faure@kde.org");
     aboutData->addAuthor("Laurent Montel", 0, "montel@kde.org");
     aboutData->addAuthor("Sven Lüppken", 0, "sven@kde.org");
     aboutData->addAuthor("Frank Dekervel", 0, "Frank.dekervel@student.kuleuven.ac.Be");
