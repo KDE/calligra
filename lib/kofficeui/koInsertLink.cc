@@ -32,7 +32,7 @@
 
 
 KoInsertLinkDia::KoInsertLinkDia( QWidget *parent, const char *name )
-    : KDialogBase( KDialogBase::IconList, i18n("Insert Link: "),
+    : KDialogBase( KDialogBase::IconList, i18n("Insert Link"),
 		   KDialogBase::Ok | KDialogBase::Cancel,
 		   KDialogBase::Ok)
 {
