@@ -204,6 +204,7 @@ KPresenterView::KPresenterView( KPresenterDoc* _doc, QWidget *_parent, const cha
     presStructView = 0;
     confPieDia = 0;
     confRectDia = 0;
+    confPolygonDia = 0;
     v_ruler = 0;
     h_ruler = 0;
     pen = QPen( black, 1, SolidLine );
@@ -1320,17 +1321,9 @@ void KPresenterView::startScreenPres( int pgNum /*1-based*/ )
         int deskw = QApplication::desktop()->width();
         int deskh = QApplication::desktop()->height();
         QRect pgRect = kPresenterDoc()->pageList().at(0)->getZoomPageRect();
-        float _presFaktW = static_cast<float>( deskw ) /
-                           static_cast<float>( pgRect.width() ) >
-                           1.0 ?
-                           static_cast<float>( deskw ) /
-                           static_cast<float>( pgRect.width() )
-                           : 1.0;
-        float _presFaktH = static_cast<float>( deskh ) /
-                           static_cast<float>( pgRect.height() ) >
-                           1.0 ? static_cast<float>( deskh ) /
-                           static_cast<float>( pgRect.height() )
-                           : 1.0;
+
+        float _presFaktW = static_cast<float>( deskw ) / static_cast<float>( pgRect.width() );
+        float _presFaktH = static_cast<float>( deskh ) / static_cast<float>( pgRect.height() );
         float _presFakt = QMIN(_presFaktW,_presFaktH);
         kdDebug(33001) << "KPresenterView::startScreenPres page->setPresFakt " << _presFakt << endl;
 
