@@ -925,15 +925,31 @@ void KWTableFrameSet::insertRow( unsigned int _idx,QList<KWFrameSet> listFrameSe
             frame->setNewFrameBehaviour(KWFrame::NoFollowup);
         }
         else
-            frame=listFrame.at(i)->getCopy();
+        {
+            if(i<listFrame.count())
+                frame=listFrame.at(i)->getCopy();
+        }
 
         Cell *newCell=0L;
         if(listFrameSet.isEmpty())
             newCell=new Cell( this, _idx, i, QString::null );
         else
         {
-            newCell = static_cast<KWTableFrameSet::Cell*> (listFrameSet.at(i));
-            addCell( newCell );
+            //when we add a column which has just a cell
+            // for example when we split a cell
+            // so we have a new column, but this column
+            //has just a cell.
+            if( i<listFrameSet.count())
+            {
+                newCell = static_cast<KWTableFrameSet::Cell*> (listFrameSet.at(i));
+                addCell( newCell );
+            }
+            else
+            {
+                newCell =getCell(_idx-1,i);
+                newCell->m_rows=newCell->m_rows+1;
+                continue;
+            }
         }
         newCell->m_cols=colSpan;
         newCell->setIsRemoveableHeader( isAHeader );
@@ -1004,15 +1020,26 @@ void KWTableFrameSet::insertCol( unsigned int col,QList<KWFrameSet> listFrameSet
             height = cell->getFrame(0)->height();
         }
         Cell *newCell=0L;
-
         if(listFrameSet.isEmpty())
             newCell = new Cell( this, i, col, QString::null );
         else
         {
-            newCell = static_cast<KWTableFrameSet::Cell*> (listFrameSet.at(i));
-            addCell( newCell );
+            //when we add a column which has just a cell
+            // for example when we split a cell
+            // so we have a new column, but this column
+            //has just a cell.
+            if( i<listFrameSet.count())
+            {
+                newCell = static_cast<KWTableFrameSet::Cell*> (listFrameSet.at(i));
+                addCell( newCell );
+            }
+            else
+            {
+                newCell =getCell(i,col-1);
+                newCell->m_cols=newCell->m_cols+1;
+                continue;
+            }
         }
-
         KWFrame *frame = 0L;
         if(listFrame.isEmpty())
         {
