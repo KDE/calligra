@@ -80,7 +80,7 @@ bool KSEval_definitions( KSParseNode* node, KSContext& context )
   {
     if ( node->branch1()->getType() == func_dcl )
     {
-      ASSERT( context.scope() );
+      Q_ASSERT( context.scope() );
       context.scope()->addObject( node->branch1()->getIdent(), new KSValue( new KSScriptFunction( context.scope()->module(), node->branch1() ) ) );
     }
     else if ( !node->branch1()->eval( context ) )
@@ -90,7 +90,7 @@ bool KSEval_definitions( KSParseNode* node, KSContext& context )
   {
     if ( node->branch2()->getType() == func_dcl )
     {
-      ASSERT( context.scope() );
+      Q_ASSERT( context.scope() );
       context.scope()->addObject( node->branch2()->getIdent(), new KSValue( new KSScriptFunction( context.scope()->module(), node->branch2() ) ) );
     }
     else if ( !node->branch2()->eval( context ) )
@@ -102,7 +102,7 @@ bool KSEval_definitions( KSParseNode* node, KSContext& context )
 
 bool KSEval_exports( KSParseNode* node, KSContext& context )
 {
-  ASSERT( context.value() );
+  Q_ASSERT( context.value() );
 
   if ( context.value()->type() == KSValue::StructClassType )
   {
@@ -122,7 +122,7 @@ bool KSEval_exports( KSParseNode* node, KSContext& context )
     }
   }
   else
-    ASSERT( 0 );
+    Q_ASSERT( 0 );
 
   return true;
 }
@@ -660,7 +660,7 @@ bool KSEval_scoped_name( KSParseNode* node, KSContext& context )
 
 bool KSEval_const_dcl( KSParseNode* node, KSContext& context )
 {
-  ASSERT( node->branch1() );
+  Q_ASSERT( node->branch1() );
 
   KSContext( l );
   if ( !node->branch1()->eval( l ) )
@@ -674,7 +674,7 @@ bool KSEval_const_dcl( KSParseNode* node, KSContext& context )
   else if ( context.value()->type() == KSValue::StructClassType )
     context.value()->structClassValue()->nameSpace()->insert( node->getIdent(), l.shareValue() );
   else
-    ASSERT( 0 );
+    Q_ASSERT( 0 );
 
   return true;
 }
@@ -1262,7 +1262,7 @@ bool KSEval_t_func_call( KSParseNode* node, KSContext& context )
     context.scope()->popModule();
   }
   else
-    ASSERT( 0 );
+    Q_ASSERT( 0 );
 
   // Resume namespaces
   context.scope()->pushLocalScope( scope );
@@ -1281,7 +1281,7 @@ bool KSEval_t_func_call( KSParseNode* node, KSContext& context )
 bool KSEval_member_expr( KSParseNode* node, KSContext& context )
 {
   KSParseNode *left = node->branch1();
-  ASSERT( left );
+  Q_ASSERT( left );
 
   // This resets leftExpr to FALSE
   KSContext l( context );
@@ -1327,7 +1327,7 @@ bool KSEval_member_expr( KSParseNode* node, KSContext& context )
             l.scope()->popModule();
         }
         else
-            ASSERT( 0 );
+            Q_ASSERT( 0 );
 
         // Resume namespaces
         l.scope()->pushLocalScope( scope );
@@ -1935,7 +1935,7 @@ bool KSEval_t_subst( KSParseNode* node, KSContext& context )
         return FALSE;
 
     int pos = node->getIdent().find( '/' );
-    ASSERT( pos != -1 );
+    Q_ASSERT( pos != -1 );
     QString match = node->getIdent().left( pos );
     QString subst = node->getIdent().mid( pos + 1 );
     KRegExp* exp = context.interpreter()->regexp();
@@ -2124,7 +2124,7 @@ bool KSEval_t_struct( KSParseNode* node, KSContext& context )
 
 bool KSEval_t_struct_members( KSParseNode* node, KSContext& context )
 {
-  ASSERT( context.value() && context.value()->type() == KSValue::StructClassType );
+  Q_ASSERT( context.value() && context.value()->type() == KSValue::StructClassType );
 
   context.value()->structClassValue()->addVariable( node->getIdent() );
 
@@ -2138,7 +2138,7 @@ bool KSEval_t_struct_members( KSParseNode* node, KSContext& context )
 
 extern bool KSEval_t_qualified_names( KSParseNode* node, KSContext& context )
 {
-  ASSERT( context.value() && context.value()->type() == KSValue::ListType );
+  Q_ASSERT( context.value() && context.value()->type() == KSValue::ListType );
 
   KSParseNode *left = node->branch1();
   if ( !left )
@@ -2187,7 +2187,7 @@ extern bool KSEval_t_try( KSParseNode* node, KSContext& context )
 
   // Execute the questionable code
   KSParseNode *left = node->branch1();
-  ASSERT( left );
+  Q_ASSERT( left );
   // No error -> Return
   if ( left->eval( context ) )
   {
@@ -2201,7 +2201,7 @@ extern bool KSEval_t_try( KSParseNode* node, KSContext& context )
 
   // Execute the catch clauses
   KSParseNode *right = node->branch2();
-  ASSERT( right );
+  Q_ASSERT( right );
   return right->eval( context );
 }
 
@@ -2211,7 +2211,7 @@ extern bool KSEval_t_catch( KSParseNode* node, KSContext& context )
 
   // Find the type to which we want to compare
   KSParseNode *left = node->branch1();
-  ASSERT( left );
+  Q_ASSERT( left );
   if ( !left->eval( d ) )
   {
     context.setException( d );
@@ -2219,7 +2219,7 @@ extern bool KSEval_t_catch( KSParseNode* node, KSContext& context )
   }
 
   // Exception of the correct type ?
-  ASSERT( context.exception() );
+  Q_ASSERT( context.exception() );
   if ( context.exception()->type()->cmp( *d.value() ) )
   {
      // Get infos about the exception
@@ -2236,7 +2236,7 @@ extern bool KSEval_t_catch( KSParseNode* node, KSContext& context )
 
     // Evaluate the catch code
     KSParseNode *right = node->branch2();
-    ASSERT( right );
+    Q_ASSERT( right );
 
     /* bool res = */ right->eval( context );
 
@@ -2262,7 +2262,7 @@ extern bool KSEval_t_catch_default( KSParseNode* node, KSContext& context )
   // Find out na,me of the variable that
   // holds the type
   KSParseNode *left = node->branch1();
-  ASSERT( left );
+  Q_ASSERT( left );
   QString name1 = left->getIdent();
 
   // Clear the exception
@@ -2280,7 +2280,7 @@ extern bool KSEval_t_catch_default( KSParseNode* node, KSContext& context )
 
   // Evaluate the catch code
   KSParseNode *right = node->branch2();
-  ASSERT( right );
+  Q_ASSERT( right );
   bool res = right->eval( context );
 
   context.scope()->localScope()->popNamespace();

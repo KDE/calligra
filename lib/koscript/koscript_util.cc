@@ -5,7 +5,7 @@
 
 bool KSUtil::checkArgumentsCount( KSContext& context, uint count, const QString& name, bool fatal )
 {
-  ASSERT( context.value() && context.value()->type() == KSValue::ListType );
+  Q_ASSERT( context.value() && context.value()->type() == KSValue::ListType );
 
   QValueList<KSValue::Ptr>& args = context.value()->listValue();
 
@@ -157,7 +157,7 @@ bool KSUtil::checkArgs( KSContext& context, const QValueList<KSValue::Ptr>& args
 	    uint x = pos;
 	    while( signature[pos] != ';' && signature[pos] != 0 )
 		++pos;
-	    ASSERT( signature[pos] == ';' );
+	    Q_ASSERT( signature[pos] == ';' );
 	    if ( args[done]->structValue()->getClass()->fullName() != signature.mid( x, pos - x ).data() )
 	    {
 		if ( fatal )
@@ -168,8 +168,8 @@ bool KSUtil::checkArgs( KSContext& context, const QValueList<KSValue::Ptr>& args
 	    ++pos;
 	}
 	else
-	    ASSERT( 0 );
-	
+	    Q_ASSERT( 0 );
+
 	++done;
     }
 
@@ -180,7 +180,7 @@ bool KSUtil::checkArgs( KSContext& context, const QValueList<KSValue::Ptr>& args
 	    tooFewArgumentsError( context, method );
 	return FALSE;
     }
-	
+
     return TRUE;
 }
 
@@ -223,7 +223,7 @@ bool KSUtil::checkArg( KSContext& context, const KSValue::Ptr& arg,
 	uint x = pos;
 	while( signature[pos] != ';' && signature[pos] != 0 )
 	    ++pos;
-	ASSERT( signature[pos] == ';' );
+	Q_ASSERT( signature[pos] == ';' );
 	if ( arg->structValue()->getClass()->fullName() != signature.mid( x, pos - x ).data() )
         {
 	    if ( fatal )
@@ -234,6 +234,6 @@ bool KSUtil::checkArg( KSContext& context, const KSValue::Ptr& arg,
 	return TRUE;
     }
 
-    ASSERT( 0 );
+    Q_ASSERT( 0 );
     return FALSE;
 }

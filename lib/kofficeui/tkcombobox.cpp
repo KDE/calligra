@@ -21,6 +21,7 @@
 #include <qlistbox.h>
 #include <qpainter.h>
 #include <qdrawutil.h>
+#include <qstyle.h>
 
 #include <kapp.h>
 #include <kstyle.h>
@@ -44,7 +45,11 @@ void TKComboBox::paintEvent(QPaintEvent*)
 {
   QRect r;
   if (editable()){
-    r = QRect( style().comboButtonRect( 0, 0, width(), height() ) );
+#ifdef __GNUC__
+#warning "Left out for now, lacking a style expert (Werner)"
+#endif
+    //r = QRect( style().comboButtonRect( 0, 0, width(), height() ) );
+    r = QRect(4, 2, width()-height()-2, height()-4);
   } else {
     r = QRect(4, 2, width()-height()-2, height()-4);
   }
@@ -89,13 +94,13 @@ void TKComboBox::paintEvent(QPaintEvent*)
         true, isEnabled(), false, KStyle::Icon, QString::null,
         &pixmap, &ref_font, this);
   } else {
-    style().drawButton( &p, bx, by, bw, bh, isEnabled() ? colorGroup() : palette().disabled(), false );
-    style().drawItem( &p, bx, by, bw, bh, AlignCenter, colorGroup(), isEnabled(), &pixmap, QString::null );
+    style().drawControl( QStyle::CE_PushButton, &p, this, QRect( bx, by, bw, bh ), colorGroup() );
+    style().drawItem( &p, QRect( bx, by, bw, bh), AlignCenter, colorGroup(), isEnabled(), &pixmap, QString::null );
   }
 
 
   if ( hasFocus()) {
-    style().drawFocusRect(&p, fr, g, &g.highlight());
+    style().drawPrimitive( QStyle::PE_FocusRect, &p, fr, g );
   }
 
   if (!editable()) {

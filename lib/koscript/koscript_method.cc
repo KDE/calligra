@@ -13,7 +13,7 @@
 
 bool KSMethod::call( KSContext& context )
 {
-  ASSERT( context.value() && context.value()->type() == KSValue::ListType );
+  Q_ASSERT( context.value() && context.value()->type() == KSValue::ListType );
 
   if ( m_func->type() == KSValue::FunctionType )
   {

@@ -20,6 +20,7 @@
 #define TKACTION_H
 
 #include <kaction.h>
+#include <qstringlist.h>
 
 namespace TK {
   enum IconMode { IconOnly, IconAndText, TextOnly };

@@ -24,6 +24,7 @@
 #include <koTabChooser.h>
 #include <qpainter.h>
 #include <qpopupmenu.h>
+#include <qcursor.h>
 
 #include <klocale.h>
 
@@ -153,7 +154,7 @@ void KoTabChooser::drawContents( QPainter *painter )
 void KoTabChooser::setupMenu()
 {
     rb_menu = new QPopupMenu();
-    CHECK_PTR( rb_menu );
+    Q_CHECK_PTR( rb_menu );
     mLeft = rb_menu->insertItem( i18n( "Tabulator &Left" ), this, SLOT( rbLeft() ) );
     mCenter = rb_menu->insertItem( i18n( "Tabulator &Center" ), this, SLOT( rbCenter() ) );
     mRight = rb_menu->insertItem( i18n( "Tabulator &Right" ), this, SLOT( rbRight() ) );

@@ -57,7 +57,7 @@ SymbolTable::SymbolTable()
     : fontTable( 1 )
 {
     fontTable.setAutoDelete( true );
-    fontTable.insert( 0, new QFont( "symbol", 12, QFont::Normal, false, QFont::AnyCharSet ) );
+    fontTable.insert( 0, new QFont( "symbol", 12, QFont::Normal, false ) );
 
     entries.setAutoDelete(true);
 

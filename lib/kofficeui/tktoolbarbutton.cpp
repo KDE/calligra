@@ -24,6 +24,8 @@
 #include <qtooltip.h>
 #include <qbitmap.h>
 #include <qpopupmenu.h>
+#include <qcursor.h>
+#include <qpainter.h>
 
 #include <kapp.h>
 #include <kglobal.h>
@@ -355,14 +357,14 @@ void TKToolBarButton::drawButton( QPainter* p )
 #define DRAW_PIXMAP_AND_TEXT \
   int x = 3;\
   if (pixmap()) {\
-    style().drawItem( p, x, 0, pixmap()->width(), height(), AlignCenter, colorGroup(), isEnabled(), pixmap(), QString::null );\
+    style().drawItem( p, QRect( x, 0, pixmap()->width(), height() ), AlignCenter, colorGroup(), isEnabled(), pixmap(), QString::null );\
     if (d->m_iconMode==TK::IconAndText && !d->m_text.isEmpty()) {\
       x += pixmap()->width() + 3;\
     }\
   }\
   if ((d->m_iconMode==TK::IconAndText||d->m_iconMode==TK::TextOnly) && !d->m_text.isEmpty()) {\
     QFontMetrics fm(ref_font);\
-    style().drawItem( p, x, 0, fm.width(d->m_text), height(), AlignCenter, colorGroup(), isEnabled(), 0, d->m_text );\
+    style().drawItem( p, QRect( x, 0, fm.width(d->m_text), height() ), AlignCenter, colorGroup(), isEnabled(), 0, d->m_text );\
   }
 
   const char* arrow[] = {
@@ -393,10 +395,10 @@ void TKToolBarButton::drawButton( QPainter* p )
           d->m_isRaised, isEnabled(), false, KStyle::Icon, "",
           &arrow_pix, &ref_font, this);
       } else {
-        style().drawToolButton( p, 0, 0, width()-12, height(), isEnabled() ? colorGroup() : palette().disabled(), f && !d->m_arrowPressed );
+        style().drawComplexControl( QStyle::CC_ToolButton, p, this, QRect( 0, 0, width()-12, height() ), isEnabled() ? colorGroup() : palette().disabled() );
 
-        style().drawToolButton( p, width()-13, 0, 13, height(), isEnabled() ? colorGroup() : palette().disabled(), f && d->m_arrowPressed );
-        style().drawItem( p, width()-13, 0, 13, height(), AlignCenter, colorGroup(), isEnabled(), &arrow_pix, QString::null );
+        style().drawComplexControl( QStyle::CC_ToolButton, p, this, QRect( width()-13, 0, 13, height() ), isEnabled() ? colorGroup() : palette().disabled() );
+        style().drawItem( p, QRect( width()-13, 0, 13, height() ), AlignCenter, colorGroup(), isEnabled(), &arrow_pix, QString::null );
         DRAW_PIXMAP_AND_TEXT
       }
     } else {
@@ -406,7 +408,7 @@ void TKToolBarButton::drawButton( QPainter* p )
           d->m_isRaised, isEnabled(), false, KStyle::IconTextRight, d->m_iconMode != TK::IconOnly ? d->m_text:QString(""),
           pixmap(), &ref_font, this);
       } else {
-        style().drawToolButton( p, 0, 0, width(), height(), isEnabled() ? colorGroup() : palette().disabled(), f );
+        style().drawComplexControl( QStyle::CC_ToolButton, p, this, QRect( 0, 0, width(), height() ), isEnabled() ? colorGroup() : palette().disabled(), f );
         DRAW_PIXMAP_AND_TEXT
       }
       int z = f ? 1:0;
@@ -419,7 +421,7 @@ void TKToolBarButton::drawButton( QPainter* p )
         d->m_isRaised, isEnabled(), d->m_popup, iconType, d->m_text,
         pixmap(), &ref_font, this);
     } else {
-      style().drawToolButton( p, 0, 0, width(), height(), isEnabled() ? colorGroup() : palette().disabled(), f );
+      style().drawComplexControl( QStyle::CC_ToolButton, p, this, QRect( 0, 0, width(), height() ), isEnabled() ? colorGroup() : palette().disabled(), f );
       DRAW_PIXMAP_AND_TEXT
     }
   }

@@ -26,6 +26,7 @@
 #include <qlineedit.h>
 #include <qpopupmenu.h>
 #include <qpushbutton.h>
+#include <qregexp.h>
 #include <kapp.h>
 #include <kdebug.h>
 #include <kcombobox.h>

@@ -23,6 +23,7 @@
 #include <ktoolbar.h>
 #include <qcstring.h>
 #include <qdrawutil.h>
+#include <qpainter.h>
 #include <qtoolbar.h>
 #include <qtoolbutton.h>
 
@@ -416,7 +417,7 @@ int KColorBarAction::plug( QWidget *widget, int index )
 
 	addContainer( bar, b );
 	connect( bar, SIGNAL( destroyed() ), this, SLOT( slotDestroyed() ) );
-	
+
 	b->orientationChanged( bar->orientation() );
 	return containerCount() - 1;
     }

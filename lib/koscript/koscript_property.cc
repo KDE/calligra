@@ -18,7 +18,7 @@ bool KSProperty::set( KSContext& context, const KSValue::Ptr& v )
     else if ( m_module )
 	return m_module->setMember( context, m_name, v );
     else
-	ASSERT( 0 );
+	Q_ASSERT( 0 );
 
     // Never reached
     return false;

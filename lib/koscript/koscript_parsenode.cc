@@ -333,7 +333,7 @@ KSParseNode *KSParseNode::getBranch( int i )
   case 5:
     return b5;
   default:
-    ASSERT( 0 );
+    Q_ASSERT( 0 );
   }
   return 0;
 }
@@ -363,7 +363,7 @@ void KSParseNode::setBranch( int i, KSParseNode *node )
     b5 = node;
     break;
   default:
-    ASSERT( 0 );
+    Q_ASSERT( 0 );
   }
 }
 
@@ -396,7 +396,7 @@ void KSParseNode::printBranch( int indent, const char *tag, bool detailed )
     cout << " (" << getBooleanLiteral() << ")";
     break;
   default:
-    ASSERT( 0 );
+    Q_ASSERT( 0 );
   }
   cout << endl;
   if( b1 )

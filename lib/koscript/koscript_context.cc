@@ -93,7 +93,7 @@ QString KSException::toString( KSContext& context )
 
 KSScope::KSScope( const KSNamespace* globalSpace, KSModule* module )
 {
-  ASSERT( globalSpace );
+  Q_ASSERT( globalSpace );
 
   m_module = module;
   m_globalSpace = globalSpace;
@@ -167,7 +167,7 @@ void KSScope::addObject( const QString& name, const KSValue::Ptr& value )
   else if( m_module )
     m_module->addObject( name, value );
   else
-    ASSERT( 0 );
+    Q_ASSERT( 0 );
 }
 
 /*************************************************

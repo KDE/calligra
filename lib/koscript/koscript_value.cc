@@ -64,7 +64,7 @@ KSValue::KSValue( Type _type )
       // Do nothing
       break;
     case NTypes:
-      ASSERT( 0 );
+      Q_ASSERT( 0 );
     }
 }
 
@@ -132,7 +132,7 @@ KSValue& KSValue::operator= ( const KSValue& p )
       val.ptr = ((KSStruct*)p.val.ptr)->clone();
       break;
     case NTypes:
-      ASSERT( 0 );
+      Q_ASSERT( 0 );
     }
 
   typ = p.type();
@@ -331,7 +331,7 @@ void KSValue::clear()
       delete (KScript::CharRef*)val.ptr;
       break;
     case NTypes:
-      ASSERT(0);
+      Q_ASSERT(0);
       break;
     }
 
@@ -457,7 +457,7 @@ bool KSValue::cast( Type _typ )
       // They can be casted to nothing
       return false;
     case NTypes:
-      ASSERT(0);
+      Q_ASSERT(0);
       break;
     }
 
@@ -582,7 +582,7 @@ QString KSValue::toString( KSContext& context )
       }
       break;
     case NTypes:
-      ASSERT(0);
+      Q_ASSERT(0);
       break;
     }
 
@@ -664,7 +664,7 @@ bool KSValue::cmp( const KSValue& v ) const
     case StructBuiltinMethodType:
       return ( val.sm == v.val.sm );
     case NTypes:
-      ASSERT( 0 );
+      Q_ASSERT( 0 );
     }
 
   // Never reached
@@ -712,7 +712,7 @@ bool KSValue::implicitCast( Type _typ ) const
       // They can be casted to nothing
       return false;
     case NTypes:
-      ASSERT(0);
+      Q_ASSERT(0);
       break;
     }
 

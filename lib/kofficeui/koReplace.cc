@@ -20,6 +20,7 @@
 
 #include <qcheckbox.h>
 #include <qlabel.h>
+#include <qregexp.h>
 #include <kapp.h>
 #include <kdebug.h>
 #include <kcombobox.h>

@@ -4,6 +4,7 @@
 #include <kcolordialog.h>
 #include <ktoolbar.h>
 #include <qcolor.h>
+#include <qpainter.h>
 #include <qiconset.h>
 #include <qtooltip.h>
 #include <klocale.h>

@@ -863,7 +863,7 @@ double KoRuler::makeIntern( double _v )
 void KoRuler::setupMenu()
 {
     d->rb_menu = new QPopupMenu();
-    CHECK_PTR( d->rb_menu );
+    Q_CHECK_PTR( d->rb_menu );
     d->mMM = d->rb_menu->insertItem( i18n( "Millimeters (mm)" ), this, SLOT( rbMM() ) );
     d->mPT = d->rb_menu->insertItem( i18n( "Points (pt)" ), this, SLOT( rbPT() ) );
     d->mINCH = d->rb_menu->insertItem( i18n( "Inches (inch)" ), this, SLOT( rbINCH() ) );

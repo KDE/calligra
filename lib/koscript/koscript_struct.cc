@@ -128,7 +128,7 @@ void KSBuiltinStructClass::addMethod( const QString& name, KSBuiltinStructClass:
 bool KSBuiltinStructClass::call( void* object, KSContext& context, const QString& name )
 {
     QMap<QString,Method>::Iterator it = m_methods.find( name );
-    ASSERT( it != m_methods.end() );
+    Q_ASSERT( it != m_methods.end() );
 
     if ( !it.data().m_signature.isNull() )
 	if ( !KSUtil::checkArgs( context, it.data().m_signature, name, TRUE ) )
@@ -203,7 +203,7 @@ bool KSBuiltinStruct::setMember( KSContext& context, const QString& name, const 
 	context.setException( new KSException( "ReadOnly", tmp.arg( name ).arg( getClass()->name() ) ) );
 	return FALSE;
     }
-	
+
     return TRUE;
 }
 

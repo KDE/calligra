@@ -22,6 +22,7 @@
 #include <math.h>
 
 #include <qpainter.h>
+#include <qpaintdevice.h>
 
 #include <kdebug.h>
 

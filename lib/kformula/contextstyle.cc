@@ -45,7 +45,7 @@ void ContextStyle::TextStyleValues::setup( QFont font,
 ContextStyle::ContextStyle()
         : m_zoomedResolutionX(1.0), m_zoomedResolutionY(1.0),
           defaultFont("times"), nameFont("times"), numberFont("times"),
-          operatorFont("times"), symbolFont("symbol",12,QFont::Normal,FALSE,QFont::AnyCharSet),
+          operatorFont("times"), symbolFont("symbol",12,QFont::Normal,FALSE),
           defaultColor(Qt::black), numberColor(Qt::blue),
           operatorColor(Qt::darkGreen), errorColor(Qt::darkRed),
           emptyColor(Qt::blue)

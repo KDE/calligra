@@ -50,7 +50,7 @@ public:
      * Reimplemented by KSPebblesModule.
      */
     virtual bool isPebbles() const { return FALSE; }
-    
+
     /**
      * @return the modules name.
      */
@@ -133,11 +133,11 @@ public:
   KSScope( const KSNamespace* globalSpace, KSModule *module );
   KSScope( const KSScope& s );
 
-  void pushLocalScope( KSSubScope* scope ) { ASSERT( m_localScope == 0 ); m_localScope = scope;  }
+  void pushLocalScope( KSSubScope* scope ) { Q_ASSERT( m_localScope == 0 ); m_localScope = scope;  }
   KSSubScope* popLocalScope() { KSSubScope* s = m_localScope; m_localScope = 0; return s; }
   KSSubScope* localScope() { return m_localScope; }
 
-  void pushModule( KSModule* m ) { ASSERT( m_module == 0 ); m_module = m; m_moduleSpace = m->nameSpace(); }
+  void pushModule( KSModule* m ) { Q_ASSERT( m_module == 0 ); m_module = m; m_moduleSpace = m->nameSpace(); }
   KSModule* popModule() { KSModule* n = m_module; m_module = 0; return n; }
 
   KSModule* module() { return m_module; }

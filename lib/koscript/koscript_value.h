@@ -113,40 +113,40 @@ public:
 
     bool isEmpty() const { return ( typ == Empty ); }
 
-    const QDate& dateValue() const { ASSERT( typ == DateType ); return *((QDate*)val.ptr); }
-    QDate& dateValue() { ASSERT( typ == DateType ); return *((QDate*)val.ptr); }
+    const QDate& dateValue() const { Q_ASSERT( typ == DateType ); return *((QDate*)val.ptr); }
+    QDate& dateValue() { Q_ASSERT( typ == DateType ); return *((QDate*)val.ptr); }
 
-    const QTime& timeValue() const { ASSERT( typ == TimeType ); return *((QTime*)val.ptr); }
-    QTime& timeValue() { ASSERT( typ == TimeType ); return *((QTime*)val.ptr); }
+    const QTime& timeValue() const { Q_ASSERT( typ == TimeType ); return *((QTime*)val.ptr); }
+    QTime& timeValue() { Q_ASSERT( typ == TimeType ); return *((QTime*)val.ptr); }
 
-    const QString& stringValue() const { ASSERT( typ == StringType ); return *((QString*)val.ptr); }
-    QString& stringValue() { ASSERT( typ == StringType ); return *((QString*)val.ptr); }
-    const QValueList<Ptr>& listValue() const { ASSERT( typ == ListType );  return *((QValueList<Ptr>*)val.ptr); }
-    QValueList<Ptr>& listValue() { ASSERT( typ == ListType );  return *((QValueList<Ptr>*)val.ptr); }
-    const QMap<QString,Ptr>& mapValue() const { ASSERT( typ == MapType ); return *((QMap<QString,Ptr>*)val.ptr); }
-    QMap<QString,Ptr>& mapValue() { ASSERT( typ == MapType ); return *((QMap<QString,Ptr>*)val.ptr); }
-    KScript::Long intValue() const { ASSERT( typ == IntType || typ == DoubleType ); if ( typ == IntType ) return val.i; return (int)val.d; }
-    KScript::Boolean boolValue() const { ASSERT( typ == BoolType || typ == StringType ); if ( typ == BoolType ) return val.b;
+    const QString& stringValue() const { Q_ASSERT( typ == StringType ); return *((QString*)val.ptr); }
+    QString& stringValue() { Q_ASSERT( typ == StringType ); return *((QString*)val.ptr); }
+    const QValueList<Ptr>& listValue() const { Q_ASSERT( typ == ListType );  return *((QValueList<Ptr>*)val.ptr); }
+    QValueList<Ptr>& listValue() { Q_ASSERT( typ == ListType );  return *((QValueList<Ptr>*)val.ptr); }
+    const QMap<QString,Ptr>& mapValue() const { Q_ASSERT( typ == MapType ); return *((QMap<QString,Ptr>*)val.ptr); }
+    QMap<QString,Ptr>& mapValue() { Q_ASSERT( typ == MapType ); return *((QMap<QString,Ptr>*)val.ptr); }
+    KScript::Long intValue() const { Q_ASSERT( typ == IntType || typ == DoubleType ); if ( typ == IntType ) return val.i; return (int)val.d; }
+    KScript::Boolean boolValue() const { Q_ASSERT( typ == BoolType || typ == StringType ); if ( typ == BoolType ) return val.b;
                                          return !stringValue().isEmpty(); }
-    KScript::Double doubleValue() const { ASSERT( typ == DoubleType || typ == IntType ); if ( typ == DoubleType ) return val.d;
+    KScript::Double doubleValue() const { Q_ASSERT( typ == DoubleType || typ == IntType ); if ( typ == DoubleType ) return val.d;
                                           return (double)val.i; }
     KScript::Char charValue() const { if ( typ == CharRefType ) return *((KScript::CharRef*)val.ptr);
-                                            ASSERT( typ == CharType ); return QChar( val.c ); }
-    KScript::CharRef& charRefValue() { ASSERT( typ == CharRefType ); return *((KScript::CharRef*)val.ptr); }
-    const KScript::CharRef& charRefValue() const { ASSERT( typ == CharRefType ); return *((KScript::CharRef*)val.ptr); }
-    KSFunction* functionValue() { ASSERT( typ == FunctionType ); return ((KSFunction*)val.ptr); }
-    const KSFunction* functionValue() const { ASSERT( typ == FunctionType ); return ((KSFunction*)val.ptr); }
-    KSMethod* methodValue() { ASSERT( typ == MethodType ); return ((KSMethod*)val.ptr); }
-    const KSMethod* methodValue() const { ASSERT( typ == MethodType ); return ((KSMethod*)val.ptr); }
-    KSProperty* propertyValue() { ASSERT( typ == PropertyType ); return ((KSProperty*)val.ptr); }
-    const KSProperty* propertyValue() const { ASSERT( typ == PropertyType ); return ((KSProperty*)val.ptr); }
-    KSModule* moduleValue() { ASSERT( typ == ModuleType ); return ((KSModule*)val.ptr); }
-    const KSModule* moduleValue() const { ASSERT( typ == ModuleType ); return ((KSModule*)val.ptr); }
-    KSStructClass* structClassValue() { ASSERT( typ == StructClassType ); return ((KSStructClass*)val.ptr); }
-    const KSStructClass* structClassValue() const { ASSERT( typ == StructClassType ); return ((KSStructClass*)val.ptr); }
-    KSStruct* structValue() { ASSERT( typ == StructType ); return ((KSStruct*)val.ptr); }
-    const KSStruct* structValue() const { ASSERT( typ == StructType ); return ((KSStruct*)val.ptr); }
-    KSStructBuiltinMethod structBuiltinMethodValue() { ASSERT( typ == StructBuiltinMethodType ); return val.sm; }
+                                            Q_ASSERT( typ == CharType ); return QChar( val.c ); }
+    KScript::CharRef& charRefValue() { Q_ASSERT( typ == CharRefType ); return *((KScript::CharRef*)val.ptr); }
+    const KScript::CharRef& charRefValue() const { Q_ASSERT( typ == CharRefType ); return *((KScript::CharRef*)val.ptr); }
+    KSFunction* functionValue() { Q_ASSERT( typ == FunctionType ); return ((KSFunction*)val.ptr); }
+    const KSFunction* functionValue() const { Q_ASSERT( typ == FunctionType ); return ((KSFunction*)val.ptr); }
+    KSMethod* methodValue() { Q_ASSERT( typ == MethodType ); return ((KSMethod*)val.ptr); }
+    const KSMethod* methodValue() const { Q_ASSERT( typ == MethodType ); return ((KSMethod*)val.ptr); }
+    KSProperty* propertyValue() { Q_ASSERT( typ == PropertyType ); return ((KSProperty*)val.ptr); }
+    const KSProperty* propertyValue() const { Q_ASSERT( typ == PropertyType ); return ((KSProperty*)val.ptr); }
+    KSModule* moduleValue() { Q_ASSERT( typ == ModuleType ); return ((KSModule*)val.ptr); }
+    const KSModule* moduleValue() const { Q_ASSERT( typ == ModuleType ); return ((KSModule*)val.ptr); }
+    KSStructClass* structClassValue() { Q_ASSERT( typ == StructClassType ); return ((KSStructClass*)val.ptr); }
+    const KSStructClass* structClassValue() const { Q_ASSERT( typ == StructClassType ); return ((KSStructClass*)val.ptr); }
+    KSStruct* structValue() { Q_ASSERT( typ == StructType ); return ((KSStruct*)val.ptr); }
+    const KSStruct* structValue() const { Q_ASSERT( typ == StructType ); return ((KSStruct*)val.ptr); }
+    KSStructBuiltinMethod structBuiltinMethodValue() { Q_ASSERT( typ == StructBuiltinMethodType ); return val.sm; }
 
     /**
      * DO NOT USE ANY MORE.
