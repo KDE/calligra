@@ -830,9 +830,9 @@ static const sExcelFunction ExcelFunctions[] =
 	{ "FIND",             124,  0 },
 	{ "CELL",             125,  0 },
 	{ "ISERR",            126,  1 },
-	{ "ISSTRING",         127,  1 },
-	{ "ISVALUE",          128,  1 },
-	{ "ISEMPTY",          129,  1 },
+	{ "ISTEXT",           127,  1 },
+	{ "ISNUMBER",         128,  1 },
+	{ "ISBALNK",          129,  1 },
 	{ "T",                130,  1 },
 	{ "N",                131,  1 },
 	{ "DATEVALUE",        140,  1 },
@@ -848,10 +848,10 @@ static const sExcelFunction ExcelFunctions[] =
 	{ "ZINSZ",            167,  0 },
 	{ "KAPZ",             168,  0 },
 	{ "COUNT2",           169,  0 },
-	{ "MULTIPLY",         183,  0 },  /* EXCEL: PRODUCT */
+	{ "PRODUCT",          183,  0 },
 	{ "FACT",             184,  1 },
 	{ "DPRODUCT",         189,  3 },
-	{ "ISNONSTRING",      190,  1 },
+	{ "ISNONTEXT",        190,  1 },
 	{ "STDEVP",           193,  0 },
 	{ "VARP",             194,  0 },
 	{ "DSTDEVP",          195,  3 },
@@ -875,6 +875,7 @@ static const sExcelFunction ExcelFunctions[] =
 	{ "ACOSH",            233,  1 },  /* EXCEL: ARCCOSHYP */
 	{ "ATANH",            234,  1 },  /* EXCEL: ARCTANHYP */
 	{ "DGET",             235,  3 },
+	{ "INFO",             244,  1 },  /* EXCEL: GDA2 */
 	{ "DB",               247,  0 },  /* EXCEL: GDA2 */
 	{ "FREQUENCY",        252,  2 },
 	{ "ERRORTYPE",        261,  1 },
@@ -943,13 +944,13 @@ static const sExcelFunction ExcelFunctions[] =
 	{ "TRIMMEAN",         331,  2 },
 	{ "TINV",             332,  2 },
 	{ "CONCATENATE",      336,  0 },  /* EXCEL: CONCAT */
-	{ "POW",              337,  2 },  /* EXCEL: POWER */
+	{ "POWER",            337,  2 },
 	{ "RADIANS",          342,  1 },
 	{ "DEGREES",          343,  1 },
 	{ "SUBTOTAL",         344,  0 },
 	{ "SUMIF",            345,  0 },
 	{ "COUNTIF",          346,  2 },
-	{ "COUNTEMPTYCELLS",  347,  1 },
+	{ "COUNTBLANK",       347,  1 },
 	{ "ROMAN",            354,  0 },
 	{ "ISPMT",            350,  4 },
 	{ "GETPIVOTDATA",     358,  2 },
