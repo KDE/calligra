@@ -114,6 +114,9 @@ PixmapCollection::contains(const QString &name)
 void
 PixmapCollection::save(QDomNode parentNode)
 {
+	if(m_pixmaps.isEmpty())
+		return;
+
 	QDomDocument domDoc = parentNode.ownerDocument();
 	QDomElement collection = domDoc.createElement("collection");
 	parentNode.appendChild(collection);

@@ -847,10 +847,12 @@ FormIO::saveWidget(ObjectTreeItem *item, QDomElement &parent, QDomDocument &domD
 			tclass.setAttribute("colspan", item->gridColSpan());
 		}
 	}
+	if(!item->parent()) // Toplevel widget
+		tclass.setAttribute("class", "QWidget");
 	// For compatibility, HBox, VBox and Grid are saved as "QLayoutWidget"
-	if((item->widget()->isA("HBox")) || (item->widget()->isA("VBox")) || (item->widget()->isA("Grid")))
+	else if((item->widget()->isA("HBox")) || (item->widget()->isA("VBox")) || (item->widget()->isA("Grid")))
 		tclass.setAttribute("class", "QLayoutWidget");
-	else if(item->widget()->className() == QString("CustomWidget"))
+	else if(item->widget()->isA("CustomWidget"))
 		tclass.setAttribute("class", item->className());
 	else // Normal widgets
 		tclass.setAttribute("class", item->widget()->className());
@@ -889,6 +891,14 @@ FormIO::saveWidget(ObjectTreeItem *item, QDomElement &parent, QDomDocument &domD
 	}
 	delete map;
 
+	if(item->widget()->isA("CustomWidget")) {
+		QDomDocument doc("TEMP");
+		doc.setContent(item->m_unknownProps);
+		for(QDomNode n = doc.firstChild(); !n.isNull(); n = n.nextSibling()) {
+			tclass.appendChild(n.cloneNode());
+		}
+
+	}
 	// Saving container 's layout if there is one
 	QDomElement layout;
 	if(item->container() && item->container()->layoutType() != Container::NoLayout)
@@ -1190,7 +1200,12 @@ FormIO::readChildNodes(ObjectTreeItem *tree, Container *container, WidgetLibrary
 			}
 			// If the object doesn't have this property, we let the Factory handle it (maybe a special property)
 			else if(w->metaObject()->findProperty(name.latin1(), true) == -1)
-				lib->readSpecialProperty(w->className(), node, w, tree);
+			{
+				if(w->className() == QString("CustomWidget"))
+					tree->storeUnknownProperty(node);
+				else
+					lib->readSpecialProperty(w->className(), node, w, tree);
+			}
 			else // we have a normal property, let's load it
 			{
 				QVariant val = readProp(node.firstChild(), w, name);
@@ -1219,8 +1234,12 @@ FormIO::readChildNodes(ObjectTreeItem *tree, Container *container, WidgetLibrary
 			else if(tag == "vbox")
 				tree->container()->setLayout(Container::VBox);
 		}
-		else // unknown tag, we let the Factory handle it
-			lib->readSpecialProperty(w->className(), node, w, tree);
+		else {// unknown tag, we let the Factory handle it
+			if(w->className() == QString("CustomWidget"))
+				tree->storeUnknownProperty(node);
+			else
+				lib->readSpecialProperty(w->className(), node, w, tree);
+		}
 	}
 
 	// If the wigdet doesn't have a geometry property (so inside a layout), we need to move it to make sure it will be in the right place in the layout

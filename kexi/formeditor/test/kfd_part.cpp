@@ -268,7 +268,7 @@ KFormDesignerPart::saveFile()
 void
 KFormDesignerPart::saveAs()
 {
-	KURL url = KFileDialog::getSaveURL("::kformdesigner", i18n("*.ui|Qt Designer UI Files"), m_workspace);
+	KURL url = KFileDialog::getSaveURL("::kformdesigner", i18n("*.ui|Qt Designer UI Files"), m_workspace->topLevelWidget());
 	if(url.isEmpty())
 		return;
 	else

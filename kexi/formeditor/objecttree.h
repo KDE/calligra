@@ -29,6 +29,7 @@
 #include <qguardedptr.h>
 
 class QWidget;
+class QDomElement;
 
 namespace KFormDesigner {
 
@@ -76,6 +77,7 @@ class KFORMEDITOR_EXPORT ObjectTreeItem
 		    These modified properties are written in the .ui files when saving the form.
 		*/
 		void		addModifiedProperty(const QString &property, const QVariant &value);
+		void		storeUnknownProperty(QDomElement &el);
 
 		void		addPixmapName(const QString &property, const QString &name);
 		QString		pixmapName(const QString &property);
@@ -93,6 +95,7 @@ class KFORMEDITOR_EXPORT ObjectTreeItem
 		ObjectTreeList	m_children;
 		QGuardedPtr<Container> m_container;
 		QMap<QString, QVariant> m_props;
+		QString  m_unknownProps;
 		QMap<QString, QString>  m_pixmapNames;
 		ObjectTreeItem* m_parent;
 		QGuardedPtr<QWidget> m_widget;
@@ -100,6 +103,9 @@ class KFORMEDITOR_EXPORT ObjectTreeItem
 
 		int m_row, m_col, m_rowspan, m_colspan;
 		bool m_span;
+
+		friend class ObjectTree;
+		friend class FormIO;
 };
 
 //! A class representing all the objects in a Form

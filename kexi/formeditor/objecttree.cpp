@@ -21,6 +21,8 @@
 #include <qwidget.h>
 #include <qstringlist.h>
 #include <qvariant.h>
+#include <qdom.h>
+#include <qtextstream.h>
 
 #include "form.h"
 #include "container.h"
@@ -75,6 +77,15 @@ ObjectTreeItem::addModifiedProperty(const QString &property, const QVariant &old
 	{
 		m_props.insert(property, oldValue);
 		//kdDebug() << "ObjectTree::adModProperty(): Added this property in the list: " << property << endl;
+	}
+}
+
+void
+ObjectTreeItem::storeUnknownProperty(QDomElement &el)
+{
+	if(!el.isNull()) {
+		QTextStream ts(m_unknownProps, IO_WriteOnly|IO_Append );
+		el.save(ts, 0);
 	}
 }
 

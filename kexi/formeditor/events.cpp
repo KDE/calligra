@@ -69,6 +69,9 @@ ConnectionBuffer::allConnectionsForWidget(const QString &widget)
 void
 ConnectionBuffer::save(QDomNode &parentNode)
 {
+	if(isEmpty())
+		return;
+
 	QDomDocument domDoc = parentNode.ownerDocument();
 	QDomElement connections;
 	if(!parentNode.namedItem("connections").isNull())
