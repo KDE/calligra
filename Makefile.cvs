@@ -1,7 +1,29 @@
-
-all:
-	cat acinclude.m4.in libtool.m4.in > acinclude.m4
+all: 
+	@echo "This Makefile is only for the CVS repository"
+	@echo "I will delete it before making the distribution"
+	@echo ""
+	@if test ! -d admin; then \
+	   echo "Please recheckout this module!" ;\
+	   echo "for cvs: use checkout once and after that update again" ;\
+	   echo "for cvsup: checkout kde-common from cvsup and" ;\
+	   echo "   link kde-common/admin to ./admin" ;\
+	   exit ;\
+	fi
+	cat admin/acinclude.m4.in admin/libtool.m4.in > acinclude.m4
 	aclocal
-	autoconf
 	autoheader
 	automake
+	autoconf
+
+dist:
+	@cat admin/acinclude.m4.in admin/libtool.m4.in > acinclude.m4; \
+	aclocal; \
+	autoheader; \
+	automake --foreign --include-deps; \
+	autoconf; \
+	LIST=`find ./po -name "*.po"`; \
+	for i in $$LIST; do \
+	 file2=`echo $$i | sed -e "s#\.po#\.gmo#"`; \
+	 msgfmt -o $$file2 $$i || touch $$file2; \
+	done
+
