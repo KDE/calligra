@@ -26,8 +26,9 @@ VUnitDoubleSpinBox::VUnitDoubleValidator::VUnitDoubleValidator( VUnitDoubleSpinB
 }
 
 QValidator::State
-VUnitDoubleSpinBox::VUnitDoubleValidator::validate( QString &s, int & ) const
+VUnitDoubleSpinBox::VUnitDoubleValidator::validate( QString &s, int &pos ) const
 {
+	QValidator::State result = Valid;
 	bool ok = false;
 	double value = s.toDouble( &ok );
 	double newVal = -1;
@@ -39,17 +40,17 @@ VUnitDoubleSpinBox::VUnitDoubleValidator::validate( QString &s, int & ) const
 			newVal = KoUnit::ptToUnit( KoUnit::ptFromUnit( value, KoUnit::U_INCH ), m_unit );
 		else if( s.endsWith( "pt" ) )
 			newVal = KoUnit::ptToUnit( KoUnit::ptFromUnit( value, KoUnit::U_PT ), m_unit );
-		else if( s.endsWith( "m" ) || s.endsWith( "i" ) || s.endsWith( "p" ) )
-			return Intermediate;
+		else if( s.at( pos - 2 ).isDigit() && ( s.endsWith( "m" ) || s.endsWith( "i" ) || s.endsWith( "p" ) ) )
+			result = Intermediate;
 		else
-			return Invalid;
+			newVal = value;
 	}
 	if( newVal >= 0.0 )
 	{
 		m_spin->setValue( newVal );
 		s = QString( "%1%2").arg( newVal, 0, 'f', m_spin->precision() ).arg( KoUnit::unitName( m_unit ) );
 	}
-	return Valid;
+	return result;
 }
 
 
