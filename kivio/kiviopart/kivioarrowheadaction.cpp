@@ -48,8 +48,8 @@ KivioArrowHeadAction::KivioArrowHeadAction(const QString &text, const QString &p
   m_endPopup = new KPopupMenu;
   m_startPopup->setCheckable(true);
   m_endPopup->setCheckable(true);
-  m_popup->insertItem(i18n("Arrowhead at Origin"), m_startPopup);
-  m_popup->insertItem(i18n("Arrowhead at End"), m_endPopup);
+  m_popup->insertItem(UserIconSet("start_arrowhead"), i18n("Arrowhead at Origin"), m_startPopup);
+  m_popup->insertItem(UserIconSet("end_arrowhead"), i18n("Arrowhead at End"), m_endPopup);
   loadArrowHeads(m_startPopup, false);
   loadArrowHeads(m_endPopup, true);
   m_currentStart = m_currentEnd = 0;

@@ -1,5 +1,5 @@
 <!DOCTYPE kpartgui SYSTEM "kpartgui.dtd" >
-<kpartgui name="KivioConnectorTool" library="libkivioconnectortool" version="4">
+<kpartgui name="KivioConnectorTool" library="libkivioconnectortool" version="5">
 <MenuBar>
   <Menu name="Tools">
     <Action name="connector"/>
@@ -7,6 +7,6 @@
   </Menu>
 </MenuBar>
 <ToolBar name="ToolsToolBar">
-  <Action name="connector"/>
+  <Action name="polyLineConnector"/>
 </ToolBar>
 </kpartgui>

@@ -1,5 +1,5 @@
 <!DOCTYPE kpartgui SYSTEM "kpartgui.dtd" >
-<kpartgui name="kivio" version="25">
+<kpartgui name="kivio" version="26">
   <MenuBar>
     <Menu name="file">
       <Action name="installStencilSet"/>
@@ -88,20 +88,9 @@
     <Separator/>
   </ToolBar>
   
-  <ToolBar name="FormatToolBar" fullWidth="false"><text>Format</text>
-    <Action name="setFGColor"/>
-    <Action name="setBGColor"/>
-    <Separator/>
-    <Action name="arrowHeads"/>
-    <Action name="setLineWidth"/>
-    <Action name="setLineStyle"/>
-  </ToolBar>
-  
   <ToolBar name="TextBar" fullWidth="false"><text>Text Format</text>
     <Action name="setFontFamily"/>
     <Action name="setFontSize"/>
-    <Separator/>
-    <Action name="setTextColor"/>
     <Separator/>
     <Action name="setFontBold"/>
     <Action name="setFontItalics"/>
@@ -112,8 +101,16 @@
     <Action name="textAlignLeft"/>
     <Action name="textAlignCenter"/>
     <Action name="textAlignRight"/>
-    <Action name="textVAlignSuper"/>
-    <Action name="textVAlignSub"/>
+  </ToolBar>
+  
+  <ToolBar name="FormatToolBar" fullWidth="false"><text>Format</text>
+    <Action name="setTextColor"/>
+    <Action name="setFGColor"/>
+    <Action name="setBGColor"/>
+    <Separator/>
+    <Action name="arrowHeads"/>
+    <Action name="setLineWidth"/>
+    <Action name="setLineStyle"/>
   </ToolBar>
   
   <Menu name="menupage_popup">
