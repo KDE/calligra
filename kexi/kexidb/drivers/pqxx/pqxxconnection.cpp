@@ -46,29 +46,6 @@ Cursor* pqxxSqlConnection::prepareQuery( QuerySchema& query, uint cursor_options
 }
 
 //==================================================================================
-//
-void pqxxSqlConnection::escapeString( const QString& str, char *target )
-{
-#warning TODO: need to implement string escaping
-}
-
-//==================================================================================
-//
-QString pqxxSqlConnection::escapeString( const QString& str) const
-{
-#warning TODO: need to implement string escaping
-    return QString::null;
-}
-
-//==================================================================================
-//
-QCString pqxxSqlConnection::escapeString( const QCString& str) const
-{
-#warning TODO: need to implement string escaping
-    return QCString();
-}
-
-//==================================================================================
 //Properly escaped a database object name
 QString pqxxSqlConnection::escapeName(const QString &name) const
 {

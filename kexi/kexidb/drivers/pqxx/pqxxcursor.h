@@ -23,9 +23,9 @@ class pqxxSqlCursor: public Cursor {
 public:
 	virtual ~pqxxSqlCursor();
 
-	virtual QVariant value(int) const;
-	virtual const char** recordData() const;
-	virtual void storeCurrentRecord(RecordData &data) const;
+	virtual QVariant value(uint i);
+	virtual const char** rowData() const;
+	virtual void storeCurrentRow(RowData &data) const;
 
 //TODO		virtual const char *** bufferData()
 		
@@ -52,6 +52,7 @@ private:
 	pqxx::result* m_res;
 	pqxx::nontransaction* m_tran;
 	pqxx::connection* my_conn;
+	QVariant pValue(uint pos) const;
 	
 	friend class pqxxSqlConnection;
 };

@@ -23,6 +23,7 @@
 #include <kexidb/driver_p.h>
 #include "pqxxdriver.h"
 #include "pqxxconnection.h"
+#include <string>
 
 //#include <qfile.h>
 //#include <qdir.h>
@@ -36,6 +37,8 @@ using namespace KexiDB;
 
 KEXIDB_DRIVER_INFO( pqxxSqlDriver, pqxxsql, "pqxxsql" );
 
+//==================================================================================
+//
 pqxxSqlDriver::pqxxSqlDriver( QObject *parent, const char *name, const QStringList &args )
 	: Driver( parent, name, args )
 {
@@ -63,31 +66,53 @@ pqxxSqlDriver::pqxxSqlDriver( QObject *parent, const char *name, const QStringLi
 	m_typeNames[Field::BLOB]="BYTEA";
 }
 
+//==================================================================================
+//
 pqxxSqlDriver::~pqxxSqlDriver()
 {
 //	delete d;
 }
 
-
+//==================================================================================
+//
 KexiDB::Connection*
 pqxxSqlDriver::drv_createConnection( ConnectionData &conn_data )
 {
 	return new pqxxSqlConnection( this, conn_data );
 }
 
+//==================================================================================
+//
 bool pqxxSqlDriver::isSystemObjectName( const QString& n ) const
 {
 	return Driver::isSystemObjectName(n);
 }
 
+//==================================================================================
+//
 bool pqxxSqlDriver::isSystemFieldName( const QString& n ) const
 {
 	return n.lower()=="oid";
 }
 
+//==================================================================================
+//
 bool pqxxSqlDriver::isSystemDatabaseName( const QString& n ) const
 {
 	return n.lower()=="template1" || n.lower()=="template0";
 }
 
+//==================================================================================
+//
+QString pqxxSqlDriver::escapeString( const QString& str) const
+{
+    return QString(pqxx::Quote(str.ascii()).c_str());
+}
+
+//==================================================================================
+//
+QCString pqxxSqlDriver::escapeString( const QCString& str) const
+{
+    return QCString(pqxx::Quote(QString(str).ascii()).c_str());
+}
 #include "pqxxdriver.moc"

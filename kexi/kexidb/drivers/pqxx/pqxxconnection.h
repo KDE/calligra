@@ -32,9 +32,6 @@ class pqxxSqlConnection : public Connection
 
                 virtual Cursor* prepareQuery( const QString& statement = QString::null, uint cursor_options = 0 );
 		virtual Cursor* prepareQuery( QuerySchema& query, uint cursor_options = 0 );
-                virtual void escapeString( const QString& str, char *target );
-                virtual QString escapeString( const QString& str) const;
-                virtual QCString escapeString( const QCString& str) const;
 
 	protected:
 

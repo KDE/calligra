@@ -42,6 +42,8 @@ class KEXI_DB_EXPORT pqxxSqlDriver : public Driver
 		virtual bool isSystemObjectName( const QString& n )const;
 		virtual bool isSystemFieldName( const QString& n )const;
 		virtual bool isSystemDatabaseName( const QString& n )const;
+                virtual QString escapeString( const QString& str) const;
+                virtual QCString escapeString( const QCString& str) const;
 
 	protected:
 		virtual Connection *drv_createConnection( ConnectionData &conn_data );

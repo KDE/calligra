@@ -160,7 +160,14 @@ else
 
 //==================================================================================
 //Return the value for a given column for the current record
-QVariant pqxxSqlCursor::value(int pos) const
+QVariant pqxxSqlCursor::value(uint pos)
+{
+	return pValue(pos);
+}
+
+//==================================================================================
+//Return the value for a given column for the current record - Private const version
+QVariant pqxxSqlCursor::pValue(uint pos) const
 {
 	if (!m_res->size() > 0)
 	{
@@ -182,7 +189,7 @@ QVariant pqxxSqlCursor::value(int pos) const
 //==================================================================================
 //Return the current record as a char**
 //who'd have thought we'd be using char** in this day and age :o)
-const char** pqxxSqlCursor::recordData() const
+const char** pqxxSqlCursor::rowData() const
 {
 	KexiDBDrvDbg << "pqxxSqlCursor::recordData" << endl;
 	
@@ -208,18 +215,18 @@ const char** pqxxSqlCursor::recordData() const
 
 //==================================================================================
 //Store the current record in [data]
-void pqxxSqlCursor::storeCurrentRecord(RecordData &data) const
+void pqxxSqlCursor::storeCurrentRow(RowData &data) const
 {
-KexiDBDrvDbg << "pqxxSqlCursor::storeCurrentRecord: POSITION IS " << (long)m_at<< endl;
+KexiDBDrvDbg << "pqxxSqlCursor::storeCurrentRow: POSITION IS " << (long)m_at<< endl;
 
 if (!m_res->size()>0)
 	return;
 
 data.reserve(m_fieldCount);
 
-for( int i=0; i<m_fieldCount; i++)
+for( uint i=0; i<m_fieldCount; i++)
 {
-	data[i] = QVariant(value(i));
+	data[i] = pValue(i);
 }
 }
 
