@@ -41,14 +41,14 @@ void drawFigure( LineEnd figure, QPainter* painter, const KoPoint &coord, const 
     {
         int _h = _w;
         if ( _h % 2 == 0 ) _h--;
-	painter->translate( _zoomHandler->zoomItX(coord.x()), _zoomHandler->zoomItY( coord.y()) );
+        painter->translate( _zoomHandler->zoomItX(coord.x()), _zoomHandler->zoomItY( coord.y()) );
         painter->rotate( angle );
         painter->scale( 1, 1 );
         painter->fillRect( _zoomHandler->zoomItX(-3 - _w / 2),_zoomHandler->zoomItY( -3 - _h / 2),_zoomHandler->zoomItX( 6 + _w),_zoomHandler->zoomItY( 6 + _h), color );
     } break;
     case L_CIRCLE:
     {
-	painter->translate( _zoomHandler->zoomItX(coord.x()), _zoomHandler->zoomItY(coord.y()) );
+        painter->translate( _zoomHandler->zoomItX(coord.x()), _zoomHandler->zoomItY(coord.y()) );
         painter->setBrush( color );
         painter->drawEllipse( _zoomHandler->zoomItX(-3 - _w / 2), _zoomHandler->zoomItY(-3 - _w / 2),_zoomHandler->zoomItX( 6 + _w), _zoomHandler->zoomItY(6 + _w) );
     } break;
@@ -62,7 +62,7 @@ void drawFigure( LineEnd figure, QPainter* painter, const KoPoint &coord, const 
         pArray.setPoint( 1, _zoomHandler->zoomPoint(p2) );
         pArray.setPoint( 2, _zoomHandler->zoomPoint(p3) );
 
-	painter->translate( _zoomHandler->zoomItX(coord.x()),_zoomHandler->zoomItY( coord.y()) );
+        painter->translate( _zoomHandler->zoomItX(coord.x()),_zoomHandler->zoomItY( coord.y()) );
         painter->rotate( angle );
         painter->scale( 1, 1 );
         painter->setBrush( color );
@@ -92,7 +92,7 @@ void drawFigure( LineEnd figure, QPainter* painter, const KoPoint &coord, const 
     }break;
     case L_DOUBLE_ARROW:
     {
-	painter->translate( _zoomHandler->zoomItX(coord.x()),_zoomHandler->zoomItY( coord.y()) );
+        painter->translate( _zoomHandler->zoomItX(coord.x()),_zoomHandler->zoomItY( coord.y()) );
         painter->rotate( angle );
         painter->scale( 1, 1 );
         painter->setBrush( color );
@@ -238,7 +238,7 @@ KoPointArray getCloseObject( KoPointArray points, bool close, bool objClosed )
 /*
  * Custom cursors. Use the X utility "bitmap" to create new cursors.
  */
-QCursor penCursor()
+static QCursor penCursor()
 {
     static unsigned char pen_bits[] = {
         0x00, 0x00, 0x00, 0x00, 0x00, 0x1c, 0x00, 0x00, 0x3a, 0x00, 0x00, 0x7d,
@@ -257,7 +257,7 @@ QCursor penCursor()
     return QCursor( pix, 1, 22 );
 }
 
-QCursor rotateCursor()
+static QCursor rotateCursor()
 {
     static unsigned char rotate_bits[] = {
         0x00, 0x00, 0x00, 0x00, 0x0c, 0x00, 0xc0, 0xf3, 0x00, 0xe0, 0xff, 0x01,

@@ -20,21 +20,22 @@
 #ifndef _kpresenter_utils_h__
 #define _kpresenter_utils_h__
 
-
-
 #include <global.h>
 #include <koPointArray.h>
+
 class QPoint;
 class QColor;
 class QPainter;
 class KoZoomHandler;
 class KoSize;
 class KoPoint;
+
 void drawFigure( LineEnd figure, QPainter* painter, const KoPoint &coord, const QColor & color, int _w, float angle, KoZoomHandler*_zoomHandler );
 KoSize getBoundingSize( LineEnd figure, int _w, const KoZoomHandler*_zoomHandler );
 QString lineEndBeginName( LineEnd type );
 LineEnd lineEndBeginFromString( const QString & name );
 KoPointArray getCloseObject( KoPointArray points, bool close, bool objClosed );
-QCursor penCursor(); // pen tool cursor
-QCursor rotateCursor(); // rotate tool cursor
+static QCursor penCursor(); // pen tool cursor
+static QCursor rotateCursor(); // rotate tool cursor
+
 #endif
