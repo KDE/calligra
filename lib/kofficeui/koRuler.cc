@@ -477,9 +477,9 @@ void KoRuler::mouseReleaseEvent(QMouseEvent *e)
 		     tabList.at(currTab)->ptPos + (frameStart == -1 ? static_cast<int>(layout.ptLeft) : frameStart),canvas->height());
 	  p.end();
 	}
-      if (tabList.at(currTab)->ptPos + (frameStart == -1 ? static_cast<int>(layout.ptLeft) : frameStart) < layout.ptLeft || 
+      if (/*tabList.at(currTab)->ptPos + (frameStart == -1 ? static_cast<int>(layout.ptLeft) : frameStart) < layout.ptLeft || 
 	  tabList.at(currTab)->ptPos + (frameStart == -1 ? static_cast<int>(layout.ptLeft) : frameStart) > layout.ptWidth - 
-	  (layout.ptRight + layout.ptLeft) || e->y() < -50 || e->y() > height() + 50)
+	  (layout.ptRight + layout.ptLeft) || */e->y() < -50 || e->y() > height() + 50)
 	tabList.remove(currTab);
 
       emit tabListChanged(&tabList);
