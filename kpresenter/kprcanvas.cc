@@ -2049,7 +2049,7 @@ void KPrCanvas::setTextBackgroundColor( const QColor &color )
     QPtrList<KoTextFormatInterface> lst = applicableTextInterfaces();
     if ( lst.isEmpty() ) return;
     QPtrListIterator<KoTextFormatInterface> it( lst );
-    KMacroCommand* macroCmd = new KMacroCommand( i18n("Set Text Color") );
+    KMacroCommand* macroCmd = new KMacroCommand( i18n("Set Text Background Color") );
     for ( ; it.current() ; ++it ) {
         KCommand* cmd = it.current()->setTextBackgroundColorCommand( color );
         if ( cmd )
@@ -5413,13 +5413,13 @@ unsigned int KPrCanvas::currPgNum() const
 /*================================================================*/
 unsigned int KPrCanvas::rastX() const
 {
-    return m_view->zoomHandler()->zoomItX(m_view->kPresenterDoc()->rastX());
+    return QMAX(1, m_view->zoomHandler()->zoomItX(m_view->kPresenterDoc()->rastX()));
 }
 
 /*================================================================*/
 unsigned int KPrCanvas::rastY() const
 {
-    return m_view->zoomHandler()->zoomItY(m_view->kPresenterDoc()->rastY());
+    return QMAX(1, m_view->zoomHandler()->zoomItY(m_view->kPresenterDoc()->rastY()));
 }
 
 /*================================================================*/
