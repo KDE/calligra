@@ -12,6 +12,7 @@
 
 #include <kdeversion.h>
 #include <kaction.h>
+#include <kapplication.h>
 #include <klocale.h>
 #include <kdebug.h>
 #include <kstdaction.h>
@@ -57,6 +58,7 @@ KFMView::KFMView()
 	KStdAction::cut(manager, SLOT(cutWidget()), actionCollection());
 	KStdAction::copy(manager, SLOT(copyWidget()), actionCollection());
 	KStdAction::paste(manager, SLOT(pasteWidget()), actionCollection());
+	KStdAction::quit( KApplication::kApplication(), SLOT(quit()), actionCollection());
 	KStdAction::printPreview(this, SLOT(slotPreviewForm()), actionCollection());
 #if KDE_IS_VERSION(3,1,9)
 	KStdAction::clear(manager, SLOT(deleteWidget()), actionCollection());
@@ -73,6 +75,8 @@ KFMView::KFMView()
 void
 KFMView::slotPreviewForm()
 {
+	if(!manager->activeForm())
+		return;
 	QWidget *widg = new QWidget(w);
 	manager->previewForm(manager->activeForm(), widg);
 }

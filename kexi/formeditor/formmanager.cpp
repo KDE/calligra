@@ -126,10 +126,14 @@ FormManager::stopInsert()
 void
 FormManager::windowChanged(QWidget *w)
 {
-	if(m_collection->action( KStdAction::name(KStdAction::Undo)))
+	if(!w)
 	{
-		m_collection->take( m_collection->action( KStdAction::name(KStdAction::Undo) ) );
+		m_active = 0;
+		return;
 	}
+
+	if(m_collection->action( KStdAction::name(KStdAction::Undo)))
+		m_collection->take( m_collection->action( KStdAction::name(KStdAction::Undo) ) );
 	if(m_collection->action( KStdAction::name(KStdAction::Redo)))
 		m_collection->take( m_collection->action( KStdAction::name(KStdAction::Redo) ) );
 
@@ -142,7 +146,7 @@ FormManager::windowChanged(QWidget *w)
 			m_treeview->setForm(form);
 			kdDebug() << "FormManager::windowChanged() active form is " << form->objectTree()->name() << endl;
 			if(m_collection)
-			m_collection->addDocCollection(form->actionCollection());
+				m_collection->addDocCollection(form->actionCollection());
 
 			if(m_client)
 				m_client->createGUI(m_client->xmlFile());
@@ -171,6 +175,9 @@ FormManager::deleteForm(Form *form)
 		m_preview.remove(form);
 	else
 		m_forms.remove(form);
+
+	if(m_forms.count() == 0)
+		m_active = 0;
 }
 
 void
@@ -299,6 +306,8 @@ FormManager::saveFormAs()
 void
 FormManager::previewForm(Form *form, QWidget *container)
 {
+	if(!form || !container)
+		return;
 	QDomDocument domDoc;
 	FormIO::saveFormToDom(form, domDoc);
 

@@ -145,13 +145,6 @@ ObjectTreeViewItem::setup()
 		setHeight(0);
 }
 
-
-/*QPixmap
-ObjectTreeViewItem::iconByName(const QString &classname)
-{
-
-}*/
-
 // ObjectTreeView itself
 
 ObjectTreeView::ObjectTreeView(QWidget *parent, const char *name)

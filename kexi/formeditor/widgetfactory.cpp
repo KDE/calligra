@@ -47,6 +47,7 @@ WidgetFactory::createEditor(const QString &text, QWidget *w, QRect geometry, int
 	KLineEdit *editor = new KLineEdit(text, w->parentWidget());
 	editor->setAlignment(align);
 	editor->setPalette(w->palette());
+	editor->setFont(w->font());
 	editor->setGeometry(geometry);
 	if(background == Qt::NoBackground)
 		editor->setBackgroundMode(w->backgroundMode());

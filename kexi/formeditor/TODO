@@ -19,7 +19,7 @@
 
 ^^^^^^^^^^^^^^^^^^  OTHER ^^^^^^^^^^^^^^^^^^^^^^^^
 * Move tab between two QTabWidgets by drag'n drop
-* Icons in ObjectTreeView(in branch) + context menu
+* Better editor for iconview and listview if they really are necessary
 
 ^^^^^^^^^^^^^^^^ DONE ^^^^^^^^^^^^^^
 * Finish sync between Form and ObjectTreeView (2/21/04)
@@ -45,3 +45,4 @@
 * Add grid layout (3/27/04)
 * Add many other widgets :-) (part II : all basic containers + more widgets) (4/13/04)
 * Change tab position by drag'n drop (4/14/04)
+* Icons in ObjectTreeView(in branch) + context menu (4/14/04)
