@@ -89,6 +89,8 @@ public:
     virtual QRect& dataArea() { return m_rctDataArea; }
     virtual void setDataArea( const QRect _rect ) { m_rctDataArea = _rect; }
 
+    KSpreadTable* table() { return m_pTable; }
+    
 signals:
     void changed( KSpreadCell *_obj );
 
@@ -166,7 +168,7 @@ public:
     /**
      * @reimp
      */
-     bool loadDocument( KoStore* _store );
+    bool loadDocument( KoStore* _store );
 
     KChartPart* chart();
 
@@ -687,7 +689,8 @@ public:
 
     void emit_updateRow( RowLayout *_layout, int _row );
     void emit_updateColumn( ColumnLayout *_layout, int _column );
-
+    void emit_polygonInvalidated( const QPointArray& );
+    
     /**
      * Needed for @ref KSpreadCell::leftBorderPen and friends, since we can not
      * have a static pen object.

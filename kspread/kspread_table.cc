@@ -110,38 +110,40 @@ ChartBinding::~ChartBinding()
 
 void ChartBinding::cellChanged( KSpreadCell* )
 {
-  kdDebug(36001) << "######### void ChartBinding::cellChanged( KSpreadCell* )" << endl;
+    kdDebug(36001) << "######### void ChartBinding::cellChanged( KSpreadCell* )" << endl;
 
-  if ( m_bIgnoreChanges )
-    return;
+    if ( m_bIgnoreChanges )
+	return;
 
-  kdDebug(36001) << "with=" << m_rctDataArea.width() << "  height=" << m_rctDataArea.height() << endl;
+    kdDebug(36001) << "with=" << m_rctDataArea.width() << "  height=" << m_rctDataArea.height() << endl;
 
-  KChartData matrix( m_rctDataArea.height(), m_rctDataArea.width() );
+    KChartData matrix( m_rctDataArea.height(), m_rctDataArea.width() );
 
-  //matrix.matrix.length( ( m_rctDataArea.width() - 1 ) * ( m_rctDataArea.height() - 1 ) );
-  for ( int y = 0; y < m_rctDataArea.height(); y++ )
-    for ( int x = 0; x < m_rctDataArea.width(); x++ )
-    {
-	KSpreadCell* cell = m_pTable->cellAt( m_rctDataArea.left() + x, m_rctDataArea.top() + y );
-	matrix.cell( y, x ).exists = TRUE;
-	if ( cell && cell->isValue() )
-	    matrix.cell( y, x ).value = cell->valueDouble();
-	else if ( cell )
-	    matrix.cell( y, x ).value = cell->valueString();
-	else
-	    matrix.cell( y, x ).exists = FALSE;
-    }
+    for ( int y = 0; y < m_rctDataArea.height(); y++ )
+	for ( int x = 0; x < m_rctDataArea.width(); x++ )
+        {
+	    KSpreadCell* cell = m_pTable->cellAt( m_rctDataArea.left() + x, m_rctDataArea.top() + y );
+	    matrix.cell( y, x ).exists = TRUE;
+	    if ( cell && cell->isValue() )
+		matrix.cell( y, x ).value = cell->valueDouble();
+	    else if ( cell )
+		matrix.cell( y, x ).value = cell->valueString();
+	    else
+		matrix.cell( y, x ).exists = FALSE;
+	}
 
-  // ######### Kalle may be interested in that, too
-  /* Chart::Range range;
-  range.top = m_rctDataArea.top();
-  range.left = m_rctDataArea.left();
-  range.right = m_rctDataArea.right();
-  range.bottom = m_rctDataArea.bottom();
-  range.table = m_pTable->name(); */
+    // ######### Kalle may be interested in that, too
+    /* Chart::Range range;
+       range.top = m_rctDataArea.top();
+       range.left = m_rctDataArea.left();
+       range.right = m_rctDataArea.right();
+       range.bottom = m_rctDataArea.bottom();
+       range.table = m_pTable->name(); */
 
-  m_child->chart()->setPart( matrix );
+    m_child->chart()->setPart( matrix );
+    
+    // Force a redraw of the chart on all views
+    table()->emit_polygonInvalidated( m_child->framePointArray() );
 }
 
 /*****************************************************************************
@@ -4415,9 +4417,16 @@ void KSpreadTable::updateCell( KSpreadCell *cell, int _column, int _row )
     arr.setPoint( 2, right, bottom );
     arr.setPoint( 3, left, bottom );
 
+    // ##### Hmmmm, why not draw the cell directly ?
+    // That will be faster.
     emit sig_polygonInvalidated( arr );
 
     cell->clearDisplayDirtyFlag();
+}
+
+void KSpreadTable::emit_polygonInvalidated( const QPointArray& arr )
+{
+    emit sig_polygonInvalidated( arr );
 }
 
 void KSpreadTable::emit_updateRow( RowLayout *_layout, int _row )
