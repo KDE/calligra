@@ -1,7 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2002 Till Busch <till@bux.at>
    Lucijan Busch <lucijan@gmx.at>
-   Daniel Molkentin <molkentin@kde.org>
    Copyright (C) 2003 Joseph Wenninger <jowenn@kde.org>
    Copyright (C) 2003 Jaroslaw Staniek <js@iidea.pl>
 
@@ -85,10 +84,12 @@ KexiTableView::KexiTableView(QWidget *parent, const char *name, KexiTableList *c
 #ifdef Q_WS_WIN
   m_rowHeight = fontMetrics().lineSpacing() + 4;
 #else
-  m_rowHeight = fontMetrics().lineSpacing() + 4;
+  m_rowHeight = fontMetrics().lineSpacing() + 1;
 #endif
-	if(m_rowHeight < 17)
+
+if(m_rowHeight < 17)
 		m_rowHeight = 17;
+
 	m_pBufferPm = 0;
 
 	m_sortedColumn = -1;
@@ -464,7 +465,7 @@ QSizePolicy KexiTableView::sizePolicy() const
 
 QSize KexiTableView::sizeHint() const
 {
-	return QSize(tableSize().width(), 
+	return QSize(tableSize().width(),
 		QMAX(m_rowHeight*m_numRows + m_pTopHeader->height(), minimumSizeHint().height()) );
 }
 
@@ -510,15 +511,18 @@ void KexiTableView::drawContents( QPainter *p, int cx, int cy, int cw, int ch )
 		collast = cols() - 1;
 
 	int r;
-	pb->fillRect(0, 0, cw, ch, colorGroup().base());
+//	pb->fillRect(0, 0, cw, ch, colorGroup().base());
 
 	QPtrListIterator<KexiTableItem> it(*m_contents);
 	it += rowfirst;
 
-	int maxwc = QMIN(cw, (columnPos(m_numCols - 1) + columnWidth(m_numCols - 1)));
-	pb->fillRect(maxwc, 0, cw - maxwc, ch, colorGroup().base());
-	pb->fillRect(0, rowPos(rowlast) + m_rowHeight, cw, ch, colorGroup().base());
+//	int maxwc = QMIN(cw, (columnPos(m_numCols - 1) + columnWidth(m_numCols - 1)));
+	int maxwc = columnPos(cols() - 1) + columnWidth(cols() - 1);
+	kdDebug() << "KexiTableView::drawContents(): maxwc: " << maxwc << endl;
 
+// 	pb->fillRect(maxwc, 0, cw - maxwc, ch, colorGroup().base());
+// 	pb->fillRect(0, rowPos(rowlast) + m_rowHeight, cw, ch, colorGroup().base());
+	pb->fillRect(cx, cy, cw, ch, colorGroup().base());
 	for(r = rowfirst; r <= rowlast; r++, ++it)
 	{
 		// get row position and height
@@ -549,10 +553,12 @@ void KexiTableView::drawContents( QPainter *p, int cx, int cy, int cw, int ch )
 		pb->translate(translx, transly);
 //	    	paintCell( pb, r, c, QRect(columnPos(c), rowPos(r), colw, m_rowHeight));
 	    	paintCell( pb, it.current(), c, QRect(columnPos(c), rowPos(r), colw, m_rowHeight));
-		  	pb->restoreWorldMatrix();
+		pb->restoreWorldMatrix();
 		}
 
 	}
+
+
 	delete pb;
 
 	p->drawPixmap(cx,cy,*m_pBufferPm, 0,0,cw,ch);
@@ -618,7 +624,7 @@ void KexiTableView::paintCell(QPainter* p, KexiTableItem *item, int col, const Q
 		p->setPen(QColor(190,190,190));
 //		iOffset = 3;
 	}
-#ifdef Q_WS_WIN			
+#ifdef Q_WS_WIN
 	int x = 1;
 	int y_offset = 1;
 #else
@@ -636,7 +642,7 @@ void KexiTableView::paintCell(QPainter* p, KexiTableItem *item, int col, const Q
 //				p->setPen(red);
 //			p->drawText(x - (x+x) - 2, 2, w, h, AlignRight, QString::number(num));
 //			qDebug("KexiTableView::paintCell(): mode: %i", m_pColumnModes->at(col));
-#ifndef Q_WS_WIN			
+#ifndef Q_WS_WIN
 			int x = 0;
 #endif
 			if(item->isInsertItem() && m_pColumnModes->at(col) == 3)  //yes that isn't beautiful
@@ -652,7 +658,7 @@ void KexiTableView::paintCell(QPainter* p, KexiTableItem *item, int col, const Q
 		}
 		case QVariant::Double:
 		{
-#ifndef Q_WS_WIN			
+#ifndef Q_WS_WIN
 			int x = 0;
 #endif
 			QString f = KGlobal::locale()->formatNumber(item->getValue(col).toDouble());
@@ -710,11 +716,11 @@ void KexiTableView::paintCell(QPainter* p, KexiTableItem *item, int col, const Q
 		case QVariant::String:
 		default:
 		{
-#ifdef Q_WS_WIN			
+#ifdef Q_WS_WIN
 			p->drawText(x, -1, w - (x+x), h, AlignLeft | SingleLine | AlignVCenter, item->getText(col));
 #else
 			p->drawText(x, 0, w - (x+x), h, AlignLeft | SingleLine | AlignVCenter, item->getText(col));
-#endif			
+#endif
 		}
 	}
 	p->setPen(fg);
@@ -901,7 +907,7 @@ void KexiTableView::keyPressEvent(QKeyEvent* e)
 	// navigate in the header...
     switch (e->key())
     {
-	case Key_Delete: 
+	case Key_Delete:
 		if (e->state()==Qt::ControlButton) {//remove current row
 			removeRecord();
 		}
@@ -1151,10 +1157,10 @@ void KexiTableView::createEditor(int row, int col, QString addText/* = QString::
 			break;
 	}
 
-#ifdef Q_WS_WIN	
+#ifdef Q_WS_WIN
 	moveChild(m_pEditor, columnPos(m_curCol), rowPos(m_curRow)-1);
 	m_pEditor->resize(columnWidth(m_curCol)-1, rowHeight(m_curRow));
-#else 	
+#else
 	moveChild(m_pEditor, columnPos(m_curCol), rowPos(m_curRow));
 	m_pEditor->resize(columnWidth(m_curCol)-1, rowHeight(m_curRow)-1);
 #endif
@@ -1279,8 +1285,10 @@ void KexiTableView::columnWidthChanged( int col, int, int )
 //		repaintContents( s.width(), 0, w - s.width() + 1, contentsHeight(), TRUE );
 	else
 	//	updateContents( columnPos(col), 0, contentsWidth(), contentsHeight() );
-		updateContents(columnPos(col), 0, viewport()->width(), contentsHeight());
+		updateContents(contentsX(), 0, viewport()->width(), contentsHeight());
 	//	viewport()->repaint();
+
+//	updateContents(0, 0, m_pBufferPm->width(), m_pBufferPm->height());
 	if (m_pEditor)
 	{
 		m_pEditor->resize(columnWidth(m_curCol)-1, rowHeight(m_curRow)-1);
