@@ -54,6 +54,10 @@ namespace OoUtils
 
     // From style:text-underline to kword/kpresenter's underline/underlinestyleline
     void importUnderline( const QString& text_underline, QString& underline, QString& styleline );
+
+    // From style:text-position (for subscript/superscript)
+    // to kword/kpresenter's value/relativetextsize
+    void importTextPosition( const QString& text_position, QString& value, QString& relativetextsize );
 };
 
 #endif /* OOUTILS_H */

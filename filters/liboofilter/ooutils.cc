@@ -387,3 +387,47 @@ void OoUtils::importUnderline( const QString& in, QString& underline, QString& s
     else
         kdWarning() << k_funcinfo << " unsupported text-underline value: " << in << endl;
 }
+
+void OoUtils::importTextPosition( const QString& text_position, QString& value, QString& relativetextsize )
+{
+    //OO: <vertical position (% or sub or super)> [<size as %>]
+    //Examples: "super" or "super 58%" or "82% 58%" (where 82% is the vertical position)
+    // TODO in kword: vertical positions other than sub/super
+    QStringList lst = QStringList::split( ' ', text_position );
+    if ( !lst.isEmpty() )
+    {
+        QString textPos = lst.front().stripWhiteSpace();
+        QString textSize;
+        lst.pop_front();
+        if ( !lst.isEmpty() )
+            textSize = lst.front().stripWhiteSpace();
+        Q_ASSERT( lst.isEmpty() );
+        bool super = textPos == "super";
+        bool sub = textPos == "sub";
+        if ( textPos.endsWith("%") )
+        {
+            textPos.truncate( textPos.length() - 1 );
+            // This is where we interpret the text position into kotext's simpler
+            // "super" or "sub".
+            double val = textPos.toDouble();
+            if ( val > 0 )
+                super = true;
+            else if ( val < 0 )
+                sub = true;
+        }
+        if ( super )
+            value = "2";
+        else if ( sub )
+            value = "1";
+        else
+            value = "0";
+        if ( !textSize.isEmpty() && textSize.endsWith("%") )
+        {
+            textSize.truncate( textSize.length() - 1 );
+            double textSizeValue = textSize.toDouble() / 100; // e.g. 0.58
+            relativetextsize = QString::number( textSizeValue );
+        }
+    }
+    else
+        value = "0";
+}

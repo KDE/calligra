@@ -974,25 +974,13 @@ void OoWriterImport::writeFormat( QDomDocument& doc, QDomElement& formats, int i
     if( m_styleStack.hasAttribute("style:text-position")) // 3.10.7
     {
         QDomElement vertAlign = doc.createElement( "VERTALIGN" );
-        QString textPos =m_styleStack.attribute("style:text-position");
-        //relativetextsize="0.58"
-        //"super 58%"
-        if( textPos.contains("super"))
-        {
-            textPos=textPos.remove("super");
-            textPos=textPos.remove("%");
-            double value = textPos.stripWhiteSpace().toDouble();
-            vertAlign.setAttribute( "value", 2 );
-            vertAlign.setAttribute( "relativetextsize", value/100 );
-        }
-        else if(textPos.contains("sub"))
-        {
-            textPos=textPos.remove("sub");
-            textPos=textPos.remove("%");
-            double value = textPos.stripWhiteSpace().toDouble();
-            vertAlign.setAttribute( "value", 1 );
-            vertAlign.setAttribute( "relativetextsize", value/100 );
-        }
+        QString text_position = m_styleStack.attribute("style:text-position");
+        QString value;
+        QString relativetextsize;
+        OoUtils::importTextPosition( text_position, value, relativetextsize );
+        vertAlign.setAttribute( "value", value );
+        if ( !relativetextsize.isEmpty() )
+            vertAlign.setAttribute( "relativetextsize", relativetextsize );
         format.appendChild( vertAlign );
     }
     if ( m_styleStack.hasAttribute( "style:text-underline" ) ) // 3.10.22
@@ -1063,11 +1051,12 @@ void OoWriterImport::writeFormat( QDomDocument& doc, QDomElement& formats, int i
 
     /*
       Missing properties:
-      style:use-window-font-color, 3.10.4 - this is an automatic fg color depending on the bg color
-                    We need the exact algorithm to determine the fg color, I have asked for it (DF)
+      style:use-window-font-color, 3.10.4 - this is what KWord uses by default (fg color from the color style)
+         OO also switches to another color when necessary to avoid dark-on-dark and light-on-light cases.
+         (that is TODO in KWord)
       style:text-outline, 3.10.5 - not implemented in kotext
       style:font-family-generic, 3.10.10 - roman, swiss, modern -> map to a font?
-      style:font-style-name, 3.10.11 - ?
+      style:font-style-name, 3.10.11 - can be ignored, says DV, the other ways to specify a font are more precise
       style:font-pitch, 3.10.12 - fixed or variable -> map to a font?
       style:font-charset, 3.10.14 - not necessary with Qt
       style:font-size-rel, 3.10.15 - TODO in StyleStack::fontSize()
@@ -1174,8 +1163,8 @@ void OoWriterImport::writeLayout( QDomDocument& doc, QDomElement& layoutElement 
     "page sequence entry point"
     style:background-image
     line numbering
-    text autospace, punctuation wrap
-    vertical alignment - a bit like offsetfrombaseline...
+    punctuation wrap, 3.10.36
+    vertical alignment - a bit like offsetfrombaseline (but not for subscript/superscript, in general)
   Michael said those are in fact parag properties:
     style:text-autospace, 3.10.32 - not implemented in kotext
     style:line-break, 3.10.37 - what's strict linebreaking?

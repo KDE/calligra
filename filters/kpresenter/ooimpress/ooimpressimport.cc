@@ -1,4 +1,4 @@
-// -*- Mode: c++-mode; c-basic-offset: 4; indent-tabs-mode: nil; tab-width: 4; -*-
+// -*- Mode: c++; c-basic-offset: 4; indent-tabs-mode: nil; tab-width: 4; -*-
 /* This file is part of the KDE project
    Copyright (C) 2002 Laurent Montel <lmontel@mandrakesoft.com>
    Copyright (c) 2003 Lukas Tinkl <lukas@kde.org>
@@ -1450,27 +1450,15 @@ void OoImpressImport::parseSpanOrSimilar( QDomDocument& doc, const QDomElement& 
             if ( m_styleStack.attribute( "fo:font-style" ) == "italic" )
                 text.setAttribute( "italic", 1 );
 
-        if ( m_styleStack.hasAttribute( "style:text-position" ) )
+        if ( m_styleStack.hasAttribute( "style:text-position" ) ) // 3.10.17
         {
-            QString textPos =m_styleStack.attribute( "style:text-position" );
-            //relativetextsize="0.58"
-            //"super 58%"
-            if( textPos.contains( "super" ) )
-            {
-                textPos = textPos.remove( "super" );
-                textPos = textPos.remove( "%" );
-                double value = textPos.stripWhiteSpace().toDouble();
-                text.setAttribute( "VERTALIGN", 2 );
-                text.setAttribute( "relativetextsize", value / 100 );
-            }
-            else if (textPos.contains("sub"))
-            {
-                textPos = textPos.remove( "sub" );
-                textPos = textPos.remove( "%" );
-                double value = textPos.stripWhiteSpace().toDouble();
-                text.setAttribute( "VERTALIGN", 1 );
-                text.setAttribute( "relativetextsize", value / 100 );
-            }
+            QString text_position = m_styleStack.attribute("style:text-position");
+            QString value;
+            QString relativetextsize;
+            OoUtils::importTextPosition( text_position, value, relativetextsize );
+            text.setAttribute( "VERTALIGN", value );
+            if ( !relativetextsize.isEmpty() )
+                text.setAttribute( "relativetextsize", relativetextsize );
         }
 
         bool wordByWord = (m_styleStack.hasAttribute("fo:score-spaces"))
