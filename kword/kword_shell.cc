@@ -133,7 +133,6 @@ void KWordShell::setDocument(KWordDocument *_doc)
       m_pFileMenu->setItemEnabled(m_idMenuFile_SaveAs,true);
       m_pFileMenu->setItemEnabled(m_idMenuFile_Print,true);
       m_pFileMenu->setItemEnabled(m_idMenuFile_Close,true);
-      m_pFileMenu->setItemEnabled(m_idMenuFile_Quit,true);
     }
 
   opToolBar()->setItemEnabled(TOOLBAR_PRINT,true);
@@ -155,6 +154,7 @@ bool KWordShell::newDocument()
   m_pDoc = new KWordDocument;
   if (!m_pDoc->init())
     {
+      releaseDocument();
       cerr << "ERROR: Could not initialize document" << endl;
       return false;
     }
@@ -175,7 +175,6 @@ bool KWordShell::newDocument()
       m_pFileMenu->setItemEnabled(m_idMenuFile_SaveAs,true);
       m_pFileMenu->setItemEnabled(m_idMenuFile_Print,true);
       m_pFileMenu->setItemEnabled(m_idMenuFile_Close,true);
-      m_pFileMenu->setItemEnabled(m_idMenuFile_Quit,true);
     }
 
   opToolBar()->setItemEnabled(TOOLBAR_PRINT,true);
@@ -223,7 +222,6 @@ bool KWordShell::openDocument(const char *_url,const char *_format)
       m_pFileMenu->setItemEnabled(m_idMenuFile_Save,true);
       m_pFileMenu->setItemEnabled(m_idMenuFile_Print,true);
       m_pFileMenu->setItemEnabled(m_idMenuFile_Close,true);
-      m_pFileMenu->setItemEnabled(m_idMenuFile_Quit,true);
     }
 
   opToolBar()->setItemEnabled(TOOLBAR_PRINT,true);
@@ -321,14 +319,17 @@ void KWordShell::releaseDocument()
     views = m_pDoc->viewCount();
   cerr << "############## VIEWS=" << views << " #####################" << endl;
 
-  cerr << "-1) VIEW void KOMBase::refcnt() = " << m_pView->_refcnt() << endl;
+  if ( m_pView )
+    cerr << "-1) VIEW void KOMBase::refcnt() = " << m_pView->_refcnt() << endl;
 
   setRootPart(0);
 
-  cerr << "-2) VIEW void KOMBase::refcnt() = " << m_pView->_refcnt() << endl;
+  if ( m_pView )
+    cerr << "-2) VIEW void KOMBase::refcnt() = " << m_pView->_refcnt() << endl;
 
   interface()->setActivePart(0);
 
+  // if ( m_pView )
   // cerr << "-3) VIEW void KOMBase::refcnt() = " << m_pView->_refcnt() << endl;
 
   if (m_pView)
@@ -337,34 +338,53 @@ void KWordShell::releaseDocument()
   /* if (m_pView)
     m_pView->cleanUp(); */
 
+  // if ( m_pView )
   // cerr << "-4) VIEW void KOMBase::refcnt() = " << m_pView->_refcnt() << endl;
   if (m_pDoc && views <= 1)
     m_pDoc->cleanUp();
+  // if ( m_pView )
   // cerr << "-5) VIEW void KOMBase::refcnt() = " << m_pView->_refcnt() << endl;
   // if (m_pView)
   // CORBA::release(m_pView);
+  // if ( m_pView )
   // cerr << "-6) VIEW void KOMBase::refcnt() = " << m_pView->_refcnt() << endl;
   if (m_pDoc)
     CORBA::release(m_pDoc);
+  // if ( m_pView )
   // cerr << "-7) VIEW void KOMBase::refcnt() = " << m_pView->_refcnt() << endl;
   m_pView = 0L;
   m_pDoc = 0L;
+
+  if(m_pFileMenu)
+    {
+      m_pFileMenu->setItemEnabled(m_idMenuFile_Save,false);
+      m_pFileMenu->setItemEnabled(m_idMenuFile_SaveAs,false);
+      m_pFileMenu->setItemEnabled(m_idMenuFile_Print,false);
+      m_pFileMenu->setItemEnabled(m_idMenuFile_Close,false);
+    }
+
+  opToolBar()->setItemEnabled(TOOLBAR_PRINT,false);
+  opToolBar()->setItemEnabled(TOOLBAR_SAVE,false);
 }
 
 /*================================================================*/
 void KWordShell::slotFileNew()
 {
-  m_pDoc->enableEmbeddedParts(false);
+  if ( m_pDoc )
+    m_pDoc->enableEmbeddedParts(false);
   if (!newDocument())
     QMessageBox::critical(this,i18n("KWord Error"),i18n("Could not create new document"),i18n("Ok"));
-  m_pDoc->enableEmbeddedParts(true);
-  m_pView->getGUI()->getPaperWidget()->repaint(false);
+  if ( m_pDoc )
+    m_pDoc->enableEmbeddedParts(true);
+  if ( m_pView )
+    m_pView->getGUI()->getPaperWidget()->repaint(false);
 }
 
 /*================================================================*/
 void KWordShell::slotFileOpen()
 {
-  m_pDoc->enableEmbeddedParts(false);
+  if ( m_pDoc )
+    m_pDoc->enableEmbeddedParts(false);
 
   QString filter = KoFilterManager::self()->fileSelectorList(KoFilterManager::Import,
 							     "application/x-kword",
@@ -385,8 +405,10 @@ void KWordShell::slotFileOpen()
       tmp.sprintf(i18n("Could not open\n%s"),file.data());
       QMessageBox::critical(this,i18n("IO Error"),tmp,i18n("OK"));
     }
-  m_pDoc->enableEmbeddedParts(true);
-  m_pView->getGUI()->getPaperWidget()->repaint(false);
+  if ( m_pDoc )
+    m_pDoc->enableEmbeddedParts(true);
+  if ( m_pView )
+    m_pView->getGUI()->getPaperWidget()->repaint(false);
 }
 
 /*================================================================*/
@@ -441,17 +463,11 @@ void KWordShell::slotFileSaveAs()
 /*================================================================*/
 void KWordShell::slotFileClose()
 {
-  if (documentCount() <= 1)
-    {
-      slotFileQuit();
-      return;
-    }
-
   if (isModified())
     if (!requestClose())
       return;
 
-  delete this;
+  releaseDocument();
 }
 
 /*================================================================*/
