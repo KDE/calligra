@@ -27,8 +27,6 @@ Bugs to fix:
 
 Reginald Stadlbauer <reggie@kde.org>
 
-- Double clicking with "select frame" outside the page results in a crash.
-
 
 Fix the frame/frameset classes so references and data are localized 
  - Add name tag in frameset DTD, check this is used in
@@ -37,7 +35,6 @@ Fix the frame/frameset classes so references and data are localized
 
 
 Add lots of functions to the framedia.cc as a placeholder for future extentions.
-  - also remove all 'mm' and replace with doc->getUnit()
 
 Look into:
  - placing files external
@@ -64,6 +61,9 @@ we might consider creating them.
 
 Add getSelectedFrame() to kword_page and replace lots of code with that function.
 
+Page Preview image forgets about orientation when changing page size.
+
+New frameset suggests "Frameset 9" and higher. Think of a nice way to start with 1
 
 Thomas Zander <zander@earthling.net>
 

@@ -34,6 +34,7 @@
   <Action name="view_endnotes"/>
   <Separator/>
   <Action name="view_zoom"/>
+  <Separator/>
  </Menu>
  <Menu name="Insert"><text>&amp;Insert</text>
   <Action name="insert_picture"/>

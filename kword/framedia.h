@@ -48,6 +48,8 @@ public:
     KWFrameDia( QWidget *parent, KWFrame *_frame);
     //KWFrameDia( QWidget *parent, KWPage *_page);
 
+    void setPage(KWPage *_page) {page =_page;}
+
 protected:
     void init();
     bool applyChanges();

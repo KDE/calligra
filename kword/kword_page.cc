@@ -1059,6 +1059,7 @@ void KWPage::vmrCreateText()
 	}
 
 	frameDia = new KWFrameDia( this, frame,doc,FT_TEXT);
+        frameDia->setPage(this);
 	connect( frameDia, SIGNAL( changed() ), this, SLOT( frameDiaClosed() ) );
         frameDia->setCaption(i18n("Connect frame"));
 	frameDia->show();
@@ -1600,6 +1601,7 @@ void KWPage::editReconnectFrame()
     }
 
     frameDia = new KWFrameDia( this,  frame,doc,frame->getFrameType());
+    frameDia->setPage(this);
 
     connect( frameDia, SIGNAL( changed() ), this, SLOT( frameDiaClosed() ) );
     frameDia->setCaption( i18n( "Reconnect Frame" ) );
@@ -3533,18 +3535,21 @@ void KWPage::femProps()
     KWFrame *frame=0L;
 
     repaintScreen( FALSE );
-    for ( unsigned int i = 0; i < doc->getNumFrameSets(); i++ ) {
-        for ( unsigned int j = 0; j < doc->getFrameSet(i)->getNumFrames(); j++ ) {
-            if(doc->getFrameSet(i)->getFrame( j )->isSelected()) {
-                frame=doc->getFrameSet(i)->getFrame(j);
+    int iFrameset;
+    for ( iFrameset = 0; iFrameset < doc->getNumFrameSets(); iFrameset++ ) {
+        for ( unsigned int j = 0; j < doc->getFrameSet(iFrameset)->getNumFrames(); j++ ) {
+            if(doc->getFrameSet(iFrameset)->getFrame( j )->isSelected()) {
+                frame=doc->getFrameSet(iFrameset)->getFrame(j);
                 break;
             }
         }
     }
     frameDia = new KWFrameDia( this, frame);
+    frameDia->setPage(this);
     connect( frameDia, SIGNAL( changed() ), this, SLOT( frameDiaClosed() ) );
     frameDia->setCaption(i18n("Frame Properties"));
     frameDia->show();
+    repaintScreen(iFrameset,true);
 }
 
 /*================================================================*/

@@ -243,6 +243,10 @@ void KWordView::setupActions()
 					actionCollection(), "edit_sldatabase" );
 
     // -------------- View actions
+// DEBUG info
+    actionPrintDebug = new KAction( i18n( "Print debug info" ) , 0,
+				       this, SLOT( printDebug() ),
+				       actionCollection(), "printdebug" );
     actionViewFormattingChars = new KToggleAction( i18n( "&Formatting Characters" ), 0,
 						   this, SLOT( viewFormattingChars() ),
 						   actionCollection(), "view_formattingchars" );
@@ -2827,3 +2831,34 @@ int KWordView::canvasYOffset() const
 {
     return gui->getPaperWidget()->contentsY();
 }
+
+
+/*===============================================================*/
+void KWordView::printDebug() {
+    KWordDocument *doc = m_pKWordDoc ;
+    kdDebug() << "----------------------------------------"<<endl;
+    kdDebug() << "                 Debug info"<<endl;
+    kdDebug() << "Document:" << doc <<endl;
+    kdDebug() << "Type of document: (0=WP, 1=DTP) " << doc->getProcessingType() <<endl;
+    kdDebug() << "size: x:" << doc->getPTLeftBorder()<< ", y:"<<doc->getPTTopBorder() << ", w:"<< doc->getPTPaperWidth() << ", h:"<<doc->getPTPaperHeight()<<endl;
+    kdDebug() << "Has header: " << doc->hasHeader() << " visible"<<endl;
+    kdDebug() << "Has footer: " << doc->hasFooter() << " visible"<<endl;
+    kdDebug() << "units: " << doc->getUnit() <<endl;
+    kdDebug() << "Legend: types 0=base, 1=txt, 2=pic, 3=part, 4=formula." <<endl;
+    kdDebug() << "        info  0=body, headers: 1=first, 2=odd, 3=even footers: 4=first, 5=odd, 6=even, 7=footnote" <<endl;
+    kdDebug() << "Framesets: " << doc->getNumFrameSets() <<endl;
+    for (unsigned int iFrameset = 0; iFrameset < doc->getNumFrameSets(); iFrameset++ ) {
+        kdDebug() << "Frameset " << iFrameset+": " << 
+            doc->getFrameSet(iFrameset)->getName() << " (" << doc->getFrameSet(iFrameset) << ")" <<endl;
+        kdDebug() << "Frameset has type:" << doc->getFrameSet(iFrameset)->getFrameType() << endl;
+        kdDebug() << "Frameset has Info:" << doc->getFrameSet(iFrameset)->getFrameInfo() << endl;
+        kdDebug() << "Frameset has " << doc->getFrameSet(iFrameset)->getNumFrames() << " frames" << endl;
+        for ( unsigned int j = 0; j < doc->getFrameSet(iFrameset)->getNumFrames(); j++ ) {
+            if(doc->getFrameSet(iFrameset)->getFrame( j )->isSelected())
+                kdDebug() << " Frame " << j << " on page "<< doc->getFrameSet(iFrameset)->getFrame(j)->getPageNum() << " *" << endl;
+            else 
+                kdDebug() << " Frame " << j << " on page "<< doc->getFrameSet(iFrameset)->getFrame(j)->getPageNum() << endl;
+        }
+    }
+}
+

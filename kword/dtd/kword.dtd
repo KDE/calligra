@@ -99,13 +99,9 @@
 		Attributes:
 
 		frametype:		1 for text, 2 for graphics
-		autocreatenewframe:	1 if new frames should be added to the frameset when the text doesn't fit
-					into the existing frames anymore, else 0 (only in wordprocessing mode)	
 -->
 <!ELEMENT FRAMESET (FRAME|PARAGRAPH)*>
-<!ATTLIST FRAMESET		frameType CDATA #REQUIRED
-				autoCreateNewFrame CDATA #REQUIRED>
-
+<!ATTLIST FRAMESET name CDATA>
 
 <!ELEMENT FRAME	EMPTY>
 
@@ -116,11 +112,14 @@
 
 	right, leftm, top, bottom: absolute coordinates in pt
 	runaround: 1 if text should run around overalpping frames, 
-			2 if text should not run around overlapping frames (only for text frames)
-	runaroundGap: when runaround is 1 specify here the distance between overlapping frames and runaround text
-	frameInfo: 1 = normal text, 2 = header for first page, 3 = header for odd pages, 4 = header for even pages,
-			5 = footer for first pages, 6 = footer for odd pages, 7 footer for even pages
-
+         2 if text should not run around overlapping frames (only for text frames)
+	runaroundGap: when runaround is 1 specify here the distance between overlapping 
+         frames and runaround text
+	frameInfo: 1 = normal text, 2 = header for first page, 3 = header for odd pages,
+         4 = header for even pages, 5 = footer for first pages, 6 = footer for odd pages,
+         7 footer for even pages
+        autocreatenewframe:   0 = AutoExtendFrame, 1 = AutoCreateNewFrame, 2 = Ignore 
+         extra text
 -->
 <!ATTLIST FRAME	left CDATA #REQUIRED
 				right CDATA #REQUIRED
@@ -128,6 +127,8 @@
 				bottom CDATA #REQUIRED
 				runaround CDATA #IMPLIED
 				runaroundGap CDATA #IMPLIED
+                frameType CDATA #REQUIRED
+				autoCreateNewFrame CDATA #REQUIRED
 				frameInfo CDATA #IMPLIED>
 <!ELEMENT PARAGRAPH (TEXT|FORMATS|LAYOUT)*>
 <!ELEMENT TEXT EMPTY>

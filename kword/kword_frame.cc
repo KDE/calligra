@@ -103,7 +103,7 @@ KWFrame::KWFrame(KWFrameSet *fs, const QPoint &topleft, const QPoint &bottomrigh
     brd_bottom.style = KWParagLayout::SOLID;
     brd_bottom.ptWidth = 1;
 
-    frameBehaviour=AutoExtendFrame;
+    frameBehaviour=AutoCreateNewFrame;
 }
 
 /*================================================================*/
@@ -132,7 +132,7 @@ KWFrame::KWFrame( KWFrameSet *fs,const QPoint &topleft, const QSize &size )
     brd_bottom.style = KWParagLayout::SOLID;
     brd_bottom.ptWidth = 1;
 
-    frameBehaviour=AutoExtendFrame;
+    frameBehaviour=AutoCreateNewFrame;
 }
 
 /*================================================================*/
@@ -161,7 +161,7 @@ KWFrame::KWFrame(KWFrameSet *fs, int left, int top, int width, int height )
     brd_bottom.style = KWParagLayout::SOLID;
     brd_bottom.ptWidth = 1;
 
-    frameBehaviour=AutoExtendFrame;
+    frameBehaviour=AutoCreateNewFrame;
 }
 
 /*================================================================*/
@@ -190,7 +190,7 @@ KWFrame::KWFrame(KWFrameSet *fs, int left, int top, int width, int height, RunAr
     brd_bottom.style = KWParagLayout::SOLID;
     brd_bottom.ptWidth = 1;
 
-    frameBehaviour=AutoExtendFrame;
+    frameBehaviour=AutoCreateNewFrame;
 }
 
 /*================================================================*/
@@ -219,7 +219,7 @@ KWFrame::KWFrame(KWFrameSet *fs, const QRect &_rect )
     brd_bottom.style = KWParagLayout::SOLID;
     brd_bottom.ptWidth = 1;
 
-    frameBehaviour=AutoExtendFrame;
+    frameBehaviour=AutoCreateNewFrame;
 }
 
 /*================================================================*/
@@ -443,9 +443,6 @@ void KWFrameSet::addFrame( KWFrame _frame )
     frm->setBackgroundColor( QBrush( _frame.getBackgroundColor() ) );
 
     addFrame(frm);
-    //frames.append( frm );
-    //if ( frames.count() == 1 ) init();
-    //update();
 }
 
 /*================================================================*/

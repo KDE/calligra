@@ -3697,7 +3697,6 @@ bool KWordDocument::canResize( KWFrameSet *frameset, KWFrame *frame, int page, i
 /* Sets and gets this frames behaviour. This is used when the text
    gets to long to fit in this frame. The possible behaviours are
    defined in kword_frame.h with enum FrameBehaviour.
-   Written by zander@earhtling.net
 */
 FrameBehaviour KWordDocument::getFrameBehaviour() {
     for ( unsigned int i = 0; i < getNumFrameSets(); i++ ) {
@@ -3705,14 +3704,6 @@ FrameBehaviour KWordDocument::getFrameBehaviour() {
             return dynamic_cast<KWTextFrameSet*>( getFrameSet( i ) )->getFrameBehaviour();
     }
     return AutoCreateNewFrame;
-}
-
-void KWordDocument::setFrameBehaviour( FrameBehaviour behaviour )
-{
-    for ( unsigned int i = 0; i < getNumFrameSets(); i++ ) {
-        if ( getFrameSet( i )->hasSelectedFrame() && getFrameSet( i )->getFrameType() == FT_TEXT )
-            dynamic_cast<KWTextFrameSet*>( getFrameSet( i ) )->setFrameBehaviour(behaviour);
-    }
 }
 
 /*================================================================*/
@@ -3786,8 +3777,10 @@ bool KWordDocument::isOnlyOneFrameSelected()
     for ( unsigned int i = 0; i < getNumFrameSets(); i++ ) {
 	if ( getFrameSet( i )->hasSelectedFrame() ) {
 	    for ( unsigned int j = 0; j < getFrameSet( i )->getNumFrames(); j++ ) {
-		if ( getFrameSet( i )->getFrame( j )->isSelected() )
+		if ( getFrameSet( i )->getFrame( j )->isSelected() ) {
+		    qDebug( "selted frame found: %d, %d",i,j);
 		    _selected++;
+                }
 	    }
 	}
     }

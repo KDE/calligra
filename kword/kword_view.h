@@ -140,6 +140,8 @@ public:
     int canvasYOffset() const;
 
 public slots:
+    // TEMP function. Pure for debugging.
+    void printDebug();
     // IDL
     virtual void editUndo();
     virtual void editRedo();
@@ -299,6 +301,7 @@ protected:
 
     bool m_bUnderConstruction, m_bKWordModified;
 
+    KAction *actionPrintDebug;
     KAction *actionEditUndo;
     KAction *actionEditRedo;
     KAction *actionEditCut;

@@ -296,7 +296,6 @@ public:
     RunAround getRunAround();
     KWUnit getRunAroundGap();
 
-    void setFrameBehaviour(FrameBehaviour);
     void setRunAround( RunAround _ra );
     void setRunAroundGap( KWUnit _gap );
 
