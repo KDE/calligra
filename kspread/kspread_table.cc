@@ -2386,7 +2386,7 @@ void KSpreadTable::insertChild( const QRect& _rect, KoDocumentEntry& _e )
     // Error message is already displayed, so just return
     return;
 
-  doc->init();
+  doc->initDoc();
 
   KSpreadChild* ch = new KSpreadChild( m_pDoc, this, _rect, doc );
   insertChild( ch );

@@ -121,7 +121,7 @@ bool KSpreadShell::newDocument()
   }
 
   m_pDoc = new KSpreadDoc;
-  if ( !m_pDoc->init() )
+  if ( !m_pDoc->initDoc() )
   {
     cerr << "ERROR: Could not initialize document" << endl;
     return false;

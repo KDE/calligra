@@ -78,7 +78,7 @@ public:
   virtual KSpreadView* createSpreadView( QWidget* _parent = 0 );
 
   // IDL
-  virtual CORBA::Boolean init();
+  virtual CORBA::Boolean initDoc();
 
   virtual KSpread::Book_ptr book();
 

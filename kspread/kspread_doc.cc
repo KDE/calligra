@@ -241,7 +241,7 @@ KSpreadDoc::KSpreadDoc()
   cout << "DOC=" << tmp.in() << endl;
 }
 
-CORBA::Boolean KSpreadDoc::init()
+CORBA::Boolean KSpreadDoc::initDoc()
 {
   KSpreadTable *t = createTable();
   m_pMap->addTable( t );
