@@ -126,7 +126,7 @@ KPrCanvas::KPrCanvas( QWidget *parent, const char *name, KPresenterView *_view )
         m_drawLineWithCubicBezierCurve = true;
         m_oldCubicBezierPointArray.putPoints( 0, 4, 0,0, 0,0, 0,0, 0,0 );
         //for test
-        m_view->kPresenterDoc()->addHorizHelpline(30.0);
+        //m_view->kPresenterDoc()->addHorizHelpline(30.0);
     } else {
         m_view = 0;
         hide();
@@ -6355,7 +6355,13 @@ void KPrCanvas::removeHelpLine()
     repaint(false);
 }
 
-void changeHelpLinePosition( double newPos )
+void KPrCanvas::changeHelpLinePosition( int newPos )
 {
-    //todo
+    if ( m_tmpVertHelpline != -1)
+        m_view->kPresenterDoc()->updateVertHelpline( m_tmpVertHelpline, m_view->zoomHandler()->zoomItX( newPos ) );
+    else if ( m_tmpHorizHelpline != -1)
+        m_view->kPresenterDoc()->updateHorizHelpline( m_tmpHorizHelpline, m_view->zoomHandler()->zoomItY( newPos ));
+    m_tmpHorizHelpline = -1;
+    m_tmpVertHelpline = -1;
+    repaint(false);
 }

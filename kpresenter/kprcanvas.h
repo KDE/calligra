@@ -215,7 +215,10 @@ public:
 
     unsigned int objNums() const;
     void removeHelpLine();
-    void changeHelpLinePosition(double newPos);
+    void changeHelpLinePosition( int newPos);
+
+    int tmpHorizHelpLine() const { return  m_tmpHorizHelpline;}
+    int tmpVertHelpLine() const { return m_tmpVertHelpline;}
 
 
 public slots:

@@ -128,6 +128,8 @@
 
 #include <koCommentDia.h>
 
+#include "kprhelplinedia.h"
+
 #include <kstdaccel.h>
 #include <koDocumentInfo.h>
 
@@ -5737,8 +5739,29 @@ void KPresenterView::removeHelpLine()
 
 void KPresenterView::changeHelpLinePosition()
 {
-    //todo
-    //m_canvas->changeHelpLinePosition( pos );
+    int pos = 0;
+    int limitTop = 0;
+    int limitBottom = 0;
+    QRect r=m_canvas->activePage()->getZoomPageRect();
+    if ( m_canvas->tmpHorizHelpLine() != -1)
+    {
+        pos = zoomHandler()->zoomItY (m_pKPresenterDoc->horizHelplines()[m_canvas->tmpHorizHelpLine()]);
+        limitTop = r.top();
+        limitBottom = r.bottom();
+    }
+    else if ( m_canvas->tmpVertHelpLine() != -1)
+    {
+        pos = zoomHandler()->zoomItX( m_pKPresenterDoc->vertHelplines()[m_canvas->tmpVertHelpLine()]);
+        limitTop = r.left();
+        limitBottom = r.right();
+    }
+
+    KPrHelpLineDia *dlg= new KPrHelpLineDia(this, pos, limitTop , limitBottom);
+    if ( dlg->exec())
+    {
+        m_canvas->changeHelpLinePosition( dlg->newPosition() );
+    }
+    delete dlg;
 }
 
 void KPresenterView::openPopupMenuHelpLine( const QPoint & _point )
