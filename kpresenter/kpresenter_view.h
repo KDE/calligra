@@ -33,6 +33,7 @@
 #include "global.h"
 #include "ktextobject.h"
 
+class DCOPObject;
 class KPresenterView;
 class KPresenterShell;
 class KPresenterDoc;
@@ -102,6 +103,7 @@ public:
     ~KPresenterView();
 
     void initGui();
+    virtual DCOPObject* dcopObject();
 
 public slots:
     virtual bool printDlg();
@@ -164,7 +166,7 @@ public slots:
     virtual void extraAlignObjBottom();
 
     virtual void extraAlignObjs();
-    
+
     // screen menu
     virtual void screenConfigPages();
     virtual void screenPresStructView();
@@ -180,7 +182,7 @@ public slots:
     virtual void screenFullScreen();
     virtual void screenPenColor();
     virtual void screenPenWidth( const QString &w );
-    
+
     // help menu
     virtual void helpContents();
 
@@ -537,6 +539,8 @@ protected:
     QAction *actionScreenPenWidth;
 
     QAction *actionColorBar;
+
+    DCOPObject *dcop;
 
 };
 

@@ -16,3 +16,14 @@ QString KPresenterDocIface::url()
     return doc->url();
 }
 
+DCOPRef KPresenterDocIface::firstView()
+{
+    return DCOPRef( kapp->dcopClient()->appId(), 
+		    doc->getFirstView()->dcopObject()->objId() );
+}
+
+DCOPRef KPresenterDocIface::nextView()
+{
+    return DCOPRef( kapp->dcopClient()->appId(), 
+		    doc->getNextView()->dcopObject()->objId() );
+}

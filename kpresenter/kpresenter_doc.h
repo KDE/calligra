@@ -304,6 +304,13 @@ public:
     void copyPage( int num );
     virtual DCOPObject* dcopObject();
 
+    KPresenterView *getFirstView() {
+	return (KPresenterView*)firstView();
+    }
+    KPresenterView *getNextView() {
+	return (KPresenterView*)nextView();
+    }
+    
 signals:
 
     // document modified

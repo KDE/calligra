@@ -80,6 +80,8 @@
 #include <X11/Xlib.h>
 #include <kstddirs.h>
 
+#include "KPresenterViewIface.h"
+
 #define DEBUG
 
 /*****************************************************************/
@@ -102,6 +104,8 @@
 KPresenterView::KPresenterView( KPresenterDoc* _doc, QWidget *_parent, const char *_name )
     : ContainerView( _doc, _parent, _name )
 {
+    dcop = 0;
+
     m_pKPresenterDoc = 0L;
     m_bKPresenterModified = false;
     m_bUnderConstruction = true;
@@ -166,11 +170,21 @@ KPresenterView::KPresenterView( KPresenterDoc* _doc, QWidget *_parent, const cha
     setKeyCompression( true );
 }
 
+/*=============================================================*/
+DCOPObject* KPresenterView::dcopObject()
+{
+    if ( !dcop )
+	dcop = new KPresenterViewIface( this );
+
+    return dcop;
+}
+
 /*======================= destructor ============================*/
 KPresenterView::~KPresenterView()
 {
     // ######### Reggie: Why that ?
     page->setToolEditMode( TEM_MOUSE );
+    delete dcop;
 }
 
 /*=========================== file print =======================*/
@@ -1252,7 +1266,7 @@ void KPresenterView::textNormalText()
     KTextObject *txtObj = page->kTxtObj();
     if ( !txtObj )
 	txtObj = page->haveASelectedTextObj();
-    if ( txtObj ) { 
+    if ( txtObj ) {
 	txtObj->setObjType( KTextObject::PLAIN );
 	if ( !page->kTxtObj() )
 	    page->repaint( FALSE );
@@ -1265,7 +1279,7 @@ void KPresenterView::textDepthPlus()
     KTextObject *txtObj = page->kTxtObj();
     if ( !txtObj )
 	txtObj = page->haveASelectedTextObj();
-    if ( txtObj ) { 
+    if ( txtObj ) {
 	txtObj->incDepth();
 	if ( !page->kTxtObj() )
 	    page->repaint( FALSE );

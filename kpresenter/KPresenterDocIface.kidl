@@ -2,6 +2,8 @@
 <CLASS name="KPresenterDocIface">
 <SUPER name="DCOPObject"/>
 <FUNC name="url" qual=""><RET type="QString"/></FUNC>
+<FUNC name="firstView" qual=""><RET type="DCOPRef"/></FUNC>
+<FUNC name="nextView" qual=""><RET type="DCOPRef"/></FUNC>
 </CLASS>
 <INCLUDE file="qstring.h"/>
 <INCLUDE file="dcopref.h"/>

@@ -16,6 +16,8 @@ public:
 
 k_dcop:
     virtual QString url();
+    virtual DCOPRef firstView();
+    virtual DCOPRef nextView();
 
 private:
     KPresenterDoc *doc;
