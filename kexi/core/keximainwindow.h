@@ -154,6 +154,11 @@ class KEXICORE_EXPORT KexiMainWindow : public KMdiMainFrm
 
 		void slotPartLoaded(KexiPart::Part* p);
 
+		void slotCaptionForCurrentMDIChild(bool childrenMaximized);
+		void slotNoMaximizedChildFrmLeft(KMdiChildFrm*);
+		void slotLastChildFrmClosed();
+		void slotChildViewIsDetachedNow(QWidget*);
+
 		//! Shows an error message signaled by project's objects, connections, etc.
 		void showErrorMessage(const QString&,KexiDB::Object *obj);
 		void showErrorMessage(const QString &title, const QString &details = QString::null);

@@ -70,8 +70,10 @@ class KexiMainWindow::Private
 #endif
 		KexiBrowser *nav;
 		KexiDialogDict dialogs;
-		KXMLGUIClient   *curDialogGUIClient;
+		KXMLGUIClient *curDialogGUIClient;
 		QGuardedPtr<KexiDialogBase> curDialog;
+
+		QString appCaption; //<! original application's caption
 		//! project menu
 		KAction *action_save, *action_save_as, *action_close,
 		 *action_project_properties;
@@ -112,11 +114,16 @@ KexiMainWindow::KexiMainWindow()
 
 	//get informed
 	connect(&Kexi::partManager(),SIGNAL(partLoaded(KexiPart::Part*)),this,SLOT(slotPartLoaded(KexiPart::Part*)));
+	connect( m_pMdi, SIGNAL(nowMaximized(bool)), this, SLOT(slotCaptionForCurrentMDIChild(bool)) ); 
+	connect( m_pMdi, SIGNAL(noMaximizedChildFrmLeft(KMdiChildFrm*)), this, SLOT(slotNoMaximizedChildFrmLeft(KMdiChildFrm*)));
+	connect( m_pMdi, SIGNAL(lastChildFrmClosed()), this, SLOT(slotLastChildFrmClosed()));
+	connect( this, SIGNAL(childViewIsDetachedNow(QWidget*)), this, SLOT(slotChildViewIsDetachedNow(QWidget*)));
 
 	initActions();
 	createShellGUI(true);
 	(void) new KexiStatusBar(this, "status_bar");
 
+	d->appCaption = caption();
 	initContextHelp();
 	
 
@@ -210,9 +217,9 @@ KexiMainWindow::initActions()
 	d->action_view_nav = new KAction(i18n("Navigator"), "", ALT + Key_1,
 		this, SLOT(slotViewNavigator()), actionCollection(), "view_navigator");
 
-	new KAction(i18n("From File ..."), "fileopen", 0, 
+	new KAction(i18n("From File..."), "fileopen", 0, 
 		this, SLOT(slotImportFile()), actionCollection(), "import_file");
-	new KAction(i18n("From Server ..."), "server", 0, 
+	new KAction(i18n("From Server..."), "server", 0, 
 		this, SLOT(slotImportServer()), actionCollection(), "import_server");
 
 
@@ -451,6 +458,48 @@ void KexiMainWindow::slotPartLoaded(KexiPart::Part* p)
 	new KexiPart::GUIClient(this, p, p->instanceName());
 }
 
+//! internal
+void KexiMainWindow::slotCaptionForCurrentMDIChild(bool childrenMaximized)
+{
+	//js todo: allow to set custom "static" app caption
+	KMdiChildView *view;
+	if (!d->curDialog)
+		view = 0;
+	else if (d->curDialog->isAttached())
+		view = d->curDialog;
+	else {
+		//currend dialog isn't attached! - find top level child
+		if (m_pMdi->topChild()) {
+			view = m_pMdi->topChild()->m_pClient;
+			childrenMaximized = view->mdiParent()->state()==KMdiChildFrm::Maximized;
+		}
+		else
+			view = 0;
+	}
+
+	if (childrenMaximized && view) {
+		setCaption( view->caption() );
+	}
+	else {
+		setCaption( d->appCaption );
+	}
+}
+
+void KexiMainWindow::slotNoMaximizedChildFrmLeft(KMdiChildFrm*)
+{
+	slotCaptionForCurrentMDIChild(false);
+}
+
+void KexiMainWindow::slotLastChildFrmClosed()
+{
+	slotCaptionForCurrentMDIChild(false);
+}
+
+void KexiMainWindow::slotChildViewIsDetachedNow(QWidget*)
+{
+	slotCaptionForCurrentMDIChild(false);
+}
+
 void
 KexiMainWindow::closeEvent(QCloseEvent *ev)
 {
@@ -555,38 +604,44 @@ KexiMainWindow::registerChild(KexiDialogBase *dlg)
 void
 KexiMainWindow::activeWindowChanged(KMdiChildView *v)
 {
-	kdDebug() << "KexiMainWindow::activeWindowChanged()" << endl;
 	KexiDialogBase *dlg = static_cast<KexiDialogBase *>(v);
-	kdDebug() << "KexiMainWindow::activeWindowChanged(): dlg = " << dlg << endl;
+	kdDebug() << "KexiMainWindow::activeWindowChanged() to = " << (dlg ? dlg->caption() : "") << endl;
 
 
 	KXMLGUIClient *client;
 
 	if (!dlg)
 		client=0;
-	else if ( !dlg->isRegistered())
-		return;
-	else
+	else if ( dlg->isRegistered()) {
 		client=dlg->guiClient();
-
-	if (client!=d->curDialogGUIClient) {
-		kdDebug()<<"KexiMainWindow::activeWindowChanged(): old gui client:"<<d->curDialogGUIClient<<" new gui client: "<<client<<endl;
-		if (d->curDialogGUIClient) {
-			guiFactory()->removeClient(d->curDialogGUIClient);
-			d->curDialog->detachFromGUIClient();
-		}
-		if (client) {
-			guiFactory()->addClient(client);
-			dlg->attachToGUIClient();
-		}
-	} else {
-		if ((KexiDialogBase*)d->curDialog!=dlg) {
-			if (d->curDialog) d->curDialog->detachFromGUIClient();
-			if (dlg) dlg->attachToGUIClient();
+		if (client!=d->curDialogGUIClient) {
+			kdDebug()<<"KexiMainWindow::activeWindowChanged(): old gui client:"<<d->curDialogGUIClient<<" new gui client: "<<client<<endl;
+			if (d->curDialogGUIClient) {
+				guiFactory()->removeClient(d->curDialogGUIClient);
+				d->curDialog->detachFromGUIClient();
+			}
+			if (client) {
+				guiFactory()->addClient(client);
+				dlg->attachToGUIClient();
+			}
+		} else {
+			if ((KexiDialogBase*)d->curDialog!=dlg) {
+				if (d->curDialog)
+					d->curDialog->detachFromGUIClient();
+				if (dlg)
+					dlg->attachToGUIClient();
+			}
 		}
 	}
+	bool update_dlg_caption = dlg && dlg!=(KexiDialogBase*)d->curDialog && dlg->mdiParent();
+
 	d->curDialogGUIClient=client;
 	d->curDialog=dlg;
+
+	//update caption...
+	if (update_dlg_caption) {
+		slotCaptionForCurrentMDIChild(d->curDialog->mdiParent()->state()==KMdiChildFrm::Maximized);
+	}
 }
 
 bool
@@ -861,7 +916,7 @@ void KexiMainWindow::detachWindow(KMdiChildView *pWnd,bool bShow)
 
 bool KexiMainWindow::eventFilter( QObject *obj, QEvent * e )
 {
-	kdDebug() << "eventFilter: " <<e->type() << " " <<obj->name()<<endl;
+/*	kdDebug() << "eventFilter: " <<e->type() << " " <<obj->name()<<endl;
 	if (e->type()==QEvent::KeyPress) {
 		kdDebug() << "KEY EVENT" << endl;
 	}
@@ -870,7 +925,7 @@ bool KexiMainWindow::eventFilter( QObject *obj, QEvent * e )
 	}
 	if (e->type()==QEvent::FocusIn || e->type()==QEvent::FocusOut) {
 		kdDebug() << "Focus EVENT" << endl;
-	}
+	}*/
 	//keep focus in main window:
 	if (obj==d->nav) {
 //		kdDebug() << "NAV" << endl;
