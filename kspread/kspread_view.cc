@@ -103,12 +103,6 @@
 #include "KSpreadViewIface.h"
 #include <kdebug.h>
 
-
-struct spellStruct {
-  QString _data;
-  KSpellConfig * _ksconf;
-};
-
 /*****************************************************************************
  *
  * KSpreadView
@@ -489,8 +483,8 @@ KSpreadView::~KSpreadView()
 
 void KSpreadView::initConfig()
 {
-KConfig *config = KSpreadFactory::global()->config();
-if( config->hasGroup("Parameters" ))
+    KConfig *config = KSpreadFactory::global()->config();
+    if( config->hasGroup("Parameters" ))
         {
         config->setGroup( "Parameters" );
         m_pDoc->setShowHorizontalScrollBar(config->readBoolEntry("Horiz ScrollBar",true));
@@ -522,7 +516,7 @@ if( config->hasGroup("Parameters" ))
      m_pDoc->changeDefaultGridPenColor(_col);
    }
 
-if( config->hasGroup("KSpread Page Layout" ) )
+ if( config->hasGroup("KSpread Page Layout" ) )
   {
     config->setGroup( "KSpread Page Layout" );
     if( m_pDoc->isEmpty())
@@ -534,6 +528,7 @@ if( config->hasGroup("KSpread Page Layout" ) )
       }
   }
 
+ // Why not do this in KSpreadDoc ? (DF)
  KSpellConfig ksconfig;
  if( config->hasGroup("KSpell kspread" ) )
  {
@@ -2391,7 +2386,7 @@ void KSpreadView::slotActivateTool( int _id )
 
   ToolEntry* entry = m_lstTools.at( _id - m_popupMenuFirstToolId );
 
-  KoDataTool* tool = entry->info.createTool();
+  KoDataTool* tool = entry->info.createTool( m_pDoc );
   if ( !tool )
   {
       kdDebug(36001) << "Could not create Tool" << endl;
@@ -2401,18 +2396,13 @@ void KSpreadView::slotActivateTool( int _id )
 
   QString text = activeTable()->getWordSpelling( QPoint( m_pCanvas->markerColumn(), m_pCanvas->markerRow() ));
 
-  spellStruct tmpStruct;
-  tmpStruct._data=text;
-  tmpStruct._ksconf=m_pDoc->getKSpellConfig();
-  if ( tool->run( entry->command, &tmpStruct, "QString", "text/plain") )
-      {
-      text= tmpStruct._data;
-
+  if ( tool->run( entry->command, &text, "QString", "text/plain") )
+  {
       activeTable()->setWordSpelling( QPoint( m_pCanvas->markerColumn(), m_pCanvas->markerRow() ),text);
 
       KSpreadCell *cell = m_pTable->cellAt( m_pCanvas->markerColumn(), m_pCanvas->markerRow() );
       editWidget()->setText( cell->text() );
-      }
+  }
 }
 
 void KSpreadView::deleteSelection()
