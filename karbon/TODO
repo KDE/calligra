@@ -22,7 +22,6 @@ TODO:
 -	if selecting many shapes, the fill/stroke state should be "unknown",
 	preview widgets needs to paint questionmarks or something in this case
 -	select first/last segment's knot if one of each other's knot is selected
--	don't create tools while being a r/o part
 -	investigate whether we can use a KToolBar with an appropriate layout to replace
 	our current non-conforming solution.
 -	port path commands to vgroup::insertNewDeleteOld(), maybe add a vpathcommand
