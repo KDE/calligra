@@ -22,6 +22,9 @@ Boston, MA 02111-1307, USA.
 
 KexiCreateProjectPage::KexiCreateProjectPage(KexiCreateProject *parent, QPixmap *wpic, const char *name) : QWidget(parent, name)
 {
+	m_loaded = false;
+
+	parent->registerPage(this);
 }
 
 QVariant

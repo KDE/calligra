@@ -4,7 +4,7 @@ kexi_SOURCES = kexidatetableedit.cpp kmultitabbar.cpp kexitabbrowser.cpp kexiwid
 kexitableitem.cpp kexitableview.cpp kexidatatable.cpp kexistore.cpp kexidoc.cpp kexidialogbase.cpp kexibrowseritem.cpp \
 kexiworkspace.cpp kexiformbase.cpp kexicreateprojectpage.cpp kexicreateproject.cpp kexibrowser.cpp keximainwindow.cpp kexiapplication.cpp main.cpp \
 kexiproject.cpp kexiformmanager.cpp \
-kexicreateprojectpageengine.cpp kexicreateprojectpageconnection.cpp kexicreateprojectpagedb.cpp
+kexicreateprojectpageengine.cpp kexicreateprojectpageconnection.cpp kexicreateprojectpagedb.cpp kexicreateprojectpagefile.cpp
 
 kexi_LDADD   = $(LIB_KPARTS) kexiDB/libkexidb.la
 

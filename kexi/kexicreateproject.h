@@ -20,6 +20,7 @@
 
 #include <kwizard.h>
 #include <qpixmap.h>
+#include <qptrlist.h>
 
 /**
   *@author lucijan busch
@@ -32,6 +33,8 @@
 
 class KexiCreateProjectPage;
 
+typedef QPtrList<KexiCreateProjectPage> PageList;
+
 /*! this class aims to represent
     the dirtiest class you ever saw
  */
@@ -43,9 +46,19 @@ class KexiCreateProject : public KWizard  {
 		KexiCreateProject(QWidget *parent=0, const char *name=0, bool modal=false, WFlags f=0);
 		~KexiCreateProject();
 
-		
+		/*! adds the page to the pagelist
+		 *  which enables showing on demand
+		*/
+		void			registerPage(KexiCreateProjectPage *page);
+
+
 	protected:
-		void			addItem(KexiCreateProjectPage *page, QString title);
+		void			addItem(KexiCreateProjectPage *page, QString title, int index=-1);
+		/*! adds pages, needed for a section
+		 *  and removes pages, which are'n needed as well,
+		 *  note: it requeries that the pages are added in the right order)
+		 */
+		void			requireSection(QString section);
 
 		//always the same pixmap at the left
 		QPixmap			*m_wpic;
@@ -54,6 +67,11 @@ class KexiCreateProject : public KWizard  {
 		KexiCreateProjectPage	*m_pageEngine;
 		KexiCreateProjectPage	*m_pageConnection;
 		KexiCreateProjectPage	*m_pageDatabase;
+		KexiCreateProjectPage	*m_pageFile;
+
+		PageList		m_pageList;
+
+		QString			m_currentSection;
 
 	protected slots:
 		void			slotValueChanged(KexiCreateProjectPage *, QString &);

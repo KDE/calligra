@@ -27,19 +27,20 @@ MySqlResult::MySqlResult(MYSQL_RES *result, QObject *parent) : KexiDBResult(pare
 {
 	//various initialisations...
 	m_result = result;
+//	m_row = new MYSQL_ROW;
 	m_row = 0;
 	m_currentRecord = 0;
 //	m_fieldNames = 0;
 	m_numFields = mysql_num_fields(m_result);
 	
 	//creating field-index
-/*	MYSQL_FIELD *field;
+	MYSQL_FIELD *field;
 	int i=0;
 	while((field = mysql_fetch_field(m_result)))
 	{
 		m_fieldNames.insert(QString::fromLatin1(field->name), i);
 		i++;
-	}*/
+	}
 }
 
 unsigned int
@@ -51,24 +52,18 @@ MySqlResult::numRows()
 bool
 MySqlResult::next()
 {
-	kdDebug() << "MySqlResult::next(): " << numRows() << " rows in buffer" << endl;
+	m_row = mysql_fetch_row(m_result);
 	if(!m_row)
-		m_row = new MYSQL_ROW;
-	*m_row = mysql_fetch_row(m_result);
-	if(m_currentRecord < numRows())
-	{
-		kdDebug() << "MySqlResult::next(): @" << m_currentRecord << endl;
-		m_currentRecord++;
-		return true;
-	}
-
-	return false;
+		return false;
+	return true;
 }
 
 QVariant
 MySqlResult::value(unsigned int field)
 {
-	QVariant v((*m_row)[field]);
+	if(!m_row)
+		return 0;
+	QVariant v((m_row)[field]);
 	return v;
 }
 
@@ -77,7 +72,7 @@ MySqlResult::value(QString field)
 {
 	FieldNames::Iterator it;
 	it = m_fieldNames.find(field);
-	QVariant v((*m_row)[it.data()]);
+	QVariant v((m_row)[it.data()]);
 	return v;
 }
 

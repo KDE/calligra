@@ -24,6 +24,7 @@
 #include "kexicreateprojectpageengine.h"
 #include "kexicreateprojectpageconnection.h"
 #include "kexicreateprojectpagedb.h"
+#include "kexicreateprojectpagefile.h"
 
 #include "kexicreateproject.h"
 
@@ -38,15 +39,24 @@ KexiCreateProject::KexiCreateProject(QWidget *parent, const char *name, bool mod
 	m_pageConnection = new KexiCreateProjectPageConnection(this, m_wpic, "page_connection");
 	addItem(m_pageConnection, i18n("Connection"));
 	m_pageDatabase = new KexiCreateProjectPageDB(this, m_wpic, "page_db");
-	addItem(m_pageDatabase, i18n("Database"));
+	m_pageDatabase->hide();
+	m_pageFile = new KexiCreateProjectPageFile(this, m_wpic, "page_file");
+	m_pageFile->hide();
 }
 
 void
-KexiCreateProject::addItem(KexiCreateProjectPage *page, QString title)
+KexiCreateProject::registerPage(KexiCreateProjectPage *page)
 {
-	addPage(page, title);
+	m_pageList.append(page);
+}
+
+void
+KexiCreateProject::addItem(KexiCreateProjectPage *page, QString title, int index)
+{
+	insertPage(page, title, index);
 	connect(page, SIGNAL(valueChanged(KexiCreateProjectPage*, QString &)), this,
 	   SLOT(slotValueChanged(KexiCreateProjectPage*, QString &)));
+	page->m_loaded = true;
 }
 
 void
@@ -62,7 +72,21 @@ void
 KexiCreateProject::next()
 {
 	kdDebug() << "KexiCreateProject::next()" << endl;
-	if(currentPage() == m_pageConnection)
+	if(currentPage() == m_pageEngine)
+	{
+		if(m_pageEngine->data("location").toString() == "RemoteDB")
+		{
+			requireSection("RemoteDB");
+			KWizard::next();
+			return;
+		}
+		else
+		{
+			requireSection("LocalDB");
+			KWizard::next();
+		}
+	}
+	else if(currentPage() == m_pageConnection)
 	{
 		kdDebug() << "KexiCreateProject::next(): time to connect..." << endl;
 		QString engine = m_pageEngine->data("engine").toString();
@@ -80,6 +104,42 @@ KexiCreateProject::accept()
 {
 	if(static_cast<KexiCreateProjectPageDB*>(m_pageDatabase)->connectDB())
 		KWizard::accept();
+}
+
+void
+KexiCreateProject::requireSection(QString section)
+{
+	if(section == m_currentSection)
+	{
+		return;
+	}
+	else
+	{
+		for(KexiCreateProjectPage *page = m_pageList.first(); page; page = m_pageList.next())
+		{
+			if(page->data("section").toString() == m_currentSection)
+			{
+				//unload it in that case...
+				removePage(page);
+				kdDebug() << "KexiCreateProject::requireSection(): took page: " << page->data("caption").toString() << endl;
+			}
+			else if(page->data("section").toString() == section)
+			{
+				//we will need it...
+				if(!page->m_loaded)
+				{
+					addItem(page, page->data("caption").toString());
+					kdDebug() << "KexiCreateProject::requireSection(): added page: " << page->data("caption").toString() << endl;
+					page->show();
+				}
+				else
+				{
+					page->show();
+					kdDebug() << "KexiCreateProject::requireSection(): ignored: " << page->data("caption").toString() << endl;
+				}
+			}
+		}
+	}
 }
 
 KexiCreateProject::~KexiCreateProject()

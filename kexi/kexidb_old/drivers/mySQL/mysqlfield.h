@@ -17,41 +17,22 @@ the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
 Boston, MA 02111-1307, USA.
 */
 
-#ifndef MYSQLRESULT_H
-#define MYSQLRESULT_H
+#ifndef MYSQLFIELD_H
+#define MYSQLFIELD_H
 
 #include <mysql/mysql.h>
 
-#include <qmap.h>
+#include "../../kexiDB/kexidbfield.h"
 
-#include "../../kexiDB/kexidbresult.h"
-
-typedef QMap<QString, int> FieldNames;
-
-class MySqlResult : public KexiDBResult
+class MySqlField : public KexiDBField
 {
-	Q_OBJECT
-	
 	public:
-		MySqlResult(MYSQL_RES *result, QObject *parent=0);
-		~MySqlResult();
-
-		QVariant	value(unsigned int field);
-		QVariant	value(QString field);
+		MySqlField(MYSQL_FIELD *field, QString table, unsigned int column);
+		~MySqlField();
 		
-		bool		next();
-
-		unsigned int	numRows();
 	protected:
-		// mysql specific
-		MYSQL_RES	*m_result;
-	        MYSQL_ROW	m_row;
-		MYSQL_FIELD	*m_fields;
-		unsigned int	m_numFields;
+		MYSQL_FIELD *field;
 
-		FieldNames	m_fieldNames;
-
-		unsigned int	m_currentRecord;
 };
 
 #endif

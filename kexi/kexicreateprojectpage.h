@@ -39,8 +39,10 @@ class KexiCreateProjectPage : public QWidget
 		QVariant data(QString property) const;
 		void setProperty(QString property, QVariant data);
 
+		bool	m_loaded;
+
 	protected:
-		DataMap m_data;
+		DataMap	m_data;
 		
 	signals:
 		void valueChanged(KexiCreateProjectPage *, QString &);

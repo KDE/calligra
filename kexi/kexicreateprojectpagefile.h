@@ -17,41 +17,30 @@ the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
 Boston, MA 02111-1307, USA.
 */
 
-#ifndef MYSQLRESULT_H
-#define MYSQLRESULT_H
+#ifndef KEXICREATEPROJECTPAGEFILE_H
+#define KEXICREATEPROJECTPAGEFILE_H
 
-#include <mysql/mysql.h>
+#include "kexicreateprojectpage.h"
 
-#include <qmap.h>
+class QRadioButton;
+class KURLRequester;
 
-#include "../../kexiDB/kexidbresult.h"
-
-typedef QMap<QString, int> FieldNames;
-
-class MySqlResult : public KexiDBResult
+class KexiCreateProjectPageFile : public KexiCreateProjectPage
 {
 	Q_OBJECT
-	
+
 	public:
-		MySqlResult(MYSQL_RES *result, QObject *parent=0);
-		~MySqlResult();
+		KexiCreateProjectPageFile(KexiCreateProject *parent, QPixmap *wpic, const char *name);
+		~KexiCreateProjectPageFile();
 
-		QVariant	value(unsigned int field);
-		QVariant	value(QString field);
-		
-		bool		next();
-
-		unsigned int	numRows();
 	protected:
-		// mysql specific
-		MYSQL_RES	*m_result;
-	        MYSQL_ROW	m_row;
-		MYSQL_FIELD	*m_fields;
-		unsigned int	m_numFields;
+		QRadioButton	*m_btnEmbedd;
+		QRadioButton	*m_btnExtern;
+		KURLRequester	*m_externURL;
 
-		FieldNames	m_fieldNames;
-
-		unsigned int	m_currentRecord;
+	protected slots:
+		void slotExternToggle(bool);
+		void slotEmbeddToggle(bool);
 };
 
 #endif

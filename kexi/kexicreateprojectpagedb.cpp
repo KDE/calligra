@@ -38,6 +38,11 @@ KexiCreateProjectPageDB::KexiCreateProjectPageDB(KexiCreateProject *parent, QPix
 	QLabel *lPic = new QLabel("", this);
 	lPic->setPixmap(*wpic);
 
+	//default properties
+	setProperty("section", QVariant("RemoteDB"));
+	setProperty("caption", QVariant(i18n("Connection")));
+
+	//widget
 	m_databases = new KListView(this);
 	m_databases->addColumn(i18n("Select Database"));
 	connect(m_databases, SIGNAL(selectionChanged()), this, SLOT(slotDatabaseChanged()));

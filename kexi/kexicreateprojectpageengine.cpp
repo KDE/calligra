@@ -50,6 +50,9 @@ KexiCreateProjectPageEngine::KexiCreateProjectPageEngine(KexiCreateProject *pare
 	g->addMultiCellWidget(m_summery,1,	1,	1,	2);
 
 	fill();
+
+	setProperty("section", QVariant("Both"));
+	setProperty("caption", QVariant(i18n("Engine")));
 }
 
 void
@@ -81,6 +84,9 @@ KexiCreateProjectPageEngine::fillSummery()
 	{
 		m_summery->setText(userSummery);
 	}
+
+	QVariant location = kexi->project()->db()->driverInfo(m_engine->currentText())->service()->property("X-Kexi-Location");
+	setProperty("location", location);
 }
 
 void
