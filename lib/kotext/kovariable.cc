@@ -42,7 +42,7 @@
 class KoVariableSettings::KoVariableSettingPrivate
 {
 public:
-    KoVariableSettingPrivate() 
+    KoVariableSettingPrivate()
     {
         m_lastPrintingDate.setTime_t(0); // Default is 1970-01-01 midnight locale time
     }
@@ -196,12 +196,12 @@ QCString KoVariableDateFormat::getKey( const QString& props ) const
 
 void KoVariableDateFormat::load( const QCString &key )
 {
-    QCString params( key.mid( 4 ) );
+    QCString params( key.mid( 4 ) ); // skip "DATE"
     if ( !params.isEmpty() )
     {
         if (params[0] == '1' || params[0] == '0') // old m_bShort crap
             params = params.mid(1); // skip it
-        m_strFormat = QString::fromUtf8( params ); // skip "DATE"
+        m_strFormat = QString::fromUtf8( params );
     }
 }
 
@@ -913,18 +913,18 @@ void KoDateVariable::load( QDomElement& elem )
     QDomElement e = elem.namedItem( "DATE" ).toElement();
     if (!e.isNull())
     {
-        const int y = e.attribute("year").toInt();
-        const int month = e.attribute("month").toInt();
-        const int d = e.attribute("day").toInt();
-        const int h = e.attribute("hour").toInt();
-        const int min = e.attribute("minute").toInt();
-        const int s = e.attribute("second").toInt();
-        const int ms = e.attribute("msecond").toInt();
         const bool fix = e.attribute("fix").toInt() == 1;
         if ( e.hasAttribute("correct"))
             m_correctDate = e.attribute("correct").toInt();
         if ( fix )
         {
+            const int y = e.attribute("year").toInt();
+            const int month = e.attribute("month").toInt();
+            const int d = e.attribute("day").toInt();
+            const int h = e.attribute("hour").toInt();
+            const int min = e.attribute("minute").toInt();
+            const int s = e.attribute("second").toInt();
+            const int ms = e.attribute("msecond").toInt();
             QDate date( y, month, d );
             date = date.addDays( m_correctDate );
             const QTime time( h, min, s, ms );
@@ -935,8 +935,8 @@ void KoDateVariable::load( QDomElement& elem )
         }
         //old date variable format
         m_subtype = fix ? VST_DATE_FIX : VST_DATE_CURRENT;
-        if ( elem.hasAttribute( "subtype" ))
-            m_subtype = elem.attribute( "subtype").toInt();
+        if ( e.hasAttribute( "subtype" ))
+            m_subtype = e.attribute( "subtype").toInt();
     }
 }
 
