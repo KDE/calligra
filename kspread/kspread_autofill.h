@@ -50,6 +50,7 @@ public:
     QString getString() { return string; }
     int getIOtherEnd() {return otherEnd; }
     int getIOtherBegin() {return otherBegin; }
+    static QStringList *other;
 
 protected:
     int ivalue;
@@ -63,7 +64,7 @@ protected:
 
     static QStringList *month;
     static QStringList *day;
-    static QStringList *other;
+    //static QStringList *other;
 };
 
 class AutoFillSequence

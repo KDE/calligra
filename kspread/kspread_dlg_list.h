@@ -45,6 +45,7 @@ public slots:
   void slotAdd();
   void slotNew();
   void slotModify();
+  void slotCopy();
 protected:
   KConfig *config;
 
@@ -56,6 +57,7 @@ protected:
   QPushButton* m_pNew;
   QPushButton* m_pAdd;
   QPushButton* m_pModify;
+  QPushButton* m_pCopy;
 };
 
 #endif

@@ -2971,7 +2971,7 @@ static bool kspreadfunc_imargument( KSContext& context )
         context.setValue( new KSValue(i18n("#Div/0")));
         return true;
         }
-  double arg=1/(tan(imag/real));
+  double arg=atan2(imag,real);
 
   context.setValue( new KSValue(arg));
 

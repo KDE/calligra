@@ -70,6 +70,9 @@ KSpreadList::KSpreadList( KSpreadView* parent, const char* name )
   m_pModify=new QPushButton(i18n("Modify"),this);
   grid1->addWidget(m_pModify,4,2);
 
+  m_pCopy=new QPushButton(i18n("Copy"),this);
+  grid1->addWidget(m_pCopy,5,2);
+
 
   KButtonBox *bb = new KButtonBox( this );
   bb->addStretch();
@@ -87,6 +90,7 @@ KSpreadList::KSpreadList( KSpreadView* parent, const char* name )
   connect( m_pAdd, SIGNAL( clicked() ), this, SLOT( slotAdd() ) );
   connect( m_pNew, SIGNAL( clicked() ), this, SLOT( slotNew() ) );
   connect( m_pModify, SIGNAL( clicked() ), this, SLOT( slotModify() ) );
+  connect( m_pCopy, SIGNAL( clicked() ), this, SLOT( slotCopy() ) );
   connect( list, SIGNAL(doubleClicked(QListBoxItem *)),this,SLOT(slotDoubleClicked(QListBoxItem *)));
   init();
   entryList->setEnabled(false);
@@ -180,8 +184,11 @@ void KSpreadList::slotOk()
   config->writeEntry("Other list",result);
   //todo refresh AutoFillSequenceItem::other
   // I don't know how to do for the moment
-  /*delete(AutoFillSequenceItem::other);
-    AutoFillSequenceItem::other=0L;*/
+  if(AutoFillSequenceItem::other!=0L)
+    {
+    delete(AutoFillSequenceItem::other);
+    AutoFillSequenceItem::other=0L;
+    }
   accept();
 }
 
@@ -211,6 +218,14 @@ void KSpreadList::slotModify()
   entryList->setEnabled(false);
   m_pModify->setEnabled(false);
   
+}
+
+void KSpreadList::slotCopy()
+{
+  if(list->currentItem()!=-1)
+    {
+      list->insertItem(list->currentText(),list->count()); 
+    }
 }
 
 void KSpreadList::slotClose()

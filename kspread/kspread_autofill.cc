@@ -185,7 +185,6 @@ AutoFillSequenceItem::AutoFillSequenceItem( const QString &_str )
 	    index++;
 	  }
 	index= other->findIndex(_str);
-	otherBegin=0;
 	for ( QStringList::Iterator it = other->find(_str); it != other->begin();--it ) 
 	  {
 	    if((*it)=="\\")
