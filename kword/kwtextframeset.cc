@@ -133,8 +133,8 @@ KWFrame * KWTextFrameSet::internalToContents( QPoint iPoint, QPoint & cPoint ) c
         totalHeight += frameRect.height();
     }
 
-    kdWarning(32002) << "KWTextFrameSet::internalToContents " << iPoint.x() << "," << iPoint.y()
-                     << " not in any frame of " << (void*)this << endl;
+    kdDebug(32002) << "** KWTextFrameSet::internalToContents " << iPoint.x() << "," << iPoint.y()
+                   << " not in any frame of " << (void*)this << endl;
     cPoint = iPoint; // bah
     return 0L;
 }
@@ -302,7 +302,8 @@ void KWTextFrameSet::getMargins( int yp, int h, int* marginLeft, int* marginRigh
                        << endl;*/
     QPoint p;
     KWFrame * frame = internalToContents( QPoint(0, yp), p );
-    ASSERT(frame);
+    if (!frame)
+        kdDebug() << "getMargins: internalToContents returned frame=0L for yp=" << yp << endl;
     // Everything from there is in contents coordinates.
     int left = frame ? kWordDocument()->zoomItX( frame->left() ) : 0;
     int from = left;

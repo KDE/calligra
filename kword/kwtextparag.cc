@@ -650,51 +650,52 @@ void KWTextParag::loadFormatting( QDomElement &attributes, int offset )
     QDomElement formatsElem = attributes.namedItem( "FORMATS" ).toElement();
     if ( !formatsElem.isNull() )
     {
-        //QTextFormatCollection *fc = formatCollection();
-        QDomNodeList listFormats = formatsElem.elementsByTagName( "FORMAT" );
-        for (unsigned int item = 0; item < listFormats.count(); item++)
+        QDomElement formatElem = attributes.firstChild().toElement();
+        for ( ; !formatElem.isNull() ; formatElem = formatElem.nextSibling().toElement() )
         {
-            QDomElement formatElem = listFormats.item( item ).toElement();
-            int index = formatElem.attribute( "pos" ).toInt() + offset;
-            int len = formatElem.attribute( "len" ).toInt();
-
-            int id = formatElem.attribute( "id" ).toInt();
-            switch( id ) {
-            case 1: // Normal text
+            if ( formatElem.tagName() == "FORMAT" )
             {
-                QTextFormat f = loadFormat( formatElem, paragFormat() );
-                //kdDebug(32002) << "KWTextParag::loadFormatting applying formatting from " << index << " to " << index+len << endl;
-                setFormat( index, len, document()->formatCollection()->format( &f ) );
-                break;
-            }
-            case 2: // Picture
-            {
-                ASSERT( len == 1 );
-                KWTextDocument * textdoc = static_cast<KWTextDocument *>(document());
-                KWDocument * doc = textdoc->textFrameSet()->kWordDocument();
-                KWTextImage * custom = new KWTextImage( textdoc, QString::null );
-                kdDebug() << "KWTextParag::loadFormatting insertCustomItem" << endl;
-                setCustomItem( index, custom, paragFormat() );
-                // <IMAGE>
-                QDomElement image = formatElem.namedItem( "IMAGE" ).toElement();
-                if ( !image.isNull() ) {
-                    // <FILENAME>
-                    QDomElement filenameElement = image.namedItem( "FILENAME" ).toElement();
-                    if ( !filenameElement.isNull() )
-                    {
-                        QString filename = filenameElement.attribute( "value" );
-                        doc->addImageRequest( filename, custom );
-                    }
-                    else
-                        kdError(32001) << "Missing FILENAME tag in IMAGE" << endl;
-                } else
-                    kdError(32001) << "Missing IMAGE tag in FORMAT wth id=2" << endl;
+                int index = formatElem.attribute( "pos" ).toInt() + offset;
+                int len = formatElem.attribute( "len" ).toInt();
 
-                break;
-            }
-            default:
-                kdWarning() << "KWTextParag::loadFormat id=" << id << " not supported" << endl;
-                break;
+                int id = formatElem.attribute( "id" ).toInt();
+                switch( id ) {
+                case 1: // Normal text
+                {
+                    QTextFormat f = loadFormat( formatElem, paragFormat() );
+                    //kdDebug(32002) << "KWTextParag::loadFormatting applying formatting from " << index << " to " << index+len << endl;
+                    setFormat( index, len, document()->formatCollection()->format( &f ) );
+                    break;
+                }
+                case 2: // Picture
+                {
+                    ASSERT( len == 1 );
+                    KWTextDocument * textdoc = static_cast<KWTextDocument *>(document());
+                    KWDocument * doc = textdoc->textFrameSet()->kWordDocument();
+                    KWTextImage * custom = new KWTextImage( textdoc, QString::null );
+                    kdDebug() << "KWTextParag::loadFormatting insertCustomItem" << endl;
+                    setCustomItem( index, custom, paragFormat() );
+                    // <IMAGE>
+                    QDomElement image = formatElem.namedItem( "IMAGE" ).toElement();
+                    if ( !image.isNull() ) {
+                        // <FILENAME>
+                        QDomElement filenameElement = image.namedItem( "FILENAME" ).toElement();
+                        if ( !filenameElement.isNull() )
+                        {
+                            QString filename = filenameElement.attribute( "value" );
+                            doc->addImageRequest( filename, custom );
+                        }
+                        else
+                            kdError(32001) << "Missing FILENAME tag in IMAGE" << endl;
+                    } else
+                        kdError(32001) << "Missing IMAGE tag in FORMAT wth id=2" << endl;
+
+                    break;
+                }
+                default:
+                    kdWarning() << "KWTextParag::loadFormat id=" << id << " not supported" << endl;
+                    break;
+                }
             }
         }
     }

@@ -611,99 +611,101 @@ void KWFrameSet::save( QDomElement &parentElem )
 void KWFrameSet::load( QDomElement &attributes )
 {
     // <FRAME>
-    QDomNodeList listFrames = attributes.elementsByTagName ( "FRAME" );
-    for (unsigned int item = 0; item < listFrames.count(); item++)
+    QDomElement frameElem = attributes.firstChild().toElement();
+    for ( ; !frameElem.isNull() ; frameElem = frameElem.nextSibling().toElement() )
     {
-        QDomElement frameElem = listFrames.item( item ).toElement();
-        QRect rect;
-        NewFrameBehaviour newFrameBehaviour = Reconnect;
-        FrameBehaviour autoCreateNewValue = AutoCreateNewFrame;
-        SheetSide sheetSide = AnySide;
-        Border l, r, t, b;
-        double lmm = 0.0, linch = 0.0, rmm = 0.0, rinch = 0.0, tmm = 0.0, tinch = 0.0, bmm = 0.0, binch = 0.0, ramm = 1.0, rainch = 0.0393701;
-        double lpt = 0.0, rpt = 0.0, tpt = 0.0, bpt = 0.0, rapt = 2.0;
+        if ( frameElem.tagName() == "FRAME" )
+        {
+            QRect rect;
+            NewFrameBehaviour newFrameBehaviour = Reconnect;
+            FrameBehaviour autoCreateNewValue = AutoCreateNewFrame;
+            SheetSide sheetSide = AnySide;
+            Border l, r, t, b;
+            double lmm = 0.0, linch = 0.0, rmm = 0.0, rinch = 0.0, tmm = 0.0, tinch = 0.0, bmm = 0.0, binch = 0.0, ramm = 1.0, rainch = 0.0393701;
+            double lpt = 0.0, rpt = 0.0, tpt = 0.0, bpt = 0.0, rapt = 2.0;
 
-        l.color = Qt::white;
-        l.style = Border::SOLID;
-        l.ptWidth = 0;
-        r.color = Qt::white;
-        r.style = Border::SOLID;
-        r.ptWidth = 0;
-        t.color = Qt::white;
-        t.style = Border::SOLID;
-        t.ptWidth = 0;
-        b.color = Qt::white;
-        b.style = Border::SOLID;
-        b.ptWidth = 0;
-        QColor c( Qt::white );
+            l.color = Qt::white;
+            l.style = Border::SOLID;
+            l.ptWidth = 0;
+            r.color = Qt::white;
+            r.style = Border::SOLID;
+            r.ptWidth = 0;
+            t.color = Qt::white;
+            t.style = Border::SOLID;
+            t.ptWidth = 0;
+            b.color = Qt::white;
+            b.style = Border::SOLID;
+            b.ptWidth = 0;
+            QColor c( Qt::white );
 
-        rect.setLeft( KWDocument::getAttribute( frameElem, "left", 0 ) );
-        rect.setTop( KWDocument::getAttribute( frameElem, "top", 0 ) );
-        rect.setRight( KWDocument::getAttribute( frameElem, "right", 0 ) );
-        rect.setBottom( KWDocument::getAttribute( frameElem, "bottom", 0 ) );
-        RunAround runaround = static_cast<RunAround>( KWDocument::getAttribute( frameElem, "runaround", 0 ) );
-        KWUnit runAroundGap;
-        runAroundGap.setPT( KWDocument::getAttribute( frameElem, "runaroundGap", 0.0 ) );
-        getPointBasedAttribute( ra, frameElem, "runaGapPT", 0.0 );
-        l.ptWidth = KWDocument::getAttribute( frameElem, "lWidth", 0 );
-        r.ptWidth = KWDocument::getAttribute( frameElem, "rWidth", 0 );
-        t.ptWidth = KWDocument::getAttribute( frameElem, "tWidth", 0 );
-        b.ptWidth = KWDocument::getAttribute( frameElem, "bWidth", 0 );
-        l.color.setRgb(
-            KWDocument::getAttribute( frameElem, "lRed", 0xff ),
-            KWDocument::getAttribute( frameElem, "lGreen", 0xff ),
-            KWDocument::getAttribute( frameElem, "lBlue", 0xff ) );
-        r.color.setRgb(
-            KWDocument::getAttribute( frameElem, "rRed", 0xff ),
-            KWDocument::getAttribute( frameElem, "rGreen", 0xff ),
-            KWDocument::getAttribute( frameElem, "rBlue", 0xff ) );
-        t.color.setRgb(
-            KWDocument::getAttribute( frameElem, "tRed", 0xff ),
-            KWDocument::getAttribute( frameElem, "tGreen", 0xff ),
-            KWDocument::getAttribute( frameElem, "tBlue", 0xff ) );
-        b.color.setRgb(
-            KWDocument::getAttribute( frameElem, "bRed", 0xff ),
-            KWDocument::getAttribute( frameElem, "bGreen", 0xff ),
-            KWDocument::getAttribute( frameElem, "bBlue", 0xff ) );
-        l.style = static_cast<Border::BorderStyle>( KWDocument::getAttribute( frameElem, "lStyle", Border::SOLID ) );
-        r.style = static_cast<Border::BorderStyle>( KWDocument::getAttribute( frameElem, "rStyle", Border::SOLID ) );
-        t.style = static_cast<Border::BorderStyle>( KWDocument::getAttribute( frameElem, "tStyle", Border::SOLID ) );
-        b.style = static_cast<Border::BorderStyle>( KWDocument::getAttribute( frameElem, "bStyle", Border::SOLID ) );
-        c.setRgb(
-            KWDocument::getAttribute( frameElem, "bkRed", 0xff ),
-            KWDocument::getAttribute( frameElem, "bkGreen", 0xff ),
-            KWDocument::getAttribute( frameElem, "bkBlue", 0xff ) );
-        getPointBasedAttribute( l, frameElem, "bleftpt", 0.0 );
-        getPointBasedAttribute( r, frameElem, "brightpt", 0.0 );
-        getPointBasedAttribute( t, frameElem, "btoppt", 0.0 );
-        getPointBasedAttribute( b, frameElem, "bbottompt", 0.0 );
-        autoCreateNewValue = static_cast<FrameBehaviour>( KWDocument::getAttribute( frameElem, "autoCreateNewFrame", AutoCreateNewFrame ) );
-        newFrameBehaviour = static_cast<NewFrameBehaviour>( KWDocument::getAttribute( frameElem, "newFrameBehaviour", Reconnect ) );
-        sheetSide = static_cast<SheetSide>( KWDocument::getAttribute( frameElem, "sheetSide", AnySide ) );
+            rect.setLeft( KWDocument::getAttribute( frameElem, "left", 0 ) );
+            rect.setTop( KWDocument::getAttribute( frameElem, "top", 0 ) );
+            rect.setRight( KWDocument::getAttribute( frameElem, "right", 0 ) );
+            rect.setBottom( KWDocument::getAttribute( frameElem, "bottom", 0 ) );
+            RunAround runaround = static_cast<RunAround>( KWDocument::getAttribute( frameElem, "runaround", 0 ) );
+            KWUnit runAroundGap;
+            runAroundGap.setPT( KWDocument::getAttribute( frameElem, "runaroundGap", 0.0 ) );
+            getPointBasedAttribute( ra, frameElem, "runaGapPT", 0.0 );
+            l.ptWidth = KWDocument::getAttribute( frameElem, "lWidth", 0 );
+            r.ptWidth = KWDocument::getAttribute( frameElem, "rWidth", 0 );
+            t.ptWidth = KWDocument::getAttribute( frameElem, "tWidth", 0 );
+            b.ptWidth = KWDocument::getAttribute( frameElem, "bWidth", 0 );
+            l.color.setRgb(
+                KWDocument::getAttribute( frameElem, "lRed", 0xff ),
+                KWDocument::getAttribute( frameElem, "lGreen", 0xff ),
+                KWDocument::getAttribute( frameElem, "lBlue", 0xff ) );
+            r.color.setRgb(
+                KWDocument::getAttribute( frameElem, "rRed", 0xff ),
+                KWDocument::getAttribute( frameElem, "rGreen", 0xff ),
+                KWDocument::getAttribute( frameElem, "rBlue", 0xff ) );
+            t.color.setRgb(
+                KWDocument::getAttribute( frameElem, "tRed", 0xff ),
+                KWDocument::getAttribute( frameElem, "tGreen", 0xff ),
+                KWDocument::getAttribute( frameElem, "tBlue", 0xff ) );
+            b.color.setRgb(
+                KWDocument::getAttribute( frameElem, "bRed", 0xff ),
+                KWDocument::getAttribute( frameElem, "bGreen", 0xff ),
+                KWDocument::getAttribute( frameElem, "bBlue", 0xff ) );
+            l.style = static_cast<Border::BorderStyle>( KWDocument::getAttribute( frameElem, "lStyle", Border::SOLID ) );
+            r.style = static_cast<Border::BorderStyle>( KWDocument::getAttribute( frameElem, "rStyle", Border::SOLID ) );
+            t.style = static_cast<Border::BorderStyle>( KWDocument::getAttribute( frameElem, "tStyle", Border::SOLID ) );
+            b.style = static_cast<Border::BorderStyle>( KWDocument::getAttribute( frameElem, "bStyle", Border::SOLID ) );
+            c.setRgb(
+                KWDocument::getAttribute( frameElem, "bkRed", 0xff ),
+                KWDocument::getAttribute( frameElem, "bkGreen", 0xff ),
+                KWDocument::getAttribute( frameElem, "bkBlue", 0xff ) );
+            getPointBasedAttribute( l, frameElem, "bleftpt", 0.0 );
+            getPointBasedAttribute( r, frameElem, "brightpt", 0.0 );
+            getPointBasedAttribute( t, frameElem, "btoppt", 0.0 );
+            getPointBasedAttribute( b, frameElem, "bbottompt", 0.0 );
+            autoCreateNewValue = static_cast<FrameBehaviour>( KWDocument::getAttribute( frameElem, "autoCreateNewFrame", AutoCreateNewFrame ) );
+            newFrameBehaviour = static_cast<NewFrameBehaviour>( KWDocument::getAttribute( frameElem, "newFrameBehaviour", Reconnect ) );
+            sheetSide = static_cast<SheetSide>( KWDocument::getAttribute( frameElem, "sheetSide", AnySide ) );
 
-        KWFrame * frame = new KWFrame(this, rect.x(), rect.y(), rect.width(), rect.height(), runaround, rainch == -1 ? runAroundGap : KWUnit( rapt, ramm, rainch ) );
-        if(c==l.color && l.ptWidth==1 && l.style==0 )
-	  l.ptWidth=0;
-	frame->setLeftBorder( l );
-	if(c==r.color  && r.ptWidth==1 && r.style==0)
-	  r.ptWidth=0;
-        frame->setRightBorder( r );
-	if(c==t.color && t.ptWidth==1 && t.style==0 )
-	  t.ptWidth=0;
-        frame->setTopBorder( t );
-	if(c==b.color && b.ptWidth==1 && b.style==0 )
-	  b.ptWidth=0;
-        frame->setBottomBorder( b );
-        frame->setBackgroundColor( QBrush( c ) );
-        frame->setBLeft( KWUnit( lpt, lmm, linch ) );
-        frame->setBRight( KWUnit( rpt, rmm, rinch ) );
-        frame->setBTop( KWUnit( tpt, tmm, tinch ) );
-        frame->setBBottom( KWUnit( bpt, bmm, binch ) );
-        frame->setFrameBehaviour( autoCreateNewValue );
-        frame->setSheetSide( sheetSide );
-        frame->setNewFrameBehaviour( newFrameBehaviour);
-        frames.append( frame );
-        doc->progressItemLoaded();
+            KWFrame * frame = new KWFrame(this, rect.x(), rect.y(), rect.width(), rect.height(), runaround, rainch == -1 ? runAroundGap : KWUnit( rapt, ramm, rainch ) );
+            if(c==l.color && l.ptWidth==1 && l.style==0 )
+                l.ptWidth=0;
+            frame->setLeftBorder( l );
+            if(c==r.color  && r.ptWidth==1 && r.style==0)
+                r.ptWidth=0;
+            frame->setRightBorder( r );
+            if(c==t.color && t.ptWidth==1 && t.style==0 )
+                t.ptWidth=0;
+            frame->setTopBorder( t );
+            if(c==b.color && b.ptWidth==1 && b.style==0 )
+                b.ptWidth=0;
+            frame->setBottomBorder( b );
+            frame->setBackgroundColor( QBrush( c ) );
+            frame->setBLeft( KWUnit( lpt, lmm, linch ) );
+            frame->setBRight( KWUnit( rpt, rmm, rinch ) );
+            frame->setBTop( KWUnit( tpt, tmm, tinch ) );
+            frame->setBBottom( KWUnit( bpt, bmm, binch ) );
+            frame->setFrameBehaviour( autoCreateNewValue );
+            frame->setSheetSide( sheetSide );
+            frame->setNewFrameBehaviour( newFrameBehaviour);
+            frames.append( frame );
+            doc->progressItemLoaded();
+        }
     }
 }
 

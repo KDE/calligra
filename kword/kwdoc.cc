@@ -800,6 +800,8 @@ bool KWDocument::loadChildren( KoStore *_store )
 /*================================================================*/
 bool KWDocument::loadXML( QIODevice *, const QDomDocument & doc )
 {
+    QTime dt;
+    dt.start();
     emit sigProgress( 0 );
     kdDebug(32001) << "KWDocument::loadXML" << endl;
     pixmapKeys.clear();
@@ -986,7 +988,7 @@ bool KWDocument::loadXML( QIODevice *, const QDomDocument & doc )
     if ( !stylesElem.isNull() )
         loadStyleTemplates( stylesElem );
 
-    emit sigProgress(25);
+    emit sigProgress(20);
 
     QDomElement framesets = word.namedItem( "FRAMESETS" ).toElement();
     if ( !framesets.isNull() )
@@ -1238,6 +1240,8 @@ bool KWDocument::loadXML( QIODevice *, const QDomDocument & doc )
 
     setModified( false );
 
+    kdDebug(32001) << "Loading took " << (float)(dt.elapsed()) / 1000 << " seconds" << endl;
+
     return TRUE;
 }
 
@@ -1326,12 +1330,12 @@ void KWDocument::moveUpStyleTemplate ( const QString & _styleName )
 void KWDocument::progressItemLoaded()
 {
     m_itemsLoaded++;
-    // We progress from 15 to 85 -> 70-wide range, 15 offset.
-    unsigned int perc = 70 * m_itemsLoaded / m_nrItemsToLoad;
-    if ( perc != 70 * (m_itemsLoaded-1) / m_nrItemsToLoad ) // only emit if different from previous call
+    // We progress from 20 to 85 -> 65-wide range, 20 offset.
+    unsigned int perc = 65 * m_itemsLoaded / m_nrItemsToLoad;
+    if ( perc != 65 * (m_itemsLoaded-1) / m_nrItemsToLoad ) // only emit if different from previous call
     {
-        //kdDebug(32001) << m_itemsLoaded << " items loaded. %=" << perc + 15 << endl;
-        emit sigProgress( perc + 15 );
+        //kdDebug(32001) << m_itemsLoaded << " items loaded. %=" << perc + 20 << endl;
+        emit sigProgress( perc + 20 );
     }
 }
 

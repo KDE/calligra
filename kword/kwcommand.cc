@@ -322,8 +322,9 @@ QTextCursor * KWPasteCommand::execute( QTextCursor *c )
     // second time to apply the character & paragraph formatting
     QString text;
 
+    // Note: because we need 'count' below, this can't be ported to firstChild/nextSibling
     QDomNodeList listParagraphs = elem.elementsByTagName ( "PARAGRAPH" );
-    uint count =listParagraphs.count();
+    uint count = listParagraphs.count();
     for (unsigned int item = 0; item < count; item++)
     {
         QDomElement paragElem = listParagraphs.item( item ).toElement();
