@@ -308,7 +308,7 @@ void configureInterfacePage::slotDefault()
     indent->setValue( newIndent );
     recentFiles->setValue(10);
     showRuler->setChecked(true);
-    autoSave->setValue(KoDocument::defaultAutoSave());
+    autoSave->setValue(KoDocument::defaultAutoSave()/60);
 }
 
 #include "kwconfig.moc"
