@@ -6,6 +6,7 @@ BUGS :
   - copy&paste with mouse (MMB) bugs (ah, QT 2 bug)
     '^' + 'e' = 'e' !
   - selecting several lines : first line gets unselected
+- Placing of objects is not precise 
 
 MISSING FEATURES, todo :
 ==============================
@@ -23,5 +24,8 @@ MISSING FEATURES, todo :
 - Insert pagenumber into txt objs
 - Group objects (finish: resizing is fucked up, set properties doesn´t work)
 - Possibility to print 1, 2 or 4 slides / page
+- Setting colors in the text using color bar
+- Add menu item for creating templates from slides
+
 
 Reginald Stadlbauer <reggie@kde.org>
