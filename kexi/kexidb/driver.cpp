@@ -76,6 +76,16 @@ Driver::~Driver()
 	KexiDBDbg << "Driver::~Driver() ok" << endl;
 }
 
+bool Driver::isValid()
+{
+	QString not_init = i18n("not initialized for \"%1\" driver.").arg(m_driverName);
+	if (beh->ROW_ID_FIELD_NAME.isEmpty()) {
+		setError(ERR_INVALID_DRIVER_IMPL, QString("DriverBehaviour::ROW_ID_FIELD_NAME ") + not_init);
+		return false;
+	}
+	return true;
+}
+
 const QPtrList<Connection> Driver::connectionsList() 
 {
 	QPtrList<Connection> clist;

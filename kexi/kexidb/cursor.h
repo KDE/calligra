@@ -29,8 +29,6 @@
 
 namespace KexiDB {
 
-//class CursorData;
-
 /*! Provides database cursor functionality.
 
 	Cursor can be defined in two ways:

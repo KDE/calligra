@@ -38,7 +38,8 @@
 
 namespace KexiDB {
 
-typedef QValueVector<QVariant> RecordData;
+//! structure for storing single record with type information
+typedef QValueVector<QVariant> RecordData; 
 
 class Cursor;
 class Driver;

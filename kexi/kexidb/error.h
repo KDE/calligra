@@ -40,6 +40,7 @@
 #define ERR_ROLLBACK_OR_COMMIT_TRANSACTION 150 //!< error during transaction rollback or commit
 #define ERR_SYSTEM_NAME_RESERVED 160 //!< system name is reserved and cannot be used (e.g. for table of field name)
 #define ERR_CANNOT_CREATE_EMPTY_OBJECT 170 //!< empty object cannot be created (e.g. table without fields)
+#define ERR_INVALID_DRIVER_IMPL 180 //! driver's implementation is not invalid
 
 #define ERR_OTHER 0xffff //!< use this if you have not (yet?) the name for given error 
 #endif

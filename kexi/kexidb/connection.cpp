@@ -119,6 +119,11 @@ Connection::~Connection()
 bool Connection::connect()
 {
 	clearError();
+	if (!m_driver->isValid()) {
+		setError(ERR_INVALID_DRIVER_IMPL, i18n("Invalid database driver implementation. ")+m_driver->errorMsg());
+		return false;
+	}
+
 	if (m_is_connected) {
 		setError(ERR_ALREADY_CONNECTED, i18n("Connection already established.") );
 		return false;

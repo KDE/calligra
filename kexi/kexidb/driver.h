@@ -124,6 +124,13 @@ class KEXI_DB_EXPORT Driver : public QObject, public KexiDB::Object
 
 		/*! used when we do not have Driver instance yet */
 		static QString defaultSQLTypeName(int id_t);
+		
+		/*! \return true if this driver's implementation is valid. 
+		 Just few constriants are checked to ensure that driver 
+		 developer didn't forget about something. 
+		 This method is called automatically on Conenction::connect(),
+		 and proper error message is set properly on any error. */
+		bool isValid();
 
 	protected:
 		/*! For reimplemenation: creates and returns connection object 

@@ -48,6 +48,10 @@ class DriverBehaviour
 	 Special definition string should be stored in AUTO_INCREMENT_FIELD_OPTION.
 	 False by default. */
 	bool SPECIAL_AUTO_INCREMENT_DEF : 1;
+	/*! Name of a field with autoincremented unique value,
+	 typically returned by Connection::drv_lastInsertRowID().
+	*/
+	QString ROW_ID_FIELD_NAME;
 };
 
 }
