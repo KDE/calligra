@@ -71,7 +71,8 @@ pie_gif( short imagewidth,
 	 QPainter*      p, // paint here
          KChartParameters* params, // all the parameters
          int  num_points,
-         float val[] )	/* data */
+         float val[],	/* data */
+         QColor color[],QColor colorShd[] )
 {
     params->offsetCol=num_points*params->colPie; 
     int offsetCol=params->offsetCol;
@@ -95,7 +96,7 @@ pie_gif( short imagewidth,
     char any_too_small = FALSE;
     char others[num_points];
     float slice_angle[3][num_points];	// must be used with others[]
-    //char threeD = ( params->type == KCHARTTYPE_3DPIE );
+  
 
     int	xdepth_3D = 0;// affects func_px()
     int ydepth_3D = 0;// affects func_py()
@@ -153,7 +154,6 @@ pie_gif( short imagewidth,
 		if( (this_pct > min_grphable) ||	/* too small */
                 (params->missing.isNull() || !params->missing[offsetCol+i]) ) 
 		  {	/* still want angles */
-		//int this_explode = GDCPIE_explode? GDCPIE_explode[i]: 0;
                 int this_explode = !params->explode.isNull() ? params->explode[offsetCol+i]: 0;
 		
 		double	this_sin;
@@ -178,18 +178,11 @@ pie_gif( short imagewidth,
                         char foo[1+4+1+1]; /* XPG2 compatibility */
                         int pct_len;
                         int lbl_len = 0;
-                        /*lbl_hgt = ( cnt_nl(lbl[i], &lbl_len) + (params->percent_labels == KCHARTPCTTYPE_ABOVE ||
-			  params->percent_labels == KCHARTPCTTYPE_BELOW? 1: 0) )
-			  * (params->labelFontHeight()+1);*/
+                        
 			lbl_hgt = ( cnt_nl(params->legend[i], &lbl_len) + (params->percent_labels == KCHARTPCTTYPE_ABOVE ||
 									params->percent_labels == KCHARTPCTTYPE_BELOW? 1: 0) )
 			  * (params->labelFontHeight()+1);
-                        /*sprintf( foo,
-                                 (params->percent_labels==KCHARTPCTTYPE_LEFT ||
-                                  params->percent_labels==KCHARTPCTTYPE_RIGHT) &&
-                                 lbl[i]? "(%.0f%%)":
-                                 "%.0f%%",
-                                 this_pct * 100.0 );*/
+                       
 			sprintf( foo,
                                  (params->percent_labels==KCHARTPCTTYPE_LEFT ||
                                   params->percent_labels==KCHARTPCTTYPE_RIGHT) &&
@@ -294,7 +287,7 @@ pie_gif( short imagewidth,
     BGColor   = params->BGColor;
     LineColor = params->LineColor;
     PlotColor = params->PlotColor;
-    if( params->EdgeColor != QColor() ) 
+    /*if( params->EdgeColor != QColor() ) 
     	{
         EdgeColor = params->EdgeColor;
         if( params->threeD() )
@@ -303,14 +296,14 @@ pie_gif( short imagewidth,
             EdgeColorShd = QColor( params->EdgeColor.red() / 2,
                                    params->EdgeColor.green() / 2,
                                    params->EdgeColor.blue() / 2 );
-    	}
+	 }*/
 
     /* --- set color for each slice --- */
     for( i=0; i<num_points; ++i )
         if( params->SetColor.count() ) 
         {
             QColor slc_clr = params->SetColor.color( i );
-            SliceColor[i]     = slc_clr;
+            SliceColor[i] = slc_clr;
 	    if( params->threeD() )
                 SliceColorShd[i] = QColor( slc_clr.red() / 2,
                                            slc_clr.green() / 2,
@@ -318,31 +311,17 @@ pie_gif( short imagewidth,
         } 
         else 
         {
-	    SliceColor[i]     = PlotColor;
+	  /*SliceColor[i] = PlotColor;
             if( params->threeD() )
                 SliceColorShd[i] = QColor( params->PlotColor.red() / 2,
                                            params->PlotColor.green() / 2,
                                            params->PlotColor.blue() / 2 );
+	  */
+	  SliceColor[i] = color[i];
+	  if( params->threeD() )
+	    SliceColorShd[i]=colorShd[i];
         }
-    //remove it when pie chart works
-    SliceColor[0]=QColor("#ff0000");
-    SliceColor[1]=QColor("#c0ffc0");
-    SliceColor[2]=QColor("#00ff00");
-    SliceColor[3]=QColor("#0000ff");
-    SliceColorShd[0] = QColor(  SliceColor[0].red() / 2,
-                                SliceColor[0] .green() / 2,
-                                SliceColor[0].blue() / 2 );
-    SliceColorShd[1] = QColor(  SliceColor[1].red() / 2,
-                                SliceColor[1].green() / 2,
-                                SliceColor[1] .blue() / 2 );
-    SliceColorShd[2] = QColor(  SliceColor[2].red() / 2,
-                                SliceColor[2].green() / 2,
-                                SliceColor[2] .blue() / 2 );
-    SliceColorShd[3] = QColor(  SliceColor[3].red() / 2,
-                                SliceColor[3].green() / 2,
-                                SliceColor[3] .blue() / 2 );
-    
-    
+   
     pscl = (2.0*M_PI)/tot_val;
 	
     /* ----- calc: smallest a slice can be ----- */
@@ -358,7 +337,7 @@ pie_gif( short imagewidth,
     {
         /* draw background shaded pie */
         {
-            float	rad1 = rad;
+            float rad1 = rad;
             for( i=0; i<num_points; ++i )
 	      if( !(others[i]) &&
 		(params->missing.isNull() || !params->missing[offsetCol+i]) ) 
@@ -624,29 +603,7 @@ pie_gif( short imagewidth,
 					}*/
 			}
 	}
-    /* text is writting bye over function*/	
-    /*if( !params->title.isEmpty() ) 
-	  {
-		int title_len;
-		
-		cnt_nl( params->title.latin1(), &title_len );
-		// PENDING(kalle) Check whether this really does line breaks
-		QRect br = QFontMetrics( params->titleFont() ).boundingRect( 0, 0, MAXINT,MAXINT,Qt::AlignCenter,params->title );
-		
-		p->drawText( (imagewidth-title_len*params->titleFontWidth())/2,
-					 1, // y
-					 br.width(), br.height(),
-					 Qt::AlignCenter, params->title );
-				
-		// Original
-		//                 GDCImageStringNL( im,
-		//                                   params->titleFont(),
-		//                                   (imagewidth-title_len*params->titleFontWidth())/2,
-		//                                   1,
-		//                                   params->title,
-		//                                   LineColor,
-		//                                   KCHARTJUSTIFYCENTER );
-		}*/
+   
 	
 	/* labels */
 	if( !params->legend.isEmpty() ) 
@@ -663,17 +620,12 @@ pie_gif( short imagewidth,
 				char pct_str[1+4+1+1];
 				int pct_wdth;
 				int lbl_wdth;
-				/*short	num_nl = cnt_nl( lbl[i], &lbl_wdth );*/
 				short num_nl = cnt_nl( params->legend[i], &lbl_wdth );
 				int lblx,  pctx;
 				int lbly,  pcty;
 				int linex, liney;
 				
 				lbl_wdth *= params->labelFontWidth();
-				/*sprintf( pct_str,(params->percent_labels==KCHARTPCTTYPE_LEFT ||params->percent_labels==KCHARTPCTTYPE_RIGHT) &&
-						 lbl[i]? "(%.0f%%)":
-						 "%.0f%%",
-						 (val[i]/tot_val) * 100.0 );*/
 				sprintf( pct_str,(params->percent_labels==KCHARTPCTTYPE_LEFT ||params->percent_labels==KCHARTPCTTYPE_RIGHT) &&
 						 params->legend[i]? "(%.0f%%)":
 						 "%.0f%%",
@@ -684,12 +636,16 @@ pie_gif( short imagewidth,
 				lbly = (liney = IY(i,0,0))-( num_nl * (1+params->labelFontHeight()) ) / 2;
 				lblx = pctx = linex = IX(i,0,0);
 				
-				if( slice_angle[0][i] > M_PI ) {								/* which semicircle */
+				if( slice_angle[0][i] > M_PI ) 
+				  {  /* which semicircle */
 					lblx -= lbl_wdth;
 					pctx = lblx;
 					++linex;
-				} else
-					--linex;
+				  } 
+				else
+				  {
+				    --linex;
+				  }
 
 				switch( params->percent_labels )	
 				{
@@ -733,10 +689,7 @@ pie_gif( short imagewidth,
 				}
 				/*if( lbl[i] )*/
 				if( !params->legend[i].isNull() ) 
-				  {
-				    /*QRect br = QFontMetrics( params->labelFont() ).boundingRect( 0, 0, MAXINT, MAXINT, slice_angle[0][i] <= M_PI ?
-				      Qt::AlignLeft : Qt::AlignRight, lbl[i] );*/
-				    
+				  {  
 				    QRect br = QFontMetrics( params->labelFont() ).boundingRect( 0, 0, MAXINT, MAXINT, slice_angle[0][i] <= M_PI ?
 												 Qt::AlignLeft : Qt::AlignRight, params->legend[i] );
 				    p->setPen( LineColor);

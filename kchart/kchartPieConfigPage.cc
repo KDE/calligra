@@ -20,6 +20,7 @@ KChartPieConfigPage::KChartPieConfigPage(KChartParameters* params,QWidget* paren
     QWidget( parent ),_params( params )
 {
    col=_params->colPie;
+   pos=-1;
    QGridLayout *grid = new QGridLayout(this,8,4,15,7);
    list = new QListView( this );
    list->resize( list->sizeHint() );
@@ -76,11 +77,13 @@ KChartPieConfigPage::KChartPieConfigPage(KChartParameters* params,QWidget* paren
    	depth->setEnabled(false);
    	}
       
-   initList(); 
+   initList();
+   dist->setEnabled(false); 
+   
    connect(column,SIGNAL(valueChanged(int)),this,SLOT(changeValue(int)));
    
-  /*connect( list, SIGNAL( highlighted(const QString &) ), this, SLOT( slotselected(const QString &) ) );
-  */
+  connect( list, SIGNAL( selectionChanged(QListViewItem *) ), this, SLOT( slotselected(QListViewItem *) ) );
+  
 }
 
 void KChartPieConfigPage::initList()
@@ -99,14 +102,26 @@ for ( ; it.current(); ++it )
 	((QCheckListItem*)it.current())->setOn(_params->missing[_params->legend.count()*col+indice]) ;
 
 	}
+value.duplicate(_params->explode);
+
+
 }
 
-/*
-void KChartPieConfigPage::slotselected(const QString &select)
+
+void KChartPieConfigPage::slotselected(QListViewItem *it)
 {
-cout <<"Select :"<<select.ascii()<<endl;
+//column : 0
+//cout <<"Select :"<<(it)->text(0).ascii()<<endl;
+int indice=_params->legend.findIndex((it)->text(0));
+if(pos==-1)
+	dist->setEnabled(true);
+else
+	value[pos]=dist->value();
+	
+pos=_params->legend.count()*col+indice;
+dist->setValue(value[pos]);
 }
-*/
+
 void KChartPieConfigPage::changeValue(int val)
 {
 col=val-1;
@@ -120,6 +135,12 @@ for ( ; it.current(); ++it )
 	((QCheckListItem*)it.current())->setOn(_params->missing[_params->legend.count()*col+indice]) ;
 	}
 
+if(pos!=-1)
+	{
+	value[pos]=dist->value();
+	pos=_params->legend.count()*col+indice;
+	dist->setValue(value[pos]);
+	}
 }
 
 void KChartPieConfigPage::init()
@@ -139,6 +160,12 @@ if(_params->threeD())
    	depth->setValue(_params->_3d_depth);
    	angle->setValue(_params->_3d_angle);
    	}
+value.duplicate(_params->explode);
+if(pos!=-1)
+	{
+	pos=_params->legend.count()*col;
+	dist->setValue(	value[pos]);
+	}
 }
 void KChartPieConfigPage::apply()
 {
@@ -157,6 +184,6 @@ if(_params->threeD())
    	_params->_3d_depth=depth->value();
    	_params->_3d_angle=angle->value();
    	}
-
-
+value[pos]=dist->value();
+_params->explode.duplicate(value);
 }

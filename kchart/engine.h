@@ -207,6 +207,6 @@ void pie_gif( short width,
 			  QPainter*,/* open file pointer, can be stdout */
 			  KChartParameters* params,
 			  int num_points,
-			  float	data[] );
+			  float	data[],QColor color[],QColor colorShd[] );
 
 #endif /*!_GDCPIE_H*/

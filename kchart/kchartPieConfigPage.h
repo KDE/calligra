@@ -29,7 +29,7 @@ public:
     
 public slots:
     void changeValue(int);
-    /*void slotselected(const QString &);*/
+    void slotselected(QListViewItem *);
     
 private:
     int col;
@@ -39,7 +39,8 @@ private:
     QListView *list;
     QSpinBox *angle;
     QSpinBox *depth;
-
+    QArray<int> value;
+    int pos;
 };
 
 #endif

@@ -79,16 +79,21 @@ void KChartPart::initRandomData()
 	  currentData.setCell(row,col,t);
 	 }
     }
-    params()->legend+="KDE";
-    params()->legend+="KOFFICE";
-    params()->legend+="KCHART";
-    params()->legend+="LINUX";
-    
-    params()->xlbl+="Year 2000";
-    params()->xlbl+="Year 2001";
-    params()->xlbl+="Year 2002";
-    params()->xlbl+="Year 2003";
-
+    if(params()->legend.isEmpty())
+    	{
+    	params()->legend+="KDE";
+    	params()->legend+="KOFFICE";
+    	params()->legend+="KCHART";
+    	params()->legend+="LINUX";
+    	}
+    if(params()->xlbl.isEmpty())	
+    	{
+    	params()->xlbl+="Year 2000";
+    	params()->xlbl+="Year 2001";
+    	params()->xlbl+="Year 2002";
+    	params()->xlbl+="Year 2003";
+	}
+	
 QArray<int> tmpExp(16);
 QArray<bool> tmpMissing(16);
 
@@ -97,9 +102,14 @@ for(int i=0; i<16; ++i )
   tmpExp[i]=0;
   tmpMissing[i]=FALSE;
   }
-  params()->missing=tmpMissing;
-  params()->explode=tmpExp;
-
+if(params()->missing.isEmpty())
+	{
+  	params()->missing=tmpMissing;
+  	}
+if(params()->explode.isEmpty())
+	{
+  	params()->explode=tmpExp;
+	}
 }
 
 
@@ -660,6 +670,10 @@ bool KChartPart::load( istream& in, KoStore* store ) {
 
 /**
  * $Log$
+ * Revision 1.21  2000/01/22 19:55:19  mlaurent
+ * Add new page for config pie chart
+ * Now pie chart works (a lot :( there are against bug)
+ *
  * Revision 1.20  2000/01/21 16:04:03  mlaurent
  * Add legend and label
  * Add new page for config font

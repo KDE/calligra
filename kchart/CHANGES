@@ -63,3 +63,7 @@ But Pb for writing % in label for the moment it's not good
 -Add new page for config pie chart
 -Now you can choose pie chart
 -Bug fix
+
+2000-01-23 - Montel laurent <montell@club-internet.fr>
+------------------------------------------------------
+-Improved pie chart and page config pie chart

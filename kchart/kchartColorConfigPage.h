@@ -44,8 +44,8 @@ public:
     QColor yLabelColor() const;
     void setYLabel2Color( QColor color );
     QColor yLabel2Color() const;
-    void setEdgeColor( QColor color );
-    QColor edgeColor() const;
+    /*void setEdgeColor( QColor color );
+    QColor edgeColor() const;*/
 /*     void setDataColor( uint dataset, QColor color ); */
 /*     QColor dataColor( uint dataset ) const; */
 
@@ -62,7 +62,7 @@ private:
     KColorButton* _xlabelCB;
     KColorButton* _ylabelCB;
     KColorButton* _ylabel2CB;
-    KColorButton* _edgeCB;
+    //KColorButton* _edgeCB;
 //    KColorButton* _dataCB[NUMDATACOLORS];
 };
 
@@ -211,7 +211,7 @@ inline QColor KChartColorConfigPage::yLabel2Color() const
 }
 
 
-inline void KChartColorConfigPage::setEdgeColor( QColor color )
+/*inline void KChartColorConfigPage::setEdgeColor( QColor color )
 {
     _edgeCB->setColor( color );
 }
@@ -220,7 +220,7 @@ inline void KChartColorConfigPage::setEdgeColor( QColor color )
 inline QColor KChartColorConfigPage::edgeColor() const
 {
     return _edgeCB->color();
-}
+}*/
 
 
 #endif

@@ -95,11 +95,11 @@ KChartColorConfigPage::KChartColorConfigPage( QWidget* parent ) :
     _ylabel2CB = new KColorButton( this );
     grid->addWidget( _ylabel2CB, 5, 3 );
 
-    QLabel* edgeLA = new QLabel( i18n( "Edge color (pies only)" ), this );
+    /*QLabel* edgeLA = new QLabel( i18n( "Edge color (pies only)" ), this );
     edgeLA->setAlignment( AlignRight | AlignVCenter );
     grid->addWidget( edgeLA, 6, 0 );
     _edgeCB = new KColorButton( this );
-    grid->addWidget( _edgeCB, 6, 1 );
+    grid->addWidget( _edgeCB, 6, 1 );*/
     
 //     for( int i = 0; i < NUMDATACOLORS; i++ ) {
 // 	QString labeltext;

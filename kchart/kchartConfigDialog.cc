@@ -72,7 +72,7 @@ void KChartConfigDialog::apply()
     _params->XLabelColor = _colorpage->xLabelColor();
     _params->YLabelColor = _colorpage->yLabelColor();
     _params->YLabel2Color = _colorpage->yLabel2Color();
-    _params->EdgeColor = _colorpage->edgeColor();
+    //_params->EdgeColor = _colorpage->edgeColor();
     
     if(!_params->isPie())
     	_parameterpage->apply();
@@ -104,7 +104,7 @@ void KChartConfigDialog::defaults()
     _colorpage->setXLabelColor( _params->XLabelColor );
     _colorpage->setYLabelColor( _params->YLabelColor );
     _colorpage->setYLabel2Color( _params->YLabel2Color );
-    _colorpage->setEdgeColor( _params->EdgeColor );
+    //_colorpage->setEdgeColor( _params->EdgeColor );
     
     if(!_params->isPie())
     	_parameterpage->init();
