@@ -158,9 +158,10 @@ KoFilter::ConversionStatus CSVFilter::convert( const QCString& from, const QCStr
               // If not, try with the '.' as decimal separator
               if ( !ok )
                 d = text.toDouble( &ok );
-              if ( !ok ) 
+              if ( !ok )
               {
-                table->setText( row + 1, col + 1, text, false );
+                cell = table->nonDefaultCell( col + 1, row + 1, false, s );
+                cell->setCellText( text, false, true );
                 cell->setFormatType( KSpreadCell::Number );
               }
               else
@@ -182,7 +183,7 @@ KoFilter::ConversionStatus CSVFilter::convert( const QCString& from, const QCStr
               cell->setPrecision( 2 );
               break;
             }
-        }        
+        }
     }
 
     emit sigProgress( 98 );
