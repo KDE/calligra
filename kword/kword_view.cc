@@ -1,4 +1,4 @@
-/* This file is part of the KDE project
+;/* This file is part of the KDE project
    Copyright (C) 1998, 1999 Reginald Stadlbauer <reggie@kde.org>
 
    This library is free software; you can redistribute it and/or
@@ -78,7 +78,6 @@
 #include <kfontdialog.h>
 #include <kstddirs.h>
 #include <kmessagebox.h>
-#include <qfontdatabase.h>
 
 #include <stdlib.h>
 #define DEBUG
@@ -96,7 +95,6 @@ KWordView::KWordView( QWidget *_parent, const char *_name, KWordDocument* _doc )
     m_pKWordDoc = 0L;
     m_bUnderConstruction = TRUE;
     m_bShowGUI = TRUE;
-    m_fontDatabase = 0;
     gui = 0;
     kspell = 0;
     flow = KWParagLayout::LEFT;
@@ -140,7 +138,7 @@ KWordView::KWordView( QWidget *_parent, const char *_name, KWordDocument* _doc )
 		      this, SLOT( slotUpdateChildGeometry( KWordChild* ) ) );
 
 
-    getFonts();
+    KFontChooser::getFontList(fontList, false);
     setKeyCompression( TRUE );
     setAcceptDrops( TRUE );
     createKWordGUI();
@@ -157,7 +155,6 @@ void KWordView::showEvent( QShowEvent *e )
 /*================================================================*/
 KWordView::~KWordView()
 {
-    delete m_fontDatabase;
 }
 
 /*=============================================================*/
@@ -2413,16 +2410,6 @@ void KWordView::dragLeaveEvent( QDragLeaveEvent *e )
 void KWordView::dropEvent( QDropEvent *e )
 {
     QApplication::sendEvent( gui, e );
-}
-
-
-/*===================== load not KDE installed fonts =============*/
-void KWordView::getFonts()
-{
-    if ( !m_fontDatabase ) {
-	m_fontDatabase = new QFontDatabase();
-    }
-    fontList = m_fontDatabase->families();
 }
 
 /*================================================================*/

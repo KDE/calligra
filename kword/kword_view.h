@@ -62,7 +62,6 @@ class KSpell;
 class QScrollView;
 class QSplitter;
 class KAction;
-class QFontDatabase;
 
 // /******************************************************************/
 // /* Class: KWordFrame						  */
@@ -292,13 +291,11 @@ protected:
     virtual void dragLeaveEvent( QDragLeaveEvent *e );
     virtual void dropEvent( QDropEvent *e );
 
-    void getFonts();
     void setParagBorderValues();
 
     virtual void updateReadWrite( bool readwrite );
 
     KWordDocument *m_pKWordDoc;
-    QFontDatabase *m_fontDatabase;
 
     bool m_bUnderConstruction, m_bKWordModified;
 
