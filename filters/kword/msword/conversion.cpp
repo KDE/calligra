@@ -162,8 +162,9 @@ int Conversion::numberFormatCode( int nfc )
         return 3;
     case 4: // lower case letter
         return 2;
-    case 5: // ordinal - not supported by KWord
+    case 5: // arabic with a trailing dot (added by writeCounter)
     case 6: // numbered (one, two, three) - not supported by KWord
+    case 7: // ordinal (first, second, third) - not supported by KWord
     case 22: // leading zero (01-09, 10-99, 100-...) - not supported by KWord
     case 0: // arabic
         return 1;

@@ -703,6 +703,9 @@ void Document::writeCounter( QDomElement& parentElement, const wvWare::Paragraph
         }
         if ( depthFound )
         {
+            // Word6 models "1." as nfc=5
+            if ( nfc == 5 && suffix.isEmpty() )
+                suffix = ".";
             kdDebug() << " prefix=" << prefix << " suffix=" << suffix << endl;
             counterElement.setAttribute( "type", Conversion::numberFormatCode( nfc ) );
             counterElement.setAttribute( "lefttext", prefix );
