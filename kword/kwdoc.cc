@@ -1231,7 +1231,6 @@ bool KWDocument::loadOasis( const QDomDocument& doc, KoOasisStyles& oasisStyles,
     if ( !settings.isNull() )
     {
         loadOasisSettings( settings );
-        m_varColl->variableSetting()->loadOasis( settings );
     }
     //printDebug();
 
@@ -1247,8 +1246,8 @@ void KWDocument::loadOasisSettings( const QDomDocument&settingsDoc )
         setUnit(KoUnit::unit(viewSettings.parseConfigItemString("unit")));
     }
     loadOasisIgnoreList( settings );
+    m_varColl->variableSetting()->loadOasis( settings );
 }
-
 
 static QString headerTypeToFramesetName( const QString& tagName, bool hasEvenOdd )
 {
