@@ -1,5 +1,5 @@
 <!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
-<kpartgui name="kexi" version="117">
+<kpartgui name="kexi" version="118">
 <MenuBar noMerge="0">
   <Menu name="file" noMerge="1">
     <text>&amp;Project</text>
@@ -56,12 +56,8 @@
     <Separator/>
     <Action name="view_navigator"/>
     <Action name="view_propeditor"/>
-    <Action name="view_viewmode"/>
-    <Action name="view_next_window"/>
-    <Action name="view_previous_window"/>
-    <Action name="view_first_window"/>
-    <Action name="view_last_window"/>
-    <Action name="file_switchto"/>
+    <Separator/>
+    <MergeLocal/>
   </Menu>
   
   <Menu name="create" noMerge="1">
