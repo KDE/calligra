@@ -198,7 +198,7 @@ KSParseNode::KSParseNode( KSParseNodeType aType, KSParseNode *one,
 {
   str = 0;
   type = aType;
-  ident = NULL;
+  ident = QString::null;
   b1 = one;
   b2 = two;
   b3 = three;
