@@ -125,7 +125,7 @@
         <application id="generic">
             <title xml:lang="en_us">Generic (for all KOffice applications)</title>
             <filter id="generic_xslt">
-                <webcvs importsuffix="#import" exportsuffix="#export" path="koffice/filters/xsltfilter"/>
+                <webcvs importsuffix="" exportsuffix="" path="koffice/filters/xsltfilter"/>
                 <title xml:lang="en_us">XSLT</title>
                 <stat import="onestar" export="twostars"/>
             </filter>
@@ -204,6 +204,7 @@
                 <stat import="threestars" export="onestar"/>
             </filter>
             <filter id="kword_starwriter">
+                <webcvs importsuffix="" exportsuffix="" path="koffice/filters/kword/starwriter"/>
                 <title xml:lang="en_us">StarWriter</title>
                 <contact href="mailto:ariya@kde.org">Ariya Hidayat</contact>
                 <contact href="mailto:info@marcozanon.com">Marco Zanon</contact>
@@ -222,7 +223,7 @@
                 <stat import="threestars" export="threestars"/>
             </filter>
             <filter id="kword_wordperfect">
-                <webcvs importsuffix="#import" exportsuffix="#export" path="koffice/filters/kword/wordperfect"/>
+                <webcvs importsuffix="" exportsuffix="" path="koffice/filters/kword/wordperfect"/>
                 <title xml:lang="en_us">WordPerfect</title>
                 <note xml:lang="en_us">WP 5.x and WP 6/7/8 documents, text only</note>
                 <stat import="threestars" export="twostars"/>
@@ -247,13 +248,13 @@
                 <title xml:lang="en_us">dBase</title>
                 <stat import="twostars" export="none"/>
             </filter>
-            <filter id="kspread_excel"> 
+            <filter id="kspread_excel">
                 <webcvs importsuffix="#import" exportsuffix="#export" path="koffice/filters/olefilters/excel97"/>
                 <title xml:lang="en_us">Excel</title>
                 <note xml:lang="en_us">Microsoft Excel 97/2000</note>
                 <stat import="threestars" export="none"/>
             </filter>
-            <filter id="kspread_gnumeric"> 
+            <filter id="kspread_gnumeric">
                 <webcvs importsuffix="#import" exportsuffix="#export" path="koffice/filters/kspread/gnumeric"/>
                 <title xml:lang="en_us">Gnumeric</title>
                 <note xml:lang="en_us">Part of GNOME Office</note>
@@ -274,6 +275,7 @@
                 <stat import="twostars" export="none"/>
             </filter>
             <filter id="kspread_opencalc">
+                <webcvs importsuffix="#import" exportsuffix="#export" path="koffice/filters/kspread/opencalc"/>
                 <title xml:lang="en_us">OpenCalc</title>
                 <contact href="mailto:nandres@web.de">Norbert Andres</contact>
                 <stat import="twostars" export="planned"/>
@@ -284,7 +286,7 @@
             <title xml:lang="en_us">KPresenter</title>
             <filter id="kword_magicpoint">
                 <title xml:lang="en_us">Magicpoint</title>
-		<contact href="mailto:lukas@kde.org">Lukas Tinkl</contact>
+                <contact href="mailto:lukas@kde.org">Lukas Tinkl</contact>
                 <stat import="onestar" export="none"/>
             </filter>
             <filter id="kword_ooimpress">
@@ -298,7 +300,7 @@
                 <stat import="onestar" export="none"/>
             </filter>
             <filter id="kpresenter_kword">
-                <webcvs importsuffix="#import" exportsuffix="#export" path="koffice/filters/kpresenter/kword"/>
+                <webcvs importsuffix="" exportsuffix="#export" path="koffice/filters/kpresenter/kword"/>
                 <title xml:lang="en_us">KWord</title>
                 <note xml:lang="en_us">Text export only</note>
                 <stat import="none" export="fivestars"/>
