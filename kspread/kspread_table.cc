@@ -700,7 +700,7 @@ void KSpreadTable::setSelection( const QRect &_sel, const QPoint& m, KSpreadCanv
     int r = m_rctSelection.top();
     if (c > 0 && r > 0)
     {
-      kdDebug() << "testing cell " <<
+      kdDebug(36001) << "testing cell " <<
         util_cellName(c,r) << endl;
 
       KSpreadCell* up = getNextCellUp(c,r);
@@ -711,17 +711,17 @@ void KSpreadTable::setSelection( const QRect &_sel, const QPoint& m, KSpreadCanv
       QString str;
 
       str = (up == NULL) ? "NULL" : util_cellName(up->column(), up->row());
-      kdDebug() << "next used cell up is " << str << endl;
+      kdDebug(36001) << "next used cell up is " << str << endl;
 
       str = (down == NULL) ? "NULL" : util_cellName(down->column(), down->row());
-      kdDebug() << "next used cell down is " << str << endl;
+      kdDebug(36001) << "next used cell down is " << str << endl;
 
       str = (left == NULL) ? "NULL" : util_cellName(left->column(), left->row());
-      kdDebug() << "next used cell left is " << str << endl;
+      kdDebug(36001) << "next used cell left is " << str << endl;
 
       str = (right == NULL) ? "NULL" :
             util_cellName(right->column(), right->row());
-      kdDebug() << "next used cell right is " << str << endl;
+      kdDebug(36001) << "next used cell right is " << str << endl;
     }
 /***********end of temporary code */
   }
@@ -3081,7 +3081,7 @@ void KSpreadTable::sortByColumn(int ref_column,SortingOrder mode)
     {
         // Look for which row we want to swap with the one number d
         KSpreadCell *cell1 = cellAt( ref_column, d );
-        //kdDebug() << "New ref row " << d << endl;
+        //kdDebug(36001) << "New ref row " << d << endl;
         if ( cell1->isObscured() && cell1->isObscuringForced() )
         {
             int moveY=cell1->obscuringCellsRow();

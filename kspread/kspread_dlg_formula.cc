@@ -226,7 +226,7 @@ KSpreadDlgFormula::KSpreadDlgFormula( KSpreadView* parent, const char* name,cons
 
 KSpreadDlgFormula::~KSpreadDlgFormula()
 {
-    kdDebug()<<"KSpreadDlgFormula::~KSpreadDlgFormula() \n";
+    kdDebug(36001)<<"KSpreadDlgFormula::~KSpreadDlgFormula() \n";
 }
 
 

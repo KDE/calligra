@@ -90,7 +90,7 @@ void KSpreadreference::slotHighlighted(QListBoxItem * )
         if((*it).ref_name==tmp)
 	{
             if(!m_pView->doc()->map()->findTable( (*it).table_name))
-                kdDebug()<<"(*it).table_name) doesn't find*********\n";
+                kdDebug(36001)<<"(*it).table_name) doesn't find*********\n";
             else
                 tmpName=util_rangeName( m_pView->doc()->map()->findTable( (*it).table_name), (*it).rect );
             break;

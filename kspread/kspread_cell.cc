@@ -836,7 +836,7 @@ void KSpreadCell::makeLayout( QPainter &_painter, int _col, int _row )
     }
     else // When does this happen ?
     {
-        kdDebug() << "Please report: final case of makeLayout ... m_dataType=" << m_dataType << " m_strText=" << m_strText << endl;
+        kdDebug(36001) << "Please report: final case of makeLayout ... m_dataType=" << m_dataType << " m_strText=" << m_strText << endl;
         m_strOutText = m_strText;
     }
 
@@ -2918,7 +2918,7 @@ void KSpreadCell::incPrecision()
   if ( !isNumeric() )
     return;
   int tmpPreci=precision(column(),row());
-  kdDebug() << "incPrecision: tmpPreci = " << tmpPreci << endl;
+  kdDebug(36001) << "incPrecision: tmpPreci = " << tmpPreci << endl;
   if ( tmpPreci == -1 )
   {
     int pos = m_strOutText.find(decimal_point);
@@ -2936,7 +2936,7 @@ void KSpreadCell::incPrecision()
       else if((start=m_strOutText.find('E'))!=-1)
         start=m_strOutText.length()-start;
 
-      //kdDebug() << "start=" << start << " pos=" << pos << " length=" << m_strOutText.length() << endl;
+      //kdDebug(36001) << "start=" << start << " pos=" << pos << " length=" << m_strOutText.length() << endl;
       setPrecision( QMAX( 0, (int)m_strOutText.length() - start - pos ) );
     }
   }
@@ -3061,7 +3061,7 @@ void KSpreadCell::setDisplayText( const QString& _text, bool updateDepends )
           s->parse( m_strFormulaOut );
       else
           s->parse( m_strText );
-      kdDebug() << "SELECT " << s->text() << endl;
+      kdDebug(36001) << "SELECT " << s->text() << endl;
       checkTextInput(); // is this necessary?
       // m_bLayoutDirtyFlag = true;
   }
@@ -3524,7 +3524,7 @@ bool KSpreadCell::tryParseNumber( const QString& str )
 
     if ( ok )
     {
-        kdDebug() << "KSpreadCell::tryParseNumber '" << str << "' successfully parsed as number: " << value << endl;
+        kdDebug(36001) << "KSpreadCell::tryParseNumber '" << str << "' successfully parsed as number: " << value << endl;
         m_dValue = value;
         m_dataType = NumericData;
         return true;
@@ -3558,7 +3558,7 @@ bool KSpreadCell::tryParseDate( const QString& str )
                 for ( ; yearPos > 0 && fmt[yearPos-1] != '%'; --yearPos )
                     fmt.remove( yearPos, 1 );
             }
-            //kdDebug() << "KSpreadCell::tryParseDate short format w/o date: " << fmt << endl;
+            //kdDebug(36001) << "KSpreadCell::tryParseDate short format w/o date: " << fmt << endl;
             tmpDate = locale()->readDate( str, fmt, &valid );
         }
     }
@@ -4015,7 +4015,7 @@ bool KSpreadCell::load( const QDomElement& cell, int _xshift, int _yshift, Paste
                 {
                     m_strText = pasteOperation( t, m_strText, op );
                     checkTextInput();
-                    //kdDebug() << "KSpreadCell::load called checkTextInput, got m_dataType=" << dataTypeToString( m_dataType ) << "  t=" << t << endl;
+                    //kdDebug(36001) << "KSpreadCell::load called checkTextInput, got m_dataType=" << dataTypeToString( m_dataType ) << "  t=" << t << endl;
                     newStyleLoading = false;
                 }
             }

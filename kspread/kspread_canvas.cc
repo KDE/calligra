@@ -3123,7 +3123,7 @@ void KSpreadVBorder::mouseReleaseEvent( QMouseEvent * _ev )
         bool m_frozen = false;
         if ( m_frozen )
         {
-            kdDebug() << "selected: T " << rect.top() << " B " << rect.bottom() << endl;
+            kdDebug(36001) << "selected: T " << rect.top() << " B " << rect.bottom() << endl;
 
             int i;
             RowLayout * row;
@@ -3666,7 +3666,7 @@ void KSpreadHBorder::mouseReleaseEvent( QMouseEvent * _ev )
         bool m_frozen = false;
         if ( m_frozen )
         {
-            kdDebug() << "selected: L " << rect.left() << " R " << rect.right() << endl;
+            kdDebug(36001) << "selected: L " << rect.left() << " R " << rect.right() << endl;
 
             int i;
             ColumnLayout * col;

@@ -762,7 +762,7 @@ void KSpreadDoc::paintContent( QPainter& painter, const QRect& rect, bool transp
     KSpreadTable* table = m_pMap->firstTable();
     if ( !table )
         return;
-    kdDebug()<<"paintContent-------------------------------------\n";
+    kdDebug(36001)<<"paintContent-------------------------------------\n";
     // ### TODO support zooming
     paintContent( painter, rect, transparent, table,false );
 }
@@ -817,7 +817,7 @@ KSpreadDoc::~KSpreadDoc()
 
   delete m_dcop;
   s_docs->removeRef(this);
-  kdDebug() << "alive 1" << endl;
+  kdDebug(36001) << "alive 1" << endl;
   delete m_pMap;
 }
 

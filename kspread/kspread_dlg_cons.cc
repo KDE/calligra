@@ -102,7 +102,7 @@ KSpreadConsolidate::KSpreadConsolidate( KSpreadView* parent, const char* name )
 
 KSpreadConsolidate::~KSpreadConsolidate()
 {
-    kdDebug()<<"KSpreadConsolidate::~KSpreadConsolidate()\n";
+    kdDebug(36001)<<"KSpreadConsolidate::~KSpreadConsolidate()\n";
 }
 
 enum Function { F_SUM, F_AVERAGE };

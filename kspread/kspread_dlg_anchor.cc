@@ -73,7 +73,7 @@ void KSpreadLinkDlg::slotOk()
       result=_cellAnchor->apply();
       break;
     default:
-      kdDebug()<<"Error in KSpreadLinkDlg\n";
+      kdDebug(36001)<<"Error in KSpreadLinkDlg\n";
     }
   if(!result.isEmpty())
     setCellText(result);

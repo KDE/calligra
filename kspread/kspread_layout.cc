@@ -989,7 +989,7 @@ void KSpreadLayout::setTextPen( const QPen& _p )
 
     //setProperty( PTextPen );
     m_textPen = _p;
-    //kdDebug() << "setTextPen: this=" << this << " pen=" << m_textPen.color().name() << " valid:" << m_textPen.color().isValid() << endl;
+    //kdDebug(36001) << "setTextPen: this=" << this << " pen=" << m_textPen.color().name() << " valid:" << m_textPen.color().isValid() << endl;
     layoutChanged();
 }
 

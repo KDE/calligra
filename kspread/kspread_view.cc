@@ -754,7 +754,7 @@ void KSpreadView::RecalcWorkBook(){
 
 void KSpreadView::slotRefreshLocale()
 {
-    kdDebug()<<"KSpreadView::slotRefreshLocale()***************\n";
+    kdDebug(36001)<<"KSpreadView::slotRefreshLocale()***************\n";
     KSpreadTable *tbl;
     for ( tbl = m_pDoc->map()->firstTable();
 	  tbl != 0L; tbl = m_pDoc->map()->nextTable() ){
@@ -2729,7 +2729,7 @@ void KSpreadView::popupColumnMenu(const QPoint & _point)
     int i;
     ColumnLayout * col;
     QRect rect = activeTable()->selectionRect();
-    kdDebug() << "Column: L: " << rect.left() << endl;
+    kdDebug(36001) << "Column: L: " << rect.left() << endl;
     for ( i = rect.left(); i <= rect.right(); ++i )
     {
       if (i == 2) // "B"
@@ -2806,7 +2806,7 @@ void KSpreadView::popupRowMenu(const QPoint & _point )
     QRect rect = activeTable()->selectionRect();
     for ( i = rect.top(); i <= rect.bottom(); ++i )
     {
-      kdDebug() << "popupRow: " << rect.top() << endl;
+      kdDebug(36001) << "popupRow: " << rect.top() << endl;
       if (i == 2)
       {
         row = activeTable()->rowLayout( 1 );
@@ -3436,7 +3436,7 @@ void KSpreadView::slotAddTable( KSpreadTable *_table )
 
 void KSpreadView::slotUpdateView( KSpreadTable *_table )
 {
-    // kdDebug()<<"void KSpreadView::slotUdateView( KSpreadTable *_table )\n";
+    // kdDebug(36001)<<"void KSpreadView::slotUdateView( KSpreadTable *_table )\n";
 
     // Do we display this table ?
     if ( _table != m_pTable )
@@ -3458,7 +3458,7 @@ void KSpreadView::slotUpdateView( KSpreadTable *_table, const QRect& _rect )
 
 void KSpreadView::slotUpdateHBorder( KSpreadTable *_table )
 {
-    // kdDebug()<<"void KSpreadView::slotUpdateHBorder( KSpreadTable *_table )\n";
+    // kdDebug(36001)<<"void KSpreadView::slotUpdateHBorder( KSpreadTable *_table )\n";
 
     // Do we display this table ?
     if ( _table != m_pTable )
