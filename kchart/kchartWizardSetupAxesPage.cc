@@ -55,11 +55,13 @@ KChartWizardSetupAxesPage::KChartWizardSetupAxesPage( QWidget* parent,
     // PENDING(kalle) Put back in
     //     border->setChecked( _chart->params()->border );
     grid2->addWidget(border,1,0);
+    border->setEnabled(false);
 
     borderColor=new KColorButton(tmpQGroupBox);
     // PENDING(kalle) Put back in
     //     colorBorder=_chart->params()->LineColor;
     borderColor->setColor( colorBorder );
+    borderColor->setEnabled(false);
     grid2->addWidget(borderColor,1,1);
 
     grid1->addWidget(tmpQGroupBox,0,0);
@@ -132,7 +134,7 @@ KChartWizardSetupAxesPage::KChartWizardSetupAxesPage( QWidget* parent,
     // PENDING(kalle) Put back in
     //     if( _chart->params()->requested_ymax != -DBL_MAX)
 //         y_max->setText( tmp.setNum(_chart->params()->requested_ymax));
-
+    tmpQGroupBox->setEnabled(false);
     grid1->addWidget(tmpQGroupBox,1,0);
 
     tmpQGroupBox = new QGroupBox( this, "GroupBox_3" );
@@ -175,7 +177,7 @@ KChartWizardSetupAxesPage::KChartWizardSetupAxesPage( QWidget* parent,
 //         int len=_chart->params()->ylabel2_fmt.length();
 //         ylabel2_fmt->setText(_chart->params()->ylabel2_fmt.right(len-3));
 //     }
-
+    tmpQGroupBox->setEnabled(false);
     grid1->addWidget(tmpQGroupBox,1,1);
 
 
