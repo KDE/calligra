@@ -74,7 +74,7 @@ private:
     QString createTextValidationCondition( KSpreadValidity* _val );
     QString createTimeValidationCondition( KSpreadValidity* _val );
     QString createDateValidationCondition( KSpreadValidity* _val );
-    QString createIntergerValidationCondition( KSpreadValidity* _val );
+    QString createNumberValidationCondition( KSpreadValidity* _val );
 
     void initVal( KSpreadValidity *_val );
 

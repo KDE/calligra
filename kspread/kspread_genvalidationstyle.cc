@@ -138,9 +138,6 @@ QString KSpreadGenValidationStyle::createValidationCondition( KSpreadValidity* _
     case Allow_All:
         //nothing
         break;
-    case Allow_Number:
-        //FIXME todo
-        break;
     case Allow_Text:
         //doesn't exist into oo spec
         result = "cell-content-is-text()";
@@ -152,7 +149,8 @@ QString KSpreadGenValidationStyle::createValidationCondition( KSpreadValidity* _
         result = createDateValidationCondition( _val );
         break;
     case Allow_Integer:
-        result = createIntergerValidationCondition( _val );
+    case Allow_Number:
+        result = createNumberValidationCondition( _val );
         break;
     case Allow_TextLength:
         result = createTextValidationCondition( _val );
@@ -161,9 +159,13 @@ QString KSpreadGenValidationStyle::createValidationCondition( KSpreadValidity* _
     return result;
 }
 
-QString KSpreadGenValidationStyle::createIntergerValidationCondition( KSpreadValidity* _val )
+QString KSpreadGenValidationStyle::createNumberValidationCondition( KSpreadValidity* _val )
 {
-    QString result( "cell-content-is-whole-number() and " );
+    QString result;
+    if ( _val->m_allow == Allow_Number )
+        result = "cell-content-is-whole-number() and ";
+    else if ( _val->m_allow == Allow_Integer )
+        result = "cell-content-is-decimal-number() and ";
     switch( _val->m_cond )
     {
     case None:
