@@ -1802,28 +1802,17 @@ void KWView::raiseFrame()
 
         int pageNum = frame->pageNum();
         // Look for frame in same page that is most on top
-        bool first = true;
-        int maxZOrder = 0; // (this initialization is bogus, value is never used)
-        QPtrList<KWFrame> framesInPage = m_doc->framesInPage( pageNum );
-        QPtrListIterator<KWFrame> frameIt( framesInPage );
-        for ( ; frameIt.current(); ++frameIt ) {
-            if ( first || frameIt.current()->zOrder() > maxZOrder ) {
-                maxZOrder = frameIt.current()->zOrder();
-                first = false;
-            }
-        }
+        int maxZOrder = m_doc->maxZOrder( pageNum );
         // Now raise the frame - unless it's already the one most on top
         // That test doesn't work, due to multiple frames with the same zorder...
-        //if ( !first && frame->zOrder() <= maxZOrder ) {
-        if ( !first ) {
-            KWFrame* frameCopy = frame->getCopy();
-            frame->setZOrder( maxZOrder + 1 );
+        //if ( frame->zOrder() <= maxZOrder ) {
+        KWFrame* frameCopy = frame->getCopy();
+        frame->setZOrder( maxZOrder + 1 );
 
-            KWFramePropertiesCommand* cmd = new KWFramePropertiesCommand( QString::null, frameCopy, frame );
-            if(!macroCmd)
-                macroCmd = new KMacroCommand( i18n("Raise Frame") );
-            macroCmd->addCommand(cmd);
-        }
+        KWFramePropertiesCommand* cmd = new KWFramePropertiesCommand( QString::null, frameCopy, frame );
+        if(!macroCmd)
+            macroCmd = new KMacroCommand( i18n("Raise Frame") );
+        macroCmd->addCommand(cmd);
     }
     if ( macroCmd )
     {
@@ -1864,7 +1853,6 @@ void KWView::lowerFrame()
         // Now raise the frame - unless it's already the one most on top
         // That test doesn't work, due to multiple frames with the same zorder...
         //if ( !first && frame->zOrder() <= maxZOrder ) {
-        if ( !first ) {
             KWFrame* frameCopy = frame->getCopy();
             frame->setZOrder( minZOrder - 1 );
 
@@ -1878,7 +1866,6 @@ void KWView::lowerFrame()
             // Hopefully no need for undo/redo for that one, the main frame remains under.
             if ( frameOfFirstFrameSet && frame->zOrder() <= frameOfFirstFrameSet->zOrder() )
                 frameOfFirstFrameSet->setZOrder( frame->zOrder() - 1 );
-        }
     }
     if ( macroCmd )
     {

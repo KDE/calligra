@@ -1139,6 +1139,7 @@ void KWCanvas::mrCreateText()
     if ( m_insRect.width() > m_doc->gridX() && m_insRect.height() > m_doc->gridY() ) {
         KWFrame *frame = new KWFrame(0L, m_insRect.x(), m_insRect.y(), m_insRect.width(), m_insRect.height() );
         frame->setNewFrameBehavior(KWFrame::Reconnect);
+        frame->setZOrder( m_doc->maxZOrder( frame->pageNum(m_doc) ) + 1 ); // make sure it's on top
         KWFrameDia frameDia( this, frame, m_doc, FT_TEXT );
         frameDia.setCaption(i18n("Connect Frame"));
         frameDia.exec();
@@ -1187,6 +1188,7 @@ void KWCanvas::mrCreatePixmap()
         m_insRect = m_insRect.normalize();
         KWFrame *frame = new KWFrame(fs, m_insRect.x(), m_insRect.y(), m_insRect.width(),
                                      m_insRect.height() );
+        frame->setZOrder( m_doc->maxZOrder( frame->pageNum(m_doc) ) + 1 ); // make sure it's on top
         fs->addFrame( frame, false );
         m_doc->addFrameSet( fs );
         KWCreateFrameCommand *cmd=new KWCreateFrameCommand( i18n("Create a picture frame"), frame );
@@ -1216,6 +1218,7 @@ void KWCanvas::mrCreateFormula()
     if ( m_insRect.width() > m_doc->gridX() && m_insRect.height() > m_doc->gridY() ) {
         KWFormulaFrameSet *frameset = new KWFormulaFrameSet( m_doc, QString::null );
         KWFrame *frame = new KWFrame(frameset, m_insRect.x(), m_insRect.y(), m_insRect.width(), m_insRect.height() );
+        frame->setZOrder( m_doc->maxZOrder( frame->pageNum(m_doc) ) + 1 ); // make sure it's on top
         frameset->addFrame( frame, false );
         m_doc->addFrameSet( frameset );
         KWCreateFrameCommand *cmd=new KWCreateFrameCommand( i18n("Create a formula frame"), frame );
@@ -1259,6 +1262,7 @@ KWTableFrameSet * KWCanvas::createTable() // uses m_insRect and m_table to creat
         for ( unsigned int j = 0; j < m_table.cols; j++ ) {
             KWTableFrameSet::Cell *cell = new KWTableFrameSet::Cell( table, i, j, QString::null /*automatic name*/ );
             KWFrame *frame = new KWFrame(cell, 0, 0, 0, 0, KWFrame::RA_NO ); // pos and size will be set in setBoundingRect
+            // Wrong page! frame->setZOrder( m_doc->maxZOrder( frame->pageNum(m_doc) ) + 1 ); // make sure it's on top
             cell->addFrame( frame, false );
             frame->setFrameBehavior(KWFrame::AutoExtendFrame);
             frame->setNewFrameBehavior(KWFrame::NoFollowup);

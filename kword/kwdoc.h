@@ -280,11 +280,18 @@ public:
     QCursor getMouseCursor( const QPoint& nPoint, bool controlPressed );
     QPtrList<KWFrame> getSelectedFrames() const;
     KWFrame *getFirstSelectedFrame() const;
-    /** Gather all the frames which are on a certain page and return them.
-      * The list is unordered. @see KWFrameSet::framesInPage
-      */
-    QPtrList<KWFrame> framesInPage( int pageNum ) const;
     int frameSetNum( KWFrameSet* fs ) { return m_lstFrameSet.findRef( fs ); }
+
+    /** Gather all the frames which are on a certain page and return them.
+     * The list is unordered. @see KWFrameSet::framesInPage
+     */
+    QPtrList<KWFrame> framesInPage( int pageNum ) const;
+
+    /**
+     * Max z-order among all frames on the given page
+     */
+    int maxZOrder( int pageNum) const;
+    // No minZOrder() method, because of the main frameset, see kwview::lowerFrame
 
     void updateAllFrames();
 

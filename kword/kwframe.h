@@ -138,6 +138,8 @@ public:
 
     /** The page on which this frame is (0 based)*/
     int pageNum() const;
+    /** Same thing, but works if the frame hasn't been added to a frameset yet */
+    int pageNum( KWDocument* doc ) const;
 
     /** The z-order of the frame, relative to the other frames on the same page */
     void setZOrder( int z ) { m_zOrder = z; }

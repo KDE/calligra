@@ -3460,5 +3460,19 @@ void KWDocument::clearIgnoreWordAll( )
 
 }
 
+int KWDocument::maxZOrder( int pageNum) const
+{
+    bool first = true;
+    int maxZOrder = 0; //this value is only used if there's no frame on the page
+    QPtrList<KWFrame> frames = framesInPage( pageNum );
+    QPtrListIterator<KWFrame> frameIt( frames );
+    for ( ; frameIt.current(); ++frameIt ) {
+        if ( first || frameIt.current()->zOrder() > maxZOrder ) {
+            maxZOrder = frameIt.current()->zOrder();
+            first = false;
+        }
+    }
+    return maxZOrder;
+}
 
 #include "kwdoc.moc"

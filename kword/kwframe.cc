@@ -105,7 +105,11 @@ int KWFrame::pageNum() const
     Q_ASSERT( m_frameSet );
     if ( !m_frameSet )
         return 0;
-    KWDocument *doc = m_frameSet->kWordDocument();
+    return pageNum( m_frameSet->kWordDocument() );
+}
+
+int KWFrame::pageNum( KWDocument* doc ) const
+{
     int page = static_cast<int>(y() / doc->ptPaperHeight());
     return QMIN( page, doc->getPages()-1 );
 }
