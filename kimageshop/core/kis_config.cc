@@ -1,5 +1,5 @@
 /*
- *  kis_config.cc - part of KImageShop
+ *  kis_config.cc - part of Krayon
  *
  *  Global configuration classes for KImageShop
  *
@@ -40,121 +40,125 @@ QStringList 		KisConfig::m_blendList;
 
 KisConfig * KisConfig::getNewConfig()
 {
-  if ( doInit ) {
-    return ( new KisConfig() );
-  }
-
-  else {
-    if ( instanceList.count() == 0 ) {
-      return ( new KisConfig() );
+    if ( doInit ) 
+    {
+        return ( new KisConfig() );
     }
+    else 
+    {
+        if ( instanceList.count() == 0 ) 
+        {
+            return ( new KisConfig() );
+        }
 
-    return ( new KisConfig( *instanceList.first() ) );
-  }
+        return ( new KisConfig( *instanceList.first() ) );
+    }
 }
 
 
-KisConfig::KisConfig() : QObject( 0L, "kimageshop config" )
+KisConfig::KisConfig() : QObject( 0L, "krayon config" )
 {
-  // load and init global settings only once
-  if ( doInit ) {
-    initStatic();
-  }
+    // load and init global settings only once
+    if ( doInit ) 
+    {
+        initStatic();
+    }
 
-  instanceList.append( this );
+    instanceList.append( this );
 
-  // now load all the settings for the config objects
-  loadConfig();
+    // now load all the settings for the config objects
+    loadConfig();
 }
 
 
 KisConfig::KisConfig( const KisConfig& /*config*/ )
   : QObject()
 {
-  instanceList.append( this );
+    instanceList.append( this );
 
-  // ...
+    // ...
 }
 
 
 KisConfig::~KisConfig()
 {
-  instanceList.remove( this );
+    instanceList.remove( this );
 
-  // when the last document is closed, save the global settings
-  if ( instanceList.isEmpty() )
-    saveGlobalSettings();
+    // when the last document is closed, save the global settings
+    if ( instanceList.isEmpty() )
+        saveGlobalSettings();
 
-  // ...
+    // ...
 }
 
 
 void KisConfig::initStatic()
 {
-  kc = KGlobal::config();
+    kc = KGlobal::config();
 
-  instanceList.clear();
-  instanceList.setAutoDelete( false );
+    instanceList.clear();
+    instanceList.setAutoDelete( false );
 
-  loadGlobalSettings();
+    loadGlobalSettings();
   
-  (void) m_blendList.append( i18n("Normal") );
-  (void) m_blendList.append( i18n("Dissolve") );
-  (void) m_blendList.append( i18n("Behind") );
-  (void) m_blendList.append( i18n("Multiply") );
-  (void) m_blendList.append( i18n("Screen") );
-  (void) m_blendList.append( i18n("Overlay") );
-  (void) m_blendList.append( i18n("Difference") );
-  (void) m_blendList.append( i18n("Addition") );
-  (void) m_blendList.append( i18n("Subtract") );
-  (void) m_blendList.append( i18n("Darken only") );
-  (void) m_blendList.append( i18n("Lighten only") );
-  (void) m_blendList.append( i18n("Hue") );
-  (void) m_blendList.append( i18n("Saturation") );
-  (void) m_blendList.append( i18n("Color") );
-  (void) m_blendList.append( i18n("Value") );
+    (void) m_blendList.append( i18n("Normal") );
+    (void) m_blendList.append( i18n("Dissolve") );
+    (void) m_blendList.append( i18n("Behind") );
+    (void) m_blendList.append( i18n("Multiply") );
+    (void) m_blendList.append( i18n("Screen") );
+    (void) m_blendList.append( i18n("Overlay") );
+    (void) m_blendList.append( i18n("Difference") );
+    (void) m_blendList.append( i18n("Addition") );
+    (void) m_blendList.append( i18n("Subtract") );
+    (void) m_blendList.append( i18n("Darken only") );
+    (void) m_blendList.append( i18n("Lighten only") );
+    (void) m_blendList.append( i18n("Hue") );
+    (void) m_blendList.append( i18n("Saturation") );
+    (void) m_blendList.append( i18n("Color") );
+    (void) m_blendList.append( i18n("Value") );
 
-  doInit = false;
+    doInit = false;
 }
 
 
 // a convenience method - load all document specific configuration
 void KisConfig::loadConfig()
 {
-  loadDialogSettings();
-  // ...
+    loadDialogSettings();
+    // ...
 }
 
 
 // save all document specific configuration
 void KisConfig::saveConfig()
 {
-  saveDialogSettings();
-  // ...
+    saveDialogSettings();
+    // ...
 }
 
 
 void KisConfig::saveAll()
 {
-  KisConfig *config = 0L;
-  for ( config = instanceList.first(); config; config = instanceList.next() ) {
-    config->saveConfig();
-  }
+    KisConfig *config = 0L;
+    for ( config = instanceList.first(); config; config = instanceList.next() ) 
+    {
+        config->saveConfig();
+    }
 
-  saveGlobalSettings();
+    saveGlobalSettings();
 }
 
 
 void KisConfig::loadGlobalSettings()
 {
-  // read some fonts
-  QFont font = KGlobalSettings::generalFont();
-  font.setPointSize( 10 );
-  m_smallFont = kc->readFontEntry( "Small Font", &font );
+    // read some fonts
+    QFont font = KGlobalSettings::generalFont();
+    font.setPointSize( 10 );
+    m_smallFont = kc->readFontEntry( "Small Font", &font );
 
-  font = KGlobalSettings::generalFont();
-  font.setPointSize( 8 );
-  m_tinyFont = kc->readFontEntry( "Tiny Font", &font );
+    font = KGlobalSettings::generalFont();
+    font.setPointSize( 8 );
+    m_tinyFont = kc->readFontEntry( "Tiny Font", &font );
 
   // ...
 }
@@ -162,10 +166,10 @@ void KisConfig::loadGlobalSettings()
 
 void KisConfig::saveGlobalSettings()
 {
-  kc->setGroup( "General Settings" );
+    kc->setGroup( "General Settings" );
 
-  kc->writeEntry( "Small Font", m_smallFont );
-  kc->writeEntry( "Tiny Font", m_tinyFont );
+    kc->writeEntry( "Small Font", m_smallFont );
+    kc->writeEntry( "Tiny Font", m_tinyFont );
 
   // ...
 }
@@ -187,9 +191,9 @@ void KisConfig::saveDialogSettings()
 
 const QStringList& KisConfig::blendings()
 {
-  if ( doInit )
-    KisConfig::initStatic();
-  return KisConfig::m_blendList;
+    if ( doInit ) KisConfig::initStatic();
+        
+    return KisConfig::m_blendList;
 }
 
 // The base configuration class

@@ -34,134 +34,143 @@
 
 KisPluginServer::KisPluginServer()
 {
-  m_count = 0;
-  m_plugins.setAutoDelete(true);
+    m_count = 0;
+    m_plugins.setAutoDelete(true);
 
-  /*
-   * Find plugin dirs. For example ~/.kde/share/apps/krayon/plugins or
-   * $KDEDIR/share/apps/kimageshop/plugins
-   */
-  QStringList pluginDirs = KisFactory::global()->dirs()->resourceDirs("kis_plugins");
+    /*
+    *   Find plugin dirs. For example ~/.kde/share/apps/krayon/plugins or
+    *   $KDEDIR/share/apps/krayon/plugins
+    */
+   
+    QStringList pluginDirs 
+        = KisFactory::global()->dirs()->resourceDirs("kis_plugins");
 
-  if (!pluginDirs.isEmpty())
+    if (!pluginDirs.isEmpty())
     {
-      QStringList::Iterator it;
+        QStringList::Iterator it;
 
-      for ( it = pluginDirs.begin(); it != pluginDirs.end(); ++it )
-	{
-	  qDebug("Searching plugins in: %s", (*it).latin1());
-	  findPlugins(*it);
-	}
+        for ( it = pluginDirs.begin(); it != pluginDirs.end(); ++it )
+	    {
+	        qDebug("Searching plugins in: %s", (*it).latin1());
+	        findPlugins(*it);
+	    }
     }
-  else
-    qDebug("Warning: No plugin directories found.");
+    else
+    {
+        qDebug("Warning: No plugin directories found.");
+    }    
 }
 
 KisPluginServer::~KisPluginServer()
 {
-  m_plugins.clear();
+    m_plugins.clear();
 }
+
 
 void KisPluginServer::findPlugins( const QString &directory )
 {
-  QString pname, pcomment, pdir, plib, ptype, pcategory;
-  PluginType type = PLUGIN_FILTER;
+    QString pname, pcomment, pdir, plib, ptype, pcategory;
+    PluginType type = PLUGIN_FILTER;
 
-  QDir dir(directory, "*.kisplugin");
-  if (!dir.exists())
-    return;
+    QDir dir(directory, "*.kisplugin");
+    if (!dir.exists()) return;
   
-  const QFileInfoList *list = dir.entryInfoList();
-  QFileInfoListIterator it(*list);
-  QFileInfo *fi;
+    const QFileInfoList *list = dir.entryInfoList();
+    QFileInfoListIterator it(*list);
+    QFileInfo *fi;
 
-  while ((fi = it.current()))
+    while ((fi = it.current()))
     {
-      KSimpleConfig config(fi->absFilePath(), true);
+        KSimpleConfig config(fi->absFilePath(), true);
 
-      config.setGroup("General");
-      pname = config.readEntry("Name", fi->baseName());
-      pcomment = config.readEntry("Comment", i18n("No description available."));
-      pdir = directory + config.readEntry("Subdir", fi->baseName());
-      plib = config.readEntry("Library", QString("libkray_") + fi->baseName());
-      pcategory = config.readEntry("Category", "General");
-      ptype = config.readEntry("Type", "Filter");
-      qDebug("%s", pcategory.latin1());
+        config.setGroup("General");
+        pname = config.readEntry("Name", fi->baseName());
+        pcomment = config.readEntry("Comment", 
+            i18n("No description available."));
+        pdir = directory + config.readEntry("Subdir", fi->baseName());
+        plib = config.readEntry("Library", 
+            QString("libkray_") + fi->baseName());
+        pcategory = config.readEntry("Category", "General");
+        ptype = config.readEntry("Type", "Filter");
+        qDebug("Plugin category is %s", pcategory.latin1());
 
-      if ( ptype == "Filter" )
-	type = PLUGIN_FILTER;
-      else if (ptype == "Tool" )
-	type = PLUGIN_TOOL;
-      else
-	qDebug("Warning: %s is not a valid Krayon plugin type.", ptype.latin1()); 
+        if ( ptype == "Filter" )
+	        type = PLUGIN_FILTER;
+        else if (ptype == "Tool" )
+	        type = PLUGIN_TOOL;
+        else
+	        qDebug("Warning: %s is not a valid Krayon plugin type.", 
+                ptype.latin1()); 
       
-      PluginInfo *pi = new PluginInfo(pname, pcomment, pdir, plib, pcategory, type);
-      m_plugins.append(pi);
+        PluginInfo *pi = new PluginInfo(pname, pcomment, 
+            pdir, plib, pcategory, type);
+        m_plugins.append(pi);
      
-      ++it;
+        ++it;
     }
 }
 
+
 void KisPluginServer::buildFilterMenu( QPopupMenu *menu )
 {
-  if (!menu)
-    return;
+    if (!menu) return;
+    menu->clear();
 
-  menu->clear();
+    QStringList categories;
 
-  QStringList categories;
-
-  // build a list of filter categories.
-  for (PluginInfo *pi = m_plugins.first(); pi != 0; pi = m_plugins.next())
+    // build a list of filter categories.
+    for (PluginInfo *pi = m_plugins.first(); pi != 0; pi = m_plugins.next())
     {
-      if (!pi->type() == PLUGIN_FILTER)
-	continue;
+        if (!pi->type() == PLUGIN_FILTER)
+	        continue;
 
-      if (!categories.contains(pi->category()))
-	categories.append(pi->category());
+        if (!categories.contains(pi->category()))
+	        categories.append(pi->category());
     }
 
-  // sort it alphabetically
-  categories.sort();
+    // sort it alphabetically
+    categories.sort();
 
-  // loop through the categories and build submenus
-  for (QStringList::Iterator it = categories.begin(); it != categories.end(); it++)
+    // loop through the categories and build submenus
+    for (QStringList::Iterator it = categories.begin(); it != categories.end(); it++)
     {
-      if ((*it) == "General")
-	continue;
+        if ((*it) == "General")
+	        continue;
       
-      qDebug("hallo");
-      QPopupMenu *submenu = new QPopupMenu( menu );
+        qDebug("hallo");
+        QPopupMenu *submenu = new QPopupMenu( menu );
 
-      for (PluginInfo *pi = m_plugins.first(); pi != 0; pi = m_plugins.next())
-	{
-	  if (!pi->type() == PLUGIN_FILTER)
-	    continue;
-
-	  if (pi->category() == (*it))
+        for (PluginInfo *pi = m_plugins.first(); pi != 0; 
+        pi = m_plugins.next())
 	    {
-	      qDebug("hallo2");
-	      int id = ++m_count;
-	      id = submenu->insertItem(pi->name(), id);
-	      pi->setId(id);
+	        if (!pi->type() == PLUGIN_FILTER)
+	            continue;
+
+	        if (pi->category() == (*it))
+	        {
+	            qDebug("hallo2");
+	            int id = ++m_count;
+	            id = submenu->insertItem(pi->name(), id);
+	            pi->setId(id);
+	        }
 	    }
-	}
-      qDebug("hallo3");
-      menu->insertItem((*it), submenu);
+        
+        qDebug("hallo3");
+        menu->insertItem((*it), submenu);
     }
 
-  // build general (== toplevel) category
-  for (PluginInfo *pi = m_plugins.first(); pi != 0; pi = m_plugins.next())
+    // build general (== toplevel) category
+    for (PluginInfo *pi = m_plugins.first(); pi != 0; pi = m_plugins.next())
     {
-      if (!pi->type() == PLUGIN_FILTER)
-	continue;
+        if (!pi->type() == PLUGIN_FILTER)
+	        continue;
 
-      if (pi->category() == "General")
-	{
-	  int id = ++m_count;
-	  menu->insertItem(pi->name(), id);
-	  pi->setId(id);
-	}
+        if (pi->category() == "General")
+	    {
+	        int id = ++m_count;
+	        menu->insertItem(pi->name(), id);
+	        pi->setId(id);
+	    }
     }
 }
 

@@ -26,32 +26,32 @@
 
 KisTool::KisTool(KisDoc *doc, KisView *view)
 {
-  m_pDoc = doc;
-  m_pView = view;
-  m_Cursor = KisCursor::arrowCursor();
+    m_pDoc = doc;
+    m_pView = view;
+    m_Cursor = KisCursor::arrowCursor();
 }
 
 KisTool::~KisTool() {}
 
 QString KisTool::toolName()
 {
-  return "BaseTool";
+    return "BaseTool";
 }
 
 void KisTool::optionsDialog()
 {
-  //KMessageBox::sorry(0L, i18n("No Options available for this tool."));
-  KMessageBox::sorry(NULL, "No Options available for this tool.", "", FALSE);  
+    KMessageBox::sorry(NULL, "Options for current tool... coming soon", 
+        "", FALSE);  
 }
 
 void KisTool::setCursor( const QCursor& c )
 {
-  m_Cursor = c;
+    m_Cursor = c;
 }
 
 QCursor KisTool::cursor()
 {
-  return m_Cursor;
+    return m_Cursor;
 }
 
 // translate integer for zoom factor

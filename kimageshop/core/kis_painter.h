@@ -33,19 +33,28 @@ class KisPainter : public QObject
   Q_OBJECT
 
 public:
-  	KisPainter(KisDoc *doc);
+  	KisPainter(KisDoc *doc, KisView *view);
   	~KisPainter();
-  
+
+    void resize(int width, int height);
+    void clearAll();
+    void clearRectangle(QRect & rect);
+    void drawLine(int x1, int y1, int x2, int y2);
+    void drawRectangle(int x, int y, int w, int h);
+    void drawRectangle(QRect & rectint);    
+    void drawEllipse(int x, int y, int w, int h);
+    void drawEllipse(QRect & rect);
+      
 protected:
-	void toLayer();	
-    void clear();
+    bool toLayer(QRect paintRect);
 
 private:
+    void swap(int *first, int *second);
   	QImage painterImage;
   	QPixmap painterPixmap;
-  	QRect updateRect;
 
   	KisDoc *pDoc;
+    KisView *pView;
 };
 
 #endif

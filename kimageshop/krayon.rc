@@ -29,10 +29,13 @@
   <Action name="tool_pen"/>
   <Action name="tool_brush"/>
   <Action name="tool_airbrush"/>
-  <Action name="tool_line"/>  
+  <Action name="tool_line"/>
+  <Action name="tool_rectangle"/>
+  <Action name="tool_ellipse"/>      
   <Action name="tool_gradient"/>
   <Action name="tool_eraser"/>
   <Action name="tool_fill"/>
+  <Action name="current_tool_properties"/>  
 </Menu>
 <Menu name="Image"><text>Image</text>
   <Action name="import_image"/>
@@ -48,10 +51,10 @@
 <Menu name="Layer"><text>Layer</text>
   <Action name="insert_layer"/>
   <Action name="remove_layer"/>
-  <Action name="layer_properties"/>
   <Action name="hide_layer"/>
   <Action name="link_layer"/>
-  <Action name="layer_mask"/>
+  <Action name="previous_layer"/>  
+  <Action name="next_layer"/>
   <Separator/>
   <Action name="insert_layer_image"/>
   <Action name="save_layer_image"/>
@@ -62,6 +65,8 @@
   <Separator/>
   <Action name="layer_mirrorX"/>
   <Action name="layer_mirrorY"/>
+  <Separator/>  
+  <Action name="layer_properties"/>  
 </Menu>
 <Menu name="Color"><text>Color</text>
   <Action name="select_fgColor"/>
@@ -133,8 +138,11 @@
   <Action name="tool_brush"/>
   <Action name="tool_airbrush"/>
   <Action name="tool_line"/>    
+  <Action name="tool_rectangle"/>
+  <Action name="tool_ellipse"/>      
   <Action name="tool_gradient"/>
   <Action name="tool_eraser"/>
-  <Action name="tool_fill"/>  
+  <Action name="tool_fill"/>
+  <Action name="current_tool_properties"/>      
 </ToolBar>
 </kpartgui>

@@ -38,6 +38,7 @@ class GradientEditorDialog;
 class KisDoc;
 class KisImage;
 class KisCanvas;
+class KisPainter;
 class KisTabBar;
 class KisSideBar;
 
@@ -66,6 +67,8 @@ class ZoomTool;
 class KisGradient;
 class GradientTool;
 class LineTool;
+class RectangleTool;
+class EllipseTool;
 class ColorPicker;
 class Fill;
 class QButton;
@@ -83,8 +86,9 @@ class KisView : public KoView
     KisColor& fgColor() { return m_fg; }
     KisColor& bgColor() { return m_bg; }
 
-    KisCanvas* kisCanvas() { return m_pCanvas; }
-
+    KisCanvas*  kisCanvas() { return m_pCanvas; }
+    KisPainter* kisPainter() { return m_pPainter; }
+    
     void updateCanvas(  QRect & ur );
     void showScrollBars( );
         
@@ -143,8 +147,16 @@ class KisView : public KoView
 
     // layer action slots
     void insert_layer();
+    void remove_layer();
+    void link_layer();
+    void hide_layer();
+    void next_layer();
+    void previous_layer();
+    void layer_properties();
+            
     void insert_layer_image();
     void save_layer_image();
+    
     void layer_rotate180();
     void layer_rotateleft90();
     void layer_rotateright90();
@@ -159,6 +171,7 @@ class KisView : public KoView
     void merge_linked_layers();
 
     // tool action slots
+    void tool_properties();
     void tool_select_rect();
     void tool_move();
     void tool_zoom();
@@ -168,6 +181,8 @@ class KisView : public KoView
     void tool_eraser();
     void tool_gradient();
     void tool_line();
+    void tool_rectangle();
+    void tool_ellipse();
     void tool_colorpicker();
     void tool_fill();
 
@@ -196,6 +211,7 @@ class KisView : public KoView
     virtual void resizeEvent( QResizeEvent* );
     virtual void updateReadWrite( bool readwrite );
 
+    void setupPainter();
     void setupCanvas();
     void setupSideBar();
     void setupScrollBars();
@@ -228,7 +244,7 @@ class KisView : public KoView
 
     // import/export actions
     KAction *m_layer_rotate180, *m_layer_rotate270, *m_layer_rotate90,
-    *m_layer_mirrorX, *m_layer_mirrorY; 
+        *m_layer_mirrorX, *m_layer_mirrorY; 
         
     // edit actions
     KAction *m_undo, *m_redo, *m_copy, *m_cut, *m_paste, *m_crop,
@@ -248,13 +264,12 @@ class KisView : public KoView
     KToggleAction *m_tool_select_rect, *m_tool_select_polygon, *m_tool_move, 
     *m_tool_zoom, *m_tool_brush, *m_tool_draw, *m_tool_pen, *m_tool_gradient, 
     *m_tool_colorpicker, *m_tool_fill, *m_tool_airbrush, *m_tool_eraser,
-    *m_tool_line;
+    *m_tool_line, *m_tool_rectangle, *m_tool_ellipse;
 
     KisDoc                *m_pDoc;  // inherited a lot by tools
     KisTool               *m_pTool; // currently active tool
 
     // tools    
-
     SelectTool      *m_pSelectTool;
     PasteTool       *m_pPasteTool;
     MoveTool        *m_pMoveTool;
@@ -265,7 +280,9 @@ class KisView : public KoView
     ZoomTool        *m_pZoomTool;
     KisGradient     *m_pGradient;
     GradientTool    *m_pGradientTool;
-    LineTool        *m_pLineTool;    
+    LineTool        *m_pLineTool;
+    RectangleTool   *m_pRectangleTool;
+    EllipseTool     *m_pEllipseTool;   
     ColorPicker     *m_pColorPicker;
     Fill            *m_pFill;
     
@@ -285,6 +302,7 @@ class KisView : public KoView
     GradientEditorDialog *m_pGradientEditorDialog;
 
     KisCanvas            *m_pCanvas;
+    KisPainter           *m_pPainter;
     KisSideBar           *m_pSideBar;
     QScrollBar           *m_pHorz, *m_pVert;
     KRuler               *m_pHRuler, *m_pVRuler;
@@ -295,7 +313,7 @@ class KisView : public KoView
 
     KHelpMenu            *m_helpMenu;
 
-    float		 m_zoomFactor;
+    float		         m_zoomFactor;
 };
 
 #endif

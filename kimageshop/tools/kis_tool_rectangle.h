@@ -1,7 +1,7 @@
 /*
- *  linetool.h - part of Krayon
+ *  gradienttool.h - part of KImageShop
  *
- *  Copyright (c) 2000 John Califf <jcaliff@comuzone.net>
+ *  Copyright (c) 1999 Michael Koch <koch@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -18,8 +18,8 @@
  *  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  */
 
-#ifndef __linetool_h__
-#define __linetool_h__
+#ifndef __rectangletool_h__
+#define __rectangletool_h__
 
 #include <qpoint.h>
 
@@ -29,14 +29,14 @@ class KisDoc;
 class KisView;
 class KisCanvas;
 
-class LineTool : public KisTool
+class RectangleTool : public KisTool
 {
 public:
 
-  LineTool( KisDoc* _doc, KisView* _view, KisCanvas* _canvas );
-  ~LineTool();
+  RectangleTool( KisDoc* _doc, KisView* _view, KisCanvas* _canvas);
+  ~RectangleTool();
 
-  virtual QString toolName() { return QString( "Line Tool" ); }
+  virtual QString toolName() { return QString( "Rectangle Tool" ); }
 
   virtual void mousePress( QMouseEvent* event );
   virtual void mouseMove( QMouseEvent* event );
@@ -44,7 +44,7 @@ public:
 
 protected:
 
-  void drawLine( const QPoint&, const QPoint& );
+  void drawRectangle( const QPoint&, const QPoint& );
 
 protected:
 

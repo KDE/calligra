@@ -46,6 +46,7 @@
 #include "kis_doc.h"
 #include "kis_util.h"
 #include "kis_canvas.h"
+#include "kis_painter.h"
 #include "kis_sidebar.h"
 #include "kis_tabbar.h"
 #include "kis_krayon.h"
@@ -75,6 +76,8 @@
 #include "kis_tool_pen.h"
 #include "kis_tool_gradient.h"
 #include "kis_tool_line.h"
+#include "kis_tool_rectangle.h"
+#include "kis_tool_ellipse.h"
 #include "kis_tool_colorpicker.h"
 #include "kis_tool_eraser.h"
 #include "kis_tool_fill.h"
@@ -99,7 +102,8 @@ KisView::KisView( KisDoc* doc, QWidget* parent, const char* name )
 
 // this is the original configuration that works but tools
 // need to be set up before canvas 
-
+    
+    setupPainter();
     setupCanvas();
     setupScrollBars();
     setupRulers();
@@ -112,6 +116,11 @@ KisView::KisView( KisDoc* doc, QWidget* parent, const char* name )
 
 KisView::~KisView()
 {
+}
+
+void KisView::setupPainter()
+{
+    m_pPainter = new KisPainter(m_pDoc, this);
 }
 
 /*
@@ -213,9 +222,6 @@ void KisView::setupScrollBars()
     m_pHorz->setValue(0);
     m_pVert->setValue(0);
 
-    //m_pVert->show();
-    //m_pHorz->show();
-
     QObject::connect(m_pVert, 
         SIGNAL(valueChanged(int)), this, SLOT(scrollV(int)));
     QObject::connect(m_pHorz, 
@@ -277,40 +283,20 @@ void KisView::setupTabBar()
 
 void KisView::setupTools()
 {
-    // select tool
+
     m_pSelectTool = new SelectTool( m_pDoc, this, m_pCanvas );
-
-    // select tool
     m_pPasteTool = new PasteTool( m_pDoc, this, NULL );
-
-    // move tool
     m_pMoveTool = new MoveTool(m_pDoc);
-
-    // brush tool
     m_pBrushTool = new BrushTool(m_pDoc, this, m_pBrush);
-
-    // airbrush tool
     m_pAirBrushTool = new AirBrushTool(m_pDoc, this, m_pBrush);
-
-    // pen tool
     m_pPenTool = new PenTool(m_pDoc, this, m_pCanvas, m_pBrush);
-
-    // eraser tool
     m_pEraserTool = new EraserTool(m_pDoc, this, m_pBrush);
-
-    // color picker
     m_pColorPicker = new ColorPicker(m_pDoc, this);
-
-    // zoom tool
     m_pZoomTool = new ZoomTool(this);
-
-    // gradient tool
     m_pGradientTool = new GradientTool( m_pDoc, this, m_pCanvas, m_pGradient );
-
-    // line tool
-    m_pLineTool = new LineTool( m_pDoc, this, m_pCanvas, m_pGradient );
-
-    // fill tool
+    m_pLineTool = new LineTool( m_pDoc, this, m_pCanvas );
+    m_pRectangleTool = new RectangleTool( m_pDoc, this, m_pCanvas );
+    m_pEllipseTool = new EllipseTool( m_pDoc, this, m_pCanvas );
     m_pFill = new Fill( m_pDoc, this );
 
     // start with pen as active tool
@@ -480,16 +466,56 @@ void KisView::setupActions()
     m_tool_gradient->setExclusiveGroup( "tools" );
 
     m_tool_line = new KToggleAction( i18n("&Line tool"),
-        "line", 0, this, SLOT( tool_gradient() ),
+        "line", 0, this, SLOT( tool_line() ),
         actionCollection(), "tool_line");
 
     m_tool_line->setExclusiveGroup( "tools" );
+
+    m_tool_rectangle = new KToggleAction( i18n("&Rectangle tool"),
+        "rectangle", 0, this, SLOT( tool_rectangle() ),
+        actionCollection(), "tool_rectangle");
+
+    m_tool_rectangle->setExclusiveGroup( "tools" );
+
+    m_tool_ellipse = new KToggleAction( i18n("&Ellipse tool"),
+        "ellipse", 0, this, SLOT( tool_ellipse() ),
+        actionCollection(), "tool_ellipse");
+
+    m_tool_ellipse->setExclusiveGroup( "tools" );
+
+    (void) new KAction( i18n("&Current Tool Properties..."),
+        "configure", 0, this, SLOT( tool_properties() ),
+        actionCollection(), "current_tool_properties" );
 
     // layer actions
 
     (void) new KAction( i18n("&Insert layer..."),
         0, this, SLOT( insert_layer() ),
         actionCollection(), "insert_layer" );
+
+    (void) new KAction( i18n("&Remove layer..."),
+        0, this, SLOT( remove_layer() ),
+        actionCollection(), "remove_layer" );
+
+    (void) new KAction( i18n("&Link layer..."),
+        0, this, SLOT( link_layer() ),
+        actionCollection(), "link_layer" );
+
+    (void) new KAction( i18n("&Hide layer..."),
+        0, this, SLOT( hide_layer() ),
+        actionCollection(), "hide_layer" );
+
+    (void) new KAction( i18n("&Next layer..."),
+        0, this, SLOT( next_layer() ),
+        actionCollection(), "next_layer" );
+
+    (void) new KAction( i18n("&Previous layer..."),
+        0, this, SLOT( previous_layer() ),
+        actionCollection(), "previous_layer" );
+
+    (void) new KAction( i18n("Layer Properties..."),
+        0, this, SLOT( layer_properties() ),
+        actionCollection(), "layer_properties" );
 
     (void) new KAction( i18n("I&nsert image as layer..."),
         0, this, SLOT( insert_layer_image() ),
@@ -499,6 +525,8 @@ void KisView::setupActions()
         0, this, SLOT( save_layer_image() ),
         actionCollection(), "save_layer_image" );
 
+    // layer transformations - should be generic, for selection too
+    
     m_layer_rotate180 = new KAction( i18n("Rotate &180"),
         0, this, SLOT( layer_rotate180() ),
         actionCollection(), "layer_rotate180");
@@ -993,11 +1021,15 @@ void KisView::activateTool(KisTool* t)
  * tool action slots
  */
 
+void KisView::tool_properties()
+{
+    m_pTool->optionsDialog();
+}
+
 void KisView::tool_select_rect()
 {
     activateTool(m_pSelectTool);
 }
-
 
 void KisView::tool_move()
 {
@@ -1044,6 +1076,16 @@ void KisView::tool_line()
   activateTool( m_pLineTool );
 }
 
+void KisView::tool_rectangle()
+{
+  activateTool( m_pRectangleTool );
+}
+
+void KisView::tool_ellipse()
+{
+  activateTool( m_pEllipseTool );
+}
+
 void KisView::tool_fill()
 {
   activateTool( m_pFill );
@@ -1056,13 +1098,13 @@ void KisView::tool_fill()
 void KisView::undo()
 {
     kdDebug() << "UNDO called" << endl;
-    //m_pDoc->commandHistory()->undo(); //jwc
+    //m_pDoc->commandHistory()->undo();
 }
 
 void KisView::redo()
 {
     kdDebug() << "REDO called" << endl;
-    //m_pDoc->commandHistory()->redo(); //jwc
+    //m_pDoc->commandHistory()->redo();
 }
 
 void KisView::copy()
@@ -1275,6 +1317,36 @@ void KisView::insert_layer()
     KMessageBox::sorry(NULL, "Please use layers tab on sidebar.", "", FALSE); 
 }
 
+void KisView::remove_layer()
+{
+    KMessageBox::sorry(NULL, "Please use layers tab on sidebar.", "", FALSE); 
+}
+
+void KisView::hide_layer()
+{
+    KMessageBox::sorry(NULL, "Please use layers tab on sidebar.", "", FALSE); 
+}
+
+void KisView::link_layer()
+{
+    KMessageBox::sorry(NULL, "Please use layers tab on sidebar.", "", FALSE); 
+}
+
+void KisView::next_layer()
+{
+    KMessageBox::sorry(NULL, "Please use layers tab on sidebar.", "", FALSE); 
+}
+
+void KisView::previous_layer()
+{
+    KMessageBox::sorry(NULL, "Please use layers tab on sidebar.", "", FALSE); 
+}
+
+void KisView::layer_properties()
+{
+    KMessageBox::sorry(NULL, "Please use layers tab on sidebar.", "", FALSE); 
+}
+
 /*
     Insert a standard image like png or jpg into the current layer.
     This is the same as "import" in other koffice apps, but since
@@ -1368,6 +1440,11 @@ void KisView::add_new_image_tab()
 {
     if(!m_pDoc->slotNewImage())
         kdDebug(0) << "Couldn't add image tab" << endl;
+        
+    m_pPainter->resize(m_pDoc->current()->width(), 
+        m_pDoc->current()->height());
+        
+    m_pPainter->clearAll();    
 }
 
 

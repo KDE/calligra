@@ -41,16 +41,16 @@ KisResourceServer::KisResourceServer()
 
     // init vars
     QStringList  lst;
-    QString      format, file;
+    QString format, file;
 
     // find brushes
-    for ( QStringList::Iterator it = formats.begin(); it != formats.end(); ++it )
+    for ( QStringList::Iterator it = formats.begin(); 
+    it != formats.end(); ++it )
     {
       format = *it;
 	  QStringList l = KisFactory::global()->dirs()->findAllResources("kis_brushes", format, false, true);
 	  lst += l;
 	}
-  
     // load brushes
     for ( QStringList::Iterator it = lst.begin(); it != lst.end(); ++it )
     {
@@ -69,7 +69,6 @@ KisResourceServer::KisResourceServer()
 	  QStringList l = KisFactory::global()->dirs()->findAllResources("kis_pattern", format, false, true);
 	  lst += l;
 	}
-  
     // load pattern
     for ( QStringList::Iterator it = lst.begin(); it != lst.end(); ++it )
     {

@@ -39,8 +39,6 @@ KisShell::KisShell( const char* name )
 {
     m_pStatusBar = new KStatusBar( this, "shell_statusbar" );
 
-    //setStatusBar( m_pStatusBar ); 
-    
     m_pStatusBar->insertItem( i18n( "a little test for the statusbar" ), 
         ID_STATUSBAR_INFOTEXT );
 

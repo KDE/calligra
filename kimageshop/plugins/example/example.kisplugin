@@ -1,6 +1,6 @@
 [GENERAL]
 Name=Example
-Comment=Example KImageshop plugin
+Comment=Example Krayon plugin
 Subdir=example
 Library=lipkisp_example
 Type=Filter

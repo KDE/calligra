@@ -1,7 +1,7 @@
 /*
- *  colorpicker.h - part of KImageShop
+ *  kis_tool_fill.h - part of Krayon
  *
- *  Copyright (c) 1999 Matthias Elter
+ *  Copyright (c) 2000 John Califf
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -28,22 +28,40 @@
 #include "kis_tool.h"
 #include "kis_layer.h"
 
+struct fillinfo
+{
+   int left;
+   int right;
+   int top;
+   int bottom;
+   unsigned char or, og, ob, r, g, b;
+};
+
+struct fillpixelinfo
+{
+   int y, xl, xr, dy;
+};
+
 class Fill : public KisTool
 {
   public:
     Fill(KisDoc *doc, KisView *view);
     ~Fill();
   
-    QString toolName() { return QString("Fill"); }
+    QString toolName() { return QString("Fill Tool"); }
     bool flood(int startX, int startY);
     
   public slots:
     virtual void mousePress(QMouseEvent*); 
   
   protected:
-    int checkTouching(KisLayer *lay, int x, int y, int r, int g, int b);
-    void drawFlood(KisLayer *lay, QRect & layerRect, int x, int y);
-    
+
+    // from gpaint
+    int is_old_pixel_value(struct fillinfo *info, int x, int y);  
+    void set_new_pixel_value(struct fillinfo *info, int x, int y);      
+    void flood_fill(struct fillinfo *info, int x, int y);
+    void seed_flood_fill( int x, int y, QRect & frect );    
+                
     // new colors (desired)
     int nRed;
     int nGreen;
@@ -53,9 +71,8 @@ class Fill : public KisTool
     int sRed;
     int sGreen;
     int sBlue;
-    
-    // number of recursions of drawFlood()
-    int iterations;
+
+    KisLayer *fLayer;
 };
 
 #endif //__filltool_h__

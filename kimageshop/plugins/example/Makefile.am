@@ -9,5 +9,5 @@ lib_LTLIBRARIES = libkisp_example.la
 libkisp_example_la_SOURCES = example.cc
 
 kisplugin_DATA = example.kisplugin
-kisplugindir = $(kde_datadir)/kimageshop/plugins/
+kisplugindir = $(kde_datadir)/krayon/plugins/
 

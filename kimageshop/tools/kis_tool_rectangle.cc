@@ -1,5 +1,5 @@
 /*
- *  linetool.cc - part of KImageShop
+ *  kis_tool_rectangle.cc - part of Krayon
  *
  *  Copyright (c) 2000 John Califf <jcaliff@compuzone.net>
  *
@@ -26,22 +26,22 @@
 #include "kis_painter.h"
 #include "kis_color.h"
 #include "kis_canvas.h"
-#include "kis_tool_line.h"
+#include "kis_tool_rectangle.h"
 
 
-LineTool::LineTool( KisDoc* _doc, KisView* _view, KisCanvas* _canvas)
+RectangleTool::RectangleTool( KisDoc* _doc, KisView* _view, KisCanvas* _canvas)
   : KisTool( _doc, _view )
   , m_dragging( false )
   , pCanvas( _canvas )
 {
 }
 
-LineTool::~LineTool()
+RectangleTool::~RectangleTool()
 {
 }
 
 
-void LineTool::mousePress( QMouseEvent* event )
+void RectangleTool::mousePress( QMouseEvent* event )
 {
     if ( m_pDoc->isEmpty() )
         return;
@@ -55,21 +55,21 @@ void LineTool::mousePress( QMouseEvent* event )
 }
 
 
-void LineTool::mouseMove( QMouseEvent* event )
+void RectangleTool::mouseMove( QMouseEvent* event )
 {
     if ( m_pDoc->isEmpty() )
         return;
 
     if( m_dragging )
     {
-        drawLine( m_dragStart, m_dragEnd );
+        drawRectangle( m_dragStart, m_dragEnd );
         m_dragEnd = event->pos();
-        drawLine( m_dragStart, m_dragEnd );
+        drawRectangle( m_dragStart, m_dragEnd );
     }
 }
 
 
-void LineTool::mouseRelease( QMouseEvent* event )
+void RectangleTool::mouseRelease( QMouseEvent* event )
 {
     if ( m_pDoc->isEmpty() )
         return;
@@ -77,35 +77,28 @@ void LineTool::mouseRelease( QMouseEvent* event )
     if(( m_dragging) 
     && ( event->state() == LeftButton))
     {
-        drawLine( m_dragStart, m_dragEnd );
+        drawRectangle( m_dragStart, m_dragEnd );
         m_dragging = false;
-        drawLine( m_dragStart, m_dragEnd );
+        drawRectangle( m_dragStart, m_dragEnd );
     }
     
     KisPainter *p = m_pView->kisPainter();
-    p->drawLine(m_dragStart.x(), m_dragStart.y(),
-                m_dragEnd.x(),   m_dragEnd.y());
+    QRect rect(m_dragStart, m_dragEnd) ;
+    p->drawRectangle( rect );
 }
 
 
-void LineTool::drawLine( const QPoint& start, const QPoint& end )
+void RectangleTool::drawRectangle( const QPoint& start, const QPoint& end )
 {
     QPainter p;
-
     p.begin( pCanvas );
     p.setRasterOp( Qt::NotROP );
     float zF = m_pView->zoomFactor();
-
-    p.drawLine( QPoint( start.x() + m_pView->xPaintOffset() 
-                          - (int)(zF * m_pView->xScrollOffset()),
-                        start.y() + m_pView->yPaintOffset() 
-                           - (int)(zF * m_pView->yScrollOffset())), 
-                QPoint( end.x() + m_pView->xPaintOffset() 
-                          - (int)(zF * m_pView->xScrollOffset()),
-                        end.y() + m_pView->yPaintOffset() 
-                           - (int)(zF * m_pView->yScrollOffset())) );
-
+    p.drawRect( QRect(start.x() + m_pView->xPaintOffset() 
+                                - (int)(zF * m_pView->xScrollOffset()),
+                      start.y() + m_pView->yPaintOffset() 
+                                - (int)(zF * m_pView->yScrollOffset()), 
+                      end.x() - start.x(), 
+                      end.y() - start.y()) );
     p.end();
 }
-
-

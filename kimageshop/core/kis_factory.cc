@@ -84,11 +84,14 @@ KisFactory::~KisFactory()
     Create the document
 */
 
-KParts::Part* KisFactory::createPart( QWidget *parentWidget, const char *widgetName, QObject* parent, const char* name, const char* classname, const QStringList & )
+KParts::Part* KisFactory::createPart( QWidget *parentWidget, 
+    const char *widgetName, QObject* parent, 
+    const char* name, const char* classname, const QStringList & )
 {
     bool bWantKoDocument = ( strcmp( classname, "KoDocument" ) == 0 );
 
-    KisDoc *doc = new KisDoc( parentWidget, widgetName, parent, name, !bWantKoDocument );
+    KisDoc *doc = new KisDoc( parentWidget, 
+        widgetName, parent, name, !bWantKoDocument );
 
     if ( !bWantKoDocument )
         doc->setReadWrite( false );
@@ -101,34 +104,34 @@ KInstance* KisFactory::global()
 {
     if ( !s_global )
     {
-	s_global = new KInstance(s_aboutData);
+	    s_global = new KInstance(s_aboutData);
 
-	s_global->dirs()->addResourceType("kis",
-	    KStandardDirs::kde_default("data") + "krayon/");
+	    s_global->dirs()->addResourceType("kis",
+	        KStandardDirs::kde_default("data") + "krayon/");
 
-	s_global->dirs()->addResourceType("kis_images",
-	    KStandardDirs::kde_default("data") + "krayon/images/");
+	    s_global->dirs()->addResourceType("kis_images",
+	        KStandardDirs::kde_default("data") + "krayon/images/");
 
-	s_global->dirs()->addResourceType("kis_brushes",
-	    KStandardDirs::kde_default("data") + "krayon/brushes/");
+	    s_global->dirs()->addResourceType("kis_brushes",
+	        KStandardDirs::kde_default("data") + "krayon/brushes/");
 
-	s_global->dirs()->addResourceType("kis_pattern",
+	    s_global->dirs()->addResourceType("kis_pattern",
             KStandardDirs::kde_default("data") + "krayon/patterns/");
 
-	s_global->dirs()->addResourceType("kis_gradients",
-	    KStandardDirs::kde_default("data") + "krayon/gradients/");
+	    s_global->dirs()->addResourceType("kis_gradients",
+	        KStandardDirs::kde_default("data") + "krayon/gradients/");
 
-	s_global->dirs()->addResourceType("kis_pics",
-	    KStandardDirs::kde_default("data") + "krayon/pics/");
+	    s_global->dirs()->addResourceType("kis_pics",
+	        KStandardDirs::kde_default("data") + "krayon/pics/");
 
-	s_global->dirs()->addResourceType("kis_plugins",
-	    KStandardDirs::kde_default("data") + "krayon/plugins/");
+	    s_global->dirs()->addResourceType("kis_plugins",
+	        KStandardDirs::kde_default("data") + "krayon/plugins/");
 
-	s_global->dirs()->addResourceType("toolbars",
-	    KStandardDirs::kde_default("data") + "koffice/toolbar/");
+	    s_global->dirs()->addResourceType("toolbars",
+	        KStandardDirs::kde_default("data") + "koffice/toolbar/");
 
-	// Tell the iconloader about share/apps/koffice/icons
-	s_global->iconLoader()->addAppDir("koffice");
+	    // Tell the iconloader about share/apps/koffice/icons
+	    s_global->iconLoader()->addAppDir("koffice");
     }
 
     return s_global;
