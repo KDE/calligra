@@ -431,8 +431,8 @@ int KoTextParag::lineSpacing( int line ) const
 QRect KoTextParag::pixelRect( KoZoomHandler *zh ) const
 {
     QRect rct( zh->layoutUnitToPixel( rect() ) );
-    kdDebug(32500) << "   pixelRect for parag " << paragId()
-                   << ": rect=" << rect() << " pixelRect=" << rct << endl;
+    //kdDebug(32500) << "   pixelRect for parag " << paragId()
+    //               << ": rect=" << rect() << " pixelRect=" << rct << endl;
 
     // After division we almost always end up with the top overwriting the bottom of the parag above
     if ( prev() )
