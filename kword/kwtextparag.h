@@ -80,12 +80,7 @@ public:
     static KoParagLayout loadParagLayout( QDomElement & parentElem, KWDocument *doc, bool useRefStyle );
     static void saveParagLayout( const KoParagLayout& layout, QDomElement & parentElem );
 
-#ifndef NDEBUG
-    void printRTDebug( int );
-#endif
-
 protected:
-    virtual void copyParagData( QTextParag *_parag );
     virtual void drawFormattingChars( QPainter &painter, const QString &s, int start, int len,
                                       int startX, int lastY, int baseLine, int h, // in LU
                                       int startX_pix, int lastY_pix, int baseLine_pix, int bw, int h_pix, // in pixels
