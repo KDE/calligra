@@ -22,6 +22,8 @@
 #include <klocale.h>
 #include <kglobal.h>
 #include <koMainWindow.h>
+#include <kstddirs.h>
+#include <qstringlist.h>
 
 KoApplication::KoApplication(int &argc, char **argv, const QString& rAppName)
     : OPApplication(argc, argv, rAppName)
@@ -30,10 +32,7 @@ KoApplication::KoApplication(int &argc, char **argv, const QString& rAppName)
     , m_bWithGUI( true )
 {
   KGlobal::locale()->insertCatalogue("koffice");
-  KGlobal::iconLoader()->insertDirectory(0, kde_datadir() +
-				     "/koffice/toolbar");
-  KGlobal::iconLoader()->insertDirectory(3, localkdedir() +
-				     "/share/apps/koffice/toolbar");
+  KGlobal::dirs()->addResourceType("toolbar", KStandardDirs::kde_data_relative() + "/koffice/toolbar/");
 
   // checking wether start the app as server or not
   QStringList::Iterator it;
