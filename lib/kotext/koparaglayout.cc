@@ -22,14 +22,15 @@
 #include "koparagcounter.h"
 #include "kostyle.h"
 #include "kooasiscontext.h"
+#include <koxmlwriter.h>
+#include <koxmlns.h>
 #include <koGenStyles.h>
 
-#include <qdom.h>
 #include <kglobal.h>
 #include <klocale.h>
 #include <kdebug.h>
+#include <qdom.h>
 #include <qbuffer.h>
-#include <koxmlwriter.h>
 
 QString* KoParagLayout::shadowCssCompat = 0L;
 
@@ -422,46 +423,46 @@ void KoParagLayout::loadOasisParagLayout( KoParagLayout& layout, KoOasisContext&
     // It can have been initialized already, e.g. by copying from a style
 
     // code from OoWriterImport::writeLayout
-    if ( context.styleStack().hasAttribute( "fo:text-align" ) ) {
-        QCString align = context.styleStack().attribute( "fo:text-align" ).latin1();
+    if ( context.styleStack().hasAttributeNS( KoXmlNS::fo, "text-align" ) ) {
+        QCString align = context.styleStack().attributeNS( KoXmlNS::fo, "text-align" ).latin1();
         layout.alignment = loadOasisAlignment( align );
     }
 
-    if ( context.styleStack().hasAttribute( "style:writing-mode" ) ) { // http://web4.w3.org/TR/xsl/slice7.html#writing-mode
+    if ( context.styleStack().hasAttributeNS( KoXmlNS::style, "writing-mode" ) ) { // http://web4.w3.org/TR/xsl/slice7.html#writing-mode
         // LTR is lr-tb. RTL is rl-tb
-        QString writingMode = context.styleStack().attribute( "style:writing-mode" );
+        QString writingMode = context.styleStack().attributeNS( KoXmlNS::style, "writing-mode" );
         layout.direction = ( writingMode=="rl-tb" || writingMode=="rl" ) ? QChar::DirR : QChar::DirL;
     }
 
     // Indentation (margins)
-    if ( context.styleStack().hasAttribute( "fo:margin-left" ) || // 3.11.19
-         context.styleStack().hasAttribute( "fo:margin-right" ) ) {
-        layout.margins[QStyleSheetItem::MarginLeft] = KoUnit::parseValue( context.styleStack().attribute( "fo:margin-left" ) );
-        layout.margins[QStyleSheetItem::MarginRight] = KoUnit::parseValue( context.styleStack().attribute( "fo:margin-right" ) );
+    if ( context.styleStack().hasAttributeNS( KoXmlNS::fo, "margin-left" ) || // 3.11.19
+         context.styleStack().hasAttributeNS( KoXmlNS::fo, "margin-right" ) ) {
+        layout.margins[QStyleSheetItem::MarginLeft] = KoUnit::parseValue( context.styleStack().attributeNS( KoXmlNS::fo, "margin-left" ) );
+        layout.margins[QStyleSheetItem::MarginRight] = KoUnit::parseValue( context.styleStack().attributeNS( KoXmlNS::fo, "margin-right" ) );
         // *text-indent must always be bound to either margin-left or margin-right
         double first = 0;
-        if ( context.styleStack().attribute("style:auto-text-indent") == "true" ) // style:auto-text-indent takes precedence
+        if ( context.styleStack().attributeNS( KoXmlNS::style, "auto-text-indent") == "true" ) // style:auto-text-indent takes precedence
             // ### "indented by a value that is based on the current font size"
             // ### and "requires margin-left and margin-right
             // ### but how much is the indent?
             first = 10;
-        else if ( context.styleStack().hasAttribute("fo:text-indent") )
-            first = KoUnit::parseValue( context.styleStack().attribute("fo:text-indent") );
+        else if ( context.styleStack().hasAttributeNS( KoXmlNS::fo, "text-indent") )
+            first = KoUnit::parseValue( context.styleStack().attributeNS( KoXmlNS::fo, "text-indent") );
 
         layout.margins[QStyleSheetItem::MarginFirstLine] = first;
     }
 
     // Offset before and after paragraph
-    if( context.styleStack().hasAttribute("fo:margin-top") || // 3.11.22
-        context.styleStack().hasAttribute("fo:margin-bottom")) {
-        layout.margins[QStyleSheetItem::MarginTop] = KoUnit::parseValue( context.styleStack().attribute( "fo:margin-top" ) );
-        layout.margins[QStyleSheetItem::MarginBottom] = KoUnit::parseValue( context.styleStack().attribute("fo:margin-bottom" ) );
+    if( context.styleStack().hasAttributeNS( KoXmlNS::fo, "margin-top") || // 3.11.22
+        context.styleStack().hasAttributeNS( KoXmlNS::fo, "margin-bottom")) {
+        layout.margins[QStyleSheetItem::MarginTop] = KoUnit::parseValue( context.styleStack().attributeNS( KoXmlNS::fo, "margin-top" ) );
+        layout.margins[QStyleSheetItem::MarginBottom] = KoUnit::parseValue( context.styleStack().attributeNS( KoXmlNS::fo, "margin-bottom" ) );
     }
 
     // Line spacing
-    if( context.styleStack().hasAttribute("fo:line-height") ) {  // 3.11.1
+    if( context.styleStack().hasAttributeNS( KoXmlNS::fo, "line-height") ) {  // 3.11.1
         // Fixed line height
-        QString value = context.styleStack().attribute( "fo:line-height" );
+        QString value = context.styleStack().attributeNS( KoXmlNS::fo, "line-height" );
         if ( value != "normal" ) {
             if ( value == "100%" )
                 layout.lineSpacingType = KoParagLayout::LS_SINGLE;
@@ -483,9 +484,9 @@ void KoParagLayout::loadOasisParagLayout( KoParagLayout& layout, KoOasisContext&
         }
     }
     // Line-height-at-least is mutually exclusive with line-height
-    else if ( context.styleStack().hasAttribute("style:line-height-at-least") ) // 3.11.2
+    else if ( context.styleStack().hasAttributeNS( KoXmlNS::style, "line-height-at-least") ) // 3.11.2
     {
-        QString value = context.styleStack().attribute( "style:line-height-at-least" );
+        QString value = context.styleStack().attributeNS( KoXmlNS::style, "line-height-at-least" );
         // kotext has "at least" but that's for the linespacing, not for the entire line height!
         // Strange. kotext also has "at least" for the whole line height....
         // Did we make the wrong choice in kotext?
@@ -495,9 +496,9 @@ void KoParagLayout::loadOasisParagLayout( KoParagLayout& layout, KoOasisContext&
         layout.lineSpacing = KoUnit::parseValue( value );
     }
     // Line-spacing is mutually exclusive with line-height and line-height-at-least
-    else if ( context.styleStack().hasAttribute("style:line-spacing") ) // 3.11.3
+    else if ( context.styleStack().hasAttributeNS( KoXmlNS::style, "line-spacing") ) // 3.11.3
     {
-        double value = KoUnit::parseValue( context.styleStack().attribute( "style:line-spacing" ) );
+        double value = KoUnit::parseValue( context.styleStack().attributeNS( KoXmlNS::style, "line-spacing" ) );
         if ( value != 0.0 )
         {
             layout.lineSpacingType = KoParagLayout::LS_CUSTOM;
@@ -507,23 +508,23 @@ void KoParagLayout::loadOasisParagLayout( KoParagLayout& layout, KoOasisContext&
 
     // Tabulators
     KoTabulatorList tabList;
-    if ( context.styleStack().hasChildNode( "style:tab-stops" ) ) { // 3.11.10
-        QDomElement tabStops = context.styleStack().childNode( "style:tab-stops" ).toElement();
+    if ( context.styleStack().hasChildNodeNS( KoXmlNS::style, "tab-stops" ) ) { // 3.11.10
+        QDomElement tabStops = context.styleStack().childNodeNS( KoXmlNS::style, "tab-stops" );
         //kdDebug(30519) << k_funcinfo << tabStops.childNodes().count() << " tab stops in layout." << endl;
         for ( QDomNode it = tabStops.firstChild(); !it.isNull(); it = it.nextSibling() )
         {
             QDomElement tabStop = it.toElement();
             Q_ASSERT( tabStop.tagName() == "style:tab-stop" );
-            QString type = tabStop.attribute( "style:type" ); // left, right, center or char
+            QString type = tabStop.attributeNS( KoXmlNS::style, "type", QString::null ); // left, right, center or char
 
             KoTabulator tab;
-            tab.ptPos = KoUnit::parseValue( tabStop.attribute( "style:position" ) );
+            tab.ptPos = KoUnit::parseValue( tabStop.attributeNS( KoXmlNS::style, "position", QString::null ) );
             if ( type == "center" )
                 tab.type = T_CENTER;
             else if ( type == "right" )
                 tab.type = T_RIGHT;
             else if ( type == "char" ) {
-                QString delimiterChar = tabStop.attribute( "style:char" ); // single character
+                QString delimiterChar = tabStop.attributeNS( KoXmlNS::style, "char", QString::null ); // single character
                 if ( !delimiterChar.isEmpty() )
                     tab.alignChar = delimiterChar[0];
                 tab.type = T_DEC_PNT; // "alignment on decimal point"
@@ -531,12 +532,12 @@ void KoParagLayout::loadOasisParagLayout( KoParagLayout& layout, KoOasisContext&
             else //if ( type == "left" )
                 tab.type = T_LEFT;
 
-            tab.ptWidth = KoUnit::parseValue( tabStop.attribute( "style:leader-width" ), 0.5 );
+            tab.ptWidth = KoUnit::parseValue( tabStop.attributeNS( KoXmlNS::style, "leader-width", QString::null ), 0.5 );
 
             tab.filling = TF_BLANK;
-            if ( tabStop.attribute( "style:leader-type" ) == "single" )
+            if ( tabStop.attributeNS( KoXmlNS::style, "leader-type", QString::null ) == "single" )
             {
-                QString leaderStyle = tabStop.attribute( "style:leader-style" );
+                QString leaderStyle = tabStop.attributeNS( KoXmlNS::style, "leader-style", QString::null );
                 if ( leaderStyle == "solid" )
                     tab.filling = TF_LINE;
                 else if ( leaderStyle == "dotted" )
@@ -551,7 +552,7 @@ void KoParagLayout::loadOasisParagLayout( KoParagLayout& layout, KoOasisContext&
             else
             {
                 // Fallback: convert leaderChar's unicode value
-                QString leaderChar = tabStop.attribute( "style:leader-text" );
+                QString leaderChar = tabStop.attributeNS( KoXmlNS::style, "leader-text", QString::null );
                 if ( !leaderChar.isEmpty() )
                 {
                     QChar ch = leaderChar[0];
@@ -574,50 +575,50 @@ void KoParagLayout::loadOasisParagLayout( KoParagLayout& layout, KoOasisContext&
     layout.setTabList( tabList );
 
     // Borders
-    if ( context.styleStack().hasAttribute("fo:border","left") )
-        layout.leftBorder.loadFoBorder( context.styleStack().attribute("fo:border","left") );
+    if ( context.styleStack().hasAttributeNS( KoXmlNS::fo, "border","left") )
+        layout.leftBorder.loadFoBorder( context.styleStack().attributeNS( KoXmlNS::fo, "border","left") );
     else
         layout.leftBorder.setPenWidth(0);
-    if ( context.styleStack().hasAttribute("fo:border","right") )
-        layout.rightBorder.loadFoBorder( context.styleStack().attribute("fo:border","right") );
+    if ( context.styleStack().hasAttributeNS( KoXmlNS::fo, "border","right") )
+        layout.rightBorder.loadFoBorder( context.styleStack().attributeNS( KoXmlNS::fo, "border","right") );
     else
         layout.rightBorder.setPenWidth(0);
-    if ( context.styleStack().hasAttribute("fo:border","top") )
-        layout.topBorder.loadFoBorder( context.styleStack().attribute("fo:border","top") );
+    if ( context.styleStack().hasAttributeNS( KoXmlNS::fo, "border","top") )
+        layout.topBorder.loadFoBorder( context.styleStack().attributeNS( KoXmlNS::fo, "border","top") );
     else
         layout.topBorder.setPenWidth(0);
-    if ( context.styleStack().hasAttribute("fo:border","bottom") )
-        layout.bottomBorder.loadFoBorder( context.styleStack().attribute("fo:border","bottom") );
+    if ( context.styleStack().hasAttributeNS( KoXmlNS::fo, "border","bottom") )
+        layout.bottomBorder.loadFoBorder( context.styleStack().attributeNS( KoXmlNS::fo, "border","bottom") );
     else
         layout.bottomBorder.setPenWidth(0);
 
 
     // Page breaking
     int pageBreaking = 0;
-    if( context.styleStack().hasAttribute("fo:break-before") ||
-        context.styleStack().hasAttribute("fo:break-after") ||
-        context.styleStack().hasAttribute("fo:keep-together") ||
-        context.styleStack().hasAttribute("style:keep-with-next") ||
-        context.styleStack().hasAttribute("fo:keep-with-next") )
+    if( context.styleStack().hasAttributeNS( KoXmlNS::fo, "break-before") ||
+        context.styleStack().hasAttributeNS( KoXmlNS::fo, "break-after") ||
+        context.styleStack().hasAttributeNS( KoXmlNS::fo, "keep-together") ||
+        context.styleStack().hasAttributeNS( KoXmlNS::style, "keep-with-next") ||
+        context.styleStack().hasAttributeNS( KoXmlNS::fo, "keep-with-next") )
     {
-        if ( context.styleStack().hasAttribute("fo:break-before") ) { // 3.11.24
+        if ( context.styleStack().hasAttributeNS( KoXmlNS::fo, "break-before") ) { // 3.11.24
             // TODO in KWord: implement difference between "column" and "page"
-            if ( context.styleStack().attribute( "fo:break-before" ) != "auto" )
+            if ( context.styleStack().attributeNS( KoXmlNS::fo, "break-before" ) != "auto" )
                 pageBreaking |= KoParagLayout::HardFrameBreakBefore;
         }
-        else if ( context.styleStack().hasAttribute("fo:break-after") ) { // 3.11.24
+        else if ( context.styleStack().hasAttributeNS( KoXmlNS::fo, "break-after") ) { // 3.11.24
             // TODO in KWord: implement difference between "column" and "page"
-            if ( context.styleStack().attribute( "fo:break-after" ) != "auto" )
+            if ( context.styleStack().attributeNS( KoXmlNS::fo, "break-after" ) != "auto" )
                 pageBreaking |= KoParagLayout::HardFrameBreakAfter;
         }
 
-        if ( context.styleStack().hasAttribute( "fo:keep-together" ) ) { // was style:break-inside in OOo-1.1, renamed in OASIS
-            if ( context.styleStack().attribute( "fo:keep-together" ) != "auto" )
+        if ( context.styleStack().hasAttributeNS( KoXmlNS::fo, "keep-together" ) ) { // was style:break-inside in OOo-1.1, renamed in OASIS
+            if ( context.styleStack().attributeNS( KoXmlNS::fo, "keep-together" ) != "auto" )
                  pageBreaking |= KoParagLayout::KeepLinesTogether;
         }
-        if ( context.styleStack().hasAttribute( "fo:keep-with-next" ) ) {
+        if ( context.styleStack().hasAttributeNS( KoXmlNS::fo, "keep-with-next" ) ) {
             // OASIS spec says it's "auto"/"always", not a boolean.
-            QString val = context.styleStack().attribute( "fo:keep-with-next" );
+            QString val = context.styleStack().attributeNS( KoXmlNS::fo, "keep-with-next" );
             if ( val == "true" || val == "always" )
                 pageBreaking |= KoParagLayout::KeepWithNext;
         }

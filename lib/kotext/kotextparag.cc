@@ -21,14 +21,15 @@
 #include "koparagcounter.h"
 #include "kozoomhandler.h"
 #include "kostyle.h"
-#include <kglobal.h>
-#include <klocale.h>
-#include <assert.h>
-#include <kdebug.h>
 #include "kovariable.h"
 #include <kooasiscontext.h>
 #include <koxmlwriter.h>
 #include <koGenStyles.h>
+#include <koxmlns.h>
+#include <kglobal.h>
+#include <klocale.h>
+#include <kdebug.h>
+#include <assert.h>
 
 //#define DEBUG_PAINT
 
@@ -1699,8 +1700,8 @@ void KoTextParag::loadOasisSpan( const QDomElement& parent, KoOasisContext& cont
         else if ( textFoo && afterText == "s" ) // text:s
         {
             int howmany = 1;
-            if (ts.hasAttribute("text:c"))
-                howmany = ts.attribute("text:c").toInt();
+            if (ts.hasAttributeNS( KoXmlNS::text, "c"))
+                howmany = ts.attributeNS( KoXmlNS::text, "c", QString::null).toInt();
 
             textData.fill(32, howmany);
         }

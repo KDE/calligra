@@ -24,6 +24,7 @@
 #include "kooasiscontext.h"
 #include <koxmlwriter.h>
 #include <koGenStyles.h>
+#include <koxmlns.h>
 #include <kdebug.h>
 #include <qdom.h>
 #include <qbuffer.h>
@@ -182,20 +183,20 @@ void KoParagCounter::loadOasis( KoOasisContext& context, int restartNumbering, b
     m_numbering = heading ? 1 : 0;
     m_depth = level - 1; // depth start at 0
     // restartNumbering can either be provided by caller, or taken from the style
-    if ( restartNumbering == -1 && listStyle.hasAttribute( "text:start-value" ) )
-        restartNumbering = context.listStyleStack().currentListStyle().attribute( "text:start-value" ).toInt();
+    if ( restartNumbering == -1 && listStyle.hasAttributeNS( KoXmlNS::text, "start-value" ) )
+        restartNumbering = context.listStyleStack().currentListStyle().attributeNS( KoXmlNS::text, "start-value", QString::null ).toInt();
 
     m_restartCounter = restartNumbering != -1;
     m_startNumber = m_restartCounter ? restartNumbering : 1;
     if ( orderedList || heading ) {
-        m_style = importCounterType( listStyle.attribute("style:num-format")[0] );
-        m_prefix = listStyle.attribute( "style:num-prefix" );
-        m_suffix = listStyle.attribute( "style:num-suffix" );
-        QString dl = listStyle.attribute( "text:display-levels" );
+        m_style = importCounterType( listStyle.attributeNS( KoXmlNS::style, "num-format", QString::null)[0] );
+        m_prefix = listStyle.attributeNS( KoXmlNS::style, "num-prefix", QString::null );
+        m_suffix = listStyle.attributeNS( KoXmlNS::style, "num-suffix", QString::null );
+        QString dl = listStyle.attributeNS( KoXmlNS::text, "display-levels", QString::null );
         m_displayLevels = dl.isEmpty() ? 1 : dl.toInt();
     } else { // bullets, see 3.3.6 p138
         m_style = STYLE_CUSTOMBULLET;
-        QString bulletChar = listStyle.attribute( "text:bullet-char" );
+        QString bulletChar = listStyle.attributeNS( KoXmlNS::text, "bullet-char", QString::null );
         if ( !bulletChar.isEmpty() ) {
             // Reverse engineering, I found those codes:
             switch( bulletChar[0].unicode() ) {
@@ -220,7 +221,7 @@ void KoParagCounter::loadOasis( KoOasisContext& context, int restartNumbering, b
             case 0x2714: // checkmark
                 m_customBulletChar = bulletChar[0];
                 // often StarSymbol when it comes from OO; doesn't matter, Qt finds it in another font if needed.
-                m_customBulletFont = listStyleProperties.attribute( "style:font-name" );
+                m_customBulletFont = listStyleProperties.attributeNS( KoXmlNS::style, "font-name", QString::null );
                 // ## TODO in fact we're supposed to read it from the style pointed to by text:style-name
                 break;
             default:

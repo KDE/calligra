@@ -17,24 +17,10 @@
    Boston, MA 02111-1307, USA.
 */
 
-#include <kdeversion.h>
 #include "kovariable.h"
 #include "kovariable.moc"
 #include <koDocumentInfo.h>
 #include <kozoomhandler.h>
-#include <klocale.h>
-#include <kdebug.h>
-#include <kglobal.h>
-#include <qdom.h>
-#include <koDocument.h>
-#include <kdialogbase.h>
-#include <kconfig.h>
-#include <kinstance.h>
-#include <kaboutdata.h>
-#include <qstringlist.h>
-#include <qcombobox.h>
-#include <qvaluelist.h>
-#include <qradiobutton.h>
 #include "timeformatwidget_impl.h"
 #include "dateformatwidget_impl.h"
 #include "kocommand.h"
@@ -43,10 +29,24 @@
 #include "kooasiscontext.h"
 
 #include <koxmlwriter.h>
+#include <koDocument.h>
+#include <koxmlns.h>
 
-#if KDE_IS_VERSION(3, 2, 0)
+#include <klocale.h>
+#include <kdebug.h>
+#include <kglobal.h>
+#include <kdialogbase.h>
+#include <kconfig.h>
+#include <kdeversion.h>
+#include <kinstance.h>
 #include <kcalendarsystem.h>
-#endif
+#include <kaboutdata.h>
+
+#include <qstringlist.h>
+#include <qcombobox.h>
+#include <qvaluelist.h>
+#include <qdom.h>
+#include <qradiobutton.h>
 
 class KoVariableSettings::KoVariableSettingPrivate
 {
@@ -696,7 +696,7 @@ KoVariable* KoVariableCollection::loadOasisField( KoTextDocument* textdoc, const
     int type = -1;
     if ( tagName.endsWith( "date" ) || tagName.endsWith( "time" ) )
     {
-        QString dataStyleName = tag.attribute( "style:data-style-name" );
+        QString dataStyleName = tag.attributeNS( KoXmlNS::style, "data-style-name", QString::null );
         QString dateFormat = "locale";
         const KoOasisStyles::DataFormatsMap& map = context.oasisStyles().dataFormats();
         KoOasisStyles::DataFormatsMap::const_iterator it = map.find( dataStyleName );
@@ -1101,9 +1101,9 @@ void KoDateVariable::loadOasis( const QDomElement &elem, KoOasisContext& /*conte
     if ( tagName == "text:date" ) // current (or fixed) date
     {
         // Standard form of the date is in text:date-value. Example: 2004-01-21T10:57:05
-        QDateTime dt(QDate::fromString(elem.attribute("text:date-value"), Qt::ISODate));
+        QDateTime dt(QDate::fromString(elem.attributeNS( KoXmlNS::text, "date-value", QString::null), Qt::ISODate));
 
-        bool fixed = (elem.hasAttribute("text:fixed") && elem.attribute("text:fixed")=="true");
+        bool fixed = (elem.hasAttributeNS( KoXmlNS::text, "fixed") && elem.attributeNS( KoXmlNS::text, "fixed", QString::null)=="true");
         if (!dt.isValid())
             fixed = false; // OOo docs say so: not valid = current datetime
         if ( fixed )
@@ -1117,7 +1117,7 @@ void KoDateVariable::loadOasis( const QDomElement &elem, KoOasisContext& /*conte
         m_subtype = VST_DATE_CREATE_FILE;
     else if ( tagName.startsWith( "text:modification" ) )
         m_subtype = VST_DATE_MODIFY_FILE;
-    m_correctDate = elem.attribute( "text:date-adjust" ).toInt();
+    m_correctDate = elem.attributeNS( KoXmlNS::text, "date-adjust", QString::null ).toInt();
 }
 
 QStringList KoDateVariable::actionTexts()
@@ -1297,15 +1297,15 @@ void KoTimeVariable::loadOasis( const QDomElement &elem, KoOasisContext& /*conte
     if ( tagName == "text:time" ) // current (or fixed) time
     {
         // Use QDateTime to work around a possible problem of QTime::fromString in Qt 3.2.2
-        QDateTime dt(QDateTime::fromString(elem.attribute("text:time-value"), Qt::ISODate));
+        QDateTime dt(QDateTime::fromString(elem.attributeNS( KoXmlNS::text, "time-value", QString::null), Qt::ISODate));
 
-        bool fixed = (elem.hasAttribute("text:fixed") && elem.attribute("text:fixed")=="true");
+        bool fixed = (elem.hasAttributeNS( KoXmlNS::text, "fixed") && elem.attributeNS( KoXmlNS::text, "fixed", QString::null)=="true");
         if (!dt.isValid())
             fixed = false; // OOo docs say so: not valid = current datetime
         if ( fixed )
             m_varValue = QVariant( dt.time() );
         m_subtype = fixed ? VST_TIME_FIX : VST_TIME_CURRENT;
-        m_correctTime = elem.attribute( "text:time-adjust" ).toInt();
+        m_correctTime = elem.attributeNS( KoXmlNS::text, "time-adjust", QString::null ).toInt();
     }
 }
 
@@ -1459,7 +1459,7 @@ void KoCustomVariable::loadOasis( const QDomElement &elem, KoOasisContext& /*con
     // - user-defined is related to meta::user-defined in meta.xml
     if ( tagName == "text:variable-set"
          || tagName == "text:user-defined" ) {
-        m_varValue = elem.attribute( "text:name" );
+        m_varValue = elem.attributeNS( KoXmlNS::text, "name", QString::null );
         setValue( elem.text() );
     }
 }
@@ -1654,9 +1654,9 @@ void KoPgNumVariable::loadOasis( const QDomElement &elem, KoOasisContext& /*cont
     if (afterText == "page-number") {
         m_subtype = VST_PGNUM_CURRENT;
 
-        if (elem.hasAttribute("text:select-page"))
+        if (elem.hasAttributeNS( KoXmlNS::text, "select-page"))
         {
-            const QString select = elem.attribute("text:select-page");
+            const QString select = elem.attributeNS( KoXmlNS::text, "select-page", QString::null);
             if (select == "previous")
                 m_subtype = VST_PGNUM_PREVIOUS;
             else if (select == "next")
@@ -1806,7 +1806,7 @@ void KoFieldVariable::loadOasis( const QDomElement &elem, KoOasisContext& /*cont
 {
     const QCString afterText( elem.tagName().latin1() + 5 );
     if (afterText == "file-name") {
-        const QCString display = elem.attribute("text:display").latin1();
+        const QCString display = elem.attributeNS( KoXmlNS::text, "display", QString::null).latin1();
         if (display == "path")
             m_subtype = VST_DIRECTORYNAME;
         else if (display == "name")
@@ -2125,7 +2125,7 @@ void KoLinkVariable::loadOasis( const QDomElement &elem, KoOasisContext& /*conte
 {
     const QCString afterText( elem.tagName().latin1() + 5 );
     if (afterText == "a") {
-        m_url = elem.attribute("xlink:href");
+        m_url = elem.attributeNS( KoXmlNS::xlink, "href", QString::null);
         m_varValue = QVariant(elem.text());
     }
 }

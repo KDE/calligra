@@ -22,10 +22,12 @@
 #include "kotextformatter.h"
 #include "kotextformat.h"
 #include "koparagcounter.h"
-#include <kdebug.h>
-#include <kdeversion.h>
 #include "kocommand.h"
 #include "kooasiscontext.h"
+#include <koxmlns.h>
+#include <kdebug.h>
+#include <kdeversion.h>
+
 //#define DEBUG_PAINTING
 
 //// Note that many methods are implemented in korichtext.cpp
@@ -1482,7 +1484,7 @@ KoTextParag* KoTextDocument::loadOasisText( const QDomElement& bodyElem, KoOasis
         {
             kdDebug(32500)<<" heading \n";
             context.fillStyleStack( tag, "text:style-name" );
-            int level = tag.attribute( "text:level" ).toInt();
+            int level = tag.attributeNS( KoXmlNS::text, "level", QString::null ).toInt();
             bool listOK = false;
             // When a heading is inside a list, it seems that the list prevails.
             // Example:
@@ -1496,9 +1498,9 @@ KoTextParag* KoTextDocument::loadOasisText( const QDomElement& bodyElem, KoOasis
             // === The new method for this is that we simply override it in parseList, afterwards.
             listOK = context.pushOutlineListLevelStyle( level );
             int restartNumbering = -1;
-            if ( tag.hasAttribute( "text:start-value" ) )
+            if ( tag.hasAttributeNS( KoXmlNS::text, "start-value" ) )
                 // OASIS extension http://lists.oasis-open.org/archives/office/200310/msg00033.html
-                restartNumbering = tag.attribute( "text:start-value" ).toInt();
+                restartNumbering = tag.attributeNS( KoXmlNS::text, "start-value", QString::null ).toInt();
 
             KoTextParag *parag = createParag( this, lastParagraph, nextParagraph );
             parag->loadOasis( tag, context, styleColl, pos );
@@ -1545,12 +1547,12 @@ KoTextParag* KoTextDocument::loadList( const QDomElement& list, KoOasisContext& 
     //kdDebug(30518) << k_funcinfo << "parsing list"<< endl;
 
     const QString oldListStyleName = context.currentListStyleName();
-    if ( list.hasAttribute( "text:style-name" ) )
-        context.setCurrentListStyleName( list.attribute( "text:style-name" ) );
+    if ( list.hasAttributeNS( KoXmlNS::text, "style-name" ) )
+        context.setCurrentListStyleName( list.attributeNS( KoXmlNS::text, "style-name", QString::null ) );
     bool listOK = !context.currentListStyleName().isEmpty();
     int level;
     if ( list.tagName() == "text:numbered-paragraph" )
-        level = list.attribute( "text:level", "1" ).toInt();
+        level = list.attributeNS( KoXmlNS::text, "level", "1" ).toInt();
     else
         level = context.listStyleStack().level() + 1;
     if ( listOK )
@@ -1564,8 +1566,8 @@ KoTextParag* KoTextDocument::loadList( const QDomElement& list, KoOasisContext& 
     {
         // A numbered-paragraph contains paragraphs directly (it's both a list and a list-item)
         int restartNumbering = -1;
-        if ( list.hasAttribute( "text:start-value" ) )
-            restartNumbering = list.attribute( "text:start-value" ).toInt();
+        if ( list.hasAttributeNS( KoXmlNS::text, "start-value" ) )
+            restartNumbering = list.attributeNS( KoXmlNS::text, "start-value", QString::null ).toInt();
         KoTextParag* oldLast = lastParagraph;
         lastParagraph = loadOasisText( list, context, lastParagraph, styleColl, nextParagraph );
         KoTextParag* firstListItem = oldLast ? oldLast->next() : firstParag();
@@ -1579,8 +1581,8 @@ KoTextParag* KoTextDocument::loadList( const QDomElement& list, KoOasisContext& 
         {
             QDomElement listItem = n.toElement();
             int restartNumbering = -1;
-            if ( listItem.hasAttribute( "text:start-value" ) )
-                restartNumbering = listItem.attribute( "text:start-value" ).toInt();
+            if ( listItem.hasAttributeNS( KoXmlNS::text, "start-value" ) )
+                restartNumbering = listItem.attributeNS( KoXmlNS::text, "start-value", QString::null ).toInt();
             KoTextParag* oldLast = lastParagraph;
             lastParagraph = loadOasisText( listItem, context, lastParagraph, styleColl, nextParagraph );
             KoTextParag* firstListItem = oldLast ? oldLast->next() : firstParag();

@@ -20,11 +20,15 @@
 #include "kostyle.h"
 #include "kooasiscontext.h"
 #include "koparagcounter.h"
+
 #include <koOasisStyles.h>
 #include <koGenStyles.h>
 #include <koxmlwriter.h>
+#include <koxmlns.h>
+
 #include <kdebug.h>
 #include <klocale.h>
+
 #include <qdom.h>
 
 //necessary to create unique shortcut
@@ -83,7 +87,7 @@ void KoStyleCollection::loadOasisStyleTemplates( KoOasisContext& context )
 
         if(styleList().count() > followingStyles.count() )
         {
-            QString following = styleElem.attribute( "style:next-style-name" );
+            QString following = styleElem.attributeNS( KoXmlNS::style, "next-style-name", QString::null );
             followingStyles.append( following );
         }
         else
@@ -496,13 +500,13 @@ void KoParagStyle::loadStyle( QDomElement & parentElem, int docVersion )
 void KoParagStyle::loadStyle( QDomElement & styleElem, KoOasisContext& context )
 {
     // Load name
-    m_name = styleElem.attribute( "style:name" );
-    m_displayName = styleElem.attribute( "style:display-name" );
+    m_name = styleElem.attributeNS( KoXmlNS::style, "name", QString::null );
+    m_displayName = styleElem.attributeNS( KoXmlNS::style, "display-name", QString::null );
 
     // OOo hack
     //m_bOutline = m_name.startsWith( "Heading" );
     // real OASIS solution:
-    m_bOutline = styleElem.hasAttribute( "style:default-outline-level" );
+    m_bOutline = styleElem.hasAttributeNS( KoXmlNS::style, "default-outline-level" );
 
     context.styleStack().save();
     context.addStyles( &styleElem ); // Load all parents - only because we don't support inheritance.
@@ -512,9 +516,9 @@ void KoParagStyle::loadStyle( QDomElement & styleElem, KoOasisContext& context )
     // loadOasisParagLayout doesn't load the counter. It's modelled differently for parags and for styles.
     int level = 0;
     bool listOK = false;
-    const QString listStyleName = styleElem.attribute( "style:list-style-name" );
+    const QString listStyleName = styleElem.attributeNS( KoXmlNS::style, "list-style-name", QString::null );
     if ( m_bOutline ) {
-        level = styleElem.attribute( "style:default-outline-level" ).toInt(); // 1-based
+        level = styleElem.attributeNS( KoXmlNS::style, "default-outline-level", QString::null ).toInt(); // 1-based
         listOK = context.pushOutlineListLevelStyle( level );
         // allow overriding the outline numbering, see http://lists.oasis-open.org/archives/office/200310/msg00033.html
         if ( !listStyleName.isEmpty() )
@@ -531,7 +535,7 @@ void KoParagStyle::loadStyle( QDomElement & styleElem, KoOasisContext& context )
         // 2) for KWord's own loading/saving, to add a hack into the file format, say
         // style:default-level.
         // Note that default-level defaults to "1", i.e. works for non-nested OOo lists too.
-        level = styleElem.attribute( "style:default-level", "1" ).toInt(); // 1-based
+        level = styleElem.attributeNS( KoXmlNS::style, "default-level", "1" ).toInt(); // 1-based
         listOK = !listStyleName.isEmpty();
         if ( listOK )
             listOK = context.pushListLevelStyle( listStyleName, level );

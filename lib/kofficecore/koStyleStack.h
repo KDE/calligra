@@ -21,6 +21,8 @@
 #ifndef KOSTYLESTACK_H
 #define KOSTYLESTACK_H
 
+#include <kdemacros.h>
+
 #include <qvaluelist.h>
 #include <qdom.h>
 #include <qvaluestack.h>
@@ -84,24 +86,49 @@ public:
      * where detail is e.g. left, right, top or bottom.
      * This allows to also find 'name' alone (e.g. padding implies padding-left, padding-right etc.)
      */
-    bool hasAttribute( const QString& name, const QString& detail=QString::null ) const;
+    bool hasAttribute( const QString& name, const QString& detail = QString::null ) const KDE_DEPRECATED;
 
     /**
      * Search for the attribute called 'name', starting on top of the stack,
      * and return it.
      */
-    QString attribute( const QString& name, const QString& detail=QString::null ) const;
+    QString attribute( const QString& name, const QString& detail = QString::null ) const KDE_DEPRECATED;
+
+    /**
+     * Check if any of the styles on the stack has an attribute called 'name'-'detail'
+     * where detail is e.g. left, right, top or bottom.
+     * This allows to also find 'name' alone (e.g. padding implies padding-left, padding-right etc.)
+     */
+    bool hasAttributeNS( const char* nsURI, const char* localName, const char* detail = 0 ) const;
+
+    /**
+     * Search for the attribute called 'name', starting on top of the stack,
+     * and return it.
+     */
+    QString attributeNS( const char* nsURI, const char* localName, const char* detail = 0 ) const;
 
     /**
      * Check if any of the styles on the stack has a child node called 'name'.
      */
-    bool hasChildNode(const QString & name ) const;
+    bool hasChildNode( const QString & name ) const KDE_DEPRECATED;
 
     /**
      * Search for a child node called 'name', starting on top of the stack,
      * and return it.
      */
-    QDomNode childNode(const QString & name ) const;
+    QDomElement childNode( const QString & name ) const KDE_DEPRECATED;
+
+    /**
+     * Check if any of the styles on the stack has a child element called 'localName' in the namespace 'nsURI'.
+     */
+    bool hasChildNodeNS( const char* nsURI, const char* localName ) const;
+
+    /**
+     * Search for a child element which has a child element called 'localName'
+     * in the namespace 'nsURI' starting on top of the stack,
+     * and return it.
+     */
+    QDomElement childNodeNS( const char* nsURI, const char* localName ) const;
 
     /**
      * Special case for the current font size, due to special handling of fo:font-size="115%".
@@ -117,7 +144,7 @@ public:
     /**
      * Add properties name
      */
-    void setTypeProperties(const QString &typeProperties);
+    void setTypeProperties(const char* typeProperties);
 
 private:
     /// For save/restore: stack of "marks". Each mark is an index in m_stack.
@@ -131,7 +158,7 @@ private:
 
     KoStyleStack( const KoStyleStack& );
     void operator=( const KoStyleStack& );
-    QString m_propertiesTagName;
+    QCString m_propertiesTagName;
 };
 
 #endif /* KOSTYLESTACK_H */
