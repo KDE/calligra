@@ -18,6 +18,7 @@ KSpreadInsertHandler::KSpreadInsertHandler( KSpreadView* view, QWidget* widget, 
 KSpreadInsertHandler::~KSpreadInsertHandler()
 {
     ((QWidget*)target())->setCursor( arrowCursor );
+    m_view->resetInsertHandle();
 }
 
 bool KSpreadInsertHandler::eventFilter( QObject*, QEvent* ev )

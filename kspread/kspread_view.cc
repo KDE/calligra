@@ -298,6 +298,8 @@ KSpreadView::KSpreadView( QWidget *_parent, const char *_name, KSpreadDoc* doc )
     dcopObject(); // build it
     m_bLoading =false;
 
+    m_pInsertHandle = 0L;
+
     m_selectionInfo = new KSpreadSelection(this);
 
     // Vert. Scroll Bar
@@ -1258,6 +1260,9 @@ KSpreadView::~KSpreadView()
     delete m_popupListChoose;
     delete m_sbCalcLabel;
     delete m_dcop;
+
+    delete m_pInsertHandle;
+    m_pInsertHandle = 0L;
 }
 
 
@@ -4813,27 +4818,36 @@ void KSpreadView::insertObject()
     return;
   }
 
-  (void)new KSpreadInsertHandler( this, m_pCanvas, e );
+  //Don't start handles more than once
+  if( m_pInsertHandle )
+    delete m_pInsertHandle;
+
+  m_pInsertHandle = new KSpreadInsertHandler( this, m_pCanvas, e );
   m_pDoc->emitEndOperation();
 }
 
 void KSpreadView::insertChart()
 {
-    if( util_isColumnSelected(selection()) || util_isRowSelected(selection()) )
-    {
-        KMessageBox::error( this, i18n("Area too large!"));
-        return;
-    }
-    QValueList<KoDocumentEntry> vec = KoDocumentEntry::query( "'KOfficeChart' in ServiceTypes" );
-    if ( vec.isEmpty() )
-    {
-        KMessageBox::error( this, i18n("No charting component registered") );
-        return;
-    }
-    m_pDoc->emitBeginOperation(false);
+  if( util_isColumnSelected(selection()) || util_isRowSelected(selection()) )
+  {
+    KMessageBox::error( this, i18n("Area too large!"));
+    return;
+  }
+  QValueList<KoDocumentEntry> vec = KoDocumentEntry::query( "'KOfficeChart' in ServiceTypes" );
+  if ( vec.isEmpty() )
+  {
+    KMessageBox::error( this, i18n("No charting component registered") );
+    return;
+  }
 
-    (void)new KSpreadInsertHandler( this, m_pCanvas, vec[0], TRUE );
-    m_pDoc->emitEndOperation();
+  //Don't start handles more than once
+  if( m_pInsertHandle )
+    delete m_pInsertHandle;
+
+  m_pDoc->emitBeginOperation(false);
+
+  m_pInsertHandle = new KSpreadInsertHandler( this, m_pCanvas, vec[0], TRUE );
+  m_pDoc->emitEndOperation();
 }
 
 

@@ -55,6 +55,7 @@ class KToggleAction;
 class KoPartSelectAction;
 class KSpreadSpell;
 class KSpreadMacroUndoAction;
+class KSpreadInsertHandler;
 
 class KActionMenu;
 
@@ -181,15 +182,17 @@ public:
     void insertTable( KSpreadSheet* table );
     QColor borderColor() const;
 
-  KSpreadSelection* selectionInfo()const { return m_selectionInfo; }
-  QRect selection() const { return selectionInfo()->selection(); }
-  QPoint marker() const { return selectionInfo()->marker(); }
-  void updateShowTableMenu();
+    KSpreadSelection* selectionInfo()const { return m_selectionInfo; }
+    QRect selection() const { return selectionInfo()->selection(); }
+    QPoint marker() const { return selectionInfo()->marker(); }
+    void updateShowTableMenu();
 
-  /**
-   * Repaint any cell with the paintDirty flag that is visible in this view
-   */
-  void paintUpdates();
+    /**
+     * Repaint any cell with the paintDirty flag that is visible in this view
+     */
+    void paintUpdates();
+
+    void resetInsertHandle() { m_pInsertHandle = 0L; }
 
 public slots:
     /**
@@ -721,6 +724,8 @@ private:
   KSpreadSelection* m_selectionInfo;
   QMap<KSpreadSheet*, QPoint> savedAnchors;
   QMap<KSpreadSheet*, QPoint> savedMarkers;
+
+  KSpreadInsertHandler* m_pInsertHandle;
 
   /* helper functions */
     void initializeCalcActions();
