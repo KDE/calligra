@@ -110,7 +110,7 @@ private:
      * (Yes, the counter is increased by the method.)
      */
     QString makeAutomaticStyleName(const QString& prefix, ulong& counter) const;
-private: // ZIP methids
+private: // ZIP methods
     bool zipPrepareWriting(const QString& name);
     bool zipDoneWriting(void);
     bool zipWriteData(const char* str);
