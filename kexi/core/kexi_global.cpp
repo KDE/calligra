@@ -20,7 +20,7 @@
     Boston, MA 02111-1307, USA.
 */
 
-#include "kexi_version.h"
+#include "kexi_global.h"
 
 KEXICORE_EXPORT unsigned int Kexi::version()
 {
