@@ -61,6 +61,7 @@ public:
    * Reads the script @p filename from the hard disk and tries to execute it.
    *
    * @param args is the list of parameters passed to the main function
+   * @param filename is a string containing the name of the file to read
    *
    * @return the stringified exception or an empty string if everything was ok.
    *         This is a convenience function for @ref #runModule.
@@ -76,6 +77,8 @@ public:
    *        of "context" is deleted, you may no longer use the exception contained
    *        in "context". That means you may not extract the exception and destroy
    *        the KSContext object and then still use the exception object.
+   * @param filename is a string containing the name of the file to read
+   * @param name is the name of the module within the file
    * @param args is the list of parameters passed to the main function
    */
   bool runModule( KSContext& context, const QString& name, const QString& filename, const QStringList& args );
