@@ -170,7 +170,7 @@ void KPrPage::pasteObjs( const QByteArray & data )
     QString clip_str = QString::fromUtf8( data );
     if ( clip_str.isEmpty() ) return;
     m_doc->loadPastedObjs( clip_str,this );
-    m_objectList.last()->moveBy( m_doc->zoomHandler()->unzoomItX(20), m_doc->zoomHandler()->unzoomItY(20) );
+    m_objectList.last()->moveBy( 20,20 );
     m_objectList.last()->setSelected( true );
     m_doc->setModified(true);
 }
