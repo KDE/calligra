@@ -1773,6 +1773,7 @@ void KWDocument::drawBorders( QPainter *painter, const QRect & crect, bool clear
         painter->save();
         painter->setPen( QApplication::palette().active().color( QColorGroup::Dark ) );
         painter->setBrush( Qt::NoBrush );
+        const int shadowOffset = 3;
 
         for ( int k = 0; k < getPages(); k++ )
         {
@@ -1834,10 +1835,9 @@ void KWDocument::drawBorders( QPainter *painter, const QRect & crect, bool clear
                 {
                     painter->fillRect( repaintRect,
                                        QApplication::palette().active().brush( QColorGroup::Mid ) );
-                    const int offset = 3;
                     // Draw a shadow
-                    int topOffset = ( k==0 ) ? offset : 0; // leave a few pixels on top, only for first page
-                    QRect shadowRect( rightArea.left(), rightArea.top() + topOffset, offset, pageheight - topOffset );
+                    int topOffset = ( k==0 ) ? shadowOffset : 0; // leave a few pixels on top, only for first page
+                    QRect shadowRect( rightArea.left(), rightArea.top() + topOffset, shadowOffset, pageheight - topOffset );
                     shadowRect &= repaintRect; // intersect
                     if ( !shadowRect.isEmpty() )
                     {
@@ -1847,7 +1847,25 @@ void KWDocument::drawBorders( QPainter *painter, const QRect & crect, bool clear
                 }
             }
         }
-        painter->restore();
+        // Take care of the area at the bottom of the last page
+        int lastBottom = pageTop( getPages() );
+        if ( !embedded && crect.bottom() > lastBottom )
+        {
+            QRect bottomArea( 0, lastBottom, crect.width(), crect.bottom() - lastBottom + 1 );
+            QRect repaintRect = bottomArea.intersect( crect );
+            if ( !repaintRect.isEmpty() )
+            {
+                painter->fillRect( repaintRect,
+                                   QApplication::palette().active().brush( QColorGroup::Mid ) );
+                // Draw a shadow
+                int leftOffset = shadowOffset; // leave a few pixels on the left
+                QRect shadowRect( leftOffset, bottomArea.top(), paperWidth(), shadowOffset );
+                shadowRect &= repaintRect; // intersect
+                if ( !shadowRect.isEmpty() )
+                    painter->fillRect( shadowRect,
+                                       QApplication::palette().active().brush( QColorGroup::Shadow ) );
+            }
+        }
     }
 }
 
