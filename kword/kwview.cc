@@ -3269,8 +3269,11 @@ void KWView::frameSelectedChanged()
         QListIterator<KWFrame> it( selectedFrames );
         for ( ; it.current(); ++it )
         {
-            if ( it.current()->getFrameSet()->type()!=FT_PART)
+            if ( it.current()->getFrameSet()->type()!=FT_PART && it.current()->getFrameSet()->type()!=FT_CLIPART && it.current()->getFrameSet()->type()!= FT_PICTURE)
+            {
                 frameDifferentOfPart=true;
+                break;
+            }
         }
     }
     actionBackgroundColor->setEnabled( frameDifferentOfPart );
