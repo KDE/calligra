@@ -11,9 +11,8 @@ libkspreadcommon_la_SOURCES =  \
         digest.cc \
         commands.cc \
         damages.cc \
-				dependencies.cc \
-				formula.cc \
-				functions.cc \
+        dependencies.cc \
+        formula.cc \
         kspread_autofill.cc \
         kspread_canvas.cc \
         kspread_cell.cc \

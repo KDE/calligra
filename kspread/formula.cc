@@ -18,8 +18,11 @@
 */
 
 #include "formula.h"
-#include "functions.h"
 #include "kspread_value.h"
+
+#if 0
+#include "functions.h"
+#endif 
 
 #include <limits.h>
 
@@ -1397,7 +1400,10 @@ KSpreadValue Formula::eval() const
   unsigned index;
   KSpreadValue val1, val2;
   QValueVector<KSpreadValue> args;
+
+#if 0    
   Function* function;
+#endif
 
   for( unsigned pc = 0; pc < d->codes.count(); pc++ )
   {
@@ -1536,6 +1542,8 @@ KSpreadValue Formula::eval() const
 
       // calling function
       case Opcode::Function:
+        return KSpreadValue::errorVALUE();
+#if 0        
         if( stack.count() < index )
           return KSpreadValue::errorVALUE(); // not enough arguments
         args.clear();
@@ -1548,6 +1556,7 @@ KSpreadValue Formula::eval() const
         if( !function )
           return KSpreadValue::errorVALUE(); // no such function
         stack.push( function->exec( this, args ) );
+#endif        
         break;
 
       default:
