@@ -72,7 +72,8 @@ class PWidget;
 // remains unhandled, the M9r returns false and the Event has to be processed
 // by the calling method.
 // Note: The M9r is bound to a specific view and it won't work (correctly)
-// if you use one M9r for more than one view.
+// if you use one M9r for more than one view. Maybe I need some sort of
+// map or dict which relates a view to a M9r?
 // Whenever a repaint is needed (movement,...), the dirty rect has to be
 // set (i.e. something different to (0, 0, 0, 0)).
 // Some of the M9rs can be in two different "modes": Create and Manipulate
@@ -134,6 +135,10 @@ protected:
     // clicking 'Apply'.
     virtual void createPropertyDialog();
 
+    bool created() const { return m_created; }
+    QList<QRect> *handles() const { return m_handles; }
+
+private:
     GObject *m_object;
     Mode m_mode;
     bool first_call; // Whether this is the first call for this M9r (no hit test!)
@@ -143,7 +148,6 @@ protected:
     bool m_changed;           // true, if the Apply button is "active"
     bool m_created;           // dia created?
 
-private:
     QString m_type;         // Type of object (e.g. "Line", "Rectangle")
     QLineEdit *m_line;      // line ed. for the name field
     GraphiteView *m_view;   // "our" parent view
@@ -307,23 +311,14 @@ protected:
     GObject(const GObject &rhs);
     GObject(const QDomElement &element);
 
-    // rotatePoint rotates a given point. The "point" (x, y, or QPoint) passed as
-    // function argument is changed! (we're using radians!)
-    void rotatePoint(int &x, int &y, const double &angle, const QPoint &center) const;
-    void rotatePoint(unsigned int &x, unsigned int &y, const double &angle, const QPoint &center) const;
-    void rotatePoint(double &x, double &y, const double &angle, const QPoint &center) const;
-    void rotatePoint(QPoint &p, const double &angle, const QPoint &center) const;
+    bool boundingRectDirty() const { return m_boundingRectDirty; }
+    void setBoundingRectDirty(bool dirty=true) const { m_boundingRectDirty=dirty; }
+    void setBoundingRect(const QRect &br) const { m_boundingRect=br; }
 
-    // scalePoint scales a given point. The "point" (x, y, or QPoint) passed as
-    // function argument is changed!
-    void scalePoint(int &x, int &y, const double &xfactor, const double &yfactor,
-                    const QPoint &center) const;
-    void scalePoint(unsigned int &x, unsigned int &y, const double &xfactor,
-                    const double &yfactor, const QPoint &center) const;
-    void scalePoint(double &x, double &y, const double &xfactor, const double &yfactor,
-                    const QPoint &center) const;
-    void scalePoint(QPoint &p, const double &xfactor, const double &yfactor,
-                    const QPoint &center) const;
+    void setAngle(const double angle) const { m_angle=angle; }
+
+private:
+    GObject &operator=(const GObject &rhs); // don't assign the objects, clone them
 
     QString m_name;                    // name of the object
     State m_state;                     // are there handles to draw or not?
@@ -339,9 +334,6 @@ protected:
     QPen m_pen;
 
     bool m_ok;      // used to express errors (e.g. during loading)
-
-private:
-    GObject &operator=(const GObject &rhs); // don't assign the objects, clone them
 };
 
 
@@ -386,9 +378,7 @@ inline const double normalizeDeg(const double &deg) {
     return nDeg;
 }
 
-}; // namespace Graphite
-
-inline void GObject::rotatePoint(int &x, int &y, const double &angle, const QPoint &center) const {
+inline void rotatePoint(int &x, int &y, const double &angle, const QPoint &center) {
 
     double dx=static_cast<double>(x-center.x());
     double dy=static_cast<double>(center.y()-y); // Attention: Qt coordinate system!
@@ -398,7 +388,7 @@ inline void GObject::rotatePoint(int &x, int &y, const double &angle, const QPoi
     y=center.y()-Graphite::double2Int(dx*sinalpha+dy*cosalpha); // here too
 }
 
-inline void GObject::rotatePoint(unsigned int &x, unsigned int &y, const double &angle, const QPoint &center) const {
+inline void rotatePoint(unsigned int &x, unsigned int &y, const double &angle, const QPoint &center) {
 
     // This awkward stuff with the tmp variables is a workaround for
     // "old" compilers (egcs-1.1.2 :)
@@ -409,7 +399,7 @@ inline void GObject::rotatePoint(unsigned int &x, unsigned int &y, const double 
     y=static_cast<unsigned int>(_y);
 }
 
-inline void GObject::rotatePoint(double &x, double &y, const double &angle, const QPoint &center) const {
+inline void rotatePoint(double &x, double &y, const double &angle, const QPoint &center) {
 
     double dx=x-static_cast<double>(center.x());
     double dy=static_cast<double>(center.y())-y; // Attention: Qt coordinate system!
@@ -419,20 +409,20 @@ inline void GObject::rotatePoint(double &x, double &y, const double &angle, cons
     y=static_cast<double>(center.y())-(dx*sinalpha+dy*cosalpha); // here too
 }
 
-inline void GObject::rotatePoint(QPoint &p, const double &angle, const QPoint &center) const {
+inline void rotatePoint(QPoint &p, const double &angle, const QPoint &center) {
     rotatePoint(p.rx(), p.ry(), angle, center);
 }
 
-inline void GObject::scalePoint(int &x, int &y, const double &xfactor, const double &yfactor,
-                         const QPoint &center) const {
+inline void scalePoint(int &x, int &y, const double &xfactor, const double &yfactor,
+                         const QPoint &center) {
     if(xfactor<=0 || yfactor<=0)
         return;
     x=Graphite::double2Int( static_cast<double>(center.x()) + static_cast<double>(x-center.x())*xfactor );
     y=Graphite::double2Int( static_cast<double>(center.y()) + static_cast<double>(y-center.y())*yfactor );
 }
 
-inline void GObject::scalePoint(unsigned int &x, unsigned int &y, const double &xfactor,
-                         const double &yfactor, const QPoint &center) const {
+inline void scalePoint(unsigned int &x, unsigned int &y, const double &xfactor,
+                         const double &yfactor, const QPoint &center) {
     // This awkward stuff with the tmp variables is a workaround for
     // "old" compilers (egcs-1.1.2 :)
     int _x=static_cast<int>(x);
@@ -442,19 +432,20 @@ inline void GObject::scalePoint(unsigned int &x, unsigned int &y, const double &
     y=static_cast<unsigned int>(_y);
 }
 
-inline void GObject::scalePoint(double &x, double &y, const double &xfactor, const double &yfactor,
-                         const QPoint &center) const {
+inline void scalePoint(double &x, double &y, const double &xfactor, const double &yfactor,
+                         const QPoint &center) {
     if(xfactor<=0 || yfactor<=0)
         return;
     x=static_cast<double>(center.x()) + static_cast<double>(x-center.x())*xfactor;
     y=static_cast<double>(center.y()) + static_cast<double>(y-center.y())*yfactor;
 }
 
-inline void GObject::scalePoint(QPoint &p, const double &xfactor, const double &yfactor,
-                         const QPoint &center) const {
+inline void scalePoint(QPoint &p, const double &xfactor, const double &yfactor,
+                         const QPoint &center) {
     scalePoint(p.rx(), p.ry(), xfactor, yfactor, center);
 }
 
+}; // namespace Graphite
 
 // This *huge* class is needed to present the preview pixmap.
 // It is simply a plain Widget which tries to get all the free

@@ -56,7 +56,7 @@ GGroup::GGroup(const QDomElement &element) :
     GObject(element.namedItem(QString::fromLatin1("gobject")).toElement()),
     m_iterator(0L) {
 
-    if(!m_ok)
+    if(!isOk())
         return;
 
     static const QString &tagChildren=KGlobal::staticQString("children");
@@ -65,7 +65,7 @@ GGroup::GGroup(const QDomElement &element) :
 
     QDomElement children=element.namedItem(tagChildren).toElement();
     if(children.isNull()) {
-        m_ok=false;
+        setOk(false);
         return;
     }
 
@@ -133,7 +133,7 @@ bool GGroup::plugChild(GObject *child, const Position &pos) {
         else
             m_members.append(child);
     }
-    m_boundingRectDirty=true;
+    setBoundingRectDirty();
     return true;
 }
 
@@ -142,7 +142,7 @@ bool GGroup::unplugChild(GObject *child) {
     if(child==0L)
         return false;
     child->setParent(0L);
-    m_boundingRectDirty=true;
+    setBoundingRectDirty();
     return m_members.removeRef(child);
 }
 
@@ -199,7 +199,7 @@ void GGroup::recalculate() {
     QListIterator<GObject> it(m_members);
     for( ; it!=0L; ++it)
         it.current()->recalculate();
-    m_boundingRectDirty=true;
+    setBoundingRectDirty();
 }
 
 const GObject *GGroup::hit(const QPoint &p) const {
@@ -224,31 +224,32 @@ bool GGroup::intersects(const QRect &r) const {
 
 const QRect &GGroup::boundingRect() const {
 
-    if(!m_boundingRectDirty)
-        return m_boundingRect;
+    if(!boundingRectDirty())
+        return boundingRect();
 
     if(m_members.isEmpty()) {
-        m_boundingRect=QRect(0, 0, 0, 0);
-        m_boundingRectDirty=true;
-        return m_boundingRect;
+        setBoundingRect(QRect(0, 0, 0, 0));
+        setBoundingRectDirty(false);
+        return boundingRect();
     }
 
     QListIterator<GObject> it(m_members);
-    m_boundingRect=it.current()->boundingRect();
+    QRect br=it.current()->boundingRect();
     ++it;
     for( ; it!=0L; ++it) {
         QRect r=it.current()->boundingRect();
-        if(r.top()<m_boundingRect.top())
-            m_boundingRect.setTop(r.top());
-        if(r.left()<m_boundingRect.left())
-            m_boundingRect.setLeft(r.left());
-        if(r.bottom()>m_boundingRect.bottom())
-            m_boundingRect.setBottom(r.bottom());
-        if(r.right()>m_boundingRect.right())
-            m_boundingRect.setRight(r.right());
+        if(r.top()<br.top())
+            br.setTop(r.top());
+        if(r.left()<br.left())
+            br.setLeft(r.left());
+        if(r.bottom()>br.bottom())
+            br.setBottom(r.bottom());
+        if(r.right()>br.right())
+            br.setRight(r.right());
     }
-    m_boundingRectDirty=false;
-    return m_boundingRect;
+    setBoundingRect(br);
+    setBoundingRectDirty(false);
+    return boundingRect();
 }
 
 GObjectM9r *GGroup::createM9r(GraphitePart *part, GraphiteView *view,
@@ -267,7 +268,7 @@ void GGroup::setOrigin(const QPoint &o) {
     QListIterator<GObject> it(m_members);
     for( ; it!=0L; ++it)
         it.current()->move(dx, dy);
-    m_boundingRectDirty=true;
+    setBoundingRectDirty();
 }
 
 void GGroup::moveX(const int &dx) {
@@ -275,7 +276,7 @@ void GGroup::moveX(const int &dx) {
     QListIterator<GObject> it(m_members);
     for( ; it!=0L; ++it)
         it.current()->moveX(dx);
-    m_boundingRectDirty=true;
+    setBoundingRectDirty();
 }
 
 void GGroup::moveY(const int &dy) {
@@ -283,7 +284,7 @@ void GGroup::moveY(const int &dy) {
     QListIterator<GObject> it(m_members);
     for( ; it!=0L; ++it)
         it.current()->moveY(dy);
-    m_boundingRectDirty=true;
+    setBoundingRectDirty();
 }
 
 void GGroup::move(const int &dx, const int &dy) {
@@ -291,17 +292,16 @@ void GGroup::move(const int &dx, const int &dy) {
     QListIterator<GObject> it(m_members);
     for( ; it!=0L; ++it)
         it.current()->move(dx, dy);
-    m_boundingRectDirty=true;
+    setBoundingRectDirty();
 }
 
-void GGroup::rotate(const QPoint &center, const double &angle) {
+void GGroup::rotate(const QPoint &center, const double &ang) {
 
     QListIterator<GObject> it(m_members);
     for( ; it!=0L; ++it)
-        it.current()->rotate(center, angle);
-    m_angle+=angle;
-    m_angle=Graphite::normalizeRad(m_angle);
-    m_boundingRectDirty=true;
+        it.current()->rotate(center, ang);
+    setAngle(Graphite::normalizeRad(angle()+ang));
+    setBoundingRectDirty();
 }
 
 void GGroup::scale(const QPoint &origin, const double &xfactor, const double &yfactor) {
@@ -309,7 +309,7 @@ void GGroup::scale(const QPoint &origin, const double &xfactor, const double &yf
     QListIterator<GObject> it(m_members);
     for( ; it!=0L; ++it)
         it.current()->scale(origin, xfactor, yfactor);
-    m_boundingRectDirty=true;
+    setBoundingRectDirty();
 }
 
 void GGroup::resize(const QRect &brect) {
@@ -322,57 +322,57 @@ void GGroup::resize(const QRect &brect) {
     move(dx, dy);
 }
 
-void GGroup::setState(const State state) {
+void GGroup::setState(const State s) {
 
-    if(m_state==state)
+    if(state()==s)
         return;
-    m_state=state;
-    if(state==GObject::Handles || state==GObject::Rot_Handles)
+    GObject::setState(s);
+    if(s==GObject::Handles || s==GObject::Rot_Handles)
         return;
 
     QListIterator<GObject> it(m_members);
     for( ; it!=0L; ++it)
-        it.current()->setState(state);
+        it.current()->setState(s);
 }
 
-void GGroup::setFillStyle(const FillStyle &fillStyle) {
+void GGroup::setFillStyle(const FillStyle &fs) {
 
-    if(m_fillStyle==fillStyle)
+    if(fillStyle()==fs)
         return;
-    m_fillStyle=fillStyle;
+    GObject::setFillStyle(fs);
     QListIterator<GObject> it(m_members);
     for( ; it!=0L; ++it)
-        it.current()->setFillStyle(fillStyle);
+        it.current()->setFillStyle(fs);
 }
 
-void GGroup::setBrush(const QBrush &brush) {
+void GGroup::setBrush(const QBrush &b) {
 
-    if(m_brush==brush)
+    if(brush()==b)
         return;
-    m_brush=brush;
+    GObject::setBrush(b);
     QListIterator<GObject> it(m_members);
     for( ; it!=0L; ++it)
-        it.current()->setBrush(brush);
+        it.current()->setBrush(b);
 }
 
-void GGroup::setGradient(const Gradient &gradient) {
+void GGroup::setGradient(const Gradient &g) {
 
-    if(m_gradient==gradient)
+    if(gradient()==g)
         return;
-    m_gradient=gradient;
+    GObject::setGradient(g);
     QListIterator<GObject> it(m_members);
     for( ; it!=0L; ++it)
-        it.current()->setGradient(gradient);
+        it.current()->setGradient(g);
 }
 
-void GGroup::setPen(const QPen &pen) {
+void GGroup::setPen(const QPen &p) {
 
-    if(m_pen==pen)
+    if(pen()==p)
         return;
-    m_pen=pen;
+    GObject::setPen(p);
     QListIterator<GObject> it(m_members);
     for( ; it!=0L; ++it)
-        it.current()->setPen(pen);
+        it.current()->setPen(p);
 }
 
 
@@ -388,7 +388,7 @@ GGroupM9r::~GGroupM9r() {
 }
 
 void GGroupM9r::draw(QPainter &p) {
-    m_group->drawHandles(p, m_handles);
+    m_group->drawHandles(p, handles());
 }
 
 bool GGroupM9r::mouseMoveEvent(QMouseEvent */*e*/, QRect &/*dirty*/) {
@@ -401,35 +401,35 @@ bool GGroupM9r::mousePressEvent(QMouseEvent */*e*/, QRect &/*dirty*/) {
     // TODO
     // test
     kdDebug(37001) << "XXXXXXXXXXXXXXXXX Properties XXXXXXXXXXXXXXXXX" << endl;
-    kdDebug(37001) << "Name: " << m_object->name() << endl;
-    kdDebug(37001) << "Pen: color: " << m_object->pen().color().name() << " width: "
-                   << m_object->pen().width() << " style: "
-                   << (int)m_object->pen().style() << endl;
-    kdDebug(37001) << "Fill Style: " << m_object->fillStyle() << endl;
-    kdDebug(37001) << "Brush: color: " << m_object->brush().color().name()
-                   << " style: " << (int)m_object->brush().style() << endl;
-    kdDebug(37001) << "Gradient: color a: " << m_object->gradient().ca.name()
-                   << " color b: " << m_object->gradient().cb.name()
-                   << " type: " << (int)m_object->gradient().type
-                   << " xfactor: " << m_object->gradient().xfactor
-                   << " yfactor: " << m_object->gradient().yfactor
+    kdDebug(37001) << "Name: " << gobject()->name() << endl;
+    kdDebug(37001) << "Pen: color: " << gobject()->pen().color().name() << " width: "
+                   << gobject()->pen().width() << " style: "
+                   << (int)gobject()->pen().style() << endl;
+    kdDebug(37001) << "Fill Style: " << gobject()->fillStyle() << endl;
+    kdDebug(37001) << "Brush: color: " << gobject()->brush().color().name()
+                   << " style: " << (int)gobject()->brush().style() << endl;
+    kdDebug(37001) << "Gradient: color a: " << gobject()->gradient().ca.name()
+                   << " color b: " << gobject()->gradient().cb.name()
+                   << " type: " << (int)gobject()->gradient().type
+                   << " xfactor: " << gobject()->gradient().xfactor
+                   << " yfactor: " << gobject()->gradient().yfactor
                    << endl;
     kdDebug(37001) << "XXXXXXXXXXXXXXXXX Properties XXXXXXXXXXXXXXXXX" << endl;
     createPropertyDialog();
     exec();
     kdDebug(37001) << "XXXXXXXXXXXXXXXXX Properties XXXXXXXXXXXXXXXXX" << endl;
-    kdDebug(37001) << "Name: " << m_object->name() << endl;
-    kdDebug(37001) << "Pen: color: " << m_object->pen().color().name() << " width: "
-                   << m_object->pen().width() << " style: "
-                   << (int)m_object->pen().style() << endl;
-    kdDebug(37001) << "Fill Style: " << m_object->fillStyle() << endl;
-    kdDebug(37001) << "Brush: color: " << m_object->brush().color().name()
-                   << " style: " << (int)m_object->brush().style() << endl;
-    kdDebug(37001) << "Gradient: color a: " << m_object->gradient().ca.name()
-                   << " color b: " << m_object->gradient().cb.name()
-                   << " type: " << (int)m_object->gradient().type
-                   << " xfactor: " << m_object->gradient().xfactor
-                   << " yfactor: " << m_object->gradient().yfactor
+    kdDebug(37001) << "Name: " << gobject()->name() << endl;
+    kdDebug(37001) << "Pen: color: " << gobject()->pen().color().name() << " width: "
+                   << gobject()->pen().width() << " style: "
+                   << (int)gobject()->pen().style() << endl;
+    kdDebug(37001) << "Fill Style: " << gobject()->fillStyle() << endl;
+    kdDebug(37001) << "Brush: color: " << gobject()->brush().color().name()
+                   << " style: " << (int)gobject()->brush().style() << endl;
+    kdDebug(37001) << "Gradient: color a: " << gobject()->gradient().ca.name()
+                   << " color b: " << gobject()->gradient().cb.name()
+                   << " type: " << (int)gobject()->gradient().type
+                   << " xfactor: " << gobject()->gradient().xfactor
+                   << " yfactor: " << gobject()->gradient().yfactor
                    << endl;
     kdDebug(37001) << "XXXXXXXXXXXXXXXXX Properties XXXXXXXXXXXXXXXXX" << endl;
     return false;

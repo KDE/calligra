@@ -39,7 +39,7 @@ GLine::GLine(const GLine &rhs) : GObject(rhs), m_a(rhs.a()), m_b(rhs.b()) {
 GLine::GLine(const QDomElement &element) :
     GObject(element.namedItem(QString::fromLatin1("gobject")).toElement()) {
 
-    if(!m_ok)
+    if(!isOk())
         return;
 
     bool ok;
@@ -50,7 +50,7 @@ GLine::GLine(const QDomElement &element) :
     static const QString &attrY=KGlobal::staticQString("y");
 
     if(element.tagName()!=tagGLine) {
-        m_ok=false;
+        setOk(false);
         return;
     }
 
@@ -116,14 +116,14 @@ QDomElement GLine::save(QDomDocument &doc) const {
 
 void GLine::draw(QPainter &p, const QRect &rect, bool toPrinter) {
 
-    if(m_state==GObject::Deleted || (toPrinter && m_state==GObject::Invisible))
+    if(state()==GObject::Deleted || (toPrinter && state()==GObject::Invisible))
         return;
 
     if(!rect.intersects(boundingRect()))
         return;
 
     p.save();
-    p.setPen(m_pen); // adjust the pen if it's invisible (light grey)
+    p.setPen(pen()); // adjust the pen if it's invisible (light grey)
     p.drawLine(m_a, m_b);
     p.restore();
 }
@@ -136,11 +136,11 @@ void GLine::drawHandles(QPainter &p, QList<QRect> *handles) {
 
     int size;
     int offset;
-    if(m_state==Handles) {
+    if(state()==Handles) {
         size=GraphiteGlobal::self()->handleSize();
         offset=GraphiteGlobal::self()->handleOffset();
     }
-    else if(m_state==Rot_Handles) {
+    else if(state()==Rot_Handles) {
         size=GraphiteGlobal::self()->rotHandleSize();
         offset=GraphiteGlobal::self()->rotHandleOffset();
     }
@@ -157,7 +157,7 @@ void GLine::drawHandles(QPainter &p, QList<QRect> *handles) {
                      m_a.y()+Graphite::double2Int(static_cast<double>(m_b.y()-m_a.y())*0.5)-offset,
                      size, size);
 
-    if(m_state==Handles) {
+    if(state()==Handles) {
         p.drawRect(*r1);
         p.drawRect(*r2);
         if(r3)
@@ -223,14 +223,14 @@ const GLine *GLine::hit(const QPoint &p) const {
 
         // make it easier for the user to select something by
         // adding a (configurable) "fuzzy zone" :)
-        int w=Graphite::double2Int(static_cast<double>(m_pen.width())/2.0);
+        int w=Graphite::double2Int(static_cast<double>(pen().width())/2.0);
         int tmp1=fBorder-w;
         int tmp2=2*fBorder+w+1;
         QRect fuzzyZone=QRect( QMIN( m_a.x(), m_a.x() + ir ) - tmp1,
                                m_a.y() - tmp1, ir + tmp2, tmp2 );
         // Don't change the original point!
         QPoint tmp3(p);
-        rotatePoint(tmp3, -alpha, m_a);
+        Graphite::rotatePoint(tmp3, -alpha, m_a);
 
         if(fuzzyZone.contains(tmp3))
             return this;
@@ -274,12 +274,12 @@ bool GLine::intersects(const QRect &r) const {
 
 const QRect &GLine::boundingRect() const {
 
-    if(!m_boundingRectDirty)
-        return m_boundingRect;
-    m_boundingRect=QRect( QMIN(m_a.x(), m_b.x()), QMIN(m_a.y(), m_b.y()),
-                          QABS(m_a.x()-m_b.x()), QABS(m_a.y()-m_b.y()));
-    m_boundingRectDirty=false;
-    return m_boundingRect;
+    if(!boundingRectDirty())
+        return boundingRect();
+    setBoundingRect(QRect( QMIN(m_a.x(), m_b.x()), QMIN(m_a.y(), m_b.y()),
+                          QABS(m_a.x()-m_b.x()), QABS(m_a.y()-m_b.y())));
+    setBoundingRectDirty(false);
+    return boundingRect();
 }
 
 GObjectM9r *GLine::createM9r(GraphitePart *part, GraphiteView *view,
@@ -292,21 +292,21 @@ void GLine::setOrigin(const QPoint &origin) {
     m_b.setX(m_b.x()-m_a.x()+origin.x());
     m_b.setY(m_b.y()-m_a.y()+origin.y());
     m_a=origin;
-    m_boundingRectDirty=true;
+    setBoundingRectDirty();
 }
 
 void GLine::moveX(const int &dx) {
 
     m_a.setX(m_a.x()+dx);
     m_b.setX(m_b.x()+dx);
-    m_boundingRectDirty=true;
+    setBoundingRectDirty();
 }
 
 void GLine::moveY(const int &dy) {
 
     m_a.setY(m_a.y()+dy);
     m_b.setY(m_b.y()+dy);
-    m_boundingRectDirty=true;
+    setBoundingRectDirty();
 }
 
 void GLine::move(const int &dx, const int &dy) {
@@ -317,29 +317,33 @@ void GLine::move(const int &dx, const int &dy) {
 
 void GLine::rotate(const QPoint &center, const double &angle) {
 
-    rotatePoint(m_a, angle, center);
-    rotatePoint(m_b, angle, center);
-    m_boundingRectDirty=true;
+    Graphite::rotatePoint(m_a, angle, center);
+    Graphite::rotatePoint(m_b, angle, center);
+    setBoundingRectDirty();
 }
 
 const double &GLine::angle() const {
 
-    m_angle=std::atan( static_cast<double>(m_b.y()-m_a.y()) /
-                       static_cast<double>(m_b.x()-m_a.x()) );
-    return m_angle;
+    // [FIXME]: Do we really want that to be the angle??? (Werner)
+    // Normally the angle should be the angle which the object was
+    // rotated by... and not the angle of the line. This is a special case
+    // though, hmmm.... We really don't want that one here!
+    setAngle(std::atan( static_cast<double>(m_b.y()-m_a.y()) /
+                        static_cast<double>(m_b.x()-m_a.x()) ));
+    return angle();
 }
 
 void GLine::scale(const QPoint &origin, const double &xfactor, const double &yfactor) {
 
-    scalePoint(m_a, xfactor, yfactor, origin);
-    scalePoint(m_b, xfactor, yfactor, origin);
-    m_boundingRectDirty=true;
+    Graphite::scalePoint(m_a, xfactor, yfactor, origin);
+    Graphite::scalePoint(m_b, xfactor, yfactor, origin);
+    setBoundingRectDirty();
 }
 
 void GLine::resize(const QRect &boundingRect) {
 
-    m_boundingRect=boundingRect;
-    m_boundingRectDirty=false;
+    setBoundingRect(boundingRect);
+    setBoundingRectDirty(false);
     m_a=boundingRect.topLeft();
     m_b=boundingRect.bottomRight();
 }
@@ -357,7 +361,7 @@ GLineM9r::~GLineM9r() {
 }
 
 void GLineM9r::draw(QPainter &p) {
-    m_line->drawHandles(p, m_handles);
+    m_line->drawHandles(p, handles());
 }
 
 bool GLineM9r::mouseMoveEvent(QMouseEvent */*e*/, QRect &/*dirty*/) {

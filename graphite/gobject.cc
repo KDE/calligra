@@ -185,15 +185,15 @@ void GObjectM9r::createPropertyDialog() {
 
 void G1DObjectM9r::slotApply() {
 
-    m_object->setPen(QPen(m_color->color(),
-                          m_width->value(),
-                          static_cast<Qt::PenStyle>(m_style->currentItem())));
+    gobject()->setPen(QPen(m_color->color(),
+                         m_width->value(),
+                         static_cast<Qt::PenStyle>(m_style->currentItem())));
     GObjectM9r::slotApply();
 }
 
 void G1DObjectM9r::createPropertyDialog() {
 
-    if(m_created)
+    if(created())
         return;
 
     GObjectM9r::createPropertyDialog();
@@ -208,14 +208,14 @@ void G1DObjectM9r::createPropertyDialog() {
     grid->addWidget(label, 0, 0);
 
     m_width=new QSpinBox(1, 100, 1, frame);
-    m_width->setValue(m_object->pen().width());
+    m_width->setValue(gobject()->pen().width());
     connect(m_width, SIGNAL(valueChanged(int)), this, SLOT(slotChanged(int)));
     grid->addWidget(m_width, 0, 2);
 
     label=new QLabel(i18n("Color:"), frame);
     grid->addWidget(label, 1, 0);
 
-    m_color=new KColorButton(m_object->pen().color(), frame);
+    m_color=new KColorButton(gobject()->pen().color(), frame);
     connect(m_color, SIGNAL(changed(const QColor &)), this,
             SLOT(slotChanged(const QColor &)));
     grid->addWidget(m_color, 1, 2);
@@ -238,7 +238,7 @@ void G1DObjectM9r::createPropertyDialog() {
         m_style->insertItem(*pm);
     }
     connect(m_style, SIGNAL(activated(int)), this, SLOT(slotChanged(int)));
-    m_style->setCurrentItem(m_object->pen().style());
+    m_style->setCurrentItem(gobject()->pen().style());
     grid->addWidget(m_style, 2, 2);
     grid->setColStretch(1, 1);
     grid->setColStretch(3, 10);
@@ -263,14 +263,14 @@ void G2DObjectM9r::slotApply() {
     int id=m_style->id(m_style->selected());
 
     if(id==0) {
-        m_object->setBrush(QBrush());
-        m_object->setFillStyle(GObject::Brush);
+        gobject()->setBrush(QBrush());
+        gobject()->setFillStyle(GObject::Brush);
     }
     else if(id==1) {
-        m_object->setBrush(QBrush(m_brushColor->color(),
+        gobject()->setBrush(QBrush(m_brushColor->color(),
                                   static_cast<Qt::BrushStyle>
                                   (m_brushStyle->currentItem()+1)));
-        m_object->setFillStyle(GObject::Brush);
+        gobject()->setFillStyle(GObject::Brush);
     }
     else {
         Gradient g;
@@ -280,8 +280,8 @@ void G2DObjectM9r::slotApply() {
                (m_gradientStyle->currentItem());
         g.xfactor=m_xfactor->value();
         g.yfactor=m_yfactor->value();
-        m_object->setGradient(g);
-        m_object->setFillStyle(GObject::GradientFilled);
+        gobject()->setGradient(g);
+        gobject()->setFillStyle(GObject::GradientFilled);
     }
     G1DObjectM9r::slotApply();
 }
@@ -294,7 +294,7 @@ void G2DObjectM9r::resizeEvent(QResizeEvent *e) {
 
 void G2DObjectM9r::createPropertyDialog() {
 
-    if(m_created)
+    if(created())
         return;
 
     G1DObjectM9r::createPropertyDialog();
@@ -313,10 +313,10 @@ void G2DObjectM9r::createPropertyDialog() {
     leftbox->addWidget(m_style);
     connect(m_style, SIGNAL(clicked(int)),
             this, SLOT(slotChanged(int)));
-    if(m_object->brush().style()==Qt::NoBrush)
+    if(gobject()->brush().style()==Qt::NoBrush)
         m_style->setButton(0);
     else
-        m_style->setButton(static_cast<int>(m_object->fillStyle())+1);
+        m_style->setButton(static_cast<int>(gobject()->fillStyle())+1);
     m_style->setExclusive(true);
 
     QVGroupBox *previewbox=new QVGroupBox(i18n("Preview:"), fill);
@@ -345,7 +345,7 @@ void G2DObjectM9r::createPropertyDialog() {
     grid=new QGridLayout(widget, 5, 4, KDialog::marginHint(), KDialog::spacingHint());
     label=new QLabel(i18n("Color:"), widget);
     grid->addWidget(label, 1, 0);
-    m_brushColor=new KColorButton(m_object->brush().color(), widget);
+    m_brushColor=new KColorButton(gobject()->brush().color(), widget);
     connect(m_brushColor, SIGNAL(changed(const QColor &)), this,
             SLOT(slotChanged(const QColor &)));
     grid->addWidget(m_brushColor, 1, 2);
@@ -369,7 +369,7 @@ void G2DObjectM9r::createPropertyDialog() {
             << i18n("Diagonal Lines (\\)")
             << i18n("Diagonal Crossing Lines");
     m_brushStyle->insertStringList(content);
-    int current=static_cast<int>(m_object->brush().style());
+    int current=static_cast<int>(gobject()->brush().style());
     if(current==0) ++current;
     m_brushStyle->setCurrentItem(current-1);
     connect(m_brushStyle, SIGNAL(activated(int)),
@@ -390,11 +390,11 @@ void G2DObjectM9r::createPropertyDialog() {
 
     label=new QLabel(i18n("Colors:"), widget);
     grid->addWidget(label, 0, 0);
-    m_gradientCA=new KColorButton(m_object->gradient().ca, widget);
+    m_gradientCA=new KColorButton(gobject()->gradient().ca, widget);
     connect(m_gradientCA, SIGNAL(changed(const QColor &)), this,
             SLOT(slotChanged(const QColor &)));
     grid->addWidget(m_gradientCA, 0, 2);
-    m_gradientCB=new KColorButton(m_object->gradient().cb, widget);
+    m_gradientCB=new KColorButton(gobject()->gradient().cb, widget);
     connect(m_gradientCB, SIGNAL(changed(const QColor &)), this,
             SLOT(slotChanged(const QColor &)));
     grid->addWidget(m_gradientCB, 1, 2);
@@ -411,7 +411,7 @@ void G2DObjectM9r::createPropertyDialog() {
             << i18n("PipeCross")
             << i18n("Elliptical");
     m_gradientStyle->insertStringList(content);
-    m_gradientStyle->setCurrentItem(static_cast<int>(m_object->gradient().type));
+    m_gradientStyle->setCurrentItem(static_cast<int>(gobject()->gradient().type));
     connect(m_gradientStyle, SIGNAL(activated(int)),
             this, SLOT(slotChanged(int)));
     grid->addWidget(m_gradientStyle, 2, 2);
@@ -429,7 +429,7 @@ void G2DObjectM9r::createPropertyDialog() {
     QGridLayout *factorgrid=new QGridLayout(wbox, 2, 2, KDialog::spacingHint());
     label=new QLabel(i18n("X-Factor:"), widget);
     factorgrid->addWidget(label, 0, 0);
-    m_xfactor=new QSlider(-200, 200, 10, m_object->gradient().xfactor,
+    m_xfactor=new QSlider(-200, 200, 10, gobject()->gradient().xfactor,
                           Qt::Horizontal, widget);
     connect(m_xfactor, SIGNAL(valueChanged(int)),
             this, SLOT(slotChanged(int)));
@@ -438,7 +438,7 @@ void G2DObjectM9r::createPropertyDialog() {
 
     label=new QLabel(i18n("Y-Factor:"), widget);
     factorgrid->addWidget(label, 1, 0);
-    m_yfactor=new QSlider(-200, 200, 10, m_object->gradient().yfactor,
+    m_yfactor=new QSlider(-200, 200, 10, gobject()->gradient().yfactor,
                           Qt::Horizontal, widget);
     connect(m_yfactor, SIGNAL(valueChanged(int)),
             this, SLOT(slotChanged(int)));
@@ -448,10 +448,10 @@ void G2DObjectM9r::createPropertyDialog() {
     wbox->addStretch(1);
 
     int id;
-    if(m_object->brush().style()==Qt::NoBrush)
+    if(gobject()->brush().style()==Qt::NoBrush)
         id=0;
     else
-        id=static_cast<int>(m_object->fillStyle())+1;
+        id=static_cast<int>(gobject()->fillStyle())+1;
 
     m_stack->raiseWidget(id);
     updatePreview(id); // inititalize the pixmap

@@ -41,9 +41,7 @@ GraphitePart::GraphitePart(QWidget *parentWidget, const char *widgetName, QObjec
     : KoDocument(parentWidget, widgetName, parent, name, singleViewMode) {
 
     setInstance(GraphiteFactory::global());
-    KAction *undo=KStdAction::undo(this, SLOT(edit_undo()), actionCollection(), "edit_undo");
-    KAction *redo=KStdAction::redo(this, SLOT(edit_redo()), actionCollection(), "edit_redo");
-    m_history=new GCommandHistory(undo, redo);
+    m_history=new GCommandHistory(actionCollection());
 
     KStdAction::cut(this, SLOT(edit_cut()), actionCollection(), "edit_cut" );
 

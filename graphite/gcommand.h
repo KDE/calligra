@@ -22,8 +22,10 @@
 
 #include <qlist.h>
 #include <qstring.h>
+#include <qobject.h>
 
 class KAction;
+class KActionCollection;
 
 // The abstract base class for all Commands. Commands are used to
 // store information needed for Undo/Redo functionality...
@@ -48,6 +50,27 @@ private:
 };
 
 
+// A Macro Command is a command that holds several sub-commands.
+// It will appear as one to the user, in the command history,
+// but it can use the implementation of multiple commands internally.
+
+class GMacroCommand : public GCommand {
+
+public:
+    GMacroCommand(const QString &name);
+    virtual ~GMacroCommand() {}
+
+    // Appends a command to this macro command.
+    // The ownership is transfered to the macro command.
+    void addCommand(GCommand *command);
+
+    virtual void execute();
+    virtual void unexecute();
+protected:
+    QList<GCommand> m_commands;
+};
+
+
 // The command history stores a (user) configurable amount of
 // Commands. It keeps track of its size and deletes commands
 // if it gets too large. The user can set a maximum undo and
@@ -57,24 +80,39 @@ private:
 // undo/redo actions in the menu and changes the text according
 // to the name of the command.
 
-class GCommandHistory {
+class GCommandHistory : public QObject {
+
+    Q_OBJECT
 
 public:
-    GCommandHistory(KAction *undo, KAction *redo);
-    ~GCommandHistory();
+    GCommandHistory(KActionCollection *actionCollection);
+    virtual ~GCommandHistory();
 
-    void addCommand(GCommand *command);
-    void undo();
-    void redo();
+    void clear();
+
+    void addCommand(GCommand *command, bool execute=true);
 
     const int &undoLimit() { return m_undoLimit; }
     void setUndoLimit(const int &limit);
     const int &redoLimit() { return m_redoLimit; }
     void setRedoLimit(const int &limit);
 
+public slots:
+    void undo();
+    void redo();
+
+signals:
+    // This is called every time a command is executed
+    // (whether by addCommand, undo or redo).
+    // You can use this to update the GUI, for instance.
+    void commandExecuted();
+
 private:
+    // don't copy or assing me ;)
+    GCommandHistory(const GCommandHistory &rhs);
+    GCommandHistory &operator=(GCommandHistory &rhs);
+
     void clipCommands();  // ensures that the limits are kept
-    void helpRedo();
 
     QList<GCommand> m_commands;
     GCommand *m_present;
