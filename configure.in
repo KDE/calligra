@@ -78,7 +78,8 @@ dnl add here all your Makefiles. These are created by configure
 AC_OUTPUT( \
 	Makefile \
 	katabase/Makefile \
-        katabase/kformviewer/Makefile \
+    katabase/kformviewer/Makefile \
+    katabase/kformeditor/Makefile \
 	kchart/Makefile	\
 	kchart/core/Makefile \
 	kchart/pics/Makefile \
