@@ -1478,7 +1478,7 @@ KCommand *KoAutoFormat::doUseNumberStyle(KoTextCursor * /*textEditCursor*/, KoTe
             textdoc->setSelectionEnd( KoTextObject::HighlightSelection, &cursor );
             KCommand *cmd=txtObj->removeSelectedTextCommand( &cursor, KoTextObject::HighlightSelection  );
             // Adjust index
-            index -= 2;
+            index -= word.length()+1;
             if(cmd)
                 macroCmd->addCommand(cmd);
 
@@ -1495,16 +1495,25 @@ KCommand *KoAutoFormat::doUseNumberStyle(KoTextCursor * /*textEditCursor*/, KoTe
             c.setStyle( KoParagCounter::STYLE_NUM );
             c.setSuffix(QString( punct ));
             c.setStartNumber( (int)val);
-            cmd=txtObj->setCounterCommand( &cursor, c ,KoTextObject::HighlightSelection );
+
+            // Look at which number this parag will have without a restart counter flag,
+            // to see if we need it. Thanks to Shaheed for number() taking a parag as param,
+            // so that it works even if the parag doesn't have this counter yet!
+            if ( c.number( parag ) != (int)val )
+                c.setRestartCounter( true );
+
+            cmd=txtObj->setCounterCommand( &cursor, c, KoTextObject::HighlightSelection );
             if( cmd)
                 macroCmd->addCommand(cmd);
             // Apply counter to next paragraph too
+            // but without restart
+            c.setRestartCounter( false );
             cursor.setParag( parag->next() );
             cursor.setIndex( 0 );
             textdoc->setSelectionStart( KoTextObject::HighlightSelection, &cursor );
             cursor.setIndex( 0 );
             textdoc->setSelectionEnd( KoTextObject::HighlightSelection, &cursor );
-            cmd=txtObj->setCounterCommand( &cursor, c ,KoTextObject::HighlightSelection );
+            cmd=txtObj->setCounterCommand( &cursor, c, KoTextObject::HighlightSelection );
             if(cmd)
                 macroCmd->addCommand(cmd);
             return macroCmd;
