@@ -52,7 +52,7 @@ FilterString::FilterString(GfxState *state, double x0, double y0,
 {
     GfxRGB rgb;
     state->getFillRGB(&rgb);
-    QColor color(int(rgb.r), int(rgb.g), int(rgb.b));
+    QColor color(qRound(rgb.r*255), qRound(rgb.g*255), qRound(rgb.b*255));
     GfxFont *font = state->getFont();
     GString *gname = (font ? font->getName() : 0);
     QString name = (gname ? gname->getCString() : 0);

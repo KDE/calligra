@@ -79,18 +79,20 @@ PdfImportDialog::PdfImportDialog(uint nbPages, bool isEncrypted,
     _rangeButton = new QRadioButton(i18n("Range"), hbox);
     _group->insert(_rangeButton);
     _range = new KLineEdit(hbox);
+    _range->setFocus();
     connect(_range, SIGNAL(textChanged(const QString &)),
             SLOT(rangeChanged(const QString &)));
 
     // passwords
-    QGrid *grid = new QGrid(2, plainPage());
+    gbox = new QVGroupBox(i18n("Passwords"), plainPage());
+    top->addWidget(gbox);
+    QGrid *grid = new QGrid(2, gbox);
     grid->setSpacing(KDialogBase::spacingHint());
-    top->addWidget(grid);
     (void)new QLabel(i18n("Owner"), grid);
     _owner = new KLineEdit(grid);
     (void)new QLabel(i18n("User"), grid);
     _user = new KLineEdit(grid);
-    if ( !isEncrypted ) grid->setEnabled(false);
+    grid->setEnabled(isEncrypted);
 }
 
 PdfImportDialog::~PdfImportDialog()

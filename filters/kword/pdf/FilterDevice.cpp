@@ -95,21 +95,6 @@ void FilterDevice::drawLink(Link* link, Catalog *cat)
     _page->addLink(flink);
 }
 
-void FilterDevice::drawImageMask(GfxState *state, Object *ref, Stream *str,
-                                 int width, int height, GBool invert,
-                                 GBool inlineImg)
-{
-    // get image geometry
-    Image image;
-    computeGeometry(state, image);
-
-    qDebug("image mask !");
-
-    // #### TODO
-    OutputDev::drawImageMask(state, ref, str, width, height, invert,
-                             inlineImg);
-}
-
 void FilterDevice::addImage()
 {
     // check if same image already put at same place (don't know why this
@@ -197,26 +182,28 @@ void FilterDevice::computeGeometry(GfxState *state, Image &image)
     // #### TODO : take care of image transform (rotation,...)
 }
 
-void FilterDevice::drawImage(GfxState *state, Object *ref, Stream *str,
-                             int width, int height, GfxImageColorMap *colorMap,
-                             int *maskColors, GBool inlineImg)
+uint FilterDevice::initImage(GfxState *state, int width, int height,
+                             bool withMask)
 {
     // get image geometry
     Image image;
+    image.mask = withMask;
     computeGeometry(state, image);
 
     // check if new image
     if ( _image.ptr &&
          (_image.ptr->width()!=width || !equal(image.left, _image.left) ||
           !equal(image.right, _image.right) ||
-          !equal(image.top, _image.bottom)) ) addImage();
+          !equal(image.top, _image.bottom) ||
+          !equal(image.mask, _image.mask)) ) addImage();
 
-    qDebug("image %i : inline=%i same=%i w=%i h=%i left=%f top=%f right=%f bottom=%f",
-           str->getKind(), inlineImg, _image.ptr!=0, width, height, image.left,
+    qDebug("  same=%i w=%i h=%i left=%f top=%f right=%f bottom=%f",
+           _image.ptr!=0, width, height, image.left,
            image.top, image.right, image.bottom);
 
     uint offset = (_image.ptr ? _image.ptr->height() : 0);
     image.ptr = new QImage(width, offset + height, 32);
+    image.ptr->setAlphaBuffer(withMask);
     if (_image.ptr) { // copy previous
         for (int j=0; j<_image.ptr->height(); j++) {
             QRgb *pix = (QRgb *)_image.ptr->scanLine(j);
@@ -227,6 +214,16 @@ void FilterDevice::drawImage(GfxState *state, Object *ref, Stream *str,
         _image.ptr = image.ptr;
         _image.bottom = image.bottom;
     } else _image = image;
+    return offset;
+}
+
+void FilterDevice::drawImage(GfxState *state, Object *, Stream *str,
+                             int width, int height, GfxImageColorMap *colorMap,
+                             int *maskColors, GBool inlineImg)
+{
+    qDebug("image kind=%i inline=%i maskColors=%i", str->getKind(), inlineImg,
+           maskColors!=0);
+    uint offset = initImage(state, width, height, maskColors!=0);
 
     // read pixels
     int nbComps = colorMap->getNumPixelComps();
@@ -239,10 +236,45 @@ void FilterDevice::drawImage(GfxState *state, Object *ref, Stream *str,
         for (int i=0; i<width; i++) {
             GfxRGB rgb;
             colorMap->getRGB(p, &rgb);
-            pix[i] =
-                qRgb(qRound(rgb.r*255), qRound(rgb.g*255), qRound(rgb.b*255));
-            p += colorMap->getNumPixelComps();
+            int alpha = 255;
+            if (maskColors) {
+                for (int k=0; k<nbComps; k++)
+                    if ( p[k]<maskColors[2*k] || p[k]>maskColors[2*k+1] ) {
+                        alpha = 0;
+                        break;
+                    }
+            }
+            pix[i] = qRgba(qRound(rgb.r*255), qRound(rgb.g*255),
+                           qRound(rgb.b*255), alpha);
+            p += nbComps;
         }
     }
     delete istr;
+}
+
+void FilterDevice::drawImageMask(GfxState *state, Object *, Stream *str,
+                                 int width, int height, GBool invert,
+                                 GBool inlineImg)
+{
+    qDebug("image mask ! kind=%i inline=%i", str->getKind(), inlineImg);
+    uint offset = initImage(state, width, height, true);
+
+    // read pixels
+    GfxRGB rgb;
+    state->getFillRGB(&rgb);
+    int red = qRound(rgb.r * 255);
+    int green = qRound(rgb.g * 255);
+    int blue = qRound(rgb.b * 255);
+
+    ImageStream *istr = new ImageStream(str, width, 1, 1);
+    str->reset();
+    for (int j=0; j<height; j++) {
+        Guchar *p = istr->getLine();
+        QRgb *pix = (QRgb *)_image.ptr->scanLine(offset + j);
+        for (int i=0; i<width; i++)
+            pix[i] = qRgba(red, green, blue, 255 * p[i]);
+    }
+    delete istr;
+
+    if (invert) _image.ptr->invertPixels();
 }

@@ -71,11 +71,13 @@ class FilterDevice : public OutputDev
     struct Image {
         QImage *ptr;
         double left, right, top, bottom;
+        bool   mask;
     };
     Image               _image;
     QValueVector<Image> _images;
 
     static void computeGeometry(GfxState *, Image &);
+    uint initImage(GfxState *, int width, int height, bool mask);
     void addImage();
 };
 
