@@ -6,7 +6,7 @@ kexipicsdir = $(kde_datadir)/kexi/pics
 
 
 icon_ICON = button button_no test_it db form_edit lineedit business_user urlrequest tabwidget frame \
-	relation state_edit state_sql state_text state_view scripting \
+	relation state_data state_edit state_sql state_text state_view scripting \
 	table tables table_newobj \
 	query queries query_newobj \
 	form forms form_newobj \
