@@ -165,7 +165,7 @@ void TextElement::draw( QPainter& painter, const LuPixelRect& /*r*/,
 
     // Each starting element draws the whole token
     ElementType* token = getElementType();
-    if ( ( token != 0 ) && token->multiElement() ) {
+    if ( ( token != 0 ) && ( token->end()-token->start() > 1 ) ) {
         painter.drawText( context.layoutUnitToPixelX( myPos.x() ),
                           context.layoutUnitToPixelY( myPos.y()+getBaseline() ),
                           token->text( static_cast<SequenceElement*>( getParent() ) ) );

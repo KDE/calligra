@@ -159,6 +159,9 @@ void SequenceParser::readText()
 {
     BasicElement* element = list.at( tokenStart );
     TextElement* beginText = static_cast<TextElement*>( element );
+    if ( beginText->isSymbol() ) {
+        return;
+    }
     char format = beginText->format();
     type = ORDINARY;
     for ( ; tokenEnd < list.count(); tokenEnd++ ) {
@@ -170,6 +173,9 @@ void SequenceParser::readText()
             return;
         }
         if ( static_cast<TextElement*>( element )->format() != format ) {
+            return;
+        }
+        if ( static_cast<TextElement*>( element )->isSymbol() ) {
             return;
         }
     }
