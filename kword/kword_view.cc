@@ -1204,8 +1204,7 @@ void KWordView::newView()
 
     KWordShell* shell = new KWordShell;
     shell->show();
-    // ################
-    //shell->setDocument( m_pKWordDoc );
+    shell->setRootDocument( m_pKWordDoc );
 }
 
 /*===============================================================*/
@@ -1611,7 +1610,7 @@ void KWordView::toolsCreatePix()
 #else
     KFileDialog fd( QString::null, KImageIO::pattern(KImageIO::Writing), 0, 0, TRUE );
     //fd.setPreviewMode( FALSE, TRUE );
-    fd.setCaption(i18n("Create Picture"));     
+    fd.setCaption(i18n("Create Picture"));
     fd.setPreviewWidget( new Preview( &fd ) );
     //fd.setViewMode( QFileDialog::ListView | QFileDialog::PreviewContents );
     KURL url;
