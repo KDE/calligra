@@ -113,11 +113,11 @@ void
 VGradient::addStop( const VColor &color, float rampPoint, float midPoint )
 {
 	// Clamping between 0.0 and 1.0
-	rampPoint = rampPoint < 0.0 ? 0.0 : rampPoint;
-	rampPoint = rampPoint > 1.0 ? 1.0 : rampPoint;
+	rampPoint = QMAX( 0.0, rampPoint );
+	rampPoint = QMIN( 1.0, rampPoint );
 	// Clamping between 0.0 and 1.0
-	midPoint = midPoint < 0.0 ? 0.0 : midPoint;
-	midPoint = midPoint > 1.0 ? 1.0 : midPoint;
+	midPoint = QMAX( 0.0, midPoint );
+	midPoint = QMIN( 1.0, midPoint );
 
 	m_colorStops.inSort( new VColorStop( rampPoint, midPoint, color ) );
 }
