@@ -920,9 +920,13 @@ KarbonView::initActions()
 	// line width
 	m_setLineWidth = new KoUnitDoubleSpinComboBox( this, 0.0, 1000.0, 0.5, 1.0, KoUnit::U_PT, 1 );
 	new KWidgetAction( m_setLineWidth, i18n( "Set Line Width" ), 0, this, SLOT( setLineWidth() ), actionCollection(), "setLineWidth" );
+	m_setLineWidth->insertItem( 0.25 );
 	m_setLineWidth->insertItem( 0.5 );
+	m_setLineWidth->insertItem( 0.75 );
 	m_setLineWidth->insertItem( 1.0 );
 	m_setLineWidth->insertItem( 2.0 );
+	m_setLineWidth->insertItem( 3.0 );
+	m_setLineWidth->insertItem( 4.0 );
 	m_setLineWidth->insertItem( 5.0 );
 	m_setLineWidth->insertItem( 10.0 );
 	m_setLineWidth->insertItem( 20.0 );
