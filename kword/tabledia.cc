@@ -223,6 +223,8 @@ void KWTableDia::setupTab2(const QString & _templateName, int format )
 void KWTableDia::slotOk()
 {
     if ( m_useMode==NEW )
+        /// ###### This should be done AFTER this dialog is closed.
+        // Otherwise we have two modal dialogs fighting each other
         canvas->createTable( nRows->value(), nCols->value(),
                              cWid->currentItem(),
                              cHei->currentItem(),
