@@ -38,7 +38,7 @@ KCharSelectDia::KCharSelectDia(QWidget *parent,const char *name,QList<QFont> *_f
   grid->addWidget(charSelect,0,0);
   connect(charSelect,SIGNAL(activated(const QChar &)),this,SLOT(charChanged(const QChar &)));
   connect(charSelect,SIGNAL(fontChanged(const QString &)),this,SLOT(fontSelected(const QString &)));
-  
+
   wid = new QWidget(this);
 
   grid2 = new QGridLayout(wid,2,7,0,7);
@@ -131,6 +131,8 @@ KCharSelectDia::KCharSelectDia(QWidget *parent,const char *name,QList<QFont> *_f
   grid->addWidget(bbox,2,0);
 
   grid->setRowStretch(1,1);
+
+  charSelect->setFocus();
 }
 
 /*================================================================*/

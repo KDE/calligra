@@ -30,7 +30,7 @@ KCharSelectDia::KCharSelectDia(QWidget *parent,const char *name,const QChar &_ch
   grid->addWidget(charSelect,0,0);
 
   grid->addWidget(new QWidget(this),1,0);
-  
+
   bbox = new KButtonBox(this,KButtonBox::HORIZONTAL,7);
   bbox->addStretch(20);
   bOk = bbox->addButton("OK");
@@ -54,6 +54,8 @@ KCharSelectDia::KCharSelectDia(QWidget *parent,const char *name,const QChar &_ch
   grid->setRowStretch(2,0);
 
   grid->activate();
+
+  charSelect->setFocus();
 }
 
 /*================================================================*/
