@@ -393,70 +393,83 @@ void KWFrameSet::drawBorders( QPainter *painter, const QRect &crect, QRegion &re
         }
 
         // Draw borders either as the user defined them, or using the view settings.
-
-        // Right
-        int w = frame->getRightBorder().ptWidth;
-        if ( w > 0 )
-        {
-            painter->setPen( Border::borderPen( frame->getRightBorder() ) );
-        }
-        else
-        {
-            painter->setPen( viewSetting );
-            w = 1;
-        }
-
         // Borders should be drawn _outside_ of the frame area
         // otherwise the frames will erase the border when painting themselves.
+        QPen pen;
+        double width;
+        int w;
 
-        w = ( w + 1 ) / 2; // at least 1
+        // Right
+        width = frame->getRightBorder().ptWidth;
+        if ( width > 0 )
+        {
+            pen = Border::borderPen( frame->getRightBorder() );
+            w = QMAX( 1, (int)m_doc->zoomItX( width + 0.5 ) );
+        }
+        else
+        {
+            pen = viewSetting;
+            w = 1;
+        }
+        pen.setWidth( w );
+        painter->setPen( pen );
+        w = QMAX( w / 2, 1 );
         painter->drawLine( frameRect.right() + w, frameRect.y(),
-                           frameRect.right() + w, frameRect.bottom() + 1 );
+                           frameRect.right() + w, frameRect.bottom() );
 
         // Bottom
-        w = frame->getBottomBorder().ptWidth;
-        if ( w > 0 )
+        width = frame->getBottomBorder().ptWidth;
+        if ( width > 0 )
         {
-            painter->setPen( Border::borderPen( frame->getBottomBorder() ) );
+            pen = Border::borderPen( frame->getBottomBorder() );
+            w = QMAX( 1, (int)m_doc->zoomItY( width + 0.5 ) );
         }
         else
         {
-            painter->setPen( viewSetting );
+            pen = viewSetting;
             w = 1;
         }
-        w = ( w + 1 ) / 2;
-        painter->drawLine( frameRect.x(),         frameRect.bottom() + w,
-                           frameRect.right() + 1, frameRect.bottom() + w );
+        pen.setWidth( w );
+        painter->setPen( pen );
+        w = QMAX( w / 2, 1 );
+        painter->drawLine( frameRect.x(),     frameRect.bottom() + w,
+                           frameRect.right(), frameRect.bottom() + w );
 
         // Left
-        w = frame->getLeftBorder().ptWidth;
-        if ( w > 0 )
+        width = frame->getLeftBorder().ptWidth;
+        if ( width > 0 )
         {
-            painter->setPen( Border::borderPen( frame->getLeftBorder() ) );
+            pen = Border::borderPen( frame->getLeftBorder() );
+            w = QMAX( 1, (int)m_doc->zoomItX( width + 0.5 ) );
         }
         else
         {
-            painter->setPen( viewSetting );
+            pen = viewSetting;
             w = 1;
         }
-        w = ( w + 1 ) / 2;
+        pen.setWidth( w );
+        painter->setPen( pen );
+        w = QMAX( w / 2, 1 );
         painter->drawLine( frameRect.x() - w, frameRect.y(),
-                           frameRect.x() - w, frameRect.bottom() + 1 );
+                        frameRect.x() - w, frameRect.bottom() );
 
         // Top
-        w = frame->getTopBorder().ptWidth;
-        if ( w > 0 )
+        width = frame->getTopBorder().ptWidth;
+        if ( width > 0 )
         {
-            painter->setPen( Border::borderPen( frame->getTopBorder() ) );
+            pen = Border::borderPen( frame->getTopBorder() );
+            w = QMAX( 1, (int)m_doc->zoomItY( width + 0.5 ) );
         }
         else
         {
-            painter->setPen( viewSetting );
+            pen = viewSetting;
             w = 1;
         }
-        w = ( w + 1 ) / 2;
-        painter->drawLine( frameRect.x(),         frameRect.y() - w,
-                           frameRect.right() + 1, frameRect.y() - w );
+        pen.setWidth( w );
+        painter->setPen( pen );
+        w = QMAX( w / 2, 1 );
+        painter->drawLine( frameRect.x(),     frameRect.y() - w,
+                        frameRect.right(), frameRect.y() - w );
     }
     painter->restore();
 }
