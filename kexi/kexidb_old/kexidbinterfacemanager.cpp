@@ -29,12 +29,38 @@
 #include "kexidb.h"
 #include "kexidbinterfacemanager.h"
 
-KexiDBInterfaceManager::KexiDBInterfaceManager(QObject *parent, const char *name) : QObject(parent, name)
+/*
+static KexiDBInterfaceManager *KexiDBInterfaceManager::s_kexidbinterfacemanager=0;
+
+KexiDBInterfaceManager *KexiDBInterfaceManager::self();
+{
+	if (s_kexidbinterfacemanager==0)
+		s_kexidbinterfacemanager=new KexiDBInterfaceManager("kexidbifacemngr");
+
+	return s_kexidbinterfacemanager;
+}
+
+void KexiDBInterfaceManager::addRef()
+{
+	m_ref++;
+}
+
+void KexiDBInterfaceManager::remRef()
+{
+	m_ref--;
+	if (m_ref<1) {
+		s_kexidbinterfacemanager=0;
+		deleteLater();
+	}
+}
+*/
+
+KexiDBInterfaceManager::KexiDBInterfaceManager(const char *name) : QObject(0, name)//,m_ref(0)
 {
 	//some initialisations
 //	m_libLoader = KLibLoader::self();
 	lookupDrivers();
-	m_part = new KexiDB(this, "database");
+	//m_part = new KexiDB(this, "database");
 // no idea, why this loops infinitly here	load("mySQL");
 
 }
@@ -102,7 +128,6 @@ KexiDBInterfaceManager::load(const QString &driver)
 				kdDebug() << "KexiDBInterfaceManager::load(): library: "<<d->service()->library()<<endl;
 				KexiDB *plugin = KParts::ComponentFactory::createInstanceFromService<KexiDB>(d->service(),
 					this, "db", QStringList());
-				m_part = plugin;
 
 				if(plugin)
 				{
@@ -116,7 +141,7 @@ KexiDBInterfaceManager::load(const QString &driver)
 }
 
 QStringList
-KexiDBInterfaceManager::getDrivers() const
+KexiDBInterfaceManager::drivers() const
 {
 	QStringList result;
 
@@ -130,7 +155,7 @@ KexiDBInterfaceManager::getDrivers() const
 }
 
 KexiDBDriver*
-KexiDBInterfaceManager::getDriverInfo(const QString &driver)
+KexiDBInterfaceManager::driverInfo(const QString &driver)
 {
 	KexiDBDriver *d = m_driverList.find(driver);
 	if(d)
@@ -156,5 +181,26 @@ KexiDBInterfaceManager::~KexiDBInterfaceManager()
 		}
 	}
 }
+
+KexiDB*
+KexiDBInterfaceManager::newDBInstance(const QString &driver)
+{
+	/*! this loads (if needed) the plugin
+	    and creates an instance, wich is returned.
+	    it should be used in replacement of that one
+	    oh, how we love c++
+	*/
+
+	kdDebug() << "KexDB::add" << endl;
+
+	KexiDB *d =require(driver);
+	if(d)
+	{
+		kdDebug() << "got driver..." << endl;
+		return d;
+	}
+	return 0;
+}
+
 
 #include "kexidbinterfacemanager.moc"

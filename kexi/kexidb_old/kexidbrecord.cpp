@@ -24,4 +24,8 @@ KexiDBRecord::KexiDBRecord(QObject *parent, const char *name)
 {
 }
 
+void KexiDBRecord::latestError(KexiDBError **error) {
+    *error=latestError();
+}
+
 #include "kexidbrecord.moc"

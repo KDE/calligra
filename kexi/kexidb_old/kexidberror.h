@@ -30,7 +30,10 @@ typedef QMap<int, QString> ErrorList;
 class KexiDBError
 {
 	public:
+		KexiDBError();
+		KexiDBError(const KexiDBError &old);
 		KexiDBError(int kexiErrno, QString text=QString::null);
+		void setup(int KexiErrno, QString text=QString::null);
 		~KexiDBError();
 
 		void	toUser(QWidget *parent);

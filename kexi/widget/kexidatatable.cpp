@@ -158,14 +158,10 @@ KexiDataTable::executeQuery(const QString &queryStatement)
 	if(queryStatement.isEmpty())
 		return false;
 
-	try
-	{
-		m_record = kexiProject()->db()->queryRecord(queryStatement, true);
-	}
-	catch(KexiDBError &err)
-	{
+	m_record = kexiProject()->db()->queryRecord(queryStatement, true);
+	if (!m_record) {
 		kdDebug() << "KexiDataTable::executeQuery(): db-error" << endl;
-		err.toUser(this);
+		kexiProject()->db()->latestError()->toUser(this);
 		return false;
 	}
 
@@ -183,13 +179,10 @@ KexiDataTable::slotItemChanged(KexiTableItem *i, int col)
 		i->setInsertItem(false);
 		i->setHint(QVariant(m_record->insert()));
 		m_record->update(i->getHint().toInt(), col, i->getValue(col));
-		try
+
+		if (!m_record->commit(i->getHint().toInt(), true))
 		{
-			m_record->commit(i->getHint().toInt(), true);
-		}
-		catch(KexiDBError &err)
-		{
-			KMessageBox::detailedError(this, i18n("Error occupied while updating table"), err.message(),
+			KMessageBox::detailedError(this, i18n("Error occupied while updating table"), m_record->latestError()->message(),
 			 i18n("Database Error"));
 //			err.toUser(this);
 			return;

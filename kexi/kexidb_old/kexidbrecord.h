@@ -28,6 +28,8 @@ class QVariant;
 
 class KexiDBResult;
 
+class KexiDBError;
+
 class KexiDBRecord : public QObject
 {
 	Q_OBJECT
@@ -129,7 +131,7 @@ class KexiDBRecord : public QObject
 		 */
 		virtual bool update(unsigned int record, QString field, QVariant value) = 0;
 
-		/*! 
+		/*!
 		 *  deletes the current record
 		 *  the changes have to be commited in order to take effect
 		 *  returns true, if delete is possible
@@ -170,6 +172,20 @@ class KexiDBRecord : public QObject
 
 		virtual unsigned long last_id() = 0;
 		virtual bool isForignField(uint field) { return false; }
+
+
+/*!
+		 *  the last error which occured. The pointer must neither be stored by the caller nor
+		 *  freed by the caller. If there has been no error the pointer to a KexiDBError containing an error code of 0 is returned;
+		 */
+		void latestError(KexiDBError **error);
+	public:
+/*!
+		 *  the last error which occured. The pointer must neither be stored by the caller nor
+		 *  freed by the caller. If there has been no error the pointer to a KexiDBError containing an error code of 0 is returned;
+		 */
+		virtual KexiDBError *latestError()=0;
+
 };
 
 #endif

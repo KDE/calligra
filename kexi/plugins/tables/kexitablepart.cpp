@@ -115,16 +115,15 @@ KexiDBRecord *KexiTablePart::records(QWidget*,const QString& identifier,Paramete
 	kdDebug()<<"KexiDBRecord *KexiTablePart::records(): local-id: "<< localIdentifier(identifier) << endl;
 
 	KexiDBRecord *m_record=0;
-    try
-    {
         m_record = kexiProject()->db()->queryRecord("select * from " + localIdentifier(identifier), true);
-    }
-    catch(KexiDBError &err)
-    {
-        kdDebug() << "KexiTablePart::executeQuery(): db-error" << endl;
-        err.toUser(0);
-        return 0;
-    }
+
+	if(!m_record)
+	{
+	        kdDebug() << "KexiTablePart::executeQuery(): db-error" << endl;
+        	kexiProject()->db()->latestError()->toUser(0);
+        	return 0;
+	}
+
 	return m_record;
 }
 

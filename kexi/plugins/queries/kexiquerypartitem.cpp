@@ -253,14 +253,12 @@ KexiDBRecord *KexiQueryPartItem::records(QWidget* dpar,KexiDataProvider::Paramet
 
 	kdDebug()<<"resulting query string: "<<query<<endl;
 	KexiDBRecord *rec;
-        try
-        {
-                rec = projectPart()->kexiProject()->db()->queryRecord(query, true);
-        }
-        catch(KexiDBError &err)
+
+        rec = projectPart()->kexiProject()->db()->queryRecord(query, true);
+        if (!rec)
         {
                 kdDebug() << "KexiQueryPartItem(): db-error" << endl;
-                err.toUser(0);
+                projectPart()->kexiProject()->db()->latestError()->toUser(0);
                 return 0;
         }
 

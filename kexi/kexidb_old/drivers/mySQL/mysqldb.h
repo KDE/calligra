@@ -25,6 +25,7 @@ Boston, MA 02111-1307, USA.
 
 #include <kexidb.h>
 #include <kexidbresult.h>
+#include <kexidberror.h>
 
 typedef struct st_mysql MYSQL;
 
@@ -43,6 +44,8 @@ class MySqlDB : public KexiDB
 	public:
 		MySqlDB(QObject *parent=0, const char *name="mysq", const QStringList &args=QStringList());
 		~MySqlDB();
+
+		virtual KexiDBError *latestError();
 
 		/*!
 		 *  connect to mysql-database
@@ -129,6 +132,8 @@ class MySqlDB : public KexiDB
 			int index, KexiDBTableStruct fields);
 		bool changeKeys(const KexiDBField& field,
 			int index, KexiDBTableStruct fields);
+
+		KexiDBError m_error;
 };
 
 #endif

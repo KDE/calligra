@@ -24,10 +24,25 @@
 
 #include "kexidberror.h"
 
+KexiDBError::KexiDBError() {
+	m_errno=0;
+	m_text=QString();
+}
+
 KexiDBError::KexiDBError(int kexiErrno, QString text)
 {
 	m_errno = kexiErrno;
 	m_text = text;
+}
+
+void KexiDBError::setup(int kexiErrno, QString text) {
+	m_errno=kexiErrno;
+	m_text=text;
+}
+
+KexiDBError::KexiDBError(const KexiDBError &old) {
+	m_errno=old.m_errno;
+	m_text=old.m_text;
 }
 
 void

@@ -106,6 +106,7 @@ class MySqlRecord : public KexiDBRecord, public MySqlResult
 		//needed members
 		void takeInsertBuffer(MySqlRecord *buffer);
 
+		virtual KexiDBError *latestError();
 	protected:
 		bool		findKey(); /* finds the key for updateing */
 		QString		forignUpdate(const QString &field, const QString &value, const QString &key, bool n);
@@ -129,6 +130,7 @@ class MySqlRecord : public KexiDBRecord, public MySqlResult
 		int		m_lastItem;
 
 		unsigned long	m_lastID;
+		KexiDBError	m_error;
 };
 
 #endif

@@ -33,7 +33,7 @@
 #include <koTemplateChooseDia.h>
 
 #include <kexiDB/kexidberror.h>
-
+#include <kexiDB/kexidbinterfacemanager.h>
 #include "KexiProjectIface.h"
 #include "kexiproject.h"
 #include "kexiproject.moc"
@@ -44,13 +44,15 @@
 #include "kexiprojecthandler.h"
 #include "kexidbconnection.h"
 
+
 KexiProject::KexiProject( QWidget *parentWidget, const char *widgetName, QObject* parent,
          const char* name, bool singleViewMode )
-    : KoDocument( parentWidget, widgetName, parent, name, singleViewMode ),m_handlersLoaded(false)
+    : KoDocument( parentWidget, widgetName, parent, name, singleViewMode ),m_handlersLoaded(false),m_db(0)
 {
 	dcop = 0;
 	setInstance( KexiFactory::global(), false );
-	m_db = new KexiDB(this, "db");
+	//m_db = new KexiDB(this, "db");
+	m_dbInterfaceManager=new KexiDBInterfaceManager(); //I think this class should be static
 	m_dbconnection = new KexiDBConnection();
 	m_relationManager=new KexiRelation(this);
 
@@ -292,7 +294,7 @@ KexiProject::initDBConnection(KexiDBConnection *connection, KoStore *store)
 		return;
 
 	m_dbconnection = connection;
-	m_db = connection->connectDB(m_db, store);
+	m_db = connection->connectDB(m_dbInterfaceManager, store);
 	kdDebug() << "KexiProject::initDBConnection()" << endl;
 	if(m_db)
 	{

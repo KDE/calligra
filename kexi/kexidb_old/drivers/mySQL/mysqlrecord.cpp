@@ -327,6 +327,7 @@ MySqlRecord::insert()
 bool
 MySqlRecord::deleteRecord(uint record)
 {
+	m_error.setup(0);
 	kdDebug() << "MySqlRecord::deleteRecord()" << endl;
 	if(readOnly())
 		return false;
@@ -334,13 +335,10 @@ MySqlRecord::deleteRecord(uint record)
 	QString key = m_db->escape(m_keyBuffer.find(record).data().toString());
 	QString statement("delete from " + m_table + " where " + m_keyField + " = '" + key + "'");
 	kdDebug() << "MySqlRecord::deleteRecord():" << statement << endl;
-	try
+	if (!m_db->query(statement))
 	{
-		m_db->query(statement);
-	}
-	catch(KexiDBError &err)
-	{
-		throw err;
+		m_error=KexiDBError(*(m_db->latestError()));
+		return false;
 	}
 	return true;
 }
@@ -404,6 +402,10 @@ MySqlRecord::isForignField(uint f)
 MySqlRecord::~MySqlRecord()
 {
 	kdDebug()<<"MySqlRecord::~MySqlRecord()"<<endl;
+}
+
+KexiDBError *MySqlRecord::latestError() {
+	return &m_error;
 }
 
 #include "mysqlrecord.moc"

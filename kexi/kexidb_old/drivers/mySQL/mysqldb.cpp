@@ -38,21 +38,21 @@ K_EXPORT_COMPONENT_FACTORY(keximysqlinterface, KGenericFactory<MySqlDB>( "mysqli
 MySqlDB::MySqlDB(QObject *parent, const char *name, const QStringList &) : KexiDB(parent, name)
 {
 	kdDebug() << "MySqlDB::MySqlDB()" << endl;
-	
+
 	m_mysql = 0;
 	m_mysql = mysql_init(m_mysql);
 	m_connected = false;
 	m_connectedDB = false;
-	
+
 }
+
 
 KexiDBRecord*
 MySqlDB::queryRecord(QString querystatement, bool buffer)
 {
+	m_error.setup(0);
 	kdDebug() << "MySqlDB::queryRecord()" << endl;
-	try
-	{
-		query(querystatement);
+	if (query(querystatement)) {
 		MYSQL_RES *res;
 		if(!buffer)
 			res = mysql_use_result(m_mysql);
@@ -65,14 +65,12 @@ MySqlDB::queryRecord(QString querystatement, bool buffer)
 			return rec;
 		}
 	}
-	catch(KexiDBError &err)
+	else
 	{
-		kdDebug() << "MySqlDB::queryRecord(): abroating..." << endl;
-		kdDebug() << "MySqlDB::queryRecord(): cause:"<<err.message() << endl;
-
-		throw err;
+		kdDebug() << "MySqlDB::queryRecord(): error..." << endl;
+		kdDebug() << "MySqlDB::queryRecord(): cause:"<<m_error.message() <<endl;
 	}
-	
+
 	return 0;
 }
 
@@ -109,7 +107,7 @@ MySqlDB::connect(QString host, QString user, QString password, QString socket, Q
 	}
 	else
 	{
-		throw KexiDBError(0, mysql_error(m_mysql));
+		m_error=KexiDBError(1, mysql_error(m_mysql));
 	}
 
 	kdDebug() << "MySqlDB::connect(...) failed: " << mysql_error(m_mysql) << endl;
@@ -124,7 +122,7 @@ MySqlDB::connect(QString host, QString user, QString password, QString socket, Q
 		&& port.toUInt() == m_port)
 	{
 		kdDebug() << "MySqlDB::connect(db): already connected" << endl;
-		
+
 		//create new database if needed
 		if(create)
 		{
@@ -141,8 +139,6 @@ MySqlDB::connect(QString host, QString user, QString password, QString socket, Q
 	else
 	{
 		kdDebug() << "MySqlDB::connect(db): retrying..." << endl;
-		try
-		{
 			if(connect(host, user, password, socket, port))
 			{
 				//create new database if needed
@@ -155,12 +151,8 @@ MySqlDB::connect(QString host, QString user, QString password, QString socket, Q
 				m_connectedDB = true;
 				return true;
 			}
-		}
-		catch(KexiDBError &err)
-		{
-			throw err;
+			else
 			return false;
-		}
 	}
 
 	return false;
@@ -214,11 +206,12 @@ MySqlDB::tables()
 bool
 MySqlDB::query(QString statement)
 {
+	m_error.setup(0);
 //	if(!m_connected)
 //		return false;
 	if(!uhQuery(statement))
 	{
-		throw KexiDBError(0, mysql_error(m_mysql));
+		m_error.setup(1, mysql_error(m_mysql));
 		return false;
 	}
 	return true;
@@ -297,7 +290,7 @@ MySqlDB::escape(const QString &str)
 {
 	char* escaped = (char*) malloc(str.length() * 2 + 2);
 	mysql_real_escape_string(m_mysql, escaped, str.local8Bit(), str.length());
-	
+
 	QString rval = escaped;
 	free(escaped);
 	return rval;
@@ -307,7 +300,7 @@ QString
 MySqlDB::escape(const QByteArray& str)
 {
 	QString rval;
-	
+
 	if(str.size() > 0)
 	{
 		char* escaped = (char*) malloc(str.size() * 2 + 2);
@@ -319,7 +312,7 @@ MySqlDB::escape(const QByteArray& str)
 	{
 		rval = "";
 	}
-	
+
 	return rval;
 }
 
@@ -744,6 +737,10 @@ MySqlDB::changeKeys(const KexiDBField& field, int index,
 	}
 
 	return true;
+}
+
+KexiDBError *MySqlDB	::latestError() {
+	return &m_error;
 }
 
 MySqlDB::~MySqlDB()

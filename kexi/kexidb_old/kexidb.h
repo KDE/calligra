@@ -30,6 +30,7 @@ Boston, MA 02111-1307, USA.
 class KexiDBInterfaceManager;
 class KexiDBDriver;
 class KexiDBRecord;
+class KexiDBError;
 
 typedef struct SourceConnection
 {
@@ -59,11 +60,8 @@ class KexiDB : public QObject
 		KexiDB(QObject *parent=0, const char *name=0);
 		~KexiDB();
 
-		KexiDB *add(const QString &driver);
-		KexiDBDriver *driverInfo(const QString &driver);
 
 	public slots:
-		QStringList getDrivers();
 
 		//now driver related functions
 
@@ -107,14 +105,24 @@ class KexiDB : public QObject
 		virtual unsigned long		affectedRows();
 		virtual KexiDBWatcher		*watcher() { return m_dbwatcher; }
 
-		void appendManager(KexiDBInterfaceManager *m);
 
 		void setRelations(RelationList r) { m_relations = r; }
 		RelationList			relations() { return m_relations; }
 
-		KexiDBInterfaceManager	*manager();
 		KexiDBDriver		*m_currentDriver;
 		uint us(int i) { return i; }
+				/*!
+		 *  the last error which occured. The pointer must neither be stored by the caller nor
+		 *  freed by the caller. If there has been no error the pointer to a KexiDBError containing an error code of 0 is returned;
+		 */
+		void latestError(KexiDBError **error);
+	public:
+		/*!
+		 *  the last error which occured. The pointer must neither be stored by the caller nor
+		 *  freed by the caller. If there has been no error the pointer to a KexiDBError containing an error code of 0 is returned;
+		 */
+		virtual KexiDBError *latestError()=0;
+
 
 	protected:
 

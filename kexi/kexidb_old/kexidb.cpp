@@ -27,60 +27,8 @@
 KexiDB::KexiDB(QObject *parent, const char *name) : QObject(parent, name)
 {
 	kdDebug() << "KexiDB::KexiDB()" << endl;
-	m_manager = 0;
 	m_dbwatcher = new KexiDBWatcher(this, "dbwatcher");
 }
-
-KexiDB*
-KexiDB::add(const QString &driver)
-{
-	/*! this loads (if needed) the plugin
-	    and creates an instance, wich is returned.
-	    it should be used in replacement of that one
-	    oh, how we love c++
-	*/
-
-	kdDebug() << "KexDB::add" << endl;
-
-	KexiDB *d = manager()->require(driver);
-	if(d)
-	{
-		kdDebug() << "got driver..." << endl;
-		appendManager(manager());
-		return d;
-	}
-	return 0;
-}
-
-KexiDBDriver*
-KexiDB::driverInfo(const QString &driver)
-{
-	return manager()->getDriverInfo(driver);
-}
-
-void
-KexiDB::appendManager(KexiDBInterfaceManager *m)
-{
-	if(m)
-		m_manager = m;
-}
-
-QStringList
-KexiDB::getDrivers()
-{
-	return manager()->getDrivers();
-}
-
-KexiDBInterfaceManager*
-KexiDB::manager()
-{
-	if(!m_manager)
-		m_manager = new KexiDBInterfaceManager(this, "manager");
-
-	return m_manager;
-}
-
-// it's not worth reading behind that line :)
 
 
 bool
@@ -222,5 +170,10 @@ KexiDB::getNativeDataType(const KexiDBField::ColumnType& t)
 KexiDB::~KexiDB()
 {
 }
+
+void KexiDB::latestError(KexiDBError **error) {
+    *error=latestError();
+}
+
 
 #include "kexidb.moc"

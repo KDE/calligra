@@ -31,6 +31,7 @@ Boston, MA 02111-1307, USA.
 #include <kmessagebox.h>
 
 #include "kexiDB/kexidb.h"
+#include "kexiDB/kexidbinterfacemanager.h"
 
 #include "kexiproject.h"
 #include "kexitabbrowser.h"
@@ -40,7 +41,7 @@ Boston, MA 02111-1307, USA.
 #include "kexidbconnection.h"
 
 KexiCreateProjectPageDB::KexiCreateProjectPageDB(KexiCreateProject *parent, QPixmap *wpic, const char *name)
- : KexiCreateProjectPage(parent, wpic, name)
+ : KexiCreateProjectPage(parent, wpic, name),m_kcp(parent)
 {
 	//cool picture ;)
 	QLabel *lPic = new QLabel("", this);
@@ -110,16 +111,12 @@ KexiCreateProjectPageDB::connectHost(const QString &driver, const QString &host,
 
 	m_databases->clear();
 
-	KexiDB *db = new KexiDB;
-	db = db->add(driver);
+	KexiDB *db = m_kcp->project()->manager()->newDBInstance(driver);
 
-	try
+	if (!db->connect(host, user, password, socket, port))
 	{
-		db->connect(host, user, password, socket, port);
-	}
-	catch(KexiDBError &err)
-	{
-		KMessageBox::detailedError(0, i18n("Error in databaseconnection"), err.message(), i18n("Database Connection"));
+		KMessageBox::detailedError(0, i18n("Error in databaseconnection"),
+			db->latestError()->message(), i18n("Database Connection"));
 		return false;
 	}
 

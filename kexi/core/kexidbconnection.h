@@ -25,7 +25,7 @@
 class QDomElement;
 class KoStore;
 class KexiDB;
-
+class KexiDBInterfaceManager;
 /**
  * this class aims to provide
  * methods to store/load database settings
@@ -59,7 +59,7 @@ class KexiDBConnection
 		 *
 		 * @returns the connection handle or 0 if connection faild
 		 */
-		KexiDB*	connectDB(KexiDB *parent, KoStore *store=0);
+		KexiDB*	connectDB(KexiDBInterfaceManager *parent, KoStore *store=0);
 
 		/**
 		 * returns if we are connected to a db

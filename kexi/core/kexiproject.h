@@ -34,6 +34,7 @@ class DCOPObject;
 class KexiRelation;
 class KexiProjectHandler;
 class KexiDBConnection;
+class KexiDBInterfaceManager;
 
 typedef QPtrList<KexiProjectHandler> ProviderList;
 
@@ -100,6 +101,7 @@ public:
 	PartList *getParts();
 
 	KexiDB* db()const { return m_db; };
+	KexiDBInterfaceManager* manager() {return m_dbInterfaceManager;}
 	bool dbIsAvaible()const { return m_dbAvaible; }
 	QString boolToString(bool b);
 	bool stringToBool(const QString &s);
@@ -137,6 +139,7 @@ private:
 	DCOPObject	*dcop;
 	bool		m_handlersLoaded;
 	KexiDBConnection *m_dbconnection;
+	KexiDBInterfaceManager *m_dbInterfaceManager;
 };
 
 #endif

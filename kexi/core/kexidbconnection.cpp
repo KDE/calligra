@@ -34,6 +34,7 @@
 #include <koStore.h>
 
 #include<kexiDB/kexidb.h>
+#include<kexiDB/kexidbinterfacemanager.h>
 #include<kexiDB/kexidberror.h>
 #include "kexidbconnection.h"
 
@@ -71,13 +72,13 @@ KexiDBConnection::KexiDBConnection(const QString &engine, const QString &file, b
 }
 
 KexiDB*
-KexiDBConnection::connectDB(KexiDB *parent, KoStore *store)
+KexiDBConnection::connectDB(KexiDBInterfaceManager *parent, KoStore *store)
 {
-	kdDebug() << "KexiDBConnection::connectDB()" << endl;
-
-	KexiDB *addDB = parent->add(m_engine);
+	KexiDB *addDB = parent->newDBInstance(m_engine);
 	if(!addDB)
 	{
+	kdDebug() << "KexiDBConnection::connectDB()" << endl;
+
 		KMessageBox::detailedError(0, i18n("Error in database connection"),
                                    i18n("kexi couldn't determine engine type"), i18n("Database Connection"));
 		return 0;
@@ -89,22 +90,17 @@ KexiDBConnection::connectDB(KexiDB *parent, KoStore *store)
 	{
 		case KexiDB::RemoteDB:
 		{
-			try
+			if(addDB->connect(m_host, m_user, m_pass, m_socket, m_port, m_dbname, false))
 			{
-				if(addDB->connect(m_host, m_user, m_pass, m_socket, m_port, m_dbname, false))
-				{
-					return addDB;
-				}
-
 				kdDebug() << "KexiDBConnection::connectDB(): remote = " << addDB << endl;
+				return addDB;
 			}
-			catch(KexiDBError err)
+			else
 			{
-				KMessageBox::detailedError(0, i18n("Error in database connection"), err.message(), i18n("Database Connection"));
+				KMessageBox::detailedError(0, i18n("Error in database connection"),addDB->latestError()->message(), i18n("Database Connection"));
+				delete addDB;
 				return 0;
 			}
-
-			return addDB;
 		}
 		case KexiDB::LocalDirectoryDB:
 		{
@@ -129,17 +125,17 @@ KexiDBConnection::connectDB(KexiDB *parent, KoStore *store)
 
 //			if(store)
 			provide(store);
-			try
+			if (addDB->load(tmpfile, m_persistant))
 			{
-				addDB->load(tmpfile, m_persistant);
+				return addDB;
 			}
-			catch(KexiDBError err)
+			else
 			{
-				err.toUser(0);
-				return false;
+				addDB->latestError()->toUser(0);
+				delete addDB;
+				return 0;
 			}
 
-			return addDB;
 		}
 		default:
 		{
