@@ -28,7 +28,7 @@
 #include <koparagcounter.h>
 #include "kwframestyle.h"
 #include <kocommand.h>
-
+#include "kwvariable.h"
 class KWFrameSet;
 class KWTableStyle;
 class KWTableTemplate;
@@ -39,6 +39,8 @@ class KoLinkVariable;
 class KWFieldVariable;
 class KWTimeVariable;
 class KWDateVariable;
+class KWPgNumVariable;
+class KWFootNoteVariable;
 /**
  * Command created when pasting formatted text
  * [relies on KWord's XML structure, so not moved to kotext]
@@ -818,4 +820,18 @@ protected:
     SeparatorLineLineType m_newLineType;
 };
 
+class KWRenameBookmarkCommand : public KNamedCommand
+{
+public:
+    KWRenameBookmarkCommand( const QString &name, const QString & _oldname, const QString & _newName, KWDocument *_doc);
+
+    ~KWRenameBookmarkCommand() {}
+
+    virtual void execute();
+    virtual void unexecute();
+protected:
+    KWDocument *m_doc;
+    QString m_oldName;
+    QString m_newName;
+};
 #endif

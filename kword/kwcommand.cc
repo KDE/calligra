@@ -1910,3 +1910,24 @@ void KWChangeFootNoteLineSeparatorParametersCommand::changeLineSeparatorParamete
     m_doc->setFootNoteSeparatorLineType( _type );
     m_doc->slotRepaintAllViews();
 }
+
+
+KWRenameBookmarkCommand::KWRenameBookmarkCommand( const QString &name, const QString & _oldname, const QString & _newName, KWDocument *_doc):
+    KNamedCommand(name),
+    m_doc( _doc ),
+    m_oldName( _oldname),
+    m_newName( _newName)
+{
+}
+
+void KWRenameBookmarkCommand::execute()
+{
+    m_doc->renameBookMark( m_oldName, m_newName);
+}
+
+void KWRenameBookmarkCommand::unexecute()
+{
+        m_doc->renameBookMark( m_newName, m_oldName);
+}
+
+

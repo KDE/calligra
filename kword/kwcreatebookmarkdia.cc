@@ -25,6 +25,7 @@
 #include <qpushbutton.h>
 #include <qlistbox.h>
 #include <kmessagebox.h>
+#include "kwcommand.h"
 #include "kwcreatebookmarkdia.h"
 
 KWCreateBookmarkDia::KWCreateBookmarkDia( const QStringList & _list, QWidget *parent, const char *name )
@@ -116,7 +117,9 @@ void KWSelectBookmarkDia::slotRenameBookmark()
     KWCreateBookmarkDia dia( lst, tmp, this, 0 );
     if ( dia.exec() ) {
         QString newName = dia.bookmarkName();
-        m_doc->renameBookMark(tmp, newName );
+        KWRenameBookmarkCommand *cmd = new KWRenameBookmarkCommand( i18n("Rename Bookmark"), tmp, newName, m_doc);
+        m_doc->addCommand( cmd );
+        cmd->execute();
         m_bookmarkList->changeItem ( newName, m_bookmarkList->currentItem() );
     }
 }
