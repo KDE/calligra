@@ -269,7 +269,7 @@ void KoAutoFormatDia::setupTab3()
     QVBoxLayout *grid = new QVBoxLayout(tab3, 5, 5);
     grid->setAutoAdd( true );
 
-    abbreviation=new KoAutoFormatExceptionWidget(tab3,i18n("Don't treat as end of sentence:"),m_autoFormat.listException(),true);
+    abbreviation=new KoAutoFormatExceptionWidget(tab3,i18n("Do not treat as the end of a sentence:"),m_autoFormat.listException(),true);
     ( void )new QWidget( tab3 );
     twoUpperLetter=new KoAutoFormatExceptionWidget(tab3,i18n("Accept two uppercase letters in:"),m_autoFormat.listTwoUpperLetterException());
     ( void )new QWidget( tab3 );
