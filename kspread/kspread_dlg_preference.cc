@@ -354,6 +354,22 @@ miscParameters::miscParameters( KSpreadView* _view,QWidget *parent , char *name 
   msgError->setChecked(m_bMsgError);
   lay1->addWidget(msgError);
 
+  label=new QLabel(tmpQGroupBox);
+  label->setText(i18n("Method of calc:"));
+  lay1->addWidget(label);
+
+  typeCalc=new QComboBox( tmpQGroupBox);
+  QStringList listTypeCalc;
+  listTypeCalc+=i18n("Sum");
+  listTypeCalc+=i18n("Min");
+  listTypeCalc+=i18n("Max");
+  listTypeCalc+=i18n("Average");
+  listTypeCalc+=i18n("Count");
+  typeCalc->insertStringList(listTypeCalc);
+  typeCalc->setCurrentItem(0);
+  lay1->addWidget(typeCalc);
+
+
   initComboBox();
   box->addWidget( tmpQGroupBox);
 
@@ -401,6 +417,28 @@ switch( m_pView->doc()->getMoveToValue( ))
                 break;
         }
 
+switch( m_pView->doc()->getTypeOfCalc())
+        {
+        case  Sum:
+                typeCalc->setCurrentItem(0);
+                break;
+        case  Min:
+                typeCalc->setCurrentItem(1);
+                break;
+        case  Max:
+                typeCalc->setCurrentItem(2);
+                break;
+        case  Average:
+                typeCalc->setCurrentItem(3);
+                break;
+        case  Count:
+	        typeCalc->setCurrentItem(4);
+                break;
+        default :
+                typeCalc->setCurrentItem(0);
+                break;
+        }
+
 }
 
 void miscParameters::slotDefault()
@@ -409,6 +447,7 @@ valIndent->setValue(10);
 typeCompletion->setCurrentItem(3);
 typeOfMove->setCurrentItem(0);
 msgError->setChecked(true);
+typeCalc->setCurrentItem(0);
 }
 
 
@@ -463,6 +502,32 @@ if(tmpMoveTo!=m_pView->doc()->getMoveToValue())
         {
         m_pView->doc()->setMoveToValue(tmpMoveTo);
         config->writeEntry( "Move", (int)tmpMoveTo);
+        }
+
+MethodOfCalc tmpMethodCalc=Sum;
+switch(typeCalc->currentItem())
+        {
+        case 0:
+	  tmpMethodCalc =Sum;
+	  break;
+        case 1:
+	  tmpMethodCalc=Min;
+	  break;
+        case 2:
+	  tmpMethodCalc=Max;
+	  break;
+        case 3:
+	  tmpMethodCalc=Average;
+	  break;
+	case 4:
+	  tmpMethodCalc=Count;
+	  break;
+        }
+if(tmpMethodCalc!=m_pView->doc()->getTypeOfCalc())
+        {
+        m_pView->doc()->setTypeOfCalc(tmpMethodCalc);
+        config->writeEntry( "Method of Calc", (int)tmpMethodCalc);
+	m_pView->resultOfCalc();
         }
 
 

@@ -90,6 +90,8 @@ protected:
   KIntNumInput  *valIndent;
   KConfig* config;
   QComboBox *typeCompletion;
+  QComboBox *typeCalc
+;
   QComboBox *typeOfMove;
   QCheckBox *msgError;
 } ;

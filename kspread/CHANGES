@@ -1115,3 +1115,14 @@ a file name)
 2000-12-11-Montel laurent <lmontel@mandrakesoft.com>
 ----------------------------------------------------
 -Now you can hide/show col/row header
+
+2000-12-18-Montel laurent <lmontel@mandrakesoft.com>
+----------------------------------------------------
+-Now you can define what you want to write in statusbar when you select
+an area:
+	sum
+	average
+	count
+	min
+	max
+you can configure it in "Configure dialogBox" -> misc

@@ -169,6 +169,11 @@ public:
 
     bool isLoading() {return m_bLoading;}
 
+    /**
+     * write in statusBar result of calc (Min, or Max, average, sum, count)
+     */
+    void resultOfCalc();
+
 public slots:
     void initialPosition();
     /**

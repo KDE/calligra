@@ -472,7 +472,8 @@ if( config->hasGroup("Parameters" ))
         m_pDoc->setCompletionMode((KGlobalSettings::Completion)config->readNumEntry("Completion Mode",(int)(KGlobalSettings::CompletionAuto)));
         m_pDoc->setMoveToValue((MoveTo)config->readNumEntry("Move",(int)(Bottom)));
         m_pDoc->setIndentValue(config->readNumEntry( "Indent",10 ) );
-        }
+        m_pDoc->setTypeOfCalc((MethodOfCalc)config->readNumEntry("Method of Calc",(int)(Sum)));
+	}
 }
 
 void KSpreadView::RecalcWorkBook(){
@@ -821,13 +822,13 @@ QButton * KSpreadView::newIconButton( const char *_file, bool _kbutton, QWidget 
 void KSpreadView::enableUndo( bool _b )
 {
     m_undo->setEnabled( _b );
-    m_undo->setText(i18n("Undo : %1").arg(m_pDoc->undoBuffer()->getUndoTitle()));
+    m_undo->setText(i18n("Undo: %1").arg(m_pDoc->undoBuffer()->getUndoTitle()));
 }
 
 void KSpreadView::enableRedo( bool _b )
 {
     m_redo->setEnabled( _b );
-    m_redo->setText(i18n("Redo : %1") .arg(m_pDoc->undoBuffer()->getRedoTitle()));
+    m_redo->setText(i18n("Redo: %1") .arg(m_pDoc->undoBuffer()->getRedoTitle()));
 }
 
 void KSpreadView::undo()
@@ -2666,53 +2667,9 @@ void KSpreadView::slotChangeSelection( KSpreadTable *_table, const QRect &_old, 
         m_resizeColumn->setEnabled(true);
         m_equalizeColumn->setEnabled(true);
         }
-    double result=0;
-    QRect tmpRect(n);
-    if(n.left()==0)
-        tmpRect.setCoords( m_pCanvas->markerColumn(), m_pCanvas->markerRow(),
-                        m_pCanvas->markerColumn(), m_pCanvas->markerRow());
-    if(tmpRect.bottom()==0x7FFF)
-        {
-
-        KSpreadCell* c = activeTable()->firstCell();
-        for( ;c; c = c->nextCell() )
-                {
-                int col = c->column();
-                if ( tmpRect.left() <= col && tmpRect.right() >= col
-                        &&!c->isObscuringForced())
-                        {
-                        if(c->isValue())
-                                result+=c->valueDouble();
-                        }
-                }
-        }
-    else if(n.right()==0x7FFF)
-        {
-        KSpreadCell* c = activeTable()->firstCell();
-        for( ; c; c = c->nextCell() )
-                {
-                int row = c->row();
-                if ( tmpRect.top() <= row && tmpRect.bottom() >= row
-                        &&!c->isObscuringForced())
-                        {
-                        if(c->isValue())
-                                result+=c->valueDouble();
-                        }
-                }
-        }
-    else
-        {
-        for (int i=tmpRect.left();i<=tmpRect.right();i++)
-                for(int j=tmpRect.top();j<=tmpRect.bottom();j++)
-                        {
-                        KSpreadCell *cell = activeTable()->cellAt( i, j );
-                        if(!cell->isDefault() && cell->isValue())
-                                result+=cell->valueDouble();
-                        }
-        }
-    KoMainWindow * tmpKo = m_pDoc->firstShell();
-    for ( ; tmpKo ; tmpKo = m_pDoc->nextShell() )
-        tmpKo->statusBarLabel()->setText(i18n(" Sum : %1").arg(result));
+   
+    
+    resultOfCalc();
     // Send some event around. This is read for example
     // by the calculator plugin.
     KSpreadSelectionChanged ev( n, activeTable()->name() );
@@ -2725,6 +2682,161 @@ void KSpreadView::slotChangeSelection( KSpreadTable *_table, const QRect &_old, 
     m_pCanvas->updateSelection( _old, _old_marker );
     m_pVBorderWidget->update();
     m_pHBorderWidget->update();
+}
+
+void KSpreadView::resultOfCalc()
+{
+  double result=0.0;
+  int nbCell=0;
+QRect n = activeTable()->selectionRect();
+ QRect tmpRect(n);
+    if(n.left()==0)
+        tmpRect.setCoords( m_pCanvas->markerColumn(), m_pCanvas->markerRow(),
+                        m_pCanvas->markerColumn(), m_pCanvas->markerRow());
+ if(tmpRect.bottom()==0x7FFF)
+   {
+     KSpreadCell* c = activeTable()->firstCell();
+     for( ;c; c = c->nextCell() )
+       {
+	 int col = c->column();
+	 if ( tmpRect.left() <= col && tmpRect.right() >= col
+	      &&!c->isObscuringForced())
+	   {
+	     if(c->isValue())
+	       {
+		 switch( m_pDoc->getTypeOfCalc())
+		   {
+		   case Sum:
+		     result+=c->valueDouble();		 
+		     break;
+		   case Average:
+		     result+=c->valueDouble();	
+		     break;
+		   case Min:
+		     if(result!=0)
+		       result=QMIN(c->valueDouble(),result);
+		     else
+		       result=c->valueDouble();
+		     break;
+		   case Max:
+		     if(result!=0)
+		       result=QMAX(c->valueDouble(),result);
+		     else
+		       result=c->valueDouble();
+		     break;
+		   case Count:
+		     break;
+		   default:
+		     break;
+		   }
+		 nbCell++;
+	       }
+	   }
+       }
+   }
+ else if(tmpRect.right()==0x7FFF)
+   {
+     KSpreadCell* c = activeTable()->firstCell();
+     for( ; c; c = c->nextCell() )
+       {
+	 int row = c->row();
+	 if ( tmpRect.top() <= row && tmpRect.bottom() >= row
+	      &&!c->isObscuringForced())
+	   {
+	     if(c->isValue())
+	       {
+		 switch( m_pDoc->getTypeOfCalc())
+		   {
+		   case Sum:
+		     result+=c->valueDouble();		 
+		     break;
+		   case Average:
+		     result+=c->valueDouble();	
+		     break;
+		   case Min:
+		     if(result!=0)
+		       result=QMIN(c->valueDouble(),result);
+		     else
+		       result=c->valueDouble();
+		     break;
+		   case Max:
+		     if(result!=0)
+		       result=QMAX(c->valueDouble(),result);
+		     else
+		       result=c->valueDouble();
+		     break;
+		   case Count:
+		     break;
+		   default:
+		     break;
+		   }
+		 nbCell++;
+	       }	
+	   }
+       }
+   }
+ else
+   {
+     for (int i=tmpRect.left();i<=tmpRect.right();i++)
+       for(int j=tmpRect.top();j<=tmpRect.bottom();j++)
+	 {
+	   KSpreadCell *cell = activeTable()->cellAt( i, j );
+	   if(!cell->isDefault() && cell->isValue())
+	     {
+		 switch( m_pDoc->getTypeOfCalc())
+		   {
+		   case Sum:
+		     result+=cell->valueDouble();		 
+		     break;
+		   case Average:
+		     result+=cell->valueDouble();	
+		     break;
+		   case Min:
+		     if(result!=0)
+		       result=QMIN(cell->valueDouble(),result);
+		     else
+		       result=cell->valueDouble();
+		     break;
+		   case Max:
+		     if(result!=0)
+		       result=QMAX(cell->valueDouble(),result);
+		     else
+		       result=cell->valueDouble();
+		     break;
+		   case Count:
+		     break;
+		   default:
+		     break;
+		   }
+		 nbCell++;
+	       }	      
+	 }
+   }
+ QString tmp;
+ switch( m_pDoc->getTypeOfCalc())
+   {
+   case Sum:
+     tmp=i18n(" Sum: %1").arg(result);		 
+     break;
+   case Average:
+     result=result/nbCell;
+     tmp=i18n("Average: %1").arg(result);	
+     break;
+   case Min:
+     tmp=i18n("Min: %1").arg(result);
+     break;
+   case Max:
+     tmp=i18n("Max: %1").arg(result);
+     break;
+   case Count:
+     tmp=i18n("Count: %1").arg(nbCell);
+     break;
+   }
+	 
+	 
+ KoMainWindow * tmpKo = m_pDoc->firstShell();
+ for ( ; tmpKo ; tmpKo = m_pDoc->nextShell() )
+   tmpKo->statusBarLabel()->setText(tmp);
 }
 
 void KSpreadView::slotUnselect( KSpreadTable *_table, const QRect& _old )

@@ -301,6 +301,14 @@ public:
   void setShowMessageError(bool _show) {   m_bShowError=_show;}
   bool getShowMessageError() { return  m_bShowError;}
 
+  /**
+  * Method of calc
+  */
+  void setTypeOfCalc( MethodOfCalc _calc) { m_EMethodOfCalc=_calc;}
+  MethodOfCalc getTypeOfCalc(){ return m_EMethodOfCalc;}
+
+
+
 public slots:
   /**
    * Open a dialog for the "Page Layout".
@@ -536,6 +544,8 @@ protected:
 
 
   bool m_bShowError;
+  
+  MethodOfCalc m_EMethodOfCalc;
 };
 
 #endif

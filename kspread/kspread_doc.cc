@@ -125,6 +125,7 @@ KSpreadDoc::KSpreadDoc( QWidget *parentWidget, const char *widgetName, QObject* 
   m_iIndentValue=10;
   m_EMoveTo=Bottom;
   m_bShowError=false;
+  m_EMethodOfCalc=Sum;
 }
 
 bool KSpreadDoc::initDoc()
