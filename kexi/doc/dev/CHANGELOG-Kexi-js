@@ -278,12 +278,6 @@ TODO: fix lucijan's hack, with part loading (29 feb)
 === Startup TODO ===
 - reuse KexiNameWidget in KexiNewProjectWizard!
 
-=== CLI TODO ===
-- add kexicmd as a symlink to kexi binary, for totally non-gui usage
-- just drop all tables when database already exist 
-  (so recreating database will be available even 
-	if you have only access to one database).
-
 
 TODO: add SharedAction::setVisible() and use QMenuData::setItemVisible() where needed
 
@@ -313,6 +307,13 @@ TODO: Query designer: for queries like 'select * from a, b, c' allow to enter * 
 - add clever query relatins parsing 
       (needed for switching back to GUI editor from text mode)
 - add flexible support for date/time constants
+
+=== CLI TODO ===
+- add kexicmd as a symlink to kexi binary, for totally non-gui usage
+- just drop all tables when database already exist 
+	(so recreating database will be available even 
+	if you have only access to one database).
+- GRANT privileges for non-root (current?) user for newly created db
 
 === 2004 LT TODO ===
 KexiDB Drivers

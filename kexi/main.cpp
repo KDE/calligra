@@ -87,30 +87,29 @@ static KCmdLineOptions options[] =
 	"Database driver to be used for\n"
 	"connecting to a database project.\n"
 	"Ignored if a shortcut filename\n"
-	"is provided.\n"), "SQLite" },
+	"is provided."), "SQLite" },
   { "u", 0, 0 },
   { "user <name>", I18N_NOOP(
 	"User name to be used for\n"
 	"connecting to a database project.\n"
 	"Ignored if a shortcut filename\n"
-	"is provided. If omitted, current \n"
-	"user's name will be used.\n"), 0 },
+	"is provided."), 0 },
   { "password <password>", I18N_NOOP(
 	"User password to be used for\n"
 	"connecting to a database project.\n"
 	"Ignored if a shortcut filename\n"
-	"is provided.\n"), 0 },
+	"is provided."), 0 },
   { "h", 0, 0 },
   { "host <name>", I18N_NOOP(
 	"Server (host) name to be used for\n"
 	"connecting to a database project.\n"
 	"Ignored if a shortcut filename\n"
-	"is provided.\n"), 0 },
+	"is provided."), 0 },
   { "port <number>", I18N_NOOP(
 	"Server's port name to be used for\n"
 	"connecting to a database project.\n"
 	"Ignored if a shortcut filename\n"
-	"is provided.\n"), 0 },
+	"is provided."), 0 },
 
   { "+[database-name]", I18N_NOOP(
 	"Database project filename\n"
