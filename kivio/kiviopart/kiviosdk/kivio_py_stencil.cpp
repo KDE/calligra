@@ -504,6 +504,14 @@ void KivioPyStencil::paint( KivioIntraStencilData *d, bool outlined )
         d->painter->drawEllipse( x, y, w, h );
       }
     }
+
+    if(stype == "polygon") {
+      d->painter->drawPolygon(&points);
+    }
+
+    if(stype == "polyline") {
+      d->painter->drawPolyline(&points);
+    }
   }
 
   KivioConnectorTarget *pTarget = m_pConnectorTargets->first();
