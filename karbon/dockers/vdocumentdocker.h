@@ -136,6 +136,7 @@ public slots:
 	void updateLayers();
 
 	void selectionChanged( QListViewItem* item, const QPoint&, int col );
+	void slotSelectionChanged();
 	void renameItem( QListViewItem* item, const QPoint&, int col );
 	void addLayer();
 	void raiseItem();

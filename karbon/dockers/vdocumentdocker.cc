@@ -439,6 +439,7 @@ VLayersTab::VLayersTab( KarbonView* view, QWidget* parent )
 
 	connect( m_layersListView, SIGNAL( clicked( QListViewItem*, const QPoint&, int ) ), this, SLOT( selectionChanged( QListViewItem*, const QPoint&, int ) ) );
 	connect( m_layersListView, SIGNAL( rightButtonClicked( QListViewItem*, const QPoint&, int ) ), this, SLOT( renameItem( QListViewItem*, const QPoint&, int ) ) );
+	connect( m_view, SIGNAL( selectionChange() ), this, SLOT( slotSelectionChanged() ) );
 	connect( m_buttonGroup, SIGNAL( clicked( int ) ), this, SLOT( slotButtonClicked( int ) ) );
 
 	layout->activate();
@@ -464,6 +465,26 @@ VLayersTab::slotButtonClicked( int ID )
 			deleteItem(); break;
 	}
 } // VLayersTab::slotButtonClicked
+
+void
+VLayersTab::slotSelectionChanged()
+{
+	// TODO : use some kind of mapping...
+	m_layersListView->clearSelection();
+	VObjectListIterator itr = m_document->selection()->objects();
+	for( ; itr.current();++itr )
+		if( itr.current()->state() != VObject::deleted )
+		{
+			QListViewItemIterator it( m_layersListView );
+		    while( it.current() )
+			{
+				if( dynamic_cast<VObjectListViewItem *>( it.current() ) &&
+					dynamic_cast<VObjectListViewItem *>( it.current() )->object() == itr.current() )
+					m_layersListView->setSelected( it.current(), true );
+				++it;
+			}
+		}
+}
 
 void
 VLayersTab::selectionChanged( QListViewItem* item, const QPoint &, int col )
