@@ -616,3 +616,4 @@ Reggie, 2.1.2000:
 Changes after Kpresenter-1.1
 ============================
 - Port to kotext
+- New effect : Now kpresenter can play sound.
