@@ -1098,46 +1098,25 @@ void KPresenterDoc::saveOasisSettings( KoXmlWriter &settingsWriter )
     }
     if ( !helpLineOasis.isEmpty() )
     {
-        settingsWriter.startElement( "config:config-item" );
-        settingsWriter.addAttribute( "config:name", "SnapLinesDrawing" );
-        settingsWriter.addAttribute( "config:type", "string" );
-        settingsWriter.addTextNode(helpLineOasis);
-        settingsWriter.endElement();
+        settingsWriter.addConfigItem("SnapLinesDrawing", helpLineOasis );
     }
     //<config:config-item config:name="IsSnapToGrid" config:type="boolean">false</config:config-item>
-    settingsWriter.startElement( "config:config-item" );
-    settingsWriter.addAttribute( "config:name", "IsSnapToGrid" );
-    settingsWriter.addAttribute( "config:type", "boolean" );
-    settingsWriter.addTextNode(m_bSnapToGrid ? "true" : "false" );
-    settingsWriter.endElement();
+    settingsWriter.addConfigItem( "IsSnapToGrid", m_bSnapToGrid );
 
     //<config:config-item config:name="GridFineWidth" config:type="int">500</config:config-item>
-    settingsWriter.startElement( "config:config-item" );
-    settingsWriter.addAttribute( "config:name", "GridFineWidth" );
-    settingsWriter.addAttribute( "config:type", "int" );
-    settingsWriter.addTextNode( QString::number( m_gridX ) );
-    settingsWriter.endElement();
+    settingsWriter.addConfigItem( "GridFineWidth", m_gridX );
 
 
     //<config:config-item config:name="GridFineHeight" config:type="int">500</config:config-item>
-    settingsWriter.startElement( "config:config-item" );
-    settingsWriter.addAttribute( "config:name", "GridFineHeight" );
-    settingsWriter.addAttribute( "config:type", "int" );
-    settingsWriter.addTextNode( QString::number( m_gridX ) );
-    settingsWriter.endElement();
+    settingsWriter.addConfigItem( "GridFineHeight", m_gridY );
 
     //<config:config-item config:name="SelectedPage" config:type="short">3</config:config-item>
-    settingsWriter.startElement( "config:config-item" );
-    settingsWriter.addAttribute( "config:name", "SelectedPage" );
-    settingsWriter.addAttribute( "config:type", "short" );
     //store first view parameter.
     int activePage=0;
     if ( m_initialActivePage )
         activePage=m_pageList.findRef(m_initialActivePage);
     activePage = QMAX( activePage, 0);
-    settingsWriter.addTextNode( QString::number( activePage ) );
-    settingsWriter.endElement();
-
+    settingsWriter.addConfigItem( "SelectedPage", activePage );
 }
 
 void KPresenterDoc::loadOasisSettings()

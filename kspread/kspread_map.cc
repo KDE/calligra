@@ -99,11 +99,8 @@ void KSpreadMap::saveOasisSettings( KoXmlWriter &settingsWriter )
   {
       KSpreadCanvas * canvas = view->canvasWidget();
       //<config:config-item config:name="ActiveTable" config:type="string">Feuille1</config:config-item>
-      settingsWriter.startElement( "config:config-item" );
-      settingsWriter.addAttribute( "config:name", "ActiveTable" );
-      settingsWriter.addAttribute( "config:type", "string" );
-      settingsWriter.addTextNode( canvas->activeTable()->tableName() );
-      settingsWriter.endElement();
+      settingsWriter.addConfigItem( "ActiveTable",  canvas->activeTable()->tableName() );
+
       //todo
       //mymap.setAttribute( "markerColumn", canvas->markerColumn() );
       //mymap.setAttribute( "markerRow", canvas->markerRow() );

@@ -300,3 +300,39 @@ void KoXmlWriter::addManifestEntry( const QString& fullPath, const QString& medi
     addAttribute( "manifest:full-path", fullPath );
     endElement();
 }
+
+void KoXmlWriter::addConfigItem( const QString & configName, const QString& value )
+{
+    startElement( "config:config-item" );
+    addAttribute( "config:name", configName );
+    addAttribute( "config:type",  "string" );
+    addTextNode( value );
+    endElement();
+}
+
+void KoXmlWriter::addConfigItem( const QString & configName, bool value )
+{
+    startElement( "config:config-item" );
+    addAttribute( "config:name", configName );
+    addAttribute( "config:type",  "boolean" );
+    addTextNode( value ? "true" : "false" );
+    endElement();
+}
+
+void KoXmlWriter::addConfigItem( const QString & configName, int value )
+{
+    startElement( "config:config-item" );
+    addAttribute( "config:name", configName );
+    addAttribute( "config:type",  "int");
+    addTextNode(QString::number( value ) );
+    endElement();
+}
+
+void KoXmlWriter::addConfigItem( const QString & configName, double value )
+{
+    startElement( "config:config-item" );
+    addAttribute( "config:name", configName );
+    addAttribute( "config:type", "double" );
+    addTextNode( QString::number( value ) );
+    endElement();
+}

@@ -171,6 +171,19 @@ public:
     void addManifestEntry( const QString& fullPath, const QString& mediaType );
 
     /**
+     * Special helper for writing config item into settings.xml
+     */
+    void addConfigItem( const QString & configName, const QString& value );
+
+    void addConfigItem( const QString & configName, bool value );
+
+    void addConfigItem( const QString & configName, int value );
+
+    void addConfigItem( const QString & configName, double value );
+
+
+
+    /**
      * @return the current indentation level.
      * Useful when creating a sub-KoXmlWriter (see addCompleteElement)
      */
