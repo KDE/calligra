@@ -164,8 +164,12 @@ void KoParagCounter::loadOasis( KoOasisContext& context, int restartNumbering, b
     //const QDomElement listStyleProperties = context.listStyleStack().currentListStyleProperties();
     m_numbering = heading ? 1 : 0;
     m_depth = level - 1; // depth start at 0
-    m_startNumber = restartNumbering;
+    // restartNumbering can either be provided by caller, or taken from the style
+    if ( restartNumbering == -1 && listStyle.hasAttribute( "text:start-value" ) )
+        restartNumbering = context.listStyleStack().currentListStyle().attribute( "text:start-value" ).toInt();
+
     m_restartCounter = restartNumbering != -1;
+    m_startNumber = m_restartCounter ? restartNumbering : 1;
     if ( orderedList || heading ) {
         m_style = importCounterType( listStyle.attribute("style:num-format")[0] );
         m_prefix = listStyle.attribute( "style:num-prefix" );
@@ -227,6 +231,7 @@ int KoParagCounter::number( const KoTextParag *paragraph )
 
     // Should we start a new list?
     if ( m_restartCounter ) {
+        Q_ASSERT( m_startNumber != -1 );
         m_cache.number = m_startNumber;
         return m_startNumber;
     }
@@ -311,6 +316,7 @@ int KoParagCounter::number( const KoTextParag *paragraph )
         }
         break;
     }
+    Q_ASSERT( m_cache.number != -1 );
     return m_cache.number;
 }
 
@@ -717,10 +723,15 @@ const QCString RNThousands[] = {"", "m", "mm", "mmm"};
 
 QString KoParagCounter::makeRomanNumber( int n )
 {
-    return QString::fromLatin1( RNThousands[ ( n / 1000 ) ] +
-                                RNHundreds[ ( n / 100 ) % 10 ] +
-                                RNTens[ ( n / 10 ) % 10 ] +
-                                RNUnits[ ( n ) % 10 ] );
+    if ( n >= 0 )
+        return QString::fromLatin1( RNThousands[ ( n / 1000 ) ] +
+                                    RNHundreds[ ( n / 100 ) % 10 ] +
+                                    RNTens[ ( n / 10 ) % 10 ] +
+                                    RNUnits[ ( n ) % 10 ] );
+    else { // should never happen, but better not crash if it does
+        kdWarning(32500) << "makeRomanNumber: n=" << n << endl;
+        return QString::number( n );
+    }
 }
 
 QString KoParagCounter::makeAlphaUpperNumber( int n )

@@ -245,19 +245,8 @@ void KoStyle::loadStyle( QDomElement & parentElem, int docVersion )
 
 void KoStyle::loadStyle( QDomElement & styleElem, KoOasisContext& context )
 {
-    context.styleStack().save();
-    context.addStyles( &styleElem );
-    KoParagLayout layout;
-    KoParagLayout::loadOasisParagLayout( layout, context );
-
-    // This way, KoTextParag::setParagLayout also sets the style pointer, to this style
-    layout.style = this;
-    m_paragLayout = layout;
-
     // Load name
     m_name = styleElem.attribute( "style:name" );
-
-    m_format.load( context );
 
     // ### In KWord the style says "I'm part of the outline" (TOC)
     // ### In OOo the paragraph says that (text:h)
@@ -265,6 +254,41 @@ void KoStyle::loadStyle( QDomElement & styleElem, KoOasisContext& context )
     // This needs to be reviewed/understood. Can a paragraph's belonging
     // to the outline be switched on/off? If not, why is it a parag property?
     m_bOutline = m_name.startsWith( "Heading" );
+
+    context.styleStack().save();
+    context.addStyles( &styleElem ); // Load all parents - only because we don't support inheritance.
+    KoParagLayout layout;
+    KoParagLayout::loadOasisParagLayout( layout, context );
+
+    // loadOasisParagLayout doesn't load the counter. It's modelled differently for parags and for styles.
+    // ### missing info in the format!
+    const int level = m_name.right(1).toInt(); // ## HACK
+    bool listOK = false;
+    if ( level > 0 ) {
+        if ( m_bOutline )
+            listOK = context.pushOutlineListLevelStyle( level );
+        else {
+            const QString listStyleName = styleElem.attribute( "style:list-style-name" );
+            listOK = !listStyleName.isEmpty();
+            if ( listOK )
+                listOK = context.pushListLevelStyle( listStyleName, level );
+        }
+    }
+    if ( listOK ) {
+        const QDomElement listStyle = context.listStyleStack().currentListStyle();
+        // The tag is either text:list-level-style-number or text:list-level-style-bullet
+        bool ordered = listStyle.tagName() == "text:list-level-style-number";
+        Q_ASSERT( !layout.counter );
+        layout.counter = new KoParagCounter;
+        layout.counter->loadOasis( context, -1, ordered, m_bOutline, level );
+        context.listStyleStack().pop();
+    }
+
+    // This way, KoTextParag::setParagLayout also sets the style pointer, to this style
+    layout.style = this;
+    m_paragLayout = layout;
+
+    m_format.load( context );
 
     context.styleStack().restore();
 }

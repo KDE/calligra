@@ -56,6 +56,9 @@ public:
     /// @return true on success (a list style was found and pushed)
     bool pushListLevelStyle( const QString& listStyleName, int level );
     /// Used for outline levels
+    bool pushOutlineListLevelStyle( int level );
+
+private:
     /// @return true on success (a list style was found and pushed)
     bool pushListLevelStyle( const QString& listStyleName, const QDomElement& fullListStyle, int level );
 

@@ -1788,7 +1788,7 @@ void KoTextParag::loadOasisSpan( const QDomElement& parent, KoOasisContext& cont
             } else {
                 if ( (*it).frameSetName != m_currentFrameset.attribute( "name" ) ) {
                     // Oh tell me this never happens...
-                    kdWarning(30518) << "Cross-frameset bookmark! Not supported." << endl;
+                    kdWarning(32500) << "Cross-frameset bookmark! Not supported." << endl;
                 } else {
                     appendBookmark( doc, (*it).paragId, (*it).pos,
                                     numberOfParagraphs( m_currentFrameset ), pos, it.key() );
@@ -1801,7 +1801,7 @@ void KoTextParag::loadOasisSpan( const QDomElement& parent, KoOasisContext& cont
             QDomText t ( node.toText() );
             if ( t.isNull() ) // no textnode, we must ignore
             {
-                kdWarning(30518) << "Ignoring tag " << ts.tagName() << endl;
+                kdWarning(32500) << "Ignoring tag " << ts.tagName() << endl;
                 continue;
             }
             else
