@@ -559,7 +559,7 @@ QString Field::debugString()
 	QString prec_str;
 	if (m_precision > 0 && isFPNumericType())
 		prec_str = QString(", ") + QString::number(m_precision);
-	if (m_length > 0)
+	if (m_type==Field::Text && m_length>0)
 		dbg += "(" + QString::number(m_length) + prec_str + ")";
 	if (m_constraints & Field::AutoInc)
 		dbg += " AUTOINC";

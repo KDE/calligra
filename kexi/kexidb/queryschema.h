@@ -139,7 +139,7 @@ class KEXI_DB_EXPORT QuerySchema : public FieldList, public SchemaData
 
 		/*! Removes all columns and their aliases from the columns list, 
 		 removes all tables and their aliases from the tables list within this query.
-		 Sets parent table information to NULL.
+		 Sets master table information to NULL.
 		 Does not destroy any objects though. Clears name and all other properties. 
 		 \sa FieldList::clear() */
 		virtual void clear();
@@ -151,24 +151,28 @@ class KEXI_DB_EXPORT QuerySchema : public FieldList, public SchemaData
 			returns this connection object, otherwise NULL. */
 		Connection* connection() const;
 		
-		/*! \return table that is parent to this query. 
+		/*! \return table that is master to this query. 
 		 All potentially-editable columns within this query belong just to this table.
 		 This method also can return NULL if there are no tables at all,
-		 or if previously assigned parent table schema has been removed 
+		 or if previously assigned master table schema has been removed 
 		 with removeTable(). 
-		 Every query that have at least one table defined, should have 
-		 assigned a parent table. */
-		TableSchema* parentTable() const;
+		 Every query that has at least one table defined, should have 
+		 assigned a master table. 
+		 If no master table is assigned explicitym but this method there is only 
+		 one table used for this query even if there are table aliases,
+		 a single table is returned here.
+		 (e.g. "T" table is returned for "SELECT T1.A, T2.B FROM T T1, T T2" statement). */
+		TableSchema* masterTable() const;
 
-		/*! Sets parent table of this query to \a table.
+		/*! Sets master table of this query to \a table.
 			This table should be also added to query's tables list
 			using addTable(). If \a table equals NULL, nothing is performed.
-			\sa parentTable() */
-		void setParentTable(TableSchema *table);
+			\sa masterTable() */
+		void setMasterTable(TableSchema *table);
 		
 		/*! \return list of tables used in a query. 
-		 This also includes parent table. 
-		 \sa parentTable() */
+		 This also includes master table. 
+		 \sa masterTable() */
 		TableSchema::List* tables() const;
 
 		/*! Adds \a table schema as one of tables used in a query.
@@ -179,7 +183,7 @@ class KEXI_DB_EXPORT QuerySchema : public FieldList, public SchemaData
 
 		/*! Removes \a table schema from this query. 
 		 This does not destroy \a table object but only takes it out of the list. 
-		 If this table was parent for the query, parent table information is also
+		 If this table was master for the query, master table information is also
 		 invalidated. */
 		void removeTable(TableSchema *table);
 
@@ -322,15 +326,15 @@ class KEXI_DB_EXPORT QuerySchema : public FieldList, public SchemaData
 		 Returned vector is owned by QuerySchema object, when you assign it, 
 		 it is implicity shared.
 		 Its size if equal to number of PKEY fields, i.e. 
-		 == parentTable()->primaryKey()->fieldCount().
-		 Returns empty vector if there is neither parent table nor parent table's pkey.
+		 == masterTable()->primaryKey()->fieldCount().
+		 Returns empty vector if there is neither master table nor master table's pkey.
 		 This method's result is cached by QuerySchema object.
 @todo js: UPDATE CACHE!
 		*/
 		QValueVector<uint> pkeyFieldsOrder();
 
 		/*! \return a list of field infos for all auto-incremented fields
-		 from parent table of this query. This result is cached for efficiency. 
+		 from master table of this query. This result is cached for efficiency. 
 		 fieldsExpanded() is used for that.
 		*/
 		QueryColumnInfo::List* autoIncrementFields();

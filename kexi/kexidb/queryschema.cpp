@@ -42,7 +42,7 @@ class QuerySchemaPrivate
 	public:
 		QuerySchemaPrivate(QuerySchema* q)
 		 : query(q)
-		 , parent_table(0)
+		 , masterTable(0)
 		 , maxIndexWithAlias(-1)
 		 , visibility(64)
 		 , fieldsExpanded(0)
@@ -78,7 +78,7 @@ class QuerySchemaPrivate
 			tableAliases.clear();
 			asterisks.clear();
 			relations.clear();
-			parent_table = 0;
+			masterTable = 0;
 			tables.clear();
 			clearCachedData();
 			delete pkeyFieldsOrder;
@@ -138,10 +138,10 @@ class QuerySchemaPrivate
 
 		QuerySchema *query;
 
-		/*! Parent table of the query. (may be NULL)
-			Any data modifications can be performed if we know parent table.
+		/*! Master table of the query. (may be NULL)
+			Any data modifications can be performed if we know master table.
 			If null, query's records cannot be modified. */
-		TableSchema *parent_table;
+		TableSchema *masterTable;
 		
 		/*! List of tables used in this query */
 		TableSchema::List tables;
@@ -265,19 +265,19 @@ QuerySchema::QuerySchema(TableSchema* tableSchema)
 	, SchemaData(KexiDB::QueryObjectType)
 	, d( new QuerySchemaPrivate(this) )
 {
-	d->parent_table = tableSchema;
-	assert(d->parent_table);
+	d->masterTable = tableSchema;
+	assert(d->masterTable);
 	init();
-	if (!d->parent_table) {
+	if (!d->masterTable) {
 		m_name = QString::null;
 		return;
 	}
-	addTable(d->parent_table);
+	addTable(d->masterTable);
 	//defaults:
 	//inherit name from a table
-	m_name = d->parent_table->name();
+	m_name = d->masterTable->name();
 	//inherit caption from a table
-	m_caption = d->parent_table->caption();
+	m_caption = d->masterTable->caption();
 	//add all fields of the table as asterisk:
 	addField( new QueryAsterisk(this) );
 }
@@ -435,7 +435,7 @@ FieldList& QuerySchema::addAsterisk(QueryAsterisk *asterisk, bool visible)
 
 Connection* QuerySchema::connection() const
 {
-	return d->parent_table ? d->parent_table->connection() : 0;
+	return d->masterTable ? d->masterTable->connection() : 0;
 }
 
 QString QuerySchema::debugString()
@@ -444,7 +444,7 @@ QString QuerySchema::debugString()
 	dbg.reserve(1024);
 	//fields
 	dbg = QString("QUERY ") + schemaDataDebugString() + "\n"
-		+ "-PARENT_TABLE=" + (d->parent_table ? d->parent_table->name() :"<NULL>")
+		+ "-masterTable=" + (d->masterTable ? d->masterTable->name() :"<NULL>")
 		+ "\n-COLUMNS:\n"
 		+ ((fieldCount()>0) ? FieldList::debugString() : "<NONE>") + "\n";
 
@@ -514,15 +514,30 @@ QString QuerySchema::debugString()
 	return dbg;
 }
 
-TableSchema* QuerySchema::parentTable() const
+TableSchema* QuerySchema::masterTable() const
 {
-	return d->parent_table;
+	if (d->masterTable)
+		return d->masterTable;
+	if (d->tables.isEmpty())
+		return 0;
+
+	//try to find master table if there's only one table (with possible aliasses)
+	int num = 0;
+	QString tableNameLower;
+	for (TableSchema::ListIterator it(d->tables); it.current(); ++it, num++) {
+		if (!tableNameLower.isEmpty() && it.current()->name().lower()!=tableNameLower) {
+			//two or more different tables
+			return 0;
+		}
+		tableNameLower = tableAlias(num);
+	}
+	return d->tables.first();
 }
 
-void QuerySchema::setParentTable(TableSchema *table)
+void QuerySchema::setMasterTable(TableSchema *table)
 { 
 	if (table)
-		d->parent_table=table; 
+		d->masterTable=table; 
 }
 
 TableSchema::List* QuerySchema::tables() const
@@ -566,8 +581,8 @@ void QuerySchema::removeTable(TableSchema *table)
 {
 	if (!table)
 		return;
-	if (d->parent_table == table)
-		d->parent_table = 0;
+	if (d->masterTable == table)
+		d->masterTable = 0;
 	d->tables.remove(table);
 	//todo: remove fields!
 }
@@ -795,7 +810,7 @@ QValueVector<uint> QuerySchema::pkeyFieldsOrder()
 	if (d->pkeyFieldsOrder)
 		return *d->pkeyFieldsOrder;
 
-	TableSchema *tbl = parentTable();
+	TableSchema *tbl = masterTable();
 	if (!tbl || !tbl->primaryKey())
 		return QValueVector<uint>();
 
@@ -836,15 +851,15 @@ QueryColumnInfo::List* QuerySchema::autoIncrementFields()
 	if (!d->autoincFields) {
 		d->autoincFields = new QueryColumnInfo::List();
 	}
-	if (!d->parent_table) {
-		KexiDBWarn << "QuerySchema::autoIncrementFields(): no parent table!" << endl;
+	if (!d->masterTable) {
+		KexiDBWarn << "QuerySchema::autoIncrementFields(): no master table!" << endl;
 		return d->autoincFields;
 	}
 	if (d->autoincFields->isEmpty()) {//no cache
 		QueryColumnInfo::Vector fexp = fieldsExpanded();
 		for (int i=0; i<(int)fexp.count(); i++) {
 			QueryColumnInfo *fi = fexp[i];
-			if (fi->field->table() == d->parent_table && fi->field->isAutoIncrement()) {
+			if (fi->field->table() == d->masterTable && fi->field->isAutoIncrement()) {
 				d->autoincFields->append( fi );
 			}
 		}

@@ -753,7 +753,7 @@ QString Connection::createTableStatement( const KexiDB::TableSchema& tableSchema
 				v += m_driver->sqlTypeName(field->type());
 			if (field->isUnsigned())
 				v += (" " + m_driver->beh->UNSIGNED_TYPE_KEYWORD);
-			if (field->m_length>0)
+			if (field->type()==Field::Text && field->m_length>0)
 				v += QString("(%1)").arg(field->m_length);
 			if (autoinc)
 				v += (" " +
@@ -1107,9 +1107,12 @@ bool Connection::createTable( KexiDB::TableSchema* tableSchema, bool replaceExis
 
 	const QString &tableName = tableSchema->name().lower();
 
+	bool previousSchemaStillKept = false;
+
+	KexiDB::TableSchema *existingTable = 0;
 	if (replaceExisting) {
 		//get previous table (do not retrieve, though)
-		KexiDB::TableSchema *existingTable = m_tables_byname[tableName];
+		existingTable = m_tables_byname[tableName];
 		if (existingTable) {
 			if (existingTable == tableSchema) {
 				setError(ERR_OBJECT_EXISTS, i18n("Could not create the same table \"%1\" twice.").arg(tableSchema->name()) );
@@ -1118,7 +1121,8 @@ bool Connection::createTable( KexiDB::TableSchema* tableSchema, bool replaceExis
 //TODO(js): update any structure (e.g. queries) that depend on this table!
 			if (existingTable->id()>0)
 				tableSchema->m_id = existingTable->id(); //copy id from existing table
-			if (!dropTable( existingTable ))
+			previousSchemaStillKept = true;
+			if (!dropTable( existingTable, false /*alsoRemoveSchema*/ ))
 				return false;
 		}
 	}
@@ -1224,11 +1228,20 @@ bool Connection::createTable( KexiDB::TableSchema* tableSchema, bool replaceExis
 			delete existingTable;
 		}
 	}*/
-	//store objects locally:
-	m_tables.insert(tableSchema->id(), tableSchema);
-	m_tables_byname.insert(tableSchema->name().lower(), tableSchema);
 
-	return commitAutoCommitTransaction(trans);
+	bool res = commitAutoCommitTransaction(trans);
+
+	if (res) {
+		if (previousSchemaStillKept) {
+			//remove previous table schema
+			m_tables_byname.remove(existingTable->name().lower());
+			m_tables.remove(existingTable->id());
+		}
+		//store one schema object locally:
+		m_tables.insert(tableSchema->id(), tableSchema);
+		m_tables_byname.insert(tableSchema->name().lower(), tableSchema);
+	}
+	return res;
 }
 
 bool Connection::removeObject( uint objId )
@@ -1257,6 +1270,11 @@ bool Connection::drv_dropTable( const QString& name )
     TODO: Should check that a database is currently in use? (c.f. createTable)
 */
 tristate Connection::dropTable( KexiDB::TableSchema* tableSchema )
+{
+	return dropTable( tableSchema, true );
+}
+
+tristate Connection::dropTable( KexiDB::TableSchema* tableSchema, bool alsoRemoveSchema)
 {
 // Each SQL identifier needs to be escaped in the generated query.
 	clearError();
@@ -1304,10 +1322,11 @@ tristate Connection::dropTable( KexiDB::TableSchema* tableSchema )
 		return false;
 	}
 
-//TODO(js): update any structure (e.g. queries) that depend on this table!
-	m_tables_byname.remove(tableSchema->name().lower());
-	m_tables.remove(tableSchema->id());
-
+	if (alsoRemoveSchema) {
+//! \todo js: update any structure (e.g. queries) that depend on this table!
+		m_tables_byname.remove(tableSchema->name().lower());
+		m_tables.remove(tableSchema->id());
+	}
 	return commitAutoCommitTransaction(trans);
 }
 
@@ -1991,10 +2010,16 @@ bool Connection::resultExists(const QString& sql, bool &success)
 	//optimization
 	if (m_driver->beh->SELECT_1_SUBQUERY_SUPPORTED) {
 		//this is at least for sqlite
-		m_sql = QString("SELECT 1 FROM (") + sql + ") LIMIT 1"; // is this safe?;
+		if (sql.left(6).upper() == "SELECT")
+			m_sql = QString("SELECT 1 FROM (") + sql + ") LIMIT 1"; // is this safe?;
+		else
+			m_sql = sql;
 	}
 	else {
-		m_sql = sql + " LIMIT 1"; //not always safe!
+		if (sql.left(6).upper() == "SELECT")
+			m_sql = sql + " LIMIT 1"; //not always safe!
+		else
+			m_sql = sql;
 	}
 	if (!(cursor = executeQuery( m_sql ))) {
 		KexiDBDbg << "Connection::querySingleRecord(): !executeQuery()" << endl;
@@ -2342,18 +2367,18 @@ bool Connection::updateRow(QuerySchema &query, RowData& data, RowEditBuffer& buf
 		KexiDBDbg << " -- NO CHANGES DATA!" << endl;
 		return true;
 	}
-	if (!query.parentTable()) {
-		KexiDBWarn << " -- NO PARENT TABLE!" << endl;
+	if (!query.masterTable()) {
+		KexiDBWarn << " -- NO MASTER TABLE!" << endl;
 		return false;
 	}
-	IndexSchema *pkey = query.parentTable()->primaryKey();
+	IndexSchema *pkey = query.masterTable()->primaryKey();
 	if (!pkey || pkey->fields()->isEmpty()) {
 		KexiDBWarn << " -- NO PARENT TABLE's PKEY!" << endl;
 //js TODO: hmm, perhaps we can try to update without using PKEY?
 		return false;
 	}
 	//update the record:
-	m_sql = "UPDATE " + escapeIdentifier(query.parentTable()->name()) + " SET ";
+	m_sql = "UPDATE " + escapeIdentifier(query.masterTable()->name()) + " SET ";
 	QString sqlset, sqlwhere;
 	sqlset.reserve(1024);
 	sqlwhere.reserve(1024);
@@ -2405,20 +2430,20 @@ bool Connection::insertRow(QuerySchema &query, RowData& data, RowEditBuffer& buf
 	if (buf.dbBuffer().isEmpty()) {
 		KexiDBDbg << " -- NO CHANGES DATA!" << endl;
 		return true; }*/
-	if (!query.parentTable()) {
-		KexiDBWarn << " -- NO PARENT TABLE!" << endl;
+	if (!query.masterTable()) {
+		KexiDBWarn << " -- NO MASTER TABLE!" << endl;
 		return false;
 	}
-	IndexSchema *pkey = query.parentTable()->primaryKey();
+	IndexSchema *pkey = query.masterTable()->primaryKey();
 	if (!pkey || pkey->fields()->isEmpty())
-		KexiDBWarn << " -- WARNING: NO PARENT TABLE's PKEY" << endl;
+		KexiDBWarn << " -- WARNING: NO MASTER TABLE's PKEY" << endl;
 
 	QString sqlcols, sqlvals;
 	sqlcols.reserve(1024);
 	sqlvals.reserve(1024);
 
 	//insert the record:
-	m_sql = "INSERT INTO " + escapeIdentifier(query.parentTable()->name()) + " (";
+	m_sql = "INSERT INTO " + escapeIdentifier(query.masterTable()->name()) + " (";
 	KexiDB::RowEditBuffer::DBMap b = buf.dbBuffer();
 
 	if (buf.dbBuffer().isEmpty()) {
@@ -2427,7 +2452,7 @@ bool Connection::insertRow(QuerySchema &query, RowData& data, RowEditBuffer& buf
 			return false;
 		}
 		//at least one value is needed for VALUES section: find it and set to NULL:
-		Field *anyField = query.parentTable()->anyNonPKField();
+		Field *anyField = query.masterTable()->anyNonPKField();
 		if (!anyField) {
 			//try to set NULL in pkey field (could not work for every SQL engine!)
 			anyField = pkey->fields()->first();
@@ -2498,16 +2523,16 @@ bool Connection::deleteRow(QuerySchema &query, RowData& data)
 // Each SQL identifier needs to be escaped in the generated query.
 	KexiDBWarn << "Connection::deleteRow.." << endl;
 	clearError();
-	if (!query.parentTable()) {
-		KexiDBWarn << " -- NO PARENT TABLE!" << endl;
+	if (!query.masterTable()) {
+		KexiDBWarn << " -- NO MASTER TABLE!" << endl;
 		return false;
 	}
-	IndexSchema *pkey = query.parentTable()->primaryKey();
+	IndexSchema *pkey = query.masterTable()->primaryKey();
 	if (!pkey || pkey->fields()->isEmpty())
-		KexiDBWarn << " -- WARNING: NO PARENT TABLE's PKEY" << endl;
+		KexiDBWarn << " -- WARNING: NO MASTER TABLE's PKEY" << endl;
 
 	//update the record:
-	m_sql = "DELETE FROM " + escapeIdentifier(query.parentTable()->name()) + " WHERE ";
+	m_sql = "DELETE FROM " + escapeIdentifier(query.masterTable()->name()) + " WHERE ";
 	QString sqlwhere;
 	sqlwhere.reserve(1024);
 	QValueVector<uint> pkeyFieldsOrder = query.pkeyFieldsOrder();
@@ -2539,15 +2564,15 @@ bool Connection::deleteRow(QuerySchema &query, RowData& data)
 bool Connection::deleteAllRows(QuerySchema &query)
 {
 	clearError();
-	if (!query.parentTable()) {
-		KexiDBWarn << " -- NO PARENT TABLE!" << endl;
+	if (!query.masterTable()) {
+		KexiDBWarn << " -- NO MASTER TABLE!" << endl;
 		return false;
 	}
-	IndexSchema *pkey = query.parentTable()->primaryKey();
+	IndexSchema *pkey = query.masterTable()->primaryKey();
 	if (!pkey || pkey->fields()->isEmpty())
-		KexiDBWarn << "Connection::deleteAllRows -- WARNING: NO PARENT TABLE's PKEY" << endl;
+		KexiDBWarn << "Connection::deleteAllRows -- WARNING: NO MASTER TABLE's PKEY" << endl;
 
-	m_sql = "DELETE FROM " + escapeIdentifier(query.parentTable()->name());
+	m_sql = "DELETE FROM " + escapeIdentifier(query.masterTable()->name());
 
 	KexiDBDbg << " -- SQL == " << m_sql << endl;
 

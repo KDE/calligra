@@ -486,7 +486,7 @@ QuerySchema* parseSelect(
 	/* set parent table if there's only one */
 //	if (parser->select()->tables()->count()==1)
 	if (querySchema->tables()->count()==1)
-		querySchema->setParentTable(querySchema->tables()->first());
+		querySchema->setMasterTable(querySchema->tables()->first());
 
 	//-------add fields
 	if (colViews) {

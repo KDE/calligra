@@ -449,13 +449,17 @@ class KEXI_DB_EXPORT Connection : public QObject, public KexiDB::Object
 		 (or declare it as local-scope variable). 
 
 		 If \a replaceExisting is false (the default) and table with the same name 
-		 (as tableSchema->name()) exists, error is returned. 
+		 (as tableSchema->name()) exists, false is returned. 
 		 If \a replaceExisting is true, a table schema with the same name (if exists) 
 		 is overwritten, then a new table schema gets the same identifier 
 		 as existing table schema's identifier.
 
-		 Note: on error, \a tableSchema is not inserted into Connection structures,
-		 so you are still owner of this object.
+		 Note that on error:
+		 - \a tableSchema is not inserted into Connection's structures,
+		   so you are still owner of this object
+		 - existing table schema object is not destroyed (i.e. it is still available 
+		   e.g. using Connection::tableSchema(const QString& ), even if the table 
+			 was physically dropped.
 		*/
 		bool createTable( TableSchema* tableSchema, bool replaceExisting = false );
 
@@ -607,7 +611,7 @@ class KEXI_DB_EXPORT Connection : public QObject, public KexiDB::Object
 		 \sa setupObjectSchemaData( const KexiDB::RowData &data, SchemaData &sdata ) */
 		bool loadObjectSchemaData( int objectID, SchemaData &sdata );
 
-		/*! Finds object schema data for object of type \a obejctType and name \a objectName.
+		/*! Finds object schema data for object of type \a objectType and name \a objectName.
 		 If the object is found, resulted schema is stored in \a sdata and true is returned,
 		 otherwise false is returned. */
 		bool loadObjectSchemaData( int objectType, const QString& objectName, SchemaData &sdata );
@@ -669,6 +673,13 @@ class KEXI_DB_EXPORT Connection : public QObject, public KexiDB::Object
 		/*! Method to be called form Connection's subclass destructor.
 		 \sa ~Connection() */
 		void destroy();
+
+		/*! @internal drops table \a tableSchema physically, but destroys 
+		 \a tableSchema object only if \a alsoRemoveSchema is true.
+		 Used (alsoRemoveSchema==false) on table altering: 
+		 if recreating table can failed we're giving up and keeping 
+		 the original table schema (even if it is no longer points to any real data). */
+		tristate dropTable( KexiDB::TableSchema* tableSchema, bool alsoRemoveSchema);
 
 		/*! For reimplemenation: connects to database
 			\return true on success. */
