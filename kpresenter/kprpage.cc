@@ -95,8 +95,9 @@ DCOPObject* KPrPage::dcopObject()
 }
 
 
-bool KPrPage::saveOasisPage( KoXmlWriter &xmlWriter, int posPage /*add style*/ )
+bool KPrPage::saveOasisPage( KoStore *store, KoXmlWriter &xmlWriter, int posPage /*add style*/ )
 {
+    //store use to save picture and co
     xmlWriter.startElement( "draw:page" );
     xmlWriter.addAttribute( "draw:name", m_manualTitle );
     //xmlWriter.addAttribute( "draw:style-name", style );

@@ -917,7 +917,7 @@ bool KPresenterDoc::saveOasis( KoStore* store, KoXmlWriter* manifestWriter )
     //save page
     for ( int i = 0; i < static_cast<int>( m_pageList.count() ); i++ )
     {
-        m_pageList.at( i )->saveOasisPage( xmlWriter, ( i+1 ) );
+        m_pageList.at( i )->saveOasisPage( store, xmlWriter, ( i+1 ) );
     }
     xmlWriter.endElement();
     xmlWriter.endElement(); // root element

@@ -46,6 +46,7 @@
 #include "kpgradient.h"
 #include "KPPixmapObjectIface.h"
 
+
 KPPixmapObject::KPPixmapObject( KoPictureCollection *_imageCollection )
     : KP2DObject()
 {
@@ -125,7 +126,7 @@ void KPPixmapObject::setPicture( const KoPictureKey & key )
 void KPPixmapObject::reload( void )
 {
     // ### FIXME: this seems wrong, KoPictureCollection will never reload it (or perhaps it is the function name that is wrong)
-    setPicture( image.getKey() ); 
+    setPicture( image.getKey() );
 }
 
 QDomDocumentFragment KPPixmapObject::save( QDomDocument& doc, double offset )
@@ -158,6 +159,14 @@ QDomDocumentFragment KPPixmapObject::save( QDomDocument& doc, double offset )
 
     return fragment;
 }
+
+bool KPPixmapObject::saveOasisImage( KoXmlWriter &xmlWriter )
+{
+    //we don't have a simple object
+    //modify imageCollection to save oasis format
+    return true;
+}
+
 
 void KPPixmapObject::loadOasis(const QDomElement &element, KoOasisContext & context, QDomElement *animation)
 {

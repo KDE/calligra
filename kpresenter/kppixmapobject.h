@@ -59,7 +59,7 @@ public:
 
     QSize originalSize() const
         { return image.getOriginalSize(); }
-    
+
     /// Deprecated, please use KPPixmapObject::setPicture
     void setPixmap( const KoPictureKey & key ) KDE_DEPRECATED;
     void setPicture( const KoPictureKey & key );
@@ -72,6 +72,8 @@ public:
         { return i18n("Picture"); }
 
     virtual QDomDocumentFragment save( QDomDocument& doc, double offset );
+    virtual bool saveOasisImage( KoXmlWriter &xmlWriter );
+
     virtual double load(const QDomElement &element);
     virtual void loadOasis(const QDomElement &element, KoOasisContext & context, QDomElement *animation);
 
@@ -103,7 +105,7 @@ public:
     void setPictureBright(int _bright) { bright = _bright; }
 
     KoPicture picture() const { return image;}
-    
+
     /// Deprecated, please use KPPixmapObject::loadPicture
     void loadImage( const QString & fileName ) KDE_DEPRECATED;
     void loadPicture( const QString & fileName );
