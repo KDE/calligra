@@ -44,7 +44,10 @@ class KEXI_DB_EXPORT Connection : public QObject, public KexiDB::Object
 	public:
 
 		/*! Opened connection is automatically disconnected and removed 
-			from driver's connections list. */
+			from driver's connections list (see note). 
+			Note for drivers writers: 
+			you should call disconnect() from you Connection's
+			subclass' destructor. */
 		virtual ~Connection();
 
 		/*! \return parameters that had been used for create this connection. */

@@ -58,6 +58,8 @@ SQLiteConnection::SQLiteConnection( Driver *driver, const ConnectionData &conn_d
 
 SQLiteConnection::~SQLiteConnection()
 {
+	//disconnect if was connected
+	disconnect();
 	delete d;
 }
 
