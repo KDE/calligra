@@ -48,7 +48,6 @@ libkspreadpart_la_SOURCES = kspread_locale.cc \
 libkspreadpart_la_LDFLAGS = $(all_libraries) $(KDE_PLUGIN)
 libkspreadpart_la_LIBADD = $(top_builddir)/interfaces/libkochart.la \
 	$(LIB_KOSCRIPT) $(LIB_KOFFICEUI) $(LIB_KOTEXT) -lkspell
-libkspreadpart_la_METASOURCES = AUTO
 
 METASOURCES = AUTO
 
