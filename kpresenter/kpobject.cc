@@ -172,7 +172,7 @@ QDomDocumentFragment KPObject::save( QDomDocument& doc, double offset )
 
 double KPObject::load(const QDomElement &element) {
 
-    double offset=0;
+    double offset=0.0;
     QDomElement e=element.namedItem(tagORIG).toElement();
     if(!e.isNull()) {
         if(e.hasAttribute(attrX))
@@ -768,8 +768,8 @@ void KPShadowObject::draw( QPainter *_painter, KoZoomHandler*_zoomHandler,
 {
     double ox = orig.x();
     double oy = orig.y();
-    double ow = ext.width();
-    double oh = ext.height();
+    //double ow = ext.width();
+    //double oh = ext.height();
     _painter->save();
 
     // Draw the shadow if any
@@ -867,33 +867,21 @@ QDomDocumentFragment KP2DObject::save( QDomDocument& doc,double offset )
     if(gColor1!=Qt::red || gColor2!=Qt::green || gType!=BCT_GHORZ || unbalanced || xfactor!=100 || yfactor!=100)
         fragment.appendChild(KPObject::createGradientElement(tagGRADIENT, gColor1, gColor2, static_cast<int>(gType),
                                                              unbalanced, xfactor, yfactor, doc));
-    if(pen.color()!=Qt::black || pen.width()!=1 || pen.style()!=Qt::SolidLine)
-        fragment.appendChild(KPObject::createPenElement(tagPEN, pen, doc));
-    if(brush.color()!=Qt::black || brush.style()!=Qt::NoBrush)
-        fragment.appendChild(KPObject::createBrushElement(tagBRUSH, brush, doc));
     return fragment;
 }
 
 double KP2DObject::load(const QDomElement &element)
 {
     double offset=KPShadowObject::load(element);
-    QDomElement e=element.namedItem(tagPEN).toElement();
-    if(!e.isNull())
-        setPen(KPObject::toPen(e));
-    else
-        pen=QPen();
-    e=element.namedItem(tagBRUSH).toElement();
-    if(!e.isNull())
-        setBrush(KPObject::toBrush(e));
-    else
-        brush=QBrush();
-    e=element.namedItem(tagFILLTYPE).toElement();
+ 
+    QDomElement e=element.namedItem(tagFILLTYPE).toElement();
     if(!e.isNull()) {
         if(e.hasAttribute(attrValue))
             setFillType(static_cast<FillType>(e.attribute(attrValue).toInt()));
     }
     else
         setFillType(FT_BRUSH);
+
     e=element.namedItem(tagGRADIENT).toElement();
     if(!e.isNull()) {
         KPObject::toGradient(e, gColor1, gColor2, gType, unbalanced, xfactor, yfactor);
@@ -910,4 +898,3 @@ double KP2DObject::load(const QDomElement &element)
     }
     return offset;
 }
-
