@@ -174,7 +174,7 @@ void KoAutoFormatDia::setupTab1()
     cbUpperUpper = new QCheckBox( tab1 );
     cbUpperUpper->setText( i18n( "Convert two uppercase characters to one uppercase and one lowercase character.\n"
                                  "(e.g. PErfect to Perfect)" ) );
-    QWhatsThis::add( cbUpperUpper, i18n("All words are checked for the common mistake to hold the shift key down a bit too long. If some words must have two uppercase characters, then those exceptions should be added in the %1 tab.").arg(i18n("Exceptions")));
+    QWhatsThis::add( cbUpperUpper, i18n("All words are checked for the common mistake of holding the shift key down a bit too long. If some words must have two uppercase characters, then those exceptions should be added in the %1 tab.").arg(i18n("Exceptions")));
     cbUpperUpper->resize( cbUpperUpper->sizeHint() );
     cbUpperUpper->setChecked( m_autoFormat.getConfigUpperUpper() );
     ( void )new QWidget( tab1 );
