@@ -176,12 +176,17 @@ void KIllustratorView::createMyGUI()
     new KAction( i18n("Zoom in"), "viewmag+", CTRL+Key_Plus, this, SLOT( slotZoomIn() ), actionCollection(), "zoomin");
     new KAction( i18n("Zoom out"), "viewmag-", CTRL+Key_Minus, this, SLOT( slotZoomOut() ), actionCollection(), "zoomout");
 
-    KToggleAction *m_outline = new KToggleAction( i18n("Ou&tline"), 0, actionCollection(), "outline" );
+    m_outline = new KToggleAction( i18n("Ou&tline"), 0,
+                                   this, SLOT( slotOutline() ),
+                                   actionCollection(), "outline" );
     m_outline->setExclusiveGroup( "Outline" );
-    connect( m_outline, SIGNAL( toggled( bool ) ), this, SLOT( slotOutline( bool ) ) );
-    KToggleAction *m_normal = new KToggleAction( i18n("&Normal"), 0, actionCollection(), "normal" );
+
+
+    m_normal = new KToggleAction( i18n("&Normal"), 0,
+                                  this,SLOT( slotNormal() ) ,
+                                  actionCollection(), "normal" );
     m_normal->setExclusiveGroup( "Outline" );
-    connect( m_normal, SIGNAL( toggled( bool ) ), this, SLOT( slotNormal( bool ) ) );
+
     KToggleAction *m_showRuler = new KToggleAction( i18n("Show &Ruler"), 0, actionCollection(), "showRuler" );
     connect( m_showRuler, SIGNAL( toggled( bool ) ), this, SLOT( slotShowRuler( bool ) ) );
 
@@ -878,14 +883,24 @@ void KIllustratorView::slotProperties()
         PropertyEditor::edit( &cmdHistory, m_pDoc->gdoc() );
 }
 
-void KIllustratorView::slotOutline( bool )
+void KIllustratorView::slotOutline( )
 {
-    canvas->setOutlineMode (true);
+    if ( m_outline->isChecked() )
+    {
+        canvas->setOutlineMode (true);
+    }
+    else
+        m_outline->setChecked( true ); // always one has to be checked !
 }
 
-void KIllustratorView::slotNormal( bool )
+void KIllustratorView::slotNormal()
 {
-    canvas->setOutlineMode (false);
+    if ( m_normal->isChecked() )
+    {
+        canvas->setOutlineMode (false);
+    }
+    else
+        m_normal->setChecked( true ); // always one has to be checked !
 }
 
 void KIllustratorView::slotShowRuler( bool b )

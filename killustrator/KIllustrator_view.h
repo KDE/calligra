@@ -152,8 +152,8 @@ private slots:
     void slotDelete();
     void slotSelectAll();
     void slotProperties();
-    void slotOutline( bool );
-    void slotNormal( bool );
+    void slotOutline( );
+    void slotNormal( );
     void slotShowRuler( bool );
     void slotShowGrid( bool );
     void slotShowHelplines( bool );
@@ -240,6 +240,9 @@ protected:
     KAction* m_setupGrid;
     KAction* m_setupHelplines;
     KAction* m_backOne;
+
+    KToggleAction *m_normal;
+    KToggleAction *m_outline;
 
     KoPartSelectAction *m_insertPartTool;
 
