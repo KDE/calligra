@@ -1,5 +1,4 @@
-INCLUDES = -I$(srcdir)/.. -I$(srcdir)/../widgets -I$(srcdir)/../dialogs  \
-$(KOFFICE_INCLUDES) $(all_includes) $(MICO_INCLUDES)
+INCLUDES = -I$(srcdir)/.. -I$(srcdir)/../widgets -I$(srcdir)/../dialogs $(KOFFICE_INCLUDES) $(all_includes)
 
 noinst_LTLIBRARIES = libkistools.la
 # libkistools_a_LDFLAGS = $(all_libraries) -version-info 1:0
