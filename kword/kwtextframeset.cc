@@ -1775,10 +1775,11 @@ void KWTextFrameSet::formatMore()
 
                 if ( theFrame->getFrameSet()->isAFooter() )
                 {
+                    double maxFooterSize=footerHearderSizeMax(  theFrame );
                     wantedPosition = theFrame->top() - m_doc->unzoomItY( difference );
-                    if ( wantedPosition != theFrame->top() )
+                    if ( wantedPosition != theFrame->top() &&  QMAX(theFrame->bottom()-maxFooterSize,wantedPosition)==wantedPosition )
                     {
-                        theFrame->setTop( wantedPosition );
+                        theFrame->setTop( wantedPosition);
                         frameResized( theFrame );
                     }
                     break;
@@ -1793,6 +1794,13 @@ void KWTextFrameSet::formatMore()
 #endif
 
                 bool resized = theFrame->bottom() != newPosition;
+
+                if ( theFrame->getFrameSet()->isAHeader() )
+                {
+                    double maxHeaderSize=footerHearderSizeMax(  theFrame );
+                    resized=QMIN(maxHeaderSize+theFrame->top(),newPosition)==newPosition;
+                }
+
                 if ( resized )
                     theFrame->setBottom(newPosition);
 
@@ -1944,6 +1952,77 @@ void KWTextFrameSet::formatMore()
         }
 #endif
     }
+}
+
+double KWTextFrameSet::footerHearderSizeMax(  KWFrame *theFrame )
+{
+    double tmp =(int)(m_doc->ptPaperHeight()-m_doc->ptBottomBorder()-m_doc->ptTopBorder())-40;//default min 40 for page size
+    switch ( theFrame->getFrameSet()->frameSetInfo() ) {
+        case KWFrameSet::FI_FIRST_HEADER:
+            if ( m_doc->isHeaderVisible() ) {
+                QListIterator<KWFrameSet> fit = m_doc->framesetsIterator();
+                for ( ; fit.current() ; ++fit )
+                {
+                    if(fit.current()->frameSetInfo()==KWFrameSet::FI_FIRST_FOOTER)
+                        return (tmp-fit.current()->getFrame( 0 )->height());
+
+                }
+            }
+            break;
+        case KWFrameSet::FI_EVEN_HEADER:
+            if (  m_doc->isHeaderVisible() ) {
+               QListIterator<KWFrameSet> fit = m_doc->framesetsIterator();
+                for ( ; fit.current() ; ++fit )
+                {
+                    if(fit.current()->frameSetInfo()==KWFrameSet::FI_EVEN_FOOTER)
+                        return (tmp-fit.current()->getFrame( 0 )->height());
+                }
+            }
+            break;
+        case KWFrameSet::FI_ODD_HEADER:
+            if (  m_doc->isHeaderVisible() ) {
+
+                QListIterator<KWFrameSet> fit = m_doc->framesetsIterator();
+                for ( ; fit.current() ; ++fit )
+                {
+                    if(fit.current()->frameSetInfo()==KWFrameSet::FI_ODD_FOOTER)
+                        return (tmp-fit.current()->getFrame( 0 )->height());
+                }
+
+            }
+            break;
+        case KWFrameSet::FI_FIRST_FOOTER:
+            if (  m_doc->isFooterVisible() ) {
+                QListIterator<KWFrameSet> fit = m_doc->framesetsIterator();
+                for ( ; fit.current() ; ++fit )
+                {
+                    if(fit.current()->frameSetInfo()==KWFrameSet::FI_FIRST_HEADER)
+                        return (tmp-fit.current()->getFrame( 0 )->height());
+                }
+            }
+            break;
+        case KWFrameSet::FI_EVEN_FOOTER:
+            if (  m_doc->isFooterVisible() ) {
+                  QListIterator<KWFrameSet> fit = m_doc->framesetsIterator();
+                for ( ; fit.current() ; ++fit )
+                {
+                    if(fit.current()->frameSetInfo()==KWFrameSet::FI_EVEN_HEADER)
+                        return (tmp-fit.current()->getFrame( 0 )->height());
+                }
+            }
+            break;
+        case KWFrameSet::FI_ODD_FOOTER:
+            if (  m_doc->isFooterVisible() ) {
+                    QListIterator<KWFrameSet> fit = m_doc->framesetsIterator();
+                for ( ; fit.current() ; ++fit )
+                {
+                    if(fit.current()->frameSetInfo()==KWFrameSet::FI_ODD_HEADER)
+                        return (tmp-fit.current()->getFrame( 0 )->height());
+                }
+            }
+        default: break;
+    }
+    return 0;
 }
 
 void KWTextFrameSet::frameResized( KWFrame *theFrame )

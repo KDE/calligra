@@ -240,7 +240,7 @@ public:
 
     void typingStarted();
     void typingDone();
-
+    double footerHearderSizeMax(  KWFrame *theFrame );
 public slots:
     void formatMore();
 
