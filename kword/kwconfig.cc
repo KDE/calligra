@@ -67,6 +67,18 @@ KWConfig::KWConfig( KWView* parent )
   connect(this, SIGNAL(okClicked()),this,SLOT(slotApply()));
 }
 
+void KWConfig::openPage(int flags)
+{
+    if(flags & KW_KSPELL)
+        showPage( 0 );
+    else if(flags & KP_INTERFACE)
+        showPage(1 );
+    else if(flags & KP_MISC)
+        showPage(2);
+    else if(flags & KP_DOCUMENT)
+        showPage(3 );
+}
+
 void KWConfig::slotApply()
 {
     m_spellPage->apply();

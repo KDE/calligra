@@ -104,7 +104,9 @@ class KWConfig : public KDialogBase
 {
     Q_OBJECT
 public:
+    enum { KW_KSPELL=1,KP_INTERFACE=2,KP_MISC=4, KP_DOCUMENT=8};
     KWConfig( KWView* parent );
+    void openPage(int flags);
 public slots:
     void slotApply();
     void slotDefault();

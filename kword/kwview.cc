@@ -3469,10 +3469,12 @@ void KWView::spellCheckerFinished()
     KSpell::spellStatus status = m_spell.kspell->status();
     delete m_spell.kspell;
     m_spell.kspell = 0;
+    bool kspellNoConfigured=false;
     if (status == KSpell::Error)
     {
         KMessageBox::sorry(this, i18n("ISpell could not be started.\n"
-                                      "Please make sure you have ISpell properly configured and in your PATH.\nUsed settings->configure."));
+                                      "Please make sure you have ISpell properly configured and in your PATH."));
+        kspellNoConfigured=true;
     }
     else if (status == KSpell::Crashed)
     {
@@ -3495,6 +3497,12 @@ void KWView::spellCheckerFinished()
     KWTextFrameSetEdit * edit = currentTextEdit();
     if (edit)
         edit->drawCursor( TRUE );
+    if(kspellNoConfigured)
+    {
+        KWConfig configDia( this );
+        configDia.openPage( KWConfig::KW_KSPELL);
+        configDia.exec();
+    }
 }
 
 void KWView::configure()
