@@ -1283,6 +1283,7 @@ void KSpreadView::initConfig()
         //autosave value is stored as a minute.
         //but default value is stored as seconde.
         m_pDoc->setAutoSave(config->readNumEntry("AutoSave",KoDocument::defaultAutoSave()/60)*60);
+        m_pDoc->setBackupFile( config->readBoolEntry("BackupFile",true));
 	}
 
  if(  config->hasGroup("KSpread Color" ) )
@@ -2982,7 +2983,7 @@ void KSpreadView::subtotals()
 
   KSpreadSubtotalDlg dlg(this, selection, "KSpreadSubtotalDlg" );
   if ( dlg.exec() )
-    m_selectionInfo->setSelection( dlg.selection().topLeft(), 
+    m_selectionInfo->setSelection( dlg.selection().topLeft(),
                                    dlg.selection().bottomRight(),
                                    dlg.table() );
 
@@ -3322,7 +3323,7 @@ void KSpreadView::setZoom( int zoom, bool /*updateViews*/ )
   m_pVBorderWidget->repaint();
   m_pHBorderWidget->repaint();
   m_pCanvas->repaint();
-  
+
   refreshView();
 }
 

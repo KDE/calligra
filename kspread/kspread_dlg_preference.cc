@@ -260,6 +260,7 @@ configure::configure( KSpreadView* _view, QVBox *box , char *name )
   bool tabbar=true;
   bool formulaBar=true;
   bool statusBar=true;
+  m_oldBackupFile = true;
 
   QGroupBox* tmpQGroupBox = new QVGroupBox( i18n("Configuration"), box, "GroupBox" );
 
@@ -282,6 +283,7 @@ configure::configure( KSpreadView* _view, QVBox *box , char *name )
         statusBar=config->readBoolEntry("Status bar",true);
         oldRecent=config->readNumEntry( "NbRecentFile" ,10);
         oldAutoSaveValue=config->readNumEntry("AutoSave",KoDocument::defaultAutoSave()/60);
+        m_oldBackupFile=config->readBoolEntry("BackupFile",m_oldBackupFile);
         }
   nbPage=new KIntNumInput(_page, tmpQGroupBox , 10);
   nbPage->setRange(1, 10, 1);
@@ -296,6 +298,9 @@ configure::configure( KSpreadView* _view, QVBox *box , char *name )
   autoSaveDelay->setLabel(i18n("Au&tosave (min):"));
   autoSaveDelay->setSpecialValueText(i18n("No autosave"));
   autoSaveDelay->setSuffix(i18n("min"));
+
+  m_createBackupFile = new QCheckBox( i18n("Create Backup File"), tmpQGroupBox );
+  m_createBackupFile->setChecked( m_oldBackupFile );
 
   showVScrollBar=new QCheckBox(i18n("Show &vertical scrollbar"),tmpQGroupBox);
   showVScrollBar->setChecked(vertical);
@@ -331,6 +336,7 @@ void configure::slotDefault()
   nbPage->setValue(1);
   nbRecentFile->setValue(10);
   autoSaveDelay->setValue(KoDocument::defaultAutoSave()/60);
+  m_createBackupFile->setChecked( true );
 }
 
 
@@ -338,6 +344,7 @@ void configure::apply()
 {
     config->setGroup( "Parameters" );
     config->writeEntry( "NbPage", nbPage->value());
+    KSpreadDoc *doc =m_pView->doc();
     bool active=true;
     active=showHScrollBar->isChecked();
     if( m_pView->horzScrollBar()->isVisible()!=active)
@@ -347,7 +354,7 @@ void configure::apply()
             m_pView->horzScrollBar()->show();
         else
             m_pView->horzScrollBar()->hide();
-        m_pView->doc()->setShowHorizontalScrollBar(active);
+        doc->setShowHorizontalScrollBar(active);
     }
     active=showVScrollBar->isChecked();
     if( m_pView->vertScrollBar()->isVisible()!=active)
@@ -357,7 +364,7 @@ void configure::apply()
             m_pView->vertScrollBar()->show();
         else
             m_pView->vertScrollBar()->hide();
-        m_pView->doc()->setShowVerticalScrollBar(active);
+        doc->setShowVerticalScrollBar(active);
 
     }
     active=showColHeader->isChecked();
@@ -368,7 +375,7 @@ void configure::apply()
             m_pView->hBorderWidget()->show();
         else
             m_pView->hBorderWidget()->hide();
-        m_pView->doc()->setShowColHeader(active);
+        doc->setShowColHeader(active);
     }
 
     active=showRowHeader->isChecked();
@@ -379,7 +386,7 @@ void configure::apply()
             m_pView->vBorderWidget()->show();
         else
             m_pView->vBorderWidget()->hide();
-        m_pView->doc()->setShowRowHeader(active);
+        doc->setShowRowHeader(active);
     }
 
     active=showTabBar->isChecked();
@@ -390,7 +397,7 @@ void configure::apply()
             m_pView->tabBar()->show();
         else
             m_pView->tabBar()->hide();
-        m_pView->doc()->setShowTabBar(active);
+        doc->setShowTabBar(active);
     }
 
     active=showFormulaBar->isChecked();
@@ -402,7 +409,7 @@ void configure::apply()
             m_pView->posWidget()->show();
         else
             m_pView->posWidget()->hide();
-        m_pView->doc()->setShowFormulaBar(active);
+        doc->setShowFormulaBar(active);
     }
     active=showStatusBar->isChecked();
     if(m_pView->statusBar() && m_pView->statusBar()->isVisible()!=active)
@@ -412,7 +419,7 @@ void configure::apply()
             m_pView->statusBar()->show();
         else
             m_pView->statusBar()->hide();
-        m_pView->doc()->setShowStatusBar(active);
+        doc->setShowStatusBar(active);
     }
     int val=nbRecentFile->value();
     if( oldRecent!= val)
@@ -424,8 +431,17 @@ void configure::apply()
     if(val!=oldAutoSaveValue)
     {
         config->writeEntry( "AutoSave", val );
-        m_pView->doc()->setAutoSave(val*60);
+        doc->setAutoSave(val*60);
     }
+
+    bool state =m_createBackupFile->isChecked();
+    if(state!=m_oldBackupFile)
+    {
+        config->writeEntry( "BackupFile", state );
+        doc->setBackupFile( state);
+        m_oldBackupFile=state;
+    }
+
 }
 
 

@@ -86,7 +86,10 @@ protected:
   QCheckBox *showRowHeader;
   QCheckBox *showTabBar;
   QCheckBox *showFormulaBar;
-  QCheckBox *showStatusBar;
+    QCheckBox *showStatusBar;
+    QCheckBox *m_createBackupFile;
+  bool m_oldBackupFile;
+
   KConfig* config;
   int oldRecent;
   int oldAutoSaveValue;
