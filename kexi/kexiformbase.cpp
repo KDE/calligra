@@ -47,6 +47,9 @@ class KexiFormBase::EditGUIClient: public KXMLGUIClient
 	public:
 		EditGUIClient():KXMLGUIClient()
 		{
+			m_formMode = new KToggleAction(i18n("Edit Form"),"form_edit",
+				0,actionCollection(),"form_edit");
+
 		        m_lineedit = new KAction(i18n("Line Edit"), "lineedit",
                 		Key_F5, actionCollection(), "widget_line_edit");
 
@@ -60,6 +63,7 @@ class KexiFormBase::EditGUIClient: public KXMLGUIClient
 		virtual ~EditGUIClient(){;}
 		void activate(QObject* o)
 		{
+			m_formMode->setChecked(true);
 			connect(m_lineedit,SIGNAL(activated()),o,SLOT(slotWidgetLineEdit()));
 			connect(m_button,SIGNAL(activated()),o,SLOT(slotWidgetPushButton()));
 			connect(m_urlreq,SIGNAL(activated()),o,SLOT(slotWidgetURLRequester()));
@@ -71,12 +75,34 @@ class KexiFormBase::EditGUIClient: public KXMLGUIClient
 			m_urlreq->disconnect(o);
 		}
 	private:
+	KToggleAction *m_formMode;
+
 	KAction *m_lineedit;
 	KAction *m_button;
 	KAction *m_urlreq;
 };
 
+class KexiFormBase::ViewGUIClient: public KXMLGUIClient
+{
+	public:
+		ViewGUIClient():KXMLGUIClient()
+		{
+			setXMLFile("kexiformviewui.rc");
+		}
+		virtual ~ViewGUIClient(){;}
+		void activate(QObject* o)
+		{
+		}
+		void deactivate(QObject* o)
+		{
+		}
+	private:
+};
+
+
+
 KexiFormBase::EditGUIClient *KexiFormBase::m_editGUIClient=0;
+KexiFormBase::ViewGUIClient *KexiFormBase::m_viewGUIClient=0;
 
 KexiFormBaseResizeHandle::KexiFormBaseResizeHandle(QWidget *parent,QWidget *buddy, HandlePos pos):QWidget(parent)
 {
@@ -239,7 +265,7 @@ KexiFormBase::KexiFormBase(QWidget *parent, const char *name, QString identifier
 {
 //	initActions();
 	
-	setCaption(identifier);
+	setCaption(i18n("%1 [Edit Mode]").arg(identifier));
 
 	KIconLoader *iloader = KGlobal::iconLoader();
 	setIcon(iloader->loadIcon("form", KIcon::Small));

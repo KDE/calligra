@@ -118,6 +118,10 @@ class KexiFormBase : public KexiDialogBase
 		class EditGUIClient;
 		friend class EditGUIClient;
 		static EditGUIClient *m_editGUIClient;
+
+		class ViewGUIClient;
+		friend class ViewGUIClient;
+		static ViewGUIClient *m_viewGUIClient;
 	protected slots:
 		void slotWidgetLineEdit();
 		void slotWidgetPushButton();

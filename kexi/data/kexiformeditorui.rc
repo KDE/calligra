@@ -1,5 +1,9 @@
 <!DOCTYPE kpartgui>
-<kpartgui name="kexiformeditor" version="0.2">
+<kpartgui name="kexiformeditor" version="0.3">
+
+<ToolBar name="mainToolBar"><text>Main Toolbar</text>
+        <Action name="form_edit"/>
+</ToolBar>
 
 <ToolBar name="widgets">
 	<Text>Widgets</Text>
