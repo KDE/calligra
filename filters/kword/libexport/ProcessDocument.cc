@@ -212,12 +212,6 @@ static void ProcessStringValueTag ( QDomNode myNode, void *tagData, KWEFKWordLea
     ProcessOneAttrTag (myNode, "value", "QString", tagData, leader);
 }
 
-static void ProcessStringAlignTag ( QDomNode myNode, void *tagData, KWEFKWordLeader *leader )
-{
-    ProcessOneAttrTag (myNode, "align", "QString", tagData, leader);
-}
-
-
 static void ProcessStringNameTag (QDomNode myNode, void *tagData, KWEFKWordLeader *leader )
 {
     ProcessOneAttrTag (myNode, "name", "QString", tagData, leader);
@@ -227,6 +221,21 @@ static void ProcessStringNameTag (QDomNode myNode, void *tagData, KWEFKWordLeade
 // --------------------------------------------------------------------------------
 
 
+static void ProcessOldLayoutChildTag (QDomNode myNode, void *tagData, KWEFKWordLeader* /*leader*/)
+{
+    QValueList<AttrProcessing> attrProcessingList;
+
+    double* d = (double*) ( tagData );
+    *d = 0.0; // Put a sensible default
+
+    attrProcessingList
+        << AttrProcessing ( "pt", *d )
+        << AttrProcessing ( "inch" )
+        << AttrProcessing ( "mm" )
+        ;
+    ProcessAttributes (myNode, attrProcessingList);
+}
+ 
 static void ProcessUnderlineTag (QDomNode myNode, void *tagData, KWEFKWordLeader* /*leader*/ )
 {
     TextFormatting* text=(TextFormatting*) tagData;
@@ -895,20 +904,84 @@ static void ProcessLinespacingTag (QDomNode myNode, void *tagData, KWEFKWordLead
     }
 }
 
+static void ProcessLineSpaceTag (QDomNode myNode, void *tagData, KWEFKWordLeader* /*leader*/ )
+{
+    // <LINESPACE> is an old tag, of before syntax 1
+    LayoutData *layout = (LayoutData *) tagData;
+    double spacingValue = 0.0;
+
+    QValueList<AttrProcessing> attrProcessingList;
+    attrProcessingList << AttrProcessing ( "pt", spacingValue );
+    attrProcessingList << AttrProcessing ( "mm" );
+    attrProcessingList << AttrProcessing ( "inch" );
+    ProcessAttributes (myNode, attrProcessingList);
+
+    layout->lineSpacingType = LayoutData::LS_CUSTOM; // set to custom
+    layout->lineSpacing     = spacingValue;
+}
+
+static void ProcessFlowTag ( QDomNode myNode, void *tagData, KWEFKWordLeader *leader )
+{
+    LayoutData *layout = (LayoutData *) tagData;
+    
+    QString oldAlign, normalAlign;
+    
+    QValueList<AttrProcessing> attrProcessingList;
+    if ( leader->m_oldSyntax )
+    {
+        // KWord 0.8
+        attrProcessingList << AttrProcessing ( "value", oldAlign ); // KWord 0.8
+    }
+    // New syntax and some files from syntax 1
+    attrProcessingList << AttrProcessing ( "align", normalAlign );
+    attrProcessingList << AttrProcessing ( "dir" ); // ### TODO
+    ProcessAttributes (myNode, attrProcessingList);
+
+    if ( leader->m_oldSyntax && normalAlign.isEmpty() )
+    {
+        if ( oldAlign.isEmpty() )
+        {
+            layout->alignment = "left"; // KWord 0.8 did not support right-to-left
+        }
+        else
+        {
+            const int align = oldAlign.toInt();
+            if ( ( align < 0 ) || ( align > 3) )
+            {
+                kdWarning(30520) << "KWord 0.8 flow unknown: " << oldAlign << endl;
+                layout->alignment = "left"; // Unknown, so assume left
+            }
+            else
+            {
+                const char* flows[]={"left", "right", "center", "justify" };
+                layout->alignment = flows[ align ];
+            }
+        }
+        kdDebug(30520) << "KWord 0.8 flow: " << oldAlign << " corrected: " << layout->alignment << endl;
+    }
+    else
+    {
+        layout->alignment = normalAlign;
+    }
+
+}
+
+
 void ProcessLayoutTag ( QDomNode myNode, void *tagData, KWEFKWordLeader *leader )
 // Processes <LAYOUT> and <STYLE>
 {
+    QValueList<AttrProcessing> attrProcessingList;
+    attrProcessingList << AttrProcessing ( "outline" ); // Only in <STYLE>
+    ProcessAttributes (myNode, attrProcessingList);
+    
     LayoutData *layout = (LayoutData *) tagData;
-
-    AllowNoAttributes (myNode);
 
     ValueListFormatData formatDataList;
 
-    QString lineSpacing;
     QValueList<TagProcessing> tagProcessingList;
     tagProcessingList << TagProcessing ( "NAME",         ProcessStringValueTag,       &layout->styleName           );
     tagProcessingList << TagProcessing ( "FOLLOWING",    ProcessFollowingTag,         &layout->styleFollowing      );
-    tagProcessingList << TagProcessing ( "FLOW",         ProcessStringAlignTag,       &layout->alignment           );
+    tagProcessingList << TagProcessing ( "FLOW",         ProcessFlowTag,              layout );
     tagProcessingList << TagProcessing ( "INDENTS",      ProcessIndentsTag,           layout              );
     tagProcessingList << TagProcessing ( "OFFSETS",      ProcessLayoutOffsetTag,      layout              );
     tagProcessingList << TagProcessing ( "LINESPACING",  ProcessLinespacingTag,       layout              );
@@ -921,6 +994,19 @@ void ProcessLayoutTag ( QDomNode myNode, void *tagData, KWEFKWordLeader *leader 
     tagProcessingList << TagProcessing ( "FORMAT",       ProcessFormatTag,            &formatDataList     );
     tagProcessingList << TagProcessing ( "TABULATOR",    ProcessLayoutTabulatorTag,   &layout->tabulatorList       );
     tagProcessingList << TagProcessing ( "SHADOW",       ProcessShadowTag,            layout                       );
+    
+    if ( leader->m_oldSyntax )
+    {
+        layout->indentLeft = 0.0; // ### TODO: needed or not?
+        tagProcessingList
+            << TagProcessing ( "OHEAD",  ProcessOldLayoutChildTag, &layout->marginTop )
+            << TagProcessing ( "OFOOT",  ProcessOldLayoutChildTag, &layout->marginBottom )
+            << TagProcessing ( "ILEFT",  ProcessOldLayoutChildTag, &layout->indentLeft )
+            << TagProcessing ( "IFIRST", ProcessOldLayoutChildTag, &layout->indentFirst )
+            << TagProcessing ( "LINESPACE", ProcessLineSpaceTag,   layout )
+            ;
+    }
+
     ProcessSubtags (myNode, tagProcessingList, leader);
 
 
