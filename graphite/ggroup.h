@@ -20,7 +20,6 @@
 #ifndef ggroup_h
 #define ggroup_h
 
-#include <qptrlist.h>
 #include <gobject.h>
 
 // This is an abstract middle layer for two kinds of gourps:

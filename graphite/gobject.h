@@ -20,16 +20,8 @@
 #ifndef gobject_h
 #define gobject_h
 
-#include <qptrlist.h>
-#include <qbrush.h>
 #include <qpen.h>
-#include <qrect.h>
-#include <qpoint.h>
-#include <qwidget.h>
-
 #include <kdialogbase.h>
-
-#include <math.h>
 
 #include <graphiteglobal.h>
 
