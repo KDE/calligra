@@ -33,10 +33,6 @@
 #include "kwcommand.h"
 #include <qcombobox.h>
 
-//Laurent disable it because for the moment
-//end note is not implemented
-//#define END_NOTE
-
 KWConfigFootNoteDia::KWConfigFootNoteDia( QWidget *parent, const char *name, KWDocument *_doc )
     : KDialogBase(Tabbed, QString::null, Ok | Cancel , Ok, parent, name, true)
 {
@@ -45,9 +41,7 @@ KWConfigFootNoteDia::KWConfigFootNoteDia( QWidget *parent, const char *name, KWD
 
     resize( 510, 310 );
     setupTab1();
-#ifdef END_NOTE
     setupTab2();
-#endif
     setupTab3();
 }
 
@@ -177,7 +171,6 @@ void KWConfigFootNoteDia::slotOk()
         cmd= new KWChangeFootEndNoteSettingsCommand( i18n("Change End-/Footnote Variable Settings") , counter, m_footNoteConfig->counter() ,true ,m_doc);
         macro->addCommand(cmd );
     }
-#ifdef END_NOTE
     counter = static_cast<KWVariableSettings*>(m_doc->getVariableCollection()->variableSetting())->endNoteCounter();
     if (counter != m_endNoteConfig->counter() )
     {
@@ -186,7 +179,6 @@ void KWConfigFootNoteDia::slotOk()
         cmd= new KWChangeFootEndNoteSettingsCommand( i18n("Change End-/Footnote Variable Settings") , counter, m_endNoteConfig->counter() ,false ,m_doc);
         macro->addCommand(cmd );
     }
-#endif
 
     int val =spLength->value();
     double width = spWidth->value();

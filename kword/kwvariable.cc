@@ -36,6 +36,8 @@ KWVariableSettings::KWVariableSettings() : KoVariableSettings()
 {
     m_footNoteCounter.setSuffix( QString::null );
     m_endNoteCounter.setSuffix( QString::null );
+    // By default endnotes are numbered in lowercase roman numbers, in other WPs.
+    m_endNoteCounter.setStyle( KoParagCounter::STYLE_ROM_NUM_L );
 }
 
 void KWVariableSettings::changeFootNoteCounter( KoParagCounter _c )
@@ -58,7 +60,7 @@ void KWVariableSettings::save( QDomElement &parentElem )
     m_footNoteCounter.save( footNoteSettingElem );
     QDomElement endNoteSettingElem = doc.createElement( "ENDNOTESETTING" );
     parentElem.appendChild( endNoteSettingElem );
-    m_footNoteCounter.save( endNoteSettingElem );
+    m_endNoteCounter.save( endNoteSettingElem );
 }
 
 void KWVariableSettings::load( QDomElement &elem )
@@ -69,7 +71,7 @@ void KWVariableSettings::load( QDomElement &elem )
         m_footNoteCounter.load( footNoteSettings );
     QDomElement endNoteSettings = elem.namedItem( "ENDNOTESETTING" ).toElement();
     if ( !endNoteSettings.isNull() )
-        m_footNoteCounter.load( endNoteSettings );
+        m_endNoteCounter.load( endNoteSettings );
 }
 
 KWVariableCollection::KWVariableCollection(KWVariableSettings *_setting)
