@@ -28,6 +28,7 @@
 #include "kis_image.h"
 #include "kis_layer.h"
 #include "kis_pattern.h"
+#include "kis_gradient.h"
 
 
 class KisSelection : public QObject 

@@ -89,7 +89,7 @@ int KisTool::zoomedY(int n)
 
 
 // translate point for zoom factor
-QPoint KisTool::zoomed(QPoint & point)
+QPoint KisTool::zoomed(const QPoint & point)
 {
     // current zoom factor for this view
     float zF = m_pView->zoomFactor();
@@ -387,8 +387,28 @@ bool KisTool::pasteClipImage( QPoint pos )
     return true;
 }
 
+bool KisTool::shouldRepaint()
+{
+	return false;
+}
+
 void KisTool::setBrush(KisBrush *)
 {
+}
+
+void KisTool::clearOld()
+{
+}
+
+void KisTool::toolSelect()
+{
+	if (m_pView)
+		m_pView -> activateTool(this);
+}
+
+void KisTool::setPattern(KisPattern *pattern)
+{
+	m_pPattern = pattern;
 }
 
 #include "kis_tool.moc"

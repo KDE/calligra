@@ -21,6 +21,10 @@
 #ifndef __kis_global_h__
 #define __kis_global_h__
 
+#include <qvaluevector.h>
+
+class KisTool;
+
 // size for graphic blocks - must be a power of 2
 const int TILE_SIZE = 64;
 
@@ -41,5 +45,8 @@ enum cId { ci_Indexed, ci_Alpha, ci_Red, ci_Green, ci_Blue, ci_Cyan,
 
 // background mode
 enum bgMode {bm_White, bm_Transparent, bm_BackgroundColor, bm_ForegroundColor };
+
+typedef QValueVector<KisTool*> ktvector;
+typedef ktvector::size_type ktvector_size_type;
 
 #endif

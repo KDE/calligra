@@ -92,28 +92,7 @@
 #include "kis_dlg_new_layer.h"
 
 // tools
-#include "kis_tool_select_freehand.h"
-#include "kis_tool_select_rectangular.h"
-#include "kis_tool_select_polygonal.h"
-#include "kis_tool_select_elliptical.h"
-#include "kis_tool_select_contiguous.h"
-
-#include "kis_tool_paste.h"
-#include "kis_tool_move.h"
-#include "kis_tool_zoom.h"
-#include "kis_tool_brush.h"
-#include "kis_tool_airbrush.h"
-#include "kis_tool_pen.h"
-#include "kis_tool_line.h"
-#include "kis_tool_polyline.h"
-#include "kis_tool_polygon.h"
-#include "kis_tool_rectangle.h"
-#include "kis_tool_ellipse.h"
-#include "kis_tool_colorpicker.h"
-#include "kis_tool_colorchanger.h"
-#include "kis_tool_eraser.h"
-#include "kis_tool_fill.h"
-#include "kis_tool_stamp.h"
+#include "kis_tool_factory.h"
 
 // debug
 #include <kdebug.h>
@@ -139,13 +118,15 @@
     cut and paste, make comparisons, etc., between them.
 */
 KisView::KisView( KisDoc* doc, QWidget* parent, const char* name )
-    : KoView( doc, parent, name )
+    : super( doc, parent, name )
     , m_pDoc( doc )
     , m_zoomFactor( 1.0 )
 
 {
     setInstance( KisFactory::global() );
     setXMLFile( "krayon.rc" );
+
+	m_pTool = 0;
 
     QObject::connect( m_pDoc, SIGNAL( docUpdated( ) ),
         this, SLOT( slotDocUpdated ( ) ) );
@@ -169,6 +150,7 @@ KisView::KisView( KisDoc* doc, QWidget* parent, const char* name )
     m_pPattern  = 0L;
     m_pGradient = 0L;
 
+
     setupPainter();
     setupCanvas();
     setupScrollBars();
@@ -176,7 +158,10 @@ KisView::KisView( KisDoc* doc, QWidget* parent, const char* name )
     setupTabBar();
     setupActions();
     setupSideBar();
-    setupTools();
+	slotSetBrush(m_pBrush);
+	slotSetPattern(m_pPattern);
+	setupTools(m_pCanvas, m_pBrush, m_pPattern);
+
 }
 
 /*
@@ -442,73 +427,6 @@ void KisView::setupTabBar()
 }
 
 /*
-    setupTools - create tools. Possibly there is no need to create all
-    these objects until we first click on them - only create default tool
-    to start. However, these don't take long to set up.  The entire
-    kis_view takes less than 2 seconds to initiate from start to finish,
-    so why not.
-*/
-void KisView::setupTools()
-{
-    // navigation tools
-    m_pZoomTool = new ZoomTool(this);
-    m_pMoveTool = new MoveTool(m_pDoc, this);
-
-    // selection tools
-    m_pFreehandSelectTool
-        = new FreehandSelectTool( m_pDoc, this, m_pCanvas );
-    m_pRectangularSelectTool
-        = new RectangularSelectTool( m_pDoc, this, m_pCanvas );
-    m_pPolygonalSelectTool
-        = new PolygonalSelectTool( m_pDoc, this, m_pCanvas );
-    m_pEllipticalSelectTool
-        = new EllipticalSelectTool( m_pDoc, this, m_pCanvas );
-    m_pContiguousSelectTool
-        = new ContiguousSelectTool( m_pDoc, this, m_pCanvas );
-
-    // painting tools
-    m_pPasteTool
-        = new PasteTool( m_pDoc, this, m_pCanvas );
-    m_pBrushTool
-        = new BrushTool(m_pDoc, this, m_pBrush);
-    m_pAirBrushTool
-        = new AirBrushTool(m_pDoc, this, m_pBrush);
-    m_pPenTool
-        = new PenTool(m_pDoc, this, m_pCanvas, m_pBrush);
-    m_pEraserTool
-        = new EraserTool(m_pDoc, this, m_pBrush);
-    m_pColorPicker
-        = new ColorPicker(m_pDoc, this);
-    m_pColorChangerTool
-        = new ColorChangerTool(m_pDoc, this);
-    m_pFillTool
-        = new FillTool( m_pDoc, this );
-    m_pStampTool
-        = new StampTool(m_pDoc, this, m_pCanvas, m_pPattern);
-
-    // drawing tools
-    m_pLineTool
-        = new LineTool( m_pDoc, this, m_pCanvas );
-    m_pPolyLineTool
-        = new PolyLineTool( m_pDoc, this, m_pCanvas );
-    m_pPolyGonTool
-        = new PolyGonTool( m_pDoc, this, m_pCanvas );
-    m_pRectangleTool
-        = new RectangleTool( m_pDoc, this, m_pCanvas );
-    m_pEllipseTool
-        = new EllipseTool( m_pDoc, this, m_pCanvas );
-
-    // set default brush and pattern - we also need a default gradient
-    slotSetBrush(m_pBrush);
-    slotSetPattern(m_pPattern);
-
-    // start with brush as active tool - it's the most versatile
-    m_tool_brush->setChecked( true );
-    activateTool(m_pBrushTool);
-}
-
-
-/*
     Actions - these seem to be menu actions, toolbar actions
     and keyboard actions.  Any action can take on any of these forms,
     at least.  However, using Kde's brain-damaged xmlGui because it
@@ -594,138 +512,6 @@ void KisView::setupActions()
         actionCollection(), "dialog_gradient");
 
     // tool actions - lots of them
-
-    m_tool_select_freehand
-        = new KToggleAction(i18n("&Freehand select"),
-        "freehand", 0, this,  SLOT( tool_select_freehand()),
-        actionCollection(), "tool_select_freehand" );
-
-    m_tool_select_freehand->setExclusiveGroup("tools");
-
-    m_tool_select_rectangular
-        = new KToggleAction(i18n("&Rectangular select"),
-        "rectangular", 0, this,  SLOT( tool_select_rectangular()),
-        actionCollection(), "tool_select_rectangular" );
-
-    m_tool_select_rectangular->setExclusiveGroup("tools");
-
-    m_tool_select_polygonal
-        = new KToggleAction(i18n("&Polygonal select"),
-        "handdrawn" , 0, this, SLOT( tool_select_polygonal() ),
-        actionCollection(), "tool_select_polygonal" );
-
-    m_tool_select_polygonal->setExclusiveGroup( "tools" );
-
-    m_tool_select_elliptical
-        = new KToggleAction(i18n("&Elliptical select"),
-        "elliptical" , 0, this, SLOT( tool_select_elliptical() ),
-        actionCollection(), "tool_select_elliptical" );
-
-    m_tool_select_elliptical->setExclusiveGroup( "tools" );
-
-    m_tool_select_contiguous
-        = new KToggleAction(i18n("&Contiguous select"),
-        "contiguous" , 0, this, SLOT( tool_select_contiguous() ),
-        actionCollection(), "tool_select_contiguous" );
-
-    m_tool_select_contiguous->setExclusiveGroup( "tools" );
-
-    m_tool_move = new KToggleAction( i18n("&Move tool"),
-        "move", 0, this, SLOT( tool_move() ),
-        actionCollection(), "tool_move");
-
-    m_tool_move->setExclusiveGroup( "tools" );
-
-    m_tool_zoom = new KToggleAction( i18n("&Zoom tool"),
-        "viewmag", 0, this, SLOT( tool_zoom() ),
-        actionCollection(), "tool_zoom");
-
-    m_tool_zoom->setExclusiveGroup( "tools" );
-
-    m_tool_pen = new KToggleAction( i18n("&Pen tool"),
-        "pencil", 0, this, SLOT( tool_pen() ),
-        actionCollection(), "tool_pen");
-
-    m_tool_pen->setExclusiveGroup( "tools" );
-
-    m_tool_brush = new KToggleAction( i18n("&Brush tool"),
-        "paintbrush", 0, this, SLOT( tool_brush() ),
-        actionCollection(), "tool_brush");
-
-    m_tool_brush->setExclusiveGroup( "tools" );
-
-    m_tool_airbrush = new KToggleAction( i18n("&Airbrush tool"),
-        "airbrush", 0, this, SLOT( tool_airbrush() ),
-        actionCollection(), "tool_airbrush");
-
-    m_tool_airbrush->setExclusiveGroup( "tools" );
-
-    m_tool_fill = new KToggleAction( i18n("&Filler tool"),
-        "fill", 0, this, SLOT( tool_fill() ),
-        actionCollection(), "tool_fill");
-
-    m_tool_fill->setExclusiveGroup( "tools" );
-
-    m_tool_stamp = new KToggleAction( i18n("&Stamp (Pattern) tool"),
-        "stamp", 0, this, SLOT( tool_stamp() ),
-        actionCollection(), "tool_stamp");
-
-    m_tool_stamp->setExclusiveGroup( "tools" );
-
-    m_tool_eraser = new KToggleAction( i18n("&Eraser tool"),
-        "eraser", 0, this, SLOT( tool_eraser() ),
-        actionCollection(), "tool_eraser");
-
-    m_tool_eraser->setExclusiveGroup( "tools" );
-
-    m_tool_colorpicker = new KToggleAction( i18n("&Color picker"),
-        "colorpicker", 0, this, SLOT( tool_colorpicker() ),
-        actionCollection(), "tool_colorpicker");
-
-    m_tool_colorpicker->setExclusiveGroup( "tools" );
-
-    m_tool_colorchanger = new KToggleAction( i18n("Color changer"),
-        "colorize", 0, this, SLOT( tool_colorchanger() ),
-        actionCollection(), "tool_colorchanger");
-
-    m_tool_colorchanger->setExclusiveGroup( "tools" );
-
-    m_tool_line = new KToggleAction( i18n("&Line tool"),
-        "line", 0, this, SLOT( tool_line() ),
-        actionCollection(), "tool_line");
-
-    m_tool_line->setExclusiveGroup( "tools" );
-
-    m_tool_polyline = new KToggleAction( i18n("&Polyline tool"),
-        "polyline", 0, this, SLOT( tool_polyline() ),
-        actionCollection(), "tool_polyline");
-
-    m_tool_polyline->setExclusiveGroup( "tools" );
-
-    m_tool_polygon = new KToggleAction( i18n("&Polygon tool"),
-        "polygon", 0, this, SLOT( tool_polygon() ),
-        actionCollection(), "tool_polygon");
-
-    m_tool_polygon->setExclusiveGroup( "tools" );
-
-    m_tool_rectangle = new KToggleAction( i18n("&Rectangle tool"),
-        "rectangle", 0, this, SLOT( tool_rectangle() ),
-        actionCollection(), "tool_rectangle");
-
-    m_tool_rectangle->setExclusiveGroup( "tools" );
-
-    m_tool_ellipse = new KToggleAction( i18n("&Ellipse tool"),
-        "ellipse", 0, this, SLOT( tool_ellipse() ),
-        actionCollection(), "tool_ellipse");
-
-    m_tool_ellipse->setExclusiveGroup( "tools" );
-
-    m_tool_paste = new KToggleAction( i18n("&Paste tool"),
-        "editpaste", 0, this, SLOT( tool_paste() ),
-        actionCollection(), "tool_paste");
-
-    m_tool_paste->setExclusiveGroup( "tools" );
-
 
     (void) new KAction( i18n("&Current Tool Properties..."),
         "configure", 0, this, SLOT( tool_properties() ),
@@ -1588,13 +1374,14 @@ void KisView::canvasGotEnterEvent ( QEvent *e )
 */
 void KisView::canvasGotLeaveEvent ( QEvent *e )
 {
-    // clear artifacts from tools which paint on canvas
-    // this does not affect the image or layer
-    if(m_pTool == m_pStampTool || m_pTool == m_pPasteTool)
-        m_pCanvas->repaint();
+	// clear artifacts from tools which paint on canvas
+	// this does not affect the image or layer
+	if (m_pTool && m_pTool -> shouldRepaint()) 
+		m_pCanvas -> repaint();
 
-    QEvent ev(*e) ;
-    emit canvasLeaveEvent( &ev );
+	QEvent ev(*e);
+
+	emit canvasLeaveEvent(&ev);
 }
 
 void KisView::canvasGotMouseWheelEvent( QWheelEvent *e )
@@ -1609,36 +1396,29 @@ void KisView::canvasGotMouseWheelEvent( QWheelEvent *e )
 */
 void KisView::activateTool(KisTool* t)
 {
-    if (!t) return;
+	if (!t) 
+		return;
 
-    // remove the selection outline, if any
-    if(m_pTool) m_pTool->clearOld();
+	// remove the selection outline, if any
+	// prevent old tool from receiving events from canvas
+	if(m_pTool) {
+		m_pTool -> clearOld();
+		QObject::disconnect(m_pTool);
+		m_pTool -> setChecked(false);
+		m_pTool -> setBrush(m_pBrush);
+		m_pTool -> setPattern(m_pPattern);
+	}
 
-    // prevent old tool from receiving events from canvas
-    if(m_pTool) QObject::disconnect(m_pTool);
+	m_pTool = t;
+	m_pTool -> setChecked(true);
 
-    m_pTool = t;
+	QObject::connect(this, SIGNAL(canvasMousePressEvent(QMouseEvent*)), m_pTool, SLOT(mousePress(QMouseEvent*)));
+	QObject::connect(this, SIGNAL(canvasMouseMoveEvent(QMouseEvent*)), m_pTool, SLOT(mouseMove(QMouseEvent*)));
+	QObject::connect(this, SIGNAL(canvasMouseReleaseEvent(QMouseEvent*)), m_pTool, SLOT(mouseRelease(QMouseEvent*)));
 
-    QObject::connect(this, SIGNAL(canvasMousePressEvent(QMouseEvent* )),
-        m_pTool, SLOT( mousePress ( QMouseEvent* ) ) );
-
-    QObject::connect(this, SIGNAL(canvasMouseMoveEvent(QMouseEvent* )),
-        m_pTool, SLOT( mouseMove ( QMouseEvent* ) ) );
-
-    QObject::connect(this, SIGNAL(canvasMouseReleaseEvent(QMouseEvent* )),
-		m_pTool, SLOT( mouseRelease ( QMouseEvent* ) ) );
-
-    if (m_pCanvas) m_pCanvas->setCursor(m_pTool->cursor());
+	if (m_pCanvas) 
+		m_pCanvas -> setCursor(m_pTool -> cursor());
 }
-
-
-/*-------------------------------------------------------------
-    tool action slots - these are just slots to set the active
-    tool to the one selected from the menu or toolbar - due to
-    the limitations of kde's xmlgui, threre must be a slot for
-    each menu item/toolbar item.  A brief description of each
-    tool follows...
---------------------------------------------------------------*/
 
 /*
     tool_properties invokes the optionsDialog() method for the
@@ -1649,268 +1429,8 @@ void KisView::activateTool(KisTool* t)
 */
 void KisView::tool_properties()
 {
-    m_pTool->optionsDialog();
-}
-
-/*
-    tool_select_freehand - select a freehand
-    area with the mouse.
-*/
-void KisView::tool_select_freehand()
-{
-    activateTool(m_pFreehandSelectTool);
-}
-
-/*
-    tool_select_rectangular - select a rectangular
-    area with the mouse or by entering coordinates
-    and size of the rectangle
-*/
-void KisView::tool_select_rectangular()
-{
-    activateTool(m_pRectangularSelectTool);
-}
-
-/*
-    tool_select_polygonal - select a polygonal area
-    a variation of the polyline tool, applied
-    to select rather than to draw
-*/
-void KisView::tool_select_polygonal()
-{
-    activateTool(m_pPolygonalSelectTool);
-}
-
-/*
-    tool_select_elliptical - select an elliptical
-    areas with the mouse - or with a dialog for
-    entering center, and the two radii or a rectangle
-    bounding the ellipse
-*/
-void KisView::tool_select_elliptical()
-{
-    activateTool(m_pEllipticalSelectTool);
-}
-
-/*
-    tool_select_contiguous - select a contiguous area based
-    on color, hue, value or saturation.  Tolerances (a range)
-    of values for all these paramaters are allowed.
-*/
-void KisView::tool_select_contiguous()
-{
-    activateTool(m_pContiguousSelectTool);
-}
-
-/*
-    tool_move - move a layer with the mouse or by
-    entering coordinates to move the layer to within
-    the image
-*/
-void KisView::tool_move()
-{
-    activateTool(m_pMoveTool);
-}
-
-/*
-    tool_zoom - click on the image to multiply the zoom factor by
-    2 with left button or by 1/2 with right button.  The view
-    should also center on the point clicked on. (todo)
-*/
-void KisView::tool_zoom()
-{
-    activateTool(m_pZoomTool);
-}
-
-/*
-    tool_brush - the basic painting tool for krayon. The color
-    value of the brush image is applied to the current foreground
-    color and blended with the current layer pixels.  Various
-    predefined blending methods can be selected with the options
-    dialog (todo).
-*/
-void KisView::tool_brush()
-{
-    activateTool(m_pBrushTool);
-}
-
-/*
-    tool_airbrush - randomly paints pixels of the brush image as
-    the button is held down over time. Compound blending is
-    disallowed with the airbrush tool as this tends to increase
-    contrast with the background over time too much.
-*/
-void KisView::tool_airbrush()
-{
-    activateTool(m_pAirBrushTool);
-}
-
-/*
-    tool_eraser - use the current brush as an eraser to decrease
-    the alpha value of the pixels painted over or set those pixels
-    to the background color is there is no alpha channel for the
-    image.
-*/
-void KisView::tool_eraser()
-{
-    activateTool(m_pEraserTool);
-}
-
-/*
-    tool_pen - like brush, except there is no blending with the
-    background.  The current fgColor is painted or not painted
-    depending on the value of the pixel in the brush and the
-    threshold, which can be set with he options dialog. The alpha
-    value of the layer pixel can also be changed, if desired,
-    depending on the saturation of the color in the brush pixel.
-*/
-void KisView::tool_pen()
-{
-    activateTool(m_pPenTool);
-}
-
-/*
-    tool_colorpicker - change the fgColor to the color of the
-    pixel clicked on with left click or the bgColor with right
-    click.
-*/
-void KisView::tool_colorpicker()
-{
-    activateTool(m_pColorPicker);
-}
-
-/*
-    tool_colorchanger - change the color of the pixel clicked
-    to the current fgColor
-*/
-void KisView::tool_colorchanger()
-{
-    activateTool(m_pColorChangerTool);
-}
-
-
-/*
-    tool_line - draw a line usig KisPainter
-*/
-void KisView::tool_line()
-{
-    // set line tool settings
-    KisDoc::LineToolSettings s = m_pDoc->getLineToolSettings();
-    KisPainter *p = kisPainter();
-
-    p->setLineThickness( s.thickness );
-    p->setLineOpacity( s.opacity );
-    p->setPatternFill( s.useCurrentPattern );
-    p->setGradientFill( s.fillWithGradient );
-
-    activateTool( m_pLineTool );
-}
-
-/*
-    tool_polyline - draw a polyline using KisPainter
-*/
-void KisView::tool_polyline()
-{
-    // set polyline tool settings
-    KisDoc::PolylineToolSettings s = m_pDoc->getPolyLineToolSettings();
-    KisPainter *p = kisPainter();
-
-    p->setLineThickness( s.thickness );
-    p->setLineOpacity( s.opacity );
-    p->setPatternFill( s.useCurrentPattern );
-    p->setGradientFill( s.fillWithGradient );
-
-    activateTool( m_pPolyLineTool );
-}
-
-/*
-    tool_polygon - draw a polygon using KisPainter
-*/
-void KisView::tool_polygon()
-{
-    // set polygon tool settings
-    KisDoc::PolygonToolSettings s = m_pDoc->getPolyGonToolSettings();
-    KisPainter *p = kisPainter();
-
-    p->setLineThickness( s.thickness );
-    p->setLineOpacity( s.opacity );
-    p->setPatternFill( s.useCurrentPattern );
-    p->setGradientFill( s.fillWithGradient );
-    p->setFilledPolygon( s.fillInteriorRegions );
-
-    activateTool( m_pPolyGonTool );
-}
-
-/*
-    tool_rectangle - draw a rectangle using KisPainter
-*/
-
-void KisView::tool_rectangle()
-{
-    // set rectangle tool settings
-    KisDoc::RectangleToolSettings s = m_pDoc->getRectangleToolSettings();
-    KisPainter *p = kisPainter();
-
-    p->setLineThickness( s.thickness );
-    p->setLineOpacity( s.opacity );
-    p->setFilledRectangle( s.fillInteriorRegions );
-    p->setGradientFill( s.useCurrentPattern );
-    p->setPatternFill( s.useCurrentPattern );
-
-    activateTool( m_pRectangleTool );
-}
-
-/*
-    tool_ellipse - draw an ellipse using KisPainter
-*/
-void KisView::tool_ellipse()
-{
-    // set ellipse tool settings
-    KisDoc::EllipseToolSettings s = m_pDoc->getEllipseToolSettings();
-    KisPainter *p = kisPainter();
-
-    p->setLineThickness( s.thickness );
-    p->setLineOpacity( s.opacity );
-    p->setFilledEllipse( s.useCurrentPattern );
-    p->setGradientFill( s.fillWithGradient );
-    p->setPatternFill( s.fillInteriorRegions );
-
-    activateTool( m_pEllipseTool );
-}
-
-/*
-    tool_fill - flood fill with fgColor all contiguous
-    pixels which are the same as the pixel selected
-*/
-void KisView::tool_fill()
-{
-    activateTool( m_pFillTool );
-}
-
-/*
-    tool_stamp - use the current pattern as a brush
-*/
-void KisView::tool_stamp()
-{
-    activateTool( m_pStampTool );
-}
-
-/*
-    tool_paste is same as paste action from the selection group
-    but paste still needes to be a tool because you can paint with it
-*/
-void KisView::tool_paste()
-{
-    if(m_pDoc->getClipImage())
-    {
-        m_pPasteTool->setClip();
-        activateTool(m_pPasteTool);
-        slotUpdateImage();
-    }
-    else
-    {
-        KMessageBox::sorry(NULL, i18n("Nothing to paste!"), "", FALSE);
-    }
+	assert(m_pTool);
+	m_pTool -> optionsDialog();
 }
 
 /*---------------------------
@@ -2016,6 +1536,8 @@ void KisView::removeSelection()
 */
 void KisView::paste()
 {
+	// XXX
+#if 0
     // get local clip from global clipboard
     if(m_pDoc->getClipImage())
     {
@@ -2028,6 +1550,7 @@ void KisView::paste()
     {
         KMessageBox::sorry(NULL, i18n("Nothing to paste!"), "", FALSE);
     }
+#endif
 }
 
 /*
@@ -2993,18 +2516,9 @@ void KisView::setZoomFactor( float zf )
 
 void KisView::slotSetBrush(KisBrush* b)
 {
-	assert(m_pBrushTool);
-	assert(m_pPenTool);
-	assert(m_pAirBrushTool);
-	assert(m_pEraserTool);
+	assert(b);
 	assert(m_pBrush);
-
 	m_pBrush = b;
-	m_pBrushTool -> setBrush(b);
-	m_pPenTool -> setBrush(b);
-	m_pAirBrushTool -> setBrush(b);
-	m_pEraserTool -> setBrush(b);
-	m_pSideBar -> slotSetBrush(*b);
 
 	if (m_pTool) {
 		m_pTool -> setBrush(b);
@@ -3014,20 +2528,21 @@ void KisView::slotSetBrush(KisBrush* b)
 
 void KisView::slotSetKrayon(KisKrayon* k)
 {
-    m_pKrayon = k;
-    m_pSideBar->slotSetKrayon(*k);
+	m_pKrayon = k;
+	m_pSideBar -> slotSetKrayon(*k);
 }
 
 
 void KisView::slotSetPattern(KisPattern* p)
 {
-    // set current pattern for this view
-    m_pPattern = p;
+	// set current pattern for this view
+	m_pPattern = p;
 
-    /* set pattern for other things that use patterns */
-    if(m_pStampTool) m_pStampTool->setPattern(p);
-    if(m_pSideBar) m_pSideBar->slotSetPattern(*p);
-    if(m_pDoc->frameBuffer()) m_pDoc->frameBuffer()->setPattern(p);
+	// set pattern for other things that use patterns
+	assert(m_pSideBar);
+	assert(m_pDoc);
+	m_pSideBar -> slotSetPattern(*p);
+	m_pDoc -> frameBuffer() -> setPattern(p);
 }
 
 
@@ -3037,8 +2552,8 @@ void KisView::slotSetPattern(KisPattern* p)
 */
 void KisView::slotSetFGColor(const KisColor& c)
 {
-    m_fg = c;
-    emit fgColorChanged(c);
+	m_fg = c;
+	emit fgColorChanged(c);
 }
 
 /*
@@ -3047,8 +2562,8 @@ void KisView::slotSetFGColor(const KisColor& c)
 */
 void KisView::slotSetBGColor(const KisColor& c)
 {
-    m_bg = c;
-    emit bgColorChanged(c);
+	m_bg = c;
+	emit bgColorChanged(c);
 }
 
 
@@ -3176,6 +2691,18 @@ void KisView::addHasNewLayer(QImage& loadedImg, KURL& u)
 	m_pLayerView -> layerTable() -> selectLayer(indx);
 	m_pLayerView -> layerTable() -> updateTable();
 	m_pLayerView -> layerTable() -> updateAllCells();
+}
+
+void KisView::setupTools(KisCanvas *canvas, KisBrush *brush, KisPattern *pattern)
+{
+	m_tools = ::toolFactory(canvas, brush, pattern, m_pDoc, this);
+
+	for (ktvector_size_type i = 0; i < m_tools.size(); i++) {
+		KisTool *p = m_tools[i];
+
+		assert(p);
+		p -> setupAction(actionCollection());
+	}
 }
 
 #include "kis_view.moc"

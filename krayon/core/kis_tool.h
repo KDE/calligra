@@ -26,57 +26,64 @@
 #include <qpixmap.h>
 #include <qimage.h>
 
+#include <kaction.h>
+
 #include "kis_brush.h"
+#include "kis_pattern.h"
 
 class KisDoc;
 class KisView;
 
-class KisTool : public QObject
-{
-  Q_OBJECT
+class KisTool : public QObject {
+Q_OBJECT
 
- public:
-    KisTool(KisDoc *doc, KisView *view = 0L);
-    ~KisTool();
+public:
+	KisTool(KisDoc *doc, KisView *view = 0L);
+	~KisTool();
 
-    QString toolName();
-    QCursor cursor();
+	virtual QString toolName();
+	virtual QCursor cursor();
+	virtual void setCursor(const QCursor& cursor);
+	virtual void setCursor();
+	virtual void setPattern(KisPattern *pattern);
+	virtual void setBrush(KisBrush *b);
+	virtual void optionsDialog();
+	virtual void clearOld();
 
-    virtual void setCursor(const QCursor& cursor);
-    virtual void setCursor();
-    virtual void setBrush(KisBrush *b);
-    virtual void optionsDialog();
-    virtual void clearOld(){}
+	virtual void setupAction(QObject *collection) = 0;
+	virtual void setChecked(bool) {}
+	virtual bool shouldRepaint();
+	//virtual bool willModify(); // TODO : If this only a selection tool, we should tell the view not to mark the document dirty
 
-    void setSelectCursor();
-    void setMoveCursor();
-    
- public slots:
+	void setSelectCursor();
+	void setMoveCursor();
 
-    virtual void mousePress(QMouseEvent*); 
-    virtual void mouseMove(QMouseEvent*);
-    virtual void mouseRelease(QMouseEvent*);
-    
- protected:
+public slots:
+	virtual void toolSelect();
+	virtual void mousePress(QMouseEvent*); 
+	virtual void mouseMove(QMouseEvent*);
+	virtual void mouseRelease(QMouseEvent*);
 
-    int zoomed(int n);
-    int zoomedX(int n);  
-    int zoomedY(int n);
-    QPoint zoomed(QPoint & point);
+protected:
+	int zoomed(int n);
+	int zoomedX(int n);  
+	int zoomedY(int n);
+	QPoint zoomed(const QPoint& point);
 
-    QRect getDrawRect( QPointArray & points );
-    QPointArray zoomPointArray( QPointArray & points );
+	QRect getDrawRect(QPointArray& points);
+	QPointArray zoomPointArray(QPointArray& points);
 
-    void setClipImage();
-    void dragSelectImage( QPoint dragPoint, QPoint m_hotSpot );
-    bool pasteClipImage( QPoint pos );
-  
-    KisDoc  *m_pDoc;
-    KisView *m_pView;
-    QCursor  m_Cursor;
+	void setClipImage();
+	void dragSelectImage(QPoint dragPoint, QPoint m_hotSpot);
+	bool pasteClipImage(QPoint pos);
 
-    QPixmap clipPixmap;
-    QImage  clipImage;
+	KisDoc  *m_pDoc;
+	KisView *m_pView;
+	KisPattern  *m_pPattern;
+	QCursor  m_Cursor;
+
+	QPixmap clipPixmap;
+	QImage  clipImage;
 };
 
 #endif
