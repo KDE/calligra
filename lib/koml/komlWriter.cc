@@ -32,7 +32,7 @@ ostream& indent( ostream& outs )
 
 void intToHexStr( char *_buffer, int _val )
 {
-  char *conv = "0123456789abcdef";
+    const char *conv = "0123456789abcdef";
   
   _buffer[0] = conv[ ( _val >> 28 ) ];
   _buffer[1] = conv[ ( _val >> 24 ) & 0xF ];
@@ -68,7 +68,7 @@ int hexStrToInt( const char *_buffer )
 
 void shortToHexStr( char *_buffer, short _val )
 {
-  char *conv = "0123456789abcdef";
+  const char *conv = "0123456789abcdef";
   
   _buffer[0] = conv[ ( _val >> 4 ) & 0xF ];
   _buffer[1] = conv[ _val & 0xF ];

@@ -221,8 +221,8 @@ protected:
    *  maximal 4 Zeichen Putback-Bereich plus
    *  maximal 6 Zeichen normaler Lesepuffer
    */
-  const int m_iBufferSize = 48 + 4;     // Groesse des Datenpuffers
-  char m_buffer[ m_iBufferSize ];
+    const int m_iBufferSize;// = 48 + 4;     // Groesse des Datenpuffers
+    char *m_buffer; // m_iBufferSize ];
 
 public:
   /* Konstruktor
@@ -230,14 +230,18 @@ public:
    *  - keine Putback-Reserve
    *  => underflow() forcieren
    */
-  Base64DecodeBuffer( istream& _str ) : m_in( _str )
+  Base64DecodeBuffer( istream& _str ) : m_iBufferSize(48 + 4), m_in( _str )
   {
+      m_buffer = new char[m_iBufferSize];
+
     setg ( m_buffer + 4,     // Putback-Anfang
 	   m_buffer + 4,     // Leseposition
 	   m_buffer + 4 );    // Puffer-Ende
 
     m_bEnd = false;
   }
+
+  ~Base64DecodeBuffer() { delete [] m_buffer; }
 
 protected:
   /* neue Zeichen in den Puffer einlesen
@@ -273,8 +277,8 @@ protected:
    *  maximal 4 Zeichen Putback-Bereich plus
    *  maximal 6 Zeichen normaler Lesepuffer
    */
-  const int m_iBufferSize = 252 + 4;     // Groesse des Datenpuffers
-  char m_buffer[ m_iBufferSize ];
+    const int m_iBufferSize; // = 252 + 4;     // Groesse des Datenpuffers
+    char *m_buffer; // [ m_iBufferSize ];
 
 public:
   /* Konstruktor
@@ -282,16 +286,21 @@ public:
    *  - keine Putback-Reserve
    *  => underflow() forcieren
    */
-  KOMLBodyIBuffer( istream& _str, const char *_boundary, KOMLBodyIStream& _kin ) : m_in( _str ), m_stream( _kin )
+  KOMLBodyIBuffer( istream& _str, const char *_boundary, KOMLBodyIStream& _kin ) : 
+      m_iBufferSize(252 + 4), m_in( _str ), m_stream( _kin )
   {
-    setg ( m_buffer + 4,     // Putback-Anfang
-	   m_buffer + 4,     // Leseposition
-	   m_buffer + 4 );    // Puffer-Ende
-
-    m_bEnd = false;
-    m_bNewLine = true;
-    m_strBoundary = _boundary;
+      m_buffer = new char[m_iBufferSize];
+      
+      setg ( m_buffer + 4,     // Putback-Anfang
+	     m_buffer + 4,     // Leseposition
+	     m_buffer + 4 );    // Puffer-Ende
+      
+      m_bEnd = false;
+      m_bNewLine = true;
+      m_strBoundary = _boundary;
   }
+
+  virtual ~KOMLBodyIBuffer() { delete [] m_buffer; }
 
 protected:
   /* neue Zeichen in den Puffer einlesen

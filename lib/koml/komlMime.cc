@@ -209,7 +209,7 @@ int Base64DecodeBuffer::underflow()
     memcpy( m_buffer + ( 4 - anzPutback ), gptr()-anzPutback, anzPutback );
 
     int want = ( m_iBufferSize - 4 ) * 4 / 3;
-    char buf[ want ];
+    char *buf = new char[ want ];
     
     int got = 0;
     while( !m_in.eof() && !m_bEnd && got < want )
@@ -225,6 +225,7 @@ int Base64DecodeBuffer::underflow()
 	  if ( m_in.eof() )
 	  {
 	    cerr << "Unexpected EOF" << endl;
+	    delete [] buf;
 	    return EOF;
 	  }
 	  got++;
@@ -232,6 +233,7 @@ int Base64DecodeBuffer::underflow()
 	  if ( c != '=' )
 	  {
 	    cerr << "Not correct base64" << endl;
+	    delete [] buf;
 	    return EOF;
 	  }
 	  buf[ got++ ] = c;
@@ -245,6 +247,7 @@ int Base64DecodeBuffer::underflow()
 	else 
 	{
 	  cerr << "Unexpected =" << endl;
+	  delete [] buf;
 	  return EOF;
 	}
       }
@@ -255,6 +258,7 @@ int Base64DecodeBuffer::underflow()
     if( got % 4 != 0 )
     {
       cerr << "Unexpected EOF 2" << endl;
+      delete [] buf;
       return EOF;
     }
     
@@ -272,6 +276,8 @@ int Base64DecodeBuffer::underflow()
     setg ( m_buffer + ( 4 - anzPutback ),   // Putback-Anfang
 	   m_buffer + 4,                // Leseposition
 	   m_buffer + 4 + anz );           // Puffer-Ende
+
+    delete [] buf;
 
     // naechstes Zeichen zurueckliefern
     return *gptr();
