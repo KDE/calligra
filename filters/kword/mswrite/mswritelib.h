@@ -541,7 +541,7 @@ public:
 class MSWRITE_BITMAP_COLOUR_INDEX
 {
 public:
-	BYTE blue, green, red, reserved;
+	UBYTE blue, green, red, reserved;
 };
 
 // 14-byte header for bitmaps INSIDE MSWrite documents only

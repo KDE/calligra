@@ -108,6 +108,11 @@ char *MSWRITE_IMPORT_LIB::getVersion (void) const
 // front-end filter function
 int MSWRITE_IMPORT_LIB::filter (void)
 {
+
+// gcc 2.95.3 seems to experience an internal compiler so we use an inelegant workaround :(
+#define I_HAVE_A_BROKEN_COMPILER
+
+#if !defined (I_HAVE_A_BROKEN_COMPILER)
 	// list of functions to call in turn only if the previous one succeeds
 	// (no one can get trickier than this definition! :)
 	int (MSWRITE_IMPORT_LIB:: *action []) (void) =
@@ -134,6 +139,32 @@ int MSWRITE_IMPORT_LIB::filter (void)
 			return 1;
 		}
 	}
+#else
+	bool fail = false;
+
+	if (headerRead ())
+		fail = true;
+	else if (sectionTableRead ())
+		fail = true;
+	else if (sectionPropertyRead ())
+		fail = true;
+	else if (pageTableRead ())
+		fail = true;
+	else if (fontTableRead ())
+		fail = true;
+	else if (charInfoRead ())
+		fail = true;
+	else if (paraInfoRead ())
+		fail = true;
+	else if (documentFilter ())
+		fail = true;
+
+	if (fail)
+	{
+		error ("could not execute filter() function list (compiler workaround version)\n");
+		return 1;
+	}
+#endif
 
 	return 0;
 }
