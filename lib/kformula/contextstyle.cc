@@ -116,12 +116,12 @@ int ContextStyle::getOperatorSpace(TextStyle tstyle) const
 
 int ContextStyle::getBaseSize() const
 {
-    return zoomItY( baseSize );
+    return static_cast<int>( zoomItY( baseSize ) );
 }
 
 int ContextStyle::getMinimumSize() const
 {
-    return zoomItY( minimumSize );
+    return static_cast<int>( zoomItY( minimumSize ) );
 }
 
 double ContextStyle::getAdjustedSize( TextStyle tstyle ) const
@@ -149,18 +149,18 @@ double ContextStyle::getAdjustedSize( TextStyle tstyle ) const
 
 int ContextStyle::getLineWidth() const
 {
-    return zoomItY( lineWidth );
+    return static_cast<int>( zoomItY( lineWidth ) );
 }
 
 
 int ContextStyle::getEmptyRectWidth() const
 {
-    return zoomItY( emptyRectWidth );
+    return static_cast<int>( zoomItY( emptyRectWidth ) );
 }
 
 int ContextStyle::getEmptyRectHeight() const
 {
-    return zoomItY( emptyRectHeight );
+    return static_cast<int>( zoomItY( emptyRectHeight ) );
 }
 
 

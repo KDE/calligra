@@ -74,17 +74,12 @@ private:
 
     void calcCharSize(const ContextStyle& style, double height, QChar ch);
 
-    void calcRoundBracket(const ContextStyle& style, int height);
-    void calcSquareBracket(const ContextStyle& style, int height);
-    void calcCurlyBracket(const ContextStyle& style, int height);
+    void calcRoundBracket(const ContextStyle& style, const char chars[], int height);
+    void calcSquareBracket(const ContextStyle& style, const char chars[], int height);
+    void calcCurlyBracket(const ContextStyle& style, const char chars[], int height);
 
     void drawLeftRoundBracket(QPainter& p, const ContextStyle& style, int x, int y, int height);
     void drawRightRoundBracket(QPainter& p, const ContextStyle& style, int x, int y, int height);
-
-    void drawLeftSmallRoundBracket(QPainter& p, const ContextStyle& style, const char chars[], int x, int y, int charHeight, bool left = true);
-    void drawRightSmallRoundBracket(QPainter& p, const ContextStyle& style, const char chars[], int x, int y, int charHeight);
-    void drawLeftBigRoundBracket(QPainter& p, const ContextStyle& style, const char chars[], int x, int y, int charHeight, int height, bool left = true);
-    void drawRightBigRoundBracket(QPainter& p, const ContextStyle& style, const char chars[], int x, int y, int charHeight, int height);
 
     void drawLeftSquareBracket(QPainter& p, const ContextStyle& style, int x, int y, int height);
     void drawRightSquareBracket(QPainter& p, const ContextStyle& style, int x, int y, int height);
@@ -92,10 +87,10 @@ private:
     void drawLeftCurlyBracket(QPainter& p, const ContextStyle& style, int x, int y, int height);
     void drawRightCurlyBracket(QPainter& p, const ContextStyle& style, int x, int y, int height);
 
-    void drawLeftSmallCurlyBracket(QPainter& p, const ContextStyle& style, const char chars[], int x, int y, int charHeight, bool left = true);
-    void drawRightSmallCurlyBracket(QPainter& p, const ContextStyle& style, const char chars[], int x, int y, int charHeight);
-    void drawLeftBigCurlyBracket(QPainter& p, const ContextStyle& style, const char chars[], int x, int y, int charHeight, int height, bool left = true);
-    void drawRightBigCurlyBracket(QPainter& p, const ContextStyle& style, const char chars[], int x, int y, int charHeight, int height);
+    void drawSmallRoundBracket(QPainter& p, const ContextStyle& style, const char chars[], int x, int y, int charHeight);
+    void drawBigRoundBracket(QPainter& p, const ContextStyle& style, const char chars[], int x, int y, int charHeight, int height);
+    void drawSmallCurlyBracket(QPainter& p, const ContextStyle& style, const char chars[], int x, int y, int charHeight);
+    void drawBigCurlyBracket(QPainter& p, const ContextStyle& style, const char chars[], int x, int y, int charHeight, int height);
 
     QSize size;
     QPoint point;
@@ -108,12 +103,13 @@ private:
 
     SymbolType type;
 
-    static const char leftSmallRoundBracket[];
-    static const char leftBigRoundBracket[];
-    static const char leftSmallSquareBracket[];
-    static const char leftBigSquareBracket[];
-    static const char leftSmallCurlyBracket[];
-    static const char leftBigCurlyBracket[];
+    static const char leftRoundBracket[];
+    static const char leftSquareBracket[];
+    static const char leftCurlyBracket[];
+
+    static const char rightRoundBracket[];
+    static const char rightSquareBracket[];
+    static const char rightCurlyBracket[];
 };
 
 

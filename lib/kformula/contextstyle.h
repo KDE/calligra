@@ -197,12 +197,12 @@ private:
      * The basic distance. Used everywhere a non specific
      * distance is needed. (Maybe we should think about this.)
      */
-    int distance;
+    double distance;
 
     /**
      * The space to be left before and after a normal operator.
      */
-    int operatorSpace;
+    double operatorSpace;
 
     /**
      * The cursors movement style. You need to notify each cursor
@@ -213,7 +213,7 @@ private:
     /**
      * The (font) size of the formula's main sequence.
      */
-    int baseSize;
+    double baseSize;
 
     /**
      * The base text style of the formula.
@@ -234,19 +234,19 @@ private:
     /**
      * The smallest font size we use. Sometimes things have to be readable...
      */
-    int minimumSize;
+    double minimumSize;
 
     /**
      * The thickness of our lines.
      */
-    int lineWidth;
+    double lineWidth;
 
     /**
      * The little rect (square in most cases) that marks the
      * empty place where elements might be inserted.
      */
-    int emptyRectWidth;
-    int emptyRectHeight;
+    double emptyRectWidth;
+    double emptyRectHeight;
 
     /**
      * true means to center the symbol between its indexes.

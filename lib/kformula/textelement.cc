@@ -93,8 +93,8 @@ void TextElement::calcSizes(const ContextStyle& context, ContextStyle::TextStyle
     int spaceAfter = getSpaceAfter(context, tstyle);
 
     QFontMetrics fm(font);
-    QRect bound = fm.boundingRect(character);
-    //QRect bound = fm.boundingRect(QString(character));
+    //QRect bound = fm.boundingRect(character);
+    QRect bound = fm.boundingRect(QString(character));
 
     setWidth(fm.width(character) + spaceBefore + spaceAfter);
     setHeight(bound.height());

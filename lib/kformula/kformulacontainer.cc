@@ -624,14 +624,15 @@ void KFormulaContainer::save(QString file)
 {
     QFile f(file);
     if(!f.open(IO_Truncate | IO_ReadWrite)) {
-        cerr << "Error opening file " << file.latin1() << endl;
+        kdDebug() << "Error opening file " << file.latin1() << endl;
         return;
     }
     QCString data=domData().toCString();
     cerr << (const char *)data << endl;
 
-    QTextStream str(&f);
-    domData().save(str,4);
+    QTextStream stream(&f);
+    stream.setEncoding(QTextStream::Unicode);
+    domData().save(stream,4);
     f.close();
 }
 
@@ -648,11 +649,15 @@ void KFormulaContainer::load(QString file)
 {
     QFile f(file);
     if (!f.open(IO_ReadOnly)) {
-        cerr << "Error opening file" << endl;
+        kdDebug() << "Error opening file " << file.latin1() << endl;
         return;
     }
+    QTextStream stream(&f);
+    stream.setEncoding(QTextStream::Unicode);
+    QString content = stream.read();
+    //kdDebug() << content << endl;
     QDomDocument doc;
-    if (!doc.setContent(&f)) {
+    if (!doc.setContent(content)) {
         f.close();
         return;
     }
@@ -666,7 +671,7 @@ void KFormulaContainer::loadMathMl(QString file)
 {
     QFile f(file);
     if (!f.open(IO_ReadOnly)) {
-        cerr << "Error opening file" << endl;
+        kdDebug() << "Error opening file " << file.latin1() << endl;
         return;
     }
     QDomDocument doc;
@@ -704,7 +709,7 @@ bool KFormulaContainer::load(QDomNode doc)
         }
         else {
             delete root;
-            cerr << "Error constructing element tree." << endl;
+            kdDebug() << "Error constructing element tree." << endl;
         }
     }
     return false;
