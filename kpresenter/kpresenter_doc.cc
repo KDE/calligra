@@ -582,6 +582,7 @@ bool KPresenterDoc::loadXML( QIODevice * dev, const QDomDocument& doc )
 
 	// Read the full XML and write it to a temp file
 	KTempFile tmpFileIn;
+	tmpFileIn.setAutoDelete( true );
 	{
 	    dev->reset();
 	    QByteArray array = dev->readAll();
@@ -591,6 +592,7 @@ bool KPresenterDoc::loadXML( QIODevice * dev, const QDomDocument& doc )
 	
 	// Launch the perl script on it
 	KTempFile tmpFileOut;
+	tmpFileOut.setAutoDelete( true );
 	QCString cmd = KGlobal::dirs()->findExe("perl").local8Bit();
 	if (cmd.isEmpty())
 	{
