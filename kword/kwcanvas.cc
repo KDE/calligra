@@ -1139,10 +1139,12 @@ void KWCanvas::mrCreateText()
         KWFrameDia frameDia( this, frame, m_doc, FT_TEXT );
         frameDia.setCaption(i18n("Connect frame"));
         frameDia.exec();
+	checkCurrentTextEdit(frame->frameSet());
     }
     setMouseMode( MM_EDIT );
     m_doc->repaintAllViews();
     emit docStructChanged(TextFrames);
+    emit currentFrameSetEditChanged();
 }
 
 void KWCanvas::mrCreatePixmap()
