@@ -158,3 +158,13 @@ void KWordViewIface::lowerFrame()
   view->lowerFrame();
 }
 
+void KWordViewIface::bringForward()
+{
+    view->bringForward();
+}
+
+void KWordViewIface::sendBackward()
+{
+    view->sendBackward();
+}
+
