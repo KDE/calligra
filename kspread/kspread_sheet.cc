@@ -7002,7 +7002,7 @@ void KSpreadSheet::saveOasisColRowCell( KoXmlWriter& xmlWriter, KoGenStyles &mai
     {
         const ColumnFormat * column = columnFormat( i );
         KoGenStyle styleCurrent( KSpreadDoc::STYLE_COLUMN/*name ????*/ );
-        styleCurrent.addPropertyPt( "style:column-width", column->mmWidth()/10 );/*FIXME pt and not mm */
+        styleCurrent.addPropertyPt( "style:column-width", column->dblWidth() );/*FIXME pt and not mm */
         styleCurrent.addProperty( "fo:break-before", "auto" );/*FIXME auto or not ?*/
 
         bool hide = column->isHide();
@@ -7012,7 +7012,7 @@ void KSpreadSheet::saveOasisColRowCell( KoXmlWriter& xmlWriter, KoGenStyles &mai
         {
             const ColumnFormat *nextColumn = columnFormat( j );
             KoGenStyle nextStyle( KSpreadDoc::STYLE_COLUMN/*name ????*/ );
-            nextStyle.addPropertyPt( "style:column-width", nextColumn->mmWidth()/10 );/*FIXME pt and not mm */
+            nextStyle.addPropertyPt( "style:column-width", nextColumn->dblWidth() );/*FIXME pt and not mm */
             nextStyle.addProperty( "fo:break-before", "auto" );/*FIXME auto or not ?*/
 
             if ( ( nextStyle==styleCurrent ) && ( hide == nextColumn->isHide() ) )
@@ -7037,7 +7037,7 @@ void KSpreadSheet::saveOasisColRowCell( KoXmlWriter& xmlWriter, KoGenStyles &mai
     {
         const RowFormat * row = rowFormat( i );
         KoGenStyle rowStyle( KSpreadDoc::STYLE_ROW/*name ????*/ );
-        rowStyle.addPropertyPt( "style:row-height", row->mmHeight()/10 );/*FIXME pt and not mm */
+        rowStyle.addPropertyPt( "style:row-height", row->dblHeight());/*FIXME pt and not mm */
         rowStyle.addProperty( "fo:break-before", "auto" );/*FIXME auto or not ?*/
 
         xmlWriter.startElement( "table:table-row" );
