@@ -3523,6 +3523,7 @@ void KWDocument::switchViewMode( KWViewMode * newViewMode )
     // Since the text layout depends on the view mode, we need to redo it
     // But after telling the canvas about the new viewmode, otherwise stuff like
     // slotNewContentsSize will crash.
+    updateAllFrames();
     layout();
 
     repaintAllViews( true );

@@ -46,7 +46,7 @@ void KWAnchor::finalize()
 {
     if ( m_deleted )
         return;
-
+    kdDebug(32001) << kdBacktrace() << endl;
     int paragy = paragraph()->rect().y();
     kdDebug(32001) << this << " KWAnchor::finalize " << x() << "," << y() << " paragy=" << paragy << endl;
 
