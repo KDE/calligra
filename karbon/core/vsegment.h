@@ -60,7 +60,7 @@ class VSegment
 {
 public:
 	VSegment();
-	VSegment( const VSegment &other );
+	VSegment( const VSegment& segment );
 
 	VSegmentType type() const { return m_type; }
 	void setType( VSegmentType t ) { m_type = t; }
@@ -75,6 +75,14 @@ public:
 
 	void setPoint( uint i, const KoPoint& p )
 		{ if( i > 0 && i < 4 ) m_point[--i] = p; }
+
+	/// Calculate height of p above line AB.
+	static double height(
+		const KoPoint& a,
+		const KoPoint& p,
+		const KoPoint& b );
+
+	bool isFlat( const KoPoint& p0 ) const;
 
 	void save( QDomElement& element ) const;
 	void load( const QDomElement& element );

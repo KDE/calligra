@@ -14,11 +14,6 @@ class KoPoint;
 
 namespace VSegmentTools
 {
-	bool isFlat(
-		const KoPoint& p0,
-		const KoPoint& p,
-		const KoPoint& p1 );
-
 	bool linesIntersect(
 		const KoPoint& a0,
 		const KoPoint& a1,

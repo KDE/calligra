@@ -10,35 +10,8 @@
 #include "vglobal.h"
 #include "vsegment_tools.h"
 
-bool
-VSegmentTools::isFlat(
-	const KoPoint& p0,
-	const KoPoint& p,
-	const KoPoint& p1  )
-{
-	// calculate determinant of p0p and p0p1 to obtain projection of vector p0p to
-	// the orthogonal vector of p0p1:
-	const double det =
-		p.x()  * p0.y() + p1.x() * p.y()  - p.x()  * p1.y() -
-		p0.x() * p.y()  + p0.x() * p1.y() - p1.x() * p0.y();
-
-	// calculate norm = length(p0p1):
-	const double norm = sqrt(
-		( p1.x() - p0.x() ) * ( p1.x() - p0.x() ) +
-		( p1.y() - p0.y() ) * ( p1.y() - p0.y() ) );
-
-	// if norm is very small, simply use distance p0p:
-	if( norm < 1.0e-6 )
-		return(
-			sqrt(
-				( p.x() - p0.x() ) * ( p.x() - p0.x() ) +
-				( p.y() - p0.y() ) * ( p.y() - p0.y() ) )
-			< VGlobal::flatnessTolerance );
-
-	// normalize:
-	return( det / norm < VGlobal::flatnessTolerance );
-}
-
+/*bool
+*/
 bool
 VSegmentTools::linesIntersect(
 	const KoPoint& a0,

@@ -5,6 +5,7 @@
 
 #include <qdom.h>
 
+#include "vglobal.h"
 #include "vsegment.h"
 #include "vsegmentlist.h"
 
@@ -91,12 +92,69 @@ VSegment::VSegment()
 {
 }
 
-VSegment::VSegment( const VSegment& other )
+VSegment::VSegment( const VSegment& segment )
 {
-	m_point[0] = other.m_point[0];
-	m_point[1] = other.m_point[1];
-	m_point[2] = other.m_point[2];
-	m_type = other.m_type;
+	m_point[0] = segment.m_point[0];
+	m_point[1] = segment.m_point[1];
+	m_point[2] = segment.m_point[2];
+	m_type = segment.m_type;
+}
+
+double
+VSegment::height(
+	const KoPoint& a,
+	const KoPoint& p,
+	const KoPoint& b )
+{
+	// calculate determinant of AP and AB to obtain projection of vector AP to
+	// the orthogonal vector of AB:
+	const double det =
+		p.x() * a.y() + b.x() * p.y() - p.x() * b.y() -
+		a.x() * p.y() + a.x() * b.y() - b.x() * a.y();
+
+	// calculate norm = length(AB):
+	const double norm = sqrt(
+		( b.x() - a.x() ) * ( b.x() - a.x() ) +
+		( b.y() - a.y() ) * ( b.y() - a.y() ) );
+
+	// if norm is very small, simply use distance AP:
+	if( norm < 1.0e-6 )
+		return
+			sqrt(
+				( p.x() - a.x() ) * ( p.x() - a.x() ) +
+				( p.y() - a.y() ) * ( p.y() - a.y() ) );
+
+	// normalize:
+	return det / norm;
+}
+
+bool
+VSegment::isFlat( const KoPoint& p0 ) const
+{
+	if(
+		type() == segment_begin ||
+		type() == segment_line ||
+		type() == segment_end )
+	{
+		return true;
+	}
+
+	if( type() == segment_curve )
+		return
+			height( p0, m_point[1], m_point[3] )
+				< VGlobal::flatnessTolerance &&
+			height( p0, m_point[2], m_point[3] )
+				< VGlobal::flatnessTolerance;
+	else if( type() == segment_curve1 )
+		return
+			height( p0, m_point[2], m_point[3] )
+				< VGlobal::flatnessTolerance;
+	else if( type() == segment_curve2 )
+		return
+			height( p0, m_point[1], m_point[3] )
+				< VGlobal::flatnessTolerance;
+
+	return false;
 }
 
 void

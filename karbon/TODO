@@ -1,10 +1,6 @@
--	fix crash (something to do with static of current tool?)
-	when loading or adding new view
--	fix tool-bar
--	reintroduce handler
--	fix selection
--	mirror coordinate-system so origin is bottom-left
--	add validators to all tool-dialog input-fields
--	painting (NotROP) while shape creation isnt good. creation should instead
+1	painting (NotROP) while shape creation isnt good. creation should instead
 	insert a temporary object (state "edit") right from the start.
 	other vobjects shouldnt repaint if they didnt change put just blit their pixmap-cache.
+2	mirror coordinate-system so origin is bottom-left
+3	reintroduce handler
+4	add validators to all tool-dialog input-fields
