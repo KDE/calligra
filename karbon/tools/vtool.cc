@@ -51,6 +51,13 @@ VTool::eventFilter( QEvent* event )
 
 
 	// Mouse events:
+	if ( event->type() == QEvent::MouseButtonDblClick )
+	{
+		mouseButtonDblClick();
+		
+		return true;
+	}
+
 	if( event->type() == QEvent::MouseButtonPress )
 	{
 		m_firstPoint.setX( canvasCoordinate.x() );
@@ -94,7 +101,6 @@ VTool::eventFilter( QEvent* event )
 
 		return true;
 	}
-
 
 	// Key press events:
 	if( event->type() == QEvent::KeyPress )

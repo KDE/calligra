@@ -67,6 +67,11 @@ protected:
 	virtual void mouseButtonRelease() {}
 
 	/**
+	 * Mouse button double click.
+	 */
+	virtual void mouseButtonDblClick() {}
+
+	/**
 	 * Mouse move. No mouse button is pressed.
 	 */
 	virtual void mouseMove() {}

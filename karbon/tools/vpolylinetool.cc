@@ -262,6 +262,12 @@ void VPolylineTool::mouseButtonRelease()
 	draw();
 } // VPolylineTool::mouseButtonRelease
 
+void VPolylineTool::mouseButtonDlbClick()
+{
+	deactivate();
+	activate();
+} // VPolylineTool::mouseButtonDlbClick()
+
 void VPolylineTool::mouseDrag()
 {
 	if ( bezierPoints.count() == 2 )
