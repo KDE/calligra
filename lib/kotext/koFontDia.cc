@@ -475,7 +475,7 @@ void KoFontChooser::slotChangeUnderlineType( int i)
     m_underlineColorButton->setEnabled( i!=0);
 }
 
-void KoFontChooser::slotChangeStrikeOutType( int i)
+void KoFontChooser::slotChangeStrikeOutType( int /*i*/ )
 {
     m_changedFlags |= KoTextFormat::StrikeOut;
 }
