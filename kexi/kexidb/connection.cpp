@@ -1255,12 +1255,16 @@ bool Connection::drv_dropTable( const QString& name )
 
     TODO: Should check that a database is currently in use? (c.f. createTable)
 */
-bool Connection::dropTable( KexiDB::TableSchema* tableSchema )
+tristate Connection::dropTable( KexiDB::TableSchema* tableSchema )
 {
 // Each SQL identifier needs to be escaped in the generated query.
 	clearError();
 	if (!tableSchema)
 		return false;
+
+	tristate res = closeAllTableSchemaChangeListeners(*tableSchema);
+	if (true!=res)
+		return res;
 
 	//sanity checks:
 	if (m_driver->isSystemObjectName( tableSchema->name() )) {
@@ -1296,7 +1300,7 @@ bool Connection::dropTable( KexiDB::TableSchema* tableSchema )
 	return commitAutoCommitTransaction(trans);
 }
 
-bool Connection::dropTable( const QString& table )
+tristate Connection::dropTable( const QString& table )
 {
 	clearError();
 	TableSchema* ts = tableSchema( table );
@@ -1310,17 +1314,11 @@ bool Connection::dropTable( const QString& table )
 
 tristate Connection::alterTable( TableSchema& tableSchema, TableSchema& newTableSchema )
 {
-	QPtrList<Connection::TableSchemaChangeListenerInterface> *listeners = d->m_tableSchemaChangeListeners[&tableSchema];
-	if (listeners) {
-		for (QPtrListIterator<Connection::TableSchemaChangeListenerInterface>it(*listeners);
-			it.current(); ++it) {
-			tristate res = it.current()->closeListener();
-			if (res!=true)
-				return res;
-		}
-	}
-
 	clearError();
+	tristate res = closeAllTableSchemaChangeListeners(tableSchema);
+	if (true!=res)
+		return res;
+
 	if (&tableSchema == &newTableSchema) {
 		setError(ERR_OBJECT_THE_SAME, i18n("Could not alter table \"%1\" using the same table.")
 			.arg(tableSchema.name()));
@@ -2517,11 +2515,37 @@ void Connection::unregisterForTableSchemaChanges(TableSchemaChangeListenerInterf
 	listeners->remove( &listener );
 }
 
+void Connection::unregisterForTablesSchemaChanges(TableSchemaChangeListenerInterface& listener)
+{
+	for (QPtrDictIterator< QPtrList<TableSchemaChangeListenerInterface> > it(d->m_tableSchemaChangeListeners);
+		it.current(); ++it)
+	{
+		if (-1!=it.current()->find(&listener))
+			it.current()->take();
+	}
+}
+
 QPtrList<Connection::TableSchemaChangeListenerInterface>*
 Connection::tableSchemaChangeListeners(TableSchema& tableSchema) const
 {
 	KexiDBDbg << d->m_tableSchemaChangeListeners.count() << endl;
 	return d->m_tableSchemaChangeListeners[&tableSchema];
+}
+
+tristate Connection::closeAllTableSchemaChangeListeners(TableSchema& tableSchema)
+{
+	QPtrList<Connection::TableSchemaChangeListenerInterface> *listeners = d->m_tableSchemaChangeListeners[&tableSchema];
+	if (!listeners)
+		return true;
+	QPtrListIterator<KexiDB::Connection::TableSchemaChangeListenerInterface> tmpListeners(*listeners); //safer copy
+	tristate res = true;
+	//try to close every window
+	for (QPtrListIterator<KexiDB::Connection::TableSchemaChangeListenerInterface> it(tmpListeners);
+		it.current() && res==true; ++it)
+	{
+		res = it.current()->closeListener();
+	}
+	return res;
 }
 
 #include "connection.moc"

@@ -366,8 +366,7 @@ void KexiAlterTableDialog::setPrimaryKey(KexiPropertyBuffer &buf, bool set)
 		if (m_view->selectedItem()) {
 			//show key in the table
 			m_view->data()->clearRowEditBuffer();
-			QVariant v(set ? "key" : "");
-			m_view->data()->updateRowEditBuffer(m_view->selectedItem(), COLUMN_ID_PK, v);
+			m_view->data()->updateRowEditBuffer(m_view->selectedItem(), COLUMN_ID_PK, QVariant(set ? "key" : ""));
 			m_view->data()->saveRowChanges(*m_view->selectedItem(), true);
 		}
 		if (was_pkey || set) //cahnge flag only if we're setting pk or really clearing it
@@ -909,9 +908,8 @@ tristate KexiAlterTableDialog::storeData()
 		QPtrList<KexiDB::Connection::TableSchemaChangeListenerInterface>* listeners
 			= conn->tableSchemaChangeListeners(*tempData()->table);
 		if (listeners && !listeners->isEmpty()) {
-			QPtrListIterator<KexiDB::Connection::TableSchemaChangeListenerInterface> tmpListeners(*listeners);
 			QString openedObjectsStr = "<ul>";
-			for (QPtrListIterator<KexiDB::Connection::TableSchemaChangeListenerInterface> it(tmpListeners);
+			for (QPtrListIterator<KexiDB::Connection::TableSchemaChangeListenerInterface> it(*listeners);
 				it.current(); ++it)	{
 					openedObjectsStr += QString("<li>%1</li>").arg(it.current()->listenerInfoString);
 			}
@@ -919,15 +917,12 @@ tristate KexiAlterTableDialog::storeData()
 			int r = KMessageBox::questionYesNo(this, 
 				"<p>"+i18n("You are about to change design of table \"%1\" "
 				"but following objects using this table are opened:").arg(tempData()->table->name())
-				+"</p><p>"+openedObjectsStr+"</p><p>", 
+				+"</p><p>"+openedObjectsStr+"</p><p>"
+				+i18n("Do you want to close all windows for these objects?"), 
 				QString::null, KGuiItem(i18n("Close windows"),"fileclose"), KStdGuiItem::cancel());
 			if (r == KMessageBox::Yes) {
-				res = true;
 				//try to close every window
-				for (QPtrListIterator<KexiDB::Connection::TableSchemaChangeListenerInterface> it(tmpListeners);
-					it.current() && res==true; ++it)	{
-					res = it.current()->closeListener();
-				}
+				res = conn->closeAllTableSchemaChangeListeners(*tempData()->table);
 				if (res!=true) //do not expose closing errors twice; just cancel
 					res = cancelled;
 			}

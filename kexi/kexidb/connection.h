@@ -458,11 +458,11 @@ class KEXI_DB_EXPORT Connection : public QObject, public KexiDB::Object
 		 - its schema is removed even in this case.
 		*/
 //TODO(js): update any structure (e.g. query) that depend on this table!
-		bool dropTable( TableSchema* tableSchema );
+		tristate dropTable( TableSchema* tableSchema );
 
 		/*! It is a convenience function, does exactly the same as 
 		 bool dropTable( KexiDB::TableSchema* tableSchema ) */
-		bool dropTable( const QString& table );
+		tristate dropTable( const QString& table );
 
 		/*! Alters \a tableSchema using \a newTableSchema in memory and on the db backend. 
 		 \return true on success, cancelled if altering was cancelled. */
@@ -645,8 +645,12 @@ class KEXI_DB_EXPORT Connection : public QObject, public KexiDB::Object
 		void unregisterForTableSchemaChanges(TableSchemaChangeListenerInterface& listener, 
 			TableSchema &schema);
 
+		void unregisterForTablesSchemaChanges(TableSchemaChangeListenerInterface& listener);
+
 		QPtrList<Connection::TableSchemaChangeListenerInterface>*
 			tableSchemaChangeListeners(TableSchema& tableSchema) const;
+
+		tristate closeAllTableSchemaChangeListeners(TableSchema& tableSchema);
 
 	protected:
 		/*! Used by Driver */

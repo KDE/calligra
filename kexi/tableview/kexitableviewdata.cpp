@@ -431,12 +431,7 @@ void KexiTableViewData::clearRowEditBuffer()
 		m_pRowEditBuffer->clear();
 }
 
-/*bool KexiTableViewData::isDBAware()
-{
-	return m_cursor!=0;
-}*/
-
-bool KexiTableViewData::updateRowEditBuffer(KexiTableItem *item, 
+bool KexiTableViewData::updateRowEditBufferRef(KexiTableItem *item, 
 	int colnum, QVariant& newval, bool allowSignals)
 {
 	m_result.clear();
@@ -445,15 +440,15 @@ bool KexiTableViewData::updateRowEditBuffer(KexiTableItem *item,
 	if (!m_result.success)
 		return false;
 
-	kdDebug() << "KexiTableViewData::updateRowEditBuffer() column #" << colnum << " = " << newval.toString() << endl;
+	kdDebug() << "KexiTableViewData::updateRowEditBufferRef() column #" << colnum << " = " << newval.toString() << endl;
 	KexiTableViewColumn* col = columns.at(colnum);
 	if (!col) {
-		kdDebug() << "KexiTableViewData::updateRowEditBuffer(): column #" << colnum<<" not found! col==0" << endl;
+		kdDebug() << "KexiTableViewData::updateRowEditBufferRef(): column #" << colnum<<" not found! col==0" << endl;
 		return false;
 	}
 	if (m_pRowEditBuffer->isDBAware()) {
 		if (!(col->fieldinfo)) {
-			kdDebug() << "KexiTableViewData::updateRowEditBuffer(): column #" << colnum<<" not found!" << endl;
+			kdDebug() << "KexiTableViewData::updateRowEditBufferRef(): column #" << colnum<<" not found!" << endl;
 			return false;
 		}
 //		if (!(static_cast<KexiDBTableViewColumn*>(col)->field)) {
@@ -461,13 +456,13 @@ bool KexiTableViewData::updateRowEditBuffer(KexiTableItem *item,
 		return true;
 	}
 	if (!(col->field())) {
-		kdDebug() << "KexiTableViewData::updateRowEditBuffer(): column #" << colnum<<" not found!" << endl;
+		kdDebug() << "KexiTableViewData::updateRowEditBufferRef(): column #" << colnum<<" not found!" << endl;
 		return false;
 	}
 	//not db-aware:
 	const QString colname = col->field()->name();
 	if (colname.isEmpty()) {
-		kdDebug() << "KexiTableViewData::updateRowEditBuffer(): column #" << colnum<<" not found!" << endl;
+		kdDebug() << "KexiTableViewData::updateRowEditBufferRef(): column #" << colnum<<" not found!" << endl;
 		return false;
 	}
 	m_pRowEditBuffer->insert(colname, newval);

@@ -249,11 +249,13 @@ void KexiQueryDesignerGuiEditor::updateColumnsData()
 	d->fieldColumnData->append( item );
 	d->fieldColumnIdentifiers.insert((*item)[0].toString(), (char*)1); //cache
 
+	tempData()->clearQuery();
 	for (QStringList::const_iterator it = sortedTableNames.constBegin(); 
 		it!=sortedTableNames.constEnd(); ++it)
 	{
 		//table
 		KexiDB::TableSchema *table = d->relations->tables()->find(*it)->table();
+		d->conn->registerForTableSchemaChanges(*tempData(), *table); //this table will be used
 		item = new KexiTableItem(2);
 		(*item)[0]=table->name();
 		(*item)[1]=(*item)[0];
@@ -443,7 +445,7 @@ KexiQueryDesignerGuiEditor::buildSchema(QString *errMsg)
 	temp->query->setWhereExpression( whereExpr );
 
 	temp->query->debug();
-	temp->registerTableSchemaChanges();
+	temp->registerTableSchemaChanges(temp->query);
 	//TODO?
 	return true;
 }
@@ -698,6 +700,7 @@ void KexiQueryDesignerGuiEditor::showFieldsForQuery(KexiDB::QuerySchema *query)
 	if (!was_dirty)
 		setDirty(false);
 	d->dataTable->tableView()->ensureCellVisible(0,0);
+//	tempData()->registerTableSchemaChanges(query);
 }
 
 bool KexiQueryDesignerGuiEditor::loadLayout()

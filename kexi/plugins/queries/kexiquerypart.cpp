@@ -164,6 +164,8 @@ KexiQueryPart::loadSchemaData(KexiDialogBase *dlg, const KexiDB::SchemaData& sda
 	query->debug();
 	(KexiDB::SchemaData&)*query = sdata; //copy main attributes
 
+	temp->registerTableSchemaChanges(query);
+
 	query->debug();
 	return query;
 }
@@ -178,24 +180,24 @@ KexiQueryPart::TempData::TempData(KexiDialogBase* parent, KexiDB::Connection *co
 	this->conn = conn;
 }
 
+KexiQueryPart::TempData::~TempData()
+{
+	conn->unregisterForTablesSchemaChanges(*this);
+}
+
 void KexiQueryPart::TempData::clearQuery()
 {
 	if (!query)
 		return;
-	//unregister all tables
-	for (KexiDB::TableSchema::ListIterator it(*query->tables());
-		it.current(); ++it)
-	{
-		conn->unregisterForTableSchemaChanges(*this, *it.current());
-	}
+	conn->unregisterForTablesSchemaChanges(*this);
 	query->clear();
 }
 
-void KexiQueryPart::TempData::registerTableSchemaChanges()
+void KexiQueryPart::TempData::registerTableSchemaChanges(KexiDB::QuerySchema *q)
 {
-	if (!query)
+	if (!q)
 		return;
-	for (KexiDB::TableSchema::ListIterator it(*query->tables());
+	for (KexiDB::TableSchema::ListIterator it(*q->tables());
 		it.current(); ++it)
 	{
 		conn->registerForTableSchemaChanges(*this, *it.current());

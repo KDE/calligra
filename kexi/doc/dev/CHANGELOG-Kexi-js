@@ -400,11 +400,12 @@ CCMAIL: dkite@shaw.ca
 
 2004-11-20
 KexiDB
-- TableSchemaChangeListenerInterface added to signal cahnges 
+- TableSchemaChangeListenerInterface added to signal changes 
   in tableschema set
 Query Designer
 - registers usage of table schema
 - fixes in GUI editor
+- more checks for schema changes
 
 2004-11-19
 Query Designer

@@ -59,9 +59,10 @@ class KexiQueryPart : public KexiPart::Part
 		{
 			public:
 				TempData(KexiDialogBase* parent, KexiDB::Connection *conn);
+				virtual ~TempData();
 				virtual tristate closeListener();
 				void clearQuery();
-				void registerTableSchemaChanges();
+				void registerTableSchemaChanges(KexiDB::QuerySchema *q);
 
 				KexiDB::QuerySchema *query;
 				KexiDB::Connection *conn;

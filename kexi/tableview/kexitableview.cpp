@@ -3287,7 +3287,7 @@ bool KexiTableView::acceptEditor()
 //		emit aboutToChangeCell(d->pCurrentItem, newval, allow);
 //		if (allow) {
 		//send changes to the backend
-		if (m_data->updateRowEditBuffer(d->pCurrentItem,d->curCol,newval)) {
+		if (m_data->updateRowEditBufferRef(d->pCurrentItem,d->curCol,newval)) {
 			kdDebug() << "KexiTableView::acceptEditor(): ------ EDIT BUFFER CHANGED TO:" << endl;
 			m_data->rowEditBuffer()->debug();
 		} else {
