@@ -476,10 +476,12 @@ void KWFrameDia::setupTab3(){ // TAB Frameset
             lFrameSList->setSelected(item, TRUE );
     }
 
-    if (! frame->getFrameSet()) {
+    // We now create this item (new frameset) in all cases, to allow disconnect+createnew
+    //if (! frame->getFrameSet()) {
         QListViewItem *item = new QListViewItem( lFrameSList );
         item->setText( 0, QString( "*%1" ).arg( doc->getNumFrameSets()+1 ) );
         item->setText( 1, i18n( "Create a new frameset with this frame" ) );
+    if (! frame->getFrameSet()) {
         lFrameSList->setSelected( lFrameSList->firstChild(), TRUE );
     }
 
@@ -686,14 +688,15 @@ void KWFrameDia::setupTab4(){ // TAB Geometry
     sw->setValidator( new KFloatValidator( 0,9999,sw ) );
 
     bool disable = false;
-    if ( doc->isOnlyOneFrameSelected() )
+    // Only one frame selected, or when creating a frame -> enable coordinates
+    if ( doc->isOnlyOneFrameSelected() || !frame->getFrameSet() )
     {
-        KWFrame * theFrame = doc->getFirstSelectedFrame();
-
-        oldX = KWUnit::userValue( theFrame->x(), doc->getUnit() );
-        oldY = KWUnit::userValue( (theFrame->y() - (theFrame->pageNum() * doc->ptPaperHeight())), doc->getUnit() );
-        oldW = KWUnit::userValue( theFrame->width(), doc->getUnit() );
-        oldH = KWUnit::userValue( theFrame->height(), doc->getUnit() );
+	// Can't use frame->pageNum() here since frameset might be 0
+	int pageNum = QMIN( static_cast<int>(frame->y() / doc->ptPaperHeight()), doc->getPages()-1 );
+        oldX = KWUnit::userValue( frame->x(), doc->getUnit() );
+        oldY = KWUnit::userValue( (frame->y() - (pageNum * doc->ptPaperHeight())), doc->getUnit() );
+        oldW = KWUnit::userValue( frame->width(), doc->getUnit() );
+        oldH = KWUnit::userValue( frame->height(), doc->getUnit() );
 
         sx->setText( QString::number( oldX ) );
         sy->setText( QString::number( oldY ) );
@@ -706,7 +709,8 @@ void KWFrameDia::setupTab4(){ // TAB Geometry
         oldW = sw->text().toDouble();
         oldH = sh->text().toDouble();
 
-        if ( theFrame->getFrameSet()->getGroupManager() )
+        KWFrameSet * fs = frame->getFrameSet();
+        if ( fs && fs->getGroupManager() )
             floating->setText( i18n( "Table is inline" ) );
 
         floating->setChecked( frameSetFloating );
@@ -715,8 +719,7 @@ void KWFrameDia::setupTab4(){ // TAB Geometry
             slotFloatingToggled( true );
 
         // Can't change geometry of main WP frame or headers/footers
-        if ( theFrame->getFrameSet()->isHeaderOrFooter() ||
-             theFrame->getFrameSet()->isMainFrameset() )
+        if ( fs && ( fs->isHeaderOrFooter() || fs->isMainFrameset() ) )
             disable = true;
     }
     else
@@ -877,45 +880,19 @@ bool KWFrameDia::applyChanges()
     Q_ASSERT(frame);
     if ( !frame )
         return false;
-    KWFrame *frameCopy=frame->getCopy();
-    if ( tab1 )
-    {
-        // Copy
-        frame->setCopy( cbCopy->isChecked() );
-
-        // FrameBehaviour
-        if ( frameType == FT_TEXT )
-        {
-            if(rResizeFrame->isChecked())
-                frame->setFrameBehaviour(KWFrame::AutoExtendFrame);
-            else if ( rAppendFrame->isChecked())
-                frame->setFrameBehaviour(KWFrame::AutoCreateNewFrame);
-            else
-                frame->setFrameBehaviour(KWFrame::Ignore);
-        }
-
-        // NewFrameBehaviour
-        if( reconnect && reconnect->isChecked() )
-            frame->setNewFrameBehaviour(KWFrame::Reconnect);
-        else if ( noFollowup->isChecked() )
-            frame->setNewFrameBehaviour(KWFrame::NoFollowup);
-        else
-            frame->setNewFrameBehaviour(KWFrame::Copy);
-
-        if ( cbAspectRatio && frame->getFrameSet() )
-            static_cast<KWPictureFrameSet *>( frame->getFrameSet() )->setKeepAspectRatio( cbAspectRatio->isChecked() );
-    }
-    bool createFrameset=false;
+    KWFrame *frameCopy = frame->getCopy(); // keep a copy of the original (for undo/redo)
+    bool isNewFrame = frame->getFrameSet() == 0L; // true if we are creating a new frame
     if ( tab3 )
     {
         // Frame/Frameset belonging, and frameset naming
         // We have basically three cases:
         // * Creating a frame (fs==0), and creating a frameset ('*' selected)
         // * Creating a frame (fs==0), and attaching to an existing frameset (other)
-        // * Editing a frame (fs!=0), possibly changing the frameset attachment, possibly renaming the frameset...
+        // * Editing a frame (fs!=0), possibly changing the frameset attachment (maybe creating a new one)
+        //                            and possibly renaming the frameset...
 
         QString str = lFrameSList->currentItem() ? lFrameSList->currentItem()->text( 0 ) : QString::null;
-        createFrameset = ( str[ 0 ] == '*' );
+        bool createFrameset = ( !str.isEmpty() && str[ 0 ] == '*' );
         if ( createFrameset )
             str.remove( 0, 1 );
         int _num = str.toInt() - 1;
@@ -1013,6 +990,34 @@ bool KWFrameDia::applyChanges()
         }
     }
 
+    KMacroCommand * macroCmd=0L;
+    if ( tab1 )
+    {
+        // Copy
+        frame->setCopy( cbCopy->isChecked() );
+
+        // FrameBehaviour
+        if ( frameType == FT_TEXT )
+        {
+            if(rResizeFrame->isChecked())
+                frame->setFrameBehaviour(KWFrame::AutoExtendFrame);
+            else if ( rAppendFrame->isChecked())
+                frame->setFrameBehaviour(KWFrame::AutoCreateNewFrame);
+            else
+                frame->setFrameBehaviour(KWFrame::Ignore);
+        }
+
+        // NewFrameBehaviour
+        if( reconnect && reconnect->isChecked() )
+            frame->setNewFrameBehaviour(KWFrame::Reconnect);
+        else if ( noFollowup->isChecked() )
+            frame->setNewFrameBehaviour(KWFrame::NoFollowup);
+        else
+            frame->setNewFrameBehaviour(KWFrame::Copy);
+
+        if ( cbAspectRatio && frame->getFrameSet() )
+            static_cast<KWPictureFrameSet *>( frame->getFrameSet() )->setKeepAspectRatio( cbAspectRatio->isChecked() );
+    }
     if ( tab2 )
     {
         // Run around
@@ -1025,23 +1030,25 @@ bool KWFrameDia::applyChanges()
 
         frame->setRunAroundGap( KWUnit::fromUserValue( eRGap->text().toDouble(), doc->getUnit() ) );
     }
-    KMacroCommand * macroCmd=0L;
 
-    if(!createFrameset && (frameCopy->runAroundGap()!=frame->runAroundGap()
-                           || frameCopy->runAround()!=frame->runAround()
-                           || frameCopy->runAround()!=frame->runAround()
-                           || frameCopy->getFrameBehaviour()!=frame->getFrameBehaviour()
-                           || frameCopy->getNewFrameBehaviour()!=frame->getNewFrameBehaviour()))
+    // Undo/redo for frame properties
+    if(!isNewFrame && (
+                      frameCopy->isCopy()!=frame->isCopy()
+                   || frameCopy->getFrameBehaviour()!=frame->getFrameBehaviour()
+                   || frameCopy->getNewFrameBehaviour()!=frame->getNewFrameBehaviour())
+                   || frameCopy->runAround()!=frame->runAround()
+                   || frameCopy->runAroundGap()!=frame->runAroundGap())
     {
         if(!macroCmd)
             macroCmd = new KMacroCommand( i18n("Frame Properties") );
-        KWFramePropertiesCommand*cmd = new KWFramePropertiesCommand( i18n("Frame Properties"), frameCopy, frame );
+        KWFramePropertiesCommand*cmd = new KWFramePropertiesCommand( QString::null, frameCopy, frame );
         macroCmd->addCommand(cmd);
     }
     else
     {
         delete frameCopy;
     }
+    frameCopy = 0L; // don't even think about using it below this point :)
 
     if ( tab4 )
     {
@@ -1064,7 +1071,7 @@ bool KWFrameDia::applyChanges()
             move->sizeOfBegin=frame->normalize();
 
             // turn non-floating frame into floating frame
-            KWFrameSetPropertyCommand *cmd = new KWFrameSetPropertyCommand( i18n("Make FrameSet Inline"), parentFs, KWFrameSetPropertyCommand::FSP_FLOATING, "true" );
+            KWFrameSetPropertyCommand *cmd = new KWFrameSetPropertyCommand( QString::null, parentFs, KWFrameSetPropertyCommand::FSP_FLOATING, "true" );
             cmd->execute();
 
             move->sizeOfEnd=frame->normalize();
@@ -1072,7 +1079,7 @@ bool KWFrameDia::applyChanges()
             frameindexList.append(index);
             frameindexMove.append(move);
 
-            KWFrameMoveCommand *cmdMoveFrame = new KWFrameMoveCommand( i18n("Move Frame"), frameindexList, frameindexMove );
+            KWFrameMoveCommand *cmdMoveFrame = new KWFrameMoveCommand( QString::null, frameindexList, frameindexMove );
 
             macroCmd->addCommand(cmdMoveFrame);
             macroCmd->addCommand(cmd);
@@ -1082,7 +1089,7 @@ bool KWFrameDia::applyChanges()
             if(!macroCmd)
                 macroCmd = new KMacroCommand( i18n("Make FrameSet Non-Inline") );
             // turn floating-frame into non-floating frame
-            KWFrameSetPropertyCommand *cmd = new KWFrameSetPropertyCommand( i18n("Make FrameSet Non-Inline"), parentFs, KWFrameSetPropertyCommand::FSP_FLOATING, "false" );
+            KWFrameSetPropertyCommand *cmd = new KWFrameSetPropertyCommand( QString::null, parentFs, KWFrameSetPropertyCommand::FSP_FLOATING, "false" );
             macroCmd->addCommand(cmd);
             cmd->execute();
         }
@@ -1095,8 +1102,11 @@ bool KWFrameDia::applyChanges()
                 //kdDebug() << "New geom: " << sx->text().toDouble() << ", " << sy->text().toDouble()
                 //          << " " << sw->text().toDouble() << "x" << sh->text().toDouble() << endl;
 
+	        // Can't use frame->pageNum() here since frameset might be 0
+	        int pageNum = QMIN( static_cast<int>(frame->y() / doc->ptPaperHeight()), doc->getPages()-1 );
+
                 double px = KWUnit::fromUserValue( QMAX( sx->text().toDouble(), 0 ), doc->getUnit() );
-                double py = KWUnit::fromUserValue( (QMAX( sy->text().toDouble(),0)) + (frame->pageNum() * doc->ptPaperHeight()), doc->getUnit());
+                double py = KWUnit::fromUserValue( (QMAX( sy->text().toDouble(),0)) + (pageNum * doc->ptPaperHeight()), doc->getUnit());
                 double pw = KWUnit::fromUserValue( QMAX( sw->text().toDouble(), 0 ), doc->getUnit() );
                 double ph = KWUnit::fromUserValue( QMAX( sh->text().toDouble(), 0 ), doc->getUnit() );
 
@@ -1146,9 +1156,9 @@ void KWFrameDia::updateFrames()
 
     if(frames.count()==1)
     {
-        KWFrame *theFrame = frames.first();
-        if(theFrame->isSelected())
-            theFrame->updateResizeHandles();
+	ASSERT( frames.first() == frame );
+        if(frame->isSelected())
+            frame->updateResizeHandles();
     }
     doc->repaintAllViews();
 }

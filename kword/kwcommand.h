@@ -417,7 +417,7 @@ protected:
 };
 
 /**
- * Command created when jointing a cell
+ * Command created when joining cells
  */
 class KWJoinCellCommand : public KCommand
 {

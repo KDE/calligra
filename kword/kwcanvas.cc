@@ -38,6 +38,7 @@
 
 #include <ktempfile.h>
 #include <kaction.h>
+#include <kcursor.h>
 #include <kdebug.h>
 #include <kapp.h>
 #include <kmessagebox.h>
@@ -82,6 +83,7 @@ KWCanvas::KWCanvas(QWidget *parent, KWDocument *d, KWGUI *lGui)
     setFocus();
     viewport()->installEventFilter( this );
     installEventFilter( this );
+    KCursor::setAutoHideCursor( this, true, true );
 
     connect( this, SIGNAL(contentsMoving( int, int )),
              this, SLOT(slotContentsMoving( int, int )) );
@@ -2008,6 +2010,10 @@ bool KWCanvas::eventFilter( QObject *o, QEvent *e )
         return TRUE;
 
     if ( o == this || o == viewport() ) {
+
+	// Pass event to auto-hide-cursor code (see kcursor.h for details)
+	KCursor::autoHideEventFilter( o, e );
+
         switch ( e->type() ) {
             case QEvent::FocusIn:
                 if ( m_currentFrameSetEdit && !m_printing )

@@ -504,6 +504,9 @@ KWFrameMoveCommand::KWFrameMoveCommand( const QString &name, QPtrList<FrameIndex
     m_indexFrame(_frameIndex),
     m_frameMove(_frameMove)
 {
+    // Brrr... why don't we use QValueList rather ?
+    m_indexFrame.setAutoDelete(true);
+    m_frameMove.setAutoDelete(true);
 }
 
 void KWFrameMoveCommand::execute()
