@@ -176,6 +176,9 @@ public:
     KWDocStructTree( QWidget *_parent, KWordDocument *_doc, KWordGUI*__parent );
 
     void setup();
+    QSize	minimumSizeHint() const {
+	return QSize( 0, 0 );
+    }
 
 protected:
     KWordDocument *doc;
