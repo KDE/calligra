@@ -36,13 +36,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-extern void openFileManagerWindow( const char *_url );
-
-void openFileManagerWindow( const char *_url )
-{
-  // One should open KFM here, perhaps ....
-}
-
 KoFilterManager* KoFilterManager::s_pSelf = 0;
 
 KoFilterManager* KoFilterManager::self()
