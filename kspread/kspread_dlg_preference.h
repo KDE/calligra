@@ -39,6 +39,7 @@ class preference : public QWidget
 public:
   preference( KSpreadView* _view, QWidget *parent = 0, char *name = 0 );
   void apply();
+  void slotDefault();
 
 protected:
   QCheckBox *m_pFormula;
@@ -63,6 +64,7 @@ class configure : public QWidget
 public:
   configure( KSpreadView* _view, QWidget *parent = 0, char *name = 0 );
   void apply();
+  void slotDefault();
 
   void initComboBox();
 protected:
@@ -85,6 +87,7 @@ public:
   KSpreadpreference( KSpreadView* parent, const char* name);
 public slots:
   void slotApply();
+  void slotDefault();
 private :
   preference *_preferenceConfig;
   configure * _configure;

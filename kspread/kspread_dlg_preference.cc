@@ -38,7 +38,7 @@
 KSpreadpreference::KSpreadpreference( KSpreadView* parent, const char* /*name*/)
 	: KDialogBase(KDialogBase::IconList,
                                     i18n("Configure Kspread") ,
-                                    KDialogBase::Ok | KDialogBase::Cancel,
+                                    KDialogBase::Ok | KDialogBase::Cancel| KDialogBase::Default,
                                     KDialogBase::Ok)
 
 {
@@ -57,6 +57,11 @@ void KSpreadpreference::slotApply()
 {
 _preferenceConfig->apply();
 _configure->apply();
+}
+
+void KSpreadpreference::slotDefault()
+{
+_configure->slotDefault();
 }
 
  preference::preference( KSpreadView* _view,QWidget *parent , char *name )
@@ -105,6 +110,11 @@ _configure->apply();
   box->addWidget( tmpQGroupBox);
 }
 
+
+void preference::slotDefault()
+{
+//todo
+}
 
 void preference::apply()
 {
@@ -267,6 +277,19 @@ switch( m_pView->doc()->completionMode( ))
         }
 
 }
+
+void configure::slotDefault()
+{
+showHScrollBar->setChecked(true);
+showRowHeader->setChecked(true);
+showVScrollBar->setChecked(true);
+showColHeader->setChecked(true);
+valIndent->setValue(10);
+nbPage->setValue(1);
+typeCompletion->setCurrentItem(3);
+}
+
+
 void configure::apply()
 {
 config->setGroup( "Parameters" );
@@ -311,32 +334,36 @@ if( m_pView->vBorderWidget()->isVisible()!=showRowHeader->isChecked())
                 m_pView->vBorderWidget()->hide();
         m_pView->doc()->setShowRowHeader(showRowHeader->isChecked());
         }
+KGlobalSettings::Completion tmpCompletion=KGlobalSettings::CompletionNone;
 
 switch(typeCompletion->currentItem())
         {
         case 0:
-                m_pView->doc()->setCompletionMode(KGlobalSettings::CompletionNone);
-                config->writeEntry( "Completion Mode", (int)KGlobalSettings::CompletionNone);
+                tmpCompletion=KGlobalSettings::CompletionNone;
                 break;
         case 1:
-                m_pView->doc()->setCompletionMode(KGlobalSettings::CompletionShell);
-                config->writeEntry( "Completion Mode", (int)KGlobalSettings::CompletionShell);
+                tmpCompletion=KGlobalSettings::CompletionShell;
                 break;
         case 2:
-                m_pView->doc()->setCompletionMode(KGlobalSettings::CompletionPopup);
-                config->writeEntry( "Completion Mode", (int)KGlobalSettings::CompletionPopup);
+                tmpCompletion=KGlobalSettings::CompletionPopup;
                 break;
         case 3:
-                m_pView->doc()->setCompletionMode(KGlobalSettings::CompletionAuto);
-                config->writeEntry( "Completion Mode", (int)KGlobalSettings::CompletionAuto);
+                tmpCompletion=KGlobalSettings::CompletionAuto;
                 break;
         case 4:
-                m_pView->doc()->setCompletionMode(KGlobalSettings::CompletionMan);
-                config->writeEntry( "Completion Mode", (int)KGlobalSettings::CompletionMan);
+                tmpCompletion=KGlobalSettings::CompletionMan;
                 break;
         }
-m_pView->doc()->setIndentValue( valIndent->value());
-config->writeEntry( "Indent", valIndent->value());
+if(tmpCompletion!=m_pView->doc()->completionMode())
+        {
+        m_pView->doc()->setCompletionMode(KGlobalSettings::CompletionMan);
+        config->writeEntry( "Completion Mode", (int)KGlobalSettings::CompletionMan);
+        }
+if(valIndent->value()!=m_pView->doc()->getIndentValue())
+        {
+        m_pView->doc()->setIndentValue( valIndent->value());
+        config->writeEntry( "Indent", valIndent->value());
+        }
 
 m_pView->doc()->refreshInterface();
 }
