@@ -565,14 +565,11 @@ QDomElement KPresenterDoc::saveTitle( QDomDocument &doc )
 
     if ( saveOnlyPage == -1 )
     { // All page titles.
+        for ( int i = 0; i < static_cast<int>( m_pageList.count() ); i++ )
         {
-            KPRPage *page=0L;
-            for(page=m_pageList.first(); page; page=m_pageList.next())
-            {
-                QDomElement title=doc.createElement("Title");
-                title.setAttribute("title", page->getManualTitle());
-                titles.appendChild(title);
-            }
+            QDomElement title=doc.createElement("Title");
+            title.setAttribute("title", m_pageList.at(i)->getManualTitle());
+            titles.appendChild(title);
         }
     }
     else
@@ -590,15 +587,16 @@ QDomElement KPresenterDoc::saveNote( QDomDocument &doc )
     QDomElement notes=doc.createElement("PAGENOTES");
 
     if ( saveOnlyPage == -1 ) { // All page notes.
-        for ( QStringList::ConstIterator it = noteTextList.begin(); it != noteTextList.end(); ++it ) {
+        for ( int i = 0; i < static_cast<int>( m_pageList.count() ); i++ )
+        {
             QDomElement note=doc.createElement("Note");
-            note.setAttribute("note", (*it));
+            note.setAttribute("note", m_pageList.at(i)->getNoteText( ));
             notes.appendChild(note);
         }
     }
     else { // Only current page note.
         QDomElement note=doc.createElement("Note");
-        note.setAttribute("note", noteTextList[saveOnlyPage]);
+        note.setAttribute("note", m_pageList.at(saveOnlyPage)->getNoteText( ));
         notes.appendChild(note);
     }
 
@@ -963,22 +961,6 @@ bool KPresenterDoc::loadXML( const QDomDocument &doc )
         emit sigProgress(::abs(100-base/childCount*100)+10);
     }
 
-    // Initialization of manualTitleList
-    // for version before adding this new feature (save/load page title to file)
-#if 0 //FIXME
-    if ( manualTitleList.isEmpty() ) {
-        kdDebug() << "KPresenterDoc::loadXML no manual titles -> filling with Null" << endl;
-        for ( unsigned int i = 0; i <= getPageNums() - 1; ++i )
-            manualTitleList.append(QString::null);
-    }
-#endif
-    // Initialization of noteTextList
-    // for version before adding this new feature ( notebar )
-    if ( noteTextList.isEmpty() ) {
-        for ( unsigned int i = 0; i <= getPageNums() - 1; ++i )
-            noteTextList.append( QString::null );
-    }
-
     if ( _rastX == 0 ) _rastX = 10;
     if ( _rastY == 0 ) _rastY = 10;
 
@@ -1218,9 +1200,17 @@ void KPresenterDoc::loadTitle( const QDomElement &element )
 void KPresenterDoc::loadNote( const QDomElement &element )
 {
     QDomElement note=element.firstChild().toElement();
+    int i=0;
     while ( !note.isNull() ) {
         if ( note.tagName()=="Note" )
-            noteTextList.append(note.attribute("note"));
+        {
+            //test if there is a page at this index
+            //=> don't add new page if there is again a page
+            if(i>(m_pageList.count()-1))
+                m_pageList.append(new KPRPage(this));
+            m_pageList.at(i)->setNoteText(note.attribute("note"));
+            i++;
+        }
         note=note.nextSibling().toElement();
     }
 }
@@ -1542,9 +1532,6 @@ void KPresenterDoc::deletePage( int _page )
     Q_ASSERT( _page < (int)m_selectedSlides.count() );
     m_selectedSlides.remove( m_selectedSlides.at( _page ) );
 
-    // Delete page note.
-    pageNoteDelete( _page );
-
     // Update the sidebars
     QPtrListIterator<KoView> it( views() );
     for (; it.current(); ++it )
@@ -1606,10 +1593,6 @@ int KPresenterDoc::insertPage( int _page, InsertPos _insPos, bool chooseTemplate
     }
     else
         m_selectedSlides.append( true );
-
-
-    // Insert page note.
-    pageNoteInsert( _page );
 
     recalcPageNum();
 
@@ -1962,43 +1945,6 @@ void KPresenterDoc::reorganizeGUI()
     QPtrListIterator<KoView> it( views() );
     for (; it.current(); ++it )
 	((KPresenterView*)it.current())->reorganize();
-}
-
-void KPresenterDoc::setNoteText( int _pageNum, const QString &_text )
-{
-    if ( _pageNum >= 0 ) {
-        *noteTextList.at( _pageNum ) = _text;
-
-        if ( !_text.isEmpty() )
-            setModified( true );
-    }
-}
-
-QString KPresenterDoc::getNoteText( int _pageNum )
-{
-    QString text = QString::null;
-
-    if ( _pageNum >= 0 )
-        text = *noteTextList.at( _pageNum );
-
-    return text;
-}
-
-void KPresenterDoc::pageNoteInsert( unsigned int _pageNum )
-{
-    if ( getPageNums() == noteTextList.count()+1 )
-        noteTextList.insert( noteTextList.at( _pageNum ), QString::null );
-    else {
-        // For "Move Page", "Copy Page and paste" and "Duplicate Page".
-        QString note = *noteTextList.fromLast();
-        noteTextList.remove( noteTextList.fromLast() );
-        noteTextList.insert( noteTextList.at( _pageNum ), note );
-    }
-}
-
-void KPresenterDoc::pageNoteDelete( unsigned int _pageNum )
-{
-    noteTextList.remove( noteTextList.at( _pageNum ) );
 }
 
 int KPresenterDoc::undoRedoLimit()

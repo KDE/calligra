@@ -272,12 +272,6 @@ public:
 
     void reorganizeGUI();
 
-    
-    // For NoteBar
-    void setNoteText( int _pageNum, const QString &_text );
-    QString getNoteText( int _pageNum );
-    QStringList getNoteTextList() { return noteTextList; }
-
     // Get KPresenterView
     KPresenterView *getKPresenterView() const { return m_kpresenterView; }
 
@@ -411,16 +405,7 @@ protected:
     KoVariableFormatCollection *m_varFormatCollection;
     KPrVariableCollection *m_varColl;
 
-    // For NoteBar
-    QStringList noteTextList;
-
-
 private:
-    // For NoteBar
-    void pageNoteInsert( unsigned int _pageNum );
-    void pageNoteDelete( unsigned int _pageNum );
-
-
     KPresenterView *m_kpresenterView;;
     QPtrList<KPRPage> m_pageList;
 };

@@ -64,7 +64,8 @@ KPRPage::KPRPage(KPresenterDoc *_doc )
                                     (m_doc->getClipartCollection()), this );
     //create object list for each page.
     m_objectList.setAutoDelete( false );
-    manualTitle="";
+    manualTitle=QString::null;
+    noteText=QString::null;
 }
 
 KPRPage::~KPRPage()
@@ -2578,4 +2579,19 @@ QString KPRPage::pageTitle( const QString &_title ) const
     if(i==0 && j==-1)
         return txt;
     return txt.mid(i, j);
+}
+
+
+void KPRPage::setNoteText(  const QString &_text )
+{
+    noteText=_text;
+    if(!_text.isEmpty())
+        m_doc->setModified(true);
+}
+
+QString KPRPage::getNoteText(  )
+{
+    if(noteText.isEmpty())
+        return QString("");
+    return noteText;
 }

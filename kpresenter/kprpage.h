@@ -50,6 +50,9 @@ public:
     void insertManualTitle(const QString & title);
     QString pageTitle( const QString &_title ) const;
 
+    void setNoteText( const QString &_text );
+    QString getNoteText( );
+
     const QPtrList<KPObject> & objectList() const { return m_objectList;}
     void appendObject(KPObject *);
     void insertObject(KPObject *_oldObj, KPObject *_newObject);
@@ -189,5 +192,6 @@ private:
     KPresenterDoc *m_doc;
     KPBackGround *kpbackground;
     QString manualTitle;
+    QString noteText;
 };
 #endif //KPRPAGE_H

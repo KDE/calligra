@@ -44,7 +44,9 @@ NoteBar::NoteBar( QWidget *_parent, KPresenterDoc *_doc, KPresenterView *_view )
     textEdit->setCurrentFont( font );
 
     int currentPageNum = view->getCurrentPresPage(); // 1 base.
-    QString text = doc->getNoteText( currentPageNum - 1 );
+    QString text=QString::null;
+    if( currentPageNum!=-1)
+        text= doc->pageList().at(currentPageNum - 1)->getNoteText( );
     textEdit->setText( text );
 
     connect( textEdit, SIGNAL( textChanged() ),
@@ -80,7 +82,7 @@ void NoteBar::slotTextChanged()
 {
     int currentPageNum = view->getCurrPgNum(); // 1 base.
     if ( currentPageNum > 0 && !initialize ) {
-        doc->setNoteText( currentPageNum - 1, textEdit->text() );
+        doc->pageList().at(currentPageNum - 1)->setNoteText(textEdit->text() );
         textEdit->setModified( true );
     }
 
@@ -151,14 +153,14 @@ QString NoteBar::getAllNoteTextForPrinting()
     QString allText = QString::null;
     bool firstText = true;
     int pageCount = 1;
-    QStringList lists = doc->getNoteTextList();
-    QStringList::ConstIterator it;
-    for ( it = lists.begin(); it != lists.end(); ++it ) {
+    // laurent todo test me
+    for ( int i = 0; i < static_cast<int>( doc->pageList().count() ); i++ )
+    {
         if ( !firstText )
             allText += QString("\n\n");
 
         allText += i18n( "Page Note %1:\n" ).arg( pageCount );
-        allText += *it;
+        allText += doc->pageList().at(i)->getNoteText();
 
         firstText = false;
         ++pageCount;

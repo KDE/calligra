@@ -3525,13 +3525,12 @@ void KPresenterView::skipToPage( int num )
     emit currentPageChanged( currPg );
     if( sidebar )
         sidebar->setCurrentPage( currPg );
-
+    m_canvas->setActivePage( m_pKPresenterDoc->pageList().at(currPg));
     if ( notebar ) {
         kdDebug() << "Current Page: " << currPg << endl;
-        QString text = m_pKPresenterDoc->getNoteText( currPg );
+        QString text = m_pKPresenterDoc->pageList().at(currPg)->getNoteText( );
         notebar->setCurrentNoteText( text );
     }
-    m_canvas->setActivePage( m_pKPresenterDoc->pageList().at(currPg));
     refreshPageButton();
 //FIXME
     yOffset = 0;//kPresenterDoc()->getPageRect( 0, 0, 0, 1.0, false ).height() * currPg;
