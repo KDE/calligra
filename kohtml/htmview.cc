@@ -22,29 +22,29 @@
 // $Id$
 //
 
-#include "khtmlview_patched.h"
-#include "khtmlview_patched.moc"
+#include "htmview.h"
+#include "htmview.moc"
 
-#include "khtmlwidget_patched.h"
+#include "htmwidget.h"
 
 #include <iostream.h>
 
 #include <qobjectlist.h>
 
-KHTMLView_Patched::KHTMLView_Patched(QWidget *parent = 0L, const char *name = 0L, int flags = 0,
-                    KHTMLView_Patched *parent_view = 0L)
-:KHTMLView(parent, name, flags, parent_view, (new KHTMLWidget_Patched(0L, "" )) )
+KMyHTMLView::KMyHTMLView(QWidget *parent = 0L, const char *name = 0L, int flags = 0,
+                    KMyHTMLView *parent_view = 0L)
+:KHTMLView(parent, name, flags, parent_view, (new KMyHTMLWidget(0L, "" )) )
 {
 }
 
-KHTMLView_Patched::~KHTMLView_Patched()
+KMyHTMLView::~KMyHTMLView()
 {
   if (view) delete view;
 }
 
-void KHTMLView_Patched::draw(QPainter *painter, int width, int height)
+void KMyHTMLView::draw(QPainter *painter, int width, int height)
 {
-  cerr << "void KHTMLView_Patched::draw(QPainter *painter, int width, int height)" << endl;
+  cerr << "void KMyHTMLView::draw(QPainter *painter, int width, int height)" << endl;
 
   pixmap = new QPixmap( width, height );
 
@@ -66,7 +66,7 @@ void KHTMLView_Patched::draw(QPainter *painter, int width, int height)
   cerr << "done" << endl;
 }
 
-void KHTMLView_Patched::drawWidget( QWidget *widget )
+void KMyHTMLView::drawWidget( QWidget *widget )
 {
   cerr << "trying to paint " << widget->className() << endl;
 
@@ -103,11 +103,11 @@ void KHTMLView_Patched::drawWidget( QWidget *widget )
     
 }
 
-KHTMLView *KHTMLView_Patched::newView(QWidget *parent = 0L, const char *name = 0L, int flags = 0L)
+KHTMLView *KMyHTMLView::newView(QWidget *parent = 0L, const char *name = 0L, int flags = 0L)
 {
   cout << "uh, creating new patched view" << endl;
   
-  KHTMLView_Patched *view = new KHTMLView_Patched(parent, name, flags, this);
+  KMyHTMLView *view = new KMyHTMLView(parent, name, flags, this);
   
     connect( view, SIGNAL( documentStarted( KHTMLView * ) ),
 	     this, SLOT( slotDocumentStarted( KHTMLView * ) ) );
@@ -129,12 +129,4 @@ KHTMLView *KHTMLView_Patched::newView(QWidget *parent = 0L, const char *name = 0
 	     this, SLOT( slotFormSubmitted( KHTMLView *, const char *, const char*, const char* ) ) );
   
   return view;
-}
-
-void KHTMLView_Patched::setMouseLock(bool flag)
-{
-  QListIterator<KHTMLView> it(*viewList);
-  
-  for (; it.current(); ++it)
-      ((KHTMLWidget_Patched*)it.current()->getKHTMLWidget())->setMouseLock(flag);
 }

@@ -22,31 +22,31 @@
 // $Id$
 //
 
-#ifndef __khtmlwidget_patched_h_
-#define __khtmlwidget_patched_h_
+#include "htmwidget.h"
+#include "htmwidget.moc"
 
-#include <qpaintdevice.h>
-#include <qstrlist.h>
+#include <iostream.h>
 
-#include <khtml.h>
-
-class KHTMLWidget_Patched : public KHTMLWidget
+KMyHTMLWidget::KMyHTMLWidget(QWidget *parent = 0L, const char *name = 0L,
+                      const char *pixDir = 0L)
+:KHTMLWidget(parent, name, pixDir)		      
 {
-  Q_OBJECT
-public:
-  KHTMLWidget_Patched(QWidget *parent = 0L, const char *name = 0L,
-                      const char *pixDir = 0L);
-  ~KHTMLWidget_Patched();
+}		      
+		      
+KMyHTMLWidget::~KMyHTMLWidget()
+{
+}
 
-  void draw(QPaintDevice *dev, int width, int height);
+void KMyHTMLWidget::draw(QPaintDevice *dev, int width, int height)
+{
+  cerr << "drawinggggggg" << endl;
+
+//  if (painter) delete painter
   
-  void setMouseLock(bool flag) { m_bMouseLockHack = flag; }
+  QPainter::redirect(this, dev);
+  QPaintEvent pe(QRect(x_offset, y_offset, x_offset+width, y_offset+height));
+  QApplication::sendEvent(this, &pe);
+  QPainter::redirect(this, 0);
   
-protected:
-  virtual void mousePressEvent(QMouseEvent *ev);
-
-private:
-  bool m_bMouseLockHack;    
-};  		        
-
-#endif
+  cerr << "done :-))))))" << endl;
+}

@@ -51,7 +51,7 @@
 #include <khtmlsavedpage.h>
 
 #include "kohtml_shell.h"
-#include "khtmlwidget_patched.h"
+#include "htmwidget.h"
 #include "settingsdlg.h"
 #include "edithtmldlg.h"
 #include "openurldlg.h"
@@ -64,7 +64,7 @@ KoHTMLFrame::KoHTMLFrame(KoHTMLView *_view, KoHTMLChild *_child)
 }
 
 KoHTMLView::KoHTMLView(QWidget *parent, const char *name, KoHTMLDoc *_doc)
-: QWidget(parent, name), KoViewIf(_doc), OPViewIf(_doc), KoHTML::KoHTMLView_skel()
+: KMyHTMLView(parent, name), KoViewIf(_doc), OPViewIf(_doc), KoHTML::KoHTMLView_skel()
 {
   setWidget(this);
   
@@ -86,28 +86,26 @@ KoHTMLView::KoHTMLView(QWidget *parent, const char *name, KoHTMLDoc *_doc)
 
   KAccel *acc = new KAccel(this);
 
-  m_pHTMLView = new KHTMLView_Patched(this, "m_pHTMLView");
-  widget()->setFocusProxy(m_pHTMLView);
-  widget()->setFocusPolicy(QWidget::StrongFocus);
+  QWidget::setFocusPolicy(QWidget::StrongFocus);
 
-  m_pDoc->addHTMLView(m_pHTMLView);
+  m_pDoc->addHTMLView(this);
 
-  QObject::connect(m_pHTMLView, SIGNAL(setTitle(const char *)),
-                   this, SLOT(slotSetCaption(const char *)));
-  QObject::connect(m_pHTMLView, SIGNAL(onURL(KHTMLView *, const char *)),
-                   this, SLOT(slotShowURL(KHTMLView *, const char *)));
-  QObject::connect(m_pHTMLView, SIGNAL(URLSelected(KHTMLView *, const char *, int, const char *)),
-                   this, SLOT(slotOpenURL(KHTMLView *, const char *, int, const char *)));
-  QObject::connect(m_pHTMLView, SIGNAL(popupMenu(KHTMLView *, const char *, const QPoint &)),
-                   this, SLOT(slotURLPopup(KHTMLView *, const char *, const QPoint &)));
+  QObject::connect(this, SIGNAL(setTitle(const char *)),
+                   SLOT(slotSetCaption(const char *)));
+  QObject::connect(this, SIGNAL(onURL(KHTMLView *, const char *)),
+                   SLOT(slotShowURL(KHTMLView *, const char *)));
+  QObject::connect(this, SIGNAL(URLSelected(KHTMLView *, const char *, int, const char *)),
+                   SLOT(slotOpenURL(KHTMLView *, const char *, int, const char *)));
+  QObject::connect(this, SIGNAL(popupMenu(KHTMLView *, const char *, const QPoint &)),
+                   SLOT(slotURLPopup(KHTMLView *, const char *, const QPoint &)));
 
   acc->insertItem("Scroll Up", "Scroll Up", "Up");
   acc->insertItem("Scroll Down", "Scroll Down", "Down");
   
-  acc->connectItem("Scroll Up", m_pHTMLView, SLOT(slotVertSubtractLine()));
-  acc->connectItem("Scroll Down", m_pHTMLView, SLOT(slotVertAddLine()));
-  acc->connectItem(KAccel::Prior, m_pHTMLView, SLOT(slotVertSubtractPage()));
-  acc->connectItem(KAccel::Next, m_pHTMLView, SLOT(slotVertAddPage()));
+  acc->connectItem("Scroll Up", this, SLOT(slotVertSubtractLine()));
+  acc->connectItem("Scroll Down", this, SLOT(slotVertAddLine()));
+  acc->connectItem(KAccel::Prior, this, SLOT(slotVertSubtractPage()));
+  acc->connectItem(KAccel::Next, this, SLOT(slotVertAddPage()));
 
   QObject::connect(m_pDoc, SIGNAL(contentChanged()),
                    this, SLOT(slotDocumentContentChanged()));
@@ -160,10 +158,8 @@ void KoHTMLView::cleanUp()
   if (!CORBA::is_nil(statusBarMan))
      statusBarMan->unregisterClient(id());
 
-  m_pDoc->removeHTMLView(m_pHTMLView);
+  m_pDoc->removeHTMLView(this);
   m_pDoc->removeView(this);
-
-  delete m_pHTMLView;
 
   map<int,QString*>::iterator it2 = m_mapBookmarks.begin();
   for( ; it2 != m_mapBookmarks.end(); ++it2 )
@@ -214,9 +210,6 @@ void KoHTMLView::setFocus(CORBA::Boolean mode)
 
   if ( KoViewIf::mode() != KOffice::View::RootMode )
     resizeEvent( 0L );
-
-  if ((bool)mode)
-     m_pHTMLView->setMouseLock(true);
 }
 
 CORBA::Boolean KoHTMLView::printDlg()
@@ -415,16 +408,11 @@ bool KoHTMLView::mappingCreateMenuBar(OpenPartsUI::MenuBar_ptr menuBar)
   return true;
 }
 
-void KoHTMLView::resizeEvent(QResizeEvent *ev)
-{
-  m_pHTMLView->setGeometry(0, 0, width(), height());
-}
-
 void KoHTMLView::pushURLToHistory()
 {
   if (m_bStackLock) return;
   
-  SavedPage *p = m_pHTMLView->saveYourself();
+  SavedPage *p = saveYourself();
   if (!p) return;
   
   m_backStack.push(p);
@@ -520,9 +508,9 @@ void KoHTMLView::editCopy()
   QClipboard *clip = QApplication::clipboard();
   QString text;
   
-  if (!m_pHTMLView->isTextSelected()) return;
+  if (!isTextSelected()) return;
   
-  m_pHTMLView->getSelectedText(text);
+  getSelectedText(text);
   
   clip->setText(text);
 }
@@ -619,11 +607,10 @@ void KoHTMLView::slotDocumentContentChanged()
 
   KURL u(url);  
 
-  m_pHTMLView->begin(u.url());  
-  m_pHTMLView->parse();
-  m_pHTMLView->write(data);
-  m_pHTMLView->end();
-  m_pHTMLView->show();
+  KHTMLView::begin(u.url());  
+  KHTMLView::parse();
+  KHTMLView::write(data);
+  KHTMLView::end();
 
   if (m_vLocationToolBar) m_vLocationToolBar->setLinedText(ID_LOCATION, u.url());
 } 
@@ -715,14 +702,14 @@ void KoHTMLView::slotBack()
   if (m_backStack.isEmpty()) return;
   
   SavedPage *s = m_backStack.pop();
-  SavedPage *p = m_pHTMLView->saveYourself();
+  SavedPage *p = saveYourself();
   
   m_forwardStack.push(p);
   
   updateHistory(!m_backStack.isEmpty(), true);
 
   m_bStackLock = true; 
-  m_pHTMLView->restore(s); 
+  restore(s); 
   m_bStackLock = false;
   
   delete s;
@@ -733,14 +720,14 @@ void KoHTMLView::slotForward()
   if (m_forwardStack.isEmpty()) return;
   
   SavedPage *s = m_forwardStack.pop();
-  SavedPage *p = m_pHTMLView->saveYourself();
+  SavedPage *p = saveYourself();
   
   m_backStack.push(p);
   
   updateHistory(true, !m_forwardStack.isEmpty());
   
   m_bStackLock = true;
-  m_pHTMLView->restore(s);
+  restore(s);
   m_bStackLock = false;
   
   delete s;
@@ -755,7 +742,7 @@ void KoHTMLView::slotReload()
 {
   cerr << "void KoHTMLView::slotReload()" << endl;
 
-  m_pHTMLView->cancelAllRequests();
+  cancelAllRequests();
   
   m_pDoc->stopLoading();
 
@@ -946,7 +933,7 @@ void KoHTMLView::slotOpenURL(KHTMLView *view, const char *url, int button, const
 	QMessageBox::critical(0L, "KoHTML", tmp);
      
         KHTMLView *targetView1 = view->findView(target);
-	KHTMLView *targetView2 = m_pHTMLView->findView(target);
+	KHTMLView *targetView2 = findView(target);
 
         tmp.sprintf("targetView1 = %p\ntargetView2 = %p", targetView1, targetView2);
 	QMessageBox::critical(0L, "KoHTML", tmp);
@@ -968,17 +955,22 @@ void KoHTMLView::slotOpenURL(KHTMLView *view, const char *url, int button, const
         if (!targetView1)
 	   targetView1 = targetView2;
 
-        if (targetView1 != m_pHTMLView)
+	cerr << "getFrameName() = " << getFrameName() << endl;
+	cerr << "this = " << this << endl;
+	   
+        if (targetView1 != this)
 	   {
              pushURLToHistory();  
-	     targetView1->openURL(url);   
+	     cerr << "targetView1->openURL(url);" << endl;
+	     targetView1->openURL(url);
 	     return;
 	   }     
 
      }
 
-  pushURLToHistory();  
-  m_pDoc->openURL(url);     
+  cerr << "m_pDoc->openURL(url);" << endl;
+  pushURLToHistory();
+  m_pDoc->openURL(url);
 }
 
 void KoHTMLView::slotOpenURL()
@@ -1066,10 +1058,10 @@ void KoHTMLView::slotUpdateConfig()
   config->writeEntry("TextColor", m_txtColor);
   config->writeEntry("VLinkColor", m_vlnkColor);
   
-  m_pHTMLView->getKHTMLWidget()->setDefaultBGColor(m_bgColor);
-  m_pHTMLView->getKHTMLWidget()->setDefaultTextColors(m_txtColor, m_lnkColor, m_vlnkColor);
-  m_pHTMLView->getKHTMLWidget()->setStandardFont(m_standardFont.family());
-  m_pHTMLView->getKHTMLWidget()->setFixedFont(m_fixedFont.family());
+  getKHTMLWidget()->setDefaultBGColor(m_bgColor);
+  getKHTMLWidget()->setDefaultTextColors(m_txtColor, m_lnkColor, m_vlnkColor);
+  getKHTMLWidget()->setStandardFont(m_standardFont.family());
+  getKHTMLWidget()->setFixedFont(m_fixedFont.family());
   
   config->sync();
 }

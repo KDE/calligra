@@ -166,7 +166,7 @@ protected slots:
   void slotDocumentStarted(KHTMLView *view);
   void slotDocumentDone(KHTMLView *view);
 
-  void slotDocumentLoaded(KoHTMLJob *job, KHTMLView *topParent, KHTMLView *parent, const char *url, const char *filename);
+  void slotDocumentLoaded(KoHTMLJob *job, KHTMLView *topParent, KHTMLView *parent, const char *url, const char *data, int len);
   void slotImageLoaded(KoHTMLJob *job, KHTMLView *topParent, KHTMLView *parent, const char *url, const char *filename);  
 
   void slotUpdateInternalView();
@@ -201,7 +201,7 @@ private:
 
   KoHTML::KoHTMLDocument::SaveLoadMode m_eSaveLoadMode;
 
-  KHTMLView_Patched *m_pInternalView;
+  KMyHTMLView *m_pInternalView;
 
   QList<KoHTMLView> m_lstViews;
   QList<KoHTMLChild> m_lstChildren;

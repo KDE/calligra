@@ -22,8 +22,8 @@
 // $Id$
 //
 
-#ifndef __khtmlview_patched_h_
-#define __khtmlview_patched_h_
+#ifndef __htmview_h_
+#define __htmview_h_
 
 #include <qpainter.h>
 
@@ -31,21 +31,19 @@
 
 #include <khtmlsavedpage.h>
 
-class KHTMLView_Patched : public KHTMLView
+class KMyHTMLView : public KHTMLView
 {
   Q_OBJECT
 public:
-  KHTMLView_Patched(QWidget *parent = 0L, const char *name = 0L, int flags = 0,
-                    KHTMLView_Patched *parent_view = 0L);
-  ~KHTMLView_Patched();
+  KMyHTMLView(QWidget *parent = 0L, const char *name = 0L, int flags = 0,
+                    KMyHTMLView *parent_view = 0L);
+  ~KMyHTMLView();
 
   void draw(QPainter *painter, int width, int height);
 
   void drawWidget( QWidget *widget );
 
   virtual KHTMLView *newView(QWidget *parent, const char *name = 0L, int flags = 0L);
-
-  void setMouseLock(bool flag);  
   
 private:
   QPixmap *pixmap;

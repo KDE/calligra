@@ -28,7 +28,7 @@
 class KoHTMLFrame;
 class KoHTMLView;
 class KoHTMLChild;
-class KHTMLView_Patched;
+class KMyHTMLView;
 
 #include <kom.h>
 #include <komBase.h>
@@ -49,7 +49,8 @@ class KHTMLView_Patched;
 
 #include <khtml.h>
 #include <khtmlview.h>
-#include "khtmlview_patched.h"
+
+#include "htmview.h"
 #include "kohtmljob.h"
 
 class KoHTMLFrame : public KoFrame
@@ -65,7 +66,7 @@ protected:
   KoHTMLView *m_pKoHTMLView;  
 };
 
-class KoHTMLView : public QWidget,
+class KoHTMLView : public KMyHTMLView,
                    virtual public KoViewIf,
 		   virtual public KoHTML::KoHTMLView_skel
 {
@@ -138,8 +139,6 @@ protected:
   virtual bool mappingCreateMenuBar(OpenPartsUI::MenuBar_ptr menuBar);
   virtual bool mappingCreateToolBar(OpenPartsUI::ToolBarFactory_ptr factory);
 
-  virtual void resizeEvent(QResizeEvent *ev);
-
   virtual void pushURLToHistory();
   virtual void updateHistory(bool enableBack, bool enableForward);
 
@@ -200,8 +199,6 @@ protected:
 
   KoHTMLDoc *m_pDoc;
   
-  KHTMLView_Patched *m_pHTMLView;
-
   int m_idBookmarkId;
   map<int,QString*> m_mapBookmarks;
   

@@ -276,7 +276,7 @@ void KoHTMLShell::createFileMenu( OPMenuBar *menuBar)
   
   m_idMenuFile_New = m_pFileMenu->insertItem( Icon( "filenew.xpm" ), i18n("&New Window"), this, SLOT( slotFileNew() ), CTRL + Key_N );
   m_idMenuFile_Open = m_pFileMenu->insertItem( Icon( "fileopen.xpm" ), i18n("&Open File..."), this, SLOT( slotFileOpen() ), CTRL + Key_O );
-  m_pFileMenu->insertItem( i18n("Open &URL..."), this, SLOT( slotFileOpenURL() ), CTRL + Key_U );
+  m_pFileMenu->insertItem( Icon( "go-url3.xpm" ), i18n("Open &URL..."), this, SLOT( slotFileOpenURL() ), CTRL + Key_U );
   m_pFileMenu->insertSeparator( -1 );
   m_idMenuFile_Save = m_pFileMenu->insertItem( Icon( "filefloppy.xpm" ), i18n( "&Save" ), this, SLOT( slotFileSave() ), CTRL + Key_S );
   m_idMenuFile_SaveAs = m_pFileMenu->insertItem( i18n( "&Save as..." ), this, SLOT( slotFileSaveAs() ) );

@@ -34,7 +34,7 @@
 #include <khtmlsavedpage.h>
 //#include <khtmlcache.h>
 
-#include "khtmlwidget_patched.h"
+#include "htmwidget.h"
 #include "kfileio.h"
 
 KoHTMLChild::KoHTMLChild(KoHTMLDoc *doc, const KRect &rect, KOffice::Document_ptr koDoc)
@@ -153,7 +153,7 @@ CORBA::Boolean KoHTMLDoc::init()
   m_lastHeight = -1;
   m_lastScale = -1;
   
-  m_pInternalView = new KHTMLView_Patched;
+  m_pInternalView = new KMyHTMLView;
   
   addHTMLView(m_pInternalView);
 
@@ -610,7 +610,9 @@ KoHTMLJob *KoHTMLDoc::findJob(KHTMLView *view, const char *url, KoHTMLJob::JobTy
 void KoHTMLDoc::slotDocumentRequest(KHTMLView *view, const char *url)
 {
   KHTMLView *topView = view->topView();
-  
+
+  cerr << "void KoHTMLDoc::slotDocumentRequest() = " << url << endl;
+    
   if (m_lstHTMLViews.findRef(topView) == -1)
      {
        cerr << "AAAAAAIEEEEEE!!!" << endl;
@@ -619,6 +621,7 @@ void KoHTMLDoc::slotDocumentRequest(KHTMLView *view, const char *url)
      
   if (view == topView)
      {
+       cerr << "TOPVIEW!!!!!!!!!!" << endl;
        openURL(url);
        return;
      }     
@@ -627,8 +630,9 @@ void KoHTMLDoc::slotDocumentRequest(KHTMLView *view, const char *url)
   
   m_lstJobs.append(job);
   
-  QObject::connect(job, SIGNAL(jobDone(KoHTMLJob *, KHTMLView *, KHTMLView *, const char *, const char *)),
-                   this, SLOT(slotDocumentLoaded(KoHTMLJob *, KHTMLView *, KHTMLView *, const char *, const char *)));
+  QObject::connect(job, SIGNAL(jobDone(KoHTMLJob *, KHTMLView *, KHTMLView *, const char *, const char *, int)),
+                   this, SLOT(slotDocumentLoaded(KoHTMLJob *, KHTMLView *, KHTMLView *, const char *, const char *, int)));
+
   job->start();	   
 }
 
@@ -720,7 +724,7 @@ void KoHTMLDoc::slotDocumentDone(KHTMLView *view)
   m_bRepaintDocument = true;
 }
 
-void KoHTMLDoc::slotDocumentLoaded(KoHTMLJob *job, KHTMLView *topParent, KHTMLView *parent, const char *url, const char *filename)
+void KoHTMLDoc::slotDocumentLoaded(KoHTMLJob *job, KHTMLView *topParent, KHTMLView *parent, const char *url, const char *data, int len)
 {
   KHTMLView *topView = parent->topView();
   
@@ -730,12 +734,13 @@ void KoHTMLDoc::slotDocumentLoaded(KoHTMLJob *job, KHTMLView *topParent, KHTMLVi
        return;
      }
 
-  QString m_strData = kFileToString(filename);
-  
+  cerr << "void KoHTMLDoc::slotDocumentLoaded( " << url << " );" << endl;
+     
   parent->begin(url);
   parent->parse();
-  parent->write(m_strData);
+  parent->write(data);
   parent->end();
+  parent->show();
   
   m_lstJobs.removeRef(job);
   m_bRepaintDocument = true;
