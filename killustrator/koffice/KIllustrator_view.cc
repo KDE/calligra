@@ -231,175 +231,175 @@ bool KIllustratorView::mappingCreateMenubar (OpenPartsUI::MenuBar_ptr
     return true;
   }
 
-  CORBA::WString_var text;
+  QString text;
 
   // Menu: Edit
-  text = Q2C( i18n ("&Edit") );
+  text = i18n ("&Edit") ;
   menubar->insertMenu (text, m_vMenuEdit, -1, -1);
-  text = Q2C( i18n ("Undo") );
+  text = i18n ("Undo") ;
   m_idMenuEdit_Undo = m_vMenuEdit->insertItem (text, this,
 					       "editUndo", 0);
-  text = Q2C( i18n ("Redo") );
+  text = i18n ("Redo") ;
   m_idMenuEdit_Redo = m_vMenuEdit->insertItem (text, this,
 					       "editRedo", 0);
   m_vMenuEdit->insertSeparator (-1);
-  text = Q2C( i18n ("&Copy") );
+  text = i18n ("&Copy") ;
   m_idMenuEdit_Copy = m_vMenuEdit->insertItem (text, this,
 					   "editCopy", 0);
-  text = Q2C( i18n ("&Paste") );
+  text = i18n ("&Paste") ;
   m_idMenuEdit_Paste = m_vMenuEdit->insertItem (text, this,
 					    "editPaste", 0);
-  text = Q2C( i18n ("C&ut") );
+  text = i18n ("C&ut") ;
   m_idMenuEdit_Cut = m_vMenuEdit->insertItem (text, this,
 					      "editCut", 0);
   m_vMenuEdit->insertSeparator (-1);
-  text = Q2C( i18n ("Duplicate") );
+  text = i18n ("Duplicate") ;
   m_idMenuEdit_Duplicate = m_vMenuEdit->insertItem (text, this,
 						 "editDuplicate", 0);
-  text = Q2C( i18n ("&Delete") );
+  text = i18n ("&Delete") ;
   m_idMenuEdit_Delete = m_vMenuEdit->insertItem (text, this,
 						 "editDelete", 0);
   m_vMenuEdit->insertSeparator (-1);
-  text = Q2C( i18n ("&Select All") );
+  text = i18n ("&Select All") ;
   m_idMenuEdit_SelectAll = m_vMenuEdit->insertItem (text, this,
 						    "editSelectAll", 0);
   m_vMenuEdit->insertSeparator (-1);
 
-  text = Q2C( i18n ("&Insert") );
+  text = i18n ("&Insert") ;
   m_vMenuEdit->insertItem8 (text, m_vMenuInsert, -1, -1);
 
-  text = Q2C( i18n ("Pr&operties") );
+  text = i18n ("Pr&operties") ;
   m_idMenuEdit_Properties =
     m_vMenuEdit->insertItem (text, this,
 			     "editProperties", 0);
 
   // Menu: Edit->Insert
-  text = Q2C( i18n ("&Object...") );
+  text = i18n ("&Object...") ;
   m_idMenuInsert_Object =
     m_vMenuInsert->insertItem (text, this,
 			       "editInsertObject", 0);
-  text = Q2C( i18n ("&Clipart...") );
+  text = i18n ("&Clipart...") ;
   m_idMenuInsert_Clipart =
     m_vMenuInsert->insertItem (text, this,
 			       "editInsertClipart", 0);
-  text = Q2C( i18n ("&Bitmap...") );
+  text = i18n ("&Bitmap...") ;
   m_idMenuInsert_Bitmap =
     m_vMenuInsert->insertItem (text, this,
 			       "editInsertBitmap", 0);
 
   // Menu: View
-  text = Q2C( i18n ("&View") );
+  text = i18n ("&View") ;
   menubar->insertMenu (text, m_vMenuView, -1, -1);
-  text = Q2C( i18n ("Outline") );
+  text = i18n ("Outline") ;
   m_idMenuView_Outline =
     m_vMenuView->insertItem (text, this, "viewOutline", 0);
   m_vMenuView->setCheckable (true);
-  text = Q2C( i18n ("Normal") );
+  text = i18n ("Normal") ;
   m_idMenuView_Normal =
     m_vMenuView->insertItem (text, this, "viewNormal", 0);
   m_vMenuView->insertSeparator (-1);
-  text = Q2C( i18n ("Layers") );
+  text = i18n ("Layers") ;
   m_idMenuView_Layers =
     m_vMenuView->insertItem (text, this, "editLayers", 0);
   m_vMenuView->insertSeparator (-1);
-  text = Q2C( i18n ("Ruler") );
+  text = i18n ("Ruler") ;
   m_idMenuView_Ruler =
     m_vMenuView->insertItem (text, this, "toggleRuler", 0);
   m_vMenuView->setItemChecked (m_idMenuView_Ruler, m_bShowRulers);
-  text = Q2C( i18n ("Grid") );
+  text = i18n ("Grid") ;
   m_idMenuView_Grid =
     m_vMenuView->insertItem (text, this, "toggleGrid", 0);
   m_vMenuView->setItemChecked (m_idMenuView_Grid, false);
-  text = Q2C( i18n ("Helplines") );
+  text = i18n ("Helplines") ;
   m_idMenuView_Helplines =
     m_vMenuView->insertItem (text, this, "toggleHelplines", 0);
   m_vMenuView->setItemChecked (m_idMenuView_Helplines, false);
 
   // Menu: Layout
-  text = Q2C( i18n ("&Layout") );
+  text = i18n ("&Layout") ;
   menubar->insertMenu (text, m_vMenuLayout, -1, -1);
-  text = Q2C( i18n ("Page Layout") );
+  text = i18n ("Page Layout") ;
   m_idMenuLayout_PageLayout =
     m_vMenuLayout->insertItem (text, this, "setupPage", 0);
   m_vMenuLayout->insertSeparator (-1);
-  text = Q2C( i18n ("Setup Grid") );
+  text = i18n ("Setup Grid") ;
   m_idMenuLayout_SetupGrid =
     m_vMenuLayout->insertItem (text, this, "setupGrid", 0);
-  text = Q2C( i18n ("Setup Helplines") );
+  text = i18n ("Setup Helplines") ;
   m_idMenuLayout_SetupHelplines =
     m_vMenuLayout->insertItem (text, this,
 			       "setupHelplines", 0);
   m_vMenuLayout->insertSeparator (-1);
-  text = Q2C( i18n ("Align to Grid") );
+  text = i18n ("Align to Grid") ;
   m_idMenuLayout_AlignToGrid =
     m_vMenuLayout->insertItem (text, this, "alignToGrid", 0);
   m_vMenuLayout->setCheckable (true);
   m_vMenuLayout->setItemChecked (m_idMenuLayout_AlignToGrid, false);
-  text = Q2C( i18n ("Align to Helplines") );
+  text = i18n ("Align to Helplines") ;
   m_idMenuLayout_AlignToHelplines =
     m_vMenuLayout->insertItem (text, this,
 			       "alignToHelplines", 0);
   m_vMenuLayout->setItemChecked (m_idMenuLayout_AlignToHelplines, false);
 
   // Menu: Arrange
-  text = Q2C( i18n ("&Arrange") );
+  text = i18n ("&Arrange") ;
   menubar->insertMenu (text, m_vMenuArrange, -1, -1);
-  text = Q2C( i18n ("Transform") );
+  text = i18n ("Transform") ;
   m_vMenuArrange->insertItem8 (text, m_vMenuTransform, -1, -1);
-  text = Q2C( i18n ("Align") );
+  text = i18n ("Align") ;
   m_idMenuArrange_Align = m_vMenuArrange->insertItem (text, this,
 						      "arrangeAlign", 0);
-  text = Q2C( i18n ("To Front") );
+  text = i18n ("To Front") ;
   m_idMenuArrange_ToFront = m_vMenuArrange->insertItem (text,
 							this,
 							"arrangeToFront", 0);
-  text = Q2C( i18n ("To Back") );
+  text = i18n ("To Back") ;
   m_idMenuArrange_ToBack = m_vMenuArrange->insertItem (text, this,
 				"arrangeToBack", 0);
-  text = Q2C( i18n ("Forward One") );
+  text = i18n ("Forward One") ;
   m_idMenuArrange_1Forward =
     m_vMenuArrange->insertItem (text, this,
 				"arrangeOneForward", 0);
-  text = Q2C( i18n ("Back One") );
+  text = i18n ("Back One") ;
   m_idMenuArrange_1Back = m_vMenuArrange->insertItem (text, this,
 						      "arrangeOneBack", 0);
   m_vMenuArrange->insertSeparator (-1);
-  text = Q2C( i18n ("Group") );
+  text = i18n ("Group") ;
   m_idMenuArrange_Group = m_vMenuArrange->insertItem (text, this,
 						      "arrangeGroup", 0);
-  text = Q2C( i18n ("Ungroup") );
+  text = i18n ("Ungroup") ;
   m_idMenuArrange_Ungroup = m_vMenuArrange->insertItem (text,
 							this,
 							"arrangeUngroup", 0);
   m_vMenuArrange->insertSeparator (-1);
-  text = Q2C( i18n ("Text along path") );
+  text = i18n ("Text along path") ;
   m_idMenuArrange_TextAlongPath =
     m_vMenuArrange->insertItem (text,
 				this,
 				"arrangeTextAlongPath", 0);
 
   // Menu: Arrange->Transform
-  text = Q2C( i18n ("Position") );
+  text = i18n ("Position") ;
   m_idMenuTransform_Position =
     m_vMenuTransform->insertItem (text, this,
 				  "transformPosition", 0);
-  text = Q2C( i18n ("Dimension") );
+  text = i18n ("Dimension") ;
   m_idMenuTransform_Dimension =
     m_vMenuTransform->insertItem (text, this,
 				  "transformDimension", 0);
-  text = Q2C( i18n ("Rotation") );
+  text = i18n ("Rotation") ;
   m_idMenuTransform_Rotation =
     m_vMenuTransform->insertItem (text, this,
 				  "transformRotation", 0);
-  text = Q2C( i18n ("Mirror") );
+  text = i18n ("Mirror") ;
   m_idMenuTransform_Mirror =
     m_vMenuTransform->insertItem (text, this,
 				  "transformMirror", 0);
 
   // Menu: Extras
-  text = Q2C( i18n ("&Extras") );
+  text = i18n ("&Extras") ;
   menubar->insertMenu (text, m_vMenuExtras, -1, -1);
-  text = Q2C( i18n ("Scripts") );
+  text = i18n ("Scripts") ;
   m_idMenuExtras_Scripts =
     m_vMenuExtras->insertItem (text, this,
 				  "showScripts", 0);
@@ -408,7 +408,7 @@ bool KIllustratorView::mappingCreateMenubar (OpenPartsUI::MenuBar_ptr
   m_vMenuHelp = menubar->helpMenu ();
   if (CORBA::is_nil (m_vMenuHelp)) {
     menubar->insertSeparator (-1);
-    text = Q2C( i18n ("&Help") );
+    text = i18n ("&Help") ;
     menubar->setHelpMenu (menubar->insertMenu (text,
 					       m_vMenuHelp, -1, -1));
   }
@@ -429,7 +429,7 @@ bool KIllustratorView::mappingCreateToolbar (OpenPartsUI::ToolBarFactory_ptr
   m_vToolBarTools->setFullWidth (false);
   OpenPartsUI::Pixmap_var pix = 
     OPUIUtils::convertPixmap (BarIcon("selecttool"));
-  CORBA::WString_var toolTip = Q2C( i18n ("Selection Mode") );
+  QString toolTip = i18n ("Selection Mode") ;
   m_idSelectionTool =
     m_vToolBarTools->insertButton2 (pix, ID_TOOL_SELECT,
 				    SIGNAL (clicked ()), this,
@@ -438,7 +438,7 @@ bool KIllustratorView::mappingCreateToolbar (OpenPartsUI::ToolBarFactory_ptr
   m_vToolBarTools->setToggle (ID_TOOL_SELECT, true);
   m_vToolBarTools->setButton (ID_TOOL_SELECT, true);
   pix = OPUIUtils::convertPixmap (BarIcon("pointtool"));
-  toolTip = Q2C( i18n ("Edit Point") );
+  toolTip = i18n ("Edit Point") ;
   m_idEditPointTool =
     m_vToolBarTools->insertButton2 (pix, ID_TOOL_EDITPOINT,
 				    SIGNAL (clicked ()), this,
@@ -447,7 +447,7 @@ bool KIllustratorView::mappingCreateToolbar (OpenPartsUI::ToolBarFactory_ptr
   m_vToolBarTools->setToggle (ID_TOOL_EDITPOINT, true);
 
   pix = OPUIUtils::convertPixmap(BarIcon("freehandtool"));
-  toolTip = Q2C( i18n ("Create FreeHand Line") );
+  toolTip = i18n ("Create FreeHand Line") ;
   m_idFreeHandTool =
     m_vToolBarTools->insertButton2 (pix, ID_TOOL_FREEHAND,
 				    SIGNAL (clicked ()), this,
@@ -456,7 +456,7 @@ bool KIllustratorView::mappingCreateToolbar (OpenPartsUI::ToolBarFactory_ptr
   m_vToolBarTools->setToggle (ID_TOOL_FREEHAND, true);
 
   pix = OPUIUtils::convertPixmap(BarIcon("linetool"));
-  toolTip = Q2C( i18n ("Create Polyline") );
+  toolTip = i18n ("Create Polyline") ;
   m_idPolylineTool =
     m_vToolBarTools->insertButton2 (pix, ID_TOOL_LINE,
 				    SIGNAL (clicked ()), this,
@@ -465,7 +465,7 @@ bool KIllustratorView::mappingCreateToolbar (OpenPartsUI::ToolBarFactory_ptr
   m_vToolBarTools->setToggle (ID_TOOL_LINE, true);
 
   pix = OPUIUtils::convertPixmap(BarIcon("beziertool"));
-  toolTip = Q2C( i18n ("Create Bezier Curve") );
+  toolTip = i18n ("Create Bezier Curve") ;
   m_idBezierTool =
     m_vToolBarTools->insertButton2 (pix, ID_TOOL_BEZIER,
 				    SIGNAL (clicked ()), this,
@@ -474,7 +474,7 @@ bool KIllustratorView::mappingCreateToolbar (OpenPartsUI::ToolBarFactory_ptr
   m_vToolBarTools->setToggle (ID_TOOL_BEZIER, true);
 
   pix = OPUIUtils::convertPixmap(BarIcon("recttool"));
-  toolTip = Q2C( i18n ("Create Rectangle") );
+  toolTip = i18n ("Create Rectangle") ;
   m_idRectangleTool =
     m_vToolBarTools->insertButton2 (pix, ID_TOOL_RECTANGLE,
 				    SIGNAL (clicked ()), this,
@@ -484,7 +484,7 @@ bool KIllustratorView::mappingCreateToolbar (OpenPartsUI::ToolBarFactory_ptr
 
 
   pix = OPUIUtils::convertPixmap(BarIcon("polygontool"));
-  toolTip = Q2C( i18n ("Create Polygon") );
+  toolTip = i18n ("Create Polygon") ;
   m_idPolygonTool =
     m_vToolBarTools->insertButton2 (pix, ID_TOOL_POLYGON,
 				    SIGNAL (clicked ()), this,
@@ -495,7 +495,7 @@ bool KIllustratorView::mappingCreateToolbar (OpenPartsUI::ToolBarFactory_ptr
 				  this, "configPolygonTool");
 
   pix = OPUIUtils::convertPixmap(BarIcon("ellipsetool"));
-  toolTip = Q2C( i18n ("Create Ellipse") );
+  toolTip = i18n ("Create Ellipse") ;
   m_idEllipseTool =
     m_vToolBarTools->insertButton2 (pix, ID_TOOL_ELLIPSE,
 				    SIGNAL (clicked ()), this,
@@ -506,7 +506,7 @@ bool KIllustratorView::mappingCreateToolbar (OpenPartsUI::ToolBarFactory_ptr
 				  this, "configEllipseTool");
 
   pix = OPUIUtils::convertPixmap(BarIcon("texttool"));
-  toolTip = Q2C( i18n ("Create/Edit Text") );
+  toolTip = i18n ("Create/Edit Text") ;
   m_idTextTool =
     m_vToolBarTools->insertButton2 (pix, ID_TOOL_TEXT,
 				    SIGNAL (clicked ()), this,
@@ -515,7 +515,7 @@ bool KIllustratorView::mappingCreateToolbar (OpenPartsUI::ToolBarFactory_ptr
   m_vToolBarTools->setToggle (ID_TOOL_TEXT, true);
 
   pix = OPUIUtils::convertPixmap(BarIcon("zoomtool"));
-  toolTip = Q2C( i18n ("Zoom In") );
+  toolTip = i18n ("Zoom In") ;
   m_idZoomTool =
     m_vToolBarTools->insertButton2 (pix, ID_TOOL_ZOOM,
 				    SIGNAL (clicked ()), this,
@@ -534,14 +534,14 @@ bool KIllustratorView::mappingCreateToolbar (OpenPartsUI::ToolBarFactory_ptr
   m_vToolBarEdit->setFullWidth (false);
 
   pix = OPUIUtils::convertPixmap (BarIcon("undo"));
-  toolTip = Q2C( i18n ("Undo") );
+  toolTip = i18n ("Undo") ;
   m_idEditUndo =
     m_vToolBarEdit->insertButton2 (pix, ID_EDIT_UNDO, SIGNAL (clicked ()),
 				   this, "editUndo", true, toolTip, -1);
   //  m_vToolBarEdit->setItemEnabled (ID_EDIT_UNDO, false);
 
   pix = OPUIUtils::convertPixmap (BarIcon("redo"));
-  toolTip = Q2C( i18n ("Redo") );
+  toolTip = i18n ("Redo") ;
   m_idEditRedo =
     m_vToolBarEdit->insertButton2 (pix, ID_EDIT_REDO, SIGNAL (clicked ()),
 				   this, "editRedo", true, toolTip, -1);
@@ -549,19 +549,19 @@ bool KIllustratorView::mappingCreateToolbar (OpenPartsUI::ToolBarFactory_ptr
   m_vToolBarEdit->insertSeparator (-1);
 
   pix = OPUIUtils::convertPixmap(BarIcon("editcut"));
-  toolTip = Q2C( i18n ("Cut") );
+  toolTip = i18n ("Cut") ;
   m_idEditCut =
     m_vToolBarEdit->insertButton2 (pix, ID_EDIT_CUT, SIGNAL (clicked ()),
 				   this, "editCut", true, toolTip, -1);
 
   pix = OPUIUtils::convertPixmap (BarIcon("editcut"));
-  toolTip = Q2C( i18n ("Copy") );
+  toolTip = i18n ("Copy") ;
   m_idEditCopy =
     m_vToolBarEdit->insertButton2 (pix, ID_EDIT_COPY, SIGNAL (clicked ()),
 				   this, "editCopy", true, toolTip, -1);
 
   pix = OPUIUtils::convertPixmap (BarIcon("editpaste"));
-  toolTip = Q2C( i18n ("Paste") );
+  toolTip = i18n ("Paste") ;
   m_idEditPaste =
     m_vToolBarEdit->insertButton2 (pix, ID_EDIT_PASTE, SIGNAL (clicked ()),
 				   this, "editPaste", true,
@@ -569,21 +569,20 @@ bool KIllustratorView::mappingCreateToolbar (OpenPartsUI::ToolBarFactory_ptr
   m_vToolBarEdit->insertSeparator (-1);
 
   pix = OPUIUtils::convertPixmap (BarIcon("delete"));
-  toolTip = Q2C( i18n ("Delete") );
+  toolTip = i18n ("Delete") ;
   m_idEditDelete =
     m_vToolBarEdit->insertButton2 (pix, ID_EDIT_DELETE, SIGNAL (clicked ()),
 				   this, "editDelete", true,
 				   toolTip, -1);
   m_vToolBarEdit->insertSeparator (-1);
 
-  OpenPartsUI::StrList zoomSizes;
-  zoomSizes.length ((int) zFactors.size ());
+  OpenPartsUI::WStrList zoomSizes;
   for (int i = 0; i < (int) zFactors.size (); i++) {
     char buf[8];
     sprintf (buf, "%3.0f%%", zFactors[i] * 100);
-    zoomSizes[i] = CORBA::string_dup (buf);
+    zoomSizes.append( buf );
   }
-  toolTip = Q2C( i18n ("Zoom Factors") );
+  toolTip = i18n ("Zoom Factors") ;
   m_idEditZoom =
   m_vToolBarEdit->insertCombo (zoomSizes, ID_EDIT_ZOOM, true,
 			       SIGNAL (activated (const QString &)),
@@ -625,7 +624,7 @@ bool KIllustratorView::mappingCreateToolbar (OpenPartsUI::ToolBarFactory_ptr
     factory->create (OpenPartsUI::ToolBarFactory::Transient);
 
   pix = OPUIUtils::convertPixmap(BarIcon("moveNode"));
-  toolTip = Q2C( i18n ("Move Point") );
+  toolTip = i18n ("Move Point") ;
   m_idMovePoint =
     m_vToolBarEditPoint->insertButton2 (pix, ID_TOOL_EP_MOVE,
 					SIGNAL (clicked ()),
@@ -634,7 +633,7 @@ bool KIllustratorView::mappingCreateToolbar (OpenPartsUI::ToolBarFactory_ptr
   m_vToolBarEditPoint->setToggle (ID_TOOL_EP_MOVE, true);
 
   pix = OPUIUtils::convertPixmap(BarIcon("newNode"));
-  toolTip = Q2C( i18n ("Insert Point") );
+  toolTip = i18n ("Insert Point") ;
   m_idInsertPoint =
     m_vToolBarEditPoint->insertButton2 (pix, ID_TOOL_EP_INSERT,
 					SIGNAL (clicked ()),
@@ -643,7 +642,7 @@ bool KIllustratorView::mappingCreateToolbar (OpenPartsUI::ToolBarFactory_ptr
   m_vToolBarEditPoint->setToggle (ID_TOOL_EP_INSERT, true);
 
   pix = OPUIUtils::convertPixmap(BarIcon("deleteNode"));
-  toolTip = Q2C( i18n ("Remove Point") );
+  toolTip = i18n ("Remove Point") ;
   m_idRemovePoint =
     m_vToolBarEditPoint->insertButton2 (pix, ID_TOOL_EP_DELETE,
 					SIGNAL (clicked ()),
@@ -806,12 +805,12 @@ void KIllustratorView::setUndoStatus(bool undoPossible, bool redoPossible)
     // we do this " " trick to avoid double translation of "Undo" and "Undo "
     m_vMenuEdit->setItemEnabled (m_idMenuEdit_Undo, undoPossible);
 
-    CORBA::WString_var text;
+    QString text;
 
     QString label = i18n ("Undo");
     if (undoPossible)
       label += " " + cmdHistory.getUndoName ();
-    text = Q2C( label );
+    text = label;
     m_vMenuEdit->changeItemText (text, m_idMenuEdit_Undo);
 
     m_vMenuEdit->setItemEnabled (m_idMenuEdit_Redo, redoPossible);
@@ -820,7 +819,7 @@ void KIllustratorView::setUndoStatus(bool undoPossible, bool redoPossible)
     if (redoPossible)
       label += " " + cmdHistory.getRedoName ();
 
-    text = Q2C( label );
+    text = label;
     m_vMenuEdit->changeItemText (text, m_idMenuEdit_Redo);
   }
 }
@@ -857,7 +856,7 @@ void KIllustratorView::showTransformationDialog (int id) {
 }
 
 
-CORBA::Boolean KIllustratorView::printDlg () {
+bool KIllustratorView::printDlg () {
   canvas->printDocument ();
   return true;
 }
@@ -1077,9 +1076,9 @@ void KIllustratorView::alignToHelplines () {
   m_vMenuLayout->setItemChecked (m_idMenuLayout_AlignToHelplines, snap);
 }
 
-void KIllustratorView::setPenColor (CORBA::Long id) {
-  CORBA::Short red, green, blue;
-  CORBA::Boolean fill;
+void KIllustratorView::setPenColor (long int id) {
+  short int red, green, blue;
+  bool fill;
   if(! m_vColorBar->getRgbColor (id, red, green, blue, fill))
     return;
 
@@ -1107,9 +1106,9 @@ void KIllustratorView::setPenColor (CORBA::Long id) {
   }
 }
 
-void KIllustratorView::setFillColor (CORBA::Long id) {
-  CORBA::Short red, green, blue;
-  CORBA::Boolean fill;
+void KIllustratorView::setFillColor (long int id) {
+  short int red, green, blue;
+  bool fill;
   if(! m_vColorBar->getRgbColor (id, red, green, blue, fill))
     return;
 
@@ -1236,8 +1235,8 @@ void KIllustratorView::setupPage () {
     m_pDoc->setPageLayout (pLayout);
 }
 
-void KIllustratorView::zoomSizeSelected (const CORBA::WChar* s) {
-  float value = C2Q( s ).toFloat();
+void KIllustratorView::zoomSizeSelected (const QString & s) {
+  float value = s.toFloat();
   if (canvas)
     canvas->setZoomFactor (value / 100.0);
 }

@@ -86,7 +86,7 @@ public:
   void changeChildGeometry (KIllustratorChild* child, const QRect& r);
 
   // --- IDL ---
-  virtual CORBA::Boolean initDoc ();
+  virtual bool initDoc ();
 
   virtual KOffice::MainWindow_ptr createMainWindow();
 
@@ -94,27 +94,27 @@ public:
   virtual OpenParts::View_ptr createView ();
 
   // get list of views
-  virtual void viewList (OpenParts::Document::ViewList*& list_ptr);
+  virtual void viewList (OpenParts::Document::ViewList & list_ptr);
 
   void removeView (KIllustratorView* view);
 
   // get mime type
-  virtual char* mimeType () { return CORBA::string_dup (MIME_TYPE); }
+  virtual QCString mimeType () { return MIME_TYPE; }
 
   // ask, if document is modified
-  virtual CORBA::Boolean isModified ();
+  virtual bool isModified ();
   virtual void setModified (bool f);
 
-  virtual void draw (QPaintDevice* dev, CORBA::Long w, CORBA::Long h,
-		     CORBA::Float _scale );
+  virtual void draw (QPaintDevice* dev, long int w, long int h,
+		     float _scale );
 
   virtual int viewCount ();
   virtual KIllustratorView* createKIllustratorView ( QWidget* _parent = 0 );
 
   virtual bool isEmpty () { return m_bEmpty; }
 
-  virtual CORBA::Boolean checkForSelection ();
-  virtual KIllustrator::GfxObjectSeq* getSelection ();
+  virtual bool checkForSelection ();
+  virtual KIllustrator::GfxObjectSeq getSelection ();
   virtual void addToSelection (KIllustrator::GfxObject_ptr obj);
   virtual void removeFromSelection (KIllustrator::GfxObject_ptr obj);
   virtual void groupSelection ();

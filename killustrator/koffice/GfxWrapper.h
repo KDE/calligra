@@ -11,21 +11,21 @@ class GfxWrapper : public SWrapper,
 public:
   GfxWrapper (KIllustratorDocument *doc, GObject *o);
 
-  virtual CORBA::Long id ();
-  virtual void applyFillColor (CORBA::Short r, CORBA::Short g, CORBA::Short b);
-  virtual void getFillColor (CORBA::Short& r, CORBA::Short& g, 
-			     CORBA::Short& b);
-  virtual void applyPenColor (CORBA::Short r, CORBA::Short g, CORBA::Short b);
-  virtual void getPenColor (CORBA::Short& r, CORBA::Short& g, CORBA::Short& b);
-  virtual void setPosition (CORBA::Float x, CORBA::Float y);
-  virtual void getPosition (CORBA::Float& x, CORBA::Float& y);
-  virtual void getCenter (CORBA::Float& x, CORBA::Float& y);
-  virtual void translate (CORBA::Float dx, CORBA::Float dy);
-  virtual void rotate (CORBA::Float angle);
-  virtual void rotateAround (CORBA::Float angle, 
-			     CORBA::Float xp, CORBA::Float yp);
+  virtual long int id ();
+  virtual void applyFillColor (short int r, short int g, short int b);
+  virtual void getFillColor (short int& r, short int& g, 
+			     short int& b);
+  virtual void applyPenColor (short int r, short int g, short int b);
+  virtual void getPenColor (short int& r, short int& g, short int& b);
+  virtual void setPosition (float x, float y);
+  virtual void getPosition (float& x, float& y);
+  virtual void getCenter (float& x, float& y);
+  virtual void translate (float dx, float dy);
+  virtual void rotate (float angle);
+  virtual void rotateAround (float angle, 
+			     float xp, float yp);
   virtual ObjectType getObjectType ();
-  virtual CORBA::Boolean isSelected ();
+  virtual bool isSelected ();
   virtual ::KIllustrator::GfxObject_ptr duplicateObject ();
   virtual void deleteObject ();
   virtual void orderBackOne ();

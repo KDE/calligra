@@ -131,7 +131,7 @@ bool KIllustratorDocument::saveChildren (KOStore::Store_ptr _store, const char *
         // set the child document's url to an internal url (ex: "tar:/0/1")
         QString internURL = QString( "%1/%2" ).arg( _path ).arg( i++ );
         KOffice::Document_var doc = it.current()->document();
-        if ( !doc->saveToStore( _store, 0L, internURL ) )
+        if ( !doc->saveToStore( _store, "", internURL ) )
           return false;
     }
   return true;
@@ -182,7 +182,7 @@ void KIllustratorDocument::changeChildGeometry (KIllustratorChild* child,
   emit childGeometryChanged (child);
 }
 
-CORBA::Boolean KIllustratorDocument::initDoc () {
+bool KIllustratorDocument::initDoc () {
   return true;
 }
 
@@ -216,15 +216,13 @@ int KIllustratorDocument::viewCount () {
   return m_lstViews.count ();
 }
 
-void KIllustratorDocument::viewList (OpenParts::Document::ViewList*& list_ptr) {
-  list_ptr->length (m_lstViews.count ());
-  int i = 0;
+void KIllustratorDocument::viewList (OpenParts::Document::ViewList & list_ptr) {
   QListIterator<KIllustratorView> it (m_lstViews);
   for (; it.current (); ++it)
-    (*list_ptr)[i++] = OpenParts::View::_duplicate (it.current ());
+    list_ptr.append( OpenParts::View::_duplicate (it.current ()) );
 }
 
-CORBA::Boolean KIllustratorDocument::isModified () {
+bool KIllustratorDocument::isModified () {
   return GDocument::isModified ();
 }
 
@@ -235,8 +233,8 @@ void KIllustratorDocument::setModified (bool f) {
 }
 
 void KIllustratorDocument::draw (QPaintDevice* dev,
-				 CORBA::Long , CORBA::Long ,
-				 CORBA::Float _scale ) {
+				 long int , long int ,
+				 float _scale ) {
   Painter painter;
   painter.begin (dev);
 
@@ -247,21 +245,20 @@ void KIllustratorDocument::draw (QPaintDevice* dev,
   painter.end ();
 }
 
-CORBA::Boolean KIllustratorDocument::checkForSelection () {
+bool KIllustratorDocument::checkForSelection () {
   cout << "check for selection..." << endl;
   return !selectionIsEmpty ();
 }
 
-KIllustrator::GfxObjectSeq* KIllustratorDocument::getSelection () {
-  KIllustrator::GfxObjectSeq* seq = new KIllustrator::GfxObjectSeq;
-  seq->length (selectionCount ());
+KIllustrator::GfxObjectSeq  KIllustratorDocument::getSelection () {
+  KIllustrator::GfxObjectSeq seq;
   int n = 0;
   for (list<GObject*>::iterator i = selection.begin ();
        i != selection.end (); i++) {
     GfxWrapper* wobj = (GfxWrapper *) (*i)->getWrapper ();
     if (wobj == 0L)
       wobj = new GfxWrapper (this, *i);
-    (*seq)[n++] = KIllustrator::GfxObject::_duplicate (wobj);
+    seq.append ( KIllustrator::GfxObject::_duplicate (wobj) );
   }
 
   return seq;

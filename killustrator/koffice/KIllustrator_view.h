@@ -116,8 +116,8 @@ public:
   // --- IDL ---
   void newView ();
   //  void setMode (OPParts::Part::Mode mode);
-  //  void setFocus (CORBA::Boolean mode);
-  CORBA::Boolean printDlg ();
+  //  void setFocus (bool mode);
+  bool printDlg ();
 
   void editUndo ();
   void editRedo ();
@@ -162,8 +162,8 @@ public:
   void editLayers ();
   void setupPage ();
 
-  void setPenColor (CORBA::Long id);
-  void setFillColor (CORBA::Long id);
+  void setPenColor (long int id);
+  void setFillColor (long int id);
 
   void toolSelection ();
   void toolEditPoint ();
@@ -183,7 +183,7 @@ public:
   void configPolygonTool ();
   void configEllipseTool ();
 
-  void zoomSizeSelected (const CORBA::WChar* s);
+  void zoomSizeSelected (const QString & s);
 
   void showScripts ();
 
@@ -226,24 +226,24 @@ protected:
   /* Menu: Edit */
   OpenPartsUI::Menu_var m_vMenuEdit;
   OpenPartsUI::Menu_var m_vMenuInsert;
-  CORBA::Long m_idMenuEdit_Undo, m_idMenuEdit_Redo,
+  long int m_idMenuEdit_Undo, m_idMenuEdit_Redo,
     m_idMenuEdit_Cut, m_idMenuEdit_Copy, m_idMenuEdit_Paste, 
     m_idMenuEdit_Duplicate, m_idMenuEdit_Delete, m_idMenuEdit_SelectAll, 
     m_idMenuEdit_InsertObject, m_idMenuEdit_Properties;
 
   /* Menu: Edit->Insert */
-  CORBA::Long m_idMenuInsert_Object, m_idMenuInsert_Clipart, 
+  long int m_idMenuInsert_Object, m_idMenuInsert_Clipart, 
     m_idMenuInsert_Bitmap;
 
   /* Menu: View */
   OpenPartsUI::Menu_var m_vMenuView;
-  CORBA::Long m_idMenuView_Outline, 
+  long int m_idMenuView_Outline, 
     m_idMenuView_Normal, m_idMenuView_Ruler, m_idMenuView_Grid,
     m_idMenuView_Helplines, m_idMenuView_Layers;
 
   /* Menu: Layout */
   OpenPartsUI::Menu_var m_vMenuLayout;
-  CORBA::Long m_idMenuLayout_InsertPage, 
+  long int m_idMenuLayout_InsertPage, 
     m_idMenuLayout_RemovePage, m_idMenuLayout_GotoPage, 
     m_idMenuLayout_PageLayout, 
     m_idMenuLayout_SetupGrid, m_idMenuLayout_AlignToGrid,
@@ -252,7 +252,7 @@ protected:
   /* Menu: Arrange */
   OpenPartsUI::Menu_var m_vMenuArrange;
   OpenPartsUI::Menu_var m_vMenuTransform;
-  CORBA::Long m_idMenuTransform_Position,
+  long int m_idMenuTransform_Position,
     m_idMenuTransform_Dimension, m_idMenuTransform_Rotation, 
     m_idMenuTransform_Mirror, m_idMenuArrange_Align, 
     m_idMenuArrange_ToFront, m_idMenuArrange_ToBack, 
@@ -261,43 +261,43 @@ protected:
     m_idMenuArrange_TextAlongPath;
   /* Menu: Extras */
   OpenPartsUI::Menu_var m_vMenuExtras;
-  CORBA::Long m_idMenuExtras_Scripts;
+  long int m_idMenuExtras_Scripts;
 
   /* Menu: Help */
   OpenPartsUI::Menu_var m_vMenuHelp;
 
   /* Toolbar: Tools */
   OpenPartsUI::ToolBar_var m_vToolBarTools;
-  CORBA::Long m_idSelectionTool;
-  CORBA::Long m_idEditPointTool;
-  CORBA::Long m_idFreeHandTool;
-  CORBA::Long m_idPolylineTool;
-  CORBA::Long m_idBezierTool;
-  CORBA::Long m_idRectangleTool;
-  CORBA::Long m_idPolygonTool;
-  CORBA::Long m_idEllipseTool;
-  CORBA::Long m_idTextTool;
-  CORBA::Long m_idZoomTool;
-  CORBA::Long m_idActiveTool;
+  long int m_idSelectionTool;
+  long int m_idEditPointTool;
+  long int m_idFreeHandTool;
+  long int m_idPolylineTool;
+  long int m_idBezierTool;
+  long int m_idRectangleTool;
+  long int m_idPolygonTool;
+  long int m_idEllipseTool;
+  long int m_idTextTool;
+  long int m_idZoomTool;
+  long int m_idActiveTool;
 
   /* Toolbar: Edit */
   OpenPartsUI::ToolBar_var m_vToolBarEdit;
-  CORBA::Long m_idEditCut;
-  CORBA::Long m_idEditCopy;
-  CORBA::Long m_idEditPaste;
-  CORBA::Long m_idEditDelete;
-  CORBA::Long m_idEditUndo;
-  CORBA::Long m_idEditRedo;
-  CORBA::Long m_idEditZoom;
+  long int m_idEditCut;
+  long int m_idEditCopy;
+  long int m_idEditPaste;
+  long int m_idEditDelete;
+  long int m_idEditUndo;
+  long int m_idEditRedo;
+  long int m_idEditZoom;
 
   /* Toolbar: Colors */
   OpenPartsUI::ColorBar_var m_vColorBar;
 
   /* Toolbar: Edit Point */
   OpenPartsUI::ToolBar_var m_vToolBarEditPoint;
-  CORBA::Long m_idMovePoint;
-  CORBA::Long m_idInsertPoint;
-  CORBA::Long m_idRemovePoint;
+  long int m_idMovePoint;
+  long int m_idInsertPoint;
+  long int m_idRemovePoint;
 
   KIllustratorDocument *m_pDoc;
   EditPointTool *editPointTool;

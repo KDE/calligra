@@ -6,12 +6,12 @@ GfxWrapper::GfxWrapper (KIllustratorDocument *doc, GObject *o) {
   o->setWrapper (this);
 }
 
-CORBA::Long GfxWrapper::id () {
+long int GfxWrapper::id () {
   return 0;
 }
 
-void GfxWrapper::applyFillColor (CORBA::Short r, CORBA::Short g,
-				 CORBA::Short b) {
+void GfxWrapper::applyFillColor (short int r, short int g,
+				 short int b) {
   cout << "fill color = " << r << ", " << g << ", " << b << endl;
   GObject::FillInfo info;
   info.color  = QColor (r, g, b);
@@ -20,12 +20,12 @@ void GfxWrapper::applyFillColor (CORBA::Short r, CORBA::Short g,
   obj->setFillInfo (info);
 }
 
-void GfxWrapper::getFillColor (CORBA::Short& , CORBA::Short& ,
-			       CORBA::Short& ) {
+void GfxWrapper::getFillColor (short int& , short int& ,
+			       short int& ) {
 }
 
-void GfxWrapper::applyPenColor (CORBA::Short r, CORBA::Short g,
-				CORBA::Short b) {
+void GfxWrapper::applyPenColor (short int r, short int g,
+				short int b) {
   cout << "pen color = " << r << ", " << g << ", " << b << endl;
   GObject::OutlineInfo info;
   info.color  = QColor (r, g, b);
@@ -34,35 +34,35 @@ void GfxWrapper::applyPenColor (CORBA::Short r, CORBA::Short g,
   obj->setOutlineInfo (info);
 }
 
-void GfxWrapper::getPenColor (CORBA::Short& , CORBA::Short& ,
-			      CORBA::Short& ) {
+void GfxWrapper::getPenColor (short int& , short int& ,
+			      short int& ) {
 }
 
-void GfxWrapper::setPosition (CORBA::Float , CORBA::Float ) {
+void GfxWrapper::setPosition (float , float ) {
 }
 
-void GfxWrapper::getPosition (CORBA::Float& , CORBA::Float& ) {
+void GfxWrapper::getPosition (float& , float& ) {
 }
 
-void GfxWrapper::getCenter (CORBA::Float& x, CORBA::Float& y) {
+void GfxWrapper::getCenter (float& x, float& y) {
   Coord cp = obj->boundingBox ().center ();
   x = cp.x (); y = cp.y ();
 }
 
-void GfxWrapper::translate (CORBA::Float dx, CORBA::Float dy) {
+void GfxWrapper::translate (float dx, float dy) {
   QWMatrix m;
   m.translate (dx, dy);
   obj->transform (m, true);
 }
 
-void GfxWrapper::rotate (CORBA::Float angle) {
+void GfxWrapper::rotate (float angle) {
   QWMatrix m;
   m.rotate (angle);
   obj->transform (m, true);
 }
 
-void GfxWrapper::rotateAround (CORBA::Float angle,
-			       CORBA::Float xp, CORBA::Float yp) {
+void GfxWrapper::rotateAround (float angle,
+			       float xp, float yp) {
   QWMatrix m1, m2, m3;
   m1.translate (-xp, -yp);
   m2.rotate (angle);
@@ -99,7 +99,7 @@ void GfxWrapper::rotateAround (CORBA::Float angle,
   return result;
 }
 
-CORBA::Boolean GfxWrapper::isSelected () {
+bool GfxWrapper::isSelected () {
   return obj->isSelected ();
 }
 
