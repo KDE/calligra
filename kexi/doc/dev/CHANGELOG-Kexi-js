@@ -314,6 +314,57 @@ HOT TODO:
 
 CC_MAIL: dkite@shaw.ca
 
+CCPASTEUR: 
+	-why pixmap's code is in kexiproperty/kexipropertybuffer?
+	-perhaps we'd reuse KDE Menu editor GUI?
+	-inserting widget by single clicking should setup proper human-visible size, not just 1 pixel size
+	-backgroundOrigin property should have 'ParentOrigin' as default 
+	 (not it's as in QtDesigner, and it's not intuitive)
+
+2004-06-24
+KexiCore
+- Some doxygen docs added.
+- Fixed activeView() when we're just switched to other view in KexiDialogBase
+Widgets
+- SQL Editor: now properly emits signal about text changes.
+- SQL Editor: now has QT_ONLY_SQL_EDITOR compile-time option (both modes works on win32)
+
+2004-06-23
+KexiCore
+- Fixed focusing previously selected dialog after Kexi main window's activation
+- KatePart is working on win32 as well
+
+2004-06-21
+KexiActionProxy
+- activateSharedAction(), isAvailable() now have alsoCheckInChildren arg.
+KexiDialogBase
+- actions availability is invalidated on view switching
+KexiPart::Part
+- proper integration with SharedActionHost
+- actions creating simplified with Part::createSharedAction()
+- finally: initPartActions() and initInstanceActions() 
+   replaced with single call of initActions(). 
+   createSharedPartAction() and createSharedAction() added
+Parts
+- all parts code updated for API changes
+
+2004-06-19
+KexiTableView
+- added checks if column is >=0 (this avoid crashes)
+FormDesigner
+- TabStopDialog: 
+  * was badly implemented: exec() in ctor. exec() moved from ctor to 
+    TabStopDialog::exec(Form*) method
+  * fixed crash: QVBoxLayout was added twice! 1st via ctor, 2nd view QLayout::addLayout()
+    --removed 1st
+Query Designer
+- kexiquerypartinstui.rc added and some actions
+Core
+- sql parser is now allocated in KexiProject
+KexiDB
+- docs greatly improved, thx Martin!
+- UNSIGNED INT -> INT UNSIGNED
+
 2004-06-18
 Query Designer
 - SQL Editor: added KexiSectionHeader
@@ -326,7 +377,6 @@ Query Designer
 KexiTableView
 - Editor's focus position is updated (moved down) 
   when new row is inserted above current row
-
 KexiDialogBase
 - returning without failure when KexiViewBase::beforeSwitchTo() 
   returned cancel==true and success==false

@@ -51,7 +51,8 @@ KexiDialogBase::KexiDialogBase(KexiMainWindow *parent, const QString &caption)
 {
 	m_supportedViewModes = 0; //will be set by KexiPart
 	m_currentViewMode = 0; //override this!
-	m_parentWindow=parent;
+	m_parentWindow = parent;
+	m_newlySelectedView = 0;
 
 	QVBoxLayout *lyr = new QVBoxLayout(this);
 	m_stack = new QWidgetStack(this, "stack");
@@ -185,7 +186,7 @@ bool KexiDialogBase::tryClose(bool dontSaveChanges)
 
 bool KexiDialogBase::dirty() const
 {
-	KexiViewBase *v = selectedView();
+	KexiViewBase *v = m_newlySelectedView ? m_newlySelectedView : selectedView();
 	return v ? v->dirty() : false;
 }
 
@@ -262,11 +263,16 @@ bool KexiDialogBase::switchToViewMode( int newViewMode, bool &cancelled )
 			<< m_currentViewMode << " restored." << endl;
 		return false;
 	}
+	const int prevViewMode = m_currentViewMode;
+	m_currentViewMode = newViewMode;
+	m_newlySelectedView = newView;
+	m_newlySelectedView->setDirty(false);
 	if (!newView->afterSwitchFrom(m_currentViewMode, cancelled)) {
 		kdDebug() << "Switching to mode " << newViewMode << " failed. Previous mode "
 			<< m_currentViewMode << " restored." << endl; 
 		return false;
 	}
+	m_newlySelectedView = 0;
 	if (cancelled)
 		return true;
 	m_currentViewMode = newViewMode;
@@ -307,7 +313,9 @@ bool KexiDialogBase::eventFilter(QObject *obj, QEvent *e)
 	if (KMdiChildView::eventFilter(obj, e))
 		return true;
 	if (m_stack->visibleWidget() && Kexi::hasParent(m_stack->visibleWidget(), obj)) {
-		if (e->type()==QEvent::FocusIn || e->type()==QEvent::MouseButtonPress) {
+		if ((e->type()==QEvent::FocusIn && m_parentWindow->activeWindow()==this)
+			|| e->type()==QEvent::MouseButtonPress) 
+		{
 			//pass the activation
 			activate();
 		}

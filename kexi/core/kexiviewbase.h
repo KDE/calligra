@@ -32,6 +32,20 @@ namespace KexiDB {
 	class SchemaData;
 }
 
+//! Base class for single view embeddable of in KexiDialogBase.
+/*! This class automatically works as a proxy for shared (application-wide) actions.
+ KexiViewBase has 'dirty' flag to indicate that view's data has changed.
+ This flag's state is reused by KexiDialogBase object that contain the view.
+ KexiViewBase obejcts can be also nested, using addChildView(): any actions and 'dirty' flag
+ are transmited to parent view in this case.
+
+ KexiViewBase objects are usually allocated within KexiDialogBase objects by implementing
+ KexiPart::createView() method. See query or table part code for examples.
+
+ KexiViewBase object can be also allocated without attaching it KexiDialogBase, 
+ especially withinn dock window. see KexiMainWindowImpl::initNavigator() to see example 
+ how KexiBrowser does this.
+*/
 class KEXICORE_EXPORT KexiViewBase : public QWidget, public KexiActionProxy
 {
 	Q_OBJECT
@@ -193,7 +207,6 @@ class KEXICORE_EXPORT KexiViewBase : public QWidget, public KexiActionProxy
 		 dialog has not yet assigned valid identifier (it has just negative temp. number).
 		 \sa KexiDialogBase::id()
 		 */
-//UNUSED NOW: TODO: REMOVE
 		int m_newlyAssignedID;
 
 		bool m_dirty : 1;

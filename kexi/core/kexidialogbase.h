@@ -40,6 +40,8 @@ namespace KexiPart {
 }
 class KexiPropertyBuffer;
 
+//! Privides temporary data shared between KexiDialogBase's views (KexiView's)
+/*! Designed for reimplementation, if needed. */
 class KEXICORE_EXPORT KexiDialogTempData : public QObject
 {
 	public:
@@ -47,6 +49,10 @@ class KEXICORE_EXPORT KexiDialogTempData : public QObject
 	 : QObject(parent, "KexiDialogTempData") {}
 };
 
+//! Base class for child window of Kexi's main application window.
+/*! This class can contain a number of configurable views, switchable using toggle action.
+ It also automatically works as a proxy for shared (application-wide) actions.
+*/
 class KEXICORE_EXPORT KexiDialogBase : public KMdiChildView, public KexiActionProxy
 {
 	Q_OBJECT
@@ -173,7 +179,6 @@ class KEXICORE_EXPORT KexiDialogBase : public KMdiChildView, public KexiActionPr
 		void setTempData( KexiDialogTempData* data ) { m_tempData = data; }
 
 	public slots:
-//		virtual void detach();
 		virtual void setFocus();
 
 		void updateCaption();
@@ -238,16 +243,14 @@ class KEXICORE_EXPORT KexiDialogBase : public KMdiChildView, public KexiActionPr
 		KexiContextHelpInfo *m_contextHelpInfo;
 #endif
 		int m_id;
-//		KInstance *m_instance;
 		QGuardedPtr<KexiPart::Part> m_part;
 		KexiPart::Item *m_item;
 		QWidgetStack *m_stack;
-		QString m_origCaption; //helper
+		QString m_origCaption; //!< helper
 		KexiDB::SchemaData* m_schemaData;
-
-		/*! temporary data shared between views */
-		QGuardedPtr<KexiDialogTempData> m_tempData;
-//		bool m_neverSaved : 1; //!< true, if this dialog's contents were never saved 
+		KexiViewBase *m_newlySelectedView; //!< Used in dirty(), temporary set in switchToViewMode()
+		                                   //!< during view setup, when a new view is not yet raised.
+		QGuardedPtr<KexiDialogTempData> m_tempData; //!< temporary data shared between views
 		bool m_destroying : 1; //!< true after entering to the dctor
 
 		friend class KexiMainWindow;
