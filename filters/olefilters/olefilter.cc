@@ -197,7 +197,7 @@ void OLEFilter::convert(const QString &dirname) {
 
         if(myFilter==0L) {
             // unknown
-            kdebug(KDEBUG_INFO, 31000, "OLEFilter::convert(): superunknown");
+            kdebug(KDEBUG_INFO, 31000, "OLEFilter::convert(): superunknown -> black hole sun ;)");
             myFilter=new FilterBase();
             // connect SIGNALs&SLOTs
             connectCommon(&myFilter);
@@ -206,9 +206,13 @@ void OLEFilter::convert(const QString &dirname) {
         success=myFilter->filter();
         QString file=myFilter->part();
         char *tmp=0L;
-        //slotPart(dirname, myFilter->extension(), &tmp);
+        //slotPart(dirname, myFilter->extension(), &tmp);  // TODO!
         //fileOut->writeFile(tmp, "", "", file.length(), (const char*)file.utf8());
-        // KoTarStore!
+        // use KoTarStore for that stuff:
+        // generate name (e.g. tar:/0/1/0)
+        // store->open(...);
+        // store->write(...);
+        // store->close();
         delete [] tmp;
         delete myFilter;
     }
