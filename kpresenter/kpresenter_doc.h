@@ -326,6 +326,10 @@ public:
     bool dontCheckTitleCase() const {return  m_bDontCheckTitleCase;}
     void setDontCheckTitleCase(bool _b) {m_bDontCheckTitleCase=_b;}
 
+    // in pt
+    double getIndentValue() { return m_indent; }
+    void setIndentValue(double _ind) { m_indent=_ind; }
+
 public slots:
     void movePage( int from, int to );
     void copyPage( int from, int to );
@@ -430,7 +434,6 @@ protected:
 
     int saveOnlyPage;
     QString m_tempFileInClipboard;
-    //KTextEditFormatCollection *fCollection;
     QValueList<bool> m_selectedSlides;
     bool ignoreSticky;
 
@@ -443,6 +446,8 @@ protected:
     KSpellConfig *m_pKSpellConfig;
     bool m_bDontCheckUpperWord;
     bool m_bDontCheckTitleCase;
+
+    double m_indent; // in pt
 
 private:
     void pageTitleInsert( unsigned int pageNumber);

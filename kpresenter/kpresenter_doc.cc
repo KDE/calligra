@@ -160,6 +160,7 @@ KPresenterDoc::KPresenterDoc( QWidget *parentWidget, const char *widgetName, QOb
     //   _pageLayout.ptBottom = 0;
 
     _pageLayout.unit = PG_MM;
+    m_indent = MM_TO_POINT( 10.0 );
 
     objStartY = 0;
     setPageLayout( _pageLayout, 0, 0 );
@@ -215,6 +216,9 @@ void KPresenterDoc::initConfig()
         setAutoSave( config->readNumEntry( "AutoSave", defaultAutoSave()/60 ) * 60 );
         _rastX = config->readNumEntry( "RastX", 10 );
         _rastY = config->readNumEntry( "RastY", 10 );
+        // Config-file value in mm, default 10 pt
+        double indent = MM_TO_POINT( config->readDoubleNumEntry("Indent", POINT_TO_MM(10.0) ) );
+        setIndentValue(indent);
     }
 
     QColor oldBgColor = Qt::white;

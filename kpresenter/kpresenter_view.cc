@@ -1397,8 +1397,15 @@ void KPresenterView::textUnsortList()
 void KPresenterView::textDepthPlus()
 {
     KPTextView *edit=page->currentTextObjectView();
-    if ( !edit )
-        return;
+    if ( edit )
+    {
+        double leftMargin = edit->currentParagLayout().margins[QStyleSheetItem::MarginLeft];
+        double indent = m_pKPresenterDoc->getIndentValue();
+        double newVal = leftMargin + indent;
+        KCommand *cmd=edit->setMarginCommand( QStyleSheetItem::MarginLeft, newVal );
+        if(cmd)
+            m_pKPresenterDoc->addCommand(cmd);
+    }
 
 #if 0
     KPTextObject *txtObj = page->currentTextObjectView()->textObject();
@@ -1417,6 +1424,20 @@ void KPresenterView::textDepthPlus()
 /*===============================================================*/
 void KPresenterView::textDepthMinus()
 {
+    KPTextView *edit=page->currentTextObjectView();
+    if ( edit )
+    {
+        double leftMargin = edit->currentParagLayout().margins[QStyleSheetItem::MarginLeft];
+        if ( leftMargin > 0 )
+        {
+            double indent = m_pKPresenterDoc->getIndentValue();
+            double newVal = leftMargin - indent;
+            KCommand *cmd=edit->setMarginCommand( QStyleSheetItem::MarginLeft, QMAX( newVal, 0 ) );
+            if(cmd)
+                m_pKPresenterDoc->addCommand(cmd);
+        }
+    }
+
 #if 0
     KPTextObject *txtObj = page->currentTextObjectView();
     if ( !txtObj )
@@ -2410,7 +2431,9 @@ void KPresenterView::objectSelectedChanged()
     actionTextAlignBlock->setEnabled(isText);
     actionTextTypeUnsortList->setEnabled(isText);
     actionTextDepthPlus->setEnabled(isText);
+
     actionTextDepthMinus->setEnabled(isText);
+
     actionTextSettings->setEnabled(isText);
     actionTextExtentCont2Height->setEnabled(isText);
     actionTextExtendObj2Cont->setEnabled(isText);
