@@ -361,19 +361,9 @@ bool KHTMLReader::parse_br(DOM::Element e) {
 }
 
 QColor parsecolor(QString colorstring) {
-      QColor dummy;
-      if (colorstring.upper() == "RED") return QColor(255,0,0);
-      if (colorstring.upper() == "BLUE") return QColor(0,0,255);
-      if (colorstring.upper() == "GREEN") return QColor(0,255,0);
-      if (colorstring.startsWith("#")) {
-      return QColor(
-            colorstring.mid(1,2).toInt(0,16),
-            colorstring.mid(3,2).toInt(0,16),
-            colorstring.mid(5,2).toInt(0,16)
-            );
-      }
-      else return dummy;
-
+      QColor color;
+      color.setNamedColor(colorstring);
+      return color;
 }
 
 
