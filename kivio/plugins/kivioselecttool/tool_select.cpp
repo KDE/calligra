@@ -215,13 +215,6 @@ void SelectTool::mousePress(const QPoint &pos)
     return;
   }
 
-  // Check if we can drag a stencil (only the selected stencils first)
-  if( startDragging(pos, true) )
-  {
-    m_mode = stmDragging;
-    return;
-  }
-
   // Check if we can drag a stencil
   if( startDragging(pos, false) )
   {

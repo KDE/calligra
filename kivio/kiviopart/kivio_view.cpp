@@ -1116,8 +1116,6 @@ void KivioView::setLineStyle(int style)
 void KivioView::groupStencils()
 {
     m_pActivePage->groupSelectedStencils();
-    KoRect r = m_pActivePage->getRectForAllStencils();
-
     m_pDoc->updateView(m_pActivePage);
 }
 
