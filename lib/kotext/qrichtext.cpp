@@ -2979,13 +2979,10 @@ int QTextFormat::width( const QChar &c ) const
 	    int w;
 	    if ( c.row() )
 		w = fm.width( c );
-	    else {
+	    else
 		w = widths[ c.unicode() ];
-                qDebug( "QTextFormat::width fontsize=%d char='%s' found in cache: w=%d", fn.pointSize(), QString(c).latin1(), w );
-            }
 	    if ( w == 0 && !c.row() ) {
 		w = fm.width( c );
-                qDebug( "QTextFormat::width fontsize=%d char='%s' calculated: w=%d", fn.pointSize(), QString(c).latin1(), w );
 		( (QTextFormat*)this )->widths[ c.unicode() ] = w;
 	    }
 	    return w;
@@ -3002,7 +2999,6 @@ int QTextFormat::width( const QChar &c ) const
 	f.setPointSize( ( f.pointSize() * 2 ) / 3 );
     painter->setFont( f );
 
-    qDebug( "QTextFormat::width - using painter - fontsize=%d char='%s' w=%d", fn.pointSize(), QString(c).latin1(), painter->fontMetrics().width( c ) );
     return painter->fontMetrics().width( c );
 }
 
