@@ -1,23 +1,23 @@
 #ifndef KCHART_DATA_EDITOR_H
 #define KCHART_DATA_EDITOR_H
 
-#include <kdialog.h>   
+#include <kdialogbase.h>   
 #include "kchart_part.h"
 #include "sheetdlg.h"  
 #include <qstrlist.h>
+
+class QLabel;
+class QSpinBox;
 
 namespace KChart
 {
 
 class KChartParams;
 
-class kchartDataEditor : public KDialog 
+class kchartDataEditor : public KDialogBase
 {
     Q_OBJECT
 public:
-#if 0
-    kchartDataEditor();
-#endif
     kchartDataEditor(QWidget* parent = 0);
     void setData(KoChart::Data* dat);
     void getData(KoChart::Data* dat);
@@ -29,9 +29,17 @@ public:
     void setAxisLabelTextShort( QStringList *_shortLabels ){ shortLabels = _shortLabels; }
 
 private:
+    // Data Editor, Old version
     SheetDlg *_widget;
     QStringList *longLabels;
     QStringList *shortLabels;
+
+    // Data Editor, TNG
+    QTable      *m_table;
+    QLabel      *rowsLA;
+    QSpinBox    *rowsSB;
+    QLabel      *colsLA;
+    QSpinBox    *colsSB;
 };
 
 }  //KChart namespace

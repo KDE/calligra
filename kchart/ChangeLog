@@ -1,5 +1,10 @@
 2005-03-03  Inge Wallin  <inge@lysator.liu.se>
 
+	Start on bug 90892 - "Data editor looks bad", and bug 90878 -
+	"KChart: Crash when creating more than 16 rows or columns".
+	* kchartDataEditor.{h,cc}: First prototype of a new data editor.
+
+	Code cleaning.
 	* kchartFontConfigPage.cc (class KChartFontListBoxItem): Move from
 	kchartDataConfigPage.h.  That used to be an error.
 
