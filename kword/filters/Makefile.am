@@ -1,1 +1,1 @@
-SUBDIRS = ascii winword97 html
+SUBDIRS = ascii html
