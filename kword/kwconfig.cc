@@ -152,9 +152,6 @@ ConfigureInterfacePage::ConfigureInterfacePage( KWView *_view, QVBox *box, char 
     m_pView=_view;
     config = KWFactory::global()->config();
     KoUnit::Unit unit = m_pView->kWordDocument()->getUnit();
-    /*QVBoxLayout *box = new QVBoxLayout( this );
-    box->setMargin( 5 );
-    box->setSpacing( 10 );*/
     QGroupBox* tmpQGroupBox = new QGroupBox( box, "GroupBox" );
     tmpQGroupBox->setTitle(i18n("Interface"));
 
@@ -207,13 +204,13 @@ ConfigureInterfacePage::ConfigureInterfacePage( KWView *_view, QVBox *box, char 
     gridX->setRange(0.1, 50, 0.1);
     gridX->setPrecision (1);
     gridX->setSuffix( suffix );
-    gridX->setLabel(i18n("X grid space"));
+    gridX->setLabel(i18n("X grid space:"));
     lay1->addWidget(gridX);
 
     gridY=new KDoubleNumInput( KoUnit::userValue( ptGridY, unit ), tmpQGroupBox );
     gridY->setRange(0.1, 50, 0.1);
     gridY->setPrecision(1);
-    gridY->setLabel(i18n("Y grid space"));
+    gridY->setLabel(i18n("Y grid space:"));
     gridY->setSuffix( suffix );
     lay1->addWidget(gridY);
 
@@ -222,7 +219,7 @@ ConfigureInterfacePage::ConfigureInterfacePage( KWView *_view, QVBox *box, char 
     indent->setRange(0.1, 50, 0.1);
     indent->setPrecision(1);
     indent->setSuffix( suffix );
-    indent->setLabel(i18n("Paragraph indent by toolbar buttons"));
+    indent->setLabel(i18n("Paragraph indent by toolbar buttons:"));
 
     lay1->addWidget(indent);
 
@@ -231,15 +228,12 @@ ConfigureInterfacePage::ConfigureInterfacePage( KWView *_view, QVBox *box, char 
     m_nbPagePerRow->setLabel(i18n("Preview mode - Number of pages per row:"));
 
     lay1->addWidget(m_nbPagePerRow);
-
-    //box->addWidget( tmpQGroupBox);
 }
 
 void ConfigureInterfacePage::apply()
 {
     KWDocument * doc = m_pView->kWordDocument();
     double valX=KoUnit::fromUserValue( gridX->value(), doc->getUnit() );
-    //kdDebug() << "ConfigureInterfacePage::apply gridX->value()=" << gridX->value() << " valX=" << valX << endl;
     double valY=KoUnit::fromUserValue( gridY->value(), doc->getUnit() );
     int nbRecent=recentFiles->value();
     bool ruler=showRuler->isChecked();
@@ -247,7 +241,6 @@ void ConfigureInterfacePage::apply()
     config->setGroup( "Interface" );
     if(valX!=doc->gridX())
     {
-        //kdDebug() << "ConfigureInterfacePage::apply writing gridX=" << valX << endl;
         config->writeEntry( "GridX", valX, true, false, 'g', DBL_DIG /* 6 is not enough */ );
         doc->setGridX(valX);
     }
