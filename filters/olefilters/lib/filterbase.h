@@ -27,8 +27,9 @@
 
 #include <qobject.h>
 #include <qdom.h>
-#include <myfile.h>
+#include <qstringlist.h>
 
+class myFile;
 class QCString;
 
 // Attention: The nameOUT Strings are allocated with new[] in the
@@ -40,7 +41,13 @@ class FilterBase : public QObject {
     Q_OBJECT
 
 public:
+
+    // Default constructor used by subclasses.
     FilterBase();
+    // This filter only ever gets used in error cases, when we could not find a
+    // real filter. So, pass in the names of the OLE streams making up the item
+    // item that could not be converted.
+    FilterBase(QStringList &oleStreams);
     virtual ~FilterBase() {}
 
     // Manages the filtering process
@@ -49,7 +56,7 @@ public:
     // override this to return true if you want to return a plain QCString
     virtual bool plainString() const { return false; }
     // okay -- let's get the QDomDocument
-    virtual const QDomDocument * const part() { return &m_part; }
+    virtual const QDomDocument *const part() { return &m_part; }
     // or get the plain QCString ;)
     virtual QCString CString() const { return QCString(); }
 
@@ -85,5 +92,6 @@ private:
     // Don't copy or assign me...
     FilterBase(const FilterBase &);
     const FilterBase &operator=(const FilterBase &);
+    QStringList m_oleStreams;
 };
 #endif // FILTERBASE_H
