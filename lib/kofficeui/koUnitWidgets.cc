@@ -45,7 +45,7 @@ KoUnitDoubleValidator::validate( QString &s, int &pos ) const
     if ( res > -1 )
     {
         number = s.left( res ).stripWhiteSpace();
-        unit = regexp.cap( 1 ).stripWhiteSpace();
+        unit = regexp.cap( 1 ).stripWhiteSpace(); // ### TODO: if we allow uppercase, we need a lower() here
     }
     else
     {
@@ -54,12 +54,12 @@ KoUnitDoubleValidator::validate( QString &s, int &pos ) const
     kdDebug(30004) << "Split:" << number << ":" << unit << ":" << endl;
     
     bool ok = false;
+    // ### TODO: readNumber is not enough, as it wants 1000 separators at fixed positions, but when editing they might shift.
     const double value = KGlobal::locale()->readNumber( number, &ok );
     double newVal = 0.0;
     if( ok )
     {
         // ### TODO: see if KoUnit has not something similar
-        // ### TODO: long unit names?
         if ( unit.isEmpty() )
             newVal = value; // ### TODO: verify if this is not "Intermediate" instead
         else if( unit == "mm"  )
