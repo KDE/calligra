@@ -500,9 +500,7 @@
  <item find="isnot" replace="is not" />
  <item find="isnt" replace="isn't" />
  <item find="isthe" replace="is the" />
- <item find="it have" replace="it has" />
  <item find="it snot" replace="it's not" />
- <item find="it were" replace="it was" />
  <item find="it' snot" replace="it's not" />
  <item find="it;ll" replace="it'll" />
  <item find="it;s" replace="it's" />
