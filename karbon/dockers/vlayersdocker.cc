@@ -18,24 +18,24 @@
    Boston, MA 02111-1307, USA.
 */
 
-#include <qpushbutton.h>
-#include <qptrvector.h>
-#include <qlayout.h> 
+#include <qhbuttongroup.h>
 #include <qinputdialog.h>
-#include <qpixmap.h>
+#include <qlayout.h> 
+#include <qptrvector.h>
+#include <qpushbutton.h>
 
-#include <klocale.h>
 #include <kiconloader.h>
+#include <klocale.h>
 #include <koMainWindow.h>
 
-#include "vkopainter.h"
-#include "karbon_view.h"
 #include "karbon_part.h"
+#include "karbon_view.h"
 #include "vdocument.h"
+#include "vkopainter.h"
 #include "vlayer.h"
-#include "vselection.h"
-#include "vlayersdocker.h"
 #include "vlayercmd.h"
+#include "vlayersdocker.h"
+#include "vselection.h"
 
 VLayerListViewItem::VLayerListViewItem( QListView* parent, KarbonView* view, VLayer* layer )
 	: QCheckListItem( parent, 0L, CheckBox ), m_view( view ), m_layer( layer )
@@ -93,14 +93,23 @@ VLayersDocker::VLayersDocker( KarbonView* view )
 	
 	setCaption( i18n( "Layers Manager" ) );
 
+	QPushButton* button;
 	QFrame* mainWidget = new QFrame( this );
 	mainWidget->setFrameStyle( QFrame::Box | QFrame::Sunken );
-	QGridLayout* layout = new QGridLayout( mainWidget, 2, 4 );
-	layout->addMultiCellWidget( m_layersListView = new QListView( mainWidget ), 0, 0, 0, 3 );
-	layout->addWidget( m_addButton = new QPushButton( QPixmap( il.iconPath( "14_layer_newlayer.png", KIcon::Small ) ), "", mainWidget ), 1, 0, Qt::AlignCenter );
-	layout->addWidget( m_raiseButton = new QPushButton( QPixmap( il.iconPath( "14_layer_raiselayer.png", KIcon::Small ) ), "", mainWidget ), 1, 1, Qt::AlignCenter );
-	layout->addWidget( m_lowerButton = new QPushButton( QPixmap( il.iconPath( "14_layer_lowerlayer.png", KIcon::Small ) ), "", mainWidget ), 1, 2, Qt::AlignCenter );
-	layout->addWidget( m_deleteButton = new QPushButton( QPixmap( il.iconPath( "14_layer_deletelayer.png", KIcon::Small ) ), "", mainWidget ), 1, 3, Qt::AlignCenter);
+	QVBoxLayout* layout = new QVBoxLayout( mainWidget, 1 );
+	layout->addWidget( m_layersListView = new QListView( mainWidget ), 0 );
+	m_buttonGroup = new QHButtonGroup( mainWidget );
+	m_buttonGroup->setFrameShape( NoFrame );
+	m_buttonGroup->setInsideMargin( 1 );
+	button = new QPushButton( SmallIcon( "14_layer_newlayer.png" ), "", m_buttonGroup );
+	m_buttonGroup->insert( button );
+	button = new QPushButton( SmallIcon( "14_layer_raiselayer.png" ), "", m_buttonGroup );
+	m_buttonGroup->insert( button );
+	button = new QPushButton( SmallIcon( "14_layer_lowerlayer.png" ), "", m_buttonGroup );
+	m_buttonGroup->insert( button );
+	button = new QPushButton( SmallIcon( "14_layer_deletelayer.png" ), "", m_buttonGroup );
+	m_buttonGroup->insert( button );
+	layout->addWidget( m_buttonGroup, 1);
 	layout->setSpacing( 0 );
 	layout->setMargin( 3 );
 	
@@ -113,21 +122,30 @@ VLayersDocker::VLayersDocker( KarbonView* view )
 	m_layersListView->setColumnWidthMode( 2, QListView::Maximum );
 	m_layersListView->setResizeMode( QListView::LastColumn );
 	m_layersListView->setSorting( 0, false );
-	m_addButton->setFixedSize( 30, 30 );
-	m_raiseButton->setFixedSize( 30, 30 );
-	m_lowerButton->setFixedSize( 30, 30 );
-	m_deleteButton->setFixedSize( 30, 30 );
 	
 	connect( m_layersListView, SIGNAL( clicked( QListViewItem*, const QPoint&, int ) ), this, SLOT( selectionChanged( QListViewItem*, const QPoint&, int ) ) );
 	connect( m_layersListView, SIGNAL( rightButtonClicked( QListViewItem*, const QPoint&, int ) ), this, SLOT( renameLayer( QListViewItem*, const QPoint&, int ) ) );
-	connect( m_addButton, SIGNAL( clicked() ), this, SLOT( addLayer() ) );
-	connect( m_raiseButton, SIGNAL( clicked() ), this, SLOT( raiseLayer() ) );
-	connect( m_lowerButton, SIGNAL( clicked() ), this, SLOT( lowerLayer() ) );
-	connect( m_deleteButton, SIGNAL( clicked() ), this, SLOT( deleteLayer() ) );
+	connect( m_buttonGroup, SIGNAL( clicked( int ) ), this, SLOT( slotButtonClicked( int ) ) );
 	
+	layout->activate();
 	updateLayers();
 	setWidget( mainWidget );
 } // VLayerDocker::VLayerDocker
+
+void VLayersDocker::slotButtonClicked( int ID )
+{
+	switch( ID )
+	{
+		case 0:
+			addLayer(); break;
+		case 1:
+			raiseLayer(); break;
+		case 2:
+			lowerLayer(); break;
+		case 3:
+			deleteLayer(); break;
+	}
+}
 
 void VLayersDocker::selectionChanged( QListViewItem* item, const QPoint &, int col )
 {

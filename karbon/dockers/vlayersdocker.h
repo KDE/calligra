@@ -25,9 +25,9 @@
 #include "vdocker.h"
 #include "vdocument.h"
 
-class QPushButton;
-class VLayer;
 class KarbonView;
+class QHButtonGroup;
+class VLayer;
 
 class VLayerListViewItem : public QCheckListItem
 {
@@ -63,18 +63,18 @@ class VLayersDocker : public VDocker
 		void raiseLayer();
 		void lowerLayer();
 		void deleteLayer();
+	
+	private slots:
+		void slotButtonClicked( int ID );
 
 	protected:
 		VLayerListViewItem* listItem( int pos );
 
 	private:	
-		QListView*       m_layersListView;
-		QPushButton*     m_addButton;
-		QPushButton*     m_raiseButton;
-		QPushButton*     m_lowerButton;
-		QPushButton*     m_deleteButton;
+		QListView* m_layersListView;
+		QHButtonGroup* m_buttonGroup;
+		KarbonView* m_view;
 
-		KarbonView*      m_view;
 }; // VLayersDocker
 
 #endif /* _VLAYERSDOCKER_H_ */
