@@ -486,11 +486,11 @@ bool KexiDialogBase::storeDataBlock_internal( const QString &dataString, int o_i
 	if (!ok)
 		return false;
 	if (exists) {
-		return conn->drv_executeSQL( "update kexi__objectdata set o_data="
+		return conn->executeSQL( "update kexi__objectdata set o_data="
 			+ drv->valueToSQL( KexiDB::Field::BLOB, dataString )
 			+ " where o_id=" + QString::number(o_id) + " and " + sql_sub );
 	}
-	return conn->drv_executeSQL( 
+	return conn->executeSQL( 
 		"insert into kexi__objectdata (o_id, o_data, o_sub_id) values ("
 		+ QString::number(o_id) +"," + drv->valueToSQL( KexiDB::Field::BLOB, dataString )
 		+ "," + drv->valueToSQL( KexiDB::Field::Text, dataID ) + ")" );

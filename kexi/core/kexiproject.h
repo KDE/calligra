@@ -49,10 +49,10 @@ class KexiMainWindow;
 class KexiDialogBase;
 
 /**
- * this class represents a project it contains data about connections, 
- * current file state etc..
+ * This class represents a project's controller. It also contains connection data,
+ * current file state, etc.
  */
-class KEXICORE_EXPORT KexiProject : public QObject, public KexiDB::Object
+class KEXICORE_EXPORT KexiProject : public QObject, protected KexiDB::Object
 {
 	Q_OBJECT
 
@@ -121,10 +121,13 @@ class KEXICORE_EXPORT KexiProject : public QObject, public KexiDB::Object
 		//! For convenience
 		KexiDialogBase* openObject(KexiMainWindow *wnd, const QCString &mime, const QString& name, int viewMode = Kexi::DataViewMode);
 
-		/*! Remove part instance pointed by \a item.
-		 \return true on success.
-		*/
+		/*! Remove a part instance pointed by \a item.
+		 \return true on success. */
 		bool removeObject(KexiMainWindow *wnd, KexiPart::Item& item);
+
+		/*! Renames a part instance pointed by \a item to a new name \a newName.
+		 \return true on success. */
+		bool renameObject(KexiMainWindow *wnd, KexiPart::Item& item, const QString& newName);
 
 		/*! Creates part item for given part \a info. 
 		 Newly item will not be saved to the backend but stored in memory only
@@ -171,7 +174,13 @@ class KEXICORE_EXPORT KexiProject : public QObject, public KexiDB::Object
 
 		//! setting not KexiDB-related erorr
 		void setError(const QString &msg, const QString &desc);
-				
+
+		/*! Finds part for \a item. Sets error retrieved from Part Manager 
+		 if the part cannot be found. */
+		KexiPart::Part *findPartFor(KexiPart::Item& item);
+
+		void clearMsg();
+
 	signals:
 		/**
 		 * this signal gets emmited after succesfully connected to a db

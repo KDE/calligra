@@ -57,11 +57,40 @@ class KEXICORE_EXPORT Part : public QObject
 		KexiDialogBase* openInstance(KexiMainWindow *win, KexiPart::Item &item, 
 			int viewMode = Kexi::DataViewMode);
 
-		/*! "Removes" any stored data pointed by \a item (example: table is dropped for table part). 
+		/*! Removes any stored data pointed by \a item (example: table is dropped for table part). 
 		 From now this data is inaccesible, and \a item disappear.
+		 You do not need to remove \a item, or remove object's schema stored in the database,
+		 beacuse this will be done automatically by KexiProject after successful 
+		 call of this method. All object's data blocks are also automatically removed from database 
+		 (from "kexi__objectdata" table).
 		 For this, a database connection associated with kexi project owned by \a win can be used.
-		*/
-		virtual bool remove(KexiMainWindow *win, KexiPart::Item &item) = 0;
+
+		 Database transaction is started by KexiProject before calling this method, 
+		 and it will be rolled back if you return false here.
+		 You shouldn't use by hand transactions here.
+		 
+		 Default implementation does nothing and returns true. */
+		virtual bool remove(KexiMainWindow *win, KexiPart::Item &item)
+			{ return true; }
+
+		/*! Renames stored data pointed by \a item to \a newName 
+		 (example: table name is altered in the database). 
+		 For this, a database connection associated with kexi project owned by \a win can be used. 
+		 You do not need to change \a item, and change object's schema stored in the database,
+		 beacuse this is automatically handled by KexiProject. 
+
+		 Database transaction is started by KexiProject before calling this method, 
+		 and it will be rolled back if you return false here.
+		 You shouldn't use by hand transactions here.
+
+		 Default implementation does nothing and returns true. */
+		virtual bool rename(KexiMainWindow *win, KexiPart::Item &item, const QString& newName) 
+			{ return true; }
+
+		/*! Creates a new view for mode \a viewMode, \a item and \a parent. The view will be 
+		 used inside \a dialog. */
+		virtual KexiViewBase* createView(QWidget *parent, KexiDialogBase* dialog, 
+			KexiPart::Item &item, int viewMode = Kexi::DataViewMode) = 0;
 
 		/*! i18n'd instance name usable for displaying in gui.
 		 @todo move this to Info class when the name could be moved as localized property 
@@ -73,8 +102,6 @@ class KEXICORE_EXPORT Part : public QObject
 		inline GUIClient *guiClient() const { return m_guiClient; }
 
 		inline GUIClient *instanceGuiClient(int mode = 0) const { return m_instanceGuiClients[mode]; }
-
-		virtual KexiViewBase* createView(QWidget *parent, KexiDialogBase* dialog, KexiPart::Item &item, int viewMode = Kexi::DataViewMode) = 0;
 
 		/**
 		 * @returns the datasource object of this part

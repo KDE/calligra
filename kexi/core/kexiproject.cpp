@@ -147,8 +147,9 @@ bool
 KexiProject::createConnection()
 {
 	closeConnection();//for sanity
-	clearError();
-	
+	clearMsg();
+	m_error_title = i18n("Could not connect to \"%1\" database.").arg(m_data->connectionData()->serverInfoString());
+
 	KexiDB::Driver *driver = Kexi::driverManager().driver(m_data->connectionData()->driverName);
 	if(!driver) {
 		setError(&Kexi::driverManager());
@@ -158,7 +159,7 @@ KexiProject::createConnection()
 	m_connection = driver->createConnection(*m_data->connectionData());
 	if (!m_connection)
 	{
-		kdDebug() << "KexiProject::open(): uuups faild " << driver->errorMsg()  << endl;
+		kdDebug() << "KexiProject::open(): uuups failed " << driver->errorMsg()  << endl;
 		setError(driver);
 		return false;
 	}
@@ -293,6 +294,12 @@ KexiProject::item(KexiPart::Info *i, const QString &name)
 	return 0;
 }
 
+void KexiProject::clearMsg()
+{
+	clearError();
+	m_error_title=QString::null;
+}
+
 void KexiProject::setError(int code, const QString &msg )
 {
 	Object::setError(code, msg);
@@ -322,14 +329,21 @@ void KexiProject::setError(const QString &msg, const QString &desc)
 	emit error(msg, desc); //not KexiDB-related
 }
 
+KexiPart::Part *KexiProject::findPartFor(KexiPart::Item& item)
+{
+	clearMsg();
+	KexiPart::Part *part = Kexi::partManager().part(item.mime());
+	if (!part)
+		setError(&Kexi::partManager());
+	return part;
+}
+
 KexiDialogBase* KexiProject::openObject(KexiMainWindow *wnd, KexiPart::Item& item, int viewMode)
 {
-	clearError();
-	KexiPart::Part *part = Kexi::partManager().part(item.mime());
-	if (!part) {
-		setError(&Kexi::partManager());
+	clearMsg();
+	KexiPart::Part *part = findPartFor(item);
+	if (!part)
 		return 0;
-	}
 	KexiDialogBase *dlg  = part->openInstance(wnd, item, viewMode);
 	if (!dlg) {
 		if (part->lastOperationStatus().error())
@@ -349,16 +363,23 @@ KexiDialogBase* KexiProject::openObject(KexiMainWindow *wnd, const QCString &mim
 
 bool KexiProject::removeObject(KexiMainWindow *wnd, KexiPart::Item& item)
 {
-	KexiPart::Part *part = Kexi::partManager().part(item.mime());
-	if (!part) {
-//js TODO:		setError(&Kexi::partManager());
+	clearMsg();
+	KexiPart::Part *part = findPartFor(item);
+	if (!part)
 		return false;
-	}
 	if (!item.neverSaved() && !part->remove(wnd, item)) {
 		//js TODO check for errors
 		return false;
 	}
+	KexiDB::TransactionGuard tg( m_connection );
+	if (!tg.transaction().active())
+		return false;
+	if (!m_connection->removeObject( item.identifier() )) {
+		return false;
+	}
 	emit itemRemoved(item);
+	if (!tg.commit())
+		return false;
 	//now: remove this item from cache
 	if (part->info()) {
 		KexiPart::ItemDict *dict = m_itemDictsCache[ part->info()->projectPartID() ];
@@ -368,11 +389,54 @@ bool KexiProject::removeObject(KexiMainWindow *wnd, KexiPart::Item& item)
 	return true;
 }
 
+bool KexiProject::renameObject( KexiMainWindow *wnd, KexiPart::Item& item, const QString& _newName )
+{
+	clearMsg();
+	QString newName = _newName.stripWhiteSpace();
+	if (newName.isEmpty()) {
+		setError( i18n("Could not set empty name for this object.") );
+		return false;
+	}
+	if (this->item(item.mime(), newName)!=0) {
+		setError( i18n("Could not use this name. Object with name \"%1\" already exists.").arg(newName) );
+		return false;
+	}
+
+	m_error_title = i18n("Could not rename object \"%1\".").arg(item.name());
+	KexiPart::Part *part = findPartFor(item);
+	if (!part)
+		return false;
+	KexiDB::TransactionGuard tg( m_connection );
+	if (!tg.transaction().active()) {
+		setError(m_connection);
+		return false;
+	}
+	if (!part->rename(wnd, item, newName)) {
+		setError(part->lastOperationStatus().message, part->lastOperationStatus().description);
+		return false;
+	}
+	if (!m_connection->executeSQL( "update kexi__objects set o_name="
+		+ m_connection->driver()->valueToSQL( KexiDB::Field::Text, newName )
+		+ " where o_id=" + QString::number(item.identifier()) )) {
+		setError(m_connection);
+		return false;
+	}
+	if (!tg.commit()) {
+		setError(m_connection);
+		return false;
+	}
+	item.setName( newName );
+	return true;
+}
+
 KexiPart::Item* KexiProject::createPartItem(KexiPart::Info *info)
 {
+	clearMsg();
 	KexiPart::Part *part = Kexi::partManager().part(info);
-	if(!part)
+	if (!part) {
+		setError(&Kexi::partManager());
 		return 0;
+	}
 
 	KexiPart::ItemDict *dict = items(info);
 	QString new_name;
