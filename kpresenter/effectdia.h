@@ -46,7 +46,6 @@ public:
 protected:
 	QComboBox *cEffect, *cEffect2;
 	QLabel *lEffect, *lEffect2, *lNum;
-	// KRestrictedLine *eNum;
 	QSpinBox *eNum;
 	QPushButton *cancelBut, *okBut;
 

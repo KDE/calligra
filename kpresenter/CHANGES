@@ -199,3 +199,8 @@ Reggie, 15.5.1999:
 - Some focus handling fixes
 - Fix for loading pixmaps
 - Fixed calcutaion of current page number
+
+Reggie, 16.5.1999:
+------------------
+- More fixes for loading pixmaps
+- Removed code in effectdia which was commented out
