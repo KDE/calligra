@@ -474,11 +474,12 @@ bool KoTextView::moveCursor( CursorAction action )
             break;
         case MoveParagUp: {
             KoTextParag * parag = m_cursor->parag()->prev();
-            if ( parag )
+            if ( m_cursor->index()==0 && parag )
             {
                 m_cursor->setParag( parag );
                 m_cursor->setIndex( 0 );
             }
+            else m_cursor->setIndex( 0 );
         } break;
         case MoveParagDown: {
             KoTextParag * parag = m_cursor->parag()->next();
