@@ -482,9 +482,13 @@ void KWTableFrameSet::recalcRows(int _col, int _row) {
 
     // do positioning.
     Cell *cell;
+    bool setMinFrameSize= activeCell->getFrame(0)->isSelected();
     for(cell=m_cells.first();cell;cell=m_cells.next()) {
         if((cell->m_row >=fromRow && cell->m_row < untilRow) || cell->m_col >= redrawFromCol) 
-            position(cell, cell->m_row <= row-1 && cell->m_row + cell->m_rows > row-1);
+            if(setMinFrameSize)
+                position(cell, cell->m_row <= row-1 && cell->m_row + cell->m_rows > row-1);
+            else
+                position(cell);
     }
     redrawFromCol=m_cols;
 
