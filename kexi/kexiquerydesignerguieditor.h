@@ -30,6 +30,7 @@ class QComboBox;
 class QPushButton;
 class KexiDB;
 class KexiTableView;
+class KexiTableItem;
 class KexiRelationView;
 
 class KexiQueryDesignerGuiEditor : public QWidget
@@ -52,6 +53,9 @@ class KexiQueryDesignerGuiEditor : public QWidget
 
 		QComboBox		*m_tableCombo;
 		QPushButton		*m_addButton;
+
+		KexiTableItem		*m_insertItem;
+		QStringList		m_sourceList;
 };
 
 #endif

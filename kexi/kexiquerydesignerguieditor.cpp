@@ -52,21 +52,58 @@ KexiQueryDesignerGuiEditor::KexiQueryDesignerGuiEditor(KexiQueryDesigner *parent
 
 	m_designTable->viewport()->setAcceptDrops(true);
 	m_designTable->addDropFilter("kexi/field");
-	
-	m_designTable->addColumn(i18n("source"), QVariant::StringList, true, QVariant(kexi->project()->db()->tables()));
+
+	m_sourceList = kexi->project()->db()->tables();
+	m_sourceList.prepend(i18n("[no table]"));
+
+	m_designTable->addColumn(i18n("source"), QVariant::StringList, true, QVariant(m_sourceList));
 	m_designTable->addColumn(i18n("field"), QVariant::String, true);
 	m_designTable->addColumn(i18n("shown"), QVariant::Bool, true);
 	m_designTable->addColumn(i18n("condition"), QVariant::String, true);
 	
-	KexiTableItem *i = new KexiTableItem(m_designTable);
-	i->setValue(0, 1);
-	i->setInsertItem(true);
+	m_insertItem = new KexiTableItem(m_designTable);
+	m_insertItem->setValue(0, 0);
+	m_insertItem->setValue(2, true);
+	m_insertItem->setInsertItem(true);
 
 	QGridLayout *g = new QGridLayout(this);
 	g->addWidget(m_tableCombo,		0,	0);
 	g->addWidget(m_addButton,		0,	1);
 	g->addMultiCellWidget(m_tables,		1,	1,	0,	1);
 	g->addMultiCellWidget(m_designTable,	2,	2,	0,	1);
+}
+
+void
+KexiQueryDesignerGuiEditor::slotDropped(QDropEvent *ev)
+{
+	kdDebug() << "KexiQueryDesignerGuiEditor::slotDropped()" << endl;
+
+	KexiRelationViewTable *sourceTable = static_cast<KexiRelationViewTable *>(ev->source());
+
+	QString srcTable = sourceTable->table();
+	QString srcField(ev->encodedData("kexi/field"));
+
+//	m_insertItem->setValue(0, m_sourceList.findIndex(srcField));
+
+	uint i=0;
+	for(QStringList::Iterator it = m_sourceList.begin(); it != m_sourceList.end(); it++)
+	{
+		kdDebug() << "KexiQueryDesignerGuiEditor::slotDropped()" << srcTable << ":" << (*it) << endl;
+		if(srcTable == (*it))
+		{
+			break;
+		}
+		i++;
+	}
+
+	m_insertItem->setValue(0, i);
+	m_insertItem->setValue(1, srcField);
+	m_insertItem->setInsertItem(false);
+
+	KexiTableItem *newInsert = new KexiTableItem(m_designTable);
+	newInsert->setValue(0, 0);
+	newInsert->setInsertItem(true);
+	m_insertItem = newInsert;
 }
 
 void
@@ -82,12 +119,6 @@ KexiQueryDesignerGuiEditor::slotAddTable()
 	
 	delete r;
 	m_tableCombo->removeItem(m_tableCombo->currentItem());
-}
-
-void
-KexiQueryDesignerGuiEditor::slotDropped(QDropEvent *ev)
-{
-	kdDebug() << "KexiQueryDesignerGuiEditor::slotDropped()" << endl;
 }
 
 KexiQueryDesignerGuiEditor::~KexiQueryDesignerGuiEditor()

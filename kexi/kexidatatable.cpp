@@ -83,7 +83,7 @@ KexiDataTable::executeQuery(QString queryStatement)
 		}
 		else
 		{
-			m_tableView->addColumn(m_record->fieldName(i), m_record->type(i), !m_record->readOnly(), 100, true);
+			m_tableView->addColumn(m_record->fieldName(i), m_record->type(i), !m_record->readOnly(), QVariant(""), 100, true);
 			kdDebug() << "KexiDataTable::executeQuery(): adding auto-inc columns" << endl;
 		}
 	}

@@ -57,6 +57,8 @@ class KexiQueryDesigner::EditGUIClient: public KXMLGUIClient
 		KToggleAction *m_actionView;
 };
 
+//KexiQueryDesigner::EditGUIClient *KexiQueryDesigner::m_editGuiClient=0;
+
 KexiQueryDesigner::KexiQueryDesigner(QWidget *parent, const char *name)
  : KexiDialogBase(parent, name)
 {
