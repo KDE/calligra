@@ -60,3 +60,7 @@ Reggie, 29.3.1999:
 ------------------
 - Fixed a bug with drawing line begins and ends (arrows, circles, etc.)
   of quite thick lines - it's still not perfect but much better now.
+
+Reggie, 2.4.1999:
+-----------------
+- KPresenter uses now keyCompression

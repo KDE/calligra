@@ -112,6 +112,8 @@ KPresenterView::KPresenterView( QWidget *_parent, const char *_name, KPresenterD
 		   this,SLOT(slotUpdateChildGeometry(KPresenterChild*)));
 
   createGUI();
+  
+  setKeyCompression(true);
 }
 
 /*======================= init ============================*/
@@ -3841,7 +3843,7 @@ void KPresenterView::setTool(ToolEditMode toolEditMode)
 {
   if (!m_vToolBarTools || !m_vMenuTools)
     return;
-  
+
   m_vToolBarTools->setButton(ID_TOOL_MOUSE,false);
   m_vToolBarTools->setButton(ID_TOOL_LINE,false);
   m_vToolBarTools->setButton(ID_TOOL_RECT,false);

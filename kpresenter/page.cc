@@ -57,6 +57,7 @@ Page::Page(QWidget *parent=0,const char *name=0,KPresenterView *_view=0)
     }
 
   setFocusPolicy(QWidget::StrongFocus);
+  setKeyCompression(true);
 }
 
 /*======================== destructor ============================*/
@@ -167,7 +168,7 @@ void Page::mousePressEvent(QMouseEvent *e)
   //setFocus();
 
   view->sendFocusEvent();
-  
+
   KPObject *kpobject = 0;
 
   oldMx = e->x();
@@ -696,7 +697,7 @@ void Page::mouseMoveEvent(QMouseEvent *e)
 {
   if (!hasFocus())
     view->sendFocusEvent();
-  
+
   if (editMode)
     {
       view->setRulerMousePos(e->x(),e->y());

@@ -1564,6 +1564,8 @@ KTextObject::KTextObject(QWidget *parent=0,const char *name=0,ObjType ot=PLAIN,
 
   allInOneColor = false;
   autoFocus = false;
+
+  setKeyCompression(true);
 }
 
 /*======================== destructor ============================*/
@@ -4730,7 +4732,7 @@ void KTextObject::mousePressEvent(QMouseEvent *e)
   //setFocus();
 
   emit giveMeFocus();
-  
+
   if (e->button() != RightButton)
     {
       drawSelection = false;
@@ -4816,7 +4818,7 @@ void KTextObject::mouseMoveEvent(QMouseEvent *e)
 {
   if (!hasFocus())
     emit giveMeFocus();
-  
+
   if (mousePressed)
     {
       TxtCursor _startCursor = startCursor;
