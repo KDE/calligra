@@ -286,7 +286,7 @@ void KPTextObject::loadOasis(const QDomElement &element, KoOasisContext& context
     }
     kdDebug()<<" vertical Alignment :"<< ( ( m_textVertAlign== KP_TOP ) ? "top" : ( m_textVertAlign==  KP_CENTER ) ? "center": "bottom" )<<endl;
     resizeTextDocument(); // this will to formatMore()
-    QDomElement tmp = element.firstChild().toElement();
+    QDomElement tmp = element.namedItem("draw:text-box").toElement();
     m_textobj->loadOasisContent( tmp, context, m_doc->styleCollection() );
 }
 
