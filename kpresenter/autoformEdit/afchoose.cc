@@ -59,7 +59,7 @@ void AFChoose::getGroups()
 	    {
 	      grpPtr = new Group;
 	      grpPtr->dir.setFile(afDir + QString(c).stripWhiteSpace() + "/");
-	      grpPtr->name.operator=(QString(qstrdup(c)).stripWhiteSpace());
+	      grpPtr->name = QString(qstrdup(c)).stripWhiteSpace();
 	      groupList.append(grpPtr);
 	    }
 	  strcpy(c,"");

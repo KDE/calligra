@@ -66,8 +66,8 @@ KPresenterView_impl::KPresenterView_impl(QWidget *_parent = 0L,const char *_name
   shadowDia = 0;
   xOffset = 0;
   yOffset = 0;
-  pen.operator=(QPen(black,1,SolidLine));
-  brush.operator=(QBrush(white,SolidPattern));
+  pen = QPen(black,1,SolidLine);
+  brush = QBrush(white,SolidPattern);
   lineBegin = L_NORMAL;
   lineEnd = L_NORMAL;
   setMouseTracking(true);
@@ -1227,8 +1227,8 @@ void KPresenterView_impl::styleOk()
   if (!m_pKPresenterDoc->setPenBrush(styleDia->getPen(),styleDia->getBrush(),styleDia->getLineBegin(),
 				     styleDia->getLineEnd(),xOffset,yOffset))
     {
-      pen.operator=(styleDia->getPen());
-      brush.operator=(styleDia->getBrush());
+      pen = styleDia->getPen();
+      brush = styleDia->getBrush();
       lineBegin = styleDia->getLineBegin();
       lineEnd = styleDia->getLineEnd();
     }

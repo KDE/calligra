@@ -56,8 +56,8 @@ public:
   PBPreview(QWidget* parent=0,const char* name=0,int _paintType=0);
   
   // set values
-  void setPen(QPen _pen) {pen.operator=(_pen); repaint(true);}    
-  void setBrush(QBrush _brush) {brush.operator=(_brush); repaint(true);}
+  void setPen(QPen _pen) {pen = _pen; repaint(true);}    
+  void setBrush(QBrush _brush) {brush = _brush; repaint(true);}
   void setLineBegin(LineEnd lb) {lineBegin = lb; repaint(true);}
   void setLineEnd(LineEnd le) {lineEnd = le; repaint(true);}
 

@@ -104,8 +104,8 @@ KPresenterDocument_impl::KPresenterDocument_impl()
   _rastY = 10;
   _xRnd = 20;
   _yRnd = 20;
-  _txtBackCol.operator=(white);
-  _txtSelCol.operator=(lightGray);
+  _txtBackCol = white;
+  _txtSelCol = lightGray;
   _pageLayout.format = PG_SCREEN;
   _pageLayout.orientation = PG_PORTRAIT;
   _pageLayout.width = PG_SCREEN_WIDTH;
@@ -146,8 +146,8 @@ KPresenterDocument_impl::KPresenterDocument_impl(const CORBA::BOA::ReferenceData
   _rastY = 20;
   _xRnd = 20;
   _yRnd = 20;
-  _txtBackCol.operator=(white);
-  _txtSelCol.operator=(lightGray);
+  _txtBackCol = white;
+  _txtSelCol = lightGray;
   _pageLayout.format = PG_SCREEN;
   _pageLayout.orientation = PG_PORTRAIT;
   _pageLayout.width = PG_SCREEN_WIDTH;
@@ -530,8 +530,8 @@ bool KPresenterDocument_impl::load(KOMLParser& parser)
       _rastY = 20;
       _xRnd = 20;
       _yRnd = 20;
-      _txtBackCol.operator=(white);
-      _txtSelCol.operator=(lightGray);
+      _txtBackCol = white;
+      _txtSelCol = lightGray;
     }
 
   // DOC
@@ -1216,8 +1216,8 @@ void KPresenterDocument_impl::loadTxtObj(KOMLParser& parser,vector<KOMLAttrib>& 
 		b = atoi((*it).m_strValue.c_str());
 	    }
 	  color.setRgb(r,g,b);
-	  elt.font.operator=(font);
-	  elt.color.operator=(color);
+	  elt.font = font;
+	  elt.color = color;
 	  txtPtr->setEnumListType(elt);
 	}
       
@@ -1248,8 +1248,8 @@ void KPresenterDocument_impl::loadTxtObj(KOMLParser& parser,vector<KOMLAttrib>& 
 		b = atoi((*it).m_strValue.c_str());
 	    }
 	  color.setRgb(r,g,b);
-	  ult.font.operator=(font);
-	  ult.color.operator=(color);
+	  ult.font = font;
+	  ult.color = color;
 	  txtPtr->setUnsortListType(ult);
 	}
 
@@ -1517,7 +1517,7 @@ void KPresenterDocument_impl::setPageLayout(KoPageLayout pgLayout,int diffx,int 
 	  QWMatrix m;
  	  m.scale((float)getPageSize(pagePtr->pageNum,diffx,diffy).width()/pagePtr->obackPix.width(),
  		  (float)getPageSize(pagePtr->pageNum,diffx,diffy).height()/pagePtr->obackPix.height());
- 	  pagePtr->backPix.operator=(pagePtr->obackPix.xForm(m));
+ 	  pagePtr->backPix = pagePtr->obackPix.xForm(m);
 	 }
        if (pagePtr->backType == BT_CLIP)
 	 {
@@ -1550,8 +1550,8 @@ unsigned int KPresenterDocument_impl::insertNewPage(int diffx,int diffy)
   pagePtr->pic->move(getPageSize(pagePtr->pageNum,diffx,diffy).x(),
  		     getPageSize(pagePtr->pageNum,diffx,diffy).y());
   pagePtr->pic->hide();
-  pagePtr->backColor1.operator=(white);
-  pagePtr->backColor2.operator=(white);
+  pagePtr->backColor1 = white;
+  pagePtr->backColor2 = white;
   pagePtr->bcType = BCT_PLAIN;
   pagePtr->cPix = new QPixmap(getPageSize(pagePtr->pageNum,diffx,diffy).width(),
 			      getPageSize(pagePtr->pageNum,diffx,diffy).height()); 
@@ -1590,8 +1590,8 @@ void KPresenterDocument_impl::setBackColor(unsigned int pageNum,QColor backColor
     {
       if (pagePtr->pageNum == pageNum)
 	{
-	  pagePtr->backColor1.operator=(backColor1);
-	  pagePtr->backColor2.operator=(backColor2);
+	  pagePtr->backColor1 = backColor1;
+	  pagePtr->backColor2 = backColor2;
 	  pagePtr->bcType = bcType;
 	  //emit restoreBackColor(pageNum-1);
 	  return;
@@ -1705,7 +1705,7 @@ void KPresenterDocument_impl::setBPicView(unsigned int pageNum,BackView picView)
       if (pagePtr->pageNum == pageNum)
 	{
 	  pagePtr->backPicView = picView;
-	  pagePtr->backPix.operator=(QPixmap(pagePtr->obackPix));
+	  pagePtr->backPix = QPixmap(pagePtr->obackPix);
 	  if ((picView == BV_ZOOM) && (!pagePtr->backPix.isNull()))
 	    {
 	      QWMatrix m;

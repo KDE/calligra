@@ -1058,10 +1058,10 @@ TxtLine* TxtParagraph::toOneLine()
     {
       // concat all lines to one line
       if (lines() == 1)
-	linePtr->operator=(lineAt(0));
+	*linePtr = lineAt(0);
       else
 	for (i = 0;i < lines();i++)
-	  linePtr->operator+=(lineAt(i));
+	  *linePtr += lineAt(i);
       
       // clear the list and return the pointer to the resulting line 
       lineList.clear();
@@ -1466,7 +1466,7 @@ KTextObject::KTextObject(QWidget *parent=0,const char *name=0,ObjType ot=PLAIN,
   ystart = 0;
   drawSelection = false;
 
-  selectionColor.operator=(QColor(0,255,255));
+  selectionColor = QColor(0,255,255);
   
   TxtParagraph *para;
   para = new TxtParagraph(true);
@@ -1598,7 +1598,7 @@ void KTextObject::zoom(float _fakt)
 	  for (k = 0;k < txtLine->items();k++)
 	    {
 	      txtObj = txtLine->itemAt(k);
-	      font.operator=(txtObj->font());
+	      font = txtObj->font();
 	      txtObj->setOrigSize(txtObj->font().pointSize());
 	      font.setPointSize(((int)((float)font.pointSize() * _fakt)));
 	      txtObj->setFont(font);
@@ -1606,15 +1606,15 @@ void KTextObject::zoom(float _fakt)
 	}
     }
   
-  font.operator=(objEnumListType.font);
-  objEnumListType.ofont.operator=(font);
+  font = objEnumListType.font;
+  objEnumListType.ofont = font;
   font.setPointSize(((int)((float)font.pointSize() * _fakt)));
-  objEnumListType.font.operator=(font);
+  objEnumListType.font = font;
 
-  font.operator=(objUnsortListType.font);
-  objUnsortListType.ofont.operator=(font);
+  font = objUnsortListType.font;
+  objUnsortListType.ofont = font;
   font.setPointSize(((int)((float)font.pointSize() * _fakt)));
-  objUnsortListType.font.operator=(font);
+  objUnsortListType.font = font;
 
   recalc();
   repaint(false);
@@ -1640,15 +1640,15 @@ void KTextObject::zoomOrig()
 	  for (k = 0;k < txtLine->items();k++)
 	    {
 	      txtObj = txtLine->itemAt(k);
-	      font.operator=(txtObj->font());
+	      font = txtObj->font();
 	      font.setPointSize(txtObj->origSize());
 	      txtObj->setFont(font);
 	    }
 	}
     }
 
-  objEnumListType.font.operator=(objEnumListType.ofont);
-  objUnsortListType.font.operator=(objUnsortListType.ofont);
+  objEnumListType.font = objEnumListType.ofont;
+  objUnsortListType.font = objUnsortListType.ofont;
 
   recalc();
   repaint(false);
@@ -2257,8 +2257,8 @@ void KTextObject::parseHTML(QString text)
 		    font.setBold(oldFont.bold());
 		    font.setItalic(oldFont.italic());
 		    font.setUnderline(oldFont.underline());
-		    oldFont.operator=(font);
-		    oldColor.operator=(color);
+		    oldFont = font;
+		    oldColor = color;
 		    
 		    if (!parsedTag.attribs.isEmpty())
 		      {
@@ -2279,8 +2279,8 @@ void KTextObject::parseHTML(QString text)
 		    oldFont.setBold(font.bold());
 		    oldFont.setItalic(font.italic());
 		    oldFont.setUnderline(font.underline());
-		    font.operator=(oldFont);
-		    color.operator=(oldColor);
+		    font = oldFont;
+		    color = oldColor;
 		  }
 	      } break;
 	    case BOLD:
@@ -4567,7 +4567,7 @@ void KTextObject::mousePressEvent(QMouseEvent *e)
 	  rbMenu->setItemEnabled(CB_PASTE,false);
 
 	QPoint pnt;
-	pnt.operator=(QCursor::pos());
+	pnt = QCursor::pos();
 	rbMenu->popup(pnt);
       } break;
     }

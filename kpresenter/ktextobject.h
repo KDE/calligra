@@ -1820,7 +1820,7 @@ protected:
   bool insertChar(char);
 
   bool sameEffects(TxtObj *to)
-    {return (currFont.operator==(to->font()) && currColor.operator==(to->color()));}
+    {return (currFont == to->font() && currColor == to->color());}
 
   bool makeCursorVisible();
   

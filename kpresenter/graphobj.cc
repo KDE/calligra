@@ -128,7 +128,7 @@ QPixmap GraphObj::getPix()
   if (width() != pix.width() || height() != pix.height())
     {
       m.scale((float)width()/origPix.width(),(float)height()/origPix.height());
-      pix.operator=(QPixmap(origPix));
+      pix = QPixmap(origPix);
       pix = pix.xForm(m);
     }
 

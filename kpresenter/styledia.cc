@@ -26,8 +26,8 @@ PBPreview::PBPreview(QWidget* parent=0,const char* name=0,int _paintType=0)
   : QWidget(parent,name)
 {
   paintType = _paintType;
-  pen.operator=(QPen(black,1,SolidLine));
-  brush.operator=(QBrush(white,SolidPattern));
+  pen = QPen(black,1,SolidLine);
+  brush = QBrush(white,SolidPattern);
 }
 
 /*================== paint event =================================*/
@@ -120,7 +120,7 @@ StyleDia::StyleDia(QWidget* parent=0,const char* name=0)
   choosePWidth->insertItem("10");
   connect(choosePWidth,SIGNAL(activated(int)),this,SLOT(changePWidth(int)));
 
-  pen.operator=(QPen(black,1,SolidLine));
+  pen = QPen(black,1,SolidLine);
   
   llineBegin = new QLabel(penFrame);
   llineBegin->setText(i18n("Choose line begin:"));
@@ -194,7 +194,7 @@ StyleDia::StyleDia(QWidget* parent=0,const char* name=0)
   chooseBCol->resize(chooseBStyle->width(),chooseBCol->height());
   connect(chooseBStyle,SIGNAL(activated(int)),this,SLOT(changeBStyle(int)));
 
-  brush.operator=(QBrush(white,SolidPattern));
+  brush = QBrush(white,SolidPattern);
 
   brushPrev = new PBPreview(brushFrame,"brushPrev",1);
   brushPrev->move(brushStyle->x(),chooseBStyle->y()+chooseBStyle->height()+20);
@@ -248,7 +248,7 @@ StyleDia::~StyleDia()
 /*=========================== set pen =============================*/
 void StyleDia::setPen(QPen _pen)
 {
-  pen.operator=(_pen);
+  pen = _pen;
   penPrev->setPen(pen);
   switch (pen.style())
     {
@@ -265,7 +265,7 @@ void StyleDia::setPen(QPen _pen)
 /*========================= set brush =============================*/
 void StyleDia::setBrush(QBrush _brush)
 {
-  brush.operator=(_brush);
+  brush = _brush;
   brushPrev->setBrush(brush);
   switch (brush.style())
     {

@@ -698,7 +698,7 @@ void Page::mousePressEvent(QMouseEvent *e)
 		  mousePressed = false;
 		  deSelectAllObj();
 		  selectObj(objNum);
-		  pnt.operator=(QCursor::pos());
+		  pnt = QCursor::pos();
 		  picMenu->popup(pnt);
 		  modType = MT_NONE;
 		  resizeObjNum = 0;
@@ -708,14 +708,14 @@ void Page::mousePressEvent(QMouseEvent *e)
 		  mousePressed = false;
 		  deSelectAllObj();
 		  selectObj(objNum);
-		  pnt.operator=(QCursor::pos());
+		  pnt = QCursor::pos();
 		  clipMenu->popup(pnt);
 		  modType = MT_NONE;
 		  resizeObjNum = 0;
 		}
 	      else if (objPtr->objType == OT_TEXT)
 		{
-		  pnt.operator=(QCursor::pos());
+		  pnt = QCursor::pos();
 		  txtMenu->popup(pnt);
 		  mousePressed = false;
 		  modType = MT_NONE;
@@ -723,7 +723,7 @@ void Page::mousePressEvent(QMouseEvent *e)
 		}
 	      else
 		{
-		  pnt.operator=(QCursor::pos());
+		  pnt = QCursor::pos();
 		  graphMenu->popup(pnt);
 		  mousePressed = false;
 		  modType = MT_NONE;
@@ -756,7 +756,7 @@ void Page::mousePressEvent(QMouseEvent *e)
       else if (e->button() == RightButton)
 	{
 	  setCursor(arrowCursor);
-	  pnt.operator=(QCursor::pos());
+	  pnt = QCursor::pos();
 	  presMenu->popup(pnt);
 	} 
     }
@@ -1550,13 +1550,13 @@ void Page::startScreenPresentation(bool zoom)
 	  QWMatrix m;
  	  m.scale((float)getPageSize(pagePtr->pageNum,_presFakt).width()/pagePtr->obackPix.width(),
  		  (float)getPageSize(pagePtr->pageNum,_presFakt).height()/pagePtr->obackPix.height());
- 	  pagePtr->backPix.operator=(pagePtr->obackPix.xForm(m));
+ 	  pagePtr->backPix = pagePtr->obackPix.xForm(m);
 	}
       if (pagePtr->backType == BT_PIC && pagePtr->backPicView == BV_CENTER)
 	{
 	  QWMatrix m;
  	  m.scale(_presFakt,_presFakt);
- 	  pagePtr->backPix.operator=(pagePtr->obackPix.xForm(m));
+ 	  pagePtr->backPix = pagePtr->obackPix.xForm(m);
 	}
       restoreBackColor(i);
     }
@@ -1642,10 +1642,10 @@ void Page::stopScreenPresentation()
 	  QWMatrix m;
  	  m.scale((float)getPageSize(pagePtr->pageNum,_presFakt).width()/pagePtr->obackPix.width(),
  		  (float)getPageSize(pagePtr->pageNum,_presFakt).height()/pagePtr->obackPix.height());
- 	  pagePtr->backPix.operator=(pagePtr->obackPix.xForm(m));
+ 	  pagePtr->backPix = pagePtr->obackPix.xForm(m);
 	}
       if (pagePtr->backType == BT_PIC && pagePtr->backPicView == BV_CENTER)
-	pagePtr->backPix.operator=(pagePtr->obackPix);
+	pagePtr->backPix = pagePtr->obackPix;
       pagePtr->cPix->resize(getPageSize(pagePtr->pageNum,_presFakt).width(),
 			    getPageSize(pagePtr->pageNum,_presFakt).height());
       restoreBackColor(i);

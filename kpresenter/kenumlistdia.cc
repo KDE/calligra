@@ -273,13 +273,13 @@ void KEnumListDia::underlChanged()
 /*======================= before changed ========================*/
 void KEnumListDia::beforeChanged(const char* str)
 {
-  _before.operator=(str);
+  _before = str;
 }
 
 /*======================= after changed =========================*/
 void KEnumListDia::afterChanged(const char* str)
 {
-  _after.operator=(str);
+  _after = str;
 }
 
 

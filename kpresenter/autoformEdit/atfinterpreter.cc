@@ -57,7 +57,7 @@ void ATFInterpreter::load(const char* fileName)
       while (!ptA.atEnd())
 	{
 	  ptA.readLine(cLine,256);
-	  line.operator=(simplify(QString(qstrdup(cLine))));
+	  line = simplify(QString(qstrdup(cLine)));
 	  lines.append(qstrdup(line));
 	}
       ptA.close();
@@ -344,7 +344,7 @@ void ATFInterpreter::interpret()
 	{
 	  if (level.top()->l == LEVEL_NULL)
 	    {
-	      if (operator==(line,PNT_BG))
+	      if (line == PNT_BG)
 		{
 		  coordPtr = new Coord;
 		  lPtr = new ls;
@@ -356,22 +356,22 @@ void ATFInterpreter::interpret()
 	  else if (level.top()->l == LEVEL_POINT)
 	    {
 	      lPtr = new ls;
-	      if (operator==(line,X_BG))
+	      if (line == X_BG)
 		{
 		  lPtr->l = LEVEL_X;
 		  level.push(lPtr);
 		}
-	      else if (operator==(line,Y_BG))
+	      else if (line == Y_BG)
 		{
 		  lPtr->l = LEVEL_Y;
 		  level.push(lPtr);
 		}
-	      else if (operator==(line,ATTR_BG))
+	      else if (line == ATTR_BG)
 		{
 		  lPtr->l = LEVEL_ATTR;
 		  level.push(lPtr);
 		}
-	      else if (operator==(line,END))
+	      else if (line = END)
 		{
 		  level.pop();
 		  coordList.append(coordPtr);

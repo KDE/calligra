@@ -73,9 +73,9 @@ public:
   int getLineType() {return lineType;}
   void setRectType(RectType t) {rectType = t;}
   int getRectType() {return rectType;}
-  void setObjPen(QPen p) {oPen.operator=(p);}
+  void setObjPen(QPen p) {oPen = p;}
   QPen getObjPen() {return oPen;}
-  void setObjBrush(QBrush b) {oBrush.operator=(b);}
+  void setObjBrush(QBrush b) {oBrush = b;}
   QBrush getObjBrush() {return oBrush;}
   void setFileName(QString fn);
   QString getFileName() {return fileName;}
