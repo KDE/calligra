@@ -95,35 +95,36 @@ KPTTaskDialog::KPTTaskDialog(KPTTask &task, QWidget *p, const char *n)
 }
 
 
-KMacroCommand *KPTTaskDialog::buildCommand() {
+KMacroCommand *KPTTaskDialog::buildCommand(KPTPart *part) {
     KMacroCommand *cmd = new KMacroCommand(i18n("Modify Task"));
     bool modified = false;
 
     KPTDuration dt = KPTDuration();
 
     if (m_task.name() != m_name->text()) {
-        cmd->addCommand(new KPTNodeModifyNameCmd(m_task, m_name->text()));
+        cmd->addCommand(new KPTNodeModifyNameCmd(part, m_task, m_name->text()));
         modified = true;
     }
     if (m_task.leader() != m_leader->text()) {
-        cmd->addCommand(new KPTNodeModifyLeaderCmd(m_task, m_leader->text()));
+        cmd->addCommand(new KPTNodeModifyLeaderCmd(part, m_task, m_leader->text()));
         modified = true;
     }
     if (m_task.description() != m_description->text()) {
-        cmd->addCommand(new KPTNodeModifyDescriptionCmd(m_task, m_description->text()));
+        cmd->addCommand(new KPTNodeModifyDescriptionCmd(part, m_task, m_description->text()));
         modified = true;
     }
     KPTNode::ConstraintType c = (KPTNode::ConstraintType)m_generalTab->schedulingType();
     if (c != m_task.constraint()) {
-        cmd->addCommand(new KPTNodeModifyConstraintCmd(m_task, c));
+        cmd->addCommand(new KPTNodeModifyConstraintCmd(part, m_task, c));
         modified = true;
     }
     if (c == KPTNode::FinishNotLater || c == KPTNode::StartNotEarlier || c == KPTNode::MustStartOn) {
-        cmd->addCommand(new KPTNodeModifyConstraintTimeCmd(m_task, m_generalTab->dateTime()));
+        cmd->addCommand(new KPTNodeModifyConstraintTimeCmd(part, m_task, m_generalTab->dateTime()));
         modified = true;
     }
     KMacroCommand *m = m_resourcesTab->buildCommand();
     if (m) {
+        kdDebug()<<k_funcinfo<<"ResourceTab modified"<<endl;
         cmd->addCommand(m);
         modified = true;
     }

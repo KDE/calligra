@@ -20,21 +20,23 @@
 #ifndef KPTCOMMAND_H
 #define KPTCOMMAND_H
 
-#include "kptnode.h"
-#include "kptproject.h"
-
 #include <kcommand.h>
+#include "kptnode.h"
+
 class QString;
+class KPTProject;
 class KPTCalendar;
+class KPTPart;
 
 class KPTCalendarAddCmd : public KNamedCommand
 {
 public:
-    KPTCalendarAddCmd(KPTProject *project, KPTCalendar *cal, QString name=0);
+    KPTCalendarAddCmd(KPTPart *part, KPTProject *project, KPTCalendar *cal, QString name=0);
     void execute();
     void unexecute();
 
 private:
+    KPTPart *m_part;
     KPTProject *m_project;
     KPTCalendar *m_cal;
     bool m_added;
@@ -43,22 +45,24 @@ private:
 class KPTCalendarDeleteCmd : public KNamedCommand
 {
 public:
-    KPTCalendarDeleteCmd(KPTCalendar *cal, QString name=0);
+    KPTCalendarDeleteCmd(KPTPart *part, KPTCalendar *cal, QString name=0);
     void execute();
     void unexecute();
 
 private:
+    KPTPart *m_part;
     KPTCalendar *m_cal;
 };
 
 class KPTNodeAddCmd : public KNamedCommand
 {
 public:
-    KPTNodeAddCmd(KPTProject *project, KPTNode *node, KPTNode *position, QString name=0);
+    KPTNodeAddCmd(KPTPart *part, KPTProject *project, KPTNode *node, KPTNode *position, QString name=0);
     void execute();
     void unexecute();
 
 protected:
+    KPTPart *m_part;
     KPTProject *m_project;
     KPTNode *m_node;
     KPTNode *m_position;
@@ -68,25 +72,26 @@ protected:
 class KPTNodeDeleteCmd : public KNamedCommand
 {
 public:
-    KPTNodeDeleteCmd(KPTNode *node, QString name=0);
+    KPTNodeDeleteCmd(KPTPart *part, KPTNode *node, QString name=0);
     void execute();
     void unexecute();
 
 private:
+    KPTPart *m_part;
     KPTNode *m_node;
 };
 
 class KPTTaskAddCmd : public KPTNodeAddCmd
 {
 public:
-    KPTTaskAddCmd(KPTProject *project, KPTNode *node, KPTNode *position,  QString name=0);
+    KPTTaskAddCmd(KPTPart *part, KPTProject *project, KPTNode *node, KPTNode *position,  QString name=0);
     void execute();
 };
 
 class KPTSubtaskAddCmd : public KPTNodeAddCmd
 {
 public:
-    KPTSubtaskAddCmd(KPTProject *project, KPTNode *node, KPTNode *position,  QString name=0);
+    KPTSubtaskAddCmd(KPTPart *part, KPTProject *project, KPTNode *node, KPTNode *position,  QString name=0);
     void execute();
 };
 
@@ -94,11 +99,12 @@ public:
 class KPTNodeModifyNameCmd : public KNamedCommand
 {
 public:
-    KPTNodeModifyNameCmd(KPTNode &node, QString nodename, QString name=0);
+    KPTNodeModifyNameCmd(KPTPart *part, KPTNode &node, QString nodename, QString name=0);
     void execute();
     void unexecute();
 
 private:
+    KPTPart *m_part;
     KPTNode &m_node;
     QString newName;
     QString oldName;
@@ -107,11 +113,12 @@ private:
 class KPTNodeModifyLeaderCmd : public KNamedCommand
 {
 public:
-    KPTNodeModifyLeaderCmd(KPTNode &node, QString leader, QString name=0);
+    KPTNodeModifyLeaderCmd(KPTPart *part, KPTNode &node, QString leader, QString name=0);
     void execute();
     void unexecute();
 
 private:
+    KPTPart *m_part;
     KPTNode &m_node;
     QString newLeader;
     QString oldLeader;
@@ -120,11 +127,12 @@ private:
 class KPTNodeModifyDescriptionCmd : public KNamedCommand
 {
 public:
-    KPTNodeModifyDescriptionCmd(KPTNode &node, QString description, QString name=0);
+    KPTNodeModifyDescriptionCmd(KPTPart *part, KPTNode &node, QString description, QString name=0);
     void execute();
     void unexecute();
 
 private:
+    KPTPart *m_part;
     KPTNode &m_node;
     QString newDescription;
     QString oldDescription;
@@ -133,11 +141,12 @@ private:
 class KPTNodeModifyConstraintCmd : public KNamedCommand
 {
 public:
-    KPTNodeModifyConstraintCmd(KPTNode &node, KPTNode::ConstraintType c, QString name=0);
+    KPTNodeModifyConstraintCmd(KPTPart *part, KPTNode &node, KPTNode::ConstraintType c, QString name=0);
     void execute();
     void unexecute();
 
 private:
+    KPTPart *m_part;
     KPTNode &m_node;
     KPTNode::ConstraintType newConstraint;
     KPTNode::ConstraintType oldConstraint;
@@ -146,11 +155,12 @@ private:
 class KPTNodeModifyConstraintTimeCmd : public KNamedCommand
 {
 public:
-    KPTNodeModifyConstraintTimeCmd(KPTNode &node, QDateTime dt, QString name=0);
+    KPTNodeModifyConstraintTimeCmd(KPTPart *part, KPTNode &node, QDateTime dt, QString name=0);
     void execute();
     void unexecute();
 
 private:
+    KPTPart *m_part;
     KPTNode &m_node;
     QDateTime newTime;
     QDateTime oldTime;
@@ -159,11 +169,12 @@ private:
 class KPTNodeIndentCmd : public KNamedCommand
 {
 public:
-    KPTNodeIndentCmd(KPTNode &node, QString name=0);
+    KPTNodeIndentCmd(KPTPart *part, KPTNode &node, QString name=0);
     void execute();
     void unexecute();
 
 private:
+    KPTPart *m_part;
     KPTNode &m_node;
     KPTNode *m_oldparent, *m_newparent;
     int m_oldindex, m_newindex;
@@ -172,11 +183,12 @@ private:
 class KPTNodeUnindentCmd : public KNamedCommand
 {
 public:
-    KPTNodeUnindentCmd(KPTNode &node, QString name=0);
+    KPTNodeUnindentCmd(KPTPart *part, KPTNode &node, QString name=0);
     void execute();
     void unexecute();
 
 private:
+    KPTPart *m_part;
     KPTNode &m_node;
     KPTNode *m_oldparent, *m_newparent;
     int m_oldindex, m_newindex;
@@ -185,11 +197,12 @@ private:
 class KPTNodeMoveUpCmd : public KNamedCommand
 {
 public:
-    KPTNodeMoveUpCmd(KPTNode &node, QString name=0);
+    KPTNodeMoveUpCmd(KPTPart *part, KPTNode &node, QString name=0);
     void execute();
     void unexecute();
 
 private:
+    KPTPart *m_part;
     KPTNode &m_node;
     int m_oldindex, m_newindex;
 };
@@ -197,11 +210,12 @@ private:
 class KPTNodeMoveDownCmd : public KNamedCommand
 {
 public:
-    KPTNodeMoveDownCmd(KPTNode &node, QString name=0);
+    KPTNodeMoveDownCmd(KPTPart *part, KPTNode &node, QString name=0);
     void execute();
     void unexecute();
 
 private:
+    KPTPart *m_part;
     KPTNode &m_node;
     int m_oldindex, m_newindex;
 };

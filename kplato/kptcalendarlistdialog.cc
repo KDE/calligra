@@ -21,6 +21,7 @@
 #include "kptproject.h"
 #include "kptcalendar.h"
 #include "kptcommand.h"
+#include "kptpart.h"
 
 #include <qpushbutton.h>
 #include <qcombobox.h>
@@ -72,11 +73,11 @@ public:
         if (!base) return false;
         return base == item || base->hasBaseCalendar(item);
     }
-    void ok(KPTProject &p, KMacroCommand *macro) {
+    void ok(KPTPart *part, KPTProject &p, KMacroCommand *macro) {
         if (state == New) {
             //kdDebug()<<k_funcinfo<<"add: "<<calendar->name()<<" p="<<&p<<endl;
             base ? calendar->setParent(base->baseCalendar()) : calendar->setParent(0);
-            macro->addCommand(new KPTCalendarAddCmd(&p, calendar));
+            macro->addCommand(new KPTCalendarAddCmd(part, &p, calendar));
             calendar = 0;
         } else if (state == Modified) {
             //kdDebug()<<k_funcinfo<<"modified: "<<calendar->name()<<endl;
@@ -163,7 +164,7 @@ KPTCalendarListDialog::KPTCalendarListDialog(KPTProject &p, QWidget *parent, con
     connect(dia, SIGNAL(enableButtonOk(bool)), SLOT(enableButtonOK(bool)));
 }
 
-KMacroCommand *KPTCalendarListDialog::buildCommand() {
+KMacroCommand *KPTCalendarListDialog::buildCommand(KPTPart *part) {
     //kdDebug()<<k_funcinfo<<endl;
     KMacroCommand *cmd = new KMacroCommand(i18n("Modify Calendars"));
     bool modified = false;
@@ -171,7 +172,7 @@ KMacroCommand *KPTCalendarListDialog::buildCommand() {
     for (; it.current(); ++it) {
         //kdDebug()<<k_funcinfo<<"deleted: "<<it.current()->calendar->name()<<endl;
         if (it.current()->original) {
-            cmd->addCommand(new KPTCalendarDeleteCmd(it.current()->original));
+            cmd->addCommand(new KPTCalendarDeleteCmd(part, it.current()->original));
             modified = true;
         }
     }
@@ -179,7 +180,7 @@ KMacroCommand *KPTCalendarListDialog::buildCommand() {
     for (;cit.current(); ++cit) {
         CalendarListViewItem *item = dynamic_cast<CalendarListViewItem *>(cit.current());
         if (item) {
-            item->ok(project, cmd);
+            item->ok(part, project, cmd);
             modified = true;
         }
     }

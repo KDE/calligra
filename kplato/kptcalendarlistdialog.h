@@ -30,6 +30,7 @@
 
 class KMacroCommand;
 class KPTProject;
+class KPTPart;
 class CalendarListViewItem;
 
 class KPTCalendarListDialogImpl : public KPTCalendarListDialogBase {
@@ -72,7 +73,7 @@ class KPTCalendarListDialog : public KDialogBase {
 public:
     KPTCalendarListDialog(KPTProject &project, QWidget *parent=0, const char *name=0);
     
-    KMacroCommand *buildCommand();
+    KMacroCommand *buildCommand(KPTPart *part);
 
 protected slots:
     void slotOk();

@@ -27,6 +27,7 @@
 class KPTTaskGeneralPanelBase;
 class KPTRequestResourcesPanel;
 class KPTTaskNotesPanelBase;
+class KPTPart;
 class KPTTask;
 class KLineEdit;
 class KMacroCommand;
@@ -43,7 +44,7 @@ class KPTTaskDialog : public KDialogBase {
 public:
     KPTTaskDialog(KPTTask &task, QWidget *parent=0, const char *name=0);
 
-    KMacroCommand *buildCommand();
+    KMacroCommand *buildCommand(KPTPart *part);
 
 protected slots:
     void slotOk();

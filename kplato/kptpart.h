@@ -63,6 +63,8 @@ public:
 
     void addCommand(KCommand * cmd, bool execute=true);
     
+    void setCommandType(int type);
+    
 protected:
     virtual KoView* createViewInstance(QWidget* parent, const char* name);
 
@@ -75,6 +77,7 @@ private:
     KPTProjectDialog *m_projectDialog;
     KPTView *m_view;
     KoCommandHistory *m_commandHistory;
+    bool m_update, m_calculate;
 };
 
 #endif

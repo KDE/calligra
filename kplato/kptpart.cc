@@ -41,6 +41,7 @@ KPTPart::KPTPart(QWidget *parentWidget, const char *widgetName,
     : KoDocument(parentWidget, widgetName, parent, name, singleViewMode),
       m_project(0), m_projectDialog(0), m_view(0)
 {
+    m_update = m_calculate = false;
     m_project = new KPTProject();
     m_commandHistory = new KoCommandHistory(actionCollection());
 
@@ -257,7 +258,19 @@ void KPTPart::addCommand(KCommand * cmd, bool execute)
 void KPTPart::slotCommandExecuted() {
     //kdDebug()<<k_funcinfo<<endl;
     setModified(true);
-    m_view->slotUpdate(false); // Update views, don't calculate (?)
+    if (m_calculate)
+        m_view->slotUpdate(true);
+    else if (m_update)
+        m_view->slotUpdate(false);
+    m_update = m_calculate = false;
+}
+
+void KPTPart::setCommandType(int type) {
+    //kdDebug()<<k_funcinfo<<"type="<<type<<endl;
+    if (type == 0)
+        m_update = true;
+    else if (type == 1)
+        m_calculate = true;
 }
 
 #include "kptpart.moc"

@@ -300,7 +300,7 @@ void KPTView::slotProjectEdit() {
 void KPTView::slotProjectCalendar() {
     KPTCalendarListDialog *dia = new KPTCalendarListDialog(getProject());
     if (dia->exec()) {
-        KMacroCommand *cmd = dia->buildCommand();
+        KMacroCommand *cmd = dia->buildCommand(getPart());
         if (cmd) {
             //kdDebug()<<k_funcinfo<<"Modifying calendar(s)"<<endl;
             getPart()->addCommand(cmd); //also executes
@@ -312,7 +312,7 @@ void KPTView::slotProjectCalendar() {
 void KPTView::slotProjectWorktime() {
     KPTStandardWorktimeDialog *dia = new KPTStandardWorktimeDialog(getProject());
     if (dia->exec()) {
-        KMacroCommand *cmd = dia->buildCommand();
+        KMacroCommand *cmd = dia->buildCommand(getPart());
         if (cmd) {
             //kdDebug()<<k_funcinfo<<"Modifying calendar(s)"<<endl;
             getPart()->addCommand(cmd); //also executes
@@ -353,12 +353,11 @@ void KPTView::slotAddSubTask() {
 		KPTNode *currNode = currentTask();
 		if (currNode)
         {
-            KMacroCommand *m = dia->buildCommand();
+            KMacroCommand *m = dia->buildCommand(getPart());
             m->execute(); // do changes to task
             delete m;
-            KPTSubtaskAddCmd *cmd = new KPTSubtaskAddCmd(&(getProject()), node, currNode, i18n("Add Subtask"));
+            KPTSubtaskAddCmd *cmd = new KPTSubtaskAddCmd(getPart(), &(getProject()), node, currNode, i18n("Add Subtask"));
             getPart()->addCommand(cmd); // add task to project
-    		slotUpdate(true);
 			return;
 	    }
 		else
@@ -376,12 +375,11 @@ void KPTView::slotAddTask() {
 		KPTNode* currNode = currentTask();
 		if (currNode)
         {
-            KMacroCommand *m = dia->buildCommand();
+            KMacroCommand *m = dia->buildCommand(getPart());
             m->execute(); // do changes to task
             delete m;
-            KPTTaskAddCmd *cmd = new KPTTaskAddCmd(&(getProject()), node, currNode, i18n("Add Task"));
+            KPTTaskAddCmd *cmd = new KPTTaskAddCmd(getPart(), &(getProject()), node, currNode, i18n("Add Task"));
             getPart()->addCommand(cmd); // add task to project
-    		slotUpdate(true);
 			return;
 	    }
 		else
@@ -404,12 +402,11 @@ void KPTView::slotAddMilestone() {
 		KPTNode *currNode = currentTask();
 		if (currNode)
         {
-            KMacroCommand *m = dia->buildCommand();
+            KMacroCommand *m = dia->buildCommand(getPart());
             m->execute(); // do changes to task
             delete m;
-            KPTTaskAddCmd *cmd = new KPTTaskAddCmd(&(getProject()), node, currNode, i18n("Add Milestone"));
+            KPTTaskAddCmd *cmd = new KPTTaskAddCmd(getPart(), &(getProject()), node, currNode, i18n("Add Milestone"));
             getPart()->addCommand(cmd); // add task to project
-    		slotUpdate(true);
 			return;
 	    }
 		else
@@ -460,10 +457,9 @@ void KPTView::slotOpenNode() {
             KPTTask *task = dynamic_cast<KPTTask *>(node);
             KPTTaskDialog *dia = new KPTTaskDialog(*task);
             if (dia->exec()) {
-                KMacroCommand *m = dia->buildCommand();
+                KMacroCommand *m = dia->buildCommand(getPart());
                 if (m) {
                     getPart()->addCommand(m);
-                    slotUpdate(true);
                 }
             }
             delete dia;
@@ -477,10 +473,9 @@ void KPTView::slotOpenNode() {
             KPTTask *task = dynamic_cast<KPTTask *>(node);
             KPTTaskDialog *dia = new KPTTaskDialog(*task);
             if (dia->exec()) {
-                KMacroCommand *m = dia->buildCommand();
+                KMacroCommand *m = dia->buildCommand(getPart());
                 if (m) {
                     getPart()->addCommand(m);
-                    slotUpdate(true);
                 }
             }
             delete dia;
@@ -503,7 +498,7 @@ void KPTView::slotDeleteTask()
         kdDebug()<<k_funcinfo<<(node ? "Task is main project" : "No current task")<<endl;
         return;
     }
-    KPTNodeDeleteCmd *cmd = new KPTNodeDeleteCmd(node, i18n("Delete Task"));
+    KPTNodeDeleteCmd *cmd = new KPTNodeDeleteCmd(getPart(), node, i18n("Delete Task"));
     getPart()->addCommand(cmd);
 }
 
@@ -516,7 +511,7 @@ void KPTView::slotIndentTask()
         return;
     }
     if (getProject().canIndentTask(node)) {
-        KPTNodeIndentCmd *cmd = new KPTNodeIndentCmd(*node, i18n("Indent Task"));
+        KPTNodeIndentCmd *cmd = new KPTNodeIndentCmd(getPart(), *node, i18n("Indent Task"));
         getPart()->addCommand(cmd);
     }
 }
@@ -530,7 +525,7 @@ void KPTView::slotUnindentTask()
         return;
     }
     if (getProject().canUnindentTask(node)) {
-        KPTNodeUnindentCmd *cmd = new KPTNodeUnindentCmd(*node, i18n("Unindent Task"));
+        KPTNodeUnindentCmd *cmd = new KPTNodeUnindentCmd(getPart(), *node, i18n("Unindent Task"));
         getPart()->addCommand(cmd);
     }
 }
@@ -552,7 +547,7 @@ void KPTView::slotMoveTaskUp()
 		return;
 	}
     if (getProject().canMoveTaskUp(task)) {
-        KPTNodeMoveUpCmd *cmd = new KPTNodeMoveUpCmd(*task, i18n("Move Task Up"));
+        KPTNodeMoveUpCmd *cmd = new KPTNodeMoveUpCmd(getPart(), *task, i18n("Move Task Up"));
         getPart()->addCommand(cmd);
     }
 }
@@ -573,7 +568,7 @@ void KPTView::slotMoveTaskDown()
 		return;
 	}
     if (getProject().canMoveTaskDown(task)) {
-        KPTNodeMoveDownCmd *cmd = new KPTNodeMoveDownCmd(*task, i18n("Move Task Down"));
+        KPTNodeMoveDownCmd *cmd = new KPTNodeMoveDownCmd(getPart(), *task, i18n("Move Task Down"));
         getPart()->addCommand(cmd);
     }
 }
@@ -711,7 +706,7 @@ void KPTView::slotAboutToShow(QWidget *widget) {
 void KPTView::renameNode(KPTNode *node, QString name) {
     //kdDebug()<<k_funcinfo<<name<<endl;
     if (node) {
-        KPTNodeModifyNameCmd *cmd = new KPTNodeModifyNameCmd(*node, name, i18n("Modify name"));
+        KPTNodeModifyNameCmd *cmd = new KPTNodeModifyNameCmd(getPart(), *node, name, i18n("Modify name"));
         getPart()->addCommand(cmd);
     }
 }

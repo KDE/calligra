@@ -22,6 +22,7 @@
 #include "kptcalendar.h"
 #include "kptcommand.h"
 #include "kptintervaledit.h"
+#include "kptpart.h"
 
 #include <qpushbutton.h>
 #include <qspinbox.h>
@@ -50,7 +51,7 @@ KPTStandardWorktimeDialog::KPTStandardWorktimeDialog(KPTProject &p, QWidget *par
 }
 
 // FIXME
-KMacroCommand *KPTStandardWorktimeDialog::buildCommand() {
+KMacroCommand *KPTStandardWorktimeDialog::buildCommand(KPTPart *part) {
     kdDebug()<<k_funcinfo<<endl;
     project.addStandardWorktime(dia->standardWorktime());
     return 0;
