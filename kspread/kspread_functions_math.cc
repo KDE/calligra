@@ -110,7 +110,7 @@ void KSpreadRegisterMathFunctions()
   repo->registerFunction( "EVEN",        kspreadfunc_even );
   repo->registerFunction( "EXP",         kspreadfunc_exp );
   repo->registerFunction( "FACT",        kspreadfunc_fact );
-  repo->registerFunction( "FACTDOUBLE",  kspreadfunc_factdouble ); 
+  repo->registerFunction( "FACTDOUBLE",  kspreadfunc_factdouble );
   repo->registerFunction( "FIB",         kspreadfunc_fib ); // KSpread-specific, like Quattro-Pro's FIB
   repo->registerFunction( "FLOOR",       kspreadfunc_floor );
   repo->registerFunction( "GCD",         kspreadfunc_gcd );
@@ -989,7 +989,7 @@ bool kspreadfunc_mod( KSContext& context )
   if( (int)args[1]->doubleValue()!=0)
   {
         result=(int)args[0]->doubleValue() % (int)args[1]->doubleValue();
-        if( result < 0 ) result += (int)args[1]->doubleValue();	
+        if( result < 0 ) result += (int)args[1]->doubleValue();
         context.setValue( new KSValue(  result  ) );
   }
   else
@@ -1342,7 +1342,7 @@ bool kspreadfunc_trunc( KSContext & context )
       precision = 0;
   }
 
-  int factor = (int) pow( 10, precision );
+  int factor = (int) pow( 10.0, precision );
 
   result = floor( result * factor ) / factor;
 
@@ -1364,7 +1364,7 @@ bool kspreadfunc_count( KSContext& context )
   return b;
 }
 
-static int kspreadfunc_countif_helper( KSContext& context, KSValue* value, 
+static int kspreadfunc_countif_helper( KSContext& context, KSValue* value,
   const QString& criteria )
 {
   if( KSUtil::checkType( context, value, KSValue::DoubleType, false ) )
@@ -1392,17 +1392,17 @@ static int kspreadfunc_countif_helper( KSContext& context, KSValue* value,
     QValueList<KSValue::Ptr>& args = value->listValue();
     QValueList<KSValue::Ptr>::Iterator it = args.begin();
     QValueList<KSValue::Ptr>::Iterator end = args.end();
-    
+
     int count = 0;
     for( ; it != end; ++it )
        if ( !kspreadfunc_countif_helper( context, *it, criteria ) ) count++;
- 
+
     return count;
   }
 
-  return 0;   
+  return 0;
 }
- 
+
 // Function: COUNTIF
 // This is a lot simplified !!
 // Not really Excel-compatible as it understands only "equals to" relation
@@ -1489,7 +1489,7 @@ bool kspreadfunc_multipleOP( KSContext& context )
   KSpreadCell * cell;
   KSpreadTable * table = ((KSpreadInterpreter *) context.interpreter() )->table();
 
-  KSpreadPoint point( extra[1]->stringValue() );  
+  KSpreadPoint point( extra[1]->stringValue() );
   KSpreadPoint point2( extra[3]->stringValue() );
   KSpreadPoint point3( extra[0]->stringValue() );
 
@@ -1498,12 +1498,12 @@ bool kspreadfunc_multipleOP( KSContext& context )
   {
     cell = table->cellAt( point.pos.x(), point.pos.y() );
     cell->setValue( args[2]->doubleValue() );
-    kdDebug() << "Setting value " << args[2]->doubleValue() << " on cell " << point.pos.x() 
+    kdDebug() << "Setting value " << args[2]->doubleValue() << " on cell " << point.pos.x()
               << ", " << point.pos.y() << endl;
 
     cell = table->cellAt( point2.pos.x(), point.pos.y() );
     cell->setValue( args[4]->doubleValue() );
-    kdDebug() << "Setting value " << args[4]->doubleValue() << " on cell " << point2.pos.x() 
+    kdDebug() << "Setting value " << args[4]->doubleValue() << " on cell " << point2.pos.x()
               << ", " << point2.pos.y() << endl;
   }
 
@@ -1515,7 +1515,7 @@ bool kspreadfunc_multipleOP( KSContext& context )
             << d << endl;
 
   kdDebug() << "Resetting old values" << endl;
- 
+
   cell = table->cellAt( point.pos.x(), point.pos.y() );
   cell->setValue( oldCol );
 
@@ -1527,7 +1527,7 @@ bool kspreadfunc_multipleOP( KSContext& context )
   ((KSpreadInterpreter *) context.interpreter() )->document()->emitEndOperation();
 
   context.setValue( new KSValue( (double) d ) );
- 
+
   gWorking = false;
   return true;
 }
@@ -1612,7 +1612,7 @@ bool kspreadfunc_subtotal( KSContext & context )
   // create a new list
   QValueList<KSValue::Ptr> * list = new QValueList<KSValue::Ptr>;
   int function = args[0]->intValue();
-  
+
   KSValue * c = 0;
   KSpreadCell  * cell = 0;
   KSpreadTable * table = ((KSpreadInterpreter *) context.interpreter() )->table();
@@ -1624,7 +1624,7 @@ bool kspreadfunc_subtotal( KSContext & context )
   if ( !range.isValid() )
   {
     KSpreadPoint point( extra[1]->stringValue(), map, table );
-    
+
     if ( !point.isValid() )
       return false;
 
@@ -1632,7 +1632,7 @@ bool kspreadfunc_subtotal( KSContext & context )
                          point.pos.x(), point.pos.y() );
 
   }
-   
+
   KSValue * l = new KSValue( KSValue::ListType );
   int count = 0;
   int countA = 0;
@@ -1645,13 +1645,13 @@ bool kspreadfunc_subtotal( KSContext & context )
   int x = range.range.left();
   int y = range.range.top();
   int bottom = range.range.bottom();
-  
+
   for ( ; y <= bottom; ++y )
   {
     cell = table->cellAt( x, y );
     if ( cell->isDefault() || cell->text().find( "SUBTOTAL", 0, false ) != -1 )
       continue;
-    
+
     ++count;
     if ( cell->isNumeric() )
     {
