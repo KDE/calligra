@@ -157,6 +157,7 @@ KSpreadCell::KSpreadCell( KSpreadSheet * _table, int _column, int _row )
   d->mergedYCells = 0;
   d->extraWidth = 0.0;
   d->extraHeight = 0.0;
+  d->fmAscent = 0;
 
   m_lstDepends.setAutoDelete( true );
   m_lstDependingOnMe.setAutoDelete( true );
@@ -191,6 +192,7 @@ KSpreadCell::KSpreadCell( KSpreadSheet * _table, KSpreadStyle * _style, int _col
   d->mergedYCells = 0;
   d->extraWidth = 0.0;
   d->extraHeight = 0.0;
+  d->fmAscent = 0;
 
   m_lstDepends.setAutoDelete( true );
   m_lstDependingOnMe.setAutoDelete( true );
@@ -225,6 +227,7 @@ KSpreadCell::KSpreadCell( KSpreadSheet *_table, QPtrList<KSpreadDependency> _dep
   d->mergedYCells = 0;
   d->extraWidth = 0.0;
   d->extraHeight = 0.0;
+  d->fmAscent = 0;
 
   m_lstDepends.setAutoDelete( true );
   m_lstDependingOnMe = _deponme ;
