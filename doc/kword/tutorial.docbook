@@ -112,7 +112,7 @@ Make sure you do not see the <emphasis>frame select pointer</emphasis></para>
 fileref="Tut4.png"/></imageobject>
 <textobject><phrase>Screen shot</phrase></textobject></mediaobject>
 
-<para><emphasis>This tells &kword; to insert text into this frame.  A cursor inside the frame near your mouse click. Click in the upper left corner of the frame. </emphasis></para>
+<para><emphasis>This tells &kword; to insert text into this frame. Click in the upper left corner of the frame to position the cursor in the upper left corner of the frame. </emphasis></para>
 
 <para>Step 6: Enter the following text using the keyboard: <userinput>KWord Press Release</userinput>.</para>
 
@@ -277,7 +277,7 @@ fileref="Tut14b.png"/></imageobject>
 
 <para>A dialog box will appear.</para>
 
-<para>Step 17: Select <guilabel>Text Frameset 3</guilabel> by clicking with the $LMB;.</para>
+<para>Step 17: Select <guilabel>Text Frameset 3</guilabel> by clicking with the &LMB;.</para>
 
 <para><mediaobject><imageobject><imagedata format="PNG"
 fileref="Tut15b.png"/></imageobject>
