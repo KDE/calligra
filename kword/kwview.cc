@@ -366,7 +366,6 @@ void KWView::initGui()
     m_gui->canvasWidget()->setMouseMode( m_gui->canvasWidget()->mouseMode() );
 
     bool editingFormula = dynamic_cast<KWFormulaFrameSetEdit *>( m_gui->canvasWidget()->currentFrameSetEdit() ) != 0;
-    kdDebug() << k_funcinfo << "editingFormula=" << editingFormula << endl;
     //showFormulaToolbar( FALSE ); // not called, to avoid creating the formula-document if not necessary
     if(shell())
         shell()->showToolbar( "formula_toolbar", editingFormula );
@@ -1481,7 +1480,6 @@ void KWView::insertNewCustomVariable()
 
 void KWView::showFormulaToolbar( bool show )
 {
-    kdDebug() << k_funcinfo << show << endl;
     m_doc->getFormulaDocument()->setEnabled( show );
     if(shell())
       shell()->showToolbar( "formula_toolbar", show );
