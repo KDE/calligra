@@ -5140,6 +5140,10 @@ bool KSpreadCell::loadOasis( const QDomElement &element, const KoOasisStyles& oa
         convertFormula( formula, element.attribute( "table:formula" ) );
         setCellText( formula );
     }
+    if ( element.hasAttribute( "table:validation-name" ) )
+    {
+        kdDebug()<<" Celle has a validation :"<<element.attribute( "table:validation-name" )<<endl;
+    }
     if( element.hasAttribute( "table:value-type" ) )
     {
         QString valuetype = element.attribute( "table:value-type" );
