@@ -4969,18 +4969,16 @@ bool KSpreadCell::saveCellResult( QDomDocument& doc, QDomElement& result,
 
 bool KSpreadCell::loadOasis( const QDomElement &element, const KoOasisStyles& oasisStyles )
 {
-    //todo load cell
-#if 0
-    QDomElement annotation = e.namedItem( "office:annotation" ).toElement();
-    if ( !annotation.isNull() )
+    QString text;
+    
+    QDomElement textP = element.namedItem( "text:p" ).toElement();
+    if ( !textP.isNull() )
     {
-      QDomElement commentText = annotation.namedItem( "text:p" ).toElement();
-      if ( !commentText.isNull() )
-      {
-          comment = commentText.text();
-      }
+        text = textP.text();
+        setCellText( text );
+        setValue( text );
     }
-#endif
+    
     return true;
 }
 
