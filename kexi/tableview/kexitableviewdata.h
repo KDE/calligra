@@ -127,7 +127,7 @@ class KEXIDATATABLE_EXPORT KexiTableViewColumn {
 		/*! Only usable if related data is set (ie. this is for combo boxes).
 		 Sets 'editable' flag for this column, what means a new value can be entered
 		 by hand. This is similar to QComboBox::setEditable(). */
-		inline void setRelatedDataEditable(bool set);
+		void setRelatedDataEditable(bool set);
 
 		/*! Only usable if related data is set (ie. this is for combo boxes).
 		 \return 'editable' flag for this column. 
