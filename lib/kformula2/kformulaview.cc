@@ -95,6 +95,7 @@ void KFormulaView::keyPressEvent(QKeyEvent* event)
             document->addSquareBracket();
             break;
         case '{':
+            document->addCurlyBracket();
             break;
         case '|':
             document->addLineBracket();

@@ -73,17 +73,6 @@ public:
     
 protected:
 
-    void drawLeftSquareBracket(QPainter& painter, const ContextStyle& style, int x, int y, int size);
-    void drawRightSquareBracket(QPainter& painter, const ContextStyle& style, int x, int y, int size);
-    void drawLeftCurlyBracket(QPainter& painter, const ContextStyle& style, int x, int y, int size);
-    void drawRightCurlyBracket(QPainter& painter, const ContextStyle& style, int x, int y, int size);
-    void drawLineBracket(QPainter& painter, const ContextStyle& style, int x, int y, int size);
-    void drawLeftCornerBracket(QPainter& painter, const ContextStyle& style, int x, int y, int size);
-    void drawRightCornerBracket(QPainter& painter, const ContextStyle& style, int x, int y, int size);
-    void drawLeftRoundBracket(QPainter& painter, const ContextStyle& style, int x, int y, int size);
-    void drawRightRoundBracket(QPainter& painter, const ContextStyle& style, int x, int y, int size);
-
-    void drawEmpty(QPainter& painter, int x, int y, int size);
     void drawIntegral(QPainter& painter, const ContextStyle& style, int x, int y, int size);
     void drawArrow(QPainter& painter, int x, int y, int size);
 

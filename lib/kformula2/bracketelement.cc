@@ -87,13 +87,8 @@ void BracketElement::calcSizes(const ContextStyle& style, int parentSize)
     int contentHeight = 2 * QMAX(content->getMidline(),
                                  content->getHeight() - content->getMidline());
     
-    left->calcSizes(style, mySize);
-    //left->scale(((double)contentHeight+2)/left->getHeight());
-    left->setHeight(contentHeight+2);
-    
-    right->calcSizes(style, mySize);
-    //right->scale(((double)contentHeight+2)/right->getHeight());
-    right->setHeight(contentHeight+2);
+    left->calcSizes(style, contentHeight + style.getSizeReduction());
+    right->calcSizes(style, contentHeight + style.getSizeReduction());
 
     // width
     setWidth(left->getWidth() + content->getWidth() + right->getWidth());
@@ -257,6 +252,8 @@ Artwork* BracketElement::createBracket(char bracket)
     case '>':
     case '(':
     case ')':
+    case '/':
+    case '\\':
         aw->setType(static_cast<SymbolType>(bracket));
         break;
     }

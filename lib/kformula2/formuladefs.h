@@ -35,6 +35,8 @@ enum SymbolType {
     RightCornerBracket = '>',
     LeftRoundBracket = '(',
     RightRoundBracket = ')',
+    SlashBracket = '/',
+    BackSlashBracket = '\\',
 
     // symbols that have no ascii character
     Empty = 1000,
