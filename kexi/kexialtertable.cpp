@@ -97,15 +97,32 @@ void KexiAlterTable::slotItemChanged(KexiTableItem *i, int /*col*/)
 {
 	if(i->isInsertItem())
 	{
-		i->setInsertItem(false);
+		if(i->getValue(0).toString() != "" && i->getValue(1).toInt() != 0)
+		{
+			kdDebug() << "Create new field!" << endl;
+			bool ok = kexi->project()->db()->createField(m_table, i->getValue(0).toString(),
+				static_cast<KexiDBField::ColumnType>(i->getValue(1).toInt()), i->getValue(2).toInt(),
+				i->getValue(3).toBool(), i->getValue(4).toString(), i->getValue(5).toBool());
+			
+			if(ok)
+			{
+				kdDebug() << "New field created!" << endl;
+				i->setInsertItem(false);
+				m_fieldnames.append(i->getValue(0).toString());
+				KexiTableItem *newinsert = new KexiTableItem(m_view);
+				newinsert->setHint(QVariant(i->getHint().toInt() + 1));
+				newinsert->setInsertItem(true);
+			}
+		}
 	}
 	else
 	{
 		int field = i->getHint().toInt();
 		kdDebug() << "KexiAlterTable::slotItemChanged(" << field << ")" << endl;
-		bool ok = kexi->project()->db()->alterField(m_table, m_fieldnames[field], i->getValue(0).toString(),
-		 static_cast<KexiDBField::ColumnType> (i->getValue(1).toInt()), i->getValue(2).toInt(), i->getValue(3).toBool(),
-		 i->getValue(4).toString(), i->getValue(5).toBool());
+		bool ok = kexi->project()->db()->alterField(m_table, m_fieldnames[field],
+			i->getValue(0).toString(), static_cast<KexiDBField::ColumnType> (i->getValue(1).toInt()),
+			i->getValue(2).toInt(), i->getValue(3).toBool(), i->getValue(4).toString(),
+			i->getValue(5).toBool());
 		
 		if(ok)
 		{

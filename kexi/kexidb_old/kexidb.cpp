@@ -147,6 +147,13 @@ KexiDB::alterField(const QString& table, const QString& field, const QString& ne
 	return false;
 }
 
+bool
+KexiDB::createField(const QString& table, const QString& field, KexiDBField::ColumnType dtype,
+ int length, bool notNull, const QString& defaultVal, bool autoInc)
+{
+	return false;
+}
+
 KexiDBResult*
 KexiDB::getResult()
 {

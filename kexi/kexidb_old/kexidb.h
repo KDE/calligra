@@ -63,6 +63,8 @@ class KexiDB : public QObject
 		virtual QString escape(QString &str);
 		virtual bool alterField(const QString&, const QString&, const QString&, KexiDBField::ColumnType,
 			int, bool, const QString&, bool);
+		virtual bool createField(const QString&, const QString&, KexiDBField::ColumnType,
+			int, bool, const QString&, bool);
 		
 		virtual KexiDBResult	*getResult();
 

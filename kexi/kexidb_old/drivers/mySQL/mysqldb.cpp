@@ -270,7 +270,30 @@ MySqlDB::alterField(const QString& table, const QString& field, const QString& n
 	kdDebug() << "MySqlDB::alterField: Table: " << table << " Field: " << field << endl;
 	kdDebug() << "MySqlDB::alterField: DataType: " << MySqlField::sql2string(dtype) << "ColumnType: " << dtype << endl;
 	QString qstr = "ALTER TABLE " + table + " CHANGE " + field + " " + newFieldName;
-	qstr += " " + MySqlField::sql2string(dtype);
+	qstr += " " + createDefinition(dtype, length, notNull, defaultVal, autoInc);
+	
+	kdDebug() << "MySqlDB::alterField: Query: " << qstr << endl;
+	return query(qstr);
+}
+
+bool
+MySqlDB::createField(const QString& table, const QString& field, KexiDBField::ColumnType dtype,
+ int length, bool notNull, const QString& defaultVal, bool autoInc)
+{
+	kdDebug() << "MySqlDB::createField: Table: " << table << " Field: " << field << endl;
+	kdDebug() << "MySqlDB::createField: DataType: " << MySqlField::sql2string(dtype) << "ColumnType: " << dtype << endl;
+	QString qstr = "ALTER TABLE " + table + " ADD " + field;
+	qstr += " " + createDefinition(dtype, length, notNull, defaultVal, autoInc);
+	
+	kdDebug() << "MySqlDB::createField: Query: " << qstr << endl;
+	return query(qstr);
+}
+
+QString
+MySqlDB::createDefinition(KexiDBField::ColumnType dtype, int length, bool notNull,
+ const QString& defaultVal, bool autoInc)
+{
+	QString qstr = MySqlField::sql2string(dtype);
 	
 	if(dtype != KexiDBField::SQLDate) {
 		qstr += "(" + QString::number(length) + ")";
@@ -290,11 +313,10 @@ MySqlDB::alterField(const QString& table, const QString& field, const QString& n
 	}
 	
 	if(autoInc) {
-		qstr += "AUTO_INCREMENT, ADD INDEX(" + newFieldName + ")";
+		qstr += "AUTO_INCREMENT";
 	}
 	
-	kdDebug() << "MySqlDB::alterField: Query: " << qstr << endl;
-	return query(qstr);
+	return qstr;
 }
 
 MySqlDB::~MySqlDB()
