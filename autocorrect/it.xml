@@ -48,6 +48,7 @@
  <SuperScript>
   <superscript find="1o" super="o" />
   <superscript find="1a" super="a" />
+  <superscript find="othernb" super="o" />
  </SuperScript>
  <DoubleQuote>
   <doublequote begin="&#201C;" end="&#201D;" />
