@@ -41,8 +41,8 @@ public:
 	void setLabel(const QString& l) { _label = l; };
 	void setDescr(const QString& d) { _descr = d; };
 	
-	virtual const QString& text();
-	virtual const QString& type();
+	virtual const QString& text() const;
+	virtual const QString& type() const;
 	virtual uint length() const;
 	
 	virtual void setText(const QString&);

@@ -40,7 +40,7 @@ kdbBaseType::~kdbBaseType()
 }
 
 const QString&
-kdbBaseType::text()
+kdbBaseType::text() const
 {
 	return _value;
 }
@@ -52,7 +52,7 @@ kdbBaseType::setText(const QString& p_val)
 }
 
 const QString&
-kdbBaseType::type()
+kdbBaseType::type() const
 {
 	return _type;
 }
