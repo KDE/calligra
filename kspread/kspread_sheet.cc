@@ -6342,11 +6342,13 @@ bool KSpreadSheet::loadOasis( const QDomElement& tableElement, KoOasisStyles& oa
     {
         QDomElement rowElement = rowNode.toElement();
         if( !rowElement.isNull() )
-        if( rowElement.tagName() == "table:table-row" )
         {
-            // TODO load cells
+            if( rowElement.tagName() == "table:table-row" )
+            {
+                bool b = loadCellsOasis( rowElement );
+                // TODO load cells
+            }
         }
-
         rowNode = rowNode.nextSibling();
     }
 
@@ -6373,6 +6375,13 @@ bool KSpreadSheet::loadOasis( const QDomElement& tableElement, KoOasisStyles& oa
       kdDebug(30518) << "Password hash: '" << passwd << "'" << endl;
       m_strPassword = passwd;
     }
+    return true;
+}
+
+bool KSpreadSheet::loadCellsOasis( const QDomElement &element )
+{
+    kdDebug()<<"bool KSpreadSheet::loadCellsOasis( const QDomElement &element )*****************\n";
+    //todo parse cell
     return true;
 }
 
