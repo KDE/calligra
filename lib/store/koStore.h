@@ -27,7 +27,7 @@
 class KoStore : public KOStore::Store_skel
 {
 protected: // interface, not real class
-  KoStore::KoStore() {}
+  KoStore() {}
 public:
   virtual ~KoStore() {}
 

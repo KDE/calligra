@@ -242,7 +242,7 @@ CORBA::Boolean KoTarStore::write( const KOStore::Data& data )
 {
   unsigned int len = data.length();
   unsigned char *p = new unsigned char[ len ];
-  for( int i = 0; i < len; i++ )
+  for( unsigned int i = 0; i < len; i++ )
     p[i] = data[i];
     
   bool ret = write( (const char*)p, len ); // see below

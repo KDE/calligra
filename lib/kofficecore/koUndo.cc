@@ -121,7 +121,7 @@ QString KoCommandHistory::getRedoName()
 
 QStringList KoCommandHistory::getUndoList()
 {
-  int i;
+  unsigned int i;
   int item;
   QString tmp;
   QStringList list;
@@ -141,8 +141,8 @@ QStringList KoCommandHistory::getUndoList()
 
 QStringList KoCommandHistory::getRedoList()
 {
-  int i;
-  int item;
+  unsigned int i;
+  unsigned int item;
   QString tmp;
   QStringList list;
 

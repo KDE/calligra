@@ -13,19 +13,22 @@
  * (David)
  */
 
+// (Werner) I've translated the comments - there migth be
+// some errors, though :(
+
 class ostorestreambuffer : public streambuf
 {
 protected:
-  static const int m_bufferSize = 4096;   // Groesse des Datenm_buffers
-  char m_buffer[m_bufferSize + 1];            // Datenm_buffer
+  static const int m_bufferSize = 4096;   // Size of the buffer
+  char m_buffer[m_bufferSize + 1];
   KoStore* m_pStore;
   KOStore::Store_var m_vStore;
 
 public:
-  /* Konstruktor
-   *  - Datenm_buffer initialisieren
-   *  - ein Zeichen kleiner,
-   *    damit das m_bufferSize-te Zeichen overflow() ausloest
+  /* CTOR
+   *  - initialize m_buffer
+   *  - the whole stuff has to be one char shorter to
+   *    trigger overflow() if the m_bufferSized char is reached
    */
   ostorestreambuffer( KoStore* _store ) : m_pStore( _store )
   {
@@ -36,8 +39,8 @@ public:
     setp (m_buffer, m_buffer+(m_bufferSize-1));
   }
 
-  /* Destruktor
-   *  - Datenm_buffer leeren
+  /* DTOR
+   *  - empty our m_buffer
    */
   virtual ~ostorestreambuffer()
   {
@@ -45,18 +48,18 @@ public:
   }
 
 protected:
-  /* Zeichen im buffer abspeichern
+  /* store chars in the buffer
    */
   int emptybuffer();
 
-  /* M_buffer voll
-   *  - c und alle vorherigen Zeichen ausgeben
+  /* m_buffer if full
+   *  - pass on all chars of buffer and "c"
    */
   virtual int overflow (int c)
   {
     if (c != EOF)
     {
-      // Zeichen noch in den M_buffer einfuegen
+      // add "c" to m_buffer
       *pptr() = c;
       pbump(1);
     }
@@ -67,14 +70,14 @@ protected:
     return c;
   }
 
-  /* Daten mit Datentraeger abgleichen
-   *  - buffer explizit leeren
+  /* sync the buffers
+   *  - explicitly empty the buffer
    */
   virtual int sync ()
   {
     if (emptybuffer() == EOF)
     {
-      // FEHLER
+      // ERROR
       return -1;
     }
     return 0;
@@ -100,40 +103,40 @@ protected:
 class istorestreambuffer : public streambuf
 {
 protected:
-  /* Datenpuffer:
-   *  maximal 4 Zeichen Putback-Bereich plus
-   *  maximal 8192 Zeichen normaler Lesepuffer
+  /* data buffer:
+   *  max. 4 chars additional Putback-Zone
+   *  max. 8192 chars "normal" read buffer
    */
-  static const int pufferSize = 8192 + 4;     // Groesse des Datenpuffers
-  char puffer[pufferSize];       // Datenpuffer
+  static const int pufferSize = 8192 + 4;     // size of the buffer
+  char puffer[pufferSize];       // buffer (buffer -> German: "Puffer" :)
   KoStore* m_pStore;
   KOStore::Store_var m_vStore;
 
 public:
-  /* Konstruktor
-   *  - Datenpuffer leer initialisieren
-   *  - keine Putback-Reserve
-   *  => underflow() forcieren
+  /* CTOR
+   *  - initialize empty buffer
+   *  - no Putback-Zone!
+   *  => force underflow()
    */
   istorestreambuffer( KoStore* _store ) : m_pStore( _store )
   {
     kdebug( KDEBUG_INFO, 30002, "Pointer constructor" );
-    setg (puffer+4,     // Putback-Anfang
-	  puffer+4,     // Leseposition
-	  puffer+4);    // Puffer-Ende
+    setg (puffer+4,     // beginning of Putback-Zone
+	  puffer+4,     // read posiition
+	  puffer+4);    // end of the buffer
   }
   istorestreambuffer( KOStore::Store_ptr _store ) : m_pStore( 0L )
   {
     m_vStore = KOStore::Store::_duplicate( _store );
 
     kdebug( KDEBUG_INFO, 30002, "Var constructor" );
-    setg (puffer+4,     // Putback-Anfang
-	  puffer+4,     // Leseposition
-	  puffer+4);    // Puffer-Ende
+    setg (puffer+4,     // beginning of Putback-Zone
+	  puffer+4,     // read position
+	  puffer+4);    // end of the buffer
   }
 
 protected:
-  /* neue Zeichen in den Puffer einlesen
+  /* read a new char into the buffer
    */
   virtual int underflow ();
 };
