@@ -30,8 +30,9 @@
 #include <qfile.h>
 
 #include <kotextobject.h>
-
-
+#include <qdom.h>
+#include <kglobal.h>
+#include <koDocument.h>
 /******************************************************************/
 /* Class: KoAutoFormat						  */
 /******************************************************************/
@@ -68,10 +69,10 @@ void KoAutoFormat::readConfig()
 
     bool fileNotFound = false;
     QFile xmlFile;
-#if 0
-    xmlFile.setName(KWFactory::global()->dirs()->findResource("autocorrect", klocale.languageList().front() + ".xml"));
+    KLocale klocale(m_doc->instance()->instanceName());
+    xmlFile.setName(locate( "data", "koffice/autocorrect/" + klocale.languageList().front() + ".xml", m_doc->instance() ));
     if(!xmlFile.open(IO_ReadOnly)) {
-        xmlFile.setName(KWFactory::global()->dirs()->findResource("autocorrect","autocorrect.xml"));
+        xmlFile.setName(locate( "data", "koffice/autocorrect/autocorrect.xml", m_doc->instance() ));
     if(!xmlFile.open(IO_ReadOnly)) {
 	fileNotFound = true;
       }
@@ -92,7 +93,7 @@ void KoAutoFormat::readConfig()
           QDomNodeList nl = item.childNodes();
           m_maxFindLength=nl.count();
           for(uint i = 0; i < m_maxFindLength; i++) {
-              m_entries.insert( nl.item(i).toElement().attribute("find"), KWAutoFormatEntry(nl.item(i).toElement().attribute("replace")) );
+              m_entries.insert( nl.item(i).toElement().attribute("find"), KoAutoFormatEntry(nl.item(i).toElement().attribute("replace")) );
           }
       }
 
@@ -117,7 +118,6 @@ void KoAutoFormat::readConfig()
       }
     }
     xmlFile.close();
-#endif
     buildMaxLen();
     m_configRead = true;
 }
@@ -125,6 +125,7 @@ void KoAutoFormat::readConfig()
 void KoAutoFormat::saveConfig()
 {
     KConfig config("kofficerc");
+    KLocale klocale(m_doc->instance()->instanceName());
     KConfigGroupSaver cgs( &config, "AutoFormat" );
     config.writeEntry( "ConvertUpperCase", m_convertUpperCase );
     config.writeEntry( "ConvertUpperUpper", m_convertUpperUpper );
@@ -136,7 +137,6 @@ void KoAutoFormat::saveConfig()
 
     //refresh m_maxFindLength
     m_maxFindLength=0;
-#if 0
     QDomDocument doc("autocorrection");
 
     QDomElement begin = doc.createElement( "Word" );
@@ -177,7 +177,7 @@ void KoAutoFormat::saveConfig()
     }
     begin.appendChild(twoUpper);
 
-    QFile f(locateLocal("data", "kword/autocorrect/"+klocale.languageList().front() + ".xml"));
+    QFile f(locateLocal("data", "koffice/autocorrect/"+klocale.languageList().front() + ".xml",m_doc->instance()));
     if(!f.open(IO_WriteOnly)) {
         kdDebug()<<"Error during saving...........\n";
 	return;
@@ -185,7 +185,7 @@ void KoAutoFormat::saveConfig()
     QTextStream ts(&f);
     doc.save(ts, 2);
     f.close();
-#endif
+
     config.sync();
 }
 
