@@ -688,18 +688,28 @@ void OoWriterImport::parseSpanOrSimilar( QDomDocument& doc, const QDomElement& p
         else if ( tagName == "text:a" )
         {
             m_styleStack.setMark( StyleStack::SpanMark );
-            // The problem is that KWord's hyperlink text is not inside the normal text, but for OOWriter it is nearly a <text:span>
-            // So we have to fake.
-            QDomElement fakeParagraph, fakeFormats;
-            uint fakePos=0;
-            QString text;
-            parseSpanOrSimilar( doc, ts, fakeParagraph, fakeFormats, text, fakePos);
+            QString href( ts.attribute("xlink:href") );
+            if ( href.startsWith("#") )
+            {
+                // We have a reference to a bookmark (### TODO)
+                // As we do not support it now, treat it as a <text:span> without formatting
+                parseSpanOrSimilar( doc, ts, kwordParagraph, kwordFormats, paragraphText, pos);
+            }
+            else
+            {
+                // The problem is that KWord's hyperlink text is not inside the normal text, but for OOWriter it is nearly a <text:span>
+                // So we have to fake.
+                QDomElement fakeParagraph, fakeFormats;
+                uint fakePos=0;
+                QString text;
+                parseSpanOrSimilar( doc, ts, fakeParagraph, fakeFormats, text, fakePos);
+                textData = '#'; // hyperlink placeholder
+                QDomElement linkElement (doc.createElement("LINK"));
+                linkElement.setAttribute("hrefName",ts.attribute("xlink:href"));
+                linkElement.setAttribute("linkName",text);
+                appendKWordVariable(doc, kwordFormats, ts, pos, "STRING", 9, text, linkElement);
+            }
             m_styleStack.popToMark( StyleStack::SpanMark  );
-            textData = '#'; // hyperlink placeholder
-            QDomElement linkElement (doc.createElement("LINK"));
-            linkElement.setAttribute("hrefName",ts.attribute("xlink:href"));
-            linkElement.setAttribute("linkName",text);
-            appendKWordVariable(doc, kwordFormats, ts, pos, "STRING", 9, text, linkElement);
         }
         else if (tagName == "text:date")
         {
