@@ -862,6 +862,7 @@ void KSpreadCanvas::mousePressEvent( QMouseEvent * _ev )
   }
 
 
+
   hideMarker();
 
   int xpos, ypos;
@@ -967,6 +968,8 @@ void KSpreadCanvas::mousePressEvent( QMouseEvent * _ev )
     QPoint p = mapToGlobal( _ev->pos() );
     m_pView->openPopupMenu( p );
   }
+  if(_ev->button() == MidButton )
+        table->paste( QPoint( markerColumn(), markerRow() ) );
 }
 
 void KSpreadCanvas::chooseMouseMoveEvent( QMouseEvent * _ev )

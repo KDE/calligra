@@ -731,3 +731,5 @@ it works.
 2000-07-05-Montel laurent <montell@club-internet.fr>
 ----------------------------------------------------
 -bug fix
+-Improved kspread_dlg_angle
+-Now when you press middle button you can paste fix bug #?????
