@@ -74,8 +74,23 @@ void StyleClusterTester::run()
   CHECK_STYLE(stylecluster.lookup(1000,2000), static_cast< const KSpreadStyle& > (*(m_sheet->doc()->styleManager()->defaultStyle())));
   KSpreadStyle *style1 = new KSpreadStyle();
   stylecluster.insert(1000,2000, style1);
-  CHECK_STYLE(stylecluster.lookup(1000,2000), *style1);
+  CHECK_STYLE(stylecluster.lookup(1000,2000), *style1); 
+  CHECK_STYLE(stylecluster.lookup(1001,2000), static_cast< const KSpreadStyle& > (*(m_sheet->doc()->styleManager()->defaultStyle())));
+  CHECK_STYLE(stylecluster.lookup(1001,2001), static_cast< const KSpreadStyle& > (*(m_sheet->doc()->styleManager()->defaultStyle())));
+  CHECK_STYLE(stylecluster.lookup(1000,2001), static_cast< const KSpreadStyle& > (*(m_sheet->doc()->styleManager()->defaultStyle())));
+  CHECK_STYLE(stylecluster.lookup(0,0), static_cast< const KSpreadStyle& > (*(m_sheet->doc()->styleManager()->defaultStyle())));
+  stylecluster.insert(0,0, style1);
+  stylecluster.insert(1,0, style1);
+  stylecluster.insert(0,1, style1);
+  stylecluster.insert(1,1, style1);
   
+  CHECK_STYLE(stylecluster.lookup(0,0), *style1);
+  CHECK_STYLE(stylecluster.lookup(0,1), *style1);
+  CHECK_STYLE(stylecluster.lookup(1,0), *style1);
+  CHECK_STYLE(stylecluster.lookup(1,1), *style1);
+  CHECK_STYLE(stylecluster.lookup(0,2), static_cast< const KSpreadStyle& > (*(m_sheet->doc()->styleManager()->defaultStyle())));
+
+
 }
 
 
