@@ -78,6 +78,7 @@ private:
 private slots:
   void tableChanged(int);
   void slotSetQuery();
+  void editFilter();
 };
 
 

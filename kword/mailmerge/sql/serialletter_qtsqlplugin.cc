@@ -168,7 +168,9 @@ KWQTSQLDataSourceEditor::KWQTSQLDataSourceEditor( QWidget *parent, KWQTSQLSerial
         (new QVBoxLayout(plainPage()))->setAutoAdd(true);
         setMainWidget(widget=new QTSQLDataSourceEditor(plainPage()));
 	connect(widget->tableCombo,SIGNAL(activated(int)),this,SLOT(tableChanged(int)));
+	connect(widget->editFilter,SIGNAL(clicked()),this,SLOT(editFilters()));
 	updateTableCombo();
+	
 //        connect(this,SIGNAL(okClicked()),this,SLOT(slotSetQuery()));
 }
 
@@ -199,6 +201,10 @@ void KWQTSQLDataSourceEditor::slotSetQuery()
         db->refresh(true);
 }
 
+
+void KWQTSQLDataSourceEditor::editFilter()
+{
+}
 
 extern "C" {
         KWMailMergeDataSource *create_kwmailmerge_qtsqldb(KInstance *inst,QObject *parent)
