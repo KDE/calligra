@@ -154,6 +154,11 @@ public:
      * Slightly slow (does a linear search in the paragraph) */
     QTextFormat * format() const;
 
+    virtual void draw(QPainter* p, int x, int y, int cx, int cy, int cw, int ch, const QColorGroup& cg, bool selected );
+
+    virtual void drawCustomItems(QPainter* p, int x, int y, int cx, int cy, int cw, int ch, const QColorGroup& cg, bool selected)=0;
+
+
 protected:
     virtual void adjustToPainter( QPainter* ) { resize(); }
     bool m_deleted;

@@ -386,6 +386,22 @@ QTextFormat * KoTextCustomItem::format() const
     return parag->at( index() )->format();
 }
 
+
+void KoTextCustomItem::draw(QPainter* p, int x, int y, int cx, int cy, int cw, int ch, const QColorGroup& cg, bool selected )
+{
+    KoZoomHandler *zh=textDocument()->zoomHandler();
+    kdDebug()<<" x :"<<x<<" y :"<<y<<" cx :"<<cx<<" cy :"<<cy<<" ch :"<<ch<<" cw :"<<cw<<endl;
+    x=zh->layoutUnitToPixelX(x);
+    y=zh->layoutUnitToPixelY(y);
+    cx=zh->layoutUnitToPixelX(cx);
+    cy=zh->layoutUnitToPixelY(cy);
+    ch=zh->layoutUnitToPixelY(ch);
+    cw=zh->layoutUnitToPixelX(cw);
+    kdDebug()<<"After  x :"<<x<<" y :"<<y<<" cx :"<<cx<<" cy :"<<cy<<" ch :"<<ch<<" cw :"<<cw<<endl;
+
+    drawCustomItems(p,x, y,cx, cy, cw, ch, cg, selected);
+}
+
 void CustomItemsMap::insertItems( const QTextCursor & startCursor, int size )
 {
     if ( isEmpty() )
