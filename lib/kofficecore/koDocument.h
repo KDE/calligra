@@ -182,6 +182,12 @@ public:
   void setFilterManager( KoFilterManager * manager );
 
   /**
+   * Sets the error message to be shown to the user (use i18n()!)
+   * when loading or saving fails.
+   */
+  void setErrorMessage( const QString& errMsg );
+
+  /**
    *  Create a new view for the document.
    */
   KoView *createView( QWidget *parent = 0, const char *name = 0 );

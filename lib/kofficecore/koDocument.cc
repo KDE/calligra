@@ -1,6 +1,8 @@
 /* This file is part of the KDE project
    Copyright (C) 1998, 1999 Torben Weis <weis@kde.org>
 
+#include "koDocument.h"
+
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
    License as published by the Free Software Foundation; either
@@ -82,24 +84,22 @@ public:
     QPtrList<KoView> m_views;
     QPtrList<KoDocumentChild> m_children;
     QPtrList<KoMainWindow> m_shells;
-
-    bool m_bSingleViewMode;
-    mutable bool m_changed;
+    QValueList<QDomDocument> m_viewBuildDocuments;
 
     KoViewWrapperWidget *m_wrapperWidget;
-
-    QValueList<QDomDocument> m_viewBuildDocuments;
     KoDocumentIface * m_dcopObject;
-
     KoDocumentInfo *m_docInfo;
 
-    QCString outputMimeType; // The mimetype to use when saving
     KoFilterManager * filterManager; // The filter-manager to use when loading/saving [for the options]
     // It can be set by KoMainWindow (to pass options), or created here (without options)
 
+    QCString outputMimeType; // The mimetype to use when saving
     QTimer m_autoSaveTimer;
+    QString lastErrorMessage; // see openFile()
     int m_autoSaveDelay; // in seconds, 0 to disable.
     bool modifiedAfterAutosave;
+    bool m_bSingleViewMode;
+    mutable bool m_changed;
 };
 
 // Used in singleViewMode
@@ -241,7 +241,10 @@ bool KoDocument::saveFile()
 {
   kdDebug(30003) << "KoDocument::saveFile()" << endl;
   if ( !kapp->inherits( "KoApplication" ) )
+  {
+    d->lastErrorMessage = i18n( "Internal error: not a KOffice application, saving not allowed" );
     return false;
+  }
 
   QCString _native_format = nativeFormatMimeType();
   // The output format is set by koMainWindow, and by openFile
@@ -622,18 +625,26 @@ bool KoDocument::saveChildren( KoStore* /*_store*/, const QString& /*_path*/ )
 
 bool KoDocument::saveNativeFormat( const QString & file )
 {
-  kdDebug(30003) << "Saving to store" << endl;
+  d->lastErrorMessage = QString::null;
+  //kdDebug(30003) << "Saving to store" << endl;
 
   QCString appIdentification( "KOffice " ); // We are limited in the number of chars.
   appIdentification += nativeFormatMimeType();
   appIdentification += '\004'; // Two magic bytes to make the identification
   appIdentification += '\006'; // more reliable (DF)
   KoStore* store = new KoStore( file, KoStore::Write, appIdentification );
+  if ( store->bad() )
+  {
+    d->lastErrorMessage = i18n( "Couldn't open the file for saving" ); // more details needed?
+    delete store;
+    return false;
+  }
 
   // Save childen first since they might get a new url
-  if ( store->bad() || !saveChildren( store, QString(STORE_PROTOCOL) + ':' ) )
+  if ( !saveChildren( store, QString(STORE_PROTOCOL) + ':' ) )
   {
-    kdDebug(30003) << "store->bad()=" << store->bad() << "   aborting saving !" << endl;
+    if ( d->lastErrorMessage.isEmpty() )
+        d->lastErrorMessage = i18n( "Error while saving embedded documents" ); // more details needed
     delete store;
     return false;
   }
@@ -651,6 +662,7 @@ bool KoDocument::saveNativeFormat( const QString & file )
   }
   else
   {
+    d->lastErrorMessage = i18n( "Not able to write maindoc.xml" );
     delete store;
     return false;
   }
@@ -725,9 +737,14 @@ QString KoDocument::autoSaveFile( const QString & path ) const
 bool KoDocument::openURL( const KURL & _url )
 {
   kdDebug() << "KoDocument::openURL url=" << _url.url() << endl;
-  // Reimplemented, to add a check for autosave files
+  d->lastErrorMessage = QString::null;
+
+  // Reimplemented, to add a check for autosave files and to improve error reporting
   if ( _url.isMalformed() )
+  {
+    d->lastErrorMessage = i18n( "Malformed URL\n%1" ).arg( _url.url() ); // ## used anywhere ?
     return false;
+  }
   if ( !closeURL() )
     return false;
   KURL url( _url );
@@ -826,7 +843,10 @@ bool KoDocument::openFile()
     if ( !loadNativeFormat( importedFile ) )
     {
       ok = false;
-      KMessageBox::error( 0L, i18n( "Could not open\n%1" ).arg( url().prettyURL() ) );
+      if ( d->lastErrorMessage.isEmpty() )
+          KMessageBox::error( 0L, i18n( "Could not open\n%1" ).arg( url().prettyURL() ) );
+      else
+          KMessageBox::error( 0L, i18n( "Could not open\n%1\nReason: %2" ).arg( url().prettyURL() ).arg( d->lastErrorMessage ) );
     }
   }
   else {
@@ -871,6 +891,7 @@ bool KoDocument::loadNativeFormat( const QString & file )
   if ( !in.open( IO_ReadOnly ) )
   {
     QApplication::restoreOverrideCursor();
+    d->lastErrorMessage = i18n( "Couldn't open the file for reading (check read permissions)" );
     return false;
   }
 
@@ -880,6 +901,7 @@ bool KoDocument::loadNativeFormat( const QString & file )
   {
     QApplication::restoreOverrideCursor();
     in.close();
+    d->lastErrorMessage = i18n( "Couldn't read the beginning of the file" );
     return false;
   }
 
@@ -906,6 +928,7 @@ bool KoDocument::loadNativeFormat( const QString & file )
 
     if ( store->bad() )
     {
+      d->lastErrorMessage = i18n( "Not a valid TAR file" );
       delete store;
       QApplication::restoreOverrideCursor();
       return false;
@@ -925,6 +948,7 @@ bool KoDocument::loadNativeFormat( const QString & file )
     } else
     {
       kdError(30003) << "ERROR: No maindoc.xml" << endl;
+      d->lastErrorMessage = i18n( "Invalid document: no file 'maindoc.xml'" );
       delete store;
       QApplication::restoreOverrideCursor();
       return false;
@@ -933,6 +957,7 @@ bool KoDocument::loadNativeFormat( const QString & file )
     if ( !loadChildren( store ) )
     {
       kdError(30003) << "ERROR: Could not load children" << endl;
+      d->lastErrorMessage = i18n( "Couldn't load embedded objects" );
       delete store;
       QApplication::restoreOverrideCursor();
       return false;
@@ -947,7 +972,7 @@ bool KoDocument::loadNativeFormat( const QString & file )
     }
     else
     {
-      kdDebug( 30003 ) << "cannot open document info" << endl;
+      //kdDebug( 30003 ) << "cannot open document info" << endl;
       delete d->m_docInfo;
       d->m_docInfo = new KoDocumentInfo( this, "document info" );
     }
@@ -1036,6 +1061,7 @@ bool KoDocument::completeSaving( KoStore* )
 QDomDocument KoDocument::saveXML()
 {
     kdError(30003) << "KoDocument::saveXML not implemented" << endl;
+    d->lastErrorMessage = i18n( "Internal error: saveXML not implemented" );
     return QDomDocument();
 }
 
@@ -1119,7 +1145,10 @@ DCOPObject * KoDocument::dcopObject()
   return d->m_dcopObject;
 }
 
+void KoDocument::setErrorMessage( const QString& errMsg )
+{
+    d->lastErrorMessage = errMsg;
+}
+
 #include "koDocument.moc"
 #include "koDocument_p.moc"
-
-
