@@ -5328,15 +5328,15 @@ void KWView::spellCheckerMisspelling( const QString &old, int pos )
 {
    #ifdef HAVE_LIBKSPELL2
     //kdDebug(32001) << "KWView::spellCheckerMisspelling old=" << old << " pos=" << pos << endl;
-    KoTextObject* textobj = m_spell.textIterator->currentTextObject();
-    KoTextParag* parag = m_spell.textIterator->currentParag();
+    KoTextObject* textobj = m_spell.kospell->currentTextObject();
+    KoTextParag* parag = m_spell.kospell->currentParag();
     Q_ASSERT( textobj );
     Q_ASSERT( parag );
     if ( !textobj || !parag ) return;
     KWTextDocument *textdoc=static_cast<KWTextDocument *>( textobj->textDocument() );
     Q_ASSERT( textdoc );
     if ( !textdoc ) return;
-    pos += m_spell.textIterator->currentStartIndex();
+    pos += m_spell.kospell->currentStartIndex();
     kdDebug(32001) << "KWView::spellCheckerMisspelling parag=" << parag->paragId() << " pos=" << pos << " length=" << old.length() << endl;
     textdoc->textFrameSet()->highlightPortion( parag, pos, old.length(), m_gui->canvasWidget() );
 #endif
@@ -5344,17 +5344,17 @@ void KWView::spellCheckerMisspelling( const QString &old, int pos )
 
 void KWView::spellCheckerCorrected( const QString &old, int pos , const QString &corr )
 {
- #ifdef HAVE_LIBKSPELL2
+#ifdef HAVE_LIBKSPELL2
     //kdDebug(32001) << "KWView::spellCheckerCorrected old=" << old << " corr=" << corr << " pos=" << pos << endl;
-    KoTextObject* textobj = m_spell.textIterator->currentTextObject();
-    KoTextParag* parag = m_spell.textIterator->currentParag();
+    KoTextObject* textobj = m_spell.kospell->currentTextObject();
+    KoTextParag* parag = m_spell.kospell->currentParag();
     Q_ASSERT( textobj );
     Q_ASSERT( parag );
     if ( !textobj || !parag ) return;
     KWTextDocument *textdoc=static_cast<KWTextDocument *>( textobj->textDocument() );
     Q_ASSERT( textdoc );
     if ( !textdoc ) return;
-    pos += m_spell.textIterator->currentStartIndex();
+    pos += m_spell.kospell->currentStartIndex();
     textdoc->textFrameSet()->highlightPortion( parag, pos, old.length(), m_gui->canvasWidget() );
 
     KoTextCursor cursor( textdoc );
@@ -5371,7 +5371,7 @@ void KWView::spellCheckerDone( const QString & )
 {
 #ifdef HAVE_LIBKSPELL2
     //kdDebug(32001) << "KWView::spellCheckerDone" << endl;
-    KoTextObject* textobj = m_spell.textIterator->currentTextObject();
+    KoTextObject* textobj = m_spell.kospell->currentTextObject();
     Q_ASSERT( textobj );
     KWTextDocument *textdoc=static_cast<KWTextDocument *>( textobj->textDocument() );
     Q_ASSERT( textdoc );
@@ -5419,7 +5419,7 @@ void KWView::spellCheckerFinished() // connected to death()
         KMessageBox::sorry(this, i18n("ISpell seems to have crashed."));
     }
 #endif
-    KoTextObject* textobj = m_spell.textIterator->currentTextObject();
+    KoTextObject* textobj = m_spell.kospell->currentTextObject();
     if ( textobj ) {
         KWTextDocument *textdoc=static_cast<KWTextDocument *>( textobj->textDocument() );
         if ( textdoc )
