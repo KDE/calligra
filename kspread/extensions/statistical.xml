@@ -190,6 +190,36 @@
       </Help>
     </Function>
 
+	<Function>
+	<Name>AVEDEV</Name>
+	<Type>Float</Type>
+	<Parameter optional="true">
+	<Comment>Floating point values</Comment>
+	<Type range="true">Float</Type>
+	</Parameter>
+	<Parameter optional="true">
+	<Comment>Floating point values</Comment>
+	<Type range="true">Float</Type>
+	</Parameter>
+	<Parameter optional="true">
+	<Comment>Floating point values</Comment>
+	<Type range="true">Float</Type>
+	</Parameter>
+	<Parameter optional="true">
+	<Comment>Floating point values</Comment>
+	<Type range="true">Float</Type>
+	</Parameter>
+	<Parameter optional="true">
+	<Comment>Floating point values</Comment>
+	<Type range="true">Float</Type>
+	</Parameter>
+	<Help>
+	<Text>The AVEDEV() function calculates the average of the absolute deviations of a data set from their mean.</Text>
+	<Syntax>AVEDEV(value;value;...)</Syntax>
+	<Example>AVEDEV(11.4;17.3;21.3;25.9;40.1) returns 7.84</Example>
+	<Example>AVEDEV(A1:A5) ...</Example>
+	</Help>
+	</Function>
 
     <Function>
       <Name>MEDIAN</Name>

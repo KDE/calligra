@@ -1390,3 +1390,56 @@ bool kspreadfunc_sumxmy2( KSContext& context )
 
   return b;
 }
+
+static bool kspreadfunc_avedev_helper(KSContext &context, QValueList<KSValue::Ptr> &args, double &result, double temp)
+{
+	QValueList<KSValue::Ptr>::Iterator it = args.begin();
+	QValueList<KSValue::Ptr>::Iterator end = args.end();
+
+	for(; it != end; ++it)
+	{
+		if(KSUtil::checkType(context, *it, KSValue::ListType, false))
+		{
+			if(!kspreadfunc_avedev_helper(context, (*it)->listValue(), result, temp))
+				return false;
+		}
+		else if(KSUtil::checkType(context, *it, KSValue::DoubleType, true))
+			result += fabs((*it)->doubleValue() - temp);
+	}
+
+	return true;
+}
+
+// Function: avedev
+bool kspreadfunc_avedev(KSContext &context)
+{
+	double temp = 0.0, result = 0.0;
+	int number = 0;
+
+	// First sum the range into one double
+	bool b = kspreadfunc_average_helper(context, context.value()->listValue(), temp, number);
+
+	if(number == 0)
+	{
+		context.setValue(new KSValue(i18n("#DIV/0")));
+		return true;
+	}
+
+	if(!b)
+		return false;
+
+	// Devide by the number of values
+	temp /= number;
+	
+	bool finish = kspreadfunc_avedev_helper(context, context.value()->listValue(), result, temp);
+	
+	if(!finish)
+		return false;
+	
+	// Devide by the number of values
+	result /= number;
+
+	context.setValue(new KSValue(result));
+
+	return b;
+}
