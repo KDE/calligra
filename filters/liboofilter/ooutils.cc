@@ -96,7 +96,7 @@ void OoUtils::importIndents( QDomElement& parentElement, const StyleStack& style
             if( marginLeft != 0 )
                 indent.setAttribute( "left", marginLeft );
             if( marginRight != 0 )
-                indent.setAttribute( "right", marginLeft );
+                indent.setAttribute( "right", marginRight );
             if( first != 0 )
                 indent.setAttribute( "first", first );
             parentElement.appendChild( indent );
