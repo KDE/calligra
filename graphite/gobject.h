@@ -150,9 +150,9 @@ private:
     GraphitePart *m_part;     // we need that for the history
     QList<QRect> *m_handles;  // contains all the handle rects
     //bool m_firstCall : 1; // Whether this is the first call for this M9r (no hit test!)
-    bool m_pressed : 1;           // mouse button pressed?
-    bool m_changed : 1;           // true, if the Apply button is "active"
-    bool m_created : 1;           // dia created?
+    bool m_pressed;           // mouse button pressed?
+    bool m_changed;           // true, if the Apply button is "active"
+    bool m_created;           // dia created?
 
     QString m_type;         // Type of object (e.g. "Line", "Rectangle")
     QLineEdit *m_line;      // line ed. for the name field
@@ -277,12 +277,12 @@ public:
 
     // toPrinter is set when we print the document - this means we don't
     // have to paint "invisible" (normally they are colored gray) objects
-    virtual void draw(QPainter &p, const QRect &rect, bool toPrinter=false) = 0;
+    virtual void draw(QPainter &p, const QRect &rect, bool toPrinter=false) const = 0;
     // Used to draw the handles/rot-handles when selected
     // All handles which are drawn are added to the list if the list
     // is != 0L. Use this list to check "mouseOver" stuff
     // drawing: setROP(Not)
-    virtual void drawHandles(QPainter &p, QList<QRect> *handles=0L);
+    virtual void drawHandles(QPainter &p, QList<QRect> *handles=0L) const;
 
     // does the object contain this point? (Note: finds the most nested child which is hit!)
     virtual const GObject *hit(const QPoint &p) const = 0;
@@ -350,8 +350,8 @@ private:
     Gradient m_gradient;
     QPen m_pen;
 
-    bool m_ok : 1;      // used to express errors (e.g. during loading)
-    mutable bool m_dirty : 1;   // the zoom factor changed (->recalc on next use)
+    bool m_ok;      // used to express errors (e.g. during loading)
+    mutable bool m_dirty;   // the zoom factor changed (->recalc on next use)
 };
 
 

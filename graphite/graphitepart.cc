@@ -27,15 +27,13 @@
 #include <graphitepart.h>
 #include <graphiteview.h>
 #include <graphitefactory.h>
+#include <gbackground.h>
 
 #include <pagelayoutdia_impl.h>
 
-// test
-#include <ggroup.h>
-
 
 GraphitePart::GraphitePart(QWidget *parentWidget, const char *widgetName, QObject *parent, const char *name, bool singleViewMode)
-    : KoDocument(parentWidget, widgetName, parent, name, singleViewMode), m_history(actionCollection()) {
+    : KoDocument(parentWidget, widgetName, parent, name, singleViewMode), m_history(actionCollection()), m_zoom(1.0) {
 
     setInstance(GraphiteFactory::global());
 
@@ -43,10 +41,33 @@ GraphitePart::GraphitePart(QWidget *parentWidget, const char *widgetName, QObjec
     KStdAction::cut(this, SLOT(edit_cut()), actionCollection(), "edit_cut");
 
     // Settings -> Configure... (nice dialog to configure e.g. units)
+    // ### KMessageBox::enableAllMessages -> dialog
     m_unit=Graphite::MM;  // ### load that from a rc file
+
+    m_nodeZero=new GBackground(QString::fromLatin1("Node Zero"));
+    // test
+    m_nodeZero->setBrush(Qt::red);
+    m_nodeZero->resize(FxRect(20.0, 20.0, 50.0, 50.0));
 }
 
 GraphitePart::~GraphitePart() {
+    delete m_nodeZero;
+    m_nodeZero=0;
+}
+
+void GraphitePart::setGlobalZoom(const double &zoom) {
+
+    if(m_zoom==zoom)
+        return;
+    GraphiteGlobal::self()->setZoom(zoom);
+    m_zoom=zoom;
+    m_nodeZero->setDirty();
+}
+
+void GraphitePart::paintContent(QPainter &painter, const QRect &rect, bool transparent) {
+    kdDebug(37001) << "GraphitePart::painEvent()" << endl;
+    m_nodeZero->setTransparent(transparent);
+    m_nodeZero->draw(painter, rect);
 }
 
 bool GraphitePart::initDoc() {
@@ -185,11 +206,6 @@ KoView *GraphitePart::createViewInstance(QWidget *parent, const char *name) {
     return new GraphiteView(this, parent, name);
 }
 
-void GraphitePart::paintContent(QPainter &/*painter*/, const QRect &/*rect*/, bool /*transparent*/) {
-    kdDebug(37001) << "GraphitePart::painEvent()" << endl;
-    // TODO: setGlobalZoom()
-}
-
 void GraphitePart::setUnit(Graphite::Unit unit) {
     if(m_unit==unit)
         return;
@@ -213,14 +229,6 @@ void GraphitePart::edit_cut() {
 
 void GraphitePart::documentRestored() {
     setModified(false);
-}
-
-void GraphitePart::setGlobalZoom(const double &zoom) {
-
-    if(GraphiteGlobal::self()->zoom()==zoom)
-        return;
-    GraphiteGlobal::self()->setZoom(zoom);
-    // nodeZero->setDirty();
 }
 
 

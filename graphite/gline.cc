@@ -45,7 +45,7 @@ GLine::GLine(const QDomElement &element) :
     if(!isOk())
         return;
 
-    bool ok;
+    bool ok=true;
     static const QString &tagGLine=KGlobal::staticQString("gline");
     static const QString &tagStart=KGlobal::staticQString("start");
     static const QString &tagEnd=KGlobal::staticQString("end");
@@ -117,7 +117,7 @@ QDomElement GLine::save(QDomDocument &doc) const {
     return e;
 }
 
-void GLine::draw(QPainter &p, const QRect &rect, bool toPrinter) {
+void GLine::draw(QPainter &p, const QRect &rect, bool toPrinter) const {
 
     if(dirty())
         recalculate();
@@ -134,7 +134,7 @@ void GLine::draw(QPainter &p, const QRect &rect, bool toPrinter) {
     p.restore();
 }
 
-void GLine::drawHandles(QPainter &p, QList<QRect> *handles) {
+void GLine::drawHandles(QPainter &p, QList<QRect> *handles) const {
 
     if(dirty())
         recalculate();

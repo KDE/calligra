@@ -54,11 +54,12 @@ void GCanvas::contentsMouseMoveEvent(QMouseEvent *e) {
     m_doc->mouseMoveEvent(e, m_view);
 }
 
-void GCanvas::viewportPaintEvent(QPaintEvent */*e*/) {
+void GCanvas::viewportPaintEvent(QPaintEvent *e) {
 
+    m_doc->setGlobalZoom(m_view->zoom());
     QPainter p(viewport());
-    //QRect clipRect=
-    //p.setClip
+    p.setClipRect(e->rect());
+    p.setClipping(true);
     // TODO: 1 - define the region which has to be
     //           repainted and  call m_doc->preparePainting(zoom)!!!
     //       2 - set the clipping region
@@ -76,7 +77,7 @@ void GCanvas::viewportPaintEvent(QPaintEvent */*e*/) {
     //   (flickering,...)
     // - Double buffers are invalidated via: zoomfactor
     //   changes, background changes,...
-    /*kdDebug(37001) << "paintEvent: x=" << e->rect().x()
+    kdDebug(37001) << "paintEvent: x=" << e->rect().x()
                    << " y=" << e->rect().y()
                    << " width=" << e->rect().width()
                    << " height=" << e->rect().height()
@@ -86,8 +87,9 @@ void GCanvas::viewportPaintEvent(QPaintEvent */*e*/) {
                    << " | visible: width=" << visibleWidth()
                    << " height=" << visibleHeight()
                    << " | x-offset=" << contentsX()
-                   << " y-offet=" << contentsY() << endl;*/
-
+                   << " y-offet=" << contentsY() << endl;
+    m_doc->paintContent(p, e->rect());
+    p.end();
 }
 
 bool GCanvas::eventFilter(QObject *obj, QEvent *e) {

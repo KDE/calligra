@@ -43,6 +43,12 @@ public:
     virtual int leftBorder() const { return 20; }
     virtual int topBorder() const { return 20; }
 
+    // ### TODO
+    //virtual void canvasAddChild(KoViewChild *child);
+    //virtual DCOPObject * dcopObject();
+    //virtual void setupPrinter( QPrinter &printer );
+    //virtual void print( QPrinter &printer );
+
 public slots:
     void layoutChanged();
 

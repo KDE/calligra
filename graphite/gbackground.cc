@@ -21,12 +21,29 @@
 
 #include <klocale.h>
 #include <kglobal.h>
+#include <kdebug.h>
 
 #include <gbackground.h>
 
 
 GBackground::GBackground(const QDomElement &element) :
-    GGroup(element.namedItem(QString::fromLatin1("ggroup")).toElement()), m_transparent(false) {
+    GAbstractGroup(element.namedItem(QString::fromLatin1("gabstractgroup")).toElement()) {
+
+    if(!isOk())
+        return;
+
+    static const QString &tagGBackground=KGlobal::staticQString("gbackground");
+    static const QString &attrTransparent=KGlobal::staticQString("transparent");
+
+    if(element.tagName()!=tagGBackground) {
+        setOk(false);
+        return;
+    }
+
+    bool ok=true;
+    m_transparent=static_cast<bool>(element.attribute(attrTransparent).toInt(&ok));
+    if(!ok)
+        m_transparent=false;
 }
 
 GObject *GBackground::clone() const {
@@ -40,66 +57,69 @@ GObject *GBackground::instantiate(const QDomElement &element) const {
 QDomElement GBackground::save(QDomDocument &doc) const {
 
     static const QString &tagGBackground=KGlobal::staticQString("gbackground");
+    static const QString &attrTransparent=KGlobal::staticQString("transparent");
     QDomElement element=doc.createElement(tagGBackground);
-    element.appendChild(GGroup::save(doc));
+    element.setAttribute(attrTransparent, static_cast<int>(m_transparent));
+    element.appendChild(GAbstractGroup::save(doc));
     return element;
 }
 
-void GBackground::draw(QPainter &p, const QRect &rect, bool toPrinter) {
+void GBackground::draw(QPainter &p, const QRect &rect, bool toPrinter) const {
 
+    kdDebug() << "GBackground::draw" << endl;
     if(dirty())
         recalculate();
 
     // do we really have to draw ourselves?
     if(!rect.intersects(boundingRect()))
         return;
+    kdDebug() << "GBackground::draw -- 2" << endl;
 
     // okay, let's draw a nice background
-    if(!toPrinter && !transparent()) {
+    if(!m_transparent) {
         p.save();
         if(fillStyle()==GObject::Brush) {
             p.setBrush(brush());
+            p.drawRect(m_rect.pxRect());
+            kdDebug() << "GBackground::draw -- 3" << endl;
         }
         //else {
             // okay, we have a bg gradient...
             // let's wait for Dirk's answer
+            // Update: Seems that gradients won't be supported (too slow and mem-hungry)
         //}
         p.restore();
     }
-    GGroup::draw(p, rect, toPrinter);
+    GAbstractGroup::draw(p, rect, toPrinter);
 }
 
-const GObject *GBackground::hit(const QPoint &/*p*/) const {
+const QRect &GBackground::boundingRect() const {
 
-    /*
-    if(dirty())
-        recalculate();
+    if(!boundingRectDirty())
+        return GObject::boundingRect();
 
-    QListIterator<GObject> it(m_members);
-    it.toLast();
-    for( ; it!=0L; --it) {
-        if(it.current()->hit(p))
-            return it.current();
-    }
-    if(boundingRect().contains(p))
-        return this;
-    */
-    return 0L;
-}
-
-bool GBackground::intersects(const QRect &r) const {
-
-    if(dirty())
-        recalculate();
-
-    if(r.intersects(boundingRect()))
-        return true;
-    return false;
+    setBoundingRect(GAbstractGroup::boundingRect().unite(m_rect.pxRect()));
+    setBoundingRectDirty(false);
+    return GObject::boundingRect();
 }
 
 GObjectM9r *GBackground::createM9r(GraphitePart *part, GraphiteView *view,
                               const GObjectM9r::Mode &mode) {
     return new GBackgroundM9r(this, mode, part, view, i18n("Background"));
+}
+
+const FxPoint GBackground::origin() const {
+    return m_rect.topLeft();
+}
+
+void GBackground::setOrigin(const FxPoint &origin) {
+    m_rect.moveTopLeft(origin);
+    setBoundingRectDirty(true);
+}
+
+void GBackground::resize(const FxRect &boundingRect) {
+    m_rect=boundingRect;
+    setBoundingRectDirty(true);
 }
 
 
@@ -109,7 +129,7 @@ GBackgroundM9r::GBackgroundM9r(GBackground *background, const Mode &mode, Graphi
 }
 
 bool GBackgroundM9r::mousePressEvent(QMouseEvent */*e*/, QRect &/*dirty*/) {
-    // TODO -- RMB popup
+    // ### TODO -- RMB popup
     return false;
 }
 

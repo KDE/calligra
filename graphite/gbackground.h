@@ -23,11 +23,11 @@
 #include <ggroup.h>
 
 
-class GBackground : public GGroup {
+class GBackground : public GAbstractGroup {
 
 public:
-    GBackground(const QString &name=QString::null) : GGroup(name), m_transparent(false) {}
-    GBackground(const GBackground &rhs) : GGroup(rhs), m_transparent(false) {}
+    GBackground(const QString &name=QString::null) : GAbstractGroup(name), m_transparent(false) {}
+    GBackground(const GBackground &rhs) : GAbstractGroup(rhs), m_transparent(false) {}
     GBackground(const QDomElement &element);
 
     virtual ~GBackground() {}
@@ -40,16 +40,22 @@ public:
     void setTransparent(bool transparent=true) { m_transparent=transparent; }
     bool transparent() const { return m_transparent; }
 
-    virtual void draw(QPainter &p, const QRect &rect, bool toPrinter=false);
+    virtual void draw(QPainter &p, const QRect &rect, bool toPrinter=false) const;
 
-    virtual const GObject *hit(const QPoint &p) const;
-    virtual bool intersects(const QRect &r) const;
-    //virtual const QRect &boundingRect() const;
+    virtual const QRect &boundingRect() const;
 
     virtual GObjectM9r *createM9r(GraphitePart *part, GraphiteView *view,
                                   const GObjectM9r::Mode &mode=GObjectM9r::Manipulate);
+
+    virtual const FxPoint origin() const;
+    virtual void setOrigin(const FxPoint &origin);
+
+    virtual void resize(const FxRect &boundingRect);
+
 private:
     GBackground &operator=(const GBackground &rhs);
+
+    FxRect m_rect;
     bool m_transparent;
 };
 

@@ -32,6 +32,7 @@ class KoMainWindow;
 
 class GraphiteView;
 class GObjectM9r;
+class GBackground;
 
 class GraphitePart : public KoDocument {
 
@@ -41,6 +42,7 @@ public:
     GraphitePart(QWidget *parentWidget = 0, const char *widgetName = 0, QObject *parent=0, const char *name=0, bool singleViewMode=false);
     virtual ~GraphitePart();
 
+    void setGlobalZoom(const double &zoom=1.0); // set the global zoom factor (for this view)
     virtual void paintContent(QPainter &painter, const QRect &rect, bool transparent=false);
 
     virtual bool initDoc();
@@ -86,6 +88,9 @@ public:
     void keyPressEvent(QKeyEvent *e, GraphiteView *view);
     void keyReleaseEvent(QKeyEvent *e, GraphiteView *view);
 
+    // ### TODO
+    //virtual DCOPObject * dcopObject();
+
 public slots:
     void setUnit(Graphite::Unit);
 
@@ -105,7 +110,6 @@ protected:
 
 private:
     GraphitePart &operator=(const GraphitePart &rhs);
-    void setGlobalZoom(const double &zoom=1.0); // set the global zoom factor (for this view)
 
     KCommandHistory m_history;
     QMap<GraphiteView*, GObjectM9r*> m_m9rMap; // map views to m9rs
@@ -115,6 +119,8 @@ private:
     // TODO: Do we need isLoading() like in KSpread?
     Graphite::PageLayout m_pageLayout;
     Graphite::Unit m_unit;
+    GBackground *m_nodeZero;
+    double m_zoom;  // keep track of the zoom factor and setDirty appropriately
 };
 
 

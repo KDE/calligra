@@ -41,9 +41,9 @@ public:
 
     virtual QDomElement save(QDomDocument &doc) const; // save the line to xml
 
-    virtual void draw(QPainter &p, const QRect &rect, bool toPrinter=false);
+    virtual void draw(QPainter &p, const QRect &rect, bool toPrinter=false) const;
     // Do we need this? Maybe even lines should have rectangular handles... nah, doesn't look sexy :)
-    virtual void drawHandles(QPainter &p, QList<QRect> *handles=0L);
+    virtual void drawHandles(QPainter &p, QList<QRect> *handles=0L) const;
 
     virtual const GLine *hit(const QPoint &p) const;
     virtual bool intersects(const QRect &r) const;

@@ -184,6 +184,8 @@ public:
     void setThirdHandleTrigger(const int &thirdHandleTrigger) { m_thirdHandleTrigger=thirdHandleTrigger; }
 
     // current zoom factor (for the "active" (read: being painted on currently) view), 1.0 == 100%
+    // This global zoom factor is needed that we don't have to get zoom factors in every single
+    // Fx* Object
     const double &zoom() const { return m_zoom; }
     void setZoom(const double &zoom);
 

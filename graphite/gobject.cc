@@ -113,7 +113,9 @@ void GObjectM9r::slotCancel() {
     if(KMessageBox::warningContinueCancel(this,
                                           i18n("You'll loose the last changes you made!"),
                                           i18n("Really Cancel?"),
-                                          i18n("Continue"))==KMessageBox::Continue)
+                                          i18n("Continue"),
+                                          QString::fromLatin1("propertydia"),
+                                          true)==KMessageBox::Continue)
         KDialogBase::slotCancel();
 }
 
@@ -578,7 +580,7 @@ QDomElement GObject::save(QDomDocument &doc) const {
     return e;
 }
 
-void GObject::drawHandles(QPainter &p, QList<QRect> *handles) {
+void GObject::drawHandles(QPainter &p, QList<QRect> *handles) const {
 
     if(dirty())
         recalculate();
@@ -724,7 +726,7 @@ GObject::GObject(const QDomElement &element) : m_parent(0L), m_boundingRectDirty
     if(element.tagName()!=tagObject )
         return;
 
-    bool ok;
+    bool ok=true;
 
     if(element.hasAttribute(attrName))
         m_name=element.attribute(attrName);
