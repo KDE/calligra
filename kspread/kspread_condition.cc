@@ -126,7 +126,6 @@ void KSpreadConditions::setConditionList(const QValueList<KSpreadConditional> &l
 QDomElement KSpreadConditions::saveConditions(QDomDocument& doc) const
 {
   QDomElement conditions = doc.createElement("condition");
-  KSpreadConditional condition = condList.first();
   QValueList<KSpreadConditional>::const_iterator it;
   QDomElement child;
   int num = 0;
@@ -134,7 +133,7 @@ QDomElement KSpreadConditions::saveConditions(QDomDocument& doc) const
 
   for (it = condList.begin(); it != condList.end(); it++)
   {
-    condition = *it;
+    KSpreadConditional condition = *it;
 
     /* the name of the element will be "condition<n>"
      * This is unimportant now but in older versions three conditions were

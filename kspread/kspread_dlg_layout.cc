@@ -205,7 +205,7 @@ CellLayoutDlg::CellLayoutDlg( KSpreadView *_view, KSpreadTable *_table,
     obj = table->cellAt( _right, _top );
     if(obj->isObscuringForced())
     {
-      obj = obj->obscuringCells().getFirst();
+      obj = obj->obscuringCells().first();
       int moveX=obj->column();
       int moveY=_top;
       int moveX2 = _right;

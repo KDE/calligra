@@ -58,8 +58,6 @@ KSpreadCell::KSpreadCell( KSpreadTable *_table, int _column, int _row )
   m_pPrivate = 0L;
   m_pQML = NULL;
 
-  m_ObscuringCells.clear();
-
   m_lstDepends.setAutoDelete( TRUE );
   m_lstDependingOnMe.setAutoDelete( TRUE );
 
@@ -285,12 +283,10 @@ void KSpreadCell::setLayoutDirtyFlag()
 {
     setFlag(Flag_LayoutDirty);
 
-    KSpreadCell* cell = NULL;
-    for (cell = m_ObscuringCells.first(); cell != NULL;
-         cell = m_ObscuringCells.next() )
-    {
-      cell->setLayoutDirtyFlag();
-    }
+    QValueList<KSpreadCell*>::iterator it = m_ObscuringCells.begin();
+    QValueList<KSpreadCell*>::iterator end = m_ObscuringCells.end();
+    for ( ; it != end; ++it )
+	(*it)->setLayoutDirtyFlag();
 }
 
 bool KSpreadCell::needsPrinting() const
@@ -321,13 +317,13 @@ bool KSpreadCell::isObscured() const
   return !( m_ObscuringCells.isEmpty() );
 }
 
-bool KSpreadCell::isObscuringForced()
+bool KSpreadCell::isObscuringForced() const
 {
-  KSpreadCell *cell = NULL;
-
-  for (cell = m_ObscuringCells.first(); cell != NULL;
-       cell = m_ObscuringCells.next())
+  QValueList<KSpreadCell*>::const_iterator it = m_ObscuringCells.begin();
+  QValueList<KSpreadCell*>::const_iterator end = m_ObscuringCells.end();
+  for ( ; it != end; ++it )
   {
+    KSpreadCell *cell = *it;
     if (cell->isForceExtraCells())
     {
       /* the cell might force extra cells, and then overlap even beyond that
@@ -346,7 +342,7 @@ bool KSpreadCell::isObscuringForced()
 
 void KSpreadCell::obscure( KSpreadCell *cell, bool isForcing )
 {
-  while (m_ObscuringCells.removeRef(cell));
+  m_ObscuringCells.remove(cell); // removes *all* occurences
 
   if (isForcing)
   {
@@ -1864,10 +1860,10 @@ void KSpreadCell::paintCell( const QRect& rect, QPainter &painter,
        infinite loop
     */
     // Determine the dimension of the cell.
-    KSpreadCell* obscuringCell = NULL;
-    for (obscuringCell = m_ObscuringCells.first(); obscuringCell != NULL;
-         obscuringCell = m_ObscuringCells.next())
-    {
+    QValueList<KSpreadCell*>::iterator it = m_ObscuringCells.begin();
+    QValueList<KSpreadCell*>::iterator end = m_ObscuringCells.end();
+    for ( ; it != end; ++it ) {
+      KSpreadCell *obscuringCell = *it;
       QPoint obscuringCellRef(obscuringCell->column(), obscuringCell->row());
       QPoint obscuringCellLoc( m_pTable->columnPos(obscuringCell->column()),
                                m_pTable->rowPos(obscuringCell->row()));
@@ -2031,7 +2027,6 @@ void KSpreadCell::paintDefaultBorders(QPainter& painter, KSpreadView* view,
   bool paintLeft;
   bool paintBottom;
   bool paintRight;
-  KSpreadCell *cell = NULL;
 
   paintLeft = ( left_pen.style() == Qt::NoPen &&
                 table()->getShowGrid() );
@@ -2051,9 +2046,11 @@ void KSpreadCell::paintDefaultBorders(QPainter& painter, KSpreadView* view,
                   table()->getShowGrid() &&
                   table()->isOnNewPageY( cellRef.y() + 1 ) ); //Only when last cell on page
 
-  for (cell = m_ObscuringCells.first(); cell != NULL;
-       cell = m_ObscuringCells.next())
+  QValueList<KSpreadCell*>::const_iterator it = m_ObscuringCells.begin();
+  QValueList<KSpreadCell*>::const_iterator end = m_ObscuringCells.end();
+  for ( ; it != end; ++it )
   {
+    KSpreadCell *cell = *it;
     paintLeft = paintLeft && (cell->column() == cellRef.x());
     paintTop = paintTop && (cell->row() == cellRef.y());
   }
@@ -2528,10 +2525,11 @@ void KSpreadCell::paintCellBorders(QPainter& painter, KSpreadView* view,
   bool paintTop = true;
   bool paintBottom = true;
 
-  KSpreadCell* cell = NULL;
-  for (cell = m_ObscuringCells.first(); cell != NULL;
-       cell = m_ObscuringCells.next())
+  QValueList<KSpreadCell*>::const_iterator it = m_ObscuringCells.begin();
+  QValueList<KSpreadCell*>::const_iterator end = m_ObscuringCells.end();
+  for ( ; it != end; ++it )
   {
+    KSpreadCell* cell = *it;
     int xDiff = cellRef.x() - cell->column();
     int yDiff = cellRef.y() - cell->row();
     paintLeft = paintLeft && xDiff == 0;
@@ -3036,9 +3034,9 @@ int KSpreadCell::height( int _row, const KSpreadCanvas *_canvas ) const
 
 const QBrush& KSpreadCell::backGroundBrush( int _col, int _row ) const
 {
-  KSpreadCell* cell = m_ObscuringCells.getFirst();
-  if ( cell != NULL )
+  if ( !m_ObscuringCells.isEmpty() )
   {
+    const KSpreadCell* cell = m_ObscuringCells.first();
     return cell->backGroundBrush( cell->column(), cell->row() );
   }
 
@@ -3047,9 +3045,9 @@ const QBrush& KSpreadCell::backGroundBrush( int _col, int _row ) const
 
 const QColor& KSpreadCell::bgColor( int _col, int _row ) const
 {
-  const KSpreadCell* cell = m_ObscuringCells.getFirst();
-  if ( cell != NULL )
+  if ( !m_ObscuringCells.isEmpty() )
   {
+    const KSpreadCell* cell = m_ObscuringCells.first();
     return cell->bgColor( cell->column(), cell->row() );
   }
 
@@ -3321,12 +3319,7 @@ void KSpreadCell::setDisplayText( const QString& _text, bool updateDepends )
     for (int y = m_iRow; y <= m_iRow + extraYCells(); y++)
     {
       KSpreadCell* cell = m_pTable->cellAt(x,y);
-      QPtrList<KSpreadCell> lst = cell->obscuringCells();
-
-      for (cell = lst.first(); cell != NULL; cell = lst.next())
-      {
-        cell->setFlag(Flag_LayoutDirty);
-      }
+      cell->setLayoutDirtyFlag();
     }
   }
   setCalcDirtyFlag();
@@ -3538,10 +3531,11 @@ void KSpreadCell::setValue( double _d )
 void KSpreadCell::update()
 {
   kdDebug(36001) << util_cellName( m_iColumn, m_iRow ) << " update" << endl;
-  KSpreadCell* cell = NULL;
-  for ( cell = m_ObscuringCells.first(); cell != NULL;
-        cell = m_ObscuringCells.next())
+  QValueList<KSpreadCell*>::iterator it = m_ObscuringCells.begin();
+  QValueList<KSpreadCell*>::iterator end = m_ObscuringCells.end();
+  for ( ; it != end; ++it )
   {
+    KSpreadCell* cell = *it;
     cell->setLayoutDirtyFlag();
     cell->setDisplayDirtyFlag();
     m_pTable->updateCell( cell, cell->column(), cell->row() );

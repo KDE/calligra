@@ -522,9 +522,10 @@ void KSpreadTable::adjustSizeMaxY ( int _y )
 KSpreadCell* KSpreadTable::visibleCellAt( int _column, int _row, bool _scrollbar_update )
 {
   KSpreadCell* cell = cellAt( _column, _row, _scrollbar_update );
-  KSpreadCell* obscuring = cell->obscuringCells().getLast();
-
-  return obscuring == NULL ? cell : obscuring;
+  if ( cell->obscuringCells().isEmpty() )
+      return cell;
+  else
+      return cell->obscuringCells().last();
 }
 
 KSpreadCell* KSpreadTable::firstCell() const
@@ -1550,7 +1551,7 @@ void KSpreadTable::setSeries( const QPoint &_marker, double start, double end, d
       if ( cell->isObscuringForced() )
       {
         /* case 2. */
-        cell = cell->obscuringCells().getFirst();
+        cell = cell->obscuringCells().first();
         undoRegion.setLeft(QMIN(undoRegion.left(), cell->column()));
       }
       /* case 1.  Add the extra space to numberOfCells and then skip
@@ -1574,7 +1575,7 @@ void KSpreadTable::setSeries( const QPoint &_marker, double start, double end, d
 
       if ( cell->isObscuringForced() )
       {
-        cell = cell->obscuringCells().getFirst();
+        cell = cell->obscuringCells().first();
         undoRegion.setTop(QMIN(undoRegion.top(), cell->row()));
       }
       numberOfCells += cell->extraXCells();
@@ -1605,7 +1606,7 @@ void KSpreadTable::setSeries( const QPoint &_marker, double start, double end, d
 
       if (cell->isObscuringForced())
       {
-        cell = cell->obscuringCells().getFirst();
+        cell = cell->obscuringCells().first();
       }
 
       //      cell->setCellText(cellText.setNum( incr ));
@@ -1652,7 +1653,7 @@ void KSpreadTable::setSeries( const QPoint &_marker, double start, double end, d
 
       if (cell->isObscuringForced())
       {
-        cell = cell->obscuringCells().getFirst();
+        cell = cell->obscuringCells().first();
       }
 
       //      cell->setCellText(cellText.setNum( incr ));
@@ -1698,7 +1699,7 @@ void KSpreadTable::setSeries( const QPoint &_marker, double start, double end, d
 
       if (cell->isObscuringForced())
       {
-        cell = cell->obscuringCells().getFirst();
+        cell = cell->obscuringCells().first();
       }
 
       //cell->setCellText(cellText.setNum( incr ));
@@ -3299,7 +3300,7 @@ void KSpreadTable::sortByRow( const QRect &area, int key1, int key2, int key3,
     cell1 = cellAt( d, key1 );
     if ( cell1->isObscured() && cell1->isObscuringForced() )
     {
-      KSpreadCell* obscuring = cell1->obscuringCells().getFirst();
+      KSpreadCell* obscuring = cell1->obscuringCells().first();
       cell = cellAt( obscuring->column(), key1 );
       cell1 = cellAt( obscuring->column() + cell->extraXCells() + 1,
                       obscuring->column());
@@ -3644,7 +3645,7 @@ void KSpreadTable::sortByColumn( const QRect &area, int key1, int key2, int key3
     cell1 = cellAt( key1, d );
     if ( cell1->isObscured() && cell1->isObscuringForced() )
     {
-      KSpreadCell* obscuring = cell1->obscuringCells().getFirst();
+      KSpreadCell* obscuring = cell1->obscuringCells().first();
       cell  = cellAt( key1, obscuring->row() );
       cell1 = cellAt( key1, obscuring->row() + cell->extraYCells() + 1 );
       d     = obscuring->row() + cell->extraYCells() + 1;

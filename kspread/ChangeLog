@@ -1,3 +1,11 @@
+2002-07-18  Harri Porten  <porten@kde.org>
+
+	* kspread_cell.h: store the obscuring lest list in a QValueList
+	as QPtrList has a rather high memory overhead offset (for empty lists).
+	Saves ~20 bytes per cell. More optimizations should be possible by
+	converting the two others lists and using a special KSpreadCellList
+	class.
+
 2002-07-16  Harri Porten  <porten@kde.org>
 
 	* kspread_dlg_layout.cc: warning free layouts, switched to using

@@ -526,12 +526,12 @@ public:
      *
      * @return TRUE if an obscuring cell is forced to obscure this one.
      */
-    bool isObscuringForced();
+    bool isObscuringForced() const;
 
     /**
      * @return the obscuring cell list (might be empty)
      */
-    QPtrList<KSpreadCell> const obscuringCells() const
+    QValueList<KSpreadCell*> const obscuringCells() const
       { return m_ObscuringCells; }
 
     /**
@@ -878,7 +878,7 @@ private:
      * enlarged object. This means that we have to call this object in order
      * of painting it for example instead of painting 'this'.
      */
-    QPtrList<KSpreadCell> m_ObscuringCells;
+    QValueList<KSpreadCell*> m_ObscuringCells;
 
     /**
      * Tells wether the cell is a button, combobox etc.

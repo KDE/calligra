@@ -505,7 +505,7 @@ void KSpreadCanvas::gotoLocation( QPoint location, KSpreadTable* table,
     KSpreadCell* cell = table->cellAt(location);
     if ( cell->isObscured() && cell->isObscuringForced() )
     {
-      cell = cell->obscuringCells().getFirst();
+      cell = cell->obscuringCells().first();
       topLeft = QPoint(cell->column(), cell->row());
     }
     bottomRight.setX(topLeft.x() + cell->extraXCells());
@@ -977,7 +977,7 @@ void KSpreadCanvas::mousePressEvent( QMouseEvent * _ev )
   // Go to the upper left corner of the obscuring object if cells are merged
   if (cell->isObscuringForced())
   {
-    cell = cell->obscuringCells().getFirst();
+    cell = cell->obscuringCells().first();
     col = cell->column();
     row = cell->row();
   }
@@ -1227,7 +1227,7 @@ void KSpreadCanvas::moveDirection(KSpread::MoveTo direction, bool extendSelectio
   */
   if (cell->isObscuringForced())
   {
-    cell = cell->obscuringCells().getFirst();
+    cell = cell->obscuringCells().first();
     cellCorner = QPoint(cell->column(), cell->row());
   }
 
@@ -3928,7 +3928,7 @@ void KSpreadToolTip::maybeTip( const QPoint& p )
     // Special treatment for obscured cells.
     if ( cell->isObscured() && cell->isObscuringForced() )
     {
-      cell = cell->obscuringCells().getFirst();
+      cell = cell->obscuringCells().first();
       int moveX = cell->column();
       int moveY = cell->row();
 

@@ -125,7 +125,7 @@ void KSpreadSelection::setSelection( QPoint newMarker, QPoint newAnchor,
   KSpreadCell* cell = table->cellAt(newMarker);
   if (cell->isObscured() && cell->isObscuringForced())
   {
-    cell = cell->obscuringCells().getFirst();
+    cell = cell->obscuringCells().first();
     newMarker = QPoint(cell->column(), cell->row());
   }
 
@@ -157,7 +157,7 @@ void KSpreadSelection::setMarker( const QPoint &point, KSpreadTable* table )
   KSpreadCell* cell = table->cellAt(topLeft);
   if (cell->isObscured() && cell->isObscuringForced())
   {
-    cell = cell->obscuringCells().getFirst();
+    cell = cell->obscuringCells().first();
     topLeft = QPoint(cell->column(), cell->row());
   }
 
@@ -188,7 +188,7 @@ QPoint KSpreadSelection::selectionAnchor()const
 
   if (cell->isObscured())
   {
-    cell = cell->obscuringCells().getFirst();
+    cell = cell->obscuringCells().first();
     anchorArea = QRect(QPoint(cell->column(), cell->row()), anchor);
   }
   else
@@ -273,7 +273,7 @@ QRect KSpreadSelection::extendToMergedAreas(QRect area) const
         }
         else if ( cell->isObscured() && cell->isObscuringForced() )
         {
-          cell = cell->obscuringCells().getFirst();
+          cell = cell->obscuringCells().first();
           left=QMIN(left,cell->column());
           top=QMIN(top,cell->row());
           bottom=QMAX(bottom,cell->row() + cell->extraYCells());
