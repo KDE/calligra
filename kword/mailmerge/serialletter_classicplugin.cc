@@ -21,7 +21,7 @@
 #include "serialletter_classicplugin.h"
 #include "serialletter_classicplugin.moc"
 #include "mailmerge.h"
-#include <klineeditdlg.h>
+#include <kinputdialog.h>
 #include <qlabel.h>
 #include <qhbox.h>
 #include <qvbox.h>
@@ -465,7 +465,11 @@ void KWClassicMailMergeEditor::changeRecord( int i )
 void KWClassicMailMergeEditor::addEntry()
 {
     bool ok;
-    QString value=KLineEditDlg::getText(i18n("Enter entry name:"),QString::null,&ok,this);
+    QString value=KInputDialog::getText( i18n("Add entry"),
+					 i18n("Enter entry name:"),
+					 QString::null,
+					 &ok,
+					 this);
     if ((ok) && !value.isEmpty())
     {
         if ( db->getNumRecords() == 0 )
