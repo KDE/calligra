@@ -46,6 +46,12 @@ class OOWRITERExportFactory : KGenericFactory<OOWRITERExport, KoFilter>
 public: // ### TODO: load correct .po file
     OOWRITERExportFactory(void) : KGenericFactory<OOWRITERExport, KoFilter> ("kwordkword1dot3import")
     {}
+
+protected:
+    virtual void setupTranslations(void)
+    {
+        KGlobal::locale()->insertCatalogue("kofficefilters");
+    }
 };
 
 K_EXPORT_COMPONENT_FACTORY( libkwordkword1dot3import, OOWRITERExportFactory() )
