@@ -57,22 +57,30 @@ VGradientTool::draw()
 void
 VGradientTool::mouseButtonRelease( const KoPoint& current )
 {
+	VGradient gradient;
+	gradient.clearStops();
+	gradient.addStop( VColor( m_dialog->startColor().rgb() ), 0.0, 0.5 );
+	gradient.addStop( VColor( m_dialog->endColor().rgb() ), 1.0, 0.5 );
+	gradient.setOrigin( first() );
+	gradient.setVector( current );
+	gradient.setType( (VGradient::VGradientType)m_dialog->gradientType() );
+	gradient.setRepeatMethod( (VGradient::VGradientRepeatMethod)m_dialog->gradientRepeat() );
+
 	if( m_dialog->gradientFill() )
 	{
-		VGradient gradient;
-		gradient.clearStops();
-		gradient.addStop( VColor( m_dialog->startColor().rgb() ), 0.0, 0.5 );
-		gradient.addStop( VColor( m_dialog->endColor().rgb() ), 1.0, 0.5 );
-		gradient.setOrigin( first() );
-		gradient.setVector( current );
-		gradient.setType( (VGradient::VGradientType)m_dialog->gradientType() );
-		gradient.setRepeatMethod( (VGradient::VGradientRepeatMethod)m_dialog->gradientRepeat() );
-
 		VFill fill;
 		fill.gradient() = gradient;
 		fill.setType( VFill::grad );
 		view()->part()->addCommand(
 			new VFillCmd( &view()->part()->document(), fill ), true );
+	}
+	else
+	{
+		VStroke stroke;
+		stroke.gradient() = gradient;
+		stroke.setType( VStroke::grad );
+		view()->part()->addCommand(
+			new VStrokeCmd( &view()->part()->document(), &stroke ), true );
 	}
 
 	view()->selectionChanged();
@@ -90,8 +98,17 @@ VGradientTool::mouseDragRelease( const KoPoint& current )
 	gradient.setType( (VGradient::VGradientType)m_dialog->gradientType() );
 	gradient.setRepeatMethod( (VGradient::VGradientRepeatMethod)m_dialog->gradientRepeat() );
 
-	view()->part()->addCommand(
-		new VStrokeCmd( &view()->part()->document(), &gradient ), true );
+	if( m_dialog->gradientFill() )
+	{
+		VFill fill;
+		fill.gradient() = gradient;
+		fill.setType( VFill::grad );
+		view()->part()->addCommand(
+			new VFillCmd( &view()->part()->document(), fill ), true );
+	}
+	else
+		view()->part()->addCommand(
+			new VStrokeCmd( &view()->part()->document(), &gradient ), true );
 
 	view()->selectionChanged();
 }
