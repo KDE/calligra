@@ -271,7 +271,6 @@ void KPLineObject::draw( QPainter *_painter, int _diffx, int _diffy )
     int oy = orig.y() - _diffy;
     int ow = ext.width();
     int oh = ext.height();
-    QRect r;
 
     _painter->save();
 
@@ -279,7 +278,6 @@ void KPLineObject::draw( QPainter *_painter, int _diffx, int _diffy )
     {
         QPen tmpPen( pen );
         pen.setColor( shadowColor );
-        r = _painter->viewport();
 
         if ( angle == 0 )
         {
@@ -287,12 +285,12 @@ void KPLineObject::draw( QPainter *_painter, int _diffx, int _diffy )
             int sy = oy;
             getShadowCoords( sx, sy, shadowDirection, shadowDistance );
 
-            _painter->setViewport( sx, sy, r.width(), r.height() );
+            _painter->translate( sx, sy );
             paint( _painter );
         }
         else
         {
-            _painter->setViewport( ox, oy, r.width(), r.height() );
+            _painter->translate( ox, oy );
 
             QRect br = QRect( 0, 0, ow, oh );
             int pw = br.width();
@@ -316,15 +314,13 @@ void KPLineObject::draw( QPainter *_painter, int _diffx, int _diffy )
             paint( _painter );
         }
 
-        _painter->setViewport( r );
         pen = tmpPen;
     }
 
     _painter->restore();
-    _painter->save();
 
-    r = _painter->viewport();
-    _painter->setViewport( ox, oy, r.width(), r.height() );
+    _painter->save();
+    _painter->translate( ox, oy );
 
     if ( angle == 0 )
         paint( _painter );
@@ -347,8 +343,6 @@ void KPLineObject::draw( QPainter *_painter, int _diffx, int _diffy )
         _painter->setWorldMatrix( m, true );
         paint( _painter );
     }
-
-    _painter->setViewport( r );
 
     _painter->restore();
 

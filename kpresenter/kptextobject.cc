@@ -376,10 +376,6 @@ void KPTextObject::draw( QPainter *_painter, int _diffx, int _diffy )
     int oy = orig.y() - _diffy;
     int ow = ext.width();
     int oh = ext.height();
-    QRect r;
-
-    _painter->save();
-    r = _painter->viewport();
 
     _painter->setPen( pen );
     _painter->setBrush( brush );
@@ -395,7 +391,7 @@ void KPTextObject::draw( QPainter *_painter, int _diffx, int _diffy )
             int sy = oy;
             getShadowCoords( sx, sy, shadowDirection, shadowDistance );
 
-            _painter->setViewport( sx, sy, r.width(), r.height() );
+            _painter->translate( sx, sy );
 
             if ( specEffects ) {
                 switch ( effect2 ) {
@@ -412,7 +408,7 @@ void KPTextObject::draw( QPainter *_painter, int _diffx, int _diffy )
 
             ktextobject.document()->disableDrawAllInOneColor();
         } else {
-            _painter->setViewport( ox, oy, r.width(), r.height() );
+            _painter->translate( ox, oy );
 
             QRect br = QRect( 0, 0, ow, oh );
             int pw = br.width();
@@ -452,7 +448,7 @@ void KPTextObject::draw( QPainter *_painter, int _diffx, int _diffy )
         _painter->restore();
     }
 
-    _painter->setViewport( ox, oy, r.width(), r.height() );
+    _painter->translate( ox, oy );
 
     if ( angle == 0 ) {
         _painter->setPen( Qt::NoPen );
@@ -523,8 +519,6 @@ void KPTextObject::draw( QPainter *_painter, int _diffx, int _diffy )
         }
     }
 
-    _painter->setViewport( r );
-    _painter->restore();
     _painter->restore();
 
     KPObject::draw( _painter, _diffx, _diffy );

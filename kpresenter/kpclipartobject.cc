@@ -451,15 +451,12 @@ void KPClipartObject::draw( QPainter *_painter, int _diffx, int _diffy )
     int oh = ext.height();
 
     _painter->save();
-    QRect ov = _painter->viewport();
 
     _painter->setPen( pen );
     _painter->setBrush( brush );
 
     int penw = pen.width() / 2;
 
-    _painter->save();
-    _painter->setViewport( 0, 0, ov.width(), ov.height() );
     if ( angle == 0 ) {
         _painter->setPen( Qt::NoPen );
         _painter->setBrush( brush );
@@ -469,19 +466,21 @@ void KPClipartObject::draw( QPainter *_painter, int _diffx, int _diffy )
             _painter->drawPixmap( ox + penw, oy + penw, *gradient->getGradient(),
                                   0, 0, ow - 2 * penw, oh - 2 * penw );
 
-        QRect r2 = _painter->viewport();
+        // We have to use setViewport here, but it doesn't cumulate with previous transformations
+        // (e.g. painter translation set up by kword when embedding kpresenter...)   :(
         _painter->save();
-        _painter->setViewport( ox + 1, oy + 1, ext.width() - 2, ext.height() - 2 );
+        //QRect r = _painter->window();
+        //_painter->translate( ox+1, oy+1 );
+        //_painter->scale( 1.0 * (ext.width()-2) / r.width(), 1.0 * (ext.height()-2) / r.height() );
+        _painter->setViewport( ox+1, oy+1, ext.width()-2, ext.height()-2 );
         _painter->drawPicture( *picture );
-        _painter->setViewport( r2 );
         _painter->restore();
 
         _painter->setPen( pen );
         _painter->setBrush( Qt::NoBrush );
         _painter->drawRect( ox + penw, oy + penw, ow - 2 * penw, oh - 2 * penw );
     } else {
-        QRect r = _painter->viewport();
-        _painter->setViewport( ox, oy, r.width(), r.height() );
+        _painter->translate( ox, oy );
 
         QRect br( QPoint( 0, 0 ), ext );
         int pw = br.width();
@@ -504,7 +503,7 @@ void KPClipartObject::draw( QPainter *_painter, int _diffx, int _diffy )
         pnt.drawPicture( *picture );
         pnt.end();
 
-        _painter->setWorldMatrix( m );
+        _painter->setWorldMatrix( m, true /* always keep previous transformations */ );
 
         _painter->setPen( Qt::NoPen );
         _painter->setBrush( brush );
@@ -522,10 +521,8 @@ void KPClipartObject::draw( QPainter *_painter, int _diffx, int _diffy )
         _painter->setBrush( Qt::NoBrush );
         _painter->drawRect( rr.left() + pixXPos + penw, rr.top() + pixYPos + penw, ow - 2 * penw, oh - 2 * penw );
 
-        _painter->setViewport( r );
     }
 
-    _painter->setViewport( ov );
     _painter->restore();
 
     KPObject::draw( _painter, _diffx, _diffy );

@@ -155,14 +155,11 @@ void KPPartObject::draw( QPainter *_painter, int _diffx, int _diffy )
 //     int oy = orig.y() - _diffy;
     int ow = ext.width();
     int oh = ext.height();
-//     QRect r;
 
     int penw = pen.width() / 2;
 
     _painter->save();
     _painter->translate( -_diffx, -_diffy );
-    // r = _painter->viewport();
-    // _painter->setViewport( ox, oy, r.width(), r.height() );
 
     if ( angle == 0 )
     {
@@ -215,8 +212,6 @@ void KPPartObject::draw( QPainter *_painter, int _diffx, int _diffy )
 
         paint( _painter );
     }
-
-    // _painter->setViewport( r );
 
     _painter->restore();
 

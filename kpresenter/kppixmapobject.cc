@@ -503,10 +503,8 @@ void KPPixmapObject::draw( QPainter *_painter, int _diffx, int _diffy )
     int oy = orig.y() - _diffy;
     int ow = ext.width();
     int oh = ext.height();
-    QRect r;
 
     _painter->save();
-    r = _painter->viewport();
 
     _painter->setPen( pen );
     _painter->setBrush( brush );
@@ -530,8 +528,7 @@ void KPPixmapObject::draw( QPainter *_painter, int _diffx, int _diffy )
         }
         else
         {
-            r = _painter->viewport();
-            _painter->setViewport( ox, oy, r.width(), r.height() );
+            _painter->translate( ox, oy );
 
             QRect br = pixmap->rect();
             int pw = br.width();
@@ -557,8 +554,6 @@ void KPPixmapObject::draw( QPainter *_painter, int _diffx, int _diffy )
             getShadowCoords( dx, dy, shadowDirection, shadowDistance );
             _painter->drawRect( rr.left() + pixXPos + dx, rr.top() + pixYPos + dy,
                                 bs.width(), bs.height() );
-
-            _painter->setViewport( r );
         }
     }
     _painter->restore();
@@ -579,8 +574,7 @@ void KPPixmapObject::draw( QPainter *_painter, int _diffx, int _diffy )
         _painter->setBrush( Qt::NoBrush );
         _painter->drawRect( ox + penw, oy + penw, ow - 2 * penw, oh - 2 * penw );
     } else {
-        r = _painter->viewport();
-        _painter->setViewport( ox, oy, r.width(), r.height() );
+        _painter->translate( ox, oy );
 
         QRect br = pixmap->rect();
         int pw = br.width();
@@ -613,14 +607,8 @@ void KPPixmapObject::draw( QPainter *_painter, int _diffx, int _diffy )
         _painter->setPen( pen );
         _painter->setBrush( Qt::NoBrush );
         _painter->drawRect( rr.left() + pixXPos + penw, rr.top() + pixYPos + penw, ow - 2 * penw, oh - 2 * penw );
-
-        _painter->setViewport( r );
     }
     _painter->restore();
 
     KPObject::draw( _painter, _diffx, _diffy );
 }
-
-
-
-

@@ -124,42 +124,35 @@ void KPBackGround::setBackClipFilename( const QString &_filename, QDateTime _las
 void KPBackGround::draw( QPainter *_painter, QPoint _offset, bool _drawBorders )
 {
     _painter->save();
-    QRect r = _painter->viewport();
+    _painter->translate( _offset.x(), _offset.y() );
 
     switch ( backType )
     {
     case BT_COLOR:
-    {
-        _painter->setViewport( _offset.x(), _offset.y(), r.width(), r.height() );
         drawBackColor( _painter );
-    } break;
+        break;
     case BT_PICTURE:
-    {
-        _painter->setViewport( _offset.x(), _offset.y(), r.width(), r.height() );
         if ( backView == BV_CENTER ) drawBackColor( _painter );
         drawBackPix( _painter );
-    } break;
+        break;
     case BT_CLIPART:
     {
-        _painter->setViewport( _offset.x(), _offset.y(), r.width(), r.height() );
         drawBackColor( _painter );
-        _painter->setViewport( r );
         _painter->save();
+        // We have to use setViewport here, but it doesn't cumulate with previous transformations
+        // (e.g. painter translation set up by kword when embedding kpresenter...)   :(
         _painter->setViewport( _offset.x(), _offset.y(), ext.width(), ext.height() );
+        ////_painter->scale( 1.0 * ext.width() / r.width(), 1.0 * ext.height() / r.height() );
         drawBackClip( _painter );
         _painter->restore();
     } break;
     }
 
     if ( _drawBorders )
-    {
-        _painter->setViewport( _offset.x(), _offset.y(), r.width(), r.height() );
         drawBorders( _painter );
-    }
 
     drawHeaderFooter( _painter, _offset );
 
-    _painter->setViewport( r );
     _painter->restore();
 }
 

@@ -279,12 +279,8 @@ void KPObject::draw( QPainter *_painter, int _diffx, int _diffy )
     if ( dSelection )
     {
         _painter->save();
-        QRect r = _painter->viewport();
-
-        _painter->setViewport( orig.x() - _diffx, orig.y() - _diffy, r.width(), r.height() );
+        _painter->translate( orig.x() - _diffx, orig.y() - _diffy );
         paintSelection( _painter );
-
-        _painter->setViewport( r );
         _painter->restore();
     }
 }
