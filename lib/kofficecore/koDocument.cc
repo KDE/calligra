@@ -1692,7 +1692,7 @@ bool KoDocument::loadNativeFormatFromStore( const QString& file )
 
     if ( store->bad() )
     {
-        d->lastErrorMessage = i18n( "Not a valid KOffice file." );
+        d->lastErrorMessage = i18n( "Not a valid KOffice file: %1" ).arg( file );
         delete store;
         QApplication::restoreOverrideCursor();
         return false;
