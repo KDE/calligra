@@ -21,7 +21,7 @@ kformula_bin_SOURCES =  kformula_view.cc matrixwidget.cc kformula_main.cc \
 	MatrixElement.cc PrefixedElement.cc 
 noinst_HEADERS = kformula_main.h kformula_doc.h kformula_view.h formuladef.h \
 	kformula.h kformula_shell.h BasicElement.h RootElement.h TextElement.h\
-	BracketElement.h FractionElement.h MatrixElement.h PrefixedElement.h
+	BracketElement.h FractionElement.h MatrixElement.h PrefixedElement.h \
 	matrixwidget.h
 SRCMETA = kformula_main.moc kformula_view.moc kformula_doc.moc \
 	kformula_shell.moc matrixwidget.moc
