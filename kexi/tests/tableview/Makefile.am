@@ -1,0 +1,13 @@
+bin_PROGRAMS = kexitableviewtest  #kexidbfirebirdcursor
+
+INCLUDES = -I$(top_srcdir)/kexi $(all_includes)
+
+SUBDIRS = .
+
+METASOURCES = AUTO
+
+kexitableviewtest_SOURCES = main.cpp
+kexitableviewtest_LDADD = $(LIB_QT) $(LIB_KDECORE) $(top_srcdir)/kexi/kexidb/libkexidb.la $(top_srcdir)/kexi/widget/libkexiextendedwidgets.la $(all_libraries)
+kexitableviewtest_LDFLAGS = $(all_libraries) $(KDE_RPATH) --no-undefined
+
+include $(top_srcdir)/kexi/Makefile.global
