@@ -496,7 +496,7 @@ void SelectTool::continueDragging(const QPoint &pos)
   KivioSelectDragData *pData;
   KivioStencil *pStencil = m_pCanvas->activePage()->selectedStencils()->first();
   pData = m_lstOldGeometry.first();
-  bool move = true;
+  // bool move = true;
 
   while( pStencil && pData )
   {
@@ -535,10 +535,10 @@ void SelectTool::continueDragging(const QPoint &pos)
         newY = p.y();
       }
 
-      if( pStencil->protection()->at( kpX )==false ) {
+      if( pStencil->protection()->at( kpX ) == false ) {
         pStencil->setX(newX);
       }
-      if( pStencil->protection()->at( kpY )==false ) {
+      if( pStencil->protection()->at( kpY ) == false ) {
         pStencil->setY(newY);
       }
     }
@@ -896,9 +896,13 @@ void SelectTool::endDragging(const QPoint&)
         KivioMoveStencilCommand * cmd = new KivioMoveStencilCommand( i18n("Move Stencil"),
           pStencil, pData->rect, pStencil->rect(), m_pCanvas->activePage());
         macro->addCommand( cmd);
+
+        if(pStencil->type() == kstConnector) {
+          pStencil->searchForConnections(m_pView->activePage(), m_pView->zoomHandler()->zoomItY(4));
+        }
+
         pData = m_lstOldGeometry.next();
         pStencil = m_pCanvas->activePage()->selectedStencils()->next();
-
     }
 
     m_pCanvas->doc()->addCommand( macro );
@@ -915,6 +919,16 @@ void SelectTool::endCustomDragging(const QPoint&)
 {
     m_customDragID = 0;
     m_pCanvas->drawSelectedStencilsXOR();
+    KivioStencil *pStencil = m_pCanvas->activePage()->selectedStencils()->first();
+
+    while( pStencil )
+    {
+        if(pStencil->type() == kstConnector) {
+          pStencil->searchForConnections(m_pView->activePage(), m_pView->zoomHandler()->zoomItY(4));
+        }
+
+        pStencil = m_pCanvas->activePage()->selectedStencils()->next();
+    }
 
     m_pCanvas->endUnclippedSpawnerPainter();
 }
@@ -926,6 +940,10 @@ void SelectTool::endResizing(const QPoint&)
     m_pCanvas->doc()->addCommand( cmd );
     // Undraw the last outline
     m_pCanvas->drawStencilXOR( m_pResizingStencil );
+
+    if(m_pResizingStencil->type() == kstConnector) {
+      m_pResizingStencil->searchForConnections(m_pView->activePage(), m_pView->zoomHandler()->zoomItY(4));
+    }
 
     // Deallocate the painter object
     m_pCanvas->endUnclippedSpawnerPainter();

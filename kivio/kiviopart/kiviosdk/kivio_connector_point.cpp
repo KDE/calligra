@@ -159,6 +159,7 @@ void KivioConnectorPoint::disconnect( bool removeFromTargetList )
             m_pTarget->removeConnectorPointFromList(this);
 
         m_pTarget = NULL;
+        m_targetId = -1;
     }
 
 }

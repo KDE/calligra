@@ -1,8 +1,4 @@
-#1########################################################!@#$
-####   Makefile.am generated automatically by KDEStudio   ####
-#### WARNING! All changes made in this part will be lost! ####
-##############################################################
-SUBDIRS = straight_connector 
+SUBDIRS = straight_connector
 lib_LTLIBRARIES =libkivioconnectortool.la
 
 
@@ -11,7 +7,7 @@ INCLUDES = -I$(top_srcdir)/kivio/kiviopart\
 	-I$(top_srcdir)/kivio/kiviopart/tklib\
 	-I$(top_srcdir)/kivio/kiviopart/tools\
 	-I$(top_srcdir)/kivio/plugins/kivioconnectortool/straight_connector \
-	$(KOFFICE_INCLUDES) $(all_includes)
+	$(KOFFICE_INCLUDES) $(KOTEXT_INCLUDES) $(all_includes)
 libkivioconnectortool_la_METASOURCES = AUTO
 libkivioconnectortool_la_SOURCES = \
 		plugin.cpp\
@@ -26,9 +22,7 @@ EXTRA_DIST = \
 		kivioconnectortool.desktop\
 		kivio_connector_cursor2.xpm\
 		kivio_connector_cursor1.xpm
-##############################################################
-####                  END KDEStudio part                  ####
-#2########################################################!@#$
+
 libkivioconnectortool_la_LDFLAGS = -module $(KDE_PLUGIN)
 libkivioconnectortool_la_LIBADD = $(all_libraries) $(top_builddir)/kivio/kiviopart/libkiviopart.la
 

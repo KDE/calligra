@@ -23,6 +23,7 @@
 #include <kiconloader.h>
 #include <kstandarddirs.h>
 #include <koPoint.h>
+#include <kozoomhandler.h>
 
 #include "kivio_view.h"
 #include "kivio_canvas.h"
@@ -129,7 +130,7 @@ void ConnectorTool::connector(QRect)
         return;
     }
 
-    m_pStencil->searchForConnections(page);
+    m_pStencil->searchForConnections(page, m_pView->zoomHandler()->zoomItY(4));
     doc->updateView(page);
 }
 
