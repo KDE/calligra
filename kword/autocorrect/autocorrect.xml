@@ -1,0 +1,7 @@
+<!DOCTYPE autocorrection>
+<items>
+ <item find="(C)" replace="©" />
+ <item find="(R)" replace="®" />
+ <item find="(c)" replace="©" />
+ <item find="(r)" replace="®" />
+</items>
