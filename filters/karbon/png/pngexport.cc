@@ -60,20 +60,22 @@ PngExport::convert( const QCString& from, const QCString& to )
 	// create image with correct width and height
 	QImage img( int( rect.width() ), int( rect.height() ), 32 );
 
-	// Create painter and paint the image
+	// Create painter and set up objects to draw
 	VKoPainter p( img.bits(), rect.width(), rect.height() );
 	p.setWorldMatrix( QWMatrix().translate( -rect.x(), -rect.y() ) );
-	VObjectListIterator itr = doc.selection()->objects();
+	VObjectList objects = doc.selection()->objects();
+	VObjectListIterator itr = objects;
 
+	// we dont need the selection anymore:
+	doc.selection()->clear();
+
+	// paint shapes over image
     for ( ; itr.current(); ++itr )
 		itr.current()->draw( &p, rect );
 
 	QImage image = img.swapRGB();
 	// save png
 	image.save( m_chain->outputFile(), "PNG" );
-
-	// we dont need the selection anymore:
-	doc.selection()->clear();
 
 	delete storeIn;
 
