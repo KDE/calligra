@@ -34,14 +34,14 @@
 typedef KGenericFactory<StarWriterImport, KoFilter> StarWriterImportFactory;
 K_EXPORT_COMPONENT_FACTORY(libstarwriterimport, StarWriterImportFactory("starwriterimport"));
 
-// Get unsigned 24-bit integer at given offset
+// Get unsigned 24-bits integer at given offset
 static inline Q_UINT32 readU24(QByteArray array, Q_UINT32 p)
 {
    Q_UINT8* ptr = (Q_UINT8*) array.data();
    return (Q_UINT32) (ptr[p] + (ptr[p+1] << 8) + (ptr[p+2] << 16));
 }
 
-// Get unsigned 16-bit integer at given offset
+// Get unsigned 16-bits integer at given offset
 static inline Q_UINT16 readU16(QByteArray array, Q_UINT32 p)
 {
    Q_UINT8* ptr = (Q_UINT8*) array.data();
@@ -68,7 +68,7 @@ KoFilter::ConversionStatus StarWriterImport::convert(const QCString& from, const
 
     // Read streams
     POLE::Storage storage;
-    storage.open( m_chain->inputFile().latin1() );
+    storage.open(m_chain->inputFile().latin1());
 
     POLE::Stream* stream;
 
@@ -273,6 +273,8 @@ bool StarWriterImport::parseText(QByteArray n)
     QByteArray s;
     Q_UINT16 len;
     QString text;
+    Q_UINT16 attributeStart, attributeLength;
+    QString parAttributes, charAttributes1, charAttributes2;
 
     // Retrieve the paragraph (text-only)
     len = readU16(n, 0x09);
@@ -280,10 +282,17 @@ bool StarWriterImport::parseText(QByteArray n)
     for (Q_UINT16 k = 0x00; k < len; k++)
         s[k] = n[0x0B+k];
 
-    // Write it to the variable
+    /*
+    // Retrieve paragraph and character attributes
+    // FIXME: parse 'S' sections
+    // FIXME: parse 'A' sections
+    */
+
+    // Write everything to the variable
     text = convertToKWordString(s);
     bodyStuff.append("  <PARAGRAPH>\n");
     bodyStuff.append("   <TEXT xml:space=\"preserve\">" + text + "</TEXT>\n");
+    // FIXME: add FORMATS
     bodyStuff.append("  </PARAGRAPH>\n");
 
     return true;
