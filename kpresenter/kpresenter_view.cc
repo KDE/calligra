@@ -5875,7 +5875,7 @@ void KPresenterView::slotUpdateRuler()
             getVRuler()->setFrameStartEnd( r.top()/*+ m_canvas->diffy()*//*- pc.y()*/, r.bottom()/*+m_canvas->diffy()*//*- pc.y()*/ );
             if( getHRuler())
             {
-                int flags = txtobj->isProtectContent ? 0: (KoRuler::F_INDENTS | KoRuler::F_TABS);
+                int flags = txtobj->isProtectContent() ? 0 : (KoRuler::F_INDENTS | KoRuler::F_TABS);
                 if( getHRuler()->flags()!= flags )
                 {
                     getHRuler()->changeFlags(flags);
