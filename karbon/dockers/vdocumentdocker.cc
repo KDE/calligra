@@ -537,7 +537,7 @@ void VHistoryTab::commandExecuted( VCommand* command )
 			QListViewItem* child = item->firstChild();
 			while ( !found && child )
 			{
-				found = ( ( (VHistoryItem*)item )->command() == command );
+				found = ( ( (VHistoryItem*)child )->command() == command );
 				if ( !found )
 					child = child->nextSibling();
 				else
@@ -550,10 +550,11 @@ void VHistoryTab::commandExecuted( VCommand* command )
 	} 
 	if ( found )
 	{
-		m_history->setCurrentItem( item );
+		m_history->repaintItem( item );
+		if ( item->parent() )
+			m_history->repaintItem( item->parent() );
 		m_history->ensureItemVisible( item );
 	}
-	m_history->update();
 } // VHistoryTab::commandExecuted
 
 void VHistoryTab::commandAdded( VCommand* command )
@@ -639,8 +640,9 @@ void VHistoryTab::removeLastCommand()
 
 void VHistoryTab::commandClicked( int button, QListViewItem* item, const QPoint&, int )
 {
-	if ( !item )
+	if ( !item || item->rtti() == 1001 )
 		return;
+
 	VCommand* cmd = ( (VHistoryItem*)item )->command();
 	if ( cmd->success() )
 		if ( button == 1 )
