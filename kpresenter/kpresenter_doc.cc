@@ -1574,7 +1574,6 @@ bool KPresenterDoc::loadOasis( const QDomDocument& doc, KoOasisStyles&oasisStyle
         }
     }
 
-    setModified(false);
 
     ignoreSticky = TRUE;
     kdDebug()<<" _clean :"<<_clean<<endl;
@@ -1600,6 +1599,7 @@ bool KPresenterDoc::loadOasis( const QDomDocument& doc, KoOasisStyles&oasisStyle
     recalcVariables( VT_FIELD );
     emit sigProgress( -1 );
 
+    setModified( false );
     return true;
 }
 
@@ -4471,6 +4471,7 @@ void KPresenterDoc::updateCustomListSlideShow( CustomListMap & map )
         }
         m_customListSlideShow.insert( it.key(), tmpDict );
     }
+    setModified( true );
 }
 
 
