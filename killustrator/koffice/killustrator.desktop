@@ -1,16 +1,9 @@
-# KDE Config File
-[KDE Desktop Entry]
+[Desktop Entry]
 Name=KIllustrator
 Name[eo]=Ilustranto
 Name[hu]=KIllusztr·tor
 Name[is]=Teiknir
-Name[no]=Illustrat¯r
-Name[pt]=IlustraÁıes
-Name[ro]=Ilustrator
-Name[ru]=ÈÃÃ¿”‘“¡‘œ“
-Name[sv]=Illustrattioner
 Exec=killustrator
-CORBAExec=killustrator --server
 Comment=KIllustrator Vector Graphics Application
 Comment[ca]=AplicaciÛ de gr‡fics vectorials
 Comment[cs]=Aplikace pro pr·ci s vektorovou grafikou
@@ -20,23 +13,12 @@ Comment[eo]=Vektorgrafika desegnilo
 Comment[es]=AplicaciÛn de Gr·ficos Vectoriales KIllustrator
 Comment[fi]=Vektorigrafiikkaohjelmisto
 Comment[fr]=KIllustrator est une Application de dessin vectoriel
-Comment[hr]=Killustrator program za vektorsku grafiku
+Comment[hr]=Program za vektorsku grafiku
 Comment[hu]=KIllusztr·tor vektor grafikus rajzolÛprogram
 Comment[is]=killustrator:  Hlutbundi teikniforrit K-vˆndulsins
 Comment[ja]=KIllustrator •Ÿ•Ø•»•Î•∞•È•’•£•√•Ø•π•¢•◊•Í•±°º•∑•Á•Û
-Comment[no]=Vektorgrafikkprogrammet KIllustrator
-Comment[pl]=Program do grafiki wektorowej
-Comment[pt]=Ferramenta para desenho vectorial
-Comment[pt_BR]=Programa de gr·ficos vetoriais KIllustrator
-Comment[ro]=Program de grafic„ vectorial„
-Comment[ru]=˜≈À‘œ“ŒŸ  «“¡∆…ﬁ≈”À…  “≈ƒ¡À‘œ“
-Comment[sk]=KIllustrator - vektorov· grafick· aplik·cia
-Comment[sl]=Paket KIllustrator za vektorsko grafiko
-Comment[sv]=Vektorgrafikprogram
 MimeType=application/x-killustrator
-X-KDE-RepoIds=IDL:KIllustrator/DocumentFactory:1.0#KIllustrator
-X-KDE-ActivationMode=shared
-Type=OpenPart
+Type=Application
 Icon=killustrator.png
 MiniIcon=killustrator.png
-ServiceTypes=KOfficeDocument
+ServiceTypes=KOfficePart,KPart

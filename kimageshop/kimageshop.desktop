@@ -1,11 +1,12 @@
 [Desktop Entry]
 Name=KImageShop
+Name[eo]=Bildejo
 Exec=kimageshop
 X-KDE-Library=libkimageshop
 X-KDE-LibraryMajor=1
 X-KDE-LibraryMinor=0
-X-KDE-LibraryDependencies=libcutesti.so
-Comment=KImageShop
+X-KDE-LibraryDependencies=
+Comment=KOffice Image Manipulation Program
 MimeType=application/x-kimageshop
 Type=Application
 Icon=kimageshop.png

@@ -11,4 +11,5 @@ X-KDE-LibraryDependencies=
 Type=Application
 Icon=kchart.png
 MiniIcon=kchart.png
-ServiceTypes=application/x-kchart,KOfficePart,KPart
+MimeType=application/x-kchart
+ServiceTypes=KOfficePart,KPart
