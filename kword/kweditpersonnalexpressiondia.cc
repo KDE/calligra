@@ -83,6 +83,7 @@ KWEditPersonnalExpression::KWEditPersonnalExpression( QWidget *parent, const cha
     m_delExpression->setEnabled(state);
 
     m_delGroup->setEnabled(state);
+    m_renameGroup->setEnabled(state);
     m_renameExpression->setEnabled(state);
     enableButtonOK( state );
 
@@ -256,6 +257,7 @@ void KWEditPersonnalExpression::slotAddGroup()
         m_addExpression->setEnabled(true);
         m_delExpression->setEnabled(false);
         m_delGroup->setEnabled(true);
+        m_renameGroup->setEnabled(true);
         enableButtonOK( true );
         m_bChanged=true;
     }
@@ -276,6 +278,7 @@ void KWEditPersonnalExpression::slotDelGroup()
     m_delExpression->setEnabled(hasItems);
     m_delGroup->setEnabled(hasItems);
     m_renameExpression->setEnabled(hasItems);
+    m_renameGroup->setEnabled(hasItems);
     m_bChanged=true;
 
 }
@@ -297,7 +300,7 @@ void KWEditPersonnalExpression::slotRenameGroup()
         initCombobox();
         m_typeExpression->setCurrentItem(m_typeExpression->listBox()->index(m_typeExpression->listBox()->findItem ( newName )));
         m_addExpression->setEnabled(true);
-        m_delExpression->setEnabled(m_typeExpression->listBox()->count()>0);
+        m_delExpression->setEnabled(m_listOfExpression->count()>0);
         m_delGroup->setEnabled(true);
         enableButtonOK( true );
         m_bChanged=true;
