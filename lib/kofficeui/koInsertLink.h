@@ -25,6 +25,7 @@
 class QLineEdit;
 class KURLRequester;
 
+namespace KOfficePrivate {
 /**
  * @internal
  */
@@ -114,6 +115,7 @@ private:
 signals:
     void textChanged();
 };
+}
 
 /**
  * Dialog to insert links to various sources (file, Internet, mail and bookmarks).
@@ -123,21 +125,22 @@ class KoInsertLinkDia : public KDialogBase
     Q_OBJECT
 public:
     KoInsertLinkDia( QWidget *parent, const char *name = 0,bool displayBookmarkLink=true );
-    static bool createLinkDia(QString & linkName, QString & hrefName, QStringList bkmlist, bool displayBookmarkLink = true );
+    static bool createLinkDia(QString & linkName, QString & hrefName, const QStringList& bkmlist, bool displayBookmarkLink = true,
+                              QWidget* parent = 0, const char* name = 0);
 
     //internal
-    QString linkName()const;
-    QString hrefName();
+    QString linkName() const;
+    QString hrefName() const;
     void setHrefLinkName(const QString &_href, const QString &_link, const QStringList & bkmlist);
 protected slots:
     virtual void slotOk();
     void slotTextChanged (  );
 
 private:
-    fileLinkPage *fileLink;
-    mailLinkPage *mailLink;
-    internetLinkPage *internetLink;
-    bookmarkLinkPage *bookmarkLink;
+    KOfficePrivate::fileLinkPage *fileLink;
+    KOfficePrivate::mailLinkPage *mailLink;
+    KOfficePrivate::internetLinkPage *internetLink;
+    KOfficePrivate::bookmarkLinkPage *bookmarkLink;
 };
 
 #endif

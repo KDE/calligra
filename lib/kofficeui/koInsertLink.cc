@@ -33,13 +33,14 @@
 #include <kdesktopfile.h>
 #include <krecentdocument.h>
 
+using namespace KOfficePrivate;
 
-KoInsertLinkDia::KoInsertLinkDia( QWidget */*parent*/, const char */*name*/,bool displayBookmarkLink )
+KoInsertLinkDia::KoInsertLinkDia( QWidget *parent, const char *name, bool displayBookmarkLink )
     : KDialogBase( KDialogBase::IconList, i18n("Insert Link"),
 		   KDialogBase::Ok | KDialogBase::Cancel,
-		   KDialogBase::Ok)
+		   KDialogBase::Ok, parent, name )
 {
-    bookmarkLink = 0L;
+  bookmarkLink = 0L;
   QVBox *page=addVBoxPage(i18n("Internet"), QString::null,BarIcon("html",KIcon::SizeMedium));
   internetLink = new  internetLinkPage(page );
   connect(internetLink,SIGNAL(textChanged()),this,SLOT(slotTextChanged (  )));
@@ -69,11 +70,11 @@ void KoInsertLinkDia::slotTextChanged ( )
     enableButtonOK( !(linkName().isEmpty()  || hrefName().isEmpty()));
 }
 
-bool KoInsertLinkDia::createLinkDia(QString & _linkName, QString & _hrefName, QStringList bkmlist, bool displayBookmarkLink)
+bool KoInsertLinkDia::createLinkDia(QString & _linkName, QString & _hrefName, const QStringList& bkmlist, bool displayBookmarkLink, QWidget* parent, const char* name)
 {
     bool res = false;
 
-    KoInsertLinkDia *dlg = new KoInsertLinkDia( 0L, "Insert Link", displayBookmarkLink );
+    KoInsertLinkDia *dlg = new KoInsertLinkDia( parent, name, displayBookmarkLink );
     dlg->setHrefLinkName(_hrefName,_linkName, bkmlist);
     if ( dlg->exec() == Accepted )
     {
@@ -122,7 +123,7 @@ void KoInsertLinkDia::setHrefLinkName(const QString &_href, const QString &_link
     slotTextChanged ( );
 }
 
-QString KoInsertLinkDia::linkName()const
+QString KoInsertLinkDia::linkName() const
 {
     QString result;
     switch(activePageIndex())
@@ -148,7 +149,7 @@ QString KoInsertLinkDia::linkName()const
   return result;
 }
 
-QString KoInsertLinkDia::hrefName()
+QString KoInsertLinkDia::hrefName() const
 {
     QString result;
     switch(activePageIndex())
