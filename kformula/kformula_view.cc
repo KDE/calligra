@@ -240,9 +240,11 @@ void KFormulaPartView::cursorChanged(bool visible, bool selecting)
     KFormula::Document* doc = document()->getDocument();
     doc->getFormatBoldAction()->setEnabled( selecting );
     doc->getFormatItalicAction()->setEnabled( selecting );
+    doc->getFontFamilyAction()->setEnabled( selecting );
     if ( !selecting ) {
         doc->getFormatBoldAction()->setChecked( false );
         doc->getFormatItalicAction()->setChecked( false );
+        doc->getFontFamilyAction()->setCurrentItem( 0 );
     }
 }
 
