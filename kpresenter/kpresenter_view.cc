@@ -1240,14 +1240,14 @@ void KPresenterView::screenFullScreen()
 /*===============================================================*/
 void KPresenterView::sizeSelected()
 {
-    tbFont.setPointSize( ( (QFontSizeAction*)actionTextFontSize )->fontSize() );
+    tbFont.setPointSize( ( (KFontSizeAction*)actionTextFontSize )->fontSize() );
     page->setTextFont( &tbFont );
 }
 
 /*===============================================================*/
 void KPresenterView::fontSelected()
 {
-    tbFont.setFamily( ( (QFontAction*)actionTextFontFamily )->currentText() );
+    tbFont.setFamily( ( (KFontAction*)actionTextFontFamily )->currentText() );
     page->setTextFont( &tbFont );
 }
 
@@ -2033,7 +2033,7 @@ void KPresenterView::setupActions()
 					     actionCollection(), "screen_penwidth" );
     QStringList lst;
     lst << "1" << "2" << "3" << "4" << "5" << "6" << "7" << "8" << "9" << "10";
-    ( ( QSelectAction* )actionScreenPenWidth )->setItems( lst );
+    ( ( KSelectAction* )actionScreenPenWidth )->setItems( lst );
     connect( ( ( KSelectAction* )actionScreenPenWidth ), SIGNAL( activated( const QString & ) ),	
 	     this, SLOT( screenPenWidth( const QString & ) ) );
 
@@ -2721,7 +2721,7 @@ void KPresenterView::doAutomaticScreenPres()
     screenStop();
 }
 
-void KPresenterView::updateReadWrite( bool readwrite )
+void KPresenterView::updateReadWrite( bool /*readwrite*/ )
 {
 #ifdef __GNUC__
 #warning TODO

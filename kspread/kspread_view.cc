@@ -303,7 +303,7 @@ KSpreadView::KSpreadView( QWidget *_parent, const char *_name, KSpreadDoc* doc )
     lst.append( "cos");
     lst.append( "sqrt");
     lst.append( i18n("Others...") );
-    ((QSelectAction*) m_formulaSelection)->setItems( lst );
+    ((KSelectAction*) m_formulaSelection)->setItems( lst );
     connect( m_formulaSelection, SIGNAL( activated( const QString& ) ),
 	     this, SLOT( formulaSelection( const QString& ) ) );
     m_autoSum = new KAction( i18n("AutoSum"), KSBarIcon("black-sum"), 0, this, SLOT( autoSum() ),
@@ -1350,7 +1350,7 @@ void KSpreadView::addTable( KSpreadTable *_t )
     QObject::connect( _t, SIGNAL( sig_maxRow( int ) ), m_pCanvas, SLOT( slotMaxRow( int ) ) );
     QObject::connect( _t, SIGNAL( sig_polygonInvalidated( const QPointArray& ) ),
 		      this, SLOT( repaintPolygon( const QPointArray& ) ) );
-  
+
 }
 
 void KSpreadView::removeTable( KSpreadTable *_t )

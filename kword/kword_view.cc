@@ -208,13 +208,13 @@ void KWordView::initGui()
     ( (KColorAction*)actionFrameBackColor )->blockSignals( FALSE );
 
     showFormulaToolbar( FALSE );
-    
+
     QWidget *tb = 0;
     if ( factory() )
       tb = factory()->container( "frame_toolbar", this );
     if ( tb )
       tb->hide();
-    
+
     /* ???
     if ( ( (KoMainWindow*)shell() )->fileToolBar() )
 	( (KoMainWindow*)shell() )->fileToolBar()->setBarPos( KToolBar::Left );
@@ -400,7 +400,7 @@ void KWordView::setupActions()
     for ( unsigned int i = 0; i < m_pKWordDoc->paragLayoutList.count(); i++ )
  	lst << m_pKWordDoc->paragLayoutList.at( i )->getName();
     styleList = lst;
-    ( (QSelectAction*)actionFormatStyle )->setItems( lst );
+    ( (KSelectAction*)actionFormatStyle )->setItems( lst );
     actionFormatBold = new KToggleAction( i18n( "&Bold" ), KWBarIcon( "bold" ), CTRL + Key_B,
 					   this, SLOT( textBold() ),
 					   actionCollection(), "format_bold" );
@@ -434,7 +434,7 @@ void KWordView::setupActions()
     lst.clear();
     for ( unsigned int i = 0; i <= 10; i++ )
  	lst << QString( "%1" ).arg( i );
-    ( (QSelectAction*)actionFormatLineSpacing )->setItems( lst );
+    ( (KSelectAction*)actionFormatLineSpacing )->setItems( lst );
     actionFormatEnumList = new KToggleAction( i18n( "Enumerated List" ), KWBarIcon( "enumList" ), 0,
 					      this, SLOT( textEnumList() ),
 					      actionCollection(), "format_enumlist" );
@@ -473,7 +473,7 @@ void KWordView::setupActions()
     lst.clear();
     for ( unsigned int i = 0; i < 10; i++ )
  	lst << QString( "%1" ).arg( i + 1 );
-    ( (QSelectAction*)actionFormatBrdWidth )->setItems( lst );
+    ( (KSelectAction*)actionFormatBrdWidth )->setItems( lst );
     actionFormatBrdStyle = new KSelectAction( i18n( "Paragraph Border Style" ), 0,
 						 actionCollection(), "format_brdstyle" );
     connect( ( ( KSelectAction* )actionFormatBrdStyle ), SIGNAL( activated( const QString & ) ),	
@@ -484,7 +484,7 @@ void KWordView::setupActions()
     lst.append( i18n( "dot line ( **** )" ) );
     lst.append( i18n( "dash dot line ( -*-* )" ) );
     lst.append( i18n( "dash dot dot line ( -**- )" ) );
-    ( (QSelectAction*)actionFormatBrdStyle )->setItems( lst );
+    ( (KSelectAction*)actionFormatBrdStyle )->setItems( lst );
 
     // ---------------------------- frame toolbar actions
 
@@ -507,7 +507,7 @@ void KWordView::setupActions()
 					     actionCollection(), "frame_brdstyle" );
     connect( ( ( KSelectAction* )actionFrameBrdStyle ), SIGNAL( activated( const QString & ) ),	
 	     this, SLOT( frameBorderStyle( const QString & ) ) );
-    ( (QSelectAction*)actionFrameBrdStyle )->setItems( lst );
+    ( (KSelectAction*)actionFrameBrdStyle )->setItems( lst );
     actionFrameBrdWidth = new KSelectAction( i18n( "Frame Border Width" ), 0,
 						 actionCollection(), "frame_brdwidth" );
     connect( ( ( KSelectAction* )actionFrameBrdWidth ), SIGNAL( activated( const QString & ) ),	
@@ -515,7 +515,7 @@ void KWordView::setupActions()
     lst.clear();
     for ( unsigned int i = 0; i < 10; i++ )
  	lst << QString( "%1" ).arg( i + 1 );
-    ( (QSelectAction*)actionFrameBrdWidth )->setItems( lst );
+    ( (KSelectAction*)actionFrameBrdWidth )->setItems( lst );
     actionFrameBackColor = new KColorAction( i18n( "Frame Background Color" ), KColorAction::BackgroundColor, 0,
 					     this, SLOT( frameBackColor() ),
 					     actionCollection(), "frame_backcolor" );
@@ -660,11 +660,11 @@ void KWordView::showFormulaToolbar( bool show )
 {
   if ( !factory() )
     return;
-  
+
   QWidget *tb = factory()->container( "formula_toolbar", this );
   if( !tb )
     return;
-  
+
   if ( show )
     tb->show();
   else
@@ -995,7 +995,7 @@ void KWordView::setTool( MouseMode _mouseMode )
     }
     QWidget *tbFormat = 0;
     QWidget *tbFrame = 0;
-    
+
     if ( factory() )
     {
       tbFormat = factory()->container( "format_toolbar", this );
