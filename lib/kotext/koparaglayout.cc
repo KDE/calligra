@@ -22,6 +22,8 @@
 #include "koparagcounter.h"
 #include "kostyle.h"
 #include <qdom.h>
+#include <kglobal.h>
+#include <klocale.h>
 #include <kdebug.h>
 
 QString* KoParagLayout::shadowCssCompat = 0L;
@@ -143,7 +145,11 @@ void KoParagLayout::loadParagLayout( KoParagLayout& layout, const QDomElement& p
             tab.ptPos = KoStyle::getAttribute( element, "ptpos", 0.0 );
             tab.filling = static_cast<KoTabulatorFilling>( KoStyle::getAttribute( element, "filling", TF_BLANK ) );
             tab.ptWidth = KoStyle::getAttribute( element, "width", 0.5 );
-            tab.alignChar = element.attribute("alignchar",".")[0];
+            QString alignCharStr = element.attribute("alignchar");
+            if ( alignCharStr.isEmpty() )
+                tab.alignChar = KGlobal::locale()->decimalSymbol()[0];
+            else
+                tab.alignChar = alignCharStr[0];
             tabList.append( tab );
         }
     }
