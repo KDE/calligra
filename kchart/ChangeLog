@@ -1,3 +1,10 @@
+2005-03-09    <ingwa@dhcp-254-144.lkpg.cendio.se>
+
+	Fix bug introduced by patch to fix bug 14971: Axes label handling
+	in connection with KSpread was broken.
+	* kchart_part.cc (setData): set m_rowLabels and m_colLabels
+	instead of storing axes labels to the params.
+
 2005-03-08  Inge Wallin  <inge@lysator.liu.se>
 
 	Initialize the chart in the document instead of the view.

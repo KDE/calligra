@@ -87,8 +87,6 @@ bool KChartPart::initDoc(InitDocFlags flags, QWidget* parentWidget)
 }
 
 
-// FIXME: This function seems to be never called!!
-
 void KChartPart::initTestChart()
 {
     int  col;
@@ -108,8 +106,8 @@ void KChartPart::initTestChart()
                 // kdDebug(35001) << "Set cell for " << row << "," << col << endl;
                 m_currentData.setCell(row, col, t);
 
+		// Fill column label, but only on the first iteration.
 		if (row == 0) {
-		    // Fill columnlabel.
 		    m_colLabels << QString("Column %1").arg(col + 1);
 		}
             }
@@ -267,45 +265,58 @@ void KChartPart::setData( const KoChart::Data& data )
         rowStart = 1;
     }
 
-    if ( hasColHeader )
-    {
+    // Generate legend from the column headers if applicable.
+    m_rowLabels.clear();
+    if ( hasColHeader ) {
+#if 0
         m_params->setLegendSource( KDChartParams::LegendManual );
         for( row = rowStart; row < data.rows(); row++ )
         {
             m_params->setLegendText( row - rowStart, data.cell( row, 0 ).stringValue() );
         }
+#else
+        for( row = rowStart; row < data.rows(); row++ )
+	    m_rowLabels << data.cell( row, 0 ).stringValue();
+#endif
     }
     else
         m_params->setLegendSource( KDChartParams::LegendAutomatic );
 
-    if ( hasRowHeader )
-    {
+    // Generate X labels from the row headers if applicable
+    m_colLabels.clear();
+    if ( hasRowHeader ) {
+#if 0
         KDChartAxisParams bottomparms = m_params->axisParams( KDChartAxisParams::AxisPosBottom );
 
         m_longLabels.clear();
         m_shortLabels.clear();
-        for ( uint col = colStart; col < data.cols(); col++ )
-        {
+        for ( uint col = colStart; col < data.cols(); col++ ) {
             m_longLabels << data.cell( 0, col ).stringValue();
             m_shortLabels << data.cell( 0, col ).stringValue().left( 3 );
         }
         bottomparms.setAxisLabelStringLists( &m_longLabels, &m_shortLabels );
         m_params->setAxisParams( KDChartAxisParams::AxisPosBottom, bottomparms );
+#else
+        for( col = colStart; col < data.cols(); col++ )
+	    m_colLabels << data.cell( 0, col ).stringValue();
+#endif
     }
     else
     {
+#if 0
         m_longLabels.clear();
         m_shortLabels.clear();
+#endif
     }
 
-    if ( hasColHeader || hasRowHeader )
-    {
+    // If there is a row header and/or a column header, then generate
+    // the data that will be used for the chart by translating the
+    // original data.
+    if ( hasColHeader || hasRowHeader ) {
         KoChart::Data matrix( data.rows() - rowStart, data.cols() - colStart );
 
-        for ( col = colStart; col < data.cols(); col++ )
-        {
-            for ( row = rowStart; row < data.rows(); row++ )
-            {
+        for ( col = colStart; col < data.cols(); col++ ) {
+            for ( row = rowStart; row < data.rows(); row++ ) {
                 matrix.setCell( row - rowStart, col - colStart,
 				KoChart::Value( data.cell( row, col ).doubleValue() ) );
             }
@@ -319,9 +330,6 @@ void KChartPart::setData( const KoChart::Data& data )
     emit docChanged();
 }
 
-
-// FIXME: This has to be totally wrong.  It has to be the view that
-//        shows the wizard, not the document.
 
 bool KChartPart::showWizard()
 {
