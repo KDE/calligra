@@ -1427,7 +1427,18 @@ void OoWriterImport::writeFormat( QDomDocument& doc, QDomElement& formats, int i
     if (m_styleStack.hasAttribute("fo:text-shadow")) // 3.10.21
     {
         QDomElement shadow = doc.createElement("SHADOW");
-        shadow.setAttribute("text-shadow", m_styleStack.attribute("fo:text-shadow"));
+        QString css = m_styleStack.attribute("fo:text-shadow");
+        // Workaround for OOo-1.1 bug: they forgot to save the color.
+        QStringList tokens = QStringList::split(' ', css);
+        if ( !tokens.isEmpty() ) {
+            QColor col( tokens.first() );
+            if ( !col.isValid() && tokens.count() > 1 ) {
+                col.setNamedColor( tokens.last() );
+            }
+            if ( !col.isValid() ) // no valid color found at either end -> append gray
+                css += " gray";
+        }
+        shadow.setAttribute("text-shadow", css);
         format.appendChild(shadow);
     }
 
