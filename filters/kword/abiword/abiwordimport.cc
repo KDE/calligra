@@ -124,6 +124,7 @@ public:
         red=0;
         green=0;
         blue=0;
+        textPosition=0;
     }
     ~StackItem()
     {
@@ -139,6 +140,7 @@ public:
     int         red;
     int         green;
     int         blue;
+    int         textPosition; //Normal (0), subscript(1), superscript (2)
 };
 
 
@@ -225,31 +227,51 @@ bool StructureParser :: startElement( const QString&, const QString&, const QStr
     //TODO: memory failure recovery
     if ((name=="c")||(name=="C"))
     {
-        // <c> tags can be nested in <p> tags or in other <c> tags
+        // <c> tags can be nested in <p> elements or in other <c> elements
+        // AbiWord does not use it but explicitely allows external programs to write AbiWord files with nested <c> elements!
         if ((structureStack.current()->elementType==ElementTypeParagraph)
                 ||(structureStack.current()->elementType==ElementTypeContent))
         {
             QValueList<AbiProps> abiPropsList;
-            QString strFontStyle,strWeight,strDecoration,strColour;
+            QString strFontStyle,strWeight,strDecoration,strColour,strTextPosition;
+            //TODO: initialize the QStrings with the previous values of the properties they represent!
             abiPropsList.append( AbiProps("font-style",&strFontStyle));
             abiPropsList.append( AbiProps("font-weight",&strWeight));
             abiPropsList.append( AbiProps("text-decoration",&strDecoration));
+            abiPropsList.append( AbiProps("text-position",&strTextPosition));
             abiPropsList.append( AbiProps("color",&strColour));
             kdDebug()<< "========== props=\"" << attributes.value("props") << "\"" << endl;
+            // Treat the props attributes in the two available flavors: lower case and upper case.
             TreatAbiProps(attributes.value("props"),abiPropsList);
             TreatAbiProps(attributes.value("PROPS"),abiPropsList);
             stackItem->elementType=ElementTypeContent;
             stackItem->stackNode=nodeOut;   // <TEXT>
             stackItem->stackNode2=nodeOut2; // <FORMATS>
             stackItem->pos=structureStack.current()->pos; //Propagate the position
-            stackItem->italic=(strFontStyle.contains("italic")>0);
-            stackItem->bold=(strWeight.contains("bold")>0);
+
+            // GRR/TODO: if we have nested <c> elements, the following code resets properties instead of keepimg the old unmodified ones!
+            stackItem->italic=(strFontStyle=="italic");
+            stackItem->bold=(strWeight=="bold");
             // underline is the only font-decoration available in KWord
-            stackItem->underline=(strDecoration.contains("underline")>0);
+            stackItem->underline=(strDecoration=="underline"); // Underline is the only text decoration that KWord can do!
+            if (strTextPosition=="subscript")
+            {
+                stackItem->textPosition=1;
+            }
+            else if (strTextPosition=="superscript")
+            {
+                stackItem->textPosition=2;
+            }
+            else
+            {
+                stackItem->textPosition=0;
+            }
             long int colour=strColour.toLong(NULL,16);
             stackItem->red  =(colour&0xFF0000)>>16;
             stackItem->green=(colour&0x00FF00)>>8;
             stackItem->blue =(colour&0x0000FF);
+            // TODO: font-size (e.g. 10pt) and font-family (e.g. times)
+            // TODO: transform the font-family in a font we have on the system KWord will run.
         }
         else
         {//we are not nested correctly, so consider it a parse error!
@@ -337,6 +359,7 @@ bool StructureParser :: endElement( const QString&, const QString& , const QStri
 
 bool StructureParser :: characters ( const QString & ch )
 {
+    // DEBUG start
     if (ch=="\n")
     {
         kdDebug() << indent << " (LINEFEED)" << endl;
@@ -345,6 +368,7 @@ bool StructureParser :: characters ( const QString & ch )
     {
         kdDebug() << indent << " :" << ch << ":" << endl;
     }
+    // DEBUG end
     if (structureStack.isEmpty())
     {
         kdError() << "Stack is empty!! Aborting! (in StructureParser::characters)" << endl;
@@ -387,6 +411,13 @@ bool StructureParser :: characters ( const QString & ch )
         {
             QDomElement fontElementOut=nodeOut.ownerDocument().createElement("UNDERLINE");
             fontElementOut.setAttribute("value",1);
+            formatElementOut.appendChild(fontElementOut); //Append to <FORMAT>
+        }
+
+        if (stackItem->textPosition)
+        {
+            QDomElement fontElementOut=nodeOut.ownerDocument().createElement("VERTALIGN");
+            fontElementOut.setAttribute("value",stackItem->textPosition);
             formatElementOut.appendChild(fontElementOut); //Append to <FORMAT>
         }
 
@@ -539,9 +570,7 @@ const bool ABIWORDImport::filter(const QString &fileIn, const QString &fileOut,
 
     StructureParser handler(createMainFramesetElement(qDomDocumentOut));
 
-    //TODO: verify if the encoding of the file is really UTF-8
-    //For now, we arbitrarily decide that Qt can handle it!!
-
+    //For now, we arbitrarily decide that Qt can handle the encoding in which the file was written!!
     QXmlSimpleReader reader;
     reader.setContentHandler( &handler );
 
@@ -560,8 +589,6 @@ const bool ABIWORDImport::filter(const QString &fileIn, const QString &fileOut,
         in.remove();
     }
 
-    //kdDebug()<< qDomDocumentOut.toCString() << endl;
-    kdDebug() << "Now importing to KWord!" << endl;
 
     KoStore out=KoStore(fileOut, KoStore::Write);
     if(!out.open("root"))
@@ -575,6 +602,8 @@ const bool ABIWORDImport::filter(const QString &fileIn, const QString &fileOut,
     QCString strOut=qDomDocumentOut.toCString();
     out.write((const char*)strOut, strOut.length());
     out.close();
+
+    kdDebug() << "Now importing to KWord!" << endl;
 
     return true;
 }
