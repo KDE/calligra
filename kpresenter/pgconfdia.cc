@@ -23,8 +23,8 @@
 
 /*==================== constructor ===============================*/
 PgConfDia::PgConfDia(QWidget* parent,const char* name,
-		     bool infLoop,bool swMan,int pgNum=1,PageEffect pageEffect=PEF_NONE)
-  :QDialog(parent,name,true)
+		     bool infLoop,bool swMan,int pgNum=1,PageEffect pageEffect = PEF_NONE,PresSpeed presSpeed = PS_NORMAL)
+  : QDialog(parent,name,true)
 {
   general = new QButtonGroup(this,"general");
   general->setFrameStyle(QFrame::Box|QFrame::Sunken);
@@ -40,6 +40,18 @@ PgConfDia::PgConfDia(QWidget* parent,const char* name,
   manualSwitch->resize(manualSwitch->sizeHint());
   manualSwitch->move(infinitLoop->x(),infinitLoop->y()+infinitLoop->height()+10);
   manualSwitch->setChecked(swMan);
+
+  label4 = new QLabel(i18n("Speed of the presentation:"),general);
+  label4->resize(label4->sizeHint());
+  label4->move(manualSwitch->x(),manualSwitch->y() + manualSwitch->height() + 10);
+
+  speedCombo = new QComboBox(false,general);
+  speedCombo->move(label4->x(),label4->y() + label4->height() + 5);
+  speedCombo->insertItem(i18n("Slow"));
+  speedCombo->insertItem(i18n("Normal"));
+  speedCombo->insertItem(i18n("Fast"));
+  speedCombo->resize(speedCombo->sizeHint());
+  speedCombo->setCurrentItem(static_cast<int>(presSpeed));
 
   page = new QButtonGroup(this,"page");
   page->setFrameStyle(QFrame::Box|QFrame::Sunken);
@@ -71,8 +83,10 @@ PgConfDia::PgConfDia(QWidget* parent,const char* name,
   effectCombo->resize(effectCombo->sizeHint());
   effectCombo->setCurrentItem(static_cast<int>(pageEffect));
   
-  page->resize(label2->width()+20,effectCombo->y()+effectCombo->height()+10);
-  general->resize(manualSwitch->x()+manualSwitch->width()+20,manualSwitch->y()+manualSwitch->height()+10);
+  speedCombo->resize(effectCombo->size());
+
+  general->resize(manualSwitch->x()+manualSwitch->width()+20,speedCombo->y() + speedCombo->height() + 10);
+  page->resize(general->width(),effectCombo->y()+effectCombo->height()+10);
   page->move(20,general->y()+general->height()+20);
 
   cancelBut = new QPushButton(this,"BCancel");

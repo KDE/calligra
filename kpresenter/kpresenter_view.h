@@ -12,8 +12,8 @@
 /* Module: KPresenter View (header)                               */
 /******************************************************************/
 
-#ifndef __kpresenter_view_h__
-#define __kpresenter_view_h__
+#ifndef kpresenter_view_h
+#define kpresenter_view_h
 
 class KPresenterView_impl;
 class KPresenterShell_impl;

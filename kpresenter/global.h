@@ -27,7 +27,7 @@
 // types
 enum BackType {BT_COLOR = 0,BT_PICTURE = 1,BT_CLIPART = 2};
 enum BackView {BV_ZOOM = 0,BV_CENTER = 1,BV_TILED = 2};
-enum BCType {BCT_PLAIN = 0,BCT_GHORZ = 1,BCT_GVERT = 2};
+enum BCType {BCT_PLAIN = 0,BCT_GHORZ = 1,BCT_GVERT = 2,BCT_GDIAGONAL1 = 3,BCT_GDIAGONAL2 = 4,BCT_GCIRCLE = 5,BCT_GRECT = 6};
 enum ObjType {OT_PICTURE = 0,OT_LINE = 1,OT_RECT = 2,OT_ELLIPSE = 3,OT_TEXT = 4,OT_AUTOFORM = 5,OT_CLIPART = 6,OT_UNDEFINED = 7};
 enum LineType {LT_HORZ,LT_VERT,LT_LU_RD,LT_LD_RU};
 enum RectType {RT_NORM,RT_ROUND};
@@ -43,6 +43,10 @@ enum LineEnd {L_NORMAL,L_ARROW,L_SQUARE,L_CIRCLE};
 enum ShadowDirection {SD_LEFT_UP = 1,SD_UP = 2,SD_RIGHT_UP = 3,SD_RIGHT = 4,SD_RIGHT_BOTTOM = 5,SD_BOTTOM = 6,\
 		      SD_LEFT_BOTTOM = 7,SD_LEFT = 8};
 enum FillType {FT_BRUSH = 0,FT_GRADIENT = 1};
+enum PresSpeed {PS_SLOW = 0,PS_NORMAL = 1,PS_FAST = 2};
+
+static const float ObjSpeed[] = {70.0,50.0,30.0};
+static const float PageSpeed[] = {8.0,16.0,32.0};
 
 // offsets of the effects in the Effect2 enum accoording to a objType
 const int TxtObjOffset = 0;

@@ -37,8 +37,10 @@ KPObject::KPObject()
   ownClipping = true;
   subPresStep = 0;
   specEffects = false;
+  onlyCurrStep = true;
   inObjList = true;
   cmds = 0;
+  move = false;
 }
 
 /*======================= get bounding rect ======================*/

@@ -568,7 +568,8 @@ void KPresenterView_impl::screenConfigPages()
     }
   pgConfDia = new PgConfDia(0,"PageConfig",KPresenterDoc()->spInfinitLoop(),
 			    KPresenterDoc()->spManualSwitch(),getCurrPgNum(),
-			    KPresenterDoc()->backgroundList()->at(getCurrPgNum() - 1)->getPageEffect());
+			    KPresenterDoc()->backgroundList()->at(getCurrPgNum() - 1)->getPageEffect(),
+			    KPresenterDoc()->getPresSpeed());
   pgConfDia->setMaximumSize(pgConfDia->width(),pgConfDia->height());
   pgConfDia->setMinimumSize(pgConfDia->width(),pgConfDia->height());
   pgConfDia->setCaption(i18n("KPresenter - Page Configuration for Screenpresentations"));
@@ -1341,6 +1342,7 @@ void KPresenterView_impl::pgConfOk()
   KPresenterDoc()->setManualSwitch(pgConfDia->getManualSwitch());
   KPresenterDoc()->setInfinitLoop(pgConfDia->getInfinitLoop());
   KPresenterDoc()->setPageEffect(getCurrPgNum() - 1,pgConfDia->getPageEffect());
+  KPresenterDoc()->setPresSpeed(pgConfDia->getPresSpeed());
 }
 
 /*=================== effect dialog ok ===========================*/

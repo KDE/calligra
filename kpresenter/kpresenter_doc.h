@@ -305,6 +305,11 @@ public:
   void alignObjsBottom();
   void replaceObjs();
 
+  PresSpeed getPresSpeed()
+    { return presSpeed; }
+  void setPresSpeed(PresSpeed _presSpeed)
+    { presSpeed = _presSpeed; }
+
 signals:
 
   // document modified
@@ -389,6 +394,7 @@ protected:
   int objStartY,objStartNum;
 
   int _orastX,_orastY,_oxRnd,_oyRnd;
+  PresSpeed presSpeed;
 
   QPen _presPen;
 

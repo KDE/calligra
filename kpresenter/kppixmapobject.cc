@@ -42,6 +42,7 @@ KPPixmapObject::KPPixmapObject(KPPixmapCollection *_pixmapCollection,QString _fi
 void KPPixmapObject::setSize(int _width,int _height)
 {
   KPObject::setSize(_width,_height);
+  if (move) return;
 
   if (!filename.isEmpty() && !data.isEmpty())
     {
@@ -66,6 +67,7 @@ void KPPixmapObject::setSize(int _width,int _height)
 void KPPixmapObject::resizeBy(int _dx,int _dy)
 {
   KPObject::resizeBy(_dx,_dy);
+  if (move) return;
 
   if (!filename.isEmpty() && !data.isEmpty())
     {
@@ -292,6 +294,12 @@ void KPPixmapObject::load(KOMLParser& parser,vector<KOMLAttrib>& lst)
 /*========================= draw =================================*/
 void KPPixmapObject::draw(QPainter *_painter,int _diffx,int _diffy)
 {
+  if (move) 
+    {
+      KPObject::draw(_painter,_diffx,_diffy);
+      return;
+    }
+
   if (!pixmap) return;
 
   int ox = orig.x() - _diffx;

@@ -124,8 +124,8 @@ public:
     { ownClipping = _ownClipping; }
   virtual void setSubPresStep(int _subPresStep)
     { subPresStep = _subPresStep; }
-  virtual void doSpecificEffects(int _specEffects)
-    { specEffects = _specEffects; }
+  virtual void doSpecificEffects(bool _specEffects,bool _onlyCurrStep = true)
+    { specEffects = _specEffects; onlyCurrStep = _onlyCurrStep; }
 
   virtual void draw(QPainter *_painter,int _diffx,int _diffy);
 
@@ -145,6 +145,9 @@ public:
     { cmds++; }
   virtual void decCmdRef()
     { cmds--; doDelete(); }
+
+  virtual void setMove(bool _move)
+    { move = _move; }
 
 protected:
   virtual void getShadowCoords(int& _x,int& _y,ShadowDirection _direction,int _distance);
@@ -168,10 +171,12 @@ protected:
   QSize oldExt;
   int subPresStep;
   bool specEffects;
+  bool onlyCurrStep;
   bool ownClipping;
 
   bool inObjList;
   int cmds;
+  bool move;
 
 };
 

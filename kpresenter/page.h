@@ -157,6 +157,8 @@ protected:
   QRect getPageSize(unsigned int p,float fakt=1.0) {return view->KPresenterDoc()->getPageSize(p,diffx(),diffy(),fakt);}
   unsigned int pageNums() {return view->KPresenterDoc()->getPageNums();}
   int getPageOfObj(int i,float fakt = 1.0) {return view->KPresenterDoc()->getPageOfObj(i,diffx(),diffy(),fakt);}
+  float objSpeedFakt() {return ObjSpeed[static_cast<int>(view->KPresenterDoc()->getPresSpeed())];}
+  float pageSpeedFakt() {return PageSpeed[static_cast<int>(view->KPresenterDoc()->getPresSpeed())];}
 
   void _repaint(bool erase=true) {view->KPresenterDoc()->repaint(false);}
   void _repaint(QRect r) {view->KPresenterDoc()->repaint(r);}
@@ -185,7 +187,7 @@ protected:
   int PM_DM,PM_SM;
   int firstX,firstY;
   bool drawRubber;
-  QRect rubber;
+  QRect rubber,oldBoundingRect;
 
 private slots:
 

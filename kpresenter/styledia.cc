@@ -246,6 +246,10 @@ StyleDia::StyleDia(QWidget* parent=0,const char* name=0)
   gradients->move(gStyle->x(),gStyle->y() + gStyle->height() + 10);
   gradients->insertItem(i18n("Horizontal Gradient"),-1);
   gradients->insertItem(i18n("Vertical Gradient"),-1);
+  gradients->insertItem(i18n("Diagonal Gradient 1"),-1);
+  gradients->insertItem(i18n("Diagonal Gradient 2"),-1);
+  gradients->insertItem(i18n("Circle Gradient"),-1);
+  gradients->insertItem(i18n("Rectangle Gradient"),-1);
   gradients->resize(chooseBStyle->size());
   connect(gradients,SIGNAL(activated(int)),this,SLOT(gcStyle(int)));
 

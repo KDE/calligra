@@ -139,7 +139,7 @@ void Page::drawObjects(QPainter *painter,QRect rect)
 	  if (!editMode && static_cast<int>(currPresStep) == kpobject->getPresNum() && !goingBack)
 	    {
 	      kpobject->setSubPresStep(subPresStep);
-	      kpobject->doSpecificEffects(true);
+	      kpobject->doSpecificEffects(true,false);
 	    }
 
 	  kpobject->draw(painter,diffx(),diffy());
@@ -198,7 +198,10 @@ void Page::mousePressEvent(QMouseEvent *e)
 		  overObject = true;
 		  if (kpobject->isSelected() && modType == MT_MOVE) deSelAll = false;
 		  if (kpobject->isSelected() && modType != MT_MOVE && modType != MT_NONE)
-		    resizeObjNum = i;
+		    {
+		      oldBoundingRect = kpobject->getBoundingRect(0,0);
+		      resizeObjNum = i;
+		    }
 		  break;
 		}
 	    }
@@ -348,17 +351,34 @@ void Page::mouseReleaseEvent(QMouseEvent *e)
       {
 	if (firstX != mx || firstY != my)
 	  {
-	    
 	    for (int i = static_cast<int>(objectList()->count()) - 1;i >= 0;i--)
 	      {
 		kpobject = objectList()->at(i);
-		if (kpobject->isSelected()) 
-		  _objects.append(kpobject);
+		if (kpobject->isSelected())
+		  {
+		    kpobject->setMove(false);
+		    _objects.append(kpobject);
+		    _repaint(QRect(kpobject->getBoundingRect(0,0).x() + (firstX - mx),
+				   kpobject->getBoundingRect(0,0).y() + (firstY - my),
+				   kpobject->getBoundingRect(0,0).width(),
+				   kpobject->getBoundingRect(0,0).height()));
+		    _repaint(kpobject);
+		  }
 	      }
 	    MoveByCmd *moveByCmd = new MoveByCmd(i18n("Move object(s)"),QPoint(mx - firstX,my - firstY),
 						 _objects,view->KPresenterDoc());
 	    view->KPresenterDoc()->commands()->addCommand(moveByCmd);
-	  }
+	  } 
+	else
+	  for (int i = static_cast<int>(objectList()->count()) - 1;i >= 0;i--)
+	    {
+	      kpobject = objectList()->at(i);
+	      if (kpobject->isSelected())
+		{
+		  kpobject->setMove(false);
+		  _repaint(kpobject);
+		}
+	    }
       } break;
     case MT_RESIZE_UP:
       {
@@ -367,8 +387,15 @@ void Page::mouseReleaseEvent(QMouseEvent *e)
 	    kpobject = objectList()->at(resizeObjNum);
 	    ResizeCmd *resizeCmd = new ResizeCmd(i18n("Resize object up"),QPoint(0,my - firstY),QSize(0,firstY - my),
 						 kpobject,view->KPresenterDoc());
+	    kpobject->setMove(false);
+	    resizeCmd->unexecute();
+	    resizeCmd->execute();
 	    view->KPresenterDoc()->commands()->addCommand(resizeCmd);
 	  }
+       	kpobject = objectList()->at(resizeObjNum);
+	kpobject->setMove(false);
+	_repaint(oldBoundingRect);
+	_repaint(kpobject);
       } break;
     case MT_RESIZE_DN:
       {
@@ -377,8 +404,15 @@ void Page::mouseReleaseEvent(QMouseEvent *e)
 	    kpobject = objectList()->at(resizeObjNum);
 	    ResizeCmd *resizeCmd = new ResizeCmd(i18n("Resize object down"),QPoint(0,0),QSize(0,my - firstY),
 						 kpobject,view->KPresenterDoc());
+	    kpobject->setMove(false);
+	    resizeCmd->unexecute();
+	    resizeCmd->execute();
 	    view->KPresenterDoc()->commands()->addCommand(resizeCmd);
 	  }
+	kpobject = objectList()->at(resizeObjNum);
+	kpobject->setMove(false);
+	_repaint(oldBoundingRect);
+	_repaint(kpobject);
       } break;
     case MT_RESIZE_LF:
       {
@@ -387,8 +421,15 @@ void Page::mouseReleaseEvent(QMouseEvent *e)
 	    kpobject = objectList()->at(resizeObjNum);
 	    ResizeCmd *resizeCmd = new ResizeCmd(i18n("Resize object left"),QPoint(mx - firstX,0),QSize(firstX - mx,0),
 						 kpobject,view->KPresenterDoc());
+	    kpobject->setMove(false);
+	    resizeCmd->unexecute();
+	    resizeCmd->execute();
 	    view->KPresenterDoc()->commands()->addCommand(resizeCmd);
 	  }
+	kpobject = objectList()->at(resizeObjNum);
+	kpobject->setMove(false);
+	_repaint(oldBoundingRect);
+	_repaint(kpobject);
       } break;
     case MT_RESIZE_RT:
       {
@@ -397,8 +438,15 @@ void Page::mouseReleaseEvent(QMouseEvent *e)
 	    kpobject = objectList()->at(resizeObjNum);
 	    ResizeCmd *resizeCmd = new ResizeCmd(i18n("Resize object right"),QPoint(0,0),QSize(mx - firstX,0),
 						 kpobject,view->KPresenterDoc());
+	    kpobject->setMove(false);
+	    resizeCmd->unexecute();
+	    resizeCmd->execute();
 	    view->KPresenterDoc()->commands()->addCommand(resizeCmd);
 	  }
+	kpobject = objectList()->at(resizeObjNum);
+	kpobject->setMove(false);
+	_repaint(oldBoundingRect);
+	_repaint(kpobject);
       } break;
     case MT_RESIZE_LU:
       {
@@ -407,8 +455,15 @@ void Page::mouseReleaseEvent(QMouseEvent *e)
 	    kpobject = objectList()->at(resizeObjNum);
 	    ResizeCmd *resizeCmd = new ResizeCmd(i18n("Resize object left up"),QPoint(mx - firstX,my - firstY),
 						 QSize(firstX - mx,firstY - my),kpobject,view->KPresenterDoc());
+	    kpobject->setMove(false);
+	    resizeCmd->unexecute();
+	    resizeCmd->execute();
 	    view->KPresenterDoc()->commands()->addCommand(resizeCmd);
 	  }
+	kpobject = objectList()->at(resizeObjNum);
+	kpobject->setMove(false);
+	_repaint(oldBoundingRect);
+	_repaint(kpobject);
       } break;
     case MT_RESIZE_LD:
       {
@@ -417,8 +472,15 @@ void Page::mouseReleaseEvent(QMouseEvent *e)
 	    kpobject = objectList()->at(resizeObjNum);
 	    ResizeCmd *resizeCmd = new ResizeCmd(i18n("Resize object left down"),QPoint(mx - firstX,0),
 						 QSize(firstX - mx,my - firstY),kpobject,view->KPresenterDoc());
+	    kpobject->setMove(false);
+	    resizeCmd->unexecute();
+	    resizeCmd->execute();
 	    view->KPresenterDoc()->commands()->addCommand(resizeCmd);
 	  }
+	kpobject = objectList()->at(resizeObjNum);
+	kpobject->setMove(false);
+	_repaint(oldBoundingRect);
+	_repaint(kpobject);
       } break;
     case MT_RESIZE_RU:
       {
@@ -427,8 +489,15 @@ void Page::mouseReleaseEvent(QMouseEvent *e)
 	    kpobject = objectList()->at(resizeObjNum);
 	    ResizeCmd *resizeCmd = new ResizeCmd(i18n("Resize object right up"),QPoint(0,my - firstY),
 						 QSize(mx - firstX,firstY - my),kpobject,view->KPresenterDoc());
+	    kpobject->setMove(false);
+	    resizeCmd->unexecute();
+	    resizeCmd->execute();
 	    view->KPresenterDoc()->commands()->addCommand(resizeCmd);
 	  }
+	kpobject = objectList()->at(resizeObjNum);
+	kpobject->setMove(false);
+	_repaint(oldBoundingRect);
+	_repaint(kpobject);
       } break;
     case MT_RESIZE_RD:
       {
@@ -437,8 +506,15 @@ void Page::mouseReleaseEvent(QMouseEvent *e)
 	    kpobject = objectList()->at(resizeObjNum);
 	    ResizeCmd *resizeCmd = new ResizeCmd(i18n("Resize object right down"),QPoint(0,0),QSize(mx - firstX,my - firstY),
 						 kpobject,view->KPresenterDoc());
+	    kpobject->setMove(false);
+	    resizeCmd->unexecute();
+	    resizeCmd->execute();
 	    view->KPresenterDoc()->commands()->addCommand(resizeCmd);
 	  }
+	kpobject = objectList()->at(resizeObjNum);
+	kpobject->setMove(false);
+	_repaint(oldBoundingRect);
+	_repaint(kpobject);
       } break;
     }
 
@@ -495,85 +571,74 @@ void Page::mouseMoveEvent(QMouseEvent *e)
 	    }
 	  else if (modType == MT_MOVE)
 	    {
-	      QList<KPObject> _objects;
-	      _objects.setAutoDelete(false);
+	      QPainter p;
+	      p.begin(this);
+	      
 	      for (int i = static_cast<int>(objectList()->count()) - 1;i >= 0;i--)
 		{
 		  kpobject = objectList()->at(i);
-		  if (kpobject->isSelected()) 
-		    _objects.append(kpobject);
+		  if (kpobject->isSelected())
+		    {
+		      kpobject->setMove(true);
+		      kpobject->draw(&p,diffx(),diffy());
+		      kpobject->moveBy(QPoint(mx - oldMx,my - oldMy));
+		      kpobject->draw(&p,diffx(),diffy());
+		    }
 		}
-	      MoveByCmd *moveByCmd = new MoveByCmd(i18n("Move object(s)"),QPoint(mx - oldMx,my - oldMy),
-						   _objects,view->KPresenterDoc());
-	      moveByCmd->execute();
-	      delete moveByCmd;
+
+	      p.end();
 	    }
 	  else if (modType != MT_NONE && resizeObjNum != -1)
 	    {
+	      QPainter p;
+	      p.begin(this);
+
 	      QRect oldRect;
 	      kpobject = objectList()->at(resizeObjNum);
 	      oldRect = kpobject->getBoundingRect(0,0);
+	      kpobject->setMove(true);
+	      kpobject->draw(&p,diffx(),diffy());
 
 	      switch (modType)
 		{
 		case MT_RESIZE_LU:
 		  {
-		    ResizeCmd *resizeCmd = new ResizeCmd(i18n("Resize object left up"),QPoint(mx - oldMx,my - oldMy),
-							 QSize(oldMx - mx,oldMy - my),kpobject,view->KPresenterDoc());
-		    resizeCmd->execute();
-		    delete resizeCmd;
+		    kpobject->moveBy(QPoint(mx - oldMx,my - oldMy));
+		    kpobject->resizeBy(QSize(oldMx - mx,oldMy - my));
 		  } break;
 		case MT_RESIZE_LF:
 		  {
-		    ResizeCmd *resizeCmd = new ResizeCmd(i18n("Resize object left"),QPoint(mx - oldMx,0),QSize(oldMx - mx,0),
-							 kpobject,view->KPresenterDoc());
-		    resizeCmd->execute();
-		    delete resizeCmd;
+		    kpobject->moveBy(QPoint(mx - oldMx,0));
+		    kpobject->resizeBy(QSize(oldMx - mx,0));
 		  } break;
 		case MT_RESIZE_LD:
 		  {
-		    ResizeCmd *resizeCmd = new ResizeCmd(i18n("Resize object left down"),QPoint(mx - oldMx,0),
-							 QSize(oldMx - mx,my - oldMy),kpobject,view->KPresenterDoc());
-		    resizeCmd->execute();
-		    delete resizeCmd;
+		    kpobject->moveBy(QPoint(mx - oldMx,0));
+		    kpobject->resizeBy(QSize(oldMx - mx,my - oldMy));
 		  } break;
 		case MT_RESIZE_RU:
 		  {
-		    ResizeCmd *resizeCmd = new ResizeCmd(i18n("Resize object right up"),QPoint(0,my - oldMy),
-							 QSize(mx - oldMx,oldMy - my),kpobject,view->KPresenterDoc());
-		    resizeCmd->execute();
-		    delete resizeCmd;
+		    kpobject->moveBy(QPoint(0,my - oldMy));
+		    kpobject->resizeBy(QSize(mx - oldMx,oldMy - my));
 		  } break;
 		case MT_RESIZE_RT:
-		  {
-		    ResizeCmd *resizeCmd = new ResizeCmd(i18n("Resize object right"),QPoint(0,0),QSize(mx - oldMx,0),
-							 kpobject,view->KPresenterDoc());
-		    resizeCmd->execute();
-		    delete resizeCmd;
-		  } break;
+		  kpobject->resizeBy(QSize(mx - oldMx,0));
+		  break;
 		case MT_RESIZE_RD:
-		  {
-		    ResizeCmd *resizeCmd = new ResizeCmd(i18n("Resize object right down"),QPoint(0,0),QSize(mx - oldMx,my - oldMy),
-							 kpobject,view->KPresenterDoc());
-		    resizeCmd->execute();
-		    delete resizeCmd;
-		  } break;
+		  kpobject->resizeBy(QSize(mx - oldMx,my - oldMy));
+		  break;
 		case MT_RESIZE_UP:
 		  {
-		    ResizeCmd *resizeCmd = new ResizeCmd(i18n("Resize object up"),QPoint(0,my - oldMy),QSize(0,oldMy - my),
-							 kpobject,view->KPresenterDoc());
-		    resizeCmd->execute();
-		    delete resizeCmd;
+		    kpobject->moveBy(QPoint(0,my - oldMy));
+		    kpobject->resizeBy(QSize(0,oldMy - my));
 		  } break;
 		case MT_RESIZE_DN:
-		  {
-		    ResizeCmd *resizeCmd = new ResizeCmd(i18n("Resize object down"),QPoint(0,0),QSize(0,my - oldMy),
-							 kpobject,view->KPresenterDoc());
-		    resizeCmd->execute();
-		    delete resizeCmd;
-		  } break;
+		  kpobject->resizeBy(QSize(0,my - oldMy));
+		  break;
 		default: break;
 		}
+	      kpobject->draw(&p,diffx(),diffy());
+	      p.end();
 	    }
 
 	  oldMx = e->x();
@@ -1038,6 +1103,7 @@ void Page::setTextAlign(TxtParagraph::HorzAlign align)
 /*====================== start screenpresentation ================*/
 void Page::startScreenPresentation(bool zoom)
 {
+  setCursor(waitCursor);
   KPObject *kpobject = 0;
 
   if (editNum != -1)
@@ -1102,6 +1168,7 @@ void Page::startScreenPresentation(bool zoom)
 /*====================== stop screenpresentation =================*/
 void Page::stopScreenPresentation()
 {
+  setCursor(waitCursor);
   KPObject *kpobject = 0;
   KPBackGround *kpbackground = 0;
   int i;
@@ -1345,7 +1412,7 @@ void Page::changePages(QPixmap _pix1,QPixmap _pix2,PageEffect _effect)
       } break;
     case PEF_CLOSE_HORZ:
       {
-	_steps = static_cast<int>(50000.0 / static_cast<float>(kapp->desktop()->height()));
+	_steps = static_cast<int>(static_cast<float>(kapp->desktop()->height()) / pageSpeedFakt());
 	_time.start();
 
 	for (;;)
@@ -1367,7 +1434,7 @@ void Page::changePages(QPixmap _pix1,QPixmap _pix2,PageEffect _effect)
       } break;
     case PEF_CLOSE_VERT:
       {
-	_steps = static_cast<int>(50000.0 / static_cast<float>(kapp->desktop()->width()));
+	_steps = static_cast<int>(static_cast<float>(kapp->desktop()->width()) / pageSpeedFakt());
 	_time.start();
 
 	for (;;)
@@ -1389,7 +1456,7 @@ void Page::changePages(QPixmap _pix1,QPixmap _pix2,PageEffect _effect)
       } break;
     case PEF_CLOSE_ALL:
       {
-	_steps = static_cast<int>(50000.0 / static_cast<float>(kapp->desktop()->width()));
+	_steps = static_cast<int>(static_cast<float>(kapp->desktop()->width()) / pageSpeedFakt());
 	_time.start();
 
 	for (;;)
@@ -1417,7 +1484,7 @@ void Page::changePages(QPixmap _pix1,QPixmap _pix2,PageEffect _effect)
       } break;
     case PEF_OPEN_HORZ:
       {
-	_steps = static_cast<int>(50000.0 / static_cast<float>(kapp->desktop()->height()));
+	_steps = static_cast<int>(static_cast<float>(kapp->desktop()->height()) / pageSpeedFakt());
 	_time.start();
 
 	for (;;)
@@ -1440,7 +1507,7 @@ void Page::changePages(QPixmap _pix1,QPixmap _pix2,PageEffect _effect)
       } break;
     case PEF_OPEN_VERT:
       {
-	_steps = static_cast<int>(50000.0 / static_cast<float>(kapp->desktop()->height()));
+	_steps = static_cast<int>(static_cast<float>(kapp->desktop()->width()) / pageSpeedFakt());
 	_time.start();
 
 	for (;;)
@@ -1463,7 +1530,7 @@ void Page::changePages(QPixmap _pix1,QPixmap _pix2,PageEffect _effect)
       } break;
     case PEF_OPEN_ALL:
       {
-	_steps = static_cast<int>(50000.0 / static_cast<float>(kapp->desktop()->height()));
+	_steps = static_cast<int>(static_cast<float>(kapp->desktop()->width()) / pageSpeedFakt());
 	_time.start();
 
 	for (;;)
@@ -1486,12 +1553,13 @@ void Page::changePages(QPixmap _pix1,QPixmap _pix2,PageEffect _effect)
 	
 		_time.restart();
 	      }
-	    if ((_pix2.width() / _steps) * _step >= _pix2.width()) break;
+	    if ((_pix2.width() / _steps) * _step >= _pix2.width() && 
+		(_pix2.height() / _steps) * _step >= _pix2.height()) break;
 	  }
       } break;
     case PEF_INTERLOCKING_HORZ_1:
       {
-	_steps = static_cast<int>(50000.0 / static_cast<float>(kapp->desktop()->width()));
+	_steps = static_cast<int>(static_cast<float>(kapp->desktop()->width()) / pageSpeedFakt());
 	_time.start();
 
 	for (;;)
@@ -1516,7 +1584,7 @@ void Page::changePages(QPixmap _pix1,QPixmap _pix2,PageEffect _effect)
       } break;
     case PEF_INTERLOCKING_HORZ_2:
       {
-	_steps = static_cast<int>(50000.0 / static_cast<float>(kapp->desktop()->width()));
+	_steps = static_cast<int>(static_cast<float>(kapp->desktop()->width()) / pageSpeedFakt());
 	_time.start();
 
 	for (;;)
@@ -1540,7 +1608,7 @@ void Page::changePages(QPixmap _pix1,QPixmap _pix2,PageEffect _effect)
       } break;
     case PEF_INTERLOCKING_VERT_1:
       {
-	_steps = static_cast<int>(50000.0 / static_cast<float>(kapp->desktop()->height()));
+	_steps = static_cast<int>(static_cast<float>(kapp->desktop()->height()) / pageSpeedFakt());
 	_time.start();
 
 	for (;;)
@@ -1565,7 +1633,7 @@ void Page::changePages(QPixmap _pix1,QPixmap _pix2,PageEffect _effect)
       } break;
     case PEF_INTERLOCKING_VERT_2:
       {
-	_steps = static_cast<int>(50000.0 / static_cast<int>(kapp->desktop()->height()));
+	_steps = static_cast<int>(static_cast<float>(kapp->desktop()->height()) / pageSpeedFakt());
 	_time.start();
 
 	for (;;)
@@ -1677,8 +1745,8 @@ void Page::doObjEffects()
   
   if (effects)
     {
-      _step_width = static_cast<int>((20.0 * static_cast<float>(kapp->desktop()->width())) / 1000.0);
-      _step_height = static_cast<int>((20.0 * static_cast<float>(kapp->desktop()->height())) / 1000.0);
+      _step_width = static_cast<int>((static_cast<float>(kapp->desktop()->width()) / objSpeedFakt()));
+      _step_height = static_cast<int>((static_cast<float>(kapp->desktop()->height()) / objSpeedFakt()));
       _steps1 = x_pos1 > y_pos1 ? x_pos1 / _step_width : y_pos1 / _step_height;
       _steps2 = kapp->desktop()->width() - x_pos2 > kapp->desktop()->height() - y_pos2 ?
 	(kapp->desktop()->width() - x_pos2) / _step_width : (kapp->desktop()->height() - y_pos2) / _step_height;

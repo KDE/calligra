@@ -32,6 +32,7 @@ KPTextObject::KPTextObject()
 void KPTextObject::setSize(int _width,int _height)
 {
   KPObject::setSize(_width,_height);
+  if (move) return;
   ktextobject.resize(ext);
 }
 
@@ -39,6 +40,7 @@ void KPTextObject::setSize(int _width,int _height)
 void KPTextObject::resizeBy(int _dx,int _dy)
 {
   KPObject::resizeBy(_dx,_dy);
+  if (move) return;
   ktextobject.resize(ext);
 }
 
@@ -187,6 +189,12 @@ void KPTextObject::load(KOMLParser& parser,vector<KOMLAttrib>& lst)
 /*========================= draw =================================*/
 void KPTextObject::draw(QPainter *_painter,int _diffx,int _diffy)
 {
+  if (move) 
+    {
+      KPObject::draw(_painter,_diffx,_diffy);
+      return;
+    }
+
   int ox = orig.x() - _diffx;
   int oy = orig.y() - _diffy;
   int ow = ext.width();
@@ -211,7 +219,7 @@ void KPTextObject::draw(QPainter *_painter,int _diffx,int _diffy)
 	  switch (effect2)
 	    {
 	    case EF2T_PARA:
-	      pic = ktextobject.getPic(_x,_y,_w,_h,zoomed,subPresStep,subPresStep,ownClipping);
+	      pic = ktextobject.getPic(_x,_y,_w,_h,zoomed,(onlyCurrStep ? subPresStep : 0),subPresStep,ownClipping);
 	      break;
 	    default:
 	      pic = ktextobject.getPic(_x,_y,_w,_h,zoomed,-1,-1,ownClipping);
@@ -268,7 +276,7 @@ void KPTextObject::draw(QPainter *_painter,int _diffx,int _diffy)
       switch (effect2)
 	{
 	case EF2T_PARA:
-	  pic = ktextobject.getPic(_x,_y,_w,_h,zoomed,subPresStep,subPresStep,ownClipping);
+	  pic = ktextobject.getPic(_x,_y,_w,_h,zoomed,(onlyCurrStep ? subPresStep : 0),subPresStep,ownClipping);
 	  break;
 	default:
 	  pic = ktextobject.getPic(_x,_y,_w,_h,zoomed,-1,-1,ownClipping);
@@ -350,6 +358,7 @@ void KPTextObject::saveKTextObject(ostream& out)
   TxtParagraph *txtParagraph;
   unsigned int i,j,k;
   QFont font;
+  bool lastWasSpace = false;
 
   out << otag << "<TEXTOBJ objType=\"" << static_cast<int>(ktextobject.objType()) << "\">" << endl;
   out << indent << "<ENUMLISTTYPE type=\"" << ktextobject.enumListType().type << "\" before=\""
@@ -374,6 +383,8 @@ void KPTextObject::saveKTextObject(ostream& out)
 
       out << otag << "<PARAGRAPH horzAlign=\"" << static_cast<int>(txtParagraph->horzAlign()) << "\">" << endl; 
 
+      lastWasSpace = false;
+
       for (j = 0;j < txtParagraph->lines();j++)
 	{
 	  txtLine = txtParagraph->lineAt(j);
@@ -383,6 +394,9 @@ void KPTextObject::saveKTextObject(ostream& out)
 	  for (k = 0;k < txtLine->items();k++)
 	    {
 	      txtObj = txtLine->itemAt(k);
+	      if (lastWasSpace && txtObj->type() == TxtObj::SEPARATOR) continue;
+	      if (txtObj->type() == TxtObj::SEPARATOR) lastWasSpace = true;
+	      else lastWasSpace = false;
 	      font = txtObj->font();
 	      
 	      out << otag << "<OBJ>" << endl;

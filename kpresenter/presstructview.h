@@ -38,7 +38,8 @@ const QString ObjName[] = {"Picture","Line","Rectangle","Ellipse","Text","Autofo
 			   "Clipart","Undefined"};
 const QString BackTypeName[] = {"Color","Picture","Clipart"};
 const QString BackViewName[] = {"Zoom","Center","Tiled"};
-const QString BackColorTypeName[] = {"Plain","Horizontal Gradient","Vertical Gradient"};
+const QString BackColorTypeName[] = {"Plain","Horizontal Gradient","Vertical Gradient","Diagonal Gradient 1","Diagonal Gradient 2",
+				     "Circle Gradient","Rectangle Gradient"};
 const QString PageEffectName[] = {"No effect","Close horizontal","Close vertical","Close from all directions",
 				  "Open horizontal","Open vertical","Open from all directions","Interlocking horizontal 1",
 				  "Interlocking horizontal 2","Interlocking vertical 1","Interlocking vertical 2"};

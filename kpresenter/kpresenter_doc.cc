@@ -90,6 +90,8 @@ KPresenterDocument_impl::KPresenterDocument_impl()
   objStartY = 0;
   setPageLayout(_pageLayout,0,0);
   _presPen = QPen(red,3,SolidLine);
+  presSpeed = PS_NORMAL;
+
   QObject::connect(&_commands,SIGNAL(undoRedoChanged(QString,QString)),this,SLOT(slotUndoRedoChanged(QString,QString)));
 }
 
@@ -134,6 +136,8 @@ KPresenterDocument_impl::KPresenterDocument_impl(const CORBA::BOA::ReferenceData
   objStartY = 0;
   insertNewTemplate(0,0,true);
   _presPen = QPen(red,3,SolidLine);
+  presSpeed = PS_NORMAL;
+
   QObject::connect(&_commands,SIGNAL(undoRedoChanged(QString,QString)),this,SLOT(slotUndoRedoChanged(QString,QString)));
 }
 
@@ -234,6 +238,7 @@ bool KPresenterDocument_impl::save(ostream& out)
 
   out << indent << "<INFINITLOOP value=\"" << _spInfinitLoop << "\"/>" << endl; 
   out << indent << "<MANUALSWITCH value=\"" << _spManualSwitch << "\"/>" << endl; 
+  out << indent << "<PRESSPEED value=\"" << static_cast<int>(presSpeed) << "\"/>" << endl; 
 
   // Write "OBJECT" tag for every child
   QListIterator<KPresenterChild> chl(m_lstChildren);
@@ -493,6 +498,17 @@ bool KPresenterDocument_impl::load(KOMLParser& parser)
 	    {
 	      if ((*it).m_strName == "value")
 		_spInfinitLoop = static_cast<bool>(atoi((*it).m_strValue.c_str()));
+	    }
+	}
+
+      else if (name == "PRESSPEED")
+	{
+	  KOMLParser::parseTag(tag.c_str(),name,lst);
+	  vector<KOMLAttrib>::const_iterator it = lst.begin();
+	  for(;it != lst.end();it++)
+	    {
+	      if ((*it).m_strName == "value")
+		presSpeed = static_cast<PresSpeed>(atoi((*it).m_strValue.c_str()));
 	    }
 	}
 

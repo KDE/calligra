@@ -23,9 +23,17 @@
 #include <qpainter.h>
 #include <qimage.h>
 
-#include <dither.h>
-
 #include "global.h"
+
+#include <dither.h>
+#include <math.h>
+
+#ifndef min
+#define min(a,b) ((a)<(b)?(a):(b))
+#endif
+#ifndef max
+#define max(a,b) ((a)>(b)?(a):(b))
+#endif
 
 /******************************************************************/
 /* Class: KPGradient                                              */
@@ -69,6 +77,8 @@ protected:
   KPGradient()
     {;}
   virtual void paint();
+  virtual void makeLineGradient(QPixmap &pmCrop,QColor _color1,QColor _color2,int _ySize);
+  virtual void makeColorList(QList<QColor> &_colorList,QColor _color1,QColor _color2,int _ySize);
 
   QColor color1,color2;
   BCType bcType;

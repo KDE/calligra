@@ -24,6 +24,7 @@
 KPClipartObject::KPClipartObject()
   : KPObject(), filename(), clipart()
 {
+  
 }
 
 /*================== overloaded constructor ======================*/
@@ -174,6 +175,12 @@ void KPClipartObject::load(KOMLParser& parser,vector<KOMLAttrib>& lst)
 /*========================= draw =================================*/
 void KPClipartObject::draw(QPainter *_painter,int _diffx,int _diffy)
 {
+  if (move) 
+    {
+      KPObject::draw(_painter,_diffx,_diffy);
+      return;
+    }
+
   int ox = orig.x() - _diffx;
   int oy = orig.y() - _diffy;
   int ow = ext.width();

@@ -60,6 +60,8 @@ KPAutoformObject::KPAutoformObject(QPen _pen,QBrush _brush,QString _filename,Lin
 void KPAutoformObject::setSize(int _width,int _height)
 {
   KPObject::setSize(_width,_height);
+  if (move) return;
+
   if (fillType == FT_GRADIENT && gradient)
     {
       gradient->setSize(getSize());
@@ -72,6 +74,8 @@ void KPAutoformObject::setSize(int _width,int _height)
 void KPAutoformObject::resizeBy(int _dx,int _dy)
 {
   KPObject::resizeBy(_dx,_dy);
+  if (move) return;
+
   if (fillType == FT_GRADIENT && gradient)
     {
       gradient->setSize(getSize());
@@ -372,6 +376,12 @@ void KPAutoformObject::load(KOMLParser& parser,vector<KOMLAttrib>& lst)
 /*========================= draw =================================*/
 void KPAutoformObject::draw(QPainter *_painter,int _diffx,int _diffy)
 {
+  if (move) 
+    {
+      KPObject::draw(_painter,_diffx,_diffy);
+      return;
+    }
+
   int ox = orig.x() - _diffx;
   int oy = orig.y() - _diffy;
   int ow = ext.width();
