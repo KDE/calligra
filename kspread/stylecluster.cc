@@ -145,7 +145,7 @@ StyleCluster::~StyleCluster()
 // A Simple will never have the same style as the parent.  Instead it will be null.
 // If a Quad has a Simple, then it must also have a null.  If temporarily it doesn't, then the 
 // Simple must be deleted, and made a null and the Quad given that style.
-void StyleCluster::insert( int x, int y, KSpreadStyle * style)
+void StyleCluster::setStyle( int x, int y, KSpreadStyle * style)
 {
   Q_ASSERT(m_topQuad);
   
@@ -278,6 +278,12 @@ void StyleCluster::insert( int x, int y, KSpreadStyle * style)
   return;
   
 }
+
+/*
+ * Take a range 
+ */
+//void StyleCluster::rect( QRect range) {
+//}
 
 void StyleCluster::simplify(  QValueStack<StyleClusterQuad**> path ) { 
   StyleClusterQuad** current_node;

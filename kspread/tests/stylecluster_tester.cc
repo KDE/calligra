@@ -111,7 +111,7 @@ void StyleClusterTester::run()
   CHECK_STYLE(stylecluster.lookup(1000,2000), static_cast< const KSpreadStyle& > (*(m_sheet->doc()->styleManager()->defaultStyle())));
   KSpreadStyle *style1 = new KSpreadStyle();
   style1->addRef();
-  stylecluster.insert(1000,2000, style1);
+  stylecluster.setStyle(1000,2000, style1);
   CHECK_STYLE(stylecluster.lookup(1000,2000), *style1); 
   CHECK_STYLE(stylecluster.lookup(1001,2000), static_cast< const KSpreadStyle& > (*(m_sheet->doc()->styleManager()->defaultStyle())));
   CHECK_STYLE(stylecluster.lookup(1001,2001), static_cast< const KSpreadStyle& > (*(m_sheet->doc()->styleManager()->defaultStyle())));
@@ -121,16 +121,16 @@ void StyleClusterTester::run()
   void *quad1 = stylecluster.lookupNode(0,0); 
   CHECK_QUAD(stylecluster.lookupNode(0,0), quad1);
   CHECK_FAILS_QUAD(stylecluster.lookupNode(0,0), stylecluster.lookupNode(1000,2000)); 
-  stylecluster.insert(1000,2000, m_sheet->doc()->styleManager()->defaultStyle());
+  stylecluster.setStyle(1000,2000, m_sheet->doc()->styleManager()->defaultStyle());
   CHECK_QUAD(stylecluster.lookupNode(0,0), stylecluster.lookupNode(1000,2000)); 
   
  
-  stylecluster.insert(0,0, style1);
-  stylecluster.insert(1,0, style1);
-  stylecluster.insert(0,1, style1);
+  stylecluster.setStyle(0,0, style1);
+  stylecluster.setStyle(1,0, style1);
+  stylecluster.setStyle(0,1, style1);
   CHECK_FAILS_QUAD(stylecluster.lookupNode(0,0), stylecluster.lookupNode(0,1));
   
-  stylecluster.insert(1,1, style1);
+  stylecluster.setStyle(1,1, style1);
   
   CHECK_QUAD(stylecluster.lookupNode(0,0), stylecluster.lookupNode(0,1));
   CHECK_QUAD(stylecluster.lookupNode(0,0), stylecluster.lookupNode(1,0));
@@ -142,15 +142,15 @@ void StyleClusterTester::run()
   CHECK_STYLE(stylecluster.lookup(1,1), *style1);
   CHECK_STYLE(stylecluster.lookup(0,2), static_cast< const KSpreadStyle& > (*(m_sheet->doc()->styleManager()->defaultStyle())));
 
-  stylecluster.insert(0,0, m_sheet->doc()->styleManager()->defaultStyle());
+  stylecluster.setStyle(0,0, m_sheet->doc()->styleManager()->defaultStyle());
   CHECK_STYLE(stylecluster.lookup(0,0), static_cast< const KSpreadStyle& > (*(m_sheet->doc()->styleManager()->defaultStyle())));
   CHECK_STYLE(stylecluster.lookup(0,1), stylecluster.lookup(1,0));
   CHECK_STYLE(stylecluster.lookup(0,1), stylecluster.lookup(1,1));
   CHECK_STYLE(stylecluster.lookup(0,1), *style1);
   
-  stylecluster.insert(0,1, m_sheet->doc()->styleManager()->defaultStyle());
-  stylecluster.insert(1,0, m_sheet->doc()->styleManager()->defaultStyle());
-  stylecluster.insert(1,1, m_sheet->doc()->styleManager()->defaultStyle());
+  stylecluster.setStyle(0,1, m_sheet->doc()->styleManager()->defaultStyle());
+  stylecluster.setStyle(1,0, m_sheet->doc()->styleManager()->defaultStyle());
+  stylecluster.setStyle(1,1, m_sheet->doc()->styleManager()->defaultStyle());
   
 //Quad tree should be totally empty now
   
@@ -165,7 +165,7 @@ void StyleClusterTester::run()
 
   for(int y = 0; y < 64; y++) {
     for(int x = 0; x < 64; x++) {
-      stylecluster.insert(x,y, style1);
+      stylecluster.setStyle(x,y, style1);
     }
   }
   
@@ -177,7 +177,7 @@ void StyleClusterTester::run()
   //Undo what we did
   for(int y = 0; y < 64; y++) {
     for(int x = 0; x < 64; x++) {
-      stylecluster.insert(x,y, m_sheet->doc()->styleManager()->defaultStyle());
+      stylecluster.setStyle(x,y, m_sheet->doc()->styleManager()->defaultStyle());
     }
   }
 

@@ -32,31 +32,51 @@ class KSpreadRange;
 
 namespace KSpread {
 
-/**
-@author Raphael Langerhorst
-*/
-
 class StyleClusterQuad;
 class StyleClusterTester;
 
 // class StyleManipulator;
 
-
+/**
+ * The StyleCluster class is an owner of a Quad tree made up of
+ * StyleClusterQuad's.  It contains various functions to search the
+ * quad tree and insert a new style for a cell at a given x,y.
+ * 
+ * Internally it always maintains the quad tree at a minimum size
+ * possible.  Note that inserting ( @ref setStyle ) can be fairly expensive,
+ * creating and deleting up to 8 objects in total.  So use the (yet to be
+ * written) insert range functions to change large amounts of styles at a time.
+ * 
+ * Note that the style returned here is <i>not</i> necessarily
+ * the final style for the cell, because the whole column and whole row
+ * may have a style that need to be applied first.  Any settings in
+ * those styles override the settings here.
+ * 
+ * @author John Tapsell
+ * @author Raphael Langerhorst
+ */
 class KSPREAD_EXPORT StyleCluster : public QObject
 {
   Q_OBJECT
-  
+
   protected:
     StyleClusterQuad* m_topQuad;
-    
     KSpreadSheet* m_sheet;
-    
+    //To be written
+    //friend class StyleManipulator;
+    friend class StyleClusterTester;
+
     void simplify(  QValueStack<StyleClusterQuad**> path );
+    
+    /**
+     * Return the quad being used at x,y.
+     */
+    StyleClusterQuad* lookupNode(int x, int y);
   public:
     StyleCluster(KSpreadSheet* sheet);
 
     ~StyleCluster();
-    
+
     /**
      * Example usage: A cell should be changed to bold.
      * First, the current style is looked up with lookup(),
@@ -66,23 +86,20 @@ class KSPREAD_EXPORT StyleCluster : public QObject
      * one and delete your created one).
      * Now use your style to insert it into x,y.
      */
-    void insert( int x, int y, KSpreadStyle * style);
-    
+    void setStyle( int x, int y, KSpreadStyle * style);
+
 //     /**
 //      * Practically same usage as above, but use a range to apply the style.
+//      * TODO - implement
 //      */
 //     void insert( const KSpreadRange & range, const KSpreadStyle * style);
-    
+
     /**
      * If you intend to modify this returned style, create
      * a new one based on the returned style.
      * @see insert
      */
     const KSpreadStyle& lookup(int x, int y);
-    
-    StyleClusterQuad* lookupNode(int x, int y);
-
-//     friend class StyleManipulator;
 
 };
 
