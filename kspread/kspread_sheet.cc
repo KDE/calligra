@@ -6804,7 +6804,7 @@ bool KSpreadSheet::loadOasis( const QDomElement& tableElement, const KoOasisStyl
         }
     }
 
-    int rowIndex = 0;
+    int rowIndex = 1;
     int indexCol = 1;
     QDomNode rowNode = tableElement.firstChild();
     while( !rowNode.isNull() )
@@ -7083,6 +7083,7 @@ bool KSpreadSheet::loadRowFormat( const QDomElement& row, int &rowIndex,const Ko
     KSpreadFormat layout( this , doc()->styleManager()->defaultStyle() );
     KoStyleStack styleStack;
     styleStack.setTypeProperties( "row" );
+    int backupRow = rowIndex;
     if ( row.hasAttribute( "table:style-name" ) )
     {
         QString str = row.attribute( "table:style-name" );
@@ -7166,11 +7167,11 @@ bool KSpreadSheet::loadRowFormat( const QDomElement& row, int &rowIndex,const Ko
         QDomElement cellElement = cellNode.toElement();
         if( !cellElement.isNull() )
         {
-            columnIndex++;
+            ++columnIndex;
             if( cellElement.tagName() == "table:table-cell" )
             {
-                kdDebug()<<" create cell at row index :"<<rowIndex<<endl;
-                KSpreadCell* cell = nonDefaultCell( columnIndex, rowIndex );
+                kdDebug()<<" create cell at row index :"<<backupRow<<endl;
+                KSpreadCell* cell = nonDefaultCell( columnIndex, backupRow );
                 cell->loadOasis( cellElement, oasisStyles );
 
                 if( cellElement.hasAttribute( "table:number-columns-repeated" ) )
@@ -7180,8 +7181,8 @@ bool KSpreadSheet::loadRowFormat( const QDomElement& row, int &rowIndex,const Ko
                     if( ok )
                         for( int i = 1; i < cols; i++ )
                         {
-                            columnIndex++;
-                            KSpreadCell* target = nonDefaultCell( columnIndex, rowIndex );
+                            ++columnIndex;
+                            KSpreadCell* target = nonDefaultCell( columnIndex, backupRow );
                             target->copyAll( cell );
                         }
                 }
