@@ -20,13 +20,15 @@ class VObject;
  * Objects in a layer can be manipulated and worked on independant of objects
  * in other layers.
  */
-class VLayer : public VObjectBase
+class VLayer : public VObject
 {
 public:
 	VLayer();
 	~VLayer();
 
 	void draw( VPainter *painter, const KoRect& rect );
+
+	virtual void transform( const QWMatrix& ) {}
 
 	/// appends the object relative to the current position in the object list
 	void appendObject( VObject* object );
@@ -66,6 +68,8 @@ public:
 
 	void save( QDomElement& element ) const;
 	void load( const QDomElement& element );
+
+	virtual VObject* clone() { return 0L; }
 
 private:
 	VObjectList m_objects;	/// all objects in this layer
