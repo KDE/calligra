@@ -35,7 +35,6 @@
 #include "vspiraltool.h"
 #include "vstartool.h"
 #include "vtexttool.h"
-#include "vcliparttool.h"
 
 VToolController::VToolController( KarbonPart *part ) : m_part( part )
 {
@@ -61,7 +60,6 @@ VToolController::init()
 	m_spiralTool		= new VSpiralTool( m_part );
 	m_starTool			= new VStarTool( m_part );
 	m_textTool			= new VTextTool( m_part, "" );
-	m_clipartTool		= new VClipartTool( m_part, "" );
 	m_activeTool		= m_selectTool;
 }
 
@@ -82,7 +80,6 @@ VToolController::~VToolController()
 	delete m_spiralTool;
 	delete m_starTool;
 	delete m_textTool;
-	delete m_clipartTool;
 }
 
 void

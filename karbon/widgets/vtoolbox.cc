@@ -97,11 +97,12 @@ VToolBox::slotButtonPressed( int id )
 {
 	int shapestart = m_manipulationtools.count();
 	int miscstart = m_manipulationtools.count() + m_shapetools.count();
+	int miscend = miscstart + m_misctools.count();
 	if( id < shapestart )
 		emit activeToolChanged( m_manipulationtools.at( id ) );
 	else if( id < miscstart )
 		emit activeToolChanged( m_shapetools.at( id - shapestart ) );
-	else
+	else if( id < miscend )
 		emit activeToolChanged( m_misctools.at( id - miscstart ) );
 }
 
@@ -147,6 +148,8 @@ VToolBox::setupTools()
 		if( tool )
 			addButton( tool->icon().latin1(), tool->name(), id++ );
 	}
+	if( !insertLeft ) // uneven count, make dummy button
+		addButton( "karbon", "", id );
 }
 
 QToolButton *

@@ -1,6 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2001, The Karbon Developers
-   Copyright (C) 2002, The Karbon Developers
+   Copyright (C) 2001, 2002, 2003 The Karbon Developers
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -38,7 +37,6 @@
 #include "vspiraltool.h"
 #include "vstartool.h"
 #include "vtexttool.h"
-#include "vcliparttool.h"
 
 VToolFactory::VToolFactory( KarbonView *view ) 
 {
@@ -57,7 +55,6 @@ VToolFactory::VToolFactory( KarbonView *view )
 	m_spiralTool		= new VSpiralTool( view );
 	m_starTool			= new VStarTool( view );
 	m_textTool			= new VTextTool( view, "" );
-	m_clipartTool		= new VClipartTool( view, "" );
 }
 
 VToolFactory::~VToolFactory()
@@ -77,6 +74,5 @@ VToolFactory::~VToolFactory()
 	delete m_spiralTool;
 	delete m_starTool;
 	delete m_textTool;
-	delete m_clipartTool;
 }
 
