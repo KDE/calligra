@@ -521,7 +521,7 @@ KexiMainWindowImpl::initActions()
 	d->action_edit_undo = createSharedAction( KStdAction::Undo, "edit_undo");
 	d->action_edit_redo = createSharedAction( KStdAction::Redo, "edit_redo");
 
-	d->action_edit_delete = createSharedAction(i18n("&Delete"), "button_cancel", 
+	d->action_edit_delete = createSharedAction(i18n("&Delete"), "editdelete", 
 		0/*Key_Delete*/, "edit_delete");
 	d->action_edit_delete->setToolTip(i18n("Delete object"));
 	d->action_edit_delete->setWhatsThis(i18n("Deletes currently selected object."));
