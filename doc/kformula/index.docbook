@@ -1,0 +1,83 @@
+<?xml version="1.0" ?>
+<!DOCTYPE book PUBLIC "-//KDE//DTD DocBook XML V4.1-Based Variant V1.0//EN" "dtd/kdex.dtd" [
+  <!ENTITY kappname "&kformula;">
+  <!ENTITY % English "INCLUDE" > <!-- change language only here -->
+  <!ENTITY % addindex "IGNORE">
+  
+  
+]>
+
+<book lang="&language;">
+
+<bookinfo>
+<title>The &kformula; Users Manual</title>
+
+<authorgroup>
+<author>
+<firstname>Ulrich</firstname>
+<othername></othername>
+<surname>K&uuml;ttler</surname>
+<affiliation>
+<address><email>ulrich.kuettler@gmx.de</email></address>
+</affiliation>
+</author>
+<!-- TRANS:ROLES_OF_TRANSLATORS -->
+</authorgroup>
+
+
+
+<legalnotice>&FDLNotice;</legalnotice>
+
+<!-- Date and version information of the documentation
+Don't forget to include this last date and this last revision number, we
+need them for translation coordination !
+Please respect the format of the date (DD/MM/YYYY) and of the version
+(Major.minor.lesser), it could be used by automation scripts -->
+
+<date>2001-10-07</date>
+<releaseinfo>0.00.01</releaseinfo>
+
+<!-- Abstract about this handbook -->
+
+<abstract>
+<para>
+&kformula; is part of the &koffice; package.
+</para>
+</abstract>
+
+
+<keywordset>
+<keyword>KDE</keyword>
+<keyword>Kapp</keyword>
+</keywordset>
+
+</bookinfo>
+
+<chapter id="introduction">
+<title>Introduction</title>
+<para>&kformula; is used to write formulas. It doesn't evaluate
+anything. All it does is printing them.</para> 
+<para>&kformula; was designed for your editing pleasure. It makes it
+delightful to enter greek letter, fractions and all the stuff that
+makes a formula look like, hmm, a formula.</para> 
+<para>But most of the time you won't want to use &kformula; itself.
+Instead you might choose to use it from within &kword; or any other
+&koffice; application. At least that's the idea.</para>
+
+
+&underFDL;
+&underGPL;
+
+<para>Isn't this ridiculously?</para>
+</chapter>
+
+&documentation.index; 
+</book>
+<!--
+Local Variables:
+mode: sgml
+sgml-minimize-attributes: nil
+sgml-general-insert-case: lower
+End:
+-->
+
