@@ -18,11 +18,11 @@
 */
 
 #include "kintegerinputdialog.h"
-
+#include <limits.h>
 #include <qlayout.h>
 #include <qpushbutton.h>
 #include <qlabel.h>
-
+#include <knuminput.h>
 #include <klocale.h>
 
 /*****************************************************************************
@@ -38,7 +38,10 @@ KIntegerInputDialog::KIntegerInputDialog(QWidget *parent, const char *name, cons
     QGridLayout* grid = new QGridLayout( this, 4, 4, 15, 7 );
 
 	// Inputline
-	m_pLineEdit = new KIntLineEdit( this, "inputtext" );
+    m_pLineEdit = new KIntNumInput( QString::null, -INT_MAX, INT_MAX, 1,
+				    0,
+				    QString::null, 10, false, this,
+				    "inputtext" );
 	grid->addMultiCellWidget( m_pLineEdit, 1, 1, 0, 3 );
 	
 	// Label

@@ -20,8 +20,9 @@
 #ifndef __kzoomfactordlg_h__
 #define __kzoomfactordlg_h__
 
-#include <knumlineedit.h>
 #include <kdialog.h>
+
+class KIntNumInput;
 
 /**
  */
@@ -37,8 +38,8 @@ public:
   int getValue( QPoint& theValue);
 
 private:
-  KIntLineEdit* m_pLineEditXFactor;
-  KIntLineEdit* m_pLineEditYFactor;
+  KIntNumInput* m_pLineEditXFactor;
+  KIntNumInput* m_pLineEditYFactor;
 };
 
 #endif

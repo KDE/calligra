@@ -20,8 +20,9 @@
 #ifndef __kintegerinputdlg_h__
 #define __kintegerinputdlg_h__
 
-#include <knumlineedit.h>
 #include <kdialog.h>
+
+class KIntNumInput;
 
 /**
  */
@@ -36,7 +37,7 @@ public:
 	int getValue( int& theValue);
 
 private:
-	KIntLineEdit* m_pLineEdit;
+	KIntNumInput* m_pLineEdit;
 };
 
 #endif

@@ -20,9 +20,9 @@
 #include <qlayout.h>
 #include <qpushbutton.h>
 #include <qlabel.h>
-
+#include <knuminput.h>
 #include <klocale.h>
-
+#include <limits.h>
 #include "zoomfactordlg.h"
 
 /**
@@ -36,13 +36,19 @@ KZoomFactorDialog::KZoomFactorDialog( QWidget* parent, const char* name, WFlags 
   QGridLayout* grid = new QGridLayout( this, 6, 4, 15, 7 );
 
   // Inputline X
-  m_pLineEditXFactor = new KIntLineEdit( this, i18n( "inputZoomX" ) );
+  m_pLineEditXFactor = new KIntNumInput( QString::null, -INT_MAX, INT_MAX, 1,
+					 0,
+					 QString::null, 10, false, this,
+					 "inputZoomX");
   grid->addMultiCellWidget( m_pLineEditXFactor, 1, 1, 0, 3 );
   QLabel* label = new QLabel( m_pLineEditXFactor, i18n( "Zoom factor for width in % (1x = 100)" ), this );
   grid->addWidget( label, 0, 0 );
 
   // Inputline Y
-  m_pLineEditYFactor = new KIntLineEdit( this, i18n( "inputZoomX" ) );
+  m_pLineEditYFactor = new KIntNumInput(QString::null, -INT_MAX, INT_MAX, 1,
+					0,
+					QString::null, 10, false, 
+					this, "inputZoomX"  );
   grid->addMultiCellWidget( m_pLineEditYFactor, 3, 3, 0, 3 );
   label = new QLabel( m_pLineEditYFactor, i18n( "Zoom factor for height in % (1x = 100)" ), this );
   grid->addWidget( label, 2, 0 );
