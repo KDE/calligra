@@ -18,24 +18,24 @@
  *  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  */
 
-#include <qcolor.h>
 #include <qbitmap.h>
-#include <kdebug.h>
-#include <kapplication.h>
+#include <qcolor.h>
 
+#include <kaction.h>
+#include <kapplication.h>
+#include <kdebug.h>
 
 #include "kis_brush.h"
-#include "kis_doc.h"
-#include "kis_view.h"
 #include "kis_canvas.h"
-#include "kis_vec.h"
 #include "kis_cursor.h"
-#include "kis_util.h"
-#include "kis_tool_brush.h"
+#include "kis_doc.h"
 #include "kis_dlg_toolopts.h"
+#include "kis_tool_brush.h"
+#include "kis_util.h"
+#include "kis_view.h"
+#include "kis_vec.h"
 
-
-BrushTool::BrushTool(KisDoc *doc, KisView *view, KisBrush *_brush)
+BrushTool::BrushTool(KisDoc *doc, KisView *view, KisBrush *brush)
   : KisTool(doc, view)
 {
     m_pDoc = doc;
@@ -48,15 +48,15 @@ BrushTool::BrushTool(KisDoc *doc, KisView *view, KisBrush *_brush)
     useGradient = s.blendWithCurrentGradient;
     opacity = s.opacity;
 
-    setBrush(_brush);
+    setBrush(brush);
 }
 
 BrushTool::~BrushTool() {}
 
 
-void BrushTool::setBrush(KisBrush *_brush)
+void BrushTool::setBrush(KisBrush *brush)
 {
-    m_pBrush = _brush;
+    m_pBrush = brush;
 
     brushWidth = m_pBrush->pixmap().width();
     brushHeight = m_pBrush->pixmap().height();
@@ -121,13 +121,13 @@ void BrushTool::mousePress(QMouseEvent *e)
     }
 }
 
-bool BrushTool::paintCanvas(QPoint /* pos */)
+bool BrushTool::paintCanvas(const QPoint& /* pos */)
 {
     return true;
 }
 
 
-bool BrushTool::paintMonochrome(QPoint pos)
+bool BrushTool::paintMonochrome(const QPoint& pos)
 {
     KisImage * img = m_pDoc->current();
     KisLayer *lay = img->getCurrentLayer();
@@ -262,7 +262,7 @@ void BrushTool::mouseRelease(QMouseEvent *e)
 }
 
 
-bool BrushTool::paintColor(QPoint /*pos*/)
+bool BrushTool::paintColor(const QPoint& /*pos*/)
 {
     return true;
 }

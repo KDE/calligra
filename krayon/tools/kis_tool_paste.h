@@ -1,4 +1,3 @@
-
 /*
  *  kis_tool_brush.h - part of Krayon
  *
@@ -37,7 +36,6 @@ public:
 	virtual void setupAction(QObject *collection);
 	virtual bool shouldRepaint();
 
-	QString toolName() { return QString("Paste Tool"); }
 	void setOpacity(int opacity);
 	bool pasteMonochrome(QPoint pos);
 	bool pasteColor(QPoint pos);

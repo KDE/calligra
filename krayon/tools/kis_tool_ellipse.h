@@ -34,15 +34,14 @@ public:
 	EllipseTool( KisDoc* _doc, KisView* _view, KisCanvas* _canvas );
 	virtual ~EllipseTool();
 
-	virtual QString toolName() { return QString( "LineTool" ); }
+	virtual void setupAction(QObject *collection);
+	virtual void optionsDialog();
+	virtual void toolSelect();
 
 public slots:
 	virtual void mousePress( QMouseEvent* event );
 	virtual void mouseMove( QMouseEvent* event );
 	virtual void mouseRelease( QMouseEvent* event );
-	virtual void optionsDialog();
-	virtual void toolSelect();
-	virtual void setupAction(QObject *collection);
 
 protected:
 	void drawEllipse( const QPoint&, const QPoint& );
@@ -62,7 +61,7 @@ protected:
     bool    m_dragging;
     
     KisCanvas   *pCanvas;
-    KisDoc      *m_pDoc;
 };
 
 #endif //__linetool_h__
+

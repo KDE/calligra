@@ -44,24 +44,23 @@ struct fillpixelinfo
    int y, xl, xr, dy;
 };
 
-class FillTool : public KisTool
-{
-  public:
-    FillTool(KisDoc *doc, KisView *view);
-    ~FillTool();
+class FillTool : public KisTool {
+public:
+	FillTool(KisDoc *doc, KisView *view);
+	virtual ~FillTool();
   
-    QString toolName() { return QString("Fill Tool"); }
-    bool flood(int startX, int startY);
+	virtual void optionsDialog();
+	virtual void setupAction(QObject *collection);
 
-    // set custom cursor.
+	// set custom cursor.
 	virtual void setCursor();
     
-  public slots:
-    virtual void mousePress(QMouseEvent*); 
-    virtual void optionsDialog();
-	virtual void setupAction(QObject *collection);
+	bool flood(int startX, int startY);
+
+public slots:
+	virtual void mousePress(QMouseEvent*); 
       
-  protected:
+protected:
 
     // from gpaint
     int is_old_pixel_value(struct fillinfo *info, int x, int y);  
@@ -90,7 +89,6 @@ class FillTool : public KisTool
     int toleranceBlue;
 
     KisLayer *fLayer;
-    KisDoc   *m_pDoc;
 };
 
 #endif //__filltool_h__

@@ -29,23 +29,22 @@ class KisDoc;
 class KisCanvas;
 class KisView;
 
-class ContiguousSelectTool : public KisTool
-{
+class ContiguousSelectTool : public KisTool {
 public:
-    ContiguousSelectTool( KisDoc* _doc, KisView* _view, KisCanvas* _canvas );
-    ~ContiguousSelectTool();
+	ContiguousSelectTool(KisDoc *doc, KisView *view, KisCanvas *canvas);
+	virtual ~ContiguousSelectTool();
 
-    virtual QString toolName() { return QString( "SelectTool" ); }
+	virtual void setupAction(QObject *collection);
+	virtual void clearOld();
+	virtual bool willModify() const;
 
 public slots:
-	virtual void mousePress( QMouseEvent *_event );
-	virtual void mouseMove( QMouseEvent *_event );
-	virtual void mouseRelease( QMouseEvent *_event );
-	virtual void clearOld();
-	virtual void setupAction(QObject *collection);
+	virtual void mousePress(QMouseEvent *event);
+	virtual void mouseMove(QMouseEvent *event);
+	virtual void mouseRelease(QMouseEvent *event);
 
 protected:
-    void drawRect( const QPoint&, const QPoint& ); 
+	void drawRect(const QPoint&, const QPoint&); 
 
 protected:
     QPoint     m_dragStart;
@@ -54,7 +53,6 @@ protected:
     bool       m_drawn;   
     bool       m_init;
 
-    KisView   *m_view;  
     KisCanvas *m_canvas;
 
     QRect      m_selectRect;

@@ -26,21 +26,18 @@
 #include "kis_color.h"
 #include "kis_tool.h"
 
-class ColorPicker : public KisTool
-{
-
- public:
-  ColorPicker(KisDoc *doc, KisView *view);
-  ~ColorPicker();
+class ColorPicker : public KisTool {
+public:
+	ColorPicker(KisDoc *doc, KisView *view);
+	virtual ~ColorPicker();
   
-  QString toolName() { return QString("Color picker"); }
-
-  KisColor pick(int x, int y);
-
- public slots:
-  virtual void mousePress(QMouseEvent*); 
+	KisColor pick(int x, int y);
 	virtual void setupAction(QObject *collection);
+
+public slots:
+	virtual void mousePress(QMouseEvent*); 
 
 };
 
 #endif //__colorpicker_h__
+

@@ -34,15 +34,14 @@ public:
 	LineTool(KisDoc *_doc, KisView *_view, KisCanvas *_canvas);
 	virtual ~LineTool();
 
-	virtual QString toolName() { return QString( "Line Tool" ); }
+	virtual void optionsDialog();
+	virtual void setupAction(QObject *collection);
+	virtual void toolSelect();
 
 public slots:
 	virtual void mousePress( QMouseEvent* event );
 	virtual void mouseMove( QMouseEvent* event );
 	virtual void mouseRelease( QMouseEvent* event );
-	virtual void optionsDialog();
-	virtual void setupAction(QObject *collection);
-	virtual void toolSelect();
   
 protected:
 	void drawLine( const QPoint&, const QPoint& );

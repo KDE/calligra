@@ -31,37 +31,30 @@ class KisBrush;
 class KisFrameBuffer;
 class KisDoc;
 
-class PenTool : public KisTool
-{
- public:
-
-    PenTool(KisDoc *doc, KisView *view, KisCanvas *canvas, KisBrush *_brush);
-    ~PenTool();
+class PenTool : public KisTool {
+public:
+	PenTool(KisDoc *doc, KisView *view, KisCanvas *canvas, KisBrush *brush);
+	virtual ~PenTool();
   
-    QString toolName() { return QString("BrushTool"); }
+	virtual void optionsDialog();
+	virtual void setupAction(QObject *collection);
+	virtual void setBrush(KisBrush *brush);
 
-    void setBrush(KisBrush *_brush);
-    bool paint(QPoint pos);
+	bool paint(QPoint pos);
 
 public slots:
 	virtual void mousePress(QMouseEvent*); 
 	virtual void mouseMove(QMouseEvent*);
 	virtual void mouseRelease(QMouseEvent*);
-	virtual void optionsDialog();
-	virtual void setupAction(QObject *collection);
 
-
- protected:
+protected:
 
     QPoint 	        m_dragStart;
     bool   	        m_dragging;
     float           m_dragdist;
     
-    KisBrush        *m_pBrush;
-    KisView         *m_pView;
     KisCanvas       *m_pCanvas;
     KisFrameBuffer  *fb;
-    KisDoc          *m_pDoc;
     
     QPen pen;
     int  penW;

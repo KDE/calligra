@@ -32,24 +32,22 @@ class KisDoc;
 class KisCanvas;
 class KisView;
 
-class FreehandSelectTool : public KisTool
-{
+class FreehandSelectTool : public KisTool {
 public:
+	FreehandSelectTool(KisDoc *doc, KisView *view, KisCanvas *canvas);
+	virtual ~FreehandSelectTool();
 
-    FreehandSelectTool( KisDoc* _doc, KisView* _view, KisCanvas* _canvas );
-    ~FreehandSelectTool();
-
-    virtual QString toolName() { return QString( "Freehand Select Tool" ); }
-
-public slots:
-	virtual void mousePress( QMouseEvent *_event );
-	virtual void mouseMove( QMouseEvent *_event );
-	virtual void mouseRelease( QMouseEvent *_event );
 	virtual void setupAction(QObject *collection);
 	virtual void clearOld();
+	virtual bool willModify() const;
 
 	void start( QPoint p );
 	void finish( QPoint p ); 
+
+public slots:
+	virtual void mousePress(QMouseEvent *event);
+	virtual void mouseMove(QMouseEvent *event);
+	virtual void mouseRelease(QMouseEvent *event);
 
 protected:
 
@@ -65,7 +63,6 @@ protected:
     bool        m_dragging;
     bool        m_drawn;   
 
-    KisView     *m_view;  
     KisCanvas   *m_canvas;
 
 private:

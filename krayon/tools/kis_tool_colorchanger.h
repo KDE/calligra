@@ -31,25 +31,21 @@
 
 class KisDoc;
 
-class ColorChangerTool : public KisTool
-{
-  public:
-
-    ColorChangerTool(KisDoc *doc, KisView *view);
-    ~ColorChangerTool();
+class ColorChangerTool : public KisTool {
+public:
+	ColorChangerTool(KisDoc *doc, KisView *view);
+	virtual ~ColorChangerTool();
   
-    QString toolName() { return QString("Colorchanger Tool"); }
-    bool changeColors(int startx, int starty);
-
-	virtual void setCursor();
-    
-  public slots:
-
-    virtual void mousePress(QMouseEvent*); 
-    virtual void optionsDialog();
 	virtual void setupAction(QObject *collection);
+	virtual void optionsDialog();
+	virtual void setCursor();
+
+	bool changeColors(int startx, int starty);
+
+public slots:
+	virtual void mousePress(QMouseEvent*); 
       
-  protected:
+protected:
                 
     // new colors (desired)
     int nRed;
@@ -72,7 +68,6 @@ class ColorChangerTool : public KisTool
     int toleranceBlue;
 
     KisLayer *fLayer;
-    KisDoc   *m_pDoc;
 };
 
 #endif //__colorchangertool_h__

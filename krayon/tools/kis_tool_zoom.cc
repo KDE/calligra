@@ -18,13 +18,15 @@
  *  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  */
 
-#include "qpoint.h"
+#include <qpoint.h>
 
-#include "kis_doc.h"
-#include "kis_view.h"
+#include <kaction.h>
+
 #include "kis_canvas.h"
 #include "kis_cursor.h"
+#include "kis_doc.h"
 #include "kis_tool_zoom.h"
+#include "kis_view.h"
 
 ZoomTool::ZoomTool( KisView *view )
   : KisTool( 0L, view )

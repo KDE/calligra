@@ -29,20 +29,19 @@ class KisDoc;
 class KisCanvas;
 class KisView;
 
-class RectangularSelectTool : public KisTool
-{
+class RectangularSelectTool : public KisTool {
 public:
-    RectangularSelectTool( KisDoc* _doc, KisView* _view, KisCanvas* _canvas );
-    ~RectangularSelectTool();
+	RectangularSelectTool(KisDoc *doc, KisView *view, KisCanvas *canvas);
+	virtual ~RectangularSelectTool();
 
-    virtual QString toolName() { return QString( "SelectTool" ); }
-
-public slots:
-	virtual void mousePress( QMouseEvent *_event );
-	virtual void mouseMove( QMouseEvent *_event );
-	virtual void mouseRelease( QMouseEvent *_event );
 	virtual void setupAction(QObject *collection);
 	virtual void clearOld();
+	virtual bool willModify() const;
+
+public slots:
+	virtual void mousePress(QMouseEvent *event);
+	virtual void mouseMove(QMouseEvent *event);
+	virtual void mouseRelease(QMouseEvent *event);
 
 protected:
     void drawRect( const QPoint&, const QPoint& ); 
@@ -54,7 +53,6 @@ protected:
     bool       m_drawn;   
     bool       m_init;
 
-    KisView   *m_view;  
     KisCanvas *m_canvas;
 
     QRect      m_selectRect;

@@ -45,21 +45,18 @@ private:
   QPoint m_newPos;
 };
 
-class MoveTool : public KisTool
-{
+class MoveTool : public KisTool {
 public:
+	MoveTool(KisDoc *doc, KisView *view);
+	virtual ~MoveTool();
 
-  MoveTool( KisDoc *doc, KisView *view);
-  ~MoveTool();
-
-  virtual QString toolName() { return QString( "MoveTool" ); }
+	virtual void setCursor();
+	virtual void setupAction(QObject *collection);
 
 public slots:
 	virtual void mousePress(QMouseEvent *e); 
 	virtual void mouseMove(QMouseEvent *e);
 	virtual void mouseRelease(QMouseEvent *e);
-	virtual void setCursor();
-	virtual void setupAction(QObject *collection);
 
 protected:
 

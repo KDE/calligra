@@ -32,25 +32,22 @@ class KisDoc;
 class KisCanvas;
 class KisView;
 
-class PolygonalSelectTool : public KisTool
-{
-
+class PolygonalSelectTool : public KisTool {
 public:
+	PolygonalSelectTool(KisDoc *doc, KisView *view, KisCanvas *canvas);
+	virtual ~PolygonalSelectTool();
 
-    PolygonalSelectTool( KisDoc* _doc, KisView* _view, KisCanvas* _canvas );
-    ~PolygonalSelectTool();
-
-    virtual QString toolName() { return QString("Polygonal Select Tool"); }
-
-public slots:
-	virtual void mousePress( QMouseEvent *_event );
-	virtual void mouseMove( QMouseEvent *_event );
-	virtual void mouseRelease( QMouseEvent *_event );
 	virtual void setupAction(QObject *collection);
 	virtual void clearOld();
+	virtual bool willModify() const;
 
-    void start(QPoint p);
-    void finish(QPoint p); 
+	void start(QPoint p);
+	void finish(QPoint p); 
+
+public slots:
+	virtual void mousePress(QMouseEvent *event);
+	virtual void mouseMove(QMouseEvent *event);
+	virtual void mouseRelease(QMouseEvent *event);
 
 protected:
 
@@ -67,7 +64,6 @@ private:
     bool        m_dragging;
     bool        m_drawn;   
 
-    KisView     *m_view;  
     KisCanvas   *m_canvas;
 
     QRect       m_selectRect;

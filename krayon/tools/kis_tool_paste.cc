@@ -21,6 +21,8 @@
 #include <qcolor.h>
 #include <qclipboard.h>
 #include <qpainter.h>
+
+#include <kaction.h>
 #include <kapplication.h>
 #include <kdebug.h>
 #include <kmessagebox.h>

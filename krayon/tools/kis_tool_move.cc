@@ -19,15 +19,14 @@
  *  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  */
 
+#include <kaction.h>
 #include <klocale.h>
-#include <iostream>
-#include "kis_doc.h"
-#include "kis_view.h"
+
 #include "kis_canvas.h"
 #include "kis_cursor.h"
+#include "kis_doc.h"
 #include "kis_tool_move.h"
-
-using namespace std;
+#include "kis_view.h"
 
 MoveCommand::MoveCommand( KisDoc *_doc, int _layer, 
     QPoint _oldpos, QPoint _newpos )
@@ -40,14 +39,12 @@ MoveCommand::MoveCommand( KisDoc *_doc, int _layer,
 
 void MoveCommand::execute()
 {
-  cout << "MoveCommand::execute" << endl;
 
   moveTo( m_newPos );
 }
 
 void MoveCommand::unexecute()
 {
-  cout << "MoveCommand::unexecute" << endl;
 
   moveTo( m_oldPos );
 }

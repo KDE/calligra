@@ -20,34 +20,32 @@
 
 #include <qpainter.h>
 #include <qregion.h>
+
+#include <kaction.h>
 #include <kdebug.h>
 
-#include "kis_doc.h"
-#include "kis_view.h"
 #include "kis_canvas.h"
-#include "kis_vec.h"
 #include "kis_cursor.h"
+#include "kis_doc.h"
 #include "kis_tool_select_freehand.h"
+#include "kis_view.h"
+#include "kis_vec.h"
 
-
-FreehandSelectTool::FreehandSelectTool( KisDoc* _doc, KisView* _view, KisCanvas* _canvas )
-  : KisTool( _doc, _view)
-  , m_dragging( false ) 
-  , m_view( _view )  
-  , m_canvas( _canvas )
-
+FreehandSelectTool::FreehandSelectTool(KisDoc *doc, KisView *view, KisCanvas *canvas) : KisTool(doc, view)
 {
-    m_dragStart = QPoint(-1,-1);
-    m_dragEnd =   QPoint(-1,-1);
+	m_dragging = false;
+	m_canvas = canvas;
+	m_dragStart = QPoint(-1,-1);
+	m_dragEnd =   QPoint(-1,-1);
 
-    mStart  = QPoint(-1, -1);
-    mFinish = QPoint(-1, -1);     
-      
-    setSelectCursor();
+	mStart  = QPoint(-1, -1);
+	mFinish = QPoint(-1, -1);     
 
-    m_index = 0;
-    m_dragging = false;
-    moveSelectArea = false;
+	setSelectCursor();
+
+	m_index = 0;
+	m_dragging = false;
+	moveSelectArea = false;
 }
 
 FreehandSelectTool::~FreehandSelectTool()
@@ -75,7 +73,7 @@ void FreehandSelectTool::clearOld()
 
    // clear everything in 
    QRect updateRect(0, 0, m_pDoc->current()->width(), m_pDoc->current()->height());
-   m_view->updateCanvas(updateRect);
+   m_pView->updateCanvas(updateRect);
    m_selectRegion = QRegion();
 
    m_dragStart = QPoint(-1,-1);
@@ -297,3 +295,7 @@ void FreehandSelectTool::setupAction(QObject *collection)
 	p -> setExclusiveGroup("tools");
 }
 
+bool FreehandSelectTool::willModify() const
+{
+	return false;
+}

@@ -29,34 +29,28 @@
 class KisBrush;
 class KisDoc;
 
-class AirBrushTool : public KisTool
-{
-    Q_OBJECT
+class AirBrushTool : public KisTool {
+Q_OBJECT
     
 public:
-
-    AirBrushTool(KisDoc *doc, KisView *view, KisBrush *brush);
-    ~AirBrushTool();
+	AirBrushTool(KisDoc *doc, KisView *view, KisBrush *brush);
+	virtual ~AirBrushTool();
   
-    QString toolName() { return QString("AirBrushTool"); }
-    void setBrush(KisBrush *_brush);
-    bool paint(QPoint pos, bool timeout);
+	virtual void setupAction(QObject *collection);
+	virtual void setBrush(KisBrush *brush);
+	virtual void optionsDialog();
+    
+	bool paint(QPoint pos, bool timeout);
+	void timeoutPaint();  
       
 public slots:
-
-    virtual void mousePress(QMouseEvent*); 
-    virtual void mouseMove(QMouseEvent*);
-    virtual void mouseRelease(QMouseEvent*);
-    virtual void optionsDialog();
-	virtual void setupAction(QObject *collection);
-    
-    void timeoutPaint();  
+	virtual void mousePress(QMouseEvent*); 
+	virtual void mouseMove(QMouseEvent*);
+	virtual void mouseRelease(QMouseEvent*);
 
 protected:
 
-    KisBrush *m_pBrush;
     QTimer *timer;
-    KisDoc *m_pDoc;
     
     QMemArray <int> brushArray; // array of points in brush
     int nPoints;  // number of points marked in array

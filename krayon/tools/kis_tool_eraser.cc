@@ -18,7 +18,9 @@
  *  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  */
 
-#include "qbitmap.h"
+#include <qbitmap.h>
+
+#include <kaction.h>
 
 #include "kis_brush.h"
 #include "kis_doc.h"

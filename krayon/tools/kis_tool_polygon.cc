@@ -18,12 +18,13 @@
  *  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  */
 
+#include <math.h>
+
 #include <qpainter.h>
 #include <qpointarray.h>
 
+#include <kaction.h>
 #include <kdebug.h>
-
-#include <math.h>
 
 #include "kis_doc.h"
 #include "kis_view.h"

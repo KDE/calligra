@@ -19,6 +19,8 @@
  */
 
 #include <qpainter.h>
+
+#include <kaction.h>
 #include <kdebug.h>
 
 #include "kis_doc.h"

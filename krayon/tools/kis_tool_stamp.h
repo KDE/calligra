@@ -36,27 +36,24 @@ public:
 	StampTool(KisDoc *doc, KisView *view, KisCanvas *canvas, KisPattern *pattern);
 	virtual ~StampTool();
   
-	virtual QString toolName() { return QString("Stamp Tool"); }
 	virtual bool shouldRepaint();
 	virtual void setupAction(QObject *collection);
+	virtual void setPattern(KisPattern *pattern);
+	virtual void optionsDialog();
 
 	void setOpacity(int opacity);
 	bool stampMonochrome(QPoint pos);
 	bool stampColor(QPoint pos);
 	bool stampToCanvas(QPoint pos);
-	virtual void setPattern(KisPattern *pattern);
 
 public slots:
 	virtual void mousePress(QMouseEvent*); 
 	virtual void mouseMove(QMouseEvent*);
 	virtual void mouseRelease(QMouseEvent*);
-	virtual void optionsDialog();
 
 protected:
 
-	KisView     *m_pView;
 	KisCanvas   *m_pCanvas;
-	KisDoc      *m_pDoc;
 
 	QPoint      oldp;
 	QPoint      mHotSpot;

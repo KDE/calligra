@@ -29,24 +29,21 @@ class KisDoc;
 class KisView;
 class KisCanvas;
 
-class PolyLineTool : public KisTool
-{
+class PolyLineTool : public KisTool {
 public:
+	PolyLineTool(KisDoc *doc, KisView *view, KisCanvas *canvas);
+	virtual ~PolyLineTool();
 
-    PolyLineTool( KisDoc* _doc, KisView* _view, KisCanvas* _canvas );
-    ~PolyLineTool();
+	virtual void optionsDialog();
+	virtual void setupAction(QObject *collection);
 
-    virtual QString toolName() { return QString( "Polyline Tool" ); }
-
-    void start(QPoint p);
-    void finish(QPoint p); 
+	void start(QPoint p);
+	void finish(QPoint p); 
 
 public slots:
 	virtual void mousePress( QMouseEvent* event );
 	virtual void mouseMove( QMouseEvent* event );
 	virtual void mouseRelease( QMouseEvent* event );
-	virtual void optionsDialog();
-	virtual void setupAction(QObject *collection);
     
 protected:
 
@@ -70,7 +67,6 @@ private:
     bool        m_done;
     
     KisCanvas   *pCanvas;
-    KisDoc      *m_pDoc;
 };
 
 #endif //__polylinetool_h__

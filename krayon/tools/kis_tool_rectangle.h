@@ -34,15 +34,14 @@ public:
 	RectangleTool( KisDoc* _doc, KisView* _view, KisCanvas* _canvas);
 	virtual ~RectangleTool();
 
-	virtual QString toolName() { return QString( "Rectangle Tool" ); }
+	virtual void toolSelect();
+	virtual void optionsDialog();
+	virtual void setupAction(QObject *collection);
 
 public slots:
-	virtual void toolSelect();
 	virtual void mousePress( QMouseEvent* event );
 	virtual void mouseMove( QMouseEvent* event );
 	virtual void mouseRelease( QMouseEvent* event );
-	virtual void optionsDialog();
-	virtual void setupAction(QObject *collection);
     
 protected:
 
@@ -63,7 +62,6 @@ protected:
     bool        m_dragging;
 
     KisCanvas   *pCanvas;
-    KisDoc      *m_pDoc;
 };
 
 #endif //__linetool_h__
