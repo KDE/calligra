@@ -1539,6 +1539,7 @@ void KSpreadView::initView()
     d->toolWidget = new QFrame( this );
 
     d->formulaBarLayout = new QHBoxLayout( d->toolWidget );
+    d->formulaBarLayout->setMargin( 4 );
     d->formulaBarLayout->addSpacing( 2 );
 
     d->posWidget = new KSpreadComboboxLocationEditWidget( d->toolWidget, this );
