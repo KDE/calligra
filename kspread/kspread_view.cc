@@ -4611,7 +4611,7 @@ bool KSpreadView::showTable(const QString& tableName) {
   m_pCanvas->closeEditor();
   setActiveTable( t );
 
-  return true;	
+  return true;
 }
 
 void KSpreadView::nextTable(){
@@ -6116,6 +6116,7 @@ void KSpreadView::slotChangeSelection( KSpreadSheet *_table,
     m_conditional->setEnabled( !colSelected && !rowSelected);
     m_resizeColumn->setEnabled( !rowSelected );
     m_equalizeColumn->setEnabled( !rowSelected );
+    m_textToColumns->setEnabled( !rowSelected );
 
     bool simpleSelection = m_selectionInfo->singleCellSelection()
       || colSelected || rowSelected;

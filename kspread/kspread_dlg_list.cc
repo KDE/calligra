@@ -257,8 +257,11 @@ void KSpreadList::slotOk()
         for(unsigned int i=2;i<list->count();i++)
         {
             QStringList tmp=result.split(", ",list->text(i));
-            result+=tmp;
-            result+="\\";
+            if ( !tmp.isEmpty() )
+            {
+                result+=tmp;
+                result+="\\";
+            }
         }
         config->setGroup( "Parameters" );
         config->writeEntry("Other list",result);
