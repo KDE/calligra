@@ -65,3 +65,11 @@ double KoZoomHandler::layoutUnitToFontSize( int luSize, bool forPrint ) const
     return layoutUnitToPt( luSize ) * m_zoomedResolutionY
         * ( forPrint ? 1.0 : (72.0 / QPaintDevice::x11AppDpiY()) );
 }
+
+int KoZoomHandler::layoutUnitToPixelY( int y, int h ) const
+{
+    // We call layoutUnitToPixelY on the bottom value, i.e. y+h-1,
+    // and then determine the height from the result (i.e. bottom-top+1).
+    // Calling layoutUnitToPixelY(h) leads to rounding problems.
+    return layoutUnitToPixelY( y + h - 1 ) - layoutUnitToPixelY( y ) + 1;
+}

@@ -221,8 +221,8 @@ void KoTextParag::drawLabel( QPainter* p, int x, int y, int /*w*/, int h, int ba
         int width = format->width( ' ' );
         int height = format->height();
 
-        width = zh->layoutUnitToPixelX(width);
-        height = zh->layoutUnitToPixelY(y,height);
+        width = zh->layoutUnitToPixelX( width );
+        height = zh->layoutUnitToPixelY( y, height );
         QString prefix = m_layout.counter->prefix()+ ' '/*the trailing space*/;
         int posPrefix=0;
         for ( unsigned int i = 0; i < prefix.length(); i++ )
@@ -358,6 +358,23 @@ int KoTextParag::lineSpacing( int line ) const
     return 0;
 }
 
+QRect KoTextParag::pixelRect() const
+{
+    KoZoomHandler * zh = textDocument()->zoomHandler();
+    QRect rect( zh->layoutUnitToPixel( rect() ) );
+    // After division we almost always end up with the top overwriting the bottom of the parag above
+    if ( prev() )
+    {
+        QRect prevRect( zh->layoutUnitToPixel( prev()->rect() ) );
+        if ( rect.top() < prevRect.bottom() + 1 )
+        {
+            //kdDebug() << "rect.top() adjusted to " << prevRect.bottom() + 1 << " (was " << rect.top() << ")" << endl;
+            rect.setTop( prevRect.bottom() + 1 );
+        }
+    }
+    return rect;
+}
+
 // Reimplemented from QTextParag
 void KoTextParag::paint( QPainter &painter, const QColorGroup &cg, QTextCursor *cursor, bool drawSelections,
                          int clipx, int clipy, int clipw, int cliph )
@@ -426,6 +443,8 @@ void KoTextParag::drawParagString( QPainter &painter, const QString &s, int star
     //kdDebug() << "startX in LU: " << startX << " layoutUnitToPt( startX )*zoomedResolutionX : " << zh->layoutUnitToPt( startX ) << "*" << zh->zoomedResolutionX() << endl;
     int startXpix = zh->layoutUnitToPixelX( startX ) + at( rightToLeft ? start+len-1 : start )->pixelxadj;
     //kdDebug() << "KoTextParag::drawParagString startX in pixels : " << startXpix << endl;
+    //kdDebug() << "KoTextParag::drawParagString h(LU)=" << h << " lastY(LU)=" << lastY
+    //          << " h(PIX)=" << zh->layoutUnitToPixelY( lastY, h ) << " lastY(PIX)=" << zh->layoutUnitToPixelY( lastY ) << endl;
     QTextParag::drawParagString( painter, s, start, len, startXpix,
                                  zh->layoutUnitToPixelY( lastY ), zh->layoutUnitToPixelY( lastY, baseLine ),
                                  bw, // Note that bw is already in pixels (see QTextParag::paint)

@@ -129,8 +129,7 @@ public:
 
     // This variant converts a height, using y as reference.
     // This prevents rounding problems.
-    int layoutUnitToPixelY( int y, int h ) const
-    { return layoutUnitToPixelY( y + h ) - layoutUnitToPixelY( y ); }
+    int layoutUnitToPixelY( int y, int h ) const;
 
     QPoint layoutUnitToPixel( const QPoint &p ) const
     { return QPoint( layoutUnitToPixelX( p.x() ),
