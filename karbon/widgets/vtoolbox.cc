@@ -112,8 +112,8 @@ VToolBox::VToolBox( KarbonPart* part, KMainWindow *mainWin, const char* name ) :
 QToolButton *
 VToolBox::addButton( const char* iconName, QString tooltip )
 {
-	QToolButton *button = new QToolButton( insertLeft?left:right );
-	QPixmap pixmap=BarIcon( iconName, KarbonFactory::instance() );
+	QToolButton *button = new QToolButton( insertLeft ? left : right );
+	QPixmap pixmap = BarIcon( iconName, KarbonFactory::instance() );
 	button->setPixmap( pixmap );
 	button->setToggleButton( true );
 	QToolTip::add( button, tooltip );
@@ -133,7 +133,7 @@ void
 VToolBox::setOrientation ( Qt::Orientation o )
 {
 	if( barPos() == Floating ) { // when floating, make it a standing toolbox.
-		o = o==Qt::Vertical ? Qt::Horizontal : Qt::Vertical;
+		o = o == Qt::Vertical ? Qt::Horizontal : Qt::Vertical;
 	}
 	QBoxLayout::Direction d = o == Qt::Vertical ? QBoxLayout::LeftToRight : QBoxLayout::TopToBottom;
 	columnsLayouter->setDirection( d );

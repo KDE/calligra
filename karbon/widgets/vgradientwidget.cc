@@ -112,7 +112,7 @@ void VGradientWidget::paintEvent( QPaintEvent* )
 	QPainter p( &pixmap );
 
 	p.setPen( colorGroup().light() );
-	p.moveTo( 1, height()-17 );
+	p.moveTo( 1, height() - 17 );
 	p.lineTo( 1, 1 );
 	p.lineTo( width() - 1, 1 );
 	p.lineTo( width() - 1, height() - 1 );
@@ -143,16 +143,16 @@ void VGradientWidget::paintEvent( QPaintEvent* )
 	int w = width() - 5;
 
 	QPtrList<VColorStop>& colorStops = ( *m_lpgradient )->m_colorStops;
-	if ( colorStops.count() > 1 )
+	if( colorStops.count() > 1 )
 	{
 		VColorStop* stop, *nextstop;
-		for ( stop = colorStops.first(), nextstop = colorStops.next();
+		for( stop = colorStops.first(), nextstop = colorStops.next();
 				nextstop; stop = nextstop, nextstop = colorStops.next() )
 		{
 			paintColorStop( p, (int)( stop->rampPoint * w ), stop->color );
 			paintMidPoint( p, (int)(( stop->rampPoint + ( nextstop->rampPoint - stop->rampPoint ) * stop->midPoint ) * w ) );
 		}
-		paintColorStop( p, (int)( stop->rampPoint * w ), stop->color );
+		paintColorStop( p, int( stop->rampPoint * w ), stop->color );
 	}
 	p.end();
 	bitBlt( this, 0, 0, &pixmap, 0, 0, width(), height() );
@@ -160,7 +160,7 @@ void VGradientWidget::paintEvent( QPaintEvent* )
 
 void VGradientWidget::mousePressEvent( QMouseEvent* e )
 {
-	if ( !( ( e->y() > height() - 14 ) && ( e->y() < height() - 2 ) && ( e->x() > 2 ) && ( e->x() < width() - 3 ) ) )
+	if( !( ( e->y() > height() - 14 ) && ( e->y() < height() - 2 ) && ( e->x() > 2 ) && ( e->x() < width() - 3 ) ) )
 		return;
 
 	QPtrList<VColorStop>& colorStops = ( *m_lpgradient )->m_colorStops;
@@ -169,20 +169,20 @@ void VGradientWidget::mousePressEvent( QMouseEvent* e )
 
 	int i = colorStops.count() - 1;
 	int r, m;
-	VColorStop* stop, *nextstop = 0;
-	for ( stop = colorStops.last(); i >= 0; i--, stop = colorStops.prev() )
+	VColorStop *stop, *nextstop = 0;
+	for( stop = colorStops.last(); i >= 0; i--, stop = colorStops.prev() )
 	{
 		r = int( stop->rampPoint * ( width() - 4 ) );
-		if ( nextstop )
+		if( nextstop )
 		{
 			m = int( stop->rampPoint + ( nextstop->rampPoint - stop->rampPoint ) * stop->midPoint * ( width() - 4 ) );
-			if ( ( e->x() - 2 > m - 4 ) && ( e->x() - 2 < m + 4 ) )
+			if( ( e->x() - 2 > m - 4 ) && ( e->x() - 2 < m + 4 ) )
 			{
 				currentPoint = 2*i + 2;
 				return;
 			}
 		}
-		if ( ( e->x() - 2 > r - 5 ) && ( e->x() - 2 < r + 5 ) )
+		if( ( e->x() - 2 > r - 5 ) && ( e->x() - 2 < r + 5 ) )
 		{
 			currentPoint = 2*i + 1;
 			return;
@@ -194,9 +194,9 @@ void VGradientWidget::mousePressEvent( QMouseEvent* e )
 
 void VGradientWidget::mouseReleaseEvent( QMouseEvent* e )
 {
-	if ( e->button() == Qt::RightButton )
+	if( e->button() == Qt::RightButton )
 	{
-		if ( ( e->y() > height() - 14 ) && ( e->y() < height() - 2 ) && ( e->x() > 2 ) && ( e->x() < width() - 1 ) && ( currentPoint % 2 == 1 ) )
+		if( ( e->y() > height() - 14 ) && ( e->y() < height() - 2 ) && ( e->x() > 2 ) && ( e->x() < width() - 1 ) && ( currentPoint % 2 == 1 ) )
 		{
 			( *m_lpgradient )->m_colorStops.remove( currentPoint / 2 );
 			update();
@@ -207,9 +207,9 @@ void VGradientWidget::mouseReleaseEvent( QMouseEvent* e )
 
 void VGradientWidget::mouseDoubleClickEvent( QMouseEvent* e )
 {
-	if ( ( e->y() > height() - 14 ) && ( e->y() < height() - 2 ) && ( e->x() > 2 ) && ( e->x() < width() - 1 ) )
+	if( ( e->y() > height() - 14 ) && ( e->y() < height() - 2 ) && ( e->x() > 2 ) && ( e->x() < width() - 1 ) )
 	{
-		if ( currentPoint % 2 == 1 )
+		if( currentPoint % 2 == 1 )
 		{
 			VColorDlg* d = new VColorDlg( ( *m_lpgradient )->m_colorStops.at( currentPoint / 2 )->color, this->topLevelWidget() );
 			d->exec();
@@ -218,7 +218,7 @@ void VGradientWidget::mouseDoubleClickEvent( QMouseEvent* e )
 			update();
 			emit changed();
 		}
-		else if ( currentPoint == 0 )
+		else if( currentPoint == 0 )
 		{
 			VColorDlg* d = new VColorDlg( ( *m_lpgradient )->m_colorStops.at( 0 )->color, this->topLevelWidget() );
 			d->exec();
@@ -232,9 +232,9 @@ void VGradientWidget::mouseMoveEvent( QMouseEvent* e )
 {
 	QPtrList<VColorStop>& colorStops = ( *m_lpgradient )->m_colorStops;
 
-	if ( ( e->y() > height() - 14 ) && ( e->y() < height() - 2 ) && ( e->x() > 2 ) && ( e->x() < width() - 1 ) )
+	if( ( e->y() > height() - 14 ) && ( e->y() < height() - 2 ) && ( e->x() > 2 ) && ( e->x() < width() - 1 ) )
 	{
-		if ( currentPoint % 2 == 1 )
+		if( currentPoint % 2 == 1 )
 		{
 			int x = e->x();
 			// Clip the color stop between to others.
@@ -244,7 +244,7 @@ void VGradientWidget::mouseMoveEvent( QMouseEvent* e )
 			update();
 			emit changed();
 		}
-		else if ( currentPoint > 0 )
+		else if( currentPoint > 0 )
 		{
 			int x = e->x();
 			// Clip the mid point between to ramp points.

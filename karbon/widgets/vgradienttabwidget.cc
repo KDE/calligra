@@ -61,7 +61,7 @@ void VGradientPreview::paintEvent( QPaintEvent* )
 	gp.setRasterOp( Qt::XorROP );
 	gp.newPath();
 	VGradient gradient( **m_lpgradient );
-	if ( gradient.type() == VGradient::radial )
+	if( gradient.type() == VGradient::radial )
 	{
 		gradient.setOrigin( KoPoint( width() / 2, height() / 2 ) );
 		gradient.setVector( KoPoint( width() / 4, height() / 4 ) );
@@ -120,7 +120,7 @@ VGradientTabWidget::~VGradientTabWidget()
 
 void VGradientTabWidget::setupUI()
 {
-	m_editGroup    = new QGroupBox( i18n( "Edit Gradient" ) );
+	m_editGroup = new QGroupBox( i18n( "Edit Gradient" ) );
 	QGridLayout* editLayout = new QGridLayout( m_editGroup, 6, 3 );
 	editLayout->setSpacing( 3 );
 	editLayout->setMargin( 6 );
@@ -155,13 +155,13 @@ void VGradientTabWidget::setupUI()
 
 void VGradientTabWidget::setupConnections()
 {
-	connect( m_gradientType, SIGNAL( activated( int ) ), this, SLOT( combosChange( int ) ) );
-	connect( m_gradientRepeat, SIGNAL( activated( int ) ), this, SLOT( combosChange( int ) ) );
-	connect( m_gradientWidget, SIGNAL( changed() ), m_gradientPreview, SLOT( update() ) );
-	connect( m_addToPredefs, SIGNAL( clicked() ), this, SLOT( addGradientToPredefs() ) );
-	connect( m_predefGradientsView, SIGNAL( executed( QListBoxItem* ) ), this, SLOT( changeToPredef( QListBoxItem* ) ) );
+	connect( m_gradientType,		SIGNAL( activated( int ) ),				this, SLOT( combosChange( int ) ) );
+	connect( m_gradientRepeat,		SIGNAL( activated( int ) ),				this, SLOT( combosChange( int ) ) );
+	connect( m_gradientWidget,		SIGNAL( changed() ),					m_gradientPreview, SLOT( update() ) );
+	connect( m_addToPredefs,		SIGNAL( clicked() ),					this, SLOT( addGradientToPredefs() ) );
+	connect( m_predefGradientsView, SIGNAL( executed( QListBoxItem* ) ),	this, SLOT( changeToPredef( QListBoxItem* ) ) );
 	connect( m_predefGradientsView, SIGNAL( highlighted( QListBoxItem* ) ), this, SLOT( predefSelected( QListBoxItem* ) ) );
-	connect( m_predefDelete, SIGNAL( clicked() ), this, SLOT( deletePredef() ) );
+	connect( m_predefDelete,		SIGNAL( clicked() ),					this, SLOT( deletePredef() ) );
 } // VGradientTabWidget::setupConnection
 
 void VGradientTabWidget::initUI()
@@ -171,11 +171,9 @@ void VGradientTabWidget::initUI()
 	m_gradientTarget->setCurrentItem( FILL );
 
 	QPtrList<VGradientListItem>* gradientList = m_resourceServer->gradients();
-	if ( gradientList->count() > 0 )
-		for ( VGradientListItem* g = gradientList->first(); g != NULL; g = gradientList->next() )
-		{
+	if( gradientList->count() > 0 )
+		for( VGradientListItem* g = gradientList->first(); g != NULL; g = gradientList->next() )
 			m_predefGradientsView->insertItem( new VGradientListItem( *g ) );
-		}
 } // VGradientTabWidget::initUI
 
 const VGradient* VGradientTabWidget::gradient()
@@ -216,7 +214,7 @@ void VGradientTabWidget::addGradientToPredefs()
 
 void VGradientTabWidget::predefSelected( QListBoxItem* item )
 {
-	if ( item )
+	if( item )
 	{
 		VGradientListItem* gradientItem = (VGradientListItem*)item;
 		m_predefDelete->setEnabled( gradientItem->canDelete() );
@@ -225,7 +223,7 @@ void VGradientTabWidget::predefSelected( QListBoxItem* item )
 
 void VGradientTabWidget::changeToPredef( QListBoxItem* item ) 
 {
-	if ( item )
+	if( item )
 	{
 		VGradientListItem* gradientItem = (VGradientListItem*)item;
 		(*m_gradient) = *( gradientItem->gradient() );
