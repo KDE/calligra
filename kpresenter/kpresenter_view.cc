@@ -4372,9 +4372,7 @@ void KPresenterView::slotSpecialChar(QChar c, const QString &_font)
     KPTextView *edit=m_canvas->currentTextObjectView();
     if ( !edit )
         return;
-    edit->setFamily( _font );
-    edit->insertSpecialChar(c);
-
+    edit->insertSpecialChar(c, _font);
 }
 
 void KPresenterView::insertLink()

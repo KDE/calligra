@@ -1900,150 +1900,252 @@ void KPrCanvas::setFont(const QFont &font, bool _subscript, bool _superscript, c
 
 {
     QPtrList<KoTextFormatInterface> lst = applicableTextInterfaces();
+    if ( lst.isEmpty() ) return;
+    KMacroCommand* macroCmd = new KMacroCommand( i18n("Change text font") );
     QPtrListIterator<KoTextFormatInterface> it( lst );
-    for ( ; it.current() ; ++it )
-        it.current()->setFont( font, _subscript, _superscript, col, backGroundColor, flags );
+    for ( ; it.current() ; ++it ) {
+        KCommand* cmd = it.current()->setFontCommand( font, _subscript, _superscript, col, backGroundColor, flags );
+        if (cmd)
+            macroCmd->addCommand( cmd );
+    }
+    m_view->kPresenterDoc()->addCommand( macroCmd );
 }
 
 void KPrCanvas::setTextColor( const QColor &color )
 {
     QPtrList<KoTextFormatInterface> lst = applicableTextInterfaces();
+    if ( lst.isEmpty() ) return;
     QPtrListIterator<KoTextFormatInterface> it( lst );
-    for ( ; it.current() ; ++it )
-        it.current()->setTextColor( color );
+    KMacroCommand* macroCmd = new KMacroCommand( i18n("Set Text Color") );
+    for ( ; it.current() ; ++it ) {
+        KCommand* cmd = it.current()->setTextColorCommand( color );
+        if (cmd)
+            macroCmd->addCommand( cmd );
+    }
+    m_view->kPresenterDoc()->addCommand( macroCmd );
 }
 
 void KPrCanvas::setTextBackgroundColor( const QColor &color )
 {
     QPtrList<KoTextFormatInterface> lst = applicableTextInterfaces();
+    if ( lst.isEmpty() ) return;
     QPtrListIterator<KoTextFormatInterface> it( lst );
-    for ( ; it.current() ; ++it )
-        it.current()->setTextBackgroundColor( color );
+    KMacroCommand* macroCmd = new KMacroCommand( i18n("Set Text Color") );
+    for ( ; it.current() ; ++it ) {
+        KCommand* cmd = it.current()->setTextBackgroundColorCommand( color );
+        if ( cmd )
+            macroCmd->addCommand( cmd );
+    }
+    m_view->kPresenterDoc()->addCommand( macroCmd );
 }
 
 void KPrCanvas::setTextBold( bool b )
 {
     QPtrList<KoTextFormatInterface> lst = applicableTextInterfaces();
+    if ( lst.isEmpty() ) return;
     QPtrListIterator<KoTextFormatInterface> it( lst );
-    for ( ; it.current() ; ++it )
-        it.current()->setBold( b );
+    KMacroCommand* macroCmd = new KMacroCommand( i18n("Make Text Bold") );
+    for ( ; it.current() ; ++it ) {
+        KCommand* cmd = it.current()->setBoldCommand( b );
+        if ( cmd )
+            macroCmd->addCommand( cmd );
+    }
+    m_view->kPresenterDoc()->addCommand( macroCmd );
 }
 
 void KPrCanvas::setTextItalic( bool b )
 {
     QPtrList<KoTextFormatInterface> lst = applicableTextInterfaces();
+    if ( lst.isEmpty() ) return;
     QPtrListIterator<KoTextFormatInterface> it( lst );
-    for ( ; it.current() ; ++it )
-        it.current()->setItalic( b );
+    KMacroCommand* macroCmd = new KMacroCommand( i18n("Make Text Italic") );
+    for ( ; it.current() ; ++it ) {
+        KCommand* cmd = it.current()->setItalicCommand( b );
+        if ( cmd )
+            macroCmd->addCommand( cmd );
+    }
+    m_view->kPresenterDoc()->addCommand( macroCmd );
 }
 
 void KPrCanvas::setTextUnderline( bool b )
 {
     QPtrList<KoTextFormatInterface> lst = applicableTextInterfaces();
+    if ( lst.isEmpty() ) return;
     QPtrListIterator<KoTextFormatInterface> it( lst );
-    for ( ; it.current() ; ++it )
-        it.current()->setUnderline( b );
+    KMacroCommand* macroCmd = new KMacroCommand( i18n("Underline Text") );
+    for ( ; it.current() ; ++it ) {
+        KCommand* cmd = it.current()->setUnderlineCommand( b );
+        if ( cmd )
+            macroCmd->addCommand( cmd );
+    }
+    m_view->kPresenterDoc()->addCommand( macroCmd );
 }
 
 void KPrCanvas::setTextStrikeOut( bool b )
 {
     QPtrList<KoTextFormatInterface> lst = applicableTextInterfaces();
+    if ( lst.isEmpty() ) return;
+    KMacroCommand* macroCmd = new KMacroCommand( i18n("Make Text Italic") );
     QPtrListIterator<KoTextFormatInterface> it( lst );
-    for ( ; it.current() ; ++it )
-        it.current()->setStrikeOut( b );
+    for ( ; it.current() ; ++it ) {
+        KCommand *cmd = it.current()->setStrikeOutCommand( b );
+        if ( cmd )
+            macroCmd->addCommand( cmd );
+    }
+    m_view->kPresenterDoc()->addCommand( macroCmd );
 }
 
 void KPrCanvas::setTextFamily( const QString &f )
 {
     QPtrList<KoTextFormatInterface> lst = applicableTextInterfaces();
+    if ( lst.isEmpty() ) return;
+    KMacroCommand* macroCmd = new KMacroCommand( i18n("Set Text Font") );
     QPtrListIterator<KoTextFormatInterface> it( lst );
-    for ( ; it.current() ; ++it )
-        it.current()->setFamily( f );
+    for ( ; it.current() ; ++it ) {
+        KCommand* cmd = it.current()->setFamilyCommand( f );
+        if ( cmd )
+            macroCmd->addCommand( cmd );
+    }
+    m_view->kPresenterDoc()->addCommand( macroCmd );
 }
 
 void KPrCanvas::setTextPointSize( int s )
 {
     QPtrList<KoTextFormatInterface> lst = applicableTextInterfaces();
+    if ( lst.isEmpty() ) return;
+    KMacroCommand* macroCmd = new KMacroCommand( i18n("Change Text Size") );
     QPtrListIterator<KoTextFormatInterface> it( lst );
-    for ( ; it.current() ; ++it )
-        it.current()->setPointSize( s );
+    for ( ; it.current() ; ++it ) {
+        KCommand* cmd = it.current()->setPointSizeCommand( s );
+        if ( cmd )
+            macroCmd->addCommand( cmd );
+    }
+    m_view->kPresenterDoc()->addCommand( macroCmd );
 }
 
 void KPrCanvas::setTextSubScript( bool b )
 {
     QPtrList<KoTextFormatInterface> lst = applicableTextInterfaces();
+    if ( lst.isEmpty() ) return;
     QPtrListIterator<KoTextFormatInterface> it( lst );
-    for ( ; it.current() ; ++it )
-        it.current()->setTextSubScript( b );
+    KMacroCommand* macroCmd = new KMacroCommand( i18n("Set Text Subscript") );
+    for ( ; it.current() ; ++it ) {
+        KCommand* cmd = it.current()->setTextSubScriptCommand( b );
+        if ( cmd )
+            macroCmd->addCommand( cmd );
+    }
+    m_view->kPresenterDoc()->addCommand( macroCmd );
 }
 
 void KPrCanvas::setTextSuperScript( bool b )
 {
     QPtrList<KoTextFormatInterface> lst = applicableTextInterfaces();
+    if ( lst.isEmpty() ) return;
     QPtrListIterator<KoTextFormatInterface> it( lst );
-    for ( ; it.current() ; ++it )
-        it.current()->setTextSuperScript( b );
+    KMacroCommand* macroCmd = new KMacroCommand( i18n("Set Text Superscript") );
+    for ( ; it.current() ; ++it ) {
+        KCommand* cmd = it.current()->setTextSuperScriptCommand( b );
+        if ( cmd )
+            macroCmd->addCommand( cmd );
+    }
+    m_view->kPresenterDoc()->addCommand( macroCmd );
 }
 
 
 void KPrCanvas::setTextDefaultFormat( )
 {
     QPtrList<KoTextFormatInterface> lst = applicableTextInterfaces();
+    if ( lst.isEmpty() ) return;
     QPtrListIterator<KoTextFormatInterface> it( lst );
-    for ( ; it.current() ; ++it )
-        it.current()->setDefaultFormat( );
+    KMacroCommand* macroCmd = new KMacroCommand( i18n("Apply Default Format") );
+    for ( ; it.current() ; ++it ) {
+        KCommand* cmd = it.current()->setDefaultFormatCommand( );
+        if ( cmd )
+            macroCmd->addCommand( cmd );
+    }
+    m_view->kPresenterDoc()->addCommand( macroCmd );
 }
 
 void KPrCanvas::setIncreaseFontSize()
 {
     QPtrList<KoTextFormatInterface> lst = applicableTextInterfaces();
+    if ( lst.isEmpty() ) return;
     QPtrListIterator<KoTextFormatInterface> it( lst );
     int size=12;
     if(!lst.isEmpty())
         size=static_cast<int>( KoTextZoomHandler::layoutUnitPtToPt(lst.first()->currentFormat()->font().pointSize()));
-    for ( ; it.current() ; ++it )
-        it.current()->setPointSize( size+1 );
+    KMacroCommand* macroCmd = new KMacroCommand( i18n("Increase Font Size") );
+    for ( ; it.current() ; ++it ) {
+        KCommand* cmd = it.current()->setPointSizeCommand( size+1 );
+        if ( cmd )
+            macroCmd->addCommand( cmd );
+    }
+    m_view->kPresenterDoc()->addCommand( macroCmd );
 }
 
 void KPrCanvas::setDecreaseFontSize()
 {
     QPtrList<KoTextFormatInterface> lst = applicableTextInterfaces();
+    if ( lst.isEmpty() ) return;
     QPtrListIterator<KoTextFormatInterface> it( lst );
-        int size=12;
+    int size=12;
     if(!lst.isEmpty())
         size=static_cast<int>( KoTextZoomHandler::layoutUnitPtToPt(lst.first()->currentFormat()->font().pointSize()));
-    for ( ; it.current() ; ++it )
-        it.current()->setPointSize( size-1 );
+    KMacroCommand* macroCmd = new KMacroCommand( i18n("Decrease Font Size") );
+    for ( ; it.current() ; ++it ) {
+        KCommand* cmd = it.current()->setPointSizeCommand( size-1 );
+        if ( cmd )
+            macroCmd->addCommand( cmd );
+    }
+    m_view->kPresenterDoc()->addCommand( macroCmd );
 }
 
 /*===================== set text alignment =======================*/
 void KPrCanvas::setTextAlign( int align )
 {
     QPtrList<KoTextFormatInterface> lst = applicableTextInterfaces();
+    if ( lst.isEmpty() ) return;
     QPtrListIterator<KoTextFormatInterface> it( lst );
-    for ( ; it.current() ; ++it )
-        it.current()->setAlign(align);
+    KMacroCommand* macroCmd = new KMacroCommand( i18n("Set Text Align") );
+    for ( ; it.current() ; ++it ) {
+        KCommand* cmd = it.current()->setAlignCommand(align);
+        if ( cmd )
+            macroCmd->addCommand( cmd );
+    }
+    m_view->kPresenterDoc()->addCommand( macroCmd );
 }
 
 void KPrCanvas::setTabList( const KoTabulatorList & tabList )
 {
     QPtrList<KoTextFormatInterface> lst = applicableTextInterfaces();
+    if ( lst.isEmpty() ) return;
     QPtrListIterator<KoTextFormatInterface> it( lst );
-    for ( ; it.current() ; ++it )
-        it.current()->setTabList(tabList );
+    KMacroCommand* macroCmd = new KMacroCommand( i18n("Change Tabulators") );
+    for ( ; it.current() ; ++it ) {
+        KCommand* cmd = it.current()->setTabListCommand(tabList );
+        if ( cmd )
+            macroCmd->addCommand( cmd );
+    }
+    m_view->kPresenterDoc()->addCommand( macroCmd );
 }
 
 void KPrCanvas::setTextDepthPlus()
 {
     QPtrList<KoTextFormatInterface> lst = applicableTextInterfaces();
+    if ( lst.isEmpty() ) return;
     double leftMargin=0.0;
     if(!lst.isEmpty())
         leftMargin=lst.first()->currentParagLayoutFormat()->margins[QStyleSheetItem::MarginLeft];
     double indent = m_view->kPresenterDoc()->getIndentValue();
     double newVal = leftMargin + indent;
     QPtrListIterator<KoTextFormatInterface> it( lst );
-    for ( ; it.current() ; ++it )
-        it.current()->setMargin(QStyleSheetItem::MarginLeft, newVal);
+    KMacroCommand* macroCmd = new KMacroCommand( i18n("Increase paragraph depth") );
+    for ( ; it.current() ; ++it ) {
+        KCommand* cmd = it.current()->setMarginCommand(QStyleSheetItem::MarginLeft, newVal);
+        if ( cmd )
+            macroCmd->addCommand( cmd );
+    }
+    m_view->kPresenterDoc()->addCommand( macroCmd );
     if(!lst.isEmpty())
     {
         const KoParagLayout *layout=lst.first()->currentParagLayoutFormat();
@@ -2054,14 +2156,20 @@ void KPrCanvas::setTextDepthPlus()
 void KPrCanvas::setTextDepthMinus()
 {
     QPtrList<KoTextFormatInterface> lst = applicableTextInterfaces();
+    if ( lst.isEmpty() ) return;
     double leftMargin=0.0;
     if(!lst.isEmpty())
         leftMargin=lst.first()->currentParagLayoutFormat()->margins[QStyleSheetItem::MarginLeft];
     double indent = m_view->kPresenterDoc()->getIndentValue();
     QPtrListIterator<KoTextFormatInterface> it( lst );
     double newVal = leftMargin - indent;
-    for ( ; it.current() ; ++it )
-        it.current()->setMargin(QStyleSheetItem::MarginLeft, QMAX( newVal, 0 ));
+    KMacroCommand* macroCmd = new KMacroCommand( i18n("Increase paragraph depth") );
+    for ( ; it.current() ; ++it ) {
+        KCommand* cmd = it.current()->setMarginCommand(QStyleSheetItem::MarginLeft, QMAX( newVal, 0 ));
+        if ( cmd )
+            macroCmd->addCommand( cmd );
+    }
+    m_view->kPresenterDoc()->addCommand( macroCmd );
     if(!lst.isEmpty())
     {
         const KoParagLayout *layout=lst.first()->currentParagLayoutFormat();
@@ -2072,37 +2180,61 @@ void KPrCanvas::setTextDepthMinus()
 void KPrCanvas::setNewFirstIndent(double _firstIndent)
 {
     QPtrList<KoTextFormatInterface> lst = applicableTextInterfaces();
+    if ( lst.isEmpty() ) return;
     double index=0.0;
     if(!lst.isEmpty())
         index=lst.first()->currentParagLayoutFormat()->margins[QStyleSheetItem::MarginLeft];
     QPtrListIterator<KoTextFormatInterface> it( lst );
     double val = _firstIndent - index;
-    for ( ; it.current() ; ++it )
-        it.current()->setMargin(QStyleSheetItem::MarginFirstLine, val);
+    KMacroCommand* macroCmd = new KMacroCommand( i18n("Change first line indent") );
+    for ( ; it.current() ; ++it ) {
+        KCommand* cmd = it.current()->setMarginCommand(QStyleSheetItem::MarginFirstLine, val);
+        if ( cmd )
+            macroCmd->addCommand( cmd );
+    }
+    m_view->kPresenterDoc()->addCommand( macroCmd );
 }
 
 void KPrCanvas::setNewLeftIndent(double _leftIndent)
 {
     QPtrList<KoTextFormatInterface> lst = applicableTextInterfaces();
+    if ( lst.isEmpty() ) return;
     QPtrListIterator<KoTextFormatInterface> it( lst );
-    for ( ; it.current() ; ++it )
-        it.current()->setMargin(QStyleSheetItem::MarginLeft, _leftIndent);
+    KMacroCommand* macroCmd = new KMacroCommand( i18n("Change left indent") );
+    for ( ; it.current() ; ++it ) {
+        KCommand* cmd = it.current()->setMarginCommand(QStyleSheetItem::MarginLeft, _leftIndent);
+        if ( cmd )
+            macroCmd->addCommand( cmd );
+    }
+    m_view->kPresenterDoc()->addCommand( macroCmd );
 }
 
 void KPrCanvas::setNewRightIndent(double _rightIndent)
 {
     QPtrList<KoTextFormatInterface> lst = applicableTextInterfaces();
+    if ( lst.isEmpty() ) return;
     QPtrListIterator<KoTextFormatInterface> it( lst );
-    for ( ; it.current() ; ++it )
-        it.current()->setMargin(QStyleSheetItem::MarginRight, _rightIndent);
+    KMacroCommand* macroCmd = new KMacroCommand( i18n("Change right indent") );
+    for ( ; it.current() ; ++it ) {
+        KCommand* cmd = it.current()->setMarginCommand(QStyleSheetItem::MarginRight, _rightIndent);
+        if ( cmd )
+            macroCmd->addCommand( cmd );
+    }
+    m_view->kPresenterDoc()->addCommand( macroCmd );
 }
 
 void KPrCanvas::setTextCounter(KoParagCounter counter)
 {
     QPtrList<KoTextFormatInterface> lst = applicableTextInterfaces();
+    if ( lst.isEmpty() ) return;
     QPtrListIterator<KoTextFormatInterface> it( lst );
-    for ( ; it.current() ; ++it )
-        it.current()->setCounter(counter );
+    KMacroCommand* macroCmd = new KMacroCommand( i18n("Change paragraph type") );
+    for ( ; it.current() ; ++it ) {
+        KCommand* cmd = it.current()->setCounterCommand(counter );
+        if ( cmd )
+            macroCmd->addCommand( cmd );
+    }
+    m_view->kPresenterDoc()->addCommand( macroCmd );
 }
 
 #ifndef NDEBUG
@@ -3146,7 +3278,6 @@ void KPrCanvas::changePages( QPixmap _pix1, QPixmap _pix2, PageEffect _effect )
         _time.start();
 
         int dheight = _pix2.height();
-        int dwidth = _pix2.width();
 
         for ( ; ; )
         {
@@ -3201,7 +3332,6 @@ void KPrCanvas::changePages( QPixmap _pix1, QPixmap _pix2, PageEffect _effect )
         _time.start();
 
         int dheight = _pix2.height();
-        int dwidth = _pix2.width();
 
         for ( ; ; )
         {
