@@ -294,24 +294,14 @@ bool KoShellWindow::queryClose()
 }
 
 /*
+// Should this be an additionnal action in the File menu ?
 bool KoShellWindow::saveAllPages()
 {
   // TODO
   return false;
 }
-
-bool KoShellWindow::printDlg()
-{
-  assert( m_activePage != m_lstPages.end() );
-
-  return (*m_activePage).m_vView->printDlg();
-}
-
-void KoShellWindow::releasePages()
-{
-  m_pFrame->detach();
-}
 */
+
 QString KoShellWindow::configFile() const
 {
   //return readConfigFile( locate( "data", "koshell/koshell_shell.rc" ) );
@@ -321,7 +311,9 @@ QString KoShellWindow::configFile() const
 /*
 void KoShellWindow::slotFilePrint()
 {
-  printDlg();
+  assert( m_activePage != m_lstPages.end() );
+
+  return (*m_activePage).m_vView->printDlg();
 }
 */
 
