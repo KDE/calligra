@@ -1,7 +1,7 @@
 
 KDE_CXXFLAGS = $(USE_RTTI)
 INCLUDES = $(all_includes)
-AM_LDFLAGS   = $(all_libraries)
+LDFLAGS   = $(all_libraries)
 
 ####### Files
 
