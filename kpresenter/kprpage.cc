@@ -2830,8 +2830,7 @@ QString KPrPage::pageTitle( const QString &_title ) const
 
         }
     }
-
-    if ( txt.isEmpty()|| txt=="\n" )
+    if ( txt.isEmpty()||txt==" " || txt=="\n" )
         return _title;
     return txt;
 }
