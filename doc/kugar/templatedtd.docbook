@@ -6,7 +6,7 @@ this prolog
 
 -->
 
-<appendix title="template-dtd">
+<appendix id="template-dtd">
 <title>The KugarTemplate Document Type Definition</title>
 
 <synopsis>
