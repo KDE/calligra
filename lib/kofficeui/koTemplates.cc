@@ -52,14 +52,19 @@ const QPixmap &KoTemplate::loadPicture() {
         m_pixmap=QPixmap();
         return m_pixmap;
     }
-    if (img.width() > 60 || img.height() > 60) {
+    const int maxHeightWidth = 60; // ### TODO: make it 64x64, also some people would surely like to have 128x128
+    if (img.width() > maxHeightWidth || img.height() > maxHeightWidth) {
+#if 1
+        img = img.smoothScale( maxHeightWidth, maxHeightWidth, QImage::ScaleMax );
+#else
         if (img.width() > img.height()) {
-            int height = (int) ((60.0 / img.width()) * img.height());
-            img = img.smoothScale(60, height);
+            const int height = int ( ( maxHeightWidth / img.width() ) * img.height() );
+            img = img.smoothScale( maxHeightWidth, height );
         } else {
-            int width = (int) ((60.0 / img.height()) * img.width());
-            img = img.smoothScale(width, 60);
+            const int width = int ( ( maxHeightWidth / img.height() ) * img.width() );
+            img = img.smoothScale( width, maxHeightWidth );
         }
+#endif
     }
     m_pixmap.convertFromImage(img);
     m_cached=true;
