@@ -1765,8 +1765,7 @@ void KWCanvas::editTextFrameSet( KWFrameSet * fs, KoTextParag* parag, int index 
         if ( m_currentFrameSetEdit && m_currentFrameSetEdit->frameSet()->type()==FT_TEXT ) {
             static_cast<KWTextFrameSetEdit*>( m_currentFrameSetEdit )->setCursor( parag, index );
 
-            // This duplicates the code in `checkCurrentEdit', but the _new_ cursor
-            // position must be visible.
+            // The _new_ cursor position must be visible.
             KWTextFrameSetEdit *textedit=dynamic_cast<KWTextFrameSetEdit *>(m_currentFrameSetEdit->currentTextEdit());
             if ( textedit )
                 textedit->ensureCursorVisible();
@@ -1827,9 +1826,6 @@ bool KWCanvas::checkCurrentEdit( KWFrameSet * fs )
     if ( fs && !m_currentFrameSetEdit )
     {
         m_currentFrameSetEdit = fs->createFrameSetEdit( this );
-        KWTextFrameSetEdit *textedit=dynamic_cast<KWTextFrameSetEdit *>(m_currentFrameSetEdit->currentTextEdit());
-        if ( textedit )
-            textedit->ensureCursorVisible();
         emitChanged = true;
     }
     return emitChanged;

@@ -301,7 +301,7 @@ void KWFootNoteVariable::finalize()
     if ( m_frameset->isDeleted() )
         return;
 
-    kdDebug() << "KWFootNoteVariable::finalize" << endl;
+    //kdDebug(32001) << "KWFootNoteVariable::finalize" << endl;
 
     int pageNum = this->pageNum();
     if ( pageNum == -1 )

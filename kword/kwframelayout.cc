@@ -148,12 +148,15 @@ void KWFrameLayout::layout( KWFrameSet* mainTextFrameSet, int numColumns,
 
                 //KWFrame::FrameBehavior fnFrameBehavior = KWFrame::AutoExtendFrame;
                 KWFootNoteFrameSet* fnfs = static_cast<KWFootNoteFrameSet *>( fs );
-                KWFootNoteVariable* fnvar = fnfs->footNoteVariable();
 
+                //KWFootNoteVariable* fnvar = fnfs->footNoteVariable();
                 // The varY() call here is what depends on the maintextframe size
                 /*double minY = fnvar->varY() + it.current()->m_spacing */ /* some spacing */;
+
                 double minY = it.current()->m_minY;
+#ifdef DEBUG_FRAMELAYOUT
                 kdDebug(32002) << "   footnote: frameHeight=" << frameHeight << " frameTop (" << frameTop << ") <? minY (" << minY << ")" << endl;
+#endif
                 if ( frameTop < minY )
                 {
                     // Ok, this is the complex case of a footnote var too far down in the page,
@@ -164,7 +167,9 @@ void KWFrameLayout::layout( KWFrameSet* mainTextFrameSet, int numColumns,
                     // In the current page we stop at minY.
                     frameTop = minY;
                     frameHeight = bottom - frameTop;
+#ifdef DEBUG_FRAMELAYOUT
                     kdDebug(32002) << "   footnote: new top=" << frameTop << " new height=" << frameHeight << " remaining height=" << it.current()->m_height - frameHeight << endl;
+#endif
                     Q_ASSERT( frameHeight < it.current()->m_height );
                     it.current()->m_height -= frameHeight; // calculate what remains to be done in the next frame
                     //fnFrameBehavior = KWFrame::Ignore;
@@ -313,7 +318,7 @@ void KWFrameLayout::checkFootNotes()
             KWFootNoteFrameSet* fnfs = static_cast<KWFootNoteFrameSet *>( hff->m_frameset );
             KWFootNoteVariable* fnvar = fnfs->footNoteVariable();
             double varY = fnvar->varY();
-            hff->m_minY = varY + hff->m_spacing /* some spacing */;
+            hff->m_minY = varY + /*2 * */ hff->m_spacing + 2 /* some spacing */;
             int pageNum = static_cast<int>(varY / m_doc->ptPaperHeight());
             //int pageNum = fnvar->pageNum(); // faster to deduce it from varY
             if ( pageNum != hff->m_startAtPage ) {

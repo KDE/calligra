@@ -2917,6 +2917,10 @@ void KWTextFrameSetEdit::insertFootNote( NoteType noteType,KWFootNoteVariable::N
 
      // And now edit the footnote frameset - all WPs do that it seems.
      m_canvas->editFrameSet( fs );
+     // Ensure cursor is visible
+     KWTextFrameSetEdit *textedit=dynamic_cast<KWTextFrameSetEdit *>(m_canvas->currentFrameSetEdit()->currentTextEdit());
+     if ( textedit )
+         textedit->ensureCursorVisible();
 }
 
 void KWTextFrameSetEdit::insertVariable( int type, int subtype )
