@@ -1533,6 +1533,49 @@ KCommand *KoAutoFormat::scanParag( KoTextParag * parag, KoTextObject * obj )
                     createMacro = true;
                 }
             }
+            if ( ( ch.isSpace() || ch.isPunct() ) && i > 0 )
+            {
+                QString lastWord = getLastWord(parag, i);
+                //kdDebug()<<" m_listCompletion->items() :"<<m_listCompletion->items()<<endl;
+                KMacroCommand *macro =new KMacroCommand(i18n("Autocorrection"));
+                bool cmdCreate=false;
+                int newPos = i;
+                KCommand *cmd = doAutoCorrect( cursor, parag, newPos , obj );
+
+                if( cmd )
+                {
+                    macro->addCommand( cmd );
+                    cmdCreate = true;
+                }
+
+                if ( !m_ignoreUpperCase && (m_convertUpperUpper || m_convertUpperCase) )
+                {
+                    lastWord = getLastWord(parag, newPos);
+                    cmd = doUpperCase( cursor, parag, newPos, lastWord, obj );
+                    if( cmd )
+                    {
+                        macro->addCommand( cmd );
+                        cmdCreate = true;
+                    }
+                }
+                if ( cmdCreate )
+                {
+                    macro->addCommand( macro );
+                    createMacro = true;
+                }
+                else
+                    delete macro;
+
+                if( m_bAutoSuperScript && m_superScriptEntries.count()>0)
+                {
+                    KCommand * cmd =doAutoSuperScript( cursor, parag, newPos, lastWord, obj  );
+                    if ( cmd )
+                    {
+                        macro->addCommand( cmd );
+                        createMacro = true;
+                    }
+                }
+            }
         }
     }
     delete cursor;
