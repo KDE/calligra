@@ -708,6 +708,11 @@ QDomDocument KPresenterDoc::saveXML()
 
 void KPresenterDoc::saveEmbeddedObject(KPrPage *page, const QPtrList<KoDocumentChild>& childList ,QDomDocument &doc,QDomElement &presenter )
 {
+    QPtrListIterator<KoDocumentChild> chl( childList );
+    double offset=m_pageList.find(page)*page->getPageRect().height();
+    for( ; chl.current(); ++chl ) {
+        saveEmbeddedObject(page, chl.current(),doc,presenter, offset );
+    }
 }
 
 void KPresenterDoc::saveEmbeddedObject(KPrPage *page, KoDocumentChild *chl,QDomDocument &doc,QDomElement &presenter, double offset )
