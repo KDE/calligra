@@ -40,14 +40,15 @@ class KPrinter;
 
     ~KPTPertView();
     
-	void zoom(double /*zoom*/) {}
-	
+    void zoom(double /*zoom*/) {}
+
     void draw();
     KPTView *mainView();
-    KPTNode *currentNode() { return m_node; }
 
     void print(KPrinter &printer);
 
+    KPTNode *currentNode();
+ 
  public slots:
     void slotRMBPressed(KPTNode *node, const QPoint & point);
 
@@ -55,7 +56,8 @@ private:
     void init(QLayout *layout);
     KPTView *m_mainview;
     KPTPertCanvas *m_canvasview;
-	KPTNode *m_node;
+    KPTNode *m_node;
     int m_defaultFontSize;
 };
- #endif
+
+#endif

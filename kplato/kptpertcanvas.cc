@@ -451,7 +451,10 @@ KPTPertNodeItem *KPTPertCanvas::selectedItem()
 	return 0;
 }
 
-
+KPTNode *KPTPertCanvas::selectedNode() { 
+    return selectedItem() ? &(selectedItem()->node()) : 0; 
+}
+ 
 #ifndef NDEBUG
 void KPTPertCanvas::printDebug( int /*info*/ )
 {

@@ -81,4 +81,8 @@ void KPTPertView::print(KPrinter &printer) {
 
 }
 
+KPTNode *KPTPertView::currentNode() {
+    return m_canvasview->selectedNode(); 
+}
+ 
 #include "kptpertview.moc"

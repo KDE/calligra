@@ -45,23 +45,25 @@ public:
     void clear();
     QSize canvasSize();
 
-	KPTPertNodeItem *selectedItem();
+    KPTPertNodeItem *selectedItem();
 
-	int verticalGap() { return m_verticalGap; }
-	int horizontalGap() { return m_horizontalGap; }
-	QSize itemSize() { return m_itemSize; }
+    int verticalGap() { return m_verticalGap; }
+    int horizontalGap() { return m_horizontalGap; }
+    QSize itemSize() { return m_itemSize; }
 
-	bool legalToLink(KPTNode &par, KPTNode &child);
-	bool legalParents(KPTNode *par, KPTNode *child);
-	bool legalChildren(KPTNode *par, KPTNode *child);
+    bool legalToLink(KPTNode &par, KPTNode &child);
+    bool legalParents(KPTNode *par, KPTNode *child);
+    bool legalChildren(KPTNode *par, KPTNode *child);
 
     void setColumn(int row, int col) { m_rows.at(row)[col] = true; }
 
     void mapNode(KPTPertNodeItem *item);
     void mapChildNode(KPTPertNodeItem *parentItem, KPTPertNodeItem *childItem, TimingRelation type);
+    
+    KPTNode *selectedNode();
 
 protected:
-	void drawRelations();
+    void drawRelations();
 
     void createChildItems(KPTPertNodeItem *node);
     KPTPertNodeItem *createNodeItem(KPTNode *node);
