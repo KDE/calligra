@@ -25,6 +25,8 @@ TODO:
 -	painting (NotROP) while shape creation isnt good. creation should instead
 	insert a temporary object (state "edit") right from the start.
 	other vobjects shouldnt repaint if they didnt change put just blit their pixmap-cache.
+-	fix i18n singular/plural
+
 
 WISHLIST:
 -	Ctrl or Shift (pressed) while dragging a shape should make the shape move along only one axis
