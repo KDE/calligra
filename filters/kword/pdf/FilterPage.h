@@ -23,81 +23,108 @@
 
 #include <qvaluevector.h>
 #include <qdom.h>
+#include <qdatetime.h>
+#include <qptrlist.h>
 
 #include "misc.h"
 
 
-//-----------------------------------------------------------------------------
-class FilterBlock
+namespace PDFImport
 {
- public:
-    FilterBlock() : pos(0) {}
 
-    FilterFont font;
-    FilterLink link;
-    uint       pos;
-    QString    text;
+class Page;
+class Data;
+
+//-----------------------------------------------------------------------------
+class Block
+{
+public:
+    Block() : link(0), pos(0) {}
+
+public:
+    Font    font;
+    const Link *link;
+    uint    pos;
+    QString text;
 };
 
 //-----------------------------------------------------------------------------
-class FilterParagraph
-{
- public:
-    uint nbLines, frameIndex;
-    double firstIndent, leftIndent, offset;
-    QValueVector<double> tabs;
-    QValueVector<FilterBlock> blocks;
+enum Align { AlignLeft, AlignRight, AlignCenter, AlignBlock };
 
+class Paragraph
+{
+public:
+    Paragraph()
+        : nbLines(1), firstIndent(0), leftIndent(0), align(AlignLeft) {}
+
+public:
+    uint                 nbLines, frameIndex;
+    double               firstIndent, leftIndent, offset;
+    Align                align;
+    QValueVector<double> tabs;
+    QValueList<Block>    blocks;
+
+public:
     int findTab(double xMin, double epsilon, bool firstLine) const;
     uint findNbTabs(uint i, double prevXMax) const;
+    int charFromEnd(uint dec, uint &blockIndex);
 };
 
 //-----------------------------------------------------------------------------
-class FilterPage;
-
-class FilterString : public TextString
+class String : public TextString
 {
- public:
-    FilterString(GfxState *state, double x0, double y0,
-                 double fontSize, uint frameIndex);
+public:
+    String(GfxState *state, double x0, double y0,
+           double fontSize, uint frameIndex);
 
- private:
-    FilterFont _font;
-    FilterLink _link;
-    uint       _frameIndex;
-
-    void addChar(GfxState *state, double x, double y,
-                 double dx, double dy, Unicode u);
+    uint frameIndex() const { return _frameIndex; }
+    const Font &font() const { return _font; }
+    DRect rect() const;
     bool checkCombination(TextString *s);
 
-    friend class FilterPage;
+public:
+    const Link *link;
+
+private:
+    void addChar(GfxState *state, double x, double y,
+                 double dx, double dy, Unicode u);
+
+private:
+    Font _font;
+    uint _frameIndex;
 };
 
 //-----------------------------------------------------------------------------
-class FilterData;
-
-class FilterPage : public TextPage
+class Page : public TextPage
 {
- public:
-    FilterPage(FilterData &data);
+public:
+    Page(Data &data);
 
     void beginString(GfxState *, double x0, double y0);
     void addString(TextString *);
     void endString();
     void dump();
-    void addLink(const FilterLink &link) { _links.push_back(link); }
+    void addLink(Link *link) { _links.append(link); }
     void clear();
 
- private:
-    FilterData &_data;
-    bool        _empty;
-    QValueVector<FilterParagraph> _pars;
-    QValueVector<FilterLink>      _links;
-    FilterString *_lastStr;
+    const DRect &rect() const { return _rect; }
 
-    static QChar checkSpecial(QChar, const FilterFont &,
-                              PDFImport::FontFamily &);
+private:
+    FontFamily checkSpecial(Block &, uint index) const;
+    static TextBlock *findLastBlock(TextLine *);
+    static bool isLastParagraphLine(TextLine *);
+    void createParagraphs();
     void prepare();
+
+private:
+    Data &_data;
+    QValueList<Paragraph> _pars;
+    QPtrList<Link> _links;
+    String *_lastStr;
+    QTime _time; // debug
+    DRect _rect;
 };
+
+}; // namespace
 
 #endif

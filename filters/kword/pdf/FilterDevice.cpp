@@ -24,66 +24,73 @@
 
 #include "GfxState.h"
 #include "Link.h"
+
 #include "FilterPage.h"
+#include "data.h"
+#include "dialog.h"
 
 
-using namespace PDFImport;
+namespace PDFImport
+{
 
-FilterDevice::FilterDevice(FilterData &data)
+Device::Device(Data &data)
     : _data(data), _fillColor(Qt::white), _strokeColor(Qt::black)
 {
-    _page = new FilterPage(_data);
+    _pages.setAutoDelete(true);
 }
 
-FilterDevice::~FilterDevice()
+Device::~Device()
 {
     clear();
-    delete _page;
 }
 
-void FilterDevice::clear()
+void Device::clear()
 {
-    _page->clear();
     _images.clear();
 }
 
-void FilterDevice::startPage(int, GfxState *)
+void Device::dumpPage(uint i)
 {
     _data.startPage();
+    _pages.at(i)->dump();
 }
 
-void FilterDevice::endPage()
+void Device::startPage(int, GfxState *)
+{
+    _pages.append( new Page(_data) );
+}
+
+void Device::endPage()
 {
     if ( !_currentImage.image.isNull() ) addImage();
-    _page->dump();
+    _data.endPage( _pages.getLast()->rect() );
     clear();
-    _data.endPage();
     kdDebug(30516) << "-- end page --------------------------" << endl;
 }
 
-void FilterDevice::updateFont(GfxState *state)
+void Device::updateFont(GfxState *state)
 {
-    _page->updateFont(state);
+    _pages.getLast()->updateFont(state);
 }
 
-void FilterDevice::beginString(GfxState *state, GString *)
+void Device::beginString(GfxState *state, GString *)
 {
-    _page->beginString(state, state->getCurX(), state->getCurY());
+    _pages.getLast()->beginString(state, state->getCurX(), state->getCurY());
 }
 
-void FilterDevice::endString(GfxState *)
+void Device::endString(GfxState *)
 {
-    _page->endString();
+    _pages.getLast()->endString();
 }
 
-void FilterDevice::drawChar(GfxState *state, double x, double y,
+void Device::drawChar(GfxState *state, double x, double y,
                             double dx, double dy, double, double,
                             CharCode, Unicode *u, int uLen)
 {
-    _page->addChar(state, x, y, dx, dy, u, uLen);
+    _pages.getLast()->addChar(state, x, y, dx, dy, u, uLen);
 }
 
-void FilterDevice::drawLink(Link* link, Catalog *cat)
+void Device::drawLink(::Link* link, Catalog *cat)
 {
     double x1, y1, x2, y2, w;
     link->getBorder(&x1, &y1, &x2, &y2, &w);
@@ -92,12 +99,16 @@ void FilterDevice::drawLink(Link* link, Catalog *cat)
     cvtUserToDev(x1, y1, &ux1, &uy1);
     cvtUserToDev(x2, y2, &ux2, &uy2);
 
-    LinkAction *action = link->getAction();
-    FilterLink flink(ux1 ,ux2, uy1, uy2, *action, *cat);
-    _page->addLink(flink);
+    DRect r;
+    r.left = kMin(ux1, ux2);
+    r.right = kMax(ux1, ux2);
+    r.top = kMin(uy1, uy2);
+    r.bottom = kMax(uy1, uy2);
+    Link *l = new Link(r, *link->getAction(), *cat);
+    _pages.getLast()->addLink(l);
 }
 
-void FilterDevice::addImage()
+void Device::addImage()
 {
     if ( _currentImage.image.width()==0 || _currentImage.image.height()==0 ) {
         kdDebug(30516) << "image has null width or height !" << endl;
@@ -158,7 +169,7 @@ void FilterDevice::addImage()
     _currentImage = Image();
 }
 
-void FilterDevice::computeGeometry(GfxState *state, Image &image)
+void Device::computeGeometry(GfxState *state, Image &image)
 {
     double xt, yt, wt, ht;
     state->transform(0, 0, &xt, &yt);
@@ -171,7 +182,7 @@ void FilterDevice::computeGeometry(GfxState *state, Image &image)
     // #### TODO : take care of image transform (rotation,...)
 }
 
-uint FilterDevice::initImage(GfxState *state, int width, int height,
+uint Device::initImage(GfxState *state, int width, int height,
                              bool withMask)
 {
     // get image geometry
@@ -204,13 +215,14 @@ uint FilterDevice::initImage(GfxState *state, int width, int height,
     return offset;
 }
 
-void FilterDevice::drawImage(GfxState *state, Object *, Stream *str,
+void Device::drawImage(GfxState *state, Object *, Stream *str,
                              int width, int height, GfxImageColorMap *colorMap,
                              int *maskColors, GBool inlineImg)
 {
     kdDebug(30516) << "image kind=" << str->getKind()
                    << " inline=" << inlineImg
                    << " maskColors=" << (maskColors!=0) << endl;
+    if ( !_data.options().importImages ) return;
 
     uint offset = initImage(state, width, height, maskColors!=0);
 
@@ -241,12 +253,13 @@ void FilterDevice::drawImage(GfxState *state, Object *, Stream *str,
     delete istr;
 }
 
-void FilterDevice::drawImageMask(GfxState *state, Object *, Stream *str,
+void Device::drawImageMask(GfxState *state, Object *, Stream *str,
                                  int width, int height, GBool invert,
                                  GBool inlineImg)
 {
     kdDebug(30516) << "image mask ! kind=" << str->getKind()
                    << "inline=" << inlineImg << endl;
+    if ( !_data.options().importImages ) return;
 
     uint offset = initImage(state, width, height, true);
 
@@ -270,30 +283,30 @@ void FilterDevice::drawImageMask(GfxState *state, Object *, Stream *str,
     if (invert) _currentImage.image.invertPixels();
 }
 
-void FilterDevice::updateAll(GfxState *state)
+void Device::updateAll(GfxState *state)
 {
     updateFillColor(state);
     updateStrokeColor(state);
     updateFont(state);
 }
 
-void FilterDevice::updateFillColor(GfxState *state)
+void Device::updateFillColor(GfxState *state)
 {
     GfxRGB rgb;
     state->getFillRGB(&rgb);
     _fillColor = toColor(rgb);
 }
 
-void FilterDevice::updateStrokeColor(GfxState *state)
+void Device::updateStrokeColor(GfxState *state)
 {
     GfxRGB rgb;
     state->getStrokeRGB(&rgb);
     _strokeColor = toColor(rgb);
 }
 
-void FilterDevice::stroke(GfxState */*state*/)
+void Device::stroke(GfxState */*state*/)
 {
-    kdDebug(30516) << "stroke" << endl;
+//    kdDebug(30516) << "stroke" << endl;
 //    DPathVector path = convertPath(state);
 //    for (uint i=0; i<path.size(); i++) {
 //        if ( path[i].isHorizontalSegment() ) {
@@ -313,20 +326,20 @@ void FilterDevice::stroke(GfxState */*state*/)
 //    }
 }
 
-void FilterDevice::fill(GfxState */*state*/)
+void Device::fill(GfxState */*state*/)
 {
-    kdDebug(30516) << "fill" << endl;
+//    kdDebug(30516) << "fill" << endl;
 //    doFill(state);
 }
 
-void FilterDevice::eoFill(GfxState */*state*/)
+void Device::eoFill(GfxState */*state*/)
 {
-    kdDebug(30516) << "eoFill" << endl;
+//    kdDebug(30516) << "eoFill" << endl;
 //    convertPath(state);
 //    doFill(state);
 }
 
-void FilterDevice::doFill(const DPathVector &path)
+void Device::doFill(const DPathVector &path)
 {
     for (uint i=0; i<path.size(); i++) {
         if ( path[i].isSegment() ) continue;
@@ -343,7 +356,7 @@ void FilterDevice::doFill(const DPathVector &path)
     }
 }
 
-DPathVector FilterDevice::convertPath(GfxState *state)
+DPathVector Device::convertPath(GfxState *state)
 {
     GfxPath *path = state->getPath();
     uint nbPaths = path->getNumSubpaths();
@@ -368,3 +381,5 @@ DPathVector FilterDevice::convertPath(GfxState *state)
     }
     return vector;
 }
+
+}; // namespace

@@ -29,25 +29,25 @@
 #include "FilterDevice.h"
 #include "misc.h"
 
-using namespace PDFImport;
 
-PdfDocument::PdfDocument(const QString &name, const QString &ownerPassword,
-               const QString &userPassword, KoFilter::ConversionStatus &result)
-    : _object(0), _fileStream(0), _document(0), _device(0), _imageIndex(1)
+namespace PDFImport
 {
+
+Document::Document()
+    : _file(0), _object(0), _fileStream(0), _document(0), _device(0)
+{}
+
+KoFilter::ConversionStatus
+Document::init(const QString &name, const QString &ownerPassword,
+               const QString &userPassword)
+{
+    clear();
+
     _file = new QFile(name);
-    if( !_file->open(IO_ReadOnly) ) {
-        kdError(30516) << "Unable to open input file!" << endl;
-        result =  KoFilter::FileNotFound;
-        return;
-    }
+    if( !_file->open(IO_ReadOnly) ) return KoFilter::FileNotFound;
 
     FILE *fd = fdopen(_file->handle(), "r");
-    if ( fd==0 ) {
-        kdError(30516) << "Unable to obtain FILE*" << endl;
-        result =  KoFilter::InternalError;
-        return;
-    }
+    if ( fd==0 ) return KoFilter::InternalError;
 
     globalParams = new GlobalParams(0);
     globalParams->setErrQuiet(gFalse);
@@ -63,29 +63,30 @@ PdfDocument::PdfDocument(const QString &name, const QString &ownerPassword,
     delete user;
     delete owner;
 
-    if ( !_document->isOk() ) {
-        kdError(30516) << "Unrecognized file!" << endl;
-        result = KoFilter::WrongFormat;
-        return;
-    }
-
-    result = KoFilter::OK;
-    FilterFont::init();
+    if ( !_document->isOk() ) return KoFilter::WrongFormat;
+    Font::init();
+    return KoFilter::OK;
 }
 
-PdfDocument::~PdfDocument()
+void Document::clear()
 {
-    FilterFont::cleanup();
+    Font::cleanup();
     delete _device;
+    _device = 0;
     delete _document;
+    _document = 0;
     // _fileStream is deleted by PDFDoc
     // _object is free()ed by FileStream
-    delete _object;
+    _object = 0;
+    _fileStream = 0;
     delete globalParams;
+    globalParams = 0;
     delete _file;
+    _file = 0;
+    _imageIndex = 1;
 }
 
-QString PdfDocument::info(const QCString &key) const
+QString Document::info(const QCString &key) const
 {
     QString res;
     Object info;
@@ -118,19 +119,19 @@ QString PdfDocument::info(const QCString &key) const
     return res;
 }
 
-uint PdfDocument::nbPages() const
+uint Document::nbPages() const
 {
     return _document->getNumPages();
 }
 
-KoOrientation PdfDocument::paperOrientation() const
+KoOrientation Document::paperOrientation() const
 {
     if ( nbPages()==0 ) return PG_PORTRAIT;
     return ( _document->getPageWidth(1)<_document->getPageHeight(1) ?
              PG_PORTRAIT : PG_LANDSCAPE );
 }
 
-DRect PdfDocument::paperSize(KoFormat &format) const
+DRect Document::paperSize(KoFormat &format) const
 {
     KoOrientation orientation = paperOrientation();
 
@@ -140,8 +141,8 @@ DRect PdfDocument::paperSize(KoFormat &format) const
     double w, h;
     if ( nbPages()==0 ) {
         format = PG_DIN_A4;
-        w = toPoint(KoPageFormat::width(format, orientation));
-        h = toPoint(KoPageFormat::height(format, orientation));
+        w = mmToPoint(KoPageFormat::width(format, orientation));
+        h = mmToPoint(KoPageFormat::height(format, orientation));
         rect.right = w;
         rect.bottom = h;
         return rect;
@@ -157,8 +158,8 @@ DRect PdfDocument::paperSize(KoFormat &format) const
     double height = h;
     for (uint i=0; i<22/*PG_LAST_FORMAT*/; i++) { // #### koffice 1.2
         if ( i==PG_CUSTOM || i==PG_SCREEN ) continue; // #### koffice 1.2
-        w = toPoint(KoPageFormat::width(KoFormat(i), orientation));
-        h = toPoint(KoPageFormat::height(KoFormat(i), orientation));
+        w = mmToPoint(KoPageFormat::width(KoFormat(i), orientation));
+        h = mmToPoint(KoPageFormat::height(KoFormat(i), orientation));
         double v = fabs(min/w - 1) + fabs(max/h - 1);
         if ( v<best ) {
             best = v;
@@ -175,18 +176,25 @@ DRect PdfDocument::paperSize(KoFormat &format) const
     return rect;
 }
 
-void PdfDocument::initDevice(FilterData &data)
+void Document::initDevice(Data &data)
 {
     Q_ASSERT( _device==0 );
-    _device = new FilterDevice(data);
+    _device = new Device(data);
 }
 
-void PdfDocument::treatPage(uint i)
+void Document::treatPage(uint i)
 {
-    _document->displayPage(_device, i, static_cast<int>(72*1), 0, gTrue);
+    _document->displayPage(_device, i, int(72*1), 0, gTrue);
 }
 
-bool PdfDocument::isEncrypted() const
+bool Document::isEncrypted() const
 {
     return _document->getXRef()->isEncrypted();
 }
+
+void Document::dumpPage(uint i)
+{
+    _device->dumpPage(i);
+}
+
+}; // namespace

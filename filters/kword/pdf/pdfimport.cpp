@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002 Nicolas HADACEK (hadacek@kde.org)
+ * Copyright (c) 2002-2003 Nicolas HADACEK (hadacek@kde.org)
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -20,6 +20,7 @@
 #include "pdfimport.moc"
 
 #include <qdom.h>
+#include <qdatetime.h> // debug
 
 #include <koFilterChain.h>
 #include <kgenericfactory.h>
@@ -29,9 +30,7 @@
 #include <kapplication.h>
 #include <kprogress.h>
 
-#include "pdfdocument.h"
-#include "misc.h"
-#include "dialog.h"
+#include "data.h"
 
 
 using namespace PDFImport;
@@ -40,7 +39,7 @@ using namespace PDFImport;
 class PdfImportFactory : KGenericFactory<PdfImport, KoFilter>
 {
  public:
-    PdfImportFactory(void)
+    PdfImportFactory()
         : KGenericFactory<PdfImport, KoFilter>("kwordpdfimport") {}
 
  protected:
@@ -59,51 +58,89 @@ KoFilter::ConversionStatus PdfImport::convert(const QCString& from,
                                               const QCString& to)
 {
     // check for proper conversion
-    if ( to != "application/x-kword" || from != "application/pdf" )
+    if ( to!="application/x-kword" || from!="application/pdf" )
         return KoFilter::NotImplemented;
 
     // read file
-    KoFilter::ConversionStatus result;
-    PdfDocument *doc = new PdfDocument(m_chain->inputFile(), QString::null,
-                                       QString::null, result);
-    if ( result!=KoFilter::OK ) {
-        delete doc;
-        return result;
-    }
+    KoFilter::ConversionStatus result
+        = _doc.init(m_chain->inputFile(), QString::null, QString::null);
+    if ( result!=KoFilter::OK ) return result;
 
-    // dialog
-    PdfImportDialog* dialog =
-        new PdfImportDialog(doc->nbPages(), doc->isEncrypted(), 0);
-    dialog->exec();
-    SelectionRange range = dialog->range();
-    QString ownerPassword = dialog->ownerPassword();
-    QString userPassword = dialog->userPassword();
-    delete dialog;
-    if ( dialog->result()==QDialog::Rejected ) {
-        delete doc;
-        return KoFilter::UserCancelled;
+    // options dialog
+    {
+        Dialog dialog(_doc.nbPages(), _doc.isEncrypted(), 0);
+        dialog.exec();
+        if ( dialog.result()==QDialog::Rejected )
+            return KoFilter::UserCancelled;
+        _options = dialog.options();
     }
 
     // progress dialog
     KProgressDialog pd(0, "progress_dialog", i18n("PDF Import"),
                        i18n("Initializing..."), true);
     pd.setMinimumDuration(0);
-    pd.progressBar()->setTotalSteps(range.nbPages());
+    pd.progressBar()->setTotalSteps( _options.range.nbPages()*2 );
     pd.progressBar()->setValue(1);
     qApp->processEvents();
 
     // if passwords : reread file
-    if ( !ownerPassword.isEmpty() || !userPassword.isEmpty() ) {
-        delete doc;
-        doc = new PdfDocument(m_chain->inputFile(), dialog->ownerPassword(),
-                              dialog->userPassword(), result);
-        if ( result!=KoFilter::OK ) {
-            delete doc;
-            return result;
-        }
+    if ( !_options.ownerPassword.isEmpty()
+         || !_options.userPassword.isEmpty() ) {
+        result = _doc.init(m_chain->inputFile(), _options.ownerPassword,
+                           _options.userPassword);
+        if ( result!=KoFilter::OK ) return result;
     }
 
-    // document information
+    // data
+    KoPageLayout page;
+    DRect rect = _doc.paperSize(page.format);
+    kdDebug(30516) << "paper size: " << rect.toString() << endl;
+    page.orientation = _doc.paperOrientation();
+    Data data(m_chain, rect, page, _options);
+    _doc.initDevice(data);
+
+    // treat pages
+    QTime time;
+    time.start();
+    SelectionRangeIterator it(_options.range);
+    for (uint k=0; k<2; k++) {
+        data.pageIndex = 0;
+        for (it.toFirst(); it.current()!=it.end(); it.next()) {
+            QString s = (k==0 ? i18n("First pass: page #%1...")
+                         : i18n("Second pass: page #%1..."));
+            pd.setLabel( s.arg(it.current()) );
+            qApp->processEvents();
+            if (pd.wasCancelled()) return KoFilter::UserCancelled;
+            kdDebug(30516) << "-- " << "pass #" << k
+                           << "  treat page: " << it.current()
+                           << "----------------" << endl;
+            if ( k==0 ) _doc.treatPage( it.current() );
+            else _doc.dumpPage(data.pageIndex);
+            pd.progressBar()->advance(1);
+            data.pageIndex++;
+        }
+    }
+    data.endDump();
+    kdDebug(30516) << "treatement elapsed=" << time.elapsed() << endl;
+
+    // output
+    KoStoreDevice* out = m_chain->storageFile("root", KoStore::Write);
+    if( !out ) {
+        kdError(30516) << "Unable to open output file!" << endl;
+        return KoFilter::StorageCreationError;
+    }
+//    kdDebug(30516) << data.document().toCString() << endl;
+    QCString cstr = data.document().toCString();
+    out->writeBlock(cstr, cstr.length());
+    out->close();
+
+    treatInfoDocument();
+
+    return KoFilter::OK;
+}
+
+void PdfImport::treatInfoDocument()
+{
     QDomDocument infoDocument("document-info");
     infoDocument.appendChild(
         infoDocument.createProcessingInstruction(
@@ -118,68 +155,22 @@ KoFilter::ConversionStatus PdfImport::convert(const QCString& from,
     infoElement.appendChild(authorTag);
     QDomElement fullNameTag = infoDocument.createElement("full-name");
     authorTag.appendChild(fullNameTag);
-	QDomText authorText = infoDocument.createTextNode( doc->info("Author") );
+	QDomText authorText = infoDocument.createTextNode( _doc.info("Author") );
 	fullNameTag.appendChild(authorText);
 
     QDomElement titleTag = infoDocument.createElement("title");
     aboutTag.appendChild(titleTag);
-    QDomText titleText = infoDocument.createTextNode( doc->info("Title") );
+    QDomText titleText = infoDocument.createTextNode( _doc.info("Title") );
 	titleTag.appendChild(titleText);
 
-    // document
-    KoPageLayout page;
-    DRect rect = doc->paperSize(page.format);
-    kdDebug(30516) << "size=[" << rect.width() << "," << rect.height() << "]"
-                   << endl;
-    page.orientation = doc->paperOrientation();
-    FilterData data(m_chain, rect, page, doc->nbPages());
-    doc->initDevice(data);
-
-    // treat pages
-    SelectionRangeIterator it(range);
-    for (; it.current()!=-1; it.next()) {
-        pd.setLabel(i18n("Treating page %1...").arg(it.current()));
-        qApp->processEvents();
-        if (pd.wasCancelled()) {
-            delete doc;
-            return KoFilter::UserCancelled;
-        }
-        kdDebug(30516) << "-- treat page: " << it.current()
-                       << "----------------" << endl;
-        doc->treatPage( it.current() );
-        QDomElement element = data.createElement("BOOKMARKITEM");
-        element.setAttribute("name", QString("page%1").arg(it.current()));
-        element.setAttribute("cursorIndexStart", 0); // ?
-        element.setAttribute("cursorIndexEnd", 0); // ?
-        element.setAttribute("frameset", "Text Frameset 1");
-        element.setAttribute("startparag", 0); // ?
-        element.setAttribute("endparag", 0); // ?
-        data.bookmarks().appendChild(element);
-        pd.progressBar()->advance(1);
-    }
-
-    // cleanup
-    delete doc;
-
-    // save output
-    KoStoreDevice* out = m_chain->storageFile("root", KoStore::Write);
-    if( !out ) {
-        kdError(30516) << "Unable to open output file!" << endl;
-        return KoFilter::StorageCreationError;
-    }
-    kdDebug(30516) << data.document().toCString() << endl;
-    QCString cstr = data.document().toCString();
-    out->writeBlock(cstr, cstr.length());
-    out->close();
-
-    out = m_chain->storageFile("documentinfo.xml", KoStore::Write);
+    // output
+    KoStoreDevice *out =
+        m_chain->storageFile("documentinfo.xml", KoStore::Write);
     if ( !out )
         kdWarning(30516) << "unable to open doc info. continuing anyway\n";
 	else {
-		cstr = infoDocument.toCString();
+		QCString cstr = infoDocument.toCString();
 		out->writeBlock(cstr, cstr.length());
 		out->close();
 	}
-
-    return KoFilter::OK;
 }

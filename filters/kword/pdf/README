@@ -1,6 +1,6 @@
 PDF Importer for KWord
 ----------------------
-Copyright (c) 2002 Nicolas Hadacek (hadacek@kde.org)
+Copyright (c) 2002-2003 Nicolas Hadacek (hadacek@kde.org)
 Distributed under the GNU General Public License
 
 
@@ -13,7 +13,7 @@ able to open PDF files transparently by using this module.
 
 
 Requirements: You need the following libraries and headers (found usually
-in the "devel" packages of distributions) :
+in the "devel" packages of distributions):
 
 - Qt >= 3.0
 - KDE >= 3.0

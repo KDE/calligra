@@ -26,18 +26,24 @@ class Stream;
 
 #include "gtypes.h"
 #include "OutputDev.h"
+
 #include "misc.h"
 
-class FilterPage;
-class FilterData;
 
-
-class FilterDevice : public OutputDev
+namespace PDFImport
 {
- public:
-    FilterDevice(FilterData &data);
-    ~FilterDevice();
+class Page;
+class Data;
 
+class Device : public OutputDev
+{
+public:
+    Device(Data &data);
+    ~Device();
+
+    void dumpPage(uint i);
+
+    //-----
     virtual GBool upsideDown() { return gTrue; }
     virtual GBool useDrawChar() { return gTrue; }
     virtual GBool interpretType3Chars() { return gFalse; }
@@ -70,7 +76,7 @@ class FilterDevice : public OutputDev
                           CharCode c, Unicode *u, int uLen);
 
     //----- link borders
-    virtual void drawLink(Link* link, Catalog *cat);
+    virtual void drawLink(::Link* link, Catalog *cat);
 
     //----- image drawing
     virtual void drawImageMask(GfxState *, Object *ref, Stream *,
@@ -85,27 +91,31 @@ class FilterDevice : public OutputDev
     virtual void fill(GfxState *state);
     virtual void eoFill(GfxState *state);
 
- private:
-    FilterData &_data;
-    FilterPage *_page;
-    QColor _fillColor, _strokeColor;
-
-    class Image {
-     public:
-        QImage           image;
-        PDFImport::DRect rect;
-        bool             mask;
-    };
-    Image     _currentImage;
-    typedef QValueList<Image> ImageList;
-    ImageList _images;
-
+private:
+    class Image;
     static void computeGeometry(GfxState *, Image &);
     uint initImage(GfxState *, int width, int height, bool mask);
     void addImage();
     void clear();
-    static PDFImport::DPathVector convertPath(GfxState *);
-    void doFill(const PDFImport::DPathVector &);
+    static DPathVector convertPath(GfxState *);
+    void doFill(const DPathVector &);
+
+private:
+    Data &_data;
+    QPtrList<Page> _pages;
+    QColor _fillColor, _strokeColor;
+
+    class Image {
+    public:
+        QImage image;
+        DRect  rect;
+        bool   mask;
+    };
+    Image _currentImage;
+    typedef QValueList<Image> ImageList;
+    ImageList _images;
 };
+
+}; // namespace
 
 #endif

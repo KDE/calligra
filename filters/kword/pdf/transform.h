@@ -66,7 +66,10 @@ namespace PDFImport
         return ( type==Punctuation_Accent || type==Accent );
     }
 
+    CharType type(Unicode);
+
     bool checkLigature(Unicode, Unicode &res1, Unicode &res2);
+
     CharType checkSpecial(Unicode, Unicode &res);
 
     // detect some letter/accent combinations

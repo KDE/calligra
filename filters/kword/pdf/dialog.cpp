@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002 Nicolas HADACEK (hadacek@kde.org)
+ * Copyright (c) 2002-2003 Nicolas HADACEK (hadacek@kde.org)
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -26,9 +26,14 @@
 #include <qgrid.h>
 #include <qlabel.h>
 #include <qlayout.h>
+#include <qbuttongroup.h>
+#include <qradiobutton.h>
+#include <qwhatsthis.h>
+#include <qcheckbox.h>
 
 #include <klocale.h>
 #include <kdebug.h>
+#include <klineedit.h>
 
 
 //-----------------------------------------------------------------------------
@@ -105,8 +110,10 @@ int SelectionRangeIterator::next()
 }
 
 //-----------------------------------------------------------------------------
-PdfImportDialog::PdfImportDialog(uint nbPages, bool isEncrypted,
-                                 QWidget *widget)
+namespace PDFImport
+{
+
+Dialog::Dialog(uint nbPages, bool isEncrypted, QWidget *widget)
     : KDialogBase(Plain, i18n("KWord's PDF Import Filter"), Ok|Cancel, Ok,
                   widget, "pdf_import_dialog"), _nbPages(nbPages)
 {
@@ -131,6 +138,18 @@ PdfImportDialog::PdfImportDialog(uint nbPages, bool isEncrypted,
     connect(_range, SIGNAL(textChanged(const QString &)),
             SLOT(rangeChanged(const QString &)));
 
+    // options
+    _images = new QCheckBox(i18n("Import images"), plainPage());
+    _images->setChecked(true);
+    top->addWidget(_images);
+    _returns = new QCheckBox(i18n("Remove carriage returns..."), plainPage());
+    QWhatsThis::add(_returns,
+                    i18n("The import filter will also try to remove hyphen "
+                         "and to compute the paragraph alignment."
+                         "Note that the layout of each page can "
+                         "be more or less messed up."));
+    top->addWidget(_returns);
+
     // passwords
     gbox = new QVGroupBox(i18n("Passwords"), plainPage());
     top->addWidget(gbox);
@@ -145,19 +164,27 @@ PdfImportDialog::PdfImportDialog(uint nbPages, bool isEncrypted,
     grid->setEnabled(isEncrypted);
 }
 
-PdfImportDialog::~PdfImportDialog()
+Dialog::~Dialog()
 {
     delete _group;
     QApplication::setOverrideCursor(Qt::waitCursor);
 }
 
-void PdfImportDialog::rangeChanged(const QString &)
+void Dialog::rangeChanged(const QString &)
 {
     _rangeButton->setChecked(true);
 }
 
-SelectionRange PdfImportDialog::range() const
+Options Dialog::options() const
 {
-    return SelectionRange( (_allButton->isChecked() ?
-                            QString("1-%1").arg(_nbPages) : _range->text()) );
+    Options o;
+    o.range = SelectionRange( (_allButton->isChecked() ?
+                             QString("1-%1").arg(_nbPages) : _range->text()) );
+    o.ownerPassword = _owner->text();
+    o.userPassword = _user->text();
+    o.importImages = _images->isChecked();
+    o.removeReturns = _returns->isChecked();
+    return o;
 }
+
+}; // namespace

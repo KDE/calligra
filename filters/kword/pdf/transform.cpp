@@ -111,7 +111,7 @@ static const char TABLE[NB_TABLES][TABLE_SIZE] = {
 #undef X
 };
 
-CharType quickCheck(Unicode u)
+CharType type(Unicode u)
 {
     uint offset = u / TABLE_SIZE;
     uint index = u % TABLE_SIZE;
@@ -119,6 +119,7 @@ CharType quickCheck(Unicode u)
         if ( offset==OFFSET[i] ) return (CharType)TABLE[i][index];
         if ( offset<OFFSET[i] ) break;
     }
+    if ( u>=0xFB01 && u<=0xFB06 ) return Ligature;
     return Unknown;
 }
 
@@ -133,7 +134,7 @@ static const Unicode LIGATURE_DATA[][3] = {
 
 bool checkLigature(Unicode u, Unicode &res1, Unicode &res2)
 {
-    if ( quickCheck(u)!=Ligature && (u<0xFB01 || u>0xFB06) ) return false;
+    if ( type(u)!=Ligature ) return false;
 
     uint i = 0;
     while ( LIGATURE_DATA[i][0]!=0 ) {
@@ -176,10 +177,10 @@ static const Unicode BULLET_DATA[][2] = {
 
 CharType checkSpecial(Unicode u, Unicode &res)
 {
-    CharType type = quickCheck(u);
+    CharType t = type(u);
 
     // special mapping
-    switch (type) {
+    switch (t) {
     case Unknown:
         kdDebug(30516) << "unknown special " << QString(QChar(u))
                        << " (" << u << ")" << endl;
@@ -219,7 +220,7 @@ CharType checkSpecial(Unicode u, Unicode &res)
         break;
     }
 
-    return type;
+    return t;
 }
 
 
@@ -419,8 +420,8 @@ static const SpecialCombiData SPECIAL_COMBI_DATA[] = {
 Unicode checkCombi(Unicode letter, Unicode accent)
 {
     // quick check
-    if ( !isAccent( quickCheck(accent) ) ) return 0;
-    if ( quickCheck(letter)!=Letter_CanHaveAccent ) return 0;
+    if ( !isAccent( type(accent) ) ) return 0;
+    if ( type(letter)!=Letter_CanHaveAccent ) return 0;
 
     // find accent
     uint i = 0;

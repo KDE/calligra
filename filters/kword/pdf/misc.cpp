@@ -19,8 +19,8 @@
 #include "misc.h"
 
 #include <math.h>
-#include <qfontinfo.h>
 #include <qregexp.h>
+#include <qfontmetrics.h>
 #include <kglobal.h>
 #include <kdebug.h>
 
@@ -32,6 +32,7 @@
 namespace PDFImport
 {
 
+
 QColor toColor(GfxRGB &rgb)
 {
     return QColor(qRound(rgb.r*255), qRound(rgb.g*255), qRound(rgb.b*255));
@@ -42,6 +43,28 @@ bool DRect::operator ==(const DRect &r) const
 {
     return ( equal(top, r.top) && equal(bottom, r.bottom)
              && equal(left, r.left) && equal(right, r.right) );
+}
+
+bool DRect::isInside(const DRect &r, double percent) const
+{
+    return ( more(r.top, top, percent) && less(r.bottom, bottom, percent)
+             && more(r.left, left, percent) && less(r.right, right, percent) );
+}
+
+DRect DRect::getUnion(const DRect &r) const
+{
+    DRect rect;
+    rect.left = kMin(left, r.left);
+    rect.right = kMax(right, r.right);
+    rect.top = kMin(top, r.top);
+    rect.bottom = kMax(bottom, r.bottom);
+    return rect;
+}
+
+QString DRect::toString() const
+{
+    return QString("left=%1 right=%2 top=%3 bottom=%4").arg(left).arg(right)
+        .arg(top).arg(bottom);
 }
 
 bool DPath::isRectangle() const
@@ -70,221 +93,27 @@ DRect DPath::boundingRect() const
     return r;
 }
 
-}; // namespace
-
-using namespace PDFImport;
 
 //-----------------------------------------------------------------------------
-FilterData::FilterData(KoFilterChain *chain, const DRect &pageRect,
-                       KoPageLayout page, uint nbPages)
-    : _chain(chain), _pageIndex(1), _imageIndex(1), _textIndex(1),
-      _needNewTextFrameset(false), _pageRect(pageRect)
-{
-    _document = QDomDocument("DOC");
-    _document.appendChild(
-        _document.createProcessingInstruction(
-            "xml","version=\"1.0\" encoding=\"UTF-8\""));
-
-    _mainElement = _document.createElement("DOC");
-    _mainElement.setAttribute("editor", "KWord's PDF Import Filter");
-    _mainElement.setAttribute("mime", "application/x-kword");
-    _mainElement.setAttribute("syntaxVersion", 2);
-    _document.appendChild(_mainElement);
-
-    QDomElement element = _document.createElement("ATTRIBUTES");
-    element.setAttribute("processing", 0);
-    element.setAttribute("hasHeader", 0);
-    element.setAttribute("hasFooter", 0);
-    element.setAttribute("unit", "mm");
-    _mainElement.appendChild(element);
-
-    QDomElement paper = _document.createElement("PAPER");
-    paper.setAttribute("format", page.format);
-    paper.setAttribute("width", pageRect.width());
-    paper.setAttribute("height", pageRect.height());
-    paper.setAttribute("orientation", page.orientation);
-    paper.setAttribute("columns", 1);
-    paper.setAttribute("pages", nbPages);
-    paper.setAttribute("columnspacing", 2);
-    paper.setAttribute("hType", 0);
-    paper.setAttribute("fType", 0);
-    paper.setAttribute("spHeadBody", 9);
-    paper.setAttribute("spFootBody", 9);
-    paper.setAttribute("zoom", 100);
-    _mainElement.appendChild(paper);
-
-    element = _document.createElement("PAPERBORDERS");
-    element.setAttribute("left", 0);
-    element.setAttribute("top", 0);
-    element.setAttribute("right", 0);
-    element.setAttribute("bottom", 0);
-    paper.appendChild(element);
-
-    // framesets
-    _framesets = _document.createElement("FRAMESETS");
-    _mainElement.appendChild(_framesets);
-
-    // main text frameset
-    _mainTextFrameset = createFrameset(Text);
-    _pageIndex = 0;
-
-    // standard style
-    QDomElement styles = _document.createElement("STYLES");
-    _mainElement.appendChild(styles);
-
-    QDomElement style = _document.createElement("STYLE");
-    styles.appendChild(style);
-
-    element = _document.createElement("FORMAT");
-    FilterFont font;
-    font.format(_document, element, 0, 0, true);
-    style.appendChild(element);
-
-    element = _document.createElement("NAME");
-    element.setAttribute("value","Standard");
-    style.appendChild(element);
-
-    element = _document.createElement("FOLLOWING");
-    element.setAttribute("name","Standard");
-    style.appendChild(element);
-
-    // pictures
-    _pictures = _document.createElement("PICTURES");
-    _mainElement.appendChild(_pictures);
-
-    // treat pages
-    _bookmarks = _document.createElement("BOOKMARKS");
-    _mainElement.appendChild(_bookmarks);
-}
-
-void FilterData::checkTextFrameset()
-{
-// #### only use main text frameset
-//    if ( !_needNewTextFrameset ) return;
-//    createFrameset(Text, _pageSize);
-}
-
-QDomElement FilterData::pictureFrameset(const DRect &r)
-{
-    QDomElement frameset = createFrameset(Picture);
-    QDomElement frame = createFrame(Picture, r, false);
-    frameset.appendChild(frame);
-    return frameset;
-}
-
-QDomElement FilterData::createFrameset(FramesetType type)
-{
-    bool text = (type==Text);
-    uint &index = (text ? _textIndex : _imageIndex);
-
-    QDomElement frameset = _document.createElement("FRAMESET");
-    frameset.setAttribute("frameType", (text ? 1 : 2));
-    QString name = (text ? QString("Text Frameset %1")
-                    : QString("Picture %1")).arg(index);
-    frameset.setAttribute("name", name);
-    frameset.setAttribute("frameInfo", 0);
-    _framesetList.append(frameset);
-
-    if (text) _textFrameset = frameset;
-    _needNewTextFrameset = !text;
-    kdDebug(30516) << "new frameset " << index << (text ? " text" : " image")
-                   << endl;
-    index++;
-    return frameset;
-}
-
-QDomElement FilterData::createFrame(FramesetType type, const DRect &r,
-                                    bool forceMainFrameset)
-{
-    bool text = (type==Text);
-    bool mainFrameset =
-        (text ? (forceMainFrameset ? true : _textIndex==1) : false);
-
-    QDomElement frame = _document.createElement("FRAME");
-    if (text) frame.setAttribute("autoCreateNewFrame", (mainFrameset ? 1 : 0));
-    frame.setAttribute("newFrameBehavior", (mainFrameset ? 0 : 1));
-    frame.setAttribute("runaround", 0);
-    frame.setAttribute("left", r.left);
-    frame.setAttribute("right", r.right);
-    double offset = (_pageIndex-1) * _pageRect.height();
-    frame.setAttribute("top", r.top + offset);
-    frame.setAttribute("bottom", r.bottom + offset);
-    if ( text && !mainFrameset ) frame.setAttribute("bkStyle", 0);
-    return frame;
-}
-
-void FilterData::startPage()
-{
-    _pageIndex++;
-    _textFrameset = _mainTextFrameset;
-    _needNewTextFrameset = false;
-    if ( !_lastMainLayout.isNull() ) {
-        QDomElement element = _document.createElement("PAGEBREAKING");
-        element.setAttribute("hardFrameBreakAfter", "true");
-        _lastMainLayout.appendChild(element);
-    }
-    _lastMainLayout = QDomElement();
-    QDomElement frame = createFrame(Text, _pageRect, true);
-    _mainTextFrameset.appendChild(frame);
-}
-
-void FilterData::endPage()
-{
-    FramesetList::const_iterator it;
-    for (it=_framesetList.begin(); it!=_framesetList.end(); ++it)
-        _framesets.appendChild(*it);
-}
-
-QDomElement FilterData::createParagraph(const QString &text,
-                                      const QValueVector<QDomElement> &layouts,
-                                      const QValueVector<QDomElement> &formats)
-{
-    QDomElement paragraph = _document.createElement("PARAGRAPH");
-    _textFrameset.appendChild(paragraph);
-
-    QDomElement textElement = _document.createElement("TEXT");
-    textElement.appendChild( _document.createTextNode(text) );
-    paragraph.appendChild(textElement);
-
-    QDomElement layout = _document.createElement("LAYOUT");
-    paragraph.appendChild(layout);
-    QDomElement element = _document.createElement("NAME");
-    element.setAttribute("value", "Standard");
-    layout.appendChild(element);
-    for (uint i=0; i<layouts.size(); i++)
-        layout.appendChild(layouts[i]);
-    if ( _textFrameset==_mainTextFrameset )
-        _lastMainLayout = layout;
-
-    if ( formats.size() ) {
-        QDomElement format = _document.createElement("FORMATS");
-        paragraph.appendChild(format);
-        for (uint i=0; i<formats.size(); i++)
-            format.appendChild(formats[i]);
-    }
-    return paragraph;
-}
-
-//-----------------------------------------------------------------------------
-QDict<FilterFont::Data> *FilterFont::_dict = 0;
-const char *FilterFont::FAMILY_DATA[Nb_Family] = {
+QDict<Font::Data> *Font::_dict = 0;
+const char *Font::FAMILY_DATA[Nb_Family] = {
     "Times", "Helvetica", "Courier", "Symbol"
 };
 
-void FilterFont::init()
+void Font::init()
 {
     Q_ASSERT( _dict==0 );
     _dict = new QDict<Data>(100, false); // case insensitive
     _dict->setAutoDelete(true);
 }
 
-void FilterFont::cleanup()
+void Font::cleanup()
 {
     delete _dict;
     _dict = 0;
 }
 
-FilterFont::FilterFont(const QString &name, uint size, const QColor &color)
+Font::Font(const QString &name, uint size, const QColor &color)
     : _pointSize(size), _color(color)
 {
     init(name);
@@ -297,19 +126,19 @@ struct KnownData {
     bool   latex;
 };
 static const KnownData KNOWN_DATA[] = {
-    // standard XPDF fonts
+    // standard XPDF fonts (the order is important for finding !)
     { "times-roman",           Times,       Regular,    false },
+    { "times-bolditalic",      Times,       BoldItalic, false },
     { "times-bold",            Times,       Bold,       false },
     { "times-italic",          Times,       Italic,     false },
-    { "times-bolditalic",      Times,       BoldItalic, false },
-    { "helvetica",             Helvetica,   Regular,    false },
+    { "helvetica-bolditalic",  Helvetica,   BoldItalic, false },
     { "helvetica-bold",        Helvetica,   Bold,       false },
     { "helvetica-italic",      Times,       Italic,     false },
-    { "helvetica-bolditalic",  Helvetica,   BoldItalic, false },
-    { "courier",               Courier,     Regular,    false },
+    { "helvetica",             Helvetica,   Regular,    false },
+    { "courier-bolditalic",    Courier,     BoldItalic, false },
     { "courier-bold",          Courier,     Bold,       false },
     { "courier-italic",        Courier,     Italic,     false },
-    { "courier-bolditalic",    Courier,     BoldItalic, false },
+    { "courier",               Courier,     Regular,    false },
     { "symbol",                Symbol,      Regular,    false },
 
     // some latex fonts
@@ -324,20 +153,24 @@ static const KnownData KNOWN_DATA[] = {
     { 0,                       Nb_Family,   Regular,    false }
 };
 
-void FilterFont::init(const QString &n)
+void Font::init(const QString &n)
 {
     // check if font already parsed
     _data = _dict->find(n);
     if ( _data==0 ) {
+        kdDebug(30516) << "font " << n << endl;
         // replace "Oblique" by "Italic"
         QString name = n.lower();
-        name.replace("oblique", "italic");
+        name.replace(QRegExp("oblique"), "italic"); // QRegExp(...) for Qt 3.0
 
         // check if known font
         _data = new Data;
+        kdDebug(30516) << "data " << _data << endl;
         uint i = 0;
         while ( KNOWN_DATA[i].name!=0 ) {
             if ( name.find(KNOWN_DATA[i].name)!=-1 ) {
+                kdDebug(30516) << "found " << KNOWN_DATA[i].name
+                               << " " << isBold(KNOWN_DATA[i].style) << endl;
                 _data->family = FAMILY_DATA[KNOWN_DATA[i].family];
                 _data->style = KNOWN_DATA[i].style;
                 _data->latex = KNOWN_DATA[i].latex;
@@ -367,19 +200,23 @@ void FilterFont::init(const QString &n)
             _data->latex = false;
         }
 
+        if ( name.isEmpty() ) name = "##unknown"; // dummy name
         _dict->insert(name, _data);
     }
 
     // check if QFont already created
-    if ( _data->fonts[_pointSize]==0 ) {
-        QFont *font = new QFont(_data->family, _pointSize,
-                          (isBold(_data->style) ? QFont::Bold : QFont::Normal),
-                          isItalic(_data->style));
-        _data->fonts.insert(_pointSize, font);
+    if ( !_data->height.contains(_pointSize) ) {
+        kdDebug(30516) << "font " << _data
+                       << "bold=" << isBold(_data->style) << endl;
+        QFont font(_data->family, _pointSize,
+                   (isBold(_data->style) ? QFont::Bold : QFont::Normal),
+                   isItalic(_data->style));
+        QFontMetrics fm(font);
+        _data->height.insert(_pointSize, fm.height());
     }
 }
 
-bool FilterFont::operator ==(const FilterFont &font) const
+bool Font::operator ==(const Font &font) const
 {
     if ( _pointSize!=font._pointSize ) return false;
     if ( _data->family!=font._data->family ) return false;
@@ -390,15 +227,15 @@ bool FilterFont::operator ==(const FilterFont &font) const
     return true;
 }
 
-bool FilterFont::format(QDomDocument &doc, QDomElement &f,
-                        uint pos, uint len, bool all) const
+bool Font::format(QDomDocument &doc, QDomElement &f,
+                  uint pos, uint len, bool all) const
 {
     f.setAttribute("id", 1);
     if (!all) f.setAttribute("pos", pos);
     if (!all) f.setAttribute("len", len);
 
     QDomElement element;
-    FilterFont def;
+    Font def;
 
     if ( all || _data->family!=def._data->family ) {
         element = doc.createElement("FONT");
@@ -457,7 +294,7 @@ bool FilterFont::format(QDomDocument &doc, QDomElement &f,
     return f.hasChildNodes();
 }
 
-void FilterFont::setFamily(FontFamily f)
+void Font::setFamily(FontFamily f)
 {
     int k = -1;
     uint i=0;
@@ -476,17 +313,10 @@ void FilterFont::setFamily(FontFamily f)
     init(KNOWN_DATA[k].name);
 }
 
-
 //-----------------------------------------------------------------------------
-FilterLink::FilterLink(double x1, double x2, double y1, double y2,
-                       LinkAction &action, Catalog &catalog)
-    : _href("") // null string means not a link
+Link::Link(const DRect &rect, LinkAction &action, Catalog &catalog)
+    : _rect(rect)
 {
-    _xMin = kMin(x1, x2);
-    _xMax = kMax(x1, x2);
-    _yMin = kMin(y1, y2);
-    _yMax = kMax(y1, y2);
-
     switch ( action.getKind() ) {
     case actionGoTo: {
         LinkGoTo &lgoto = static_cast<LinkGoTo &>(action);
@@ -501,8 +331,8 @@ FilterLink::FilterLink(double x1, double x2, double y1, double y2,
             delete dest;
         }
 
-        _href = QString("bkm://page%1").arg(page);
-        kdDebug(30516) << "link to page " << page << endl;
+        _href = QString("bkm://") + pageLinkName(page);
+//        kdDebug(30516) << "link to page " << page << endl;
         break;
     }
 
@@ -535,8 +365,7 @@ FilterLink::FilterLink(double x1, double x2, double y1, double y2,
 
     case actionURI: {
         LinkURI &luri = static_cast<LinkURI &>(action);
-        if ( luri.getURI() )
-            _href = luri.getURI()->getCString();
+        if ( luri.getURI() ) _href = luri.getURI()->getCString();
 
         kdDebug(30516) << "link to URI \"" << _href << "\"" << endl;
         break;
@@ -550,22 +379,8 @@ FilterLink::FilterLink(double x1, double x2, double y1, double y2,
     }
 }
 
-bool FilterLink::operator ==(const FilterLink &link) const
-{
-    if ( _href.isNull() && link._href.isNull() ) return true;
-    return ( _href==link._href && _xMin==link._xMin && _xMax==link._xMax
-             && _yMin==link._yMin && _yMax==link._yMax );
-}
-
-bool FilterLink::inside(double xMin, double xMax,
-                        double yMin, double yMax) const
-{
-    double y = (yMin + yMax)/2;
-    return ( y<=_yMax ) && ( y>=_yMin ) && ( xMax<=_xMax ) && ( xMin>=_xMin );
-}
-
-void FilterLink::format(QDomDocument &doc, QDomElement &f, uint pos,
-                        const QString &text) const
+void Link::format(QDomDocument &doc, QDomElement &f, uint pos,
+                  const QString &text) const
 {
     f.setAttribute("id", 4);
     f.setAttribute("pos", pos);
@@ -584,3 +399,10 @@ void FilterLink::format(QDomDocument &doc, QDomElement &f, uint pos,
 
     f.appendChild(v);
 }
+
+QString Link::pageLinkName(uint i)
+{
+    return QString("page") + QString::number(i);
+}
+
+}; // namespace

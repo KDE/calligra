@@ -21,15 +21,25 @@
 
 #include <koFilter.h>
 
+#include "pdfdocument.h"
+#include "dialog.h"
+
 
 class PdfImport : public KoFilter
 {
- Q_OBJECT
- public:
+    Q_OBJECT
+public:
     PdfImport(KoFilter *parent, const char *name, const QStringList&);
 
-    KoFilter::ConversionStatus convert(const QCString& from,
-                                       const QCString& to);
+    KoFilter::ConversionStatus
+    convert(const QCString& from, const QCString& to);
+
+private:
+    void treatInfoDocument();
+
+private:
+    PDFImport::Document _doc;
+    PDFImport::Options  _options;
 };
 
 #endif

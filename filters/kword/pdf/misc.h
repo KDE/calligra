@@ -22,188 +22,146 @@
 #include <math.h>
 
 #include <qcolor.h>
-#include <qfont.h>
 #include <qdom.h>
 #include <qsize.h>
 #include <qvaluevector.h>
 #include <qdict.h>
-#include <qintdict.h>
+#include <qmap.h>
 
-#include <koGlobal.h>
-
+class LinkAction;
+class Catalog;
 class GfxRGB;
+
 
 namespace PDFImport
 {
-    enum FontFamily { Times = 0, Helvetica, Courier, Symbol, Nb_Family };
-    enum FontStyle { Regular, Bold, Italic, BoldItalic };
-    inline FontStyle toStyle(bool bold, bool italic) {
-        return (bold ? (italic ? BoldItalic : Bold)
-                : (italic ? Italic : Regular) );
-    }
-    inline bool isItalic(FontStyle style) {
-        return (style==Italic || style==BoldItalic);
-    }
-    inline bool isBold(FontStyle style) {
-        return (style==Bold || style==BoldItalic);
-    }
-    //-------------------------------------------------------------------------
-    inline double toPoint(double mm) { return mm * 72 / 25.4; }
-    inline bool equal(double d1, double d2, double delta = 0.1) {
-        return ( fabs(d1 - d2)<delta );
-    }
-    inline bool more(double d1, double d2, double delta = 0.1) {
-        return ( d1>(d2+delta) );
-    }
-    inline bool less(double d1, double d2, double delta = 0.1) {
-        return ( d1<(d2+delta) );
-    }
-    QColor toColor(GfxRGB &);
-
-    //-------------------------------------------------------------------------
-    class DRect {
-    public:
-        double width() const { return right - left; }
-        double height() const { return bottom - top; }
-
-        bool operator ==(const DRect &) const;
-
-        double top, bottom, right, left;
-    };
-
-    struct DPoint {
-        double x, y;
-    };
-
-    class DPath : public QValueVector<DPoint>
-    {
-    public:
-        DPath() {}
-
-        bool isSegment() const { return size()==2; }
-        bool isHorizontalSegment() const {
-            return isSegment() && equal(at(0).y, at(1).y);
-        }
-        bool isVerticalSegment() const {
-            return isSegment() && equal(at(0).x, at(1).y);
-        }
-        bool isRectangle() const;
-        DRect boundingRect() const;
-    };
-
-    typedef QValueVector<DPath> DPathVector;
-};
 
 //-----------------------------------------------------------------------------
-class KoFilterChain;
+enum FontFamily { Times = 0, Helvetica, Courier, Symbol, Nb_Family };
+enum FontStyle { Regular, Bold, Italic, BoldItalic };
 
-class FilterData
-{
- public:
-    FilterData(KoFilterChain *, const PDFImport::DRect &pageRect, KoPageLayout,
-               uint nbPages);
-
-    QDomElement createElement(const QString &name)
-        { return _document.createElement(name); }
-    QDomElement createParagraph(const QString &text,
-                                const QValueVector<QDomElement> &layouts,
-                                const QValueVector<QDomElement> &formats);
-
-    KoFilterChain *chain() const { return _chain; }
-    QDomDocument document() const { return _document; }
-    uint imageIndex() const { return _imageIndex; }
-    uint textIndex() const { return _textIndex; }
-    QDomElement bookmarks() const { return _bookmarks; }
-    QDomElement pictures() const { return _pictures; }
-
-    void checkTextFrameset();
-    QDomElement pictureFrameset(const PDFImport::DRect &);
-
-    void startPage();
-    void endPage();
-
- private:
-    KoFilterChain   *_chain;
-    QDomDocument     _document;
-    uint             _pageIndex, _imageIndex, _textIndex;
-    bool             _needNewTextFrameset;
-    QDomElement      _mainElement, _framesets, _pictures, _bookmarks;
-    QDomElement      _textFrameset, _mainTextFrameset, _lastMainLayout;
-    PDFImport::DRect _pageRect;
-    typedef QValueList<QDomElement> FramesetList;
-    FramesetList     _framesetList;
-
-    enum FramesetType { Text, Picture };
-    QDomElement createFrameset(FramesetType);
-    QDomElement createFrame(FramesetType, const PDFImport::DRect &,
-                            bool forceMainFrameset);
-};
+inline FontStyle toStyle(bool bold, bool italic) {
+    return (bold ? (italic ? BoldItalic : Bold)
+            : (italic ? Italic : Regular) );
+}
+inline bool isItalic(FontStyle style) {
+    return (style==Italic || style==BoldItalic);
+}
+inline bool isBold(FontStyle style) {
+    return (style==Bold || style==BoldItalic);
+}
 
 //-----------------------------------------------------------------------------
-class FilterFont
-{
- public:
-    FilterFont(const QString &name = "Times-Roman",
-               uint size = 12, const QColor &color = Qt::black);
+inline double mmToPoint(double mm) { return mm * 72 / 25.4; }
 
-    bool operator ==(const FilterFont &) const;
+inline bool equal(double d1, double d2, double percent = 0.01) {
+    double delta = percent * (fabs(d1)+fabs(d2)) / 2;
+    return ( fabs(d1 - d2)<delta );
+}
+inline bool more(double d1, double d2, double percent = 0.01) {
+    double delta = percent * (fabs(d1)+fabs(d2)) / 2;
+    return ( (d2-d1)<delta );
+}
+inline bool less(double d1, double d2, double percent = 0.01) {
+    double delta = percent * (fabs(d1)+fabs(d2)) / 2;
+    return ( (d1-d2)<delta );
+}
+
+QColor toColor(GfxRGB &);
+
+//-----------------------------------------------------------------------------
+class DRect {
+public:
+    double width() const { return right - left; }
+    double height() const { return bottom - top; }
+
+    bool operator ==(const DRect &) const;
+    bool isInside(const DRect &, double percent = 0.01) const;
+    DRect getUnion(const DRect &) const;
+    QString toString() const;
+
+public:
+    double top, bottom, right, left;
+};
+
+struct DPoint {
+    double x, y;
+};
+
+class DPath : public QValueVector<DPoint>
+{
+public:
+    DPath() {}
+
+    bool isSegment() const { return size()==2; }
+    bool isHorizontalSegment() const {
+        return isSegment() && equal(at(0).y, at(1).y);
+    }
+    bool isVerticalSegment() const {
+        return isSegment() && equal(at(0).x, at(1).y);
+    }
+    bool isRectangle() const;
+    DRect boundingRect() const;
+};
+
+typedef QValueVector<DPath> DPathVector;
+
+//-----------------------------------------------------------------------------
+class Font
+{
+public:
+    Font(const QString &name = "Times-Roman",
+         uint size = 12, const QColor &color = Qt::black);
+
+    bool operator ==(const Font &) const;
     bool format(QDomDocument &, QDomElement &format, uint pos, uint len,
                 bool all = false) const;
-    const QFont &font() const { return *_data->fonts[_pointSize]; }
+    int height() const { return _data->height[_pointSize]; }
     const QColor &color() const { return _color; }
     bool isLatex() const { return _data->latex; }
 
-    void setFamily(PDFImport::FontFamily);
+    void setFamily(FontFamily);
 
     static void init();
     static void cleanup();
 
- private:
+private:
+    void init(const QString &name);
+
+private:
     uint   _pointSize;
     QColor _color;
 
     class Data {
     public:
-        Data() { fonts.setAutoDelete(true); }
-
-        QString family;
-        PDFImport::FontStyle   style;
-        bool    latex;
-        QIntDict<QFont> fonts;
+        QString   family;
+        FontStyle style;
+        bool      latex;
+        QMap<int, int> height;
     };
     Data *_data;
 
     static QDict<Data> *_dict;
     static const char *FAMILY_DATA[PDFImport::Nb_Family];
-
- private:
-    void init(const QString &name);
 };
 
 //-----------------------------------------------------------------------------
-class LinkAction;
-class Catalog;
-
-class FilterLink
+class Link
 {
- public:
-    FilterLink() {}
-    FilterLink(double x1, double x2, double y1, double y2,
-               LinkAction &, Catalog &);
+public:
+    Link(const DRect &, LinkAction &, Catalog &);
 
-    bool operator ==(const FilterLink &) const;
-
-    bool isNull() const { return _href.isNull(); }
-    bool inside(double xMin, double xMax, double yMin, double yMax) const;
+    const DRect &rect() const { return _rect; }
     void format(QDomDocument &, QDomElement &format,
                 uint pos, const QString &text) const;
 
- public:
-    QString text;
+    static QString pageLinkName(uint i);
 
- private:
-    double  _xMin, _yMin, _xMax, _yMax;
+private:
+    DRect   _rect;
     QString _href;
 };
+
+}; // namespace
 
 #endif

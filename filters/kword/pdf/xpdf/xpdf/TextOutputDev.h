@@ -24,7 +24,6 @@ class GfxState;
 class GString;
 class TextBlock;
 class TextLine;
-class FilterPage;
 
 #undef TEXTOUT_DO_SYMBOLS
 
@@ -36,6 +35,10 @@ typedef void (*TextOutputFunc)(void *stream, char *text, int len);
 //------------------------------------------------------------------------
 // TextString
 //------------------------------------------------------------------------
+namespace PDFImport {
+    class String;
+    class Page;
+};
 
 class TextString {
 public:
@@ -67,8 +70,8 @@ protected:
 
   friend class TextPage;
   friend class TextBlock;
-  friend class FilterString;
-  friend class FilterPage;
+  friend class PDFImport::String;
+  friend class PDFImport::Page;
 };
 
 
@@ -186,7 +189,7 @@ private:
 
   int nTinyChars;		// number of "tiny" chars seen so far
 
-  friend class FilterPage;
+  friend class PDFImport::Page;
 };
 
 //------------------------------------------------------------------------

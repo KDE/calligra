@@ -25,40 +25,49 @@
 #include <koFilter.h>
 #include <koGlobal.h>
 
-
 class Object;
 class BaseStream;
 class PDFDoc;
-class FilterDevice;
-class FilterData;
+
+
 namespace PDFImport
 {
-    class DRect;
-};
+class DRect;
+class Device;
+class Data;
 
-class PdfDocument
+class Document
 {
  public:
-    PdfDocument(const QString &name, const QString &ownerPassword,
-                const QString &userPassword, KoFilter::ConversionStatus &);
-    ~PdfDocument();
+    Document();
+    ~Document() { clear(); }
+
+    KoFilter::ConversionStatus init(const QString &name,
+                    const QString &ownerPassword, const QString &userPassword);
+    void clear();
 
     QString info(const QCString &key) const;
     uint nbPages() const;
     KoOrientation paperOrientation() const;
-    PDFImport::DRect paperSize(KoFormat &format) const;
+    DRect paperSize(KoFormat &format) const;
     bool isEncrypted() const;
 
-    void initDevice(FilterData &data);
+    void initDevice(Data &);
     void treatPage(uint i);
+    void dumpPage(uint i);
 
  private:
-    QFile        *_file;
-    Object       *_object;
-    BaseStream   *_fileStream;
-    PDFDoc       *_document;
-    FilterDevice *_device;
-    uint          _imageIndex;
+    QFile      *_file;
+    Object     *_object;
+    BaseStream *_fileStream;
+    PDFDoc     *_document;
+    Device     *_device;
+    uint        _imageIndex;
+
+    Document(const Document &);
+    Document &operator =(const Document &);
 };
+
+}; // namespace
 
 #endif

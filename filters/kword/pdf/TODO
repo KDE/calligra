@@ -5,18 +5,18 @@ Small things:
 - correctly detect and layout list bullets.
 - correctly detect soft hyphens.
 - correctly layout superscript characters.
-- complete "latexsymbol" conversion table.
+- complete "latexsymbol" conversion table (?)
 - complete accent+letter conversion table.
 - check below/above accent+letter combination.
-- check "..." and replace with appropriate symbol.
+- check "..." symbol and replace it with dots (?)
+- treat lots of "......" as tab with '.' filling
 
 Bigger things:
 - fix height offsets (difficult to do for KOffice 1.2 : I need to
   tell kword the height of a paragraph).
 - compute columns of text : compute main frame size with reasonnable
   margins. Suppress uneeded line breaks. Use some kind of heuristic
-  on several pages and take care of right/left page...
-- detect if text is more or less centered.
+  on several pages and take care of right/left page (not supported in kword ?)
 - correctly detect and layout superscript.
 - correctly detect and layout underline and strokeline.
 
@@ -26,4 +26,7 @@ Hard things:
 - detect header/footer.
 
 GUI:
-- add option to (not) load images.
+- add option to remove carriage return and to add soft hyphen.
+
+Cleanup:
+- no more text in Blocks (link text in Link ?)
