@@ -30,6 +30,7 @@ KarbonPartBase::KarbonPartBase( QWidget* parentWidget, const char* widgetName,
 KarbonPartBase::~KarbonPartBase()
 {
 	delete m_toolController;
+	m_toolController = 0;
 }
 
 VToolController *
