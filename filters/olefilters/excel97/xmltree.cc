@@ -283,7 +283,10 @@ const QDomElement XMLTree::getFormat(Q_UINT16 xf)
     format.setAttribute("alignY", ((xfs[xf]->align >> 4) & 0x07) == 3 ? 2 : ((xfs[xf]->align >> 4) & 0x07) + 1);
 
     int angle = xfs[xf]->align >> 8;
-    format.setAttribute("angle", angle < 91 ? angle * (-1) : angle - 90);
+    if(angle!=255 && angle !=0)
+      format.setAttribute("angle", angle < 91 ? angle * (-1) : angle - 90);
+    else if(angle==255)
+      format.setAttribute("verticaltext", "yes");
     int indent = xfs[xf]->indent & 0x0f;
     if( indent !=0)
       format.setAttribute("indent", (indent*10));
