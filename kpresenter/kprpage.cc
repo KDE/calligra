@@ -331,7 +331,6 @@ KCommand * KPrPage::ungroupObjects()
     if ( kpobject && kpobject->getType() == OT_GROUP ) {
         UnGroupObjCmd *unGroupObjCmd = new UnGroupObjCmd( i18n( "Ungroup Objects" ),
                                                           (KPGroupObject*)kpobject, m_doc, this );
-        //m_doc->addCommand( unGroupObjCmd );
         unGroupObjCmd->execute();
         return unGroupObjCmd;
     }
@@ -592,88 +591,16 @@ LineEnd KPrPage::getLineEnd( LineEnd le ) const
 /*========================= get brush =============================*/
 QBrush KPrPage::getBrush( const QBrush &brush )const
 {
-
   QPtrListIterator<KPObject> it( m_objectList );
   for ( ; it.current() ; ++it )
     {
-
       if(it.current()->isSelected())
         {
-	  switch ( it.current()->getType() ) {
-	  case OT_RECT:
-	    {
-	      KPRectObject*obj=dynamic_cast<KPRectObject*>( it.current() );
-	      if(obj)
-		return obj->getBrush();
-	    }
-	    break;
-	  case OT_ELLIPSE:
-	    {
-	      KPEllipseObject*obj=dynamic_cast<KPEllipseObject*>( it.current() );
-	      if(obj)
-		return obj->getBrush();
-	    }
-
-	    break;
-	  case OT_AUTOFORM:
-	    {
-	      KPAutoformObject*obj=dynamic_cast<KPAutoformObject*>( it.current() );
-	      if(obj)
-		return obj->getBrush();
-	    }
-
-	    break;
-	  case OT_PIE:
-	    {
-	      KPPieObject*obj=dynamic_cast<KPPieObject*>( it.current() );
-	      if(obj)
-		return obj->getBrush();
-	    }
-
-	    break;
-	  case OT_PART:
-	    {
-	      KPPartObject*obj=dynamic_cast<KPPartObject*>( it.current() );
-	      if(obj)
-		return obj->getBrush();
-	    }
-
-	    break;
-	  case OT_CLIPART:
-	  case OT_PICTURE:
-	    {
-	      KPPixmapObject*obj=dynamic_cast<KPPixmapObject*>( it.current() );
-	      if(obj)
-		return obj->getBrush();
-	    }
-
-	    break;
-	  case OT_TEXT:
-	    {
-	      KPTextObject*obj=dynamic_cast<KPTextObject*>( it.current() );
-	      if(obj)
-		return obj->getBrush();
-	    }
-
-	    break;
-	  case OT_POLYGON:
-	    {
-	      KPPolygonObject*obj=dynamic_cast<KPPolygonObject*>( it.current() );
-	      if(obj)
-		return obj->getBrush();
-	    }
-          case OT_CLOSED_LINE: {
-              KPClosedLineObject *kpobject = dynamic_cast<KPClosedLineObject*>( it.current() );
-              if ( kpobject )
-                  return kpobject->getBrush();
-          } break;
-
-	    break;
-	  default: break;
-	  }
+            KP2DObject *obj=dynamic_cast<KP2DObject*>(it.current() );
+            if(obj)
+                return obj->getBrush();
 	}
     }
-
   return brush;
 }
 
@@ -2511,7 +2438,9 @@ KCommand* KPrPage::setBrushColor( const QColor &c, bool fill, QPtrList<KPObject>
 
 void KPrPage::slotRepaintVariable()
 {
-    QPtrListIterator<KPObject> it( m_objectList );
+    QPtrList<KPObject> lst;
+    getAllObjectSelectedList(lst,true /*force*/ );
+    QPtrListIterator<KPObject> it( lst );
     for ( ; it.current() ; ++it )
     {
 	if ( it.current()->getType() == OT_TEXT )
@@ -2521,7 +2450,9 @@ void KPrPage::slotRepaintVariable()
 
 void KPrPage::recalcPageNum()
 {
-    QPtrListIterator<KPObject> it( m_objectList );
+    QPtrList<KPObject> lst;
+    getAllObjectSelectedList(lst,true /*force*/ );
+    QPtrListIterator<KPObject> it( lst );
     for ( ; it.current() ; ++it )
     {
 	if ( it.current()->getType() == OT_TEXT )
@@ -2793,12 +2724,12 @@ void KPrPage::completeLoadingForGroupObject( KPObject *_obj )
         for ( ; it.current(); ++it ) {
             if ( ( it.current()->getType() == OT_PICTURE )
                 || ( it.current()->getType() == OT_CLIPART ) ) {
-                KPPixmapObject *_pixObj = static_cast<KPPixmapObject*>( it.current() );
+                KPPixmapObject *_pixObj = dynamic_cast<KPPixmapObject*>( it.current() );
                 if ( _pixObj )
                     _pixObj->reload();
             }
             else if ( it.current()->getType() == OT_TEXT ) {
-                KPTextObject *_textObj=  static_cast<KPTextObject*>( it.current() );
+                KPTextObject *_textObj=  dynamic_cast<KPTextObject*>( it.current() );
                 if ( _textObj )
                     _textObj->recalcPageNum( m_doc, this );
             }
