@@ -187,7 +187,7 @@ VSelection::draw( VPainter* painter, double zoomFactor ) const
 	m_handleRect[ node_rb ].setRect( m_handleRect[0].right() - handleNodeSize - (1 / zoomFactor), m_handleRect[0].top() - handleNodeSize, 2 * handleNodeSize, 2 * handleNodeSize );
 	m_handleRect[ node_rm ].setRect( m_handleRect[0].right() - handleNodeSize - (1 / zoomFactor), center.y() - handleNodeSize, 2 * handleNodeSize, 2 * handleNodeSize );
 	m_handleRect[ node_rt ].setRect( m_handleRect[0].right() - handleNodeSize - (1 / zoomFactor) , m_handleRect[0].bottom() - handleNodeSize - (1 / zoomFactor), 2 * handleNodeSize, 2 * handleNodeSize );
-	m_handleRect[ node_mt ].setRect( center.x(), m_handleRect[0].bottom() - handleNodeSize - (1 / zoomFactor), 2 * handleNodeSize, 2 * handleNodeSize );
+	m_handleRect[ node_mt ].setRect( center.x() - handleNodeSize, m_handleRect[0].bottom() - handleNodeSize - (1 / zoomFactor), 2 * handleNodeSize, 2 * handleNodeSize );
 	m_handleRect[ node_lt ].setRect( m_handleRect[0].left() - handleNodeSize, m_handleRect[0].bottom() - handleNodeSize - (1 / zoomFactor), 2 * handleNodeSize, 2 * handleNodeSize );
 	m_handleRect[ node_lm ].setRect( m_handleRect[0].left() - handleNodeSize, center.y() - handleNodeSize, 2 * handleNodeSize, 2 * handleNodeSize );
 

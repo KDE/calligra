@@ -893,12 +893,21 @@ VKoPainter::drawImage( const QImage &image, const QWMatrix &affine )
 {
 	// set up world matrix
 	double affineresult[6];
-	affineresult[0] = m_zoomFactor * affine.m11();
+	affineresult[0] = ( m_matrix.m11() * affine.m11() ) * m_zoomFactor;
 	affineresult[1] = affine.m12();
 	affineresult[2] = affine.m21();
-	affineresult[3] = m_zoomFactor / affine.m22();
-	affineresult[4] = m_matrix.dx() + affine.dx();
-	affineresult[5] = m_matrix.dy() - affine.dy() - image.height();
+	affineresult[3] = ( m_matrix.m22() * affine.m22() ) * m_zoomFactor;
+	affineresult[4] = m_matrix.dx() + affine.dx() * m_zoomFactor;
+	affineresult[5] = m_matrix.dy() - ( affine.dy() + image.height() ) * m_zoomFactor;
+	kdDebug() << "affineresult[0] : " << affineresult[0] << endl;
+	kdDebug() << "affineresult[1] : " << affineresult[1] << endl;
+	kdDebug() << "affineresult[2] : " << affineresult[2] << endl;
+	kdDebug() << "affineresult[3] : " << affineresult[3] << endl;
+	kdDebug() << "affineresult[4] : " << affineresult[4] << endl;
+	kdDebug() << "affineresult[5] : " << affineresult[5] << endl;
+	kdDebug() << "m_matrix.dx() : " << m_matrix.dx() << endl;
+	kdDebug() << "affine.dx() : " << affine.dx() << endl;
+	kdDebug() << "image.height() : " << image.height() << endl;
 	art_rgba_affine( m_buffer, 0, 0, m_width, m_height, m_width * 4,
 					 image.bits(), image.width(), image.height(), image.width() * 4,
 					 affineresult, ART_FILTER_NEAREST, 0L );

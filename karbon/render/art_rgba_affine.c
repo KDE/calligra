@@ -99,6 +99,7 @@ art_rgba_affine (art_u8 *dst, int x0, int y0, int x1, int y1, int dst_rowstride,
 	  dst_p[0] = src_p[0];
 	  dst_p[1] = src_p[1];
 	  dst_p[2] = src_p[2];
+	  dst_p[3] = src_p[3];
 	  dst_p += 4;
 	}
       dst_linestart += dst_rowstride;

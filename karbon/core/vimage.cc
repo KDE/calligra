@@ -35,6 +35,7 @@ VImage::VImage( const VImage &other ) : VObject( other )
 		m_image			= 0L;
 	m_fname			= other.m_fname;
 	m_boundingBox	= other.m_boundingBox;
+	m_matrix		= other.m_matrix;
 }
 
 VImage::~VImage()
