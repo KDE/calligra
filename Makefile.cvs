@@ -1,5 +1,6 @@
 
 all:
+	cat acinclude.m4.in libtool.m4.in > acinclude.m4
 	aclocal
 	autoconf
 	autoheader
