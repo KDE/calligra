@@ -1087,7 +1087,6 @@ void KoTextCursor::splitAndInsertEmptyParag( bool ind, bool updateIds )
 	if ( f->isMisspelled() ) {
             KoTextFormat fNoMisspelled( *f );
             fNoMisspelled.setMisspelled( false );
-	    f->removeRef();
 	    f = doc->formatCollection()->format( &fNoMisspelled );
 	}
     }
