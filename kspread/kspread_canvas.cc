@@ -853,24 +853,26 @@ void KSpreadCanvas::mouseMoveEvent( QMouseEvent * _ev )
     return;
   }
 
-  double width  = 0.0;
-  double height = 0.0;
-  int i;
   QRect rct( selectionInfo()->selection() );
-  int bot   = rct.bottom();
-  int right = rct.right();
-  for ( i = rct.left(); i <= right; ++i )
-  {
-    width += table->columnFormat( i )->dblWidth( this );
-  }
-  for ( i = rct.top(); i <= bot; ++i )
-  {
-    height += table->rowFormat( i )->dblHeight( this );
-  }
 
-  QRect r1( xpos - 2, ypos - 2, width + 1, height + 2 );
-  QRect r2( xpos + 2, ypos + 2, width - 12, height - 8 );
+  QRect r1;
+  QRect r2;
 
+  double lx = table->dblColumnPos( rct.left() );
+  double rx = table->dblColumnPos( rct.right() + 1 );
+  double ty = table->dblRowPos( rct.top() );
+  double by = table->dblRowPos( rct.bottom() + 1 );
+  
+  r1.setLeft( lx - 1 );
+  r1.setTop( ty - 1 );
+  r1.setRight( rx + 1 );
+  r1.setBottom( by + 1 );
+  
+  r2.setLeft( lx + 1 );
+  r2.setTop( ty + 1 );
+  r2.setRight( rx - 1 );
+  r2.setBottom( by - 1 );
+  
   QRect selectionHandle = m_pView->selectionInfo()->selectionHandleArea();
 
   // Test whether the mouse is over some anchor
@@ -885,7 +887,7 @@ void KSpreadCanvas::mouseMoveEvent( QMouseEvent * _ev )
   }
 
   if ( selectionHandle.contains( QPoint( doc()->zoomItX( ev_PosX ),
-                                        doc()->zoomItY( ev_PosY ) ) ) )
+                                         doc()->zoomItY( ev_PosY ) ) ) )
   {
     //If the cursor is over the hanlde, than it might be already on the next cell.
     //Recalculate the cell!
@@ -903,17 +905,11 @@ void KSpreadCanvas::mouseMoveEvent( QMouseEvent * _ev )
     if ( !table->isProtected() )
       setCursor( KCursor::handCursor() );
   }
-  else if ( ( col == rct.left() || col - 1 == rct.right()
-              || row == rct.top() || row - 1 == rct.bottom() )
-            && col >= rct.left() && col - 1 <= rct.right()
-            && row >= rct.top() && row - 1 <= rct.bottom()
-            && r1.contains( QPoint( ev_PosX, ev_PosY ) )
+  else if ( r1.contains( QPoint( ev_PosX, ev_PosY ) )
             && !r2.contains( QPoint( ev_PosX, ev_PosY ) ) )
-
     setCursor( KCursor::handCursor() );
   else
     setCursor( arrowCursor );
-
 
   // No marking, selecting etc. in progess? Then quit here.
   if ( m_eMouseAction == NoAction )
@@ -1125,32 +1121,32 @@ void KSpreadCanvas::mousePressEvent( QMouseEvent * _ev )
 
   {
     ElapsedTime st( "Start the drag part" );
-    // start drag ?
-    double width  = 0.0;
-    double height = 0.0;
-    int i;
-    QRect rct( selectionInfo()->selection() );
-    int bot   = rct.bottom();
-    int right = rct.right();
-    for ( i = rct.left(); i <= right; ++i )
-    {
-      width += table->columnFormat( i )->dblWidth( this );
-    }
-    for ( i = rct.top(); i <= bot; ++i )
-    {
-      height += table->rowFormat( i )->dblHeight( this );
-    }
 
-    QRect r1( xpos - 2, ypos - 2, width + 1, height + 2 );
-    QRect r2( xpos + 2, ypos + 2, width - 8, height - 8 );
+    // start drag ?
+    QRect rct( selectionInfo()->selection() );
+
+    QRect r1;
+    QRect r2;
+    {
+      double lx = table->dblColumnPos( rct.left() );
+      double rx = table->dblColumnPos( rct.right() + 1 );
+      double ty = table->dblRowPos( rct.top() );
+      double by = table->dblRowPos( rct.bottom() + 1 );
+      
+      r1.setLeft( lx - 1 );
+      r1.setTop( ty - 1 );
+      r1.setRight( rx + 1 );
+      r1.setBottom( by + 1 );
+      
+      r2.setLeft( lx + 1 );
+      r2.setTop( ty + 1 );
+      r2.setRight( rx - 1 );
+      r2.setBottom( by - 1 );
+    }
 
     m_dragStart.setX( -1 );
 
-    if ( ( col == rct.left() || col - 1 == rct.right()
-           || row == rct.top() || row - 1 == rct.bottom() )
-         && col >= rct.left() && col - 1 <= rct.right()
-         && row >= rct.top() && row - 1 <= rct.bottom()
-         && r1.contains( QPoint( ev_PosX, ev_PosY ) )
+    if ( r1.contains( QPoint( ev_PosX, ev_PosY ) )
          && !r2.contains( QPoint( ev_PosX, ev_PosY ) ) )
     {
       m_dragStart.setX( (int) ev_PosX );
