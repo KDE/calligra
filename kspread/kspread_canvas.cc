@@ -2743,18 +2743,22 @@ void KSpreadVBorder::mousePressEvent( QMouseEvent * _ev )
   {
     int h = table->rowLayout( row )->height( m_pCanvas );
     row++;
-    if ( _ev->pos().y() >= y + h - 1 && _ev->pos().y() <= y + h + 1 )
+    if ( _ev->pos().y() >= y + h - 1 && _ev->pos().y() <= y + h + 1 
+	&& !(table->rowLayout( row )->isHide()&&row==1) )
       m_bResize = TRUE;
     y += h;
   }
-
+  int tmp2;
+  int tmpRow=table->topRow( _ev->pos().y() - 1, tmp2, m_pCanvas );
+  if(table->rowLayout(tmpRow  )->isHide()&&tmpRow==1)
+      m_bResize = false;
   // So he clicked between two rows ?
   if ( m_bResize )
   {
     // Determine row to resize
     int tmp;
     m_iResizedRow = table->topRow( _ev->pos().y() - 1, tmp, m_pCanvas );
-
+    
     paintSizeIndicator( _ev->pos().y(), true );
   }
   else
@@ -2832,7 +2836,8 @@ void KSpreadVBorder::mouseReleaseEvent( QMouseEvent * _ev )
         for(int i = start; i <= end; i++ )
         {
             RowLayout *rl = table->nonDefaultRowLayout( i );
-            rl->setHeight( height, m_pCanvas );
+	    if(!rl->isHide())
+		rl->setHeight( height, m_pCanvas );
         }
 
         delete m_lSize;
@@ -2997,13 +3002,16 @@ void KSpreadVBorder::mouseMoveEvent( QMouseEvent * _ev )
   {
     int y = 0;
     int row = table->topRow( 0, y, m_pCanvas );
-
+    int tmp;
+    int tmpRow=table->topRow( _ev->pos().y() - 1, tmp, m_pCanvas );
     while ( y < height() )
     {
       int h = table->rowLayout( row )->height( m_pCanvas );
       row++;
-      if ( _ev->pos().y() >= y + h - 1 && _ev->pos().y() <= y + h + 1 )
-      {
+ 
+      if ( _ev->pos().y() >= y + h - 1 && _ev->pos().y() <= y + h + 1
+	   &&!(table->rowLayout(tmpRow)->isHide()&&tmpRow==1))
+      {   
         setCursor(splitVCursor);
         return;
       }
@@ -3199,10 +3207,17 @@ void KSpreadHBorder::mousePressEvent( QMouseEvent * _ev )
   {
     int w = table->columnLayout( col )->width( m_pCanvas );
     col++;
-    if ( _ev->pos().x() >= x + w - 1 && _ev->pos().x() <= x + w + 1 )
+    if ( _ev->pos().x() >= x + w - 1 && _ev->pos().x() <= x + w + 1 &&
+	 !(table->columnLayout( col )->isHide()&&col==1))
       m_bResize = TRUE;
     x += w;
   }
+  //if col is hide and it's the first column
+  //you mustn't resize it.
+  int tmp2;
+  int tmpCol=table->leftColumn( _ev->pos().x() - 1, tmp2, m_pCanvas );
+  if(table->columnLayout(tmpCol  )->isHide()&&tmpCol==1)
+      m_bResize = false;
 
   if ( m_bResize )
   {
@@ -3284,7 +3299,8 @@ void KSpreadHBorder::mouseReleaseEvent( QMouseEvent * _ev )
     for(int i=start;i<=end;i++)
         {
         ColumnLayout *cl = table->nonDefaultColumnLayout( i );
-        cl->setWidth( width, m_pCanvas );
+	if(!cl->isHide())
+	    cl->setWidth( width, m_pCanvas );
         }
     delete m_lSize;
     m_lSize=0;
@@ -3464,12 +3480,17 @@ void KSpreadHBorder::mouseMoveEvent( QMouseEvent * _ev )
   {
     int x = 0;
     int col = table->leftColumn( 0, x, m_pCanvas );
-
+    //if col is hide and it's the first column
+    //you mustn't resize it.
+    int tmp2;
+    int tmpCol=table->leftColumn( _ev->pos().x() - 1, tmp2, m_pCanvas );
+ 
     while ( x < width() )
     {
       int w = table->columnLayout( col )->width( m_pCanvas );
       col++;
-      if ( _ev->pos().x() >= x + w - 1 && _ev->pos().x() <= x + w + 1 )
+      if ( _ev->pos().x() >= x + w - 1 && _ev->pos().x() <= x + w + 1
+	   &&!(table->columnLayout(tmpCol)->isHide()&&tmpCol==1))
       {
         setCursor(splitHCursor);
         return;
