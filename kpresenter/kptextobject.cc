@@ -239,21 +239,6 @@ double KPTextObject::load(const QDomElement &element)
         }
         if ( e.hasAttribute( "verticalValue" ))
             alignVertical = e.attribute( "verticalValue" ).toDouble();
-#if 0
-        ktextobject.document()->setLineSpacing( e.attribute( attrLineSpacing ).toInt() );
-        ktextobject.document()->setParagSpacing( e.attribute( attrParagSpacing ).toInt() );
-        ktextobject.document()->setMargin( e.attribute( attrMargin ).toInt() );
-        KTextEditDocument::TextSettings settings = ktextobject.document()->textSettings();
-        settings.bulletColor[0] = QColor( e.attribute( attrBulletColor1, Qt::black.name() ) );
-        settings.bulletColor[1] = QColor( e.attribute( attrBulletColor2, Qt::black.name() ) );
-        settings.bulletColor[2] = QColor( e.attribute( attrBulletColor3, Qt::black.name() ) );
-        settings.bulletColor[3] = QColor( e.attribute( attrBulletColor4, Qt::black.name() ) );
-        settings.bulletType[0] = (KTextEditDocument::Bullet)e.attribute( attrBulletType1, 0 ).toInt();
-        settings.bulletType[1] = (KTextEditDocument::Bullet)e.attribute( attrBulletType2, 0 ).toInt();
-        settings.bulletType[2] = (KTextEditDocument::Bullet)e.attribute( attrBulletType3, 0 ).toInt();
-        settings.bulletType[3] = (KTextEditDocument::Bullet)e.attribute( attrBulletType4, 0 ).toInt();
-        ktextobject.document()->setTextSettings( settings );
-#endif
 
         loadKTextObject( e );
     }
@@ -617,33 +602,22 @@ void KPTextObject::loadKTextObject( const QDomElement &elem )
 
             //kdDebug(33001) << k_funcinfo << "old bullet depth is: " << depth  << endl;
 
-            //compatibility (bullets, numbering etc)
+            // 1.1 compatibility (bullets)
             QString type;
             if( e.hasAttribute(attrType) )
                 type = e.attribute( attrType );
 
             //kdDebug(33001) << k_funcinfo << "old PARAG type is: " << type  << endl;
 
-            if(!type.isEmpty())
+            // Do not import type="2" (enum list). The enum was there in 1.1, but not the code!
+            if(type == "1")
             {
                 if(!paragLayout.counter)
                     paragLayout.counter = new KoParagCounter;
-                if ( type == "1" )
-                {
-                    //t = KTextEdit::BulletList;
-                    paragLayout.counter->setStyle(KoParagCounter::STYLE_DISCBULLET);
-                    paragLayout.counter->setNumbering(KoParagCounter::NUM_LIST);
-                    paragLayout.counter->setPrefix(QString::null);
-                    paragLayout.counter->setSuffix(QString::null);
-                }
-                else if ( type == "2" )
-                {
-                    //t = KTextEdit::EnumList;
-                    paragLayout.counter->setStyle(KoParagCounter::STYLE_NUM);
-                    paragLayout.counter->setNumbering(KoParagCounter::NUM_LIST);
-                    paragLayout.counter->setPrefix(QString::null);
-                    paragLayout.counter->setSuffix(QString::null);
-                }
+                paragLayout.counter->setStyle(KoParagCounter::STYLE_DISCBULLET);
+                paragLayout.counter->setNumbering(KoParagCounter::NUM_LIST);
+                paragLayout.counter->setPrefix(QString::null);
+                paragLayout.counter->setSuffix(QString::null);
             }
 
             // This is for very old (KOffice-1.0) documents.
