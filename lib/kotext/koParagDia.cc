@@ -132,7 +132,7 @@ KoCounterStyleWidget::KoCounterStyleWidget( bool displayDepth, bool onlyStyleTyp
         lDisplayLevels->hide();
 
     cbRestart = new QCheckBox( i18n( "&Restart numbering at this paragraph" ), gStyle );
-    grid->addWidget( cbRestart, 5, 1 );
+    grid->addMultiCellWidget( cbRestart, 5, 5, 1, 3 );
 
     if ( onlyStyleTypeLetter )
     {
