@@ -218,6 +218,7 @@ TABLE VIEW TODO:
 - fix not-db-aware mode
 - add SpreadSheet mode (eg. for alter table, and query editor)
 - add support for enums (combo boxes)
+- shrink viewport area after each row removing (so scrollbars can be updated)
 
 2004-01-06
 - KexiTableView: 
@@ -230,9 +231,15 @@ TABLE VIEW TODO:
 - KexiDialogBase/KexiPart : fixed caption icons setting for dialogs created by
   parts
 - Shared Actions:
-  - KexiSharedActionHost introduced - it's "action sharing" functionality extracted from KexiMainWindow.
+  - KexiSharedActionHost introduced - it's "action sharing" functionality   extracted from KexiMainWindow.
   - global default KexiSharedActionHost added for convenience
   - KexiActionProxy now uses KexiSharedActionHost as it's host instead of explicity pointed KexiMainWindow
+  - on destruction, KexiSharedAction object is taken out of its KexiSharedActionHost 
+  - int KexiMainWindow::generatePrivateDocID() added, so we can use this when we want to get unique doc id e.g. for KexiDialogBase.
+  - generatePrivateDocID() is used in Relations dialog
+
+- KexiMainWindow: fixed bug in virtual function
+- KexiSharedActionHost: fixed behaviour on destruction
 
 -KMDI:
   -caption's icon is resized on setIcon() when needed
