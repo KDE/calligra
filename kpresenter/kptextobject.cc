@@ -2001,7 +2001,7 @@ KPrTextDrag * KPTextView::newDrag( QWidget * parent )
     {
         text = c1.parag()->toString( c1.index(), c2.index() - c1.index() );
 
-        m_kptextobj->saveParagraph( domDoc, c1.parag(), elem, c1.index(), c2.index()-2 );
+        m_kptextobj->saveParagraph( domDoc, c1.parag(), elem, c1.index(), c2.index()-1 );
     }
     else
     {
