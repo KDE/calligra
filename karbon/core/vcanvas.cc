@@ -146,13 +146,6 @@ drawPage( VPainter *p )
 	p->lineTo( KoPoint( RIGHT, TOP + 1 ) );
 	p->lineTo( KoPoint( RIGHT, TOP ) );
 	p->fillPath();
-
-	/*p->newPath();
-	p->moveTo( KoPoint( LEFT,     BOTTOM - 2 ) );
-	p->lineTo( KoPoint( LEFT + 1, BOTTOM - 2 ) );
-	p->lineTo( KoPoint( LEFT + 1, TOP ) );
-	p->lineTo( KoPoint( LEFT,     TOP ) );
-	p->fillPath();*/
 }
 
 void
@@ -168,11 +161,6 @@ VCanvas::viewportPaintEvent( QPaintEvent *e )
 		p->begin();
 		p->clear( QColor( 195, 194, 193 ) );
 		p->setZoomFactor( m_view->zoom() );
-		/*QWMatrix mat;
-		mat.scale( 1, -1 );
-		kdDebug() << "viewport()->height() : " << contentsHeight() << endl;
-		mat.translate( -contentsX(), contentsY() - contentsHeight() );
-		p->setWorldMatrix( mat );*/
 		setYMirroring( false );
 		drawPage( p );
 
@@ -213,11 +201,6 @@ VCanvas::drawDocument( QPainter* /*painter*/, const QRect& rect, bool drawVObjec
 		p->begin();
 		p->clear( QColor( 195, 194, 193 ) );
 		p->setZoomFactor( m_view->zoom() );
-		/*QWMatrix mat;
-		mat.scale( 1, -1 );
-		kdDebug() << "contentsHeight() : " << contentsHeight() << endl;
-		mat.translate( -contentsX(), contentsY() - contentsHeight() );
-		p->setWorldMatrix( mat ); */
 		setYMirroring( false );
 		drawPage( p );
 
