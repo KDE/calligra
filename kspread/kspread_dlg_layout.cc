@@ -1119,7 +1119,7 @@ CellLayoutPagePosition::CellLayoutPagePosition( QWidget* parent, CellLayoutDlg *
 
     grp = new QButtonGroup( i18n("Vertical"),this);
     grp->setRadioButtonExclusive( TRUE );
-    
+
     grid2 = new QGridLayout(grp,3,1,15,7);
     top = new QRadioButton( i18n("Top"), grp );
     grid2->addWidget(top,0,0);
@@ -1144,22 +1144,44 @@ CellLayoutPagePosition::CellLayoutPagePosition( QWidget* parent, CellLayoutDlg *
     grid2->addWidget(multi,0,0);
     multi->setChecked(dlg->bMultiRow);
     grid3->addMultiCellWidget(grp,1,1,0,1);
-    
+
     grp = new QButtonGroup( i18n("Size of cell"),this);
-    grid2 = new QGridLayout(grp,1,2,15,7);
-    width=new KIntNumInput(dlg->widthSize, grp, 10);    
+    grid2 = new QGridLayout(grp,2,2,15,7);
+    width=new KIntNumInput(dlg->widthSize, grp, 10);
     width->setLabel(i18n("Width :"));
     width->setRange(20, 400, 1);
     grid2->addWidget(width,0,0);
+    defaultWidth=new QCheckBox(i18n("Default width (60)"),grp);
+    grid2->addWidget(defaultWidth,1,0);
 
-    height=new KIntNumInput(dlg->heigthSize, grp, 10);    
+    height=new KIntNumInput(dlg->heigthSize, grp, 10);
     height->setLabel(i18n("Height :"));
     height->setRange(20, 400, 1);
     grid2->addWidget(height,0,1);
+    defaultHeight=new QCheckBox(i18n("Default height (20)"),grp);
+    grid2->addWidget(defaultHeight,1,1);
+
     grid3->addMultiCellWidget(grp,2,2,0,1);
 
+    connect(defaultWidth , SIGNAL(clicked() ),this, SLOT(slotChangeWidthState()));
+    connect(defaultHeight , SIGNAL(clicked() ),this, SLOT(slotChangeHeightState()));
     this->resize( 400, 400 );
 
+}
+void CellLayoutPagePosition::slotChangeWidthState()
+{
+    if( defaultWidth->isChecked())
+        width->setEnabled(false);
+    else
+        width->setEnabled(true);
+}
+
+void CellLayoutPagePosition::slotChangeHeightState()
+{
+    if( defaultHeight->isChecked())
+        height->setEnabled(false);
+    else
+        height->setEnabled(true);
 }
 
 void CellLayoutPagePosition::apply( KSpreadCell *_obj )
@@ -1180,14 +1202,20 @@ else if(center->isChecked())
 _obj->setMultiRow(multi->isChecked());
 }
 
-int CellLayoutPagePosition::getSizeHeight() 
+int CellLayoutPagePosition::getSizeHeight()
 {
-return height->value();
+  if(defaultHeight->isChecked())
+        return 20;
+  else
+        return height->value();
 }
 
-int CellLayoutPagePosition::getSizeWidth() 
+int CellLayoutPagePosition::getSizeWidth()
 {
-return width->value();
+  if(defaultWidth->isChecked())
+        return 60;
+  else
+        return width->value();
 }
 
 KSpreadBorderButton::KSpreadBorderButton( QWidget *parent, const char *_name ) : QPushButton(parent,_name)

@@ -24,7 +24,7 @@ class KSpreadCell;
 class QLabel;
 class QPainter;
 
-#define YBORDER_WIDTH 35
+#define YBORDER_WIDTH 40
 #define XBORDER_HEIGHT 14
 
 /**

@@ -2198,10 +2198,9 @@ void KSpreadVBorder::paintEvent( QPaintEvent* _ev )
     else
       painter.setPen( colorGroup().text() );
     int len = painter.fontMetrics().width(buffer );
-    //painter.drawText( 3, ypos +
-    //                ( row_lay->height( m_pCanvas ) + painter.fontMetrics().ascent() - painter.fontMetrics().descent() ) / 2, buffer );
-    painter.drawText( (YBORDER_WIDTH-len)/2+1, ypos +
+    painter.drawText( (YBORDER_WIDTH-len)/2, ypos +
                     ( row_lay->height( m_pCanvas ) + painter.fontMetrics().ascent() - painter.fontMetrics().descent() ) / 2, buffer );
+
     ypos += row_lay->height( m_pCanvas );
   }
 

@@ -211,12 +211,16 @@ protected:
 
 class CellLayoutPagePosition : public QWidget
 {
+    Q_OBJECT
 public:
     CellLayoutPagePosition( QWidget *parent, CellLayoutDlg *_dlg );
 
     void apply( KSpreadCell *_cell );
     int getSizeHeight();
     int getSizeWidth();
+public slots:
+    void slotChangeHeightState();
+    void slotChangeWidthState();
 protected:
     QRadioButton *bottom;
     QRadioButton *top;
@@ -228,6 +232,8 @@ protected:
     KIntNumInput *width;
     KIntNumInput *height;
     CellLayoutDlg *dlg;
+    QCheckBox *defaultWidth;
+    QCheckBox *defaultHeight;
 };
 
 
