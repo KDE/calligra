@@ -28,6 +28,8 @@
 #include <qvaluelist.h>
 #include <kdebug.h>
 
+#include <klocale.h>
+
 StencilBarDockManager::StencilBarDockManager( QWidget* parent, const char* name )
 : QWidget(parent,name)
 {
@@ -90,7 +92,7 @@ void StencilBarDockManager::insertStencilSet( QWidget* w, const QString& caption
   switch (pos) {
     case OnDesktop:
       bar = new KivioStackBar(0L);
-      bar->setCaption("StencilSets");
+      bar->setCaption(i18n("Stencil Sets"));
       m_pTopLevelBars.append(bar);
       connect(bar,SIGNAL(beginDragPage(DragBarButton*)),SLOT(slotBeginDragPage(DragBarButton*)));
       connect(bar,SIGNAL(finishDragPage(DragBarButton*)),SLOT(slotFinishDragPage(DragBarButton*)));
