@@ -13,7 +13,6 @@ LDADD =  ../lib/kofficeui/libkofficeui.la \
 ####### Files
 
 bin_PROGRAMS = kformula.bin
-bin_SCRIPTS = kformula
 
 kformula_bin_SOURCES = kformula_main.cc kformula_doc.cc kformula_view.cc \
 	kformula.cc kformula_shell.cc
@@ -31,6 +30,12 @@ idl_HEADERS = kformula.h
 
 kdelnk_DATA = kformula_part.kdelnk
 kdelnkdir = $(kde_datadir)/koffice/partlnk
+
+install-exec-local:
+	$(INSTALL_SCRIPT) kformula $(bindir)/kformula
+
+uninstall-local:
+	-rm $(bindir)/kformula
 
 ####### Implicit rules
 
@@ -61,3 +66,4 @@ kformula_main.cc: kformula_main.moc kformula.h
 kformula_shell.cc: kformula_shell.moc
 kformula_view.cc: kformula_view.moc
 kformula_main.cc: kformula_view.h kformula.h
+
