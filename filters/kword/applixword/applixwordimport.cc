@@ -38,8 +38,7 @@ const bool APPLIXWORDImport::filter(const QString &fileIn, const QString &fileOu
                                const QString &) 
 {
 
-//  if(to!="application/x-kword" || from!="application/x-applixword")
-    if(to!="application/x-kword" || from!="application/x-applix")
+    if(to!="application/x-kword" || from!="application/x-applixword")
         return false;
 
     QFile in(fileIn);
