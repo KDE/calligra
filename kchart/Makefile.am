@@ -7,9 +7,6 @@ libkchart_la_LDFLAGS = -avoid-version -module
 
 libkchart_la_LIBADD = ../lib/kofficeui/libkofficeui.la
 
-
-
-
 ####### Files
 
 bin_PROGRAMS = kchart
@@ -102,12 +99,10 @@ linktest_SOURCES = $(libkchart_la_SOURCES)
 linktest_LDADD = $(lib_LTLIBRARIES)
 linktest_LDFLAGS = $(libkchart_LDFLAGS)
 
-
-
 # SUBDIRS =  . plugins pics dtd toolbar
 SUBDIRS =  . toolbar
 
-messages:
-	$(XGETTEXT) *.cc -o $(podir)/kchart.pot
+messages: rc.cpp
+	$(XGETTEXT) rc.cpp *.cc -o $(podir)/kchart.pot
 
 

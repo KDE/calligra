@@ -40,7 +40,7 @@ rcdir = $(kde_datadir)/kspread/kpartplugins
 
 SUBDIRS = pics
 
-messages:
+messages: rc.cpp
 	$(XGETTEXT) *.cpp -o $(podir)/kspreadcalc_calc.pot
 
 

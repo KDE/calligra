@@ -71,7 +71,7 @@ parser:
 	flex -Pdep lex.dep.l
 	bison -p dep -b dep -d yacc.dep.y
 
-messages:
-	$(XGETTEXT) *.cc -o $(podir)/kspread.pot
+messages: rc.cpp
+	$(XGETTEXT) rc.cpp *.cc -o $(podir)/kspread.pot
 
 

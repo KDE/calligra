@@ -82,8 +82,7 @@ rc_DATA = kpresenter.rc
 
 SUBDIRS = autoformEdit autoforms . pics templates dtd slideshow toolbar
 
-messages:
-	$(XGETTEXT) */*.cc *.cc *.h -o $(podir)/kpresenter.pot
+messages: rc.cpp
+	$(XGETTEXT) rc.cpp */*.cc *.cc *.h -o $(podir)/kpresenter.pot
 
-IDL_FLAGS = --relative-paths -I$(top_srcdir)/lib/kofficecore -I$(top_srcdir)/lib/store -I$(idldir)
 

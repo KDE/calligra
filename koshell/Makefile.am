@@ -18,6 +18,6 @@ rc_DATA = koshell_shell.rc
 
 ####### Implicit rules
 
-messages:
-	$(XGETTEXT) *.cc -o $(podir)/koshell.pot
+messages: rc.cpp
+	$(XGETTEXT) rc.cpp *.cc -o $(podir)/koshell.pot
 

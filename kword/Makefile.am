@@ -47,5 +47,5 @@ rc_DATA = kword.rc
 
 SUBDIRS = . toolbar templates dtd pics
 
-messages:
-	$(XGETTEXT)  *.cc -o $(podir)/kword.pot
+messages: rc.cpp
+	$(XGETTEXT) rc.cpp *.cc -o $(podir)/kword.pot

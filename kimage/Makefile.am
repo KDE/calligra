@@ -38,6 +38,6 @@ kdemimedir = $(kde_mimedir)/application
 rcdir = $(kde_datadir)/kimage
 rc_DATA = kimage.rc
 
-messages:
-	$(XGETTEXT) *.cc -o $(podir)/kimage.pot
+messages: rc.cpp
+	$(XGETTEXT) rc.cpp *.cc -o $(podir)/kimage.pot
 
