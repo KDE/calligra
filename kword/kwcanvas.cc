@@ -1237,6 +1237,7 @@ void KWCanvas::setLeftFrameBorder( Border _frmBrd, bool _b )
                 frame->setLeftBorder(_frmBrd);
             }
         }
+        frame->updateResizeHandles();
     }
     if(leftFrameBorderChanged)
     {
@@ -1285,6 +1286,7 @@ void KWCanvas::setRightFrameBorder( Border _frmBrd, bool _b )
                 rightFrameBorderChanged=true;
             }
         }
+        frame->updateResizeHandles();
     }
     if( rightFrameBorderChanged)
     {
@@ -1333,6 +1335,7 @@ void KWCanvas::setTopFrameBorder( Border _frmBrd, bool _b )
                 frame->setTopBorder(_frmBrd);
             }
         }
+        frame->updateResizeHandles();
     }
     if(topFrameBorderChanged)
     {
@@ -1380,6 +1383,7 @@ void KWCanvas::setBottomFrameBorder( Border _frmBrd, bool _b )
                 frame->setBottomBorder(_frmBrd);
             }
         }
+        frame->updateResizeHandles();
     }
     if(bottomFrameBorderChanged)
     {
@@ -1478,6 +1482,7 @@ void KWCanvas::setOutlineFrameBorder( Border _frmBrd, bool _b )
             frame->setLeftBorder(_frmBrd);
             frame->setRightBorder(_frmBrd);
         }
+        frame->updateResizeHandles();
     }
     KMacroCommand * macroCmd = new KMacroCommand( i18n("Change Outline Border") );
     KWFrameBorderCommand *cmd=new KWFrameBorderCommand(QString::null,frameindexListBottom,tmpBorderListBottom,_frmBrd);
