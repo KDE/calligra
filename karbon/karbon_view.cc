@@ -82,13 +82,17 @@ KarbonView::KarbonView( KarbonPart* p, QWidget* parent, const char* name )
 {
 	m_toolbox = 0L;
 	m_currentTool = 0L;
+        m_toolOptionsDocker = 0L;
+        m_documentDocker = 0L;
 	if( p->isReadWrite() )
 		m_toolFactory = new VToolFactory( this );
+        else
+            m_toolFactory = 0L;
 
 	setInstance( KarbonFactory::instance() );
 
 	if( p->isReadWrite() )
-		m_toolbox->setupTools();
+            m_toolbox->setupTools();
 
 	setAcceptDrops( true );
 
@@ -217,14 +221,14 @@ KarbonView::removeContainer( QWidget *container, QWidget *parent,
 {
 	if( shell() && m_toolbox )
 	{
-		delete m_toolbox;
-		delete m_toolOptionsDocker;
-		delete m_documentDocker;
-		m_toolbox = 0L;
-		delete m_toolFactory;
-		m_toolFactory = 0L;
-		m_currentTool = 0L;
-		return ;
+            delete m_toolbox;
+            delete m_toolOptionsDocker;
+            delete m_documentDocker;
+            m_toolbox = 0L;
+            delete m_toolFactory;
+            m_toolFactory = 0L;
+            m_currentTool = 0L;
+            return ;
 	}
 
 	KXMLGUIBuilder::removeContainer( container, parent, element, id );
