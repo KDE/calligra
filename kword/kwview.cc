@@ -3021,7 +3021,6 @@ void KWView::slotFrameSetEditChanged()
     actionEditCut->setEnabled( hasSelection && rw );
     actionEditCopy->setEnabled( hasSelection );
     actionFormatDefault->setEnabled( hasSelection && rw);
-    actionChangeCase->setEnabled( hasSelection && rw);
     clipboardDataChanged(); // for paste
 
     bool state = (edit != 0L) && rw;
@@ -3040,7 +3039,7 @@ void KWView::slotFrameSetEditChanged()
     actionFormatAlignRight->setEnabled(state);
     actionFormatAlignBlock->setEnabled(state);
     actionFormatIncreaseIndent->setEnabled(state);
-    actionChangeCase->setEnabled(state);
+    actionChangeCase->setEnabled( hasSelection && state);
 
 
     bool goodleftMargin=false;
