@@ -27,8 +27,8 @@
 
 //class PropertyBufferItem;
 
-/** This class is a QMap<QString, KexiProperty> which holds properties to be shown in 
-    Property Editor.
+/** This class is a QDict<KexiProperty> which holds properties to be shown in 
+    Property Editor. Properties are indexed by their names, case insensitively.
     \sa KexiPropertyEditor for help on how to use KexiPropertyBuffer.
     \sa KexiProperty to see how to create properties.
 **/

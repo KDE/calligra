@@ -25,7 +25,7 @@
 
 KexiPropertyBuffer::KexiPropertyBuffer(QObject *parent, const QString &type_name)
  : QObject(parent, type_name.latin1())
-	,QDict<KexiProperty>(101)
+	,QDict<KexiProperty>(101, false)
 	,m_typeName( type_name )
 {
 	setAutoDelete( true );
