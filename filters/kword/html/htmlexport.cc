@@ -293,44 +293,113 @@ void AllowNoAttributes ( QDomNode )
 //          LAYOUT
 //            NAME value=
 
+// Counter structure, for LayoutData
+class CounterData
+{
+public:
+    CounterData() {}
 
-// FormatData is a container for data retreived from the FORMAT tag
-// and its subtags to be used in the PARAGRAPH tag.
+    enum Numbering
+    {
+        NUM_LIST = 0,       // Numbered as a list item.
+        NUM_CHAPTER = 1,    // Numbered as a heading.
+        NUM_NONE = 2        // No counter.
+    };
+    enum Style
+    {
+        STYLE_NONE = 0,
+        STYLE_NUM = 1, STYLE_ALPHAB_L = 2, STYLE_ALPHAB_U = 3,
+        STYLE_ROM_NUM_L = 4, STYLE_ROM_NUM_U = 5, STYLE_CUSTOMBULLET = 6,
+        STYLE_CUSTOM = 7, STYLE_CIRCLEBULLET = 8, STYLE_SQUAREBULLET = 9,
+        STYLE_DISCBULLET = 10
+    };
+    Numbering numbering;
+    Style style;
+    /*unsigned*/ int depth;
+    int start;
+    QString lefttext;
+    QString righttext;
+
+    int /*QChar*/ customCharacter;
+    QString customFont;
+    //QString custom;
+};
+
+// Paragraph layout
+class LayoutData
+{
+public:
+    LayoutData() { init(); }
+
+    QString styleName;
+    QString alignment;
+    CounterData counter;
+
+    void init()
+    {
+    }
+};
 
 static void ProcessLayoutNameTag ( QDomNode myNode, void *tagData, QString &, ClassExportFilterBase* )
 {
-    QString *layout = (QString *) tagData;
+    LayoutData *layout = (LayoutData *) tagData;
 
-    *layout = "";
+    layout->styleName = "";
     QValueList<AttrProcessing> attrProcessingList;
-    attrProcessingList.append ( AttrProcessing ( "value", "QString", (void *) layout ) );
+    attrProcessingList.append ( AttrProcessing ( "value", "QString", (void *) &layout->styleName ) );
     ProcessAttributes (myNode, attrProcessingList);
 
-    if ( *layout == "" )
+    if ( layout->styleName == "" )
     {
-        *layout = "Standard";
-
+        layout->styleName = "Standard";
         kdError(30503) << "Bad layout name value!" << endl;
     }
 
     AllowNoSubtags (myNode);
 }
 
+static void ProcessLayoutFlowTag ( QDomNode myNode, void *tagData, QString &, ClassExportFilterBase* )
+{
+    LayoutData *layout = (LayoutData *) tagData;
+
+    layout->alignment = "";
+    QValueList<AttrProcessing> attrProcessingList;
+    attrProcessingList.append ( AttrProcessing ( "align", "QString", (void *) &layout->alignment ) );
+    ProcessAttributes (myNode, attrProcessingList);
+
+    AllowNoSubtags (myNode);
+}
+
+static void ProcessCounterTag ( QDomNode myNode, void *tagData, QString &, ClassExportFilterBase* )
+{
+    CounterData *counter = (CounterData *) tagData;
+    QValueList<AttrProcessing> attrProcessingList;
+    attrProcessingList.append ( AttrProcessing ( "numberingtype", "int", (void *) &counter->numbering ) );
+    attrProcessingList.append ( AttrProcessing ( "type", "int", (void *) &counter->style ) );
+    attrProcessingList.append ( AttrProcessing ( "depth", "int", (void *) &counter->depth ) );
+    attrProcessingList.append ( AttrProcessing ( "start", "int", (void *) &counter->start ) );
+    attrProcessingList.append ( AttrProcessing ( "lefttext", "QString", (void *) &counter->lefttext ) );
+    attrProcessingList.append ( AttrProcessing ( "righttext", "QString", (void *) &counter->righttext ) );
+    attrProcessingList.append ( AttrProcessing ( "bullet", "int", (void *) &counter->customCharacter ) );
+    attrProcessingList.append ( AttrProcessing ( "bulletfont", "QString", (void *) &counter->customFont ) );
+    ProcessAttributes (myNode, attrProcessingList);
+
+    AllowNoSubtags (myNode);
+}
 
 static void ProcessLayoutTag ( QDomNode myNode, void *tagData, QString &outputText, ClassExportFilterBase* exportFilter )
 {
-    QString *layout = (QString *) tagData;
+    LayoutData *layout = (LayoutData *) tagData;
 
     AllowNoAttributes (myNode);
 
-    *layout = "";
     QValueList<TagProcessing> tagProcessingList;
     tagProcessingList.append ( TagProcessing ( "NAME",        ProcessLayoutNameTag, (void *) layout ) );
     tagProcessingList.append ( TagProcessing ( "FOLLOWING",   NULL,                 NULL            ) );
-    tagProcessingList.append ( TagProcessing ( "COUNTER",     NULL,                 NULL            ) );
+    tagProcessingList.append ( TagProcessing ( "COUNTER",     ProcessCounterTag,    (void *) & layout->counter ) );
     tagProcessingList.append ( TagProcessing ( "FORMAT",      NULL,                 NULL            ) );
     tagProcessingList.append ( TagProcessing ( "TABULATOR",   NULL,                 NULL            ) );
-    tagProcessingList.append ( TagProcessing ( "FLOW",        NULL,                 NULL            ) );
+    tagProcessingList.append ( TagProcessing ( "FLOW",        ProcessLayoutFlowTag, (void *) layout ) );
     tagProcessingList.append ( TagProcessing ( "INDENTS",     NULL,                 NULL            ) );
     tagProcessingList.append ( TagProcessing ( "OFFSETS",     NULL,                 NULL            ) );
     tagProcessingList.append ( TagProcessing ( "LINESPACING", NULL,                 NULL            ) );
@@ -338,6 +407,8 @@ static void ProcessLayoutTag ( QDomNode myNode, void *tagData, QString &outputTe
     ProcessSubtags (myNode, tagProcessingList, outputText, exportFilter);
 }
 
+// FormatData is a container for data retreived from the FORMAT tag
+// and its subtags to be used in the PARAGRAPH tag.
 class FormatData
 {
     public:
@@ -366,8 +437,8 @@ class FormatData
     private:
         void init()
         {
-            //Initiate member variables
-            // (initiate all variables, even those to 0!)
+            //Initialize member variables
+            // (initialize all variables, even those to 0!)
             weight=0;
             fontSize=-1;
             colour=QColor();
@@ -645,7 +716,7 @@ static void ProcessParagraphTag ( QDomNode myNode, void *, QString   &outputText
 
     QString paraText;
     ValueListFormatData paraFormatDataList;
-    QString paraLayout;
+    LayoutData paraLayout;
     QValueList<TagProcessing> tagProcessingList;
 
     tagProcessingList.append ( TagProcessing ( "TEXT",    ProcessTextTag,       (void *) &paraText           ) );
@@ -664,48 +735,21 @@ static void ProcessParagraphTag ( QDomNode myNode, void *, QString   &outputText
         strParaText="&nbsp;";
     }
 
-    if ( paraLayout == "Head 1" )
+    if ( paraLayout.counter.numbering == CounterData::NUM_CHAPTER )
     {
-        outputText += "<h1>";
-        outputText +=strParaText;
-        outputText += "</h1>\n";
+        int depth = paraLayout.counter.depth + 1;
+        outputText += QString("<h%1>%2</h%3>\n").arg(depth).arg(strParaText).arg(depth);
     }
-    else if ( paraLayout == "Head 2" )
+    // TODO NUM_LIST
+    else if ( !paraLayout.alignment.isEmpty() && paraLayout.alignment != "left" ) // left doesn't need to be set explicitely
     {
-        outputText += "<h2>";
-        outputText +=strParaText;
-        outputText += "</h2>\n";
+        QString align = paraLayout.alignment; // center, right, or justify - is justify correct in HTML ?
+        outputText += QString("<p align=%1>%2</p>\n").arg(align).arg(strParaText);
     }
-    else if ( paraLayout == "Head 3" )
-    {
-        outputText += "<h3>";  //Warning: No trailing white space or else it's in the text!!!
-        outputText +=strParaText;
-        outputText += "</h3>\n";
-    }
-    /*
-    else if ( paraLayout == "Bullet List" )
-    {
-        outputText += "<p>"; //TODO
-        outputText +=strParaText;
-        outputText += "</p>\n";
-    }
-    else if ( paraLayout == "Enumerated List" )
-    {
-        outputText += "<p>"; //TODO
-        outputText +=strParaText;
-        outputText += "</p>\n";
-    }
-    else if ( paraLayout == "Alphabetical List" )
-    {
-        outputText += "<p>"; //TODO
-        outputText +=strParaText;
-        outputText += "</p>\n";
-    }
-    */
     else
-    {// We don't know the layout, so assume it's "Standard". It's better than to abort with an error!
+    {
         outputText += "<p>";
-        outputText +=strParaText;
+        outputText += strParaText;
         outputText += "</p>\n";
     }
 }
