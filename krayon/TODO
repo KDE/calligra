@@ -22,7 +22,6 @@ we want to have in the 1.0 release:
 - basic import/export filters (png/jpg/tif/gif)
 - basic plugin filters (blur/sharpen etc.)
 - basic image transformations (rotate, mirror)
-
 - move tool
 - crop tool
 - basic text tool
@@ -34,16 +33,14 @@ we want to have in the 1.0 release:
 - airbrush (paint brush or pattern)
 - eraser
 - blur/sharpen with brush tool 
-
 - fullscreen editing mode
-
-- Rules a la gimp
-- Restore default tool functionality
-- Rotates layout
+- Rules a la gimp 
+- Rotate layouts
 - Saves channel information to file
 
 BUGS
 
-Paste tool and paste is broken
-Select Ellipse Tool is broken
-Selection tools don't get redrawed when they need to
+- Paste tool and paste is broken
+- Selection tools don't get redrawed when they need to
+- Select Ellipse Tool is broken
+
