@@ -2211,7 +2211,7 @@ void KoPgNumVariable::setSectionTitle( const QString& _title )
     QString title( _title );
     if ( title.isEmpty() )
     {
-        title = i18n("<None>"); // TODO after msg freeze: <No title>
+        title = i18n("<No title>");
     }
     m_varValue = QVariant( title );
 }
