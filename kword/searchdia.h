@@ -22,8 +22,6 @@
 #ifndef searchdia_h
 #define searchdia_h
 
-#include <koFind.h>
-#include <koReplace.h>
 #include <qstring.h>
 #include <qstringlist.h>
 #include <qrichtext_p.h>
