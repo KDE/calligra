@@ -577,17 +577,9 @@ QDomElement KPTextObject::saveKTextObject( QDomDocument& doc )
         for ( int i = 0; i < parag->length(); ++i ) {
             KTextEditString::Char *c = parag->at( i );
             if ( !lastFormat || c->format->key() != lastFormat->key() ) {
-                if ( lastFormat ) {
-                    QDomElement element=doc.createElement("TEXT");
-                    element.setAttribute("family", tmpFamily);
-                    element.setAttribute("pointSize", tmpPointSize);
-                    element.setAttribute("bold", tmpBold);
-                    element.setAttribute("italic", tmpItalic);
-                    element.setAttribute("underline", tmpUnderline);
-                    element.setAttribute("color", tmpColor);
-                    element.appendChild(doc.createTextNode(tmpText));
-                    paragraph.appendChild(element);
-                }
+                if ( lastFormat )
+                    paragraph.appendChild(saveHelper(tmpText, tmpFamily, tmpColor, tmpPointSize,
+                                                     tmpBold, tmpItalic, tmpUnderline, doc));
                 lastFormat = c->format;
                 tmpText="";
                 tmpFamily=lastFormat->font().family();
@@ -600,20 +592,30 @@ QDomElement KPTextObject::saveKTextObject( QDomDocument& doc )
             tmpText+=c->c;
         }
         if ( lastFormat ) {
-            QDomElement element=doc.createElement("TEXT");
-            element.setAttribute("family", tmpFamily);
-            element.setAttribute("pointSize", tmpPointSize);
-            element.setAttribute("bold", tmpBold);
-            element.setAttribute("italic", tmpItalic);
-            element.setAttribute("underline", tmpUnderline);
-            element.setAttribute("color", tmpColor);
-            element.appendChild(doc.createTextNode(tmpText));
-            paragraph.appendChild(element);
+            paragraph.appendChild(saveHelper(tmpText, tmpFamily, tmpColor, tmpPointSize,
+                                             tmpBold, tmpItalic, tmpUnderline, doc));
         }
         textobj.appendChild(paragraph);
         parag = parag->next();
     }
     return textobj;
+}
+
+QDomElement KPTextObject::saveHelper(const QString &tmpText, const QString &tmpFamily, const QString &tmpColor,
+                                     int tmpPointSize, unsigned int tmpBold, unsigned int tmpItalic,
+                                     unsigned int tmpUnderline, QDomDocument &doc) {
+    QDomElement element=doc.createElement("TEXT");
+    element.setAttribute("family", tmpFamily);
+    element.setAttribute("pointSize", tmpPointSize);
+    element.setAttribute("bold", tmpBold);
+    element.setAttribute("italic", tmpItalic);
+    element.setAttribute("underline", tmpUnderline);
+    element.setAttribute("color", tmpColor);
+    if(tmpText.stripWhiteSpace().isEmpty())
+        // working around a bug in QDom
+        element.setAttribute("whitespace", tmpText.length());
+    element.appendChild(doc.createTextNode(tmpText));
+    return element;
 }
 
 /*====================== load ktextobject ========================*/
@@ -654,14 +656,16 @@ void KPTextObject::loadKTextObject( const QDomElement &elem, int type )
                     QColor col( color );
                     fm = ktextobject.document()->formatCollection()->format( fn, col );
                     QString txt = n.firstChild().toText().data();
+                    if(n.hasAttribute("whitespace")) {
+                        int ws=n.attribute("whitespace").toInt();
+                        txt.fill(' ', ws);
+                    }
                     n=n.nextSibling().toElement();
-                    if ( txt.isEmpty() && lastParag->length() == 0 )
+                    if ( txt.isEmpty() )
                         txt = ' ';
                     if ( !txt.isEmpty() ) {
-                        if ( (!txt[txt.length()-1].isSpace()  && n.isNull()) || (txt.length()==1 && txt[0].isSpace()) ) {
-                            kdWarning() << "Found a TEXT element which doesn't end with a trailing space, adding one." << endl;
+                        if ( ( !txt[txt.length()-1].isSpace()  && n.isNull() ) )
                             txt+=' ';
-                        }
                         lastParag->append( txt );
                         lastParag->setFormat( i, txt.length(), fm, TRUE, KTextEditFormat::Format );
                         i += txt.length();

@@ -63,6 +63,7 @@ class KTextEditFormat;
 class KTextEditFormatCollection;
 
 // +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+//#define DEBUG_COLLECTION 1
 
 class KTextEditCursor
 {

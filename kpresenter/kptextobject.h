@@ -113,6 +113,10 @@ public:
 
 protected:
     virtual QDomElement saveKTextObject( QDomDocument& doc );
+    QDomElement saveHelper(const QString &tmpText, const QString &tmpFamily, const QString &tmpColor,
+                           int tmpPointSize, unsigned int tmpBold, unsigned int tmpItalic,
+                           unsigned int tmpUnderline, QDomDocument &doc);
+
     virtual void loadKTextObject( const QDomElement &e, int type );
     void drawParags( QPainter *p, int from, int to );
 
