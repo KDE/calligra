@@ -58,6 +58,11 @@ void KoTextViewIface::setUnderline(bool on)
     m_textView->setUnderlineCommand(on);
 }
 
+void KoTextViewIface::setDoubleUnderline(bool on)
+{
+    m_textView->setDoubleUnderlineCommand(on);
+}
+
 void KoTextViewIface::setStrikeOut(bool on)
 {
     m_textView->setStrikeOutCommand(on);

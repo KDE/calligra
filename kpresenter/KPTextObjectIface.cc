@@ -80,6 +80,11 @@ void KPTextObjectIface::setUnderlineText( bool b )
     m_textobject->textObject()->setUnderlineCommand(b);
 }
 
+void KPTextObjectIface::setDoubleUnderlineText( bool b )
+{
+    m_textobject->textObject()->setDoubleUnderlineCommand(b);
+}
+
 void KPTextObjectIface::setStrikeOutText( bool b )
 {
     m_textobject->textObject()->setStrikeOutCommand(b);
