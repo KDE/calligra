@@ -332,6 +332,14 @@ SvgImport::parsePA( GraphicsContext *gc, const QString &command, const QString &
 		fillcolor.setOpacity( params.toFloat() );
 		strokecolor.setOpacity( params.toFloat() );
 	}
+	else if( command == "font-family" )
+	{
+		QString family = params;
+		family = family.replace( QChar( '\'' ) , QChar( ' ' ) );
+		gc->font.setFamily( family );
+	}
+	else if( command == "font-size" )
+		gc->font.setPointSize( params.toUInt() );
 
 	if( gc->fill.type() == VFill::solid )
 		gc->fill.setColor( fillcolor );
@@ -494,14 +502,13 @@ SvgImport::parseGroup( VGroup *grp, const QDomElement &e )
 		{
 			VText *text = new VText( &m_document );
 			text->setText( b.text() );
-			QFont font;
-			//font.setFamily( b.attribute( "" ) );
-			text->setFont( font );
 			VPath base( 0L );
 			base.moveTo( KoPoint( 100, 100 ) );
 			base.lineTo( KoPoint( 200, 100 ) );
 			text->setBasePath( base );
 			obj = text;
+			parseStyle( obj, b );
+			text->setFont( m_gc.current()->font );
 		}
 		if( !obj ) continue;
 		parseStyle( obj, b );

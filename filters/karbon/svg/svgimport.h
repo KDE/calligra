@@ -53,6 +53,7 @@ protected:
 		VFill		fill;
 		VStroke		stroke;
 		QWMatrix	matrix;
+		QFont		font;
 	};
 
 	void parsePath( VComposite *, const QDomElement & );
