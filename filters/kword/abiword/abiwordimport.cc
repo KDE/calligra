@@ -445,20 +445,6 @@ bool StartElementP(StackItem* stackItem, StackItem* stackCurrent, QDomElement& m
     }
     layoutElement.appendChild(element);
 
-#if 0
-    // The following tabulators were KWord's 0.8 one
-    // We trust now on KWord's 1.0 default tabulators.
-    element=layoutElement.ownerDocument().createElement("TABULATOR");
-    element.setAttribute("type","0");
-    element.setAttribute("ptpos","182");
-    layoutElement.appendChild(element);
-
-    element=layoutElement.ownerDocument().createElement("TABULATOR");
-    element.setAttribute("type","0");
-    element.setAttribute("ptpos","365");
-    layoutElement.appendChild(element);
-#endif
-
     QDomElement formatElementOut=layoutElement.ownerDocument().createElement("FORMAT");
     layoutElement.appendChild(formatElementOut);
 
@@ -545,17 +531,23 @@ bool EndElementP (StackItem* stackItem)
     return true;
 }
 
-// <pbr> (forced bage break
-bool StartElementPBR(StackItem* stackItem, StackItem* stackCurrent, QDomDocument& mainDocument, QDomElement& mainFramesetElement)
+// <br> (forced line break)
+static bool StartElementBR(StackItem* stackItem, StackItem* stackCurrent,
+                           QDomDocument& mainDocument,
+                           QDomElement& mainFramesetElement)
 {
+    // We are simulating a line break by starting a new paragraph!
+    // TODO: when KWord has learnt what line breaks are, change to them.
+
     if (stackCurrent->elementType==ElementTypeContent)
     {
-        kdWarning(30506) << "Forced page break in <c> element! Ignoring! (Not supported)" <<endl;
+        // TODO: this can happen in an AbiWord file, so we must support it!
+        kdWarning(30506) << "Forced line break in <c> element! Ignoring! (Not supported)" <<endl;
         return true; // It is only a warning, so continue parsing!
     }
     if (stackCurrent->elementType!=ElementTypeParagraph)
     {
-        kdError(30506) << "Forced page break found out of turn! Aborting! (in StartElementPBR)" <<endl;
+        kdError(30506) << "Forced line break found out of turn! Aborting! (in StartElementPBR)" <<endl;
         return false;
     }
     // Now we are sure to be the child of a <p> element
@@ -575,7 +567,7 @@ bool StartElementPBR(StackItem* stackItem, StackItem* stackCurrent, QDomDocument
 
     if (!nodeList.count())
     {
-        kdError(30506) << "Unable to find <LAYOUT> element! Aborting! (in StartElementPBR)" <<endl;
+        kdError(30506) << "Unable to find <LAYOUT> element! Aborting! (in StartElementBR)" <<endl;
         return false;
     }
 
@@ -583,12 +575,10 @@ bool StartElementPBR(StackItem* stackItem, StackItem* stackCurrent, QDomDocument
     QDomNode newNode=nodeList.item(0).cloneNode(true); // We make a deep cloning of the first element/node
     if (newNode.isNull())
     {
-        kdError(30506) << "Unable to clone <LAYOUT> element! Aborting! (in StartElementPBR)" <<endl;
+        kdError(30506) << "Unable to clone <LAYOUT> element! Aborting! (in StartElementBR)" <<endl;
         return false;
     }
     paragraphElementOut.appendChild(newNode);
-
-    // TODO: add to layout that a page break occured! (in the old paragraph!)
 
     // NOTE: The following code is similar to StartElementP but we are working on stackCurrent!
     // Now that we have done with the old paragraph,
@@ -864,13 +854,13 @@ bool StructureParser :: startElement( const QString&, const QString&, const QStr
         stackItem->stackNode=structureStack.current()->stackNode;
         success=true;
     }
-    else if ((name=="pbr") || (name=="PBR")) // TODO: does it really exists as upper-case?
+    else if (name=="br") // NOTE: Not sure if it only exists in lower case!
     {
-        // We have a forced page break
+        // We have a forced line break
         // NOTE: this is an empty element!
         stackItem->elementType=ElementTypeEmpty;
         stackItem->stackNode=structureStack.current()->stackNode;
-        success=StartElementPBR(stackItem,structureStack.current(),mainDocument,mainFramesetElement);
+        success=StartElementBR(stackItem,structureStack.current(),mainDocument,mainFramesetElement);
     }
     else if (name=="pagesize")
         // Does only exists as lower case tag!

@@ -50,6 +50,7 @@ void TreatCSS2Styles(QString strProps,QValueList<CSS2Styles> &css2StylesList);
 enum StackItemElementType{
     ElementTypeUnknown  = 0,
     ElementTypeBottom,      // Bottom of the stack
+    ElementTypeEmpty,       // An empty elemnt
     ElementTypeHtml,        // <html>
     ElementTypeBody,        // <body>
     ElementTypeParagraph,   // <p>
@@ -95,12 +96,16 @@ public:
 };
 
 bool TransformCSS2ToStackItem(StackItem* stackItem, StackItem* stackCurrent, QString strStyle);
-bool StartElementSpan(StackItem* stackItem, StackItem* stackCurrent, const QString& strStyleLocal, const QString& strStyleAttribute);
+bool StartElementSpan(StackItem* stackItem, StackItem* stackCurrent,
+    const QString& strStyleLocal, const QString& strStyleAttribute);
 bool charactersElementSpan (StackItem* stackItem, const QString & ch);
 bool EndElementSpan (StackItem* stackItem, StackItem* stackCurrent);
-bool StartElementP(StackItem* stackItem, StackItem* stackCurrent, QDomElement& mainFramesetElement,
-        const QString& strStyleLocal, const QString& strStyleAttribute, const QString& strAlign);
+bool StartElementP(StackItem* stackItem, StackItem* stackCurrent,
+    QDomElement& mainFramesetElement, const QString& strStyleLocal,
+    const QString& strStyleAttribute, const QString& strAlign);
 bool charactersElementP (StackItem* stackItem, const QString & ch);
 bool EndElementP (StackItem* stackItem);
+bool StartElementBR(StackItem* stackItem, StackItem* stackCurrent,
+    QDomDocument& mainDocument,QDomElement& mainFramesetElement);
 
 #endif // HTMLIMPORTSAX_H

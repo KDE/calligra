@@ -110,6 +110,12 @@ bool HtmlListener :: doStartElement(const QString& name, const HtmlAttributes& a
         stackItem->stackNode=structureStack.current()->stackNode;
         success=true;
     }
+    else if (name=="br")
+    {
+        stackItem->elementType=ElementTypeEmpty;
+        stackItem->stackNode=structureStack.current()->stackNode;
+        success=StartElementBR(stackItem,structureStack.current(),mainDocument,mainFramesetElement);
+    }
     else if (name=="body") // Special case (FIXME/TODO)
     {
         // Just tell that we are the <body> element.
@@ -219,6 +225,15 @@ bool HtmlListener :: doCharacters ( const QString & ch )
     else if (stackItem->elementType==ElementTypeParagraph)
     { // <p>
         success=charactersElementP(stackItem,ch);
+    }
+    else if (stackItem->elementType==ElementTypeEmpty)
+    {
+        success=ch.stripWhiteSpace().isEmpty();
+        if (!success)
+        {
+            // We have a parsing error, so abort!
+            kdError(30503) << "Empty element is not empty! Aborting! (in HtmlListener :: doCharacters)" << endl;
+        }
     }
     else
     {

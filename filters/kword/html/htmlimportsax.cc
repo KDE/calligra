@@ -344,20 +344,6 @@ bool StartElementP(StackItem* stackItem, StackItem* stackCurrent, QDomElement& m
     }
     layoutElement.appendChild(element);
 
-#if 0
-	// The following tabulators were KWord's 0.8 one
-	// We trust now on KWord's 1.0 default tabulators.
-    element=layoutElement.ownerDocument().createElement("TABULATOR");
-    element.setAttribute("type","0");
-    element.setAttribute("ptpos","182");
-    layoutElement.appendChild(element);
-
-    element=layoutElement.ownerDocument().createElement("TABULATOR");
-    element.setAttribute("type","0");
-    element.setAttribute("ptpos","365");
-    layoutElement.appendChild(element);
-#endif
-
     QDomElement formatElementOut=layoutElement.ownerDocument().createElement("FORMAT");
     layoutElement.appendChild(formatElementOut);
 
@@ -422,3 +408,65 @@ bool EndElementP (StackItem* stackItem)
     stackItem->stackNode.toElement().normalize();
     return true;
 }
+
+// <br> (forced line break)
+bool StartElementBR(StackItem* stackItem, StackItem* stackCurrent,
+                    QDomDocument& mainDocument,
+                    QDomElement& mainFramesetElement)
+{
+    // We are simulating a line break by starting a new paragraph!
+    // TODO: when KWord has learnt what line breaks are, change to them.
+
+    if (stackCurrent->elementType==ElementTypeSpan)
+    {
+        // TODO: this can probabily happen , so we must support it!
+        kdWarning(30503) << "Forced line break in <span> element! Ignoring! (Not supported)" <<endl;
+        return true; // It is only a warning, so continue parsing!
+    }
+    if (stackCurrent->elementType!=ElementTypeParagraph)
+    {
+        kdError(30503) << "Forced line break found out of turn! Aborting! (in StartElementPBR)" <<endl;
+        return false;
+    }
+    // Now we are sure to be the child of a <p> element
+
+    // The following code is similar to StartElementP
+    // We use mainFramesetElement here not to be dependant that <section> has happened before
+    QDomElement paragraphElementOut=mainDocument.createElement("PARAGRAPH");
+    mainFramesetElement.appendChild(paragraphElementOut);
+    QDomElement textElementOut=mainDocument.createElement("TEXT");
+    paragraphElementOut.appendChild(textElementOut);
+    QDomElement formatsPluralElementOut=mainDocument.createElement("FORMATS");
+    paragraphElementOut.appendChild(formatsPluralElementOut);
+
+    // We must now copy/clone the layout of nodeOut.
+
+    QDomNodeList nodeList=stackCurrent->stackNode.toElement().elementsByTagName("LAYOUT");
+
+    if (!nodeList.count())
+    {
+        kdError(30503) << "Unable to find <LAYOUT> element! Aborting! (in StartElementBR)" <<endl;
+        kdDebug(30503) << mainDocument.toString() << endl;
+        return false;
+    }
+
+    // Now clone it
+    QDomNode newNode=nodeList.item(0).cloneNode(true); // We make a deep cloning of the first element/node
+    if (newNode.isNull())
+    {
+        kdError(30503) << "Unable to clone <LAYOUT> element! Aborting! (in StartElementBR)" <<endl;
+        return false;
+    }
+    paragraphElementOut.appendChild(newNode);
+
+    // NOTE: The following code is similar to StartElementP but we are working on stackCurrent!
+    // Now that we have done with the old paragraph,
+    //  we can write stackCurrent with the data of the new one!
+    stackCurrent->elementType=ElementTypeParagraph;
+    stackCurrent->stackNode=textElementOut; // <TEXT>
+    stackCurrent->stackNode2=formatsPluralElementOut; // <FORMATS>
+    stackCurrent->pos=0; // No text characters yet
+
+    return true;
+}
+
