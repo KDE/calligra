@@ -1,1 +1,1 @@
-SUBDIRS = kword
+SUBDIRS = kword ooimpress
