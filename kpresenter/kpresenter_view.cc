@@ -3057,7 +3057,7 @@ void KPresenterView::setupActions()
     actionInsertVariable->insert(actionInsertCustom);
     refreshCustomMenu();
 
-    addVariableActions( VT_PGNUM, KoPgNumVariable::actionTexts(), actionInsertVariable, QString::null );
+    addVariableActions( VT_PGNUM, KoPgNumVariable::actionTexts(), actionInsertVariable, i18n("&Page") );
 
     actionInsertVariable->popupMenu()->insertSeparator();
     actionRefreshAllVariable = new KAction( i18n( "&Refresh all variables" ), 0,
