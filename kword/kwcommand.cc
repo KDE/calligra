@@ -245,6 +245,12 @@ KWFrameBorderCommand::KWFrameBorderCommand( const QString &name, QPtrList<FrameI
 {
 }
 
+KWFrameBorderCommand::~KWFrameBorderCommand()
+{
+    m_indexFrame.setAutoDelete( true);
+    m_oldBorderFrameType.setAutoDelete( true);
+}
+
 void KWFrameBorderCommand::execute()
 {
     FrameIndex *tmp;

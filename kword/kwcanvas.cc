@@ -148,7 +148,7 @@ KWCanvas::~KWCanvas()
         w->hide();
     }
     delete l;
-
+    delete cmdMoveFrame;
     delete m_currentFrameSetEdit;
     m_currentFrameSetEdit = 0L;
 }
@@ -1641,6 +1641,9 @@ KCommand *KWCanvas::setBottomFrameBorder( KoBorder newBorder, bool on )
     {
         tmpBorderList.setAutoDelete(true);
         frameindexList.setAutoDelete(true);
+        tmpBorderList.clear();
+        frameindexList.clear();
+
     }
     return 0L;
 }
@@ -1675,6 +1678,11 @@ void KWCanvas::setFrameBackgroundColor( const QBrush &_backColor )
         KWFrameBackGroundColorCommand *cmd=new KWFrameBackGroundColorCommand(i18n("Change Frame Background Color"),frameindexList,oldColor,_backColor);
         m_doc->addCommand(cmd);
         m_doc->repaintAllViews();
+    }
+    else
+    {
+        frameindexList.setAutoDelete(true);
+        oldColor.setAutoDelete(true);
     }
 }
 

@@ -99,7 +99,7 @@ class KWFrameBorderCommand : public KNamedCommand
 {
 public:
     KWFrameBorderCommand( const QString &name, QPtrList<FrameIndex> &_listFrameIndex, QPtrList<FrameBorderTypeStruct> &_frameTypeBorder,const KoBorder & _newBorder ) ;
-    ~ KWFrameBorderCommand() {}
+    ~ KWFrameBorderCommand();
 
     void execute();
     void unexecute();

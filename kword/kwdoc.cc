@@ -186,6 +186,7 @@ KWDocument::KWDocument(QWidget *parentWidget, const char *widgetName, QObject* p
     m_lstFrameSet.setAutoDelete( true );
     // m_textImageRequests does not create or delete the KWTextImage classes
     m_textImageRequests.setAutoDelete(false);
+    m_bookmarkList.setAutoDelete( true );
 
     m_styleColl=new KoStyleCollection();
     m_frameStyleColl = new KWFrameStyleCollection();
@@ -332,7 +333,6 @@ KWDocument::~KWDocument()
         saveConfig();
     // formula frames have to be deleted before m_formulaDocument
     m_lstFrameSet.clear();
-    m_bookmarkList.setAutoDelete( true );
     m_bookmarkList.clear();
     m_tmpBookMarkList.clear();
     delete m_autoFormat;
