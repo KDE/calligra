@@ -40,7 +40,7 @@ void TextElement::draw(QPoint drawPoint,int resolution=72)
   if( beActive )
     pen->setPen(red);
   if ( content == "" )
-    pen->drawRect(x+familySize.x(),y-5,10,10);
+    pen->drawRect(x+familySize.x(),y-5,5,10);
   else {
 
 //warning("Font for text");
@@ -162,6 +162,22 @@ if(action==Key_Backspace)
 if(position>content.length()) position=content.length();
 if(position<0)position=0;
 return position;
+}
+
+void TextElement::changeFontFamily(QString family)
+{
+  
+   if (family=="")
+    {
+    if (font!=0L) delete font;	   
+     font=0L;  
+    }
+     else 
+    {
+     if (font==0L) font = new QFont;
+       font->setFamily(family);
+       font->setPointSize(numericFont);
+    } 
 }
 
 void TextElement::setNumericFont(int value)

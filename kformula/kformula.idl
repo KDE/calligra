@@ -49,7 +49,14 @@ module KFormula
           slot void elementColor();
           slot void generalColor();
           slot void generalFont();
-    
+          slot void fractionAlignL();
+          slot void fractionAlignR();
+          slot void fractionAlignC();
+          slot void fractionDist();
+          slot void fractionDistMore();
+          slot void fractionDistLess();
+          slot void delimiterLeft(in string left);
+          slot void delimiterRight(in string right);    
 //	  slot void insertIndex(in unsigned long i);
 	};
 

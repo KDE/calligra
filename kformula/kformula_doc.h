@@ -92,9 +92,9 @@ class KFormulaDocument : public QObject,
     void addRootElement();
     void addIndex(int index);
     void addFractionElement(QString cont);
-    /*
-    void addMatrixElement();
-    void addIntegralElement();
+    
+    void addMatrixElement(QString cont);
+    /*void addIntegralElement();
 
     void addSymbolElement();
     void addDecorationElement();

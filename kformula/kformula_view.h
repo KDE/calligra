@@ -99,7 +99,14 @@ protected:
     CORBA::Long m_idMenuElement_Matrix_RemCol;
     CORBA::Long m_idMenuElement_Fraction;
     CORBA::Long m_idMenuElement_Fraction_VA;  //Vert Allign
+    CORBA::Long m_idMenuElement_Fraction_VA_U; 
+    CORBA::Long m_idMenuElement_Fraction_VA_D; 
+    CORBA::Long m_idMenuElement_Fraction_VA_M; 
     CORBA::Long m_idMenuElement_Fraction_HA;  //Horiz Allign
+    CORBA::Long m_idMenuElement_Fraction_HA_C;
+    CORBA::Long m_idMenuElement_Fraction_HA_L;
+    CORBA::Long m_idMenuElement_Fraction_HA_R;
+    CORBA::Long m_idMenuElement_Fraction_Dist;
     CORBA::Long m_idMenuElement_Fraction_MidLine;
     CORBA::Long m_idMenuElement_Decoration;
     CORBA::Long m_idMenuElement_Decoration_Set;
@@ -138,9 +145,16 @@ protected:
     CORBA::Long m_idButtonType_Spl;
     CORBA::Long m_idButtonType_RIn;
     CORBA::Long m_idButtonType_Del;
+    CORBA::Long m_idComboType_DelLeft;
+    CORBA::Long m_idComboType_DelRight;
     CORBA::Long m_idButtonType_UAl;
     CORBA::Long m_idButtonType_MAl;
     CORBA::Long m_idButtonType_DAl;
+    CORBA::Long m_idButtonType_LAl;
+    CORBA::Long m_idButtonType_CAl;
+    CORBA::Long m_idButtonType_RAl;
+    CORBA::Long m_idButtonType_Mor;
+    CORBA::Long m_idButtonType_Les;
     CORBA::Long m_idButtonType_Mid;
     CORBA::Long m_idButtonType_AddH;
     CORBA::Long m_idButtonType_AddL;
@@ -164,6 +178,12 @@ protected:
     virtual void fractionAlignU();
     virtual void fractionAlignD();
     virtual void fractionAlignM();
+    virtual void fractionAlignL();
+    virtual void fractionAlignR();
+    virtual void fractionAlignC();
+    virtual void fractionDist();
+    virtual void fractionDistMore();
+    virtual void fractionDistLess();
     virtual void fontSwitch();
     virtual void addTopLeftIndex();
     virtual void addBottomLeftIndex();
@@ -192,7 +212,8 @@ protected:
     virtual void elementColor();
     virtual void generalColor();
     virtual void generalFont();
-    
+    virtual void delimiterLeft(const char*);
+    virtual void delimiterRight(const char*);    
 protected slots:
    void insertIndex(int i);
 };

@@ -1,7 +1,7 @@
 #include "kformula_view.h"
 #include "kformula_doc.h"
 #include "kformula_main.h"
-
+#include "TextElement.h"
 #include <op_app.h>
 #include <utils.h>
 #include <part_frame_impl.h>
@@ -70,6 +70,7 @@ void KFormulaView::setDocument( KFormulaDocument *_doc )
 
     QObject::connect( m_pDoc, SIGNAL( sig_changeType(int) ), 
 		      this, SLOT( slotTypeChanged(int) ) );
+
 }
 
 void KFormulaView::paintEvent( QPaintEvent *_ev )
@@ -346,6 +347,7 @@ void KFormulaView::createGUI()
 							   this,CORBA::string_dup("fontSelected"));
 	m_rToolBarFont->insertComboItem(m_idComboFont_FontFamily ,CORBA::string_dup("utopia"),-1);
 	m_rToolBarFont->insertComboItem(m_idComboFont_FontFamily ,CORBA::string_dup("symbol"),-1);
+	m_rToolBarFont->insertComboItem(m_idComboFont_FontFamily ,CORBA::string_dup("(default)"),-1);
         m_rToolBarFont->setCurrentComboItem(m_idComboFont_FontFamily ,0);
 	    
 	m_idComboFont_FontSize = m_rToolBarFont->insertCombo(true,CORBA::string_dup(i18n("Font Size of active Element")),60,
@@ -437,9 +439,32 @@ void KFormulaView::createGUI()
 // ************************** Brackets ********************	  
             m_rToolBarType->insertSeparator();	
 
-	    m_idButtonType_Del = addToolButton(m_rToolBarType, "delimiter.xpm", 
-					     i18n( "Set delimiter type" ), "bracketType" );
+	//    m_idButtonType_Del = addToolButton(m_rToolBarType, "delimiter.xpm", 
+	//				     i18n( "Set delimiter type" ), "bracketType" );
 
+  m_idComboType_DelLeft = m_rToolBarType->insertCombo(true,CORBA::string_dup(i18n("Left Delimiter")),40,
+							   this,CORBA::string_dup("delimiterLeft"));
+	m_rToolBarType->insertComboItem(m_idComboType_DelLeft ,CORBA::string_dup("("),-1);
+	m_rToolBarType->insertComboItem(m_idComboType_DelLeft ,CORBA::string_dup("["),-1);
+	m_rToolBarType->insertComboItem(m_idComboType_DelLeft ,CORBA::string_dup("<"),-1);
+	m_rToolBarType->insertComboItem(m_idComboType_DelLeft ,CORBA::string_dup("/"),-1);
+	m_rToolBarType->insertComboItem(m_idComboType_DelLeft ,CORBA::string_dup("\\"),-1);
+	m_rToolBarType->insertComboItem(m_idComboType_DelLeft ,CORBA::string_dup(")"),-1);
+	m_rToolBarType->insertComboItem(m_idComboType_DelLeft ,CORBA::string_dup("]"),-1);
+	m_rToolBarType->insertComboItem(m_idComboType_DelLeft ,CORBA::string_dup(">"),-1);
+	m_rToolBarType->insertComboItem(m_idComboType_DelLeft ,CORBA::string_dup("|"),-1);
+  m_idComboType_DelRight = m_rToolBarType->insertCombo(true,CORBA::string_dup(i18n("Right Delimiter")),40,
+							   this,CORBA::string_dup("delimiterRight"));
+							   
+	m_rToolBarType->insertComboItem(m_idComboType_DelRight ,CORBA::string_dup(")"),-1);
+	m_rToolBarType->insertComboItem(m_idComboType_DelRight,CORBA::string_dup("]"),-1);
+	m_rToolBarType->insertComboItem(m_idComboType_DelRight,CORBA::string_dup(">"),-1);
+	m_rToolBarType->insertComboItem(m_idComboType_DelRight ,CORBA::string_dup("/"),-1);
+	m_rToolBarType->insertComboItem(m_idComboType_DelRight ,CORBA::string_dup("\\"),-1);
+	m_rToolBarType->insertComboItem(m_idComboType_DelRight ,CORBA::string_dup("("),-1);
+	m_rToolBarType->insertComboItem(m_idComboType_DelRight ,CORBA::string_dup("["),-1);
+	m_rToolBarType->insertComboItem(m_idComboType_DelRight ,CORBA::string_dup("<"),-1);
+	m_rToolBarType->insertComboItem(m_idComboType_DelRight,CORBA::string_dup("|"),-1);
             m_rToolBarType->insertSeparator();
 // ************************** Fraction ********************
 	    m_idButtonType_MAl = addToolButton(m_rToolBarType, "midalign.xpm", 
@@ -450,6 +475,21 @@ void KFormulaView::createGUI()
 
 	    m_idButtonType_DAl = addToolButton(m_rToolBarType, "downalign.xpm", 
 					     i18n( "Align fraction to denominator" ), "fractionAlignD" );
+
+	    m_idButtonType_CAl = addToolButton(m_rToolBarType, "centralign.xpm", 
+					     i18n( "Align center" ), "fractionAlignC" );
+
+	    m_idButtonType_LAl = addToolButton(m_rToolBarType, "leftalign.xpm", 
+					     i18n( "Align left" ), "fractionAlignL" );
+
+	    m_idButtonType_RAl = addToolButton(m_rToolBarType, "rightalign.xpm", 
+					     i18n( "Align Right" ), "fractionAlignR" );
+
+	    m_idButtonType_Les = addToolButton(m_rToolBarType, "near.xpm", 
+					     i18n( "Reduce element vertical distance" ), "fractionDistLess" );
+
+	    m_idButtonType_Mor = addToolButton(m_rToolBarType, "far.xpm", 
+					     i18n( "Increase element vertical distance" ), "fractionDistMore" );
 
 	    m_idButtonType_Mid = addToolButton(m_rToolBarType, "midline.xpm", 
 					     i18n( "Toggle fraction line" ), "toggleMidline" );
@@ -476,34 +516,62 @@ void KFormulaView::createGUI()
             m_rToolBarType->insertSeparator();
 // *********************** General *************************
 	    m_idButtonType_Pix = addToolButton(m_rToolBarType, "pixmap.xpm", 
-					     i18n( "Remove a column" ), "togglePixmap" );
+					     i18n( "Toggle pixmap use" ), "togglePixmap" );
 
 	    m_rToolBarType->setToggle( m_idButtonType_UAl, true );
 	    m_rToolBarType->setToggle( m_idButtonType_MAl, true );
 	    m_rToolBarType->setToggle( m_idButtonType_DAl, true );
+	    m_rToolBarType->setToggle( m_idButtonType_CAl, true );
+	    m_rToolBarType->setToggle( m_idButtonType_LAl, true );
+	    m_rToolBarType->setToggle( m_idButtonType_RAl, true );
 	    m_rToolBarType->setToggle( m_idButtonType_Mid, true );
 	    
 	    // TODO insert Line Edit control
 	}  
+ slotTypeChanged(0);
 }
 
 
 void KFormulaView::slotTypeChanged(int type)
-{   
-/*   m_rToolBarType->setItemEnabled(m_idButtonType_0,(type==0));          
-   m_rToolBarType->setItemEnabled(m_idButtonType_1,(type==0));          
-   m_rToolBarType->setItemEnabled(m_idButtonType_2,(type==1));          
-   m_rToolBarType->setItemEnabled(m_idButtonType_3,(type==2));          
-   m_rToolBarType->setItemEnabled(m_idButtonType_4,(type==2));          
-   m_rToolBarType->setItemEnabled(m_idButtonType_5,(type==3));          
-*/debug("Type Changed");
+{  
+   m_rToolBarType->setItemEnabled(m_idButtonType_Spl,(type==EL_TEXT));          
+   m_rToolBarType->setItemEnabled(m_idComboType_DelLeft,(type==EL_BRACKET));          
+   m_rToolBarType->setItemEnabled(m_idComboType_DelRight,(type==EL_BRACKET));           
+   m_rToolBarType->setItemEnabled(m_idButtonType_RIn,(type==EL_ROOT));          
+   m_rToolBarType->setItemEnabled(m_idButtonType_UAl,(type==EL_FRACTION));          
+   m_rToolBarType->setItemEnabled(m_idButtonType_DAl,(type==EL_FRACTION));          
+   m_rToolBarType->setItemEnabled(m_idButtonType_MAl,(type==EL_FRACTION));           
+   m_rToolBarType->setItemEnabled(m_idButtonType_Mid,(type==EL_FRACTION));          
+   m_rToolBarType->setItemEnabled(m_idButtonType_CAl,(type==EL_FRACTION));          
+   m_rToolBarType->setItemEnabled(m_idButtonType_LAl,(type==EL_FRACTION));          
+   m_rToolBarType->setItemEnabled(m_idButtonType_RAl,(type==EL_FRACTION));           
+   m_rToolBarType->setItemEnabled(m_idButtonType_Les,(type==EL_FRACTION));          
+   m_rToolBarType->setItemEnabled(m_idButtonType_Mor,(type==EL_FRACTION));          
+   m_rToolBarType->setItemEnabled(m_idButtonType_AddH,(type==EL_INTEGRAL));          
+   m_rToolBarType->setItemEnabled(m_idButtonType_AddL,(type==EL_INTEGRAL));          
+   m_rToolBarType->setItemEnabled(m_idButtonType_SetM,(type==EL_MATRIX));           
+   m_rToolBarType->setItemEnabled(m_idButtonType_InC,(type==EL_MATRIX));
+   m_rToolBarType->setItemEnabled(m_idButtonType_InR,(type==EL_MATRIX));
+   m_rToolBarType->setItemEnabled(m_idButtonType_ReC,(type==EL_MATRIX));    
+   m_rToolBarType->setItemEnabled(m_idButtonType_ReR,(type==EL_MATRIX));
+if(type==EL_FRACTION){ 
+   QString content=m_pDoc->activeElement()->getContent();
+   m_rToolBarType->setButton(m_idButtonType_UAl,content[1]=='U');          
+   m_rToolBarType->setButton(m_idButtonType_DAl,content[1]=='D');          
+   m_rToolBarType->setButton(m_idButtonType_MAl,content[1]=='M');          
+   m_rToolBarType->setButton(m_idButtonType_CAl,content[2]=='C');          
+   m_rToolBarType->setButton(m_idButtonType_LAl,content[2]=='L');          
+   m_rToolBarType->setButton(m_idButtonType_RAl,content[2]=='R');          
+   m_rToolBarType->setButton(m_idButtonType_Mid,content[0]=='F');          
+  }
+ debug("Type Changed");
     update();
 
 }
 
 
 void KFormulaView::slotModified()
-{
+{ 
     update();
 }
 
@@ -538,25 +606,26 @@ void KFormulaView::addRoot()
 void KFormulaView::addFraction()
 {
     debug("adding Fraction");
-    m_pDoc->addFractionElement("FMCC10");
+    m_pDoc->addFractionElement("FMC10");
 }
 
 void KFormulaView::addVertSpace()
 {
     debug("adding VerticalSpace");
-    m_pDoc->addFractionElement("VULC40");
+    m_pDoc->addFractionElement("VUC10");
 }
 
 void KFormulaView::addBracket()
 {
     debug("adding parenthesis");
-    m_pDoc->addBracketElement("[]");
+    m_pDoc->addBracketElement("()");
 //    m_rToolBarType->hide();
 }
 
 void KFormulaView::addMatrix()
 {
-    debug("##adding Integral");
+    debug("adding Matrix");
+    m_pDoc->addMatrixElement("003003001006CCNNNNNN");
 }
 
 void KFormulaView::addIntegral()
@@ -601,7 +670,10 @@ void KFormulaView::enlarge()
 
 
 void KFormulaView::fractionAlignM()
-{
+{ 
+ QString content=m_pDoc->activeElement()->getContent();
+ content[1]='M';
+ m_pDoc->activeElement()->setContent(content);
  m_rToolBarType->setButton(m_idButtonType_MAl,false);
  m_rToolBarType->setButton(m_idButtonType_DAl,false);
  m_rToolBarType->setButton(m_idButtonType_UAl,false);
@@ -609,6 +681,10 @@ void KFormulaView::fractionAlignM()
 }
 void KFormulaView::fractionAlignU()
 {
+
+ QString content=m_pDoc->activeElement()->getContent();
+ content[1]='U';
+ m_pDoc->activeElement()->setContent(content);
  m_rToolBarType->setButton(m_idButtonType_MAl,false);
  m_rToolBarType->setButton(m_idButtonType_DAl,false);
  m_rToolBarType->setButton(m_idButtonType_UAl,false);
@@ -617,9 +693,70 @@ void KFormulaView::fractionAlignU()
 
 void KFormulaView::fractionAlignD()
 {
+
+ QString content=m_pDoc->activeElement()->getContent();
+ content[1]='D';
+ m_pDoc->activeElement()->setContent(content);
  m_rToolBarType->setButton(m_idButtonType_MAl,false);
  m_rToolBarType->setButton(m_idButtonType_DAl,false);
  m_rToolBarType->setButton(m_idButtonType_UAl,false);
+ update();
+}
+void KFormulaView::fractionAlignL()
+{
+
+ QString content=m_pDoc->activeElement()->getContent();
+ content[2]='L';
+ m_pDoc->activeElement()->setContent(content);
+ m_rToolBarType->setButton(m_idButtonType_CAl,false);
+ m_rToolBarType->setButton(m_idButtonType_RAl,false);
+ m_rToolBarType->setButton(m_idButtonType_LAl,false);
+ update();
+}
+void KFormulaView::fractionAlignR()
+{
+
+ QString content=m_pDoc->activeElement()->getContent();
+ content[2]='R';
+ m_pDoc->activeElement()->setContent(content);
+ m_rToolBarType->setButton(m_idButtonType_CAl,false);
+ m_rToolBarType->setButton(m_idButtonType_RAl,false);
+ m_rToolBarType->setButton(m_idButtonType_LAl,false);
+ update();
+}
+void KFormulaView::fractionAlignC()
+{
+
+ QString content=m_pDoc->activeElement()->getContent();
+ content[2]='C';
+ m_pDoc->activeElement()->setContent(content);
+ m_rToolBarType->setButton(m_idButtonType_CAl,false);
+ m_rToolBarType->setButton(m_idButtonType_RAl,false);
+ m_rToolBarType->setButton(m_idButtonType_LAl,false);
+ update();
+}
+
+void KFormulaView::fractionDist()
+{
+
+}
+
+void KFormulaView::fractionDistMore()
+{
+ QString content=m_pDoc->activeElement()->getContent();
+ content.sprintf("%s%i",(const char*)content.left(3),(atoi(content.right(content.length()-3))+1));
+ warning(content);
+ m_pDoc->activeElement()->setContent(content);
+ update();
+}
+void KFormulaView::fractionDistLess()
+{
+ QString content=m_pDoc->activeElement()->getContent();
+ int space=(atoi(content.right(content.length()-3))-1);
+ if (space<1) space =1;
+ content.sprintf("%s%i",(const char*)content.left(3),space);
+ warning(content);
+ m_pDoc->activeElement()->setContent(content);
  update();
 }
 
@@ -670,13 +807,21 @@ void KFormulaView::insertIndex(int i)
 
 void KFormulaView::sizeSelected(const char *size)
 {
-  //setPointSize(atoi(size));
+
+ BasicElement *el=m_pDoc->activeElement();
+ if (el==0) return;
+ el->setNumericFont(atoi(size)); 
    warning(size);
 }
 void KFormulaView::fontSelected(const char *font)
 {
-//  tbFont.setFamily(qstrdup(font));
+BasicElement *el=m_pDoc->activeElement();
+if (el==0) return;
+if (el->type()!=EL_TEXT) return;
+if(font=="(default)") font="";
+((TextElement *)(el))->changeFontFamily(font);
 warning(font);
+update();
 }
 
 void KFormulaView::modeSelected(const char *mode)
@@ -733,7 +878,12 @@ warning("Slot fractionHAlign");
 }
 void KFormulaView::toggleMidline()
 { 
+
 warning("Slot toggleMidline");
+ QString content=m_pDoc->activeElement()->getContent();
+ if (content[0]=='F') content[0]='V'; else content[0]='F';
+ m_pDoc->activeElement()->setContent(content);
+ update();
 }
 void KFormulaView::symbolType()
 { 
@@ -759,7 +909,25 @@ void KFormulaView::generalFont()
 { 
 warning("Slot generalFont");
 }
-    
+void KFormulaView::delimiterLeft(const char *left)
+{ 
+ QString content=m_pDoc->activeElement()->getContent();
+ warning(content);
+ content[0]=left[0];
+ warning(content);
+ m_pDoc->activeElement()->setContent(content);
+ update();
+}
+
+void KFormulaView::delimiterRight(const char *right)
+{ 
+ QString content=m_pDoc->activeElement()->getContent();
+ warning(content);
+ content[1]=right[0];
+ warning(content);
+ m_pDoc->activeElement()->setContent(content);
+ update();
+}        
 
 #include "kformula_view.moc"
 

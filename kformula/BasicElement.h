@@ -1,6 +1,7 @@
 /*
  BasicElement.h 
  Project KOffice/KFormula
+
  
  Author: Andrea Rizzi <rizzi@kde.org>
  License:GPL

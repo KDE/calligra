@@ -5,6 +5,7 @@
 #include "FractionElement.h"
 #include "RootElement.h"
 #include "BracketElement.h"
+#include "MatrixElement.h"
 
 #include <koIMR.h>
 #include <komlMime.h>
@@ -108,6 +109,11 @@ OPParts::View_ptr KFormulaDocument::createView()
 
 void KFormulaDocument::emitModified()
 {
+if(theActiveElement!=0)
+    emit sig_changeType(theActiveElement->type());
+     else 
+    emit sig_changeType(0);
+     
     emit sig_modified();
 }
 
@@ -137,7 +143,7 @@ void KFormulaDocument::addRootElement()
     //RootElement need a child[0] i.e. root content
     theActiveElement->setChild(newElement = new BasicElement(this,theActiveElement,4),0);	 
     setActiveElement(newElement); //I prefere to AutoActivate RootContent 
-    emit sig_modified();
+    emitModified();
 }
 
 void KFormulaDocument::addFractionElement(QString cont)
@@ -165,10 +171,51 @@ void KFormulaDocument::addFractionElement(QString cont)
     newElement->setContent(cont);	 
     setActiveElement(newElement);  
     //RootElement need a child[0] i.e. numer
-    theActiveElement->setChild(newElement = new BasicElement(this,theActiveElement,4),0);	 
     theActiveElement->setChild(newElement = new BasicElement(this,theActiveElement,5),1);	 
-    //setActiveElement(newElement); //I prefere to AutoActivate RootContent 
-    emit sig_modified();
+    theActiveElement->setChild(newElement = new BasicElement(this,theActiveElement,4),0);	 
+    setActiveElement(newElement); //I prefere to AutoActivate numerator 
+    emitModified();
+    
+}
+
+void KFormulaDocument::addMatrixElement(QString cont)
+{   
+  BasicElement *nextElement;
+  BasicElement *newElement;
+   if(theActiveElement==0L)
+     setActiveElement(theFirstElement);
+  
+        if(theActiveElement->type()==EL_BASIC)  //If current Element is a Basic
+         {					//It change it into a Root
+	  theActiveElement->substituteElement(newElement = new MatrixElement(this));
+	  delete theActiveElement;
+          theActiveElement = 0;
+	 }         
+        else 
+	 {
+	 nextElement=theActiveElement->getNext();
+	 if(nextElement!=0L){       //If there's a next insert root before next
+	  nextElement->insertElement(newElement=new MatrixElement(this));
+	  }
+	  else              //If there isn't a next append only.
+ 	   activeElement()->setNext(newElement=new MatrixElement(this,theActiveElement));
+	 }
+    newElement->setContent(cont);	 
+    setActiveElement(newElement);  
+    //RootElement need a child[0] i.e. numer
+    theActiveElement->setChild(newElement = new BasicElement(this,theActiveElement,13),9);	 
+    theActiveElement->setChild(newElement = new BasicElement(this,theActiveElement,12),8);	 
+    theActiveElement->setChild(newElement = new BasicElement(this,theActiveElement,11),7);	 
+    theActiveElement->setChild(newElement = new BasicElement(this,theActiveElement,10),6);	 
+    theActiveElement->setChild(newElement = new BasicElement(this,theActiveElement,9),5);	 
+    theActiveElement->setChild(newElement = new BasicElement(this,theActiveElement,8),4);	 
+    theActiveElement->setChild(newElement = new BasicElement(this,theActiveElement,7),3);	 
+    theActiveElement->setChild(newElement = new BasicElement(this,theActiveElement,6),2);	 
+    theActiveElement->setChild(newElement = new BasicElement(this,theActiveElement,5),1);	 
+    theActiveElement->setChild(newElement = new BasicElement(this,theActiveElement,4),0);	 
+    setActiveElement(newElement); //I prefere to AutoActivate numerator 
+    emitModified();
+    
 }
 
 void KFormulaDocument::addBracketElement(QString cont)
@@ -197,7 +244,7 @@ void KFormulaDocument::addBracketElement(QString cont)
     //RootElement need a child[0] i.e. parenthesis content
     theActiveElement->setChild(newElement = new BasicElement(this,theActiveElement,4),0);	 
     setActiveElement(newElement); //I prefere to AutoActivate RootContent 
-    emit sig_modified();
+    emitModified();
 }
 
 /*
@@ -222,7 +269,7 @@ void KFormulaDocument::addIndex(int index)
     oldIndexElement->insertElement(newElement = new BasicElement(this));
    }
     setActiveElement(newElement);
-    emit sig_modified();
+    emitModified();
 } 
 
 void KFormulaDocument::addTextElement()
@@ -246,14 +293,14 @@ BasicElement *newElement;
 	   activeElement()->setNext(newElement=new TextElement(this,theActiveElement));
 	 }
     setActiveElement(newElement);
-    emit sig_modified();
+    emitModified();
 }
 
 void KFormulaDocument::mousePressEvent( QMouseEvent *a,QWidget *wid)
 {
  
    setActiveElement(theFirstElement->isInside(a->pos()));  
-   emit sig_modified();
+   emitModified();
 if(a->button()==RightButton){
    QPopupMenu *mousepopup = new QPopupMenu;
    QPopupMenu *convert = new QPopupMenu;
@@ -345,7 +392,7 @@ if(k->key()==Key_Backspace) {
 //ChText(Blocks[getCurrent()]->getcont());
 //ChType(Blocks[getCurrent()]->gettype());
 //update();
- emit sig_modified();
+ emitModified();
 }
 
 
