@@ -1,25 +1,17 @@
 <?xml version="1.0" ?>
-<!DOCTYPE book PUBLIC "-//KDE//DTD DocBook XML V4.1-Based Variant V1.0//EN" "dtd/kdex.dtd" [
+<!DOCTYPE book PUBLIC "-//KDE//DTD DocBook XML V4.1.2-Based Variant V1.1//EN" "dtd/kdex.dtd" [
   <!ENTITY kappname "&kformula;">
   <!ENTITY package "koffice">
   <!ENTITY % English "INCLUDE" > <!-- change language only here -->
   <!ENTITY % addindex "IGNORE">
 ]>
-
+ 
 <book lang="&language;">
 
 <bookinfo>
 <title>The &kformula; Users Manual</title>
 
 <authorgroup>
-<author>
-<firstname>Ulrich</firstname>
-<othername></othername>
-<surname>K&uuml;ttler</surname>
-<affiliation>
-<address><email>ulrich.kuettler@gmx.de</email></address>
-</affiliation>
-</author>
 
 <author>
 <firstname>Jonathan</firstname>
@@ -29,32 +21,37 @@
 </affiliation>
 </author>
 
+<othercredit role="developer">
+<firstname>Ulrich</firstname>
+<othername></othername>
+<surname>K&uuml;ttler</surname>
+<affiliation>
+<address><email>ulrich.kuettler@gmx.de</email></address>
+</affiliation>
+<contrib>Developer</contrib>
+</othercredit>
+
 <!-- TRANS:ROLES_OF_TRANSLATORS -->
+
 </authorgroup>
 
 <legalnotice>&FDLNotice;</legalnotice>
 
-<!-- Date and version information of the documentation
-Don't forget to include this last date and this last revision number, we
-need them for translation coordination !
-Please respect the format of the date (DD/MM/YYYY) and of the version
-(Major.minor.lesser), it could be used by automation scripts -->
-
 <date>2002-02-19</date>
-<releaseinfo>0.00.30</releaseinfo>
-
-<!-- Abstract about this handbook -->
+<releaseinfo>0.00.02</releaseinfo>
 
 <abstract>
 <para>
-&kformula; is part of the &koffice; package.
+&kformula; is used to layout formulas.
 </para>
 </abstract>
 
+
 <keywordset>
 <keyword>KDE</keyword>
-<keyword>Koffice</keyword>
+<keyword>KOffice</keyword>
 <keyword>kformula</keyword>
+<keyword>formula</keyword>
 </keywordset>
 
 </bookinfo>
@@ -62,20 +59,18 @@ Please respect the format of the date (DD/MM/YYYY) and of the version
 <chapter id="introduction">
 <title>Introduction</title>
 <para>&kformula; is used to write formulas. It doesn't evaluate
-anything. All it does is printing them.</para> 
-
+anything. All it does is print them.</para>
 <para>&kformula; was designed for your editing pleasure. It makes it
-delightful to enter greek letter, fractions and all the stuff that
-makes a formula look like, hmm, a formula.</para> 
-
+delightful to enter greek letters, fractions and all the stuff that
+makes a formula look like a formula.</para> 
 <para>But most of the time you won't want to use &kformula; itself.
 Instead you might choose to use it from within &kword; or any other
 &koffice; application. That is &kformula; is not a useful application
 on its own but an extention to all the other &koffice; applications
 you've fallen in love with.</para>
 
-<para>But don't fear! Where ever &kformula; gets embedded, it will
-behave the same. So this documentation applies anyway.</para>
+<para>Where ever &kformula; gets embedded, it will
+behave the same.</para>
 
 </chapter>
 
@@ -88,92 +83,908 @@ arranged in lists. An element in this respect might be a single char
 or a root symbol or something like that. The lists are put together so
 that they form a formula. That is there are lists for indexes, lower
 and upper bounds and so on. And of course there is the main
-list. What's the one we've just seen.</para>
+list, which we've already seen.</para>
 
 <para>Writing a formula means to fill the empty list with letters,
 figures and mathematical symbols. That is straightforward: use your
-keyboard. As soon as you type something the <guiicon>empty</guiicon>
+keyboard. As soon as you type something the <quote>empty</quote>
 symbol will vanish and you will see whatever you have inserted
 instead. New characters are always put at the current cursor
 position.</para>
 
-<para>There is a toolbar called <quote>Add</quote> that allows you to
-create more complex elements. There are indexes, fractions, roots and
-matrices. Just to name name a few. All those elements consist of at
-least one list, you can move the cursor into and insert new
-stuff.</para>
+<para>There is a toolbar called <guilabel>Add</guilabel> that allows
+you to create more complex elements. There are indexes, fractions,
+roots and matrices to name a few. All those elements
+consist of at least one list, you can move the cursor into and insert
+new items.</para>
 
-<para>A special feature is the name insertion. When you type a
-backslash (<literal>\</literal>) you get a new empty list right
-away, but this one is special. It uses a different font and is meant
-to insert things like function names. There is, however, a second idea
-here. Your keyboard only has a limited number of keys. The wealth of
-mathematical symbols on the other side is overwhelming. To get one of
-those you can type its name and press the space key afterwards. The
-name you typed will be replaced by the symbol then. By the way,
-normally the space key means <quote>get out of here</quote>, that is move the
-cursor to the containing list.
+</chapter>
+
+<chapter id="using-kformula">
+<title>Using &kformula;</title>
+
+<screenshot>
+<screeninfo>Screenshot of &kformula;</screeninfo>
+	<mediaobject>
+	  <imageobject>
+	    <imagedata fileref="green1.png" format="PNG"/>
+	  </imageobject>
+	   <textobject>
+	    <phrase>Screenshot of &kformula;</phrase>
+	  </textobject>
+	</mediaobject>
+</screenshot>
+
+<para> The Green's formula above can be printed to a &PostScript;
+file. To do that choose <menuchoice><guimenu>File</guimenu><guimenuitem>Print</guimenuitem>
+</menuchoice> and configure print as shown below:</para>
+
+<screenshot>
+<screeninfo>Here's a screenshot of Greens Formula in &kformula;</screeninfo>
+	<mediaobject>
+	  <imageobject>
+	    <imagedata fileref="green2.png" format="PNG"/>
+	  </imageobject>
+<textobject><phrase>Here's a screenshot of Greens Formula in &kformula;</phrase></textobject>
+	</mediaobject>
+</screenshot>
+
+<para>
+Here is what the the resulting &PostScript; file should look
+like:</para>
+
+<screenshot>
+<screeninfo>Here is the &PostScript; output from &kappname;</screeninfo>
+	<mediaobject>
+	  <imageobject>
+	    <imagedata fileref="greens.png" format="PNG"/>
+	  </imageobject>
+	</mediaobject>
+</screenshot>
+
+<important>
+<para>See the <link linkend="fonts">Mathematical Fonts</link> section
+for font installation details. You must install the esstix fonts to
+get these results
+</para>
+</important>
+
+<sect1 id="kformula-features">
+<title>More &kformula; features</title>
+
+<para>More on formulas</para>
+<para>
 </para>
 
-<para>Another thing you might want to insert are spaces. We all know,
-printing formulae is all about the right spacing. And you can do just
-that using the <quote>name list</quote>. Simply type the chars
-<literal>,</literal> or <literal>&gt;</literal> or
-<literal>;</literal> to get a small, medium or thick space
-respectively. You also might type the word <literal>quad</literal> and
-the space you get will be even wider.</para>
+</sect1>
+</chapter>
+
+<chapter id="commands">
+<title>Command Reference</title>
+
+<sect1 id="kformula-mainwindow">
+<title>The main &kformula; window</title>
+
+<sect2>
+<title>The <guimenu>File</guimenu> Menu</title>
+
+<variablelist>
+<varlistentry>
+<term><menuchoice>
+<shortcut>
+<keycombo action="simul">&Ctrl;<keycap>N</keycap></keycombo>
+</shortcut>
+<guimenu>File</guimenu>
+<guimenuitem>New</guimenuitem>
+</menuchoice></term>
+<listitem><para><action>Creates a new &kformula; document</action></para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<shortcut>
+<keycombo action="simul">&Ctrl;<keycap>O</keycap></keycombo>
+</shortcut>
+<guimenu>File</guimenu>
+<guimenuitem>Open</guimenuitem>
+</menuchoice></term>
+<listitem><para><action>Opens a previously saved document</action></para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<guimenu>File</guimenu>
+<guimenuitem>Open Recent</guimenuitem>
+</menuchoice></term>
+<listitem><para><action>displays a selection of recently saved documents you can open</action></para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<shortcut>
+<keycombo action="simul">&Ctrl;<keycap>S</keycap></keycombo>
+</shortcut>
+<guimenu>File</guimenu>
+<guimenuitem>Save</guimenuitem>
+</menuchoice></term>
+<listitem><para><action>Saves the document</action></para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<guimenu>File</guimenu>
+<guimenuitem>Save As</guimenuitem>
+</menuchoice></term>
+<listitem><para><action>Saves the document with a name you provide</action></para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<shortcut>
+<keycombo action="simul">&Ctrl;<keycap>P</keycap></keycombo>
+</shortcut>
+<guimenu>File</guimenu>
+<guimenuitem>Print</guimenuitem>
+</menuchoice></term>
+<listitem><para><action>Prints the document</action></para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<guimenu>File</guimenu>
+<guimenuitem>Print Preview...</guimenuitem>
+</menuchoice></term>
+<listitem><para><action>Shows how the printed document will appear</action></para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<guimenu>File</guimenu>
+<guimenuitem>Document Information...</guimenuitem>
+</menuchoice></term>
+<listitem><para><action>Provides a dialog box where you can enter your name,
+e-mail address and a short description about the document</action></para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<guimenu>File</guimenu>
+<guimenuitem>Send File...</guimenuitem>
+</menuchoice></term>
+<listitem><para><action>Invokes Kmail so you can e-mail the file.
+Note: You still have to attach the file to the e-mail</action></para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<shortcut>
+<keycombo action="simul">&Ctrl;<keycap>W</keycap></keycombo>
+</shortcut>
+<guimenu>File</guimenu>
+<guimenuitem>Close</guimenuitem>
+</menuchoice></term>
+<listitem><para><action>Closes the current document</action></para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<shortcut>
+<keycombo action="simul">&Ctrl;<keycap>Q</keycap></keycombo>
+</shortcut>
+<guimenu>File</guimenu>
+<guimenuitem>Quit</guimenuitem>
+</menuchoice></term>
+<listitem><para><action>Quits</action> &kformula;</para></listitem>
+</varlistentry>
+</variablelist>
+
+</sect2>
+
+<sect2>
+<title>The <guimenu>Edit</guimenu> Menu</title>
+
+<variablelist>
+<varlistentry>
+<term><menuchoice>
+<shortcut>
+<keycombo action="simul">&Ctrl;<keycap>Z</keycap></keycombo>
+</shortcut>
+<guimenu>Edit</guimenu>
+<guimenuitem>Undo</guimenuitem>
+</menuchoice></term>
+<listitem><para><action>Undoes an action. You can revert to the state that existed
+before your last change</action></para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<shortcut>
+<keycombo action="simul">&Ctrl; &Shift; <keycap>Z</keycap></keycombo>
+</shortcut>
+<guimenu>Edit</guimenu>
+<guimenuitem>Redo</guimenuitem>
+</menuchoice></term>
+<listitem><para><action>Undoes an undo. Reverse the action of Undo. This will restore the change
+you originally made</action></para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<shortcut>
+<keycombo action="simul">&Ctrl;<keycap>X</keycap></keycombo>
+</shortcut>
+<guimenu>Edit</guimenu>
+<guimenuitem>Cut</guimenuitem>
+</menuchoice></term>
+<listitem><para><action>Cuts a highlighted piece of text from the &kformula; screen.</action></para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<shortcut>
+<keycombo action="simul">&Ctrl;<keycap>C</keycap></keycombo>
+</shortcut>
+<guimenu>Edit</guimenu>
+<guimenuitem>Cut</guimenuitem>
+</menuchoice></term>
+<listitem><para><action>Copies a highlighted piece of text from the &kformula; screen.</action></para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<shortcut>
+<keycombo action="simul">&Ctrl;<keycap>V</keycap></keycombo>
+</shortcut>
+<guimenu>Edit</guimenu>
+<guimenuitem>Paste</guimenuitem>
+</menuchoice></term>
+<listitem><para><action>Pastes the text you selected with Cut or Copy to the &kformula; screen.</action></para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<shortcut>
+<keycombo action="simul">&Ctrl;<keycap>A</keycap></keycombo>
+</shortcut>
+<guimenu>Edit</guimenu>
+<guimenuitem>Select All</guimenuitem>
+</menuchoice></term>
+<listitem><para><action>Highlights all the text in the &kformula; screen for
+either Cut or Copy.</action></para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<shortcut>
+<keycombo action="simul">&Ctrl;<keycap>R</keycap></keycombo>
+</shortcut>
+<guimenu>Edit</guimenu>
+<guimenuitem>Remove enclosing element</guimenuitem>
+</menuchoice></term>
+<listitem><para><action>Removes enclosing braces, brackets or absolute value bars.
+This action takes place on the braces just outside the cursor.</action></para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<shortcut>
+<keycombo action="simul">&Ctrl;<keycap>G</keycap></keycombo>
+</shortcut>
+<guimenu>Edit</guimenu>
+<guimenuitem>Convert to Greek</guimenuitem>
+</menuchoice></term>
+<listitem><para><action>Converts a Latin character to a Greek symbol.</action></para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<guimenu>Edit</guimenu>
+<guimenuitem>Edit Formula String</guimenuitem>
+</menuchoice></term>
+<listitem><para><action>Brings up an editor where you can edit the existing formula.</action></para></listitem>
+</varlistentry>
+
+</variablelist>
+
+</sect2>
+
+<sect2>
+<title>The <guimenu>Element</guimenu> Menu</title>
+
+<variablelist>
+
+<varlistentry>
+<term><menuchoice>
+<shortcut>
+<keycombo action="simul">&Ctrl;<keycap>2</keycap></keycombo>
+</shortcut>
+<guimenu>Element</guimenu>
+<guisubmenu>Add...</guisubmenu>
+<guimenuitem>Add root</guimenuitem>
+</menuchoice></term>
+<listitem><para><action>Inserts the square root.</action></para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<shortcut>
+<keycombo action="simul">&Ctrl;<keycap>3</keycap></keycombo>
+</shortcut>
+<guimenu>Element</guimenu>
+<guisubmenu>Add...</guisubmenu>
+<guimenuitem>Add fraction</guimenuitem>
+</menuchoice></term>
+<listitem><para><action>Inserts a fraction.</action></para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<guimenu>Element</guimenu>
+<guisubmenu>Add...</guisubmenu>
+<guimenuitem>Add bracket</guimenuitem>
+</menuchoice></term>
+<listitem><para><action>Inserts a pair of brackets, i.e. ( ).</action></para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<shortcut>
+<keycombo action="simul">&Ctrl;<keycap>3</keycap></keycombo>
+</shortcut>
+<guimenu>Element</guimenu>
+<guisubmenu>Add...</guisubmenu>
+<guimenuitem>Add fraction</guimenuitem>
+</menuchoice></term>
+<listitem><para><action>Inserts a fraction.</action></para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<shortcut>
+<keycombo action="simul">&Ctrl;<keycap>6</keycap></keycombo>
+</shortcut>
+<guimenu>Element</guimenu>
+<guisubmenu>Add...</guisubmenu>
+<guimenuitem>Add integral</guimenuitem>
+</menuchoice></term>
+<listitem><para><action>Inserts the integral sign.</action></para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<shortcut>
+<keycombo action="simul">&Ctrl;<keycap>7</keycap></keycombo>
+</shortcut>
+<guimenu>Element</guimenu>
+<guisubmenu>Add...</guisubmenu>
+<guimenuitem>Add sum</guimenuitem>
+</menuchoice></term>
+<listitem><para><action>Inserts the summation sign (sigma).</action></para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<shortcut>
+<keycombo action="simul">&Ctrl;<keycap>4</keycap></keycombo>
+</shortcut>
+<guimenu>Element</guimenu>
+<guisubmenu>Add...</guisubmenu>
+<guimenuitem>Add prod</guimenuitem>
+</menuchoice></term>
+<listitem><para><action>Inserts the product sign.</action></para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<shortcut>
+<keycombo action="simul">&Ctrl;<keycap>8</keycap></keycombo>
+</shortcut>
+<guimenu>Element</guimenu>
+<guisubmenu>Add...</guisubmenu>
+<guimenuitem>Add matrix</guimenuitem>
+</menuchoice></term>
+<listitem><para><action>Inserts a matrix. A dialog box pops up, with the default size being 3x3.
+You can specify the number of rows and columns in this box.</action></para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<guimenu>Element</guimenu>
+<guisubmenu>Add...</guisubmenu>
+<guimenuitem>Add 1x2 matrix</guimenuitem>
+</menuchoice></term>
+<listitem><para><action>Inserts a two rowed column vector.</action></para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<shortcut>
+<keycombo action="simul">&Ctrl;<keycap>U</keycap></keycombo>
+</shortcut>
+<guimenu>Element</guimenu>
+<guisubmenu>Add...</guisubmenu>
+<guimenuitem>Add upper index</guimenuitem>
+</menuchoice></term>
+<listitem><para><action>Adds a superscript to an existing element.</action></para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<shortcut>
+<keycombo action="simul">&Ctrl;<keycap>L</keycap></keycombo>
+</shortcut>
+<guimenu>Element</guimenu>
+<guisubmenu>Add...</guisubmenu>
+<guimenuitem>Add lower index</guimenuitem>
+</menuchoice></term>
+<listitem><para><action>Adds a subscript to an existing element.</action></para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<guimenu>Element</guimenu>
+<guisubmenu>Add...</guisubmenu>
+<guimenuitem>Add thin space</guimenuitem>
+</menuchoice></term>
+<listitem><para><action>Inserts a small space.</action></para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<guimenu>Element</guimenu>
+<guisubmenu>Add...</guisubmenu>
+<guimenuitem>Add medium space</guimenuitem>
+</menuchoice></term>
+<listitem><para><action>Inserts a space that is one and a half times wider.</action></para></listitem>
+</varlistentry>
+
+
+<varlistentry>
+<term><menuchoice>
+<guimenu>Element</guimenu>
+<guisubmenu>Add...</guisubmenu>
+<guimenuitem>Add thick space</guimenuitem>
+</menuchoice></term>
+<listitem><para><action>Inserts a double space.</action></para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<guimenu>Element</guimenu>
+<guisubmenu>Add...</guisubmenu>
+<guimenuitem>Add quad space</guimenuitem>
+</menuchoice></term>
+<listitem><para><action>Inserts a quadruple wide space.</action></para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<guimenu>Element</guimenu>
+<guisubmenu>Matrix</guisubmenu>
+<guimenuitem>Insert Column</guimenuitem>
+</menuchoice></term>
+<listitem><para><action>Inserts a column in an existing matrix. The column is inserted where the cursor is at.</action></para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<guimenu>Element</guimenu>
+<guisubmenu>Matrix</guisubmenu>
+<guimenuitem>Append Column</guimenuitem>
+</menuchoice></term>
+<listitem><para><action>Appends a column to an existing matrix. The column is appended on the right.</action></para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<guimenu>Element</guimenu>
+<guisubmenu>Matrix</guisubmenu>
+<guimenuitem>Remove Column</guimenuitem>
+</menuchoice></term>
+<listitem><para><action>Removes a column from an existing matrix. Removal occurs where the cursor is positioned.</action></para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<guimenu>Element</guimenu>
+<guisubmenu>Matrix</guisubmenu>
+<guimenuitem>Insert Row</guimenuitem>
+</menuchoice></term>
+<listitem><para><action>Inserts a row in an existing matrix. The row is inserted where the cursor is at.</action></para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<guimenu>Element</guimenu>
+<guisubmenu>Matrix</guisubmenu>
+<guimenuitem>Append Row</guimenuitem>
+</menuchoice></term>
+<listitem><para><action>Appends a row to an existing matrix. The row is appended on the bottom.</action></para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<guimenu>Element</guimenu>
+<guisubmenu>Matrix</guisubmenu>
+<guimenuitem>Remove Row</guimenuitem>
+</menuchoice></term>
+<listitem><para><action>Removes a row from an existing matrix. Removal occurs where the cursor is positioned.</action></para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<guimenu>Element</guimenu>
+<guimenuitem>Left delimiter</guimenuitem>
+</menuchoice></term>
+<listitem><para><action>Allows insertion of various delimiters i.e. (, {, and [.</action></para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<guimenu>Element</guimenu>
+<guimenuitem>Right delimiter</guimenuitem>
+</menuchoice></term>
+<listitem><para><action>Allows insertion of various delimiters i.e. ), }, and ].</action></para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<shortcut>
+<keycombo action="simul">&Ctrl;<keycap>I</keycap></keycombo>
+</shortcut>
+<guimenu>Element</guimenu>
+<guimenuitem>Insert symbol</guimenuitem>
+</menuchoice></term>
+<listitem><para><action>Inserts the symbol, selected in the symbol toolbar.</action></para></listitem>
+</varlistentry>
+</variablelist>
+
+</sect2>
+
+<sect2>
+<title>The <guimenu>Settings</guimenu> Menu</title>
+<para>Here you can choose how &kformula; is configured.
+ You can select the toolbars you want displayed or the type of fonts to be used.</para>
+
+<variablelist>
+
+<varlistentry>
+<term><menuchoice>
+<guimenu>Settings</guimenu>
+<guimenuitem>Syntax highlighting</guimenuitem>
+</menuchoice></term>
+<listitem><para><action>Checking this item detremines if the numbers will be displayed in color</action></para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<guimenu>Settings</guimenu>
+<guimenuitem>Show file toolbar</guimenuitem>
+</menuchoice></term>
+<listitem><para><action>Toggles the toolbar that contains clickable icons for new, open and save files.
+Print and print preview are here also.</action></para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<guimenu>Settings</guimenu>
+<guimenuitem>Show edit toolbar</guimenuitem>
+</menuchoice></term>
+<listitem><para><action>Toggles the edit toolbar.Here are clickable icons for cut
+ and paste as well as Undo and Redo.</action></para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<guimenu>Settings</guimenu>
+<guimenuitem>Show add toolbar</guimenuitem>
+</menuchoice></term>
+<listitem><para><action>This toolbar contains all the mathematical elements such as Sum,
+Integral, Exponent etc.</action></para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<guimenu>Settings</guimenu>
+<guimenuitem>Show symbol toolbar</guimenuitem>
+</menuchoice></term>
+<listitem><para><action>This toogles the combo box that contains Del, the partial derivative symbol, limit arrows, 
+boolean operators and other mathematical symbols.</action></para></listitem>
+</varlistentry>
+
+
+<varlistentry>
+<term><menuchoice>
+<guimenu>Settings</guimenu>
+<guimenuitem>Show matrix toolbar</guimenuitem>
+</menuchoice></term>
+<listitem><para><action>This toggles the matrix toolbar. It contains clickable icons
+that pertain to matrix creation and editing.</action></para></listitem>
+</varlistentry>
+
+</variablelist>
+
+</sect2>
+
+<sect2>
+<title>The <guimenu>Help</guimenu> Menu</title>
+
+&help.menu.documentation;
+
+</sect2>
+</sect1>
 
 </chapter>
 
 <chapter id="advanced">
 <title>Advanced editing</title>
+
 <para>There is a lot to say about what can be done...</para>
+<para>A special feature is the name insertion. When you type a
+backslash (<literal>\</literal>) you get a new empty list right away. But this one is
+special. It uses a different font and is meant to insert things like
+function names. There is, however, a second idea here. Your keyboard
+only has a limited number of keys. The wealth of mathematical symbols
+on the other side is overwhelming. To get one of those you can type
+its name and press the space key afterwards. The name you typed will
+be replaced by the symbol then. By the way, normally the
+<keycap>Space</keycap> key means <quote>get out of here</quote>, that
+is move the cursor to the containing list.
+</para>
+
+<para>Another thing you might want to insert are spaces. We all know,
+printing formulae is all about the right spacing. And you can do just
+that using a <quote>name list</quote>.</para>
+<para>
+Inside the blue square do: <userinput><keycombo action="seq"><keycap>\</keycap><keycap>,</keycap><keycap>SPACE</keycap></keycombo></userinput> to get a small space.
+</para>
+<para>
+Do: <userinput><keycombo action="seq"><keycap>\</keycap><keycap>&lt;</keycap><keycap>Space</keycap></keycombo></userinput> to get a medium space.
+</para>
+<para>
+Do: <userinput><keycombo action="seq"><keycap>\</keycap><keycap>;</keycap><keycap>Space</keycap></keycombo></userinput> to get a thick space.
+</para>
+<para>
+Do: <userinput><keycap>\</keycap> quad <keycap>Space</keycap></userinput> to get a quadruple wide space.
+</para>
+<para>
+In the same way, specific mathematical symbols can be inserted.  
+<userinput><keycap>\</keycap> oint <keycap>Space</keycap></userinput> inserts the path integral about a closed contour. Below is the result of <userinput><keycap>\</keycap> oint <keycap>Space</keycap></userinput>:</para>
+<screenshot>
+<screeninfo>Picture of path integral</screeninfo>
+	<mediaobject>
+	  <imageobject>
+	    <imagedata fileref="path-integral.png" format="PNG"/>
+	  </imageobject>
+	</mediaobject>
+</screenshot>
+
 </chapter>
 
-<chapter id="elementlist">
+<chapter id="element-list">
 <title>Element list</title>
+
 <para>Every element has its peculiarities.</para>
+
 </chapter>
 
 <chapter id="fonts">
 <title>Mathematical Fonts</title>
-<para>The unicode table and font files.</para>
-</chapter>
 
-<chapter id="configuration">
-<title>User configuration</title>
-<para>Did you find
-<menuchoice><guimenu>Settings</guimenu><guimenuitem>Configure
-KFormula...</guimenuitem></menuchoice>?</para>
+<para>
+In order to print postscript files from &kformula;, you need to get
+the esstix fonts. These fonts can be obtained from 
+<ulink url="ftp://ftp.elsevier.nl/pub/styles/esstix/esstix.zip">
+ftp://ftp.elsevier.nl/pub/styles/esstix/esstix.zip</ulink>
+</para>
+
+<sect1>
+<title>Installing the fonts with &kcontrol;</title>
+
+<para>
+After downloading the fonts, install them into a folder called
+<filename class="directory">esstix</filename>. You can unpack them with 
+the &kde; application &ark;. <mousebutton>Right</mousebutton> click on
+<filename>esstix.zip</filename> and select <guimenuitem>Extract
+here...</guimenuitem>.   
+Then start the &kde; font installer by going to the K menu and
+selecting the command <menuchoice><guimenu>Control Center</guimenu><guimenuitem>System</guimenuitem><guimenuitem>
+Font Installer</guimenuitem></menuchoice> You should get the following
+screen:</para>
+
+<screenshot>
+<screeninfo>Picture of the &kde; font installer</screeninfo>
+	<mediaobject>
+	  <imageobject>
+	    <imagedata fileref="kfontinst1.png" format="PNG"/>
+	  </imageobject>
+<textobject><phrase>Picture of the &kde; font installer</phrase></textobject>
+</mediaobject>
+</screenshot>
+
+<para>
+You will need to run the font installer with <systemitem
+class="username">root</systemitem> privileges. Click on the button
+<guibutton>Administrator Mode</guibutton> and enter your <systemitem class="username">root</systemitem> password. Click on the button <guibutton>Change Folder</guibutton>. 
+This should bring up a pane from where you can select the folder your fonts are stored in. In
+this example they are stored in <filename
+class="directory">/home/poincare/esstix</filename>.</para>
+
+<screenshot>
+<screeninfo>Picture of the &kde; font installer</screeninfo>
+	<mediaobject>
+	  <imageobject>
+	    <imagedata fileref="kfontinst2.png" format="PNG"/>
+	  </imageobject>
+<textobject><phrase>Picture of the &kde; font installer</phrase></textobject>
+	</mediaobject>
+</screenshot>
+
+<para>Click on the the folder <filename
+class="directory">esstix</filename> and then click on the
+<guibutton>OK</guibutton> button. You should obtain the following
+result.</para>
+
+<screenshot>
+<screeninfo>Picture of font installer ready to install</screeninfo>
+	<mediaobject>
+	  <imageobject>
+	    <imagedata fileref="kfontinst3.png" format="PNG"/>
+	  </imageobject>
+<textobject><phrase>Picture of font installer ready to install</phrase></textobject>
+	</mediaobject>
+</screenshot>
+
+<para>
+Click on the top font entry. Holding down the &Shift; key, click on
+the last esstix font, at the bottom. Your selection should look like
+this.</para>
+
+<screenshot>
+<screeninfo>Picture of the font installer installing</screeninfo>
+	<mediaobject>
+	  <imageobject>
+	    <imagedata fileref="kfontinst4.png" format="PNG"/>
+	  </imageobject>
+<textobject><phrase>Picture of the font installer installing</phrase></textobject>
+	</mediaobject>
+</screenshot>
+
+<para>Click on the tab <guilabel>Anti-Alias</guilabel> and then click
+on the <guibutton>Advanced</guibutton> button; make the following
+addition by configuring the box as shown below. Click on
+<guibutton>Add</guibutton> and your configuration should now appear in
+the match window. Then click on <guibutton>Ok</guibutton> to accept
+the change.</para>
+
+<screenshot>
+<screeninfo>Picture of the font installer installing</screeninfo>
+	<mediaobject>
+	  <imageobject>
+	    <imagedata fileref="esstix-kfo1.png" format="PNG"/>
+	  </imageobject>
+<textobject><phrase>Picture of the font installer installing</phrase></textobject>
+	</mediaobject>
+</screenshot>
+
+<para>
+After clicking on <guibutton>Ok</guibutton>, your <guilabel>Advanced</guilabel> table should contain the Esstix font addition.
+Here it is at the top:</para>
+
+<screenshot>
+<screeninfo>The newly installed fonts</screeninfo>
+	<mediaobject>
+	  <imageobject>
+	    <imagedata fileref="esstix-kfo2.png" format="PNG"/>
+	  </imageobject>
+<textobject><phrase>The newly installed fonts</phrase></textobject>
+	</mediaobject>
+</screenshot>
+
+<para>Save the changes; click on that button:</para>
+
+<screenshot>
+<screeninfo>Picture of advanced table</screeninfo>
+	<mediaobject>
+	  <imageobject>
+	    <imagedata fileref="esstix-kfo3.png" format="PNG"/>
+	  </imageobject>
+<textobject><phrase>Picture of advanced table</phrase></textobject>
+	</mediaobject>
+</screenshot>
+
+<para>You should use the native <acronym>AFM</acronym> files. Set up
+your <menuchoice><guimenu>Settings</guimenu><guimenuitem>System</guimenuitem></menuchoice> as shown below. The <guilabel>Generate AFM's, with</guilabel> box 
+should be unchecked:</para>
+
+<screenshot>
+<screeninfo>Picture of settings tab</screeninfo>
+	<mediaobject>
+	  <imageobject>
+	    <imagedata fileref="kfontinst-right.png" format="PNG"/>
+	  </imageobject>
+<textobject><phrase>Picture of settings tab</phrase></textobject>
+	</mediaobject>
+</screenshot>
+
+<para>Click on the <guibutton>Install</guibutton> button. The fonts
+will install. After this you must click on the
+<guibutton>Apply</guibutton> button. the following splash will
+appear:</para>
+
+<screenshot>
+<screeninfo>Picture of &kcontrol; applying the fonts</screeninfo>
+	<mediaobject>
+	  <imageobject>
+	    <imagedata fileref="kfontinst5.png" format="PNG"/>
+	  </imageobject>
+<textobject><phrase>Picture of &kcontrol; applying the fonts</phrase></textobject>
+	</mediaobject>
+</screenshot>
+
+<para>Answer <guibutton>Yes</guibutton> to the <guilabel>Apply sytem
+changes now</guilabel> dialog. You are done installing the esstix fonts.
+</para>
+
+</sect1>
 </chapter>
 
 <chapter id="credits-and-licenses">
 <title>Credits and Licenses</title>
 
-<para>&kformula; is copyright Andrea Rizzi
-<email>rizzi@kde.org</email> Ulrich Kuettler
-<email>ulrich.kuettler@mailbox.tu-dresden.de</email></para>
+<para>&kformula; copyright Ulrich K&uuml;ttler</para>
 
-<para>&kformula; documentation is copyright 2001-2002 Ulrich Kuettler and
-Jonathan Drews <email>j.e.drews@att.net</email></para>
-
-<!-- TRANS:CREDIT_FOR_TRANSLATORS -->
+<para>Documentation copyright 2002 Jonathan Drews
+<email>j.e.drews@att.net</email></para>
 
 &underFDL;
 &underGPL;
 
 </chapter>
 
-&documentation.index; 
-
 <appendix id="installation">
 <title>Installation</title>
 
+<sect1 id="getting-kformula">
+<title>How to obtain &kformula;</title>
+
 &install.intro.documentation;
+
+</sect1>
+
+<sect1 id="requirements">
+<title>Requirements</title>
+
+<para>
+All required libraries as well as &kformula; itself can be found
+on <ulink url="ftp://ftp.kapp.org">The &kformula; home page</ulink>.
+</para>
+
+<para>
+You can find a list of changes at <ulink
+url="http://apps.kde.org/kformula">http://apps.kde.org/kapp</ulink>.
+</para>
+</sect1>
+
+<sect1 id="compilation">
+<title>Compilation and Installation</title>
+
 
 &install.compile.documentation;
 
+</sect1>
+
+<sect1 id="configuration">
+<title>Configuration</title>
+
+<para>Some fonts will not work with &kformula;. You will need to try several 
+to achieve a satisfactory rendering.</para>
+
+</sect1>
+
 </appendix>
+
+&documentation.index; 
 
 </book>
 <!--
@@ -183,4 +994,10 @@ sgml-minimize-attributes: nil
 sgml-general-insert-case: lower
 End:
 -->
+
+
+
+
+
+
 
