@@ -1,28 +1,25 @@
-/* -*- C++ -*-
+/* This file is part of the KDE project
+  Copyright (c) 1999 Matthias Elter <me@kde.org>
+  Copyright (c) 2001 Igor Janssen <rm@linux.ru.net>
 
+   This library is free software; you can redistribute it and/or
+   modify it under the terms of the GNU Library General Public
+   License as published by the Free Software Foundation; either
+   version 2 of the License, or (at your option) any later version.
 
-  This file is part of KIllustrator.
-  Copyright (C) 2000 Igor Janssen (rm@linux.ru.net)
+   This library is distributed in the hope that it will be useful,
+   but WITHOUT ANY WARRANTY; without even the implied warranty of
+   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+   Library General Public License for more details.
 
-  This program is free software; you can redistribute it and/or modify
-  it under the terms of the GNU Library General Public License as
-  published by
-  the Free Software Foundation; either version 2 of the License, or
-  (at your option) any later version.
-
-  This program is distributed in the hope that it will be useful,
-  but WITHOUT ANY WARRANTY; without even the implied warranty of
-  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-  GNU General Public License for more details.
-
-  You should have received a copy of the GNU Library General Public License
-  along with this program; if not, write to the Free Software
-  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
-
+   You should have received a copy of the GNU Library General Public License
+   along with this library; see the file COPYING.LIB.  If not, write to
+   the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
+   Boston, MA 02111-1307, USA.
 */
 
-#ifndef __kis_colorchooser_h__
-#define __kis_colorchooser_h__
+#ifndef __ko_ColorChooser_h__
+#define __ko_ColorChooser_h__
 
 #include <qwidget.h>
 #include "koColor.h"
@@ -40,55 +37,55 @@ class KoColorChooser : public QWidget
 {
   Q_OBJECT
 public:
-  KoColorChooser(QWidget* parent = 0L, const char* name = 0L);
+  KoColorChooser(QWidget *parent = 0L, const char *name = 0L);
+
+  const KoColor &color() const {return mColor; }
 
 signals:
-  void colorChanged(const KoColor&);
+  void colorChanged(const KoColor &);
 
 protected slots:
-  void slotChangeColor(const KoColor& c);
+  void slotChangeColor(const KoColor &c);
 
 private:
+  KoColor     mColor;
+
   QGridLayout *mGrid;
   KoFrameButton *btn_RGB;
   KoFrameButton *btn_CMYK;
   KoFrameButton *btn_Grey;
   KoFrameButton *btn_HSB;
   KoFrameButton *btn_LAB;
-  RGBWidget *clr;
+  RGBWidget *mRGBWidget;
   KColorPatch *clr_patch;
 };
 
 class RGBWidget : public QWidget
 {
   Q_OBJECT
- 
- public:
-  RGBWidget(QWidget *parent = 0L);
+public:
+  RGBWidget(KoColorChooser *aCC, QWidget *parent = 0L);
 
- public slots:
-  void slotSetColor(const KoColor&);
+public slots:
+  void slotChangeColor();
 
- protected slots:
-  void slotRSliderChanged(int);
-  void slotGSliderChanged(int);
-  void slotBSliderChanged(int);
+protected slots:
+  void slotRSliderChanged(int r);
+  void slotGSliderChanged(int g);
+  void slotBSliderChanged(int b);
 
-  void slotRInChanged(int);
-  void slotGInChanged(int);
-  void slotBInChanged(int);
+  void slotRInChanged(int r);
+  void slotGInChanged(int g);
+  void slotBInChanged(int b);
 
- signals:
-  void colorChanged(const KoColor&);
+signals:
+  void colorChanged(const KoColor &);
 
- protected:
-  virtual void resizeEvent(QResizeEvent *);
-
- protected:
-  KoColor     m_c;
-  KoColorSlider *m_pRSlider, *m_pGSlider, *m_pBSlider;
-  QLabel      *m_pRLabel, *m_pGLabel, *m_pBLabel;
-  QSpinBox    *m_pRIn, *m_pGIn, *m_pBIn;
+private:
+  KoColorChooser *mCC;
+  KoColorSlider *mRSlider, *mGSlider, *mBSlider;
+  QLabel      *mRLabel, *mGLabel, *mBLabel;
+  QSpinBox    *mRIn, *mGIn, *mBIn;
 };
 
 #endif
