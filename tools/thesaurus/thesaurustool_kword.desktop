@@ -1,0 +1,9 @@
+[Desktop Entry]
+Name=Thesaurus Tool
+X-KDE-Library=libthesaurustool
+Type=Service
+Commands=thesaurus
+Comment=Show related words
+ServiceTypes=KDataTool
+DataType=QString
+DataMimeTypes=text/plain
