@@ -117,7 +117,7 @@ VShapeTool::recalcCoords()
 		if ( m_isCentered )
 		{
 			m_p.setX( m_p.x() - m_sign1 * qRound( m_d1 * 0.5 ) );
-			m_p.setY( m_p.y() - m_sign2 * qRound( m_d2 * 0.5 ) );
+			m_p.setY( m_p.y() + m_sign2 * qRound( m_d2 * 0.5 ) );
 		}
 	}
 }
