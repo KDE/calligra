@@ -112,3 +112,7 @@ Bugfixes:
 - Fix update ruler tabs when we switch between two text object
 - Fix move up/down style
 - Fix restore style shortcut when we remove/rename/add style
+
+Changes after KPresenter 1.2
+============================
+- Use ForbiddenCursor when object is "protect size"
