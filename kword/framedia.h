@@ -20,7 +20,7 @@
 #ifndef framedia_h
 #define framedia_h
 
-#include <qtabdialog.h>
+#include <kdialogbase.h>
 
 class KWFrame;
 class KWordDocument;
@@ -47,15 +47,15 @@ static const int FD_BORDERS        = 32;
 /* Class: KWFrameDia                                              */
 /******************************************************************/
 
-class KWFrameDia : public QTabDialog
+class KWFrameDia : public KDialogBase
 {
     Q_OBJECT
-
 public:
     KWFrameDia( QWidget *parent, const char *name, KWFrame *_frame, KWordDocument *_doc,
                 KWPage *_page, int _flags, KWFrameSet *fs = 0 );
 
 protected:
+    bool applyChanges();
     void setupTab1TextFrameSet();
     void setupTab2TextFrame();
     void setupTab3ConnectTextFrames();
@@ -82,20 +82,15 @@ protected:
 
     float oldX, oldY, oldW, oldH;
 
-    void closeEvent( QCloseEvent *e )
-    { emit frameDiaClosed(); e->accept(); }
-
 signals:
-    void frameDiaClosed();
-    void applyButtonReallyPressed();
+    void changed();
 
 protected slots:
     void runNoClicked();
     void runBoundingClicked();
     void runConturClicked();
-    void applyChanges();
+    virtual void slotOk();
     void connectListSelected( QListViewItem * );
-
 };
 
 #endif

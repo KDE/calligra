@@ -1068,21 +1068,14 @@ void KWPage::vmrCreateText()
     if ( insRect.width() > doc->getRastX() && insRect.height() > doc->getRastY() ) {
 	if ( frameDia ) {
 	    frameDia->close();
-	    disconnect( frameDia, SIGNAL( frameDiaClosed() ), this, SLOT( frameDiaClosed() ) );
-	    disconnect( frameDia, SIGNAL( applyButtonPressed() ), this, SLOT( frameDiaClosed() ) );
-	    disconnect( frameDia, SIGNAL( cancelButtonPressed() ), this, SLOT( frameDiaClosed() ) );
-	    disconnect( frameDia, SIGNAL( defaultButtonPressed() ), this, SLOT( frameDiaClosed() ) );
 	    delete frameDia;
 	    frameDia = 0;
 	}
 
 	frameDia = new KWFrameDia( this, "", frame, doc, this,
 				   FD_FRAME_CONNECT | FD_FRAME | FD_PLUS_NEW_FRAME | FD_BORDERS );
-	connect( frameDia, SIGNAL( frameDiaClosed() ), this, SLOT( frameDiaClosed() ) );
-	connect( frameDia, SIGNAL( applyButtonReallyPressed() ), this, SLOT( frameDiaClosed() ) );
-	connect( frameDia, SIGNAL( cancelButtonPressed() ), this, SLOT( frameDiaClosed() ) );
-	connect( frameDia, SIGNAL( defaultButtonPressed() ), this, SLOT( frameDiaClosed() ) );
-	frameDia->setCaption( i18n( "KWord - Frame settings" ) );
+	connect( frameDia, SIGNAL( changed() ), this, SLOT( frameDiaClosed() ) );
+        frameDia->setCaption(i18n("Connect frame"));
 	frameDia->show();
     }
 }
@@ -1589,20 +1582,13 @@ void KWPage::editReconnectFrame()
 
     if ( frameDia ) {
 	frameDia->close();
-	disconnect( frameDia, SIGNAL( frameDiaClosed() ), this, SLOT( frameDiaClosed() ) );
-	disconnect( frameDia, SIGNAL( applyButtonPressed() ), this, SLOT( frameDiaClosed() ) );
-	disconnect( frameDia, SIGNAL( cancelButtonPressed() ), this, SLOT( frameDiaClosed() ) );
-	disconnect( frameDia, SIGNAL( defaultButtonPressed() ), this, SLOT( frameDiaClosed() ) );
 	delete frameDia;
 	frameDia = 0;
     }
 
     frameDia = new KWFrameDia( this, "", frame, doc, this, FD_FRAME_CONNECT | FD_PLUS_NEW_FRAME , fs );
-    connect( frameDia, SIGNAL( frameDiaClosed() ), this, SLOT( frameDiaClosed() ) );
-    connect( frameDia, SIGNAL( applyButtonReallyPressed() ), this, SLOT( frameDiaClosed() ) );
-    connect( frameDia, SIGNAL( cancelButtonPressed() ), this, SLOT( frameDiaClosed() ) );
-    connect( frameDia, SIGNAL( defaultButtonPressed() ), this, SLOT( frameDiaClosed() ) );
-    frameDia->setCaption( i18n( "KWord - Reconnect Frame" ) );
+    connect( frameDia, SIGNAL( changed() ), this, SLOT( frameDiaClosed() ) );
+    frameDia->setCaption( i18n( "Reconnect Frame" ) );
     frameDia->show();
 
     if ( blinking )
@@ -3543,21 +3529,14 @@ void KWPage::femProps()
 {
     if ( frameDia ) {
 	frameDia->close();
-	disconnect( frameDia, SIGNAL( frameDiaClosed() ), this, SLOT( frameDiaClosed() ) );
-	disconnect( frameDia, SIGNAL( applyButtonPressed() ), this, SLOT( frameDiaClosed() ) );
-	disconnect( frameDia, SIGNAL( cancelButtonPressed() ), this, SLOT( frameDiaClosed() ) );
-	disconnect( frameDia, SIGNAL( defaultButtonPressed() ), this, SLOT( frameDiaClosed() ) );
 	delete frameDia;
 	frameDia = 0;
     }
 
     repaintScreen( FALSE );
     frameDia = new KWFrameDia( this, "", 0L, doc, this, FD_FRAME_SET | FD_FRAME | FD_GEOMETRY | FD_BORDERS );
-    connect( frameDia, SIGNAL( frameDiaClosed() ), this, SLOT( frameDiaClosed() ) );
-    connect( frameDia, SIGNAL( applyButtonReallyPressed() ), this, SLOT( frameDiaClosed() ) );
-    connect( frameDia, SIGNAL( cancelButtonPressed() ), this, SLOT( frameDiaClosed() ) );
-    connect( frameDia, SIGNAL( defaultButtonPressed() ), this, SLOT( frameDiaClosed() ) );
-    frameDia->setCaption( i18n( "KWord - Frame settings" ) );
+    connect( frameDia, SIGNAL( changed() ), this, SLOT( frameDiaClosed() ) );
+    frameDia->setCaption(i18n("Frame Properties"));
     frameDia->show();
 }
 

@@ -54,7 +54,7 @@
 /*================================================================*/
 KWFrameDia::KWFrameDia( QWidget* parent, const char* name, KWFrame *_frame, KWordDocument *_doc,
 			KWPage *_page, int _flags, KWFrameSet *fs )
-    : QTabDialog( parent, name, true )
+    : KDialogBase( Tabbed, i18n("Frame settings"), Ok | Cancel, Ok, parent, name, true)
 {
     frame = _frame;
     frameset = fs;
@@ -79,19 +79,13 @@ KWFrameDia::KWFrameDia( QWidget* parent, const char* name, KWFrame *_frame, KWor
     if ( ( flags & FD_GEOMETRY ) && doc )
 	setupTab4Geometry();
 
-    setCancelButton( i18n( "Cancel" ) );
-    setOkButton( i18n( "OK" ) );
-
-    connect( this, SIGNAL( applyButtonPressed() ), this, SLOT( applyChanges() ) );
-
-    resize( 550, 400 );
+    setInitialSize( QSize(550, 400) );
 }
 
 /*================================================================*/
 void KWFrameDia::setupTab1TextFrameSet()
 {
-    tab1 = new QWidget( this );
-
+    tab1 = addPage( i18n("Frameset") );
     grid1 = new QGridLayout( tab1, 4, 1, 15, 7 );
 
     lNewFrame = new QLabel( i18n( "If the text of the frameset doesn't fit into the the frames of the frameset anymore:" ), tab1 );
@@ -127,8 +121,6 @@ void KWFrameDia::setupTab1TextFrameSet()
 
     grid1->activate();
 
-    addTab( tab1, i18n( "Frameset" ) );
-
     rAppendFrame->setChecked( doc->getAutoCreateNewFrame() );
     rResizeFrame->setChecked( !doc->getAutoCreateNewFrame() );
 }
@@ -136,7 +128,7 @@ void KWFrameDia::setupTab1TextFrameSet()
 /*================================================================*/
 void KWFrameDia::setupTab2TextFrame()
 {
-    tab2 = new QWidget( this );
+    tab2 =  addPage( i18n( "Text Frame" ) );
 
     grid2 = new QGridLayout( tab2, 3, 2, 15, 7 );
 
@@ -225,7 +217,6 @@ void KWFrameDia::setupTab2TextFrame()
 
     grid2->activate();
 
-    addTab( tab2, i18n( "Text Frame" ) );
 
     uncheckAllRuns();
     switch ( frame ? frame->getRunAround() : doc->getRunAround() ) {
@@ -253,7 +244,7 @@ void KWFrameDia::setupTab2TextFrame()
 /*================================================================*/
 void KWFrameDia::setupTab3ConnectTextFrames()
 {
-    tab3 = new QWidget( this );
+    tab3 = addPage( i18n( "Connect Text Frames" ) );
 
     grid3 = new QGridLayout( tab3, 3, 1, 15, 7 );
 
@@ -312,7 +303,6 @@ void KWFrameDia::setupTab3ConnectTextFrames()
 
     grid3->activate();
 
-    addTab( tab3, i18n( "Connect Text Frames" ) );
     eFrameSetName->setText( i18n( "Frameset %1" ).arg( doc->getNumFrameSets() + 1 ) );
     connectListSelected( lFrameSList->firstChild() );
 }
@@ -320,7 +310,7 @@ void KWFrameDia::setupTab3ConnectTextFrames()
 /*================================================================*/
 void KWFrameDia::setupTab4Geometry()
 {
-    tab4 = new QWidget( this );
+    tab4 = addPage( i18n( "Geometry" ) );
     grid4 = new QGridLayout( tab4, 3, 1, 15, 7 );
 
     grp1 = new QGroupBox( i18n( QString( "Position in " + doc->getUnit() ) ), tab4 );
@@ -528,7 +518,6 @@ void KWFrameDia::setupTab4Geometry()
 
     grid4->activate();
 
-    addTab( tab4, i18n( "Geometry" ) );
 
     KWUnit l, r, t, b;
     doc->getFrameMargins( l, r, t, b );
@@ -629,7 +618,7 @@ void KWFrameDia::runConturClicked()
 }
 
 /*================================================================*/
-void KWFrameDia::applyChanges()
+bool KWFrameDia::applyChanges()
 {
     if ( ( flags & FD_FRAME_SET ) && doc )
 	doc->setAutoCreateNewFrame( rAppendFrame->isChecked() );
@@ -697,7 +686,7 @@ void KWFrameDia::applyChanges()
 		          "can not be made because a frameset with that name\n"
 		          "already exists. Please enter another name or select\n"
 		          "an existing frameset from the list.").arg(name));
-		return;
+		return false;
 	    }
 	}
 	int _num = str.toInt() - 1;
@@ -722,8 +711,8 @@ void KWFrameDia::applyChanges()
 	    doc->addFrameSet( _frameSet );
 	    page->repaintScreen( _num, true );
 	    _frameSet->setAutoCreateNewFrame( true );
-	    emit applyButtonReallyPressed();
-	    return;
+	    emit changed();
+	    return true;
 	}
 	doc->updateAllFrames();
     }
@@ -787,7 +776,16 @@ void KWFrameDia::applyChanges()
     else
 	page->repaintScreen( true );
 
-    emit applyButtonReallyPressed();
+    emit changed();
+    return true;
+}
+
+void KWFrameDia::slotOk()
+{
+    if (applyChanges())
+    {
+       KDialogBase::slotOk();
+    }
 }
 
 /*================================================================*/
