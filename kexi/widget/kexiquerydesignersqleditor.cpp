@@ -231,12 +231,12 @@ KexiQueryDesignerSQLEditor::KexiQueryDesignerSQLEditor(
 	KTextEditor::HighlightingInterface *hl = KTextEditor::highlightingInterface(d->doc);
 	for(uint i=0; i < hl->hlModeCount(); i++)
 	{
-		if(hl->hlModeName(i) == "SQL-MySQL")
+//		kdDebug() << "hlmode("<<i<<"): " << hl->hlModeName(i) << endl;
+		if (hl->hlModeName(i).contains("sql", false))
 		{
 			hl->setHlMode(i);
 			break;
 		}
-		i++;
 	}
 	connect(d->doc, SIGNAL(textChanged()), this, SIGNAL(textChanged()));
 #endif

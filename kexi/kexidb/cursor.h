@@ -296,7 +296,7 @@ class KEXI_DB_EXPORT Cursor: public Object
 		//</members related to buffering>
 
 		//! Usefull e.g. for value(int) method when we need access to schema def.
-		QueryFieldInfo::Vector* m_fieldsExpanded;
+		QueryColumnInfo::Vector* m_fieldsExpanded;
 
 //		QValueList<bool> m_detailedVisibility;
 

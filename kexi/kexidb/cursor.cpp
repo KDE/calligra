@@ -79,7 +79,7 @@ void Cursor::init()
 
 	if (m_query) {
 		//get list of all fields
-		m_fieldsExpanded = new QueryFieldInfo::Vector();
+		m_fieldsExpanded = new QueryColumnInfo::Vector();
 		*m_fieldsExpanded = m_query->fieldsExpanded();//&m_detailedVisibility);
 		m_fieldCount = m_fieldsExpanded->count();
 	} else {

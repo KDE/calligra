@@ -316,6 +316,19 @@ KexiDB Drivers
 
 TODO: add kexi__toremove table, and use it to remove objects on begin connection
 
+2004-09-15
+SQL Parser
+- select statements are now parser in more functional way, instead
+  of using global pointers. This enables nested statements in the future.
+- field alias support fixed
+- table alias support added
+KexiDB 
+- (API CHANGED) QuerySchema: 
+--"Field" in isFieldVisible(), setFieldVisible() renamed to "Column"
+--alias() renamed to columnAlias(), and so on
+--Table aliases are now supported: tableAlias() added, and so on
+--QueryFieldInfo class renamed to QueryColumnInfo
+
 2004-09-14
 TableView
 - hack added for KDownArrowPushButton for drawing with thinkeramik style. 

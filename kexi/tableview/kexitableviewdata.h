@@ -70,7 +70,7 @@ class KEXIDATATABLE_EXPORT KexiTableViewColumn {
 			uint width = 0);
 
 		//! Db-aware version.
-		KexiTableViewColumn(const KexiDB::QuerySchema &query, KexiDB::QueryFieldInfo& fi);
+		KexiTableViewColumn(const KexiDB::QuerySchema &query, KexiDB::QueryColumnInfo& fi);
 
 		virtual ~KexiTableViewColumn();
 
@@ -124,7 +124,7 @@ class KEXIDATATABLE_EXPORT KexiTableViewColumn {
 		
 		/*! A rich field information for db-aware data. 
 		 For not-db-aware data it always return false (use field() instead. */
-		KexiDB::QueryFieldInfo* fieldinfo;
+		KexiDB::QueryColumnInfo* fieldinfo;
 
 		bool isDBAware : 1; //!< true if data is stored in DB, not only in memeory
 

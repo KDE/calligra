@@ -23,10 +23,38 @@
 #include "expression.h"
 #include <kdebug.h>
 
+KEXI_DB_EXPORT QString KexiDB::exprClassName(int c)
+{
+	if (c==KexiDBExpr_Unary)
+		return "Unary";
+	else if (c==KexiDBExpr_Arithm)
+		return "Arithm";
+	else if (c==KexiDBExpr_Logical)
+		return "Logical";
+	else if (c==KexiDBExpr_Relational)
+		return "Relational";
+	else if (c==KexiDBExpr_SpecialBinary)
+		return "SpecialBinary";
+	else if (c==KexiDBExpr_Const)
+		return "Const";
+	else if (c==KexiDBExpr_Variable)
+		return "Variable";
+	else if (c==KexiDBExpr_Function)
+		return "Function";
+	else if (c==KexiDBExpr_Aggregation)
+		return "Aggregation";
+	else if (c==KexiDBExpr_TableList)
+		return "TableList";
+	
+	return "Unknown";
+}
+
 using namespace KexiDB;
 
+//=========================================
+
 BaseExpr::BaseExpr(int type) 
- : cl(KexiDBExpr_Unknown)
+ : m_cl(KexiDBExpr_Unknown)
  , m_par(0)
  , m_type(type)
 {
@@ -49,19 +77,20 @@ void BaseExpr::check()
 
 //=========================================
 
-NArgExpr::NArgExpr(int type)
+NArgExpr::NArgExpr(int aClass, int type)
  : BaseExpr(type)
 {
+	m_cl = aClass;
 	list.setAutoDelete(TRUE);
 }
 
 QString NArgExpr::debugString()
 {
-	QString s = "NArgExpr(";
+	QString s = QString("NArgExpr(")
+		+ "class=" + exprClassName(m_cl);
 	BaseExpr::ListIterator it(list);
 	for ( int i=0; it.current(); ++it, i++ ) {
-		if (i>0)
-			s+=", ";
+		s+=", ";
 		s+=it.current()->debugString();
 	}
 	s+=")";
@@ -94,9 +123,8 @@ void NArgExpr::check()
 
 //=========================================
 UnaryExpr::UnaryExpr(int typ, BaseExpr *n)
- : NArgExpr(typ)
+ : NArgExpr(KexiDBExpr_Unary, typ)
 {
-	cl = KexiDBExpr_Unary;
 	list.append(n);
 	//ustaw ojca
 	n->setParent(this);
@@ -143,9 +171,8 @@ void UnaryExpr::check()
 	
 //=========================================
 BinaryExpr::BinaryExpr(int aClass, BaseExpr *l_n, int typ, BaseExpr *r_n)
- : NArgExpr(typ)
+ : NArgExpr(aClass, typ)
 {
-	cl = aClass;
 	list.append(l_n);
 	list.append(r_n);
 	//ustaw ojca
@@ -169,9 +196,11 @@ void BinaryExpr::check() {
 
 QString BinaryExpr::debugString()
 {
-	return "BinaryExpr(" 
-		+ (left() ? left()->debugString() : QString("<NONE>")) 
-		+ "," + (right() ? right()->debugString() : QString("<NONE>")) 
+	return QString("BinaryExpr(")
+		+ "class=" + exprClassName(m_cl)
+		+ "," + (left() ? left()->debugString() : QString("<NONE>")) 
+		+ "," + QString::number(m_type) + ","
+		+ (right() ? right()->debugString() : QString("<NONE>")) 
 		+ ")";
 }
 
@@ -180,7 +209,7 @@ ConstExpr::ConstExpr( int type, const QVariant& val)
 : BaseExpr( type )
 , value(val)
 {
-	cl = KexiDBExpr_Const;
+	m_cl = KexiDBExpr_Const;
 }
 
 QString ConstExpr::debugString()
@@ -193,7 +222,7 @@ VariableExpr::VariableExpr( const QString& _name)
 : BaseExpr( 0/*undefined*/ )
 , name(_name)
 {
-	cl = KexiDBExpr_Variable;
+	m_cl = KexiDBExpr_Variable;
 }
 
 QString VariableExpr::debugString()
@@ -207,7 +236,7 @@ FunctionExpr::FunctionExpr( const QString& _name, NArgExpr* args_ )
  , name(_name)
  , args(args_)
 {
-	cl = KexiDBExpr_Function;
+	m_cl = KexiDBExpr_Function;
 	args->setParent( this );
 }
 

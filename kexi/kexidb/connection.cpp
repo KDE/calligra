@@ -954,33 +954,42 @@ QString Connection::selectStatement( KexiDB::QuerySchema& querySchema ) const
 //	for (Field *f = fields->first(); f; f = fields->next(), number++) {
 	Field *f;
 	for (Field::ListIterator it = querySchema.fieldsIterator(); (f = it.current()); ++it, number++) {
-		if (querySchema.isFieldVisible(number)) {
+		if (querySchema.isColumnVisible(number)) {
 			if (!sql.isEmpty())
-				sql += ", ";
+				sql += QString::fromLatin1(", ");
 
 			if (f->isQueryAsterisk()) {
 				if (static_cast<QueryAsterisk*>(f)->isSingleTableAsterisk()) //single-table *
-					sql += (escapeIdentifier(f->table()->name() + ".*"));
+					sql += (escapeIdentifier(f->table()->name() + QString::fromLatin1(".*")));
 				else //all-tables *
-					sql += "*";
+					sql += QString::fromLatin1("*");
 			}
 			else {
 				if (!f->table()) //sanity check
 					return QString::null;
 				sql += (escapeIdentifier(f->table()->name()) + "." + escapeIdentifier(f->name()));
+				QString aliasString = QString(querySchema.columnAlias(number));
+				if (!aliasString.isEmpty())
+					sql += (QString::fromLatin1(" AS ") + aliasString);
 			}
 		}
 	}
 	sql.prepend("SELECT ");
 	TableSchema::List* tables = querySchema.tables();
 	if (tables && !tables->isEmpty()) {
-		sql += " FROM ";
+		sql += QString::fromLatin1(" FROM ");
 		QString s_from;
 		TableSchema *table;
-		for (TableSchema::ListIterator it(*tables); (table = it.current()); ++it) {
+		number = 0;
+		for (TableSchema::ListIterator it(*tables); (table = it.current()); 
+			++it, number++)
+		{
 			if (!s_from.isEmpty())
-				s_from += ", ";
+				s_from += QString::fromLatin1(", ");
 			s_from += escapeIdentifier(table->name());
+			QString aliasString = QString(querySchema.tableAlias(number));
+			if (!aliasString.isEmpty())
+				s_from += (QString::fromLatin1(" AS ") + aliasString);
 		}
 		sql += s_from;
 	}
@@ -993,24 +1002,24 @@ QString Connection::selectStatement( KexiDB::QuerySchema& querySchema ) const
 	bool wasWhere = false; //for later use
 	for (Relationship::ListIterator it(*querySchema.relationships()); (rel = it.current()); ++it) {
 		if (s_where.isEmpty()) {
-			s_where = " WHERE ";
+			s_where = QString::fromLatin1(" WHERE ");
 			wasWhere = true;
 		}
 		else
-			s_where += " AND ";
+			s_where += QString::fromLatin1(" AND ");
 		Field::Pair *pair;
 		QString s_where_sub;
 		for (QPtrListIterator<Field::Pair> p_it(*rel->fieldPairs()); (pair = p_it.current()); ++p_it) {
 			if (!s_where_sub.isEmpty())
-				s_where_sub += " AND ";
-			s_where_sub += (pair->first->table()->name() + "." + 
-				escapeIdentifier(pair->first->name()) + " = "  +
-				escapeIdentifier(pair->second->table()->name()) + "." +
+				s_where_sub += QString::fromLatin1(" AND ");
+			s_where_sub += (pair->first->table()->name() + QString::fromLatin1(".") + 
+				escapeIdentifier(pair->first->name()) + QString::fromLatin1(" = ")  +
+				escapeIdentifier(pair->second->table()->name()) + QString::fromLatin1(".") +
 				escapeIdentifier(pair->second->name()));
 		}
 		if (rel->fieldPairs()->count()>1) {
 			s_where_sub.prepend("(");
-			s_where_sub += ")";
+			s_where_sub += QString::fromLatin1(")");
 		}
 		s_where += s_where_sub;
 	}
@@ -2189,7 +2198,7 @@ bool Connection::updateRow(QuerySchema &query, RowData& data, RowEditBuffer& buf
 		return false;
 	}
 	//success: now also assign new value in memory:
-	QMap<QueryFieldInfo*,uint> fieldsOrder = query.fieldsOrder();
+	QMap<QueryColumnInfo*,uint> fieldsOrder = query.fieldsOrder();
 	for (KexiDB::RowEditBuffer::DBMap::ConstIterator it=b.begin();it!=b.end();++it) {
 		data[ fieldsOrder[it.key()] ] = it.data();
 	}
@@ -2239,17 +2248,17 @@ bool Connection::insertRow(QuerySchema &query, RowData& data, RowEditBuffer& buf
 	return false;
 	}
 	//success: now also assign new value in memory:
-	QMap<QueryFieldInfo*,uint> fieldsOrder = query.fieldsOrder();
+	QMap<QueryColumnInfo*,uint> fieldsOrder = query.fieldsOrder();
 	for (KexiDB::RowEditBuffer::DBMap::ConstIterator it=b.begin();it!=b.end();++it) {
 		data[ fieldsOrder[it.key()] ] = it.data();
 	}
 
 	//fetch autoincremented values
-	QueryFieldInfo::List *aif_list = query.autoIncrementFields();
+	QueryColumnInfo::List *aif_list = query.autoIncrementFields();
 	if (pkey && !aif_list->isEmpty()) {
 		//now only if PKEY is present:
 		//js TODO more...
-		QueryFieldInfo *id_fieldinfo = aif_list->first();
+		QueryColumnInfo *id_fieldinfo = aif_list->first();
 		int last_id = lastInsertedAutoIncValue(id_fieldinfo->field->name(), id_fieldinfo->field->table()->name());
 		if (last_id==-1) {
 			//err...
@@ -2265,8 +2274,8 @@ bool Connection::insertRow(QuerySchema &query, RowData& data, RowEditBuffer& buf
 			//err...
 			return false;
 		}
-		QueryFieldInfo::ListIterator fi_it(*aif_list);
-		QueryFieldInfo *fi;
+		QueryColumnInfo::ListIterator fi_it(*aif_list);
+		QueryColumnInfo *fi;
 		for (uint i=0; (fi = fi_it.current()); ++fi_it, i++) {
 			KexiDBDbg << "Connection::insertRow(): AUTOINCREMENTED FIELD " << fi->field->name() << " == " 
 				<< aif_data[i].toInt() << endl;

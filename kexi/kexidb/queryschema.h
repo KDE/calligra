@@ -41,20 +41,20 @@ class Connection;
 class QueryAsterisk;
 class QuerySchemaPrivate;
 
-/*! Helper class that assigns additional information for the field in a query:
+/*! Helper class that assigns additional information for the column in a query:
 	- alias
 	- visibility
-	QueryFieldInfo::Vector is created and returned by QuerySchema::fieldsExpanded().
+	QueryColumnInfo::Vector is created and returned by QuerySchema::fieldsExpanded().
 	It's efficiently cached there.
 */
-class KEXI_DB_EXPORT QueryFieldInfo
+class KEXI_DB_EXPORT QueryColumnInfo
 {
 	public:
-		typedef QPtrVector<QueryFieldInfo> Vector;
-		typedef QPtrList<QueryFieldInfo> List;
-		typedef QPtrListIterator<QueryFieldInfo> ListIterator;
+		typedef QPtrVector<QueryColumnInfo> Vector;
+		typedef QPtrList<QueryColumnInfo> List;
+		typedef QPtrListIterator<QueryColumnInfo> ListIterator;
 		
-		QueryFieldInfo(Field *f, QCString _alias, bool _visible)
+		QueryColumnInfo(Field *f, QCString _alias, bool _visible)
 		 : field(f), alias(_alias), visible(_visible)
 		{
 		}
@@ -69,7 +69,7 @@ class KEXI_DB_EXPORT QueryFieldInfo
 class KEXI_DB_EXPORT QuerySchema : public FieldList, public SchemaData
 {
 	public:
-		/*! Creates empty query object (without fields). */
+		/*! Creates empty query object (without columns). */
 		QuerySchema();
 
 		/*! Creates query schema object that is equivalent to "SELECT * FROM table" 
@@ -86,7 +86,7 @@ class KEXI_DB_EXPORT QuerySchema : public FieldList, public SchemaData
 		
 		virtual ~QuerySchema();
 		
-		/*! Inserts \a field to the field list at \a index position.
+		/*! Inserts \a field to the columns list at \a index position.
 		 Inserted field will not be owned by this QuerySchema object,
 		 but still by corresponding TableSchema. 
 		 
@@ -96,46 +96,43 @@ class KEXI_DB_EXPORT QuerySchema : public FieldList, public SchemaData
 		 Note: After inserting a field, corresponding table will be automatically 
 		 added to query's tables list if it is not present there (see tables()).
 		 Field must have its table assigned. 
-		 */
+		 
+		 Added field will be visible. Use insertField(index, field, false)
+		 to add invisible field.
+		*/
 		virtual FieldList& insertField(uint index, Field *field);
 
+		/* Like above method, but you can also set column's visibility. */
 		virtual FieldList& insertField(uint index, Field *field, bool visible);
 		
-		/*! Adds \a field to the field list.
+		/*! Adds \a field to the columns list.
 		 \sa insertField() */
 		virtual KexiDB::FieldList& addField(KexiDB::Field* field, bool visible = true);
 
-		/*! Removes field from the field list. Use with care. */
+		/*! Removes field from the columns list. Use with care. */
 		virtual void removeField(KexiDB::Field *field);
 
-		/*! \return field's \a number visibility. By default field is visible. */
-		bool isFieldVisible(uint number) const;
+		/*! \return column's \a number visibility. By default column is visible. */
+		bool isColumnVisible(uint number) const;
 
-		//! Sets field's \a number visibility to \a v.
-		void setFieldVisible(uint number, bool v);
+		//! Sets column's \a number visibility to \a v.
+		void setColumnVisible(uint number, bool v);
 
-#if 0
-		/*! \return field's visibility. By default field is visible. */
-		bool isFieldVisible(KexiDB::Field *f) const;
-
-		//! Sets field's visibility.
-		void setFieldVisible(KexiDB::Field *f, bool v);
-#endif
-		/*! Adds \a asterisk at the and of field list. */
+		/*! Adds \a asterisk at the and of columns list. */
 		FieldList& addAsterisk(QueryAsterisk *asterisk, bool visible = true);
 
 //		int id() { return m_id; }
 //		Field::List::iterator fields() { return m_fields.begin(); }
 //js		void addPrimaryKey(const QString& key);
 
-		/*! Removes all fields and aliases from the list.
-		 Removes all tables. Sets parent table information to NULL.
-		 Does not destroy any objects though.
-		 clears name and all other properties. 
+		/*! Removes all columns and their aliases from the columns list, 
+		 removes all tables and their aliases from the tables list within this query.
+		 Sets parent table information to NULL.
+		 Does not destroy any objects though. Clears name and all other properties. 
 		 \sa FieldList::clear() */
 		virtual void clear();
 
-		/*! \return String for debugging purposes. */
+		/*! \return string for debugging purposes. */
 		virtual QString debugString();
 
 		/*! If query was created using a connection, 
@@ -143,10 +140,10 @@ class KEXI_DB_EXPORT QuerySchema : public FieldList, public SchemaData
 		Connection* connection();
 		
 		/*! \return table that is parent to this query. 
-		 Only potentially-editable fields 
-		 in this query belong to this table.
-		 This method also can return NULL if there is no tables at all,
-		 or if previously parent table schema was removed with removeTable(). 
+		 All potentially-editable columns within this query belong just to this table.
+		 This method also can return NULL if there are no tables at all,
+		 or if previously assigned parent table schema has been removed 
+		 with removeTable(). 
 		 Every query that have at least one table defined, should have 
 		 assigned a parent table. */
 		TableSchema* parentTable() const;
@@ -170,24 +167,45 @@ class KEXI_DB_EXPORT QuerySchema : public FieldList, public SchemaData
 		 If this table was parent for the query, parent table information is also
 		 invalidated. */
 		void removeTable(TableSchema *table);
+
+		/*! \return table with name \a tableName or 0 if this query has no such table */
+		TableSchema* table(const QString& tableName) const;
 		
 		/*! \return true if the query uses \a table. */
 		bool contains(TableSchema *table) const;
 
-		/*! \return alias of a field at \a index or null string 
-		 if there is no alias for \a field 
-		 or if there is no such field within the query defined */
-		QCString alias(uint index) const;
+		/*! \return alias of a column at \a index or null string 
+		 If there is no alias for this column
+		 or if there is no such column within the query defined */
+		QCString columnAlias(uint index) const;
 		
-		/*! This is convenience method. 
-		 \return true if a field at \a index has non empty alias defined within the query.
-		 if there is no alias for this field,
-		 or if there is no such field in the query defined, false is returned. */
-		bool hasAlias(uint index) const;
+		/*! Provided for convenience. 
+		 \return true if a column at \a index has non empty alias defined 
+		 within the query.
+		 If there is no alias for this column,
+		 or if there is no such column in the query defined, false is returned. */
+		bool hasColumnAlias(uint index) const;
 
-		/*! Sets \a alias for a field at \a index, within the query. 
-		 Passing empty sting to \a alias clears alias for a given field. */
-		void setAlias(uint index, const QCString& alias);
+		/*! Sets \a alias for a column at \a index, within the query. 
+		 Passing empty sting to \a alias clears alias for a given column. */
+		void setColumnAlias(uint index, const QCString& alias);
+
+		/*! \return alias of a table at \a index or null string (within FROM section)
+		 If there is no alias for this table
+		 or if there is no such table within the query defined */
+		QCString tableAlias(uint index) const;
+		
+		/*! Provided for convenience. 
+		 \return true if a table at \a index (within FROM section of the the query)
+		 has non empty alias defined.
+		 If there is no alias for this table,
+		 or if there is no such table in the query defined, false is returned. */
+		bool hasTableAlias(uint index) const;
+
+		/*! Sets \a alias for a table at \a index (within FROM section of the the query).
+		 Passing empty sting to \a alias clears alias for a given table
+		 (only for specified \a index). */
+		void setTableAlias(uint index, const QCString& alias);
 
 		/*! \return a list of relationships defined for this query */
 		Relationship::List* relationships() const;
@@ -204,9 +222,10 @@ class KEXI_DB_EXPORT QuerySchema : public FieldList, public SchemaData
 		/*! \return list of QueryAsterisk objects defined for this query */
 		Field::List* asterisks() const;
 
-		/*! QuerySchema::fields() returns vector of fields used in the query, but 
-		 in a case when there are asterisks defined for the query,
-		 it does not expand QueryAsterisk objects to field lists but return asterisk as-is.
+		/*! QuerySchema::fields() returns vector of fields used for the query columns,
+		 but in a case when there are asterisks defined for the query,
+		 it does not expand QueryAsterisk objects to field lists but return every
+		 asterisk as-is.
 		 This could be inconvenient when you need just full expanded list of fields,
 		 so this method does the work for you. 
 
@@ -215,19 +234,20 @@ class KEXI_DB_EXPORT QuerySchema : public FieldList, public SchemaData
 		 This method's result is cached by QuerySchema object.
 @todo js: UPDATE CACHE!
 		*/
-		QueryFieldInfo::Vector fieldsExpanded();//QValueList<bool> *detailedVisibility = 0);
+		QueryColumnInfo::Vector fieldsExpanded();//QValueList<bool> *detailedVisibility = 0);
 
-		/*! \return a map for fast lookup of query fields' order.
-		 This is exactly opposite information compared to vector returned by fieldsExpanded()
-		 This method's result is cached by QuerySchema object.
+		/*! \return a map for fast lookup of query columns' order.
+		 This is exactly opposite information compared to vector returned 
+		 by fieldsExpanded(). This method's result is cached by QuerySchema object.
 @todo js: UPDATE CACHE!
 		*/
-		QMap<QueryFieldInfo*,uint> fieldsOrder();
+		QMap<QueryColumnInfo*,uint> fieldsOrder();
 
 		/*! \return table describing order of PKEY fields within the query.
 		 It is usable foe e.g. Conenction::updateRow(), when we need 
 		 to locate each PKEY's field in a constant time.
-		 Returned vector is owned by QuerySchema object, when you assign it, it is implicity shared.
+		 Returned vector is owned by QuerySchema object, when you assign it, 
+		 it is implicity shared.
 		 Its size if equal to number of PKEY fields, i.e. 
 		 == parentTable()->primaryKey()->fieldCount().
 		 Returns empty vector if there is neither parent table nor parent table's pkey.
@@ -240,7 +260,7 @@ class KEXI_DB_EXPORT QuerySchema : public FieldList, public SchemaData
 		 from parent table of this query. This result is cached for efficiency. 
 		 fieldsExpanded() is used for that.
 		*/
-		QueryFieldInfo::List* autoIncrementFields();
+		QueryColumnInfo::List* autoIncrementFields();
 
 		/*! \return a preset statement (if any). */
 		QString statement() const;
@@ -248,18 +268,19 @@ class KEXI_DB_EXPORT QuerySchema : public FieldList, public SchemaData
 		//! forces a query statement (i.e. no statement is composed from QuerySchema's content)
 		void setStatement(const QString &s);
 
-		/*! \return a string that is a result of concatenating all field names for \a infolist,
-		 with "," between each one. This is usable e.g. as argument like "field1,field2" 
+		/*! \return a string that is a result of concatenating all column names 
+		 for \a infolist, with "," between each one. 
+		 This is usable e.g. as argument like "field1,field2" 
 		 for "INSERT INTO (xxx) ..". The result of this method is effectively cached,
 		 and it is invalidated when set of fields changes (e.g. using clear() 
 		 or addField()).
 		 
 		 This method is similar to FieldList::sqlFieldsList() it just uses
-		 QueryFieldInfo::List instead of Field::List.
+		 QueryColumnInfo::List instead of Field::List.
 		*/
-		static QString sqlFieldsList(QueryFieldInfo::List* infolist, Driver *driver);
+		static QString sqlColumnsList(QueryColumnInfo::List* infolist, Driver *driver);
 
-		/*! \return cached sql list created using sqlFieldsList() on a list returned
+		/*! \return cached sql list created using sqlColumnsList() on a list returned
 		 by autoIncrementFields(). */
 		QString autoIncrementSQLFieldsList(Driver *driver);
 		
@@ -277,7 +298,8 @@ class KEXI_DB_EXPORT QuerySchema : public FieldList, public SchemaData
 /*! This class encapsulates information about single asterisk in query definition.
  There are two types of query asterisks:
  
- 1. "Single-table" asterisk, that references all fields of given table used in the query.
+ 1. "Single-table" asterisk, that references all fields of given table used
+ in the query.
  Example SQL statement: 
  \code
  SELECT staff.*, cars.model from staff, cars WHERE staff.car = cars.number;

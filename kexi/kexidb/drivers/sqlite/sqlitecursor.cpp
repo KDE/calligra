@@ -405,7 +405,7 @@ void SQLiteCursor::storeCurrentRow(RowData &data) const
 
 	const uint fieldsExpandedCount = m_fieldsExpanded->count();
 	for( uint i=0, j=0; i<m_fieldCount; i++, col++, j++ ) {
-//		while (j < m_detailedVisibility.count() && !m_detailedVisibility[j]) //!m_query->isFieldVisible(j))
+//		while (j < m_detailedVisibility.count() && !m_detailedVisibility[j]) //!m_query->isColumnVisible(j))
 			//j++;
 		while (j < fieldsExpandedCount && !m_fieldsExpanded->at(j)->visible)
 			j++;

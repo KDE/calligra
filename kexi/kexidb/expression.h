@@ -33,10 +33,14 @@ namespace KexiDB {
 #define KexiDBExpr_Arithm 2
 #define KexiDBExpr_Logical 3
 #define KexiDBExpr_Relational 4
-#define KexiDBExpr_Const 5
-#define KexiDBExpr_Variable 6
-#define KexiDBExpr_Function 7
-#define KexiDBExpr_Aggregation 8
+#define KexiDBExpr_SpecialBinary 5
+#define KexiDBExpr_Const 6
+#define KexiDBExpr_Variable 7
+#define KexiDBExpr_Function 8
+#define KexiDBExpr_Aggregation 9
+#define KexiDBExpr_TableList 10
+
+KEXI_DB_EXPORT QString exprClassName(int c);
 
 //! A base class for all expressions
 class KEXI_DB_EXPORT BaseExpr
@@ -53,8 +57,10 @@ public:
 	virtual void check();
 	virtual QString debugString();
 
-	int cl; //class
+	int exprClass() const { return m_cl; }
+
 protected:
+	int m_cl; //!< class
 	BaseExpr *m_par; //!< parent
 	int m_type;
 };
@@ -63,7 +69,7 @@ protected:
 class KEXI_DB_EXPORT NArgExpr : public BaseExpr
 {
 public:
-	NArgExpr(int typ);
+	NArgExpr(int aClass, int typ);
 	void add(BaseExpr *expr);
 	BaseExpr *arg(int n);
 	int args();
@@ -83,22 +89,28 @@ public:
 	virtual void check();
 };
 
-//! A base class for binary operation
-//! -  arithmetic operations: + - / * % << >> & | ||
-//! - relational operations: = (or ==) < > <= >= <> (or !=) LIKE IN
-//! - logical operations: OR (or ||) AND (or &&) XOR
+/*! A base class for binary operation
+ - arithmetic operations: + - / * % << >> & | ||
+ - relational operations: = (or ==) < > <= >= <> (or !=) LIKE IN
+ - logical operations: OR (or ||) AND (or &&) XOR
+ - SpecialBinary "pseudo operators": 
+    * e.g. "f1 f2" : type == 0
+    * e.g. "f1 AS f2" : type == AS
+*/
 class KEXI_DB_EXPORT BinaryExpr : public NArgExpr
 {
 public:
-	BinaryExpr(int aClass, BaseExpr *left_expr, int typ, BaseExpr *right_expr);
+	BinaryExpr(int aClass, BaseExpr *left_expr, int type, BaseExpr *right_expr);
 	virtual QString debugString();
 	BaseExpr *left();
 	BaseExpr *right();
 	virtual void check();
 };
 
-//! string, integer, float constants
-//! also includes NULL value
+/*! String, integer, float constants also includes NULL value.
+ type can be: IDENTIFIER, SQL_NULL, CHARACTER_STRING_LITERAL,
+ INTEGER_CONST, REAL_CONST
+*/
 class KEXI_DB_EXPORT ConstExpr : public BaseExpr
 {
 public:

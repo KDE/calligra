@@ -54,7 +54,7 @@ namespace KexiDB {
 class KEXI_DB_EXPORT RowEditBuffer {
 public:
 	typedef QMap<QString,QVariant> SimpleMap;
-	typedef QMap<QueryFieldInfo*,QVariant> DBMap;
+	typedef QMap<QueryColumnInfo*,QVariant> DBMap;
 
 	RowEditBuffer(bool dbAwareBuffer);
 	~RowEditBuffer();
@@ -65,14 +65,14 @@ public:
 
 	bool isEmpty() const;
 
-	inline void insert( QueryFieldInfo& fi, QVariant &val )
+	inline void insert( QueryColumnInfo& fi, QVariant &val )
 		{ if (m_dbBuffer) m_dbBuffer->insert(&fi,val); }
 
 	inline void insert( const QString& fname, QVariant &val ) 
 		{ if (m_simpleBuffer) m_simpleBuffer->insert(fname,val); }
 
 	//! useful only for db-aware buffer
-	QVariant* at( QueryFieldInfo& fi );
+	QVariant* at( QueryColumnInfo& fi );
 	
 	//! useful only for not-db-aware buffer
 	QVariant* at( Field& f );

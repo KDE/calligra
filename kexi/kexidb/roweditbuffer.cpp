@@ -40,10 +40,10 @@ RowEditBuffer::~RowEditBuffer()
 	delete m_dbBufferIt;
 }
 
-QVariant* RowEditBuffer::at( QueryFieldInfo& fi ) 
+QVariant* RowEditBuffer::at( QueryColumnInfo& fi ) 
 { 
 	if (!m_dbBuffer) {
-		KexiDBWarning << "RowEditBuffer::at(QueryFieldInfo&): not db-aware buffer!" << endl;
+		KexiDBWarning << "RowEditBuffer::at(QueryColumnInfo&): not db-aware buffer!" << endl;
 		return 0;
 	}
 	*m_dbBufferIt = m_dbBuffer->find( &fi );

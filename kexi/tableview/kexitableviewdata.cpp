@@ -74,7 +74,7 @@ KexiTableViewColumn::KexiTableViewColumn(const QString& name, KexiDB::Field::Typ
 }
 
 KexiTableViewColumn::KexiTableViewColumn(
-	const KexiDB::QuerySchema &query, KexiDB::QueryFieldInfo& fi)
+	const KexiDB::QuerySchema &query, KexiDB::QueryColumnInfo& fi)
 //	const KexiDB::QuerySchema &query, KexiDB::Field& f)
 : fieldinfo(&fi)
 , m_field(fi.field)
@@ -203,11 +203,11 @@ KexiTableViewData::KexiTableViewData(KexiDB::Cursor *c)
 	uint i = 0;
 //	QValueList<bool> detailedVisibility;
 //	KexiDB::Field::Vector vector = m_cursor->query()->fieldsExpanded(&detailedVisibility);
-	KexiDB::QueryFieldInfo::Vector vector 
+	KexiDB::QueryColumnInfo::Vector vector 
 		= m_cursor->query()->fieldsExpanded();
 	KexiTableViewColumn* col;
 	for (i=0;i<vector.count();i++) {
-		KexiDB::QueryFieldInfo *fi = vector[i];
+		KexiDB::QueryColumnInfo *fi = vector[i];
 		if (fi->visible) {
 			col=new KexiTableViewColumn(*m_cursor->query(), *fi);
 			//col->setVisible( detailedVisibility[i] );
