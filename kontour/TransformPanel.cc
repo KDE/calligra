@@ -65,8 +65,8 @@ QDockWindow(QDockWindow::InDock, parent, name)
   QLabel *mVertText = new QLabel(i18n("Vertical"), mTranslate);
   mVertBox = new QSpinBox(-1000, 1000, 1, mTranslate);
   //connect(mVert, SIGNAL(valueChanged(int)), this, SLOT(slotTranslateChanged(int)));
-  QCheckBox *mTRelative = new QCheckBox(i18n("Relative"), mTranslate, "T");
-  connect(mTRelative, SIGNAL(toggled(bool)), this, SLOT(slotRelativeToggled(bool)));
+  QCheckBox *mRelative = new QCheckBox(i18n("Relative"), mTranslate, "T");
+  connect(mRelative, SIGNAL(toggled(bool)), this, SLOT(slotRelativeToggled(bool)));
   mDuplicateBtn = new QPushButton(i18n("Duplicate"), mTranslate);
   connect(mDuplicateBtn, SIGNAL(clicked()), this, SLOT(slotDupPressed()));
   mApplyBtn = new QPushButton(i18n("Apply"), mTranslate);
@@ -76,7 +76,7 @@ QDockWindow(QDockWindow::InDock, parent, name)
   mLayout->addWidget(mHorizBox, 0, 1);
   mLayout->addWidget(mVertText, 1, 0);
   mLayout->addWidget(mVertBox, 1, 1);
-  mLayout->addMultiCellWidget(mTRelative, 2, 2, 0, 1);
+  mLayout->addMultiCellWidget(mRelative, 2, 2, 0, 1);
   mLayout->addWidget(mDuplicateBtn, 3, 0);
   mLayout->addWidget(mApplyBtn, 3, 1);
   mTab->insertTab(mTranslate, i18n("T"));
@@ -87,8 +87,8 @@ QDockWindow(QDockWindow::InDock, parent, name)
   QLabel *mAngleText = new QLabel(i18n("Angle"), mRotate);
   mAngleBox = new QSpinBox(-360, 360, 1, mRotate);
   //connect(mHoriz, SIGNAL(valueChanged(int)), this, SLOT(slotHorizTranslateChanged(int)));
-  QCheckBox *mRRelative = new QCheckBox(i18n("Relative"), mRotate, "R");
-  connect(mRRelative, SIGNAL(toggled(bool)), this, SLOT(slotRelativeToggled(bool)));
+  mRelative = new QCheckBox(i18n("Relative"), mRotate, "R");
+  connect(mRelative, SIGNAL(toggled(bool)), this, SLOT(slotRelativeToggled(bool)));
   mDuplicateBtn = new QPushButton(i18n("Duplicate"), mRotate);
   connect(mDuplicateBtn, SIGNAL(clicked()), this, SLOT(slotDupPressed()));
   mApplyBtn = new QPushButton(i18n("Apply"), mRotate);
@@ -96,7 +96,7 @@ QDockWindow(QDockWindow::InDock, parent, name)
 
   mLayout->addWidget(mAngleText, 0, 0);
   mLayout->addWidget(mAngleBox, 0, 1);
-  mLayout->addMultiCellWidget(mRRelative, 1, 1, 0, 1);
+  mLayout->addMultiCellWidget(mRelative, 1, 1, 0, 1);
   mLayout->addWidget(mDuplicateBtn, 2, 0);
   mLayout->addWidget(mApplyBtn, 2, 1);
   mTab->insertTab(mRotate, i18n("R"));
@@ -190,6 +190,10 @@ void TransformPanel::slotRelativeToggled(bool toggled)
   else if(mTab->currentPage() == mRotate)
   {
 	mRRelative = toggled;
+	if(toggled)
+	{
+	  mAngleBox->setValue(0);
+	}
   }
 }
 
