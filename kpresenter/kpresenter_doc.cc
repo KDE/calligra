@@ -932,18 +932,18 @@ bool KPresenterDoc::saveOasis( KoStore* store, KoXmlWriter* manifestWriter )
     QValueList<KoGenStyles::NamedStyle> styles = mainStyles.styles( STYLE_AUTO );
     QValueList<KoGenStyles::NamedStyle>::const_iterator it = styles.begin();
     for ( ; it != styles.end() ; ++it ) {
-        (*it).style->writeStyle( &contentWriter, "style:style", (*it).name, "style:paragraph-properties" );
+        (*it).style->writeStyle( &contentWriter, mainStyles,  "style:style", (*it).name, "style:paragraph-properties" );
     }
     styles = mainStyles.styles( STYLE_BACKGROUNDPAGEAUTO );
     it = styles.begin();
     for ( ; it != styles.end() ; ++it ) {
-        (*it).style->writeStyle( &contentWriter, "style:style", (*it).name, "style:drawing-page-properties" );
+        (*it).style->writeStyle( &contentWriter, mainStyles, "style:style", (*it).name, "style:drawing-page-properties" );
     }
 
     styles = mainStyles.styles( STYLE_GRAPHICAUTO );
     it = styles.begin();
     for ( ; it != styles.end() ; ++it ) {
-        (*it).style->writeStyle( &contentWriter, "style:style", (*it).name , "style:graphic-properties"  );
+        (*it).style->writeStyle( &contentWriter, mainStyles, "style:style", (*it).name , "style:graphic-properties"  );
     }
 
     contentWriter.endElement(); // office:automatic-styles
@@ -1008,7 +1008,7 @@ void KPresenterDoc::saveOasisDocumentStyles( KoStore* store, KoGenStyles& mainSt
     QValueList<KoGenStyles::NamedStyle> styles = mainStyles.styles( STYLE_USER );
     QValueList<KoGenStyles::NamedStyle>::const_iterator it = styles.begin();
     for ( ; it != styles.end() ; ++it ) {
-        (*it).style->writeStyle( &stylesWriter, "style:style", (*it).name, "style:paragraph-properties" );
+        (*it).style->writeStyle( &stylesWriter, mainStyles, "style:style", (*it).name, "style:paragraph-properties" );
     }
     stylesWriter.endElement(); // office:styles
 //todo add other style
@@ -1017,7 +1017,7 @@ void KPresenterDoc::saveOasisDocumentStyles( KoStore* store, KoGenStyles& mainSt
     styles = mainStyles.styles( STYLE_BACKGROUNDPAGE );
     it = styles.begin();
     for ( ; it != styles.end() ; ++it ) {
-        (*it).style->writeStyle( &stylesWriter, "style:style", (*it).name , "style:drawing-page-properties"  );
+        (*it).style->writeStyle( &stylesWriter, mainStyles, "style:style", (*it).name , "style:drawing-page-properties"  );
     }
 
 
