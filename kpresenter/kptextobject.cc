@@ -1026,7 +1026,8 @@ void KPTextObject::setShadowParameter(int _distance,ShadowDirection _direction,c
 
 void KPTextObject::slotFormatChanged(const KoTextFormat &_format)
 {
-    m_doc->getKPresenterView()->showFormat( _format );
+    if(m_doc && m_doc->getKPresenterView())
+        m_doc->getKPresenterView()->showFormat( _format );
 }
 
 void KPTextObject::applyStyleChange( KoStyle * changedStyle, int paragLayoutChanged, int formatChanged )
