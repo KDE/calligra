@@ -864,13 +864,26 @@ QString OOWriterWorker::textFormatToStyle(const TextFormatting& formatOrigin,
     return strElement.stripWhiteSpace(); // Remove especially trailing spaces
 }
 
-bool OOWriterWorker::makeTable(const FrameAnchor& /*anchor*/ )
+#undef ALLOW_TABLE
+
+// ### TODO: table support
+bool OOWriterWorker::makeTable(const FrameAnchor& anchor )
 {
-#if 0
-    *m_streamOut << "</abiword:p>\n"; // Close previous paragraph ### TODO: do it correctly like for HTML
-    *m_streamOut << "<table:table>\n";
-    // ### TODO: table:column
+#ifdef ALLOW_TABLE
+    const QString tableName( anchor.key.toString() ); // ### FIXME: we do not need the date stamp
+
+    *m_streamOut << "</text:p>\n"; // Close previous paragraph ### TODO: do it correctly like for HTML
+    *m_streamOut << "<table:table table:name=\""
+        << escapeOOText( anchor.key.toString() )
+        << "\ table:style-name=\""
+        << "Table1" // ### TODO: we need an automatic table style
+        << "\" >\n";
+    // ### TODO: table:table-column (how do we count?)
     // ### TODO: automatic styles
+
+    *m_streamOut << "<table:row>\n" << endl;
+    int rowCurrent = 1; // Not 0 as for the other filters, as we have already opened the first row
+
 
     QValueList<TableCell>::ConstIterator itCell;
 
@@ -878,9 +891,14 @@ bool OOWriterWorker::makeTable(const FrameAnchor& /*anchor*/ )
         itCell!=anchor.table.cellList.end(); itCell++)
     {
         // ### TODO: rowspan, colspan
+        if ( rowCurrent != (*itCell).row )
+        {
+            rowCurrent = (*itCell).row;
+            *m_streamOut << "</table:row>\n" << endl;
+            *m_streamOut << "<table:row>\n" << endl;
+        }
 
-        // AbiWord seems to work by attaching to the cell borders
-        *m_streamOut << "<table:table-cell Table:value-type=\"string\">\n";
+        *m_streamOut << "<table:table-cell table:value-type=\"string\" table:style-name=\"### TODO\">\n";
 
         if (!doFullAllParagraphs(*(*itCell).paraList))
         {
@@ -890,8 +908,9 @@ bool OOWriterWorker::makeTable(const FrameAnchor& /*anchor*/ )
         *m_streamOut << "</table:table-cell>\n";
     }
 
+    *m_streamOut << "</table:row>\n" << endl;
     *m_streamOut << "</table:table>\n";
-    *m_streamOut << "<abiword:p>\n"; // Re-open the "previous" paragraph ### TODO: do it correctly like for HTML
+    *m_streamOut << "<text:p>\n"; // Re-open the "previous" paragraph ### TODO: do it correctly like for HTML
 #endif
     return true;
 }
