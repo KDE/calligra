@@ -1,0 +1,294 @@
+<!DOCTYPE UI><UI version="3.1" stdsetdef="1">
+<class>DurationPanelBase</class>
+<widget class="QWidget">
+    <property name="name">
+        <cstring>DurationPanelBase</cstring>
+    </property>
+    <property name="geometry">
+        <rect>
+            <x>0</x>
+            <y>0</y>
+            <width>430</width>
+            <height>237</height>
+        </rect>
+    </property>
+    <property name="caption">
+        <string>Adjust duration</string>
+    </property>
+    <vbox>
+        <property name="name">
+            <cstring>unnamed</cstring>
+        </property>
+        <widget class="QLayoutWidget">
+            <property name="name">
+                <cstring>layout6</cstring>
+            </property>
+            <hbox>
+                <property name="name">
+                    <cstring>unnamed</cstring>
+                </property>
+                <widget class="QLabel">
+                    <property name="name">
+                        <cstring>textLabel1</cstring>
+                    </property>
+                    <property name="text">
+                        <string>Duration:</string>
+                    </property>
+                </widget>
+                <widget class="QLabel">
+                    <property name="name">
+                        <cstring>durationPreview</cstring>
+                    </property>
+                </widget>
+                <spacer>
+                    <property name="name">
+                        <cstring>spacer2</cstring>
+                    </property>
+                    <property name="orientation">
+                        <enum>Horizontal</enum>
+                    </property>
+                    <property name="sizeType">
+                        <enum>Expanding</enum>
+                    </property>
+                    <property name="sizeHint">
+                        <size>
+                            <width>335</width>
+                            <height>20</height>
+                        </size>
+                    </property>
+                </spacer>
+            </hbox>
+        </widget>
+        <widget class="Line">
+            <property name="name">
+                <cstring>line4</cstring>
+            </property>
+            <property name="frameShape">
+                <enum>HLine</enum>
+            </property>
+            <property name="frameShadow">
+                <enum>Sunken</enum>
+            </property>
+            <property name="orientation">
+                <enum>Horizontal</enum>
+            </property>
+        </widget>
+        <widget class="QLayoutWidget">
+            <property name="name">
+                <cstring>layout3</cstring>
+            </property>
+            <grid>
+                <property name="name">
+                    <cstring>unnamed</cstring>
+                </property>
+                <widget class="QLabel" row="0" column="0">
+                    <property name="name">
+                        <cstring>textLabel3</cstring>
+                    </property>
+                    <property name="text">
+                        <string>Less then a day:</string>
+                    </property>
+                </widget>
+                <widget class="QLineEdit" row="1" column="1">
+                    <property name="name">
+                        <cstring>durationSpecification</cstring>
+                    </property>
+                </widget>
+                <widget class="QLayoutWidget" row="0" column="1">
+                    <property name="name">
+                        <cstring>layout1</cstring>
+                    </property>
+                    <hbox>
+                        <property name="name">
+                            <cstring>unnamed</cstring>
+                        </property>
+                        <widget class="QTimeEdit">
+                            <property name="name">
+                                <cstring>durationTime</cstring>
+                            </property>
+                        </widget>
+                        <spacer>
+                            <property name="name">
+                                <cstring>spacer1</cstring>
+                            </property>
+                            <property name="orientation">
+                                <enum>Horizontal</enum>
+                            </property>
+                            <property name="sizeType">
+                                <enum>Expanding</enum>
+                            </property>
+                            <property name="sizeHint">
+                                <size>
+                                    <width>21</width>
+                                    <height>20</height>
+                                </size>
+                            </property>
+                        </spacer>
+                    </hbox>
+                </widget>
+                <widget class="QLabel" row="1" column="0">
+                    <property name="name">
+                        <cstring>textLabel4</cstring>
+                    </property>
+                    <property name="text">
+                        <string>Amount of days:</string>
+                    </property>
+                </widget>
+            </grid>
+        </widget>
+        <widget class="QGroupBox">
+            <property name="name">
+                <cstring>groupBox2</cstring>
+            </property>
+            <property name="title">
+                <string>Adjust time</string>
+            </property>
+            <vbox>
+                <property name="name">
+                    <cstring>unnamed</cstring>
+                </property>
+                <widget class="QLayoutWidget">
+                    <property name="name">
+                        <cstring>layout8</cstring>
+                    </property>
+                    <hbox>
+                        <property name="name">
+                            <cstring>unnamed</cstring>
+                        </property>
+                        <widget class="QComboBox">
+                            <item>
+                                <property name="text">
+                                    <string>Add</string>
+                                </property>
+                            </item>
+                            <item>
+                                <property name="text">
+                                    <string>Subtract</string>
+                                </property>
+                            </item>
+                            <property name="name">
+                                <cstring>adjustType</cstring>
+                            </property>
+                        </widget>
+                        <widget class="QSpinBox">
+                            <property name="name">
+                                <cstring>spinBox1</cstring>
+                            </property>
+                        </widget>
+                        <widget class="QComboBox">
+                            <item>
+                                <property name="text">
+                                    <string>Day(s)</string>
+                                </property>
+                            </item>
+                            <item>
+                                <property name="text">
+                                    <string>Week(s)</string>
+                                </property>
+                            </item>
+                            <item>
+                                <property name="text">
+                                    <string>Year(s)</string>
+                                </property>
+                            </item>
+                            <item>
+                                <property name="text">
+                                    <string>Leap year(s)</string>
+                                </property>
+                            </item>
+                            <item>
+                                <property name="text">
+                                    <string>Hour(s)</string>
+                                </property>
+                            </item>
+                            <item>
+                                <property name="text">
+                                    <string>Minute(s)</string>
+                                </property>
+                            </item>
+                            <item>
+                                <property name="text">
+                                    <string>Second(s)</string>
+                                </property>
+                            </item>
+                            <property name="name">
+                                <cstring>adjustStep</cstring>
+                            </property>
+                        </widget>
+                        <spacer>
+                            <property name="name">
+                                <cstring>spacer6_2</cstring>
+                            </property>
+                            <property name="orientation">
+                                <enum>Horizontal</enum>
+                            </property>
+                            <property name="sizeType">
+                                <enum>Expanding</enum>
+                            </property>
+                            <property name="sizeHint">
+                                <size>
+                                    <width>31</width>
+                                    <height>20</height>
+                                </size>
+                            </property>
+                        </spacer>
+                    </hbox>
+                </widget>
+                <widget class="QLayoutWidget">
+                    <property name="name">
+                        <cstring>layout11</cstring>
+                    </property>
+                    <hbox>
+                        <property name="name">
+                            <cstring>unnamed</cstring>
+                        </property>
+                        <spacer>
+                            <property name="name">
+                                <cstring>spacer7</cstring>
+                            </property>
+                            <property name="orientation">
+                                <enum>Horizontal</enum>
+                            </property>
+                            <property name="sizeType">
+                                <enum>Expanding</enum>
+                            </property>
+                            <property name="sizeHint">
+                                <size>
+                                    <width>240</width>
+                                    <height>20</height>
+                                </size>
+                            </property>
+                        </spacer>
+                        <widget class="QPushButton">
+                            <property name="name">
+                                <cstring>bAdd</cstring>
+                            </property>
+                            <property name="text">
+                                <string>Ok</string>
+                            </property>
+                        </widget>
+                    </hbox>
+                </widget>
+            </vbox>
+        </widget>
+        <spacer>
+            <property name="name">
+                <cstring>spacer3</cstring>
+            </property>
+            <property name="orientation">
+                <enum>Vertical</enum>
+            </property>
+            <property name="sizeType">
+                <enum>Expanding</enum>
+            </property>
+            <property name="sizeHint">
+                <size>
+                    <width>21</width>
+                    <height>20</height>
+                </size>
+            </property>
+        </spacer>
+    </vbox>
+</widget>
+<layoutdefaults spacing="6" margin="11"/>
+</UI>

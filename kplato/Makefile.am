@@ -9,7 +9,8 @@ libkplatopart_la_SOURCES =  kptmilestone.cc kptnode.cc kptproject.cc \
     kptmilestonedialog.cc kptganttcanvas.cc kpttimescale.cc \
     kptganttview.cc kptprojectlist.cc kptresourcespanel.cc \
     kptpertview.cc kptpertcanvas.cc kptrelationdialog.cc \
-    kptcanvasitem.cc kptprojectdialogbase.ui resourcespanelbase.ui
+    kptcanvasitem.cc kptprojectdialogbase.ui resourcespanelbase.ui \
+    durationpanelbase.ui kptdurationdialog.cc
 
 noinst_HEADERS = defs.h kptaboutdata.h kptduration.h kptfactory.h \
     kptmilestone.h kptnode.h kptpart.h kptproject.h kptrelation.h \
@@ -18,7 +19,7 @@ noinst_HEADERS = defs.h kptaboutdata.h kptduration.h kptfactory.h \
     kptmilestonedialog.h kptganttcanvas.h kpttimescale.h \
     kptganttview.h kptprojectlist.h kptcanvasitem.h \
     kptpertview.h kptpertcanvas.h kptrelationdialog.h \
-    kptresourcespanel.h
+    kptresourcespanel.h kptdurationdialog.h
 
 ## The part
 kde_module_LTLIBRARIES = libkplatopart.la
