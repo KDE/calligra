@@ -9,7 +9,7 @@
             <x>0</x>
             <y>0</y>
             <width>290</width>
-            <height>204</height>
+            <height>210</height>
         </rect>
     </property>
     <grid>
@@ -31,32 +31,6 @@
             <property name="title">
                 <string>Export</string>
             </property>
-            <widget class="QCheckBox">
-                <property name="name">
-                    <cstring>m_checkCrop</cstring>
-                </property>
-                <property name="enabled">
-                    <bool>false</bool>
-                </property>
-                <property name="geometry">
-                    <rect>
-                        <x>9</x>
-                        <y>82</y>
-                        <width>242</width>
-                        <height>20</height>
-                    </rect>
-                </property>
-                <property name="text">
-                    <string>C&amp;rop picture to edges</string>
-                </property>
-                <property name="toolTip" stdset="0">
-                    <string>Don't export extra blank space to file</string>
-                </property>
-                <property name="whatsThis" stdset="0">
-                    <string>&lt;b&gt;Crop picture to edges&lt;/b&gt;&lt;br&gt;
-This will eliminate all blank portions of the drawing. The picture will only be as large as the stencils it contains. If your stencils are located in the upper right corner of the page, then only the upper right corner will be exported.</string>
-                </property>
-            </widget>
             <widget class="QRadioButton">
                 <property name="name">
                     <cstring>m_radioSelectedStencils</cstring>
@@ -107,6 +81,35 @@ Export only the selected stencils to file.</string>
                 <property name="whatsThis" stdset="0">
                     <string>&lt;b&gt;All Stencils&lt;/b&gt;&lt;br&gt;
 This will cause the entire page to be exported to the file. This means that &lt;i&gt;all&lt;/i&gt; stencils will be exported.</string>
+                </property>
+            </widget>
+            <widget class="QCheckBox">
+                <property name="name">
+                    <cstring>m_checkCrop</cstring>
+                </property>
+                <property name="enabled">
+                    <bool>true</bool>
+                </property>
+                <property name="geometry">
+                    <rect>
+                        <x>9</x>
+                        <y>82</y>
+                        <width>242</width>
+                        <height>20</height>
+                    </rect>
+                </property>
+                <property name="text">
+                    <string>C&amp;rop picture to edges</string>
+                </property>
+                <property name="accel">
+                    <string>Alt+R</string>
+                </property>
+                <property name="toolTip" stdset="0">
+                    <string>Don't export extra blank space to file</string>
+                </property>
+                <property name="whatsThis" stdset="0">
+                    <string>&lt;b&gt;Crop picture to edges&lt;/b&gt;&lt;br&gt;
+This will eliminate all blank portions of the drawing. The picture will only be as large as the stencils it contains. If your stencils are located in the upper right corner of the page, then only the upper right corner will be exported.</string>
                 </property>
             </widget>
         </widget>
