@@ -32,6 +32,7 @@
 #include <kdebug.h>
 #include <qdom.h>
 #include <qtl.h>
+#include <assert.h>
 
 KWTextParag::KWTextParag( QTextDocument *d, QTextParag *pr, QTextParag *nx, bool updateIds)
     : QTextParag( d, pr, nx, updateIds )

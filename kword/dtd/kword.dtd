@@ -78,7 +78,7 @@ don't put a </?xml...> at the end of the file!).
                             KWord can read all previous versions, but always saves in the latest.
 -->
 <!ELEMENT DOC
-    (PAPER, ATTRIBUTES, FRAMESETS, STYLES, (EMBEDDED*))>
+    (PAPER, ATTRIBUTES, FRAMESETS, STYLES, PIXMAPS, (EMBEDDED*))>
 <!ATTLIST DOC
     editor CDATA #IMPLIED
     mime CDATA "application/x-kword"
@@ -684,7 +684,7 @@ don't put a </?xml...> at the end of the file!).
 <!ELEMENT IMAGE
     (FILENAME)>
 <!--    Key of the image - not really the filename, but a way to identify the
-        image in the image collection.
+        image in the image collection. #### To be renamed 'KEY' ######
         The images are defined in the PIXMAPS element and saved in the tar file.
 
         Attributes:
@@ -739,6 +739,31 @@ don't put a </?xml...> at the end of the file!).
 <!ATTLIST FIELD
     subtype CDATA #REQUIRED,
     value CDATA #REQUIRED>
+
+<!--
+        Pixmap collection. This list holds the keys of all the pixmaps
+        used by this document (by picture framesets), in the order in which
+        they are stored in the store (under pictures/).
+-->
+<!ELEMENT PIXMAPS
+    (KEY)*>
+<!--
+        The key mapping to one pixmap.
+        [Old attribute was named "key" (the filename).]
+        "name" is the relative path to the image in the store (e.g. picture/picture1.ext)
+-->
+<!ELEMENT KEY
+    EMPTY>
+<!ATTLIST KEY
+    filename CDATA #REQUIRED,
+    year CDATA #REQUIRED,
+    month CDATA #REQUIRED,
+    day CDATA #REQUIRED,
+    hour CDATA #REQUIRED,
+    minute CDATA #REQUIRED,
+    second CDATA #REQUIRED,
+    msec CDATA #REQUIRED,
+    name CDATA #REQUIRED>
 
 <!--
         Embedded object

@@ -559,9 +559,9 @@ public:
     void setImage( const KWImage &image ) { m_image = image; }
     KWImage image() const { return m_image; }
 
-    QString key() const { return m_image.key(); }
+    KoImageKey key() const { return m_image.key(); }
 
-    void setFileName( const QString &_filename, const QSize &_imgSize );
+    void loadImage( const QString &fileName, const QSize &_imgSize );
     void setSize( QSize _imgSize );
 
     virtual void save( QDomElement &parentElem, bool saveFrames = true );

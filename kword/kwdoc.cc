@@ -188,6 +188,7 @@ KWDocument::KWDocument(QWidget *parentWidget, const char *widgetName, QObject* p
     m_footerVisible = false;
 
     m_lastStyle = 0L;
+    m_pixmapMap = 0L;
 
     slDataBase = new KWSerialLetterDataBase( this );
     slRecordNum = -1;
@@ -892,8 +893,8 @@ bool KWDocument::loadXML( QIODevice *, const QDomDocument & doc )
     dt.start();
     emit sigProgress( 0 );
     kdDebug(32001) << "KWDocument::loadXML" << endl;
-    pixmapKeys.clear();
-    pixmapNames.clear();
+    delete m_pixmapMap;
+    m_pixmapMap = 0L;
     m_imageRequests.clear();
     m_imageRequests2.clear();
     m_anchorRequests.clear();
@@ -1066,15 +1067,8 @@ bool KWDocument::loadXML( QIODevice *, const QDomDocument & doc )
     QDomElement pixmapsElem = word.namedItem( "PIXMAPS" ).toElement();
     if ( !pixmapsElem.isNull() )
     {
-        QDomNodeList listPixmaps = pixmapsElem.elementsByTagName( "KEY" );
-        for (item = 0; item < listPixmaps.count(); item++)
-        {
-            QDomElement pixmap = listPixmaps.item( item ).toElement();
-            QString k = KWDocument::getAttribute( pixmap, "key", QString::null );
-            QString n = KWDocument::getAttribute( pixmap, "name", QString::null );
-            pixmapNames.append( n );
-            pixmapKeys.append( k );
-        }
+        QDateTime defaultDateTime = QDateTime::currentDateTime();
+        m_pixmapMap = new QMap<KoImageKey, QString>( m_imageCollection.readXML( pixmapsElem, defaultDateTime ) );
     }
 
     emit sigProgress(90);
@@ -1502,46 +1496,12 @@ KWFrameSet * KWDocument::loadFrameSet( QDomElement framesetElem, bool loadFrames
 
 bool KWDocument::completeLoading( KoStore *_store )
 {
-    if ( _store ) {
-        QString str = urlIntern.isEmpty() ? KURL( url() ).path() : urlIntern;
-
-        QStringList::Iterator it = pixmapKeys.begin();
-        QStringList::Iterator nit = pixmapNames.begin();
-
-        for ( ; it != pixmapKeys.end(); ++it, ++nit ) {
-            QString u;
-            if ( !( *nit ).isEmpty() )
-                u = *nit;
-            else {
-                u = str;
-                u += "/";
-                u += *it;
-            }
-
-            QImage img;
-
-            if ( _store->open( u ) ) {
-                KoStoreDevice dev(_store );
-                QImageIO io( &dev, 0 );
-                io.read( );
-                img = io.image();
-
-                _store->close();
-            } else {
-                u.prepend( "file:" );
-                if ( _store->open( u ) ) {
-                  KoStoreDevice dev(_store );
-                  QImageIO io( &dev, 0 );
-                  io.read( );
-                  img = io.image();
-
-                  _store->close();
-                }
-            }
-
-            if ( !img.isNull() )
-                m_imageCollection.insertImage( *it, img );
-        }
+    if ( _store && m_pixmapMap ) {
+        QString prefix = urlIntern.isEmpty() ? url().path() : urlIntern;
+        prefix += '/';
+        m_imageCollection.readFromStore( _store, *m_pixmapMap, prefix );
+        delete m_pixmapMap;
+        m_pixmapMap = 0L;
     }
 
     processImageRequests();
@@ -1570,15 +1530,15 @@ bool KWDocument::completeLoading( KoStore *_store )
 
 void KWDocument::processImageRequests()
 {
-    QMapIterator<QString,KWTextImage *> it2 = m_imageRequests.begin();
+    QMapIterator<KoImageKey,KWTextImage *> it2 = m_imageRequests.begin();
     for ( ; it2 != m_imageRequests.end(); ++it2 )
     {
-        kdDebug(32001) << "KWDocument::completeLoading loading image " << it2.key() << endl;
+        kdDebug(32001) << "KWDocument::completeLoading loading image " << it2.key().toString() << endl;
         it2.data()->setImage( m_imageCollection.findImage( it2.key() ) );
     }
     m_imageRequests.clear();
 
-    QMapIterator<QString,KWPictureFrameSet *> it3 = m_imageRequests2.begin();
+    QMapIterator<KoImageKey,KWPictureFrameSet *> it3 = m_imageRequests2.begin();
     for ( ; it3 != m_imageRequests2.end(); ++it3 )
         it3.data()->setImage( m_imageCollection.findImage( it3.key() ) );
     m_imageRequests2.clear();
@@ -1632,7 +1592,7 @@ QDomDocument KWDocument::saveXML()
     QDomElement framesets = doc.createElement( "FRAMESETS" );
     kwdoc.appendChild( framesets );
 
-    QStringList saveImages;
+    QValueList<KoImageKey> saveImages;
     QListIterator<KWFrameSet> fit = framesetsIterator();
     for ( ; fit.current() ; ++fit )
     {
@@ -1644,7 +1604,7 @@ QDomDocument KWDocument::saveXML()
         // If picture frameset, make a note of the image it needs.
         if ( !frameSet->isDeleted() && frameSet->type() == FT_PICTURE )
         {
-            QString key = static_cast<KWPictureFrameSet *>( frameSet )->key();
+            KoImageKey key = static_cast<KWPictureFrameSet *>( frameSet )->key();
             if ( !saveImages.contains( key ) )
                 saveImages.append( key );
         }
@@ -1655,36 +1615,10 @@ QDomDocument KWDocument::saveXML()
     for ( KWStyle * p = m_styleList.first(); p != 0L; p = m_styleList.next() )
         p->save( styles );
 
-    QDomElement pixmaps = doc.createElement( "PIXMAPS" );
+    // Save the PIXMAPS list
+    QString prefix = isStoredExtern() ? QString::null : url().url() + "/";
+    QDomElement pixmaps = m_imageCollection.saveXML( doc, saveImages, prefix );
     kwdoc.appendChild( pixmaps );
-
-    //KWImageCollection::ConstIterator it = m_imageCollection.begin();
-    //KWImageCollection::ConstIterator end = m_imageCollection.end();
-    int i = 0;
-    QStringList::Iterator it = saveImages.begin();
-    for ( ; it != saveImages.end(); ++it )
-    {
-        KWImage image = m_imageCollection.findImage( *it );
-        if ( image.isNull() )
-            kdWarning() << "Image " << *it << " not found in collection !" << endl;
-        else
-        {
-            QString fileName = *it; // currently same as the key
-            QString format = QFileInfo( fileName ).extension().upper();
-            if ( format == "JPG" )
-                format = "JPEG";
-            if ( QImage::outputFormats().find( QFile::encodeName(format) ) == -1 )
-                format = "BMP";
-            QString pictureName = QString( "pictures/picture%1.%2" ).arg( ++i ).arg( format.lower() );
-            if ( !isStoredExtern() )
-                pictureName.prepend( url().url() + "/" );
-
-            QDomElement keyElem = doc.createElement( "KEY" );
-            pixmaps.appendChild( keyElem );
-            keyElem.setAttribute( "key", fileName );
-            keyElem.setAttribute( "name", pictureName );
-        }
-    }
 
     // Not needed anymore
 #if 0
@@ -1743,7 +1677,7 @@ bool KWDocument::completeSaving( KoStore *_store )
 
     //KWImageCollection::ConstIterator it = m_imageCollection.begin();
     //KWImageCollection::ConstIterator end = m_imageCollection.end();
-    QStringList saveImages;
+    QValueList<KoImageKey> saveImages;
     QListIterator<KWFrameSet> fit = framesetsIterator();
     for ( ; fit.current() ; ++fit )
     {
@@ -1751,43 +1685,13 @@ bool KWDocument::completeSaving( KoStore *_store )
         // If picture frameset, make a note of the image it needs.
         if ( !frameSet->isDeleted() && frameSet->type() == FT_PICTURE )
         {
-            QString key = static_cast<KWPictureFrameSet *>( frameSet )->key();
+            KoImageKey key = static_cast<KWPictureFrameSet *>( frameSet )->key();
             if ( !saveImages.contains( key ) )
                 saveImages.append( key );
         }
     }
-    int i = 0;
-    QStringList::Iterator it = saveImages.begin();
-    for ( ; it != saveImages.end(); ++it )
-    {
-        KWImage image = m_imageCollection.findImage( *it );
-        if ( image.isNull() )
-            kdWarning() << "Image " << *it << " not found in collection !" << endl;
-        else
-        {
-            QString fileName = *it; // currently same as the key
-            QString format = QFileInfo( fileName ).extension().upper();
-            if ( format == "JPG" )
-                format = "JPEG";
-            if ( QImage::outputFormats().find( QFile::encodeName(format) ) == -1 )
-                format = "PNG";
-
-            QString u2 = QString( "pictures/picture%1.%2" ).arg( ++i ).arg( format.lower() );
-            if ( !isStoredExtern() )
-                u2.prepend( url().url() + "/" );
-
-            if ( _store->open( u2 ) ) {
-                KoStoreDevice dev( _store );
-                QImageIO io;
-                io.setIODevice( &dev );
-                io.setImage( image.image() );
-                io.setFormat( QFile::encodeName(format) );
-                io.write();
-                _store->close();
-            }
-        }
-    }
-
+    m_imageCollection.saveToStore( _store, saveImages,
+                                   isStoredExtern() ? QString::null : url().url() + "/" );
     return TRUE;
 }
 
@@ -2337,14 +2241,14 @@ void KWDocument::setFrameMargins( double l, double r, double t, double b )
     setModified(TRUE);
 }
 
-void KWDocument::addImageRequest( const QString &filename, KWTextImage *img )
+void KWDocument::addImageRequest( const KoImageKey &key, KWTextImage *img )
 {
-    m_imageRequests.insert( filename, img );
+    m_imageRequests.insert( key, img );
 }
 
-void KWDocument::addImageRequest( const QString &filename, KWPictureFrameSet *fs )
+void KWDocument::addImageRequest( const KoImageKey &key, KWPictureFrameSet *fs )
 {
-    m_imageRequests2.insert( filename, fs );
+    m_imageRequests2.insert( key, fs );
 }
 
 void KWDocument::addAnchorRequest( const QString &framesetName, const KWAnchorPosition &anchorPos )

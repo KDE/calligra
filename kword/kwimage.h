@@ -20,22 +20,10 @@
 #ifndef __kwimage_h__
 #define __kwimage_h__
 
-#include <qstring.h>
-
 #include <koImage.h>
 #include <koImageCollection.h>
 
-class KWTextDocument;
-typedef KoImageCollection<QString>::Image KWImage;
-
-class KWImageCollection : public KoImageCollection<QString>
-{
-public:
-
-    /**
-     * Find or create an image
-     */
-    KWImage image( const QString & fileName );
-};
+typedef KoImage KWImage;
+typedef KoImageCollection KWImageCollection;
 
 #endif

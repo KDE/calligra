@@ -1200,11 +1200,11 @@ KWPictureFrameSet::KWPictureFrameSet( KWDocument *_doc, const QString & name )
 KWPictureFrameSet::~KWPictureFrameSet() {
 }
 
-void KWPictureFrameSet::setFileName( const QString &_filename, const QSize &_imgSize )
+void KWPictureFrameSet::loadImage( const QString & fileName, const QSize &_imgSize )
 {
     KWImageCollection *collection = m_doc->imageCollection();
 
-    m_image = collection->image( _filename );
+    m_image = collection->loadImage( fileName );
 
     m_image = m_image.scale( _imgSize );
 }
@@ -1225,9 +1225,9 @@ void KWPictureFrameSet::save( QDomElement & parentElem, bool saveFrames )
 
     QDomElement imageElem = parentElem.ownerDocument().createElement( "IMAGE" );
     framesetElem.appendChild( imageElem );
-    QDomElement elem = parentElem.ownerDocument().createElement( "FILENAME" );
+    QDomElement elem = parentElem.ownerDocument().createElement( "KEY" );
     imageElem.appendChild( elem );
-    elem.setAttribute( "value", m_image.key() );
+    m_image.key().saveAttributes( elem );
 }
 
 void KWPictureFrameSet::load( QDomElement &attributes, bool loadFrames )
@@ -1237,16 +1237,27 @@ void KWPictureFrameSet::load( QDomElement &attributes, bool loadFrames )
     // <IMAGE>
     QDomElement image = attributes.namedItem( "IMAGE" ).toElement();
     if ( !image.isNull() ) {
-        // <FILENAME>
-        QDomElement filenameElement = image.namedItem( "FILENAME" ).toElement();
-        if ( !filenameElement.isNull() )
+        // <KEY>
+        QDomElement keyElement = image.namedItem( "KEY" ).toElement();
+        if ( !keyElement.isNull() )
         {
-            QString filename = filenameElement.attribute( "value" );
-            m_doc->addImageRequest( filename, this );
+            KoImageKey key;
+            key.loadAttributes( keyElement, QDate(), QTime() );
+            m_doc->addImageRequest( key, this );
         }
         else
         {
-            kdError(32001) << "Missing FILENAME tag in IMAGE" << endl;
+            // <FILENAME> (old format, up to KWord-1.1-beta2)
+            QDomElement filenameElement = image.namedItem( "FILENAME" ).toElement();
+            if ( !filenameElement.isNull() )
+            {
+                QString filename = filenameElement.attribute( "value" );
+                m_doc->addImageRequest( KoImageKey( filename, QDateTime::currentDateTime() ), this );
+            }
+            else
+            {
+                kdError(32001) << "Missing KEY tag in IMAGE" << endl;
+            }
         }
     } else {
         kdError(32001) << "Missing IMAGE tag in FRAMESET" << endl;

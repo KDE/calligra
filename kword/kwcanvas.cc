@@ -41,6 +41,7 @@
 #include <kapp.h>
 #include <kmessagebox.h>
 #include <config.h>
+#include <assert.h>
 
 KWCanvas::KWCanvas(QWidget *parent, KWDocument *d, KWGUI *lGui)
     : QScrollView( parent, "canvas", WNorthWestGravity | WResizeNoErase | WRepaintNoErase ), m_doc( d )
@@ -1026,7 +1027,7 @@ void KWCanvas::mrCreatePixmap()
     m_insRect = m_insRect.normalize();
     if ( m_insRect.width() > m_doc->gridX() && m_insRect.height() > m_doc->gridY() && !m_PixmapName.isEmpty() ) {
         KWPictureFrameSet *frameset = new KWPictureFrameSet( m_doc, QString::null /*automatic name*/ );
-        frameset->setFileName( m_PixmapName, m_doc->zoomRect( m_insRect ).size() );
+        frameset->loadImage( m_PixmapName, m_doc->zoomRect( m_insRect ).size() );
         m_insRect = m_insRect.normalize();
         KWFrame *frame = new KWFrame(frameset, m_insRect.x(), m_insRect.y(), m_insRect.width(),
                                      m_insRect.height() );

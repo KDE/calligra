@@ -1141,7 +1141,7 @@ void KWTextFrameSet::unzoom()
 
 int KWTextFrameSet::docFontSize( QTextFormat * format ) const
 {
-    assert( format );
+    ASSERT( format );
     int * oldSize = m_origFontSizes.find( format );
     if ( !oldSize )
     {

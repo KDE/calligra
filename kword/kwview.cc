@@ -1522,7 +1522,7 @@ void KWView::insertPicture(const QString &filename)
             width = QMIN( width, m_doc->paperWidth() - m_doc->leftBorder() - m_doc->rightBorder() - m_doc->zoomItX( 10 ) );
             height = QMIN( height, m_doc->paperHeight() - m_doc->topBorder() - m_doc->bottomBorder() - m_doc->zoomItY( 10 ) );
 
-            frameset->setFileName( filename, QSize( width, height ) );
+            frameset->loadImage( filename, QSize( width, height ) );
             m_doc->addFrameSet( frameset, false ); // done first since the frame number is stored in the undo/redo
             KWFrame *frame = new KWFrame(frameset, 0, 0, m_doc->unzoomItX( width ), m_doc->unzoomItY( height ) );
             frameset->addFrame( frame, false );

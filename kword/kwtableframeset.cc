@@ -184,9 +184,11 @@ void KWTableFrameSet::addCell( Cell *cell )
 KoRect KWTableFrameSet::boundingRect()
 {
     KWFrame *first = getCell( 0, 0 )->getFrame( 0 );
-    assert(first);
+    ASSERT(first);
     KWFrame *last = getCell( m_rows - 1, m_cols - 1 )->getFrame( 0 );
-    assert(last);
+    ASSERT(last);
+    if (!first || !last)
+        return KoRect();
 
     return first->unite( *last );
 }

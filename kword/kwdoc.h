@@ -304,9 +304,9 @@ public:
 
     // This is used upon loading, to delay certain things until completeLoading.
     // For KWTextImage
-    void addImageRequest( const QString &filename, KWTextImage *img );
+    void addImageRequest( const KoImageKey &key, KWTextImage *img );
     // For KWPictureFrameSet
-    void addImageRequest( const QString &filename, KWPictureFrameSet *fs );
+    void addImageRequest( const KoImageKey &key, KWPictureFrameSet *fs );
     // For KWTextParag
     void addAnchorRequest( const QString &framesetName, const KWAnchorPosition &anchorPos );
 
@@ -571,10 +571,10 @@ private:
 
     QString urlIntern;
 
-    QStringList pixmapKeys, pixmapNames;
+    QMap<KoImageKey, QString> * m_pixmapMap;
 
-    QMap<QString, KWTextImage *> m_imageRequests;
-    QMap<QString, KWPictureFrameSet *> m_imageRequests2;
+    QMap<KoImageKey, KWTextImage *> m_imageRequests;
+    QMap<KoImageKey, KWPictureFrameSet *> m_imageRequests2;
     QMap<QString, KWAnchorPosition> m_anchorRequests;
 
     QMap<int, KWVariableFormat*> m_mapVariableFormats;

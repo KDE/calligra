@@ -31,7 +31,7 @@ KWTextImage::KWTextImage( KWTextDocument *textdoc, const QString & filename )
     KWDocument * doc = textdoc->textFrameSet()->kWordDocument();
     if ( !filename.isEmpty() )
     {
-        m_image = doc->imageCollection()->image( filename );
+        m_image = doc->imageCollection()->loadImage( filename );
         ASSERT( !m_image.isNull() );
         resize(); // Zoom if necessary
     }
@@ -91,7 +91,7 @@ void KWTextImage::save( QDomElement & formatElem )
     formatElem.appendChild( imageElem );
     QDomElement elem = formatElem.ownerDocument().createElement( "FILENAME" );
     imageElem.appendChild( elem );
-    elem.setAttribute( "value", image().key() );
+    elem.setAttribute( "value", image().key().filename() );
 }
 
 void KWTextImage::load( QDomElement & formatElem )
@@ -105,7 +105,7 @@ void KWTextImage::load( QDomElement & formatElem )
         {
             QString filename = filenameElement.attribute( "value" );
             KWDocument * doc = static_cast<KWTextDocument *>(parent)->textFrameSet()->kWordDocument();
-            doc->addImageRequest( filename, this );
+            doc->addImageRequest( KoImageKey( filename, QDateTime::currentDateTime() ), this );
         }
         else
             kdError(32001) << "Missing FILENAME tag in IMAGE" << endl;
