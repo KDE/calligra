@@ -57,8 +57,8 @@ VMToolHandle::draw( QPainter& painter, const double zoomFactor )
 {
 	painter.setBrush( Qt::NoBrush );
 	painter.setPen( Qt::blue.light() );
-	QWMatrix mat = painter.worldMatrix();
-	painter.setWorldMatrix( mat.scale( 1 / zoomFactor, 1 / zoomFactor ) );
+	//QWMatrix mat = painter.worldMatrix();
+	//painter.setWorldMatrix( mat.scale( 1 / zoomFactor, 1 / zoomFactor ) );
 
 	if( part()->selection().count() > 0 )
 	{

@@ -70,7 +70,9 @@ VCanvas::viewportPaintEvent( QPaintEvent *e )
 
 	// draw handle:
 	QPainter qpainter( p->device() );
-	qpainter.setWorldMatrix( QWMatrix().scale( m_zoomFactor, m_zoomFactor ).translate( -contentsX(), -contentsY() ) );
+	//qpainter.setWorldMatrix( QWMatrix().translate( -contentsX(), -contentsY()) );
+	//qpainter.setWorldMatrix( QWMatrix().scale( 1 / m_zoomFactor, 1 / m_zoomFactor ).translate( -contentsX(), -contentsY() ) );
+	qpainter.setWorldMatrix( QWMatrix().translate( -contentsX(), -contentsY() ) );
 	VMToolHandle::instance( m_part )->draw( qpainter, m_zoomFactor );
 }
 
@@ -103,8 +105,9 @@ VCanvas::drawDocument( QPainter* /*painter*/, const QRect& rect )
 
 	// draw handle:
 	QPainter qpainter( p->device() );
-	qpainter.setWorldMatrix( QWMatrix().scale( m_zoomFactor, m_zoomFactor ).translate( -contentsX(), -contentsY() ) );
+	//qpainter.setWorldMatrix( QWMatrix().scale( 1 / m_zoomFactor, 1 / m_zoomFactor ).translate( -contentsX(), -contentsY() ) );
 	//qpainter.setWorldMatrix( QWMatrix().translate( -contentsX(), -contentsY()) );
+	qpainter.setWorldMatrix( QWMatrix().translate( -contentsX(), -contentsY() ) );
 	VMToolHandle::instance( m_part )->draw( qpainter, m_zoomFactor );
 }
 

@@ -47,14 +47,12 @@ VMToolSelect::drawTemporaryObject( KarbonView* view )
 	painter->setRasterOp( Qt::NotROP );
 
 	QPoint fp = view->canvasWidget()->viewportToContents( m_fp );
-	//QPoint lp = view->canvasWidget()->viewportToContents( m_lp );
 
 	// already selected, so must be a handle operation (move, scale etc.)
 	QRect rect = part()->selection().boundingBox( 1 / view->zoomFactor() );
 	kdDebug() << " x: " << rect.x() << " y: " << rect.y() << " rect.width: " << rect.width() << " rect.height: " << rect.height() << endl;
 	if( !part()->selection().isEmpty()
 		&& ( m_state != normal || rect.contains( fp /* view->zoomFactor() */ ) ) )
-//		part()->selection()->boundingBox().contains( p /* view->zoomFactor() */ ) ) )
 	{
 		if( m_state != moving )
 			m_state = moving;
