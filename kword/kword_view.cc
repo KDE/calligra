@@ -853,7 +853,7 @@ void KWordView::toolsClipart()
 /*===============================================================*/
 void KWordView::toolsTable()
 {
-  gui->getPaperWidget()->setTableConfig(3,4);
+  gui->getPaperWidget()->setTableConfig(7,5);
   gui->getPaperWidget()->mmTable();
 }
 
@@ -866,7 +866,7 @@ void KWordView::toolsKSpreadTable()
   if ( vec.size() == 0 )
   {    
     cout << "Got no results" << endl;
-    QMessageBox::critical( 0L, i18n("Error"), i18n("Sorry, no charting component registered"), i18n("Ok") );
+    QMessageBox::critical( 0L, i18n("Error"), i18n("Sorry, no table component registered"), i18n("Ok") );
     return;
   }
 
@@ -883,7 +883,7 @@ void KWordView::toolsFormula()
   if ( vec.size() == 0 )
   {    
     cout << "Got no results" << endl;
-    QMessageBox::critical( 0L, i18n("Error"), i18n("Sorry, no charting component registered"), i18n("Ok") );
+    QMessageBox::critical( 0L, i18n("Error"), i18n("Sorry, no formula component registered"), i18n("Ok") );
     return;
   }
   gui->getPaperWidget()->setPartEntry(vec[0]);

@@ -265,7 +265,7 @@ public:
   void updateAllRanges();
   void updateAllCursors();
   void drawAllBorders(QPainter *_painter = 0);
-  void recalcWholeText(bool _cursor = false,int _except = -1);
+  void recalcWholeText(bool _cursor = false,bool _fast = false);
   void hideAllFrames();
 
   int getPages() { return pages; }
@@ -341,7 +341,7 @@ public:
   void setHeader(bool h);
   void setFooter(bool f);
 
-  void recalcFrames(bool _cursor = false);
+  void recalcFrames(bool _cursor = false,bool _fast = false);
 
   KoHFType getHeaderType() { return pageHeaderFooter.header; }
   KoHFType getFooterType() { return pageHeaderFooter.footer; }
@@ -350,6 +350,10 @@ public:
 
   bool needRedraw() { return _needRedraw; }
   void setNeedRedraw(bool _r) { _needRedraw = _r; }
+
+  void addGroupManager(KWGroupManager *gm) { grpMgrs.append(gm); }
+  unsigned int getNumGroupManagers() { return grpMgrs.count(); }
+  KWGroupManager *getGroupManager(int i) { return grpMgrs.at(i); }
 
 signals:
   void sig_imageModified();
@@ -402,6 +406,7 @@ protected:
    * @see KWFrame
    */
   QList<KWFrameSet> frames;
+  QList<KWGroupManager> grpMgrs;
 
   /**
    * The default user font.

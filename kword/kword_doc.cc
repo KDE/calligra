@@ -93,6 +93,12 @@ KWordDocument::KWordDocument()
   cUserFont = 0L;
   cParagLayout = 0L;
   cDisplayFont = 0L;
+
+  paragLayoutList.setAutoDelete(false);
+  userFontList.setAutoDelete(false);
+  displayFontList.setAutoDelete(false);
+  frames.setAutoDelete(true);
+  grpMgrs.setAutoDelete(true);
 }
 
 /*================================================================*/
@@ -207,7 +213,7 @@ void KWordDocument::setPageLayout(KoPageLayout _layout,KoColumns _cl,KoKWHeaderF
 }
 
 /*================================================================*/
-void KWordDocument::recalcFrames(bool _cursor = false)
+void KWordDocument::recalcFrames(bool _cursor = false,bool _fast = false)
 {
   if (processingType != DTP)
     pages = 1;
@@ -610,7 +616,7 @@ void KWordDocument::recalcFrames(bool _cursor = false)
 	}
     }
 
-  recalcWholeText(_cursor);
+  recalcWholeText(_cursor,_fast);
   updateAllRanges();
 }
 
@@ -1019,6 +1025,9 @@ bool KWordDocument::loadXML( KOMLParser& parser, KOStore::Store_ptr )
       fs->setAutoCreateNewFrame(false);
     }
 
+  for (unsigned int i = 0;i < getNumGroupManagers();i++)
+    getGroupManager(i)->init();
+
   return true;
 }
 
@@ -1063,6 +1072,8 @@ void KWordDocument::loadFrameSets(KOMLParser& parser,vector<KOMLAttrib>& lst)
 
   bool autoCreateNewFrame = true;
   FrameInfo frameInfo = FI_BODY;
+  QString _name = "";
+  int _row = 0,_col = 0;
 
   while (parser.open(0L,tag))
     {
@@ -1072,6 +1083,8 @@ void KWordDocument::loadFrameSets(KOMLParser& parser,vector<KOMLAttrib>& lst)
       if (name == "FRAMESET")
 	{    
 	  FrameType frameType = FT_BASE;
+	  _name = "";
+	  _row = _col = 0;
 
 	  KOMLParser::parseTag(tag.c_str(),name,lst);
 	  vector<KOMLAttrib>::const_iterator it = lst.begin();
@@ -1083,6 +1096,12 @@ void KWordDocument::loadFrameSets(KOMLParser& parser,vector<KOMLAttrib>& lst)
 		autoCreateNewFrame = atoi((*it).m_strValue.c_str());
 	      if ((*it).m_strName == "frameInfo")
 		frameInfo = static_cast<FrameInfo>(atoi((*it).m_strValue.c_str()));
+	      if ((*it).m_strName == "grpMgr")
+		_name = QString((*it).m_strValue.c_str());
+	      if ((*it).m_strName == "row")
+		_row = atoi((*it).m_strValue.c_str());
+	      if ((*it).m_strName == "col")
+		_col = atoi((*it).m_strValue.c_str());
 	    }
 	  
 	  switch (frameType)
@@ -1093,7 +1112,32 @@ void KWordDocument::loadFrameSets(KOMLParser& parser,vector<KOMLAttrib>& lst)
 		frame->load(parser,lst);
 		frame->setAutoCreateNewFrame(autoCreateNewFrame);
 		frame->setFrameInfo(frameInfo);
-		frames.append(frame);
+
+		if (!_name.isEmpty())
+		  {
+		    KWGroupManager *grpMgr = 0L;
+		    if (getNumGroupManagers() > 0)
+		      {
+			for (unsigned int i = 0;i < getNumGroupManagers();i++)
+			  {
+			    if (getGroupManager(getNumGroupManagers() - 1 - i)->getName() == _name)
+			      {
+				grpMgr = getGroupManager(getNumGroupManagers() - 1 - i);
+				break;
+			      }
+			  }
+		      }
+		    if (!grpMgr)
+		      {
+			grpMgr = new KWGroupManager(this);
+			grpMgr->setName(_name);
+			addGroupManager(grpMgr);
+		      }
+		    frame->setGroupManager(grpMgr);
+		    grpMgr->addFrameSet(frame,_row,_col);
+		  }
+		else
+		  frames.append(frame);
 	      } break;
 	    case FT_PICTURE:
 	      {
@@ -1141,7 +1185,7 @@ bool KWordDocument::save( ostream &out, const char* /* _format */ )
   for (unsigned int i = 0;i < getNumFrameSets();i++)
     {
       frameSet = getFrameSet(i);
-      if (frameSet->getFrameType() != FT_PART)// && !isAHeader(frameSet->getFrameInfo()) && !isAFooter(frameSet->getFrameInfo()))
+      if (frameSet->getFrameType() != FT_PART)
 	frameSet->save(out);
     }
 
@@ -2312,7 +2356,7 @@ void KWordDocument::appendPage(unsigned int _page,QPainter &_painter)
     {
       QPaintDevice *pd = _painter.device();
       _painter.end();
-      recalcFrames();
+      recalcFrames(false,true);
       _painter.begin(pd);
     }
 }
@@ -2670,7 +2714,7 @@ void KWordDocument::updateAllFrames()
 }
 
 /*================================================================*/
-void KWordDocument::recalcWholeText(bool _cursor = false,int _except = -1)
+void KWordDocument::recalcWholeText(bool _cursor = false,bool _fast)
 {
   KWordView *viewPtr;
 
@@ -2678,7 +2722,7 @@ void KWordDocument::recalcWholeText(bool _cursor = false,int _except = -1)
     {
       viewPtr = m_lstViews.first();
       if (viewPtr->getGUI() && viewPtr->getGUI()->getPaperWidget())
-	viewPtr->getGUI()->getPaperWidget()->recalcWholeText(_cursor,_except);
+	viewPtr->getGUI()->getPaperWidget()->recalcWholeText(_cursor,_fast);
     }
 }
 
@@ -2737,7 +2781,7 @@ void KWordDocument::setHeader(bool h)
 	}
     }
 
-  recalcFrames(true); 
+  recalcFrames(true,true); 
   updateAllViews(0L,true);
 }
 
@@ -2756,38 +2800,36 @@ void KWordDocument::setFooter(bool f)
 	}
     }
 
-  recalcFrames(true); 
+  recalcFrames(true,true); 
   updateAllViews(0L,true); 
 }
 
 /*================================================================*/
 bool KWordDocument::canResize(KWFrameSet *frameset,KWFrame *frame,int page,int diff)
 {
-
   if (diff < 0) return false;
 
   if (!frameset->getGroupManager())
     {
+      // a normal frame _must_ not leave the page
       if (frameset->getFrameInfo() == FI_BODY)
 	{
 	  if (static_cast<int>(frame->bottom() + diff) < static_cast<int>((page + 1) * getPTPaperHeight()))
 	    return true;
 	  return false;
 	}
+      // headers and footers may always resize - ok this may lead to problems in strange situations, but let's ignore them :-)
       else
 	{
+	  // a footer has to moved a bit to the top before he gets resized
 	  if (isAFooter(frameset->getFrameInfo()))
 	    frame->moveTopLeft(KPoint(0,frame->y() - diff));
 	  return true;
 	}
     }
+  // tables may _always_ resize, because the group managers can add pages if needed
   else
-    {
-      KWGroupManager *grpMgr = frameset->getGroupManager();
-      if (static_cast<int>(grpMgr->getBoundingRect().bottom() + diff) < static_cast<int>((page + 1) * getPTPaperHeight()))
-	return true;
-      return false;
-    }
+    return true;
   
   return false;
 }

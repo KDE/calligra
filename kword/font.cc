@@ -17,7 +17,9 @@ KWUserFont::KWUserFont(KWordDocument *_doc,QString _name)
 
 KWUserFont::~KWUserFont()
 {
+    document->userFontList.setAutoDelete(true);
     document->userFontList.removeRef( this );
+    document->userFontList.setAutoDelete(false);
 }
 
 KWDisplayFont::KWDisplayFont( KWordDocument *_doc, KWUserFont *_font, unsigned int _size,
@@ -82,6 +84,8 @@ unsigned int KWDisplayFont::getPTWidth( char &_c )
 
 KWDisplayFont::~KWDisplayFont()
 {
+  document->displayFontList.setAutoDelete(true);
   document->displayFontList.removeRef( this );
+  document->displayFontList.setAutoDelete(false);
 }
     

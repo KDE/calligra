@@ -280,6 +280,9 @@ void KWPage::mouseMoveEvent(QMouseEvent *e)
 			      undos.at(i)->drawAllRects(p,xOffset,yOffset);
 			    }			      
 			}
+		      
+		      if (frameset->getGroupManager())
+			frameset->getGroupManager()->recalcRows(p);
 
 		      p.end();
 		    }
@@ -335,7 +338,7 @@ void KWPage::mouseMoveEvent(QMouseEvent *e)
 		    }
 
 		  if (doc->getFrameSet(frameset)->getGroupManager())
-		    doc->getFrameSet(frameset)->getGroupManager()->recalcRows();
+		    doc->getFrameSet(frameset)->getGroupManager()->recalcRows(p);
 
 		  p.drawRect(!doc->getFrameSet(frameset)->getGroupManager() ? frame->x() - xOffset : 
 			     doc->getFrameSet(frameset)->getGroupManager()->getBoundingRect().x() - xOffset, 
@@ -898,6 +901,10 @@ void KWPage::mouseReleaseEvent(QMouseEvent *e)
 	if (insRect.width() != 0 && insRect.height() != 0)
 	  {
 	    KWGroupManager *grpMgr = new KWGroupManager(doc);
+	    QString _name;
+	    _name.sprintf("grpmgr_%d",doc->getNumGroupManagers());
+	    grpMgr->setName(_name);
+	    doc->addGroupManager(grpMgr);
 	    for (unsigned int i = 0;i < trows;i++)
 	      {
 		for (unsigned int j = 0;j < tcols;j++)
@@ -911,6 +918,10 @@ void KWPage::mouseReleaseEvent(QMouseEvent *e)
 		  }
 	      }
 	    grpMgr->init(insRect.x() + xOffset,insRect.y() + yOffset,insRect.width(),insRect.height());
+	    QPainter p;
+	    p.begin(this);
+	    grpMgr->recalcRows(p);
+	    p.end();
 	    buffer.fill(white);
 	    repaint(false);
 	  }
@@ -1094,7 +1105,7 @@ void KWPage::recalcText()
 }
 
 /*================================================================*/
-void KWPage::recalcWholeText(bool _cursor = false,int _except = -1)
+void KWPage::recalcWholeText(bool _cursor = false,bool _fast = false)
 {
   if (recalcingText) return;
 
@@ -1104,12 +1115,10 @@ void KWPage::recalcWholeText(bool _cursor = false,int _except = -1)
 
   for (unsigned int i = 0;i < doc->getNumFrameSets();i++)
     {
-      if (static_cast<int>(i) == _except) continue;
-
       if (doc->getFrameSet(i)->getFrameType() != FT_TEXT || doc->getFrameSet(i)->getNumFrames() == 0) continue;      
       KWFormatContext _fc(doc,i + 1);
       _fc.init(doc->getFirstParag(i),painter,true);
-
+      
       bool bend = false;
       
       while (!bend)
@@ -2501,7 +2510,9 @@ void KWPage::drawBorders(QPainter &_painter,KRect v_area)
 	      else
 		{
 		  _painter.restore();
-		_painter.fillRect(frame.x(),frame.y(),frame.width(),frame.height(),kapp->selectColor);
+		  _painter.fillRect(frame.x(),frame.y(),frame.width(),frame.height(),kapp->selectColor);
+		  _painter.fillRect(frame.x() + frame.width() - 6,frame.y() + frame.height() / 2 - 3,6,6,black);
+		  _painter.fillRect(frame.x() + frame.width() / 2 - 3,frame.y() + frame.height() - 6,6,6,black);
 		}	    
 	    }
 	}

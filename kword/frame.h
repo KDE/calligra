@@ -73,7 +73,8 @@ public:
   void addIntersect(KRect _r);
   void clearIntersects()
     { intersections.clear(); }
-  
+  bool intersectChanged();
+
   int getLeftIndent(int _y,int _h);
   int getRightIndent(int _y,int _h);
 
@@ -111,7 +112,7 @@ protected:
   bool mostRight;
   int pageNum;
 
-  QList<KRect> intersections;
+  QList<KRect> intersections,oldIntersects;
 
   KWParagLayout::Border brd_left,brd_right,brd_top,brd_bottom;
 
@@ -343,8 +344,9 @@ public:
   bool getFrameSet(KWFrameSet *fs,unsigned int &row,unsigned int &col);
   
   void init(unsigned int x,unsigned int y,unsigned int width,unsigned int height);
+  void init();
   void recalcCols();
-  void recalcRows();
+  void recalcRows(QPainter &_painter);
 
   unsigned int getRows() { return rows; }
   unsigned int getCols() { return cols; }
@@ -361,11 +363,15 @@ public:
 
   void deselectAll();
 
+  void setName(QString _name) { name = _name; }
+  QString getName() { return name; }
+
 protected:
   QList<Cell> cells;
   unsigned int rows,cols;
   KWordDocument *doc;
-
+  QString name;
+  
 };
 
 bool isAHeader(FrameInfo fi);

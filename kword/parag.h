@@ -96,10 +96,12 @@ public:
     KWString* getKWString() { return &text; }
 
     /**
-     * @return the paragraph Llyout of this paragraph.
+     * @return the paragraph Layout of this paragraph.
      */
     KWParagLayout* getParagLayout() { return paragLayout; }
     
+    void setParagLayout(KWParagLayout* _paragLayout) { *paragLayout = *_paragLayout; }
+
     /**
      * Fille '_str' with the counters text. If this paragraph has no counter,
      * an empty but non null string is returned.

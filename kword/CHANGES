@@ -655,3 +655,12 @@ Reggie, 13.1.1999:
 - If the text of a frameset doesn't fit into the frames anymore, and no new frames should be appended,
   the last frame gets, if possible, automatically resized now (this is default for table cells and headers/footers)
 - Cleanup of framedia
+
+Reggie, 14.1.1999:
+------------------
+- Fixes
+- When inserting a new parag (after pressing return) and current paragLayout->name() == following paragLayout->name()
+  a copy of the current paragLayout is assigned to the new parag. 
+- Tables can flow over multiple pages now
+- Saving and Loading tabes works now
+- Destructor doesn'c crash anymore :-)) (at least on my system)

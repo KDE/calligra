@@ -49,7 +49,6 @@ KWParagLayout::KWParagLayout(KWordDocument *_doc,bool _add = true, QString _name
     document = _doc;
     if (_add)
       document->paragLayoutList.append(this);
-    document->paragLayoutList.setAutoDelete(true);
 
     tabList.setAutoDelete(false);
     specialTabs = false;
@@ -57,7 +56,9 @@ KWParagLayout::KWParagLayout(KWordDocument *_doc,bool _add = true, QString _name
 
 KWParagLayout::~KWParagLayout()
 {
+    document->paragLayoutList.setAutoDelete(true);
     document->paragLayoutList.removeRef( this );
+    document->paragLayoutList.setAutoDelete(false);
 }
 
 KWParagLayout& KWParagLayout::operator=(KWParagLayout &_layout)

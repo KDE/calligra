@@ -1073,9 +1073,6 @@ bool KWFormatContext::makeLineLayout( QPainter &_painter, bool _checkIntersects 
 	    if (document->canResize(document->getFrameSet(frameSet - 1),document->getFrameSet(frameSet - 1)->getFrame(frame - 1),
 				    document->getFrameSet(frameSet - 1)->getPageOfFrame(frame - 1),diff + 1))
 	      {
-		QPaintDevice *dev = _painter.device();
-		_painter.end();
-		
 		document->getFrameSet(frameSet - 1)->getFrame(frame - 1)->
 		  setHeight(document->getFrameSet(frameSet - 1)->getFrame(frame - 1)->height() + diff + 1);
 		
@@ -1083,10 +1080,13 @@ bool KWFormatContext::makeLineLayout( QPainter &_painter, bool _checkIntersects 
 		  {
 		    document->getFrameSet(frameSet - 1)->getGroupManager()->deselectAll();
 		    document->getFrameSet(frameSet - 1)->getFrame(frame - 1)->setSelected(true);
-		    document->getFrameSet(frameSet - 1)->getGroupManager()->recalcRows();
+		    document->getFrameSet(frameSet - 1)->getGroupManager()->recalcRows(_painter);
 		  }
 		
-		document->recalcFrames();
+		QPaintDevice *dev = _painter.device();
+		_painter.end();
+
+		document->recalcFrames(false,true);
 		document->updateAllFrames();
 		document->setNeedRedraw(true);
 		
@@ -1110,7 +1110,7 @@ bool KWFormatContext::makeLineLayout( QPainter &_painter, bool _checkIntersects 
 	    ptY = document->getFrameSet(frameSet - 1)->getFrame(frame - 1)->top();
 	    return makeLineLayout(_painter);
 	  }
-	else // append a page
+	else // append a page or resize frame
 	  {
 	    if (!dynamic_cast<KWTextFrameSet*>(document->getFrameSet(frameSet - 1))->getAutoCreateNewFrame())
 	      {
@@ -1119,9 +1119,6 @@ bool KWFormatContext::makeLineLayout( QPainter &_painter, bool _checkIntersects 
 		if (document->canResize(document->getFrameSet(frameSet - 1),document->getFrameSet(frameSet - 1)->getFrame(frame - 1),
 					document->getFrameSet(frameSet - 1)->getPageOfFrame(frame - 1),diff + 1))
 		  {
-		    QPaintDevice *dev = _painter.device();
-		    _painter.end();
-
 		    document->getFrameSet(frameSet - 1)->getFrame(frame - 1)->
 		      setHeight(document->getFrameSet(frameSet - 1)->getFrame(frame - 1)->height() + diff + 1);
 		   
@@ -1129,10 +1126,13 @@ bool KWFormatContext::makeLineLayout( QPainter &_painter, bool _checkIntersects 
 		      {
 			document->getFrameSet(frameSet - 1)->getGroupManager()->deselectAll();
 			document->getFrameSet(frameSet - 1)->getFrame(frame - 1)->setSelected(true);
-			document->getFrameSet(frameSet - 1)->getGroupManager()->recalcRows();
+			document->getFrameSet(frameSet - 1)->getGroupManager()->recalcRows(_painter);
 		      }
 
- 		    document->recalcFrames();
+		    QPaintDevice *dev = _painter.device();
+		    _painter.end();
+
+ 		    document->recalcFrames(false,true);
  		    document->updateAllFrames();
  		    document->setNeedRedraw(true);
 
