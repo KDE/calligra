@@ -319,6 +319,19 @@ TODO: fix lucijan's hack, with part loading (29 feb)
 
 TODO: reuse KexiNameWidget in KexiNewProjectWizard!
 
+2004-03-09
+Main Window : some top level polishing
+	-most tooltips/what's this  added for actions
+	-'save' action now works int the current dialog context
+	-message about more not impelmented features added
+	-proper quitting and project closing
+	-KMainWindow::queryExit() and queryClose() impelmented instad of closeEvent()
+	-"Create" menu is disabled when no project is loaded
+	-On last dialog closing, guiclient is removed (so dead toolbar are hidden now)
+
+	-Main Window: dock windows are disabled on project closing, for sanity
+	-some fixes for mime data (QString -> QCString)
+
 2004-03-08
 Table View
 	-'acceptsRowEditAfterCellAccepting' flag added

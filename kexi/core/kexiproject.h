@@ -102,9 +102,9 @@ class KEXICORE_EXPORT KexiProject : public QObject, public KexiDB::Object
 		 * @return all items of a type \a mime in this project
 		 * It is a convenience function.
 		 */
-		KexiPart::ItemDict* items(const QString &mime);
+		KexiPart::ItemDict* items(const QCString &mime);
 
-		KexiPart::Item* item(const QString &mime, const QString &name);
+		KexiPart::Item* item(const QCString &mime, const QString &name);
 		//! convenience function
 		KexiPart::Item* item(KexiPart::Info *i, const QString &name);
 
@@ -118,7 +118,7 @@ class KEXICORE_EXPORT KexiProject : public QObject, public KexiDB::Object
 		KexiDialogBase* openObject(KexiMainWindow *wnd, KexiPart::Item& item, int viewMode = Kexi::DataViewMode);
 
 		//! For convenience
-		KexiDialogBase* openObject(KexiMainWindow *wnd, const QString &mime, const QString& name, int viewMode = Kexi::DataViewMode);
+		KexiDialogBase* openObject(KexiMainWindow *wnd, const QCString &mime, const QString& name, int viewMode = Kexi::DataViewMode);
 
 		/*! Remove part instance pointed by \a item.
 		 \return true on success.

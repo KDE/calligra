@@ -255,14 +255,14 @@ KexiProject::items(KexiPart::Info *i)
 }
 
 KexiPart::ItemDict*
-KexiProject::items(const QString &mime)
+KexiProject::items(const QCString &mime)
 {
 	KexiPart::Info *info = Kexi::partManager().info(mime);
 	return items(info);
 }
 
 KexiPart::Item*
-KexiProject::item(const QString &mime, const QString &name)
+KexiProject::item(const QCString &mime, const QString &name)
 {
 	KexiPart::ItemDict *dict = items(mime);
 	if (!dict)
@@ -327,7 +327,7 @@ KexiDialogBase* KexiProject::openObject(KexiMainWindow *wnd, KexiPart::Item& ite
 	return dlg;
 }
 
-KexiDialogBase* KexiProject::openObject(KexiMainWindow *wnd, const QString &mime, const QString& name, 
+KexiDialogBase* KexiProject::openObject(KexiMainWindow *wnd, const QCString &mime, const QString& name, 
 	int viewMode)
 {
 	KexiPart::Item *it = item(mime, name);

@@ -178,7 +178,7 @@ Manager::checkProject(KexiDB::Connection *conn)
 	for(cursor->moveFirst(); !cursor->eof(); cursor->moveNext())
 	{
 		id++;
-		Info *i = info(cursor->value(2).toString());
+		Info *i = info(cursor->value(2).toCString());
 		if(!i)
 		{
 			Missing m;

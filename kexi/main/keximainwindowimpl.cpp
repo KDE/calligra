@@ -482,8 +482,15 @@ void KexiMainWindowImpl::invalidateProjectWideActions()
 	d->action_show_helper->setEnabled(d->prj);
 #endif
 
+	//CREATE MENU
 	if (d->createMenu)
 		d->createMenu->setEnabled(d->prj);
+
+	//DOCKS
+	if (d->nav)
+		d->nav->setEnabled(d->prj);
+	if (d->propEditor)
+		d->propEditor->setEnabled(d->prj);
 }
 
 void KexiMainWindowImpl::invalidateViewModeActions()
@@ -638,7 +645,7 @@ bool KexiMainWindowImpl::openProject(KexiProjectData *projectData)
 	for (QValueList<KexiProjectData::ObjectInfo>::Iterator it = projectData->autoopenObjects.begin(); it != projectData->autoopenObjects.end(); ++it ) {
 //		openObject(QString("kexi/")+(*it).first,(*it).second);
 		KexiProjectData::ObjectInfo info = *it;
-		KexiPart::Info *i = Kexi::partManager().info( QString("kexi/")+info["type"] );
+		KexiPart::Info *i = Kexi::partManager().info( QCString("kexi/")+info["type"].latin1() );
 		if (!i) {
 			not_found_msg += ( info["name"] + " - " + i18n("unknown object type \"%1\"").arg(info["type"])+"<br>" );
 			continue;
@@ -708,6 +715,7 @@ bool KexiMainWindowImpl::closeProject(bool &cancelled)
 
 //	Kexi::partManager().unloadAllParts();
 	invalidateActions();
+	updateAppCaption();
 	return true;
 }
 
@@ -1866,7 +1874,7 @@ bool KexiMainWindowImpl::eventFilter( QObject *obj, QEvent * e )
 }
 
 KexiDialogBase *
-KexiMainWindowImpl::openObject(const QString& mime, const QString& name, int viewMode)
+KexiMainWindowImpl::openObject(const QCString& mime, const QString& name, int viewMode)
 {
 	KexiPart::Item *item = d->prj->item(mime,name);
 	if (!item)
