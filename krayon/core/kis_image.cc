@@ -19,12 +19,6 @@
  *  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  */
 
-#include <string.h>
-#include <stdio.h>
-#include <iostream.h>
-#include <sys/time.h>
-#include <unistd.h>
-
 #include <qpainter.h>
 #include <qregexp.h>
 #include <qfileinfo.h>
