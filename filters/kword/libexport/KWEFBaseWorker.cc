@@ -20,19 +20,21 @@
    Boston, MA 02111-1307, USA.
 */
 
+#include <qdom.h>
+
 #include <kdebug.h>
 
 #include "KWEFBaseWorker.h"
 
 bool KWEFBaseWorker::doOpenFile(const QString& , const QString& )
 {
-    // As it would be the first method to be called, warn if we are called!
     kdWarning() << "KWEFBaseWorker::doOpenFile was called (Worker not correctly defined?)" << endl;
     return false;
 }
 
 bool KWEFBaseWorker::doCloseFile(void)
 {
+    kdWarning() << "KWEFBaseWorker::doCloseFile was called (Worker not correctly defined?)" << endl;
     return false;
 }
 
@@ -44,15 +46,33 @@ bool KWEFBaseWorker::doAbortFile(void)
 
 bool KWEFBaseWorker::doOpenDocument(void)
 {
+    kdWarning() << "KWEFBaseWorker::doOpenDocument was called (Worker not correctly defined?)" << endl;
     return false;
 }
 
 bool KWEFBaseWorker::doCloseDocument(void)
 {
+    kdWarning() << "KWEFBaseWorker::doCloseDocument was called (Worker not correctly defined?)" << endl;
     return false;
 }
 
 bool KWEFBaseWorker::doFullParagraph(QString&, LayoutData&, ValueListFormatData&)
 {
+    kdWarning() << "KWEFBaseWorker::doFullParagraph was called (Worker not correctly defined?)" << endl;
     return false;
+}
+
+bool KWEFBaseWorker::doOpenTextFrameSet(void)
+{
+    return true;
+}
+
+bool KWEFBaseWorker::doCloseTextFrameSet(void)
+{
+    return true;
+}
+
+bool KWEFBaseWorker::doFullDocumentInfo(QDomDocument& info)
+{
+    return true;
 }

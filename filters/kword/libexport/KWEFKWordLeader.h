@@ -25,6 +25,7 @@
 
 #include "KWEFBaseClass.h"
 
+class QDomDocument;
 class KWEFBaseWorker;
 
 class KWEFKWordLeader : public KWEFBaseClass
@@ -35,16 +36,20 @@ class KWEFKWordLeader : public KWEFBaseClass
         virtual ~KWEFKWordLeader(void) {}
     public:
         void setWorker(KWEFBaseWorker* newWorker);
+        KWEFBaseWorker*  getWorker(void) const;
         bool filter(const QString& filenameIn, const QString& filenameOut,
             const QString& from, const QString& to, const QString& param);
     public: // public leader/worker functions (DO NOT use in your own code!)
         bool doFullParagraph(QString& paraText, LayoutData& layout, ValueListFormatData& paraFormatDataList);
+        bool doOpenTextFrameSet(void);
+        bool doCloseTextFrameSet(void);
     protected: // leader/worker functions
         bool doOpenFile(const QString& filenameOut, const QString& to);
         bool doCloseFile(void);
         bool doAbortFile(void);
         bool doOpenDocument(void);
         bool doCloseDocument(void);
+        bool doFullDocumentInfo(QDomDocument& info);
     private:
         KWEFBaseWorker* m_worker;
 };

@@ -39,6 +39,9 @@ class KWEFBaseWorker
         virtual bool doOpenDocument(void);
         virtual bool doCloseDocument(void);
         virtual bool doFullParagraph(QString& paraText, LayoutData& layout, ValueListFormatData& paraFormatDataList);
+        virtual bool doOpenTextFrameSet(void);
+        virtual bool doCloseTextFrameSet(void);
+        virtual bool doFullDocumentInfo(QDomDocument& info);  // PROVISORY!
 };
 
 #endif /* KWEF_BASEWORKER_H */

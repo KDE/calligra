@@ -64,6 +64,8 @@ void ProcessParagraphTag ( QDomNode      myNode,
     ProcessSubtags (myNode, tagProcessingList, outputText, exportFilter);
 
     KWEFKWordLeader* leader=(KWEFKWordLeader*) exportFilter;
+
+    CreateMissingFormatData(paraText, paraFormatDataList);
     leader->doFullParagraph(paraText, layout, paraFormatDataList);
 
 }
@@ -86,12 +88,13 @@ void ProcessFramesetTag ( QDomNode      myNode,
 
     if ((1==frameType) && (0==frameInfo))
     {   //Main text
-        // TODO: we need something for AbiWord's <section>
+        KWEFKWordLeader* leader=(KWEFKWordLeader*) exportFilter;
+        leader->doOpenTextFrameSet();
         QValueList<TagProcessing> tagProcessingList;
         tagProcessingList.append ( TagProcessing ( "FRAME",     NULL,                NULL ) );
         tagProcessingList.append ( TagProcessing ( "PARAGRAPH", ProcessParagraphTag, NULL ) );
         ProcessSubtags (myNode, tagProcessingList, outputText, exportFilter);
-        // TODO: we need something for AbiWord's </section>
+        leader->doCloseTextFrameSet();
     }
     //TODO: Treat the other types of frames (frameType)
 }
@@ -134,6 +137,12 @@ void KWEFKWordLeader::setWorker(KWEFBaseWorker* newWorker)
 {
     m_worker=newWorker;
 }
+
+KWEFBaseWorker*  KWEFKWordLeader::getWorker(void) const
+{
+    return m_worker;
+}
+
 
 bool KWEFKWordLeader::doOpenFile(const QString& filenameOut, const QString& to)
 {
@@ -179,6 +188,26 @@ bool KWEFKWordLeader::doFullParagraph(QString& paraText, LayoutData& layout, Val
     return false;
 }
 
+bool KWEFKWordLeader::doOpenTextFrameSet(void)
+{
+    if (m_worker)
+        return m_worker->doOpenTextFrameSet();
+    return false;
+}
+
+bool KWEFKWordLeader::doCloseTextFrameSet(void)
+{
+    if (m_worker)
+        return m_worker->doCloseTextFrameSet();
+    return false;
+}
+
+bool KWEFKWordLeader::doFullDocumentInfo(QDomDocument& info)
+{
+    if (m_worker)
+        return m_worker->doFullDocumentInfo(info);
+    return false;
+}
 
 bool KWEFKWordLeader::filter(const QString& filenameIn, const QString& filenameOut,
     const QString& from, const QString& to, const QString&)
@@ -190,11 +219,33 @@ bool KWEFKWordLeader::filter(const QString& filenameIn, const QString& filenameO
 
     KoStore koStoreIn (filenameIn, KoStore::Read);
 
-    if ( !koStoreIn.open ( "root" ) )
+    if (!doOpenFile(filenameOut,to))
     {
+        kdError() << "Worker could not open export file! Aborting!" << endl;
+        return false;
+    }
+
+    if ( koStoreIn.open ( "documentinfo.xml" ) )
+    {
+        QByteArray infoArrayIn = koStoreIn.read ( koStoreIn.size () );
         koStoreIn.close ();
 
+        QDomDocument qDomDocumentInfo;
+        qDomDocumentInfo.setContent (infoArrayIn);
+
+        doFullDocumentInfo(qDomDocumentInfo);
+    }
+    else
+    {
+        // Note: we do not worry too much if we cannot open the document info!
+        kdWarning() << "Unable to open documentinfo.xml sub-file!" << endl;
+    }
+
+    if ( !koStoreIn.open ( "root" ) )
+    {
+        // TODO: read a untarred KWord file (useful with koconverter)
         kdError() << "Unable to open input file!" << endl;
+        doAbortFile();
         return false;
     }
 
@@ -206,12 +257,7 @@ bool KWEFKWordLeader::filter(const QString& filenameIn, const QString& filenameO
     if (!qDomDocumentIn.setContent (byteArrayIn))
     {
         kdError() << "Parsing error! Aborting!" << endl;
-        return false;
-    }
-
-    if (!doOpenFile(filenameOut,to))
-    {
-        kdError() << "Worker could not open export file! Aborting!" << endl;
+        doAbortFile();
         return false;
     }
 
