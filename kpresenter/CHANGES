@@ -79,6 +79,14 @@ Bugfixes:
 - Width and height spin boxes in the style dialog are now coupled when
   keep aspect ratio is in effect.
 - Fix unselect object : use right button + shift
+- Fixed rounded rectangle + gradient
+- Fixed saving shadowed objects (when only their color differed from
+  the defaults)
+- Restored a lot of backwards compatibility (formatting, bullets, numbers,
+  whitespace handling etc.)
+- Speedup in displaying of the pixmap objects
+- Fixed the drawing of the background (no gradient when background is
+  an image or a clipart)
 
 Crashes:
 - Fixed crash when we close kword and "special char dialogbox" is not closed
