@@ -75,6 +75,7 @@ static RTFProperty propertyTable[] =
 	PROP(	0L,		"ansi",	setAnsiCodepage,		0L, 0 ),
 	PROP(	0L,		"ansicpg",	setCodepage,		0L, 0 ),
 	MEMBER(	0L,		"b",		setToggleProperty,	state.format.bold, 0 ),
+        // \bin is handled in the tokenizer
 	MEMBER(	"@colortbl",	"blue",		setNumericProperty,	blue, 0 ),
 	MEMBER(	0L,		"box",		setEnumProperty,	state.layout.border, 0 ),
 	MEMBER(	0L,		"brdrb",	setEnumProperty,	state.layout.border, offsetof(RTFImport,state.layout.borders[3]) ),
@@ -431,10 +432,10 @@ KoFilter::ConversionStatus RTFImport::convert( const QCString& from, const QCStr
 	    }
             else
             {
-                kdWarning(30515) << "Unknown control word: " << token.text << endl;
+                //kdWarning(30515) << "Unknown control word: " << token.text << endl;
             }
 	}
-	else if (token.type == RTFTokenizer::PlainText)
+	else if (token.type == RTFTokenizer::PlainText || token.type == RTFTokenizer::BinaryData)
 	{
 	    (this->*destination.destproc)(0L);
 	}
@@ -1265,6 +1266,11 @@ void RTFImport::parsePicture( RTFProperty * )
 		      ((l + ((l & 16) ? 0 : 9)) & 0xf);
 	}
 	picture.nibble = *src;
+    }
+    else if (token.type == RTFTokenizer::BinaryData)
+    {
+        picture.bits = token.binaryData;
+        kdDebug(30515) << "Binary data of length: " << picture.bits.size() << endl;
     }
     else if (token.type == RTFTokenizer::CloseGroup)
     {

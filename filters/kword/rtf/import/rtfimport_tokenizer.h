@@ -20,7 +20,7 @@
 class RTFTokenizer
 {
 public:
-    enum TokenType { OpenGroup, CloseGroup, ControlWord, PlainText };
+    enum TokenType { OpenGroup, CloseGroup, ControlWord, PlainText, BinaryData };
 
     RTFTokenizer();
 
@@ -32,6 +32,9 @@ public:
     TokenType type;
     int value;		// numeric parameter
     bool hasParam;	// token has a (numeric) parameter
+
+public:
+    QByteArray binaryData;
 
     // tokenizer (private) data
 private:

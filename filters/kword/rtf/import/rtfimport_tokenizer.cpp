@@ -9,6 +9,8 @@
    version 2 of the License, or (at your option) any later version.
 */
 
+#include <kdebug.h>
+
 #include "rtfimport_tokenizer.h"
 
 
@@ -88,6 +90,7 @@ void RTFTokenizer::next()
 	}
 	ch = *fileBufferPtr++;
 
+        QCString binTest;
 	// Type is either control word or control symbol
 	if ((ch >= 'a' && ch <= 'z') || (ch >= 'A' && ch <= 'Z'))
 	{
@@ -97,6 +100,7 @@ void RTFTokenizer::next()
 	    while ((ch >= 'a' && ch <= 'z') || (ch >= 'A' && ch <= 'Z'))
 	    {
 		*_text++ = ch;
+                binTest += ch;
 
 		if (fileBufferPtr == fileBufferEnd)
 		{
@@ -121,7 +125,7 @@ void RTFTokenizer::next()
 		if (fileBufferPtr == fileBufferEnd)
 		{
 		    int n = infile->readBlock( fileBuffer.data(), fileBuffer.size() );
-	
+
 		    if (n <= 0)
 		    {
 			// Return CloseGroup on EOF
@@ -141,7 +145,7 @@ void RTFTokenizer::next()
 		if (fileBufferPtr == fileBufferEnd)
 		{
 		    int n = infile->readBlock( fileBuffer.data(), fileBuffer.size() );
-	
+
 		    if (n <= 0)
 		    {
 			ch = ' ';
@@ -159,6 +163,40 @@ void RTFTokenizer::next()
 	    {
 		--fileBufferPtr;
 	    }
+
+            if ( binTest == "bin" )
+            {   // We have \bin, so we need to read the bytes
+                *_text = 0; //DEBUG
+                kdDebug(30515) << "Token:" << tokenText << endl;
+                if (value > 0)
+                {
+                    kdDebug(30515) << "\\bin" << value << endl;
+                    type = RTFTokenizer::BinaryData;
+                    binaryData.resize(value);
+                    for (int i=0; i<value; i++)
+                    {
+                        if (fileBufferPtr == fileBufferEnd)
+                        {
+                            const int n = infile->readBlock( fileBuffer.data(), fileBuffer.size() );
+
+                            if (n <= 0)
+                            {
+                                kdError(30515) << "\\bin stream hit end of file." << endl;
+                                type = RTFTokenizer::CloseGroup;
+                                break;
+                            }
+                            fileBufferPtr = (uchar *)fileBuffer.data();
+                            fileBufferEnd = (fileBufferPtr + n);
+                        }
+                        binaryData[i]=*fileBufferPtr++; // ###TODO: end of file
+                    }
+                }
+                else
+                {
+                    kdError(30515) << "\\bin with negative value skipping" << endl;
+                }
+            }
+
 	}
 	else if (ch=='\'')
 	{
@@ -187,7 +225,7 @@ void RTFTokenizer::next()
 		if (fileBufferPtr == fileBufferEnd)
 		{
 		    int n = infile->readBlock( fileBuffer.data(), fileBuffer.size() );
-	
+
 		    if (n <= 0)
 		    {
 			ch = ' ';
