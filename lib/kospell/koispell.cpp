@@ -915,12 +915,12 @@ void KOISpell::check2 (KProcIO *)
 
     } while (tempe>0);
 
-  proc->ackRead();
 
 
   if (tempe==-1) //we were called, but no data seems to be ready...
     return;
 
+  proc->ackRead();
   //If there is more to check, then send another line to ISpell.
   if ((unsigned int)lastline<origbuffer.length())
     {
