@@ -27,9 +27,13 @@ the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
 Boston, MA 02111-1307, USA.
 */
 
+#include <config.h>
+
+#ifndef WITHOUT_ARTS
 #include <kartsdispatcher.h>
 #include <kplayobjectfactory.h>
 #include <soundserver.h>
+#endif
 
 #include <kdebug.h>
 
@@ -43,10 +47,12 @@ public:
 
     KPresenterSoundPlayerPrivate( QString fileName ) : fileName( fileName ) {};
 
+#ifndef WITHOUT_ARTS
     KArtsDispatcher m_dispatche;
     Arts::SoundServerV2 m_soundServer;
     KPlayObjectFactory *m_factory;
     KPlayObject        *m_player;
+#endif
 };
 
 KPresenterSoundPlayer::KPresenterSoundPlayer( const QString &fileName, QObject *parent, const char *name )
@@ -54,15 +60,19 @@ KPresenterSoundPlayer::KPresenterSoundPlayer( const QString &fileName, QObject *
 {
     d = new KPresenterSoundPlayerPrivate( fileName );
 
+#ifndef WITHOUT_ARTS
     d->m_soundServer = Arts::Reference( "global:Arts_SoundServerV2" );
     d->m_factory = new KPlayObjectFactory( d->m_soundServer );
     d->m_player = 0;
+#endif
 }
 
 KPresenterSoundPlayer::~KPresenterSoundPlayer()
 {
+#ifndef WITHOUT_ARTS
     delete d->m_player;
     delete d->m_factory;
+#endif
     delete d;
 }
 
@@ -74,12 +84,15 @@ void KPresenterSoundPlayer::play( const QString &fileName )
 
 void KPresenterSoundPlayer::stop()
 {
+#ifndef WITHOUT_ARTS
     delete d->m_player;
     d->m_player = 0;
+#endif
 }
 
 void KPresenterSoundPlayer::play()
 {
+#ifndef WITHOUT_ARTS
     if ( d->m_soundServer.isNull() )
         return;
 
@@ -92,6 +105,7 @@ void KPresenterSoundPlayer::play()
         else
             d->m_player->play();
     }
+#endif
 }
 
 #include "kpresenter_sound_player.moc"

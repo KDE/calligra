@@ -52,8 +52,12 @@ libkpresenterpart_la_SOURCES = koPointArray.cc kprcanvas.cc kprpage.cc searchdia
 	kprimportstyledia.cc \
 	imageEffectDia.cc imageEffectBase.ui
 
+if include_ARTS
+ARTSKDE = -lartskde
+endif
+
 libkpresenterpart_la_LDFLAGS = $(all_libraries) $(KDE_PLUGIN)
-libkpresenterpart_la_LIBADD = autoformEdit/libaf.la $(LIB_KOFFICEUI) $(LIB_KOTEXT) -lartskde -lkdefx
+libkpresenterpart_la_LIBADD = autoformEdit/libaf.la $(LIB_KOFFICEUI) $(LIB_KOTEXT) $(ARTSKDE) -lkdefx
 libkpresenterpart_la_METASOURCES = AUTO
 
 ## The kdeinit loadable module and the executable
