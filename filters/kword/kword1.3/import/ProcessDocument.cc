@@ -888,12 +888,6 @@ static void ProcessLineSpaceTag (QDomNode myNode, void *tagData, KWEFKWordLeader
     attrProcessingList << AttrProcessing ( "inch" );
     ProcessAttributes (myNode, attrProcessingList);
 
-
-    if ( ! spacingValue )
-    {
-        kdDebug(30520) << "Found <LINESPACE pt=\"0\">" << endl;
-    }
-
     layout->lineSpacingType = LayoutData::LS_CUSTOM; // set to custom
     layout->lineSpacing     = spacingValue;
 }
