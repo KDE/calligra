@@ -753,7 +753,7 @@ void KIllustrator::menuCallback (int item) {
 					     this);
 	if (! fname.isEmpty ()) {
           KURL u (fname);
-          lastOpenDir = u.directoryURL();
+          lastOpenDir = u.directory( false /* keep trailing slash */ );
 	  document->initialize ();
 	  openURL ((const char *)fname);
 	  cmdHistory.reset ();
