@@ -17,32 +17,31 @@
    Boston, MA 02111-1307, USA.
 */
 
-#include <koApplication.h>
-#include <koDocument.h>
-#include <koMainWindow.h>
-#include <kcmdlineargs.h>
-#include <klocale.h>
-#include <dcopclient.h>
-#include "kudesigner_aboutdata.h"
+#ifndef KUDESIGNER_FACTORY_H
+#define KUDESIGNER_FACTORY_H
 
+#include <koFactory.h>
 
-static const KCmdLineOptions options[]=
+class KInstance;
+class KAboutData;
+
+class KudesignerFactory : public KoFactory
 {
-	{"+[file]", I18N_NOOP("File To Open"),0},
-	{0,0,0}
+    Q_OBJECT
+public:
+    KudesignerFactory( QObject* parent = 0, const char* name = 0 );
+    ~KudesignerFactory();
+
+    virtual KParts::Part *createPartObject( QWidget *parentWidget = 0, const char *widgetName = 0, QObject *parent = 0, const char *name = 0, const char *classname = "KoDocument", const QStringList &args = QStringList() );
+
+    static KInstance* global();
+
+    // _Creates_ a KAboutData but doesn't keep ownership
+    static KAboutData* aboutData();
+
+private:
+    static KInstance* s_global;
+    static KAboutData* s_aboutData;
 };
 
-int main( int argc, char **argv )
-{
-    KLocale::setMainCatalogue("kugar");
-    KCmdLineArgs::init( argc, argv, newKudesignerAboutData() );
-    KCmdLineArgs::addCmdLineOptions( options );
-    KoApplication app;
-
-    app.dcopClient()->attach();
-    app.dcopClient()->registerAs( "kudesigner" );
-
-    if (!app.start()) // parses command line args, create initial docs and shells
-	return 1;
-    return app.exec();
-}
+#endif

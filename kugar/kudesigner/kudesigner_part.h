@@ -17,32 +17,42 @@
    Boston, MA 02111-1307, USA.
 */
 
-#include <koApplication.h>
+#ifndef KUDESIGNER_PART_H
+#define KUDESIGNER_PART_H
+
 #include <koDocument.h>
-#include <koMainWindow.h>
-#include <kcmdlineargs.h>
-#include <klocale.h>
-#include <dcopclient.h>
-#include "kudesigner_aboutdata.h"
+#include <kcommand.h>
 
+class MyCanvas;
+class QCanvas;
 
-static const KCmdLineOptions options[]=
+class KudesignerPart : public KoDocument
 {
-	{"+[file]", I18N_NOOP("File To Open"),0},
-	{0,0,0}
+    Q_OBJECT
+public:
+    KudesignerPart( QWidget *parentWidget = 0, const char *widgetName = 0, QObject* parent = 0, const char* name = 0, bool singleViewMode = false );
+    ~KudesignerPart();
+
+    virtual void paintContent( QPainter& painter, const QRect& rect, bool transparent = FALSE, double zoomX = 1.0, double zoomY = 1.0 );
+
+    virtual bool initDoc();
+
+    virtual bool loadXML( QIODevice *, const QDomDocument & );
+    virtual QDomDocument saveXML();
+
+    MyCanvas *canvas();
+
+protected:
+    virtual KoView* createViewInstance( QWidget* parent, const char* name );
+
+protected slots:
+    void commandExecuted();
+    void documentRestored();
+
+private:
+    KCommandHistory *history;
+
+    MyCanvas *docCanvas;
 };
 
-int main( int argc, char **argv )
-{
-    KLocale::setMainCatalogue("kugar");
-    KCmdLineArgs::init( argc, argv, newKudesignerAboutData() );
-    KCmdLineArgs::addCmdLineOptions( options );
-    KoApplication app;
-
-    app.dcopClient()->attach();
-    app.dcopClient()->registerAs( "kudesigner" );
-
-    if (!app.start()) // parses command line args, create initial docs and shells
-	return 1;
-    return app.exec();
-}
+#endif

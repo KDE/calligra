@@ -31,7 +31,6 @@
 #include "cspecialfield.h"
 #include "ccalcfield.h"
 #include "cline.h"
-#include "itemopts.h"
 
 ReportCanvas::ReportCanvas(QCanvas * canvas, QWidget * parent, const char * name, WFlags f):
 	QCanvasView(canvas, parent, name, f)
@@ -91,7 +90,7 @@ void ReportCanvas::deleteItem(QCanvasItemList &l)
 void ReportCanvas::editItem(QCanvasItemList &l)
 {
     //display editor for report items or sections
-    for (QCanvasItemList::Iterator it=l.begin(); it!=l.end(); ++it)
+/*    for (QCanvasItemList::Iterator it=l.begin(); it!=l.end(); ++it)
     {
 	if ((*it)->rtti() >= 1800) //for my own report items
 	{
@@ -109,7 +108,7 @@ void ReportCanvas::editItem(QCanvasItemList &l)
 	    emit modificationPerformed();
 	    break;
 	}
-    }
+    }*/
 }
 
 void ReportCanvas::placeItem(QCanvasItemList &l, QMouseEvent *e)
@@ -196,11 +195,11 @@ void ReportCanvas::contentsMousePressEvent(QMouseEvent* e)
 	case LeftButton:
 	    if (selectedItem)
 	    {
-		placeItem(l, e);
+		    placeItem(l, e);
 	    }
 	    else
 	    {
-		startMoveOrResizeItem(l, e, p);
+		    startMoveOrResizeItem(l, e, p);
 	    }
 	    break;
         default:
