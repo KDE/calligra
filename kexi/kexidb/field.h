@@ -34,12 +34,6 @@ class TableSchema;
 class FieldList;
 class Expression;
 
-class KEXI_DB_EXPORT FieldTypeNames : public QValueVector<QString>
-{
-	public:
-		FieldTypeNames();
-};
-
 /*! KexiDB::Field provides information about single database field.
 */
 class KEXI_DB_EXPORT Field
@@ -85,14 +79,14 @@ class KEXI_DB_EXPORT Field
 		enum TypeGroup
 		{
 			InvalidGroup = 0,
-			IntegerGroup = 1,
-			FloatGroup = 2,
-			BooleanGroup = 3,
-			DateTimeGroup = 4,
-			TextGroup = 5,
+			TextGroup = 1,
+			IntegerGroup = 2,
+			FloatGroup = 3,
+			BooleanGroup = 4,
+			DateTimeGroup = 5,
 			BLOBGroup = 6, /* large binary object */
 
-			LastGroup	// This line should be at the end of the enum!
+			LastTypeGroup = 6 // This line should be at the end of the enum!
 		};
 
 /*		enum ColumnType
@@ -151,10 +145,14 @@ class KEXI_DB_EXPORT Field
 
 		//! Converts field \a type to QVariant equivalent as accurate as possible
 		static QVariant::Type variantType(uint type);
-		//! \return \a type name
+
+		//! \return type name (\a type has to be an element from Field::Type)
 		static QString typeName(uint type);
 
-		//! \return field name 
+		//! \return group name (\a typeGroup has to be an element from Field::TypeGroup)
+		static QString typeGroupName(uint typeGroup);
+
+		//! \return the name of this field
 		inline QString name() const { return m_name; }
 		
 		/*! \return table schema of table that owns this field. */
@@ -310,9 +308,11 @@ class KEXI_DB_EXPORT Field
 		 \a expr can be null - then current field's expression is cleared.
 		*/
 		void setExpression(KexiDB::Expression *expr);
-
+//<TMP>
 		/*! Returns the hints for enum fields */
-		QValueVector<QString> enumHints() { return m_hints; }
+		QValueVector<QString> enumHints() const { return m_hints; }
+		QString enumHint(uint num) { return (num < m_hints.size()) ? m_hints.at(num) : QString::null; }
+//</TMP>
 
 		/*! sets the hint for enum fields */
 		void setEnumHints(const QValueVector<QString> &l) { m_hints = l; }
@@ -336,14 +336,23 @@ class KEXI_DB_EXPORT Field
 
 		Expression *m_expr;
 
+		class KEXI_DB_EXPORT FieldTypeNames : public QValueVector<QString> {
+			public: FieldTypeNames();
+		};
+		class KEXI_DB_EXPORT FieldTypeGroupNames : public QValueVector<QString> {
+			public: FieldTypeGroupNames();
+		};
+
 		//! real i18n'd type names
 		static FieldTypeNames m_typeNames;
+
+		//! real i18n'd type group names
+		static FieldTypeGroupNames m_typeGroupNames;
+
 
 	friend class Connection;
 	friend class TableSchema;
 	friend class QuerySchema;
-
-	public:
 };
 
 
