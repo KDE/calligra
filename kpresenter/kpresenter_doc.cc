@@ -906,20 +906,54 @@ bool KPresenterDoc::saveOasis( KoStore* store, KoXmlWriter* manifestWriter )
 
     if ( !store->open( "content.xml" ) )
         return false;
-    //just for compile
-    KoGenStyles mainStyles;
-    KoStoreDevice dev( store );
-    KoXmlWriter xmlWriter( &dev, "office:document-content" );
-    xmlWriter.startElement( "office:body" );
 
-    //save page
+    KoStoreDevice contentDev( store );
+    KoXmlWriter contentWriter( &contentDev, "office:document-content" );
+
+
+    KoGenStyles mainStyles;
+    KTempFile contentTmpFile;
+    contentTmpFile.setAutoDelete( true );
+    QFile* tmpFile = contentTmpFile.file();
+    KoXmlWriter contentTmpWriter( tmpFile );
+
+
+    contentTmpWriter.startElement( "office:body" );
+
+//save page
     for ( int i = 0; i < static_cast<int>( m_pageList.count() ); i++ )
     {
-        m_pageList.at( i )->saveOasisPage( store, xmlWriter, ( i+1 ),mainStyles );
+        m_pageList.at( i )->saveOasisPage( store, contentTmpWriter, ( i+1 ),mainStyles );
     }
-    xmlWriter.endElement();
-    xmlWriter.endElement(); // root element
-    xmlWriter.endDocument();
+    contentTmpWriter.endElement(); //office:body
+
+    // Done with writing out the contents to the tempfile, we can now write out the automatic styles
+    contentWriter.startElement( "office:automatic-styles" );
+    QValueList<KoGenStyles::NamedStyle> styles = mainStyles.styles( STYLE_AUTO );
+    QValueList<KoGenStyles::NamedStyle>::const_iterator it = styles.begin();
+    for ( ; it != styles.end() ; ++it ) {
+        (*it).style->writeStyle( &contentWriter, "style:style", (*it).name, "style:paragraph-properties" );
+    }
+    contentWriter.endElement(); // office:automatic-styles
+
+    // And now we can copy over the contents from the tempfile to the real one
+    contentDev.writeBlock( "\n", 1 );
+    tmpFile->close();
+    bool openOk = tmpFile->open( IO_ReadOnly );
+    Q_ASSERT( openOk );
+    static const int MAX_CHUNK_SIZE = 8*1024; // 8 KB
+    QByteArray buffer(MAX_CHUNK_SIZE);
+    while ( !tmpFile->atEnd() ) {
+        Q_LONG len = tmpFile->readBlock( buffer.data(), buffer.size() );
+        if ( len <= 0 ) // e.g. on error
+            break;
+        contentDev.writeBlock( buffer.data(), len );
+    }
+    contentTmpFile.close();
+
+    contentWriter.endElement(); // root element
+    contentWriter.endDocument();
+
     if ( !store->close() ) // done with content.xml
         return false;
 
