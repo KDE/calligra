@@ -2629,6 +2629,11 @@ void KSpreadTable::sortByRow( int ref_row, SortingOrder mode )
     // It may not happen that entire columns are selected.
     ASSERT( r.right() != 0x7fff );
 
+    if ( !m_pDoc->undoBuffer()->isLocked() )
+    {
+        KSpreadUndoChangeAreaTextCell *undo = new KSpreadUndoChangeAreaTextCell( m_pDoc, this, r );
+        m_pDoc->undoBuffer()->appendUndo( undo );
+    }
     // Are entire rows selected ?
     if ( r.right() == 0x7FFF )
     {
@@ -2707,7 +2712,11 @@ void KSpreadTable::sortByColumn(int ref_column,SortingOrder mode)
     ASSERT( mode == Increase || mode == Decrease );
 
     QRect r( selectionRect() );
-
+    if ( !m_pDoc->undoBuffer()->isLocked() )
+    {
+        KSpreadUndoChangeAreaTextCell *undo = new KSpreadUndoChangeAreaTextCell( m_pDoc, this, r );
+        m_pDoc->undoBuffer()->appendUndo( undo );
+    }
     // It may not happen that entire rows are selected.
     ASSERT( r.right() != 0x7fff );
 
