@@ -521,6 +521,7 @@ void KWordTextHandler::writeOutParagraph( const QString& styleName, const QStrin
     QDomElement paragraphElementOut=mainDocument().createElement("PARAGRAPH");
     m_framesetElement.appendChild(paragraphElementOut);
     QDomElement textElement=mainDocument().createElement("TEXT");
+    textElement.setAttribute( "xml:space", "preserve" );
     paragraphElementOut.appendChild(textElement);
     paragraphElementOut.appendChild( m_formats );
     QDomElement layoutElement=mainDocument().createElement("LAYOUT");
