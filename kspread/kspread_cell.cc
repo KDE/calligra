@@ -1647,7 +1647,10 @@ void KSpreadCell::textSize( QPainter &_paint )
     // Vertical text ?
     else
     {
-        m_iOutTextWidth = fm.width( m_strOutText.at(0));
+        int width=0;
+        for(unsigned int i=0;i<m_strOutText.length();i++)
+                width=QMAX(width,fm.width(m_strOutText.at(i)));
+        m_iOutTextWidth = width;
         m_iOutTextHeight = (fm.ascent() + fm.descent())*(m_strOutText.length());
     }
 
@@ -2274,7 +2277,7 @@ void KSpreadCell::paintCell( const QRect& _rect, QPainter &_painter,
         {
 	    int xpos = _tx;
 	    RowLayout* rl = m_pTable->rowLayout( _row + y );
-	
+
 	    for( int x = 0; x <= extraXCells(); ++ x )
 	    {
 		ColumnLayout* cl = m_pTable->columnLayout( _col + x );
@@ -2285,7 +2288,7 @@ void KSpreadCell::paintCell( const QRect& _rect, QPainter &_painter,
 		}
 		xpos += cl->width();
 	    }
-	
+
 	    ypos += rl->height();
 	}
     }
@@ -2473,11 +2476,11 @@ void KSpreadCell::paintCell( const QRect& _rect, QPainter &_painter,
 		    m_iTextX = leftBorderWidth( _col, _row) + BORDER_SPACE;
 		    break;
 		case KSpreadCell::Right:
-		    m_iTextX = w - BORDER_SPACE - fm.width( t )
+		    m_iTextX = w2 - BORDER_SPACE - fm.width( t )
 			       - rightBorderWidth( _col, _row );
 		    break;
 		case KSpreadCell::Center:
-		    m_iTextX = ( w - fm.width( t ) ) / 2;
+		    m_iTextX = ( w2 - fm.width( t ) ) / 2;
 		}
 
 		_painter.drawText( _tx + m_iTextX + dx, _ty + m_iTextY + dy, t );
@@ -2497,30 +2500,6 @@ void KSpreadCell::paintCell( const QRect& _rect, QPainter &_painter,
 	    {
 		i=m_strOutText.length();
 		t=m_strOutText.at(j);
-		int a = m_eAlign;
-		if ( a == KSpreadCell::Undefined )
-	        {
-		    if ( m_bValue || m_bDate ||m_bTime)
-			a = KSpreadCell::Right;
-		    else
-			a = KSpreadCell::Left;
-		}
-		if(m_pTable->getShowFormular())
-		    a = KSpreadCell::Left;
-
-		switch( a )
-	        {
-		case KSpreadCell::Left:
-		    m_iTextX = leftBorderWidth( _col, _row) + BORDER_SPACE;
-		    break;
-		case KSpreadCell::Right:
-		    m_iTextX = w - BORDER_SPACE - fm.width( t )
-			       - rightBorderWidth( _col, _row );
-		    break;
-		case KSpreadCell::Center:
-		    m_iTextX = ( w - fm.width( t ) ) / 2;
-		}
-
 		_painter.drawText( _tx + m_iTextX + dx, _ty + m_iTextY + dy, t );
 		dy += fm.descent() + fm.ascent();
 		j++;
@@ -2894,7 +2873,7 @@ const QPen& KSpreadCell::rightBorderPen( int _col, int _row ) const
 	// If not then there is no right border.
 	if ( _col != m_pObscuringCell->column() + m_pObscuringCell->extraXCells() )
 	    return m_pTable->emptyPen();
-	
+
 	// Ask the obscuring cell for a rigth border
 	if ( m_pObscuringCell->hasProperty( PRightBorder ) )
 	    return m_pObscuringCell->rightBorderPen( m_pObscuringCell->column(), m_pObscuringCell->row() );
@@ -2925,7 +2904,7 @@ const QPen& KSpreadCell::leftBorderPen( int _col, int _row ) const
 	// If not then there is no left border.
 	if ( _col != m_pObscuringCell->column() )
 	    return m_pTable->emptyPen();
-	
+
 	// Ask the obscuring cell for a left border
 	if ( m_pObscuringCell->hasProperty( PLeftBorder ) )
 	    return m_pObscuringCell->leftBorderPen( m_pObscuringCell->column(), m_pObscuringCell->row() );
@@ -2956,7 +2935,7 @@ const QPen& KSpreadCell::bottomBorderPen( int _col, int _row ) const
 	// If not then there is no bottom border.
 	if ( _row != m_pObscuringCell->row() + m_pObscuringCell->extraYCells() )
 	    return m_pTable->emptyPen();
-	
+
 	// Ask the obscuring cell for a bottom border
 	if ( m_pObscuringCell->hasProperty( PBottomBorder ) )
 	    return m_pObscuringCell->bottomBorderPen( m_pObscuringCell->column(), m_pObscuringCell->row() );
@@ -2987,7 +2966,7 @@ const QPen& KSpreadCell::topBorderPen( int _col, int _row ) const
 	// If not then there is no top border.
 	if ( _row != m_pObscuringCell->row() )
 	    return m_pTable->emptyPen();
-	
+
 	// Ask the obscuring cell for a top border
 	if ( m_pObscuringCell->hasProperty( PTopBorder ) )
 	    return m_pObscuringCell->topBorderPen( m_pObscuringCell->column(), m_pObscuringCell->row() );
@@ -3444,7 +3423,7 @@ void KSpreadCell::checkFormat(bool _formular)
                         return;
                         }
                 }
-        else if(pos==(tmpText.length()-1)) //example 125.55 F
+        else if((unsigned int)pos==(tmpText.length()-1)) //example 125.55 F
                 {
                 tmp=tmpText.left(tmpText.length()-1);
                 tmp=tmp.simplifyWhiteSpace();
@@ -3553,7 +3532,7 @@ QDomElement KSpreadCell::save( QDomDocument& doc, int _x_offset, int _y_offset )
     //
     QDomElement format = KSpreadLayout::save( doc );
     cell.appendChild( format );
-    
+
     // ### always saved
     if ( m_style )
 	format.setAttribute( "style", (int)m_style );
@@ -3572,7 +3551,7 @@ QDomElement KSpreadCell::save( QDomDocument& doc, int _x_offset, int _y_offset )
     // ### always saved
     if( m_rotateAngle != 0 )
 	format.setAttribute( "angle", m_rotateAngle );
-    
+
     if( ( m_firstCondition != 0 ) || ( m_secondCondition != 0 ) || ( m_thirdCondition != 0 ) )
     {
   	QDomElement condition = doc.createElement("condition");
@@ -3706,7 +3685,7 @@ bool KSpreadCell::load( const QDomElement& cell, int _xshift, int _yshift, Paste
     {
 	if ( !KSpreadLayout::load( f ) )
 	    return false;
-    
+
 	if ( f.hasAttribute( "format" ) )
         {
 	    m_eFormatNumber=(formatNumber)f.attribute("format").toInt( &ok );

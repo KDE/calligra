@@ -802,3 +802,14 @@ Correct some bugs, etc...
 2000-07-16-Montel laurent <montell@club-internet.fr>
 ----------------------------------------------------
 -Add new script functions setTextBold(),setTextUnderLine() etc...
+
+
+Summary 2000-07-16 ->2000-07-20
+Torben corrected bug in save/load embedded component
+=>now you can load a kspread file with kchart file
+-corrected print bug.
+
+
+2000-07-20-Montel laurent <montell@club-internet.fr>
+----------------------------------------------------
+-Now vertical text and multirow works when cell merged
