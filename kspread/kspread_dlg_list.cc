@@ -18,74 +18,63 @@
 */
 
 
-
-#include "kspread_dlg_list.h"
-#include "kspread_view.h"
-#include "kspread_doc.h"
-#include "kspread_autofill.h"
-
-#include <kbuttonbox.h>
-#include <kmessagebox.h>
-
+#include <qlabel.h>
 #include <qlayout.h>
-#include <qpushbutton.h>
 #include <qlineedit.h>
 #include <qlistbox.h>
-
 #include <qmultilineedit.h>
+#include <qpushbutton.h>
+
+#include <kbuttonbox.h>
 #include <kconfig.h>
-#include <qlabel.h>
 #include <kdebug.h>
+#include <kmessagebox.h>
+
+#include <kspread_autofill.h>
+#include <kspread_dlg_list.h>
+#include <kspread_doc.h>
+#include <kspread_view.h>
 
 KSpreadList::KSpreadList( KSpreadView* parent, const char* name )
-	: QDialog( parent, name,TRUE )
+	: KDialogBase( parent, name, true, i18n("Sort Lists"), Ok|Cancel )
 {
-  QGridLayout *grid1 = new QGridLayout(this,10,3,15,7);
-  setCaption( i18n("Sort Lists") );
+  QWidget* page = new QWidget( this );
+  setMainWidget( page );
 
-  QLabel *lab=new QLabel(this);
+  QGridLayout *grid1 = new QGridLayout( page,10,3,15,7);
+
+  QLabel *lab=new QLabel(page);
   lab->setText(i18n("List:" ));
   grid1->addWidget(lab,0,0);
 
-  list=new QListBox(this);
+  list=new QListBox(page);
   grid1->addMultiCellWidget(list,1,8,0,0);
 
 
-  lab=new QLabel(this);
+  lab=new QLabel(page);
   lab->setText(i18n("Entry:" ));
   grid1->addWidget(lab,0,1);
 
-  entryList=new QMultiLineEdit(this);
+  entryList=new QMultiLineEdit(page);
   grid1->addMultiCellWidget(entryList,1,8,1,1);
 
-  m_pRemove=new QPushButton(i18n("&Remove"),this);
+  m_pRemove=new QPushButton(i18n("&Remove"),page);
   grid1->addWidget(m_pRemove,3,2);
 
-  m_pAdd=new QPushButton(i18n("&Add"),this);
+  m_pAdd=new QPushButton(i18n("&Add"),page);
   grid1->addWidget(m_pAdd,1,2);
 
-  m_pNew=new QPushButton(i18n("&New"),this);
+  m_pNew=new QPushButton(i18n("&New"),page);
   grid1->addWidget(m_pNew,2,2);
 
-  m_pModify=new QPushButton(i18n("&Modify"),this);
+  m_pModify=new QPushButton(i18n("&Modify"),page);
   grid1->addWidget(m_pModify,4,2);
 
-  m_pCopy=new QPushButton(i18n("Co&py"),this);
+  m_pCopy=new QPushButton(i18n("Co&py"),page);
   grid1->addWidget(m_pCopy,5,2);
-
-
-  KButtonBox *bb = new KButtonBox( this );
-  bb->addStretch();
-  m_pOk = bb->addButton( i18n("&OK") );
-  m_pOk->setDefault( TRUE );
-  m_pCancel= bb->addButton( i18n( "&Cancel" ) );
-  bb->layout();
-  grid1->addWidget(bb,9,1);
 
   m_pAdd->setEnabled(false);
 
-  connect( m_pOk, SIGNAL( clicked() ), this, SLOT( slotOk() ) );
-  connect( m_pCancel, SIGNAL( clicked() ), this, SLOT( reject() ) );
   connect( m_pRemove, SIGNAL( clicked() ), this, SLOT( slotRemove() ) );
   connect( m_pAdd, SIGNAL( clicked() ), this, SLOT( slotAdd() ) );
   connect( m_pNew, SIGNAL( clicked() ), this, SLOT( slotNew() ) );

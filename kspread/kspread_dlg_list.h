@@ -1,6 +1,9 @@
 /* This file is part of the KDE project
    Copyright (C) 1998, 1999 Torben Weis <weis@kde.org>
-   Copyright (C) 1999, 2000, 2001 Montel Laurent <lmontel@mandrakesoft.com>
+             (C) 1999, 2000, 2001 Montel Laurent <lmontel@mandrakesoft.com>
+             (C) 1999-2002 The KSpread Team
+                           www.koffice.org/kspread
+
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
    License as published by the Free Software Foundation; either
@@ -20,24 +23,27 @@
 #ifndef __kspread_dlg_list__
 #define __kspread_dlg_list__
 
-#include <qdialog.h>
-class KSpreadView;
-class QLineEdit;
-class QPushButton;
-class QMultiLineEdit;
+#include <kdialogbase.h>
+
 class QListBox;
 class QListBoxItem;
-class KConfig;
+class QLineEdit;
+class QMultiLineEdit;
+class QPushButton;
 
-class KSpreadList: public QDialog
+class KConfig;
+class KSpreadView;
+
+class KSpreadList: public KDialogBase
 {
   Q_OBJECT
+
 public:
   KSpreadList( KSpreadView* parent, const char* name );
   void init();
 
 public slots:
-  void slotOk();
+  virtual void slotOk();
   void slotDoubleClicked(QListBoxItem *);
   void slotTextClicked(QListBoxItem*);
   void slotRemove();
@@ -45,6 +51,7 @@ public slots:
   void slotNew();
   void slotModify();
   void slotCopy();
+
 protected:
   KConfig *config;
 
