@@ -159,10 +159,11 @@
 /* -- undefined because people asked why these doesn't work: --
 # define KEXI_SHOW_UNIMPLEMENTED 
 # define KEXI_STARTUP_SHOW_TEMPLATES 
-# define KEXI_STARTUP_SHOW_RECENT*/
+# define KEXI_STARTUP_SHOW_RECENT
+# define KEXI_REPORTS_SUPPORT
+*/
 # define KEXI_NO_UNFINISHED
 # define KEXI_FORMS_SUPPORT
-# define KEXI_REPORTS_SUPPORT
 #endif
 
 #endif //KEXI_EXPORT_H

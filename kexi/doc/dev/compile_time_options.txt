@@ -29,22 +29,15 @@ Description: If defined, forces to show menu entries and dialogs just to give
 impression about development plans of Kexi Team. 
 Only recommended for test/development versions.
 
-* KDOCKWIDGET_P
-Type: defined/undefined
-Default: undefined
-Description: If defined, enables a hack for better handling property editor's 
-panel within KexiMainWindowImpl object. 
-Notes:
-- if you defined this, make sure you provided kdockwidget_private.h header file 
-  compatible with KDE version you're compiling Kexi with.
-
 * KEXI_FORMS_SUPPORT
 Type: defined/undefined
 Default: defined in kexi_export.h if KEXI_OPTIONS is undefined
 Description: If defined, form plugin will be loaded; else: it will be 
 not loaded even if is compiled.
+
 * KEXI_REPORTS_SUPPORT
 Like KEXI_FORMS_SUPPORT macro, but for enabling report plugin.
+Default: undefined
 
 * KEXI_SERVER_SUPPORT
 Type: defined/undefined
@@ -54,7 +47,7 @@ for these will be disabled even if is compiled.
 
 * KEXI_NO_MIGRATION
 Type: defined/undefined
-Default: defined in kexidb/kexidb_export.h if KEXI_OPTIONS is undefined
+Default: undefined
 Description: If defined, data/project migration support for Kexi 
 (available in Tools>Migration menu) will be disabled; else: support will 
 be enabled.
@@ -97,3 +90,12 @@ executing the action, a dialog with current (after changes) and original form's
 GUI XML code will be presented in a tabbed dialog, so you can compare what changed 
 and look for possible problems. The "current" XML code will be saved when "save" 
 action is executed.
+
+
+==== Obsolete, don't use ====
+
+* KDOCKWIDGET_P
+Type: defined/undefined
+Default: undefined
+Description: If defined, enables a hack for better handling property editor's 
+panel within KexiMainWindowImpl object. 

@@ -460,6 +460,13 @@ Forms:
 -change form's object caption to "caption" property, when changed and conversely!
 -new forms should have "dirty" set to true, so user can save them quickly
 
+2005-03-28
+Main Window
+- dock windows' width is managed for TabPageMode in the same way as for ChildframeMode
+- hiding property editor's dock when not needed
+Table/Form Views
+- database cursor deleted when not needed
+
 2005-03-25
 Forms
 - "cancel cell editing" and "cancel row editing" implemented
