@@ -147,23 +147,35 @@
 
 <!ELEMENT refname (#PCDATA)>
 
-<!--	Describe the area selected.
+<!--
+	They are two conflicting uses of <rect>
+
+ Use 1:
+    Describe the area selected.
         Attributes:
 
          left-rect   value of the left border
          right-rect  value of the right border
          bottom-rect value of the bottom border
          top-rect    value of the top border
+
+ Use 2:
+    Use unknown (### TODO)
+        Attributes:
+         x          x position
+         y          y posution
+         w          width
+         h          height
 -->
 <!ELEMENT rect  EMPTY>
 <!ATTLIST rect  left-rect      CDATA #IMPLIED
                 right-rect     CDATA #IMPLIED
                 bottom-rect    CDATA #IMPLIED
-                top-rect       CDATA #IMPLIED>
-<!ATTLIST rect  x              CDATA #REQUIRED
-                y              CDATA #REQUIRED
-                w              CDATA #REQUIRED
-                h              CDATA #REQUIRED>
+                top-rect       CDATA #IMPLIED
+                x              CDATA #IMPLIED
+                y              CDATA #IMPLIED
+                w              CDATA #IMPLIED
+                h              CDATA #IMPLIED>
 
 <!--	Contains the table data for the various tables.
 
@@ -200,7 +212,7 @@
 <!ATTLIST table  name                   CDATA #REQUIRED
                  columnnumber           CDATA #REQUIRED
                  borders                CDATA #REQUIRED     
-                 hide                   CDATA #REQUIRED 
+                 hide                   CDATA #REQUIRED
                  hidezero               CDATA #REQUIRED
                  firstletterupper       CDATA #REQUIRED
                  grid                   CDATA #REQUIRED
