@@ -75,6 +75,8 @@ public:
     /**
      * Draw the image in a painter.
      *
+     * The parameter @p fastMode allows the picture to be re-sized and drawn quicker if possible
+     *
      * The parameters @p width, @p height define the desired size for the picture
      *
      * The other parameters are very similar to QPainter::drawPixmap :
@@ -83,7 +85,7 @@ public:
      * (@p sw, @p sh) specify the size of the pixmap that is to be drawn. The default, (-1, -1), means all the way to the bottom
      * right of the pixmap.
      */
-    void draw(QPainter& painter, int x, int y, int width, int height, int sx = 0, int sy = 0, int sw = -1, int sh = -1);
+    void draw(QPainter& painter, int x, int y, int width, int height, int sx = 0, int sy = 0, int sw = -1, int sh = -1, bool fastMode = false);
 
     bool load(QIODevice* io, const QString& extension);
 

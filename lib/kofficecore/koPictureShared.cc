@@ -74,10 +74,10 @@ bool KoPictureShared::isNull(void) const
     return true;
 }
 
-void KoPictureShared::draw(QPainter& painter, int x, int y, int width, int height, int sx, int sy, int sw, int sh)
+void KoPictureShared::draw(QPainter& painter, int x, int y, int width, int height, int sx, int sy, int sw, int sh, bool fastMode)
 {
     if (m_base)
-        m_base->draw(painter, x, y, width, height, sx, sy, sw, sh);
+        m_base->draw(painter, x, y, width, height, sx, sy, sw, sh, fastMode);
     else
     {
         // Draw a red box (easier DEBUG)

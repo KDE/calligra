@@ -107,7 +107,7 @@ void KoPictureImage::scaleAndCreatePixmap(const QSize& size, bool fastMode)
     m_cachedSize=size;
 }
 
-void KoPictureImage::draw(QPainter& painter, int x, int y, int width, int height, int sx, int sy, int sw, int sh)
+void KoPictureImage::draw(QPainter& painter, int x, int y, int width, int height, int sx, int sy, int sw, int sh, bool fastMode)
 {
     //kdDebug() << "KoImage::draw currentSize:" << currentSize.width() << "x" << currentSize.height() << endl;
     if ( !width || !height )
