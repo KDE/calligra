@@ -21,6 +21,7 @@
 #include "qrichtext_p.h" // for KoTextFormat
 #include "kozoomhandler.h"
 #include <kdebug.h>
+#include <klocale.h>
 
 void KoTextFormat::KoTextFormatPrivate::clearCache()
 {
@@ -34,12 +35,348 @@ void KoTextFormat::KoTextFormatPrivate::clearCache()
     memset( m_screenWidths, 0, 256 * sizeof( ushort ) );
 }
 
-void KoTextFormat::setPointSizeFloat( float size )
+KoTextFormat::KoTextFormat()
 {
-    if ( fn.pointSizeFloat() == size )
-        return;
-    fn.setPointSizeFloat( size );
+    linkColor = TRUE;
+    ref = 0;
+    missp = FALSE;
+    ha = AlignNormal;
+    collection = 0;
+    //// kotext: WYSIWYG works much much better with scalable fonts -> force it to be scalable
+    fn.setStyleStrategy( QFont::ForceOutline );
+    d = new KoTextFormatPrivate;
+    m_textUnderlineColor=QColor();
+    m_underlineLine = U_NONE;
+    m_strikeOutLine = S_NONE;
+    m_underlineLineStyle = U_SOLID;
+    m_strikeOutLineStyle = S_SOLID;
+    m_language = KGlobal::locale()->language();
+    ////
+//#ifdef DEBUG_COLLECTION
+//    qDebug("KoTextFormat simple ctor, no addRef, no generateKey ! %p",this);
+//#endif
+}
+
+KoTextFormat::KoTextFormat( const QFont &f, const QColor &c, KoTextFormatCollection *parent )
+    : fn( f ), col( c ), /*fm( QFontMetrics( f ) ),*/ linkColor( TRUE )
+{
+#ifdef DEBUG_COLLECTION
+    qDebug("KoTextFormat with font & color & parent (%p), addRef. %p", parent, this);
+#endif
+    int pointSize;
+    if ( f.pointSize() == -1 ) // font was set with a pixelsize, we need a pointsize!
+        pointSize = (int)( ( (double)fn.pixelSize() * 72.0 ) / (double)QPaintDevice::x11AppDpiY() );
+    else
+        pointSize = f.pointSize();
+    fn.setPointSize( pointSize );
+    // WYSIWYG works much much better with scalable fonts -> force it to be scalable
+    fn.setStyleStrategy( QFont::ForceOutline );
+    ref = 0;
+    collection = parent;
+    //leftBearing = fm.minLeftBearing();
+    //rightBearing = fm.minRightBearing();
+    //hei = fm.height();
+    //asc = fm.ascent();
+    //dsc = fm.descent();
+    missp = FALSE;
+    ha = AlignNormal;
+    //memset( widths, 0, 256 * sizeof( ushort ) );
+    //// kotext
+    d = new KoTextFormatPrivate;
+    m_textUnderlineColor = QColor();
+    m_underlineLine = U_NONE;
+    m_strikeOutLine = S_NONE;
+    m_underlineLineStyle = U_SOLID;
+    m_strikeOutLineStyle = S_SOLID;
+    //m_language = _language;
+    m_language = KGlobal::locale()->language();
+    ////
+    generateKey();
+    addRef();
+    //updateStyleFlags();
+}
+
+KoTextFormat::KoTextFormat( const KoTextFormat &f )
+{
+    d = 0L;
+    operator=( f );
+}
+
+KoTextFormat::~KoTextFormat()
+{
+    //// kotext addition
+    // Removing a format that is in the collection is forbidden, in fact.
+    // It should have been removed from the collection before being deleted.
+#ifndef NDEBUG
+    if ( parent() && parent()->defaultFormat() ) // not when destroying the collection
+        assert( ! ( parent()->dict().find( key() ) == this ) );
+        // (has to be the same pointer, not only the same key)
+#endif
+    delete d;
+    ////
+}
+
+KoTextFormat& KoTextFormat::operator=( const KoTextFormat &f )
+{
+#ifdef DEBUG_COLLECTION
+    qDebug("KoTextFormat::operator= %p (copying %p). Will addRef",this,&f);
+#endif
+    ref = 0;
+    collection = 0; // f might be in the collection, but we are not
+    fn = f.fn;
+    col = f.col;
+    //fm = f.fm;
+    //leftBearing = f.leftBearing;
+    //rightBearing = f.rightBearing;
+    //memset( widths, 0, 256 * sizeof( ushort ) );
+    //hei = f.hei;
+    //asc = f.asc;
+    //dsc = f.dsc;
+    missp = f.missp;
+    ha = f.ha;
+    k = f.k;
+    linkColor = f.linkColor;
+    //// kotext addition
+    delete d;
+    d = new KoTextFormatPrivate;
+    m_textBackColor=f.m_textBackColor;
+    m_textUnderlineColor=f.m_textUnderlineColor;
+    m_underlineLine = f.m_underlineLine;
+    m_strikeOutLine = f.m_strikeOutLine;
+    m_underlineLineStyle = f.m_underlineLineStyle;
+    m_strikeOutLineStyle = f.m_strikeOutLineStyle;
+    m_language = f.m_language;
+    ////
+    addRef();
+    return *this;
+}
+
+void KoTextFormat::update()
+{
+    //qDebug("%p KoTextFormat::update %s %d",this, fn.family().latin1(),pointSize());
+    fn.setStyleStrategy( QFont::ForceOutline );
+    //fm = QFontMetrics( fn );
+    //leftBearing = fm.minLeftBearing();
+    //rightBearing = fm.minRightBearing();
+    //hei = fm.height();
+    //asc = fm.ascent();
+    //dsc = fm.descent();
+    //memset( widths, 0, 256 * sizeof( ushort ) );
+    generateKey();
+    //updateStyleFlags();
+    //// kotext
+    assert( d );
+    d->clearCache(); // i.e. recalc at the next screenFont[Metrics]() call
+    ////
+}
+
+void KoTextFormat::copyFormat( const KoTextFormat & nf, int flags )
+{
+    if ( flags & KoTextFormat::Bold )
+	fn.setBold( nf.fn.bold() );
+    if ( flags & KoTextFormat::Italic )
+	fn.setItalic( nf.fn.italic() );
+    if ( flags & KoTextFormat::Underline )
+	fn.setUnderline( nf.fn.underline() );
+    if ( flags & KoTextFormat::Family )
+	fn.setFamily( nf.fn.family() );
+    if ( flags & KoTextFormat::Size )
+	fn.setPointSize( nf.fn.pointSize() );
+    if ( flags & KoTextFormat::Color )
+	col = nf.col;
+    if ( flags & KoTextFormat::Misspelled )
+	missp = nf.missp;
+    if ( flags & KoTextFormat::VAlign )
+	ha = nf.ha;
+    ////// kotext addition
+    if ( flags & KoTextFormat::StrikeOut )
+    {
+        setStrikeOutLineStyle( nf.strikeOutLineStyle() );
+        setStrikeOutLineType (nf.strikeOutLineType());
+    }
+    if( flags & KoTextFormat::TextBackgroundColor)
+        setTextBackgroundColor(nf.textBackgroundColor());
+    if( flags & KoTextFormat::ExtendUnderLine)
+    {
+        setTextUnderlineColor(nf.textUnderlineColor());
+        setUnderlineLineType (nf.underlineLineType());
+        setUnderlineLineStyle (nf.underlineLineStyle());
+    }
+    if( flags & KoTextFormat::SpellCheckingLanguage)
+        setSpellCheckingLanguage(nf.spellCheckingLanguage());
+
+    //////
     update();
+    //kdDebug(32500) << "KoTextFormat " << (void*)this << " copyFormat nf=" << (void*)&nf << " " << nf.key() << " flags=" << flags
+    //        << " ==> result " << this << " " << key() << endl;
+}
+
+void KoTextFormat::setBold( bool b )
+{
+    if ( b == fn.bold() )
+	return;
+    fn.setBold( b );
+    update();
+}
+
+void KoTextFormat::setMisspelled( bool b )
+{
+    if ( b == (bool)missp )
+	return;
+    missp = b;
+    update();
+}
+
+void KoTextFormat::setVAlign( VerticalAlignment a )
+{
+    if ( a == ha )
+	return;
+    ha = a;
+    update();
+}
+
+void KoTextFormat::setItalic( bool b )
+{
+    if ( b == fn.italic() )
+	return;
+    fn.setItalic( b );
+    update();
+}
+
+void KoTextFormat::setUnderline( bool b )
+{
+    if ( b == fn.underline() )
+	return;
+    fn.setUnderline( b );
+    update();
+}
+
+void KoTextFormat::setFamily( const QString &f )
+{
+    if ( f == fn.family() )
+	return;
+    fn.setFamily( f );
+    update();
+}
+
+void KoTextFormat::setPointSize( int s )
+{
+    if ( s == fn.pointSize() )
+	return;
+    fn.setPointSize( s );
+    update();
+}
+
+void KoTextFormat::setFont( const QFont &f )
+{
+    if ( f == fn && !k.isEmpty() )
+	return;
+    fn = f;
+    update();
+}
+
+void KoTextFormat::setColor( const QColor &c )
+{
+    if ( c == col )
+	return;
+    col = c;
+    update();
+}
+
+#if 0
+int KoTextFormat::minLeftBearing() const
+{
+    if ( !painter || !painter->isActive() )
+	return leftBearing;
+    painter->setFont( fn );
+    return painter->fontMetrics().minLeftBearing();
+}
+
+int KoTextFormat::minRightBearing() const
+{
+    if ( !painter || !painter->isActive() )
+	return rightBearing;
+    painter->setFont( fn );
+    return painter->fontMetrics().minRightBearing();
+}
+#endif
+
+void KoTextFormat::generateKey()
+{
+    k = fn.key();
+    k += '/';
+    if ( col.isValid() ) // just to shorten the key in the common case
+        k += QString::number( (uint)col.rgb() );
+    k += '/';
+    k += QString::number( (int)isMisspelled() ); // a digit each, no need for '/'
+    k += QString::number( (int)vAlign() );
+    //// kotext addition
+    k += '/';
+    if (m_textBackColor.isValid())
+        k += QString::number( (uint)m_textBackColor.rgb() );
+    k += '/';
+    if ( m_textUnderlineColor.isValid())
+        k += QString::number( (uint)m_textUnderlineColor.rgb() );
+    k += '/';
+    k += QString::number( (int)m_underlineLine ); // a digit each, no need for '/'
+    k += QString::number( (int)m_strikeOutLine );
+    k += '/';
+    k += QString::number( (int)m_underlineLineStyle );
+    k += '/';
+    k += QString::number( (int)m_strikeOutLineStyle);
+    k += '/';
+    k += m_language;
+    ////
+}
+
+// This is used to create "simple formats", with font and color etc., but without
+// advanced features. Doesn't matter, don't extend the args.
+QString KoTextFormat::getKey( const QFont &fn, const QColor &col, bool misspelled, VerticalAlignment a )
+{
+    QString k = fn.key();
+    k += '/';
+    if ( col.isValid() ) // just to shorten the key in the common case
+        k += QString::number( (uint)col.rgb() );
+    k += '/';
+    k += QString::number( (int)misspelled );
+    k += QString::number( (int)a );
+    //// kotext addition
+    k += '/';
+        // no background color
+    k += '/';
+        // no underline color
+    k += '/';
+    k += QString::number( (int)U_NONE );
+    k += QString::number( (int)S_NONE ); // no double-underline in a "simple format"
+    k += '/';
+    k += QString::number( (int)U_SOLID );
+    k += '/';
+    k += QString::number( (int)S_SOLID ); // no double-underline in a "simple format"
+    k += '/';
+    //k += QString::null; // spellcheck language
+    ////
+    return k;
+}
+
+void KoTextFormat::addRef()
+{
+    ref++;
+#ifdef DEBUG_COLLECTION
+    if ( collection )
+        qDebug( "  add ref of '%s' to %d (%p) (coll %p)", k.latin1(), ref, this, collection );
+#endif
+}
+
+void KoTextFormat::removeRef()
+{
+    ref--;
+    if ( !collection )
+        return;
+#ifdef DEBUG_COLLECTION
+    qDebug( "  remove ref of '%s' to %d (%p) (coll %p)", k.latin1(), ref, this, collection );
+#endif
+    if ( ref == 0 )
+        collection->remove( this );
 }
 
 void KoTextFormat::setStrikeOutLineType (StrikeOutLineType _type)
@@ -102,7 +439,7 @@ int KoTextFormat::compare( const KoTextFormat & format ) const
         flags |= KoTextFormat::ExtendUnderLine;
     if ( fn.family() != format.fn.family() )
         flags |= KoTextFormat::Family;
-    if ( fn.pointSize() != format.fn.pointSize() )
+    if ( pointSize() != format.pointSize() )
         flags |= KoTextFormat::Size;
     if ( color() != format.color() )
         flags |= KoTextFormat::Color;
@@ -127,7 +464,8 @@ QColor KoTextFormat::defaultTextColor( QPainter * painter )
 
 float KoTextFormat::screenPointSize( const KoZoomHandler* zh ) const
 {
-    int pointSizeLU = font().pointSize();
+    // ## simplify (needs a change in KoZoomHandler)
+    int pointSizeLU = KoTextZoomHandler::ptToLayoutUnitPt( pointSize() );
     if ( vAlign() != KoTextFormat::AlignNormal )
         pointSizeLU = ( ( pointSizeLU * 2 ) / 3 );
 
@@ -136,10 +474,10 @@ float KoTextFormat::screenPointSize( const KoZoomHandler* zh ) const
 
 float KoTextFormat::refPointSize() const
 {
-    int pointSizeLU = font().pointSize();
     if ( vAlign() != KoTextFormat::AlignNormal )
-        pointSizeLU = ( ( pointSizeLU * 2 ) / 3 );
-    return KoTextZoomHandler::layoutUnitPtToPt( pointSizeLU );
+        return ( (float)pointSize() * 2 ) / 3.0;
+    else
+        return pointSize();
 }
 
 QFont KoTextFormat::refFont() const
@@ -213,6 +551,15 @@ const QFontMetrics& KoTextFormat::refFontMetrics() const
     return *d->m_refFontMetrics;
 }
 
+QFont KoTextFormat::smallCapsFont( const KoZoomHandler* zh, bool applyZoom ) const
+{
+    QFont font = applyZoom ? screenFont( zh ) : refFont();
+    QFontMetrics fm = refFontMetrics(); // only used for proportions, so applyZoom doesn't matter
+    double pointSize = font.pointSize() * ((double)fm.boundingRect("x").height()/(double)fm.boundingRect("X").height());
+    font.setPointSizeFloat( pointSize );
+    return font;
+}
+
 int KoTextFormat::charWidth( const KoZoomHandler* zh, bool applyZoom, const KoTextStringChar* c,
                              const KoTextParag* parag, int i ) const
 {
@@ -254,10 +601,8 @@ int KoTextFormat::charWidth( const KoZoomHandler* zh, bool applyZoom, const KoTe
             pixelww = this->refFontMetrics().width( c->c );
     }
     else {
-        // Here we have no choice, we need to create the format
-        KoTextFormat tmpFormat( *this );  // make a copy
-        tmpFormat.setPointSizeFloat( applyZoom ? screenPointSize( zh ) : refPointSize() );
         // complex text. We need some hacks to get the right metric here
+        const QFontMetrics& fontMetrics = applyZoom ? screenFontMetrics( zh ) : refFontMetrics();
         QString str;
         int pos = 0;
         if( i > 4 )
@@ -268,13 +613,13 @@ int KoTextFormat::charWidth( const KoZoomHandler* zh, bool applyZoom, const KoTe
             str += parag->at(pos)->c;
             pos++;
         }
-        pixelww = tmpFormat.width( str, off );
+        pixelww = fontMetrics.charWidth( str, off );
     }
 
 #ifdef DEBUG_FORMATTER
     if ( applyZoom ) // ###
         qDebug( "\nKoTextFormatter::format: char=%s, LU-size=%d, LU-width=%d [equiv. to pix=%d] pixel-width=%d", // format=%s",
-                QString(c->c).latin1(), this->font().pointSize(),
+                QString(c->c).latin1(), pointSize(),
                 ww, zh->layoutUnitToPixelX(ww), pixelww/*, this->key().latin1()*/ );
 #endif
     return pixelww;
@@ -416,9 +761,9 @@ KoTextFormat::StrikeOutLineStyle KoTextFormat::stringToStrikeOutStyle( const QSt
 
 void KoTextFormat::setSpellCheckingLanguage( const QString & _lang)
 {
-    if ( m_spellCheckLanguage == _lang )
+    if ( m_language == _lang )
         return;
-    m_spellCheckLanguage = _lang;
+    m_language = _lang;
     update();
 }
 
