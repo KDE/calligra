@@ -1,0 +1,289 @@
+<sect1 id="tab-stops">
+<title>Using Tab Stops</title>
+
+<para>Tab stops are a (very useful) holdover from the days of
+typewriters.  They allow you to align text into columns quickly and
+easily.</para>
+
+<para>When a tab stop is in place, you can immediately jump to that
+horizontal position on the page by pressing the "Tab" key.  Tab stops
+are most commonly used to align columns in a table, or to automatically
+indent paragraphs.</para>
+
+<para>Tab stops are part of the properties of a paragraph.  Each
+paragraph keeps track of its own set of tab stops.  You can view the tab
+stops of a particular paragraph by placing the mouse cursor within a
+paragraph, clicking once, and checking the top ruler.  The tab stops are
+marked as symbols in black. </para>
+
+<para>&kword; recognizes 4 types of tab stops.  Each of these types has
+a corresponding symbol to help you identify the type in the
+ruler.</para>
+
+<informaltable frame="none"><tgroup cols="4" align="left">
+<colspec colname="c1"/>
+<colspec colname="c2"/>
+<colspec colname="c3"/>
+<colspec colname="c4"/>
+<spanspec spanname="hspan" namest="c3" nameend="c4" align="left"/>
+<tbody>
+<row><entry align="center">Type</entry><entry align="center">Symbol</entry><entry align="center">Description</entry></row>
+<row><entry>Right Tab Stop</entry><entry><mediaobject><imageobject><imagedata fileref="rtab.png" format="PNG" align="center"/></imageobject></mediaobject></entry>
+<entry spanname="hspan">With a right tab stop, the right edge of the next set of words is aligned at the tab stop. </entry></row>
+<row><entry></entry></row>
+<row><entry></entry><entry></entry><entry align="right"><emphasis>Example:</emphasis></entry><entry align="left"><mediaobject><imageobject><imagedata fileref="rtab2.png" format="PNG" align="center"/></imageobject></mediaobject></entry></row>
+<row><entry></entry></row>
+<row><entry>Center Tab Stop</entry><entry><mediaobject><imageobject><imagedata fileref="ctab.png" format="PNG" align="center"/></imageobject></mediaobject></entry>
+<entry spanname="hspan">With a right tab stop, the text is centered at the tab stop. </entry></row>
+<row><entry></entry></row>
+<row><entry></entry><entry></entry><entry align="right"><emphasis>Example:</emphasis></entry><entry align="left"><mediaobject><imageobject><imagedata fileref="ctab2.png" format="PNG" align="center"/></imageobject></mediaobject></entry></row>
+<row><entry></entry></row>
+<row><entry>Left Tab Stop</entry><entry><mediaobject><imageobject><imagedata fileref="ltab.png" format="PNG" align="center"/></imageobject></mediaobject></entry>
+<entry spanname="hspan">With a left tab stop, the left edge of the next set of words is aligned at the tab stop. </entry></row>
+<row><entry></entry></row>
+<row><entry></entry><entry></entry><entry align="right"><emphasis>Example:</emphasis></entry><entry align="left"><mediaobject><imageobject><imagedata fileref="ltab2.png" format="PNG" align="center"/></imageobject></mediaobject></entry></row>
+<row><entry></entry></row>
+<row><entry>Decimal Tab Stop</entry><entry><mediaobject><imageobject><imagedata fileref="dtab.png" format="PNG" align="center"/></imageobject></mediaobject></entry>
+<entry spanname="hspan">With a decimal tab stop, the decimal points of the text are aligned at the tab stop. </entry></row>
+<row><entry></entry></row>
+<row><entry></entry><entry></entry><entry align="right"><emphasis>Example:</emphasis></entry><entry align="left"><mediaobject><imageobject><imagedata fileref="dtab2.png" format="PNG" align="center"/></imageobject></mediaobject></entry></row>
+</tbody></tgroup></informaltable>
+
+<sect2 id="tab-stop-setting">
+<title>Setting Tab Stops</title>
+
+<para>Tab stops can be set one of two ways:</para>
+
+<itemizedlist>
+<listitem>
+<para><link linkend="tab-stop-setting-rulers">Using the rulers of
+&kword;</link></para>
+</listitem>
+<listitem>
+<para><link linkend="tab-stop-setting-dialog">Using a specialized dialog
+panel.</link></para>
+</listitem>
+</itemizedlist>
+
+<sect3 id="tab-stop-setting-rulers">
+<title>Using the Ruler</title>
+
+<para>You can use the top ruler on &kword; to interactively insert tab
+stops.</para>
+
+<para>First, you should select the type of tab stop you want to
+use.</para>
+
+<para>Place the mouse cursor over the current tab character (located
+directly to the left of the top ruler).  Click once with the
+<mousebutton>right</mousebutton> button of the mouse.  A small submenu
+will appear.  You can select the tab stop you want from the sub
+menu.</para>
+
+<tip>
+<para>You can also use the left mouse button to cycle through the
+different types of tab stops.  </para>
+
+<para>Click once on the current tab character, and the tab stop changes
+from <quote>Left Tab Stop</quote>, to <quote>Center Tab Stop</quote>.
+If you continue to click with the left mouse button, you will change to
+<quote>Right Tab Stop</quote>, then to <quote>Decimal Tab Stop</quote>,
+then back to <quote>Left Tab Stop</quote>. </para> 
+</tip>
+
+<para>Once you have the correct type of tab stop, you can simply place
+the mouse cursor on the top ruler bar, and click once with the
+<mousebutton>left</mousebutton> mouse button.  This will place a tab
+stop at that position.</para>
+
+</sect3>
+
+<sect3 id="tab-stop-setting-dialog">
+<title>Using the Dialog Box</title>
+
+<para>The fastest way to get to the tab stop dialog panel, is to select
+<menuchoice><guimenu>Format</guimenu><guimenuitem>Paragraph</guimenuitem></menuchoice>
+from the Menu bar.  This will bring up a dialog box with 5 tabs. </para>
+
+<para>Click on the tab labeled <guilabel>Tabulators</guilabel></para>
+
+<screenshot>
+<mediaobject>
+<imageobject><imagedata fileref="fpara5.png" format="PNG"/>
+</imageobject>
+</mediaobject>
+</screenshot>
+
+<para>You can now add tab stops by:</para>
+
+<orderedlist numeration="arabic">
+<listitem>
+<para>Type the horizontal location of the tab stop in the space
+provided.  The units are listed above the text box.</para>
+</listitem>
+<listitem>
+<para>Select the type of tab stop from the list on the right.</para>
+</listitem>
+<listitem>
+<para>Click <guibutton>Add</guibutton>.</para>
+</listitem>
+</orderedlist>
+
+<para>When you are done adding tab stops, you can click
+<guibutton>OK</guibutton> to finish.</para>
+
+</sect3>
+</sect2>
+
+<sect2 id="tab-stop-moving">
+<title>Moving Tab Stops</title>
+
+<para>Tab stops can be moved one of two ways:</para>
+
+<itemizedlist>
+<listitem>
+<para><link linkend="tab-stop-move-ruler">Using the rulers of
+&kword;</link></para>
+</listitem>
+<listitem>
+<para><link linkend="tab-stop-move-dialog">Using a specialized dialog
+panel.</link></para>
+</listitem>
+</itemizedlist>
+
+<sect3 id="tab-stop-move-ruler">
+<title>Using the Ruler</title>
+
+<orderedlist numeration="arabic">
+<listitem>
+<para>To move a tab stop with the ruler, place the mouse over the
+desired tab stop.  The mouse cursor will change to a double
+arrow.</para>
+</listitem>
+
+<listitem>
+<para>Click and hold down the right button on the mouse.  Drag the tab
+stop to its new location</para>
+</listitem>
+
+<listitem>
+<para>When the tab stop is where you want it, release the mouse
+button.</para>
+</listitem>
+</orderedlist>
+
+</sect3>
+
+<sect3 id="tab-stop-move-dialog">
+<title>Using the Dialog Box</title>
+
+<para>The fastest way to get to the tab stop dialog panel, is to select
+<menuchoice><guimenu>Format</guimenu><guimenuitem>Paragraph</guimenuitem></menuchoice>
+from the Menu bar.  This will bring up a dialog box with 5 tabs. </para>
+
+<para>Click on the tab labeled <guilabel>Tabulators</guilabel></para>
+
+<screenshot>
+<mediaobject>
+<imageobject><imagedata fileref="fpara5.png" format="PNG"/></imageobject>
+</mediaobject>
+</screenshot>
+
+<para>You can now move tab stops by: !!!!!!!!!This is assumed, not
+working when written!!!!!!!!!!!</para>
+
+<orderedlist numeration="arabic">
+<listitem>
+<para>Click on the tab stop you want moved.  The list of all tab stops
+is in the box on the left side of the dialog panel</para>
+</listitem>
+<listitem>
+<para>Click <guilabel>Modify</guilabel>.</para>
+</listitem>
+<listitem>
+<para>Edit the horizontal location of the tab stop in the space
+provided.  The units are listed above the text box.</para>
+</listitem>
+<listitem>
+<para>If you need to make changes, select the type of tab stop from the
+list on the right.</para>
+</listitem>
+<listitem>
+<para>Click <quote>OK</quote>.</para>
+</listitem>
+</orderedlist>
+</sect3>
+</sect2>
+
+<sect2 id="tab-stop-remove">
+<title>Removing Tab Stops</title>
+
+<para>
+Tab stops can be removed one of two ways:
+</para>
+
+<itemizedlist>
+<listitem>
+<para><link linkend="tab-stop-delete-rulers">Using the rulers of
+&kword;</link></para>
+</listitem>
+<listitem>
+<para><link linkend="tab-stop-delete-dialog">Using a specialized dialog
+panel.</link></para>
+</listitem>
+</itemizedlist>
+
+<sect3 id="tab-stop-delete-rulers">
+<title>Using the Ruler</title>
+
+<orderedlist numeration="arabic">
+<listitem>
+<para>To delete a tab stop with the ruler, place the mouse over the
+desired tab stop.  The mouse cursor will change to a double
+arrow.</para>
+</listitem>
+<listitem>
+<para>Click and hold down the <mousebutton>right</mousebutton> button on
+the mouse. Drag the tab stop off the edge of the document.</para>
+</listitem>
+<listitem>
+<para>Release the mouse button.</para>
+</listitem>
+</orderedlist>
+</sect3>
+
+<sect3 id="tab-stop-delete-dialog">
+<title>Using the Dialog Box</title>
+
+<para>The fastest way to get to the tab stop dialog panel, is to select
+<menuchoice><guimenu>Format</guimenu><guimenuitem>Paragraph</guimenuitem></menuchoice>
+from the Menu bar.  This will bring up a dialog box with 5 tabs. </para>
+
+<para>Click on the tab labeled <guilabel>Tabulators</guilabel></para>
+
+<screenshot>
+<mediaobject>
+<imageobject>
+<imagedata fileref="fpara5.png" format="PNG"/></imageobject>
+</mediaobject>
+</screenshot>
+
+<para>You can now delete tab stops by: !!!!!!!!!This is assumed, not
+working when written!!!!!!!!!!!</para>
+
+<orderedlist numeration="arabic">
+<listitem>
+<para>Click on the tab stop you want moved.  The list of all tab stops
+is in the box on the left side of the dialog panel</para>
+</listitem>
+<listitem>
+<para>Click <guibutton>Delete</guibutton>.</para>
+</listitem>
+</orderedlist>
+
+<para>When you are done adding tab stops, you can click
+<guibutton>OK</guibutton> to finish.</para>
+
+</sect3>
+</sect2>
+</sect1>

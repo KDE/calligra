@@ -1,0 +1,122 @@
+<sect1 id="template-creation">
+<title>Creating Templates/Saving a document as a template</title>
+
+<para>&kword; comes with several pre-defined templates (both
+Word processing and <acronym>DTP</acronym> templates), which are designed
+to get you started on your documents.</para>
+
+<para>If, however, you often use the same format for a document over and
+over, you may want to create a template which
+<emphasis>exactly</emphasis> matches your needs.</para>
+
+<para>You can create an unlimited number of templates in &kword;, and
+you can organize them into categories for easy recall.</para>
+
+<para>You create these templates by first generating the layout in
+&kword; based on one of the pre-defined templates, and then you save the
+file.  Instead of saving it as a traditional file, you save it as a
+template.</para>
+
+<para>What follows, is a step by step process to save the current
+document as a template.</para>
+
+<procedure>
+<step>
+<para>When the document is like you want, Select <menuchoice>
+<guimenu>Extra</guimenu><guimenuitem>Create Template From
+Document</guimenuitem></menuchoice> from the Menu bar.</para>
+
+<para>This brings up a dialog:</para>
+
+<screenshot>
+<mediaobject>
+<imageobject><imagedata fileref="savetmpl1.png" format="PNG"/></imageobject>
+</mediaobject>
+</screenshot>
+
+<para>This dialog helps you organize your templates into
+categories.</para>
+</step>
+
+<step>
+<para>As you can see, your templates will be saved into a sub-directory
+in your home directory.  You first need to create a Folder (which
+represents a sub-directory) within the <filename
+class="directory">templates</filename> directory.</para>
+
+<substeps>
+<step>
+<para>To create this folder:</para>
+<para>Place the mouse cursor over the line directory name (in this
+example: <filename
+class="directory">/home/mmcbride/.kde/share/apps/kword/templates/</filename>)
+and click with the <mousebutton>right</mousebutton> mouse button.</para>
+
+<para>This will bring up a sub-menu.</para>
+</step>
+<step>
+<para>Select <guimenuitem>Add Folder</guimenuitem>.</para>
+
+<para>This will add another dialog to the screen.</para>
+
+<screenshot>
+<mediaobject>
+<imageobject>
+<imagedata fileref="savetmpl2.png" format="PNG"/></imageobject>
+</mediaobject>
+</screenshot>
+</step>
+<step>
+<para>Type in a name for the folder.  The name should be descriptive of
+the types of templates you will be placing within it.</para>
+<para>Click <guibutton>Clear</guibutton> to ???Not implemented yet???.</para>
+<para>Click <guibutton>Cancel</guibutton> to abort creating a new folder.</para>
+<para>Click <guibutton>OK</guibutton> to create this folder.</para>
+<screenshot>
+<mediaobject>
+<imageobject>
+<imagedata fileref="savetmpl3.png" format="PNG"/></imageobject>
+</mediaobject>
+</screenshot>
+<para>The dialog box will now show your new folder.</para>
+<note>
+<para>You do not need to create a new folder for each template.  The
+folders you create can be used to organize your templates.</para>
+<para>You must, however, have at least one folder.  You can not save any
+templates into the templates sub-directory.</para>
+</note>
+</step>
+</substeps>
+</step>
+<step>
+<para>Select the newly created folder by clicking once on it with the
+<mousebutton>left</mousebutton> mouse button.</para>
+</step>
+
+<step>
+<para>Type the name of your new template in the blank entitled
+<guilabel>Template Name</guilabel>.</para>
+</step>
+
+<step>
+<para>You now need to select a graphic to represent your template in the
+open document window.</para>
+<para>???Not implemented yet???</para></step>
+</procedure>
+
+<para>Once you have saved your template, the next time you open a
+document, you will see your new category/new template in the open file
+dialog.</para>
+
+<screenshot>
+<mediaobject>
+<imageobject>
+<imagedata fileref="savetmpl4.png" format="PNG"/></imageobject>
+</mediaobject>
+</screenshot>
+
+<para>This is an example of a new category named
+<guilabel>Newsletters</guilabel>, with a new template named
+<guilabel>Monthly</guilabel>.</para>
+
+</sect1> 
