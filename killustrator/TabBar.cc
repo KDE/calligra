@@ -33,6 +33,8 @@
 #include <klocale.h>
 #include <kiconloader.h>
 #include <kmessagebox.h>
+#include <knotifyclient.h>
+#include <klineeditdlg.h>
 #include <kdebug.h>
 
 #include "TabBar.h"
@@ -41,7 +43,6 @@
 #include "KIllustrator_doc.h"
 #include "GDocument.h"
 #include "GPage.h"
-#include "PageNameDialog.h"
 
 TabBar::TabBar( QWidget *parent, KIllustratorView *view )
 : QWidget(parent), m_pView(view)
@@ -245,29 +246,36 @@ void TabBar::openPopupMenu( const QPoint &_global )
 
 void TabBar::slotRename()
 {
-    QString activeName;
-    QString newName;
-
     // Store the current name of the active page
     GPage* page = doc->activePage();
-    activeName = page->name();
 
-    PageNameDialog tndlg( m_pView, "PageName" , activeName );
-    if ( tndlg.exec() );
+    bool ok;
+    QString activeName = page->name();
+    QString newName = KLineEditDlg::getText( i18n("Page Name"), activeName, &ok, this );
+
+    // Have a different name ?
+    if ( ok ) // User pushed an OK button.
     {
-        // Have a different name ?
-        if ( ( newName = tndlg.pageName() ) != activeName )
+        if ( (newName.stripWhiteSpace()).isEmpty() ) // Page name is empty.
         {
-	page->setName( newName );
-	update();
-            // Is the name already used
-        /*    if ( !page->setName( newName ) )
-            {
-                KMessageBox::error( this, i18n("This name is already used."));
-                // Recursion
-                slotRename();
-                return;
-            }*/
+            KNotifyClient::beep();
+            KMessageBox::information( this, i18n("Page name cannot be empty."), i18n("Change page name") );
+            // Recursion
+            slotRename();
+        }
+        else if ( newName != activeName ) // Page name changed.
+        {
+             /* // Is the name already used
+             if ( !page->setTableName( newName ) )
+             {
+                KNotifyClient::beep();
+                KMessageBox::information( this, i18n("This name is already used."), i18n("Change page name") );
+                 // Recursion
+                 slotRename();
+             }*/
+             page->setName( newName );
+             update();
+             doc->setModified( true );
         }
     }
 }

@@ -37,7 +37,7 @@ kde_module_LTLIBRARIES = libkillustratorpart.la
 libkillustratorpart_la_SOURCES = KIllustrator_doc.cc \
 	KIllustrator_view.cc \
 	InsertPartTool.cc GPart.cc KIllustrator_factory.cc \
-	GPage.cc PageNameDialog.cc \
+	GPage.cc \
 	tooldockmanager.cc \
 	Handle.cc GObject.cc GPolyline.cc GPolygon.cc \
 	PathTextTool.cc GOval.cc GClipart.cc GBezier.cc GPixmap.cc \
