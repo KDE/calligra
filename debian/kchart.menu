@@ -3,7 +3,8 @@
 	section=Apps/Math\
 	hints="KDE,Graphs"\
 	kderemove="1"\
-	title="KChart (Charting)"\
+	title="KChart"\
+	longtitle="KChart (Charting)"\
 	icon="/usr/share/pixmaps/kchart.xpm"\
 	command=kchart
 

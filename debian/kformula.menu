@@ -3,7 +3,8 @@
 	section=Apps/Math\
 	hints="KDE"\
 	kderemove="1"\
-	title="KFormula (Formula Editor)"\
+	title="KFormula"\
+	longtitle="KFormula (Formula Editor)"\
 	icon="/usr/share/pixmaps/kformula.xpm"\
 	command=kformula
 

@@ -3,7 +3,8 @@
 	section=Apps/Tools\
 	hints="KDE"\
 	kderemove="1"\
-	title="Kugar (Report Generator)"\
+	title="Kugar"\
+	longtitle="Kugar (Report Generator)"\
 	icon="/usr/share/pixmaps/kugar.xpm"\
 	command=kugar
 
@@ -12,6 +13,7 @@
 	section=Apps/Tools\
 	hints="KDE"\
 	kderemove="1"\
-	title="Kugar Designer (Report Template Designer)"\
+	title="Kugar Designer"\
+	longtitle="Kugar Designer (Report Template Designer)"\
 	command=kudesigner
 

@@ -3,7 +3,8 @@
 	section=Apps/Editors\
 	hints="KDE,WordProcessors"\
 	kderemove="1"\
-	title="KWord (Word Processing)"\
+	title="KWord"\
+	longtitle="KWord (Word Processing)"\
 	icon="/usr/share/pixmaps/kword.xpm"\
 	command=kword
 

@@ -3,7 +3,8 @@
 	section=Apps/Math\
 	hints="KDE,Spreadsheets"\
 	kderemove="1"\
-	title="KSpread (Spreadsheets)"\
+	title="KSpread"\
+	longtitle="KSpread (Spreadsheets)"\
 	icon="/usr/share/pixmaps/kspread.xpm"\
 	command=kspread
 

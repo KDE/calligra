@@ -3,7 +3,8 @@
 	section=Apps/Tools\
 	hints="KDE,Presentation"\
 	kderemove="1"\
-	title="KPresenter (Slide Presentations)"\
+	title="KPresenter"\
+	longtitle="KPresenter (Slide Presentations)"\
 	icon="/usr/share/pixmaps/kpresenter.xpm"\
 	command=kpresenter
 

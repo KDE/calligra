@@ -4,5 +4,6 @@
 	hints="KDE"\
 	kderemove="1"\
 	title="KOffice Workspace"\
+	longtitle="KOffice Workspace (Office Suite)"\
 	command=koshell
 
