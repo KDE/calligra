@@ -365,7 +365,7 @@ public:
     void insertVariable( int type, int subtype = 0 );
     void insertFootNote( NoteType noteType, KWFootNoteVariable::Numbering _numType, const QString &_manualString );
     void insertCustomVariable( const QString &name);
-    void insertVariable( KoVariable *var, KoTextFormat *format = 0 /*means currentFormat()*/,bool removeSelectedText = true );
+    void insertVariable( KoVariable *var, KoTextFormat *format = 0 /*means currentFormat()*/,bool removeSelectedText = true, bool refreshCustomMenu = false/*don't refresh all the time custom menu*/ );
 
     void insertLink(const QString &_linkName, const QString & hrefName);
     void insertComment(const QString &_comment);

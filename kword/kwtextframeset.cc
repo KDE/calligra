@@ -3274,6 +3274,7 @@ void KWTextFrameSetEdit::insertVariable( int type, int subtype )
     KWDocument * doc = frameSet()->kWordDocument();
 
     KoVariable * var = 0L;
+    bool refreshCustomMenu = false;
     if ( type == VT_CUSTOM )
     {
         KoCustomVarDialog dia( m_canvas );
@@ -3282,6 +3283,7 @@ void KWTextFrameSetEdit::insertVariable( int type, int subtype )
             KoCustomVariable *v = new KoCustomVariable( textFrameSet()->textDocument(), dia.name(), doc->variableFormatCollection()->format( "STRING" ),doc->getVariableCollection() );
             v->setValue( dia.value() );
             var = v;
+            refreshCustomMenu = true;
         }
     }
     else if ( type == VT_MAILMERGE )
@@ -3295,10 +3297,10 @@ void KWTextFrameSetEdit::insertVariable( int type, int subtype )
     else
         var = doc->getVariableCollection()->createVariable( type, subtype,  doc->variableFormatCollection(), 0L, textFrameSet()->textDocument(),doc);
 
-    insertVariable( var );
+    insertVariable( var, 0L /*means currentFormat()*/, true, refreshCustomMenu);
 }
 
-void KWTextFrameSetEdit::insertVariable( KoVariable *var, KoTextFormat *format /*=0*/, bool removeSelectedText )
+void KWTextFrameSetEdit::insertVariable( KoVariable *var, KoTextFormat *format /*=0*/, bool removeSelectedText, bool refreshCustomMenu )
 {
     if ( var )
     {
@@ -3317,7 +3319,7 @@ void KWTextFrameSetEdit::insertVariable( KoVariable *var, KoTextFormat *format /
         cursor()->parag()->invalidate(0);
         cursor()->parag()->setChanged( true );
         frameSet()->kWordDocument()->slotRepaintChanged( frameSet() );
-        if ( var->type()==VT_CUSTOM )
+        if ( var->type()==VT_CUSTOM && refreshCustomMenu)
             frameSet()->kWordDocument()->refreshMenuCustomVariable();
     }
 }
