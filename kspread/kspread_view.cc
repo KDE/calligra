@@ -242,6 +242,7 @@ KSpreadView::KSpreadView( QWidget *_parent, const char *_name, KSpreadDoc* doc )
     m_transform = new KAction( i18n("Transform object..."), "rotate", 0, this, SLOT( transformPart() ),
 			       actionCollection(), "transform" );
     m_transform->setEnabled( FALSE );
+    // ### This seems to be duplicated ....
     connect( m_transform, SIGNAL( activated() ), this, SLOT( transformPart() ) );
     m_copy = KStdAction::copy( this, SLOT( copySelection() ), actionCollection(), "copy" );
     m_paste = KStdAction::paste( this, SLOT( paste() ), actionCollection(), "paste" );
@@ -1570,33 +1571,31 @@ void KSpreadView::keyPressEvent ( QKeyEvent* _ev )
 
 int KSpreadView::leftBorder() const
 {
-  return YBORDER_WIDTH;
+    return YBORDER_WIDTH;
 }
 
 int KSpreadView::rightBorder() const
 {
- return /*20*/ 16;
+    return m_pVertScrollBar->width();
 }
 
 int KSpreadView::topBorder() const
 {
- return /*30 + */XBORDER_HEIGHT;
+    return m_pToolWidget->height() + XBORDER_HEIGHT;
 }
 
 int KSpreadView::bottomBorder() const
 {
- return /*20*/16;
+    return m_pHorzScrollBar->height();
 }
 
 void KSpreadView::resizeEvent( QResizeEvent * )
 {
     m_pToolWidget->show();
+    // If this value (30) is changed then topBorder() needs to
+    // be changed, too.
     m_pToolWidget->setGeometry( 0, 0, width(), 30 );
     int top = 30;
-    // m_pPosWidget->setGeometry( 2,2,50,26 );
-    // m_pCancelButton->setGeometry( 60, 2, 26, 26 );
-    // m_pOkButton->setGeometry( 90, 2, 26, 26 );
-    // m_pEditWidget->setGeometry( 125, 2, 200, 26 );
 
     m_pTabBarFirst->setGeometry( 0, height() - 16, 16, 16 );
     m_pTabBarFirst->show();

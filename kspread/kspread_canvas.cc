@@ -1156,10 +1156,10 @@ void KSpreadCanvas::paintEvent( QPaintEvent* _ev )
     if ( ((KSpreadChild*)it.current())->table() == activeTable() &&
          !m_pView->hasDocumentInWindow( it.current()->document() ) )
     {
-      rgn -= it.current()->region( painter.worldMatrix() );
+	// HACK rgn -= it.current()->region( painter.worldMatrix() );
     }
   }
-  painter.setClipRegion( rgn );
+  // HACK painter.setClipRegion( rgn );
 
   // Draw content
   m_pDoc->paintContent( painter, QRect( tl, br ), FALSE, activeTable() );
@@ -1171,8 +1171,8 @@ void KSpreadCanvas::paintEvent( QPaintEvent* _ev )
   it.toFirst();
   for( ; it.current(); ++it )
   {
-    if ( ((KSpreadChild*)it.current())->table() == activeTable() &&
-         !m_pView->hasDocumentInWindow( it.current()->document() ) )
+      // HACK if ( ((KSpreadChild*)it.current())->table() == activeTable() &&
+      // HACK !m_pView->hasDocumentInWindow( it.current()->document() ) )
     {
       // #### todo: paint only if child is visible inside rect
       painter.save();
