@@ -21,22 +21,43 @@
 
 #include <kaction.h>
 
+/**
+ * Class KoZoomAction implements an action to provide zoom values.
+ * In a toolbar, KoZoomAction will show a dropdown list, also with 
+ * the possibility for the user to enter arbritrary zoom value
+ * (must be an integer). The values shown on the list are alwalys
+ * sorted.
+ */
 class KoZoomAction : public KSelectAction
 {
 Q_OBJECT
 
 public:
 
+  /**
+   * Creates a new zoom action.
+   */
   KoZoomAction( const QString& text, const QIconSet& pix, 
     const KShortcut& cut = KShortcut(), QObject* parent = 0, const char* name = 0 );
       
+  /**
+   * Creates a new zoom action.
+   */
   KoZoomAction( const QString& text, const QString& pix, 
     const KShortcut& cut = KShortcut(), QObject* parent = 0, const char* name = 0 );
       
 public slots:
 
+  /**
+   * Sets the zoom. If it's not yet on the list of zoom values, it will be inserted
+   * into the list at proper place so that the the values remain sorted.
+   */
   void setZoom( const QString& zoom );
   
+  /**
+   * Sets the zoom. If it's not yet on the list of zoom values, it will be inserted
+   * into the list at proper place so that the the values remain sorted.
+   */
   void setZoom( int zoom );
 
 protected slots:
@@ -45,6 +66,10 @@ protected slots:
   
 signals:
 
+  /**
+   * Signal zoomChanged is triggered when user changes the zoom value, either by
+   * choosing it from the list or by entering new value.
+   */
   void zoomChanged( const QString& zoom );
   
 protected:
