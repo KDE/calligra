@@ -68,6 +68,8 @@ protected:
 	virtual void mouseDragCtrlPressed();
 	virtual void mouseDragCtrlReleased();
 
+	void updateStatusBar() const;
+
 private:
 	enum { normal, moving, scaling, rotating } m_state;
 	enum { none, lockx, locky } m_lock;

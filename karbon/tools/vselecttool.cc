@@ -71,10 +71,7 @@ VSelectTool::~VSelectTool()
 void
 VSelectTool::activate()
 {
-	//if( m_state == normal )
-		view()->statusMessage()->setText( i18n( "Select" ) );
-	//else
-//		view()->statusMessage()->setText( i18n( "Scale" ) );
+	view()->statusMessage()->setText( i18n( "Select" ) );
 	view()->canvasWidget()->viewport()->setCursor( QCursor( Qt::arrowCursor ) );
 	view()->part()->document().selection()->setState( VObject::selected );
 	view()->part()->document().selection()->clearNodes();
@@ -203,6 +200,8 @@ VSelectTool::mouseButtonRelease()
 	}
 	else
 		m_state = normal;
+
+	updateStatusBar();
 }
 
 void
@@ -242,6 +241,21 @@ VSelectTool::mouseDragRelease()
 			true );
 		m_s1 = m_s2 = 1;
 	}
+	updateStatusBar();
+}
+
+void
+VSelectTool::updateStatusBar() const
+{
+	if( view()->part()->document().selection()->objects().count() > 0 )
+	{
+		KoRect rect = view()->part()->document().selection()->boundingBox();
+
+		QString selectMessage = QString( "Selection [(%1, %2), (%3, %4)]" ).arg( rect.x() ).arg( rect.y() ).arg( rect.right() ).arg( rect.bottom() );
+		view()->statusMessage()->setText( selectMessage );
+	}
+	else
+		view()->statusMessage()->setText( i18n( "No selection" ) );
 }
 
 void
