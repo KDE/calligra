@@ -496,10 +496,12 @@ void KoTemplateChooseDia::setupDialog()
 	setupRecentDialog(d->recentTab, recentTabLayout);
 
 	QString tabhighlighted = grp.readEntry("LastReturnType");
-	if ( tabhighlighted == QString("Template"))
-	    d->tabWidget->setCurrentPage(0);
+	if ( tabhighlighted == "Template" )
+	    d->tabWidget->setCurrentPage(0); // CreateDocument tab
+	else if (tabhighlighted == "File" )
+	    d->tabWidget->setCurrentPage(2); // RecentDocument tab
 	else
-	    d->tabWidget->setCurrentPage(1);
+	    d->tabWidget->setCurrentPage(1); // ExistingDocument tab
     }
     else
     {
