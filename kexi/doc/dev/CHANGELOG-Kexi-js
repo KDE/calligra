@@ -316,6 +316,13 @@ TODO: fix lucijan's hack, with part loading (29 feb)
                  friend class KexiProject;
 +                friend class KexiMainWindowImpl;
  
+2004-03-04
+Main Window
+	-Both on window close and application close: User is prompted for saving 
+	 unsaved data for each "dirty" dialog. Pressing "Cancel" 
+	 -cancels application closing.
+	-only stored objects are added to the Navigator
+	-few methods move to protected
 
 2004-03-03
 2004-03-02

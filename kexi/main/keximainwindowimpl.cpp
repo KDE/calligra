@@ -1492,7 +1492,7 @@ bool KexiMainWindowImpl::closeDialog(KexiDialogBase *dlg, bool layoutTaskBar)
 
 	if (remove_on_closing) {
 		//we won't save this object, and it was never saved -remove it
-		if (!removeObject( dlg->partItem() )) {
+		if (!removeObject( dlg->partItem(), false )) {
 			//msg?
 			//TODO: ask if we'd continue and return true/false
 			return false;
@@ -1829,11 +1829,12 @@ bool KexiMainWindowImpl::newObject( KexiPart::Info *info )
 	it->setName(dlg->name());
 	it->setNeverSaved(true);*/
 
-	d->nav->addItem(it);
+	if (!it->neverSaved()) //only add stored objects to the browser
+		d->nav->addItem(it);
 	return openObject(it, Kexi::DesignViewMode);
 }
 
-bool KexiMainWindowImpl::removeObject( KexiPart::Item *item )
+bool KexiMainWindowImpl::removeObject( KexiPart::Item *item, bool dontAsk )
 {
 	if (!item)
 		return false;
@@ -1842,9 +1843,9 @@ bool KexiMainWindowImpl::removeObject( KexiPart::Item *item )
 	if (!part)
 		return false;
 
-	if (!item->neverSaved()) {
-		if (KMessageBox::questionYesNo(this, i18n("Do you want to remove:")
-			+"<p>"+part->instanceName()+" \""+ item->name() + "\"?",
+	if (dontAsk) {
+		if (KMessageBox::questionYesNo(this, "<p>"+i18n("Do you want to remove:")
+			+"</p><p>"+part->instanceName()+" \""+ item->name() + "\"?</p>",
 			0, KStdGuiItem::yes(), KStdGuiItem::no(), "askBeforeDeletePartItem"/*config entry*/)==KMessageBox::No)
 			return true;//cancelled
 	}

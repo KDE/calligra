@@ -110,18 +110,9 @@ class KEXIMAIN_EXPORT KexiMainWindowImpl : public KexiMainWindow
 
 		//! Opens object pointed by \a item in a view \a viewMode
 		virtual KexiDialogBase * openObject(KexiPart::Item *item, int viewMode = Kexi::DataViewMode);
+
 		//! For convenience
 		virtual KexiDialogBase * openObject(const QString& mime, const QString& name, int viewMode = Kexi::DataViewMode);
-
-		/*! this slot handles event when user double clicked (or single -depending on settings)
-		 or pressed return ky on the part item in the navigator.
-		 This differs from openObject() signal in that if the object is already opened
-		 in view mode other than \a viewMode, the mode is not changed. 
-		 \sa KexiBrowser::openOrActivateItem() */
-		KexiDialogBase * openObjectFromNavigator(KexiPart::Item* item, int viewMode);
-
-		bool newObject( KexiPart::Info *info );
-		bool removeObject( KexiPart::Item *item );
 
 	protected:
 		/**
@@ -240,6 +231,20 @@ class KEXIMAIN_EXPORT KexiMainWindowImpl : public KexiMainWindow
 
 		//! internal - creates and initializes kexi project
 		void createKexiProject(KexiProjectData* new_data);
+
+		/*! this slot handles event when user double clicked (or single -depending on settings)
+		 or pressed return ky on the part item in the navigator.
+		 This differs from openObject() signal in that if the object is already opened
+		 in view mode other than \a viewMode, the mode is not changed. 
+		 \sa KexiBrowser::openOrActivateItem() */
+		KexiDialogBase * openObjectFromNavigator(KexiPart::Item* item, int viewMode);
+
+		bool newObject( KexiPart::Info *info );
+
+		/*! Removes object pointed by \a item from current project. 
+		 Asks for confirmation. \return true on success. 
+		 if \a dontAsk is true. */
+		bool removeObject( KexiPart::Item *item, bool dontAsk = true );
 
 		/*moved 
 		void setActionAvailable(const char *name, bool avail);
