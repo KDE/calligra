@@ -2137,13 +2137,13 @@ void KPrStickyObjCommand::unexecute()
 void KPrStickyObjCommand::stickObj(KPObject *_obj)
 {
     m_page->takeObject(_obj);
-    m_doc->appendStickyObj(_obj);
+    m_doc->stickyPage()->appendObject(_obj);
     _obj->setSticky(true);
 }
 
 void KPrStickyObjCommand::unstickObj(KPObject *_obj)
 {
-    m_doc->takeStickyObj(_obj);
+    m_doc->stickyPage()->takeObject(_obj);
     m_page->appendObject(_obj);
     _obj->setSticky(false);
 }

@@ -455,6 +455,8 @@ public:
     void setPresentationDuration( int _pgNum );
     void restartPresentationDuration();
 
+    KPrPage * stickyPage();
+
 protected slots:
     // dialog slots
     void backOk( bool );

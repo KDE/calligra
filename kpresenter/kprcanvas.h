@@ -235,7 +235,12 @@ protected:
     virtual void paintEvent( QPaintEvent* );
     void paintBackground( QPainter*, const QRect& );
     void drawBackground( QPainter*, const QRect& );
+
+    //draw all object : object in current page + object in sticky page
     void drawObjects( QPainter*, const QRect&, bool drawCursor, bool drawSelection, bool doSpecificEffects );
+
+    void drawObjectsInPage(QPainter *painter, const KoRect& rect2, bool drawCursor, bool drawSelection, bool doSpecificEffects, const QPtrList<KPObject> & obj);
+
     void drawCurrentPageInPix( QPixmap& );
     virtual void mousePressEvent( QMouseEvent *e );
     virtual void mouseReleaseEvent( QMouseEvent *e );

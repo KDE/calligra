@@ -2986,3 +2986,43 @@ QValueList<int> KPrPage::reorderPage()
     }
     return orderList;
 }
+
+void KPrPage::deSelectAllObj()
+{
+    QPtrListIterator<KPObject> sIt( m_objectList );
+    for ( ; sIt.current() ; ++sIt )
+    {
+        if(sIt.current()->isSelected())
+            deSelectObj(sIt.current() );
+    }
+}
+
+void KPrPage::deSelectObj( KPObject *kpobject )
+{
+    kpobject->setSelected( false );
+    m_doc->repaint( kpobject );
+}
+
+QDomElement KPrPage::saveObjects( QDomDocument &doc, QDomElement &objects, int yoffset, KoZoomHandler* zoomHandler, int saveOnlyPage )
+{
+    QPtrListIterator<KPObject> oIt(m_objectList);
+    for (; oIt.current(); ++oIt )
+    {
+        if ( oIt.current()->getType() == OT_PART )
+            continue;
+        QDomElement object=doc.createElement("OBJECT");
+        object.setAttribute("type", static_cast<int>( oIt.current()->getType() ));
+        bool _sticky = oIt.current()->isSticky();
+        if (_sticky)
+            object.setAttribute("sticky", static_cast<int>(_sticky));
+        QPoint orig =zoomHandler->zoomPoint(oIt.current()->getOrig());
+        if ( saveOnlyPage != -1 )
+            yoffset=0;
+        //add yoffset to compatibility with koffice 1.1
+        object.appendChild(oIt.current()->save( doc, yoffset ));
+        if ( saveOnlyPage != -1 )
+            oIt.current()->setOrig( orig );
+        objects.appendChild(object);
+    }
+    return objects;
+}

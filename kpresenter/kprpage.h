@@ -208,6 +208,10 @@ public:
     QString insPictureFile() const { return m_pictureFile; }
     QString insClipartFile() const { return m_clipartFile; }
 
+    void deSelectAllObj();
+    void deSelectObj( KPObject *kpobject );
+    QDomElement saveObjects( QDomDocument &doc, QDomElement &objects, int yoffset, KoZoomHandler* zoomHandler, int saveOnlyPage );
+
 protected:
 
 private:

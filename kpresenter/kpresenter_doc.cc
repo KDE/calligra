@@ -184,6 +184,7 @@ KPresenterDoc::KPresenterDoc( QWidget *parentWidget, const char *widgetName, QOb
     KPrPage *newpage=new KPrPage(this);
     m_pageList.insert( 0,newpage);
     emit sig_changeActivePage(newpage );
+    m_stickyPage=new KPrPage(this);
     objStartY = 0;
     setPageLayout( _pageLayout );
     _presPen = QPen( red, 3, SolidLine );
@@ -342,6 +343,7 @@ KPresenterDoc::~KPresenterDoc()
     delete m_varColl;
     delete m_varFormatCollection;
     delete dcop;
+    delete m_stickyPage;
 }
 
 
@@ -543,33 +545,19 @@ QDomDocumentFragment KPresenterDoc::saveBackground( QDomDocument &doc )
 QDomElement KPresenterDoc::saveObjects( QDomDocument &doc )
 {
     QDomElement objects=doc.createElement("OBJECTS");
-
+    int yoffset=0;
     for ( int i = 0; i < static_cast<int>( m_pageList.count() ); i++ ) {
         if ( saveOnlyPage != -1 && saveOnlyPage!=i)
-                continue;
-        int yoffset=i*m_pageList.at(i)->getZoomPageRect().height();
-        QPtrListIterator<KPObject> oIt(m_pageList.at(i)->objectList());
-        for (; oIt.current(); ++oIt )
-        {
-            if ( oIt.current()->getType() == OT_PART )
-                continue;
-            QDomElement object=doc.createElement("OBJECT");
-            object.setAttribute("type", static_cast<int>( oIt.current()->getType() ));
+            continue;
+        yoffset=i*m_pageList.at(i)->getZoomPageRect().height();
+        objects=m_pageList.at(i)->saveObjects( doc, objects, yoffset, m_zoomHandler, saveOnlyPage );
 
-            bool _sticky = oIt.current()->isSticky();
-            if (_sticky)
-                object.setAttribute("sticky", static_cast<int>(_sticky));
-
-            QPoint orig =m_zoomHandler->zoomPoint(oIt.current()->getOrig());
-            if ( saveOnlyPage != -1 )
-                yoffset=0;
-            //add yoffset to compatibility with koffice 1.1
-            object.appendChild(oIt.current()->save( doc, yoffset ));
-            if ( saveOnlyPage != -1 )
-                oIt.current()->setOrig( orig );
-            objects.appendChild(object);
-        }
     }
+    yoffset=m_stickyPage->getZoomPageRect().height();
+    //save sticky object
+    //todo FIXME saveOnlyPage !!!!!!!!!!!!
+    objects=m_stickyPage->saveObjects( doc, objects, yoffset, m_zoomHandler, saveOnlyPage );
+
     return objects;
 }
 
@@ -1031,7 +1019,13 @@ void KPresenterDoc::loadObjects( const QDomElement &element,bool paste )
             case OT_LINE: {
                 KPLineObject *kplineobject = new KPLineObject();
                 offset=kplineobject->load(obj);
-                if (m_pageWhereLoadObject && paste) {
+                if ( sticky && !ignoreSticky)
+                {
+                    m_stickyPage->appendObject(kplineobject);
+                    kplineobject->setOrig(kplineobject->getOrig().x(),offset);
+                    kplineobject->setSticky(sticky);
+                }
+                else if (m_pageWhereLoadObject && paste) {
                     kplineobject->setOrig(kplineobject->getOrig().x(),offset);
                     InsertCmd *insertCmd = new InsertCmd( i18n( "Insert Line" ), kplineobject, this,m_pageWhereLoadObject );
                     insertCmd->execute();
@@ -1048,7 +1042,13 @@ void KPresenterDoc::loadObjects( const QDomElement &element,bool paste )
             case OT_RECT: {
                 KPRectObject *kprectobject = new KPRectObject();
                 offset=kprectobject->load(obj);
-                if (m_pageWhereLoadObject && paste) {
+                if ( sticky && !ignoreSticky)
+                {
+                    m_stickyPage->appendObject(kprectobject);
+                    kprectobject->setOrig(kprectobject->getOrig().x(),offset);
+                    kprectobject->setSticky(sticky);
+                }
+                else if (m_pageWhereLoadObject && paste) {
                     kprectobject->setOrig(kprectobject->getOrig().x(),offset);
                     InsertCmd *insertCmd = new InsertCmd( i18n( "Insert Rectangle" ), kprectobject, this, m_pageWhereLoadObject );
                     insertCmd->execute();
@@ -1065,7 +1065,14 @@ void KPresenterDoc::loadObjects( const QDomElement &element,bool paste )
             case OT_ELLIPSE: {
                 KPEllipseObject *kpellipseobject = new KPEllipseObject();
                 offset=kpellipseobject->load(obj);
-                if ( m_pageWhereLoadObject && paste) {
+                if ( sticky && !ignoreSticky)
+                {
+                    m_stickyPage->appendObject(kpellipseobject);
+                    kpellipseobject->setOrig(kpellipseobject->getOrig().x(),offset);
+                    kpellipseobject->setSticky(sticky);
+                }
+                else if ( m_pageWhereLoadObject && paste)
+                {
                     kpellipseobject->setOrig(kpellipseobject->getOrig().x(),offset);
                     InsertCmd *insertCmd = new InsertCmd( i18n( "Insert Ellipse" ), kpellipseobject, this, m_pageWhereLoadObject );
                     insertCmd->execute();
@@ -1082,7 +1089,13 @@ void KPresenterDoc::loadObjects( const QDomElement &element,bool paste )
             case OT_PIE: {
                 KPPieObject *kppieobject = new KPPieObject();
                 offset=kppieobject->load(obj);
-                if ( m_pageWhereLoadObject && paste) {
+                if ( sticky && !ignoreSticky)
+                {
+                    m_stickyPage->appendObject(kppieobject);
+                    kppieobject->setOrig(kppieobject->getOrig().x(),offset);
+                    kppieobject->setSticky(sticky);
+                }
+                else if ( m_pageWhereLoadObject && paste) {
                     kppieobject->setOrig(kppieobject->getOrig().x(),offset);
                     InsertCmd *insertCmd = new InsertCmd( i18n( "Insert Pie/Arc/Chord" ), kppieobject, this, m_pageWhereLoadObject );
                     insertCmd->execute();
@@ -1099,7 +1112,13 @@ void KPresenterDoc::loadObjects( const QDomElement &element,bool paste )
             case OT_AUTOFORM: {
                 KPAutoformObject *kpautoformobject = new KPAutoformObject();
                 offset=kpautoformobject->load(obj);
-                if ( m_pageWhereLoadObject&& paste) {
+                if ( sticky && !ignoreSticky)
+                {
+                    m_stickyPage->appendObject(kpautoformobject);
+                    kpautoformobject->setOrig(kpautoformobject->getOrig().x(),offset);
+                    kpautoformobject->setSticky(sticky);
+                }
+                else if ( m_pageWhereLoadObject&& paste) {
                     kpautoformobject->setOrig(kpautoformobject->getOrig().x(),offset);
                     InsertCmd *insertCmd = new InsertCmd( i18n( "Insert Autoform" ), kpautoformobject, this, m_pageWhereLoadObject );
                     insertCmd->execute();
@@ -1116,7 +1135,13 @@ void KPresenterDoc::loadObjects( const QDomElement &element,bool paste )
             case OT_CLIPART: {
                 KPClipartObject *kpclipartobject = new KPClipartObject( &_clipartCollection );
                 offset=kpclipartobject->load(obj);
-                if ( m_pageWhereLoadObject && paste) {
+                if ( sticky && !ignoreSticky)
+                {
+                    m_stickyPage->appendObject(kpclipartobject);
+                    kpclipartobject->setOrig(kpclipartobject->getOrig().x(),offset);
+                    kpclipartobject->setSticky(sticky);
+                }
+                else if ( m_pageWhereLoadObject && paste) {
                     kpclipartobject->setOrig(kpclipartobject->getOrig().x(),offset);
                     InsertCmd *insertCmd = new InsertCmd( i18n( "Insert Clipart" ), kpclipartobject, this , m_pageWhereLoadObject);
                     insertCmd->execute();
@@ -1134,7 +1159,13 @@ void KPresenterDoc::loadObjects( const QDomElement &element,bool paste )
             case OT_TEXT: {
                 KPTextObject *kptextobject = new KPTextObject( this );
                 offset=kptextobject->load(obj);
-                if ( m_pageWhereLoadObject && paste) {
+                if ( sticky && !ignoreSticky)
+                {
+                    m_stickyPage->appendObject(kptextobject);
+                    kptextobject->setOrig(kptextobject->getOrig().x(),offset);
+                    kptextobject->setSticky(sticky);
+                }
+                else if ( m_pageWhereLoadObject && paste) {
                     kptextobject->setOrig(kptextobject->getOrig().x(),offset);
                     InsertCmd *insertCmd = new InsertCmd( i18n( "Insert Textbox" ), kptextobject, this, m_pageWhereLoadObject );
                     insertCmd->execute();
@@ -1151,7 +1182,13 @@ void KPresenterDoc::loadObjects( const QDomElement &element,bool paste )
             case OT_PICTURE: {
                 KPPixmapObject *kppixmapobject = new KPPixmapObject( &_imageCollection );
                 offset=kppixmapobject->load(obj);
-                if ( m_pageWhereLoadObject && paste) {
+                if ( sticky && !ignoreSticky)
+                {
+                    m_stickyPage->appendObject(kppixmapobject);
+                    kppixmapobject->setOrig(kppixmapobject->getOrig().x(),offset);
+                    kppixmapobject->setSticky(sticky);
+                }
+                else if ( m_pageWhereLoadObject && paste) {
                     kppixmapobject->setOrig(kppixmapobject->getOrig().x(),offset);
                     InsertCmd *insertCmd = new InsertCmd( i18n( "Insert Picture" ), kppixmapobject, this, m_pageWhereLoadObject );
                     insertCmd->execute();
@@ -1169,7 +1206,14 @@ void KPresenterDoc::loadObjects( const QDomElement &element,bool paste )
             case OT_FREEHAND: {
                 KPFreehandObject *kpfreehandobject = new KPFreehandObject();
                 offset=kpfreehandobject->load(obj);
-                if ( m_pageWhereLoadObject && paste) {
+
+                if ( sticky && !ignoreSticky)
+                {
+                    m_stickyPage->appendObject(kpfreehandobject);
+                    kpfreehandobject->setOrig(kpfreehandobject->getOrig().x(),offset);
+                    kpfreehandobject->setSticky(sticky);
+                }
+                else if ( m_pageWhereLoadObject && paste) {
                     kpfreehandobject->setOrig(kpfreehandobject->getOrig().x(),offset);
                     InsertCmd *insertCmd = new InsertCmd( i18n( "Insert Freehand" ), kpfreehandobject, this, m_pageWhereLoadObject );
                     insertCmd->execute();
@@ -1186,7 +1230,13 @@ void KPresenterDoc::loadObjects( const QDomElement &element,bool paste )
             case OT_POLYLINE: {
                 KPPolylineObject *kppolylineobject = new KPPolylineObject();
                 offset=kppolylineobject->load(obj);
-                if (m_pageWhereLoadObject && paste) {
+                if ( sticky && !ignoreSticky)
+                {
+                    m_stickyPage->appendObject(kppolylineobject);
+                    kppolylineobject->setOrig(kppolylineobject->getOrig().x(),offset);
+                    kppolylineobject->setSticky(sticky);
+                }
+                else if (m_pageWhereLoadObject && paste) {
                     kppolylineobject->setOrig(kppolylineobject->getOrig().x(),offset);
                     InsertCmd *insertCmd = new InsertCmd( i18n( "Insert Polyline" ), kppolylineobject, this, m_pageWhereLoadObject );
                     insertCmd->execute();
@@ -1203,7 +1253,13 @@ void KPresenterDoc::loadObjects( const QDomElement &element,bool paste )
             case OT_QUADRICBEZIERCURVE: {
                 KPQuadricBezierCurveObject *kpQuadricBezierCurveObject = new KPQuadricBezierCurveObject();
                 offset=kpQuadricBezierCurveObject->load(obj);
-                if ( m_pageWhereLoadObject && paste) {
+                if ( sticky && !ignoreSticky)
+                {
+                    m_stickyPage->appendObject(kpQuadricBezierCurveObject);
+                    kpQuadricBezierCurveObject->setOrig(kpQuadricBezierCurveObject->getOrig().x(),offset);
+                    kpQuadricBezierCurveObject->setSticky(sticky);
+                }
+                else if ( m_pageWhereLoadObject && paste) {
                     kpQuadricBezierCurveObject->setOrig(kpQuadricBezierCurveObject->getOrig().x(),offset);
                     InsertCmd *insertCmd = new InsertCmd( i18n( "Insert Quadric Bezier Curve" ), kpQuadricBezierCurveObject, this, m_pageWhereLoadObject );
                     insertCmd->execute();
@@ -1220,7 +1276,13 @@ void KPresenterDoc::loadObjects( const QDomElement &element,bool paste )
             case OT_CUBICBEZIERCURVE: {
                 KPCubicBezierCurveObject *kpCubicBezierCurveObject = new KPCubicBezierCurveObject();
                 offset=kpCubicBezierCurveObject->load(obj);
-                if ( m_pageWhereLoadObject && paste) {
+                if ( sticky && !ignoreSticky)
+                {
+                    m_stickyPage->appendObject(kpCubicBezierCurveObject);
+                    kpCubicBezierCurveObject->setOrig(kpCubicBezierCurveObject->getOrig().x(),offset);
+                    kpCubicBezierCurveObject->setSticky(sticky);
+                }
+                else if ( m_pageWhereLoadObject && paste) {
                     kpCubicBezierCurveObject->setOrig(kpCubicBezierCurveObject->getOrig().x(),offset);
                     InsertCmd *insertCmd = new InsertCmd( i18n( "Insert Cubic Bezier Curve" ), kpCubicBezierCurveObject, this, m_pageWhereLoadObject );
                     insertCmd->execute();
@@ -1237,7 +1299,13 @@ void KPresenterDoc::loadObjects( const QDomElement &element,bool paste )
             case OT_POLYGON: {
                 KPPolygonObject *kpPolygonObject = new KPPolygonObject();
                 offset=kpPolygonObject->load( obj );
-                if ( m_pageWhereLoadObject && paste) {
+                if ( sticky && !ignoreSticky)
+                {
+                    m_stickyPage->appendObject(kpPolygonObject);
+                    kpPolygonObject->setOrig(kpPolygonObject->getOrig().x(),offset);
+                    kpPolygonObject->setSticky(sticky);
+                }
+                else if ( m_pageWhereLoadObject && paste) {
                     kpPolygonObject->setOrig(kpPolygonObject->getOrig().x(),offset);
                     InsertCmd *insertCmd = new InsertCmd( i18n( "Insert Polygon" ), kpPolygonObject, this , m_pageWhereLoadObject);
                     insertCmd->execute();
@@ -1254,7 +1322,13 @@ void KPresenterDoc::loadObjects( const QDomElement &element,bool paste )
             case OT_GROUP: {
                 KPGroupObject *kpgroupobject = new KPGroupObject();
                 offset=kpgroupobject->load(obj, this);
-                if ( m_pageWhereLoadObject && paste) {
+                if ( sticky && !ignoreSticky)
+                {
+                    m_stickyPage->appendObject(kpgroupobject);
+                    kpgroupobject->setOrig(kpgroupobject->getOrig().x(),offset);
+                    kpgroupobject->setSticky(sticky);
+                }
+                else if ( m_pageWhereLoadObject && paste) {
                     kpgroupobject->setOrig(kpgroupobject->getOrig().x(),offset);
                     InsertCmd *insertCmd = new InsertCmd( i18n( "Insert Group Object" ), kpgroupobject, this, m_pageWhereLoadObject );
                     insertCmd->execute();
@@ -1270,10 +1344,6 @@ void KPresenterDoc::loadObjects( const QDomElement &element,bool paste )
             } break;
             default: break;
             }
-#if 0
-            if ( !ignoreSticky )
-                _objectList->last()->setSticky( sticky );
-#endif
         }
         obj=obj.nextSibling().toElement();
     }
@@ -1733,6 +1803,7 @@ void KPresenterDoc::deSelectAllObj()
     QPtrListIterator<KoView> it( views() );
     for (; it.current(); ++it )
 	((KPresenterView*)it.current())->getCanvas()->deSelectAllObj();
+
 }
 
 /*================================================================*/
@@ -2078,15 +2149,10 @@ void KPresenterDoc::newZoomAndResolution( bool updateViews, bool forPrint )
     }
 }
 
-void KPresenterDoc::appendStickyObj(KPObject *_obj)
-{
-    m_stickyObj.append(_obj);
-}
 
-void KPresenterDoc::takeStickyObj(KPObject *_obj)
+KPrPage * KPresenterDoc::stickyPage()
 {
-    m_stickyObj.take(m_stickyObj.findRef(_obj));
+    return m_stickyPage;
 }
-
 
 #include <kpresenter_doc.moc>

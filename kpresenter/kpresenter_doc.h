@@ -119,11 +119,7 @@ public:
 
     const QPtrList<KPrPage> & getPageList() const {return m_pageList;}
 
-    const QPtrList<KPObject> & stickyObject() const { return m_stickyObj;}
-
-    void appendStickyObj(KPObject *_obj);
-
-    void takeStickyObj(KPObject *_obj);
+    KPrPage * stickyPage();
 
     // We need one that's not const, due to QPtrList::at() not being const
     QPtrList<KPrPage>& pageList() { return m_pageList;}
@@ -432,7 +428,7 @@ private:
     QPtrList<KPrPage> m_pageList;
     KPrPage *m_initialActivePage;
     KPrPage *m_pageWhereLoadObject;
-    QPtrList<KPObject> m_stickyObj;
+    KPrPage *m_stickyPage;
 };
 
 #endif

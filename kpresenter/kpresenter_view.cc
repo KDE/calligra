@@ -437,6 +437,9 @@ void KPresenterView::editCut()
 	m_canvas->setToolEditMode( TEM_MOUSE );
 	m_canvas->activePage()->copyObjs();
 	m_canvas->activePage()->deleteObjs();
+        stickyPage()->copyObjs();
+	stickyPage()->deleteObjs();
+
     } else {
 	m_canvas->currentTextObjectView()->cut();
     }
@@ -448,6 +451,7 @@ void KPresenterView::editCopy()
     if ( !m_canvas->currentTextObjectView() ) {
 	m_canvas->setToolEditMode( TEM_MOUSE );
 	m_canvas->activePage()->copyObjs();
+        stickyPage()->copyObjs();
     } else {
 	m_canvas->currentTextObjectView()->copy();
     }
@@ -892,7 +896,10 @@ void KPresenterView::extraPenBrush()
 			   m_canvas->activePage()->getGUnbalanced( gUnbalanced ),
 			   m_canvas->activePage()->getGXFactor( gXFactor ),
 			   m_canvas->activePage()->getGYFactor( gYFactor ) );
-    styleDia->setSticky( m_canvas->activePage()->getSticky( sticky ) );
+
+    //now all sticky object are stored in sticky page
+    styleDia->setSticky( m_pKPresenterDoc->stickyPage()->getSticky( sticky ) );
+
     styleDia->setCaption( i18n( "KPresenter - Pen and Brush" ) );
     QObject::connect( styleDia, SIGNAL( styleOk() ), this, SLOT( styleOk() ) );
     m_canvas->setToolEditMode( TEM_MOUSE );
@@ -5137,5 +5144,10 @@ QString KPresenterView::presentationDurationDataFormatChange( int _time )
     return presentationDurationString.sprintf( "%02d:%02d:%02d", hours, minutes, seconds );
 }
 
+
+KPrPage * KPresenterView::stickyPage()
+{
+    return m_pKPresenterDoc->stickyPage();
+}
 
 #include <kpresenter_view.moc>

@@ -297,12 +297,10 @@ void KPrCanvas::eraseEmptySpace( QPainter * painter, const QRegion & emptySpaceR
     painter->restore();
 }
 
-/*========================= draw objects =========================*/
-void KPrCanvas::drawObjects( QPainter *painter, const QRect& rect, bool drawCursor, bool drawSelection, bool doSpecificEffects )
+// Draw all object in page : draw object in current page and sticky objects
+void KPrCanvas::drawObjectsInPage(QPainter *painter, const KoRect& rect2, bool drawCursor, bool drawSelection, bool doSpecificEffects, const QPtrList<KPObject> & obj)
 {
-    int pgNum = editMode ? (int)m_view->getCurrPgNum() : currPresPage;
-    KoRect rect2 = m_view->zoomHandler()->unzoomRect(rect);
-    QPtrListIterator<KPObject> it( m_view->kPresenterDoc()->pageList().at(pgNum-1)->objectList() );
+    QPtrListIterator<KPObject> it( obj );
     for ( ; it.current() ; ++it )
     {
 
@@ -349,6 +347,21 @@ void KPrCanvas::drawObjects( QPainter *painter, const QRect& rect, bool drawCurs
 		it.current()->setOrig( op );
 	}
     }
+
+}
+
+/*========================= draw objects =========================*/
+void KPrCanvas::drawObjects( QPainter *painter, const QRect& rect, bool drawCursor, bool drawSelection, bool doSpecificEffects )
+{
+    int pgNum = editMode ? (int)m_view->getCurrPgNum() : currPresPage;
+    KoRect rect2 = m_view->zoomHandler()->unzoomRect(rect);
+
+    //objects in current page
+    drawObjectsInPage( painter, rect2, drawCursor,drawSelection, doSpecificEffects,m_view->kPresenterDoc()->pageList().at(pgNum-1)->objectList());
+
+    //draw sticky object
+    drawObjectsInPage( painter, rect2, drawCursor,drawSelection, doSpecificEffects,m_view->kPresenterDoc()->stickyPage()->objectList());
+
 }
 
 /*==================== handle mouse pressed ======================*/
@@ -1607,7 +1620,7 @@ void KPrCanvas::deSelectObj( KPObject *kpobject )
 /*====================== select all objects ======================*/
 void KPrCanvas::selectAllObj()
 {
-    if(m_activePage->numSelected()==(int)objectList().count())
+    if((m_activePage->numSelected()==(int)objectList().count()) || (m_view->kPresenterDoc()->stickyPage()->numSelected()==(int)m_view->kPresenterDoc()->stickyPage()->objectList().count()))
         return;
 
     QProgressDialog progress( i18n( "Selecting..." ), 0,
@@ -1638,12 +1651,8 @@ void KPrCanvas::deSelectAllObj()
     else
         m_view->kPresenterDoc()->raiseAndLowerObject = false;
 
-    QPtrListIterator<KPObject> it( getObjectList() );
-    for ( ; it.current() ; ++it )
-    {
-        if(it.current()->isSelected())
-            deSelectObj(it.current() );
-    }
+    m_activePage->deSelectAllObj();
+    m_view->kPresenterDoc()->stickyPage()->deSelectAllObj();
 
     //desactivate kptextview when we switch of page
     if(m_currentTextObjectView)
