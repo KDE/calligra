@@ -121,6 +121,7 @@
 #include "damages.h"
 
 #include "testrunner.h"
+#include "inspector.h"
 
 #include "KSpreadViewIface.h"
 #include "kspread_dlg_paperlayout.h"
@@ -563,6 +564,7 @@ public:
     KAction* customList;
     KAction* spellChecking;
     KAction* internalTests;
+    KAction* inspector;
 
     // settings
     KoZoomAction* viewZoom;
@@ -1256,6 +1258,8 @@ void ViewPrivate::initActions()
 
   actions->internalTests = new KAction( i18n("Run Internal Tests..."), "internalTests",
       Qt::CTRL+ Qt::SHIFT + Qt::Key_T, view, SLOT( runInternalTests() ), ac, "internalTests" );
+  actions->inspector = new KAction( i18n("Run Inspector..."), "inspector",
+      Qt::CTRL+ Qt::SHIFT + Qt::Key_I, view, SLOT( runInspector() ), ac, "inspector" );
 }
 
 void ViewPrivate::adjustActions( bool mode )
@@ -6731,6 +6735,15 @@ void KSpreadView::runInternalTests()
     KSpread::TestRunner* runner = new KSpread::TestRunner(d->doc->locale());
     runner->exec();
     delete runner;
+}
+
+void KSpreadView::runInspector()
+{
+    // useful to inspect objects
+    KSpreadCell * cell = d->activeSheet->cellAt( d->selectionInfo->marker() );
+    KSpread::Inspector* ins = new KSpread::Inspector( cell );
+    ins->exec();
+    delete ins;
 }
 
 
