@@ -1213,6 +1213,14 @@ void Page::keyReleaseEvent( QKeyEvent *e )
     {
         m_currentTextObjectView->keyReleaseEvent( e );
     }
+    else
+    {
+        if ( mouseSelectedObject )
+        {
+            if(e->key()==Key_Up || e->key()==Key_Down || e->key()==Key_Right || e->key()==Key_Left)
+                emit objectSelectedChanged();
+        }
+    }
 }
 
 /*========================= resize Event =========================*/
