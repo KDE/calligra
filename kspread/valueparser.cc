@@ -25,7 +25,7 @@
 
 using namespace KSpread;
 
-ValueParser::ValueParser( KLocale* l) : locale( l )
+ValueParser::ValueParser( KLocale* locale ) : parserLocale( locale )
 {
 }
 
@@ -55,7 +55,7 @@ void ValueParser::parse (const QString& str, KSpreadCell *cell)
 
   // Test for money number
   bool ok;
-  double money = locale->readMoney (strStripped, &ok);
+  double money = parserLocale->readMoney (strStripped, &ok);
   if (ok)
   {
     cell->setPrecision(2);
@@ -104,7 +104,7 @@ KSpreadValue ValueParser::parse (const QString &str)
     return val;
 
   // Test for money number
-  double money = locale->readMoney (strStripped, &ok);
+  double money = parserLocale->readMoney (strStripped, &ok);
   if (ok)
   {
     val.setValue (money);
@@ -167,13 +167,13 @@ KSpreadValue ValueParser::tryParseBool (const QString& str, bool *ok)
   KSpreadValue val;
   if (ok) *ok = false;
   if ((str.lower() == "true") ||
-      (str.lower() == locale->translate("True").lower()))
+      (str.lower() == parserLocale->translate("True").lower()))
   {
     val.setValue (true);
     if (ok) *ok = true;
   }
   else if ((str.lower() == "false") ||
-      (str.lower() == locale->translate("false").lower()))
+      (str.lower() == parserLocale->translate("false").lower()))
   {
     val.setValue (false);
     if (ok) *ok = true;
@@ -197,8 +197,8 @@ KSpreadValue ValueParser::tryParseNumber (const QString& str, bool *ok)
     str2 = str;
 
   
-  // First try to understand the number using the locale
-  double val = locale->readNumber (str2, ok);
+  // First try to understand the number using the parserLocale
+  double val = parserLocale->readNumber (str2, ok);
   // If not, try with the '.' as decimal separator
   if (!(*ok))
     val = str2.toDouble(ok);
@@ -237,7 +237,7 @@ KSpreadValue ValueParser::tryParseNumber (const QString& str, bool *ok)
 KSpreadValue ValueParser::tryParseDate (const QString& str, bool *ok)
 {
   bool valid = false;
-  QDate tmpDate = locale->readDate (str, &valid);
+  QDate tmpDate = parserLocale->readDate (str, &valid);
   if (!valid)
   {
     // Try without the year
@@ -245,7 +245,7 @@ KSpreadValue ValueParser::tryParseDate (const QString& str, bool *ok)
     // For instance %Y-%m-%d becomes %m-%d and %d/%m/%Y becomes %d/%m
     // If the year is in the middle, say %m-%Y/%d, we'll remove the sep.
     // before it (%m/%d).
-    QString fmt = locale->dateFormatShort();
+    QString fmt = parserLocale->dateFormatShort();
     int yearPos = fmt.find ("%Y", 0, false);
     if ( yearPos > -1 )
     {
@@ -261,7 +261,7 @@ KSpreadValue ValueParser::tryParseDate (const QString& str, bool *ok)
           fmt.remove( yearPos, 1 );
       }
       //kdDebug(36001) << "KSpreadCell::tryParseDate short format w/o date: " << fmt << endl;
-      tmpDate = locale->readDate( str, fmt, &valid );
+      tmpDate = parserLocale->readDate( str, fmt, &valid );
     }
   }
   if (valid)
@@ -273,7 +273,7 @@ KSpreadValue ValueParser::tryParseDate (const QString& str, bool *ok)
   
     // The following fixes the problem, 3/4/1955 will always be 1955
 
-    QString fmt = locale->dateFormatShort();
+    QString fmt = parserLocale->dateFormatShort();
     if( ( fmt.contains( "%y" ) == 1 ) && ( tmpDate.year() > 2999 ) )
       tmpDate = tmpDate.addYears( -1900 );
 
@@ -298,7 +298,7 @@ KSpreadValue ValueParser::tryParseDate (const QString& str, bool *ok)
     }
     
     //test if it's a short date or text date.
-    if (locale->formatDate (tmpDate, false) == str)
+    if (parserLocale->formatDate (tmpDate, false) == str)
       fmtType = TextDate_format;
     else
       fmtType = ShortDate_format;
@@ -325,26 +325,26 @@ KSpreadValue ValueParser::tryParseTime (const QString& str, bool *ok)
   if (!valid)
   {
     QTime tm;
-    if (locale->use12Clock())
+    if (parserLocale->use12Clock())
     {
-      QString stringPm = locale->translate("pm");
-      QString stringAm = locale->translate("am");
+      QString stringPm = parserLocale->translate("pm");
+      QString stringAm = parserLocale->translate("am");
       int pos=0;
       if((pos=str.find(stringPm))!=-1)
       {
           QString tmp=str.mid(0,str.length()-stringPm.length());
           tmp=tmp.simplifyWhiteSpace();
-          tm = locale->readTime(tmp+" "+stringPm, &valid);
+          tm = parserLocale->readTime(tmp+" "+stringPm, &valid);
           if (!valid)
-              tm = locale->readTime(tmp+":00 "+stringPm, &valid);
+              tm = parserLocale->readTime(tmp+":00 "+stringPm, &valid);
       }
       else if((pos=str.find(stringAm))!=-1)
       {
           QString tmp = str.mid(0,str.length()-stringAm.length());
           tmp = tmp.simplifyWhiteSpace();
-          tm = locale->readTime (tmp + " " + stringAm, &valid);
+          tm = parserLocale->readTime (tmp + " " + stringAm, &valid);
           if (!valid)
-              tm = locale->readTime (tmp + ":00 " + stringAm, &valid);
+              tm = parserLocale->readTime (tmp + ":00 " + stringAm, &valid);
       }
     }
   }
@@ -371,7 +371,7 @@ QDateTime ValueParser::readTime (const QString & intstr, bool withSeconds,
 {
   duration = false;
   QString str = intstr.simplifyWhiteSpace().lower();
-  QString format = locale->timeFormat().simplifyWhiteSpace();
+  QString format = parserLocale->timeFormat().simplifyWhiteSpace();
   if ( !withSeconds )
   {
     int n = format.find("%S");
@@ -417,7 +417,7 @@ QDateTime ValueParser::readTime (const QString & intstr, bool withSeconds,
      case 'p':
       {
         QString s;
-        s = locale->translate("pm").lower();
+        s = parserLocale->translate("pm").lower();
         int len = s.length();
         if (str.mid(strpos, len) == s)
         {
@@ -426,7 +426,7 @@ QDateTime ValueParser::readTime (const QString & intstr, bool withSeconds,
         }
         else
         {
-          s = locale->translate("am").lower();
+          s = parserLocale->translate("am").lower();
           len = s.length();
           if (str.mid(strpos, len) == s)
           {

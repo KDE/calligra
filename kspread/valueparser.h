@@ -42,6 +42,8 @@ class ValueParser {
   /** constructor */
   ValueParser (KLocale *locale);
   
+  KLocale* locale();
+  
   /** try to parse the text in a given cell and set value accordingly */
   void parse (const QString& str, KSpreadCell *cell);
 
@@ -54,7 +56,7 @@ class ValueParser {
   KSpreadValue tryParseTime (const QString& str, bool *ok = 0);
  protected:
  
-  KLocale* locale;
+  KLocale* parserLocale;
 
   // Try to parse the text as a bool/number/date/time/etc.
   // Helpers for parse.
