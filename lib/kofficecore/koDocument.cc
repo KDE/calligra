@@ -79,6 +79,27 @@ public:
   QList<KoMainWindow> m_shells;
 
   bool m_bSingleViewMode;
+
+  QWidget *m_wrapperWidget;
+};
+
+class KoViewWrapperWidget : public QWidget
+{
+public:
+  KoViewWrapperWidget( QWidget *parent ) : QWidget( parent, "HackyWackyKoDocumentWrapperWidget" ) {};
+
+  virtual void resizeEvent( QResizeEvent * )
+  {
+    QObject *wid = child( 0, "QWidget" );
+    if ( wid )
+      static_cast<QWidget *>(wid)->setGeometry( 0, 0, width(), height() );
+  }
+
+  virtual void childEvent( QChildEvent *ev )
+  {
+    if ( ev->type() == QEvent::ChildInserted )
+      resizeEvent( 0L );
+  }
 };
 
 KoDocument::KoDocument( QObject* parent, const char* name, bool singleViewMode )
@@ -97,6 +118,12 @@ KoDocument::KoDocument( QObject* parent, const char* name, bool singleViewMode )
       else if ( parent->inherits( "KParts::Part" ) )
         d->m_bSingleViewMode = true;
     }
+    
+  if ( singleViewMode )
+  {
+    d->m_wrapperWidget = new KoViewWrapperWidget( (QWidget *)parent );
+    setWidget( d->m_wrapperWidget );
+  }
 }
 
 KoDocument::~KoDocument()
@@ -162,6 +189,8 @@ bool KoDocument::saveFile()
 
 QWidget *KoDocument::widget()
 {
+  return KParts::ReadWritePart::widget(); 
+/* 
   if ( !d->m_bSingleViewMode )
     return 0L;
 
@@ -187,6 +216,7 @@ QWidget *KoDocument::widget()
   }
 
   return d->m_views.getFirst();
+*/
 }
 
 QAction *KoDocument::action( const QDomElement &element )
@@ -387,7 +417,7 @@ bool KoDocument::saveNativeFormat( const QString & file )
 {
 // If KOffice documents are going to be in two different formats
 // (a tar.gz store if they contain children and a simple XML file if
-//   they don't), then writing filters (both the builtin ones and 
+//   they don't), then writing filters (both the builtin ones and
 //   one day in other office apps) is going to be awful...
 //
 //  if ( hasToWriteMultipart() )
@@ -502,6 +532,14 @@ bool KoDocument::openFile()
     // and remove temp file
     unlink( importedFile.ascii() );
   }
+  
+  if ( loadOk && d->m_bSingleViewMode )
+  {
+    QWidget *view = createView( d->m_wrapperWidget );
+    view->show();
+  }
+
+  
   return loadOk;
 }
 
