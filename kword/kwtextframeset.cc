@@ -327,10 +327,13 @@ void KWTextFrameSet::drawFrame( KWFrame *frame, QPainter *painter, const QRect &
     bool drawCursor = edit!=0L;
     QTextCursor * cursor = edit ? static_cast<KWTextFrameSetEdit *>(edit)->getCursor() : 0;
 
-    // Colored backgrounds need to be drawn somehow :/
-    // This also paints the 1st two lines, which QRT forgets.
+    // This paints the 1st two lines, which QRT forgets.
     if (!onlyChanged)
-        painter->fillRect( r, cg.brush( QColorGroup::Base ) );
+    {
+        QRect rtop( r.intersect( QRect( 0, 0, r.width(), 2 ) ) );
+        if ( !rtop.isEmpty() )
+            painter->fillRect( rtop, cg.brush( QColorGroup::Base ) );
+    }
 
     QTextParag * lastFormatted = textdoc->draw( painter, r.x(), r.y(), r.width(), r.height(),
                                                 cg, onlyChanged, drawCursor, cursor, resetChanged );
@@ -676,7 +679,7 @@ bool KWTextFrameSet::checkVerticalBreak( int & yp, int h, QTextParag * parag, bo
             kdDebug(32002) << "checkVerticalBreak ADJUSTING yp=" << yp << " h=" << h
                            << " breakEnd+2 [new value for yp]=" << breakEnd+2 << endl;
 #endif
-            yp = breakEnd + 2;
+            yp = breakEnd + 1;
             return true;
         }
         else // Line-level breaking
@@ -712,10 +715,10 @@ bool KWTextFrameSet::checkVerticalBreak( int & yp, int h, QTextParag * parag, bo
                             kdDebug(32002) << "checkVerticalBreak parag " << parag->paragId()
                                            << " BREAKING first line -> parag break" << endl;
 #endif
-                            yp = breakEnd + 2;
+                            yp = breakEnd + 1;
                             return true;
                         }
-                        dy = breakEnd + 2 - y;
+                        dy = breakEnd + 1 - y;
 #ifdef DEBUG_FLOW
                         kdDebug(32002) << "checkVerticalBreak parag " << parag->paragId()
                                        << " BREAKING at line " << line << " dy=" << dy << endl;
@@ -799,7 +802,7 @@ void KWTextFrameSet::adjustFlow( int &yp, int w, int h, QTextParag * parag, bool
                     // The paragraph wants a frame break before it, and is in the current frame
                     // The last check is for whether we did the frame break already
                     // (adjustFlow is called twice for each paragraph, if a break was done)
-                    yp = bottom + 2;
+                    yp = bottom /*+ 2*/;
 #ifdef DEBUG_FLOW
                     kdDebug() << "KWTextFrameSet::adjustFlow -> HARD FRAME BREAK" << endl;
                     kdDebug() << "KWTextFrameSet::adjustFlow yp now " << yp << endl;
