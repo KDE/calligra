@@ -1555,6 +1555,7 @@ void KSpreadView::increaseIndent()
   if ( !m_pTable )
         return;
   m_pTable->increaseIndent( QPoint( m_pCanvas->markerColumn(), m_pCanvas->markerRow() ) );
+  updateEditWidget();
 }
 
 void KSpreadView::decreaseIndent()

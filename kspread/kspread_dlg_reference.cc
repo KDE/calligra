@@ -81,7 +81,7 @@ KSpreadreference::KSpreadreference( KSpreadView* parent, const char* name )
   connect( m_pRemove, SIGNAL( clicked() ), this, SLOT( slotRemove() ) );
   connect( list, SIGNAL(doubleClicked(QListBoxItem *)),this,SLOT(slotDoubleClicked(QListBoxItem *)));
   connect( list, SIGNAL(highlighted ( QListBoxItem * ) ),this,SLOT(slotHighlighted(QListBoxItem * )));
-  rangeName->setText(i18n("area:"));
+  rangeName->setText(i18n("area: %1").arg(""));
 
   resize( 250, 200 );
 
