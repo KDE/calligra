@@ -58,6 +58,17 @@ struct KSpreadConditional
  Conditional m_cond;
 };
 
+struct KSpreadValidity
+{
+ QString avertissment;
+ QString title;
+ double valMin;
+ double valMax;
+ Conditional m_cond;
+ Action m_action;
+ Allow m_allow;
+};
+
 struct KSpreadDepend
 {
   int m_iColumn;
@@ -269,6 +280,8 @@ public:
      * Most of the time, call this with updateDepends=true so that dependencies are updated.
      */
     void setCellText( const QString& _text, bool updateDepends = true );
+
+    void setDisplayText( const QString& _text, bool updateDepends = true );
     /**
      * @return the text the user entered.
      */
@@ -611,6 +624,26 @@ public:
     	m_firstCondition=0;
     	}
 
+    void verifyValidity();
+    KSpreadValidity * getValidity(int newStruct=-1)
+    	{
+    	if((m_Validity==0)&&(newStruct==-1))
+    		m_Validity=new KSpreadValidity;
+    	return  m_Validity;
+    	}
+    void removeValidity()
+    	{
+    	if(m_Validity!=0)
+    		delete m_Validity;
+    	m_Validity=0;
+    	}
+
+     /**
+     * return true if value is good
+     * else show a messagebox
+     */
+     bool  testValidity();
+
     void conditionAlign(QPainter &painter,int _col,int _row);
 
     /**
@@ -935,6 +968,8 @@ protected:
     * default is 0
     */
     int m_nbLines;
+
+    KSpreadValidity * m_Validity;
 
     /**
     * When it's True displays **

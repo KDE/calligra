@@ -188,6 +188,7 @@ public slots:
     void togglePageBorders( bool );
     void replace();
     void conditional();
+    void validity();
     void insertSeries();
     void sort();
     void insertHyperlink();
@@ -429,6 +430,7 @@ private:
     KAction* m_reloadScripts;
     KAction* m_replace;
     KAction* m_conditional;
+    KAction* m_validity;
     KAction* m_sort;
     KAction* m_consolidate;
     KAction* m_help;

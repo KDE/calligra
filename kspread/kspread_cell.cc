@@ -107,6 +107,7 @@ KSpreadCell::KSpreadCell( KSpreadTable *_table, int _column, int _row )
   m_numberOfCond=-1;
   m_nbLines=0;
   m_bCellTooShort=false;
+  m_Validity=0;
 }
 
 void KSpreadCell::copyLayout( KSpreadCell *_cell )
@@ -3453,7 +3454,27 @@ void KSpreadCell::decPrecision()
   }
 }
 
+
+
 void KSpreadCell::setCellText( const QString& _text, bool updateDepends )
+{
+  QString oldText=m_strText;
+  setDisplayText( _text, updateDepends );
+  bool result;
+  if(!m_pTable->isLoading())
+        {
+        result=testValidity();
+        if(!result)
+                {
+                //reapply old value if action == stop
+                setDisplayText( oldText, updateDepends );
+                }
+        }
+
+}
+
+
+void KSpreadCell::setDisplayText( const QString& _text, bool updateDepends )
 {
   m_bError = false;
   m_strText = _text;
@@ -3554,6 +3575,85 @@ void KSpreadCell::setCellText( const QString& _text, bool updateDepends )
 
   if ( updateDepends )
       update();
+
+}
+
+bool KSpreadCell::testValidity()
+{
+bool valid=false;
+if(m_Validity!=0)
+        {
+        if(m_Validity->m_allow==Allow_Number)
+                {
+                if(isValue())
+                        {
+                        switch( m_Validity->m_cond)
+                                {
+                                case Equal:
+                                        if(m_dValue ==m_Validity->valMin)
+                                                valid=true;
+                                        break;
+                                case Superior:
+                                        if(m_dValue >m_Validity->valMin)
+                                                valid=true;
+                                        break;
+                                case Inferior:
+                                        if(m_dValue <m_Validity->valMin)
+                                                valid=true;
+                                        break;
+                                case SuperiorEqual:
+                                        if(m_dValue >=m_Validity->valMin)
+                                                valid=true;
+                                        break;
+                                case InferiorEqual:
+                                        if(m_dValue <=m_Validity->valMin)
+                                                valid=true;
+                                        break;
+                                case Between:
+                                        if(m_dValue >=m_Validity->valMin && m_dValue <=m_Validity->valMax)
+                                                valid=true;
+                                        break;
+                                case Different:
+                                        if(m_dValue <m_Validity->valMin || m_dValue >m_Validity->valMax)
+                                                valid=true;
+                                        break;
+                                default :
+                                        break;
+
+                                }
+
+                        }
+
+                }
+        else if(m_Validity->m_allow==Allow_Text)
+                {
+                 if(!isValue() && !isBool() && !isDate() && !isTime())
+                        valid=true;
+
+                }
+        }
+else
+        valid= true;
+
+if(!valid &&m_Validity!=0 )
+        {
+        switch (m_Validity->m_action)
+                {
+                case Stop:
+                        KMessageBox::error((QWidget*)0L , m_Validity->avertissment,m_Validity->title);
+                        break;
+                case Warning:
+                        KMessageBox::warningYesNo((QWidget*)0L , m_Validity->avertissment,m_Validity->title);
+                        break;
+                case Information:
+                        KMessageBox::information((QWidget*)0L , m_Validity->avertissment,m_Validity->title);
+                        break;
+                }
+        }
+if(!valid && m_Validity!=0 && m_Validity->m_action==Stop)
+        return false;
+else
+        return true;
 }
 
 void KSpreadCell::setValue( double _d )
@@ -3992,6 +4092,27 @@ QDomElement KSpreadCell::save( QDomDocument& doc, int _x_offset, int _y_offset )
         cell.appendChild( condition );
     }
 
+    if( m_Validity!=0 )
+    {
+        QDomElement validity = doc.createElement("validity");
+
+        QDomElement param=doc.createElement("param");
+        param.setAttribute("cond",(int)m_Validity->m_cond);
+        param.setAttribute("action",(int)m_Validity->m_action);
+        param.setAttribute("allow",(int)m_Validity->m_allow);
+        param.setAttribute("valmin",m_Validity->valMin);
+        param.setAttribute("valmax",m_Validity->valMax);
+        validity.appendChild(param);
+        QDomElement title = doc.createElement( "title" );
+        title.appendChild( doc.createTextNode( m_Validity->title ) );
+        validity.appendChild( title );
+        QDomElement avertissement = doc.createElement( "avertissement" );
+        avertissement.appendChild( doc.createCDATASection( m_Validity->avertissment ) );
+        validity.appendChild( avertissement );
+
+        cell.appendChild( validity );
+    }
+
     if ( !m_strComment.isEmpty() )
     {
         QDomElement comment = doc.createElement( "comment" );
@@ -4216,6 +4337,56 @@ bool KSpreadCell::load( const QDomElement& cell, int _xshift, int _yshift, Paste
             QDomElement font = third.namedItem( "font" ).toElement();
             if ( !font.isNull() )
                 m_thirdCondition->fontcond=toFont(font) ;
+        }
+    }
+
+    QDomElement validity = cell.namedItem( "validity" ).toElement();
+    if ( !validity.isNull())
+    {
+        QDomElement param = validity.namedItem( "param" ).toElement();
+        if(!param.isNull())
+        {
+        m_Validity=new KSpreadValidity;
+        if ( param.hasAttribute( "cond" ) )
+            {
+            m_Validity->m_cond=(Conditional) param.attribute("cond").toInt( &ok );
+            if ( !ok )
+                return false;
+            }
+         if ( param.hasAttribute( "action" ) )
+            {
+            m_Validity->m_action=(Action) param.attribute("action").toInt( &ok );
+            if ( !ok )
+                return false;
+            }
+         if ( param.hasAttribute( "allow" ) )
+            {
+            m_Validity->m_allow=(Allow) param.attribute("allow").toInt( &ok );
+            if ( !ok )
+                return false;
+            }
+         if ( param.hasAttribute( "valmin" ) )
+            {
+            m_Validity->valMin=param.attribute("valmin").toDouble( &ok );
+            if ( !ok )
+                return false;
+            }
+         if ( param.hasAttribute( "valmax" ) )
+            {
+            m_Validity->valMax=param.attribute("valmax").toDouble( &ok );
+            if ( !ok )
+                return false;
+            }
+        }
+        QDomElement title = validity.namedItem( "title" ).toElement();
+        if(!title.isNull())
+        {
+                 m_Validity->title= title.text();
+        }
+        QDomElement avertissement = validity.namedItem( "avertissement" ).toElement();
+        if(!avertissement.isNull())
+        {
+                 m_Validity->avertissment= avertissement.text();
         }
     }
 

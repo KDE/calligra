@@ -4111,6 +4111,130 @@ void KSpreadTable::setConditional( const QPoint &_marker,KSpreadConditional tmp[
 }
 
 
+void KSpreadTable::setValidity(const QPoint &_marker,KSpreadValidity tmp )
+{
+    m_pDoc->setModified( true );
+    KSpreadValidity *tmpValidity=0;
+    QRect r( m_rctSelection );
+    bool selected = ( m_rctSelection.left() != 0 );
+    if ( !selected )
+        r.setCoords( _marker.x(), _marker.y(), _marker.x(), _marker.y() );
+
+
+    if ( !m_pDoc->undoBuffer()->isLocked() )
+    {
+            KSpreadUndoConditional *undo = new KSpreadUndoConditional( m_pDoc, this, r );
+            m_pDoc->undoBuffer()->appendUndo( undo );
+    }
+
+    // Complete rows selected ?
+    if ( selected && m_rctSelection.right() == 0x7FFF )
+    {
+        KSpreadCell* c = m_cells.firstCell();
+        for( ;c; c = c->nextCell() )
+        {
+            int row = c->row();
+            if ( m_rctSelection.top() <= row && m_rctSelection.bottom() >= row
+            && !c->isObscured())
+            {
+                c->setDisplayDirtyFlag();
+
+                if(tmp.m_allow==Allow_All)
+                            c->removeValidity();
+                else
+                        {
+                        tmpValidity =c->getValidity();
+                        tmpValidity->avertissment=tmp.avertissment;
+                        tmpValidity->title=tmp.title;
+                        tmpValidity->valMin=tmp.valMin;
+                        tmpValidity->valMax=tmp.valMax;
+                        tmpValidity->m_cond=tmp.m_cond;
+                        tmpValidity->m_action=tmp.m_action;
+                        tmpValidity->m_allow=tmp.m_allow;
+                        }
+                c->clearDisplayDirtyFlag();
+            }
+        }
+
+        emit sig_updateView( this, m_rctSelection );
+        return;
+    }
+    // Complete columns selected ?
+    else if ( selected && m_rctSelection.bottom() == 0x7FFF )
+    {
+        KSpreadCell* c = m_cells.firstCell();
+        for( ;c; c = c->nextCell() )
+        {
+            int col = c->column();
+            if ( m_rctSelection.left() <= col && m_rctSelection.right() >= col
+            && !c->isObscured())
+            {
+                c->setDisplayDirtyFlag();
+                if(tmp.m_allow==Allow_All)
+                            c->removeValidity();
+                else
+                        {
+                        tmpValidity =c->getValidity();
+                        tmpValidity->avertissment=tmp.avertissment;
+                        tmpValidity->title=tmp.title;
+                        tmpValidity->valMin=tmp.valMin;
+                        tmpValidity->valMax=tmp.valMax;
+                        tmpValidity->m_cond=tmp.m_cond;
+                        tmpValidity->m_action=tmp.m_action;
+                        tmpValidity->m_allow=tmp.m_allow;
+                        }
+
+                c->clearDisplayDirtyFlag();
+            }
+        }
+
+        emit sig_updateView( this, m_rctSelection );
+        return;
+    }
+    else
+    {
+        QRect r( m_rctSelection );
+        if ( !selected )
+            r.setCoords( _marker.x(), _marker.y(), _marker.x(), _marker.y() );
+
+        for ( int x = r.left(); x <= r.right(); x++ )
+            for ( int y = r.top(); y <= r.bottom(); y++ )
+            {
+                KSpreadCell *cell = cellAt( x, y );
+
+                if ( cell == m_pDefaultCell )
+                {
+                    cell = new KSpreadCell( this, x, y );
+                    m_cells.insert( cell, x, y );
+                }
+
+                if (!cell->isObscured())
+                {
+
+                cell->setDisplayDirtyFlag();
+                if(tmp.m_allow==Allow_All)
+                            cell->removeValidity();
+                else
+                        {
+                        tmpValidity =cell->getValidity();
+                        tmpValidity->avertissment=tmp.avertissment;
+                        tmpValidity->title=tmp.title;
+                        tmpValidity->valMin=tmp.valMin;
+                        tmpValidity->valMax=tmp.valMax;
+                        tmpValidity->m_cond=tmp.m_cond;
+                        tmpValidity->m_action=tmp.m_action;
+                        tmpValidity->m_allow=tmp.m_allow;
+                        }
+
+                cell->clearDisplayDirtyFlag();
+                }
+            }
+
+        emit sig_updateView( this, r );
+    }
+}
+
+
 void KSpreadTable::copySelection( const QPoint &_marker )
 {
     QRect rct;

@@ -20,6 +20,7 @@
   <Action name="RecalcWorkBook"/>
   <Separator/>
   <Action name="conditional"/>
+  <Action name="validity"/>
   <Action name="editCell"/>
   <Separator/>
   <Action name="transform"/>

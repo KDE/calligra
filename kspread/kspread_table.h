@@ -487,6 +487,8 @@ public:
 
     void setConditional( const QPoint &_marker,KSpreadConditional tmp[3] );
 
+    void setValidity( const QPoint &_marker,KSpreadValidity tmp );
+
     bool getShowGrid() {return m_bShowGrid;}
 
     void setShowGrid(bool _showGrid) {m_bShowGrid=_showGrid;}

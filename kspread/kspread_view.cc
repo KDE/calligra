@@ -85,6 +85,7 @@
 #include "kspread_dlg_comment.h"
 #include "kspread_dlg_angle.h"
 #include "kspread_dlg_goto.h"
+#include "kspread_dlg_validity.h"
 #include "kspread_undo.h"
 
 #include "handler.h"
@@ -307,6 +308,7 @@ KSpreadView::KSpreadView( QWidget *_parent, const char *_name, KSpreadDoc* doc )
     connect( m_showPageBorders, SIGNAL( toggled( bool ) ), this, SLOT( togglePageBorders( bool ) ) );
     m_replace = new KAction( i18n("Find and Replace..."), "find",CTRL + Key_F, this, SLOT( replace() ), actionCollection(), "replace" );
     m_conditional = new KAction( i18n("Conditional cell attributes ..."), 0, this, SLOT( conditional() ), actionCollection(), "conditional" );
+    m_validity = new KAction( i18n("Validity ..."), 0, this, SLOT( validity() ), actionCollection(), "validity" );
     m_sort = new KAction( i18n("Sort ..."), 0, this, SLOT( sort() ), actionCollection(), "sort" );
     m_consolidate = new KAction( i18n("Consolidate..."), 0, this, SLOT( consolidate() ), actionCollection(), "consolidate" );
     m_mergeCell = new KAction( i18n("Merge cells"),"mergecell" ,0, this, SLOT( mergeCell() ), actionCollection(), "mergecell" );
@@ -1501,9 +1503,7 @@ void KSpreadView::replace()
 
 void KSpreadView::conditional()
 {
-
 //  KSpreadconditional *dlg=new KSpreadconditional( this,"conditional",QPoint( m_pCanvas->markerColumn(), m_pCanvas->markerRow() ));
-
   QRect rect( activeTable()-> selectionRect() );
 
   if((rect.right()==0x7FFF) ||(rect.bottom()==0x7FFF))
@@ -1516,14 +1516,33 @@ void KSpreadView::conditional()
          rect.right() == 0 || rect.bottom() == 0 )
            {
                 rect.setCoords(  m_pCanvas->markerColumn(), m_pCanvas->markerRow(),m_pCanvas->markerColumn(), m_pCanvas->markerRow());
-
            }
-
          KSpreadconditional *dlg=new KSpreadconditional(this,"conditional",rect);
          dlg->show();
          }
 
 }
+
+void KSpreadView::validity()
+{
+  QRect rect( activeTable()-> selectionRect() );
+
+  if((rect.right()==0x7FFF) ||(rect.bottom()==0x7FFF))
+        {
+        KMessageBox::error( this, i18n("Area too large!"));
+        }
+  else
+        {
+        if ( rect.left() == 0 || rect.top() == 0 ||
+         rect.right() == 0 || rect.bottom() == 0 )
+           {
+                rect.setCoords(  m_pCanvas->markerColumn(), m_pCanvas->markerRow(),m_pCanvas->markerColumn(), m_pCanvas->markerRow());
+           }
+         KSpreadDlgValidity *dlg=new KSpreadDlgValidity( this,"validity",rect);
+         dlg->show();
+         }
+}
+
 
 void KSpreadView::insertSeries()
 {
