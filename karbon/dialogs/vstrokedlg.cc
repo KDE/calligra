@@ -27,9 +27,9 @@ VStrokeDlg::VStrokeDlg( KarbonPart* part, QWidget* parent, const char* name )
 	enableButtonSeparator( true );
 	QTabWidget *mainWidget = new QTabWidget( this, "strokemain" );
 	QHBoxLayout *mainLayout = new QHBoxLayout (mainWidget, 3);
-	
+
 	QVBoxLayout *leftLayout = new QVBoxLayout( mainLayout, 4 );
-	
+
 	QLabel* widthLabel = new QLabel( i18n ( "Width:" ), mainWidget );
 	leftLayout->addWidget ( widthLabel );
 	m_setLineWidth = new TKUFloatSpinBox( mainWidget );
@@ -37,7 +37,7 @@ VStrokeDlg::VStrokeDlg( KarbonPart* part, QWidget* parent, const char* name )
 	m_setLineWidth->setMinValue(0.0);
 	m_setLineWidth->setLineStep(0.5);
 	leftLayout->addWidget ( m_setLineWidth );
-		
+
 	//Dashing ->
 	QLabel* styleLabel = new QLabel( i18n ( "Style:" ), mainWidget );
 	leftLayout->addWidget ( styleLabel );
@@ -45,7 +45,7 @@ VStrokeDlg::VStrokeDlg( KarbonPart* part, QWidget* parent, const char* name )
 	m_styleCombo->setEnabled ( false );
 	leftLayout->addWidget ( m_styleCombo );
 	// <- Dashing - reserved for later
-	
+
 	QRadioButton* button;
 	m_typeOption = new QVButtonGroup ( mainWidget );
 	button = new QRadioButton ( i18n( "None" ), m_typeOption );
@@ -57,7 +57,7 @@ VStrokeDlg::VStrokeDlg( KarbonPart* part, QWidget* parent, const char* name )
 	m_typeOption->setTitle( i18n( "Type" ) );
 	mainLayout->addWidget( m_typeOption );
 	connect( m_typeOption, SIGNAL( clicked( int ) ), this, SLOT( slotTypeChanged( int ) ) );
-	
+
 	m_capOption = new QVButtonGroup ( mainWidget );
 	button = new QRadioButton ( i18n( "Butt" ), m_capOption );
 	m_capOption->insert( button );
@@ -68,7 +68,7 @@ VStrokeDlg::VStrokeDlg( KarbonPart* part, QWidget* parent, const char* name )
 	m_capOption->setTitle( i18n( "Cap" ) );
 	mainLayout->addWidget( m_capOption );
 	connect( m_capOption, SIGNAL( clicked( int ) ), this, SLOT( slotCapChanged( int ) ) );
-	
+
 	m_joinOption = new QVButtonGroup ( mainWidget );
 	button = new QRadioButton ( i18n( "Miter" ), m_joinOption );
 	m_joinOption->insert( button );
@@ -79,7 +79,7 @@ VStrokeDlg::VStrokeDlg( KarbonPart* part, QWidget* parent, const char* name )
 	m_joinOption->setTitle( i18n( "Join" ) );
 	mainLayout->addWidget( m_joinOption );
 	connect( m_joinOption, SIGNAL( clicked( int ) ), this, SLOT( slotJoinChanged( int ) ) );
-	
+
 	if( part->document().selection()->objects().count() > 0 ) // there is a selection, so take the stroke of first selected object
 	{
 		m_stroke.setType ( part->document().selection()->objects().getFirst()->stroke()->type() );
@@ -89,13 +89,14 @@ VStrokeDlg::VStrokeDlg( KarbonPart* part, QWidget* parent, const char* name )
 		m_stroke.setLineJoin ( part->document().selection()->objects().getFirst()->stroke()->lineJoin() );
 		m_stroke.setMiterLimit ( part->document().selection()->objects().getFirst()->stroke()->miterLimit() );
 	}
-	
+
 	slotUpdateDialog(); //Put the values of selected objects (or default)
 	mainLayout->activate();
 
 	//setMainWidget( mainWidget );
 
-	m_colortab = new VColorTab( part->document().selection()->objects().getFirst()->stroke()->color(), this);
+	m_colortab = new VColorTab( part->document().selection()->objects().count() == 0 ? part->document().defaultStroke().color() :
+								part->document().selection()->objects().getFirst()->stroke()->color(), this);
 	m_colortab->insertTab( mainWidget, i18n("Stroke"), 0 );
 	m_colortab->setCurrentPage( 0 );
 
@@ -147,7 +148,7 @@ void VStrokeDlg::slotOKClicked()
 
 	m_stroke.setColor( m_colortab->getColor() );
 
-	if( m_part )
+	if( m_part && m_part->document().selection()->objects().count() > 0 )
 		m_part->addCommand( new VStrokeCmd( &m_part->document(), m_stroke ), true );
 
 	emit strokeChanged( VStroke( m_stroke ) );
@@ -187,20 +188,6 @@ void VStrokeDlg::slotUpdateDialog()
 	
 	m_setLineWidth->setValue( m_stroke.lineWidth() );
 }
-
-/*void VStrokeDlg::slotApplyButtonPressed()
-{
-	VColor color;
-	float r = mRed->value() / 255.0, g = mGreen->value() / 255.0, b = mBlue->value() / 255.0;
-	float op = mOpacity->value() / 100.0;
-	color.setValues( &r, &g, &b, 0L );
-	color.setOpacity( op );
-
-	if( m_part )
-		m_part->addCommand( new VStrokeCmd( &m_part->document(), VStroke( color ) ), true );
-
-	emit strokeChanged( VStroke( color ) );
-}*/
 
 #include "vstrokedlg.moc"
 

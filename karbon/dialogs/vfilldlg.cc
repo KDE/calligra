@@ -19,7 +19,8 @@ VFillDlg::VFillDlg( KarbonPart* part, QWidget* parent, const char* name )
 	: KDialogBase ( parent, name, true, i18n( "Uniform Color" ),
 		KDialogBase::Ok | KDialogBase::Cancel ), m_part( part )
 {
-	m_colortab = new VColorTab( part->document().selection()->objects().getFirst()->fill()->color(), this, name );
+	m_colortab = new VColorTab( part->document().selection()->objects().count() == 0 ? part->document().defaultFill().color() :
+								part->document().selection()->objects().getFirst()->fill()->color(), this, name );
 
 	connect( this, SIGNAL( okClicked() ), this, SLOT( slotApplyButtonPressed() ) );
 
@@ -30,7 +31,7 @@ VFillDlg::VFillDlg( KarbonPart* part, QWidget* parent, const char* name )
 void
 VFillDlg::slotApplyButtonPressed()
 {
-	if( m_part )
+	if( m_part && m_part->document().selection() )
 		m_part->addCommand( new VFillCmd( &m_part->document(), VFill( m_colortab->getColor() ) ), true );
 
 	emit fillChanged( VFill( m_colortab->getColor() ) );
