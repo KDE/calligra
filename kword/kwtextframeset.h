@@ -91,12 +91,18 @@ public:
      * into a point in the document coordinate system (in pt).
      * Also returns the frame in which this point is. */
     KWFrame * internalToDocument( const QPoint &iPoint, KoPoint &dPoint ) const;
+
     /** Same as internalToDocument, but goes directly to the normal coords (zoomed)
      * since this method is used for view stuff only (mouse).
      * @param hintDPoint hint, in case of copied frames. If specified, its y
      * value will be used as a minimum on the returned result, to prefer a frame
      * over any of its copies (e.g. in the header/footer case). */
     KWFrame * internalToDocumentWithHint( const QPoint &iPoint, KoPoint &dPoint, const KoPoint &hintDPoint ) const;
+
+    /** A variant of internalToDocument, when the frame is already known.
+     * Both faster, and more correct for inline frames that spawn over multiple containing frames
+     */
+    KoPoint internalToDocumentKnowingFrame( const QPoint &iPoint, KWFrame* theFrame ) const;
 
     /** Implementation of Ctrl+PageUp/PageDown
      * Returns a point in layout units (for placing the cursor) */

@@ -348,8 +348,7 @@ KWFrame * KWTextFrameSet::internalToDocumentWithHint( const QPoint &iPoint, KoPo
         // r is the frame in qrt coords
         if ( r.contains( iPoint ) ) // both r and p are in layout units (aka internal)
         {
-            dPoint.setX( m_doc->layoutUnitPtToPt( m_doc->pixelXToPt( iPoint.x() ) ) + theFrame->innerRect().x() );
-            dPoint.setY( m_doc->layoutUnitPtToPt( m_doc->pixelYToPt( iPoint.y() ) ) - theFrame->internalY() + theFrame->innerRect().y() );
+            dPoint = internalToDocumentKnowingFrame( iPoint, theFrame );
 #ifdef DEBUG_ITD
             kdDebug() << "copy: " << theFrame->isCopy() << " hintDPoint.y()=" << hintDPoint.y() << " dPoint.y()=" << dPoint.y() << endl;
 #endif
@@ -374,6 +373,12 @@ KWFrame * KWTextFrameSet::internalToDocumentWithHint( const QPoint &iPoint, KoPo
 #endif
     dPoint = m_doc->layoutUnitPtToPt( m_doc->pixelToPt( iPoint ) ); // bah
     return 0L;
+}
+
+KoPoint KWTextFrameSet::internalToDocumentKnowingFrame( const QPoint &iPoint, KWFrame* theFrame ) const
+{
+    return KoPoint( m_doc->layoutUnitPtToPt( m_doc->pixelXToPt( iPoint.x() ) ) + theFrame->innerRect().x(),
+                    m_doc->layoutUnitPtToPt( m_doc->pixelYToPt( iPoint.y() ) ) - theFrame->internalY() + theFrame->innerRect().y() );
 }
 
 QPoint KWTextFrameSet::moveToPage( int currentPgNum, short int direction ) const
@@ -1529,8 +1534,7 @@ KWFrame * KWTextFrameSet::internalToDocument( const QPoint &iPoint, KoPoint &dPo
         // r is the frame in qrt coords
         if ( r.contains( iPoint ) ) // both r and p are in "qrt coordinates"
         {
-            dPoint.setX( m_doc->layoutUnitPtToPt( m_doc->pixelXToPt( iPoint.x() ) ) + theFrame->innerRect().x() );
-            dPoint.setY( m_doc->layoutUnitPtToPt( m_doc->pixelYToPt( iPoint.y() ) ) - theFrame->internalY() + theFrame->innerRect().y() );
+            dPoint = internalToDocumentKnowingFrame( iPoint, theFrame );
             return theFrame;
         }
     }

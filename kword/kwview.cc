@@ -5548,7 +5548,6 @@ void KWView::applyAutoFormat()
 {
     m_doc->getAutoFormat()->readConfig();
     KMacroCommand *macro = 0L;
-    bool createcmd=false;
     QPtrList<KoTextObject> list(m_doc->frameTextObject());
     QPtrListIterator<KoTextObject> fit(list);
     for ( ; fit.current() ; ++fit )
