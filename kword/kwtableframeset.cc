@@ -434,7 +434,7 @@ void KWTableFrameSet::recalcRows(int _col, int _row)
     m_hasTmpHeaders = false;
     // check/set sizes of frames
     unsigned int row=0,col=0;
-    if(!m_cells.isEmpty() /*&& isOneSelected(row,col)*/) {
+    if(!m_cells.isEmpty()) {
         if(_col!=-1 && _row!=-1)
         {
             row=(unsigned int)_row;
@@ -448,17 +448,27 @@ void KWTableFrameSet::recalcRows(int _col, int _row)
         Cell *cell;
         double coordinate;
 
+        if(activeCell->getFrame(0)->isSelected()) 
+            activeCell->getFrame(0)->setMinFrameHeight(activeCell->getFrame(0)->height());
         // find old coord.
         coordinate=activeCell->getFrame(0)->top();
+        bool found=false;
         for ( unsigned int i = 0; i < m_cols; i++) {
-
+            // search current row for a cell that starts at this row, just like our does.
             if( !(i>=col && i<=(activeCell->m_col+activeCell->m_cols-1))) {
                 cell=getCell(row,i);
                 ASSERT(cell);
                 if(cell && cell->m_row==row) {
                     coordinate=cell->getFrame(0)->top();
+                    found=true;
                     break;
                 }
+            }
+        }
+        if(!found && row>0) {
+            cell = getCell(row-1,col);
+            if(cell) {
+                coordinate=cell->getFrame(0)->bottom()+tableCellSpacing ;
             }
         }
         double postAdjust=0;
@@ -509,15 +519,24 @@ void KWTableFrameSet::recalcRows(int _col, int _row)
             row+=activeCell->m_rows-1;
             // find old coord.
             coordinate=activeCell->getFrame(0)->bottom();
+            found=false;
             for ( unsigned int i = 0; i < m_cols; i++) {
                 if(!(i>=col && i<=(activeCell->m_col+activeCell->m_cols-1))) {
                     cell=getCell(activeCell->m_row+activeCell->m_rows-1,i);
                     if(cell->m_row+cell->m_rows==activeCell->m_row+activeCell->m_rows) {
                         coordinate=cell->getFrame(0)->bottom();
+                        found=true;
                         break;
                     }
                 }
             }
+            if(!found) {
+                cell = getCell(activeCell->m_row + activeCell->m_rows +1);
+                if(cell) {
+                    coordinate=cell->getFrame(0)->top()-tableCellSpacing;
+                }
+            }
+
             if(coordinate != activeCell->getFrame(0)->bottom()) {
                 for ( unsigned int i = 0; i < m_cols; i++) {
                     cell = getCell(row,i);
@@ -531,6 +550,7 @@ void KWTableFrameSet::recalcRows(int _col, int _row)
                                 postAdjust = minFrameHeight-newHeight;
                         }
                         cell->getFrame(0)->setHeight(newHeight);
+kdDebug() << cell->getFrame(0) << "->setMinFrameHeight("<< newHeight<< ")" << endl;
                         cell->getFrame(0)->setMinFrameHeight(newHeight);
                     }
                 }
@@ -541,6 +561,7 @@ void KWTableFrameSet::recalcRows(int _col, int _row)
                     if(cell->m_col == i) {
                         cell->getFrame(0)->setHeight( cell->getFrame(0)->height() + postAdjust);
                         cell->getFrame(0)->setMinFrameHeight( cell->getFrame(0)->height() + postAdjust);
+kdDebug() << "setMinFrameHeight2("<< cell->getFrame(0)->height() + postAdjust << ")" << endl;
                     }
                 }
             }

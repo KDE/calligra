@@ -1220,6 +1220,7 @@ void KWFrameSet::printDebug()
         QColor col = frame->getBackgroundColor().color();
         kdDebug() << "     BackgroundColor: "<< ( col.isValid() ? col.name().latin1() : "(default)" ) << endl;
         kdDebug() << "     SheetSide "<< frame->getSheetSide() << endl;
+        kdDebug() << "     minFrameHeight "<< frame->minFrameHeight() << endl;
         if(frame->isSelected())
             kdDebug() << " *   Page "<< frame->pageNum() << endl;
         else

@@ -1992,8 +1992,8 @@ void KWTextFrameSet::formatMore()
             double wantedPosition = theFrame->bottom() - m_doc->unzoomItY( difference );
             kdDebug() << "formatMore wantedPosition=" << wantedPosition << " top+minheight=" << theFrame->top() + minFrameHeight << endl;
             wantedPosition = QMAX( wantedPosition, theFrame->top() + minFrameHeight );
-            if ( wantedPosition != theFrame->bottom() && wantedPosition-theFrame->top() > theFrame->minFrameHeight())
-            {
+            wantedPosition = QMAX( wantedPosition, theFrame->minFrameHeight()+theFrame->top() );
+            if ( wantedPosition != theFrame->bottom()) {
                 kdDebug() << "setBottom " << wantedPosition << endl;
                 theFrame->setBottom( wantedPosition );
                 frameResized( theFrame );
