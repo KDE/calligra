@@ -324,7 +324,7 @@ VObjectListViewItem::update()
 	VSelectionDescription selectionDesc;
 	selectionDesc.visit( *m_object );
 	setText( 2, QString( "%1" ).arg( selectionDesc.shortDescription() ) );
-	setPixmap( 1, QPixmap( il.iconPath( ( m_object->state() == VObject::normal || m_object->state() == VObject::normal_locked ? "14_layer_visible.png" : "14_layer_novisible.png" ), KIcon::Small ) ) );
+	setPixmap( 1, QPixmap( il.iconPath( ( m_object->state() == VObject::hidden || m_object->state() == VObject::hidden_locked ? "14_layer_novisible.png" : "14_layer_visible.png" ), KIcon::Small ) ) );
 	setPixmap( 2, preview );
 }
 
