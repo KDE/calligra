@@ -183,14 +183,36 @@ SvgExport::exportSegments( QTextStream& s, const QDomElement& node )
 
 			if( e.tagName() == "CURVE" )
 			{
-				s <<	
-					"C" <<
-					e.attribute( "x1" ) << "," <<
-					e.attribute( "y1" ) << " " <<
-					e.attribute( "x2" ) << "," <<
-					e.attribute( "y2" ) << " " <<
-					e.attribute( "x3" ) << "," <<
-					e.attribute( "y3" ) << " ";
+			s <<
+				"C" <<
+				e.attribute( "x1" ) << "," <<
+				e.attribute( "y1" ) << " " <<
+				e.attribute( "x2" ) << "," <<
+				e.attribute( "y2" ) << " " <<
+				e.attribute( "x3" ) << "," <<
+				e.attribute( "y3" ) << " ";
+			}
+			if( e.tagName() == "CURVE1" )
+			{
+			s <<
+				"C" <<
+				e.attribute( "x1" ) << "," <<
+				e.attribute( "y1" ) << " " <<
+				e.attribute( "x1" ) << "," <<
+				e.attribute( "y1" ) << " " <<
+				e.attribute( "x3" ) << "," <<
+				e.attribute( "y3" ) << " ";
+			}
+			f( e.tagName() == "CURVE" )
+			{
+			s <<
+				"C" <<
+				e.attribute( "x1" ) << "," <<
+				e.attribute( "y1" ) << " " <<
+				e.attribute( "x3" ) << "," <<
+				e.attribute( "y3" ) << " " <<
+				e.attribute( "x3" ) << "," <<
+				e.attribute( "y3" ) << " ";
 			}
 			else if( e.tagName() == "LINE" )
 			{
