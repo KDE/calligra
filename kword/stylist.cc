@@ -341,11 +341,13 @@ void KWStyleManager::slotApply() {
 
 void KWStyleManager::apply() {
     noSignals=true;
+    bool docIsChanged=false;
     for (unsigned int i =0 ; m_origStyles.count() > i ; i++) {
         if(m_origStyles.at(i) == 0) {           // newly added style
             kdDebug() << "adding new " << m_changedStyles.at(i)->name() << " (" << i << ")" << endl;
             KWStyle *tmp = m_doc->addStyleTemplate(m_changedStyles.take(i));
             m_changedStyles.insert(i, tmp);
+            docIsChanged=true;
         } else if(m_changedStyles.at(i) == 0) { // deleted style
             kdDebug() << "deleting orig " << m_origStyles.at(i)->name() << " (" << i << ")" << endl;
 
@@ -353,6 +355,7 @@ void KWStyleManager::apply() {
             m_doc->applyStyleChange( orig, -1, -1 );
             m_doc->removeStyleTemplate( orig );
             // Note that the style is never deleted (we'll need it for undo/redo purposes)
+            docIsChanged=true;
 
         } else if(m_changedStyles.at(i) != m_origStyles.at(i)) {
             kdDebug() << "update style " << m_changedStyles.at(i)->name() << " (" << i << ")" << endl;
@@ -362,6 +365,9 @@ void KWStyleManager::apply() {
 
             int paragLayoutChanged = orig->paragLayout().compare( changed->paragLayout() );
             int formatChanged = orig->format().compare( changed->format() );
+            if(formatChanged || paragLayoutChanged || orig->name().compare(changed->name())!=0)
+                docIsChanged=true;
+
             //kdDebug() << "old format " << orig->format().key() << " pointsize " << orig->format().pointSizeFloat() << endl;
             //kdDebug() << "new format " << changed->format().key() << " pointsize " << changed->format().pointSizeFloat() << endl;
 
@@ -375,7 +381,10 @@ void KWStyleManager::apply() {
          //     kdDebug() << "has not changed " <<  m_changedStyles.at(i)->name() << " (" << i << ")" <<  endl;
     }
 
-    m_doc->updateAllStyleLists();
+    if(docIsChanged) {
+        m_doc->updateAllStyleLists();
+        m_doc->setModified(true);
+    }
     noSignals=false;
 }
 
