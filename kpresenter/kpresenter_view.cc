@@ -103,6 +103,7 @@ KPresenterView::KPresenterView(QWidget *_parent,const char *_name,KPresenterDoc*
   rndX = 0;
   rndY = 0;
   m_vColorBar = 0;
+  allowWebPres = true;
 
   m_pKPresenterDoc = _doc;
   m_bKPresenterModified = true;
@@ -894,14 +895,20 @@ void KPresenterView::extraOptions()
 /*===============================================================*/
 void KPresenterView::extraWebPres()
 {
+  if (!allowWebPres)
+    return;
+
+  m_vToolBarExtra->setItemEnabled(ID_TOOL_WEBPRES,false);
+  m_vMenuExtra->setItemEnabled(m_idMenuExtra_WepPres,false);
+
   QString config = QString::null;
   if (QMessageBox::information((QWidget*)0L,i18n("Create Web-Presentation"),
 			       i18n("Do you want to load a configuration which should be used for this\n"
 				    "Web-Presentation, which you have already saved earlier?"),
 			       i18n("&Yes"),i18n("&No"),QString::null,1,1) == 0)
-    config = KFileDialog::getOpenFileName(QString::null,"*.kpweb | KPresenter Web-Presentation");
-    
-  KPWebPresentationWizard::createWebPresentation(config,m_pKPresenterDoc,this);  
+    config = KFileDialog::getOpenFileName(QString::null,"*.kpweb|KPresenter Web-Presentation");
+
+  KPWebPresentationWizard::createWebPresentation(config,m_pKPresenterDoc,this);
 }
 
 /*===============================================================*/
@@ -3789,10 +3796,10 @@ bool KPresenterView::mappingCreateToolbar(OpenPartsUI::ToolBarFactory_ptr _facto
 
   m_vToolBarExtra->insertSeparator(-1);
 
-  // line end
+  // web presentation
   pix = OPUIUtils::convertPixmap(ICON("webpres.xpm"));
   toolTip = Q2C( i18n("Create HTML Slide show") );
-  m_idButtonExtra_WebPres = m_vToolBarExtra->insertButton2(pix,1,SIGNAL(clicked()),this,"extraWebPres",
+  m_idButtonExtra_WebPres = m_vToolBarExtra->insertButton2(pix,ID_TOOL_WEBPRES,SIGNAL(clicked()),this,"extraWebPres",
 							   true,toolTip,-1);
 
   m_vToolBarExtra->enable(OpenPartsUI::Show);
@@ -4017,7 +4024,11 @@ void KPresenterView::setRanges()
 /*==============================================================*/
 void KPresenterView::skipToPage(int _num)
 {
+  if (_num < 0 || _num > static_cast<int>(m_pKPresenterDoc->getPageNums()) - 1)
+    return;
+
   vert->setValue(kPresenterDoc()->getPageSize(_num,0,0,1.0,false).y());
+  repaint(false);
 }
 
 /*==============================================================*/

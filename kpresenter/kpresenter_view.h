@@ -195,7 +195,7 @@ public:
   virtual void extraLineBegin();
   virtual void extraLineEnd();
   virtual void extraWebPres();
-  
+
   virtual void extraAlignObjLeftidl();
   virtual void extraAlignObjCenterHidl();
   virtual void extraAlignObjRightidl();
@@ -335,6 +335,11 @@ public:
 
   QFont &currFont() { return tbFont; }
   QColor &currColor() { return tbColor; }
+
+  void enableWebPres() { 
+    m_vToolBarExtra->setItemEnabled(ID_TOOL_WEBPRES,true); 
+    m_vMenuExtra->setItemEnabled(m_idMenuExtra_WepPres,true);
+  }
 
 public slots:
 
@@ -541,7 +546,7 @@ protected:
   CORBA::Long m_idMenuExtra_Layout;
   CORBA::Long m_idMenuExtra_Options;
   CORBA::Long m_idMenuExtra_WepPres;
-  
+
   // screenpresentation menu
   OpenPartsUI::Menu_var m_vMenuScreen;
   CORBA::Long m_idMenuScreen_ConfigPage;
@@ -639,7 +644,7 @@ protected:
   CORBA::Long m_idButtonExtra_LineBegin;
   CORBA::Long m_idButtonExtra_LineEnd;
   CORBA::Long m_idButtonExtra_WebPres;
-  
+
   // screen toolbar
   OpenPartsUI::ToolBar_var m_vToolBarScreen;
   CORBA::Long m_idButtonScreen_Stop;
@@ -709,6 +714,7 @@ protected:
   QString m_strNewPart;
   bool m_bShowGUI;
   bool presStarted;
+  bool allowWebPres;
 
   KSize oldSize;
 
@@ -739,6 +745,7 @@ protected:
   static const int ID_TOOL_TABLE = 21;
   static const int ID_TOOL_FORMULA = 22;
   static const int ID_TOOL_AUTOFORM = 23;
+  static const int ID_TOOL_WEBPRES = 24;
 
 };
 

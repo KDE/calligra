@@ -129,3 +129,8 @@ Reggie, 1.5.1999:
 - Using new template dialog
 - Fix in autoformat choose dialog
 - Started with implementation of HTML slideshow creation
+
+Reggie, 2.5.1999:
+-----------------
+- Some fixes
+- Finished implementation of HTML slideshow creation

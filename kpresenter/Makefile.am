@@ -1,7 +1,7 @@
 
 INCLUDES = $(MICO_INCLUDES) $(KOFFICE_INCLUDES) $(all_includes) -I$(idldir)
 LDFLAGS	= $(all_libraries) $(MICO_LDFLAGS) $(KDE_RPATH)
-LDADD = autoformEdit/libaf.a ../lib/kofficeui/libkofficeui.la $(LIB_KIMGIO)
+LDADD = autoformEdit/libaf.a ../lib/kofficeui/libkofficeui.la $(LIBQIMGIO) $(LIB_KIMGIO)
 
 ####### Files
 
@@ -72,7 +72,7 @@ DISTCLEANFILES = $(idl_DATA:.idl=.cc) $(idl_HEADERS) $(METASOURCES)
 kdelnk_DATA = kpresenter.kdelnk
 kdelnkdir = $(kde_datadir)/koffice/partlnk
 
-SUBDIRS = autoformEdit autoforms pics toolbar templates dtd
+SUBDIRS = autoformEdit autoforms pics toolbar templates dtd slideshow
 
 ####### Implicit rules
 

@@ -1887,7 +1887,45 @@ bool Page::canAssignEffect(int &pgNum,int &objNum)
     }
   return ret;
 }
-	
+
+/*================================================================*/
+void Page::drawPageInPix2(QPixmap &_pix,int __diffy,int pgnum)
+{
+  currPresPage = pgnum + 1;
+  int _yOffset = view->getDiffY();
+  view->setDiffY(__diffy);
+
+  QPainter p;
+  p.begin(&_pix);
+
+  KPObject *kpobject = 0L;
+  int i;
+  
+  for (i = 0;i < static_cast<int>(objectList()->count());i++)
+    {
+      kpobject = objectList()->at(i);
+      kpobject->drawSelection(false);
+    }
+
+  bool _editMode = editMode;
+  
+  editMode = false;
+  drawBackground(&p,_pix.rect());
+  editMode = _editMode;
+
+  drawObjects(&p,_pix.rect());
+
+  p.end();
+
+  view->setDiffY(_yOffset);
+
+  for (i = 0;i < static_cast<int>(objectList()->count());i++)
+    {
+      kpobject = objectList()->at(i);
+      kpobject->drawSelection(true);
+    }
+}
+
 /*==================== draw a page in a pixmap ===================*/
 void Page::drawPageInPix(QPixmap &_pix,int __diffy)
 {

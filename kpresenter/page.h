@@ -118,6 +118,9 @@ public:
 
   KTextObject *haveASelectedTextObj();
 
+  void drawPageInPix(QPixmap&,int);
+  void drawPageInPix2(QPixmap&,int,int);
+
 public slots:
 
   // public slots
@@ -185,7 +188,6 @@ protected:
   void _repaint(KRect r) {view->kPresenterDoc()->repaint(r);}
   void _repaint(KPObject *o) {view->kPresenterDoc()->repaint(o);}
 
-  void drawPageInPix(QPixmap&,int);
   void drawPageInPainter(QPainter*,int,KRect);
   void changePages(QPixmap,QPixmap,PageEffect);
   void doObjEffects();
