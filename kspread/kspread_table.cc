@@ -2905,7 +2905,8 @@ void KSpreadTable::swapCells( int x1, int y1, int x2, int y2 )
 
 void KSpreadTable::refreshPreference()
 {
-        recalc();
+  if(getAutoCalc()) recalc();
+  
         emit sig_updateHBorder( this );
         emit sig_updateView( this );
 }
@@ -4349,7 +4350,7 @@ void KSpreadTable::mergeCell( const QPoint &_marker)
                            abs(m_rctSelection.bottom() - m_rctSelection.top()));
 
     setMarker(QPoint(x,y));
-    recalc(true);
+    if(getAutoCalc()) recalc(true);
     emit sig_updateView( this, m_rctSelection );
 }
 

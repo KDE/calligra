@@ -45,6 +45,7 @@ protected:
 
   KSpreadView* m_pView;
   QCheckBox *m_pFormula;
+  QCheckBox *m_pAutoCalc;
   QCheckBox *m_pGrid;
   QCheckBox *m_pColumn;
   QCheckBox *m_pLcMode;

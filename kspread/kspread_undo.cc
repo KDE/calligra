@@ -159,7 +159,7 @@ void KSpreadUndoRemoveColumn::undo()
     table->insertColumn( m_iColumn);
 
     table->paste( m_data, QPoint( m_iColumn, 1 ) );
-    table->recalc( true );
+    if(table->getAutoCalc()) table->recalc(true);
 
     doc()->undoBuffer()->unlock();
 }
@@ -269,7 +269,7 @@ void KSpreadUndoRemoveRow::undo()
     table->insertRow( m_iRow );
 
     table->paste( m_data, QPoint( 1, m_iRow ) );
-    table->recalc( true );
+    if(table->getAutoCalc()) table->recalc(true);
 
     doc()->undoBuffer()->unlock();
 }
@@ -655,7 +655,7 @@ void KSpreadUndoDelete::undo()
 
     table->deleteCells( m_selection );
     table->paste( m_data, m_selection.topLeft() );
-    table->recalc( true );
+    if(table->getAutoCalc()) table->recalc(true);
 
     doc()->undoBuffer()->unlock();
 }
@@ -1086,7 +1086,7 @@ void KSpreadUndoAutofill::undo()
     doc()->undoBuffer()->lock();
     table->deleteCells( m_selection );
     table->paste( m_data, m_selection.topLeft() );
-    table->recalc( true );
+    if(table->getAutoCalc()) table->recalc(true);
 
     doc()->undoBuffer()->unlock();
 }
@@ -1102,7 +1102,7 @@ void KSpreadUndoAutofill::redo()
     table->deleteCells( m_selection );
     doc()->undoBuffer()->lock();
     table->paste( m_dataRedo, m_selection.topLeft() );
-    table->recalc( true );
+    if(table->getAutoCalc()) table->recalc(true);
 
     doc()->undoBuffer()->unlock();
 }
@@ -1352,7 +1352,7 @@ void KSpreadUndoConditional::undo()
 
     doc()->undoBuffer()->lock();
     table->paste( m_data, m_selection.topLeft() );
-    table->recalc( true );
+    if(table->getAutoCalc()) table->recalc(true);
 
     doc()->undoBuffer()->unlock();
 }
@@ -1367,7 +1367,7 @@ void KSpreadUndoConditional::redo()
 
     doc()->undoBuffer()->lock();
     table->paste( m_dataRedo, m_selection.topLeft() );
-    table->recalc( true );
+    if(table->getAutoCalc()) table->recalc(true);
 
     doc()->undoBuffer()->unlock();
 }
@@ -1609,8 +1609,7 @@ void KSpreadUndoCellPaste::undo()
     table->deleteCells( m_selection );
     table->paste( m_data,m_selection.topLeft());
     }
-
-    table->recalc( true );
+    if(table->getAutoCalc()) table->recalc(true);
     doc()->undoBuffer()->unlock();
 }
 
@@ -1654,8 +1653,7 @@ void KSpreadUndoCellPaste::redo()
     table->deleteCells( m_selection );
     table->paste( m_dataRedo,m_selection.topLeft());
     }
-
-    table->recalc( true );
+    if(table->getAutoCalc()) table->recalc(true);
 
     doc()->undoBuffer()->unlock();
 }

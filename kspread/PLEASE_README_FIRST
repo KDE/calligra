@@ -1,6 +1,3 @@
-TODO-List:
-----------
-
 Please everyone working on KSpread:
 
 Get yourself a copy of Excel 97 or 2000 and create
@@ -46,30 +43,4 @@ I am a professional user of Excel. I eat, sleap and work with Excel
 on my trading desk on Wall-Street.)
 
 
-Bernd <wuebben@kde.org>
-
-
-Improvement :
--------------
-- Add zoom (Bernd: Yes, this is important. KSpread is much to cluttered
-up at this point. you can hardly do any real work with it even on a
-17inch screen. Torben? Please?)
--create a script editor for execute script
- (Use KWrite)
-
-Bug fix :
----------
--bug when we sort number (sort by string but not by number )
-
-
--and also bug fix :)
-
-<montell@club-internet.fr>
-
-Torbens TODO-List:
-------------------
-- Copy/Paste of complete rows/cols
-- Write-Protect cells
-- Select a region. Then right click -> "Spell Checking".
-  All selected cells should be spell checked
-  
+Bernd 

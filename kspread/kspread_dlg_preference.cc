@@ -46,7 +46,7 @@ KSpreadpreference::KSpreadpreference( KSpreadView* parent, const char* name)
   lay1->setMargin( 20 );
   lay1->setSpacing( 10 );
 
-  m_pFormula= new QCheckBox(i18n("Show formular"),tmpQGroupBox);
+  m_pFormula= new QCheckBox(i18n("Show formula"),tmpQGroupBox);
   lay1->addWidget(m_pFormula);
   m_pFormula->setChecked(m_pView->activeTable()->getShowFormular());
 
@@ -62,6 +62,9 @@ KSpreadpreference::KSpreadpreference( KSpreadView* parent, const char* name)
   lay1->addWidget(m_pLcMode);
   m_pLcMode->setChecked(m_pView->activeTable()->getLcMode());
 
+  m_pAutoCalc= new QCheckBox(i18n("Automatic Recalculation"),tmpQGroupBox);
+  lay1->addWidget(m_pAutoCalc);
+  m_pAutoCalc->setChecked(m_pView->activeTable()->getAutoCalc());
   box->addWidget( tmpQGroupBox);
 
   KButtonBox *bb = new KButtonBox( this );
@@ -82,6 +85,7 @@ void KSpreadpreference::slotOk()
   if(m_pView->activeTable()->getLcMode()==m_pLcMode->isChecked()
   && m_pView->activeTable()->getShowColumnNumber()==m_pColumn->isChecked()
   && m_pView->activeTable()->getShowFormular()==m_pFormula->isChecked()
+  && m_pView->activeTable()->getAutoCalc()==m_pAutoCalc->isChecked()
   && m_pView->activeTable()->getShowGrid()==m_pGrid->isChecked())
   {
   //if there is any changes
@@ -95,6 +99,7 @@ void KSpreadpreference::slotOk()
         m_pView->activeTable()->setShowColumnNumber(m_pColumn->isChecked());
         m_pView->activeTable()->setShowGrid(m_pGrid->isChecked());
         m_pView->activeTable()->setShowFormular(m_pFormula->isChecked());
+        m_pView->activeTable()->setAutoCalc(m_pAutoCalc->isChecked());
         accept();
   }
 }

@@ -470,7 +470,7 @@ void KSpreadView::initialPosition()
     KSpreadTable *tbl;
     for ( tbl = m_pDoc->map()->firstTable(); tbl != 0L; tbl = m_pDoc->map()->nextTable() )
         {
-        tbl->recalc(true);
+	  if(tbl->getAutoCalc()) tbl->recalc(true);
         tbl->refreshMergedCell();
         }
 
@@ -1398,7 +1398,7 @@ void KSpreadView::paste()
         return;
 
     m_pTable->paste( QPoint( m_pCanvas->markerColumn(), m_pCanvas->markerRow() ) );
-    m_pTable->recalc(true);
+    if(m_pTable->getAutoCalc()) m_pTable->recalc(true);
     updateEditWidget();
 }
 
@@ -1410,7 +1410,7 @@ void KSpreadView::specialPaste()
     KSpreadspecial dlg( this, "Special Paste" );
     if( dlg.exec() )
     {
-        m_pTable->recalc(true);
+    if(m_pTable->getAutoCalc()) m_pTable->recalc(true);
         updateEditWidget();
     }
 }

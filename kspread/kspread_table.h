@@ -499,6 +499,10 @@ public:
 
     void setLcMode(bool _lcMode) {m_bLcMode=_lcMode;}
 
+    bool getAutoCalc() {return m_bAutoCalc;}
+
+    void setAutoCalc(bool _AutoCalc) {m_bAutoCalc=_AutoCalc;}
+
     bool getShowColumnNumber() {return m_bShowColumnNumber;}
 
     void setShowColumnNumber(bool _showColumnNumber) {m_bShowColumnNumber=_showColumnNumber;}
@@ -902,6 +906,7 @@ protected:
 
     bool m_bShowGrid;
     bool m_bShowFormular;
+    bool m_bAutoCalc;
     bool m_bLcMode;
     bool m_bShowColumnNumber;
 
