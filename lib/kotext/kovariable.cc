@@ -2083,12 +2083,22 @@ QString KoLinkVariable::fieldCode()
 
 void KoLinkVariable::loadOasis( const QDomElement &elem, KoOasisContext& /*context*/ )
 {
-    // TODO
+    const QCString afterText( elem.tagName().latin1() + 5 );
+    if (afterText == "a") {
+        m_url = elem.attribute("xlink:href");
+        m_varValue = QVariant(elem.text());
+    }
 }
 
 void KoLinkVariable::saveOasis( KoXmlWriter& writer, KoSavingContext& context ) const
 {
-    kdWarning(32500) << "Not implemented: OASIS saving of links variables" << endl;
+    //<text:a xlink:type="simple" xlink:href="http://www.kde.org/" office:name="sdgfsdfgs">kde org wxc &lt;wxc </text:a>
+    writer.startElement( "text:a" );
+    writer.addAttribute( "xlink:type", "simple" );
+    writer.addAttribute( "xlink:href", m_url );
+    writer.addAttribute( "office:name", m_varValue.toString() );
+    writer.addTextNode( m_varValue.toString() );
+    writer.endElement();
 
 }
 
