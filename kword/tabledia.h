@@ -1,0 +1,93 @@
+/******************************************************************/ 
+/* KWord - (c) by Reginald Stadlbauer and Torben Weis 1997-1998   */
+/* Version: 0.0.1                                                 */
+/* Author: Reginald Stadlbauer, Torben Weis                       */
+/* E-Mail: reggie@kde.org, weis@kde.org                           */
+/* Homepage: http://boch35.kfunigraz.ac.at/~rs                    */
+/* needs c++ library Qt (http://www.troll.no)                     */
+/* written for KDE (http://www.kde.org)                           */
+/* needs mico (http://diamant.vsb.cs.uni-frankfurt.de/~mico/)     */
+/* needs OpenParts and Kom (weis@kde.org)                         */
+/* License: GNU GPL                                               */
+/******************************************************************/
+/* Module: Table Dialog (header)                                  */
+/******************************************************************/
+
+#ifndef tabledia_h
+#define tabledia_h
+
+#include <stdlib.h>
+
+#include <qtabdialog.h>
+#include <qwidget.h>
+#include <qlayout.h>
+#include <qlabel.h>
+#include <qstring.h>
+#include <qevent.h>
+#include <qspinbox.h>
+#include <qpen.h>
+#include <qcolor.h>
+#include <qpainter.h>
+
+#include <kapp.h>
+#include <kcolorbtn.h>
+#include <kbuttonbox.h>
+
+class KWPage;
+
+/******************************************************************/
+/* Class: KWTablePreview                                          */
+/******************************************************************/
+
+class KWTablePreview : public QWidget
+{
+  Q_OBJECT
+
+public:
+  KWTablePreview(QWidget *_parent,int _rows,int _cols)
+    : QWidget(_parent), rows(_rows), cols(_cols) {}
+
+  void setRows(int _rows) { rows = _rows; repaint(true); }
+  void setCols(int _cols) { cols = _cols; repaint(true); }
+
+protected:
+  void paintEvent(QPaintEvent *e);
+
+  int rows,cols;
+
+};
+
+/******************************************************************/
+/* Class: KWTableDia                                              */
+/******************************************************************/
+
+class KWTableDia : public QTabDialog
+{
+  Q_OBJECT
+
+public:
+  KWTableDia(QWidget *parent,const char *name,KWPage *_page,int rows,int cols);
+
+protected:
+  void setupTab1(int rows,int cols);
+  void setupTab2();
+  void closeEvent(QCloseEvent *e) { emit cancelButtonPressed(); }
+
+  QWidget *tab1;
+  QGridLayout *grid1;
+  QLabel *lRows,*lCols;
+  QSpinBox *nRows,*nCols;
+  KWTablePreview *preview;
+
+  KWPage *page;
+
+protected slots:
+  void insertTable();
+  void rowsChanged(int);
+  void colsChanged(int);
+
+};
+
+#endif
+
+
