@@ -841,7 +841,7 @@ void KWord13OasisGenerator::writePreviewFile(void)
     }
 
     // We have a 256x256x8 preview and we need a 128x128x32 preview with alpha channel
-    QImage preview( image.convertDepth( 32 ).smoothScale( 128, 128 ) );
+    const QImage preview( image.convertDepth( 32, Qt::ColorOnly ).smoothScale( 128, 128 ) );
     if ( preview.isNull() )
     {
         kdWarning(30520) << "Could not create preview!" << endl;
