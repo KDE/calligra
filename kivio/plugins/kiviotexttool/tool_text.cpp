@@ -120,14 +120,22 @@ void TextTool::setStencilText()
 
     QString text = d.text();
     KMacroCommand *macro = new KMacroCommand( i18n("Change Stencil Text"));
+    bool createMacro=false;
     while( stencil )
     {
-        KivioChangeStencilTextCommand *cmd = new KivioChangeStencilTextCommand( i18n("Change Stencil Text"), stencil, stencil->text(), text, page);
-        macro->addCommand( cmd);
-        stencil->setText( text );
+        if ( stencil->text()!= text )
+        {
+            KivioChangeStencilTextCommand *cmd = new KivioChangeStencilTextCommand( i18n("Change Stencil Text"), stencil, stencil->text(), text, page);
+            macro->addCommand( cmd);
+            stencil->setText( text );
+            createMacro=true;
+        }
         stencil = page->selectedStencils()->next();
     }
-    doc->addCommand( macro);
+    if ( createMacro )
+        doc->addCommand( macro);
+    else
+        delete macro;
     doc->updateView(page);
 }
 
