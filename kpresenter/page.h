@@ -125,6 +125,8 @@ protected:
   void resizeObjLeft(int diff,PageObjects* obj);
   void resizeObjBot(int diff,PageObjects* obj);
   void resizeObjRight(int diff,PageObjects* obj);
+  void focusInEvent(QFocusEvent*) {}
+  void focusOutEvent(QFocusEvent*) {}
 
   // setup popupmenus
   void setupMenus();
