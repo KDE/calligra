@@ -452,6 +452,10 @@ void SequenceElement::remove(FormulaCursor* cursor,
             uint pos = cursor->getPos();
             if (pos < children.count()) {
                 removeChild(removedChildren, pos);
+                // It is necessary to set the cursor to its old
+                // position because it got a notification and
+                // moved to the beginning of this sequence.
+                cursor->setTo(this, pos);
             }
         }
     }

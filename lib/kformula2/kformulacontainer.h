@@ -95,6 +95,9 @@ public slots:
     void addText(FormulaCursor* cursor, QChar ch);
     void addOperator(FormulaCursor* cursor, QChar ch);
     void addBracket(FormulaCursor* cursor, char left, char right);
+    void addFraction(FormulaCursor* cursor);
+    void addRoot(FormulaCursor* cursor);
+    void addMatrix(FormulaCursor* cursor, int rows, int columns);
     void addLowerRightIndex(FormulaCursor* cursor);
     void addUpperRightIndex(FormulaCursor* cursor);
 
@@ -121,6 +124,10 @@ private:
      * If true we need to recalc the formula.
      */
     bool dirty;
+
+    // debug
+    friend class TestFormulaCursor;
 };
+
 
 #endif // __KFORMULACONTAINER_H

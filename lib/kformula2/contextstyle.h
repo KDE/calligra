@@ -57,6 +57,8 @@ public:
     QColor getDefaultColor() { return defaultColor; }
 
     QFont getDefaultFont() { return defaultFont; }
+
+    int getDistance() { return 5; }
     
 private:
     

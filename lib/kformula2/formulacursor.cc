@@ -338,6 +338,9 @@ IndexElement* FormulaCursor::getActiveIndexElement()
 void FormulaCursor::elementWillVanish(BasicElement* element)
 {
     BasicElement* child = getElement();
+    if (child == element->getParent()) {
+        child->moveHome(this);
+    }
     while (child != 0) {
         if (child == element) {
             // This is meant to catch all cursors that did not

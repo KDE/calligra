@@ -52,12 +52,13 @@ BracketElement::~BracketElement()
  */
 void BracketElement::calcSizes(ContextStyle& style, int parentSize)
 {
+    int mySize = parentSize + getRelativeSize();
     content->calcSizes(style, parentSize);
     int contentHeight = 2 * QMAX(content->getMidline(),
                                  content->getHeight() - content->getMidline());
     
-    left->calcSizes(style, parentSize, contentHeight, false);
-    right->calcSizes(style, parentSize, contentHeight, true);
+    left->calcSizes(style, mySize, contentHeight, false);
+    right->calcSizes(style, mySize, contentHeight, true);
 
     // width
     setWidth(left->getWidth() + content->getWidth() + right->getWidth());

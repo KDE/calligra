@@ -1,0 +1,124 @@
+/* This file is part of the KDE project
+   Copyright (C) 2001 Andrea Rizzi <rizzi@kde.org>
+	              Ulrich Kuettler <ulrich.kuettler@mailbox.tu-dresden.de>
+
+   This library is free software; you can redistribute it and/or
+   modify it under the terms of the GNU Library General Public
+   License as published by the Free Software Foundation; either
+   version 2.
+ 
+   This library is distributed in the hope that it will be useful,
+   but WITHOUT ANY WARRANTY; without even the implied warranty of
+   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+   Library General Public License for more details.
+ 
+   You should have received a copy of the GNU Library General Public License
+   along with this library; see the file COPYING.LIB.  If not, write to
+   the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
+   Boston, MA 02111-1307, USA.
+*/
+
+#ifndef __MATRIXELEMENT_H
+#define __MATRIXELEMENT_H
+
+#include <qlist.h>
+
+#include "basicelement.h"
+
+
+/**
+ * A matrix.
+ */
+class MatrixElement : public BasicElement {
+public:
+
+    MatrixElement(int rows, int columns, BasicElement* parent = 0);
+    ~MatrixElement();
+
+    // drawing
+    //
+    // Drawing depends on a context which knows the required properties like
+    // fonts, spaces and such.
+    // It is essential to calculate elements size with the same context
+    // before you draw.
+    
+    /**
+     * Calculates our width and height and
+     * our children's parentPosition.
+     */
+    virtual void calcSizes(ContextStyle& context, int parentSize);
+
+    /**
+     * Draws the whole element including its children.
+     * The `parentOrigin' is the point this element's parent starts.
+     * We can use our parentPosition to get our own origin then.
+     */
+    virtual void draw(QPainter& painter, ContextStyle& context,
+                      int parentSize, const QPoint& parentOrigin);
+
+    
+    // navigation
+    // 
+    // The elements are responsible to handle cursor movement themselves.
+    // To do this they need to know the direction the cursor moves and
+    // the element it comes from.
+    //
+    // The cursor might be in normal or in selection mode.
+    
+    /**
+     * Enters this element while moving to the left starting inside
+     * the element `from'. Searches for a cursor position inside
+     * this element or to the left of it.
+     */
+    virtual void moveLeft(FormulaCursor* cursor, BasicElement* from);
+
+    /**
+     * Enters this element while moving to the right starting inside
+     * the element `from'. Searches for a cursor position inside
+     * this element or to the right of it.
+     */
+    virtual void moveRight(FormulaCursor* cursor, BasicElement* from);
+
+    /**
+     * Enters this element while moving up starting inside
+     * the element `from'. Searches for a cursor position inside
+     * this element or above it.
+     */
+    virtual void moveUp(FormulaCursor*, BasicElement*);
+
+    /**
+     * Enters this element while moving down starting inside
+     * the element `from'. Searches for a cursor position inside
+     * this element or below it.
+     */
+    virtual void moveDown(FormulaCursor*, BasicElement*);
+
+    /**
+     * Sets the cursor inside this element to its start position.
+     * For most elements that is the main child.
+     */
+    virtual void goInside(FormulaCursor* cursor);
+    
+private:
+
+    uint getRows() { return content.count(); }
+    uint getColumns() { return content.at(0)->count(); }
+
+    SequenceElement* getElement(uint row, uint column)
+        { return content.at(row)->at(column); }
+
+    /**
+     * Searches throught the matrix for the element. Sets the
+     * row and column if found.
+     * Returns true if the element was found. false otherwise.
+     */
+    bool searchElement(BasicElement* element, int& row, int& column);
+        
+    /**
+     * The elements we contain.
+     */
+    QList<QList<SequenceElement> > content;
+};
+
+
+#endif // __MATRIXELEMENT_H

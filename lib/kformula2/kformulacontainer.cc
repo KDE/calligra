@@ -26,9 +26,12 @@
 #include "contextstyle.h"
 #include "formulacursor.h"
 #include "formulaelement.h"
+#include "fractionelement.h"
 #include "indexelement.h"
 #include "kformulacontainer.h"
+#include "matrixelement.h"
 #include "operatorelement.h"
+#include "rootelement.h"
 #include "sequenceelement.h"
 #include "textelement.h"
 
@@ -107,6 +110,14 @@ void KFormulaContainer::keyPressEvent(FormulaCursor* cursor, QKeyEvent* event)
             addBracket(cursor, '|', '|');
             break;
         case '/':
+            addFraction(cursor);
+            break;
+        case '#':
+            // here we need a dialog!
+            addMatrix(cursor, 4, 5);
+            break;
+        case '\\':
+            addRoot(cursor);
             break;
         case '+':
         case '-':
@@ -191,6 +202,39 @@ void KFormulaContainer::addBracket(FormulaCursor* cursor, char left, char right)
         //cursor->setSelection(false);
     }
     cursor->goInsideElement(bracket);
+}
+
+void KFormulaContainer::addFraction(FormulaCursor* cursor)
+{
+    FractionElement* fraction = new FractionElement;
+    if (cursor->isSelection()) {
+        cursor->replaceSelectionWith(fraction);
+    }
+    else {
+        cursor->insert(fraction);
+        //cursor->setSelection(false);
+    }
+    cursor->goInsideElement(fraction);
+}
+
+void KFormulaContainer::addRoot(FormulaCursor* cursor)
+{
+    RootElement* root = new RootElement();
+    if (cursor->isSelection()) {
+        cursor->replaceSelectionWith(root);
+    }
+    else {
+        cursor->insert(root);
+        //cursor->setSelection(false);
+    }
+    cursor->goInsideElement(root);
+}
+
+void KFormulaContainer::addMatrix(FormulaCursor* cursor, int rows, int columns)
+{
+    MatrixElement* matrix = new MatrixElement(rows, columns);
+    cursor->insert(matrix);
+    cursor->goInsideElement(matrix);
 }
 
 void KFormulaContainer::addLowerRightIndex(FormulaCursor* cursor)

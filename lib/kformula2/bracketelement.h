@@ -51,7 +51,8 @@ public:
      * The `parentOrigin' is the point this element's parent starts.
      * We can use our parentPosition to get our own origin then.
      */
-    virtual void draw(QPainter& painter, ContextStyle& style, int parentSize, const QPoint& parentOrigin);
+    virtual void draw(QPainter& painter, ContextStyle& style,
+                      int parentSize, const QPoint& parentOrigin);
 
     /**
      * Enters this element while moving to the left starting inside
