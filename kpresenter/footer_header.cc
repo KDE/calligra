@@ -356,6 +356,7 @@ void KPFooterHeaderEditor::slotShowHeader()
     //showHeader->setChecked( !showHeader->isChecked() );
     doc->setHeader( showHeader->isChecked() );
     penBrush1->setEnabled( showHeader->isChecked() );
+    doc->setModified(true);
     slotUpdatePage();
 }
 
@@ -365,6 +366,7 @@ void KPFooterHeaderEditor::slotShowFooter()
     //showFooter->setChecked( !showFooter->isChecked() );
     doc->setFooter( showFooter->isChecked() );
     penBrush2->setEnabled( showFooter->isChecked() );
+    doc->setModified(true);
     slotUpdatePage();
 }
 
