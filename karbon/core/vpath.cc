@@ -12,7 +12,6 @@
 
 #include "vpainter.h"
 #include "vpath.h"
-#include "vpath_bounding.h"
 
 #include <kdebug.h>
 
@@ -284,6 +283,20 @@ VPath::transform( const QWMatrix& m )
 const KoRect&
 VPath::boundingBox() const
 {
+	// check bbox-validity of subobjects:
+	if( !m_boundingBoxIsInvalid )
+	{
+		QPtrListIterator<VSegmentList> itr( m_segmentLists );
+		for( itr.toFirst(); itr.current(); ++itr )
+		{
+			if( itr.current()->boundingBoxIsInvalid() )
+			{
+				m_boundingBoxIsInvalid = true;
+				break;
+			}
+		}
+	}
+
 	if( m_boundingBoxIsInvalid )
 	{
 		// clear:

@@ -20,8 +20,6 @@ noinst_HEADERS = \
 	vobjectlist.h \
 	vgroup.h \
 	vpath.h \
-	vpath_bounding.h \
-	vpath_intersect.h \
 	vsegment.h \
 	vsegmentlist.h \
 	vstroke.h
@@ -39,8 +37,6 @@ libkarboncore_la_SOURCES = \
 	vobjectlist.cc \
 	vgroup.cc \
 	vpath.cc \
-	vpath_bounding.cc \
-	vpath_intersect.cc \
 	vsegment.cc \
 	vsegmentlist.cc \
 	vstroke.cc

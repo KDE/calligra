@@ -81,13 +81,14 @@ public:
 	 *
 	 * @return true if bounding box is invalid.
 	 */
-	 bool boundingBoxIsInvalid() const { return m_boundingBoxIsInvalid; }
+	bool boundingBoxIsInvalid() const
+		{ return m_boundingBoxIsInvalid; }
 
 	/**
 	 * Invalidates the bounding box, so it has to be recalculated.
 	 */
-	 void invalidateBoundingBox()
-	 	{ m_boundingBoxIsInvalid = true; }
+	void invalidateBoundingBox()
+		{ m_boundingBoxIsInvalid = true; }
 
 	/**
 	 * Tests whether this object intersects the given rectangle.

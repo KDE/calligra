@@ -112,6 +112,8 @@ VSegmentList::VSegmentList()
 	m_currentIndex = -1;
 	m_iteratorList = 0L;
 
+	m_boundingBoxIsInvalid = true;
+
 	// add an initial ("begin") segment:
 	append( new VSegment() );
 }
@@ -124,6 +126,8 @@ VSegmentList::VSegmentList( const VSegmentList& list )
 	m_number = 0;
 	m_currentIndex = -1;
 	m_iteratorList = 0L;
+
+	m_boundingBoxIsInvalid = true;
 
 	VSegment* segment = list.m_first;
 	while( segment )
@@ -309,19 +313,40 @@ VSegmentList::close()
 	m_isClosed = true;
 }
 
-KoRect
+const KoRect&
 VSegmentList::boundingBox() const
 {
-	KoRect rect;
-
-	VSegment* segment = m_first;
-	while( segment )
+	// check bbox-validity of subobjects:
+	if( !m_boundingBoxIsInvalid )
 	{
-		rect |= segment->boundingBox();
-		segment = segment->m_next;
+		VSegment* segment = m_first;
+		while( segment )
+		{
+			if( segment->boundingBoxIsInvalid() )
+			{
+				m_boundingBoxIsInvalid = true;
+				break;
+			}
+			segment = segment->m_next;
+		}
 	}
 
-	return rect;
+	if( m_boundingBoxIsInvalid )
+	{
+		// clear:
+		m_boundingBox = KoRect();
+
+		VSegment* segment = m_first;
+		while( segment )
+		{
+			m_boundingBox |= segment->boundingBox();
+			segment = segment->m_next;
+		}
+
+		m_boundingBoxIsInvalid = false;
+	}
+
+	return m_boundingBox;
 }
 
 void
@@ -333,6 +358,9 @@ VSegmentList::transform( const QWMatrix& m )
 		segment->setCtrlPoint1( segment->ctrlPoint1().transform( m ) );
 		segment->setCtrlPoint2( segment->ctrlPoint2().transform( m ) );
 		segment->setKnot2( segment->knot2().transform( m ) );
+
+		segment->invalidateBoundingBox();
+
 		segment = segment->m_next;
 	}
 }

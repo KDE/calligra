@@ -43,8 +43,26 @@ public:
 	bool isClosed() const { return m_isClosed; }
 	void close();
 
-	/// "Calculate" bounding box.
-	KoRect boundingBox() const;
+	/**
+	 * Calculates the tightest bounding box around the objects.
+	 *
+	 * @return the bounding box.
+	 */
+	const KoRect& boundingBox() const;
+
+	/**
+	 * Checks if the bounding box is invalid and needs to be recalculated.
+	 *
+	 * @return true if bounding box is invalid.
+	 */
+	bool boundingBoxIsInvalid() const
+		{ return m_boundingBoxIsInvalid; }
+
+	/**
+	 * Invalidates the bounding box, so it has to be recalculated.
+	 */
+	void invalidateBoundingBox()
+		{ m_boundingBoxIsInvalid = true; }
 
 	void transform( const QWMatrix& m );
 
@@ -84,6 +102,10 @@ private:
 	uint m_number;
 
 	VSegmentListIteratorList* m_iteratorList;
+
+	/// Bounding box.
+	mutable KoRect m_boundingBox;
+	mutable bool m_boundingBoxIsInvalid;
 };
 
 
