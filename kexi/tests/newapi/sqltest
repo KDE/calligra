@@ -1,0 +1,20 @@
+#!/bin/sh
+
+# fast parser testing using sqlite database
+# Copyright (C) 2004 Jaroslaw Staniek <js@iidea.pl>
+
+[ $# -lt 1 ] && echo "Usage: $0 <sqlite-database-name> [<sql-statement>]" && \
+ echo " Omit <sql-statement> for interactive mode." && exit 1
+
+if [ -z "$2" ] ; then
+	echo "Enter SQL Statement:"
+	read
+else
+	REPLY=$2
+fi
+
+temp=`mktemp /tmp/$0.XXXXXX`
+
+kexidbtest -test parser sqlite "$1" "$REPLY" 2> $temp || cat $temp
+
+rm -f $temp

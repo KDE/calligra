@@ -1,20 +1,22 @@
-kexidbtest
-----------
+1. kexidbtest
+-------------
 
 This is a set of tests for the new, common KexiDB API.
 Every test is driver-independent.
 
-
-Usage
------
-
-newapi - New KexiDB API test in few aspects
-
-Run 'kexidbtest --help' for usage details.
+Usage: run 'kexidbtest --help' for usage details.
 
 
-Important documents
--------------------
+2. sqltest
+----------
+
+Script for easier executing 'parser' subtest within kexidbtest.
+
+Usage: run './sqltest' without arguments for usage details.
+
+
+3. Important documents
+----------------------
 -Kexi API Documentation in html
 http://koffice.org/developer/apidocs/kexi/html
 
@@ -23,8 +25,8 @@ http://www.kexi-project.org/wiki/wikiview/index.php?KexiDBDrivers
 
 
 
-Information for KexiDB drivers developers
------------------------------------------
+4. Information for KexiDB drivers developers
+--------------------------------------------
 
 While you're developing new driver or improving existing one,
 you may want to test a number of aspects to see if the behaviour 

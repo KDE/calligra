@@ -1,7 +1,6 @@
 int parserTest(const char *st)
 {
 	int r = 0;
-	QString statement( st );
 
 	if (!conn->useDatabase( db_name )) {
 		conn->debugError();
@@ -10,15 +9,15 @@ int parserTest(const char *st)
 	
 	KexiDB::Parser parser(conn);
 
-	const bool ok = parser.parse(st);
+	const bool ok = parser.parse(QString::fromLocal8Bit( st ));
 	KexiDB::QuerySchema *q = parser.query();
 	if (ok && q) {
 		cout << q->debugString().latin1() << '\n';
 	}
 	else {
 		KexiDB::ParserError	err = parser.error();
-		kdDebug() << QString("Error = %1\ntype = %2\nat = %3").arg(err.type())
-			.arg(err.error()).arg(err.at()) << endl;
+		kdDebug() << QString("Error = %1\ntype = %2\nat = %3").arg(err.error())
+			.arg(err.type()).arg(err.at()) << endl;
 		r = 1;
 	}
 	delete q;
