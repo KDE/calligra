@@ -1062,10 +1062,8 @@ bool OOWriterWorker::makeTableRows( const QString& tableName, const Table& table
             << "\"";
 
         // More than one column width?
-        if ( (*itCell).m_cols > 1 )
         {
             *m_streamOut << " table:number-columns-spanned=\"" << (*itCell).m_cols << "\"";
-            // ### TODO: we needs "covered cells"
         }
 
         *m_streamOut << ">\n";
@@ -1076,6 +1074,15 @@ bool OOWriterWorker::makeTableRows( const QString& tableName, const Table& table
         }
 
         *m_streamOut << "</table:table-cell>\n";
+
+        if ( (*itCell).m_cols > 1 )
+        {
+            // We need to add some placeholder for the "covered" cells
+            for (int i = 1; i < (*itCell).m_cols; ++i)
+            {
+                *m_streamOut << "<table:covered-table-cell/>";
+            }
+        }
     }
 
     *m_streamOut << "</table:table-row>\n";
