@@ -1,49 +1,49 @@
 data_DATA =             \
-ahcenter.xpm \
-aleft.xpm \
-aright.xpm \
-atop.xpm \
-abottom.xpm \
-avcenter.xpm \
-dleft.xpm \
-dright.xpm \
-dhcenter.xpm \
-dhdist.xpm \
-dtop.xpm \
-dbottom.xpm \
-dvcenter.xpm \
-dvdist.xpm \
-ellipsetool.xpm \
-linetool.xpm \
-freehandtool.xpm \
-recttool.xpm \
-selecttool.xpm \
-texttool.xpm \
-beziertool.xpm \
-zoomtool.xpm \
-polygontool.xpm \
-pointtool.xpm \
-ellipse1.xpm \
-ellipse2.xpm \
-ellipse3.xpm \
-hmirror.xpm \
-vmirror.xpm \
-tleftalign.xpm \
-tcenteralign.xpm \
-trightalign.xpm \
-killustrator.xpm \
-logo.xpm \
-deletelayer.xpm \
-lowerlayer.xpm \
-newlayer.xpm \
-raiselayer.xpm \
-eye.xpm \
-deleteNode.xpm \
-joinNodes.xpm \
-moveNode.xpm \
-newNode.xpm \
-split.xpm \
-mini-killustrator.xpm  \
+ahcenter.png \
+aleft.png \
+aright.png \
+atop.png \
+abottom.png \
+avcenter.png \
+dleft.png \
+dright.png \
+dhcenter.png \
+dhdist.png \
+dtop.png \
+dbottom.png \
+dvcenter.png \
+dvdist.png \
+ellipsetool.png \
+linetool.png \
+freehandtool.png \
+recttool.png \
+selecttool.png \
+texttool.png \
+beziertool.png \
+zoomtool.png \
+polygontool.png \
+pointtool.png \
+ellipse1.png \
+ellipse2.png \
+ellipse3.png \
+hmirror.png \
+vmirror.png \
+tleftalign.png \
+tcenteralign.png \
+trightalign.png \
+killustrator.png \
+logo.png \
+deletelayer.png \
+lowerlayer.png \
+newlayer.png \
+raiselayer.png \
+eye.png \
+deleteNode.png \
+joinNodes.png \
+moveNode.png \
+newNode.png \
+split.png \
+mini-killustrator.png  \
 killustrator-intro.gif
 
 EXTRA_DIST = $(data_DATA) 
@@ -53,8 +53,8 @@ datadir = $(kde_datadir)/killustrator/pics
 
 install-data-local:
 	$(mkinstalldirs) $(kde_minidir)
-	$(INSTALL_DATA) $(srcdir)/mini-killustrator.xpm $(kde_minidir)/killustrator.xpm
+	$(INSTALL_DATA) $(srcdir)/mini-killustrator.png $(kde_minidir)/killustrator.png
 
 uninstall-local:
-	-rm -f $(kde_minidir)/killustrator.xpm
+	-rm -f $(kde_minidir)/killustrator.png
 
