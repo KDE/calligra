@@ -645,6 +645,10 @@ void KivioDoc::saveConfig()
     config->writeEntry("ShowGrid", grid().isShow );
     config->writeEntry("SnapGrid",grid().isSnap);
     config->writeEntry("GridColor",grid().color);
+    config->writeEntry("GridXSpacing", grid().freq.width());
+    config->writeEntry("GridYSpacing", grid().freq.height());
+    config->writeEntry("GridXSnap", grid().snap.width());
+    config->writeEntry("GridYSnap", grid().snap.height());
     config->writeEntry("Unit", KoUnit::unitName(m_units));
 }
 
@@ -657,8 +661,12 @@ void KivioDoc::initConfig()
         KivioGridData d = grid();
         d.isShow = config->readBoolEntry( "ShowGrid", true );
         d.isSnap = config->readBoolEntry( "SnapGrid", true);
-        QColor color=QColor(200,200,200);
-        d.color =config->readColorEntry( "GridColor", &color );
+        QColor color = QColor(200,200,200);
+        d.color = config->readColorEntry( "GridColor", &color );
+        d.freq.setWidth(config->readDoubleNumEntry("GridXSpacing", 10.0));
+        d.freq.setHeight(config->readDoubleNumEntry("GridYSpacing", 10.0));
+        d.snap.setWidth(config->readDoubleNumEntry("GridXSnap", 10.0));
+        d.snap.setHeight(config->readDoubleNumEntry("GridYSnap", 10.0));
         setGrid(d);
         m_units = KoUnit::unit(config->readEntry("Unit", "mm"));
     }
