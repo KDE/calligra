@@ -1612,7 +1612,7 @@ void KWParagTabulatorsWidget::setCurrentTab( double tabPos ) {
     KoTabulatorList::ConstIterator it = m_tabList.begin();
     for ( int i = 0; it != m_tabList.end(); ++it, ++i )
         if ( (*it).ptPos == tabPos ) {
-            lstTabs->setCurrentItem(lstTabs->findItem(tabToString(&(*it))));
+            lstTabs->setCurrentItem(i);
             setActiveItem( i );
             return;
         }
