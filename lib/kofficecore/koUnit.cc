@@ -130,7 +130,7 @@ double KoUnit::parseValue( QString value, double defaultVal )
         return val;
 
     QString unit = value.mid( index );
-    value.truncate ( index );
+    //value.truncate ( index );
 
     if ( unit == "pt" )
         return val;
