@@ -310,12 +310,14 @@ public:
     KSpreadHBorder *hBorderWidget;
     QScrollBar *horzScrollBar;
     QScrollBar *vertScrollBar;
-    KSpreadEditWidget *editWidget;
+    KoTabBar *tabBar;
+    KStatusBarLabel* calcLabel;
+    // formulabar, consists of:
+    QHBoxLayout* formulaBarLayout;
+    KSpreadComboboxLocationEditWidget *posWidget;
     QButton *okButton;
     QButton *cancelButton;
-    KoTabBar *tabBar;
-    KSpreadComboboxLocationEditWidget *posWidget;
-    KStatusBarLabel* calcLabel;
+    KSpreadEditWidget *editWidget;
 
     // all UI actions
     ViewActions* actions;
@@ -1581,20 +1583,20 @@ KSpreadView::KSpreadView( QWidget *_parent, const char *_name, KSpreadDoc* doc )
     // Edit Bar
     d->toolWidget = new QFrame( this );
 
-    QHBoxLayout* hbox = new QHBoxLayout( d->toolWidget );
-    hbox->addSpacing( 2 );
+    d->formulaBarLayout = new QHBoxLayout( d->toolWidget );
+    d->formulaBarLayout->addSpacing( 2 );
 
     d->posWidget = new KSpreadComboboxLocationEditWidget( d->toolWidget, this );
 
     d->posWidget->setMinimumWidth( 100 );
-    hbox->addWidget( d->posWidget );
-    hbox->addSpacing( 6 );
+    d->formulaBarLayout->addWidget( d->posWidget );
+    d->formulaBarLayout->addSpacing( 6 );
 
     d->cancelButton = d->newIconButton( "cancel", TRUE, d->toolWidget );
-    hbox->addWidget( d->cancelButton );
+    d->formulaBarLayout->addWidget( d->cancelButton );
     d->okButton = d->newIconButton( "ok", TRUE, d->toolWidget );
-    hbox->addWidget( d->okButton );
-    hbox->addSpacing( 6 );
+    d->formulaBarLayout->addWidget( d->okButton );
+    d->formulaBarLayout->addSpacing( 6 );
 
     // The widget on which we display the table
     d->canvas = new KSpreadCanvas( d->frame, this, doc );
@@ -1603,8 +1605,8 @@ KSpreadView::KSpreadView( QWidget *_parent, const char *_name, KSpreadDoc* doc )
     // edit the cells content. It knows about the two buttons.
     d->editWidget = new KSpreadEditWidget( d->toolWidget, d->canvas, d->cancelButton, d->okButton );
     d->editWidget->setFocusPolicy( QWidget::StrongFocus );
-    hbox->addWidget( d->editWidget, 2 );
-    hbox->addSpacing( 2 );
+    d->formulaBarLayout->addWidget( d->editWidget, 2 );
+    d->formulaBarLayout->addSpacing( 2 );
 
     d->canvas->setEditWidget( d->editWidget );
 
