@@ -166,6 +166,7 @@ bool kspreadfunc_replace( KSContext& context );
 bool kspreadfunc_REPT( KSContext& context );
 
 // defined in kspread_functions_conversion.cc
+bool kspreadfunc_value( KSContext& context );
 bool kspreadfunc_dec2hex( KSContext& context );
 bool kspreadfunc_dec2oct( KSContext& context );
 bool kspreadfunc_dec2bin( KSContext& context );
@@ -528,6 +529,7 @@ static const functionEntry funcTab[] = {
   { "SHORTCURRENTDATE", kspreadfunc_shortcurrentDate },
 
   // conversion
+  { "VALUE", kspreadfunc_value },
   { "DEGREE", kspreadfunc_degree },
   { "RADIAN", kspreadfunc_radian },
   { "DEC2HEX", kspreadfunc_dec2hex },
