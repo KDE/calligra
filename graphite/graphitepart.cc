@@ -36,6 +36,8 @@
 #include <kdialogbase.h>
 #include <math.h>
 
+#include <bitset>
+
 
 GraphitePart::GraphitePart(QWidget *parentWidget, const char *widgetName, QObject *parent, const char *name, bool singleViewMode)
     : KoDocument(parentWidget, widgetName, parent, name, singleViewMode) {

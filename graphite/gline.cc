@@ -205,7 +205,7 @@ const GLine *GLine::hit(const QPoint &p) const {
         double dy=static_cast<double>(m_b.y()-m_a.y());
         double r=std::sqrt( dx*dx + dy*dy );
         int ir=Graphite::double2Int(r);
-        double alpha1=std::asin( QABS(dy)/r );
+        double alpha1=std::asin( Graphite::abs(dy)/r );
         double alpha;
 
         if(dx>=0) {
@@ -226,7 +226,7 @@ const GLine *GLine::hit(const QPoint &p) const {
         int w=Graphite::double2Int(static_cast<double>(pen().width())/2.0);
         int tmp1=fBorder-w;
         int tmp2=2*fBorder+w+1;
-        QRect fuzzyZone=QRect( QMIN( m_a.x(), m_a.x() + ir ) - tmp1,
+        QRect fuzzyZone=QRect( Graphite::min( m_a.x(), m_a.x() + ir ) - tmp1,
                                m_a.y() - tmp1, ir + tmp2, tmp2 );
         // Don't change the original point!
         QPoint tmp3(p);
@@ -276,8 +276,8 @@ const QRect &GLine::boundingRect() const {
 
     if(!boundingRectDirty())
         return GObject::boundingRect();
-    setBoundingRect(QRect( QMIN(m_a.x(), m_b.x()), QMIN(m_a.y(), m_b.y()),
-                          QABS(m_a.x()-m_b.x()), QABS(m_a.y()-m_b.y())));
+    setBoundingRect(QRect( Graphite::min(m_a.x(), m_b.x()), Graphite::min(m_a.y(), m_b.y()),
+                           Graphite::abs(m_a.x()-m_b.x()), Graphite::abs(m_a.y()-m_b.y())));
     setBoundingRectDirty(false);
     return GObject::boundingRect();
 }

@@ -40,6 +40,125 @@ bool operator!=(const Gradient &lhs, const Gradient &rhs) {
     return !operator==(lhs, rhs);
 }
 
+
+// some useful "macros" and helper functions
+namespace Graphite {
+
+double mm2inch(const double &mm) { return mm*0.039370147; }
+double mm2pt(const double &mm) { return mm*2.83465058; }
+double inch2mm(const double &inch) { return inch*25.399956; }
+double inch2pt(const double &inch) { return inch*72.0; }
+double pt2mm(const double &pt) { return pt*0.352777167; }
+double pt2inch(const double &pt) { return pt*0.01388888888889; }
+
+const int double2Int(const double &value) {
+
+    if( static_cast<double>((value-static_cast<int>(value)))>=0.5 )
+        return static_cast<int>(value)+1;
+    else if( static_cast<double>((value-static_cast<int>(value)))<=-0.5 )
+        return static_cast<int>(value)-1;
+    else
+        return static_cast<int>(value);
+}
+
+const double rad2deg(const double &rad) {
+    return rad*180.0*M_1_PI;   // M_1_PI = 1/M_PI :)
+}
+
+const double deg2rad(const double &deg) {
+    return deg*M_PI/180.0;
+}
+
+const double normalizeRad(const double &rad) {
+
+    double nRad=rad;
+    while(nRad>2*M_PI)
+        nRad-=2*M_PI;
+    while(nRad<0)
+        nRad+=2*M_PI;
+    return nRad;
+}
+
+const double normalizeDeg(const double &deg) {
+
+    double nDeg=deg;
+    while(nDeg>360)
+        nDeg-=360;
+    while(nDeg<0)
+        nDeg+=360;
+    return nDeg;
+}
+
+void rotatePoint(int &x, int &y, const double &angle, const QPoint &center) {
+
+    double dx=static_cast<double>(x-center.x());
+    double dy=static_cast<double>(center.y()-y); // Attention: Qt coordinate system!
+    double sinalpha=std::sin(angle);
+    double cosalpha=std::cos(angle);
+    x=center.x()+Graphite::double2Int(dx*cosalpha-dy*sinalpha);
+    y=center.y()-Graphite::double2Int(dx*sinalpha+dy*cosalpha); // here too
+}
+
+void rotatePoint(unsigned int &x, unsigned int &y, const double &angle, const QPoint &center) {
+
+    // This awkward stuff with the tmp variables is a workaround for
+    // "old" compilers (egcs-1.1.2 :)
+    int _x=static_cast<int>(x);
+    int _y=static_cast<int>(y);
+    rotatePoint(_x, _y, angle, center);
+    x=static_cast<unsigned int>(_x);
+    y=static_cast<unsigned int>(_y);
+}
+
+void rotatePoint(double &x, double &y, const double &angle, const QPoint &center) {
+
+    double dx=x-static_cast<double>(center.x());
+    double dy=static_cast<double>(center.y())-y; // Attention: Qt coordinate system!
+    double sinalpha=std::sin(angle);
+    double cosalpha=std::cos(angle);
+    x=static_cast<double>(center.x())+(dx*cosalpha-dy*sinalpha);
+    y=static_cast<double>(center.y())-(dx*sinalpha+dy*cosalpha); // here too
+}
+
+void rotatePoint(QPoint &p, const double &angle, const QPoint &center) {
+    rotatePoint(p.rx(), p.ry(), angle, center);
+}
+
+void scalePoint(int &x, int &y, const double &xfactor, const double &yfactor,
+                const QPoint &center) {
+    if(xfactor<=0 || yfactor<=0)
+        return;
+    x=Graphite::double2Int( static_cast<double>(center.x()) + static_cast<double>(x-center.x())*xfactor );
+    y=Graphite::double2Int( static_cast<double>(center.y()) + static_cast<double>(y-center.y())*yfactor );
+}
+
+void scalePoint(unsigned int &x, unsigned int &y, const double &xfactor,
+                const double &yfactor, const QPoint &center) {
+    // This awkward stuff with the tmp variables is a workaround for
+    // "old" compilers (egcs-1.1.2 :)
+    int _x=static_cast<int>(x);
+    int _y=static_cast<int>(y);
+    scalePoint(_x, _y, xfactor, yfactor, center);
+    x=static_cast<unsigned int>(_x);
+    y=static_cast<unsigned int>(_y);
+}
+
+void scalePoint(double &x, double &y, const double &xfactor, const double &yfactor,
+                const QPoint &center) {
+    if(xfactor<=0 || yfactor<=0)
+        return;
+    x=static_cast<double>(center.x()) + static_cast<double>(x-center.x())*xfactor;
+    y=static_cast<double>(center.y()) + static_cast<double>(y-center.y())*yfactor;
+}
+
+void scalePoint(QPoint &p, const double &xfactor, const double &yfactor,
+                const QPoint &center) {
+    scalePoint(p.rx(), p.ry(), xfactor, yfactor, center);
+}
+
+}; //namespace Graphite
+
+
 Gradient &Gradient::operator=(const Gradient &rhs) {
 
     ca=rhs.ca;
@@ -177,16 +296,6 @@ GraphiteGlobal::GraphiteGlobal() : m_fuzzyBorder(3), m_handleSize(4),
 }
 
 
-FxValue::FxValue() : m_value(0.0), m_pixel(0) {
-}
-
-FxValue::FxValue(const int &pixel) {
-    setPxValue(pixel);
-}
-
-FxValue::FxValue(const FxValue &v) : m_value(v.value()), m_pixel(v.pxValue()) {
-}
-
 FxValue &FxValue::operator=(const FxValue &rhs) {
 
     m_value=rhs.value();
@@ -194,21 +303,14 @@ FxValue &FxValue::operator=(const FxValue &rhs) {
     return *this;
 }
 
-bool FxValue::operator==(const FxValue &rhs) {
-    return m_pixel==rhs.pxValue();
-}
-
-bool FxValue::operator!=(const FxValue &rhs) {
-    return m_pixel!=rhs.pxValue();
-}
-
 void FxValue::setValue(const double &value) {
     m_value=value;
     recalculate();
 }
 
-void FxValue::setPxValue(const int &/*pixel*/) {
-    // TODO
+void FxValue::setPxValue(const int &pixel) {
+    m_value=static_cast<double>(m_pixel)/GraphiteGlobal::self()->zoom();
+    m_pixel=pixel;
 }
 
 const double FxValue::valueUnit() const {
@@ -222,12 +324,13 @@ const double FxValue::valueUnit() const {
 }
 
 const double FxValue::valueInch() const {
-    return 0.0;
+    return m_value; // *
 }
 
 const double FxValue::valuePt() const {
-    return 0.0;
+    return m_value; // *
 }
 
 void FxValue::recalculate() {
+
 }

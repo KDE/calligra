@@ -44,6 +44,39 @@ bool operator==(const Gradient &lhs, const Gradient &rhs);
 bool operator!=(const Gradient &lhs, const Gradient &rhs);
 
 
+// some useful "macros" and helper functions
+namespace Graphite {
+template<class T> inline T max(const T &a, const T &b) { return a > b ? a : b; }
+template<class T> inline T min(const T &a, const T &b) { return a < b ? a : b; }
+template<class T> inline T abs(const T &a) { return a < 0 ? -a : a; }
+
+double mm2inch(const double &mm);
+double mm2pt(const double &mm);
+double inch2mm(const double &inch);
+double inch2pt(const double &inch);
+double pt2mm(const double &pt);
+double pt2inch(const double &pt);
+
+const int double2Int(const double &value);
+
+const double rad2deg(const double &rad);
+const double deg2rad(const double &deg);
+const double normalizeRad(const double &rad);
+const double normalizeDeg(const double &deg);
+
+void rotatePoint(int &x, int &y, const double &angle, const QPoint &center);
+void rotatePoint(unsigned int &x, unsigned int &y, const double &angle, const QPoint &center);
+void rotatePoint(double &x, double &y, const double &angle, const QPoint &center);
+void rotatePoint(QPoint &p, const double &angle, const QPoint &center);
+
+void scalePoint(int &x, int &y, const double &xfactor, const double &yfactor, const QPoint &center);
+void scalePoint(unsigned int &x, unsigned int &y, const double &xfactor, const double &yfactor, const QPoint &center);
+void scalePoint(double &x, double &y, const double &xfactor, const double &yfactor, const QPoint &center);
+void scalePoint(QPoint &p, const double &xfactor, const double &yfactor, const QPoint &center);
+
+}; //namespace Graphite
+
+
 // This class is used to access some configurable values.
 // We also use this class to save the rc file.
 // Note: Follows the singleton pattern
@@ -79,7 +112,7 @@ public:
     void setUnit(const Unit &unit);
     QString unitString() const { return m_unitString; }
 
-    // current zoom factor (for the "active" view)
+    // current zoom factor (for the "active" view), 1.0 == 100%
     const double &zoom() const { return m_zoom; }
     void setZoom(const double &zoom);
 
@@ -123,15 +156,15 @@ private:
 class FxValue {
 
 public:
-    FxValue();
-    explicit FxValue(const int &pixel);
-    FxValue(const FxValue &v);
+    FxValue() : m_value(0.0), m_pixel(0) {}
+    explicit FxValue(const int &pixel) { setPxValue(pixel); }
+    FxValue(const FxValue &v) : m_value(v.value()), m_pixel(v.pxValue()) {}
     ~FxValue() {}
 
     FxValue &operator=(const FxValue &rhs);
     // compares the current pixel values!
-    bool operator==(const FxValue &rhs);
-    bool operator!=(const FxValue &rhs);
+    bool operator==(const FxValue &rhs) { return m_pixel==rhs.pxValue(); }
+    bool operator!=(const FxValue &rhs) { return m_pixel!=rhs.pxValue(); }
 
     const double &value() const { return m_value; }
     void setValue(const double &value);
