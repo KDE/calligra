@@ -1,12 +1,16 @@
 REAL BUGS:
--	dont always fill shapes especially when no fillShape() is called
 -	select first/last segment's knot if one of each other's knot is selected
 -	if selecting many shapes, the fill/stroke state should be "unknown",
 	preview widgets needs to paint questionmarks or something in this case
 -	change flatness test in intersection code to a estimation used in gems code. otherwise
 	if the 2 input curves are the same our code runs forever.
+-	shape creation: the last temporary shape looks slightly different than the final shape
 
 TODO:
+-	libart rendering uses the wrong fill rule (see filled spiral) => use even odd
+-	remove defaultFill/Stroke stuff from VDocument and just use VSelection's fill/stroke.
+-	zooming has problems (zoom out: shapes and selection coords are different. zoom back:
+	canvas is "fragmented")
 -	scratch your head about how to do undo/redo of path operations best like
 	removing nodes, inserting nodes...
 -	port path commands to vgroup::insertNewDeleteOld(), maybe add a vpathcommand
@@ -15,15 +19,14 @@ TODO:
 -	painting (NotROP) while shape creation isnt good. creation should instead
 	insert a temporary object (state "edit") right from the start.
 	other vobjects shouldnt repaint if they didnt change put just blit their pixmap-cache.
--	allow for multiple strokes and fills in VPath. Also allow for strokes to be under
-	fills for nice special effects.
+-	allow for multiple strokes and fills in VPath which get rendered in the order they occur.
 -	use inside/intersection tests in vpath::combine() for changing winding.
 -	use vflatten in vselectool for more precise selection (lenny)
--	being a kde/koffice app, we should use the global selection color for selections
+-	printing
 
 WISHLIST:
 -	Ctrl or Shift (pressed) while dragging a shape should make the shape move along only one axis
--	krita export filter (with layers)
+-	krita and/or gimp export filter (with layers)
 
 OPTIMIZATION:
 -	in VShapeTool and all manipulation tools: store temporary objects so one doesnt
@@ -33,6 +36,7 @@ OPTIMIZATION:
 -	check places we use sqrt() if these are really necessary (lenny)
 
 MAKE IT NICE:
+-	being a kde/koffice app, we should use the global selection color for selections
 -	use SVG's path notation natively
 -	vroundcorners needs to be improved for beziers and big radii (lenny)
 -	can't we pass VTool::draw() a painter inseatd of each tool creating a painter itself?
