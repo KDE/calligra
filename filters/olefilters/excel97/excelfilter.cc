@@ -16,12 +16,11 @@
    Boston, MA 02111-1307, USA.
 */
 
-#include <qstring.h>
-#include <kdebug.h>
-
-#include <xmltree.h>
-#include <records.h>
 #include <excelfilter.h>
+#include <kdebug.h>
+#include <qdatastream.h>
+#include <qstring.h>
+#include <xmltree.h>
 
 ExcelFilter::ExcelFilter(const QByteArray &mainStream):FilterBase(), length(mainStream.size())
 {
@@ -43,7 +42,7 @@ ExcelFilter::~ExcelFilter()
 
 bool ExcelFilter::filter()
 {
-    unsigned int i, cont = 0;
+    bool continued = false;
     double count = 0;
 
     Q_UINT8 byte;
@@ -67,15 +66,10 @@ bool ExcelFilter::filter()
             body = new QDataStream(record, IO_ReadOnly);
             body->setByteOrder(QDataStream::LittleEndian);
 
-            for (i = 0; biff[i].opcode != opcode && biff[i].opcode != 0; i++);
-
-            if (biff[i].opcode == opcode)
-            {
-                if (cont)
-                    m_success = (tree->*(biff[i].func))(contSize, *body);
-                else
-                    m_success = (tree->*(biff[i].func))(size, *body);
-            }
+            if (continued)
+                m_success = tree->invokeHandler(opcode, contSize, *body);
+            else
+                m_success = tree->invokeHandler(opcode, size, *body);
             delete body;
 
             opcode = readAhead;
@@ -87,15 +81,15 @@ bool ExcelFilter::filter()
 
             s->readRawBytes(record.data(), size);
 
-            if (cont)
+            if (continued)
             {
-                cont = 0;
+                continued = false;
                 contSize = 0;
             }
         }
         else // a CONTINUE record, lets add it
         {
-            cont = 1;
+            continued = true;
             *s >> size;
             *s >> byte; // we do a look-ahead
             record.resize(contSize + size);
@@ -154,3 +148,5 @@ const QDomDocument* const ExcelFilter::part()
         return &m_part;
     }
 }
+
+#include <excelfilter.moc>

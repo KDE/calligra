@@ -20,25 +20,27 @@
 #define EXCELFILTER_H
 
 #include <filterbase.h>
-#include <qcstring.h>
-#include <qdatastream.h>
-#include <xmltree.h>
+#include <qarray.h>
+class QDataStream;
+class XMLTree;
 
-const int MAX_RECORD_SIZE = 0x2024;
-
-class ExcelFilter:public FilterBase
+class ExcelFilter :
+    public FilterBase
 {
+    Q_OBJECT
+
 public:
     ExcelFilter(const QByteArray &mainStream);
     ~ExcelFilter();
 
     virtual bool filter();
-    virtual const QDomDocument* const part();
+    virtual const QDomDocument *const part();
 
 private:
     QDataStream *s;
     XMLTree *tree;
     double length;
+    static const int MAX_RECORD_SIZE = 0x2024;
 };
 
 #endif
