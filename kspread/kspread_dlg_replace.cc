@@ -28,7 +28,7 @@
 #include <qlayout.h>
 #include <kapp.h>
 #include <klocale.h>
-
+#include <kbuttonbox.h>
 
 
 KSpreadreplace::KSpreadreplace( KSpreadView* parent, const char* name,const QPoint &_marker)
@@ -40,32 +40,32 @@ KSpreadreplace::KSpreadreplace( KSpreadView* parent, const char* name,const QPoi
   QVBoxLayout *lay1 = new QVBoxLayout( this );
   lay1->setMargin( 5 );
   lay1->setSpacing( 10 );
-  QGridLayout *lay2 = new QGridLayout( lay1,4,2 );
-  lay2->setSpacing( 5 );
 
   QLabel* tmpQLabel;
   tmpQLabel = new QLabel( this);
 
 
-  lay2->addWidget(tmpQLabel,0,0);
+  lay1->addWidget(tmpQLabel);
   tmpQLabel->setText(i18n("Find"));
 
   l_find = new QLineEdit( this );
-  lay2->addWidget(l_find,1,0);
+  lay1->addWidget(l_find);
 
 
-  m_pOk = new QPushButton( i18n("Replace"), this );
-
-  lay2->addWidget(m_pOk,2,1);
-  m_pClose = new QPushButton( i18n("Close"), this );
-  lay2->addWidget(m_pClose,3,1);
   tmpQLabel = new QLabel( this);
-  lay2->addWidget(tmpQLabel,2,0);
+  lay1->addWidget(tmpQLabel);
   tmpQLabel->setText(i18n("Replace with"));
   l_replace = new QLineEdit( this );
-  lay2->addWidget(l_replace,3,0);
-
+  lay1->addWidget(l_replace);
   l_find->setFocus();
+
+  KButtonBox *bb = new KButtonBox( this );
+  bb->addStretch();
+  m_pOk = bb->addButton( i18n("Replace") );
+  m_pOk->setDefault( TRUE );
+  m_pClose = bb->addButton( i18n( "Close" ) );
+  bb->layout();
+  lay1->addWidget( bb);
   connect( m_pOk, SIGNAL( clicked() ), this, SLOT( slotOk() ) );
   connect( m_pClose, SIGNAL( clicked() ), this, SLOT( slotClose() ) );
 
@@ -101,7 +101,7 @@ else
 			m_pView->editWidget()->setText( cell->text() );
 		 else
 			m_pView->editWidget()->setText( "" );
-	
+
 		accept();
 		}
 	}

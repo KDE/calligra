@@ -110,7 +110,7 @@ KSpreadWidgetconditional::KSpreadWidgetconditional(QWidget *_parent,const char* 
   edit2->setEnabled(false);
   connect(choose,SIGNAL(highlighted(const QString &)),this,SLOT(changeIndex(const QString &)));
   connect(fontButton,SIGNAL(clicked()),this,SLOT(changeLabelFont()));
- 
+
   connect(this,SIGNAL(fontSelected()),
 	  this,SLOT(refreshPreview()));
   emit(fontSelected());
@@ -179,6 +179,12 @@ switch(tmp->m_cond)
 emit(fontSelected());
 }
 
+void KSpreadWidgetconditional::disabled()
+{
+fontButton->setEnabled(false);
+color->setEnabled(false);
+}
+
 void KSpreadWidgetconditional::refreshPreview()
 {
 
@@ -202,9 +208,13 @@ if(text==i18n("<none>"))
         {
          edit1->setEnabled(false);
          edit2->setEnabled(false);
+         fontButton->setEnabled(false);
+         color->setEnabled(false);
         }
 else
         {
+        fontButton->setEnabled(true);
+        color->setEnabled(true);
         if((text==i18n("between"))||(text==i18n("different from")))
                 {
                 edit1->setEnabled(true);
@@ -316,13 +326,17 @@ KSpreadCell *obj = m_pView->activeTable()->cellAt( marker.x(), marker.y() );
 for(int i=0;i<3;i++)
    {
    switch(i)
-	{	
+	{
 	case 0:
 		tmpCondition=obj->getFirstCondition(0);
 		if(tmpCondition!=0)
     			{
     			firstCond->init(tmpCondition);
     			}
+                else
+                        {
+                        firstCond->disabled();
+                        }
 		break;
 	case 1:
 		tmpCondition=obj->getSecondCondition(0);
@@ -330,6 +344,10 @@ for(int i=0;i<3;i++)
     			{
     			secondCond->init(tmpCondition);
     			}
+                else
+                        {
+                        secondCond->disabled();
+                        }
 
 		break;
 	case 2:
@@ -338,11 +356,14 @@ for(int i=0;i<3;i++)
     			{
     			thirdCond->init(tmpCondition);
     			}
-
+                else
+                        {
+                        thirdCond->disabled();
+                        }
 		break;
 	}
-    
-    	
+
+
     }
 
 }

@@ -48,7 +48,8 @@ public slots:
   void changeLabelFont();
   void changeIndex(const QString &text);
   void refreshPreview();
-signals:            
+  void disabled();
+signals:
   void fontSelected();
 protected:
   QComboBox *choose;
