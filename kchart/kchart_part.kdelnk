@@ -1,8 +1,10 @@
 # KDE Config File
 [KDE Desktop Entry]
 Name=KChart
+Name[no]=Graf
 Exec=kchart.bin --server
 Comment=Kalles Charter
+Comment[no]=Kalles graf
 Comment[pt_BR]=Programa de desenho de fluxogramas
 MimeTypes=application/x-kchart,
 RepoID=IDL:KCharter/Factory:1.0,

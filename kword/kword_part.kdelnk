@@ -1,6 +1,7 @@
 # KDE Config File
 [KDE Desktop Entry]
 Name=KWord
+Name[no]=Ord
 Exec=kword.bin --server
 Comment=KWord
 MimeTypes=application/x-kword,

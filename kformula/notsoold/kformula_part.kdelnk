@@ -1,8 +1,10 @@
 # KDE Config File
 [KDE Desktop Entry]
 Name=KFormula
+Name[no]=Formel
 Exec=kformula.bin --server
 Comment=The Formula Editor
+Comment[no]=Formelregidereren
 Comment[pt_BR]=Editor de Fórmulas
 MimeTypes=application/x-kformula
 RepoID=IDL:KFormula/Factory:1.0,

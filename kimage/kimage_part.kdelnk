@@ -1,8 +1,10 @@
 # KDE Config File
 [KDE Desktop Entry]
 Name=KImage
+Name[no]=Bilde
 Exec=kimage.bin --server
 Comment=Torben's Image Viewer
+Comment[no]=Torbens bildefremviser
 Comment[pt_BR]=Visualizador de Imagens
 Comment[sk]=Torbenov prehliadaè obrázkov
 MimeTypes=application/x-kimage,image/gif,

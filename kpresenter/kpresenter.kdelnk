@@ -1,8 +1,10 @@
 # KDE Config File
 [KDE Desktop Entry]
 Name=KPresenter
+Name[no]=Presenterer
 Exec=kpresenter.bin --server
 Comment=Reggie's Presentation Software
+Comment[no]=Reggies presentasjonsprogramvare
 Comment[pt_BR]=Software de Apresentações
 Comment[sk]=Reggieho Prezentaèný softvér
 MimeTypes=application/x-kpresenter,

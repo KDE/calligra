@@ -1,8 +1,10 @@
 # KDE Config File
 [KDE Desktop Entry]
 Name=KSpread
+Name[no]=Regneark
 Exec=kspread.bin --server
 Comment=Torben's Spread Sheet
+Comment[no]=Torbens regneark
 Comment[pt_BR]=Planilha Eletrônica
 Comment[sk]=Torbenov Spread Sheet
 MimeTypes=application/x-kspread,

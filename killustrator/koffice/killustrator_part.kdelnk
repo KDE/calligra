@@ -1,8 +1,10 @@
 # KDE Config File
 [KDE Desktop Entry]
 Name=KIllustrator
+Name[no]=Illustratør
 Exec=killustrator.bin --server
 Comment=KIllustrator Vector Graphics Application
+Comment[no]=Vektorgrafikkprogrammet KIllustrator
 Comment[pt_BR]=Programa de gráficos vetoriais KIllustrator
 MimeTypes=application/x-killustrator,
 RepoID=IDL:KIllustrator/DocumentFactory:1.0,
