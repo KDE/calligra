@@ -493,7 +493,32 @@ static void ProcessFramesetTag ( QDomNode        myNode,
                         }
                         else
                         {
-                            // ### TODO: non-inlined table?
+                            bool found = false;
+                            KoPictureKey key( grpMgr );
+                            QValueList<FrameAnchor>::Iterator it;
+                            for ( it = leader->m_nonInlinedTableAnchors.begin(); it !=  leader->m_nonInlinedTableAnchors.end(); ++it )
+                            {
+                                if ( (*it).key == key )
+                                {
+                                    kdDebug(30520) << "Found pseudo-anchor for table: " << (*it).key.toString() << endl;
+                                    found = true;
+                                    break;
+                                }
+                            }
+                            
+                            if ( found )
+                            {
+                                ProcessTableAnchor( myNode, leader, &(*it), col, row, cols, rows );
+                            }
+                            else
+                            {
+                                kdWarning(30520) << "Table anchor not found: " << grpMgr << endl;
+                                FrameAnchor anchor;
+                                ProcessTableAnchor( myNode, leader, &anchor, col, row, cols, rows );
+                                anchor.key = key; // Needed, so that the pseudo-anchor can be found again
+                                leader->m_nonInlinedTableAnchors << anchor;
+                                leader->m_unanchoredFramesets.append( grpMgr );
+                            }
                         }
                     }
                     else
@@ -508,6 +533,7 @@ static void ProcessFramesetTag ( QDomNode        myNode,
                     kdWarning (30508) << "Unset value for one of, or all FRAMESET attributes col, row: "
                                     << col << ", " << row << "!" << endl;
                     AllowNoSubtags (myNode, leader);
+                    leader->m_unanchoredFramesets.append( leader->m_currentFramesetName );
                 }
             }
             break;
@@ -528,7 +554,12 @@ static void ProcessFramesetTag ( QDomNode        myNode,
             else
             {
                 // ### TODO: non-inlined picture?
-                kdWarning (30508) << "ProcessFramesetTag: Couldn't find anchor " << leader->m_currentFramesetName << endl;
+                // No anchor found, so the picture is not inlined
+                kdDebug (30508) << "ProcessFramesetTag: Couldn't find anchor " << leader->m_currentFramesetName << endl;
+                FrameAnchor anchor;
+                ProcessPictureAnchor( myNode, leader, &anchor, frameType );
+                leader->m_nonInlinedPictureAnchors << anchor;
+                leader->m_unanchoredFramesets.append( leader->m_currentFramesetName ); // DEBUG
             }
 
             break;
@@ -564,11 +595,6 @@ static void ProcessFramesetsTag ( QDomNode        myNode,
 
 static void ProcessStyleTag (QDomNode myNode, void *, KWEFKWordLeader *leader )
 {
-    QValueList<AttrProcessing> attrProcessingList;
-    attrProcessingList
-        << AttrProcessing ( "outline" );
-    ProcessAttributes (myNode, attrProcessingList);
-
     LayoutData layout;
 
     ProcessLayoutTag (myNode, &layout, leader);
@@ -800,27 +826,50 @@ static void ProcessPixmapsKeyTag ( QDomNode         myNode,
 
     KoPictureKey key;
 
-    // Let KoPicture do most of the loading
+    // Let KoPictureKey do most of the loading
     key.loadAttributes(myNode.toElement());
-    QString name(myNode.toElement().attribute("name"));
+    const QString name(myNode.toElement().attribute("name"));
 
-    // TODO/FIXME: an image could be re-used a few times!
-    FrameAnchor *frameAnchor = findAnchor (key, *paraList);
+    kdDebug(30508) << "search anchors: " << key.toString() << endl;
+    bool found = false;
 
-    if ( frameAnchor )
+    // NOTE: we must always search in both inlined and non-inlined pictures. A picture can be used in both ways and a few times in each!
+    
+    // Process inlined pictures
+    QValueList<ParaData>::Iterator paraIt;
+
+    for ( paraIt = paraList->begin(); paraIt != paraList->end(); paraIt++ )
     {
-#if 0
-        kdDebug (30508) << "DEBUG: ProcessPixmapsKeyTag (): koStore for picture "
-                        << fileName << " is " << name << endl;
-#endif
-
-        frameAnchor->picture.koStoreName = name;
+        ValueListFormatData::Iterator formattingIt;
+        for ( formattingIt = (*paraIt).formattingList.begin();
+              formattingIt != (*paraIt).formattingList.end();
+              formattingIt++ )
+        {
+            if ( ( ( (*formattingIt).id == 6 ) || ( (*formattingIt).id == 2 ) )
+                 && (*formattingIt).frameAnchor.key == key )
+            {
+                kdDebug(30520) << "Found anchor for inlined picture: " << (*formattingIt).frameAnchor.key.toString() << endl;
+                (*formattingIt).frameAnchor.picture.koStoreName = name;
+                found = true;
+            }
+        }
     }
-    else
+    // Process non-inline pictures
+    QValueList<FrameAnchor>::Iterator it;
+    for ( it = leader->m_nonInlinedPictureAnchors.begin(); it !=  leader->m_nonInlinedPictureAnchors.end(); ++it )
     {
-        kdWarning (30508) << "Could find anchor for picture " << key.toString() << endl;
+        if ( (*it).key == key )
+        {
+            kdDebug(30520) << "Found pseudo-anchor for non-inlined picture: " << (*it).key.toString() << endl;
+            (*it).picture.koStoreName = name;
+            found = true;
+        }
     }
-
+    
+    if ( !found )
+    {
+        kdWarning (30508) << "Could not find any anchor for picture " << key.toString() << endl;
+    }
 
     AllowNoSubtags (myNode, leader);
 }
@@ -948,7 +997,7 @@ static void ProcessBookmarksTag ( QDomNode myNode, void* tag, KWEFKWordLeader *l
     ProcessSubtags (myNode, tagProcessingList, leader);
 }
 
-/*static*/ void ProcessDocTag ( QDomNode         myNode,
+void ProcessDocTag ( QDomNode         myNode,
     void* /*tagData*/, KWEFKWordLeader* leader )
 {
     //kdDebug (30508) << "Entering ProcessDocTag" << endl;
@@ -1020,7 +1069,7 @@ static void ProcessBookmarksTag ( QDomNode myNode, void* tag, KWEFKWordLeader *l
     else
         ProcessStylesPluralTag (nodeStyles, NULL, leader);
 
-    // Process framesets, but only to find and extract footnotes
+    // Process framesets, but only to find and extract footnotes (also endnotes)
     QValueList<FootnoteData> footnotes;
     QDomNode nodeFramesets=myNode.namedItem("FRAMESETS");
     if ( !nodeFramesets.isNull() )
@@ -1053,6 +1102,14 @@ static void ProcessBookmarksTag ( QDomNode myNode, void* tag, KWEFKWordLeader *l
 
     leader->doFullDocument (paraList);
 
+    kdDebug(30520) << "Unachored Framesets : START" << endl;
+    QStringList::ConstIterator it;
+    for ( it = leader->m_unanchoredFramesets.begin(); it != leader->m_unanchoredFramesets.end(); ++it )
+    {
+        kdDebug(30520) << (*it) << endl;
+    }
+    kdDebug(30520) << "Unachored Framesets : END" << endl;
+    
     FreeCellParaLists (paraList);
 
     leader->doCloseBody();

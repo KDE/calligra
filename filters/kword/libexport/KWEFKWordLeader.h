@@ -27,8 +27,8 @@
 
 #include <koFilterChain.h>
 
-#include <KWEFStructures.h>
-#include <KWEFBaseWorker.h>
+#include "KWEFStructures.h"
+#include "KWEFBaseWorker.h"
 
 class KWEFKWordLeader
 {
@@ -93,6 +93,9 @@ class KWEFKWordLeader
         QMap<QString,int> m_paraCountMap;
         /// List of bookmarks
         QValueList<Bookmark> m_bookmarkList;
+        QStringList m_unanchoredFramesets; ///< List of framesets where an anchor was searched but not found (DEBUG) @since 1.4
+        QValueList<FrameAnchor> m_nonInlinedPictureAnchors; ///< Pseudo-anchors for non-inlined anchors @since 1.4
+        QValueList<FrameAnchor> m_nonInlinedTableAnchors; ///< Pseudo-anchors for non-inlined tables @since 1.4
     private:
         KWEFBaseWorker *m_worker;
         KoFilterChain* m_chain;
