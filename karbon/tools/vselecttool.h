@@ -23,10 +23,14 @@ public:
 protected:
 	virtual void setCursor( const QPoint & ) const;
 	virtual void mousePressed( QMouseEvent * );
+	virtual void mouseMoved( QMouseEvent * );
 	virtual void mouseReleased( QMouseEvent * );
+	virtual void dragCtrlPressed();
+	virtual void dragCtrlReleased();
 
 private:
 	enum { normal, moving, scaling, rotating } m_state;
+	enum { none, lockx, locky } m_lock;
 
 	double m_s1;
 	double m_s2;

@@ -26,10 +26,43 @@
 VSelectTool::VSelectTool( KarbonView* view )
 	: VTool( view ), m_state( normal )
 {
+	m_lock = none;
 }
 
 VSelectTool::~VSelectTool()
 {
+}
+
+void
+VSelectTool::dragCtrlPressed()
+{
+	m_lock = lockx;
+}
+
+void
+VSelectTool::dragCtrlReleased()
+{
+	m_lock = none;
+}
+
+void
+VSelectTool::mouseMoved( QMouseEvent *mouse_event )
+{
+    if( m_isDragging )
+	{
+        // erase old object:
+		drawTemporaryObject();
+
+		if( m_lock == lockx )
+			m_lp.setX( m_fp.x() );
+		else
+			m_lp.setX( mouse_event->pos().x() );
+
+		m_lp.setY( mouse_event->pos().y() );
+
+		// paint new object:
+		drawTemporaryObject();
+	}
 }
 
 void
@@ -225,6 +258,8 @@ VSelectTool::mouseReleased( QMouseEvent *mouse_event )
 
 	if( m_state == moving )
 	{
+		if( m_lock == lockx )
+			lp.setX( fp.x() );
 		m_state = normal;
 		view()->part()->addCommand(
 			new VTranslateCmd(
