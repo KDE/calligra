@@ -1937,10 +1937,10 @@ void KSpreadCanvas::showComment()
 KSpreadVBorder::KSpreadVBorder( QWidget *_parent, KSpreadCanvas *_canvas, KSpreadView *_view)
   : QWidget( _parent, "", WNorthWestGravity )
 {
-
   m_pView = _view;
   m_pCanvas = _canvas;
-  size=0;
+  m_lSize = 0L;
+
   setBackgroundMode( PaletteBackground );
   setMouseTracking( TRUE );
   m_bResize = FALSE;
@@ -1974,6 +1974,10 @@ void KSpreadVBorder::mousePressEvent( QMouseEvent * _ev )
   // So he clicked between two rows ?
   if ( m_bResize )
   {
+    // Determine row to resize
+    int tmp;
+    m_iResizedRow = table->topRow( _ev->pos().y() - 3, tmp, m_pCanvas );
+
     paintSizeIndicator( _ev->pos().y(), true );
   }
   else
@@ -2015,15 +2019,15 @@ void KSpreadVBorder::mouseReleaseEvent( QMouseEvent * _ev )
     painter.drawLine( 0, m_iResizePos, m_pCanvas->width(), m_iResizePos );
     painter.end();
 
-    RowLayout *rl = table->nonDefaultRowLayout( m_iResizeAnchor );
-    int y = table->rowPos( m_iResizeAnchor, m_pCanvas );
+    RowLayout *rl = table->nonDefaultRowLayout( m_iResizedRow );
+    int y = table->rowPos( m_iResizedRow, m_pCanvas );
     if (( m_pCanvas->zoom() * (float)( _ev->pos().y() - y ) ) < 20.0 )
       //_ev->pos().y() < 20 )
       rl->setHeight( 20, m_pCanvas );
     else
       rl->setHeight( _ev->pos().y() - y, m_pCanvas );
-    delete size;
-    size=0;
+    delete m_lSize;
+    m_lSize = 0;
   }
 
   m_bSelection = FALSE;
@@ -2165,11 +2169,9 @@ void KSpreadVBorder::paintSizeIndicator( int mouseY, bool firstTime )
       painter.drawLine( 0, m_iResizePos, m_pCanvas->width(), m_iResizePos );
 
     m_iResizePos = mouseY;
-    int tmp;
-    m_iResizeAnchor = table->topRow( mouseY - 3, tmp, m_pCanvas );
     // Dont make the row have a height < 20 pixel.
     int twenty = (int)( 20.0 * m_pCanvas->zoom() );
-    int y = table->rowPos( m_iResizeAnchor, m_pCanvas );
+    int y = table->rowPos( m_iResizedRow, m_pCanvas );
     if ( m_iResizePos < y + twenty )
       m_iResizePos = y + twenty;
     painter.drawLine( 0, m_iResizePos, m_pCanvas->width(), m_iResizePos );
@@ -2181,18 +2183,18 @@ void KSpreadVBorder::paintSizeIndicator( int mouseY, bool firstTime )
     int len = painter.fontMetrics().width(tmpSize );
     int hei = painter.fontMetrics().height( );
     painter.end();
-    if(!size)
+    if(!m_lSize)
     {
-	  size=new QLabel(m_pCanvas);
-	  size->setGeometry(3,3+y,len+2, hei+2 ) ;
-	  size->setAlignment(Qt::AlignVCenter);
-	  size->setText(tmpSize);
-	  size->show();
+	  m_lSize=new QLabel(m_pCanvas);
+	  m_lSize->setGeometry(3,3+y,len+2, hei+2 ) ;
+	  m_lSize->setAlignment(Qt::AlignVCenter);
+	  m_lSize->setText(tmpSize);
+	  m_lSize->show();
     }
     else
     {
-	  size->setGeometry(3,3+y,len+2, hei+2 );
-	  size->setText(tmpSize);
+	  m_lSize->setGeometry(3,3+y,len+2, hei+2 );
+	  m_lSize->setText(tmpSize);
     }
 }
 
@@ -2270,7 +2272,7 @@ KSpreadHBorder::KSpreadHBorder( QWidget *_parent, KSpreadCanvas *_canvas,KSpread
 {
   m_pView = _view;
   m_pCanvas = _canvas;
-  size=0;
+  m_lSize = 0L;
   setBackgroundMode( PaletteBackground );
   setMouseTracking( TRUE );
   m_bResize = FALSE;
@@ -2301,6 +2303,9 @@ void KSpreadHBorder::mousePressEvent( QMouseEvent * _ev )
 
   if ( m_bResize )
   {
+    // Determine the column to resize
+    int tmp;
+    m_iResizedColumn = table->leftColumn( _ev->pos().x() - 3, tmp, m_pCanvas );
     paintSizeIndicator( _ev->pos().x(), true );
   }
   else
@@ -2339,14 +2344,14 @@ void KSpreadHBorder::mouseReleaseEvent( QMouseEvent * _ev )
     painter.drawLine( m_iResizePos, 0, m_iResizePos, m_pCanvas->height() );
     painter.end();
 
-    ColumnLayout *cl = table->nonDefaultColumnLayout( m_iResizeAnchor );
-    int x = table->columnPos( m_iResizeAnchor, m_pCanvas );
+    ColumnLayout *cl = table->nonDefaultColumnLayout( m_iResizedColumn );
+    int x = table->columnPos( m_iResizedColumn, m_pCanvas );
     if ( ( m_pCanvas->zoom() * (float)( _ev->pos().x() - x ) ) < 20.0 )
       cl->setWidth( 20, m_pCanvas );
     else
       cl->setWidth( _ev->pos().x() - x, m_pCanvas );
-    delete size;
-    size=0;
+    delete m_lSize;
+    m_lSize=0;
   }
 
   m_bSelection = FALSE;
@@ -2455,7 +2460,6 @@ void KSpreadHBorder::mouseMoveEvent( QMouseEvent * _ev )
   if ( m_bResize )
   {
     paintSizeIndicator( _ev->pos().x(), false );
-
   }
   else if ( m_bSelection )
   {
@@ -2518,12 +2522,9 @@ void KSpreadHBorder::paintSizeIndicator( int mouseX, bool firstTime )
       painter.drawLine( m_iResizePos, 0, m_iResizePos, m_pCanvas->height() );
 
     m_iResizePos = mouseX;
-    int tmp;
-    m_iResizeAnchor = table->leftColumn( mouseX - 3, tmp, m_pCanvas );
-
     int twenty = (int)( 20.0 * m_pCanvas->zoom() );
     // Dont make the column have a width < 20 pixels.
-    int x = table->columnPos( m_iResizeAnchor, m_pCanvas );
+    int x = table->columnPos( m_iResizedColumn, m_pCanvas );
     if ( m_iResizePos < x + twenty )
       m_iResizePos = x + twenty;
     painter.drawLine( m_iResizePos, 0, m_iResizePos, m_pCanvas->height() );
@@ -2534,18 +2535,18 @@ void KSpreadHBorder::paintSizeIndicator( int mouseX, bool firstTime )
     int len = painter.fontMetrics().width(tmpSize );
     int hei = painter.fontMetrics().height( );
     painter.end();
-    if(!size)
+    if(!m_lSize)
     {
-    	size=new QLabel(m_pCanvas);
-	size->setGeometry(x+3,3,len+2, hei+2 ) ;
-	size->setAlignment(Qt::AlignVCenter);
-	size->setText(tmpSize);
-    	size->show();
+    	m_lSize=new QLabel(m_pCanvas);
+	m_lSize->setGeometry(x+3,3,len+2, hei+2 ) ;
+	m_lSize->setAlignment(Qt::AlignVCenter);
+	m_lSize->setText(tmpSize);
+    	m_lSize->show();
     }
     else
     {
-        size->setGeometry(x+3,3,len+2, hei+2 ) ;
-	size->setText(tmpSize);
+        m_lSize->setGeometry(x+3,3,len+2, hei+2 ) ;
+	m_lSize->setText(tmpSize);
     }
 }
 

@@ -480,22 +480,28 @@ protected:
 
     /**
      * Flag that indicates whether the user resizes a column
-     * The user may resize columns by dragging the mouse around in th XBorder widget.
-     * If he is doing that right now, this flag is TRUE. Mention that the user may
+     * The user may resize columns by dragging the mouse around in the HBorder widget.
+     * If he is doing that right now, this flag is TRUE.
      */
     bool m_bResize;
+
     /**
      * The column over which the user pressed the mouse button.
-     * The user may resize columns by dragging the mouse around un the XBorder widget.
+     * The user may resize columns by dragging the mouse around the XBorder widget.
      * This is the column over which he pressed the mouse button. This column is going
      * to be resized.
       */
-    int m_iResizeAnchor;
+    int m_iResizedColumn;
+
     /**
-     * Last position of the mouse.
+     * Last position of the mouse, when resizing.
      */
     int m_iResizePos;
-    QLabel *size;
+
+    /**
+     * The label used for showing the current size, when resizing
+     */
+    QLabel *m_lSize;
 };
 
 /**
@@ -522,9 +528,12 @@ protected:
     bool m_bSelection;
     int m_iSelectionAnchor;
     bool m_bResize;
-    int m_iResizeAnchor;
+    int m_iResizedRow;
     int m_iResizePos;
-    QLabel *size;
+    /**
+     * The label used for showing the current size, when resizing
+     */
+    QLabel *m_lSize;
 };
 
 #endif
