@@ -106,7 +106,7 @@ bool KivioStencilSpawnerSet::loadDir( const QString &dirName )
   m_name = readTitle( dirName );
   m_id = readId( dirName );
 
-  d.setNameFilter("*.so, *.sml *.ksp *.spy *.shape");
+  d.setNameFilter("*.so *.sml *.ksp *.spy *.shape");
   m_files = d.entryList();
 
   return true;

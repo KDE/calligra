@@ -1,4 +1,4 @@
-<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd" ><kpartgui name="kivio" version="20">
+<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd" ><kpartgui name="kivio" version="21">
 <MenuBar>
  <Menu name="Edit"><text>&amp;Edit</text>
   <Action name="koffice_undo"/>
@@ -33,6 +33,7 @@
      <Action name="viewManager"/>
      <Action name="birdEye"/>
      <Action name="protection"/>
+     <Action name="addStencilSetDock"/>
    </Menu>
  </Menu> <Menu name="Page"><text>P&amp;age</text>
    <Action name="insertPage"/>

@@ -74,6 +74,8 @@
 #include <koApplication.h>
 #include <kotabbar.h>
 #include <koPageLayoutDia.h>
+#include <kolinewidthaction.h>
+#include <kolinestyleaction.h>
 
 #include "kivio_view.h"
 #include "kivio_dlg_pageshow.h"
@@ -124,9 +126,7 @@
 #include "kiviodragobject.h"
 #include "kivioglobal.h"
 #include "kivio_config.h"
-
-#include "kolinewidthaction.h"
-#include "kolinestyleaction.h"
+#include "kivioaddstencilsetpanel.h"
 
 #define TOGGLE_ACTION(X) ((KToggleAction*)actionCollection()->action(X))
 #define MOUSEPOS_TEXT 1000
@@ -247,6 +247,7 @@ KivioView::KivioView( QWidget *_parent, const char *_name, KivioDoc* doc )
   createLayerDock();
   createBirdEyeDock();
   createProtectionDock();
+  createAddStencilSetDock();
 
   setupActions();
 
@@ -349,14 +350,27 @@ void KivioView::createLayerDock()
 
 void KivioView::createProtectionDock()
 {
-   m_pProtectionPanel = new KivioProtectionPanel(this,this);
-   ToolDockBase* protectionBase = toolDockManager()->createToolDock(m_pProtectionPanel,i18n("Protection"));
-   protectionBase->move(0,0);
+  m_pProtectionPanel = new KivioProtectionPanel(this,this);
+  ToolDockBase* protectionBase = toolDockManager()->createToolDock(m_pProtectionPanel,i18n("Protection"));
+  protectionBase->move(0,0);
 
-   KToggleAction *showProtection = new KToggleAction( i18n("Protection"), CTRL+SHIFT+Key_P, actionCollection(), "protection" );
-   connect( showProtection, SIGNAL(toggled(bool)), protectionBase, SLOT(makeVisible(bool)));
-   connect( protectionBase, SIGNAL(visibleChange(bool)), SLOT(toggleProtectionPanel(bool)));
+  KToggleAction *showProtection = new KToggleAction( i18n("Protection"), CTRL+SHIFT+Key_P, actionCollection(), "protection" );
+  connect( showProtection, SIGNAL(toggled(bool)), protectionBase, SLOT(makeVisible(bool)));
+  connect( protectionBase, SIGNAL(visibleChange(bool)), SLOT(toggleProtectionPanel(bool)));
 }
+
+void KivioView::createAddStencilSetDock()
+{
+  m_addStencilSetPanel = new Kivio::AddStencilSetPanel(this);
+  ToolDockBase* addStencilSetBase = toolDockManager()->createToolDock(m_addStencilSetPanel, i18n("Add Stencil Set"));
+  addStencilSetBase->move(0,0);
+  
+  KToggleAction *showAddStencilSet = new KToggleAction( i18n("Add Stencil Set"), 0, actionCollection(), "addStencilSetDock" );
+  connect(showAddStencilSet, SIGNAL(toggled(bool)), addStencilSetBase, SLOT(makeVisible(bool)));
+  connect(addStencilSetBase, SIGNAL(visibleChange(bool)), SLOT(toggleAddStencilSetPanel(bool)));
+  connect(m_addStencilSetPanel, SIGNAL(addStencilSet(const QString&)), this, SLOT(addStencilSet(const QString&)));
+}
+
 
 void KivioView::setupActions()
 {
@@ -1654,6 +1668,11 @@ void KivioView::toggleProtectionPanel(bool b)
 void KivioView::toggleBirdEyePanel(bool b)
 {
     TOGGLE_ACTION("birdEye")->setChecked(b);
+}
+
+void KivioView::toggleAddStencilSetPanel(bool b)
+{
+    TOGGLE_ACTION("addStencilSetDock")->setChecked(b);
 }
 
 void KivioView::setupPrinter(KPrinter &p)

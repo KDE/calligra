@@ -38,6 +38,7 @@ namespace Kivio {
   class ToolDockBase;
   class ToolDockManager;
   class PluginManager;
+  class AddStencilSetPanel;
 }
 
 class KivioBirdEyePanel;
@@ -154,6 +155,7 @@ class KivioView : public KoView
     void createLayerDock();
     void createBirdEyeDock();
     void createProtectionDock();
+    void createAddStencilSetDock();
 
   public slots:
     void paperLayoutDlg();
@@ -170,6 +172,7 @@ class KivioView : public KoView
     void toggleLayersPanel(bool);
     void toggleBirdEyePanel(bool);
     void toggleProtectionPanel(bool);
+    void toggleAddStencilSetPanel(bool);
 
     void insertPage();
     void removePage();
@@ -325,6 +328,7 @@ class KivioView : public KoView
     KivioLayerPanel* m_pLayersPanel;
     KivioBirdEyePanel* m_pBirdEyePanel;
     KivioProtectionPanel* m_pProtectionPanel;
+    Kivio::AddStencilSetPanel* m_addStencilSetPanel;
     KToggleAction* showPageMargins;
     KToggleAction* showRulers;
     KToggleAction* showGrid;
