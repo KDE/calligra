@@ -75,13 +75,17 @@ private:
     QFont        toFont(QDomElement &element)     const;
 
 private:
-    // Members
+    // The chart and its contents
     KoChart::Data  m_currentData;
+    KChartParams  *m_params;
     QStringList    m_longLabels;
     QStringList    m_shortLabels;
-    KChartParams  *m_params;
-    QWidget       *m_parentWidget;
+
+    // Auxiliary values
     bool           m_bCanChangeValue;
+
+    // Graphics
+    QWidget       *m_parentWidget;
 };
 
 class WizardExt : public KoChart::WizardExtension

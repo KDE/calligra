@@ -25,6 +25,7 @@ public:
     void setLegend(const QStringList &legend);
     void getXLabel(KChartParams* params);
     void setXLabel(const QStringList &xlbl);
+
     void setAxisLabelTextLong( QStringList *_longLabels ) { longLabels = _longLabels; }
     void setAxisLabelTextShort( QStringList *_shortLabels ){ shortLabels = _shortLabels; }
 
@@ -36,10 +37,10 @@ private:
 
     // Data Editor, TNG
     QTable      *m_table;
-    QLabel      *rowsLA;
-    QSpinBox    *rowsSB;
-    QLabel      *colsLA;
-    QSpinBox    *colsSB;
+    QLabel      *m_rowsLA;
+    QSpinBox    *m_rowsSB;
+    QLabel      *m_colsLA;
+    QSpinBox    *m_colsSB;
 };
 
 }  //KChart namespace

@@ -220,6 +220,7 @@ void KChartPart::setData( const KoChart::Data& data )
     if ( hasColHeader || hasRowHeader )
     {
         KoChart::Data matrix( data.rows() - rowStart, data.cols() - colStart );
+
         for ( col = colStart; col < data.cols(); col++ )
         {
             for ( row = rowStart; row < data.rows(); row++ )

@@ -25,7 +25,7 @@
 #include <qlistbox.h>
 #include <qpainter.h>
 
-#include "kchartcolorarray.h"
+// FIXME: Should include something else to get KoChart declared!
 #include "kchartDataEditor.h"
 
 class QRadioButton;
@@ -43,6 +43,7 @@ public:
     KChartDataConfigPage( KChartParams* params, QWidget* parent,
 			  KoChart::Data *dat);
     void init();
+    void defaults();
     void apply();
 
 public slots:

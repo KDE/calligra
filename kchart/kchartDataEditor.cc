@@ -34,30 +34,30 @@ kchartDataEditor::kchartDataEditor(QWidget* parent) :
    QString colwhatsthis = i18n("<p><b>Sets the number of columns in the data table."
 			       "</b><br><br>The number of columns defines the number of data values in each data set (row).</p>");
   
-   rowsLA = new QLabel( i18n("# Rows:" ), page );
-   rowsLA->resize( rowsLA->sizeHint() );
-   QWhatsThis::add(rowsLA, rowwhatsthis);
-   rowsSB = new QSpinBox( page );
-   rowsSB->resize( rowsSB->sizeHint() );
-   QToolTip::add(rowsSB, i18n("Number of active data rows"));
-   QWhatsThis::add(rowsSB, rowwhatsthis);
+   m_rowsLA = new QLabel( i18n("# Rows:" ), page );
+   m_rowsLA->resize( m_rowsLA->sizeHint() );
+   QWhatsThis::add(m_rowsLA, rowwhatsthis);
+   m_rowsSB = new QSpinBox( page );
+   m_rowsSB->resize( m_rowsSB->sizeHint() );
+   QToolTip::add(m_rowsSB, i18n("Number of active data rows"));
+   QWhatsThis::add(m_rowsSB, rowwhatsthis);
   
-   colsLA = new QLabel( i18n("# Columns:" ), page );
-   colsLA->resize( colsLA->sizeHint() );
-   QWhatsThis::add(colsLA, colwhatsthis);
-   colsSB = new QSpinBox( page );
-   colsSB->resize( colsSB->sizeHint() );
-   QToolTip::add(colsSB, i18n("Number of active data columns"));
-   QWhatsThis::add(colsSB, colwhatsthis);
+   m_colsLA = new QLabel( i18n("# Columns:" ), page );
+   m_colsLA->resize( m_colsLA->sizeHint() );
+   QWhatsThis::add(m_colsLA, colwhatsthis);
+   m_colsSB = new QSpinBox( page );
+   m_colsSB->resize( m_colsSB->sizeHint() );
+   QToolTip::add(m_colsSB, i18n("Number of active data columns"));
+   QWhatsThis::add(m_colsSB, colwhatsthis);
 
    QVBoxLayout  *topLayout = new QVBoxLayout( page );
    topLayout->addWidget(m_table);
 
    QHBoxLayout  *rowColLayout = new QHBoxLayout(  );
-   rowColLayout->addWidget(rowsLA);
-   rowColLayout->addWidget(rowsSB);
-   rowColLayout->addWidget(colsLA);
-   rowColLayout->addWidget(colsSB);
+   rowColLayout->addWidget(m_rowsLA);
+   rowColLayout->addWidget(m_rowsSB);
+   rowColLayout->addWidget(m_colsLA);
+   rowColLayout->addWidget(m_colsSB);
    rowColLayout->addStretch(1);
    rowColLayout->setMargin(10);
 
@@ -96,8 +96,8 @@ void kchartDataEditor::setData( KoChart::Data* dat )
     _widget->setUsedRows( rowsCount );
     _widget->setUsedCols( colsCount );
 #else
-    rowsSB->setValue(rowsCount);
-    colsSB->setValue(colsCount);
+    m_rowsSB->setValue(rowsCount);
+    m_colsSB->setValue(colsCount);
     m_table->setNumRows(rowsCount);
     m_table->setNumCols(colsCount);
 #endif
@@ -111,9 +111,12 @@ void kchartDataEditor::setData( KoChart::Data* dat )
             // fill it in from the part
             if (t.hasValue()) {
                 if( t.isDouble() ) {
-                    //_widget->fillCell(row, col, t.doubleValue());
+#if 0
+		    _widget->fillCell(row, col, t.doubleValue());
+#else
 		    m_table->setText(row + 1, col + 1, 
 				     QString("%1").arg(t.doubleValue()));
+#endif
 		}
                 else if( t.isString() )
                     kdDebug(35001) << "I cannot handle strings in the table yet"
@@ -133,8 +136,8 @@ void kchartDataEditor::getData( KoChart::Data* dat )
     int  numRows = _widget->usedRows()
     int  numCols = _widget->usedCols()
 #else
-    int  numRows = rowsSB->value();
-    int  numCols = colsSB->value();
+    int  numRows = m_rowsSB->value();
+    int  numCols = m_colsSB->value();
 #endif
 
 #if 0
@@ -142,35 +145,32 @@ void kchartDataEditor::getData( KoChart::Data* dat )
     if( static_cast<int>( dat->rows() ) < _widget->usedRows() ||
         static_cast<int>( dat->cols() ) < _widget->usedCols() )
 	dat->expand( _widget->usedRows(), _widget->usedCols() );
-
-    dat->setUsedRows( _widget->usedRows() );
-    dat->setUsedCols( _widget->usedCols() );
 #else
-    // Make sure that the data table is not smaller than the used data
+    // Make sure that the data table for the chart is not smaller than
+    // the data in the editor.
     if( static_cast<int>( dat->rows() ) < numRows
 	|| static_cast<int>( dat->cols() ) < numCols )
 	dat->expand( numRows, numCols );
+#endif
 
     dat->setUsedRows( numRows );
     dat->setUsedCols( numCols );
-#endif
 
     for (int row = 0;row < numRows; row++) {
         for (int col = 0;col < numCols; col++) {
-            // m_pData->setYValue( row, col, _widget->getCell(row,col) );
             KoChart::Value t;
-            //double val =  _widget->getCell(row,col);
-
+#if 0
+            double val =  _widget->getCell(row,col);
+#else
 	    QString tmp = m_table->text(row + 1, col + 1);
 	    bool    ok;
 	    double  val = tmp.toLong(&ok);
 	    if (!ok)
 		val = 0.0;
-
+#endif
 	    t = KoChart::Value( val );
             kdDebug(35001) << "Set cell for " << row << "," << col << endl;
             dat->setCell(row,col,t);
-            //   maxY = _widget->getCell(row,col) > maxY ? _widget->getCell(row,col) : maxY;
         }
     }
 }
@@ -183,23 +183,24 @@ void kchartDataEditor::setLegend( const QStringList &legend )
 #if 0
     int  numRows = _widget->usedRows()
 #else
-    int  numRows = rowsSB->value();
+    int  numRows = m_rowsSB->value();
 #endif
 
     rowHeader->setLabel(0, "");
     for (row = 0;row < numRows; row++) {
 	kdDebug(35001) << "Set row header for row " << row << ": " << endl;
-;
-        if( legend[row].isNull() ) {
-	    rowHeader->setLabel(row + 1, QString("%1").arg(row + 1));
-	    m_table->setText(row + 1, 0, QString("Data Set %1").arg(row + 1));
 
+	rowHeader->setLabel(row + 1, QString("%1").arg(row + 1));
+        if( legend[row].isNull() ) {
+	    m_table->setText(row + 1, 0, QString("Data Set %1").arg(row + 1));
 	}
 	else {
             QString tmp=legend[row];
-            //_widget->fillY(row,tmp);
-	    //rowHeader->setLabel(row, tmp);
+#if 0
+            _widget->fillY(row,tmp);
+#else
 	    m_table->setText(row + 1, 0, tmp);
+#endif
 	    kdDebug(35001) << tmp << endl;
         }
     }
@@ -214,12 +215,15 @@ void kchartDataEditor::getLegend( KChartParams* params )
 #if 0
     int  numRows = _widget->usedRows()
 #else
-    int  numRows = rowsSB->value();
+    int  numRows = m_rowsSB->value();
 #endif
 
     for( int row = 0; row < numRows; row++ ) {
-	//params->setLegendText( row, _widget->getY( row ) );
+#if 0
+	params->setLegendText( row, _widget->getY( row ) );
+#else
 	params->setLegendText( row, m_table->text(row + 1, 0) );
+#endif
     }
 }
 
@@ -231,7 +235,7 @@ void kchartDataEditor::setXLabel( const QStringList & xlbl )
 #if 0
     int  numCols = _widget->usedCols()
 #else
-    int  numCols = colsSB->value();
+    int  numCols = m_colsSB->value();
 #endif
 
     colHeader->setLabel(0, "");
@@ -243,9 +247,11 @@ void kchartDataEditor::setXLabel( const QStringList & xlbl )
 	}
 	else {
             QString tmp=xlbl[col];
-            //_widget->fillX(col,tmp);
-	    //colHeader->setLabel(col, tmp);
+#if 0
+            _widget->fillX(col,tmp);
+#else
 	    m_table->setText(0, col + 1, tmp);
+#endif
         }
     }
 }
@@ -260,7 +266,7 @@ void kchartDataEditor::getXLabel( KChartParams* params )
 #if 0
     int  numCols = _widget->usedCols()
 #else
-    int  numCols = colsSB->value();
+    int  numCols = m_colsSB->value();
 #endif
 
     bool filled = FALSE;

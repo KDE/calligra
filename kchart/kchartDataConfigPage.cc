@@ -98,8 +98,15 @@ void KChartDataConfigPage::init()
 }
 
 
+void KChartDataConfigPage::defaults()
+{
+    m_rowMajor->setChecked(true);
+}
+
+
 void KChartDataConfigPage::apply()
 {
 }
+
 
 }  //KChart namespace

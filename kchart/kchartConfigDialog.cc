@@ -295,7 +295,7 @@ void KChartConfigDialog::defaults()
 {
     // Data page
     if (m_datapage)
-        m_datapage->init();
+        m_datapage->defaults();
 
     // Color page
     if(_colorpage)

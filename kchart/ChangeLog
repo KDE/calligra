@@ -1,3 +1,18 @@
+2005-03-05    <ingwa@dhcp-254-144.lkpg.cendio.se>
+
+	Continue with the new data editor.
+	* kchartDataEditor.cc (setLegend): Always initialize the row
+	headers, not only the first time.
+	
+	Start fixing default handling in the config dialog.
+	* kchartConfigDialog.cc (defaults): Call datapage->defaults()
+	instead of init.
+	* kchartDataConfigPage.{h,cc} (defaults): New method.
+
+	Cleaning
+	* kcartDataEditor.{h,cc}: make all members follow the m_
+	convention.
+	
 2005-03-03  Inge Wallin  <inge@lysator.liu.se>
 
 	Start on bug 90892 - "Data editor looks bad", and bug 90878 -
