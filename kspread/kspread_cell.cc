@@ -1249,6 +1249,9 @@ void KSpreadCell::makeLayout( QPainter &_painter, int _col, int _row )
                     cell->obscure( this, m_iColumn, m_iRow );
                 }
                 m_iExtraXCells = c - m_iColumn;
+                //Not enough space
+                if(end==-1)
+                        m_bCellTooShort=true;
             }
             else
             {
@@ -2700,6 +2703,7 @@ void KSpreadCell::paintCell( const QRect& _rect, QPainter &_painter,
         }
         _painter.setPen(tmpPen);
         //_painter.setFont( m_textFont );
+
         QString tmpText=m_strOutText;
         if(m_bCellTooShort)
                 m_strOutText=textDisplaying(_painter);
@@ -2910,6 +2914,27 @@ void KSpreadCell::paintCell( const QRect& _rect, QPainter &_painter,
 QString KSpreadCell::textDisplaying( QPainter &_painter)
 {
 QFontMetrics fm = _painter.fontMetrics();
+
+if (( m_eAlign == KSpreadCell::Left || m_eAlign == KSpreadCell::Undefined) && !isValue())
+        {
+        //not enough space but align to left
+        int len=0;
+        for (int i=column();i<=column()+m_iExtraXCells;i++)
+                {
+                ColumnLayout *cl2 = m_pTable->columnLayout( i );
+                len+=cl2->width() - 1;
+                }
+        QString tmp;
+        for (int i=m_strOutText.length();i!=0;i--)
+                {
+                tmp=m_strOutText.left(i);
+                if((fm.width(tmp)+m_indent)<len)
+                        {
+                        return tmp;
+                        }
+                }
+        return QString("");
+        }
 
 ColumnLayout *cl = m_pTable->columnLayout( column() );
 int w = cl->width();
