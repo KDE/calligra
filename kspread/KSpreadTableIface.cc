@@ -154,3 +154,8 @@ bool KSpreadTableIface::processDynamic( const QCString& fun, const QByteArray&/*
     out << DCOPRef( kapp->dcopClient()->appId(), str );
     return TRUE;
 }
+
+bool KSpreadTableIface::setTableName( const QString & name)
+{
+    return m_table->setTableName( name);
+}

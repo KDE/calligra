@@ -27,7 +27,8 @@ k_dcop:
     virtual void setSelection( const QRect& selection );
     virtual QString name() const;
     virtual int maxColumn() const;
-    virtual int maxRow() const;    
+    virtual int maxRow() const;
+    virtual bool setTableName( const QString & name);
 private:
     KSpreadTable* m_table;
     KSpreadCellProxy* m_proxy;
