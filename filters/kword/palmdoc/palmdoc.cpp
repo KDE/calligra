@@ -198,7 +198,10 @@ QString PalmDoc::uncompress( QByteArray rec )
 
     if( INRANGE(c,1,8) )
     {
-      // FIXME what to do ?
+      i++;
+      if( i < rec.size() )
+         for( unsigned char v = rec[i]; i>0; i-- )
+            result.append( v );
     }
 
     else if( INRANGE(c,0x09,0x7F) )
