@@ -99,16 +99,25 @@ void PolylineTool::processEvent (QEvent* e, GDocument *doc, Canvas* canvas) {
     }
     else {
       newObj = true;
+      points.clear ();
 
       GPolyline* obj = 0L;
 
       if (me->state () & ShiftButton) {
-	obj = (GPolyline *) doc->findNextObject (xpos, ypos, "GPolyline");
+	// magnetic mode
+	GObject *o = 0L;
+	int idx = -1;
+	if (doc->findNearestObject ("GPolyline", xpos, ypos, 
+				    80, o, idx)) {
+	  line = (GPolyline *) o;
+	  last = (idx != 0 ? idx + 1 : idx);
+	  newObj = false;
+	}
       }
       else {
-
-	QList<GObject> olist;
 	// look for existing polylines with a point near the mouse pointer
+	QList<GObject> olist;
+
 	if (doc->findContainingObjects (xpos, ypos, olist)) {
 	  QListIterator<GObject> it (olist);
 	  while (it.current ()) {
@@ -119,16 +128,15 @@ void PolylineTool::processEvent (QEvent* e, GDocument *doc, Canvas* canvas) {
 	    ++it;
 	  }
 	}
-      }
-      if (obj && (last = obj->getNeighbourPoint (Coord (xpos, ypos))) != -1
-	  && (last == 0 || last == (int) obj->numOfPoints () - 1)) {
-	line = obj; 
-	newObj = false;
-	if (last != 0)
-	  // it's not the first point of the line, so update the
-	  // index
-	  last += 1;
-	points.clear ();
+	if (obj && (last = obj->getNeighbourPoint (Coord (xpos, ypos))) != -1
+	    && (last == 0 || last == (int) obj->numOfPoints () - 1)) {
+	  line = obj; 
+	  newObj = false;
+	  if (last != 0)
+	    // it's not the first point of the line, so update the
+	    // index
+	    last += 1;
+	}
       }
 
       if (line == 0L) {

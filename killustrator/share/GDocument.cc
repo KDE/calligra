@@ -40,6 +40,7 @@
 #include <iostream.h>
 #include <fstream.h>
 
+#include <values.h>
 #include <stack>
 #include <vector>
 
@@ -246,9 +247,32 @@ void GDocument::deleteObject (GObject* obj) {
   }
 }
 
-GObject* GDocument::findNextObject (int x, int y, const char* type) {
-  // TODO
-  return 0L;
+/**
+ * Looks for an object of type <tt>otype</tt> which endpoints are distant
+ * not more than <tt>max_dist</tt> from the point <tt>x, y</tt>.
+ * The method returns <tt>true</tt> if an object was found as well as
+ * the object in <tt>obj</tt> and the index of the nearest point in
+ * <tt>pidx</tt>.
+ */
+bool GDocument::findNearestObject (const char* otype, int x, int y,
+				   float max_dist, GObject*& obj, int& pidx) {
+  float d, distance = MAXFLOAT;
+  obj = 0L;
+  QListIterator<GObject> it (objects);
+  Coord p (x, y);
+
+  for (; it.current (); ++it) {
+    if (otype == 0L || it.current ()->isA (otype)) {
+      if (it.current ()->findNearestPoint (p, max_dist, d, pidx) &&
+	  d < distance) {
+	obj = it.current ();
+	distance = d;
+      }
+    }
+  }
+  if (obj == 0L)
+    pidx = -1;
+  return obj != 0L;
 }
 
 GObject* GDocument::findContainingObject (int x, int y) {

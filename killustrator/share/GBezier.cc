@@ -52,8 +52,11 @@ GBezier::GBezier (const GBezier& obj) : GPolyline (obj) {
 }
   
 void GBezier::setPoint (int idx, const Coord& p) {
-  points.at (idx)->x (p.x ());
-  points.at (idx)->y (p.y());
+  QWMatrix mi = tMatrix.invert ();
+  Coord np = p.transform (mi);
+
+  points.at (idx)->x (np.x ());
+  points.at (idx)->y (np.y());
   if (! isEndPoint (idx))
     updateBasePoint (cPoint (idx));
   calcBoundingBox ();
@@ -314,4 +317,33 @@ void GBezier::writeToXml (XmlWriter& xml) {
     xml.closeTag (true);
   }
   xml.endTag ();
+}
+
+bool GBezier::findNearestPoint (const Coord& p, float max_dist, 
+				float& dist, int& pidx) {
+  float dx, dy, d1, d2;
+  pidx = -1;
+
+  QWMatrix mi = tMatrix.invert ();
+  Coord np = p.transform (mi);
+
+  dx = points.at (1)->x () - np.x ();
+  dy = points.at (1)->y () - np.y ();
+  d1 = sqrt (dx * dx + dy * dy);
+
+  dx = points.at (points.count () - 2)->x () - np.x ();
+  dy = points.at (points.count () - 2)->y () - np.y ();
+  d2 = sqrt (dx * dx + dy * dy);
+
+  if (d1 < d2) {
+    if (d1 < max_dist) {
+      dist = d1;
+      pidx = 1;
+    }
+  }
+  else if (d2 < max_dist) {
+    dist = d2;
+    pidx = points.count () - 2;
+  }
+  return pidx >= 0;
 }

@@ -71,6 +71,9 @@ public:
 
   virtual void writeToXml (XmlWriter&);
 
+  virtual bool findNearestPoint (const Coord& p, float max_dist, 
+				 float& dist, int& pidx);
+
 protected:
   void calcBoundingBox ();
 

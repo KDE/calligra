@@ -83,7 +83,9 @@ public:
   void deleteObject (GObject* obj);
 
   GObject* findContainingObject (int x, int y);
-  GObject* findNextObject (int x, int y, const char* type);
+
+  bool findNearestObject (const char* otype, int x, int y,
+			  float max_dist, GObject*& obj, int& pidx);
 
   bool findContainingObjects (int x, int y, QList<GObject>& olist);
   bool findObjectsContainedIn (const Rect& r, QList<GObject>& olist);

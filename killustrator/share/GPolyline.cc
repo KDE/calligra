@@ -390,3 +390,32 @@ void GPolyline::writeToXml (XmlWriter& xml) {
   }
   xml.endTag ();
 }
+
+bool GPolyline::findNearestPoint (const Coord& p, float max_dist, 
+				  float& dist, int& pidx) {
+  float dx, dy, d1, d2;
+  pidx = -1;
+
+  QWMatrix mi = tMatrix.invert ();
+  Coord np = p.transform (mi);
+
+  dx = points.at (0)->x () - np.x ();
+  dy = points.at (0)->y () - np.y ();
+  d1 = sqrt (dx * dx + dy * dy);
+
+  dx = points.at (points.count () - 1)->x () - np.x ();
+  dy = points.at (points.count () - 1)->y () - np.y ();
+  d2 = sqrt (dx * dx + dy * dy);
+
+  if (d1 < d2) {
+    if (d1 < max_dist) {
+      dist = d1;
+      pidx = 0;
+    }
+  }
+  else if (d2 < max_dist) {
+    dist = d2;
+    pidx = points.count () - 1;
+  }
+  return pidx >= 0;
+}

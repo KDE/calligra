@@ -59,6 +59,9 @@ public:
   virtual void writeToPS (ostream& os);
   virtual void writeToXml (XmlWriter&);
 
+  virtual bool findNearestPoint (const Coord& p, float max_dist, 
+				 float& dist, int& pidx);
+
   bool isEndPoint (int idx) { return (idx % 3) == 1; }
   void initBasePoint (int idx);
   void setWorkingSegment (int seg);

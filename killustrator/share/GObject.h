@@ -296,6 +296,12 @@ public:
 
   virtual void writeToXml (XmlWriter&) = 0;
 
+  /**
+   * At the moment only valid for lines and bezier curves.
+   */
+  virtual bool findNearestPoint (const Coord& p, float max_dist, 
+				 float& dist, int& pidx) { return false; }
+
 signals:
   void changed ();
   void propertiesChanged ();

@@ -129,7 +129,17 @@ void BezierTool::processEvent (QEvent* e, GDocument *doc, Canvas* canvas) {
       GBezier* obj = 0L;
  
       if (me->state () & ShiftButton) {
-	obj = (GBezier *) doc->findNextObject (xpos, ypos, "GBezier");
+	// magnetic mode
+	GObject *o = 0L;
+	int idx = -1;
+	if (doc->findNearestObject ("GBezier", xpos, ypos, 
+				    80, o, idx)) {
+	  curve = (GBezier *) o;
+	  last = idx;
+	  addAtEnd = (last != 1);
+	  newObj = false;
+	  oldNumOfPoints = curve->numOfPoints ();
+	}
       }
       else {
 	QList<GObject> olist;
@@ -145,15 +155,14 @@ void BezierTool::processEvent (QEvent* e, GDocument *doc, Canvas* canvas) {
 	    ++it;
 	  }
 	}
-      }
-	
-      if (obj && ((last = obj->getNeighbourPoint (Coord (xpos, ypos))) != -1)
-	  && obj->isEndPoint (last) 
-	  && (last == 1 || last == (int) obj->numOfPoints () - 2)) {
-	curve = obj;
-	addAtEnd = (last != 1);
-	newObj = false;
-	oldNumOfPoints = obj->numOfPoints ();
+	if (obj && ((last = obj->getNeighbourPoint (Coord (xpos, ypos))) != -1)
+	    && obj->isEndPoint (last) 
+	    && (last == 1 || last == (int) obj->numOfPoints () - 2)) {
+	  curve = obj;
+	  addAtEnd = (last != 1);
+	  newObj = false;
+	  oldNumOfPoints = obj->numOfPoints ();
+	}
       }
       
       if (curve == 0L) {
