@@ -46,7 +46,7 @@ protected slots:
     void slotDelExpression();
     void slotAddGroup();
     void slotDelGroup();
-
+    void slotSelectionChanged();
     virtual void slotOk();
 
  private:

@@ -51,6 +51,9 @@ KWEditPersonnalExpression::KWEditPersonnalExpression( QWidget *parent, const cha
     m_listOfExpression=new QListBox(page);
     grid->addMultiCellWidget(m_listOfExpression,1,8,0,1);
 
+    connect(m_listOfExpression,SIGNAL(selectionChanged()),
+            this,SLOT(slotSelectionChanged()));
+
     m_addGroup=new QPushButton(i18n("Add Group"),page);
     grid->addWidget(m_addGroup,1,2);
     connect(m_addGroup,SIGNAL(clicked ()),this,SLOT(slotAddGroup()));
@@ -79,7 +82,13 @@ KWEditPersonnalExpression::KWEditPersonnalExpression( QWidget *parent, const cha
     slotExpressionActivated(m_typeExpression->currentText() );
     resize(200,300);
     m_bChanged=false;
+    slotSelectionChanged();
     setFocus();
+}
+
+void KWEditPersonnalExpression::slotSelectionChanged()
+{
+    m_delExpression->setEnabled(m_listOfExpression->currentItem()!=-1);
 }
 
 void KWEditPersonnalExpression::slotExpressionActivated(const QString &_text )
