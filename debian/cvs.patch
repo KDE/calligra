@@ -1,0 +1,169 @@
+--- kchart/Makefile.am	2001/03/22 14:53:21	1.79
++++ kchart/Makefile.am	2001/04/08 21:39:14
+@@ -42,13 +42,13 @@ libkchartpart_la_SOURCES = kchart_part.c
+ 	sheet.cc \
+ 	sheetdlg.cc \
+ 	table.cc
+-libkchartpart_la_LDFLAGS = $(KDE_PLUGIN)
++libkchartpart_la_LDFLAGS = $(KDE_PLUGIN_DEBIAN)
+ libkchartpart_la_LIBADD = $(top_builddir)/interfaces/libkochart.la \
+                           $(top_builddir)/lib/kofficeui/libkofficeui.la
+ 
+ ## The kdeinit loadable module
+ kchart_la_SOURCES = main.cc
+-kchart_la_LDFLAGS = $(all_libraries) -avoid-version -module
++kchart_la_LDFLAGS = $(all_libraries) -module
+ kchart_la_LIBADD = libkchartpart.la
+ 
+ ## The executable
+--- killustrator/Makefile.am	2001/03/23 18:30:52	1.34
++++ killustrator/Makefile.am	2001/04/08 21:39:15
+@@ -21,7 +21,7 @@ lib_LTLIBRARIES = libkillustratorpart.la
+ 
+ ## The kdeinit loadable module
+ killustrator_la_SOURCES = main.cc
+-killustrator_la_LDFLAGS = $(all_libraries) -avoid-version -module
++killustrator_la_LDFLAGS = $(all_libraries) -module
+ killustrator_la_LIBADD = libkillustratorpart.la
+ 
+ ## The executable
+@@ -76,7 +76,7 @@ libkillustratorpart_la_SOURCES = KIllust
+        	BlendDialog.cc BlendCmd.cc stencilbarmovemanager.cc \
+        	filter_utils.cc LayerPanel.cc TabBar.cc tooldockbase.cc
+ 
+-libkillustratorpart_la_LDFLAGS = $(all_libraries) $(KDE_PLUGIN)
++libkillustratorpart_la_LDFLAGS = $(all_libraries) $(KDE_PLUGIN_DEBIAN)
+ libkillustratorpart_la_LIBADD = $(top_builddir)/killustrator/filter/libfilter.la $(top_builddir)/lib/kofficeui/libkofficeui.la
+ 
+ METASOURCES = AUTO
+--- kimageshop/Makefile.am	2001/03/22 14:53:22	1.70
++++ kimageshop/Makefile.am	2001/04/08 21:39:15
+@@ -4,14 +4,14 @@ lib_LTLIBRARIES = libkrayonpart.la krayo
+ ## The part
+ libkrayonpart_la_SOURCES = dummy.cc
+ 
+-libkrayonpart_la_LDFLAGS = $(KDE_PLUGIN)
++libkrayonpart_la_LDFLAGS = $(KDE_PLUGIN_DEBIAN)
+ libkrayonpart_la_LIBADD = core/libkiscore.la ui/libkisui.la tools/libkistools.la \
+ 	../lib/kofficeui/libkofficeui.la
+ METASOURCES = AUTO
+ 
+ ## The kdeinit loadable module
+ krayon_la_SOURCES = main.cc
+-krayon_la_LDFLAGS = $(all_libraries) -avoid-version -module
++krayon_la_LDFLAGS = $(all_libraries) -module
+ krayon_la_LIBADD = libkrayonpart.la
+ 
+ ## The executable
+--- kimageshop/plugins/example/Makefile.am	2000/12/31 23:10:16	1.3
++++ kimageshop/plugins/example/Makefile.am	2001/04/08 21:39:15
+@@ -1,6 +1,6 @@
+ INCLUDES  = -I$(srcdir)/../core -I$(srcdir)/../ui -I$(srcdir)/../tools $(KOFFICE_INCLUDES) -I$(interfacedir) $(all_includes)
+ 
+-libkisp_example_la_LDFLAGS = $(all_libraries) -avoid-version -module
++libkisp_example_la_LDFLAGS = $(all_libraries) -module
+ #libkisp_example_la_LIBADD =  ../core/libkiscore.la ../ui/libkisui.la ../tools/libkistools.la \
+ #	../../lib/kofficeui/libkofficeui.la
+ 
+--- kivio/kiviopart/Makefile.am	2001/03/20 22:53:05	1.8
++++ kivio/kiviopart/Makefile.am	2001/04/08 21:39:15
+@@ -133,10 +133,10 @@ EXTRA_DIST = \
+ #2########################################################!@#$
+ lib_LTLIBRARIES =  libkiviopart.la kivio.la
+ kivio_la_SOURCES = main.cpp
+-kivio_la_LDFLAGS = $(all_libraries) -module -avoid-version
++kivio_la_LDFLAGS = $(all_libraries) -module
+ kivio_la_LIBADD = libkiviopart.la
+ 
+-libkiviopart_la_LDFLAGS = -avoid-version -module $(LIB_KOFFICEUI) $(all_libraries)
++libkiviopart_la_LDFLAGS = -module $(LIB_KOFFICEUI) $(all_libraries)
+ 
+ bin_PROGRAMS = kivio
+ kivio_SOURCES = dummy.cpp
+--- koshell/Makefile.am	2001/03/22 14:02:17	1.25
++++ koshell/Makefile.am	2001/04/08 21:39:15
+@@ -4,7 +4,7 @@ INCLUDES  = $(KOFFICE_INCLUDES) $(all_in
+ ## The kdeinit loadable module
+ lib_LTLIBRARIES = koshell.la
+ koshell_la_SOURCES = koshell_main.cc koshell_shell.cc
+-koshell_la_LDFLAGS = $(all_libraries) -avoid-version -module
++koshell_la_LDFLAGS = $(all_libraries) -module
+ koshell_la_LIBADD = $(LIB_KOFFICEUI)
+ 
+ ## The executable
+--- kpresenter/Makefile.am	2001/03/23 00:29:39	1.139
++++ kpresenter/Makefile.am	2001/04/08 21:39:15
+@@ -30,13 +30,13 @@ libkpresenterpart_la_SOURCES = backdia.c
+ 	textdialog.cc sidebar.cc koStream.cc \
+ 	insertpagedia.ui generalconfig.ui kpimage.cc
+ 
+-libkpresenterpart_la_LDFLAGS = $(KDE_PLUGIN)
++libkpresenterpart_la_LDFLAGS = $(KDE_PLUGIN_DEBIAN)
+ libkpresenterpart_la_LIBADD = autoformEdit/libaf.la ../lib/kofficeui/libkofficeui.la ../lib/koml/libkoml.la
+ libkpresenterpart_la_METASOURCES = AUTO
+ 
+ ## The kdeinit loadable module
+ kpresenter_la_SOURCES = main.cc
+-kpresenter_la_LDFLAGS = $(all_libraries) -avoid-version -module
++kpresenter_la_LDFLAGS = $(all_libraries) -module
+ kpresenter_la_LIBADD = libkpresenterpart.la
+ 
+ ## The executable
+--- kspread/Makefile.am	2001/03/22 14:53:22	1.150
++++ kspread/Makefile.am	2001/04/08 21:39:15
+@@ -31,13 +31,13 @@ libkspreadpart_la_SOURCES = kspread_loca
+ 	KSpreadViewIface.skel KSpreadViewIface.cc \
+ 	kspread_cluster.cc
+ 
+-libkspreadpart_la_LDFLAGS = $(all_libraries) $(KDE_PLUGIN)
++libkspreadpart_la_LDFLAGS = $(all_libraries) $(KDE_PLUGIN_DEBIAN)
+ libkspreadpart_la_LIBADD = $(top_builddir)/interfaces/libkochart.la ../lib/koscript/libkoscript.la ../lib/kofficeui/libkofficeui.la ../lib/kformula/libkformula.la -lkspell
+ libkspreadpart_la_METASOURCES = AUTO
+ 
+ ## The kdeinit loadable module
+ kspread_la_SOURCES = main.cc
+-kspread_la_LDFLAGS = $(all_libraries) -avoid-version -module
++kspread_la_LDFLAGS = $(all_libraries) -module
+ kspread_la_LIBADD = libkspreadpart.la 
+ 
+ ## The executable
+--- kugar/part/Makefile.am	2001/03/29 12:29:25	1.3
++++ kugar/part/Makefile.am	2001/04/08 21:39:15
+@@ -2,7 +2,7 @@ INCLUDES = -I$(srcdir)/../lib $(KOFFICE_
+ 
+ lib_LTLIBRARIES = libkugarpart.la
+ libkugarpart_la_SOURCES = kugar_part.cpp
+-libkugarpart_la_LDFLAGS = $(all_libraries) -module -avoid-version
++libkugarpart_la_LDFLAGS = $(all_libraries) -module
+ libkugarpart_la_LIBADD = ../lib/libkugar.la $(LIB_KPARTS)
+ 
+ libkugarpart_la_METASOURCES = AUTO
+--- kword/Makefile.am	2001/04/04 19:23:27	1.112
++++ kword/Makefile.am	2001/04/08 21:39:15
+@@ -19,13 +19,13 @@ libkwordpart_la_SOURCES = kwfactory.cc k
+                 border.cc resizehandles.cc kwcommand.cc \
+ 		autoformat.cc autoformatdia.cc
+ 
+-libkwordpart_la_LDFLAGS = $(all_libraries) $(KDE_PLUGIN)
++libkwordpart_la_LDFLAGS = $(all_libraries) $(KDE_PLUGIN_DEBIAN)
+ libkwordpart_la_LIBADD = ../lib/kofficeui/libkofficeui.la ../lib/kformula2/libkformula2.la ../qt3stuff/libqt3stuff.la -lkspell
+ libkwordpart_la_METASOURCES = AUTO
+ 
+ ## The kdeinit loadable module
+ kword_la_SOURCES = main.cc
+-kword_la_LDFLAGS = $(all_libraries) -avoid-version -module
++kword_la_LDFLAGS = $(all_libraries) -module
+ kword_la_LIBADD = libkwordpart.la
+ 
+ ## The executable
+--- lib/kwmf/Makefile.am	2001/03/22 14:02:17	1.2
++++ lib/kwmf/Makefile.am	2001/04/08 21:39:15
+@@ -2,7 +2,7 @@
+ 
+ INCLUDES= -I$(srcdir) $(all_includes)
+ # Why is it a -module ? Shouldn't it have -version-info instead ? (DF)
+-libkwmf_la_LDFLAGS	= -module -avoid-version -no-undefined
++libkwmf_la_LDFLAGS	= -module -no-undefined
+ libkwmf_la_LIBADD = $(KOFFICE_LIBS)
+ 
+ ####### Files
