@@ -93,6 +93,10 @@ class KEXICORE_EXPORT KexiSharedActionHost
 		 has this action plugged _and_ it is available (i.e. enabled). 
 		 Otherwise the action is disabled.
 
+		 If \a o is not KexiDialogBase or its child,
+		 actions are only invalidated if these come from mainwindow's KActionCollection
+		 (thus part-actions are untouched when the focus is e.g. in the Property Editor.
+
 		 Call this method when it is known that some actions need invalidation 
 		 (e.g. when new window is activated). See how it is used in KexiMainWindow.
 		*/

@@ -117,6 +117,7 @@ void KexiViewBase::setDirty(bool set)
 		}
 		return;
 	}*/
+	const bool changed = (m_dirty != set);
 	m_dirty = set;
 	m_dirty = dirty();
 //	if (m_dirty!=set)//eventually didn't change
@@ -125,7 +126,7 @@ void KexiViewBase::setDirty(bool set)
 		m_parentView->setDirty(m_dirty);
 	}
 	else {
-		if (m_dialog)
+		if (changed && m_dialog)
 			m_dialog->dirtyChanged();
 	}
 }

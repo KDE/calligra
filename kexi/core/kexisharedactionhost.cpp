@@ -20,6 +20,8 @@
 #include "kexisharedactionhost.h"
 #include "kexisharedactionhost_p.h"
 #include "kexiactionproxy.h"
+#include "kexidialogbase.h"
+#include "kexi_utils.h"
 
 #include <kiconloader.h>
 #include <kdebug.h>
@@ -117,10 +119,18 @@ KMainWindow* KexiSharedActionHost::mainWindow() const
 
 void KexiSharedActionHost::invalidateSharedActions(QObject *o)
 {
+	bool insideDialogBase = o && (o->inherits("KexiDialogBase") || 0!=Kexi::findParent<KexiDialogBase>(o, "KexiDialogBase"));
+
 	KexiActionProxy *p = o ? d->actionProxies[ o ] : 0;
 	for (KActionPtrList::Iterator it=d->sharedActions.begin(); it!=d->sharedActions.end(); ++it) {
 //			setActionAvailable((*it)->name(),p && p->isAvailable((*it)->name()));
 		KAction *a = *it;
+		if (!insideDialogBase && d->mainWin->actionCollection()!=a->parentCollection()) {
+			//o is not KexiDialogBase or its child:
+			// only invalidate action if it comes from mainwindow's KActionCollection
+			// (thus part-actions are untouched when the focus is e.g. in the Property Editor)
+			continue;
+		}
 		const bool avail = p && p->isAvailable(a->name());
 		KexiVolatileActionData *va = d->volatileActions[ a ];
 		if (va != 0) {
