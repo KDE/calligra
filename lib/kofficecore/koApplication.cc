@@ -197,15 +197,15 @@ bool KoApplication::start()
                 } else if ( shell->openDocument( doc, args->url(i) ) ) {
                     if ( print ) {
                         shell->print(false /*we want to get the dialog*/);
-                        delete shell;
+                        // delete shell; done by ~KoDocument
 		    } else {
                         // Normal case, success
                         n++;
                     }
                 } else {
                     // .... if failed
-                    delete shell;
                     // delete doc; done by openDocument
+                    // delete shell; done by ~KoDocument
                 }
             }
         }
