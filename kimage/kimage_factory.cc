@@ -1,9 +1,12 @@
 #include <kinstance.h>
 #include <kglobal.h>
 #include <kstddirs.h>
-
+#include <klocale.h>
 #include "kimage_factory.h"
 #include "kimage_doc.h"
+
+static const char* description=I18N_NOOP("KOffice Image Viewer");
+static const char* version="0.1";
 
 extern "C"
 {
@@ -50,7 +53,14 @@ QObject* KImageFactory::create( QObject* parent, const char* name, const char*cl
 KInstance* KImageFactory::global()
 {
    if ( !s_global )
-     s_global = new KInstance( "kimage" );
+   {
+        KAboutData *aboutData= new KAboutData( "kimage", I18N_NOOP("KImage"),
+             version, description, KAboutData::License_GPL,
+             "(c) 1998-2000, Michael Koch");
+        aboutData->addAuthor("Michael Koch",0, "koch@kde.org");
+   
+       s_global = new KInstance(aboutData);
+   }
    return s_global;
 }
 

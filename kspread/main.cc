@@ -28,9 +28,8 @@
 #include <kstartparams.h>
 
 #include <dcopclient.h>
+#include "kspread_factory.h"
 
-static const char* description=I18N_NOOP("KOffice Spreadsheet Application");
-static const char* version="0.1";
 
 static const KCmdLineOptions options[]=
 {
@@ -40,11 +39,8 @@ static const KCmdLineOptions options[]=
 
 int main( int argc, char **argv )
 {
-    KAboutData aboutData( "kspread", I18N_NOOP("KSpread"),
-        version, description, KAboutData::License_GPL,
-        "(c) 1998-2000, Torben Weis");
-    aboutData.addAuthor("Torben Weis",0, "weis@kde.org");
-    KCmdLineArgs::init( argc, argv, &aboutData );
+
+    KCmdLineArgs::init( argc, argv, KSpreadFactory::global()->aboutData());
     KCmdLineArgs::addCmdLineOptions( options );
 
     KoApplication app;

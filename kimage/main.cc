@@ -26,14 +26,14 @@
 #include <klocale.h>
 #include "kimage_doc.h"
 #include "kimage_shell.h"
+#include "kimage_factory.h"
 
 extern "C"
 {
   void* init_libkimage();
 }
 
-static const char* description=I18N_NOOP("KOffice Image Viewer");
-static const char* version="0.1";
+
 
 static const KCmdLineOptions options[]=
 {
@@ -43,15 +43,11 @@ static const KCmdLineOptions options[]=
 
 int main( int argc, char **argv )
 {
-  KoApplication app;
-
-  KAboutData aboutData( "kimage", I18N_NOOP("KImage"),
-    version, description, KAboutData::License_GPL,
-    "(c) 1998-2000, Michael Koch");
-  aboutData.addAuthor("Michael Koch",0, "koch@kde.org");
-  KCmdLineArgs::init( argc, argv, &aboutData );
+  KCmdLineArgs::init( argc, argv, KImageFactory::global()->aboutData());
   KCmdLineArgs::addCmdLineOptions( options );
   
+  KoApplication app;
+    
   app.dcopClient()->attach();
   app.dcopClient()->registerAs( "kimage" );
 

@@ -1,10 +1,14 @@
 #include "kspread_factory.h"
 #include "kspread_doc.h"
-
+#include <kaboutdata.h>
 #include "KSpreadAppIface.h"
 
+#include <klocale.h>
 #include <kinstance.h>
 #include <kstddirs.h>
+
+static const char* description=I18N_NOOP("KOffice Spreadsheet Application");
+static const char* version="0.1";
 
 extern "C"
 {
@@ -55,7 +59,12 @@ KInstance* KSpreadFactory::global()
 {
     if ( !s_global )
     {
-      s_global = new KInstance( "kspread" );
+      KAboutData *aboutData= new KAboutData( "kspread", I18N_NOOP("KSpread"),
+        version, description, KAboutData::License_GPL,
+        "(c) 1998-2000, Torben Weis");
+      aboutData->addAuthor("Torben Weis",0, "weis@kde.org");
+      
+      s_global = new KInstance(aboutData);
       s_global->dirs()->addResourceType( "toolbar",
 				         KStandardDirs::kde_default("data") + "koffice/toolbar/");
       s_global->dirs()->addResourceType( "extensions", KStandardDirs::kde_default("data") + "koffice/extensions/");

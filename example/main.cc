@@ -21,12 +21,12 @@
 #include <koDocument.h>
 #include <koMainWindow.h>
 #include <koQueryTypes.h>
-#include <kaboutdata.h>
 #include <kcmdlineargs.h>
 #include <klocale.h>
+#include <kaboutdata.h>
+#include "example_factory.h"
 
-static const char* description=I18N_NOOP("Example KOffice Program");
-static const char* version="0.1";
+
 
 static const KCmdLineOptions options[]=
 {
@@ -36,14 +36,10 @@ static const KCmdLineOptions options[]=
 
 int main( int argc, char **argv )
 {
-    KAboutData aboutData( "example", I18N_NOOP("Example"),
-        version, description, KAboutData::License_GPL,
-        "(c) 1998-2000, Torben Weis");
-    aboutData.addAuthor("Torben Weis",0, "weis@kde.org");
-    KCmdLineArgs::init( argc, argv, &aboutData );
+    KCmdLineArgs::init( argc, argv, ExampleFactory::global()->aboutData());
     KCmdLineArgs::addCmdLineOptions( options );
-
     KoApplication app;
+    
     app.start(); // parses command line args, create initial docs and shells
     app.exec();
     return 0;

@@ -26,8 +26,13 @@
 #include <kglobal.h>
 #include <kstddirs.h>
 #include <kinstance.h>
-
+#include <kaboutdata.h>
 #include <qstringlist.h>
+#include <klocale.h>
+
+
+static const char* description=I18N_NOOP("KOffice Presentation Tool");
+static const char* version="0.1";
 
 extern "C"
 {
@@ -93,7 +98,12 @@ KInstance* KPresenterFactory::global()
 {
     if ( !s_global )
     {
-      s_global = new KInstance( "kpresenter" );
+      KAboutData *aboutData= new KAboutData( "kpresenter", I18N_NOOP("KPresenter"),
+        version, description, KAboutData::License_GPL,
+        "(c) 1998-2000, Reginald Stadlbauer");
+      aboutData->addAuthor("Reginald Stadlbauer",0, "reggie@kde.org");
+    
+      s_global = new KInstance(aboutData);
 
       s_global->dirs()->addResourceType("kpresenter_template",
 				        KStandardDirs::kde_default("data") + "kpresenter/templates/");

@@ -26,8 +26,13 @@
 #include <kstddirs.h>
 #include <kimgio.h>
 #include <kinstance.h>
+#include <klocale.h>
+#include <kaboutdata.h>
 
 #include <qstringlist.h>
+
+static const char* description=I18N_NOOP("KOffice Word Processor");
+static const char* version="0.1";
 
 extern "C"
 {
@@ -93,6 +98,10 @@ KInstance* KWordFactory::global()
 {
     if ( !s_global )
     {
+      KAboutData aboutData( "kword", I18N_NOOP("KWord"),
+        version, description, KAboutData::License_GPL,
+        "(c) 1998-2000, Reginald Stadlbauer");
+      aboutData.addAuthor("Reginald Stadlbauer",0, "reggie@kde.org");
       s_global = new KInstance( "kword" );
 
       s_global->dirs()->addResourceType( "kword_template",

@@ -21,9 +21,8 @@
 #include <kcmdlineargs.h>
 #include <kaboutdata.h>
 #include <klocale.h>
+#include "kchart_factory.h"
 
-static const char* description=I18N_NOOP("KOffice Chart Generator");
-static const char* version="0.1";
 
 static const KCmdLineOptions options[]=
 {
@@ -33,17 +32,11 @@ static const KCmdLineOptions options[]=
 
 int main( int argc, char **argv )
 {
-    KAboutData aboutData( "kchart", I18N_NOOP("KChart"),
-        version, description, KAboutData::License_GPL,
-        "(c) 1998-2000, Kalle Dalheimer");
-    aboutData.addAuthor("Kalle Dalheimer",0, "kalle@kde.org");
-    KCmdLineArgs::init( argc, argv, &aboutData );
-    KCmdLineArgs::addCmdLineOptions( options );
-
     KoApplication app;
-
+    KCmdLineArgs::init( argc, argv, KChartFactory::global()->aboutData());
+    KCmdLineArgs::addCmdLineOptions( options );
+    
     app.start();
-
     app.exec();
 
     return 0;
