@@ -950,7 +950,7 @@ bool KexiMainWindowImpl::openProject(KexiProjectData *projectData)
 
 	d->updatePropEditorVisibility(d->curDialog ? d->curDialog->currentViewMode() : 0);
 #ifndef PROPEDITOR_VISIBILITY_CHANGES
-	if (!d->curDialog)
+	if (!d->curDialog || d->curDialog->currentViewMode()==Kexi::DataViewMode)
 		d->propEditorToolWindow->hide();
 #endif
 
@@ -1283,6 +1283,13 @@ void KexiMainWindowImpl::slotLastChildViewClosed() //slotLastChildFrmClosed()
 		return;
 	slotCaptionForCurrentMDIChild(false);
 	activeWindowChanged(0);
+
+	if (d->propEditorToolWindow)
+		d->propEditorToolWindow->hide();
+//	if (d->propEditor) {
+		//KDockWidget *dw = (KDockWidget *)d->propEditor->parentWidget();
+		//dw->hide();
+//	}
 }
 
 void KexiMainWindowImpl::slotChildViewIsDetachedNow(QWidget*)
