@@ -338,33 +338,35 @@ void OLEFilter::convert( const QCString& mimeTypeHint )
         FilterBase *myFilter=0L;
 
         if ( mimeType == "application/x-kword" ) {
-            // WinWord.
+            // WinWord (or dummy).
 
-            myFile main, table0, table1, data;
+            myFile main;
             KLaola::NodeList tmp;
-
             tmp=docfile->find("WordDocument", true);
-            if(tmp.count()==1)
+
+            if(tmp.count()==1) {
+                // okay, not a dummy
                 main=docfile->stream(tmp.at(0));
 
-            tmp=docfile->find("0Table", true);
-            if(tmp.count()==1)
-                table0=docfile->stream(tmp.at(0));
+                myFile table0, table1, data;
+                tmp=docfile->find("0Table", true);
+                if(tmp.count()==1)
+                    table0=docfile->stream(tmp.at(0));
 
-            tmp=docfile->find("1Table", true);
-            if(tmp.count()==1)
-                table1=docfile->stream(tmp.at(0));
+                tmp=docfile->find("1Table", true);
+                if(tmp.count()==1)
+                    table1=docfile->stream(tmp.at(0));
 
-            tmp=docfile->find("Data", true);
-            if(tmp.count()==1)
-                data=docfile->stream(tmp.at(0));
+                tmp=docfile->find("Data", true);
+                if(tmp.count()==1)
+                    data=docfile->stream(tmp.at(0));
 
-            mimeType = "application/x-kword";
-            myFilter=new WordFilter(main, table0, table1, data);
+                myFilter=new WordFilter(main, table0, table1, data);
 
-            // forward the internal communication calls
-            connect( this, SIGNAL( internalCommShapeID( unsigned int& ) ), myFilter, SIGNAL( internalCommShapeID( unsigned int& ) ) );
-            connect( this, SIGNAL( internalCommDelayStream( const char* ) ), myFilter, SIGNAL( internalCommDelayStream( const char* ) ) );
+                // forward the internal communication calls
+                connect( this, SIGNAL( internalCommShapeID( unsigned int& ) ), myFilter, SIGNAL( internalCommShapeID( unsigned int& ) ) );
+                connect( this, SIGNAL( internalCommDelayStream( const char* ) ), myFilter, SIGNAL( internalCommDelayStream( const char* ) ) );
+            }
         }
         else if ( mimeType == "application/x-kspread" ) {
             // Excel.
@@ -380,7 +382,6 @@ void OLEFilter::convert( const QCString& mimeTypeHint )
                 if ( tmp.count() == 1 )
                     workbook = docfile->stream( tmp.at( 0 ) );
             }
-            mimeType = "application/x-kspread";
             myFilter=new ExcelFilter(workbook);
         }
         else if ( mimeType == "application/x-kpresenter" ) {
@@ -405,68 +406,18 @@ void OLEFilter::convert( const QCString& mimeTypeHint )
             if(tmp.count()==1)
                 documentSummary=docfile->stream(tmp.at(0));
 
-            mimeType = "application/x-kpresenter";
             myFilter=new PowerPointFilter(main, currentUser);
-        }
-        else {
-            // We haven't been able to find the type of the file with our
-            // first few guesses... let's try with a few different ones ;)
-            // ###### CHECK: Shaheed, please have a look.
-            node=list.first();
-
-            do {
-                nodeNames.prepend(node->name());
-                /*
-                if(node->name()=="Ole10Native") {
-                    myFile native, pres, objinfo, compobj;
-                    KLaola::NodeList tmp;
-
-                    tmp=docfile->find("Ole10Native", true);
-                    if(tmp.count()==1)
-                        native=docfile->stream(tmp.at(0));
-
-                    tmp=docfile->find("OlePres000", true);
-                    if(tmp.count()==1)
-                        pres=docfile->stream(tmp.at(0));
-
-                    tmp=docfile->find("ObjInfo", true);
-                    if(tmp.count()==1)
-                        objinfo=docfile->stream(tmp.at(0));
-
-                    tmp=docfile->find("CompObj", true);
-                    if(tmp.count()==1)
-                        compobj=docfile->stream(tmp.at(0));
-                    kdDebug(s_area) << "converting XXXXXXXXXXXX" << endl;
-                    QFile file;
-                    file.setName("Ole10Native");
-                    file.open(IO_WriteOnly );
-                    file.writeBlock((char*)native.data, native.length);
-                    file.close();
-                    file.setName("OlePres000");
-                    file.open(IO_WriteOnly );
-                    file.writeBlock((char*)pres.data, pres.length);
-                    file.close();
-                    file.setName("ObjInfo");
-                    file.open(IO_WriteOnly );
-                    file.writeBlock((char*)objinfo.data, objinfo.length);
-                    file.close();
-                    file.setName("CompObj");
-                    file.open(IO_WriteOnly );
-                    file.writeBlock((char*)compobj.data, compobj.length);
-                    file.close();
-                    node=list.next();
-                }
-                */
-                node = list.next();
-            } while(!myFilter && node);
         }
 
         if(!myFilter) {
-
             // Unknown type. We turn it into a dummy kword document...
+            node = list.first();
+            do {
+                nodeNames.prepend(node->name());
+                node = list.next();
+            } while ( node );
 
             kdWarning(s_area) << "cannot convert \"" << nodeNames.join(",") << "\"" << endl;
-            mimeType = "application/x-kword";
             myFilter=new FilterBase(nodeNames);
         }
 
@@ -530,6 +481,7 @@ QCString OLEFilter::mimeTypeHelper()
     KLaola::NodeList list = docfile->parseCurrentDir();
     KLaola::OLENode* node = list.first();
 
+    // ###### FIXME: Shaheed, please add additional mimetypes here
     while ( node ) {
         if ( node->name() == "WordDocument" )
             return "application/x-kword";
