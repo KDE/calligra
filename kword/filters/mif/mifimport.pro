@@ -13,6 +13,7 @@ PARSER = parser.cpp
 SOURCES =	$$PARSER \
 			backend.cpp	\
 			keyword.cpp \
+			treebuild_document.cpp \
 			treebuild_pgf.cpp \
 			treebuild_font.cpp \
 			treebuild_tabstop.cpp \
@@ -27,6 +28,7 @@ SOURCES =	$$PARSER \
 			generate_xml_textflow.cpp \
 			generate_xml_para.cpp
 HEADERS =	backend.h \
+			treebuild_document.h \
 			treebuild_pgf.h	\
 			treebuild_font.h	\
 			treebuild_tabstop.h	\

@@ -35,38 +35,160 @@ void warning( char*s, char* t );
 	TFSynchronized* mif_tfsynchronized;
 	TFLineSpacing* mif_tflinespacing;
 	TFMinHangHeight* mif_tfminhangheight;
+		DocumentElementList* mif_document;
+	FNoteStartNum* mif_fnotestartnum;
+	DocumentElementList* mif_documentelementlist;
+	DocumentElement* mif_documentelement;
+	DocumentAcrobatBookmarksIncludeTagNames* mif_dacrobatbookmarksincludetagnames;
+	DocumentAcrobatParagraphBookmarks* mif_dacrobatparagraphbookmarks;
+	DocumentAutoChBars* mif_dautochbars;
+	DocumentBordersOn* mif_dborderson;
+	DocumentChBarColor* mif_dchbarcolor;
+	DocumentChBarGap* mif_dchbargap;
+	DocumentChBarPosition* mif_dchbarposition;
+	DocumentChBarWidth* mif_dchbarwidth;
+	DocumentCurrentView* mif_dcurrentview;
+	DocumentDisplayOverrides* mif_ddisplayoverrides;
+	DocumentFluid* mif_dfluid;
+	DocumentFluidSideHeads* mif_dfluidsideheads;
+	DocumentFNoteAnchorPos* mif_dfnoteanchorpos;
+	DocumentFNoteAnchorPrefix* mif_dfnoteanchorprefix;
+	DocumentFNoteAnchorSuffix* mif_dfnoteanchorsuffix;
+	DocumentFNoteLabels* mif_dfnotelabels;
+	DocumentFNoteMaxH* mif_dfnotemaxh;
+	DocumentFNoteNumberPos* mif_dfnotenumberpos;
+	DocumentFNoteNumberPrefix* mif_dfnotenumberprefix;
+	DocumentFNoteNumberSuffix* mif_dfnotenumbersuffix;
+	DocumentFNoteNumStyle* mif_dfnotenumstyle;
+	DocumentFNoteRestart* mif_dfnoterestart;
+	DocumentFNoteTag* mif_dfnotetag;
+	DocumentFrozenPages* mif_dfrozenpages;
+	DocumentFullRulers* mif_dfullrulers;
+	DocumentGenerateAcrobatInfo* mif_dgenerateacrobatinfo;
+	DocumentGraphicsOff* mif_dgraphicsoff;
+	DocumentGridOn* mif_dgridon;
+	DocumentLanguage* mif_dlanguage;
+	DocumentLineBreakChars* mif_dlinebreakchars;
+	DocumentLinkBoundariesOn* mif_dlinkboundarieson;
+	DocumentMathAlphaCharFontFamily* mif_dmathalphacharfontfamily;
+	DocumentMathCatalog* mif_dmathcatalog;
+	DocumentMathFunctions* mif_dmathfunctions;
+	DocumentMathGreek* mif_dmathgreek;
+	DocumentMathLargeHoriz* mif_dmathlargehoriz;
+	DocumentMathLargeIntegral* mif_dmathlargeintegral;
+	DocumentMathLargeLevel1* mif_dmathlargelevel1;
+	DocumentMathLargeLevel2* mif_dmathlargelevel2;
+	DocumentMathLargeLevel3* mif_dmathlargelevel3;
+	DocumentMathLargeSigma* mif_dmathlargesigma;
+	DocumentMathLargeVert* mif_dmathlargevert;
+	DocumentMathMediumHoriz* mif_dmathmediumhoriz;
+	DocumentMathMediumIntegral* mif_dmathmediumintegral;
+	DocumentMathMediumLevel1* mif_dmathmediumlevel1;
+	DocumentMathMediumLevel2* mif_dmathmediumlevel2;
+	DocumentMathMediumLevel3* mif_dmathmediumlevel3;
+	DocumentMathMediumSigma* mif_dmathmediumsigma;
+	DocumentMathMediumVert* mif_dmathmediumvert;
+	DocumentMathNumbers* mif_dmathnumbers;
+	DocumentMathShowCustom* mif_dmathshowcustom;
+	DocumentMathSmallHoriz* mif_dmathsmallhoriz;
+	DocumentMathSmallIntegral* mif_dmathsmallintegral;
+	DocumentMathSmallLevel1* mif_dmathsmalllevel1;
+	DocumentMathSmallLevel2* mif_dmathsmalllevel2;
+	DocumentMathSmallLevel3* mif_dmathsmalllevel3;
+	DocumentMathSmallSigma* mif_dmathsmallsigma;
+	DocumentMathSmallVert* mif_dmathsmallvert;
+	DocumentMathStrings* mif_dmathstrings;
+	DocumentMathVariables* mif_dmathvariables;
+	DocumentMenuBar* mif_dmenubar;
+	DocumentNarrowRubiSpaceForJapanese* mif_dnarrowrubispaceforjapanese;
+	DocumentNarrowRubiSpaceForOther* mif_dnarrowrubispaceforother;
+	DocumentNextUnique* mif_dnextunique;
+	DocumentPageGrid* mif_dpagegrid;
+	DocumentPageNumStyle* mif_dpagenumstyle;
+	DocumentPagePointStyle* mif_dpagepointstyle;
+	DocumentPageRounding* mif_dpagerounding;
+	DocumentPageScrolling* mif_dpagescrolling;
+	DocumentPageSize* mif_dpagesize;
+	DocumentParity* mif_dparity;
+	DocumentPrintSeparations* mif_dprintseparations;
+	DocumentPrintSkipBlankPages* mif_dprintskipblankpages;
+	DocumentPunctuationChars* mif_dpunctuationchars;
+	DocumentRubiAlignAtLineBounds* mif_drubialignatlinebounds;
+	DocumentRubiOverhang* mif_drubioverhang;
+	DocumentRubiSize* mif_drubisize;
+	DocumentRulersOn* mif_drulerson;
+	DocumentShowAllConditions* mif_dshowallconditions;
+	DocumentSmallCapsSize* mif_dsmallcapssize;
+	DocumentSmallCapsStretch* mif_dsmallcapsstretch;
+	DocumentSmartQuotesOn* mif_dsmartquoteson;
+	DocumentSmartSpacesOn* mif_dsmartspaceson;
+	DocumentSnapGrid* mif_dsnapgrid;
+	DocumentSnapRotation* mif_dsnaprotation;
+	DocumentStartPage* mif_dstartpage;
+	DocumentSubscriptShift* mif_dsubscriptshift;
+	DocumentSubscriptSize* mif_dsubscriptsize;
+	DocumentSubscriptStretch* mif_dsubscriptstretch;
+	DocumentSuperscriptShift* mif_dsuperscriptshift;
+	DocumentSuperscriptSize* mif_dsuperscriptsize;
+	DocumentSuperscriptStretch* mif_dsuperscriptstretch;
+	DocumentSymbolsOn* mif_dsymbolson;
+	DocumentTblFNoteAnchorPos* mif_dtblfnoteanchorpos;
+	DocumentTblFNoteAnchorPrefix* mif_dtblfnoteanchorprefix;
+	DocumentTblFNoteAnchorSuffix* mif_dtblfnoteanchorsuffix;
+	DocumentTblFNoteLabels* mif_dtblfnotelabels;
+	DocumentTblFNoteNumberPos* mif_dtblfnotenumberpos;
+	DocumentTblFNoteNumberPrefix* mif_dtblfnotenumberprefix;
+	DocumentTblFNoteNumberSuffix* mif_dtblfnotenumbersuffix;
+	DocumentTblFNoteNumStyle* mif_dtblfnotenumstyle;
+	DocumentTblFNoteTag* mif_dtblfnotetag;
+	DocumentTwoSides* mif_dtwosides;
+	DocumentUpdateTextInsetsOnOpen* mif_dupdatetextinsetsonopen;
+	DocumentUpdateXRefsOnOpen* mif_dupdatexrefsonopen;
+	DocumentViewOnly* mif_dviewonly;
+	DocumentViewOnlySelect* mif_dviewonlyselect;
+	DocumentViewOnlyWinBorders* mif_dviewonlywinborders;
+	DocumentViewOnlyWinMenubar* mif_dviewonlywinmenubar;
+	DocumentViewOnlyWinPalette* mif_dviewonlywinpalette;
+	DocumentViewOnlyWinPopup* mif_dviewonlywinpopup;
+	DocumentViewOnlyXRef* mif_dviewonlyxref;
+	DocumentViewRect* mif_dviewrect;
+	DocumentViewScale* mif_dviewscale;
+	DocumentVoMenuBar* mif_dvomenubar;
+	DocumentWideRubiSpaceForJapanese* mif_dwiderubispaceforjapanese;
+	DocumentWideRubiSpaceForOther* mif_dwiderubispaceforother;
+	DocumentWindowRect* mif_dwindowrect;
 	String* mif_string;
 	Char* mif_char;
-	TextRectID* mif_textrectid;
-	Variable* mif_variable;
-	VariableElement* mif_variableelement;
-	VariableElementList* mif_variableelementlist;
-	ATbl* mif_atbl;
-	AFrame* mif_aframe;
-	Marker* mif_marker;
-	MarkerElement* mif_markerelement;
-	MarkerElementList* mif_markerelementlist;
-	XRefEnd* mif_xrefend;
-	Para* mif_para;
-	ParaElement* mif_paraelement;
-	ParaElementList* mif_paraelementlist;
-	ParaLine* mif_paraline;
-	ParaLineElement* mif_paralineelement;
-	ParaLineElementList* mif_paralineelementlist;
-	FNote* mif_fnote;
-	FNoteElement* mif_fnoteelement;
-	FNoteElementList* mif_fnoteelementlist;
-	Unique* mif_unique;
-	FrameID* mif_id;
-	Pen* mif_pen;
-	Notes* mif_notes;
-	NotesElement* mif_noteselement;
-	NotesElementList* mif_noteselementlist;
-	XRefSrcText* mif_xrefsrctext;
-	XRefSrcFile* mif_xrefsrcfile;
-	XRefSrcIsElem* mif_xrefsrciselem;
-	XRefLastUpdate* mif_xreflastupdate;
-	VariableName* mif_variablename;
+TextRectID* mif_textrectid;
+Variable* mif_variable;
+VariableElement* mif_variableelement;
+VariableElementList* mif_variableelementlist;
+ATbl* mif_atbl;
+AFrame* mif_aframe;
+Marker* mif_marker;
+MarkerElement* mif_markerelement;
+MarkerElementList* mif_markerelementlist;
+XRefEnd* mif_xrefend;
+Para* mif_para;
+ParaElement* mif_paraelement;
+ParaElementList* mif_paraelementlist;
+ParaLine* mif_paraline;
+ParaLineElement* mif_paralineelement;
+ParaLineElementList* mif_paralineelementlist;
+FNote* mif_fnote;
+FNoteElement* mif_fnoteelement;
+FNoteElementList* mif_fnoteelementlist;
+Unique* mif_unique;
+FrameID* mif_id;
+Pen* mif_pen;
+Notes* mif_notes;
+NotesElement* mif_noteselement;
+NotesElementList* mif_noteselementlist;
+XRefSrcText* mif_xrefsrctext;
+XRefSrcFile* mif_xrefsrcfile;
+XRefSrcIsElem* mif_xrefsrciselem;
+XRefLastUpdate* mif_xreflastupdate;
+VariableName* mif_variablename;
 	VariableDef* mif_variabledef;
 	XRefName* mif_xrefname;
 	XRef* mif_xref;
@@ -631,6 +753,125 @@ void warning( char*s, char* t );
 %type <mif_aframe> tag_aframe
 %type <mif_atbl> tag_atbl
 %type <mif_char> tag_char
+%type <mif_documentelement> document_element
+%type <mif_dacrobatbookmarksincludetagnames> tag_dacrobatbookmarksincludetagnames 
+%type <mif_dacrobatparagraphbookmarks> tag_dacrobatparagraphbookmarks
+%type <mif_dautochbars> tag_dautochbars 
+%type <mif_dborderson> tag_dborderson 
+%type <mif_dchbarcolor> tag_dchbarcolor 
+%type <mif_dchbargap> tag_dchbargap 
+%type <mif_dchbarposition> tag_dchbarposition 
+%type <mif_dchbarwidth> tag_dchbarwidth 
+%type <mif_dcurrentview> tag_dcurrentview 
+%type <mif_ddisplayoverrides> tag_ddisplayoverrides 
+%type <mif_dfluid> tag_dfluid 
+%type <mif_dfluidsideheads> tag_dfluidsideheads 
+%type <mif_dfnoteanchorpos> tag_dfnoteanchorpos
+%type <mif_dfnoteanchorprefix> tag_dfnoteanchorprefix 
+%type <mif_dfnoteanchorsuffix> tag_dfnoteanchorsuffix 
+%type <mif_dfnotelabels> tag_dfnotelabels 
+%type <mif_dfnotemaxh> tag_dfnotemaxh
+%type <mif_dfnotenumberpos> tag_dfnotenumberpos 
+%type <mif_dfnotenumberprefix> tag_dfnotenumberprefix 
+%type <mif_dfnotenumbersuffix> tag_dfnotenumbersuffix 
+%type <mif_dfnotenumstyle> tag_dfnotenumstyle 
+%type <mif_dfnoterestart> tag_dfnoterestart 
+%type <mif_dfnotetag> tag_dfnotetag 
+%type <mif_dfrozenpages> tag_dfrozenpages 
+%type <mif_dfullrulers> tag_dfullrulers 
+%type <mif_dgenerateacrobatinfo> tag_dgenerateacrobatinfo 
+%type <mif_dgraphicsoff> tag_dgraphicsoff 
+%type <mif_dgridon> tag_dgridon 
+%type <mif_dlanguage> tag_dlanguage 
+%type <mif_dlinebreakchars> tag_dlinebreakchars 
+%type <mif_dlinkboundarieson> tag_dlinkboundarieson 
+%type <mif_dmathalphacharfontfamily> tag_dmathalphacharfontfamily 
+%type <mif_dmathcatalog> tag_dmathcatalog 
+%type <mif_dmathfunctions> tag_dmathfunctions 
+%type <mif_dmathgreek> tag_dmathgreek 
+%type <mif_dmathlargehoriz> tag_dmathlargehoriz 
+%type <mif_dmathlargeintegral> tag_dmathlargeintegral 
+%type <mif_dmathlargelevel1> tag_dmathlargelevel1 
+%type <mif_dmathlargelevel2> tag_dmathlargelevel2 
+%type <mif_dmathlargelevel3> tag_dmathlargelevel3 
+%type <mif_dmathlargesigma> tag_dmathlargesigma 
+%type <mif_dmathlargevert> tag_dmathlargevert 
+%type <mif_dmathmediumhoriz> tag_dmathmediumhoriz 
+%type <mif_dmathmediumintegral> tag_dmathmediumintegral 
+%type <mif_dmathmediumlevel1> tag_dmathmediumlevel1 
+%type <mif_dmathmediumlevel2> tag_dmathmediumlevel2 
+%type <mif_dmathmediumlevel3> tag_dmathmediumlevel3 
+%type <mif_dmathmediumsigma> tag_dmathmediumsigma 
+%type <mif_dmathmediumvert> tag_dmathmediumvert 
+%type <mif_dmathnumbers> tag_dmathnumbers 
+%type <mif_dmathshowcustom> tag_dmathshowcustom 
+%type <mif_dmathsmallhoriz> tag_dmathsmallhoriz 
+%type <mif_dmathsmallintegral> tag_dmathsmallintegral 
+%type <mif_dmathsmalllevel1> tag_dmathsmalllevel1 
+%type <mif_dmathsmalllevel2> tag_dmathsmalllevel2 
+%type <mif_dmathsmalllevel3> tag_dmathsmalllevel3 
+%type <mif_dmathsmallsigma> tag_dmathsmallsigma 
+%type <mif_dmathsmallvert> tag_dmathsmallvert 
+%type <mif_dmathstrings> tag_dmathstrings 
+%type <mif_dmathvariables> tag_dmathvariables 
+%type <mif_dmenubar> tag_dmenubar 
+%type <mif_dnarrowrubispaceforjapanese> tag_dnarrowrubispaceforjapanese 
+%type <mif_dnarrowrubispaceforother> tag_dnarrowrubispaceforother 
+%type <mif_dnextunique> tag_dnextunique 
+%type <mif_dpagegrid> tag_dpagegrid 
+%type <mif_dpagenumstyle> tag_dpagenumstyle 
+%type <mif_dpagepointstyle> tag_dpagepointstyle 
+%type <mif_dpagerounding> tag_dpagerounding 
+%type <mif_dpagescrolling> tag_dpagescrolling 
+%type <mif_dpagesize> tag_dpagesize 
+%type <mif_dparity> tag_dparity 
+%type <mif_dprintseparations> tag_dprintseparations 
+%type <mif_dprintskipblankpages> tag_dprintskipblankpages 
+%type <mif_dpunctuationchars> tag_dpunctuationchars 
+%type <mif_drubialignatlinebounds> tag_drubialignatlinebounds 
+%type <mif_drubioverhang> tag_drubioverhang 
+%type <mif_drubisize> tag_drubisize 
+%type <mif_drulerson> tag_drulerson 
+%type <mif_dshowallconditions> tag_dshowallconditions 
+%type <mif_dsmallcapssize> tag_dsmallcapssize 
+%type <mif_dsmallcapsstretch> tag_dsmallcapsstretch 
+%type <mif_dsmartquoteson> tag_dsmartquoteson 
+%type <mif_dsmartspaceson> tag_dsmartspaceson 
+%type <mif_dsnapgrid> tag_dsnapgrid 
+%type <mif_dsnaprotation> tag_dsnaprotation 
+%type <mif_dstartpage> tag_dstartpage 
+%type <mif_dsubscriptshift> tag_dsubscriptshift 
+%type <mif_dsubscriptsize> tag_dsubscriptsize 
+%type <mif_dsubscriptstretch> tag_dsubscriptstretch 
+%type <mif_dsuperscriptshift> tag_dsuperscriptshift 
+%type <mif_dsuperscriptsize> tag_dsuperscriptsize 
+%type <mif_dsuperscriptstretch> tag_dsuperscriptstretch 
+%type <mif_dsymbolson> tag_dsymbolson 
+%type <mif_dtblfnoteanchorpos> tag_dtblfnoteanchorpos 
+%type <mif_dtblfnoteanchorprefix> tag_dtblfnoteanchorprefix 
+%type <mif_dtblfnoteanchorsuffix> tag_dtblfnoteanchorsuffix 
+%type <mif_dtblfnotelabels> tag_dtblfnotelabels 
+%type <mif_dtblfnotenumberpos> tag_dtblfnotenumberpos 
+%type <mif_dtblfnotenumberprefix> tag_dtblfnotenumberprefix 
+%type <mif_dtblfnotenumbersuffix> tag_dtblfnotenumbersuffix 
+%type <mif_dtblfnotenumstyle> tag_dtblfnotenumstyle 
+%type <mif_dtblfnotetag> tag_dtblfnotetag 
+%type <mif_dtwosides> tag_dtwosides 
+%type <mif_dupdatetextinsetsonopen> tag_dupdatetextinsetsonopen 
+%type <mif_dupdatexrefsonopen> tag_dupdatexrefsonopen 
+%type <mif_dviewonly> tag_dviewonly 
+%type <mif_dviewonlyselect> tag_dviewonlyselect 
+%type <mif_dviewonlywinborders> tag_dviewonlywinborders 
+%type <mif_dviewonlywinmenubar> tag_dviewonlywinmenubar 
+%type <mif_dviewonlywinpalette> tag_dviewonlywinpalette 
+%type <mif_dviewonlywinpopup> tag_dviewonlywinpopup 
+%type <mif_dviewonlyxref> tag_dviewonlyxref 
+%type <mif_dviewrect> tag_dviewrect 
+%type <mif_dviewscale> tag_dviewscale 
+%type <mif_dvomenubar> tag_dvomenubar 
+%type <mif_dwiderubispaceforjapanese> tag_dwiderubispaceforjapanese 
+%type <mif_dwiderubispaceforother> tag_dwiderubispaceforother 
+%type <mif_dwindowrect> tag_dwindowrect 
 %type <mif_fangle> tag_fangle
 %type <mif_fcase> tag_fcase
 %type <mif_fchangebar> tag_fchangebar
@@ -646,6 +887,7 @@ void warning( char*s, char* t );
 %type <mif_fnoteelement> fnote_element
 %type <mif_fnote> fnotereference
 %type <mif_fnote> tag_fnote
+%type <mif_fnotestartnum> tag_fnotestartnum
 %type <mif_foutline> tag_foutline
 %type <mif_foverline> tag_foverline
 %type <mif_fpairkern> tag_fpairkern
@@ -2055,497 +2297,741 @@ tag_document:	'<' DOCUMENT document_elements '>'
 				;
 
 document_elements:		document_element
-					|	document_elements document_element
+						{ 
+							documentelements.push_front( $1 );
+						}
+					|	document_element document_elements
+						{
+							documentelements.push_front( $1 );
+						}			 
 					;
 
 document_element:		tag_dacrobatbookmarksincludetagnames 
+						{ $$ = new DocumentElement( $1 ); }
 					|	tag_dacrobatparagraphbookmarks
+						{ $$ = new DocumentElement( $1 ); }
 					|	tag_dautochbars 
+						{ $$ = new DocumentElement( $1 ); }
 					|	tag_dborderson 
+						{ $$ = new DocumentElement( $1 ); }
 					|	tag_dchbarcolor 
+						{ $$ = new DocumentElement( $1 ); }
 					|	tag_dchbargap 
+						{ $$ = new DocumentElement( $1 ); }
 					|	tag_dchbarposition 
+						{ $$ = new DocumentElement( $1 ); }
 					|	tag_dchbarwidth	
+						{ $$ = new DocumentElement( $1 ); }
 					|	tag_dcurrentview 
+						{ $$ = new DocumentElement( $1 ); }
 					|	tag_ddisplayoverrides 
+						{ $$ = new DocumentElement( $1 ); }
 					|	tag_dfnoteanchorpos
+						{ $$ = new DocumentElement( $1 ); }
 					|	tag_dfnoteanchorprefix
+						{ $$ = new DocumentElement( $1 ); }
 					|	tag_dfnoteanchorsuffix 
+						{ $$ = new DocumentElement( $1 ); }
 					|	tag_dfnotelabels 
+						{ $$ = new DocumentElement( $1 ); }
 					|	tag_dfnotemaxh
+						{ $$ = new DocumentElement( $1 ); }
 					|	tag_dfnotenumstyle 
+						{ $$ = new DocumentElement( $1 ); }
 					|	tag_dfnotenumberpos 
+						{ $$ = new DocumentElement( $1 ); }
 					|	tag_dfnotenumberprefix 
+						{ $$ = new DocumentElement( $1 ); }
 					|	tag_dfnotenumbersuffix 
+						{ $$ = new DocumentElement( $1 ); }
 					|	tag_dfnoterestart 
+						{ $$ = new DocumentElement( $1 ); }
 					|	tag_dfnotetag 
+						{ $$ = new DocumentElement( $1 ); }
 					|	tag_dfluid 
+						{ $$ = new DocumentElement( $1 ); }
 					|	tag_dfluidsideheads 
+						{ $$ = new DocumentElement( $1 ); }
 					|	tag_dfrozenpages 
+						{ $$ = new DocumentElement( $1 ); }
 					|	tag_dfullrulers 
+						{ $$ = new DocumentElement( $1 ); }
 					|	tag_dgenerateacrobatinfo 
+						{ $$ = new DocumentElement( $1 ); }
 					|	tag_dgraphicsoff 
+						{ $$ = new DocumentElement( $1 ); }
 					|	tag_dgridon 
+						{ $$ = new DocumentElement( $1 ); }
 					|	tag_dlanguage 
+						{ $$ = new DocumentElement( $1 ); }
 					|	tag_dlinebreakchars 
+						{ $$ = new DocumentElement( $1 ); }
 					|	tag_dlinkboundarieson 
+						{ $$ = new DocumentElement( $1 ); }
 					|	tag_dmathalphacharfontfamily 
+						{ $$ = new DocumentElement( $1 ); }
 					|	tag_dmathcatalog 
+						{ $$ = new DocumentElement( $1 ); }
 					|	tag_dmathfunctions 
+						{ $$ = new DocumentElement( $1 ); }
 					|	tag_dmathgreek 
+						{ $$ = new DocumentElement( $1 ); }
 					|	tag_dmathlargehoriz 
+						{ $$ = new DocumentElement( $1 ); }
 					|	tag_dmathlargeintegral 
+						{ $$ = new DocumentElement( $1 ); }
 					|	tag_dmathlargelevel1 
+						{ $$ = new DocumentElement( $1 ); }
 					|	tag_dmathlargelevel2 
+						{ $$ = new DocumentElement( $1 ); }
 					|	tag_dmathlargelevel3 
+						{ $$ = new DocumentElement( $1 ); }
 					|	tag_dmathlargesigma 
+						{ $$ = new DocumentElement( $1 ); }
 					|	tag_dmathlargevert 
+						{ $$ = new DocumentElement( $1 ); }
 					|	tag_dmathmediumhoriz 
+						{ $$ = new DocumentElement( $1 ); }
 					|	tag_dmathmediumintegral 
+						{ $$ = new DocumentElement( $1 ); }
 					|	tag_dmathmediumlevel1 
+						{ $$ = new DocumentElement( $1 ); }
 					|	tag_dmathmediumlevel2 
+						{ $$ = new DocumentElement( $1 ); }
 					|	tag_dmathmediumlevel3 
+						{ $$ = new DocumentElement( $1 ); }
 					|	tag_dmathmediumsigma 
+						{ $$ = new DocumentElement( $1 ); }
 					|	tag_dmathmediumvert 
+						{ $$ = new DocumentElement( $1 ); }
 					|	tag_dmathnumbers
+						{ $$ = new DocumentElement( $1 ); }
 					|	tag_dmathshowcustom 
+						{ $$ = new DocumentElement( $1 ); }
 					|	tag_dmathsmallhoriz 
+						{ $$ = new DocumentElement( $1 ); }
 					|	tag_dmathsmallintegral 
+						{ $$ = new DocumentElement( $1 ); }
 					|	tag_dmathsmalllevel1 
+						{ $$ = new DocumentElement( $1 ); }
 					|	tag_dmathsmalllevel2 
+						{ $$ = new DocumentElement( $1 ); }
 					|	tag_dmathsmalllevel3 
+						{ $$ = new DocumentElement( $1 ); }
 					|	tag_dmathsmallsigma 
+						{ $$ = new DocumentElement( $1 ); }
 					|	tag_dmathsmallvert 
+						{ $$ = new DocumentElement( $1 ); }
 					|	tag_dmathstrings 
+						{ $$ = new DocumentElement( $1 ); }
 					|	tag_dmathvariables 
+						{ $$ = new DocumentElement( $1 ); }
 					|	tag_dmenubar 
+						{ $$ = new DocumentElement( $1 ); }
 					|	tag_dnarrowrubispaceforjapanese 
+						{ $$ = new DocumentElement( $1 ); }
 					|	tag_dnarrowrubispaceforother 
+						{ $$ = new DocumentElement( $1 ); }
 					|	tag_dnextunique 
-					|	tag_dnoprintsepcolor 
-					|	tag_document 
+						{ $$ = new DocumentElement( $1 ); }
 					|	tag_dpagegrid 
+						{ $$ = new DocumentElement( $1 ); }
 					|	tag_dpagenumstyle 
+						{ $$ = new DocumentElement( $1 ); }
 					|	tag_dpagepointstyle 
+						{ $$ = new DocumentElement( $1 ); }
 					|	tag_dpagerounding 
+						{ $$ = new DocumentElement( $1 ); }
 					|	tag_dpagescrolling 
+						{ $$ = new DocumentElement( $1 ); }
 					|	tag_dpagesize 
+						{ $$ = new DocumentElement( $1 ); }
 					|	tag_dparity 
+						{ $$ = new DocumentElement( $1 ); }
 					|	tag_dprintseparations 
+						{ $$ = new DocumentElement( $1 ); }
 					|	tag_dprintskipblankpages
+						{ $$ = new DocumentElement( $1 ); }
 					|	tag_dpunctuationchars 
+						{ $$ = new DocumentElement( $1 ); }
 					|	tag_drubialignatlinebounds 
+						{ $$ = new DocumentElement( $1 ); }
 					|	tag_drubioverhang 
+						{ $$ = new DocumentElement( $1 ); }
 					|	tag_drubisize 
+						{ $$ = new DocumentElement( $1 ); }
 					|	tag_drulerson 
+						{ $$ = new DocumentElement( $1 ); }
 					|	tag_dshowallconditions 
+						{ $$ = new DocumentElement( $1 ); }
 					|	tag_dsmallcapssize 
+						{ $$ = new DocumentElement( $1 ); }
 					|	tag_dsmallcapsstretch 
+						{ $$ = new DocumentElement( $1 ); }
 					|	tag_dsmartquoteson 
+						{ $$ = new DocumentElement( $1 ); }
 					|	tag_dsmartspaceson 
+						{ $$ = new DocumentElement( $1 ); }
 					|	tag_dsnapgrid 
+						{ $$ = new DocumentElement( $1 ); }
 					|	tag_dsnaprotation 
+						{ $$ = new DocumentElement( $1 ); }
 					|	tag_dstartpage 
+						{ $$ = new DocumentElement( $1 ); }
 					|	tag_dsubscriptshift 
+						{ $$ = new DocumentElement( $1 ); }
 					|	tag_dsubscriptsize 
+						{ $$ = new DocumentElement( $1 ); }
 					|	tag_dsubscriptstretch 
+						{ $$ = new DocumentElement( $1 ); }
 					|	tag_dsuperscriptshift 
+						{ $$ = new DocumentElement( $1 ); }
 					|	tag_dsuperscriptsize 
+						{ $$ = new DocumentElement( $1 ); }
 					|	tag_dsuperscriptstretch
+						{ $$ = new DocumentElement( $1 ); }
 					|	tag_dsymbolson 
+						{ $$ = new DocumentElement( $1 ); }
 					|	tag_dtblfnoteanchorpos 
+						{ $$ = new DocumentElement( $1 ); }
 					|	tag_dtblfnoteanchorprefix 
+						{ $$ = new DocumentElement( $1 ); }
 					|	tag_dtblfnoteanchorsuffix 
+						{ $$ = new DocumentElement( $1 ); }
 					|	tag_dtblfnotelabels 
+						{ $$ = new DocumentElement( $1 ); }
 					|	tag_dtblfnotenumstyle 
+						{ $$ = new DocumentElement( $1 ); }
 					|	tag_dtblfnotenumberpos 
+						{ $$ = new DocumentElement( $1 ); }
 					|	tag_dtblfnotenumberprefix 
+						{ $$ = new DocumentElement( $1 ); }
 					|	tag_dtblfnotenumbersuffix 
+						{ $$ = new DocumentElement( $1 ); }
 					|	tag_dtblfnotetag 
+						{ $$ = new DocumentElement( $1 ); }
 					|	tag_dtwosides 
+						{ $$ = new DocumentElement( $1 ); }
 					|	tag_dupdatetextinsetsonopen 
+						{ $$ = new DocumentElement( $1 ); }
 					|	tag_dupdatexrefsonopen 
+						{ $$ = new DocumentElement( $1 ); }
 					|	tag_dviewonly 
+						{ $$ = new DocumentElement( $1 ); }
 					|	tag_dviewonlyselect 
+						{ $$ = new DocumentElement( $1 ); }
 					|	tag_dviewonlywinborders 
+						{ $$ = new DocumentElement( $1 ); }
 					|	tag_dviewonlywinmenubar 
+						{ $$ = new DocumentElement( $1 ); }
 					|	tag_dviewonlywinpalette 
+						{ $$ = new DocumentElement( $1 ); }
 					|	tag_dviewonlywinpopup 
+						{ $$ = new DocumentElement( $1 ); }
 					|	tag_dviewonlyxref 
+						{ $$ = new DocumentElement( $1 ); }
 					|	tag_dviewrect 
+						{ $$ = new DocumentElement( $1 ); }
 					|	tag_dviewscale 
+						{ $$ = new DocumentElement( $1 ); }
 					|	tag_dvomenubar 
+						{ $$ = new DocumentElement( $1 ); }
 					|	tag_dwiderubispaceforjapanese 
+						{ $$ = new DocumentElement( $1 ); }
 					|	tag_dwiderubispaceforother 
+						{ $$ = new DocumentElement( $1 ); }
 					|	tag_dwindowrect 
+						{ $$ = new DocumentElement( $1 ); }
 					|	tag_fnotestartnum
+						{ $$ = new DocumentElement( $1 ); }
 					;
 
 tag_dacrobatbookmarksincludetagnames:	'<' DACROBATBOOKMARKSINCLUDETAGNAMES ID '>' 
+	{ $$ = new DocumentAcrobatBookmarksIncludeTagNames( $3 ); }
 ;
 
 tag_dacrobatparagraphbookmarks:	'<' DACROBATPARAGRAPHBOOKMARKS ID '>'
+	{ $$ = new DocumentAcrobatParagraphBookmarks( $3 ); }
 ;
 
 tag_dautochbars:	'<' DAUTOCHBARS ID '>'
+	{ $$ = new DocumentAutoChBars( $3 ); }
 ;
 
 tag_dborderson:	'<' DBORDERSON ID '>' 
+	{ $$ = new DocumentBordersOn( $3 ); }
 ;
 
 tag_dchbarcolor:	'<' DCHBARCOLOR SQSTRING '>' 
+	{ $$ = new DocumentChBarColor( $3 ); }
 ;
 
 tag_dchbargap:	'<' DCHBARGAP INCHREAL '>' 
-				| '<' DCHBARGAP PCREAL '>' 
+	{ $$ = new DocumentChBarGap( $3 ); }
+				| '<' DCHBARGAP PCREAL '>'
+	{ $$ = new DocumentChBarGap( $3 ); } 
 ;
 
 tag_dchbarposition:	'<' DCHBARPOSITION ID '>' 
+	{ $$ = new DocumentChBarPosition( $3 ); }
 ;
 
 tag_dchbarwidth:	'<' DCHBARWIDTH REAL unit '>'	
+	{ $$ = new DocumentChBarWidth( $3 ); }
 ;
 
 tag_dcurrentview:	'<' DCURRENTVIEW INTEGER '>' 
+	{ $$ = new DocumentCurrentView( $3 ); }
 ;
 
 tag_ddisplayoverrides:	'<' DDISPLAYOVERRIDES ID '>' 
+	{ $$ = new DocumentDisplayOverrides( $3 ); }
 ;
 
 tag_dfnoteanchorpos:	'<' DFNOTEANCHORPOS ID '>'
+	{ $$ = new DocumentFNoteAnchorPos( $3 ); }
 ;
 
 tag_dfnoteanchorprefix:	'<' DFNOTEANCHORPREFIX SQSTRING '>'
+	{ $$ = new DocumentFNoteAnchorPrefix( $3 ); }
 ;
 
 tag_dfnoteanchorsuffix:	'<' DFNOTEANCHORSUFFIX SQSTRING '>' 
+	{ $$ = new DocumentFNoteAnchorSuffix( $3 ); }
 ;
 
 tag_dfnotelabels:	'<' DFNOTELABELS SQSTRING '>' 
+	{ $$ = new DocumentFNoteLabels( $3 ); }
 ;
 
 tag_dfnotemaxh:	'<' DFNOTEMAXH INCHREAL '>'
+	{ $$ = new DocumentFNoteMaxH( $3 ); }
 				| '<' DFNOTEMAXH PCREAL '>'
+	{ $$ = new DocumentFNoteMaxH( $3 ); }
 ;
 
 tag_dfnotenumstyle:	'<' DFNOTENUMSTYLE ID '>' 
+	{ $$ = new DocumentFNoteNumStyle( $3 ); }
 ;
 
 tag_dfnotenumberpos:	'<' DFNOTENUMBERPOS ID '>' 
+	{ $$ = new DocumentFNoteNumberPos( $3 ); }
 ;
 
 tag_dfnotenumberprefix:	'<' DFNOTENUMBERPREFIX SQSTRING '>' 
+	{ $$ = new DocumentFNoteNumberPrefix( $3 ); }
 ;
 
 tag_dfnotenumbersuffix:	'<' DFNOTENUMBERSUFFIX SQSTRING '>' 
+	{ $$ = new DocumentFNoteNumberSuffix( $3 ); }
 ;
 
 tag_dfnoterestart:	'<' DFNOTERESTART ID '>' 
+	{ $$ = new DocumentFNoteRestart( $3 ); }
 ;
 
 tag_dfnotetag:	'<' DFNOTETAG SQSTRING '>' 
+	{ $$ = new DocumentFNoteTag( $3 ); }
 ;
 
 tag_dfluid:	'<' DFLUID ID '>' 
+	{ $$ = new DocumentFluid( $3 ); }
 ;
 
 tag_dfluidsideheads:	'<' DFLUIDSIDEHEADS ID '>' 
+	{ $$ = new DocumentFluidSideHeads( $3 ); }
 ;
 
 tag_dfrozenpages:	'<' DFROZENPAGES ID '>' 
+	{ $$ = new DocumentFrozenPages( $3 ); }
 ;
 
 tag_dfullrulers:	'<' DFULLRULERS ID '>' 
+	{ $$ = new DocumentFullRulers( $3 ); }
 ;
 
 tag_dgenerateacrobatinfo:	'<' DGENERATEACROBATINFO ID '>' 
+	{ $$ = new DocumentGenerateAcrobatInfo( $3 ); }
 ;
 
 tag_dgraphicsoff:	'<' DGRAPHICSOFF ID '>' 
+	{ $$ = new DocumentGraphicsOff( $3 ); }
 ;
 
 tag_dgridon:	'<' DGRIDON ID '>' 
+	{ $$ = new DocumentGridOn( $3 ); }
 ;
 
 tag_dlanguage:	'<' DLANGUAGE ID '>' 
+	{ $$ = new DocumentLanguage( $3 ); }
 ;
 
 tag_dlinebreakchars:	'<' DLINEBREAKCHARS SQSTRING '>' 
+	{ $$ = new DocumentLineBreakChars( $3 ); }
 ;
 
 tag_dlinkboundarieson:	'<' DLINKBOUNDARIESON ID '>' 
+	{ $$ = new DocumentLinkBoundariesOn( $3 ); }
 ;
 
 tag_dmathalphacharfontfamily:	'<' DMATHALPHACHARFONTFAMILY SQSTRING '>' 
+	{ $$ = new DocumentMathAlphaCharFontFamily( $3 ); }
 ;
 
 tag_dmathcatalog:	'<' DMATHCATALOG '>' 
+	{ $$ = new DocumentMathCatalog(); }
 ;
 
 tag_dmathfunctions:	'<' DMATHFUNCTIONS SQSTRING '>' 
+	{ $$ = new DocumentMathFunctions( $3 ); }
 ;
 
 tag_dmathgreek:	'<' DMATHGREEK SQSTRING '>' 
+	{ $$ = new DocumentMathGreek( $3 ); }
 ;
 
 tag_dmathlargehoriz:	'<' DMATHLARGEHORIZ REAL unit '>' 
+	{ $$ = new DocumentMathLargeHoriz( $3 ); }
 ;
 
 tag_dmathlargeintegral:	'<' DMATHLARGEINTEGRAL REAL unit '>' 
+	{ $$ = new DocumentMathLargeIntegral( $3 ); }
 ;
 
 tag_dmathlargelevel1:	'<' DMATHLARGELEVEL1 REAL unit '>' 
+	{ $$ = new DocumentMathLargeLevel1( $3 ); }
 ;
 
 tag_dmathlargelevel2:	'<' DMATHLARGELEVEL2 REAL unit '>' 
+	{ $$ = new DocumentMathLargeLevel2( $3 ); }
 ;
 
 tag_dmathlargelevel3:	'<' DMATHLARGELEVEL3 REAL unit '>' 
+	{ $$ = new DocumentMathLargeLevel3( $3 ); }
 ;
 
 tag_dmathlargesigma:	'<' DMATHLARGESIGMA REAL unit '>' 
+	{ $$ = new DocumentMathLargeSigma( $3 ); }
 ;
 
 tag_dmathlargevert:	'<' DMATHLARGEVERT REAL unit '>' 
+	{ $$ = new DocumentMathLargeVert( $3 ); }
 ;
 
 tag_dmathmediumhoriz:	'<' DMATHMEDIUMHORIZ REAL unit '>' 
+	{ $$ = new DocumentMathMediumHoriz( $3 ); }
 ;
 
 tag_dmathmediumintegral:	'<' DMATHMEDIUMINTEGRAL REAL unit '>' 
+	{ $$ = new DocumentMathMediumIntegral( $3 ); }
 ;
 
 tag_dmathmediumlevel1:	'<' DMATHMEDIUMLEVEL1 REAL unit '>' 
+	{ $$ = new DocumentMathMediumLevel1( $3 ); }
 ;
 
 tag_dmathmediumlevel2:	'<' DMATHMEDIUMLEVEL2 REAL unit '>' 
+	{ $$ = new DocumentMathMediumLevel2( $3 ); }
 ;
 
 tag_dmathmediumlevel3:	'<' DMATHMEDIUMLEVEL3 REAL unit '>' 
+	{ $$ = new DocumentMathMediumLevel3( $3 ); }
 ;
 
 tag_dmathmediumsigma:	'<' DMATHMEDIUMSIGMA REAL unit '>' 
+	{ $$ = new DocumentMathMediumSigma( $3 ); }
 ;
 
 tag_dmathmediumvert:	'<' DMATHMEDIUMVERT REAL unit '>' 
+	{ $$ = new DocumentMathMediumVert( $3 ); }
 ;
 
 tag_dmathnumbers:	'<' DMATHNUMBERS SQSTRING '>'
+	{ $$ = new DocumentMathNumbers( $3 ); }
 ;
 
 tag_dmathshowcustom:	'<' DMATHSHOWCUSTOM ID '>' 
+	{ $$ = new DocumentMathShowCustom( $3 ); }
 ;
 
 tag_dmathsmallhoriz:	'<' DMATHSMALLHORIZ REAL unit '>' 
+	{ $$ = new DocumentMathSmallHoriz( $3 ); }
 ;
 
 tag_dmathsmallintegral:	'<' DMATHSMALLINTEGRAL REAL unit '>' 
+	{ $$ = new DocumentMathSmallIntegral( $3 ); }
 ;
 
 tag_dmathsmalllevel1:	'<' DMATHSMALLLEVEL1 REAL unit '>' 
+	{ $$ = new DocumentMathSmallLevel1( $3 ); }
 ;
 
 tag_dmathsmalllevel2:	'<' DMATHSMALLLEVEL2 REAL unit '>' 
+	{ $$ = new DocumentMathSmallLevel2( $3 ); }
 ;
 
 tag_dmathsmalllevel3:	'<' DMATHSMALLLEVEL3 REAL unit '>' 
+	{ $$ = new DocumentMathSmallLevel3( $3 ); }
 ;
 
 tag_dmathsmallsigma:	'<' DMATHSMALLSIGMA REAL unit '>' 
+	{ $$ = new DocumentMathSmallSigma( $3 ); }
 ;
 
 tag_dmathsmallvert:	'<' DMATHSMALLVERT REAL unit '>' 
+	{ $$ = new DocumentMathSmallVert( $3 ); }
 ;
 
 tag_dmathstrings:	'<' DMATHSTRINGS SQSTRING '>' 
+	{ $$ = new DocumentMathStrings( $3 ); }
 ;
 
 tag_dmathvariables:	'<' DMATHVARIABLES SQSTRING '>' 
+	{ $$ = new DocumentMathVariables( $3 ); }
 ;
 
 tag_dmenubar:	'<' DMENUBAR SQSTRING '>' 
+	{ $$ = new DocumentMenuBar( $3 ); }
 ;
 
 tag_dnarrowrubispaceforjapanese:	'<' DNARROWRUBISPACEFORJAPANESE ID '>' 
+	{ $$ = new DocumentNarrowRubiSpaceForJapanese( $3 ); }
 ;
 
 tag_dnarrowrubispaceforother:	'<' DNARROWRUBISPACEFOROTHER ID '>' 
+	{ $$ = new DocumentNarrowRubiSpaceForOther( $3 ); }
 ;
 
 tag_dnextunique:	'<' DNEXTUNIQUE INTEGER '>' 
-;
-
-tag_dnoprintsepcolor:	'<' DNOPRINTSEPCOLOR SQSTRING '>' 
+	{ $$ = new DocumentNextUnique( $3 ); }
 ;
 
 tag_dpagegrid:	'<' DPAGEGRID INCHREAL '>' 
+	{ $$ = new DocumentPageGrid( $3 ); }
 				| '<' DPAGEGRID PCREAL '>' 
+	{ $$ = new DocumentPageGrid( $3 ); }
 ;
 
 tag_dpagenumstyle:	'<' DPAGENUMSTYLE ID '>' 
+	{ $$ = new DocumentPageNumStyle( $3 ); }
 ;
 
 tag_dpagepointstyle:	'<' DPAGEPOINTSTYLE ID '>' 
+	{ $$ = new DocumentPagePointStyle( $3 ); }
 ;
 
 tag_dpagerounding:	'<' DPAGEROUNDING ID '>' 
+	{ $$ = new DocumentPageRounding( $3 ); }
 ;
 
 /* Problem here: variable is a possible value for DPageScrolling tag 
    and a tag itself. */
 tag_dpagescrolling:	'<' DPAGESCROLLING VARIABLE '>' 
+	{ $$ = new DocumentPageScrolling( $3 ); }
 ;
 
 tag_dpagesize:	'<' DPAGESIZE INCHREAL INCHREAL '>' 
+	{ $$ = new DocumentPageSize( $3, $4 ); }
 				| '<' DPAGESIZE PCREAL PCREAL '>' 
+	{ $$ = new DocumentPageSize( $3, $4 ); }
 ;
 
 tag_dparity:	'<' DPARITY ID '>' 
+	{ $$ = new DocumentParity( $3 ); }
 ;
 
 tag_dprintseparations:	'<' DPRINTSEPARATIONS ID '>' 
+	{ $$ = new DocumentPrintSeparations( $3 ); }
 ;
 
 tag_dprintskipblankpages:	'<' DPRINTSKIPBLANKPAGES ID '>'
+	{ $$ = new DocumentPrintSkipBlankPages( $3 ); }
 ;
 
 tag_dpunctuationchars:	'<' DPUNCTUATIONCHARS SQSTRING '>' 
+	{ $$ = new DocumentPunctuationChars( $3 ); }
 ;
 
 tag_drubialignatlinebounds:	'<' DRUBIALIGNATLINEBOUNDS ID '>' 
+	{ $$ = new DocumentRubiAlignAtLineBounds( $3 ); }
 ;
 
 tag_drubioverhang:	'<' DRUBIOVERHANG ID '>' 
+	{ $$ = new DocumentRubiOverhang( $3 ); }
 ;
 
 tag_drubisize:	'<' DRUBISIZE REAL '%' '>' 
+	{ $$ = new DocumentRubiSize( $3 ); }
 ;
 
 tag_drulerson:	'<' DRULERSON ID '>' 
+	{ $$ = new DocumentRulersOn( $3 ); }
 ;
 
 tag_dshowallconditions:	'<' DSHOWALLCONDITIONS ID '>' 
+	{ $$ = new DocumentShowAllConditions( $3 ); }
 ;
 
 tag_dsmallcapssize:	'<' DSMALLCAPSSIZE REAL '%' '>' 
+	{ $$ = new DocumentSmallCapsSize( $3 ); }
 ;
 
 tag_dsmallcapsstretch:	'<' DSMALLCAPSSTRETCH REAL '%' '>' 
+	{ $$ = new DocumentSmallCapsStretch( $3 ); }
 ;
 
 tag_dsmartquoteson:	'<' DSMARTQUOTESON ID '>' 
+	{ $$ = new DocumentSmartQuotesOn( $3 ); }
 ;
 
 tag_dsmartspaceson:	'<' DSMARTSPACESON ID '>' 
+	{ $$ = new DocumentSmartSpacesOn( $3 ); }
 ;
 
 tag_dsnapgrid:	'<' DSNAPGRID INCHREAL '>' 
+	{ $$ = new DocumentSnapGrid( $3 ); }
 				| '<' DSNAPGRID PCREAL '>' 
+	{ $$ = new DocumentSnapGrid( $3 ); }
 ;
 
 tag_dsnaprotation:	'<' DSNAPROTATION REAL '>' 
+	{ $$ = new DocumentSnapRotation( $3 ); }
 ;
 
 tag_dstartpage:	'<' DSTARTPAGE INTEGER '>' 
+	{ $$ = new DocumentStartPage( $3 ); }
 ;
 
 tag_dsubscriptshift:	'<' DSUBSCRIPTSHIFT REAL '%' '>' 
+	{ $$ = new DocumentSubscriptShift( $3 ); }
 ;
 
 tag_dsubscriptsize:	'<' DSUBSCRIPTSIZE REAL '%' '>' 
+	{ $$ = new DocumentSubscriptSize( $3 ); }
 ;
 
 tag_dsubscriptstretch:	'<' DSUBSCRIPTSTRETCH REAL '%' '>' 
+	{ $$ = new DocumentSubscriptStretch( $3 ); }
 ;
 
 tag_dsuperscriptshift:	'<' DSUPERSCRIPTSHIFT REAL '%' '>' 
+	{ $$ = new DocumentSuperscriptShift( $3 ); }
 ;
 
 tag_dsuperscriptsize:	'<' DSUPERSCRIPTSIZE REAL '%' '>' 
+	{ $$ = new DocumentSuperscriptSize( $3 ); }
 ;
 
 tag_dsuperscriptstretch:	'<' DSUPERSCRIPTSTRETCH REAL '%' '>'
+	{ $$ = new DocumentSuperscriptStretch( $3 ); }
 ;
 
 tag_dsymbolson:	'<' DSYMBOLSON ID '>' 
+	{ $$ = new DocumentSymbolsOn( $3 ); }
 ;
 
 tag_dtblfnoteanchorpos:	'<' DTBLFNOTEANCHORPOS ID '>' 
+	{ $$ = new DocumentTblFNoteAnchorPos( $3 ); }
 ;
 
 tag_dtblfnoteanchorprefix:	'<' DTBLFNOTEANCHORPREFIX SQSTRING '>' 
+	{ $$ = new DocumentTblFNoteAnchorPrefix( $3 ); }
 ;
 
 tag_dtblfnoteanchorsuffix:	'<' DTBLFNOTEANCHORSUFFIX SQSTRING '>'  
+	{ $$ = new DocumentTblFNoteAnchorSuffix( $3 ); }
 ;
 
 tag_dtblfnotelabels:	'<' DTBLFNOTELABELS SQSTRING '>' 
+	{ $$ = new DocumentTblFNoteLabels( $3 ); }
 ;
 
 tag_dtblfnotenumstyle:	'<' DTBLFNOTENUMSTYLE ID '>' 
+	{ $$ = new DocumentTblFNoteNumStyle( $3 ); }
 ;
 
 tag_dtblfnotenumberpos:	'<' DTBLFNOTENUMBERPOS ID '>' 
+	{ $$ = new DocumentTblFNoteNumberPos( $3 ); }
 ;
 
 tag_dtblfnotenumberprefix:	'<' DTBLFNOTENUMBERPREFIX SQSTRING '>' 
+	{ $$ = new DocumentTblFNoteNumberPrefix( $3 ); }
 ;
 
 tag_dtblfnotenumbersuffix:	'<' DTBLFNOTENUMBERSUFFIX SQSTRING '>' 
+	{ $$ = new DocumentTblFNoteNumberSuffix( $3 ); }
 ;
 
 tag_dtblfnotetag:	'<' DTBLFNOTETAG SQSTRING '>' 
+	{ $$ = new DocumentTblFNoteTag( $3 ); }
 ;
 
 tag_dtwosides:	'<' DTWOSIDES ID '>' 
+	{ $$ = new DocumentTwoSides( $3 ); }
 ;
 
 tag_dupdatetextinsetsonopen:	'<' DUPDATETEXTINSETSONOPEN ID '>' 
+	{ $$ = new DocumentUpdateTextInsetsOnOpen( $3 ); }
 ;
 
 tag_dupdatexrefsonopen:	'<' DUPDATEXREFSONOPEN ID '>' 
+	{ $$ = new DocumentUpdateXRefsOnOpen( $3 ); }
 ;
 
 tag_dviewonly:	'<' DVIEWONLY ID '>' 
+	{ $$ = new DocumentViewOnly( $3 ); }
 ;
 
 tag_dviewonlyselect:	'<' DVIEWONLYSELECT ID '>' 
+	{ $$ = new DocumentViewOnlySelect( $3 ); }
 ;
 
 tag_dviewonlywinborders:	'<' DVIEWONLYWINBORDERS ID '>' 
+	{ $$ = new DocumentViewOnlyWinBorders( $3 ); }
 ;
 
 tag_dviewonlywinmenubar:	'<' DVIEWONLYWINMENUBAR ID '>' 
+	{ $$ = new DocumentViewOnlyWinMenubar( $3 ); }
 ;
 
 tag_dviewonlywinpalette:	'<' DVIEWONLYWINPALETTE ID '>' 
+	{ $$ = new DocumentViewOnlyWinPalette( $3 ); }
 ;
 
 tag_dviewonlywinpopup:	'<' DVIEWONLYWINPOPUP ID '>' 
+	{ $$ = new DocumentViewOnlyWinPopup( $3 ); }
 ;
 
 tag_dviewonlyxref:	'<' DVIEWONLYXREF ID '>' 
+	{ $$ = new DocumentViewOnlyXRef( $3 ); }
 ;
 
 tag_dviewrect:	'<' DVIEWRECT INTEGER INTEGER INTEGER INTEGER '>' 
+	{ $$ = new DocumentViewRect( $3, $4, $5, $6 ); }
 ;
 
 tag_dviewscale:	'<' DVIEWSCALE REAL '%' '>' 
+	{ $$ = new DocumentViewScale( $3 ); }
 ;
 
 tag_dvomenubar:	'<' DVOMENUBAR SQSTRING '>' 
+	{ $$ = new DocumentVoMenuBar( $3 ); }
 ;
 
 tag_dwiderubispaceforjapanese:	'<' DWIDERUBISPACEFORJAPANESE ID '>' 
+	{ $$ = new DocumentWideRubiSpaceForJapanese( $3 ); }
 ;
 
 tag_dwiderubispaceforother:	'<' DWIDERUBISPACEFOROTHER ID '>' 
+	{ $$ = new DocumentWideRubiSpaceForOther( $3 ); }
 ;
 
 tag_dwindowrect:	'<' DWINDOWRECT INTEGER INTEGER INTEGER INTEGER '>' 
+	{ $$ = new DocumentWindowRect( $3, $4, $5, $6 ); }
 ;
 
 tag_fnotestartnum:		'<' FNOTESTARTNUM INTEGER '>'
+	{ $$ = new FNoteStartNum( $3 ); }
 ;
 
 

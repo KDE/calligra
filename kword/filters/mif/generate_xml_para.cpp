@@ -15,6 +15,8 @@
 
 extern ofstream xmloutstr;
 
+static string paratext;
+
 class generate_xml_paraline_element
 {
 public:
@@ -51,13 +53,15 @@ void generate_xml_para_element::operator()( const ParaElement* pe )
 
 void generate_xml_para_element::out_begin()
 {
-	xmloutstr << "\n<PARAGRAPH>\n";
+	xmloutstr << "\n   <PARAGRAPH>\n";
+	paratext = "";
 }
 
 
 void generate_xml_para_element::out_end()
 {
-	xmloutstr << "\n</PARAGRAPH>\n";
+	xmloutstr << "    <TEXT value=\"" << paratext << "\"/>";
+	xmloutstr << "\n   </PARAGRAPH>\n";
 }
 
 
@@ -83,11 +87,7 @@ void generate_xml_paraline_element::operator()( const ParaLineElement* ple )
 	case ParaLineElement::T_String: {
 		// Convert some special characters in the string.
 		string outstring = ple->plestring()->value(); 
-// 		string outstring1 = find_and_replace( "\\xd2 ", "&ldquo;", outstring );
-// 		string outstring2 = find_and_replace( "\\xd3 ", "&rdquo;", outstring1 );
-// 		string outstring3 = find_and_replace( "\\xd5 ", "'", outstring2 );
-		string outstring3 = outstring; 
-		xmloutstr << outstring3 << endl; 
+		paratext += outstring;
 		break;
 	}
 	case ParaLineElement::T_TextRectID:
@@ -113,5 +113,4 @@ void generate_xml_paraline_element::out_begin()
 
 void generate_xml_paraline_element::out_end()
 {
-	cerr << '\n';
 }

@@ -21,15 +21,28 @@ void generate_xml( const char* outfile )
 	}
 
 	// generate_header
+	xmloutstr << "<?xml version=\"1.0\"?>\n";
 	xmloutstr << "<DOC author=\"Kalle Dalheimer\" email=\"kalle@kde.org\" editor=\"KWord/MIF-Filter\" mime=\"application/x-kword\">" << endl;
+	// PENDING(kalle) Don't hard-code those values
+	xmloutstr << " <PAPER format=\"1\" width=\"210\" height=\"297\" orientation=\"0\" columns=\"1\" columnspacing=\"3\">" << endl;
+	xmloutstr << "  <PAPERBORDERS left=\"10\" top=\"15\" right=\"10\" bottom=\"15\"/>" << endl;
+	xmloutstr << " </PAPER>" << endl;
+	xmloutstr << " <ATTRIBUTES processing=\"1\" standardpage=\"1\"/>"
+			  << endl;
 	indent += 2;
+
+	// write out framesets tag
+	xmloutstr << " <FRAMESETS>" << endl;
 
 	// Traverse all text flow elements
 	for_each( textflows.begin(), textflows.end(),
 			  generate_xml_textflow() );
 
-	xmloutstr.close();
+	// write out /framesets tag
+	xmloutstr << " </FRAMESETS>" << endl;
+
 	xmloutstr << "</DOC>";
+	xmloutstr.close();
 }
 
 

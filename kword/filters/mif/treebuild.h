@@ -8,6 +8,7 @@
 #ifndef _TREEBUILD_H
 #define _TREEBUILD_H
 
+#include "treebuild_document.h"
 #include "treebuild_fnote.h"
 #include "treebuild_font.h"
 #include "treebuild_general.h"
