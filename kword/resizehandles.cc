@@ -205,6 +205,11 @@ bool KWResizeHandle::isResizingEnabled() const
            ( direction != Up && direction != LeftUp && direction != RightUp ) ) )
         return false;
 
+    if ( fs->isFootEndNote() &&
+         ( frame->frameBehavior() == KWFrame::AutoExtendFrame ||
+           ( direction != Up && direction != LeftUp && direction != RightUp ) ) )
+        return false;
+
     return true;
 }
 
