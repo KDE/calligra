@@ -21,6 +21,7 @@
 #include "footnote.h"
 #include "clipbrd_dnd.h"
 #include <klocale.h>
+#include <qtextstream.h>
 
 /******************************************************************/
 /* Class: KWPage                                                  */
