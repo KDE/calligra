@@ -110,7 +110,7 @@ VPolygon::saveOasis( KoStore *store, KoXmlWriter *docWriter )
 {
 	docWriter->startElement( "draw:polygon" );
 
-	docWriter->addAttribute( "svg:points", m_points );
+	docWriter->addAttribute( "draw:points", m_points );
 
 	if( !VObject::name().isEmpty() )
 		docWriter->addAttribute( "draw:name", VObject::name() );

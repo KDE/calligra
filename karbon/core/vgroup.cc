@@ -23,6 +23,9 @@
 
 #include <qdom.h>
 
+#include <koStore.h>
+#include <koxmlwriter.h>
+
 #include "vcomposite.h"
 #include "shapes/vellipse.h"
 #include "shapes/vrectangle.h"
@@ -168,6 +171,19 @@ VGroup::save( QDomElement& element ) const
 	}
 }
 
+void
+VGroup::saveOasis( KoStore *store, KoXmlWriter *docWriter )
+{
+	docWriter->startElement( "draw:group" );
+
+	// save objects:
+	VObjectListIterator itr = m_objects;
+
+	for ( ; itr.current(); ++itr )
+		itr.current()->saveOasis( store, docWriter );
+
+	docWriter->endElement();
+}
 void
 VGroup::load( const QDomElement& element )
 {

@@ -130,6 +130,10 @@ VRectangle::save( QDomElement& element ) const
 void
 VRectangle::saveOasis( KoStore *store, KoXmlWriter *docWriter )
 {
+	// different rx/ry is not supported by oasis, so act like it is a normal path
+	if( m_rx != 0. && m_ry != 0. && m_rx != m_ry )
+		return VPath::saveOasis( store, docWriter );
+	
 	docWriter->startElement( "draw:rect" );
 
 	//save all into pt
@@ -138,6 +142,8 @@ VRectangle::saveOasis( KoStore *store, KoXmlWriter *docWriter )
 	docWriter->addAttributePt( "svg:width",  m_width );
 	docWriter->addAttributePt( "svg:height", m_height );
 
+	if( m_rx != 0. && m_ry != 0. && m_rx == m_ry )
+		docWriter->addAttributePt( "draw:corner-radius", m_rx );
 	if( !VObject::name().isEmpty() )
 		docWriter->addAttribute( "draw:name", VObject::name() );
 
