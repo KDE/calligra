@@ -325,6 +325,7 @@ void SelectTool::processButtonReleaseEvent(QMouseEvent *e, GPage *page, Canvas *
         page->selectObject(it.current());
 //      state = S_Pick;
       state = S_Init;
+	  canvas->updateBuf(r);
       canvas->repaint(r);
     }
     else

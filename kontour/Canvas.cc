@@ -476,19 +476,21 @@ void Canvas::scrollY(int v)
 
 void Canvas::updateRegion(const KoRect &r, bool handle)
 {
-  int x = static_cast<int>(r.x() + mXOffset);
-  int y = static_cast<int>(r.y() + mYOffset);
-  int w = static_cast<int>(r.width() * zoomFactor());
-  int h = static_cast<int>(r.height() * zoomFactor());
+  // TODO : small handle size bug
+  int x = static_cast<int>(r.x());
+  int y = static_cast<int>(r.y());
+  int w = static_cast<int>(r.width());
+  int h = static_cast<int>(r.height());
   if(handle)
   {
     x -= 7;
     y -= 7;
-    w += 14;
-    h += 14;
+    w += 36;
+    h += 36;
   }
   kdDebug(38000) << "update: x=" << x << " y=" << y << " w=" << w << " h=" << h <<endl;
-  QRect rr(x, y, w, h);
+  QRect rr(x * zoomFactor() + mXOffset, y * zoomFactor() + mYOffset,
+           w * zoomFactor(), h * zoomFactor());
   updateBuf(rr);
   repaint(rr);
 }
