@@ -81,18 +81,23 @@ QImage KoPictureEps::scaleWithGhostScript(const QSize& size, const int resolutio
 
     // ### TODO: do not call GhostScript up to three times for each re-scaling (one call of GhostScript should be enough to know which device is available: gs --help)
     // png16m is better, but not always available -> fallback to bmp16m, then fallback to ppm (256 colors)
+    // ### TODO: pcx24b is also a true colour format
+    // ### TODO: support alpha (other gs devices needed)
+    
+    const char* deviceTable[] = { "png16m", "bmp16m", "ppm", 0 };
+    
     QImage img;
-    int ret = tryScaleWithGhostScript(img, size, resolutionx, resolutiony, "png16m");
-    if ( ret == -1 )
+    
+    for ( int i = 0; deviceTable[i]; ++i)
     {
-        ret = tryScaleWithGhostScript(img, size, resolutionx, resolutiony, "bmp16m");
-        if ( ret == -1 )
+        if ( tryScaleWithGhostScript( img, size, resolutionx, resolutiony, deviceTable[i] ) != -1 )
         {
-            ret = tryScaleWithGhostScript(img, size, resolutionx, resolutiony, "ppm");
-            if ( ret == -1 )
-                kdError(30003) << "Image from GhostScript cannot be loaded (in KoPictureEps::scaleWithGhostScript)" << endl;
+            return img;
         }
+        
     }
+    
+    kdError(30003) << "Image from GhostScript cannot be loaded (in KoPictureEps::scaleWithGhostScript)" << endl;
     return img;
 }
 
@@ -101,7 +106,7 @@ QImage KoPictureEps::scaleWithGhostScript(const QSize& size, const int resolutio
 int KoPictureEps::tryScaleWithGhostScript(QImage &image, const QSize& size, const int resolutionx, const int resolutiony, const char* device )
 // Based on the code of the file kdelibs/kimgio/eps.cpp
 {
-    kdDebug(30003) << "Sampling with GhostScript, using device " << device << " (in KoPictureEps::tryScaleWithGhostScript)" << endl;
+    kdDebug(30003) << "Sampling with GhostScript, using device \"" << device << "\" (in KoPictureEps::tryScaleWithGhostScript)" << endl;
 
     KTempFile tmpFile;
     tmpFile.setAutoDelete(true);
