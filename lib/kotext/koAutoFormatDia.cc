@@ -132,6 +132,7 @@ void KoAutoFormatExceptionWidget::slotRemoveException()
         pbAddException->setEnabled(false);
         pbRemoveException->setEnabled( exceptionList->currentItem()!=-1 && m_listException.count()>0);
         exceptionList->insertStringList(m_listException);
+        exceptionLine->clear();
     }
 }
 
