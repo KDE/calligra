@@ -1204,7 +1204,7 @@ const QPen& ColumnLayout::rightBorderPen( int _col, int _row ) const
     // First look ar the right column at the right
     if ( !hasProperty( PRightBorder ) )
     {
-	ColumnLayout* cl = table()->columnLayout( _col + 1 );
+	const ColumnLayout* cl = table()->columnLayout( _col + 1 );
 	if ( cl->hasProperty( PLeftBorder ) )
 	    return cl->leftBorderPen( _col + 1, _row );
     }
