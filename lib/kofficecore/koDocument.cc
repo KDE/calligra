@@ -872,7 +872,13 @@ KService::Ptr KoDocument::readNativeService( KInstance *instance )
     return service;
 
   if ( service->property( "X-KDE-NativeMimeType" ).toString().isEmpty() )
-      kdWarning(30003) << service->desktopEntryPath() << ": no X-KDE-NativeMimeType entry!" << endl;
+  {
+      // It may be that the servicetype "KOfficePart" is missing, which leads to this property not being known
+      if ( KServiceType::serviceType( "KOfficePart" ) == 0L )
+        kdError(30003) << "The serviceType KOfficePart is missing. Check that you have a kofficepart.desktop file in the share/servicetypes directory." << endl;
+      else
+        kdWarning(30003) << service->desktopEntryPath() << ": no X-KDE-NativeMimeType entry!" << endl;
+  }
 
   return service;
 }
