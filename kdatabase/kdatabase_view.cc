@@ -39,7 +39,7 @@ KDatabaseView::KDatabaseView( KDatabasePart* part, QWidget* parent, const char* 
     KStdAction::cut(this, SLOT( cut() ), actionCollection(), "cut" );
     KStdAction::paste(this, SLOT( paste() ), actionCollection(), "paste" );
     
-    m_actionToggleDocBrowser = new KToggleAction(i18n("&View document browser"), "toggle_docbrowser", Key_F2, this, SLOT(toggleDocBrowser()),
+    m_actionToggleDocBrowser = new KToggleAction(i18n("&View Document Browser"), "toggle_docbrowser", Key_F2, this, SLOT(toggleDocBrowser()),
     			actionCollection(), "toggle_docbrowser");
     m_actionToggleDocBrowser->setChecked(true);
     

@@ -13,7 +13,7 @@
         </rect>
     </property>
     <property name="caption">
-        <string>Kdb name - Query Builder</string>
+        <string>Kdb Name - Query Builder</string>
     </property>
     <property name="sizeGripEnabled">
         <bool>true</bool>
