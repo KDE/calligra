@@ -5565,6 +5565,7 @@ void KPresenterView::viewZoom( const QString &s )
     }
     if( !ok || zoom<10 ) //zoom should be valid and >10
         zoom = zoomHandler()->zoom();
+    zoom = QMIN( zoom, 4000);
     //refresh menu
     changeZoomMenu( zoom );
     //refresh menu item
@@ -6098,23 +6099,26 @@ void KPresenterView::zoomMinus()
     //unzoom from 25%
     int zoom = zoomHandler()->zoom() - (int)(zoomHandler()->zoom()*0.25);
     viewZoom( QString::number(zoom ) );
+    m_canvas->setToolEditMode( TEM_MOUSE );
 }
 
 void KPresenterView::zoomPageWidth()
 {
     int zoom = qRound( static_cast<double>(m_canvas->visibleRect().width() * 100 ) / (zoomHandler()->resolutionX() * m_pKPresenterDoc->pageLayout().ptWidth ) );
     viewZoom( QString::number(zoom ) );
-
+    m_canvas->setToolEditMode( TEM_MOUSE );
 }
 
 void KPresenterView::zoomEntirePage()
 {
     viewZoom( QString::number(getZoomEntirePage() ) );
+    m_canvas->setToolEditMode( TEM_MOUSE );
 }
 
 void KPresenterView::zoomPlus()
 {
     setZoomRect( QRect(0,0,0,0),false);
+    m_canvas->setToolEditMode( TEM_MOUSE );
 }
 
 int KPresenterView::getZoomEntirePage()
