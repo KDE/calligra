@@ -102,7 +102,7 @@ void PopulateProperties(StackItem* stackItem, const QString& strStyleProps,
     QString strBackgroundTextColor=abiPropsMap["bgcolor"].getValue();
     if (strBackgroundTextColor=="transparent")
     {
-        // KWord has no idea was transparency is, so we use white
+        // KWord has no idea what transparency is, so we use white
         stackItem->bgColor.setRgb(255,255,255);
     }
     else if(!strBackgroundTextColor.isEmpty())
@@ -201,7 +201,7 @@ void AddLayout(const QString& strStyleName, QDomElement& layoutElement,
     QDomElement followingElement=mainDocument.createElement("FOLLOWING");
     followingElement.setAttribute("name",strFollowing);
     if ((strFollowing.isEmpty())
-        || (strFollowing=="Current Settings")) // "Current Settings" is not a style!
+        || (strFollowing=="Current Settings")) // "Current Settings" is only a pseudo-style!
     {
         // We have no idea what style follows
         if (isStyle)
@@ -286,7 +286,7 @@ void AddLayout(const QString& strStyleName, QDomElement& layoutElement,
     {
         element=mainDocument.createElement("OFFSETS");
         const double margin_top=ValueWithLengthUnit(strTopMargin);
-        const double margin_bottom=ValueWithLengthUnit(strTopMargin);
+        const double margin_bottom=ValueWithLengthUnit(strBottomMargin);
         // Zero is propably a valid value!
         if (!strBottomMargin.isEmpty())
             element.setAttribute("after",margin_bottom);

@@ -28,7 +28,6 @@
 #include <qmap.h>
 #include <qbuffer.h>
 #include <qpicture.h>
-#include <qfontinfo.h>
 #include <qxml.h>
 #include <qdom.h>
 
@@ -36,7 +35,6 @@
 #include <kmdcodec.h>
 #include <kfilterdev.h>
 #include <kgenericfactory.h>
-#include <kglobalsettings.h>
 
 #include <koGlobal.h>
 #include <koStore.h>
@@ -61,10 +59,11 @@ K_EXPORT_COMPONENT_FACTORY( libabiwordimport, ABIWORDImportFactory( "kwordabiwor
 class StructureParser : public QXmlDefaultHandler
 {
 public:
-    StructureParser(QDomDocument doc, KoFilterChain* chain)
-        : mainDocument(doc), m_chain(chain), m_pictureNumber(0), m_clipartNumber(0), m_pictureFrameNumber(0)
+    StructureParser(QDomDocument& doc, KoFilterChain* chain)
+        : mainDocument("DOC"), m_chain(chain), m_pictureNumber(0), m_clipartNumber(0), m_pictureFrameNumber(0)
     {
-        createMainFramesetElement();
+        createDocument();
+        doc=mainDocument;
         structureStack.setAutoDelete(true);
         StackItem *stackItem=new(StackItem);
         stackItem->elementType=ElementTypeBottom;
@@ -86,11 +85,17 @@ protected:
     bool complexForcedPageBreak(StackItem* stackItem);
 private:
     // The methods that would need too much parameters are private instead of being static outside the class
+    bool StartElementC(StackItem* stackItem, StackItem* stackCurrent,
+        const QXmlAttributes& attributes);
+    bool StartElementA(StackItem* stackItem, StackItem* stackCurrent,
+        const QXmlAttributes& attributes);
     bool StartElementImage(StackItem* stackItem, StackItem* stackCurrent,
         const QXmlAttributes& attributes);
     bool EndElementD (StackItem* stackItem);
+    bool StartElementSection(StackItem* stackItem, StackItem* stackCurrent,
+        const QXmlAttributes& attributes);
 private:
-    void createMainFramesetElement(void);
+    void createDocument(void);
     QString indent; //DEBUG
     StackItemStack structureStack;
     QDomDocument mainDocument;
@@ -98,6 +103,8 @@ private:
     QDomElement mainFramesetElement;    // The main <FRAMESET> where the body text will be under.
     QDomElement pixmapsElement;         // <PIXMAPS>
     QDomElement clipartsElement;        // <CLIPARTS>
+    QDomElement m_paperElement;         // <PAPER>
+    QDomElement m_paperBordersElement;   // <PAPERBORDER>
     StyleDataMap styleDataMap;
     KoFilterChain* m_chain;
     uint m_pictureNumber;                   // unique: increment *before* use
@@ -108,17 +115,29 @@ private:
 
 // Element <c>
 
-bool StartElementC(StackItem* stackItem, StackItem* stackCurrent, const QXmlAttributes& attributes)
+bool StructureParser::StartElementC(StackItem* stackItem, StackItem* stackCurrent, const QXmlAttributes& attributes)
 {
     // <c> elements can be nested in <p> elements, in <a> elements or in other <c> elements
-    // AbiWord does not use it but explicitely allows external programs to write AbiWord files with nested <c> elements!
+    // AbiWord does not nest <c> elements in other <c> elements, but explicitely allows external programs to do it!
 
     // <p> or <c> (not child of <a>)
     if ((stackCurrent->elementType==ElementTypeParagraph)||(stackCurrent->elementType==ElementTypeContent))
     {
+        // Contents can have styles, however KWord cannot have character style.
+        // Therefore we use the style if it exist, but we do not create it if not.
+        QString strStyleProps;
+        QString strStyleName=attributes.value("style").stripWhiteSpace();
+        if (!strStyleName.isEmpty())
+        {
+            StyleDataMap::Iterator it=styleDataMap.find(strStyleName);
+            if (it!=styleDataMap.end())
+            {
+                strStyleProps=it.data().m_props;
+            }
+        }
 
         AbiPropsMap abiPropsMap;
-        PopulateProperties(stackItem,QString::null,attributes,abiPropsMap,true);
+        PopulateProperties(stackItem,strStyleProps,attributes,abiPropsMap,true);
 
         stackItem->elementType=ElementTypeContent;
         stackItem->stackElementParagraph=stackCurrent->stackElementParagraph;   // <PARAGRAPH>
@@ -191,7 +210,7 @@ bool EndElementC (StackItem* stackItem, StackItem* stackCurrent)
 }
 
 // Element <a>
-static bool StartElementA(StackItem* stackItem, StackItem* stackCurrent, const QXmlAttributes& attributes)
+bool StructureParser::StartElementA(StackItem* stackItem, StackItem* stackCurrent, const QXmlAttributes& attributes)
 {
     // <a> elements can be nested in <p> elements
     if (stackCurrent->elementType==ElementTypeParagraph)
@@ -432,11 +451,13 @@ static bool StartElementS(StackItem* stackItem, StackItem* /*stackCurrent*/,
         QString strLevel=attributes.value("level");
         int level;
         if (strLevel.isEmpty())
-            level=-1;
+            level=-1; //TODO/FIXME: might be wrong if the style is base on another
         else
             level=strLevel.toInt();
-        styleDataMap.defineNewStyle(strStyleName,level,attributes.value("props"));
+        QString strBasedOn=attributes.value("basedon").simplifyWhiteSpace();
+        styleDataMap.defineNewStyleFromOld(strStyleName,strBasedOn,level,attributes.value("props"));
         kdDebug(30506) << " Style name: " << strStyleName << endl
+            << " Based on: " << strBasedOn  << endl
             << " Level: " << level << endl
             << " Props: " << attributes.value("props") << endl;
     }
@@ -672,7 +693,6 @@ bool StructureParser::EndElementD (StackItem* stackItem)
         return false;
     }
 
-    // TODO: we cannot have a base64-coded SVG.
     if (stackItem->bold) // Is base64-coded?
     {
         kdDebug(30506) << "Decode and write base64 stream: " << stackItem->fontName << endl;
@@ -795,7 +815,7 @@ static bool StartElementPBR(StackItem* /*stackItem*/, StackItem* stackCurrent,
 }
 
 // <pagesize>
-static bool StartElementPageSize(QDomDocument& mainDocument, const QXmlAttributes& attributes)
+static bool StartElementPageSize(QDomElement& paperElement, const QXmlAttributes& attributes)
 {
     if (attributes.value("page-scale").toDouble()!=1.0)
     {
@@ -884,16 +904,6 @@ static bool StartElementPageSize(QDomDocument& mainDocument, const QXmlAttribute
 
     // Now that we have gathered all the page size data, put it in the right element!
 
-    QDomNodeList nodeList=mainDocument.elementsByTagName("PAPER");
-
-    if (!nodeList.count())
-    {
-        kdError(30506) << "No <PAPER> element was found! Aborting!" << endl;
-        return false;
-    }
-
-    QDomElement paperElement=nodeList.item(0).toElement();
-
     if (paperElement.isNull())
     {
         kdError(30506) << "<PAPER> element cannot be accessed! Aborting!" << endl;
@@ -941,6 +951,48 @@ bool StructureParser::complexForcedPageBreak(StackItem* stackItem)
     return success;
 }
 
+bool StructureParser::StartElementSection(StackItem* stackItem, StackItem* stackCurrent,
+    const QXmlAttributes& attributes)
+{
+    //TODO: non main text sections (e.g. footers)
+    stackItem->elementType=ElementTypeSection;
+
+    AbiPropsMap abiPropsMap;
+    // Treat the props attributes in the two available flavors: lower case and upper case.
+    kdDebug(30506)<< "========== props=\"" << attributes.value("props") << "\"" << endl;
+    abiPropsMap.splitAndAddAbiProps(attributes.value("props"));
+    abiPropsMap.splitAndAddAbiProps(attributes.value("PROPS")); // PROPS is deprecated
+
+    // TODO: only the first main text section should change the page margins
+    // TODO;   (as KWord does not allow different page sizes/margins for the same document)
+    if (true && (!m_paperBordersElement.isNull()))
+    {
+        QString str;
+        str=abiPropsMap["page-margin-top"].getValue();
+        if (!str.isEmpty())
+        {
+            m_paperBordersElement.setAttribute("top",ValueWithLengthUnit(str));
+        }
+        str=abiPropsMap["page-margin-left"].getValue();
+        if (!str.isEmpty())
+        {
+            m_paperBordersElement.setAttribute("left",ValueWithLengthUnit(str));
+        }
+        str=abiPropsMap["page-margin-bottom"].getValue();
+        if (!str.isEmpty())
+        {
+            m_paperBordersElement.setAttribute("bottom",ValueWithLengthUnit(str));
+        }
+        str=abiPropsMap["page-margin-right"].getValue();
+        if (!str.isEmpty())
+        {
+            m_paperBordersElement.setAttribute("right",ValueWithLengthUnit(str));
+        }
+    }
+    return true;
+}
+
+
 // Parser for SAX2
 
 bool StructureParser :: startElement( const QString&, const QString&, const QString& name, const QXmlAttributes& attributes)
@@ -978,11 +1030,8 @@ bool StructureParser :: startElement( const QString&, const QString&, const QStr
             mainFramesetElement,styleDataMap,attributes);
     }
     else if ((name=="section")||(name=="SECTION"))
-    {//Not really needed, as it is the default behaviour for now!
-        //TODO: non main text sections (e.g. footers)
-        stackItem->elementType=ElementTypeSection;
-        stackItem->stackElementText=structureStack.current()->stackElementText; // TODO: reason?
-        success=true;
+    {
+        success=StartElementSection(stackItem,structureStack.current(),attributes);
     }
     else if (name=="a")
     {
@@ -1041,7 +1090,7 @@ bool StructureParser :: startElement( const QString&, const QString&, const QStr
     {
         stackItem->elementType=ElementTypeEmpty;
         stackItem->stackElementText=structureStack.current()->stackElementText; // TODO: reason?
-        success=StartElementPageSize(mainDocument,attributes);
+        success=StartElementPageSize(m_paperElement,attributes);
     }
     else if ((name=="field") //TODO: upper-case?
         || (name=="f")) // old deprecated name for <field>
@@ -1191,18 +1240,7 @@ bool StructureParser :: characters ( const QString & ch )
 bool StructureParser::startDocument(void)
 {
     indent = QString::null;  //DEBUG
-    // Add a few of AbiWord predefined style sheets
-    // TODO: use the properties that AbiWord uses
-    // TODO: other predefined style sheets
-    styleDataMap.defineNewStyle("Normal",-1,QString::null);
-    styleDataMap.defineNewStyle("Heading 1",1,"font-weight: bold; font-size: 24pt");
-    styleDataMap.defineNewStyle("Heading 2",2,"font-weight: bold; font-size: 16pt");
-    styleDataMap.defineNewStyle("Heading 3",3,"font-weight: bold; font-size: 12pt");
-    QFontInfo fixedInfo(KGlobalSettings::fixedFont());
-    QString strBlockText=QString("font-family: %1; font-size: %2pt")
-        .arg(fixedInfo.family()).arg(fixedInfo.pointSize());
-    kdDebug(30506) << "Block Text: " << strBlockText << endl;
-    styleDataMap.defineNewStyle("Block Text",-1,strBlockText);
+    styleDataMap.defineDefaultStyles();
     return true;
 }
 
@@ -1230,9 +1268,51 @@ bool StructureParser::endDocument(void)
     return true;
 }
 
-
-void StructureParser :: createMainFramesetElement(void)
+void StructureParser :: createDocument(void)
 {
+    mainDocument.appendChild(
+        mainDocument.createProcessingInstruction(
+        "xml","version=\"1.0\" encoding=\"UTF-8\""));
+
+    QDomElement elementDoc;
+    elementDoc=mainDocument.createElement("DOC");
+    elementDoc.setAttribute("editor","KWord's AbiWord Import Filter");
+    elementDoc.setAttribute("mime","application/x-kword");
+    elementDoc.setAttribute("syntaxVersion",2);
+    mainDocument.appendChild(elementDoc);
+
+    QDomElement element;
+    element=mainDocument.createElement("ATTRIBUTES");
+    element.setAttribute("processing",0);
+    element.setAttribute("standardpage",1);
+    element.setAttribute("hasHeader",0);
+    element.setAttribute("hasFooter",0);
+    element.setAttribute("unit","mm");
+    elementDoc.appendChild(element);
+
+    // <PAPER> will be partialy changed by an AbiWord <pagesize> element.
+    // default paper format of AbiWord is "Letter"
+    m_paperElement=mainDocument.createElement("PAPER");
+    m_paperElement.setAttribute("format",PG_US_LETTER);
+    m_paperElement.setAttribute("width",MillimetresToPoints(KoPageFormat::width (PG_US_LETTER,PG_PORTRAIT)));
+    m_paperElement.setAttribute("height",MillimetresToPoints(KoPageFormat::height(PG_US_LETTER,PG_PORTRAIT)));
+    m_paperElement.setAttribute("orientation",PG_PORTRAIT);
+    m_paperElement.setAttribute("columns",1);
+    m_paperElement.setAttribute("columnspacing",2);
+    m_paperElement.setAttribute("hType",0);
+    m_paperElement.setAttribute("fType",0);
+    m_paperElement.setAttribute("spHeadBody",9);
+    m_paperElement.setAttribute("spFootBody",9);
+    m_paperElement.setAttribute("zoom",100);
+    elementDoc.appendChild(m_paperElement);
+
+    m_paperBordersElement=mainDocument.createElement("PAPERBORDERS");
+    m_paperBordersElement.setAttribute("left",28);
+    m_paperBordersElement.setAttribute("top",42);
+    m_paperBordersElement.setAttribute("right",28);
+    m_paperBordersElement.setAttribute("bottom",42);
+    m_paperElement.appendChild(m_paperBordersElement);
+
     framesetsPluralElement=mainDocument.createElement("FRAMESETS");
     mainDocument.documentElement().appendChild(framesetsPluralElement);
 
@@ -1300,54 +1380,8 @@ KoFilter::ConversionStatus ABIWORDImport::convert( const QCString& from, const Q
 
     kdDebug(30506)<<"AbiWord to KWord Import filter"<<endl;
 
-    QDomDocument qDomDocumentOut("DOC");
-    qDomDocumentOut.appendChild(
-        qDomDocumentOut.createProcessingInstruction(
-        "xml","version=\"1.0\" encoding=\"UTF-8\""));
-
-    QDomElement elementDoc;
-    elementDoc=qDomDocumentOut.createElement("DOC");
-    elementDoc.setAttribute("editor","KWord's AbiWord Import Filter");
-    elementDoc.setAttribute("mime","application/x-kword");
-    elementDoc.setAttribute("syntaxVersion",2);
-    qDomDocumentOut.appendChild(elementDoc);
-
-    QDomElement element;
-    element=qDomDocumentOut.createElement("ATTRIBUTES");
-    element.setAttribute("processing",0);
-    element.setAttribute("standardpage",1);
-    element.setAttribute("hasHeader",0);
-    element.setAttribute("hasFooter",0);
-    element.setAttribute("unit","mm");
-    elementDoc.appendChild(element);
-
-    QDomElement elementPaper;
-    // <PAPER> will be partialy changed by an AbiWord <pagesize> element.
-    // default paper format of AbiWord is "Letter"
-    elementPaper=qDomDocumentOut.createElement("PAPER");
-    elementPaper.setAttribute("format",PG_US_LETTER);
-    elementPaper.setAttribute("width",MillimetresToPoints(KoPageFormat::width (PG_US_LETTER,PG_PORTRAIT)));
-    elementPaper.setAttribute("height",MillimetresToPoints(KoPageFormat::height(PG_US_LETTER,PG_PORTRAIT)));
-    elementPaper.setAttribute("orientation",PG_PORTRAIT);
-    elementPaper.setAttribute("columns",1);
-    elementPaper.setAttribute("columnspacing",2);
-    elementPaper.setAttribute("hType",0);
-    elementPaper.setAttribute("fType",0);
-    elementPaper.setAttribute("spHeadBody",9);
-    elementPaper.setAttribute("spFootBody",9);
-    elementPaper.setAttribute("zoom",100);
-    elementDoc.appendChild(elementPaper);
-
-    element=qDomDocumentOut.createElement("PAPERBORDERS");
-    element.setAttribute("left",28);
-    element.setAttribute("top",42);
-    element.setAttribute("right",28);
-    element.setAttribute("bottom",42);
-    elementPaper.appendChild(element);
-
-    kdDebug(30506) << "Header " << endl << qDomDocumentOut.toString() << endl;
-
-    StructureParser handler(qDomDocumentOut, m_chain);
+    QDomDocument documentOut;
+    StructureParser handler(documentOut,m_chain);
 
     //We arbitrarily decide that Qt can handle the encoding in which the file was written!!
     QXmlSimpleReader reader;
@@ -1415,12 +1449,12 @@ KoFilter::ConversionStatus ABIWORDImport::convert( const QCString& from, const Q
     }
 
     //Write the document!
-    QCString strOut=qDomDocumentOut.toCString(); // UTF-8
+    QCString strOut=documentOut.toCString(); // UTF-8
     // WARNING: we cannot use KoStore::write(const QByteArray&) because it writes an extra NULL character at the end.
     out->writeBlock(strOut,strOut.length());
 
 #if 0
-    kdDebug(30506) << qDomDocumentOut.toString();
+    kdDebug(30506) << documentOut.toString();
 #endif
 
     kdDebug(30506) << "Now importing to KWord!" << endl;

@@ -21,6 +21,9 @@
 
 #include <qfontinfo.h>
 
+#include <kglobalsettings.h>
+#include <kdebug.h>
+
 #include <koGlobal.h>
 
 #include "ImportStyle.h"
@@ -35,21 +38,40 @@ StyleDataMap::StyleDataMap(void)
 
 QString StyleDataMap::getDefaultStyle(void)
 {
-    // We use QFontInfo, as it does not return -1 as point size
+    // We use QFontInfo, as it return real values
     QFontInfo fontInfo(KoGlobal::defaultFont());
     QString strReturn;
 
-    // As something is upsetting KWord's style manager, we must define everything!
     strReturn += "font-family:";
-    strReturn += fontInfo.family();
-    strReturn += "; font-size:";
-    strReturn += QString::number(fontInfo.pointSize());
-    strReturn += "pt;";
-
+    strReturn += fontInfo.family(); // TODO: should be "Times New Roman"
+    strReturn += "; font-size: 12pt;";
     // Note: the last property must have a semi-colon!
 
     return strReturn;
 }
+
+void StyleDataMap::defineNewStyleFromOld(const QString& strName, const QString& strOld,
+    const int level, const QString& strProps)
+{
+    if (strOld.isEmpty())
+    {
+        defineNewStyle(strName,level,strProps);
+        return;
+    }
+
+    StyleDataMap::Iterator it=find(strOld);
+    if (it==end())
+    {
+        defineNewStyle(strName,level,strProps);
+    }
+    else
+    {
+        QString strAllProps=it.data().m_props;
+        strAllProps+=strProps;
+        defineNewStyle(strName,level,strAllProps);
+    }
+}
+
 
 void StyleDataMap::defineNewStyle(const QString& strName, const int level,
     const QString& strProps)
@@ -65,13 +87,16 @@ void StyleDataMap::defineNewStyle(const QString& strName, const int level,
     StyleData& styleData=it.data();
     styleData.m_level=level;
     styleData.m_props+=getDefaultStyle();
-    styleData.m_props+=strProps;
-    styleData.m_props+=";"; // Security if other properties are appended later
+    if (!strProps.isEmpty())
+    {
+        styleData.m_props+=strProps;
+        styleData.m_props+=";"; // Security if other properties are appended later
+    }
 }
 
 StyleDataMap::Iterator StyleDataMap::useOrCreateStyle(const QString& strName)
 {
-    // We are using a style but we ar enot sure if it is defined
+    // We are using a style but we are not sure if it is defined
     StyleDataMap::Iterator it=find(strName);
     if (it==end())
     {
@@ -82,4 +107,24 @@ StyleDataMap::Iterator StyleDataMap::useOrCreateStyle(const QString& strName)
         it=insert(strName,data);
     }
     return it;
+}
+
+void StyleDataMap::defineDefaultStyles(void)
+{
+    // Add a few of AbiWord predefined style sheets
+    // AbiWord file: src/text/ptbl/xp/pt_PT_Styles.cpp
+    defineNewStyle("Normal",-1,QString::null);
+    // TODO: font should be "Arial"
+    // TODO: "keep with next"
+    QString strHeading("font-weight: bold; margin-top: 22pt; margin-bottom: 3pt; ");
+    defineNewStyle("Heading 1",1,strHeading+"font-size: 17pt");
+    defineNewStyle("Heading 2",2,strHeading+"font-size: 14pt");
+    defineNewStyle("Heading 3",3,strHeading+"font-size: 12pt");
+    defineNewStyle("Block Text",-1,"margin-left: 1in; margin-right: 1in; margin-bottom: 6pt");
+    QFontInfo fixedInfo(KGlobalSettings::fixedFont());
+    QString strPlainText=QString("font-family: %1")
+        .arg(fixedInfo.family()); // TODO: should be "Courier New"
+    kdDebug(30506) << "Plain Text: " << strPlainText << endl;
+    defineNewStyle("Plain Text",-1,strPlainText);
+    // TODO: all list and numbered types
 }
