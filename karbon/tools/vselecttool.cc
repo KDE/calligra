@@ -19,6 +19,7 @@
 */
 
 #include <math.h>
+#include <stdlib.h>
 
 #include <qcursor.h>
 #include <qlabel.h>
