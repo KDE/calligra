@@ -589,6 +589,7 @@ QDomElement KPTextObject::saveKTextObject( QDomDocument& doc )
                     paragraph.appendChild(element);
                 }
                 lastFormat = c->format;
+                tmpText="";
                 tmpFamily=lastFormat->font().family();
                 tmpPointSize=lastFormat->font().pointSize();
                 tmpBold=static_cast<unsigned int>(lastFormat->font().bold());
