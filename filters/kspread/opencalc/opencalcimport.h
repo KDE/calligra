@@ -33,6 +33,7 @@ class KSpreadSheet;
 class KSpreadValidity;
 class KoStyleStack;
 class KSpreadConditional;
+class KoStore;
 
 class OpenCalcImport : public KoFilter
 {
@@ -105,6 +106,7 @@ class OpenCalcImport : public KoFilter
     void loadOasisConditionValue( const QString &styleCondition, KSpreadConditional &newCondition );
     void loadOasisCondition( QString &valExpression, KSpreadConditional &newCondition );
     void loadOasisValidationValue( const QStringList &listVal, KSpreadConditional &newCondition );
+    bool loadAndParse( KoStore *m_store, const QString& fileName, QDomDocument& doc, QString& errorMessage );
 
   KoFilter::ConversionStatus openFile();
 };

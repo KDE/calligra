@@ -24,6 +24,7 @@
 #include <qfile.h>
 #include <qfont.h>
 #include <qpen.h>
+#include <qxml.h>
 
 #include "opencalcimport.h"
 
@@ -2353,6 +2354,7 @@ bool OpenCalcImport::createStyleMap( QDomDocument const & styles )
   kdDebug(30518) << "Reading in default styles" << endl;
 
   QDomNode def = KoDom::namedItemNS( fixedStyles, KoXmlNS::style, "default-style" );
+  kdDebug()<<" def !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! :"<<def.isNull()<<endl;
   while ( !def.isNull() )
   {
     QDomElement e = def.toElement();
@@ -2695,6 +2697,7 @@ void OpenCalcImport::loadOasisValidationCondition( KSpreadValidity* val,QString 
 
 int OpenCalcImport::readMetaData()
 {
+    //kdDebug()<<" OpenCalcImport::readMetaData() !!!!!!!!!!!!!!!\n";
   int result = 5;
   KoDocumentInfo * docInfo          = m_doc->documentInfo();
   KoDocumentInfoAbout  * aboutPage  = static_cast<KoDocumentInfoAbout *>(docInfo->page( "about" ));
@@ -2703,6 +2706,7 @@ int OpenCalcImport::readMetaData()
   QDomNode meta   = KoDom::namedItemNS( m_meta, KoXmlNS::office, "document-meta" );
   QDomNode office = KoDom::namedItemNS( meta, KoXmlNS::office, "meta" );
 
+  //kdDebug()<<"  office.isNull():::::::::::::::::::::::::::::::::::::: :"<<office.isNull()<<endl;
   if ( office.isNull() )
     return 2;
 
@@ -2813,7 +2817,8 @@ KoFilter::ConversionStatus OpenCalcImport::openFile()
   }
 
   kdDebug(30518) << "Trying to open content.xml" << endl;
-  if ( !store->open( "content.xml" ) )
+  QString messageError;
+  if ( !loadAndParse( store, "content.xml", m_content, messageError))
   {
     kdWarning(30518) << "This file doesn't seem to be a valid OpenCalc file" << endl;
     delete store;
@@ -2822,76 +2827,20 @@ KoFilter::ConversionStatus OpenCalcImport::openFile()
   kdDebug(30518) << "Opened" << endl;
 
   QDomDocument styles;
-  QCString totalString;
-  char tempData[1024];
-
-  Q_LONG size = store->read( &tempData[0], 1023 );
-  while ( size > 0 )
-  {
-    QCString tempString( tempData, size + 1);
-    totalString += tempString;
-
-    size = store->read( &tempData[0], 1023 );
-  }
-
-  m_content.setContent( totalString );
-  totalString = "";
-  store->close();
-
   kdDebug(30518) << "file content.xml loaded " << endl;
 
-  if ( store->open( "styles.xml" ) )
-  {
-    size = store->read( &tempData[0], 1023 );
-    while ( size > 0 )
-    {
-      QCString tempString( tempData, size + 1);
-      totalString += tempString;
-
-      size = store->read( &tempData[0], 1023 );
-    }
-
-    styles.setContent( totalString );
-    totalString = "";
-    store->close();
-    kdDebug(30518) << "file containing styles loaded" << endl;
-  }
-  else
+  if ( !loadAndParse( store, "styles.xml", styles, messageError) )
     kdWarning(30518) << "Style definitions do not exist!" << endl;
 
-  if ( store->open( "meta.xml" ) )
+  if ( loadAndParse( store, "meta.xml", m_meta, messageError) )
   {
-    size = store->read( &tempData[0], 1023 );
-    while ( size > 0 )
-    {
-      QCString tempString( tempData, size + 1);
-      totalString += tempString;
-
-      size = store->read( &tempData[0], 1023 );
-    }
-
-    m_meta.setContent( totalString );
-    totalString = "";
-    store->close();
     kdDebug(30518) << "File containing meta definitions loaded" << endl;
   }
   else
     kdWarning(30518) << "Meta definitions do not exist!" << endl;
 
-  if ( store->open( "settings.xml" ) )
+  if (  loadAndParse( store, "settings.xml", m_settings, messageError) )
   {
-    size = store->read( &tempData[0], 1023 );
-    while ( size > 0 )
-    {
-      QCString tempString( tempData, size + 1);
-      totalString += tempString;
-
-      size = store->read( &tempData[0], 1023 );
-    }
-
-    m_settings.setContent( totalString );
-    totalString = "";
-    store->close();
     kdDebug(30518) << "File containing settings loaded" << endl;
   }
   else
@@ -2907,6 +2856,46 @@ KoFilter::ConversionStatus OpenCalcImport::openFile()
   return KoFilter::OK;
 }
 
+bool OpenCalcImport::loadAndParse( KoStore *m_store, const QString& fileName, QDomDocument& doc, QString& errorMessage )
+{
+    kdDebug(30518) << "loadAndParse: Trying to open " << fileName << endl;
+
+    if (!m_store->open(fileName))
+    {
+        kdWarning(30518) << "Entry " << fileName << " not found!" << endl;
+        errorMessage = i18n( "Could not find %1" ).arg( fileName );
+        return false;
+    }
+    // Error variables for QDomDocument::setContent
+    QString errorMsg;
+    int errorLine, errorColumn;
+
+    // We need to be able to see the space in <text:span> </text:span>, this is why
+    // we activate the "report-whitespace-only-CharData" feature.
+    // Unfortunately this leads to lots of whitespace text nodes in between real
+    // elements in the rest of the document, watch out for that.
+    QXmlInputSource source( m_store->device() );
+    // Copied from QDomDocumentPrivate::setContent, to change the whitespace thing
+    QXmlSimpleReader reader;
+    KoDocument::setupXmlReader( reader, true /*namespaceProcessing*/ );
+
+    bool ok = doc.setContent( &source, &reader, &errorMsg, &errorLine, &errorColumn );
+    if ( !ok )
+    {
+        kdError(30003) << "Parsing error in " << fileName << "! Aborting!" << endl
+                       << " In line: " << errorLine << ", column: " << errorColumn << endl
+                       << " Error message: " << errorMsg << endl;
+        errorMessage = i18n( "Parsing error in the main document at line %1, column %2\nError message: %3" )
+                       .arg( errorLine ).arg( errorColumn ).arg( i18n ( "QXml", errorMsg.utf8() ) );
+    }
+    else
+    {
+        kdDebug(30003) << "File " << fileName << " loaded and parsed" << endl;
+    }
+    //kdDebug()<<" doc.toString() :"<<doc.toString()<<endl;
+    m_store->close();
+    return ok;
+}
 
 #include "opencalcimport.moc"
 
