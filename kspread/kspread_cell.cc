@@ -4592,7 +4592,8 @@ bool KSpreadCell::saveOasis( KoXmlWriter& xmlwriter, KoGenStyles &mainStyles, in
     }
 
 
-    saveOasisValue (xmlwriter);
+    if ( link().isEmpty() )
+      saveOasisValue (xmlwriter);
 
     if (d->hasExtra() && d->extra()->validity)
     {
@@ -4608,7 +4609,6 @@ bool KSpreadCell::saveOasis( KoXmlWriter& xmlwriter, KoGenStyles &mainStyles, in
     else if ( !link().isEmpty() )
     {
         kdDebug()<<"Link found \n";
-        //TODO format !
         xmlwriter.startElement( "text:p" );
         xmlwriter.startElement( "text:a" );
         xmlwriter.addAttribute( " xlink:href", link() );
@@ -4629,7 +4629,7 @@ bool KSpreadCell::saveOasis( KoXmlWriter& xmlwriter, KoGenStyles &mainStyles, in
         xmlwriter.addAttribute( "table:number-rows-spanned", QString::number( rowSpan ) );
     }
 
-    if ( !isEmpty() )
+    if ( !isEmpty() && link().isEmpty() )
     {
         xmlwriter.startElement( "text:p" );
         xmlwriter.addTextNode(strOutText());
@@ -4833,27 +4833,24 @@ bool KSpreadCell::loadOasis( const QDomElement &element, const KoOasisStyles& oa
     QDomElement textP = KoDom::namedItemNS( element, KoXmlNS::text, "p" );
     if ( !textP.isNull() )
     {
-        QDomElement subText = textP.firstChild().toElement();
-        if ( !subText.isNull() )
+        text = textP.text(); // our text, could contain formating for value or result of formul
+        setCellText( text );
+        setValue( text );
+
+        QDomElement textA = KoDom::namedItemNS( textP, KoXmlNS::text, "a" );
+        if( !textA.isNull() )
         {
-            // something in <text:p>, e.g. links
-            text = subText.text();
-            if ( subText.hasAttributeNS( KoXmlNS::xlink, "href" ) )
+            if ( textA.hasAttributeNS( KoXmlNS::xlink, "href" ) )
             {
-                QString link = subText.attributeNS( KoXmlNS::xlink, "href", QString::null );
-                kdDebug()<<" link :"<<link<<endl;
-                d->extra()->link = link;
-                d->strText = text;
-                kdDebug()<<"  d->strText :"<< d->strText<<endl;
+                QString link = textA.attributeNS( KoXmlNS::xlink, "href", QString::null );
+                text = textA.text();
+                setCellText( text );
+                setValue( text );
+                setLink( link );
             }
-        }
-        else
-        {
-            text = textP.text(); // our text, could contain formating for value or result of formul
-            setCellText( text );
-            setValue( text );
-        }
+        }             
     }
+    
     bool isFormula = false;
     if ( element.hasAttributeNS( KoXmlNS::table, "formula" ) )
     {
