@@ -278,7 +278,7 @@ void KoFindDialog::showPatterns()
         m_patterns = new QPopupMenu(this);
         for (i = 0; (unsigned)i < sizeof(items) / sizeof(items[0]); i++)
         {
-            m_patterns->insertItem(items[i].description, i, i);
+            m_patterns->insertItem(i18n(items[i].description), i, i);
         }
     }
 
@@ -314,7 +314,7 @@ void KoFindDialog::showPlaceholders()
         m_placeholders = new QPopupMenu(this);
         for (i = 0; (unsigned)i < sizeof(items) / sizeof(items[0]); i++)
         {
-            m_placeholders->insertItem(items[i].description, i, i);
+            m_placeholders->insertItem(i18n(items[i].description), i, i);
         }
     }
 
