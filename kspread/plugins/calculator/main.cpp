@@ -134,7 +134,7 @@ bool Calculator::eventFilter( QObject*, QEvent* ev )
         if ( event->rect().left() == event->rect().right() &&
              event->rect().top() == event->rect().bottom() )
         {
-            KSpreadCell* cell = table->cellAt( event->rect().left(), event->rect().top() );
+            KSpreadCell* cell = table->cellAt( event->rect().left(), event->rect().top(), false );
             if ( !cell )
                 return FALSE;
 
@@ -186,7 +186,7 @@ void QtCalculator::useData()
             KSpreadTable* table = view->doc()->map()->findTable( table_name );
             if ( !table )
                 return;
-            KSpreadCell* cell = table->cellAt( x, y );
+            KSpreadCell* cell = table->cellAt( x, y, false );
             if ( !cell )
                 return;
 

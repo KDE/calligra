@@ -165,7 +165,7 @@ else
                         int val_start=QMIN(end->text().toInt(),start->text().toInt());
                         m_pTable->setSeries( marker,val_start,val_end,step->text().toInt(),mode,type );
 
-                        KSpreadCell *cell = m_pTable->cellAt( marker.x(),marker.y()  );
+                        KSpreadCell *cell = m_pTable->cellAt( marker.x(),marker.y() );
                         if ( cell->text() != 0L )
                                 m_pView->editWidget()->setText( cell->text() );
                         else

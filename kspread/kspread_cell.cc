@@ -3418,7 +3418,7 @@ void KSpreadCell::updateDepending()
     {
       for (int r = d->Top(); r <= d->Bottom(); r++)
       {
-	d->Table()->cellAt(c,r)->updateDepending();
+	d->Table()->cellAt( c, r )->updateDepending();
       }
     }
   }
@@ -3450,7 +3450,7 @@ void KSpreadCell::setCalcDirtyFlag()
     {
       for (int r = d->Top(); r <= d->Bottom(); r++)
       {
-	d->Table()->cellAt(c,r)->setCalcDirtyFlag();
+	d->Table()->cellAt( c, r )->setCalcDirtyFlag();
       }
     }
   }
@@ -4611,7 +4611,7 @@ void KSpreadCell::NotifyDependancyList(QPtrList<KSpreadDependency> lst, bool isD
     {
       for (int r = d->Top(); r <= d->Bottom(); r++)
       {
-	d->Table()->cellAt(c, r, false)->NotifyDepending(m_iColumn, m_iRow, m_pTable, isDepending);
+	d->Table()->cellAt( c, r )->NotifyDepending(m_iColumn, m_iRow, m_pTable, isDepending);
       }
     }
   }

@@ -484,11 +484,11 @@ void KSpreadTable::adjustSizeMaxY ( int _y )
     m_ulSizeMaxY += _y;
 }
 
-KSpreadCell* KSpreadTable::visibleCellAt( int _column, int _row, bool _no_scrollbar_update )
+KSpreadCell* KSpreadTable::visibleCellAt( int _column, int _row, bool _scrollbar_update )
 {
-  KSpreadCell* cell = cellAt( _column, _row, _no_scrollbar_update );
+  KSpreadCell* cell = cellAt( _column, _row, _scrollbar_update );
   if ( cell->isObscured() )
-    return cellAt( cell->obscuringCellsColumn(), cell->obscuringCellsRow(), _no_scrollbar_update );
+    return cellAt( cell->obscuringCellsColumn(), cell->obscuringCellsRow(), _scrollbar_update );
 
   return cell;
 }
@@ -517,7 +517,7 @@ const KSpreadCell* KSpreadTable::cellAt( int _column, int _row ) const
     return m_pDefaultCell;
 }
 
-KSpreadCell* KSpreadTable::cellAt( int _column, int _row, bool _no_scrollbar_update )
+KSpreadCell* KSpreadTable::cellAt( int _column, int _row, bool _scrollbar_update )
 {
   if ( _column > KS_colMax ) {
     _column = KS_colMax;
@@ -528,18 +528,10 @@ KSpreadCell* KSpreadTable::cellAt( int _column, int _row, bool _no_scrollbar_upd
     _row = KS_rowMax;
   }
 
-  if ( !_no_scrollbar_update && m_bScrollbarUpdates )
+  if ( _scrollbar_update && m_bScrollbarUpdates )
   {
-    if ( _column > m_iMaxColumn )
-    {
-      m_iMaxColumn = _column;
-      emit sig_maxColumn( _column );
-    }
-    if ( _row > m_iMaxRow )
-    {
-      m_iMaxRow = _row;
-      emit sig_maxRow( _row );
-    }
+    checkRangeHBorder( _column );
+    checkRangeVBorder( _row );
   }
 
   KSpreadCell *p = m_cells.lookup( _column, _row );
@@ -587,20 +579,12 @@ RowLayout* KSpreadTable::nonDefaultRowLayout( int _row, bool force_creation )
 }
 
 KSpreadCell* KSpreadTable::nonDefaultCell( int _column, int _row,
-                                           bool _no_scrollbar_update )
+                                           bool _scrollbar_update )
 {
-  if ( !_no_scrollbar_update && m_bScrollbarUpdates )
+  if ( _scrollbar_update && m_bScrollbarUpdates )
   {
-    if ( _column > m_iMaxColumn )
-    {
-      m_iMaxColumn = _column;
-      emit sig_maxColumn( _column );
-    }
-    if ( _row > m_iMaxRow )
-    {
-      m_iMaxRow = _row;
-      emit sig_maxRow( _row );
-    }
+    checkRangeHBorder( _column );
+    checkRangeVBorder( _row );
   }
 
   KSpreadCell *p = m_cells.lookup( _column, _row );
@@ -932,7 +916,7 @@ KSpreadTable::SelectionType KSpreadTable::workOnCells( const QPoint& _marker, Ce
 	    {
 		for ( int i=m_rctSelection.left(); i<=m_rctSelection.right(); i++ )
 		{
-		    KSpreadCell *cell = cellAt( i, rw->row(), true );
+		    KSpreadCell *cell = cellAt( i, rw->row() );
 		    if ( cell == m_pDefaultCell )
 			// '&& worker.create_if_default' unneccessary as never used in type A
 		    {
@@ -1014,7 +998,7 @@ KSpreadTable::SelectionType KSpreadTable::workOnCells( const QPoint& _marker, Ce
 		{
 		    for ( int i=m_rctSelection.left(); i<=m_rctSelection.right(); i++ )
 		    {
-			KSpreadCell *cell = cellAt( i, rw->row(), true);
+			KSpreadCell *cell = cellAt( i, rw->row() );
 			// ### this if should be not necessary; cells are created
 			//     before the undo object is created, aren't they?
 			if ( cell == m_pDefaultCell )
@@ -1037,7 +1021,7 @@ KSpreadTable::SelectionType KSpreadTable::workOnCells( const QPoint& _marker, Ce
 	for ( int x = r.left(); x <= r.right(); x++ )
 	    for ( int y = r.top(); y <= r.bottom(); y++ )
 	    {
-		KSpreadCell *cell = cellAt( x, y, true );
+		KSpreadCell *cell = cellAt( x, y );
                 if ( worker.testCondition( cell ) )
 		{
 		    if ( worker.create_if_default && cell == m_pDefaultCell )
@@ -1560,14 +1544,14 @@ void KSpreadTable::setSeries( const QPoint &_marker,int start,int end,int step,S
     y = _marker.y();
 
     /* now we're going to actually loop through and set the values */
-    for ( int incr=start;incr<=end; )
+    for ( int incr=start; incr <= end; )
     {
-        KSpreadCell *cell = nonDefaultCell( x, y, true );
+        KSpreadCell *cell = nonDefaultCell( x, y );
 
         if(cell->isObscuringForced())
         {
             cell = cellAt( cell->obscuringCellsColumn(),
-			   cell->obscuringCellsRow());
+			   cell->obscuringCellsRow() );
         }
 
         cell->setCellText(cellText.setNum(incr));
@@ -2329,7 +2313,7 @@ void KSpreadTable::find( const QPoint &_marker, QString _find, long options, KSp
     {
         for(int col = colStart ; !bck ? col < colEnd : col > colEnd ; !bck ? ++col : --col )
         {
-            KSpreadCell *cell = cellAt( col, row, true /*no scrollbar updates*/ );
+            KSpreadCell *cell = cellAt( col, row );
             if ( !cell->isDefault() && !cell->isObscured() && !cell->isFormula() )
             {
                 QString text = cell->text();
@@ -2420,7 +2404,7 @@ void KSpreadTable::borderBottom( const QPoint &_marker,const QColor &_color )
   QRect r( m_rctSelection );
   if ( m_rctSelection.left()==0 )
   {
-    KSpreadCell *cell = cellAt(_marker.x(), _marker.y());
+    KSpreadCell *cell = cellAt( _marker.x(), _marker.y() );
 
     r.setCoords( _marker.x(), _marker.y(), _marker.x() + cell->extraXCells(),
                  _marker.y() + cell->extraYCells() );
@@ -2485,7 +2469,7 @@ void KSpreadTable::borderRight( const QPoint &_marker,const QColor &_color )
   QRect r( m_rctSelection );
   if ( m_rctSelection.left()==0 )
   {
-    KSpreadCell *cell = cellAt(_marker.x(), _marker.y());
+    KSpreadCell *cell = cellAt( _marker.x(), _marker.y() );
 
     r.setCoords( _marker.x(), _marker.y(), _marker.x() + cell->extraXCells(),
                  _marker.y() + cell->extraYCells() );
@@ -2528,7 +2512,7 @@ void KSpreadTable::borderRight( const QPoint &_marker,const QColor &_color )
       {
         for(int i=m_rctSelection.left();i<=m_rctSelection.right();i++)
         {
-          KSpreadCell *cell = nonDefaultCell( i,  rw->row(), true);
+          KSpreadCell *cell = nonDefaultCell( i,  rw->row() );
         }
       }
     }
@@ -2543,7 +2527,7 @@ void KSpreadTable::borderRight( const QPoint &_marker,const QColor &_color )
       {
         for(int i=m_rctSelection.left();i<=m_rctSelection.right();i++)
         {
-          KSpreadCell *cell = nonDefaultCell( i,  rw->row(), true);
+          KSpreadCell *cell = nonDefaultCell( i, rw->row() );
           cell->setRightBorderPen(pen);
         }
       }
@@ -2577,7 +2561,7 @@ void KSpreadTable::borderLeft( const QPoint &_marker, const QColor &_color )
   QRect r( m_rctSelection );
   if ( m_rctSelection.left()==0 )
   {
-    KSpreadCell *cell = cellAt(_marker.x(), _marker.y());
+    KSpreadCell *cell = cellAt( _marker.x(), _marker.y() );
 
     r.setCoords( _marker.x(), _marker.y(), _marker.x() + cell->extraXCells(),
                  _marker.y() + cell->extraYCells() );
@@ -2596,7 +2580,7 @@ void KSpreadTable::borderLeft( const QPoint &_marker, const QColor &_color )
       {
         for(int i=m_rctSelection.left();i<=m_rctSelection.right();i++)
         {
-          KSpreadCell *cell = nonDefaultCell( i,  rw->row(), true);
+          KSpreadCell *cell = nonDefaultCell( i,  rw->row() );
         }
       }
     }
@@ -2628,7 +2612,7 @@ void KSpreadTable::borderLeft( const QPoint &_marker, const QColor &_color )
       {
         for(int i=m_rctSelection.left();i<=m_rctSelection.right();i++)
         {
-          KSpreadCell *cell = nonDefaultCell( i,  rw->row(), true);
+          KSpreadCell *cell = nonDefaultCell( i,  rw->row() );
           cell->setLeftBorderPen(pen);
         }
       }
@@ -2649,7 +2633,7 @@ void KSpreadTable::borderLeft( const QPoint &_marker, const QColor &_color )
     for ( int y = r.top(); y <= r.bottom(); y++ )
     {
       int x = r.left();
-      KSpreadCell *cell = nonDefaultCell( x, y, true );
+      KSpreadCell *cell = nonDefaultCell( x, y );
       cell->setLeftBorderPen(pen);
     }
     emit sig_updateView( this, r );
@@ -2663,7 +2647,7 @@ void KSpreadTable::borderTop( const QPoint &_marker,const QColor &_color )
   QRect r( m_rctSelection );
   if ( m_rctSelection.left()==0 )
   {
-    KSpreadCell *cell = cellAt(_marker.x(), _marker.y());
+    KSpreadCell *cell = cellAt( _marker.x(), _marker.y() );
 
     r.setCoords( _marker.x(), _marker.y(), _marker.x() + cell->extraXCells(),
                  _marker.y() + cell->extraYCells() );
@@ -2710,7 +2694,7 @@ void KSpreadTable::borderTop( const QPoint &_marker,const QColor &_color )
     for ( int x = r.left(); x <= r.right(); x++ )
     {
       int y = r.top();
-      KSpreadCell *cell = nonDefaultCell( x, y, true );
+      KSpreadCell *cell = nonDefaultCell( x, y );
       cell->setTopBorderPen(pen);
     }
     emit sig_updateView( this, r );
@@ -2722,7 +2706,7 @@ void KSpreadTable::borderOutline( const QPoint &_marker,const QColor &_color )
   QRect r( m_rctSelection );
   if ( m_rctSelection.left()==0 )
   {
-    KSpreadCell *cell = cellAt(_marker.x(), _marker.y());
+    KSpreadCell *cell = cellAt( _marker.x(), _marker.y() );
 
     r.setCoords( _marker.x(), _marker.y(), _marker.x() + cell->extraXCells(),
                  _marker.y() + cell->extraYCells() );
@@ -2760,7 +2744,7 @@ void KSpreadTable::borderOutline( const QPoint &_marker,const QColor &_color )
     rw->setBottomBorderPen(pen);
     for ( int y = r.top(); y <= r.bottom(); y++ )
     {
-      KSpreadCell *cell = nonDefaultCell( r.left(), y, true );
+      KSpreadCell *cell = nonDefaultCell( r.left(), y );
       cell->setLeftBorderPen(pen);
     }
     emit sig_updateView( this );
@@ -2791,7 +2775,7 @@ void KSpreadTable::borderOutline( const QPoint &_marker,const QColor &_color )
     cl->setRightBorderPen(pen);
     for ( int x = r.left(); x <= r.right(); x++ )
     {
-      KSpreadCell *cell = nonDefaultCell( x, r.top(), true );
+      KSpreadCell *cell = nonDefaultCell( x, r.top() );
       cell->setTopBorderPen(pen);
     }
     emit sig_updateView( this );
@@ -2801,8 +2785,8 @@ void KSpreadTable::borderOutline( const QPoint &_marker,const QColor &_color )
   {
     for ( int x = r.left(); x <= r.right(); x++ )
     {
-      nonDefaultCell( x, r.top(), true )->setTopBorderPen(pen);
-      nonDefaultCell( x, r.bottom(), true )->setBottomBorderPen(pen);
+      nonDefaultCell( x, r.top() )->setTopBorderPen(pen);
+      nonDefaultCell( x, r.bottom() )->setBottomBorderPen(pen);
     }
     for ( int y = r.top(); y <= r.bottom(); y++ )
     {
@@ -2983,11 +2967,11 @@ void KSpreadTable::sortByRow( int ref_row, SortingOrder mode, bool cpLayout )
 
     for ( int d = r.left();  d <= r.right(); d++ )
     {
-        KSpreadCell *cell1 = cellAt( d, ref_row  );
+        KSpreadCell *cell1 = cellAt( d, ref_row );
         if ( cell1->isObscured() && cell1->isObscuringForced() )
         {
             int moveX = cell1->obscuringCellsColumn();
-            KSpreadCell * cell = cellAt(moveX, ref_row);
+            KSpreadCell * cell = cellAt( moveX, ref_row );
             cell1 = cellAt( moveX + cell->extraXCells() + 1, moveX );
             d = moveX + cell->extraXCells() + 1;
         }
@@ -2998,7 +2982,7 @@ void KSpreadTable::sortByRow( int ref_row, SortingOrder mode, bool cpLayout )
 
         for ( int x = d + 1 ; x <= r.right(); x++ )
         {
-            KSpreadCell * cell2 = cellAt( x, ref_row, true );
+            KSpreadCell * cell2 = cellAt( x, ref_row );
 
             if ( cell2->isEmpty() )
             { /* No need to swap */ }
@@ -3089,7 +3073,7 @@ void KSpreadTable::sortByColumn( int ref_column, SortingOrder mode, bool cpLayou
         if ( cell1->isObscured() && cell1->isObscuringForced() )
         {
             int moveY=cell1->obscuringCellsRow();
-            KSpreadCell* cell = cellAt(ref_column, moveY);
+            KSpreadCell* cell = cellAt( ref_column, moveY );
             cell1 = cellAt( ref_column, moveY+cell->extraYCells()+1 );
             d=moveY+cell->extraYCells()+1;
         }
@@ -3098,7 +3082,7 @@ void KSpreadTable::sortByColumn( int ref_column, SortingOrder mode, bool cpLayou
 
         for ( int y = d + 1 ; y <= r.bottom(); y++ )
         {
-            KSpreadCell * cell2 = cellAt( ref_column, y, true );
+            KSpreadCell * cell2 = cellAt( ref_column, y );
             
             if ( cell2->isEmpty() )
             { /* No need to swap */ }
@@ -3777,10 +3761,10 @@ int KSpreadTable::adjustColumn( const QPoint& _marker, int _col )
         return ( long_max + 4 );
 }
 
-int KSpreadTable::adjustRow(const QPoint &_marker,int _row)
+int KSpreadTable::adjustRow( const QPoint &_marker, int _row )
 {
     int long_max=0;
-    if( _row == -1 )
+    if( _row == -1 ) //No special row is defined, so use selected rows
     {
         if ( isRowSelected() )
         {
@@ -4061,7 +4045,7 @@ void KSpreadTable::setConditional( const QRect & _marker,
   {
     for (int y = t; y <= b; ++y)
     {
-      cell = cellAt( x, y, true );
+      cell = cellAt( x, y );
       if ( cell->isObscuringForced() )
         continue;
       if ( cell->isDefault() )
@@ -4218,7 +4202,7 @@ QString KSpreadTable::copyAsText( const QPoint &_marker )
     {
       for (x = m_rctSelection.left(); x <= m_rctSelection.right(); ++x)
       {
-        KSpreadCell * cell = cellAt( x, y, true );
+        KSpreadCell * cell = cellAt( x, y );
         if( !cell->isDefault() )
         {
             int l = max - cell->strOutText().length();
@@ -4378,7 +4362,7 @@ void KSpreadTable::pasteTextPlain( QString &_text, const QPoint &_marker)
 
     // next cell
     ++i;
-    cell = cellAt( mx, my + i, true);
+    cell = cellAt( mx, my + i );
 
     if (!cell || p == (int) tmp.length())
       break;
@@ -4676,7 +4660,7 @@ void KSpreadTable::deleteCells( const QRect& rect )
     else if(rect.contains(m_marker.x(),m_marker.y())
     &&m_rctSelection.left()==0)
         {
-        KSpreadCell *cell = nonDefaultCell( m_marker.x(),m_marker.y() );
+        KSpreadCell *cell = nonDefaultCell( m_marker.x(), m_marker.y() );
         if(cell->isForceExtraCells())
                 {
                 extraCell=true;
@@ -4811,7 +4795,7 @@ void KSpreadTable::changeMergedCell( int m_iCol, int m_iRow, int m_iExtraX, int 
         dissociateCell( QPoint( m_iCol,m_iRow),false);
         return;
         }
-    KSpreadCell *cell = nonDefaultCell( m_iCol,m_iRow  );
+    KSpreadCell *cell = nonDefaultCell( m_iCol, m_iRow );
     if(cell->isForceExtraCells())
         dissociateCell( QPoint( m_iCol,m_iRow),false);
 
@@ -4836,7 +4820,7 @@ void KSpreadTable::mergeCell( const QPoint &_marker, bool makeUndo)
         x = m_rctSelection.left();
     if( _marker.y() > m_rctSelection.top() )
         y = m_rctSelection.top();
-    KSpreadCell *cell = nonDefaultCell( x ,y  );
+    KSpreadCell *cell = nonDefaultCell( x , y );
 
     if ( !m_pDoc->undoBuffer()->isLocked() && makeUndo)
     {
@@ -4856,7 +4840,7 @@ void KSpreadTable::mergeCell( const QPoint &_marker, bool makeUndo)
 
 void KSpreadTable::dissociateCell( const QPoint &_marker,bool makeUndo)
 {
-    KSpreadCell *cell = nonDefaultCell(_marker.x() ,_marker.y()  );
+    KSpreadCell *cell = nonDefaultCell( _marker.x(), _marker.y() );
     if(!cell->isForceExtraCells())
         return;
 
@@ -5275,7 +5259,7 @@ QDomDocument KSpreadTable::saveCellRect( const QRect &_rect )
 	for(int j=_rect.top();j<=_rect.bottom();j++)
 	{
 	    bool insert=false;
-	    KSpreadCell *cell = cellAt( i, j, false );
+	    KSpreadCell *cell = cellAt( i, j );
 	    if ( cell == m_pDefaultCell )
 	    {
 		cell = new KSpreadCell( this, i, j );
@@ -5684,7 +5668,7 @@ void KSpreadTable::emit_updateColumn( ColumnLayout *_layout, int _column )
 
     emit sig_updateHBorder( this );
     emit sig_updateView( this );
-    emit sig_maxColumn(maxColumn());
+    emit sig_maxColumn( maxColumn() );
     _layout->clearDisplayDirtyFlag();
 }
 
@@ -5807,6 +5791,26 @@ KSpreadTable::~KSpreadTable()
     delete m_dcop;
 }
 
+
+void KSpreadTable::checkRangeHBorder ( int _column )
+{
+    if ( m_bScrollbarUpdates && _column > m_iMaxColumn )
+    {
+      m_iMaxColumn = _column;
+      emit sig_maxColumn( _column );
+    }
+}
+
+void KSpreadTable::checkRangeVBorder ( int _row )
+{
+    if ( m_bScrollbarUpdates && _row > m_iMaxRow )
+    {
+      m_iMaxRow = _row;
+      emit sig_maxRow( _row );
+    }
+}
+
+
 void KSpreadTable::enableScrollBarUpdates( bool _enable )
 {
   m_bScrollbarUpdates = _enable;
@@ -5836,9 +5840,9 @@ void KSpreadTable::removeTable()
 
 void KSpreadTable::setActiveTable()
 {
-    emit sig_maxColumn( maxColumn());
-    emit sig_maxRow(maxRow() );
-    emit sig_TableActivated(this);
+    emit sig_maxColumn( maxColumn() );
+    emit sig_maxRow( maxRow() );
+    emit sig_TableActivated( this );
     emit sig_updateVBorder( this );
     emit sig_updateHBorder( this );
     emit sig_updateView( this );
@@ -5915,7 +5919,7 @@ KSpreadCell* KSpreadTable::getNextCellRight(int col, int row)
 bool KSpreadTable::isCellSelected(int column, int row)
 {
   bool selected;
-  KSpreadCell* cell = cellAt(column, row);
+  KSpreadCell* cell = cellAt( column, row );
   selected = selectionRect().contains( QPoint( column, row ) );
   if ( cell->isObscured() )
   {
@@ -5958,14 +5962,14 @@ void KSpreadTable::convertObscuringBorders()
 
       for (int x = c->column(); x < c->column() + c->extraXCells(); x++)
       {
-        nonDefaultCell(x, c->row())->setTopBorderPen(topPen);
-        nonDefaultCell(x, c->row() + c->extraYCells())->
+        nonDefaultCell( x, c->row() )->setTopBorderPen(topPen);
+        nonDefaultCell( x, c->row() + c->extraYCells() )->
           setBottomBorderPen(bottomPen);
       }
       for (int y = c->row(); y < c->row() + c->extraYCells(); y++)
       {
-        nonDefaultCell(c->column(), y)->setLeftBorderPen(leftPen);
-        nonDefaultCell(c->column() + c->extraXCells(), y)->
+        nonDefaultCell( c->column(), y )->setLeftBorderPen(leftPen);
+        nonDefaultCell( c->column() + c->extraXCells(), y )->
           setRightBorderPen(rightPen);
       }
     }
@@ -5982,7 +5986,7 @@ void KSpreadTable::printDebug()
     {
         for ( int currentcolumn = 1 ; currentcolumn < iMaxColumn ; currentcolumn++ )
         {
-            KSpreadCell * cell = cellAt( currentcolumn, currentrow, true );
+            KSpreadCell * cell = cellAt( currentcolumn, currentrow );
             if ( !cell->isDefault() && !cell->isEmpty() )
             {
                 QString cellDescr = util_cellName( currentcolumn, currentrow );

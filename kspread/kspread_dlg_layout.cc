@@ -650,7 +650,7 @@ void CellLayoutDlg::slotApply()
     {
         if(positionPage->getMergedCellState())
         {
-            KSpreadCell *obj = table->nonDefaultCell( left,top );
+            KSpreadCell *obj = table->nonDefaultCell( left, top );
 
             KSpreadUndoMergedCell *undo = new KSpreadUndoMergedCell( table->doc(), table, left ,top ,obj->extraXCells() ,obj->extraYCells());
             macroUndo->addCommand(undo);
@@ -663,7 +663,7 @@ void CellLayoutDlg::slotApply()
         else
         {
             //dissociate cells
-            KSpreadCell *obj = table->nonDefaultCell( left,top );
+            KSpreadCell *obj = table->nonDefaultCell( left, top );
             right=obj->extraXCells()+left;
             bottom=obj->extraYCells()+top;
 
@@ -695,7 +695,7 @@ void CellLayoutDlg::slotApply()
                 {
                     for(int i=left;i<=right;i++)
                     {
-		      cell = table->nonDefaultCell(i, rw->row(), true);
+		      cell = table->nonDefaultCell( i, rw->row() );
                     }
                 }
             }
@@ -1675,8 +1675,7 @@ void CellLayoutPageFloat::apply( ColumnLayout *_obj )
     {
       for(int i=dlg->left;i<=dlg->right;i++)
       {
-        KSpreadCell *cell = dlg->getTable()->nonDefaultCell( i,  rw->row(),
-                                                             true);
+        KSpreadCell *cell = dlg->getTable()->nonDefaultCell( i, rw->row() );
         applyLayout(cell );
       }
     }
@@ -2058,8 +2057,7 @@ void CellLayoutPageFont::apply( ColumnLayout *_obj)
     {
       for(int i=dlg->left;i<=dlg->right;i++)
       {
-        KSpreadCell *cell = dlg->getTable()->nonDefaultCell( i,  rw->row(),
-                                                             true);
+        KSpreadCell *cell = dlg->getTable()->nonDefaultCell( i, rw->row() );
         applyLayout(cell );
       }
     }
@@ -2514,8 +2512,7 @@ void CellLayoutPagePosition::apply( ColumnLayout *_obj )
     {
       for(int i=dlg->left;i<=dlg->right;i++)
       {
-        KSpreadCell *cell = dlg->getTable()->nonDefaultCell( i,  rw->row(),
-                                                             true);
+        KSpreadCell *cell = dlg->getTable()->nonDefaultCell( i, rw->row() );
         applyLayout(cell );
       }
     }
@@ -3134,7 +3131,7 @@ void CellLayoutPageBorder::applyBottomOutline()
   {
     for ( int x = dlg->left; x <= dlg->right; x++ )
     {
-      KSpreadCell *obj = dlg->getTable()->nonDefaultCell( x,dlg->bottom );
+      KSpreadCell *obj = dlg->getTable()->nonDefaultCell( x, dlg->bottom );
       obj->setBottomBorderPen( tmpPen );
     }
   }
@@ -3161,7 +3158,7 @@ void CellLayoutPageBorder::applyLeftOutline()
   {
     for ( int y = dlg->top; y <= dlg->bottom; y++ )
     {
-      KSpreadCell *obj = dlg->getTable()->nonDefaultCell( dlg->left,y );
+      KSpreadCell *obj = dlg->getTable()->nonDefaultCell( dlg->left, y );
       obj->setLeftBorderPen( tmpPen );
     }
   }
@@ -3186,7 +3183,7 @@ void CellLayoutPageBorder::applyLeftOutline()
         for(int i=dlg->left;i<=dlg->right;i++)
         {
           KSpreadCell *cell =
-            dlg->getTable()->nonDefaultCell( i,  rw->row(), true);
+            dlg->getTable()->nonDefaultCell( i, rw->row() );
           cell->setLeftBorderPen( tmpPen );
         }
       }
@@ -3202,7 +3199,7 @@ void CellLayoutPageBorder::applyRightOutline()
   {
     for ( int y = dlg->top; y <= dlg->bottom; y++ )
     {
-      KSpreadCell *obj = dlg->getTable()->nonDefaultCell( dlg->right,y );
+      KSpreadCell *obj = dlg->getTable()->nonDefaultCell( dlg->right, y );
       obj->setRightBorderPen(tmpPen);
     }
   }
@@ -3228,7 +3225,7 @@ void CellLayoutPageBorder::applyRightOutline()
         for(int i=dlg->left;i<=dlg->right;i++)
         {
           KSpreadCell *cell =
-            dlg->getTable()->nonDefaultCell( i,  rw->row(), true );
+            dlg->getTable()->nonDefaultCell( i, rw->row() );
           cell->setRightBorderPen(tmpPen);
         }
       }
@@ -3250,7 +3247,7 @@ void CellLayoutPageBorder::applyDiagonalOutline()
     {
       for ( int y = dlg->top; y <= dlg->bottom; y++ )
       {
-        KSpreadCell *obj = dlg->getTable()->nonDefaultCell( x,y );
+        KSpreadCell *obj = dlg->getTable()->nonDefaultCell( x, y );
         if ( fallDiagonal->isChanged() )
           obj->setFallDiagonalPen( tmpPenFall );
         if ( goUpDiagonal->isChanged() )
@@ -3295,7 +3292,7 @@ void CellLayoutPageBorder::applyDiagonalOutline()
         for(int i=dlg->left;i<=dlg->right;i++)
         {
           KSpreadCell *cell =
-            dlg->getTable()->nonDefaultCell( i,  rw->row(), true );
+            dlg->getTable()->nonDefaultCell( i, rw->row() );
           cell->setFallDiagonalPen( tmpPenFall );
           cell->setGoUpDiagonalPen( tmpPenGoUp );
         }
@@ -3372,7 +3369,7 @@ void CellLayoutPageBorder::applyHorizontalOutline()
         for(int i=dlg->left;i<=dlg->right;i++)
         {
           KSpreadCell *cell =
-            dlg->getTable()->nonDefaultCell( i,  rw->row(), true);
+            dlg->getTable()->nonDefaultCell( i, rw->row() );
           cell->setTopBorderPen(tmpPen);
         }
       }
@@ -3407,7 +3404,7 @@ void CellLayoutPageBorder::applyVerticalOutline()
     {
       for ( int y = dlg->top; y <= dlg->bottom; y++ )
       {
-        KSpreadCell *obj = dlg->getTable()->nonDefaultCell( x,y );
+        KSpreadCell *obj = dlg->getTable()->nonDefaultCell( x, y );
         obj->setLeftBorderPen( tmpPen );
       }
     }
@@ -3435,7 +3432,7 @@ void CellLayoutPageBorder::applyVerticalOutline()
         for(int i=dlg->left + 1;i<=dlg->right;i++)
         {
           KSpreadCell *cell =
-            dlg->getTable()->nonDefaultCell( i,  rw->row(), true);
+            dlg->getTable()->nonDefaultCell( i, rw->row() );
           cell->setLeftBorderPen( tmpPen );
         }
       }
@@ -4226,7 +4223,7 @@ void CellLayoutPagePattern::apply( ColumnLayout *_obj )
       for(int i=dlg->left;i<=dlg->right;i++)
       {
         KSpreadCell *cell =
-          dlg->getTable()->nonDefaultCell( i,  rw->row(), true);
+          dlg->getTable()->nonDefaultCell( i, rw->row() );
         applyLayout(cell );
       }
     }

@@ -294,38 +294,38 @@ public:
 
     const KSpreadCell* cellAt( int _column, int _row ) const;
     /**
-     * @param _no_scrollbar_update won't change the scrollbar if set to true disregarding
-     *                             whether _column/_row are bigger than
-     *                             m_iMaxRow/m_iMaxColumn. May be overruled by
-     *                             @ref #m_bScrollbarUpdates.
+     * @param _scrollbar_update will change the scrollbar if set to true disregarding
+     *                          whether _column/_row are bigger than
+     *                          m_iMaxRow/m_iMaxColumn. May be overruled by
+     *                          @ref #m_bScrollbarUpdates.
      */
-    KSpreadCell* cellAt( int _column, int _row, bool _no_scrollbar_update = false );
+    KSpreadCell* cellAt( int _column, int _row, bool _scrollbar_update = false );
     /**
      * A convenience function.
      */
-    KSpreadCell* cellAt( const QPoint& _point, bool _no_scrollbar_update = false )
-      { return cellAt( _point.x(), _point.y(), _no_scrollbar_update ); }
+    KSpreadCell* cellAt( const QPoint& _point, bool _scrollbar_update = false )
+      { return cellAt( _point.x(), _point.y(), _scrollbar_update ); }
     /**
      * @returns the pointer to the cell that is visible at a certain position. That means If the cell
      *          at this position is obscured then the obscuring cell is returned.
      *
-     * @param _no_scrollbar_update won't change the scrollbar if set to true disregarding
-     *                             whether _column/_row are bigger than
-     *                             m_iMaxRow/m_iMaxColumn. May be overruled by
-     *                             @ref #m_bScrollbarUpdates.
+     * @param _scrollbar_update will change the scrollbar if set to true disregarding
+     *                          whether _column/_row are bigger than
+     *                          m_iMaxRow/m_iMaxColumn. May be overruled by
+     *                          @ref #m_bScrollbarUpdates.
      */
-    KSpreadCell* visibleCellAt( int _column, int _row, bool _no_scrollbar_update = false );
+    KSpreadCell* visibleCellAt( int _column, int _row, bool _scrollbar_update = false );
     /**
      * If no special KSpreadCell exists for this position then a new one is created.
      *
-     * @param _no_scrollbar_update won't change the scrollbar if set to true disregarding
-     *                             whether _column/_row are bigger than
-     *                             m_iMaxRow/m_iMaxColumn. May be overruled by
-     *                             @ref #m_bScrollbarUpdates.
+     * @param _scrollbar_update will change the scrollbar if set to true disregarding
+     *                          whether _column/_row are bigger than
+     *                          m_iMaxRow/m_iMaxColumn. May be overruled by
+     *                          @ref #m_bScrollbarUpdates.
      *
      * @return a non default KSpreadCell for the position.
      */
-    KSpreadCell* nonDefaultCell( int _column, int _row, bool _no_scrollbar_update = false );
+    KSpreadCell* nonDefaultCell( int _column, int _row, bool _scrollbar_update = false );
 
     KSpreadCell* defaultCell() { return m_pDefaultCell; }
 
@@ -898,6 +898,14 @@ public:
      * In an empty table it starts with 256.
      */
     int maxColumn() { return m_iMaxColumn; }
+    
+    /**
+     * Checks if the argument _column is out of the current maximum range of the vertical border
+     * If this is the case, the current maximum value m_iMaxColumn is adjusted and the vertical border
+     * is resized. 
+     * Use this function with care, as it involves a repaint of the border, when it is out of range.
+     */
+    void checkRangeHBorder ( int _column );
 
     /**
      * Return the currently maximum defined row of the vertical scrollbar.
@@ -906,6 +914,15 @@ public:
      */
     int maxRow() { return m_iMaxRow; }
 
+    /**
+     * Checks if the argument _row is out of the current maximum range of the horizontal border
+     * If this is the case, the current maximum value m_iMaxRow is adjusted and the horizontal border
+     * is resized. 
+     * Use this function with care, as it involves a repaint of the border, when it is out of range.
+     */
+    void checkRangeVBorder ( int _row );
+
+    
     void enableScrollBarUpdates( bool _enable );
 
     virtual DCOPObject* dcopObject();

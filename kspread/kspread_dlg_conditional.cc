@@ -333,7 +333,7 @@ void KSpreadconditional::init()
   {
     for ( int y = marker.top(); y <= marker.bottom(); y++ )
     {
-      KSpreadCell *obj2 = m_pView->activeTable()->cellAt( x, y, true );
+      KSpreadCell *obj2 = m_pView->activeTable()->cellAt( x, y );
       otherList = obj2->GetConditionList();
       
       it1 = conditionList.begin();

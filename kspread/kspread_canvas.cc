@@ -554,12 +554,13 @@ void KSpreadCanvas::gotoLocation( int x, int y, KSpreadTable* table, bool make_s
                 }
         }
   }
-  cell= table->cellAt( x, y );
+  cell= table->cellAt( x, y, true /* update scrollbar when necessary */ );
   if( cell->isObscured() && cell->isObscuringForced() )
   {
    x=cell->obscuringCellsColumn();
    y=cell->obscuringCellsRow();
   }
+  
   int xpos = table->columnPos( x, this );
   int ypos = table->rowPos( y, this );
 
@@ -651,14 +652,14 @@ void KSpreadCanvas::chooseGotoLocation( int x, int y, KSpreadTable* table, bool 
   else
     table = activeTable();
 
-  KSpreadCell* cell = table->cellAt( x, y );
+  KSpreadCell* cell = table->cellAt( x, y, true /* update scrollbar when necessary */ );
   if ( cell->isObscured() && cell->isObscuringForced() )
   {
     int moveX=cell->obscuringCellsColumn();
     int moveY=cell->obscuringCellsRow();
-    cell = table->cellAt( moveX, moveY );
+    cell = table->cellAt( moveX, moveY, true /* update scrollbar when necessary */ );
     QRect extraCell;
-    extraCell.setCoords(moveX,moveY,moveX+cell->extraXCells(),moveY+cell->extraYCells());
+    extraCell.setCoords( moveX, moveY, moveX+cell->extraXCells(), moveY+cell->extraYCells() );
     if( (x-chooseMarkerColumn())!=0 && extraCell.contains(chooseMarker()))
         x=cell->extraXCells()+x;
     else if((y-chooseMarkerRow())!=0 && extraCell.contains(chooseMarker()))
@@ -1216,14 +1217,14 @@ void KSpreadCanvas::mousePressEvent( QMouseEvent * _ev )
 
     // activeTable()->setMarker( QPoint( col, row ) );
 
-    KSpreadCell *cell = table->cellAt( col, row, true );
+    KSpreadCell *cell = table->cellAt( col, row );
 
     // Go to the upper left corner of the obscuring object if cells are merged
     if (cell->isObscuringForced())
     {
         col = cell->obscuringCellsColumn();
         row = cell->obscuringCellsRow();
-        cell = table->cellAt(col, row, true);
+        cell = table->cellAt( col, row );
         //        activeTable()->setSelection( QRect(col, row, col, row) );
     }
 
@@ -1273,7 +1274,7 @@ void KSpreadCanvas::mousePressEvent( QMouseEvent * _ev )
     {
         table->setMarker( QPoint( col, row ) );
         table->paste( QPoint( markerColumn(), markerRow() ) );
-        table->cellAt(markerColumn(), markerRow())->update();
+        table->cellAt( markerColumn(), markerRow() )->update();
     }
 
     // Update the edit box
@@ -1832,7 +1833,7 @@ void KSpreadCanvas::keyPressEvent ( QKeyEvent * _ev )
                    if(moveHide==0)
                         return;
 	  if ( m_bChoose )
-                        chooseGotoLocation( chooseMarkerColumn(), QMAX( 1, /*chooseMarkerRow() - 1*/moveHide ), 0, make_select );
+              chooseGotoLocation( chooseMarkerColumn(), QMAX( 1, /*chooseMarkerRow() - 1*/moveHide ), 0, make_select );
 	  else
 	      gotoLocation( markerColumn(), QMAX( 1, /*markerRow() - 1*/ moveHide ), 0, make_select,false,true );
 
@@ -1844,16 +1845,17 @@ void KSpreadCanvas::keyPressEvent ( QKeyEvent * _ev )
 	      return;
 	  if ( m_bChoose && chooseMarkerColumn() >= KS_colMax )
 	      return;
-                   if(m_bChoose)
-                        moveHide=chooseMarkerColumn();
-                   else
-                        moveHide=markerColumn() ;
-                   do
-                        {
-                                moveHide++;
-                                cl= activeTable()->nonDefaultColumnLayout( moveHide );
-                        }
-                   while( cl->isHide() );
+	  if(m_bChoose)
+	      moveHide=chooseMarkerColumn();
+	  else
+	      moveHide=markerColumn() ;
+                   
+	  do
+	  {
+	      moveHide++;
+	      cl= activeTable()->nonDefaultColumnLayout( moveHide );
+	  }
+	  while( cl->isHide() );
 
 	  if ( m_bChoose )
 	      chooseGotoLocation( QMIN( KS_colMax, /*chooseMarkerColumn() + 1*/moveHide ), chooseMarkerRow(), 0, make_select );
@@ -1943,7 +1945,7 @@ void KSpreadCanvas::keyPressEvent ( QKeyEvent * _ev )
               // be unused cells in the middle
               for (i = 1; i < maxCol; ++i)
               {
-                  KSpreadCell * cell = table->cellAt(i, row);
+                  KSpreadCell * cell = table->cellAt( i, row );
 
                   if (cell != table->defaultCell())
                   {
@@ -2056,14 +2058,14 @@ void KSpreadCanvas::keyPressEvent ( QKeyEvent * _ev )
 	      y = markerRow();
 
 	      //If we are at the end of a filled or empty block, then move one up
-	      if ( activeTable()->cellAt(x, y, true)->isEmpty() != activeTable()->cellAt(x, y-1, true)->isEmpty() )
+	      if ( activeTable()->cellAt( x, y )->isEmpty() != activeTable()->cellAt( x, y-1 )->isEmpty() )
 		  y --;
 	      else
 		  {
 		  // if this is a filled cell
-		  if(!activeTable()->cellAt(x, y, true)->isEmpty()){
+		  if(!activeTable()->cellAt( x, y )->isEmpty()){
 		      //Then we search as long as the previous pervios field is filled
-		      while ( (y-1 >= 1) && !(activeTable()->cellAt(x, y-1, true))->isEmpty() )
+		      while ( (y-1 >= 1) && !(activeTable()->cellAt( x, y-1 ))->isEmpty() )
 		      {
 			  y --;
 		      }
@@ -2111,14 +2113,14 @@ void KSpreadCanvas::keyPressEvent ( QKeyEvent * _ev )
 	      y = markerRow();
 
 	      //If we are at the end of a filled or empty block, then move one down
-	      if ( ( y < KS_rowMax ) && ( activeTable()->cellAt(x, y, true)->isEmpty() != activeTable()->cellAt(x, y+1, true)->isEmpty() ) )
+	      if ( ( y < KS_rowMax ) && ( activeTable()->cellAt( x, y )->isEmpty() != activeTable()->cellAt( x, y+1 )->isEmpty() ) )
 		  y ++;
 	      else
 		  {
 		  // if this is a filled cell
-		  if(!activeTable()->cellAt(x, y, true)->isEmpty()){
+		  if(!activeTable()->cellAt( x, y )->isEmpty()){
 		      //Then we search as long as the next field is filled
-		      while ( (y+1 <= KS_rowMax) && !(activeTable()->cellAt(x, y+1, true))->isEmpty() )
+		      while ( (y+1 <= KS_rowMax) && !(activeTable()->cellAt( x, y+1 ))->isEmpty() )
 		      {
 			  y ++;
 		      }
@@ -2170,14 +2172,14 @@ void KSpreadCanvas::keyPressEvent ( QKeyEvent * _ev )
 	      y = markerRow();
 
 	      //If we are at the end of a filled or empty block, then move one right
-	      if ( activeTable()->cellAt(x, y, true)->isEmpty() != activeTable()->cellAt(x+1, y, true)->isEmpty() )
+	      if ( activeTable()->cellAt( x, y )->isEmpty() != activeTable()->cellAt( x+1, y )->isEmpty() )
 		  x ++;
 	      else
 		  {
 		  // if this is a filled cell
-		  if(!activeTable()->cellAt(x, y, true)->isEmpty()){
+		  if(!activeTable()->cellAt( x, y )->isEmpty()){
 		      //Then we search as long as the next field is filled
-		      while ( (x < KS_colMax) && !(activeTable()->cellAt(x+1, y, true))->isEmpty() ){
+		      while ( (x < KS_colMax) && !(activeTable()->cellAt( x+1, y ))->isEmpty() ){
 			  x ++;
 		      }
 		  }
@@ -2228,14 +2230,14 @@ void KSpreadCanvas::keyPressEvent ( QKeyEvent * _ev )
 	      y = markerRow();
 
 	      //If we are at the end of a filled or empty block, then move one left
-	      if ( activeTable()->cellAt(x, y, true)->isEmpty() != activeTable()->cellAt(x-1, y, true)->isEmpty() )
+	      if ( activeTable()->cellAt( x, y )->isEmpty() != activeTable()->cellAt( x-1, y )->isEmpty() )
 		  x --;
 	      else
 		  {
 		  // if this is a filled cell
-		  if(!activeTable()->cellAt(x, y, true)->isEmpty()){
+		  if(!activeTable()->cellAt( x, y )->isEmpty()){
 		      //Then we search as long as the previous field is filled
-		      while ( (x-1 >= 1) && !(activeTable()->cellAt(x-1, y, true))->isEmpty() ){
+		      while ( (x-1 >= 1) && !(activeTable()->cellAt( x-1, y ))->isEmpty() ){
 			  x --;
 		      }
 		  }
@@ -2613,7 +2615,7 @@ void KSpreadCanvas::updateSelection( const QRect &_old_sel, const QRect& old_mar
         for ( int x = left_col; x <= right_col && xpos <= view.right(); x++ )
         {
             ColumnLayout *col_lay = table->columnLayout( x );
-            KSpreadCell *cell = table->cellAt( x, y, TRUE );
+            KSpreadCell *cell = table->cellAt( x, y );
 
             QPoint p( x, y );
 
@@ -2856,7 +2858,7 @@ void KSpreadCanvas::updatePosWidget()
     QRect selection = m_pView->activeTable()->selectionRect();
     QString buffer;
     QString tmp;
-    KSpreadCell *cell=activeTable()->cellAt(markerColumn(),markerRow());
+    KSpreadCell *cell=activeTable()->cellAt( markerColumn(), markerRow() );
     QRect extraCell;
     extraCell.setCoords(markerColumn(),markerRow(),
     markerColumn()+cell->extraXCells(),markerRow()+cell->extraYCells());
@@ -3322,6 +3324,7 @@ void KSpreadVBorder::equalizeRow( int resize )
      rl->setHeight( resize, m_pCanvas );
   }
 }
+
 void KSpreadVBorder::resizeRow( int resize, int nb, bool makeUndo )
 {
   KSpreadTable *table = m_pCanvas->activeTable();
@@ -3550,7 +3553,7 @@ void KSpreadVBorder::paintEvent( QPaintEvent* _ev )
   QFont boldFont = normalFont;
   boldFont.setBold( TRUE );
 
-  KSpreadCell *cell=table->cellAt(m_pCanvas->markerColumn(),m_pCanvas->markerRow());
+  KSpreadCell *cell=table->cellAt( m_pCanvas->markerColumn(), m_pCanvas->markerRow() );
   QRect extraCell;
   extraCell.setCoords(m_pCanvas->markerColumn(),m_pCanvas->markerRow(),
   m_pCanvas->markerColumn()+cell->extraXCells(),m_pCanvas->markerRow()+cell->extraYCells());
@@ -4094,7 +4097,7 @@ void KSpreadHBorder::paintEvent( QPaintEvent* _ev )
   QFont normalFont = painter.font();
   QFont boldFont = normalFont;
   boldFont.setBold( TRUE );
-  KSpreadCell *cell=table->cellAt(m_pCanvas->markerColumn(),m_pCanvas->markerRow());
+  KSpreadCell *cell=table->cellAt( m_pCanvas->markerColumn(), m_pCanvas->markerRow() );
   QRect extraCell;
   extraCell.setCoords(m_pCanvas->markerColumn(),m_pCanvas->markerRow(),
   m_pCanvas->markerColumn()+cell->extraXCells(),m_pCanvas->markerRow()+cell->extraYCells());

@@ -26,6 +26,7 @@
 #include <qtoolbutton.h>
 #include <qtimer.h>
 #include <qcursor.h>
+#include <qpaintdevicemetrics.h>
 
 #include <kprocio.h>
 #include <kspell.h>
@@ -1297,7 +1298,7 @@ void KSpreadView::spellCheckerReady()
   {
     for ( x = m_spell.spellCurrCellX; x <= m_spell.spellEndCellX; ++x )
     {
-      KSpreadCell * cell = m_spell.currentSpellTable->cellAt(x, y, true);
+      KSpreadCell * cell = m_spell.currentSpellTable->cellAt( x, y );
 
       // check text only
       if (cell->isDefault() || !cell->isString())
@@ -1420,8 +1421,8 @@ void KSpreadView::spellCheckerCorrected( const QString & old, const QString & co
 
   if (m_spell.spellCheckSelection)
   {
-    cell = m_spell.currentSpellTable->cellAt(m_spell.spellCurrCellX,
-                                             m_spell.spellCurrCellY, true);
+    cell = m_spell.currentSpellTable->cellAt( m_spell.spellCurrCellX,
+                                              m_spell.spellCurrCellY );
   }
   else
   {
@@ -1986,7 +1987,7 @@ void KSpreadView::fontSelected( const QString &_font )
     // Dont leave the focus in the toolbars combo box ...
     if ( m_pCanvas->editor() )
     {
-      KSpreadCell * cell = m_pTable->cellAt(m_pCanvas->markerColumn(), m_pCanvas->markerRow());
+      KSpreadCell * cell = m_pTable->cellAt( m_pCanvas->markerColumn(), m_pCanvas->markerRow() );
       m_pCanvas->editor()->setEditorFont(cell->textFont(cell->column(), cell->row()), true);
       m_pCanvas->editor()->setFocus();
     }
@@ -2079,7 +2080,7 @@ void KSpreadView::fontSizeSelected( int _size )
     // Dont leave the focus in the toolbars combo box ...
     if ( m_pCanvas->editor() )
     {
-        KSpreadCell * cell = m_pTable->cellAt(m_pCanvas->markerColumn(), m_pCanvas->markerRow());
+        KSpreadCell * cell = m_pTable->cellAt( m_pCanvas->markerColumn(), m_pCanvas->markerRow() );
         m_pCanvas->editor()->setEditorFont(cell->textFont(m_pCanvas->markerColumn(), m_pCanvas->markerRow()), true);
         m_pCanvas->editor()->setFocus();
     }
@@ -2100,7 +2101,7 @@ void KSpreadView::bold( bool b )
 
     if ( m_pCanvas->editor() )
     {
-        KSpreadCell * cell = m_pTable->cellAt(col, row);
+        KSpreadCell * cell = m_pTable->cellAt( col, row );
         m_pCanvas->editor()->setEditorFont(cell->textFont(col, row), true);
     }
 }
@@ -2118,7 +2119,7 @@ void KSpreadView::underline( bool b )
     m_pTable->setSelectionFont( QPoint( col, row ), 0L, -1, -1, -1 ,b );
     if ( m_pCanvas->editor() )
     {
-        KSpreadCell * cell = m_pTable->cellAt(col, row);
+        KSpreadCell * cell = m_pTable->cellAt( col, row );
         m_pCanvas->editor()->setEditorFont(cell->textFont(col, row), true);
     }
 }
@@ -2136,7 +2137,7 @@ void KSpreadView::strikeOut( bool b )
     m_pTable->setSelectionFont( QPoint( col, row ), 0L, -1, -1, -1 ,-1,b );
     if ( m_pCanvas->editor() )
     {
-        KSpreadCell * cell = m_pTable->cellAt(col, row);
+        KSpreadCell * cell = m_pTable->cellAt( col, row );
         m_pCanvas->editor()->setEditorFont(cell->textFont(col, row), true);
     }
 }
@@ -2155,7 +2156,7 @@ void KSpreadView::italic( bool b )
     m_pTable->setSelectionFont( QPoint( col, row ), 0L, -1, -1, b );
     if ( m_pCanvas->editor() )
     {
-        KSpreadCell * cell = m_pTable->cellAt(col, row);
+        KSpreadCell * cell = m_pTable->cellAt( col, row );
         m_pCanvas->editor()->setEditorFont(cell->textFont(col, row), true);
     }
 }
@@ -2601,8 +2602,8 @@ void KSpreadView::decreaseIndent()
   int column=m_pCanvas->markerColumn();
   int row=m_pCanvas->markerRow();
 
-  m_pTable->decreaseIndent( QPoint( column,row ) );
-  KSpreadCell* cell = m_pTable->cellAt( column,row );
+  m_pTable->decreaseIndent( QPoint( column, row ) );
+  KSpreadCell* cell = m_pTable->cellAt( column, row );
   if(cell)
       m_decreaseIndent->setEnabled(cell->getIndent(column,row)>0);
 }
@@ -2759,6 +2760,34 @@ void KSpreadView::print( KPrinter &prt )
     // Print the table and tell that m_pDoc is NOT embedded.
     m_pTable->print( painter, &prt );
     painter.end();
+
+
+/* Will correct soon, Philipp   
+    QPaintDeviceMetrics metrics( &prt );
+
+    bool doZoom = false;
+
+    int dpiX = doZoom ? 300 : QPaintDevice::x11AppDpiX();
+    int dpiY = doZoom ? 300 : QPaintDevice::x11AppDpiY();
+
+kdDebug(36001) << "  dpiX " << dpiX << endl;
+kdDebug(36001) << "  dpiy " << dpiY << endl;
+
+    painter.begin( &prt );
+
+    painter.scale( (double)metrics.logicalDpiX() / (double)dpiX,
+                   (double)metrics.logicalDpiY() / (double)dpiY );
+
+kdDebug(36001) << "  metrics.logicalDpiX() " << metrics.logicalDpiX() << endl;
+kdDebug(36001) << "  metrics.logicalDpiY() " << metrics.logicalDpiY() << endl;
+
+    // Print the table and tell that m_pDoc is NOT embedded.
+    m_pTable->print( painter, &prt );
+
+    painter.setBrush ( blue );
+    painter.drawRect(1,1, 2000, 200);
+    painter.end();
+*/
 }
 
 void KSpreadView::insertChart( const QRect& _geometry, KoDocumentEntry& _e )
@@ -3394,7 +3423,7 @@ void KSpreadView::slotItemSelected( int id)
 {
   QString tmp=m_popupListChoose->text(id);
   KSpreadCell *cell = m_pTable->nonDefaultCell( m_pCanvas->markerColumn(),
-						m_pCanvas->markerRow(), true );
+						m_pCanvas->markerRow() );
 
   if(tmp==cell->text())
     return;
