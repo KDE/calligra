@@ -130,7 +130,7 @@ KexiBrowser::slotContextMenu(KListView *, QListViewItem *item, const QPoint &pos
 		else
 		{
 			kdDebug() << "KexiBrowser::slotContextMenu() item @ " << it->item() << endl;
-			pg = it->part()->itemContext();
+			pg = static_cast<KexiProjectPart*>(it->item()->parent())->itemContext();
 		}
 	
 		pg->setIdentifier(it->identifier());

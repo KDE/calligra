@@ -21,11 +21,11 @@
 
 #include "kexipartpopupmenu.h"
 
-KexiPartPopupMenu::KexiPartPopupMenu(QObject *recever)
+KexiPartPopupMenu::KexiPartPopupMenu(QObject *receiver)
 {
 	kdDebug() << "KexiPartPopupMenu::KexiPartPopupMenu()" << endl;
 
-	m_receiver = recever;
+	m_receiver = receiver;
 
 	connect(this, SIGNAL(activated(int)), this, SLOT(slotActivated(int)));
 }
