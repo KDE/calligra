@@ -2,38 +2,32 @@
 #define __koshell_window_h__
 
 #include <koMainWindow.h>
-#include <koQueryTypes.h>
-#include <koKoolBar.h>
-#include <openparts.h>
-
 #include <qlist.h>
-#include <qtimer.h>
-#include <qstring.h>
-
 #include <list>
-#include <vector>
-#include <map>
+
+class KoKoolBar;
+class KoDocumentEntry;
 
 class KoShellWindow : public KoMainWindow
 {
   Q_OBJECT
+
 public:
+
   // C++
   KoShellWindow();
   ~KoShellWindow();
 
-  // C++
   virtual void cleanUp();
 
-  // C++
   virtual bool newPage( KoDocumentEntry& _e );
   virtual bool closeApplication();
   virtual bool saveAllPages();
   virtual void releasePages();
-
   virtual void attachView( KoFrame* _frame, unsigned long _part_id );
   
 protected slots:
+
   void slotFileNew();
   void slotFileOpen();
   void slotFileSave();
@@ -45,7 +39,15 @@ protected slots:
   void slotKoolBar( int _grp, int _item );
   
 protected:
-  // C++
+
+  struct Page
+  {
+    KOffice::Document_var m_vDoc;
+    KOffice::View_var m_vView;
+    KoFrame* m_pFrame;
+    int m_id;
+  };
+
   virtual KOffice::Document_ptr document();
   virtual KOffice::View_ptr view();
 
@@ -56,15 +58,7 @@ protected:
   bool isModified();
   bool requestClose();
 
-  struct Page
-  {
-    KOffice::Document_var m_vDoc;
-    KOffice::View_var m_vView;
-    KoFrame* m_pFrame;
-    int m_id;
-  };
   list<Page> m_lstPages;
-  
   list<Page>::iterator m_activePage;
 
   KoKoolBar* m_pKoolBar;
@@ -72,8 +66,8 @@ protected:
   int m_grpFile;
   int m_grpDocuments;
   
-  vector<KoDocumentEntry> m_lstComponents;
-  map<int,KoDocumentEntry*> m_mapComponents;
+  QValueList<KoDocumentEntry> m_lstComponents;
+  QMap<int,KoDocumentEntry*> m_mapComponents;
 
   OpenParts::Part_var m_vKfm;
   KoFrame* m_pKfmFrame;
@@ -81,9 +75,5 @@ protected:
   static QList<KoShellWindow>* s_lstShells;
 };
 
-#endif
-
-
-
-
+#endif // __koshell_window_h__
 

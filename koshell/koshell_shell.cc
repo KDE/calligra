@@ -1,24 +1,25 @@
 #include <qprinter.h>
+#include <qmsgbox.h>
 
 #include "koshell_shell.h"
 
-#include <koAboutDia.h>
-#include <koFrame.h>
-#include <koMainWindow.h>
-#include <koQueryTypes.h>
-#include <koQueryTrader.h>
+#include <kfiledialog.h>
+#include <klocale.h>
+#include <kdebug.h>
+#include <kded_instance.h>
+#include <kactivator.h>
+
 #include <opMainWindowIf.h>
 #include <opMenuBarManager.h>
 #include <opToolBar.h>
 #include <opMenu.h>
 #include <opApplication.h>
 
-#include <kfiledialog.h>
-#include <kapp.h>
-#include <qmsgbox.h>
-#include <klocale.h>
-#include <kded_instance.h>
-#include <kactivator.h>
+#include <koAboutDia.h>
+#include <koFrame.h>
+#include <koQueryTypes.h>
+#include <koQueryTrader.h>
+#include <koKoolBar.h>
 
 QList<KoShellWindow>* KoShellWindow::s_lstShells = 0L;
 
@@ -36,12 +37,12 @@ KoShellWindow::KoShellWindow()
 
   m_pKoolBar = new KoKoolBar( w );
   m_grpFile = m_pKoolBar->insertGroup("Parts");
-  m_lstComponents = koQueryDocuments();
-  vector<KoDocumentEntry>::iterator it = m_lstComponents.begin();
+  m_lstComponents = KoDocumentEntry::query();
+  QValueList<KoDocumentEntry>::Iterator it = m_lstComponents.begin();
   for( ; it != m_lstComponents.end(); ++it )
-    if ( !it->icon.isNull() )
+    if ( !(*it).icon.isNull() )
     {
-      int id = m_pKoolBar->insertItem( m_grpFile, it->icon, it->name,
+      int id = m_pKoolBar->insertItem( m_grpFile, (*it).icon, (*it).name,
 				       this, SLOT( slotKoolBar( int, int ) ) );
       m_mapComponents[ id ] = &*it;
     }
@@ -66,7 +67,7 @@ KoShellWindow::KoShellWindow()
 
 KoShellWindow::~KoShellWindow()
 { 
-  cerr << "KoShellWindow::~KoShellWindow()" << endl;
+  kdebug( KDEBUG_INFO, 0, "KoShellWindow::~KoShellWindow()" );
   
   cleanUp();
   

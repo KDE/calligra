@@ -10,14 +10,15 @@ class KoShellShell;
 class KoShellApp : public KoApplication
 {
   Q_OBJECT
+
 public:
-  KoShellApp( int &argc, char** argv );
+
+  KoShellApp( int& argc, char** argv );
   ~KoShellApp();
   
-  virtual void start();
-  
 protected:
-  KoShellWindow *m_pShell;
+
+  KoShellWindow* m_pShell;
 };
 
 #endif
