@@ -204,7 +204,7 @@ void KWView::initConfig()
       changeNbOfRecentFiles(config->readNumEntry("NbRecentFile",10));
 
       doc->setShowRuler(config->readBoolEntry("Rulers",true));
-      doc->setAutoSave((config->readNumEntry("AutoSave",1))*60);
+      doc->setAutoSave((config->readNumEntry("AutoSave",KoDocument::defaultAutoSave()))*60);
       doc->setNbPagePerRow(config->readNumEntry("nbPagePerRow",4));
   }
 }

@@ -135,7 +135,7 @@ configureInterfacePage::configureInterfacePage( KWView *_view, QWidget *parent ,
     bool m_bShowRuler=true;
 
     oldNbRecentFiles=10;
-    oldAutoSaveValue=1;
+    oldAutoSaveValue=KoDocument::defaultAutoSave() / 60;
     int nbPagePerRow=4;
     if( config->hasGroup("Interface") )
     {
@@ -145,7 +145,7 @@ configureInterfacePage::configureInterfacePage( KWView *_view, QWidget *parent ,
         ptIndent = config->readDoubleNumEntry("Indent", MM_TO_POINT(10.0));
         oldNbRecentFiles=config->readNumEntry("NbRecentFile",10);
         m_bShowRuler=config->readBoolEntry("Rulers",true);
-        oldAutoSaveValue=config->readNumEntry("AutoSave",1);
+        oldAutoSaveValue=config->readNumEntry("AutoSave",oldAutoSaveValue);
         nbPagePerRow=config->readNumEntry("nbPagePerRow",4);
     }
 
@@ -269,7 +269,7 @@ void configureInterfacePage::slotDefault()
     indent->setValue( (int)newIndent );
     recentFiles->setValue(10);
     showRuler->setChecked(true);
-    autoSave->setValue(1);
+    autoSave->setValue(KoDocument::defaultAutoSave());
 }
 
 #include "kwconfig.moc"

@@ -20,6 +20,10 @@
 #include "kwformat.h"
 #include <kdebug.h>
 #include <kwdoc.h>
+#if 0
+#include <kglobal.h>
+#include <kcharsets.h>
+#endif
 
 KWTextFormatCollection::KWTextFormatCollection( KWDocument * doc )
     : QTextFormatCollection(), m_cachedFormat( 0L )
@@ -105,6 +109,12 @@ void KWTextFormat::setStrikeOut(bool b)
 
 void KWTextFormat::generateKey()
 {
+#if 0 // doesn't seem to help...
+    // Small hack: we ask for the user's charset here, so that we do
+    // it in all cases.
+    fn.setCharSet( KGlobal::charsets()->charsetForLocale() );
+#endif
+
     QTextFormat::generateKey();
     QString k = key();
     // SYNC any changes to the key format with ::format above

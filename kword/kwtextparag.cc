@@ -945,7 +945,8 @@ void KWTextParag::printRTDebug( int info )
         for ( int i = 0 ; i < s->length() ; ++i )
         {
             QTextStringChar & ch = s->at(i);
-            kdDebug() << i << ": '" << QString(ch.c) << "' format=" << ch.format()
+            kdDebug() << i << ": '" << QString(ch.c) << "' (" << ch.c.unicode() << ")"
+                      << " format=" << ch.format()
                       << " \"" << ch.format()->key() << "\" "
                 //<< " fontsize:" << dynamic_cast<KWTextFormat *>(ch.format())->pointSizeFloat()
                       << endl;
