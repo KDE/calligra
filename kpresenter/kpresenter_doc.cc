@@ -433,9 +433,9 @@ QDomDocument KPresenterDoc::saveXML()
     QDomElement element=doc.createElement("BACKGROUND");
     element.setAttribute("rastX", _rastX);
     element.setAttribute("rastY", _rastY);
-
+#if 0
     element.setAttribute("color", _txtBackCol.name());
-
+#endif
     element.appendChild(saveBackground( doc ));
     presenter.appendChild(element);
 
@@ -958,10 +958,12 @@ bool KPresenterDoc::loadXML( const QDomDocument &doc )
                 green = elem.attribute("bgreen").toInt();
             if(elem.hasAttribute("bblue"))
                 blue = elem.attribute("bblue").toInt();
+#if 0
             if(elem.hasAttribute("color"))
                 _txtBackCol.setNamedColor(elem.attribute("color"));
             else
                 _txtBackCol.setRgb(red, green, blue);
+#endif
             loadBackground(elem);
         } else if(elem.tagName()=="HEADER") {
             if ( _clean /*don't reload header footer, header/footer was created at the beginning || !hasHeader()*/ ) {
