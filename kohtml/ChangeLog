@@ -84,3 +84,8 @@ Sat Jan 23 14:16:18 1999 Simon Hausmann <tronical@gmx.net>
 
         * imported two icons by Jost Schenck <uzsnty@uni-bonn.de> (thanks Jost!!!)
 
+Wed Jan 27 22:53:39 1999 Simon Hausmann <tronical@gmx.net>
+
+        * fixes with frame support
+
+        * renamed some files
