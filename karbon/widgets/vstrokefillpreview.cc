@@ -198,7 +198,7 @@ VStrokeFillPreview::update( const VStroke &s, const VFill &f )
 			{
 				fill.pattern() = f.pattern();
 				fill.pattern().setOrigin( KoPoint( 20, 10 ) );
-				fill.pattern().setVector( KoPoint( 20, 40 ) );
+				fill.pattern().setVector( KoPoint( 30, 10 ) );
 				fill.setType( VFill::patt );
 			}
 			m_painter->setBrush( fill );
