@@ -10,6 +10,7 @@
 #include <koscript_func.h>
 #include <koscript_synext.h>
 
+#include <stdlib.h>
 #include <math.h>
 #include <klocale.h>
 #include <kapp.h>

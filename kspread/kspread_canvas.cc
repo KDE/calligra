@@ -19,6 +19,7 @@
 #include <krun.h>
 
 #include <assert.h>
+#include <stdlib.h>
 #include <stdio.h>
 #include <qlabel.h>
 #include <qpainter.h>

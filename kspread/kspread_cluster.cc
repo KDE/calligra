@@ -1,3 +1,5 @@
+#include <stdlib.h>
+
 #include "kspread_cluster.h"
 #include "kspread_cell.h"
 #include "kspread_layout.h"
