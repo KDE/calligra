@@ -21,6 +21,7 @@
 #include <qpainter.h>
 
 #include <kdebug.h>
+#include <assert.h>
 
 #include "formulacursor.h"
 #include "formulaelement.h"
