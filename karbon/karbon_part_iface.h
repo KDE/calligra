@@ -49,8 +49,6 @@ k_dcop:
 	void clearHistory();
 	QString unitName() const;
 
-	void setBackupFile( bool b );
-	bool backupFile() const;
 	int nbLayer() const;
 	DCOPRef activeLayer();
 

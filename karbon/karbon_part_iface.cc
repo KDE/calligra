@@ -81,16 +81,6 @@ QString KarbonPartIface::unitName() const
 	return m_part->getUnitName();
 }
 
-void KarbonPartIface::setBackupFile( bool b )
-{
-	m_part->setBackupFile( b );
-}
-
-bool KarbonPartIface::backupFile() const
-{
-	return m_part->backupFile();
-}
-
 int KarbonPartIface::nbLayer() const
 {
 	return m_part->document().layers().count();
