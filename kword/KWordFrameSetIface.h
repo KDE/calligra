@@ -66,6 +66,8 @@ k_dcop:
     virtual QColor bottomBorderColor() const;
 
     virtual bool isCopy()const;
+    virtual bool isProtectSize()const;
+    virtual void setProtectSize( bool _b );
 
 private:
     KWFrameSet *m_frame;

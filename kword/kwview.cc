@@ -4488,7 +4488,6 @@ void KWView::slotFrameSetEditChanged()
     actionFormatAlignRight->setEnabled( rw );
     actionFormatAlignBlock->setEnabled( rw );
     actionFormatIncreaseIndent->setEnabled(state);
-    actionChangeCase->setEnabled( (rw && !edit)|| (state && hasSelection) );
     actionInsertLink->setEnabled(state);
     actionCreateStyleFromSelection->setEnabled( state && hasSelection);
     bool goodleftMargin=false;
@@ -4504,6 +4503,9 @@ void KWView::slotFrameSetEditChanged()
     actionFormatSub->setEnabled(rw);
     actionFormatParag->setEnabled(state);
     actionInsertSpecialChar->setEnabled(state);
+
+    actionChangeCase->setEnabled( (rw && !edit)|| (state && hasSelection) );
+
 
     actionInsertFormula->setEnabled(state && (m_gui->canvasWidget()->viewMode()->type()!="ModeText"));
     actionInsertVariable->setEnabled(state);

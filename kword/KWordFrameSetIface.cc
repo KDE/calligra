@@ -170,3 +170,12 @@ QColor KWordFrameSetIface::bottomBorderColor() const
     return m_frame->frame( 0 )->bottomBorder().color;
 }
 
+bool KWordFrameSetIface::isProtectSize()const
+{
+    return m_frame->isProtectSize();
+}
+
+void KWordFrameSetIface::setProtectSize( bool _b )
+{
+    m_frame->setProtectSize( _b );
+}

@@ -121,7 +121,7 @@ protected:
     KDoubleNumInput *sml, *smr, *smt, *smb;
     QCheckBox *synchronize;
     QCheckBox *floating;
-
+    QCheckBox *protectSize;
     // TAB 5:
     QWidget *tab5;
     QGridLayout *grid5;
@@ -135,7 +135,7 @@ protected:
     KWDocument *doc;
     FrameSetType frameType;
     bool frameSetFloating;
-
+    bool frameSetProtectedSize;
     double oldX, oldY, oldW, oldH;
     double oldMarginLeft, oldMarginRight, oldMarginTop, oldMarginBottom;
 
@@ -150,6 +150,7 @@ protected slots:
     void setFrameBehaviorInputOn();
     void setFrameBehaviorInputOff();
     void slotFloatingToggled(bool);
+    void slotProtectSizeToggled(bool);
     void textNameFrameChanged ( const QString & );
     void updateBrushConfiguration();
     void slotMarginsChanged( double );

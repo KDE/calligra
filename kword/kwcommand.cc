@@ -677,6 +677,9 @@ KWFrameSetPropertyCommand::KWFrameSetPropertyCommand( const QString &name, KWFra
     case FSP_KEEPASPECTRATION:
         m_oldValue = static_cast<KWPictureFrameSet*>(m_pFrameSet)->keepAspectRatio() ? "keepRatio" : "dontKeepRatio";
         break;
+    case FSP_PROTECTSIZE:
+        m_oldValue = m_pFrameSet->isProtectSize() ? "true" : "false";
+        break;
     }
 }
 
@@ -713,6 +716,12 @@ void KWFrameSetPropertyCommand::setValue( const QString &value )
             if(frameSet)
                 frameSet->setKeepAspectRatio( false );
         }
+        break;
+    case FSP_PROTECTSIZE:
+        if( value == "true")
+            m_pFrameSet->setProtectSize( true );
+        else
+            m_pFrameSet->setProtectSize( false );
         break;
     }
     m_pFrameSet->kWordDocument()->updateAllFrames();

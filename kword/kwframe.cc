@@ -501,6 +501,7 @@ KWFrameSet::KWFrameSet( KWDocument *doc )
     : m_doc( doc ), frames(), m_framesInPage(), m_firstPage( 0 ), m_emptyList(),
       m_info( FI_BODY ),
       grpMgr( 0L ), m_removeableHeader( false ), m_visible( true ),
+      m_protectSize( false ),
       m_anchorTextFs( 0L ), m_currentDrawnCanvas( 0L ), m_dcop( 0L )
 {
     // Send our "repaintChanged" signals to the document.

@@ -98,7 +98,7 @@ KWFrameDia::KWFrameDia( QWidget* parent, KWFrame *_frame)
     if(fs==0L) fs=frame->frameSet();
     frameType = fs->type();
     frameSetFloating = fs->isFloating();
-
+    frameSetProtectedSize = fs->isProtectSize();
     doc = 0;
     init();
 }
@@ -112,6 +112,7 @@ KWFrameDia::KWFrameDia( QWidget* parent, KWFrame *_frame, KWDocument *_doc, Fram
     doc = _doc;
     frame= _frame;
     frameSetFloating = false;
+    frameSetProtectedSize = false;
     if(frame==0) {
         kdDebug() << "ERROR: KWFrameDia::constructor no frame.."<<endl;
         return;
@@ -716,6 +717,11 @@ void KWFrameDia::setupTab4(){ // TAB Geometry
     int row = 0;
     grid4->addMultiCellWidget( floating, row, row, 0, 1 );
 
+    row++;
+    protectSize = new QCheckBox( i18n("Protect Size and Position"), tab4);
+    grid4->addMultiCellWidget( protectSize, row, row, 0, 1 );
+    connect( protectSize, SIGNAL( toggled(bool) ), this, SLOT( slotProtectSizeToggled(bool) ) );
+
     /* ideally the following properties could be given to any floating frame:
        Position: (y)
         Top of frame
@@ -874,10 +880,11 @@ void KWFrameDia::setupTab4(){ // TAB Geometry
             floating->setText( i18n( "Table is inline" ) );
 
         floating->setChecked( frameSetFloating );
-
+        protectSize->setChecked( frameSetProtectedSize);
         if ( frameSetFloating )
             slotFloatingToggled( true );
-
+        if ( frameSetProtectedSize)
+            slotProtectSizeToggled( true );
         // Can't change geometry of main WP frame or headers/footers
         if ( fs && ( fs->isHeaderOrFooter() || fs->isMainFrameset() || fs->isFootEndNote()) )
             disable = true;
@@ -1166,9 +1173,14 @@ void KWFrameDia::setFrameBehaviorInputOff() {
     }
 }
 
+void KWFrameDia::slotProtectSizeToggled(bool b)
+{
+    grp1->setEnabled( !b && !floating->isChecked());
+}
+
 void KWFrameDia::slotFloatingToggled(bool b)
 {
-    grp1->setEnabled( !b ); // Position doesn't make sense for a floating frame
+    grp1->setEnabled( !b && !protectSize->isChecked()); // Position doesn't make sense for a floating frame
     if (tab1 && rAppendFrame && rResizeFrame && rNoShow ) {
         cbCopy->setEnabled( !b ); // 'copy' irrelevant for floating frames.
         if ( rAppendFrame )
@@ -1602,7 +1614,15 @@ bool KWFrameDia::applyChanges()
             macroCmd->addCommand(cmd);
             cmd->execute();
         }
+        if ( frameSetProtectedSize != protectSize->isChecked() )
+        {
+            if(!macroCmd)
+                macroCmd = new KMacroCommand( i18n("Protect Size") );
+            KWFrameSetPropertyCommand *cmd = new KWFrameSetPropertyCommand( QString::null, parentFs, KWFrameSetPropertyCommand::FSP_PROTECTSIZE, protectSize->isChecked()? "true" : "false" );
+            macroCmd->addCommand(cmd);
+            cmd->execute();
 
+        }
         if ( doc->isOnlyOneFrameSelected() && ( doc->processingType() == KWDocument::DTP ||
                                                 ( doc->processingType() == KWDocument::WP &&
                                                   doc->frameSetNum( frame->frameSet() ) > 0 ) ) ) {

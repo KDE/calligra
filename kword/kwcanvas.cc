@@ -899,6 +899,7 @@ void KWCanvas::mmEditFrameMove( const QPoint &normalPoint, bool shiftPressed )
             continue;
         // Can't move frame of floating frameset
         if ( frameset->isFloating() ) continue;
+        if ( frameset->isProtectSize() ) continue;
 
         m_frameMoved = true;
         QPtrListIterator<KWFrame> frameIt( frameset->frameIterator() );

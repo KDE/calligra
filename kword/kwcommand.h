@@ -214,7 +214,7 @@ protected:
 class KWFrameSetPropertyCommand : public KNamedCommand
 {
 public:
-    enum Property { FSP_NAME, FSP_FLOATING, FSP_KEEPASPECTRATION };
+    enum Property { FSP_NAME, FSP_FLOATING, FSP_KEEPASPECTRATION, FSP_PROTECTSIZE };
     KWFrameSetPropertyCommand( const QString &name, KWFrameSet *frameset,
 		               Property prop, const QString & value );
     ~KWFrameSetPropertyCommand() {}

@@ -631,6 +631,9 @@ public:
     /** returns if one of our frames has been selected. */
     bool hasSelectedFrame();
 
+    bool isProtectSize()const { return m_protectSize; }
+    void setProtectSize( bool _b) { m_protectSize = _b;}
+
     /**
      * Returns true if the frameset is visible.
      * A frameset is visible if setVisible(false) wasn't called,
@@ -698,6 +701,7 @@ protected:
     Info m_info;
     KWTableFrameSet *grpMgr;
     bool m_removeableHeader, m_visible;
+    bool m_protectSize;
     QString m_name;
     KWTextFrameSet * m_anchorTextFs;
     KWCanvas * m_currentDrawnCanvas;           // The canvas currently being drawn.

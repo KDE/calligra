@@ -190,7 +190,7 @@ bool KWResizeHandle::isResizingEnabled() const
         return false;
     }
 
-    if ( fs->isMainFrameset() )
+    if ( fs->isMainFrameset() || fs->isProtectSize())
         return false;
 
     // Headers and footer are resizable only in some directions

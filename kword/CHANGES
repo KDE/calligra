@@ -154,3 +154,4 @@ Changes between KWord-1.2-beta1 and KWord-1.2-beta2
 - Double line border type for frames and paragraphs
 - New dialogbox to resize a column in a table
 - Add new font format (improve underline, strikeout )
+- Add support to protect frameset size and position.
