@@ -367,7 +367,7 @@ int KDChartAxesPainter::axisGapX( int axis )
         default:
             return 0;
     }
-};
+}
 
 int KDChartAxesPainter::axisGapY( int axis )
 {
@@ -391,7 +391,7 @@ int KDChartAxesPainter::axisGapY( int axis )
         default:
             return 0;
     }
-};
+}
 
 
 double fastPow10( int x )

@@ -65,7 +65,7 @@ KDChartPropertySet& KDChartPropertySet::operator=( const KDChartPropertySet& R )
     mIdExtraMarkersColor = R.mIdExtraMarkersColor; mExtraMarkersColor = R.mExtraMarkersColor;
     mIdExtraMarkersStyle = R.mIdExtraMarkersStyle; mExtraMarkersStyle = R.mExtraMarkersStyle;
     return *this;
-};
+}
 
 
 void KDChartPropertySet::fillValueMembersWithDummyValues()
@@ -140,7 +140,7 @@ QDomElement KDChartPropertySet::saveXML(QDomDocument& doc) const
     specMarkerStElem.setAttribute("Style",
             KDChartParams::lineMarkerStyleToString(    (KDChartParams::LineMarkerStyle)mExtraMarkersStyle));
     return propertySetElement;
-};
+}
 
 bool KDChartPropertySet::loadXML( const QDomElement& element, KDChartPropertySet& set )
 {

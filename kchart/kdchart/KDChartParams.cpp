@@ -1629,7 +1629,7 @@ void KDChartParams::setDataRainbowColors()
     setDataColor(  7, QColor(160,  0,255) );
     for( int i=8; i<16; ++i )
         setDataColor( i, dataColor(i-8).light() );
-};
+}
 
 /**
   Specifies a set of eighteen subdued colors for the datasets 0..17.
@@ -1693,7 +1693,7 @@ static const QColor SUBDUEDCOLORS[ NUM_SUBDUEDCOLORS ] = {
         setDataColor(16, SUBDUEDCOLORS[ 8] );
         setDataColor(17, SUBDUEDCOLORS[13] );
     }
-};
+}
 
 
 void KDChartParams::calculateShadowColors( QColor color,
@@ -2565,7 +2565,7 @@ KDChartCustomBox* KDChartParams::customBoxRef( uint box )
         return 0;
     else
         return &it.data();
-};
+}
 
 /**
   Retrieve the number of custom boxes
@@ -8676,7 +8676,7 @@ bool KDChartParams::findFirstAxisCustomBoxID( uint n, uint& boxID ) const
         }
     }
     return false;
-};
+}
 
 void KDChartParams::insertDefaultAxisTitleBox( uint n,
                                                bool setTitle,          const QString& axisTitle,
@@ -8729,7 +8729,7 @@ void KDChartParams::insertDefaultAxisTitleBox( uint n,
                           0,0,0,
                           bVert ? Qt::AlignBottom + Qt::AlignRight : Qt::AlignTop + Qt::AlignHCenter,
                           false ) );
-};
+}
 
 /**
   Specifies the default axis title text.
