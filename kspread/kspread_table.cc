@@ -54,11 +54,8 @@
 
 #include "KSpreadTableIface.h"
 
-#include <koStream.h>
-
 #include <koscript_context.h>
 
-#include <strstream.h>
 #include <kdebug.h>
 #include <assert.h>
 

@@ -41,7 +41,6 @@
 #include "kspread_util.h"
 #include "kspread_factory.h"
 
-#include <koStream.h>
 #include <kformula.h>
 #include <kinstance.h>
 #include <klocale.h>

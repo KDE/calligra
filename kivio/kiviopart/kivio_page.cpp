@@ -61,11 +61,6 @@
 #include "kivio_ps_printer.h"
 #include "kivio_stencil.h"
 
-
-#include <koStream.h>
-
-#include <strstream.h>
-
 int KivioPage::s_id = 0L;
 QIntDict<KivioPage>* KivioPage::s_mapPages;
 
