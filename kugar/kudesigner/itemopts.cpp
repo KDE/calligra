@@ -29,7 +29,13 @@ void dlgItemOptions::commitProps()
     {
         QString a = taProps->item(i, 0)->text();
         QString result = taProps->item(i, 1)->text();
-        bool ok;
+        (*props)[a].first = result;
+	
+	// Alexander Dymo:
+	// Can't do this - property values are not integers and doubles
+	// there are strings and colors (like 255,255,255) - I have bug reports
+	// conversion IMHO is not nesessary ???
+/*        bool ok;
         result.toDouble( &ok );
         if ( ok )
             (*props)[a].first = result;
@@ -40,7 +46,7 @@ void dlgItemOptions::commitProps()
                 (*props)[a].first = result;
             else
                 (*props)[a].first = QString::number(0);
-        }
+        }*/
     }
 }
 
@@ -63,6 +69,38 @@ dlgItemOptions::dlgItemOptions(std::map<QString, std::pair<QString, QStringList>
 	taProps->insertRows(taProps->numRows());
 	taProps->setText(j, 0, i->first);
 	taProps->setText(j, 1, i->second.first);
+/*	if (i->second.second[1] == "string")
+	{
+	    taProps->setText(j, 0, i->first);
+	    taProps->setText(j, 1, i->second.first);
+	}
+	if (i->second.second[1] == "int_from_list")
+	{
+	    taProps->setText(j, 0, i->first);
+	    QStringList sl;
+	    for (QStringList::const_iterator it = i->second.second.begin(); it!=i->second.second.end(); ++it)
+	    {
+		sl << (*it);
+	    }
+	    taProps->setItem(j, 1, new QComboTableItem(taProps, sl));
+	    taProps->setText(j, 0, i->first);
+	    taProps->setText(j, 1, i->second.first);
+	}
+	if (i->second.second[1] == "int")
+	{
+	    taProps->setText(j, 0, i->first);
+	    taProps->setText(j, 1, i->second.first);
+	}
+	if (i->second.second[1] == "font")
+	{
+	    taProps->setText(j, 0, i->first);
+	    taProps->setText(j, 1, i->second.first);
+	}
+	if (i->second.second[1] == "color")
+	{
+	    taProps->setText(j, 0, i->first);
+	    taProps->setText(j, 1, i->second.first);
+	}*/
 	j++;
     }
 
