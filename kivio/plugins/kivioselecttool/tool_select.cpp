@@ -58,6 +58,7 @@ SelectTool::SelectTool( KivioView* parent ) : Kivio::MouseTool(parent, "Selectio
   
   KAction* textAction = new KAction(i18n("&Edit text..."), "text", Key_F2, this, SLOT(editStencilText()), actionCollection(), "editText");
   textActionList.append(textAction);
+  textActionList.append(new KActionSeparator(actionCollection()));
 
   m_mode = stmNone;
   m_pResizingStencil = NULL;

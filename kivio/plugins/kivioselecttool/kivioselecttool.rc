@@ -1,5 +1,5 @@
 <!DOCTYPE kpartgui SYSTEM "kpartgui.dtd" >
-<kpartgui name="KivioSelectTool" library="libkivioselecttool" version="4">
+<kpartgui name="KivioSelectTool" library="libkivioselecttool" version="5">
 <MenuBar>
   <Menu name="Tools">
     <Action name="select" />
@@ -10,15 +10,10 @@
 </ToolBar>
 <Menu name="SelectPopup">
   <ActionList name="textActionList"/>
-  <Separator/>
   <ActionList name="clipboardActionList"/>
-  <Separator/>
   <ActionList name="alignActionList"/>
-  <Separator/>
   <ActionList name="groupActionList"/>
-  <Separator/>
   <ActionList name="layerActionList"/>
-  <Separator/>
   <Action name="properties"/>
 </Menu>
 </kpartgui>
