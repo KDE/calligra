@@ -21,6 +21,7 @@
 #include <qdatastream.h>
 #include <qstring.h>
 #include <xmltree.h>
+#include <assert.h>
 
 ExcelFilter::ExcelFilter(const QByteArray &mainStream):FilterBase(), length(mainStream.size())
 {
@@ -57,6 +58,7 @@ bool ExcelFilter::filter()
 	*s >> size;
 	count += size;
 
+        assert( size <= record.size() );
 	s->readRawBytes(record.data(), size);
 	*s >> readAhead;
 
@@ -76,6 +78,10 @@ bool ExcelFilter::filter()
 			opcode = readAhead;
 			*s >> size;
 			count += size;
+
+                        // The other call to record.resize() might have made it much smaller (DF)
+                        if ( size > record.size() )
+                            record.resize( MAX_RECORD_SIZE );
 
 			if (size > MAX_RECORD_SIZE)
 				kdError(30511) << "Record larger than MAX_RECORD_SIZE!" << endl;
