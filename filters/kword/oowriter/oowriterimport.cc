@@ -24,6 +24,7 @@
 #include <qfont.h>
 #include <qpen.h>
 #include <qregexp.h>
+#include <qimage.h>
 
 #include "oowriterimport.h"
 #include <ooutils.h>
@@ -99,6 +100,13 @@ KoFilter::ConversionStatus OoWriterImport::convert( QCString const & from, QCStr
 
     KoFilter::ConversionStatus preStatus = openFile();
 
+    QImage thumbnail;
+    if ( preStatus == KoFilter::OK )
+    {
+        // We do not care about the failure
+        OoUtils::loadThumbnail( thumbnail, m_zip );
+    }
+    
     if ( preStatus != KoFilter::OK )
     {
         m_zip->close();
@@ -160,6 +168,23 @@ KoFilter::ConversionStatus OoWriterImport::convert( QCString const & from, QCStr
         out->writeBlock( info , info.length() );
     }
 
+    // store preview
+    
+    if ( thumbnail.isNull() )
+    {
+        // ### TODO: thumbnail.setAlphaBuffer( false ); // legacy KOffice previews have no alpha channel
+        // Legacy KOffice previews are 256x256x8 instead of 128x128x32
+        QImage preview( thumbnail.smoothScale( 256, 256 ).convertDepth(8, Qt::AvoidDither | Qt::DiffuseDither) );
+        // Not to be able to generate a preview is not an error
+        if ( !preview.isNull() )
+        {
+            out = m_chain->storageFile( "preview.png", KoStore::Write );
+            if( out )
+            {
+                preview.save( out, "PNG" );
+            }
+        }
+    }
 
     kdDebug(30518) << "######################## OoWriterImport::convert done ####################" << endl;
     return KoFilter::OK;
