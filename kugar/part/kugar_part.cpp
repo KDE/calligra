@@ -18,6 +18,7 @@
 #include <qwidget.h>
 #include <kfiledialog.h>
 #include <kdebug.h>
+#include <koStore.h>
 
 #if defined(HAVE_CONFIG_H)
 #include "config.h"
@@ -30,7 +31,8 @@
 #include "kugar_factory.h"
 
 KugarPart::KugarPart( QWidget *parentWidget, const char *widgetName, QObject* parent ,
-                const char* name , bool singleViewMode):KoDocument(parentWidget,widgetName,parent,name,singleViewMode)
+                const char* name , bool singleViewMode):KoDocument(parentWidget,widgetName,parent,name,singleViewMode),
+		m_templateOk(false)
 {
 	setInstance(KugarFactory::global(),false);
 	m_reportEngine=new MReportEngine();
@@ -56,21 +58,25 @@ bool KugarPart::loadXML( QIODevice *file, const QDomDocument & doc)
 		{
 			ok=m_reportEngine->setReportData(m_reportData);
 //			ok=m_reportEngine->setReportData(doc);
-			m_reportEngine->renderReport();
 			kdDebug()<<"KugarPart::loadXML: report data set"<<endl;
-			if (ok)
+
+			if (m_templateOk)
 			{
-				kdDebug()<<m_reportData<<endl;
-				QPtrList<KoView> vs= views();
-				if (vs.count())
+				m_reportEngine->renderReport();
+				if (ok)
 				{
-					for (KoView *v=vs.first();v;v=vs.next())
+					kdDebug()<<m_reportData<<endl;
+					QPtrList<KoView> vs= views();
+					if (vs.count())
 					{
-						ok=static_cast<KugarView*>(v->qt_cast("KugarView"))->renderReport();
-						if (!ok) break;
-					}		
-				}
-                        }
+						for (KoView *v=vs.first();v;v=vs.next())
+						{
+							ok=static_cast<KugarView*>(v->qt_cast("KugarView"))->renderReport();
+							if (!ok) break;
+						}		
+					}
+        	                }
+			}
 			if (!ok) KMessageBox::sorry(0,i18n("Invalid data file %1").arg(m_file));
 		}
 		else
@@ -108,7 +114,7 @@ bool KugarPart::initDoc()
 KoView* KugarPart::createViewInstance( QWidget* parent, const char* name )
 {
     KugarView *v=new KugarView( this, parent, name );
-    v->renderReport();
+    if (m_templateOk) v->renderReport();
     return v;
 }
 
@@ -141,10 +147,46 @@ void KugarPart::slotPreferedTemplate(const QString &tpl)
 
                 if (f.open(IO_ReadOnly))
                 {
-                        if (!m_reportEngine -> setReportTemplate(&f))
-                                KMessageBox::sorry(0,i18n("Invalid template file: %1").arg(localtpl));
+        		// Try to find out whether it is a mime multi part file
+		        char buf[5];
+		        if ( f.readBlock( buf, 4 ) == 4 )
+        		{
+			        bool isRawXML = (strncasecmp( buf, "<?xm", 4 ) == 0);
+				f.close();
 
-                        f.close();
+				if (isRawXML) 
+				{
+					f.open(IO_ReadOnly);
+		                        if (!m_reportEngine -> setReportTemplate(&f))
+		                                KMessageBox::sorry(0,i18n("Invalid template file: %1").arg(localtpl));
+					else
+						m_templateOk=true;
+					f.close();
+				}
+				else
+				{
+					KoStore *tmpStore=KoStore::createStore(localtpl,KoStore::Read);
+					if (tmpStore->open("maindoc.xml")) 
+					{
+						if (!m_reportEngine -> setReportTemplate(tmpStore->device()))
+							KMessageBox::sorry(0,i18n("%1 is not a valid Kugar Designer template file").arg(localtpl));	
+						else
+							m_templateOk=true;
+						tmpStore->close();
+					}
+					else
+						KMessageBox::sorry(0,i18n("%1 is not a valid Kugar Designer template file").arg(localtpl));	
+					
+					delete tmpStore;
+				}
+
+			}
+			else
+			{
+		                f.close();
+				KMessageBox::sorry(0, i18n( "Couldn't read the beginning of the template file: %1").arg(localtpl));
+		        }
+
                 }
                 else
                         KMessageBox::sorry(0,i18n("Unable to open template file: %1").arg(localtpl));
