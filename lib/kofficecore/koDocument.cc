@@ -274,7 +274,7 @@ void KoDocument::setOutputMimeType( const QCString & mimeType )
 
 void KoDocument::slotAutoSave()
 {
-    kdDebug() << "KoDocument::slotAutoSave m_file=" << m_file << endl;
+    //kdDebug() << "KoDocument::slotAutoSave m_file=" << m_file << endl;
     if ( !m_file.isEmpty() && isModified() )
     {
         // TODO temporary message in statusbar ?
