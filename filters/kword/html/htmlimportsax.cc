@@ -32,7 +32,7 @@
 
 #include <koStore.h>
 
-//#include "ImportTags.h"
+#include "ImportTags.h"
 #include "htmlimportsax.h"
 
 // *Note for the reader of this code*
@@ -105,11 +105,12 @@ static void TreatCSS2Styles(QString strProps,QValueList<CSS2Styles> &css2StylesL
 
 enum StackItemElementType{
     ElementTypeUnknown  = 0,
-    ElementTypeBottom   = 1, // Bottom of the stack
-    ElementTypeHtml     = 2, // <html>
-    ElementTypeBody     = 3, // <body>
-    ElementTypeParagraph= 4, // <p>
-    ElementTypeSpan     = 5  // <span>
+    ElementTypeBottom,      // Bottom of the stack
+    ElementTypeHtml,        // <html>
+    ElementTypeBody,        // <body>
+    ElementTypeParagraph,   // <p>
+    ElementTypeSpan,        // <span>
+    ElementTypeDisplayNone  // Do not display, nor its children!
 };
 
 class StackItem
@@ -179,6 +180,7 @@ private:
     QString indent; //DEBUG
     QStack<StackItem> structureStack;
     QDomElement mainFramesetElement;
+    MapTag mapTag;
 };
 
 static bool TransformCSS2ToStackItem(StackItem* stackItem, StackItem* /* stackCurrent */, QString strStyle)
@@ -615,155 +617,63 @@ bool StructureParser :: startElement( const QString&, const QString&, const QStr
     //TODO: memory failure recovery
 
     stackItem->elementName=name; // Register the element name
-	
+
 	QString strStyleAttribute=attributes.value("style");
 
+    QMapIterator<QString,ParsingTag> mapTagIter=mapTag.find(name);
+    if (mapTagIter==mapTag.end())
+    {
+        // If not found, point to default
+        kdDebug(30503) << "Tag name " << name << " not found in map! (StructureParser::startElement)" << endl;
+        mapTagIter=mapTag.begin();
+    }
+
     bool success=false;
-    bool nomatch=false;
 
-    switch (name.length())
+    ModeDisplay mode=mapTagIter.data().getModeDisplay();
+
+    if (mode==modeDisplayBlock)
     {
-    case 1:
-        {
-            if (name=="p")
-            {
-                success=StartElementP(stackItem,structureStack.current(),mainFramesetElement,
-                        QString::null,strStyleAttribute,attributes.value("align"));
-            }
-            else if (name=="b")
-            {
-                success=StartElementSpan(stackItem,structureStack.current(),"font-weight:bold;",strStyleAttribute);
-            }
-            else if (name=="i")
-            {
-                success=StartElementSpan(stackItem,structureStack.current(),"font-style:italic;",strStyleAttribute);
-            }
-            else if (name=="u")
-            {
-                success=StartElementSpan(stackItem,structureStack.current(),"text-decoration:underline;",strStyleAttribute);
-            }
-            else if (name=="s")
-            {
-                success=StartElementSpan(stackItem,structureStack.current(),"text-decoration:line-through;",strStyleAttribute);
-            }
-            else
-            {
-                nomatch=true;
-            }
-            break;
-        }
-    case 2:
-        {
-            if (name=="hr")
-            {
-                nomatch=true; // TODO: implement <hr> correctly!
-            }
-            else if(name[0]=='h')
-            { // <h1> ... <h6> (many other tags are catched too but do not exist.)
-                success=StartElementP(stackItem,structureStack.current(),mainFramesetElement,
-                        "font-weight:bold;",strStyleAttribute,attributes.value("align"));
-            }
-            else if (name=="em")
-            {
-                success=StartElementSpan(stackItem,structureStack.current(),"font-style:italic;",strStyleAttribute);
-
-            }
-            else if (name=="br")
-            {
-                nomatch=true; // TODO: how can we implent this one? <br> can be on <p> but also on <span> (and compatibles)
-            }
-            else
-            {
-                nomatch=true;
-            }
-            break;
-        }
-    case 3:
-        {
-            if (name=="sub")
-            {
-               success=StartElementSpan(stackItem,structureStack.current(),"text-position:subscript;",strStyleAttribute);
-            }
-            else if (name=="sup")
-            {
-               success=StartElementSpan(stackItem,structureStack.current(),"text-position:superscript;",strStyleAttribute);
-            }
-            else if (name=="del")
-            {  // May need to be changed when a new KWord does know what "deleted" text is!
-               success=StartElementSpan(stackItem,structureStack.current(),"text-decoration:line-through;",strStyleAttribute);
-            }
-            else if (name=="ins")
-            {  // May need to be changed when a new KWord does know what "inserted" text is!
-               success=StartElementSpan(stackItem,structureStack.current(),"text-decoration:underline;",strStyleAttribute);
-            }
-            else
-            {
-                nomatch=true;
-            }
-        }
-    case 4:
-        {
-            if (name=="span")
-            {
-                success=StartElementSpan(stackItem,structureStack.current(),QString::null,strStyleAttribute);
-            }
-            else if (name=="body")     // <===============================================================================================
-            {
-                // Just tell that we are the <body> element.
-                stackItem->elementType=ElementTypeBody;
-                stackItem->stackNode=structureStack.current()->stackNode;
-                success=true;
-            }
-            else if (name=="cite")
-            {
-                success=StartElementSpan(stackItem,structureStack.current(),"font-style:italic;",strStyleAttribute);
-            }
-            else
-            {
-                nomatch=true;
-            }
-            break;
-        }
-    case 6:
-        {
-            if (name=="strike")
-            {
-                success=StartElementSpan(stackItem,structureStack.current(),"text-decoration:line-through;",strStyleAttribute);
-            }
-            else if (name=="strong")
-            {
-                success=StartElementSpan(stackItem,structureStack.current(),"font-weight:bold;",strStyleAttribute);
-            }
-            else
-            {
-                nomatch=true;
-            }
-            break;
-        }
-    default:
-        {
-            nomatch=true;
-            break;
-        }
+        success=StartElementP(stackItem,structureStack.current(),mainFramesetElement,
+                        mapTagIter.data().getStyle(),attributes.value("style"),attributes.value("align"));
+    }
+    else if (mode==modeDisplayInline)
+    {
+        success=StartElementSpan(stackItem,structureStack.current(),mapTagIter.data().getStyle(),attributes.value("style"));
+    }
+    else if (mode==modeDisplayNone)
+    {
+        stackItem->elementType=ElementTypeDisplayNone;
+        stackItem->stackNode=structureStack.current()->stackNode;
+        success=true;
+    }
+    else if (name=="body") // Special case (FIXME/TODO)
+    {
+        // Just tell that we are the <body> element.
+        stackItem->elementType=ElementTypeBody; // FIXME/TODO: everything in <body> is displayable by default!
+        stackItem->stackNode=structureStack.current()->stackNode;
+        success=true;
+    }
+    else if (structureStack.current()->elementType==ElementTypeDisplayNone)
+    {
+        stackItem->elementType=ElementTypeDisplayNone;
+        stackItem->stackNode=structureStack.current()->stackNode;
+        success=true;
+    }
+    else if ((structureStack.current()->elementType==ElementTypeParagraph)||(structureStack.current()->elementType==ElementTypeSpan))
+    {
+        // We are in a <p> or <span> element (or compatible)
+        // We do not know the element but treat it as <span> (with empty style not to have secondary effects.)
+        success=StartElementSpan(stackItem,structureStack.current(),QString::null,strStyleAttribute);
+    }
+    else
+    {
+        // We are not in a paragraph, so we must discard the element's content.
+        stackItem->elementType=ElementTypeUnknown; //TODO: in theory these elements must be displayed too!
+        stackItem->stackNode=structureStack.current()->stackNode;
+        success=true;
     }
 
-    if (nomatch)
-    {
-        // The element has not yet been treated, so make a default action
-        if ((structureStack.current()->elementType==ElementTypeParagraph)||(structureStack.current()->elementType==ElementTypeSpan))
-        {
-            // We are in a <p> or <span> element (or compatible)
-            // We do not know the element but treat it as <span> (with empty style not to have secondary effects.)
-            success=StartElementSpan(stackItem,structureStack.current(),QString::null,strStyleAttribute);
-        }
-        else
-        {
-            // We are not in a paragraph, so we must discard the element's content.
-            stackItem->elementType=ElementTypeUnknown;
-            stackItem->stackNode=structureStack.current()->stackNode;
-            success=true;
-        }
-    }
     if (success)
     {
         structureStack.push(stackItem);
