@@ -639,7 +639,6 @@ void KWView::insertExpression()
     if ( edit )
     {
         KAction * act = (KAction *)(sender());
-        kdDebug()<<"text :"<<act->text()<<endl;
         edit->insertExpression(act->text());
     }
 }
@@ -2601,7 +2600,7 @@ void KWView::updatePopupMenuChangeAction()
 {
     KWFrame *frame=doc->getFirstSelectedFrame();
     // Warning, frame can be 0L !
-    
+
     // if a header/footer etc. Dont show the popup.
     if(frame && frame->getFrameSet() && frame->getFrameSet()->getFrameInfo() != FI_BODY)
         return;
