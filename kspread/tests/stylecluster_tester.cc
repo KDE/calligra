@@ -121,39 +121,26 @@ void StyleClusterTester::run()
   void *quad1 = stylecluster.lookupNode(0,0); 
   CHECK_QUAD(stylecluster.lookupNode(0,0), quad1);
   CHECK_FAILS_QUAD(stylecluster.lookupNode(0,0), stylecluster.lookupNode(1000,2000)); 
-  kdDebug() << "0. Insert done" << endl;
   stylecluster.insert(1000,2000, m_sheet->doc()->styleManager()->defaultStyle());
   CHECK_QUAD(stylecluster.lookupNode(0,0), stylecluster.lookupNode(1000,2000)); 
   
  
   stylecluster.insert(0,0, style1);
-  kdDebug() << "1. Insert done" << endl;
   stylecluster.insert(1,0, style1);
-  kdDebug() << "2. Insert done" << endl;
   stylecluster.insert(0,1, style1);
-  kdDebug() << "3. Insert done" << endl;
   CHECK_FAILS_QUAD(stylecluster.lookupNode(0,0), stylecluster.lookupNode(0,1));
   
-  kdDebug() << "4. check done" << endl;
   stylecluster.insert(1,1, style1);
   
-  kdDebug() << "5. Insert done" << endl;
   CHECK_QUAD(stylecluster.lookupNode(0,0), stylecluster.lookupNode(0,1));
-  kdDebug() << "6. check done" << endl;
   CHECK_QUAD(stylecluster.lookupNode(0,0), stylecluster.lookupNode(1,0));
   CHECK_QUAD(stylecluster.lookupNode(1,0), stylecluster.lookupNode(1,1));
-  kdDebug() << "7. check done" << endl;
 
   CHECK_STYLE(stylecluster.lookup(0,0), *style1);
-  kdDebug() << "8. check done" << endl;
   CHECK_STYLE(stylecluster.lookup(0,1), *style1);
-  kdDebug() << "9. check done" << endl;
   CHECK_STYLE(stylecluster.lookup(1,0), *style1);
-  kdDebug() << "10. check done" << endl;
   CHECK_STYLE(stylecluster.lookup(1,1), *style1);
-  kdDebug() << "11. check done" << endl;
   CHECK_STYLE(stylecluster.lookup(0,2), static_cast< const KSpreadStyle& > (*(m_sheet->doc()->styleManager()->defaultStyle())));
-  kdDebug() << "12. check done" << endl;
 
   stylecluster.insert(0,0, m_sheet->doc()->styleManager()->defaultStyle());
   CHECK_STYLE(stylecluster.lookup(0,0), static_cast< const KSpreadStyle& > (*(m_sheet->doc()->styleManager()->defaultStyle())));
@@ -172,6 +159,28 @@ void StyleClusterTester::run()
   
   CHECK_QUAD(stylecluster.lookupNode(0,0), stylecluster.lookupNode(1,0));
   CHECK_QUAD(stylecluster.lookupNode(1,1), stylecluster.lookupNode(1005,20320));
+
+//Quad tree is empty.  Add a big 4x4 group, and check that
+  
+
+  for(int y = 0; y < 64; y++) {
+    for(int x = 0; x < 64; x++) {
+      stylecluster.insert(x,y, style1);
+    }
+  }
+  
+  CHECK_QUAD(stylecluster.lookupNode(0,0), stylecluster.lookupNode(1,1));
+  CHECK_QUAD(stylecluster.lookupNode(0,0), stylecluster.lookupNode(2,2));
+  CHECK_QUAD(stylecluster.lookupNode(0,0), stylecluster.lookupNode(7,7));
+  CHECK_QUAD(stylecluster.lookupNode(0,0), stylecluster.lookupNode(60,60));
+ 
+  //Undo what we did
+  for(int y = 0; y < 64; y++) {
+    for(int x = 0; x < 64; x++) {
+      stylecluster.insert(x,y, m_sheet->doc()->styleManager()->defaultStyle());
+    }
+  }
+
   
   if(style1->release()) {
     kdDebug() << "DELETING STYLE in test runner" << endl;

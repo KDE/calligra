@@ -155,7 +155,7 @@ void StyleCluster::insert( int x, int y, KSpreadStyle * style)
   StyleClusterQuad* last_node = NULL;
   int x_offset = 0;
   int y_offset = 0;
-  int half_quad_size = KS_Max_Quad/2;
+  int quad_size = KS_Max_Quad;
   
   if( m_topQuad->m_type == StyleClusterQuad::Simple ) { 
     if( style == m_topQuad->getStyle() )
@@ -174,31 +174,42 @@ void StyleCluster::insert( int x, int y, KSpreadStyle * style)
     Q_ASSERT( *current_node);
     //The below should be true.  It is obviously true from the code, so feel free to comment out
     Q_ASSERT( (*current_node)->m_type == StyleClusterQuad::Quad );
-  
+    Q_ASSERT( quad_size > 0); // we can't have a quad of width 1!
+
+    // For the next few lines, 'quad_size' is the size of the child node - i.e. the new current_node
+    quad_size /= 2;
+    
     last_node = *current_node;
     
     path.push(current_node);
     
-    if( x - x_offset <= half_quad_size ) {
-      if( y - y_offset <= half_quad_size ) {
+    if( x - x_offset < quad_size ) {
+      if( y - y_offset < quad_size ) {
         current_node = &((*current_node)->m_topLeft);
+	kdDebug() << "topLeft" << endl;
       }
       else {
         current_node = &((*current_node)->m_bottomLeft);
-        y_offset += half_quad_size;
+        y_offset += quad_size;
+	kdDebug() << "bottomLeft" << endl;
       }
     } else {
-      if( y - y_offset <= half_quad_size ) {
+      if( y - y_offset < quad_size ) {
         current_node = &((*current_node)->m_topRight);
-        x_offset += half_quad_size;
+        x_offset += quad_size;
+	kdDebug() << "topRight" << endl;
       }
       else {
         current_node = &((*current_node)->m_bottomRight);
-        y_offset += half_quad_size;
-        x_offset += half_quad_size;
+        y_offset += quad_size;
+        x_offset += quad_size;
+	kdDebug() << "bottomRight" << endl;
       }
     }
-    kdDebug() << "gone down one to size "<< half_quad_size << " offset " << x_offset << "," << y_offset << endl;
+    
+    //quad_size is now the size (size of width, and size of height) of current_node
+    
+    kdDebug() << "gone down one to size "<< quad_size << " offset " << x_offset << "," << y_offset << " looking for " << x << "," << y << endl;
     //Now we have gone down one step.  The parent is a quad, but the current node
     //may be null, in which case our style is the style of the parent, or it's Simple,
     //in which case we need to check whether we to subdivide, or it's a quad, in which case
@@ -214,7 +225,7 @@ void StyleCluster::insert( int x, int y, KSpreadStyle * style)
       //The whole of this section is already this style.  No need to do anything.
       if( style == last_node->getStyle() ) return;
 
-      if(half_quad_size == 0) {  //We are now on a single cell
+      if(quad_size == 1) {  //We are now on a single cell
 	int num_null_children_in_parent = last_node->numNullChildren();
 
 	Q_ASSERT(last_node->getStyle() != NULL);
@@ -239,7 +250,7 @@ void StyleCluster::insert( int x, int y, KSpreadStyle * style)
       //we will go into this next time round the loop
       // so make it a quad
       (*current_node)->m_type = StyleClusterQuad::Quad;
-      kdDebug() << "Making a quad at size " << half_quad_size <<  endl;
+      kdDebug() << "Making a quad at size " << quad_size <<  endl;
 
       if(last_node->numNullChildren() == 0) {
         last_node->setStyle(0); //nothing is using this anymore
@@ -249,7 +260,7 @@ void StyleCluster::insert( int x, int y, KSpreadStyle * style)
     } else if( (*current_node)->m_type == StyleClusterQuad::Simple ) { 
       if( style == (*current_node)->getStyle() )
         return;
-      if(half_quad_size == 0) {
+      if(quad_size == 1) {
 	
         kdDebug() << "Found simple cell to modify. style is different" << endl;
         //So we are a simple cell
@@ -263,19 +274,18 @@ void StyleCluster::insert( int x, int y, KSpreadStyle * style)
 	  simplify(path);
         
 	} else if (last_node->getStyle() == 0) {
-	  //We are the _only_ child that is Simple.  Can't happen for half_quad_size==0
+	  //We are the _only_ child that is Simple.  Can't happen for quad_size==1
 	  Q_ASSERT(false);
 	  return;
 	} else { 
 	  //The style on the parent differs from us, so there's nothing more we can do
           (*current_node)->setStyle(style);
 	}
-	return; //we are on half_quad_size ==0, so a single cell. no point continuing.	
+	return; //we are on quad_size ==1, so a single cell. no point continuing.	
       }
       //else make this a quad, and go inside it
       (*current_node)->m_type = StyleClusterQuad::Quad;
     } // else it's a quad, and we will go into it on the next time round the while loop
-    half_quad_size /= 2;
   }
   
   return;
@@ -360,30 +370,30 @@ StyleClusterQuad* StyleCluster::lookupNode(int x, int y) {
   StyleClusterQuad* last_node = NULL;
   int x_offset = 0;
   int y_offset = 0;
-  int half_quad_size = KS_Max_Quad;
+  int quad_size = KS_Max_Quad;
   
   while ( current_node && current_node->m_type != StyleClusterQuad::Simple )
   {
     last_node = current_node;
-    half_quad_size /= 2;
-    kdDebug() << "Looking up size " << half_quad_size << endl;
-    if( x - x_offset <= half_quad_size ) {
-      if( y - y_offset <= half_quad_size ) {
+    quad_size /= 2;
+    kdDebug() << "Looking up size " << quad_size << endl;
+    if( x - x_offset < quad_size ) {
+      if( y - y_offset < quad_size ) {
         current_node = current_node->m_topLeft;
       }
       else {
         current_node = current_node->m_bottomLeft;
-        y_offset += half_quad_size;
+        y_offset += quad_size;
       }
     } else {
-      if( y - y_offset <= half_quad_size ) {
+      if( y - y_offset < quad_size ) {
         current_node = current_node->m_topRight;
-        x_offset += half_quad_size;
+        x_offset += quad_size;
       }
       else {
         current_node = current_node->m_bottomRight;
-        y_offset += half_quad_size;
-        x_offset += half_quad_size;
+        y_offset += quad_size;
+        x_offset += quad_size;
       }
     }
   }
