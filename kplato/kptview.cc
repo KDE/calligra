@@ -126,7 +126,7 @@ void KPTView::slotAddTask() {
     // Execute the dialog
     if (dialog->exec()) {
         KPTNode &node = ((KPTNodeItem *)m_listview->selectedItem())->getNode();
-        kdebug(42000) << "Adding child to " << node.name().latin1() << endl;
+        kdDebug(42000) << "Adding child to " << node.name().latin1() << endl;
         node.addChildNode(task);
 
         displayProject();
