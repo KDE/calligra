@@ -6,6 +6,8 @@
 
 module KOffice
 {
+	interface MainWindow;
+
 	interface Document : OpenParts::Document
 	{
 		void setURL( in string url );
@@ -47,6 +49,8 @@ module KOffice
 		 */
 		void makeChildList( in KOffice::Document root, in string name );
 		void addToChildList( in KOffice::Document child, in string name );
+
+		MainWindow createMainWindow();
 	};
 
 	/**
@@ -54,7 +58,7 @@ module KOffice
 	 */
 	interface Print
 	{
-		string encodedMetaFile( in long width, in long height );
+		string encodedMetaFile( in long width, in long height, in float scale );
 	};
 
 	interface View : OpenParts::View
@@ -80,7 +84,7 @@ module KOffice
 		boolean printDlg();
 	};
 
-	interface DocumentFactory
+	interface DocumentFactory : KOM::ComponentFactory
 	{
 		KOffice::Document create();
 	};
@@ -97,6 +101,32 @@ module KOffice
 		
 		Document document();
 		View view();
+	};
+
+	interface Filter : KOM::Component
+	{
+		typedef sequence<octet> Data;
+
+		exception FormatError
+		{
+		};
+
+		exception UnsupportedFormat
+		{
+			string format;
+		};
+
+		/**
+		* @param from is the mimetype which has to be converted.
+		* @param to is the mimetype to which we want to make a conversion.
+		*/
+		void filter( inout Data data, in string from, in string to )
+		     raises( FormatError, UnsupportedFormat );
+	};
+
+	interface FilterFactory : KOM::ComponentFactory
+	{
+		Filter create( in KOM::Component core );
 	};
 
 	/**

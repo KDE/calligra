@@ -249,7 +249,7 @@ public:
    *               Otherwise 0L is returned if the child does not support the
    *               printing Extension.
    */
-  virtual QPicture* draw( bool _force = true );
+  virtual QPicture* draw( float _scale = 1.0, bool _force = true );
 
   virtual KOffice::View_ptr createView( KOffice::MainWindow_ptr _main );
   
@@ -269,6 +269,8 @@ protected:
   QString m_strMimeType;
 
   QPicture* m_pPicture;
+  float m_pictureScale;
+  
   bool m_bHasPrintingExtension;
 };
 

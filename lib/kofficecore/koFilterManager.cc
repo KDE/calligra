@@ -1,4 +1,4 @@
-/* $Id:$
+/* $Id$
    This file is part of KOffice
     Copyright (C) 1998 Kalle Dalheimer <kalle@kde.org>
 
@@ -23,60 +23,39 @@
 #include <kapp.h>
 #include <klocale.h>
 
-KoFilterManager* KoFilterManager::_instance = 0;
+KoFilterManager* KoFilterManager::s_pSelf = 0;
 
-KoFilterManager* KoFilterManager::instance()
+KoFilterManager* KoFilterManager::self()
 {
-	if( _instance == 0 ) {
-		_instance = new KoFilterManager;
-	}
-	return _instance;
+  if( s_pSelf == 0 )
+  {
+    s_pSelf = new KoFilterManager;
+  }
+
+  return s_pSelf;
 }
 
-
-void KoFilterManager::registerFilter( const char* name, 
-									  const char* extensions, 
-									  Direction direction, KoFilter* filter )
+QString KoFilterManager::fileSelectorList( Direction direction, const char *_format, bool allfiles ) const
 {
-	KoFilterData* fd = new KoFilterData;
-	fd->name = name;
-	fd->extensions = extensions;
-	fd->direction = direction;
-	fd->filter = filter;
-	_filterlist.append( fd );
-}
-
-QStrList KoFilterManager::fileSelectorList( Direction direction, 
-											bool allfiles ) const
-{
-	QStrList ret;
-	QListIterator<KoFilterData> it( _filterlist );
-	KoFilterData* current;
-	while( ( current = it.current() ) ) {
-		++it;
-		if( current->direction == direction ) {
-			QString filterstr;
-			filterstr = current->name + " (" + current->extensions + ")";
-			ret.append( filterstr );
-		}
-	}
-	if( allfiles ) {
-		QString filterstr = i18n( "All files (*.*)" );
-		ret.append( filterstr );
-	}
-	
-	return ret;
-}
-
-void* KoFilterManager::invokeFilterParser( Direction direction, 
-										   const char* filename,
-										   KoFilter*& filter )
-{
-	return 0;
+  QStrList ret;
+  QListIterator<KoFilterData> it( _filterlist );
+  KoFilterData* current;
+  while( ( current = it.current() ) ) {
+    ++it;
+    if( current->direction == direction ) {
+      QString filterstr;
+      filterstr = current->name + " (" + current->extensions + ")";
+      ret.append( filterstr );
+    }
+  }
+  if( allfiles ) {
+    QString filterstr = i18n( "All files (*.*)" );
+    ret.append( filterstr );
+  }
+  
+  return ret;
 }
 
 KoFilterManager::KoFilterManager()
 {
-	_filterlist.setAutoDelete( true );
 }
-

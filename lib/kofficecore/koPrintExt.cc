@@ -18,10 +18,11 @@ QPicture* KoPrintExt::picture()
   return m_pPicture;
 }
 
-char* KoPrintExt::encodedMetaFile( CORBA::Long _width, CORBA::Long _height )
+char* KoPrintExt::encodedMetaFile( CORBA::Long _width, CORBA::Long _height,
+				   CORBA::Float _scale )
 {
   if ( m_pPicture == 0L )
-    draw( _width, _height );
+    draw( _width, _height, _scale );
   
   int size = m_pPicture->size() * 4 / 3 + 10;
   char *p = CORBA::string_alloc( size );
@@ -43,12 +44,12 @@ char* KoPrintExt::encodedMetaFile( CORBA::Long _width, CORBA::Long _height )
   return p;
 }
 
-void KoPrintExt::draw( CORBA::Long _width, CORBA::Long _height )
+void KoPrintExt::draw( CORBA::Long _width, CORBA::Long _height, CORBA::Float _scale )
 {
   // Create picture
   QPicture *p = picture();
   // Paint to it
-  draw( p, _width, _height );
+  draw( p, _width, _height, _scale );
   cout << "QPicture has " << p->size() << " bytes" << endl;
 }
 

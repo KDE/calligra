@@ -218,19 +218,19 @@ bool KoDocumentChild::isStoredExtern()
   return true;
 }
 
-QPicture* KoDocumentChild::draw( bool _force )
+QPicture* KoDocumentChild::draw( float _scale, bool _force )
 {
   cout << "QPicture* KoDocumentChild::draw( bool _force )" << endl;
   
   if ( m_pPicture != 0L && !m_bHasPrintingExtension && !_force )
     return 0L;
 
-  if ( m_pPicture != 0L )
+  if ( m_pPicture != 0L && m_pictureScale == _scale )
     return m_pPicture;
   
   cout << "Trying to fetch the QPicture stuff" << endl;
   
-  CORBA::Object_var obj = m_rDoc->getInterface( "IDL:OPParts/Print:1.0" );
+  CORBA::Object_var obj = m_rDoc->getInterface( "IDL:KOffice/Print:1.0" );
   if ( CORBA::is_nil( obj ) )
   {
     if ( !_force )
@@ -238,9 +238,10 @@ QPicture* KoDocumentChild::draw( bool _force )
   
     if ( m_pPicture == 0L )
       m_pPicture = new QPicture;
-  
+    m_pictureScale = _scale;
+    
     // Draw a white area instead
-    cout << "OPParts::Print not supported" << endl;
+    cout << "KOffice::Print not supported" << endl;
     QPainter painter;
     painter.begin( m_pPicture );
     
@@ -258,7 +259,8 @@ QPicture* KoDocumentChild::draw( bool _force )
   
     if ( m_pPicture == 0L )
       m_pPicture = new QPicture;
-
+    m_pictureScale = _scale;
+    
     // Draw a white area instead
     cerr << "ERROR: Could not narrow to OPParts::Print" << endl;
     QPainter painter;
@@ -270,7 +272,8 @@ QPicture* KoDocumentChild::draw( bool _force )
   }
   
   cout << "Fetching data" << endl;
-  CORBA::String_var str( print->encodedMetaFile( m_geometry.width(), m_geometry.height() ) );
+  CORBA::String_var str( print->encodedMetaFile( m_geometry.width(), m_geometry.height(),
+						 _scale ) );
   cout << "Fetched data" << endl;
   
   int inlen = strlen( str );
@@ -284,7 +287,8 @@ QPicture* KoDocumentChild::draw( bool _force )
 
     if ( m_pPicture == 0L )
       m_pPicture = new QPicture;
-
+    m_pictureScale = _scale;
+    
     QPainter painter;
     painter.begin( m_pPicture );
     
@@ -313,6 +317,7 @@ QPicture* KoDocumentChild::draw( bool _force )
 
   if ( m_pPicture == 0L )
     m_pPicture = new QPicture;
+  m_pictureScale = _scale;
   
   m_pPicture->setData( p, got );
   delete p;

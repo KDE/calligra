@@ -7,6 +7,12 @@
 #include <kapp.h>
 #include <opApplication.h>
 
+/*******************************************************************
+ *
+ * Trader
+ *
+ *******************************************************************/
+
 void koInitTrader()
 {
   QString exec = kapp->kde_bindir();
@@ -78,6 +84,12 @@ void koQueryTrader( const char *_service_type, const char *_constr, unsigned int
    * END DEBUG
    ****/
 }
+
+/*******************************************************************
+ *
+ * Component
+ *
+ *******************************************************************/
 
 KoComponentEntry koParseComponentProperties( CosTrading::PropertySeq& p  )
 {
@@ -160,25 +172,27 @@ KoComponentEntry koParseComponentProperties( CosTrading::PropertySeq& p  )
   return e;
 }
 
+/*******************************************************************
+ *
+ * Document
+ *
+ *******************************************************************/
+
 KoDocumentEntry koParseDocumentProperties( CosTrading::PropertySeq& p  )
 {
   KoDocumentEntry e( koParseComponentProperties( p ) );
 
-  cerr << "0" << endl;
   unsigned int max = p.length();
   for( unsigned int j = 0; j < max; j++ )
   {
     if ( strcmp( p[j].name, "MimeTypes" ) == 0 )
     {  
-      cerr << "1" << endl;
       CosTrading::StringList lst;
       if ( p[j].value >>= lst )
       {  
-	cerr << "2" << endl;
 	for( unsigned int l = 0; l < lst.length(); ++l )
 	  e.mimeTypes.append( lst[l].in() );
       }
-      cerr << "3" << endl;
     }
   }
   
@@ -199,6 +213,7 @@ vector<KoDocumentEntry> koQueryDocuments( const char *_constr, int _count )
     cout << "Got " <<  offers->length() << " results" << endl;
   else
     cout << "Got no results" << endl;
+  // END DEBUG
 
   lst.reserve( offers->length() );
   
@@ -206,6 +221,7 @@ vector<KoDocumentEntry> koQueryDocuments( const char *_constr, int _count )
   for( unsigned int i = 0; i < max; i++ )
   {
     lst.push_back( koParseDocumentProperties( (*offers)[i].properties ) );
+    lst.back().reference = CORBA::Object::_duplicate( (*offers)[i].reference );
   }
   
   return lst;
@@ -221,3 +237,80 @@ KoDocumentEntry::KoDocumentEntry( const KoComponentEntry _e )
   miniIcon = _e.miniIcon;
   icon = _e.icon;
 }
+
+
+/*******************************************************************
+ *
+ * Filters
+ *
+ *******************************************************************/
+
+KoFilterEntry koParseFilterProperties( CosTrading::PropertySeq& p  )
+{
+  KoFilterEntry e( koParseComponentProperties( p ) );
+
+  unsigned int max = p.length();
+  for( unsigned int j = 0; j < max; j++ )
+  {
+    if ( strcmp( p[j].name, "Import" ) == 0 )
+    {  
+      CosTrading::StringList lst;
+      if ( p[j].value >>= lst )
+      {  
+	for( unsigned int l = 0; l < lst.length(); ++l )
+	  e.import.append( lst[l].in() );
+      }
+    }
+    else if ( strcmp( p[j].name, "Export" ) == 0 )
+    {  
+      CosTrading::StringList lst;
+      if ( p[j].value >>= lst )
+      {  
+	for( unsigned int l = 0; l < lst.length(); ++l )
+	  e.export.append( lst[l].in() );
+      }
+    }
+  }
+  
+  return e;
+}
+
+vector<KoFilterEntry> koQueryFilters( const char *_constr, int _count )
+{
+  vector<KoFilterEntry> lst;
+  
+  CosTrading::OfferSeq_var offers;
+  CosTrading::OfferIterator_var offer_iter;
+  CosTrading::PolicyNameSeq_var limits;
+  koQueryTrader( "KOfficeFilter", _constr, _count, offers, offer_iter, limits );
+
+  // DEBUG
+  if ( offers->length() != 0 )
+    cout << "Got " <<  offers->length() << " results" << endl;
+  else
+    cout << "Got no results" << endl;
+  // END DEBUG
+
+  lst.reserve( offers->length() );
+  
+  unsigned int max = offers->length();
+  for( unsigned int i = 0; i < max; i++ )
+  {
+    lst.push_back( koParseFilterProperties( (*offers)[i].properties ) );
+    lst.back().reference = CORBA::Object::_duplicate( (*offers)[i].reference );
+  }
+  
+  return lst;
+}
+
+KoFilterEntry::KoFilterEntry( const KoComponentEntry& _e )
+{
+  comment = _e.comment;
+  name = _e.name;
+  exec = _e.exec;
+  activationMode = _e.activationMode;
+  repoID = _e.repoID;
+  miniIcon = _e.miniIcon;
+  icon = _e.icon;
+}
+
