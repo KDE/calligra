@@ -430,7 +430,6 @@ void KSpreadPaperLayout::slotOk()
 
     m_pView->slotUpdateView( m_pView->activeTable() );
     accept();
-    delete this;
 }
 
 void KSpreadPaperLayout::closeEvent ( QCloseEvent * )
@@ -462,7 +461,6 @@ void KSpreadPaperLayout::slotSelectionChanged( KSpreadSheet* /*_table*/, const Q
 void KSpreadPaperLayout::slotCancel()
 {
   reject();
-  delete this;
 }
 
 bool KSpreadPaperLayout::eventFilter( QObject* obj, QEvent* ev )
