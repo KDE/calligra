@@ -458,7 +458,7 @@ KoTextFormat KWTextParag::loadFormat( QDomElement &formatElem, KoTextFormat * re
 
     elem = formatElem.namedItem( "VERTALIGN" ).toElement();
     if ( !elem.isNull() )
-        format.setVAlign( static_cast<QTextFormat::VerticalAlignment>( elem.attribute("value").toInt() ) );
+        format.setVAlign( static_cast<KoTextFormat::VerticalAlignment>( elem.attribute("value").toInt() ) );
     elem = formatElem.namedItem( "COLOR" ).toElement();
     if ( !elem.isNull() )
     {
@@ -957,7 +957,7 @@ void KWTextParag::saveParagLayout( const KoParagLayout& layout, QDomElement & pa
     }
 }
 
-void KWTextParag::join( Qt3::QTextParag *parag )
+void KWTextParag::join( KoTextParag *parag )
 {
     m_layout.pageBreaking &= ~(KoParagLayout::HardFrameBreakBefore|KoParagLayout::HardFrameBreakAfter);
     KoTextParag::join( parag );

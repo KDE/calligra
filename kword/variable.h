@@ -31,11 +31,9 @@ class KoVariable;
 class KoPgNumVariable;
 class KoMailMergeVariable;
 class QDomElement;
-namespace Qt3 {
-class QTextFormat;
-}
+class KoTextFormat;
 
-class KWVariableCollection : public KoVariableCollection 
+class KWVariableCollection : public KoVariableCollection
 {
  public:
     KWVariableCollection();
@@ -64,7 +62,7 @@ class KWMailMergeVariable : public KoMailMergeVariable
 {
 public:
     KWMailMergeVariable( KoTextDocument *textdoc, const QString &name, KoVariableFormat *varFormat,KoVariableCollection *_varColl, KWDocument *doc );
-    
+
     virtual QString text();
     virtual QString value() const;
     virtual void recalc();

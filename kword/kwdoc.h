@@ -60,7 +60,7 @@ class QRect;
 namespace KFormula {
     class Document;
 }
-namespace Qt3 { class QTextParag; }
+class KoTextParag;
 
 #include <koDocument.h>
 #include <koGlobal.h>
@@ -299,7 +299,7 @@ public:
     //void setApplyStyleChangeMask( int _f ) { styleMask = _f; }
 
     // paragLayoutChanged is a set of flags for the parag layout - see the enum in KWParagLayout
-    // formatChanged is a set of flags from QTextFormat
+    // formatChanged is a set of flags from KoTextFormat
     // If both are -1, it means the style has been deleted.
     void applyStyleChange( KWStyle * changedStyle, int paragLayoutChanged, int formatChanged );
     void updateAllStyleLists();
@@ -425,6 +425,9 @@ public:
 
     bool showStatusBar() const { return m_bShowStatusBar;}
     void setShowStatusBar( bool _status ) { m_bShowStatusBar = _status;}
+
+    bool pgUpDownMovesCaret() const { return m_pgUpDownMovesCaret; }
+    void setPgUpDownMovesCaret( bool b ) { m_pgUpDownMovesCaret = b; }
 
     bool dontCheckUpperWord() const { return m_bDontCheckUpperWord; }
     void setDontCheckUpperWord(bool _b) { m_bDontCheckUpperWord=_b;}
@@ -628,6 +631,7 @@ private:
     bool m_bShowDocStruct;
     bool m_hasTOC;
     bool m_bShowStatusBar;
+    bool m_pgUpDownMovesCaret;
 
     bool m_bAllowAutoFormat;
 

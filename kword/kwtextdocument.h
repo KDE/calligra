@@ -20,13 +20,13 @@
 #ifndef kwtextdocument_h
 #define kwtextdocument_h
 
-#include "kotextdocument.h"
+#include "qrichtext_p.h"
 
 class KWTextFrameSet;
 class KoTextFormatCollection;
 
 /**
- * This is our QTextDocument reimplementation, to create KWTextParag instead of QTextParags,
+ * This is our KoTextDocument reimplementation, to create KWTextParag instead of KoTextParags,
  * and to relate it to the text frameset it's in.
  */
 class KWTextDocument : public KoTextDocument
@@ -40,7 +40,7 @@ public:
 
     ~KWTextDocument();
 
-    virtual Qt3::QTextParag * createParag( QTextDocument *d, Qt3::QTextParag *pr = 0, Qt3::QTextParag *nx = 0, bool updateIds = TRUE );
+    virtual KoTextParag * createParag( KoTextDocument *d, KoTextParag *pr = 0, KoTextParag *nx = 0, bool updateIds = TRUE );
 
     /** Return the text frameset in which this document is.
      * Note that this can be 0L (e.g. for paragraphs in the paragdia preview) */

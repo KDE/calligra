@@ -64,10 +64,8 @@ class KMacroCommand;
 class KWFrameSet;
 class KoFindReplace;
 class KWFindReplace;
-namespace Qt3 {
-class QTextFormat;
-class QTextParag;
-};
+class KoTextFormat;
+class KoTextParag;
 
 /******************************************************************/
 /* Class: KWView						  */

@@ -50,7 +50,7 @@ class KWordFrameSetIface;
  * whole text object". This is how "setBold", "setItalic" etc. can apply to
  * a whole text frameset.
  */
-class KWTextFrameSet : public KWFrameSet, public QTextFlow, public KoTextFormatInterface
+class KWTextFrameSet : public KWFrameSet, public KoTextFlow, public KoTextFormatInterface
 {
     Q_OBJECT
 public:
@@ -141,22 +141,22 @@ public:
     virtual void drawFrame( KWFrame * frame, QPainter *painter, const QRect & crect,
                             QColorGroup &cg, bool onlyChanged, bool resetChanged, KWFrameSetEdit * edit );
 
-    void drawCursor( QPainter *p, QTextCursor *cursor, bool cursorVisible, KWCanvas *canvas, KWFrame *currentFrame );
+    void drawCursor( QPainter *p, KoTextCursor *cursor, bool cursorVisible, KWCanvas *canvas, KWFrame *currentFrame );
 
     void showPopup( KWFrame *frame, KWFrameSetEdit *edit, KWView *view, const QPoint &point );
 
-    KCommand* pasteKWord( QTextCursor * cursor, const QCString & data, bool removeSelected );
-    void insertTOC( QTextCursor * cursor );
-    void insertFrameBreak( QTextCursor * cursor );
-    KCommand * setPageBreakingCommand( QTextCursor * cursor, int pageBreaking );
+    KCommand* pasteKWord( KoTextCursor * cursor, const QCString & data, bool removeSelected );
+    void insertTOC( KoTextCursor * cursor );
+    void insertFrameBreak( KoTextCursor * cursor );
+    KCommand * setPageBreakingCommand( KoTextCursor * cursor, int pageBreaking );
 
-    QRect paragRect( Qt3::QTextParag * parag ) const; // in normal coords
+    QRect paragRect( KoTextParag * parag ) const; // in normal coords
 
     KCommand *deleteAnchoredFrame( KWAnchor * anchor );
-    void findPosition( const KoPoint &dPoint, Qt3::QTextParag * & parag, int & index );
+    void findPosition( const KoPoint &dPoint, KoTextParag * & parag, int & index );
 
     /** Highlighting support (for search/replace, spellchecking etc.) */
-    void highlightPortion( Qt3::QTextParag * parag, int index, int length, KWCanvas * canvas );
+    void highlightPortion( KoTextParag * parag, int index, int length, KWCanvas * canvas );
     void removeHighlight();
 
     virtual void addTextFrameSets( QPtrList<KWTextFrameSet> &lst );
@@ -189,19 +189,19 @@ public:
     virtual bool statistics( QProgressDialog *progress, ulong & charsWithSpace, ulong & charsWithoutSpace,
         ulong & words, ulong& sentences, ulong & syllables, bool selected );
 
-    /** reimplemented from QTextFlow, implements flowing around frames etc. */
+    /** reimplemented from KoTextFlow, implements flowing around frames etc. */
     virtual int adjustLMargin( int yp, int h, int margin, int space );
-    /** reimplemented from QTextFlow, implements flowing around frames etc. */
+    /** reimplemented from KoTextFlow, implements flowing around frames etc. */
     virtual int adjustRMargin( int yp, int h, int margin, int space );
 
     /** Called by KWTextFrameSet. Implements page breaking, breaking around frames, etc. */
-    int formatVertically( Qt3::QTextParag *parag );
+    int formatVertically( KoTextParag *parag );
 
     /** Make sure this paragraph is formatted
      * If formatting happens, the afterFormatting signal will only be emitted if emitAfterFormatting is true.
      * This prevents re-entrancy if ensureFormatting is called by canRemovePage (from another frameset's
      * slotAfterFormatting) */
-    void ensureFormatted( Qt3::QTextParag * parag, bool emitAfterFormatting = true );
+    void ensureFormatted( KoTextParag * parag, bool emitAfterFormatting = true );
 
     /** The viewmode that was passed to drawContents. Special hook for KWAnchor. Don't use. */
     KWViewMode * currentViewMode() const { return m_currentViewMode; }
@@ -230,13 +230,13 @@ signals:
 protected slots:
     // All those slots are connected to KoTextObject
     void slotAvailableHeightNeeded();
-    void slotAfterFormatting( int bottom, Qt3::QTextParag *lastFormatted, bool* abort );
+    void slotAfterFormatting( int bottom, KoTextParag *lastFormatted, bool* abort );
     void slotNewCommand( KCommand *cmd );
     void slotRepaintChanged();
 
 protected:
     void getMargins( int yp, int h, int* marginLeft, int* marginRight, int* breakBegin, int* breakEnd, int paragLeftMargin = 0 );
-    bool checkVerticalBreak( int & yp, int & h, Qt3::QTextParag * parag, bool linesTogether, int breakBegin, int breakEnd );
+    bool checkVerticalBreak( int & yp, int & h, KoTextParag * parag, bool linesTogether, int breakBegin, int breakEnd );
     void frameResized( KWFrame *theFrame );
     double footerHeaderSizeMax( KWFrame *theFrame );
     QDomElement saveInternal( QDomElement &parentElem, bool saveFrames, bool saveAnchorsFramesets );
@@ -338,9 +338,9 @@ public slots:
 
 protected:
     // Reimplemented from KoTextView
-    virtual void doAutoFormat( QTextCursor* cursor, KoTextParag *parag, int index, QChar ch );
+    virtual void doAutoFormat( KoTextCursor* cursor, KoTextParag *parag, int index, QChar ch );
     virtual bool doIgnoreDoubleSpace(KoTextParag * parag, int index,QChar ch );
-    virtual void doAutoCompletion( QTextCursor* cursor, KoTextParag *parag, int index );
+    virtual void doAutoCompletion( KoTextCursor* cursor, KoTextParag *parag, int index );
 
     virtual void startDrag();
     KWTextDrag * newDrag( QWidget * parent ) const;

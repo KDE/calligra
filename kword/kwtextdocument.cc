@@ -34,7 +34,6 @@ KWTextDocument::KWTextDocument( KoZoomHandler * zoomHandler )
       m_textfs( 0 )
 {
     init();
-    setWidth( 1000 );
 }
 
 void KWTextDocument::init()
@@ -47,7 +46,7 @@ KWTextDocument::~KWTextDocument()
 {
 }
 
-Qt3::QTextParag * KWTextDocument::createParag( Qt3::QTextDocument *d, Qt3::QTextParag *pr, Qt3::QTextParag *nx, bool updateIds )
+KoTextParag * KWTextDocument::createParag( KoTextDocument *d, KoTextParag *pr, KoTextParag *nx, bool updateIds )
 {
     return new KWTextParag( static_cast<KoTextDocument *>(d), static_cast<KoTextParag *>(pr), static_cast<KoTextParag *>(nx), updateIds );
 }

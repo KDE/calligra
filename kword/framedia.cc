@@ -24,7 +24,7 @@
 #include "defs.h"
 #include "kwcommand.h"
 #include "kwtableframeset.h"
-#include <kotextdocument.h>
+//#include <kotextdocument.h>
 
 #include <klocale.h>
 #include <kiconloader.h>
@@ -989,7 +989,7 @@ void KWFrameDia::initComboStyleBrush()
         }
         overwriteColor->setChecked(allFramesSame);
     }
-    
+
 
     switch ( newBrushStyle.style() )
     {
@@ -1450,7 +1450,7 @@ bool KWFrameDia::applyChanges()
             if(tmpBrush!=frame->backgroundColor()) {
                 frame->setBackgroundColor(tmpBrush);
                 doc->repaintAllViews();
-            } 
+            }
         } else if(overwriteColor->isChecked()) {
             for(KWFrame *f=allFrames.first();f; f=allFrames.next())
                 f->setBackgroundColor(tmpBrush);
@@ -1637,7 +1637,7 @@ void KWFrameDia::connectListSelected( QListViewItem *item )
 bool KWFrameDia::mayDeleteFrameSet(KWTextFrameSet *fs) {
     if(fs==0) return true;
     if(fs->getNumFrames() > 1) return true;
-    Qt3::QTextParag * parag = fs->textDocument()->firstParag();
+    KoTextParag * parag = fs->textDocument()->firstParag();
     if(parag==0) return true;
     bool isEmpty = parag->next() == 0L && parag->length() == 1;
     if ( !isEmpty ) {

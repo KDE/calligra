@@ -34,8 +34,6 @@ DESCRIPTION
 #include <qstring.h>
 #include <qrichtext_p.h>
 
-using namespace Qt3;
-
 class KWDocument;
 class KWTableFrameSetEdit;
 class QPainter;

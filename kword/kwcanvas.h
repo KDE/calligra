@@ -36,14 +36,10 @@ class KWTextFrameSet;
 class KWTableFrameSet;
 class KWFrameMoveCommand;
 class KWViewMode;
-
-namespace Qt3 {
-class QTextCursor;
-class QTextParag;
-class QTextFormat;
-class QTextDocument;
-}
-using namespace Qt3;
+class KoTextCursor;
+class KoTextParag;
+class KoTextFormat;
+class KoTextDocument;
 class QTimer;
 class KWGUI;
 class KWStyle;

@@ -1391,19 +1391,19 @@ void KWView::showFormat( const KoTextFormat &currentFormat )
 
     switch(currentFormat.vAlign())
       {
-      case QTextFormat::AlignSuperScript:
+      case KoTextFormat::AlignSuperScript:
         {
           actionFormatSub->setChecked( false );
           actionFormatSuper->setChecked( true );
           break;
         }
-      case QTextFormat::AlignSubScript:
+      case KoTextFormat::AlignSubScript:
         {
           actionFormatSub->setChecked( true );
           actionFormatSuper->setChecked( false );
           break;
         }
-      case QTextFormat::AlignNormal:
+      case KoTextFormat::AlignNormal:
       default:
         {
           actionFormatSub->setChecked( false );
@@ -1438,7 +1438,7 @@ void KWView::showAlign( int align ) {
         case Qt::AlignRight:
             actionFormatAlignRight->setChecked( TRUE );
             break;
-        case Qt::AlignJustify: // Make this Qt:AlignJustify after the merge with Qt3
+        case Qt::AlignJustify:
             actionFormatAlignBlock->setChecked( TRUE );
             break;
     }
@@ -1897,7 +1897,7 @@ void KWView::deleteFrame( bool _warning )
                 return;
 
             KoTextDocument * textdoc = textfs->textDocument();
-            Qt3::QTextParag * parag = textdoc->firstParag();
+            KoTextParag * parag = textdoc->firstParag();
             if ( parag && parag->string()->length() > 0 )
             {
                 int result = KMessageBox::warningContinueCancel(
@@ -3177,7 +3177,7 @@ void KWView::textStyleSelected( int index )
             {
                 KoTextObject *textObject = ((KWTextFrameSet*)curFrameSet)->textObject();
                 textObject->textDocument()->selectAll( KoTextDocument::Temp );
-                KCommand *cmd = textObject->applyStyle( 0L, m_doc->styleCollection()->styleAt( index ), KoTextDocument::Temp, KoParagLayout::All, QTextFormat::Format, true, true );
+                KCommand *cmd = textObject->applyStyle( 0L, m_doc->styleCollection()->styleAt( index ), KoTextDocument::Temp, KoParagLayout::All, KoTextFormat::Format, true, true );
                 textObject->textDocument()->removeSelection( KoTextDocument::Temp );
                 if (cmd)
                     globalCmd->addCommand( cmd );
@@ -4072,7 +4072,7 @@ void KWView::spellCheckerMisspelling( const QString &old, const QStringList &, u
     KWTextFrameSet * fs = m_spell.textFramesets.at( m_spell.spellCurrFrameSetNum ) ;
     Q_ASSERT( fs );
     if ( !fs ) return;
-    Qt3::QTextParag * p = fs->textDocument()->firstParag();
+    KoTextParag * p = fs->textDocument()->firstParag();
     while ( p && (int)pos >= p->length() )
     {
         pos -= p->length();
@@ -4091,7 +4091,7 @@ void KWView::spellCheckerCorrected( const QString &old, const QString &corr, uns
     KWTextFrameSet * fs = m_spell.textFramesets.at( m_spell.spellCurrFrameSetNum ) ;
     Q_ASSERT( fs );
     if ( !fs ) return;
-    Qt3::QTextParag * p = fs->textDocument()->firstParag();
+    KoTextParag * p = fs->textDocument()->firstParag();
     while ( p && (int)pos >= p->length() )
     {
         pos -= p->length();
@@ -4101,7 +4101,7 @@ void KWView::spellCheckerCorrected( const QString &old, const QString &corr, uns
     if ( !p ) return;
     fs->highlightPortion( p, pos, old.length(), m_gui->canvasWidget() );
 
-    QTextCursor cursor( fs->textDocument() );
+    KoTextCursor cursor( fs->textDocument() );
     cursor.setParag( p );
     cursor.setIndex( pos );
     if(!m_spell.macroCmdSpellCheck)

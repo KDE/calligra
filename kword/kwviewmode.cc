@@ -18,7 +18,7 @@
 */
 
 #include "kwviewmode.h"
-#include <kotextdocument.h>
+//#include <kotextdocument.h>
 #include "kwdoc.h"
 #include <kdebug.h>
 #include <kwtextframeset.h>

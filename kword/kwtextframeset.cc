@@ -75,7 +75,7 @@ public:
     KWTextFormatter( KWTextFrameSet *textfs ) : m_textfs( textfs ) {}
     virtual ~KWTextFormatter() {}
 
-    virtual int formatVertically( Qt3::QTextDocument*, Qt3::QTextParag* parag )
+    virtual int formatVertically( KoTextDocument*, KoTextParag* parag )
     {
         return m_textfs->formatVertically( parag );
     }
@@ -106,8 +106,8 @@ KWTextFrameSet::KWTextFrameSet( KWDocument *_doc, const QString & name )
 
     connect( m_textobj, SIGNAL( availableHeightNeeded() ),
              SLOT( slotAvailableHeightNeeded() ) );
-    connect( m_textobj, SIGNAL( afterFormatting( int, Qt3::QTextParag*, bool* ) ),
-             SLOT( slotAfterFormatting( int, Qt3::QTextParag*, bool* ) ) );
+    connect( m_textobj, SIGNAL( afterFormatting( int, KoTextParag*, bool* ) ),
+             SLOT( slotAfterFormatting( int, KoTextParag*, bool* ) ) );
     connect( m_textobj, SIGNAL( newCommand( KCommand * ) ),
              SLOT( slotNewCommand( KCommand * ) ) );
     connect( m_textobj, SIGNAL( repaintChanged( KoTextObject* ) ),
@@ -352,7 +352,7 @@ void KWTextFrameSet::drawFrame( KWFrame *theFrame, QPainter *painter, const QRec
     m_currentDrawnFrame = theFrame;
     // Update variables for each frame (e.g. for page-number)
     // If more than KWPgNumVariable need this functionality, create an intermediary base class
-    QPtrListIterator<Qt3::QTextCustomItem> cit( textDocument()->allCustomItems() );
+    QPtrListIterator<KoTextCustomItem> cit( textDocument()->allCustomItems() );
     for ( ; cit.current() ; ++cit )
     {
         KWPgNumVariable * var = dynamic_cast<KWPgNumVariable *>( cit.current() );
@@ -369,9 +369,9 @@ void KWTextFrameSet::drawFrame( KWFrame *theFrame, QPainter *painter, const QRec
 
     // Do we draw a cursor ?
     bool drawCursor = edit!=0L;
-    QTextCursor * cursor = edit ? static_cast<KWTextFrameSetEdit *>(edit)->cursor() : 0;
+    KoTextCursor * cursor = edit ? static_cast<KWTextFrameSetEdit *>(edit)->cursor() : 0;
 
-    Qt3::QTextParag * lastFormatted = textDocument()->drawWYSIWYG(
+    KoTextParag * lastFormatted = textDocument()->drawWYSIWYG(
         painter, r.x(), r.y(), r.width(), r.height(),
         cg, kWordDocument(), // TODO view's zoom handler
         onlyChanged, drawCursor, cursor, resetChanged,m_doc->backgroundSpellCheckEnabled(),m_doc->viewFormattingChars() );
@@ -382,8 +382,8 @@ void KWTextFrameSet::drawFrame( KWFrame *theFrame, QPainter *painter, const QRec
     if ( onlyChanged && resetChanged )
     {
         // Finding the "last parag of the frame" is a bit tricky.
-        // It's usually the one before lastFormatted, except if it's actually lastParag :}  [see QTextDocument::draw]
-        Qt3::QTextParag * lastDrawn = lastFormatted->prev();
+        // It's usually the one before lastFormatted, except if it's actually lastParag :}  [see KoTextDocument::draw]
+        KoTextParag * lastDrawn = lastFormatted->prev();
         if ( lastFormatted == textDocument()->lastParag() && ( !lastDrawn || m_doc->layoutUnitToPixelY( lastDrawn->rect().bottom() ) < r.bottom() ) )
             lastDrawn = lastFormatted;
 
@@ -419,7 +419,7 @@ void KWTextFrameSet::drawFrame( KWFrame *theFrame, QPainter *painter, const QRec
     m_currentDrawnFrame = 0L;
 }
 
-void KWTextFrameSet::drawCursor( QPainter *p, QTextCursor *cursor, bool cursorVisible, KWCanvas *canvas, KWFrame *theFrame )
+void KWTextFrameSet::drawCursor( QPainter *p, KoTextCursor *cursor, bool cursorVisible, KWCanvas *canvas, KWFrame *theFrame )
 {
     // This redraws the paragraph where the cursor is - with a small clip region around the cursor
     m_currentDrawnCanvas = canvas;
@@ -546,7 +546,7 @@ void KWTextFrameSet::slotRepaintChanged()
 int KWTextFrameSet::paragraphs()
 {
     int paragraphs = 0;
-    Qt3::QTextParag * parag = textDocument()->firstParag();
+    KoTextParag * parag = textDocument()->firstParag();
     for ( ; parag ; parag = parag->next() )
         paragraphs++;
     return paragraphs;
@@ -555,7 +555,7 @@ int KWTextFrameSet::paragraphs()
 int KWTextFrameSet::paragraphsSelected()
 {
     int paragraphs = 0;
-    Qt3::QTextParag *parag = textDocument()->firstParag();
+    KoTextParag *parag = textDocument()->firstParag();
     for ( ; parag ; parag = parag->next() ) {
         if ( parag->hasSelection( KoTextDocument::Standard ) )
             paragraphs++;
@@ -582,7 +582,7 @@ bool KWTextFrameSet::statistics( QProgressDialog *progress, ulong & charsWithSpa
 
     QString s;
     kdDebug() << "KWTextFrameSet::statistics avant "<<this << endl;
-    Qt3::QTextParag * parag = textDocument()->firstParag();
+    KoTextParag * parag = textDocument()->firstParag();
     for ( ; parag ; parag = parag->next() )
     {
         progress->setProgress(progress->progress()+1);
@@ -848,7 +848,7 @@ int KWTextFrameSet::adjustLMargin( int yp, int h, int margin, int space )
 #ifdef DEBUG_MARGINS
     kdDebugBody(32002) << "KWTextFrameSet::adjustLMargin marginLeft=" << marginLeft << endl;
 #endif
-    return QTextFlow::adjustLMargin( yp, h, margin + marginLeft, space );
+    return KoTextFlow::adjustLMargin( yp, h, margin + marginLeft, space );
 }
 
 int KWTextFrameSet::adjustRMargin( int yp, int h, int margin, int space )
@@ -858,11 +858,11 @@ int KWTextFrameSet::adjustRMargin( int yp, int h, int margin, int space )
 #ifdef DEBUG_MARGINS
     kdDebugBody(32002) << "KWTextFrameSet::adjustRMargin marginRight=" << marginRight << endl;
 #endif
-    return QTextFlow::adjustRMargin( yp, h, margin + marginRight, space );
+    return KoTextFlow::adjustRMargin( yp, h, margin + marginRight, space );
 }
 
 // helper for formatVertically
-bool KWTextFrameSet::checkVerticalBreak( int & yp, int & h, Qt3::QTextParag * parag, bool linesTogether, int breakBegin, int breakEnd )
+bool KWTextFrameSet::checkVerticalBreak( int & yp, int & h, KoTextParag * parag, bool linesTogether, int breakBegin, int breakEnd )
 {
     // We need the "+1" here because when skipping a frame on top, we want to be _under_
     // its bottom. Without the +1, we hit the frame again on the next adjustLMargin call.
@@ -881,7 +881,7 @@ bool KWTextFrameSet::checkVerticalBreak( int & yp, int & h, Qt3::QTextParag * pa
         }
         else // Line-level breaking
         {
-            QMap<int, QTextParagLineStart*>& lineStarts = parag->lineStartList();
+            QMap<int, KoTextParagLineStart*>& lineStarts = parag->lineStartList();
 #ifdef DEBUG_FLOW
             kdDebug(32002) << "checkVerticalBreak parag " << parag->paragId()
                            << ". lineStarts has " << lineStarts.count()
@@ -889,10 +889,10 @@ bool KWTextFrameSet::checkVerticalBreak( int & yp, int & h, Qt3::QTextParag * pa
 #endif
             int dy = 0;
             int line = 0;
-            QMap<int, QTextParagLineStart*>::Iterator it = lineStarts.begin();
+            QMap<int, KoTextParagLineStart*>::Iterator it = lineStarts.begin();
             for ( ; it != lineStarts.end() ; ++it, ++line )
             {
-                QTextParagLineStart * ls = it.data();
+                KoTextParagLineStart * ls = it.data();
                 Q_ASSERT( ls );
                 int y = parag->rect().y() + ls->y;
 #ifdef DEBUG_FLOW
@@ -944,7 +944,7 @@ bool KWTextFrameSet::checkVerticalBreak( int & yp, int & h, Qt3::QTextParag * pa
     return false;
 }
 
-int KWTextFrameSet::formatVertically( Qt3::QTextParag * _parag )
+int KWTextFrameSet::formatVertically( KoTextParag * _parag )
 {
     QRect paragRect( _parag->rect() );
     int yp = paragRect.y();
@@ -1083,7 +1083,7 @@ int KWTextFrameSet::formatVertically( Qt3::QTextParag * _parag )
     {
         if ( parag->hardFrameBreakAfter() )
         {
-            QTextFormat * lastFormat = parag->at( parag->length() - 1 )->format();
+            KoTextFormat * lastFormat = parag->at( parag->length() - 1 )->format();
             // keep in sync with KWTextFrameSet::formatVertically
             QString str = i18n( "--- Frame Break ---" );
             int width = 0;
@@ -1093,7 +1093,7 @@ int KWTextFrameSet::formatVertically( Qt3::QTextParag * _parag )
         }
         else if ( parag->lineStartList().count() == 1 ) // don't use lines() here, parag not formatted yet
         {
-            QTextFormat * lastFormat = parag->at( parag->length() - 1 )->format();
+            KoTextFormat * lastFormat = parag->at( parag->length() - 1 )->format();
             parag->setWidth( parag->rect().width() + lastFormat->width('x') );
         }
     }
@@ -1440,7 +1440,7 @@ void KWTextFrameSet::setVisible(bool visible)
 
 void KWTextFrameSet::setInlineFramesVisible(bool visible)
 {
-    QPtrListIterator<Qt3::QTextCustomItem> cit( textDocument()->allCustomItems() );
+    QPtrListIterator<KoTextCustomItem> cit( textDocument()->allCustomItems() );
     for ( ; cit.current() ; ++cit )
     {
       KWAnchor *anc = dynamic_cast<KWAnchor *>( cit.current() );
@@ -1457,7 +1457,7 @@ void KWTextFrameSet::preparePrinting( QPainter *painter, QProgressDialog *progre
     textDocument()->setWithoutDoubleBuffer( painter != 0 );
 
     textDocument()->formatCollection()->setPainter( painter );
-    Qt3::QTextParag *parag = textDocument()->firstParag();
+    KoTextParag *parag = textDocument()->firstParag();
     while ( parag ) {
         parag->invalidate( 0 );
         parag->setPainter( painter, true );
@@ -1480,14 +1480,14 @@ void KWTextFrameSet::slotNewCommand( KCommand *cmd )
     m_doc->addCommand( cmd );
 }
 
-void KWTextFrameSet::ensureFormatted( Qt3::QTextParag * parag, bool emitAfterFormatting )
+void KWTextFrameSet::ensureFormatted( KoTextParag * parag, bool emitAfterFormatting )
 {
     if (!isVisible())
         return;
     m_textobj->ensureFormatted( parag, emitAfterFormatting );
 }
 
-void KWTextFrameSet::slotAfterFormatting( int bottom, Qt3::QTextParag *lastFormatted, bool* abort )
+void KWTextFrameSet::slotAfterFormatting( int bottom, KoTextParag *lastFormatted, bool* abort )
 {
     int availHeight = availableHeight();
     if ( ( bottom > availHeight ) ||   // this parag is already off page
@@ -1765,7 +1765,7 @@ void KWTextFrameSet::frameResized( KWFrame *theFrame )
 
 bool KWTextFrameSet::isFrameEmpty( KWFrame * theFrame )
 {
-    Qt3::QTextParag * lastParag = textDocument()->lastParag();
+    KoTextParag * lastParag = textDocument()->lastParag();
     ensureFormatted( lastParag, false );
     int bottom = lastParag->rect().top() + lastParag->rect().height();
 
@@ -1846,7 +1846,7 @@ void KWTextFrameSet::updateViewArea( QWidget * w, const QPoint & nPointBottom )
     m_textobj->formatMore();
 }
 
-KCommand * KWTextFrameSet::setPageBreakingCommand( QTextCursor * cursor, int pageBreaking )
+KCommand * KWTextFrameSet::setPageBreakingCommand( KoTextCursor * cursor, int pageBreaking )
 {
     if ( !textDocument()->hasSelection( KoTextDocument::Standard ) &&
          static_cast<KWTextParag *>(cursor->parag())->pageBreaking() == pageBreaking )
@@ -1864,8 +1864,8 @@ KCommand * KWTextFrameSet::setPageBreakingCommand( QTextCursor * cursor, int pag
     }
     else
     {
-        Qt3::QTextParag *start = textDocument()->selectionStart( KoTextDocument::Standard );
-        Qt3::QTextParag *end = textDocument()->selectionEnd( KoTextDocument::Standard );
+        KoTextParag *start = textDocument()->selectionStart( KoTextDocument::Standard );
+        KoTextParag *end = textDocument()->selectionEnd( KoTextDocument::Standard );
         m_textobj->setLastFormattedParag( start );
         for ( ; start && start != end->next() ; start = start->next() )
             static_cast<KWTextParag *>(start)->setPageBreaking( pageBreaking );
@@ -1888,7 +1888,7 @@ KCommand * KWTextFrameSet::setPageBreakingCommand( QTextCursor * cursor, int pag
     return new KoTextCommand( m_textobj, /*cmd, */i18n("Change Paragraph Attribute") );
 }
 
-KCommand * KWTextFrameSet::pasteKWord( QTextCursor * cursor, const QCString & data, bool removeSelected )
+KCommand * KWTextFrameSet::pasteKWord( KoTextCursor * cursor, const QCString & data, bool removeSelected )
 {
     // Having data as a QCString instead of a QByteArray seems to fix the trailing 0 problem
     // I tried using QDomDocument::setContent( QByteArray ) but that leads to parse error at the end
@@ -1921,18 +1921,18 @@ KCommand * KWTextFrameSet::pasteKWord( QTextCursor * cursor, const QCString & da
     return macroCmd;
 }
 
-void KWTextFrameSet::insertTOC( QTextCursor * cursor )
+void KWTextFrameSet::insertTOC( KoTextCursor * cursor )
 {
     m_textobj->emitHideCursor();
     KMacroCommand * macroCmd = new KMacroCommand( i18n("Insert Table Of Contents") );
 
     // Remove old TOC
 
-    QTextCursor *cur= KWInsertTOCCommand::removeTOC( this, cursor, macroCmd );
+    KoTextCursor *cur= KWInsertTOCCommand::removeTOC( this, cursor, macroCmd );
 
     // Insert new TOC
 
-    QTextCommand * cmd = new KWInsertTOCCommand( this,cur ? cur->parag(): cursor->parag() );
+    KoTextDocCommand * cmd = new KWInsertTOCCommand( this,cur ? cur->parag(): cursor->parag() );
     textDocument()->addCommand( cmd );
     macroCmd->addCommand( new KoTextCommand( m_textobj, QString::null ) );
     *cursor = *( cmd->execute( cursor ) );
@@ -1947,7 +1947,7 @@ void KWTextFrameSet::insertTOC( QTextCursor * cursor )
     m_doc->addCommand( macroCmd );
 }
 
-void KWTextFrameSet::insertFrameBreak( QTextCursor *cursor )
+void KWTextFrameSet::insertFrameBreak( KoTextCursor *cursor )
 {
     clearUndoRedoInfo();
     KMacroCommand* macroCmd = new KMacroCommand( i18n( "Insert Break After Paragraph" ) );
@@ -1964,7 +1964,7 @@ void KWTextFrameSet::insertFrameBreak( QTextCursor *cursor )
     m_textobj->emitShowCursor();
 }
 
-QRect KWTextFrameSet::paragRect( Qt3::QTextParag * parag ) const
+QRect KWTextFrameSet::paragRect( KoTextParag * parag ) const
 {
     // ## Warning. Imagine a paragraph cut in two pieces (at the line-level),
     // between two columns. A single rect in internal coords, but two rects in
@@ -1979,9 +1979,9 @@ QRect KWTextFrameSet::paragRect( Qt3::QTextParag * parag ) const
     return QRect( topLeft, bottomRight );
 }
 
-void KWTextFrameSet::findPosition( const KoPoint &dPoint, Qt3::QTextParag * & parag, int & index )
+void KWTextFrameSet::findPosition( const KoPoint &dPoint, KoTextParag * & parag, int & index )
 {
-    QTextCursor cursor( textDocument() );
+    KoTextCursor cursor( textDocument() );
 
     QPoint iPoint;
     if ( documentToInternal( dPoint, iPoint ) )
@@ -2003,7 +2003,7 @@ KCommand * KWTextFrameSet::deleteAnchoredFrame( KWAnchor * anchor )
 {
     kdDebug() << "KWTextFrameSet::deleteAnchoredFrame anchor->index=" << anchor->index() << endl;
     Q_ASSERT( anchor );
-    QTextCursor c( textDocument() );
+    KoTextCursor c( textDocument() );
     c.setParag( anchor->paragraph() );
     c.setIndex( anchor->index() );
 
@@ -2026,7 +2026,7 @@ QString KWTextFrameSet::selectedText() const
     return m_textobj->selectedText();
 }
 
-void KWTextFrameSet::highlightPortion( Qt3::QTextParag * parag, int index, int length, KWCanvas * canvas )
+void KWTextFrameSet::highlightPortion( KoTextParag * parag, int index, int length, KWCanvas * canvas )
 {
     m_textobj->highlightPortion( parag, index, length );
     QRect expose = canvas->viewMode()->normalToView( paragRect( parag ) );
@@ -2076,7 +2076,7 @@ KCommand *KWTextFrameSet::setChangeCaseOfTextCommand(KoChangeCaseDia::TypeOfCase
 {
     KoTextDocument *textdoc = m_textobj->textDocument();
     textdoc->selectAll( KoTextDocument::Standard );
-    QTextCursor *cursor = new QTextCursor( textDocument() );
+    KoTextCursor *cursor = new KoTextCursor( textDocument() );
     KCommand* cmd = m_textobj->changeCaseOfText(cursor, _type);
     textdoc->removeSelection( KoTextDocument::Standard );
     delete cursor;
@@ -2205,7 +2205,7 @@ bool KWTextFrameSetEdit::doIgnoreDoubleSpace(KoTextParag * parag,
 }
 
 
-void KWTextFrameSetEdit::doAutoFormat( QTextCursor* cursor, KoTextParag *parag, int index, QChar ch )
+void KWTextFrameSetEdit::doAutoFormat( KoTextCursor* cursor, KoTextParag *parag, int index, QChar ch )
 {
     if( textFrameSet()->kWordDocument()->allowAutoFormat() )
     {
@@ -2215,7 +2215,7 @@ void KWTextFrameSetEdit::doAutoFormat( QTextCursor* cursor, KoTextParag *parag, 
     }
 }
 
-void KWTextFrameSetEdit::doAutoCompletion( QTextCursor* cursor, KoTextParag *parag, int index )
+void KWTextFrameSetEdit::doAutoCompletion( KoTextCursor* cursor, KoTextParag *parag, int index )
 {
     if( textFrameSet()->kWordDocument()->allowAutoFormat() )
     {
@@ -2247,8 +2247,8 @@ void KWTextFrameSetEdit::startDrag()
 KWTextDrag * KWTextFrameSetEdit::newDrag( QWidget * parent ) const
 {
     textFrameSet()->unzoom();
-    QTextCursor c1 = textDocument()->selectionStartCursor( KoTextDocument::Standard );
-    QTextCursor c2 = textDocument()->selectionEndCursor( KoTextDocument::Standard );
+    KoTextCursor c1 = textDocument()->selectionStartCursor( KoTextDocument::Standard );
+    KoTextCursor c2 = textDocument()->selectionEndCursor( KoTextDocument::Standard );
 
     QString text;
     QDomDocument domDoc( "PARAGRAPHS" );
@@ -2263,7 +2263,7 @@ KWTextDrag * KWTextFrameSetEdit::newDrag( QWidget * parent ) const
     {
         text += c1.parag()->string()->toString().mid( c1.index() ) + "\n";
         static_cast<KWTextParag *>(c1.parag())->save( elem, c1.index(), c1.parag()->length()-2, true );
-        Qt3::QTextParag *p = c1.parag()->next();
+        KoTextParag *p = c1.parag()->next();
         while ( p && p != c2.parag() ) {
             text += p->string()->toString() + "\n";
             static_cast<KWTextParag *>(p)->save( elem, 0, p->length()-2, true );
@@ -2285,7 +2285,7 @@ KWTextDrag * KWTextFrameSetEdit::newDrag( QWidget * parent ) const
 void KWTextFrameSetEdit::ensureCursorVisible()
 {
     //kdDebug() << "KWTextFrameSetEdit::ensureCursorVisible paragId=" << cursor()->parag()->paragId() << endl;
-    Qt3::QTextParag * parag = cursor()->parag();
+    KoTextParag * parag = cursor()->parag();
     textFrameSet()->ensureFormatted( parag );
     KoTextStringChar *chr = parag->at( cursor()->index() );
     int h = parag->lineHeightOfChar( cursor()->index() );
@@ -2404,7 +2404,7 @@ void KWTextFrameSetEdit::dropEvent( QDropEvent * e, const QPoint & nPoint, const
     if ( frameSet()->kWordDocument()->isReadWrite() && KWTextDrag::canDecode( e ) )
     {
         e->acceptAction();
-        QTextCursor dropCursor( textDocument() );
+        KoTextCursor dropCursor( textDocument() );
         QPoint dropPoint;
         KoPoint dPoint = frameSet()->kWordDocument()->unzoomPoint( nPoint );
         if ( !textFrameSet()->documentToInternal( dPoint, dropPoint ) )
@@ -2506,7 +2506,7 @@ void KWTextFrameSetEdit::pgUpKeyPressed()
 #if 0
     // One idea would be: move up until first-visible-paragraph wouldn't be visible anymore
     // First find the first-visible paragraph...
-    Qt3::QTextParag *firstVis = m_cursor->parag();
+    KoTextParag *firstVis = m_cursor->parag();
     while ( firstVis && crect.intersects( s->rect() ) )
         firstVis = firstVis->prev();
     if ( !firstVis )
@@ -2516,7 +2516,7 @@ void KWTextFrameSetEdit::pgUpKeyPressed()
 #endif
     // Go up of 90% of crect.height()
     int h = frameSet()->kWordDocument()->pixelToLayoutUnitY( (int)( (double)crect.height() * 0.9 ) );
-    Qt3::QTextParag *s = textView()->cursor()->parag();
+    KoTextParag *s = textView()->cursor()->parag();
     int y = s->rect().y();
     while ( s ) {
         if ( y - s->rect().y() >= h )
@@ -2539,8 +2539,8 @@ void KWTextFrameSetEdit::pgDownKeyPressed()
     // Go down of 90% of crect.height()
     int h = frameSet()->kWordDocument()->pixelToLayoutUnitY( (int)( (double)crect.height() * 0.9 ) );
 
-    QTextCursor *cursor = textView()->cursor();
-    Qt3::QTextParag *s = cursor->parag();
+    KoTextCursor *cursor = textView()->cursor();
+    KoTextParag *s = cursor->parag();
     int y = s->rect().y();
     while ( s ) {
         if ( s->rect().y() - y >= h )

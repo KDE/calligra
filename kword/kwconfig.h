@@ -62,11 +62,9 @@ private:
     KDoubleNumInput* gridX,*gridY;
     KDoubleNumInput* indent;
     KIntNumInput* recentFiles;
-    KIntNumInput* autoSave;
-    QCheckBox *showRuler, *showStatusBar;
+    QCheckBox *showRuler, *showStatusBar, *pgUpDownMovesCaret;
     int oldNbRecentFiles;
     KConfig* config;
-    int oldAutoSaveValue;
     KIntNumInput *m_nbPagePerRow;
 };
 
@@ -84,8 +82,6 @@ private:
     int m_oldUnit;
     KIntNumInput* m_undoRedoLimit;
     int m_oldNbRedo;
-    int m_oldStartingPage;
-    QLineEdit* m_variableNumberOffset;
     QCheckBox* m_displayLink, *m_displayComment;
 };
 
@@ -101,11 +97,16 @@ public slots:
 private:
     KWView* m_pView;
     KConfig* config;
-    QComboBox *m_unit;
     QFont *font;
     QLabel *fontName;
 
     KDoubleNumInput* columnSpacing;
+
+    KIntNumInput* autoSave;
+    int oldAutoSaveValue;
+
+    int m_oldStartingPage;
+    QLineEdit* m_variableNumberOffset;
 };
 
 class KWConfig : public KDialogBase

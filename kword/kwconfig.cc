@@ -63,7 +63,7 @@ KWConfig::KWConfig( KWView* parent )
                               BarIcon("miscconfig", KIcon::SizeMedium) );
   m_miscPage=new ConfigureMiscPage(parent, page3);
 
-  QVBox *page4 = addVBoxPage( i18n("Document"), i18n("Document defaults"),
+  QVBox *page4 = addVBoxPage( i18n("Document"), i18n("Document"),
                               BarIcon("documentdefaults", KIcon::SizeMedium) );
 
   m_defaultDocPage=new ConfigureDefaultDocPage(parent, page4);
@@ -215,8 +215,8 @@ ConfigureInterfacePage::ConfigureInterfacePage( KWView *_view, QVBox *box, char 
     double ptIndent = MM_TO_POINT(10.0);
     bool bShowRuler=true;
     bool oldShowStatusBar = true;
+    bool oldPgUpDownMovesCaret = false;
     oldNbRecentFiles=10;
-    oldAutoSaveValue=KoDocument::defaultAutoSave() / 60;
     int nbPagePerRow=4;
     if( config->hasGroup("Interface") )
     {
@@ -224,11 +224,11 @@ ConfigureInterfacePage::ConfigureInterfacePage( KWView *_view, QVBox *box, char 
         ptGridX=config->readDoubleNumEntry("GridX", ptGridX);
         ptGridY=config->readDoubleNumEntry("GridY", ptGridY);
         ptIndent = config->readDoubleNumEntry("Indent", ptIndent);
-        oldNbRecentFiles=config->readNumEntry("NbRecentFile",oldNbRecentFiles);
-        bShowRuler=config->readBoolEntry("Rulers",true);
-        oldAutoSaveValue=config->readNumEntry("AutoSave",oldAutoSaveValue);
-        nbPagePerRow=config->readNumEntry("nbPagePerRow",nbPagePerRow);
-        oldShowStatusBar = config->readBoolEntry( "ShowStatusBar" , true );
+        oldNbRecentFiles=config->readNumEntry("NbRecentFile", oldNbRecentFiles);
+        bShowRuler=config->readBoolEntry("Rulers", true);
+        nbPagePerRow=config->readNumEntry("nbPagePerRow", nbPagePerRow);
+        oldShowStatusBar = config->readBoolEntry( "ShowStatusBar", true );
+        oldPgUpDownMovesCaret = config->readBoolEntry( "PgUpDownMovesCaret", false );
     }
 
 
@@ -242,20 +242,18 @@ ConfigureInterfacePage::ConfigureInterfacePage( KWView *_view, QVBox *box, char 
     showStatusBar = new QCheckBox(i18n("Show status bar"),gbInterfaceGroup);
     showStatusBar->setChecked(oldShowStatusBar);
 
-    autoSave = new KIntNumInput( oldAutoSaveValue, gbInterfaceGroup );
-    autoSave->setRange(0, 60, 1);
-    autoSave->setLabel(i18n("Auto save every (min):"));
-    QWhatsThis::add( autoSave, i18n("A backup copy of the current document is created when a change "
-                    "has been made. The interval used to create backup documents is set here.") );
-    autoSave->setSpecialValueText(i18n("No auto save"));
-    autoSave->setSuffix(i18n(" min"));
+    pgUpDownMovesCaret = new QCheckBox(i18n("PageUp/PageDown moves the caret"),gbInterfaceGroup);
+    pgUpDownMovesCaret->setChecked(oldPgUpDownMovesCaret);
+    QWhatsThis::add( pgUpDownMovesCaret, i18n(
+                         "If this option is enabled, the PageUp and PageDown keys "
+                         "move the text caret, as do other KDE applications. "
+                         "If it is disabled, they move the scrollbars, as do most other Word Processors." ) );
 
     recentFiles=new KIntNumInput( oldNbRecentFiles, gbInterfaceGroup );
     recentFiles->setRange(1, 20, 1);
     recentFiles->setLabel(i18n("Number of recent files:"));
     QWhatsThis::add( recentFiles, i18n("The amount of files remembered in the file open dialog and in the "
                     "recent files menu item") );
-
 
     QString suffix = KoUnit::unitName( unit ).prepend(' ');
     gridX=new KDoubleNumInput( KoUnit::ptToUnit( ptGridX, unit ), gbInterfaceGroup );
@@ -300,7 +298,6 @@ void ConfigureInterfacePage::apply()
     double valY=KoUnit::ptFromUnit( gridY->value(), doc->getUnit() );
     int nbRecent=recentFiles->value();
     bool ruler=showRuler->isChecked();
-
     bool statusBar=showStatusBar->isChecked();
 
     config->setGroup( "Interface" );
@@ -343,17 +340,17 @@ void ConfigureInterfacePage::apply()
         refreshGUI=true;
     }
 
+    bool b = pgUpDownMovesCaret->isChecked();
+    if ( b != doc->pgUpDownMovesCaret() )
+    {
+        config->writeEntry( "PgUpDownMovesCaret", b );
+        doc->setPgUpDownMovesCaret( b );
+    }
+
     if( refreshGUI )
         doc->reorganizeGUI();
 
 
-    int autoSaveVal=autoSave->value();
-    if(autoSaveVal!=oldAutoSaveValue)
-    {
-        config->writeEntry( "AutoSave", autoSaveVal );
-        doc->setAutoSave(autoSaveVal*60);
-        oldAutoSaveValue=autoSaveVal;
-    }
     int nbPageByRow=m_nbPagePerRow->value();
     if(nbPageByRow!=doc->nbPagePerRow())
     {
@@ -375,7 +372,7 @@ void ConfigureInterfacePage::slotDefault()
     recentFiles->setValue(10);
     showRuler->setChecked(true);
     showStatusBar->setChecked(true);
-    autoSave->setValue(KoDocument::defaultAutoSave()/60);
+    pgUpDownMovesCaret->setChecked(false);
 }
 
 
@@ -433,14 +430,7 @@ ConfigureMiscPage::ConfigureMiscPage( KWView *_view, QVBox *box, char *name )
     QWhatsThis::add( m_undoRedoLimit, i18n("Limit the amount of undo/redo actions remembered to save "
                 "memory") );
 
-    new QLabel(i18n("Starting page number:"),gbMiscGroup);
-
-    KWDocument * doc = m_pView->kWordDocument();
-    m_oldStartingPage=doc->getVariableCollection()->variableSetting()->startingPage();
-    m_variableNumberOffset=new QLineEdit(gbMiscGroup);
-    m_variableNumberOffset->setValidator(new KIntValidator(0,9999,m_variableNumberOffset));
-    m_variableNumberOffset->setText(QString::number(m_oldStartingPage));
-
+    KWDocument* doc = m_pView->kWordDocument();
     m_displayLink=new QCheckBox(i18n("Displays link"),gbMiscGroup);
     m_displayLink->setChecked(doc->getVariableCollection()->variableSetting()->displayLink());
 
@@ -478,16 +468,7 @@ void ConfigureMiscPage::apply()
         doc->setUndoRedoLimit(newUndo);
         m_oldNbRedo=newUndo;
     }
-    int newStartingPage=m_variableNumberOffset->text().toInt();
     KMacroCommand * macroCmd=0L;
-    if(newStartingPage!=m_oldStartingPage)
-    {
-        macroCmd=new KMacroCommand(i18n("Change starting page number"));
-        KWChangeStartingPageCommand *cmd = new KWChangeStartingPageCommand( i18n("Change starting page number"), doc, m_oldStartingPage,newStartingPage );
-        cmd->execute();
-        macroCmd->addCommand(cmd);
-        m_oldStartingPage=newStartingPage;
-    }
     bool b=m_displayLink->isChecked();
     if(doc->getVariableCollection()->variableSetting()->displayLink()!=b)
     {
@@ -514,7 +495,6 @@ void ConfigureMiscPage::apply()
 void ConfigureMiscPage::slotDefault()
 {
    m_undoRedoLimit->setValue(30);
-   m_variableNumberOffset->setText(QString::number(1));
    m_displayLink->setChecked(true);
    m_displayComment->setChecked(true);
 }
@@ -572,6 +552,34 @@ ConfigureDefaultDocPage::ConfigureDefaultDocPage( KWView *_view, QVBox *box, cha
     fontLayout->addWidget(fontTitle, 0, 0);
     fontLayout->addWidget(fontName, 0, 1);
     fontLayout->addWidget(chooseButton, 0, 2);
+
+
+    QVGroupBox* gbDocumentSettings = new QVGroupBox( i18n("Document settings"), box );
+    gbDocumentSettings->setMargin( 10 );
+    gbDocumentSettings->setInsideSpacing( 5 );
+
+    oldAutoSaveValue=KoDocument::defaultAutoSave() / 60;
+    if( config->hasGroup("Interface") )
+    {
+        config->setGroup( "Interface" );
+        oldAutoSaveValue=config->readNumEntry("AutoSave",oldAutoSaveValue);
+    }
+    autoSave = new KIntNumInput( oldAutoSaveValue, gbDocumentSettings );
+    autoSave->setRange(0, 60, 1);
+    autoSave->setLabel(i18n("Auto save every (min):"));
+    QWhatsThis::add( autoSave, i18n("A backup copy of the current document is created when a change "
+                    "has been made. The interval used to create backup documents is set here.") );
+    autoSave->setSpecialValueText(i18n("No auto save"));
+    autoSave->setSuffix(i18n(" min"));
+
+
+    new QLabel(i18n("Starting page number:"), gbDocumentSettings);
+
+    KWDocument * doc = m_pView->kWordDocument();
+    m_oldStartingPage=doc->getVariableCollection()->variableSetting()->startingPage();
+    m_variableNumberOffset=new QLineEdit(gbDocumentSettings);
+    m_variableNumberOffset->setValidator(new KIntValidator(0,9999,m_variableNumberOffset));
+    m_variableNumberOffset->setText(QString::number(m_oldStartingPage));
 }
 
 void ConfigureDefaultDocPage::apply()
@@ -585,11 +593,33 @@ void ConfigureDefaultDocPage::apply()
         doc->setDefaultColumnSpacing(colSpacing);
     }
     config->writeEntry("DefaultFont",font->toString());
+
+    config->setGroup( "Interface" );
+    int autoSaveVal=autoSave->value();
+    if(autoSaveVal!=oldAutoSaveValue)
+    {
+        config->writeEntry( "AutoSave", autoSaveVal );
+        doc->setAutoSave(autoSaveVal*60);
+        oldAutoSaveValue=autoSaveVal;
+    }
+
+    KMacroCommand * macroCmd=0L;
+    int newStartingPage=m_variableNumberOffset->text().toInt();
+    if(newStartingPage!=m_oldStartingPage)
+    {
+        macroCmd=new KMacroCommand(i18n("Change starting page number"));
+        KWChangeStartingPageCommand *cmd = new KWChangeStartingPageCommand( i18n("Change starting page number"), doc, m_oldStartingPage,newStartingPage );
+        cmd->execute();
+        macroCmd->addCommand(cmd);
+        m_oldStartingPage=newStartingPage;
+    }
 }
 
 void ConfigureDefaultDocPage::slotDefault()
 {
    columnSpacing->setValue(KoUnit::ptToUnit( 3, m_pView->kWordDocument()->getUnit() ));
+   autoSave->setValue(KoDocument::defaultAutoSave()/60);
+   m_variableNumberOffset->setText(QString::number(1));
 }
 
 void ConfigureDefaultDocPage::selectNewDefaultFont() {

@@ -2112,7 +2112,16 @@ bool KWCanvas::eventFilter( QObject *o, QEvent *e )
                     // For some reason 'T' doesn't work (maybe kxkb)
                 }
 #endif
-                if ( m_currentFrameSetEdit && m_mouseMode == MM_EDIT && m_doc->isReadWrite() && !m_printing )
+                // By default PgUp and PgDown move the scrollbars and not the caret anymore - this is done here
+                if ( !m_doc->pgUpDownMovesCaret() && ( keyev->key() == Key_PageUp || keyev->key() == Key_PageDown ) )
+                {
+                    if ( keyev->key() == Key_PageUp )
+                        setContentsPos( contentsX(), contentsY() - visibleHeight() );
+                    else // Key_PageDown
+                        setContentsPos( contentsX(), contentsY() + visibleHeight() );
+                }
+                else // normal key processing
+                    if ( m_currentFrameSetEdit && m_mouseMode == MM_EDIT && m_doc->isReadWrite() && !m_printing )
                 {
                     m_currentFrameSetEdit->keyPressEvent( keyev );
                     return TRUE;

@@ -28,19 +28,19 @@
 #include <klocale.h>
 #include <kdebug.h>
 
-KWInsertTOCCommand::KWInsertTOCCommand( KWTextFrameSet * fs, Qt3::QTextParag *parag )
-    : QTextCommand( fs->textDocument() ), m_paragId( parag->paragId() )
+KWInsertTOCCommand::KWInsertTOCCommand( KWTextFrameSet * fs, KoTextParag *parag )
+    : KoTextDocCommand( fs->textDocument() ), m_paragId( parag->paragId() )
 {
 }
 
-QTextCursor * KWInsertTOCCommand::execute( QTextCursor *c )
+KoTextCursor * KWInsertTOCCommand::execute( KoTextCursor *c )
 {
     KWTextDocument * textdoc = static_cast<KWTextDocument *>(doc);
     KWTextFrameSet * fs = textdoc->textFrameSet();
 
     fs->kWordDocument()->renameButtonTOC(true);
 
-    Qt3::QTextParag *insertionParag = textdoc->paragAt( m_paragId );
+    KoTextParag *insertionParag = textdoc->paragAt( m_paragId );
     if ( !insertionParag ) {
         qWarning( "KWInsertTOCCommand:: can't locate parag at %d, last parag: %d", m_paragId, textdoc->lastParag()->paragId() );
         return c;
@@ -115,7 +115,7 @@ QTextCursor * KWInsertTOCCommand::execute( QTextCursor *c )
     return c;
 }
 
-QTextCursor *KWInsertTOCCommand::unexecute( QTextCursor *c )
+KoTextCursor *KWInsertTOCCommand::unexecute( KoTextCursor *c )
 {
     KWTextDocument * textdoc = static_cast<KWTextDocument *>(doc);
     KWTextFrameSet * fs = textdoc->textFrameSet();
@@ -125,15 +125,15 @@ QTextCursor *KWInsertTOCCommand::unexecute( QTextCursor *c )
     return c;
 }
 
-QTextCursor * KWInsertTOCCommand::removeTOC( KWTextFrameSet *fs, QTextCursor *cursor, KMacroCommand * /*macroCmd*/ )
+KoTextCursor * KWInsertTOCCommand::removeTOC( KWTextFrameSet *fs, KoTextCursor *cursor, KMacroCommand * /*macroCmd*/ )
 {
     KoTextDocument * textdoc = fs->textDocument();
     // Remove existing table of contents, based on the style
-    QTextCursor start( textdoc );
-    QTextCursor end( textdoc );
+    KoTextCursor start( textdoc );
+    KoTextCursor end( textdoc );
     // We start from the end, to avoid the parag shifting problem
-    Qt3::QTextParag *p = textdoc->lastParag();
-    QTextCursor *posOfTable=0L;
+    KoTextParag *p = textdoc->lastParag();
+    KoTextCursor *posOfTable=0L;
     KWTextParag *posOfToc=0L;
 
     while ( p )
@@ -164,8 +164,8 @@ QTextCursor * KWInsertTOCCommand::removeTOC( KWTextFrameSet *fs, QTextCursor *cu
 
             // So instead, we do things by hand, and without undo....
 
-            Qt3::QTextParag *prev = p->prev();
-            Qt3::QTextParag *next = p->next();
+            KoTextParag *prev = p->prev();
+            KoTextParag *next = p->next();
             // Move cursor out
             if ( cursor->parag() == p )
                 cursor->setParag( next ? next : prev );
@@ -200,7 +200,7 @@ QTextCursor * KWInsertTOCCommand::removeTOC( KWTextFrameSet *fs, QTextCursor *cu
     textdoc->invalidate();
      if(posOfToc)
      {
-         posOfTable=new QTextCursor( textdoc );
+         posOfTable=new KoTextCursor( textdoc );
          posOfTable->setParag(posOfToc  );
          posOfTable->setIndex( 0 );//start of parag
      }

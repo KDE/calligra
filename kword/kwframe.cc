@@ -626,7 +626,7 @@ void KWFrameSet::setFloating()
         if ( !frameSet || frameSet->frameSetInfo() != FI_BODY )
             continue;
 
-        Qt3::QTextParag* parag = 0L;
+        KoTextParag* parag = 0L;
         int index = 0;
         KoPoint dPoint( frames.first()->topLeft() );
         kdDebug() << "KWFrameSet::setFloating looking for pos at " << dPoint.x() << " " << dPoint.y() << endl;
@@ -664,7 +664,7 @@ void KWFrameSet::setAnchored( KWTextFrameSet* textfs )
 KWAnchor * KWFrameSet::findAnchor( int frameNum )
 {
     Q_ASSERT( m_anchorTextFs );
-    QPtrListIterator<Qt3::QTextCustomItem> cit( m_anchorTextFs->textDocument()->allCustomItems() );
+    QPtrListIterator<KoTextCustomItem> cit( m_anchorTextFs->textDocument()->allCustomItems() );
     for ( ; cit.current() ; ++cit )
     {
         KWAnchor * anchor = dynamic_cast<KWAnchor *>( cit.current() );
@@ -714,7 +714,7 @@ void KWFrameSet::createAnchors( KWTextParag * parag, int index, bool placeHolder
 void KWFrameSet::deleteAnchor( KWAnchor * anchor )
 {
     // Simple deletion, no undo/redo
-    QTextCursor c( m_anchorTextFs->textDocument() );
+    KoTextCursor c( m_anchorTextFs->textDocument() );
     c.setParag( anchor->paragraph() );
     c.setIndex( anchor->index() );
     anchor->setDeleted( true ); // this sets m_anchorTextFs to 0L
@@ -1887,7 +1887,7 @@ KWFormulaFrameSet::KWFormulaFrameSet( KWDocument *_doc, const QString & name )
         // undo/redo creates/deletes anchors
         KWAnchor * anchor = findAnchor( 0 );
         if ( anchor ) {
-            QTextFormat * format = anchor->format();
+            KoTextFormat * format = anchor->format();
             formula->setFontSize( format->font().pointSize() );
         }
     }

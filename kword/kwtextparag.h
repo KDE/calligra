@@ -20,7 +20,8 @@
 #ifndef kwtextparag_h
 #define kwtextparag_h
 
-#include <kotextparag.h>
+//#include <kotextparag.h>
+#include "qrichtext_p.h"
 
 class QDomDocument;
 class KWTextFrameSet;
@@ -79,7 +80,7 @@ public:
     static KoParagLayout loadParagLayout( QDomElement & parentElem, KWDocument *doc, bool useRefStyle );
     static void saveParagLayout( const KoParagLayout& layout, QDomElement & parentElem );
 
-    virtual void join( Qt3::QTextParag *parag );
+    virtual void join( KoTextParag *parag );
 protected:
     virtual void drawFormattingChars( QPainter &painter, const QString &s, int start, int len,
                                       int startX, int lastY, int baseLine, int h, // in LU

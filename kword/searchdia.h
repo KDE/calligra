@@ -30,7 +30,6 @@
 #include <kotextobject.h>
 #include <kotextview.h>
 #include <koSearchDia.h>
-using namespace Qt3;
 
 class KWCanvas;
 class KWTextFrameSet;
@@ -48,9 +47,9 @@ public:
     KWFindReplace( KWCanvas * canvas, KoSearchDia * dialog , KWTextFrameSetEdit*textView ,const QPtrList<KoTextObject> & lstObject);
     KWFindReplace( KWCanvas * parent, KoReplaceDia * dialog, KWTextFrameSetEdit *textView,const QPtrList<KoTextObject> & lstObject);
     ~KWFindReplace();
-    
+
     virtual void emitNewCommand(KCommand *);
-    virtual void highlightPortion(Qt3::QTextParag * parag, int index, int length, KoTextDocument *textdoc);
+    virtual void highlightPortion(KoTextParag * parag, int index, int length, KoTextDocument *textdoc);
 
 private:
     KWCanvas *m_canvas;

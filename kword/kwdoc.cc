@@ -149,6 +149,7 @@ KWDocument::KWDocument(QWidget *parentWidget, const char *widgetName, QObject* p
     m_bDontCheckTitleCase = false;
     m_bShowStatusBar = true;
     m_bAllowAutoFormat = true;
+    m_pgUpDownMovesCaret = false;
 
 
     m_lastViewMode="ModeNormal";
@@ -2712,7 +2713,7 @@ void KWDocument::recalcVariables( int type )
         {
             update = true;
             it.current()->recalc();
-            Qt3::QTextParag * parag = it.current()->paragraph();
+            KoTextParag * parag = it.current()->paragraph();
             if ( parag )
             {
                 kdDebug() << "KWDoc::recalcVariables -> invalidating parag " << parag->paragId() << endl;

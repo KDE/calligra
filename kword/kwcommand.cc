@@ -24,19 +24,18 @@
 #include "kwanchor.h"
 #include <kotextobject.h>
 
-using namespace Qt3;
 #include <kdebug.h>
 
 
 KWPasteTextCommand::KWPasteTextCommand( KoTextDocument *d, int parag, int idx,
                                 const QCString & data )
-    : QTextCommand( d ), m_parag( parag ), m_idx( idx ), m_data( data )
+    : KoTextDocCommand( d ), m_parag( parag ), m_idx( idx ), m_data( data )
 {
 }
 
-QTextCursor * KWPasteTextCommand::execute( QTextCursor *c )
+KoTextCursor * KWPasteTextCommand::execute( KoTextCursor *c )
 {
-    Qt3::QTextParag *firstParag = doc->paragAt( m_parag );
+    KoTextParag *firstParag = doc->paragAt( m_parag );
     if ( !firstParag ) {
         qWarning( "can't locate parag at %d, last parag: %d", m_parag, doc->lastParag()->paragId() );
         return 0;
@@ -108,8 +107,8 @@ QTextCursor * KWPasteTextCommand::execute( QTextCursor *c )
                 QDomElement formatElem = layout.namedItem( "FORMAT" ).toElement();
                 if ( !formatElem.isNull() )
                 {
-                    QTextFormat f = parag->loadFormat( formatElem, 0L, QFont() );
-                    QTextFormat * defaultFormat = doc->formatCollection()->format( &f );
+                    KoTextFormat f = parag->loadFormat( formatElem, 0L, QFont() );
+                    KoTextFormat * defaultFormat = doc->formatCollection()->format( &f );
                     // Last paragraph (i.e. only one in all) : some of the text might be from before the paste
                     int endIndex = (item == count-1) ? c->index() : parag->string()->length() - 1;
                     parag->setFormat( m_idx, endIndex - m_idx, defaultFormat, TRUE );
@@ -155,7 +154,7 @@ class KWDeleteCustomItemVisitor : public KoParagVisitor // see kwtextdocument.h
 {
 public:
     KWDeleteCustomItemVisitor() : KoParagVisitor() { }
-    virtual bool visit( Qt3::QTextParag *parag, int start, int end )
+    virtual bool visit( KoTextParag *parag, int start, int end )
     {
         kdDebug() << "KWPasteTextCommand::execute " << parag->paragId() << " " << start << " " << end << endl;
         for ( int i = start ; i < end ; ++i )
@@ -173,9 +172,9 @@ public:
     }
 };
 
-QTextCursor * KWPasteTextCommand::unexecute( QTextCursor *c )
+KoTextCursor * KWPasteTextCommand::unexecute( KoTextCursor *c )
 {
-    Qt3::QTextParag *firstParag = doc->paragAt( m_parag );
+    KoTextParag *firstParag = doc->paragAt( m_parag );
     if ( !firstParag ) {
         qWarning( "can't locate parag at %d, last parag: %d", m_parag, doc->lastParag()->paragId() );
         return 0;
@@ -184,7 +183,7 @@ QTextCursor * KWPasteTextCommand::unexecute( QTextCursor *c )
     cursor.setIndex( m_idx );
     doc->setSelectionStart( KoTextDocument::Temp, &cursor );
 
-    Qt3::QTextParag *lastParag = doc->paragAt( m_lastParag );
+    KoTextParag *lastParag = doc->paragAt( m_lastParag );
     if ( !lastParag ) {
         qWarning( "can't locate parag at %d, last parag: %d", m_lastParag, doc->lastParag()->paragId() );
         return 0;

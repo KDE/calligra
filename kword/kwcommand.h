@@ -34,14 +34,14 @@ class KoLinkVariable;
  * Command created when pasting formatted text
  * [relies on KWord's XML structure, so not moved to kotext]
  */
-class KWPasteTextCommand : public QTextCommand
+class KWPasteTextCommand : public KoTextDocCommand
 {
 public:
     KWPasteTextCommand( KoTextDocument *d, int parag, int idx,
                     const QCString & data );
     ~KWPasteTextCommand() {}
-    QTextCursor *execute( QTextCursor *c );
-    QTextCursor *unexecute( QTextCursor *c );
+    KoTextCursor *execute( KoTextCursor *c );
+    KoTextCursor *unexecute( KoTextCursor *c );
 protected:
     int m_parag;
     int m_idx;

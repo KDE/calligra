@@ -24,22 +24,21 @@ class KWTextFrameSet;
 class KMacroCommand;
 class KoStyle;
 #include <qrichtext_p.h>
-using namespace Qt3;
 
 // This command inserts a TOC at the beginning of a frameset, and is able to undo that.
 // The reason we don't use KWTextFrameSet's insert, applyStyle etc. is that it would
 // generate many many subcommands (resulting in much memory use).
-class KWInsertTOCCommand : public QTextCommand
+class KWInsertTOCCommand : public KoTextDocCommand
 {
 public:
     // The parag is where the TOC should be inserted
-    KWInsertTOCCommand( KWTextFrameSet *fs, Qt3::QTextParag *parag );
-    QTextCursor *execute( QTextCursor *c );
-    QTextCursor *unexecute( QTextCursor *c );
+    KWInsertTOCCommand( KWTextFrameSet *fs, KoTextParag *parag );
+    KoTextCursor *execute( KoTextCursor *c );
+    KoTextCursor *unexecute( KoTextCursor *c );
 
     // Helper method, public for KWTextFrameSet::insertTOC().
     // Remove a toc based on the parag styles
-    static QTextCursor * removeTOC( KWTextFrameSet *fs, QTextCursor *cursor, KMacroCommand *macroCmd );
+    static KoTextCursor * removeTOC( KWTextFrameSet *fs, KoTextCursor *cursor, KMacroCommand *macroCmd );
 
 protected:
     // Find or create a toc style
