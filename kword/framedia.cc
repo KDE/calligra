@@ -89,6 +89,10 @@ KWFrameDia::KWFrameDia( QWidget* parent, KWFrame *_frame)
     : KDialogBase( Tabbed, i18n("Frame settings"), Ok | Cancel, Ok, parent, "framedialog", true)
 {
     frame = _frame;
+    if(frame==0) {
+        kdDebug() << "ERROR: KWFrameDia::constructor no frame.."<<endl;
+        return;
+    }
     KWFrameSet *fs = frame->frameSet()->getGroupManager();
     if(fs==0L) fs=frame->frameSet();
     frameType = fs->type();
@@ -106,6 +110,10 @@ KWFrameDia::KWFrameDia( QWidget* parent, KWFrame *_frame, KWDocument *_doc, Fram
     doc = _doc;
     frame= _frame;
     frameSetFloating = false;
+    if(frame==0) {
+        kdDebug() << "ERROR: KWFrameDia::constructor no frame.."<<endl;
+        return;
+    }
     init();
 }
 
@@ -138,82 +146,82 @@ KWFrameDia::KWFrameDia( QWidget *parent, QPtrList<KWFrame> listOfFrames) : KDial
         }
         f=listOfFrames.next();
     }
+    if(allFrames.count()==0)
+        allFrames.append(listOfFrames.first());
+
     if(allFrames.count()==1)
         frame=allFrames.at(0);
-    if(allFrames.count()==0)
-        return;
 
-    //init();
-// for now:
-    setupTab1();
-    setupTab2();
-    setupTab3();
+    init();
 }
 
 void KWFrameDia::init() {
 
     tab1 = tab2 = tab3 = tab4 = tab5 = 0;
-    if (frame) {
+    KWFrameSet *fs=0;
+    if(frame) {
+        fs = frame->frameSet(); // 0 when creating a frame
         KoRect r = frame->normalize();
         frame->setRect( r.x(), r.y(), r.width(), r.height() );
-        KWFrameSet *fs = frame->frameSet(); // 0 when creating a frame
-        if(!doc && fs)
-        {
-            doc = fs->kWordDocument();
-        }
-        if(!doc)
-        {
-            kdDebug() << "ERROR: KWFrameDia::init frame has no reference to doc.."<<endl;
-            return;
-        }
-        if( fs && fs->isMainFrameset() )
-        {
-            setupTab5();
-        }
-        else if ( fs && fs->isHeaderOrFooter() )
-        {
-            setupTab1();
-            setupTab2();
-            setupTab4();
-            setupTab5();
-        }
-        else if(frameType == FT_TEXT)
-        {
-            setupTab1();
-            setupTab2();
-            setupTab3();
-            setupTab4();
-            setupTab5();
-            if(! frame->frameSet()) // first creation
-                showPage(2);
-        }
-        else if(frameType == FT_PICTURE || frameType == FT_CLIPART)
-        {
-            setupTab1();
-            setupTab2();
-            setupTab4();
-            showPage(1); // while options are not implemented..
-        }
-        else if(frameType == FT_PART)
-        {
-            setupTab2();
-            setupTab4();
-        }
-        else if(frameType == FT_FORMULA)
-        {
-            setupTab1();
-            setupTab2();
-            setupTab4();
-            showPage(1); // while options are not implemented..
-        }
-        else if(frameType == FT_TABLE)
-        {
-             setupTab4();
-             grp1->setEnabled(false);
-        }
     }
-    else
-        kdDebug() << "ERROR: KWFrameDia::init  no frame.."<<endl;
+    if(!doc && fs)
+    {
+        doc = fs->kWordDocument();
+    }
+    if(!doc)
+    {
+        kdDebug() << "ERROR: KWFrameDia::init frame has no reference to doc.."<<endl;
+        return;
+    }
+    if( fs && fs->isMainFrameset() )
+    {
+        setupTab5();
+    }
+    else if ( fs && fs->isHeaderOrFooter() )
+    {
+        setupTab1();
+        setupTab2();
+        setupTab4();
+        setupTab5();
+    }
+    else if(frameType == FT_TEXT)
+    {
+        setupTab1();
+        setupTab2();
+        setupTab3();
+        if(frame)       // not for multiframe dia
+            setupTab4();
+        if(frame)       // not for multiframe dia
+            setupTab5();
+        if(! fs) // first creation
+            showPage(2);
+    }
+    else if(frameType == FT_PICTURE || frameType == FT_CLIPART)
+    {
+        setupTab1();
+        setupTab2();
+        if(frame)       // not for multiframe dia
+            setupTab4();
+        showPage(1); // while options are not implemented..
+    }
+    else if(frameType == FT_PART)
+    {
+        setupTab2();
+        if(frame)       // not for multiframe dia
+            setupTab4();
+    }
+    else if(frameType == FT_FORMULA)
+    {
+        setupTab1();
+        setupTab2();
+        if(frame)       // not for multiframe dia
+            setupTab4();
+        showPage(1); // while options are not implemented..
+    }
+    else if(frameType == FT_TABLE)
+    {
+         setupTab4();
+    }
     setInitialSize( QSize(550, 400) );
 }
 
@@ -266,12 +274,31 @@ void KWFrameDia::setupTab1(){ // TAB Frame Options
     if(frameType==FT_PICTURE)
     {
         cbAspectRatio = new QCheckBox (i18n("Retain original aspect ratio"),tab1);
+        bool show=true;
+        bool on=true;
         if(frame) {
             if ( frame->frameSet() )
-                cbAspectRatio->setChecked( static_cast<KWPictureFrameSet *>( frame->frameSet() )->keepAspectRatio() );
-            else
-                cbAspectRatio->setChecked( true );
-        } else { // TODO
+                on= static_cast<KWPictureFrameSet *>( frame->frameSet() )->keepAspectRatio();
+        } else {
+            KWFrame *f=allFrames.first();
+            KWPictureFrameSet *fs = dynamic_cast<KWPictureFrameSet *> (f->frameSet());
+            if(fs)
+                on=fs->keepAspectRatio();
+            f=allFrames.next();
+            while(f) {
+                KWPictureFrameSet *fs = dynamic_cast<KWPictureFrameSet *> (f->frameSet());
+                if(fs)
+                    if(on != fs->keepAspectRatio()) {
+                        show=false;
+                        break;
+                    }
+                f=allFrames.next();
+            }
+        }
+        cbAspectRatio->setChecked( on );
+        if(! show) {
+            cbAspectRatio->setTristate();
+            cbAspectRatio->setNoChange();
         }
         grid1->addWidget(cbAspectRatio, row, 0);
         ++row;
@@ -1359,8 +1386,14 @@ bool KWFrameDia::applyChanges()
 
                     macroCmd->addCommand(cmd);
                 }
-            } else {
-                kdDebug() << "TODO: implement multi-frame set aspect ratio..\n";
+            } else if(cbAspectRatio->state() != QButton::NoChange) {
+                for(KWFrame *f=allFrames.first();f; f=allFrames.next()) {
+                    KWPictureFrameSet *fs = dynamic_cast<KWPictureFrameSet *> (f->frameSet());
+                    if(fs) {
+                        fs->setKeepAspectRatio( cbAspectRatio->isChecked() );
+                        // TODO undo.
+                    }
+                }
             }
         }
     }

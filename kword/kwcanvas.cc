@@ -1618,11 +1618,17 @@ void KWCanvas::setFrameBackgroundColor( const QBrush &_backColor )
 
 void KWCanvas::editFrameProperties()
 {
-    KWFrame *frame = m_doc->getFirstSelectedFrame();
-    if (!frame)
-        return;
-    KWFrameDia *frameDia = new KWFrameDia( this, frame );
-    frameDia->setCaption(i18n("Frame Properties"));
+    QPtrList<KWFrame> frames=m_doc->getSelectedFrames();
+    if(frames.count()==0) return;
+    KWFrameDia *frameDia;
+    if(frames.count()==1) {
+        KWFrame *frame = frames.first();
+        frameDia = new KWFrameDia( this, frame );
+        frameDia->setCaption(i18n("Frame Properties"));
+    } else { // multi frame dia.
+        frameDia = new KWFrameDia( this, frames );
+        frameDia->setCaption(i18n("Frames Properties"));
+    }
     frameDia->exec();
     delete frameDia;
 }
