@@ -1,0 +1,192 @@
+<!DOCTYPE UI><UI>
+<class>XSLTDialog</class>
+<widget>
+    <class>QDialog</class>
+    <property stdset="1">
+        <name>name</name>
+        <cstring>XSLTDialog</cstring>
+    </property>
+    <property stdset="1">
+        <name>geometry</name>
+        <rect>
+            <x>0</x>
+            <y>0</y>
+            <width>410</width>
+            <height>310</height>
+        </rect>
+    </property>
+    <property stdset="1">
+        <name>caption</name>
+        <string>Export XSLT Configuration</string>
+    </property>
+    <property stdset="1">
+        <name>sizeGripEnabled</name>
+        <bool>false</bool>
+    </property>
+    <widget>
+        <class>QGroupBox</class>
+        <property stdset="1">
+            <name>name</name>
+            <cstring>GroupBox1</cstring>
+        </property>
+        <property stdset="1">
+            <name>geometry</name>
+            <rect>
+                <x>10</x>
+                <y>10</y>
+                <width>390</width>
+                <height>161</height>
+            </rect>
+        </property>
+        <property stdset="1">
+            <name>title</name>
+            <string>Common xslt files :</string>
+        </property>
+        <widget>
+            <class>QListBox</class>
+            <item>
+                <property>
+                    <name>text</name>
+                    <string>Export XSL:FO</string>
+                </property>
+            </item>
+            <property stdset="1">
+                <name>name</name>
+                <cstring>xsltList</cstring>
+            </property>
+            <property stdset="1">
+                <name>geometry</name>
+                <rect>
+                    <x>20</x>
+                    <y>30</y>
+                    <width>351</width>
+                    <height>111</height>
+                </rect>
+            </property>
+        </widget>
+    </widget>
+    <widget>
+        <class>QGroupBox</class>
+        <property stdset="1">
+            <name>name</name>
+            <cstring>GroupBox2</cstring>
+        </property>
+        <property stdset="1">
+            <name>geometry</name>
+            <rect>
+                <x>10</x>
+                <y>180</y>
+                <width>390</width>
+                <height>80</height>
+            </rect>
+        </property>
+        <property stdset="1">
+            <name>title</name>
+            <string>Personnal xslt files :</string>
+        </property>
+        <widget>
+            <class>QPushButton</class>
+            <property stdset="1">
+                <name>name</name>
+                <cstring>chooseBtn</cstring>
+            </property>
+            <property stdset="1">
+                <name>geometry</name>
+                <rect>
+                    <x>280</x>
+                    <y>30</y>
+                    <width>90</width>
+                    <height>31</height>
+                </rect>
+            </property>
+            <property stdset="1">
+                <name>text</name>
+                <string>Choose ...</string>
+            </property>
+        </widget>
+        <widget>
+            <class>QComboBox</class>
+            <property stdset="1">
+                <name>name</name>
+                <cstring>recentBox</cstring>
+            </property>
+            <property stdset="1">
+                <name>geometry</name>
+                <rect>
+                    <x>20</x>
+                    <y>30</y>
+                    <width>250</width>
+                    <height>31</height>
+                </rect>
+            </property>
+        </widget>
+    </widget>
+    <widget>
+        <class>QPushButton</class>
+        <property stdset="1">
+            <name>name</name>
+            <cstring>CancelBtn</cstring>
+        </property>
+        <property stdset="1">
+            <name>geometry</name>
+            <rect>
+                <x>300</x>
+                <y>270</y>
+                <width>91</width>
+                <height>31</height>
+            </rect>
+        </property>
+        <property stdset="1">
+            <name>text</name>
+            <string>Annuler</string>
+        </property>
+    </widget>
+    <widget>
+        <class>QPushButton</class>
+        <property stdset="1">
+            <name>name</name>
+            <cstring>OkBtn</cstring>
+        </property>
+        <property stdset="1">
+            <name>geometry</name>
+            <rect>
+                <x>190</x>
+                <y>270</y>
+                <width>90</width>
+                <height>30</height>
+            </rect>
+        </property>
+        <property stdset="1">
+            <name>text</name>
+            <string>OK</string>
+        </property>
+        <property stdset="1">
+            <name>default</name>
+            <bool>true</bool>
+        </property>
+    </widget>
+</widget>
+<connections>
+    <connection>
+        <sender>OkBtn</sender>
+        <signal>clicked()</signal>
+        <receiver>XSLTDialog</receiver>
+        <slot>okSlot()</slot>
+    </connection>
+    <connection>
+        <sender>CancelBtn</sender>
+        <signal>clicked()</signal>
+        <receiver>XSLTDialog</receiver>
+        <slot>cancelSlot()</slot>
+    </connection>
+    <connection>
+        <sender>chooseBtn</sender>
+        <signal>clicked()</signal>
+        <receiver>XSLTDialog</receiver>
+        <slot>chooseSlot()</slot>
+    </connection>
+    <slot access="public">cancelSlot()</slot>
+    <slot access="public">chooseSlot()</slot>
+    <slot access="public">okSlot()</slot>
+</connections>
+</UI>
