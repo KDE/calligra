@@ -121,8 +121,9 @@ class KEXI_DB_EXPORT Field
 			PrimaryKey = 4,
 			ForeignKey = 8,
 			NotNull = 16,
-			NotEmpty = 32 //only legel for string-like and blob fields
- 		};
+			NotEmpty = 32, //!< only legal for string-like and blob fields
+			Indexed = 64
+		};
 
 		enum Options
 		{
@@ -194,6 +195,9 @@ class KEXI_DB_EXPORT Field
 		/*! \return true if the field is not allowed to be null */
 		inline bool isNotEmpty() const { return constraints() & NotEmpty; }
 
+		/*! \return true if the field is indexed using single-field database index. */
+		inline bool isIndexed() const { return constraints() & Indexed; }
+
 		/*! \return true if the field is of any numeric type (integer or floating point) */
 		inline bool isNumericType() const { return Field::isNumericType(m_type); }
 		
@@ -235,71 +239,139 @@ class KEXI_DB_EXPORT Field
 //		virtual QString		references() const;
 
 		uint options() const { return m_options; }
+
 		void setOptions(uint options) { m_options = options; }
 
 		inline QVariant::Type variantType() const { return variantType(m_type); }
 
 		inline Type type() const { return m_type; }
+
 		inline QString typeName() const { return Field::typeName(m_type); }
+
 		inline TypeGroup typeGroup() const { return Field::typeGroup(m_type); }
+
 		inline QString typeGroupName() const { return Field::typeGroupName(m_type); }
 
 		inline QString typeString() const { return Field::typeString(m_type); }
+
 		inline QString typeGroupString() const { return Field::typeGroupString(m_type); }
 
 		inline QVariant defaultValue() const { return m_defaultValue; }
 		
 		//! \return length of text is the field type is text
 		inline uint length() const { return m_length; }
-		//! \retrun precision for numeric and other fields that have both length and precision
+
+		/*! \return precision for numeric and other fields that have both length 
+		 and precision (floating point types) */
 		inline uint precision() const { return m_precision; } 
+
 		//! \return the constraints defined for this field
 		inline uint constraints() const { return m_constraints; }
+
 		//! \return order of this field in containing table (counting starts from 0)
 		//! (-1 if unspecified)
 		inline int order() const { return m_order; }
+
 		//! \return caption of this field
 		inline QString caption() const { return m_caption; }
+
 		//! \return caption of this field or - if empty - return its name
 		inline QString captionOrName() const { return m_caption.isEmpty() ? m_name : m_caption; }
+
 		//! \return description text for this field
 		inline QString description() const { return m_desc; }
+
 		//! \return width of this field (usually in pixels or points)
 		//! 0 (the default) means there is no hint for the width
 		inline uint width() const { return m_width; }
 		
 		//! if the type has the unsigned attribute
 		inline bool isUnsigned() const { return m_options & Unsigned; }
+
 //		virtual bool isBinary() const;
 
 		//! \return true if this field has EMPTY property (i.e. it is of type string or is a BLOB)
 		inline bool hasEmptyProperty() const { return Field::hasEmptyProperty(m_type); }
+
 		/*! static version of hasEmptyProperty() method
 		 *! \return true if this field has EMPTY property (i.e. it is of type string or is a BLOB) */
 		static bool hasEmptyProperty(uint type);
 
 		void setType(Type t);
+
 		virtual void setTable(TableSchema *table);
+
 		void setName(const QString& n);
+
+		/*! Sets constraints to \a c. If PrimaryKey is set in \a c, also 
+		 constraits implied by being primary key are enforced (see setPrimaryKey()).
+		 If Indexed is not set in \a c, constraits implied by not being are 
+		 enforced as well (see setIndexed()). */
 		void setConstraints(uint c);
+
 		void setLength(uint l);
+
 		void setPrecision(uint p);
+
 		void setUnsigned(bool u);
-		void setBinary(bool b);
+
+//		void setBinary(bool b);
+
 		void setDefaultValue(const QVariant& def);
+
 		/*! Sets default value decoded from QCString. 
 			Decoding errors are detected (value is strictly checked against field type) 
 			- if one is encountered, default value is cleared (defaultValue()==QVariant()). 
 			\return true if given value was valid for field type. */
 		bool setDefaultValue(const QCString& def);
+
 		void setAutoIncrement(bool a);
+
+		/*! Specifies whether the field is single-field primary key or not 
+		 (KexiDB::PrimeryKey item). 
+		 Use this with caution. Setting this to true implies setting:
+		 - setUniqueKey(true)
+		 - setNotNull(true)
+		 - setNotEmpty(true)
+		 - setIndexed(true) */
 		void setPrimaryKey(bool p);
+
+		/*! Specifies whether the field has single-field unique constraint or not 
+		 (KexiDB::Unique item). Setting this to true implies setting Indexed flag
+		 to true (setIndexed(true)), because index is required it control unique constraint. */
 		void setUniqueKey(bool u);
+
 		void setForeignKey(bool f);
+
+		/*! Specifies whether the field has single-field unique constraint or not 
+		 (KexiDB::NotNull item). Setting this to true implies setting Indexed flag
+		 to true (setIndexed(true)), because index is required it control 
+		 not null constraint. */
 		void setNotNull(bool n);
+
+		/*! Specifies whether the field has single-field unique constraint or not 
+		 (KexiDB::NotEmpty item). Setting this to true implies setting Indexed flag
+		 to true (setIndexed(true)), because index is required it control 
+		 not empty constraint. */
 		void setNotEmpty(bool n);
+
+		/*! Specifies whether the field is indexed (KexiDB::Indexed item)
+		 (by single-field implicit index) or not. 
+		 Use this with caution. Since index is used to control unique, 
+		 not null/empty constratins, setting this to false implies setting:
+		 - setPrimaryKey(false)
+		 - setUniqueKey(false)
+		 - setNotNull(false)
+		 - setNotEmpty(false)
+		 because above flags need index to be present. 
+		 Similarly, setting one of the above flags to true, will automatically 
+		 do setIndexed(true) for the same reason. */
+		void setIndexed(bool s);
+
 		void setCaption(const QString& caption) { m_caption=caption; }
+
 		void setDescription(const QString& description) { m_desc=description; }
+		
 		void setWidth(uint w) { m_width=w; }
 
 		/*! There can be added asterisks (QueryAsterisk objects) 
