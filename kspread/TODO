@@ -21,8 +21,6 @@ Others bugs not in BT system (Report by - taken by):
 Other things: (please add the things you are working on!)
 
 - Zoom
-- inserting data from text files
-- inserting formated data (csv) from clipboard
 - "Freeze/Unfreeze Panes", started but had some problems caused by the
         scrollbars, it works, but not very nice (not commited (Norbert))
 - AutoFormat (already exists in a very limited way: Format -> table style)
@@ -41,8 +39,12 @@ Other things: (please add the things you are working on!)
 - Scenerios
 - Locked areas (for formulas with a matrix as result)
 - Multible Operations (in Excel: "Data"->"Table")
+- Pivot tables
 - more chart types
-- much more formulas (financial,...)
+- Styles
+- background spell check
+- links to other kspread files
+- much more formulas (financial, database...)
 - Scrollbar that supports jumping one row/column forward or back
 - Named areas with something like "=x+5" ("='x'+5" works already)
 - other bug fixes                               (everybody, every time)
@@ -81,12 +83,7 @@ Philipp
 Norbert
 =======
 
-- insert data from databases                                    (Norbert - almost done)
-- Styles                                                        ( after 1.2 cause it requires bigger changes
-                                                                  than expected )
-- implement more Excel shortcuts like CTRL+Shift+!, *, ^, ...   (done)
-  (see Todo-list below)
-- GoalSeek                                                      ( done )
+- Functions that belongs in Excel to "Information"
 
 Ariya
 =====
