@@ -20,6 +20,7 @@
 #include "KWordFrameTextIface.h"
 
 #include "kwtextframeset.h"
+#include <kotextobject.h>
 #include <kapplication.h>
 #include <dcopclient.h>
 
@@ -62,4 +63,14 @@ bool KWordFrameTextIface::isAHeader() const
 bool KWordFrameTextIface::isAFooter() const
 {
     return m_frametext->isAFooter();
+}
+
+QString KWordFrameTextIface::selectedText() const
+{
+    return m_frametext->selectedText();
+}
+
+void KWordFrameTextIface::selectAll( bool select )
+{
+    m_frametext->textObject()->selectAll(select);
 }

@@ -41,6 +41,8 @@ k_dcop:
     bool isFloating() const;
     bool isAHeader() const;
     bool isAFooter() const;
+    QString selectedText() const;
+    void selectAll( bool select );
 private:
     KWTextFrameSet *m_frametext;
 
