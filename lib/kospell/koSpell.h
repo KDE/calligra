@@ -427,7 +427,7 @@ protected:
     unsigned int lastline;
     unsigned int posinline;
     unsigned int lastlastline;
-    unsigned int offset;
+    int offset;
     unsigned int curprog;
 
     void dialog (const QString & word, QStringList & sugg);
