@@ -137,24 +137,28 @@ void KWordTableHandler::tableCellStart()
     if ( tc.fVertMerge && !tc.fVertRestart )
         return;
 
-    KoRect cellRect( left / 20.0, // left
-                     m_currentY, // top
-                     ( right - left ) / 20.0, // width
-                     rowHeight() ); // height
-
     // Check how many cells that mean, according to our cell edge array
     int leftCellNumber = m_currentTable->columnNumber( left );
     int rightCellNumber = m_currentTable->columnNumber( right );
 
     // In cases where not all columns are present, ensure that the last
     // column spans the remainder of the table.
-    if ( m_column == nbCells - 1 )
+    // ### It would actually be more closer to the original if we created
+    // an empty cell from m_column+1 to the last column. (table-6.doc)
+    if ( m_column == nbCells - 1 )  {
         rightCellNumber = m_currentTable->m_cellEdges.size() - 1;
+        right = m_currentTable->m_cellEdges[ rightCellNumber ];
+    }
 
     Q_ASSERT( rightCellNumber >= leftCellNumber ); // you'd better be...
     int colSpan = rightCellNumber - leftCellNumber; // the resulting number of merged cells
 
-    kdDebug() << " tableCellStart row=" << m_row << " WordColumn=" << m_column << " colSpan=" << colSpan << " rowSpan=" << rowSpan << " (from " << leftCellNumber << " to " << rightCellNumber << " for KWord) cellRect=" << cellRect << endl;
+    KoRect cellRect( left / 20.0, // left
+                     m_currentY, // top
+                     ( right - left ) / 20.0, // width
+                     rowHeight() ); // height
+
+    kdDebug() << " tableCellStart row=" << m_row << " WordColumn=" << m_column << " colSpan=" << colSpan << " (from " << leftCellNumber << " to " << rightCellNumber << " for KWord) rowSpan=" << rowSpan << " cellRect=" << cellRect << endl;
 
     // Sort out the borders.
     // It seems we get this on the cells that are adjacent

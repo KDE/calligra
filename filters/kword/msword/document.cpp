@@ -160,7 +160,7 @@ void Document::processStyles()
     {
         const wvWare::Style* style = styles.styleByIndex( i );
         Q_ASSERT( style );
-        kdDebug() << k_funcinfo << "style " << i << " " << style << endl;
+        //kdDebug() << k_funcinfo << "style " << i << " " << style << endl;
         if ( style && style->type() == wvWare::Style::sgcPara )
         {
             QDomElement styleElem = m_mainDocument.createElement("STYLE");
@@ -373,8 +373,10 @@ void Document::generateFrameBorder( QDomElement& frameElementOut, const wvWare::
         Conversion::setBorderAttributes( frameElementOut, brcTop, "t" );
     if ( brcBottom.ico != 255 && brcBottom.dptLineWidth != 255 ) // see tablehandler.cpp
         Conversion::setBorderAttributes( frameElementOut, brcBottom, "b" );
-    Conversion::setBorderAttributes( frameElementOut, brcLeft, "l" );
-    Conversion::setBorderAttributes( frameElementOut, brcRight, "r" );
+    if ( brcLeft.ico != 255 && brcLeft.dptLineWidth != 255 ) // could still be 255, for first column
+        Conversion::setBorderAttributes( frameElementOut, brcLeft, "l" );
+    if ( brcRight.ico != 255 && brcRight.dptLineWidth != 255 ) // could still be 255, for last column
+        Conversion::setBorderAttributes( frameElementOut, brcRight, "r" );
 
     // Frame background brush (color and fill style)
     if ( shd.icoFore != 0 || shd.icoBack != 0 )
@@ -384,7 +386,7 @@ void Document::generateFrameBorder( QDomElement& frameElementOut, const wvWare::
         // (and icoBack is usually white; it's the other colour of the pattern,
         // something that we can't set in Qt apparently).
         int bkColor = shd.ipat ? shd.icoFore : shd.icoBack;
-        //kdDebug() << "generateFrameBorder: " << " icoFore=" << shd.icoFore << " icoBack=" << shd.icoBack << " ipat=" << shd.ipat << " -> bkColor=" << bkColor << endl;
+        kdDebug() << "generateFrameBorder: " << " icoFore=" << shd.icoFore << " icoBack=" << shd.icoBack << " ipat=" << shd.ipat << " -> bkColor=" << bkColor << endl;
         Conversion::setColorAttributes( frameElementOut, bkColor, "bk", true );
         // Fill style
         frameElementOut.setAttribute( "bkStyle", Conversion::fillPatternStyle( shd.ipat ) );
