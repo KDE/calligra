@@ -185,7 +185,6 @@ public:
     void initCalcMenu();
 
     void changeNbOfRecentFiles(int _nb);
-    void openPopupMenuMenuPage( const QPoint & _point );
 
     void updateBorderButton();
     void removeTable( KSpreadSheet *_t );
@@ -383,6 +382,11 @@ public slots:
 
     void statusBarClicked(int _id);
     void menuCalc(bool);
+
+    /**
+     * Shows context menu when tabbar is double-clicked.
+     */
+    void popupTabBarMenu( const QPoint& );
 
 protected slots:
     /**

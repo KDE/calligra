@@ -83,9 +83,6 @@ public:
 
     void drawTab( QPainter& painter, QRect& rect, const QString& text, bool active );
     void drawMoveMarker( QPainter& painter, int x, int y );
-
-    // open pop-up menu at global pos
-    void openPopupMenu( const QPoint &pos );
 };
 
 
@@ -175,13 +172,6 @@ void TabBarPrivate::drawMoveMarker( QPainter& painter, int x, int y )
     painter.setBrush( Qt::black );
     painter.drawPolygon(movmark);
     painter.setBrush( oldBrush );
-}
-
-void TabBarPrivate::openPopupMenu( const QPoint &pos )
-{
-    if ( !view->koDocument()->isReadWrite() )
-      return;
-    view->openPopupMenuMenuPage( pos );
 }
 
 // creates a new tabbar
@@ -396,13 +386,6 @@ void TabBar::autoScrollRight()
         QTimer::singleShot( 400, this, SLOT( autoScrollRight() ) );
 }
 
-void TabBar::slotAdd()
-{
-    d->view->insertTable();
-    d->view->editWidget()->setText( "" );
-    d->view->activeTable()->setHidden( false );
-}
-
 void TabBar::paintEvent( QPaintEvent* )
 {
     if ( d->visibleTabs.count() == 0 )
@@ -569,7 +552,7 @@ void TabBar::mousePressEvent( QMouseEvent* _ev )
     }
     else if ( _ev->button() == RightButton )
     {
-        d->openPopupMenu( _ev->globalPos() );
+        emit contextMenu( _ev->globalPos() );
     }
 }
 

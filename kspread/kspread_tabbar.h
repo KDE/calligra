@@ -165,6 +165,12 @@ signals:
      */
     void tabChanged( const QString& _text );
 
+    /**
+     * Emitted upon mouse double-clicked. This is typically used
+     * to popup a context menu.
+     */
+    void contextMenu( const QPoint& pos );
+
 public slots:
     /**
      * Opens a dialog to rename active tab.
@@ -172,8 +178,6 @@ public slots:
     void slotRename( );
 
 protected slots:
-    void slotAdd();
-
     void autoScrollLeft();
     void autoScrollRight();
 

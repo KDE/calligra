@@ -343,7 +343,9 @@ KSpreadView::KSpreadView( QWidget *_parent, const char *_name, KSpreadDoc* doc )
 
     m_pTabBar = new KSpread::TabBar( this );
     QObject::connect( m_pTabBar, SIGNAL( tabChanged( const QString& ) ), this, SLOT( changeTable( const QString& ) ) );
-
+    QObject::connect( m_pTabBar, SIGNAL( contextMenu( const QPoint& ) ),
+      this, SLOT( popupTabBarMenu( const QPoint& ) ) );
+      
     // Paper and Border widgets
     m_pFrame = new QWidget( this );
     m_pFrame->raise();
@@ -6516,7 +6518,7 @@ void KSpreadView::guiActivateEvent( KParts::GUIActivateEvent *ev )
   KoView::guiActivateEvent( ev );
 }
 
-void KSpreadView::openPopupMenuMenuPage( const QPoint & _point )
+void KSpreadView::popupTabBarMenu( const QPoint & _point )
 {
   if ( !koDocument()->isReadWrite() || !factory() )
     return;
