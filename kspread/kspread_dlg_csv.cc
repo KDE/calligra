@@ -46,6 +46,7 @@
 KSpreadCSVDialog::KSpreadCSVDialog( KSpreadView * parent, const char * name, QRect const & rect, Mode mode)
   : KDialogBase( parent, name, true, QString::null, Ok|Cancel ),
     m_pView( parent ),
+    m_cancelled( false ),
     m_adjustRows( 0 ),
     m_startline( 0 ),
     m_textquote( '"' ),
@@ -176,12 +177,14 @@ KSpreadCSVDialog::KSpreadCSVDialog( KSpreadView * parent, const char * name, QRe
     if ( !mime )
     {
       KMessageBox::information( this, i18n("There is no data in the clipboard.") );
+      m_cancelled = true;
       return;
     }
 
     if ( !mime->provides( "text/plain" ) )
     {
       KMessageBox::information( this, i18n("There is no usable data in the clipboard.") );
+      m_cancelled = true;
       return;
     }
     m_fileArray = QByteArray(mime->encodedData( "text/plain" ) );
@@ -196,6 +199,7 @@ KSpreadCSVDialog::KSpreadCSVDialog( KSpreadView * parent, const char * name, QRe
     if ( file.isEmpty() )
     {
         actionButton( Ok )->setEnabled( false );
+        m_cancelled = true;
         return;
     }
     QFile in(file);
@@ -204,6 +208,7 @@ KSpreadCSVDialog::KSpreadCSVDialog( KSpreadView * parent, const char * name, QRe
       KMessageBox::sorry( this, i18n("Cannot open input file!") );
       in.close();
       actionButton( Ok )->setEnabled( false );
+      m_cancelled = true;
       return;
     }
     m_fileArray = QByteArray(in.size());
@@ -256,6 +261,11 @@ KSpreadCSVDialog::KSpreadCSVDialog( KSpreadView * parent, const char * name, QRe
 KSpreadCSVDialog::~KSpreadCSVDialog()
 {
   // no need to delete child widgets, Qt does it all for us
+}
+
+bool KSpreadCSVDialog::cancelled()
+{
+  return m_cancelled;
 }
 
 void KSpreadCSVDialog::fillTable()

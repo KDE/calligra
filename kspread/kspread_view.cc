@@ -3565,7 +3565,8 @@ void KSpreadView::textToColumns()
   }
 
   KSpreadCSVDialog dialog( this, "KSpreadCSVDialog", m_selectionInfo->selection(), KSpreadCSVDialog::Column );
-  dialog.exec();
+  if( !dialog.cancelled() )
+    dialog.exec();
 }
 
 void KSpreadView::consolidate()
@@ -3894,7 +3895,8 @@ void KSpreadView::insertFromTextfile()
     //KMessageBox::information( this, "Not implemented yet, work in progress...");
 
     KSpreadCSVDialog dialog( this, "KSpreadCSVDialog", selection(), KSpreadCSVDialog::File );
-    dialog.exec();
+    if( !dialog.cancelled() )
+      dialog.exec();
 }
 
 void KSpreadView::insertFromClipboard()
@@ -3902,7 +3904,8 @@ void KSpreadView::insertFromClipboard()
     m_pCanvas->closeEditor();
 
     KSpreadCSVDialog dialog( this, "KSpreadCSVDialog", m_selectionInfo->selection(), KSpreadCSVDialog::Clipboard );
-    dialog.exec();
+    if( !dialog.cancelled() )
+      dialog.exec();
 }
 
 void KSpreadView::setupPrinter( KPrinter &prt )

@@ -62,6 +62,8 @@ class KSpreadCSVDialog : public KDialogBase
 
   ~KSpreadCSVDialog();
 
+  bool cancelled();
+
  protected:
   void accept();
 
@@ -99,6 +101,7 @@ class KSpreadCSVDialog : public KDialogBase
   int  getHeader(int col);
   QString getText(int row, int col);
 
+  bool m_cancelled;
   int   m_adjustRows;
   int   m_startline;
   QChar m_textquote;
