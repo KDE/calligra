@@ -29,7 +29,7 @@ libkpresenterpart_la_SOURCES = koPointArray.cc kprcanvas.cc kprpage.cc searchdia
 	kpresenter_dlg_config.cc kprvariable.cc kprdrag.cc \
 	kprtextdocument.cc kpfreehandobject.cc kppolylineobject.cc \
 	kpquadricbeziercurveobject.cc kpcubicbeziercurveobject.cc \
-	confpolygondia.cc kppolygonobject.cc notebar.cpp \
+	confpolygondia.cc kppolygonobject.cc notebar.cc \
 	KPTextObjectIface.skel KPTextObjectIface.cc \
 	KPTextViewIface.skel KPTextViewIface.cc presdurationdia.cc \
 	KPPieObjectIface.skel KPPieObjectIface.cc \
