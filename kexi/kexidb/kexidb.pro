@@ -38,6 +38,7 @@ fieldlist.cpp \
 global.cpp \
 relationship.cpp \
 roweditbuffer.cpp \
+msghandler.cpp \
 \
 parser/parser.cpp \
 parser/parser_p.cpp \
