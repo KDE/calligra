@@ -1283,15 +1283,6 @@ QRegion KWFrameSet::frameClipRegion( QPainter * painter, KWFrame *frame, const Q
         // This breaks when a frame is under another one, it still appears if !onlyChanged.
         // cvs log says this is about frame borders... hmm.
         /// ### if ( onlyChanged )
-        {
-            QPtrListIterator<KWFrame> fIt( frame->framesOnTop() );
-            for ( ; fIt.current() ; ++fIt )
-            {
-                QRect r = painter->xForm( viewMode->normalToView( (*fIt)->outerRect() ) );
-                //kdDebug(32002) << "frameClipRegion subtract rect "<< DEBUGRECT(r) << endl;
-                reg -= r; // subtract
-            }
-        }
 
 	// clip inline frames against their 'parent frames' (=the frame containing the anchor of the frame.)
 	KWFrameSet *parentFrameset= this;
@@ -1305,6 +1296,20 @@ QRegion KWFrameSet::frameClipRegion( QPainter * painter, KWFrame *frame, const Q
                     reg &= r;
                 }
     	}
+
+	// if this frame was not inline, parentFrame == frame so normal clipping happens.
+	// but an inline frame we clip only against the parent frames and the frames above the parent frame.
+	// because we can't trust the z-order of an inline frame.
+        {
+            QPtrListIterator<KWFrame> fIt( parentFrame->framesOnTop() );
+            for ( ; fIt.current() ; ++fIt )
+            {
+                QRect r = painter->xForm( viewMode->normalToView( (*fIt)->outerRect() ) );
+                //kdDebug(32002) << "frameClipRegion subtract rect "<< DEBUGRECT(r) << endl;
+                reg -= r; // subtract
+            }
+        }
+
 
 
         return reg;
