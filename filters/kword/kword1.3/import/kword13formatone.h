@@ -31,6 +31,8 @@ public:
 
 public:
     QMap<QString,QString> m_properties;
+public: // OASIS-specific
+    QString m_autoStyleName; ///< Name of the OASIS automatic style
 };
 
 #endif // KWORD_1_3_FORMAT_ONE

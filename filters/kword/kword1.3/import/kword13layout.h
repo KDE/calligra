@@ -36,6 +36,8 @@ public:
     QMap<QString,QString> m_layoutProperties;
     bool m_outline;
     QString m_name; ///< Name of the style (either the used one or the one currently being defined)
+public: // OASIS-specific
+    QString m_autoStyleName; ///< Name of the OASIS automatic style
 };
 
 #endif // _KWORD13LAYOUT
