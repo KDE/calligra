@@ -21,9 +21,11 @@
 #include "kozoomhandler.h"
 #include "kotextformat.h"
 #include "kotextdocument.h"
+#include "kooasiscontext.h"
+#include <koxmlwriter.h>
 #include <kdebug.h>
 #include <qdom.h>
-#include "kooasiscontext.h"
+#include <qbuffer.h>
 
 static KoTextParag * const INVALID_PARAG = (KoTextParag *)-1;
 
@@ -213,6 +215,45 @@ void KoParagCounter::loadOasis( KoOasisContext& context, int restartNumbering, b
         }
     }
     invalidate();
+}
+
+void KoParagCounter::saveOasis( KoGenStyle& listStyle )
+{
+    // TODO invent a display:name. Not really easy, since we don't have user-visible list styles.
+
+    // Prepare a sub-xmlwriter for the list-level-style-* element
+    QBuffer buffer;
+    buffer.open( IO_WriteOnly );
+    KoXmlWriter listLevelWriter( &buffer );  // TODO pass indentation level
+    const char* tagName = isBullet() ? "text:list-level-style-bullet" : "text:list-level-style-number";
+    listLevelWriter.startElement( tagName );
+    listLevelWriter.addAttribute( "text:level", (int)m_depth + 1 );
+    // OASIS allows to specify a text:style, the character style to use for the numbering...
+    // We currently always format as per the first character of the paragraph, but that's not perfect.
+
+    if ( isBullet() )
+    {
+        // TODO implement
+        if ( (Style)m_style == STYLE_CUSTOMBULLET )
+        {
+            // TODO text:bullet-char etc.
+        }
+    }
+    else
+    {
+        listLevelWriter.addAttribute( "style:num-prefix", m_prefix );
+        listLevelWriter.addAttribute( "style:num-suffix", m_suffix );
+        listLevelWriter.addAttribute( "text:display-levels", m_displayLevels );
+        // start-value/m_restartCounter is saved by kotextparag itself. ### TODO: save for paragstyles?
+        // TODO m_align => fo:text-align
+    }
+
+    // TODO save m_cache.text
+    // TODO finish oasis saving
+
+    listLevelWriter.endElement();
+    QString listLevelContents = QString::fromUtf8( buffer.buffer(), buffer.buffer().size() );
+    listStyle.addChildElement( tagName, listLevelContents );
 }
 
 int KoParagCounter::number( const KoTextParag *paragraph )

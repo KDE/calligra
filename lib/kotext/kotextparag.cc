@@ -1882,18 +1882,20 @@ void KoTextParag::saveOasis( KoXmlWriter& writer, KoSavingContext& context,
     if ( paragCounter )
     {
         writer.startElement( "text:numbered-paragraph" );
-        writer.addAttribute( "text:level", (int)paragCounter->depth() );
+        writer.addAttribute( "text:level", (int)paragCounter->depth() + 1 );
         if ( paragCounter->restartCounter() )
             writer.addAttribute( "text:start-value", paragCounter->startNumber() );
 
         KoGenStyle listStyle( KoGenStyle::STYLE_LIST /*, no family*/ );
-        // TODO save the parag counter into a list style
+        paragCounter->saveOasis( listStyle );
 
         QString autoListStyleName = mainStyles.lookup( listStyle, "L", true );
         writer.addAttribute( "text:style-name", autoListStyleName );
     }
     // TODO: level for headings
-    writer.startElement( outline ? "text:p" : "text:h", false /*no indent inside this tag*/ );
+    writer.startElement( outline ? "text:h" : "text:p", false /*no indent inside this tag*/ );
+    if ( outline && m_layout.style->paragLayout().counter )
+        writer.addAttribute( "text:outline-level", (int)m_layout.style->paragLayout().counter->depth() );
     writer.addAttribute( "text:style-name", autoParagStyleName );
 
     if ( to == -1 ) {

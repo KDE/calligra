@@ -18,6 +18,7 @@
 */
 
 #include <qstring.h>
+class KoGenStyle;
 class KoTextParag;
 class QDomElement;
 class KoTextFormat;
@@ -68,6 +69,7 @@ public:
     void load( QDomElement & element );
     void save( QDomElement & element );
     void loadOasis( KoOasisContext& context, int restartNumbering, bool orderedList, bool heading, int level );
+    void saveOasis( KoGenStyle& listStyle );
 
     bool operator==( const KoParagCounter & c2 ) const;
     bool operator!=( const KoParagCounter & c2 ) const { return !(*this == c2); }
