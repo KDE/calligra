@@ -515,3 +515,12 @@ void KPresenterViewIface::refreshAllVariable()
 {
     view->extraAutoFormat();
 }
+
+void KPresenterViewIface::skipToPage( int _num )
+{
+    //don't try to skip to a not exist page
+    if(_num>(int)view->kPresenterDoc()->getPageNums()-1)
+        return;
+    view->skipToPage(_num);
+}
+

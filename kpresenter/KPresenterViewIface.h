@@ -156,6 +156,8 @@ k_dcop:
 
     virtual void refreshAllVariable();
 
+    virtual void skipToPage( int _num );
+
 private:
     KPresenterView *view;
 
