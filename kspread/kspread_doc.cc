@@ -60,11 +60,11 @@ class DocPrivate
 {
 public:
 
-  // the workbook that holds all the sheets
-  KSpreadMap *workbook;
-
-  // the manager of the styles
-  KSpreadStyleManager * styleManager;
+  KSpreadMap* workbook;
+  KSpreadStyleManager* styleManager;
+  KSpreadSheet *activeSheet;
+  
+  DCOPObject* dcop;
 
   // used to give every KSpreadSheet a unique default name.
   int tableId;
@@ -73,12 +73,9 @@ public:
   // had been called with an URL as argument.
   QString fileURL;
 
-  // syntax version of the opened file
-  int syntaxVersion;
-
-  // hold the KScript Interpreter.
   KSpreadInterpreter::Ptr interpreter;
-
+  KSModule::Ptr module;
+  KSContext context;
   /**
    * This list contains the logical names of all modules
    * which contains KSpread extensions. These modules are
@@ -89,7 +86,7 @@ public:
    */
   QStringList kscriptModules;
   
-  // for undo/redoc 
+  // for undo/redo 
   KSpreadUndo *undoBuffer;
 
   // TRUE if loading is in process, otherwise FALSE.
@@ -99,68 +96,35 @@ public:
   QPen defaultGridPen;
   QColor pageBorderColor;
 
-  /**
-   * This DCOP object represents the document.
-   */
-  DCOPObject* dcop;
-
-  /**
-   * This module is used to execute formulas of this table.
-   */
-  KSModule::Ptr module;
-  /**
-   * This context is used to execute formulas of this table.
-   */
-  KSContext context;
-
   QPtrList<KSpreadPlugin> plugins;
 
   QValueList<Reference> refs;
   KCompletion listCompletion;
 
-  KSpreadLocale locale;
+  int numOperations;
   
-  /**
-  * bool which define if you can show scroolbar
-  */
+  // document properties
+  KSpreadLocale locale;
+  KoUnit::Unit unit;
+  int syntaxVersion;
   bool verticalScrollBar;
   bool horizontalScrollBar;
-
-  /**
-  * completion mode
-  */
   KGlobalSettings::Completion completionMode;
-
-  /**
-  * bool which define if you can show col/row header
-  */
   bool columnHeader;
   bool rowHeader;
-
   double indentValue;
-
   KSpread::MoveTo moveTo;
-
   bool showError;
-
   MethodOfCalc calcMethod;
-
   bool showTabBar;
-
   bool showCommentIndicator;
   bool showFormulaBar;
   bool showStatusBar;
-
   bool delayCalculation;
-
   KSpellConfig *spellConfig;
   bool dontCheckUpperWord;
   bool dontCheckTitleCase;
   QStringList spellListIgnoreAll;
-  KoUnit::Unit unit;
-  KSpreadSheet *activeSheet;
-
-  int numOperations;
 };
 
 /*****************************************************************************
@@ -184,19 +148,19 @@ KSpreadDoc::KSpreadDoc( QWidget *parentWidget, const char *widgetName, QObject* 
 {
   d = new DocPrivate;
   
-  d->workbook = 0;
+  d->workbook = new KSpreadMap( this, "Map" );
   d->styleManager = new KSpreadStyleManager();
+  d->activeSheet= 0;
+  
   d->pageBorderColor = Qt::red;
   
   QFont f( KoGlobal::defaultFont() );
-
   KSpreadFormat::setGlobalRowHeight( f.pointSizeFloat() + 3 );
   KSpreadFormat::setGlobalColWidth( ( f.pointSizeFloat() + 3 ) * 5 );
 
   d->plugins.setAutoDelete( false );
 
   d->delayCalculation = false;
-  d->syntaxVersion = CURRENT_SYNTAX_VERSION;
 
   if ( s_docs == 0 )
       s_docs = new QPtrList<KSpreadDoc>;
@@ -223,34 +187,31 @@ KSpreadDoc::KSpreadDoc( QWidget *parentWidget, const char *widgetName, QObject* 
 
   initInterpreter();
 
-  d->workbook = new KSpreadMap( this, "Map" );
-
   d->undoBuffer = new KSpreadUndo( this );
 
   // Make us scriptable if the document has a name
   if ( name )
       dcopObject();
 
-  d->completionMode=KGlobalSettings::CompletionAuto;
-
-  d->verticalScrollBar=true;
-  d->horizontalScrollBar=true;
-  d->columnHeader=true;
-  d->rowHeader=true;
-  d->indentValue = 10.0;
-  d->moveTo=KSpread::Bottom;
-  d->showError=false;
-  d->calcMethod=SumOfNumber;
-  d->showCommentIndicator=true;
-  d->showTabBar=true;
-  d->showFormulaBar=true;
-  d->showStatusBar=true;
-  d->spellConfig=0;
-
-  d->dontCheckUpperWord=false;
-  d->dontCheckTitleCase=false;
+  // default document properties
   d->unit = KoUnit::U_MM;
-  d->activeSheet= 0L;
+  d->syntaxVersion = CURRENT_SYNTAX_VERSION;
+  d->verticalScrollBar = true;
+  d->horizontalScrollBar = true;
+  d->columnHeader = true;
+  d->rowHeader = true;
+  d->indentValue = 10.0;
+  d->showStatusBar = true;
+  d->showFormulaBar = true;
+  d->showTabBar = true;
+  d->showCommentIndicator = true;
+  d->showError = false;
+  d->calcMethod = SumOfNumber;
+  d->moveTo = KSpread::Bottom;  
+  d->completionMode = KGlobalSettings::CompletionAuto;
+  d->spellConfig = 0;
+  d->dontCheckUpperWord = false;
+  d->dontCheckTitleCase = false;
 }
 
 bool KSpreadDoc::initDoc()
