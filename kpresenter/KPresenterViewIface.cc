@@ -601,3 +601,8 @@ void KPresenterViewIface::editDeSelectAll()
 {
     view->editDeSelectAll();
 }
+
+void KPresenterViewIface::createStyleFromSelection()
+{
+    view->createStyleFromSelection();
+}

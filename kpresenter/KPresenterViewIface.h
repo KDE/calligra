@@ -178,6 +178,7 @@ k_dcop:
     virtual void configureCompletion();
     virtual void duplicateObj();
     virtual void applyAutoFormat();
+    virtual void createStyleFromSelection();
 
 private:
     KPresenterView *view;

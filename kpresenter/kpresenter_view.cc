@@ -54,6 +54,7 @@
 #include <notebar.h>
 #include <insertpagedia.h>
 #include <koPictureFilePreview.h>
+#include <koCreateStyleDia.h>
 
 #include <dcopclient.h>
 #include <kfiledialog.h>
@@ -3109,6 +3110,10 @@ void KPresenterView::setupActions()
     actionApplyAutoFormat= new KAction( i18n( "Apply AutoFormat" ), 0,
                                         this, SLOT( applyAutoFormat() ),
                                         actionCollection(), "apply_autoformat" );
+
+    actionCreateStyleFromSelection = new KAction( i18n( "Create Style From Selection" ), 0,
+                                                  this, SLOT( createStyleFromSelection()),
+                                                  actionCollection(), "create_style" );
 
 }
 
@@ -6577,6 +6582,30 @@ KCommand * KPresenterView::applyAutoFormatToCurrentPage( const QPtrList<KoTextOb
     else
         delete macro;
     return 0L;
+}
+
+
+void KPresenterView::createStyleFromSelection()
+{
+    KPTextView *edit=m_canvas->currentTextObjectView();
+    if ( edit )
+    {
+        QStringList list;
+        QPtrListIterator<KoStyle> styleIt( m_pKPresenterDoc->styleCollection()->styleList() );
+        for ( ; styleIt.current(); ++styleIt )
+        {
+            list.append( styleIt.current()->name() );
+        }
+        KoCreateStyleDia *dia = new KoCreateStyleDia( list , this, 0 );
+        if ( dia->exec() )
+        {
+            KoStyle *style=edit->createStyleFromSelection(dia->nameOfNewStyle());
+            m_pKPresenterDoc->styleCollection()->addStyleTemplate( style );
+            m_pKPresenterDoc->updateAllStyleLists();
+
+        }
+        delete dia;
+    }
 }
 
 

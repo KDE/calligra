@@ -202,7 +202,7 @@ public:
     KPGradientCollection *getGradientCollection() { return &_gradientCollection; }
     KoPictureCollection *getClipartCollection() { return &_clipartCollection; }
 
-    KoAutoFormat * getAutoFormat() { return m_autoFormat; }
+    KoAutoFormat * getAutoFormat()const { return m_autoFormat; }
 
     void replaceObjs( bool createUndoRedo = true );
 
@@ -225,8 +225,8 @@ public:
 
     void enableEmbeddedParts( bool f );
 
-    KPTextObject *header() { return _header; }
-    KPTextObject *footer() { return _footer; }
+    KPTextObject *header()const { return _header; }
+    KPTextObject *footer()const { return _footer; }
     bool hasHeader()const { return _hasHeader; }
     bool hasFooter()const { return _hasFooter; }
     void setHeader( bool b );
@@ -247,7 +247,7 @@ public:
 
     bool raiseAndLowerObject;
 
-    KoStyleCollection * styleCollection() { return m_styleColl;}
+    KoStyleCollection * styleCollection()const { return m_styleColl;}
 
 
     void updateAllStyleLists();
@@ -262,7 +262,7 @@ public:
      * get custom kspell config
      */
     void setKSpellConfig(KSpellConfig _kspell);
-    KSpellConfig * getKSpellConfig() {return m_pKSpellConfig;}
+    KSpellConfig * getKSpellConfig()const {return m_pKSpellConfig;}
 
     bool dontCheckUpperWord() const { return m_bDontCheckUpperWord; }
     void setDontCheckUpperWord(bool _b) { m_bDontCheckUpperWord=_b;}
@@ -278,8 +278,8 @@ public:
 
 
     // The user-chosen global unit
-    QString getUnitName() { return KoUnit::unitName( m_unit ); }
-    KoUnit::Unit getUnit() { return m_unit; }
+    QString getUnitName()const { return KoUnit::unitName( m_unit ); }
+    KoUnit::Unit getUnit()const { return m_unit; }
     void setUnit( KoUnit::Unit _unit );
 
     // in pt
@@ -294,7 +294,7 @@ public:
 
     void recalcPageNum();
 
-    KPrVariableCollection *getVariableCollection() {return m_varColl;}
+    KPrVariableCollection *getVariableCollection()const {return m_varColl;}
 
     void refreshMenuCustomVariable();
 
