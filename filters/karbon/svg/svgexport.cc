@@ -201,15 +201,14 @@ QString createUID()
 }
 
 void
-SvgExport::getColorStops( const QValueList<VGradient::VColorStop> &colorStops )
+SvgExport::getColorStops( const QPtrVector<VColorStop> &colorStops )
 {
-	QValueListConstIterator<VGradient::VColorStop> itr;
-	for( itr = colorStops.begin(); itr != colorStops.end(); ++itr )
+	for( unsigned int i = 0; i < colorStops.count() ; i++ )
 	{
 		*m_defs << "<stop stop-color=\"";
-		getHexColor( m_defs, (*itr).color );
+		getHexColor( m_defs, colorStops.at( i )->color );
 		*m_defs << "\" offset=\"";
-		*m_defs << QString().setNum( (*itr).rampPoint ) << "\" />" << endl;
+		*m_defs << QString().setNum( colorStops.at( i )->rampPoint ) << "\" />" << endl;
 	}
 }
 

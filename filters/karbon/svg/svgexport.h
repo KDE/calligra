@@ -55,7 +55,7 @@ private:
 	virtual void visitVText( VText& text );
 
 	void getStroke( const VStroke& stroke );
-	void getColorStops( const QValueList<VGradient::VColorStop> &colorStops );
+	void getColorStops( const QPtrVector<VColorStop> &colorStops );
 	void getFill( const VFill& fill  );
 	void getGradient( const VGradient& grad );
 	void getHexColor( QTextStream *, const VColor& color  );
