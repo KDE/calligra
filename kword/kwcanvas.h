@@ -130,6 +130,10 @@ public:
     void scrollToOffset( int _x, int _y );
     void setContentsPos( int x, int y );
 
+    //koruler position
+    int getVertRulerPos(int y=-1);
+    int getHorzRulerPos(int x=-1);
+
 public slots:
     void printRTDebug();
     /**

@@ -342,37 +342,41 @@ void KWCanvas::keyPressEvent( QKeyEvent *e )
 {
     if( !doc->isReadWrite()) {
         switch( e->key() ) {
-            case Key_Down:
-                setContentsPos( contentsX(), contentsY() + 10 );
-                break;
-            case Key_Up:
-                setContentsPos( contentsX(), contentsY() - 10 );
-                break;
-            case Key_Left:
-                setContentsPos( contentsX() - 10, contentsY() );
-                break;
-            case Key_Right:
-                setContentsPos( contentsX() + 10, contentsY() );
-                break;
-            case Key_PageUp:
-                setContentsPos( contentsX(), contentsY() - visibleHeight() );
-                break;
-            case Key_PageDown:
-                setContentsPos( contentsX(), contentsY() + visibleHeight() );
-                break;
-            case Key_Home:
-                setContentsPos( contentsX(), 0 );
-                break;
-            case Key_End:
-                setContentsPos( contentsX(), contentsHeight() - visibleHeight() );
-                break;
-            default:
-                break;
+        case Key_Down:
+            setContentsPos( contentsX(), contentsY() + 10 );
+            break;
+        case Key_Up:
+            setContentsPos( contentsX(), contentsY() - 10 );
+            break;
+        case Key_Left:
+            setContentsPos( contentsX() - 10, contentsY() );
+            break;
+        case Key_Right:
+            setContentsPos( contentsX() + 10, contentsY() );
+            break;
+        case Key_PageUp:
+            setContentsPos( contentsX(), contentsY() - visibleHeight() );
+            break;
+        case Key_PageDown:
+            setContentsPos( contentsX(), contentsY() + visibleHeight() );
+            break;
+        case Key_Home:
+            setContentsPos( contentsX(), 0 );
+            break;
+        case Key_End:
+            setContentsPos( contentsX(), contentsHeight() - visibleHeight() );
+            break;
+        default:
+            break;
+            m_gui->getVertRuler()->setOffset( 0, -getVertRulerPos() );
         }
         return;
     }
     if ( m_currentFrameSetEdit && m_mouseMode==MM_EDIT )
-        m_currentFrameSetEdit->keyPressEvent( e );
+        {
+            m_currentFrameSetEdit->keyPressEvent( e );
+            m_gui->getVertRuler()->setOffset( 0, -getVertRulerPos() );
+        }
 }
 
 void KWCanvas::mpEditFrame( QMouseEvent *e, int mx, int my ) // mouse press in edit-frame mode
@@ -467,6 +471,8 @@ void KWCanvas::contentsMousePressEvent( QMouseEvent *e )
         return;
     int mx = e->pos().x();
     int my = e->pos().y();
+
+
     if ( e->button() == RightButton ) {
         // rmb menu
         switch ( m_mouseMode )
@@ -522,6 +528,7 @@ void KWCanvas::contentsMousePressEvent( QMouseEvent *e )
 
                 if ( m_currentFrameSetEdit )
                     m_currentFrameSetEdit->mousePressEvent( e );
+                m_gui->getVertRuler()->setOffset( 0, -getVertRulerPos() );
             }
             break;
         case MM_EDIT_FRAME:
@@ -1692,7 +1699,7 @@ void KWCanvas::doAutoScroll()
 	scrollTimer->stop();
 }
 
-void KWCanvas::slotContentsMoving( int, int cy )
+void KWCanvas::slotContentsMoving( int cx, int cy )
 {
     kdDebug() << "KWCanvas::slotContentsMoving " << cy << endl;
     // Update our "formatted paragraphs needs" in the text framesets
@@ -1705,6 +1712,8 @@ void KWCanvas::slotContentsMoving( int, int cy )
             fs->updateViewArea( this, cy + visibleHeight() );
         }
     }
+    m_gui->getVertRuler()->setOffset( 0, -getVertRulerPos(cy) );
+    m_gui->getHorzRuler()->setOffset( -getHorzRulerPos(cx), 0 );
 }
 
 /*================================================================*/
@@ -1731,6 +1740,23 @@ void KWCanvas::setContentsPos( int x, int y )
     //calcVisiblePages();
 }
 
+
+/*================================================================*/
+int KWCanvas::getVertRulerPos(int y)
+{
+    int pageNum=1;
+    if( m_currentFrameSetEdit )
+        pageNum=m_currentFrameSetEdit->currentFrame()->getPageNum() + 1;
+    return ( -(y==-1 ? contentsY() : y) + (pageNum - 1) * doc->ptPaperHeight() );
+}
+
+/*================================================================*/
+int KWCanvas::getHorzRulerPos(int x)
+{
+    return ( -(x==-1 ? contentsX() : x) );
+}
+
+/*================================================================*/
 bool KWCanvas::eventFilter( QObject *o, QEvent *e )
 {
     if ( !o || !e )
