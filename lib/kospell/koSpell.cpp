@@ -663,8 +663,11 @@ int KOSpell::modalCheck( QString& text, KOSpellConfig* _kcs )
         m_spell=0L;
     }
 
-    text = modaltext;
+    while (m_spell->status()!=Finished)
+        kapp->processEvents();
 
+    text = modaltext;
+    delete m_spell;
     return modalreturn;
 }
 
