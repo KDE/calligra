@@ -8,12 +8,12 @@ Generate Manifest file
 converting from raw XML KWord document (in KoStore?)
 Main frame/frameset (fo:border, style:border-line-width, fo:padding?, style:footnote-max-height?)
 Tables
+<FOOTNOTESETTINGS>. <ENDNOTESETTINGS>
 ...
 
 === Old OOWriter To-Do List ===
 Paragraph direction
 Paragraph bullets/counters
-Footnotes/Endnotes
 Text boxes (framesets)
 Annotations (aka "note")
 Anchors

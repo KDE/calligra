@@ -76,6 +76,7 @@ private:
     void processNormalText ( const QString& paraText,
         const TextFormatting& formatLayout,
         const FormatData& formatData);
+    void processFootnote( const VariableData& variable );
     void processVariable ( const QString& paraText,
         const TextFormatting& formatLayout,
         const FormatData& formatData);

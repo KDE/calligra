@@ -899,6 +899,45 @@ void OOWriterWorker::processNormalText ( const QString &paraText,
     }
 }
 
+void OOWriterWorker::processFootnote( const VariableData& variable )
+{
+    // Footnote
+    const QValueList<ParaData> *paraList = variable.getFootnotePara();
+    if( paraList )
+    {
+        const QString value ( variable.getFootnoteValue() );
+        //const bool automatic = formatData.variable.getFootnoteAuto();
+        const bool flag = variable.getFootnoteType();
+
+        if ( flag )
+        {
+            *m_streamOut << "<text:footnote text:id=\"ft";
+            *m_streamOut << (++m_footnoteNumber);
+            *m_streamOut << "\">";
+            *m_streamOut << "<text:footnote-citation>" << escapeOOText( value ) << "</text:footnote-citation>";
+            *m_streamOut << "<text:footnote-body>\n";
+
+            doFullAllParagraphs( *paraList );
+
+            *m_streamOut << "\n</text:footnote-body>";
+            *m_streamOut << "</text:footnote>";
+        }
+        else
+        {
+            *m_streamOut << "<text:endnote text:id=\"ft";
+            *m_streamOut << (++m_footnoteNumber);
+            *m_streamOut << "\">";
+            *m_streamOut << "<text:endnote-citation>" << escapeOOText( value ) << "</text:endnote-citation>";
+            *m_streamOut << "<text:endnote-body>\n";
+
+            doFullAllParagraphs( *paraList );
+
+            *m_streamOut << "\n</text:endnote-body>";
+            *m_streamOut << "</text:endnote>";
+        }
+    }
+}
+
 void OOWriterWorker::processVariable ( const QString&,
     const TextFormatting& formatLayout,
     const FormatData& formatData)
@@ -939,23 +978,7 @@ void OOWriterWorker::processVariable ( const QString&,
     else if (11==formatData.variable.m_type)
     {
         // Footnote
-        const QString value = formatData.variable.getFootnoteValue();
-        //const bool automatic = formatData.variable.getFootnoteAuto();
-        QValueList<ParaData> *paraList = formatData.variable.getFootnotePara();
-        if( paraList )
-        {
-            *m_streamOut << "<text:footnote text:id=\"ft";
-            *m_streamOut << (++m_footnoteNumber);
-            *m_streamOut << "\">";
-            *m_streamOut << "<text:footnote-citation>" << escapeOOText(value) << "</text:footnote-citation>";
-            *m_streamOut << "<text:footnote-body>\n";
-
-            doFullAllParagraphs(*paraList);
-
-            *m_streamOut << "\n</text:footnote-body>";
-            *m_streamOut << "</text:footnote>";
-
-        }
+        processFootnote ( formatData.variable );
     }
     else
     {

@@ -209,6 +209,9 @@ class FrameAnchor
       Table   table;
 };
 
+/**
+ * Data of variables
+ */
 class VariableData
 {
 public:
@@ -220,33 +223,43 @@ public:
       footnotePara(other.footnotePara) {}
 public:
     /**
-     * Set parameters of a <LINK> element
+     * Set parameters of a LINK element
      */
     void setLink(const QString& linkName, const QString& hrefName);
-    QString getLinkName(void) const; // Name of link (attribute "linkName" of <LINK>)
-    QString getHrefName(void) const; // Reference of link (attribute "hrefName" of <LINK>)
+    /// Name of link (attribute "linkName" of LINK)
+    QString getLinkName(void) const;
+    /// Reference of link (attribute "hrefName" of LINK)
+    QString getHrefName(void) const;
     /**
-     * Set parameters of a <PGNUM> element
+     * Set parameters of a PGNUM element
      */
     void setPgNum(const QString& subtype, const QString& value);
     bool isPageNumber(void) const;
     bool isPageCount(void) const;
     /*
-     * Set parameters of a <FIELD> element
+     * Set parameters of a FIELD element
      */
     void setField(const QString& subtype, const QString& value);
     QString getFieldName(void) const;
     QString getFieldValue(void) const;
     /*
-     * Set parameters of a <FOOTNOTE> element
+     * Set parameters of a FOOTNOTE element
      */
-    void setFootnote(bool automatic, const QString& value, QValueList<ParaData>* para);
+    void setFootnote( const QString& notetype, const QString& automatic, const QString& value, QValueList<ParaData>* para );
+    /// Is the footnote an automatic one (false == manual)
     bool getFootnoteAuto(void) const;
+    /// Get the value (counter) of the footnote
     QString getFootnoteValue(void) const;
+    /// Get type of footnote (true of footnote, false for endnote)
+    bool getFootnoteType( void ) const;
+    /// Paragrapgh of the footnote
     QValueList<ParaData>* getFootnotePara(void) const;
 
+    /// Key (extended type) of variable
     QString m_key;
+    /// result text of the variable
     QString m_text;
+    /// Type of variable
     int m_type;
 
 protected:
