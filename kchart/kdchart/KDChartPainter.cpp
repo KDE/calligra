@@ -8,6 +8,13 @@
   Copyright (C) 2001 by Klarälvdalens Datakonsult AB
 */
 
+#ifdef __WINDOWS__
+#include <math.h>
+#else
+#include <cmath>
+#include <stdlib.h>
+#endif
+
 #include <KDDrawText.h>
 #include <KDChartPainter.h>
 #include <KDChartEnums.h>
