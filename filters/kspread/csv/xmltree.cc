@@ -74,6 +74,12 @@ const QString XMLTree::part()
 
   root->save(t);  // Why does this take sooooo long (approx. 8s on my Athlon 500 :( )
 
+//David: gdb says that QString::replace calls itself recursively an enormous amount of time
+// This is called by QStringBuffer::writeBlock (), called by QTextStream::writeBlock ()
+// called by QTextStream::operator<< () in QDOM_AttrPrivate::save ().
+//
+// And this looks related to the UTF 8 encoding ...
+
   kDebugInfo( 31501, (const char*)QString::number((long)tmr.elapsed()));
   kDebugInfo( 31501, "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX");
 
