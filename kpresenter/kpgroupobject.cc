@@ -30,6 +30,9 @@
 #include <kppieobject.h>
 #include <kpfreehandobject.h>
 #include <kppolylineobject.h>
+#include <kpquadricbeziercurveobject.h>
+#include <kpcubicbeziercurveobject.h>
+
 #include <kdebug.h>
 
 #include <qpainter.h>
@@ -194,6 +197,16 @@ void KPGroupObject::load(const QDomElement &element, KPresenterDoc *doc)
                         KPPolylineObject *kppolylineobject = new KPPolylineObject();
                         kppolylineobject->load( current );
                         objects.append( kppolylineobject );
+                    } break;
+                    case OT_QUADRICBEZIERCURVE: {
+                        KPQuadricBezierCurveObject *kpQuadricBezierCurveObject = new KPQuadricBezierCurveObject();
+                        kpQuadricBezierCurveObject->load( current );
+                        objects.append( kpQuadricBezierCurveObject );
+                    } break;
+                    case OT_CUBICBEZIERCURVE: {
+                        KPCubicBezierCurveObject *kpCubicBezierCurveObject = new KPCubicBezierCurveObject();
+                        kpCubicBezierCurveObject->load( current );
+                        objects.append( kpCubicBezierCurveObject );
                     } break;
                     case OT_GROUP: {
                         KPGroupObject *kpgroupobject = new KPGroupObject();

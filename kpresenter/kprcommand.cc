@@ -29,6 +29,8 @@
 #include <kpautoformobject.h>
 #include <kpfreehandobject.h>
 #include <kppolylineobject.h>
+#include <kpquadricbeziercurveobject.h>
+#include <kpcubicbeziercurveobject.h>
 
 #include <kptextobject.h>
 #include <kppixmapobject.h>
@@ -1035,6 +1037,18 @@ void PenBrushCmd::execute()
 	    dynamic_cast<KPPolylineObject*>( kpobject )->setLineEnd( newPen.lineEnd );
 	    doc->repaint( kpobject );
 	    break;
+        case OT_QUADRICBEZIERCURVE:
+	    dynamic_cast<KPQuadricBezierCurveObject*>( kpobject )->setPen( newPen.pen );
+	    dynamic_cast<KPQuadricBezierCurveObject*>( kpobject )->setLineBegin( newPen.lineBegin );
+	    dynamic_cast<KPQuadricBezierCurveObject*>( kpobject )->setLineEnd( newPen.lineEnd );
+	    doc->repaint( kpobject );
+	    break;
+        case OT_CUBICBEZIERCURVE:
+	    dynamic_cast<KPCubicBezierCurveObject*>( kpobject )->setPen( newPen.pen );
+	    dynamic_cast<KPCubicBezierCurveObject*>( kpobject )->setLineBegin( newPen.lineBegin );
+	    dynamic_cast<KPCubicBezierCurveObject*>( kpobject )->setLineEnd( newPen.lineEnd );
+	    doc->repaint( kpobject );
+	    break;
 	default: break;
 	}
     }
@@ -1199,6 +1213,22 @@ void PenBrushCmd::unexecute()
 		dynamic_cast<KPPolylineObject*>( kpobject )->setPen( oldPen.at( i )->pen );
 		dynamic_cast<KPPolylineObject*>( kpobject )->setLineBegin( oldPen.at( i )->lineBegin );
 		dynamic_cast<KPPolylineObject*>( kpobject )->setLineEnd( oldPen.at( i )->lineEnd );
+		doc->repaint( kpobject );
+	    }
+	} break;
+        case OT_QUADRICBEZIERCURVE: {
+	    if ( oldPen.count() > i ) {
+		dynamic_cast<KPQuadricBezierCurveObject*>( kpobject )->setPen( oldPen.at( i )->pen );
+		dynamic_cast<KPQuadricBezierCurveObject*>( kpobject )->setLineBegin( oldPen.at( i )->lineBegin );
+		dynamic_cast<KPQuadricBezierCurveObject*>( kpobject )->setLineEnd( oldPen.at( i )->lineEnd );
+		doc->repaint( kpobject );
+	    }
+	} break;
+        case OT_CUBICBEZIERCURVE: {
+	    if ( oldPen.count() > i ) {
+		dynamic_cast<KPCubicBezierCurveObject*>( kpobject )->setPen( oldPen.at( i )->pen );
+		dynamic_cast<KPCubicBezierCurveObject*>( kpobject )->setLineBegin( oldPen.at( i )->lineBegin );
+		dynamic_cast<KPCubicBezierCurveObject*>( kpobject )->setLineEnd( oldPen.at( i )->lineEnd );
 		doc->repaint( kpobject );
 	    }
 	} break;

@@ -33,6 +33,8 @@
 
 #include <global.h>
 
+#define RAD_FACTOR 180.0 / M_PI
+
 class KoTextFormatInterface;
 class KPresenterView;
 class KPresenterDoc;
@@ -272,6 +274,7 @@ protected:
     void insertAutoform( QRect, bool );
     void insertFreehand( const QPointArray &_pointArray );
     void insertPolyline( const QPointArray &_pointArray );
+    void insertCubicBezierCurve( const QPointArray &_pointArray );
 
     void selectNext();
     void selectPrev();
@@ -284,6 +287,10 @@ protected:
     virtual bool focusNextPrevChild( bool );
 
     void endDrawPolyline();
+
+    void drawCubicBezierCurve( int _dx, int _dy );
+    void endDrawCubicBezierCurve();
+    double getAngle( QPoint p1, QPoint p2 );
 
 private:
     // variables
@@ -323,10 +330,13 @@ private:
 
     KPresenterSoundPlayer *soundPlayer;
 
-    QPointArray m_pointArray;
-    QPoint m_dragStartPoint, m_dragEndPoint;
+    QPointArray m_pointArray, m_oldCubicBezierPointArray;
+    QPoint m_dragStartPoint, m_dragEndPoint, m_dragSymmetricEndPoint;
+    QPoint m_CubicBezierSecondPoint, m_CubicBezierThirdPoint;
     unsigned int m_indexPointArray;
     bool m_drawPolyline;
+    bool m_drawCubicBezierCurve;
+    bool m_drawLineWithCubicBezierCurve;
 
 private:
     QValueList<int> pages(const QString &range);

@@ -148,6 +148,12 @@ void KPPresStructObjectItem::setObject( KPObject *o, int num )
     case OT_POLYLINE:
       setPixmap( 0, KPBarIcon( "polyline" ) );
       break;
+    case OT_QUADRICBEZIERCURVE:
+      setPixmap( 0, KPBarIcon( "quadricbeziercurve" ) );
+      break;
+    case OT_CUBICBEZIERCURVE:
+      setPixmap( 0, KPBarIcon( "cubicbeziercurve" ) );
+      break;
     case OT_GROUP:
       setPixmap( 0, KPBarIcon( "group" ) );
       break;

@@ -37,6 +37,8 @@
 #include <insertpagedia.h>
 #include <kpfreehandobject.h>
 #include <kppolylineobject.h>
+#include <kpquadricbeziercurveobject.h>
+#include <kpcubicbeziercurveobject.h>
 
 #include <qpopupmenu.h>
 #include <qclipboard.h>
@@ -669,7 +671,7 @@ bool KPresenterDoc::loadXML( QIODevice * dev, const QDomDocument& doc )
     }
     initConfig();
     setModified(false);
-    
+
     kdDebug() << "Loading took " << (float)(dt.elapsed()) / 1000 << " seconds" << endl;
 
     return b;
@@ -732,10 +734,10 @@ bool KPresenterDoc::loadXML( const QDomDocument &doc )
     QDomElement elem=document.firstChild().toElement();
 
     uint childCount=document.childNodes().count();
-    
+
     while(!elem.isNull()) {
         uint base = childCount;
-          
+
         if(elem.tagName()=="EMBEDDED") {
             KPresenterChild *ch = new KPresenterChild( this );
             KPPartObject *kppartobject = 0L;
@@ -938,9 +940,9 @@ bool KPresenterDoc::loadXML( const QDomDocument &doc )
             }
         }
         elem=elem.nextSibling().toElement();
-        
+
         base-=1;
-        
+
         emit sigProgress(::abs(100-base/childCount*100)+10);
     }
 
@@ -1113,6 +1115,26 @@ void KPresenterDoc::loadObjects( const QDomElement &element, bool _paste )
                     addCommand( insertCmd );
                 } else
                     _objectList->append( kppolylineobject );
+            } break;
+            case OT_QUADRICBEZIERCURVE: {
+                KPQuadricBezierCurveObject *kpQuadricBezierCurveObject = new KPQuadricBezierCurveObject();
+                kpQuadricBezierCurveObject->load(obj);
+                if ( _paste ) {
+                    InsertCmd *insertCmd = new InsertCmd( i18n( "Insert Quadric Bezier Curve" ), kpQuadricBezierCurveObject, this );
+                    insertCmd->execute();
+                    addCommand( insertCmd );
+                } else
+                    _objectList->append( kpQuadricBezierCurveObject );
+            } break;
+            case OT_CUBICBEZIERCURVE: {
+                KPCubicBezierCurveObject *kpCubicBezierCurveObject = new KPCubicBezierCurveObject();
+                kpCubicBezierCurveObject->load(obj);
+                if ( _paste ) {
+                    InsertCmd *insertCmd = new InsertCmd( i18n( "Insert Cubic Bezier Curve" ), kpCubicBezierCurveObject, this );
+                    insertCmd->execute();
+                    addCommand( insertCmd );
+                } else
+                    _objectList->append( kpCubicBezierCurveObject );
             } break;
             case OT_GROUP: {
                 KPGroupObject *kpgroupobject = new KPGroupObject();
@@ -1587,6 +1609,18 @@ bool KPresenterDoc::setPenBrush( QPen pen, QBrush brush, LineEnd lb, LineEnd le,
 		ptmp->lineEnd = dynamic_cast<KPPolylineObject*>( kpobject )->getLineEnd();
 		ret = true;
 		break;
+             case OT_QUADRICBEZIERCURVE:
+		ptmp->pen = QPen( dynamic_cast<KPQuadricBezierCurveObject*>( kpobject )->getPen() );
+		ptmp->lineBegin = dynamic_cast<KPQuadricBezierCurveObject*>( kpobject )->getLineBegin();
+		ptmp->lineEnd = dynamic_cast<KPQuadricBezierCurveObject*>( kpobject )->getLineEnd();
+		ret = true;
+		break;
+             case OT_CUBICBEZIERCURVE:
+		ptmp->pen = QPen( dynamic_cast<KPCubicBezierCurveObject*>( kpobject )->getPen() );
+		ptmp->lineBegin = dynamic_cast<KPCubicBezierCurveObject*>( kpobject )->getLineBegin();
+		ptmp->lineEnd = dynamic_cast<KPCubicBezierCurveObject*>( kpobject )->getLineEnd();
+		ret = true;
+		break;
 	    default: break;
 	    }
 	    _oldPen.append( ptmp );
@@ -1661,6 +1695,18 @@ bool KPresenterDoc::setLineBegin( LineEnd lb )
 		ptmp->pen = QPen( dynamic_cast<KPPolylineObject*>( kpobject )->getPen() );
 		ptmp->lineBegin = dynamic_cast<KPPolylineObject*>( kpobject )->getLineBegin();
 		ptmp->lineEnd = dynamic_cast<KPPolylineObject*>( kpobject )->getLineEnd();
+		ret = true;
+	    } break;
+            case OT_QUADRICBEZIERCURVE: {
+		ptmp->pen = QPen( dynamic_cast<KPQuadricBezierCurveObject*>( kpobject )->getPen() );
+		ptmp->lineBegin = dynamic_cast<KPQuadricBezierCurveObject*>( kpobject )->getLineBegin();
+		ptmp->lineEnd = dynamic_cast<KPQuadricBezierCurveObject*>( kpobject )->getLineEnd();
+		ret = true;
+	    } break;
+            case OT_CUBICBEZIERCURVE: {
+		ptmp->pen = QPen( dynamic_cast<KPCubicBezierCurveObject*>( kpobject )->getPen() );
+		ptmp->lineBegin = dynamic_cast<KPCubicBezierCurveObject*>( kpobject )->getLineBegin();
+		ptmp->lineEnd = dynamic_cast<KPCubicBezierCurveObject*>( kpobject )->getLineEnd();
 		ret = true;
 	    } break;
 	    default: continue; break;
@@ -1739,6 +1785,18 @@ bool KPresenterDoc::setLineEnd( LineEnd le )
 		ptmp->pen = QPen( dynamic_cast<KPPolylineObject*>( kpobject )->getPen() );
 		ptmp->lineBegin = dynamic_cast<KPPolylineObject*>( kpobject )->getLineBegin();
 		ptmp->lineEnd = dynamic_cast<KPPolylineObject*>( kpobject )->getLineEnd();
+		ret = true;
+	    } break;
+            case OT_QUADRICBEZIERCURVE: {
+		ptmp->pen = QPen( dynamic_cast<KPQuadricBezierCurveObject*>( kpobject )->getPen() );
+		ptmp->lineBegin = dynamic_cast<KPQuadricBezierCurveObject*>( kpobject )->getLineBegin();
+		ptmp->lineEnd = dynamic_cast<KPQuadricBezierCurveObject*>( kpobject )->getLineEnd();
+		ret = true;
+	    } break;
+            case OT_CUBICBEZIERCURVE: {
+		ptmp->pen = QPen( dynamic_cast<KPCubicBezierCurveObject*>( kpobject )->getPen() );
+		ptmp->lineBegin = dynamic_cast<KPCubicBezierCurveObject*>( kpobject )->getLineBegin();
+		ptmp->lineEnd = dynamic_cast<KPCubicBezierCurveObject*>( kpobject )->getLineEnd();
 		ret = true;
 	    } break;
 	    default: continue; break;
@@ -1978,6 +2036,18 @@ bool KPresenterDoc::setPenColor( QColor c, bool fill )
 		ptmp->lineEnd = dynamic_cast<KPPolylineObject*>( kpobject )->getLineEnd();
 		ret = true;
 	    } break;
+            case OT_QUADRICBEZIERCURVE: {
+		ptmp->pen = QPen( dynamic_cast<KPQuadricBezierCurveObject*>( kpobject )->getPen() );
+		ptmp->lineBegin = dynamic_cast<KPQuadricBezierCurveObject*>( kpobject )->getLineBegin();
+		ptmp->lineEnd = dynamic_cast<KPQuadricBezierCurveObject*>( kpobject )->getLineEnd();
+		ret = true;
+	    } break;
+            case OT_CUBICBEZIERCURVE: {
+		ptmp->pen = QPen( dynamic_cast<KPCubicBezierCurveObject*>( kpobject )->getPen() );
+		ptmp->lineBegin = dynamic_cast<KPCubicBezierCurveObject*>( kpobject )->getLineBegin();
+		ptmp->lineEnd = dynamic_cast<KPCubicBezierCurveObject*>( kpobject )->getLineEnd();
+		ret = true;
+	    } break;
 	    default: break;
 	    }
 	    _oldPen.append( ptmp );
@@ -2029,7 +2099,9 @@ bool KPresenterDoc::setBrushColor( QColor c, bool fill )
 	kpobject = objectList()->at( i );
 	if ( kpobject->isSelected() && kpobject->getType() != OT_LINE
                                     && kpobject->getType() != OT_FREEHAND
-                                    && kpobject->getType() != OT_POLYLINE ) {
+                                    && kpobject->getType() != OT_POLYLINE
+                                    && kpobject->getType() != OT_QUADRICBEZIERCURVE
+                                    && kpobject->getType() != OT_CUBICBEZIERCURVE ) {
 	    ptmp = new PenBrushCmd::Pen;
 	    btmp = new PenBrushCmd::Brush;
 	    switch ( kpobject->getType() )
@@ -2302,6 +2374,12 @@ QPen KPresenterDoc::getPen( QPen pen )
             case OT_POLYLINE:
 		return dynamic_cast<KPPolylineObject*>( kpobject )->getPen();
 		break;
+            case OT_QUADRICBEZIERCURVE:
+		return dynamic_cast<KPQuadricBezierCurveObject*>( kpobject )->getPen();
+		break;
+            case OT_CUBICBEZIERCURVE:
+		return dynamic_cast<KPCubicBezierCurveObject*>( kpobject )->getPen();
+		break;
 	    default: break;
 	    }
 	}
@@ -2335,6 +2413,12 @@ LineEnd KPresenterDoc::getLineBegin( LineEnd lb )
             case OT_POLYLINE:
 		return dynamic_cast<KPPolylineObject*>( kpobject )->getLineBegin();
 		break;
+            case OT_QUADRICBEZIERCURVE:
+		return dynamic_cast<KPQuadricBezierCurveObject*>( kpobject )->getLineBegin();
+		break;
+            case OT_CUBICBEZIERCURVE:
+		return dynamic_cast<KPCubicBezierCurveObject*>( kpobject )->getLineBegin();
+		break;
 	    default: break;
 	    }
 	}
@@ -2366,6 +2450,12 @@ LineEnd KPresenterDoc::getLineEnd( LineEnd le )
 		break;
             case OT_POLYLINE:
 		return dynamic_cast<KPPolylineObject*>( kpobject )->getLineEnd();
+		break;
+            case OT_QUADRICBEZIERCURVE:
+		return dynamic_cast<KPQuadricBezierCurveObject*>( kpobject )->getLineEnd();
+		break;
+            case OT_CUBICBEZIERCURVE:
+		return dynamic_cast<KPCubicBezierCurveObject*>( kpobject )->getLineEnd();
 		break;
 	    default: break;
 	    }
@@ -3063,6 +3153,38 @@ void KPresenterDoc::insertPolyline( const QPointArray &points, QRect r, QPen pen
     kppolylineobject->setSelected( true );
 
     InsertCmd *insertCmd = new InsertCmd( i18n( "Insert Polyline" ), kppolylineobject, this );
+    insertCmd->execute();
+    addCommand( insertCmd );
+}
+
+/*================ insert a quadric bezier curve =================*/
+void KPresenterDoc::insertQuadricBezierCurve( const QPointArray &points, const QPointArray &allPoints, QRect r, QPen pen,
+                                            LineEnd lb, LineEnd le, int diffx, int diffy )
+{
+    QSize size( r.width(), r.height() );
+
+    KPQuadricBezierCurveObject *kpQuadricBezierCurveObject = new KPQuadricBezierCurveObject( points, allPoints, size, pen, lb, le );
+    kpQuadricBezierCurveObject->setOrig( r.x() + diffx, r.y() + diffy );
+    kpQuadricBezierCurveObject->setSize( r.width(), r.height() );
+    kpQuadricBezierCurveObject->setSelected( true );
+
+    InsertCmd *insertCmd = new InsertCmd( i18n( "Insert Quadric Bezier Curve" ), kpQuadricBezierCurveObject, this );
+    insertCmd->execute();
+    addCommand( insertCmd );
+}
+
+/*================= insert a cubic bezier curve ==================*/
+void KPresenterDoc::insertCubicBezierCurve( const QPointArray &points, const QPointArray &allPoints, QRect r, QPen pen,
+                                            LineEnd lb, LineEnd le, int diffx, int diffy )
+{
+    QSize size( r.width(), r.height() );
+
+    KPCubicBezierCurveObject *kpCubicBezierCurveObject = new KPCubicBezierCurveObject( points, allPoints, size, pen, lb, le );
+    kpCubicBezierCurveObject->setOrig( r.x() + diffx, r.y() + diffy );
+    kpCubicBezierCurveObject->setSize( r.width(), r.height() );
+    kpCubicBezierCurveObject->setSelected( true );
+
+    InsertCmd *insertCmd = new InsertCmd( i18n( "Insert Cubic Bezier Curve" ), kpCubicBezierCurveObject, this );
     insertCmd->execute();
     addCommand( insertCmd );
 }
@@ -3769,6 +3891,7 @@ int KPresenterDoc::getPenBrushFlags()
         if ( kpobject->isSelected() ) {
             switch ( kpobject->getType() ) {
                 case OT_LINE: case OT_FREEHAND: case OT_POLYLINE:
+                case OT_QUADRICBEZIERCURVE: case OT_CUBICBEZIERCURVE:
                     flags = flags | StyleDia::SdPen;
                     flags = flags | StyleDia::SdEndBeginLine;
                     break;

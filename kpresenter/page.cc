@@ -45,6 +45,7 @@
 #include <kptextobject.h>
 #include <kpresenter_sound_player.h>
 #include <notebar.h>
+#include <kpresenter_utils.h>
 
 #include <kapplication.h>
 #include <kmimemagic.h>
@@ -60,6 +61,8 @@
 #include <kozoomhandler.h>
 #include <stdlib.h>
 #include <qclipboard.h>
+
+#include <math.h>
 
 /******************************************************************/
 /* class Page - Page                                              */
@@ -103,6 +106,9 @@ Page::Page( QWidget *parent, const char *name, KPresenterView *_view )
         drawLineInDrawMode = false;
         soundPlayer = 0;
         m_drawPolyline = false;
+        m_drawCubicBezierCurve = false;
+        m_drawLineWithCubicBezierCurve = true;
+        m_oldCubicBezierPointArray.putPoints( 0, 4, 0,0, 0,0, 0,0, 0,0 );
     } else {
         view = 0;
         hide();
@@ -388,6 +394,65 @@ void Page::mousePressEvent( QMouseEvent *e )
                 return;
             }
 
+            if ( m_drawCubicBezierCurve && ( toolEditMode == INS_CUBICBEZIERCURVE || toolEditMode == INS_QUADRICBEZIERCURVE ) ) {
+                if ( m_drawLineWithCubicBezierCurve ) {
+                    QPainter p( this );
+                    p.setPen( QPen( Qt::black, 1, Qt::SolidLine ) );
+                    p.setBrush( Qt::NoBrush );
+                    p.setRasterOp( Qt::NotROP );
+
+                    QPoint oldStartPoint = m_dragStartPoint;
+
+                    m_dragStartPoint = QPoint( ( ( e->x() + diffx() ) / rastX() ) * rastX() - diffx(),
+                                               ( ( e->y() + diffy() ) / rastY() ) * rastY() - diffy() );
+
+                    p.drawLine( oldStartPoint, m_dragStartPoint );  // erase old line
+                    p.end();
+
+                    m_pointArray.putPoints( m_indexPointArray, 1, m_dragStartPoint.x(), m_dragStartPoint.y() );
+                    ++m_indexPointArray;
+                    m_drawLineWithCubicBezierCurve = false;
+                }
+                else {
+                    QPoint _oldEndPoint = QPoint( ( ( e->x() + diffx() ) / rastX() ) * rastX() - diffx(),
+                                                  ( ( e->y() + diffy() ) / rastY() ) * rastY() - diffy() );
+                    QPainter p( this );
+                    QPen _pen = QPen( Qt::black, 1, Qt::DashLine );
+                    p.setPen( _pen );
+                    p.setBrush( Qt::NoBrush );
+                    p.setRasterOp( Qt::NotROP );
+
+                    p.save();
+                    double _angle = getAngle( _oldEndPoint, m_dragStartPoint );
+                    drawFigure( L_SQUARE, &p, _oldEndPoint, _pen.color(), _pen.width(), _angle ); // erase old figure
+                    p.restore();
+
+                    p.drawLine( m_dragStartPoint, _oldEndPoint ); // erase old line
+
+                    int p_x = m_dragStartPoint.x() * 2 - _oldEndPoint.x();
+                    int p_y = m_dragStartPoint.y() * 2 - _oldEndPoint.y();
+                    QPoint _oldSymmetricEndPoint = QPoint( p_x, p_y );
+
+                    p.save();
+                    _angle = getAngle( _oldSymmetricEndPoint, m_dragStartPoint );
+                    drawFigure( L_SQUARE, &p, _oldSymmetricEndPoint, _pen.color(), _pen.width(), _angle );  // erase old figure
+                    p.restore();
+
+                    p.drawLine( m_dragStartPoint, _oldSymmetricEndPoint );  // erase old line
+
+                    m_pointArray.putPoints( m_indexPointArray, 3, m_CubicBezierSecondPoint.x(), m_CubicBezierSecondPoint.y(),
+                                            m_CubicBezierThirdPoint.x(), m_CubicBezierThirdPoint.y(),
+                                            m_dragStartPoint.x(), m_dragStartPoint.y() );
+                    m_indexPointArray += 3;
+                    m_drawLineWithCubicBezierCurve = true;
+                    m_oldCubicBezierPointArray = QPointArray();
+                    m_oldCubicBezierPointArray.putPoints( 0, 4, 0,0, 0,0, 0,0, 0,0 );
+                    m_dragEndPoint = m_dragStartPoint;
+                }
+
+                return;
+            }
+
             switch ( toolEditMode ) {
                 case TEM_MOUSE: {
                     bool overObject = false;
@@ -460,6 +525,22 @@ void Page::mousePressEvent( QMouseEvent *e )
                     m_pointArray.putPoints( m_indexPointArray, 1, m_dragStartPoint.x(), m_dragStartPoint.y() );
                     ++m_indexPointArray;
                 } break;
+                case INS_CUBICBEZIERCURVE: case INS_QUADRICBEZIERCURVE: {
+                    deSelectAllObj();
+                    mousePressed = true;
+                    insRect = QRect( ( ( e->x() + diffx() ) / rastX() ) * rastX() - diffx(),
+                                     ( ( e->y() + diffy() ) / rastY() ) * rastY() - diffy(), 0, 0 );
+
+                    m_drawCubicBezierCurve = true;
+                    m_drawLineWithCubicBezierCurve = true;
+                    m_indexPointArray = 0;
+                    m_oldCubicBezierPointArray.putPoints( 0, 4, 0,0, 0,0, 0,0, 0,0 );
+                    m_dragStartPoint = QPoint( ( ( e->x() + diffx() ) / rastX() ) * rastX() - diffx(),
+                                               ( ( e->y() + diffy() ) / rastY() ) * rastY() - diffy() );
+                    m_dragEndPoint = m_dragStartPoint;
+                    m_pointArray.putPoints( m_indexPointArray, 1, m_dragStartPoint.x(), m_dragStartPoint.y() );
+                    ++m_indexPointArray;
+                } break;
                 default: {
                     deSelectAllObj();
                     mousePressed = true;
@@ -475,6 +556,27 @@ void Page::mousePressEvent( QMouseEvent *e )
             m_pointArray.putPoints( m_indexPointArray, 1, m_dragStartPoint.x(), m_dragStartPoint.y() );
             ++m_indexPointArray;
             endDrawPolyline();
+
+            mouseMoveEvent( e );
+
+            return;
+        }
+
+        if ( e->button() == RightButton && ( toolEditMode == INS_CUBICBEZIERCURVE || toolEditMode == INS_QUADRICBEZIERCURVE )
+             && !m_pointArray.isNull() && m_drawCubicBezierCurve ) {
+            if ( m_drawLineWithCubicBezierCurve ) {
+                QPoint point = QPoint( ( ( e->x() + diffx() ) / rastX() ) * rastX() - diffx(),
+                                       ( ( e->y() + diffy() ) / rastY() ) * rastY() - diffy() );
+                m_pointArray.putPoints( m_indexPointArray, 1, point.x(), point.y() );
+                ++m_indexPointArray;
+            }
+            else {
+                m_pointArray.putPoints( m_indexPointArray, 2, m_CubicBezierSecondPoint.x(), m_CubicBezierSecondPoint.y(),
+                                        m_CubicBezierThirdPoint.x(), m_CubicBezierThirdPoint.y() );
+                m_indexPointArray += 2;
+            }
+
+            endDrawCubicBezierCurve();
 
             mouseMoveEvent( e );
 
@@ -615,7 +717,8 @@ void Page::mouseReleaseEvent( QMouseEvent *e )
     _objects.setAutoDelete( false );
     KPObject *kpobject = 0;
 
-    if ( m_drawPolyline && toolEditMode == INS_POLYLINE ) {
+    if ( ( m_drawPolyline && toolEditMode == INS_POLYLINE )
+         || ( m_drawCubicBezierCurve && ( toolEditMode == INS_CUBICBEZIERCURVE || toolEditMode == INS_QUADRICBEZIERCURVE ) ) ) {
         return;
     }
 
@@ -1085,8 +1188,8 @@ void Page::mouseMoveEvent( QMouseEvent *e )
                                          ( ( e->y() + diffy() ) / rastY() ) * rastY() - diffy() );
                 QPainter p( this );
                 p.setPen( QPen( black, 1, SolidLine ) );
-		p.setBrush( NoBrush );
-		p.setRasterOp( NotROP );
+                p.setBrush( NoBrush );
+                p.setRasterOp( NotROP );
                 p.drawLine( m_dragStartPoint, m_dragEndPoint );
                 p.end();
 
@@ -1102,8 +1205,8 @@ void Page::mouseMoveEvent( QMouseEvent *e )
             case INS_POLYLINE: {
                 QPainter p( this );
                 p.setPen( QPen( black, 1, SolidLine ) );
-		p.setBrush( NoBrush );
-		p.setRasterOp( NotROP );
+                p.setBrush( NoBrush );
+                p.setRasterOp( NotROP );
                 p.drawLine( m_dragStartPoint, m_dragEndPoint ); //
                 m_dragEndPoint = QPoint( ( ( e->x() + diffx() ) / rastX() ) * rastX() - diffx(),
                                          ( ( e->y() + diffy() ) / rastY() ) * rastY() - diffy() );
@@ -1115,6 +1218,16 @@ void Page::mouseMoveEvent( QMouseEvent *e )
                 view->penColorChanged( view->getPen() );
                 view->brushColorChanged( view->getBrush() );
             } break;
+            case INS_CUBICBEZIERCURVE: case INS_QUADRICBEZIERCURVE:{
+                drawCubicBezierCurve( ( ( e->x() + diffx() ) / rastX() ) * rastX() - diffx(),
+                                      ( ( e->y() + diffy() ) / rastY() ) * rastY() - diffy() );
+
+                mouseSelectedObject = true;
+
+                view->penColorChanged( view->getPen() );
+                view->brushColorChanged( view->getBrush() );
+            } break;
+            default: break;
 	    }
 	}
     } else if ( !editMode && drawMode && drawLineInDrawMode ) {
@@ -1216,6 +1329,20 @@ void Page::keyPressEvent( QKeyEvent *e )
             if ( !spManualSwitch() )
                 view->autoScreenPresStopTimer();
 	    slotGotoPage(); break;
+        case Key_Home:  // go to first page
+            gotoPage( 1 );
+            if ( !spManualSwitch() ) {
+                view->setCurrentTimer( 1 );
+                setNextPageTimer( true );
+            }
+            break;
+        case Key_End:  // go to last page
+            gotoPage( slideList.count() );
+            if ( !spManualSwitch() ) {
+                view->setCurrentTimer( 1 );
+                setNextPageTimer( true );
+            }
+            break;
 	default: break;
 	}
     } else if ( editNum != -1 ) {
@@ -3424,13 +3551,116 @@ void Page::insertPolyline( const QPointArray &_pointArray )
 }
 
 /*================================================================*/
+void Page::insertCubicBezierCurve( const QPointArray &_pointArray )
+{
+    QPointArray _points( _pointArray );
+    QPointArray _allPoints;
+    unsigned int pointCount = _points.count();
+    QRect _rect;
+
+    if ( pointCount == 2 ) { // line
+        _rect = _points.boundingRect();
+        _allPoints = _points;
+    }
+    else { // cubic bezier curve
+        QPointArray tmpPointArray;
+        unsigned int _tmpIndex = 0;
+        unsigned int count = 0;
+        while ( count < pointCount ) {
+            if ( pointCount >= ( count + 4 ) ) { // for cubic bezier curve
+                int _firstX = _points.at( count ).x();
+                int _firstY = _points.at( count ).y();
+
+                int _fourthX = _points.at( count + 1 ).x();
+                int _fourthY = _points.at( count + 1 ).y();
+
+                int _secondX = _points.at( count + 2 ).x();
+                int _secondY = _points.at( count + 2 ).y();
+
+                int _thirdX = _points.at( count + 3 ).x();
+                int _thirdY = _points.at( count + 3 ).y();
+
+                QPointArray _cubicBezierPoint;
+                _cubicBezierPoint.putPoints( 0, 4, _firstX,_firstY, _secondX,_secondY, _thirdX,_thirdY, _fourthX,_fourthY );
+                _cubicBezierPoint = _cubicBezierPoint.cubicBezier();
+
+                QPointArray::Iterator it;
+                for ( it = _cubicBezierPoint.begin(); it != _cubicBezierPoint.end(); ++it ) {
+                    QPoint _point = (*it);
+                    tmpPointArray.putPoints( _tmpIndex, 1, _point.x(), _point.y() );
+                    ++_tmpIndex;
+                }
+
+                count += 4;
+            }
+            else { // for line
+                int _x1 = _points.at( count ).x();
+                int _y1 = _points.at( count ).y();
+
+                int _x2 = _points.at( count + 1 ).x();
+                int _y2 = _points.at( count + 1 ).y();
+
+                tmpPointArray.putPoints( _tmpIndex, 2, _x1,_y1, _x2,_y2 );
+                _tmpIndex += 2;
+                count += 2;
+            }
+        }
+
+        _rect = tmpPointArray.boundingRect();
+        _allPoints = tmpPointArray;
+    }
+
+    int ox = _rect.x() + diffx();
+    int oy = _rect.y() + diffy();
+    unsigned int index = 0;
+
+    QPointArray points( _pointArray );
+    QPointArray tmpPoints;
+    QPointArray::Iterator it;
+    for ( it = points.begin(); it != points.end(); ++it ) {
+        QPoint point = (*it);
+        int tmpX = point.x() - ox;
+        int tmpY = point.y() - oy;
+        tmpPoints.putPoints( index, 1, tmpX,tmpY );
+        ++index;
+    }
+
+    index = 0;
+    QPointArray tmpAllPoints;
+    for ( it = _allPoints.begin(); it != _allPoints.end(); ++it ) {
+        QPoint point = (*it);
+        int tmpX = point.x() - ox;
+        int tmpY = point.y() - oy;
+        tmpAllPoints.putPoints( index, 1, tmpX,tmpY );
+        ++index;
+    }
+
+    if ( toolEditMode == INS_CUBICBEZIERCURVE ) {
+        view->kPresenterDoc()->insertCubicBezierCurve( tmpPoints, tmpAllPoints, _rect, view->getPen(),
+                                                       view->getLineBegin(), view->getLineEnd(), diffx(), diffy() );
+    }
+    else if ( toolEditMode == INS_QUADRICBEZIERCURVE ) {
+        view->kPresenterDoc()->insertQuadricBezierCurve( tmpPoints, tmpAllPoints, _rect, view->getPen(),
+                                                         view->getLineBegin(), view->getLineEnd(), diffx(), diffy() );
+    }
+
+    m_pointArray = QPointArray();
+    m_indexPointArray = 0;
+}
+
+/*================================================================*/
 void Page::setToolEditMode( ToolEditMode _m, bool updateView )
 {
     //store m_pointArray if !m_pointArray.isNull()
-    if(!m_pointArray.isNull())
+    if(toolEditMode == INS_POLYLINE && !m_pointArray.isNull())
     {
         endDrawPolyline();
     }
+
+    if ( ( toolEditMode == INS_CUBICBEZIERCURVE || toolEditMode == INS_QUADRICBEZIERCURVE ) && !m_pointArray.isNull() )
+        endDrawCubicBezierCurve();
+
+
     exitEditMode();
     toolEditMode = _m;
 
@@ -3456,6 +3686,21 @@ void Page::endDrawPolyline()
 {
     m_drawPolyline = false;
     insertPolyline( m_pointArray );
+    emit objectSelectedChanged();
+    if ( toolEditMode != TEM_MOUSE && editMode )
+        repaint( false );
+    mousePressed = false;
+    modType = MT_NONE;
+    resizeObjNum = -1;
+    ratio = 0.0;
+    keepRatio = false;
+}
+
+void Page::endDrawCubicBezierCurve()
+{
+    m_drawCubicBezierCurve = false;
+    m_oldCubicBezierPointArray = QPointArray();
+    insertCubicBezierCurve( m_pointArray );
     emit objectSelectedChanged();
     if ( toolEditMode != TEM_MOUSE && editMode )
         repaint( false );
@@ -4311,6 +4556,152 @@ void Page::terminateEditing( KPTextObject *textObj )
         m_currentTextObjectView = 0L;
         editNum = -1 ;
     }
+}
+
+void Page::drawCubicBezierCurve( int _dx, int _dy )
+{
+    QPoint oldEndPoint = m_dragEndPoint;
+    m_dragEndPoint = QPoint( _dx, _dy );
+
+    unsigned int pointCount = m_pointArray.count();
+
+    QPainter p( this );
+
+    if ( !m_drawLineWithCubicBezierCurve ) {
+        QPen _pen = QPen( Qt::black, 1, Qt::DashLine );
+        p.setPen( _pen );
+        p.setBrush( Qt::NoBrush );
+        p.setRasterOp( Qt::NotROP );
+
+        p.save();
+        double _angle = getAngle( oldEndPoint, m_dragStartPoint );
+        drawFigure( L_SQUARE, &p, oldEndPoint, _pen.color(), _pen.width(), _angle ); // erase old figure
+        p.restore();
+
+        p.drawLine( m_dragStartPoint, oldEndPoint ); // erase old line
+
+        int p_x = m_dragStartPoint.x() * 2 - oldEndPoint.x();
+        int p_y = m_dragStartPoint.y() * 2 - oldEndPoint.y();
+        m_dragSymmetricEndPoint = QPoint( p_x, p_y );
+
+        p.save();
+        _angle = getAngle( m_dragSymmetricEndPoint, m_dragStartPoint );
+        drawFigure( L_SQUARE, &p, m_dragSymmetricEndPoint, _pen.color(), _pen.width(), _angle );  // erase old figure
+        p.restore();
+
+        p.drawLine( m_dragStartPoint, m_dragSymmetricEndPoint );  // erase old line
+
+
+        p.save();
+        _angle = getAngle( m_dragEndPoint, m_dragStartPoint );
+        drawFigure( L_SQUARE, &p, m_dragEndPoint, _pen.color(), _pen.width(), _angle ); // draw new figure
+        p.restore();
+
+        p.drawLine( m_dragStartPoint, m_dragEndPoint );  // draw new line
+
+        p_x = m_dragStartPoint.x() * 2 - m_dragEndPoint.x();
+        p_y = m_dragStartPoint.y() * 2 - m_dragEndPoint.y();
+        m_dragSymmetricEndPoint = QPoint( p_x, p_y );
+
+        p.save();
+        _angle = getAngle( m_dragSymmetricEndPoint, m_dragStartPoint );
+        drawFigure( L_SQUARE, &p, m_dragSymmetricEndPoint, _pen.color(), _pen.width(), _angle ); // draw new figure
+        p.restore();
+
+        p.drawLine( m_dragStartPoint, m_dragSymmetricEndPoint );  // draw new line
+    }
+    else if ( m_drawLineWithCubicBezierCurve ) {
+        p.setPen( QPen( Qt::black, 1, Qt::SolidLine ) );
+        p.setBrush( Qt::NoBrush );
+        p.setRasterOp( Qt::NotROP );
+
+        QPoint startPoint( m_pointArray.at( m_indexPointArray - 1 ).x(),
+                           m_pointArray.at( m_indexPointArray - 1 ).y() );
+
+        p.drawLine( startPoint, oldEndPoint );  // erase old line
+
+        p.drawLine( startPoint, m_dragEndPoint );  // draw new line
+    }
+
+    if ( !m_drawLineWithCubicBezierCurve && ( ( pointCount % 2 ) == 0 ) ) {
+        p.save();
+
+        p.setPen( QPen( Qt::black, 1, Qt::SolidLine ) );
+        p.setBrush( Qt::NoBrush );
+        p.setRasterOp( Qt::NotROP );
+
+        p.drawCubicBezier( m_oldCubicBezierPointArray );  // erase old cubic bezier curve
+
+        int _firstX = m_pointArray.at( m_indexPointArray - 2 ).x();
+        int _firstY = m_pointArray.at( m_indexPointArray - 2 ).y();
+
+        int _fourthX = m_pointArray.at( m_indexPointArray - 1 ).x();
+        int _fourthY = m_pointArray.at( m_indexPointArray - 1 ).y();
+
+        int _midpointX = (_firstX + _fourthX ) / 2;
+        int _midpointY = (_firstY + _fourthY ) / 2;
+        int _diffX = _fourthX - _midpointX;
+        int _diffY = _fourthY - _midpointY;
+
+        int _secondX = m_dragEndPoint.x() - _diffX;
+        int _secondY = m_dragEndPoint.y() - _diffY;
+        m_CubicBezierSecondPoint = QPoint( _secondX, _secondY );
+
+        int _thirdX = m_dragSymmetricEndPoint.x() - _diffX;
+        int _thirdY = m_dragSymmetricEndPoint.y() - _diffY;
+        m_CubicBezierThirdPoint = QPoint( _thirdX, _thirdY );
+
+        if ( toolEditMode == INS_QUADRICBEZIERCURVE ) {
+            _secondX = _thirdX;
+            _secondY = _thirdY;
+            m_CubicBezierSecondPoint = QPoint( _secondX, _secondY );
+        }
+
+        QPointArray points;
+        points.putPoints( 0, 4, _firstX,_firstY, _secondX,_secondY, _thirdX,_thirdY, _fourthX,_fourthY );
+        p.drawCubicBezier( points );  // draw new cubic bezier curve
+
+        m_oldCubicBezierPointArray = points;
+
+        p.restore();
+    }
+
+    p.end();
+}
+
+/*===================== get angle ================================*/
+double Page::getAngle( QPoint p1, QPoint p2 )
+{
+    double _angle = 0.0;
+
+    if ( p1.x() == p2.x() ) {
+        if ( p1.y() < p2.y() )
+            _angle = 270.0;
+        else
+            _angle = 90.0;
+    }
+    else {
+        double x1, x2, y1, y2;
+
+        if ( p1.x() <= p2.x() ) {
+            x1 = p1.x(); y1 = p1.y();
+            x2 = p2.x(); y2 = p2.y();
+        }
+        else {
+            x2 = p1.x(); y2 = p1.y();
+            x1 = p2.x(); y1 = p2.y();
+        }
+
+        double m = -( y2 - y1 ) / ( x2 - x1 );
+        _angle = atan( m ) * RAD_FACTOR;
+
+        if ( p1.x() < p2.x() )
+            _angle = 180.0 - _angle;
+        else
+            _angle = -_angle;
+    }
+
+    return _angle;
 }
 
 #include <page.moc>

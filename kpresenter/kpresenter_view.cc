@@ -793,6 +793,28 @@ void KPresenterView::toolsPolyline()
         actionToolsPolyline->setChecked(true);
 }
 
+/*================ insert quadric bezier curve =================*/
+void KPresenterView::toolsQuadricBezierCurve()
+{
+    if ( actionToolsQuadricBezierCurve->isChecked() ) {
+        page->setToolEditMode( INS_QUADRICBEZIERCURVE, false );
+        page->deSelectAllObj();
+    }
+    else
+        actionToolsQuadricBezierCurve->setChecked(true);
+}
+
+/*================= insert cubic bezier curve ==================*/
+void KPresenterView::toolsCubicBezierCurve()
+{
+    if ( actionToolsCubicBezierCurve->isChecked() ) {
+        page->setToolEditMode( INS_CUBICBEZIERCURVE, false );
+        page->deSelectAllObj();
+    }
+    else
+        actionToolsCubicBezierCurve->setChecked(true);
+}
+
 /*===============================================================*/
 void KPresenterView::extraPenBrush()
 {
@@ -2241,6 +2263,16 @@ void KPresenterView::setupActions()
                                              actionCollection(), "tools_polyline" );
     actionToolsPolyline->setExclusiveGroup( "tools" );
 
+    actionToolsQuadricBezierCurve = new KToggleAction( i18n( "&Quadric Bezier Curve" ), "quadricbeziercurve", 0,
+                                                       this, SLOT( toolsQuadricBezierCurve() ),
+                                                       actionCollection(), "tools_quadricbeziercurve" );
+    actionToolsQuadricBezierCurve->setExclusiveGroup( "tools" );
+
+    actionToolsCubicBezierCurve = new KToggleAction( i18n( "C&ubic Bezier Curve" ), "cubicbeziercurve", 0,
+                                                     this, SLOT( toolsCubicBezierCurve() ),
+                                                     actionCollection(), "tools_cubicbeziercurve" );
+    actionToolsCubicBezierCurve->setExclusiveGroup( "tools" );
+
     // ----------------- text actions
 
     actionTextFont = new KAction( i18n( "&Font..." ), 0,
@@ -2433,11 +2465,11 @@ void KPresenterView::setupActions()
 
     actionExtraPenStyle = new KAction( i18n("Pen Style"), "pen_style", 0,
 					this, SLOT( extraPenStyle() ),
-					actionCollection(), "pen_style" );
+					actionCollection(), "extra_penstyle" );
 
     actionExtraPenWidth = new KAction( i18n("Pen Width"), "pen_width", 0,
 					this, SLOT( extraPenWidth() ),
-					actionCollection(), "pen_width" );
+					actionCollection(), "extra_penwidth" );
 
     actionExtraGroup = new KAction( i18n( "&Group Objects" ), "group", 0,
 				    this, SLOT( extraGroup() ),

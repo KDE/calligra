@@ -151,6 +151,8 @@ public slots:
     void toolsObject();
     void toolsFreehand();
     void toolsPolyline();
+    void toolsQuadricBezierCurve();
+    void toolsCubicBezierCurve();
 
     // extra menu
     void extraPenBrush();
@@ -234,7 +236,7 @@ public slots:
      * Update a given item in the sidebar
      */
     void updateSideBarItem( int pagenr );
-    
+
     //statusbar updates
     void updatePageInfo();
     void updateObjectStatusBarItem();
@@ -278,7 +280,7 @@ public slots:
 
     void formatParagraph();
     void changeNbOfRecentFiles(int _nb);
-    
+
     void insertVariable();
 
     void insertCustomVariable();
@@ -515,7 +517,7 @@ protected:
     void startScreenPres( int pgNum = -1 );
 
     virtual void updateReadWrite( bool readwrite );
-    
+
     void addVariableActions( int type, const QStringList & texts,
                              KActionMenu * parentMenu, const QString & menuText );
 
@@ -625,6 +627,8 @@ private:
     KToggleAction *actionToolsFormula;
     KToggleAction *actionToolsFreehand;
     KToggleAction *actionToolsPolyline;
+    KToggleAction *actionToolsQuadricBezierCurve;
+    KToggleAction *actionToolsCubicBezierCurve;
     KoPartSelectAction *actionToolsObject;
 
     KAction *actionTextFont;
@@ -739,7 +743,7 @@ private:
     int currentTimer;
 
     KoCharSelectDia *m_specialCharDlg;
-    
+
 
     QStringList m_ignoreWord;
     // Spell-checking
