@@ -1883,7 +1883,7 @@ void KSpreadUndoRemoveCellCol::redo()
  *
  ***************************************************************************/
 
-KSpreadUndoConditional::KSpreadUndoConditional( KSpreadDoc *_doc, KSpreadTable* table, QRect & _selection)
+KSpreadUndoConditional::KSpreadUndoConditional( KSpreadDoc *_doc, KSpreadTable* table, QRect const & _selection)
     : KSpreadUndoAction( _doc )
 {
     name=i18n("Conditional Cell Attribute");

@@ -491,7 +491,7 @@ protected:
 class KSpreadUndoConditional : public KSpreadUndoAction
 {
 public:
-    KSpreadUndoConditional( KSpreadDoc *_doc, KSpreadTable *_table, QRect &_rect );
+    KSpreadUndoConditional( KSpreadDoc *_doc, KSpreadTable *_table, QRect const & _rect );
     virtual ~KSpreadUndoConditional();
 
     virtual void undo();

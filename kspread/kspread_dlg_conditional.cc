@@ -231,74 +231,73 @@ else
 
 double KSpreadWidgetconditional::getBackFirstValue()
 {
-QString tmp;
-tmp=edit1->text();
-return (tmp.toDouble());
+  QString tmp;
+  tmp = edit1->text();
+  return (tmp.toDouble());
 }
 
 double KSpreadWidgetconditional::getBackSecondValue()
 {
-QString tmp;
-tmp=edit2->text();
-return( tmp.toDouble());
+  QString tmp;
+  tmp = edit2->text();
+  return( tmp.toDouble());
 }
-
-
-
 
 QColor KSpreadWidgetconditional::getColor()
 {
-return color->color();
+  return color->color();
 }
 
 Conditional KSpreadWidgetconditional::typeOfCondition()
 {
-Conditional result=None;
-switch(  choose->currentItem())
-        {
-         case 0 :
-                result=None;
-                break;
-         case 1 :
-                result=Equal;
-                break;
-
-         case 2 :
-                result=Superior;
-                break;
-         case 3 :
-                result=Inferior;
-                break;
-         case 4 :
-                result=SuperiorEqual;
-                break;
-         case 5 :
-                result=InferiorEqual;
-                break;
-         case 6 :
-                result=Between;
-                break;
-         case 7 :
-                result=Different;
-                break;
-         default:
-                kdDebug(36001) << "Error in list" << endl;
-                break;
-        }
-
-return result;
+  Conditional result=None;
+  switch(  choose->currentItem())
+  {
+   case 0 :
+    result=None;
+    break;
+   case 1 :
+    result=Equal;
+    break;
+    
+   case 2 :
+    result=Superior;
+    break;
+   case 3 :
+    result=Inferior;
+    break;
+   case 4 :
+    result=SuperiorEqual;
+    break;
+   case 5 :
+    result=InferiorEqual;
+    break;
+   case 6 :
+    result=Between;
+    break;
+   case 7 :
+    result=Different;
+    break;
+   default:
+    kdDebug(36001) << "Error in list" << endl;
+    break;
+  }
+  
+  return result;
 }
 
-KSpreadconditional::KSpreadconditional( KSpreadView* parent, const char* name,const QRect &_marker)
-        : KDialogBase( parent, name,TRUE,i18n("Relational cell attributes"),Ok|Cancel )
+KSpreadconditional::KSpreadconditional( KSpreadView * parent, const char * name,
+                                        const QRect & _marker)
+        : KDialogBase( parent, name, TRUE, i18n("Relational cell attributes"),
+                       Ok | Cancel )
 {
   m_pView = parent;
-  marker=_marker;
-  QWidget *page = new QWidget( this );
+  marker  = _marker;
+  QWidget * page = new QWidget( this );
   setMainWidget(page);
 
-  QGridLayout *grid1 = new QGridLayout(page,4,1,15,7);
-  conditionals[0] = new KSpreadWidgetconditional(page,i18n("First condition"));
+  QGridLayout *grid1 = new QGridLayout(page, 4, 1, 15, 7);
+  conditionals[0] = new KSpreadWidgetconditional(page, i18n("First condition"));
   grid1->addWidget(conditionals[0], 0, 0);
 
   conditionals[1] = new KSpreadWidgetconditional(page,
@@ -334,7 +333,7 @@ void KSpreadconditional::init()
   {
     for ( int y = marker.top(); y <= marker.bottom(); y++ )
     {
-      KSpreadCell *obj2 = m_pView->activeTable()->cellAt( x, y );
+      KSpreadCell *obj2 = m_pView->activeTable()->cellAt( x, y, true );
       otherList = obj2->GetConditionList();
       
       it1 = conditionList.begin();
@@ -383,9 +382,10 @@ void KSpreadconditional::slotOk()
   QValueList<KSpreadConditional> newList;
   KSpreadConditional newCondition;
 
+  kdDebug() << "Start creating list" << endl;
   /* copy the information from the form, put it in a list and send it to the
      appropriate cells */
-  for (int i=0; i < KSPREAD_NUM_CONDITIONALS; i++)
+  for (int i = 0; i < KSPREAD_NUM_CONDITIONALS; i++)
   {
     if (conditionals[i]->typeOfCondition() != None)
     {
@@ -404,9 +404,12 @@ void KSpreadconditional::slotOk()
       newList.append(newCondition);
     }
   }
-
+  kdDebug() << "Condition list created " << endl;
 
   m_pView->activeTable()->setConditional(marker, newList);
+
+  kdDebug() << "Update done" << endl;
+
   accept();
 }
 

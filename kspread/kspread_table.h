@@ -46,6 +46,7 @@ class KPrinter;
 #include <qmemarray.h>
 #include <qrect.h>
 #include <qwidget.h>
+#include <qdragobject.h>
 
 #define BORDER_SPACE 1
 
@@ -171,6 +172,39 @@ public:
 private:
     ChartBinding *m_pBinding;
 };
+
+/********************************************************************
+ *
+ * KSpreadTextDrag
+ *
+ ********************************************************************/
+
+/**
+ * @short This is a class for handling clipboard data
+ */
+
+class KSpreadTextDrag : public QTextDrag
+{
+    Q_OBJECT
+
+public:
+    KSpreadTextDrag( QWidget * dragSource = 0L, const char * name = 0L );
+    virtual ~KSpreadTextDrag();
+
+    void setPlain( QString const & _plain ) { setText( _plain ); }
+    void setKSpread( QByteArray const & _kspread ) { m_kspread = _kspread; }
+
+    virtual QByteArray encodedData( const char * mime ) const;
+    virtual const char* format( int i ) const;
+
+    static bool canDecode( QMimeSource * e );
+
+    static const char * selectionMimeType();
+
+protected:
+    QByteArray m_kspread;
+};
+
 
 /********************************************************************
  *
@@ -582,7 +616,7 @@ public:
     void borderRight( const QPoint &_marker,const QColor &_color );
 
     void setConditional( const QRect &_marker,
-			 QValueList<KSpreadConditional> newConditions );
+			 QValueList<KSpreadConditional> const & newConditions );
 
     void setValidity( const QPoint &_marker,KSpreadValidity tmp );
 
@@ -820,7 +854,10 @@ public:
      */
     bool testListChoose(const QPoint &_marker);
 
-    void copyAsText(const QPoint &_marker);
+    /**
+     * returns the text to be copied to the clipboard
+     */ 
+    QString copyAsText(const QPoint &_marker);
 
     /**
      * Assume that the retangle 'src' was already selected. Then the user clicked on the

@@ -131,6 +131,49 @@ void ChartBinding::cellChanged( KSpreadCell* )
     table()->emit_polygonInvalidated( m_child->framePointArray() );
 }
 
+/******************************************************************/
+/* Class: KSpreadTextDrag                                               */
+/******************************************************************/
+
+KSpreadTextDrag::KSpreadTextDrag( QWidget * dragSource, const char * name )
+    : QTextDrag( dragSource, name )
+{
+}
+
+KSpreadTextDrag::~KSpreadTextDrag()
+{
+}
+
+
+QByteArray KSpreadTextDrag::encodedData( const char * mime ) const
+{
+  if ( strcmp( selectionMimeType(), mime ) == 0)
+    return m_kspread;
+  else
+    return QTextDrag::encodedData( mime );
+}
+
+bool KSpreadTextDrag::canDecode( QMimeSource* e )
+{
+  if ( e->provides( selectionMimeType() ) )
+    return true;
+  return QTextDrag::canDecode(e);
+}
+
+const char * KSpreadTextDrag::format( int i ) const
+{
+  if ( i < 4 ) // HACK, but how to do otherwise ??
+    return QTextDrag::format(i);
+  else if ( i == 4 )
+    return selectionMimeType();
+  else return 0;
+}
+
+const char * KSpreadTextDrag::selectionMimeType()
+{
+  return "application/x-kspread-snippet";
+}
+
 /*****************************************************************************
  *
  * KSpreadTable
@@ -889,7 +932,7 @@ KSpreadTable::SelectionType KSpreadTable::workOnCells( const QPoint& _marker, Ce
 	    {
 		for ( int i=m_rctSelection.left(); i<=m_rctSelection.right(); i++ )
 		{
-		    KSpreadCell *cell = cellAt( i, rw->row() );
+		    KSpreadCell *cell = cellAt( i, rw->row(), true );
 		    if ( cell == m_pDefaultCell )
 			// '&& worker.create_if_default' unneccessary as never used in type A
 		    {
@@ -971,7 +1014,7 @@ KSpreadTable::SelectionType KSpreadTable::workOnCells( const QPoint& _marker, Ce
 		{
 		    for ( int i=m_rctSelection.left(); i<=m_rctSelection.right(); i++ )
 		    {
-			KSpreadCell *cell = cellAt( i, rw->row());
+			KSpreadCell *cell = cellAt( i, rw->row(), true);
 			// ### this if should be not necessary; cells are created
 			//     before the undo object is created, aren't they?
 			if ( cell == m_pDefaultCell )
@@ -994,7 +1037,7 @@ KSpreadTable::SelectionType KSpreadTable::workOnCells( const QPoint& _marker, Ce
 	for ( int x = r.left(); x <= r.right(); x++ )
 	    for ( int y = r.top(); y <= r.bottom(); y++ )
 	    {
-		KSpreadCell *cell = cellAt( x, y );
+		KSpreadCell *cell = cellAt( x, y, true );
                 if ( worker.testCondition( cell ) )
 		{
 		    if ( worker.create_if_default && cell == m_pDefaultCell )
@@ -1462,7 +1505,7 @@ void KSpreadTable::setSeries( const QPoint &_marker,int start,int end,int step,S
     {
         for ( y = _marker.y(); y <= (_marker.y() + numberOfCells - 1); y++ )
         {
-	  cell = cellAt( _marker.x(), y, true );
+	  cell = cellAt( _marker.x(), y );
 
 	  if ( cell->isObscuringForced() )
 	  {
@@ -1470,8 +1513,7 @@ void KSpreadTable::setSeries( const QPoint &_marker,int start,int end,int step,S
 	    undoRegion.setLeft(QMIN(undoRegion.left(),
 				    cell->obscuringCellsColumn()));
 	    cell = cellAt( cell->obscuringCellsColumn(),
-			   cell->obscuringCellsRow(),
-                           true);
+			   cell->obscuringCellsRow() );
 	  }
 	  /* case 1.  Add the extra space to numberOfCells and then skip
 	     over the region.  Note that because of the above if block 'cell'
@@ -1490,15 +1532,14 @@ void KSpreadTable::setSeries( const QPoint &_marker,int start,int end,int step,S
         {
 	  /* see the code above for a column series for a description of
 	     what is going on here. */
-	  cell = cellAt( x,_marker.y(), true );
+	  cell = cellAt( x,_marker.y() );
 
 	  if ( cell->isObscuringForced() )
 	  {
 	    undoRegion.setTop(QMIN(undoRegion.top(),
 				   cell->obscuringCellsRow()));
 	    cell = cellAt( cell->obscuringCellsColumn(),
-                           cell->obscuringCellsRow(), 
-                           true );
+				    cell->obscuringCellsRow() );
 	  }
 	  numberOfCells += cell->extraXCells();
 	  x += cell->extraXCells();
@@ -1526,8 +1567,7 @@ void KSpreadTable::setSeries( const QPoint &_marker,int start,int end,int step,S
         if(cell->isObscuringForced())
         {
             cell = cellAt( cell->obscuringCellsColumn(),
-			   cell->obscuringCellsRow(),
-                           true);
+			   cell->obscuringCellsRow());
         }
 
         cell->setCellText(cellText.setNum(incr));
@@ -3994,7 +4034,7 @@ struct SetConditionalWorker : public KSpreadTable::CellWorker
 
   void doWork( KSpreadCell* cell, bool, int, int )
   {
-    if ( !cell->isObscured() )
+    if ( !cell->isObscured() ) // TODO: isObscuringForced()???
     {
       cell->SetConditionList(conditionList);
       cell->setDisplayDirtyFlag();
@@ -4002,17 +4042,39 @@ struct SetConditionalWorker : public KSpreadTable::CellWorker
   }
 };
 
-void KSpreadTable::setConditional
-  ( const QRect &_marker, QValueList<KSpreadConditional> newConditions)
+void KSpreadTable::setConditional( const QRect & _marker, 
+                                   QValueList<KSpreadConditional> const & newConditions)
 {
-    SetConditionalWorker w( newConditions );
-    for (int x = _marker.left(); x <= _marker.right(); x++)
+  if ( !m_pDoc->undoBuffer()->isLocked() )
+  {
+    KSpreadUndoConditional * undo = new KSpreadUndoConditional( m_pDoc, this, _marker );
+    m_pDoc->undoBuffer()->appendUndo( undo );
+  }
+
+  int l = _marker.left();
+  int r = _marker.right();
+  int t = _marker.top();
+  int b = _marker.bottom();
+  
+  for (int x = l; x <= r; ++x)
+  {
+    for (int y = t; y <= b; ++y)
     {
-      for (int y=_marker.top(); y <= _marker.bottom(); y++)
+      KSpreadCell *cell = cellAt( x, y, true );
+      if ( cell->isObscuringForced() )
+        continue;
+      if ( cell->isDefault() )
       {
-	workOnCells( QPoint(x,y), w );
+        cell = new KSpreadCell( this, x, y );
+        insertCell( cell );
       }
+
+      cell->SetConditionList(newConditions);
+      cell->setDisplayDirtyFlag();
     }
+  }
+
+  emit sig_updateView( this, _marker );
 }
 
 
@@ -4121,7 +4183,7 @@ void KSpreadTable::setWordSpelling(const QPoint &_marker, const QString _listWor
 }
 
 
-void KSpreadTable::copyAsText( const QPoint &_marker )
+QString KSpreadTable::copyAsText( const QPoint &_marker )
 {
     // No selection ? => copy active cell
     if ( m_rctSelection.left() == 0 )
@@ -4130,7 +4192,7 @@ void KSpreadTable::copyAsText( const QPoint &_marker )
         if( !cell->isDefault() )
             QApplication::clipboard()->setText( cell->strOutText() );
 
-        return;
+        return "cell->strOutText()";
     }
 
     int x;
@@ -4160,17 +4222,30 @@ void KSpreadTable::copyAsText( const QPoint &_marker )
         if( !cell->isDefault() )
         {
             int l = max - cell->strOutText().length();
-            if (cell->align(x, y) == KSpreadLayout::Right)
+            if (cell->align(x, y) == KSpreadLayout::Right 
+                || cell->defineAlignX() == KSpreadLayout::Right )
             {
               for ( int i = 0; i < l; ++i )
                 result += " ";
               result += cell->strOutText();
             }
-            else
+            else if (cell->align(x, y) == KSpreadLayout::Left 
+                     || cell->defineAlignX() == KSpreadLayout::Left )
             {
               result += " ";
               result += cell->strOutText();
-              for ( int i = 1; i < l; ++i ) // start with "1"
+              // start with "1" because we already set one space
+              for ( int i = 1; i < l; ++i ) 
+                result += " ";
+            }
+            else // centered
+            {
+              int i;
+              int s = (int) l / 2;
+              for ( i = 0; i < s; ++i )
+                result += " ";
+              result += cell->strOutText();
+              for ( i = s; s < l; ++i )
                 result += " ";
             }
         }
@@ -4183,7 +4258,7 @@ void KSpreadTable::copyAsText( const QPoint &_marker )
       result += "\n";
     }
 
-    QApplication::clipboard()->setText( result );
+    return result;
 }
 
 void KSpreadTable::copySelection( const QPoint &_marker )
@@ -4206,10 +4281,11 @@ void KSpreadTable::copySelection( const QPoint &_marker )
     str << doc;
     buffer.close();
 
-    QStoredDrag* data = new QStoredDrag( "application/x-kspread-snippet" );
-    data->setEncodedData( buffer.buffer() );
+    KSpreadTextDrag * kd = new KSpreadTextDrag( 0L );
+    kd->setPlain( copyAsText(_marker) );
+    kd->setKSpread( buffer.buffer() );
 
-    QApplication::clipboard()->setData( data );
+    QApplication::clipboard()->setData( kd );
 }
 
 void KSpreadTable::cutSelection( const QPoint &_marker )
@@ -4226,8 +4302,8 @@ void KSpreadTable::paste( const QPoint &_marker,bool makeUndo, PasteMode sp, Ope
 
     QByteArray b;
 
-    if ( mime->provides( "application/x-kspread-snippet" ) )
-        b = mime->encodedData( "application/x-kspread-snippet" );
+    if ( mime->provides( KSpreadTextDrag::selectionMimeType() ) )
+        b = mime->encodedData( KSpreadTextDrag::selectionMimeType() );
     else if( mime->provides( "text/plain" ) )
       {
         // Note: QClipboard::text() seems to do a better job than encodedData( "text/plain" )
@@ -4304,7 +4380,7 @@ void KSpreadTable::pasteTextPlain( QString &_text, const QPoint &_marker)
     ++i;
     cell = cellAt( mx, my + i, true);
 
-    if (!cell || p == tmp.length())
+    if (!cell || p == (int) tmp.length())
       break;
 
     // exclude the left part and '\n'
