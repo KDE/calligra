@@ -4,6 +4,7 @@ libkrossapi_la_SOURCES = \
     object.cpp \
     variant.cpp \
     list.cpp \
+    argument.cpp \
     interpreter.cpp
 
 #dict.cpp
