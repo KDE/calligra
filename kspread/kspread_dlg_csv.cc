@@ -58,8 +58,7 @@ KSpreadCSVDialog::KSpreadCSVDialog( KSpreadView * parent, const char * name, QRe
   if ( !name )
     setName( "KSpreadCSVDialog" );
 
-  resize( 798, 282 ); 
-  setCaption( i18n( "KSpreadCSVDialog" ) );
+  setCaption( i18n( "CSV Import" ) );
   setSizeGripEnabled( TRUE );
   MyDialogLayout = new QGridLayout( this, 1, 1, 11, 6, "MyDialogLayout"); 
   
