@@ -96,7 +96,7 @@ KarbonFactory::aboutData()
 						  KAboutData::License_GPL,
 						  I18N_NOOP( "(c) 2001, 2002 The Karbon Developers" ),
 						  I18N_NOOP( "You are invited to participate in any way." ),
-						  I18N_NOOP( "http://www.xs4all.nl/~rwlbuis/karbon/" ) );
+						  "http://www.xs4all.nl/~rwlbuis/karbon/");
 		s_aboutData->addAuthor(
 			"Lennart Kudling",
 			0,
@@ -113,7 +113,7 @@ KarbonFactory::aboutData()
 			"tomislav.lukman@ck.hinet.hr",
 			0 );
 		s_aboutData->addAuthor(
-			"Benoît Vautrin",
+			"BenoÃ®t Vautrin",
 			0,
 			"benoit.vautrin@free.fr",
 			0 );
