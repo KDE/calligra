@@ -61,6 +61,8 @@ void KSpreadGotoDlg::slotOk()
         result = m_pView->canvasWidget()->gotoLocation( KSpreadPoint( tmp_upper, m_pView->doc()->map() ) );
     if ( result )
         accept();
+    else
+        m_nameCell->clear();
 }
 
 #include "kspread_dlg_goto.moc"
