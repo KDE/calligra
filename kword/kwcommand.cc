@@ -167,6 +167,9 @@ QTextCursor * KWTextParagCommand::execute( QTextCursor *c )
             case Tabulator:
                 p->setTabList( m_newParagLayout.tabList() );
                 break;
+            case PageBreaking:
+                p->setLinesTogether( m_newParagLayout.linesTogether );
+                break;
             default:
                 kdDebug() << "Houston we have a problem" << endl;
                 break;
@@ -219,6 +222,9 @@ QTextCursor * KWTextParagCommand::unexecute( QTextCursor *c )
 	        break;
             case Tabulator:
                 p->setTabList( (*lit).tabList() );
+                break;
+            case PageBreaking:
+                p->setLinesTogether( (*lit).linesTogether );
                 break;
             default:
                 kdDebug() << "KWTextParagCommand::unexecute unhandled flag " << m_flags << endl;

@@ -2669,13 +2669,15 @@ void KWView::paragDiaOk()
     if(paragDia->listTabulatorChanged())
         edit->setTabList(paragDia->tabListTabulator());
 
-
     if(paragDia->isLineSpacingChanged())
         edit->setLineSpacing( paragDia->lineSpacing() );
 
     if(paragDia->isBorderChanged())
         edit->setBorders( paragDia->leftBorder(), paragDia->rightBorder(),
                           paragDia->bottomBorder(), paragDia->topBorder() );
+
+    if ( paragDia->isPageBreakingChanged() )
+        edit->setPageBreaking( paragDia->linesTogether() );
 }
 
 /*================================================================*/

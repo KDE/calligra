@@ -105,6 +105,12 @@ void KWTextParag::setLineSpacing( KWUnit _i )
     invalidate(0);
 }
 
+void KWTextParag::setLinesTogether( bool b )
+{
+    m_layout.linesTogether = b;
+    invalidate(0);
+}
+
 void KWTextParag::setTopBorder( const Border & _brd )
 {
     m_layout.topBorder = _brd;
@@ -681,6 +687,7 @@ void KWTextParag::setParagLayout( const KWParagLayout & layout )
     //kdDebug() << "KWTextParag " << this << " setParagLayout" << endl;
     setAlign( layout.alignment );
     setMargins( layout.margins );
+    setLinesTogether( layout.linesTogether );
     setLineSpacing( layout.lineSpacing );
     setLeftBorder( layout.leftBorder );
     setRightBorder( layout.rightBorder );
@@ -738,6 +745,7 @@ void KWParagLayout::operator=( const KWParagLayout &layout )
     alignment = layout.alignment;
     for ( int i = 0 ; i < 5 ; ++i )
         margins[i] = layout.margins[i];
+    linesTogether = layout.linesTogether;
     leftBorder = layout.leftBorder;
     rightBorder = layout.rightBorder;
     topBorder = layout.topBorder;
@@ -804,28 +812,28 @@ KWParagLayout::KWParagLayout( QDomElement & parentElem, KWDocument *doc )
             static const int flow2align[] = { Qt::AlignLeft, Qt::AlignRight, Qt::AlignCenter, Qt3::AlignJustify };
             alignment = flow2align[flow.toInt()];
         } else {
-            flow = element.attribute( "align" ); // KWord-v2 DTD
+            flow = element.attribute( "align" ); // KWord-1.0 DTD
             alignment = flow=="right" ? Qt::AlignRight : flow=="center" ? Qt::AlignCenter : flow=="justify" ? Qt3::AlignJustify : Qt::AlignLeft;
         }
     }
 
-    element = parentElem.namedItem( "OHEAD" ).toElement(); // Should have been in KWord-v1 DTD, used by KWord-0.8
+    element = parentElem.namedItem( "OHEAD" ).toElement(); // used by KWord-0.8
     if ( !element.isNull() )
         margins[QStyleSheetItem::MarginTop].setPT( KWDocument::getAttribute( element, "pt", 0.0 ) );
 
-    element = parentElem.namedItem( "OFOOT" ).toElement(); // Should have been in KWord-v1 DTD, used by KWord-0.8
+    element = parentElem.namedItem( "OFOOT" ).toElement(); // used by KWord-0.8
     if ( !element.isNull() )
         margins[QStyleSheetItem::MarginBottom].setPT( KWDocument::getAttribute( element, "pt", 0.0 ) );
 
-    element = parentElem.namedItem( "IFIRST" ).toElement(); // Should have been in KWord-v1 DTD, used by KWord-0.8
+    element = parentElem.namedItem( "IFIRST" ).toElement(); // used by KWord-0.8
     if ( !element.isNull() )
         margins[QStyleSheetItem::MarginFirstLine].setPT( KWDocument::getAttribute( element, "pt", 0.0 ) );
 
-    element = parentElem.namedItem( "ILEFT" ).toElement(); // Should have been in KWord-v1 DTD, used by KWord-0.8
+    element = parentElem.namedItem( "ILEFT" ).toElement(); // used by KWord-0.8
     if ( !element.isNull() )
         margins[QStyleSheetItem::MarginLeft].setPT( KWDocument::getAttribute( element, "pt", 0.0 ) );
 
-    // KWord-v2 DTD
+    // KWord-1.0 DTD
     element = parentElem.namedItem( "INDENTS" ).toElement();
     if ( !element.isNull() )
     {
@@ -840,13 +848,19 @@ KWParagLayout::KWParagLayout( QDomElement & parentElem, KWDocument *doc )
         margins[QStyleSheetItem::MarginBottom].setPT( KWDocument::getAttribute( element, "after", 0.0 ) );
     }
 
-    element = parentElem.namedItem( "LINESPACE" ).toElement(); // not in KWord-v1 DTD, used by KWord-0.8
+    element = parentElem.namedItem( "LINESPACE" ).toElement(); // used by KWord-0.8
     if ( !element.isNull() )
         lineSpacing.setPT( KWDocument::getAttribute( element, "pt", 0.0 ) );
 
-    element = parentElem.namedItem( "LINESPACING" ).toElement(); // KWord-v2 DTD
+    element = parentElem.namedItem( "LINESPACING" ).toElement(); // KWord-1.0 DTD
     if ( !element.isNull() )
         lineSpacing.setPT( KWDocument::getAttribute( element, "value", 0.0 ) );
+
+
+    element = parentElem.namedItem( "PAGEBREAKING" ).toElement();
+    if ( !element.isNull() )
+        linesTogether = element.attribute( "linesTogether" ) == "true";
+
 
     element = parentElem.namedItem( "LEFTBORDER" ).toElement();
     if ( !element.isNull() )
@@ -888,7 +902,7 @@ void KWParagLayout::initialise()
     rightBorder.ptWidth = 0;
     topBorder.ptWidth = 0;
     bottomBorder.ptWidth = 0;
-    samePage = true;
+    linesTogether = false;
 }
 
 KWParagLayout::~KWParagLayout()
@@ -937,6 +951,13 @@ void KWParagLayout::save( QDomElement & parentElem )
         element = doc.createElement( "LINESPACING" );
         parentElem.appendChild( element );
         element.setAttribute( "value", lineSpacing.pt() );
+    }
+
+    if ( linesTogether )
+    {
+        element = doc.createElement( "PAGEBREAKING" );
+        parentElem.appendChild( element );
+        element.setAttribute( "linesTogether", linesTogether ? "true" : "false" );
     }
 
     if ( leftBorder.ptWidth > 0 )

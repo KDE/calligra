@@ -87,9 +87,6 @@ public:
     int docFontSize( int zoomedFontSize ) const; // zoomed -> doc [warning, rounding problems]
     int zoomedFontSize( int docFontSize ) const; // doc -> zoomed
 
-    // stupid updating of all styles.
-    //void updateAllStyles();
-
     /** returns a deep copy of self (and all it contains) */
     KWTextFrameSet *getCopy();
 
@@ -132,6 +129,7 @@ public:
     void setCounter( QTextCursor * cursor, const Counter & counter );
     void setAlign( QTextCursor * cursor, int align );
     void setLineSpacing( QTextCursor * cursor, KWUnit spacing );
+    void setPageBreaking( QTextCursor * cursor, bool linesTogether );
     void setBorders( QTextCursor * cursor, Border leftBorder, Border rightBorder, Border bottomBorder, Border topBorder );
     void setMargin( QTextCursor * cursor, QStyleSheetItem::Margin m, KWUnit margin );
     void applyStyle( QTextCursor * cursor, const KWStyle * style, int selectionId = QTextDocument::Standard );
@@ -184,7 +182,7 @@ private:
      */
     struct UndoRedoInfo { // borrowed from QTextEdit
         enum Type { Invalid, Insert, Delete, Return, RemoveSelected, Format,
-                    Alignment, Counter, Margin, LineSpacing, Borders, Tabulator };
+                    Alignment, Counter, Margin, LineSpacing, Borders, Tabulator, PageBreaking };
         UndoRedoInfo( KWTextFrameSet * fs );
         ~UndoRedoInfo();
         void clear();
@@ -296,6 +294,7 @@ public:
     // -- Paragraph settings --
     void setCounter( const Counter & counter ) { textFrameSet()->setCounter( cursor, counter ); }
     void setAlign( int align ) { textFrameSet()->setAlign( cursor, align ); }
+    void setPageBreaking( bool linesTogether ) { textFrameSet()->setPageBreaking( cursor, linesTogether ); }
     void setLineSpacing( KWUnit spacing ) { textFrameSet()->setLineSpacing( cursor, spacing ); }
     void setBorders( Border leftBorder, Border rightBorder, Border bottomBorder, Border topBorder )
           { textFrameSet()->setBorders( cursor, leftBorder, rightBorder, bottomBorder, topBorder ); }

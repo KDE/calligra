@@ -54,13 +54,13 @@ public:
     // Save to XML.
     void save( QDomElement & parentElem );
 
-    // This class used to be a struct, which explains the public vars :)
+    // This class is used as a struct, which explains the public vars :)
     int alignment;
     KWUnit margins[5]; // left, right, top, bottom, firstLineSpacing
     KWUnit lineSpacing;
     Border leftBorder, rightBorder, topBorder, bottomBorder;
     Counter* counter; // can be 0 if no counter set
-    bool samePage;
+    bool linesTogether; // whether to keep all lines on the same page if the parag is at the end of a frame
 
     void setStyleName( const QString &styleName );
     QString styleName() const { return m_styleName; }
@@ -131,6 +131,10 @@ public:
     // Style
     QString styleName() const { return m_layout.styleName(); }
     void setStyleName( const QString & style ) { m_layout.setStyleName( style ); }
+
+    // Whether to keep all lines on the same page if the parag is at the end of a frame
+    void setLinesTogether( bool b );
+    bool linesTogether() const { return m_layout.linesTogether; }
 
     // Public for KWStyle
     static QDomElement saveFormat( QDomDocument & doc, QTextFormat * curFormat, QTextFormat * refFormat, int pos, int len );

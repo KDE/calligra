@@ -99,7 +99,7 @@ public:
 class KWTextParagCommand : public QTextCommand
 {
 public:
-    enum Flags { All, Alignment, Counter, Margin, LineSpacing, Borders, Tabulator };
+    enum Flags { All, Alignment, Counter, Margin, LineSpacing, Borders, Tabulator, PageBreaking };
     KWTextParagCommand( QTextDocument *d, int fParag, int lParag,
                         const QValueList<KWParagLayout> &oldParagLayouts,
                         KWParagLayout newParagLayout,

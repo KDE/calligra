@@ -449,47 +449,6 @@ void KWTextFrameSet::eraseAfter( QTextParag * parag, QPainter * p, const QColorG
     p->fillRect( r.x(), r.y(), r.width(), cPoint.y() - r.bottom(), cg.brush( QColorGroup::Base ) );
 }
 
-#if 0
-/*================================================================*/
-void KWTextFrameSet::assign( KWTextFrameSet *fs )
-{
-    if ( parags )
-        delete parags;
-
-    //parags = fs->getFirstParag();
-
-    parags = new KWParag( *fs->getFirstParag() );
-    parags->setFrameSet( this );
-    parags->setPrev( 0L );
-    parags->setDocument( doc );
-
-    KWParag *p1 = fs->getFirstParag()->getNext(), *p2 = parags, *tmp;
-    while ( p1 ) {
-        tmp = p2;
-        p2 = new KWParag( *p1 );
-        //*p2 = *p1;
-        tmp->setNext( p2 );
-        p2->setPrev( tmp );
-        p2->setFrameSet( this );
-        p2->setDocument( doc );
-        tmp = p2;
-
-        p1 = p1->getNext();
-    }
-
-    p2->setNext( 0L );
-    getFrame( 0 )->setBackgroundColor( fs->getFrame( 0 )->getBackgroundColor() );
-    getFrame( 0 )->setLeftBorder( fs->getFrame( 0 )->getLeftBorder2() );
-    getFrame( 0 )->setRightBorder( fs->getFrame( 0 )->getRightBorder2() );
-    getFrame( 0 )->setTopBorder( fs->getFrame( 0 )->getTopBorder2() );
-    getFrame( 0 )->setBottomBorder( fs->getFrame( 0 )->getBottomBorder2() );
-    getFrame( 0 )->setBLeft( fs->getFrame( 0 )->getBLeft() );
-    getFrame( 0 )->setBRight( fs->getFrame( 0 )->getBRight() );
-    getFrame( 0 )->setBTop( fs->getFrame( 0 )->getBTop() );
-    getFrame( 0 )->setBBottom( fs->getFrame( 0 )->getBBottom() );
-}
-#endif
-
 /*================================================================*/
 KWTextFrameSet::~KWTextFrameSet()
 {
@@ -1095,6 +1054,10 @@ void KWTextFrameSet::UndoRedoInfo::clear()
             case Return:
                 cmd = new KWTextInsertCommand( textdoc, id, index, text.rawData(), customItemsMap, oldParagLayouts );
                 break;
+            case Delete:
+            case RemoveSelected:
+                cmd = new KWTextDeleteCommand( textdoc, id, index, text.rawData(), customItemsMap, oldParagLayouts );
+                break;
             case Format:
                 cmd = new QTextFormatCommand( textdoc, id, index, eid, eindex, text.rawData(), format, flags );
                 break;
@@ -1112,14 +1075,13 @@ void KWTextFrameSet::UndoRedoInfo::clear()
 	        cmd = new KWTextParagCommand( textdoc, id, eid, oldParagLayouts, newParagLayout, KWTextParagCommand::LineSpacing );
 	        break;
 	    case Borders:
-	         cmd = new KWTextParagCommand( textdoc, id, eid, oldParagLayouts, newParagLayout, KWTextParagCommand::Borders );
+                cmd = new KWTextParagCommand( textdoc, id, eid, oldParagLayouts, newParagLayout, KWTextParagCommand::Borders );
 	        break;
             case Tabulator:
-                 cmd = new KWTextParagCommand( textdoc, id, eid, oldParagLayouts, newParagLayout, KWTextParagCommand::Tabulator );
+                cmd = new KWTextParagCommand( textdoc, id, eid, oldParagLayouts, newParagLayout, KWTextParagCommand::Tabulator );
 	        break;
-            case Delete:
-            case RemoveSelected:
-                cmd = new KWTextDeleteCommand( textdoc, id, index, text.rawData(), customItemsMap, oldParagLayouts );
+            case PageBreaking:
+                cmd = new KWTextParagCommand( textdoc, id, eid, oldParagLayouts, newParagLayout, KWTextParagCommand::PageBreaking );
                 break;
             case Invalid:
                 break;
@@ -1558,6 +1520,40 @@ void KWTextFrameSet::setTabList( QTextCursor * cursor, const KoTabulatorList &ta
     }
 
     undoRedoInfo.newParagLayout.setTabList( tabList );
+    undoRedoInfo.clear();
+    emit showCursor();
+    emit updateUI();
+}
+
+void KWTextFrameSet::setPageBreaking( QTextCursor * cursor, bool linesTogether )
+{
+    QTextDocument * textdoc = textDocument();
+    if ( !textdoc->hasSelection( QTextDocument::Standard ) &&
+         static_cast<KWTextParag *>(cursor->parag())->linesTogether() == linesTogether )
+        return; // No change needed.
+
+    emit hideCursor();
+
+    storeParagUndoRedoInfo( cursor );
+    undoRedoInfo.type = UndoRedoInfo::PageBreaking;
+    undoRedoInfo.name = i18n("Change paragraph attribute"); // bleh
+
+    if ( !textdoc->hasSelection( QTextDocument::Standard ) ) {
+        static_cast<KWTextParag *>(cursor->parag())->setLinesTogether( linesTogether );
+        emit repaintChanged( this );
+    }
+    else
+    {
+	QTextParag *start = textDocument()->selectionStart( QTextDocument::Standard );
+	QTextParag *end = textDocument()->selectionEnd( QTextDocument::Standard );
+        setLastFormattedParag( start );
+        for ( ; start && start != end->next() ; start = start->next() )
+            static_cast<KWTextParag *>(start)->setLinesTogether( linesTogether );
+	emit repaintChanged( this );
+    }
+
+    formatMore();
+    undoRedoInfo.newParagLayout.linesTogether = linesTogether;
     undoRedoInfo.clear();
     emit showCursor();
     emit updateUI();
