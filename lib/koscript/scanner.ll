@@ -25,6 +25,7 @@
 #include <stdlib.h>
 #include <ctype.h>
 #include <qstring.h>
+#include <string.h>
 
 #include "koscript_parsenode.h"
 #include "koscript_types.h"
@@ -40,6 +41,11 @@ extern int idl_line_no;
 static bool s_kspread;
 KLocale* s_koscript_locale = 0;
 static KLocale* s_defaultLocale = 0;
+
+#define PARSE_NUM(yytext) \
+  if( strlen( yytext ) < 8 ) \
+  { yylval._int = ascii_to_longlong( 10, yytext ); return T_INTEGER_LITERAL; } else \
+  { yylval._float = ascii_to_longdouble( yytext ); return T_FLOATING_PT_LITERAL; }
 
 static KScript::Long ascii_to_longlong( long base, const char *s )
 {
@@ -347,8 +353,7 @@ KScript_Identifier      [_a-zA-Z][a-zA-Z0-9_]*
                         }
 <REGEXP_GROUP>{Digit}   {
                                 yy_pop_state();
-                                yylval._int = ascii_to_longlong( 10, yytext );
-                                return T_INTEGER_LITERAL;
+                                PARSE_NUM(yytext);
                         }
 <REGEXP_GROUP>.         {
                                 yy_pop_state();
@@ -420,8 +425,7 @@ from                    return T_FROM;
                           return T_FLOATING_PT_LITERAL;
                         }
 <KSPREAD>{KSpread_Int_Literal1} {
-                          yylval._int = ascii_to_longlong( 10, yytext );
-                          return T_INTEGER_LITERAL;
+                          PARSE_NUM( yytext );
                         }
 
 <PLAIN>{Plain_Float_Literal1} |
@@ -433,8 +437,7 @@ from                    return T_FROM;
                           return T_FLOATING_PT_LITERAL;
                         }
 <PLAIN>{Plain_Int_Literal} {
-                          yylval._int = ascii_to_longlong( 10, yytext );
-                          return T_INTEGER_LITERAL;
+                          PARSE_NUM( yytext );
                         }
 
 {Oct_Literal}           {
