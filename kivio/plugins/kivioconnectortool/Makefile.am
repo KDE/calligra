@@ -1,4 +1,4 @@
-SUBDIRS = straight_connector polyline_connector .
+SUBDIRS = straight_connector .
 lib_LTLIBRARIES =libkivioconnectortool.la
 
 

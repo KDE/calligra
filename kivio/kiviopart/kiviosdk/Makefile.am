@@ -40,4 +40,6 @@ libkiviosdk_la_SOURCES = \
 		kivio_line_style.cpp\
 		kivio_text_style.cpp\
 		kivio_1d_stencil.cpp \
-		diapathparser.cpp
+		diapathparser.cpp \
+		kiviopolylineconnector.cpp \
+		polylineconnectorspawner.cpp
