@@ -515,6 +515,11 @@ don't put a </?xml...> at the end of the file!).
         other than its text and formatting.
         Each of the child elements can be present only once, except
         TABULATOR which can be repeated.
+        The FORMAT tag here is the 'default format' for the paragraph.
+
+        Note: on loading the properties of the layout for a paragraph
+        default to those specified in the style of the paragraph.
+        On saving, the paragraph layout is currently fully specified.
 -->
 <!ENTITY % layout "NAME|FLOW|INDENTS|OFFSETS|LINESPACING|PAGEBREAKING|
     LEFTBORDER|RIGHTBORDER|TOPBORDER|BOTTOMBORDER|COUNTER|FORMAT|
@@ -527,6 +532,11 @@ don't put a </?xml...> at the end of the file!).
         style. As the markup is stored in one place (the style) changing the markup
         throughout the document is simply a task of changing one or two styles.
         Highly recommended for structured documents.
+
+        A style element contains the same child elements as the LAYOUT tag:
+        all the paragraph properties, as well as a text format.
+        It also contains the name of the following style, i.e. the one used when
+        the user presses Enter in a paragraph using this style.
 -->
 <!ELEMENT STYLES
     (STYLE*)>
