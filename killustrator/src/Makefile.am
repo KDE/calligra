@@ -1,2 +1,2 @@
-SUBDIRS = share filter xmlutils standalone pics doc
+SUBDIRS = share filter xmlutils standalone koffice pics doc
 
