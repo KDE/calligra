@@ -701,6 +701,8 @@ public:
 
     void setChanged() { m_changed = true; }
 
+    int floatingFrameBaseline( int /*frameNum*/ );
+
 protected slots:
 
     void slotFormulaChanged(int width, int height);
@@ -746,6 +748,11 @@ public:
     virtual void cut();
     virtual void paste();
     virtual void selectAll();
+
+    /** Moves the cursor to the first position */
+    void moveHome();
+    /** Moves the cursor to the last position */
+    void moveEnd();
 
 protected slots:
 

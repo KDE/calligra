@@ -1513,7 +1513,18 @@ KWFormulaFrameSet::KWFormulaFrameSet( KWDocument *_doc, const QString & name )
         m_name = _doc->generateFramesetName( i18n( "Formula %1" ) );
     else
         m_name = name;
+
+    if ( isFloating() ) {
+        // we need to look for the anchor every time, don't cache this value.
+        // undo/redo creates/deletes anchors
+        KWAnchor * anchor = findAnchor( 0 );
+        if ( anchor ) {
+            QTextFormat * format = anchor->format();
+            formula->setFontSize( format->font().pointSize() );
+        }
+    }
 }
+
 
 KWFormulaFrameSet::~KWFormulaFrameSet()
 {
@@ -1535,6 +1546,16 @@ void KWFormulaFrameSet::drawFrame( KWFrame* /*frame*/, QPainter* painter, const 
         if ( resetChanged )
             m_changed = false;
 
+        if ( isFloating() ) {
+            // we need to look for the anchor every time, don't cache this value.
+            // undo/redo creates/deletes anchors
+            KWAnchor * anchor = findAnchor( 0 );
+            if ( anchor ) {
+                QTextFormat * format = anchor->format();
+                formula->setFontSize( format->font().pointSize() );
+            }
+        }
+
         if ( edit )
         {
             KWFormulaFrameSetEdit * formulaEdit = static_cast<KWFormulaFrameSetEdit *>(edit);
@@ -1548,13 +1569,13 @@ void KWFormulaFrameSet::drawFrame( KWFrame* /*frame*/, QPainter* painter, const 
     }
 }
 
-void KWFormulaFrameSet::slotFormulaChanged(int width, int height)
+void KWFormulaFrameSet::slotFormulaChanged( int width, int height )
 {
     if ( frames.isEmpty() )
         return;
     // Did I tell you that assignment to parameters is evil?
-    width = static_cast<int>( (double)width / kWordDocument()->zoomedResolutionX() ) + 5;
-    height = static_cast<int>( (double)height / kWordDocument()->zoomedResolutionY() ) + 5;
+    width = static_cast<int>( static_cast<double>( width ) / kWordDocument()->zoomedResolutionX() ) + 1;
+    height = static_cast<int>( static_cast<double>( height ) / kWordDocument()->zoomedResolutionY() ) + 1;
 
     double oldWidth = frames.first()->width();
     double oldHeight = frames.first()->height();
@@ -1619,6 +1640,15 @@ void KWFormulaFrameSet::zoom( bool forPrint )
     }
 }
 
+int KWFormulaFrameSet::floatingFrameBaseline( int /*frameNum*/ )
+{
+    if ( !frames.isEmpty() )
+    {
+        return formula->baseline();
+    }
+    return -1;
+}
+
 
 KWFormulaFrameSetEdit::KWFormulaFrameSetEdit(KWFormulaFrameSet* fs, KWCanvas* canvas)
         : KWFrameSetEdit(fs, canvas)
@@ -1642,10 +1672,27 @@ KWFormulaFrameSetEdit::~KWFormulaFrameSetEdit()
     delete formulaView;
 }
 
-void KWFormulaFrameSetEdit::keyPressEvent(QKeyEvent* event)
+void KWFormulaFrameSetEdit::keyPressEvent( QKeyEvent* event )
 {
     //kdDebug(32001) << "KWFormulaFrameSetEdit::keyPressEvent" << endl;
-    formulaView->keyPressEvent(event);
+    int action = event->key();
+    if ( event->state() == 0 ) {
+        switch ( action ) {
+        case Qt::Key_Left:
+            if ( formulaView->isHome() ) {
+                // leave left
+                return;
+            }
+            break;
+        case Qt::Key_Right:
+            if ( formulaView->isEnd() ) {
+                // leave right
+                return;
+            }
+            break;
+        }
+    }
+    formulaView->keyPressEvent( event );
 }
 
 void KWFormulaFrameSetEdit::mousePressEvent(QMouseEvent* event, const QPoint &, const KoPoint & )
@@ -1706,6 +1753,15 @@ void KWFormulaFrameSetEdit::paste()
 void KWFormulaFrameSetEdit::selectAll()
 {
     formulaView->slotSelectAll();
+}
+
+void KWFormulaFrameSetEdit::moveHome()
+{
+    formulaView->slotMoveHome( WordMovement );
+}
+void KWFormulaFrameSetEdit::moveEnd()
+{
+    formulaView->slotMoveEnd( WordMovement );
 }
 
 void KWFormulaFrameSetEdit::cursorChanged( bool visible, bool /*selecting*/ )
