@@ -109,6 +109,8 @@ KexiDataTable::executeQuery(QString queryStatement)
 		insert->setHint(QVariant(record));
 		insert->setInsertItem(true);
 	}
+	
+	return true;
 }
 
 void

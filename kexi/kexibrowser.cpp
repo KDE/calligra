@@ -177,6 +177,7 @@ void KexiBrowser::slotCreate(QListViewItem *i)
 				KexiDataTable *kt = new KexiDataTable(kexi->mainWindow()->workspaceWidget(), r->text(0), "table");
 				if(kt->executeQuery("select * from " + r->text(0)))
 				{
+					kdDebug() << "Show Tsble" << endl;
 					kt->show();
 				}
 				else
