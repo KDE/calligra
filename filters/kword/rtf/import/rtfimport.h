@@ -145,8 +145,26 @@ struct RTFFormat
     int font, fontSize, baseline;
     int color, bgcolor, underlinecolor;
     int uc;
-    bool bold, italic, strike, striked, hidden, caps, smallCaps;
+    bool bold, italic, strike, striked;
+    bool hidden, caps, smallCaps;
 };
+
+/// Comparison operator \since 1.4
+inline bool operator == ( const RTFFormat& f1, const RTFFormat& f2 )
+{
+    return f1.vertAlign == f2.vertAlign && f1.underline == f2.underline
+        && f1.font == f2.font && f1.fontSize == f2.fontSize && f1.baseline == f2.baseline
+        && f1.color == f2.color && f1.bgcolor == f2.color && f1.underlinecolor == f2.underlinecolor
+        && f1.uc == f2.uc
+        && f1.bold == f2.bold && f1.italic == f2.italic && f1.strike == f2.strike && f1.striked == f2.striked
+        && f1.hidden == f2.hidden && f1.caps == f2.caps && f1.smallCaps == f2.smallCaps
+        ;
+}
+/// Comparison operator \since 1.4
+inline bool operator != ( const RTFFormat& f1, const RTFFormat& f2 )
+{
+    return ! ( f1 == f2 );
+}
 
 /// Style sheet entry
 struct RTFStyle

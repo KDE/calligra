@@ -1924,9 +1924,9 @@ void RTFImport::parseRichText( RTFProperty * )
 	    int len = (token.text[0] < 0) ? 1 : strlen( token.text );
 
 	    // Check and store format changes
-	    if (textState->formats.isEmpty() ||
-		memcmp( &textState->formats.last().fmt,
-			&state.format, sizeof(RTFFormat) )|| (!textState->formats.last().xmldata.isEmpty()))
+	    if ( textState->formats.isEmpty() ||
+		textState->formats.last().fmt != state.format ||
+                ( !textState->formats.last().xmldata.isEmpty() ) )
 	    {
 		kwFormat.fmt = state.format;
 		kwFormat.id  = 1;
@@ -2465,8 +2465,7 @@ void RTFImport::addParagraph( DomNode &node, bool frameBreak )
 
     for ( QValueList<KWFormat>::ConstIterator it = textState->formats.begin(); it != textState->formats.end(); ++it )
     {
-	if ( (*it).id != 1 ||
-	    memcmp( &(*it).fmt, format, sizeof(RTFFormat) ) )
+	if ( (*it).id != 1 || (*it).fmt != *format )
 	{
 	    if (!hasFormats)
 	    {
