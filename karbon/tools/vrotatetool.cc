@@ -46,10 +46,9 @@ VRotateTool::instance( KarbonPart* part )
 }
 
 void
-VRotateTool::setCursor( KarbonView* view ) const
+VRotateTool::setCursor( KarbonView* view, const QPoint &p ) const
 {
-/*
-	switch( VHandleTool::instance( m_part )->activeNode() )
+	switch( m_part->document().selection()->node( p ) )
 	{
 		case node_lt:
 		case node_rb:
@@ -75,7 +74,6 @@ VRotateTool::setCursor( KarbonView* view ) const
 			view->canvasWidget()->viewport()->
 				setCursor( QCursor( Qt::arrowCursor ) );
 	}
-*/
 }
 
 void
@@ -83,13 +81,14 @@ VRotateTool::drawTemporaryObject( KarbonView* view )
 {
 	VPainter *painter = view->painterFactory()->editpainter();
 	painter->setRasterOp( Qt::NotROP );
-/*
+
 	// already selected, so must be a handle operation (move, scale etc.)
+	VHandleNode node = part()->document().selection()->node( QPoint( m_lp.x(), m_lp.y() ) );
+	kdDebug() << "node : " << node << endl;
 	if(
 		part()->document().selection()->objects().count() > 0 &&
-		VHandleTool::instance( m_part )->activeNode() != node_mm )
+		node != node_mm )
 	{
-		setCursor( view );
 		KoPoint lp = view->canvasWidget()->viewportToContents( QPoint( m_lp.x(), m_lp.y() ) );
 		KoRect rect = part()->document().selection()->boundingBox();
 
@@ -99,22 +98,22 @@ VRotateTool::drawTemporaryObject( KarbonView* view )
 			m_sp.y() - view->canvasWidget()->contentsY() );
 
 		m_angle = atan2( lp.y() - m_sp.y(), lp.x() - m_sp.x() );
-		if( VHandleTool::instance( m_part )->activeNode() == node_lt )
+		if( node == node_lt )
 			m_angle -= atan2( rect.top() - m_sp.y(), rect.left() - m_sp.x() );
-		else if( VHandleTool::instance( m_part )->activeNode() == node_mt )
+		else if( node == node_mt )
 			m_angle += M_PI / 2;
-		else if( VHandleTool::instance( m_part )->activeNode() == node_rt )
+		else if( node == node_rt )
 			m_angle -= atan2( rect.top() - m_sp.y(), rect.right() - m_sp.x() );
-		else if( VHandleTool::instance( m_part )->activeNode() == node_rm)
+		else if( node == node_rm)
 		{
 		}
-		else if( VHandleTool::instance( m_part )->activeNode() == node_rb )
+		else if( node == node_rb )
 			m_angle -= atan2( rect.bottom() - m_sp.y(), rect.right() - m_sp.x() );
-		else if( VHandleTool::instance( m_part )->activeNode() == node_mb )
+		else if( node == node_mb )
 			m_angle -= M_PI / 2;
-		else if( VHandleTool::instance( m_part )->activeNode() == node_lb )
+		else if( node == node_lb )
 			m_angle -= atan2( rect.bottom() - m_sp.y(), rect.left() - m_sp.x() );
-		else if( VHandleTool::instance( m_part )->activeNode() == node_lm )
+		else if( node == node_lm )
 		{
 		}
 		// rotate operation
@@ -148,13 +147,16 @@ VRotateTool::drawTemporaryObject( KarbonView* view )
 		}
 		painter->setZoomFactor( 1.0 );
 	}
-	else*/
+	else
 		m_isDragging = false;
 }
 
 bool
 VRotateTool::eventFilter( KarbonView* view, QEvent* event )
 {
+	QMouseEvent* mouse_event = static_cast<QMouseEvent*> ( event );
+	setCursor( view, mouse_event->pos() );
+
 	if ( event->type() == QEvent::MouseMove )
 	{
 		if( m_isDragging )
@@ -162,7 +164,6 @@ VRotateTool::eventFilter( KarbonView* view, QEvent* event )
 			// erase old object:
 			drawTemporaryObject( view );
 
-			QMouseEvent* mouse_event = static_cast<QMouseEvent*> ( event );
 			m_lp.setX( mouse_event->pos().x() );
 			m_lp.setY( mouse_event->pos().y() );
 
@@ -175,7 +176,6 @@ VRotateTool::eventFilter( KarbonView* view, QEvent* event )
 
 	if ( event->type() == QEvent::MouseButtonRelease && m_isDragging )
 	{
-		QMouseEvent* mouse_event = static_cast<QMouseEvent*> ( event );
 		m_lp.setX( mouse_event->pos().x() );
 		m_lp.setY( mouse_event->pos().y() );
 
@@ -210,7 +210,6 @@ VRotateTool::eventFilter( KarbonView* view, QEvent* event )
 	{
 		view->painterFactory()->painter()->end();
 
-		QMouseEvent* mouse_event = static_cast<QMouseEvent*>( event );
 		m_fp.setX( mouse_event->pos().x() );
 		m_fp.setY( mouse_event->pos().y() );
 		m_lp.setX( mouse_event->pos().x() );

@@ -15,7 +15,6 @@
 #include "vscaletool.h"
 #include "vpainter.h"
 #include "vpainterfactory.h"
-#include "vselection.h"
 #include "vtransformcmd.h"
 
 
@@ -43,10 +42,9 @@ VScaleTool::instance( KarbonPart* part )
 }
 
 void
-VScaleTool::setCursor( KarbonView* view ) const
+VScaleTool::setCursor( KarbonView* view, const QPoint &p ) const
 {
-/*
-	switch( VHandleTool::instance( m_part )->activeNode() )
+	switch( m_part->document().selection()->node( p ) )
 	{
 		case node_lt:
 		case node_rb:
@@ -72,7 +70,6 @@ VScaleTool::setCursor( KarbonView* view ) const
 			view->canvasWidget()->viewport()->
 				setCursor( QCursor( Qt::arrowCursor ) );
 	}
-*/
 }
 
 void
@@ -84,58 +81,60 @@ VScaleTool::drawTemporaryObject( KarbonView* view )
 	KoPoint lp = view->canvasWidget()->viewportToContents( QPoint( m_lp.x(), m_lp.y() ) );
 
 	KoRect rect = part()->document().selection()->boundingBox();
-/*
+	kdDebug() << "rect.x()  : " << rect.x() << endl;
+	kdDebug() << "rect.y()  : " << rect.y() << endl;
+	kdDebug() << "rect.right()  : " << rect.right() << endl;
+	kdDebug() << "rect.bottom()  : " << rect.bottom() << endl;
+
 	// already selected, so must be a handle operation (move, scale etc.)
 	if(
-		part()->document().selection()->objects().count() > 0 &&
-		VHandleTool::instance( m_part )->activeNode() != node_mm )
+		part()->document().selection()->objects().count() > 0 && m_activeNode != node_mm )
 	{
-		setCursor( view );
 		// scale operation
 		QWMatrix mat;
-		if( VHandleTool::instance( m_part )->activeNode() == node_lt )
+		if( m_activeNode == node_lt )
 		{
 			m_sp = KoPoint( rect.right(), rect.bottom() );
 			m_s1 = ( rect.right() - lp.x() ) / double( rect.width() );
 			m_s2 = ( rect.bottom() - lp.y() ) / double( rect.height() );
 		}
-		else if( VHandleTool::instance( m_part )->activeNode() == node_mt )
+		else if( m_activeNode == node_mt )
 		{
 			m_sp = KoPoint( ( ( rect.right() + rect.left() ) / 2 ), rect.bottom() );
 			m_s1 = ( rect.right() - lp.x() ) / double( rect.width() / 2 );
 			m_s2 = ( rect.bottom() - lp.y() ) / double( rect.height() );
 		}
-		else if( VHandleTool::instance( m_part )->activeNode() == node_rt )
+		else if( m_activeNode == node_rt )
 		{
 			m_sp = KoPoint( rect.x(), rect.bottom() );
 			m_s1 = ( lp.x() - rect.x() ) / double( rect.width() );
 			m_s2 = ( rect.bottom() - lp.y() ) / double( rect.height() );
 		}
-		else if( VHandleTool::instance( m_part )->activeNode() == node_rm)
+		else if( m_activeNode == node_rm)
 		{
 			m_sp = KoPoint( rect.x(), ( rect.bottom() + rect.top() )  / 2 );
 			m_s1 = ( lp.x() - rect.x() ) / double( rect.width() );
 			m_s2 = ( rect.bottom() - lp.y() ) / double( rect.height() / 2 );
 		}
-		else if( VHandleTool::instance( m_part )->activeNode() == node_rb )
+		else if( m_activeNode == node_rb )
 		{
 			m_sp = KoPoint( rect.x(), rect.y() );
 			m_s1 = ( lp.x() - rect.x() ) / double( rect.width() );
 			m_s2 = ( lp.y() - rect.y() ) / double( rect.height() );
 		}
-		else if( VHandleTool::instance( m_part )->activeNode() == node_mb )
+		else if( m_activeNode == node_mb )
 		{
 			m_sp = KoPoint( ( ( rect.right() + rect.left() ) / 2 ), rect.y() );
 			m_s1 = ( rect.right() - lp.x() ) / double( rect.width() / 2 );
 			m_s2 = ( lp.y() - rect.y() ) / double( rect.height() );
 		}
-		else if( VHandleTool::instance( m_part )->activeNode() == node_lb )
+		else if( m_activeNode == node_lb )
 		{
 			m_sp = KoPoint( rect.right(), rect.y() );
 			m_s1 = ( rect.right() - lp.x() ) / double( rect.width() );
 			m_s2 = ( lp.y() - rect.y() ) / double( rect.height() );
 		}
-		else if( VHandleTool::instance( m_part )->activeNode() == node_lm )
+		else if( m_activeNode == node_lm )
 		{
 			m_sp = KoPoint( rect.right(), ( rect.bottom() + rect.top() )  / 2 );
 			m_s1 = ( rect.right() - lp.x() ) / double( rect.width() );
@@ -143,6 +142,10 @@ VScaleTool::drawTemporaryObject( KarbonView* view )
 		}
 		KoPoint sp = KoPoint( m_sp.x() - view->canvasWidget()->contentsX(), m_sp.y() - view->canvasWidget()->contentsY() );
 		mat.translate( sp.x() / view->zoom(), sp.y() / view->zoom());
+		kdDebug() << "lp.x() : " << lp.x() << endl;
+		kdDebug() << "lp.y() : " << lp.y() << endl;
+		kdDebug() << "m_s1 : " << m_s1 << endl;
+		kdDebug() << "m_s2 : " << m_s2 << endl;
 		mat.scale( m_s1, m_s2 );
 		mat.translate(	- ( sp.x() + view->canvasWidget()->contentsX() ) / view->zoom(),
 						- ( sp.y() + view->canvasWidget()->contentsY() ) / view->zoom() );
@@ -165,13 +168,16 @@ VScaleTool::drawTemporaryObject( KarbonView* view )
 		}
 		painter->setZoomFactor( 1.0 );
 	}
-	else*/
+	else
 		m_isDragging = false;
 }
 
 bool
 VScaleTool::eventFilter( KarbonView* view, QEvent* event )
 {
+	QMouseEvent* mouse_event = static_cast<QMouseEvent*> ( event );
+	setCursor( view, mouse_event->pos() );
+
 	if ( event->type() == QEvent::MouseMove )
 	{
 		if( m_isDragging )
@@ -179,7 +185,6 @@ VScaleTool::eventFilter( KarbonView* view, QEvent* event )
 			// erase old object:
 			drawTemporaryObject( view );
 
-			QMouseEvent* mouse_event = static_cast<QMouseEvent*> ( event );
 			m_lp.setX( mouse_event->pos().x() );
 			m_lp.setY( mouse_event->pos().y() );
 
@@ -194,7 +199,6 @@ VScaleTool::eventFilter( KarbonView* view, QEvent* event )
 	{
 		view->canvasWidget()->viewport()->setCursor( QCursor( Qt::arrowCursor ) );
 
-		QMouseEvent* mouse_event = static_cast<QMouseEvent*> ( event );
 		m_lp.setX( mouse_event->pos().x() );
 		m_lp.setY( mouse_event->pos().y() );
 
@@ -229,11 +233,12 @@ VScaleTool::eventFilter( KarbonView* view, QEvent* event )
 	{
 		view->painterFactory()->painter()->end();
 
-		QMouseEvent* mouse_event = static_cast<QMouseEvent*>( event );
 		m_fp.setX( mouse_event->pos().x() );
 		m_fp.setY( mouse_event->pos().y() );
 		m_lp.setX( mouse_event->pos().x() );
 		m_lp.setY( mouse_event->pos().y() );
+	
+		m_activeNode = m_part->document().selection()->node( mouse_event->pos() );
 
 		// draw initial object:
 		drawTemporaryObject( view );

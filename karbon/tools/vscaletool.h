@@ -7,6 +7,7 @@
 #define __VSCALETOOL_H__
 
 #include "vtool.h"
+#include "vselection.h"
 
 class KarbonPart;
 class KarbonView;
@@ -27,7 +28,7 @@ public:
 protected:
 	VScaleTool( KarbonPart* part );
 
-	void setCursor( KarbonView* view ) const;
+	void setCursor( KarbonView* view, const QPoint & ) const;
 
 private:
 	static VScaleTool* s_instance;
@@ -38,6 +39,8 @@ private:
 
 	double m_s1, m_s2;
 	KoPoint m_sp;
+
+	VHandleNode m_activeNode;
 
 	bool m_isDragging;
 };

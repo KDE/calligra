@@ -174,7 +174,7 @@ VSelection::node( const QPoint& point ) const
 {
 	for( uint i = node_lt; i <= node_rb; ++i )
 	{
-		if( m_qrect[i].contains( point ) );
+		if( m_qrect[i].contains( point ) )
 			return static_cast<VHandleNode>( i );
 	}
 

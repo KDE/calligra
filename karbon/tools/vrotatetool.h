@@ -27,7 +27,7 @@ public:
 protected:
 	VRotateTool( KarbonPart* part );
 
-	void setCursor( KarbonView* view ) const;
+	void setCursor( KarbonView* view, const QPoint & ) const;
 
 private:
 	static VRotateTool* s_instance;
