@@ -2,6 +2,7 @@
 Encoding=UTF-8
 Name=KPresenter
 Name[af]=Kpresenter
+Name[cy]=KCyflwynydd
 Name[eo]=Prezentilo
 Name[lo]=ການນຳສະເຫນີຊໍ້ມູນ
 Name[nl]=Kpresenter
@@ -17,6 +18,7 @@ GenericName[af]=Skuif Voorleggings
 GenericName[bg]=Създаване на презентации
 GenericName[ca]=Presentacions de diapositives
 GenericName[cs]=Prezentace
+GenericName[cy]=Cyflwyniadau Tryloywder
 GenericName[da]=Diaspræsentationer
 GenericName[de]=Folien-Präsentationen
 GenericName[el]=Παρουσιάσεις σε σλάιντ

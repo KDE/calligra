@@ -1,6 +1,7 @@
 [Desktop Entry]
 Encoding=UTF-8
 Name=KThesaurus
+Name[cy]=KThesawrws
 Name[eo]=Tezaŭro
 Name[fr]=KThésaurus
 Name[lo]=ວັດຈະນານຸກົມຄໍາຟ້ອງ K
@@ -17,6 +18,7 @@ GenericName[af]=Verwanter Woorde
 GenericName[bg]=Синоними
 GenericName[ca]=Paraules relacionades
 GenericName[cs]=Podobná slova
+GenericName[cy]=Geiriau Perthnasol
 GenericName[da]=Relaterede ord
 GenericName[de]=Verwandte Ausdrücke
 GenericName[el]=Συγγενικές λέξεις

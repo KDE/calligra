@@ -2,6 +2,7 @@
 Encoding=UTF-8
 Name=KFormula
 Name[af]=Kformula
+Name[cy]=KFformiwla
 Name[eo]=Formulilo
 Name[lo]=ສູດຄະນິດສາດ K
 Name[pt_BR]=KFormula - Editor de fórmulas
@@ -14,6 +15,7 @@ GenericName[af]=Formule Redigeerder
 GenericName[bg]=Редактор на формули
 GenericName[ca]=Editor de fórmules
 GenericName[cs]=Editor vzorců
+GenericName[cy]=Golygydd Fformiwla
 GenericName[da]=Formeleditor
 GenericName[de]=Formel-Editor
 GenericName[el]=Επεξεργαστής μαθηματικών τύπων
