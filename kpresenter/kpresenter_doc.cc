@@ -118,6 +118,7 @@ void KPresenterDoc::draw(QPaintDevice* _dev,CORBA::Long _width,CORBA::Long _heig
   warning("***********************************************");
   warning(i18n("KPresenter doesn't support KoDocument::draw(...) now!"));
   warning("***********************************************");
+
   return;
   
   if (m_lstViews.count() > 0)
