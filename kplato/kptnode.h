@@ -100,7 +100,7 @@ public:
 	void setParent( KPTNode* newParent ) { m_parent = newParent;}
     const QPtrList<KPTNode> &childNodeIterator() const { return m_nodes; }
     int numChildren() const { return m_nodes.count(); }
-    virtual void addChildNode(KPTNode *node);
+    virtual void addChildNode(KPTNode *node, KPTNode *after=0);
     virtual void insertChildNode(unsigned int index, KPTNode *node);
     void delChildNode(KPTNode *node, bool remove=true);
     void delChildNode(int number, bool remove=true);

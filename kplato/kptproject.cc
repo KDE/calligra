@@ -644,7 +644,7 @@ void KPTProject::unindentTask( KPTNode* task )
 		return;
 	}
 	parentNode->delChildNode( task, false ); // false: do not delete objekt
-	grandParentNode->addChildNode( task );
+	grandParentNode->addChildNode( task, parentNode );
 	task->setParent( grandParentNode ); // tell the node about it
 }
 

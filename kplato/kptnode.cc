@@ -91,8 +91,13 @@ void KPTNode::insertChildNode( unsigned int index, KPTNode *node) {
     m_nodes.insert(index,node);
 }
 
-void KPTNode::addChildNode( KPTNode *node) {
-    m_nodes.append(node);
+void KPTNode::addChildNode( KPTNode *node, KPTNode *after) {
+    int index = m_nodes.findRef(after);
+    if (index == -1) {
+        m_nodes.append(node);
+        return;
+    }
+    m_nodes.insert(index+1, node);
 }
 
 int KPTNode::findChildNode( KPTNode* node )
