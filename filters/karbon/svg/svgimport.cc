@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2002, The Karbon Developers
+   Copyright (C) 2002, 2003, The Karbon Developers
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -35,8 +35,7 @@
 #include <qcolor.h>
 #include <qfile.h>
 #include <qregexp.h>
-#include <iostream>
-#include <zlib.h>
+#include <kfilterdev.h>
 
 typedef KGenericFactory<SvgImport, KoFilter> SvgImportFactory;
 K_EXPORT_COMPONENT_FACTORY( libkarbonsvgimport, SvgImportFactory( "karbonsvgimport" ) );
@@ -57,47 +56,48 @@ KoFilter::ConversionStatus SvgImport::convert(const QCString& from, const QCStri
 	// check for proper conversion
 	if( to != "application/x-karbon" || from != "image/svg+xml" )
 		return KoFilter::NotImplemented;
-	QFile in( m_chain->inputFile() );
 
-	QString path = m_chain->inputFile();
-	if( path.right( 3 ).upper() == "SVG" )
-    {
-	    if( !in.open( IO_ReadOnly ) )
-		{
-			kdError(30502) << "Unable to open input file" << endl;
-			return KoFilter::FileNotFound;
-		}
-		inpdoc.setContent( &in );
-	}
-	else
+        //Find the last extension
+        QString strExt;
+        QString fileIn ( m_chain->inputFile() );
+        const int result=fileIn.findRev('.');
+        if (result>=0)
+        {
+    	        strExt=fileIn.mid(result).lower();
+        }
+
+        QString strMime; // Mime type of the compressor
+        if ((strExt==".gz")      //in case of .svg.gz (logical extension)
+                ||(strExt==".zsvg")) //in case of .zsvg (extension used prioritary)
+                strMime="application/x-gzip"; // Compressed with gzip
+        else if (strExt==".bz2") //in case of .svg.bz2 (logical extension)
+                strMime="application/x-bzip2"; // Compressed with bzip2
+        else
+                strMime="text/plain";
+
+        kdDebug() << "File extension: -" << strExt << "- Compression: " << strMime << endl;
+
+        QIODevice* in = KFilterDev::deviceForFile(fileIn,strMime);
+
+        if (!in->open(IO_ReadOnly))
+        {
+                kdError() << "Cannot open file! Aborting!" << endl;
+                delete in;
+                return KoFilter::FileNotFound;
+        }
+
+	int line, col;
+	QString errormessage;
+        const bool parsed=inpdoc.setContent( in, &errormessage, &line, &col );
+        in->close();
+        delete in;
+	if ( ! parsed )
 	{
-		// svgz loading from kdecore/svgicons
-		gzFile svgz = gzopen( path.latin1(), "ro" );
-		if( !svgz )
-			return KoFilter::FileNotFound;
-
-		QByteArray data;
-		bool done = false;
-
-		char *buffer = new char[ 1024 ];
-
-		while( !done )
-		{
-			memset( buffer, 0, 1024 );
-
-			int ret = gzread( svgz, buffer, 1024 );
-			if( ret == 0 )
-				done = true;
-			else if( ret == -1 )
-				return KoFilter::FileNotFound;
-
-			QDataStream dataStream( data, IO_WriteOnly | IO_Append );
-	        dataStream.writeRawBytes( buffer, 1024 );
-		}
-
-		gzclose( svgz );
-
-		inpdoc.setContent( data );
+	        kdError() << "Error while parsing file: "
+		        << "at line " << line << " column: " << col 
+		        << " message: " << errormessage << endl;
+		// ### TODO: feedback to the user
+	        return KoFilter::ParsingError;
 	}
 
 	// Do the conversion!
@@ -112,7 +112,6 @@ KoFilter::ConversionStatus SvgImport::convert(const QCString& from, const QCStri
 	QCString cstring = outdoc.toCString(); // utf-8 already
 	out->writeBlock( cstring.data(), cstring.length() );
 
-	in.close();
 	return KoFilter::OK; // was successfull
 }
 
