@@ -38,6 +38,8 @@ VDrawSelection::visitVComposite( VComposite &composite )
 
 	VPathListIterator itr( composite.paths() );
 
+	m_painter->setPen( Qt::SolidLine );
+
 	if( composite.state() == VObject::selected )
     {
 		// paint fill:

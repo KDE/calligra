@@ -113,7 +113,9 @@ VSelection::append( const KoRect& rect, bool selectObjects, bool exclusive )
 	else
 	{
 		VObjectListIterator itr( m_objects );
+		VObjectList notSelected;
 
+		// Try to select all that have at least one node contained in the rect
 		for ( ; itr.current(); ++itr )
 		{
 			VSelectNodes op( rect, true, exclusive );
@@ -121,10 +123,12 @@ VSelection::append( const KoRect& rect, bool selectObjects, bool exclusive )
 			if( op.visit( *itr.current() ) )
 				success = true;
 			else
-			{
-				take( *( itr.current() ) );
-			}
+				notSelected.append( itr.current());
 		}
+		// Remove all that were not selected from this selection
+		VObjectListIterator jtr( notSelected );
+		for ( ; jtr.current(); ++jtr )
+			take( *( jtr.current() ) );
 	}
 
 	invalidateBoundingBox();

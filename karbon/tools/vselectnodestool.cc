@@ -77,7 +77,6 @@ VSelectNodesTool::draw()
 	{
 		if( m_state == normal )
 		{
-			double tolerance = 1.0 / view()->zoom();
 			view()->part()->document().selection()->append(
 				KoRect(
 					first().x() - tolerance,
