@@ -559,6 +559,8 @@ protected:
     //we move presSpeed to each table => compatibility with old file format
     void compatibilityPresSpeed();
 
+    void parseOasisHelpLine( const QString &str );
+
     // ************ variables ************
 
     // screenpresentations

@@ -1127,6 +1127,36 @@ void KPresenterDoc::loadOasisSettings()
 {
 }
 
+void KPresenterDoc::parseOasisHelpLine( const QString &text )
+{
+    QString str;
+    int newPos = text.length()-1; //start to element = 1
+    for ( int pos = text.length()-1; pos >=0;--pos )
+    {
+        if ( text[pos]=='P' )
+        {
+            //point
+            str = text.mid( pos+1, ( newPos-pos ) );
+            kdDebug()<<" point elemetn !!!!!!!!!!!!!!!!! :"<< str <<endl;
+            newPos = pos-1;
+        }
+        else if ( text[pos]=='V' )
+        {
+            //vertical element
+            str = text.mid( pos+1, ( newPos-pos ) );
+            kdDebug()<<" vertical !!!!!!!!!!!!!!!!! :"<< str <<endl;
+            newPos = pos-1;
+        }
+        else if ( text[pos]=='H' )
+        {
+            //horizontal element
+            str = text.mid( pos+1, ( newPos-pos ) );
+            kdDebug()<<" horizontal !!!!!!!!!!!!!!!!! :"<< str <<endl;
+            newPos = pos-1;
+        }
+    }
+}
+
 void KPresenterDoc::saveOasisPresentationSettings( KoXmlWriter &contentTmpWriter )
 {
     //todo don't save when is not value by default (check with oo)
