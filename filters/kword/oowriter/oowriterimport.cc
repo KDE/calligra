@@ -747,6 +747,9 @@ QDomElement OoWriterImport::parseParagraph( QDomDocument& doc, const QDomElement
             if ( underLineColor != "font-color" )
                 underLineElem.setAttribute("underlinecolor", underLineColor);
             // TODO wordbyword?
+            // LT: doesn't work in kotext: it underlines/strikes only the first word
+            //bool wordByWord = (m_styleStack.hasAttribute("fo:score-spaces"))    //3.10.25
+            //                  && (m_styleStack.attribute("fo:score-spaces") == "false");
             format.appendChild( underLineElem );
         }
 
