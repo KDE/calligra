@@ -208,4 +208,19 @@ bool KWTextDocument::loadSpanTag( const QDomElement& tag, KoOasisContext& contex
     return false;
 }
 
+void KWTextDocument::appendTOC( const QDomElement &e )
+{
+    m_textfs->appendTOC( e );
+}
+
+void KWTextDocument::appendImage( KoOasisContext& context, const QDomElement& tag )
+{
+    m_textfs->appendImage( context, tag );
+}
+
+void KWTextDocument::appendTextBox( KoOasisContext&  context,  const QDomElement& tag )
+{
+    m_textfs->appendTextBox( context, tag );
+}
+
 #include "kwtextdocument.moc"

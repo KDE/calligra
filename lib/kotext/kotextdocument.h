@@ -200,8 +200,13 @@ public:
     int length() const;
     void clear( bool createEmptyParag = FALSE );
 
-    virtual KoTextParag *createParag( KoTextDocument *d, KoTextParag *pr = 0, KoTextParag *nx = 0, bool updateIds = TRUE );
+    virtual KoTextParag* loadList( const QDomElement& list, KoOasisContext& context, KoTextParag* lastParagraph, KoStyleCollection * _styleCol );
+    virtual KoTextParag * loadOasisText( const QDomElement &bodyElem, KoOasisContext& context, KoTextParag* lastParagraph, KoStyleCollection * _styleCol );
 
+    virtual KoTextParag *createParag( KoTextDocument *d, KoTextParag *pr = 0, KoTextParag *nx = 0, bool updateIds = TRUE );
+    virtual void appendTOC( const QDomElement &/*e*/ ) {};
+    virtual void appendImage( KoOasisContext& /*context*/, const QDomElement& /*tag*/ ) { };
+    virtual void appendTextBox( KoOasisContext&  /*context*/,  const QDomElement& /*tag*/ ) { };
     void setAddMargins( bool b ) { addMargs = b; }
     int addMargins() const { return addMargs; }
 

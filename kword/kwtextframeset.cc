@@ -1788,203 +1788,70 @@ QDomElement KWTextFrameSet::saveInternal( QDomElement &parentElem, bool saveFram
     return framesetElem;
 }
 
-// How to share this code with KPresenter?
-KWTextParag* KWTextFrameSet::loadList( const QDomElement& list, KoOasisContext& context, KWTextParag* lastParagraph )
+
+void KWTextFrameSet::appendTOC( const QDomElement &e )
 {
-    //kdDebug(30518) << k_funcinfo << "parsing list"<< endl;
+    //todo
+}
 
-    bool orderedList = list.tagName() == "text:ordered-list";
-    QString oldListStyleName = context.currentListStyleName();
-    if ( list.hasAttribute( "text:style-name" ) )
-        context.setCurrentListStyleName( list.attribute( "text:style-name" ) );
-    bool listOK = !context.currentListStyleName().isEmpty();
-    const int level = context.listStyleStack().level() + 1;
-    if ( listOK )
-        listOK = context.pushListLevelStyle( context.currentListStyleName(), level );
+void KWTextFrameSet::appendImage( KoOasisContext& context, const QDomElement& tag )
+{
+    KWFrameSet* fs = new KWPictureFrameSet( m_doc, tag, context );
+    m_doc->addFrameSet( fs, false );
+}
 
-    // Iterate over list items
-    for ( QDomNode n = list.firstChild(); !n.isNull(); n = n.nextSibling() )
-    {
-        QDomElement listItem = n.toElement();
-        int restartNumbering = -1;
-        if ( listItem.hasAttribute( "text:start-value" ) )
-            restartNumbering = listItem.attribute( "text:start-value" ).toInt();
-        KWTextParag* oldLast = lastParagraph;
-        lastParagraph = loadOasisText( listItem, context, lastParagraph );
-        KoTextParag* firstListItem = oldLast ? oldLast->next() : textDocument()->firstParag();
-        // It's either list-header (normal text on top of list) or list-item
-        if ( listItem.tagName() != "text:list-header" && firstListItem ) {
-            // Apply list style to first paragraph inside list-item
-            firstListItem->applyListStyle( context, restartNumbering, orderedList, false, context.listStyleStack().level() );
+void KWTextFrameSet::appendTextBox( KoOasisContext&  context,  const QDomElement& tag )
+{
+    // Text frame chains. When seeing frame 'B' is chained to this frame A when loading,
+    // we store 'B' -> A, so that when loading B we can add it to A's frameset.
+    // If we load B first, no problem: when loading A we can chain.
+    // This is all made simpler by the fact that we don't have manually configurable order in KWord...
+    // But it's made more complex by the fact that frames don't have names in KWord (framesets do).
+    // Hence the framename temporary storage in KWLoadingInfo
+
+    KWTextFrameSet* fs = 0;
+    QString frameName = tag.attribute( "draw:name" );
+    QString chainNextName = tag.attribute( "draw:chain-next-name" );
+    if ( !chainNextName.isEmpty() ) { // 'B' in the above example
+        kdDebug(32001) << "Loading " << frameName << " : next-in-chain=" << chainNextName << endl;
+        // Check if we already loaded that frame (then we need to go 'before' it)
+        KWFrame* nextFrame = m_doc->loadingInfo()->frameByName( chainNextName );
+        if ( nextFrame ) {
+            fs = dynamic_cast<KWTextFrameSet *>( nextFrame->frameSet() );
+            chainNextName = QString::null; // already found, no need to store it
+            kdDebug(32001) << "  found " << nextFrame << " -> frameset " << ( fs ? fs->getName() : QString::null ) << endl;
         }
     }
-    if ( listOK )
-        context.listStyleStack().pop();
-    context.setCurrentListStyleName( oldListStyleName );
-    return lastParagraph;
+    KWFrame* prevFrame = m_doc->loadingInfo()->chainPrevFrame( frameName );
+    //kdDebug(32001) << "Loading " << frameName << " : chainPrevFrame=" << prevFrame << endl;
+    if ( prevFrame ) {
+        if ( fs ) // we are between prevFrame and nextFrame. They'd better be for the same fs!!
+            Q_ASSERT( fs == prevFrame->frameSet() );
+        fs = dynamic_cast<KWTextFrameSet *>( prevFrame->frameSet() );
+        //kdDebug(32001) << "  found " << prevFrame << " -> frameset " << fs->getName() << endl;
+    }
+    KWFrame* frame = 0;
+    if ( !fs ) {
+        fs = new KWTextFrameSet( m_doc, tag, context );
+        m_doc->addFrameSet( fs, false );
+        frame = fs->loadOasis( tag, context );
+    } else { // Adding frame to existing frameset
+        context.styleStack().save();
+        context.fillStyleStack( tag, "draw:style-name" ); // get the style for the graphics element
+        frame = fs->loadOasisFrame( tag, context );
+        context.styleStack().restore();
+    }
+
+    m_doc->loadingInfo()->storeFrameName( frame, frameName );
+
+    if ( !chainNextName.isEmpty() ) {
+        m_doc->loadingInfo()->storeNextFrame( frame, chainNextName );
+    }
 }
 
 KWTextParag * KWTextFrameSet::loadOasisText( const QDomElement &bodyElem, KoOasisContext& context, KWTextParag* lastParagraph )
 {
-    // was OoWriterImport::parseBodyOrSimilar
-    for ( QDomNode text (bodyElem.firstChild()); !text.isNull(); text = text.nextSibling() )
-    {
-        context.styleStack().save();
-        QDomElement tag = text.toElement();
-        const QString tagName = tag.tagName();
-        const bool textFoo = tagName.startsWith( "text:" );
-
-        if ( textFoo )
-        {
-            if ( tagName == "text:p" ) {  // text paragraph
-                context.fillStyleStack( tag, "text:style-name" );
-
-                KWTextParag *parag = new KWTextParag( textDocument(), lastParagraph );
-                parag->loadOasis( tag, context, m_doc->styleCollection() );
-                if ( !lastParagraph )        // First parag
-                    textDocument()->setFirstParag( parag );
-                lastParagraph = parag;
-                m_doc->progressItemLoaded(); // ## check
-            }
-            else if ( tagName == "text:h" ) // heading
-            {
-                context.fillStyleStack( tag, "text:style-name" );
-                int level = tag.attribute( "text:level" ).toInt();
-                bool listOK = false;
-                // When a heading is inside a list, it seems that the list prevails.
-                // Example:
-                //    <text:ordered-list text:style-name="Numbering 1">
-                //      <text:list-item text:start-value="5">
-                //        <text:h text:style-name="P2" text:level="4">The header</text:h>
-                // where P2 has list-style-name="something else"
-                // Result: the numbering of the header follows "Numbering 1".
-                // So we use the style for the outline level only if we're not inside a list:
-                //if ( !context.atStartOfListItem() )
-                // === The new method for this is that we simply override it in parseList, afterwards.
-                listOK = context.pushOutlineListLevelStyle( level );
-                int restartNumbering = -1;
-                if ( tag.hasAttribute( "text:start-value" ) )
-                    // OASIS extension http://lists.oasis-open.org/archives/office/200310/msg00033.html
-                    restartNumbering = tag.attribute( "text:start-value" ).toInt();
-
-                KWTextParag *parag = new KWTextParag( textDocument(), lastParagraph );
-                parag->loadOasis( tag, context, m_doc->styleCollection() );
-                if ( !lastParagraph )        // First parag
-                    textDocument()->setFirstParag( parag );
-                lastParagraph = parag;
-                if ( listOK ) {
-                    parag->applyListStyle( context, restartNumbering, true /*ordered*/, true /*heading*/, level );
-                    context.listStyleStack().pop();
-                }
-            }
-            else if ( tagName == "text:unordered-list" || tagName == "text:ordered-list" // OOo-1.1
-                      || tagName == "text:list" )  // OASIS
-            {
-                lastParagraph = loadList( tag, context, lastParagraph );
-                context.styleStack().restore();
-                continue;
-            }
-            else if ( tagName == "text:section" ) // Provisory support (###TODO)
-            {
-                kdDebug(32002) << "Section found!" << endl;
-                context.fillStyleStack( tag, "text:style-name" );
-                lastParagraph = loadOasisText( tag, context, lastParagraph );
-            }
-            else if ( tagName == "text:variable-decls" )
-            {
-                // We don't parse variable-decls since we ignore var types right now
-                // (and just storing a list of available var names wouldn't be much use)
-            }
-#if 0 // TODO (OASIS text:table-of-content)
-            else if ( tagName == "text:table-of-content" )
-            {
-                appendTOC( e );
-            }
-#endif
-            // TODO OASIS text:sequence-decls
-            else
-            {
-                kdWarning(32002) << "Unsupported body element '" << tagName << "'" << endl;
-            }
-        }
-        else // not text:
-        {
-            if ( tagName == "draw:frame" ) {
-                kdWarning(32001) << "Loading of OASIS element draw:frame not implemented yet! Please report this." << endl;
-                // TODO draw:frame is an OASIS change
-                // IIRC this means moving draw:image and draw:text-box
-                // here, being the child element of the draw:frame
-                // and loading the frame attributes from the draw:frame element.
-            }
-            else if ( tagName == "draw:image" )
-            {
-                KWFrameSet* fs = new KWPictureFrameSet( m_doc, tag, context );
-                m_doc->addFrameSet( fs, false );
-            }
-#if 0 // TODO OASIS table:table
-            if ( tagName == "table:table" )
-            {
-                kdDebug(32002) << "Table found!" << endl;
-                parseTable( tag, currentFramesetElement );
-            }
-#endif
-            else if ( tagName == "draw:text-box" )
-            {
-                // Text frame chains. When seeing frame 'B' is chained to this frame A when loading,
-                // we store 'B' -> A, so that when loading B we can add it to A's frameset.
-                // If we load B first, no problem: when loading A we can chain.
-                // This is all made simpler by the fact that we don't have manually configurable order in KWord...
-                // But it's made more complex by the fact that frames don't have names in KWord (framesets do).
-                // Hence the framename temporary storage in KWLoadingInfo
-
-                KWTextFrameSet* fs = 0;
-                QString frameName = tag.attribute( "draw:name" );
-                QString chainNextName = tag.attribute( "draw:chain-next-name" );
-                if ( !chainNextName.isEmpty() ) { // 'B' in the above example
-                    kdDebug(32001) << "Loading " << frameName << " : next-in-chain=" << chainNextName << endl;
-                    // Check if we already loaded that frame (then we need to go 'before' it)
-                    KWFrame* nextFrame = m_doc->loadingInfo()->frameByName( chainNextName );
-                    if ( nextFrame ) {
-                        fs = dynamic_cast<KWTextFrameSet *>( nextFrame->frameSet() );
-                        chainNextName = QString::null; // already found, no need to store it
-                        kdDebug(32001) << "  found " << nextFrame << " -> frameset " << ( fs ? fs->getName() : QString::null ) << endl;
-                    }
-                }
-                KWFrame* prevFrame = m_doc->loadingInfo()->chainPrevFrame( frameName );
-                //kdDebug(32001) << "Loading " << frameName << " : chainPrevFrame=" << prevFrame << endl;
-                if ( prevFrame ) {
-                    if ( fs ) // we are between prevFrame and nextFrame. They'd better be for the same fs!!
-                        Q_ASSERT( fs == prevFrame->frameSet() );
-                    fs = dynamic_cast<KWTextFrameSet *>( prevFrame->frameSet() );
-                    //kdDebug(32001) << "  found " << prevFrame << " -> frameset " << fs->getName() << endl;
-                }
-                KWFrame* frame = 0;
-                if ( !fs ) {
-                    fs = new KWTextFrameSet( m_doc, tag, context );
-                    m_doc->addFrameSet( fs, false );
-                    frame = fs->loadOasis( tag, context );
-                } else { // Adding frame to existing frameset
-                    context.styleStack().save();
-                    context.fillStyleStack( tag, "draw:style-name" ); // get the style for the graphics element
-                    frame = fs->loadOasisFrame( tag, context );
-                    context.styleStack().restore();
-                }
-
-                m_doc->loadingInfo()->storeFrameName( frame, frameName );
-
-                if ( !chainNextName.isEmpty() ) {
-                    m_doc->loadingInfo()->storeNextFrame( frame, chainNextName );
-                }
-            }
-            else
-            {
-                kdWarning(32002) << "Unsupported body element '" << tagName << "'" << endl;
-            }
-        }
-
-        context.styleStack().restore(); // remove the styles added by the paragraph or list
-    }
-    return lastParagraph;
+    return static_cast<KWTextParag *>(textDocument()->loadOasisText( bodyElem, context, lastParagraph,m_doc->styleCollection() ) );
 }
 
 void KWTextFrameSet::loadOasisContent( const QDomElement &bodyElem, KoOasisContext& context )

@@ -28,7 +28,7 @@
 #include <kdebugclasses.h>
 #endif
 #include "kocommand.h"
-
+#include "kooasiscontext.h"
 //#define DEBUG_PAINTING
 
 //// Note that many methods are implemented in korichtext.cpp
@@ -1447,6 +1447,157 @@ void KoTextDocument::drawParagWYSIWYG( QPainter *p, KoTextParag *parag, int cx, 
 KoTextDocCommand *KoTextDocument::deleteTextCommand( KoTextDocument *textdoc, int id, int index, const QMemArray<KoTextStringChar> & str, const CustomItemsMap & customItemsMap, const QValueList<KoParagLayout> & oldParagLayouts )
 {
     return new KoTextDeleteCommand( textdoc, id, index, str, customItemsMap, oldParagLayouts );
+}
+
+
+KoTextParag * KoTextDocument::loadOasisText( const QDomElement &bodyElem, KoOasisContext& context, KoTextParag* lastParagraph, KoStyleCollection * _styleCol )
+{
+    // was OoWriterImport::parseBodyOrSimilar
+    for ( QDomNode text (bodyElem.firstChild()); !text.isNull(); text = text.nextSibling() )
+    {
+        context.styleStack().save();
+        QDomElement tag = text.toElement();
+        const QString tagName = tag.tagName();
+        const bool textFoo = tagName.startsWith( "text:" );
+
+        if ( textFoo )
+        {
+            if ( tagName == "text:p" ) {  // text paragraph
+                context.fillStyleStack( tag, "text:style-name" );
+
+                KoTextParag *parag = createParag( this, lastParagraph );
+                parag->loadOasis( tag, context, _styleCol );
+                if ( !lastParagraph )        // First parag
+                    setFirstParag( parag );
+                lastParagraph = parag;
+                //use signal slot ?
+                //m_doc->progressItemLoaded(); // ## check
+            }
+            else if ( tagName == "text:h" ) // heading
+            {
+                context.fillStyleStack( tag, "text:style-name" );
+                int level = tag.attribute( "text:level" ).toInt();
+                bool listOK = false;
+                // When a heading is inside a list, it seems that the list prevails.
+                // Example:
+                //    <text:ordered-list text:style-name="Numbering 1">
+                //      <text:list-item text:start-value="5">
+                //        <text:h text:style-name="P2" text:level="4">The header</text:h>
+                // where P2 has list-style-name="something else"
+                // Result: the numbering of the header follows "Numbering 1".
+                // So we use the style for the outline level only if we're not inside a list:
+                //if ( !context.atStartOfListItem() )
+                // === The new method for this is that we simply override it in parseList, afterwards.
+                listOK = context.pushOutlineListLevelStyle( level );
+                int restartNumbering = -1;
+                if ( tag.hasAttribute( "text:start-value" ) )
+                    // OASIS extension http://lists.oasis-open.org/archives/office/200310/msg00033.html
+                    restartNumbering = tag.attribute( "text:start-value" ).toInt();
+
+                KoTextParag *parag = createParag( this, lastParagraph );
+                parag->loadOasis( tag, context, _styleCol );
+                if ( !lastParagraph )        // First parag
+                    setFirstParag( parag );
+                lastParagraph = parag;
+                if ( listOK ) {
+                    parag->applyListStyle( context, restartNumbering, true /*ordered*/, true /*heading*/, level );
+                    context.listStyleStack().pop();
+                }
+            }
+            else if ( tagName == "text:unordered-list" || tagName == "text:ordered-list" // OOo-1.1
+                      || tagName == "text:list" )  // OASIS
+            {
+                lastParagraph = loadList( tag, context, lastParagraph, _styleCol );
+                context.styleStack().restore();
+                continue;
+            }
+            else if ( tagName == "text:section" ) // Provisory support (###TODO)
+            {
+                kdDebug(32002) << "Section found!" << endl;
+                context.fillStyleStack( tag, "text:style-name" );
+                lastParagraph = loadOasisText( tag, context, lastParagraph, _styleCol );
+            }
+            else if ( tagName == "text:variable-decls" )
+            {
+                // We don't parse variable-decls since we ignore var types right now
+                // (and just storing a list of available var names wouldn't be much use)
+            }
+#if 0 // TODO (OASIS text:table-of-content)
+            else if ( tagName == "text:table-of-content" )
+            {
+                appendTOC( e );
+            }
+#endif
+        }
+        else // not text:
+        {
+            if ( tagName == "draw:frame" ) {
+                kdWarning(32001) << "Loading of OASIS element draw:frame not implemented yet! Please report this." << endl;
+                // TODO draw:frame is an OASIS change
+                // IIRC this means moving draw:image and draw:text-box
+                // here, being the child element of the draw:frame
+                // and loading the frame attributes from the draw:frame element.
+            }
+            else if ( tagName == "draw:image" )
+            {
+                appendImage( context, tag );
+            }
+#if 0 // TODO OASIS table:table
+            if ( tagName == "table:table" )
+            {
+                //todo
+                parseTable(tag, currentFramesetElement);
+                kdDebug(32002) << "Table found!" << endl;
+            }
+#endif
+            else if ( tagName == "draw:text-box" )
+            {
+                appendTextBox( context,  tag );
+            }
+            else
+            {
+                kdWarning(32002) << "Unsupported body element '" << tagName << "'" << endl;
+            }
+        }
+
+        context.styleStack().restore(); // remove the styles added by the paragraph or list
+    }
+    return lastParagraph;
+}
+
+KoTextParag* KoTextDocument::loadList( const QDomElement& list, KoOasisContext& context, KoTextParag* lastParagraph, KoStyleCollection * _styleCol )
+{
+    //kdDebug(30518) << k_funcinfo << "parsing list"<< endl;
+
+    bool orderedList = list.tagName() == "text:ordered-list";
+    QString oldListStyleName = context.currentListStyleName();
+    if ( list.hasAttribute( "text:style-name" ) )
+        context.setCurrentListStyleName( list.attribute( "text:style-name" ) );
+    bool listOK = !context.currentListStyleName().isEmpty();
+    const int level = context.listStyleStack().level() + 1;
+    if ( listOK )
+        listOK = context.pushListLevelStyle( context.currentListStyleName(), level );
+
+    // Iterate over list items
+    for ( QDomNode n = list.firstChild(); !n.isNull(); n = n.nextSibling() )
+    {
+        QDomElement listItem = n.toElement();
+        int restartNumbering = -1;
+        if ( listItem.hasAttribute( "text:start-value" ) )
+            restartNumbering = listItem.attribute( "text:start-value" ).toInt();
+        KoTextParag* oldLast = lastParagraph;
+        lastParagraph = loadOasisText( listItem, context, lastParagraph, _styleCol );
+        KoTextParag* firstListItem = oldLast ? oldLast->next() : firstParag();
+        // It's either list-header (normal text on top of list) or list-item
+        if ( listItem.tagName() != "text:list-header" && firstListItem ) {
+            // Apply list style to first paragraph inside list-item
+            firstListItem->applyListStyle( context, restartNumbering, orderedList, false, context.listStyleStack().level() );
+        }
+    }
+    if ( listOK )
+        context.listStyleStack().pop();
+    context.setCurrentListStyleName( oldListStyleName );
+    return lastParagraph;
 }
 
 #include "kotextdocument.moc"

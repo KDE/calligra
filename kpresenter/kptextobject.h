@@ -81,7 +81,6 @@ public:
     virtual double load(const QDomElement &element);
     virtual void loadOasis(const QDomElement &element, const KoStyleStack &styleStack, KoOasisStyles&oasisStyles, QDomElement *animation);
     void loadOasisContent( const QDomElement &bodyElem, KoOasisContext& context );
-    KoTextParag* loadList( const QDomElement& list, KoOasisContext& context, KoTextParag* lastParagraph );
     KoTextParag * loadOasisText( const QDomElement &bodyElem, KoOasisContext& context, KoTextParag* lastParagraph );
 
 

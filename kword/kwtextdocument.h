@@ -54,7 +54,9 @@ public:
     virtual bool loadSpanTag( const QDomElement& tag, KoOasisContext& context,
                               KoTextParag* parag, uint pos,
                               QString& textData, KoTextCustomItem* & customItem );
-
+    virtual void appendTOC( const QDomElement &e );
+    virtual void appendImage( KoOasisContext& context, const QDomElement& tag );
+    virtual void appendTextBox( KoOasisContext&  context,  const QDomElement& tag );
 protected:
     void init();
 private:
