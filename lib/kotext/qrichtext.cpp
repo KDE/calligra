@@ -1406,8 +1406,6 @@ KoTextDocument::~KoTextDocument()
 	delete [] tArray;
 }
 
-#define KoTextDocument KoTextDocument
-
 void KoTextDocument::clear( bool createEmptyParag )
 {
     if ( flow_ )
@@ -7162,8 +7160,6 @@ KoTextFlow::KoTextFlow()
 KoTextFlow::~KoTextFlow()
 {
 }
-
-#define KoTextFlow KoTextFlow
 
 void KoTextFlow::clear()
 {
