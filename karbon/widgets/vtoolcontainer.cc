@@ -55,7 +55,6 @@ VToolContainer::VToolContainer( KarbonPart *part, KoView* parent, const char* /*
 	pixmap = BarIcon( "select", KarbonFactory::instance() );
 	button->setPixmap( pixmap );
 	button->setToggleButton( true );
-	button->toggle();
 	connect( button, SIGNAL( clicked() ), this, SIGNAL( editNodeToolActivated() ) );
 	btngroup->insert( button, EditNode );
 

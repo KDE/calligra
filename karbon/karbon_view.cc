@@ -845,12 +845,12 @@ KarbonView::initActions()
 	m_sinusToolAction = new KToggleAction(
 		i18n( "S&inus" ), "14_sinus", 0, this,
 		SLOT( sinusTool() ), actionCollection(), "tool_sinus" );
+	m_editNodeToolAction = new KToggleAction(
+		i18n( "&Manipulate nodes" ), "editnode", 0, this,
+		SLOT( editNodeTool() ), actionCollection(), "tool_editnode" );
 	m_selectToolAction = new KToggleAction(
 		i18n( "&Select Objects" ), "select", 0, this,
 		SLOT( selectTool() ), actionCollection(), "tool_select" );
-	m_editNodeToolAction = new KToggleAction(
-		i18n( "&Manipulate nodes" ), "select", 0, this,
-		SLOT( editNodeTool() ), actionCollection(), "tool_select" );
 	m_rotateToolAction = new KToggleAction(
 		i18n( "&Rotate Objects" ), "14_rotate", 0, this,
 		SLOT( rotateTool() ), actionCollection(), "tool_rotate" );
@@ -876,6 +876,7 @@ KarbonView::initActions()
 	m_roundRectToolAction->setExclusiveGroup( "Tools" );
 	m_sinusToolAction->setExclusiveGroup( "Tools" );
 	m_selectToolAction->setExclusiveGroup( "Tools" );
+	m_editNodeToolAction->setExclusiveGroup( "Tools" );
 	m_rotateToolAction->setExclusiveGroup( "Tools" );
 	m_spiralToolAction->setExclusiveGroup( "Tools" );
 	m_starToolAction->setExclusiveGroup( "Tools" );
