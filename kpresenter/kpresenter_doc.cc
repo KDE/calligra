@@ -272,8 +272,6 @@ KPresenterDoc::KPresenterDoc( QWidget *parentWidget, const char *widgetName, QOb
     connect( m_commandHistory, SIGNAL( commandExecuted() ), this, SLOT( slotCommandExecuted() ) );
 
     connect(m_varColl,SIGNAL(repaintVariable()),this,SLOT(slotRepaintVariable()));
-    connect( documentInfo(), SIGNAL( sigDocumentInfoModifed()),this,SLOT(slotDocumentInfoModifed() ) );
-
     if ( name )
 	dcopObject();
 }
@@ -1828,6 +1826,8 @@ bool KPresenterDoc::completeLoading( KoStore* _store )
     recalcVariables( VT_FIELD );
     emit sigProgress( -1 );
 
+    connect( documentInfo(), SIGNAL( sigDocumentInfoModifed()),this,SLOT(slotDocumentInfoModifed() ) );
+
     return true;
 }
 
@@ -3068,7 +3068,7 @@ void KPresenterDoc::saveHelpLines( QDomDocument &doc, QDomElement& element )
         lines.setAttribute("value", *it);
         element.appendChild( lines );
     }
-    
+
     for(QValueList<KoPoint>::Iterator it = m_helpPoints.begin(); it != m_helpPoints.end(); ++it)
     {
         QDomElement point=doc.createElement("HelpPoint");
