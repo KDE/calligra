@@ -694,7 +694,8 @@ KPTDateTime &KPTTask::scheduleBackward(KPTDateTime &latest, int use) {
         }
     } else if (type() == KPTNode::Type_Milestone) {
         // milestones generally wants to stick to their dependant parent
-        m_startTime = m_endTime;
+        // let's try using earliestStart, haven't thought this trough, though
+        m_startTime = m_endTime = earliestStart;
         m_duration = KPTDuration::zeroDuration;
     } else if (type() == KPTNode::Type_Summarytask) {
         //shouldn't come here
