@@ -15,7 +15,7 @@
 </mediaobject>
 <author>
 <firstname>Hagen</firstname>
-<surname>H&ouml;pfner</surname>
+<surname>HÃ¶pfner</surname>
 <affiliation>
 <address><email>Hagen.Hoepfner@gmx.de</email></address>
 </affiliation>
@@ -107,11 +107,11 @@ Now, for the Linux operating system and of course for other Unixes the Qt toolki
 
 <para>This handbook refers mainly to the "stand-alone version" of KIllustrator. Special information regarding the KIllustrator component of the KOffice package is not considered. However, the information presented here applies in many respects to the KOffice component also. </para>
 
-<para>This documentation is a translation of the original German text by Hagen Höpfner.</para>
+<para>This documentation is a translation of the original German text by Hagen HÃ¶pfner.</para>
 
 <para>The current version can be found on <ulink url="http://www.cs.uni-magdeburg.de/~hoepfner/kde.html">his home page</ulink>.</para>
 
-<para>Original German version: Hagen Höpfner, <ulink url="mailto:Hagen.Hoepfner@gmx.de">Hagen.Hoepfner@gmx.de</ulink></para>
+<para>Original German version: Hagen HÃ¶pfner, <ulink url="mailto:Hagen.Hoepfner@gmx.de">Hagen.Hoepfner@gmx.de</ulink></para>
 
 <para>English translation: Ben Skelton, <ulink url="mailto:skeltobc@elec.canterbury.ac.nz">skeltobc@elec.canterbury.ac.nz</ulink> and Winter Laite, <literal remap="tt"><ulink url="mailto:winlaite@lobo.net">winlaite@lobo.net</ulink></literal></para>
 </sect1>
@@ -175,19 +175,19 @@ Official releases are recommended for non-developers which are available from th
 
 <para><itemizedlist>
 <listitem>
-<para>RedHat 5.1 (Hagen Höpfner)</para>
+<para>RedHat 5.1 (Hagen HÃ¶pfner)</para>
 </listitem>
 <listitem>
-<para>RedHat 5.2 (Hagen Höpfner)</para>
+<para>RedHat 5.2 (Hagen HÃ¶pfner)</para>
 </listitem>
 <listitem>
-<para>SuSE 6.0 (Hagen Höpfner) </para>
+<para>SuSE 6.0 (Hagen HÃ¶pfner) </para>
 </listitem>
 <listitem>
-<para>SuSE 6.1 Cebit Beta (Hagen Höpfner)</para>
+<para>SuSE 6.1 Cebit Beta (Hagen HÃ¶pfner)</para>
 </listitem>
 <listitem>
-<para>SuSE 6.1 (Hagen Höpfner)</para>
+<para>SuSE 6.1 (Hagen HÃ¶pfner)</para>
 </listitem>
 <listitem>
 <para>SuSE 6.2 (Joachim Ansorg)</para>
