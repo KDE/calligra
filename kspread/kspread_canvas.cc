@@ -167,7 +167,7 @@ void KSpreadEditWidget::keyPressEvent ( QKeyEvent* _ev )
     case Key_F2:
       cellEditor->setFocus();
       cellEditor->setText( text());
-      cellEditor->setCursorPosition(cellEditor->text().length());
+      cellEditor->setCursorPosition(cursorPosition());
       break;
     default:
 
@@ -1500,6 +1500,8 @@ void KSpreadCanvas::keyPressEvent ( QKeyEvent * _ev )
        return;
     case Key_F2:
        m_pView->editWidget()->setFocus();
+       if(m_pEditor)
+        m_pView->editWidget()->setCursorPosition(m_pEditor->cursorPosition()-1);
        m_pView->editWidget()->cursorRight(false);
        return;
     default:

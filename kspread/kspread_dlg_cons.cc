@@ -165,12 +165,23 @@ void KSpreadConsolidate::slotOk()
     return;
   }
 
+  if( (*it).range.bottom()==0x7FFF || (*it).range.right()== 26*26)
+  {
+    KMessageBox::error( this, i18n( "The range\n%1\nis too large" ).arg( *( r.begin() ) ));
+    return;
+  }
+
   ++it;
   int i = 1;
   for( ; it != ranges.end(); ++it, i++ )
   {
     int w2 = (*it).range.right() - (*it).range.left() + 1;
     int h2 = (*it).range.bottom() - (*it).range.top() + 1;
+    if((*it).range.bottom()==0x7FFF || (*it).range.right()== 26*26)
+    {
+      KMessageBox::error( this, i18n( "The range\n%1\nis too large" ).arg( r[i]));
+      return;
+    }
     if ( ( desc == D_NONE && ( w != w2 || h != h2 ) ) ||
 	 ( desc == D_ROW && h != h2 ) ||
 	 ( desc == D_COL && w != w2 ) )
@@ -207,7 +218,8 @@ void KSpreadConsolidate::slotOk()
       for( int y = 0; y < h; y++ )
       {
 	double dbl = 0.0;
-	QString formel;
+        bool novalue=true;
+        QString formel;
 	if ( f == F_AVERAGE )
 	  formel = "=(";
 	else if ( f == F_SUM )
@@ -222,14 +234,16 @@ void KSpreadConsolidate::slotOk()
 	  KSpreadTable *t = (*it).table;
 	  assert( t );
 	  KSpreadCell *c = t->cellAt( x + (*it).range.left(), y + (*it).range.top() );
-	  if ( c && c->isValue() )
+          if(!c->isDefault())
+                novalue=false;
+          if ( c && c->isValue() )
 	  {
 	    if ( f == F_SUM || f == F_AVERAGE )
 	      dbl += c->valueDouble();
 	    else
 	      assert( 0 );
 	  }
-	
+
 	  // Built formula
 	  if ( f == F_SUM || f == F_AVERAGE )
 	  {
@@ -242,7 +256,7 @@ void KSpreadConsolidate::slotOk()
 	  else
 	    assert( 0 );
 	}
-	
+
 	if ( f == F_AVERAGE )
 	{
 	  char buffer[ 100 ];
@@ -254,7 +268,8 @@ void KSpreadConsolidate::slotOk()
 	
 	if ( m_pCopy->isChecked() )
 	  formel.sprintf( "%f", dbl );
-	table->setText( dy + y, dx + x, formel );
+        if(!novalue)
+	  table->setText( dy + y, dx + x, formel );
       }
     }
   }
@@ -366,7 +381,7 @@ void KSpreadConsolidate::slotOk()
 	}
 
 	if ( m_pCopy->isChecked() )
-	  formel.sprintf( "%f", dbl );	
+	  formel.sprintf( "%f", dbl );
 	table->setText( dy + y, dx + x, formel );
       }
     }
@@ -479,7 +494,7 @@ void KSpreadConsolidate::slotOk()
 	}
 
 	if ( m_pCopy->isChecked() )
-	  formel.sprintf( "%f", dbl );	
+	  formel.sprintf( "%f", dbl );
 	table->setText( dy + y, dx + x, formel );
       }
     }
@@ -611,7 +626,7 @@ void KSpreadConsolidate::slotOk()
 	  formel = "=";
 	else
 	  assert( 0 );
-	
+
 	QValueList<st_cell>::Iterator lit = lst.begin();
 	for( ; lit != lst.end(); ++lit )
 	{
@@ -636,7 +651,7 @@ void KSpreadConsolidate::slotOk()
 	      assert( 0 );
 	  }
 	}
-	
+
 	if ( f == F_AVERAGE )
 	{
 	  char buffer[ 100 ];
@@ -647,12 +662,12 @@ void KSpreadConsolidate::slotOk()
 	}
 
 	if ( m_pCopy->isChecked() )
-	  formel.sprintf( "%f", dbl );	
+	  formel.sprintf( "%f", dbl );
 	table->setText( dy + y, dx + x, formel );
       }
     }
   }
-
+  m_pView->updateEditWidget();
   accept();
 }
 

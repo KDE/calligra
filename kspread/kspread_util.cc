@@ -159,6 +159,8 @@ void KSpreadPoint::init( const QString& _str )
   }
 
   int y = atoi( _str.latin1() + p2 );
+  if(y>=0x7FFF)
+      y=0x7FFF;
   if ( y <= 0 )
     return;
 
