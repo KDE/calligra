@@ -47,6 +47,7 @@ private:
 	MYSQL_ROW m_row;
 	unsigned long *m_lengths;
 	unsigned int m_numFields;
+	unsigned long m_numRows;
 };
 
 }

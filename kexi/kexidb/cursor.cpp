@@ -74,8 +74,8 @@ bool Cursor::open( const QString& statement )
 	m_at = 0; //we are before 1st rec
 	if (!m_opened)
 		return false;
-//js: why if? if (!m_readAhead) 
-	m_readAhead = drv_getNextRecord(); //true if any record in this query
+        if (!m_readAhead) // jowenn: to ensure before first state, without cluttering implementation code
+  	    m_readAhead = drv_getNextRecord(); //true if any record in this query
 //	m_validRecord = false; //no record retrieved
 	return true;
 }
@@ -178,10 +178,13 @@ bool Cursor::moveNext()
 
 bool Cursor::movePrev()
 {
-#ifndef Q_WS_WIN
-#warning todo
-#endif
-	return false;//rm this
+	if (!m_opened || m_beforeFirst)
+		return false;
+	if (drv_getPrevRecord()) {
+		m_validRecord=true;
+		return true;
+	}
+	return false;
 }
 
 /*

@@ -66,6 +66,11 @@ int main(int /*argc*/, char */*argv[]*/)
 	while (c2->moveNext()) {
 		kdDebug()<<"Cursor2: Value(0)"<<c2->value(0).asString()<<endl;
 	}
+
+	kdDebug()<<"Cursor::prev"<<endl;
+	while (c->movePrev()) {
+		kdDebug()<<"Cursor: Value(0)"<<c->value(0).asString()<<endl;
+	}
 #if 0
 	KexiDB::Table *t = conn->tableSchema( "persons" );
 	if (t)

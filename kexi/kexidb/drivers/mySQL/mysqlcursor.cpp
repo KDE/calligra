@@ -25,7 +25,7 @@ Boston, MA 02111-1307, USA.
 using namespace KexiDB;
 
 MySqlCursor::MySqlCursor(KexiDB::Connection* conn, const QString& statement):Cursor(conn,statement), m_res(0),m_row(0),
-	m_lengths(0),m_numFields(0) {
+	m_lengths(0),m_numFields(0),m_numRows(0) {
 }
 
 MySqlCursor::~MySqlCursor() {
@@ -45,7 +45,8 @@ bool MySqlCursor::drv_open() {
                 if(mysql_errno(conn->m_mysql) == 0) {
 			m_res= mysql_store_result(conn->m_mysql);
 			m_numFields=mysql_num_fields(m_res);
-			m_readAhead=mysql_num_rows(m_res);
+			m_readAhead=m_numRows=mysql_num_rows(m_res);
+			m_at=0;
 /*
                         MYSQL_RES *res;
                         res = mysql_use_result(m_mysql);
@@ -71,6 +72,7 @@ bool MySqlCursor::drv_close() {
 	m_numFields=0;
 	m_lengths=0;
 	m_opened=false;
+	m_numRows=0;
 }
         
 bool MySqlCursor::drv_moveFirst() {
@@ -79,12 +81,14 @@ bool MySqlCursor::drv_moveFirst() {
 bool MySqlCursor::drv_getNextRecord() {
 	m_row=mysql_fetch_row(m_res);
 	if (m_row) {
+		m_at++;
 		m_beforeFirst=false;
 		m_validRecord=true;
 		m_afterLast=false;
 		m_lengths=mysql_fetch_lengths(m_res);
 		return true;
 	} else {
+		m_at=m_numRows+1;
 		m_validRecord = false;
 		m_afterLast = true;
 		return false;	
@@ -92,6 +96,21 @@ bool MySqlCursor::drv_getNextRecord() {
 }
 
 bool MySqlCursor::drv_getPrevRecord() {
+	MYSQL_ROW_OFFSET ro=mysql_row_tell(m_res);
+	if (m_at>1) {
+		m_at--;
+		mysql_data_seek(m_res,m_at-1);
+		m_row=mysql_fetch_row(m_res);
+		m_beforeFirst=false;
+		m_validRecord=true;
+		m_afterLast=false;
+		m_lengths=mysql_fetch_lengths(m_res);
+		return true;
+	}
+	m_at=0;
+	m_validRecord=false;
+	m_afterLast=false;
+	m_beforeFirst=true;
 	return false;
 }
 
