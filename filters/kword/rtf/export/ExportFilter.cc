@@ -428,16 +428,38 @@ QString RTFWorker::ProcessParagraphData ( const QString &paraText,
             }
             else if (4==(*paraFormatDataIt).id)
             {
-                if (0==(*paraFormatDataIt).variable.m_type) // date
+                if ( (0==(*paraFormatDataIt).variable.m_type) // date
+                    || (2==(*paraFormatDataIt).variable.m_type) ) // time
                 {
-                    // ### TODO: fixed/variable date, exact custom formats
+                    // ### TODO: fixed/variable date
                     QString key((*paraFormatDataIt).variable.m_key.mid(4));
                     if (key.startsWith("locale"))
-                        key = QString::null; // ###TODO
-                    str += "{\\field{\\*\\fldinst DATE ";
-                    if (!key.isEmpty())
+                        key = QString::null; // ###TODO: exact locale formats
+                    str += "{\\field{\\*\\fldinst ";
+                    if (0==(*paraFormatDataIt).variable.m_type)
+                        str += "DATE ";
+                    else
+                        str += "TIME ";
+                   if (!key.isEmpty())
                     {
-                        kdDebug(30515) << "Date format: " << key << endl;
+                        kdDebug(30515) << "Time format: " << key << endl;
+                        QRegExp regexp("AP");
+                        regexp.setCaseSensitive(false);
+                        if (regexp.search(key)!=-1)
+                        {
+                            // 12h
+                            key.replace("ap","am/pm");
+                            key.replace("AP","AM/PM");
+                        }
+                        else
+                        {
+                            //24h
+                            key.replace('h','H'); // MS Word uses H for 24hour times
+                        }
+                        // MS Word do not know possesive months
+                        key.replace("PPP","MMM");
+                        key.replace("PPPP","MMMM");
+                        kdDebug(30515) << "New format:  " << key << endl;
                         str += "\\@ \"";
                         str += key;
                         str += "\" ";
@@ -445,13 +467,6 @@ QString RTFWorker::ProcessParagraphData ( const QString &paraText,
                     str += "\\* MERGEFORMAT }{\\fldrslt ";
                     str += escapeRtfText((*paraFormatDataIt).variable.m_text);
                     str += "}}";
-                }
-                else if (2==(*paraFormatDataIt).variable.m_type) // time
-                {
-                   // ### TODO: fixed/variable time, exact custom formats
-                   str += "{\\field{\\*\\fldinst TIME \\* MERGEFORMAT }{\\fldrslt ";
-                   str += escapeRtfText((*paraFormatDataIt).variable.m_text);
-                   str += "}}";
                 }
                 else if (4==(*paraFormatDataIt).variable.m_type)
                 {
