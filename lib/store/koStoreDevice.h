@@ -54,7 +54,7 @@ public:
   }
 
   Q_LONG readBlock( char *data, Q_ULONG maxlen ) { return m_store->read(data, maxlen); }
-  Q_LONG writeBlock( const char *data, Q_ULONG len ) { m_store->write( data, len ); return len; }
+  Q_LONG writeBlock( const char *data, Q_ULONG len ) { return m_store->write( data, len ); }
   Q_LONG readLine( char *, Q_ULONG  ) { return -1; } // unsupported
 
   int getch() {
@@ -68,7 +68,7 @@ public:
     char c[2];
     c[0] = _c;
     c[1] = 0;
-    if (m_store->write( c, 1 ))
+    if (m_store->write( c, 1 ) == 1)
       return _c;
     else
       return -1;

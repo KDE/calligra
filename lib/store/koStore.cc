@@ -382,16 +382,14 @@ QIODevice::Offset KoStore::size() const
   return m_iSize;
 }
 
-bool KoStore::write( const QByteArray& data )
+Q_LONG KoStore::write( const QByteArray& data )
 {
-  unsigned int len = data.size();
-  if ( len == 0L ) return true; // nothing to do
-  return write( data.data(), len ); // see below
+  return write( data.data(), data.size() ); // see below
 }
 
-bool KoStore::write( const char* _data, Q_ULONG _len )
+Q_LONG KoStore::write( const char* _data, Q_ULONG _len )
 {
-  if ( _len == 0L ) return true;
+  if ( _len == 0L ) return 0;
 
   if ( !m_bIsOpen )
   {
@@ -404,10 +402,11 @@ bool KoStore::write( const char* _data, Q_ULONG _len )
     return 0L;
   }
 
-  m_stream->writeBlock( _data, _len );
-  m_iSize += _len;
+  int nwritten = m_stream->writeBlock( _data, _len );
+  Q_ASSERT( nwritten == (int)_len );
+  m_iSize += nwritten;
 
-  return true;
+  return nwritten;
 }
 
 bool KoStore::at( QIODevice::Offset pos )

@@ -78,13 +78,13 @@ public:
    * Write data into the currently opened file. You can also use the streams
    * for this.
    */
-  bool write( const QByteArray& _data );
+  Q_LONG write( const QByteArray& _data );
 
   /**
    * Write data into the currently opened file. You can also use the streams
    * for this.
    */
-  bool write( const char* _data, Q_ULONG _len );
+  Q_LONG write( const char* _data, Q_ULONG _len );
 
   /**
    * Read data from the currently opened file. You can also use the streams
