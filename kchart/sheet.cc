@@ -15,7 +15,12 @@
 
 #include <stdlib.h>
 
+#include <klocale.h>
+
 #include <qscrollbar.h>
+
+#include <qtooltip.h>
+#include <qwhatsthis.h>
 
 #include "sheet.h"
 #include "sheet.moc"
@@ -33,7 +38,21 @@ Sheet::Sheet( QWidget *parent, const char *name, int _tableSize )
     tableView = new SheetTable(tableSize, tableSize, this, Tbl_clipCellPainting );
     head      = new SheetTable(tableSize, 1,         this, Tbl_clipCellPainting);
     side      = new SheetTable(1,         tableSize, this, Tbl_clipCellPainting, "Side");
+    
+    head->setPaletteBackgroundColor(cyan);
+    side->setPaletteBackgroundColor(cyan);
+    
+    
+    QToolTip::add(head,i18n("Names for all data values at each position"));
+    QWhatsThis::add(head,i18n("<p><b>Set names for data values.</b><br><br>Each column represents one data value of each data set (row), you can change the name of the data values by entering text in each column header. These names are represented along the x-axis of the chart.<br> These names could for example represent years/dates or elapsed time.</p>"));
 
+    QToolTip::add(side,i18n("Names of the data sets"));
+    QWhatsThis::add(side,i18n("<p><b>Set names for data sets.</b><br><br>Each data set that is represented by a row can have its own name. This name is also shown in the Legend of the chart. You can set the name of each data set by entering text in this first column.</p>"));
+                  
+    QToolTip::add(tableView,i18n("Chart data, each row is a data set."));
+    QWhatsThis::add(tableView,i18n("<p>This table represents the complete data for the chart.<br><br> Each row is one data set of values. The name of such a data set can be changed in the first column (on the left) of the table. In a line diagram each row is one line. In a ring diagram each row is one slice. <br><br> Each column represents one value of each data set. Just like rows you can also change the name of each value in the first row (at the top) of the table. In a bar diagram the number of columns defines the number of value sets. In a ring diagram each column is one ring.</p>"));
+    
+                  
     extraH = head->tHeight() + 2;
     extraW = side->tWidth()  + 2;
 
@@ -86,11 +105,13 @@ Sheet::Sheet( QWidget *parent, const char *name, int _tableSize )
              side, SLOT(scrollVert(int)));
     extraW += vert->width();
 
-    // Set row labels to the row number, starting at 1.
+    // Set row and column labels to useful default values.
     QString str;
-    for (int i = 0;i < tableSize;i++) {
-	str.sprintf("%d",i+1);
-	importTextSide(i,0,str);
+    for (int i = 0;i <tableSize;i++) {
+        str.sprintf("Data Set %d",i+1);
+        importTextSide(i,0,str);
+        str.sprintf("Value %d",i+1);
+        importTextHead(0,i,str);
     }
 
 }

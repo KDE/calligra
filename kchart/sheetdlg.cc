@@ -22,6 +22,9 @@
 #include <qlabel.h>
 #include <qspinbox.h>
 
+#include <qwhatsthis.h>
+#include <qtooltip.h>
+
 const int SheetDlg::TABLE_SIZE = 16;
 
 SheetDlg::SheetDlg( QWidget *parent, const char *name )
@@ -29,23 +32,35 @@ SheetDlg::SheetDlg( QWidget *parent, const char *name )
 {
   t = new Sheet(this,"Sheet",TABLE_SIZE);
   t->move(0,0);
-
-  cancel = new KPushButton(KStdGuiItem::cancel(),this);
-  cancel->resize(cancel->sizeHint());
-
-  ok = new KPushButton(KStdGuiItem::ok(),this);
-  ok->resize(cancel->sizeHint());
-
+  
+  
+  QString rowwhatsthis = i18n("<p><b>Sets the number of rows in the data table.</b><br><br>Each row represents one data set.</p>");
+  QString colwhatsthis = i18n("<p><b>Sets the number of columns in the data table.</b><br><br>The number of columns defines the number of data values in each data set (row).</p>");
+  
   usedrowsLA = new QLabel( i18n("# Rows:" ), this );
   usedrowsLA->resize( usedrowsLA->sizeHint() );
+  QWhatsThis::add(usedrowsLA,rowwhatsthis);
   usedrowsSB = new QSpinBox( this );
   usedrowsSB->resize( usedrowsSB->sizeHint() );
-
+  QToolTip::add(usedrowsSB,i18n("Number of active data rows"));
+  QWhatsThis::add(usedrowsSB,rowwhatsthis);
+  
   usedcolsLA = new QLabel( i18n("# Cols:" ), this );
   usedcolsLA->resize( usedcolsLA->sizeHint() );
+  QWhatsThis::add(usedcolsLA,colwhatsthis);
   usedcolsSB = new QSpinBox( this );
   usedcolsSB->resize( usedcolsSB->sizeHint() );
-
+  QToolTip::add(usedcolsSB,i18n("Number of active data columns"));
+  QWhatsThis::add(usedcolsSB,colwhatsthis);
+  
+  ok = new KPushButton(KStdGuiItem::ok(),this);
+  ok->resize(ok->sizeHint());
+  QToolTip::add(ok,i18n("Accept changes to data table and quit dialog"));
+  
+  cancel = new KPushButton(KStdGuiItem::cancel(),this);
+  cancel->resize(cancel->sizeHint());
+  QToolTip::add(cancel,i18n("Discard changes to data table and quit dialog"));
+  
   connect(ok,SIGNAL(clicked()),parent,SLOT(accept()));
   connect(ok,SIGNAL(clicked()),t,SLOT(ok()));
   connect(cancel,SIGNAL(clicked()),parent,SLOT(reject()));
