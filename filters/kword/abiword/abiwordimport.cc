@@ -1295,6 +1295,7 @@ void StructureParser :: createDocument(void)
     element.setAttribute("hasHeader",0);
     element.setAttribute("hasFooter",0);
     element.setAttribute("unit","mm");
+    element.setAttribute("tabStopValue",36); // AbiWord has a default of 0.5 inch tab stops
     elementDoc.appendChild(element);
 
     // <PAPER> will be partialy changed by an AbiWord <pagesize> element.
