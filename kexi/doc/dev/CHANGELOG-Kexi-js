@@ -389,6 +389,8 @@ Core
 - KexiProperty - added 'fixed' flag for 'list' types
  (the flag is used in Property Editor in most cases)
 - KexiPart::ObjectTypes introduced
+- KexiProperty: 
+  property is unchanged if we're moving from null value to a null pixmap, etc.
 Form Designer
 - some fixes for efficiency
 - WidgetFactory can now define custom i18n'd:

@@ -30,6 +30,7 @@
 #include <qrect.h>
 #include <qfont.h>
 #include <qcursor.h>
+#include <qpixmap.h>
 
 #include <klocale.h>
 #include <kglobal.h>
@@ -338,6 +339,10 @@ void KexiProperty::setValue(const QVariant &v, bool updateChildren, bool saveOld
 		ch = (m_value.toString().isEmpty() != v.toString().isEmpty()
 		//..or both are not empty and values differ
 			|| !m_value.toString().isEmpty() && !v.toString().isEmpty() && m_value != v);
+	}
+	else if (m_value.type()==QVariant::Pixmap || v.type()==QVariant::Pixmap) {
+		//property is unchanged if we're moving from null value to null pixmap or so...
+		ch = m_value.isNull() != v.toPixmap().isNull();
 	}
 	else
 		ch = (m_value != v);
