@@ -26,7 +26,6 @@
 #include <qpixmap.h>
 #include <qfileinfo.h>
 
-#include <koFilterManager.h>
 #include <koTemplateChooseDia.h>
 #include <koStore.h>
 #include <koStoreDevice.h>
@@ -1040,9 +1039,16 @@ bool KWDocument::loadXML( QIODevice *, const QDomDocument & doc )
             ch->load( object, true );
             r = ch->geometry();
             insertChild( ch );
-            fs = new KWPartFrameSet( this, ch, QString::null /* ### do we save the name of the frameset ?*/ );
-            frames.append( fs );
             QDomElement settings = embedded.namedItem( "SETTINGS" ).toElement();
+            QString name;
+            if ( !settings.isNull() )
+            {
+                QDomElement nameElem = embedded.namedItem( "NAME" ).toElement();
+                if ( !nameElem.isNull() )
+                    name = nameElem.attribute( "value" );
+            }
+            fs = new KWPartFrameSet( this, ch, name );
+            frames.append( fs );
             if ( !settings.isNull() )
             {
                 kdDebug(32001) << "KWDocument::loadXML loading embedded object" << endl;

@@ -767,8 +767,9 @@ don't put a </?xml...> at the end of the file!).
 
 <!--
         Additionnal attributes of the embedded object.
-        In KWord's case, it's the definition of the frame around the object.
+        In KWord's case, it's the definition of the frame around the object,
+        and the name of the part-frameset.
 -->
 <!ELEMENT SETTINGS
-    (FRAME)>
+    (FRAME|NAME)*>
 

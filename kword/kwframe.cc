@@ -1217,6 +1217,9 @@ void KWPartFrameSet::save( QDomElement &parentElem )
     if ( frames.isEmpty() ) // Deleted frameset -> don't save
         return;
     KWFrameSet::save( parentElem );
+    QDomElement nameElem = parentElem.ownerDocument().createElement( "NAME" );
+    parentElem.appendChild( nameElem );
+    nameElem.setAttribute( "value", m_name );
 }
 
 void KWPartFrameSet::load( QDomElement &attributes )
