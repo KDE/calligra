@@ -106,7 +106,7 @@ public:
 	virtual void save( QDomElement& element ) const;
 	virtual void load( const QDomElement& element );
 
-	virtual void accept( const VVisitor& visitor )
+	virtual void accept( VVisitor& visitor )
 		{ visitor.visitVPath( *this, m_segmentLists ); }
 
 private:

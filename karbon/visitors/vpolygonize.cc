@@ -14,7 +14,7 @@ VPolygonize::setFlatness( double flatness )
 
 void
 VPolygonize::visitVPath(
-	VPath& /*path*/, QPtrList<VSegmentList>& lists ) const
+	VPath& /*path*/, QPtrList<VSegmentList>& lists )
 {
 	QPtrListIterator<VSegmentList> itr( lists );
 	for( ; itr.current(); ++itr )

@@ -17,7 +17,7 @@ public:
 	void setKnots( uint knots );
 
 	virtual void visitVPath(
-		VPath& path, QPtrList<VSegmentList>& lists ) const;
+		VPath& path, QPtrList<VSegmentList>& lists );
 
 private:
 	uint m_knots;

@@ -9,11 +9,13 @@ INCLUDES = \
 noinst_LTLIBRARIES = libkarbonvisitors.la
 
 noinst_HEADERS = \
+	vboolean.h \
 	vinsertknots.h \
 	vpolygonize.h \
 	vvisitor.h
 
 libkarbonvisitors_la_SOURCES = \
+	vboolean.cc \
 	vinsertknots.cc \
 	vpolygonize.cc \
 	vvisitor.cc

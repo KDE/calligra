@@ -17,7 +17,7 @@ public:
 	void setFlatness( double flatness );
 
 	virtual void visitVPath(
-		VPath& path, QPtrList<VSegmentList>& lists ) const;
+		VPath& path, QPtrList<VSegmentList>& lists );
 
 private:
 	double m_flatness;

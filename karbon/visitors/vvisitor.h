@@ -12,9 +12,9 @@ class VSegmentList;
 class VVisitor
 {
 public:
-	virtual void visit( VObject& object ) const;
+	virtual void visit( VObject& object );
 	virtual void visitVPath(
-		VPath& /*path*/, QPtrList<VSegmentList>& /*lists*/ ) const = 0;
+		VPath& /*path*/, QPtrList<VSegmentList>& /*lists*/ ) = 0;
 };
 
 #endif

@@ -6,7 +6,7 @@
 #include "vvisitor.h"
 
 void
-VVisitor::visit( VObject& object ) const
+VVisitor::visit( VObject& object )
 {
 	object.accept( *this );
 }

@@ -14,7 +14,7 @@ VInsertKnots::setKnots( uint knots )
 
 void
 VInsertKnots::visitVPath(
-	VPath& /*path*/, QPtrList<VSegmentList>& lists ) const
+	VPath& /*path*/, QPtrList<VSegmentList>& lists )
 {
 	QPtrListIterator<VSegmentList> itr( lists );
 	for( ; itr.current(); ++itr )
