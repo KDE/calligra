@@ -181,6 +181,14 @@ QString NoteBar::getNotesTextForPrinting(QValueList<int> _list) const
 
         firstText = false;
     }
+    //code for master page
+    if ( !firstText )
+        allText += QString("\n\n");
+    allText += i18n( "Master Page Note:\n" );
+    if ( !doc->masterPage()->noteText().isEmpty() )
+         noteIsEmpty = false;
+    allText += doc->masterPage()->noteText();
+
     if( noteIsEmpty )
         return QString::null;
     return allText;

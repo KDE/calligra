@@ -270,6 +270,7 @@ QRect ThumbBar::tip(const QPoint &pos, QString &title)
 
 void ThumbBar::rebuildItems()
 {
+    kdDebug()<<" void ThumbBar::rebuildItems() beofre \n";
     if( !isVisible())
         return;
     kdDebug(33001) << "ThumbBar::rebuildItems" << endl;
