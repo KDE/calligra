@@ -79,3 +79,8 @@ Reggie, 6.4.1999:
 Reggie, 8.4.1999:
 -----------------
 - When saving text '>' and '<' are converted to &gt; and &lt;
+
+Reggie, 9.4.1999:
+-----------------
+- Added a new effect for changes pages in screenpresentations
+  (Now pages can fly away :-)

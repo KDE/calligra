@@ -2238,6 +2238,98 @@ void Page::changePages(QPixmap _pix1,QPixmap _pix2,PageEffect _effect)
 	      }
 	  }
       } break;
+    case PEF_FLY1:
+      {
+	_steps = static_cast<int>(static_cast<float>(kapp->desktop()->height()) / pageSpeedFakt());
+	_time.start();
+
+	int _psteps = _steps / 5;
+	KRect oldRect(0,0,kapp->desktop()->width(),kapp->desktop()->height());
+	KSize ps;
+	QPixmap pix3;
+		 	
+	for (;;)
+	  {
+	    kapp->processEvents();
+	    if (_time.elapsed() >= 1)
+	      {
+		_step++;
+		if (_step < _psteps)
+		  {
+		    pix3 = QPixmap(_pix1);
+		    QPixmap pix4(_pix2);
+		    float dw = static_cast<float>(_step * ((pix3.width() - (pix3.width() / 10)) / (2 * _psteps)));
+		    float dh = static_cast<float>(_step * ((pix3.height() - (pix3.height() / 10)) / (2 * _psteps)));
+	      
+		    dw *= 2;
+		    dh *= 2;
+	      
+		    QWMatrix m;
+		    m.scale(static_cast<float>(pix3.width() - dw) / static_cast<float>(pix3.width()),
+			    static_cast<float>(pix3.height() - dh) / static_cast<float>(pix3.height()));
+		    pix3 = pix3.xForm(m);
+		    //pix3.resize(pix3.width() - dw,pix3.height() - dh);
+		    ps = pix3.size();
+		    
+		    bitBlt(&pix4,(pix4.width() - pix3.width()) / 2,(pix4.height() - pix3.height()) / 2,
+			   &pix3,0,0,pix3.width(),pix3.height());
+		    KRect newRect((pix4.width() - pix3.width()) / 2,(pix4.height() - pix3.height()) / 2,
+				  pix3.width(),pix3.height());
+		    KRect r = newRect.unite(oldRect);
+		    bitBlt(this,r.x(),r.y(),&pix4,r.x(),r.y(),r.width(),r.height());
+		    oldRect = newRect;
+		  }
+		if (_step == _psteps)
+		  {
+// 		    pix3 = QPixmap(_pix1);
+// 		    QWMatrix m;
+// 		    m.scale(static_cast<float>(ps.width()) / static_cast<float>(pix3.width()),
+// 			    static_cast<float>(ps.height()) / static_cast<float>(pix3.height()));
+// 		    pix3 = pix3.xForm(m);
+		  }
+		if (_step > _psteps && _step < _psteps * 2)
+		  {
+		    QPixmap pix4(_pix2);
+		    int yy = (_pix1.height() - pix3.height()) / 2 - (((_pix1.height() - pix3.height()) / 2) / _psteps) * (_step - _psteps);
+
+		    bitBlt(&pix4,(pix4.width() - pix3.width()) / 2,yy,
+			   &pix3,0,0,pix3.width(),pix3.height());
+		    KRect newRect((pix4.width() - pix3.width()) / 2,yy,
+				  pix3.width(),pix3.height());
+		    KRect r = newRect.unite(oldRect);
+		    bitBlt(this,r.x(),r.y(),&pix4,r.x(),r.y(),r.width(),r.height());
+		    oldRect = newRect;
+		  }
+		if (_step > 2 * _psteps && _step < _psteps * 3)
+		  {
+		    QPixmap pix4(_pix2);
+		    int xx = (_pix1.width() - pix3.width()) / 2 - (((_pix1.width() - pix3.width()) / 2) / _psteps) * (_step - 2 * _psteps);
+		    int yy = (((_pix1.height() - pix3.height()) / 2) / _psteps) * (_step - 2 * _psteps);
+
+		    bitBlt(&pix4,xx,yy,&pix3,0,0,pix3.width(),pix3.height());
+		    KRect newRect(xx,yy,pix3.width(),pix3.height());
+		    KRect r = newRect.unite(oldRect);
+		    bitBlt(this,r.x(),r.y(),&pix4,r.x(),r.y(),r.width(),r.height());
+		    oldRect = newRect;
+		  }
+		if (_step > 3 * _psteps && _step < _psteps * 5)
+		  {
+		    QPixmap pix4(_pix2);
+		    int xx = ((_pix1.width() - pix3.width()) / _psteps) * (_step - 3 * _psteps);
+		    int yy = ((_pix1.height() - pix3.height()) / 2) + (((_pix1.height() - pix3.height()) / 2) / _psteps) * (_step - 3 * _psteps);
+
+		    bitBlt(&pix4,xx,yy,&pix3,0,0,pix3.width(),pix3.height());
+		    KRect newRect(xx,yy,pix3.width(),pix3.height());
+		    KRect r = newRect.unite(oldRect);
+		    bitBlt(this,r.x(),r.y(),&pix4,r.x(),r.y(),r.width(),r.height());
+		    oldRect = newRect;
+		  }
+		_time.restart();
+	      }
+	    if (_step >= _steps)
+	      break;
+	  }
+      } break;
     }
 }
 
@@ -3013,20 +3105,20 @@ void Page::dropEvent(QDropEvent *e)
 
       QImage pix;
       QImageDrag::decode(e,pix);
-      
+
       QString uid = getenv("USER");
       QString num;
       num.setNum(objectList()->count());
       uid += "_";
       uid += num;
-      
+
       QString filename = "/tmp/kpresenter";
       filename += uid;
       filename += ".xpm";
-      
+
       pix.save(filename,"XPM");
       view->kPresenterDoc()->insertPicture(filename,e->pos().x(),e->pos().y());
-      
+
       QString cmd = "rm -f ";
       cmd += filename;
       system(cmd.ascii());
@@ -3038,7 +3130,7 @@ void Page::dropEvent(QDropEvent *e)
 
       QString text;
       QTextDrag::decode(e,text);
-      
+
       view->kPresenterDoc()->insertText(KRect(e->pos().x(),e->pos().y(),250,250),diffx(),diffy(),text,view);
     }
   else if (QUrlDrag::canDecode(e))
@@ -3048,7 +3140,7 @@ void Page::dropEvent(QDropEvent *e)
 
       QStrList lst;
       QUrlDrag::decode(e,lst);
-      
+
       QString str;
       for (str = lst.first();!str.isEmpty();str = lst.next())
 	{
@@ -3057,10 +3149,10 @@ void Page::dropEvent(QDropEvent *e)
 // 	  num.setNum(objectList()->count());
 // 	  uid += "_";
 // 	  uid += num;
-		  
+		
 // 	  QString filename = "/tmp/kpresenter";
 // 	  filename += uid;
-		  
+		
 // 	  KIOJob *job = new KIOJob("kpresenter job");
 // 	  job->copy(str,filename);
 
@@ -3070,7 +3162,7 @@ void Page::dropEvent(QDropEvent *e)
 
 	  QString filename = url.path();
  	  KMimeMagicResult *res = KMimeMagic::self()->findFileType(filename);
-	  
+	
 	  if (res && res->isValid())
 	    {
 	      QString mimetype = res->mimeType();
@@ -3079,9 +3171,9 @@ void Page::dropEvent(QDropEvent *e)
 		  view->kPresenterDoc()->insertPicture(filename,e->pos().x(),e->pos().y());
       		  continue;
 		}	
-	      
+	
 	    }
-	  
+	
 	  // open any non-picture as text
 	  // in the future we should open specific mime types with "their" programms and embed them
 	  QFile f(filename);
@@ -3103,7 +3195,7 @@ void Page::dropEvent(QDropEvent *e)
 // 	  QString cmd = "rm -f ";
 // 	  cmd += filename;
 // 	  system(cmd.ascii());
-	  
+	
 // 	  delete job;
 	}
     }

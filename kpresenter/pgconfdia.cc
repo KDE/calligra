@@ -81,9 +81,10 @@ PgConfDia::PgConfDia(QWidget* parent,const char* name,
   effectCombo->insertItem(i18n("Interlocking vertical 1"));
   effectCombo->insertItem(i18n("Interlocking vertical 2"));
   effectCombo->insertItem(i18n("Surround 1"));
+  effectCombo->insertItem(i18n("Fly away 1"));
   effectCombo->resize(effectCombo->sizeHint());
   effectCombo->setCurrentItem(static_cast<int>(pageEffect));
-  
+
   speedCombo->resize(effectCombo->size());
 
   general->resize(manualSwitch->x()+manualSwitch->width()+20,speedCombo->y() + speedCombo->height() + 10);
@@ -94,7 +95,7 @@ PgConfDia::PgConfDia(QWidget* parent,const char* name,
   cancelBut->setText(i18n("Cancel"));
   cancelBut->resize(cancelBut->sizeHint());
   cancelBut->move(general->x()+general->width()-cancelBut->width(),page->y()+page->height()+20);
- 
+
   okBut = new QPushButton(this,"BOK");
   okBut->setText(i18n("OK"));
   okBut->setAutoRepeat(FALSE);
