@@ -1,12 +1,11 @@
 #ifndef __KSCRIPT_STRUCT_H__
 #define __KSCRIPT_STRUCT_H__
 
+#include <qshared.h>
 #include <qstring.h>
 #include <qstringlist.h>
 #include <qcstring.h>
 #include <qmap.h>
-
-#include <ksharedptr.h>
 
 #include "koscript_value.h"
 #include "koscript_context.h"
@@ -14,10 +13,10 @@
 class KSParseNode;
 class KSStruct;
 
-class KSStructClass : public KShared
+class KSStructClass : public QShared
 {
 public:
-  typedef KSharedPtr<KSStructClass> Ptr;
+  typedef KSSharedPtr<KSStructClass> Ptr;
 
   KSStructClass( KSModule* module, const QString& name /*, const KSParseNode* n*/ );
   virtual ~KSStructClass() { }
@@ -68,10 +67,10 @@ private:
   KSModule* m_module;
 };
 
-class KSStruct : public KShared
+class KSStruct : public QShared
 {
 public:
-  typedef KSharedPtr<KSStruct> Ptr;
+  typedef KSSharedPtr<KSStruct> Ptr;
 
   KSStruct( KSStructClass* c ) { m_class = c; }
   virtual ~KSStruct() { }
@@ -91,7 +90,7 @@ public:
    * A convenience function
    */
   QString className() const { return m_class->name(); }
-
+    
     // ########## Torben: Make real copies of the menus.
   virtual KSStruct* clone() { KSStruct *s = new KSStruct( m_class ); s->m_space = m_space; return s; }
 

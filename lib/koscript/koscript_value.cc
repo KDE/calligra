@@ -6,20 +6,19 @@
 #include "koscript_method.h"
 
 #include <klocale.h>
-#include <kstaticdeleter.h>
 
 // Imported from scanner.ll
 extern KLocale* s_koscript_locale;
 
 KSValue* KSValue::s_null = 0;
 
-KSValue::KSValue() : KShared()
+KSValue::KSValue()
 {
   typ = Empty;
   m_mode = Temp;
 }
 
-KSValue::KSValue( Type _type ) : KShared()
+KSValue::KSValue( Type _type )
 {
   typ = _type;
   m_mode = Temp;
@@ -69,7 +68,7 @@ KSValue::KSValue( Type _type ) : KShared()
     }
 }
 
-KSValue::KSValue( const KSValue& p ) : KShared()
+KSValue::KSValue( const KSValue& p ) : QShared()
 {
   typ = Empty;
   *this = p;
@@ -127,7 +126,7 @@ KSValue& KSValue::operator= ( const KSValue& p )
     case ModuleType:
     case StructClassType:
       val.ptr = p.val.ptr;
-      ((KShared*)val.ptr)->_KShared_ref();
+      ((QShared*)val.ptr)->ref();
       break;
     case StructType:
       val.ptr = ((KSStruct*)p.val.ptr)->clone();
@@ -285,27 +284,33 @@ void KSValue::clear()
       break;
     case FunctionType:
       if ( val.ptr )
-          functionValue()->_KShared_unref();
+	if ( functionValue()->deref() )
+	  delete ((KSFunction*)val.ptr);
       break;
     case PropertyType:
       if ( val.ptr )
-          propertyValue()->_KShared_unref();
+	if ( propertyValue()->deref() )
+	  delete ((KSProperty*)val.ptr);
       break;
     case MethodType:
       if ( val.ptr )
-          methodValue()->_KShared_unref();
+	if ( methodValue()->deref() )
+	  delete ((KSMethod*)val.ptr);
       break;
     case ModuleType:
       if ( val.ptr )
-          moduleValue()->_KShared_unref();
+	if ( moduleValue()->deref() )
+	  delete ((KSModule*)val.ptr);
       break;
     case StructType:
       if ( val.ptr )
-          structValue()->_KShared_unref();
+	if ( structValue()->deref() )
+	  delete ((KSStruct*)val.ptr);
       break;
     case StructClassType:
       if ( val.ptr )
-          structClassValue()->_KShared_unref();
+	if ( structClassValue()->deref() )
+	  delete ((KSStructClass*)val.ptr);
       break;
     case StringType:
       delete (QString*)val.ptr;
@@ -333,14 +338,13 @@ void KSValue::clear()
   typ = Empty;
 }
 
-static KStaticDeleter<QString> typ_to_name_deleter;
 static QString *typ_to_name = 0;
 
 void KSValue::initTypeNameMap()
 {
     if ( typ_to_name ) return;
 
-    typ_to_name = typ_to_name_deleter.setObject(new QString[(int)NTypes], true);
+    typ_to_name = new QString[(int)NTypes];
 
     typ_to_name[(int)Empty] = QString::fromLatin1("<none>");
     typ_to_name[(int)StringType] = QString::fromLatin1("String");

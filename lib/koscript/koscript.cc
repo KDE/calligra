@@ -17,7 +17,7 @@
 #include <kstddirs.h>
 #include <klocale.h>
 
-KSInterpreter::KSInterpreter() : KShared()
+KSInterpreter::KSInterpreter()
 {
     m_outStream = 0;
     m_currentArg = -1;
@@ -76,7 +76,7 @@ bool KSInterpreter::runModule( KSContext& context, const QString& name )
   if ( m_modules.contains( name ) )
   {
     KSModule* m = m_modules[name];
-    m->_KShared_ref();
+    m->ref();
     context.setValue( new KSValue( m ) );
 
     return true;
@@ -125,7 +125,7 @@ bool KSInterpreter::runModule( KSContext& result, const QString& name, const QSt
   if ( m_modules.contains( name ) )
   {
     KSModule* m = m_modules[name];
-    m->_KShared_ref();
+    m->ref();
     result.setValue( new KSValue( m ) );
 
     return true;
@@ -159,7 +159,7 @@ bool KSInterpreter::runModule( KSContext& result, const QString& name, const QSt
   // parser.print( true );
 
   // Put the module in the return value
-  module->_KShared_ref();
+  module->ref();
   result.setValue( new KSValue( &*module ) );
 
   // Put all global functions etc. in the scope
