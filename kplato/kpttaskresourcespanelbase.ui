@@ -1,0 +1,288 @@
+<!DOCTYPE UI><UI version="3.2" stdsetdef="1">
+<class>KPTTaskResourcesPanelBase</class>
+<author>Dag Andersen &lt;danders@get2net.dk&gt;</author>
+<widget class="QWidget">
+    <property name="name">
+        <cstring>KPTTaskResourcesPanelBase</cstring>
+    </property>
+    <property name="geometry">
+        <rect>
+            <x>0</x>
+            <y>0</y>
+            <width>751</width>
+            <height>593</height>
+        </rect>
+    </property>
+    <property name="caption">
+        <string>KPTTaskResourcesPanelBase</string>
+    </property>
+    <vbox>
+        <property name="name">
+            <cstring>unnamed</cstring>
+        </property>
+        <widget class="QGroupBox">
+            <property name="name">
+                <cstring>groupBox1</cstring>
+            </property>
+            <property name="title">
+                <string>Effort</string>
+            </property>
+            <hbox>
+                <property name="name">
+                    <cstring>unnamed</cstring>
+                </property>
+                <widget class="QLayoutWidget">
+                    <property name="name">
+                        <cstring>layout1</cstring>
+                    </property>
+                    <grid>
+                        <property name="name">
+                            <cstring>unnamed</cstring>
+                        </property>
+                        <widget class="QComboBox" row="0" column="2">
+                            <item>
+                                <property name="text">
+                                    <string>Work based</string>
+                                </property>
+                            </item>
+                            <item>
+                                <property name="text">
+                                    <string>Fixed duration</string>
+                                </property>
+                            </item>
+                            <property name="name">
+                                <cstring>effortType</cstring>
+                            </property>
+                        </widget>
+                        <widget class="QLabel" row="1" column="2">
+                            <property name="name">
+                                <cstring>textLabel5</cstring>
+                            </property>
+                            <property name="text">
+                                <string>&lt;p align="right"&gt;Pessimistic:&lt;/p&gt;</string>
+                            </property>
+                            <property name="buddy" stdset="0">
+                                <cstring>pessimisticValue</cstring>
+                            </property>
+                        </widget>
+                        <widget class="QSpinBox" row="1" column="3">
+                            <property name="name">
+                                <cstring>pessimisticValue</cstring>
+                            </property>
+                            <property name="prefix">
+                                <string></string>
+                            </property>
+                            <property name="suffix">
+                                <string>%</string>
+                            </property>
+                            <property name="value">
+                                <number>99</number>
+                            </property>
+                        </widget>
+                        <widget class="QLabel" row="0" column="0">
+                            <property name="name">
+                                <cstring>textLabel4_2</cstring>
+                            </property>
+                            <property name="text">
+                                <string>&lt;p align="right"&gt;Expected effort:&lt;/p&gt;</string>
+                            </property>
+                        </widget>
+                        <widget class="QSpinBox" row="1" column="1">
+                            <property name="name">
+                                <cstring>optimisticValue</cstring>
+                            </property>
+                            <property name="prefix">
+                                <string></string>
+                            </property>
+                            <property name="suffix">
+                                <string>%</string>
+                            </property>
+                            <property name="maxValue">
+                                <number>0</number>
+                            </property>
+                            <property name="minValue">
+                                <number>-99</number>
+                            </property>
+                            <property name="value">
+                                <number>-99</number>
+                            </property>
+                        </widget>
+                        <widget class="QComboBox" row="0" column="3">
+                            <item>
+                                <property name="text">
+                                    <string>No risk</string>
+                                </property>
+                            </item>
+                            <item>
+                                <property name="text">
+                                    <string>Low risk</string>
+                                </property>
+                            </item>
+                            <item>
+                                <property name="text">
+                                    <string>High risk</string>
+                                </property>
+                            </item>
+                            <property name="name">
+                                <cstring>risk</cstring>
+                            </property>
+                        </widget>
+                        <widget class="QLabel" row="1" column="0">
+                            <property name="name">
+                                <cstring>textLabel4</cstring>
+                            </property>
+                            <property name="text">
+                                <string>&lt;p align="right"&gt;Optimistic:&lt;/p&gt;</string>
+                            </property>
+                            <property name="buddy" stdset="0">
+                                <cstring>optimisticValue</cstring>
+                            </property>
+                        </widget>
+                    </grid>
+                </widget>
+            </hbox>
+        </widget>
+        <widget class="QGroupBox">
+            <property name="name">
+                <cstring>groupBox22</cstring>
+            </property>
+            <property name="frameShape">
+                <enum>GroupBoxPanel</enum>
+            </property>
+            <property name="frameShadow">
+                <enum>Sunken</enum>
+            </property>
+            <property name="title">
+                <string>Resources</string>
+            </property>
+            <vbox>
+                <property name="name">
+                    <cstring>unnamed</cstring>
+                </property>
+                <widget class="QLayoutWidget">
+                    <property name="name">
+                        <cstring>layout15</cstring>
+                    </property>
+                    <hbox>
+                        <property name="name">
+                            <cstring>unnamed</cstring>
+                        </property>
+                        <widget class="QListView">
+                            <column>
+                                <property name="text">
+                                    <string>Group</string>
+                                </property>
+                                <property name="clickable">
+                                    <bool>true</bool>
+                                </property>
+                                <property name="resizable">
+                                    <bool>true</bool>
+                                </property>
+                            </column>
+                            <column>
+                                <property name="text">
+                                    <string>Max. units</string>
+                                </property>
+                                <property name="clickable">
+                                    <bool>true</bool>
+                                </property>
+                                <property name="resizable">
+                                    <bool>true</bool>
+                                </property>
+                            </column>
+                            <property name="name">
+                                <cstring>groupList</cstring>
+                            </property>
+                            <property name="minimumSize">
+                                <size>
+                                    <width>200</width>
+                                    <height>0</height>
+                                </size>
+                            </property>
+                        </widget>
+                        <widget class="QLayoutWidget">
+                            <property name="name">
+                                <cstring>layout14</cstring>
+                            </property>
+                            <vbox>
+                                <property name="name">
+                                    <cstring>unnamed</cstring>
+                                </property>
+                                <widget class="QLayoutWidget">
+                                    <property name="name">
+                                        <cstring>layout32</cstring>
+                                    </property>
+                                    <hbox>
+                                        <property name="name">
+                                            <cstring>unnamed</cstring>
+                                        </property>
+                                        <widget class="QLabel">
+                                            <property name="name">
+                                                <cstring>textLabel1</cstring>
+                                            </property>
+                                            <property name="text">
+                                                <string>Enter number of units:</string>
+                                            </property>
+                                            <property name="buddy" stdset="0">
+                                                <cstring>numUnits</cstring>
+                                            </property>
+                                        </widget>
+                                        <widget class="QSpinBox">
+                                            <property name="name">
+                                                <cstring>numUnits</cstring>
+                                            </property>
+                                        </widget>
+                                    </hbox>
+                                </widget>
+                                <widget class="QLabel">
+                                    <property name="name">
+                                        <cstring>textLabel2</cstring>
+                                    </property>
+                                    <property name="text">
+                                        <string>Or assign specific resources:</string>
+                                    </property>
+                                    <property name="buddy" stdset="0">
+                                        <cstring>resourceTable</cstring>
+                                    </property>
+                                </widget>
+                                <widget class="QTable">
+                                    <column>
+                                        <property name="text">
+                                            <string>Resource</string>
+                                        </property>
+                                    </column>
+                                    <property name="name">
+                                        <cstring>resourceTable</cstring>
+                                    </property>
+                                    <property name="resizePolicy">
+                                        <enum>Default</enum>
+                                    </property>
+                                    <property name="numRows">
+                                        <number>0</number>
+                                    </property>
+                                    <property name="numCols">
+                                        <number>1</number>
+                                    </property>
+                                </widget>
+                            </vbox>
+                        </widget>
+                    </hbox>
+                </widget>
+            </vbox>
+        </widget>
+    </vbox>
+</widget>
+<includes>
+    <include location="local" impldecl="in implementation">kptdurationwidget.h</include>
+</includes>
+<forwards>
+    <forward>class KPTDurationWidget;</forward>
+</forwards>
+<variables>
+    <variable access="public">KPTDurationWidget *effort;</variable>
+</variables>
+<functions>
+    <function>init()</function>
+</functions>
+<layoutdefaults spacing="6" margin="11"/>
+</UI>
