@@ -67,4 +67,19 @@ protected:
 };
 
 
+class KPrInsertHelpPointDia : public KDialogBase
+{
+    Q_OBJECT
+public:
+    KPrInsertHelpPointDia( QWidget *parent, const KoRect &r, KPresenterDoc *_doc, const char *name=0L);
+
+    KoPoint newPosition();
+protected:
+    KoRect limitOfPage;
+    KLineEdit* positionX;
+    KLineEdit* positionY;
+    KPresenterDoc *m_doc;
+};
+
+
 #endif

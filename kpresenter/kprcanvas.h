@@ -226,6 +226,16 @@ public:
     void setTmpHelpLinePosY( double pos) { tmpHelpLinePosY = pos;}
 
 
+
+    void changeHelpPointPosition( KoPoint newPos);
+    void removeHelpPoint();
+
+    int tmpHelpPoint() const { return  m_tmpHelpPoint;}
+
+    void setTmpHelpPointPos( KoPoint pos) { tmpHelpPointPos = pos ;}
+
+    void tmpDrawMoveHelpPoint( const QPoint & newPos );
+
 public slots:
     void exitEditMode();
 
@@ -469,6 +479,9 @@ private:
 
     KoRect m_boundingRect; // when moving object(s)
     KoPoint m_hotSpot; // when moving frame(s)
+
+    int m_tmpHelpPoint;
+    KoPoint tmpHelpPointPos;
 
     int m_zoomBeforePresentation;
     int m_tmpHorizHelpline;

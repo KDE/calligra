@@ -88,6 +88,9 @@ KPrCanvas::KPrCanvas( QWidget *parent, const char *name, KPresenterView *_view )
     tmpHelpLinePosX = -1;
     tmpHelpLinePosY = -1;
 
+    m_tmpHelpPoint = -1;
+    tmpHelpPointPos = KoPoint( -1, -1);
+
     if ( parent ) {
         mousePressed = false;
 	drawContour = false;
@@ -124,8 +127,6 @@ KPrCanvas::KPrCanvas( QWidget *parent, const char *name, KPresenterView *_view )
         m_drawCubicBezierCurve = false;
         m_drawLineWithCubicBezierCurve = true;
         m_oldCubicBezierPointArray.putPoints( 0, 4, 0,0, 0,0, 0,0, 0,0 );
-        //for test
-        //m_view->kPresenterDoc()->addHorizHelpline(30.0);
     } else {
         m_view = 0;
         hide();
@@ -461,7 +462,28 @@ void KPrCanvas::drawGrid(QPainter *painter, const QRect &rect2)
 
 void KPrCanvas::drawHelpPoints( QPainter *painter, const QRect &rect2)
 {
-    //todo
+    KPresenterDoc *doc=m_view->kPresenterDoc();
+    if(!doc->isReadWrite())
+        return;
+    KoRect rect = m_view->zoomHandler()->unzoomRect(rect2);
+
+    QValueList<KoPoint>::Iterator i;
+    QPen _pen = QPen( Qt::black, 1, Qt::DotLine );
+    painter->save();
+    painter->setPen( _pen );
+
+    QRect pageRect=activePage()->getZoomPageRect();
+    for(i = doc->helpPoints().begin(); i != doc->helpPoints().end(); ++i)
+    {
+        KoPoint vi = *i ;
+        if( rect.contains( vi ) )
+        {
+            QPoint point=m_view->zoomHandler()->zoomPoint( vi);
+            painter->drawLine( point.x(), point.y()-10, point.x(), point.y()+10);
+            painter->drawLine( point.x()-10, point.y(), point.x()+10, point.y());
+        }
+    }
+    painter->restore();
 }
 
 void KPrCanvas::drawHelplines(QPainter *painter, const QRect &rect2)
@@ -6451,4 +6473,27 @@ void KPrCanvas::changeHelpLinePosition( double newPos )
     tmpHelpLinePosY = -1;
     m_view->kPresenterDoc()->setModified(true);
     repaint(false);
+}
+
+void KPrCanvas::changeHelpPointPosition( KoPoint newPos)
+{
+    //todo
+    m_tmpHelpPoint = -1;
+    tmpHelpPointPos = KoPoint( -1, -1 );
+    m_view->kPresenterDoc()->setModified(true);
+    repaint(false);
+}
+
+void KPrCanvas::removeHelpPoint()
+{
+    //todo
+    m_tmpHelpPoint = -1;
+    tmpHelpPointPos = KoPoint( -1, -1 );
+    m_view->kPresenterDoc()->setModified(true);
+    repaint(false);
+}
+
+void KPrCanvas::tmpDrawMoveHelpPoint( const QPoint & newPos )
+{
+    //todo
 }

@@ -107,4 +107,30 @@ void KPrInsertHelpLineDia::slotRadioButtonClicked()
     }
 }
 
+
+KPrInsertHelpPointDia::KPrInsertHelpPointDia( QWidget *parent, const KoRect & _pageRect , KPresenterDoc *_doc, const char *name)
+    : KDialogBase( parent, name , true, "", Ok|Cancel, Ok, true )
+{
+    limitOfPage=_pageRect;
+    m_doc=_doc;
+    setCaption( i18n("Add new help point") );
+    QVBox *page = makeVBoxMainWidget();
+    QLabel *lab=new QLabel(i18n("Position ( x ) :(%1)").arg(m_doc->getUnitName()), page);
+    positionX = new KLineEdit(page);
+    positionX->setText( KoUnit::userValue( 0.00, m_doc->getUnit() ) );
+    positionX->setValidator( new KFloatValidator( limitOfPage.left(), limitOfPage.right() ,true,positionX ) );
+
+
+    lab=new QLabel(i18n("Position ( y ) :(%1)").arg(m_doc->getUnitName()), page);
+    positionY = new KLineEdit(page);
+    positionY->setText( KoUnit::userValue( 0.00, m_doc->getUnit() ) );
+    positionY->setValidator( new KFloatValidator( limitOfPage.top(), limitOfPage.bottom() ,true,positionY ) );
+    resize( 300,100 );
+}
+
+KoPoint KPrInsertHelpPointDia::newPosition()
+{
+    return KoPoint( KoUnit::fromUserValue( positionX->text(), m_doc->getUnit() ), KoUnit::fromUserValue( positionY->text(), m_doc->getUnit() ));
+}
+
 #include "kprhelplinedia.moc"

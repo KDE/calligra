@@ -252,7 +252,6 @@ KPresenterDoc::KPresenterDoc( QWidget *parentWidget, const char *widgetName, QOb
     connect( documentInfo(), SIGNAL( sigDocumentInfoModifed()),this,SLOT(slotDocumentInfoModifed() ) );
     if ( name )
 	dcopObject();
-
 }
 
 void KPresenterDoc::refreshMenuCustomVariable()
@@ -2883,30 +2882,33 @@ void KPresenterDoc::removeHelpPoint( int index )
     if ( index >= (int)m_helpPoints.count())
         kdDebug()<<" removeHelpPoint( int index ) : index is bad !\n";
     else
-        m_helpPoints.remove( index );
+        m_helpPoints.remove(m_helpPoints[index]);
 }
 
-void KPresenterDoc::addHelpPoint( const KoPoint & pos )
+void KPresenterDoc::addHelpPoint( KoPoint pos )
 {
-    //m_helpPoints.append( *pos );
+    m_helpPoints.append( pos );
 }
 
-void KPresenterDoc::updateHelpPoint( int idx, const KoPoint & pos )
+void KPresenterDoc::updateHelpPoint( int idx, KoPoint pos )
 {
     if ( idx >= (int)m_helpPoints.count())
         kdDebug()<<" updateHelpPoint : index is bad !\n";
     else
     {
-        //todo
-        //m_helpPoints.at(idx)= *pos;
+        m_helpPoints[idx] = pos;
     }
 
 }
 
-int KPresenterDoc::indexOfHelpPoint( const KoPoint & pos )
+int KPresenterDoc::indexOfHelpPoint( KoPoint pos )
 {
+    int ret = 0;
+    for(QValueList<KoPoint>::Iterator i = m_helpPoints.begin(); i != m_helpPoints.end(); ++i, ++ret)
+        if( ( pos.x() - 4.0 < (*i).x() && pos.x() + 4.0 > (*i).x())
+                ||( pos.y() - 4.0 < (*i).y() && pos.y() + 4.0 > (*i).y()))
+            return ret;
     return -1;
-    //return m_helpPoints.find( *pos );
 }
 
 

@@ -455,6 +455,8 @@ public:
     void openPopupMenuPolygonObject( const QPoint &_point );
 
     void openPopupMenuHelpLine( const QPoint & _point );
+    void openPopupMenuHelpPoint( const QPoint & _point );
+
 
     void penColorChanged( const QPen & _pen );
     void brushColorChanged( const QBrush & _brush );
@@ -562,10 +564,14 @@ protected slots:
     void addHelpline(const QPoint & pos, bool _horizontal);
 
     void removeHelpLine();
+    void removeHelpPoint();
 
     void changeHelpLinePosition();
+    void changeHelpPointPosition();
 
     void addHelpLine();
+    void addHelpPoint();
+
     void refreshRuler( bool state );
 
 
@@ -865,6 +871,11 @@ private:
     KAction *actionChangeHelpLinePosition;
 
     KAction *actionAddHelpLine;
+
+
+    KAction *actionRemoveHelpPoint;
+    KAction *actionChangeHelpPointPosition;
+    KAction *actionAddHelpPoint;
 
     KAction *actionConfigureCompletion;
 
