@@ -309,30 +309,6 @@ bool KexiQueryDesignerSQLEditor::eventFilter(QObject *o, QEvent *ev)
 	return false;
 }*/
 
-#if 0
-bool
-KexiQueryDesignerSQLEditor::eventFilter(QObject *o, QEvent *ev)
-{
-//TODO is it needed?
-
-	if(ev->type() == QEvent::KeyRelease)
-	{
-		QKeyEvent *ke = static_cast<QKeyEvent*>(ev);
-		if(ke->key() == Key_Return && ke->state() == ControlButton)
-		{
-			kdDebug() << "KexiQueryDesignerSQLEditor::eventFilter(): magic" << endl;
-			emit execQ();
-			return true;
-		}
-	}
-	else if (o==d->view && (ev->type() == QEvent::FocusIn || ev->type() == QEvent::FocusOut)) {
-		emit focus(ev->type() == QEvent::FocusIn);
-	}
-
-	return false;
-}
-#endif
-
 // === KexiQueryDesignerSQLEditor impelmentation using KTextEditor ===
 
 #ifdef QT_ONLY_SQL_EDITOR

@@ -57,7 +57,6 @@ class KEXIEXTWIDGETS_EXPORT KexiQueryDesignerSQLEditor : public KexiViewBase
 		virtual void updateActions(bool activated);
 
 	signals:
-		void execQ();
 		void textChanged();
 
 	private:
