@@ -90,7 +90,7 @@ void KWVariableNameDia::init()
              this, SLOT( accept() ) );
     connect( cancel, SIGNAL( clicked() ),
              this, SLOT( reject() ) );
-
+    ok->setEnabled(!names->currentText().isEmpty());
     resize( 350, 100 );
 }
 
