@@ -620,8 +620,8 @@ QDomDocument KPresenterDoc::saveXML()
     {
         QDomElement styles = doc.createElement( "STYLES" );
         presenter.appendChild( styles );
-        QPtrList<KoParagStyle> m_styleList(m_styleColl->styleList());
-        for ( KoParagStyle * p = m_styleList.first(); p != 0L; p = m_styleList.next() )
+        QPtrList<KoParagStyle> styleList(m_styleColl->styleList());
+        for ( KoParagStyle * p = styleList.first(); p != 0L; p = styleList.next() )
             saveStyle( p, styles );
 
         emit sigProgress( 60 );
@@ -957,7 +957,7 @@ bool KPresenterDoc::saveOasis( KoStore* store, KoXmlWriter* manifestWriter )
 
     contentTmpWriter.startElement( "office:body" );
 	contentTmpWriter.startElement( "office:presentation" );
-	
+
     int indexObj = 1;
     int partIndexObj = 0;
 //save page
@@ -1382,7 +1382,7 @@ bool KPresenterDoc::loadOasis( const QDomDocument& doc, KoOasisStyles&oasisStyle
         kdError(33001) << "No office:presentation found!" << endl;
         setErrorMessage( i18n( "Invalid document. No mimetype specified." ) );
        return false;
-    }	
+    }
 	//load settings
     QDomElement settings = body.namedItem("presentation:settings").toElement();
     if (!settings.isNull() && !_clean /*don't load settings when we copy/paste a page*/)
@@ -3779,9 +3779,14 @@ void KPresenterDoc::refreshAllNoteBar(int page, const QString &text, KPresenterV
 void KPresenterDoc::loadStyleTemplates( const QDomElement &stylesElem )
 {
     QValueList<QString> followingStyles;
-    QPtrList<KoParagStyle>m_styleList(m_styleColl->styleList());
 
     QDomNodeList listStyles = stylesElem.elementsByTagName( "STYLE" );
+    if( listStyles.count() > 0) { // we are going to import at least one style.
+        KoParagStyle *s = m_styleColl->findStyle("Standard");
+        kdDebug(32001) << "KPresenterDoc::loadStyleTemplates looking for Standard, to delete it. Found " << s << endl;
+        if(s) // delete the standard style.
+            m_styleColl->removeStyleTemplate(s);
+    }
     for (unsigned int item = 0; item < listStyles.count(); item++) {
         QDomElement styleElem = listStyles.item( item ).toElement();
 
@@ -3797,7 +3802,8 @@ void KPresenterDoc::loadStyleTemplates( const QDomElement &stylesElem )
 
         // Style created, now let's try to add it
         sty = m_styleColl->addStyleTemplate( sty );
-        if(m_styleList.count() > followingStyles.count() )
+        kdDebug() << k_funcinfo << m_styleColl->styleList().count() << " styles, " << followingStyles.count() << " following styles" << endl;
+        if(m_styleColl->styleList().count() > followingStyles.count() )
         {
             QString following = styleElem.namedItem("FOLLOWING").toElement().attribute("name");
             followingStyles.append( following );
@@ -3806,7 +3812,7 @@ void KPresenterDoc::loadStyleTemplates( const QDomElement &stylesElem )
             kdWarning (33001) << "Found duplicate style declaration, overwriting former " << sty->name() << endl;
     }
 
-    Q_ASSERT( followingStyles.count() == m_styleList.count() );
+    Q_ASSERT( followingStyles.count() == m_styleColl->styleList().count() );
     unsigned int i=0;
     for( QValueList<QString>::Iterator it = followingStyles.begin(); it != followingStyles.end(); ++it ) {
         KoParagStyle * style = m_styleColl->findStyle(*it);
