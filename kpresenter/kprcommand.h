@@ -482,6 +482,7 @@ public:
     PenBrushCmd( const QString &_name, QPtrList<Pen> &_oldPen, QPtrList<Brush> &_oldBrush,
 		 Pen _newPen, Brush _newBrush, QPtrList<KPObject> &_objects, KPresenterDoc *_doc, int _flags = 0 );
     ~PenBrushCmd();
+    void applyPenBrush(KPObject *kpobject,Pen *tmpPen,Brush *tmpBrush );
 
     virtual void execute();
     virtual void unexecute();
