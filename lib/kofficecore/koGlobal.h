@@ -24,7 +24,9 @@
 
 #include <qstringlist.h>
 #include <koUnit.h>
+#include <koGenStyles.h>
 #include <qfont.h>
+#include <qdom.h>
 class KConfig;
 
 // paper formats ( mm ) - public for compat reasons, but DO NOT USE in new programs !
@@ -197,6 +199,42 @@ struct KoPageLayout
     }
     bool operator!=( const KoPageLayout& l ) const {
         return !( (*this) == l );
+    }
+
+    KoGenStyle saveOasis()
+    {
+        KoGenStyle style(KoGenStyle::STYLE_PAGELAYOUT);
+        style.addPropertyPt("fo:page-width", ptWidth);
+        style.addPropertyPt("fo:page-height", ptHeight);
+        style.addPropertyPt("fo:margin-left", ptLeft);
+        style.addPropertyPt("fo:margin-right", ptRight);
+        style.addPropertyPt("fo:margin-top", ptTop);
+        style.addPropertyPt("fo:margin-bottom", ptBottom);
+        style.addProperty("style:print-orientation", (orientation == PG_LANDSCAPE ? "landscape" : "portrait"));
+        return style;
+    }
+
+    void loadOasis(const QDomElement &style)
+    {
+        QDomElement properties( style.namedItem( "style:page-layout-properties" ).toElement() );
+        if ( !properties.isNull() )
+        {
+            ptWidth = KoUnit::parseValue(properties.attribute( "fo:page-width" ) );
+            ptHeight = KoUnit::parseValue(properties.attribute( "fo:page-height" ) );
+            if (properties.attribute("style:print-orientation")=="portrait")
+                orientation=PG_PORTRAIT;
+            else 
+                orientation=PG_LANDSCAPE;
+            ptRight = KoUnit::parseValue( properties.attribute( "fo:margin-right" ) );
+            ptBottom = KoUnit::parseValue( properties.attribute( "fo:margin-bottom" ) );
+            ptLeft = KoUnit::parseValue( properties.attribute( "fo:margin-left" ) );
+            ptTop = KoUnit::parseValue( properties.attribute( "fo:margin-top" ) );
+            // guessFormat takes millimeters
+            if ( orientation == PG_LANDSCAPE )
+                format = KoPageFormat::guessFormat( POINT_TO_MM(ptHeight), POINT_TO_MM(ptWidth) );
+            else
+                format = KoPageFormat::guessFormat( POINT_TO_MM(ptWidth), POINT_TO_MM(ptHeight) );
+        }
     }
 };
 
