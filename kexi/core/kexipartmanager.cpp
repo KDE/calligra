@@ -21,13 +21,12 @@
 #include <klibloader.h>
 #include <ktrader.h>
 #include <kdebug.h>
+#include <kconfig.h>
 #include <kparts/componentfactory.h>
 
 #include "kexipartmanager.h"
-
 #include "kexipart.h"
 #include "kexipartinfo.h"
-
 #include "kexi_global.h"
 
 #include <kexidb/connection.h>
@@ -46,16 +45,38 @@ Manager::Manager(QObject *parent)
 void
 Manager::lookup()
 {
+	
 	m_partlist.clear();
 	m_partsByMime.clear();
 	KTrader::OfferList tlist = KTrader::self()->query("Kexi/Handler", "[X-Kexi-PartVersion] == " + QString::number(KEXI_PART_VERSION));
+	
+	KConfig conf("kexirc", true);
+	conf.setGroup("Parts");
+	QStringList sl_order = QStringList::split( ",", conf.readEntry("Order") );//we'll set parts in defined order
+	const int size = QMAX( tlist.count(), sl_order.count() );
+	QPtrVector<KService> ordered( size*2 );
+	int offset = size; //we will insert not described parts from #offset
+	
+	//compute order
 	for(KTrader::OfferList::Iterator it(tlist.begin()); it != tlist.end(); ++it)
 	{
 		KService::Ptr ptr = (*it);
 		kdDebug() << "Manager::lookup(): " << ptr->property("X-Kexi-TypeMime").toString() << endl;
-		Info *info = new Info(ptr);
-		m_partsByMime.insert(ptr->property("X-Kexi-TypeMime").toString(), info);
-		m_partlist.append(info);
+		
+		int idx = sl_order.findIndex( ptr->library() );
+		if (idx!=-1)
+			ordered.insert(idx, ptr);
+		else //add to end
+			ordered.insert(offset++, ptr);	
+	}
+	//fill final list using computed order
+	for (int i = 0; i< (int)ordered.size(); i++) {
+		KService::Ptr ptr = ordered[i];
+		if (ptr) {
+			Info *info = new Info(ptr);
+			m_partsByMime.insert(ptr->property("X-Kexi-TypeMime").toString(), info);
+			m_partlist.append(info);
+		}
 	}
 }
 

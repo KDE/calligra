@@ -597,7 +597,7 @@ KexiMainWindow::initNavigator()
 	if(d->prj->isConnected()) {
 		d->nav->clear();
 
-		KexiPart::PartInfoList *pl = Kexi::partManager().partInfoList(); //d->prj->partManager()->partList();
+		KexiPart::PartInfoList *pl = Kexi::partManager().partInfoList();
 		for(KexiPart::Info *it = pl->first(); it; it = pl->next())
 		{
 			kdDebug() << "KexiMainWindow::initNavigator(): adding " << it->groupName() << endl;

@@ -25,7 +25,7 @@
 #include <kiconloader.h>
 
 KexiBrowserItem::KexiBrowserItem(KListView *parent, KexiPart::Info *i)
- : KListViewItem(parent, " "+ i->groupName())
+ : KListViewItem(parent, " "+ i->groupName() + " ")
 {
 	m_item = 0;
 	m_info = i;
@@ -37,7 +37,7 @@ KexiBrowserItem::KexiBrowserItem(KListView *parent, KexiPart::Info *i)
 }
 
 KexiBrowserItem::KexiBrowserItem(KListViewItem *parent, KexiPart::Info *i, KexiPart::Item *item)
- : KListViewItem(parent, " "+ item->name())
+ : KListViewItem(parent, " "+ item->name() + " ")
 {
 	m_item = item;
 	m_info = i;
