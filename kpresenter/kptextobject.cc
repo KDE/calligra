@@ -1364,7 +1364,7 @@ void KPTextObject::applyStyleChange( KoStyle * changedStyle, int paragLayoutChan
 
 void KPTextObject::slotAfterFormatting( int bottom, KoTextParag* lastFormatted, bool* abort)
 {
-    int availHeight = availableHeight();
+    int availHeight = availableHeight()-m_doc->zoomHandler()->ptToLayoutUnitPixY(alignmentValue());
     if ( ( bottom > availHeight ) ||   // this parag is already below the avail height
          ( lastFormatted && (bottom + lastFormatted->rect().height() > availHeight) ) ) // or next parag will be below it
     {

@@ -104,3 +104,4 @@ Bugfixes:
 - Fix #45991: problems w.r.t. font color and bullets
 - Fix mouse move event + vertical alignment
 - Fix resize to height : Don't create command when it's not necessary.
+- Fix availableHeight + vertical alignment
