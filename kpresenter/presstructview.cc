@@ -243,14 +243,13 @@ void PresStructViewer::setupTreeView()
   KTreeListItem *item = 0;
   ItemInfo *info = 0;
 
-  QString pixdir = kapp->kde_toolbardir();
   QString page_name,obj_name;
   int pgnum;
 
   for (unsigned int i = 0;i < doc->backgroundList()->count();i++)
     {
       page_name.sprintf("%d. Page",i + 1);
-      item = new KTreeListItem(page_name.data(),new QPixmap(pixdir + "/filenew.xpm"));
+      item = new KTreeListItem(page_name.data(),new QPixmap(ICON("filenew.xpm")));
       treelist->insertItem(item,-1,false);
       info = new ItemInfo;
       info->num = i;
@@ -258,7 +257,6 @@ void PresStructViewer::setupTreeView()
       pageList.append(info);
     }
 
-  pixdir = kapp->kde_datadir();
   KPObject *kpobject = 0;
   for (unsigned int i = 0;i < doc->objectList()->count();i++)
     {
@@ -288,7 +286,7 @@ void PresStructViewer::setupTreeView()
 	  break;
 	}
 
-      item = new KTreeListItem(obj_name.data(),new QPixmap(pixdir + "/kpresenter/toolbar/" + str));
+      item = new KTreeListItem(obj_name.data(),new QPixmap(ICON(str)));
       pgnum = doc->getPageOfObj(i,0,0);
       if (pgnum != -1)
 	{
@@ -309,33 +307,33 @@ void PresStructViewer::setupToolBar()
 {
   toolbar = new KToolBar(this);
 
-  QString pixdir = KApplication::kde_datadir() + "/kpresenter/toolbar/";
+  //QString pixdir = KApplication::kde_datadir() + "/kpresenter/toolbar/";
   
-  toolbar->insertButton(QPixmap(pixdir + "style.xpm"),B_STYLE,SIGNAL(clicked()),this,SLOT(slotStyle()),false,i18n("Pen & Brush"));
-  toolbar->insertButton(QPixmap(pixdir + "rotate.xpm"),B_ROTATE,SIGNAL(clicked()),this,SLOT(slotRotate()),false,i18n("Rotate"));
-  toolbar->insertButton(QPixmap(pixdir + "shadow.xpm"),B_SHADOW,SIGNAL(clicked()),this,SLOT(slotShadow()),false,i18n("Shadow"));
-  toolbar->insertButton(QPixmap(pixdir + "alignobjs.xpm"),B_ALIGN,SIGNAL(clicked()),this,SLOT(slotAlign()),false,i18n("Align"));
-  toolbar->insertButton(QPixmap(pixdir + "effect.xpm"),B_EFFECT,SIGNAL(clicked()),this,SLOT(slotEffect()),false,i18n("Assign effect"));
+  toolbar->insertButton(ICON("style.xpm"),B_STYLE,SIGNAL(clicked()),this,SLOT(slotStyle()),false,i18n("Pen & Brush"));
+  toolbar->insertButton(ICON("rotate.xpm"),B_ROTATE,SIGNAL(clicked()),this,SLOT(slotRotate()),false,i18n("Rotate"));
+  toolbar->insertButton(ICON("shadow.xpm"),B_SHADOW,SIGNAL(clicked()),this,SLOT(slotShadow()),false,i18n("Shadow"));
+  toolbar->insertButton(ICON("alignobjs.xpm"),B_ALIGN,SIGNAL(clicked()),this,SLOT(slotAlign()),false,i18n("Align"));
+  toolbar->insertButton(ICON("effect.xpm"),B_EFFECT,SIGNAL(clicked()),this,SLOT(slotEffect()),false,i18n("Assign effect"));
 
   toolbar->insertSeparator();
   
-  toolbar->insertButton(QPixmap(pixdir + "raise.xpm"),B_LOWER,SIGNAL(clicked()),this,SLOT(slotRaise()),false,i18n("Raise"));
-  toolbar->insertButton(QPixmap(pixdir + "lower.xpm"),B_RAISE,SIGNAL(clicked()),this,SLOT(slotLower()),false,i18n("Lower"));
+  toolbar->insertButton(ICON("raise.xpm"),B_LOWER,SIGNAL(clicked()),this,SLOT(slotRaise()),false,i18n("Raise"));
+  toolbar->insertButton(ICON("lower.xpm"),B_RAISE,SIGNAL(clicked()),this,SLOT(slotLower()),false,i18n("Lower"));
 
   toolbar->insertSeparator();
 
-  toolbar->insertButton(QPixmap(pixdir + "delete.xpm"),B_DELETE,SIGNAL(clicked()),this,SLOT(slotDelete()),false,i18n("Delete"));
-  toolbar->insertButton(QPixmap(pixdir + "edit_text.xpm"),B_EDIT,SIGNAL(clicked()),this,SLOT(slotEdit()),false,i18n("Edit Text"));
-  toolbar->insertButton(QPixmap(pixdir + "edit_pie.xpm"),B_EDIT_PIE,SIGNAL(clicked()),this,SLOT(slotEditPie()),false,i18n("Configure Pie"));
-  toolbar->insertButton(QPixmap(pixdir + "rectangle2.xpm"),B_EDIT_RECT,SIGNAL(clicked()),this,SLOT(slotEditRect()),
+  toolbar->insertButton(ICON("delete.xpm"),B_DELETE,SIGNAL(clicked()),this,SLOT(slotDelete()),false,i18n("Delete"));
+  toolbar->insertButton(ICON("edit_text.xpm"),B_EDIT,SIGNAL(clicked()),this,SLOT(slotEdit()),false,i18n("Edit Text"));
+  toolbar->insertButton(ICON("edit_pie.xpm"),B_EDIT_PIE,SIGNAL(clicked()),this,SLOT(slotEditPie()),false,i18n("Configure Pie"));
+  toolbar->insertButton(ICON("rectangle2.xpm"),B_EDIT_RECT,SIGNAL(clicked()),this,SLOT(slotEditRect()),
 			false,i18n("Configure Rectangle"));
-  toolbar->insertButton(QPixmap(KApplication::kde_toolbardir() + "/fileopen.xpm"),B_CFILEN,
+  toolbar->insertButton(ICON("fileopen.xpm"),B_CFILEN,
 			SIGNAL(clicked()),this,SLOT(slotChangeFilename()),false,i18n("Change Filename"));
 
   toolbar->insertSeparator();
 
-  toolbar->insertButton(QPixmap(pixdir + "screen.xpm"),B_BACK,SIGNAL(clicked()),this,SLOT(slotBackground()),false,i18n("Background"));
-  toolbar->insertButton(QPixmap(KApplication::kde_toolbardir() + "/filenew.xpm"),B_CPAGES,
+  toolbar->insertButton(ICON("screen.xpm"),B_BACK,SIGNAL(clicked()),this,SLOT(slotBackground()),false,i18n("Background"));
+  toolbar->insertButton(ICON("filenew.xpm"),B_CPAGES,
 			SIGNAL(clicked()),this,SLOT(slotConfigPages()),false,i18n("Configure Pages"));
 
   toolbar->setFullWidth(true);

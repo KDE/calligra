@@ -15,6 +15,8 @@
 
 #include "shadowdia.h"
 #include "shadowdia.moc"
+#include <kapp.h>
+#include <kiconloader.h>
 
 /******************************************************************/
 /* class ShadowPreview                                            */
@@ -166,15 +168,14 @@ ShadowDia::ShadowDia(QWidget* parent,const char* name)
   lb->move(lu->x(),b->y());
   l->move(lu->x(),r->y());
 
-  QString pixdir = kapp->kde_datadir() + "/kpresenter/toolbar/";
-  lu->setPixmap(QPixmap(pixdir + "shadowLU.xpm"));
-  u->setPixmap(QPixmap(pixdir + "shadowU.xpm"));
-  ru->setPixmap(QPixmap(pixdir + "shadowRU.xpm"));
-  r->setPixmap(QPixmap(pixdir + "shadowR.xpm"));
-  rb->setPixmap(QPixmap(pixdir + "shadowRB.xpm"));
-  b->setPixmap(QPixmap(pixdir + "shadowB.xpm"));
-  lb->setPixmap(QPixmap(pixdir + "shadowLB.xpm"));
-  l->setPixmap(QPixmap(pixdir + "shadowL.xpm"));
+  lu->setPixmap(ICON("shadowLU.xpm"));
+  u->setPixmap(ICON("shadowU.xpm"));
+  ru->setPixmap(ICON("shadowRU.xpm"));
+  r->setPixmap(ICON("shadowR.xpm"));
+  rb->setPixmap(ICON("shadowRB.xpm"));
+  b->setPixmap(ICON("shadowB.xpm"));
+  lb->setPixmap(ICON("shadowLB.xpm"));
+  l->setPixmap(ICON("shadowL.xpm"));
 
   connect(lu,SIGNAL(clicked()),this,SLOT(luChanged()));
   connect(u,SIGNAL(clicked()),this,SLOT(uChanged()));
