@@ -3577,7 +3577,7 @@ void KWView::formatPage()
     KoUnit::Unit unit = m_doc->getUnit();
     KoUnit::Unit oldUnit = unit;
 
-    if ( KoPageLayoutDia::pageLayout( pgLayout, hf, cl, kwhf, flags, unit ) )
+    if ( KoPageLayoutDia::pageLayout( pgLayout, hf, cl, kwhf, flags, unit, this ) )
     {
         if( !(oldLayout._pgLayout==pgLayout) ||
             oldLayout._cl != cl ||
