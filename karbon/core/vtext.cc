@@ -124,7 +124,7 @@ VText::setState( const VState state )
 }
 
 void
-VText::draw( VPainter* painter, const KoRect& rect )
+VText::draw( VPainter* painter, const KoRect& rect ) const
 {
 	if( state() == state_deleted )
 		return;

@@ -12,6 +12,10 @@
 
 #include <qvaluevector.h>
 
+
+class VSelection;
+
+
 // Fill object(s)
 
 class VPath;
@@ -20,13 +24,13 @@ class VFillCmd : public VCommand
 {
 public:
 	VFillCmd( VDocument *doc, const VColor& color, float opacity = -1 );
-	virtual ~VFillCmd() {}
+	virtual ~VFillCmd();
 
 	virtual void execute();
 	virtual void unexecute();
 
 private:
-	VSelection m_objects;
+	VSelection* m_selection;
 
 	VColor m_color;
 	float m_opacity;

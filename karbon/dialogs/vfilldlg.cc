@@ -17,6 +17,7 @@
 #include "vcolor.h"
 #include "vfillcmd.h"
 #include "vfilldlg.h"
+#include "vselection.h"
 
 #include <kdebug.h>
 
@@ -51,8 +52,8 @@ VFillDlg::VFillDlg( KarbonPart* part, QWidget* parent, const char* name )
 	mOldColor = new KColorPatch(groupbox);
 	mColorPreview = new KColorPatch(groupbox);
 	QColor color( "black" );
-	if( part->document().selection().objects().count() > 0 ) // there is a selection, so take the color of first selected object
-		color = part->document().selection().objects().getFirst()->fill()->color().toQColor();
+	if( part->document().selection()->objects().count() > 0 ) // there is a selection, so take the color of first selected object
+		color = part->document().selection()->objects().getFirst()->fill()->color().toQColor();
 
 	mOldColor->setColor( color );
 	mColorPreview->setColor( color );
@@ -89,8 +90,8 @@ VFillDlg::VFillDlg( KarbonPart* part, QWidget* parent, const char* name )
 	QGroupBox* ogroupBox = new QGroupBox(1, Vertical, i18n("Opacity"), mRGBWidget);
 	mOpacity = new KIntNumInput(100, ogroupBox);
 	mOpacity->setRange(0, 100, 1, true);
-	if( part->document().selection().objects().count() > 0 ) // there is a selection, so take the opacity of first selected object
-		mOpacity->setValue( static_cast<int>(part->document().selection().objects().getFirst()->fill()->color().opacity() * 100.0) );
+	if( part->document().selection()->objects().count() > 0 ) // there is a selection, so take the opacity of first selected object
+		mOpacity->setValue( static_cast<int>(part->document().selection()->objects().getFirst()->fill()->color().opacity() * 100.0) );
 	mainLayout->addWidget( ogroupBox, 2, 2);
 
 	mainLayout->setSpacing(2);

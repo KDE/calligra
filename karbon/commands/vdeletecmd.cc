@@ -6,22 +6,31 @@
 #include <klocale.h>
 
 #include "vdeletecmd.h"
+#include "vselection.h"
 
 
 VDeleteCmd::VDeleteCmd( VDocument *doc )
 	: VCommand( doc, i18n( "Delete Objects" ) )
 {
-	m_objects = m_doc->selection();
+	m_selection = m_doc->selection()
+		? new VSelection( *m_doc->selection() )
+		: new VSelection();
+
 	m_doc->deselect();
 
-	if( m_objects.objects().count() == 1 )
+	if( m_selection->objects().count() == 1 )
 		setName( i18n( "Delete Object" ) );
+}
+
+VDeleteCmd::~VDeleteCmd()
+{
+	delete( m_selection );
 }
 
 void
 VDeleteCmd::execute()
 {
-	VObjectListIterator itr( m_objects.objects() );
+	VObjectListIterator itr( m_selection->objects() );
 	for ( ; itr.current() ; ++itr )
 	{
 		itr.current()->setState( state_deleted );
@@ -31,7 +40,7 @@ VDeleteCmd::execute()
 void
 VDeleteCmd::unexecute()
 {
-	VObjectListIterator itr( m_objects.objects() );
+	VObjectListIterator itr( m_selection->objects() );
 	for ( ; itr.current() ; ++itr )
 	{
 		itr.current()->setState( state_normal );

@@ -8,18 +8,21 @@
 #include "vcommand.h"
 
 
+class VSelection;
+
+
 class VWhirlPinchCmd : public VCommand
 {
 public:
 	VWhirlPinchCmd( VDocument* doc,
 		double angle, double pinch, double radius );
-	virtual ~VWhirlPinchCmd() {}
+	virtual ~VWhirlPinchCmd();
 
 	virtual void execute();
 	virtual void unexecute();
 
 private:
-	VSelection m_objects;
+	VSelection* m_selection;
 
 	KoPoint m_center;
 	double m_angle;

@@ -14,6 +14,7 @@
 #include "vhandletool.h"
 #include "vpainter.h"
 #include "vpainterfactory.h"
+#include "vselection.h"
 #include "vsheartool.h"
 #include "vtransformcmd.h"
 
@@ -80,10 +81,10 @@ VShearTool::drawTemporaryObject( KarbonView* view )
 
 	// already selected, so must be a handle operation (move, scale etc.)
 	if(
-		part()->document().selection().objects().count() > 0 &&
+		part()->document().selection()->objects().count() > 0 &&
 		VHandleTool::instance( m_part )->activeNode() != node_mm )
 	{
-		KoRect rect = part()->document().selection().boundingBox();
+		KoRect rect = part()->document().selection()->boundingBox();
 
 		if( VHandleTool::instance( m_part )->activeNode() == node_lt )
 		{
@@ -125,7 +126,7 @@ VShearTool::drawTemporaryObject( KarbonView* view )
 						- ( m_fp.y() + view->canvasWidget()->contentsY() ) / view->zoom() );
 
 		// TODO :  makes a copy of the selection, do assignment operator instead
-		VObjectListIterator itr = part()->document().selection().objects();
+		VObjectListIterator itr = part()->document().selection()->objects();
 		VObjectList list;
 		list.setAutoDelete( true );
 	    for( ; itr.current() ; ++itr )

@@ -12,10 +12,10 @@
 #include "vcolor.h"
 #include "vlayer.h"
 #include "vobject.h"
-#include "vselection.h"
 
 class QDomDocument;
 class QDomElement;
+class VSelection;
 
 
 typedef QPtrList<VLayer> VLayerList;
@@ -33,9 +33,11 @@ class VDocument : public VObject
 {
 public: 
 	VDocument();
+	VDocument( const VDocument& document );
+
 	~VDocument();
 
-	virtual void draw( VPainter* painter, const KoRect& rect );
+	virtual void draw( VPainter* painter, const KoRect& rect ) const;
 
 	// TODO
 	virtual void transform( const QWMatrix& ) {}
@@ -65,7 +67,7 @@ public:
 
 
 	// manipulate selection:
-	const VSelection& selection() const { return m_selection; }
+	const VSelection* selection() const { return m_selection; }
 
 	void select();    // select all vobjects period.
 	void deselect();  // unselect all vobjects from all vlayers.
@@ -95,7 +97,7 @@ public:
 
 private:
 	VLayerList m_layers;			// all layers in this document
-	VSelection m_selection;        // a list of selected objects.
+	VSelection* m_selection;        // a list of selected objects.
 	VLayer* m_activeLayer;			// the active/current layer.
 
 	VColor m_defaultStrokeColor;        /// keep track of a default stroke color for created shapes

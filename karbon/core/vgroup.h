@@ -30,7 +30,7 @@ public:
 
 	virtual ~VGroup();
 
-	virtual void draw( VPainter* painter, const KoRect& rect );
+	virtual void draw( VPainter* painter, const KoRect& rect ) const;
 
 	virtual void transform( const QWMatrix& m );
 

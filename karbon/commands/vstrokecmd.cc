@@ -5,6 +5,7 @@
 
 #include <klocale.h>
 
+#include "vselection.h"
 #include "vstroke.h"
 #include "vstrokecmd.h"
 
@@ -12,17 +13,23 @@
 VStrokeCmd::VStrokeCmd( VDocument *doc, const VColor& color, float opacity )
 	: VCommand( doc, i18n( "Stroke Objects" ) ), m_color( color ), m_opacity( opacity )
 {
-	m_objects = m_doc->selection();
-	//m_part->deselectAllObjects();
+	m_selection = m_doc->selection()
+		? new VSelection( *m_doc->selection() )
+		: new VSelection();
 
-	if( m_objects.objects().count() == 1 )
+	if( m_selection->objects().count() == 1 )
 		setName( i18n( "Stroke Object" ) );
+}
+
+VStrokeCmd::~VStrokeCmd()
+{
+	delete( m_selection );
 }
 
 void
 VStrokeCmd::execute()
 {
-	VObjectListIterator itr( m_objects.objects() );
+	VObjectListIterator itr( m_selection->objects() );
 	for ( ; itr.current() ; ++itr )
 	{
 		if( m_opacity == -1 )
@@ -40,7 +47,7 @@ VStrokeCmd::execute()
 void
 VStrokeCmd::unexecute()
 {
-	VObjectListIterator itr( m_objects.objects() );
+	VObjectListIterator itr( m_selection->objects() );
 	int i = 0;
 	for ( ; itr.current() ; ++itr )
 	{

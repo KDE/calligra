@@ -91,7 +91,7 @@ public:
 	void combine( const VPath& path );
 	void combineSegmentList( const VSegmentList& segmentList );
 
-	virtual void draw( VPainter *painter, const KoRect& rect );
+	virtual void draw( VPainter *painter, const KoRect& rect ) const;
 
 	const VSegment* lastSegment() const
 		{ return m_segmentLists.getLast()->getLast(); }

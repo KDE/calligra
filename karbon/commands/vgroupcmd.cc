@@ -7,13 +7,22 @@
 
 #include "vgroup.h"
 #include "vgroupcmd.h"
+#include "vselection.h"
 
 
 VGroupCmd::VGroupCmd( VDocument *doc )
 	: VCommand( doc, i18n( "Group Objects" ) )
 {
-	m_objects = m_doc->selection();
+	m_selection = m_doc->selection()
+		? new VSelection( *m_doc->selection() )
+		: new VSelection();
+
 	m_group = 0L;
+}
+
+VGroupCmd::~VGroupCmd()
+{
+	delete( m_selection );
 }
 
 void
@@ -21,7 +30,7 @@ VGroupCmd::execute()
 {
 	m_group = new VGroup( m_doc->activeLayer() );
 
-	VObjectListIterator itr( m_objects.objects() );
+	VObjectListIterator itr( m_selection->objects() );
 	for ( ; itr.current() ; ++itr )
 	{
 		// TODO : remove from corresponding VLayer
@@ -52,7 +61,7 @@ VGroupCmd::unexecute()
 		parent->take( m_group );
 
 		// inform all objects in this group about their new parent
-		VObjectListIterator itr = m_objects.objects();
+		VObjectListIterator itr = m_selection->objects();
 
 		for ( ; itr.current() ; ++itr )
 			parent->append( itr.current() );

@@ -10,6 +10,7 @@
 #include "karbon_part.h"
 #include "karbon_view.h"
 #include "vhandletool.h"
+#include "vselection.h"
 
 #include <kdebug.h>
 
@@ -55,9 +56,9 @@ VHandleTool::draw( QPainter& painter, const double zoomFactor )
 	//QWMatrix mat = painter.worldMatrix();
 	//painter.setWorldMatrix( mat.scale( 1 / zoomFactor, 1 / zoomFactor ) );
 
-	if( part()->document().selection().objects().count() > 0 )
+	if( part()->document().selection()->objects().count() > 0 )
 	{
-		const KoRect& bb = part()->document().selection().boundingBox();
+		const KoRect& bb = part()->document().selection()->boundingBox();
 
 		m_boundingBox.setCoords(
 			bb.left() * zoomFactor,

@@ -7,6 +7,7 @@
 
 #include "vdocument.h"
 #include "vfill.h"
+#include "vselection.h"
 #include "vstroke.h"
 
 #include <kdebug.h>
@@ -17,6 +18,8 @@ VDocument::VDocument()
 		m_mime( "application/x-karbon" ), m_version( "0.1" ),
 		m_editor( "karbon14 0.0.1" ), m_syntaxVersion( "0.1" )
 {
+	m_selection = new VSelection( this );
+
 	// create a layer. we need at least one:
 	m_layers.setAutoDelete( true );
 	m_layers.append( new VLayer() );
@@ -27,12 +30,19 @@ VDocument::VDocument()
 	m_defaultFillColor.setValues( &r, &g, &b, 0L );
 }
 
+VDocument::VDocument( const VDocument& document )
+{
+	m_selection = new VSelection( this );
+// TODO
+}
+
 VDocument::~VDocument()
 {
+	delete( m_selection );
 }
 
 void
-VDocument::draw( VPainter *painter, const KoRect& rect )
+VDocument::draw( VPainter *painter, const KoRect& rect ) const
 {
 	QPtrListIterator<VLayer> i = m_layers;
 
@@ -143,20 +153,20 @@ VDocument::select( VObject& object, bool exclusive )
 		deselect();
 
 	object.setState( state_selected );
-	m_selection.append( &object );
+	m_selection->append( &object );
 }
 
 void
 VDocument::deselect( VObject& object )
 {
 	object.setState( state_normal );
-	m_selection.take( &object );
+	m_selection->take( &object );
 }
 
 void
 VDocument::select()
 {
-	m_selection.clear();
+	m_selection->clear();
 
 	VObjectList objects;
 	VLayerListIterator itr( m_layers );
@@ -172,7 +182,7 @@ VDocument::select()
 			if( static_cast<VObject *>( itr2.current() )->state() != state_deleted )
 			{
 				static_cast<VObject *>( itr2.current() )->setState( state_selected );
-				m_selection.append( itr2.current() );
+				m_selection->append( itr2.current() );
 			}
 		}
 	}
@@ -194,7 +204,7 @@ VDocument::select( const KoRect& rect, bool exclusive )
 		for ( ; itr2.current(); ++itr2 )
 		{
 			static_cast<VObject *>(itr2.current())->setState( state_selected );
-			m_selection.append( itr2.current() );
+			m_selection->append( itr2.current() );
 		}
 	}
 }
@@ -203,14 +213,14 @@ void
 VDocument::deselect()
 {
 	// deselect objects:
-	VObjectListIterator itr( m_selection.objects() );
+	VObjectListIterator itr( m_selection->objects() );
 
 	for ( ; itr.current() ; ++itr )
 	{
 		static_cast<VObject *>(itr.current())->setState( state_normal );
 	}
 
-	m_selection.clear();
+	m_selection->clear();
 }
 
 void
@@ -218,7 +228,7 @@ VDocument::moveSelectionUp()
 {
 /*
 	//kdDebug() << "KarbonPart::moveSelectionUp" << endl;
-	VSelection selection = m_selection;
+	VSelection selection = *m_selection;
 
 	VObjectList objects;
 

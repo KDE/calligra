@@ -9,6 +9,9 @@
 #include "vcommand.h"
 
 
+class VSelection;
+
+
 // Group object(s)
 
 class VGroup;
@@ -17,13 +20,13 @@ class VGroupCmd : public VCommand
 {
 public:
 	VGroupCmd( VDocument *doc );
-	virtual ~VGroupCmd() {}
+	virtual ~VGroupCmd();
 
 	virtual void execute();
 	virtual void unexecute();
 
 private:
-	VSelection m_objects;
+	VSelection* m_selection;
 
 	VGroup* m_group;
 };

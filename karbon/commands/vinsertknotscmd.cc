@@ -6,13 +6,22 @@
 
 #include "vinsertknots.h"
 #include "vinsertknotscmd.h"
+#include "vselection.h"
 
 
 VInsertKnotsCmd::VInsertKnotsCmd( VDocument *doc, uint knots )
 		: VCommand( doc, i18n( "Insert Knots" ) )
 {
+	m_selection = m_doc->selection()
+		? new VSelection( *m_doc->selection() )
+		: new VSelection();
+
 	m_knots = knots > 0 ? knots : 1;
-	m_objects = doc->selection();
+}
+
+VInsertKnotsCmd::~VInsertKnotsCmd()
+{
+	delete( m_selection );
 }
 
 void
@@ -20,7 +29,7 @@ VInsertKnotsCmd::execute()
 {
 	VInsertKnots op( m_knots );
 
-	VObjectListIterator itr( m_objects.objects() );
+	VObjectListIterator itr( m_selection->objects() );
 
 	for ( ; itr.current() ; ++itr )
 		op.visit( *itr.current() );

@@ -1,6 +1,20 @@
 Karbon14 is a vector graphics application within koffice.
 
 
+Object hierarchy:
+-----------------
+
+        +- vdocument
+        |
+        +- vpath
+        |
+vobject-+- vtext
+        |
+        |         +- vselection
+        +- vgroup-+
+                  +- vlayer
+
+
 Files and directories:
 ----------------------
 commands/

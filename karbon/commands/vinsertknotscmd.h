@@ -8,17 +8,20 @@
 #include "vcommand.h"
 
 
+class VSelection;
+
+
 class VInsertKnotsCmd : public VCommand
 {
 public:
 	VInsertKnotsCmd( VDocument *doc, uint knots );
-	virtual ~VInsertKnotsCmd() {}
+	virtual ~VInsertKnotsCmd();
 
 	virtual void execute();
 	virtual void unexecute();
 
 private:
-	VSelection m_objects;
+	VSelection* m_selection;
 
 	uint m_knots;
 };

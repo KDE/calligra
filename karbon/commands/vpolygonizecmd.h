@@ -8,17 +8,20 @@
 #include "vcommand.h"
 
 
+class VSelection;
+
+
 class VPolygonizeCmd : public VCommand
 {
 public:
 	VPolygonizeCmd( VDocument *doc, double flatness );
-	virtual ~VPolygonizeCmd() {}
+	virtual ~VPolygonizeCmd();
 
 	virtual void execute();
 	virtual void unexecute();
 
 private:
-	VSelection m_objects;
+	VSelection* m_selection;
 
 	double m_flatness;
 };

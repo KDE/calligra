@@ -4,6 +4,7 @@
 
 #include <klocale.h>
 
+#include "vselection.h"
 #include "vwhirlpinch.h"
 #include "vwhirlpinchcmd.h"
 
@@ -12,11 +13,19 @@ VWhirlPinchCmd::VWhirlPinchCmd( VDocument* doc,
 	double angle, double pinch, double radius )
 		: VCommand( doc, i18n( "Whirl Pinch" ) )
 {
+	m_selection = m_doc->selection()
+		? new VSelection( *m_doc->selection() )
+		: new VSelection();
+
 	m_angle = angle;
 	m_pinch = pinch;
 	m_radius = radius;
-	m_objects = doc->selection();
-	m_center = m_objects.boundingBox().center();
+	m_center = m_selection->boundingBox().center();
+}
+
+VWhirlPinchCmd::~VWhirlPinchCmd()
+{
+	delete( m_selection );
 }
 
 void
@@ -24,7 +33,7 @@ VWhirlPinchCmd::execute()
 {
 	VWhirlPinch op( m_center, m_angle, m_pinch, m_radius );
 
-	VObjectListIterator itr( m_objects.objects() );
+	VObjectListIterator itr( m_selection->objects() );
 	for ( ; itr.current() ; ++itr )
 		op.visit( *itr.current() );
 }

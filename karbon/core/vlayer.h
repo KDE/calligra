@@ -29,7 +29,7 @@ public:
 
 	virtual ~VLayer();
 
-	virtual void draw( VPainter *painter, const KoRect& rect );
+	virtual void draw( VPainter *painter, const KoRect& rect ) const;
 
 	virtual void save( QDomElement& element ) const;
 	virtual void load( const QDomElement& element );

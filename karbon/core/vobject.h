@@ -51,7 +51,7 @@ public:
 	 * @param rect represents the visible rectangular area. If this object doesnt
 	 *             intersect with this area it is not drawn.
 	 */
-	virtual void draw( VPainter* painter, const KoRect& rect ) = 0;
+	virtual void draw( VPainter* /*painter*/, const KoRect& /*rect*/ ) const {}
 
 	/**
 	 * Transform the object according to the given matrix.
@@ -77,6 +77,19 @@ public:
 	 */
 	bool boundingBoxIsInvalid() const
 		{ return m_boundingBoxIsInvalid; }
+
+	/**
+	 * Invalidates the bounding box, so it has to be recalculated.
+	 * This function is public so visitors can access it themself at the right
+	 * time when they manipulate many VSegments.
+	 */
+	void invalidateBoundingBox()
+	{
+		m_boundingBoxIsInvalid = true;
+
+		if( m_parent )
+			m_parent->invalidateBoundingBox();
+	}
 
 	/**
 	 * Tests whether this object is inside or intersects the given rectangle.
@@ -136,17 +149,6 @@ public:
 	virtual void accept( VVisitor& /*visitor*/ ) {}
 
 protected:
-	/**
-	 * Invalidates the bounding box, so it has to be recalculated.
-	 */
-	void invalidateBoundingBox()
-	{
-		m_boundingBoxIsInvalid = true;
-
-		if( m_parent )
-			m_parent->invalidateBoundingBox();
-	}
-
 	/// Bounding box.
 	mutable KoRect m_boundingBox;
 	mutable bool m_boundingBoxIsInvalid;

@@ -7,22 +7,29 @@
 
 #include "vfill.h"
 #include "vfillcmd.h"
+#include "vselection.h"
 
 
 VFillCmd::VFillCmd( VDocument *doc, const VColor& color, float opacity )
 	: VCommand( doc, i18n( "Fill Objects" ) ), m_color( color ), m_opacity( opacity )
 {
-	m_objects = m_doc->selection();
-	//m_part->deselectAllObjects();
+	m_selection = m_doc->selection()
+		? new VSelection( *m_doc->selection() )
+		: new VSelection();
 
-	if( m_objects.objects().count() == 1 )
+	if( m_selection->objects().count() == 1 )
 		setName( i18n( "Fill Object" ) );
+}
+
+VFillCmd::~VFillCmd()
+{
+	delete( m_selection );
 }
 
 void
 VFillCmd::execute()
 {
-	VObjectListIterator itr( m_objects.objects() );
+	VObjectListIterator itr( m_selection->objects() );
 	for ( ; itr.current() ; ++itr )
 	{
 		//if( m_opacity == -1 )
@@ -40,7 +47,7 @@ VFillCmd::execute()
 void
 VFillCmd::unexecute()
 {
-	VObjectListIterator itr( m_objects.objects() );
+	VObjectListIterator itr( m_selection->objects() );
 	int i = 0;
 	for ( ; itr.current() ; ++itr )
 	{

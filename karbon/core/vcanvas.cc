@@ -7,12 +7,12 @@
 #include <qpainter.h>
 #include <qpixmap.h>
 
-#include "vcanvas.h"
 #include "karbon_view.h"
 #include "karbon_part.h"
-#include "vhandletool.h"
+#include "vcanvas.h"
 #include "vpainter.h"
 #include "vpainterfactory.h"
+#include "vselection.h"
 
 #include <kdebug.h>
 
@@ -68,10 +68,8 @@ VCanvas::viewportPaintEvent( QPaintEvent *e )
 
 	// draw handle:
 	QPainter qpainter( p->device() );
-	//qpainter.setWorldMatrix( QWMatrix().translate( -contentsX(), -contentsY()) );
-	//qpainter.setWorldMatrix( QWMatrix().scale( 1 / m_view->zoom(), 1 / m_view->zoom() ).translate( -contentsX(), -contentsY() ) );
 	qpainter.setWorldMatrix( QWMatrix().translate( -contentsX(), -contentsY() ) );
-	VHandleTool::instance( m_part )->draw( qpainter, m_view->zoom() );
+	m_part->document().selection()->draw( &qpainter, m_view->zoom() );
 }
 
 void
@@ -101,10 +99,8 @@ VCanvas::drawDocument( QPainter* /*painter*/, const QRect& rect )
 
 	// draw handle:
 	QPainter qpainter( p->device() );
-	//qpainter.setWorldMatrix( QWMatrix().scale( 1 / m_view->zoom(), 1 / m_view->zoom() ).translate( -contentsX(), -contentsY() ) );
-	//qpainter.setWorldMatrix( QWMatrix().translate( -contentsX(), -contentsY()) );
 	qpainter.setWorldMatrix( QWMatrix().translate( -contentsX(), -contentsY() ) );
-	VHandleTool::instance( m_part )->draw( qpainter, m_view->zoom() );
+	m_part->document().selection()->draw( &qpainter, m_view->zoom() );
 }
 
 void

@@ -57,6 +57,7 @@
 #include "vpainterfactory.h"
 #include "vqpainter.h"
 //#include "vtext.h"
+#include "vselection.h"
 #include "vtoolcontainer.h"
 
 #include <tkfloatspinboxaction.h>
@@ -191,7 +192,7 @@ KarbonView::editCopy()
 void
 KarbonView::editPaste()
 {
-	VObjectListIterator itr( m_part->document().selection().objects() );
+	VObjectListIterator itr( m_part->document().selection()->objects() );
 	VObjectList selection;
 	for ( ; itr.current() ; ++itr )
 	{
@@ -214,15 +215,15 @@ void
 KarbonView::editSelectAll()
 {
 	m_part->document().select();
-	//handleTool();
-	if( m_part->document().selection().objects().count() > 0 )
+
+	if( m_part->document().selection()->objects().count() > 0 )
 		m_part->repaintAllViews();
 }
 
 void
 KarbonView::editDeselectAll()
 {
-	if( m_part->document().selection().objects().count() > 0 )
+	if( m_part->document().selection()->objects().count() > 0 )
 	{
 		m_part->document().deselect();
 		m_part->repaintAllViews();
@@ -291,7 +292,7 @@ void
 KarbonView::ungroupSelection()
 {
 /*
-	if( m_part->document().selection().objects().count() == 1 )
+	if( m_part->document().selection()->objects().count() == 1 )
 	{
 		VGroup *grp = dynamic_cast<VGroup *>( m_part->document().selection().objects().getFirst() );
 		if( grp )
@@ -310,7 +311,7 @@ KarbonView::dummyForTesting()
 {
 kdDebug() << "KarbonView::dummyForTesting()" << endl;
 
-	const KoRect& rect = m_part->document().selection().boundingBox();
+	const KoRect& rect = m_part->document().selection()->boundingBox();
 
 	VWhirlPinch op(
 		rect.center(),
@@ -318,7 +319,7 @@ kdDebug() << "KarbonView::dummyForTesting()" << endl;
 		0.5,
 		200.0 );
 
-	VObjectListIterator itr( m_part->document().selection().objects() );
+	VObjectListIterator itr( m_part->document().selection()->objects() );
 	for ( ; itr.current() ; ++itr )
 	{
 		op.visit( *itr.current() );

@@ -6,13 +6,22 @@
 
 #include "vpolygonize.h"
 #include "vpolygonizecmd.h"
+#include "vselection.h"
 
 
 VPolygonizeCmd::VPolygonizeCmd( VDocument *doc, double flatness )
 		: VCommand( doc, i18n( "Polygonize" ) )
 {
+	m_selection = m_doc->selection()
+		? new VSelection( *m_doc->selection() )
+		: new VSelection();
+
 	m_flatness = flatness > 0.0 ? flatness : 1.0;
-	m_objects = doc->selection();
+}
+
+VPolygonizeCmd::~VPolygonizeCmd()
+{
+	delete( m_selection );
 }
 
 void
@@ -20,7 +29,7 @@ VPolygonizeCmd::execute()
 {
 	VPolygonize op( m_flatness );
 
-	VObjectListIterator itr( m_objects.objects() );
+	VObjectListIterator itr( m_selection->objects() );
 	for ( ; itr.current() ; ++itr )
 		op.visit( *itr.current() );
 }

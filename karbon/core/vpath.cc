@@ -43,7 +43,7 @@ VPath::~VPath()
 }
 
 void
-VPath::draw( VPainter *painter, const KoRect& rect )
+VPath::draw( VPainter *painter, const KoRect& rect ) const
 {
 	if(
 		state() == state_deleted ||

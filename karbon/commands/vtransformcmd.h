@@ -10,14 +10,17 @@
 
 // Transform object(s) with a specified matrix and allow undo.
 
+
 class QWMatrix;
 class VPath;
+class VSelection;
+
 
 class VTransformCmd : public VCommand
 {
 public:
 	VTransformCmd( VDocument *doc, const QWMatrix& mat );
-	virtual ~VTransformCmd() {}
+	virtual ~VTransformCmd();
 
 	virtual void execute();
 	virtual void unexecute();
@@ -25,7 +28,7 @@ public:
 protected:
 	VTransformCmd( VDocument *doc, const QString& name );
 
-	VSelection m_objects;
+	VSelection* m_selection;
 
 	QWMatrix m_mat;
 };

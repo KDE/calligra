@@ -16,6 +16,7 @@
 #include "vscaletool.h"
 #include "vpainter.h"
 #include "vpainterfactory.h"
+#include "vselection.h"
 #include "vtransformcmd.h"
 
 
@@ -81,11 +82,11 @@ VScaleTool::drawTemporaryObject( KarbonView* view )
 
 	KoPoint lp = view->canvasWidget()->viewportToContents( QPoint( m_lp.x(), m_lp.y() ) );
 
-	KoRect rect = part()->document().selection().boundingBox();
+	KoRect rect = part()->document().selection()->boundingBox();
 
 	// already selected, so must be a handle operation (move, scale etc.)
 	if(
-		part()->document().selection().objects().count() > 0 &&
+		part()->document().selection()->objects().count() > 0 &&
 		VHandleTool::instance( m_part )->activeNode() != node_mm )
 	{
 		setCursor( view );
@@ -146,7 +147,7 @@ VScaleTool::drawTemporaryObject( KarbonView* view )
 						- ( sp.y() + view->canvasWidget()->contentsY() ) / view->zoom() );
 
 		// TODO :  makes a copy of the selection, do assignment operator instead
-		VObjectListIterator itr = part()->document().selection().objects();
+		VObjectListIterator itr = part()->document().selection()->objects();
 		VObjectList list;
 		list.setAutoDelete( true );
 	    for( ; itr.current() ; ++itr )

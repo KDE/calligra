@@ -8,6 +8,11 @@
 
 #include "vgroup.h"
 
+
+class QPainter;
+class QRect;
+
+
 /**
  * VSelection manages a set of vobjects. It keeps the objects from bottom to top
  * in a list, ie. objects higher in the list are drawn above lower objects.
@@ -17,10 +22,15 @@
 class VSelection : public VGroup
 {
 public:
-	VSelection();
-	~VSelection();
+	VSelection( VObject* parent = 0L, VState state = state_normal );
+	VSelection( const VSelection& selection );
 
-	virtual void draw( VPainter *painter, const KoRect& rect );
+	virtual ~VSelection();
+
+	void draw( QPainter* painter, double zoomFactor ) const;
+
+private:
+	QRect* m_qrect;
 };
 
 #endif

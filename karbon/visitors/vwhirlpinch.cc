@@ -112,6 +112,8 @@ kdDebug() << "**" << dist << endl;
 				itr.current()->current()->setCtrlPoint2( delta.transform( m ) );
 			}
 
+			// invalidate bounding box once:
+			itr.current()->invalidateBoundingBox();
 
 			itr.current()->next();
 		}

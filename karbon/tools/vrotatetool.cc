@@ -17,6 +17,7 @@
 #include "vpainter.h"
 #include "vpainterfactory.h"
 #include "vpath.h"
+#include "vselection.h"
 #include "vtransformcmd.h"
 
 #include <kdebug.h>
@@ -84,12 +85,12 @@ VRotateTool::drawTemporaryObject( KarbonView* view )
 
 	// already selected, so must be a handle operation (move, scale etc.)
 	if(
-		part()->document().selection().objects().count() > 0 &&
+		part()->document().selection()->objects().count() > 0 &&
 		VHandleTool::instance( m_part )->activeNode() != node_mm )
 	{
 		setCursor( view );
 		KoPoint lp = view->canvasWidget()->viewportToContents( QPoint( m_lp.x(), m_lp.y() ) );
-		KoRect rect = part()->document().selection().boundingBox();
+		KoRect rect = part()->document().selection()->boundingBox();
 
 		m_sp = KoPoint( int( rect.left() + rect.width() / 2 ), int( rect.top() + rect.height() / 2 ) );
 		KoPoint sp(
@@ -123,7 +124,7 @@ VRotateTool::drawTemporaryObject( KarbonView* view )
 						- ( sp.y() + view->canvasWidget()->contentsY() ) / view->zoom() );
 
 		// TODO :  makes a copy of the selection, do assignment operator instead
-		VObjectListIterator itr = part()->document().selection().objects();
+		VObjectListIterator itr = part()->document().selection()->objects();
 		VObjectList list;
 		list.setAutoDelete( true );
 	    for( ; itr.current() ; ++itr )
