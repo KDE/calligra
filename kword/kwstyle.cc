@@ -50,5 +50,6 @@ void KWStyle::save( QDomElement parentElem )
     m_paragLayout.save( styleElem );
 
 
-    KWTextParag::saveFormat( doc, &m_format, 0L, 0, 0 );
+    QDomElement formatElem = KWTextParag::saveFormat( doc, &m_format, 0L, 0, 0 );
+    styleElem.appendChild( formatElem );
 }
