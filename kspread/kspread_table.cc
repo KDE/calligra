@@ -62,7 +62,7 @@
 template <class X>
 class kauto_array {
   X *ptr;
- 
+
 public:
   typedef X element_type;
   explicit kauto_array(size_t n) { ptr = new X[n]; }
@@ -358,18 +358,16 @@ int KSpreadTable::bottomRow( int _ypos, KSpreadCanvas *_canvas )
 
 int KSpreadTable::columnPos( int _col, KSpreadCanvas *_canvas )
 {
-    int col = 1;
     int x = 0;
     if ( _canvas )
       x -= _canvas->xOffset();
-    while ( col < _col )
+    for ( int col = 1; col < _col; col++ )
     {
 	// Should never happen
 	if ( col == 0x10000 )
 	    return x;
 	
 	x += columnLayout( col )->width( _canvas );
-	col++;
     }
 
     return x;
@@ -377,18 +375,16 @@ int KSpreadTable::columnPos( int _col, KSpreadCanvas *_canvas )
 
 int KSpreadTable::rowPos( int _row, KSpreadCanvas *_canvas )
 {
-    int row = 1;
     int y = 0;
     if ( _canvas )
       y -= _canvas->yOffset();
-    while ( row < _row )
+    for ( int row = 1 ; row < _row ; row++ )
     {
 	// Should never happen
 	if ( row == 0x10000 )
 	    return y;
 	
 	y += rowLayout( row )->height( _canvas );
-	row++;
     }
 
     return y;
@@ -860,12 +856,12 @@ for ( int incr=start;incr<end;incr=incr+step )
 		}
 	QString tmp;
 	cell->setText(tmp.setNum(incr));
-	    
+	
 	if(mode==Column)	
 	    posy++;
 	else
 	    posx++;
-	    
+	
 	}
 
 }

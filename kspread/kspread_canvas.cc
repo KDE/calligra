@@ -382,16 +382,18 @@ void KSpreadCanvas::slotScrollHorz( int _value )
 
   hideMarker();
 
-  int dx = xOffset() - _value;
+  // Relative movement
+  int dx = m_iXOffset - _value;
+  // New absolute position
   m_iXOffset = _value;
+
   scroll( dx, 0 );
+
   hBorderWidget()->scroll( dx, 0 );
   /* if(isgotohorz()==true)
      {
-     setgotohorz(false);
-
-     m_pView->horzScrollBar()->setValue(_value);
-
+       setgotohorz(false);
+       m_pView->horzScrollBar()->setValue(_value);
      } */
   showMarker();
 
@@ -410,15 +412,17 @@ void KSpreadCanvas::slotScrollVert( int _value )
 
   hideMarker();
 
-  int dy = yOffset() - _value;
+  // Relative movement
+  int dy = m_iYOffset - _value;
+  // New absolute position
   m_iYOffset = _value;
   scroll( 0, dy );
   vBorderWidget()->scroll( 0, dy );
 
   /* if(isgotovert()==true)
      {
-     setgotovert(false);
-     m_pView->vertScrollBar()->setValue(_value);
+       setgotovert(false);
+       m_pView->vertScrollBar()->setValue(_value);
      } */
   showMarker();
 
@@ -546,7 +550,7 @@ void KSpreadCanvas::mouseMoveEvent( QMouseEvent * _ev )
   selection.setBottom( row );
   table->setSelection( selection, this );
 
-  // Scroll the table if neccessary
+  // Scroll the table if necessary
   if ( _ev->pos().x() < 0 )
     horzScrollBar()->setValue( xOffset() + xpos );
   else if ( _ev->pos().x() > width() )
@@ -1077,7 +1081,8 @@ void KSpreadCanvas::keyPressEvent ( QKeyEvent * _ev )
                           _ev->key() == Key_Prior || _ev->key() == Key_Next );
 
   // End of editing a cell
-  if ( ( bChangingCells || _ev->key() == Key_Return ) && m_pEditor && !m_bChoose )
+  if ( ( bChangingCells || _ev->key() == Key_Return || _ev->key() == Key_Enter )
+       && m_pEditor && !m_bChoose )
   {
     deleteEditor( true /*save changes*/ );
   }
