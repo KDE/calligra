@@ -37,6 +37,8 @@
 #include <koTemplateChooseDia.h>
 #include "KexiProjectIface.h"
 
+#include <kexiDB/kexidberror.h>
+
 KexiProject::KexiProject( QWidget *parentWidget, const char *widgetName, QObject* parent,
          const char* name, bool singleViewMode )
     : KoDocument( parentWidget, widgetName, parent, name, singleViewMode )
