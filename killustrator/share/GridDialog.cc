@@ -3,7 +3,7 @@
   $Id$
 
   This file is part of KIllustrator.
-  Copyright (C) 1998 Kai-Uwe Sattler (kus@iti.cs.uni-magdeburg.de)
+  Copyright (C) 1998-99 Kai-Uwe Sattler (kus@iti.cs.uni-magdeburg.de)
 
   This program is free software; you can redistribute it and/or modify
   it under the terms of the GNU Library General Public License as
@@ -89,7 +89,7 @@ QWidget* GridDialog::createGridWidget (QWidget* parent) {
   label->move (20, 20);
 
   hspinbox = new UnitBox (box);
-  hspinbox->setFormatString ("%-3.3f");
+  hspinbox->setFormatString ("%-3.5f");
   hspinbox->setEditable (true);
   hspinbox->setRange (0, 1000);
   hspinbox->move (100, 20);
@@ -100,7 +100,7 @@ QWidget* GridDialog::createGridWidget (QWidget* parent) {
   label->move (20, 55);
 
   vspinbox = new UnitBox (box);
-  vspinbox->setFormatString ("%-3.3f");
+  vspinbox->setFormatString ("%-3.5f");
   vspinbox->setEditable (true);
   vspinbox->setRange (0, 1000);
   vspinbox->move (100, 55);
