@@ -134,7 +134,7 @@ private:
     KoFilterManager( const KoFilterManager& rhs );
     KoFilterManager &operator=( const KoFilterManager& rhs );
 
-    void importErrorHelper( const QString& mimeType );
+    void importErrorHelper( const QString& mimeType, const bool suppressDialog = false );
 
     static const int s_area;
 

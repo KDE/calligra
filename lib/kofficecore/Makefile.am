@@ -39,7 +39,7 @@ include_HEADERS = handler.h \
 	KoApplicationIface.h KoDocumentIface.h KoViewIface.h KoMainWindowIface.h \
 	koPictureKey.h koPicture.h koPictureCollection.h
 
-noinst_HEADERS = koDocument_p.h \
+noinst_HEADERS = koDocument_p.h koFilterManager_p.h \
 	koPictureShared.h koPictureBase.h koPictureImage.h koPictureClipart.h \
 	koPictureEps.h koPictureWmf.h
 

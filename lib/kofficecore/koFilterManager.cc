@@ -20,8 +20,11 @@
 
 
 #include <koFilterManager.h>
+#include <koFilterManager_p.h>
 
 #include <qfile.h>
+#include <qlabel.h>
+#include <qlayout.h>
 #include <qptrlist.h>
 #include <qapplication.h>
 
@@ -29,6 +32,7 @@
 #include <kmessagebox.h>
 #include <koDocument.h>
 #include <klibloader.h>
+#include <klistbox.h>
 #include <kmimetype.h>
 #include <kdebug.h>
 
@@ -37,10 +41,70 @@
 #include <unistd.h>
 
 
+KoFilterChooser::KoFilterChooser (QWidget *parent, const QStringList &mimeTypes, const QString &nativeFormat)
+    : KDialogBase (parent, "kofilterchooser", true, i18n ("Choose Filter"),
+                   KDialogBase::Ok | KDialogBase::Cancel, KDialogBase::Ok, true),
+    m_mimeTypes (mimeTypes)
+{
+    setInitialSize (QSize (300, 350));
+
+    QWidget *page = new QWidget (this);
+    setMainWidget (page);
+
+    // looks too squashed together without * 2
+    QVBoxLayout *layout = new QVBoxLayout (page, marginHint (), spacingHint () * 2);
+
+    QLabel *filterLabel = new QLabel (i18n ("Select a filter:"), page, "filterlabel");
+    layout->addWidget (filterLabel);
+
+    m_filterList = new KListBox (page, "filterlist");
+    layout->addWidget (m_filterList);
+
+    Q_ASSERT (!m_mimeTypes.isEmpty ());
+    for (QStringList::ConstIterator it = m_mimeTypes.begin ();
+            it != m_mimeTypes.end ();
+            it++)
+    {
+        KMimeType::Ptr mime = KMimeType::mimeType (*it);
+        m_filterList->insertItem (mime->comment ());
+    }
+
+    if (nativeFormat == "application/x-kword")
+    {
+        const int index = m_mimeTypes.findIndex ("text/plain");
+        if (index > -1)
+            m_filterList->setCurrentItem (index);
+    }
+
+    if (m_filterList->currentItem () == -1)
+        m_filterList->setCurrentItem (0);
+
+    m_filterList->centerCurrentItem ();
+    m_filterList->setFocus ();
+
+    connect (m_filterList, SIGNAL (selected (int)), this, SLOT (slotOk ()));
+}
+
+KoFilterChooser::~KoFilterChooser ()
+{
+}
+
+QString KoFilterChooser::filterSelected ()
+{
+    const int item = m_filterList->currentItem ();
+
+    if (item > -1)
+        return m_mimeTypes [item];
+    else
+        return QString::null;
+}
+
+
 // static cache for filter availability
 QMap<QString, bool> KoFilterManager::m_filterAvailable;
 
 const int KoFilterManager::s_area = 30500;
+
 
 KoFilterManager::KoFilterManager( KoDocument* document ) :
     m_document( document ), m_parentChain( 0 ), m_graph( "" ), d( 0 )
@@ -76,11 +140,42 @@ QString KoFilterManager::import( const QString& url, KoFilter::ConversionStatus&
 
     m_graph.setSourceMimeType( t->name().latin1() );  // .latin1() is okay here (Werner)
     if ( !m_graph.isValid() ) {
-        kdError(s_area) << "Couldn't create a valid graph for this source mimetype: "
-                        << t->name() << endl;
-        importErrorHelper( t->name() );
-        status = KoFilter::BadConversionGraph;
-        return QString::null;
+        bool userCancelled = false;
+
+        kdWarning(s_area) << "Can't open " << t->name () << ", trying filter chooser" << endl;
+        if ( m_document )
+        {
+            QCString nativeFormat = m_document->nativeFormatMimeType ();
+            KoFilterChooser *chooser = new KoFilterChooser
+                                            (0,
+                                            KoFilterManager::mimeFilter (nativeFormat, KoFilterManager::Import),
+                                            nativeFormat);
+            if (chooser->exec ())
+            {
+                QString f = chooser->filterSelected ();
+
+                if (f == QString (nativeFormat))
+                {
+                    status = KoFilter::OK;
+                    return url;
+                }
+
+                m_graph.setSourceMimeType (f.latin1 ());
+            }
+            else
+                userCancelled = true;
+
+            delete chooser;
+        }
+
+        if (!m_graph.isValid())
+        {
+            kdError(s_area) << "Couldn't create a valid graph for this source mimetype: "
+                            << t->name() << endl;
+            importErrorHelper( t->name(), userCancelled );
+            status = KoFilter::BadConversionGraph;
+            return QString::null;
+        }
     }
 
     KoFilterChain::Ptr chain( 0 );
@@ -118,6 +213,8 @@ QString KoFilterManager::import( const QString& url, KoFilter::ConversionStatus&
 
 KoFilter::ConversionStatus KoFilterManager::exp0rt( const QString& url, QCString& mimeType )
 {
+    bool userCancelled = false;
+
     // The import url should already be set correctly (null if we have a KoDocument
     // file manager and to the correct URL if we have an embedded manager)
     m_direction = Export; // vital information!
@@ -138,12 +235,25 @@ KoFilter::ConversionStatus KoFilterManager::exp0rt( const QString& url, QCString
             return KoFilter::BadMimeType;
         }
         m_graph.setSourceMimeType( t->name().latin1() );
+
+        if ( !m_graph.isValid() ) {
+            kdWarning(s_area) << "Can't open " << t->name () << ", trying filter chooser" << endl;
+
+            KoFilterChooser *chooser = new KoFilterChooser (0, KoFilterManager::mimeFilter ());
+            if (chooser->exec ())
+                m_graph.setSourceMimeType (chooser->filterSelected ().latin1 ());
+            else
+                userCancelled = true;
+
+            delete chooser;
+        }
     }
 
-    if ( !m_graph.isValid() ) {
+    if (!m_graph.isValid ())
+    {
         kdError(s_area) << "Couldn't create a valid graph for this source mimetype." << endl;
         QApplication::restoreOverrideCursor();
-        KMessageBox::error( 0L, i18n("Could not export file."), i18n("Missing Export Filter") );
+        if (!userCancelled) KMessageBox::error( 0L, i18n("Could not export file."), i18n("Missing Export Filter") );
         return KoFilter::BadConversionGraph;
     }
 
@@ -369,12 +479,13 @@ bool KoFilterManager::filterAvailable( KoFilterEntry::Ptr entry )
     return m_filterAvailable[ key ];
 }
 
-void KoFilterManager::importErrorHelper( const QString& mimeType )
+void KoFilterManager::importErrorHelper( const QString& mimeType, const bool suppressDialog )
 {
     QString tmp = i18n("Could not import file of type\n%1").arg( mimeType );
     QApplication::restoreOverrideCursor();
     // ###### FIXME: use KLibLoader::lastErrorMessage() here
-    KMessageBox::error( 0L, tmp, i18n("Missing Import Filter") );
+    if (!suppressDialog) KMessageBox::error( 0L, tmp, i18n("Missing Import Filter") );
 }
 
 #include <koFilterManager.moc>
+#include <koFilterManager_p.moc>
