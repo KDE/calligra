@@ -23,7 +23,6 @@
 
 #include <qdialog.h>
 #include <qpushbutton.h>
-#include <qlineedit.h>
 #include <qrect.h>
 #include <knuminput.h>
 
@@ -45,7 +44,6 @@ public slots:
 
 protected:
   KSpreadView* m_pView;
-  QLineEdit* m_pSize;
   QPushButton* m_pOk;
   QPushButton* m_pClose;
   KIntNumInput *m_pSize2;

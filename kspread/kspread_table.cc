@@ -209,7 +209,7 @@ KSpreadTable::KSpreadTable( KSpreadMap *_map, const char *_name )
   m_sort = FALSE;
 
   setHide(false);
-
+  showGrid=true;
   //init currency
   currency = KGlobal::locale()->currencySymbol();
   // Get a unique name so that we can offer scripting

@@ -299,3 +299,9 @@ Reduce memory to store condition.
 2000-02-18 -Montel laurent <montell@club-internet.fr>
 -----------------------------------------------------
 -Now Relational cell attribut is saving in file
+
+2000-02-19 -Montel laurent <montell@club-internet.fr>
+-----------------------------------------------------
+-Now you can show or hide grid
+-Fix bug report by Michael Koch (use KNumInput when you resize column or row)
+-Bug fix

@@ -1768,7 +1768,16 @@ void KSpreadCell::paintEvent( KSpreadCanvas *_canvas, const QRect& _rect, QPaint
 
   // Draw the border
   if ( m_leftBorderPen.style() == Qt::NoPen )
-    _painter.setPen( table()->doc()->defaultGridPen() );
+  	{
+  	if(!table()->getShowGrid())
+  		{
+  		_painter.setPen(Qt::NoPen);	
+  		}
+  	else
+  		{
+    		_painter.setPen( table()->doc()->defaultGridPen() );
+    		}
+    	}
   else
     _painter.setPen( m_leftBorderPen );
   // Fix a 'bug' in the pens width setting. We still need the upper left corner
@@ -1777,7 +1786,16 @@ void KSpreadCell::paintEvent( KSpreadCanvas *_canvas, const QRect& _rect, QPaint
   int dy = (int)ceil( (double)( m_topBorderPen.width() - 1) / 2.0 );
   _painter.drawLine( _tx + dx, _ty, _tx + dx, _ty + h );
   if ( m_topBorderPen.style() == Qt::NoPen )
-    _painter.setPen( table()->doc()->defaultGridPen() );
+  	{
+    	if(!table()->getShowGrid())
+  		{
+  		_painter.setPen(Qt::NoPen);	
+  		}
+  	else
+  		{
+    		_painter.setPen( table()->doc()->defaultGridPen() );
+    		}
+    	}
   else
     _painter.setPen( m_topBorderPen );
   _painter.drawLine( _tx, _ty + dy, _tx + w, _ty + dy );
@@ -3251,7 +3269,7 @@ bool KSpreadCell::load( const QDomElement& cell, int _xshift, int _yshift, Paste
   	 	m_firstCondition=new KSpreadConditional;
   	 	if ( first.hasAttribute( "cond" ) )
   	 		{
-			m_firstCondition->m_cond = first.attribute("cond").toInt( &ok );
+			m_firstCondition->m_cond =(Conditional) first.attribute("cond").toInt( &ok );
 	    		if ( !ok ) return false;
   	 		}
   	 	if(first.hasAttribute("val1"))
@@ -3280,7 +3298,7 @@ bool KSpreadCell::load( const QDomElement& cell, int _xshift, int _yshift, Paste
   	 	m_secondCondition=new KSpreadConditional;
   	 	if ( second.hasAttribute( "cond" ) )
   	 		{
-			m_secondCondition->m_cond = second.attribute("cond").toInt( &ok );
+			m_secondCondition->m_cond =(Conditional) second.attribute("cond").toInt( &ok );
 	    		if ( !ok ) return false;
   	 		}
   	 	if(second.hasAttribute("val1"))
@@ -3309,7 +3327,7 @@ bool KSpreadCell::load( const QDomElement& cell, int _xshift, int _yshift, Paste
   	 	m_thirdCondition=new KSpreadConditional;
   	 	if ( third.hasAttribute( "cond" ) )
   	 		{
-			m_thirdCondition->m_cond = third.attribute("cond").toInt( &ok );
+			m_thirdCondition->m_cond =(Conditional) third.attribute("cond").toInt( &ok );
 	    		if ( !ok ) return false;
   	 		}
   	 	if(third.hasAttribute("val1"))

@@ -232,6 +232,9 @@ KSpreadView::KSpreadView( QWidget *_parent, const char *_name, KSpreadDoc* doc )
     m_removeTable = new KAction( i18n("Remove Table"), 0, this, SLOT( removeTable() ), actionCollection(), "removeTable" );
     m_showTable = new KAction(i18n("Show Table"),0 ,this,SLOT( showTable()), actionCollection(), "showTable" );
     m_hideTable = new KAction(i18n("Hide Table"),0 ,this,SLOT( hideTable()), actionCollection(), "hideTable" );
+    m_hideGrid = new KToggleAction( i18n("Hide Grid"), 0, actionCollection(), "hideGrid");
+    connect( m_hideGrid, SIGNAL( toggled( bool ) ), this, SLOT( toggleGrid( bool ) ) );
+
     m_editGlobalScripts = new KAction( i18n("Edit Global Scripts..."), 0, this, SLOT( editGlobalScripts() ),
 				       actionCollection(), "editGlobalScripts" );
     m_editLocalScripts = new KAction( i18n("Edit Local Scripts..."), 0, this, SLOT( editLocalScripts() ), actionCollection(), "editLocalScripts" );
@@ -1367,8 +1370,12 @@ void KSpreadView::changeTable( const QString& _name )
     }
 
     setActiveTable( t );
-	
+    
     updateEditWidget();
+    //refresh toggle button
+    m_hideGrid->setChecked( !m_pTable->getShowGrid() );
+    m_showPageBorders->setChecked( m_pTable->isShowPageBorders()); 
+
 }
 
 void KSpreadView::slotScrollToFirstTable()
@@ -1471,6 +1478,7 @@ void KSpreadView::conditional()
 {
   KSpreadconditional *dlg=new KSpreadconditional( this,"conditional",QPoint( m_pCanvas->markerColumn(), m_pCanvas->markerRow() ));
   dlg->show();
+ 
 }
 
 
@@ -1623,6 +1631,13 @@ void KSpreadView::togglePageBorders( bool mode )
    m_pTable->setShowPageBorders( mode );
 }
 
+void KSpreadView::toggleGrid( bool mode)
+{
+  if ( !m_pTable )
+       return;
+  m_pTable->setShowGrid(!mode);
+  m_pCanvas->repaint();
+}
 void KSpreadView::editCell()
 {
     if ( m_pCanvas->editor() )

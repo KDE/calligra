@@ -5,15 +5,12 @@ Improvement :
 -------------
 -Add different formats (date, scientific etc...)
 -Insert commentary in a cell
--DONE Improved position in a cell (top, bottom ) when we increase size
 -Add zoom
 -create an script editor for execute script
  (Use KWrite)
 
 Bug fix :
 ---------
--DONE When you write a bad table name in a cell =>kspread crash
-for example =Tablle!A1  =>crash
 -bug when we sort number (sort by string but not by number )
 
 
@@ -24,8 +21,7 @@ for example =Tablle!A1  =>crash
 Torbens TODO-List:
 ------------------
 - Copy/Paste of complete rows/cols
-- Hide the grid
 - Write-Protect cells
 - Select a region. Then right click -> "Spell Checking".
   All selected cells should be spell checked
-- Done => Load test5.ksp and turn on ShowPageBorders -> nothing happens
+  

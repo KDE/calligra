@@ -61,6 +61,7 @@
   <Action name="removeTable"/>
   <Action name="hideTable"/>
   <Action name="showTable"/>
+  <Action name="hideGrid"/>
  </Menu>
  <Menu name="Data"><text>Data</text>
   <Action name="consolidate"/>

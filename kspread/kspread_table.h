@@ -395,7 +395,10 @@ public:
     void borderRight( const QPoint &_marker,QColor _color );
 
     void setConditional( const QPoint &_marker,KSpreadConditional tmp[3] );
-
+    
+    bool getShowGrid() {return showGrid;}
+    
+    void setShowGrid(bool _showGrid) {showGrid=_showGrid;} 
 
     QString Currency(){return currency;}
     /**
@@ -719,6 +722,8 @@ protected:
     static QIntDict<KSpreadTable>* s_mapTables;
 
     static QString currency;
+    
+    bool showGrid;
 };
 
 #endif

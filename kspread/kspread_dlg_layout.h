@@ -222,7 +222,7 @@ protected:
     QRadioButton *left;
     QRadioButton *right;
     QRadioButton *center;
-    QRadioButton *multi;
+    QCheckBox *multi;
     CellLayoutDlg *dlg;
 };
 

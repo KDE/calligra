@@ -43,9 +43,7 @@ KSpreadresize::KSpreadresize( KSpreadView* parent, const char* name,type_resize 
   QVBoxLayout *lay1 = new QVBoxLayout( this );
   lay1->setMargin( 5 );
   lay1->setSpacing( 10 );
-
-  m_pSize = new QLineEdit( this );
-  lay1->addWidget(m_pSize);
+  
   RowLayout *rl;
   ColumnLayout *cl;
   switch(type)
@@ -69,11 +67,11 @@ KSpreadresize::KSpreadresize( KSpreadView* parent, const char* name,type_resize 
 	}
 
   setCaption( tmp );
-  m_pSize->setText(tmp.setNum(size));
-  //m_pSize2=new KIntNumInput( 20,400,1,size ,0,tmp );
-
-  //m_pSize2->layout();
-  //lay1->addWidget(m_pSize2);
+  
+  m_pSize2=new KIntNumInput( 20,400,1,size ,this,QString::null, QString::null,false);
+  m_pSize2->layout();
+  lay1->addWidget(m_pSize2);
+  
   KButtonBox *bb = new KButtonBox( this );
   bb->addStretch();
   m_pOk = bb->addButton( i18n("OK") );
@@ -82,7 +80,7 @@ KSpreadresize::KSpreadresize( KSpreadView* parent, const char* name,type_resize 
   bb->layout();
   lay1->addWidget( bb );
 
-  m_pSize->setFocus();
+  m_pSize2->setFocus();
   connect( m_pClose, SIGNAL( clicked() ), this, SLOT( slotClose() ) );
   connect( m_pOk, SIGNAL( clicked() ), this, SLOT( slotOk() ) );
 
@@ -90,15 +88,7 @@ KSpreadresize::KSpreadresize( KSpreadView* parent, const char* name,type_resize 
 
 void KSpreadresize::slotOk()
 {
-QString tmp;
-tmp=m_pSize->text();
-if(tmp.toInt()!=0 || tmp.toDouble()!=0 )
-{
-int new_size;
-if(tmp.toDouble()!=0)
-	new_size=(int)tmp.toDouble();
-else
-	new_size=tmp.toInt();
+int new_size=m_pSize2->value();
 if(new_size!=size)
 {
 switch(type)
@@ -115,12 +105,6 @@ switch(type)
 	}
 }
 accept();
-}
-else
-{
- QMessageBox::warning( 0L, i18n("Error"), i18n("It is not a number !"), i18n("Ok"));
- m_pSize->setText(tmp.setNum(size));
-}
 }
 
 void KSpreadresize::slotClose()

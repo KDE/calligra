@@ -164,6 +164,7 @@ public slots:
     void runLocalScript();
     void newView();
     void togglePageBorders( bool );
+    void toggleGrid( bool );
     void gotoCell();
     void replace();
     void conditional();
@@ -402,6 +403,7 @@ private:
     KAction* m_cellLayout;
     KAction* m_hideTable;
     KAction* m_showTable;
+    KToggleAction* m_hideGrid;
     KAction* m_borderLeft;
     KAction* m_borderRight;
     KAction* m_borderTop;

@@ -599,15 +599,12 @@ CellLayoutPageMisc::CellLayoutPageMisc( QWidget* parent, CellLayoutDlg *_dlg ) :
 
 
 
-    //textColorButton = new QPushButton( this, "ComboBox_1" );
+
 
     textColorButton = new KColorButton( this, "ComboBox_1" );
     textColorButton->setGeometry( 20, 50, 100, 30 );
 
 
-    /*connect( textColorButton, SIGNAL( clicked() ),
-	     this, SLOT( slotTextColor() ) );
-    */
     connect( textColorButton, SIGNAL( changed( const QColor & ) ),
              this, SLOT( slotSetTextColor( const QColor & ) ) );
 
@@ -620,9 +617,6 @@ CellLayoutPageMisc::CellLayoutPageMisc( QWidget* parent, CellLayoutDlg *_dlg ) :
     bgColorButton->setGeometry( 140, 50, 100, 30 );
 
 
-    /*connect( bgColorButton, SIGNAL( clicked() ),
-	     this, SLOT( slotBackgroundColor() ) );
-    */
     connect( bgColorButton, SIGNAL( changed( const QColor & ) ),
              this, SLOT( slotSetBackgroundColor( const QColor & ) ) );
 
@@ -677,25 +671,21 @@ CellLayoutPageMisc::CellLayoutPageMisc( QWidget* parent, CellLayoutDlg *_dlg ) :
     {
 	textColor = dlg->textColor;
         textColorButton->setColor( dlg->textColor);
-        //setColor( textColorButton, dlg->textColor );
     }
     else
     {
 	textColor = black;
-	//setColor( textColorButton, black );
         textColorButton->setColor( black );
     }
 
     if ( dlg->bBgColor )
     {
 	bgColor = dlg->bgColor;
-	//setColor( bgColorButton, bgColor );
         bgColorButton->setColor(bgColor);
     }
     else
     {
 	bgColor = white;
-	//setColor( bgColorButton, white );
         bgColorButton->setColor(white);
     }
 
@@ -726,31 +716,6 @@ void CellLayoutPageMisc::slotStyle( int _i )
     actionText->setEnabled( false );
 }
 
-/*void CellLayoutPageMisc::slotTextColor()
-{
-    bTextColorUndefined = FALSE;
-
-    KColorDialog d( this, "color", TRUE );
-    d.setColor( textColor );
-    if ( d.exec() )
-    {
-	textColor = d.color();
-	setColor( textColorButton, d.color() );
-    }
-}
-
-void CellLayoutPageMisc::slotBackgroundColor()
-{
-    bBgColorUndefined = FALSE;
-
-    KColorDialog d( this, "color", TRUE );
-    d.setColor( bgColor );
-    if ( d.exec() )
-    {
-	bgColor = d.color();
-	setColor( bgColorButton, d.color() );
-    }
-}*/
 void CellLayoutPageMisc::slotSetTextColor( const QColor &_color )
 {
 textColor=_color;
@@ -870,31 +835,6 @@ CellLayoutPageFont::CellLayoutPageFont( QWidget* parent, CellLayoutDlg *_dlg ) :
 
 
   size_combo = new QComboBox( true, this, "Size" );
-  /*size_combo->insertItem( "", 0 );
-  size_combo->insertItem( "4" );
-  size_combo->insertItem( "5" );
-  size_combo->insertItem( "6" );
-  size_combo->insertItem( "7" );
-  size_combo->insertItem( "8" );
-  size_combo->insertItem( "9" );
-  size_combo->insertItem( "10" );
-  size_combo->insertItem( "11" );
-  size_combo->insertItem( "12" );
-  size_combo->insertItem( "13" );
-  size_combo->insertItem( "14" );
-  size_combo->insertItem( "15" );
-  size_combo->insertItem( "16" );
-  size_combo->insertItem( "17" );
-  size_combo->insertItem( "18" );
-  size_combo->insertItem( "19" );
-  size_combo->insertItem( "20" );
-  size_combo->insertItem( "22" );
-  size_combo->insertItem( "24" );
-  size_combo->insertItem( "26" );
-  size_combo->insertItem( "28" );
-  size_combo->insertItem( "32" );
-  size_combo->insertItem( "48" );
-  size_combo->insertItem( "64" );*/
   QStringList lst;
     for ( unsigned int i = 0; i < 100; ++i )
 	lst.append( QString( "%1" ).arg( i + 1 ) );
@@ -1155,10 +1095,9 @@ CellLayoutPagePosition::CellLayoutPagePosition( QWidget* parent, CellLayoutDlg *
         bottom->setChecked(true);
 
     grp = new QButtonGroup( 1, QGroupBox::Horizontal, i18n("Multi Row"),this);
-    grp->setRadioButtonExclusive( TRUE );
     grp->layout();
     lay1->addWidget(grp);
-    multi = new QRadioButton( i18n("Goto line automatically"), grp );
+    multi = new QCheckBox( i18n("Goto line automatically"), grp );
     multi->setChecked(dlg->bMultiRow);
     this->resize( 400, 400 );
 }
