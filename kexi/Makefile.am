@@ -14,7 +14,7 @@ SUBDIRS= 3rdparty kexidb core tableview widget formeditor plugins data pics main
 #migration 
 
 kdelnkdir = $(kde_appsdir)/Office
-kdelnk_DATA = kexi.desktop
+xdg_apps_DATA = kexi.desktop
 
 install-data-local:
 #	$(mkinstalldirs) $(kde_servicetypesdir)/
@@ -64,4 +64,5 @@ messages: rc.cpp
 #uncomment this if you like doxygen docs for Kexi
 #include $(top_srcdir)/../admin/Doxyfile.am
 
-kde_services_DATA = kexipart.desktop
+#obsolete:
+#kde_services_DATA = kexipart.desktop
