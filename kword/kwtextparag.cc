@@ -406,21 +406,22 @@ QString Counter::text( const KWTextParag *paragraph )
         break;
     case STYLE_ALPHAB_L:
         n = m_cache.number;
-        while ( n >= 26 )
+        while ( n > 26 )
         {
-            bottomDigit = n % 26;
-            n = n / 26;
-            tmp.prepend( QChar( 'a' + bottomDigit - 1 ) );
+            bottomDigit = (n-1) % 26;
+            n = (n-1) / 26;
+            tmp.prepend( QChar( 'a' + bottomDigit  ) );
         }
-        tmp.prepend( QChar( 'a' + n - 1 ) );
+        tmp.prepend( QChar( 'a' + n -1 ) );
         break;
     case STYLE_ALPHAB_U:
         n = m_cache.number;
-        while ( n >= 26 )
+
+        while ( n > 26 )
         {
-            bottomDigit = n % 26;
-            n = n / 26;
-            tmp.prepend( QChar( 'A' + bottomDigit - 1 ) );
+            bottomDigit = (n-1) % 26;
+            n = (n-1) / 26;
+            tmp.prepend( QChar( 'A' + bottomDigit  ) );
         }
         tmp.prepend( QChar( 'A' + n - 1 ) );
         break;
@@ -747,7 +748,7 @@ void KWTextParag::paint( QPainter &painter, const QColorGroup &cg, QTextCursor *
                          int clipx, int clipy, int clipw, int cliph )
 {
     //qDebug("KWTextParag::paint %p", this);
-    QTextParag::paint( painter, cg, cursor, drawSelections, clipx, clipy, clipw, cliph );
+        QTextParag::paint( painter, cg, cursor, drawSelections, clipx, clipy, clipw, cliph );
 
     if ( m_topBorder.ptWidth > 0
          || m_bottomBorder.ptWidth > 0

@@ -23,7 +23,6 @@
 #include "kwview.h"
 #include "kwdoc.h"
 
-#include <kiconloader.h>
 #include <kapp.h>
 #include <kfontdialog.h>
 #include <kbuttonbox.h>
@@ -31,7 +30,6 @@
 #include <qlayout.h>
 #include <qdialog.h>
 #include <qvbox.h>
-#include <qpushbutton.h>
 
 
 KWFontDia::KWFontDia( KWView* parent, const char* name, const QFont &_font, bool _underline, bool _subscript,bool _superscript, bool _strikeOut)
