@@ -1924,6 +1924,11 @@ bool KSpreadCell::calc(bool delay)
 // Paint the cell.  This is the main function that calls a lot of
 // other helper functions.
 //
+// `rect'       is the rectangle that we should paint on.  If the cell 
+//              does not overlap this rectangle, we can return immediately.
+// `coordinate' is the origin (the upper left) of the cell in document
+//              coordinates.
+//
 void KSpreadCell::paintCell( const KoRect   &rect, QPainter & painter,
                              KSpreadView    *view,
 			     const KoPoint  &coordinate,
@@ -1982,8 +1987,8 @@ void KSpreadCell::paintCell( const KoRect   &rect, QPainter & painter,
   // Check if the cell is "selected", i.e. it should be drawn with the
   // color that indicates selection (dark blue).  If more than one
   // square is selected, the last one uses the ordinary colors.  In
-  // that case, "selected" will be set to false even though it really
-  // is selected.
+  // that case, "selected" will be set to false even though the cell
+  // itself really is selected.
   bool  selected = false;
   if ( view != NULL ) {
     selected = view->selection().contains( cellRef );
@@ -2010,7 +2015,8 @@ void KSpreadCell::paintCell( const KoRect   &rect, QPainter & painter,
   // ----------------  Start the actual painting.  ----------------
 
   // If the rect of this cell doesn't intersect the rect that should
-  // be painted, we can skip the rest and return.
+  // be painted, we can skip the rest and return. (Note that we need
+  // to calculate `left' first before we can do this.)
   const KoRect  cellRect( left, coordinate.y(), width, height );
   if ( !cellRect.intersects( rect ) ) {
     clearFlag( Flag_PaintingCell );
@@ -2018,8 +2024,10 @@ void KSpreadCell::paintCell( const KoRect   &rect, QPainter & painter,
   }
 
   // Get the background color.
-  // If the background color is specified for this cell, use that one,
-  // otherwise get a standard background.
+  //
+  // If there is a condition giving the background color for this cell
+  // (and it matches), use that one, otherwise get the standard
+  // background.
   QColor backgroundColor;
   if ( d->hasExtra() && d->extra()->conditions
        && d->extra()->conditions->matchedStyle()
@@ -2028,18 +2036,23 @@ void KSpreadCell::paintCell( const KoRect   &rect, QPainter & painter,
   else
     backgroundColor = bgColor( cellRef.x(), cellRef.y() );
 
-  // Paint the background.
+  // 1. Paint the background.
   if ( !isObscuringForced() )
     paintBackground( painter, cellRect, cellRef, selected, backgroundColor );
 
-  // Paint the default borders unless we are painting on a printer.
+  // 2. Paint the default borders unless we are painting on a printer.
   if ( painter.device()->devType() != QInternal::Printer )
     paintDefaultBorders( painter, rect, cellRect, cellRef,
 			 paintBorderRight, paintBorderBottom,
                          paintBorderLeft,  paintBorderTop,
 			 rightPen, bottomPen, leftPen, topPen );
 
-  /* Paint all the cells that this one obscures. */
+  // 3. Paint all the cells that this one obscures.  They may only be
+  //    partially obscured.
+  //
+  // The `paintingObscured' variable is used to avoid infinite
+  // recursion since cells sometimes paint their obscuring cell as
+  // well.
   paintingObscured++;
   paintObscuredCells( rect, painter, view, cellRect, cellRef,
 		      paintBorderRight, paintBorderBottom,
@@ -2052,6 +2065,8 @@ void KSpreadCell::paintCell( const KoRect   &rect, QPainter & painter,
   if ( painter.device()->isExtDev() )
     painter.setClipping( false );
 
+  // 4. Paint the borders of the cell.
+  // FIXME (comment): What is that test?
   if ( !isObscuringForced() )
     paintCellBorders( painter, rect, cellRect, cellRef,
 		      paintBorderRight, paintBorderBottom,
@@ -2061,28 +2076,28 @@ void KSpreadCell::paintCell( const KoRect   &rect, QPainter & painter,
   if ( painter.device()->isExtDev() )
     painter.setClipping( true );
 
-  // Paint diagonal lines and page borders..
+  // 5. Paint diagonal lines and page borders..
   paintCellDiagonalLines( painter, cellRect, cellRef );
   paintPageBorders( painter, cellRect, cellRef,
 		    paintBorderRight, paintBorderBottom );
 
-  // Now print the content, if this cell isn't obscured.
+  // 6. Now paint the content, if this cell isn't obscured.
   if ( !isObscured() ) {
 
-    // Paint possible comment indicator.
+    // 6a. Paint possible comment indicator.
     if ( !painter.device()->isExtDev()
 	 || m_pTable->print()->printCommentIndicator() )
       paintCommentIndicator( painter, cellRect, cellRef, backgroundColor );
 
-    // Paint possible formula indicator.
+    // 6b. Paint possible formula indicator.
     if ( !painter.device()->isExtDev()
 	 || m_pTable->print()->printFormulaIndicator() )
       paintFormulaIndicator( painter, cellRect, backgroundColor );
 
-    // Paint possible indicator for clipped text.
+    // 6c. Paint possible indicator for clipped text.
     paintMoreTextIndicator( painter, cellRect, backgroundColor );
 
-    // Paint the text in the cell unless:
+    // 6d. Paint the text in the cell unless:
     //  a) it is empty
     //  b) something indicates that the text should not be painted
     //  c) the table is protected and the cell is hidden.
@@ -2095,9 +2110,9 @@ void KSpreadCell::paintCell( const KoRect   &rect, QPainter & painter,
     }
   }
 
-  // If this cell is obscured and we are not already painting obscured
-  // cells, then paint the obscuring cell(s).  Otherwise don't do
-  // anything so that we don't cause an infinite loop.
+  // 7. If this cell is obscured and we are not already painting obscured
+  //    cells, then paint the obscuring cell(s).  Otherwise don't do
+  //    anything so that we don't cause an infinite loop.
   if ( isObscured() && paintingObscured == 0 ) {
 
     // Store the obscuringCells list in a list of QPoint(column, row)
@@ -2134,6 +2149,9 @@ void KSpreadCell::paintCell( const KoRect   &rect, QPainter & painter,
           KoPoint corner( x, y );
           painter.save();
 
+	  // Get the effective pens for the borders.  These are
+	  // determined by possible conditions on the cell with
+	  // associated styles.
           QPen rp( obscuringCell->effRightBorderPen( obscuringCellRef.x(),
 						     obscuringCellRef.y() ) );
           QPen bp( obscuringCell->effBottomBorderPen( obscuringCellRef.x(),
@@ -2188,7 +2206,7 @@ void KSpreadCell::paintCell( const KoRect   &rect, QPainter & painter,
 #endif
 
 
-// Paint all the cells that this cell obscures.
+// Paint all the cells that this cell obscures (helper function to paintCell).
 //
 void KSpreadCell::paintObscuredCells(const KoRect& rect, QPainter& painter,
                                      KSpreadView* view,
@@ -2200,6 +2218,7 @@ void KSpreadCell::paintObscuredCells(const KoRect& rect, QPainter& painter,
                                      QPen & rightPen, QPen & bottomPen,
                                      QPen & leftPen,  QPen & topPen )
 {
+  // If there are no obscured cells, return.
   if ( !extraXCells() && !extraYCells() )
     return;
 
@@ -2240,82 +2259,75 @@ void KSpreadCell::paintBackground( QPainter& painter, const KoRect &cellRect,
                                    const QPoint &cellRef, bool selected,
                                    QColor &backgroundColor )
 {
-  QColorGroup defaultColorGroup = QApplication::palette().active();
+  QColorGroup  defaultColorGroup = QApplication::palette().active();
+  QRect        zoomedCellRect    = table()->doc()->zoomRect( cellRect );
 
-  QRect zoomedCellRect = table()->doc()->zoomRect( cellRect );
-  /*
-     If this is not the KS_rowMax and/or KS_colMax, then we reduce width and/or height by one.
-     This is due to the fact that the right/bottom most pixel is shared with the
-     left/top most pixel of the following cell.
-     Only in the case of KS_colMax/KS_rowMax we need to draw even this pixel,
-     as there isn't a following cell to draw the background pixel.
-   */
-   if( cellRef.x() != KS_colMax )
-   {
+  // If this is not the KS_rowMax and/or KS_colMax, then we reduce
+  // width and/or height by one.  This is due to the fact that the
+  // right/bottom most pixel is shared with the left/top most pixel of
+  // the following cell.  Only in the case of KS_colMax/KS_rowMax we
+  // need to draw even this pixel, as there isn't a following cell to
+  // draw the background pixel.
+   if ( cellRef.x() != KS_colMax ) 
      zoomedCellRect.setWidth( zoomedCellRect.width() - 1 );
-   }
-   if( cellRef.y() != KS_rowMax )
-   {
+   if ( cellRef.y() != KS_rowMax )
      zoomedCellRect.setHeight( zoomedCellRect.height() - 1 );
-   }
+
 
   // Determine the correct background color
-  if( selected )
-  {
+  if ( selected )
     painter.setBackgroundColor( defaultColorGroup.highlight() );
-  }
-  else
-  {
+  else {
     QColor bg( backgroundColor );
 
-    if ( !painter.device()->isExtDev() )
-    {
-      if ( bg.isValid() )
-      {
+    // Handle printers separately.
+    if ( !painter.device()->isExtDev() ) {
+      if ( bg.isValid() ) 
         painter.setBackgroundColor( bg );
-      }
       else
         painter.setBackgroundColor( defaultColorGroup.base() );
     }
-    else
-    {
+    else {
       //bad hack but there is a qt bug
       //so I can print backgroundcolor
       QBrush bb( bg );
-      if( !bg.isValid() )
+      if ( !bg.isValid() )
         bb.setColor( Qt::white );
 
       painter.fillRect( zoomedCellRect, bb );
       return;
     }
   }
+
   // Erase the background of the cell.
   if ( !painter.device()->isExtDev() )
     painter.eraseRect( zoomedCellRect );
 
-  // Draw a background brush
+  // Get a background brush
   QBrush bb;
-  if ( d->hasExtra() && d->extra()->conditions
+  if ( d->hasExtra()
+       && d->extra()->conditions
        && d->extra()->conditions->matchedStyle()
        && d->extra()->conditions->matchedStyle()->hasFeature( KSpreadStyle::SBackgroundBrush, true ) )
     bb = d->extra()->conditions->matchedStyle()->backGroundBrush();
   else
     bb = backGroundBrush( cellRef.x(), cellRef.y() );
 
-  if( bb.style() != Qt::NoBrush )
-  {
+  // Draw background pattern if necessary.
+  if ( bb.style() != Qt::NoBrush )
     painter.fillRect( zoomedCellRect, bb );
-  }
 
   backgroundColor = painter.backgroundColor();
 }
 
+
+// Paint the standard light grey borders that are always visible.
+//
 void KSpreadCell::paintDefaultBorders( QPainter& painter, const KoRect &rect,
                                        const KoRect &cellRect,
                                        const QPoint &cellRef,
-                                       bool paintBorderRight,
-                                       bool paintBorderBottom,
-                                       bool paintBorderLeft, bool paintBorderTop,
+                                       bool paintBorderRight, bool paintBorderBottom,
+                                       bool paintBorderLeft,  bool paintBorderTop,
                                        QPen const & rightPen, QPen const & bottomPen,
                                        QPen const & leftPen, QPen const & topPen )
 {
@@ -2323,28 +2335,30 @@ void KSpreadCell::paintDefaultBorders( QPainter& painter, const KoRect &rect,
 
   KSpreadSheet::LayoutDirection sheetDir =  m_pTable->layoutDirection();
 
-  /* Each cell is responsible for drawing it's top and left portions of the
-     "default" grid. --Or not drawing it if it shouldn't be there.
-     It's even responsible to paint the right and bottom, if it is the last
-     cell on a print out*/
+  // Each cell is responsible for drawing it's top and left portions
+  // of the "default" grid. --Or not drawing it if it shouldn't be
+  // there.  It's also responsible to paint the right and bottom, if
+  // it is the last cell on a print out.
 
   bool paintTop;
   bool paintLeft;
   bool paintBottom;
   bool paintRight;
 
-  paintLeft = ( paintBorderLeft && leftPen.style() == Qt::NoPen && table()->getShowGrid() );
-  paintRight = ( paintBorderRight && rightPen.style() == Qt::NoPen  && table()->getShowGrid() );
-  paintTop = ( paintBorderTop && topPen.style() == Qt::NoPen && table()->getShowGrid() );
+  paintLeft   = ( paintBorderLeft && leftPen.style() == Qt::NoPen
+		  && table()->getShowGrid() );
+  paintRight  = ( paintBorderRight && rightPen.style() == Qt::NoPen
+		  && table()->getShowGrid() );
+  paintTop    = ( paintBorderTop && topPen.style() == Qt::NoPen
+		  && table()->getShowGrid() );
   paintBottom = ( paintBorderBottom && table()->getShowGrid()
                   && bottomPen.style() == Qt::NoPen );
 
-  if (d->hasExtra())
-  {
+  // If there are extra cells, there might be more conditions.
+  if (d->hasExtra()) {
     QValueList<KSpreadCell*>::const_iterator it  = d->extra()->obscuringCells.begin();
     QValueList<KSpreadCell*>::const_iterator end = d->extra()->obscuringCells.end();
-    for ( ; it != end; ++it )
-    {
+    for ( ; it != end; ++it ) {
       KSpreadCell *cell = *it;
       paintLeft = paintLeft && ( cell->column() == cellRef.x() );
       paintTop  = paintTop && ( cell->row() == cellRef.y() );
@@ -2353,16 +2367,16 @@ void KSpreadCell::paintDefaultBorders( QPainter& painter, const KoRect &rect,
     }
   }
 
-  /* should we do the left border? */
-  if ( paintLeft )
-  {
+  // The left border.
+  if ( paintLeft ) {
     int dt = 0;
     int db = 0;
 
-    if ( cellRef.x() > 1 )
-    {
-      QPen t = m_pTable->cellAt( cellRef.x() - 1, cellRef.y() )->effTopBorderPen( cellRef.x() - 1, cellRef.y() );
-      QPen b = m_pTable->cellAt( cellRef.x() - 1, cellRef.y() )->effBottomBorderPen( cellRef.x() - 1, cellRef.y() );
+    if ( cellRef.x() > 1 ) {
+      KSpreadCell  *cell_west = m_pTable->cellAt( cellRef.x() - 1, 
+						  cellRef.y() );
+      QPen t = cell_west->effTopBorderPen( cellRef.x() - 1, cellRef.y() );
+      QPen b = cell_west->effBottomBorderPen( cellRef.x() - 1, cellRef.y() );
 
       if ( t.style() != Qt::NoPen )
         dt = ( t.width() + 1 )/2;
@@ -2372,17 +2386,15 @@ void KSpreadCell::paintDefaultBorders( QPainter& painter, const KoRect &rect,
 
     painter.setPen( QPen( table()->doc()->gridColor(), 1, Qt::SolidLine ) );
 
-    //If we are on paper printout, we limit the length of the lines
-    //On paper, we always have full cells, on screen not
-    if ( painter.device()->isExtDev() )
-    {
+    // If we are on paper printout, we limit the length of the lines.
+    // On paper, we always have full cells, on screen not.
+    if ( painter.device()->isExtDev() ) {
       painter.drawLine( doc->zoomItX( QMAX( rect.left(),   cellRect.x() ) ),
                         doc->zoomItY( QMAX( rect.top(),    cellRect.y() + dt ) ),
                         doc->zoomItX( QMIN( rect.right(),  cellRect.x() ) ),
                         doc->zoomItY( QMIN( rect.bottom(), cellRect.bottom() - db ) ) );
     }
-    else
-    {
+    else {
       if ( sheetDir == KSpreadSheet::RightToLeft )
         painter.drawLine( doc->zoomItX( cellRect.right() ),
                           doc->zoomItY( cellRect.y() + dt ),
@@ -2396,36 +2408,35 @@ void KSpreadCell::paintDefaultBorders( QPainter& painter, const KoRect &rect,
     }
   }
 
-  /* should we do the right border? */
-  if ( paintRight )
-  {
+  // The right border.
+  if ( paintRight ) {
     int dt = 0;
     int db = 0;
 
-    if ( cellRef.x() < KS_colMax )
-    {
-      QPen t = m_pTable->cellAt( cellRef.x() + 1, cellRef.y() )->effTopBorderPen( cellRef.x() + 1, cellRef.y() );
-      QPen b = m_pTable->cellAt( cellRef.x() + 1, cellRef.y() )->effBottomBorderPen( cellRef.x() + 1, cellRef.y() );
+    if ( cellRef.x() < KS_colMax ) {
+      KSpreadCell  *cell_east = m_pTable->cellAt( cellRef.x() + 1, 
+						  cellRef.y() );
+
+      QPen t = cell_east->effTopBorderPen(    cellRef.x() + 1, cellRef.y() );
+      QPen b = cell_east->effBottomBorderPen( cellRef.x() + 1, cellRef.y() );
 
       if ( t.style() != Qt::NoPen )
-        dt = ( t.width() + 1 )/2;
+        dt = ( t.width() + 1 ) / 2;
       if ( b.style() != Qt::NoPen )
         db = ( t.width() / 2);
     }
 
     painter.setPen( QPen( table()->doc()->gridColor(), 1, Qt::SolidLine ) );
 
-    //If we are on paper printout, we limit the length of the lines
-    //On paper, we always have full cells, on screen not
-    if ( painter.device()->isExtDev() )
-    {
+    // If we are on paper printout, we limit the length of the lines.
+    // On paper, we always have full cells, on screen not.
+    if ( painter.device()->isExtDev() )     {
       painter.drawLine( doc->zoomItX( QMAX( rect.left(),   cellRect.right() ) ),
                         doc->zoomItY( QMAX( rect.top(),    cellRect.y() + dt ) ),
                         doc->zoomItX( QMIN( rect.right(),  cellRect.right() ) ),
                         doc->zoomItY( QMIN( rect.bottom(), cellRect.bottom() - db ) ) );
     }
-    else
-    {
+    else {
       if ( sheetDir == KSpreadSheet::RightToLeft )
         painter.drawLine( doc->zoomItX( cellRect.x() ),
                           doc->zoomItY( cellRect.y() + dt ),
@@ -2439,15 +2450,16 @@ void KSpreadCell::paintDefaultBorders( QPainter& painter, const KoRect &rect,
     }
   }
 
-  /* should we do the top border? */
-  if ( paintTop )
-  {
+  // The top border.
+  if ( paintTop ) {
     int dl = 0;
     int dr = 0;
-    if ( cellRef.y() > 1 )
-    {
-      QPen l = m_pTable->cellAt( cellRef.x(), cellRef.y() - 1 )->effLeftBorderPen( cellRef.x(), cellRef.y() - 1 );
-      QPen r = m_pTable->cellAt( cellRef.x(), cellRef.y() - 1 )->effRightBorderPen( cellRef.x(), cellRef.y() - 1 );
+    if ( cellRef.y() > 1 ) {
+      KSpreadCell  *cell_north = m_pTable->cellAt( cellRef.x(), 
+						   cellRef.y() - 1 );
+
+      QPen l = cell_north->effLeftBorderPen(  cellRef.x(), cellRef.y() - 1 );
+      QPen r = cell_north->effRightBorderPen( cellRef.x(), cellRef.y() - 1 );
 
       if ( l.style() != Qt::NoPen )
         dl = ( l.width() - 1 ) / 2 + 1;
@@ -2457,17 +2469,15 @@ void KSpreadCell::paintDefaultBorders( QPainter& painter, const KoRect &rect,
 
     painter.setPen( QPen( table()->doc()->gridColor(), 1, Qt::SolidLine ) );
 
-    //If we are on paper printout, we limit the length of the lines
-    //On paper, we always have full cells, on screen not
-    if ( painter.device()->isExtDev() )
-    {
+    // If we are on paper printout, we limit the length of the lines.
+    // On paper, we always have full cells, on screen not.
+    if ( painter.device()->isExtDev() ) {
       painter.drawLine( doc->zoomItX( QMAX( rect.left(),   cellRect.x() + dl ) ),
                         doc->zoomItY( QMAX( rect.top(),    cellRect.y() ) ),
                         doc->zoomItX( QMIN( rect.right(),  cellRect.right() - dr ) ),
                         doc->zoomItY( QMIN( rect.bottom(), cellRect.y() ) ) );
     }
-    else
-    {
+    else {
       painter.drawLine( doc->zoomItX( cellRect.x() + dl ),
                         doc->zoomItY( cellRect.y() ),
                         doc->zoomItX( cellRect.right() - dr ),
@@ -2475,15 +2485,16 @@ void KSpreadCell::paintDefaultBorders( QPainter& painter, const KoRect &rect,
     }
   }
 
-  /* should we do the bottom border? */
-  if ( paintBottom )
-  {
+  // The bottom border.
+  if ( paintBottom ) {
     int dl = 0;
     int dr = 0;
-    if ( cellRef.y() < KS_rowMax )
-    {
-      QPen l = m_pTable->cellAt( cellRef.x(), cellRef.y() + 1 )->effLeftBorderPen( cellRef.x(), cellRef.y() + 1 );
-      QPen r = m_pTable->cellAt( cellRef.x(), cellRef.y() + 1 )->effRightBorderPen( cellRef.x(), cellRef.y() + 1 );
+    if ( cellRef.y() < KS_rowMax ) {
+      KSpreadCell  *cell_south = m_pTable->cellAt( cellRef.x(), 
+						   cellRef.y() + 1 );
+
+      QPen l = cell_south->effLeftBorderPen(  cellRef.x(), cellRef.y() + 1 );
+      QPen r = cell_south->effRightBorderPen( cellRef.x(), cellRef.y() + 1 );
 
       if ( l.style() != Qt::NoPen )
         dl = ( l.width() - 1 ) / 2 + 1;
@@ -2493,17 +2504,15 @@ void KSpreadCell::paintDefaultBorders( QPainter& painter, const KoRect &rect,
 
     painter.setPen( QPen( table()->doc()->gridColor(), 1, Qt::SolidLine ) );
 
-    //If we are on paper printout, we limit the length of the lines
-    //On paper, we always have full cells, on screen not
-    if ( painter.device()->isExtDev() )
-    {
+    // If we are on paper printout, we limit the length of the lines.
+    // On paper, we always have full cells, on screen not.
+    if ( painter.device()->isExtDev() ) {
       painter.drawLine( doc->zoomItX( QMAX( rect.left(),   cellRect.x() + dl ) ),
                         doc->zoomItY( QMAX( rect.top(),    cellRect.bottom() ) ),
                         doc->zoomItX( QMIN( rect.right(),  cellRect.right() - dr ) ),
                         doc->zoomItY( QMIN( rect.bottom(), cellRect.bottom() ) ) );
     }
-    else
-    {
+    else {
       painter.drawLine( doc->zoomItX( cellRect.x() + dl ),
                         doc->zoomItY( cellRect.bottom() ),
                         doc->zoomItX( cellRect.right() - dr ),
@@ -2513,6 +2522,8 @@ void KSpreadCell::paintDefaultBorders( QPainter& painter, const KoRect &rect,
 }
 
 
+// Paint a comment indicator if the cell has a comment.
+//
 void KSpreadCell::paintCommentIndicator( QPainter& painter,
                                          const KoRect &cellRect,
                                          const QPoint &/*cellRef*/,
@@ -2526,10 +2537,10 @@ void KSpreadCell::paintCommentIndicator( QPainter& painter,
        && cellRect.width() > 10.0
        && cellRect.height() > 10.0
        && ( table()->print()->printCommentIndicator()
-            || ( !painter.device()->isExtDev() && doc->getShowCommentIndicator() ) ) )
-  {
+            || ( !painter.device()->isExtDev() && doc->getShowCommentIndicator() ) ) ) {
     QColor penColor = Qt::red;
-    //If background has high red part, switch to blue
+
+    // If background has high red part, switch to blue.
     if ( qRed( backgroundColor.rgb() ) > 127 &&
          qGreen( backgroundColor.rgb() ) < 80 &&
          qBlue( backgroundColor.rgb() ) < 80 )
@@ -2537,9 +2548,9 @@ void KSpreadCell::paintCommentIndicator( QPainter& painter,
         penColor = Qt::blue;
     }
 
-    QPointArray point( 3 );
-    if ( m_pTable->layoutDirection()==KSpreadSheet::RightToLeft )
-    {
+    // Get the triangle.
+    QPointArray  point( 3 );
+    if ( m_pTable->layoutDirection()==KSpreadSheet::RightToLeft ) {
       point.setPoint( 0, doc->zoomItX( cellRect.x() + 6.0 ),
                          doc->zoomItY( cellRect.y() ) );
       point.setPoint( 1, doc->zoomItX( cellRect.x() ),
@@ -2547,8 +2558,7 @@ void KSpreadCell::paintCommentIndicator( QPainter& painter,
       point.setPoint( 2, doc->zoomItX( cellRect.x() ),
                          doc->zoomItY( cellRect.y() + 6.0 ) );
     }
-    else
-    {
+    else {
       point.setPoint( 0, doc->zoomItX( cellRect.right() - 5.0 ),
                          doc->zoomItY( cellRect.y() ) );
       point.setPoint( 1, doc->zoomItX( cellRect.right() ),
@@ -2556,6 +2566,8 @@ void KSpreadCell::paintCommentIndicator( QPainter& painter,
       point.setPoint( 2, doc->zoomItX( cellRect.right() ),
                          doc->zoomItY( cellRect.y() + 5.0 ) );
     }
+
+    // And draw it.
     painter.setBrush( QBrush( penColor ) );
     painter.setPen( Qt::NoPen );
     painter.drawPolygon( point );
@@ -2563,30 +2575,32 @@ void KSpreadCell::paintCommentIndicator( QPainter& painter,
 }
 
 
-// small blue rectangle if this cell holds a formula
+
+// Paint a small rectangle if this cell holds a formula.
+//
 void KSpreadCell::paintFormulaIndicator( QPainter& painter,
                                          const KoRect &cellRect,
                                          QColor &backgroundColor )
 {
-  if( isFormula() &&
+  if ( isFormula() &&
       m_pTable->getShowFormulaIndicator() &&
-      cellRect.width() > 10.0 &&
+      cellRect.width()  > 10.0 &&
       cellRect.height() > 10.0 )
   {
     KSpreadDoc* doc = table()->doc();
 
     QColor penColor = Qt::blue;
-    //If background has high blue part, switch to red
-    if( qRed( backgroundColor.rgb() ) < 80 &&
+    // If background has high blue part, switch to red.
+    if ( qRed( backgroundColor.rgb() ) < 80 &&
         qGreen( backgroundColor.rgb() ) < 80 &&
         qBlue( backgroundColor.rgb() ) > 127 )
     {
         penColor = Qt::red;
     }
 
+    // Get the triangle...
     QPointArray point( 3 );
-    if ( m_pTable->layoutDirection()==KSpreadSheet::RightToLeft )
-    {
+    if ( m_pTable->layoutDirection()==KSpreadSheet::RightToLeft ) {
       point.setPoint( 0, doc->zoomItX( cellRect.right() - 6.0 ),
                          doc->zoomItY( cellRect.bottom() ) );
       point.setPoint( 1, doc->zoomItX( cellRect.right() ),
@@ -2594,8 +2608,7 @@ void KSpreadCell::paintFormulaIndicator( QPainter& painter,
       point.setPoint( 2, doc->zoomItX( cellRect.right() ),
                          doc->zoomItY( cellRect.bottom() - 6.0 ) );
     }
-    else
-    {
+    else {
       point.setPoint( 0, doc->zoomItX( cellRect.x() ),
                          doc->zoomItY( cellRect.bottom() - 6.0 ) );
       point.setPoint( 1, doc->zoomItX( cellRect.x() ),
@@ -2603,6 +2616,8 @@ void KSpreadCell::paintFormulaIndicator( QPainter& painter,
       point.setPoint( 2, doc->zoomItX( cellRect.x() + 6.0 ),
                          doc->zoomItY( cellRect.bottom() ) );
     }
+
+    // ...and draw it.
     painter.setBrush( QBrush( penColor ) );
     painter.setPen( Qt::NoPen );
     painter.drawPolygon( point );
@@ -2610,33 +2625,33 @@ void KSpreadCell::paintFormulaIndicator( QPainter& painter,
 }
 
 
+// Paint an indicator that the text in the cell is cut.
+//
 void KSpreadCell::paintMoreTextIndicator( QPainter& painter,
                                           const KoRect &cellRect,
                                           QColor &backgroundColor )
 {
-  //show  a red triangle when it's not possible to write all text in cell
-  //don't print the red triangle if we're printing
-
+  // Show a red triangle when it's not possible to write all text in cell.
+  // Don't print the red triangle if we're printing.
   if( testFlag( Flag_CellTooShortX ) &&
       !painter.device()->isExtDev() &&
       cellRect.height() > 4.0  &&
-      cellRect.width() > 4.0 )
+      cellRect.width()  > 4.0 )
   {
     KSpreadDoc* doc = table()->doc();
 
     QColor penColor = Qt::red;
-    //If background has high red part, switch to blue
-    if( qRed( backgroundColor.rgb() ) > 127 &&
-        qGreen( backgroundColor.rgb() ) < 80 &&
-        qBlue( backgroundColor.rgb() ) < 80 )
+    // If background has high red part, switch to blue.
+    if ( qRed( backgroundColor.rgb() ) > 127 &&
+	 qGreen( backgroundColor.rgb() ) < 80 &&
+	 qBlue( backgroundColor.rgb() ) < 80 )
     {
         penColor = Qt::blue;
     }
 
+    // Get the triangle...
     QPointArray point( 3 );
-
-    if ( d->strOutText.isRightToLeft() )
-    {
+    if ( d->strOutText.isRightToLeft() ) {
       point.setPoint( 0, doc->zoomItX( cellRect.left() + 4.0 ),
                          doc->zoomItY( cellRect.y() + cellRect.height() / 2.0 -4.0 ) );
       point.setPoint( 1, doc->zoomItX( cellRect.left() ),
@@ -2644,8 +2659,7 @@ void KSpreadCell::paintMoreTextIndicator( QPainter& painter,
       point.setPoint( 2, doc->zoomItX( cellRect.left() + 4.0 ),
                          doc->zoomItY( cellRect.y() + cellRect.height() / 2.0 +4.0 ) );
     }
-    else
-    {
+    else {
       point.setPoint( 0, doc->zoomItX( cellRect.right() - 4.0 ),
                          doc->zoomItY( cellRect.y() + cellRect.height() / 2.0 - 4.0 ) );
       point.setPoint( 1, doc->zoomItX( cellRect.right() ),
@@ -2654,24 +2668,28 @@ void KSpreadCell::paintMoreTextIndicator( QPainter& painter,
                          doc->zoomItY( cellRect.y() + cellRect.height() / 2.0 + 4.0 ) );
     }
 
+    // ...and paint it.
     painter.setBrush( QBrush( penColor ) );
     painter.setPen( Qt::NoPen );
     painter.drawPolygon( point );
   }
 }
 
+
+// Paint the real contents of a cell - the text.
+//
 void KSpreadCell::paintText( QPainter& painter,
                              const KoRect &cellRect,
                              const QPoint &cellRef )
 {
-  KSpreadDoc* doc = table()->doc();
+  KSpreadDoc    *doc = table()->doc();
 
-  ColumnFormat* colFormat = m_pTable->columnFormat( cellRef.x() );
+  ColumnFormat  *colFormat         = m_pTable->columnFormat( cellRef.x() );
 
-  QColorGroup defaultColorGroup = QApplication::palette().active();
-  QColor textColorPrint = effTextColor( cellRef.x(), cellRef.y() );
+  QColorGroup    defaultColorGroup = QApplication::palette().active();
+  QColor         textColorPrint    = effTextColor( cellRef.x(), cellRef.y() );
 
-  // Resolve the text color if invalid (=default)
+  // Resolve the text color if invalid (=default).
   if ( !textColorPrint.isValid() ) {
     if ( painter.device()->isExtDev() )
       textColorPrint = Qt::black;
@@ -2681,11 +2699,12 @@ void KSpreadCell::paintText( QPainter& painter,
 
   QPen tmpPen( textColorPrint );
 
-  //Set the font according to condition
+  // Set the font according to condition.
   applyZoomedFont( painter, cellRef.x(), cellRef.y() );
 
-  //Check for red font color for negative values
-  if ( !d->hasExtra() || !d->extra()->conditions
+  // Check for red font color for negative values.
+  if ( !d->hasExtra()
+       || !d->extra()->conditions
        || !d->extra()->conditions->matchedStyle() ) {
     if ( value().isNumber()
          && !( m_pTable->getShowFormula()
@@ -2699,7 +2718,7 @@ void KSpreadCell::paintText( QPainter& painter,
     }
   }
 
-  // Check for blue color, for hyperlink
+  // Check for blue color, for hyperlink.
   if ( !link().isEmpty() ) {
     tmpPen.setColor( QApplication::palette().active().link() );
     QFont f = painter.font();
@@ -2707,6 +2726,7 @@ void KSpreadCell::paintText( QPainter& painter,
     painter.setFont( f );
   }
 
+#if 0
 /****
 
  For now I am commenting this out -- with the default color display you
@@ -2721,6 +2741,7 @@ void KSpreadCell::paintText( QPainter& painter,
  reverse text color for highlighted cells.  I just don't like extending the
  cell 'highlight' background outside of the selection rectangle because it
  looks REALLY ugly.
+*/
 
   if ( selected && ( cellRef.x() != marker.x() || cellRef.y() != marker.y() ) )
   {
@@ -2731,24 +2752,25 @@ void KSpreadCell::paintText( QPainter& painter,
   else {
     painter.setPen(tmpPen);
   }
-*/
+#endif
   painter.setPen( tmpPen );
 
-  QString tmpText = d->strOutText;
-  double tmpHeight = d->textHeight;
-  double tmpWidth = d->textWidth;
-  if ( testFlag( Flag_CellTooShortX ) ) {
-    d->strOutText = textDisplaying( painter );
-  }
+  QString  tmpText   = d->strOutText;
+  double   tmpHeight = d->textHeight;
+  double   tmpWidth  = d->textWidth;
 
-  //hide zero
-  if ( m_pTable->getHideZero() && value().isNumber()
+  if ( testFlag( Flag_CellTooShortX ) )
+    d->strOutText = textDisplaying( painter );
+
+  // Hide zero.
+  if ( m_pTable->getHideZero()
+       && value().isNumber()
        && value().asFloat() == 0 ) {
     d->strOutText = QString::null;
   }
 
+  //clear extra cell if column or row is hidden
   if ( colFormat->isHide() || ( cellRect.height() <= 2 ) ) {
-    //clear extra cell if column or row is hidden
     freeAllObscuredCells();  /* TODO: This looks dangerous...must check when I
                                 have time */
     d->strOutText = "";
@@ -2757,9 +2779,16 @@ void KSpreadCell::paintText( QPainter& painter,
   double indent = 0.0;
   double offsetCellTooShort = 0.0;
   int a = effAlignX();
-  //apply indent if text is align to left not when text is at right or middle
+
+  // Apply indent if text is align to left not when text is at right or middle.
   if (  a == KSpreadCell::Left && !isEmpty() ) {
-    if ( d->hasExtra() && d->extra()->conditions
+    // FIXME: The following condition should be remade into a call to
+    //        a new convenience function:
+    //   if ( hasConditionStyleFeature( KSpreadStyle::SIndent, true )...
+    //        This should be done throughout the entire file.
+    //
+    if ( d->hasExtra()
+	 && d->extra()->conditions
          && d->extra()->conditions->matchedStyle()
          && d->extra()->conditions->matchedStyle()->hasFeature( KSpreadStyle::SIndent, true ) )
       indent = d->extra()->conditions->matchedStyle()->indent();
@@ -2767,39 +2796,40 @@ void KSpreadCell::paintText( QPainter& painter,
       indent = getIndent( column(), row() );
   }
 
-  //made an offset, otherwise ### is under red triangle
+  // Made an offset, otherwise ### is under red triangle.
   if ( a == KSpreadCell::Right && !isEmpty() && testFlag( Flag_CellTooShortX ) )
-  {
     offsetCellTooShort = m_pTable->doc()->unzoomItX( 4 );
-  }
 
   QFontMetrics fm2 = painter.fontMetrics();
   double offsetFont = 0.0;
 
   if ( alignY( column(), row() ) == KSpreadCell::Bottom
-       && textFontUnderline( column(), row() ) ) {
+       && textFontUnderline( column(), row() ) )
     offsetFont = m_pTable->doc()->unzoomItX( fm2.underlinePos() + 1 );
-  }
 
   int  tmpAngle;
   bool tmpMultiRow;
   bool tmpVerticalText;
 
-  if ( d->hasExtra() && d->extra()->conditions
-      && d->extra()->conditions->matchedStyle() )
+  // Check for angled or vertical text.
+  if ( d->hasExtra()
+       && d->extra()->conditions
+       && d->extra()->conditions->matchedStyle() )
   {
-    if ( d->extra()->conditions->matchedStyle()->hasFeature( KSpreadStyle::SAngle, true ) )
+    KSpreadStyle  *matchedStyle = d->extra()->conditions->matchedStyle();
+
+    if ( matchedStyle->hasFeature( KSpreadStyle::SAngle, true ) )
       tmpAngle = d->extra()->conditions->matchedStyle()->rotateAngle();
     else
       tmpAngle = getAngle( cellRef.x(), cellRef.y() );
 
-    if ( d->extra()->conditions->matchedStyle()->hasFeature( KSpreadStyle::SVerticalText, true ) )
-      tmpVerticalText = d->extra()->conditions->matchedStyle()->hasProperty( KSpreadStyle::PVerticalText );
+    if ( matchedStyle->hasFeature( KSpreadStyle::SVerticalText, true ) )
+      tmpVerticalText = matchedStyle->hasProperty( KSpreadStyle::PVerticalText );
     else
       tmpVerticalText = verticalText( cellRef.x(), cellRef.y() );
 
-    if ( d->extra()->conditions->matchedStyle()->hasFeature( KSpreadStyle::SMultiRow, true ) )
-      tmpMultiRow = d->extra()->conditions->matchedStyle()->hasProperty( KSpreadStyle::PMultiRow );
+    if ( matchedStyle->hasFeature( KSpreadStyle::SMultiRow, true ) )
+      tmpMultiRow = matchedStyle->hasProperty( KSpreadStyle::PMultiRow );
     else
       tmpMultiRow = multiRow( cellRef.x(), cellRef.y() );
   }
@@ -2809,11 +2839,17 @@ void KSpreadCell::paintText( QPainter& painter,
     tmpMultiRow     = multiRow( cellRef.x(), cellRef.y() );
   }
 
+  // Actually paint the text.  There are a number of cases to consider.
+  //
   if ( !tmpMultiRow && !tmpVerticalText && !tmpAngle ) {
+    // Case 1: The simple case, one line, no angle.
+
     painter.drawText( doc->zoomItX( indent + cellRect.x() + d->textX - offsetCellTooShort ),
                       doc->zoomItY( cellRect.y() + d->textY - offsetFont ), d->strOutText );
   }
   else if ( tmpAngle != 0 ) {
+    // Case 2: an angle.
+
     int angle = tmpAngle;
     QFontMetrics fm = painter.fontMetrics();
 
@@ -2837,29 +2873,30 @@ void KSpreadCell::paintText( QPainter& painter,
     painter.rotate( -angle );
   }
   else if ( tmpMultiRow && !tmpVerticalText ) {
+    // Case 3: Multiple rows, but horizontal.
+
     QString t;
     int i;
     int pos = 0;
     double dy = 0.0;
     QFontMetrics fm = painter.fontMetrics();
-    do
-    {
+    do {
       i = d->strOutText.find( "\n", pos );
       if ( i == -1 )
         t = d->strOutText.mid( pos, d->strOutText.length() - pos );
-      else
-      {
+      else {
         t = d->strOutText.mid( pos, i - pos );
         pos = i + 1;
       }
 
-      int a = effAlignX();
-      if ( m_pTable->getShowFormula() && !( m_pTable->isProtected() && isHideFormula( d->column, d->row ) ) )
-        a = KSpreadCell::Left;
+      int align = effAlignX();
+      if ( m_pTable->getShowFormula()
+	   && !( m_pTable->isProtected()
+		 && isHideFormula( d->column, d->row ) ) )
+        align = KSpreadCell::Left;
 
       // #### Torben: This looks duplicated for me
-      switch( a )
-      {
+      switch ( align ) {
        case KSpreadCell::Left:
         d->textX = effLeftBorderPen( cellRef.x(), cellRef.y() ).width() + BORDER_SPACE;
         break;
@@ -2876,52 +2913,51 @@ void KSpreadCell::paintText( QPainter& painter,
       painter.drawText( doc->zoomItX( indent + cellRect.x() + d->textX ),
                         doc->zoomItY( cellRect.y() + d->textY + dy ), t );
       dy += doc->unzoomItY( fm.descent() + fm.ascent() );
-    }
-    while ( i != -1 );
+    } while ( i != -1 );
   }
-  else if ( tmpVerticalText && !d->strOutText.isEmpty() )
-  {
+  else if ( tmpVerticalText && !d->strOutText.isEmpty() ) {
+    // Case 4: Vertical text.
+
     QString t;
     int i = 0;
     int len = 0;
     double dy = 0.0;
     QFontMetrics fm = painter.fontMetrics();
-    do
-    {
+    do {
       len = d->strOutText.length();
       t = d->strOutText.at( i );
       painter.drawText( doc->zoomItX( indent + cellRect.x() + d->textX ),
                         doc->zoomItY( cellRect.y() + d->textY + dy ), t );
       dy += doc->unzoomItY( fm.descent() + fm.ascent() );
       i++;
-    }
-    while ( i != len );
+    } while ( i != len );
   }
 
-  if ( testFlag( Flag_CellTooShortX ) )
-  {
+  // Check for too short cell and set the outText for future reference.
+  if ( testFlag( Flag_CellTooShortX ) ) {
     d->strOutText = tmpText;
     d->textHeight = tmpHeight;
-    d->textWidth = tmpWidth;
+    d->textWidth  = tmpWidth;
   }
 
   if ( m_pTable->getHideZero() && value().isNumber()
        && value().asFloat() == 0 )
-  {
     d->strOutText = tmpText;
-  }
 
   if ( colFormat->isHide() || ( cellRect.height() <= 2 ) )
     d->strOutText = tmpText;
 }
 
 
+// Paint page borders on the page.  Only do this on the screen.
+//
 void KSpreadCell::paintPageBorders( QPainter& painter,
                                     const KoRect &cellRect,
                                     const QPoint &cellRef,
                                     bool paintBorderRight,
                                     bool paintBorderBottom )
 {
+  // Not screen?  Return immediately.
   if ( painter.device()->isExtDev() )
     return;
 
@@ -2930,12 +2966,24 @@ void KSpreadCell::paintPageBorders( QPainter& painter,
   KSpreadSheet::LayoutDirection sheetDir =  m_pTable->layoutDirection();
 
   // Draw page borders
-  if( m_pTable->isShowPageBorders() )
-  {
-    if( cellRef.x() >= print->printRange().left() &&
-        cellRef.x() <= print->printRange().right() + 1 &&
-        cellRef.y() >= print->printRange().top() &&
-        cellRef.y() <= print->printRange().bottom() + 1 )
+  //
+  // FIXME: Refactor this
+  // if (...) {
+  //   <much stuff here>
+  // }
+  //
+  // into
+  //
+  // if (!...)
+  //   return;
+  //
+  // <much stuff here>
+  //
+  if ( m_pTable->isShowPageBorders() ) {
+    if ( cellRef.x() >= print->printRange().left() &&
+	 cellRef.x() <= print->printRange().right() + 1 &&
+	 cellRef.y() >= print->printRange().top() &&
+	 cellRef.y() <= print->printRange().bottom() + 1 )
     {
       KSpreadDoc* doc = table()->doc();
       if ( print->isOnNewPageX( cellRef.x() ) &&
@@ -2949,19 +2997,23 @@ void KSpreadCell::paintPageBorders( QPainter& painter,
                             doc->zoomItX( cellRect.right() ),
                             doc->zoomItY( cellRect.bottom() ) );
         else
-          painter.drawLine( doc->zoomItX( cellRect.x() ), doc->zoomItY( cellRect.y() ),
-                            doc->zoomItX( cellRect.x() ), doc->zoomItY( cellRect.bottom() ) );
+          painter.drawLine( doc->zoomItX( cellRect.x() ),
+			    doc->zoomItY( cellRect.y() ),
+                            doc->zoomItX( cellRect.x() ), 
+			    doc->zoomItY( cellRect.bottom() ) );
       }
 
       if ( print->isOnNewPageY( cellRef.y() ) &&
            ( cellRef.x() <= print->printRange().right() ) )
       {
         painter.setPen( table()->doc()->pageBorderColor() );
-        painter.drawLine( doc->zoomItX( cellRect.x() ),     doc->zoomItY( cellRect.y() ),
-                          doc->zoomItX( cellRect.right() ), doc->zoomItY( cellRect.y() ) );
+        painter.drawLine( doc->zoomItX( cellRect.x() ), 
+			  doc->zoomItY( cellRect.y() ),
+                          doc->zoomItX( cellRect.right() ),
+			  doc->zoomItY( cellRect.y() ) );
       }
 
-      if( paintBorderRight ) {
+      if ( paintBorderRight ) {
         if ( print->isOnNewPageX( cellRef.x() + 1 )
 	     && ( cellRef.y() <= print->printRange().bottom() ) ) {
           painter.setPen( table()->doc()->pageBorderColor() );
@@ -2994,6 +3046,8 @@ void KSpreadCell::paintPageBorders( QPainter& painter,
 }
 
 
+// Paint the cell borders.
+//
 void KSpreadCell::paintCellBorders( QPainter& painter, const KoRect& rect,
                                     const KoRect &cellRect,
                                     const QPoint &cellRef,
@@ -3005,6 +3059,7 @@ void KSpreadCell::paintCellBorders( QPainter& painter, const KoRect& rect,
   KSpreadDoc * doc = table()->doc();
 
   KSpreadSheet::LayoutDirection sheetDir =  m_pTable->layoutDirection();
+
   /* we might not paint some borders if this cell is merged with another in
      that direction
   bool paintLeft   = paintBorderLeft;
@@ -3150,7 +3205,6 @@ void KSpreadCell::paintCellBorders( QPainter& painter, const KoRect& rect,
     }
   }
 
-  //
   // Look at the cells on our corners. It may happen that we
   // just erased parts of their borders corner, so we might need
   // to repaint these corners.
@@ -3158,29 +3212,49 @@ void KSpreadCell::paintCellBorders( QPainter& painter, const KoRect& rect,
   QPen  vert_pen, horz_pen;
   int   vert_penWidth, horz_penWidth;
 
+  // Some useful referenses.
+  KSpreadCell  *cell_north     = m_pTable->cellAt( cellRef.x(), 
+						   cellRef.y() - 1 );
+  KSpreadCell  *cell_northwest = m_pTable->cellAt( cellRef.x() - 1, 
+						   cellRef.y() - 1 );
+  KSpreadCell  *cell_west      = m_pTable->cellAt( cellRef.x() - 1, 
+						   cellRef.y() );
+  KSpreadCell  *cell_northeast = m_pTable->cellAt( cellRef.x() + 1, 
+						   cellRef.y() - 1 );
+  KSpreadCell  *cell_east      = m_pTable->cellAt( cellRef.x() + 1, 
+						   cellRef.y() );
+  KSpreadCell  *cell_south     = m_pTable->cellAt( cellRef.x(), 
+						   cellRef.y() + 1 );
+  KSpreadCell  *cell_southwest = m_pTable->cellAt( cellRef.x() - 1, 
+						   cellRef.y() + 1 );
+  KSpreadCell  *cell_southeast = m_pTable->cellAt( cellRef.x() + 1, 
+						   cellRef.y() + 1 );
+
   // Fix the borders which meet at the top left corner
-  if ( m_pTable->cellAt( cellRef.x(), cellRef.y() - 1 )->effLeftBorderValue( cellRef.x(), cellRef.y() - 1 )
-       >= m_pTable->cellAt( cellRef.x() - 1, cellRef.y() - 1 )->effRightBorderValue( cellRef.x() - 1, cellRef.y() - 1 ) )
-    vert_pen = m_pTable->cellAt( cellRef.x(), cellRef.y() - 1 )->effLeftBorderPen( cellRef.x(), cellRef.y() - 1 );
+  if ( cell_north->effLeftBorderValue( cellRef.x(), cellRef.y() - 1 )
+       >= cell_northwest->effRightBorderValue( cellRef.x() - 1, cellRef.y() - 1 ) )
+    vert_pen = cell_north->effLeftBorderPen( cellRef.x(), cellRef.y() - 1 );
   else
-    vert_pen = m_pTable->cellAt( cellRef.x() - 1, cellRef.y() - 1 )->effRightBorderPen( cellRef.x() - 1, cellRef.y() - 1 );
+    vert_pen = cell_northwest->effRightBorderPen( cellRef.x() - 1, 
+						  cellRef.y() - 1 );
 
   vert_penWidth = QMAX( 1, doc->zoomItX( vert_pen.width() ) );
   vert_pen.setWidth( vert_penWidth );
 
   if ( vert_pen.style() != Qt::NoPen ) {
-    if ( m_pTable->cellAt( cellRef.x() - 1, cellRef.y() )->effTopBorderValue( cellRef.x() - 1, cellRef.y() )
-         >= m_pTable->cellAt( cellRef.x() - 1, cellRef.y() - 1 )->effBottomBorderValue( cellRef.x() - 1, cellRef.y() - 1 ) )
-      horz_pen = m_pTable->cellAt( cellRef.x() - 1, cellRef.y() )->effTopBorderPen( cellRef.x() - 1, cellRef.y() );
+    if ( cell_west->effTopBorderValue( cellRef.x() - 1, cellRef.y() )
+         >= cell_northwest->effBottomBorderValue( cellRef.x() - 1, cellRef.y() - 1 ) )
+      horz_pen = cell_west->effTopBorderPen( cellRef.x() - 1, cellRef.y() );
     else
-      horz_pen = m_pTable->cellAt( cellRef.x() - 1, cellRef.y() - 1 )->effBottomBorderPen( cellRef.x() - 1, cellRef.y() - 1 );
+      horz_pen = cell_northwest->effBottomBorderPen( cellRef.x() - 1, 
+						     cellRef.y() - 1 );
 
     horz_penWidth = QMAX( 1, doc->zoomItY( horz_pen.width() ) );
     int bottom = ( QMAX( 0, -1 + horz_penWidth ) ) / 2 + 1;
 
     painter.setPen( vert_pen );
-    //If we are on paper printout, we limit the length of the lines
-    //On paper, we always have full cells, on screen not
+    // If we are on paper printout, we limit the length of the lines.
+    // On paper, we always have full cells, on screen not.
     if ( painter.device()->isExtDev() ) {
       painter.drawLine( QMAX( doc->zoomItX( rect.left() ), 
 			      doc->zoomItX( cellRect.x() ) ),
@@ -3206,21 +3280,25 @@ void KSpreadCell::paintCellBorders( QPainter& painter, const KoRect& rect,
   }
 
   // Fix the borders which meet at the top right corner
-  if ( m_pTable->cellAt( cellRef.x(), cellRef.y() - 1 )->effRightBorderValue( cellRef.x(), cellRef.y() - 1 )
-       >= m_pTable->cellAt( cellRef.x() + 1, cellRef.y() - 1 )->effLeftBorderValue( cellRef.x() + 1, cellRef.y() - 1 ) )
-    vert_pen = m_pTable->cellAt( cellRef.x(), cellRef.y() - 1 )->effRightBorderPen( cellRef.x(), cellRef.y() - 1 );
+  if ( cell_north->effRightBorderValue( cellRef.x(), cellRef.y() - 1 )
+       >= cell_northeast->effLeftBorderValue( cellRef.x() + 1, 
+					      cellRef.y() - 1 ) )
+    vert_pen = cell_north->effRightBorderPen( cellRef.x(), cellRef.y() - 1 );
   else
-    vert_pen = m_pTable->cellAt( cellRef.x() + 1, cellRef.y() - 1 )->effLeftBorderPen( cellRef.x() + 1, cellRef.y() - 1 );
+    vert_pen = cell_northeast->effLeftBorderPen( cellRef.x() + 1, 
+						 cellRef.y() - 1 );
 
   // vert_pen = effRightBorderPen( cellRef.x(), cellRef.y() - 1 );
   vert_penWidth = QMAX( 1, doc->zoomItX( vert_pen.width() ) );
   vert_pen.setWidth( vert_penWidth );
   if ( ( vert_pen.style() != Qt::NoPen ) && ( cellRef.x() < KS_colMax ) ) {
-    if ( m_pTable->cellAt( cellRef.x() + 1, cellRef.y() )->effTopBorderValue( cellRef.x() + 1, cellRef.y() )
-         >= m_pTable->cellAt( cellRef.x() + 1, cellRef.y() - 1 )->effBottomBorderValue( cellRef.x() + 1, cellRef.y() - 1 ) )
-      horz_pen = m_pTable->cellAt( cellRef.x() + 1, cellRef.y() )->effTopBorderPen( cellRef.x() + 1, cellRef.y() );
+    if ( cell_east->effTopBorderValue( cellRef.x() + 1, cellRef.y() )
+         >= cell_northeast->effBottomBorderValue( cellRef.x() + 1, 
+						  cellRef.y() - 1 ) )
+      horz_pen = cell_east->effTopBorderPen( cellRef.x() + 1, cellRef.y() );
     else
-      horz_pen = m_pTable->cellAt( cellRef.x() + 1, cellRef.y() - 1 )->effBottomBorderPen( cellRef.x() + 1, cellRef.y() - 1 );
+      horz_pen = cell_northeast->effBottomBorderPen( cellRef.x() + 1, 
+						     cellRef.y() - 1 );
 
     // horz_pen = effTopBorderPen( cellRef.x() + 1, cellRef.y() );
     horz_penWidth = QMAX( 1, doc->zoomItY( horz_pen.width() ) );
@@ -3256,31 +3334,35 @@ void KSpreadCell::paintCellBorders( QPainter& painter, const KoRect& rect,
   // Bottom
   if ( cellRef.y() < KS_rowMax ) {
     // Fix the borders which meet at the bottom left corner
-    if ( m_pTable->cellAt( cellRef.x(), cellRef.y() + 1 )->effLeftBorderValue( cellRef.x(), cellRef.y() + 1 )
-         >= m_pTable->cellAt( cellRef.x() - 1, cellRef.y() + 1 )->effRightBorderValue( cellRef.x() - 1, cellRef.y() + 1 ) )
-      vert_pen = m_pTable->cellAt( cellRef.x(), cellRef.y() + 1 )->effLeftBorderPen( cellRef.x(), cellRef.y() + 1 );
+    if ( cell_south->effLeftBorderValue( cellRef.x(), cellRef.y() + 1 )
+         >= cell_southwest->effRightBorderValue( cellRef.x() - 1, 
+						 cellRef.y() + 1 ) )
+      vert_pen = cell_south->effLeftBorderPen( cellRef.x(), cellRef.y() + 1 );
     else
-      vert_pen = m_pTable->cellAt( cellRef.x() - 1, cellRef.y() + 1 )->effRightBorderPen( cellRef.x() - 1, cellRef.y() + 1 );
+      vert_pen = cell_southwest->effRightBorderPen( cellRef.x() - 1, 
+						    cellRef.y() + 1 );
 
     // vert_pen = effLeftBorderPen( cellRef.x(), cellRef.y() + 1 );
     vert_penWidth = QMAX( 1, doc->zoomItY( vert_pen.width() ) );
     vert_pen.setWidth( vert_penWidth );
     if ( vert_pen.style() != Qt::NoPen ) {
-      if ( m_pTable->cellAt( cellRef.x() - 1, cellRef.y() )->effBottomBorderValue( cellRef.x() - 1, cellRef.y() )
-           >= m_pTable->cellAt( cellRef.x() - 1, cellRef.y() + 1 )->effTopBorderValue( cellRef.x() - 1, cellRef.y() + 1 ) )
-        horz_pen = m_pTable->cellAt( cellRef.x() - 1, cellRef.y() )->effBottomBorderPen( cellRef.x() - 1, cellRef.y() );
+      if ( cell_west->effBottomBorderValue( cellRef.x() - 1, cellRef.y() )
+           >= cell_southwest->effTopBorderValue( cellRef.x() - 1, 
+						 cellRef.y() + 1 ) )
+        horz_pen = cell_west->effBottomBorderPen( cellRef.x() - 1, 
+						  cellRef.y() );
       else
-        horz_pen = m_pTable->cellAt( cellRef.x() - 1, cellRef.y() + 1 )->effTopBorderPen( cellRef.x() - 1, cellRef.y() + 1 );
+        horz_pen = cell_southwest->effTopBorderPen( cellRef.x() - 1, 
+						    cellRef.y() + 1 );
 
       // horz_pen = effBottomBorderPen( cellRef.x() - 1, cellRef.y() );
       horz_penWidth = QMAX( 1, doc->zoomItX( horz_pen.width() ) );
       int bottom = ( QMAX( 0, -1 + horz_penWidth ) ) / 2;
 
       painter.setPen( vert_pen );
-      //If we are on paper printout, we limit the length of the lines
-      //On paper, we always have full cells, on screen not
-      if ( painter.device()->isExtDev() )
-      {
+      // If we are on paper printout, we limit the length of the lines.
+      // On paper, we always have full cells, on screen not.
+      if ( painter.device()->isExtDev() ) {
         painter.drawLine( QMAX( doc->zoomItX( rect.left() ),
 				doc->zoomItX( cellRect.x() ) ),
                           QMAX( doc->zoomItY( rect.top() ), 
@@ -3290,8 +3372,7 @@ void KSpreadCell::paintCellBorders( QPainter& painter, const KoRect& rect,
                           QMIN( doc->zoomItY( rect.bottom() ), 
 				doc->zoomItY( cellRect.bottom() ) ) );
       }
-      else
-      {
+      else {
         if ( sheetDir == KSpreadSheet::RightToLeft )
           painter.drawLine( doc->zoomItX( cellRect.right() ),
                             doc->zoomItY( cellRect.bottom() ) - bottom,
@@ -3306,12 +3387,6 @@ void KSpreadCell::paintCellBorders( QPainter& painter, const KoRect& rect,
     }
 
     // Fix the borders which meet at the bottom right corner
-      KSpreadCell *cell_east      = m_pTable->cellAt( cellRef.x() + 1, 
-						      cellRef.y() );
-      KSpreadCell *cell_south     = m_pTable->cellAt( cellRef.x(), 
-						      cellRef.y() + 1 );
-      KSpreadCell *cell_southeast = m_pTable->cellAt( cellRef.x() + 1, 
-						      cellRef.y() + 1 );
     if ( cell_south->effRightBorderValue( cellRef.x(), cellRef.y() + 1 )
          >= cell_southeast->effLeftBorderValue( cellRef.x() + 1, 
 						cellRef.y() + 1 ) )
@@ -3368,6 +3443,8 @@ void KSpreadCell::paintCellBorders( QPainter& painter, const KoRect& rect,
 }
 
 
+// Paint diagonal lines through the cell.
+//
 void KSpreadCell::paintCellDiagonalLines( QPainter& painter,
                                           const KoRect &cellRect,
                                           const QPoint &cellRef )
