@@ -372,16 +372,9 @@ bool KoHTMLView::mappingCreateMenuBar(OpenPartsUI::MenuBar_ptr menuBar)
 
   menuBar->setFileMenu( menuBar->insertMenu(i18n("&File"), m_vMenuFile, -1, -1) );
 
-  pix = OPUIUtils::convertPixmap(ICON("filenew.xpm"));
-  m_vMenuFile->insertItem6( pix, i18n("&New Window"), this, "slotNewWindow", CTRL + Key_N, ID_NEWWINDOW, -1 );
-
   pix = OPUIUtils::convertPixmap(ICON("go-url3.xpm"));
   m_vMenuFile->insertItem6( pix, i18n("Open &URL..."), this, "slotOpenURLDlg", CTRL + Key_U, ID_OPENURL, -1 );
   
-  m_vMenuFile->insertSeparator( -1 );
-
-  m_vMenuFile->insertItem4( i18n("Close"), this, "slotClose", CTRL + Key_W, ID_CLOSE, -1 );
-        
   menuBar->insertMenu(i18n("&Edit"), m_vMenuEdit, -1, -1);
 
   pix = OPUIUtils::convertPixmap(ICON("editcopy.xpm"));
@@ -532,18 +525,6 @@ void KoHTMLView::slotMoveEnd(KoFrame *frame)
   KoHTMLFrame *f = (KoHTMLFrame *)frame;
   
   m_pDoc->changeChildGeometry(f->getChild(), f->partGeometry());
-}
-
-void KoHTMLView::slotNewWindow()
-{
-  KoHTMLShell *m_pShell = new KoHTMLShell;
-  m_pShell->show();
-  m_pShell->newDocument();
-}
-
-void KoHTMLView::slotClose()
-{
-  //TODO
 }
 
 void KoHTMLView::editCopy()
