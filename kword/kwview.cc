@@ -5249,13 +5249,15 @@ void KWView::savePicture()
     {
         KWPictureFrameSet *frameset = static_cast<KWPictureFrameSet *>(frame->frameSet());
         QString oldFile=frameset->image().getKey().filename();
+        KURL url(oldFile);
+        if (!QDir(url.directory()).exists())
+            oldFile = url.fileName();
 
         QStringList mimetypes;
         mimetypes = KImageIO::mimeTypes( KImageIO::Reading );
         KFileDialog fd( oldFile, QString::null, 0, 0, TRUE );
         fd.setMimeFilter( mimetypes );
         fd.setCaption(i18n("Save Image"));
-        KURL url;
         if ( fd.exec() == QDialog::Accepted )
         {
             url = fd.selectedURL();
@@ -5287,11 +5289,14 @@ void KWView::saveClipart()
         KWClipartFrameSet *frameset = static_cast<KWClipartFrameSet *>(frame->frameSet());
         QString oldFile=frameset->key().filename();
         QStringList mimetypes;
+        KURL url(oldFile);
+        if (!QDir(url.directory()).exists())
+            oldFile = url.fileName();
+
         mimetypes = KoPictureFilePreview::clipartMimeTypes();
         KFileDialog fd( oldFile, QString::null, 0, 0, TRUE );
         fd.setMimeFilter( mimetypes );
         fd.setCaption(i18n("Save Clipart"));
-        KURL url;
         if ( fd.exec() == QDialog::Accepted )
         {
             url = fd.selectedURL();
