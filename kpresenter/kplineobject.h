@@ -74,7 +74,7 @@ protected:
     QString saveOasisStrokeElement( KoGenStyles& mainStyles ) const;
 
     virtual void paint( QPainter *_painter, KoZoomHandler*_zoomHandler,
-                        bool drawingShadow, bool drawContour = FALSE );
+                        int /* pageNum */, bool drawingShadow, bool drawContour = FALSE );
     LineType lineType;
 };
 

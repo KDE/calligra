@@ -160,7 +160,7 @@ double KPLineObject::load(const QDomElement &element)
 }
 
 void KPLineObject::paint( QPainter* _painter, KoZoomHandler*_zoomHandler,
-                          bool /*drawingShadow*/, bool drawContour )
+                          int /* pageNum */, bool /*drawingShadow*/, bool drawContour )
 {
     double ow = ext.width();
     double oh = ext.height();

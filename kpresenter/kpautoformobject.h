@@ -74,7 +74,7 @@ public:
     virtual double load(const QDomElement &element);
 protected:
     virtual void paint( QPainter *_painter, KoZoomHandler *_zoomHandler,
-                        bool drawingShadow, bool drawContour = FALSE );
+                        int /* pageNum */, bool drawingShadow, bool drawContour = FALSE );
 
     QString filename;
     LineEnd lineBegin, lineEnd;

@@ -146,7 +146,7 @@ QPointArray KPRectObject::boundingRegion( int x, int y, int w, int h, int _xRnd,
 }
 
 void KPRectObject::paint( QPainter* _painter, KoZoomHandler*_zoomHandler,
-                          bool drawingShadow, bool drawContour )
+                          int /* pageNum */, bool drawingShadow, bool drawContour )
 {
     int ow = _zoomHandler->zoomItX( ext.width() );
     int oh = _zoomHandler->zoomItY( ext.height() );

@@ -230,7 +230,7 @@ double KPPieObject::load(const QDomElement &element)
 }
 
 void KPPieObject::paint( QPainter* _painter, KoZoomHandler*_zoomHandler,
-                         bool /*drawingShadow*/, bool drawContour )
+                         int /* pageNum */, bool /*drawingShadow*/, bool drawContour )
 {
     double ow = ext.width();
     double oh = ext.height();

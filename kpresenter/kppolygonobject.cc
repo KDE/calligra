@@ -250,7 +250,7 @@ void KPPolygonObject::setFillType( FillType _fillType )
 }
 
 void KPPolygonObject::paint( QPainter* _painter,KoZoomHandler*_zoomHandler,
-                             bool drawingShadow, bool drawContour )
+                             int /* pageNum */, bool drawingShadow, bool drawContour )
 {
     int _w = ( pen.style() == Qt::NoPen ) ? 1 : pen.width();//pen.width();
 

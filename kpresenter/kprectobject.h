@@ -56,7 +56,7 @@ public:
 
 protected:
     virtual void paint( QPainter *_painter,KoZoomHandler*_zoomHandler,
-                        bool drawingShadow, bool drawContour );
+                        int /* pageNum */, bool drawingShadow, bool drawContour );
 
     int xRnd, yRnd;
 private:

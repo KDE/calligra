@@ -178,7 +178,7 @@ double KPAutoformObject::load(const QDomElement &element)
 }
 
 void KPAutoformObject::paint( QPainter* _painter, KoZoomHandler *_zoomHandler,
-                              bool drawingShadow, bool drawContour )
+                              int /* pageNum */, bool drawingShadow, bool drawContour )
 {
     unsigned int pw = 0, pwOrig = 0, px, py;
     QPen pen2;

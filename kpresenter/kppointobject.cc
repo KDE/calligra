@@ -243,7 +243,7 @@ bool KPPointObject::isClosed() const
 
 
 void KPPointObject::paint( QPainter* _painter, KoZoomHandler*_zoomHandler,
-                           bool /*drawingShadow*/, bool drawContour )
+                           int /* pageNum */, bool /*drawingShadow*/, bool drawContour )
 {
     int _w = pen.width();
 

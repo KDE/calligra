@@ -90,7 +90,7 @@ public:
 
 protected:
     virtual void paint( QPainter *_painter, KoZoomHandler*_zoomHandler,
-                        bool drawingShadow, bool drawContour );
+                        int /* pageNum */, bool drawingShadow, bool drawContour );
 
     void setMinMax( double &min_x, double &min_y, double &max_x, double &max_y, KoPoint point ) const;
     void getRealSizeAndOrig( KoSize &size, KoPoint &realOrig ) const;

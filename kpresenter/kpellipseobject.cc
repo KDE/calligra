@@ -84,7 +84,7 @@ void KPEllipseObject::setFillType( FillType _fillType )
 }
 
 void KPEllipseObject::paint( QPainter* _painter, KoZoomHandler *_zoomHandler,
-                             bool drawingShadow, bool drawContour )
+                             int /* pageNum */, bool drawingShadow, bool drawContour )
 {
     int ow = _zoomHandler->zoomItX( ext.width() );
     int oh = _zoomHandler->zoomItY( ext.height() );

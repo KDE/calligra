@@ -203,7 +203,7 @@ void KPClosedLineObject::setFillType( FillType _fillType )
 }
 
 void KPClosedLineObject::paint( QPainter* _painter,KoZoomHandler*_zoomHandler,
-                                bool drawingShadow, bool drawContour )
+                                int /* pageNum */, bool drawingShadow, bool drawContour )
 {
     int _w = ( pen.style() == Qt::NoPen ) ? 1 : pen.width();
 

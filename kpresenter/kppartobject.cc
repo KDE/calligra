@@ -142,7 +142,7 @@ void KPPartObject::draw( QPainter *_painter, KoZoomHandler *_zoomhandler,
     _painter->setBrush( Qt::NoBrush );
     _painter->drawRect( _zoomhandler->zoomItX( penw ), _zoomhandler->zoomItY( penw ),
                         _zoomhandler->zoomItX( ow - 2 * penw ), _zoomhandler->zoomItY( oh - 2 * penw ) );
-    paint( _painter, _zoomhandler, selectionMode, drawContour );
+    paint( _painter, _zoomhandler, pageNum, selectionMode, drawContour );
     _painter->restore();
 
     KPObject::draw( _painter, _zoomhandler, pageNum, selectionMode, drawContour );
@@ -157,7 +157,7 @@ void KPPartObject::slot_changed( KoChild *_koChild )
 }
 
 void KPPartObject::paint( QPainter *_painter, KoZoomHandler *_zoomHandler,
-                          bool /*drawingShadow*/, bool drawContour )
+                          int /* pageNum */, bool /*drawingShadow*/, bool drawContour )
 {
     if ( !_enableDrawing ) return;
 
