@@ -1051,6 +1051,7 @@ void KoMainWindow::slotFileOpen()
     else
         dialog->setCaption( i18n("Import Document") );
 
+    // The few lines below need to be kept in sync with KoTemplateChooseDia::setupFileDialog
     QStringList mimeFilter = KoFilterManager::mimeFilter( KoDocument::readNativeFormatMimeType(),
                                                           KoFilterManager::Import );
     QStringList::Iterator mimeFilterIt = mimeFilter.at( 1 );

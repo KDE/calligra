@@ -3,6 +3,7 @@
    Copyright (C) 1998, 1999 Reginald Stadlbauer <reggie@kde.org>
    2000, 2001 Werner Trobin <trobin@kde.org>
    2002, 2003 Thomas Nagy <tnagy@eleve.emn.fr>
+   2004 David Faure <faure@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -153,6 +154,7 @@ public:
     /**
      * This is the static method you'll normally use to show the
      * dialog.
+     *
      * @param instance the KInstance of your app
      * The native mimetype is retrieved from the (desktop file of) that instance.
      * @param file this is the filename which is returned to your app
@@ -162,12 +164,13 @@ public:
      * @param dialogType the type of the dialog
      * @param templateType the template type of your application (see kword or
      *        kpresenter for details)
+     * @param widget pointer to parent widget
      * @return The return type (see above)
      */
     static ReturnType choose(KInstance* instance, QString &file,
-                             const DialogType &dialogType = Everything,
-                             const QCString& templateType = "",
-                             QWidget* parent = 0);
+                             const DialogType &dialogType,
+                             const QCString& templateType,
+                             QWidget* parent);
 
     /**
      * Alternate API, in case no KoDocument is available [and for backwards compatibility]
