@@ -1,0 +1,8 @@
+[Desktop Entry]
+Type=Service
+Name=KIllustrator SVG Import Filter
+Export=application/x-killustrator
+Import=image/x-svg
+Implemented=kodocument
+X-KDE-Library=libsvgimport
+ServiceTypes=KOfficeFilter

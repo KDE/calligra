@@ -4,11 +4,11 @@ INCLUDES= -I$(srcdir) -I$(top_srcdir)/killustrator $(KOFFICE_INCLUDES) $(all_inc
 
 ####### Files
 
-kde_module_LTLIBRARIES = libsvgexport.la
+kde_module_LTLIBRARIES = libsvgimport.la libsvgexport.la
 
-#libsvgimport_la_SOURCES = svgimport.cc svgimport_factory.cc
-#libsvgimport_la_LDFLAGS	= -module -avoid-version -no-undefined
-#libsvgimport_la_LIBADD  = $(KOFFICE_LIBS) ../../../killustrator/libkillustratorpart.la
+libsvgimport_la_SOURCES = svgimport.cc svgimport_factory.cc basicshapes.h basicshapes.cc datatypes.h datatypes.cc path.h path.cc transform.h transform.cc style.h style.cc text.h text.cc svgmain.h svgmain.cc
+libsvgimport_la_LDFLAGS	= -module -avoid-version -no-undefined
+libsvgimport_la_LIBADD  = $(KOFFICE_LIBS) ../../../killustrator/libkillustratorpart.la
 
 libsvgexport_la_SOURCES = svgexport.cc svgexport_factory.cc
 libsvgexport_la_LDFLAGS	= -module -avoid-version -no-undefined
@@ -16,8 +16,5 @@ libsvgexport_la_LIBADD  = $(KOFFICE_LIBS) ../../../killustrator/libkillustratorp
 
 METASOURCES = AUTO
 
-service_DATA = killustrator_svg_export.desktop
+service_DATA = killustrator_svg_import.desktop killustrator_svg_export.desktop
 servicedir = $(kde_servicesdir)
-
-data_DATA = x-svg.desktop
-datadir = $(kde_mimedir)/image
