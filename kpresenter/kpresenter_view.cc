@@ -415,6 +415,18 @@ void KPresenterView_impl::screenStart()
 
   if (page && !presStarted) 
     {
+      // disable screensaver
+      QString pidFile;
+      pidFile = getenv("HOME");
+      pidFile += "/.kss.pid";
+      FILE *fp;
+      if ((fp = fopen(pidFile,"r")) != NULL)
+	{
+	  fscanf(fp,"%d",&screensaver_pid);
+	  fclose(fp);
+	  kill(screensaver_pid,SIGSTOP);
+	}
+
       page->deSelectAllObj();
       presStarted = true;
       if (fullScreen)
@@ -496,6 +508,18 @@ void KPresenterView_impl::screenStop()
       setSize(oldSize.width(),oldSize.height());
       widget()->resize(oldSize);
       resizeEvent(0L);
+
+      // start screensaver again
+      QString pidFile;
+      pidFile = getenv("HOME");
+      pidFile += "/.kss.pid";
+      FILE *fp;
+      if ((fp = fopen(pidFile,"r")) != NULL)
+	{
+	  fscanf(fp,"%d",&screensaver_pid);
+	  fclose(fp);
+	  kill(screensaver_pid,SIGCONT);
+	}
     }
 }
 
@@ -2135,7 +2159,7 @@ void KPresenterView_impl::getFonts()
   char** fontNames_copy;
   QString qfontname;
   
-  kde_display = XOpenDisplay(0L);
+  kde_display = kapp->getDisplay();
 
   bool have_installed = kapp->getKDEFonts(&fontList);
   
@@ -2188,7 +2212,6 @@ void KPresenterView_impl::getFonts()
   }
   
   XFreeFontNames(fontNames_copy);
-  XCloseDisplay(kde_display);
 }
 
 /*========================== start rect selection ================*/

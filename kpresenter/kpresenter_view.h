@@ -73,6 +73,9 @@ class Page;
 #include "pgconfdia.h"
 #include "effectdia.h"
 
+#include <X11/Xlib.h>
+#include <signal.h>
+
 /******************************************************************/
 /* class KPresenterFrame                                          */
 /******************************************************************/
@@ -489,6 +492,8 @@ protected:
 
   QList<QRect> origPartsList;
   QList<QRect> origFramesList;
+
+  int screensaver_pid;
 };
 
 #endif
