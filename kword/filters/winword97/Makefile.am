@@ -4,6 +4,8 @@ INCLUDES = $(KOFFICE_INCLUDES) $(KOFFICECORE_INCLUDES) \
 LDFLAGS	= $(all_libraries) $(MICO_LDFLAGS) $(KDE_RPATH)
 LDADD = $(LIB_KOFFICECORE)
 
+CXXFLAGS=-O2 -Wall -ansi -pedantic
+
 ####### Files
 
 bin_PROGRAMS = kword_winword97
