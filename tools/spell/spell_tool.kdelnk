@@ -1,7 +1,6 @@
 # KDE Config File
 [KDE Desktop Entry]
 Name=SpellTool
-Name[pt_BR]=SpellTool
 Exec=spell_tool --server
 Comment=Torben's Spell Tool
 Comment[pt_BR]=Ferramenta de correção ortográfica

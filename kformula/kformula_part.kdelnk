@@ -1,7 +1,6 @@
 # KDE Config File
 [KDE Desktop Entry]
 Name=KFormula
-Name[pt_BR]=KFormula
 Exec=kformula.bin --server
 Icon=kformula.xpm
 Comment=The Formula Editor

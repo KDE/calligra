@@ -1,8 +1,6 @@
 # KDE Config File
 [KDE Desktop Entry]
 Name=KImage
-Name[sk]=KImage
-Name[pt_BR]=KImage
 Exec=kimage.bin --server
 Comment=Torben's Image Viewer
 Comment[sk]=Torbenov prehliadaè obrázkov
