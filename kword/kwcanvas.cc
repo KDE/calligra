@@ -1536,11 +1536,14 @@ void KWCanvas::setMouseMode( MouseMode newMouseMode )
         if ( newMouseMode != MM_EDIT )
         {
             // Terminate edition of current frameset
-            m_currentFrameSetEdit->terminate();
-            delete m_currentFrameSetEdit;
-            m_currentFrameSetEdit = 0L;
-            emit currentFrameSetEditChanged();
-            repaintAll();
+            if ( m_currentFrameSetEdit )
+            {
+                m_currentFrameSetEdit->terminate();
+                delete m_currentFrameSetEdit;
+                m_currentFrameSetEdit = 0L;
+                emit currentFrameSetEditChanged();
+                repaintAll();
+            }
         } else if ( doc->isReadWrite() )
         {
             ASSERT( !m_currentFrameSetEdit );

@@ -313,7 +313,7 @@ void KWFrameDia::setupTab2() // TAB Text Runaround
 {
     //kdDebug() << "setup tab 2 text runaround"<<endl;
 
-    tab2 =  addPage( i18n( "Text run around" ) );
+    tab2 = addPage( i18n( "Text run around" ) );
 
     grid2 = new QGridLayout( tab2, 3, 2, KDialog::marginHint(), KDialog::spacingHint() );
 
@@ -485,6 +485,9 @@ void KWFrameDia::setupTab3(){ // TAB Frameset
     connectListSelected( lFrameSList->firstChild() );
 
     //kdDebug() << "setup tab 3 exit"<<endl;
+
+    if ( frame && frame->getFrameSet() && frame->getFrameSet()->isFloating() )
+        tab3->setEnabled( false );
 }
 
 void KWFrameDia::setupTab4(){ // TAB Geometry
