@@ -1,8 +1,7 @@
 /* This file is part of the KDE project
-   Copyright (C) 1998, 1999 Torben Weis <weis@kde.org>
-             (C) 1999, 2000, 2001 Montel Laurent <lmontel@mandrakesoft.com>
-             (C) 1999-2002 The KSpread Team
-                           www.koffice.org/kspread
+   Copyright (C) 2002-2003 Ariya Hidayat <ariya@kde.org>
+             (C) 2001-2003 Laurent Montel <montel@kde.org>
+             (C) 1998, 1999 Torben Weis <weis@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public

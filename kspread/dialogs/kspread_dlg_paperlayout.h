@@ -1,6 +1,9 @@
 /* This file is part of the KDE project
-   Copyright (C) 2002 Montel Laurent <lmontel@mandrakesoft.com>
-   2003 Philipp Müller <philipp.mueller@gmx.de>
+   Copyright (C) 2002-2003 Ariya Hidayat <ariya@kde.org>
+             (C) 2002-2003 Norbert Andres <nandres@web.de>
+             (C) 2002-2003 Philipp Mueller <philipp.mueller@gmx.de>
+             (C) 2002 Laurent Montel <montel@kde.org>
+   
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
    License as published by the Free Software Foundation; either
