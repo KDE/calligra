@@ -322,8 +322,9 @@ public:
   virtual QDomDocument saveXML();
 
   /**
-   *  Reimplement this to save the contents of the KOffice document into
-   *  a QDomDocument. The framework takes care of saving it to the store.
+   *  Save the document. The default implementation is to call
+   *  @ref saveXML. This method exists only for applications that
+   *  don't use QDomDocument for saving, i.e. kword and kpresenter.
    */
   virtual bool saveToStream( QIODevice * dev );
 
