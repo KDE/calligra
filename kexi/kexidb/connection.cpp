@@ -52,7 +52,6 @@ class ConnectionPrivate
 		 , m_versionMinor(-1)
 		 , m_dont_remove_transactions(false)
 		 , m_skip_databaseExists_check_in_useDatabase(false)
-		 , m_kexi_db_used(true)
 		{
 		}
 		~ConnectionPrivate() { }
@@ -77,10 +76,6 @@ class ConnectionPrivate
 		//! used to avoid endless recursion between useDatabase() and databaseExists()
 		//! when useTemporaryDatabaseIfNeeded() works
 		bool m_skip_databaseExists_check_in_useDatabase : 1;
-
-		//! true only while kexi-compatible database 
-		//! is used (temporary db is not such a db)
-		bool m_kexi_db_used : 1;
 
 		void errorInvalidDBContents(const QString& details) {
 			m_conn->setError( ERR_INVALID_DATABASE_CONTENTS, i18n("Invalid database contents. ")+details);
@@ -359,7 +354,7 @@ bool Connection::createDatabase( const QString &dbName )
 
 	if (!tmpdbName.isEmpty() || !m_driver->m_isDBOpenedAfterCreate) {
 		//db need to be opened
-		if (!useDatabase( dbName )) {
+		if (!useDatabase( dbName, false/*not yet kexi compatible!*/ )) {
 			setError(i18n("Database \"%1\" created but could not be opened.").arg(dbName) );
 			return false;
 		}
@@ -420,7 +415,7 @@ bool Connection::createDatabase( const QString &dbName )
 #undef createDatabase_CLOSE
 #undef createDatabase_ERROR
 
-bool Connection::useDatabase( const QString &dbName )
+bool Connection::useDatabase( const QString &dbName, bool kexiCompatible )
 {
 	if (!checkConnected())
 		return false;
@@ -454,7 +449,7 @@ bool Connection::useDatabase( const QString &dbName )
 	if (!setupKexiDBSystemSchema())
 		return false;
 
-	if (d->m_kexi_db_used && my_dbName.lower()!=anyAvailableDatabaseName().lower()) {
+	if (kexiCompatible && my_dbName.lower()!=anyAvailableDatabaseName().lower()) {
 		//-get global database information
 		int num;
 		static QString notfound_str = i18n("\"%1\" database property not found");
@@ -527,7 +522,6 @@ bool Connection::closeDatabase()
 		return false;
 
 	m_usedDatabase = "";
-	d->m_kexi_db_used = true;
 	KexiDBDbg << "Connection::closeDatabase(): " << ret << endl;
 	return ret;
 }
@@ -542,11 +536,9 @@ bool Connection::useTemporaryDatabaseIfNeeded(QString &tmpdbName)
 			setError(ERR_NO_DB_USED, i18n("Cannot find any database for temporary connection.") );
 			return false;
 		}
-		d->m_kexi_db_used = false;
-		if (!useDatabase(tmpdbName)) {
+		if (!useDatabase(tmpdbName, false)) {
 			setError(errorNum(), i18n("Error during starting temporary connection using \"%1\" database name.")
 				.arg(tmpdbName) );
-			d->m_kexi_db_used = true;
 			return false;
 		}
 	}

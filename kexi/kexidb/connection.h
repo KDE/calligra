@@ -113,9 +113,12 @@ class KEXI_DB_EXPORT Connection : public QObject, public KexiDB::Object
 		/*! 
 		\brief Opens an existing database specified by \a dbName.
 		
+		 If \a kexiCompatible is true (the default) initial checks will be performed
+		 to recognize database Kexi-specific format. Set \a kexiCompatible to false
+		 if you're using native database (one that have no Kexi System tables).
 		 For file-based drivers, \a dbName should be equal to filename
 		 (the same as specified for ConnectionData). */
-		bool useDatabase( const QString &dbName );
+		bool useDatabase( const QString &dbName, bool kexiCompatible = true );
 
 		/*! 
 		\brief Closes currently used database for this connection.
