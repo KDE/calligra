@@ -58,7 +58,7 @@ class KPTResourceGroup {
 
           enum Type { Type_Work, Type_Material };
           
-          int id() { return m_id; }
+          int id() const { return m_id; }
 	      void setName(QString n) {m_name=n;}
 	      const QString &name() const {return m_name;}
           void setType(Type type) { m_type = type; }
@@ -158,7 +158,7 @@ class KPTResource {
         KPTResource(KPTResource *resource) { copy(resource); }
         ~KPTResource();
 
-        int id() { return m_id; }
+        int id() const { return m_id; }
 
         enum Type { Type_Work, Type_Material };
         void setType(Type type) { m_type = type; }
@@ -200,7 +200,7 @@ class KPTResource {
         void saveAppointments(QDomElement &element) const;
 
         void setOverbooked(bool on) { m_overbooked = on; }
-        bool isOverbooked() { return m_overbooked; }
+        bool isOverbooked() const { return m_overbooked; }
 
         double normalRate() const { return cost.normalRate; }
         void setNormalRate(double rate) { cost.normalRate = rate; }
@@ -218,7 +218,7 @@ class KPTResource {
          */
         void setUnits(int units) { m_units = units; }
 
-        KPTProject *project() { return m_project; }
+        KPTProject *project() const { return m_project; }
 
         KPTCalendar *calendar() const;
         KPTCalendar *calendar(int id) const;
@@ -404,7 +404,7 @@ class KPTResourceGroupRequest {
         KPTResourceGroupRequest(KPTResourceGroup *group=0, int units=0);
         ~KPTResourceGroupRequest();
 
-        KPTResourceGroup *group() { return m_group; }
+        KPTResourceGroup *group() const { return m_group; }
         QPtrList<KPTResourceRequest> &resourceRequests() { return m_resourceRequests; }
         void addResourceRequest(KPTResourceRequest *request) {
             request->setParent(this);
