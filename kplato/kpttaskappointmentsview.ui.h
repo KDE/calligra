@@ -48,7 +48,7 @@ void KPTTaskAppointmentsView::draw(KPTTask *task)
                 if (ait.current()->task() == task) {
                     QListViewItem *item = new QListViewItem(m_appList, r->name());
                     item->setText(1, r->typeToString());
-                    item->setText(2, ait.current()->startTime().date().toString());
+                    item->setText(2, ait.current()->startTime().date().toString(ISODate));
                     item->setText(3, ait.current()->duration().toString(KPTDuration::Format_Hour));
                     item->setText(4, KGlobal::locale()->formatMoney(r->normalRate()));
                     item->setText(5, KGlobal::locale()->formatMoney(r->overtimeRate()));

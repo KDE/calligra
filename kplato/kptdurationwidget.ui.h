@@ -26,9 +26,13 @@ struct FieldDescriptor
     
     // If I am hidden, who else hides with me?
     QLabel *separator;
+    
+    // Used for calculating a correct duration
+    unsigned fullScale;
+    unsigned scale;
 };
 
-#define setField(f, l, ls, c, fmt, r, rs, s) \
+#define setField(f, l, ls, c, fmt, r, rs, s, fs, sc) \
 do \
 { \
     m_fields[f].left = l; \
@@ -38,6 +42,8 @@ do \
     m_fields[f].right = r; \
     m_fields[f].rightScale = rs; \
     m_fields[f].separator = s; \
+    m_fields[f].fullScale = fs; \
+    m_fields[f].scale = sc; \
 } while (0)
     
 void KPTDurationWidget::init()
@@ -64,11 +70,11 @@ void KPTDurationWidget::init()
     m_ms->setValidator(m_validator);
     
     m_fields = new FieldDescriptor[5];    
-    setField(0, NULL, 0, m_ddd, "%u", m_hh, 24, m_hhSpace);
-    setField(1, m_ddd, 24, m_hh, "%02u", m_mm, 60, m_mmColon);
-    setField(2, m_hh, 60, m_mm, "%02u", m_ss, 60, NULL);
-    setField(3, m_mm, 60, m_ss, "%02u", m_ms, 1000, m_ssColon);
-    setField(4, m_ss, 1000, m_ms, "%03u", NULL, 0, m_dot);
+    setField(0, NULL, 0, m_ddd, "%u", m_hh, 24, m_hhSpace, 24, 24);
+    setField(1, m_ddd, 24, m_hh, "%02u", m_mm, 60, m_mmColon, 60, 60);
+    setField(2, m_hh, 60, m_mm, "%02u", m_ss, 60, NULL, 60, 60);
+    setField(3, m_mm, 60, m_ss, "%02u", m_ms, 1000, m_ssColon, 60, 60);
+    setField(4, m_ss, 1000, m_ms, "%03u", NULL, 0, m_dot, 0, 0);
 }
 
 void KPTDurationWidget::destroy()
@@ -81,11 +87,19 @@ void KPTDurationWidget::setValue(const KPTDuration &newDuration)
 {
     int i;
     unsigned v[5];
+    unsigned t = 0;
     QString tmp;
     
     newDuration.get(&v[0], &v[1], &v[2], &v[3], &v[4]);
-    for (i = 0; i < 5; i++)
+    for (i = 4; i >= 0; i--)
     {
+        v[i] += t; // add overflow from prevoius field
+        t = 0;
+        if (m_fields[i].leftScale > 0)
+        {
+            t = v[i] / m_fields[i].leftScale; // this goes into next field
+            v[i] = v[i] % m_fields[i].leftScale;
+        }
         tmp.sprintf(m_fields[i].format, v[i]);
         m_fields[i].current->setText(tmp);
     }
@@ -96,11 +110,18 @@ KPTDuration KPTDurationWidget::value() const
 {
     int i;
     unsigned v[5];
-    
+    unsigned t=0;
     for (i = 0; i < 5; i++)
     {
         v[i] = m_fields[i].current->text().toUInt();
-
+        v[i] += t; // add overflow from previous field
+        t = 0;
+        if (m_fields[i].scale > 0 && m_fields[i].scale < m_fields[i].fullScale)
+        {
+            
+            t = (v[i] * m_fields[i].scale) % m_fields[i].fullScale; // this goes into next field
+            v[i] = (v[i] * m_fields[i].scale) / m_fields[i].fullScale;
+        }
         // Ignore hidden field contributions.
         if (m_fields[i].current->isHidden())
             v[i] = 0;
@@ -240,4 +261,10 @@ void KPTDurationWidget::setFieldLeftscale(int f, unsigned ls)
 void KPTDurationWidget::setFieldRightscale(int f, unsigned rs)
 {
     m_fields[f].rightScale = rs;
+}
+
+void KPTDurationWidget::setFieldScale(int f, unsigned fullScale, unsigned scale)
+{
+    m_fields[f].fullScale = fullScale;
+    m_fields[f].scale = scale;
 }

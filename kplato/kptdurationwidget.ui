@@ -253,6 +253,7 @@
     <function returnType="int">visibleFields()</function>
     <function>setFieldLeftscale( int f, unsigned ls )</function>
     <function>setFieldRightscale( int f, unsigned rs )</function>
+    <function>setFieldScale( int f, unsigned fullScale, unsigned scale )</function>
 </functions>
 <layoutdefaults spacing="6" margin="11"/>
 </UI>

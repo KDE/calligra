@@ -33,6 +33,7 @@ class KPTResourceGroup;
 class KPTResource;
 class KPTResourceGroupRequest;
 class KPTResourceRequest;
+class KPTStandardWorktime;
 class KMacroCommand;
 
 class KPTResourceTableItem {
@@ -93,7 +94,7 @@ signals:
 
 private:
     KPTTask &m_task;
-
+    KPTStandardWorktime *m_worktime;
     KPTGroupLVItem *selectedGroup;
     bool m_blockChanged;
 };

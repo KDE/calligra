@@ -151,11 +151,14 @@ int KPTGroupLVItem::numRequests() {
 KPTRequestResourcesPanel::KPTRequestResourcesPanel(QWidget *parent, KPTTask &task)
     : KPTTaskResourcesPanelBase(parent),
       m_task(task),
+      m_worktime(0),
       selectedGroup(0),
       m_blockChanged(false) {
 
     KPTProject *p = dynamic_cast<KPTProject*>(task.projectNode());
     if (p) {
+        m_worktime = p->standardWorktime();
+        
         QPtrListIterator<KPTResourceGroup> git(p->resourceGroups());
         for(int i=0; git.current(); ++git, ++i) {
             KPTResourceGroup *grp = git.current();
@@ -169,17 +172,16 @@ KPTRequestResourcesPanel::KPTRequestResourcesPanel(QWidget *parent, KPTTask &tas
         groupList->setSelected(item, true);
         groupChanged(item);
     }
-
-    if (p) {
-        KPTStandardWorktime *wt = p->standardWorktime();
-        if (wt) {
-            //FIXME handle decimals
-            effort->setFieldRightscale(0, wt->durationDay().hours()); 
-            effort->setFieldLeftscale(1, wt->durationDay().hours());
-        }
+    if (m_worktime && task.effort()->type() == KPTEffort::Type_WorkBased) {
+        //FIXME handle decimals
+        effort->setFieldScale(0, 24, m_worktime->durationDay().hours());
+        effort->setFieldRightscale(0, m_worktime->durationDay().hours()); 
+        effort->setFieldLeftscale(1, m_worktime->durationDay().hours());
+        //kdDebug()<<k_funcinfo<<"Dayscale="<<m_worktime->durationDay().hours()<<endl;
     }
     effort->setValue(task.effort()->expected());
-
+    //kdDebug()<<k_funcinfo<<"effort="<<task.effort()->expected().toString()<<endl;
+    
     //TODO: calc optimistic/pessimistic
     optimisticValue->setValue(task.effort()->optimisticRatio());
     pessimisticValue->setValue(task.effort()->pessimisticRatio());
@@ -248,9 +250,7 @@ void KPTRequestResourcesPanel::slotOk() {
         if (item)
             item->ok(m_task);
     }
-
     m_task.effort()->set(effort->value());
-
     switch(effortType->currentItem()) {
         case 0: // work based
             m_task.effort()->setType(KPTEffort::Type_WorkBased);
