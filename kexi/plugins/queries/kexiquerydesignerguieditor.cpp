@@ -436,7 +436,7 @@ KexiQueryDesignerGuiEditor::afterSwitchFrom(int mode, bool & /*cancelled*/)
 		if (!m_dialog->neverSaved()) {
 			if (!loadLayout()) {
 				//err msg
-				parentDialog()->setStatus(i18n("Query definition loading failed."), i18n("Query data may be corrupted."));
+				parentDialog()->setStatus(parentDialog()->mainWin()->project()->dbConnection(), i18n("Query definition loading failed."), i18n("Query data may be corrupted."));
 				return false;
 			}
 			showFieldsForQuery( static_cast<KexiDB::QuerySchema *>(parentDialog()->schemaData()) );

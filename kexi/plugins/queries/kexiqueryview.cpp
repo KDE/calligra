@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
-   Copyright (C) 2004   Lucijan Busch <lucijan@kde.org>
+   Copyright (C) 2004 Lucijan Busch <lucijan@kde.org>
+   Copyright (C) 2004 Jaroslaw Staniek <js@iidea.pl>
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -42,7 +43,7 @@ bool KexiQueryView::executeQuery(KexiDB::QuerySchema *query)
 		return false;
 	KexiDB::Cursor *rec = mainWin()->project()->dbConnection()->executeQuery(*query);
 	if (!rec) {
-		parentDialog()->setStatus(i18n("Query executing failed."), parentDialog()->mainWin()->project()->dbConnection()->errorMsg());
+		parentDialog()->setStatus(parentDialog()->mainWin()->project()->dbConnection(), i18n("Query executing failed."));
 		//todo: also provide server result and sql statement
 		return false;
 	}
