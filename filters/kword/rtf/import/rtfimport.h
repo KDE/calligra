@@ -13,14 +13,12 @@
 #define __RTFIMPORT_H__
 
 #include <koFilter.h>
-#include <koStore.h>
 #include <qasciidict.h>
 #include <qcolor.h>
 #include <qcstring.h>
 #include <qfile.h>
 #include <qfont.h>
 #include <qmap.h>
-#include <qobject.h>
 #include <qstring.h>
 #include <qvaluelist.h>
 #include <qvaluestack.h>
@@ -245,7 +243,6 @@ public:
 
 
     RTFTokenizer token;
-    KoStore *kostore;
     DomNode frameSets;
     DomNode pixmaps;
     DomNode cliparts;

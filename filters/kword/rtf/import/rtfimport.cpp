@@ -271,17 +271,6 @@ KoFilter::ConversionStatus RTFImport::convert( const QCString& from, const QCStr
 	return KoFilter::WrongFormat;
     }
 
-    // Open output file
-    KoStore* out = KoStore::createStore( m_chain->outputFile(), KoStore::Write, "application/x-kword" );
-
-    if (out->bad())
-    {
-	kdError() << "Unable to open output file!" << endl;
-	in.close();
-	delete out;
-	return KoFilter::StorageCreationError;
-    }
-    kostore	= out;
     table	= 0;
     clipart	= 0;
     pixmap	= 0;
@@ -576,7 +565,6 @@ KoFilter::ConversionStatus RTFImport::convert( const QCString& from, const QCStr
     writeOutPart( "root", mainDoc.data() );
     writeOutPart( "documentinfo.xml", docInfo.data() );
     in.close();
-    delete out;
 
     return KoFilter::OK;
 }
@@ -1781,11 +1769,9 @@ void RTFImport::finishTable()
  */
 void RTFImport::writeOutPart( const char *name, QByteArray &array )
 {
-    if (kostore->open( name ))
-    {
-	kostore->write( array );
-	kostore->close();
-    }
+    KoStoreDevice* dev = m_chain->storageFile( name, KoStore::Write );
+    if ( dev )
+	dev->writeBlock( array.data(), array.size() );
 }
 
 /**
