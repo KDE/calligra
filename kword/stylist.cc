@@ -423,30 +423,6 @@ void KWStylePreview::drawContents( QPainter *painter ) {
 
 
 #if 0
-void KWStyleEditor::changeFont() {
-    QFont f( style->format().font() );
-
-    KWFontDia *fontDia = new KWFontDia( this, "",f,false, false,false );
-    connect( fontDia, SIGNAL( okClicked() ), this, SLOT( slotFontDiaOk() ) );
-
-    fontDia->show();
-    delete fontDia;
-}
-
-void KWStyleEditor::slotFontDiaOk() {
-     const KWFontDia * fontDia = static_cast<const KWFontDia*>(sender());
-     style->format().setFont(fontDia->getNewFont());
-     preview->repaint( true );
-}
-
-void KWStyleEditor::changeColor() {
-  QColor c( style->format().color() );
-  if ( KColorDialog::getColor( c ) ) {
-    style->format().setColor( c );
-    preview->repaint( true );
-  }
-}
-
 bool KWStyleEditor::apply() {
 /*
     *ostyle = *style;
@@ -506,6 +482,7 @@ void KWStyleFontTab::update()
     bool subScript = m_style->format().vAlign() == QTextFormat::AlignSubScript;
     bool superScript = m_style->format().vAlign() == QTextFormat::AlignSuperScript;
     m_chooser->setFont( m_style->format().font(), subScript, superScript );
+    m_chooser->setColor( m_style->format().color() );
 }
 
 void KWStyleFontTab::save()
@@ -517,6 +494,7 @@ void KWStyleFontTab::save()
         m_style->format().setVAlign( QTextFormat::AlignSuperScript );
     else
         m_style->format().setVAlign( QTextFormat::AlignNormal );
+    m_style->format().setColor( m_chooser->color() );
 }
 
 QString KWStyleFontTab::tabName()

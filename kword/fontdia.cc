@@ -23,6 +23,7 @@
 #include "kwdoc.h"
 
 #include <kapp.h>
+#include <kcolordialog.h>
 #include <kfontdialog.h>
 #include <kbuttonbox.h>
 
@@ -40,7 +41,7 @@ KWFontChooser::KWFontChooser( QWidget* parent, const char* name, bool _withSubSu
 
     QGroupBox *grp = new QGroupBox(this);
     lay1->addWidget(grp);
-    QGridLayout *grid = new QGridLayout( grp, 2, 2, KDialog::marginHint(), KDialog::spacingHint() );
+    QGridLayout *grid = new QGridLayout( grp, 2, 3, KDialog::marginHint(), KDialog::spacingHint() );
 
     m_underline = new QCheckBox(i18n("Underline"),grp);
     grid->addWidget(m_underline,0,1);
@@ -59,10 +60,14 @@ KWFontChooser::KWFontChooser( QWidget* parent, const char* name, bool _withSubSu
     m_strikeOut = new QCheckBox(i18n("Strike Out"),grp);
     grid->addWidget(m_strikeOut,1,1);
 
+    m_colorButton = new QPushButton( i18n( "Change Color" ), grp );
+    grid->addWidget(m_colorButton,0,2);
+
     connect( m_underline, SIGNAL(clicked()), this, SLOT( slotUnderlineClicked() ) );
     connect( m_strikeOut, SIGNAL(clicked()), this, SLOT( slotStrikeOutClicked() ) );
     connect( m_subScript, SIGNAL(clicked()), this, SLOT( slotSubScriptClicked() ) );
     connect( m_superScript, SIGNAL(clicked()), this, SLOT( slotSuperScriptClicked() ) );
+    connect( m_colorButton, SIGNAL(clicked()), this, SLOT( slotChangeColor() ) );
 
     connect( m_chooseFont, SIGNAL( fontSelected( const QFont & )),
              this, SLOT( slotFontChanged(const QFont &) ) );
@@ -76,6 +81,16 @@ void KWFontChooser::setFont( const QFont &_font, bool _subscript, bool _superscr
     m_strikeOut->setChecked( _font.strikeOut() );
     m_subScript->setChecked( _subscript );
     m_superScript->setChecked( _superscript );
+}
+
+void KWFontChooser::setColor( const QColor & col )
+{
+    // TODO: when kdelibs-2.2 is a requirement, get rid of m_color
+    // and use m_chooseFont->color() directly.
+    m_color = col;
+#if 0
+    m_chooseFont->setColor( col );
+#endif
 }
 
 void KWFontChooser::slotFontChanged(const QFont & f)
@@ -107,8 +122,22 @@ void KWFontChooser::slotSuperScriptClicked()
         m_subScript->setChecked(false);
 }
 
+void KWFontChooser::slotChangeColor()
+{
+    QColor color = m_color;
+    if ( KColorDialog::getColor( color ) )
+    {
+        m_color = color;
+//#if KDE_VERSION > 220 ?
+#if 0
+        m_chooseFont->setColor( color );
+#endif
+    }
+}
+
+
 KWFontDia::KWFontDia( QWidget* parent, const char* name, const QFont &_font,
-                      bool _subscript,bool _superscript,bool _withSubSuperScript )
+                      bool _subscript, bool _superscript, bool _withSubSuperScript )
     : KDialogBase( parent, name, true,
                    i18n("Select Font"), Ok|Cancel, Ok )
 {

@@ -34,17 +34,20 @@ public:
     virtual ~KWFontChooser() {}
 
     void setFont( const QFont &_font, bool _subscript, bool _superscript );
+    void setColor( const QColor & col );
 
     bool getSuperScript() const { return m_superScript->isChecked(); }
     bool getSubScript() const { return m_subScript->isChecked(); }
     QFont getNewFont() const { return m_newFont; }
+    QColor color() const { return m_color; }
 
-public slots:
+protected slots:
     void slotSuperScriptClicked();
     void slotSubScriptClicked();
     void slotUnderlineClicked();
     void slotStrikeOutClicked();
     void slotFontChanged(const QFont &);
+    void slotChangeColor();
 
 private:
     KFontChooser *m_chooseFont;
@@ -52,7 +55,9 @@ private:
     QCheckBox *m_superScript;
     QCheckBox *m_subScript;
     QCheckBox *m_strikeOut;
+    QPushButton *m_colorButton;
     QFont m_newFont;
+    QColor m_color;
 };
 
 class KWFontDia : public KDialogBase
