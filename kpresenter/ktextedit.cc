@@ -317,7 +317,7 @@ void KTextEdit::keyPressEvent( QKeyEvent *e )
 	break;
     default: {
 	    if ( e->text().length() && !( e->state() & AltButton ) &&
-		 ( !e->ascii() || e->ascii() >= 32 ) || 
+		 ( !e->ascii() || e->ascii() >= 32 ) ||
 		 ( e->text() == "\t" && !( e->state() & ControlButton ) ) ) {
 		clearUndoRedoInfo = FALSE;
 		if ( e->key() == Key_Tab ) {
@@ -1262,6 +1262,9 @@ void KTextEdit::setColor( const QColor &c )
 
 void KTextEdit::setFont( const QFont &f_ )
 {
+    if ( !isVisible() )
+        return;
+
     KTextEditFormat f( *currentFormat );
     f.setFont( f_ );
     setFormat( &f, KTextEditFormat::Font );
@@ -1980,7 +1983,7 @@ void KTextEditCursor::splitAndInsertEmtyParag( bool ind, bool updateIds )
     f = string->at( idx )->format;
     if ( idx == string->length() - 1 && idx > 0 )
 	f = string->at( idx - 1 )->format;
-	
+
 
     if ( atParagStart() ) {
 	KTextEditParag *p = string->prev();
