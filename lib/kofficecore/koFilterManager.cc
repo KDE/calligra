@@ -157,6 +157,11 @@ QString KoFilterManager::import( const QString& url, KoFilter::ConversionStatus&
         kdWarning(s_area) << "Can't open " << t->name () << ", trying filter chooser" << endl;
         if ( m_document )
         {
+	    if ( !m_document->isAutoErrorHandlingEnabled() )
+	    {
+		status = KoFilter::BadConversionGraph;
+		return QString::null;
+	    }
             QCString nativeFormat = m_document->nativeFormatMimeType ();
 
             QApplication::setOverrideCursor( arrowCursor );

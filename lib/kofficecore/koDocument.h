@@ -496,6 +496,11 @@ public:
     void setAutoErrorHandlingEnabled( bool b );
 
     /**
+     * Checks whether error message boxes should be shown.
+     */
+    bool isAutoErrorHandlingEnabled();
+
+    /**
      * Retrieve the default value for autosave in seconds.
      * Called by the applications to use the correct default in their config
      */
