@@ -212,11 +212,11 @@ bool KivioPage::loadXML( const QDomElement& pageE )
 
 
     m_bPageHide = (int)pageE.attribute("hide").toInt();
-    
+
     // Clear the layer list
     KivioLayer *pLayer;
     m_lstLayers.clear();
-    
+
     QDomNode node = pageE.firstChild();
     while( !node.isNull() )
     {
@@ -245,29 +245,29 @@ bool KivioPage::loadXML( const QDomElement& pageE )
        {
 	  kdDebug() << "KivioLayer::loadXML() - unknown node found, " <<  node.nodeName() << endl;
        }
-       
+
        node = node.nextSibling();
     }
-    
+
     m_pCurLayer = m_lstLayers.first();
     if( !m_pCurLayer )
     {
        kdDebug() << "KivioLayer::loadXML() - No layers loaded!! BIGGGGG PROBLEMS!" << endl;
     }
-    
+
     // Now that we are done loading, fix all the connections
     KivioLayer *pLayerBak;
-    
+
     pLayer = m_lstLayers.first();
     while( pLayer )
     {
        pLayerBak = pLayer;
-       
+
        kdDebug() << "KivioLayer::loadXML() - loading layer connections" << endl;
        pLayer->searchForConnections(this);
-       
+
        m_lstLayers.find( pLayerBak );
-       
+
        pLayer = m_lstLayers.next();
     }
 
@@ -338,7 +338,7 @@ void KivioPage::paintContent( KivioPainter& painter, const QRect& rect, bool tra
 	  {
 	     if( pLayer->connectable() )
 		pLayer->paintConnectorTargets( painter, rect, transparent, p0, zoom );
-	     
+
 	     pLayer = m_lstLayers.next();
 	  }
        }
@@ -445,10 +445,10 @@ void KivioPage::selectStencils( float x, float y, float w, float h )
 	       m_lstSelection.append( pStencil );
 	    }
         }
-	
+
         pStencil = m_pCurLayer->stencilList()->next();
     }
-    
+
     m_pDoc->slotSelectionChanged();
 }
 
@@ -727,7 +727,7 @@ void KivioPage::groupSelectedStencils()
     {
 
         debug("*GROUP* Duplicating 1");
-        
+
         // Dup the stencil & group it
         pTake  = pStencil->duplicate();
 
@@ -791,7 +791,7 @@ void KivioPage::ungroupSelectedStencils()
                 pLayer = m_lstLayers.next();
             }
             */
-            
+
             // Remove the current stencil from the selection list(the group we just disassembled)
             m_lstSelection.take();
 
@@ -1017,8 +1017,8 @@ void KivioPage::paste()
 
             // FIXME: Make this offset configurable
             pDup->setPosition( pDup->x() + 10.0f, pDup->y() + 10.0f );
-            
-            
+
+
             addStencil( pDup );
 
             pSelectThese->append( pDup );
@@ -1046,16 +1046,16 @@ void KivioPage::paste()
 int KivioPage::generateStencilIds(int next)
 {
     KivioLayer *pLayer;
-    
+
     pLayer = m_lstLayers.first();
     while( pLayer )
     {
-    
+
         next = pLayer->generateStencilIds( next );
-        
+
         pLayer = m_lstLayers.next();
     }
-    
+
     return next;
 }
 
@@ -1140,8 +1140,10 @@ KivioLayer *KivioPage::layerAt( int pos )
 
 void KivioPage::alignStencils(AlignData d)
 {
+    KivioStencil* pStencil = m_lstSelection.first();
+    if(!pStencil)
+        return;
     if (d.centerOfPage) {
-      KivioStencil* pStencil = m_lstSelection.first();
       float w = m_pPageLayout.ptWidth();
       float h = m_pPageLayout.ptHeight();
       while( pStencil )
@@ -1153,7 +1155,6 @@ void KivioPage::alignStencils(AlignData d)
     }
 
     if (d.v != AlignData::None || d.h != AlignData::None) {
-        KivioStencil* pStencil = m_lstSelection.first();
         float x = pStencil->x();
         float y = pStencil->y();
         float w = pStencil->w();
