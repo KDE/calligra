@@ -1,6 +1,6 @@
 <!-- <?xml version="1.0" ?>
 <!DOCTYPE chapter PUBLIC "-//KDE//DTD DocBook XML V4.1-Based Variant V1.0//EN" "dtd/kdex.dtd">
-          
+     
 To edit or validate this document separately, uncomment this prolog
 Be sure to comment it out again when you are done -->
 
@@ -200,8 +200,8 @@ template for your presentation.
 <shortcut>
 <keycombo action="simul">&Ctrl;<keycap>O</keycap></keycombo>
 </shortcut>
-<guimenu><accel>F</accel>ile</guimenu>
-<guimenuitem><accel>O</accel>pen</guimenuitem>
+<guimenu>File</guimenu>
+<guimenuitem>Open</guimenuitem>
 </menuchoice></term>
 <listitem>
 <para>
@@ -214,8 +214,8 @@ open dialog will appear, allowing you to choose a file to open.
 <varlistentry>
 <term>
 <menuchoice>
-<guimenu><accel>F</accel>ile</guimenu>
-<guisubmenu>Open <accel>R</accel>ecent</guisubmenu>
+<guimenu>File</guimenu>
+<guisubmenu>Open Recent</guisubmenu>
 </menuchoice>
 </term>
 <listitem>
@@ -232,8 +232,8 @@ from.</action>
 <shortcut><keycombo action="simul">
 &Ctrl;<keycap>S</keycap>
 </keycombo></shortcut>
-<guimenu><accel>F</accel>ile</guimenu>
-<guimenuitem><accel>S</accel>ave</guimenuitem>
+<guimenu>File</guimenu>
+<guimenuitem>Save</guimenuitem>
 </menuchoice>
 </term>
 <listitem>
@@ -248,8 +248,8 @@ previously saved the presentation, it will be resaved with the same name.
 <varlistentry>
 <term>
 <menuchoice>
-<guimenu><accel>F</accel>ile</guimenu>
-<guimenuitem>Save <accel>A</accel>s...</guimenuitem>
+<guimenu>File</guimenu>
+<guimenuitem>Save As...</guimenuitem>
 </menuchoice>
 </term>
 <listitem>
@@ -262,8 +262,8 @@ previously saved the presentation, it will be resaved with the same name.
 <varlistentry>
 <term>
 <menuchoice>
-<guimenu><accel>F</accel>ile</guimenu>
-<guimenuitem>Create <accel>H</accel>TML Slideshow...</guimenuitem>
+<guimenu>File</guimenu>
+<guimenuitem>Create HTML Slideshow...</guimenuitem>
 </menuchoice>
 </term>
 <listitem>
@@ -277,7 +277,7 @@ section <xref linkend="html-wizard"/>.
 <varlistentry>
 <term>
 <menuchoice>
-<guimenu><accel>F</accel>ile</guimenu>
+<guimenu>File</guimenu>
 <guimenuitem>Create Template From Current Slide...</guimenuitem>
 </menuchoice>
 </term>
@@ -294,7 +294,7 @@ linkend="creating-templates"/>.
 <varlistentry>
 <term>
 <menuchoice>
-<guimenu><accel>F</accel>ile</guimenu>
+<guimenu>File</guimenu>
 <guimenuitem>Use Current Slide As Default Template</guimenuitem>
 </menuchoice>
 </term>
@@ -312,10 +312,10 @@ often.
 <term>
 <menuchoice> 
 <shortcut><keycombo action="simul">
-<keycap>Ctrl</keycap><keycap>P</keycap>
+&Ctrl;<keycap>P</keycap>
 </keycombo></shortcut>
-<guimenu><accel>F</accel>ile</guimenu>
-<guimenuitem><accel>P</accel>rint...</guimenuitem>
+<guimenu>File</guimenu>
+<guimenuitem>Print...</guimenuitem>
 </menuchoice></term>
 <listitem>
 <para>
@@ -329,8 +329,8 @@ your presentation.
 <varlistentry>
 <term>
 <menuchoice>
-<guimenu><accel>F</accel>ile</guimenu>
-<guimenuitem>Print Previe<accel>w</accel>...</guimenuitem>
+<guimenu>File</guimenu>
+<guimenuitem>Print Preview...</guimenuitem>
 </menuchoice>
 </term>
 <listitem>
@@ -344,8 +344,8 @@ exactly as it would look if printed.
 <varlistentry>
 <term>
 <menuchoice>
-<guimenu><accel>F</accel>ile</guimenu>
-<guimenuitem><accel>D</accel>ocument Information...</guimenuitem>
+<guimenu>File</guimenu>
+<guimenuitem>Document Information...</guimenuitem>
 </menuchoice>
 </term>
 <listitem>
@@ -363,8 +363,8 @@ documents contents.
 <shortcut><keycombo action="simul">
 &Ctrl;<keycap>W</keycap>
 </keycombo></shortcut> 
-<guimenu><accel>F</accel>ile</guimenu>
-<guimenuitem><accel>C</accel>lose</guimenuitem>
+<guimenu>File</guimenu>
+<guimenuitem>Close</guimenuitem>
 </menuchoice></term>
 <listitem>
 <para>
@@ -380,8 +380,8 @@ opportunity to save any changes first.
 <shortcut><keycombo action="simul">
 &Ctrl;<keycap>Q</keycap>
 </keycombo></shortcut>
-<guimenu><accel>F</accel>ile</guimenu>
-<guimenuitem><accel>Q</accel>uit</guimenuitem>
+<guimenu>File</guimenu>
+<guimenuitem>Quit</guimenuitem>
 </menuchoice></term>
 <listitem>
 <para>
@@ -415,7 +415,7 @@ Menu</phrase></textobject>
 <shortcut><keycombo action="simul">
 &Ctrl;<keycap>Z</keycap>
 </keycombo></shortcut>
-<guimenu><accel>E</accel>dit</guimenu>
+<guimenu>Edit</guimenu>
 <guimenuitem>Undo: <replaceable>Last task</replaceable></guimenuitem>
 </menuchoice></term>
 <listitem>
@@ -431,7 +431,7 @@ Menu</phrase></textobject>
 <shortcut>
 <keycombo action="simul">&Ctrl;&Shift;<keycap>Z</keycap></keycombo>
 </shortcut>
-<guimenu><accel>E</accel>dit</guimenu>
+<guimenu>Edit</guimenu>
 <guimenuitem>Redo: <replaceable>Last undone
 task</replaceable></guimenuitem>
 </menuchoice></term>
@@ -451,8 +451,8 @@ disabled.
 <shortcut><keycombo action="simul">
 &Ctrl;<keycap>X</keycap>
 </keycombo></shortcut>
-<guimenu><accel>E</accel>dit</guimenu>
-<guimenuitem>C<accel>u</accel>t</guimenuitem>
+<guimenu>Edit</guimenu>
+<guimenuitem>Cut</guimenuitem>
 </menuchoice></term>
 <listitem>
 <para>
@@ -468,8 +468,8 @@ document.</action>
 <shortcut><keycombo action="simul">
 &Ctrl;<keycap>C</keycap>
 </keycombo></shortcut>
-<guimenu><accel>E</accel>dit</guimenu>
-<guimenuitem><accel>C</accel>opy</guimenuitem>
+<guimenu>Edit</guimenu>
+<guimenuitem>Copy</guimenuitem>
 </menuchoice></term>
 <listitem>
 <para>
@@ -502,8 +502,8 @@ presentation.</action>
 <shortcut><keycombo action="simul">
 &Ctrl;<keycap>Del</keycap>
 </keycombo></shortcut>
-<guimenu><accel>E</accel>dit</guimenu>
-<guimenuitem><accel>D</accel>elete</guimenuitem>
+<guimenu>Edit</guimenu>
+<guimenuitem>Delete</guimenuitem>
 </menuchoice></term>
 <listitem>
 <para>
@@ -519,8 +519,8 @@ presentation.</action>
 <shortcut><keycombo action="simul">
 &Ctrl;<keycap>A</keycap>
 </keycombo></shortcut>
-<guimenu><accel>E</accel>dit</guimenu>
-<guimenuitem>Select <accel>A</accel>ll</guimenuitem>
+<guimenu>Edit</guimenu>
+<guimenuitem>Select All</guimenuitem>
 </menuchoice></term>
 <listitem>
 <para>
@@ -532,7 +532,7 @@ presentation.</action>
 <varlistentry>
 <term>
 <menuchoice>
-<guimenu><accel>E</accel>dit</guimenu>
+<guimenu>Edit</guimenu>
 <guimenuitem>Copy Page</guimenuitem>
 </menuchoice></term>
 <listitem>
@@ -545,7 +545,7 @@ presentation.</action>
 <varlistentry>
 <term>
 <menuchoice>
-<guimenu><accel>E</accel>dit</guimenu>
+<guimenu>Edit</guimenu>
 <guimenuitem>Duplicate Page</guimenuitem>
 </menuchoice>
 </term>
@@ -559,8 +559,8 @@ presentation.</action>
 <varlistentry>
 <term>
 <menuchoice>
-<guimenu><accel>E</accel>dit</guimenu>
-<guimenuitem>Delete <accel>P</accel>age...</guimenuitem>
+<guimenu>Edit</guimenu>
+<guimenuitem>Delete Page...</guimenuitem>
 </menuchoice></term>
 <listitem>
 <para>
@@ -576,8 +576,8 @@ will be asked to confirm this action.
 <shortcut><keycombo action="simul">
 &Ctrl;<keycap>F</keycap>
 </keycombo></shortcut>
-<guimenu><accel>E</accel>dit</guimenu>
-<guimenuitem><accel>F</accel>ind...</guimenuitem>
+<guimenu>Edit</guimenu>
+<guimenuitem>Find...</guimenuitem>
 </menuchoice></term>
 <listitem>
 <para>
@@ -589,8 +589,8 @@ will be asked to confirm this action.
 <varlistentry>
 <term>
 <menuchoice>
-<guimenu><accel>E</accel>dit</guimenu>
-<guimenuitem><accel>H</accel>eader/Footer...</guimenuitem>
+<guimenu>Edit</guimenu>
+<guimenuitem>Header/Footer...</guimenuitem>
 </menuchoice></term>
 <listitem>
 <para>
@@ -620,8 +620,8 @@ Menu</phrase></textobject>
 <varlistentry>
 <term>
 <menuchoice>
-<guimenu><accel>V</accel>iew</guimenu>
-<guimenuitem><accel>N</accel>ew View...</guimenuitem>
+<guimenu>View</guimenu>
+<guimenuitem>New View...</guimenuitem>
 </menuchoice></term>
 <listitem>
 <para>
@@ -649,8 +649,8 @@ a chance to save any changes, or to cancel closing.
 <varlistentry>
 <term>
 <menuchoice>
-<guimenu><accel>V</accel>iew</guimenu>
-<guimenuitem><accel>S</accel>plit View</guimenuitem>
+<guimenu>View</guimenu>
+<guimenuitem>Split View</guimenuitem>
 </menuchoice>
 </term>
 <listitem>
@@ -664,8 +664,8 @@ presentation.</action> The default split is horizontal.
 <varlistentry>
 <term>
 <menuchoice>
-<guimenu><accel>V</accel>iew</guimenu>
-<guimenuitem><accel>R</accel>emove View</guimenuitem>
+<guimenu>View</guimenu>
+<guimenuitem>Remove View</guimenuitem>
 </menuchoice>
 </term>
 <listitem>
@@ -680,8 +680,8 @@ changes you have made remain unsaved.
 <varlistentry>
 <term>
 <menuchoice>
-<guimenu><accel>V</accel>iew</guimenu>
-<guisubmenu>Splitter <accel>O</accel>rientation</guisubmenu>
+<guimenu>View</guimenu>
+<guisubmenu>Splitter Orientation</guisubmenu>
 </menuchoice>
 </term>
 <listitem>
@@ -696,7 +696,7 @@ changes you have made remain unsaved.
 <varlistentry>
 <term>
 <menuchoice>
-<guimenu><accel>V</accel>iew</guimenu>
+<guimenu>View</guimenu>
 <guimenuitem>Show Sidebar</guimenuitem>
 </menuchoice>
 </term>
@@ -729,8 +729,8 @@ Menu</phrase></textobject>
 <term>
 <menuchoice>
 <shortcut><keycap>F2</keycap></shortcut>
-<guimenu><accel>I</accel>nsert</guimenu>
-<guimenuitem><accel>P</accel>age...</guimenuitem>
+<guimenu>Insert</guimenu>
+<guimenuitem>Page...</guimenuitem>
 </menuchoice>
 </term>
 <listitem>
@@ -746,8 +746,8 @@ before or after the currently selected page.
 <term>
 <menuchoice>
 <shortcut><keycap>F3</keycap></shortcut>
-<guimenu><accel>I</accel>nsert</guimenu>
-<guimenuitem>P<accel>i</accel>cture...</guimenuitem>
+<guimenu>Insert</guimenu>
+<guimenuitem>Picture...</guimenuitem>
 </menuchoice>
 </term>
 <listitem>
@@ -766,8 +766,8 @@ role="extension">.png</literal> and many more.
 <term>
 <menuchoice>
 <shortcut><keycap>F4</keycap></shortcut>
-<guimenu><accel>I</accel>nsert</guimenu>
-<guimenuitem><accel>C</accel>lipart...</guimenuitem>
+<guimenu>Insert</guimenu>
+<guimenuitem>Clipart...</guimenuitem>
 </menuchoice>
 </term>
 <listitem>
@@ -816,42 +816,66 @@ Menu</phrase></textobject>
 <varlistentry>
 <term>
 <menuchoice>
-<guimenu>F<accel>o</accel>rmat</guimenu>
-<guimenuitem><accel>P</accel>en And Brush...</guimenuitem>
+<guimenu>Format</guimenu>
+<guimenuitem>Pen And Brush...</guimenuitem>
 </menuchoice>
 </term>
 <listitem>
 <para>
+Brings up a dialog box that <action>modifies the thickness, style
+(dashed or solid) color and thickness of a line</action>.</para>
 
-</para>
+<para>It also gives you the Brush (paint bucket or flood fill)
+options. Note that if you have a line selected, it only gives you the
+line options, but as a solid shape has both a line around the outside
+and an area to fill in the middle of the shape, it will give both
+dialogs.</para>
+
+<para>It also gives both if nothing is selected. The Brush allows both
+plain color fills and several gradients. By moving the dialog box out
+of the way and clicking <guibutton>Apply</guibutton>, you can see the
+effect of your changes. The <guibutton>OK</guibutton> button closes
+the dialog box.</para>
+
 </listitem>
 </varlistentry>
 
 <varlistentry>
 <term>
 <menuchoice>
-<guimenu>F<accel>o</accel>rmat</guimenu>
-<guimenuitem>Configure Pie/<accel>A</accel>rc/Chord...</guimenuitem>
+<guimenu>Format</guimenu>
+<guimenuitem>Configure Pie/Arc/Chord...</guimenuitem>
 </menuchoice>
 </term>
 <listitem>
-<para>
 
-</para>
+<para>You must first make a pie slice, an arc or a chord using the
+fifth tool down on the toolbar to the left of the work area. Once a
+shape has been made, you can change it to one of the other options and
+alter the shape by putting in different values in the boxes. The
+<guilabel>Length</guilabel> box has the most noticeable effect and is
+the one to use to change the shape from the default to what you
+need.</para>
+
 </listitem>
 </varlistentry>
 
 <varlistentry>
 <term>
 <menuchoice>
-<guimenu>F<accel>o</accel>rmat</guimenu>
-<guimenuitem>Configure <accel>R</accel>ectangle...</guimenuitem>
+<guimenu>Format</guimenu>
+<guimenuitem>Configure Rectangle...</guimenuitem>
 </menuchoice>
 </term>
 <listitem>
-<para>
 
-</para>
+<para> Draw a rectangle and it has right angles at each corner. The
+dialog box allows you to set the X and Y values (either type in a
+number, use the slider or spinbox arrows) to make rounded corners on
+your box. If you set both values to 99, your rectangle becomes a
+circle if it started off fairly square or an elipse if it was longer
+on one axis.</para>
+
 </listitem>
 </varlistentry>
 
@@ -861,14 +885,19 @@ Menu</phrase></textobject>
 <shortcut>
 <keycombo action="simul">&Ctrl;<keycap>L</keycap></keycombo>
 </shortcut>
-<guimenu>F<accel>o</accel>rmat</guimenu>
-<guimenuitem><accel>L</accel>ower Objects</guimenuitem>
+<guimenu>Format</guimenu>
+<guimenuitem>Lower Objects</guimenuitem>
 </menuchoice>
 </term>
 <listitem>
-<para>
 
-</para>
+<para>When you draw a new object (&eg; a rectangle), it is on an
+invisible layer. Newer objects (drawn after it) are on a layer above
+it, and if both are in the same place, the newer object will be the
+one on top. If this is not what you want, you can use <keycombo
+action="simul">&Ctrl;<keycap>L</keycap></keycombo> to make a newly
+drawn object go behind one you drew earlier.</para>
+
 </listitem>
 </varlistentry>
 
@@ -878,171 +907,123 @@ Menu</phrase></textobject>
 <shortcut>
 <keycombo action="simul">&Ctrl;<keycap>R</keycap></keycombo>
 </shortcut>
-<guimenu>F<accel>o</accel>rmat</guimenu>
-<guimenuitem>Ra<accel>i</accel>se Objects</guimenuitem>
+<guimenu>Format</guimenu>
+<guimenuitem>Raise Objects</guimenuitem>
 </menuchoice>
 </term>
 <listitem>
-<para>
 
-</para>
+<para>Raises an object drawn earlier to be in front of an object drawn
+after it</para>
+
 </listitem>
 </varlistentry>
 
 <varlistentry>
 <term>
 <menuchoice>
-<guimenu>F<accel>o</accel>rmat</guimenu>
-<guimenuitem>R<accel>o</accel>tate Objects</guimenuitem>
+<guimenu>Format</guimenu>
+<guimenuitem>Rotate Objects</guimenuitem>
 </menuchoice>
 </term>
 <listitem>
-<para>
-
-</para>
+<para>This gives you the option to rotate a selected object by either
+90, 180 or 270 degrees or by any other value. Click the
+<guilabel>Custom</guilabel> Radio button and use the slider to move
+the preview to whatever value you need. If you are not sure, choose 20
+degrees (or some other small value) and hit Apply several times until
+you are happy with the result. What's the <guilabel>zero
+degrees</guilabel> Radio button for? It is an undo button. It sets the
+object you have rotated back to its original position.</para>
 </listitem>
 </varlistentry>
 
 <varlistentry>
 <term>
 <menuchoice>
-<guimenu>F<accel>o</accel>rmat</guimenu>
-<guimenuitem><accel>S</accel>hadow Objects</guimenuitem>
+<guimenu>Format</guimenu>
+<guimenuitem>Shadow Objects</guimenuitem>
 </menuchoice>
 </term>
 <listitem>
-<para>
-
-</para>
+<para>This put as colored copy of either text or a drawn object behind
+it. You can make nice <quote>dropped shadows</quote> for logos with
+this tool. To make it work with text, ensure that you have the text
+box selected (you will see the six small black boxes around the
+outline) You choose the color, select which way the shadow is going to
+fall and select a distance. For text it looks nice if you set the
+distance to two or three.  Click <guibutton>Apply</guibutton> to see
+the result.</para>
 </listitem>
 </varlistentry>
 
 <varlistentry>
 <term>
 <menuchoice>
-<guimenu>F<accel>o</accel>rmat</guimenu>
-<guimenuitem><accel>G</accel>roup Objects</guimenuitem>
+<guimenu>Format</guimenu>
+<guimenuitem>Group Objects</guimenuitem>
 </menuchoice>
 </term>
 <listitem>
-<para>
+<para>If you are drawing, you might want to make something out of
+several rectangles or circles. Arrange the individual parts where you
+want them, select one, then hold down the <keycap>Shift</keycap> key
+as you click in the others you want to group together. Click
+<guimenuitem>Group objects</guimenuitem> and from then on they act as
+if they are just one thing. It glues things together.</para>
 
-</para>
 </listitem>
 </varlistentry>
 
 <varlistentry>
 <term>
 <menuchoice>
-<guimenu>F<accel>o</accel>rmat</guimenu>
-<guimenuitem><accel>U</accel>ngroup Objects</guimenuitem>
+<guimenu>Format</guimenu>
+<guimenuitem>Ungroup Objects</guimenuitem>
 </menuchoice>
 </term>
 <listitem>
-<para>
-
-</para>
+<para>If you decide that you want to alter an object that is made out
+of several pieces, you can unglue it with this tool. Click somewhere
+away from the object to deselect it, then click to select one of its
+parts.</para>
 </listitem>
 </varlistentry>
 
 <varlistentry>
 <term>
 <menuchoice>
-<guimenu>F<accel>o</accel>rmat</guimenu>
-<guisubmenu><accel>A</accel>lign Objects</guisubmenu>
-<guimenuitem>Align <accel>L</accel>eft</guimenuitem>
+<guimenu>Format</guimenu>
+<guisubmenu>Align Objects</guisubmenu>
 </menuchoice>
 </term>
 <listitem>
-<para>
 
-</para>
+<para> Align Objects has another menu as part of it. Select an object
+that you have drawn or some text (ensure that you have the text box
+selected, you will see the six small black boxes around the outline)
+and click one of the options. The selected object moves to the left,
+top center or wherever you have chosen. It's useful for page layout
+when you want some text boxes to align neatly on one side of the slide
+you have made.</para>
+
 </listitem>
 </varlistentry>
 
 <varlistentry>
 <term>
 <menuchoice>
-<guimenu>F<accel>o</accel>rmat</guimenu>
-<guisubmenu><accel>A</accel>lign Objects</guisubmenu>
-<guimenuitem>Align Center (<accel>H</accel>orizontally)</guimenuitem>
-</menuchoice>
-</term>
-<listitem>
-<para>
-
-</para>
-</listitem>
-</varlistentry>
-
-<varlistentry>
-<term>
-<menuchoice>
-<guimenu>F<accel>o</accel>rmat</guimenu>
-<guisubmenu><accel>A</accel>lign Objects</guisubmenu>
-<guimenuitem>Align <accel>R</accel>ight</guimenuitem>
-</menuchoice>
-</term>
-<listitem>
-<para>
-
-</para>
-</listitem>
-</varlistentry>
-
-<varlistentry>
-<term>
-<menuchoice>
-<guimenu>F<accel>o</accel>rmat</guimenu>
-<guisubmenu><accel>A</accel>lign Objects</guisubmenu>
-<guimenuitem>Align <accel>T</accel>op</guimenuitem>
-</menuchoice>
-</term>
-<listitem>
-<para>
-
-</para>
-</listitem>
-</varlistentry>
-
-<varlistentry>
-<term>
-<menuchoice>
-<guimenu>F<accel>o</accel>rmat</guimenu>
-<guisubmenu><accel>A</accel>lign Objects</guisubmenu>
-<guimenuitem>Align Center (<accel>V</accel>ertically)</guimenuitem>
-</menuchoice>
-</term>
-<listitem>
-<para>
-
-</para>
-</listitem>
-</varlistentry>
-
-<varlistentry>
-<term>
-<menuchoice>
-<guimenu>F<accel>o</accel>rmat</guimenu>
-<guisubmenu><accel>A</accel>lign Objects</guisubmenu>
-<guimenuitem>Align <accel>B</accel>ottom</guimenuitem>
-</menuchoice>
-</term>
-<listitem>
-<para>
-
-</para>
-</listitem>
-</varlistentry>
-
-<varlistentry>
-<term>
-<menuchoice>
-<guimenu>F<accel>o</accel>rmat</guimenu>
-<guimenuitem>Page La<accel>y</accel>out...</guimenuitem>
+<guimenu>Format</guimenu>
+<guimenuitem>Page Layout...</guimenuitem>
 </menuchoice></term>
-<listitem><para>
-</para></listitem>
+<listitem>
+
+<para>Allows you to set the page details. You can specify the margins,
+the orientation, either portrait (higher than wide) or Landscape
+(wider than high) formats. There are many templates, such as screen,
+A4, US legal.</para>
+
+</listitem>
 </varlistentry>
 
 <varlistentry>
@@ -1051,8 +1032,27 @@ Menu</phrase></textobject>
 <guimenu>F<accel>o</accel>rmat</guimenu>
 <guimenuitem>Page Bac<accel>k</accel>ground...</guimenuitem>
 </menuchoice></term>
-<listitem><para>
-</para></listitem>
+<listitem>
+
+<para>Allows you to alter the background to your presentation
+slides. Your options are <guilabel>color</guilabel>, (which lets you
+set either a plain color or one of many gradients)
+<guilabel>Clipart</guilabel> (which gives a dialog box to let you find
+your clipart on your hard drive) or <guilabel>picture</guilabel>,
+which again gives a dialog box to find the picture you want.</para>
+
+<para> If you want a plain color, click in the box to select
+it. Gradients only work when you have chosen two colors. The picture
+option allows you to center the picture, zoom it to cover the entire
+slide (if it is smaller than the screen, this is very useful) or tile
+it. This is used when you want a small pattern to repeat across the
+page. It's probably best used with patterns rather than pictures of
+logos.</para>
+
+<para>You can get rid of a picture by selecting another one or
+choosing a color/gradient.</para>
+
+</listitem>
 </varlistentry>
 </variablelist>
 
@@ -1060,6 +1060,10 @@ Menu</phrase></textobject>
 
 <sect1 id="text-menu">
 <title><guimenu>Text</guimenu> Menu</title>
+
+<para>This menu modifies text and gives a few word processing tools to
+use when you are making presentations with text rather than drawings
+in them.</para>
 
 <screenshot>
 <screeninfo>The <guimenu>Text</guimenu> Menu</screeninfo>
@@ -1071,46 +1075,165 @@ Menu</phrase></textobject>
 </mediaobject>
 </screenshot>
 
+<para>To have any effect you must have first created some text by
+making a text box (the tool to the left of the main screen with
+<guiicon>ab</guiicon> in the center). Once you have a text box, double
+click inside it to make the insertion point appear. It looks like a
+vertical line. Write a few words, &eg; <quote><userinput>Kpresenter
+can do everything I need</userinput></quote>, then sweep across the
+text while holding the <mousebutton>left</mousebutton> mouse button to
+highlight it. It should make a gray rectangle appear behind the
+text. Anything included within the rectangle will be affected by the
+tools you use under this menu.</para>
+
 <variablelist>
 <varlistentry>
 <term>
 <menuchoice>
-<guimenu>Te<accel>x</accel>t</guimenu>
-<guimenuitem><accel>F</accel>ont...</guimenuitem>
+<guimenu>Text</guimenu>
+<guimenuitem>Font...</guimenuitem>
 </menuchoice>
 </term>
 <listitem>
-<para>
 
-</para>
+<para>You have to click the Font menu entry to show the dialog box.</para>
+
+<screenshot>
+<screeninfo>The font option dialog</screeninfo>
+<mediaobject>
+<imageobject>
+<imagedata fileref="textmenu01.png" format="PNG"/>
+</imageobject>
+<textobject>
+<phrase>The font option dialog</phrase>
+</textobject>
+</mediaobject>
+</screenshot>
+
+<para>This lets you change the font you are using, the style &eg;
+change from Bold to Italic, the size and the character set. A preview
+window shows how it will look, click <guibutton>Ok</guibutton> to
+change the selected text in your presentation or
+<guibutton>Cancel</guibutton> to return without making changes.</para>
+
 </listitem>
 </varlistentry>
 
 <varlistentry>
 <term>
 <menuchoice>
-<guimenu>Te<accel>x</accel>t</guimenu>
-<guimenuitem><accel>C</accel>olor...</guimenuitem>
+<guimenu>Text</guimenu>
+<guimenuitem>Color...</guimenuitem>
 </menuchoice>
 </term>
 <listitem>
-<para>
 
-</para>
+<para>The <guimenuitem>Color</guimenuitem> menu entry has an
+<guiicon>underlined letter A</guiicon> to the left to show that there
+is an icon on a taskbar that you can use.</para>
+
+<para>This tool is used to change the color of the selected
+text.</para>
+
+<screenshot>
+<screeninfo>The color selector</screeninfo>
+<mediaobject>
+<imageobject>
+<imagedata format="PNG" fileref="textmenu02.png"/>
+</imageobject>
+<textobject><phrase>The color selector</phrase></textobject>
+</mediaobject>
+</screenshot>
+
+<para>The <guilabel>Color Selector</guilabel> dialog has a series of
+useful tools.</para>
+
+<para>On the left is a box with various colors in it. Clicking on the
+ color you want selects it and makes it appear in the square box in
+ the lower center of this dialog box.</para>
+
+<para>To the right of the colored box is a vertical greyscale slider
+ tool. You can make the color you have chosen darker or lighter by
+ sliding the small triangle to the right or clicking in the slider box
+ itself.</para>
+
+<para>Underneath the color choice box on the left are values for H, S
+ &amp; V (Hue, Saturation and Value) and R, G &amp; B (Red Green and
+ Blue). Color values can be typed into the boxes if you want to match
+ a known color used in a drawing or picture.</para>
+
+<para>On the top right is a drop down box. The default display is
+ <guilabel>Recent Colors</guilabel>. Click the colored square you want
+ in the display to choose it. <guilabel>Custom Colors</guilabel>
+ allows you to maintain a separate group of colors you prefer to
+ use. Once you have found a color you like, add it to this group with
+ the <guibutton>Add to Custom Colors</guibutton> button underneath
+ this dialog box. There is no tool provided to remove colors from
+ this.<!-- Neil, can't you just right click and choose to delete them?
+ --></para>
+
+<para><guilabel>40 Colors</guilabel> and <guilabel>Web
+ Colors</guilabel> might be used if you wanted to make a web page with
+ a small number of colors to keep the file size small for faster
+ downloads. The <guilabel>Royal</guilabel> group gives colors from
+ brown to purple via yellow and blue. <guilabel>Named
+ Colors</guilabel> are a nice spread of colors with names.</para>
+
+<para>At the bottom of the right side we have a color picker. It is
+ the pipette icon from art programs. If you have a picture displayed
+ on your screen, you can choose a color you like from the
+ picture. Click the tool, then click on the picture to select a color
+ you like. Underneath is the name of the color (if it has one) and the
+ <acronym>HTML</acronym> value (starting with <literal>#</literal>) of
+ the color. If you want the text in a web page to match a color you
+ have chosen, you can put this value in your html code.</para>
+
+<para>Once you have a color you like, click <guibutton>Ok</guibutton>
+to change its color on the page or <guibutton>Cancel</guibutton> to
+return without making changes.</para>
+
 </listitem>
 </varlistentry>
 
 <varlistentry>
 <term>
 <menuchoice>
-<guimenu>Te<accel>x</accel>t</guimenu>
-<guimenuitem><accel>S</accel>ettings</guimenuitem>
+<guimenu>Text</guimenu>
+<guimenuitem>Settings</guimenuitem>
 </menuchoice>
 </term>
 <listitem>
 <para>
+<guimenuitem>Settings</guimenuitem> has a <guiicon>spanner</guiicon>
+to the left to show that there is an icon to use on the toolbars. This
+allows you to tell &kpresenter; how to display an Unsorted list,
+better known as bullet points.</para>
 
-</para>
+<screenshot>
+<screeninfo>Configuring bullet points</screeninfo>
+<mediaobject>
+<imageobject>
+<imagedata fileref="textmenu03.png" format="PNG"/>
+</imageobject>
+<textobject><phrase>Configuring bullet points</phrase></textobject>
+</mediaobject>
+</screenshot>
+
+<para>You can have four levels of indented bullet points (useful if
+ you are making a list of items under a bullet point, then another
+ list under that one). You can have filled or outline circles and
+ squares are your bullet points.</para>
+
+<para>A nice touch is the ability to specify the color of the bullet
+ points. The black bars in the diagram are color selection dialog
+ boxes. Click inside to modify the color of the bullet points.</para>
+
+<para>The spacing of the lines, paragraphs and margins of the bullet
+point list can also be modified using the tools on the
+right. Underneath is an area that has been created for a enumerated
+(numbered) list. If this is grayed out it has not yet been
+written.</para>
+
 </listitem>
 </varlistentry>
 
@@ -1120,80 +1243,35 @@ Menu</phrase></textobject>
 <shortcut>
 <keycombo action="simul">&Alt;<keycap>L</keycap></keycombo>
 </shortcut>
-<guimenu>Te<accel>x</accel>t</guimenu>
-<guisubmenu><accel>A</accel>lign</guisubmenu>
-<guimenuitem>Align <accel>L</accel>eft</guimenuitem>
+<guimenu>Text</guimenu>
+<guisubmenu>Align</guisubmenu>
 </menuchoice>
 </term>
 <listitem>
 <para>
+<guisubmenu>Align</guisubmenu> has a sub-menu giving three options:
+<guimenuitem>Align Left</guimenuitem>, <guimenuitem>Align
+Center</guimenuitem> and <guimenuitem>Align Right</guimenuitem> and
+also shows the keyboard shortcuts to use.</para>
 
-</para>
+<para>Text is usually aligned at the left margin of a text box. If was
+want it to align to the right or would like it centered, we can use
+this tool.</para>
 </listitem>
 </varlistentry>
 
 <varlistentry>
 <term>
 <menuchoice>
-<shortcut>
-<keycombo action="simul">&Alt;<keycap>C</keycap></keycombo>
-</shortcut>
-<guimenu>Te<accel>x</accel>t</guimenu>
-<guisubmenu><accel>A</accel>lign</guisubmenu>
-<guimenuitem>Align <accel>C</accel>enter</guimenuitem>
+<guimenu>Text</guimenu>
+<guisubmenu>Type</guisubmenu>
 </menuchoice>
 </term>
 <listitem>
 <para>
-
-</para>
-</listitem>
-</varlistentry>
-
-<varlistentry>
-<term>
-<menuchoice>
-<shortcut>
-<keycombo action="simul">&Alt;<keycap>R</keycap></keycombo>
-</shortcut>
-<guimenu>Te<accel>x</accel>t</guimenu>
-<guisubmenu><accel>A</accel>lign</guisubmenu>
-<guimenuitem>Align <accel>R</accel>ight</guimenuitem>
-</menuchoice>
-</term>
-<listitem>
-<para>
-
-</para>
-</listitem>
-</varlistentry>
-
-<varlistentry>
-<term>
-<menuchoice>
-<guimenu>Te<accel>x</accel>t</guimenu>
-<guisubmenu>T<accel>y</accel>pe</guisubmenu>
-<guimenuitem><accel>U</accel>nsorted List</guimenuitem>
-</menuchoice>
-</term>
-<listitem>
-<para>
-
-</para>
-</listitem>
-</varlistentry>
-
-<varlistentry>
-<term>
-<menuchoice>
-<guimenu>Te<accel>x</accel>t</guimenu>
-<guisubmenu>T<accel>y</accel>pe</guisubmenu>
-<guimenuitem><accel>N</accel>ormal Text</guimenuitem>
-</menuchoice>
-</term>
-<listitem>
-<para>
-
+<guisubmenu>Type</guisubmenu> allows us to make an
+<guimenuitem>Unsorted list</guimenuitem> (bullet points) or remove
+them by making them <guimenuitem>Normal Text</guimenuitem>.
 </para>
 </listitem>
 </varlistentry>
@@ -1204,61 +1282,61 @@ Menu</phrase></textobject>
 <shortcut>
 <keycombo action="simul">&Ctrl;<keycap>+</keycap></keycombo>
 </shortcut>
-<guimenu>Te<accel>x</accel>t</guimenu>
-<guimenuitem><accel>I</accel>ncrease Depth</guimenuitem>
+<guimenu>Text</guimenu>
+<guimenuitem>Increase Depth</guimenuitem>
 </menuchoice>
-</term>
-<listitem>
-<para>
-
-</para>
-</listitem>
-</varlistentry>
-
-<varlistentry>
-<term>
 <menuchoice>
 <shortcut>
 <keycombo action="simul">&Ctrl;<keycap>-</keycap></keycombo>
 </shortcut>
-<guimenu>Te<accel>x</accel>t</guimenu>
-<guimenuitem><accel>D</accel>ecrease Depth</guimenuitem>
+<guimenu>Text</guimenu>
+<guimenuitem>Decrease Depth</guimenuitem>
 </menuchoice>
 </term>
 <listitem>
 <para>
+<guimenuitem>Increase Depth</guimenuitem> and <guimenuitem>Decrease
+depth</guimenuitem> move the Unsorted List paragraph to the right
+(<guimenuitem>Increase Depth</guimenuitem>) or back to the left
+(<guimenuitem>Decrease Depth</guimenuitem>).</para>
 
-</para>
+<screenshot>
+<screeninfo>&kpresenter; gets clever with bullet points</screeninfo>
+<mediaobject>
+<imageobject>
+<imagedata fileref="textmenu03a.png" format="PNG"/>
+</imageobject>
+<textobject><phrase>&kpresenter; gets clever with bullet
+points</phrase></textobject>
+<caption><para>The diagram shows indented text, different styles and colors of
+bullet points.</para></caption>
+</mediaobject>
+
+</screenshot>
 </listitem>
 </varlistentry>
 
 <varlistentry>
 <term>
 <menuchoice>
-<guimenu>Te<accel>x</accel>t</guimenu>
-<guimenuitem>Extend Contents To Object <accel>H</accel>eight</guimenuitem>
+<guimenu>Text</guimenu>
+<guimenuitem>Extend Contents To Object Height</guimenuitem>
 </menuchoice>
-</term>
-<listitem>
-<para>
-
-</para>
-</listitem>
-</varlistentry>
-
-<varlistentry>
-<term>
 <menuchoice>
-<guimenu>Te<accel>x</accel>t</guimenu>
-<guimenuitem><accel>E</accel>xtend Object To Fit The Contents</guimenuitem>
+<guimenu>Text</guimenu>
+<guimenuitem>Extend Object To Fit The Contents</guimenuitem>
 </menuchoice>
 </term>
 <listitem>
 <para>
-
+<guimenuitem>Extend Contents to Object Height</guimenuitem> and
+<guimenuitem>Extend Object to fit the Contents</guimenuitem> help to
+re-size text within the text box or make the text box fit the text you
+have typed or pasted into it. 
 </para>
 </listitem>
 </varlistentry>
+
 </variablelist>
 
 </sect1>
@@ -1281,8 +1359,8 @@ Menu</phrase></textobject>
 <varlistentry>
 <term>
 <menuchoice>
-<guimenu>Screen <accel>P</accel>resentations</guimenu>
-<guimenuitem><accel>C</accel>onfigure Pages...</guimenuitem>
+<guimenu>Screen Presentations</guimenu>
+<guimenuitem>Configure Pages...</guimenuitem>
 </menuchoice>
 </term>
 <listitem>
@@ -1295,8 +1373,8 @@ Menu</phrase></textobject>
 <varlistentry>
 <term>
 <menuchoice>
-<guimenu>Screen <accel>P</accel>resentations</guimenu>
-<guimenuitem><accel>A</accel>ssign Effect...</guimenuitem>
+<guimenu>Screen Presentations</guimenu>
+<guimenuitem>Assign Effect...</guimenuitem>
 </menuchoice>
 </term>
 <listitem>
@@ -1309,8 +1387,8 @@ Menu</phrase></textobject>
 <varlistentry>
 <term>
 <menuchoice>
-<guimenu>Screen <accel>P</accel>resentations</guimenu>
-<guimenuitem><accel>S</accel>tart</guimenuitem>
+<guimenu>Screen Presentations</guimenu>
+<guimenuitem>Start</guimenuitem>
 </menuchoice>
 </term>
 <listitem>
@@ -1323,8 +1401,8 @@ Menu</phrase></textobject>
 <varlistentry>
 <term>
 <menuchoice>
-<guimenu>Screen <accel>P</accel>resentations</guimenu>
-<guimenuitem><accel>V</accel>iew Current Page</guimenuitem>
+<guimenu>Screen Presentations</guimenu>
+<guimenuitem>View Current Page</guimenuitem>
 </menuchoice>
 </term>
 <listitem>
@@ -1338,8 +1416,8 @@ Menu</phrase></textobject>
 <term>
 <menuchoice>
 <shortcut><keycap>Home</keycap></shortcut>
-<guimenu>Screen <accel>P</accel>resentations</guimenu>
-<guimenuitem><accel>G</accel>o To Start</guimenuitem>
+<guimenu>Screen Presentations</guimenu>
+<guimenuitem>Go To Start</guimenuitem>
 </menuchoice>
 </term>
 <listitem>
@@ -1353,8 +1431,8 @@ Menu</phrase></textobject>
 <term>
 <menuchoice>
 <shortcut><keycap>Page Up</keycap></shortcut>
-<guimenu>Screen <accel>P</accel>resentations</guimenu>
-<guimenuitem><accel>P</accel>revious Step</guimenuitem>
+<guimenu>Screen Presentations</guimenu>
+<guimenuitem>Previous Step</guimenuitem>
 </menuchoice>
 </term>
 <listitem>
@@ -1368,8 +1446,8 @@ Menu</phrase></textobject>
 <term>
 <menuchoice>
 <shortcut><keycap>Page Down</keycap></shortcut>
-<guimenu>Screen <accel>P</accel>resentations</guimenu>
-<guimenuitem><accel>N</accel>ext Step</guimenuitem>
+<guimenu>Screen Presentations</guimenu>
+<guimenuitem>Next Step</guimenuitem>
 </menuchoice>
 </term>
 <listitem>
@@ -1383,8 +1461,8 @@ Menu</phrase></textobject>
 <term>
 <menuchoice>
 <shortcut><keycap>End</keycap></shortcut>
-<guimenu>Screen <accel>P</accel>resentations</guimenu>
-<guimenuitem>Go To <accel>E</accel>nd</guimenuitem>
+<guimenu>Screen Presentations</guimenu>
+<guimenuitem>Go To End</guimenuitem>
 </menuchoice>
 </term>
 <listitem>
@@ -1397,8 +1475,8 @@ Menu</phrase></textobject>
 <varlistentry>
 <term>
 <menuchoice>
-<guimenu>Screen <accel>P</accel>resentations</guimenu>
-<guimenuitem>Pen Colo<accel>r</accel>...</guimenuitem>
+<guimenu>Screen Presentations</guimenu>
+<guimenuitem>Pen Color...</guimenuitem>
 </menuchoice>
 </term>
 <listitem>
@@ -1411,8 +1489,8 @@ Menu</phrase></textobject>
 <varlistentry>
 <term>
 <menuchoice>
-<guimenu>Screen <accel>P</accel>resentations</guimenu>
-<guimenu>Pen <accel>W</accel>idth</guimenu>
+<guimenu>Screen Presentations</guimenu>
+<guimenu>Pen Width</guimenu>
 <guimenuitem>#</guimenuitem>
 </menuchoice>
 </term>
@@ -1426,8 +1504,8 @@ Menu</phrase></textobject>
 <varlistentry>
 <term>
 <menuchoice>
-<guimenu>Screen <accel>P</accel>resentations</guimenu>
-<guimenuitem><accel>O</accel>pen Presentation Structure
+<guimenu>Screen Presentations</guimenu>
+<guimenuitem>Open Presentation Structure
 Editor</guimenuitem>
 </menuchoice>
 </term>
@@ -1459,8 +1537,8 @@ Menu</phrase></textobject>
 <term>
 <menuchoice>
 <shortcut><keycap>F5</keycap></shortcut>
-<guimenu><accel>T</accel>ools</guimenu>
-<guimenuitem><accel>M</accel>ouse</guimenuitem>
+<guimenu>Tools</guimenu>
+<guimenuitem>Mouse</guimenuitem>
 </menuchoice>
 </term>
 <listitem>
@@ -1474,8 +1552,8 @@ Menu</phrase></textobject>
 <term>
 <menuchoice>
 <shortcut><keycap>F6</keycap></shortcut>
-<guimenu><accel>T</accel>ools</guimenu>
-<guimenuitem><accel>L</accel>ine</guimenuitem>
+<guimenu>Tools</guimenu>
+<guimenuitem>Line</guimenuitem>
 </menuchoice>
 </term>
 <listitem>
@@ -1489,8 +1567,8 @@ Menu</phrase></textobject>
 <term>
 <menuchoice>
 <shortcut><keycap>F7</keycap></shortcut>
-<guimenu><accel>T</accel>ools</guimenu>
-<guimenuitem><accel>R</accel>ectangle</guimenuitem>
+<guimenu>Tools</guimenu>
+<guimenuitem>Rectangle</guimenuitem>
 </menuchoice>
 </term>
 <listitem>
@@ -1504,8 +1582,8 @@ Menu</phrase></textobject>
 <term>
 <menuchoice>
 <shortcut><keycap>F8</keycap></shortcut>
-<guimenu><accel>T</accel>ools</guimenu>
-<guimenuitem><accel>C</accel>ircle/Ellipse</guimenuitem>
+<guimenu>Tools</guimenu>
+<guimenuitem>Circle/Ellipse</guimenuitem>
 </menuchoice>
 </term>
 <listitem>
@@ -1519,8 +1597,8 @@ Menu</phrase></textobject>
 <term>
 <menuchoice>
 <shortcut><keycap>F9</keycap></shortcut>
-<guimenu><accel>T</accel>ools</guimenu>
-<guimenuitem><accel>P</accel>ie/Arc/Chord</guimenuitem>
+<guimenu>Tools</guimenu>
+<guimenuitem>Pie/Arc/Chord</guimenuitem>
 </menuchoice>
 </term>
 <listitem>
@@ -1534,8 +1612,8 @@ Menu</phrase></textobject>
 <term>
 <menuchoice>
 <shortcut><keycap>F10</keycap></shortcut>
-<guimenu><accel>T</accel>ools</guimenu>
-<guimenuitem><accel>T</accel>ext</guimenuitem>
+<guimenu>Tools</guimenu>
+<guimenuitem>Text</guimenuitem>
 </menuchoice>
 </term>
 <listitem>
@@ -1549,8 +1627,8 @@ Menu</phrase></textobject>
 <term>
 <menuchoice>
 <shortcut><keycap>F11</keycap></shortcut>
-<guimenu><accel>T</accel>ools</guimenu>
-<guimenuitem><accel>A</accel>utoform</guimenuitem>
+<guimenu>Tools</guimenu>
+<guimenuitem>Autoform</guimenuitem>
 </menuchoice>
 </term>
 <listitem>
@@ -1564,8 +1642,8 @@ Menu</phrase></textobject>
 <term>
 <menuchoice>
 <shortcut><keycap>F12</keycap></shortcut>
-<guimenu><accel>T</accel>ools</guimenu>
-<guimenuitem><accel>D</accel>iagram</guimenuitem>
+<guimenu>Tools</guimenu>
+<guimenuitem>Diagram</guimenuitem>
 </menuchoice>
 </term>
 <listitem>
@@ -1581,8 +1659,8 @@ Menu</phrase></textobject>
 <shortcut>
 <keycombo action="simul">&Ctrl;<keycap>F1</keycap></keycombo>
 </shortcut>
-<guimenu><accel>T</accel>ools</guimenu>
-<guimenuitem>Ta<accel>b</accel>le</guimenuitem>
+<guimenu>Tools</guimenu>
+<guimenuitem>Table</guimenuitem>
 </menuchoice>
 </term>
 <listitem>
@@ -1598,8 +1676,8 @@ Menu</phrase></textobject>
 <shortcut>
 <keycombo action="simul">&Ctrl;<keycap>F2</keycap></keycombo>
 </shortcut>
-<guimenu><accel>T</accel>ools</guimenu>
-<guimenuitem><accel>O</accel>bject</guimenuitem>
+<guimenu>Tools</guimenu>
+<guimenuitem>Object</guimenuitem>
 </menuchoice>
 </term>
 <listitem>
@@ -1615,90 +1693,8 @@ Menu</phrase></textobject>
 <sect1 id="helpmenu">
 <title><guimenu>Help</guimenu> Menu</title>
 
-<screenshot>
-<screeninfo>The <guimenu>Help</guimenu> Menu</screeninfo>
-<mediaobject>
-<imageobject>
-<imagedata fileref="menuhelp.png" format="PNG"/></imageobject>
-<textobject><phrase>The <guimenu>Help</guimenu> Menu</phrase></textobject>
-</mediaobject>
-</screenshot>
+&help.menu.documentation;
 
-<variablelist>
-
-<varlistentry>
-<term>
-<menuchoice>
-<shortcut><keycap>F1</keycap></shortcut>
-<guimenu><accel>H</accel>elp</guimenu>
-<guimenuitem><accel>C</accel>ontents</guimenuitem>
-</menuchoice>
-</term>
-<listitem>
-<para>
-
-</para>
-</listitem>
-</varlistentry>
-
-<varlistentry>
-<term>
-<menuchoice>
-<shortcut>
-<keycombo action="simul">&Shift;<keycap>F1</keycap></keycombo>
-</shortcut>
-<guimenu><accel>H</accel>elp</guimenu>
-<guimenuitem>What's <accel>T</accel>his</guimenuitem>
-</menuchoice>
-</term>
-<listitem>
-<para>
-</para>
-</listitem>
-</varlistentry>
-
-<varlistentry>
-<term>
-<menuchoice>
-<guimenu><accel>H</accel>elp</guimenu>
-<guimenuitem><accel>R</accel>eport Bug...</guimenuitem>
-</menuchoice>
-</term>
-<listitem>
-<para>
-
-</para>
-</listitem>
-</varlistentry>
-
-<varlistentry>
-<term>
-<menuchoice>
-<guimenu><accel>H</accel>elp</guimenu>
-<guimenuitem><accel>A</accel>bout KPresenter...</guimenuitem>
-</menuchoice>
-</term>
-<listitem>
-<para>
-
-</para>
-</listitem>
-</varlistentry>
-
-<varlistentry>
-<term>
-<menuchoice>
-<guimenu><accel>H</accel>elp</guimenu>
-<guimenuitem>About <accel>K</accel>DE...</guimenuitem>
-</menuchoice>
-</term>
-<listitem>
-<para>
-
-</para>
-</listitem>
-</varlistentry>
-</variablelist>
 </sect1>
 
 </chapter>

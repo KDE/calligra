@@ -6,6 +6,7 @@
   <!ENTITY tutorial SYSTEM "tutorial.docbook">
   <!ENTITY screen SYSTEM "screen.docbook">
   <!ENTITY guides SYSTEM "guides.docbook">
+  <!ENTITY great SYSTEM "great-presentations.docbook">
   <!ENTITY menus SYSTEM "menus.docbook">
   <!ENTITY options SYSTEM "options.docbook">
   <!ENTITY faq SYSTEM "faq.docbook">
@@ -16,6 +17,15 @@
 <bookinfo>
 <title>The &kpresenter; User's Manual</title>
 <authorgroup>
+
+<author>
+<firstname>Neil</firstname>
+<surname>Lucock</surname>
+<affiliation>
+<address><email>neil@nlucock.freeserve.co.uk</email></address>
+</affiliation>
+</author>
+
 <author>
 <firstname>Krishna</firstname>
 <surname>Tateneni</surname>
@@ -28,12 +38,17 @@
      
 </authorgroup>
 
-<date>2000-01-31</date>
+<date>2002-01-16</date>
 <releaseinfo>1.10.00</releaseinfo>
 
 <copyright>
 <year>1999</year><year>2000</year>
 <holder>Krishna Tateneni</holder>
+</copyright>
+
+<copyright>
+<year>2001</year><year>2002</year>
+<holder>Neil Lucock</holder>
 </copyright>
 
 <legalnotice>&FDLNotice;</legalnotice>
@@ -190,12 +205,13 @@ KImage - a simple image viewing application.
 -->
 </itemizedlist>
 
+<!-- 
 <para>
 In addition to the above components, <application>KLyX</application>
 will become part of &koffice; in the
 future. <application>KLyX</application> is a wordprocessor for
 scientific and mathematical documents based on TeX.
-</para>
+</para> -->
 
 <para>
 &koffice; is a free (or open-source) software project which is released
@@ -208,6 +224,8 @@ under the terms of the <acronym>GNU</acronym> General Public License.
 &screen;
 
 &guides;
+
+&great;
 
 &menus;
 
@@ -254,9 +272,11 @@ Luk&aacute;&scaron; Tinkl <email>lukas@kde.org</email>
 </listitem>
 </itemizedlist>
 
+<para>Current documentation is maintained by and copyright Neil Lucock
+<email>neil@nlucock.freeserve.co.uk</email></para>
+
 <para>
-Documentation copyright 1999-2000 by Krishna Tateneni 
-<!-- add email address -->
+Documentation based on the work copyright 1999-2000 by Krishna Tateneni. 
 </para>
 
 <!-- TRANS:CREDIT_FOR_TRANSLATORS -->
