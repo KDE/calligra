@@ -586,7 +586,7 @@ const QString Helper::getFormula(Q_UINT16 row, Q_UINT16 column, QDataStream &rgc
 				}
 				*/
 
-				return ""; // Return empty formula-string on error
+				return "N/A"; // Return _error_ formula-string
 				break;
 			case 0x03:  // ptgAdd
 				stringPtr = parsedFormula.fromLast();
@@ -698,7 +698,7 @@ const QString Helper::getFormula(Q_UINT16 row, Q_UINT16 column, QDataStream &rgc
 				break;
 			case 0x14:  // ptgPercent
 				kdDebug(30511) << "WARNING: ptgPercent formula not supported, yet" << endl;
-				return ""; // Return empty formula-string on error
+				return "N/A"; // Return _error_ formula-string
 				break;
 			case 0x15:  // ptgParen
 				stringPtr = parsedFormula.fromLast();
@@ -714,15 +714,15 @@ const QString Helper::getFormula(Q_UINT16 row, Q_UINT16 column, QDataStream &rgc
 				break;
 			case 0x16:  // ptgMissArg
 				kdDebug(30511) << "WARNING: ptgMissArg formula not supported, yet" << endl;
-				return ""; // Return empty formula-string on error
+				return "N/A"; // Return _error_ formula-string
 				break;
 			case 0x17:  // ptgStr
 				kdDebug(30511) << "WARNING: ptgStr formula not supported, yet" << endl;
-				return ""; // Return empty formula-string on error
+				return "N/A"; // Return _error_ formula-string
 				break;
 			case 0x18:  // ptgExtended
 				kdDebug(30511) << "WARNING: ptgExtended formula not supported, yet" << endl;
-				return ""; // Return empty formula-string on error
+				return "N/A"; // Return _error_ formula-string
 				break;
 			case 0x19:  // ptgAttr
 				rgce >> byte >> integer;
@@ -736,7 +736,7 @@ const QString Helper::getFormula(Q_UINT16 row, Q_UINT16 column, QDataStream &rgc
 				break;
 			case 0x1c:  // ptgErr
 				kdDebug(30511) << "WARNING: ptgErr formula not supported, yet" << endl;
-				return ""; // Return empty formula-string on error
+				return "N/A"; // Return _error_ formula-string
 				break;
 			case 0x1d:  // ptgBool
 				rgce >> byte;
@@ -942,10 +942,10 @@ const QString Helper::getFormula(Q_UINT16 row, Q_UINT16 column, QDataStream &rgc
 				break;
 			case 0x24:  // ptgRef
 			case 0x44:
-				if (biff == BIFF_8)
+				if(biff == BIFF_8)
 				{
 					rgce >> refRow >> refColumn;
-					if (refColumn & 0x8000)
+					if(refColumn & 0x8000)
 						refRow += -1*row;
 					
 					if(refColumn & 0x4000)
@@ -953,12 +953,15 @@ const QString Helper::getFormula(Q_UINT16 row, Q_UINT16 column, QDataStream &rgc
 						refColumn &= 0x3fff;
 						refColumn += -1*column;
 					}
-				} else {
+				}
+				else
+				{
 					rgce >> refRow >> byte;
 					refColumn = byte;
-					if (refRow & 0x8000)
+					if(refRow & 0x8000)
 						refRow += -1*row;
-					if (refRow & 0x4000) {
+					if(refRow & 0x4000)
+					{
 						refRow &= 0x3fff;
 						refColumn += -1*column;
 					}
@@ -1023,6 +1026,6 @@ const QString Helper::getFormula(Q_UINT16 row, Q_UINT16 column, QDataStream &rgc
 				break;
 		}
 	}
-	kdDebug(30511) << "XMLTree::formula: " << parsedFormula.join("") << endl;
+	kdDebug(30511) << "Helper::getFormula: " << parsedFormula.join("") << endl;
 	return parsedFormula.join("");
 }
