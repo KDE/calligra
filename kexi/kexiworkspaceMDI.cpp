@@ -3,6 +3,7 @@
 #include "kexidialogbase.h"
 #include "kexiworkspaceMDI.h"
 #include "kexiview.h"
+#include "kexiproject.h"
 
 KexiWorkspaceMDI::KexiWorkspaceMDI(QWidget *parent, const char *name,KexiView *mw) 
 	: QWorkspace(parent, name),KexiWorkspace()
@@ -29,6 +30,7 @@ void KexiWorkspaceMDI::takeItem(KexiDialogBase *delItem)
 
 void KexiWorkspaceMDI::slotWindowActivated(QWidget* w)
 {
+	if (!m_mainwindow->project()->isReadWrite()) return;
 	kdDebug() << "KexiWorkspace::slotWindowActivated()" << endl;
 	if (!m_mainwindow) return;
 	setCaption("");

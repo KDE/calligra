@@ -47,7 +47,7 @@ class KexiDialogBase : public QWidget
 		KexiView *kexiView()const;
 	signals:
 		void closing(KexiDialogBase *);
-
+	
 	protected:
 		virtual void focusInEvent ( QFocusEvent *);
 		enum WindowType {ToolWindow, DocumentWindow};

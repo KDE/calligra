@@ -59,6 +59,7 @@ KexiView *KexiDialogBase::kexiView()const
 }
 
 
+
 void KexiDialogBase::registerAs(KexiDialogBase::WindowType wt)
 {
 	if (wt==ToolWindow)
