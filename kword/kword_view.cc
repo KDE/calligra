@@ -261,19 +261,19 @@ void KWordView::setFormat( KWFormat &_format, bool _check = true, bool _update_p
   if (_format.getWeight() != -1)
     {
       if ( !CORBA::is_nil( m_vToolBarText ) )
-	m_vToolBarText->setButton(m_idButtonText_Bold,_format.getWeight() == QFont::Bold);
+	m_vToolBarText->setButton(ID_BOLD,_format.getWeight() == QFont::Bold);
       tbFont.setBold(_format.getWeight() == QFont::Bold);
     }
   if (_format.getItalic() != -1)
     {
       if ( !CORBA::is_nil( m_vToolBarText ) )
-	m_vToolBarText->setButton(m_idButtonText_Italic,_format.getItalic() == 1);
+	m_vToolBarText->setButton(ID_ITALIC,_format.getItalic() == 1);
       tbFont.setItalic(_format.getItalic() == 1);
     }
   if (_format.getUnderline() != -1)
     {
       if ( !CORBA::is_nil( m_vToolBarText ) )
-	m_vToolBarText->setButton(m_idButtonText_Underline,_format.getUnderline() == 1);
+	m_vToolBarText->setButton(ID_UNDERLINE,_format.getUnderline() == 1);
       tbFont.setUnderline(_format.getUnderline() == 1);
     }
 
@@ -291,8 +291,8 @@ void KWordView::setFormat( KWFormat &_format, bool _check = true, bool _update_p
 
   if ( !CORBA::is_nil( m_vToolBarText ) )
   {
-    m_vToolBarText->setButton(m_idButtonText_SuperScript,false);  
-    m_vToolBarText->setButton(m_idButtonText_SubScript,false);  
+    m_vToolBarText->setButton(ID_SUPERSCRIPT,false);  
+    m_vToolBarText->setButton(ID_SUBSCRIPT,false);  
   }
   
   if (_format.getVertAlign() == KWFormat::VA_NORMAL)
@@ -301,13 +301,13 @@ void KWordView::setFormat( KWFormat &_format, bool _check = true, bool _update_p
     {
       vertAlign = KWFormat::VA_SUB;
       if ( !CORBA::is_nil( m_vToolBarText ) )
-	m_vToolBarText->setButton(m_idButtonText_SubScript,true);  
+	m_vToolBarText->setButton(ID_SUBSCRIPT,true);  
    }
   else if (_format.getVertAlign() == KWFormat::VA_SUPER)
     {
       vertAlign = KWFormat::VA_SUPER;
       if ( !CORBA::is_nil( m_vToolBarText ) )
-	m_vToolBarText->setButton(m_idButtonText_SuperScript,true);  
+	m_vToolBarText->setButton(ID_SUPERSCRIPT,true);  
    }
 
   format = _format;
@@ -322,24 +322,24 @@ void KWordView::setFlow(KWParagLayout::Flow _flow)
   if (_flow != flow)
     {
       flow = _flow;
-      m_vToolBarText->setButton(m_idButtonText_ALeft,false);  
-      m_vToolBarText->setButton(m_idButtonText_ACenter,false);  
-      m_vToolBarText->setButton(m_idButtonText_ARight,false);  
-      m_vToolBarText->setButton(m_idButtonText_ABlock,false);  
+      m_vToolBarText->setButton(ID_ALEFT,false);  
+      m_vToolBarText->setButton(ID_ACENTER,false);  
+      m_vToolBarText->setButton(ID_ARIGHT,false);  
+      m_vToolBarText->setButton(ID_ABLOCK,false);  
       
       switch (flow)
 	{
 	case KWParagLayout::LEFT:
-	  m_vToolBarText->setButton(m_idButtonText_ALeft,true);  
+	  m_vToolBarText->setButton(ID_ALEFT,true);  
 	  break;
 	case KWParagLayout::CENTER:
-	  m_vToolBarText->setButton(m_idButtonText_ACenter,true);  
+	  m_vToolBarText->setButton(ID_ACENTER,true);  
 	  break;
 	case KWParagLayout::RIGHT:
-	  m_vToolBarText->setButton(m_idButtonText_ARight,true);  
+	  m_vToolBarText->setButton(ID_ARIGHT,true);  
 	  break;
 	case KWParagLayout::BLOCK:
-	  m_vToolBarText->setButton(m_idButtonText_ABlock,true);  
+	  m_vToolBarText->setButton(ID_ABLOCK,true);  
 	  break;
 	}
     }
@@ -351,10 +351,10 @@ void KWordView::setParagBorders(KWParagLayout::Border _left,KWParagLayout::Borde
 {
   if (left != _left || right != _right || top != _top || bottom != _bottom)
     {
-      m_vToolBarText->setButton(m_idButtonText_BorderLeft,false);  
-      m_vToolBarText->setButton(m_idButtonText_BorderRight,false);  
-      m_vToolBarText->setButton(m_idButtonText_BorderTop,false);  
-      m_vToolBarText->setButton(m_idButtonText_BorderBottom,false);  
+      m_vToolBarText->setButton(ID_BRD_LEFT,false);  
+      m_vToolBarText->setButton(ID_BRD_RIGHT,false);  
+      m_vToolBarText->setButton(ID_BRD_TOP,false);  
+      m_vToolBarText->setButton(ID_BRD_BOTTOM,false);  
       
       left = _left;
       right = _right;
@@ -363,25 +363,25 @@ void KWordView::setParagBorders(KWParagLayout::Border _left,KWParagLayout::Borde
 
       if (left.ptWidth > 0)
 	{
-	  m_vToolBarText->setButton(m_idButtonText_BorderLeft,true);  
+	  m_vToolBarText->setButton(ID_BRD_LEFT,true);  
 	  tmpBrd = left;
 	  setParagBorderValues();
 	}
       if (right.ptWidth > 0)
 	{
-	  m_vToolBarText->setButton(m_idButtonText_BorderRight,true);  
+	  m_vToolBarText->setButton(ID_BRD_RIGHT,true);  
 	  tmpBrd = right;
 	  setParagBorderValues();
 	}
       if (top.ptWidth > 0)
 	{
-	  m_vToolBarText->setButton(m_idButtonText_BorderTop,true);  
+	  m_vToolBarText->setButton(ID_BRD_TOP,true);  
 	  tmpBrd = top;
 	  setParagBorderValues();
 	}
       if (bottom.ptWidth > 0)
 	{
-	  m_vToolBarText->setButton(m_idButtonText_BorderBottom,true);  
+	  m_vToolBarText->setButton(ID_BRD_BOTTOM,true);  
 	  tmpBrd = bottom;
 	  setParagBorderValues();
 	}
@@ -732,10 +732,10 @@ void KWordView::textColor()
 void KWordView::textAlignLeft()
 {
   flow = KWParagLayout::LEFT;
-  m_vToolBarText->setButton(m_idButtonText_ALeft,false);  
-  m_vToolBarText->setButton(m_idButtonText_ACenter,false);  
-  m_vToolBarText->setButton(m_idButtonText_ARight,false);  
-  m_vToolBarText->setButton(m_idButtonText_ABlock,false);  
+  m_vToolBarText->setButton(ID_ALEFT,true);  
+  m_vToolBarText->setButton(ID_ACENTER,false);  
+  m_vToolBarText->setButton(ID_ARIGHT,false);  
+  m_vToolBarText->setButton(ID_ABLOCK,false);  
   gui->getPaperWidget()->setFlow(KWParagLayout::LEFT);
 }
 
@@ -743,10 +743,10 @@ void KWordView::textAlignLeft()
 void KWordView::textAlignCenter()
 {
   flow = KWParagLayout::CENTER;
-  m_vToolBarText->setButton(m_idButtonText_ACenter,false);  
-  m_vToolBarText->setButton(m_idButtonText_ALeft,false);  
-  m_vToolBarText->setButton(m_idButtonText_ARight,false);  
-  m_vToolBarText->setButton(m_idButtonText_ABlock,false);  
+  m_vToolBarText->setButton(ID_ALEFT,false);  
+  m_vToolBarText->setButton(ID_ACENTER,true);  
+  m_vToolBarText->setButton(ID_ARIGHT,false);  
+  m_vToolBarText->setButton(ID_ABLOCK,false);  
   gui->getPaperWidget()->setFlow(KWParagLayout::CENTER);
 }
 
@@ -754,10 +754,10 @@ void KWordView::textAlignCenter()
 void KWordView::textAlignRight()
 {
   flow = KWParagLayout::RIGHT;
-  m_vToolBarText->setButton(m_idButtonText_ARight,false);  
-  m_vToolBarText->setButton(m_idButtonText_ACenter,false);  
-  m_vToolBarText->setButton(m_idButtonText_ALeft,false);  
-  m_vToolBarText->setButton(m_idButtonText_ABlock,false);  
+  m_vToolBarText->setButton(ID_ALEFT,false);  
+  m_vToolBarText->setButton(ID_ACENTER,false);  
+  m_vToolBarText->setButton(ID_ARIGHT,true);  
+  m_vToolBarText->setButton(ID_ABLOCK,false);  
   gui->getPaperWidget()->setFlow(KWParagLayout::RIGHT);
 }
 
@@ -765,10 +765,10 @@ void KWordView::textAlignRight()
 void KWordView::textAlignBlock()
 {
   flow = KWParagLayout::BLOCK;
-  m_vToolBarText->setButton(m_idButtonText_ABlock,false);  
-  m_vToolBarText->setButton(m_idButtonText_ACenter,false);  
-  m_vToolBarText->setButton(m_idButtonText_ARight,false);  
-  m_vToolBarText->setButton(m_idButtonText_ALeft,false);  
+  m_vToolBarText->setButton(ID_ARIGHT,false);  
+  m_vToolBarText->setButton(ID_ACENTER,false);  
+  m_vToolBarText->setButton(ID_ALEFT,false);  
+  m_vToolBarText->setButton(ID_ABLOCK,true);  
   gui->getPaperWidget()->setFlow(KWParagLayout::BLOCK);
 }
 
@@ -785,8 +785,8 @@ void KWordView::textUnsortList()
 /*===============================================================*/
 void KWordView::textSuperScript()
 {
-  m_vToolBarText->setButton(m_idButtonText_SubScript,false);  
-  if (!m_vToolBarText->isButtonOn(m_idButtonText_SuperScript))
+  m_vToolBarText->setButton(ID_SUBSCRIPT,false);  
+  if (m_vToolBarText->isButtonOn(ID_SUPERSCRIPT))
     vertAlign = KWFormat::VA_SUPER;
   else
     vertAlign = KWFormat::VA_NORMAL;
@@ -797,8 +797,8 @@ void KWordView::textSuperScript()
 /*===============================================================*/
 void KWordView::textSubScript()
 {
-  m_vToolBarText->setButton(m_idButtonText_SuperScript,false);  
-  if (!m_vToolBarText->isButtonOn(m_idButtonText_SubScript))
+  m_vToolBarText->setButton(ID_SUPERSCRIPT,false);  
+  if (m_vToolBarText->isButtonOn(ID_SUBSCRIPT))
     vertAlign = KWFormat::VA_SUB;
   else
     vertAlign = KWFormat::VA_NORMAL;
@@ -809,7 +809,7 @@ void KWordView::textSubScript()
 /*===============================================================*/
 void KWordView::textBorderLeft()
 {
-  if (!m_vToolBarText->isButtonOn(m_idButtonText_BorderLeft))
+  if (m_vToolBarText->isButtonOn(ID_BRD_LEFT))
     left = tmpBrd;
   else
     left.ptWidth = 0;
@@ -820,7 +820,7 @@ void KWordView::textBorderLeft()
 /*===============================================================*/
 void KWordView::textBorderRight()
 {
-  if (!m_vToolBarText->isButtonOn(m_idButtonText_BorderRight))
+  if (m_vToolBarText->isButtonOn(ID_BRD_RIGHT))
     right = tmpBrd;
   else
     right.ptWidth = 0;
@@ -831,7 +831,7 @@ void KWordView::textBorderRight()
 /*===============================================================*/
 void KWordView::textBorderTop()
 {
-  if (!m_vToolBarText->isButtonOn(m_idButtonText_BorderTop))
+  if (m_vToolBarText->isButtonOn(ID_BRD_TOP))
     top = tmpBrd;
   else
     top.ptWidth = 0;
@@ -842,7 +842,7 @@ void KWordView::textBorderTop()
 /*===============================================================*/
 void KWordView::textBorderBottom()
 {
-  if (!m_vToolBarText->isButtonOn(m_idButtonText_BorderBottom))
+  if (m_vToolBarText->isButtonOn(ID_BRD_BOTTOM))
     bottom = tmpBrd;
   else
     bottom.ptWidth = 0;
@@ -1236,7 +1236,7 @@ bool KWordView::mappingCreateToolbar( OpenPartsUI::ToolBarFactory_ptr _factory )
   fonts.length( fontList.count() );
   for(unsigned int i = 0;i < fontList.count(); i++ )
     fonts[i] = CORBA::string_dup( fontList.at(i) );
-  m_idComboText_FontList = m_vToolBarText->insertCombo( fonts, ID_FONT_LIST, false, SIGNAL( activated( const char* ) ), this,
+  m_idComboText_FontList = m_vToolBarText->insertCombo( fonts, ID_FONT_LIST, true, SIGNAL( activated( const char* ) ), this,
 							"textFontSelected", true, i18n("Font List"),
 							200, -1, OpenPartsUI::AtBottom );
   tbFont.setFamily(fontList.at(0));
@@ -1248,27 +1248,27 @@ bool KWordView::mappingCreateToolbar( OpenPartsUI::ToolBarFactory_ptr _factory )
   tmp = kapp->kde_datadir().copy();
   tmp += "/kword/toolbar/bold.xpm";
   pix = OPUIUtils::loadPixmap(tmp);
-  m_idButtonText_Bold = m_vToolBarText->insertButton2( pix, 1, SIGNAL( clicked() ), this, "textBold", true, i18n("Bold"), -1);
-  m_vToolBarText->setToggle(m_idButtonText_Bold,true);
-  m_vToolBarText->setButton(m_idButtonText_Bold,false);
+  m_idButtonText_Bold = m_vToolBarText->insertButton2( pix, ID_BOLD, SIGNAL( clicked() ), this, "textBold", true, i18n("Bold"), -1);
+  m_vToolBarText->setToggle(ID_BOLD,true);
+  m_vToolBarText->setButton(ID_BOLD,false);
   tbFont.setBold(false);
 
   // italic
   tmp = kapp->kde_datadir().copy();
   tmp += "/kword/toolbar/italic.xpm";
   pix = OPUIUtils::loadPixmap(tmp);
-  m_idButtonText_Italic = m_vToolBarText->insertButton2( pix, 1, SIGNAL( clicked() ), this, "textItalic", true, i18n("Italic"), -1);
-  m_vToolBarText->setToggle(m_idButtonText_Italic,true);
-  m_vToolBarText->setButton(m_idButtonText_Italic,false);
+  m_idButtonText_Italic = m_vToolBarText->insertButton2( pix, ID_ITALIC, SIGNAL( clicked() ), this, "textItalic", true, i18n("Italic"), -1);
+  m_vToolBarText->setToggle(ID_ITALIC,true);
+  m_vToolBarText->setButton(ID_ITALIC,false);
   tbFont.setItalic(false);
   
   // underline
   tmp = kapp->kde_datadir().copy();
   tmp += "/kword/toolbar/underl.xpm";
   pix = OPUIUtils::loadPixmap(tmp);
-  m_idButtonText_Underline = m_vToolBarText->insertButton2( pix, 1, SIGNAL( clicked() ), this, "textUnderline", true, i18n("Underline"), -1);
-  m_vToolBarText->setToggle(m_idButtonText_Underline,true);
-  m_vToolBarText->setButton(m_idButtonText_Underline,false);
+  m_idButtonText_Underline = m_vToolBarText->insertButton2( pix, ID_UNDERLINE, SIGNAL( clicked() ), this, "textUnderline", true, i18n("Underline"), -1);
+  m_vToolBarText->setToggle(ID_UNDERLINE,true);
+  m_vToolBarText->setButton(ID_UNDERLINE,false);
   tbFont.setUnderline(false);
   
   // color
@@ -1284,33 +1284,37 @@ bool KWordView::mappingCreateToolbar( OpenPartsUI::ToolBarFactory_ptr _factory )
   tmp = kapp->kde_datadir().copy();
   tmp += "/kword/toolbar/alignLeft.xpm";
   pix = OPUIUtils::loadPixmap(tmp);
-  m_idButtonText_ALeft = m_vToolBarText->insertButton2( pix, 1, SIGNAL( clicked() ), this, "textAlignLeft", true, i18n("Align Left"), -1);
-  m_vToolBarText->setToggle(m_idButtonText_ALeft,true);
-  m_vToolBarText->setButton(m_idButtonText_ALeft,true);
+  m_idButtonText_ALeft = m_vToolBarText->insertButton2( pix, ID_ALEFT, SIGNAL( clicked() ), this, "textAlignLeft", 
+							true, i18n("Align Left"), -1);
+  m_vToolBarText->setToggle(ID_ALEFT,true);
+  m_vToolBarText->setButton(ID_ALEFT,true);
 
   // align center
   tmp = kapp->kde_datadir().copy();
   tmp += "/kword/toolbar/alignCenter.xpm";
   pix = OPUIUtils::loadPixmap(tmp);
-  m_idButtonText_ACenter = m_vToolBarText->insertButton2( pix, 1, SIGNAL( clicked() ), this, "textAlignCenter", true, i18n("Align Center"), -1);
-  m_vToolBarText->setToggle(m_idButtonText_ACenter,true);
-  m_vToolBarText->setButton(m_idButtonText_ACenter,false);
+  m_idButtonText_ACenter = m_vToolBarText->insertButton2( pix, ID_ACENTER, SIGNAL( clicked() ), this, "textAlignCenter", 
+							  true, i18n("Align Center"), -1);
+  m_vToolBarText->setToggle(ID_ACENTER,true);
+  m_vToolBarText->setButton(ID_ACENTER,false);
   
   // align right
   tmp = kapp->kde_datadir().copy();
   tmp += "/kword/toolbar/alignRight.xpm";
   pix = OPUIUtils::loadPixmap(tmp);
-  m_idButtonText_ARight = m_vToolBarText->insertButton2( pix, 1, SIGNAL( clicked() ), this, "textAlignRight", true, i18n("Align Right"), -1);
-  m_vToolBarText->setToggle(m_idButtonText_ARight,true);
-  m_vToolBarText->setButton(m_idButtonText_ARight,false);
+  m_idButtonText_ARight = m_vToolBarText->insertButton2( pix, ID_ARIGHT, SIGNAL( clicked() ), this, "textAlignRight", 
+							 true, i18n("Align Right"), -1);
+  m_vToolBarText->setToggle(ID_ARIGHT,true);
+  m_vToolBarText->setButton(ID_ARIGHT,false);
   
   // align block
   tmp = kapp->kde_datadir().copy();
   tmp += "/kword/toolbar/alignBlock.xpm";
   pix = OPUIUtils::loadPixmap(tmp);
-  m_idButtonText_ABlock = m_vToolBarText->insertButton2( pix, 1, SIGNAL( clicked() ), this, "textAlignBlock", true, i18n("Align Block"), -1);
-  m_vToolBarText->setToggle(m_idButtonText_ABlock,true);
-  m_vToolBarText->setButton(m_idButtonText_ABlock,false);
+  m_idButtonText_ABlock = m_vToolBarText->insertButton2( pix, ID_ABLOCK, SIGNAL( clicked() ), this, "textAlignBlock", 
+							 true, i18n("Align Block"), -1);
+  m_vToolBarText->setToggle(ID_ABLOCK,true);
+  m_vToolBarText->setButton(ID_ABLOCK,false);
   
   m_vToolBarText->insertSeparator( -1 );
 
@@ -1332,17 +1336,19 @@ bool KWordView::mappingCreateToolbar( OpenPartsUI::ToolBarFactory_ptr _factory )
   tmp = kapp->kde_datadir().copy();
   tmp += "/kword/toolbar/super.xpm";
   pix = OPUIUtils::loadPixmap(tmp);
-  m_idButtonText_SuperScript = m_vToolBarText->insertButton2( pix, 1, SIGNAL( clicked() ), this, "textSuperScript", true, i18n("Superscript"), -1);
-  m_vToolBarText->setToggle(m_idButtonText_SuperScript,true);
-  m_vToolBarText->setButton(m_idButtonText_SuperScript,false);
+  m_idButtonText_SuperScript = m_vToolBarText->insertButton2( pix, ID_SUPERSCRIPT, SIGNAL( clicked() ), this, "textSuperScript", 
+							      true, i18n("Superscript"), -1);
+  m_vToolBarText->setToggle(ID_SUPERSCRIPT,true);
+  m_vToolBarText->setButton(ID_SUPERSCRIPT,false);
   
   // subscript
   tmp = kapp->kde_datadir().copy();
   tmp += "/kword/toolbar/sub.xpm";
   pix = OPUIUtils::loadPixmap(tmp);
-  m_idButtonText_SubScript = m_vToolBarText->insertButton2( pix, 1, SIGNAL( clicked() ), this, "textSubScript", true, i18n("Subscript"), -1);
-  m_vToolBarText->setToggle(m_idButtonText_SubScript,true);
-  m_vToolBarText->setButton(m_idButtonText_SubScript,false);
+  m_idButtonText_SubScript = m_vToolBarText->insertButton2( pix, ID_SUBSCRIPT, SIGNAL( clicked() ), this, "textSubScript", 
+							    true, i18n("Subscript"), -1);
+  m_vToolBarText->setToggle(ID_SUBSCRIPT,true);
+  m_vToolBarText->setButton(ID_SUBSCRIPT,false);
   
   m_vToolBarText->insertSeparator( -1 );
 
@@ -1350,33 +1356,37 @@ bool KWordView::mappingCreateToolbar( OpenPartsUI::ToolBarFactory_ptr _factory )
   tmp = kapp->kde_datadir().copy();
   tmp += "/kword/toolbar/borderleft.xpm";
   pix = OPUIUtils::loadPixmap(tmp);
-  m_idButtonText_BorderLeft = m_vToolBarText->insertButton2( pix, 1, SIGNAL( clicked() ), this, "textBorderLeft", true, i18n("Border Left"), -1);
-  m_vToolBarText->setToggle(m_idButtonText_BorderLeft,true);
-  m_vToolBarText->setButton(m_idButtonText_BorderLeft,false);
+  m_idButtonText_BorderLeft = m_vToolBarText->insertButton2( pix, ID_BRD_LEFT, SIGNAL( clicked() ), this, "textBorderLeft", 
+							     true, i18n("Border Left"), -1);
+  m_vToolBarText->setToggle(ID_BRD_LEFT,true);
+  m_vToolBarText->setButton(ID_BRD_LEFT,false);
   
   // border right
   tmp = kapp->kde_datadir().copy();
   tmp += "/kword/toolbar/borderright.xpm";
   pix = OPUIUtils::loadPixmap(tmp);
-  m_idButtonText_BorderRight = m_vToolBarText->insertButton2( pix, 1, SIGNAL( clicked() ), this, "textBorderRight", true, i18n("Border Right"), -1);
-  m_vToolBarText->setToggle(m_idButtonText_BorderRight,true);
-  m_vToolBarText->setButton(m_idButtonText_BorderRight,false);
+  m_idButtonText_BorderRight = m_vToolBarText->insertButton2( pix, ID_BRD_RIGHT, SIGNAL( clicked() ), this, "textBorderRight", 
+							      true, i18n("Border Right"), -1);
+  m_vToolBarText->setToggle(ID_BRD_RIGHT,true);
+  m_vToolBarText->setButton(ID_BRD_RIGHT,false);
   
   // border top
   tmp = kapp->kde_datadir().copy();
   tmp += "/kword/toolbar/bordertop.xpm";
   pix = OPUIUtils::loadPixmap(tmp);
-  m_idButtonText_BorderTop = m_vToolBarText->insertButton2( pix, 1, SIGNAL( clicked() ), this, "textBorderTop", true, i18n("Border Top"), -1);
-  m_vToolBarText->setToggle(m_idButtonText_BorderTop,true);
-  m_vToolBarText->setButton(m_idButtonText_BorderTop,false);
+  m_idButtonText_BorderTop = m_vToolBarText->insertButton2( pix, ID_BRD_TOP, SIGNAL( clicked() ), this, "textBorderTop", 
+							    true, i18n("Border Top"), -1);
+  m_vToolBarText->setToggle(ID_BRD_TOP,true);
+  m_vToolBarText->setButton(ID_BRD_TOP,false);
   
   // border bottom
   tmp = kapp->kde_datadir().copy();
   tmp += "/kword/toolbar/borderbottom.xpm";
   pix = OPUIUtils::loadPixmap(tmp);
-  m_idButtonText_BorderBottom = m_vToolBarText->insertButton2( pix, 1, SIGNAL( clicked() ), this, "textBorderBottom", true, i18n("Border Bottom"), -1);
-  m_vToolBarText->setToggle(m_idButtonText_BorderBottom,true);
-  m_vToolBarText->setButton(m_idButtonText_BorderBottom,false);
+  m_idButtonText_BorderBottom = m_vToolBarText->insertButton2( pix, ID_BRD_BOTTOM, SIGNAL( clicked() ), this, "textBorderBottom", 
+							       true, i18n("Border Bottom"), -1);
+  m_vToolBarText->setToggle(ID_BRD_BOTTOM,true);
+  m_vToolBarText->setButton(ID_BRD_BOTTOM,false);
   
   // border color
   tmpBrd.color = black;
@@ -1394,18 +1404,18 @@ bool KWordView::mappingCreateToolbar( OpenPartsUI::ToolBarFactory_ptr _factory )
     widthlist[i-1] = CORBA::string_dup( buffer );
   }
   tmpBrd.ptWidth = 1;
-  m_idComboText_BorderWidth = m_vToolBarText->insertCombo( widthlist, 1, false, SIGNAL( activated( const char* ) ),
+  m_idComboText_BorderWidth = m_vToolBarText->insertCombo( widthlist, ID_BRD_WIDTH, false, SIGNAL( activated( const char* ) ),
 						     this, "textBorderWidth", true, i18n("Border Width"),
 						     60, -1, OpenPartsUI::AtBottom );
 
   // border style combobox
   stylelist.length( 5 );
   stylelist[0] = CORBA::string_dup( i18n("solid line") );
-  stylelist[1] = CORBA::string_dup( i18n("dash line (----") );
-  stylelist[2] = CORBA::string_dup( i18n("dot line (****") );
-  stylelist[3] = CORBA::string_dup( i18n("dash dot line (-*-*") );
-  stylelist[4] = CORBA::string_dup( i18n("dash dot dot line (-**-") );
-  m_idComboText_BorderStyle = m_vToolBarText->insertCombo( stylelist, 1, false, SIGNAL( activated( const char* ) ),
+  stylelist[1] = CORBA::string_dup( i18n("dash line (----)") );
+  stylelist[2] = CORBA::string_dup( i18n("dot line (****)") );
+  stylelist[3] = CORBA::string_dup( i18n("dash dot line (-*-*)") );
+  stylelist[4] = CORBA::string_dup( i18n("dash dot dot line (-**-)") );
+  m_idComboText_BorderStyle = m_vToolBarText->insertCombo( stylelist,ID_BRD_STYLE, false, SIGNAL( activated( const char* ) ),
 						     this, "textBorderStyle", true, i18n("Border Style"),
 						     150, -1, OpenPartsUI::AtBottom );
   tmpBrd.style = KWParagLayout::SOLID;
@@ -1550,8 +1560,8 @@ void KWordView::getFonts()
 /*================================================================*/
 void KWordView::setParagBorderValues()
 {
-  m_vToolBarText->setCurrentComboItem(m_idComboText_BorderWidth,tmpBrd.ptWidth - 1);
-  m_vToolBarText->setCurrentComboItem(m_idComboText_BorderStyle,static_cast<int>(tmpBrd.style));
+  m_vToolBarText->setCurrentComboItem(ID_BRD_WIDTH,tmpBrd.ptWidth - 1);
+  m_vToolBarText->setCurrentComboItem(ID_BRD_STYLE,static_cast<int>(tmpBrd.style));
 
   OpenPartsUI::Pixmap colpix;
   colpix.data = CORBA::string_dup( colorToPixString( tmpBrd.color ) );

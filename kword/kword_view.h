@@ -320,6 +320,21 @@ protected:
   static const int ID_FONT_SIZE = 8;
   static const int ID_FONT_LIST = 9;
   static const int ID_STYLE_LIST = 10;
+  static const int ID_BOLD = 11;
+  static const int ID_ITALIC = 12;
+  static const int ID_UNDERLINE = 13;
+  static const int ID_ALEFT = 14;
+  static const int ID_ACENTER = 15;
+  static const int ID_ARIGHT = 16;
+  static const int ID_ABLOCK = 17;
+  static const int ID_BRD_LEFT = 18;
+  static const int ID_BRD_RIGHT = 19;
+  static const int ID_BRD_TOP = 20;
+  static const int ID_BRD_BOTTOM = 21;
+  static const int ID_SUBSCRIPT = 22;
+  static const int ID_SUPERSCRIPT = 23;
+  static const int ID_BRD_STYLE = 24;
+  static const int ID_BRD_WIDTH = 25;
 
 };
 
