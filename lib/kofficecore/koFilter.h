@@ -133,8 +133,8 @@ private:
  * If you're using this class you can also setup a signal/slot communication
  * between parent and child filter. To make that work you simply have to define
  * signals and slots along the following rules:
- * Signals should be named "commSignal<name>" where <name> is the name of the signal,
- * slots should be named "commSlot<name>". The connection will be done automatically
+ * Signals should be named "commSignal\<name\>" where \<name\> is the name of the signal,
+ * slots should be named "commSlot\<name\>". The connection will be done automatically
  * if names and signatures are matching.
  *
  * @author Werner Trobin

@@ -27,7 +27,7 @@
  * This class implements the list styles currently active at a given point.
  * Unlike KoStyleStack, this is NOT an inheritance stack.
  * The list-style stack contains one item per list level at any given point.
- * For instance inside <ul><li><ul><li> (in html terms), it will have 2 items.
+ * For instance inside \<ul\>\<li\>\<ul\>\<li\> (in html terms), it will have 2 items.
  *
  * @author David Faure <faure@kde.org>
  */
