@@ -670,9 +670,13 @@ bool KSpreadDoc::saveOasis( KoStore* store, KoXmlWriter* manifestWriter )
     KoXmlWriter settingsWriter(&dev, "office:document-settings");
     settingsWriter.startElement("office:settings");
     settingsWriter.startElement("config:config-item-set");
-    settingsWriter.addAttribute("config:name", "kspread:settings");
+    settingsWriter.addAttribute("config:name", "view-settings");
 
     KoUnit::saveOasis(&settingsWriter, unit());
+
+    settingsWriter.startElement("config:config-item-map-entry" );
+    saveOasisSettings( settingsWriter );
+    settingsWriter.endElement();
 
     settingsWriter.endElement(); // config:config-item-set
     settingsWriter.endElement(); // office:settings
@@ -687,6 +691,11 @@ bool KSpreadDoc::saveOasis( KoStore* store, KoXmlWriter* manifestWriter )
     setModified( false );
 
     return true;
+}
+
+void KSpreadDoc::saveOasisSettings( KoXmlWriter &settingsWriter )
+{
+    //todo
 }
 
 void KSpreadDoc::saveOasisDocumentStyles( KoStore* store, KoGenStyles& mainStyles ) const

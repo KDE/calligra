@@ -746,7 +746,10 @@ private:
                            KSpreadView* view, const KoRect &viewRect,
                            double positions[], bool paintSides[] );
   void loadPaper( QDomElement const & paper );
-  KSPLoadingInfo *m_loadingInfo;
+
+    void saveOasisSettings( KoXmlWriter &settingsWriter );
+
+    KSPLoadingInfo *m_loadingInfo;
 };
 
 #endif /* KSPREAD_DOC */
