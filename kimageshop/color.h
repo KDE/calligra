@@ -46,6 +46,20 @@ class KColor
   void lab (int *L, int *a, int *b);
   void cmyk (int *C, int *M, int *Y, int *K);
   QColor color();
+
+  int R();
+  int G();
+  int B();
+  int h();
+  int s();
+  int v();
+  int l();
+  int a();
+  int b();
+  int c();
+  int m();
+  int y();
+  int k();
   
   static void RGBtoHSV(int R, int G, int B, int *H, int *S, int *V);
   static void RGBtoLAB(int R, int G, int B, int *L, int *a, int *b);

@@ -511,3 +511,17 @@ void KColor::CMYKtoLAB(int C, int M, int Y, int K, int *L, int *a, int *b)
   CMYKtoRGB(C, M, Y, K, &R, &G, &B);
   RGBtoLAB(R, G, B, L, a, b);
 }
+
+int KColor::R() { if(!m_nativeModel == RGB) calcRGB(); return m_R; }
+int KColor::G() { if(!m_nativeModel == RGB) calcRGB(); return m_G; }
+int KColor::B() { if(!m_nativeModel == RGB) calcRGB(); return m_B; }
+int KColor::h() { if(!m_nativeModel == HSV) calcHSV(); return m_H; }
+int KColor::s() { if(!m_nativeModel == HSV) calcHSV(); return m_S; }
+int KColor::v() { if(!m_nativeModel == HSV) calcHSV(); return m_V; }
+int KColor::l() { if(!m_nativeModel == LAB) calcLAB(); return m_L; }
+int KColor::a() { if(!m_nativeModel == LAB) calcLAB(); return m_a; }
+int KColor::b() { if(!m_nativeModel == LAB) calcLAB(); return m_b; }
+int KColor::c() { if(!m_nativeModel == CMYK) calcCMYK(); return m_C; }
+int KColor::m() { if(!m_nativeModel == CMYK) calcCMYK(); return m_M; }
+int KColor::y() { if(!m_nativeModel == CMYK) calcCMYK(); return m_Y; }
+int KColor::k() { if(!m_nativeModel == CMYK) calcCMYK(); return m_K; }

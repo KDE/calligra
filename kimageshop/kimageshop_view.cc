@@ -59,6 +59,9 @@ KImageShopView::KImageShopView( KImageShopDoc* doc, QWidget* parent, const char*
   setBackgroundMode( QWidget::NoBackground );
   setMouseTracking(true);
 
+  m_fg = KColor::black();
+  m_bg = KColor::white();
+
   // edit actions
 
   m_undo = new KAction( i18n("&Undo"), KImageShopBarIcon("undo"), 0, this, SLOT( undo() ),
@@ -150,8 +153,8 @@ KImageShopView::KImageShopView( KImageShopDoc* doc, QWidget* parent, const char*
   //addDialog(m_pColorDialog);
   m_dialog_color->setChecked(true);
 
-  connect(m_pColorDialog, SIGNAL(fgColorChanged(const QColor&)), this, SLOT(slotSetFGColor(const QColor&)));
-  connect(m_pColorDialog, SIGNAL(bgColorChanged(const QColor&)), this, SLOT(slotSetBGColor(const QColor&)));
+  connect(m_pColorDialog, SIGNAL(fgColorChanged(const KColor&)), this, SLOT(slotSetFGColor(const KColor&)));
+  connect(m_pColorDialog, SIGNAL(bgColorChanged(const KColor&)), this, SLOT(slotSetBGColor(const KColor&)));
 
   // brush dialog
   m_pBrushDialog = new BrushDialog(this);
@@ -610,13 +613,13 @@ void KImageShopView::slotSetBrush(const Brush* b)
   m_pBrush->dump();
 }
 
-void KImageShopView::slotSetFGColor(const QColor& c)
+void KImageShopView::slotSetFGColor(const KColor& c)
 {
-  fg = c;
+  m_fg = c;
 }
 
-void KImageShopView::slotSetBGColor(const QColor& c)
+void KImageShopView::slotSetBGColor(const KColor& c)
 {
-  bg = c;
+  m_bg = c;
 }
 #include "kimageshop_view.moc"

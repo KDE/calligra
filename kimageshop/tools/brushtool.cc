@@ -58,9 +58,9 @@ void BrushTool::paint(QPoint pos)
     return;
 
   // test color
-  int red = m_pView->fgColor().red();
-  int green = m_pView->fgColor().green();
-  int blue = m_pView->fgColor().blue();
+  int red = m_pView->fgColor().R();
+  int green = m_pView->fgColor().G();
+  int blue = m_pView->fgColor().B();
 
   Layer *lay = m_pDoc->getCurrentLayer();
 

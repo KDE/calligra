@@ -53,8 +53,8 @@ class ColorDialog : public KFloatingDialog
   ~ColorDialog();
 
  signals:
-  void fgColorChanged(const QColor&);
-  void bgColorChanged(const QColor&);
+  void fgColorChanged(const KColor&);
+  void bgColorChanged(const KColor&);
 
  public slots:
   void slotFGColorChanged(const QColor&);
