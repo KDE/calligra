@@ -11,6 +11,6 @@ myown_dist =
 # myown_dist lists some more files when a standalone package
 EXTRA_DIST = README kil.dtd killustrator.lsm $(myown_dist)
 
-messages: rc.cpp
-	$(EXTRACTRC) */*.rc > rc.cpp
+messages:
+	$(EXTRACTRC) */*.rc >> rc.cpp
 	$(XGETTEXT) -kI18N -kSI18N rc.cpp */*.cc -o $(podir)/killustrator.pot
