@@ -1,4 +1,4 @@
-/******************************************************************/ 
+/******************************************************************/
 /* KWord - (c) by Reginald Stadlbauer and Torben Weis 1997-1998   */
 /* Version: 0.0.1                                                 */
 /* Author: Reginald Stadlbauer, Torben Weis                       */
@@ -69,10 +69,10 @@ public:
   KWordChild( KWordDocument *_wdoc,const KRect& _rect,KOffice::Document_ptr _doc,int diffx,int diffy);
   KWordChild( KWordDocument *_wdoc);
   ~KWordChild();
-  
-  KWordDocument* parent() 
+
+  KWordDocument* parent()
     { return m_pKWordDoc; }
-  
+
 protected:
   KWordDocument *m_pKWordDoc;
 
@@ -106,10 +106,10 @@ public:
   static const int U_FONT_FAMILY_ALL_SIZE = 128;
   static const int U_FONT_ALL_ALL_SIZE = 256;
   static const int U_TABS = 512;
-  
+
 protected:
   virtual bool hasToWriteMultipart();
-  
+
 public:
   // IDL
   virtual CORBA::Boolean init();
@@ -120,7 +120,7 @@ public:
   virtual bool save( ostream& out, const char *_format );
 
   virtual bool loadTemplate(const char *_url);
-  
+
   // IDL
   virtual OpenParts::View_ptr createView();
   // C++
@@ -129,10 +129,10 @@ public:
   // IDL
   virtual void viewList(KOffice::Document::ViewList*& _list);
 
-  virtual char* mimeType() 
+  virtual char* mimeType()
     { return CORBA::string_dup(MIME_TYPE); }
-  
-  virtual CORBA::Boolean isModified() 
+
+  virtual CORBA::Boolean isModified()
     { return m_bModified; }
 
   virtual KOffice::MainWindow_ptr createMainWindow();
@@ -151,7 +151,7 @@ public:
 
   virtual void insertObject(const KRect& _rect,KoDocumentEntry& _e, int diffx, int diffy );
   virtual void changeChildGeometry(KWordChild *_child,const KRect&);
-  
+
   virtual QListIterator<KWordChild> childIterator();
 
   /**
@@ -175,26 +175,26 @@ public:
   /**
    * Returns the first parag of the frameset <i>_num</i>.
    */
-  KWParag *getFirstParag(unsigned int _num) { 
+  KWParag *getFirstParag(unsigned int _num) {
     if (frames.at(_num)->getFrameType() == FT_TEXT)
       return dynamic_cast<KWTextFrameSet*>(frames.at(_num))->getFirstParag();
     else
       return 0L;
   }
-      
+
   /**
    * @return the default user font.
    *
    * @see KWUserFont
    */
-  KWUserFont* getDefaultUserFont() 
+  KWUserFont* getDefaultUserFont()
     { return defaultUserFont; }
-  KWParagLayout *getDefaultParagLayout() 
+  KWParagLayout *getDefaultParagLayout()
     { return defaultParagLayout; }
-    
+
   /**
    * List of all available user fonts
-   */    
+   */
   QList<KWUserFont> userFontList;
 
   /**
@@ -228,7 +228,7 @@ public:
 
   KWParag* findFirstParagOfPage(unsigned int _page,unsigned int _frameset);
   KWParag* findFirstParagOfRect(unsigned int _ypos,unsigned int _page,unsigned int _frameset);
-    
+
   unsigned int getPTTopBorder() { return pageLayout.ptTop; }
   unsigned int getPTBottomBorder() { return pageLayout.ptBottom; }
   unsigned int getPTLeftBorder() { return pageLayout.ptLeft; }
@@ -239,11 +239,11 @@ public:
   unsigned int getPTColumnSpacing() { return pageColumns.ptColumnSpacing; }
   float getMMPaperHeight() { return pageLayout.mmHeight; }
   float getINCHPaperHeight() { return pageLayout.inchHeight; }
-    
+
   unsigned int getColumns() { return pageColumns.columns; }
-  
+
   void print() {}
-  
+
   /**
    * @param _ypos is relative to the upper left corner of the FIRST
    *              page of the document.
@@ -253,7 +253,7 @@ public:
    *         are not considered to belong to the printable area.
    */
   bool isPTYInFrame(unsigned int _frameSet,unsigned int _frame,unsigned int _ypos);
-  
+
   bool printLine(KWFormatContext &_fc,QPainter &_painter,int xOffset,int yOffset,int _w,int _h,bool _viewFormattingChars = false);
   void printBorders(QPainter &_painter,int xOffset,int yOffset,int _w,int _h);
 
@@ -279,11 +279,11 @@ public:
 
   void insertPicture(QString _filename,KWPage *_paperWidget);
 
-  void setSelStart(KWFormatContext &_fc) 
+  void setSelStart(KWFormatContext &_fc)
     { selStart = _fc; }
   KWFormatContext *getSelStart()
     { return &selStart; }
-  void setSelEnd(KWFormatContext &_fc) 
+  void setSelEnd(KWFormatContext &_fc)
     { selEnd = _fc; }
   KWFormatContext *getSelEnd()
     { return &selEnd; }
@@ -303,7 +303,7 @@ public:
 
   ProcessingType getProcessingType()
     { return processingType; }
-  
+
   int getFrameSet(unsigned int mx,unsigned int my);
   /**
    * Return 1, if a frame gets selected which was not selected before,
@@ -320,7 +320,7 @@ public:
   KWFrameSet *getFirstSelectedFrameSet();
 
   void print(QPainter *painter,QPrinter *printer,float left_margin,float top_margin);
-  
+
   void updateAllFrames();
 
   int getRastX() { return rastX; }
@@ -346,7 +346,7 @@ public:
 
   KoHFType getHeaderType() { return pageHeaderFooter.header; }
   KoHFType getFooterType() { return pageHeaderFooter.footer; }
-  
+
   bool canResize(KWFrameSet *frameset,KWFrame *frame,int page,int diff);
 
   bool needRedraw() { return _needRedraw; }
@@ -385,6 +385,8 @@ public:
   void undo();
   void redo();
 
+  void updateTableHeaders(QList<KWGroupManager> &grpMgrs); 
+
 signals:
   void sig_imageModified();
   void sig_insertObject(KWordChild *_child,KWPartFrameSet*);
@@ -397,7 +399,7 @@ protected slots:
 protected:
   virtual void insertChild(KWordChild*);
   virtual void makeChildListIntern(KOffice::Document_ptr _doc,const char *_path);
-  
+
   virtual void draw(QPaintDevice*,CORBA::Long _width,CORBA::Long _height,
 		    CORBA::Float _scale );
 
@@ -418,11 +420,11 @@ protected:
    * @see #ptColumnWidth
    */
   //void calcColumnWidth();
-    
+
   KoPageLayout pageLayout;
   KoColumns pageColumns;
   KoKWHeaderFooter pageHeaderFooter;
-    
+
   /**
    * Width of a column in unzoomed points. This value is automatically calculated,
    * so dont write to it if you dont know exactly what you are doing.
@@ -430,7 +432,7 @@ protected:
    * @see #calcColumnWidth
    */
   unsigned int ptColumnWidth;
-  
+
   /**
    * List of all framesets.
    *
@@ -453,7 +455,7 @@ protected:
    * @see KWParagLayout
    */
   KWParagLayout *defaultParagLayout;
-  
+
   int pages;
 
   KWFormatContext selStart,selEnd;
@@ -465,7 +467,7 @@ protected:
   bool m_bEmpty;
 
   int applyStyleTemplate;
-  
+
   QStrList changedStyles;
 
   bool _loaded;
@@ -484,7 +486,7 @@ protected:
   int numParags;
 
   KWCommandHistory history;
-  
+
 };
 
 #endif

@@ -2292,8 +2292,9 @@ void KWPage::keyPressEvent(QKeyEvent *e)
 	    doc->setNeedRedraw(false);
 
 	    painter.begin(dev);
+  
 	  }
-      }  break;
+      } break;
     }
 
   if (painter.isActive())
@@ -3579,7 +3580,9 @@ void KWPage::setLeftFrameBorder(KWParagLayout::Border _brd,bool _enable)
 {
   KWFrameSet *frameset = 0L;
   KWFrame *frame = 0L;
-
+  QList<KWGroupManager> grpMgrs;
+  grpMgrs.setAutoDelete(false);
+  
   for (unsigned int i = 0;i < doc->getNumFrameSets();i++)
     {
       frameset = doc->getFrameSet(i);
@@ -3594,9 +3597,13 @@ void KWPage::setLeftFrameBorder(KWParagLayout::Border _brd,bool _enable)
 		  _brd.color = frame->getBackgroundColor().color();
 		}
 	      frame->setLeftBorder(_brd);
+	      if (frameset->getGroupManager() && grpMgrs.findRef(frameset->getGroupManager()) == -1)
+		grpMgrs.append(frameset->getGroupManager());
 	    }
 	}
     }
+
+  doc->updateTableHeaders(grpMgrs);
   doc->updateAllViews(0L);
 }
 
@@ -3605,6 +3612,8 @@ void KWPage::setRightFrameBorder(KWParagLayout::Border _brd,bool _enable)
 {
   KWFrameSet *frameset = 0L;
   KWFrame *frame = 0L;
+  QList<KWGroupManager> grpMgrs;
+  grpMgrs.setAutoDelete(false);
 
   for (unsigned int i = 0;i < doc->getNumFrameSets();i++)
     {
@@ -3620,9 +3629,13 @@ void KWPage::setRightFrameBorder(KWParagLayout::Border _brd,bool _enable)
 		  _brd.color = frame->getBackgroundColor().color();
 		}
 	      frame->setRightBorder(_brd);
+	      if (frameset->getGroupManager() && grpMgrs.findRef(frameset->getGroupManager()) == -1)
+		grpMgrs.append(frameset->getGroupManager());
 	    }
 	}
     }
+
+  doc->updateTableHeaders(grpMgrs);
   doc->updateAllViews(0L);
 }
 
@@ -3631,6 +3644,8 @@ void KWPage::setTopFrameBorder(KWParagLayout::Border _brd,bool _enable)
 {
   KWFrameSet *frameset = 0L;
   KWFrame *frame = 0L;
+  QList<KWGroupManager> grpMgrs;
+  grpMgrs.setAutoDelete(false);
 
   for (unsigned int i = 0;i < doc->getNumFrameSets();i++)
     {
@@ -3646,9 +3661,13 @@ void KWPage::setTopFrameBorder(KWParagLayout::Border _brd,bool _enable)
 		  _brd.color = frame->getBackgroundColor().color();
 		}
 	      frame->setTopBorder(_brd);
+	      if (frameset->getGroupManager() && grpMgrs.findRef(frameset->getGroupManager()) == -1)
+		grpMgrs.append(frameset->getGroupManager());
 	    }
 	}
     }
+
+  doc->updateTableHeaders(grpMgrs);
   doc->updateAllViews(0L);
 }
 
@@ -3657,6 +3676,8 @@ void KWPage::setBottomFrameBorder(KWParagLayout::Border _brd,bool _enable)
 {
   KWFrameSet *frameset = 0L;
   KWFrame *frame = 0L;
+  QList<KWGroupManager> grpMgrs;
+  grpMgrs.setAutoDelete(false);
 
   for (unsigned int i = 0;i < doc->getNumFrameSets();i++)
     {
@@ -3672,9 +3693,13 @@ void KWPage::setBottomFrameBorder(KWParagLayout::Border _brd,bool _enable)
 		  _brd.color = frame->getBackgroundColor().color();
 		}
 	      frame->setBottomBorder(_brd);
+	      if (frameset->getGroupManager() && grpMgrs.findRef(frameset->getGroupManager()) == -1)
+		grpMgrs.append(frameset->getGroupManager());
 	    }
 	}
     }
+  
+  doc->updateTableHeaders(grpMgrs);
   doc->updateAllViews(0L);
 }
 
@@ -3683,6 +3708,8 @@ void KWPage::setFrameBackgroundColor(QBrush _color)
 {
   KWFrameSet *frameset = 0L;
   KWFrame *frame = 0L;
+  QList<KWGroupManager> grpMgrs;
+  grpMgrs.setAutoDelete(false);
 
   for (unsigned int i = 0;i < doc->getNumFrameSets();i++)
     {
@@ -3701,9 +3728,13 @@ void KWPage::setFrameBackgroundColor(QBrush _color)
 	      if (frame->getBottomBorder().color == frame->getBackgroundColor().color())
 		frame->getBottomBorder().color = _color.color();
 	      frame->setBackgroundColor(_color);
+	      if (frameset->getGroupManager() && grpMgrs.findRef(frameset->getGroupManager()) == -1)
+		grpMgrs.append(frameset->getGroupManager());
 	    }
 	}
     }
+
+  doc->updateTableHeaders(grpMgrs);
   doc->updateAllViews(0L);
 }
 
@@ -3755,10 +3786,10 @@ bool KWPage::editModeChanged(QKeyEvent *e)
 
   if (grpMgr && grpMgr->isTableHeader(fs))
     {
-      grpMgr->updateTempHeaders(buffer,xOffset,yOffset,this);
-      KRect r = grpMgr->getBoundingRect();
+      grpMgr->updateTempHeaders();
+      repaintTableHeaders(grpMgr);
     }
-      
+
   switch (e->key())
     {
     case Key_Delete:
@@ -3811,4 +3842,54 @@ bool KWPage::editModeChanged(QKeyEvent *e)
     }
 
   return false;
+}
+
+/*================================================================*/
+void KWPage::repaintTableHeaders(KWGroupManager *grpMgr)
+{
+  QPainter painter;
+    
+  if (paint_directly)
+    painter.begin(this);
+  else
+    {
+      if (has_to_copy) copyBuffer();
+      painter.begin(&buffer);
+    }
+
+  KRect r = grpMgr->getBoundingRect();
+  r = KRect(r.x() - yOffset,r.y() - yOffset,r.width(),r.height());
+  painter.setClipRect(r);
+  KWTextFrameSet *fs;
+  
+  KWFormatContext *paintfc = new KWFormatContext(doc,doc->getFrameSetNum(grpMgr->getCell(0)->frameSet) + 1);
+  for (unsigned i = 0;i < grpMgr->getNumCells();i++)
+    {
+      fs = dynamic_cast<KWTextFrameSet*>(grpMgr->getCell(i)->frameSet);
+      if (!fs->isRemoveableHeader()) continue;
+      
+      KWParag *p = 0L;
+      p = fs->getFirstParag();
+		
+      if (p)
+	{
+	  paintfc->setFrameSet(doc->getFrameSetNum(grpMgr->getCell(i)->frameSet) + 1);
+	  paintfc->init(p,painter,true,true);
+
+	  bool bend = false;
+	  while (!bend)
+	    {
+	      doc->printLine(*paintfc,painter,xOffset,yOffset,width(),height(),gui->getView()->getViewFormattingChars());
+	      bend = !paintfc->makeNextLineLayout(painter);
+	      if (paintfc->getPage() > lastVisiblePage)
+		bend = true;
+	    }
+	}
+    }
+
+  delete paintfc;
+
+  painter.end();
+
+  drawBuffer(r);
 }

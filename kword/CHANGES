@@ -856,4 +856,11 @@ Reggie, 25.2.1999:
 ------------------
 - Fixed some segfaulting code
 - Fixed some memory leaking code
-- Table headers get really updated correctly now - there is only a repaint problem there now... 
+- Table headers get really updated correctly now - there is only a repaint problem there now...
+
+Reggie, 26.2.1999:
+------------------
+- Nearly fixed redraw problem when updating temp table headers
+- Margins, borders, background colors, etc. of temp table headers are updated correctly now
+- Started with more configuration possibilities for tables
+- Some fixes with adding/removing temp table headers and cells in general

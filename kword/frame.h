@@ -380,13 +380,13 @@ public:
     unsigned int row,col;
   };
 
-  KWGroupManager(KWordDocument *_doc) : showHeaderOnAllPages(true)
+  KWGroupManager(KWordDocument *_doc) : showHeaderOnAllPages(true), hasTmpHeaders(false)
     { doc = _doc; cells.setAutoDelete(true); rows = 0; cols = 0; };
 
   void addFrameSet(KWFrameSet *fs,unsigned int row,unsigned int col);
   KWFrameSet *getFrameSet(unsigned int row,unsigned int col);
   bool getFrameSet(KWFrameSet *fs,unsigned int &row,unsigned int &col);
-
+  
   bool isTableHeader(KWFrameSet *fs);
 
   void init(unsigned int x,unsigned int y,unsigned int width,unsigned int height);
@@ -426,14 +426,15 @@ public:
   bool getShowHeaderOnAllPages()
     { return showHeaderOnAllPages; }
 
-  void updateTempHeaders(QPixmap &_buffer,unsigned int xOffset,unsigned int yOffset,QWidget *page);
-
+  void updateTempHeaders();
+  bool hasTempHeaders() { return hasTmpHeaders; }
+  
 protected:
   QList<Cell> cells;
   unsigned int rows,cols;
   KWordDocument *doc;
   QString name;
-  bool showHeaderOnAllPages;
+  bool showHeaderOnAllPages,hasTmpHeaders;
 
 };
 

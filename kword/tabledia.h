@@ -1,4 +1,4 @@
-/******************************************************************/ 
+/******************************************************************/
 /* KWord - (c) by Reginald Stadlbauer and Torben Weis 1997-1998   */
 /* Version: 0.0.1                                                 */
 /* Author: Reginald Stadlbauer, Torben Weis                       */
@@ -28,12 +28,18 @@
 #include <qpen.h>
 #include <qcolor.h>
 #include <qpainter.h>
+#include <qcheckbox.h>
+#include <qbuttongroup.h>
 
 #include <kapp.h>
 #include <kcolorbtn.h>
 #include <kbuttonbox.h>
 
+#include "paraglayout.h"
+#include "format.h"
+
 class KWPage;
+class KWordDocument;
 
 /******************************************************************/
 /* Class: KWTablePreview                                          */
@@ -58,6 +64,50 @@ protected:
 };
 
 /******************************************************************/
+/* Class: KWTableConf                                             */
+/******************************************************************/
+
+class KWTableConf : public QWidget
+{
+  Q_OBJECT
+  
+public:
+  KWTableConf(QWidget *_parent,KWordDocument *_doc);
+  
+protected:
+  struct TableStyle
+  {
+    bool hasHeader,hasFirstCol;
+
+    KWParagLayout::Border hTop,hBottom,hRight,hLeft;
+    QBrush hBack;
+    KWParagLayout::Border frTop,frBottom,frRigfrt,frLeft;
+    QBrush frBack;
+    KWParagLayout::Border bTop,bBottom,bRigbt,bLeft;
+    QBrush bBack;
+    
+    KWFormat header,firstRow,Body;
+  };
+    
+  void readTableStyles();
+  void setupPage();
+  
+  QGridLayout *grid1;
+  QLabel *lStyles;
+  QListBox *lbStyles;
+  QWidget *preview;
+  QCheckBox *cbHeaderOnAllPages;
+  QButtonGroup *bgHeader,*bgFirstCol,*bgBody;
+  QCheckBox *cbHBorder,*cbHBack,*cbHFormat;
+  QCheckBox *cbFCBorder,*cbFCBack,*cbFCFormat;
+  QCheckBox *cbBodyBorder,*cbBodyBack,*cbBodyFormat;
+  
+  KWordDocument *doc;
+  QList<TableStyle> tableStyles;
+  
+};
+
+/******************************************************************/
 /* Class: KWTableDia                                              */
 /******************************************************************/
 
@@ -66,7 +116,7 @@ class KWTableDia : public QTabDialog
   Q_OBJECT
 
 public:
-  KWTableDia(QWidget *parent,const char *name,KWPage *_page,int rows,int cols);
+  KWTableDia(QWidget *parent,const char *name,KWPage *_page,KWordDocument *_doc,int rows,int cols);
 
 protected:
   void setupTab1(int rows,int cols);
@@ -78,9 +128,11 @@ protected:
   QLabel *lRows,*lCols;
   QSpinBox *nRows,*nCols;
   KWTablePreview *preview;
-
+  KWTableConf *tab2;
+  
   KWPage *page;
-
+  KWordDocument *doc;
+  
 protected slots:
   void insertTable();
   void rowsChanged(int);

@@ -385,7 +385,23 @@ void KWFrameSet::addFrame(KWFrame *_frame)
 /*================================================================*/
 void KWFrameSet::delFrame(unsigned int _num)
 {
-  frames.remove(_num);
+  KWFrame *frm = frames.at(_num),*f;
+  bool del = true;
+  unsigned int i = 0;
+  for (f = frames.first();f != 0;f = frames.next(),i++)
+    {
+      if (f == frm && i != _num)
+	{
+	  del = false;
+	  break;
+	}
+    }
+  
+  if (!del)
+    frames.take(_num);
+  else
+    frames.remove(_num);
+  
   update();
 }
 
@@ -535,7 +551,7 @@ void KWTextFrameSet::init()
 void KWTextFrameSet::assign(KWTextFrameSet *fs)
 {
   if (parags) delete parags;
-  
+
   //parags = fs->getFirstParag();
 
   parags = new KWParag(*fs->getFirstParag());
@@ -566,13 +582,13 @@ void KWTextFrameSet::assign(KWTextFrameSet *fs)
 
 //   KWFormatContext fc(doc,doc->getFrameSetNum(this) + 1);
 //   fc.init(parags,p,true,true);
-  
+
 //   bool bend = false;
 //   while (!bend)
 //     bend = !fc.makeNextLineLayout(p);
-  
+
 //   p.end();
-  
+
   getFrame(0)->setBackgroundColor(fs->getFrame(0)->getBackgroundColor());
   getFrame(0)->setLeftBorder(fs->getFrame(0)->getLeftBorder2());
   getFrame(0)->setRightBorder(fs->getFrame(0)->getRightBorder2());
@@ -1575,7 +1591,8 @@ void KWGroupManager::recalcRows(QPainter &_painter)
 	  j--;
 	}
     }
-
+  hasTmpHeaders = false;
+  
   for (unsigned int j = 0;j < rows;j++)
     {
       unsigned int i = 0;
@@ -1624,8 +1641,11 @@ void KWGroupManager::recalcRows(QPainter &_painter)
 	}
 
       if (_addRow && showHeaderOnAllPages)
-	insertRow(j,_painter,false,true);
-
+	{
+	  hasTmpHeaders = true;
+	  insertRow(j,_painter,false,true);
+	}
+      
       for (i = 0;i < cols;i++)
 	{
 	  if (_addRow)
@@ -1647,6 +1667,23 @@ void KWGroupManager::recalcRows(QPainter &_painter)
   if (getBoundingRect().y() + getBoundingRect().height() >
       static_cast<int>(doc->getPTPaperHeight() * doc->getPages()))
     doc->appendPage(doc->getPages() - 1,_painter);
+
+  // Reggie: UHHHHHHHHHHHH: Ugly and slow but it helps for now
+  Cell *c;
+  for (unsigned int f = 0;f < cells.count();f++)
+    {
+      c = cells.at(f);
+      if (c->frameSet->getNumFrames() > 1)
+	{
+	  while (true)
+	    {
+	      if (c->frameSet->getNumFrames() > 1)
+		c->frameSet->delFrame(1);
+	      else
+		break;
+	    }
+	}
+    }
 }
 
 /*================================================================*/
@@ -1906,8 +1943,10 @@ void KWGroupManager::deleteCol(unsigned int _idx)
 }
 
 /*================================================================*/
-void KWGroupManager::updateTempHeaders(QPixmap &_buffer,unsigned int xOffset,unsigned int yOffset,QWidget *page)
+void KWGroupManager::updateTempHeaders()
 {
+  //if (!hasTmpHeaders) return;
+  
   for (unsigned int i = 1;i < rows;i++)
     {
       for (unsigned int j = 0;j < cols;j++)
@@ -1916,26 +1955,19 @@ void KWGroupManager::updateTempHeaders(QPixmap &_buffer,unsigned int xOffset,uns
 	  if (fs->isRemoveableHeader())
 	    {
 	      dynamic_cast<KWTextFrameSet*>(fs)->assign(dynamic_cast<KWTextFrameSet*>(getFrameSet(0,j)));
+	
 	      QPainter p;
-	      p.begin(&_buffer);
-
-	      KWFrame *f = fs->getFrame(0);
-	      
-	      p.eraseRect(f->x() - xOffset,f->y() - yOffset,f->width(),f->height());
-	      
+	      QPicture pic;
+	      p.begin(&pic);
+	
 	      KWFormatContext fc(doc,doc->getFrameSetNum(fs) + 1);
 	      fc.init(dynamic_cast<KWTextFrameSet*>(fs)->getFirstParag(),p,true,true);
-  
+
 	      bool bend = false;
 	      while (!bend)
-		{
-		  doc->printLine(fc,p,xOffset,yOffset,f->width(),f->height(),true);
-		  bend = !fc.makeNextLineLayout(p);
-		}
-  
+		bend = !fc.makeNextLineLayout(p);
+	
 	      p.end();
-	      
-	      bitBlt(page,f->x() - xOffset,f->y() - yOffset,&_buffer,f->x() - xOffset,f->y() - yOffset,f->width(),f->height());
 	    }
 	}
     }

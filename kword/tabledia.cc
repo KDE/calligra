@@ -1,4 +1,4 @@
-/******************************************************************/ 
+/******************************************************************/
 /* KWord - (c) by Reginald Stadlbauer and Torben Weis 1997-1998   */
 /* Version: 0.0.1                                                 */
 /* Author: Reginald Stadlbauer, Torben Weis                       */
@@ -43,17 +43,94 @@ void KWTablePreview::paintEvent(QPaintEvent *e)
 }
 
 /******************************************************************/
+/* Class: KWTableConf                                             */
+/******************************************************************/
+
+/*================================================================*/
+KWTableConf::KWTableConf(QWidget *_parent,KWordDocument *_doc)
+  : QWidget(_parent)
+{
+  doc = _doc;
+
+  readTableStyles();
+  setupPage();
+}
+
+/*================================================================*/
+void KWTableConf::readTableStyles()
+{
+}
+
+/*================================================================*/
+void KWTableConf::setupPage()
+{
+  grid1 = new QGridLayout(this,4,3,15,7);
+
+  lStyles = new QLabel(i18n("Styles"),this);
+  lStyles->resize(lStyles->sizeHint());
+  grid1->addWidget(lStyles,0,0);
+  
+  lbStyles = new QListBox(this);
+  lbStyles->resize(lbStyles->sizeHint());
+  grid1->addWidget(lbStyles,1,0);
+  
+  preview = new QWidget(this);
+  preview->setBackgroundColor(white);
+  grid1->addMultiCellWidget(preview,1,1,1,2);
+  
+  bgHeader = new QButtonGroup(i18n("Apply for Header"),this);
+  grid1->addWidget(bgHeader,2,0);
+
+  bgFirstCol = new QButtonGroup(i18n("Apply for First Column"),this);
+  grid1->addWidget(bgFirstCol,2,1);
+
+  bgBody = new QButtonGroup(i18n("Apply for Body"),this);
+  grid1->addWidget(bgBody,2,2);
+
+  cbHeaderOnAllPages = new QCheckBox(i18n("When a table flows over multiple pages, copy header to each page begin"),this);
+  cbHeaderOnAllPages->resize(cbHeaderOnAllPages->sizeHint());
+  grid1->addMultiCellWidget(cbHeaderOnAllPages,3,3,0,2);
+  
+  grid1->addRowSpacing(0,lStyles->height());
+  grid1->addRowSpacing(1,lbStyles->height());
+  grid1->addRowSpacing(1,200);
+  grid1->addRowSpacing(2,bgHeader->height());
+  grid1->addRowSpacing(2,bgFirstCol->height());
+  grid1->addRowSpacing(2,bgBody->height());
+  grid1->addRowSpacing(3,cbHeaderOnAllPages->height());
+  grid1->setRowStretch(0,0);
+  grid1->setRowStretch(1,1);
+  grid1->setRowStretch(2,0);
+  grid1->setRowStretch(3,0);
+  
+  grid1->addColSpacing(0,lStyles->width());
+  grid1->addColSpacing(0,lbStyles->width());
+  grid1->addColSpacing(0,bgHeader->width());
+  grid1->addColSpacing(1,100);
+  grid1->addColSpacing(1,bgFirstCol->width());
+  grid1->addColSpacing(2,100);
+  grid1->addColSpacing(2,bgBody->width());
+  grid1->setColStretch(0,1);
+  grid1->setColStretch(1,1);
+  grid1->setColStretch(2,1);
+  
+  grid1->activate();
+}
+
+/******************************************************************/
 /* Class: KWTableDia                                              */
 /******************************************************************/
 
 /*================================================================*/
-KWTableDia::KWTableDia(QWidget* parent,const char* name,KWPage *_page,int rows,int cols)
+KWTableDia::KWTableDia(QWidget* parent,const char* name,KWPage *_page,KWordDocument *_doc,int rows,int cols)
   : QTabDialog(parent,name,true)
 {
   page = _page;
-
+  doc = _doc;
+  
   setupTab1(rows,cols);
-    
+  setupTab2();
+  
   setCancelButton(i18n("Cancel"));
   setOkButton(i18n("OK"));
 }
@@ -113,6 +190,13 @@ void KWTableDia::setupTab1(int rows,int cols)
   connect(this,SIGNAL(applyButtonPressed()),this,SLOT(insertTable()));
   connect(nRows,SIGNAL(valueChanged(int)),this,SLOT(rowsChanged(int)));
   connect(nCols,SIGNAL(valueChanged(int)),this,SLOT(colsChanged(int)));
+}
+
+/*================================================================*/
+void KWTableDia::setupTab2()
+{
+  tab2 = new KWTableConf(this,doc);
+  addTab(tab2,i18n("Properties"));
 }
 
 /*================================================================*/

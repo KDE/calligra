@@ -1,4 +1,4 @@
-/******************************************************************/ 
+/******************************************************************/
 /* KWord - (c) by Reginald Stadlbauer and Torben Weis 1997-1998   */
 /* Version: 0.0.1                                                 */
 /* Author: Reginald Stadlbauer, Torben Weis                       */
@@ -58,7 +58,7 @@ enum EditMode {EM_INSERT,EM_DELETE,EM_BACKSPACE,EM_CMOVE,EM_NONE,EM_RETURN};
 class KWPage : public QWidget
 {
   Q_OBJECT
-  
+
 public:
   KWPage(QWidget *parent,KWordDocument *_doc,KWordGUI *_gui);
   ~KWPage() { delete fc; }
@@ -76,7 +76,7 @@ public:
   void resizeEvent(QResizeEvent *e);
 
   /**
-   * @return 0 if the cursor is visible with respect to the 
+   * @return 0 if the cursor is visible with respect to the
    *         y-coordinate. Mention that the cursor may be never the less
    *         invisible because of its x-coordinate. 1 is returned if the cursor
    *         is under the visible area and -1 if the cursor is above.
@@ -88,11 +88,11 @@ public:
    * @see #isCursorYVisible
    */
   int isCursorXVisible(KWFormatContext &_fc);
-  
+
   void scrollToCursor(KWFormatContext &_fc);
   void scrollToParag(KWParag *_parag);
   void scrollToOffset(int _x,int _y,KWFormatContext &_fc);
- 
+
   void setXOffset(int _x)
     { xOffset = _x; calcVisiblePages(); }
   void setYOffset(int _y)
@@ -174,7 +174,7 @@ public:
   void forceFullUpdate();
   void setPixmapFilename(QString f)
     { pixmap_name = f; }
-  
+
   void setPartEntry(KoDocumentEntry e) { partEntry = e; }
 
   void clear() { buffer.fill(white); drawBuffer(); }
@@ -184,7 +184,7 @@ public:
   bool findRev(QString _expr,KWSearchDia::KWSearchEntry *_format,bool _first,bool _cs,bool _whole,
 	       bool _regexp,bool _wildcard,bool &_addlen,bool _select = true);
   void replace(QString _expr,KWSearchDia::KWSearchEntry *_format,bool _addlen);
-  
+
   void removeSelection();
   void addLen() { currFindPos += currFindLen; }
 
@@ -200,7 +200,7 @@ public:
   KWGroupManager *getTable();
 
 public slots:
-  void newLeftIndent(int _left); 
+  void newLeftIndent(int _left);
   void newFirstIndent(int _first);
   void frameSizeChanged(KoPageLayout);
   void mmEdit()
@@ -266,7 +266,9 @@ protected:
   void setRulerLeftIndent(KoRuler *ruler,KWUnit _value);
 
   bool editModeChanged(QKeyEvent *e);
+  void repaintTableHeaders(KWGroupManager *grpMgr);
 
+  
   KWordDocument *doc;
   bool markerIsVisible;
   bool paint_directly,has_to_copy;
@@ -292,13 +294,13 @@ protected:
    * @see #calcVisiblePages
    */
   unsigned int lastVisiblePage;
-  
+
   KWFormatContext *fc;
 
   KWordGUI *gui;
   QPixmap buffer;
   KWFormat format;
-  
+
   bool mousePressed;
   bool inKeyEvent;
   bool recalcAll;
