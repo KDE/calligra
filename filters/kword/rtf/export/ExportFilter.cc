@@ -87,11 +87,8 @@ static QString WritePositiveKeyword(const QString& keyword, const int value)
     return str;
 }
 
-#define FULL_TABLE_SUPPORT
-
 QString RTFWorker::writeRow(const QString& textCellHeader, const QString& rowText, const FrameData& frame)
 {
-#ifdef FULL_TABLE_SUPPORT
     QString row;
 
     row += "\\trowd\\trgaph60\\trql";  // start new row
@@ -103,9 +100,6 @@ QString RTFWorker::writeRow(const QString& textCellHeader, const QString& rowTex
     row += rowText;
 
     return row;
-#else
-    return QString::null;
-#endif
 }
 
 QString RTFWorker::writeBorder(const char whichBorder, const int borderWidth, const QColor& color)
@@ -125,12 +119,13 @@ QString RTFWorker::writeBorder(const char whichBorder, const int borderWidth, co
     return str;
 }
 
-bool RTFWorker::makeTable(const FrameAnchor& anchor)
+QString RTFWorker::makeTable(const FrameAnchor& anchor)
 {
-    m_textBody += m_prefix;
+    QString textBody; // Text to be returned
+    textBody += m_prefix;
+
     QString rowText;
 
-#ifdef FULL_TABLE_SUPPORT
     int rowCurrent = 0;
     bool firstCellInRow = true;
     FrameData firstFrameData;
@@ -140,20 +135,18 @@ bool RTFWorker::makeTable(const FrameAnchor& anchor)
 
     const bool oldInTable = m_inTable;
     m_inTable = true;
-#endif
 
     QValueList<TableCell>::ConstIterator itCell;
     for (itCell=anchor.table.cellList.begin();
         itCell!=anchor.table.cellList.end(); itCell++)
     {
-#ifdef FULL_TABLE_SUPPORT
         // ### TODO: rowspan, colspan
         if (rowCurrent!=(*itCell).row)
         {
             rowCurrent = (*itCell).row;
-            m_textBody += writeRow( textCellHeader, rowText, firstFrameData);
-            m_textBody += "\\row";
-            m_textBody += m_eol;
+            textBody += writeRow( textCellHeader, rowText, firstFrameData);
+            textBody += "\\row";
+            textBody += m_eol;
             rowText = QString::null;
             textCellHeader = QString::null;
             firstCellInRow=true;
@@ -176,7 +169,6 @@ bool RTFWorker::makeTable(const FrameAnchor& anchor)
         textCellHeader += writeBorder('b',qRound(PT_TO_TWIP(frame.bWidth)),frame.bColor);
         textCellHeader += writeBorder('r',qRound(PT_TO_TWIP(frame.rWidth)),frame.rColor);
         textCellHeader += WritePositiveKeyword("\\cellx",qRound(PT_TO_TWIP(frame.right) - m_paperMarginRight)); //right border of cell
-#endif
 
         QString endOfParagraph;
         QValueList<ParaData> *paraList = (*itCell).paraList;
@@ -188,31 +180,23 @@ bool RTFWorker::makeTable(const FrameAnchor& anchor)
             rowText += m_eol;
             endOfParagraph += "\\par"; // The problem is that the last paragraph ends with \cell not with \par
         }
-#ifdef FULL_TABLE_SUPPORT
         rowText += "\\cell";
         debugCellCurrent ++; // DEBUG
-#else
-        m_textBody += rowText;
-        m_textBody += "\\par";
-        rowText = QString::null;
-#endif
     }
 
-#ifdef FULL_TABLE_SUPPORT
-    m_textBody += writeRow( textCellHeader, rowText, firstFrameData);
-    //m_textBody += "\\row";
-    //m_textBody += m_eol;
+    textBody += writeRow( textCellHeader, rowText, firstFrameData);
+    textBody += "\\row";  // delimit last row
+    textBody += m_eol;
     m_inTable = oldInTable;
-    m_textBody += "\\par";  // delimit last row
-    m_textBody += m_eol;
-#endif
     m_prefix = QString::null;
 
-    return true;
+    return textBody;
 }
 
-bool RTFWorker::makeImage(const FrameAnchor& anchor)
+QString RTFWorker::makeImage(const FrameAnchor& anchor)
 {
+    QString textBody; // Text to be returned
+
     QString strImageName(anchor.picture.koStoreName);
     QString strExt;
     QByteArray image;
@@ -243,7 +227,7 @@ bool RTFWorker::makeImage(const FrameAnchor& anchor)
         if( !loadAndConvertToImage(anchor.picture.koStoreName,strExt,"PNG",image) )
         {
             kdWarning(30515) << "Unable to convert " << anchor.picture.koStoreName << endl;
-            return true;
+            return QString::null;
         }
     }
     // ### TODO: SVG, QPicture
@@ -253,7 +237,7 @@ bool RTFWorker::makeImage(const FrameAnchor& anchor)
         if (!loadSubFile(anchor.picture.koStoreName,image))
         {
             kdWarning(30515) << "Unable to load picture " << anchor.picture.koStoreName << endl;
-            return true;
+            return QString::null;
         }
 
 
@@ -294,7 +278,7 @@ bool RTFWorker::makeImage(const FrameAnchor& anchor)
         if( img.isNull() )
         {
             kdWarning(30515) << "Unable to load picture as image " << anchor.picture.koStoreName << endl;
-            return true;
+            return QString::null;
         }
         // check resolution, assume 2835 dpm (72 dpi) if not available
         int resx = img.dotsPerMeterX();
@@ -307,8 +291,8 @@ bool RTFWorker::makeImage(const FrameAnchor& anchor)
     }
 
     // Now that we are sure to have a valid image, we can write the RTF tags
-    m_textBody += "{\\pict";
-    m_textBody += strTag;
+    textBody += "{\\pict";
+    textBody += strTag;
 
     // calculate scaling factor (in percentage)
     int scaleX = width * 100 / origWidth;
@@ -318,34 +302,34 @@ bool RTFWorker::makeImage(const FrameAnchor& anchor)
     int picw = (int)(100 * TWIP_TO_MM(origWidth));
     int pich = (int)(100 * TWIP_TO_MM(origHeight));
 
-    m_textBody += "\\picscalex";
-    m_textBody += QString::number(scaleX, 10);
-    m_textBody += "\\picscaley";
-    m_textBody += QString::number(scaleY, 10);
-    m_textBody += "\\picw";
-    m_textBody += QString::number(picw,10);
-    m_textBody += "\\pich";
-    m_textBody += QString::number(pich,10);
-    m_textBody += "\\picwgoal";
-    m_textBody += QString::number(origWidth, 10);
-    m_textBody += "\\pichgoal";
-    m_textBody += QString::number(origHeight, 10);
+    textBody += "\\picscalex";
+    textBody += QString::number(scaleX, 10);
+    textBody += "\\picscaley";
+    textBody += QString::number(scaleY, 10);
+    textBody += "\\picw";
+    textBody += QString::number(picw,10);
+    textBody += "\\pich";
+    textBody += QString::number(pich,10);
+    textBody += "\\picwgoal";
+    textBody += QString::number(origWidth, 10);
+    textBody += "\\pichgoal";
+    textBody += QString::number(origHeight, 10);
 
-    m_textBody+=" ";
+    textBody+=" ";
     const char hex[] = "0123456789abcdef";
     for (uint i=0; i<image.size(); i++)
     {
         if (!(i%40))
-            m_textBody += m_eol;
+            textBody += m_eol;
         const char ch=image.at(i);
-        m_textBody += hex[(ch>>4)&0x0f]; // Done this way to avoid signed/unsigned problems
-        m_textBody += hex[(ch&0x0f)];
+        textBody += hex[(ch>>4)&0x0f]; // Done this way to avoid signed/unsigned problems
+        textBody += hex[(ch&0x0f)];
     }
 
 
-    m_textBody+="}";
+    textBody+="}";
 
-    return true;
+    return textBody;
 }
 
 QString RTFWorker::formatTextParagraph(const QString& strText,
@@ -590,11 +574,11 @@ QString RTFWorker::ProcessParagraphData ( const QString &paraText,
 
                 if (6==(*paraFormatDataIt).frameAnchor.type)
                 {
-                    makeTable((*paraFormatDataIt).frameAnchor);
+                    str += makeTable((*paraFormatDataIt).frameAnchor);
                 }
                 else if (2==(*paraFormatDataIt).frameAnchor.type)
                 {
-                    makeImage((*paraFormatDataIt).frameAnchor);
+                    str += makeImage((*paraFormatDataIt).frameAnchor);
                 }
                 else
                 {
@@ -603,7 +587,7 @@ QString RTFWorker::ProcessParagraphData ( const QString &paraText,
                 }
 
                 // open the paragraph again
-                str += " {";
+                str += " {"; // ### TODO: not enough!
             }
         }
     }

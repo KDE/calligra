@@ -68,9 +68,9 @@ private:
         const LayoutData& layout, const ValueListFormatData &paraFormatDataList);
     QString formatTextParagraph(const QString& strText,
         const FormatData& formatOrigin, const FormatData& format);
-    bool makeTable(const FrameAnchor& anchor);
+    QString makeTable(const FrameAnchor& anchor);
     bool convertUnknownPicture(const QString& strName, const QString& extension, QByteArray& image);
-    bool makeImage(const FrameAnchor& anchor);
+    QString makeImage(const FrameAnchor& anchor);
     void writeFontData(void);
     void writeColorData(void);
     void writeStyleData(void);
