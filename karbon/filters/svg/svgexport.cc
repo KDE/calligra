@@ -49,21 +49,21 @@ SvgExport::convert( const QCString& from, const QCString& to )
 		return KoFilter::NotImplemented;
 	}
 
-	KoStore storeIn( m_chain->inputFile(), KoStore::Read );
-	if( !storeIn.open( "root" ) )
+	KoStore* storeIn = KoStore::createStore( m_chain->inputFile(), KoStore::Read );
+	if( !storeIn->open( "root" ) )
 	{
-		storeIn.close();
+		delete storeIn;
 		return KoFilter::StupidError;
 	}
 
 	QFile fileOut( m_chain->outputFile() );
 	if( !fileOut.open( IO_WriteOnly ) ) {
-		storeIn.close();
+		delete storeIn;
 		return KoFilter::StupidError;
 	}
 
-	QByteArray byteArrayIn = storeIn.read( storeIn.size() );
-	storeIn.close();
+	QByteArray byteArrayIn = storeIn->read( storeIn->size() );
+	storeIn->close();
 
 	QDomDocument domIn;
 	domIn.setContent( byteArrayIn );
@@ -100,6 +100,7 @@ SvgExport::convert( const QCString& from, const QCString& to )
 	s << "</svg>" << endl;
 
 	fileOut.close();
+	delete storeIn;
 	return KoFilter::OK;
 }
 
