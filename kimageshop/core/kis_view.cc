@@ -775,7 +775,7 @@ void KisView::dialog_gradienteditor()
 
 void KisView::updateToolbarButtons()
 {
-  kdebug( KDEBUG_INFO, 0, "KisView::updateToolbarButtons" );
+  kDebugInfo( 0, "KisView::updateToolbarButtons" );
 
   m_dialog_layer->setChecked( m_pLayerDialog->isVisible() );
   m_dialog_color->setChecked( m_pColorDialog->isVisible() );
