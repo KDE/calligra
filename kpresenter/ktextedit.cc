@@ -3118,7 +3118,7 @@ int KTextEditFormatterBreakWords::format( KTextEditParag *parag, int start )
     int y = 0;
     int h = 0;
     int len = parag->length();
-    
+
     // #########################################
     // Should be optimized so that we start formatting
     // really at start (this means the last line begin before start)
@@ -3236,8 +3236,6 @@ KTextEditFormatCollection::KTextEditFormatCollection()
     defFormat = new KTextEditFormat( QFont( "utopia", 20 ), Qt::black );
     lastFormat = cres = 0;
     cflags = -1;
-    cKey.setAutoDelete( TRUE );
-    orig.setAutoDelete( TRUE );
     cachedFormat = 0;
 }
 
@@ -3449,8 +3447,7 @@ void KTextEditFormatCollection::zoom( float f )
     KTextEditFormat *format;
     orig.clear();
     while ( ( format = it.current() ) ) {
-	KTextEditFormat *f = new KTextEditFormat( *format );
-	orig.insert( it.currentKey(), f );
+	orig.insert( (void*)format, new int( format->font().pointSize() ) );
 	++it;
     }
     it.toFirst();
@@ -3464,15 +3461,16 @@ void KTextEditFormatCollection::zoom( float f )
 void KTextEditFormatCollection::unzoom()
 {
     zoomFakt = 1;
-    QDictIterator<KTextEditFormat> it( orig );
-    QDictIterator<KTextEditFormat> it2( cKey );
-    KTextEditFormat *fm, *fm2;
+    QDictIterator<KTextEditFormat> it( cKey );
+    KTextEditFormat *fm;
     while ( ( fm = it.current() ) ) {
-	fm2 = it2.current();
+	if ( !orig.find( (void*)fm ) )
+	    ;//qDebug( "*baaaaaaaaaaa: %s", it.currentKey().latin1() );
+	else {
+	    fm->fn.setPointSize( *orig.find( (void*)fm ) );
+	    fm->update();
+	}
 	++it;
-	++it2;
-	fm2->setFont( fm->font() );
-	fm2->update();
     }
     orig.clear();
 }

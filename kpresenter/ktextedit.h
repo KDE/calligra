@@ -38,6 +38,7 @@
 #include <qtextstream.h>
 #include <qpainter.h>
 #include <limits.h>
+#include <qptrdict.h>
 
 class QPainter;
 class QPaintEvent;
@@ -603,7 +604,7 @@ public:
 private:
     KTextEditFormat *defFormat, *lastFormat, *cachedFormat;
     QDict<KTextEditFormat> cKey;
-    QDict<KTextEditFormat> orig;
+    QPtrDict<int> orig;
     KTextEditFormat *cres;
     QFont cfont;
     QColor ccol;
