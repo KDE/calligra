@@ -872,7 +872,7 @@ void KWCanvas::mrCreateText()
     if ( m_insRect.width() > doc->gridX() && m_insRect.height() > doc->gridY() ) {
         KWFrame *frame = new KWFrame(0L, m_insRect.x(), m_insRect.y(), m_insRect.width(), m_insRect.height() );
         KWFrameDia * frameDia = new KWFrameDia( this, frame, doc, FT_TEXT);
-        connect( frameDia, SIGNAL( changed() ), this, SLOT( frameDiaClosed() ) );
+
         frameDia->setCaption(i18n("Connect frame"));
         frameDia->show();
         delete frameDia;
@@ -1376,28 +1376,9 @@ void KWCanvas::editFrameProperties()
     }
 
     KWFrameDia * frameDia = new KWFrameDia( this, frame);
-    connect( frameDia, SIGNAL( changed() ), this, SLOT( frameDiaClosed() ) );
     frameDia->setCaption(i18n("Frame Properties"));
     frameDia->show();
     delete frameDia;
-}
-
-void KWCanvas::frameDiaClosed() // get rid of this?
-{
-    QList<KWFrame> frames=doc->getSelectedFrames();
-    if(frames.count()==1)
-    {
-        KWFrame *theFrame = frames.at(0);
-        if(theFrame->isSelected())
-            theFrame->setSelected(true);
-        //if you change pos, you must move text also.
-        if(theFrame->getFrameSet()->getFrameType() == FT_FORMULA)
-            theFrame->getFrameSet()->updateFrames();
-    }
-    doc->repaintAllViews();
-#if 0
-    doc->updateAllFrames(); // already done in framedia
-#endif
 }
 
 void KWCanvas::updateFrameFormat()

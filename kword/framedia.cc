@@ -998,10 +998,8 @@ bool KWFrameDia::applyChanges()
                     _frameSet->setName( name );
                     _frameSet->addFrame( frame );
                     doc->addFrameSet( _frameSet );
-                    emit changed();
-                    if ( frame->getRunAround() != RA_NO )
-                        doc->layout();
-                    doc->repaintAllViews();
+
+                    updateFrames();
                     return true;
                 }
                 doc->updateAllFrames();
@@ -1025,8 +1023,6 @@ bool KWFrameDia::applyChanges()
             frame->setRunAroundGap( u );
         }
 
-        if ( frame->getRunAround() != RA_NO )
-            doc->layout();
         doc->repaintAllViews();
 
         if ( doc->isOnlyOneFrameSelected() && ( doc->processingType() == KWDocument::DTP ||
@@ -1066,9 +1062,27 @@ bool KWFrameDia::applyChanges()
         doc->setFrameMargins( u1, u2, u3, u4 );
     }
 
-    emit changed();
-
+    updateFrames();
     return true;
+}
+
+void KWFrameDia::updateFrames()
+{
+    doc->layout();
+    QList<KWFrame> frames=doc->getSelectedFrames();
+    if(frames.count()==1)
+    {
+        KWFrame *theFrame = frames.at(0);
+        if(theFrame->isSelected())
+            theFrame->setSelected(true);
+        //if you change pos, you must move text also.
+        if(theFrame->getFrameSet()->getFrameType() == FT_FORMULA)
+            theFrame->getFrameSet()->updateFrames();
+    }
+    doc->repaintAllViews();
+#if 0
+    doc->updateAllFrames(); // already done in framedia
+#endif
 }
 
 void KWFrameDia::slotOk()

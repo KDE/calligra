@@ -180,7 +180,7 @@ int KWTextParag::counterWidth() const
 }
 
 // Draw the counter/bullet for a paragraph
-void KWTextParag::drawLabel( QPainter* p, int x, int y, int /*w*/, int h, int base, const QColorGroup& cg )
+void KWTextParag::drawLabel( QPainter* p, int x, int y, int /*w*/, int h, int base, const QColorGroup& /*cg*/ )
 {
     if ( !m_layout.counter ) // shouldn't happen
         return;
@@ -196,14 +196,14 @@ void KWTextParag::drawLabel( QPainter* p, int x, int y, int /*w*/, int h, int ba
 
     // Draw the complete label.
     QTextFormat *format = at( 0 )->format(); // paragFormat();
-    QFont oldFont = p->font();
-    QFont newFont = format->font();
+    p->save();
     QPen tmpPen=p->pen();
-    QColor oldColor = tmpPen.color();
-    QColor newColor = format->color();
+
+    QColor newColor(format->color());
+    QFont newFont(format->font());
 
     p->setFont( newFont );
-    tmpPen.setColor(newColor);
+    tmpPen.setColor( newColor);
     p->setPen(tmpPen);
 
     // Now draw any bullet that is required over the space left for it.
@@ -215,19 +215,16 @@ void KWTextParag::drawLabel( QPainter* p, int x, int y, int /*w*/, int h, int ba
         int width = format->width( ' ' );
         int height = format->height();
         QRect er( x - width, y - h + height / 2 - width / 2, width, width );
-        QColorGroup tmpGroupColor(cg);
         // Draw the bullet.
         switch ( m_layout.counter->style() )
         {
             case Counter::STYLE_DISCBULLET:
-                tmpGroupColor.setBrush(QColorGroup::Foreground,newColor);
-                p->setBrush( tmpGroupColor.brush( QColorGroup::Foreground ) );
+                p->setBrush( QBrush(newColor) );
                 p->drawEllipse( er );
                 p->setBrush( Qt::NoBrush );
                 break;
             case Counter::STYLE_SQUAREBULLET:
-                tmpGroupColor.setBrush(QColorGroup::Foreground,newColor);
-                p->fillRect( er , tmpGroupColor.brush( QColorGroup::Foreground ) );
+                p->fillRect( er , QBrush(newColor) );
                 break;
             case Counter::STYLE_CIRCLEBULLET:
                 p->drawEllipse( er );
@@ -254,11 +251,7 @@ void KWTextParag::drawLabel( QPainter* p, int x, int y, int /*w*/, int h, int ba
         if ( !counterText.isEmpty() )
             p->drawText( x - size, y - h + base, counterText + ' ' );
     }
-    tmpPen=p->pen();
-    tmpPen.setColor( oldColor);
-    p->setPen(tmpPen);
-    p->setFont( oldFont );
-
+    p->restore();
 }
 
 int KWTextParag::topMargin() const

@@ -190,7 +190,6 @@ protected:
     void selectFrame( int mx, int my, bool select );
    
 private slots:
-    void frameDiaClosed();
     void slotContentsMoving( int, int );
     void doAutoScroll();
 

@@ -58,7 +58,7 @@ protected:
     void setupTab3();
     void setupTab4();
     void uncheckAllRuns();
-
+    void updateFrames();
     // TAB 1:
     QWidget *tab1;
     QGridLayout *grid1, *eofGrid, *onpGrid, *sideGrid;
@@ -101,8 +101,6 @@ protected:
 
     FrameBehaviour frameBehaviour;
     KWUnits frameUnits;
-signals:
-    void changed();
 
 protected slots:
     void runNoClicked();
