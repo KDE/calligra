@@ -1188,9 +1188,11 @@ void KWView::updatePageInfo()
         {
             m_currentPage = edit->currentFrame()->pageNum();
         }
-        //kdDebug() << (void*)this << " KWView::updatePageInfo m_currentPage=" << m_currentPage
-        //          << " m_sbPageLabel=" << m_sbPageLabel
-        //          << endl;
+        /*kdDebug() << (void*)this << " KWView::updatePageInfo "
+                  << " edit: " << edit << " " << ( edit?edit->frameSet()->getName():QString::null)
+                  << " currentFrame: " << (edit?edit->currentFrame():0L)
+                  << " m_currentPage=" << m_currentPage << " m_sbPageLabel=" << m_sbPageLabel
+                  << endl;*/
 
         // ### TODO what's the current page when we have no edit object (e.g. frames are selected) ?
         // To avoid bugs, apply max page number in case a page was removed.

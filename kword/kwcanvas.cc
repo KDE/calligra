@@ -1842,6 +1842,8 @@ bool KWCanvas::checkCurrentTextEdit( KWFrameSet * fs )
             KWTextFrameSetEdit *textedit=dynamic_cast<KWTextFrameSetEdit *>(m_currentFrameSetEdit->currentTextEdit());
             if ( textedit )
                 textedit->ensureCursorVisible();
+            // Display page number in statusbar.
+            gui()->getView()->updatePageInfo();
             emitChanged = true;
         }
     }
@@ -1864,6 +1866,8 @@ bool KWCanvas::checkCurrentEdit( KWFrameSet * fs )
     if ( fs && !m_currentFrameSetEdit )
     {
         m_currentFrameSetEdit = fs->createFrameSetEdit( this );
+        // Display page number in statusbar.
+        gui()->getView()->updatePageInfo();
         emitChanged = true;
     }
     return emitChanged;

@@ -775,8 +775,8 @@ void KWDocument::recalcFrames( int fromPage, int toPage /*-1 for all*/ )
                 for (int n = fs->getNumFrames()-1; n >= 0 ; n--) {
                     //if ( n == fs->getNumFrames()-1 )
 #ifdef DEBUG_PAGES
-                    kdDebug(32002) << "KWDocument::recalcFrames frameset " << m << " " << fs->getName()
-                                   << " frame " << n << " bottom=" << fs->frame(n)->bottom() << endl;
+                    kdDebug(32002) << "KWDocument::recalcFrames frameset number " << m << " '" << fs->getName()
+                                   << "' frame " << n << " bottom=" << fs->frame(n)->bottom() << endl;
 #endif
                     maxBottom = QMAX(maxBottom, fs->frame(n)->bottom());
                 }
