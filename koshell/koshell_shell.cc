@@ -197,7 +197,7 @@ bool KoShellWindow::newPage( KoDocumentEntry& _e )
     return false;
   }
 
-  doc->init();
+  doc->initDoc();
 
   // Create a view
   OpenParts::View_var v = doc->createView();
