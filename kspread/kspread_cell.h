@@ -852,6 +852,8 @@ protected:
 
     void NotifyDependancyList(QPtrList<KSpreadDependency> lst, bool isDepending);
 
+    void loadOasisValidationCondition( QString &valExpression );
+
 private:
 
     CellPrivate* d;

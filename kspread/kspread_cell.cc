@@ -5364,56 +5364,13 @@ void KSpreadCell::loadOasisValidation( const QString& validationName )
             valExpression = valExpression.remove("cell-content-text-length()" );
             kdDebug()<<" valExpression = :"<<valExpression<<endl;
             d->extra()->validity->m_allow = Allow_TextLength;
-            if ( valExpression.contains( "<" ) )
-            {
-                QString value = valExpression.remove( "<" );
-                kdDebug()<<" value :"<<value<<endl;
-                d->extra()->validity->m_cond = Inferior;
-                d->extra()->validity->valMin = value.toDouble();
-            }
-            else if(valExpression.contains( ">" ) )
-            {
-                QString value = valExpression.remove( ">" );
-                kdDebug()<<" value :"<<value<<endl;
-                d->extra()->validity->m_cond = Superior;
-                d->extra()->validity->valMin = value.toDouble();
-            }
-            else if (valExpression.contains( "<=" ) )
-            {
-                QString value = valExpression.remove( "<=" );
-                kdDebug()<<" value :"<<value<<endl;
-                d->extra()->validity->m_cond = InferiorEqual;
-                d->extra()->validity->valMin = value.toDouble();
-            }
-            else if (valExpression.contains( ">=" ) )
-            {
-                QString value = valExpression.remove( ">=" );
-                kdDebug()<<" value :"<<value<<endl;
-                d->extra()->validity->m_cond = SuperiorEqual;
-                d->extra()->validity->valMin = value.toDouble();
-            }
-            else if (valExpression.contains( "=" ) )
-            {
-                QString value = valExpression.remove( "=" );
-                kdDebug()<<" value :"<<value<<endl;
-                d->extra()->validity->m_cond = Equal;
-                d->extra()->validity->valMin = value.toDouble();
-            }
-            else if (valExpression.contains( "!=" ) )
-            {
-                //not implemented into kspread !!!!!!!!!!!!
-                //add Differentto attribute
-                QString value = valExpression.remove( "!=" );
-                kdDebug()<<" value :"<<value<<endl;
-                d->extra()->validity->m_cond = DifferentTo;
-                d->extra()->validity->valMin = value.toDouble();
-            }
-            else
-                kdDebug()<<" I don't know how to parse it :"<<valExpression<<endl;
+
+            loadOasisValidationCondition( valExpression );
         }
         //cell-content-text-length-is-between(Value, Value) | cell-content-text-length-is-not-between(Value, Value)
         else if ( valExpression.contains( "cell-content-text-length-is-between" ) )
         {
+            d->extra()->validity->m_allow = Allow_TextLength;
             d->extra()->validity->m_cond = Between;
             valExpression = valExpression.remove( "cell-content-text-length-is-between(" );
             kdDebug()<<" valExpression :"<<valExpression<<endl;
@@ -5425,6 +5382,7 @@ void KSpreadCell::loadOasisValidation( const QString& validationName )
         }
         else if ( valExpression.contains( "cell-content-text-length-is-not-between" ) )
         {
+            d->extra()->validity->m_allow = Allow_TextLength;
             d->extra()->validity->m_cond = Different;
             valExpression = valExpression.remove( "cell-content-text-length-is-not-between(" );
             kdDebug()<<" valExpression :"<<valExpression<<endl;
@@ -5432,6 +5390,57 @@ void KSpreadCell::loadOasisValidation( const QString& validationName )
             QStringList listVal = QStringList::split( valExpression, "," );
             d->extra()->validity->valMin = listVal[0].toDouble();
             d->extra()->validity->valMax = listVal[1].toDouble();
+        }
+        //TrueFunction ::= cell-content-is-whole-number() | cell-content-is-decimal-number() | cell-content-is-date() | cell-content-is-time()
+        else
+        {
+            if (valExpression.contains( "cell-content-is-whole-number()" ) )
+            {
+                d->extra()->validity->m_allow =  Allow_Number;
+                valExpression = valExpression.remove( "cell-content-is-whole-number() and " );
+            }
+            else if (valExpression.contains( "cell-content-is-decimal-number()" ) )
+            {
+                d->extra()->validity->m_allow = Allow_Integer;
+                valExpression = valExpression.remove( "cell-content-is-decimal-number() and " );
+            }
+            else if (valExpression.contains( "cell-content-is-date()" ) )
+            {
+                d->extra()->validity->m_allow = Allow_Date;
+                valExpression = valExpression.remove( "cell-content-is-date() and " );
+            }
+            else if (valExpression.contains( "cell-content-is-time()" ) )
+            {
+                d->extra()->validity->m_allow = Allow_Time;
+                valExpression = valExpression.remove( "cell-content-is-time() and " );
+            }
+            kdDebug()<<"valExpression :"<<valExpression<<endl;
+
+            if ( valExpression.contains( "cell-content()" ) )
+            {
+                valExpression = valExpression.remove( "cell-content()" );
+                loadOasisValidationCondition( valExpression );
+            }
+            //GetFunction ::= cell-content-is-between(Value, Value) | cell-content-is-not-between(Value, Value)
+            //for the moment we support just int/double value, not text/date/time :(
+            if ( valExpression.contains( "cell-content-is-between(" ) )
+            {
+                valExpression = valExpression.remove( "cell-content-is-between(" );
+                valExpression = valExpression.remove( ")" );
+                QStringList listVal = QStringList::split( valExpression, "," );
+                d->extra()->validity->valMin = listVal[0].toDouble();
+                d->extra()->validity->valMax = listVal[1].toDouble();
+                d->extra()->validity->m_cond = Between;
+            }
+            if ( valExpression.contains( "cell-content-is-not-between(" ) )
+            {
+                valExpression = valExpression.remove( "cell-content-is-not-between(" );
+                valExpression = valExpression.remove( ")" );
+                QStringList listVal = QStringList::split( valExpression, "," );
+                d->extra()->validity->valMin = listVal[0].toDouble();
+                d->extra()->validity->valMax = listVal[1].toDouble();
+                d->extra()->validity->m_cond = Different;
+            }
         }
     }
     if ( element.hasAttribute( "table:allow-empty-cell" ) )
@@ -5484,6 +5493,58 @@ void KSpreadCell::loadOasisValidation( const QString& validationName )
             d->extra()->validity->message = attrText.text();
     }
 }
+
+
+void KSpreadCell::loadOasisValidationCondition( QString &valExpression )
+{
+    if ( valExpression.contains( "<" ) )
+    {
+        QString value = valExpression.remove( "<" );
+        kdDebug()<<" value :"<<value<<endl;
+        d->extra()->validity->m_cond = Inferior;
+        d->extra()->validity->valMin = value.toDouble();
+    }
+    else if(valExpression.contains( ">" ) )
+    {
+        QString value = valExpression.remove( ">" );
+        kdDebug()<<" value :"<<value<<endl;
+        d->extra()->validity->m_cond = Superior;
+        d->extra()->validity->valMin = value.toDouble();
+    }
+    else if (valExpression.contains( "<=" ) )
+    {
+        QString value = valExpression.remove( "<=" );
+        kdDebug()<<" value :"<<value<<endl;
+        d->extra()->validity->m_cond = InferiorEqual;
+        d->extra()->validity->valMin = value.toDouble();
+    }
+    else if (valExpression.contains( ">=" ) )
+    {
+        QString value = valExpression.remove( ">=" );
+        kdDebug()<<" value :"<<value<<endl;
+        d->extra()->validity->m_cond = SuperiorEqual;
+        d->extra()->validity->valMin = value.toDouble();
+    }
+    else if (valExpression.contains( "=" ) )
+    {
+        QString value = valExpression.remove( "=" );
+        kdDebug()<<" value :"<<value<<endl;
+        d->extra()->validity->m_cond = Equal;
+        d->extra()->validity->valMin = value.toDouble();
+    }
+    else if (valExpression.contains( "!=" ) )
+    {
+        //not implemented into kspread !!!!!!!!!!!!
+        //add Differentto attribute
+        QString value = valExpression.remove( "!=" );
+        kdDebug()<<" value :"<<value<<endl;
+        d->extra()->validity->m_cond = DifferentTo;
+        d->extra()->validity->valMin = value.toDouble();
+    }
+    else
+        kdDebug()<<" I don't know how to parse it :"<<valExpression<<endl;
+}
+
 
 bool KSpreadCell::load( const QDomElement & cell, int _xshift, int _yshift,
                         PasteMode pm, Operation op, bool paste )
