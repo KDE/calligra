@@ -27,6 +27,8 @@
 
 #include <kdebug.h>
 
+//used in KSpreadPoint::init, KSpreadCell::encodeFormula and
+//  dialogs/kspread_dlg_paperlayout.cc
 int util_decodeColumnLabelText( const QString &_col )
 {
     int col = 0;
@@ -45,6 +47,7 @@ int util_decodeColumnLabelText( const QString &_col )
     return col;
 }
 
+//used in dialogs/kspread_dlg_paperlayout.cc
 QString util_rangeColumnName( const QRect &_area)
 {
     return QString("%1:%2")
@@ -52,6 +55,7 @@ QString util_rangeColumnName( const QRect &_area)
         .arg( KSpreadCell::columnName(_area.right()));
 }
 
+//used in dialogs/kspread_dlg_paperlayout.cc
 QString util_rangeRowName( const QRect &_area)
 {
     return QString("%1:%2")
@@ -433,6 +437,7 @@ bool KSpreadRange::intersects (const KSpreadRange &r) const
   return range.intersects (r.range);
 }
 
+//used in some math and statistical functions
 double util_fact( double val, double end )
 {
   /* fact =i*(i-1)*(i-2)*...*1 */
@@ -457,6 +462,7 @@ bool util_isRowSelected(const QRect &selection)
   return ( (selection.left() == 1) && (selection.right() == KS_colMax) );
 }
 
+//used in KSpreadView::slotRename
 bool util_validateTableName(QString name)
 {
   if (name[0] == ' ')
@@ -525,6 +531,7 @@ KSpreadCell* KSpreadRangeIterator::next()
   return cell;
 }
 
+//not used anywhere
 int util_penCompare( QPen const & pen1, QPen const & pen2 )
 {
   if ( pen1.style() == Qt::NoPen && pen2.style() == Qt::NoPen )
@@ -616,6 +623,7 @@ void insertBracket( QString & s )
 }
 
  // e.g.: Sheet4.A1:Sheet4.E28
+ //used in KSpreadSheet::saveOasis
 QString convertRangeToRef( const QString & tableName, const QRect & _area )
 {
     return tableName + "." + KSpreadCell::name( _area.left(), _area.top() ) + ":" + tableName + "."+ KSpreadCell::name( _area.right(), _area.bottom() );
