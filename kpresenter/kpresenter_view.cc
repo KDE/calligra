@@ -30,6 +30,7 @@
 #include <qdir.h>
 #include <qclipboard.h>
 #include <qradiobutton.h>
+#include <qdragobject.h>
 
 #include <backdia.h>
 #include <autoformEdit/afchoose.h>
@@ -317,8 +318,8 @@ void KPresenterView::editCopy()
 void KPresenterView::editPaste()
 {
     if ( !page->kTxtObj() ) {
-	page->setToolEditMode( TEM_MOUSE );
-	page->deSelectAllObj();
+        page->setToolEditMode( TEM_MOUSE );
+        page->deSelectAllObj();
         QMimeSource *data = QApplication::clipboard()->data();
         if ( data->provides( "text/uri-list" ) )
         {
@@ -332,8 +333,29 @@ void KPresenterView::editPaste()
             page->setMouseSelectedObject(true);
             emit objectSelectedChanged();
         }
+        else if (QImageDrag::canDecode (data)) {
+            page->setToolEditMode( TEM_MOUSE );
+            page->deSelectAllObj();
+
+            QImage pix;
+            QImageDrag::decode( data, pix );
+
+            KTempFile tmpFile;
+            tmpFile.setAutoDelete(true);
+
+            if( tmpFile.status() != 0 ) {
+                return;
+            }
+            tmpFile.close();
+
+            pix.save( tmpFile.name(), "PNG" );
+            QCursor c = cursor();
+            setCursor( waitCursor );
+            m_pKPresenterDoc->insertPicture( tmpFile.name(), xOffset, yOffset );
+            setCursor( c );
+        }
     } else {
-	page->kTxtObj()->paste();
+        page->kTxtObj()->paste();
     }
 }
 
