@@ -31,6 +31,7 @@
 #include <qstring.h>
 
 #include <kaction.h>
+#include <kdebug.h>
 #include <kinstance.h>
 #include <kiconloader.h>
 
@@ -66,7 +67,7 @@ QObject* CalcFactory::create( QObject* parent, const char* name, const char* /*c
 {
     if ( !parent->inherits("KSpreadView") )
     {
-	qDebug("CalcFactory: KSpreadView expected.");
+	kdError() << "CalcFactory: KSpreadView expected. Parent is " << parent->className() << endl;
 	return 0;
     }
 
