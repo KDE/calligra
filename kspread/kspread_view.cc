@@ -4851,7 +4851,9 @@ void KSpreadView::openPopupMenuMenuPage( const QPoint & _point )
         return;
     if( m_pTabBar )
     {
-        m_removeTable->setEnabled( m_pTabBar->listshow().count()>1);
+        bool state = (m_pTabBar->listshow().count()>1);
+        m_removeTable->setEnabled( state);
+        m_hideTable->setEnabled( state );
         static_cast<QPopupMenu*>(factory()->container("menupage_popup",this))->popup(_point);
     }
 }
@@ -4866,6 +4868,10 @@ void KSpreadView::removeTable( KSpreadTable *_t )
   QString m_tablName=_t->tableName();
   m_pTabBar->removeTab( m_tablName );
   setActiveTable( m_pDoc->map()->findTable( m_pTabBar->listshow().first() ));
+  bool state =m_pTabBar->listshow().count()>1;
+  m_removeTable->setEnabled( state );
+  m_hideTable->setEnabled( state );
+
 }
 
 void KSpreadView::insertTable( KSpreadTable* table )
@@ -4879,6 +4885,9 @@ void KSpreadView::insertTable( KSpreadTable* table )
   {
     m_pTabBar->addHiddenTab(tabName);
   }
+  bool state =m_pTabBar->listshow().count()>1;
+  m_removeTable->setEnabled( state );
+  m_hideTable->setEnabled( state );
 }
 
 QColor KSpreadView::borderColor() const
