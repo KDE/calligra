@@ -23,7 +23,7 @@
 #include <qstring.h>
 
 /******************************************************************/
-/* Class: KPClipartCollection					  */
+/* Class: KPClipartCollection                                     */
 /******************************************************************/
 
 /*================================================================*/
@@ -39,13 +39,13 @@ QPicture *KPClipartCollection::findClipart( const Key &key )
     QMap< Key, QPicture >::Iterator it = data.find ( key );
 
     if ( it != data.end() && it.key() == key )
-	return &it.data();
+        return &it.data();
     else {
-	QWinMetaFile wmf;
-	wmf.load( key.filename );
-	QPicture pic;
-	wmf.paint( &pic );
-	return insertClipart( key, pic );
+        QWinMetaFile wmf;
+        wmf.load( key.filename );
+        QPicture pic;
+        wmf.paint( &pic );
+        return insertClipart( key, pic );
     }
 }
 
@@ -67,14 +67,14 @@ QPicture *KPClipartCollection::insertClipart( const Key &key, const QPicture &pi
 void KPClipartCollection::addRef( const Key &key )
 {
     if ( !allowChangeRef )
-	return;
+        return;
 
 //     qDebug( "KPClipartCollection::addRef" );
 
     if ( refs.contains( key ) ) {
-	int ref = refs[ key ];
-	refs[ key ] = ++ref;
-// 	qDebug( "    ref: %d", ref );
+        int ref = refs[ key ];
+        refs[ key ] = ++ref;
+//      qDebug( "    ref: %d", ref );
     }
 }
 
@@ -82,19 +82,19 @@ void KPClipartCollection::addRef( const Key &key )
 void KPClipartCollection::removeRef( const Key &key )
 {
     if ( !allowChangeRef )
-	return;
+        return;
 
 //     qDebug( "KPClipartCollection::removeRef" );
 
     if ( refs.contains( key ) ) {
-	int ref = refs[ key ];
-	refs[ key ] = --ref;
-// 	qDebug( "     ref: %d", ref );
-	if ( ref == 0 ) {
-// 	    qDebug( "        remove" );
-	    refs.remove( key );
-	    data.remove( key );
-	}
+        int ref = refs[ key ];
+        refs[ key ] = --ref;
+//      qDebug( "     ref: %d", ref );
+        if ( ref == 0 ) {
+//          qDebug( "        remove" );
+            refs.remove( key );
+            data.remove( key );
+        }
     }
 
 }
@@ -105,11 +105,11 @@ QTextStream& operator<<( QTextStream &out, KPClipartCollection::Key &key )
     QDate date = key.lastModified.date();
     QTime time = key.lastModified.time();
 
-    out << " filename=\"" << (const char*)key.filename.utf8() << "\" year=\""
-	<< date.year()
-	<< "\" month=\"" << date.month() << "\" day=\"" << date.day()
-	<< "\" hour=\"" << time.hour() << "\" minute=\"" << time.minute()
-	<< "\" second=\"" << time.second() << "\" msec=\"" << time.msec() << "\" ";
+    out << " filename=\"" << key.filename << "\" year=\""
+        << date.year()
+        << "\" month=\"" << date.month() << "\" day=\"" << date.day()
+        << "\" hour=\"" << time.hour() << "\" minute=\"" << time.minute()
+        << "\" second=\"" << time.second() << "\" msec=\"" << time.msec() << "\" ";
 
     return out;
 }

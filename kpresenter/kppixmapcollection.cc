@@ -265,7 +265,7 @@ QTextStream& operator<<( QTextStream &out, KPPixmapDataCollection::Key &key )
     QDate date = key.lastModified.date();
     QTime time = key.lastModified.time();
 
-    out << " filename=\"" << (const char*)key.filename.utf8() << "\" year=\""
+    out << " filename=\"" << key.filename << "\" year=\""
         << date.year()
         << "\" month=\"" << date.month() << "\" day=\"" << date.day()
         << "\" hour=\"" << time.hour() << "\" minute=\"" << time.minute()

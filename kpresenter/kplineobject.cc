@@ -50,7 +50,6 @@ KPLineObject::KPLineObject( QPen _pen, LineEnd _lineBegin, LineEnd _lineEnd, Lin
     lineType = _lineType;
 }
 
-/*========================= save =================================*/
 KPLineObject &KPLineObject::operator=( const KPLineObject & )
 {
     return *this;

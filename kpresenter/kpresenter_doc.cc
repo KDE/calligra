@@ -195,10 +195,9 @@ bool KPresenterChild::load( KOMLParser& parser, QValueList<KOMLAttrib>& _attribs
 bool KPresenterChild::save( QTextStream& out )
 {
   assert( document() );
-  QString u = document()->url().url();
-  QString mime = document()->mimeType();
 
-  out << indent << "<OBJECT url=\"" << u.ascii() << "\" mime=\"" << mime.ascii() << "\">"
+  out << indent << "<OBJECT url=\"" << document()->url().url() << "\" mime=\""
+      << document()->mimeType() << "\">"
       << geometry() << "</OBJECT>" << endl;
 
   return true;
@@ -328,6 +327,7 @@ bool KPresenterDoc::saveChildren( KoStore* _store, const QString &_path )
 bool KPresenterDoc::saveToStream(QIODevice * dev)
 {
     QTextStream out( dev );
+    out.setEncoding(QTextStream::UnicodeUTF8);
     KPObject *kpobject = 0L;
 
     out << "<?xml version=\"1.0\" encoding=\"UTF-8\"?>" << endl;
@@ -422,8 +422,7 @@ bool KPresenterDoc::saveToStream(QIODevice * dev)
             if ( !isStoredExtern() )
               pictureName.prepend( url().url() + "/" );
             out << indent << "<KEY " << key << " name=\""
-                << pictureName.utf8().data()
-                << "\" />" << endl;
+                << pictureName << "\" />" << endl;
         }
     }
 
@@ -440,8 +439,7 @@ bool KPresenterDoc::saveToStream(QIODevice * dev)
         if ( !isStoredExtern() )
           clipartName.prepend( url().url() + "/" );
         out << indent << "<KEY " << key << " name=\""
-            << clipartName.utf8().data()
-            << "\" />" << endl;
+            << clipartName << "\" />" << endl;
     }
 
     out << etag << "</CLIPARTS>" << endl;

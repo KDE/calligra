@@ -166,8 +166,7 @@ void KPAutoformObject::save( QTextStream& out )
     int len = afDir.length();
     QString str = filename;
     str = str.remove( 0, len );
-    out << indent << "<FILENAME value=\"" << (const char*)str.utf8()
-        << "\"/>" << endl;
+    out << indent << "<FILENAME value=\"" << str << "\"/>" << endl;
     out << indent << "<FILLTYPE value=\"" << static_cast<int>( fillType ) << "\"/>" << endl;
     out << indent << "<GRADIENT red1=\"" << gColor1.red() << "\" green1=\"" << gColor1.green()
         << "\" blue1=\"" << gColor1.blue() << "\" red2=\"" << gColor2.red() << "\" green2=\""

@@ -606,7 +606,7 @@ void KPTextObject::saveKTextObject( QTextStream& out )
             else if ( chr == '>' )
                 out << "&gt;";
             else
-                out << QString( c->c ).utf8();
+                out << QString(c->c);
         }
         if ( lastFormat )
             out << "</TEXT>";
