@@ -343,7 +343,7 @@ void KPTResourceUseView::drawBarLoad(KPTResource *resource) {
     KPTChartDataSet *set = new KPTChartDataSet();
     switch (m_timeScaleUnit) {
         case KPTTimeHeaderWidget::Minute:
-            set = drawBarLoadPrHour(resource);
+            set = drawBarLoadPrMinute(resource);
             break;
         case KPTTimeHeaderWidget::Hour:
             set = drawBarLoadPrHour(resource);
