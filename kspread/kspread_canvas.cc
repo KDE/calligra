@@ -783,9 +783,9 @@ void KSpreadCanvas::mouseReleaseEvent( QMouseEvent* _ev )
   // The user started the drag in the lower right corner of the marker ?
   if ( m_eMouseAction == ResizeCell )
   {
-    QPoint selectionAnchor = selectionInfo->selectionAnchor();
-    int x = selectionAnchor.x();
-    int y = selectionAnchor.y();
+    QRect selectionAnchor = selectionInfo->selectionAnchor();
+    int x = selectionAnchor.left();
+    int y = selectionAnchor.top();
     if( x > selection.left())
         x = selection.left();
     if( y > selection.top() )
@@ -841,8 +841,22 @@ void KSpreadCanvas::processClickSelectionHandle(QMouseEvent *event)
 void KSpreadCanvas::extendCurrentSelection(QPoint cell)
 {
   KSpreadTable* table = activeTable();
-  QPoint selectionAnchor;
+  QRect selectionAnchor;
   QPoint chooseAnchor = selectionInfo()->getChooseAnchor();
+  QRect newCellArea;
+  KSpreadCell* destinationCell = table->cellAt(cell);
+
+  if (destinationCell->isObscuringForced() ||
+      (destinationCell->isObscured() && selectionInfo()->singleCellSelection()))
+  {
+    destinationCell = destinationCell->obscuringCells().getFirst();
+    newCellArea = QRect(QPoint(destinationCell->column(),
+                               destinationCell->row()), cell);
+  }
+  else
+  {
+    newCellArea = QRect(cell, cell);
+  }
 
   if (m_bChoose)
   {
@@ -857,33 +871,25 @@ void KSpreadCanvas::extendCurrentSelection(QPoint cell)
   }
   else
   {
-    if (!selectionInfo()->singleCellSelection())
+    selectionAnchor = selectionInfo()->selectionAnchor();
+
+    /* the selection simply becomes a box with the anchor and given cell as
+       opposite corners
+    */
+    int left, top, right, bottom;
+    left = QMIN(selectionAnchor.left(), newCellArea.left());
+    top = QMIN(selectionAnchor.top(), newCellArea.top());
+    right = QMAX(selectionAnchor.right(), newCellArea.right());
+    bottom = QMAX(selectionAnchor.bottom(), newCellArea.bottom());
+    QRect newSelection(QPoint(left, top), QPoint(right, bottom));
+
+    if (newSelection.width() == 1 && newSelection.height() == 1)
     {
-      selectionAnchor = selectionInfo()->selectionAnchor();
-
-      /* the selection simply becomes a box with the anchor and given cell as
-         opposite corners
-      */
-      int left, top, right, bottom;
-      left = QMIN(selectionAnchor.x(), cell.x());
-      top = QMIN(selectionAnchor.y(), cell.y());
-      right = QMAX(selectionAnchor.x(), cell.x());
-      bottom = QMAX(selectionAnchor.y(), cell.y());
-      QRect newSelection(QPoint(left, top), QPoint(right, bottom));
-
-      selectionInfo()->setSelection(newSelection, cell, table);
+      KSpreadCell* testCell = table->cellAt(newSelection.topLeft());
+      newSelection.setRight(testCell->column() + testCell->extraXCells());
+      newSelection.setBottom(testCell->row() + testCell->extraYCells());
     }
-    else
-    {
-      int left, top, right, bottom;
-      left = QMIN(selection().left(), cell.x());
-      top = QMIN(selection().top(), cell.y());
-      right = QMAX(selection().right(), cell.x());
-      bottom = QMAX(selection().bottom(), cell.y());
-      QRect newSelection(QPoint(left, top), QPoint(right, bottom));
-
-      selectionInfo()->setSelection(newSelection, cell, table);
-    }
+    selectionInfo()->setSelection(newSelection, cell, table);
   }
 }
 

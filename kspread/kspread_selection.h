@@ -72,7 +72,7 @@ public:
   /**
    * @return the 'anchor' point of the selection -- i.e. the fixed corner
    */
-   QPoint selectionAnchor()const;
+   QRect selectionAnchor()const;
 
   /**
    * The 'cursor position' is used to keep track of where on the spreadsheet the

@@ -175,20 +175,35 @@ void KSpreadSelection::setMarker( QPoint _point, KSpreadTable* table )
   setSelection( QRect(topLeft, botRight), topLeft, table );
 }
 
-QPoint KSpreadSelection::selectionAnchor()const
+QRect KSpreadSelection::selectionAnchor()const
 {
   /* the anchor is in the opposite corner of the selection rect from the marker */
 
   /* these show where the marker is */
   bool atTop;
   bool atLeft;
+  QRect anchorArea;
 
   atLeft = m_marker.x() == m_rctSelection.left();
   atTop = m_marker.y() == m_rctSelection.top();
 
   QPoint anchor(atLeft ? m_rctSelection.right() : m_rctSelection.left(),
                 atTop ? m_rctSelection.bottom() : m_rctSelection.top());
-  return anchor;
+
+  KSpreadTable* table = m_pView->activeTable();
+  KSpreadCell* cell = table->cellAt(anchor);
+
+  if (cell->isObscured())
+  {
+    cell = cell->obscuringCells().getFirst();
+    anchorArea = QRect(QPoint(cell->column(), cell->row()), anchor);
+  }
+  else
+  {
+    anchorArea = QRect(anchor, anchor);
+  }
+
+  return anchorArea;
 }
 
 bool KSpreadSelection::setCursorPosition(QPoint position)
