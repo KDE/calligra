@@ -20,6 +20,7 @@
 #include "koFilterManager.h"
 #include "koQueryTypes.h"
 #include "koFilter.h"
+#include "koFilterDialog.h"
 
 #include <klocale.h>
 #include <kmimetype.h>
@@ -133,6 +134,13 @@ const QString KoFilterManager::fileSelectorList( const Direction &direction, con
     }
     return ret;
 }
+
+#ifndef USE_QFD
+const bool KoFilterManager::addDialogs(const KFileDialog *) { // dialog) {
+  // more to come here :)
+  return false;
+}
+#endif
 
 const QString KoFilterManager::import( const QString & _url, const char *_native_format )
 {

@@ -21,6 +21,9 @@
 #define __koffice_filter_manager_h__
 
 #include <qstring.h>
+#ifndef USE_QFD
+#include <kfiledialog.h>
+#endif
 
 /**
  *  This class manages all filters for a KOffice application.
@@ -59,6 +62,14 @@ public:
                               const char *_native_pattern,
                               const char *_native_name,
                               const bool allfiles ) const;
+
+    /**
+     * Add the needed filter dialogs to the file dialog
+     * @return if the operation was sucessful
+     */
+#ifndef USE_QFD
+    const bool addDialogs(const KFileDialog *dialog);
+#endif
 
     /**
      * Import a file by applying a filter

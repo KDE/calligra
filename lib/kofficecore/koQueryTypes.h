@@ -27,6 +27,7 @@
 
 class KoDocument;
 class KoFilter;
+class KoFilterDialog;
 
 /**
  *  Represents an available component.
@@ -39,7 +40,7 @@ public:
   KoComponentEntry( const KoComponentEntry& _entry );
 
   const KoComponentEntry& operator=( const KoComponentEntry& e );
-	
+
   /**
    * Releases the @ref #reference.
    */
@@ -161,6 +162,31 @@ public:
    *                 components.
    */
   static QValueList<KoFilterEntry> query( const char* _constr = "", int _count = 100 );
+};
+
+/**
+ *  Represents an available filter dialog.
+ */
+class KoFilterDialogEntry : public KoComponentEntry
+{
+
+public:
+
+  KoFilterDialogEntry() { }
+  KoFilterDialogEntry( const KoComponentEntry& _entry );
+  KoFilterDialogEntry( const KoFilterDialogEntry& _entry );
+  ~KoFilterDialogEntry() { }
+
+  KoFilterDialog* createFilterDialog( QObject* parent = 0, const char* name = 0);
+
+  /**
+   *  This function will query KDED to find all available filter dialogs.
+   *
+   *  @param _constr is a constraint expression as used by KDEDs trader interface.
+   *                 You can use it to set additional restrictions on the available
+   *                 components.
+   */
+  static QValueList<KoFilterDialogEntry> query( const char* _constr = "", int _count = 100 );
 };
 
 /**

@@ -251,6 +251,74 @@ KoFilter* KoFilterEntry::createFilter( QObject* parent, const char* name )
     return (KoFilter*)obj;
 }
 
+
+/*******************************************************************
+ *
+ * koParseFilterDialogProperties
+ *
+ *******************************************************************/
+
+static KoFilterDialogEntry koParseFilterDialogProperties( KService::Ptr service )
+{
+  return KoFilterDialogEntry ( koParseComponentProperties( service ) );
+}
+
+/*******************************************************************
+ *
+ * KoFilterDialogEntry
+ *
+ *******************************************************************/
+
+KoFilterDialogEntry::KoFilterDialogEntry( const KoFilterDialogEntry& e ) : KoComponentEntry( e )
+{
+}
+
+KoFilterDialogEntry::KoFilterDialogEntry( const KoComponentEntry& _e ) : KoComponentEntry( _e )
+{
+}
+
+QValueList<KoFilterDialogEntry> KoFilterDialogEntry::query( const char *_constr, int /*_count*/ )
+{
+  kDebugInfo( 30003, "KoFilterDialogEntry::query( %s, <ignored> )", _constr );
+  QValueList<KoFilterDialogEntry> lst;
+
+  KTrader *trader = KTrader::self();
+
+  KTrader::OfferList offers = trader->query( "KOfficeFilterDialog", _constr );
+
+  KTrader::OfferList::ConstIterator it = offers.begin();
+  unsigned int max = offers.count();
+  kDebugInfo( 30003, "Query returned %d offers\n", max);
+  for( unsigned int i = 0; i < max; i++ )
+  {
+    KoFilterDialogEntry f( koParseFilterDialogProperties( *it ) );
+
+    // Append converted offer
+    lst.append( f );
+    // Next service
+    it++;
+  }
+
+  return lst;
+}
+
+KoFilterDialog* KoFilterDialogEntry::createFilterDialog( QObject* parent, const char* name )
+{
+    KLibFactory* factory = KLibLoader::self()->factory( libname );
+
+    if( !factory )
+	return 0;
+
+    QObject* obj = factory->create( parent, name, "KoFilterDialog" );
+    if ( !obj || !obj->inherits( "KoFilterDialog" ) )
+    {
+	delete obj;
+	return 0;
+    }
+
+    return (KoFilterDialog*)obj;
+}
+
 /*******************************************************************
  *
  * koParseToolProperties
