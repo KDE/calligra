@@ -263,6 +263,16 @@ protected:
     KToggleAction *m_alignToHelplines;
     KToggleAction *m_showHelplines;
     KToggleAction* m_selectTool;
+    KToggleAction* m_pointTool;
+    KToggleAction *m_freehandTool;
+    KToggleAction *m_lineTool;
+    KToggleAction *m_bezierTool;
+    KToggleAction *m_rectTool;
+    KToggleAction *m_polygonTool;
+    KToggleAction *m_ellipseTool;
+    KToggleAction *m_textTool;
+    KToggleAction *m_zoomTool;
+
     KToggleAction* m_moveNode;
     KToggleAction* m_newNode;
     KToggleAction* m_deleteNode;
