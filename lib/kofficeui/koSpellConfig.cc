@@ -25,6 +25,7 @@
 #include <kspell.h>
 #include <klineedit.h>
 #include <keditlistbox.h>
+#include <kio/netaccess.h>
 
 
 #include <qcheckbox.h>
@@ -199,7 +200,9 @@ void KoSpellConfigWidget::saveDictionary()
     {
         QString directoryName = QDir::homeDirPath() + "/.ispell_"+m_spellConfig->dictionary();
         kdDebug()<<" directoryName :"<<directoryName<<endl;
+        kdDebug()<<" lst :"<<lst<<endl;
         QFile f( directoryName );
+        (void )KIO::NetAccess::del( KURL( f.name() ) );
         if ( f.open(IO_ReadWrite))
         {
             QTextStream t( &f );
