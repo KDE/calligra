@@ -20,10 +20,10 @@
  *  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  */
 
-#include "qtabbar.h"
-#include "qpushbutton.h"
-#include "qpainter.h"
-#include "qpixmap.h"
+#include <qtabbar.h>
+#include <qpushbutton.h>
+#include <qpainter.h>
+#include <qpixmap.h>
 
 #include "kfloatingtabdialog.h"
 

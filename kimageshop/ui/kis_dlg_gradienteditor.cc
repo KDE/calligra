@@ -1,11 +1,11 @@
-#include "qlayout.h"
-#include "qlistbox.h"
-#include "qpushbutton.h"
-#include "qstringlist.h"
+#include <qlayout.h>
+#include <qlistbox.h>
+#include <qpushbutton.h>
+#include <qstringlist.h>
 
-#include "klocale.h"
-#include "kglobal.h"
-#include "kstddirs.h"
+#include <klocale.h>
+#include <kglobal.h>
+#include <kstddirs.h>
 
 #include "kis_doc.h"
 #include "gradientview.h"

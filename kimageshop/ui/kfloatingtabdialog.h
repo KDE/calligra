@@ -24,8 +24,8 @@
 #define __kfloatingtabdialog_h__
 
 #include "kfloatingdialog.h"
-#include "qtabbar.h"
-#include "qarray.h"
+#include <qtabbar.h>
+#include <qarray.h>
 
 class KFloatingTabDialog : public KFloatingDialog
 {

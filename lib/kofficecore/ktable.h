@@ -5,8 +5,8 @@
 #ifndef KTABLE_H
 #define KTABLE_H
 
-#include "qvaluelist.h"
-#include "qshared.h"
+#include <qvaluelist.h>
+#include <qshared.h>
 
 template<class RowT, class ColT, class CellT> class KTablePrivate : public QShared
 {
