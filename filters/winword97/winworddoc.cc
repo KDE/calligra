@@ -1,14 +1,5 @@
 #include <winworddoc.h>
 
-const short WinWordDoc::CP2UNI[] = { 0x20ac, 0x0000, 0x201a, 0x0192,
-                                     0x201e, 0x2026, 0x2020, 0x2021,
-                                     0x02c6, 0x2030, 0x0160, 0x2039,
-                                     0x0152, 0x0000, 0x017d, 0x0000,
-                                     0x0000, 0x2018, 0x2019, 0x201c,
-                                     0x201d, 0x2022, 0x2013, 0x2014,
-                                     0x02dc, 0x2122, 0x0161, 0x203a,
-                                     0x0153, 0x0000, 0x017e, 0x0178 };
-
 WinWordDoc::WinWordDoc(const myFile &mainStream, const myFile &table0Stream,
                        const myFile &table1Stream, const myFile &dataStream) :
                        main(mainStream), data(dataStream) {
@@ -243,19 +234,4 @@ const bool WinWordDoc::checkBinTables() {
         success=false;
     }
     return notCompressed;
-}
-
-const short WinWordDoc::char2uni(const unsigned char c) {
-    if(c<=0x7f || c>=0xa0)
-        return static_cast<short>(c);
-    else
-        return CP2UNI[c-0x80];
-}
-
-inline const unsigned short WinWordDoc::read16(const unsigned char *d) {
-    return ( (*(d+1) << 8) + *d );
-}
-
-inline const unsigned long WinWordDoc::read32(const unsigned char *d) {
-    return ( (read16(d+2) << 16) + read16(d) );
 }

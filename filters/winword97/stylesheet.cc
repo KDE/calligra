@@ -8,10 +8,10 @@ StyleSheet::StyleSheet(const myFile &t, const FIB * const f) : table(t),
     stdBaseLength=read16(table.data+fib->fcStshf+4);
 
     // for testing purposes
-    // kdebug(KDEBUG_INFO, 31000, "################## StyleSheet::chain_rec() ####################");
-    // kdebug(KDEBUG_INFO, 31000, styleName(65));
-    // kdebug(KDEBUG_INFO, 31000, styleName(0));
-    // kdebug(KDEBUG_INFO, 31000, "################## StyleSheet::chain_rec() ####################");
+    kdebug(KDEBUG_INFO, 31000, "################## StyleSheet::chain_rec() ####################");
+    kdebug(KDEBUG_INFO, 31000, styleName(65));
+    kdebug(KDEBUG_INFO, 31000, styleName(0));
+    kdebug(KDEBUG_INFO, 31000, "################## StyleSheet::chain_rec() ####################");
 }
 
 StyleSheet::~StyleSheet() {
@@ -87,8 +87,18 @@ const QString StyleSheet::styleName(const unsigned short &sti) {
 
     unsigned long offset;
 
-    if(findSTD(sti, offset))
-        return QString("");    // get the string (TODO)
+    if(findSTD(sti, offset)) {
+        QString ret;
+
+        offset+=stdBaseLength;
+        unsigned char len=*(table.data+offset);
+
+        QString d="len=";
+        d+=QString::number((long)len);
+        kdebug(KDEBUG_INFO, 31000, static_cast<const char*>(d));
+
+        return ret;
+    }
     else
         return QString("");
 }
@@ -117,12 +127,4 @@ const bool StyleSheet::findSTD(const unsigned short &sti, unsigned long &offset)
         ++j;                                        // two conditions for safety :)
     } while(i<limit && j<cstd);
     return false;                                   // not found!
-}
-
-inline const unsigned short StyleSheet::read16(const unsigned char *d) {
-    return ( (*(d+1) << 8) + *d );
-}
-
-inline const unsigned long StyleSheet::read32(const unsigned char *d) {
-    return ( (read16(d+2) << 16) + read16(d) );
 }

@@ -4,6 +4,7 @@
 #include <qstring.h>
 #include <qvaluelist.h>
 #include <myfile.h>
+#include <misc.h>
 #include <fib.h>
 #include <kdebug.h>
 
@@ -30,8 +31,6 @@ private:
     const bool chain_rec(const unsigned short &sti);             // recursively walks back to the NULL-Style
     void align2(long &adr);                                      // all blocks start on even addresses!
     const bool findSTD(const unsigned short &sti, unsigned long &offset); // Offset to specific STD
-    inline const unsigned short read16(const unsigned char *d);
-    inline const unsigned long read32(const unsigned char *d);
 
     myFile table;
     const FIB * const fib;

@@ -6,6 +6,7 @@
 #include <paragraph.h>
 #include <stylesheet.h>
 #include <myfile.h>
+#include <misc.h>
 #include <fib.h>
 #include <pcd.h>
 #include <kdebug.h>
@@ -32,10 +33,6 @@ private:
     const bool locatePieceTbl();
     const bool checkBinTables();
 
-    const short char2uni(const unsigned char c);
-    inline const unsigned short read16(const unsigned char *d);
-    inline const unsigned long read32(const unsigned char *d);
-
     bool success, ready;
     FIB *fib;
     myFile main, table, data;
@@ -45,7 +42,5 @@ private:
 
     // piece table (pt)
     long ptCPBase, ptSize, ptCount, ptPCDBase;
-
-    static const short CP2UNI[32];
 };
 #endif // WINWORDDOC_H
