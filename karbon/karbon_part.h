@@ -4,14 +4,17 @@
 #include <qlist.h>
 #include <koDocument.h>
 
-#include "vobject.h"
+#include "vlayer.h"
 
 class KarbonPart : public KoDocument
 {
+// TODO: add wrapper functions to access layers and remove this friendship
+	friend class VCanvas;	// drawDocument() has to access m_layers
+
 	Q_OBJECT
 public:
 	KarbonPart( QWidget* parentWidget = 0, const char* widgetName = 0,
-	QObject* parent = 0, const char* name = 0, bool singleViewMode = false );
+		QObject* parent = 0, const char* name = 0, bool singleViewMode = false );
 	virtual ~KarbonPart();
 
 	virtual void paintContent( QPainter& painter, const QRect& rect,
@@ -22,13 +25,11 @@ public:
 	virtual bool loadXML( QIODevice*, const QDomDocument& );
 	virtual QDomDocument saveXML();
 
-	QList<VObject> m_objects; // all objects
-
 protected:
 	virtual KoView* createViewInstance( QWidget* parent, const char* name );
 
 private:
-
+	QList<VLayer> m_layers;
 };
 
 #endif

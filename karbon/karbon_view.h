@@ -18,7 +18,8 @@ public:
 	KarbonView( KarbonPart* part, QWidget* parent = 0, const char* name = 0 );
 	virtual ~KarbonView();
 
-	virtual void paintEverything( QPainter &p, const QRect &rect, bool transparent = false );
+	virtual void paintEverything( QPainter &p, const QRect &rect,
+		bool transparent = false );
 
 	virtual QWidget* canvas() { return m_canvas; }
 

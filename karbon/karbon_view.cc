@@ -48,7 +48,8 @@ KarbonView::initActions()
 {
 	KStdAction::cut(this, SLOT( cut() ), actionCollection(), "edit_cut" );
 
-	m_zoomAction = new KSelectAction( i18n("&Zoom"), 0, actionCollection(), "view_zoom" );
+	m_zoomAction = new KSelectAction( i18n("&Zoom"), 0, actionCollection(),
+		"view_zoom" );
 	QStringList stl;
 	stl << i18n("25%") << i18n("50%") << i18n("100%");
 	m_zoomAction->setItems(stl);
@@ -57,16 +58,10 @@ KarbonView::initActions()
 }
 
 void
-KarbonView::paintEverything( QPainter& p, const QRect& rect, bool /*transparent*/)
+KarbonView::paintEverything( QPainter& /*p*/, const QRect& /*rect*/,
+	bool /*transparent*/)
 {
-kdDebug() << "view->paintEverything()" << endl;
-/*	p.scale(VPoint::s_fractInvScale,VPoint::s_fractInvScale);
-	// paint all objects:
-	VObject* obj;
-	for ( obj = m_part->m_objects.first(); obj!=0L; obj = m_part->m_objects.next() )
-	{
-		obj->draw( p, rect, m_zoomFactor );
-	}*/
+	kdDebug() << "view->paintEverything()" << endl;
 }
 
 #include "karbon_view.moc"

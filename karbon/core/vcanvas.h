@@ -8,13 +8,15 @@ class KarbonView;
 
 // The karbon canvas is a QScrollView.
 
-class VCanvas : public QScrollView {
+class VCanvas : public QScrollView
+{
 	Q_OBJECT
 public:
 	VCanvas( KarbonView* view, KarbonPart* part );
 
 protected:
-	virtual void drawContents( QPainter* painter, int clipx, int clipy, int clipw, int cliph  );
+	virtual void drawContents( QPainter* painter, int clipx, int clipy,
+		int clipw, int cliph  );
 	void drawDocument( QPainter* painter, const QRect& rect );
 
 	virtual void resizeEvent( QResizeEvent* event );

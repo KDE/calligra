@@ -11,6 +11,10 @@ KarbonPart::KarbonPart( QWidget* parentWidget, const char* widgetName,
 	QObject* parent, const char* name, bool singleViewMode )
 	: KoDocument( parentWidget, widgetName, parent, name, singleViewMode )
 {
+	// create a layer. we need at least one:
+	m_layers.append( new VLayer() );
+
+
 // <test-object> <<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 	VPath* path = new VPath();
 	double x1, y1, x2, y2;
@@ -31,38 +35,41 @@ KarbonPart::KarbonPart( QWidget* parentWidget, const char* widgetName,
 	x2 = 200.0; y2 = 100.0;
 	path->arcTo(x1,y1,x2,y2,100.0);
 	path->close();
-	m_objects.append( path );
+	m_layers.last()->m_objects.append( path );
 
 
 	path = new VPath();
-
 	x1 = 200.0; y1 = 100.0;
 	path->moveTo(x1,y1);
 
 	x1 = 300.0; y1 = 100.0;
 	x2 = 300.0; y2 = 200.0;
 	path->arcTo(x1,y1,x2,y2,100.0);
-	x1 = 300.0; y1 = 400.0;
-	x2 = 400.0; y2 = 350.0;
-	path->arcTo(x1,y1,x2,y2,150.0);
-/*	x1 = 100.0; y1 = 300.0;
+	x1 = 300.0; y1 = 300.0;
+	x2 = 200.0; y2 = 300.0;
+	path->arcTo(x1,y1,x2,y2,100.0);
+	x1 = 100.0; y1 = 300.0;
 	x2 = 100.0; y2 = 200.0;
 	path->arcTo(x1,y1,x2,y2,100.0);
 	x1 = 100.0; y1 = 100.0;
 	x2 = 200.0; y2 = 100.0;
-	path->arcTo(x1,y1,x2,y2,100.0);*/
+	path->arcTo(x1,y1,x2,y2,100.0);
 
-	path->translate( 100.0, 0.0 );
-	m_objects.append( path );
+	path->shear( 0.5, 0.0 );
+	path->rotate( -45.0 );
+	path->scale( 0.5, 0.5 );
+	path->translate( 100.0, 100.0 );
+
+	m_layers.last()->m_objects.append( path );
 
 // </test-object> <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 }
 
 KarbonPart::~KarbonPart()
 {
-	for ( VObject* object=m_objects.first(); object!=0L; object=m_objects.next() )
+	for ( VLayer* layer=m_layers.first(); layer!=0L; layer=m_layers.next() )
 	{
-		delete( object );
+		delete( layer );
 	}
 }
 
@@ -95,17 +102,10 @@ KarbonPart::saveXML()
 
 
 void
-KarbonPart::paintContent( QPainter& p, const QRect& rect,
-	bool /*transparent*/, double zoomX, double zoomY )
+KarbonPart::paintContent( QPainter& /*p*/, const QRect& /*rect*/,
+	bool /*transparent*/, double /*zoomX*/, double /*zoomY*/ )
 {
-kdDebug() << "part->paintContent()" << endl;
-/*	p.scale(VPoint::s_fractInvScale,VPoint::s_fractInvScale);
-	// paint all objects:
-	VObject* obj;
-	for ( obj=m_objects.first(); obj!=0L; obj=m_objects.next() )
-	{
-		obj->draw( p, rect, 1.0 );
-	} */
+	kdDebug() << "part->paintContent()" << endl;
 }
 
 #include "karbon_part.moc"

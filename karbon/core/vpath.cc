@@ -4,6 +4,7 @@
 #include <qpointarray.h>
 #include <math.h>
 
+#include "vaffinemap.h"
 #include "vpath.h"
 #include "vpoint.h"
 
@@ -19,7 +20,8 @@ VPath::VPath()
 
 VPath::~VPath()
 {
-	for ( Segment* segment=m_segments.first(); segment!=0L; segment=m_segments.next() )
+	for ( Segment* segment=m_segments.first(); segment!=0L;
+ segment=m_segments.next() )
 	{
 		if ( segment->p1 )	// control-points are never shared
 			delete( segment->p1 );
@@ -31,14 +33,14 @@ VPath::~VPath()
 }
 
 void
-VPath::draw( QPainter& p, const QRect& rect, const double& zoomFactor  )
+VPath::draw( QPainter& painter, const QRect& rect, const double& zoomFactor )
 {
 // TODO:
 // - think about QPoint-Caching
 // - Qt's quadBezier() looks ugly for small arcs. think about stealing
 //   a better routine from someone
 
-	p.save();
+	painter.save();
 
 	// walk down all Segments and add their QPoints into a QPointArray
 
@@ -56,8 +58,8 @@ VPath::draw( QPainter& p, const QRect& rect, const double& zoomFactor  )
 			qpa.setPoint( qpa.size()-1, segment->p3->getQPoint( zoomFactor ) );
 
 // demo-hack: draw controll points
-			p.setPen( Qt::black );
-			p.drawRect(
+			painter.setPen( Qt::black );
+			painter.drawRect(
 				segment->p3->getQPoint( zoomFactor ).x()-3,
 				segment->p3->getQPoint( zoomFactor ).y()-3, 6, 6 );
 
@@ -83,27 +85,27 @@ VPath::draw( QPainter& p, const QRect& rect, const double& zoomFactor  )
 			for ( unsigned int i=0; i<size2; i++ )
 				qpa.setPoint( size1+i, pa.point(i) );
 // demo-hack: draw controll points
-			p.setPen( Qt::black );
-			p.drawRect(
+			painter.setPen( Qt::black );
+			painter.drawRect(
 				prevPoint->getQPoint( zoomFactor ).x()-3,
 				prevPoint->getQPoint( zoomFactor ).y()-3, 6, 6 );
-			p.drawRect(
+			painter.drawRect(
 				segment->p1->getQPoint( zoomFactor ).x()-3,
 				segment->p1->getQPoint( zoomFactor ).y()-3, 6, 6 );
-			p.drawRect(
+			painter.drawRect(
 				segment->p2->getQPoint( zoomFactor ).x()-3,
 				segment->p2->getQPoint( zoomFactor ).y()-3, 6, 6 );
-			p.drawRect(
+			painter.drawRect(
 				segment->p3->getQPoint( zoomFactor ).x()-3,
 				segment->p3->getQPoint( zoomFactor ).y()-3, 6, 6 );
 
 
 // demo-hack: draw bezier control-lines
-			p.setPen( QPen( Qt::black, 1, Qt::DotLine ) );
-			p.drawLine(
+			painter.setPen( QPen( Qt::black, 1, Qt::DotLine ) );
+			painter.drawLine(
 				prevPoint->getQPoint( zoomFactor ),
 				segment->p1->getQPoint( zoomFactor ) );
-			p.drawLine(
+			painter.drawLine(
 				segment->p2->getQPoint( zoomFactor ),
 				segment->p3->getQPoint( zoomFactor ) );
 
@@ -115,23 +117,23 @@ VPath::draw( QPainter& p, const QRect& rect, const double& zoomFactor  )
 			qpa.setPoint( qpa.size()-1, segment->p3->getQPoint( zoomFactor ) );
 
 // demo-hack: draw controll points
-			p.setPen( Qt::black );
-			p.drawPoint( segment->p3->getQPoint( zoomFactor ) );
+			painter.setPen( Qt::black );
+			painter.drawPoint( segment->p3->getQPoint( zoomFactor ) );
 
 		}
 		prevPoint = segment->p3; // need previous point to calculate bezier-qpoints
 	}
 
-	p.setPen( Qt::black );
-	p.setBrush( QColor( 205, 201, 165 ) );
+	painter.setPen( Qt::black );
+	painter.setBrush( QColor( 205, 201, 165 ) );
 
 	// draw open or closed path ?
 	if ( isClosed() )
-		p.drawPolygon( qpa );
+		painter.drawPolygon( qpa );
 	else
-		p.drawPolyline( qpa );
+		painter.drawPolyline( qpa );
 
-	p.restore();
+	painter.restore();
 }
 
 const VPoint*
@@ -184,7 +186,7 @@ void
 VPath::arcTo( const double& x1, const double& y1,
 	const double& x2, const double& y2, const double& r )
 {
-	// parts of this routine are taken from GNU ghostscript
+	// parts of this routine are inspired by GNU ghostscript
 
 	if ( isClosed() ) return;
 
@@ -221,7 +223,8 @@ VPath::arcTo( const double& x1, const double& y1,
 
 		// if (bx0,by0) deviates from current point, add a line to it:
 // TODO: decide via radius<XXX or sthg?
-		if ( bx0 != m_segments.getLast()->p3->x() || by0 != m_segments.getLast()->p3->y() )
+		if ( bx0 != m_segments.getLast()->p3->x() || by0 !=
+ m_segments.getLast()->p3->y() )
 			lineTo( bx0, by0 );
 
 		double bx3 = x1 + dx12*d1t1;
@@ -261,7 +264,8 @@ VPath::close()
 	if ( *(m_segments.getFirst()->p3) != *(m_segments.getLast()->p3) )
 		lineTo( m_segments.getFirst()->p3->x(), m_segments.getFirst()->p3->y() );
 
-	// do nothing if first and last point are the same (eg only first point exists):
+	// do nothing if first and last point are the same (eg only first point
+	// exists):
 	if ( m_segments.getFirst()->p3!=m_segments.getLast()->p3 )
 	{
 		if ( m_segments.getLast()->p3->unref()==0 )
@@ -276,9 +280,11 @@ VPath::close()
 void
 VPath::translate( const double& dx, const double& dy )
 {
+	// we dont' use an affine map, because that's overkill here
+
 	Segment* segment = m_segments.first();	// first segment
 
-	// only translate first point if path isnt closed:
+	// only do things with first point if path isnt closed:
 	if ( !isClosed() && segment->p3 )
 		segment->p3->rmoveTo( dx, dy );
 
@@ -290,6 +296,75 @@ VPath::translate( const double& dx, const double& dy )
 			segment->p2->rmoveTo( dx, dy );
 		if ( segment->p3 )
 			segment->p3->rmoveTo( dx, dy );
+	}
+}
+
+void
+VPath::rotate( const double& ang )
+{
+	VAffineMap map;
+	map.rotate( ang );
+
+	Segment* segment = m_segments.first();	// first segment
+
+	// only do things with first point if path isnt closed:
+	if ( !isClosed() && segment->p3 )
+		*(segment->p3) = map.applyTo( *(segment->p3) );
+
+	for ( segment=m_segments.next(); segment!=0L; segment=m_segments.next() )
+	{
+		if ( segment->p1 )
+			*(segment->p1) = map.applyTo( *(segment->p1) );
+		if ( segment->p2 )
+			*(segment->p2) = map.applyTo( *(segment->p2) );
+		if ( segment->p3 )
+			*(segment->p3) = map.applyTo( *(segment->p3) );
+	}
+}
+
+void
+VPath::scale( const double& sx, const double& sy )
+{
+	VAffineMap map;
+	map.scale( sx, sy );
+
+	Segment* segment = m_segments.first();	// first segment
+
+	// only do things with first point if path isnt closed:
+	if ( !isClosed() && segment->p3 )
+		*(segment->p3) = map.applyTo( *(segment->p3) );
+
+	for ( segment=m_segments.next(); segment!=0L; segment=m_segments.next() )
+	{
+		if ( segment->p1 )
+			*(segment->p1) = map.applyTo( *(segment->p1) );
+		if ( segment->p2 )
+			*(segment->p2) = map.applyTo( *(segment->p2) );
+		if ( segment->p3 )
+			*(segment->p3) = map.applyTo( *(segment->p3) );
+	}
+}
+
+void
+VPath::shear( const double& sh, const double& sv )
+{
+	VAffineMap map;
+	map.shear( sh, sv );
+
+	Segment* segment = m_segments.first();	// first segment
+
+	// only do things with first point if path isnt closed:
+	if ( !isClosed() && segment->p3 )
+		*(segment->p3) = map.applyTo( *(segment->p3) );
+
+	for ( segment=m_segments.next(); segment!=0L; segment=m_segments.next() )
+	{
+		if ( segment->p1 )
+			*(segment->p1) = map.applyTo( *(segment->p1) );
+		if ( segment->p2 )
+			*(segment->p2) = map.applyTo( *(segment->p2) );
+		if ( segment->p3 )
+			*(segment->p3) = map.applyTo( *(segment->p3) );
 	}
 }
 

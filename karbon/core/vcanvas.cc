@@ -6,8 +6,8 @@
 #include "vcanvas.h"
 
 VCanvas::VCanvas( KarbonView* view, KarbonPart* part )
-	: QScrollView( view, "canvas", WNorthWestGravity | WResizeNoErase | WRepaintNoErase ),
-	m_part( part ), m_view( view ), m_zoomFactor( 1.0 )
+	: QScrollView( view, "canvas", WNorthWestGravity | WResizeNoErase |
+	  WRepaintNoErase ), m_part( part ), m_view( view ), m_zoomFactor( 1.0 )
 {
 	viewport()->setFocusPolicy( QWidget::StrongFocus );
 	viewport()->setMouseTracking( true );
@@ -17,7 +17,8 @@ VCanvas::VCanvas( KarbonView* view, KarbonPart* part )
 }
 
 void
-VCanvas::drawContents( QPainter* painter, int clipx, int clipy, int clipw, int cliph  )
+VCanvas::drawContents( QPainter* painter, int clipx, int clipy,
+	int clipw, int cliph  )
 {
 	drawDocument( painter, QRect( clipx, clipy, clipw, cliph ) );
 }
@@ -25,10 +26,11 @@ VCanvas::drawContents( QPainter* painter, int clipx, int clipy, int clipw, int c
 void
 VCanvas::drawDocument( QPainter* painter, const QRect& rect )
 {
-	QListIterator<VObject> i = m_part->m_objects;
+	QListIterator<VLayer> i = m_part->m_layers;
 	for ( ; i.current() ; ++i )
 	{
-		i.current()->draw( *painter, rect, m_zoomFactor );
+		if ( i.current()->isVisible() )
+			i.current()->draw( *painter, rect, m_zoomFactor );
 	}
 }
 

@@ -9,7 +9,8 @@
  * Before 
  */
 
-class VPoint {
+class VPoint
+{
 public:
 	VPoint();
 	VPoint( const VPoint& p );
@@ -27,11 +28,11 @@ public:
 	void setY( const double& y );
 
 //    VPoint& operator= (const VPoint& p) { return *this; }
-	void operator +=( const VPoint& p ) { m_x+=p.m_x; m_y+=p.m_y; }
-	void operator -=( const VPoint& p ) { m_x-=p.m_x; m_y-=p.m_y; }
+	void operator +=( const VPoint& p ) { m_x += p.m_x; m_y += p.m_y; }
+	void operator -=( const VPoint& p ) { m_x -= p.m_x; m_y -= p.m_y; }
 
 	// ref-counting (vpaths share vpoints):
-	unsigned int ref() { return ++m_refCount; }
+	unsigned int ref()   { return ++m_refCount; }
 	unsigned int unref() { return --m_refCount; }
 
 	/**

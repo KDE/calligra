@@ -10,12 +10,14 @@ class VPoint;
 // VPaths are the most common high-level objects. They consist of lines and
 // bezier-curves.
 
-class VPath : public VObject {
+class VPath : public VObject
+{
 public:
 	VPath();
 	virtual ~VPath();
 
-	virtual void draw( QPainter& p, const QRect& rect, const double& zoomFactor  );
+	virtual void draw( QPainter& painter, const QRect& rect,
+		const double& zoomFactor );
 
 	const VPoint* currentPoint() const;
 
@@ -34,6 +36,9 @@ public:
 	bool isClosed() { return( m_isClosed ); }
 
 	virtual void translate( const double& dx, const double& dy );
+	virtual void rotate( const double& ang );
+	virtual void scale( const double& sx, const double& sy );
+	virtual void shear( const double& sh, const double& sv );
 
 	virtual const QRect& boundingBox() const;
 
