@@ -412,11 +412,16 @@ bool KSEval_t_plus_sign( KSParseNode* node, KSContext& context )
 
   EVAL_OPS( context, l, r, false );
 
-  if ( !r.value()->cast( l.value()->type() ) )
+  // If we have double and int, then always convert to double
+  if ( l.value()->type() == KSValue::DoubleType )
   {
-    QString tmp( "From %1 to %2" );
-    context.setException( new KSException( "CastingError", tmp.arg( r.value()->typeName() ).arg( l.value()->typeName() ), node->getLineNo() ) );
-    return false;
+    if ( !KSUtil::checkType( context, r.value(), l.value()->type(), true ) )
+      return false;
+  }
+  else
+  {
+    if ( !KSUtil::checkType( context, l.value(), r.value()->type(), true ) )
+      return false;
   }
 
   switch( l.value()->type() )
@@ -461,12 +466,12 @@ bool KSEval_t_minus_sign( KSParseNode* node, KSContext& context )
   {
     if ( !node->branch1()->eval( context ) )
       return false;
-    if ( context.value()->cast( KSValue::IntType ) )
+    if ( context.value()->type() == KSValue::IntType )
     {
       context.setValue( new KSValue( -( context.value()->intValue() ) ) );
       return true;
     }
-    if ( context.value()->cast( KSValue::DoubleType ) )
+    if ( context.value()->type() == KSValue::DoubleType )
     {
       context.setValue( new KSValue( -( context.value()->doubleValue() ) ) );
       return true;
@@ -479,11 +484,16 @@ bool KSEval_t_minus_sign( KSParseNode* node, KSContext& context )
 
   EVAL_OPS( context, l, r, false );
 
-  if ( !r.value()->cast( l.value()->type() ) )
+  // If we have double and int, then always convert to double
+  if ( l.value()->type() == KSValue::DoubleType )
   {
-    QString tmp( "From %1 to %2" );
-    context.setException( new KSException( "CastingError", tmp.arg( r.value()->typeName() ).arg( l.value()->typeName() ), node->getLineNo() ) );
-    return false;
+    if ( !KSUtil::checkType( context, r.value(), l.value()->type(), true ) )
+      return false;
+  }
+  else
+  {
+    if ( !KSUtil::checkType( context, l.value(), r.value()->type(), true ) )
+      return false;
   }
 
   switch( l.value()->type() )
@@ -516,11 +526,16 @@ bool KSEval_t_asterik( KSParseNode* node, KSContext& context )
 {
   EVAL_OPS( context, l, r, false );
 
-  if ( !r.value()->cast( l.value()->type() ) )
+  // If we have double and int, then always convert to double
+  if ( l.value()->type() == KSValue::DoubleType )
   {
-    QString tmp( "From %1 to %2" );
-    context.setException( new KSException( "CastingError", tmp.arg( r.value()->typeName() ).arg( l.value()->typeName() ), node->getLineNo() ) );
-    return false;
+    if ( !KSUtil::checkType( context, r.value(), l.value()->type(), true ) )
+      return false;
+  }
+  else
+  {
+    if ( !KSUtil::checkType( context, l.value(), r.value()->type(), true ) )
+      return false;
   }
 
   switch( l.value()->type() )
@@ -553,16 +568,35 @@ bool KSEval_t_solidus( KSParseNode* node, KSContext& context )
 {
   EVAL_OPS( context, l, r, false );
 
-  if ( !KSUtil::checkType( context, r.value(), l.value()->type(), true ) )
-    return false;
+  // If we have double and int, then always convert to double
+  if ( l.value()->type() == KSValue::DoubleType )
+  {
+    if ( !KSUtil::checkType( context, r.value(), l.value()->type(), true ) )
+      return false;
+  }
+  else
+  {
+    if ( !KSUtil::checkType( context, l.value(), r.value()->type(), true ) )
+      return false;
+  }
 
   switch( l.value()->type() )
     {
     case KSValue::IntType:
       {
-	KScript::Long result = l.value()->intValue() / r.value()->intValue();
-	FILL_VALUE( context, l, r );
-	context.value()->setValue( result );
+	// If the devision has a "rest" then we have to convert to doubles
+	if ( ( l.value()->intValue() % r.value()->intValue() ) == 0 )
+	{
+	  KScript::Long result = l.value()->intValue() / r.value()->intValue();
+	  FILL_VALUE( context, l, r );
+	  context.value()->setValue( result );
+	}
+	else
+	{
+	  KScript::Double result = (double)l.value()->intValue() / (double)r.value()->intValue();
+	  FILL_VALUE( context, l, r );
+	  context.value()->setValue( result );
+	}
 	return true;
       }
     case KSValue::DoubleType:
