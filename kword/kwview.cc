@@ -1890,7 +1890,6 @@ void KWView::showMouseMode( int _mouseMode )
 
 void KWView::showStyle( const QString & styleName )
 {
-    kdDebug()<<" styleName :"<<styleName<<endl;
     QPtrListIterator<KWStyle> styleIt( m_doc->styleCollection()->styleList() );
     for ( int pos = 0 ; styleIt.current(); ++styleIt, ++pos )
     {
