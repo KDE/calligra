@@ -813,6 +813,41 @@ KarbonView::viewStrokeDocker()
 void
 KarbonView::initActions()
 {
+	// view ----->
+	m_viewAction = new KSelectAction(
+					   i18n( "View &Mode" ), 0, this,
+					   SLOT( viewModeChanged() ), actionCollection(), "view_mode" );
+
+	m_zoomAction = new KSelectAction(
+					   i18n( "&Zoom" ), 0, this,
+					   SLOT( zoomChanged() ), actionCollection(), "view_zoom" );
+
+	QStringList mstl;
+	mstl << i18n( "Normal" ) << i18n( "Wireframe" );
+	m_viewAction->setItems( mstl );
+	m_viewAction->setCurrentItem( 0 );
+	m_viewAction->setEditable( false );
+
+	QStringList stl;
+	stl
+	<< i18n( "    25%" )
+	<< i18n( "    50%" )
+	<< i18n( "   100%" )
+	<< i18n( "   200%" )
+	<< i18n( "   300%" )
+	<< i18n( "   400%" )
+	<< i18n( "   800%" )
+	<< i18n( "Whole Page" )
+	<< i18n( "  Width" );
+
+	m_zoomAction->setItems( stl );
+	m_zoomAction->setEditable( true );
+	m_zoomAction->setCurrentItem( 2 );
+
+	// No need for the other actions in read-only (embedded) mode
+	if( !shell() )
+		return;
+
 	// edit ----->
 	KStdAction::cut( this,
 					 SLOT( editCut() ), actionCollection(), "edit_cut" );
@@ -891,36 +926,6 @@ KarbonView::initActions()
 		SLOT( objectTrafoShear() ), actionCollection(), "object_trafo_shear" );
 	// object <-----
 
-	// view ----->
-	m_viewAction = new KSelectAction(
-					   i18n( "View &Mode" ), 0, this,
-					   SLOT( viewModeChanged() ), actionCollection(), "view_mode" );
-
-	m_zoomAction = new KSelectAction(
-					   i18n( "&Zoom" ), 0, this,
-					   SLOT( zoomChanged() ), actionCollection(), "view_zoom" );
-
-	QStringList mstl;
-	mstl << i18n( "Normal" ) << i18n( "Wireframe" );
-	m_viewAction->setItems( mstl );
-	m_viewAction->setCurrentItem( 0 );
-	m_viewAction->setEditable( false );
-
-	QStringList stl;
-	stl
-	<< i18n( "    25%" )
-	<< i18n( "    50%" )
-	<< i18n( "   100%" )
-	<< i18n( "   200%" )
-	<< i18n( "   300%" )
-	<< i18n( "   400%" )
-	<< i18n( "   800%" )
-	<< i18n( "Whole Page" )
-	<< i18n( "  Width" );
-
-	m_zoomAction->setItems( stl );
-	m_zoomAction->setEditable( true );
-	m_zoomAction->setCurrentItem( 2 );
 
 	new KAction(
 		i18n( "&Color Manager" ), "colorman", 0, this,
