@@ -79,9 +79,6 @@ public:
 
   virtual void cleanUp();
 
-  virtual void slotNewWindow() {}
-  virtual void slotClose() {}
-
   virtual void editCopy();
   virtual void editHTMLCode();
   virtual void editSettings();
@@ -211,8 +208,6 @@ protected:
   static const int ID_RELOAD                 = 14;
   static const int ID_STOP                   = 15;
   static const int ID_OPENURL                = 16;
-  static const int ID_NEWWINDOW              = 17;
-  static const int ID_CLOSE                  = 18;
 
   KoHTMLDoc *m_pDoc;
 

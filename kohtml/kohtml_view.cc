@@ -333,7 +333,8 @@ bool KoHTMLView::mappingCreateToolBar(OpenPartsUI::ToolBarFactory_ptr factory)
 
   m_vLocationToolBar->insertTextLabel(i18n("Location : "), -1, -1);
   
-  m_idLocation = m_vLocationToolBar->insertLined(m_pDoc->htmlURL(), ID_LOCATION, SIGNAL(returnPressed()), this, "slotURLEntered", true, i18n("Current Location"), 70, -1);
+  CORBA::String_var htmlURL = m_pDoc->htmlURL();
+  m_idLocation = m_vLocationToolBar->insertLined(htmlURL.in(), ID_LOCATION, SIGNAL(returnPressed()), this, "slotURLEntered", true, i18n("Current Location"), 70, -1);
   m_vLocationToolBar->setItemAutoSized(ID_LOCATION, true);
 
   if (m_bToolBarVisible) 
@@ -659,7 +660,8 @@ void KoHTMLView::slotForward2()
 
 void KoHTMLView::slotDocumentContentChanged()
 {
-  if (m_vLocationToolBar) m_vLocationToolBar->setLinedText(ID_LOCATION, m_pDoc->htmlURL());
+  CORBA::String_var htmlURL = m_pDoc->htmlURL();
+  if (m_vLocationToolBar) m_vLocationToolBar->setLinedText(ID_LOCATION, htmlURL.in());
 } 
 
 void KoHTMLView::slotURLEntered()
@@ -693,15 +695,15 @@ void KoHTMLView::slotURLEntered()
 
 void KoHTMLView::addBookmark()
 {
-  QString url = m_pDoc->htmlURL();
+  CORBA::String_var url = m_pDoc->htmlURL();
   QString title = m_strCaptionText;
-  KURL u(url);
+  KURL u(url.in());
   
   // KMimeType::initStatic();
   KMimeMagic::initStatic();  
 
-  QFileInfo icon(KPixmapCache::pixmapFileForURL(url, 0, u.isLocalFile(), false));
-  QFileInfo miniIcon(KPixmapCache::pixmapFileForURL(url, 0, u.isLocalFile(), true));
+  QFileInfo icon(KPixmapCache::pixmapFileForURL(url.in(), 0, u.isLocalFile(), false));
+  QFileInfo miniIcon(KPixmapCache::pixmapFileForURL(url.in(), 0, u.isLocalFile(), true));
   
   
   if (title.isEmpty())
@@ -716,7 +718,7 @@ void KoHTMLView::addBookmark()
   
   c.setGroup("KDE Desktop Entry");
   c.writeEntry("Type", "Link");
-  c.writeEntry("URL", url);
+  c.writeEntry("URL", url.in());
   c.writeEntry("Icon", icon.fileName());
   c.writeEntry("MiniIcon", miniIcon.fileName());
   c.writeEntry("Name", title);
@@ -797,7 +799,8 @@ void KoHTMLView::slotReload()
   m_pDoc->stopLoading();
 
 //  m_pDoc->openURL(m_pDoc->htmlURL(), true);
-  eventOpenURL( m_pDoc->htmlURL(), true );
+  CORBA::String_var htmlURL = m_pDoc->htmlURL();
+  eventOpenURL( htmlURL.in(), true );
 }
 
 void KoHTMLView::slotStop()
