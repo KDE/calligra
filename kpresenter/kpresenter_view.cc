@@ -2737,7 +2737,7 @@ void KPresenterView::objectSelectedChanged()
     {
         actionEditCopy->setEnabled(state);
         actionEditCut->setEnabled(state);
-        actionChangeCase->setEnabled( state);
+        actionChangeCase->setEnabled( val);
     }
 
     actionExtraShadow->setEnabled(!page->haveASelectedPictureObj());
