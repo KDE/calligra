@@ -481,7 +481,6 @@ bool KPresenterDoc::load_template( const QString &_url )
 /*========================== load ===============================*/
 bool KPresenterDoc::loadXML( KOMLParser& parser, KoStore* _store )
 {
-    QApplication::setOverrideCursor( waitCursor );
     string tag;
     vector<KOMLAttrib> lst;
     string name;
@@ -516,7 +515,6 @@ bool KPresenterDoc::loadXML( KOMLParser& parser, KoStore* _store )
 	// DOC
 	if ( !parser.open( "DOC", tag ) ) {
 	    cerr << "Missing DOC" << endl;
-	    QApplication::restoreOverrideCursor();
 	    return false;
 	}
 
@@ -526,7 +524,6 @@ bool KPresenterDoc::loadXML( KOMLParser& parser, KoStore* _store )
 	    if ( ( *it ).m_strName == "mime" ) {
 		if ( ( *it ).m_strValue != "application/x-kpresenter" ) {
 		    cerr << "Unknown mime type " << ( *it ).m_strValue << endl;
-		    QApplication::restoreOverrideCursor();
 		    return false;
 		}
 	    } else if ( ( *it ).m_strName == "url" )
@@ -570,7 +567,6 @@ bool KPresenterDoc::loadXML( KOMLParser& parser, KoStore* _store )
 
 		if ( !parser.close( tag ) ) {
 		    cerr << "ERR: Closing Child" << endl;
-		    QApplication::restoreOverrideCursor();
 		    return false;
 		}
 	    }
@@ -665,7 +661,6 @@ bool KPresenterDoc::loadXML( KOMLParser& parser, KoStore* _store )
 
 		if ( !parser.close( tag ) ) {
 		    cerr << "ERR: Closing Child" << endl;
-		    QApplication::restoreOverrideCursor();
 		    return false;
 		}
 	    }
@@ -775,7 +770,6 @@ bool KPresenterDoc::loadXML( KOMLParser& parser, KoStore* _store )
 
 		if ( !parser.close( tag ) ) {
 		    cerr << "ERR: Closing Child" << endl;
-		    QApplication::restoreOverrideCursor();
 		    return false;
 		}
 	    }
@@ -827,7 +821,6 @@ bool KPresenterDoc::loadXML( KOMLParser& parser, KoStore* _store )
 
 		if ( !parser.close( tag ) ) {
 		    cerr << "ERR: Closing Child" << endl;
-		    QApplication::restoreOverrideCursor();
 		    return false;
 		}
 	    }
@@ -880,7 +873,6 @@ bool KPresenterDoc::loadXML( KOMLParser& parser, KoStore* _store )
 
 		if ( !parser.close( tag ) ) {
 		    cerr << "ERR: Closing Child" << endl;
-		    QApplication::restoreOverrideCursor();
 		    return false;
 		}
 	    }
@@ -889,15 +881,12 @@ bool KPresenterDoc::loadXML( KOMLParser& parser, KoStore* _store )
 
 	if ( !parser.close( tag ) ) {
 	    cerr << "ERR: Closing Child" << endl;
-	    QApplication::restoreOverrideCursor();
 	    return false;
 	}
     }
 
     if ( _rastX == 0 ) _rastX = 10;
     if ( _rastY == 0 ) _rastY = 10;
-
-    QApplication::restoreOverrideCursor();
 
     if ( !_store ) {
 	if ( _clean )
