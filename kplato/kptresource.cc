@@ -551,7 +551,7 @@ KPTAppointmentInterval::~KPTAppointmentInterval() {
 }
 
 KPTDuration KPTAppointmentInterval::effort(const KPTDateTime &start, const KPTDateTime end) const {
-    if (start >= m_end && end <= m_start) {
+    if (start >= m_end || end <= m_start) {
         return KPTDuration::zeroDuration;
     }
     KPTDateTime s = (start > m_start ? start : m_start);
