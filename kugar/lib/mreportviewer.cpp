@@ -148,9 +148,9 @@ void MReportViewer::printReport(){
   }
 
   // Set the printer dialog
-	printer = new QPrinter();
-  printer->setPageSize((QPrinter::PageSize)report->pageSize());
-  printer->setOrientation((QPrinter::Orientation)report->pageOrientation());
+	printer = new KPrinter();
+  printer->setPageSize((KPrinter::PageSize)report->pageSize());
+  printer->setOrientation((KPrinter::Orientation)report->pageOrientation());
 	printer->setMinMax(1, cnt);
 	printer->setFromTo(1, cnt);
   printer->setFullPage(true);
@@ -164,7 +164,7 @@ void MReportViewer::printReport(){
 		int viewIdx = report->getCurrentIndex();
 
 		// Check the order we are printing the pages
-		if (printer->pageOrder() == QPrinter::FirstPageFirst)
+		if (printer->pageOrder() == KPrinter::FirstPageFirst)
 			printRev = false;
 		else
     	printRev = true;
@@ -177,7 +177,7 @@ void MReportViewer::printReport(){
 		int totalSteps = printCnt * printCopies;
 		int currentStep = 1;
 
-		// Set copies to 1, QPrinter copies does not appear to work ...
+		// Set copies to 1, KPrinter copies does not appear to work ...
 		printer->setNumCopies(1);
 
 		// Setup the progress dialog

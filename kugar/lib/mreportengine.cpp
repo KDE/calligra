@@ -373,14 +373,14 @@ void MReportEngine::drawReportFooter(MPageCollection* pages){
 
 /** Gets the metrics for the selected page size & orientation */
 QSize MReportEngine::getPageMetrics(int size, int orientation){
-  QPrinter* printer;
+  KPrinter* printer;
   QSize ps;
 
   // Set the page size
-  printer = new QPrinter();
+  printer = new KPrinter();
   printer->setFullPage(true);
-  printer->setPageSize((QPrinter::PageSize)size);
-  printer->setOrientation((QPrinter::Orientation)orientation);
+  printer->setPageSize((KPrinter::PageSize)size);
+  printer->setOrientation((KPrinter::Orientation)orientation);
 
   // Get the page metrics
   QPaintDeviceMetrics pdm(printer);

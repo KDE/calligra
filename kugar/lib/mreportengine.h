@@ -11,7 +11,7 @@
 
 #include <qobject.h>
 #include <qpicture.h>
-#include <qprinter.h>
+#include <kprinter.h>
 #include <qpaintdevicemetrics.h>
 #include <qsize.h>
 #include <qarray.h>

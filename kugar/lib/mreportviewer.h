@@ -15,7 +15,7 @@
 #include <qpixmap.h>
 #include <qpainter.h>
 #include <qpaintdevicemetrics.h>
-#include <qprinter.h>
+#include <kprinter.h>
 #include <qprogressdialog.h>
 
 #include "mreportengine.h"
@@ -70,7 +70,7 @@ private:
 	MPageDisplay *display;
 	MReportEngine *rptEngine;
 	MPageCollection *report;
-	QPrinter *printer;
+	KPrinter *printer;
 };
 
 #endif
