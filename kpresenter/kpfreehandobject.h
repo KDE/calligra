@@ -57,6 +57,7 @@ public:
     { setSize( _size.width(), _size.height() ); }
     virtual void resizeBy( const KoSize &_size );
     virtual void resizeBy( double _dx, double _dy );
+    virtual void flip(bool horizontal );
 
 protected:
     virtual void paint( QPainter *_painter, KoZoomHandler*_zoomHandler,

@@ -95,3 +95,16 @@ QString KPFreehandObjectIface::lineEnd() const
     return QString::null;
 
 }
+
+void KPFreehandObjectIface::horizontalFlips()
+{
+    //todo repaint it
+    obj->flip(true );
+}
+
+void KPFreehandObjectIface::verticalFlips()
+{
+    //todo repaint it
+    obj->flip( false );
+}
+

@@ -956,7 +956,7 @@ void KPrCanvas::mousePressEvent( QMouseEvent *e )
                         deSelectAllObj();
                     selectObj( kpobject );
                     m_view->openPopupMenuPolygonObject( pnt );
-                } else if ( kpobject->getType() == OT_POLYLINE || kpobject->getType() == OT_LINE || kpobject->getType() == OT_CUBICBEZIERCURVE || kpobject->getType() == OT_QUADRICBEZIERCURVE)
+                } else if ( kpobject->getType() == OT_POLYLINE || kpobject->getType() == OT_LINE || kpobject->getType() == OT_CUBICBEZIERCURVE || kpobject->getType() == OT_QUADRICBEZIERCURVE || kpobject->getType() == OT_FREEHAND)
                 {
                     if ( state )
                         deSelectAllObj();
@@ -6763,13 +6763,13 @@ void KPrCanvas::flipObject( bool _horizontal )
     QPtrList<KPObject> lst;
     QPtrListIterator<KPObject> it(getObjectList());
     for ( ; it.current(); ++it ) {
-        if ( it.current()->isSelected() && (it.current()->getType() == OT_POLYLINE || it.current()->getType() == OT_LINE || it.current()->getType() == OT_CUBICBEZIERCURVE || it.current()->getType() == OT_QUADRICBEZIERCURVE ) )
+        if ( it.current()->isSelected() && (it.current()->getType() == OT_POLYLINE || it.current()->getType() == OT_LINE || it.current()->getType() == OT_CUBICBEZIERCURVE || it.current()->getType() == OT_QUADRICBEZIERCURVE || it.current()->getType() == OT_FREEHAND) )
             lst.append( it.current()  );
     }
     //get sticky obj
     it=m_view->kPresenterDoc()->stickyPage()->objectList();
     for ( ; it.current(); ++it ) {
-        if ( it.current()->isSelected() && (it.current()->getType() == OT_POLYLINE || it.current()->getType() == OT_LINE || it.current()->getType() == OT_CUBICBEZIERCURVE || it.current()->getType() == OT_QUADRICBEZIERCURVE ))
+        if ( it.current()->isSelected() && (it.current()->getType() == OT_POLYLINE || it.current()->getType() == OT_LINE || it.current()->getType() == OT_CUBICBEZIERCURVE || it.current()->getType() == OT_QUADRICBEZIERCURVE || it.current()->getType() == OT_FREEHAND))
             lst.append(  it.current() );
     }
     if ( lst.isEmpty())

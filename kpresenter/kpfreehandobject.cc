@@ -243,3 +243,39 @@ void KPFreehandObject::updatePoints( double _fx, double _fy )
     points = tmpPoints;
 }
 
+void KPFreehandObject::flip(bool horizontal )
+{
+    KoPointArray tmpPoints;
+    int index = 0;
+    if ( horizontal )
+    {
+	KoPointArray::ConstIterator it;
+        double horiz = getSize().height()/2;
+        for ( it = origPoints.begin(); it != origPoints.end(); ++it ) {
+            KoPoint point = (*it);
+            if ( point.y()> horiz )
+                tmpPoints.putPoints( index, 1, point.x(),point.y()- 2*(point.y()-horiz) );
+            else
+                tmpPoints.putPoints( index, 1, point.x(),point.y()+ 2*(horiz - point.y()) );
+            ++index;
+        }
+
+    }
+    else
+    {
+        KoPointArray::ConstIterator it;
+        double vert = getSize().width()/2;
+        for ( it = origPoints.begin(); it != origPoints.end(); ++it ) {
+            KoPoint point = (*it);
+            if ( point.x()> vert )
+                tmpPoints.putPoints( index, 1, point.x()- 2*(point.x()-vert), point.y() );
+            else
+                tmpPoints.putPoints( index, 1, point.x()+ 2*(vert - point.x()),point.y() );
+            ++index;
+        }
+
+    }
+    origPoints = tmpPoints;
+    updatePoints( 1.0, 1.0 );
+
+}
