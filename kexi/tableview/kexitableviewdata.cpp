@@ -42,7 +42,7 @@ KexiTableViewColumn::KexiTableViewColumn(KexiDB::Field& f)
 	isDBAware = false;
 
 	m_nameOrCaption = field->captionOrName();
-	m_readOnly = true;
+	m_readOnly = false;
 }
 
 KexiTableViewColumn::KexiTableViewColumn(

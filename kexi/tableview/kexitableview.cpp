@@ -178,7 +178,7 @@ KexiTableView::~KexiTableView()
 	delete d;
 }
 
-void KexiTableView::initActions(KActionCollection *col)
+void KexiTableView::initActions(KActionCollection *)
 {
 
 }
@@ -384,6 +384,7 @@ void KexiTableView::setData( KexiTableViewData *data, bool owner )
 void KexiTableView::addDropFilter(const QString &filter)
 {
 	d->dropFilters.append(filter);
+	viewport()->setAcceptDrops(true);
 }
 
 void KexiTableView::setFont(const QFont &f)
@@ -401,7 +402,7 @@ void KexiTableView::setFont(const QFont &f)
 	updateContents();
 }
 
-bool KexiTableView::beforeDeleteItem(KexiTableItem *item)
+bool KexiTableView::beforeDeleteItem(KexiTableItem *)
 {
 	//always return
 	return true;
@@ -2602,6 +2603,10 @@ void KexiTableView::setNavigationPanelEnabled(bool set)
 	if (d->navigationPanelEnabled==set)
 		return;
 	d->navigationPanelEnabled = set;
+	if(!set)
+		d->navPanel->hide();
+	else
+		d->navPanel->show();
 }
 
 void KexiTableView::setHBarGeometry( QScrollBar & hbar, int x, int y, int w, int h )
@@ -2610,6 +2615,10 @@ void KexiTableView::setHBarGeometry( QScrollBar & hbar, int x, int y, int w, int
 	kdDebug(44021)<<"KexiTableView::setHBarGeometry"<<endl;
 	if (d->navPanel && d->navigationPanelEnabled) {
 		hbar.setGeometry( x + d->navPanel->width(), y, w - d->navPanel->width(), h );
+	}
+	else
+	{
+		hbar.setGeometry( x , y, w, h );
 	}
 }
 
