@@ -371,8 +371,8 @@ class KPresenterDoc : public KoDocument
     void movePageTo( int oldPos, int newPos );
 
     void updateSideBarItem( KPrPage * page );
-    KPrPage * findSideBarPage(KPObject *object);
-    KPrPage * findSideBarPage(QPtrList<KPObject> &objects);
+    KPrPage * findPage(KPObject *object);
+    KPrPage * findPage(QPtrList<KPObject> &objects);
 
     void refreshAllNoteBar(int page, const QString &text, KPresenterView *exceptView);
 

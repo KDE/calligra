@@ -1464,7 +1464,7 @@ void KPTextObject::highlightPortion( KoTextParag * parag, int index, int length,
         {
             // No -> find the right page and activate it
             // ** slow method **
-            KPrPage* page = doc->findSideBarPage( this );
+            KPrPage* page = doc->findPage( this );
             if ( page ) {
                 int pageNum = doc->pageList().findRef( page );
                 Q_ASSERT( pageNum > -1 );

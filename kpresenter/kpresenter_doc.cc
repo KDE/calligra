@@ -3673,8 +3673,7 @@ void KPresenterDoc::selectPage( int pgNum /* 0-based */, bool select )
     emit pageNumChanged();
 }
 
-// TODO remove SideBar from the name, it's a general helper (object->page)
-KPrPage * KPresenterDoc::findSideBarPage(KPObject *object)
+KPrPage * KPresenterDoc::findPage(KPObject *object)
 {
     if ( object->isSticky() ) {
         //kdDebug(33001) << "Object is on sticky page" << endl;
@@ -3692,8 +3691,7 @@ KPrPage * KPresenterDoc::findSideBarPage(KPObject *object)
     return 0L;
 }
 
-// TODO remove SideBar from the name, it's a general helper (object->page)
-KPrPage * KPresenterDoc::findSideBarPage(QPtrList<KPObject> &objects)
+KPrPage * KPresenterDoc::findPage(QPtrList<KPObject> &objects)
 {
     KPObject *object;
     for ( object = objects.first(); object; object=objects.next() ) {

@@ -64,7 +64,7 @@ ShadowCmd::ShadowCmd( const QString &_name, QPtrList<ShadowValues> &_oldShadow, 
     doc = _doc;
     newShadow = _newShadow;
 
-    m_page = doc->findSideBarPage( objects );
+    m_page = doc->findPage( objects );
 
     QPtrListIterator<KPObject> it( objects );
     for ( ; it.current() ; ++it )
@@ -262,7 +262,7 @@ RotateCmd::RotateCmd( const QString &_name, float newAngle, QPtrList<KPObject> &
         it.current()->incCmdRef();
     }
 
-    m_page = m_doc->findSideBarPage( m_objects );
+    m_page = m_doc->findPage( m_objects );
 }
 
 RotateCmd::~RotateCmd()
@@ -755,7 +755,7 @@ AlignCmd::AlignCmd( const QString &_name, QPtrList<KPObject> &_objects, AlignTyp
 {
     objects.setAutoDelete( false );
     diffs.setAutoDelete( true );
-    m_page = doc->findSideBarPage( _objects );
+    m_page = doc->findPage( _objects );
 
     QPtrListIterator<KPObject> it( _objects );
     KoRect boundingRect;
@@ -1396,7 +1396,7 @@ PictureSettingCmd::PictureSettingCmd( const QString &_name, QPtrList<PictureSett
     doc = _doc;
     newSettings = _newSettings;
 
-    m_page = doc->findSideBarPage( objects );
+    m_page = doc->findPage( objects );
 
     QPtrListIterator<KPObject> it( objects );
     for ( ; it.current() ; ++it )
@@ -1522,7 +1522,7 @@ ResizeCmd::ResizeCmd( const QString &_name, const KoPoint &_m_diff, const KoSize
 {
     object = _object;
     doc = _doc;
-    m_page = doc->findSideBarPage( object );
+    m_page = doc->findPage( object );
 
     object->incCmdRef();
 }
@@ -1981,7 +1981,7 @@ KPrNameObjectCommand::KPrNameObjectCommand( const QString &_name, const QString 
 {
     oldObjectName = object->getObjectName();
 
-    m_page = doc->findSideBarPage( object );
+    m_page = doc->findPage( object );
 }
 
 KPrNameObjectCommand::~KPrNameObjectCommand()
@@ -2047,7 +2047,7 @@ KPrFlipObjectCommand::KPrFlipObjectCommand( const QString &name, KPresenterDoc *
 {
     objects.setAutoDelete( false );
 
-    m_page = m_doc->findSideBarPage( objects );
+    m_page = m_doc->findPage( objects );
 
     QPtrListIterator<KPObject> it( objects );
     for ( ; it.current() ; ++it )
@@ -2163,7 +2163,7 @@ KPrCloseObjectCommand::KPrCloseObjectCommand( const QString &_name, KPObject *_o
       objects( _obj ),
       doc(_doc)
 {
-    m_page = doc->findSideBarPage( _obj );
+    m_page = doc->findPage( _obj );
 }
 
 KPrCloseObjectCommand::~KPrCloseObjectCommand()
@@ -2249,7 +2249,7 @@ KPrChangeMarginCommand::KPrChangeMarginCommand( const QString &name, KPTextObjec
     m_marginsEnd(_MarginsEnd),
     m_doc( _doc )
 {
-    m_page = m_doc->findSideBarPage( _obj );
+    m_page = m_doc->findPage( _obj );
 }
 
 void KPrChangeMarginCommand::execute()
@@ -2283,7 +2283,7 @@ KPrChangeVerticalAlignmentCommand::KPrChangeVerticalAlignmentCommand( const QStr
     m_newAlign(_newAlign),
     m_doc( _doc )
 {
-    m_page = m_doc->findSideBarPage( _obj );
+    m_page = m_doc->findPage( _obj );
 }
 
 void KPrChangeVerticalAlignmentCommand::execute()
@@ -2334,7 +2334,7 @@ ImageEffectCmd::ImageEffectCmd(const QString &_name, QPtrList<ImageEffectSetting
     doc = _doc;
     newSettings = _newSettings;
 
-    m_page = doc->findSideBarPage( objects );
+    m_page = doc->findPage( objects );
 
     QPtrListIterator<KPObject> it( objects );
     for ( ; it.current() ; ++it )
