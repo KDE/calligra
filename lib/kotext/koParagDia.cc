@@ -191,8 +191,10 @@ void KoCounterStyleWidget::alignmentChanged(const QString& s)
         a=Qt::AlignRight;
     else if(s==i18n("Align Auto"))
         a=Qt::AlignAuto;
-    else
+    else {
         kdError()<<"Not Implemented"<<endl;
+        return;
+    }
     m_counter.setAlignment(a);
     emit sig_alignmentChanged(a);
 }
