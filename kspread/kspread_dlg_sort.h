@@ -49,6 +49,7 @@ class KSpreadSortDlg : public QDialog
  private slots:
   void sortKey2textChanged( int );
   void useCustomListsStateChanged( int );
+  void firstRowHeaderChanged( int );
   void slotOk();
   void slotOrientationChanged(int id);
 
@@ -79,6 +80,7 @@ class KSpreadSortDlg : public QDialog
   QRadioButton * m_sortRow;
 
   QCheckBox    * m_copyLayout;
+  QCheckBox    * m_firstRowHeader;
 
   QComboBox    * m_outputTable;
   QLineEdit    * m_outputCell;

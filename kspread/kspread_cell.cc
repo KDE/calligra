@@ -3463,13 +3463,13 @@ bool KSpreadCell::updateChart(bool refresh)
         for ( bind = m_pTable->firstCellBinding(); bind != 0L; bind = m_pTable->nextCellBinding() )
         {
             if ( bind->contains( m_iColumn, m_iRow ) )
-                {
-                if(!refresh)
-                        return true;
+            {
+                if (!refresh)
+                    return true;
 
                 bind->cellChanged( this );
                 return true;
-                }
+            }
         }
     }
     return false;

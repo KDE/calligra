@@ -533,12 +533,12 @@ public:
     void sortByRow( int ref_row, SortingOrder );
     void sortByRow( int key1, int key2, int key3,
                     SortingOrder order1, SortingOrder order2, SortingOrder order3,
-                    QStringList const * firstKey, bool copyLayout,
+                    QStringList const * firstKey, bool copyLayout, bool headerRow,
                     KSpreadPoint const & outputPoint );
     void sortByColumn( int ref_column, SortingOrder );
     void sortByColumn( int key1, int key2, int key3,
                        SortingOrder order1, SortingOrder order2, SortingOrder order3,
-                       QStringList const * firstKey, bool copyLayout,
+                       QStringList const * firstKey, bool copyLayout, bool headerRow, 
                        KSpreadPoint const & outputPoint );
     void swapCells( int x1, int y1, int x2, int y2, bool cpLayout );
 
@@ -1283,6 +1283,7 @@ protected:
     QPoint m_oldPos;
     int m_iScrollPosX;
     int m_iScrollPosY;
+
 public:
     // see kspread_table.cc for an explanation of this
     // this is for type B and also for type A (better use CellWorkerTypeA for that)

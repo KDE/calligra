@@ -140,10 +140,10 @@ KSpreadSortDlg::KSpreadSortDlg( KSpreadView * parent,  const char * name,
 
   m_useCustomLists = new QCheckBox( firstKeyBox, "m_useCustomLists_2" );
   m_useCustomLists->setText( i18n( "&Use custom list" ) );
-  m_useCustomLists->setEnabled( false );
   firstKeyBoxLayout->addWidget( m_useCustomLists );
 
   m_customList = new QComboBox( false, firstKeyBox, "m_customList" );
+  m_customList->setEnabled( false );
   m_customList->setMaximumSize( 230, 30 );
   firstKeyBoxLayout->addWidget( m_customList );
 
@@ -175,6 +175,11 @@ KSpreadSortDlg::KSpreadSortDlg( KSpreadView * parent,  const char * name,
 
   page2Layout->addMultiCellWidget( m_copyLayout, 2, 2, 0, 1 );
 
+  m_firstRowHeader = new QCheckBox( m_page2, "m_copyLayout" );
+  m_firstRowHeader->setText( i18n( "&First row contains header" ) );
+
+  page2Layout->addMultiCellWidget( m_firstRowHeader, 3, 3, 0, 1 );
+
   QGroupBox * resultToBox = new QGroupBox( m_page2, "resultToBox" );
   resultToBox->setTitle( i18n( "Put results to" ) );
   resultToBox->setColumnLayout(0, Qt::Vertical );
@@ -184,7 +189,6 @@ KSpreadSortDlg::KSpreadSortDlg( KSpreadView * parent,  const char * name,
   resultToBoxLayout->setAlignment( Qt::AlignTop );
 
   m_outputTable = new QComboBox( false, resultToBox, "m_outputTable" );
-  m_outputTable->setEnabled(false);
   resultToBoxLayout->addWidget( m_outputTable );
   QSpacerItem * spacer = new QSpacerItem( 20, 20, QSizePolicy::Expanding, QSizePolicy::Minimum );
   resultToBoxLayout->addItem( spacer );
@@ -195,7 +199,6 @@ KSpreadSortDlg::KSpreadSortDlg( KSpreadView * parent,  const char * name,
 
   m_outputCell = new QLineEdit( resultToBox, "m_outputCell" );
   m_outputCell->setMaximumSize( QSize( 60, 32767 ) );
-  m_outputCell->setEnabled(false);
   resultToBoxLayout->addWidget( m_outputCell );
 
   page2Layout->addMultiCellWidget( resultToBox, 1, 1, 0, 1 );
@@ -228,6 +231,8 @@ KSpreadSortDlg::KSpreadSortDlg( KSpreadView * parent,  const char * name,
            SLOT( sortKey2textChanged( int ) ) );
   connect( m_useCustomLists, SIGNAL( stateChanged(int) ), this,
            SLOT( useCustomListsStateChanged(int) ) );
+  connect( m_firstRowHeader, SIGNAL( stateChanged(int) ), this,
+           SLOT( firstRowHeaderChanged(int) ) );
   connect( orientationGroup, SIGNAL( pressed(int) ), this,
            SLOT( slotOrientationChanged(int) ) );
 
@@ -378,6 +383,25 @@ void KSpreadSortDlg::slotOrientationChanged(int id)
     m_sortKey2->insertStringList(m_listRow);
     m_sortKey3->insertItem( i18n("None") );
     m_sortKey3->insertStringList(m_listRow);
+
+    if (m_firstRowHeader->isChecked())
+    {
+      int k1 = m_sortKey1->currentItem();
+      int k2 = m_sortKey2->currentItem();
+      int k3 = m_sortKey3->currentItem();
+      m_sortKey1->removeItem( 0 );
+      m_sortKey2->removeItem( 1 ); // because there is "None" in there
+      m_sortKey3->removeItem( 1 );
+      if (k1 > 0)
+        m_sortKey1->setCurrentItem(--k1);
+      else
+        m_sortKey1->setCurrentItem( 0 );
+      if (k2 > 0)
+        m_sortKey2->setCurrentItem(--k2);
+      if (k3 > 0)
+        m_sortKey3->setCurrentItem(--k3);
+    }
+
     break;
 
    default :
@@ -410,11 +434,12 @@ void KSpreadSortDlg::slotOk()
   QRect r = m_pView->activeTable()-> selectionRect();
   if ( r.topLeft() != outputPoint.pos )
   {
-    int t = outputPoint.pos.y() + r.height();
-    int l = outputPoint.pos.x() + r.width();
+    int h = outputPoint.pos.y() + r.height();
+    int w = outputPoint.pos.x() + r.width();
+
     if ( r.contains(outputPoint.pos)
-         || ( t >= r.left() && t <= r.right() )
-         || ( l >= r.top()  && l <= r.bottom() ) )
+         || ( w >= r.left() && w <= r.right() )
+         || ( h >= r.top()  && h <= r.bottom() ) )
     {
       KMessageBox::error( this, i18n("The output region must not overlapp with the source region!") );
       m_outputCell->setFocus();
@@ -442,22 +467,24 @@ void KSpreadSortDlg::slotOk()
 
   if ( m_sortRow->isChecked() )
   {
-    kdDebug() << r.top() << ", " 
-              << m_sortKey1->currentItem() << ", " 
-              << m_sortKey2->currentItem() << ", " 
-              << m_sortKey3->currentItem() << endl;
     key1 = m_sortKey1->currentItem() + r.top();
     if (m_sortKey2->currentItem() > 0)
       key2 = m_sortKey2->currentItem() + r.top() - 1; // cause there is "None"
     if (m_sortKey3->currentItem() > 0)
       key3 = m_sortKey3->currentItem() + r.top() - 1; // cause there is "None"
+
+    if (m_firstRowHeader->isChecked())
+    {
+      if (key1 >= 0)
+        ++key1;
+      if (key2 > 0)
+        ++key2;
+      if (key3 > 0)
+        ++key3;
+    }
   }
   else
   {
-    kdDebug() << r.left() << ", " 
-              << m_sortKey1->currentItem() << ", " 
-              << m_sortKey2->currentItem() << ", " 
-              << m_sortKey3->currentItem() << endl;
     key1 = m_sortKey1->currentItem() + r.left();
     if (m_sortKey2->currentItem() > 0)
       key2 = m_sortKey2->currentItem() + r.left() - 1; // cause there is "None"
@@ -465,8 +492,11 @@ void KSpreadSortDlg::slotOk()
       key3 = m_sortKey3->currentItem() + r.left() - 1; // cause there is "None"
   }
 
+  kdDebug() << key1 << ", " << key2 << ", " << key3 << endl;
+
   if ( m_useCustomLists->isChecked() )
   {
+    firstKey = new QStringList();
     QString list = m_customList->currentText();
     QString tmp;
     int l = list.length();
@@ -494,14 +524,12 @@ void KSpreadSortDlg::slotOk()
     key3 = 0;
   }
 
-  kdDebug() << key1 << ", " << key2 << ", " << key3 << ", " << order1 << ", " << order2 << ", " << order3 << ", " << m_copyLayout->isChecked()
-            << ", " << outputPoint.tableName << ", " << outputPoint.pos.x() << ", " << outputPoint.pos.y() << endl;
-
   if ( m_sortRow->isChecked() )
   {
     m_pView->activeTable()->sortByRow( key1, key2, key3,
                                        order1, order2, order3,
                                        firstKey, m_copyLayout->isChecked(),
+                                       m_firstRowHeader->isChecked(),
                                        outputPoint );
   }
   else if (m_sortColumn->isChecked())
@@ -509,6 +537,7 @@ void KSpreadSortDlg::slotOk()
     m_pView->activeTable()->sortByColumn( key1, key2, key3,
                                           order1, order2, order3,
                                           firstKey, m_copyLayout->isChecked(),
+                                          m_firstRowHeader->isChecked(),
                                           outputPoint );
   }
   else
@@ -533,10 +562,50 @@ void KSpreadSortDlg::sortKey2textChanged( int )
 
 void KSpreadSortDlg::useCustomListsStateChanged( int state )
 {
-  if (state == 1)
-    m_customList->setEnabled(true);
-  else
+  if (state == 0)
     m_customList->setEnabled(false);
+  else if (state == 2)
+    m_customList->setEnabled(true);
+}
+
+void KSpreadSortDlg::firstRowHeaderChanged( int state )
+{
+  if (m_sortColumn->isChecked())
+    return;
+
+  if (state == 0) // off
+  {
+    int k1 = m_sortKey1->currentItem();
+    int k2 = m_sortKey2->currentItem();
+    int k3 = m_sortKey3->currentItem();
+    m_sortKey1->clear();
+    m_sortKey2->clear();
+    m_sortKey3->clear();
+    m_sortKey1->insertStringList(m_listRow);
+    m_sortKey2->insertItem( i18n("None") );
+    m_sortKey2->insertStringList(m_listRow);
+    m_sortKey3->insertItem( i18n("None") );
+    m_sortKey3->insertStringList(m_listRow);
+
+    m_sortKey1->setCurrentItem(++k1);
+    m_sortKey2->setCurrentItem(++k2);
+    m_sortKey3->setCurrentItem(++k3);
+  }
+  else if (state == 2) // on
+  {
+    int k1 = m_sortKey1->currentItem();
+    int k2 = m_sortKey2->currentItem();
+    int k3 = m_sortKey3->currentItem();
+    m_sortKey1->removeItem( 0 );
+    m_sortKey2->removeItem( 1 ); // because there is "None" in there
+    m_sortKey3->removeItem( 1 );
+    if (k1 > 0)
+      m_sortKey1->setCurrentItem(--k1);
+    if (k2 > 0)
+      m_sortKey2->setCurrentItem(--k2);
+    if (k3 > 0)
+      m_sortKey3->setCurrentItem(--k3);
+  }
 }
 
 #include <kspread_dlg_sort.moc>
