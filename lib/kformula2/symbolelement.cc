@@ -622,3 +622,45 @@ bool SymbolElement::readContentFromDom(QDomNode& node)
     
     return true;
 }
+
+QString SymbolElement::toLatex()
+{
+    QString sym;
+    
+    switch(symbol.getType()) {
+	
+	case 1001:
+	 sym="\\int";
+	break;
+	case 1002:
+	 sym="\\sum";
+	break;
+	case 1003:
+	 sym="\\prod";
+	break;
+	
+	default:
+	 sym=" ";
+    
+    } 
+    
+    
+    if(hasLower()) {
+        sym+="_{";
+	sym+=lower->toLatex();
+	sym+="}";
+    }
+    
+    if(hasUpper()) {
+        sym+="^{";
+	sym+=upper->toLatex();
+	sym+="}";
+    }
+    
+        sym+="{";
+	sym+=content->toLatex();
+	sym+="}";
+    
+    
+    return sym;
+}
