@@ -301,8 +301,4 @@
   0 PaperHeight neg translate
 } def
 
-/Landscape { % ins Querformat umschalten
-  PaperWidth 0 translate
-  90 rotate
-} bind def
 %%EndProlog

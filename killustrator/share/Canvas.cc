@@ -394,6 +394,10 @@ void Canvas::printPSDocument () {
     // write header
     writePSHeader (psStream);
 
+    // orientation
+    if (pSetup.orientation () == QPrinter::Landscape)
+      psStream << "%%Orientation: Landscape\n";
+
     // paper format
     psStream << "%%DocumentPaperSizes: ";
     switch (pSetup.pageSize ()) {
@@ -425,9 +429,6 @@ void Canvas::printPSDocument () {
 	     << "/PaperWidth " << document->getPaperWidth () << " def\n"
              << "/PaperHeight " << document->getPaperHeight () << " def\n"
              << "InitTMatrix\n";
-
-    if (pSetup.orientation () == QPrinter::Landscape)
-      psStream << "Landscape\n";
 
     set<string> reqFonts;
     if (document->requiredFonts (reqFonts)) {
