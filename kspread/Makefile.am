@@ -26,6 +26,7 @@ libkspreadpart_la_SOURCES = kspread_canvas.cc \
 	KSpreadTableIface.cc KSpreadCellIface.cc KSpreadCellIface.skel \
 	KSpreadAppIface.cc KSpreadAppIface.skel kspread_dlg_format.cc \
 	kspread_dlg_oszi.cc KSpreadViewIface.skel KSpreadViewIface.cc \
+	kspread_cluster.cc \
 	qtai_bar.cpp qtai_base.cpp qtai_meter.cpp qtai_plot.cpp qtai_strip.cpp
 libkspreadpart_la_LDFLAGS = -avoid-version -module -no-undefined
 libkspreadpart_la_LIBADD = $(all_libraries) ../kchart/libkchartpart.la ../lib/kscript/libkscript.la ../lib/kofficeui/libkofficeui.la -lkformula
@@ -47,7 +48,7 @@ noinst_HEADERS = kspread_shell.h kspread_doc.h \
 	kspread_autofill.h kspread_interpreter.h \
 	kspread_layout.h kspread_map.h kspread_dlg_layout.h \
 	kspread_dlg_scripts.h kspread_table.h kspread_cell.h \
-	kspread_dlg_cons.h \
+	kspread_dlg_cons.h kspread_cluster.h \
 	kspread_util.h kspread_canvas.h \
         kspread_dlg_reference.h \
 	kspread_editors.h kspread_dlg_tabname.h kspread_dlg_formula.h \

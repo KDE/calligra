@@ -63,6 +63,9 @@ QChar KSpreadCell::decimal_point = '\0';
 KSpreadCell::KSpreadCell( KSpreadTable *_table, int _column, int _row )
   : KSpreadLayout( _table )
 {
+    m_nextCell = 0;
+    m_previousCell = 0;
+
   m_pCode = 0;
   m_pPrivate = 0L;
   m_pQML = 0;
@@ -291,15 +294,41 @@ void KSpreadCell::forceExtraCells( int _col, int _row, int _x, int _y )
     makeLayout( m_pTable->painter(), _col, _row );
 }
 
+void KSpreadCell::move( int col, int row )
+{
+    setLayoutDirtyFlag();
+    setCalcDirtyFlag();
+    setDisplayDirtyFlag();
+
+    int ex = extraXCells();
+    int ey = extraYCells();
+
+    if ( m_pObscuringCell )
+	m_pObscuringCell = 0;
+
+    // Unobscure the objects we obscure right now
+    for( int x = m_iColumn; x <= m_iColumn + m_iExtraXCells; x++ )
+	for( int y = m_iRow; y <= m_iRow + m_iExtraYCells; y++ )
+	    if ( x != m_iColumn || y != m_iRow )
+	    {
+		KSpreadCell *cell = m_pTable->nonDefaultCell( x, y );
+		cell->unobscure();
+	    }
+
+    m_iColumn = col;
+    m_iRow = row;
+
+    // Reobscure cells if we are forced to do so.
+    if ( m_bForceExtraCells )
+	forceExtraCells( col, row, ex, ey );
+}
+
 void KSpreadCell::setLayoutDirtyFlag()
 {
     m_bLayoutDirtyFlag= TRUE;
 
     if ( m_pObscuringCell )
-    {
 	m_pObscuringCell->setLayoutDirtyFlag();
-	return;
-    }
 }
 
 bool KSpreadCell::isEmpty() const
@@ -597,6 +626,7 @@ QString KSpreadCell::decodeFormular( const char* _text, int _col, int _row )
     return erg;
 }
 
+// ##### Are _col and _row really needed ?
 void KSpreadCell::makeLayout( QPainter &_painter, int _col, int _row )
 {
     m_leftBorderPen.setWidth( leftBorderWidth( _col, _row ) );
@@ -1812,6 +1842,7 @@ void KSpreadCell::paintCell( const QRect& _rect, QPainter &_painter,
   if ( m_bLayoutDirtyFlag)
     makeLayout( _painter, _col, _row );
 
+  // Determine the dimension of the cell.
   int w = cl->width();
   int h = rl->height();
   if ( m_iExtraXCells )
@@ -2883,23 +2914,24 @@ void KSpreadCell::update()
 void KSpreadCell::updateDepending()
 {
     kdDebug(36002) << util_cellName( m_iColumn, m_iRow ) << " updateDepending" << endl;
+
     // Every cell that references us must set its calc dirty flag
     QListIterator<KSpreadTable> it( m_pTable->map()->tableList() );
     for( ; it.current(); ++it )
     {
-	QIntDictIterator<KSpreadCell> it3( it.current()->m_dctCells );
-	for ( ; it3.current(); ++it3 )
-	    if ( it3.current() != this )
-		it3.current()->setCalcDirtyFlag( m_pTable, m_iColumn, m_iRow );
+	KSpreadCell* c = it.current()->firstCell();
+	for( ; c; c = c->nextCell() )
+	    if ( c != this )
+		c->setCalcDirtyFlag( m_pTable, m_iColumn, m_iRow );
     }
 
     // Recalculate every cell with calc dirty flag
     QListIterator<KSpreadTable> it2( m_pTable->map()->tableList() );
     for( ; it2.current(); ++it2 )
     {
-	QIntDictIterator<KSpreadCell> it4( it2.current()->m_dctCells );
-	for ( ; it4.current(); ++it4 )
-	    it4.current()->calc( TRUE );
+	KSpreadCell* c = it2.current()->firstCell();
+	for( ; c; c = c->nextCell() )
+	    c->calc( TRUE );
     }
     kdDebug(36002) << util_cellName( m_iColumn, m_iRow ) << " updateDepending done" << endl;
 
@@ -3177,9 +3209,9 @@ void KSpreadCell::setCalcDirtyFlag( KSpreadTable *_table, int _column, int _row 
     QListIterator<KSpreadTable> it( m_pTable->map()->tableList() );
     for( ; it.current(); ++it )
     {
-      QIntDictIterator<KSpreadCell> it2( it.current()->m_dctCells );
-      for ( ; it2.current(); ++it2 )
-	it2.current()->setCalcDirtyFlag( m_pTable, m_iColumn, m_iRow );
+	KSpreadCell* c = it.current()->firstCell();
+	for( ; c; c = c->nextCell() )
+	    c->setCalcDirtyFlag( m_pTable, m_iColumn, m_iRow );
     }
   }
 }
@@ -3970,25 +4002,34 @@ QString KSpreadCell::testAnchor( int _x, int _y, QWidget* _w )
 
 void KSpreadCell::tableDies()
 {
+    // Avoid unobscuring the cells in the destructor.
     m_iExtraXCells = 0;
     m_iExtraYCells = 0;
+    m_nextCell = 0;
+    m_previousCell = 0;
 }
 
 KSpreadCell::~KSpreadCell()
 {
-  if ( m_pPrivate )
-    delete m_pPrivate;
-  if ( m_pQML )
-    delete m_pQML;
-  if ( m_pVisualFormula )
-    delete m_pVisualFormula;
+    if ( m_nextCell )
+	m_nextCell->setPreviousCell( m_previousCell );
+    if ( m_previousCell )
+	m_previousCell->setNextCell( m_nextCell );
 
-  for( int x = 0; x <= m_iExtraXCells; ++x )
-      for( int y = (x == 0) ? 1 : 0; // avoid looking at (+0,+0)
-           y <= m_iExtraYCells; ++y )
+    if ( m_pPrivate )
+	delete m_pPrivate;
+    if ( m_pQML )
+	delete m_pQML;
+    if ( m_pVisualFormula )
+	delete m_pVisualFormula;
+
+    // Unobscure cells.
+    for( int x = 0; x <= m_iExtraXCells; ++x )
+	for( int y = (x == 0) ? 1 : 0; // avoid looking at (+0,+0)
+	     y <= m_iExtraYCells; ++y )
     {
         KSpreadCell* cell = m_pTable->cellAt( m_iColumn + x, m_iRow + y );
-        if ( cell /*&& cell != this*/ )
+        if ( cell )
             cell->unobscure();
     }
 }

@@ -112,12 +112,12 @@ void KSpreadUndo::redo()
 
 /****************************************************************************
  *
- * KSpreadUndoDeleteColumn
+ * KSpreadUndoRemoveColumn
  *
  ***************************************************************************/
 
 
-KSpreadUndoDeleteColumn::KSpreadUndoDeleteColumn( KSpreadDoc *_doc, KSpreadTable *_table, int _column ) :
+KSpreadUndoRemoveColumn::KSpreadUndoRemoveColumn( KSpreadDoc *_doc, KSpreadTable *_table, int _column ) :
     KSpreadUndoAction( _doc )
 {
     m_pTable = _table;
@@ -126,13 +126,13 @@ KSpreadUndoDeleteColumn::KSpreadUndoDeleteColumn( KSpreadDoc *_doc, KSpreadTable
     m_pColumnLayout = 0L;
 }
 
-KSpreadUndoDeleteColumn::~KSpreadUndoDeleteColumn()
+KSpreadUndoRemoveColumn::~KSpreadUndoRemoveColumn()
 {
     if ( m_pColumnLayout )
 	delete m_pColumnLayout;
 }
 
-void KSpreadUndoDeleteColumn::undo()
+void KSpreadUndoRemoveColumn::undo()
 {
     m_pDoc->undoBuffer()->lock();
 
@@ -152,14 +152,14 @@ void KSpreadUndoDeleteColumn::undo()
     m_pDoc->undoBuffer()->unlock();
 }
 
-void KSpreadUndoDeleteColumn::redo()
+void KSpreadUndoRemoveColumn::redo()
 {
     m_pDoc->undoBuffer()->lock();
-    m_pTable->deleteColumn( m_iColumn);
+    m_pTable->removeColumn( m_iColumn );
     m_pDoc->undoBuffer()->unlock();
 }
 
-void KSpreadUndoDeleteColumn::appendCell( KSpreadCell *_cell )
+void KSpreadUndoRemoveColumn::appendCell( KSpreadCell *_cell )
 {
     m_lstCells.append( _cell );
 }
@@ -184,7 +184,7 @@ KSpreadUndoInsertColumn::~KSpreadUndoInsertColumn()
 void KSpreadUndoInsertColumn::undo()
 {
     m_pDoc->undoBuffer()->lock();
-    m_pTable->deleteColumn( m_iColumn);
+    m_pTable->removeColumn( m_iColumn );
     m_pDoc->undoBuffer()->unlock();
 }
 
@@ -197,11 +197,11 @@ void KSpreadUndoInsertColumn::redo()
 
 /****************************************************************************
  *
- * KSpreadUndoDeleteRow
+ * KSpreadUndoRemoveRow
  *
  ***************************************************************************/
 
-KSpreadUndoDeleteRow::KSpreadUndoDeleteRow( KSpreadDoc *_doc, KSpreadTable *_table, int _row ) :
+KSpreadUndoRemoveRow::KSpreadUndoRemoveRow( KSpreadDoc *_doc, KSpreadTable *_table, int _row ) :
     KSpreadUndoAction( _doc )
 {
     m_pTable = _table;
@@ -210,13 +210,13 @@ KSpreadUndoDeleteRow::KSpreadUndoDeleteRow( KSpreadDoc *_doc, KSpreadTable *_tab
     m_pRowLayout = 0L;
 }
 
-KSpreadUndoDeleteRow::~KSpreadUndoDeleteRow()
+KSpreadUndoRemoveRow::~KSpreadUndoRemoveRow()
 {
     if ( m_pRowLayout )
 	delete m_pRowLayout;
 }
 
-void KSpreadUndoDeleteRow::undo()
+void KSpreadUndoRemoveRow::undo()
 {
     m_pDoc->undoBuffer()->lock();
 
@@ -236,14 +236,14 @@ void KSpreadUndoDeleteRow::undo()
     m_pDoc->undoBuffer()->unlock();
 }
 
-void KSpreadUndoDeleteRow::redo()
+void KSpreadUndoRemoveRow::redo()
 {
     m_pDoc->undoBuffer()->lock();
-    m_pTable->deleteRow( m_iRow );
+    m_pTable->removeRow( m_iRow );
     m_pDoc->undoBuffer()->unlock();
 }
 
-void KSpreadUndoDeleteRow::appendCell( KSpreadCell *_cell )
+void KSpreadUndoRemoveRow::appendCell( KSpreadCell *_cell )
 {
     m_lstCells.append( _cell );
 }
@@ -268,7 +268,7 @@ KSpreadUndoInsertRow::~KSpreadUndoInsertRow()
 void KSpreadUndoInsertRow::undo()
 {
     m_pDoc->undoBuffer()->lock();
-    m_pTable->deleteRow( m_iRow );
+    m_pTable->removeRow( m_iRow );
     m_pDoc->undoBuffer()->unlock();
 }
 

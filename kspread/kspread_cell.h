@@ -127,6 +127,17 @@ public:
      */
     ~KSpreadCell();
 
+    KSpreadCell* previousCell() { return m_previousCell; }
+    KSpreadCell* nextCell() { return m_nextCell; }
+    void setPreviousCell( KSpreadCell* c ) { m_previousCell = c; }
+    void setNextCell( KSpreadCell* c ) { m_nextCell = c; }
+
+    /**
+     * Moves around the cell. It cares about obscured and obscuring cells and
+     * forces, relayout, calculation and redrawing of the cell.
+     */
+    void move( int column, int row );
+    
     /**
      * The @ref KSpreadTable calls this method if the table becomes deleted.
      * At the time this method is called other cells may already be deleted or
@@ -252,13 +263,13 @@ public:
      * command. It does not trigger any updates or make shure that no other cell
      * already exists at this place.
      */
-    void setColumn( int _c ) { m_iColumn = _c; }
+    // void setColumn( int _c ) { m_iColumn = _c; }
     /**
      * Set the row this cell is now in. This function is usually used after the 'paste'
      * command. It does not trigger any updates or make shure that no other cell
      * already exists at this place.
      */
-    void setRow( int _r ) { m_iRow = _r; }
+    // void setRow( int _r ) { m_iRow = _r; }
 
     /**
      * When we are in the progress of loading, then this function will only store the
@@ -648,7 +659,7 @@ public:
     QString createFormat(double value);
     QString createFractionFormat(double value);
     void checkFormat(bool formular=false);
-    
+
     /**
      * Used for comparing cells (when sorting)
      */
@@ -669,7 +680,7 @@ protected:
      * needed for the text.
      */
     void textSize( QPainter &_paint );
-    
+
     /**
      * Cleans up formula stuff.
      * Call this before you store a new formula or to delete the
@@ -942,6 +953,9 @@ protected:
     int m_rotateAngle;
 
     formatNumber m_eFormatNumber;
+
+    KSpreadCell* m_nextCell;
+    KSpreadCell* m_previousCell;
 };
 
 #endif

@@ -57,6 +57,7 @@ class DCOPObject;
 #include "kspread_cell.h"
 #include "kspread_dlg_layout.h"
 #include "kspread_global.h"
+#include "kspread_cluster.h"
 
 /********************************************************************
  *
@@ -185,25 +186,6 @@ public:
     KSpreadTable( KSpreadMap *_map, const char *_name );
     ~KSpreadTable();
 
-    /**
-     * Deletes the column '_column' and redraws the table.
-     */
-    virtual void deleteColumn( unsigned long int col );
-    /**
-     * Moves all columns which are >= _column one position to the right and
-     * inserts a new and empty column. After this the table is redrawn.
-     */
-    virtual void insertColumn( unsigned long int col );
-    /**
-     * Deletes the row '_ow' and redraws the table.
-     */
-    virtual void deleteRow( unsigned long int row );
-    /**
-     * Moves all rows which are >= _row one position down and
-     * inserts a new and empty row. After this the table is redrawn.
-     */
-    virtual void insertRow( unsigned long int row );
-
     virtual bool isEmpty( unsigned long int x, unsigned long int y );
 
     /**
@@ -267,6 +249,12 @@ public:
      * @return a non default RowLayout for this row.
      */
     RowLayout* nonDefaultRowLayout( int _row );
+
+    /**
+     * @return the first cell of this table. Next cells can
+     * be retrieved by calling @ref KSpreadCell::nextCell.
+     */
+    KSpreadCell* firstCell();
     /**
      * @param _no_scrollbar_update won't change the scrollbar if set to true disregarding
      *                             whether _column/_row are bigger than
@@ -406,15 +394,44 @@ public:
     void sortByColumn( int ref_column, SortingOrder = Increase );
     void swapCells( int x1, int y1, int x2, int y2 );
     void setSeries( const QPoint &_marker,int start,int end,int step,Series mode,Series type );
+    
     /**
-     * Insert or remove =>move cells
+     * Moves all cells of the row _marker.y() which are in
+     * the column _marker.x() or right hand of that one position
+     * to the right.
+     *
+     * @return TRUE if the shift was possible, or false otherwise.
+     *         A reason for returning FALSE is that there was a cell
+     *         in the right most position.
      */
-    void insertRightCell(const QPoint &_marker );
-    void insertBottomCell(const QPoint &_marker);
-    void removeLeftCell(const QPoint &_marker);
-    void removeTopCell(const QPoint &_marker);
-    int adjustColumn(const QPoint &_marker,int _col=-1);
-    int adjustRow(const QPoint &_marker,int _row=-1);
+    bool shiftRow(const QPoint &_marker );
+    bool shiftColumn( const QPoint& marker );
+    
+    void unshiftColumn( const QPoint& marker );
+    void unshiftRow( const QPoint& marker );
+
+    /**
+     * Moves all columns which are >= @p col one position to the right and
+     * inserts a new and empty column. After this the table is redrawn.
+     */
+    bool insertColumn( int col );
+    /**
+     * Moves all rows which are >= @p row one position down and
+     * inserts a new and empty row. After this the table is redrawn.
+     */
+    bool insertRow( int row );
+    
+    /**
+     * Deletes the column @p col and redraws the table.
+     */
+    void removeColumn( int col );
+    /**
+     * Deletes the row @p row and redraws the table.
+     */
+    void removeRow( int row );
+
+    int adjustColumn( const QPoint &_marker, int _col = -1 );
+    int adjustRow( const QPoint &_marker, int _row = -1 );
 
     /**
      * Install borders
@@ -445,11 +462,11 @@ public:
 
     void setShowColumnNumber(bool _showColumnNumber) {m_bShowColumnNumber=_showColumnNumber;}
 
-    void mergeCell( const QPoint &_marker);
-
-    void dissociateCell( const QPoint &_marker);
+    void mergeCell( const QPoint &_marker );
+    void dissociateCell( const QPoint &_marker );
 
     QRect refreshArea(const QRect &_rect);
+    
     /**
      * Change name of reference when the user inserts or removes a column,
      * a row or a cell (= insertion of a row [or column] on a single column [or row]).
@@ -680,9 +697,9 @@ protected:
      */
     void fillSequence( QList<KSpreadCell>& _srcList, QList<KSpreadCell>& _destList, QList<AutoFillSequence>& _seqList );
 
-    QIntDict<KSpreadCell> m_dctCells;
-    QIntDict<RowLayout> m_dctRows;
-    QIntDict<ColumnLayout> m_dctColumns;
+    KSpreadCluster m_cells;
+    KSpreadRowCluster m_rows;
+    KSpreadColumnCluster m_columns;
 
     KSpreadCell* m_pDefaultCell;
     RowLayout* m_pDefaultRowLayout;

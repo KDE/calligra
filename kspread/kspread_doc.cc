@@ -241,9 +241,9 @@ bool KSpreadDoc::save( ostream& out, const char* )
 
   QCString s = buffer.utf8();
   buffer = QString::null;
-  
+
   out.write( s.data(), s.size() );
-  
+
   setModified( false );
 
   return true;
@@ -847,8 +847,8 @@ void KSpreadDoc::paintContent( QPainter& painter, const QRect& rect, bool transp
     if ( isLoading() )
 	return;
 
-    if ( !transparent )
-	painter.eraseRect( rect );
+    // if ( !transparent )
+    // painter.eraseRect( rect );
 
     int xpos;
     int ypos;

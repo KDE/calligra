@@ -51,11 +51,11 @@ protected:
     KSpreadDoc *m_pDoc;
 };
 
-class KSpreadUndoDeleteColumn : public KSpreadUndoAction
+class KSpreadUndoRemoveColumn : public KSpreadUndoAction
 {
 public:
-    KSpreadUndoDeleteColumn( KSpreadDoc *_doc, KSpreadTable *_table, int _column );
-    virtual ~KSpreadUndoDeleteColumn();
+    KSpreadUndoRemoveColumn( KSpreadDoc *_doc, KSpreadTable *_table, int _column );
+    virtual ~KSpreadUndoRemoveColumn();
 
     virtual void undo();
     virtual void redo();
@@ -84,11 +84,11 @@ protected:
     int m_iColumn;
 };
 
-class KSpreadUndoDeleteRow : public KSpreadUndoAction
+class KSpreadUndoRemoveRow : public KSpreadUndoAction
 {
 public:
-    KSpreadUndoDeleteRow( KSpreadDoc *_doc, KSpreadTable *_table, int _row );
-    virtual ~KSpreadUndoDeleteRow();
+    KSpreadUndoRemoveRow( KSpreadDoc *_doc, KSpreadTable *_table, int _row );
+    virtual ~KSpreadUndoRemoveRow();
 
     virtual void undo();
     virtual void redo();

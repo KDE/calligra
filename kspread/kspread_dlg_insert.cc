@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 1998, 1999 Torben Weis <weis@kde.org>
+   Copyright (C) 1998, 1999, 2000 Torben Weis <weis@kde.org>
    Copyright (C) 1999 Montel Laurent <montell@club-internet.fr>
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -31,9 +31,10 @@
 #include <kbuttonbox.h>
 #include <qbuttongroup.h>
 #include <kdebug.h>
+#include <kmessagebox.h>
 
 KSpreadinsert::KSpreadinsert( KSpreadView* parent, const char* name,const QPoint &_marker,Mode _mode)
-	: QDialog( parent, name,TRUE )
+	: QDialog( parent, name, TRUE )
 {
   m_pView = parent;
   marker=_marker;
@@ -70,7 +71,6 @@ KSpreadinsert::KSpreadinsert( KSpreadView* parent, const char* name,const QPoint
 
   rb1->setChecked(true);
 
-
   KButtonBox *bb = new KButtonBox( this );
   bb->addStretch();
   m_pOk = bb->addButton( i18n("OK") );
@@ -83,124 +83,64 @@ KSpreadinsert::KSpreadinsert( KSpreadView* parent, const char* name,const QPoint
   connect( m_pClose, SIGNAL( clicked() ), this, SLOT( slotClose() ) );
 }
 
-
 void KSpreadinsert::slotOk()
 {
-  if(rb1->isChecked())
-  {
-    if(insRem==Insert)
+    if( rb1->isChecked() )
     {
-      m_pView->activeTable()->insertRightCell(marker);
-      refresh(insertCellColumn);
+	if( insRem == Insert )
+        {
+	    if ( !m_pView->activeTable()->shiftRow( marker ) )
+		KMessageBox::error( this, i18n("The row is full. Can not move cells to the right.") );
+	}
+	else if( insRem == Remove )
+        {
+	    m_pView->activeTable()->unshiftRow(marker);
+	}
     }
-    else if(insRem==Remove)
+    else if( rb2->isChecked() )
     {
-      m_pView->activeTable()->removeLeftCell(marker);
-      refresh(removeCellColumn);
+	if( insRem == Insert )
+        {
+	    if ( !m_pView->activeTable()->shiftColumn( marker ) )
+		KMessageBox::error( this, i18n("The column is full. Can not move cells towards the bottom.") );
+	}
+	else if( insRem == Remove )
+        {
+	    m_pView->activeTable()->unshiftColumn( marker );
+	}
     }
-  }
-  else if(rb2->isChecked())
-  {
-    if(insRem==Insert)
+    else if( rb3->isChecked() )
     {
-      m_pView->activeTable()->insertBottomCell(marker);
-      refresh(insertCellRow);
+	if( insRem == Insert )
+        {
+	    if ( !m_pView->activeTable()->insertRow( marker.y() ) )
+		KMessageBox::error( this, i18n("The row is full. Can not move cells to the right.") );
+	}
+	else if( insRem == Remove )
+        {
+	    m_pView->activeTable()->removeRow( marker.y() );
+	}
     }
-    else if(insRem==Remove)
+    else if( rb4->isChecked() )
     {
-      m_pView->activeTable()->removeTopCell(marker);
-      refresh(removeCellRow);
+	if( insRem == Insert )
+        {
+	    if ( !m_pView->activeTable()->insertColumn( marker.x() ) )
+		KMessageBox::error( this, i18n("The column is full. Can not move cells towards the bottom.") );
+	}
+	else if( insRem == Remove )
+        {
+	    m_pView->activeTable()->removeColumn( marker.x() );
+	}
     }
-  }
-  else if(rb3->isChecked())
-  {
-    if(insRem==Insert)
+    else
     {
-      m_pView->activeTable()->insertRow(marker.y());
-      refresh(inserRow);
+	kdDebug(36001) << "Error in kspread_dlg_insert" << endl;
     }
-    else if(insRem==Remove)
-    {
-      m_pView->activeTable()->deleteRow( marker.y());
-      refresh(removeRow);
-    }
-  }
-  else if(rb4->isChecked())
-  {
-    if(insRem==Insert)
-    {
-      m_pView->activeTable()->insertColumn(marker.x());
-      refresh(insertColumn);
-    }
-    else if(insRem==Remove)
-    {
-      m_pView->activeTable()->deleteColumn( marker.x());
-      refresh(removeColumn);
-    }
-  }
-  else
-  {
-    kdDebug(36001) << "Error in kspread_dlg_insert" << endl;
-  }
-  accept();
-}
 
-void KSpreadinsert::refresh(Type_mode insertOrRemove)
-{
-  KSpreadTable *m_pTable;
-  m_pTable=m_pView->activeTable();
-  KSpreadTable *tbl;
-
-  for ( tbl = m_pView->doc()->map()->firstTable(); tbl != 0L; tbl = m_pView->doc()->map()->nextTable() )
-    tbl->recalc(true);
-  QListIterator<KSpreadTable> it( m_pTable->map()->tableList() );
-  if(insertOrRemove==insertColumn)
-  {
-    for( ; it.current(); ++it )
-      it.current()->changeNameCellRef(marker,true,KSpreadTable::ColumnInsert,m_pTable->name());
-  }
-  else if(insertOrRemove==inserRow)
-  {
-    for( ; it.current(); ++it )
-      it.current()->changeNameCellRef(marker,true,KSpreadTable::RowInsert,m_pTable->name());
-  }
-  else if(insertOrRemove==removeRow)
-  {
-    for( ; it.current(); ++it )
-      it.current()->changeNameCellRef(marker,true,KSpreadTable::RowRemove,m_pTable->name());
-  }
-  else if(insertOrRemove==removeColumn)
-  {
-    for( ; it.current(); ++it )
-      it.current()->changeNameCellRef(marker,true,KSpreadTable::ColumnRemove,m_pTable->name());  		
-  }
-  else if(insertOrRemove==insertCellColumn)
-  {
-    for( ; it.current(); ++it )
-      it.current()->changeNameCellRef(marker,false,KSpreadTable::ColumnInsert,m_pTable->name());          	
-  }
-  else if(insertOrRemove==insertCellRow)
-  {
-    for( ; it.current(); ++it )
-      it.current()->changeNameCellRef(marker,false,KSpreadTable::RowInsert,m_pTable->name());
-  }
-  else if(insertOrRemove==removeCellColumn)
-  {
-    for( ; it.current(); ++it )
-      it.current()->changeNameCellRef(marker,false,KSpreadTable::ColumnRemove,m_pTable->name());
-  }
-  else if(insertOrRemove==removeCellRow)
-  {
-    for( ; it.current(); ++it )
-      it.current()->changeNameCellRef(marker,false,KSpreadTable::RowRemove,m_pTable->name());
-  }
-
-
-  KSpreadCell *cell = m_pTable->cellAt( marker.x(),marker.y()  );
-  if ( cell->text() != 0L )
-    m_pView->editWidget()->setText( cell->text() );
-  else
-    m_pView->editWidget()->setText( "" );
+    m_pView->updateEditWidget();
+  
+    accept();
 }
 
 void KSpreadinsert::slotClose()

@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 1998, 1999 Torben Weis <weis@kde.org>
+   Copyright (C) 1998, 1999, 2000 Torben Weis <weis@kde.org>
    Copyright (C) 1999 Montel Laurent <montell@club-internet.fr>
 
    This library is free software; you can redistribute it and/or

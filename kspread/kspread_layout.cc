@@ -179,10 +179,21 @@ const QColor & KSpreadLayout::textColor() const
 
 RowLayout::RowLayout( KSpreadTable *_table, int _row ) : KSpreadLayout( _table )
 {
-  m_bDisplayDirtyFlag = false;
-  m_fHeight = POINT_TO_MM(20.0);
-  m_iRow = _row;
-  m_bDefault=false;
+    m_next = 0;
+    m_prev = 0;
+    
+    m_bDisplayDirtyFlag = false;
+    m_fHeight = POINT_TO_MM(20.0);
+    m_iRow = _row;
+    m_bDefault = false;
+}
+
+RowLayout::~RowLayout()
+{
+    if ( m_next )
+	m_next->setPrevious( m_prev );
+    if ( m_prev )
+	m_prev->setNext( m_next );
 }
 
 void RowLayout::setMMHeight( float _h )
@@ -267,6 +278,16 @@ ColumnLayout::ColumnLayout( KSpreadTable *_table, int _column ) : KSpreadLayout(
   m_fWidth = POINT_TO_MM(60.0);
   m_iColumn = _column;
   m_bDefault=false;
+  m_prev = 0;
+  m_next = 0;
+}
+
+ColumnLayout::~ColumnLayout()
+{
+    if ( m_next )
+	m_next->setPrevious( m_prev );
+    if ( m_prev )
+	m_prev->setNext( m_next );
 }
 
 void ColumnLayout::setMMWidth( float _w )

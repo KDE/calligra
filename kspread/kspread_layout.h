@@ -298,7 +298,8 @@ class RowLayout : public KSpreadLayout
 {
 public:
     RowLayout( KSpreadTable *_table, int _row );
-
+    ~RowLayout();
+    
     virtual QDomElement save( QDomDocument& );
     virtual bool load( const QDomElement& row );
 
@@ -354,6 +355,11 @@ public:
     void setDisplayDirtyFlag() { m_bDisplayDirtyFlag = true; }
     void clearDisplayDirtyFlag() { m_bDisplayDirtyFlag = false; }
 
+    RowLayout* next() { return m_next; }
+    RowLayout* previous() { return m_prev; }
+    void setNext( RowLayout* c ) { m_next = c; }
+    void setPrevious( RowLayout* c ) { m_prev = c; }
+
 protected:
     /**
      * Width of the cell in unzoomed millimeters.
@@ -380,6 +386,9 @@ protected:
     int m_iRow;
 
     bool m_bDisplayDirtyFlag;
+    
+    RowLayout* m_next;
+    RowLayout* m_prev;
 };
 
 /**
@@ -388,7 +397,8 @@ class ColumnLayout : public KSpreadLayout
 {
 public:
     ColumnLayout( KSpreadTable *_table, int _column );
-
+    ~ColumnLayout();
+    
     virtual QDomElement save( QDomDocument& );
     virtual bool load( const QDomElement& row );
 
@@ -443,6 +453,11 @@ public:
     void setDisplayDirtyFlag() { m_bDisplayDirtyFlag = true; }
     void clearDisplayDirtyFlag() { m_bDisplayDirtyFlag = false; }
 
+    ColumnLayout* next() { return m_next; }
+    ColumnLayout* previous() { return m_prev; }
+    void setNext( ColumnLayout* c ) { m_next = c; }
+    void setPrevious( ColumnLayout* c ) { m_prev = c; }
+    
 protected:
     /**
      * Height of the cells in unzoomed millimeters.
@@ -469,6 +484,9 @@ protected:
     int m_iColumn;
 
     bool m_bDisplayDirtyFlag;
+    
+    ColumnLayout* m_next;
+    ColumnLayout* m_prev;
 };
 
 #endif

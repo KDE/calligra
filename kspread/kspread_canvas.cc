@@ -572,32 +572,6 @@ void KSpreadCanvas::slotMaxRow( int _max_row )
   vertScrollBar()->setRange( 0, ypos + yOffset() );
 }
 
-/*
-void KSpreadCanvas::setAction( Actions _act )
-{
-  QRect selection( activeTable()->selectionRect() );
-
-  if ( _act == InsertChart )
-  {
-    // Something must be selected
-    if ( selection.right() == 0x7fff || selection.bottom() == 0x7fff || selection.left() == 0 )
-    {
-      KMessageBox::error( this, i18n("You must first select the cells\n"
-                                                                "which contain the data." ) );
-      return;
-    }
-  }
-
-  m_eAction = _act;
-}
-
-void KSpreadCanvas::setAction( Actions _act, KoDocumentEntry& _e )
-{
-  m_actionArgument = _e;
-  setAction( _act );
-}
-*/
-
 void KSpreadCanvas::mouseMoveEvent( QMouseEvent * _ev )
 {
     // Dont allow modifications if document is readonly.
@@ -660,6 +634,7 @@ void KSpreadCanvas::mouseMoveEvent( QMouseEvent * _ev )
     else
       setCursor( arrowCursor );
 
+    // No marking, selecting etc. in progess? Then quit here.
     if ( m_eMouseAction == NoAction )
 	return;
 
@@ -679,10 +654,13 @@ void KSpreadCanvas::mouseMoveEvent( QMouseEvent * _ev )
     else
 	selection.setBottom( row );
 
-    bool selectionChanged = ( selection != table->selectionRect() );
-    if ( selectionChanged )
-	hideMarker();
+    // If nothing changed, then quit
+    if ( selection == table->selectionRect() )
+	return;
 
+    hideMarker();
+
+    // Set the new selection
     table->setSelection( selection, this );
 
     // Scroll the table if necessary
@@ -703,9 +681,10 @@ void KSpreadCanvas::mouseMoveEvent( QMouseEvent * _ev )
 	vertScrollBar()->setValue( yOffset() + ( ypos + rl->height( this ) - height() ) );
     }
 
+    // Show where we are now.
     updatePosWidget();
-    if ( selectionChanged )
-	showMarker();
+
+    showMarker();
 
     m_bMouseMadeSelection = true;
 }
@@ -1133,6 +1112,20 @@ void KSpreadCanvas::paintEvent( QPaintEvent* _ev )
   if ( !activeTable() )
     return;
 
+  // printf("PAINT EVENT %i %i %i %i\n", _ev->rect().x(), _ev->rect().y(), _ev->rect().width(), _ev->rect().height() );
+
+  QRect rect( _ev->rect() );
+  if ( rect.left() < 0 )
+      rect.rLeft() = 0;
+  if ( rect.right() > width() )
+      rect.rRight() = width();
+  if ( rect.top() < 0 )
+      rect.rTop() = 0;
+  if ( rect.bottom() > height() )
+      rect.rBottom() = height();
+			
+  // printf("PAINT EVENT %i %i %i %i\n", rect.x(), rect.y(), rect.width(), rect.height() );
+
   /*
   kdDebug(36001) << "------------PAINT EVENT " << _ev->rect().x() << ", " << _ev->rect().y()
 		 << " " << _ev->rect().width() << "|" << _ev->rect().height() << " widget "
@@ -1146,8 +1139,8 @@ void KSpreadCanvas::paintEvent( QPaintEvent* _ev )
   QWMatrix m = m_pView->matrix();
   painter.setWorldMatrix( m );
   m = m.invert();
-  QPoint tl = m.map( _ev->rect().topLeft() );
-  QPoint br = m.map( _ev->rect().bottomRight() );
+  QPoint tl = m.map( rect.topLeft() );
+  QPoint br = m.map( rect.bottomRight() );
 
   //kdDebug(36001) << "Mapped topleft to " << tl.x() << ":" << tl.y() << endl;
 
@@ -1156,7 +1149,7 @@ void KSpreadCanvas::paintEvent( QPaintEvent* _ev )
   // Clip away children
   QRegion rgn = painter.clipRegion();
   if ( rgn.isEmpty() )
-    rgn = QRegion( _ev->rect() );
+    rgn = QRegion( rect );
   QListIterator<KoDocumentChild> it( m_pDoc->children() );
   for( ; it.current(); ++it )
   {
@@ -1584,6 +1577,7 @@ void KSpreadCanvas::updateCellRect( const QRect &_rect )
     param.setLeft( 1 );
   if ( param.top() <= 0 )
     param.setTop( 1 );
+
   if ( param.right() < param.left() )
     return;
   if ( param.bottom() < param.top() )
