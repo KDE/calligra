@@ -21,9 +21,9 @@
 #include "koAutoFormat.h"
 //#include "kotextdocument.h"
 
+#include <kdeversion.h>
 #include <kdebug.h>
 #include <klocale.h>
-#include <kcalendarsystem.h>
 #include <kinstance.h>
 #include <kconfig.h>
 #include <kstandarddirs.h>
@@ -42,6 +42,10 @@
 #include <koSearchDia.h>
 #include <kozoomhandler.h>
 #include <koGlobal.h>
+
+#if KDE_IS_VERSION(3, 2, 0)
+#include <kcalendarsystem.h>
+#endif
 
 KoAutoFormatEntry::KoAutoFormatEntry(const QString& replace)
     : m_replace( replace )
@@ -129,7 +133,13 @@ KoAutoFormat::KoAutoFormat( KoDocument *_doc, KoVariableCollection *_varCollecti
     m_listCompletion->setIgnoreCase( true );
     KLocale klocale(m_doc->instance()->instanceName());
     for (int i = 0; i <7; i++)
+    {
+#if KDE_IS_VERSION(3, 2, 0)
         m_cacheNameOfDays.append(klocale.calendar()->weekDayName( i ).lower());
+#else
+        m_cacheNameOfDays.append(klocale.weekDayName( i ).lower());
+#endif
+    }
 }
 
 KoAutoFormat::KoAutoFormat( const KoAutoFormat& format )
