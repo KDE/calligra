@@ -147,7 +147,7 @@ AutoFillSequenceItem::AutoFillSequenceItem( const QString &_str )
         shortMonth->append( i18n("Feb") );
         shortMonth->append( i18n("Mar") );
         shortMonth->append( i18n("Apr") );
-        shortMonth->append( i18n("May") );
+        shortMonth->append( i18n("May short", "May") );
         shortMonth->append( i18n("Jun") );
         shortMonth->append( i18n("Jul") );
         shortMonth->append( i18n("Aug") );
