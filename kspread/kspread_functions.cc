@@ -85,7 +85,7 @@ KSpreadFunctionParameter::KSpreadFunctionParameter( const QDomElement& element )
 	{
 	    QDomElement e = n.toElement();
 	    if ( e.tagName() == "Comment" )
-		m_help = i18n( e.text().latin1() );
+		m_help = i18n( e.text().utf8() );
 	    else if ( e.tagName() == "Type" )
 	    {
 		m_type = toType( e.text() );
@@ -131,13 +131,13 @@ KSpreadFunctionDescription::KSpreadFunctionDescription( const QDomElement& eleme
 		    {
 			QDomElement e2 = n2.toElement();
 			if ( e2.tagName() == "Text" )
-			    m_help = i18n( e2.text().latin1() );
+			    m_help = i18n( e2.text().utf8() );
 			else if ( e2.tagName() == "Syntax" )
-			    m_syntax.append( i18n( e2.text().latin1() ) );
+			    m_syntax.append( i18n( e2.text().utf8() ) );
 			else if ( e2.tagName() == "Example" )
-			    m_examples.append( i18n( e2.text().latin1() ) );
+			    m_examples.append( i18n( e2.text().utf8() ) );
 			else if ( e2.tagName() == "Related" )
-			    m_related.append( i18n( e2.text().latin1() ) );
+			    m_related.append( i18n( e2.text().utf8() ) );
 		    }
 		}
 	    }
@@ -255,7 +255,7 @@ void KSpreadFunctionRepository::loadFile( const QString& filename )
 	    QDomElement e = n.toElement();
 	    if ( e.tagName() == "Group" )
 	    {
-		group = i18n( e.namedItem( "GroupName" ).toElement().text().latin1() );
+		group = i18n( e.namedItem( "GroupName" ).toElement().text().utf8() );
 		m_groups.append( group );
 		m_groups.sort();
 		
