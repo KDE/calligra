@@ -24,8 +24,10 @@
 #include <core/vgroup.h>
 #include "aicolor.h"
 
+const void pottoa (PathOutputType &data);
+
 // generic
-KarbonAIParserBase::KarbonAIParserBase() : m_pot(POT_Other), m_ptt (PTT_Output)
+KarbonAIParserBase::KarbonAIParserBase() : m_pot(POT_Other), m_ptt (PTT_Output), m_emptyStroke(), m_emptyFill()
 /* , m_strokeColor(), m_fillColor() */ {
 
   // A4, 70 dpi
@@ -48,6 +50,9 @@ KarbonAIParserBase::KarbonAIParserBase() : m_pot(POT_Other), m_ptt (PTT_Output)
   m_document = new VDocument();
   m_layer = NULL;
   m_combination = NULL;
+
+  m_emptyFill.setType (VFill::none);
+  m_emptyStroke.setType (VStroke::none);
 
   setupHandlers();
 }
@@ -347,7 +352,7 @@ const VColor KarbonAIParserBase::toKarbonColor (const AIColor &color)
   float cv4 = v4;
 
   value.setColorSpace (VColor::cmyk);
-  value.set(cv1, cv2, cv3, cv4);
+  value.set (cv1, cv2, cv3, cv4);
 
   return value;
 }
@@ -358,12 +363,18 @@ void KarbonAIParserBase::doOutputCurrentPath2(PathOutputType type)
 
   if (type != POT_Leave)
   {
+//    pottoa(type);
+
+    m_curKarbonPath->setStroke(m_emptyStroke);
+    m_curKarbonPath->setFill(m_emptyFill);
+
     if ((type != POT_Filled) && (type != POT_Stroked) && (type != POT_FilledStroked)) return;
     if ((type == POT_Filled) || (type == POT_FilledStroked))
     {
 /*      VFill fill;
       fill.setColor (toKarbonColor (m_fillColor));
       m_curKarbonPath->setFill(fill); */
+      qDebug ("set filled");
       m_curKarbonPath->setFill(m_fill);
     }
 
@@ -372,6 +383,7 @@ void KarbonAIParserBase::doOutputCurrentPath2(PathOutputType type)
 /*      VStroke stroke;
       stroke.setColor (toKarbonColor (m_strokeColor));
       m_curKarbonPath->setStroke (stroke); */
+      qDebug ("set stroked");
       m_curKarbonPath->setStroke (m_stroke);
     }
   }
@@ -566,3 +578,18 @@ void KarbonPathHandler::gotClipPath (bool closed)
 {
   delegate->gotClipPath(closed);
 }
+
+const void pottoa (PathOutputType &data)
+{
+  switch (data)
+  {
+    case POT_Filled : qDebug ("filled"); break;
+    case POT_Stroked : qDebug ("stroked"); break;
+    case POT_FilledStroked : qDebug ("filled/stroked"); break;
+    case POT_Clip : qDebug ("clip"); break;
+    case POT_Ignore : qDebug ("ignore"); break;
+    case POT_Leave : qDebug ("leave"); break;
+    default : qDebug ("unknown");
+  }
+}
+

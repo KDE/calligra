@@ -29,6 +29,7 @@
 
 #include <koPoint.h>
 #include <core/vcomposite.h>
+#include <core/vdocument.h>
 #include <core/vlayer.h>
 #include <core/vgroup.h>
 #include <core/vfill.h>
@@ -36,8 +37,6 @@
 #include <qdom.h>
 
 #include <qptrstack.h>
-
-#include "vdocument.h"
 
 /**
   *@author 
@@ -160,6 +159,10 @@ private:
   void doOutputCurrentPath2(PathOutputType type);
   const VColor toKarbonColor (const AIColor &color);
   void ensureLayer ();
+
+  VFill m_emptyFill;
+  VStroke m_emptyStroke;
+
 protected:
   void setupHandlers();
   void teardownHandlers();

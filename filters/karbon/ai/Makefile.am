@@ -25,6 +25,8 @@ noinst_HEADERS = \
 	aiimport.h \
 	ailexer.h \
 	aiparserbase.h \
+	ai88handler.h \
+	ai3handler.h \
 	karbonaiparserbase.h
 
 libkarbonaiimport_la_SOURCES = \
@@ -33,6 +35,8 @@ libkarbonaiimport_la_SOURCES = \
 	aiimport.cc \
 	ailexer.cc \
 	aiparserbase.cc \
+	ai88handler.cc \
+	ai3handler.cc \
 	karbonaiparserbase.cc
 
 libkarbonaiimport_la_METASOURCES = \

@@ -30,6 +30,7 @@
 #include "aielement.h"
 #include "aicolor.h"
 
+
 const void arraytoa (const QValueVector<AIElement> &data);
 const void elementtoa (const AIElement &data);
 const void stacktoa (const QValueStack<AIElement> &data);
@@ -43,6 +44,8 @@ class DocumentHandlerBase;
 class ModuleHandlerBase;
 class EmbeddedHandlerBase;
 class TextHandlerBase;
+class Ai88Handler;
+class Ai3Handler;
 
 /**
   *@author Dirk Schönberger
@@ -224,6 +227,9 @@ typedef struct {
 } PathElement;
 
 class AIParserBase : protected AILexer  {
+  friend class AI88Handler;
+  friend class AI3Handler;
+
 protected:
   bool m_debug;
 private:
@@ -242,19 +248,19 @@ private:
   const QString& getReferenceValue(void);
   const QString& getOperatorValue(void);
 
-  void _handleSetDash();
-  void _handleSetStrokeColorCMYK();
-  void _handleSetFillColorCMYK();
-  void _handleSetStrokeColorGray();
-  void _handleSetFillColorGray();
-  void _handleSetStrokeColorCustom();
-  void _handleSetFillColorCustom();
-  void _handleSetFillPattern();
-  void _handleSetStrokePattern();
-  void _handleGsaveIncludeDocument();
+/*Ai88*/  // void _handleSetDash();
+/*Ai88*/  // void _handleGsaveIncludeDocument();
+/*Ai88*/  // void _handleSetStrokeColorCMYK();
+/*Ai88*/  // void _handleSetFillColorCMYK();
+/*Ai88*/  // void _handleSetStrokeColorGray();
+/*Ai88*/  // void _handleSetFillColorGray();
+/*Ai88*/  // void _handleSetStrokeColorCustom();
+/*Ai88*/  // void _handleSetFillColorCustom();
+/*Ai88*/  // void _handleSetFillPattern();
+/*Ai88*/  // void _handleSetStrokePattern();
 
-  void _handlePatternDefinition();
-  void _handleFontEncoding();
+/*Ai88*/  // void _handlePatternDefinition();
+/*Ai88*/  // void _handleFontEncoding();
 
   void _handlePSGet();
   void _handlePSExec();
@@ -275,9 +281,9 @@ private:
   void _handleDocumentNeededResources(const char *data);
   void _handleIncludeResource(const char *data);
 
-  void _handleSetCurrentText();
-  void _handleTextBlock (TextOperation to);
-  void _handleTextOutput ();
+/*Ai88*/  // void _handleSetCurrentText();
+/*Ai88*/  // void _handleTextBlock (TextOperation to);
+/*Ai88*/  // void _handleTextOutput ();
 
   void _handleCreationDate (const char *data);
 
@@ -312,46 +318,8 @@ protected:
   ModuleHandlerBase *m_moduleHandler;
   EmbeddedHandlerBase *m_embeddedHandler;
   TextHandlerBase *m_textHandler;
-
-/*  virtual void gotFillColor (AIColor &color);
-  virtual void gotStrokeColor (AIColor &color);
-  virtual void gotFillPattern (const char *pname, double px, double py, double sx, double sy, double angle, double rf, double r, double k, double ka, const QValueVector<AIElement>& transformData);
-  virtual void gotStrokePattern (const char *pname, double px, double py, double sx, double sy, double angle, double rf, double r, double k, double ka, const QValueVector<AIElement>& transformData);
-  virtual void gotFlatness (double val);
-  virtual void gotLineWidth (double val);
-  virtual void gotLineCaps (int val);
-  virtual void gotLineJoin (int val);
-  virtual void gotMiterLimit (double val);
-  virtual void gotWindingOrder (int val);
-  virtual void gotDash (const QValueVector<AIElement>& dashData, double phase);
-  virtual void gotBeginGroup (bool clipping);
-  virtual void gotEndGroup (bool clipping);
-  virtual void gotBeginCombination ();
-  virtual void gotEndCombination ();
-  virtual void gotPathElement (PathElement &element);
-  virtual void gotFillPath (bool closed, bool reset, FillMode fm = FM_NonZero);
-  virtual void gotStrokePath (bool closed);
-  virtual void gotIgnorePath (bool closed, bool reset);
-  virtual void gotClipPath (bool closed);
-  virtual void gotLockNextObject (bool value);
-  virtual void gotFillOverprinting (bool value);
-  virtual void gotStrokeOverprinting (bool value);
-  virtual void gotBoundingBox (int llx, int lly, int urx, int ury);
-  virtual void gotTemplateBox (int llx, int lly, int urx, int ury);
-  virtual void gotMargin (int llx, int lly, int urx, int ury);
-  virtual void gotPrinterRect (int llx, int lly, int urx, int ury);
-  virtual void gotPrinterName (const char *data);
-  virtual void gotPageOrigin (int x, int y);
-  virtual void gotTemplate (const char *data);
-  virtual void gotTitle (const char *data);
-  virtual void gotCreator (const char *data);
-  virtual void gotPatternDefinition (const char *name, const QValueVector<AIElement>& layerData, double llx, double lly, double urx, double ury);
-
-  virtual void gotBeginSection (SectionType st, const char *data);
-  virtual void gotEndSection (SectionType st, const char *data);
-
-  virtual void gotGsaveIncludeDocument (const QValueVector<AIElement>& transData, int llx, int lly, int urx, int ury, const char*fileName);
-  virtual void gotGrestore (); */
+  AI88Handler *m_ai88Handler;
+  AI3Handler *m_ai3Handler;
 
 private:
   void handleElement (AIElement &element);
