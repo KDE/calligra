@@ -20,6 +20,3 @@ METASOURCES = AUTO
 service_DATA = kspread_csv_import.desktop kspread_csv_export.desktop
 
 servicedir = $(kde_servicesdir)
-
-messages: rc.cpp
-	$(XGETTEXT) *.cc *.cpp -o $(podir)/csvfilter.pot

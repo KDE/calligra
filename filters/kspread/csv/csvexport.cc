@@ -34,7 +34,7 @@
 #include <csvexportdialog.h>
 
 typedef KGenericFactory<CSVExport, KoFilter> CSVExportFactory;
-K_EXPORT_COMPONENT_FACTORY( libcsvexport, CSVExportFactory( "csvfilter" ) )
+K_EXPORT_COMPONENT_FACTORY( libcsvexport, CSVExportFactory( "kofficefilters" ) )
 
 class Cell 
 {

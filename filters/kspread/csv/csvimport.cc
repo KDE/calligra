@@ -45,7 +45,7 @@
 */
 
 typedef KGenericFactory<CSVFilter, KoFilter> CSVImportFactory;
-K_EXPORT_COMPONENT_FACTORY( libcsvimport, CSVImportFactory( "csvfilter" ) )
+K_EXPORT_COMPONENT_FACTORY( libcsvimport, CSVImportFactory( "kofficefilters" ) )
 
 CSVFilter::CSVFilter(KoFilter *, const char*, const QStringList&) :
                      KoFilter() {
