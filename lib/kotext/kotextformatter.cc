@@ -250,25 +250,28 @@ int KoTextFormatter::format( KoTextDocument *doc, KoTextParag *parag,
                     word += string->at(wordEnd).c;
                     wordEnd++;
                 }
-                QString lang = string->at(wordStart).format()->language();
-                char * hyphens = m_hyphenator->hyphens( word, lang );
+                if ( !word.isEmpty() )
+                {
+                    QString lang = string->at(wordStart).format()->language();
+                    char * hyphens = m_hyphenator->hyphens( word, lang );
+#ifdef DEBUG_FORMATTER
+                    kdDebug(32500) << "Hyphenation: word=" << word << " lang=" << lang << " hyphens=" << hyphens << endl;
+#endif
+                    int hylen = strlen(hyphens);
+                    Q_ASSERT( maxlen <= hylen );
+                    for ( int hypos = maxlen-1 ; hypos >= 0 ; --hypos )
+                        if ( hyphens[hypos] % 2 ) // odd number -> can break there
+                        {
+                            // TODO insert a soft hyphen?
+                            // Or mark the LineStart object as "hyphenated", and check that flag when painting
+                            lastBreak = hypos + wordStart;
 //#ifdef DEBUG_FORMATTER
-                kdDebug(32500) << "Hyphenation: word=" << word << " lang=" << lang << " hyphens=" << hyphens << endl;
+                            qDebug( "Hyphenation: will break at %d", lastBreak );
 //#endif
-                int hylen = strlen(hyphens);
-                Q_ASSERT( maxlen <= hylen );
-                for ( int hypos = maxlen-1 ; hypos >= 0 ; --hypos )
-                    if ( hyphens[hypos] % 2 ) // odd number -> can break there
-                    {
-                        // TODO insert a soft hyphen?
-                        // Or mark the LineStart object as "hyphenated", and check that flag when painting
-                        lastBreak = hypos + wordStart;
-//#ifdef DEBUG_FORMATTER
-                        qDebug( "Hyphenation: will break at %d", lastBreak );
-//#endif
-                        break;
-                    }
-                delete[] hyphens;
+                            break;
+                        }
+                    delete[] hyphens;
+                }
             }
 
 	    // No breakable char found -> break at current char
