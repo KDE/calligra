@@ -22,7 +22,7 @@ kexi_la_LDFLAGS = $(all_libraries) -module -avoid-version
 bin_PROGRAMS = kexi
 kexi_SOURCES = dummy.cc
 kexi_LDFLAGS = $(all_libraries) $(KDE_RPATH)
-kexi_LDADD = kexi.la -lkofficecore
+kexi_LDADD = kexi.la
 
 dummy.cc:
 	echo > dummy.cc
