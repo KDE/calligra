@@ -186,6 +186,23 @@ private:
     void shpPictureFrame(MSOFBH &op, U32 byteOperands, QDataStream &operands);                                                               // do nothing
     void shpRectangle(MSOFBH &op, U32 byteOperands, QDataStream &operands);                                                               // do nothing
 
+    // Option handling.
+
+    typedef struct
+    {
+        union
+        {
+            U16 info;
+            struct
+            {
+                U16 pid: 14;
+                U16 fBid: 1;
+                U16 fComplex: 1;
+            } fields;
+        } opcode;
+        U32 value;
+    } Option;
+
     double from1616ToDouble(U32 value);
 };
 

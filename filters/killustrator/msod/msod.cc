@@ -23,6 +23,7 @@ DESCRIPTION
 #include <kdebug.h>
 #include <qdatastream.h>
 #include <qfile.h>
+#include <qlist.h>
 #include <qpointarray.h>
 #include <msod.h>
 
@@ -468,22 +469,14 @@ void Msod::opOleobject(MSOFBH &, U32, QDataStream &)
 
 void Msod::opOpt(MSOFBH &, U32 byteOperands, QDataStream &operands)
 {
-    union
-    {
-        U16 info;
-        struct
-        {
-            U16 pid: 14;
-            U16 fBid: 1;
-            U16 fComplex: 1;
-        } fields;
-    } opcode;
-    U32 value;
+    Option option;
     U16 length = 0;
     U16 complexLength = 0;
 
     double m_rotation = 0.0;
     U32 m_pib = 0;
+    QString m_pibName = QString::null;
+    U32 m_pibFlags = 0;
     U32 m_pictureId = 0;
     bool m_fNoHitTestPicture = false;
     bool m_pictureGray = false;
@@ -504,78 +497,131 @@ void Msod::opOpt(MSOFBH &, U32 byteOperands, QDataStream &operands)
     bool m_lineFillShape = true;
     bool m_fNoLineDrawDash = false;
 
+    U32 m_bWMode = 1;
+
     bool m_fOleIcon = false;
     bool m_fPreferRelativeResize = false;
     bool m_fLockShapeType = false;
     bool m_fDeleteAttachedObject = false;
     bool m_fBackground = false;
+
+    // First process all simple options, and add all complex options to a list.
+
+    QList<Option> complexOpts;
+    complexOpts.setAutoDelete(true);
     while (length + complexLength < (int)byteOperands)
     {
-        operands >> opcode.info >> value;
+        operands >> option.opcode.info >> option.value;
         length += 4;
-        if (opcode.fields.fComplex)
+
+        // Defer processing of complex options.
+
+        if (option.opcode.fields.fComplex)
         {
-            complexLength += value;
+            complexLength += option.value;
+            complexOpts.append(new Option(option));
+            continue;
         }
 
         // Now squirrel away the option value.
 
-        switch (opcode.fields.pid)
+        switch (option.opcode.fields.pid)
         {
         case 4:
-            m_rotation = from1616ToDouble(value);
+            m_rotation = from1616ToDouble(option.value);
             break;
         case 260:
-            m_pib = value;
-            if (m_isRequiredDrawing)
+            if (option.opcode.fields.fBid)
             {
-                Image *image = m_images[m_pib - 1];
-                gotPicture(
-                    m_pib,
-                    image->extension,
-                    image->length,
-                    image->data);
+                m_pib = option.value;
+                if (m_isRequiredDrawing)
+                {
+                    Image *image = m_images[m_pib - 1];
+                    gotPicture(
+                        m_pib,
+                        image->extension,
+                        image->length,
+                        image->data);
+                }
+            }
+            else
+            {
+                kdError(s_area) << "Cannot handle IMsoBlip" << endl;
             }
             break;
+        case 262:
+            m_pibFlags = option.value;
+            break;
         case 267:
-            m_pictureId = value;
+            m_pictureId = option.value;
             break;
         case 319:
-            m_fNoHitTestPicture = (value & 0x0008) != 0;
-            m_pictureGray = (value & 0x0004) != 0;
-            m_pictureBiLevel = (value & 0x0002) != 0;
-            m_pictureActive = (value & 0x0001) != 0;
+            m_fNoHitTestPicture = (option.value & 0x0008) != 0;
+            m_pictureGray = (option.value & 0x0004) != 0;
+            m_pictureBiLevel = (option.value & 0x0002) != 0;
+            m_pictureActive = (option.value & 0x0001) != 0;
             break;
         case 447:
-            m_fFilled = (value & 0x0010) != 0;
-            m_fHitTestFill = (value & 0x0008) != 0;
-            m_fillShape = (value & 0x0004) != 0;
-            m_fillUseRect = (value & 0x0002) != 0;
-            m_fNoFillHitTest = (value & 0x0001) != 0;
+            m_fFilled = (option.value & 0x0010) != 0;
+            m_fHitTestFill = (option.value & 0x0008) != 0;
+            m_fillShape = (option.value & 0x0004) != 0;
+            m_fillUseRect = (option.value & 0x0002) != 0;
+            m_fNoFillHitTest = (option.value & 0x0001) != 0;
             break;
         case 459:
-            m_lineWidth = value;
+            m_lineWidth = option.value;
             break;
         case 511:
-            m_fArrowheadsOK = (value & 0x0010) != 0;
-            m_fLine = (value & 0x0008) != 0;
-            m_fHitTestLine = (value & 0x0004) != 0;
-            m_lineFillShape = (value & 0x0002) != 0;
-            m_fNoLineDrawDash = (value & 0x0001) != 0;
+            m_fArrowheadsOK = (option.value & 0x0010) != 0;
+            m_fLine = (option.value & 0x0008) != 0;
+            m_fHitTestLine = (option.value & 0x0004) != 0;
+            m_lineFillShape = (option.value & 0x0002) != 0;
+            m_fNoLineDrawDash = (option.value & 0x0001) != 0;
+            break;
+        case 772:
+            m_bWMode = option.value;
             break;
         case 831:
-            m_fOleIcon = (value & 0x0010) != 0;
-            m_fPreferRelativeResize = (value & 0x0008) != 0;
-            m_fLockShapeType = (value & 0x0004) != 0;
-            m_fDeleteAttachedObject = (value & 0x0002) != 0;
-            m_fBackground = (value & 0x0001) != 0;
+            m_fOleIcon = (option.value & 0x0010) != 0;
+            m_fPreferRelativeResize = (option.value & 0x0008) != 0;
+            m_fLockShapeType = (option.value & 0x0004) != 0;
+            m_fDeleteAttachedObject = (option.value & 0x0002) != 0;
+            m_fBackground = (option.value & 0x0001) != 0;
             break;
         default:
-            kdDebug(s_area) << "opOpt: unsupported option: " <<
-                opcode.fields.pid << endl;
+            kdDebug(s_area) << "opOpt: unsupported simple option: " <<
+                option.opcode.fields.pid << endl;
             break;
         }
     }
+
+    // Now empty the list of complex options.
+
+    while (complexOpts.count())
+    {
+        Q_INT16 c;
+
+        option = *complexOpts.getFirst();
+        complexOpts.removeFirst();
+        switch (option.opcode.fields.pid)
+        {
+        case 261:
+            while (true)
+            {
+                operands >> c;
+                complexLength -= 2;
+                if (!c)
+                    break;
+                m_pibName += QChar(c);
+            };
+            break;
+        default:
+            kdDebug(s_area) << "opOpt: unsupported complex option: " <<
+                option.opcode.fields.pid << endl;
+            break;
+        }
+    }
+
     skip(complexLength, operands);
 }
 
