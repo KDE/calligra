@@ -23,8 +23,6 @@
 #ifndef __kis_view_h__
 #define __kis_view_h__
 
-#include <assert.h>
-
 #include <qscrollbar.h>
 #include <qwidget.h>
 
@@ -34,10 +32,15 @@
 #include "kis_color.h"
 #include "kis_tool.h"
 
+class QButton;
+class QPaintEvent;
+class QScrollBar;
+
 class KAction;
+class KRuler;
 class KToggleAction;
 class KHelpMenu;
-class QPaintEvent;
+class DCOPObject;
 
 class KisDoc;
 class KisImage;
@@ -45,6 +48,7 @@ class KisCanvas;
 class KisPainter;
 class KisTabBar;
 class KisSideBar;
+class KisGradient;
 
 class KisBrushChooser;
 class KisPatternChooser;
@@ -53,39 +57,11 @@ class KisKrayonChooser;
 class KisLayerView;
 class KisChannelView;
 
-class QScrollBar;
-class KRuler;
-
-class FreehandSelectTool;
-class RectangularSelectTool;
-class PolygonalSelectTool;
-class EllipticalSelectTool;
-class ContiguousSelectTool;
-
 class PasteTool;
 class KisKrayon;
 class KisBrush;
 class KisPattern;
 class KisTool;
-class MoveTool;
-class BrushTool;
-class AirBrushTool;
-class EraserTool;
-class PenTool;
-class ZoomTool;
-class KisGradient;
-class LineTool;
-class PolyLineTool;
-class PolyGonTool;
-class RectangleTool;
-class EllipseTool;
-class ColorPicker;
-class ColorChangerTool;
-class FillTool;
-class StampTool;
-class QButton;
-class DCOPObject;
-
 
 class KisView : public KoView {
 	Q_OBJECT
@@ -259,8 +235,6 @@ public:
     void canvasGotEnterEvent( QEvent * );
     void canvasGotLeaveEvent( QEvent * );
     void canvasGotMouseWheelEvent( QWheelEvent * );
-    void slotUndoRedoChanged( QString _undo, QString _redo );
-    void slotUndoRedoChanged( QStringList _undo, QStringList _redo );
 
  protected:
  

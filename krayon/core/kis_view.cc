@@ -118,10 +118,10 @@
 */
 KisView::KisView( KisDoc* doc, QWidget* parent, const char* name )
     : super( doc, parent, name )
-    , m_doc( doc )
-    , m_zoomFactor( 1.0 )
-
 {
+	kdDebug() << "KisView::KisView\n";
+	m_doc = doc;
+	m_zoomFactor = 1.0;
 	setInstance(KisFactory::global());
 	setXMLFile("krayon.rc");
 	m_pTool = 0;
@@ -162,7 +162,8 @@ KisView::KisView( KisDoc* doc, QWidget* parent, const char* name )
 */
 KisView::~KisView()
 {
-  delete m_dcop;
+	kdDebug() << "KisView::~KisView\n";
+	delete m_dcop;
 }
 
 DCOPObject* KisView::dcopObject()
@@ -1138,7 +1139,8 @@ void KisView::slotDocUpdated(const QRect& rect)
 */
 void KisView::updateCanvas( QRect & ur )
 {
-    //kdDebug() << "updateCanvas(QRect & ur)" << endl;
+    kdDebug() << "updateCanvas(QRect & ur)" << endl;
+
     KisImage* img = m_doc->current();
     if (!img)
     {
@@ -1154,6 +1156,10 @@ void KisView::updateCanvas( QRect & ur )
     QPainter p;
     p.begin( m_pCanvas);
 
+    if (m_pTool && !m_pTool -> willModify()) {
+	    kdDebug() << "Calling KisTool::update()\n";
+	    m_pTool -> update(p);
+    }
 
     // erase strip along left side
     p.eraseRect(0, 0, xPaintOffset(), height());
@@ -1220,7 +1226,7 @@ void KisView::updateCanvas( QRect & ur )
 */
 void KisView::canvasGotPaintEvent( QPaintEvent*e )
 {
-    //kdDebug() << "canvasGotPaintEvent()" << endl;
+    kdDebug() << "canvasGotPaintEvent()" << endl;
     KisImage* img = m_doc->current();
     if (!img)
     {
@@ -1236,6 +1242,9 @@ void KisView::canvasGotPaintEvent( QPaintEvent*e )
 
     QPainter p;
     p.begin( m_pCanvas );
+
+    if (m_pTool && !m_pTool -> willModify())
+	    m_pTool -> update(p);
 
     // erase strip along left side
     p.eraseRect( 0, 0, xPaintOffset(), height() );
@@ -1398,11 +1407,10 @@ void KisView::canvasGotLeaveEvent ( QEvent *e )
 	emit canvasLeaveEvent(&ev);
 }
 
-void KisView::canvasGotMouseWheelEvent( QWheelEvent *e )
+void KisView::canvasGotMouseWheelEvent(QWheelEvent *e)
 {
-    QApplication::sendEvent( m_pVert, e );
+	QApplication::sendEvent(m_pVert, e);
 }
-
 
 /*
     activateTool - make the selected tool the active tool and
@@ -1417,7 +1425,7 @@ void KisView::activateTool(KisTool* t)
 
 	// remove the selection outline, if any
 	// prevent old tool from receiving events from canvas
-	if(m_pTool) {
+	if (m_pTool) {
 		m_pTool -> clearOld();
 		m_pTool -> setChecked(false);
 		QObject::disconnect(m_pTool);
@@ -2533,7 +2541,6 @@ void KisView::setZoomFactor(float zf)
 void KisView::slotSetBrush(KisBrush* b)
 {
 	Q_ASSERT(b);
-
 	m_pBrush = b;
 
 	if (m_pTool) {
@@ -2580,45 +2587,6 @@ void KisView::slotSetBGColor(const KisColor& c)
 {
 	m_bg = c;
 	emit bgColorChanged(c);
-}
-
-
-void KisView::slotUndoRedoChanged( QString /*undo*/, QString /*redo*/ )
-{
-  // FIXME
-#if 0
-  m_undo->setEnabled( !undo.isEmpty() );
-  m_redo->setEnabled( !redo.isEmpty() );
-#endif
-}
-
-
-void KisView::slotUndoRedoChanged( QStringList /*undo*/, QStringList /*redo*/ )
-{
-  // FIXME
-#if 0
-  if( undo.count() )
-  {
-    // enable undo action
-    m_undo->setEnabled( true );
-  }
-  else
-  {
-    // disable undo action
-    m_undo->setEnabled( false );
-  }
-
-  if( redo.count() )
-  {
-    // enable redo action
-    m_redo->setEnabled( true );
-  }
-  else
-  {
-    // disable redo action
-    m_redo->setEnabled( false );
-  }
-#endif
 }
 
 void KisView::setupPrinter( KPrinter &printer )
