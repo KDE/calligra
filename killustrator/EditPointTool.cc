@@ -29,7 +29,8 @@
 #include <qbitmap.h>
 #include <klocale.h>
 
-#include <GDocument.h>
+#include "GDocument.h"
+#include "KIllustrator_doc.h"
 #include "GPage.h"
 #include <Canvas.h>
 #include <Coord.h>
@@ -103,6 +104,8 @@ void EditPointTool::setMode (Mode m) {
 
 void EditPointTool::processEvent (QEvent* e, GDocument *doc, Canvas* canvas)
 {
+  if(!doc->document()->isReadWrite())
+      return;
    if (doc->activePage()->selectionIsEmpty ())
       return;
 

@@ -31,6 +31,7 @@
 #include <kapp.h>
 #include <kdebug.h>
 
+#include "KIllustrator_doc.h"
 #include <GDocument.h>
 #include "GPage.h"
 #include <Canvas.h>
@@ -54,6 +55,8 @@ OvalTool::OvalTool (CommandHistory *history) : Tool (history)
 
 void OvalTool::processEvent (QEvent* e, GDocument *doc, Canvas* canvas)
 {
+  if(!doc->document()->isReadWrite())
+      return;
    if (e->type () == QEvent::MouseButtonPress)
    {
       QMouseEvent *me = (QMouseEvent *) e;

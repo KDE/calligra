@@ -33,6 +33,7 @@
 #include <kdebug.h>
 
 #include <GDocument.h>
+#include "KIllustrator_doc.h"
 #include "GPage.h"
 #include <Canvas.h>
 #include "GPolygon.h"
@@ -52,6 +53,8 @@ PolygonTool::PolygonTool (CommandHistory* history)
 
 void PolygonTool::processEvent (QEvent* e, GDocument *doc, Canvas* canvas)
 {
+  if(!doc->document()->isReadWrite())
+      return;
    if (e->type () == QEvent::MouseButtonPress)
    {
       QMouseEvent *me = (QMouseEvent *) e;

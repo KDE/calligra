@@ -62,8 +62,10 @@ void InsertPartTool::setPartEntry (KoDocumentEntry& entry)
   validEntry = true;
  }
 
-void InsertPartTool::processEvent (QEvent* e, GDocument */*_doc*/, Canvas* /*_canvas*/)
- {
+void InsertPartTool::processEvent (QEvent* e, GDocument *_doc, Canvas* /*_canvas*/)
+{
+  if(!doc->document()->isReadWrite())
+    return;
   if (e->type () == QEvent::MouseButtonRelease)
    {
     processButtonReleaseEvent((QMouseEvent *) e);
@@ -71,17 +73,17 @@ void InsertPartTool::processEvent (QEvent* e, GDocument */*_doc*/, Canvas* /*_ca
    }
   else
    if (e->type () == QEvent::MouseButtonPress)
-    {
+   {
      processButtonPressEvent((QMouseEvent *) e);
      m_toolController->emitOperationDone (m_id);
-    }
+   }
    else
-    if (e->type () == QEvent::MouseMove)
-     {
+   if (e->type () == QEvent::MouseMove)
+   {
       processMouseMoveEvent((QMouseEvent *) e);
       m_toolController->emitOperationDone (m_id);
-     }
- }
+   }
+}
 
 void InsertPartTool::processButtonPressEvent (QMouseEvent* e)
  {

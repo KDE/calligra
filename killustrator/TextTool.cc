@@ -27,6 +27,7 @@
 #include <qkeycode.h>
 #include <klocale.h>
 
+#include "KIllustrator_doc.h"
 #include "GText.h"
 #include "GDocument.h"
 #include "GPage.h"
@@ -46,6 +47,8 @@ TextTool::TextTool (CommandHistory *history) : Tool (history)
 
 void TextTool::processEvent (QEvent* e, GDocument *doc, Canvas* canvas)
 {
+  if(!doc->document()->isReadWrite())
+      return;
    if (e->type () == QEvent::MouseButtonPress)
    {
       QMouseEvent *me = (QMouseEvent *) e;

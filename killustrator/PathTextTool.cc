@@ -28,6 +28,7 @@
 #include <qbitmap.h>
 #include <klocale.h>
 
+#include "KIllustrator_doc.h"
 #include <GDocument.h>
 #include "GPage.h"
 #include <Canvas.h>
@@ -87,6 +88,8 @@ void PathTextTool::activate (GDocument* doc, Canvas* canvas)
 
 void PathTextTool::processEvent (QEvent* e, GDocument *doc, Canvas* /*canvas*/)
 {
+  if(!doc->document()->isReadWrite())
+      return;
    if (e->type () == QEvent::KeyPress)
    {
       QKeyEvent *ke = (QKeyEvent *) e;

@@ -26,6 +26,7 @@
 
 #include <qkeycode.h>
 #include <klocale.h>
+#include "KIllustrator_doc.h"
 
 #include <GDocument.h>
 #include "GPage.h"
@@ -49,8 +50,12 @@ FreeHandTool::FreeHandTool (CommandHistory* history)
    m_id=ToolFreeHand;
 }
 
-void FreeHandTool::processEvent (QEvent* e, GDocument *doc, Canvas* canvas) {
-  if (e->type () == QEvent::MouseButtonPress) {
+void FreeHandTool::processEvent (QEvent* e, GDocument *doc, Canvas* canvas)
+{
+  if(!doc->document()->isReadWrite())
+    return;
+  if (e->type () == QEvent::MouseButtonPress)
+  {
     QMouseEvent *me = (QMouseEvent *) e;
     if (me->button () != Qt::LeftButton)
       return;
@@ -60,24 +65,30 @@ void FreeHandTool::processEvent (QEvent* e, GDocument *doc, Canvas* canvas) {
     float xpos = me->x (), ypos = me->y ();
     canvas->snapPositionToGrid (xpos, ypos);
 
-    if (line != 0L) {
+    if (line != 0L)
+    {
       // continue creation: add a new segment
       if (last != 0)
         last++;
     }
-    else {
+    else
+    {
       newObj = true;
 
       QList<GObject> olist;
       // look for existing polylines with a point near the mouse pointer
-      if (doc->activePage()->findContainingObjects (qRound (xpos), qRound (ypos), olist)) {
+      if (doc->activePage()->findContainingObjects (qRound (xpos), qRound (ypos), olist))
+      {
         QListIterator<GObject> it (olist);
-        while (it.current ()) {
-          if (it.current ()->isA ("GPolyline")) {
+        while (it.current ())
+	{
+          if (it.current ()->isA ("GPolyline"))
+	  {
             GPolyline* obj = (GPolyline *) it.current ();
             if ((last =
                  obj->getNeighbourPoint (Coord (xpos, ypos))) != -1
-                && (last == 0 || last == (int) obj->numOfPoints () - 1)) {
+                && (last == 0 || last == (int) obj->numOfPoints () - 1))
+		{
               line = obj;
               newObj = false;
               if (last != 0)
@@ -102,7 +113,8 @@ void FreeHandTool::processEvent (QEvent* e, GDocument *doc, Canvas* canvas) {
     }
 //    line->addPoint (last, Coord (xpos, ypos));
   }
-  else if (e->type () == QEvent::MouseMove) {
+  else if (e->type () == QEvent::MouseMove)
+  {
     if (line == 0L || !buttonIsDown)
       return;
     QMouseEvent *me = (QMouseEvent *) e;

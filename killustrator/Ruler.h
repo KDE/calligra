@@ -29,13 +29,14 @@
 #include <PStateManager.h>
 
 class QPixmap;
+class KIllustratorDocument;
 
 class Ruler : public QFrame {
   Q_OBJECT
 public:
   enum Orientation { Horizontal, Vertical };
 
-  Ruler (Orientation o, MeasurementUnit mu = UnitPoint, QWidget *parent = 0L,
+  Ruler (KIllustratorDocument *_doc, Orientation o, MeasurementUnit mu = UnitPoint, QWidget *parent = 0L,
          const char* name = 0L);
   ~Ruler();
 
@@ -80,6 +81,7 @@ protected slots:
 private:
   bool isMousePressed;
   float zoom;
+  KIllustratorDocument *doc;
   MeasurementUnit munit;
   Orientation orientation;
   QPixmap *buffer;

@@ -22,8 +22,9 @@
 
 */
 
-#include <Ruler.h>
+#include "Ruler.h"
 #include "units.h"
+#include "KIllustrator_doc.h"
 
 #include <qpainter.h>
 #include <qpixmap.h>
@@ -41,13 +42,14 @@
 
 #define RULER_SIZE 20
 
-Ruler::Ruler (Orientation o, MeasurementUnit mu, QWidget *parent,
+Ruler::Ruler (KIllustratorDocument *_doc, Orientation o, MeasurementUnit mu, QWidget *parent,
               const char *name) : QFrame (parent, name) {
   setFrameStyle (Box | Raised);
   setLineWidth (1);
   setMidLineWidth (0);
   orientation = o;
   munit = mu;
+  doc = _doc;
   zoom = 1.0;
   zeroPoint = 0;
   buffer = 0L;
@@ -589,34 +591,35 @@ void Ruler::mousePressEvent ( QMouseEvent * e)
       emit rmbPressed();
 }
 
-void Ruler::mouseMoveEvent ( QMouseEvent * me){
+void Ruler::mouseMoveEvent ( QMouseEvent * me)
+{
    /* Implement the hooks so that a helpline can be drawn out of the ruler:
       - if the mouse is on the widget, draw a helpline
       - if it is outside remove the XOR'd helpline
       - if the mouse it over the page view, set the helpline
        (different place: update the helpline position in the status bar)*/
-   if (isMousePressed)
-   {
-      emit drawHelpline (me->x () +
-                         (orientation == Horizontal ? zeroPoint : 0) -
-                         RULER_SIZE,
-                         me->y () +
-                         (orientation == Vertical ? zeroPoint : 0) -
-                         RULER_SIZE,
-                         (orientation==Horizontal) ? true : false );
-   }
+  if (isMousePressed && doc->isReadWrite())
+    emit drawHelpline (me->x () +
+         (orientation == Horizontal ? zeroPoint : 0) -
+         RULER_SIZE,
+         me->y () +
+         (orientation == Vertical ? zeroPoint : 0) -
+         RULER_SIZE,
+         (orientation==Horizontal) ? true : false );
 }
 
-void Ruler::mouseReleaseEvent ( QMouseEvent * me){
-  if (isMousePressed) {
+void Ruler::mouseReleaseEvent ( QMouseEvent * me)
+{
+  if (isMousePressed&& doc->isReadWrite())
+  {
      isMousePressed = false;
      emit addHelpline (me->x () +
-                       (orientation == Horizontal ? zeroPoint : 0) -
-                       RULER_SIZE,
-                       me->y () +
-                       (orientation == Vertical ? zeroPoint : 0) -
-                       RULER_SIZE,
-                       (orientation==Horizontal) ? true : false );
+         (orientation == Horizontal ? zeroPoint : 0) -
+         RULER_SIZE,
+         me->y () +
+         (orientation == Vertical ? zeroPoint : 0) -
+         RULER_SIZE,
+         (orientation==Horizontal) ? true : false );
   }
 }
 

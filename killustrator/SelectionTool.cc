@@ -29,9 +29,10 @@
 #include <klocale.h>
 #include <kdebug.h>
 
-#include <GDocument.h>
+#include "GDocument.h"
 #include "GPage.h"
 #include <Canvas.h>
+#include "KIllustrator_doc.h"
 #include <Coord.h>
 #include <TranslateCmd.h>
 #include <ScaleCmd.h>
@@ -88,6 +89,8 @@ void SelectionTool::processEvent (QEvent* e, GDocument *doc, Canvas* canvas) {
       processButtonReleaseForHelpline ((QMouseEvent *) e, doc, canvas);*/
 //  }
 //  else {
+    if(!doc->document()->isReadWrite())
+      return;
     if (e->type () == QEvent::MouseButtonPress)
       processButtonPressEvent ((QMouseEvent *) e, doc, canvas);
     else if (e->type () == QEvent::MouseMove)

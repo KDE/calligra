@@ -322,8 +322,10 @@ void Canvas::docSizeChanged()
 void Canvas::paintEvent (QPaintEvent* e)
 {
    if (!guiActive) return;
+      
    QTime time;
    time.start();
+   const QRect& rect = e->rect (); 
    //kdDebug()<<"Canvas::paintEvent(): width: "<<width()<<" height: "<<height()<<endl;
    pendingRedraws = 0;
 
@@ -332,6 +334,7 @@ void Canvas::paintEvent (QPaintEvent* e)
 
    // setup the painter
    p.begin (buffer);
+   p.setClipRect(rect);
    p.setBackgroundColor(white);
    buffer->fill (white);
 
@@ -372,10 +375,11 @@ void Canvas::paintEvent (QPaintEvent* e)
 
   p.end ();
 
-  const QRect& rect = e->rect ();
   bitBlt (this, rect.x (), rect.y (), buffer,
             rect.x (), rect.y (), rect.width (), rect.height ());
-  kdDebug() << "DRAWING TIME = " << time.elapsed () << endl;
+ 
+  kdDebug() << "X=" << rect.x() << " Y=" << rect.y() << " SX=" << rect.width() << " SY=" << rect.height() << endl;
+  kdDebug() << "DRAWING: " << time.elapsed () << endl;
 }
 
 void Canvas::ensureVisibility (bool flag) {

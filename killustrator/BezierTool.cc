@@ -33,6 +33,7 @@
 #include "BezierTool.h"
 
 #include "GDocument.h"
+#include "KIllustrator_doc.h"
 #include "GPage.h"
 #include "Canvas.h"
 #include <Coord.h>
@@ -57,7 +58,8 @@ BezierTool::BezierTool (CommandHistory* history)
 }
 
 void BezierTool::processEvent (QEvent* e, GDocument *doc, Canvas* canvas) {
-
+  if(!doc->document()->isReadWrite())
+      return;
     if (e->type () == QEvent::KeyPress) {
         QKeyEvent *ke = (QKeyEvent *) e;
         if (ke->key () == Qt::Key_Escape && curve != 0L) {

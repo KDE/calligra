@@ -323,7 +323,8 @@ void KIllustratorView::createMyGUI()
     m_showGrid->setChecked(canvas->showGrid());
     m_alignToGrid->setChecked(canvas->snapToGrid());
     m_selectTool->setChecked( true );
-    tcontroller->toolSelected( Tool::ToolSelect);
+    if(m_pDoc->isReadWrite())
+      tcontroller->toolSelected( Tool::ToolSelect);
     setUndoStatus (false, false);
     connect (&cmdHistory, SIGNAL(changed(bool, bool)),SLOT(setUndoStatus(bool, bool)));
     // Disable node actions
@@ -338,10 +339,10 @@ void KIllustratorView::setupCanvas()
 
     QGridLayout* layout = new QGridLayout(this,3,3);
 
-    hRuler = new Ruler (Ruler::Horizontal, mu, this);
+    hRuler = new Ruler (m_pDoc, Ruler::Horizontal, mu, this);
     hRuler->setMeasurementUnit(PStateManager::instance()->defaultMeasurementUnit());
     hRuler->setCursor(Qt::pointingHandCursor);
-    vRuler = new Ruler (Ruler::Vertical, mu, this);
+    vRuler = new Ruler (m_pDoc, Ruler::Vertical, mu, this);
     vRuler->setMeasurementUnit(PStateManager::instance()->defaultMeasurementUnit());
     vRuler->setCursor(Qt::pointingHandCursor);
 
