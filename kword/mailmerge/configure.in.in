@@ -37,3 +37,5 @@ else
   AC_SUBST(SQLDIR)
   AC_MSG_RESULT([QT supports SQL -- qtsqlmailmerge will not be built])
 fi
+
+AM_CONDITIONAL(include_sql, test -n "$SQLDIR")

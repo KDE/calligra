@@ -14,6 +14,9 @@ METASOURCES = AUTO
 services_DATA=kwserialletter_classic.desktop
 servicesdir=$(kde_servicesdir)
 
-SUBDIRS = . $(SQLDIR)
-#SUBDIRS = . $(SQLDIR) kabc
+if include_sql
+SQLDIRECTORY=sql
+endif
+
+SUBDIRS = . $(SQLDIRECTORY)
 

@@ -1,6 +1,6 @@
 
 INCLUDES  = $(all_includes)
-LDFLAGS   = $(all_libraries) $(KDE_RPATH) $(LIBMICO)
+LDFLAGS   = $(all_libraries) $(KDE_RPATH) # $(LIBMICO)
 
 ####### Files
 
