@@ -121,7 +121,7 @@ bool Connection::databaseExists( const QString &dbName )
 		QFileInfo file(dbName);
 		return file.exists();
 	}
-	QStringList &list = databaseNames();
+	QStringList list = databaseNames();
 	if (error()) {
 		clearError();
 		return false;
