@@ -201,7 +201,7 @@ DCOPObject* KPresenterView::dcopObject()
 KPresenterView::~KPresenterView()
 {
     // ######### Reggie: Why that ?
-    page->setToolEditMode( TEM_MOUSE );
+//    page->setToolEditMode( TEM_MOUSE );
     delete dcop;
 }
 
