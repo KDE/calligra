@@ -158,6 +158,16 @@ int KSpreadLayout::goUpDiagonalWidth( KSpreadCanvas *_canvas )
 	return m_iGoUpDiagonalWidth;
 }
 
+const QColor & KSpreadLayout::bgColor() const
+{
+  return m_bgColor.isValid() ? m_bgColor : QApplication::palette().active().base();
+}
+
+const QColor & KSpreadLayout::textColor() const
+{
+  return m_textColor.isValid() ? m_textColor : QApplication::palette().active().text();
+}
+
 /*****************************************************************************
  *
  * KRowLayout

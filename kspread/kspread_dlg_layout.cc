@@ -1178,20 +1178,20 @@ void CellLayoutPagePosition::slotChangeHeightState()
 
 void CellLayoutPagePosition::apply( KSpreadCell *_obj )
 {
-if(top->isChecked())
-        _obj->setAlignY(KSpreadCell::Top);
-else if(bottom->isChecked())
-        _obj->setAlignY(KSpreadCell::Bottom);
-else if(middle->isChecked())
-        _obj->setAlignY(KSpreadCell::Middle);
+  if(top->isChecked())
+    _obj->setAlignY(KSpreadCell::Top);
+  else if(bottom->isChecked())
+    _obj->setAlignY(KSpreadCell::Bottom);
+  else if(middle->isChecked())
+    _obj->setAlignY(KSpreadCell::Middle);
 
-if(left->isChecked())
-        _obj->setAlign(KSpreadCell::Left);
-else if(right->isChecked())
-        _obj->setAlign(KSpreadCell::Right);
-else if(center->isChecked())
-        _obj->setAlign(KSpreadCell::Center);
-_obj->setMultiRow(multi->isChecked());
+  if(left->isChecked())
+    _obj->setAlign(KSpreadCell::Left);
+  else if(right->isChecked())
+    _obj->setAlign(KSpreadCell::Right);
+  else if(center->isChecked())
+    _obj->setAlign(KSpreadCell::Center);
+  _obj->setMultiRow(multi->isChecked());
 }
 
 int CellLayoutPagePosition::getSizeHeight()
@@ -1214,7 +1214,7 @@ KSpreadBorderButton::KSpreadBorderButton( QWidget *parent, const char *_name ) :
 {
   penStyle = Qt::NoPen;
   penWidth = 1;
-  penColor = Qt::black; // ?
+  penColor = colorGroup().text();
   setToggleButton( TRUE );
   setOn( false);
   setChanged(false);
@@ -1230,7 +1230,7 @@ void KSpreadBorderButton::setUndefined()
 {
  setPenStyle(SolidLine );
  setPenWidth(1);
- setColor(Qt::gray); // ?
+ setColor(colorGroup().text());
 }
 
 
@@ -1239,7 +1239,7 @@ void KSpreadBorderButton::unselect()
   setOn(false);
   setPenWidth(1);
   setPenStyle(Qt::NoPen);
-  setColor( Qt::black ); // ?
+  setColor( colorGroup().text() );
   setChanged(true);
 }
 
@@ -1280,7 +1280,7 @@ void KSpreadBord::paintEvent( QPaintEvent *_ev )
 
 void KSpreadBord::mousePressEvent( QMouseEvent* _ev )
 {
-emit choosearea(_ev);
+  emit choosearea(_ev);
 }
 
 CellLayoutPageBorder::CellLayoutPageBorder( QWidget* parent, CellLayoutDlg *_dlg ) : QWidget( parent )
@@ -1380,115 +1380,45 @@ CellLayoutPageBorder::CellLayoutPageBorder( QWidget* parent, CellLayoutDlg *_dlg
 
   grid2 = new QGridLayout(tmpQGroupBox,6,2,15,7);
 
-  pattern1 = new KSpreadPatternSelect( tmpQGroupBox, "Frame_8" );
-    {
-      QColorGroup normal( ( QColor( QRgb(0) ) ), QColor( QRgb(16777215) ), QColor( QRgb(16777215) ), QColor( QRgb(6316128) ), QColor( QRgb(10789024) ), QColor( QRgb(0) ), QColor( QRgb(16777215) ) );
-	QColorGroup disabled( ( QColor( QRgb(8421504) ) ), QColor( QRgb(12632256) ), QColor( QRgb(16777215) ), QColor( QRgb(6316128) ), QColor( QRgb(10789024) ), QColor( QRgb(8421504) ), QColor( QRgb(12632256) ) );
-	QColorGroup active( ( QColor( QRgb(0) ) ), QColor( QRgb(12632256) ), QColor( QRgb(16777215) ), QColor( QRgb(6316128) ), QColor( QRgb(10789024) ), QColor( QRgb(0) ), QColor( QRgb(16777215) ) );
-	QPalette palette( normal, disabled, active );
-	pattern1->setPalette( palette );
-    }
-    pattern1->setFrameStyle( 50 );
-    grid2->addWidget(pattern1,0,0);
+  pattern1 = new KSpreadPatternSelect( tmpQGroupBox, "Pattern_1" );
+  pattern1->setFrameStyle( 50 );
+  grid2->addWidget(pattern1,0,0);
 
-    pattern2 = new KSpreadPatternSelect( tmpQGroupBox, "Frame_9" );
-    {
-	QColorGroup normal( ( QColor( QRgb(0) ) ), QColor( QRgb(16777215) ), QColor( QRgb(16777215) ), QColor( QRgb(6316128) ), QColor( QRgb(10789024) ), QColor( QRgb(0) ), QColor( QRgb(16777215) ) );
-	QColorGroup disabled( ( QColor( QRgb(8421504) ) ), QColor( QRgb(12632256) ), QColor( QRgb(16777215) ), QColor( QRgb(6316128) ), QColor( QRgb(10789024) ), QColor( QRgb(8421504) ), QColor( QRgb(12632256) ) );
-	QColorGroup active( ( QColor( QRgb(0) ) ), QColor( QRgb(12632256) ), QColor( QRgb(16777215) ), QColor( QRgb(6316128) ), QColor( QRgb(10789024) ), QColor( QRgb(0) ), QColor( QRgb(16777215) ) );
-	QPalette palette( normal, disabled, active );
-	pattern2->setPalette( palette );
-    }
-    pattern2->setFrameStyle( 50 );
-    grid2->addWidget(pattern2,1,0);
+  pattern2 = new KSpreadPatternSelect( tmpQGroupBox, "Pattern_2" );
+  pattern2->setFrameStyle( 50 );
+  grid2->addWidget(pattern2,1,0);
 
-    pattern3 = new KSpreadPatternSelect( tmpQGroupBox, "Frame_10" );
-    {
-	QColorGroup normal( ( QColor( QRgb(0) ) ), QColor( QRgb(16777215) ), QColor( QRgb(16777215) ), QColor( QRgb(6316128) ), QColor( QRgb(10789024) ), QColor( QRgb(0) ), QColor( QRgb(16777215) ) );
-	QColorGroup disabled( ( QColor( QRgb(8421504) ) ), QColor( QRgb(12632256) ), QColor( QRgb(16777215) ), QColor( QRgb(6316128) ), QColor( QRgb(10789024) ), QColor( QRgb(8421504) ), QColor( QRgb(12632256) ) );
-	QColorGroup active( ( QColor( QRgb(0) ) ), QColor( QRgb(12632256) ), QColor( QRgb(16777215) ), QColor( QRgb(6316128) ), QColor( QRgb(10789024) ), QColor( QRgb(0) ), QColor( QRgb(16777215) ) );
-	QPalette palette( normal, disabled, active );
-	pattern3->setPalette( palette );
-    }
-    pattern3->setFrameStyle( 50 );
-    grid2->addWidget(pattern3,2,0);
+  pattern3 = new KSpreadPatternSelect( tmpQGroupBox, "Pattern_3" );
+  pattern3->setFrameStyle( 50 );
+  grid2->addWidget(pattern3,2,0);
 
-    pattern4 = new KSpreadPatternSelect( tmpQGroupBox, "Frame_11" );
-    {
-	QColorGroup normal( ( QColor( QRgb(0) ) ), QColor( QRgb(16777215) ), QColor( QRgb(16777215) ), QColor( QRgb(6316128) ), QColor( QRgb(10789024) ), QColor( QRgb(0) ), QColor( QRgb(16777215) ) );
-	QColorGroup disabled( ( QColor( QRgb(8421504) ) ), QColor( QRgb(12632256) ), QColor( QRgb(16777215) ), QColor( QRgb(6316128) ), QColor( QRgb(10789024) ), QColor( QRgb(8421504) ), QColor( QRgb(12632256) ) );
-	QColorGroup active( ( QColor( QRgb(0) ) ), QColor( QRgb(12632256) ), QColor( QRgb(16777215) ), QColor( QRgb(6316128) ), QColor( QRgb(10789024) ), QColor( QRgb(0) ), QColor( QRgb(16777215) ) );
-	QPalette palette( normal, disabled, active );
-	pattern4->setPalette( palette );
-    }
-    pattern4->setFrameStyle( 50 );
-    grid2->addWidget(pattern4,0,1);
+  pattern4 = new KSpreadPatternSelect( tmpQGroupBox, "Pattern_4" );
+  pattern4->setFrameStyle( 50 );
+  grid2->addWidget(pattern4,0,1);
 
-    pattern5 = new KSpreadPatternSelect( tmpQGroupBox, "Frame_12" );
-    {
-	QColorGroup normal( ( QColor( QRgb(0) ) ), QColor( QRgb(16777215) ), QColor( QRgb(16777215) ), QColor( QRgb(6316128) ), QColor( QRgb(10789024) ), QColor( QRgb(0) ), QColor( QRgb(16777215) ) );
-	QColorGroup disabled( ( QColor( QRgb(8421504) ) ), QColor( QRgb(12632256) ), QColor( QRgb(16777215) ), QColor( QRgb(6316128) ), QColor( QRgb(10789024) ), QColor( QRgb(8421504) ), QColor( QRgb(12632256) ) );
-	QColorGroup active( ( QColor( QRgb(0) ) ), QColor( QRgb(12632256) ), QColor( QRgb(16777215) ), QColor( QRgb(6316128) ), QColor( QRgb(10789024) ), QColor( QRgb(0) ), QColor( QRgb(16777215) ) );
-	QPalette palette( normal, disabled, active );
-	pattern5->setPalette( palette );
-    }
-    pattern5->setFrameStyle( 50 );
-    grid2->addWidget(pattern5,1,1);
+  pattern5 = new KSpreadPatternSelect( tmpQGroupBox, "Pattern_5" );
+  pattern5->setFrameStyle( 50 );
+  grid2->addWidget(pattern5,1,1);
 
-    pattern6 = new KSpreadPatternSelect( tmpQGroupBox, "Frame_13" );
-    {
-	QColorGroup normal( ( QColor( QRgb(0) ) ), QColor( QRgb(16777215) ), QColor( QRgb(16777215) ), QColor( QRgb(6316128) ), QColor( QRgb(10789024) ), QColor( QRgb(0) ), QColor( QRgb(16777215) ) );
-	QColorGroup disabled( ( QColor( QRgb(8421504) ) ), QColor( QRgb(12632256) ), QColor( QRgb(16777215) ), QColor( QRgb(6316128) ), QColor( QRgb(10789024) ), QColor( QRgb(8421504) ), QColor( QRgb(12632256) ) );
-	QColorGroup active( ( QColor( QRgb(0) ) ), QColor( QRgb(12632256) ), QColor( QRgb(16777215) ), QColor( QRgb(6316128) ), QColor( QRgb(10789024) ), QColor( QRgb(0) ), QColor( QRgb(16777215) ) );
-	QPalette palette( normal, disabled, active );
-	pattern6->setPalette( palette );
-    }
-    pattern6->setFrameStyle( 50 );
-    grid2->addWidget(pattern6,2,1);
+  pattern6 = new KSpreadPatternSelect( tmpQGroupBox, "Pattern_6" );
+  pattern6->setFrameStyle( 50 );
+  grid2->addWidget(pattern6,2,1);
 
-    pattern7 = new KSpreadPatternSelect( tmpQGroupBox, "Frame_14" );
-    {
-	QColorGroup normal( ( QColor( QRgb(0) ) ), QColor( QRgb(16777215) ), QColor( QRgb(16777215) ), QColor( QRgb(6316128) ), QColor( QRgb(10789024) ), QColor( QRgb(0) ), QColor( QRgb(16777215) ) );
-	QColorGroup disabled( ( QColor( QRgb(8421504) ) ), QColor( QRgb(12632256) ), QColor( QRgb(16777215) ), QColor( QRgb(6316128) ), QColor( QRgb(10789024) ), QColor( QRgb(8421504) ), QColor( QRgb(12632256) ) );
-	QColorGroup active( ( QColor( QRgb(0) ) ), QColor( QRgb(12632256) ), QColor( QRgb(16777215) ), QColor( QRgb(6316128) ), QColor( QRgb(10789024) ), QColor( QRgb(0) ), QColor( QRgb(16777215) ) );
-	QPalette palette( normal, disabled, active );
-	pattern7->setPalette( palette );
-    }
-    pattern7->setFrameStyle( 50 );
-    grid2->addWidget(pattern7,3,1);
+  pattern7 = new KSpreadPatternSelect( tmpQGroupBox, "Pattern_7" );
+  pattern7->setFrameStyle( 50 );
+  grid2->addWidget(pattern7,3,1);
 
-    pattern8 = new KSpreadPatternSelect( tmpQGroupBox, "Frame_15" );
-    {
-	QColorGroup normal( ( QColor( QRgb(0) ) ), QColor( QRgb(16777215) ), QColor( QRgb(16777215) ), QColor( QRgb(6316128) ), QColor( QRgb(10789024) ), QColor( QRgb(0) ), QColor( QRgb(16777215) ) );
-	QColorGroup disabled( ( QColor( QRgb(8421504) ) ), QColor( QRgb(12632256) ), QColor( QRgb(16777215) ), QColor( QRgb(6316128) ), QColor( QRgb(10789024) ), QColor( QRgb(8421504) ), QColor( QRgb(12632256) ) );
-	QColorGroup active( ( QColor( QRgb(0) ) ), QColor( QRgb(12632256) ), QColor( QRgb(16777215) ), QColor( QRgb(6316128) ), QColor( QRgb(10789024) ), QColor( QRgb(0) ), QColor( QRgb(16777215) ) );
-	QPalette palette( normal, disabled, active );
-	pattern8->setPalette( palette );
-    }
-    pattern8->setFrameStyle( 50 );
-    grid2->addWidget(pattern8,4,1);
+  pattern8 = new KSpreadPatternSelect( tmpQGroupBox, "Pattern_8" );
+  pattern8->setFrameStyle( 50 );
+  grid2->addWidget(pattern8,4,1);
 
-    pattern9 = new KSpreadPatternSelect( tmpQGroupBox, "Frame_16" );
-    {
-	QColorGroup normal( ( QColor( QRgb(0) ) ), QColor( QRgb(16777215) ), QColor( QRgb(16777215) ), QColor( QRgb(6316128) ), QColor( QRgb(10789024) ), QColor( QRgb(0) ), QColor( QRgb(16777215) ) );
-	QColorGroup disabled( ( QColor( QRgb(8421504) ) ), QColor( QRgb(12632256) ), QColor( QRgb(16777215) ), QColor( QRgb(6316128) ), QColor( QRgb(10789024) ), QColor( QRgb(8421504) ), QColor( QRgb(12632256) ) );
-	QColorGroup active( ( QColor( QRgb(0) ) ), QColor( QRgb(12632256) ), QColor( QRgb(16777215) ), QColor( QRgb(6316128) ), QColor( QRgb(10789024) ), QColor( QRgb(0) ), QColor( QRgb(16777215) ) );
-	QPalette palette( normal, disabled, active );
-	pattern9->setPalette( palette );
-    }
-    pattern9->setFrameStyle( 50 );
-    grid2->addWidget(pattern9,3,0);
+  pattern9 = new KSpreadPatternSelect( tmpQGroupBox, "Pattern_9" );
+  pattern9->setFrameStyle( 50 );
+  grid2->addWidget(pattern9,3,0);
 
-    pattern10 = new KSpreadPatternSelect( tmpQGroupBox, "Frame_17" );
-    {
-	QColorGroup normal( ( QColor( QRgb(0) ) ), QColor( QRgb(16777215) ), QColor( QRgb(16777215) ), QColor( QRgb(6316128) ), QColor( QRgb(10789024) ), QColor( QRgb(0) ), QColor( QRgb(16777215) ) );
-	QColorGroup disabled( ( QColor( QRgb(8421504) ) ), QColor( QRgb(12632256) ), QColor( QRgb(16777215) ), QColor( QRgb(6316128) ), QColor( QRgb(10789024) ), QColor( QRgb(8421504) ), QColor( QRgb(12632256) ) );
-	QColorGroup active( ( QColor( QRgb(0) ) ), QColor( QRgb(12632256) ), QColor( QRgb(16777215) ), QColor( QRgb(6316128) ), QColor( QRgb(10789024) ), QColor( QRgb(0) ), QColor( QRgb(16777215) ) );
-	QPalette palette( normal, disabled, active );
-	pattern10->setPalette( palette );
-    }
-    pattern10->setFrameStyle( 50 );
-    grid2->addWidget(pattern10,4,0);
+  pattern10 = new KSpreadPatternSelect( tmpQGroupBox, "Pattern_10" );
+  pattern10->setFrameStyle( 50 );
+  grid2->addWidget(pattern10,4,0);
 
 
 
@@ -1526,16 +1456,10 @@ CellLayoutPageBorder::CellLayoutPageBorder( QWidget* parent, CellLayoutDlg *_dlg
     style->insertItem(*paintFormatPixmap(DashDotLine),2 );
     style->insertItem(*paintFormatPixmap(DashDotDotLine),3  );
     style->insertItem(*paintFormatPixmap(SolidLine),4);
+    style->setBackgroundColor( colorGroup().background() );
 
 
-    customize = new KSpreadPatternSelect( tmpQGroupBox, "Frame_18" );
-    {
-	QColorGroup normal( ( QColor( QRgb(0) ) ), QColor( QRgb(16777215) ), QColor( QRgb(16777215) ), QColor( QRgb(6316128) ), QColor( QRgb(10789024) ), QColor( QRgb(0) ), QColor( QRgb(16777215) ) );
-	QColorGroup disabled( ( QColor( QRgb(8421504) ) ), QColor( QRgb(12632256) ), QColor( QRgb(16777215) ), QColor( QRgb(6316128) ), QColor( QRgb(10789024) ), QColor( QRgb(8421504) ), QColor( QRgb(12632256) ) );
-	QColorGroup active( ( QColor( QRgb(0) ) ), QColor( QRgb(12632256) ), QColor( QRgb(16777215) ), QColor( QRgb(6316128) ), QColor( QRgb(10789024) ), QColor( QRgb(0) ), QColor( QRgb(16777215) ) );
-	QPalette palette( normal, disabled, active );
-	customize->setPalette( palette );
-    }
+    customize = new KSpreadPatternSelect( tmpQGroupBox, "Pattern_Customize" );
     customize->setFrameStyle( 50 );
     grid2->addWidget(customize,1,1);
 
@@ -1658,7 +1582,6 @@ CellLayoutPageBorder::CellLayoutPageBorder( QWidget* parent, CellLayoutDlg *_dlg
       }
     else
       {
-
 	fallDiagonal->setUndefined();
       }
    }
@@ -1760,9 +1683,9 @@ CellLayoutPageBorder::CellLayoutPageBorder( QWidget* parent, CellLayoutDlg *_dlg
 
 void CellLayoutPageBorder::slotChangeStyle(int)
 {
-int index =style->currentItem();
-int penSize=size->currentItem();
-switch(index)
+  int index =style->currentItem();
+  int penSize=size->currentItem();
+  switch(index)
 	{
 	case 0:
                 customize->setPattern( customize->getColor(), penSize, DotLine );
@@ -1794,7 +1717,7 @@ QPixmap* CellLayoutPageBorder::paintFormatPixmap(PenStyle _style)
     pen.setStyle( _style );
     pen.setWidth( 1 );
     painter.begin( pixmap );
-    painter.fillRect( 0, 0, style->width(), 14, colorGroup().base() );
+    painter.fillRect( 0, 0, style->width(), 14, colorGroup().background() );
     painter.setPen( pen );
     painter.drawLine( 0, 7, style->width(), 7 );
     painter.end();
@@ -1846,7 +1769,7 @@ void CellLayoutPageBorder::applyOutline( int _left, int _top, int _right, int _b
     }
 
 
-if ( left->isChanged() )
+ if ( left->isChanged() )
     {
     for ( int y = _top; y <= _bottom; y++ )
         {
@@ -1893,7 +1816,7 @@ if ( left->isChanged() )
         }
     }
 
-for ( int x = _left; x <= _right; x++ )
+ for ( int x = _left; x <= _right; x++ )
         {
         for ( int y = _top; y <= _bottom; y++ )
                 {
@@ -1963,8 +1886,8 @@ void CellLayoutPageBorder::slotUnselect2( KSpreadPatternSelect *_p )
 
 void CellLayoutPageBorder::preselect( KSpreadBorderButton *_p)
 {
-_p->setOn(false);
-if(_p==remove)
+  _p->setOn(false);
+  if(_p==remove)
         {
          if(left->isOn())
                  left->unselect();
@@ -1990,7 +1913,7 @@ if(_p==remove)
           if(horizontal->isOn())
                  horizontal->unselect();
         }
-if(_p==outline)
+  if(_p==outline)
         {
         top->setOn(true);
         top->setPenWidth(selectedPattern->getPenWidth());
@@ -2013,7 +1936,7 @@ if(_p==outline)
         right->setColor( currentColor );
         right->setChanged(true);
         }
-if(_p==all)
+  if(_p==all)
         {
         if(dlg->oneRow==false)
                 {
@@ -2032,7 +1955,7 @@ if(_p==all)
                 vertical->setChanged(true);
                 }
         }
-area->repaint();
+  area->repaint();
 }
 
 void CellLayoutPageBorder::changeState( KSpreadBorderButton *_p)
@@ -2136,11 +2059,11 @@ void CellLayoutPageBorder::draw()
 
 void CellLayoutPageBorder::invertState(KSpreadBorderButton *_p)
 {
-if(_p->isOn())
+  if(_p->isOn())
         {
         _p->unselect();
         }
-else
+  else
         {
         _p->setOn(!_p->isOn());
         _p->setPenWidth(selectedPattern->getPenWidth());
@@ -2152,24 +2075,24 @@ else
 
 void CellLayoutPageBorder::slotPressEvent(QMouseEvent *_ev)
 {
-QRect rect(OFFSETX,OFFSETY-8,area->width()-OFFSETX,OFFSETY+8);
-if(rect.contains(QPoint(_ev->x(),_ev->y())))
+  QRect rect(OFFSETX,OFFSETY-8,area->width()-OFFSETX,OFFSETY+8);
+  if(rect.contains(QPoint(_ev->x(),_ev->y())))
         {
          invertState(top);
         }
-rect.setCoords(OFFSETX,area->height()-OFFSETY-8,area->width()-OFFSETX,area->height()-OFFSETY+8);
-if(rect.contains(QPoint(_ev->x(),_ev->y())))
+  rect.setCoords(OFFSETX,area->height()-OFFSETY-8,area->width()-OFFSETX,area->height()-OFFSETY+8);
+  if(rect.contains(QPoint(_ev->x(),_ev->y())))
         {
          invertState(bottom);
         }
 
-rect.setCoords(OFFSETX-8,OFFSETY,OFFSETX+8,area->height()-OFFSETY);
-if(rect.contains(QPoint(_ev->x(),_ev->y())))
+  rect.setCoords(OFFSETX-8,OFFSETY,OFFSETX+8,area->height()-OFFSETY);
+  if(rect.contains(QPoint(_ev->x(),_ev->y())))
         {
          invertState(left);
         }
-rect.setCoords(area->width()-OFFSETX-8,OFFSETY,area->width()-OFFSETX+8,area->height()-OFFSETY);
-if(rect.contains(QPoint(_ev->x(),_ev->y())))
+  rect.setCoords(area->width()-OFFSETX-8,OFFSETY,area->width()-OFFSETX+8,area->height()-OFFSETY);
+ if(rect.contains(QPoint(_ev->x(),_ev->y())))
         {
          invertState(right);
         }
@@ -2187,7 +2110,7 @@ if(rect.contains(QPoint(_ev->x(),_ev->y())))
          invertState(goUpDiagonal);
         } */
 
-if(dlg->oneCol==false)
+ if(dlg->oneCol==false)
         {
          rect.setCoords(area->width()/2-8,OFFSETY,area->width()/2+8,area->height()-OFFSETY);
 
@@ -2196,7 +2119,7 @@ if(dlg->oneCol==false)
                 invertState(vertical);
                 }
         }
-if(dlg->oneRow==false)
+ if(dlg->oneRow==false)
         {
         rect.setCoords(OFFSETX,area->height()/2-8,area->width()-OFFSETX,area->height()/2+8);
         if(rect.contains(QPoint(_ev->x(),_ev->y())))
@@ -2205,7 +2128,7 @@ if(dlg->oneRow==false)
                 }
         }
 
-area->repaint();
+ area->repaint();
 }
 
 KSpreadBrushSelect::KSpreadBrushSelect( QWidget *parent, const char * ) : QFrame( parent )
@@ -2279,167 +2202,62 @@ CellLayoutPagePattern::CellLayoutPagePattern( QWidget* parent, CellLayoutDlg *_d
     QGridLayout *grid2 = new QGridLayout(tmpQGroupBox,5,3,15,7);
 
     brush1 = new KSpreadBrushSelect( tmpQGroupBox, "Frame_1" );
-    {
-	QColorGroup normal( ( QColor( QRgb(0) ) ), QColor( QRgb(16777215) ), QColor( QRgb(16777215) ), QColor( QRgb(6316128) ), QColor( QRgb(10789024) ), QColor( QRgb(0) ), QColor( QRgb(16777215) ) );
-	QColorGroup disabled( ( QColor( QRgb(8421504) ) ), QColor( QRgb(12632256) ), QColor( QRgb(16777215) ), QColor( QRgb(6316128) ), QColor( QRgb(10789024) ), QColor( QRgb(8421504) ), QColor( QRgb(12632256) ) );
-	QColorGroup active( ( QColor( QRgb(0) ) ), QColor( QRgb(12632256) ), QColor( QRgb(16777215) ), QColor( QRgb(6316128) ), QColor( QRgb(10789024) ), QColor( QRgb(0) ), QColor( QRgb(16777215) ) );
-	QPalette palette( normal, disabled, active );
-	brush1->setPalette( palette );
-    }
     brush1->setFrameStyle( 50 );
     grid2->addWidget(brush1,0,0);
 
     brush2 = new KSpreadBrushSelect( tmpQGroupBox, "Frame_2" );
-    {
-	QColorGroup normal( ( QColor( QRgb(0) ) ), QColor( QRgb(16777215) ), QColor( QRgb(16777215) ), QColor( QRgb(6316128) ), QColor( QRgb(10789024) ), QColor( QRgb(0) ), QColor( QRgb(16777215) ) );
-	QColorGroup disabled( ( QColor( QRgb(8421504) ) ), QColor( QRgb(12632256) ), QColor( QRgb(16777215) ), QColor( QRgb(6316128) ), QColor( QRgb(10789024) ), QColor( QRgb(8421504) ), QColor( QRgb(12632256) ) );
-	QColorGroup active( ( QColor( QRgb(0) ) ), QColor( QRgb(12632256) ), QColor( QRgb(16777215) ), QColor( QRgb(6316128) ), QColor( QRgb(10789024) ), QColor( QRgb(0) ), QColor( QRgb(16777215) ) );
-	QPalette palette( normal, disabled, active );
-	brush2->setPalette( palette );
-    }
     brush2->setFrameStyle( 50 );
     grid2->addWidget(brush2,0,1);
 
     brush3 = new KSpreadBrushSelect( tmpQGroupBox, "Frame_3" );
-    {
-	QColorGroup normal( ( QColor( QRgb(0) ) ), QColor( QRgb(16777215) ), QColor( QRgb(16777215) ), QColor( QRgb(6316128) ), QColor( QRgb(10789024) ), QColor( QRgb(0) ), QColor( QRgb(16777215) ) );
-	QColorGroup disabled( ( QColor( QRgb(8421504) ) ), QColor( QRgb(12632256) ), QColor( QRgb(16777215) ), QColor( QRgb(6316128) ), QColor( QRgb(10789024) ), QColor( QRgb(8421504) ), QColor( QRgb(12632256) ) );
-	QColorGroup active( ( QColor( QRgb(0) ) ), QColor( QRgb(12632256) ), QColor( QRgb(16777215) ), QColor( QRgb(6316128) ), QColor( QRgb(10789024) ), QColor( QRgb(0) ), QColor( QRgb(16777215) ) );
-	QPalette palette( normal, disabled, active );
-	brush3->setPalette( palette );
-    }
     brush3->setFrameStyle( 50 );
     grid2->addWidget(brush3,0,2);
 
     brush4 = new KSpreadBrushSelect( tmpQGroupBox, "Frame_4" );
-    {
-	QColorGroup normal( ( QColor( QRgb(0) ) ), QColor( QRgb(16777215) ), QColor( QRgb(16777215) ), QColor( QRgb(6316128) ), QColor( QRgb(10789024) ), QColor( QRgb(0) ), QColor( QRgb(16777215) ) );
-	QColorGroup disabled( ( QColor( QRgb(8421504) ) ), QColor( QRgb(12632256) ), QColor( QRgb(16777215) ), QColor( QRgb(6316128) ), QColor( QRgb(10789024) ), QColor( QRgb(8421504) ), QColor( QRgb(12632256) ) );
-	QColorGroup active( ( QColor( QRgb(0) ) ), QColor( QRgb(12632256) ), QColor( QRgb(16777215) ), QColor( QRgb(6316128) ), QColor( QRgb(10789024) ), QColor( QRgb(0) ), QColor( QRgb(16777215) ) );
-	QPalette palette( normal, disabled, active );
-	brush4->setPalette( palette );
-    }
     brush4->setFrameStyle( 50 );
     grid2->addWidget(brush4,1,0);
 
     brush5 = new KSpreadBrushSelect( tmpQGroupBox, "Frame_5" );
-    {
-	QColorGroup normal( ( QColor( QRgb(0) ) ), QColor( QRgb(16777215) ), QColor( QRgb(16777215) ), QColor( QRgb(6316128) ), QColor( QRgb(10789024) ), QColor( QRgb(0) ), QColor( QRgb(16777215) ) );
-	QColorGroup disabled( ( QColor( QRgb(8421504) ) ), QColor( QRgb(12632256) ), QColor( QRgb(16777215) ), QColor( QRgb(6316128) ), QColor( QRgb(10789024) ), QColor( QRgb(8421504) ), QColor( QRgb(12632256) ) );
-	QColorGroup active( ( QColor( QRgb(0) ) ), QColor( QRgb(12632256) ), QColor( QRgb(16777215) ), QColor( QRgb(6316128) ), QColor( QRgb(10789024) ), QColor( QRgb(0) ), QColor( QRgb(16777215) ) );
-	QPalette palette( normal, disabled, active );
-	brush5->setPalette( palette );
-    }
     brush5->setFrameStyle( 50 );
     grid2->addWidget(brush5,1,1);
 
     brush6 = new KSpreadBrushSelect( tmpQGroupBox, "Frame_6" );
-    {
-	QColorGroup normal( ( QColor( QRgb(0) ) ), QColor( QRgb(16777215) ), QColor( QRgb(16777215) ), QColor( QRgb(6316128) ), QColor( QRgb(10789024) ), QColor( QRgb(0) ), QColor( QRgb(16777215) ) );
-	QColorGroup disabled( ( QColor( QRgb(8421504) ) ), QColor( QRgb(12632256) ), QColor( QRgb(16777215) ), QColor( QRgb(6316128) ), QColor( QRgb(10789024) ), QColor( QRgb(8421504) ), QColor( QRgb(12632256) ) );
-	QColorGroup active( ( QColor( QRgb(0) ) ), QColor( QRgb(12632256) ), QColor( QRgb(16777215) ), QColor( QRgb(6316128) ), QColor( QRgb(10789024) ), QColor( QRgb(0) ), QColor( QRgb(16777215) ) );
-	QPalette palette( normal, disabled, active );
-	brush6->setPalette( palette );
-    }
     brush6->setFrameStyle( 50 );
     grid2->addWidget(brush6,1,2);
 
     brush7 = new KSpreadBrushSelect( tmpQGroupBox, "Frame_7" );
-    {
-	QColorGroup normal( ( QColor( QRgb(0) ) ), QColor( QRgb(16777215) ), QColor( QRgb(16777215) ), QColor( QRgb(6316128) ), QColor( QRgb(10789024) ), QColor( QRgb(0) ), QColor( QRgb(16777215) ) );
-	QColorGroup disabled( ( QColor( QRgb(8421504) ) ), QColor( QRgb(12632256) ), QColor( QRgb(16777215) ), QColor( QRgb(6316128) ), QColor( QRgb(10789024) ), QColor( QRgb(8421504) ), QColor( QRgb(12632256) ) );
-	QColorGroup active( ( QColor( QRgb(0) ) ), QColor( QRgb(12632256) ), QColor( QRgb(16777215) ), QColor( QRgb(6316128) ), QColor( QRgb(10789024) ), QColor( QRgb(0) ), QColor( QRgb(16777215) ) );
-	QPalette palette( normal, disabled, active );
-	brush7->setPalette( palette );
-    }
     brush7->setFrameStyle( 50 );
     grid2->addWidget(brush7,2,0);
 
     brush8 = new KSpreadBrushSelect( tmpQGroupBox, "Frame_8" );
-    {
-	QColorGroup normal( ( QColor( QRgb(0) ) ), QColor( QRgb(16777215) ), QColor( QRgb(16777215) ), QColor( QRgb(6316128) ), QColor( QRgb(10789024) ), QColor( QRgb(0) ), QColor( QRgb(16777215) ) );
-	QColorGroup disabled( ( QColor( QRgb(8421504) ) ), QColor( QRgb(12632256) ), QColor( QRgb(16777215) ), QColor( QRgb(6316128) ), QColor( QRgb(10789024) ), QColor( QRgb(8421504) ), QColor( QRgb(12632256) ) );
-	QColorGroup active( ( QColor( QRgb(0) ) ), QColor( QRgb(12632256) ), QColor( QRgb(16777215) ), QColor( QRgb(6316128) ), QColor( QRgb(10789024) ), QColor( QRgb(0) ), QColor( QRgb(16777215) ) );
-	QPalette palette( normal, disabled, active );
-	brush8->setPalette( palette );
-    }
     brush8->setFrameStyle( 50 );
     grid2->addWidget(brush8,2,1);
 
     brush9 = new KSpreadBrushSelect( tmpQGroupBox, "Frame_9" );
-    {
-	QColorGroup normal( ( QColor( QRgb(0) ) ), QColor( QRgb(16777215) ), QColor( QRgb(16777215) ), QColor( QRgb(6316128) ), QColor( QRgb(10789024) ), QColor( QRgb(0) ), QColor( QRgb(16777215) ) );
-	QColorGroup disabled( ( QColor( QRgb(8421504) ) ), QColor( QRgb(12632256) ), QColor( QRgb(16777215) ), QColor( QRgb(6316128) ), QColor( QRgb(10789024) ), QColor( QRgb(8421504) ), QColor( QRgb(12632256) ) );
-	QColorGroup active( ( QColor( QRgb(0) ) ), QColor( QRgb(12632256) ), QColor( QRgb(16777215) ), QColor( QRgb(6316128) ), QColor( QRgb(10789024) ), QColor( QRgb(0) ), QColor( QRgb(16777215) ) );
-	QPalette palette( normal, disabled, active );
-	brush9->setPalette( palette );
-    }
     brush9->setFrameStyle( 50 );
     grid2->addWidget(brush9,2,2);
 
     brush10 = new KSpreadBrushSelect( tmpQGroupBox, "Frame_10" );
-    {
-	QColorGroup normal( ( QColor( QRgb(0) ) ), QColor( QRgb(16777215) ), QColor( QRgb(16777215) ), QColor( QRgb(6316128) ), QColor( QRgb(10789024) ), QColor( QRgb(0) ), QColor( QRgb(16777215) ) );
-	QColorGroup disabled( ( QColor( QRgb(8421504) ) ), QColor( QRgb(12632256) ), QColor( QRgb(16777215) ), QColor( QRgb(6316128) ), QColor( QRgb(10789024) ), QColor( QRgb(8421504) ), QColor( QRgb(12632256) ) );
-	QColorGroup active( ( QColor( QRgb(0) ) ), QColor( QRgb(12632256) ), QColor( QRgb(16777215) ), QColor( QRgb(6316128) ), QColor( QRgb(10789024) ), QColor( QRgb(0) ), QColor( QRgb(16777215) ) );
-	QPalette palette( normal, disabled, active );
-	brush10->setPalette( palette );
-    }
     brush10->setFrameStyle( 50 );
     grid2->addWidget(brush10,3,0);
 
     brush11 = new KSpreadBrushSelect( tmpQGroupBox, "Frame_11" );
-    {
-	QColorGroup normal( ( QColor( QRgb(0) ) ), QColor( QRgb(16777215) ), QColor( QRgb(16777215) ), QColor( QRgb(6316128) ), QColor( QRgb(10789024) ), QColor( QRgb(0) ), QColor( QRgb(16777215) ) );
-	QColorGroup disabled( ( QColor( QRgb(8421504) ) ), QColor( QRgb(12632256) ), QColor( QRgb(16777215) ), QColor( QRgb(6316128) ), QColor( QRgb(10789024) ), QColor( QRgb(8421504) ), QColor( QRgb(12632256) ) );
-	QColorGroup active( ( QColor( QRgb(0) ) ), QColor( QRgb(12632256) ), QColor( QRgb(16777215) ), QColor( QRgb(6316128) ), QColor( QRgb(10789024) ), QColor( QRgb(0) ), QColor( QRgb(16777215) ) );
-	QPalette palette( normal, disabled, active );
-	brush11->setPalette( palette );
-    }
     brush11->setFrameStyle( 50 );
     grid2->addWidget(brush11,3,1);
 
     brush12 = new KSpreadBrushSelect( tmpQGroupBox, "Frame_12" );
-    {
-	QColorGroup normal( ( QColor( QRgb(0) ) ), QColor( QRgb(16777215) ), QColor( QRgb(16777215) ), QColor( QRgb(6316128) ), QColor( QRgb(10789024) ), QColor( QRgb(0) ), QColor( QRgb(16777215) ) );
-	QColorGroup disabled( ( QColor( QRgb(8421504) ) ), QColor( QRgb(12632256) ), QColor( QRgb(16777215) ), QColor( QRgb(6316128) ), QColor( QRgb(10789024) ), QColor( QRgb(8421504) ), QColor( QRgb(12632256) ) );
-	QColorGroup active( ( QColor( QRgb(0) ) ), QColor( QRgb(12632256) ), QColor( QRgb(16777215) ), QColor( QRgb(6316128) ), QColor( QRgb(10789024) ), QColor( QRgb(0) ), QColor( QRgb(16777215) ) );
-	QPalette palette( normal, disabled, active );
-	brush12->setPalette( palette );
-    }
     brush12->setFrameStyle( 50 );
     grid2->addWidget(brush12,3,2);
 
     brush13 = new KSpreadBrushSelect( tmpQGroupBox, "Frame_13" );
-    {
-	QColorGroup normal( ( QColor( QRgb(0) ) ), QColor( QRgb(16777215) ), QColor( QRgb(16777215) ), QColor( QRgb(6316128) ), QColor( QRgb(10789024) ), QColor( QRgb(0) ), QColor( QRgb(16777215) ) );
-	QColorGroup disabled( ( QColor( QRgb(8421504) ) ), QColor( QRgb(12632256) ), QColor( QRgb(16777215) ), QColor( QRgb(6316128) ), QColor( QRgb(10789024) ), QColor( QRgb(8421504) ), QColor( QRgb(12632256) ) );
-	QColorGroup active( ( QColor( QRgb(0) ) ), QColor( QRgb(12632256) ), QColor( QRgb(16777215) ), QColor( QRgb(6316128) ), QColor( QRgb(10789024) ), QColor( QRgb(0) ), QColor( QRgb(16777215) ) );
-	QPalette palette( normal, disabled, active );
-	brush13->setPalette( palette );
-    }
     brush13->setFrameStyle( 50 );
     grid2->addWidget(brush13,4,0);
 
     brush14 = new KSpreadBrushSelect( tmpQGroupBox, "Frame_14" );
-    {
-	QColorGroup normal( ( QColor( QRgb(0) ) ), QColor( QRgb(16777215) ), QColor( QRgb(16777215) ), QColor( QRgb(6316128) ), QColor( QRgb(10789024) ), QColor( QRgb(0) ), QColor( QRgb(16777215) ) );
-	QColorGroup disabled( ( QColor( QRgb(8421504) ) ), QColor( QRgb(12632256) ), QColor( QRgb(16777215) ), QColor( QRgb(6316128) ), QColor( QRgb(10789024) ), QColor( QRgb(8421504) ), QColor( QRgb(12632256) ) );
-	QColorGroup active( ( QColor( QRgb(0) ) ), QColor( QRgb(12632256) ), QColor( QRgb(16777215) ), QColor( QRgb(6316128) ), QColor( QRgb(10789024) ), QColor( QRgb(0) ), QColor( QRgb(16777215) ) );
-	QPalette palette( normal, disabled, active );
-	brush14->setPalette( palette );
-    }
     brush14->setFrameStyle( 50 );
     grid2->addWidget(brush14,4,1);
 
     brush15 = new KSpreadBrushSelect( tmpQGroupBox, "Frame_15" );
-    {
-	QColorGroup normal( ( QColor( QRgb(0) ) ), QColor( QRgb(16777215) ), QColor( QRgb(16777215) ), QColor( QRgb(6316128) ), QColor( QRgb(10789024) ), QColor( QRgb(0) ), QColor( QRgb(16777215) ) );
-	QColorGroup disabled( ( QColor( QRgb(8421504) ) ), QColor( QRgb(12632256) ), QColor( QRgb(16777215) ), QColor( QRgb(6316128) ), QColor( QRgb(10789024) ), QColor( QRgb(8421504) ), QColor( QRgb(12632256) ) );
-	QColorGroup active( ( QColor( QRgb(0) ) ), QColor( QRgb(12632256) ), QColor( QRgb(16777215) ), QColor( QRgb(6316128) ), QColor( QRgb(10789024) ), QColor( QRgb(0) ), QColor( QRgb(16777215) ) );
-	QPalette palette( normal, disabled, active );
-	brush15->setPalette( palette );
-    }
     brush15->setFrameStyle( 50 );
     grid2->addWidget(brush15,4,2);
 
@@ -2463,13 +2281,6 @@ CellLayoutPagePattern::CellLayoutPagePattern( QWidget* parent, CellLayoutDlg *_d
     grid2->addWidget(tmpQLabel,0,1);
 
     current = new KSpreadBrushSelect( tmpQGroupBox, "Current" );
-    {
-	QColorGroup normal( ( QColor( QRgb(0) ) ), QColor( QRgb(16777215) ), QColor( QRgb(16777215) ), QColor( QRgb(6316128) ), QColor( QRgb(10789024) ), QColor( QRgb(0) ), QColor( QRgb(16777215) ) );
-	QColorGroup disabled( ( QColor( QRgb(8421504) ) ), QColor( QRgb(12632256) ), QColor( QRgb(16777215) ), QColor( QRgb(6316128) ), QColor( QRgb(10789024) ), QColor( QRgb(8421504) ), QColor( QRgb(12632256) ) );
-	QColorGroup active( ( QColor( QRgb(0) ) ), QColor( QRgb(12632256) ), QColor( QRgb(16777215) ), QColor( QRgb(6316128) ), QColor( QRgb(10789024) ), QColor( QRgb(0) ), QColor( QRgb(16777215) ) );
-	QPalette palette( normal, disabled, active );
-	current->setPalette( palette );
-    }
     current->setFrameStyle( 50 );
     grid2->addWidget(current,1,1);
     grid->addWidget( tmpQGroupBox,2,0);
@@ -2662,7 +2473,7 @@ void CellLayoutPagePattern::slotUnselect2( KSpreadBrushSelect *_p )
 
 void CellLayoutPagePattern::apply( KSpreadCell *_obj )
 {
-if(selectedBrush!=0L)
+  if(selectedBrush!=0L)
         {
          _obj->setBackGroundBrushColor(selectedBrush->getBrushColor() );
          _obj->setBackGroundBrushStyle(selectedBrush->getBrushStyle() );

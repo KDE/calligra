@@ -801,10 +801,7 @@ void KSpreadCell::makeLayout( QPainter &_painter, int _col, int _row )
       return;
   }
 
-  if ( m_textColor.isValid() )
-    m_textPen.setColor( m_textColor );
-  else
-    m_textPen.setColor( QApplication::palette().active().text() );
+  m_textPen.setColor( textColor() );
 
   if ( m_bBool )
   {
@@ -1970,9 +1967,7 @@ void KSpreadCell::paintCell( const QRect& _rect, QPainter &_painter,
     else
     {
         _painter.setFont( m_textFont );
-        if ( m_textColor.isValid() )
-          m_textPen.setColor( m_textColor );
-        // else keep default painter pen ?
+        m_textPen.setColor( textColor() );
     }
     //_painter.setFont( m_textFont );
     conditionAlign(_painter,_col,_row);
@@ -2276,7 +2271,7 @@ const QColor& KSpreadCell::bgColor( int _col, int _row )
       return cl->bgColor();
   }
   else
-    return m_bgColor;
+    return bgColor();
 }
 
 int KSpreadCell::leftBorderWidth( int _col, int _row, KSpreadCanvas *_canvas )
@@ -3098,7 +3093,7 @@ QDomElement KSpreadCell::save( QDomDocument& doc, int _x_offset, int _y_offset )
   {
     if(m_conditionIsTrue)
     {
-	m_textPen.setColor( m_textColor );
+	m_textPen.setColor( textColor() );
     }    	
     format.appendChild( doc.createElement( "pen", m_textPen ) );
   }

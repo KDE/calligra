@@ -132,11 +132,11 @@ public:
     /**
      * @return the text color.
      */
-    virtual const QColor& textColor() { return m_textColor; }
+    virtual const QColor& textColor() const;
     /**
      * @return the background color
      */
-    virtual const QColor& bgColor() { return m_bgColor; }
+    virtual const QColor& bgColor() const;
 
     /**
      * @return the color of the left color

@@ -356,7 +356,10 @@ public:
      */
     const QColor& bgColor( int _col, int _row );
 
-    const QColor& bgColor() const { return m_bgColor; }
+    /**
+     * @return the background color.
+     */
+    const QColor& bgColor() const { return KSpreadLayout::bgColor(); }
 
     /**
      * @see #setStyle

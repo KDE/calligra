@@ -453,7 +453,8 @@ protected:
     virtual void mousePressEvent( QMouseEvent* _ev );
     virtual void mouseReleaseEvent( QMouseEvent* _ev );
     virtual void mouseDoubleClickEvent( QMouseEvent* _ev );
-	virtual void mouseMoveEvent( QMouseEvent* _ev );
+    virtual void mouseMoveEvent( QMouseEvent* _ev );
+    void paintSizeIndicator( int mouseX, bool firstTime );
 
     KSpreadCanvas *m_pCanvas;
     KSpreadView *m_pView;
@@ -509,6 +510,7 @@ protected:
     virtual void mousePressEvent( QMouseEvent* _ev );
     virtual void mouseReleaseEvent( QMouseEvent* _ev );
     virtual void mouseMoveEvent( QMouseEvent* _ev );
+    void paintSizeIndicator( int mouseY, bool firstTime );
 
     KSpreadCanvas *m_pCanvas;
     KSpreadView *m_pView;

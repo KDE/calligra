@@ -621,3 +621,11 @@ TODO: trying to make this compile with the no-ascii-casts flags ;-)
 - Many fixes related to colours (obey color schemes; removed many hardcoded colors)
 - Removed canvas argument to KSpreadCell::paintCell, since always 0L and since
 zooming has to be implemented properly (see koffice@kde.org).
+
+2000-06-11 -David Faure <faure@kde.org>
+-----------------------------------------------------
+- Cleaned up code for resizing row/column (created paintSizeIndicator to avoid
+code duplication and got rid of yellow background :))
+- Many fixes in KSpreadDlgLayout (removed hardcoded colorgroups, etc.)
+- Made KSpreadLayout return a proper color in textColor() and bgColor()
+even if default.
