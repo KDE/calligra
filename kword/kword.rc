@@ -1,4 +1,4 @@
-<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd" ><kpartgui name="KWord" version="7">
+<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd" ><kpartgui name="KWord" version="8">
 <MenuBar>
  <Menu name="file"><text>&amp;File</text>
   <Action name="extra_template"/>
@@ -64,9 +64,6 @@
   </Menu>
  </Menu>
  <Menu name="tools"><text>&amp;Tools</text>
-  <Action name="extra_spellcheck"/>
-  <Action name="extra_autocorrection"/>
-  <Separator/>
   <Action name="tools_edit"/>
   <Action name="tools_editframes"/>
   <Separator/>
@@ -75,6 +72,9 @@
   <Action name="tools_kspreadtable"/>
   <Action name="tools_formula"/>
   <Action name="tools_part"/>
+  <Separator/>
+  <Action name="extra_spellcheck"/>
+  <Action name="extra_autocorrection"/>
  </Menu>
  <Menu name="format"><text>F&amp;ormat</text>
   <Action name="format_font"/>

@@ -2655,9 +2655,10 @@ void KWTextFrameSetEdit::doAutoScroll( QPoint pos )
     ensureCursorVisible();
 
     bool redraw = FALSE;
-    if ( textDocument()->hasSelection( QTextDocument::Standard ) ) {
+    if ( textDocument()->hasSelection( QTextDocument::Standard ) )
 	redraw = textDocument()->setSelectionEnd( QTextDocument::Standard, cursor ) || redraw;
-    }
+    else // it may be that the initial click was out of the frame
+        textDocument()->setSelectionStart( QTextDocument::Standard, cursor );
 
     if ( redraw )
         textFrameSet()->selectionChanged();
