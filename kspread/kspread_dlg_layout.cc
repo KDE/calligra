@@ -1477,7 +1477,7 @@ CellLayoutPageBorder::CellLayoutPageBorder( QWidget* parent, CellLayoutDlg *_dlg
     grid2->addWidget(size,0,0);
     size->setValidator(new KIntValidator( size ));
     QString tmp;
-    for(int i=1;i<5;i++)
+    for(int i=0;i<10;i++)
     	{
     	tmp=tmp.setNum(i);
     	size->insertItem(tmp);
@@ -1648,7 +1648,7 @@ CellLayoutPageBorder::CellLayoutPageBorder( QWidget* parent, CellLayoutDlg *_dlg
     pattern9->setPattern( black, 1, DashDotLine );
     pattern10->setPattern( black, 1, DashDotDotLine );
 
-    customize->setPattern( black, 1, DotLine );
+    customize->setPattern( black, 0, NoPen );
 
     slotSetColorButton( black );
 
@@ -1710,10 +1710,16 @@ CellLayoutPageBorder::CellLayoutPageBorder( QWidget* parent, CellLayoutDlg *_dlg
            this,SLOT( slotPressEvent(QMouseEvent *)));
 
   connect( style ,SIGNAL( activated(int)),this,SLOT(slotChangeStyle(int)));
+  connect( size ,SIGNAL( textChanged(const QString &)),this,SLOT(slotChangeStyle(const QString &)));
   connect( size ,SIGNAL( activated(int)),this,SLOT(slotChangeStyle(int)));
   pattern1->slotSelect();
   selectedPattern=pattern1;
   this->resize( 400, 400 );
+}
+
+void CellLayoutPageBorder::slotChangeStyle(const QString &)
+{
+slotChangeStyle(0);
 }
 
 void CellLayoutPageBorder::slotChangeStyle(int)
@@ -1721,6 +1727,10 @@ void CellLayoutPageBorder::slotChangeStyle(int)
   int index =style->currentItem();
   QString tmp;
   int penSize=size->currentText().toInt();
+  if( !penSize)
+       customize->setPattern( customize->getColor(), penSize, NoPen );
+  else
+  {
   switch(index)
 	{
 	case 0:
@@ -1742,6 +1752,7 @@ void CellLayoutPageBorder::slotChangeStyle(int)
 		kdDebug(36001)<<"Error in combobox\n";
 		break;
 	}
+ }
  if(selectedPattern!=customize)
         {
         slotUnselect2(customize);

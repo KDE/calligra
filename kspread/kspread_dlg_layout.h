@@ -293,6 +293,7 @@ public slots:
     void loadIcon( QString pix,KSpreadBorderButton *_button);
     void slotPressEvent(QMouseEvent *_ev);
     void slotChangeStyle(int );
+    void slotChangeStyle(const QString & );
 
 protected:
     KSpreadPatternSelect *selectedPattern;

@@ -1316,9 +1316,9 @@ void KSpreadCanvas::keyPressEvent ( QKeyEvent * _ev )
       }
       else
       {
-        if ( !m_bChoose && markerRow() == 1 )
+        if ( !m_bChoose && markerColumn() == 1 )
           return;
-        if ( m_bChoose && chooseMarkerRow() == 1 )
+        if ( m_bChoose && chooseMarkerColumn() == 1 )
           return;
         if ( m_bChoose )
           chooseGotoLocation( 1, markerRow(), 0, make_select );
