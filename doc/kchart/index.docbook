@@ -31,7 +31,7 @@
 
 <legalnotice>&FDLNotice;</legalnotice>
 
-<date>2005-03-18</date>
+<date>2005-03-24</date>
 <releaseinfo>1.4</releaseinfo>
 
 <abstract>
@@ -83,12 +83,9 @@ capabilities it offers together with &kspread;.
 </para>
 </chapter>
 
-<chapter id="kchartstandalone">
-<title>The &kchart; Application</title>
-
-<sect1 id="userinterface">
+<chapter id="userinterface">
 <title>The User Interface</title>
-<sect2 id="mainuserinterface">
+<sect1 id="mainuserinterface">
 <title>Main Application Interface</title>
 <para>
 We will take a look at a simple example to get to know &kchart;.
@@ -125,8 +122,8 @@ within &kspread; because all data is provided by the spreadsheet.
 As a standalone application the &dataeditor; is an important part
 of the application.
 </para>
-</sect2>
-<sect2 id="dataeditorinterface">
+</sect1>
+<sect1 id="dataeditorinterface">
 <title>The &dataeditor;</title>
 <para>
 The &dataeditor; can be reached by selecting <menuchoice>
@@ -164,8 +161,8 @@ The number of rows and columns can be adjusted to fit the needs.
 Since version 1.4 the restriction to 16 rows and 16 columns has been
 eliminated.
 </para>
-</sect2>
-<sect2 id="configurationinterface">
+</sect1>
+<sect1 id="configurationinterface">
 <title>Chart Configuration</title>
 <para>
 &kchart; offers many configuration options for the chart. These are
@@ -187,7 +184,7 @@ To get to the chart configuration dialog, select <menuchoice>
 <imagedata fileref="cr22-action-options.png" format="PNG"/>
 </imageobject></inlinemediaobject> icon in the toolbar.
 </para>
-<sect3 id="config-rowcol">
+<sect2 id="config-rowcol">
 <title>Row and Column Swapping</title>
 <screenshot>
 <screeninfo>Configuration page 1 - row/column swapping</screeninfo>
@@ -206,8 +203,8 @@ series. Here you can choose to have a each column hold
 one data set. Note that the values are not really swapped
 but only their interpretation.
 </para>
-</sect3>
-<sect3 id="config-subtype">
+</sect2>
+<sect2 id="config-subtype">
 <title>Chart Subtype</title>
 <screenshot>
 <screeninfo>Configuration page 2 - Chart Subtype</screeninfo>
@@ -224,8 +221,8 @@ this case the line chart. Some chart types have no sub type
 at all in which case this configuration page is not shown.
 You also get a preview for each subtype.
 </para>
-</sect3>
-<sect3 id="config-titlefooter">
+</sect2>
+<sect2 id="config-titlefooter">
 <title>Title and Footer</title>
 <screenshot>
 <screeninfo>Configuration page 3 - Title and Footer</screeninfo>
@@ -239,8 +236,8 @@ You also get a preview for each subtype.
 On the third page you can set the title, the subtitle and the footer of
 the chart, each with individual font settings.
 </para>
-</sect3>
-<sect3 id="config-legend">
+</sect2>
+<sect2 id="config-legend">
 <title>Legend</title>
 <screenshot>
 <screeninfo>Configuration page 4 - Legend</screeninfo>
@@ -266,8 +263,8 @@ The Font box can be used to set
 different fonts for the legend title and the individual entries.
 Additionally you can set different colors in the Color box.
 </para>
-</sect3>
-<sect3 id="config-axes">
+</sect2>
+<sect2 id="config-axes">
 <title>Axes</title>
 <screenshot>
 <screeninfo>Configuration page 5 - Axes</screeninfo>
@@ -283,8 +280,8 @@ page highly depends on the chart type chosen. For the line
 chart you can set linear or logarithmic scales, turn the grid
 on and off and the line marker puts a square at every data value.
 </para>
-</sect3>
-<sect3 id="config-colors">
+</sect2>
+<sect2 id="config-colors">
 <title>Colors</title>
 <screenshot>
 <screeninfo>Configuration page 6 - Colors</screeninfo>
@@ -299,8 +296,8 @@ On the colors page you can choose the colors for the individual
 data sets. You can also set colors for some general chart parts
 like axes line color and grid color.
 </para>
-</sect3>
-<sect3 id="config-font">
+</sect2>
+<sect2 id="config-font">
 <title>Font</title>
 <screenshot>
 <screeninfo>Configuration page 7 - Font</screeninfo>
@@ -316,8 +313,8 @@ titles, axes labels and so on. Some of these fonts can
 be set on other pages as well, but on the font page you
 have them all in one place.
 </para>
-</sect3>
-<sect3 id="config-background">
+</sect2>
+<sect2 id="config-background">
 <title>Background</title>
 <screenshot>
 <screeninfo>Configuration page 8 - Background </screeninfo>
@@ -332,8 +329,8 @@ On the background page you will find various options for tweaking
 the background settings of the chart. You can either choose
 different background colors or even a background picture.
 </para>
-</sect3>
-<sect3 id="config-more">
+</sect2>
+<sect2 id="config-more">
 <title>More...</title>
 <para>
 This short overview of the configuration options gave you an
@@ -347,9 +344,17 @@ click on the question mark on the window
 decoration and then click on the area of the configuration
 page you want get more information on.
 </para>
-</sect3>
 </sect2>
 </sect1>
+</chapter>
+
+<chapter id="kchartstandalone">
+<title>&kchart; as a standalone Application</title>
+<para>
+In this chapter we will take a look at &kchart; as a standalone
+application.
+</para>
+
 </chapter>
 
 
