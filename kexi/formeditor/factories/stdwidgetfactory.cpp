@@ -468,7 +468,7 @@ StdWidgetFactory::changeText(const QString &text)
 		WidgetFactory::m_editor->resize(w->size());
 		return;
 	}
-	// and other widgets are just enlared if needed
+	// and other widgets are just enlarged if needed
 	else if(n == "KPushButton")
 		width = w->style().sizeFromContents( QStyle::CT_PushButton, w, s).width();
 	else if(n == "QCheckBox")

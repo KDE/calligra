@@ -22,6 +22,11 @@
 #include <qcheckbox.h>
 #include <qgroupbox.h>
 #include <qheader.h>
+#include <qlabel.h>
+#include <qhbox.h>
+#include <qmetaobject.h>
+#include <qstrlist.h>
+#include <qregexp.h>
 
 #include <kstdguiitem.h>
 #include <klineedit.h>
@@ -34,9 +39,12 @@
 #include <ktabwidget.h>
 #include <klistbox.h>
 #include <kiconloader.h>
+#include <kmessagebox.h>
 #include <kdebug.h>
 #include <klocale.h>
 
+#include "kexitableview.h"
+#include "kexitableviewdata.h"
 #include "kexipropertyeditor.h"
 #include "kexipropertybuffer.h"
 #include "form.h"
@@ -770,6 +778,274 @@ TabStopDialog::slotRadioClicked(bool isOn)
 	m_treeview->setEnabled(!isOn);
 	m_buttons[BUp]->setEnabled(!isOn);
 	m_buttons[BDown]->setEnabled(!isOn);
+}
+
+
+/////////////////////////////////////////////////////////////////////////////////
+///////////// The dialog to edit or add/remove connections //////////////////////
+/////////////////////////////////////////////////////////////////////////////////
+ConnectionDialog::ConnectionDialog(QWidget *parent)
+: KDialogBase(parent, "connections_dialog", true, i18n("Edit Form connections"), Ok|Cancel|Details, Ok, false)
+{
+	QFrame *frame = makeMainWidget();
+	QHBoxLayout *layout = new QHBoxLayout(frame, 0, 6);
+
+	// And the KexiTableView ////////
+	m_data = new KexiTableViewData();
+	m_table = new KexiTableView(m_data, frame, "connections_tableview");
+	m_table->setSpreadSheetMode();
+	initTable();
+	m_table->setData(m_data, false);
+	layout->addWidget(m_table);
+
+	//// Setup the icon toolbar /////////////////
+	QVBoxLayout *vlayout = new QVBoxLayout(layout, 3);
+	QToolButton *newItem = new QToolButton(frame);
+	newItem->setIconSet(BarIconSet("edit_add"));
+	newItem->setTextLabel(i18n("&Add Connection"), true);
+	vlayout->addWidget(newItem);
+	m_buttons.insert(BAdd, newItem);
+	connect(newItem, SIGNAL(clicked()), this, SLOT(newItem()));
+
+	QToolButton *newItemDrag = new QToolButton(frame);
+	newItemDrag->setIconSet(BarIconSet("edit_add"));
+	newItemDrag->setTextLabel(i18n("Create a Connection by &Drag and drop"), true);
+	vlayout->addWidget(newItemDrag);
+	m_buttons.insert(BAddDrag, newItemDrag);
+	connect(newItemDrag, SIGNAL(clicked()), this, SLOT(newItemByDragnDrop()));
+
+	QToolButton *delItem = new QToolButton(frame);
+	delItem->setIconSet(BarIconSet("edit_remove"));
+	delItem->setTextLabel(i18n("&Remove Connection"), true);
+	vlayout->addWidget(delItem);
+	m_buttons.insert(BRemove, delItem);
+	connect(delItem, SIGNAL(clicked()), this, SLOT(removeItem()));
+	vlayout->addStretch();
+
+	// Setup the details widget /////////
+	QHBox *details = new QHBox(frame);
+	setDetailsWidget(details);
+	setDetails(true);
+
+	m_pixmapLabel = new QLabel(details);
+	m_pixmapLabel->setFixedWidth( int(IconSize(KIcon::Desktop) * 1.5) );
+	m_pixmapLabel->setAlignment(AlignHCenter | AlignTop);
+
+	m_textLabel = new QLabel(details);
+	m_textLabel->setAlignment(AlignLeft | AlignTop);
+	setStatusOk();
+
+	setInitialSize(QSize(600, 300));
+}
+
+void
+ConnectionDialog::initTable()
+{
+	QValueList<QVariant> empty_list;
+	KexiTableViewColumn *col1 = new KexiTableViewColumn(i18n("Sender"), KexiDB::Field::Enum);
+	m_widgetsColumnData = new KexiTableViewData( empty_list, empty_list,
+		KexiDB::Field::Text, KexiDB::Field::Text);
+	col1->setRelatedData( m_widgetsColumnData );
+	m_data->addColumn(col1);
+
+	KexiTableViewColumn *col2 = new KexiTableViewColumn(i18n("Signal"), KexiDB::Field::Enum);
+	m_signalsColumnData = new KexiTableViewData( empty_list, empty_list,
+		KexiDB::Field::Text, KexiDB::Field::Text);
+	col2->setRelatedData( m_signalsColumnData );
+	m_data->addColumn(col2);
+
+	KexiTableViewColumn *col3 = new KexiTableViewColumn(i18n("Receiver"), KexiDB::Field::Enum);
+	col3->setRelatedData( m_widgetsColumnData );
+	m_data->addColumn(col3);
+
+	KexiTableViewColumn *col4 = new KexiTableViewColumn(i18n("Slot"), KexiDB::Field::Enum);
+	m_slotsColumnData = new KexiTableViewData( empty_list, empty_list,
+		KexiDB::Field::Text, KexiDB::Field::Text);
+	col4->setRelatedData( m_slotsColumnData );
+	m_data->addColumn(col4);
+
+	QValueList<int> c;
+	c << 1 << 3;
+	m_table->maximizeColumnsWidth(c);
+
+	connect(m_data, SIGNAL(aboutToChangeCell(KexiTableItem*, int, QVariant, KexiDB::ResultInfo*)),
+	      this,SLOT(slotCellChanged(KexiTableItem*, int, QVariant, KexiDB::ResultInfo*)));
+	connect(m_data, SIGNAL(rowUpdated(KexiTableItem*)), this, SLOT(checkConnection(KexiTableItem *)));
+	connect(m_table, SIGNAL(itemSelected(KexiTableItem *)), this, SLOT(checkConnection(KexiTableItem *)));
+}
+
+int
+ConnectionDialog::exec(Form *form)
+{
+	m_form = form;
+	updateTableData();
+
+	int r = KDialogBase::exec();
+	if( r == QDialog::Accepted)
+	{
+	}
+	return r;
+}
+
+void
+ConnectionDialog::updateTableData()
+{
+	// First we update the columns data
+	TreeDict dict = *(m_form->objectTree()->dict());
+	TreeDictIterator it(dict);
+	for(; it.current(); ++it)
+	{
+		KexiTableItem *item = new KexiTableItem(2);
+		(*item)[0] = it.current()->name();
+		(*item)[1] = (*item)[0];
+		m_widgetsColumnData->append(item);
+	}
+
+	/*for (int i=0; i<4; i++) {
+		KexiTableItem *item = new KexiTableItem(4);
+		m_data->append(item);
+	}*/
+}
+
+void
+ConnectionDialog::setStatusOk()
+{
+	m_pixmapLabel->setPixmap( DesktopIcon("button_ok") );
+	m_textLabel->setText("<qt><h2>The connection is OK.</h2></qt>");
+}
+
+void
+ConnectionDialog::setStatusError(const QString &msg)
+{
+	m_pixmapLabel->setPixmap( DesktopIcon("button_cancel") );
+	m_textLabel->setText("<qt><h2>The connection is wrong.</h2></qt>" + msg);
+}
+
+void
+ConnectionDialog::slotCellChanged(KexiTableItem *item, int col, QVariant value, KexiDB::ResultInfo*)
+{
+	switch(col)
+	{
+		// sender changed, we update the signals list
+		case 0:
+		{
+			ObjectTreeItem *tree = m_form->objectTree()->lookup(value.toString());
+			if(!tree || !tree->widget())
+				return;
+
+			m_signalsColumnData->clear();
+			QStrList signalList = tree->widget()->metaObject()->signalNames(true);
+			QStrListIterator it(signalList);
+			for(; it.current() != 0; ++it)
+			{
+				KexiTableItem *item = new KexiTableItem(2);
+				(*item)[0] = QString(*it);
+				(*item)[1] = (*item)[0];
+				m_signalsColumnData->append(item);
+			}
+			// and we reset the signal value
+			(*item)[1] = QString("");
+			break;
+		}
+		// the signal was changed, update slot list
+		case 1:
+		{
+			updateSlotList(item, value.toString(), (*item)[2].toString());
+			break;
+		}
+		// receiver changed, we update the slots list
+		case 2:
+		{
+			updateSlotList(item, (*item)[1].toString(), value.toString());
+			break;
+		}
+		default:
+			break;
+	}
+}
+
+void
+ConnectionDialog::updateSlotList(KexiTableItem *item, const QString &signal, const QString &widget)
+{
+	m_slotsColumnData->clear();
+
+	if(widget.isEmpty())// || signal.isEmpty())
+		return;
+	ObjectTreeItem *tree = m_form->objectTree()->lookup(widget);
+	if(!tree || !tree->widget())
+		return;
+
+	QString signalArg(signal);
+	signalArg = signalArg.remove( QRegExp(".*[(]|[)]") );
+
+	QStrList slotList = tree->widget()->metaObject()->slotNames(true);
+	QStrListIterator it(slotList);
+	for(; it.current() != 0; ++it)
+	{
+		// we add the slot only if it is compatible with the signal
+		QString slotArg(*it);
+		slotArg = slotArg.remove( QRegExp(".*[(]|[)]") );
+		kdDebug() << "Comparing arguments for signal : " << signalArg << " and slot " << slotArg << endl;
+		if(!signalArg.startsWith(slotArg, true) && (!signal.isEmpty())) // args not compatible
+			continue;
+
+		KexiTableItem *item = new KexiTableItem(2);
+		(*item)[0] = QString(*it);
+		(*item)[1] = (*item)[0];
+		m_slotsColumnData->append(item);
+	}
+	// and we reset the slot value
+	(*item)[3] = QString("");
+}
+
+void
+ConnectionDialog::checkConnection(KexiTableItem *item)
+{
+	// First we check if one column is empty
+	for(int i = 0; i < 4; i++)
+	{
+		if( (*item)[i].toString().isEmpty())
+		{
+			setStatusError( i18n("<qt>You have not selected a <b>%1</b>.</qt>").arg(m_data->column(i)->nameOrCaption()) );
+			return;
+		}
+	}
+
+	// Then we check if signal/slot args are compatible
+	QString signal = (*item)[1].toString();
+	signal = signal.remove( QRegExp(".*[(]|[)]") ); // just keep the args list
+	QString slot = (*item)[3].toString();
+	slot = slot.remove( QRegExp(".*[(]|[)]") );
+	kdDebug() << "Comparing arguments for signal : " << signal << " and slot " << slot << endl;
+	if(!signal.startsWith(slot, true))
+	{
+		setStatusError( i18n("The signal/slot arguments are not compatible."));
+		return;
+	}
+
+	setStatusOk();
+}
+
+void
+ConnectionDialog::newItem()
+{
+	m_table->insertEmptyRow(m_table->rows() + 1);
+}
+
+void
+ConnectionDialog::newItemByDragnDrop()
+{
+	// TODO
+}
+
+void
+ConnectionDialog::removeItem()
+{
+	int confirm = KMessageBox::questionYesNo(parentWidget(), i18n("<qt>Do you really want to remove this connection ?</qt>"));
+	if(confirm == KMessageBox::No)
+		return;
+
+	m_table->deleteItem(m_table->selectedItem());
 }
 
 }

@@ -69,6 +69,8 @@ ObjectPropertyBuffer::slotChangeProperty(KexiPropertyBuffer &, KexiProperty &pro
 
 	if(property == "name")
 		emit nameChanged(m_widget->name(), value.toString());
+	else if(property == "paletteBackgroundPixmap")
+		(*this)["backgroundOrigin"]->setValue("WidgetOrigin");
 
 	if(property == "signals")
 		return;

@@ -157,6 +157,7 @@ class KFORMEDITOR_EXPORT FormManager : public QObject
 		void adjustWidgetSize();
 		/*! Creates a dialog to edit the current Form's PixmapCollection. */
 		void editFormPixmapCollection();
+		void editConnections();
 		/*! This slot is called when the user presses a "Widget" toolbar button or a "Widget" menu item. Prepares all Forms for
 		  creation of a new widget (ie changes cursor ...).
 		 */

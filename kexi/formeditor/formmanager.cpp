@@ -728,6 +728,16 @@ FormManager::editFormPixmapCollection()
 }
 
 void
+FormManager::editConnections()
+{
+	if(!activeForm())
+		return;
+
+	ConnectionDialog dialog(activeForm()->toplevelContainer()->widget()->topLevelWidget());
+	dialog.exec(activeForm());
+}
+
+void
 FormManager::deleteWidgetLater( QWidget *w )
 {
 	w->hide();

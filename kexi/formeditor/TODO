@@ -1,6 +1,6 @@
 ^^^^^^^^^^^^^^^  IMPORTANT  ^^^^^^^^^^^^^^^^^^^^^^
 **** New Features : ******
-* KMainWindow support : Make an action editor + a toolbar editor (a in MozillaFirebird ?) + a menu editor
+* KMainWindow support : Make an action editor + a toolbar editor (as in MozillaFirebird ?) + a menu editor
 * Automatically set label name to the text
 * Create an event editor and manage signals/slots (EventBuffer ?)
 	HOWEVER, SIGNAL/SLOT ISSUES (js):

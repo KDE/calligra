@@ -10,6 +10,7 @@
    <Action name="adjust"/>
    <Action name="change_style"/>
    <Action name="pixmap_collection"/>
+   <Action name="form_connections"/>
   </Menu>
   <Menu name="widgets">
    <text>&amp;Widgets</text>

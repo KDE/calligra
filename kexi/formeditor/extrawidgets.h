@@ -28,6 +28,7 @@
 #include <kdialogbase.h>
 
 class QListView;
+class QListView;
 class QListViewItem;
 class KListViewItem;
 class KListView;
@@ -40,6 +41,14 @@ class KTabWidget;
 class KexiPropertyBuffer;
 class KexiPropertyEditor;
 class KexiProperty;
+class KexiTableView;
+class KexiTableViewData;
+class KexiTableItem;
+
+namespace KexiDB
+{
+	class ResultInfo;
+}
 
 namespace KFormDesigner {
 
@@ -133,6 +142,41 @@ class KFORMEDITOR_EXPORT TabStopDialog : public KDialogBase
 		ObjectTreeView   *m_treeview;
 		QIntDict<QToolButton>  m_buttons;
 		QCheckBox *m_check;
+};
+
+class KFORMEDITOR_EXPORT ConnectionDialog : public KDialogBase
+{
+	Q_OBJECT
+
+	public:
+		ConnectionDialog(QWidget *parent);
+		~ConnectionDialog() {;}
+
+		int exec(Form *form);
+
+	protected:
+		void setStatusOk();
+		void setStatusError(const QString &msg);
+		void initTable();
+		void updateTableData();
+		void updateSlotList(KexiTableItem *item, const QString &signal, const QString &widget);
+
+	protected slots:
+		void slotCellChanged(KexiTableItem*, int, QVariant, KexiDB::ResultInfo*);
+		void checkConnection(KexiTableItem *item);
+
+		void newItemByDragnDrop();
+		void newItem();
+		void removeItem();
+
+	protected:
+		enum {BAdd = 10, BAddDrag, BRemove};
+		Form    *m_form;
+		KexiTableView  *m_table;
+		KexiTableViewData  *m_data;
+		KexiTableViewData *m_widgetsColumnData, *m_slotsColumnData, *m_signalsColumnData;
+		QLabel  *m_pixmapLabel, *m_textLabel;
+		QIntDict<QToolButton>  m_buttons;
 };
 
 }

@@ -256,6 +256,7 @@ InsertWidgetCommand::execute()
 	w->move(m_container->m_insertRect.x(), m_container->m_insertRect.y());
 	w->resize(m_container->m_insertRect.width()-1, m_container->m_insertRect.height()-1);
 	w->setStyle(&(m_container->widget()->style()));
+	w->setBackgroundOrigin(QWidget::ParentOrigin);
 	w->show();
 	//m_container->m_container->repaint();
 
