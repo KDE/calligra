@@ -29,10 +29,10 @@
 /***********************************************************************/
 
 /**
- * This class hold a list of tables. It just a wrapper for QList<Table> to
+ * This class hold a list of tables. It just a wrapper for QPtrList<Table> to
  * add a frame in a table if the table exists else to create a new table.
  */
-class ListTable: public QList<Table>
+class ListTable: public QPtrList<Table>
 {
 	public:
 		/**
