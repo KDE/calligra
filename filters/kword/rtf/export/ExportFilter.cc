@@ -796,7 +796,7 @@ void RTFWorker::writeFontData(void)
         }
 #endif
         // ### TODO: check if QFontInfo::fixedPitch is really working
-        *m_streamOut << "\\fcharset0\\fprq" << (info.fixedPitch()?1:2) << " "; // font definition
+        *m_streamOut << "\\fprq" << (info.fixedPitch()?1:2) << " "; // font definition
         *m_streamOut << escapeRtfText(info.family()); // ### TODO: does RTF allows brackets in the font names?
         *m_streamOut <<  ";}" << m_eol; // end font table entry
     }
