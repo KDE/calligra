@@ -44,6 +44,7 @@ KoTextDeleteCommand::KoTextDeleteCommand(
       m_oldParagLayouts( oldParagLayouts ),
       m_customItemsMap( customItemsMap )
 {
+    Q_ASSERT( id >= 0 );
     // Note that we don't pass aligns and liststyles to KoTextDeleteCommand.
     // We'll handle them here, as part of the rest, since they are in the paraglayouts
 }

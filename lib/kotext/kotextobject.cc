@@ -567,7 +567,9 @@ void KoTextObject::insert( KoTextCursor * cursor, KoTextFormat * currentFormat,
         }
         else
         {
-            emitNewCommand(removeSelectedTextCommand( cursor,selectionId  ));
+            KCommand* removeSelCmd = removeSelectedTextCommand( cursor, selectionId );
+            if (removeSelCmd)
+                emitNewCommand( removeSelCmd );
         }
     }
     KoTextCursor c2 = *cursor;
@@ -1374,8 +1376,12 @@ KCommand * KoTextObject::removeSelectedTextCommand( KoTextCursor * cursor, int s
 {
     if ( protectContent() )
         return 0L;
+    if ( !textdoc->hasSelection( selectionId ) )
+        return 0L;
+
     undoRedoInfo.clear();
     textdoc->selectionStart( selectionId, undoRedoInfo.id, undoRedoInfo.index );
+    Q_ASSERT( undoRedoInfo.id >= 0 );
 
     KoTextCursor c1 = textdoc->selectionStartCursor( selectionId );
     KoTextCursor c2 = textdoc->selectionEndCursor( selectionId );
@@ -1416,8 +1422,10 @@ KCommand* KoTextObject::replaceSelectionCommand( KoTextCursor * cursor, const QS
     KoTextFormat * format = c1.parag()->at( c1.index() )->format();
     format->addRef();
 
-    // Remove selected text
-    macroCmd->addCommand( removeSelectedTextCommand( cursor, selectionId, repaint ) );
+    // Remove selected text, if any
+    KCommand* removeSelCmd = removeSelectedTextCommand( cursor, selectionId, repaint );
+    if ( removeSelCmd )
+        macroCmd->addCommand( removeSelCmd );
 
     // Insert replacement
     insert( cursor, format,
