@@ -2847,7 +2847,8 @@ void XFRecord::setPatternBackColor( unsigned color )
 
 void XFRecord::setData( unsigned size, const unsigned char* data )
 {
-  if( size < 20 ) return;
+  unsigned recordSize = ( version() == Excel97 ) ? 20: 16;
+  if( size < recordSize ) return;
   
   setFontIndex( readU16( data ) ); 
   setFormatIndex( readU16( data+2 ) );
@@ -2865,31 +2866,34 @@ void XFRecord::setData( unsigned size, const unsigned char* data )
   
   unsigned angle = data[7];
   setRotationAngle( ( angle != 255 ) ? ( angle & 0x7f ) : 0 );
-  setStackedLetters( angle == 255 ); 
+  setStackedLetters( angle == 255 );
   
-  unsigned options = data[8];
-  setIndentLevel( options & 0x0f );
-  setShrinkContent( options & 0x10 );
+  if( version() == Excel97 )
+  { 
+    unsigned options = data[8];
+    setIndentLevel( options & 0x0f );
+    setShrinkContent( options & 0x10 );
   
-  unsigned linestyle = readU16( data + 10 );
-  unsigned color1 = readU16( data + 12 );
-  unsigned color2 = readU16( data + 14 );
-  unsigned flag = readU16( data + 16 );
+    unsigned linestyle = readU16( data + 10 );
+    unsigned color1 = readU16( data + 12 );
+    unsigned color2 = readU16( data + 14 );
+    unsigned flag = readU16( data + 16 );
   
-  setLeftBorderStyle( linestyle & 0xf );
-  setRightBorderStyle( ( linestyle >> 4 ) & 0xf );
-  setTopBorderStyle( ( linestyle >> 8 ) & 0xf );
-  setBottomBorderStyle( ( linestyle >> 12 ) & 0xf );
+    setLeftBorderStyle( linestyle & 0xf );
+    setRightBorderStyle( ( linestyle >> 4 ) & 0xf );
+    setTopBorderStyle( ( linestyle >> 8 ) & 0xf );
+    setBottomBorderStyle( ( linestyle >> 12 ) & 0xf );
   
-  setLeftBorderColor( color1 & 0x7f );
-  setRightBorderColor( ( color1 >> 7 ) & 0x7f );
-  setTopBorderColor( color1 & 0x7f );
-  setBottomBorderColor( ( color1 >> 7 ) & 0x7f );
+    setLeftBorderColor( color1 & 0x7f );
+    setRightBorderColor( ( color1 >> 7 ) & 0x7f );
+    setTopBorderColor( color1 & 0x7f );
+    setBottomBorderColor( ( color1 >> 7 ) & 0x7f );
   
-  setDiagonalTopLeft( color1 & 0x40 );
-  setDiagonalBottomLeft( color1 & 0x40 );
-  setDiagonalStyle( ( flag >> 4 ) & 0x1e  );
-  setDiagonalColor( ( ( flag & 0x1f ) << 2 ) + (  ( color1 >> 14 ) & 3 ));
+    setDiagonalTopLeft( color1 & 0x40 );
+    setDiagonalBottomLeft( color1 & 0x40 );
+    setDiagonalStyle( ( flag >> 4 ) & 0x1e  );
+    setDiagonalColor( ( ( flag & 0x1f ) << 2 ) + (  ( color1 >> 14 ) & 3 ));
+  }
 }
 
 void XFRecord::dump( std::ostream& out ) const
