@@ -244,7 +244,8 @@ KSpreadView::KSpreadView( QWidget *_parent, const char *_name, KSpreadDoc* doc )
     m_hideTable = new KAction(i18n("Hide Table"),0 ,this,SLOT( hideTable()), actionCollection(), "hideTable" );
     m_hideGrid = new KToggleAction( i18n("Hide Grid"), 0, actionCollection(), "hideGrid");
     connect( m_hideGrid, SIGNAL( toggled( bool ) ), this, SLOT( toggleGrid( bool ) ) );
-
+    m_showFormular = new KToggleAction( i18n("Show formular"), 0, actionCollection(), "showFormular");
+    connect( m_showFormular, SIGNAL( toggled( bool ) ), this, SLOT( toggleFormular( bool ) ) );
     m_editGlobalScripts = new KAction( i18n("Edit Global Scripts..."), 0, this, SLOT( editGlobalScripts() ),
 				       actionCollection(), "editGlobalScripts" );
     m_editLocalScripts = new KAction( i18n("Edit Local Scripts..."), 0, this, SLOT( editLocalScripts() ), actionCollection(), "editLocalScripts" );
@@ -1432,6 +1433,7 @@ void KSpreadView::changeTable( const QString& _name )
     //refresh toggle button
     m_hideGrid->setChecked( !m_pTable->getShowGrid() );
     m_showPageBorders->setChecked( m_pTable->isShowPageBorders());
+    m_showFormular->setChecked(m_pTable->getShowFormular());
 
 }
 
@@ -1523,7 +1525,7 @@ void KSpreadView::gotoCell()
 {
     KSpreadgoto* dlg = new KSpreadgoto( this, "GotoCell" );
     dlg->show();
-
+    
 }
 
 void KSpreadView::replace()
@@ -1664,6 +1666,17 @@ void KSpreadView::toggleGrid( bool mode)
   m_pTable->setShowGrid(!mode);
   m_pCanvas->repaint();
 }
+
+void KSpreadView::toggleFormular( bool mode)
+{
+  if ( !m_pTable )
+       return;
+  m_pTable->setShowFormular(mode);     
+  m_pTable->recalc();
+  m_pCanvas->repaint();  
+  
+}
+
 void KSpreadView::editCell()
 {
     if ( m_pCanvas->editor() )

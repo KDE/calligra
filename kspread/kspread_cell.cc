@@ -844,7 +844,7 @@ void KSpreadCell::makeLayout( QPainter &_painter, int _col, int _row )
     SelectPrivate *s = (SelectPrivate*)m_pPrivate;
     ptext = s->text();
   }
-  else if ( isFormular() )
+  else if ( isFormular()&& !m_pTable->getShowFormular() )
     ptext = m_strFormularOut;
   else
     ptext = m_strText;
@@ -864,7 +864,7 @@ void KSpreadCell::makeLayout( QPainter &_painter, int _col, int _row )
     else
       m_strOutText = "True";
   }
-  else if ( m_bValue )
+  else if ( m_bValue &&!m_pTable->getShowFormular() )
   {
     // First get some locale information
     if (!decimal_point)
@@ -924,9 +924,9 @@ void KSpreadCell::makeLayout( QPainter &_painter, int _col, int _row )
 
 
     verifyCondition();
-    if ( floatColor() == KSpreadCell::NegRed && v < 0.0 )
+    if ( floatColor() == KSpreadCell::NegRed && v < 0.0 && !m_pTable->getShowFormular())
       m_textPen.setColor( Qt::red );
-    else if(m_conditionIsTrue)
+    else if(m_conditionIsTrue && !m_pTable->getShowFormular())
     	{
     	KSpreadConditional *tmpCondition=0;
 	switch(m_numberOfCond)
@@ -953,10 +953,11 @@ void KSpreadCell::makeLayout( QPainter &_painter, int _col, int _row )
     m_textPen.setColor( m_textColor );
     m_strOutText = ptext;
   }
-
+  
+  
   _painter.setPen( m_textPen );
   verifyCondition();
-  if(m_conditionIsTrue)
+  if(m_conditionIsTrue &&!m_pTable->getShowFormular())
         {
         KSpreadConditional *tmpCondition=0;
         switch(m_numberOfCond)
@@ -1016,7 +1017,8 @@ void KSpreadCell::makeLayout( QPainter &_painter, int _col, int _row )
     else
       a = KSpreadCell::Left;
   }
-
+  if(m_pTable->getShowFormular())
+      a = KSpreadCell::Left;
   // Offset for alignment
   switch( a )
   {
@@ -1237,7 +1239,7 @@ m_numberOfCond=-1;
 double v = m_dValue * m_dFaktor;
 m_conditionIsTrue=false;
 KSpreadConditional *tmpCondition=0;
-if(m_bValue)
+if(m_bValue && !m_pTable->getShowFormular())
 {
 for(int i=0;i<3;i++)
 {
@@ -1254,7 +1256,7 @@ switch(i)
 		break;
 	}
 	
-if(tmpCondition!=0 && tmpCondition->m_cond!=None)
+if(tmpCondition!=0 && tmpCondition->m_cond!=None && !m_pTable->getShowFormular())
         {
 
         switch(tmpCondition->m_cond)
@@ -1359,7 +1361,9 @@ if ( a == KSpreadCell::Undefined )
     else
       a = KSpreadCell::Left;
   }
-
+if(m_pTable->getShowFormular())
+      a = KSpreadCell::Left;
+      
 switch( a )
   {
   case KSpreadCell::Left:
@@ -1385,7 +1389,7 @@ int h = rl->height();
 KSpreadConditional *tmpCondition=0;
 
 
-if(m_conditionIsTrue)
+if(m_conditionIsTrue && !m_pTable->getShowFormular())
         {
         switch(m_numberOfCond)
 		{	
@@ -1429,7 +1433,9 @@ if ( a == KSpreadCell::Undefined )
     else
       a = KSpreadCell::Left;
   }
-
+if(m_pTable->getShowFormular())
+      a = KSpreadCell::Left;
+      
 switch( a )
   {
   case KSpreadCell::Left:
@@ -1582,7 +1588,7 @@ bool KSpreadCell::makeFormular()
   // Sounds like kscript should have configurable argument separator...
   //
   QString sDelocalizedText ( m_strText );
-  int pos;
+  int pos=0;
   while ( ( pos = sDelocalizedText.find( decimal_point, pos ) ) >= 0 )
     sDelocalizedText.replace( pos++, 1, "." );
   // At least,  =2,5+3,2  is turned into =2.5+3.2, which can get parsed...
@@ -1981,7 +1987,7 @@ void KSpreadCell::paintEvent( KSpreadCanvas *_canvas, const QRect& _rect, QPaint
 
 
     verifyCondition();
-    if(m_conditionIsTrue)
+    if(m_conditionIsTrue && !m_pTable->getShowFormular())
         {
         KSpreadConditional *tmpCondition=0;
         switch(m_numberOfCond)
@@ -2035,7 +2041,9 @@ void KSpreadCell::paintEvent( KSpreadCanvas *_canvas, const QRect& _rect, QPaint
 	  else
 	    a = KSpreadCell::Left;
 	}
-
+	if(m_pTable->getShowFormular())
+	    a = KSpreadCell::Left;	
+	    
 	switch( a )
 	{
 	case KSpreadCell::Left:
@@ -2152,7 +2160,7 @@ void KSpreadCell::print( QPainter &_painter, int _tx, int _ty, int _col, int _ro
     {
       _painter.setPen( m_textPen );
       verifyCondition();
-      if(m_conditionIsTrue)
+      if(m_conditionIsTrue && !m_pTable->getShowFormular())
       	{
         KSpreadConditional *tmpCondition=0;
         switch(m_numberOfCond)
@@ -2942,7 +2950,7 @@ void KSpreadCell::setCalcDirtyFlag( KSpreadTable *_table, int _column, int _row 
       if ( _table == dep->m_pTable )
 	if ( left <= _column && _column <= right )
 	  if ( top <= _row && _row <= bottom )
-	    isdep = TRUE;
+	    isdep = TRUE;	
     }
     else if ( dep->m_iColumn == _column && dep->m_iRow == _row && dep->m_pTable == _table )
       isdep = TRUE;

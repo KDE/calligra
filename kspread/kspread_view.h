@@ -176,6 +176,7 @@ public slots:
     void newView();
     void togglePageBorders( bool );
     void toggleGrid( bool );
+    void toggleFormular( bool);
     void gotoCell();
     void replace();
     void conditional();
@@ -242,6 +243,7 @@ public slots:
     void slotRemoveRow();
     void slotInsertColumn();
     void slotRemoveColumn();
+    
 
     /**
      * @ref #tabBar is connected to this slot.
@@ -432,6 +434,7 @@ private:
     KAction* m_default;
     KAction* m_areaName;
     KAction* m_showArea;
+    KToggleAction* m_showFormular;
     /**
      * Pointer to the last popup menu.
      * Since only one popup menu can be opened at once, its pointer is stored here.

@@ -423,6 +423,10 @@ public:
 
     void setShowGrid(bool _showGrid) {showGrid=_showGrid;}
 
+    bool getShowFormular() {return showFormular;}
+
+    void setShowFormular(bool _showFormular) {showFormular=_showFormular;}
+
     // ########### Nameing error
     QString Currency(){return currency;}
 
@@ -753,6 +757,7 @@ protected:
     static QString currency;
 
     bool showGrid;
+    bool showFormular;
 };
 
 #endif

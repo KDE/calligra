@@ -59,6 +59,7 @@
   <Action name="showTable"/>
   <Action name="hideGrid"/>
   <Action name="showArea"/>
+  <Action name="showFormular"/>
  </Menu>
  <Menu name="Data"><text>Data</text>
   <Action name="sort"/>

@@ -229,6 +229,7 @@ KSpreadTable::KSpreadTable( KSpreadMap *_map, const char *_name )
 
   setHide(false);
   showGrid=true;
+  showFormular=false;
   //init currency
   currency = KGlobal::locale()->currencySymbol();
   // Get a unique name so that we can offer scripting
@@ -3828,7 +3829,7 @@ QDomElement KSpreadTable::save( QDomDocument& doc )
   table.setAttribute( "name", m_strName );
   table.setAttribute( "grid", (int)showGrid);
   table.setAttribute( "hide", (int)m_tableHide);
-
+  table.setAttribute( "formular", (int)showFormular);
   // Save all cells.
   QIntDictIterator<KSpreadCell> it( m_dctCells );
   for ( ; it.current(); ++it )
@@ -3899,6 +3900,11 @@ bool KSpreadTable::loadXML( const QDomElement& table )
   if(table.hasAttribute("hide"))
   {
     m_tableHide = (int)table.attribute("hide").toInt( &ok );
+    // we just ignore 'ok' - if it didn't work, go on
+  }
+  if(table.hasAttribute("formular"))
+  {
+    showFormular = (int)table.attribute("formular").toInt( &ok );
     // we just ignore 'ok' - if it didn't work, go on
   }
 

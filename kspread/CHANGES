@@ -395,3 +395,11 @@ So I think that kspread should be the best spread on linux :).
 ---------------------------------------
 -Improve error handling : don't abort if a cell is invalid
 Still don't know why I get a row = -1 for a cell, but at least it loads.
+
+2000-04-16 -Montel laurent <montell@club-internet.fr>
+-----------------------------------------------------
+-Use kformula icon because they are more nice
+
+2000-04-17 -Montel laurent <montell@club-internet.fr>
+-----------------------------------------------------
+-Add new mode : formular mode => now you can see formular in cell
