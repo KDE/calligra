@@ -23,6 +23,8 @@
 
 #include <qpen.h>
 #include <qbrush.h>
+#include <qsimplerichtext.h>
+#include <qpalette.h>
 
 #include <kdebug.h>
 
@@ -34,7 +36,7 @@ KivioScreenPainter::KivioScreenPainter()
 {
    m_transX = 0.0f;
    m_transY = 0.0f;
-   m_rotation = 0.0f;
+   m_rotation = 0;
 }
 
 KivioScreenPainter::KivioScreenPainter(QPainter* painter)
@@ -42,7 +44,7 @@ KivioScreenPainter::KivioScreenPainter(QPainter* painter)
 {
    m_transX = 0.0f;
    m_transY = 0.0f;
-   m_rotation = 0.0f;
+   m_rotation = 0;
 }
 
 KivioScreenPainter::~KivioScreenPainter()
@@ -201,31 +203,21 @@ void KivioScreenPainter::fillRect( float x1, float y1, float w1, float h1 )
     PAINTER_CHECK();
 
     QBrush b;
+    b = m_pFillStyle->brush();
 
-
-    switch( m_pFillStyle->colorStyle() )
-    {
-        case KivioFillStyle::kcsSolid:
-            b.setColor( m_pFillStyle->color() );
-            b.setStyle( QBrush::SolidPattern );
-            break;
-
-        case KivioFillStyle::kcsGradient:
-	   kdDebug(43000) << "KivioScreenPainter::fillRect() - Gradient not supported yet" << endl;
-            return;
-
-        case KivioFillStyle::kcsNone:
-	   kdDebug(43000) << "KivioScreenPainter::fillRect() - don't call fillRect() without wanting to fill it!" << endl;
-            return;
-
-        default:
-	   kdDebug(43000) << "KivioScreenpainter::fillRect() - unknown color style" << endl;
-            return;
+    if(m_pFillStyle->colorStyle() == KivioFillStyle::kcsGradient) {
+      QPixmap pix((int)w1, (int)h1);
+      QImage image = KImageEffect::gradient(pix.size(), m_pFillStyle->color(), m_pFillStyle->color2(),
+        (KImageEffect::GradientType) m_pFillStyle->gradientType());
+      pix.convertFromImage(image);
+      b.setPixmap(pix);
+      m_pPainter->setBrushOrigin(int(x1 + m_transX), int(y1 + m_transY));
     }
 
     m_pPainter->setPen(m_pLineStyle->pen(1.0f));
     m_pPainter->setBrush(b);
     m_pPainter->drawRect( int(x1), int(y1), int(w1), int(h1) );
+    m_pPainter->setBrushOrigin(0, 0);
 }
 
 
@@ -271,31 +263,21 @@ void KivioScreenPainter::fillRoundRect( float x1, float y1, float w1, float h1, 
     PAINTER_CHECK();
 
     QBrush b;
+    b = m_pFillStyle->brush();
 
-
-    switch( m_pFillStyle->colorStyle() )
-    {
-        case KivioFillStyle::kcsSolid:
-            b.setColor( m_pFillStyle->color() );
-            b.setStyle( QBrush::SolidPattern );
-            break;
-
-        case KivioFillStyle::kcsGradient:
-	   kdDebug(43000) << "fillRoundRect() - Gradient not supported yet" << endl;
-            return;
-
-        case KivioFillStyle::kcsNone:
-	   kdDebug(43000) << "don't call fillRoundRect() without wanting to fill it!" << endl;
-            return;
-
-        default:
-           kdDebug(43000) << "fillRoundRect() - unknown color style" << endl;
-            return;
+    if(m_pFillStyle->colorStyle() == KivioFillStyle::kcsGradient) {
+      QPixmap pix((int)w1, (int)h1);
+      QImage image = KImageEffect::gradient(pix.size(), m_pFillStyle->color(), m_pFillStyle->color2(),
+        (KImageEffect::GradientType) m_pFillStyle->gradientType());
+      pix.convertFromImage(image);
+      b.setPixmap(pix);
+      m_pPainter->setBrushOrigin(int(x1 + m_transX), int(y1 + m_transY));
     }
 
     m_pPainter->setPen(m_pLineStyle->pen(1.0f));
     m_pPainter->setBrush(b);
     m_pPainter->drawRoundRect( int(x1), int(y1), int(w1), int(h1), int(a1), int(a2) );
+    m_pPainter->setBrushOrigin(0, 0);
 }
 
 
@@ -340,30 +322,21 @@ void KivioScreenPainter::fillPie( float x1, float y1, float w1, float h1, float 
     PAINTER_CHECK();
 
     QBrush b;
+    b = m_pFillStyle->brush();
 
-    switch( m_pFillStyle->colorStyle() )
-    {
-        case KivioFillStyle::kcsSolid:
-            b.setColor( m_pFillStyle->color() );
-            b.setStyle( QBrush::SolidPattern );
-            break;
-
-        case KivioFillStyle::kcsGradient:
-	   kdDebug(43000) << "fillPie() - Gradient not supported yet" << endl;
-            return;
-
-        case KivioFillStyle::kcsNone:
-	   kdDebug(43000) << "don't call fillPie() without wanting to fill it!" << endl;
-            return;
-
-        default:
-	   kdDebug(43000) << "fillPie() - unknown color style" << endl;
-            return;
+    if(m_pFillStyle->colorStyle() == KivioFillStyle::kcsGradient) {
+      QPixmap pix((int)w1, (int)h1);
+      QImage image = KImageEffect::gradient(pix.size(), m_pFillStyle->color(), m_pFillStyle->color2(),
+        (KImageEffect::GradientType) m_pFillStyle->gradientType());
+      pix.convertFromImage(image);
+      b.setPixmap(pix);
+      m_pPainter->setBrushOrigin(int(x1 + m_transX), int(y1 + m_transY));
     }
 
     m_pPainter->setPen(m_pLineStyle->pen(1.0f));
     m_pPainter->setBrush(b);
     m_pPainter->drawPie( int(x1), int(y1), int(w1), int(h1), int(a1), int(a2) );
+    m_pPainter->setBrushOrigin(0, 0);
 }
 
 
@@ -408,30 +381,21 @@ void KivioScreenPainter::fillChord( float x1, float y1, float w1, float h1, floa
     PAINTER_CHECK();
 
     QBrush b;
+    b = m_pFillStyle->brush();
 
-    switch( m_pFillStyle->colorStyle() )
-    {
-        case KivioFillStyle::kcsSolid:
-            b.setColor( m_pFillStyle->color() );
-            b.setStyle( QBrush::SolidPattern );
-            break;
-
-        case KivioFillStyle::kcsGradient:
-	   kdDebug(43000) << "fillChord() - Gradient not supported yet" << endl;
-            return;
-
-        case KivioFillStyle::kcsNone:
-	   kdDebug(43000) << "don't call fillChord() without wanting to fill it!" << endl;
-            return;
-
-        default:
-	   kdDebug(43000) << "fillChord() - unknown color style" << endl;
-            return;
+    if(m_pFillStyle->colorStyle() == KivioFillStyle::kcsGradient) {
+      QPixmap pix((int)w1, (int)h1);
+      QImage image = KImageEffect::gradient(pix.size(), m_pFillStyle->color(),
+        m_pFillStyle->color2(), m_pFillStyle->gradientType());
+      pix.convertFromImage(image);
+      b.setPixmap(pix);
+      m_pPainter->setBrushOrigin(int(x1 + m_transX), int(y1 + m_transY));
     }
 
     m_pPainter->setPen(m_pLineStyle->pen(1.0f));
     m_pPainter->setBrush(b);
     m_pPainter->drawChord( int(x1), int(y1), int(w1), int(h1), int(a1), int(a2) );
+    m_pPainter->setBrushOrigin(0, 0);
 }
 
 
@@ -472,30 +436,21 @@ void KivioScreenPainter::fillEllipse( float x1, float y1, float w1, float h1 )
     PAINTER_CHECK();
 
     QBrush b;
+    b = m_pFillStyle->brush();
 
-    switch( m_pFillStyle->colorStyle() )
-    {
-        case KivioFillStyle::kcsSolid:
-            b.setColor( m_pFillStyle->color() );
-            b.setStyle( QBrush::SolidPattern );
-            break;
-
-        case KivioFillStyle::kcsGradient:
-	   kdDebug(43000) << "fillEllipse() - Gradient not supported yet" << endl;
-            return;
-
-        case KivioFillStyle::kcsNone:
-	   kdDebug(43000) << "don't call fillEllipse() without wanting to fill it!" << endl;
-            return;
-
-        default:
-	   kdDebug(43000) << "fillEllipse() - unknown color style" << endl;
-            return;
+    if(m_pFillStyle->colorStyle() == KivioFillStyle::kcsGradient) {
+      QPixmap pix((int)w1, (int)h1);
+      QImage image = KImageEffect::gradient(pix.size(), m_pFillStyle->color(), m_pFillStyle->color2(),
+        (KImageEffect::GradientType) m_pFillStyle->gradientType());
+      pix.convertFromImage(image);
+      b.setPixmap(pix);
+      m_pPainter->setBrushOrigin(int(x1 + m_transX), int(y1 + m_transY));
     }
 
     m_pPainter->setPen(m_pLineStyle->pen(1.0f));
     m_pPainter->setBrush(b);
     m_pPainter->drawEllipse( int(x1), int(y1), int(w1), int(h1) );
+    m_pPainter->setBrushOrigin(0, 0);
 }
 
 
@@ -509,28 +464,28 @@ void KivioScreenPainter::fillEllipse( float x1, float y1, float w1, float h1 )
  */
 void KivioScreenPainter::drawLineArray( QPtrList<KivioPoint> *pList )
 {
-    PAINTER_CHECK();
+  PAINTER_CHECK();
 
-    KivioPoint *pPoint;
-    QPointArray points(pList->count());
-    int i;
-    QBrush b;
+  KivioPoint *pPoint;
+  QPointArray points(pList->count());
+  int i;
+  QBrush b;
 
-    b.setStyle( QBrush::NoBrush );
+  b.setStyle( QBrush::NoBrush );
 
-    i=0;
-    pPoint = pList->first();
-    while( pPoint )
-    {
-        points.setPoint( i++, int(pPoint->x()), int(pPoint->y()) );
+  i=0;
+  pPoint = pList->first();
+  while( pPoint )
+  {
+    points.setPoint( i++, int(pPoint->x()), int(pPoint->y()) );
 
-        pPoint = pList->next();
-    }
+    pPoint = pList->next();
+  }
 
-    m_pPainter->setPen(m_pLineStyle->pen(1.0f));
-    m_pPainter->setBrush(b);
+  m_pPainter->setPen(m_pLineStyle->pen(1.0f));
+  m_pPainter->setBrush(b);
 
-    m_pPainter->drawLineSegments(points);
+  m_pPainter->drawLineSegments(points);
 }
 
 
@@ -543,24 +498,20 @@ void KivioScreenPainter::drawLineArray( QPtrList<KivioPoint> *pList )
  */
 void KivioScreenPainter::drawPolyline( QPtrList<KivioPoint> *pList )
 {
-    PAINTER_CHECK();
+  PAINTER_CHECK();
 
-    KivioPoint *pPoint;
-    QPointArray points( pList->count() );
-    int i;
+  KivioPoint *pPoint;
+  QPointArray points( pList->count() );
+  int i = 0;
+  pPoint = pList->first();
 
-    i=0;
-    pPoint = pList->first();
-    while( pPoint )
-    {
-        points.setPoint(i++, int(pPoint->x()), int(pPoint->y()) );
+  while( pPoint )
+  {
+    points.setPoint(i++, int(pPoint->x()), int(pPoint->y()) );
+    pPoint = pList->next();
+  }
 
-        pPoint = pList->next();
-    }
-
-    m_pPainter->setPen(m_pLineStyle->pen(1.0f));
-    m_pPainter->setBrush(QBrush::NoBrush);
-    m_pPainter->drawPolyline(points);
+  drawPolyline(points);
 }
 
 
@@ -574,88 +525,68 @@ void KivioScreenPainter::drawPolyline( QPtrList<KivioPoint> *pList )
  */
 void KivioScreenPainter::drawPolygon( QPtrList<KivioPoint> *pList )
 {
-    PAINTER_CHECK();
+  PAINTER_CHECK();
 
-    KivioPoint *pPoint;
-    QPointArray points( pList->count() );
-    int i;
-    QBrush b;
+  KivioPoint *pPoint;
+  QPointArray points( pList->count() );
+  int i = 0;
+  pPoint = pList->first();
 
-    switch( m_pFillStyle->colorStyle() )
-    {
-        case KivioFillStyle::kcsSolid:
-            b.setColor( m_pFillStyle->color() );
-            b.setStyle( QBrush::SolidPattern );
-            break;
+  while( pPoint )
+  {
+    points.setPoint(i++, int(pPoint->x()), int(pPoint->y()) );
+    pPoint = pList->next();
+  }
 
-        case KivioFillStyle::kcsGradient:
-            kdDebug(43000) << "drawPolygon() - Gradient not supported yet" << endl;
-            return;
-
-        case KivioFillStyle::kcsNone:
-            b.setStyle(QBrush::NoBrush);
-            return;
-
-        default:
-            kdDebug(43000) << "drawPolygon() - unknown color style" << endl;
-            return;
-    }
-
-    i=0;
-    pPoint = pList->first();
-    while( pPoint )
-    {
-        points.setPoint(i++, int(pPoint->x()), int(pPoint->y()) );
-
-        pPoint = pList->next();
-    }
-
-    m_pPainter->setPen(m_pLineStyle->pen(1.0f));
-    m_pPainter->setBrush(b);
-    m_pPainter->drawPolygon(points,true);
-
+  drawPolygon(points);
 }
 
 void KivioScreenPainter::drawPolyline( QPointArray &pArray )
 {
-    PAINTER_CHECK();
+  PAINTER_CHECK();
 
-    m_pPainter->setPen(m_pLineStyle->pen(1.0f));
-    m_pPainter->setBrush( QBrush::NoBrush );
+  m_pPainter->setPen(m_pLineStyle->pen(1.0f));
+  m_pPainter->setBrush( QBrush::NoBrush );
 
-    m_pPainter->drawPolyline( pArray );
+  m_pPainter->drawPolyline( pArray );
 }
 
 void KivioScreenPainter::drawPolygon( QPointArray &pArray )
 {
-    PAINTER_CHECK();
+  PAINTER_CHECK();
 
-    QBrush b;
+  QBrush b;
+  b = m_pFillStyle->brush();
 
-    switch( m_pFillStyle->colorStyle() )
-    {
-        case KivioFillStyle::kcsSolid:
-            b.setColor( m_pFillStyle->color() );
-            b.setStyle( QBrush::SolidPattern );
-            break;
+  if(m_pFillStyle->colorStyle() == KivioFillStyle::kcsGradient) {
+    int x1, y1, w1, h1;
+    x1 = pArray[0].x();
+    y1 = pArray[0].y();
+    w1 = h1 = 0;
 
-        case KivioFillStyle::kcsGradient:
-	   kdDebug(43000) << "drawPolygon() - Gradient not supported yet" << endl;
-            return;
-
-        case KivioFillStyle::kcsNone:
-            b.setStyle(QBrush::NoBrush);
-            return;
-
-        default:
-	   kdDebug(43000) << "drawPolygon() - unknown color style" << endl;
-            return;
+    for(unsigned int i = 0; i < pArray.count(); i++) {
+      x1 = QMIN(x1, pArray[i].x());
+      y1 = QMIN(y1, pArray[i].y());
+      w1 = QMAX(w1, pArray[i].x());
+      h1 = QMAX(h1, pArray[i].y());
     }
 
-    m_pPainter->setPen(m_pLineStyle->pen(1.0f));
-    m_pPainter->setBrush(b);
+    w1 = w1 - x1;
+    h1 = h1 - y1;
 
-    m_pPainter->drawPolygon( pArray, true );
+    QPixmap pix(w1, h1);
+    QImage image = KImageEffect::gradient(pix.size(), m_pFillStyle->color(), m_pFillStyle->color2(),
+      (KImageEffect::GradientType) m_pFillStyle->gradientType());
+    pix.convertFromImage(image);
+    b.setPixmap(pix);
+    m_pPainter->setBrushOrigin(x1 + m_transX, y1 + m_transY);
+  }
+
+  m_pPainter->setPen(m_pLineStyle->pen(1.0f));
+  m_pPainter->setBrush(b);
+
+  m_pPainter->drawPolygon( pArray, true );
+  m_pPainter->setBrushOrigin(0, 0);
 }
 
 void KivioScreenPainter::drawLineArray( QPointArray &pArray )
@@ -767,29 +698,16 @@ void KivioScreenPainter::drawClosedPath( QPtrList<KivioPoint> *pPoints )
     switch( m_pFillStyle->colorStyle() )
     {
         case KivioFillStyle::kcsNone:
-            m_pPainter->setPen(m_pLineStyle->pen(1.0f));
-            m_pPainter->setBrush( QBrush::NoBrush );
-
             // A hollow path? That's a polypath!
-            m_pPainter->drawPolyline( bPoints );
+            drawPolyline( bPoints );
             break;
 
         case KivioFillStyle::kcsSolid:
-            // Setup the line style
-            m_pPainter->setPen(m_pLineStyle->pen(1.0f));
-
-            // Setup the fill color
-            brush.setColor( m_pFillStyle->color() );
-            brush.setStyle( QBrush::SolidPattern );
-            m_pPainter->setBrush( brush );
-
-            // draw the bitch
-            m_pPainter->drawPolygon( bPoints, true );
-            break;
-
         case KivioFillStyle::kcsGradient:
-            kdDebug(43000) << "drawClosedPath() - Gradient unsupported" << endl;
+        {
+            drawPolygon(bPoints);
             break;
+        }
 
         default:
             kdDebug(43000) << "drawClosedPath() - Unknown colors style" << endl;
@@ -900,8 +818,15 @@ void KivioScreenPainter::drawText( int x, int y, int w, int h, int tf, const QSt
 {
     PAINTER_CHECK();
 
-    m_pPainter->setPen( m_textColor );
-    m_pPainter->drawText( x, y, w, h, tf, str );
+    //m_pPainter->setPen( m_textColor );
+    //m_pPainter->drawText( x, y, w, h, tf, str );
+    QSimpleRichText textArea(str, m_pPainter->font());
+    textArea.setWidth(w);
+    QColorGroup cg;
+    cg.setColor(QColorGroup::Base, m_pFillStyle->color());
+    cg.setColor(QColorGroup::Text, m_textColor);
+    QBrush b = m_pFillStyle->brush();
+    textArea.draw(m_pPainter, x, y, QRect(0, 0, 0, 0), cg, &b);
 }
 
 QRect KivioScreenPainter::boundingRect( int x, int y, int w, int h, int tf, const QString &str )
@@ -1019,7 +944,7 @@ void KivioScreenPainter::translateBy( float _x, float _y )
    m_pPainter->translate( m_transX, m_transY );
 }
 
-void KivioScreenPainter::setRotation( float _d )
+void KivioScreenPainter::setRotation( int _d )
 {
    PAINTER_CHECK();
 
@@ -1028,11 +953,22 @@ void KivioScreenPainter::setRotation( float _d )
    m_pPainter->rotate(_d);
 }
 
-void KivioScreenPainter::rotateBy( float _d )
+void KivioScreenPainter::rotateBy( int _d )
 {
    PAINTER_CHECK();
 
    m_rotation += _d;
 
    m_pPainter->rotate(m_rotation);
+}
+
+int KivioScreenPainter::rotation()
+{
+  return m_rotation;
+}
+
+void KivioScreenPainter::setWorldMatrix(QWMatrix m, bool c)
+{
+  PAINTER_CHECK();
+  m_pPainter->setWorldMatrix(m, c);
 }

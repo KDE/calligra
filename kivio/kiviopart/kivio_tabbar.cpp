@@ -32,6 +32,7 @@
 #include <kmessagebox.h>
 #include <klineeditdlg.h>
 #include <knotifyclient.h>
+#include <kdebug.h>
 
 #include "kivio_canvas.h"
 #include "kivio_doc.h"

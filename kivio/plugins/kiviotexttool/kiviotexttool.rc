@@ -1,5 +1,5 @@
 <!DOCTYPE kpartgui SYSTEM "kpartgui.dtd" >
-<kpartgui name="KivioTextTool" library="libkiviotexttool" version="2">
+<kpartgui name="KivioTextTool" library="libkiviotexttool" version="3">
 <MenuBar>
   <Menu name="Edit"><text>&amp;Edit</text>
     <Action name="text"/>
@@ -8,4 +8,7 @@
     <Action name="text"/>
   </Menu>
 </MenuBar>
+<ToolBar name="ToolsToolBar">
+  <Action name="text"/>
+</ToolBar>
 </kpartgui>

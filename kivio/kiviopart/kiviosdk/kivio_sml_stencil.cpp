@@ -1,6 +1,7 @@
 /*
  * Kivio - Visual Modelling and Flowcharting
- * Copyright (C) 2000-2001 theKompany.com & Dave Marotti
+ * Copyright (C) 2000-2003 theKompany.com & Dave Marotti
+ *                         Peter Simonsson
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -59,9 +60,6 @@ KivioSMLStencil::KivioSMLStencil()
 
     m_pConnectorTargets = new QPtrList<KivioConnectorTarget>;
     m_pConnectorTargets->setAutoDelete(true);
-
-//    m_pOriginalConnectorTargets = new QPtrList<KivioConnectorTarget>;
-//    m_pOriginalConnectorTargets->setAutoDelete(true);
 }
 
 
@@ -83,12 +81,6 @@ KivioSMLStencil::~KivioSMLStencil()
         delete m_pConnectorTargets;
         m_pConnectorTargets = NULL;
     }
-
-//    if( m_pOriginalConnectorTargets )
-//    {
-//        delete m_pOriginalConnectorTargets;
-//        m_pOriginalConnectorTargets = NULL;
-//    }
 
     m_pSubSelection = NULL;
 }
@@ -255,6 +247,8 @@ KivioStencil *KivioSMLStencil::duplicate()
     pNewStencil->m_w = m_w;
     pNewStencil->m_h = m_h;
 
+    pNewStencil->m_rotation = m_rotation;
+
     pNewStencil->m_pSpawner = m_pSpawner;
 
 
@@ -270,15 +264,11 @@ KivioStencil *KivioSMLStencil::duplicate()
 
     // Copy the Connector Targets
     KivioConnectorTarget *pTarget = m_pConnectorTargets->first();
-//    KivioConnectorTarget *pOriginal = pOriginalConnectorTargets->first();
+
     while( pTarget ) //&& pOriginal )
     {
         pNewStencil->m_pConnectorTargets->append( pTarget->duplicate() );
-
-//        pNewStencil->m_pOriginalConnectorTargets->append( pOriginal->duplicate() );
-
         pTarget = m_pConnectorTargets->next();
-//        pOriginal = m_pOriginalConnectorTargets->next();
     }
 
     *(pNewStencil->protection()) = *m_pProtection;
@@ -299,12 +289,10 @@ void KivioSMLStencil::paintOutline( KivioIntraStencilData *pData )
     KivioShape *pShape;
     KivioShapeData *pShapeData;
 
-
     m_zoomHandler = pData->zoomHandler;
-    _xoff = m_zoomHandler->zoomItX(m_x);
-    _yoff = m_zoomHandler->zoomItY(m_y);
-
-
+    pData->painter->saveState();
+    pData->painter->setTranslation(m_zoomHandler->zoomItX(m_x), m_zoomHandler->zoomItY(m_y));
+    rotatePainter(pData);  // Rotate the painter if needed
 
     pShape = m_pShapeList->first();
     while( pShape )
@@ -381,6 +369,8 @@ void KivioSMLStencil::paintOutline( KivioIntraStencilData *pData )
 
         pTarget = m_pConnectorTargets->next();
     }
+
+    pData->painter->restoreState();
 }
 
 void KivioSMLStencil::drawOutlineArc( KivioShape *pShape, KivioIntraStencilData *pData )
@@ -398,8 +388,8 @@ void KivioSMLStencil::drawOutlineArc( KivioShape *pShape, KivioIntraStencilData 
     defWidth = m_pSpawner->defWidth();
     defHeight = m_pSpawner->defHeight();
 
-    _x = m_zoomHandler->zoomItX((pPosition->x() / defWidth) * m_w) + _xoff;
-    _y = m_zoomHandler->zoomItY((pPosition->y() / defHeight) * m_h) + _yoff;
+    _x = m_zoomHandler->zoomItX((pPosition->x() / defWidth) * m_w);
+    _y = m_zoomHandler->zoomItY((pPosition->y() / defHeight) * m_h);
     _w = m_zoomHandler->zoomItX((pDimensions->x() / defWidth) * m_w) + 1;
     _h = m_zoomHandler->zoomItY((pDimensions->y() / defHeight) * m_h) + 1;
 
@@ -435,14 +425,14 @@ void KivioSMLStencil::drawOutlineBezier( KivioShape *pShape, KivioIntraStencilDa
   pPoint4 = pPointList->next();
 
 
-  controlPoints.setPoint( 0, _xoff + m_zoomHandler->zoomItX((pPoint->x() / defWidth)*m_w),
-    _yoff + m_zoomHandler->zoomItY((pPoint->y()/defHeight)*m_h) );
-  controlPoints.setPoint( 1, _xoff + m_zoomHandler->zoomItX((pPoint2->x() / defWidth)*m_w),
-    _yoff + m_zoomHandler->zoomItY((pPoint2->y()/defHeight)*m_h));
-  controlPoints.setPoint( 2, _xoff + m_zoomHandler->zoomItX((pPoint3->x() / defWidth)*m_w),
-    _yoff + m_zoomHandler->zoomItY((pPoint3->y()/defHeight)*m_h));
-  controlPoints.setPoint( 3, _xoff + m_zoomHandler->zoomItX((pPoint4->x() / defWidth)*m_w),
-    _yoff + m_zoomHandler->zoomItY((pPoint4->y()/defHeight)*m_h));
+  controlPoints.setPoint( 0, m_zoomHandler->zoomItX((pPoint->x() / defWidth)*m_w),
+    m_zoomHandler->zoomItY((pPoint->y()/defHeight)*m_h) );
+  controlPoints.setPoint( 1, m_zoomHandler->zoomItX((pPoint2->x() / defWidth)*m_w),
+    m_zoomHandler->zoomItY((pPoint2->y()/defHeight)*m_h));
+  controlPoints.setPoint( 2, m_zoomHandler->zoomItX((pPoint3->x() / defWidth)*m_w),
+    m_zoomHandler->zoomItY((pPoint3->y()/defHeight)*m_h));
+  controlPoints.setPoint( 3, m_zoomHandler->zoomItX((pPoint4->x() / defWidth)*m_w),
+    m_zoomHandler->zoomItY((pPoint4->y()/defHeight)*m_h));
 
   painter = pData->painter;
   painter->drawBezier( controlPoints );
@@ -465,8 +455,8 @@ void KivioSMLStencil::drawOutlineOpenPath( KivioShape *pShape, KivioIntraStencil
 
   while( pPoint )
   {
-    pNewPoint = new KivioPoint( _xoff + m_zoomHandler->zoomItX((pPoint->x()/defWidth)*m_w),
-                                _yoff + m_zoomHandler->zoomItY((pPoint->y()/defHeight)*m_h),
+    pNewPoint = new KivioPoint( m_zoomHandler->zoomItX((pPoint->x()/defWidth)*m_w),
+                                m_zoomHandler->zoomItY((pPoint->y()/defHeight)*m_h),
                                 pPoint->pointType() );
     pNewPoints->append(pNewPoint);
 
@@ -495,8 +485,8 @@ void KivioSMLStencil::drawOutlineClosedPath( KivioShape *pShape, KivioIntraStenc
   pPoint = pPointList->first();
   while( pPoint )
   {
-    pNewPoint = new KivioPoint( _xoff + m_zoomHandler->zoomItX((pPoint->x()/defWidth)*m_w),
-                                _yoff + m_zoomHandler->zoomItY((pPoint->y()/defHeight)*m_h),
+    pNewPoint = new KivioPoint( m_zoomHandler->zoomItX((pPoint->x()/defWidth)*m_w),
+                                m_zoomHandler->zoomItY((pPoint->y()/defHeight)*m_h),
                                 pPoint->pointType() );
     pNewPoints->append(pNewPoint);
 
@@ -523,8 +513,8 @@ void KivioSMLStencil::drawOutlineEllipse( KivioShape *pShape, KivioIntraStencilD
   defWidth = m_pSpawner->defWidth();
   defHeight = m_pSpawner->defHeight();
 
-  _x = m_zoomHandler->zoomItX((pPosition->x() / defWidth) * m_w) + _xoff;
-  _y = m_zoomHandler->zoomItY((pPosition->y() / defHeight) * m_h) + _yoff;
+  _x = m_zoomHandler->zoomItX((pPosition->x() / defWidth) * m_w);
+  _y = m_zoomHandler->zoomItY((pPosition->y() / defHeight) * m_h);
   _w = m_zoomHandler->zoomItX((pDimensions->x() / defWidth) * m_w) + 1;
   _h = m_zoomHandler->zoomItY((pDimensions->y() / defHeight) * m_h) + 1;
 
@@ -556,8 +546,8 @@ void KivioSMLStencil::drawOutlineLineArray( KivioShape *pShape, KivioIntraStenci
   pPoint = pList->first();
   while( pPoint )
   {
-    _x = m_zoomHandler->zoomItX((pPoint->x() / defWidth) * m_w) + _xoff;
-    _y = m_zoomHandler->zoomItY((pPoint->y() / defHeight) * m_h) + _yoff;
+    _x = m_zoomHandler->zoomItX((pPoint->x() / defWidth) * m_w);
+    _y = m_zoomHandler->zoomItY((pPoint->y() / defHeight) * m_h);
 
     arr.setPoint( i, (int)_x, (int)_y );
 
@@ -584,8 +574,8 @@ void KivioSMLStencil::drawOutlineRectangle( KivioShape *pShape, KivioIntraStenci
   defWidth = m_pSpawner->defWidth();
   defHeight = m_pSpawner->defHeight();
 
-  _x = m_zoomHandler->zoomItX((pPosition->x() / defWidth) * m_w) + _xoff;
-  _y = m_zoomHandler->zoomItY((pPosition->y() / defHeight) * m_h) + _yoff;
+  _x = m_zoomHandler->zoomItX((pPosition->x() / defWidth) * m_w);
+  _y = m_zoomHandler->zoomItY((pPosition->y() / defHeight) * m_h);
   _w = m_zoomHandler->zoomItX((pDimensions->x() / defWidth) * m_w) + 1;
   _h = m_zoomHandler->zoomItY((pDimensions->y() / defHeight) * m_h) + 1;
 
@@ -615,8 +605,8 @@ void KivioSMLStencil::drawOutlineRoundRectangle( KivioShape *pShape, KivioIntraS
   _ry = m_zoomHandler->zoomItY(pPoint->y());
 
 
-  _x = m_zoomHandler->zoomItX((pPosition->x() / defWidth) * m_w) + _xoff;
-  _y = m_zoomHandler->zoomItY((pPosition->y() / defHeight) * m_h) + _yoff;
+  _x = m_zoomHandler->zoomItX((pPosition->x() / defWidth) * m_w);
+  _y = m_zoomHandler->zoomItY((pPosition->y() / defHeight) * m_h);
   _w = m_zoomHandler->zoomItX((pDimensions->x() / defWidth) * m_w) + 1;
   _h = m_zoomHandler->zoomItY((pDimensions->y() / defHeight) * m_h) + 1;
 
@@ -653,8 +643,8 @@ void KivioSMLStencil::drawOutlinePolygon( KivioShape *pShape, KivioIntraStencilD
   pPoint = pList->first();
   while( pPoint )
   {
-    _x = m_zoomHandler->zoomItX((pPoint->x() / defWidth) * m_w) + _xoff;
-    _y = m_zoomHandler->zoomItY((pPoint->y() / defHeight) * m_h) + _yoff;
+    _x = m_zoomHandler->zoomItX((pPoint->x() / defWidth) * m_w);
+    _y = m_zoomHandler->zoomItY((pPoint->y() / defHeight) * m_h);
 
     arr.setPoint( i, (int)_x, (int)_y );
 
@@ -690,8 +680,8 @@ void KivioSMLStencil::drawOutlinePolyline( KivioShape *pShape, KivioIntraStencil
 
   while( pPoint )
   {
-    _x = m_zoomHandler->zoomItX((pPoint->x() / defWidth) * m_w) + _xoff;
-    _y = m_zoomHandler->zoomItY((pPoint->y() / defHeight) * m_h) + _yoff;
+    _x = m_zoomHandler->zoomItX((pPoint->x() / defWidth) * m_w);
+    _y = m_zoomHandler->zoomItY((pPoint->y() / defHeight) * m_h);
 
     arr.setPoint( i, (int)_x, (int)_y );
 
@@ -720,8 +710,8 @@ void KivioSMLStencil::drawOutlineTextBox( KivioShape *pShape, KivioIntraStencilD
   }
 
 
-  _x = zoomHandler->zoomItX((pPosition->x() / defWidth) * m_w) + _xoff;
-  _y = zoomHandler->zoomItY((pPosition->y() / defHeight) * m_h) + _yoff;
+  _x = zoomHandler->zoomItX((pPosition->x() / defWidth) * m_w);
+  _y = zoomHandler->zoomItY((pPosition->y() / defHeight) * m_h);
   _w = zoomHandler->zoomItX((pDimensions->x() / defWidth) * m_w) + 1;
   _h = zoomHandler->zoomItY((pDimensions->y() / defHeight) * m_h) + 1;
 
@@ -746,9 +736,10 @@ void KivioSMLStencil::paint( KivioIntraStencilData *pData )
   KivioShapeData *pShapeData;
 
 
-   m_zoomHandler = pData->zoomHandler;
-  _xoff = m_zoomHandler->zoomItX(m_x);
-  _yoff = m_zoomHandler->zoomItY(m_y);
+  m_zoomHandler = pData->zoomHandler;
+  pData->painter->saveState();
+  pData->painter->setTranslation(m_zoomHandler->zoomItX(m_x), m_zoomHandler->zoomItY(m_y));
+  rotatePainter(pData);  // Rotate the painter if needed
 
   pShape = m_pShapeList->first();
   while( pShape )
@@ -812,6 +803,8 @@ void KivioSMLStencil::paint( KivioIntraStencilData *pData )
 
     pShape = m_pShapeList->next();
   }
+
+  pData->painter->restoreState();
 }
 
 
@@ -865,8 +858,8 @@ void KivioSMLStencil::drawArc( KivioShape *pShape, KivioIntraStencilData *pData 
   defWidth = m_pSpawner->defWidth();
   defHeight = m_pSpawner->defHeight();
 
-  _x = m_zoomHandler->zoomItX((pPosition->x() / defWidth) * m_w) + _xoff;
-  _y = m_zoomHandler->zoomItY((pPosition->y() / defHeight) * m_h) + _yoff;
+  _x = m_zoomHandler->zoomItX((pPosition->x() / defWidth) * m_w);
+  _y = m_zoomHandler->zoomItY((pPosition->y() / defHeight) * m_h);
   _w = m_zoomHandler->zoomItX((pDimensions->x() / defWidth) * m_w) + 1;
   _h = m_zoomHandler->zoomItY((pDimensions->y() / defHeight) * m_h) + 1;
 
@@ -886,12 +879,9 @@ void KivioSMLStencil::drawArc( KivioShape *pShape, KivioIntraStencilData *pData 
       break;
 
     case KivioFillStyle::kcsSolid:  // Solid fill
-      painter->setBGColor( pShapeData->fillStyle()->color() );
-      painter->drawArc( _x, _y, _w, _h, _a, _l );
-      break;
-
     case KivioFillStyle::kcsGradient:               // Gradient
-      kdDebug(43000) << "KivioSMLStenciL::drawArc() - gradient fill unimplemented" << endl;
+      painter->setFillStyle( pShapeData->fillStyle() );
+      painter->drawArc( _x, _y, _w, _h, _a, _l );
       break;
 
     case KivioFillStyle::kcsPixmap:
@@ -923,16 +913,15 @@ void KivioSMLStencil::drawBezier( KivioShape *pShape, KivioIntraStencilData *pDa
   pPoint4 = pPointList->next();
 
 
-  controlPoints.setPoint( 0, _xoff + m_zoomHandler->zoomItX((pPoint->x() / defWidth)*m_w),
-    _yoff + m_zoomHandler->zoomItY((pPoint->y()/defHeight)*m_h));
-  controlPoints.setPoint( 1, _xoff + m_zoomHandler->zoomItX((pPoint2->x() / defWidth)*m_w),
-    _yoff + m_zoomHandler->zoomItY((pPoint2->y()/defHeight)*m_h));
-  controlPoints.setPoint( 2, _xoff + m_zoomHandler->zoomItX((pPoint3->x() / defWidth)*m_w),
-    _yoff + m_zoomHandler->zoomItY((pPoint3->y()/defHeight)*m_h));
-  controlPoints.setPoint( 3, _xoff + m_zoomHandler->zoomItX((pPoint4->x() / defWidth)*m_w),
-    _yoff + m_zoomHandler->zoomItY((pPoint4->y()/defHeight)*m_h));
+  controlPoints.setPoint( 0, m_zoomHandler->zoomItX((pPoint->x() / defWidth)*m_w),
+    m_zoomHandler->zoomItY((pPoint->y()/defHeight)*m_h));
+  controlPoints.setPoint( 1, m_zoomHandler->zoomItX((pPoint2->x() / defWidth)*m_w),
+    m_zoomHandler->zoomItY((pPoint2->y()/defHeight)*m_h));
+  controlPoints.setPoint( 2, m_zoomHandler->zoomItX((pPoint3->x() / defWidth)*m_w),
+    m_zoomHandler->zoomItY((pPoint3->y()/defHeight)*m_h));
+  controlPoints.setPoint( 3, m_zoomHandler->zoomItX((pPoint4->x() / defWidth)*m_w),
+    m_zoomHandler->zoomItY((pPoint4->y()/defHeight)*m_h));
 
-  painter = pData->painter;
   painter->setLineStyle(pShapeData->lineStyle());
   double lineWidth = pShapeData->lineStyle()->width();
   painter->setLineWidth(m_zoomHandler->zoomItY(lineWidth));
@@ -956,8 +945,8 @@ void KivioSMLStencil::drawOpenPath( KivioShape *pShape, KivioIntraStencilData *p
   pPoint = pPointList->first();
   while( pPoint )
   {
-    pNewPoint = new KivioPoint( _xoff + m_zoomHandler->zoomItX((pPoint->x()/defWidth)*m_w),
-                                _yoff + m_zoomHandler->zoomItY((pPoint->y()/defHeight)*m_h),
+    pNewPoint = new KivioPoint( m_zoomHandler->zoomItX((pPoint->x()/defWidth)*m_w),
+                                m_zoomHandler->zoomItY((pPoint->y()/defHeight)*m_h),
                                 pPoint->pointType() );
     pNewPoints->append(pNewPoint);
 
@@ -990,8 +979,8 @@ void KivioSMLStencil::drawClosedPath( KivioShape *pShape, KivioIntraStencilData 
   pPoint = pPointList->first();
   while( pPoint )
   {
-      pNewPoint = new KivioPoint( _xoff + m_zoomHandler->zoomItX((pPoint->x()/defWidth)*m_w),
-                                  _yoff + m_zoomHandler->zoomItY((pPoint->y()/defHeight)*m_h),
+      pNewPoint = new KivioPoint( m_zoomHandler->zoomItX((pPoint->x()/defWidth)*m_w),
+                                  m_zoomHandler->zoomItY((pPoint->y()/defHeight)*m_h),
                                   pPoint->pointType() );
       pNewPoints->append(pNewPoint);
 
@@ -1010,12 +999,9 @@ void KivioSMLStencil::drawClosedPath( KivioShape *pShape, KivioIntraStencilData 
         break;
 
       case KivioFillStyle::kcsSolid:  // Solid fill
-        painter->setBGColor( pShapeData->fillStyle()->color() );
-        painter->drawClosedPath( pNewPoints );
-        break;
-
       case KivioFillStyle::kcsGradient:               // Gradient
-        kdDebug(43000) << "KivioSMLStencil::drawClosedPath() - gradient fill unimplemented" << endl;
+        painter->setFillStyle( pShapeData->fillStyle() );
+        painter->drawClosedPath( pNewPoints );
         break;
 
       case KivioFillStyle::kcsPixmap:
@@ -1044,8 +1030,8 @@ void KivioSMLStencil::drawEllipse( KivioShape *pShape, KivioIntraStencilData *pD
   defWidth = m_pSpawner->defWidth();
   defHeight = m_pSpawner->defHeight();
 
-  _x = m_zoomHandler->zoomItX((pPosition->x() / defWidth) * m_w) + _xoff;
-  _y = m_zoomHandler->zoomItY((pPosition->y() / defHeight) * m_h) + _yoff;
+  _x = m_zoomHandler->zoomItX((pPosition->x() / defWidth) * m_w);
+  _y = m_zoomHandler->zoomItY((pPosition->y() / defHeight) * m_h);
   _w = m_zoomHandler->zoomItX((pDimensions->x() / defWidth) * m_w) + 1;
   _h = m_zoomHandler->zoomItY((pDimensions->y() / defHeight) * m_h) + 1;
 
@@ -1061,12 +1047,9 @@ void KivioSMLStencil::drawEllipse( KivioShape *pShape, KivioIntraStencilData *pD
       break;
 
     case KivioFillStyle::kcsSolid:  // Solid fill
-      painter->setBGColor( pShapeData->fillStyle()->color() );
-      painter->fillEllipse( _x, _y, _w, _h );
-      break;
-
     case KivioFillStyle::kcsGradient:               // Gradient
-      kdDebug(43000) << "KivioSMLStencil::drawEllipse() - gradient fill unimplemented" << endl;
+      painter->setFillStyle( pShapeData->fillStyle() );
+      painter->fillEllipse( _x, _y, _w, _h );
       break;
 
     case KivioFillStyle::kcsPixmap:
@@ -1097,8 +1080,8 @@ void KivioSMLStencil::drawLineArray( KivioShape *pShape, KivioIntraStencilData *
   pPoint = pList->first();
   while( pPoint )
   {
-    _x = m_zoomHandler->zoomItX((pPoint->x() / defWidth) * m_w) + _xoff;
-    _y = m_zoomHandler->zoomItY((pPoint->y() / defHeight) * m_h) + _yoff;
+    _x = m_zoomHandler->zoomItX((pPoint->x() / defWidth) * m_w);
+    _y = m_zoomHandler->zoomItY((pPoint->y() / defHeight) * m_h);
 
     arr.setPoint( i, (int)_x, (int)_y );
 
@@ -1129,8 +1112,8 @@ void KivioSMLStencil::drawRectangle( KivioShape *pShape, KivioIntraStencilData *
   defWidth = m_pSpawner->defWidth();
   defHeight = m_pSpawner->defHeight();
 
-  _x = m_zoomHandler->zoomItX((pPosition->x() / defWidth) * m_w) + _xoff;
-  _y = m_zoomHandler->zoomItY((pPosition->y() / defHeight) * m_h) + _yoff;
+  _x = m_zoomHandler->zoomItX((pPosition->x() / defWidth) * m_w);
+  _y = m_zoomHandler->zoomItY((pPosition->y() / defHeight) * m_h);
   _w = m_zoomHandler->zoomItX((pDimensions->x() / defWidth) * m_w) + 1;
   _h = m_zoomHandler->zoomItY((pDimensions->y() / defHeight) * m_h) + 1;
 
@@ -1146,11 +1129,9 @@ void KivioSMLStencil::drawRectangle( KivioShape *pShape, KivioIntraStencilData *
       break;
 
     case KivioFillStyle::kcsSolid:  // Solid fill
-      painter->setBGColor( pShapeData->fillStyle()->color() );
-      painter->fillRect( _x, _y, _w, _h );
-      break;
-
     case KivioFillStyle::kcsGradient:               // Gradient
+      painter->setFillStyle( pShapeData->fillStyle() );
+      painter->fillRect( _x, _y, _w, _h );
       break;
 
     case KivioFillStyle::kcsPixmap:
@@ -1174,8 +1155,8 @@ void KivioSMLStencil::drawRoundRectangle( KivioShape *pShape, KivioIntraStencilD
   defWidth = m_pSpawner->defWidth();
   defHeight = m_pSpawner->defHeight();
 
-  _x = m_zoomHandler->zoomItX((pPosition->x() / defWidth) * m_w) + _xoff;
-  _y = m_zoomHandler->zoomItY((pPosition->y() / defHeight) * m_h) + _yoff;
+  _x = m_zoomHandler->zoomItX((pPosition->x() / defWidth) * m_w);
+  _y = m_zoomHandler->zoomItY((pPosition->y() / defHeight) * m_h);
   _w = m_zoomHandler->zoomItX((pDimensions->x() / defWidth) * m_w) + 1;
   _h = m_zoomHandler->zoomItY((pDimensions->y() / defHeight) * m_h) + 1;
 
@@ -1195,12 +1176,9 @@ void KivioSMLStencil::drawRoundRectangle( KivioShape *pShape, KivioIntraStencilD
       break;
 
     case KivioFillStyle::kcsSolid:  // Solid fill
-      painter->setBGColor( pShapeData->fillStyle()->color() );
-      painter->fillRoundRect( _x, _y, _w, _h, _rx, _ry );
-      break;
-
     case KivioFillStyle::kcsGradient:               // Gradient
-      kdDebug(43000) << "KivioSMLStenciL::drawRoundRectangle() - gradient fill unimplemented" << endl;
+      painter->setFillStyle( pShapeData->fillStyle() );
+      painter->fillRoundRect( _x, _y, _w, _h, _rx, _ry );
       break;
 
     case KivioFillStyle::kcsPixmap:
@@ -1232,8 +1210,8 @@ void KivioSMLStencil::drawPolygon( KivioShape *pShape, KivioIntraStencilData *pD
   pPoint = pList->first();
   while( pPoint )
   {
-    _x = m_zoomHandler->zoomItX((pPoint->x() / defWidth) * m_w) + _xoff;
-    _y = m_zoomHandler->zoomItY((pPoint->y() / defHeight) * m_h) + _yoff;
+    _x = m_zoomHandler->zoomItX((pPoint->x() / defWidth) * m_w);
+    _y = m_zoomHandler->zoomItY((pPoint->y() / defHeight) * m_h);
 
 
     arr.setPoint( i, (int)_x, (int)_y );
@@ -1255,12 +1233,9 @@ void KivioSMLStencil::drawPolygon( KivioShape *pShape, KivioIntraStencilData *pD
       break;
 
     case KivioFillStyle::kcsSolid:  // Solid fill
-      painter->setBGColor( pShapeData->fillStyle()->color() );
-      painter->drawPolygon(arr);
-      break;
-
     case KivioFillStyle::kcsGradient:               // Gradient
-      kdDebug(43000) << "KivioSMLStenciL::drawPolygon() - gradient fill unimplemented" << endl;
+      painter->setFillStyle( pShapeData->fillStyle() );
+      painter->drawPolygon(arr);
       break;
 
     case KivioFillStyle::kcsPixmap:
@@ -1292,8 +1267,8 @@ void KivioSMLStencil::drawPolyline( KivioShape *pShape, KivioIntraStencilData *p
   pPoint = pList->first();
   while( pPoint )
   {
-    _x = m_zoomHandler->zoomItX((pPoint->x() / defWidth) * m_w) + _xoff;
-    _y = m_zoomHandler->zoomItY((pPoint->y() / defHeight) * m_h) + _yoff;
+    _x = m_zoomHandler->zoomItX((pPoint->x() / defWidth) * m_w);
+    _y = m_zoomHandler->zoomItY((pPoint->y() / defHeight) * m_h);
 
     arr.setPoint( i, (int)_x, (int)_y );
 
@@ -1326,8 +1301,8 @@ void KivioSMLStencil::drawTextBox( KivioShape *pShape, KivioIntraStencilData *pD
     return;
   }
 
-  _x = zoomHandler->zoomItX((pPosition->x() / defWidth) * m_w) + _xoff;
-  _y = zoomHandler->zoomItY((pPosition->y() / defHeight) * m_h) + _yoff;
+  _x = zoomHandler->zoomItX((pPosition->x() / defWidth) * m_w);
+  _y = zoomHandler->zoomItY((pPosition->y() / defHeight) * m_h);
   _w = zoomHandler->zoomItX((pDimensions->x() / defWidth) * m_w) + 1;
   _h = zoomHandler->zoomItY((pDimensions->y() / defHeight) * m_h) + 1;
 
@@ -1379,6 +1354,18 @@ void KivioSMLStencil::setBGColor( QColor c )
     }
 }
 
+void KivioSMLStencil::setFillPattern(int p)
+{
+    KivioShape *pShape;
+
+    pShape = m_pShapeList->first();
+    while( pShape )
+    {
+        pShape->shapeData()->fillStyle()->setBrushStyle( static_cast<Qt::BrushStyle>(p) );
+
+        pShape = m_pShapeList->next();
+    }
+}
 
 /**
  * Set the text color of this stencil.
@@ -1432,6 +1419,16 @@ void KivioSMLStencil::setLineWidth( double f )
     }
 }
 
+void KivioSMLStencil::setLinePattern(int p)
+{
+    KivioShape *pShape = m_pShapeList->first();
+
+    while( pShape )
+    {
+        pShape->shapeData()->lineStyle()->setStyle( p );
+        pShape = m_pShapeList->next();
+    }
+}
 
 /**
  * Attempts to connect a KivioConnectorPoint to this stencil.
@@ -1535,12 +1532,17 @@ KivioConnectorTarget *KivioSMLStencil::connectToTarget( KivioConnectorPoint *p, 
 void KivioSMLStencil::updateGeometry()
 {
   KivioConnectorTarget *pTarget, *pOriginal;
-  double _x, _y;
   double defWidth, defHeight;
   //kdDebug(43000) << "m_x = " << m_x << " m_y = " << m_y << endl;
 
   defWidth = m_pSpawner->defWidth();
   defHeight = m_pSpawner->defHeight();
+
+  QWMatrix m;
+  m.translate(m_x, m_y);
+  m.translate(m_w / 2.0, m_h / 2.0);
+  m.rotate(m_rotation);
+  m.translate(-m_w / 2.0, -m_h / 2.0);
 
   QPtrList<KivioConnectorTarget> *pOriginalTargets;
 
@@ -1558,10 +1560,12 @@ void KivioSMLStencil::updateGeometry()
 
   while( pTarget && pOriginal )
   {
-    _x = (pOriginal->x() / defWidth) * m_w  + m_x;
-    _y = (pOriginal->y() / defHeight) * m_h + m_y;
+    double _x = (pOriginal->x() / defWidth) * m_w;
+    double _y = (pOriginal->y() / defHeight) * m_h;
+    double newX = _x * m.m11() + _y * m.m21() + m.dx();
+    double newY = _x * m.m12() + _y * m.m22() + m.dy();
 
-    pTarget->setPosition( _x, _y );
+    pTarget->setPosition( newX, newY );
 
     pTarget = m_pConnectorTargets->next();
     pOriginal = pOriginalTargets->next();
@@ -1730,6 +1734,15 @@ double KivioSMLStencil::lineWidth()
     return 1.0f;
 }
 
+int KivioSMLStencil::linePattern()
+{
+    KivioShape *pShape = m_pShapeList->first();
+
+    if( pShape )
+        return pShape->shapeData()->lineStyle()->style();
+
+    return 1;
+}
 
 /**
  * Get the Fg color of a stencil
@@ -1760,6 +1773,16 @@ QColor KivioSMLStencil::bgColor()
     return QColor(0,0,0);
 }
 
+int KivioSMLStencil::fillPattern()
+{
+    KivioShape *pShape;
+
+    pShape = m_pShapeList->first();
+    if( pShape )
+        return pShape->shapeData()->fillStyle()->brushStyle();
+
+    return 1;
+}
 
 /**
  * Generates the ids for anything needed by this stencil
@@ -1798,114 +1821,26 @@ int KivioSMLStencil::generateIds( int nextAvailable )
  */
 KivioCollisionType KivioSMLStencil::checkForCollision( KivioPoint *pPoint, double )
 {
-/*
-    double px = pPoint->x();
-    double py = pPoint->y();
+  KivioCollisionType type = kctNone;
 
-    if( !(px < m_x + m_w &&
-         px >= m_x &&
-         py < m_y + m_h &&
-         py >= m_y ) )
-    {
-        return kctNone;
-    }
+  QWMatrix m;
+  m.translate(m_x, m_y);
+  m.translate(m_w / 2.0, m_h / 2.0);
+  m.rotate(m_rotation);
+  m.translate(-m_w / 2.0, -m_h / 2.0);
 
-    return kctBody;
-*/
+  KivioPoint* pPoints = new KivioPoint[4];
+  pPoints[0].set(0 * m.m11() + 0 * m.m21() + m.dx(), 0 * m.m12() + 0 * m.m22() + m.dy());
+  pPoints[1].set(m_w * m.m11() + 0 * m.m21() + m.dx(), m_w * m.m12() + 0 * m.m22() + m.dy());
+  pPoints[2].set(m_w * m.m11() + m_h * m.m21() + m.dx(), m_w * m.m12() + m_h * m.m22() + m.dy());
+  pPoints[3].set(0 * m.m11() + m_h * m.m21() + m.dx(), 0 * m.m12() + m_h * m.m22() + m.dy());
 
-    double px = pPoint->x();
-    double py = pPoint->y();
+  if(PointInPoly(pPoints, 4, pPoint)) {
+    type = kctBody;
+  }
 
-    if( !(px < m_x + m_w &&
-         px >= m_x &&
-         py < m_y + m_h &&
-         py >= m_y ) )
-    {
-        return kctNone;
-    }
-
-    return kctBody;
-    /*
-
-    KivioShape *pShape;
-
-    pShape = m_pShapeList->last();
-    while( pShape )
-    {
-        switch( pShape->shapeType() )
-        {
-            case KivioShapeData::kstArc:
-                if( checkCollisionArc( pShape, pPoint ) )
-                    return kctBody;
-                break;
-
-            case KivioShapeData::kstPie:
-                if( checkCollisionPie( pShape, pPoint ) )
-                    return kctBody;
-                break;
-
-            case KivioShapeData::kstLineArray:
-                if( checkCollisionLineArray( pShape, pPoint ) )
-                    return kctBody;
-                break;
-
-            case KivioShapeData::kstPolyline:
-                if( checkCollisionPolyline( pShape, pPoint) )
-                    return kctBody;
-                break;
-
-            case KivioShapeData::kstPolygon:
-                if( checkCollisionPolygon( pShape, pPoint) )
-                    return kctBody;
-                break;
-
-            case KivioShapeData::kstBezier:
-                if( checkCollisionBezier( pShape, pPoint) )
-                    return kctBody;
-                break;
-
-            case KivioShapeData::kstRectangle:
-                if( checkCollisionRectangle( pShape, pPoint) )
-                    return kctBody;
-                break;
-
-            case KivioShapeData::kstRoundRectangle:
-                if( checkCollisionRoundRectangle( pShape, pPoint) )
-                    return kctBody;
-                break;
-
-            case KivioShapeData::kstEllipse:
-                if( checkCollisionEllipse( pShape, pPoint) )
-                    return kctBody;
-                break;
-
-            case KivioShapeData::kstOpenPath:
-                if( checkCollisionOpenPath( pShape, pPoint) )
-                    return kctBody;
-                break;
-
-            case KivioShapeData::kstClosedPath:
-                if( checkCollisionClosedPath( pShape, pPoint) )
-                    return kctBody;
-                break;
-
-            case KivioShapeData::kstTextBox:
-                if( checkCollisionTextBox( pShape, pPoint) )
-                    return kctBody;
-                break;
-
-
-            case KivioShapeData::kstNone:
-            default:
-                break;
-        }
-
-        pShape = m_pShapeList->prev();
-    }
-
-
-    return kctNone;
-    */
+  delete [] pPoints;
+  return type;
 }
 
 bool KivioSMLStencil::checkCollisionArc( KivioShape *, KivioPoint * )
@@ -1961,7 +1896,6 @@ bool KivioSMLStencil::checkCollisionPolygon( KivioShape *pShape, KivioPoint *pCh
   QPtrList<KivioPoint> *pList;
   KivioPoint *pPoints;
 
-
   pShapeData = pShape->shapeData();
 
   defWidth = m_pSpawner->defWidth();
@@ -1976,8 +1910,8 @@ bool KivioSMLStencil::checkCollisionPolygon( KivioShape *pShape, KivioPoint *pCh
   pPoint = pList->first();
   while( pPoint )
   {
-    _x = m_zoomHandler->zoomItX((pPoint->x() / defWidth) * m_w) + _xoff;
-    _y = m_zoomHandler->zoomItY((pPoint->y() / defHeight) * m_h) + _yoff;
+    _x = m_zoomHandler->zoomItX((pPoint->x() / defWidth) * m_w);
+    _y = m_zoomHandler->zoomItY((pPoint->y() / defHeight) * m_h);
 
     pPoints[i].set(_x,_y);
 
@@ -2032,4 +1966,25 @@ int KivioSMLStencil::resizeHandlePositions()
    }
 
    return mask;
+}
+
+KivioLineStyle KivioSMLStencil::lineStyle()
+{
+    KivioShape *pShape = m_pShapeList->first();
+
+    if( pShape )
+        return *(pShape->shapeData()->lineStyle());
+
+    return KivioLineStyle();
+}
+
+void KivioSMLStencil::setLineStyle(KivioLineStyle ls)
+{
+    KivioShape *pShape = m_pShapeList->first();
+
+    while( pShape )
+    {
+        pShape->shapeData()->setLineStyle(ls);;
+        pShape = m_pShapeList->next();
+    }
 }

@@ -19,80 +19,75 @@
 #ifndef TOOL_ZOOM_H
 #define TOOL_ZOOM_H
 
-#include "tool.h"
+#include "kivio_mousetool.h"
 #include "kivio_rect.h"
 
 class KivioView;
 class KivioPage;
 class KivioCanvas;
-class KActionMenu;
+class KPopupMenu;
 
 class KRadioAction;
 class KAction;
 
 class QCursor;
 
-class ZoomTool : public Tool
-{ Q_OBJECT
-public:
-  ZoomTool(KivioView* view);
-  virtual ~ZoomTool();
-
-  virtual void processEvent(QEvent*);
-  virtual void activate();
-  virtual void deactivate();
-  virtual void configure();
-
-  virtual void activateGUI(KXMLGUIFactory*);
-  virtual void deactivateGUI(KXMLGUIFactory*);
-
-  void zoomRect(QRect);
-
-public slots:
-  void zoomActivated();
-  void handActivated();
-
-  void zoomPlus();
-  void zoomMinus();
-  void zoomWidth();
-  void zoomHeight();
-  void zoomPage();
-  void zoomSelected();
-  void zoomAllobjects();
-
-protected:
-  void buildMenu();
-  void showPopupMenu(QPoint);
-
-signals:
-  void operationDone();
-
-private:
-  KToolBar* m_pToolBar;
-  KRadioAction* m_z1;
-  KRadioAction* m_z2;
-
-  KActionMenu* m_pMenu;
-
-  KAction* m_pMinus;
-  KAction* m_pPlus;
-  KAction* m_pZoomWidth;
-  KAction* m_pZoomHeight;
-  KAction* m_pZoomSelected;
-  KAction* m_pZoomPage;
-  KAction* m_pZoomAllObjects;
-
-  KAction* m_pCurrent;
-
-  QCursor* m_pPlusCursor;
-  QCursor* m_pMinusCursor;
-  QCursor* m_handCursor;
-
-  bool m_bDrawRubber;
-  bool m_bHandMode;
-  bool isHandMousePressed;
-  bool m_bLockKeyboard;
-  QPoint mousePos;
+class ZoomTool : public Kivio::MouseTool
+{
+  Q_OBJECT
+  public:
+    ZoomTool(KivioView* parent);
+    virtual ~ZoomTool();
+  
+    virtual void processEvent(QEvent*);
+  
+    void zoomRect(QRect);
+  
+  public slots:
+    void zoomActivated();
+    void handActivated();
+  
+    void zoomPlus();
+    void zoomMinus();
+    void zoomWidth();
+    void zoomHeight();
+    void zoomPage();
+    void zoomSelected();
+    void zoomAllobjects();
+    
+    virtual void setActivated(bool a);
+  
+  protected:
+    void showPopupMenu(const QPoint&);
+  
+  signals:
+    void operationDone();
+  
+  private:
+    KRadioAction* m_zoomAction;
+    KRadioAction* m_panAction;
+  
+    KPopupMenu* m_pMenu;
+  
+    KAction* m_pMinus;
+    KAction* m_pPlus;
+    KAction* m_pZoomWidth;
+    KAction* m_pZoomHeight;
+    KAction* m_pZoomSelected;
+    KAction* m_pZoomPage;
+    KAction* m_pZoomAllObjects;
+  
+    KAction* m_pCurrent;
+  
+    QCursor* m_pPlusCursor;
+    QCursor* m_pMinusCursor;
+    QCursor* m_handCursor;
+  
+    bool m_bDrawRubber;
+    bool m_bHandMode;
+    bool isHandMousePressed;
+    bool m_bLockKeyboard;
+    QPoint mousePos;
 };
 
 #endif

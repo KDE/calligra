@@ -4,15 +4,10 @@ INCLUDES = -I$(top_srcdir)/kivio/kiviopart\
 	-I$(top_srcdir)/kivio/kiviopart/kiviosdk\
 	$(KOFFICE_INCLUDES) $(all_includes)
 libtools_la_METASOURCES = AUTO
-libtools_la_SOURCES = \
-		tool.cpp\
-		tool_controller.cpp
+libtools_la_SOURCES = kivio_plugin.cpp kivio_pluginmanager.cpp kivio_mousetool.cpp
 EXTRA_DIST = \
-		tool.cpp\
-		tool.h\
-		tool_controller.cpp\
-		tool_controller.h\
-		kivio_tool.rc
+	kivio_tool.rc
 
 rcdir = $(kde_datadir)/kivio
 rc_DATA = kivio_tool.rc
+noinst_HEADERS = kivio_plugin.h kivio_pluginmanager.h kivio_mousetool.h

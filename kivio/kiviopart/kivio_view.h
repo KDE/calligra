@@ -34,9 +34,10 @@ class TKSelectColorAction;
 class StencilBarDockManager;
 class KivioArrowHeadAction;
 namespace Kivio {
-class ToolController;
-class ToolDockBase;
-class ToolDockManager;
+  class ToolController;
+  class ToolDockBase;
+  class ToolDockManager;
+  class PluginManager;
 }
 
 class KivioBirdEyePanel;
@@ -57,7 +58,7 @@ class KSelectColorAction;
 class KActionMenu;
 
 class QStringList;
-class QButton;
+class QPushButton;
 class DCOPObject;
 class KoRuler;
 class KoZoomHandler;
@@ -82,7 +83,6 @@ class KivioView : public KoView
 
     virtual DCOPObject* dcopObject();
 
-    ToolController* toolsController()const { return m_pTools; }
     KivioCanvas* canvasWidget() const { return m_pCanvas; }
     KivioDoc* doc()const { return m_pDoc; }
 
@@ -133,10 +133,16 @@ class KivioView : public KoView
 
     KoRuler* horzRuler() { return hRuler; }
     KoRuler* vertRuler() { return vRuler; }
+    
+    Kivio::PluginManager* pluginManager();
+    
+    QPtrList<KAction> clipboardActionList();
+    QPtrList<KAction> alignActionList();
+    QPtrList<KAction> groupActionList();
+    QPtrList<KAction> textActionList();
+    QPtrList<KAction> layerActionList();
 
   protected:
-    virtual void customEvent( QCustomEvent* );
-
     void createGeometryDock();
     void createViewManagerDock();
     void createLayerDock();
@@ -180,8 +186,6 @@ class KivioView : public KoView
     void addStencilFromSpawner( KivioStencilSpawner * );
 
     void changePage( const QString& _name );
-
-    void viewGUIActivated(bool);
 
     void updateToolBars();
 
@@ -234,6 +238,7 @@ class KivioView : public KoView
 
     void slotChangeStencilPosition(double, double);
     void slotChangeStencilSize(double, double);
+    void slotChangeStencilRotation(int);
 
     void canvasZoomChanged();
     void viewZoom(const QString& s);
@@ -258,16 +263,14 @@ class KivioView : public KoView
 
     virtual void updateReadWrite( bool readwrite );
 
-    QButton* newIconButton( const char* file, bool kbutton = false, QWidget* parent = 0 );
-
     void changeZoomMenu(int z = 0);
     void showZoom(int z);
   private:
     KivioCanvas *m_pCanvas;
-    QButton *m_pTabBarFirst;
-    QButton *m_pTabBarLeft;
-    QButton *m_pTabBarRight;
-    QButton *m_pTabBarLast;
+    QPushButton *m_pTabBarFirst;
+    QPushButton *m_pTabBarLeft;
+    QPushButton *m_pTabBarRight;
+    QPushButton *m_pTabBarLast;
     KivioTabBar *m_pTabBar;
 
     KAction* m_paperLayout;
@@ -307,8 +310,6 @@ class KivioView : public KoView
     KivioPage* m_pActivePage;
     KivioStencilSpawnerSet* m_pActiveSpawnerSet;
 
-    ToolController* m_pTools;
-
     StencilBarDockManager* m_pDockManager;
     ToolDockManager* m_pToolDock;
 
@@ -328,6 +329,8 @@ class KivioView : public KoView
     KAction *m_selectAll;
     KAction *m_selectNone;
     KAction *m_editCopy;
+    KAction* m_editCut;
+    KAction* m_editPaste;
     bool m_bShowPageBorders;
     bool m_bShowPageMargins;
     bool m_bShowRulers;
@@ -339,6 +342,14 @@ class KivioView : public KoView
     KoZoomHandler* m_zoomHandler;
 
     KStatusBarLabel* m_coordSLbl;
+    
+    Kivio::PluginManager* m_pluginManager;
+    
+    KAction* m_groupAction;
+    KAction* m_ungroupAction;
+    KAction* m_stencilToFront;
+    KAction* m_stencilToBack;
+    KAction* m_alignAndDistribute;
 };
 
 #endif

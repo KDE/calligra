@@ -26,12 +26,15 @@
 #include <qbitarray.h>
 #include <koPoint.h>
 
+#include <koRect.h>
+
+#include <kivio_line_style.h>
+
 class KivioCustomDragData;
 class KivioConnectorPoint;
 class KivioConnectorTarget;
 class KivioFillStyle;
 class KivioIntraStencilData;
-class KivioLineStyle;
 class KivioPage;
 class KivioPoint;
 class KivioRect;
@@ -111,9 +114,12 @@ typedef enum
 
 class KivioStencil
 {
-protected:
+  protected:
     // Dimensions, size
     double m_x, m_y, m_w, m_h;
+
+    // Rotation
+    int m_rotation;
 
     // The spawner that created this stencil
     KivioStencilSpawner *m_pSpawner;
@@ -130,7 +136,11 @@ protected:
     KivioStencilType m_type;
     bool m_connected;
 
-public:
+  protected:
+    void rotatePainter(KivioIntraStencilData *);
+    KoRect calculateBoundingBox();
+
+  public:
     KivioStencil();
     virtual ~KivioStencil();
 
@@ -163,11 +173,18 @@ public:
 
     virtual void setBGColor( QColor ) { ; }
     virtual QColor bgColor() { return QColor(0,0,0); }
+    virtual void setFillPattern(int) { ; }
+    virtual int fillPattern() { return 1; }
 
     virtual KivioFillStyle *fillStyle() { return NULL; }
+    virtual KivioLineStyle lineStyle() { return KivioLineStyle(); }
+    virtual void setLineStyle(KivioLineStyle) { ; }
 
     virtual void setLineWidth( double ) { ; }
     virtual double lineWidth() { return 1.0f; }
+
+    virtual void setLinePattern(int) { ; }
+    virtual int linePattern() { return 1; }
 
     // FOnt stuff
     virtual QColor textColor() { return QColor(0,0,0); }
@@ -185,6 +202,8 @@ public:
     virtual void setText( const QString & ) { ; }
     virtual QString text() { return QString(""); }
 
+    virtual void setRotation(int d) { m_rotation = d; updateGeometry(); }
+    virtual int rotation() { return m_rotation; }
 
     virtual KivioStencilSpawner *spawner() { return m_pSpawner; }
     virtual void setSpawner( KivioStencilSpawner *s ) { m_pSpawner=s; }
@@ -247,10 +266,8 @@ public:
     virtual double endAHWidth() { return 0.0f; }
     virtual double endAHLength() { return 0.0f; }
 
-    private:
-    	KivioStencilIface *iface;
+  private:
+    KivioStencilIface *iface;
 };
 
 #endif
-
-

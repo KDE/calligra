@@ -1,24 +1,19 @@
 <!DOCTYPE kpartgui SYSTEM "kpartgui.dtd" >
-<kpartgui name="KivioZoomTool" library="libkiviozoomtool" version="6">
+<kpartgui name="KivioZoomTool" library="libkiviozoomtool" version="7">
 <ToolBar name="ZoomToolBar" fullWidth="false" position="left" hidden="true"><text>Zoom Tool</text>
-  <Action name="zoom"/>
-  <Action name="zoomHand"/>
-  <Separator lineSeparator="true" />
   <Action name="zoomPlus"/>
   <Action name="zoomMinus"/>
-  <Separator lineSeparator="true" />
+  <Separator/>
   <Action name="zoomWidth"/>
   <Action name="zoomHeight"/>
   <Action name="zoomPage"/>
-  <Separator lineSeparator="true" />
+  <Separator/>
   <Action name="zoomSelected"/>
   <Action name="zoomAllObjects"/>
 </ToolBar>
 <MenuBar>
  <Menu name="View">
    <Menu name="Zoom"><text>&amp;Zoom Tool</text>
-    <Action name="zoom"/>
-    <Action name="zoomHand"/>
     <Action name="zoomPlus"/>
     <Action name="zoomMinus"/>
     <Action name="zoomWidth"/>
@@ -30,7 +25,22 @@
  </Menu>
  <Menu name="Tools">
   <Action name="zoom"/>
-  <Action name="zoomHand"/>
+  <Action name="pan"/>
  </Menu>
 </MenuBar>
+<ToolBar name="ToolsToolBar">
+  <Action name="zoom"/>
+  <Action name="pan"/>
+</ToolBar>
+<Menu name="ZoomPopup">
+  <Action name="zoomPlus"/>
+  <Action name="zoomMinus"/>
+  <Separator/>
+  <Action name="zoomWidth"/>
+  <Action name="zoomHeight"/>
+  <Action name="zoomPage"/>
+  <Separator/>
+  <Action name="zoomSelected"/>
+  <Action name="zoomAllObjects"/>
+</Menu>
 </kpartgui>

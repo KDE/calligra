@@ -1,4 +1,4 @@
-<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd" ><kpartgui name="kivio" version="16">
+<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd" ><kpartgui name="kivio" version="17">
 <MenuBar>
  <Menu name="Edit"><text>&amp;Edit</text>
   <Action name="edit_undo"/>
@@ -85,22 +85,22 @@
 </ToolBar>
 <ToolBar name="FormatToolBar" fullWidth="false"><text>Format</text>
   <Action name="arrowHeads"/>
-  <Separator lineSeparator="true" />
+  <Separator/>
   <Action name="setFGColor"/>
   <Action name="setBGColor"/>
-  <Separator lineSeparator="true" />
+  <Separator/>
   <Action name="setLineWidth"/>
 </ToolBar>
 <ToolBar name="TextBar" fullWidth="false"><text>Text Format</text>
   <Action name="setFontFamily"/>
   <Action name="setFontSize"/>
-  <Separator lineSeparator="true" />
+  <Separator/>
   <Action name="setTextColor"/>
-  <Separator lineSeparator="true" />
+  <Separator/>
   <Action name="setFontBold"/>
   <Action name="setFontItalics"/>
   <Action name="setFontUnderline"/>
-  <Separator lineSeparator="true" />
+  <Separator/>
   <Action name="setHTextAlignment"/>
   <Action name="setVTextAlignment"/>
   <Action name="textAlignLeft"/>
@@ -109,27 +109,11 @@
   <Action name="textVAlignSuper"/>
   <Action name="textVAlignSub"/>
 </ToolBar>
-<ToolBar name="ToolsToolBar" fullWidth="false" position="left"><text>Tools</text>
+<ToolBar name="ToolsToolBar" fullWidth="false"><text>Tools</text>
 </ToolBar>
 <Menu name="menupage_popup">
   <Action name="renamePage"/>
   <Action name="insertPage"/>
   <Action name="removePage"/>
-</Menu>
-<Menu name="select_popup">
-  <Action name="text"/>
-  <Separator/>
-  <Action name="cutStencil"/>
-  <Action name="copyStencil"/>
-  <Action name="pasteStencil"/>
-  <Separator/>
-  <Action name="alignStencils"/>
-  <Separator/>
-  <Action name="groupStencils"/>
-  <Action name="ungroupStencils"/>
-  <Separator/>
-  <Action name="sendStencilToBack"/>
-  <Action name="bringStencilToFront"/>
-  <Separator/>
 </Menu>
 </kpartgui>

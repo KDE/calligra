@@ -116,6 +116,10 @@ public:
     virtual void setBGColor(QColor);
     virtual void setLineWidth(double);
     virtual double lineWidth();
+    virtual void setLinePattern(int p);
+    virtual int linePattern();
+    virtual void setFillPattern(int p);
+    virtual int fillPattern();
 
     virtual void setTextColor( QColor );
     virtual void setTextFont( const QFont & );
@@ -144,6 +148,8 @@ public:
 
     virtual int resizeHandlePositions();
 
+    virtual KivioLineStyle lineStyle();
+    virtual void setLineStyle(KivioLineStyle ls);
 };
 
 #endif

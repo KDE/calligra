@@ -194,8 +194,9 @@ void KivioStraightConnector::paint( KivioIntraStencilData *pData )
   double len;
 
 
-  painter->setFGColor( m_pLineStyle->color() );
-  painter->setLineWidth(zoomHandler->zoomItY(m_pLineStyle->width()));
+  painter->setLineStyle(m_pLineStyle);
+  double lineWidth = m_pLineStyle->width();
+  painter->setLineWidth(zoomHandler->zoomItY(lineWidth));
 
   x1 = zoomHandler->zoomItX(m_pStart->x());
   x2 = zoomHandler->zoomItX(m_pEnd->x());

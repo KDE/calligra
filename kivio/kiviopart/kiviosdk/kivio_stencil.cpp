@@ -36,6 +36,8 @@ KivioStencil::KivioStencil()
   m_x = m_y = 0.0f;
   m_w = m_h = 72.0f;
 
+  m_rotation = 0;
+
   m_selected = false;
 
   m_pProtection = new QBitArray(NUM_PROTECTIONS);
@@ -123,47 +125,50 @@ void KivioStencil::paintSelectionHandles( KivioIntraStencilData *pData )
   newW = zoomHandler->zoomItX(m_w);
   newH = zoomHandler->zoomItY(m_h);
 
+  painter->setTranslation(newX, newY);
+  rotatePainter(pData);  // Rotate the painter if needed
+
   // top left, top right, bottom left, bottom right
   if( m_pProtection->at( kpWidth ) ||
     m_pProtection->at( kpHeight ) )
   {
-    painter->drawHandle( newX,                newY,               KivioPainter::cpfLock );
-    painter->drawHandle( newX + newW,         newY,               KivioPainter::cpfLock );
-    painter->drawHandle( newX,                newY + newH,        KivioPainter::cpfLock );
-    painter->drawHandle( newX + newW,         newY + newH,        KivioPainter::cpfLock );
+    painter->drawHandle( 0, 0,  KivioPainter::cpfLock );
+    painter->drawHandle( newW, 0, KivioPainter::cpfLock );
+    painter->drawHandle( 0, newH, KivioPainter::cpfLock );
+    painter->drawHandle( newW, newH, KivioPainter::cpfLock );
   }
   else
   {
-    painter->drawHandle( newX,                newY,               0 );
-    painter->drawHandle( newX + newW,         newY,               0 );
-    painter->drawHandle( newX,                newY + newH,        0 );
-    painter->drawHandle( newX + newW,         newY + newH,        0 );
+    painter->drawHandle( 0, 0, 0 );
+    painter->drawHandle( newW, 0, 0 );
+    painter->drawHandle( 0, newH, 0 );
+    painter->drawHandle( newW, newH, 0 );
   }
 
   // Top/bottom
   if( m_pProtection->at( kpHeight ) ||
     m_pProtection->at( kpAspect ) )
   {
-    painter->drawHandle( newX + newW/2.0f,    newY,               KivioPainter::cpfLock );
-    painter->drawHandle( newX + newW/2.0f,    newY + newH,        KivioPainter::cpfLock );
+    painter->drawHandle( newW / 2, 0, KivioPainter::cpfLock );
+    painter->drawHandle( newW / 2, newH, KivioPainter::cpfLock );
   }
   else
   {
-    painter->drawHandle( newX + newW/2.0f,    newY,               0 );
-    painter->drawHandle( newX + newW/2.0f,    newY + newH,        0 );
+    painter->drawHandle( newW / 2, 0, 0 );
+    painter->drawHandle( newW / 2, newH, 0 );
   }
 
     // left, right
   if( m_pProtection->at( kpWidth ) ||
     m_pProtection->at( kpAspect ) )
   {
-    painter->drawHandle( newX,                newY + newH/2.0f,   KivioPainter::cpfLock );
-    painter->drawHandle( newX + newW,         newY + newH/2.0f,   KivioPainter::cpfLock );
+    painter->drawHandle( 0, newH / 2, KivioPainter::cpfLock );
+    painter->drawHandle( newW, newH / 2, KivioPainter::cpfLock );
   }
   else
   {
-    painter->drawHandle( newX,                newY + newH/2.0f,   0 );
-    painter->drawHandle( newX + newW,         newY + newH/2.0f,   0 );
+    painter->drawHandle( 0, newH / 2, 0 );
+    painter->drawHandle( newW, newH / 2, 0 );
   }
 }
 
@@ -219,4 +224,19 @@ void KivioStencil::updateConnectorPoints(KivioConnectorPoint *, double, double)
 {
    // Default to just calling updateGeometry
    updateGeometry();
+}
+
+void KivioStencil::rotatePainter(KivioIntraStencilData *pData)
+{
+  if(m_rotation != 0) {
+    QWMatrix m;
+    m.translate(pData->zoomHandler->zoomItX(m_w / 2.0), pData->zoomHandler->zoomItY(m_h / 2.0 ));
+    m.rotate(m_rotation);
+    m.translate(pData->zoomHandler->zoomItX(-m_w / 2.0), pData->zoomHandler->zoomItY(-m_h / 2.0));
+    pData->painter->setWorldMatrix( m, true );
+  }
+}
+
+KoRect KivioStencil::calculateBoundingBox()
+{
 }

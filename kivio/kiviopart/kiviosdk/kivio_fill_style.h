@@ -22,10 +22,8 @@
 #include <qbrush.h>
 #include <qcolor.h>
 #include <qdom.h>
-#include <kdebug.h>
 
-class KivioGradient;
-
+#include <kimageeffect.h>
 
 class KivioFillStyle
 {
@@ -46,13 +44,13 @@ public:
 protected:
     KivioColorStyle m_colorStyle;       // The color style to use when filling
     QColor m_color;                     // The color to use when solid filling
+    QColor m_color2;                     // The second color to use when using a gradient
     QBrush::BrushStyle m_brushStyle;    // The brush pattern to use when solid filling (maybe gradient too?)
-    KivioGradient *m_pGradient;         // The gradient to use when filling gradient style
+    KImageEffect::GradientType m_gradientType;  //Which type of gradient to use
 
 public:
     KivioFillStyle();
     KivioFillStyle( const KivioFillStyle & );
-    virtual ~KivioFillStyle();
 
 
     void copyInto( KivioFillStyle *pTarget ) const;
@@ -62,17 +60,21 @@ public:
 
 
     inline KivioColorStyle colorStyle() const { return m_colorStyle; }
-    inline void setKivioColorStyle( KivioColorStyle k ) { m_colorStyle=k; }
+    inline void setKivioColorStyle( KivioColorStyle k ) { m_colorStyle = k; }
 
 
     inline QColor color() const { return m_color; }
-    inline void setColor( QColor c ) { m_color=c; }
-
+    inline void setColor( const QColor& c ) { m_color = c; }
+    inline QColor color2() const { return m_color2; }
+    inline void setColor2( const QColor& c ) { m_color2 = c; }
 
     inline QBrush::BrushStyle brushStyle() const { return m_brushStyle; }
-    inline void setBrushStyle( QBrush::BrushStyle b ) { m_brushStyle=b; }
+    inline void setBrushStyle( QBrush::BrushStyle b ) { m_brushStyle = b; }
 
-    inline KivioGradient *gradient() const { return m_pGradient; }
+    inline KImageEffect::GradientType gradientType() const { return m_gradientType; }
+    inline void setGradientType(KImageEffect::GradientType t) { m_gradientType = t; }
+
+    QBrush brush();
 };
 
 #endif

@@ -21,7 +21,7 @@
 
 #include <qptrlist.h>
 #include <koPoint.h>
-#include "tool.h"
+#include "kivio_mousetool.h"
 
 #include "kivio_rect.h"
 
@@ -29,6 +29,7 @@ class KivioView;
 class KivioPage;
 class QMouseEvent;
 class KPopupMenu;
+class KRadioAction;
 
 class KivioStencil;
 
@@ -48,25 +49,26 @@ enum {
     stUngroup
 };
 
-class SelectTool : public Tool
+class SelectTool : public Kivio::MouseTool
 {
   Q_OBJECT
   public:
-    SelectTool( KivioView* view );
+    SelectTool( KivioView* parent );
     ~SelectTool();
 
     virtual void processEvent( QEvent* );
-    virtual void activate();
-    virtual void deactivate();
-    virtual void configure();
 
     void select(const QRect&);
+  
+  public slots:
+    void setActivated(bool a);
 
   signals:
     void operationDone();
 
   protected slots:
     void editText();
+    void showPropreties();
 
   protected:
     void mousePress(const QPoint&);
@@ -116,10 +118,9 @@ class SelectTool : public Tool
     int m_customDragID;
     QPtrList <KivioSelectDragData> m_lstOldGeometry;
     KivioRect m_selectedRect;
-
+    
+    KRadioAction* m_selectAction;
     KPopupMenu *m_pMenu;
 };
 
 #endif
-
-

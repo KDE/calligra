@@ -106,6 +106,7 @@
 
 
 #include "tool_controller.h"
+#include "kivio_pluginmanager.h"
 
 #include "handler.h"
 
@@ -129,6 +130,7 @@ using namespace Kivio;
 KivioView::KivioView( QWidget *_parent, const char *_name, KivioDoc* doc )
 : KoView( doc, _parent, _name )
 {
+  m_pluginManager = new PluginManager(this, "Kivio Plugin Manager");
   m_zoomHandler = new KoZoomHandler();
   zoomHandler()->setZoomAndResolution(100, QPaintDevice::x11AppDpiX(),
     QPaintDevice::x11AppDpiY());
@@ -146,7 +148,6 @@ KivioView::KivioView( QWidget *_parent, const char *_name, KivioDoc* doc )
   addStatusBarItem(m_coordSLbl, 0, true);
 
   bool isModified = doc->isModified();
-  m_pTools = new ToolController(this);
   m_pDockManager = new StencilBarDockManager(this);
   m_pDockManager->setDoc( doc );
 
@@ -172,25 +173,33 @@ KivioView::KivioView( QWidget *_parent, const char *_name, KivioDoc* doc )
   QScrollBar* horzScrollBar = new QScrollBar(QScrollBar::Horizontal,tabSplit);
 
   // Tab Bar Button
-  m_pTabBarFirst = newIconButton("tab_first", false, pRightSide);
+  m_pTabBarFirst = new QPushButton(pRightSide);
+  m_pTabBarFirst->setPixmap(BarIcon("tab_first", KivioFactory::global()));
+  m_pTabBarFirst->setFixedSize(16,16);
   connect( m_pTabBarFirst,
            SIGNAL(clicked()),
            m_pTabBar,
            SLOT(scrollFirst()));
 
-  m_pTabBarLeft = newIconButton("tab_left", false, pRightSide);
+  m_pTabBarLeft = new QPushButton(pRightSide);
+  m_pTabBarLeft->setPixmap(BarIcon("tab_left", KivioFactory::global()));
+  m_pTabBarLeft->setFixedSize(16,16);
   connect( m_pTabBarLeft,
            SIGNAL(clicked()),
            m_pTabBar,
            SLOT(scrollLeft()));
 
-  m_pTabBarRight = newIconButton("tab_right", false, pRightSide);
+  m_pTabBarRight = new QPushButton(pRightSide);
+  m_pTabBarRight->setPixmap(BarIcon("tab_right", KivioFactory::global()));
+  m_pTabBarRight->setFixedSize(16,16);
   connect( m_pTabBarRight,
            SIGNAL(clicked()),
            m_pTabBar,
            SLOT(scrollRight()));
 
-  m_pTabBarLast = newIconButton("tab_last", false, pRightSide);
+  m_pTabBarLast = new QPushButton(pRightSide);
+  m_pTabBarLast->setPixmap(BarIcon("tab_last", KivioFactory::global()));
+  m_pTabBarLast->setFixedSize(16,16);
   connect( m_pTabBarLast,
            SIGNAL(clicked()),
            m_pTabBar,
@@ -205,7 +214,7 @@ KivioView::KivioView( QWidget *_parent, const char *_name, KivioDoc* doc )
 
   // The widget on which we display the page
   QWidgetStack* canvasBase = new QWidgetStack(pRightSide);
-  m_pCanvas = new KivioCanvas(canvasBase,this,doc,m_pTools,vertScrollBar,horzScrollBar/*,vRuler,hRuler*/);
+  m_pCanvas = new KivioCanvas(canvasBase,this,doc,vertScrollBar,horzScrollBar/*,vRuler,hRuler*/);
   canvasBase->addWidget(m_pCanvas,0);
   canvasBase->raiseWidget(m_pCanvas);
   m_pCanvas->setFocusPolicy(QWidget::StrongFocus);
@@ -293,6 +302,7 @@ KivioView::KivioView( QWidget *_parent, const char *_name, KivioDoc* doc )
   }
 
   m_pDoc->setModified(isModified);
+  pluginManager()->activateDefaultTool();
 }
 
 KivioView::~KivioView()
@@ -318,6 +328,7 @@ void KivioView::createGeometryDock()
 
     connect( m_pStencilGeometryPanel, SIGNAL(positionChanged(double, double)), this, SLOT(slotChangeStencilPosition(double, double)) );
     connect( m_pStencilGeometryPanel, SIGNAL(sizeChanged(double, double)), this, SLOT(slotChangeStencilSize(double, double)) );
+    connect(m_pStencilGeometryPanel, SIGNAL(rotationChanged(int)), SLOT(slotChangeStencilRotation(int)));
     connect( m_pDoc, SIGNAL(unitsChanged(KoUnit::Unit)), m_pStencilGeometryPanel, SLOT(setUnit(KoUnit::Unit)) );
 
     KToggleAction* showStencilGeometry = new KToggleAction( i18n("Stencil Geometry Panel"), "stencil_geometry", 0, actionCollection(), "stencilGeometry" );
@@ -375,23 +386,23 @@ void KivioView::setupActions()
     "open_stencilset", actionCollection(), "addStencilSet" );
   connect(addSpSet,SIGNAL(activated(const QString&)),SLOT(addStencilSet(const QString&)));
 
-  (void) new KAction( i18n("Align && Distribute..."), CTRL+ALT+Key_A, this,
+  m_alignAndDistribute = new KAction( i18n("Align && Distribute..."), CTRL+ALT+Key_A, this,
     SLOT(alignStencilsDlg()), actionCollection(), "alignStencils" );
 
-  KStdAction::cut( this, SLOT(cutStencil()), actionCollection(), "cutStencil" );
-  m_editCopy=KStdAction::copy( this, SLOT(copyStencil()), actionCollection(), "copyStencil" );
-  KStdAction::paste( this, SLOT(pasteStencil()), actionCollection(), "pasteStencil" );
+  m_editCut = KStdAction::cut( this, SLOT(cutStencil()), actionCollection(), "cutStencil" );
+  m_editCopy = KStdAction::copy( this, SLOT(copyStencil()), actionCollection(), "copyStencil" );
+  m_editPaste = KStdAction::paste( this, SLOT(pasteStencil()), actionCollection(), "pasteStencil" );
 
   m_selectAll=KStdAction::selectAll( this, SLOT( selectAllStencils() ), actionCollection(), "selectAllStencils" );
   m_selectNone=new KAction( i18n("Select None"), CTRL+SHIFT+Key_A, this, SLOT(unselectAllStencils()), actionCollection(), "unselectAllStencils" );
 
   KAction *action;
 
-  (void) new KAction( i18n("Group Selected Stencils"), "group_stencils", CTRL+Key_G, this, SLOT(groupStencils()), actionCollection(), "groupStencils" );
-  (void) new KAction( i18n("Ungroup Selected Stencils"), "ungroup_stencils", CTRL+SHIFT+Key_G, this, SLOT(ungroupStencils()), actionCollection(), "ungroupStencils" );
+  m_groupAction = new KAction( i18n("Group Selected Stencils"), "group_stencils", CTRL+Key_G, this, SLOT(groupStencils()), actionCollection(), "groupStencils" );
+  m_ungroupAction = new KAction( i18n("Ungroup Selected Stencils"), "ungroup_stencils", CTRL+SHIFT+Key_G, this, SLOT(ungroupStencils()), actionCollection(), "ungroupStencils" );
 
-  (void) new KAction( i18n("Bring to Front"), "bring_stencil_to_front", 0, this, SLOT(bringStencilToFront()), actionCollection(), "bringStencilToFront" );
-  (void) new KAction( i18n("Send to Back"), "send_stencil_to_back", 0, this, SLOT(sendStencilToBack()), actionCollection(), "sendStencilToBack" );
+  m_stencilToFront = new KAction( i18n("Bring to Front"), "bring_stencil_to_front", 0, this, SLOT(bringStencilToFront()), actionCollection(), "bringStencilToFront" );
+  m_stencilToBack = new KAction( i18n("Send to Back"), "send_stencil_to_back", 0, this, SLOT(sendStencilToBack()), actionCollection(), "sendStencilToBack" );
 
    m_menuTextFormatAction = new KAction(i18n("&Text..."), "text", 0, this, SLOT(textFormat()),
     actionCollection(), "textFormat");
@@ -530,33 +541,6 @@ void KivioView::initActions()
   updateButton();
 
   viewZoom(zoomHandler()->zoom());
-}
-
-void KivioView::viewGUIActivated( bool active )
-{
-  if ( active )
-    m_pTools->activateView(this);
-}
-
-QButton* KivioView::newIconButton( const char* file, bool kbutton, QWidget* parent )
-{
-  if (!parent)
-    parent = this;
-
-  QPixmap *pixmap = new QPixmap(BarIcon(file,KivioFactory::global()));
-
-  QButton *pb;
-  if (!kbutton)
-    pb = new QPushButton(parent);
-  else
-    pb = new QToolButton(parent);
-
-  if (pixmap)
-    pb->setPixmap(*pixmap);
-
-  pb->setFixedSize(16,16);
-  delete pixmap;
-  return pb;
 }
 
 void KivioView::updateReadWrite( bool readwrite )
@@ -876,14 +860,6 @@ void KivioView::toggleSnapGrid(bool b)
   d.isSnap = b;
   m_pDoc->setGrid(d);
   m_pDoc->setModified( true );
-}
-
-void KivioView::customEvent( QCustomEvent* e )
-{
-  if (KParts::GUIActivateEvent::test(e)) {
-    viewGUIActivated(((KParts::GUIActivateEvent*)e)->activated());
-  }
-  KoView::customEvent(e);
 }
 
 void KivioView::addStencilSet( const QString& name )
@@ -1233,6 +1209,7 @@ void KivioView::updateToolBars()
 
         m_pStencilGeometryPanel->setSize(0.0,0.0);
         m_pStencilGeometryPanel->setPosition(0.0,0.0);
+        m_pStencilGeometryPanel->setRotation(0);
 
         m_setArrowHeads->setCurrentStartArrow(0);
         m_setArrowHeads->setCurrentEndArrow(0);
@@ -1261,6 +1238,7 @@ void KivioView::updateToolBars()
 
         m_pStencilGeometryPanel->setSize( pStencil->w(), pStencil->h() );
         m_pStencilGeometryPanel->setPosition( pStencil->x(), pStencil->y() );
+        m_pStencilGeometryPanel->setRotation(pStencil->rotation());
 
         m_menuTextFormatAction->setEnabled( true );
         m_menuStencilConnectorsAction->setEnabled( true );
@@ -1526,6 +1504,16 @@ void KivioView::slotChangeStencilPosition(double newW, double newH)
   }
 }
 
+void KivioView::slotChangeStencilRotation(int d)
+{
+  //FIXME: Add undo command!!!!!
+  KivioStencil *pStencil = m_pActivePage->selectedStencils()->first();
+
+  if(pStencil && pStencil->rotation() != d) {
+    pStencil->setRotation(d);
+    m_pDoc->updateView(m_pActivePage);
+  }
+}
 
 /**
  * When passed a spawner, this will create a new stencil at 0,0.
@@ -1951,16 +1939,21 @@ void KivioView::stencilFormat()
 {
   KivioStencilFormatDlg dlg(this);
   KivioStencil* stencil = activePage()->selectedStencils()->getLast();
+  KivioLineStyle ls;
 
   if(stencil) {
-    dlg.setLineWidth(stencil->lineWidth(), m_pDoc->units());
-    dlg.setLineColor(stencil->fgColor());
+    ls = stencil->lineStyle();
     dlg.setFillColor(stencil->bgColor());
+    dlg.setFillPattern(stencil->fillPattern());
   } else {
     dlg.setLineWidth(1.0, m_pDoc->units());
     dlg.setLineColor(QColor(0, 0, 0));
-    dlg.setFillColor(QColor(255, 255, 255));
   }
+
+  dlg.setLineWidth(ls.width(), m_pDoc->units());
+  dlg.setLineColor(ls.color());
+  dlg.setLinePattern(ls.style());
+  dlg.setLineEndStyle(ls.capStyle());
 
   if(dlg.exec()) {
     QPtrListIterator<KivioStencil> it(*activePage()->selectedStencils());
@@ -1969,7 +1962,9 @@ void KivioView::stencilFormat()
       ++it;
       stencil->setLineWidth(dlg.lineWidth());
       stencil->setFGColor(dlg.lineColor());
+      stencil->setLinePattern(dlg.linePattern());
       stencil->setBGColor(dlg.fillColor());
+      stencil->setFillPattern(dlg.fillPattern());
     }
 
     updateToolBars();
@@ -2019,6 +2014,55 @@ void KivioView::arrowHeadFormat()
 
     updateToolBars();
   }
+}
+
+Kivio::PluginManager* KivioView::pluginManager()
+{
+  return m_pluginManager;
+}
+
+QPtrList<KAction> KivioView::clipboardActionList()
+{
+  QPtrList<KAction> tmp;
+  tmp.append(m_editCut);
+  tmp.append(m_editCopy);
+  tmp.append(m_editPaste);
+  
+  return tmp;
+}
+
+QPtrList<KAction> KivioView::alignActionList()
+{
+  QPtrList<KAction> tmp;
+  tmp.append(m_alignAndDistribute);
+  
+  return tmp;
+}
+
+QPtrList<KAction> KivioView::groupActionList()
+{
+  QPtrList<KAction> tmp;
+  tmp.append(m_groupAction);
+  tmp.append(m_ungroupAction);
+  
+  return tmp;
+}
+
+QPtrList<KAction> KivioView::textActionList()
+{
+  QPtrList<KAction> tmp;
+  tmp.append(m_menuTextFormatAction);
+  
+  return tmp;
+}
+
+QPtrList<KAction> KivioView::layerActionList()
+{
+  QPtrList<KAction> tmp;
+  tmp.append(m_stencilToFront);
+  tmp.append(m_stencilToBack);
+  
+  return tmp;
 }
 
 #include "kivio_view.moc"

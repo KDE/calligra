@@ -35,26 +35,23 @@
 #include <qapplication.h>
 #include <qcursor.h>
 
-ZoomTool::ZoomTool(KivioView* view)
-:Tool(view,"Zoom")
+ZoomTool::ZoomTool(KivioView* parent) : Kivio::MouseTool(parent, "Zoom Mouse Tool")
 {
-  setSortNum(1);
-  m_pToolBar = 0L;
+  m_zoomAction = new KRadioAction(i18n("&Zoom"), "viewmag", CTRL + ALT + Key_Z, actionCollection(), "zoom");
+  m_zoomAction->setWhatsThis(i18n("By pressing this button you can zoom in on a specific area."));
+  m_panAction = new KRadioAction(i18n("&Pan Document"), "kivio_zoom_hand", CTRL + ALT + Key_H, actionCollection(), "pan");
+  m_panAction->setWhatsThis(i18n("You can drag the document by using the mouse."));
+  m_zoomAction->setExclusiveGroup("zoomAction");
+  m_panAction->setExclusiveGroup("zoomAction");
+  connect(m_zoomAction,SIGNAL(activated()),SLOT(zoomActivated()));
+  connect(m_panAction,SIGNAL(activated()),SLOT(handActivated()));
+  connect(m_zoomAction, SIGNAL(toggled(bool)), this, SLOT(setActivated(bool)));
 
-  m_z1 = new KRadioAction( i18n("Zoom"), "kivio_zoom", CTRL + ALT + Key_Z, actionCollection(), "zoom" );
-  m_z1->setWhatsThis(i18n("By pressing this button you can zoom in on a specific area."));
-  m_z2 = new KRadioAction( i18n("Hand"), "kivio_zoom_hand", CTRL + ALT + Key_H, actionCollection(), "zoomHand" );
-  m_z2->setWhatsThis(i18n("You can drag the document by using the mouse."));
-  m_z1->setExclusiveGroup("zoomAction");
-  m_z2->setExclusiveGroup("zoomAction");
-  connect(m_z1,SIGNAL(activated()),SLOT(zoomActivated()));
-  connect(m_z2,SIGNAL(activated()),SLOT(handActivated()));
-
-  m_pPlus = new KAction( i18n("Zoom Plus"), "kivio_zoom_plus", SHIFT+Key_F2, actionCollection(), "zoomPlus" );
+  m_pPlus = new KAction( i18n("Zoom Plus"), "viewmag+", SHIFT+Key_F2, actionCollection(), "zoomPlus" );
   m_pPlus->setWhatsThis(i18n("You can zoom in on the document by pressing this button."));
   connect(m_pPlus,SIGNAL(activated()),SLOT(zoomPlus()));
 
-  m_pMinus = new KAction( i18n("Zoom Minus"), "kivio_zoom_minus", SHIFT+Key_F3, actionCollection(), "zoomMinus" );
+  m_pMinus = new KAction( i18n("Zoom Minus"), "viewmag-", SHIFT+Key_F3, actionCollection(), "zoomMinus" );
   m_pMinus->setWhatsThis(i18n("By pressing this button you can zoom out of the document."));
   connect(m_pMinus,SIGNAL(activated()),SLOT(zoomMinus()));
 
@@ -89,12 +86,7 @@ ZoomTool::ZoomTool(KivioView* view)
   pix = BarIcon("kivio_zoom_hand",KivioFactory::global());
   m_handCursor = new QCursor(pix,pix.width()/2,pix.height()/2);
 
-  ToolSelectAction* zoom = new ToolSelectAction( actionCollection(), "ToolAction" );
-  zoom->insert(m_z1);
-  zoom->insert(m_z2);
-
-  m_pMenu = new KActionMenu(i18n("Zoom Menu"), this, "zoomToolMenu");
-  buildMenu();
+  m_pMenu = 0;
 }
 
 ZoomTool::~ZoomTool()
@@ -106,18 +98,20 @@ ZoomTool::~ZoomTool()
 
 void ZoomTool::processEvent(QEvent* e)
 {
+  KivioCanvas* canvas = view()->canvasWidget();
+  
   if ( !m_bHandMode )
     switch (e->type()) {
       case QEvent::KeyPress:
         if (!m_bLockKeyboard) {
           m_pCurrent = m_pMinus;
-          m_pCanvas->setCursor(*m_pMinusCursor);
+          canvas->setCursor(*m_pMinusCursor);
         }
         break;
       case QEvent::KeyRelease:
         if (!m_bLockKeyboard) {
           m_pCurrent = m_pPlus;
-          m_pCanvas->setCursor(*m_pPlusCursor);
+          canvas->setCursor(*m_pPlusCursor);
         }
         break;
       case QEvent::MouseButtonPress:
@@ -132,21 +126,21 @@ void ZoomTool::processEvent(QEvent* e)
           {
             m_bLockKeyboard = true;
             m_bDrawRubber = true;
-            m_pCanvas->startRectDraw( ((QMouseEvent*)e)->pos(), KivioCanvas::Rubber );
+            canvas->startRectDraw( ((QMouseEvent*)e)->pos(), KivioCanvas::Rubber );
           }
         }
         break;
       case QEvent::MouseButtonRelease:
         if(m_pCurrent != m_pMinus) {
-          m_pCanvas->endRectDraw();
+          canvas->endRectDraw();
           m_bDrawRubber = false;
           m_bLockKeyboard = false;
-          zoomRect(m_pCanvas->rect());
+          zoomRect(canvas->rect());
         }
         break;
       case QEvent::MouseMove:
         if (m_bDrawRubber)
-          m_pCanvas->continueRectDraw( ((QMouseEvent*)e)->pos(), KivioCanvas::Rubber );
+          canvas->continueRectDraw( ((QMouseEvent*)e)->pos(), KivioCanvas::Rubber );
         break;
       default:
         break;
@@ -162,13 +156,13 @@ void ZoomTool::processEvent(QEvent* e)
         break;
       case QEvent::MouseMove:
         if (isHandMousePressed) {
-          m_pCanvas->setUpdatesEnabled(false);
+          canvas->setUpdatesEnabled(false);
           QPoint newPos = ((QMouseEvent*)e)->pos();
           mousePos -= newPos;
-          m_pCanvas->scrollDx(-mousePos.x());
-          m_pCanvas->scrollDy(-mousePos.y());
+          canvas->scrollDx(-mousePos.x());
+          canvas->scrollDy(-mousePos.y());
           mousePos = newPos;
-          m_pCanvas->setUpdatesEnabled(true);
+          canvas->setUpdatesEnabled(true);
         }
         break;
       default:
@@ -176,41 +170,28 @@ void ZoomTool::processEvent(QEvent* e)
     }
 }
 
-void ZoomTool::activateGUI(KXMLGUIFactory* /*factory*/)
+void ZoomTool::setActivated(bool a)
 {
-}
-
-void ZoomTool::deactivateGUI( KXMLGUIFactory* )
-{
-}
-
-void ZoomTool::activate()
-{
-  m_pCurrent = m_pPlus;
-}
-
-void ZoomTool::deactivate()
-{
-  kdDebug(43000) << "ZoomTool DeActivate" << endl;
-
-  m_pCurrent = 0L;
-
-  m_z1->setChecked(false);
-  m_z2->setChecked(false);
-
-  if (!m_pCanvas->isUpdatesEnabled()) {
-    m_pCanvas->setUpdatesEnabled(true);
+  if(a) {
+    m_pCurrent = m_pPlus;
+    emit activated(this);
+  } else {
+    kdDebug(43000) << "ZoomTool DeActivate" << endl;
+  
+    m_pCurrent = 0L;
+  
+    m_zoomAction->setChecked(false);
+    m_panAction->setChecked(false);
+  
+    if (!view()->canvasWidget()->isUpdatesEnabled()) {
+      view()->canvasWidget()->setUpdatesEnabled(true);
+    }
   }
-}
-
-void ZoomTool::configure()
-{
 }
 
 void ZoomTool::zoomActivated()
 {
-  setOverride();
-  m_pCanvas->setCursor(*m_pPlusCursor);
+  view()->canvasWidget()->setCursor(*m_pPlusCursor);
   m_bHandMode = false;
   m_bDrawRubber = false;
   m_bLockKeyboard = false;
@@ -218,160 +199,139 @@ void ZoomTool::zoomActivated()
 
 void ZoomTool::handActivated()
 {
-  setOverride();
-  m_pCanvas->setCursor(*m_handCursor);
+  view()->canvasWidget()->setCursor(*m_handCursor);
   m_bHandMode = true;
   isHandMousePressed = false;
 }
 
 void ZoomTool::zoomPlus()
 {
-   setOverride();
-   m_pCanvas->zoomIn(QPoint(m_pCanvas->width()/2, m_pCanvas->height()/2));
-   if(m_pView->zoomHandler()->zoom() >= 2000)
-   {
-      m_pPlus->setEnabled(false);
-      m_pMinus->setEnabled(true);
-   }
-   else
-   {
-      m_pPlus->setEnabled(true);
-      m_pMinus->setEnabled(true);
-   }
-   removeOverride();
+  KivioCanvas* canvas = view()->canvasWidget();
+  canvas->zoomIn(QPoint(canvas->width()/2, canvas->height()/2));
+  if(view()->zoomHandler()->zoom() >= 2000)
+  {
+    m_pPlus->setEnabled(false);
+    m_pMinus->setEnabled(true);
+  }
+  else
+  {
+    m_pPlus->setEnabled(true);
+    m_pMinus->setEnabled(true);
+  }
 }
 
 void ZoomTool::zoomMinus()
 {
-   setOverride();
-   m_pCanvas->zoomOut(QPoint(m_pCanvas->width()/2, m_pCanvas->height()/2));
-   if(m_pView->zoomHandler()->zoom() <= 25)
-   {
-      m_pMinus->setEnabled(false);
-      m_pPlus->setEnabled(true);
-   }
-   else
-   {
-      m_pMinus->setEnabled(true);
-      m_pPlus->setEnabled(true);
-   }
-   removeOverride();
+  KivioCanvas* canvas = view()->canvasWidget();
+  canvas->zoomOut(QPoint(canvas->width()/2, canvas->height()/2));
+  if(view()->zoomHandler()->zoom() <= 25)
+  {
+    m_pMinus->setEnabled(false);
+    m_pPlus->setEnabled(true);
+  }
+  else
+  {
+    m_pMinus->setEnabled(true);
+    m_pPlus->setEnabled(true);
+  }
 }
 
 void ZoomTool::zoomWidth()
 {
-  setOverride();
-
+  KivioCanvas* canvas = view()->canvasWidget();
   KoZoomHandler zoom;
   zoom.setZoomAndResolution(100, QPaintDevice::x11AppDpiX(),
     QPaintDevice::x11AppDpiY());
-  int cw = QMAX(10,m_pCanvas->width()-20);
-  KoPageLayout pl = m_pCanvas->activePage()->paperLayout();
+  int cw = QMAX(10,canvas->width()-20);
+  KoPageLayout pl = canvas->activePage()->paperLayout();
   float w = zoom.zoomItX(pl.ptWidth);
   float z = cw/w;
 
-  m_pCanvas->setUpdatesEnabled(false);
-  m_pCanvas->setZoom(qRound(z * 100));
-  m_pCanvas->setUpdatesEnabled(true);
-
-  removeOverride();
+  canvas->setUpdatesEnabled(false);
+  canvas->setZoom(qRound(z * 100));
+  canvas->setUpdatesEnabled(true);
 }
 
 void ZoomTool::zoomHeight()
 {
-  setOverride();
-
+  KivioCanvas* canvas = view()->canvasWidget();
   KoZoomHandler zoom;
   zoom.setZoomAndResolution(100, QPaintDevice::x11AppDpiX(),
     QPaintDevice::x11AppDpiY());
-  int ch = QMAX(10,m_pCanvas->height()-20);
-  KoPageLayout pl = m_pCanvas->activePage()->paperLayout();
+  int ch = QMAX(10,canvas->height()-20);
+  KoPageLayout pl = canvas->activePage()->paperLayout();
   float h = zoom.zoomItY(pl.ptHeight);
   float zh = ch/h;
 
-  m_pCanvas->setUpdatesEnabled(false);
-  m_pCanvas->setZoom(qRound(zh * 100));
-  m_pCanvas->setUpdatesEnabled(true);
-
-  removeOverride();
+  canvas->setUpdatesEnabled(false);
+  canvas->setZoom(qRound(zh * 100));
+  canvas->setUpdatesEnabled(true);
 }
 
 void ZoomTool::zoomPage()
 {
-  setOverride();
-
+  KivioCanvas* canvas = view()->canvasWidget();
   KoZoomHandler zoom;
   zoom.setZoomAndResolution(100, QPaintDevice::x11AppDpiX(),
     QPaintDevice::x11AppDpiY());
-  int cw = QMAX(10,m_pCanvas->width()-20);
-  int ch = QMAX(10,m_pCanvas->height()-20);
+  int cw = QMAX(10,canvas->width()-20);
+  int ch = QMAX(10,canvas->height()-20);
 
-  KoPageLayout pl = m_pCanvas->activePage()->paperLayout();
+  KoPageLayout pl = canvas->activePage()->paperLayout();
   float w = zoom.zoomItX(pl.ptWidth);
   float h = zoom.zoomItY(pl.ptHeight);
 
   float z = QMIN(cw/w,ch/h);
 
-  m_pCanvas->setUpdatesEnabled(false);
-  m_pCanvas->setZoom(qRound(z * 100));
-  m_pCanvas->setUpdatesEnabled(true);
-
-  removeOverride();
+  canvas->setUpdatesEnabled(false);
+  canvas->setZoom(qRound(z * 100));
+  canvas->setUpdatesEnabled(true);
 }
 
-void ZoomTool::buildMenu()
+void ZoomTool::showPopupMenu(const QPoint& p )
 {
-  m_pMenu->insert( m_pPlus );
-  m_pMenu->insert( m_pMinus );
-  m_pMenu->popupMenu()->insertSeparator();
-
-  m_pMenu->insert( m_pZoomWidth );
-  m_pMenu->insert( m_pZoomHeight );
-  m_pMenu->insert( m_pZoomPage );
-  m_pMenu->popupMenu()->insertSeparator();
-
-  m_pMenu->insert( m_pZoomSelected );
-  m_pMenu->insert( m_pZoomAllObjects );
-}
-
-void ZoomTool::showPopupMenu( QPoint p )
-{
+  if(!m_pMenu) {
+    m_pMenu = static_cast<KPopupMenu*>(factory()->container("ZoomPopup", view()));
+  }
+  
+  if(m_pMenu) {
     m_pMenu->popup(p);
+  } else {
+    kdDebug(43000) << "What no popup! *ARGH*!" << endl;
+  }
 }
 
 void ZoomTool::zoomSelected()
 {
-  setOverride();
-  KivioRect r = m_pCanvas->activePage()->getRectForAllSelectedStencils();
+  KivioCanvas* canvas = view()->canvasWidget();
+  KivioRect r = canvas->activePage()->getRectForAllSelectedStencils();
 
   if (!r.isNull() && r.isValid()) {
-    m_pCanvas->setVisibleArea(r);
+    canvas->setVisibleArea(r);
   }
-
-  removeOverride();
 }
 
 void ZoomTool::zoomAllobjects()
 {
-  setOverride();
-  KivioRect r = m_pCanvas->activePage()->getRectForAllStencils();
+  KivioCanvas* canvas = view()->canvasWidget();
+  KivioRect r = canvas->activePage()->getRectForAllStencils();
 
   if (!r.isNull() && r.isValid()) {
-    m_pCanvas->setVisibleArea(r);
+    canvas->setVisibleArea(r);
   }
-
-  removeOverride();
 }
 
 void ZoomTool::zoomRect(QRect r)
 {
+  KivioCanvas* canvas = view()->canvasWidget();
+  
   if (r.isEmpty()) {
-    m_pCanvas->zoomIn(r.topLeft());
+    canvas->zoomIn(r.topLeft());
     return;
   }
 
-  KoPoint p0 = m_pCanvas->mapFromScreen(r.topLeft());
-  m_pCanvas->setVisibleArea(KivioRect(p0.x(), p0.y(), m_pView->zoomHandler()
-    ->unzoomItX(r.width()), m_pView->zoomHandler()->unzoomItY(r.height())));
+  KoPoint p0 = canvas->mapFromScreen(r.topLeft());
+  canvas->setVisibleArea(KivioRect(p0.x(), p0.y(), view()->zoomHandler()
+    ->unzoomItX(r.width()), view()->zoomHandler()->unzoomItY(r.height())));
 }
 #include "tool_zoom.moc"

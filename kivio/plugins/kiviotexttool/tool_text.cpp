@@ -23,6 +23,8 @@
 #include <kstandarddirs.h>
 #include <kdebug.h>
 #include <koPoint.h>
+#include <klocale.h>
+#include <kactionclasses.h>
 
 #include "kivio_view.h"
 #include "kivio_canvas.h"
@@ -38,19 +40,17 @@
 #include "kivio_stencil.h"
 #include "kivio_factory.h"
 #include "kivio_command.h"
+#include "kivio_pluginmanager.h"
 
 
-TextTool::TextTool( KivioView* view )
-:Tool(view,"Text")
+TextTool::TextTool( KivioView* parent ) : Kivio::MouseTool(parent, "Text Mouse Tool")
 {
-  setSortNum(2);
-
-  ToolSelectAction* text = new ToolSelectAction( actionCollection(), "ToolAction" );
-  KAction* m_z1 = new KAction( i18n("Edit Stencil Text..."), "kivio_text", Key_F2, actionCollection(), "text" );
-  text->insert(m_z1);
+  m_textAction = new KToggleAction( i18n("Edit Stencil Text..."), "text", Key_F2, actionCollection(), "text" );
+  connect(m_textAction, SIGNAL(toggled(bool)), this, SLOT(setActivated(bool)));
 
   m_mode = stmNone;
 
+  //FIXME: Use the standard text cursor!!
   QPixmap pix = BarIcon("kivio_text_cursor",KivioFactory::global());
   m_pTextCursor = new QCursor(pix,2,2);
 }
@@ -69,149 +69,147 @@ TextTool::~TextTool()
  */
 void TextTool::processEvent( QEvent* e )
 {
-    switch (e->type())
-    {
-    case QEvent::MouseButtonPress:
-        mousePress( (QMouseEvent*)e );
-        break;
+  switch (e->type())
+  {
+  case QEvent::MouseButtonPress:
+    mousePress( (QMouseEvent*)e );
+    break;
 
-    case QEvent::MouseButtonRelease:
-        mouseRelease( (QMouseEvent*)e );
-        break;
+  case QEvent::MouseButtonRelease:
+    mouseRelease( (QMouseEvent*)e );
+    break;
 
-    case QEvent::MouseMove:
-        mouseMove( (QMouseEvent*)e );
-        break;
+  case QEvent::MouseMove:
+    mouseMove( (QMouseEvent*)e );
+    break;
 
-    default:
-      break;
-    }
+  default:
+    break;
+  }
 }
 
-void TextTool::activate()
+void TextTool::setActivated(bool a)
 {
-   kdDebug(43000) << "TextTool activate" << endl;
-    m_pCanvas->setCursor(*m_pTextCursor);
+  if(a) {
+    kdDebug(43000) << "TextTool activate" << endl;
+    m_textAction->setChecked(true);
+    view()->canvasWidget()->setCursor(*m_pTextCursor);
     m_mode = stmNone;
-
-    KivioPage *pPage =m_pView->activePage();
+  
+    KivioPage *pPage = view()->activePage();
     KivioStencil *pStencil = pPage->selectedStencils()->first();
-
+  
     if( !pStencil )
-        return;
-
+      return;
+  
     setStencilText();
-
-    controller()->activateDefault();
+  
+    view()->pluginManager()->activateDefaultTool();
+  } else {
+    m_textAction->setChecked(false);
+  }
 }
 
 void TextTool::setStencilText()
 {
-    KivioDoc* doc = m_pView->doc();
-    KivioPage *page =m_pView->activePage();
-    KivioStencil *stencil = page->selectedStencils()->first();
+  KivioDoc* doc = view()->doc();
+  KivioPage *page = view()->activePage();
+  KivioStencil *stencil = page->selectedStencils()->first();
 
-    if( !stencil )
-        return;
+  if( !stencil )
+    return;
 
-    KivioStencilTextDlg d(0, stencil->text());
+  KivioStencilTextDlg d(0, stencil->text());
 
-    if( !d.exec() )
-        return;
+  if( !d.exec() )
+    return;
 
-    QString text = d.text();
-    KMacroCommand *macro = new KMacroCommand( i18n("Change Stencil Text"));
-    bool createMacro=false;
-    while( stencil )
+  QString text = d.text();
+  KMacroCommand *macro = new KMacroCommand( i18n("Change Stencil Text"));
+  bool createMacro=false;
+  while( stencil )
+  {
+    if ( stencil->text()!= text )
     {
-        if ( stencil->text()!= text )
-        {
-            KivioChangeStencilTextCommand *cmd = new KivioChangeStencilTextCommand( i18n("Change Stencil Text"), stencil, stencil->text(), text, page);
-            macro->addCommand( cmd);
-            stencil->setText( text );
-            createMacro=true;
-        }
-        stencil = page->selectedStencils()->next();
+      KivioChangeStencilTextCommand *cmd = new KivioChangeStencilTextCommand( i18n("Change Stencil Text"), stencil, stencil->text(), text, page);
+      macro->addCommand( cmd);
+      stencil->setText( text );
+      createMacro=true;
     }
-    if ( createMacro )
-        doc->addCommand( macro);
-    else
-        delete macro;
-    doc->updateView(page);
+    stencil = page->selectedStencils()->next();
+  }
+  
+  if ( createMacro )
+    doc->addCommand( macro);
+  else
+    delete macro;
+  
+  doc->updateView(page);
 }
-
-void TextTool::deactivate()
-{
-}
-
-void TextTool::configure()
-{
-}
-
 
 void TextTool::text(QRect r)
 {
-    // Calculate the start and end clicks in terms of page coordinates
-    KoPoint startPoint = m_pCanvas->mapFromScreen( QPoint( r.x(), r.y() ) );
-    KoPoint releasePoint = m_pCanvas->mapFromScreen( QPoint( r.x() + r.width(), r.y() + r.height() ) );
+  // Calculate the start and end clicks in terms of page coordinates
+  KoPoint startPoint = view()->canvasWidget()->mapFromScreen( QPoint( r.x(), r.y() ) );
+  KoPoint releasePoint = view()->canvasWidget()->mapFromScreen( QPoint( r.x() + r.width(), r.y() + r.height() ) );
 
-    // Calculate the x,y position of the textion box
-    float x = startPoint.x() < releasePoint.x() ? startPoint.x() : releasePoint.x();
-    float y = startPoint.y() < releasePoint.y() ? startPoint.y() : releasePoint.y();
+  // Calculate the x,y position of the textion box
+  float x = startPoint.x() < releasePoint.x() ? startPoint.x() : releasePoint.x();
+  float y = startPoint.y() < releasePoint.y() ? startPoint.y() : releasePoint.y();
 
-    // Calculate the w/h of the textion box
-    float w = releasePoint.x() - startPoint.x();
+  // Calculate the w/h of the textion box
+  float w = releasePoint.x() - startPoint.x();
 
-    if( w < 0.0 ) {
-        w *= -1.0;
-    }
+  if( w < 0.0 ) {
+    w *= -1.0;
+  }
 
-    float h = releasePoint.y() - startPoint.y();
+  float h = releasePoint.y() - startPoint.y();
 
-    if( h < 0.0 ) {
-        h *= -1.0;
-    }
+  if( h < 0.0 ) {
+    h *= -1.0;
+  }
 
-    KivioDoc* doc = m_pView->doc();
-    KivioPage* page = m_pCanvas->activePage();
+  KivioDoc* doc = view()->doc();
+  KivioPage* page = view()->activePage();
 
-    KivioStencilSpawner* ss = doc->findInternalStencilSpawner("Dave Marotti - Text");
+  KivioStencilSpawner* ss = doc->findInternalStencilSpawner("Dave Marotti - Text");
 
-    if (!ss) {
-        return;
-    }
+  if (!ss) {
+    return;
+  }
 
-    KivioStencil* stencil = ss->newStencil();
-    stencil->setType(kstText);
-    stencil->setPosition(x,y);
-    stencil->setDimensions(w,h);
-    stencil->setText("");
-    stencil->setTextFont(doc->defaultFont());
-    page->unselectAllStencils();
-    page->addStencil(stencil);
-    page->selectStencil(stencil);
+  KivioStencil* stencil = ss->newStencil();
+  stencil->setType(kstText);
+  stencil->setPosition(x,y);
+  stencil->setDimensions(w,h);
+  stencil->setText("");
+  stencil->setTextFont(doc->defaultFont());
+  page->unselectAllStencils();
+  page->addStencil(stencil);
+  page->selectStencil(stencil);
 
+  doc->updateView(page);
+
+  setStencilText();
+
+  if (stencil->text().isEmpty()) {
+    page->deleteSelectedStencils();
     doc->updateView(page);
-
-    setStencilText();
-
-    if (stencil->text().isEmpty()) {
-        page->deleteSelectedStencils();
-        doc->updateView(page);
-    }
+  }
 }
 
 void TextTool::mousePress( QMouseEvent *e )
 {
-    if(e->button() == RightButton)
-    {
-        controller()->activateDefault();
-        return;
-    }
-    if( startRubberBanding( e ) )
-    {
-        m_mode = stmDrawRubber;
-    }
+  if(e->button() == RightButton)
+  {
+    view()->pluginManager()->activateDefaultTool();
+    return;
+  }
+  if( startRubberBanding( e ) )
+  {
+    m_mode = stmDrawRubber;
+  }
 }
 
 
@@ -220,55 +218,56 @@ void TextTool::mousePress( QMouseEvent *e )
  */
 bool TextTool::startRubberBanding( QMouseEvent *e )
 {
-    m_pCanvas->startRectDraw( e->pos(), KivioCanvas::Rubber );
-    m_pCanvas->repaint();
+  view()->canvasWidget()->startRectDraw( e->pos(), KivioCanvas::Rubber );
+  view()->canvasWidget()->repaint();
 
-    return true;
+  return true;
 }
 
 void TextTool::mouseMove( QMouseEvent * e )
 {
-    switch( m_mode )
-    {
-        case stmDrawRubber:
-            continueRubberBanding(e);
-            break;
+  switch( m_mode )
+  {
+    case stmDrawRubber:
+      continueRubberBanding(e);
+      break;
 
-        default:
-            break;
-    }
+    default:
+      break;
+  }
 }
 
 void TextTool::continueRubberBanding( QMouseEvent *e )
 {
-    m_pCanvas->continueRectDraw( e->pos(), KivioCanvas::Rubber );
+  view()->canvasWidget()->continueRectDraw( e->pos(), KivioCanvas::Rubber );
 }
 
 void TextTool::mouseRelease( QMouseEvent *e )
 {
-    m_releasePoint = e->pos();
+  m_releasePoint = e->pos();
 
-    switch( m_mode )
-    {
-        case stmDrawRubber:
-            endRubberBanding(e);
-            break;
-    }
+  switch( m_mode )
+  {
+    case stmDrawRubber:
+      endRubberBanding(e);
+      break;
+  }
 
-  	m_mode = stmNone;
+  m_mode = stmNone;
 
-    m_pCanvas->repaint();
+  view()->canvasWidget()->repaint();
 }
 
 void TextTool::endRubberBanding(QMouseEvent */*e*/)
 {
-    // End the rubber-band drawing
-    m_pCanvas->endRectDraw();
+  // End the rubber-band drawing
+  view()->canvasWidget()->endRectDraw();
 
-    // We can't text if the start and end points are the same
-    if( m_startPoint != m_releasePoint )
-    {
-        text(m_pCanvas->rect());
-    }
+  // We can't text if the start and end points are the same
+  if( m_startPoint != m_releasePoint )
+  {
+    text(view()->canvasWidget()->rect());
+  }
 }
+
 #include "tool_text.moc"

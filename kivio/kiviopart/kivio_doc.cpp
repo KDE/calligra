@@ -468,7 +468,6 @@ void KivioDoc::takePage( KivioPage * page )
 
 void KivioDoc::paintContent( QPainter& painter, const QRect& rect, bool transparent, double /*zoomX*/, double /*zoomY*/ )
 {
-  // ## TODO - otherwise kivio isn't embeddable
   KivioPage* page = m_pMap->firstPage();
   if ( !page )
     return;
@@ -481,6 +480,7 @@ void KivioDoc::paintContent( QPainter& painter, const QRect& rect, bool transpar
   float zw = (float) rect.width() / (float)zoom.zoomItX(r.w());
   float zh = (float) rect.height() / (float)zoom.zoomItY(r.h());
   float z = QMIN(zw, zh);
+  kdDebug(43000) << "paintContent: w = " << rect.width() << " h = " << rect.height() << endl;
 
   zoom.setZoomAndResolution(qRound(z * 100), QPaintDevice::x11AppDpiX(),
     QPaintDevice::x11AppDpiY());

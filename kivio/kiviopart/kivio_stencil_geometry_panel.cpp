@@ -4,6 +4,8 @@
 #include <qlabel.h>
 #include <qpixmap.h>
 
+#include <knuminput.h>
+
 #include <koUnitWidgets.h>
 
 static const char* width_xpm[] = {
@@ -80,12 +82,13 @@ static const char* ypos_xpm[] = {
 KivioStencilGeometryPanel::KivioStencilGeometryPanel(QWidget* parent)
 : QWidget(parent,"KivioStencilGeometryPanel")
 {
-  QGridLayout* grid = new QGridLayout( this, 4, 2, 3, 3 );
+  QGridLayout* grid = new QGridLayout( this, 5, 2, 3, 3 );
 
   QLabel *lx = new QLabel(this);
   QLabel *ly = new QLabel(this);
   QLabel *lw = new QLabel(this);
   QLabel *lh = new QLabel(this);
+  QLabel *rotationLbl = new QLabel(this);
 
   lx->setPixmap( QPixmap((const char **)xpos_xpm) );
   ly->setPixmap( QPixmap((const char **)ypos_xpm) );
@@ -96,11 +99,13 @@ KivioStencilGeometryPanel::KivioStencilGeometryPanel(QWidget* parent)
   m_pY = new KoUnitDoubleSpinBox(this, -1000.0, 1000.0, 0.5, 0.0);
   m_pW = new KoUnitDoubleSpinBox(this, -1000.0, 1000.0, 0.5, 0.0);
   m_pH = new KoUnitDoubleSpinBox(this, -1000.0, 1000.0, 0.5, 0.0);
+  m_rotationSBox = new KIntSpinBox(-360, 360, 1, 0, 10, this);
 
-  QObject::connect( m_pX, SIGNAL(valueChanged(double)), this, SLOT(xChange(double)) );
-  QObject::connect( m_pY, SIGNAL(valueChanged(double)), this, SLOT(yChange(double)) );
-  QObject::connect( m_pW, SIGNAL(valueChanged(double)), this, SLOT(wChange(double)) );
-  QObject::connect( m_pH, SIGNAL(valueChanged(double)), this, SLOT(hChange(double)) );
+  connect(m_pX, SIGNAL(valueChanged(double)), SLOT(xChange(double)));
+  connect(m_pY, SIGNAL(valueChanged(double)), SLOT(yChange(double)));
+  connect(m_pW, SIGNAL(valueChanged(double)), SLOT(wChange(double)));
+  connect(m_pH, SIGNAL(valueChanged(double)), SLOT(hChange(double)));
+  connect(m_rotationSBox, SIGNAL(valueChanged(int)), SLOT(rotationChange(int)));
 
   grid->addWidget( lx, 0, 0 );
   grid->addWidget( m_pX, 0, 1 );
@@ -113,6 +118,9 @@ KivioStencilGeometryPanel::KivioStencilGeometryPanel(QWidget* parent)
 
   grid->addWidget( lh, 3, 0 );
   grid->addWidget( m_pH, 3, 1 );
+
+  grid->addWidget(rotationLbl, 4, 0);
+  grid->addWidget(m_rotationSBox, 4, 1);
 
   m_unit = KoUnit::U_PT;
   m_emitSignals = true;
@@ -159,6 +167,13 @@ void KivioStencilGeometryPanel::hChange( double d )
   }
 }
 
+void KivioStencilGeometryPanel::rotationChange(int d)
+{
+  if(m_emitSignals) {
+    emit rotationChanged(d);
+  }
+}
+
 void KivioStencilGeometryPanel::setPosition( double x, double y )
 {
   m_pX->setValue(KoUnit::ptToUnit(x, m_unit));
@@ -175,6 +190,11 @@ void KivioStencilGeometryPanel::setPageLayout(const KoPageLayout& l)
 {
   m_pX->setMaxValue(KoUnit::ptToUnit(l.ptWidth, m_unit));
   m_pY->setMaxValue(KoUnit::ptToUnit(l.ptHeight, m_unit));
+}
+
+void KivioStencilGeometryPanel::setRotation(int d)
+{
+  m_rotationSBox->setValue(d);
 }
 
 void KivioStencilGeometryPanel::setEmitSignals(bool e)

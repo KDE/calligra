@@ -19,56 +19,60 @@
 #ifndef TOOL_TEXT_H
 #define TOOL_TEXT_H
 
-#include "tool.h"
+#include "kivio_mousetool.h"
 
 class QMouseEvent;
 class QCursor;
 
+class KToggleAction;
+
 class KivioView;
 class KivioPage;
 
-class TextTool : public Tool
-{ Q_OBJECT
-public:
-  TextTool( KivioView* view );
-  ~TextTool();
-
-  virtual void processEvent( QEvent* );
-  virtual void activate();
-  virtual void deactivate();
-  virtual void configure();
-
-  void text(QRect);
-
-  void setStencilText();
-
-signals:
-  void operationDone();
-
-protected:
-  void mousePress(QMouseEvent *);
-  void mouseMove(QMouseEvent *);
-  void mouseRelease(QMouseEvent *);
-
-  bool startRubberBanding(QMouseEvent*);
-  void continueRubberBanding(QMouseEvent *);
-  void endRubberBanding(QMouseEvent *);
-
-
-
-  QPoint m_startPoint, m_releasePoint;
-
-  // Text Tool Mode
-  enum
-  {
+class TextTool : public Kivio::MouseTool
+{
+  Q_OBJECT
+  public:
+    TextTool( KivioView* parent );
+    ~TextTool();
+  
+    virtual void processEvent( QEvent* );
+  
+    void text(QRect);
+  
+    void setStencilText();
+  
+  public slots:
+    void setActivated(bool a);
+  
+  signals:
+    void operationDone();
+  
+  protected:
+    void mousePress(QMouseEvent *);
+    void mouseMove(QMouseEvent *);
+    void mouseRelease(QMouseEvent *);
+  
+    bool startRubberBanding(QMouseEvent*);
+    void continueRubberBanding(QMouseEvent *);
+    void endRubberBanding(QMouseEvent *);
+  
+  
+  
+    QPoint m_startPoint, m_releasePoint;
+  
+    // Text Tool Mode
+    enum
+    {
       stmNone,
       stmDrawRubber
-  };
-
-private:
-  // Flag to indicate that we are drawing a rubber band
-  int m_mode;
-  QCursor* m_pTextCursor;
+    };
+  
+  private:
+    // Flag to indicate that we are drawing a rubber band
+    int m_mode;
+    QCursor* m_pTextCursor;
+    KToggleAction* m_textAction;
 };
 
 #endif

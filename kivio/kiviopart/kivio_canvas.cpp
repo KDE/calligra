@@ -32,8 +32,7 @@
 #include "kivio_screen_painter.h"
 #include "kivio_grid_data.h"
 
-#include "tool_controller.h"
-#include "tool.h"
+#include "kivio_pluginmanager.h"
 
 #include <kdebug.h>
 #include <klocale.h>
@@ -54,11 +53,10 @@
 
 using namespace Kivio;
 
-KivioCanvas::KivioCanvas( QWidget *par, KivioView* view, KivioDoc* doc, ToolController* tc, QScrollBar* vs, QScrollBar* hs)
+KivioCanvas::KivioCanvas( QWidget *par, KivioView* view, KivioDoc* doc, QScrollBar* vs, QScrollBar* hs)
 : QWidget(par, "KivioCanvas", WResizeNoErase | WRepaintNoErase),
   m_pView(view),
   m_pDoc(doc),
-  m_pToolsController(tc),
   m_pVertScrollBar(vs),
   m_pHorzScrollBar(hs)
 {
@@ -369,8 +367,7 @@ void KivioCanvas::paintEvent( QPaintEvent* ev )
   // Draw content
   KivioScreenPainter kpainter;
   kpainter.start( m_buffer );
-  kpainter.painter()->translate( -m_iXOffset, -m_iYOffset );
-  kpainter.painter()->translate( 0, 0 );
+  kpainter.translateBy( -m_iXOffset, -m_iYOffset );
   m_pDoc->paintContent(kpainter, rect, false, page, QPoint(0, 0), m_pView->zoomHandler(), true);
   kpainter.stop();
 
@@ -434,8 +431,8 @@ KoSize KivioCanvas::actualGridFrequency()
 bool KivioCanvas::event( QEvent* e )
 {
   bool f = QWidget::event(e);
-  if (m_pToolsController && delegateThisEvent)
-    m_pToolsController->delegateEvent(e,this);
+  if (m_pView->pluginManager() && delegateThisEvent)
+    m_pView->pluginManager()->delegateEvent(e);
 
   delegateThisEvent = true;
   return f;
@@ -1005,13 +1002,13 @@ void KivioCanvas::dropEvent( QDropEvent *e )
     pPage->unselectAllStencils();
     pPage->selectStencil( pNewStencil );
 
-    // Select the "selection tool" in case it's not done
-    Tool *t = m_pToolsController->findTool("Select");
+    // FIXME:Select the "selection tool" in case it's not done
+/*    Tool *t = m_pToolsController->findTool("Select");
     if( t )
     {
         m_pToolsController->selectTool(t);
     }
-
+*/
     m_pDoc->updateView(activePage());
 }
 
@@ -1096,7 +1093,7 @@ void KivioCanvas::keyReleaseEvent( QKeyEvent *e )
             break;
         }
         case Key_Escape: {
-            m_pToolsController->activateDefault();
+            m_pView->pluginManager()->activateDefaultTool();
         }break;
     }
 }

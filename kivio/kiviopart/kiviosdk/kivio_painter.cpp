@@ -68,3 +68,8 @@ void KivioPainter::setLineStyle( KivioLineStyle *pStyle )
 {
     pStyle->copyInto( m_pLineStyle );
 }
+
+void KivioPainter::setFillStyle( KivioFillStyle * s )
+{
+  s->copyInto( m_pFillStyle );
+}

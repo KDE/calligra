@@ -40,9 +40,6 @@ class KivioCanvas;
 class KivioPage;
 class KivioDoc;
 class KivioRuler;
-namespace Kivio {
-class ToolController;
-}
 class KivioGuideLineData;
 
 class KivioScreenPainter;
@@ -59,13 +56,11 @@ class KoSize;
 #define YBORDER_WIDTH 50
 #define XBORDER_HEIGHT 20
 
-using namespace Kivio;
-
 class KivioCanvas : public QWidget
 { Q_OBJECT
     friend class KivioView;
   public:
-    KivioCanvas( QWidget*, KivioView*, KivioDoc*, ToolController*, QScrollBar*, QScrollBar*/*, KivioRuler*, KivioRuler**/ );
+    KivioCanvas( QWidget*, KivioView*, KivioDoc*, QScrollBar*, QScrollBar* );
     ~KivioCanvas();
     /**
     * Called from @ref KivioView to complete the construction. Has to
@@ -183,8 +178,6 @@ class KivioCanvas : public QWidget
   private:
     KivioView* m_pView;
     KivioDoc* m_pDoc;
-
-    ToolController* m_pToolsController;
 
     QScrollBar* m_pVertScrollBar;
     QScrollBar* m_pHorzScrollBar;

@@ -33,7 +33,7 @@ class KivioScreenPainter : public KivioPainter
 protected:
     QPainter *m_pPainter;
     float m_transX, m_transY;
-    float m_rotation;
+    int m_rotation;
 
 public:
     KivioScreenPainter();
@@ -98,8 +98,11 @@ public:
     virtual void restoreState();
     virtual void setTranslation(float, float);
     virtual void translateBy(float, float);
-    virtual void setRotation(float);
-    virtual void rotateBy(float);
+    virtual void setRotation(int);
+    virtual void rotateBy(int);
+    virtual int rotation();
+
+    virtual void setWorldMatrix(QWMatrix, bool);
 };
 
 #endif

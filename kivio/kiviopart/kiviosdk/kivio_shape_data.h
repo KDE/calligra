@@ -35,7 +35,7 @@ class KivioTextShapeData
 {
 public:
     KivioTextShapeData();
-    
+
     QString m_text;                                 // The text inside this shape
     QColor m_textColor;                             // The text color
     QFont m_textFont;                               // The text font
@@ -69,12 +69,12 @@ public:
         kstClosedPath,
         kstTextBox
     } KivioShapeType;
-    
+
 protected:
     friend class KivioShape;
-    
+
     QPtrList <KivioPoint> *m_pOriginalPointList;       // Original point list loaded from an SML file
-    
+
     KivioShapeType m_shapeType;                     // The shape type
     KivioPoint m_position, m_dimensions;            // The position and dimensions
     KivioFillStyle *m_pFillStyle;                   // The fill style
@@ -91,52 +91,53 @@ public:
     KivioShapeData();
     KivioShapeData( const KivioShapeData & );
     virtual ~KivioShapeData();
-        
+
     virtual void copyInto( KivioShapeData *pTarget ) const;
-    
+
     virtual bool loadXML( const QDomElement & );
     virtual QDomElement saveXML( QDomDocument & );
-    
-    
+
+
     KivioShapeType shapeType() const { return m_shapeType; }
     void setShapeType( KivioShapeType st );
-    
+
     static KivioShapeType shapeTypeFromString( const QString & );
 
     QPtrList<KivioPoint> *pointList() { return m_pOriginalPointList; }
-    
+
     KivioFillStyle *fillStyle() const { return m_pFillStyle; }
     KivioLineStyle *lineStyle() const { return m_pLineStyle; }
+    void setLineStyle(KivioLineStyle ls);
 
 
     const QString &name() const { return m_name; }
     void setName( const QString &newName ) { m_name=newName; }
-    
-    
+
+
     // Dimensions / Position
     KivioPoint *position() { return &m_position; }
     KivioPoint *dimensions() { return &m_dimensions; }
-    
+
     float x() { return m_position.x(); }
     float y() { return m_position.y(); }
     float w() { return m_dimensions.x(); }
     float h() { return m_dimensions.y(); }
 
-    
-    
-    // Text functions    
+
+
+    // Text functions
     QString text();
     void setText( const QString &newText );
-    
+
     bool isHtml() const;
     void setIsHtml( bool b );
-    
+
     int hTextAlign() const;
     void setHTextAlign( int i );
-        
+
     int vTextAlign() const;
     void setVTextAlign( int i );
-    
+
     QFont textFont();
     void setTextFont( const QFont &f );
 

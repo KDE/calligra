@@ -133,6 +133,26 @@ double Kivio1DStencil::lineWidth()
     return m_pLineStyle->width();
 }
 
+void Kivio1DStencil::setLinePattern(int p)
+{
+    m_pLineStyle->setStyle(p);
+}
+
+int Kivio1DStencil::linePattern()
+{
+    return m_pLineStyle->style();
+}
+
+void Kivio1DStencil::setFillPattern(int p)
+{
+    m_pFillStyle->setBrushStyle(static_cast<Qt::BrushStyle>(p));
+}
+
+int Kivio1DStencil::fillPattern()
+{
+    return m_pFillStyle->brushStyle();
+}
+
 void Kivio1DStencil::setBGColor( QColor c )
 {
     m_pFillStyle->setColor(c);
@@ -959,4 +979,14 @@ void Kivio1DStencil::disconnectFromTargets()
     p->disconnect(true);
     p = m_pConnectorPoints->next();
   }
+}
+
+KivioLineStyle Kivio1DStencil::lineStyle()
+{
+  return *m_pLineStyle;
+}
+
+void Kivio1DStencil::setLineStyle(KivioLineStyle ls)
+{
+  ls.copyInto(m_pLineStyle);
 }

@@ -19,61 +19,66 @@
 #ifndef TOOL_CONNECTOR_H
 #define TOOL_CONNECTOR_H
 
-#include "tool.h"
+#include "kivio_mousetool.h"
 #include <koPoint.h>
 
 class QMouseEvent;
 class QCursor;
+
+class KToggleAction;
 
 class KivioView;
 class KivioPage;
 class KivioStraightConnector;
 class KivioCustomDragData;
 
-class ConnectorTool : public Tool
-{ Q_OBJECT
-public:
-  ConnectorTool( KivioView* view );
-  ~ConnectorTool();
-
-  virtual void processEvent( QEvent* );
-  virtual void activate();
-  virtual void deactivate();
-  virtual void configure();
-
-  void connector(QRect);
-
-signals:
-  void operationDone();
-
-protected:
-  void mousePress(QMouseEvent *);
-  void mouseMove(QMouseEvent *);
-  void mouseRelease(QMouseEvent *);
-
-  bool startRubberBanding(QMouseEvent*);
-  void continueRubberBanding(QMouseEvent *);
-  void endRubberBanding(QMouseEvent *);
-
-
-
-  QPoint m_startPoint, m_releasePoint;
-
-  // Connector Tool Mode
-  enum
-  {
+class ConnectorTool : public Kivio::MouseTool
+{
+  Q_OBJECT
+  public:
+    ConnectorTool( KivioView* parent );
+    ~ConnectorTool();
+  
+    virtual void processEvent( QEvent* );
+  
+    void connector(QRect);
+    
+  public slots:
+    void setActivated(bool a);
+  
+  signals:
+    void operationDone();
+  
+  protected:
+    void mousePress(QMouseEvent *);
+    void mouseMove(QMouseEvent *);
+    void mouseRelease(QMouseEvent *);
+  
+    bool startRubberBanding(QMouseEvent*);
+    void continueRubberBanding(QMouseEvent *);
+    void endRubberBanding(QMouseEvent *);
+  
+  
+  
+    QPoint m_startPoint, m_releasePoint;
+  
+    // Connector Tool Mode
+    enum
+    {
       stmNone,
       stmDrawRubber
-  };
-
-private:
-  // Flag to indicate that we are drawing a rubber band
-  int m_mode;
-  QCursor* m_pConnectorCursor1;
-  QCursor* m_pConnectorCursor2;
-  KivioStraightConnector* m_pStencil;
-  KoPoint startPoint;
-  KivioCustomDragData* m_pDragData;
+    };
+  
+  private:
+    // Flag to indicate that we are drawing a rubber band
+    int m_mode;
+    QCursor* m_pConnectorCursor1;
+    QCursor* m_pConnectorCursor2;
+    KivioStraightConnector* m_pStencil;
+    KoPoint startPoint;
+    KivioCustomDragData* m_pDragData;
+    
+    KToggleAction* m_connectorAction;
 };
 
 #endif

@@ -18,7 +18,8 @@
  */
 #include "kivio_common.h"
 #include "kivio_fill_style.h"
-#include "kivio_gradient.h"
+
+#include <kdebug.h>
 
 /**
  * Default constructor
@@ -27,31 +28,12 @@
  * a solid pattern.  It also sets the gradient pointer to null.
  */
 KivioFillStyle::KivioFillStyle()
-    : m_pGradient(NULL)
 {
     m_colorStyle = kcsSolid;
     m_color = QColor(255,255,255);
+    m_color2 = QColor(255,255,255);
     m_brushStyle = QBrush::SolidPattern;
-    m_pGradient = NULL;             // FIXME
-}
-
-
-
-/**
- * Destructor
- *
- * If we have a gradient, it destroys it.
- * FIXME: Should we keep all gradients in a central repository and have
- * the stencils simply point to them?  If so, then we shouldn't delete it
- * here, only set the pointer to null.
- */
-KivioFillStyle::~KivioFillStyle()
-{
-    if( m_pGradient )
-    {
-        delete m_pGradient;
-        m_pGradient = NULL;
-    }
+    m_gradientType = KImageEffect::VerticalGradient;
 }
 
 
@@ -62,17 +44,14 @@ KivioFillStyle::~KivioFillStyle()
  * @param source The source object to copy from.
  *
  * Copies all attributes from source, to this object.
- * FIXME: Gradient.. should it just be a pointer? See the destructor
- * for more details.
  */
 KivioFillStyle::KivioFillStyle( const KivioFillStyle &source )
-    : m_pGradient(NULL)
 {
-    m_colorStyle = source.m_colorStyle;
-    m_color = source.m_color;
-    m_brushStyle = m_brushStyle;
-    
-    m_pGradient = new KivioGradient( *(source.m_pGradient) );
+    m_colorStyle = source.colorStyle();
+    m_color = source.color();
+    m_brushStyle = source.brushStyle();
+    m_gradientType = source.gradientType();
+    m_color2 = source.color2();
 }
 
 
@@ -83,19 +62,17 @@ KivioFillStyle::KivioFillStyle( const KivioFillStyle &source )
  * @param pTarget The target object to copy into.
  *
  * Copies all attributes of this fillstyle into pTarget.
- * FIXME: gradient
  */
 void KivioFillStyle::copyInto( KivioFillStyle *pTarget ) const
 {
     if( !pTarget )
         return;
 
-    pTarget->m_colorStyle = m_colorStyle;
-    pTarget->m_color = m_color;
-    pTarget->m_brushStyle = m_brushStyle;
-
-    if( m_pGradient && pTarget->m_pGradient )
-        m_pGradient->copyInto( pTarget->m_pGradient );
+    pTarget->setKivioColorStyle(m_colorStyle);
+    pTarget->setColor(m_color);
+    pTarget->setBrushStyle(m_brushStyle);
+    pTarget->setGradientType(m_gradientType);
+    pTarget->setColor2(m_color2);
 }
 
 
@@ -103,19 +80,20 @@ void KivioFillStyle::copyInto( KivioFillStyle *pTarget ) const
  * Load this object from an XML element
  *
  * @param e The element to load from
- *
- * FIXME: Doesn't load gradient information.
  */
 bool KivioFillStyle::loadXML( const QDomElement &e )
 {
-    QDomElement ele;
-    QDomNode node;
+  QDomElement ele;
+  QDomNode node;
 
-    m_color = XmlReadColor( e, "color", QColor(255,255,255).rgb() );
+  m_color = XmlReadColor( e, "color", QColor(255,255,255).rgb() );
+  m_color2 = XmlReadColor( e, "gradientColor", QColor(255,255,255).rgb() );
 
-    m_colorStyle = (KivioColorStyle)XmlReadInt( e, "colorStyle", kcsSolid );
+  m_colorStyle = static_cast<KivioColorStyle>(XmlReadInt( e, "colorStyle", kcsSolid ));
 
-    return false;
+  m_gradientType = static_cast<KImageEffect::GradientType>(XmlReadInt(e, "gradientType", KImageEffect::VerticalGradient));
+
+  return true;
 }
 
 
@@ -129,14 +107,37 @@ bool KivioFillStyle::loadXML( const QDomElement &e )
  */
 QDomElement KivioFillStyle::saveXML( QDomDocument &doc )
 {
-    // FIXME: make this complete.  It's incomplete because
-    // kivio does not yet support gradients
+  QDomElement e = doc.createElement("KivioFillStyle");
 
-    QDomElement e = doc.createElement("KivioFillStyle");
+  XmlWriteColor( e, "color", m_color );
+  XmlWriteColor( e, "gradientColor", m_color2 );
 
-    XmlWriteColor( e, "color", m_color );
+  XmlWriteInt( e, "colorStyle", static_cast<int>(m_colorStyle) );
 
-    XmlWriteInt( e, "colorStyle", (int)m_colorStyle );
+  XmlWriteInt( e, "gradientType", static_cast<int>(m_gradientType) );
 
-    return e;
+  return e;
+}
+
+QBrush KivioFillStyle::brush()
+{
+  QBrush b;
+  b.setColor(m_color);
+
+  switch(m_colorStyle) {
+    case kcsSolid:
+      b.setStyle(m_brushStyle);
+      break;
+
+    case kcsNone:
+      b.setStyle(QBrush::NoBrush);
+      break;
+
+    case kcsGradient:
+    case kcsPixmap:
+    default:
+      break;
+  }
+
+  return b;
 }

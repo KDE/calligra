@@ -90,6 +90,11 @@ public:
     virtual void setLineWidth( double f );
     virtual double lineWidth();
 
+    virtual void setLinePattern(int p);
+    virtual int linePattern();
+
+    virtual void setFillPattern(int p);
+    virtual int fillPattern();
 
     // position functions
     virtual void setX( double );
@@ -140,6 +145,8 @@ public:
     virtual int resizeHandlePositions();
 
     virtual void disconnectFromTargets();
+    virtual KivioLineStyle lineStyle();
+    virtual void setLineStyle(KivioLineStyle ls);
 };
 
 

@@ -23,18 +23,18 @@ KivioLineStyle::KivioLineStyle()
 {
     m_color = QColor(0,0,0);
     m_width = 1.0f;
-    m_capStyle = Qt::RoundCap;
+    m_capStyle = Qt::FlatCap;
     m_joinStyle = Qt::RoundJoin;
     m_style = Qt::SolidLine;
 }
 
 KivioLineStyle::KivioLineStyle( const KivioLineStyle &ls )
 {
-    m_color     = ls.m_color;
-    m_width     = ls.m_width;
-    m_capStyle  = ls.m_capStyle;
-    m_joinStyle = ls.m_joinStyle;
-    m_style = Qt::SolidLine;
+    m_color     = ls.color();
+    m_width     = ls.width();
+    m_capStyle  = ls.capStyle();
+    m_joinStyle = ls.joinStyle();
+    m_style = ls.style();
 }
 
 KivioLineStyle::~KivioLineStyle()

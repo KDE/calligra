@@ -24,6 +24,8 @@
 #include <kstandarddirs.h>
 #include <koPoint.h>
 #include <kozoomhandler.h>
+#include <kactionclasses.h>
+#include <klocale.h>
 
 #include "kivio_view.h"
 #include "kivio_canvas.h"
@@ -38,17 +40,15 @@
 #include "kivio_point.h"
 #include "kivio_stencil.h"
 #include "straight_connector.h"
+#include "kivio_pluginmanager.h"
 
-ConnectorTool::ConnectorTool( KivioView* view )
-:Tool(view,"Connector")
+ConnectorTool::ConnectorTool( KivioView* parent ) : Kivio::MouseTool(parent, "Connector Mouse Tool")
 {
-  setSortNum(3);
-
-  ToolSelectAction* connector = new ToolSelectAction( actionCollection(), "ToolAction" );
-  KAction* m_z1 = new KAction( i18n("Edit Stencil Connector"), "kivio_connector", 0, actionCollection(), "connector" );
-  connector->insert(m_z1);
+  m_connectorAction = new KToggleAction(i18n("Stencil Connector"), "kivio_connector", 0, actionCollection(), "connector");
+  connect(m_connectorAction, SIGNAL(toggled(bool)), this, SLOT(setActivated(bool)));
 
   m_mode = stmNone;
+  m_pDragData = 0;
 
   m_pConnectorCursor1 = new QCursor(BarIcon("kivio_connector_cursor1",KivioFactory::global()),2,2);
   m_pConnectorCursor2 = new QCursor(BarIcon("kivio_connector_cursor2",KivioFactory::global()),2,2);
@@ -58,6 +58,8 @@ ConnectorTool::~ConnectorTool()
 {
   delete m_pConnectorCursor1;
   delete m_pConnectorCursor2;
+  delete m_pDragData;
+  m_pDragData = 0;
 }
 
 
@@ -69,76 +71,71 @@ ConnectorTool::~ConnectorTool()
  */
 void ConnectorTool::processEvent( QEvent* e )
 {
-    switch (e->type())
-    {
-    case QEvent::MouseButtonPress:
-        mousePress( (QMouseEvent*)e );
-        break;
+  switch (e->type())
+  {
+  case QEvent::MouseButtonPress:
+    mousePress( (QMouseEvent*)e );
+    break;
 
-    case QEvent::MouseButtonRelease:
-        mouseRelease( (QMouseEvent*)e );
-        break;
+  case QEvent::MouseButtonRelease:
+    mouseRelease( (QMouseEvent*)e );
+    break;
 
-    case QEvent::MouseMove:
-        mouseMove( (QMouseEvent*)e );
-        break;
+  case QEvent::MouseMove:
+    mouseMove( (QMouseEvent*)e );
+    break;
 
-    default:
-      break;
-    }
+  default:
+    break;
+  }
 }
 
-void ConnectorTool::activate()
+void ConnectorTool::setActivated(bool a)
 {
-   kdDebug(43000) << "ConnectorTool activate" << endl;
-    m_pCanvas->setCursor(*m_pConnectorCursor1);
+  if(a) {
+    m_connectorAction->setChecked(true);
+    view()->canvasWidget()->setCursor(*m_pConnectorCursor1);
     m_mode = stmNone;
     m_pStencil = 0;
     m_pDragData = 0;
-}
-
-void ConnectorTool::deactivate()
-{
+    emit activated(this);
+  } else {
     m_pStencil = 0;
-    if (m_pDragData)
-      delete m_pDragData;
-
+    delete m_pDragData;
     m_pDragData = 0;
-}
-
-void ConnectorTool::configure()
-{
+    m_connectorAction->setChecked(false);
+  }
 }
 
 void ConnectorTool::connector(QRect)
 {
-    if (!m_pStencil)
-      return;
+  if (!m_pStencil)
+    return;
 
-    delete m_pDragData;
-    m_pDragData = 0;
+  delete m_pDragData;
+  m_pDragData = 0;
 
-    KivioDoc* doc = m_pView->doc();
-    KivioPage* page = m_pCanvas->activePage();
+  KivioDoc* doc = view()->doc();
+  KivioPage* page = view()->activePage();
 
-    if (m_pStencil->w() < 3.0 && m_pStencil->h() < 3.0) {
-        page->unselectAllStencils();
-        page->selectStencil(m_pStencil);
-        page->deleteSelectedStencils();
-        m_pStencil = 0;
-        doc->updateView(page);
-        return;
-    }
-
-    m_pStencil->searchForConnections(page, m_pView->zoomHandler()->unzoomItY(4));
+  if (m_pStencil->w() < 3.0 && m_pStencil->h() < 3.0) {
+    page->unselectAllStencils();
+    page->selectStencil(m_pStencil);
+    page->deleteSelectedStencils();
+    m_pStencil = 0;
     doc->updateView(page);
+    return;
+  }
+
+  m_pStencil->searchForConnections(page, view()->zoomHandler()->unzoomItY(4));
+  doc->updateView(page);
 }
 
 void ConnectorTool::mousePress( QMouseEvent *e )
 {
   if(e->button() == RightButton)
   {
-    controller()->activateDefault();
+    view()->pluginManager()->activateDefaultTool();
     return;
   }
   if( startRubberBanding( e ) )
@@ -153,8 +150,9 @@ void ConnectorTool::mousePress( QMouseEvent *e )
  */
 bool ConnectorTool::startRubberBanding( QMouseEvent *e )
 {
-  KivioDoc* doc = m_pView->doc();
-  KivioPage* pPage = m_pCanvas->activePage();
+  KivioCanvas* canvas = view()->canvasWidget();
+  KivioDoc* doc = view()->doc();
+  KivioPage* pPage = canvas->activePage();
   KivioStencilSpawner* ss = doc->findInternalStencilSpawner("Dave Marotti - Straight Connector");
 
   if (!ss) {
@@ -163,10 +161,10 @@ bool ConnectorTool::startRubberBanding( QMouseEvent *e )
   }
 
   bool hit = false;
-  startPoint = pPage->snapToTarget(m_pCanvas->mapFromScreen(e->pos()), 8.0, hit);
+  startPoint = pPage->snapToTarget(canvas->mapFromScreen(e->pos()), 8.0, hit);
 
   if(!hit) {
-    startPoint = m_pCanvas->snapToGrid(startPoint);
+    startPoint = canvas->snapToGrid(startPoint);
   }
 
   // Create the stencil
@@ -190,8 +188,8 @@ bool ConnectorTool::startRubberBanding( QMouseEvent *e )
   m_pStencil->customDrag(m_pDragData);
 
 
-  m_pCanvas->repaint();
-  m_pCanvas->setCursor(*m_pConnectorCursor2);
+  canvas->repaint();
+  canvas->setCursor(*m_pConnectorCursor2);
   return true;
 }
 
@@ -210,12 +208,13 @@ void ConnectorTool::mouseMove( QMouseEvent * e )
 
 void ConnectorTool::continueRubberBanding( QMouseEvent *e )
 {
-  KivioPage* pPage = m_pCanvas->activePage();
+  KivioCanvas* canvas = view()->canvasWidget();
+  KivioPage* pPage = view()->activePage();
   bool hit = false;
-  KoPoint endPoint = pPage->snapToTarget(m_pCanvas->mapFromScreen(e->pos()), 8.0, hit);
+  KoPoint endPoint = pPage->snapToTarget(canvas->mapFromScreen(e->pos()), 8.0, hit);
 
   if(!hit) {
-    endPoint = m_pCanvas->snapToGrid(endPoint);
+    endPoint = canvas->snapToGrid(endPoint);
   }
 
   m_pStencil->setStartPoint(endPoint.x(), endPoint.y());
@@ -227,7 +226,7 @@ void ConnectorTool::continueRubberBanding( QMouseEvent *e )
   m_pStencil->customDrag(m_pDragData);
 
   m_pStencil->updateGeometry();
-  m_pCanvas->repaint();
+  canvas->repaint();
 }
 
 void ConnectorTool::mouseRelease( QMouseEvent *e )
@@ -239,13 +238,14 @@ void ConnectorTool::mouseRelease( QMouseEvent *e )
       break;
   }
 
-  m_pCanvas->setCursor(*m_pConnectorCursor1);
+  view()->canvasWidget()->setCursor(*m_pConnectorCursor1);
   m_mode = stmNone;
 }
 
 void ConnectorTool::endRubberBanding(QMouseEvent *)
 {
-  connector(m_pCanvas->rect());
+  connector(view()->canvasWidget()->rect());
   m_pStencil = 0;
 }
+
 #include "tool_connector.moc"

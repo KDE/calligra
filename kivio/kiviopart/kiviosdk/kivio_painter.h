@@ -24,6 +24,7 @@
 #include <qpaintdevice.h>
 #include <qpixmap.h>
 #include <qpointarray.h>
+#include <qwmatrix.h>
 
 #include "kivio_fill_style.h"
 
@@ -42,12 +43,12 @@ protected:
 public:
     KivioPainter();
     virtual ~KivioPainter();
-    
+
     virtual bool start( QPaintDevice * ) { return false;}
     virtual bool start( const QString & ) { return false;}
-    
+
     virtual bool stop() { return false;}
-    
+
 
     /*\
     |*|
@@ -58,22 +59,23 @@ public:
     \*/
     virtual float lineWidth() const;
     virtual void setLineWidth( const float &f );
-    
+
     // virtual void setClipRect( QRect * );
     // virtual QRect *clipRect();
-    
+
     virtual QColor fgColor() const;
     virtual void setFGColor( const QColor &c );
-    
+
     virtual QColor bgColor() const { return m_pFillStyle->color(); }
     virtual void setBGColor( const QColor &c ) { m_pFillStyle->setColor(c); }
 
     virtual QColor textColor() const { return m_textColor; }
     virtual void setTextColor( const QColor &c ) { m_textColor = c; }
-    
+
     virtual KivioFillStyle *fillStyle() { return m_pFillStyle; }
 
     virtual void setLineStyle( KivioLineStyle * );
+    virtual void setFillStyle( KivioFillStyle * );
 
     /*\
     |*|
@@ -81,35 +83,35 @@ public:
     |*| PRIMITIVE FUNCTIONS
     |*|
     |*| (all descendants *must* reimplement these)
-    \*/    
+    \*/
     virtual void drawLine( float, float, float, float ) {;}
     virtual void drawArc( float, float, float, float, float, float ) {;}
-    
+
     virtual void drawBezier( QPtrList<KivioPoint> * ) {;}
     virtual void drawBezier( QPointArray & ) {;}
-    
+
     virtual void drawRect( float, float, float, float ) {;}
     virtual void fillRect( float, float, float, float ) {;}
-   
+
     virtual void drawRoundRect( float, float, float, float, float, float ) {;}
     virtual void fillRoundRect( float, float, float, float, float, float ) {;}
 
     virtual void drawEllipse( float, float, float, float ) {;}
     virtual void fillEllipse( float, float, float, float ) {;}
-   
+
     virtual void drawPie( float, float, float, float, float, float ) {;}
     virtual void fillPie( float, float, float, float, float, float ) {;}
-   
+
     virtual void drawChord( float, float, float, float, float, float ) {;}
     virtual void fillChord( float, float, float, float, float, float ) {;}
-   
+
     virtual void drawOpenPath( QPtrList<KivioPoint> * ) {;}
     virtual void drawClosedPath( QPtrList<KivioPoint> * ) {;}
-   
+
     virtual void drawLineArray( QPtrList<KivioPoint> * ) {;}
     virtual void drawPolyline( QPtrList<KivioPoint> * ) {;}
     virtual void drawPolygon( QPtrList<KivioPoint> * ) {;}
-   
+
     virtual void drawLineArray( QPointArray & ) {;}
     virtual void drawPolyline( QPointArray & ) {;}
     virtual void drawPolygon( QPointArray & ) {;}
@@ -117,8 +119,8 @@ public:
     virtual void setFont( const QFont & ) {;}
     virtual void drawText( int, int, int, int, int, const QString & ) {;}
     virtual QRect boundingRect( int, int, int, int, int, const QString & ) { return QRect(0,0,100,100); }
-    
-    
+
+
     // These shouldn't be used for anything except the screen painter right now...
     virtual void drawPixmap( float, float, const QPixmap & ) {;}
 
@@ -140,8 +142,11 @@ public:
     virtual void restoreState() {;}
     virtual void setTranslation(float, float) {;}
     virtual void translateBy(float, float) {;}
-    virtual void setRotation(float) {;}
-    virtual void rotateBy(float) {;}
+    virtual void setRotation(int) {;}
+    virtual void rotateBy(int) {;}
+    virtual int rotation() { return 0; }
+
+    virtual void setWorldMatrix(QWMatrix, bool) {;}
 };
 
 #endif
