@@ -70,7 +70,7 @@ public:
     DashLine,       // dashes separated by a few pixels
     DotLine,        // dots separated by a few pixels
     DashDotLine,    // alternate dots and dashes
-    DashDotDotLine, // one dash, two dots, one dash, two dots
+    DashDotDotLine  // one dash, two dots, one dash, two dots
   };
   
   Pen(): style( SolidLine ), width( 0 ){}
