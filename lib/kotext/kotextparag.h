@@ -134,6 +134,12 @@ public:
     /** @return the parag rect, in pixels. This takes care of some rounding problems */
     QRect pixelRect( KoZoomHandler* zh ) const;
 
+    /** draw underline and double underline. Static because it's used
+     *  for draw double/simple in variable.
+     */
+     static void KoTextParag::drawUnderlineDoubleUnderline( QPainter * p, KoTextFormat *format, KoZoomHandler *zh, QFont font, const QColor & color, int startX, int baseLine, int bw, int y);
+
+
 #ifndef NDEBUG
     void printRTDebug( int );
 #endif

@@ -442,20 +442,29 @@ void KoVariable::drawCustomItem( QPainter* p, int x, int y, int /*cx*/, int /*cy
 
     p->save();
     p->setPen( QPen( f->color() ) );
+
+    QFont font( f->screenFont( zh ) );
+    QColor textColor( f->color() );
+
     if ( f->textBackgroundColor().isValid() )
         p->fillRect( x, y, zh->layoutUnitToPixelX( width ), h, f->textBackgroundColor() );
     if ( selected )
     {
-        p->setPen( QPen( cg.color( QColorGroup::HighlightedText ) ) );
+        textColor = cg.color( QColorGroup::HighlightedText );
+        p->setPen( QPen( textColor ) );
         p->fillRect( x, y,  zh->layoutUnitToPixelX( width ), h, cg.color( QColorGroup::Highlight ) );
 
     }
     else if ( textDocument() && textDocument()->drawFormattingChars()
               && p->device()->devType() != QInternal::Printer )
     {
-        p->setPen( QPen( cg.color( QColorGroup::Highlight ), 0, Qt::DotLine ) );
+        textColor = cg.color( QColorGroup::Highlight );
+        p->setPen( QPen ( textColor, 0, Qt::DotLine ) );
         p->drawRect( x, y, zh->layoutUnitToPixelX( width ), h );
     }
+
+    KoTextParag::drawUnderlineDoubleUnderline( p , f , zh, font, textColor, x , bl, zh->layoutUnitToPixelX( width ), y);
+
     //p->setFont( customItemFont ); // already done by the caller
     //kdDebug() << "KoVariable::draw bl=" << bl << << endl;
     p->drawText( x, y + bl + offset, text() );
@@ -1223,6 +1232,7 @@ void KoLinkVariable::drawCustomItem( QPainter* p, int x, int y, int /*cx*/, int 
     bl = zh->layoutUnitToPixelY( y, bl );
 
     bool linkColor=m_varColl->variableSetting()->displayLink();
+    QFont font( f->screenFont( zh ) );
     p->save();
     QColor textColor=linkColor ? Qt::blue :  f->color();
     p->setPen( QPen( textColor ) );
@@ -1234,6 +1244,10 @@ void KoLinkVariable::drawCustomItem( QPainter* p, int x, int y, int /*cx*/, int 
         p->fillRect( x, y,  zh->layoutUnitToPixelX( width ), h, cg.color( QColorGroup::Highlight ) );
 
     }
+
+    KoTextParag::drawUnderlineDoubleUnderline( p , f , zh, font, textColor, x , bl, zh->layoutUnitToPixelX( width ), y);
+
+
     //p->setFont( customItemFont ); // already done by the caller
     //kdDebug() << "KoVariable::draw bl=" << bl << << endl;
     p->drawText( x, y + bl + offset, text() );
@@ -1315,6 +1329,8 @@ void KoNoteVariable::drawCustomItem( QPainter* p, int x, int y, int /*cx*/, int 
         p->setPen( QPen( cg.color( QColorGroup::Highlight ), 0, Qt::DotLine ) );
         p->drawRect( x, y, zh->layoutUnitToPixelX( width ), h );
     }
+
+
     p->restore();
 }
 

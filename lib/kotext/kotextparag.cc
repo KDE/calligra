@@ -533,33 +533,7 @@ void KoTextParag::drawParagStringInternal( QPainter &painter, const QString &s, 
 	}
     }
 
-    if ( font.underline() )
-    {
-        int y = lastY + baseLine + KoBorder::zoomWidthY( 1, zh, 0 );
-        painter.setPen( QPen( textColor, KoBorder::zoomWidthY( 1, zh, 1 ), Qt::SolidLine ) );
-        painter.drawLine( startX, y, startX + bw, y );
-        font.setUnderline( FALSE );
-	painter.setFont( font );
-    }
-
-    bool doubleUnderline = lastFormat->doubleUnderline();
-    if ( doubleUnderline )
-    {
-        // For double-underlining, both lines are of width 0.5 (*zoom), in the hopes
-	// to have room for both.
-	// Another solution would be to increase the descent, but this would have to be
-	// done in the formatter
-	// ### TODO scale the painter to do this, especially when printing, to gain more resolution
-        //kdDebug() << "KoTextParag::drawParagStringInternal double underline. lastY=" << lastY << " baseLine=" << baseLine << " 0.5pix=" << KoBorder::zoomWidthY( 0.5, zh, 0 ) << " 1pix=" << KoBorder::zoomWidthY( 1, zh, 0 ) << " descent=(LU:" << lastFormat->descent() << " pix:" << zh->layoutUnitToPixelY( lastFormat->descent() ) << ")" << endl;
-
-	int y = lastY + baseLine + KoBorder::zoomWidthY( 0.2, zh, 0 ); // slightly under the baseline if possible
-        painter.setPen( QPen( textColor, KoBorder::zoomWidthY( 0.5, zh, 1 ), Qt::SolidLine ) );
-        painter.drawLine( startX, y, startX + bw, y );
-        //kdDebug() << "KoTextParag::drawParagStringInternal drawing first line at " << y << endl;
-	y = lastY + baseLine + zh->layoutUnitToPixelY( lastFormat->descent() ) /*- KoBorder::zoomWidthY( 1, zh, 0 )*/;
-        //kdDebug() << "KoTextParag::drawParagStringInternal drawing second line at " << y << endl;
-	painter.drawLine( startX, y, startX + bw, y );
-    }
+    KoTextParag::drawUnderlineDoubleUnderline( &painter, lastFormat, zh, font, textColor, startX, baseLine, bw, lastY);
 
     QPainter::TextDirection dir = rightToLeft ? QPainter::RTL : QPainter::LTR;
 
@@ -1046,3 +1020,35 @@ void KoTextParag::printRTDebug( int info )
     }
 }
 #endif
+
+
+void KoTextParag::drawUnderlineDoubleUnderline( QPainter * p, KoTextFormat *format, KoZoomHandler *zh, QFont font, const QColor & color, int startX, int baseLine, int bw, int lastY)
+{
+    if ( font.underline() )
+    {
+        int y = lastY + baseLine + KoBorder::zoomWidthY( 1, zh, 0 );
+        p->setPen( QPen( color, KoBorder::zoomWidthY( 1, zh, 1 ), Qt::SolidLine ) );
+        p->drawLine( startX, y, startX + bw, y );
+        font.setUnderline( FALSE );
+	p->setFont( font );
+    }
+
+    bool doubleUnderline = format->doubleUnderline();
+    if ( doubleUnderline )
+    {
+        // For double-underlining, both lines are of width 0.5 (*zoom), in the hopes
+	// to have room for both.
+	// Another solution would be to increase the descent, but this would have to be
+	// done in the formatter
+	// ### TODO scale the painter to do this, especially when printing, to gain more resolution
+        //kdDebug() << "KoTextParag::drawParagStringInternal double underline. lastY=" << lastY << " baseLine=" << baseLine << " 0.5pix=" << KoBorder::zoomWidthY( 0.5, zh, 0 ) << " 1pix=" << KoBorder::zoomWidthY( 1, zh, 0 ) << " descent=(LU:" << lastFormat->descent() << " pix:" << zh->layoutUnitToPixelY( lastFormat->descent() ) << ")" << endl;
+
+	int y = lastY + baseLine + KoBorder::zoomWidthY( 0.2, zh, 0 ); // slightly under the baseline if possible
+        p->setPen( QPen( color, KoBorder::zoomWidthY( 0.5, zh, 1 ), Qt::SolidLine ) );
+        p->drawLine( startX, y, startX + bw, y );
+        //kdDebug() << "KoTextParag::drawParagStringInternal drawing first line at " << y << endl;
+	y = lastY + baseLine + zh->layoutUnitToPixelY( format->descent() ) /*- KoBorder::zoomWidthY( 1, zh, 0 )*/;
+        //kdDebug() << "KoTextParag::drawParagStringInternal drawing second line at " << y << endl;
+	p->drawLine( startX, y, startX + bw, y );
+    }
+}
