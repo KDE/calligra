@@ -132,8 +132,8 @@ KPresenterDoc::KPresenterDoc( QWidget *parentWidget, const char *widgetName, QOb
                               bool singleViewMode )
     : KoDocument( parentWidget,widgetName, parent, name, singleViewMode ),
       _gradientCollection(),
-      _hasHeader( false ),
-      _hasFooter( false )
+      m_bHasHeader( false ),
+      m_bHasFooter( false )
 {
     setInstance( KPresenterFactory::global() );
     //Necessary to define page where we load object otherwise copy-duplicate page doesn't work.
@@ -966,6 +966,7 @@ bool KPresenterDoc::saveOasis( KoStore* store, KoXmlWriter* manifestWriter )
     }
 
     m_stickyPage->saveOasisStickyPage( store, stickyTmpWriter , savingContext, indexObj,partIndexObj );
+    saveOasisHeaderFooter( stickyTmpWriter , savingContext );
 
 
     saveOasisPresentationSettings( contentTmpWriter );
@@ -1077,6 +1078,22 @@ bool KPresenterDoc::saveOasis( KoStore* store, KoXmlWriter* manifestWriter )
     setModified( false );
 
     return true;
+}
+
+void KPresenterDoc::saveOasisHeaderFooter( KoXmlWriter & stickyTmpWriter , KoSavingContext& context )
+{
+    if ( m_bHasHeader )
+    {
+        stickyTmpWriter.startElement( "style:header" );
+        header()->textObject()->saveOasisContent( stickyTmpWriter, context );
+        stickyTmpWriter.endElement();
+    }
+    if ( m_bHasFooter )
+    {
+        stickyTmpWriter.startElement( "style:footer" );
+        footer()->textObject()->saveOasisContent( stickyTmpWriter, context );
+        stickyTmpWriter.endElement();
+    }
 }
 
 void KPresenterDoc::saveOasisSettings( KoXmlWriter &settingsWriter )
@@ -3240,7 +3257,7 @@ void KPresenterDoc::deSelectObj(KPObject *obj)
 
 void KPresenterDoc::setHeader( bool b )
 {
-    _hasHeader = b;
+    m_bHasHeader = b;
     _header->setDrawEditRect( b );
     _header->setDrawEmpty( b );
     if(!b)
@@ -3249,12 +3266,12 @@ void KPresenterDoc::setHeader( bool b )
         deSelectObj(_header);
     }
     updateHeaderFooterButton();
-    repaint(_hasHeader);
+    repaint(m_bHasHeader);
 }
 
 void KPresenterDoc::setFooter( bool b )
 {
-    _hasFooter = b;
+    m_bHasFooter = b;
     _footer->setDrawEditRect( b );
     _footer->setDrawEmpty( b );
     if(!b)
@@ -3263,7 +3280,7 @@ void KPresenterDoc::setFooter( bool b )
         deSelectObj(_footer);
     }
     updateHeaderFooterButton();
-    repaint(_footer);
+    repaint(m_bHasFooter);
 }
 
 void KPresenterDoc::updateHeaderFooterButton()

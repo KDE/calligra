@@ -51,6 +51,7 @@ class KPGroupObject;
 class KoOasisContext;
 class KoXmlWriter;
 class QFile;
+class KoSavingContext;
 
 #include <koDocument.h>
 #include <koDocumentChild.h>
@@ -258,8 +259,8 @@ class KPresenterDoc : public KoDocument
 
     KPTextObject *header()const { return _header; }
     KPTextObject *footer()const { return _footer; }
-    bool hasHeader()const { return _hasHeader; }
-    bool hasFooter()const { return _hasFooter; }
+    bool hasHeader()const { return m_bHasHeader; }
+    bool hasFooter()const { return m_bHasFooter; }
     void setHeader( bool b );
     void setFooter( bool b );
 
@@ -551,6 +552,7 @@ protected:
 
     void saveOasisPresentationSettings( KoXmlWriter &contentTmpWriter );
     void saveOasisPresentationCustionSlideShow( KoXmlWriter &contentTmpWriter );
+    void saveOasisHeaderFooter( KoXmlWriter &stickyTmpWriter , KoSavingContext& context );
 
     void saveOasisSettings( KoXmlWriter &contentTmpWriter );
     void loadOasisSettings( const QDomDocument&settingsDoc );
@@ -582,7 +584,7 @@ protected:
     KPGradientCollection _gradientCollection;
 
     KPTextObject *_header, *_footer;
-    bool _hasHeader, _hasFooter;
+    bool m_bHasHeader, m_bHasFooter;
 
     QMap<KoPictureKey, QString> m_pictureMap;
 
