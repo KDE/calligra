@@ -82,14 +82,17 @@ KontourImport::parseGObject( VObject *object, const QDomElement &e )
 	if( !e.attribute( "fillstyle" ).isEmpty() )
 	{
 		VFill fill;
-		QColor c;
-		c.setNamedColor( e.attribute( "fillcolor" ) );
-		VColor color( c );
 		int fillstyle = e.attribute( "fillstyle" ).toInt();
 		switch( fillstyle )
 		{
-			case 1: fill.setType( VFill::solid );
+			case 1:
+					{
+					fill.setType( VFill::solid );
+					QColor c;
+					c.setNamedColor( e.attribute( "fillcolor" ) );
+					VColor color( c );
 					fill.setColor( color );
+					}
 					break;
 			case 4: 
 					{
@@ -104,12 +107,12 @@ KontourImport::parseGObject( VObject *object, const QDomElement &e )
 	if( !e.attribute( "strokecolor" ).isEmpty() )
 	{
 		VStroke stroke;
-		QColor c;
 		int strokestyle = e.attribute( "strokestyle" ).toInt();
 		switch( strokestyle )
 		{
 			case 1:
 					{
+					QColor c;
 					c.setNamedColor( e.attribute( "strokecolor" ) );
 					VColor color( c );
 					stroke.setColor( color );
