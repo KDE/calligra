@@ -929,7 +929,7 @@ QStringList KoFieldVariable::actionTexts()
     lst << i18n( "Author Name" ); // is "Name" necessary ?
     lst << i18n( "Email" );
     lst << i18n( "Company Name" ); // is "Name" necessary ?
-    lst << i18n( "Path and File Name" );
+    lst << i18n( "Directory and File Name" );
     lst << i18n( "File Name without extension" );
     lst << QString::null; //7
     lst << QString::null; //8
