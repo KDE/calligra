@@ -206,15 +206,16 @@ QString KPBackGround::saveOasisPageEffect() const
     switch( pageEffect )
     {
     case PEF_NONE:
+        transition="none";
         break;
     case PEF_CLOSE_HORZ:
-        transition = "close-vertical";
+        transition="close-vertical";
         break;
     case PEF_CLOSE_VERT:
         transition="close-horizontal";
         break;
     case PEF_CLOSE_ALL:
-        transition="fade-to-center";
+        transition="close";
         break;
     case PEF_OPEN_HORZ:
         transition="open-vertical";
@@ -223,32 +224,43 @@ QString KPBackGround::saveOasisPageEffect() const
         transition="open-horizontal";
         break;
     case PEF_OPEN_ALL:
-        transition="fade-from-center";
+        transition="open";
         break;
     case PEF_INTERLOCKING_HORZ_1:
+        transition="interlocking-horizontal-left";
         break;
     case PEF_INTERLOCKING_HORZ_2:
+        transition="interlocking-horizontal-right";
         break;
     case PEF_INTERLOCKING_VERT_1:
+        transition="interlocking-vertical-top";
         break;
     case PEF_INTERLOCKING_VERT_2:
+        transition="interlocking-vertical-bottom";
         break;
     case PEF_SURROUND1:
         transition="spiralin-left";
         break;
     case PEF_FLY1:
+        transition="fly-away";
         break;
     case PEF_BLINDS_HOR:
+        transition="horizontal-stripes";
         break;
     case PEF_BLINDS_VER:
+        transition="vertical-stripes";
         break;
     case PEF_BOX_IN:
+        transition="fade-to-center";
         break;
     case PEF_BOX_OUT:
+        transition="fade-from-center";
         break;
     case PEF_CHECKBOARD_ACROSS:
+        transition="horizontal-checkerboard";
         break;
     case PEF_CHECKBOARD_DOWN:
+        transition="vertical-checkerboard";
         break;
     case PEF_COVER_DOWN:
         transition="fade-from-top";
@@ -256,33 +268,47 @@ QString KPBackGround::saveOasisPageEffect() const
     case PEF_COVER_UP:
         transition="fade-from-bottom";
         break;
-    case PEF_UNCOVER_UP:
-        transition="roll-from-bottom";
-        break;
     case PEF_COVER_LEFT:
-        break;
-    case PEF_UNCOVER_LEFT:
-        transition="roll-from-right";
+        transition="fade-from-right";
         break;
     case PEF_COVER_RIGHT:
-        break;
-    case PEF_UNCOVER_RIGHT:
+        transition="fade-from-left";
         break;
     case PEF_COVER_LEFT_UP:
-        break;
-    case PEF_UNCOVER_LEFT_UP:
+        transition="fade-from-lowerright";
         break;
     case PEF_COVER_LEFT_DOWN:
-        break;
-    case PEF_UNCOVER_LEFT_DOWN:
+        transition="fade-from-upperright";
         break;
     case PEF_COVER_RIGHT_UP:
-        break;
-    case PEF_UNCOVER_RIGHT_UP:
+        transition="fade-from-lowerleft";
         break;
     case PEF_COVER_RIGHT_DOWN:
+        transition="fade-from-upperleft";
+        break;
+    case PEF_UNCOVER_LEFT:
+        transition="uncover-to-left";
+        break;
+    case PEF_UNCOVER_UP:
+        transition="uncover-to-top";
+        break;
+    case PEF_UNCOVER_RIGHT:
+        transition="uncover-to-right";
+        break;
+    case PEF_UNCOVER_DOWN:
+        transition="uncover-to-bottom";
+        break;
+    case PEF_UNCOVER_LEFT_UP:
+        transition="uncover-to-upperleft";
+        break;
+    case PEF_UNCOVER_LEFT_DOWN:
+        transition="uncover-to-lowerleft";
+        break;
+    case PEF_UNCOVER_RIGHT_UP:
+        transition="uncover-to-upperright";
         break;
     case PEF_UNCOVER_RIGHT_DOWN:
+        transition="uncover-to-lowerright";
         break;
     case PEF_DISSOLVE:
         transition="dissolve";
@@ -300,8 +326,7 @@ QString KPBackGround::saveOasisPageEffect() const
         transition="fade-from-upperleft";
         break;
     case PEF_MELTING:
-        break;
-    case PEF_UNCOVER_DOWN:
+        transition="melt";
         break;
     case PEF_LAST_MARKER://don't use it !!!
         break;
@@ -343,6 +368,7 @@ QString KPBackGround::saveOasisBackgroundPageStyle( KoStore *store, KoXmlWriter 
         }
         break;
     }
+    case BT_BRUSH:
     case BT_CLIPART:
     case BT_PICTURE:
         //todo
@@ -574,7 +600,9 @@ void KPBackGround::loadOasis(KoOasisContext & context )
         const QString effect = styleStack.attribute("presentation:transition-style", QString::null, "drawing-page");
         kdDebug() << "Transition name: " << effect << endl;
         PageEffect pef;
-        if (effect=="vertical-stripes" || effect=="vertical-lines") // PEF_BLINDS_VER
+        if ( effect=="none" )
+            pef=PEF_NONE;
+        else if (effect=="vertical-stripes" || effect=="vertical-lines") // PEF_BLINDS_VER
             pef=PEF_BLINDS_VER;
         else if (effect=="horizontal-stripes" || effect=="horizontal-lines") // PEF_BLINDS_HOR
             pef=PEF_BLINDS_HOR;
@@ -597,32 +625,64 @@ void KPBackGround::loadOasis(KoOasisContext & context )
             pef=PEF_COVER_RIGHT;
         else if (effect=="fade-from-right") // PEF_COVER_LEFT
             pef=PEF_COVER_LEFT;
-        else if (effect=="fade-to-center") // PEF_CLOSE_ALL
-            pef=PEF_CLOSE_ALL;
-        else if (effect=="fade-from-center") // PEF_OPEN_ALL
-            pef=PEF_OPEN_ALL;
+        else if (effect=="fade-from-lowerleft") // PEF_COVER_RIGHT_UP
+            pef=PEF_COVER_RIGHT_UP;
+        else if (effect=="fade-from-lowerright") // PEF_COVER_LEFT_UP
+            pef=PEF_COVER_LEFT_UP;
+        else if (effect=="fade-from-upperleft") // PEF_COVER_RIGHT_DOWN
+            pef=PEF_COVER_RIGHT_DOWN;
+        else if (effect=="fade-from-upperright") // PEF_COVER_LEFT_DOWN
+            pef=PEF_COVER_LEFT_DOWN;
+        else if (effect=="fade-to-center") // PEF_BOX_IN
+            pef=PEF_BOX_IN;
+        else if (effect=="fade-from-center") // PEF_BOX_OUT
+            pef=PEF_BOX_OUT;
         else if (effect=="open-vertical") // PEF_OPEN_HORZ; really, no kidding ;)
             pef=PEF_OPEN_HORZ;
         else if (effect=="open-horizontal") // PEF_OPEN_VERT
             pef=PEF_OPEN_VERT;
+        else if (effect=="open") // PEF_OPEN_ALL
+            pef=PEF_OPEN_ALL;
         else if (effect=="close-vertical") // PEF_CLOSE_HORZ
             pef=PEF_CLOSE_HORZ;
         else if (effect=="close-horizontal") // PEF_CLOSE_VERT
             pef=PEF_CLOSE_VERT;
+        else if (effect=="close") // PEF_CLOSE_ALL
+            pef=PEF_CLOSE_ALL;
         else if (effect=="dissolve") // PEF_DISSOLVE; perfect hit ;)
             pef=PEF_DISSOLVE;
         else if (effect=="horizontal-checkerboard") // PEF_CHECKBOARD_ACROSS
             pef=PEF_CHECKBOARD_ACROSS;
         else if (effect=="vertical-checkerboard") // PEF_CHECKBOARD_DOWN
             pef=PEF_CHECKBOARD_DOWN;
-        else if (effect=="roll-from-left") // PEF_UNCOVER_RIGHT
+        else if (effect=="uncover-to-right" || effect=="roll-from-left") // PEF_UNCOVER_RIGHT
             pef=PEF_UNCOVER_RIGHT;
-        else if (effect=="roll-from-right") // PEF_UNCOVER_LEFT
+        else if (effect=="uncover-to-left" || effect=="roll-from-right") // PEF_UNCOVER_LEFT
             pef=PEF_UNCOVER_LEFT;
-        else if (effect=="roll-from-bottom") // PEF_UNCOVER_UP
+        else if (effect=="uncover-to-top" || effect=="roll-from-bottom") // PEF_UNCOVER_UP
             pef=PEF_UNCOVER_UP;
-        else if (effect=="roll-from-top") // PEF_UNCOVER_DOWN
+        else if (effect=="uncover-to-bottom" || effect=="roll-from-top") // PEF_UNCOVER_DOWN
             pef=PEF_UNCOVER_DOWN;
+        else if (effect=="uncover-to-upperleft") // PEF_UNCOVER_LEFT_UP
+            pef=PEF_UNCOVER_LEFT_UP;
+        else if (effect=="uncover-to-upperright") // PEF_UNCOVER_RIGHT_UP
+            pef=PEF_UNCOVER_RIGHT_UP;
+        else if (effect=="uncover-to-lowerleft") // PEF_UNCOVER_LEFT_DOWN
+            pef=PEF_UNCOVER_LEFT_DOWN;
+        else if (effect=="uncover-to-lowerright") // PEF_UNCOVER_RIGHT_DOWN
+            pef=PEF_UNCOVER_RIGHT_DOWN;
+        else if (effect=="interlocking-horizontal-left")
+            pef=PEF_INTERLOCKING_HORZ_1;
+        else if (effect=="interlocking-horizontal-right")
+            pef=PEF_INTERLOCKING_HORZ_2;
+        else if (effect=="interlocking-vertical-top")
+            pef=PEF_INTERLOCKING_VERT_1;
+        else if (effect=="interlocking-vertical-bottom")
+            pef=PEF_INTERLOCKING_VERT_2;
+        else if ( effect=="melt" )
+            pef=PEF_MELTING;
+        else if ( effect=="fly-away" )
+            pef=PEF_FLY1;
         else if ( effect=="random" )
             pef=PEF_RANDOM;
         else         // we choose a random transition instead of the unsupported ones ;)
