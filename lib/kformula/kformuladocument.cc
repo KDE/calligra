@@ -200,7 +200,7 @@ Document::Document( KConfig* config,
 
     KGlobal::dirs()->addResourceType("toolbar", KStandardDirs::kde_default("data") + "kformula/pics/");
     createActions(collection);
-    //kdDebug( DEBUGID ) << "Document::Document" << endl;
+    //kdDebug( DEBUGID ) << "Document::Document " << collection << endl;
     impl->contextStyle.readConfig( impl->config );
     impl->syntaxHighlightingAction->setChecked( impl->contextStyle.syntaxHighlighting() );
 
@@ -305,6 +305,50 @@ void Document::activate(Container* f)
     impl->formula = f;
 }
 
+void Document::setEnabled( bool enabled )
+{
+    //kdDebug() << "Document::setEnabled " << enabled << endl;
+
+    getMakeGreekAction()->setEnabled( enabled );
+    getAddGenericUpperAction()->setEnabled( enabled );
+    getAddGenericLowerAction()->setEnabled( enabled );
+    getRemoveEnclosingAction()->setEnabled( enabled );
+    getInsertSymbolAction()->setEnabled( enabled );
+    getAddThinSpaceAction()->setEnabled( enabled );
+    getAddMediumSpaceAction()->setEnabled( enabled );
+    getAddThickSpaceAction()->setEnabled( enabled );
+    getAddQuadSpaceAction()->setEnabled( enabled );
+    getAddBracketAction()->setEnabled( enabled );
+    getAddSBracketAction()->setEnabled( enabled );
+    getAddCBracketAction()->setEnabled( enabled );
+    getAddAbsAction()->setEnabled(enabled);
+    getAddFractionAction()->setEnabled( enabled );
+    getAddRootAction()->setEnabled( enabled );
+    getAddSumAction()->setEnabled( enabled );
+    getAddProductAction()->setEnabled( enabled );
+    getAddIntegralAction()->setEnabled( enabled );
+    getAddMatrixAction()->setEnabled( enabled );
+    getAddOneByTwoMatrixAction()->setEnabled( enabled );
+    getAddUpperLeftAction()->setEnabled( enabled );
+    getAddLowerLeftAction()->setEnabled( enabled );
+    getAddUpperRightAction()->setEnabled( enabled );
+    getAddLowerRightAction()->setEnabled( enabled );
+
+    if ( enabled ) {
+        getAddGenericUpperAction()->setShortcut( KShortcut( CTRL + Key_U ) );
+        getAddGenericLowerAction()->setShortcut( KShortcut( CTRL + Key_L ) );
+        getRemoveEnclosingAction()->setShortcut( KShortcut( CTRL + Key_R ) );
+        getMakeGreekAction()->setShortcut( KShortcut( CTRL + Key_G ) );
+        getInsertSymbolAction()->setShortcut( KShortcut( CTRL + Key_I ) );
+    }
+    else {
+        getAddGenericUpperAction()->setShortcut( KShortcut() );
+        getAddGenericLowerAction()->setShortcut( KShortcut() );
+        getRemoveEnclosingAction()->setShortcut( KShortcut() );
+        getMakeGreekAction()->setShortcut( KShortcut() );
+        getInsertSymbolAction()->setShortcut( KShortcut() );
+    }
+}
 
 void Document::formulaDies(Container* f)
 {
@@ -336,27 +380,27 @@ void Document::createActions(KActionCollection* collection)
 
     impl->addIntegralAction = new KAction(i18n("Add Integral"),
                                     "int",
-                                    CTRL + Key_6,
+                                    0,
                                     this, SLOT(addIntegral()),
                                     collection, "formula_addintegral");
     impl->addSumAction      = new KAction(i18n("Add Sum"),
                                     "sum",
-                                    CTRL + Key_7,
+                                    0,
                                     this, SLOT(addSum()),
                                     collection, "formula_addsum");
     impl->addProductAction  = new KAction(i18n("Add Product"),
                                     "prod",
-                                    CTRL + Key_4,
+                                    0,
                                     this, SLOT(addProduct()),
                                     collection, "formula_addproduct");
     impl->addRootAction     = new KAction(i18n("Add Root"),
                                     "sqrt",
-                                    CTRL + Key_2,
+                                    0,
                                     this, SLOT(addRoot()),
                                     collection, "formula_addroot");
     impl->addFractionAction = new KAction(i18n("Add Fraction"),
                                     "frac",
-                                    CTRL + Key_3,
+                                    0,
                                     this, SLOT(addFraction()),
                                     collection, "formula_addfrac");
     impl->addBracketAction  = new KAction(i18n("Add Bracket"),
@@ -382,7 +426,7 @@ void Document::createActions(KActionCollection* collection)
 
     impl->addMatrixAction   = new KAction(i18n("Add Matrix"),
                                     "matrix",
-                                    CTRL + Key_8,
+                                    0,
                                     this, SLOT(addMatrix()),
                                     collection, "formula_addmatrix");
 
@@ -419,17 +463,17 @@ void Document::createActions(KActionCollection* collection)
                                       this, SLOT(addGenericUpperIndex()),
                                       collection, "formula_addupperindex");
     impl->addGenericLowerAction = new KAction(i18n("Add Lower Index"),
-                                      CTRL + Key_L,
+                                      0,
                                       this, SLOT(addGenericLowerIndex()),
                                       collection, "formula_addlowerindex");
 
     impl->removeEnclosingAction = new KAction(i18n("Remove Enclosing Element"),
-                                        CTRL + Key_R,
+                                        0,
                                         this, SLOT(removeEnclosing()),
                                         collection, "formula_removeenclosing");
 
     impl->makeGreekAction = new KAction(i18n("Convert to Greek"),
-                                  CTRL + Key_G,
+                                  0,
                                   this, SLOT(makeGreek()),
                                   collection, "formula_makegreek");
 

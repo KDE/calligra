@@ -210,7 +210,7 @@ ElementType* SequenceParser::getPrimitive()
 }
 
 
-QString SequenceParser::getText()
+QString SequenceParser::text()
 {
     QString text;
     for ( uint i = tokenStart; i < tokenEnd; i++ ) {

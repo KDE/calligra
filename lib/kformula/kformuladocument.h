@@ -106,6 +106,11 @@ public:
     void activate(Container* formula);
 
     /**
+     * Enables our action according to enabled.
+     */
+    void setEnabled( bool enabled );
+
+    /**
      * Tells that a formula is about to vanish. This must not be
      * the active formula from now on.
      */

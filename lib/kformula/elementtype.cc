@@ -192,6 +192,7 @@ MultiElementType::MultiElementType( SequenceParser* parser )
     for ( uint i = start(); i < end(); i++ ) {
         parser->setElementType( i, this );
     }
+    //m_text = parser->text();
 }
 
 luPt MultiElementType::getSpaceBefore( const ContextStyle& context,

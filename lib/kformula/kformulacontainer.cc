@@ -388,8 +388,7 @@ double Container::baseline() const
 {
     const ContextStyle& context = document()->getContextStyle();
     //return context.layoutUnitToPixelY( rootElement()->getBaseline() );
-    //return context.layoutUnitPtToPt( context.pixelYToPt( rootElement()->getBaseline() ) );
-    return context.pixelYToPt( rootElement()->getBaseline() );
+    return context.layoutUnitPtToPt( context.pixelYToPt( rootElement()->getBaseline() ) );
 }
 
 void Container::moveTo( int x, int y )

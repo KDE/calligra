@@ -167,6 +167,12 @@ public:
     virtual luPt getSpaceAfter( OperatorType* type, const ContextStyle& context, ContextStyle::TextStyle tstyle );
     virtual luPt getSpaceAfter( RelationType* type, const ContextStyle& context, ContextStyle::TextStyle tstyle );
     virtual luPt getSpaceAfter( InnerElementType* type, const ContextStyle& context, ContextStyle::TextStyle tstyle );
+
+    //QString text() const { return m_text; }
+
+private:
+
+    //QString m_text;
 };
 
 

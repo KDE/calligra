@@ -67,6 +67,11 @@ public:
      */
     ElementType* getPrimitive();
 
+    /**
+     * @returns the current token's text
+     */
+    QString text();
+
 private:
 
     /**
@@ -83,11 +88,6 @@ private:
      * Reads the next token which is some text.
      */
     void readText();
-
-    /**
-     * @returns the current token's text
-     */
-    QString getText();
 
     /**
      * @returns the char at tokenEnd.
