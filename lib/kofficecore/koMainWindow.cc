@@ -726,7 +726,7 @@ bool KoMainWindow::saveDocument( bool saveas )
                     suggestedFilename = suggestedFilename.left (c);
                 }
             }
-            
+
             suggestedURL.setFileName (suggestedFilename);
         }
 
@@ -1222,7 +1222,7 @@ void KoMainWindow::slotConfigureKeys()
     if ( !view )
         return;
 
-    KKeyDialog dlg;
+    KKeyDialog dlg( this );
     dlg.insert( actionCollection() );
     dlg.insert( view->actionCollection() );
     if ( rootDocument() )
@@ -1234,7 +1234,7 @@ void KoMainWindow::slotConfigureToolbars()
 {
     if (rootDocument())
         saveMainWindowSettings( KGlobal::config(), rootDocument()->instance()->instanceName() );
-    KEditToolbar edit(factory());
+    KEditToolbar edit(factory(), this);
     connect(&edit,SIGNAL(newToolbarConfig()),this,SLOT(slotNewToolbarConfig()));
     (void) edit.exec();
 }
@@ -1541,7 +1541,7 @@ void KoMainWindow::slotEmailFile()
 {
     if (!rootDocument ())
         return;
-        
+
     if (rootDocument ()->url ().isEmpty () ||
         rootDocument ()->isModified ())
     {
@@ -1565,7 +1565,7 @@ void KoMainWindow::slotEmailFile()
             return;
         }
     }
-    
+
     // Subject = Document file name
     // Attachment = The current file
     // Message Body = The current document in HTML export? <-- This may be an option.
@@ -1574,7 +1574,7 @@ void KoMainWindow::slotEmailFile()
     kdDebug(30003) << "(" << fileURL <<")" << endl;
     QStringList urls;
     urls.append( fileURL );
-    
+
     if (!fileURL.isEmpty())
     {
         kapp->invokeMailer(QString::null, QString::null, QString::null, theSubject,
