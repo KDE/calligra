@@ -633,11 +633,11 @@ void KWView::setupActions()
     KStdAction::preferences(this, SLOT(configure()), actionCollection(), "configure" );
 
     //------------------------ Menu frameSet
-    actionChangePicture=new KAction( i18n( "Change picture..." ), 0,
+    actionChangePicture=new KAction( i18n( "Change picture..." ),"frame_image",0,
                                      this, SLOT( changePicture() ),
                                      actionCollection(), "change_picture" );
 
-    actionChangeClipart=new KAction( i18n( "Change clipart..." ), 0,
+    actionChangeClipart=new KAction( i18n( "Change clipart..." ), "frame_image",0,
                                      this, SLOT( changeClipart() ),
                                      actionCollection(), "change_clipart" );
     actionConfigureHeaderFooter=new KAction( i18n( "Configure header/footer..." ), 0,
