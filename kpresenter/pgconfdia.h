@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 1998, 1999 Reginald Stadlbauer <reggie@kde.org>
+   Copyright (C) 2002, 2003 Ariya Hidayat <ariya@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -20,24 +21,22 @@
 #ifndef PGCONFDIA_H
 #define PGCONFDIA_H
 
-#include <kdialogbase.h>
+#include <global.h>
+
 #include <qmap.h>
 #include <qpen.h>
+#include <qvaluelist.h>
 
-#include <global.h>
-class QButtonGroup;
-class QLabel;
-class QPushButton;
-class QVBoxLayout;
-class QListView;
+#include <kdialogbase.h>
+
 class KPresenterDoc;
-class QRadioButton;
-class QComboBox;
+
 class QCheckBox;
+class QComboBox;
 class QColor;
+class QListView;
+
 class KIntNumInput;
-class KURLRequester;
-class KPresenterSoundPlayer;
 class KColorButton;
 
 /******************************************************************/
@@ -51,29 +50,34 @@ class PgConfDia : public KDialogBase
 public:
 
     // constructor - destructor
-    PgConfDia( QWidget* parent, const char* name,
-               bool infLoop, bool swMan, 
-               bool showPresentationDuration, QPen pen );
+    PgConfDia( QWidget* parent, KPresenterDoc* doc );
     ~PgConfDia();
     bool getInfiniteLoop() const;
     bool getManualSwitch() const;
     bool getPresentationDuration()const;
     QPen getPen() const;
+    QValueList<bool> getSelectedSlides() const;
 
 protected:
 
-    QButtonGroup *general, *slides;
+    KPresenterDoc* m_doc;
+
     QCheckBox *infiniteLoop, *manualSwitch, *presentationDuration;
-    QRadioButton *slidesAll, *slidesCurrent, *slidesSelected;
-    QLabel *label2, *label3, *lTimer;
-    QVBoxLayout *back;
-    QListView *lSlides;
     KColorButton* penColor;
     KIntNumInput* penWidth;
+    
+    QListView *slides; 
+       
+    void setupPageGeneral();
+    void setupPageSlides();
+    
+protected slots:
+    void selectAllSlides();
+    void deselectAllSlides();
 
 public slots:
     void confDiaOk() { emit pgConfDiaOk(); }
-
+    
 signals:
     void pgConfDiaOk();
 

@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 1998, 1999 Reginald Stadlbauer <reggie@kde.org>
+   Copyright (C) 2002, 2003 Ariya Hidayat <ariya@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -20,108 +21,107 @@
 #include <pgconfdia.h>
 #include <kpresenter_doc.h>
 
-#include <qlabel.h>
-#include <qpushbutton.h>
 #include <qbuttongroup.h>
-#include <qlayout.h>
 #include <qcheckbox.h>
 #include <qhbox.h>
+#include <qheader.h>
+#include <qlabel.h>
+#include <qlayout.h>
+#include <qlistview.h>
 #include <qpen.h>
+#include <qpushbutton.h>
+#include <qvaluelist.h>
 
-#include <klocale.h>
-#include <kbuttonbox.h>
-#include <kglobal.h>
-#include <knuminput.h>
 #include <kcolorbutton.h>
+#include <kglobal.h>
+#include <klocale.h>
+#include <knuminput.h>
 
 /******************************************************************/
 /* class PgConfDia                                                */
 /******************************************************************/
 
 /*================================================================*/
-PgConfDia::PgConfDia( QWidget* parent, const char* name,
-                      bool infLoop, bool swMan, 
-                      bool showPresentationDuration, QPen pen )
-    : KDialogBase( parent, name, true, "",Ok|Cancel )
+PgConfDia::PgConfDia( QWidget* parent, KPresenterDoc* doc )
+    : KDialogBase( KDialogBase::Tabbed, i18n("Configure Slide Show"), 
+      Ok|Cancel, Ok, parent, "pgConfDia", true ), 
+      m_doc( doc )
 {
-    QWidget *page = new QWidget( this );
-    setMainWidget(page);
-    
-    QVBoxLayout *back = new QVBoxLayout( page, 0, spacingHint() );
 
-    general = new QButtonGroup( 1, Qt::Horizontal, i18n( "General" ), page, "general" );
-    general->setFrameStyle( QFrame::Box | QFrame::Sunken );
+    setupPageGeneral();
+    setupPageSlides();
+    connect( this, SIGNAL( okClicked() ), this, SLOT( confDiaOk() ) );
+    connect( this, SIGNAL( okClicked() ), this, SLOT( accept() ) );
+}
 
-    infiniteLoop = new QCheckBox( i18n( "&Infinite loop" ), general );
-    infiniteLoop->setChecked( infLoop );
+/*================================================================*/
+void PgConfDia::setupPageGeneral()
+{
+    QFrame* generalPage = addPage( i18n("General") );    
+    QVBoxLayout *generalLayout = new QVBoxLayout( generalPage, 0, spacingHint() );
+    generalLayout->setAutoAdd( true );
 
-    manualSwitch = new QCheckBox( i18n( "&Manual switch to next step" ), general );
-    manualSwitch->setChecked( swMan );
+    infiniteLoop = new QCheckBox( i18n( "&Infinite loop" ), generalPage );
+    infiniteLoop->setChecked( m_doc->spInfiniteLoop() );
 
-    presentationDuration = new QCheckBox( i18n( "&Show presentation duration" ), general );
-    presentationDuration->setChecked( showPresentationDuration );
+    manualSwitch = new QCheckBox( i18n( "&Manual switch to next step" ), generalPage );
+    manualSwitch->setChecked( m_doc->spManualSwitch() );
 
-    back->addWidget(general);
-
-#if 0
-    slides = new QButtonGroup( 1, Qt::Horizontal, page );
-    slides->setCaption( i18n( "Show Slides in Presentation" ) );
-
-    slidesAll = new QRadioButton( i18n( "&All slides" ), slides );
-    slidesCurrent = new QRadioButton( i18n( "&Current slide" ), slides );
-    slidesSelected = new QRadioButton( i18n( "&Selected slides" ), slides );
-
-    lSlides = new QListView( slides );
-    lSlides->addColumn( i18n( "Slide No." ) );
-    lSlides->addColumn( i18n( "Slide Title" ) );
-    lSlides->header()->setMovingEnabled( false );
-    lSlides->setSorting( -1 );
-
-    back->addWidget(slides);
-
-    slides->hide();
-
-    connect( slides, SIGNAL( clicked( int ) ),
-             this, SLOT( presSlidesChanged( int ) ) );
-#endif
+    presentationDuration = new QCheckBox( i18n( "&Show presentation duration" ), generalPage );
+    presentationDuration->setChecked( m_doc->presentationDuration() );
 
     // presentation pen (color and width)
+    
+    new QLabel( i18n( "Presentation pen:" ), generalPage );
 
-    new QLabel( i18n( "Presentation pen:" ), general );
-
-    QHBox* penGroup = new QHBox( general );
+    QHBox* penGroup = new QHBox( generalPage );
     penGroup->setSpacing( KDialog::spacingHint() );
 
     new QLabel( i18n( "Color:" ), penGroup );
-    penColor = new KColorButton( pen.color(), pen.color(), penGroup );
+    penColor = new KColorButton( m_doc->presPen().color(), m_doc->presPen().color(), penGroup );
 
     new QLabel( i18n( "Width:" ), penGroup );
     penWidth = new KIntNumInput( 1, penGroup );
     penWidth->setSuffix( i18n(" pt") ); 
     penWidth->setRange( 1, 10, 1 );
-    penWidth->setValue( pen.width() );
+    penWidth->setValue( m_doc->presPen().width() );
+}
 
-    connect( this, SIGNAL( okClicked() ), this, SLOT( confDiaOk() ) );
-    connect( this, SIGNAL( okClicked() ), this, SLOT( accept() ) );
-
-    //presSlidesChanged( 0 );
+/*================================================================*/
+void PgConfDia::setupPageSlides()
+{
+    QFrame* slidesPage = addPage( i18n("Slides") );
+    QVBoxLayout *slidesLayout = new QVBoxLayout( slidesPage, 0, spacingHint() );
+    slidesLayout->setAutoAdd( true );
+    
+    slides = new QListView( slidesPage );
+    slides->addColumn( i18n("Slide") );
+    slides->setSorting( -1 );
+    slides->header()->hide();
+    
+    for ( int i = m_doc->getPageNums() - 1; i >= 0; --i ) 
+    {
+        KPrPage *page=m_doc->pageList().at( i );
+        QCheckListItem* item = new QCheckListItem( slides, 
+            page->pageTitle( i18n( "Slide %1" ).arg( i + 1 ) ), 
+            QCheckListItem::CheckBox );
+        item->setOn( page->isSlideSelected() );
+    }
+    
+    QHBox* buttonGroup = new QHBox( slidesPage );
+    buttonGroup->setSpacing( KDialog::spacingHint() );
+    
+    QPushButton* selectAllButton = new QPushButton( i18n( "Select All" ), buttonGroup );
+    connect( selectAllButton, SIGNAL( clicked() ), this, SLOT( selectAllSlides() ) );
+    
+    QPushButton* deselectAllButton = new QPushButton( i18n( "Deselect All" ), buttonGroup );
+    connect( deselectAllButton, SIGNAL( clicked() ), this, SLOT( deselectAllSlides() ) );    
 }
 
 /*================================================================*/
 PgConfDia::~PgConfDia()
 {
 }
-
-/*================================================================*/
-#if 0
-void PgConfDia::presSlidesChanged( int )
-{
-    if ( slidesSelected->isChecked() )
-        lSlides->setEnabled( true );
-    else
-        lSlides->setEnabled( false );
-}
-#endif
 
 /*================================================================*/
 bool PgConfDia::getInfiniteLoop() const
@@ -146,5 +146,48 @@ QPen PgConfDia::getPen() const
 {
     return QPen( penColor->color(), penWidth->value() );
 }
+
+/*================================================================*/
+QValueList<bool> PgConfDia::getSelectedSlides() const
+{
+    QValueList<bool> selectedSlides;
+    
+    QListViewItem *item = slides->firstChild();
+    while( item )
+    {
+        QCheckListItem *checkItem = dynamic_cast<QCheckListItem*>( item );
+        bool selected = false;
+        if( checkItem ) selected = checkItem->isOn();
+        item = item->nextSibling();
+        selectedSlides.append( selected );
+    }
+    return selectedSlides;
+}
+
+/*================================================================*/
+void PgConfDia::selectAllSlides()
+{
+    QListViewItem *item = slides->firstChild();
+    while( item )
+    {
+        QCheckListItem *checkItem = dynamic_cast<QCheckListItem*>( item );
+        if( checkItem ) checkItem->setOn( true );
+        item = item->nextSibling();
+    }
+}
+
+/*================================================================*/
+void PgConfDia::deselectAllSlides()
+{
+    QListViewItem *item = slides->firstChild();
+    while( item )
+    {
+        QCheckListItem *checkItem = dynamic_cast<QCheckListItem*>( item );
+        if( checkItem ) checkItem->setOn( false );
+        item = item->nextSibling();
+    }
+}
+
+
 
 #include <pgconfdia.moc>

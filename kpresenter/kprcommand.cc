@@ -1444,9 +1444,11 @@ void BrushCmd::unexecute()
 
 /*================================================================*/
 PgConfCmd::PgConfCmd( const QString &_name, bool _manualSwitch, bool _infiniteLoop,
-                      bool _showPresentationDuration, QPen _pen, 
+                      bool _showPresentationDuration, QPen _pen,
+                      QValueList<bool> _selectedSlides, 
                       bool _oldManualSwitch, bool _oldInfiniteLoop,
                       bool _oldShowPresentationDuration, QPen _oldPen,
+                      QValueList<bool> _oldSelectedSlides, 
                       KPresenterDoc *_doc )
     : KNamedCommand( _name )
 {
@@ -1454,10 +1456,12 @@ PgConfCmd::PgConfCmd( const QString &_name, bool _manualSwitch, bool _infiniteLo
     infiniteLoop = _infiniteLoop;
     showPresentationDuration = _showPresentationDuration;
     pen = _pen;
+    selectedSlides = _selectedSlides;
     oldManualSwitch = _oldManualSwitch;
     oldInfiniteLoop = _oldInfiniteLoop;
     oldShowPresentationDuration = _oldShowPresentationDuration;
     oldPen = _oldPen;
+    oldSelectedSlides = _oldSelectedSlides;
     doc = _doc;
 }
 
@@ -1468,6 +1472,12 @@ void PgConfCmd::execute()
     doc->setInfiniteLoop( infiniteLoop );
     doc->setPresentationDuration( showPresentationDuration );
     doc->setPresPen( pen );
+    
+    QPtrList<KPrPage> pages = doc->pageList();
+    unsigned count = selectedSlides.count();
+    if( count > pages.count() ) count = pages.count();
+    for( unsigned i = 0; i < selectedSlides.count(); i++ )
+      pages.at( i )->slideSelected( selectedSlides[ i ] );    
 }
 
 /*================================================================*/
@@ -1477,6 +1487,12 @@ void PgConfCmd::unexecute()
     doc->setInfiniteLoop( oldInfiniteLoop );
     doc->setPresentationDuration( oldShowPresentationDuration );
     doc->setPresPen( oldPen );
+    
+    QPtrList<KPrPage> pages = doc->pageList();
+    unsigned count = oldSelectedSlides.count();
+    if( count > pages.count() ) count = pages.count();
+    for( unsigned i = 0; i < oldSelectedSlides.count(); i++ )
+      pages.at( i )->slideSelected( oldSelectedSlides[ i ] );    
 }
 
 /******************************************************************/

@@ -530,8 +530,10 @@ class PgConfCmd : public KNamedCommand
 public:
     PgConfCmd( const QString &_name, bool _manualSwitch, bool _infiniteLoop,
                bool _showPresentationDuration, QPen _pen,
+               QValueList<bool> _selectedSlides, 
                bool _oldManualSwitch, bool _oldInfiniteLoop,
                bool _oldShowPresentationDuration, QPen _oldPen, 
+               QValueList<bool> _oldSelectedSlides, 
                KPresenterDoc *_doc );
 
     virtual void execute();
@@ -542,6 +544,7 @@ protected:
     bool infiniteLoop, oldInfiniteLoop;
     bool showPresentationDuration, oldShowPresentationDuration;
     QPen pen, oldPen;
+    QValueList<bool> selectedSlides, oldSelectedSlides;
     KPresenterDoc *doc;
 };
 
