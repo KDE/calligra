@@ -278,45 +278,86 @@ int KSelectColorAction::plug(QWidget* widget, int index)
 
 KColorBar::KColorBar( const QValueList<QColor> &cols,
 		      QWidget *parent, const char *name )
-    : QWidget( parent, name ), colors( cols )
+    : QWidget( parent, name ), colors( cols ), orient( Vertical )
 {
     setMinimumSize( 20, colors.count() * 16 + 10 );
-    setMaximumWidth( 20 );
     resize( minimumSize() );
     show();
 }
 
 void KColorBar::mousePressEvent( QMouseEvent *e )
 {
-    int index = -1;
-    int x = ( width() - 12 ) / 2;
-    int y = 5;
-    QValueList<QColor>::Iterator it = colors.begin();
-    for ( int i = 0; it != colors.end(); ++it, ++i ) {
-	if ( QRect( x, y, 12, 12 ).contains( e->pos() ) )
-	    index = i;
-	y += 16;
-    }
+    if ( orientation() == Vertical ) {
+	int index = -1;
+	int x = ( width() - 12 ) / 2;
+	int y = 5;
+	QValueList<QColor>::Iterator it = colors.begin();
+	for ( int i = 0; it != colors.end(); ++it, ++i ) {
+	    if ( QRect( x, y, 12, 12 ).contains( e->pos() ) )
+		index = i;
+	    y += 16;
+	}
 
-    if ( index != -1 && index < (int)colors.count() ) {
-	if ( e->button() == LeftButton )
-	    emit leftClicked( colors[ index ] );
-	else if ( e->button() == RightButton )
-	    emit rightClicked( colors[ index ] );
+	if ( index != -1 && index < (int)colors.count() ) {
+	    if ( e->button() == LeftButton )
+		emit leftClicked( colors[ index ] );
+	    else if ( e->button() == RightButton )
+		emit rightClicked( colors[ index ] );
+	}
+    } else {
+	int index = -1;
+	int y = ( height() - 12 ) / 2;
+	int x = 5;
+	QValueList<QColor>::Iterator it = colors.begin();
+	for ( int i = 0; it != colors.end(); ++it, ++i ) {
+	    if ( QRect( x, y, 12, 12 ).contains( e->pos() ) )
+		index = i;
+	    x += 16;
+	}
+
+	if ( index != -1 && index < (int)colors.count() ) {
+	    if ( e->button() == LeftButton )
+		emit leftClicked( colors[ index ] );
+	    else if ( e->button() == RightButton )
+		emit rightClicked( colors[ index ] );
+	}
     }
+}
+
+void KColorBar::orientationChanged( Orientation o )
+{
+    orient = o;
+    if ( orientation() == Vertical ) {
+	setMinimumSize( 20, colors.count() * 16 + 10 );
+    } else {
+	setMinimumSize( colors.count() * 16 + 10, 20 );
+    }
+    updateGeometry();
+    repaint( FALSE );
 }
 
 void KColorBar::paintEvent( QPaintEvent * )
 {
     QPainter p;
     p.begin( this );
-    int x = ( width() - 12 ) / 2;
-    int y = 5;
-    QValueList<QColor>::Iterator it = colors.begin();
-    for ( ; it != colors.end(); ++it ) {
-	qDrawShadePanel( &p, x, y, 12, 12, colorGroup(), true );
-	p.fillRect( x + 1, y + 1, 10, 10, *it );
-	y += 16;
+    if ( orientation() == Vertical ) {
+	int x = ( width() - 12 ) / 2;
+	int y = 5;
+	QValueList<QColor>::Iterator it = colors.begin();
+	for ( ; it != colors.end(); ++it ) {
+	    qDrawShadePanel( &p, x, y, 12, 12, colorGroup(), true );
+	    p.fillRect( x + 1, y + 1, 10, 10, *it );
+	    y += 16;
+	}
+    } else {
+	int y = ( height() - 12 ) / 2;
+	int x = 5;
+	QValueList<QColor>::Iterator it = colors.begin();
+	for ( ; it != colors.end(); ++it ) {
+	    qDrawShadePanel( &p, x, y, 12, 12, colorGroup(), true );
+	    p.fillRect( x + 1, y + 1, 10, 10, *it );
+	    x += 16;
+	}
     }
     p.end();
 }
@@ -349,7 +390,8 @@ int KColorBarAction::plug( QWidget *widget, int index )
 		 receiver, leftClickSlot );
 	connect( b, SIGNAL( rightClicked( const QColor & ) ),
 		 receiver, rightClickSlot );
-
+	connect( bar, SIGNAL( orientationChanged( Orientation ) ),
+		 b, SLOT( orientationChanged( Orientation ) ) );
 	addContainer( bar, b );
 	connect( bar, SIGNAL( destroyed() ), this, SLOT( slotDestroyed() ) );
 	
@@ -369,6 +411,8 @@ int KColorBarAction::plug( QWidget *widget, int index )
 		 receiver, leftClickSlot );
 	connect( b, SIGNAL( rightClicked( const QColor & ) ),
 		 receiver, rightClickSlot );
+	connect( (QToolBar*)bar, SIGNAL( orientationChanged( Orientation ) ),
+		 b, SLOT( orientationChanged( Orientation ) ) );
 
 	addContainer( bar, b );
 	connect( bar, SIGNAL( destroyed() ), this, SLOT( slotDestroyed() ) );

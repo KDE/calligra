@@ -118,13 +118,19 @@ public:
      */
     KColorBar( const QValueList<QColor> &cols, QWidget *parent, const char *name );
 
+    Orientation orientation() const { return orient; }
+    
+public slots:
+    void orientationChanged( Orientation o );
+    
 protected:
     void mousePressEvent( QMouseEvent *e );
     void paintEvent( QPaintEvent *e );
 
 private:
     QValueList<QColor> colors;
-
+    Orientation orient;
+    
 signals:
     /**
      *  This signal gets emitted when the left mouse button is clicked on a color button.
