@@ -145,7 +145,7 @@ OPParts::Document_ptr imr_createDocByServerName( const char *_server_name )
   {
     QString tmp;
     tmp.sprintf( i18n("Could not start server %s" ), _server_name );
-    QMessageBox::critical( (QWidget*)0L, i18n("KSpread Error"), tmp, i18n( OK ) );
+    QMessageBox::critical( (QWidget*)0L, i18n("KSpread Error"), tmp, i18n( "OK" ) );
     return 0L;
   }
   
