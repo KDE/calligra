@@ -53,6 +53,7 @@
 #include <insertpagedia.h>
 #include <koPictureFilePreview.h>
 
+#include <dcopclient.h>
 #include <kfiledialog.h>
 #include <kmessagebox.h>
 #include <kstdaction.h>
@@ -1210,66 +1211,75 @@ void KPresenterView::startScreenPres( int pgNum /*1-based*/ )
     page->setToolEditMode( TEM_MOUSE );
 
     if ( page && !presStarted ) {
-        /*  dos not work.
-	// disable screensaver
-	QString pidFile = QDir::homeDirPath();
-	pidFile += "/.kss.pid";
-	FILE *fp;
-	if ( ( fp = fopen( QFile::encodeName(pidFile), "r" ) ) != NULL ) {
-	    fscanf( fp, "%d", &screensaver_pid );
-	    fclose( fp );
-	    kill( screensaver_pid, SIGSTOP );
+        QByteArray data;
+        QByteArray replyData;
+	QCString replyType;
+	m_screenSaverWasEnabled = false;
+        // is screensaver enabled?
+        if (kapp->dcopClient()->call("kdesktop", "KScreensaverIface", "isEnabled()", data, replyType, replyData)
+	    && replyType=="bool")
+	{
+            QDataStream replyArg(replyData, IO_ReadOnly);
+	    replyArg >> m_screenSaverWasEnabled;
+	    if ( m_screenSaverWasEnabled )
+	    {
+                // disable screensaver
+                QDataStream arg(data, IO_WriteOnly);
+                arg << false;
+                if (!kapp->dcopClient()->send("kdesktop", "KScreensaverIface", "enable(bool)", data))
+                    kdWarning(33001) << "Couldn't disable screensaver (using dcop to kdesktop)!" << endl;
+		else
+                    kdDebug(33001) << "Screensaver successfully disabled" << endl;
+	    }
 	}
-        */
 
-	page->deSelectAllObj();
-	presStarted = true;
-	int deskw = QApplication::desktop()->width();
-	int deskh = QApplication::desktop()->height();
+        page->deSelectAllObj();
+        presStarted = true;
+        int deskw = QApplication::desktop()->width();
+        int deskh = QApplication::desktop()->height();
         QRect pgRect = kPresenterDoc()->getPageRect( 0, 0, 0, 1.0, false );
-	float _presFaktW = static_cast<float>( deskw ) /
-			   static_cast<float>( pgRect.width() ) >
-			   1.0 ?
-			   static_cast<float>( deskw ) /
-			   static_cast<float>( pgRect.width() )
-			   : 1.0;
-	float _presFaktH = static_cast<float>( deskh ) /
-			   static_cast<float>( pgRect.height() ) >
-			   1.0 ? static_cast<float>( deskh ) /
-			   static_cast<float>( pgRect.height() )
-			   : 1.0;
-	float _presFakt = QMIN(_presFaktW,_presFaktH);
+        float _presFaktW = static_cast<float>( deskw ) /
+                           static_cast<float>( pgRect.width() ) >
+                           1.0 ?
+                           static_cast<float>( deskw ) /
+                           static_cast<float>( pgRect.width() )
+                           : 1.0;
+        float _presFaktH = static_cast<float>( deskh ) /
+                           static_cast<float>( pgRect.height() ) >
+                           1.0 ? static_cast<float>( deskh ) /
+                           static_cast<float>( pgRect.height() )
+                           : 1.0;
+        float _presFakt = QMIN(_presFaktW,_presFaktH);
         kdDebug(33001) << "KPresenterView::startScreenPres page->setPresFakt " << _presFakt << endl;
 
-	xOffsetSaved = xOffset;
-	yOffsetSaved = yOffset;
-	xOffset = 0;
-	yOffset = 0;
+        xOffsetSaved = xOffset;
+        yOffsetSaved = yOffset;
+        xOffset = 0;
+        yOffset = 0;
 
         // Center the slide in the screen, if it's smaller...
         pgRect = kPresenterDoc()->getPageRect( 0, 0, 0, _presFakt, false );
         kdDebug(33001) << "                                pgRect: " << pgRect.x() << "," << pgRect.y()
                   << " " << pgRect.width() << "x" << pgRect.height() << endl;
-	if ( deskw > pgRect.width() )
-	    xOffset -= ( deskw - pgRect.width() ) / 2;
-	if ( deskh > pgRect.height() )
-	    yOffset -= ( deskh - pgRect.height() ) / 2;
+        if ( deskw > pgRect.width() )
+            xOffset -= ( deskw - pgRect.width() ) / 2;
+        if ( deskh > pgRect.height() )
+            yOffset -= ( deskh - pgRect.height() ) / 2;
 
-	vert->setEnabled( false );
-	horz->setEnabled( false );
-	m_bShowGUI = false;
+        vert->setEnabled( false );
+        horz->setEnabled( false );
+        m_bShowGUI = false;
         page->reparent( ( QWidget* )0L, 0, QPoint( 0, 0 ), FALSE );
-	page->showFullScreen();
-	page->setFocusPolicy( QWidget::StrongFocus );
-	//page->setFocus(); done in gotoPage
-	page->startScreenPresentation( _presFakt, pgNum );
+        page->showFullScreen();
+        page->setFocusPolicy( QWidget::StrongFocus );
+        page->startScreenPresentation( _presFakt, pgNum );
 
-	actionScreenStart->setEnabled( false );
-	actionScreenViewPage->setEnabled( false );
+        actionScreenStart->setEnabled( false );
+        actionScreenViewPage->setEnabled( false );
 
-	if ( !kPresenterDoc()->spManualSwitch() && pgNum == -1 ) {
-	    continuePres = true;
-	    exitPres = false;
+        if ( !kPresenterDoc()->spManualSwitch() && pgNum == -1 ) {
+            continuePres = true;
+            exitPres = false;
             page->repaint( false );
 
             if ( automaticScreenPresFirstTimer ) {
@@ -1282,7 +1292,7 @@ void KPresenterView::startScreenPres( int pgNum /*1-based*/ )
             }
             else
                 autoScreenPresReStartTimer();
-	}
+        }
     }
 }
 
@@ -1290,39 +1300,37 @@ void KPresenterView::startScreenPres( int pgNum /*1-based*/ )
 void KPresenterView::screenStop()
 {
     if ( presStarted ) {
-	continuePres = false;
-	exitPres = true;
+        continuePres = false;
+        exitPres = true;
         page->setNextPageTimer( true );
         page->stopSound();
         page->showNormal();
         page->hide();
         page->reparent( pageBase, 0, QPoint( 0, 0 ), true );
         page->lower();
-	xOffset = xOffsetSaved;
-	yOffset = yOffsetSaved;
-	page->stopScreenPresentation();
-	presStarted = false;
-	vert->setEnabled( true );
-	horz->setEnabled( true );
-	m_bShowGUI = true;
-	page->setMouseTracking( true );
-	page->setBackgroundColor( white );
+        xOffset = xOffsetSaved;
+        yOffset = yOffsetSaved;
+        page->stopScreenPresentation();
+        presStarted = false;
+        vert->setEnabled( true );
+        horz->setEnabled( true );
+        m_bShowGUI = true;
+        page->setMouseTracking( true );
+        page->setBackgroundColor( white );
 
-        /* dos not work.
-	// start screensaver again
-	QString pidFile = QDir::homeDirPath();
-	pidFile += "/.kss.pid";
-	FILE *fp;
-	if ( ( fp = fopen( QFile::encodeName(pidFile), "r" ) ) != NULL ) {
-	    fscanf( fp, "%d", &screensaver_pid );
-	    fclose( fp );
-	    kill( screensaver_pid, SIGCONT );
+	if ( m_screenSaverWasEnabled )
+	{
+            // start screensaver again
+            QByteArray data;
+            QDataStream arg(data, IO_WriteOnly);
+            arg << true;
+            if (!kapp->dcopClient()->send("kdesktop", "KScreensaverIface", "enable(bool)", data))
+                kdWarning(33001) << "Couldn't re-enabled screensaver (using dcop to kdesktop)" << endl;
 	}
-        */
 
-	actionScreenStart->setEnabled( true );
-	actionScreenViewPage->setEnabled( true );
-	pageBase->resizeEvent( 0 );
+        actionScreenStart->setEnabled( true );
+        actionScreenViewPage->setEnabled( true );
+        pageBase->resizeEvent( 0 );
     }
 }
 
@@ -1611,8 +1619,8 @@ void KPresenterView::textDepthMinus()
 /*===============================================================*/
 void KPresenterView::textSettings()
 {
-    KPTextObject *txtObj = page->currentTextObjectView()->kpTextObject();
 #if 0
+    KPTextObject *txtObj = page->currentTextObjectView()->kpTextObject();
     if ( !txtObj )
 	txtObj = page->selectedTextObj();
     if ( txtObj ) {

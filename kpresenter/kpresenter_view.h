@@ -547,6 +547,7 @@ private:
 
     // flags
     bool continuePres, exitPres;
+    bool m_screenSaverWasEnabled;
 
     // right button popup menus
     QPopupMenu *rb_oalign, *rb_lbegin, *rb_lend, *rb_pstyle, *rb_pwidth;
