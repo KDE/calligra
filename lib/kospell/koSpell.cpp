@@ -189,7 +189,15 @@ bool KOSpell::initConfig()
     config = new_aspell_config();
     kdDebug()<<" ksconfig->dictionary() :"<<ksconfig->dictionary()<<endl;
 
-    aspell_config_replace(config, "lang", ksconfig->dictionary().isEmpty() ? "de": ksconfig->dictionary().latin1());
+    aspell_config_replace(config, "lang", ksconfig->dictionary().isEmpty() ? "fr": ksconfig->dictionary().latin1());
+    kdDebug()<<" ksconfig->dictionary() :"<<ksconfig->dictionary()<<endl;
+    AspellCanHaveError * ret;
+    ret = new_aspell_speller(config);
+    if (aspell_error(ret) != 0) {
+        kdDebug()<<"Error :"<<aspell_error_message(ret)<<endl;
+        delete_aspell_can_have_error(ret);
+        return false;
+    }
     switch (ksconfig->encoding())
     {
     case KOS_E_LATIN1:
@@ -223,7 +231,6 @@ bool KOSpell::initConfig()
     aspell_config_replace(config, "ignore-case", ksconfig->ignoreCase()?"true" : "false" );
     aspell_config_replace(config, "ignore-accents", ksconfig->ignoreAccent()?"true" : "false" );
 
-    AspellCanHaveError * ret;
     ret = new_aspell_speller(config);
 
     delete_aspell_config(config);
@@ -281,6 +288,8 @@ KOSpell::setUpDialog ()
 
 bool KOSpell::addPersonal (const QString & word)
 {
+    if( !speller)
+        return false;
     //add to aspell internal.
     aspell_speller_add_to_personal(speller, word.latin1(), word.length());
     //save directly into personnal dictionary.
@@ -290,6 +299,8 @@ bool KOSpell::addPersonal (const QString & word)
 
 bool KOSpell::writePersonalDictionary ()
 {
+    if( speller)
+        return false;
     aspell_speller_save_all_word_lists(speller);
     kdDebug()<<"aspell_speller_error_message(speller) :"<<aspell_speller_error_message(speller)<<endl;
     return true;
@@ -304,7 +315,7 @@ bool KOSpell::ignore (const QString & /*word*/)
 
 QStringList KOSpell::resultCheckWord( const QString &_word )
 {
-    if (_word.isEmpty())
+    if (_word.isEmpty() || !speller)
         return QStringList();
     kdDebug()<<" aspell_config_retrieve(config, lang) :"<<aspell_config_retrieve(config, "lang")<<endl;
     QStringList result;
@@ -461,6 +472,8 @@ void KOSpell::previousWord()
 
 bool KOSpell::check( const QString &_buffer, bool _usedialog )
 {
+    if( !ksdlg )
+        return false;
     lastpos = -1;
     usedialog = _usedialog;
     origbuffer = _buffer;
@@ -495,7 +508,6 @@ bool KOSpell::check( const QString &_buffer, bool _usedialog )
     QString qs;
     qs=origbuffer.mid (0,i);
     lastline=i; //the character position, not a line number
-
     if (_usedialog)
         ksdlg->show();
     else
@@ -702,6 +714,7 @@ int KOSpell::modalCheck( QString& text, KOSpellConfig* _kcs )
     {
         delete m_spell;
         m_spell=0L;
+        return modalreturn;
     }
 
     while (m_spell->status()!=Finished)
