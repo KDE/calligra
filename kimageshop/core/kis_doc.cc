@@ -50,10 +50,6 @@ KisDoc::KisDoc( KoDocument* parent, const char* name )
 {
   m_pCurrent = 0L;
   m_pNewDialog = 0L;
-  QObject::connect( &m_commands, SIGNAL( undoRedoChanged( QString, QString ) ),
-                    this, SLOT( slotUndoRedoChanged( QString, QString ) ) );
-  QObject::connect( &m_commands, SIGNAL( undoRedoChanged( QStringList, QStringList ) ),
-                    this, SLOT( slotUndoRedoChanged( QStringList, QStringList ) ) );
 
   m_Images.setAutoDelete(false);  
 }
@@ -326,10 +322,15 @@ QCString KisDoc::mimeType() const
 
 View* KisDoc::createView( QWidget* parent, const char* name )
 {
-    KisView* view = new KisView( this, parent, name );
-    addView( view );
+  KisView* view = new KisView( this, parent, name );
+  addView( view );
 
-    return view;
+  QObject::connect( &m_commands, SIGNAL( undoRedoChanged( QString, QString ) ),
+                    view, SLOT( slotUndoRedoChanged( QString, QString ) ) );
+  QObject::connect( &m_commands, SIGNAL( undoRedoChanged( QStringList, QStringList ) ),
+                    view, SLOT( slotUndoRedoChanged( QStringList, QStringList ) ) );
+
+  return view;
 }
 
 Shell* KisDoc::createShell()
@@ -349,16 +350,6 @@ void KisDoc::paintContent( QPainter& painter, const QRect& rect, bool /*transpar
 QString KisDoc::configFile() const
 {
   return readConfigFile( locate("kis", "kimageshop.rc", KisFactory::global()) );
-}
-
-void KisDoc::slotUndoRedoChanged( QString /*_undo*/, QString /*_redo*/ )
-{
-  //####### FIXME
-}
-
-void KisDoc::slotUndoRedoChanged( QStringList /*_undo*/, QStringList /*_redo*/ )
-{
-  //####### FIXME
 }
 
 void KisDoc::paintPixmap(QPainter *p, QRect area)

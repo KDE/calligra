@@ -133,6 +133,9 @@ class KisView : public ContainerView
   void canvasGotMouseReleaseEvent ( QMouseEvent * );
   void canvasGotPaintEvent( QPaintEvent* );
 
+  void slotUndoRedoChanged( QString _undo, QString _redo );
+  void slotUndoRedoChanged( QStringList _undo, QStringList _redo );
+
  protected:
   virtual void resizeEvent( QResizeEvent* );
 

@@ -333,6 +333,13 @@ void KisView::setupActions()
   // misc actions
   m_preferences = new KAction( i18n("&Preferences"), 0, this,
 			       SLOT( preferences() ),actionCollection(), "preferences");
+
+  // disable at startup unused actions
+  m_undo->setEnabled( false );
+  m_redo->setEnabled( false );
+  m_cut->setEnabled( false );
+  m_copy->setEnabled( false );
+  m_paste->setEnabled( false );
 }
 
 void KisView::slotTabSelected(const QString& name)
@@ -607,11 +614,15 @@ void KisView::tool_gradient()
 void KisView::undo()
 {
     qDebug("UNDO called");
+    
+    m_pDoc->commandHistory()->undo();
 }
 
 void KisView::redo()
 {
     qDebug("REDO called");
+    
+    m_pDoc->commandHistory()->redo();
 }
 
 void KisView::copy()
@@ -815,6 +826,38 @@ void KisView::slotSetFGColor(const KisColor& c)
 void KisView::slotSetBGColor(const KisColor& c)
 {
   m_bg = c;
+}
+   
+void KisView::slotUndoRedoChanged( QString /*_undo*/, QString /*_redo*/ )
+{
+  //####### FIXME
+}
+
+void KisView::slotUndoRedoChanged( QStringList _undo, QStringList _redo )
+{
+  //####### FIXME
+
+  if( _undo.count() )
+  {
+    // enable undo action
+    m_undo->setEnabled( true );
+  }
+  else
+  {
+    // disable undo action
+    m_undo->setEnabled( false );
+  }
+
+  if( _redo.count() )
+  {
+    // enable redo action
+    m_redo->setEnabled( true );
+  }
+  else
+  {
+    // disable redo action
+    m_redo->setEnabled( false );
+  }
 }
 
 #include "kis_view.moc"

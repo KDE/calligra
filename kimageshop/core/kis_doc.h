@@ -116,8 +116,6 @@ public:
     void renameImage(const QString& oldname, const QString &newname);
     
 public slots:
-  void slotUndoRedoChanged( QString _undo, QString _redo );
-  void slotUndoRedoChanged( QStringList _undo, QStringList _redo );
   void setCurrentLayerOpacity( double opacity )
     {  setLayerOpacity( (uchar) ( opacity * 255 / 100 ) ); };
   void slotImageUpdated();
