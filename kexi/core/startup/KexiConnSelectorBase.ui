@@ -66,23 +66,6 @@
                 </size>
             </property>
         </spacer>
-        <spacer row="5" column="2">
-            <property name="name">
-                <cstring>spacer</cstring>
-            </property>
-            <property name="orientation">
-                <enum>Vertical</enum>
-            </property>
-            <property name="sizeType">
-                <enum>Fixed</enum>
-            </property>
-            <property name="sizeHint">
-                <size>
-                    <width>20</width>
-                    <height>6</height>
-                </size>
-            </property>
-        </spacer>
         <widget class="QPushButton" row="4" column="0" rowspan="1" colspan="2">
             <property name="name">
                 <cstring>btn_back</cstring>
@@ -170,8 +153,9 @@
                 </sizepolicy>
             </property>
             <property name="text">
-                <string>&lt;b&gt;Select database server's connection you wish use to create a new Kexi project:
-&lt;/b&gt;</string>
+                <string>&lt;b&gt;Select existing database server's connection from the list below and click "OK".&lt;/b&gt;
+&lt;p&gt;You will see existing Kexi projects available for the selected connection. Here you may also add, edit or remove connections from the list.
+</string>
             </property>
             <property name="alignment">
                 <set>WordBreak|AlignTop</set>
@@ -268,31 +252,13 @@
                 </sizepolicy>
             </property>
             <property name="text">
-                <string>Click "Back" button if you want to create a new database stored in a file rather than on a server.
-</string>
+                <string>Click "Back" button if you want to open existing Kexi project file.</string>
             </property>
             <property name="alignment">
                 <set>WordBreak|AlignTop</set>
             </property>
             <property name="indent">
                 <number>7</number>
-            </property>
-        </widget>
-        <widget class="QCheckBox" row="6" column="0" rowspan="1" colspan="3">
-            <property name="name">
-                <cstring>chk_always</cstring>
-            </property>
-            <property name="sizePolicy">
-                <sizepolicy>
-                    <hsizetype>3</hsizetype>
-                    <vsizetype>1</vsizetype>
-                    <horstretch>0</horstretch>
-                    <verstretch>0</verstretch>
-                </sizepolicy>
-            </property>
-            <property name="text">
-                <string>Al&amp;ways use selected connection for creating
-new projects. Don't show me this dialog again. </string>
             </property>
         </widget>
         <spacer row="7" column="2">
@@ -320,7 +286,6 @@ new projects. Don't show me this dialog again. </string>
     <tabstop>btn_edit</tabstop>
     <tabstop>btn_remove</tabstop>
     <tabstop>btn_back</tabstop>
-    <tabstop>chk_always</tabstop>
 </tabstops>
 <layoutdefaults spacing="6" margin="11"/>
 </UI>

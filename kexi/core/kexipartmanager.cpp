@@ -30,61 +30,69 @@
 #include <kexidb/connection.h>
 #include <kexidb/cursor.h>
 
-namespace KexiPart
-{
+using namespace KexiPart;
 
 Manager::Manager(QObject *parent)
  : QObject(parent)
 {
+	m_partlist.setAutoDelete(true);
+	m_partsByMime.setAutoDelete(false);
+	
 }
 
 void
 Manager::lookup()
 {
+	m_partlist.clear();
+	m_partsByMime.clear();
 	KTrader::OfferList tlist = KTrader::self()->query("Kexi/Handler", "[X-Kexi-PartVersion] == " + QString::number(KEXI_PART_VERSION));
 	for(KTrader::OfferList::Iterator it(tlist.begin()); it != tlist.end(); ++it)
 	{
 		KService::Ptr ptr = (*it);
 		kdDebug() << "Manager::lookup(): " << ptr->property("X-Kexi-TypeMime").toString() << endl;
-		Info *info = new Info(ptr, this);
-		m_parts.insert(ptr->property("X-Kexi-TypeMime").toString(), info);
+		Info *info = new Info(ptr);
+		m_partsByMime.insert(ptr->property("X-Kexi-TypeMime").toString(), info);
 		m_partlist.append(info);
 	}
 }
 
-Part *
-Manager::load(Info *i)
+Manager::~Manager()
 {
-	kdDebug() << "Manager::load()" << endl;
+}
+
+Part *
+Manager::part(Info *i)
+{
+	kdDebug() << "Manager::part()" << endl;
 
 	if(!i || i->broken())
 		return 0;
 
-	kdDebug() << "Manager::load()" << endl;
+	kdDebug() << "Manager::part().." << endl;
 	Part *p = KParts::ComponentFactory::createInstanceFromService<Part>(i->ptr(), this, 0, QStringList());
 
 	if(!p)
 	{
-		kdDebug() << "Manager::load(): faild :(" << endl;
+		kdDebug() << "Manager::part(): failed :(" << endl;
 		i->setBroken(true);
 		return 0;
 	}
 
 	p->setInfo(i);
-	kdDebug() << "Manager::load(): fine!" << endl;
+	kdDebug() << "Manager::part(): fine!" << endl;
 	return p;
 }
 
 Part *
-Manager::load(const QString &mime)
+Manager::part(const QString &mime)
 {
-	return load(m_parts[mime]);
+	return part(m_partsByMime[mime]);
 }
 
 Info *
 Manager::info(const QString &mime)
 {
-	return m_parts[mime];
+	return m_partsByMime[mime];
 }
 
 
@@ -119,12 +127,6 @@ Manager::checkProject(KexiDB::Connection *conn)
 	conn->deleteCursor(cursor);
 
 	return;
-}
-
-Manager::~Manager()
-{
-}
-
 }
 
 #include "kexipartmanager.moc"

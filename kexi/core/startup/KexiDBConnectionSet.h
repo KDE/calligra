@@ -43,5 +43,5 @@ private:
 	KexiDBConnectionSetPrivate *d;
 };
 
-#endif // KEXINEWDBCONNDIALOG_H
+#endif // KEXICONNSET_H
 

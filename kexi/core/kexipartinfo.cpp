@@ -20,15 +20,18 @@
 #include <kexidb/global.h>
 #include "kexipartinfo.h"
 
-namespace KexiPart
-{
+using namespace KexiPart;
 
-Info::Info(KService::Ptr ptr, Manager *manager)
+Info::Info(KService::Ptr ptr) //, Manager *manager)
 {
 	m_ptr = ptr;
-	m_manager = manager;
+//	m_manager = manager;
 	m_instance = 0;
 	m_broken = false;
+}
+
+Info::~Info()
+{
 }
 
 const QString
@@ -72,6 +75,7 @@ Info::projectPartID()
 		return m_projectPartID;
 }
 
+#if 0//js
 Part *
 Info::instance()
 {
@@ -81,10 +85,6 @@ Info::instance()
 	m_instance = m_manager->load(this);
 	return m_instance;
 }
+#endif
 
-Info::~Info()
-{
-}
-
-}
 

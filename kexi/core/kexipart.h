@@ -38,17 +38,17 @@ class Part : public QObject
 	public:
 		
 		Part(QObject *parent, const char *name, const QStringList &);
-		~Part();
-
+		virtual ~Part();
 
 		virtual void	execute(KexiMainWindow *win, const QString &oname)=0;
+		
+		Info		*info() { return m_info; }
 
 	protected:
 		friend class Manager;
 
 
 		void		setInfo(Info *info) { m_info = info; }
-		Info		*info() { return m_info; }
 
 	private:
 		Info	*m_info;

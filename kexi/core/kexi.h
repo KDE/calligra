@@ -21,9 +21,12 @@
 #define __KEXI_H__
 
 #include "kexiprojectdata.h"
+#include "kexipartmanager.h"
 #include "startup/KexiDBConnectionSet.h"
 #include "startup/KexiProjectSet.h"
 #include <kexidb/drivermanager.h>
+
+#include <qvalidator.h>
 
 namespace Kexi
 {
@@ -35,7 +38,42 @@ namespace Kexi
 	
 	//! shared driver manager
 	extern KexiDB::DriverManager driverManager;
+	
+	//! shared part manager
+	extern KexiPart::Manager partManager;
+
+	//some utils
+	
+	//! \return valid filename based on \a s
+	extern QString string2FileName(const QString &s);
+	
+	/*! always returns valid identifier based on \a s.
+	 Non alphanumeric chars (or spaces) are replaced with '_'.
+	 If a number char is at the beginning, '_' is added at start.
+	 Empty strings are not changed.
+	*/
+	extern QString string2Identifier(const QString &s);
+	
+	//! class validates input for identifier name
+	class IdentifierValidator : public QValidator
+	{
+		public:
+			IdentifierValidator(QObject * parent, const char * name = 0);
+			~IdentifierValidator();
+			virtual State validate( QString & input, int & pos) const;
+	};
+
 }
+
+//! for use inside QWidget's subclasses: centers the widget on the screen
+#define CENTER_ME move((qApp->desktop()->width()-width())/2,(qApp->desktop()->height()-height())/2)
+
+//! sometimes we leave a space in the form of empty QFrame and want to insert here
+//! a widget that must be instantiated by hand.
+//! This macro inserts a widget \a what into a frame \a where.
+#define GLUE_WIDGET(what, where) \
+	{ QVBoxLayout *lyr = new QVBoxLayout(where); \
+	  lyr->addWidget(what); }
 
 #endif
 

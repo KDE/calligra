@@ -9,7 +9,7 @@
             <x>0</x>
             <y>0</y>
             <width>495</width>
-            <height>122</height>
+            <height>135</height>
         </rect>
     </property>
     <property name="caption">
@@ -32,26 +32,7 @@
                 </property>
                 <widget class="QLabel">
                     <property name="name">
-                        <cstring>icon</cstring>
-                    </property>
-                    <property name="sizePolicy">
-                        <sizepolicy>
-                            <hsizetype>4</hsizetype>
-                            <vsizetype>1</vsizetype>
-                            <horstretch>0</horstretch>
-                            <verstretch>0</verstretch>
-                        </sizepolicy>
-                    </property>
-                    <property name="margin">
-                        <number>2</number>
-                    </property>
-                    <property name="alignment">
-                        <set>WordBreak|AlignTop</set>
-                    </property>
-                </widget>
-                <widget class="QLabel">
-                    <property name="name">
-                        <cstring>textLabel1</cstring>
+                        <cstring>lbl</cstring>
                     </property>
                     <property name="sizePolicy">
                         <sizepolicy>
@@ -61,11 +42,8 @@
                             <verstretch>0</verstretch>
                         </sizepolicy>
                     </property>
-                    <property name="margin">
-                        <number>6</number>
-                    </property>
                     <property name="text">
-                        <string>&lt;P&gt;&lt;b&gt;Select existing Kexi Project file:&lt;/b&gt;
+                        <string>&lt;b&gt;Select existing Kexi project file to open:&lt;/b&gt;
 </string>
                     </property>
                     <property name="alignment">
@@ -73,6 +51,23 @@
                     </property>
                 </widget>
             </hbox>
+        </widget>
+        <widget class="QFrame">
+            <property name="name">
+                <cstring>line</cstring>
+            </property>
+            <property name="maximumSize">
+                <size>
+                    <width>32767</width>
+                    <height>8</height>
+                </size>
+            </property>
+            <property name="frameShape">
+                <enum>HLine</enum>
+            </property>
+            <property name="frameShadow">
+                <enum>Sunken</enum>
+            </property>
         </widget>
         <spacer>
             <property name="name">
@@ -87,13 +82,13 @@
             <property name="sizeHint">
                 <size>
                     <width>20</width>
-                    <height>12</height>
+                    <height>16</height>
                 </size>
             </property>
         </spacer>
         <widget class="QLayoutWidget">
             <property name="name">
-                <cstring>layout1</cstring>
+                <cstring>layout_adv</cstring>
             </property>
             <hbox>
                 <property name="name">
@@ -128,7 +123,7 @@
                         </sizepolicy>
                     </property>
                     <property name="text">
-                        <string>Click "Advanced" button if you want to find an existing database on a server rather than a file.</string>
+                        <string>Click "Advanced" button if you want to find an existing project on a server rather than a file.</string>
                     </property>
                     <property name="alignment">
                         <set>WordBreak|AlignTop</set>

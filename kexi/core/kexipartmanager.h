@@ -46,10 +46,10 @@ namespace KexiPart
 		QString url;
 	};
 
-	typedef QDict<Info> PartList;
-	typedef QDictIterator<Info> PartListIterator;
+	typedef QDict<Info> PartDict;
+	typedef QDictIterator<Info> PartDictIterator;
 	typedef QValueList<Missing> MissingList;
-	typedef QPtrList<Info> Parts;
+	typedef QPtrList<Info> PartList;
 
 /**
  * queries parts and dlopens them when needed, they aren't dlopened at startup tough
@@ -62,7 +62,7 @@ class Manager : public QObject
 		/**
 		 * creates a emty instance
 		 */
-		Manager(QObject *parent);
+		Manager(QObject *parent = 0);
 		~Manager();
 
 		/**
@@ -71,18 +71,19 @@ class Manager : public QObject
 		void		lookup();
 
 		/**
-		 * dlopens a part identified by the part mime
-		 * @returns a KexiPart::Part or 0 if loading faild
+		 * \return a part object for specified mime type. Dlopens a part using KexiPart::Info
+		 * if needed. Return 0 if loading failed.
 		 */
-		Part		*load(const QString &mime);
+		Part		*part(const QString &mime);
 
 		/**
-		 * dlopens a part unsing KexiPart::Info
+		 * \return a part object for specified info. Dlopens a part using KexiPart::Info
+		 * if needed. Return 0 if loading failed.
 		 */
-		Part		*load(Info *);
+		Part		*part(Info *);
 
 		/**
-		 * @returns the info of a coresponding internal mime
+		 * \return the info for a coresponding internal mime
 		 */
 		Info		*info(const QString &mime);
 
@@ -103,11 +104,11 @@ class Manager : public QObject
 		/**
 		 * @returns a list of the available KexiParts
 		 */
-		Parts		*partList() { return &m_partlist; }
+		PartList		*partList() { return &m_partlist; }
 
 	private:
-		Parts		m_partlist;
-		PartList	m_parts;
+		PartList	m_partlist;
+		PartDict	m_partsByMime;
 		MissingList	m_missing;
 };
 

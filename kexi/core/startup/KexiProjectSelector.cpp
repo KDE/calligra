@@ -21,6 +21,7 @@
 
 #include <kexidb/drivermanager.h>
 #include <kexidb/connectiondata.h>
+#include "core/kexi.h"
 
 #include <kapplication.h>
 #include <kiconloader.h>
@@ -33,47 +34,57 @@
 #include <qlayout.h>
 #include <qlistview.h>
 
-//! helper class
-class ProjectDataLVItem : public QListViewItem
-{
-public:
-	ProjectDataLVItem(const KexiProjectData *d, 
-		const KexiDB::Driver::Info& info, QListView *list)
-		: QListViewItem(list)
-		, data(d)
-	{
-		setText(0, data->caption()+"  ");
-		const KexiDB::ConnectionData *cdata = data->constConnectionData();
-		
-		setText(1, data->databaseName()+"  ");
-		
-		QString drvname = info.caption.isEmpty() ? cdata->driverName : info.caption;
-		if (info.fileBased) {
-			setText(2, i18n("File") + " ("+drvname+")  " );
-		} else {
-			setText(2, drvname+"  " );
-		}
-		
-		QString conn;
-		if (!cdata->name.isEmpty())
-			conn = cdata->name + ": ";
-		conn += cdata->serverInfoString();
-		setText(3, conn + "  ");
-	}
-	~ProjectDataLVItem() {}
-	
-	const KexiProjectData *data;
-};
-
-/*================================================================*/
+#include <assert.h>
 
 class KexiProjectSelectorWidgetPrivate
 {
 public:
 	KexiProjectSelectorWidgetPrivate()
 	{
+		selectable = true;
 	}
+	QPixmap fileicon, dbicon;
+	bool showProjectNameColumn : 1;
+	bool showConnectionColumns : 1;
+	bool selectable : 1;
+};
+
+/*================================================================*/
+
+//! helper class
+class ProjectDataLVItem : public QListViewItem
+{
+public:
+	ProjectDataLVItem(KexiProjectData *d, 
+		const KexiDB::Driver::Info& info, KexiProjectSelectorWidget *selector )
+		: QListViewItem(selector->list)
+		, data(d)
+	{
+		int colnum = 0;
+		const KexiDB::ConnectionData *cdata = data->constConnectionData();
+		if (selector->d->showProjectNameColumn)
+			setText(colnum++, data->caption()+"  ");
+		
+		setText(colnum++, data->databaseName()+"  ");
+		
+		if (selector->d->showConnectionColumns) {
+			QString drvname = info.caption.isEmpty() ? cdata->driverName : info.caption;
+			if (info.fileBased) {
+				setText(colnum++, i18n("File") + " ("+drvname+")  " );
+			} else {
+				setText(colnum++, drvname+"  " );
+			}
+		
+			QString conn;
+			if (!cdata->name.isEmpty())
+				conn = cdata->name + ": ";
+			conn += cdata->serverInfoString();
+			setText(3, conn + "  ");
+		}
+	}
+	~ProjectDataLVItem() {}
 	
+	KexiProjectData *data;
 };
 
 /*================================================================*/
@@ -82,40 +93,35 @@ public:
  *  Constructs a KexiProjectSelector which is a child of 'parent', with the 
  *  name 'name' and widget flags set to 'f' 
  */
-KexiProjectSelectorWidget::KexiProjectSelectorWidget( const KexiProjectSet& prj_set, QWidget* parent,  const char* name )
+KexiProjectSelectorWidget::KexiProjectSelectorWidget( 
+	QWidget* parent, const char* name, 
+	KexiProjectSet* prj_set, bool showProjectNameColumn,
+	bool showConnectionColumns )
     : KexiProjectSelectorBase( parent, name )
-	,m_prj_set(&prj_set)
+	,m_prj_set(prj_set)
 	,d(new KexiProjectSelectorWidgetPrivate())
 {
+	d->showProjectNameColumn = showProjectNameColumn;
+	d->showConnectionColumns = showConnectionColumns;
 	QString none, iconname = KMimeType::mimeType("application/x-kexiproject-sqlite")->icon(none,0);
-	const QPixmap &myicon = KGlobal::iconLoader()->loadIcon( iconname, KIcon::Desktop );
-	setIcon( myicon );
-	icon->setPixmap( myicon );
-	const QPixmap &dbicon = SmallIcon("db",16);
+	d->fileicon = KGlobal::iconLoader()->loadIcon( iconname, KIcon::Desktop );
+	setIcon( d->fileicon );
+	d->dbicon = SmallIcon("db",16);
 //	list->setHScrollBarMode( QScrollView::AlwaysOn );
 
+	if (!d->showConnectionColumns) {
+		list->removeColumn(2);
+		list->removeColumn(2);
+	}
+	if (!d->showProjectNameColumn) {
+		list->removeColumn(0);
+	}
+	setFocusProxy(list);
+
 	//show projects
-	KexiDB::DriverManager manager;
-	KexiProjectData::ConstList prjlist = m_prj_set->list();
-	const KexiProjectData *data = prjlist.first();
-	while (data) {
-		KexiDB::Driver::Info info = manager.driverInfo(data->constConnectionData()->driverName);
-		if (!info.name.isEmpty()) {
-			ProjectDataLVItem *item = new ProjectDataLVItem(data, info, list);
-			if (info.fileBased)
-				item->setPixmap( 0, myicon );
-			else
-				item->setPixmap( 0, dbicon );
-		}
-		else {
-			kdWarning() << "KexiProjectSelector::KexiProjectSelector(): no driver found for '" << data->constConnectionData()->driverName << "'!" << endl;
-		}
-		data=prjlist.next();
-	}
-	if (list->firstChild()) {
-		list->setSelected(list->firstChild(),true);
-	}
-	connect(list,SIGNAL(doubleClicked(QListViewItem*)),this,SLOT(itemDoubleClicked(QListViewItem*)));
+	setProjectSet( m_prj_set );
+	connect(list,SIGNAL(doubleClicked(QListViewItem*)),this,SLOT(itemExecuted(QListViewItem*)));
+	connect(list,SIGNAL(returnPressed(QListViewItem*)),this,SLOT(itemExecuted(QListViewItem*)));
 }
 
 /*!  
@@ -126,7 +132,7 @@ KexiProjectSelectorWidget::~KexiProjectSelectorWidget()
 	delete d;
 }
 
-const KexiProjectData* KexiProjectSelectorWidget::selectedProjectData() const
+KexiProjectData* KexiProjectSelectorWidget::selectedProjectData() const
 {
 	ProjectDataLVItem *item = static_cast<ProjectDataLVItem*>(list->selectedItem());
 	if (item)
@@ -134,71 +140,122 @@ const KexiProjectData* KexiProjectSelectorWidget::selectedProjectData() const
 	return 0;
 }
 
-void KexiProjectSelectorWidget::itemDoubleClicked(QListViewItem *item)
+void KexiProjectSelectorWidget::itemExecuted(QListViewItem *item)
 {
+	if (!d->selectable)
+		return;
 	ProjectDataLVItem *ditem = static_cast<ProjectDataLVItem*>(item);
 	if (ditem)
-		emit projectDoubleClicked( ditem->data );
+		emit projectExecuted( ditem->data );
+}
+
+void KexiProjectSelectorWidget::setProjectSet( KexiProjectSet* prj_set )
+{
+	if (prj_set) {
+		//old list
+		list->clear();
+	}
+	m_prj_set = prj_set; 
+	if (!m_prj_set)
+		return;
+//TODO: what with project set's ownership?
+	if (m_prj_set->error()) {
+		kdDebug() << "KexiProjectSelectorWidget::setProjectSet() : m_prj_set->error() !"<<endl;
+		return;
+	}
+	KexiDB::DriverManager manager;
+	KexiProjectData::List prjlist = m_prj_set->list();
+	KexiProjectData *data = prjlist.first();
+	while (data) {
+		KexiDB::Driver::Info info = manager.driverInfo(data->constConnectionData()->driverName);
+		if (!info.name.isEmpty()) {
+			ProjectDataLVItem *item = new ProjectDataLVItem(data, info, this);
+			if (!d->selectable)
+				item->setSelectable(false);
+			if (info.fileBased)
+				item->setPixmap( 0, d->fileicon );
+			else
+				item->setPixmap( 0, d->dbicon );
+		}
+		else {
+			kdWarning() << "KexiProjectSelector::KexiProjectSelector(): no driver found for '" << data->constConnectionData()->driverName << "'!" << endl;
+		}
+		data=prjlist.next();
+	}
+	if (list->firstChild()) {
+		list->setSelected(list->firstChild(),true);
+	}
+}
+
+void KexiProjectSelectorWidget::setSelectable(bool set)
+{
+	if (d->selectable == set)
+		return;
+	d->selectable = set;
+	//update items' state
+	QListViewItemIterator it( list );
+	while ( it.current() ) {
+		it.current()->setSelectable( d->selectable );
+	}
+}
+	
+bool KexiProjectSelectorWidget::isSelectable() const
+{
+	return d->selectable;
 }
 
 /*================================================================*/
-#if 0
-KexiProjectSelectorDialog::KexiProjectSelectorDialog( const KexiDBConnectionSet& conn_set, QWidget *parent, const char *name )
- : KDialogBase( Plain, i18n("Creating a new project"), Help | Ok | Cancel, Ok, parent, name )
-// , d(new KexiStartupDialogPrivate())
+
+KexiProjectSelectorDialog::KexiProjectSelectorDialog( QWidget *parent, const char *name,
+	KexiProjectSet* prj_set, bool showProjectNameColumn, bool showConnectionColumns)
+	: KDialogBase( Plain, i18n("Open recent project"), Help | Ok | Cancel, Ok, parent, name )
 {
-	setSizeGripEnabled(true);
-	
-	QVBoxLayout *lyr = new QVBoxLayout(plainPage(), 0, KDialogBase::spacingHint(), "lyr");
-	m_sel = new KexiProjectSelectorWidget(conn_set, plainPage(), "sel");
-	lyr->addWidget(m_sel);
-	setIcon(*m_sel->icon());
-	
-	connect(m_sel->m_conn_sel->list,SIGNAL(selectionChanged()),this,SLOT(connectionItemSelected()));
-	connect(m_sel->m_conn_sel->list,SIGNAL(doubleClicked(QListViewItem*)),this,SLOT(connectionItemDBLClicked(QListViewItem*)));
+	init(prj_set, showProjectNameColumn, showConnectionColumns);
+}
 
-	m_sel->setMinimumWidth(500);
-
-//	adjustSize();
+KexiProjectSelectorDialog::KexiProjectSelectorDialog( QWidget *parent, const char *name,
+	KexiDB::ConnectionData* cdata, 
+	bool showProjectNameColumn, bool showConnectionColumns)
+	: KDialogBase( Plain, i18n("Open project"), Help | Ok | Cancel, Ok, parent, name )
+{
+	assert(cdata);
+	if (!cdata)
+		return;
+	KexiProjectSet *prj_set = new KexiProjectSet( *cdata );
+	init(prj_set, showProjectNameColumn, showConnectionColumns);
+	
+	m_sel->label->setText( i18n("Select one of these existing projects on server <b>%1</b>:")
+		.arg(cdata->serverInfoString(false)) );
 }
 
 KexiProjectSelectorDialog::~KexiProjectSelectorDialog()
 {
 }
 
-int KexiProjectSelectorDialog::selectedConnectionType() const
+void KexiProjectSelectorDialog::init(KexiProjectSet* prj_set, bool showProjectNameColumn, bool showConnectionColumns)
 {
-	return m_sel->selectedConnectionType();
+	setSizeGripEnabled(true);
+	
+	QVBoxLayout *lyr = new QVBoxLayout(plainPage(), 0, KDialogBase::spacingHint(), "lyr");
+	m_sel = new KexiProjectSelectorWidget(plainPage(), "sel", prj_set, showProjectNameColumn, showConnectionColumns);
+	lyr->addWidget(m_sel);
+	setIcon(*m_sel->icon());
+	m_sel->setFocus();
+	
+	connect(m_sel,SIGNAL(projectExecuted(KexiProjectData*)),this,SLOT(slotProjectExecuted(KexiProjectData*)));
+	CENTER_ME;
 }
 
-void KexiProjectSelectorDialog::connectionItemSelected()
+KexiProjectData* KexiProjectSelectorDialog::selectedProjectData() const
 {
-	updateDialogState();
+	return m_sel->selectedProjectData();
 }
 
-void KexiProjectSelectorDialog::connectionItemDBLClicked(QListViewItem *item)
+void KexiProjectSelectorDialog::slotProjectExecuted(KexiProjectData*)
 {
-	m_sel->m_conn_sel->list->setSelected(item,true);
-	updateDialogState();
 	accept();
 }
-
-void KexiProjectSelectorDialog::updateDialogState()
-{
-	if (selectedConnectionType()==KexiProjectSelectorWidget::FileBased) {
-		enableButtonOK(true);
-	}
-	else {
-		enableButtonOK(m_sel->selectedConnectionData());
-	}
-}
-
-const KexiDB::ConnectionData* KexiProjectSelectorDialog::selectedConnectionData() const
-{
-	return m_sel->selectedConnectionData();
-}
-
-#endif
+ 
 
 #include "KexiProjectSelector.moc"
 

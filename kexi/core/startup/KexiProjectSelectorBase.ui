@@ -8,8 +8,8 @@
         <rect>
             <x>0</x>
             <y>0</y>
-            <width>392</width>
-            <height>169</height>
+            <width>405</width>
+            <height>164</height>
         </rect>
     </property>
     <property name="sizePolicy">
@@ -23,33 +23,34 @@
     <property name="caption">
         <string>KexiProjectSelectorBase</string>
     </property>
-    <grid>
+    <vbox>
         <property name="name">
             <cstring>unnamed</cstring>
         </property>
         <property name="margin">
             <number>0</number>
         </property>
-        <widget class="QLabel" row="0" column="0">
+        <widget class="QLabel">
             <property name="name">
-                <cstring>icon</cstring>
+                <cstring>label</cstring>
             </property>
             <property name="sizePolicy">
                 <sizepolicy>
-                    <hsizetype>4</hsizetype>
-                    <vsizetype>5</vsizetype>
+                    <hsizetype>1</hsizetype>
+                    <vsizetype>1</vsizetype>
                     <horstretch>0</horstretch>
                     <verstretch>0</verstretch>
                 </sizepolicy>
             </property>
-            <property name="margin">
-                <number>5</number>
+            <property name="text">
+                <string>&lt;b&gt;There are Kexi projects you have recently opened.&lt;/b&gt; Select one you wish to open:
+</string>
             </property>
             <property name="alignment">
-                <set>AlignTop</set>
+                <set>WordBreak|AlignTop</set>
             </property>
         </widget>
-        <widget class="QListView" row="1" column="0" rowspan="1" colspan="2">
+        <widget class="QListView">
             <column>
                 <property name="text">
                     <string>Project Name</string>
@@ -118,29 +119,7 @@
                 <bool>true</bool>
             </property>
         </widget>
-        <widget class="QLabel" row="0" column="1">
-            <property name="name">
-                <cstring>label</cstring>
-            </property>
-            <property name="sizePolicy">
-                <sizepolicy>
-                    <hsizetype>1</hsizetype>
-                    <vsizetype>1</vsizetype>
-                    <horstretch>0</horstretch>
-                    <verstretch>0</verstretch>
-                </sizepolicy>
-            </property>
-            <property name="text">
-                <string>&lt;b&gt;Here are Kexi Projects you have recently opened. Select one you wish to open:&lt;/b&gt;</string>
-            </property>
-            <property name="alignment">
-                <set>WordBreak|AlignTop</set>
-            </property>
-            <property name="indent">
-                <number>9</number>
-            </property>
-        </widget>
-    </grid>
+    </vbox>
 </widget>
 <tabstops>
     <tabstop>list</tabstop>

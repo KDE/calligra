@@ -21,6 +21,7 @@
 #define KEXIPROJECTSET_H
 
 #include <kexidb/connectiondata.h>
+#include <kexidb/object.h>
 
 #include "core/kexiprojectdata.h"
 
@@ -29,17 +30,30 @@ class KexiProjectSetPrivate;
 /*! Stores information about multiple kexi project-data items
 */
 
-class KEXICORE_EXPORT KexiProjectSet
+class KEXICORE_EXPORT KexiProjectSet : public KexiDB::Object
 {
 public:
+
+	/*! Creates empty project set */
     KexiProjectSet();
-    ~KexiProjectSet();
+    
+	/*! Creates project set filled with all projects found using \a conndata. 
+	 There may be error during project list retrieving - use appropriate 
+	 KexiDB::Object::error(), and similar methods to get error message. */
+    KexiProjectSet(KexiDB::ConnectionData &conndata);
+	
+	~KexiProjectSet();
 
 	/*! Adds \a data as connection data. 
 	 \a will be owned by a KexiDBConnectionSet object. */
-	void addProjectData(const KexiProjectData *data);
+	void addProjectData(KexiProjectData *data);
 	
-	KexiProjectData::ConstList list() const;
+	//! return list object
+	KexiProjectData::List list() const;
+
+	//! finds (case insensitive) 
+	//! and returns project data for databased \a dbName or NULL if not found
+	KexiProjectData* findProject(const QString &dbName) const;
 
 private:
 	KexiProjectSetPrivate *d;

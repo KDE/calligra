@@ -18,6 +18,10 @@
  */
 
 #include "KexiProjectSet.h"
+#include "kexi.h"
+
+#include <kexidb/driver.h>
+#include <kexidb/connection.h>
 
 #include <kdebug.h>
 
@@ -28,7 +32,7 @@ public:
 	{
 //		list.setAutoDelete(true);
 	}
-	KexiProjectData::ConstList list;
+	KexiProjectData::List list;
 };
 
 KexiProjectSet::KexiProjectSet()
@@ -36,18 +40,64 @@ KexiProjectSet::KexiProjectSet()
 {
 }
 
+KexiProjectSet::KexiProjectSet(KexiDB::ConnectionData &conndata)
+: d(new KexiProjectSetPrivate())
+{
+	KexiDB::Driver *drv = Kexi::driverManager.driver(conndata.driverName);
+	if (!drv) {
+		setError(&Kexi::driverManager);
+		return;
+	}
+	KexiDB::Connection *conn = drv->createConnection(conndata);
+	if (!conn) {
+		setError(drv);
+		return;
+	}
+	if (!conn->connect()) {
+		setError(conn);
+		delete conn;
+		return;
+	}
+	QStringList dbnames = conn->databaseNames(false/*skip system*/);
+	KexiDBDbg << dbnames.count() << endl;
+	if (conn->error()) {
+		setError(conn);
+		delete conn;
+		return;
+	}
+	delete conn;
+	conn = 0;
+	for (QStringList::Iterator it = dbnames.begin(); it!=dbnames.end(); ++it) {
+		// project's caption is just the same as database name - nothing better is available
+		KexiProjectData *pdata = new KexiProjectData(conndata, *it, *it);
+		d->list.append( pdata );
+	}
+	clearError();
+}
+
+
 KexiProjectSet::~KexiProjectSet()
 {
 	delete d;
 }
 
-void KexiProjectSet::addProjectData(const KexiProjectData *data)
+void KexiProjectSet::addProjectData(KexiProjectData *data)
 {
 	d->list.append(data);
 }
 
-KexiProjectData::ConstList KexiProjectSet::list() const
+KexiProjectData::List KexiProjectSet::list() const
 {
 	return d->list;
 }
 
+KexiProjectData* KexiProjectSet::findProject(const QString &dbName) const
+{
+	const QString _dbName = dbName.lower();
+	QPtrListIterator<KexiProjectData> it( d->list );
+	for (;it.current();++it) {
+		if (it.current()->databaseName().lower()==_dbName)
+			return it.current();
+	}
+	return 0;
+}

@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2002, 2003 Lucijan Busch <lucijan@gmx.at>
+   Copyright (C) 2003 Jaroslaw Staniek <js@iidea.pl>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -17,15 +17,20 @@
    Boston, MA 02111-1307, USA.
 */
 
-#include "kexipartitem.h"
+#ifndef KEXI_CORE_STARTUP_H
+#define KEXI_CORE_STARTUP_H
 
-using namespace KexiPart;
+#include <qstring.h>
 
-Item::Item()
+class KexiProjectData;
+class QWidget;
+
+namespace Kexi
 {
+	/*! Detects filename by mime type and returns project data, if it can be detected,
+	 otherwise - NULL. \a parent is passed as parent for potential error message boxes */
+	extern KexiProjectData* detectProjectData( const QString &fname, QWidget *parent = 0 );
 }
 
-Item::~Item()
-{
-}
+#endif
 

@@ -4,9 +4,12 @@ noinst_LTLIBRARIES = kexicorestartup.la
 
 kexicorestartup_la_SOURCES = KexiConnSelectorBase.ui KexiProjectSelectorBase.ui \
 	KexiNewFileDBWidget.ui KexiOpenExistingFile.ui \
+	KexiNewPrjTypeSelector.ui KexiDBTitlePage.ui \
+	KexiServerDBNamePage.ui \
 	KexiConnSelector.cpp KexiProjectSelector.cpp \
 	KexiStartupDialog.cpp KexiDBConnectionSet.cpp KexiProjectSet.cpp \
-	KexiXMLStorage.cpp
+	KexiXMLStorage.cpp KexiStartupFileDialog.cpp KexiNewProjectWizard.cpp \
+	KexiStartup.cpp
 
 kexicorestartup_la_LDFLAGS = $(all_libraries) -Wnounresolved -module
 kexicorestartup_la_LIBADD =

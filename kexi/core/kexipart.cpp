@@ -19,8 +19,7 @@
 
 #include "kexipart.h"
 
-namespace KexiPart
-{
+using namespace KexiPart;
 
 Part::Part(QObject *parent, const char *name, const QStringList &)
 {
@@ -29,8 +28,6 @@ Part::Part(QObject *parent, const char *name, const QStringList &)
 
 Part::~Part()
 {
-}
-
 }
 
 #include "kexipart.moc"

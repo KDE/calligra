@@ -21,13 +21,30 @@
 #define KEXICONNSELECTOR_H
 
 #include "KexiDBConnectionSet.h"
+#include "KexiConnSelectorBase.h"
+#include "KexiStartupFileDialog.h"
+#include <kexidb/driver.h>
 
 #include <kdialogbase.h>
+#include <klistview.h>
+
 #include <qwidgetstack.h>
 
-class KexiNewFileDBWidget;
+
+//! helper class
+class ConnectionDataLVItem : public QListViewItem
+{
+public:
+	ConnectionDataLVItem(KexiDB::ConnectionData *d, 
+		const KexiDB::Driver::Info& info, QListView *list);
+	~ConnectionDataLVItem();
+	
+	KexiDB::ConnectionData *data;
+};
+
+
+class KexiOpenExistingFile;
 class KexiConnSelectorBase;
-class KexiConnSelectorDialog;
 class KexiConnSelectorWidgetPrivate;
 
 /*! Widget that allows to select a database connection (without choosing database itself)
@@ -39,6 +56,7 @@ class KEXICORE_EXPORT KexiConnSelectorWidget : public QWidgetStack
 public:
 	enum ConnType { FileBased=1, ServerBased=2 };
     
+	/*! Constructs a KexiConnSelector which contain \a conn_set as connection set. */
 	KexiConnSelectorWidget( const KexiDBConnectionSet& conn_set, QWidget* parent = 0, const char* name = 0 );
     ~KexiConnSelectorWidget();
 	
@@ -55,55 +73,30 @@ public:
 	//! Usable when we want to do other things for "back" button
 	void disconnectShowSimpleConnButton();
 
-	KexiConnSelectorBase *advancedPage() { return m_conn_sel; }
+	QListView* connectionsList() const;
+	
+	KexiConnSelectorBase *m_remote;
+	KexiOpenExistingFile *m_file;
+	KexiStartupFileDialog *m_fileDlg;
 
 signals:
-	void connectionItemDBLClicked(QListViewItem *item);
+	void connectionItemExecuted( ConnectionDataLVItem *item );
 
 public slots:
 	void showSimpleConn();
 	void showAdvancedConn();
+	virtual void setFocus();
+
+protected slots:
+	void slotConnectionItemExecuted(QListViewItem *item);
 
 protected:
-	KexiNewFileDBWidget *m_file_sel;
-	KexiConnSelectorBase *m_conn_sel;
 	const KexiDBConnectionSet *m_conn_set;
 	
 	KexiConnSelectorWidgetPrivate *d;
 	
-	friend class KexiConnSelectorDialog;
 };
 
-/*! Dialog that allows to select a database connection (without choosing database itself)
-*/
-class KEXICORE_EXPORT KexiConnSelectorDialog : public KDialogBase
-{
-	Q_OBJECT
-public:
-	KexiConnSelectorDialog(const KexiDBConnectionSet& conn_set, QWidget *parent = 0, 
-		const char *name = 0 );
-	~KexiConnSelectorDialog();
-
-	/*! see: KexiConnSelector::selectedConnectionType() */
-	int selectedConnectionType() const;
-
-	/*! see: KexiConnSelector::selectedConnectionData() */
-	KexiDB::ConnectionData* selectedConnectionData() const;
-
-	/*! \return true if we should always use files for creating new projects.
-	 It is effect of previous selecting a checkbox by user. */
-	static bool alwaysUseFilesForNewProjects();
-
-protected slots:
-	void connectionItemSelected();
-	void connectionItemDBLClicked(QListViewItem *item);
-
-protected:
-	void updateDialogState();
-	virtual void accept();
-	
-	KexiConnSelectorWidget *m_sel;
-};
 
 #endif // KEXICONNSELECTOR_H
 

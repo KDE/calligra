@@ -31,6 +31,10 @@ class KexiBrowser;
 class KMdiChildView;
 class KexiDialogBase;
 class KToggleAction;
+namespace KexiDB {
+	class Object;
+	class ConnectionData;
+}
 
 /**
  * @short Kexi's main window
@@ -41,11 +45,12 @@ class KexiMainWindow : public KMdiMainFrm
 
 	public:
 		/**
-		 * creates a emtpy mainwindow
+		 * creates an empty mainwindow
 		 */
 		KexiMainWindow();
 		virtual ~KexiMainWindow();
 
+		//! Project data of currently opened project or NULL if no project here yet.
 		KexiProject	*project() { return m_project; }
 
 		/**
@@ -56,7 +61,7 @@ class KexiMainWindow : public KMdiMainFrm
 		void startup(KexiProjectData* pdata);
 
 	protected:
-		//reimplementation of events
+		//! reimplementation of events
 		virtual void	closeEvent(QCloseEvent *);
 
 		/**
@@ -78,8 +83,17 @@ class KexiMainWindow : public KMdiMainFrm
 		*/
 		void		invalidateActions();
 
-		void openProject(KexiProjectData *pdata);
+		/*! Opens project pointed by \a projectData, \return true on success.
+		 Application state (e.g. actions) is updated. */
+		bool openProject(KexiProjectData *projectData);
 		
+		/*! Allows user to select a project with KexiProjectSelectorDialog.
+			\return selected project's data or NULL if dialog was cancelled.
+		*/
+		KexiProjectData* selectProject(KexiDB::ConnectionData *cdata);
+		
+		/*! Closes current project, \return true on success.
+		 Application state (e.g. actions) is updated. */
 		bool closeProject();
 		
 		/*! Shows dialog for creating new blank database,
@@ -89,14 +103,13 @@ class KexiMainWindow : public KMdiMainFrm
 		*/
 		bool createBlankDatabase();
 
-		friend class KexiDialogBase;	
 	protected slots:
 
 		/**
 		 * parsers command line options and checks if we should open the startupdlg
 		 * or a file direclty
 		 */
-//		void		parseCmdLineOptions();
+//js		void		parseCmdLineOptions();
 
 		/**
 		 * creates browser and fills it with empty items
@@ -107,6 +120,9 @@ class KexiMainWindow : public KMdiMainFrm
 		 * this slot is called if a window changes
 		 */
 		void		activeWindowChanged(KMdiChildView *dlg);
+
+		//! Shows an error message signaled by project's objects, connections, etc.
+		void slotShowErrorMessageFor(const QString&,KexiDB::Object *obj);
 
 		void slotShowSettings();
 		void slotConfigureKeys();
@@ -132,6 +148,7 @@ class KexiMainWindow : public KMdiMainFrm
 		class Private;
 		Private *d;
 
+	friend class KexiDialogBase;	
 };
 
 #endif

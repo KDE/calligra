@@ -23,13 +23,13 @@
 #include <kiconloader.h>
 #include <kdebug.h>
 
+#include "kexi.h"
 #include "kexipart.h"
 #include "kexipartinfo.h"
 #include "kexipartitem.h"
 #include "kexibrowser.h"
 #include "kexibrowseritem.h"
 #include "kexiproject.h"
-//#include "kexihandlerpopupmenu.h"
 #include "kexidialogbase.h"
 #include "keximainwindow.h"
 
@@ -159,16 +159,19 @@ KexiBrowser::slotExecuteItem(QListViewItem *item)
 		return;
 
 	kdDebug() << "KexiBrowser::slotExecuteItem() searching stuff for mime: " << it->mime() << endl;
-	KexiPart::Info *info = m_parent->project()->partManager()->info(it->mime());
-	if(!info)
+//	KexiPart::Info *info = m_parent->project()->partManager()->info(it->mime());
+//	if(!info)
+//		return;
+
+//	kdDebug() << "KexiBrowser::slotExecuteItem() info=" << info << endl;
+
+	KexiPart::Part *part = Kexi::partManager.part(it->mime());
+//	if(!info->instance())
+	if (!part)
 		return;
 
-	kdDebug() << "KexiBrowser::slotExecuteItem() info=" << info << endl;
-
-	if(!info->instance())
-		return;
-
-	info->instance()->execute(m_parent, it->name());
+//	info->instance()->execute(m_parent, it->name());
+	part->execute(m_parent, it->name());
 }
 
 #include "kexibrowser.moc"

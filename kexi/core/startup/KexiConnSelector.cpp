@@ -22,8 +22,9 @@
 #include <kexidb/drivermanager.h>
 #include <kexidb/connectiondata.h>
 
+#include "kexi.h"
 #include "KexiConnSelectorBase.h"
-#include "KexiNewFileDBWidget.h"
+#include "KexiOpenExistingFile.h"
 
 #include <kapplication.h>
 #include <kiconloader.h>
@@ -31,35 +32,31 @@
 #include <klocale.h>
 #include <kdebug.h>
 #include <kconfig.h>
+#include <kurlcombobox.h>
 
 #include <qlabel.h>
 #include <qpushbutton.h>
 #include <qlayout.h>
-#include <qlistview.h>
 #include <qcheckbox.h>
 
-//! helper class
-class ConnectionDataLVItem : public QListViewItem
+ConnectionDataLVItem::ConnectionDataLVItem(KexiDB::ConnectionData *d, 
+	const KexiDB::Driver::Info& info, QListView *list)
+	: QListViewItem(list)
+	, data(d)
 {
-public:
-	ConnectionDataLVItem(KexiDB::ConnectionData *d, 
-		const KexiDB::Driver::Info& info, QListView *list)
-		: QListViewItem(list)
-		, data(d)
-	{
-		setText(0, data->name+"  ");
-		const QString &sfile = i18n("File");
-		QString drvname = info.caption.isEmpty() ? data->driverName : info.caption;
-		if (info.fileBased)
-			setText(1, sfile + " ("+drvname+")  " );
-		else
-			setText(1, drvname+"  " );
-		setText(2, (info.fileBased ? (QString("<")+sfile.lower()+">") : data->serverInfoString())+"  " );
-	}
-	~ConnectionDataLVItem() {}
-	
-	KexiDB::ConnectionData *data;
-};
+	setText(0, data->name+"  ");
+	const QString &sfile = i18n("File");
+	QString drvname = info.caption.isEmpty() ? data->driverName : info.caption;
+	if (info.fileBased)
+		setText(1, sfile + " ("+drvname+")  " );
+	else
+		setText(1, drvname+"  " );
+	setText(2, (info.fileBased ? (QString("<")+sfile.lower()+">") : data->serverInfoString())+"  " );
+}
+
+ConnectionDataLVItem::~ConnectionDataLVItem() 
+{
+}
 
 /*================================================================*/
 
@@ -68,18 +65,16 @@ class KexiConnSelectorWidgetPrivate
 public:
 	KexiConnSelectorWidgetPrivate()
 	: conn_sel_shown(false)
+	, file_sel_shown(false)
 	{
 	}
 	
 	bool conn_sel_shown;//! helper
+	bool file_sel_shown;
 };
 
 /*================================================================*/
 
-/*!
- *  Constructs a KexiConnSelector which is a child of 'parent', with the 
- *  name 'name' and widget flags set to 'f' 
- */
 KexiConnSelectorWidget::KexiConnSelectorWidget( const KexiDBConnectionSet& conn_set, QWidget* parent,  const char* name )
     : QWidgetStack( parent, name )
 	,m_conn_set(&conn_set)
@@ -89,24 +84,24 @@ KexiConnSelectorWidget::KexiConnSelectorWidget( const KexiDBConnectionSet& conn_
 	const QPixmap &icon = KGlobal::iconLoader()->loadIcon( iconname, KIcon::Desktop );
 	setIcon( icon );
 	
-	m_file_sel = new KexiNewFileDBWidget( this, "file_sel" );
-	m_file_sel->icon->setPixmap( DesktopIcon("FileNew") );
-	m_file_sel->btn_advanced->setIconSet( SmallIconSet("1downarrow") );
-	addWidget(m_file_sel);
-	raiseWidget( m_file_sel );
-	if (m_file_sel->layout())
-		m_file_sel->layout()->setMargin(0);
-	connect(m_file_sel->btn_advanced,SIGNAL(clicked()),this,SLOT(showAdvancedConn()));
-	
-	m_conn_sel = new KexiConnSelectorBase(this,"conn_sel");
-	m_conn_sel->icon->setPixmap( DesktopIcon("socket") );
-	m_conn_sel->btn_back->setIconSet( SmallIconSet("1uparrow") );
-	addWidget(m_conn_sel);
-	if (m_conn_sel->layout())
-		m_conn_sel->layout()->setMargin(0);
-	connect(m_conn_sel->btn_back,SIGNAL(clicked()),this,SLOT(showSimpleConn()));
-	connect(m_conn_sel->list,SIGNAL(doubleClicked(QListViewItem*)),
-		this,SIGNAL(connectionItemDBLClicked(QListViewItem*)));
+	m_file = new KexiOpenExistingFile( this, "KexiOpenExistingFile");
+	m_file->btn_advanced->setIconSet( SmallIconSet("1downarrow") );
+	m_fileDlg = 0;
+		
+	addWidget(m_file);
+	connect(m_file->btn_advanced,SIGNAL(clicked()),this,SLOT(showAdvancedConn()));
+
+	m_remote = new KexiConnSelectorBase(this,"conn_sel");
+	m_remote->icon->setPixmap( DesktopIcon("socket") );
+	m_remote->btn_back->setIconSet( SmallIconSet("1uparrow") );
+	addWidget(m_remote);
+	if (m_remote->layout())
+		m_remote->layout()->setMargin(0);
+	connect(m_remote->btn_back,SIGNAL(clicked()),this,SLOT(showSimpleConn()));
+	connect(m_remote->list,SIGNAL(doubleClicked(QListViewItem*)),
+		this,SLOT(slotConnectionItemExecuted(QListViewItem*)));
+	connect(m_remote->list,SIGNAL(returnPressed(QListViewItem*)),
+		this,SLOT(slotConnectionItemExecuted(QListViewItem*)));
 }
 
 /*!  
@@ -119,7 +114,7 @@ KexiConnSelectorWidget::~KexiConnSelectorWidget()
 
 void KexiConnSelectorWidget::disconnectShowSimpleConnButton()
 {
-	m_conn_sel->btn_back->disconnect(this,SLOT(showSimpleConn()));
+	m_remote->btn_back->disconnect(this,SLOT(showSimpleConn()));
 }
 
 void KexiConnSelectorWidget::showAdvancedConn()
@@ -128,134 +123,77 @@ void KexiConnSelectorWidget::showAdvancedConn()
 		d->conn_sel_shown=true;
 		//show connections (on demand):
 		KexiDB::DriverManager manager;
-		KexiDB::ConnectionData::List list = m_conn_set->list();
-		KexiDB::ConnectionData *data = list.first();
+		KexiDB::ConnectionData::List connlist = m_conn_set->list();
+		KexiDB::ConnectionData *data = connlist.first();
 		while (data) {
 			KexiDB::Driver::Info info = manager.driverInfo(data->driverName);
 			if (!info.name.isEmpty()) {
-				new ConnectionDataLVItem(data, info, m_conn_sel->list);
+				new ConnectionDataLVItem(data, info, m_remote->list);
 			}
 			else {
 				kdWarning() << "KexiConnSelector::KexiConnSelector(): no driver found for '" << data->driverName << "'!" << endl;
 			}
-			data=list.next();
+			data=connlist.next();
 		}
-		if (m_conn_sel->list->firstChild()) {
-			m_conn_sel->list->setSelected(m_conn_sel->list->firstChild(),true);
+		if (m_remote->list->firstChild()) {
+			m_remote->list->setSelected(m_remote->list->firstChild(),true);
 		}
+		m_remote->list->setFocus();
 	}
-	m_conn_sel->list->setFocus();
-	raiseWidget(m_conn_sel);
+	raiseWidget(m_remote);
 }
 
 void KexiConnSelectorWidget::showSimpleConn()
 {
-	raiseWidget(m_file_sel);
+	if (!d->file_sel_shown) {
+		d->file_sel_shown=true;
+		m_fileDlg = new KexiStartupFileDialog( "", KexiStartupFileDialog::Opening,
+			m_file, "openExistingFileDlg");
+		static_cast<QVBoxLayout*>(m_file->layout())->insertWidget( 2, m_fileDlg );
+
+		for (QWidget *w = parentWidget(true);w;w=w->parentWidget(true)) {
+			if (w->isDialog()) {
+				connect(m_fileDlg,SIGNAL(cancelClicked()),static_cast<QDialog*>(w),SLOT(reject()));
+				break;
+			}
+		}
+	}
+	raiseWidget(m_file);
 }
 
 int KexiConnSelectorWidget::selectedConnectionType() const
 {
-	return (visibleWidget()==m_file_sel) ? FileBased : ServerBased;
+	return (visibleWidget()==m_file) ? FileBased : ServerBased;
 }
 
 KexiDB::ConnectionData* KexiConnSelectorWidget::selectedConnectionData() const
 {
 	if (selectedConnectionType()==KexiConnSelectorWidget::FileBased)
 		return 0;
-	ConnectionDataLVItem *item = static_cast<ConnectionDataLVItem*>(m_conn_sel->list->selectedItem());
+	ConnectionDataLVItem *item = static_cast<ConnectionDataLVItem*>(m_remote->list->selectedItem());
 	if (item)
 		return item->data;
 	return 0;
 }
 
-/*================================================================*/
-
-KexiConnSelectorDialog::KexiConnSelectorDialog( const KexiDBConnectionSet& conn_set, QWidget *parent, const char *name )
- : KDialogBase( Plain, i18n("Creating a new project"), Help | Ok | Cancel, Ok, parent, name )
-// , d(new KexiStartupDialogPrivate())
+void KexiConnSelectorWidget::slotConnectionItemExecuted(QListViewItem *item)
 {
-	setSizeGripEnabled(true);
-	
-	QVBoxLayout *lyr = new QVBoxLayout(plainPage(), 0, KDialogBase::spacingHint(), "lyr");
-	m_sel = new KexiConnSelectorWidget(conn_set, plainPage(), "sel");
-	lyr->addWidget(m_sel);
-	setIcon(*m_sel->icon());
-	
-	connect(m_sel->m_conn_sel->list,SIGNAL(selectionChanged()),
-		this,SLOT(connectionItemSelected()));
-	connect(m_sel->m_conn_sel,SIGNAL(connectionItemDBLClicked(QListViewItem*)),
-		this,SLOT(connectionItemDBLClicked(QListViewItem*)));
-
-	m_sel->setMinimumWidth(500);
-	move((qApp->desktop()->width()-width())/2,(qApp->desktop()->height()-height())/2);
+	emit connectionItemExecuted(static_cast<ConnectionDataLVItem*>(item));
 }
 
-KexiConnSelectorDialog::~KexiConnSelectorDialog()
+QListView* KexiConnSelectorWidget::connectionsList() const
 {
+	return m_remote->list;
 }
 
-int KexiConnSelectorDialog::selectedConnectionType() const
+void KexiConnSelectorWidget::setFocus()
 {
-	return m_sel->selectedConnectionType();
+	QWidgetStack::setFocus();
+	if (visibleWidget()==m_file)
+		m_fileDlg->locationWidget()->setFocus();
+	else
+		m_remote->list->setFocus();
 }
-
-void KexiConnSelectorDialog::connectionItemSelected()
-{
-	updateDialogState();
-}
-
-void KexiConnSelectorDialog::connectionItemDBLClicked(QListViewItem *item)
-{
-	m_sel->m_conn_sel->list->setSelected(item,true);
-	updateDialogState();
-	accept();
-}
-
-void KexiConnSelectorDialog::updateDialogState()
-{
-	if (selectedConnectionType()==KexiConnSelectorWidget::FileBased) {
-		enableButtonOK(true);
-	}
-	else {
-		enableButtonOK(m_sel->selectedConnectionData());
-	}
-}
-
-KexiDB::ConnectionData* KexiConnSelectorDialog::selectedConnectionData() const
-{
-	return m_sel->selectedConnectionData();
-}
-
-bool KexiConnSelectorDialog::alwaysUseFilesForNewProjects() {
-	KGlobal::config()->setGroup("Startup");
-	return KGlobal::config()->readBoolEntry("AlwaysUseFilesForCreatingNewProjects", false);
-}
-
-/*KexiDB::ConnectionData* KexiConnSelectorDialog::connectionDataWeAlwaysUseForCreatingNewProjects()
-{
-	KGlobal::config()->setGroup("Startup");
-	int id = KGlobal::config()->readNumEntry("ConnectionDataWeAlwaysUseForCreatingNewProjects", -1);
-	if (id==-1)
-		return 0;
-	LoadConn
-	
-	
-}*/
-void KexiConnSelectorDialog::accept()
-{
-	//save setting
-	if (selectedConnectionType()==KexiConnSelectorWidget::FileBased
-		&& m_sel->m_file_sel->chk_always->isChecked()) {
-		KGlobal::config()->writeEntry("AlwaysUseFilesForCreatingNewProjects", true);
-	}
-	else if (m_sel->selectedConnectionData() && m_sel->m_conn_sel->chk_always->isChecked()) {
-//		m_sel->m_conn_sel->selectedConnectionData();
-		KGlobal::config()->writeEntry("ConnectionDataWeAlwaysUseForNewProjects", m_sel->selectedConnectionData()->id);
-		//TODO
-	}
-	KDialogBase::accept();
-}
-
 
 #include "KexiConnSelector.moc"
 

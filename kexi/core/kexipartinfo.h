@@ -37,7 +37,7 @@ namespace KexiPart
 class Info
 {
 	public:
-		Info(KService::Ptr service, Manager *manager);
+		Info(KService::Ptr service); //js, Manager *manager);
 		~Info();
 
 		/**
@@ -106,7 +106,7 @@ class Info
 		bool 			m_broken;
 		Part 			*m_instance;
 		int 			m_projectPartID;
-		Manager 		*m_manager;
+//		Manager 		*m_manager;
 };
 
 }

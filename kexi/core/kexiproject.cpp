@@ -33,9 +33,10 @@
 #include "kexipartmanager.h"
 #include "kexipartitem.h"
 #include "kexipartinfo.h"
-//#include "kexiprojectconnectiondata.h"
 #include "kexiproject.h"
 #include "kexi.h"
+
+#include <assert.h>
 
 KexiProject::KexiProject(KexiProjectData *pdata)
  : QObject(), Object()
@@ -43,57 +44,83 @@ KexiProject::KexiProject(KexiProjectData *pdata)
 {
 //	m_drvManager = new KexiDB::DriverManager();
 //	m_connData = new KexiProjectConnectionData();
-	m_partManager = new KexiPart::Manager(this);
+//js	m_partManager = new KexiPart::Manager(this);
 
-//*******************
-//(JS): shouldn't partmanager be outside project, so can be initialised just once?
-//*******************
-	m_partManager->lookup();
+//TODO: partmanager is outside project, so can be initialised just once:
+	Kexi::partManager.lookup();
+	
 	m_connection = 0;
 }
 
 KexiProject::~KexiProject()
 {
+	closeConnection();
 	delete m_data;
 	m_data=0;
 }
 
-#if 0
-void
-KexiProject::parseCmdLineOptions()
-{
-	//FIXME: allow multiple files in different proceses
-	KCmdLineArgs *args = KCmdLineArgs::parsedArgs();
-	if(args->count() > 0 && open(QFile::decodeName(args->arg(0))))
-	{
-		kdDebug() << "KexiProject::opening was nice..." << endl;
-	}
-	else
-	{
-		KexiStartupDlg *dlg = new KexiStartupDlg(m_view);
-		int res = dlg->exec();
-		switch(res)
-		{
-			case KexiStartupDlg::Cancel:
-				qApp->quit();
-			case KexiStartupDlg::OpenExisting:
-				open(dlg->fileName());
-				break;
-			default:
-				return;
-		}
-	}
-}
-#endif
-
 bool
 KexiProject::open()
 {
-	clearError();
-	if (Kexi::driverManager.error()) {//get initial errors
-		setError(&Kexi::driverManager);
+	kdDebug() << "KexiProject::open(): " << m_data->databaseName() <<" "<< m_data->connectionData()->driverName  << endl;
+	m_error_title = i18n("Could not open project \"%1\"").arg(m_data->databaseName());
+	if (!createConnection()) {
+		kdDebug() << "KexiProject::open(): !createConnection()" << endl;
 		return false;
 	}
+	if (!m_connection->useDatabase(m_data->databaseName()))
+	{
+		kdDebug() << "KexiProject::open(): !m_connection->useDatabase() " << m_data->databaseName() <<" "<< m_data->connectionData()->driverName  << endl;
+		setError(m_connection);
+		closeConnection();
+		return false;
+	}
+
+	initProject();
+
+	return true;
+}
+
+bool 
+KexiProject::create()
+{
+	m_error_title = i18n("Could not create project \"%1\"").arg(m_data->databaseName());
+	if (!createConnection())
+		return false;
+	if (m_connection->databaseExists( m_data->databaseName() )) {
+		if (!m_connection->dropDatabase( m_data->databaseName() )) {
+			setError(m_connection);
+			closeConnection();
+			return false;
+		}
+		kdDebug() << "--- DB '" << m_data->databaseName() << "' dropped ---"<< endl;
+	}
+	if (!m_connection->createDatabase( m_data->databaseName() )) {
+		setError(m_connection);
+		closeConnection();
+		return false;
+	}
+	kdDebug() << "--- DB '" << m_data->databaseName() << "' created ---"<< endl;
+	// and now: open
+	if (!m_connection->useDatabase(m_data->databaseName()))
+	{
+		kdDebug() << "--- DB '" << m_data->databaseName() << "' USE ERROR ---"<< endl;
+		setError(m_connection);
+		closeConnection();
+		return false;
+	}
+	kdDebug() << "--- DB '" << m_data->databaseName() << "' used ---"<< endl;
+	
+	initProject();
+	
+	return true;
+}
+
+bool
+KexiProject::createConnection()
+{
+	closeConnection();//for sanity
+	clearError();
 	
 	KexiDB::Driver *driver = Kexi::driverManager.driver(m_data->connectionData()->driverName);
 	if(!driver) {
@@ -102,7 +129,7 @@ KexiProject::open()
 	}
 
 	m_connection = driver->createConnection(*m_data->connectionData());
-	if(!m_connection) 
+	if (!m_connection)
 	{
 		kdDebug() << "KexiProject::open(): uuups faild " << driver->errorMsg()  << endl;
 		setError(driver);
@@ -113,135 +140,32 @@ KexiProject::open()
 	{
 		setError(m_connection);
 		kdDebug() << "KexiProject::openConnection() errror connecting: " << m_connection->errorMsg() << endl;
-		delete m_connection;
-		m_connection = 0;
+		closeConnection();
 		return false;
 	}
 
-	return open(m_connection);
-}
-
-bool 
-KexiProject::open(KexiDB::Connection* conn)
-{
-	if (conn!=m_connection) {
-		delete m_connection;
-		m_connection = 0;
-	}
-	if (!conn->useDatabase(m_data->databaseName()))
-	{
-		setError(conn);
-//		m_error = i18n("Couldn't open database '%1'").arg(m_connData->databaseName());
-		return false;
-	}
-
-	emit dbAvailable();
-	kdDebug() << "KexiProject::open(): checking project parts..." << endl;
-	
-	m_connection = conn;
-	m_partManager->checkProject(m_connection);
-	
 	return true;
 }
 
-#if 0
-bool
-KexiProject::open(const QString &file)
+
+void
+KexiProject::closeConnection()
 {
-	QFile f(file);
-	if(!f.exists())
-		return false;
-
-	KMimeType::Ptr ptr = KMimeType::findByFileContent(file);
-	kdDebug() << "KexiProject::open(): found mime is: " << ptr.data()->name() << endl;
-	QString drivername = Kexi::driverManager.lookupByMime(ptr.data()->name());
-	kdDebug() << "KexiProject::open(): driver name: " << drivername << endl;
-	if(!drivername.isNull())
-	{
-		kdDebug() << "KexiProject::open(): file is a living databse of engine " << drivername << endl;
-		m_connData->setDriverName(drivername);
-		m_connData->setDatabaseName(file);
-		m_connData->setFileName(file);
-	}
-	else
-	{
-		kdDebug() << "KexiProject::open(): could be a xml :)" << endl;
-		delete m_connData;
-		if(!f.open(IO_ReadOnly))
-		{
-			m_error = i18n("Couldn't open connection file");
-			return false;
-		}
-		QString errMsg;
-		int errRow;
-		int errCol;
-
-		QDomDocument doc;
+	if (!m_connection)
+		return;
 		
-
-		if(!doc.setContent(&f, &errMsg, &errRow, &errCol))
-		{
-			m_error = i18n("Couldn't parse connection file: %1\nRow: %1, Col: %1").arg(errMsg).arg(errRow).arg(errCol);
-			return false;
-		}
-
-		QDomElement root = doc.elementsByTagName("KexiDBConnection").item(0).toElement();
-
-		m_connData = KexiProjectConnectionData::loadInfo(root);
-		kdDebug() << "KexiProject::open(): hope stuff is up and running (" << m_connData << ")" << endl;
-	}
-
-//	f.close();
-	if(!openConnection(m_connData) || !m_connection)
-	{
-		m_error = i18n("Couldn't connect");
-		return false;
-	}
-
-	if(!m_connection->useDatabase(m_connData->dbFileName()))
-	{
-		m_error = i18n("Couldn't open database '%1'").arg(m_connData->databaseName());
-//		/*m_error = */m_connection->debugError();
-		return false;
-	}
-
-	emit dbAvailable();
-	kdDebug() << "KexiProject::open(): checking project parts..." << endl;
-	m_partManager->checkProject(m_connection);
-	return true;
+	delete m_connection;
+	m_connection = 0;
 }
 
-bool
-KexiProject::openConnection(KexiProjectConnectionData *connection)
+void
+KexiProject::initProject()
 {
-	KexiDB::Driver *driver = m_drvManager->driver(connection->driverName().latin1());
-	if(!driver)
-		return false;
-
-	KexiDB::Connection *conn = driver->createConnection(*connection);
-	if(!conn)
-	{
-		kdDebug() << "KexiProject::openConnection(): uuups faild " << driver->errorMsg()  << endl;
-		return false;
-	}
-
-	if(driver->error())
-	{
-		m_error = i18n("Error while connecting to db %1").arg(driver->errorMsg());
-		return false;
-	}
-
-	if(!conn->connect())
-	{
-		m_error = i18n("Error while connecting to db %1").arg(driver->errorMsg());
-		kdDebug() << "KexiProject::openConnection() errror connecting: " << driver->errorMsg() << endl;
-		return false;
-	}
-
-	m_connection = conn;
-	return true;
+//	emit dbAvailable();
+	kdDebug() << "KexiProject::open(): checking project parts..." << endl;
+	
+	Kexi::partManager.checkProject(m_connection);
 }
-#endif
 
 bool
 KexiProject::isConnected()
@@ -260,7 +184,9 @@ KexiProject::items(KexiPart::Info *i)
 	if(!isConnected())
 		return list;
 
-	KexiDB::Cursor *cursor = m_connection->executeQuery("SELECT o_id, o_name, o_caption  FROM kexi__objects WHERE o_type = " + QString::number(i->projectPartID()), KexiDB::Cursor::Buffered);
+	KexiDB::Cursor *cursor = m_connection->executeQuery(
+		"SELECT o_id, o_name, o_caption  FROM kexi__objects WHERE o_type = " 
+		+ QString::number(i->projectPartID()), KexiDB::Cursor::Buffered);
 	if(!cursor)
 		return list;
 
@@ -273,11 +199,35 @@ KexiProject::items(KexiPart::Info *i)
 		it.setCaption(cursor->value(2).toString());
 
 		list.append(it);
+		kdDebug() << "KexiProject::items(): ITEM ADDED == "<<cursor->value(1).toString()<<endl;
 	}
 
 	m_connection->deleteCursor(cursor);
-	kdDebug() << "KexiProject::items(): end with cout " << list.count() << endl;
+	kdDebug() << "KexiProject::items(): end with count " << list.count() << endl;
 	return list;
+}
+
+void KexiProject::setError(int code, const QString &msg )
+{
+	KexiDB::Object::setError(code, msg);
+	if (KexiDB::Object::error())
+		emit error(m_error_title, this);
+}
+
+void KexiProject::setError( const QString &msg )
+{
+	KexiDB::Object::setError(msg);
+	if (KexiDB::Object::error())
+		emit error(m_error_title, this);
+}
+
+void KexiProject::setError( KexiDB::Object *obj )
+{
+	if (!obj)
+		return;
+	KexiDB::Object::setError(obj);
+	if (KexiDB::Object::error())
+		emit error(m_error_title, obj);
 }
 
 #include "kexiproject.moc"

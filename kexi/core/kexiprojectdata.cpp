@@ -47,10 +47,20 @@ KexiProjectData::KexiProjectData()
 }
 
 KexiProjectData::KexiProjectData( 
-	const KexiDB::ConnectionData &cdata, const QString& dbname )
- : m_connData(cdata)
+	const KexiDB::ConnectionData &cdata, const QString& dbname, const QString& caption )
+ : KexiDB::SchemaData()
+ , m_connData(cdata)
 {
 	setDatabaseName(dbname);
+	setCaption(caption);
+}
+
+KexiProjectData::KexiProjectData( KexiProjectData& pdata )
+ : KexiDB::SchemaData()
+ , m_connData(*pdata.connectionData())
+{
+	setDatabaseName(pdata.databaseName());
+	setCaption(pdata.caption());
 }
 
 KexiProjectData::~KexiProjectData()

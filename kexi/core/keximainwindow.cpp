@@ -42,14 +42,16 @@
 #include "kexipartmanager.h"
 #include "kexistartupdlg.h"
 #include "kexiproject.h"
+#include "kexiprojectdata.h"
+#include "kexi.h"
 #include "startup/KexiStartupDialog.h"
 #include "startup/KexiConnSelector.h"
+#include "startup/KexiProjectSelector.h"
 #include "startup/KexiProjectSet.h"
-#include "kexiprojectdata.h"
+#include "startup/KexiNewProjectWizard.h"
+#include "startup/KexiStartup.h"
 
-#include "kexi.h"
-
-//-------------------------------------------------
+#include <unistd.h>
 
 class KexiMainWindow::Private
 {
@@ -73,12 +75,13 @@ class KexiMainWindow::Private
 //-------------------------------------------------
 
 KexiMainWindow::KexiMainWindow()
- : KMdiMainFrm(0L, "keximain")
+ : KMdiMainFrm(0L, "keximainwindow")
 	,m_currentDocumentGUIClient(0)
  	,d(new KexiMainWindow::Private() )
 {
 	m_browser = 0;
 	m_project = 0;	
+	KGlobal::iconLoader()->addAppDir("kexi");
 	setXMLFile("kexiui.rc");
 	setManagedDockPositionModeEnabled(true);//TODO(js): remove this if will be default in kmdi :)
 	setStandardMDIMenuEnabled();
@@ -126,7 +129,6 @@ KexiMainWindow::initActions()
 		this, SLOT(slotProjectClose()), actionCollection(), "project_close" );
 	d->action_close->setWhatsThis(i18n("Close the current project."));
 	KStdAction::quit( this, SLOT(slotQuit()), actionCollection(), "quit");
-//	new KAction(i18n("&Quit"), "exit", KStdAccel::shortcut(KStdAccel::Quit), qApp, SLOT(slotFileQuit()), actionCollection(), "file_quit");
 
 	//SETTINGS MENU
 	setStandardToolBarMenuEnabled( true );
@@ -154,10 +156,6 @@ void KexiMainWindow::invalidateActions()
 {
 	stateChanged("project_opened",m_project ? StateNoReverse : StateReverse);
 	
-/*	d->action_save->setEnabled(m_project);
-	d->action_save_as->setEnabled(m_project);
-	d->action_project_properties->setEnabled(m_project);
-	d->action_close->setEnabled(m_project);*/
 	d->action_show_browser->setEnabled(m_project && m_browser);
 #ifndef KEXI_NO_CTXT_HELP
 	d->action_show_helper->setEnabled(m_project);
@@ -169,110 +167,115 @@ void KexiMainWindow::startup(KexiProjectData *projectData)
 	kdDebug() << "KexiMainWindow::startup()..." << endl;
 	if (!projectData) {
 //<TEMP>
-	//some connection data
+		//some connection data
 		KexiDB::ConnectionData *conndata;
 		conndata = new KexiDB::ConnectionData();
-			conndata->name = "My connection 1";
-			conndata->driverName = "mysql";
-			conndata->hostName = "host.net";
-			conndata->userName = "user";
-		Kexi::connset.addConnectionData(conndata);
-		conndata = new KexiDB::ConnectionData();
-			conndata->name = "My connection 2";
+			conndata->name = "My connection";
 			conndata->driverName = "mysql";
 			conndata->hostName = "myhost.org";
 			conndata->userName = "otheruser";
 			conndata->port = 53121;
 		Kexi::connset.addConnectionData(conndata);
+		conndata = new KexiDB::ConnectionData();
+			conndata->name = "Local pgsql connection";
+			conndata->driverName = "postgresql";
+			conndata->hostName = "localhost"; // -- default //"host.net";
+			conndata->userName = getlogin(); //-- temporary e.g."jarek"
+		Kexi::connset.addConnectionData(conndata);
 
 		//some recent projects data
-		KexiProjectData *prjdata;
-		prjdata = new KexiProjectData( *conndata, "bigdb" );
-		prjdata->setCaption("My Big Project");
-		prjdata->setHelpText("This is my first biger project started yesterday. Have fun!");
-		Kexi::recentProjects.addProjectData(prjdata);
+		projectData = new KexiProjectData( *conndata, "bigdb", "Big DB" );
+		projectData->setCaption("My Big Project");
+		projectData->setHelpText("This is my first biger project started yesterday. Have fun!");
+		Kexi::recentProjects.addProjectData(projectData);
 	//</TEMP>
+
+		if (!KexiStartupDialog::shouldBeShown())
+			return;
 
 		KexiStartupDialog dlg(KexiStartupDialog::Everything, KexiStartupDialog::CheckBoxDoNotShowAgain,
 			Kexi::connset, Kexi::recentProjects, 0, "dlg");
-		int e=dlg.exec();
-		kdDebug() << (e==QDialog::Accepted ? "Accepted" : "Rejected") << endl;
-	
-		if (e==QDialog::Accepted) {
-			int r = dlg.result();
-			if (r==KexiStartupDialog::TemplateResult) {
-				kdDebug() << "Template key == " << dlg.selectedTemplateKey() << endl;
-				if (dlg.selectedTemplateKey()=="blank") {
-					createBlankDatabase();
-				}
-			}
-			else if (r==KexiStartupDialog::OpenExistingResult) {
-				kdDebug() << "Existing project --------" << endl;
-				QString selFile = dlg.selectedExistingFile();
-				if (!selFile.isEmpty())
-					kdDebug() << "Project File: " << selFile << endl;
-				else if (dlg.selectedExistingConnection()) {
-					kdDebug() << "Existing connection: " << dlg.selectedExistingConnection()->serverInfoString() << endl;
-					//ok, now we are trying to show daabases for this conenction to this user
-					//todo
-				}
-			}
-			else if (r==KexiStartupDialog::OpenRecentResult) {
-				kdDebug() << "Recent project --------" << endl;
-				const KexiProjectData *data = dlg.selectedProjectData();
-				if (data) {
-					kdDebug() << "Selected project: database=" << data->databaseName()
-						<< " connection=" << data->constConnectionData()->serverInfoString() << endl;
-				}
-			}
-		}
-	}
-	
-	//we have got a project to open
-	if (projectData) { //.databaseName().isEmpty()) {
-		openProject( projectData );
-	}
-	
-	invalidateActions();
-}
-
-bool KexiMainWindow::createBlankDatabase()
-{
-	KexiDB::ConnectionData *cdata = 0;
-	if (!KexiConnSelectorDialog::alwaysUseFilesForNewProjects()) {
-		KexiConnSelectorDialog sel(Kexi::connset, 0,"sel");
-		int e = sel.exec();
-		kdDebug() << (e==QDialog::Accepted ? "Accepted" : "Rejected") << endl;
-		if (e==QDialog::Accepted) {
-			if (sel.selectedConnectionType()==KexiConnSelectorWidget::FileBased) {
-				kdDebug() << "Selected conn. type: File based" << endl;
-			}
-			else if (sel.selectedConnectionType()==KexiConnSelectorWidget::ServerBased) {
-				kdDebug() << "Selected conn. type: Server based" << endl;
-				cdata = sel.selectedConnectionData();
-				kdDebug() << "SERVER: " << cdata->serverInfoString() << endl;
-			}
-			else
-				return false;
-		}
-		else
-			return false;
-	}
+		if (dlg.exec()!=QDialog::Accepted)
+			return;
 		
+		projectData = 0;
+		int r = dlg.result();
+		if (r==KexiStartupDialog::TemplateResult) {
+			kdDebug() << "Template key == " << dlg.selectedTemplateKey() << endl;
+			if (dlg.selectedTemplateKey()=="blank") {
+				createBlankDatabase();
+				return;
+			}
+			return;//todo - templates
+		}
+		else if (r==KexiStartupDialog::OpenExistingResult) {
+			kdDebug() << "Existing project --------" << endl;
+			QString selFile = dlg.selectedExistingFile();
+			if (!selFile.isEmpty()) {
+				//file-based project
+				kdDebug() << "Project File: " << selFile << endl;
+				projectData = Kexi::detectProjectData( selFile, this );
+			}
+			else if (dlg.selectedExistingConnection()) {
+				kdDebug() << "Existing connection: " << dlg.selectedExistingConnection()->serverInfoString() << endl;
+				KexiDB::ConnectionData *cdata = dlg.selectedExistingConnection();
+				//ok, now we will try to show projects for this connection to the user
+				projectData = selectProject( cdata );
+			}
+		}
+		else if (r==KexiStartupDialog::OpenRecentResult) {
+			kdDebug() << "Recent project --------" << endl;
+			const KexiProjectData *data = dlg.selectedProjectData();
+			if (data) {
+				kdDebug() << "Selected project: database=" << data->databaseName()
+					<< " connection=" << data->constConnectionData()->serverInfoString() << endl;
+			}
+			//js: TODO
+			return;
+		}
+	
+		if (!projectData)
+			return;
+	}
+	openProject(projectData);
 }
 
-void KexiMainWindow::openProject(KexiProjectData *pdata)
+bool KexiMainWindow::openProject(KexiProjectData *projectData)
 {
-	if (!closeProject())
-		return;
-	
-	m_project = new KexiProject(pdata);
+	m_project = new KexiProject( projectData );
+	connect(m_project, SIGNAL(error(const QString&,KexiDB::Object*)), this, SLOT(slotShowErrorMessageFor(const QString&,KexiDB::Object*)));
 	if (!m_project->open()) {
-		KMessageBox::sorry(this, i18n("<qt>Could not open project:<p>%1</qt>").arg(m_project->errorMsg()));
-		closeProject();
-		return;
+		delete m_project;
+		m_project = 0;
+		return false;
 	}
 	initBrowser();
+	Kexi::recentProjects.addProjectData( projectData );
+	invalidateActions();
+	
+	return true;
+}
+
+KexiProjectData*
+KexiMainWindow::selectProject(KexiDB::ConnectionData *cdata)
+{
+	if (!cdata)
+		return 0;
+	KexiProjectData* projectData = 0;
+	//dialog for selecting a project
+	KexiProjectSelectorDialog prjdlg( this, "prjdlg", cdata, true, false );
+	if (!prjdlg.projectSet() || prjdlg.projectSet()->error()) {
+		slotShowErrorMessageFor(i18n("Could not load list of available projects list for connection \"%1\"")
+		.arg(cdata->serverInfoString()), prjdlg.projectSet());
+		return 0;
+	}
+	if (prjdlg.exec()!=QDialog::Accepted)
+		return 0;
+	if (prjdlg.selectedProjectData()) {
+		//deep copy
+		projectData = new KexiProjectData(*prjdlg.selectedProjectData());
+	}
+	return projectData;
 }
 
 bool KexiMainWindow::closeProject()
@@ -301,7 +304,7 @@ KexiMainWindow::initBrowser()
 	{
 		m_browser->clear();
 
-		KexiPart::Parts *pl = m_project->partManager()->partList();
+		KexiPart::PartList *pl = Kexi::partManager.partList(); //m_project->partManager()->partList();
 		for(KexiPart::Info *it = pl->first(); it; it = pl->next())
 		{
 			kdDebug() << "KexiMainWindow::initBrowser(): adding " << it->groupName() << endl;
@@ -314,34 +317,6 @@ KexiMainWindow::initBrowser()
 
 }
 
-#if 0
-void
-KexiMainWindow::parseCmdLineOptions()
-{
-	KCmdLineArgs *args = KCmdLineArgs::parsedArgs();
-	if(args->count() > 0 && m_project->open(QFile::decodeName(args->arg(0))))
-	{
-		kdDebug() << "KexiMainWindow::parseCmdLineOptions(): opened" << endl;
-	}
-	else
-	{
-		KexiStartupDlg *dlg = new KexiStartupDlg(this);
-		int res = dlg->exec();
-		switch(res)
-		{
-			case KexiStartupDlg::Cancel:
-				qApp->quit();
-			case KexiStartupDlg::OpenExisting:
-				if(!m_project->open(dlg->fileName()))
-					KMessageBox::error(this, m_project->errorMsg());
-				break;
-			default:
-				return;
-		}
-	}
-
-}
-#endif
 void
 KexiMainWindow::closeEvent(QCloseEvent *ev)
 {
@@ -459,14 +434,84 @@ KexiMainWindow::slotConfigureToolbars()
     (void) edit.exec();
 }
 
-void
+void 
 KexiMainWindow::slotProjectNew()
 {
+	if (m_project)//js: TODO: start new instance!
+		return;
+	createBlankDatabase();
+}
+
+bool
+KexiMainWindow::createBlankDatabase()
+{
+	KexiNewProjectWizard wiz(Kexi::connset, 0, "KexiNewProjectWizard", true);
+	if (wiz.exec() != QDialog::Accepted)
+		return false;
+	
+	KexiProjectData *new_data = 0;
+	if (wiz.projectConnectionData()) {
+		//server-based project
+		KexiDB::ConnectionData *cdata = wiz.projectConnectionData();
+		kdDebug() << "DBNAME: " << wiz.projectDBName() << " SERVER: " << cdata->serverInfoString() << endl;
+		new_data = new KexiProjectData( *cdata, wiz.projectDBName(), wiz.projectCaption() );
+	}
+	else if (!wiz.projectDBName().isEmpty()) {
+		//file-based project
+		KexiDB::ConnectionData cdata;
+		cdata.name = wiz.projectCaption();
+		cdata.driverName = "sqlite";
+		cdata.setFileName( wiz.projectDBName() );
+		new_data = new KexiProjectData( cdata, wiz.projectDBName(), wiz.projectCaption() );
+	}
+	else
+		return false;
+
+	m_project = new KexiProject( new_data );
+	connect(m_project, SIGNAL(error(const QString&,KexiDB::Object*)), this, SLOT(slotShowErrorMessageFor(const QString&,KexiDB::Object*)));
+	if (!m_project->create()) {
+		delete m_project;
+		m_project = 0;
+		return false;
+	}
+	kdDebug() << "KexiMainWindow::slotProjectNew(): new project created --- " << endl;
+	initBrowser();
+	Kexi::recentProjects.addProjectData( new_data );
+
+	invalidateActions();
+	return true;
 }
 
 void
 KexiMainWindow::slotProjectOpen()
 {
+	KexiStartupDialog dlg(
+		KexiStartupDialog::OpenExisting, 0, Kexi::connset, Kexi::recentProjects,
+		this, "KexiOpenDialog");
+	
+	if (dlg.exec()!=QDialog::Accepted)
+		return;
+
+	if (m_project)//js: TODO: start new instance!
+		return;
+
+	KexiProjectData* projectData = 0;
+	KexiDB::ConnectionData *cdata = dlg.selectedExistingConnection();
+	if (cdata) {
+		projectData = selectProject( cdata );
+	}
+	else {
+		QString selFile = dlg.selectedExistingFile();
+		if (!selFile.isEmpty()) {
+			//file-based project
+			kdDebug() << "Project File: " << selFile << endl;
+			projectData = Kexi::detectProjectData( selFile, this );
+		}
+	}
+	
+	if (!projectData)
+		return;
+	openProject(projectData);
 }
 
 void
@@ -532,6 +577,35 @@ KexiMainWindow::slotQuit()
 	close();
 }
 
+void
+KexiMainWindow::slotShowErrorMessageFor(const QString &title, KexiDB::Object *obj)
+{
+	if (!obj)
+		return;
+	QString msg;
+	if (!title.isEmpty())
+		msg = "<qt><p><b>"+title+"</b><p>";
+	else
+		msg = "<qt><p>";
+	if (!obj) {
+		KMessageBox::error(this, msg);
+		return;
+	}
+	msg += obj->errorMsg();
+	QString details;
+	if (!obj->serverErrorMsg().isEmpty())
+		details += "<qt><p><b>" +i18n("Message from server:") + "</b> " + obj->serverErrorMsg();
+	QString resname = obj->serverResultName();
+	if (!resname.isEmpty())
+		details += (QString("<p><b>")+i18n("Server result name:")+"</b> "+resname);
+	if (!details.isEmpty()) {
+		details += (QString("<p><b>")+i18n("Result number:")+"</b> "+QString::number(obj->serverResult()));
+		KMessageBox::detailedError(this, msg, details);
+	}
+	else {
+		KMessageBox::error(this, msg);
+	}
+}
 
 #include "keximainwindow.moc"
 

@@ -36,11 +36,16 @@
 class KEXICORE_EXPORT KexiProjectData : public KexiDB::SchemaData
 {
 	public:
-		typedef QPtrList<const KexiProjectData> ConstList;
+		typedef QPtrList<KexiProjectData> List;
 		
 		KexiProjectData();
 
-		KexiProjectData( const KexiDB::ConnectionData &cdata, const QString& dbname );
+		KexiProjectData( const KexiDB::ConnectionData &cdata, 
+			const QString& dbname = QString::null, const QString& caption = QString::null );
+			
+		/*! Constructs a copy of \a pdata */
+		KexiProjectData( KexiProjectData& pdata );
+			
 //		const QString& driverName, const QString& databaseName, const QString &hostName, unsigned short int port,
 //			 const QString& userName, const QString &password, const QString& fileName);
 

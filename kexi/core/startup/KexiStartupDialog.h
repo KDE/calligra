@@ -56,10 +56,12 @@ class KexiStartupDialogPrivate;
 class KexiProjectData;
 class KexiProjectSet;
 class KexiDBConnectionSet;
+class ConnectionDataLVItem;
 
 /*!
    This class is used to show the template/open-existing/open-recent tabbed dialog
-   on Kexi startup. 
+   on Kexi startup. If only one page is shown, tab is no displayed, so dialog 
+   becomes a normal "plain" type dialog.
  */
 class KEXICORE_EXPORT KexiStartupDialog : public KDialogBase
 {
@@ -100,10 +102,14 @@ public:
 	KexiStartupDialog(
 		int dialogType, 
 		int dialogOptions,
-		const KexiDBConnectionSet& connSet,
-		const KexiProjectSet& recentProjects,
+		KexiDBConnectionSet& connSet,
+		KexiProjectSet& recentProjects,
 		QWidget *parent = 0, const char *name = 0 );
 	~KexiStartupDialog();
+
+	/*! \return true if startup dialog should be shown (info is taken from kexi config)
+	*/
+	static bool shouldBeShown();
 
 	/*! Executes dialog. 
 	 \return one of Result values. Use this after dialog is closed. */
@@ -119,7 +125,7 @@ public:
 	/*! \return data of selected Kexi project (if "Open Recent" tab was selected).
 		Returns NULL if no selection has been made or other tab was selected.
 	*/
-	const KexiProjectData* selectedProjectData() const;
+	KexiProjectData* selectedProjectData() const;
 	
 	/*! \return name of selected Kexi project file 
 		(if "Open Existing" tab was selected and this file was clicked).
@@ -131,7 +137,7 @@ public:
 		(if "Open Existing" tab was selected and this connection data was clicked).
 		Returns NULL if no such selection has been made or other tab was selected.
 	*/
-	const KexiDB::ConnectionData* selectedExistingConnection();
+	KexiDB::ConnectionData* selectedExistingConnection() const;
 
 	/*! Reimplemented for internal reasons */	
 	virtual void show();
@@ -155,11 +161,11 @@ protected slots:
 	void tabShown(QWidget *w);
 
 	//! helper
-	void recentProjectDoubleClicked(const KexiProjectData *data);
+	void recentProjectItemExecuted(KexiProjectData *data);
 	void existingFileSelected(const QString &f);
 	void showSimpleConnForOpenExisting();
 	void showAdvancedConnForOpenExisting();
-	void connectionItemForOpenExistingDBLClicked(QListViewItem *item);
+	void connectionItemForOpenExistingExecuted(ConnectionDataLVItem *item);
 
 protected:
 	virtual bool eventFilter( QObject *o, QEvent *e );
@@ -167,6 +173,8 @@ protected:
 	//! helper: updates a state of dialog's OK button
 	void updateDialogOKButton(QWidget *w);
 
+	//! internal reimplementation
+	int activePageIndex() const;
 private:
 	void setupPageTemplates();
 	void setupPageOpenExisting();
@@ -176,29 +184,6 @@ private:
 	void updateSelectedTemplateKeyInfo();
 
 	KexiStartupDialogPrivate *d;
-};
-
-//! internal
-class KexiStartupFileDialog : public KFileDialog
-{
-	Q_OBJECT
-	
-public :
-	KexiStartupFileDialog(
-		const QString& startDir, QString& filter,
-		QWidget *parent=0, const char *name=0);
-	KURL currentURL();
-
-	// Return true if the current URL exists, show msg box if not
-	bool checkURL();
-
-signals:
-
-protected:
-	// Typing a file that doesn't exist closes the file dialog, we have to
-	// handle this case better here.
-	virtual void accept();
-	virtual void reject();
 };
 
 #endif
