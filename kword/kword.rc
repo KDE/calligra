@@ -1,9 +1,9 @@
 <!DOCTYPE kpartgui SYSTEM "kpartgui.dtd" ><kpartgui name="KWord" version="7">
 <MenuBar>
- <Menu name="File"><text>&amp;File</text>
+ <Menu name="file"><text>&amp;File</text>
   <Action name="extra_template"/>
  </Menu>
- <Menu name="Edit"><text>&amp;Edit</text>
+ <Menu name="edit"><text>&amp;Edit</text>
   <Action name="edit_undo"/>
   <Action name="edit_redo"/>
   <Separator/>
@@ -28,7 +28,7 @@
   <Separator/>
   <Action name="edit_customvars"/>
  </Menu>
- <Menu name="View"><text>&amp;View</text>
+ <Menu name="view"><text>&amp;View</text>
  <!-- REMOVE THOSE TWO LATER -->
     <Action name="printdebug" />
     <Action name="printrtdebug" />
@@ -48,7 +48,7 @@
   <Separator/>
   <Action name="view_zoom"/>
  </Menu>
- <Menu name="Insert"><text>&amp;Insert</text>
+ <Menu name="insert"><text>&amp;Insert</text>
   <Action name="insert_picture"/>
   <Action name="insert_clipart"/>
   <Separator/>
@@ -66,7 +66,7 @@
    <Action name="insert_var_custom"/>
   </Menu>
  </Menu>
- <Menu name="Tools"><text>&amp;Tools</text>
+ <Menu name="tools"><text>&amp;Tools</text>
   <Action name="extra_spellcheck"/>
   <Action name="extra_autocorrection"/>
   <Separator/>
@@ -80,7 +80,7 @@
   <Action name="tools_formula"/>
   <Action name="tools_part"/>
  </Menu>
- <Menu name="Format"><text>F&amp;ormat</text>
+ <Menu name="format"><text>F&amp;ormat</text>
   <Action name="format_font"/>
   <Action name="format_color"/>
   <Action name="format_paragraph"/>
@@ -90,7 +90,7 @@
   <Separator/>
   <Action name="format_style"/>
  </Menu>
- <Menu name="Table"><text>Ta&amp;ble</text>
+ <Menu name="table"><text>Ta&amp;ble</text>
   <Action name="table_insrow"/>
   <Action name="table_inscol"/>
   <Action name="table_delrow"/>
