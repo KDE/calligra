@@ -60,11 +60,16 @@ KoShellWindow::KoShellWindow()
   QValueList<KoDocumentEntry>::Iterator it = lstComponents.begin();
   for( ; it != lstComponents.end(); ++it )
   {
-      //kdDebug() << "Inserting into koolbar : " << (*it).name << endl;
-      int id = m_pKoolBar->insertItem( m_grpFile,
+      //kdDebug() << "Inserting into koolbar : " << (*it).name() << endl;
+      int id;
+      if (!(*it).service()->genericName().isEmpty()) //skip the unavailable part
+          id = m_pKoolBar->insertItem( m_grpFile,
                                        DesktopIcon((*it).service()->icon()),
                                        (*it).name(),
                                        this, SLOT( slotKoolBar( int, int ) ) );
+      else
+          continue;
+
       m_mapComponents[ id ] = *it;
 
       // Build list of patterns for all supported KOffice documents...
