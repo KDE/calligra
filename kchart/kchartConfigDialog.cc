@@ -190,6 +190,7 @@ void KChartConfigDialog::apply()
         _params->setAxisParams( KDChartAxisParams::AxisPosBottom, bottomparams );
         _params->setAxisParams( KDChartAxisParams::AxisPosLeft, leftparams );
         _params->setAxisParams( KDChartAxisParams::AxisPosRight, rightparams );
+        _params->setHeaderFooterColor( KDChartParams::HdFtPosHeader,_colorpage-> titleColor());
     }
     if((_piepage&& _parameterpiepage) ||  _parameterpage )
     {
@@ -261,7 +262,7 @@ void KChartConfigDialog::defaults()
         KDChartAxisParams rightparams( _params->axisParams( KDChartAxisParams::AxisPosRight ) );
         KDChartAxisParams bottomparams( _params->axisParams( KDChartAxisParams::AxisPosBottom ) );
         _colorpage->setGridColor( leftparams.axisGridColor() );
-        _colorpage->setTitleColor( QColor() );
+        _colorpage->setTitleColor( /*QColor()*/_params->headerFooterColor( KDChartParams::HdFtPosHeader ) );
         _colorpage->setXTitleColor( bottomparams.axisLineColor() );
         _colorpage->setYTitleColor( leftparams.axisLineColor() );
         _colorpage->setYTitle2Color( rightparams.axisLineColor() );
