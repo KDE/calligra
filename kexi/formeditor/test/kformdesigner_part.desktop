@@ -1,8 +1,19 @@
 [Desktop Entry]
 Encoding=UTF-8
 Name=Form Designer
-Name[pt_BR]=Parte do KFormDesigner
-Name[sv]=Kformdesigner-del
+Name[cy]=Dylunydd Ffurflenni
+Name[es]=Diseñador de formularios
+Name[et]=Vormikujundaja
+Name[fr]=Composeur d'interfaces graphiques
+Name[pl]=Projektant formularzy
+Name[pt]=Desenho de Formulários
+Name[pt_BR]=Desenhista de Formulário
+Name[ru]=Редактор форм
+Name[sr]=Дизајнер форми
+Name[sv]=Formulärkonstruktion
+Name[ta]=படிவ வடிவமைப்பாளர்
+Name[tg]=Дизайнгари шакл
+Name[xx]=xxForm Designerxx
 MimeType=application/x-designer;
 ServiceTypes=KParts/ReadOnlyPart,KParts/ReadWritePart
 X-KDE-Library=libkformdesigner_part
