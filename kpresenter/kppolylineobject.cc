@@ -74,6 +74,7 @@ bool KPPolylineObject::saveOasis( KoXmlWriter &xmlWriter )
     //KPObject::saveOasis( xmlWriter );
     kdDebug()<<"bool KPPolylineObject::saveOasis( KoXmlWriter &xmlWriter ) not finished to implemented\n";
     saveOasisPosObject(xmlWriter );
+    KPPointObject::saveOasis( xmlWriter );
     if( !objectName.isEmpty())
         xmlWriter.addAttribute( "draw:name", objectName );
     xmlWriter.endElement();

@@ -145,6 +145,7 @@ bool KPGroupObject::saveOasis(KoXmlWriter &xmlWriter)
         it.current()->saveOasis( xmlWriter );
     }
     xmlWriter.endElement();
+    return true;
 }
 
 

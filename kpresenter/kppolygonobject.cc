@@ -84,6 +84,26 @@ bool KPPolygonObject::saveOasis( KoXmlWriter &xmlWriter )
     //save object name and other generic attribute
     //KPObject::saveOasis( xmlWriter );
     saveOasisPosObject(xmlWriter );
+
+    QString listOfPoint;
+    int maxX=0;
+    int maxY=0;
+    KoPointArray::ConstIterator it;
+    for ( it = points.begin(); it != points.end(); ++it ) {
+        int tmpX = 0;
+        int tmpY = 0;
+        tmpX = ( int ) ( KoUnit::toMM( ( *it ).x() )*100 );
+        tmpY = ( int ) ( KoUnit::toMM( ( *it ).y() )*100 );
+        if ( !listOfPoint.isEmpty() )
+            listOfPoint += QString( " %1,%2" ).arg( tmpX ).arg( tmpY );
+        else
+            listOfPoint = QString( "%1,%2" ).arg( tmpX ).arg( tmpY );
+        maxX = QMAX( maxX, tmpX );
+        maxY = QMAX( maxY, tmpY );
+    }
+    xmlWriter.addAttribute("draw:points", listOfPoint );
+    xmlWriter.addAttribute("svg:viewBox", QString( "0 0 %1 %2" ).arg( maxX ).arg( maxY ) );
+
     if( !objectName.isEmpty())
         xmlWriter.addAttribute( "draw:name", objectName );
     xmlWriter.endElement();
