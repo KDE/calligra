@@ -30,7 +30,7 @@
 #include <qtextcodec.h>
 #include <string.h>
 
-#define CHAR_DEBUG
+//#define CHAR_DEBUG
 
 // We currently only take note of the document's main non-Far Eastern
 // language, and ignore character properties. TBD: remove these restrictions!
