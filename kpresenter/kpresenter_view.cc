@@ -852,12 +852,14 @@ void KPresenterView::extraLineEnd()
 /*===============================================================*/
 void KPresenterView::extraGroup()
 {
+    page->setToolEditMode( TEM_MOUSE );
     m_pKPresenterDoc->groupObjects();
 }
 
 /*===============================================================*/
 void KPresenterView::extraUnGroup()
 {
+    page->setToolEditMode( TEM_MOUSE );
     m_pKPresenterDoc->ungroupObjects();
 }
 

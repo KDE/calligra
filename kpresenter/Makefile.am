@@ -1,5 +1,5 @@
 
-KDE_CXXFLAGS = $(USE_RTTI) 
+KDE_CXXFLAGS = $(USE_RTTI)
 INCLUDES = $(KOFFICE_INCLUDES) $(all_includes)
 
 ####### Files
@@ -8,7 +8,7 @@ bin_PROGRAMS = kpresenter
 lib_LTLIBRARIES = libkpresenter.la
 
 kpresenter_LDFLAGS = $(all_libraries) $(KDE_RPATH)
-kpresenter_LDADD = libkpresenter.la 
+kpresenter_LDADD = libkpresenter.la
 
 libkpresenter_la_LDFLAGS = $(all_libraries) -avoid-version -module
 libkpresenter_la_LIBADD = autoformEdit/libaf.la ../lib/kofficeui/libkofficeui.la $(LIB_KIMGIO)
@@ -30,7 +30,7 @@ libkpresenter_la_SOURCES = backdia.cc webpresentation.cc kpresenter_view.cc \
 	setoptionscmd.cc chgclipcmd.cc chgpixcmd.cc setbackcmd.cc \
 	effectcmd.cc pgconfcmd.cc pglayoutcmd.cc shadowcmd.cc \
 	rotatecmd.cc lowraicmd.cc pievaluecmd.cc rectvaluecmd.cc penbrushcmd.cc \
-	commandhistory.cc preview.cc gotopage.cc footer_header.cc \
+	grpobjcmd.cc commandhistory.cc preview.cc gotopage.cc footer_header.cc \
 	kpresenter_shell.cc kpresenter_factory.cc \
 	KPresenterDocIface.skel KPresenterDocIface.cc \
 	KPresenterViewIface.skel KPresenterViewIface.cc \
@@ -55,7 +55,7 @@ noinst_HEADERS = kpresenter_doc.h kpresenter_view.h \
 		setoptionscmd.h chgclipcmd.h chgpixcmd.h setbackcmd.h \
 		effectcmd.h pgconfcmd.h pglayoutcmd.h shadowcmd.h \
 		rotatecmd.h lowraicmd.h pievaluecmd.h rectvaluecmd.h penbrushcmd.cc \
-		commandhistory.h preview.h gotopage.h webpresentation.h \
+		grpobjcmd.h commandhistory.h preview.h gotopage.h webpresentation.h \
 		footer_header.h kpresenter_shell.h kpresenter_factory.h \
 		KPresenterDocIface.h KPresenterViewIface.h KPresenterObjectIface.h \
 		KPresenterBackgroundIface.h

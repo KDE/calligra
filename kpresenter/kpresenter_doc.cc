@@ -43,6 +43,7 @@
 #include "pievaluecmd.h"
 #include "rectvaluecmd.h"
 #include "penbrushcmd.h"
+#include "grpobjcmd.h"
 #include "commandhistory.h"
 #include "styledia.h"
 #include "inspagedia.h"
@@ -3827,6 +3828,24 @@ QStringList KPresenterDoc::getRecentryOpenedList()
 /*================================================================*/
 void KPresenterDoc::groupObjects()
 {
+    QList<KPObject> objs;
+    objs.setAutoDelete( FALSE );
+    KPObject *kpobject;
+    for ( kpobject = _objectList->first(); kpobject; kpobject = _objectList->next() ) {
+	if ( kpobject->isSelected() )
+	    objs.append( kpobject );
+    }
+    
+    if ( objs.count() < 2 )
+	QMessageBox::information( 0, i18n( "KPresenter - Group Objects" ), 
+				  i18n( "You have to select at least 2 objects\n"
+				      "which should be grouped together!"), 
+				  i18n( "OK" ) );
+    else {
+	GroupObjCmd *groupObjCmd = new GroupObjCmd( i18n( "Group Objects" ), objs, this );
+	_commands.addCommand( groupObjCmd );
+	groupObjCmd->execute();
+    }
 }
 
 /*================================================================*/
