@@ -1,7 +1,8 @@
 KImageShop design document:
 ---------------------------
 
-KImageShop is pre-alpha! This is more a idea colection than a design document right now.
+KImageShop is pre-alpha! This is more an idea collection than a design document
+right now.
 
 Class overview:
 ---------------
