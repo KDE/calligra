@@ -106,7 +106,7 @@ KarbonView::KarbonView( KarbonPart* part, QWidget* parent, const char* name )
 	setInstance( KarbonFactory::instance() );
 	setAcceptDrops( true );
 
-	if ( !part->isReadWrite() )
+	if( !part->isReadWrite() )
 		setXMLFile( QString::fromLatin1( "karbon_readonly.rc" ) );
 	else
 		setXMLFile( QString::fromLatin1( "karbon.rc" ) );
@@ -245,10 +245,10 @@ KarbonView::~KarbonView()
 
 DCOPObject* KarbonView::dcopObject()
 {
-    if ( !m_dcop )
-	m_dcop = new KarbonViewIface( this );
+	if( !m_dcop )
+		m_dcop = new KarbonViewIface( this );
 
-    return m_dcop;
+	return m_dcop;
 }
 
 
@@ -271,7 +271,7 @@ KarbonView::resizeEvent( QResizeEvent* /*event*/ )
 void
 KarbonView::dragEnterEvent( QDragEnterEvent *event )
 {
-	event->accept( KColorDrag::canDecode( event ));
+	event->accept( KColorDrag::canDecode( event ) );
 }
 
 void
@@ -281,7 +281,7 @@ KarbonView::dropEvent ( QDropEvent *e )
 	QColor color;
 	VColor realcolor;
 
-	if ( KColorDrag::decode( e, color) )
+	if( KColorDrag::decode( e, color) )
 	{
 		float r = color.red() / 255.0;
 		float g = color.green() / 255.0;
@@ -313,8 +313,8 @@ KarbonView::print( KPrinter &printer )
 	// TODO : use real page layout stuff
 	QPtrListIterator<VLayer> i = m_part->document().layers();
 	KoRect rect( 0, 0, width(), height() );
-	for ( ; i.current(); ++i )
-		//if ( i.current()->visible() )
+	for( ; i.current(); ++i )
+		//if( i.current()->visible() )
 			i.current()->draw( &p, &rect );
 
 	p.end();
@@ -335,7 +335,7 @@ KarbonView::editPaste()
 {
 	VObjectListIterator itr( m_part->document().selection()->objects() );
 	VObjectList selection;
-	for ( ; itr.current() ; ++itr )
+	for( ; itr.current() ; ++itr )
 	{
 		VObject *temp = itr.current()->clone();
 		temp->transform( QWMatrix().translate( VGlobal::copyOffset, VGlobal::copyOffset ) );
@@ -344,7 +344,7 @@ KarbonView::editPaste()
 	m_part->document().selection()->clear();
 	// Calc new selection
 	VObjectListIterator itr2( selection );
-	for ( ; itr2.current() ; ++itr2 )
+	for( ; itr2.current() ; ++itr2 )
 	{
 		m_part->insertObject( itr2.current() );
 		m_part->document().selection()->append( itr2.current() );
@@ -471,9 +471,9 @@ kdDebug() << "***" << t.counterClockwise() << endl;
 void
 KarbonView::objectTrafoTranslate()
 {
-	if (m_TransformDlg->isVisible() == false )
+	if( m_TransformDlg->isVisible() == false )
 	{
-		mainWindow()->addDockWindow(m_TransformDlg, DockRight);
+		mainWindow()->addDockWindow( m_TransformDlg, DockRight );
 		m_TransformDlg->setTab( Translate );
 		m_TransformDlg->show();
 	}
@@ -482,9 +482,9 @@ KarbonView::objectTrafoTranslate()
 void
 KarbonView::objectTrafoScale()
 {
-	if (m_TransformDlg->isVisible() == false )
+	if( m_TransformDlg->isVisible() == false )
 	{
-		mainWindow()->addDockWindow(m_TransformDlg, DockRight);
+		mainWindow()->addDockWindow( m_TransformDlg, DockRight );
 		m_TransformDlg->setTab( Scale );
 		m_TransformDlg->show();
 	}
@@ -493,9 +493,9 @@ KarbonView::objectTrafoScale()
 void
 KarbonView::objectTrafoRotate()
 {
-	if (m_TransformDlg->isVisible() == false )
+	if( m_TransformDlg->isVisible() == false )
 	{
-		mainWindow()->addDockWindow(m_TransformDlg, DockRight);
+		mainWindow()->addDockWindow( m_TransformDlg, DockRight );
 		m_TransformDlg->setTab( Rotate );
 		m_TransformDlg->show();
 	}
@@ -504,9 +504,9 @@ KarbonView::objectTrafoRotate()
 void
 KarbonView::objectTrafoShear()
 {
-	if (m_TransformDlg->isVisible() == false )
+	if( m_TransformDlg->isVisible() == false )
 	{
-		mainWindow()->addDockWindow(m_TransformDlg, DockRight);
+		mainWindow()->addDockWindow( m_TransformDlg, DockRight );
 		m_TransformDlg->setTab( Shear );
 		m_TransformDlg->show();
 	}
@@ -802,7 +802,7 @@ void
 KarbonView::slotJoinStyleClicked()
 {
 	VObjectListIterator itr( m_part->document().selection()->objects() );
-	for ( ; itr.current() ; ++itr )
+	for( ; itr.current() ; ++itr )
 	{
 		VStroke stroke( *( itr.current()->stroke() ) );
 		stroke.setParent( itr.current() );
@@ -817,7 +817,7 @@ void
 KarbonView::slotCapStyleClicked()
 {
 	VObjectListIterator itr( m_part->document().selection()->objects() );
-	for ( ; itr.current() ; ++itr )
+	for( ; itr.current() ; ++itr )
 	{
 		VStroke stroke( *( itr.current()->stroke() ) );
 		stroke.setParent( itr.current() );
@@ -846,9 +846,9 @@ KarbonView::setLineWidth( double val)
 void
 KarbonView::viewColorManager()
 {
-	if (m_ColorManager->isVisible() == false )
+	if( m_ColorManager->isVisible() == false )
 	{
-		mainWindow()->addDockWindow(m_ColorManager, DockRight);
+		mainWindow()->addDockWindow( m_ColorManager, DockRight );
 		m_ColorManager->show();
 	}
 }
@@ -856,9 +856,9 @@ KarbonView::viewColorManager()
 void
 KarbonView::viewSelectionProperties()
 {
-	if (m_objectDlg->isVisible() == false )
+	if( m_objectDlg->isVisible() == false )
 	{
-		mainWindow()->addDockWindow(m_objectDlg, DockBottom);
+		mainWindow()->addDockWindow( m_objectDlg, DockBottom );
 		m_objectDlg->show();
 	}
 }
@@ -1013,12 +1013,12 @@ KarbonView::initActions()
 	// line width
 
 	m_setLineWidth = new TKUFloatSpinBoxAction( i18n("Set Line Width"), "linewidth", 0, actionCollection(), "setLineWidth" );
-	m_setLineWidth->setIconMode(TK::IconOnly);
-	m_setLineWidth->setDecimals(1);
-	m_setLineWidth->setMinValue(0.0);
-	m_setLineWidth->setLineStep(0.5);
-	connect( m_setLineWidth, SIGNAL(activated()), this, SLOT(setLineWidth()) );
-	//connect( m_pDoc, SIGNAL(unitsChanged(int)), m_setLineWidth, SLOT(setUnit(int)) );
+	m_setLineWidth->setIconMode( TK::IconOnly );
+	m_setLineWidth->setDecimals( 1 );
+	m_setLineWidth->setMinValue( 0.0 );
+	m_setLineWidth->setLineStep( 0.5 );
+	connect( m_setLineWidth, SIGNAL( activated() ), this, SLOT( setLineWidth() ) );
+	//connect( m_pDoc, SIGNAL( unitsChanged(int) ), m_setLineWidth, SLOT( setUnit(int) ) );
 
 	// set up join style widget
 	m_joinStyle = new VStateButton( this );
@@ -1029,7 +1029,7 @@ KarbonView::initActions()
 #if KDE_VERSION >= 305
 	new KWidgetAction( m_joinStyle, i18n("Set Join Style"), 0, this, SLOT( slotJoinStyleClicked() ), actionCollection(), "setJoinStyle" );
 #endif
-	connect( m_joinStyle, SIGNAL(clicked()), this, SLOT(slotJoinStyleClicked()) );
+	connect( m_joinStyle, SIGNAL( clicked() ), this, SLOT( slotJoinStyleClicked() ) );
 
 	// set up cap style widget
 	m_capStyle = new VStateButton( this );
@@ -1040,7 +1040,7 @@ KarbonView::initActions()
 #if KDE_VERSION >= 305
 	new KWidgetAction( m_capStyle, i18n("Set Cap Style"), 0, this, SLOT( slotCapStyleClicked() ), actionCollection(), "setCapStyle" );
 #endif
-	connect( m_capStyle, SIGNAL(clicked()), this, SLOT(slotCapStyleClicked()) );
+	connect( m_capStyle, SIGNAL( clicked() ), this, SLOT( slotCapStyleClicked() ) );
 
 	m_configureAction = new KAction(
 		i18n( "Configure Karbon..." ), "configure", 0, this,
@@ -1106,7 +1106,7 @@ KarbonView::selectionChanged()
 		m_setLineWidth->setValue( part()->document().selection()->objects().getFirst()->stroke()->lineWidth() );
 		m_objectDlg->enable();
 		m_objectDlg->update( m_part );
-		if ( m_ColorManager->isStrokeDocker() )
+		if( m_ColorManager->isStrokeDocker() )
 		{
 			VColor *c = new VColor ( m_part->document().selection()->objects().getFirst()->stroke()->color() );
 			m_ColorManager->setColor( c );
