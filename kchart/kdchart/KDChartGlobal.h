@@ -34,7 +34,7 @@
 
 #include <float.h>
 
-#ifdef unix
+#if defined( Q_WS_X11 ) || defined( Q_WS_MACX )
 #include <limits.h>
 #else
 #define MINDOUBLE DBL_MIN
