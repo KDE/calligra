@@ -1214,6 +1214,8 @@ void KexiTableView::columnSort(int col)
 {
 	bool i = false;
 	QVariant hint;
+	if (m_pEditor)
+		return;
 	if(m_pInsertItem)
 	{
 		i = true;
