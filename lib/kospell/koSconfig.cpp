@@ -106,6 +106,7 @@ KOSpellConfig::KOSpellConfig( QWidget *parent, const char *name,
     }
     else
     {
+        setReplaceAllList( _ksc->replaceAllList ());
         setNoRootAffix (_ksc->noRootAffix());
         setRunTogether (_ksc->runTogether());
         setDictionary  (_ksc->dictionary());
@@ -114,6 +115,7 @@ KOSpellConfig::KOSpellConfig( QWidget *parent, const char *name,
         setEncoding (_ksc->encoding());
         setIgnoreCase ( _ksc->ignoreCase ());
         setIgnoreAccent( _ksc->ignoreAccent());
+        setSpellWordWithNumber( _ksc->spellWordWithNumber());
         setDontCheckTitleCase( _ksc->dontCheckTitleCase());
         setDontCheckUpperWord( _ksc->dontCheckUpperWord());
         setClient (_ksc->client());
