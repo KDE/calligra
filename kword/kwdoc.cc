@@ -1930,7 +1930,7 @@ void KWDocument::loadDefaultFrameStyleTemplates()
     }
 
     kdDebug(30003) << "File framestyles.xml found!" << endl;
-    
+
     // Open file and parse it
     QFile in( fsfileName );
     if ( !in.open( IO_ReadOnly ) )
@@ -2720,6 +2720,7 @@ void KWDocument::saveOasisDocumentStyles( KoStore* store, KoGenStyles& mainStyle
     for ( ; it != styles.end() ; ++it ) {
         (*it).style->writeStyle( &stylesWriter, mainStyles, "style:style", (*it).name, "style:paragraph-properties" );
     }
+    m_styleColl->saveOasisOutlineStyles( stylesWriter );
     stylesWriter.endElement(); // office:styles
 
     stylesWriter.startElement( "office:automatic-styles" );
