@@ -1388,6 +1388,11 @@ KCommand *KWCanvas::setLeftFrameBorder( KoBorder newBorder, bool on )
         m_doc->repaintAllViews();
         return cmd;
     }
+    else
+    {
+        tmpBorderList.setAutoDelete(true);
+        frameindexList.setAutoDelete(true);
+    }
     return 0L;
 }
 
@@ -1436,6 +1441,11 @@ KCommand *KWCanvas::setRightFrameBorder( KoBorder newBorder, bool on )
         KWFrameBorderCommand *cmd=new KWFrameBorderCommand(i18n("Change Right Border frame"),frameindexList,tmpBorderList,newBorder);
         m_doc->repaintAllViews();
         return cmd;
+    }
+    else
+    {
+        tmpBorderList.setAutoDelete(true);
+        frameindexList.setAutoDelete(true);
     }
     return 0L;
 }
@@ -1487,6 +1497,12 @@ KCommand *KWCanvas::setTopFrameBorder( KoBorder newBorder, bool on )
         m_doc->repaintAllViews();
         return cmd;
     }
+    else
+    {
+        tmpBorderList.setAutoDelete(true);
+        frameindexList.setAutoDelete(true);
+    }
+
     return 0L;
 }
 
@@ -1534,6 +1550,11 @@ KCommand *KWCanvas::setBottomFrameBorder( KoBorder newBorder, bool on )
         KWFrameBorderCommand *cmd=new KWFrameBorderCommand(i18n("Change Bottom Border frame"),frameindexList,tmpBorderList,newBorder);
         m_doc->repaintAllViews();
         return cmd;
+    }
+    else
+    {
+        tmpBorderList.setAutoDelete(true);
+        frameindexList.setAutoDelete(true);
     }
     return 0L;
 }
