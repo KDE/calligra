@@ -30,6 +30,7 @@
 #include <klocale.h>
 #include <kdebug.h>
 #include <kiconloader.h>
+#include <kcursor.h>
 
 KoVerticalLabel::KoVerticalLabel( QWidget* parent, const char* name )
 		: QWidget( parent, name, Qt::WRepaintNoErase )
@@ -182,6 +183,7 @@ KoHelpView::KoHelpView( QWidget* parent )
 	currentText = 0L;
 	setBackgroundMode( PaletteLight );
 	parent->installEventFilter( this );
+	setMouseTracking( true );
 }; // KoHelpView::KoHelpView
 
 KoHelpView::~KoHelpView()
@@ -219,6 +221,14 @@ void KoHelpView::mouseReleaseEvent( QMouseEvent* e )
 	else
 		e->ignore();
 }; // KoHelpView::mouseReleaseEvent
+
+void KoHelpView::mouseMoveEvent( QMouseEvent* e )
+{
+	if ( !currentText->anchorAt( e->pos() ).isEmpty() )
+		setCursor( KCursor::handCursor() );
+	else
+		setCursor( KCursor::arrowCursor() );
+}; // KoHelpView::mouseMove
 
 bool KoHelpView::eventFilter( QObject*, QEvent* e )
 {

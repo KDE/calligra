@@ -83,7 +83,7 @@ class KoTinyButton : public QWidget
 			Close,
 			Sticky
 		};
-	
+
 		KoTinyButton( Action a, QWidget* parent );
 
 	signals:
@@ -117,9 +117,10 @@ class KoHelpView : public QWidget
 		void linkClicked( const QString& link );
 
 	protected:
-		void mousePressEvent( QMouseEvent* e );
-		void mouseReleaseEvent( QMouseEvent* e );
-		void paintEvent( QPaintEvent* e );
+		virtual void mousePressEvent( QMouseEvent* e );
+		virtual void mouseReleaseEvent( QMouseEvent* e );
+		virtual void mouseMoveEvent( QMouseEvent* e );
+		virtual void paintEvent( QPaintEvent* e );
 
 	private:
 		QSimpleRichText* currentText;
