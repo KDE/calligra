@@ -39,6 +39,7 @@
 #include "kinputdialog.h"
 #include "kintegerinputdialog.h"
 #include "kzoomfactordialog.h"
+#include "preferencesdlg.h"
 
 #include "kimage_doc.h"
 #include "kimage_view.h"
@@ -46,8 +47,8 @@
 #include "macros.h"
 
 #define CHECK_DOCUMENT if( m_pDoc->isEmpty() ) return;
-#define CHECK_RUNNING if( m_runningCommand ) return;
-#define CHECK_ALL CHECK_DOCUMENT
+#define CHECK_RUNNING if( m_pDoc->m_executeCommand ) return;
+#define CHECK_ALL CHECK_DOCUMENT CHECK_RUNNING
 
 /*****************************************************************************
  *
@@ -55,7 +56,7 @@
  *
  *****************************************************************************/
 
-KImageView::KImageView( QWidget *_parent, const char *_name, KImageDoc* _doc )
+KImageView::KImageView( QWidget* _parent, const char* _name, KImageDoc* _doc )
   : QWidget( _parent )
   , KoViewIf( _doc )
   , OPViewIf( _doc )
@@ -67,7 +68,7 @@ KImageView::KImageView( QWidget *_parent, const char *_name, KImageDoc* _doc )
 
   m_pDoc = _doc;
 
-  QObject::connect( m_pDoc, SIGNAL( sig_updateView() ), this, SLOT( slotUpdateView() ) );
+  QObject::connect( m_pDoc, SIGNAL( sigUpdateView() ), this, SLOT( slotUpdateView() ) );
 
   m_drawMode = OriginalSize;
   m_centerMode = 0;
@@ -129,6 +130,11 @@ void KImageView::cleanUp()
   m_pDoc->removeView( this );
 
   KoViewIf::cleanUp();
+}
+
+KImageDoc* KImageView::doc()
+{
+  return m_pDoc;
 }
 
 bool KImageView::event( const char* _event, const CORBA::Any& _value )
@@ -201,14 +207,14 @@ bool KImageView::mappingCreateMenubar( OpenPartsUI::MenuBar_ptr _menubar )
 
   // Edit
   MENU( m_vMenuEdit, "&Edit" )
-  ITEM3( m_idMenuEdit_Undo, m_vMenuEdit, "undo,xpm", "no Undo possible", "editUndo" )
-  ITEM3( m_idMenuEdit_Redo, m_vMenuEdit, "redo,xpm", "no Redo possible", "editRedo" )
-  ITEM3( m_idMenuEdit_Edit, m_vMenuEdit, "mini/unknown,xpm", "&Edit image", "editEditImage" )
-  SEPARATOR( m_vMenuEdit )
+  ITEM3( m_idMenuEdit_Undo, m_vMenuEdit, "undo.xpm", "no Undo possible", "editUndo" )
+  ITEM3( m_idMenuEdit_Redo, m_vMenuEdit, "redo.xpm", "no Redo possible", "editRedo" )
+  ITEM3( m_idMenuEdit_Edit, m_vMenuEdit, "mini/unknown.xpm", "&Edit image", "editEditImage" )
+  MN_SEPARATOR( m_vMenuEdit )
   ITEM2( m_idMenuEdit_Import, m_vMenuEdit, "&Import image", "editImportImage", CTRL + Key_I )
   ITEM2( m_idMenuEdit_Export, m_vMenuEdit, "E&xport image", "editExportImage", CTRL + Key_X )
   ITEM1( m_idMenuEdit_Export, m_vMenuEdit, "E&mbed Part", "editEmpedPart" )
-  SEPARATOR( m_vMenuEdit )
+  MN_SEPARATOR( m_vMenuEdit )
   ITEM2( m_idMenuEdit_Page, m_vMenuEdit, "&Page Layout", "editPageLayout", CTRL + Key_L )
   ITEM1( m_idMenuEdit_Preferences, m_vMenuEdit, "P&references...", "editPreferences" )
 
@@ -218,7 +224,7 @@ bool KImageView::mappingCreateMenubar( OpenPartsUI::MenuBar_ptr _menubar )
   ITEM4( m_idMenuView_FitToView, m_vMenuView, "fittoview.xpm", "Fit to &view", "viewFitToView", CTRL + Key_V )
   ITEM4( m_idMenuView_FitWithProps, m_vMenuView, "fitwithprops.xpm", "Fit and keep &proportions", "viewFitWithProportions", CTRL + Key_P )
   ITEM4( m_idMenuView_Original, m_vMenuView, "originalsize.xpm", "&Original size", "viewOriginalSize", CTRL + Key_O )
-  SEPARATOR( m_vMenuView )
+  MN_SEPARATOR( m_vMenuView )
   ITEM1( m_idMenuView_Center, m_vMenuView, "&Centered", "viewCentered" )
   ITEM1( m_idMenuView_Info, m_vMenuView, "&Scrollbars", "viewScrollbars" )
   ITEM1( m_idMenuView_Info, m_vMenuView, "I&nformations", "viewInfoImage" )
@@ -231,7 +237,7 @@ bool KImageView::mappingCreateMenubar( OpenPartsUI::MenuBar_ptr _menubar )
   ITEM1( m_idMenuTransform_RotateAngle, m_vMenuTransform, "Rotate with angle...", "transformRotateAngle" )
   ITEM1( m_idMenuTransform_FlipVertical, m_vMenuTransform, "Flip vertical", "transformFlipVertical" )
   ITEM1( m_idMenuTransform_FlipHorizontal, m_vMenuTransform, "Flip honrizontal", "transformFlipHorizontal" )
-  SEPARATOR( m_vMenuTransform )
+  MN_SEPARATOR( m_vMenuTransform )
   ITEM1( m_idMenuTransform_ZoomFactor, m_vMenuTransform, "&Zoom...", "transformZoomFactor" )
   ITEM1( m_idMenuTransform_ZoomIn10, m_vMenuTransform, "Zoom &in 10%", "transformZoomIn10" )
   ITEM1( m_idMenuTransform_ZoomOut10, m_vMenuTransform, "Zoom &out 10%", "transformZoomOut10" )
@@ -271,11 +277,6 @@ CORBA::Boolean KImageView::printDlg()
   return true;
 }
 
-void KImageView::editPageLayout()
-{
-  m_pDoc->paperLayoutDlg();
-}
-
 void KImageView::newView()
 {
   ASSERT( m_pDoc != 0L );
@@ -283,71 +284,6 @@ void KImageView::newView()
   KImageShell* shell = new KImageShell;
   shell->show();
   shell->setDocument( m_pDoc );
-}
-
-/**
- **  Gets the image from the document and resizes it if necessary
- */
-void KImageView::slotUpdateView()
-{
-  if( m_pDoc->image().isNull() )
-  {
-    return;
-  }
-
-  double dh, dw, d;
-	
-  switch ( m_drawMode )
-  {
-  	case OriginalSize:
-	  m_pixmap.convertFromImage( m_pDoc->image() );
-  	  break;
-  	case FitToView:
-	  m_pixmap.convertFromImage( m_pDoc->image().smoothScale( width(), height() ) );
-  	  break;
-  	case FitWithProps:
-      dh = (double) height() / (double) m_pDoc->image().height();
-      dw = (double) width() / (double) m_pDoc->image().width();
-      d = ( dh < dw ? dh : dw );
-	  m_pixmap.convertFromImage( m_pDoc->image().smoothScale( int( d * m_pDoc->image().width() ), int ( d * m_pDoc->image().height() ) ) );
-  	  break;
-    case ZoomFactor:
-      dw = m_pDoc->image().width() * m_zoomFactor.x() / 100;
-      dh = m_pDoc->image().height() * m_zoomFactor.y() / 100;
-	  m_pixmap.convertFromImage( m_pDoc->image().smoothScale( int( dw * m_pDoc->image().width() ), int ( dh * m_pDoc->image().height() ) ) );
-  	  break;
-  }
-  QWidget::update();
-}
-
-void KImageView::viewFitToView()
-{
-  if( m_pDoc->image().isNull() )
-  {
-    return;
-  }
-  m_drawMode = FitToView;
-  slotUpdateView();
-}
-
-void KImageView::viewFitWithProportions()
-{
-  if( m_pDoc->image().isNull() )
-  {
-    return;
-  }
-  m_drawMode = FitWithProps;
-  slotUpdateView();
-}
-
-void KImageView::viewOriginalSize()
-{
-  if( m_pDoc->image().isNull() )
-  {
-    return;
-  }
-  m_drawMode = OriginalSize;
-  slotUpdateView();
 }
 
 void KImageView::editEditImage()
@@ -363,7 +299,9 @@ void KImageView::editImportImage()
 {
   debug( "import this=%i", (int) this );
 
-  QString file = KFileDialog::getOpenFileName( getenv( "HOME" ) );
+  QString filter = i18n( "*.*|All files\n*.bmp|BMP\n*.jpg|JPEG\n*.png|PNG" );
+  
+  QString file = KFileDialog::getOpenFileName( getenv( "HOME" ), filter );
 
   if( file.isNull() )
   {
@@ -401,6 +339,50 @@ void KImageView::editExportImage()
   }
 }
 
+void KImageView::editPreferences()
+{
+  KImagePreferencesDialog dlg;
+
+  int result = dlg.exec();
+  if( result != QDialog::Accepted )
+    return;
+}
+
+void KImageView::editPageLayout()
+{
+  m_pDoc->paperLayoutDlg();
+}
+
+void KImageView::viewFitToView()
+{
+  if( m_pDoc->image().isNull() )
+  {
+    return;
+  }
+  m_drawMode = FitToView;
+  slotUpdateView();
+}
+
+void KImageView::viewFitWithProportions()
+{
+  if( m_pDoc->image().isNull() )
+  {
+    return;
+  }
+  m_drawMode = FitWithProps;
+  slotUpdateView();
+}
+
+void KImageView::viewOriginalSize()
+{
+  if( m_pDoc->image().isNull() )
+  {
+    return;
+  }
+  m_drawMode = OriginalSize;
+  slotUpdateView();
+}
+
 void KImageView::viewInfoImage()
 {
   if( m_pDoc->isEmpty() )
@@ -408,7 +390,14 @@ void KImageView::viewInfoImage()
     QMessageBox::critical( this, i18n( "KImage Error" ), i18n( "The document is empty\nNo information available." ), i18n( "OK" ) );
     return;
   }
-  QMessageBox::information( this, i18n( "Image information" ), i18n( "Infos " ), i18n( "OK" ) );
+
+  QString tmp;
+  
+  QMessageBox::information( this, i18n( "Image information" ),
+    tmp.sprintf( "X-Size : %i\nY-Size : %i\nColor depth : %i\n" + m_pDoc->m_strImageFormat,
+    m_pixmap.size().width(),
+    m_pixmap.size().height(),
+    m_pixmap.depth() ), i18n( "OK" ) );
 }
 
 void KImageView::viewZoomFactor()
@@ -437,6 +426,19 @@ void KImageView::viewCentered()
   }
   m_centerMode = 1 - m_centerMode;
   slotUpdateView();
+}
+
+/**
+ ** Sets the background color of the viewer
+ */
+void KImageView::viewBackgroundColor()
+{
+  KColorDialog dlg;
+  QColor color;
+
+  dlg.getColor( color );  
+  setBackgroundColor( color );
+  QWidget::update();
 }
 
 /**
@@ -523,19 +525,6 @@ void KImageView::transformFlipHorizontal()
   matrix *= matrix2;
   m_pDoc->transformImage( matrix );
   slotUpdateView();
-}
-
-/**
- ** Sets the background color of the viewer
- */
-void KImageView::viewBackgroundColor()
-{
-  KColorDialog dlg;
-  QColor color;
-
-  dlg.getColor( color );  
-  setBackgroundColor( color );
-  QWidget::update();
 }
 
 void KImageView::transformZoomFactor()
@@ -627,10 +616,6 @@ void KImageView::transformZoomMaxAspect()
   slotUpdateView();
 }
 
-void KImageView::editPreferences()
-{
-}
-
 QString KImageView::tmpFilename()
 {
   QString file;
@@ -640,7 +625,7 @@ QString KImageView::tmpFilename()
   return file;
 }
 
-void KImageView::slotCommandExecuted()
+void KImageView::slotCommandExecuted( KProcess* )
 {
   if( !m_pDoc->openDocument( m_tmpFile, 0L ) )
   {
@@ -649,11 +634,19 @@ void KImageView::slotCommandExecuted()
     QMessageBox::critical( this, i18n( "IO Error" ), tmp, i18n( "OK" ) );
     return;
   }
+  // TODO
+  // Funktionsaufruf: es wird kein Prozess mehr ausgeführt.
+  m_pDoc->m_executeCommand = false;
+
   debug( "ending process" );
 }
 
 void KImageView::executeCommand( KProcess& proc )
 {
+  // TODO
+  // Funktionsaufruf: es wird Prozeß ausgeführt  
+  m_pDoc->m_executeCommand = true;
+
   debug( "starting process" );
 
   m_tmpFile = tmpFilename();
@@ -665,9 +658,14 @@ void KImageView::executeCommand( KProcess& proc )
     QMessageBox::critical( this, i18n( "IO Error" ), tmp, i18n( "OK" ) );
     return;
   }
-  QApplication::connect( &proc, SIGNAL( processExited( KProcess* ) ), this, SLOT( slotCommandExecuted() ) );
+  QApplication::connect( &proc, SIGNAL( processExited( KProcess* ) ), this, SLOT( slotCommandExecuted( KProcess* ) ) );
   proc << m_tmpFile;
-  proc.start( KProcess::NotifyOnExit );
+
+  // TODO
+  // make process NotifyOnExit
+  // I think there is a bug in KProcess, the Process don't starts if NotifyOnExit
+  proc.start( KProcess::Block );
+  //proc.start();
 }
 
 void KImageView::extrasRunGimp()
@@ -703,14 +701,46 @@ void KImageView::extrasRunCommand()
   executeCommand( proc );
 }
 
-void KImageView::resizeEvent( QResizeEvent *_ev )
+void KImageView::resizeEvent( QResizeEvent* )
 {
   CHECK_ALL;
+
+  slotUpdateView();
 }
 
-KImageDoc* KImageView::doc()
+/**
+ **  Gets the image from the document and resizes it if necessary
+ */
+void KImageView::slotUpdateView()
 {
-  return m_pDoc;
+  if( m_pDoc->image().isNull() )
+  {
+    return;
+  }
+
+  double dh, dw, d;
+	
+  switch ( m_drawMode )
+  {
+  	case OriginalSize:
+	  m_pixmap.convertFromImage( m_pDoc->image() );
+  	  break;
+  	case FitToView:
+	  m_pixmap.convertFromImage( m_pDoc->image().smoothScale( width(), height() ) );
+  	  break;
+  	case FitWithProps:
+      dh = (double) height() / (double) m_pDoc->image().height();
+      dw = (double) width() / (double) m_pDoc->image().width();
+      d = ( dh < dw ? dh : dw );
+	  m_pixmap.convertFromImage( m_pDoc->image().smoothScale( int( d * m_pDoc->image().width() ), int ( d * m_pDoc->image().height() ) ) );
+  	  break;
+    case ZoomFactor:
+      dw = m_pDoc->image().width() * m_zoomFactor.x() / 100;
+      dh = m_pDoc->image().height() * m_zoomFactor.y() / 100;
+	  m_pixmap.convertFromImage( m_pDoc->image().smoothScale( int( dw * m_pDoc->image().width() ), int ( dh * m_pDoc->image().height() ) ) );
+  	  break;
+  }
+  QWidget::update();
 }
 
 /**

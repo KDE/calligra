@@ -76,14 +76,11 @@ void KImageApp::start()
 
 int main( int argc, char** argv )
 {
-  FormatManager* formatManager;
-  formatManager = new FormatManager();
-
+  int i = 1;
+  FormatManager* formatManager = new FormatManager();
   KImageAutoLoader loader( "IDL:KImage/DocumentFactory:1.0", "KImage" );
-
   KImageApp app( argc, argv );
 
-  int i = 1;
   if( strcmp( argv[ i ], "-s" ) == 0 || strcmp( argv[ i ], "--server" ) == 0 )
   {
     i++;
@@ -96,8 +93,6 @@ int main( int argc, char** argv )
   }
 
   app.exec();
-
-  debug( "============ BACK from event loop ===========" );
 
   return 0;
 }

@@ -61,6 +61,8 @@ KImageDoc::KImageDoc()
   calcPaperSize();
   m_orientation = PG_PORTRAIT;
 
+  m_executeCommand = false;
+
   kimgioRegister();
 
   m_lstViews.setAutoDelete( false );
@@ -345,7 +347,7 @@ bool KImageDoc::completeLoading( KOStore::Store_ptr _store )
   m_bModified = false;
   m_bEmpty = false;
 
-  emit sig_updateView();
+  emit sigUpdateView();
 
   return true;
 }
@@ -484,7 +486,7 @@ void KImageDoc::paperLayoutDlg()
 
   setHeadFootLine( hf.headLeft, hf.headMid, hf.headRight, hf.footLeft, hf.footMid, hf.footRight );
 
-  emit sig_updateView();
+  emit sigUpdateView();
 }
 
 void KImageDoc::setHeadFootLine( const char *_headl, const char *_headm, const char *_headr,
@@ -704,7 +706,7 @@ bool KImageDoc::openDocument( const char *_filename, const char *_format )
   else
     m_strImageFormat = QImage::imageFormat( _filename );
 
-  emit sig_updateView();
+  emit sigUpdateView();
 
   m_bModified = true;
   m_bEmpty = false;
@@ -726,7 +728,7 @@ void KImageDoc::transformImage( const QWMatrix& matrix )
   pix.convertFromImage( m_image );
   newpix = pix.xForm( matrix );
   m_image = newpix.convertToImage();
-  emit sig_updateView();
+  emit sigUpdateView();
   m_bModified = true;
   m_bEmpty = false;
 

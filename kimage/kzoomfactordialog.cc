@@ -52,30 +52,18 @@ KZoomFactorDialog::KZoomFactorDialog( QWidget* parent, const char* name, WFlags 
   // OK-Button
   QPushButton* buttonOK = new QPushButton( this, "ButtonOK" );
   buttonOK->setText( i18n( "OK" ) );
-  buttonOK->resize( buttonOK->sizeHint() );
   connect( buttonOK, SIGNAL( clicked() ), this, SLOT( accept() ) );
   grid->addWidget( buttonOK, 5, 2 );
 	
   // Cancel-Button
   QPushButton* buttonCancel = new QPushButton( this, "ButtonCancel" );
   buttonCancel->setText( i18n( "Cancel" ) );
-  buttonCancel->resize( buttonOK->sizeHint() );
   connect( buttonCancel, SIGNAL( clicked() ), this, SLOT( reject() ) );
   grid->addWidget( buttonCancel, 5, 3 ); 
 
    // Dialog
-   grid->setRowStretch( 0, 0 );
-   grid->setRowStretch( 1, 0 );
-   grid->setRowStretch( 2, 0 );
-   grid->setRowStretch( 3, 0 );
    grid->setRowStretch( 4, 1 );
-   grid->setRowStretch( 5, 0 );
-   grid->setColStretch( 0, 0 );
    grid->setColStretch( 1, 1 );
-   grid->setColStretch( 2, 0 );
-   grid->setColStretch( 3, 0 );
-
-   m_pLineEditXFactor->setFocus();
 
    setMinimumSize( label->sizeHint().width() + m_pLineEditXFactor->sizeHint().width() + buttonOK->sizeHint().width() + 30, 
                    label->sizeHint().height() + buttonOK->sizeHint().height() + buttonCancel->sizeHint().height() + 40);

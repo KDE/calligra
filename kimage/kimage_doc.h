@@ -157,7 +157,7 @@ public:
   
 signals:
   // Document signals
-  void sig_updateView();
+  void sigUpdateView();
   
 protected:
   virtual bool completeLoading( KOStore::Store_ptr /* _store */ );
@@ -252,7 +252,12 @@ protected:
   /**
    * The image format of the image in the document.
    */
+
+// TODO
+// make this private
+public:
   QString m_strImageFormat;
+  bool m_executeCommand;
 };
 
 #endif

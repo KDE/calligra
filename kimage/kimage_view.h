@@ -85,7 +85,7 @@ public slots:
   // Document signals
   void slotUpdateView();
 
-  void slotCommandExecuted();
+  void slotCommandExecuted( KProcess* );
 
 protected:
   enum DrawMode { OriginalSize, FitToView, FitWithProps, ZoomFactor };

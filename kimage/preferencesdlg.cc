@@ -17,8 +17,12 @@
    Boston, MA 02111-1307, USA.
 */
 
-#include "preferencesdlg.h"
+#include <klocale.h>
+
 #include <qlabel.h>
+#include <qlayout.h>
+
+#include "preferencesdlg.h"
 
 /*****************************************************************************
  *
@@ -27,16 +31,16 @@
  *****************************************************************************/
 
 KImagePreferencesDialog::KImagePreferencesDialog(QWidget *parent, const char *name, const char *inputtitle, WFlags f )
-	: KDialog( parent, name, false, f )
+	: KDialog( parent, name, true, f )
 {
 	// Layout
+    QGridLayout* grid = new QGridLayout( this, 5, 5, 7, 15);
 
 	// Inputline
-	m_pLineEdit = new QLineEdit( this, "inputtext" );
-	
+	m_pLineEdit = new QLineEdit( this, i18n( "Directory for temporary files" ) );
+    grid->addWidget( m_pLineEdit, 0, 0 );	
 	// Label
-	//QLabel* label = new QLabel( m_pLineEdit, inputtitle, this );
-	new QLabel( m_pLineEdit, inputtitle, this );
+	QLabel* label = new QLabel( m_pLineEdit, inputtitle, this );
 
 	// OK-Button
 
