@@ -3,5 +3,5 @@ Encoding=UTF-8
 Type=MimeType
 MimeType=application/x-kexiproject-shortcut
 Icon=kexiproject_shortcut
-Patterns=*.kexis;*.KEXIS
+Patterns=*.kexis
 Comment=Shortcut to Kexi Project on Database Server
