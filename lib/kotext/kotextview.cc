@@ -707,8 +707,11 @@ void KoTextView::dragStarted()
 
 void KoTextView::applyStyle( const KoStyle * style )
 {
-    textObject()->applyStyle( m_cursor, style );
-    showCurrentFormat();
+    if ( style )
+    {
+        textObject()->applyStyle( m_cursor, style );
+        showCurrentFormat();
+    }
 }
 
 void KoTextView::updateUI( bool updateFormat, bool /*force*/ )
