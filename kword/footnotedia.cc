@@ -23,7 +23,7 @@
 #include "footnotedia.moc"
 #include "footnote.h"
 
-#include <qlist.h>
+#include <qptrlist.h>
 #include <qwidget.h>
 #include <qlabel.h>
 

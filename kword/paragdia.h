@@ -22,7 +22,7 @@
 
 #include <kdialogbase.h>
 #include <qstringlist.h>
-#include <qlist.h>
+#include <qptrlist.h>
 #include <koRuler.h>
 #include <kwunit.h>
 #include <qdict.h>
@@ -246,7 +246,7 @@ protected slots:
 
 private:
     void updatePreview();
-    QList <StyleRepresenter> stylesList;
+    QPtrList <StyleRepresenter> stylesList;
     void fillStyleCombo(KoParagCounter::Numbering type = KoParagCounter::NUM_LIST);
 
     QGroupBox *gStyle;

@@ -152,7 +152,7 @@ KWFrame * KWTextFrameSet::documentToInternal( const KoPoint &dPoint, QPoint &iPo
 #endif
     // Find the frame that contains dPoint. To go fast, we look them up by page number.
     int pageNum = static_cast<int>( dPoint.y() / m_doc->ptPaperHeight() );
-    QListIterator<KWFrame> frameIt( framesInPage( pageNum ) );
+    QPtrListIterator<KWFrame> frameIt( framesInPage( pageNum ) );
     for ( ; frameIt.current(); ++frameIt )
     {
         KWFrame *frame = frameIt.current();
@@ -231,7 +231,7 @@ KWFrame * KWTextFrameSet::documentToInternal( const KoPoint &dPoint, QPoint &iPo
         }
         else
         {
-            QListIterator<KWFrame> frameIt( framesInPage( pageNum + 1 ) );
+            QPtrListIterator<KWFrame> frameIt( framesInPage( pageNum + 1 ) );
             if ( frameIt.current() )
             {
                 // There is a frame on the next page
@@ -263,7 +263,7 @@ KWFrame * KWTextFrameSet::internalToDocumentWithHint( const QPoint &iPoint, KoPo
     kdDebug() << "KWTextFrameSet::internalToDocumentWithHint hintDPoint: " << hintDPoint.x() << "," << hintDPoint.y() << endl;
 #endif
     KWFrame *lastFrame = 0L;
-    QListIterator<KWFrame> frameIt( frameIterator() );
+    QPtrListIterator<KWFrame> frameIt( frameIterator() );
     for ( ; frameIt.current(); ++frameIt )
     {
         KWFrame *frame = frameIt.current();
@@ -319,7 +319,7 @@ QPoint KWTextFrameSet::moveToPage( int currentPgNum, short int direction ) const
             continue; // No frame on that page
 
         //kdDebug() << "KWTextFrameSet::moveToPage ok for first frame in page " << num << endl;
-        QListIterator<KWFrame> frameIt( framesInPage( num ) );
+        QPtrListIterator<KWFrame> frameIt( framesInPage( num ) );
         return QPoint( 0, frameIt.current()->internalY() + 2 ); // found, ok.
     }
     // Not found. Go to top of first frame or bottom of last frame, depending on direction
@@ -348,7 +348,7 @@ void KWTextFrameSet::drawFrame( KWFrame *frame, QPainter *painter, const QRect &
     m_currentDrawnFrame = frame;
     // Update variables for each frame (e.g. for page-number)
     // If more than KWPgNumVariable need this functionality, create an intermediary base class
-    QListIterator<QTextCustomItem> cit( textDocument()->allCustomItems() );
+    QPtrListIterator<QTextCustomItem> cit( textDocument()->allCustomItems() );
     for ( ; cit.current() ; ++cit )
     {
         KWPgNumVariable * var = dynamic_cast<KWPgNumVariable *>( cit.current() );
@@ -897,7 +897,7 @@ int KWTextFrameSet::formatVertically( Qt3::QTextParag * _parag )
 #endif
 
     int totalHeight = 0;
-    QListIterator<KWFrame> frameIt( frameIterator() );
+    QPtrListIterator<KWFrame> frameIt( frameIterator() );
     for ( ; frameIt.current(); ++frameIt )
     {
         int frameHeight = kWordDocument()->ptToLayoutUnit( frameIt.current()->height() );
@@ -909,7 +909,7 @@ int KWTextFrameSet::formatVertically( Qt3::QTextParag * _parag )
         {
             // ## TODO optimize this [maybe we should simply start from the end in the main loop?]
             // Or cache the attribute ( e.g. "frame->hasCopy()" ).
-            QListIterator<KWFrame> nextFrame( frameIt );
+            QPtrListIterator<KWFrame> nextFrame( frameIt );
             while ( !check && !nextFrame.atLast() )
             {
                 ++nextFrame;
@@ -1070,7 +1070,7 @@ void KWTextFrameSet::updateFrames()
     QValueList<FrameStruct> sortedFrames;
 
     int width = 0;
-    QListIterator<KWFrame> frameIt( frameIterator() );
+    QPtrListIterator<KWFrame> frameIt( frameIterator() );
     for ( ; frameIt.current(); ++frameIt )
     {
         // Calculate max width while we're at it
@@ -1100,7 +1100,7 @@ void KWTextFrameSet::updateFrames()
         m_framesInPage[i]->clear();
     // Initialize the new elements.
     for ( int i = oldElements ; i < (int)m_framesInPage.size() ; ++i )
-        m_framesInPage.insert( i, new QList<KWFrame>() );
+        m_framesInPage.insert( i, new QPtrList<KWFrame>() );
 
     // Re-fill the frames list with the frames in the right order,
     // and re-fill m_framesInPage at the same time.
@@ -1143,7 +1143,7 @@ int KWTextFrameSet::availableHeight() const
     return m_textobj->availableHeight();
 }
 
-const QList<KWFrame> & KWTextFrameSet::framesInPage( int pageNum ) const
+const QPtrList<KWFrame> & KWTextFrameSet::framesInPage( int pageNum ) const
 {
     if ( pageNum < m_firstPage || pageNum >= (int)m_framesInPage.size() + m_firstPage )
     {
@@ -1152,7 +1152,7 @@ const QList<KWFrame> & KWTextFrameSet::framesInPage( int pageNum ) const
                     << " Min value: " << m_firstPage
                     << " Max value: " << m_framesInPage.size() + m_firstPage - 1 << endl;
 #endif
-        return m_emptyList; // QList<KWFrame>() doesn't work, it's a temporary
+        return m_emptyList; // QPtrList<KWFrame>() doesn't work, it's a temporary
     }
     return * m_framesInPage[pageNum - m_firstPage];
 }
@@ -1257,7 +1257,7 @@ KWFrame * KWTextFrameSet::internalToDocument( const QPoint &iPoint, KoPoint &dPo
     }
 
     // Now iterate over the frames in page 'result' and find the right one
-    QListIterator<KWFrame> frameIt( *m_framesInPage[result] );
+    QPtrListIterator<KWFrame> frameIt( *m_framesInPage[result] );
     for ( ; frameIt.current(); ++frameIt )
     {
         KWFrame *frame = frameIt.current();
@@ -1288,7 +1288,7 @@ void KWTextFrameSet::printDebug()
         kdDebug() << " -- Frames in page array -- " << endl;
         for ( uint i = 0 ; i < m_framesInPage.size() ; ++i )
         {
-            QListIterator<KWFrame> it( *m_framesInPage[i] );
+            QPtrListIterator<KWFrame> it( *m_framesInPage[i] );
             for ( ; it.current() ; ++it )
                 kdDebug() << i + m_firstPage << ": " << it.current() << "   " << DEBUGRECT( *it.current() )
                           << " internalY=" << it.current()->internalY() << endl;
@@ -1408,7 +1408,7 @@ void KWTextFrameSet::zoom( bool forPrint )
     textDocument()->setTabStops( textDocument()->formatCollection()->defaultFormat()->width( 'x' ) * 8 );
 
     // Zoom all custom items
-    QListIterator<QTextCustomItem> cit( textDocument()->allCustomItems() );
+    QPtrListIterator<QTextCustomItem> cit( textDocument()->allCustomItems() );
     for ( ; cit.current() ; ++cit )
         static_cast<KoTextCustomItem *>( cit.current() )->resize();
 
@@ -1429,7 +1429,7 @@ void KWTextFrameSet::zoom( bool forPrint )
 
 void KWTextFrameSet::hideCustomItems(bool _hide)
 {
-    QListIterator<QTextCustomItem> cit( textDocument()->allCustomItems() );
+    QPtrListIterator<QTextCustomItem> cit( textDocument()->allCustomItems() );
     for ( ; cit.current() ; ++cit )
         static_cast<KWAnchor *>( cit.current() )->frameSet()->setVisible( _hide );
 }
@@ -1482,7 +1482,7 @@ void KWTextFrameSet::preparePrinting( QPainter *painter, QProgressDialog *progre
     }
 }
 
-void KWTextFrameSet::addTextFramesets( QList<KWTextFrameSet> & lst )
+void KWTextFrameSet::addTextFramesets( QPtrList<KWTextFrameSet> & lst )
 {
     lst.append(this);
 }
@@ -1710,7 +1710,7 @@ double KWTextFrameSet::footerHeaderSizeMax( KWFrame *theFrame )
     bool header=theFrame->getFrameSet()->isAHeader();
     if( header ? m_doc->isHeaderVisible():m_doc->isFooterVisible() )
     {
-        QListIterator<KWFrameSet> fit = m_doc->framesetsIterator();
+        QPtrListIterator<KWFrameSet> fit = m_doc->framesetsIterator();
         for ( ; fit.current() ; ++fit )
         {
             bool state = header ? fit.current()->isAFooter():fit.current()->isAHeader();
@@ -1775,7 +1775,7 @@ bool KWTextFrameSet::canRemovePage( int num )
     if ( num < m_firstPage || num >= (int)m_framesInPage.size() + m_firstPage )
         return true;
 
-    QListIterator<KWFrame> frameIt( framesInPage( num ) );
+    QPtrListIterator<KWFrame> frameIt( framesInPage( num ) );
     for ( ; frameIt.current(); ++frameIt )
     {
         KWFrame * frame = frameIt.current();
@@ -1819,7 +1819,7 @@ void KWTextFrameSet::updateViewArea( QWidget * w, const QPoint & nPointBottom )
     else
     {
         // Find frames on that page, and keep the max bottom, in internal coordinates
-        QListIterator<KWFrame> frameIt( framesInPage( maxPage ) );
+        QPtrListIterator<KWFrame> frameIt( framesInPage( maxPage ) );
         for ( ; frameIt.current(); ++frameIt )
         {
             maxY = QMAX( maxY, frameIt.current()->internalY()
@@ -2990,7 +2990,7 @@ void KWTextFrameSetEdit::showFormat( KoTextFormat *format )
     m_canvas->gui()->getView()->showFormat( *format );
 }
 
-QList<KAction> KWTextFrameSetEdit::dataToolActionList()
+QPtrList<KAction> KWTextFrameSetEdit::dataToolActionList()
 {
     m_singleWord = false;
     m_wordUnderCursor = QString::null;
@@ -3038,7 +3038,7 @@ QList<KAction> KWTextFrameSetEdit::dataToolActionList()
 #endif
 
     if ( text.isEmpty() ) // Nothing to apply a tool to
-        return QList<KAction>();
+        return QPtrList<KAction>();
 
     // Any tool that works on plain text is relevant
     QValueList<KoDataToolInfo> tools = KoDataToolInfo::query( "QString", "text/plain", doc );

@@ -134,7 +134,7 @@ void KWAnchor::draw( QPainter* p, int x, int y, int cx, int cy, int cw, int ch, 
     if ( frame->isCopy() )
     {
         // Find last real frame, in case we are in a copied frame
-        QListIterator<KWFrame> frameIt( fs->frameIterator() );
+        QPtrListIterator<KWFrame> frameIt( fs->frameIterator() );
         frameIt.toLast(); // from the end to avoid a 2*N in the worst case
         while ( !frameIt.atFirst() && frameIt.current() != frame ) // look for 'frame'
             --frameIt;

@@ -73,9 +73,9 @@ protected:
     KWStylePreview *preview;
 
     KWStyle *m_currentStyle;
-    QList<KWStyle> m_origStyles;      // internal list of orig styles we have modified
-    QList<KWStyle> m_changedStyles;   // internal list of changed styles.
-    QList<KWStyleManagerTab> m_tabsList;
+    QPtrList<KWStyle> m_origStyles;      // internal list of orig styles we have modified
+    QPtrList<KWStyle> m_changedStyles;   // internal list of changed styles.
+    QPtrList<KWStyleManagerTab> m_tabsList;
     int numStyles;
     bool noSignals;
 

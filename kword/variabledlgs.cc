@@ -47,14 +47,14 @@ KWVariableNameDia::KWVariableNameDia( QWidget *parent )
 }
 
 
-KWVariableNameDia::KWVariableNameDia( QWidget *parent, const QList<KWVariable>& vars )
+KWVariableNameDia::KWVariableNameDia( QWidget *parent, const QPtrList<KWVariable>& vars )
     : QDialog( parent, "", TRUE )
 {
     setCaption( i18n( "Variable Name" ) );
 
     init();
     ok->setEnabled(false);
-    QListIterator<KWVariable> it( vars );
+    QPtrListIterator<KWVariable> it( vars );
      for ( ; it.current() ; ++it ) {
         KWVariable *var = it.current();
         if ( var->type() == VT_CUSTOM )
@@ -210,7 +210,7 @@ void KWCustomVariablesList::updateItems()
  *
  ******************************************************************/
 
-KWCustomVariablesDia::KWCustomVariablesDia( QWidget *parent, const QList<KWVariable> &variables )
+KWCustomVariablesDia::KWCustomVariablesDia( QWidget *parent, const QPtrList<KWVariable> &variables )
     : QDialog( parent, "", TRUE )
 {
     setCaption( i18n( "Variable Value Editor" ) );
@@ -222,7 +222,7 @@ KWCustomVariablesDia::KWCustomVariablesDia( QWidget *parent, const QList<KWVaria
     list = new KWCustomVariablesList( back );
 
     QStringList lst;
-    QListIterator<KWVariable> it( variables );
+    QPtrListIterator<KWVariable> it( variables );
     for ( ; it.current() ; ++it ) {
         KWVariable *var = it.current();
         if ( var->type() == VT_CUSTOM ) {

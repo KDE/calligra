@@ -217,7 +217,7 @@ void KWCanvas::drawDocument( QPainter *painter, const QRect &crect )
     }
 
     // Draw all framesets contents
-    QListIterator<KWFrameSet> fit = m_doc->framesetsIterator();
+    QPtrListIterator<KWFrameSet> fit = m_doc->framesetsIterator();
     for ( ; fit.current() ; ++fit )
     {
         KWFrameSet * frameset = fit.current();
@@ -349,9 +349,9 @@ void KWCanvas::mpEditFrame( QMouseEvent *e, const QPoint &nPoint ) // mouse pres
         m_resizedFrameInitialSize = frame->normalize();
     }
 
-    QList<KWFrame> selectedFrames = m_doc->getSelectedFrames();
-    QList<FrameIndex> frameindexList;
-    QList<FrameResizeStruct> frameindexMove;
+    QPtrList<KWFrame> selectedFrames = m_doc->getSelectedFrames();
+    QPtrList<FrameIndex> frameindexList;
+    QPtrList<FrameResizeStruct> frameindexMove;
     KWFrame *frame=0L;
     // When moving many frames, we look at the bounding rect.
     // It's the one that will be checked against the limits, etc.
@@ -825,12 +825,12 @@ void KWCanvas::mmEditFrameMove( const QPoint &normalPoint, bool shiftPressed )
       kdDebug() << " boundingX+hotspotX=" << m_boundingRect.left() + m_hotSpot.x() << endl;
       kdDebug() << " docPoint.x()=" << docPoint.x() << endl;*/
 
-    QList<KWTableFrameSet> tablesMoved;
+    QPtrList<KWTableFrameSet> tablesMoved;
     tablesMoved.setAutoDelete( FALSE );
     bool bFirst = true;
     QRegion repaintRegion;
     KoPoint _move=m_boundingRect.topLeft() - oldBoundingRect.topLeft();
-    QListIterator<KWFrameSet> framesetIt( m_doc->framesetsIterator() );
+    QPtrListIterator<KWFrameSet> framesetIt( m_doc->framesetsIterator() );
     for ( ; framesetIt.current(); ++framesetIt, bFirst=false )
     {
         KWFrameSet *frameset = framesetIt.current();
@@ -842,7 +842,7 @@ void KWCanvas::mmEditFrameMove( const QPoint &normalPoint, bool shiftPressed )
         if ( frameset->isFloating() ) continue;
 
         m_frameMoved = true;
-        QListIterator<KWFrame> frameIt( frameset->frameIterator() );
+        QPtrListIterator<KWFrame> frameIt( frameset->frameIterator() );
         for ( ; frameIt.current(); ++frameIt )
         {
             KWFrame *frame = frameIt.current();
@@ -1041,7 +1041,7 @@ void KWCanvas::mrEditFrame( QMouseEvent *e, const QPoint &nPoint ) // Can be cal
             if( cmdMoveFrame )
             {
                 // Store final positions
-                QList<KWFrame> selectedFrames = m_doc->getSelectedFrames();
+                QPtrList<KWFrame> selectedFrames = m_doc->getSelectedFrames();
                 int i = 0;
                 for(KWFrame * frame=selectedFrames.first(); frame; frame=selectedFrames.next() )
                 {
@@ -1256,11 +1256,11 @@ void KWCanvas::contentsMouseDoubleClickEvent( QMouseEvent * e )
 
 void KWCanvas::setLeftFrameBorder( KoBorder _frmBrd, bool _b )
 {
-    QList <KWFrame> selectedFrames = m_doc->getSelectedFrames();
+    QPtrList <KWFrame> selectedFrames = m_doc->getSelectedFrames();
     if (selectedFrames.count() == 0)
         return;
-    QList<FrameBorderTypeStruct> tmpBorderList;
-    QList<FrameIndex> frameindexList;
+    QPtrList<FrameBorderTypeStruct> tmpBorderList;
+    QPtrList<FrameIndex> frameindexList;
     bool leftFrameBorderChanged=false;
 
     if (!_b)
@@ -1306,11 +1306,11 @@ void KWCanvas::setLeftFrameBorder( KoBorder _frmBrd, bool _b )
 
 void KWCanvas::setRightFrameBorder( KoBorder _frmBrd, bool _b )
 {
-    QList <KWFrame> selectedFrames = m_doc->getSelectedFrames();
+    QPtrList <KWFrame> selectedFrames = m_doc->getSelectedFrames();
     if (selectedFrames.count() == 0)
         return;
-    QList<FrameBorderTypeStruct> tmpBorderList;
-    QList<FrameIndex> frameindexList;
+    QPtrList<FrameBorderTypeStruct> tmpBorderList;
+    QPtrList<FrameIndex> frameindexList;
     bool rightFrameBorderChanged=false;
     KWFrame *frame=0L;
     if (!_b)
@@ -1355,12 +1355,12 @@ void KWCanvas::setRightFrameBorder( KoBorder _frmBrd, bool _b )
 
 void KWCanvas::setTopFrameBorder( KoBorder _frmBrd, bool _b )
 {
-    QList <KWFrame> selectedFrames = m_doc->getSelectedFrames();
+    QPtrList <KWFrame> selectedFrames = m_doc->getSelectedFrames();
     if (selectedFrames.count() == 0)
         return;
 
-    QList<FrameBorderTypeStruct> tmpBorderList;
-    QList<FrameIndex> frameindexList;
+    QPtrList<FrameBorderTypeStruct> tmpBorderList;
+    QPtrList<FrameIndex> frameindexList;
     bool topFrameBorderChanged=false;
 
     KWFrame *frame=0L;
@@ -1404,12 +1404,12 @@ void KWCanvas::setTopFrameBorder( KoBorder _frmBrd, bool _b )
 
 void KWCanvas::setBottomFrameBorder( KoBorder _frmBrd, bool _b )
 {
-    QList <KWFrame> selectedFrames = m_doc->getSelectedFrames();
+    QPtrList <KWFrame> selectedFrames = m_doc->getSelectedFrames();
     if (selectedFrames.count() == 0)
         return;
     bool bottomFrameBorderChanged=false;
-    QList<FrameBorderTypeStruct> tmpBorderList;
-    QList<FrameIndex> frameindexList;
+    QPtrList<FrameBorderTypeStruct> tmpBorderList;
+    QPtrList<FrameIndex> frameindexList;
     KWFrame *frame=0L;
     if (!_b)
         _frmBrd.ptWidth=0;
@@ -1452,21 +1452,21 @@ void KWCanvas::setBottomFrameBorder( KoBorder _frmBrd, bool _b )
 
 void KWCanvas::setOutlineFrameBorder( KoBorder _frmBrd, bool _b )
 {
-    QList <KWFrame> selectedFrames = m_doc->getSelectedFrames();
+    QPtrList <KWFrame> selectedFrames = m_doc->getSelectedFrames();
     if (selectedFrames.count() == 0)
         return;
     KWFrame *frame=0L;
     if (!_b)
         _frmBrd.ptWidth=0;
 
-    QList<FrameBorderTypeStruct> tmpBorderListRight;
-    QList<FrameBorderTypeStruct> tmpBorderListTop;
-    QList<FrameBorderTypeStruct> tmpBorderListLeft;
-    QList<FrameBorderTypeStruct> tmpBorderListBottom;
-    QList<FrameIndex> frameindexListRight;
-    QList<FrameIndex> frameindexListLeft;
-    QList<FrameIndex> frameindexListTop;
-    QList<FrameIndex> frameindexListBottom;
+    QPtrList<FrameBorderTypeStruct> tmpBorderListRight;
+    QPtrList<FrameBorderTypeStruct> tmpBorderListTop;
+    QPtrList<FrameBorderTypeStruct> tmpBorderListLeft;
+    QPtrList<FrameBorderTypeStruct> tmpBorderListBottom;
+    QPtrList<FrameIndex> frameindexListRight;
+    QPtrList<FrameIndex> frameindexListLeft;
+    QPtrList<FrameIndex> frameindexListTop;
+    QPtrList<FrameIndex> frameindexListBottom;
 
     int m_IindexFrame;
     //int m_IindexFrameSet;
@@ -1560,13 +1560,13 @@ void KWCanvas::setOutlineFrameBorder( KoBorder _frmBrd, bool _b )
 
 void KWCanvas::setFrameBackgroundColor( const QBrush &_backColor )
 {
-    QList <KWFrame> selectedFrames = m_doc->getSelectedFrames();
+    QPtrList <KWFrame> selectedFrames = m_doc->getSelectedFrames();
     if (selectedFrames.count() == 0)
         return;
     bool colorChanged=false;
     KWFrame *frame=0L;
-    QList<FrameIndex> frameindexList;
-    QList<QBrush> oldColor;
+    QPtrList<FrameIndex> frameindexList;
+    QPtrList<QBrush> oldColor;
     for(frame=selectedFrames.first(); frame != 0; frame=selectedFrames.next() )
     {
         frame=KWFrameSet::settingsFrame(frame);
@@ -1606,11 +1606,11 @@ void KWCanvas::editFrameProperties()
 bool KWCanvas::selectAllFrames( bool select )
 {
     bool ret = false;
-    QListIterator<KWFrameSet> fit = m_doc->framesetsIterator();
+    QPtrListIterator<KWFrameSet> fit = m_doc->framesetsIterator();
     for ( ; fit.current() ; ++fit )
     {
         KWFrameSet * fs = fit.current();
-        QListIterator<KWFrame> frameIt = fs->frameIterator();
+        QPtrListIterator<KWFrame> frameIt = fs->frameIterator();
         for ( ; frameIt.current(); ++frameIt )
         {
             KWFrame * frame = frameIt.current();
@@ -1644,12 +1644,12 @@ void KWCanvas::copySelectedFrames()
     bool foundOne = false;
 
     // We really need a selected-frames-list !
-    QListIterator<KWFrameSet> fit = m_doc->framesetsIterator();
+    QPtrListIterator<KWFrameSet> fit = m_doc->framesetsIterator();
     for ( ; fit.current() ; ++fit )
     {
         KWFrameSet * fs = fit.current();
         bool isTable = ( fs->type() == FT_TABLE );
-        QListIterator<KWFrame> frameIt = fs->frameIterator();
+        QPtrListIterator<KWFrame> frameIt = fs->frameIterator();
         KWFrame * firstFrame = frameIt.current();
         for ( ; frameIt.current(); ++frameIt )
         {
@@ -1754,7 +1754,7 @@ void KWCanvas::terminateEditing( KWFrameSet *fs )
     if ( m_currentFrameSetEdit && m_currentFrameSetEdit->frameSet() == fs )
         terminateCurrentEdit();
     // Also deselect the frames from this frameset
-    QListIterator<KWFrame> frameIt = fs->frameIterator();
+    QPtrListIterator<KWFrame> frameIt = fs->frameIterator();
     for ( ; frameIt.current(); ++frameIt )
         if ( frameIt.current()->isSelected() )
             frameIt.current()->setSelected( false );
@@ -1912,7 +1912,7 @@ void KWCanvas::slotContentsMoving( int cx, int cy )
     //kdDebug() << " visibleWidth()=" << visibleWidth() << " visibleHeight()=" << visibleHeight() << endl;
     // Update our "formatted paragraphs needs" in the text framesets
     ///////////////// TODO: use allTextFramesets for nested text framesets
-    QListIterator<KWFrameSet> fit = m_doc->framesetsIterator();
+    QPtrListIterator<KWFrameSet> fit = m_doc->framesetsIterator();
     for ( ; fit.current() ; ++fit )
     {
         KWTextFrameSet * fs = dynamic_cast<KWTextFrameSet *>(fit.current());

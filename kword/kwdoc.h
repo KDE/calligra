@@ -64,7 +64,7 @@ namespace KFormula {
 #include "defs.h"
 
 #include <qmap.h>
-#include <qlist.h>
+#include <qptrlist.h>
 #include <qfont.h>
 
 /******************************************************************/
@@ -177,7 +177,7 @@ public:
     QString generateFramesetName( const QString & templateName );
 
     // Prefer this over getFrameSet(i), if iterating over all of them
-    QListIterator<KWFrameSet> framesetsIterator() const { return QListIterator<KWFrameSet>(frames); }
+    QPtrListIterator<KWFrameSet> framesetsIterator() const { return QPtrListIterator<KWFrameSet>(frames); }
     void addFrameSet( KWFrameSet *f, bool finalize = true );
     // Remove frameset from list (don't delete)
     void removeFrameSet( KWFrameSet *f );
@@ -233,11 +233,11 @@ public:
      * If one view is already uptodate, pass it in @p view.
      */
     void frameChanged( KWFrame * frame, KWView * view = 0L );
-    void framesChanged( const QList<KWFrame> & frames, KWView * view = 0L );
+    void framesChanged( const QPtrList<KWFrame> & frames, KWView * view = 0L );
 
     void pasteFrames( QDomElement topElem, KMacroCommand * macroCmd );
 
-    const QList<KWStyle> & styleList() const { return m_styleList; }
+    const QPtrList<KWStyle> & styleList() const { return m_styleList; }
     /**
      * Look for a style named @p name. If not found, it will return 0L.
      */
@@ -255,7 +255,7 @@ public:
     KoClipartCollection *clipartCollection() { return &m_clipartCollection; }
     KWVariableFormatCollection *variableFormatCollection() { return m_varFormatCollection; }
 
-    QList <KWView> getAllViews() { return m_lstViews; }
+    QPtrList <KWView> getAllViews() { return m_lstViews; }
 
     void appendPage( /*unsigned int _page, bool redrawBackgroundWhenAppendPage = TRUE*/ );
     void removePage( int num );
@@ -263,7 +263,7 @@ public:
     ProcessingType processingType() { return m_processingType;  }
 
     QCursor getMouseCursor( const QPoint& nPoint, bool controlPressed );
-    QList<KWFrame> getSelectedFrames();
+    QPtrList<KWFrame> getSelectedFrames();
     KWFrame *getFirstSelectedFrame();
     int getFrameSetNum( KWFrameSet* fs ) { return frames.findRef( fs ); }
 
@@ -344,7 +344,7 @@ public:
     /**
      * Returns the list of all variables. Used by the dialog.
      */
-    const QList<KWVariable>& getVariables() const {
+    const QPtrList<KWVariable>& getVariables() const {
         return variables;
     }
 
@@ -533,8 +533,8 @@ protected:
     void initUnit();
 
 private:
-    QList<KWView> m_lstViews;
-    QList<KWChild> m_lstChildren;
+    QPtrList<KWView> m_lstViews;
+    QPtrList<KWChild> m_lstChildren;
 
     unsigned int m_itemsLoaded;
     unsigned int m_nrItemsToLoad;
@@ -546,9 +546,9 @@ private:
 
     KWImageCollection m_imageCollection;
     KoClipartCollection m_clipartCollection;
-    QList<KWFrameSet> frames;
-    QList<KWStyle> m_styleList;
-    QList<KWStyle> m_deletedStyles;
+    QPtrList<KWFrameSet> frames;
+    QPtrList<KWStyle> m_styleList;
+    QPtrList<KWStyle> m_deletedStyles;
 
     // Cached value for findStyle()
     KWStyle *m_lastStyle;
@@ -572,14 +572,14 @@ private:
     QMap<KoClipartKey, QString> * m_clipartMap;
 
     QMap<KoImageKey, KWTextImage *> m_imageRequests; // to be removed
-    QList<KWPictureFrameSet> m_imageRequests2;
-    QList<KWClipartFrameSet> m_clipartRequests;
+    QPtrList<KWPictureFrameSet> m_imageRequests2;
+    QPtrList<KWClipartFrameSet> m_clipartRequests;
     QMap<QString, KWAnchorPosition> m_anchorRequests;
 
     QMap<QString,QString> * m_pasteFramesetsMap;
 
     KWVariableFormatCollection *m_varFormatCollection;
-    QList<KWVariable> variables;
+    QPtrList<KWVariable> variables;
     QMap< QString, QString > varValues;
     KWSerialLetterDataBase *m_slDataBase;
     int slRecordNum;

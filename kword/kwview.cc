@@ -758,7 +758,7 @@ void KWView::addVariableActions( int type, const QStringList & texts,
 void KWView::refreshCustomMenu()
 {
     actionInsertCustom->popupMenu()->clear();
-    QListIterator<KWVariable> it( m_doc->getVariables() );
+    QPtrListIterator<KWVariable> it( m_doc->getVariables() );
     KAction * act=0;
     QStringList lst;
     QString varName;
@@ -818,7 +818,7 @@ void KWView::fileStatistics()
     ulong words = 0L;
     ulong sentences = 0L;
     ulong syllables = 0L;
-    QListIterator<KWFrameSet> framesetIt( m_doc->framesetsIterator() );
+    QPtrListIterator<KWFrameSet> framesetIt( m_doc->framesetsIterator() );
     int paragraphs = 0;
     // count paragraphs for progress dialog:
     for ( ; framesetIt.current(); ++framesetIt )
@@ -830,7 +830,7 @@ void KWView::fileStatistics()
     QProgressDialog progress( i18n( "Counting..." ), i18n( "Cancel" ), paragraphs, 0, "count", true );
     progress.setMinimumDuration( 1000 );
     progress.setProgress( 0 );
-    QListIterator<KWFrameSet> framesetIt2( m_doc->framesetsIterator() );
+    QPtrListIterator<KWFrameSet> framesetIt2( m_doc->framesetsIterator() );
     for ( ; framesetIt2.current(); ++framesetIt2 )
     {
         KWFrameSet *frameSet = framesetIt2.current();
@@ -1056,7 +1056,7 @@ void KWView::print( KPrinter &prt )
     // ### HACK: disable zooming-when-printing if embedded parts are used.
     // No koffice app supports zooming in paintContent currently.
     bool doZoom = true;
-    QListIterator<KWFrameSet> fit = m_doc->framesetsIterator();
+    QPtrListIterator<KWFrameSet> fit = m_doc->framesetsIterator();
     for ( ; fit.current() && doZoom ; ++fit )
         if ( fit.current()->type() == FT_PART )
             doZoom = false;
@@ -1077,7 +1077,7 @@ void KWView::print( KPrinter &prt )
 
     bool serialLetter = FALSE;
 
-    QList<KWVariable> vars = m_doc->getVariables();
+    QPtrList<KWVariable> vars = m_doc->getVariables();
     KWVariable *v = 0;
     for ( v = vars.first(); v; v = vars.next() ) {
         if ( v->type() == VT_SERIALLETTER ) {
@@ -1357,7 +1357,7 @@ void KWView::setTool( int _mouseMode )
 
 void KWView::showStyle( const QString & styleName )
 {
-    QListIterator<KWStyle> styleIt( m_doc->styleList() );
+    QPtrListIterator<KWStyle> styleIt( m_doc->styleList() );
     for ( int pos = 0 ; styleIt.current(); ++styleIt, ++pos )
     {
         if ( styleIt.current()->name() == styleName ) {
@@ -1371,7 +1371,7 @@ void KWView::updateStyleList()
 {
     QString currentStyle = actionFormatStyle->currentText();
     QStringList lst;
-    QListIterator<KWStyle> styleIt( m_doc->styleList() );
+    QPtrListIterator<KWStyle> styleIt( m_doc->styleList() );
     for (; styleIt.current(); ++styleIt ) {
         lst << styleIt.current()->translatedName();
     }
@@ -1460,7 +1460,7 @@ void KWView::editDeleteFrame()
 
 void KWView::deleteFrame( bool _warning )
 {
-    QList<KWFrame> frames=m_doc->getSelectedFrames();
+    QPtrList<KWFrame> frames=m_doc->getSelectedFrames();
     Q_ASSERT( frames.count() >= 1 );
     if( frames.count() < 1)
         return;
@@ -2339,7 +2339,7 @@ void KWView::extraCreateTemplate()
     QColorGroup cg = QApplication::palette().active();
 
     // Draw all framesets contents
-    QListIterator<KWFrameSet> fit = m_doc->framesetsIterator();
+    QPtrListIterator<KWFrameSet> fit = m_doc->framesetsIterator();
     for ( ; fit.current() ; ++fit )
     {
         KWFrameSet * frameset = fit.current();
@@ -2544,7 +2544,7 @@ void KWView::tableSplitCells(int cols, int rows)
 {
     //m_gui->canvasWidget()->setMouseMode( KWCanvas::MM_EDIT_FRAME );
 
-    QList <KWFrame> selectedFrames = m_doc->getSelectedFrames();
+    QPtrList <KWFrame> selectedFrames = m_doc->getSelectedFrames();
     KWTableFrameSet *table = m_gui->canvasWidget()->getCurrentTable();
     if ( !table && selectedFrames.count() > 0) {
         table=selectedFrames.at(0)->getFrameSet()->getGroupManager();
@@ -3143,7 +3143,7 @@ void KWView::openPopupMenuEditFrame( const QPoint & _point )
     KWTableFrameSet *table = m_gui->canvasWidget()->getCurrentTable();
     if(!table)
     {
-        QList<KAction> actionList= QList<KAction>();
+        QPtrList<KAction> actionList= QPtrList<KAction>();
 
         int nbFrame=m_doc->getSelectedFrames().count();
         KActionSeparator *separator=new KActionSeparator();
@@ -3444,7 +3444,7 @@ void KWView::slotUpdateRuler()
 void KWView::frameSelectedChanged()
 {
     bool rw = koDocument()->isReadWrite();
-    QList<KWFrame> selectedFrames = m_doc->getSelectedFrames();
+    QPtrList<KWFrame> selectedFrames = m_doc->getSelectedFrames();
     int nbFrame = selectedFrames.count();
 
     actionFormatFrameSet->setEnabled( nbFrame>=1 );
@@ -3452,7 +3452,7 @@ void KWView::frameSelectedChanged()
     {
         bool okForDelete = true;
         // Check we didn't select the main text frame (in WP mode)
-        QListIterator<KWFrame> it( selectedFrames );
+        QPtrListIterator<KWFrame> it( selectedFrames );
         for ( ; it.current() && okForDelete ; ++it )
         {
             // Check we selected no footer nor header
@@ -3471,7 +3471,7 @@ void KWView::frameSelectedChanged()
     bool frameDifferentOfPart=false;
     if(nbFrame >= 1)
     {
-        QListIterator<KWFrame> it( selectedFrames );
+        QPtrListIterator<KWFrame> it( selectedFrames );
         for ( ; it.current(); ++it )
         {
             if ( it.current()->getFrameSet()->type()!=FT_PART && it.current()->getFrameSet()->type()!=FT_CLIPART && it.current()->getFrameSet()->type()!= FT_PICTURE)
@@ -3640,8 +3640,8 @@ void KWView::inlineFrame()
     {
 
         KMacroCommand* macroCmd = new KMacroCommand( i18n("Make FrameSet Inline") );
-        QList<FrameIndex> frameindexList;
-        QList<FrameResizeStruct> frameindexMove;
+        QPtrList<FrameIndex> frameindexList;
+        QPtrList<FrameResizeStruct> frameindexMove;
 
         FrameIndex *index=new FrameIndex( frame );
         FrameResizeStruct *move=new FrameResizeStruct;

@@ -119,7 +119,7 @@ void KWStyleManager::setupWidget()
     QGridLayout *frame1Layout = new QGridLayout( frame1, 0, 0, // auto
                                                  KDialog::marginHint(), KDialog::spacingHint() );
 
-    QListIterator<KWStyle> style( m_doc->styleList() );
+    QPtrListIterator<KWStyle> style( m_doc->styleList() );
     numStyles = m_doc->styleList().count();
     m_stylesList = new QListBox( frame1, "stylesList" );
     for ( ; style.current() ; ++style )
@@ -258,7 +258,7 @@ int KWStyleManager::styleIndex( int pos ) {
 
 void KWStyleManager::updateGUI() {
     kdDebug() << "KWStyleManager::updateGUI m_currentStyle=" << m_currentStyle << " " << m_currentStyle->name() << endl;
-    QListIterator<KWStyleManagerTab> it( m_tabsList );
+    QPtrListIterator<KWStyleManagerTab> it( m_tabsList );
     for ( ; it.current() ; ++it )
     {
         it.current()->setStyle( m_currentStyle );
@@ -294,7 +294,7 @@ void KWStyleManager::updatePreview()
 void KWStyleManager::save() {
     if(m_currentStyle) {
         // save changes from UI to object.
-        QListIterator<KWStyleManagerTab> it( m_tabsList );
+        QPtrListIterator<KWStyleManagerTab> it( m_tabsList );
         for ( ; it.current() ; ++it )
             it.current()->save();
 

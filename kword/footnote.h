@@ -20,7 +20,7 @@
 #ifndef footnote_h
 #define footnote_h
 
-#include <qlist.h>
+#include <qptrlist.h>
 #include <qpainter.h>
 
 #include <qtextstream.h>
@@ -67,7 +67,7 @@ protected:
 
     KWDocument *doc;
     int start;
-    QList<KWFootNote> footNotes;
+    QPtrList<KWFootNote> footNotes;
     bool superscript;
     NoteType noteType;
     QString firstParag;
@@ -90,7 +90,7 @@ public:
         QString space;
     };
 
-    KWFootNote( KWDocument *_doc, QList<KWFootNoteInternal> *_parts );
+    KWFootNote( KWDocument *_doc, QPtrList<KWFootNoteInternal> *_parts );
 
     KWFootNote *copy();
 
@@ -124,7 +124,7 @@ protected:
 
     KWDocument *doc;
     int start, end;
-    QList<KWFootNoteInternal> parts;
+    QPtrList<KWFootNoteInternal> parts;
     QString before, after, text;
     QString parag;
 

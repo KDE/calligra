@@ -323,7 +323,7 @@ void KWFindReplace::proceed()
     else // Not 'find in selection', need to iterate over the framesets
     {
         bool firstFrameSetFound = !firstFrameSet;
-        QListIterator<KWFrameSet> fit = m_canvas->kWordDocument()->framesetsIterator();
+        QPtrListIterator<KWFrameSet> fit = m_canvas->kWordDocument()->framesetsIterator();
         for ( ; fit.current() ; ++fit )
         {
             // Only interested in text framesets

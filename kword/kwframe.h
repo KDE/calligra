@@ -25,7 +25,7 @@
 #include <koClipart.h>
 #include <koRect.h>
 #include <qbrush.h>
-#include <qlist.h>
+#include <qptrlist.h>
 #include "kwstyle.h"
 #include "koborder.h"
 
@@ -216,7 +216,7 @@ private:
     QBrush backgroundColor;
     KoBorder brd_left, brd_right, brd_top, brd_bottom;
 
-    QList<KWResizeHandle> handles;
+    QPtrList<KWResizeHandle> handles;
     KWFrameSet *frameSet;
 
     // Prevent operator= and copy constructor
@@ -304,7 +304,7 @@ public:
 
     virtual FrameSetType type() { return FT_BASE; }
 
-    virtual void addTextFramesets( QList<KWTextFrameSet> & /*lst*/ ) {};
+    virtual void addTextFramesets( QPtrList<KWTextFrameSet> & /*lst*/ ) {};
 
     /** The different types of textFramesets (that TEXT is important here!)
      * FI_BODY = normal text frames.<br>
@@ -352,7 +352,7 @@ public:
     static KWFrame * settingsFrame(KWFrame* frame);
 
     /* Iterator over the child frames */
-    const QList<KWFrame> &frameIterator() const { return frames; }
+    const QPtrList<KWFrame> &frameIterator() const { return frames; }
     /* Get frame number */
     int getFrameFromPtr( KWFrame *frame );
     /* Get number of child frames */
@@ -568,7 +568,7 @@ protected:
     virtual void createAnchors( KWTextParag * parag, int index, bool placeHolderExists = false );
 
     KWDocument *m_doc;            // Document
-    QList<KWFrame> frames;        // Our frames
+    QPtrList<KWFrame> frames;        // Our frames
     struct FrameOnTop {
         FrameOnTop() {} // for QValueList
         FrameOnTop( const KoRect & r, KWFrame * f )

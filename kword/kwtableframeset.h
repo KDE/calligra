@@ -29,7 +29,7 @@ DESCRIPTION
 
 #include <kwframe.h>
 #include <kwtextframeset.h>
-#include <qlist.h>
+#include <qptrlist.h>
 #include <qobject.h>
 #include <qstring.h>
 #include <qrichtext_p.h>
@@ -81,7 +81,7 @@ public:
 
     virtual FrameSetType type() { return FT_TABLE; }
 
-    virtual void addTextFramesets( QList<KWTextFrameSet> & /*lst*/ );
+    virtual void addTextFramesets( QPtrList<KWTextFrameSet> & /*lst*/ );
 
     // constructors
     KWTableFrameSet( KWDocument *_doc, const QString & name );
@@ -174,9 +174,9 @@ public:
     bool isOneSelected( unsigned int &row, unsigned int &col );
 
     /** insert a row of new cells, use the getCols() call to decide how many cells are created */
-    void insertRow( unsigned int _idx,QList<KWFrameSet> listFrameSet=QList<KWFrameSet>(),QList<KWFrame>listFrame=QList<KWFrame>(), bool _recalc = true, bool _removeable = false );
+    void insertRow( unsigned int _idx,QPtrList<KWFrameSet> listFrameSet=QPtrList<KWFrameSet>(),QPtrList<KWFrame>listFrame=QPtrList<KWFrame>(), bool _recalc = true, bool _removeable = false );
     /** insert a column of new cells use the getRows() call to decide how many cells are created */
-    void insertCol( unsigned int _idx,QList<KWFrameSet> listFrameSet=QList<KWFrameSet>(), QList<KWFrame> listFrame=QList<KWFrame>());
+    void insertCol( unsigned int _idx,QPtrList<KWFrameSet> listFrameSet=QPtrList<KWFrameSet>(), QPtrList<KWFrame> listFrame=QPtrList<KWFrame>());
 
     /** remove all the cells in a certain row */
     void deleteRow( unsigned int _idx, bool _recalc = true );
@@ -202,7 +202,7 @@ public:
     /** merge cells to one cell. Will loose all text not in top-left cell */
     KCommand *joinCells(unsigned int colBegin=0,unsigned int rowBegin=0, unsigned int colEnd=0,unsigned int rowEnd=0);
     /** split selected cell into a number of cells */
-    KCommand * splitCell(unsigned int intoRows, unsigned int intoCols, int _col=-1, int _row=-1,QList<KWFrameSet> listFrameSet=QList<KWFrameSet>(),QList<KWFrame>listFrame=QList<KWFrame>());
+    KCommand * splitCell(unsigned int intoRows, unsigned int intoCols, int _col=-1, int _row=-1,QPtrList<KWFrameSet> listFrameSet=QPtrList<KWFrameSet>(),QPtrList<KWFrame>listFrame=QPtrList<KWFrame>());
 
     /** display formatting information */
     void viewFormatting( QPainter &painter, int zoom );
@@ -263,7 +263,7 @@ private:
     bool m_showHeaderOnAllPages;
     bool m_hasTmpHeaders;
     bool m_active;
-    QList<Cell> m_cells;
+    QPtrList<Cell> m_cells;
     QValueList<int> m_pageBoundaries;
     static const unsigned int tableCellSpacing;
 };

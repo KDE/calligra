@@ -255,7 +255,7 @@ void KWFootNoteManager::load( QDomElement& /*elem*/ )
 /* Class: KWFootNote                                              */
 /******************************************************************/
 
-KWFootNote::KWFootNote( KWDocument *_doc, QList<KWFootNoteInternal> *_parts )
+KWFootNote::KWFootNote( KWDocument *_doc, QPtrList<KWFootNoteInternal> *_parts )
     : start( 1 ), end( 1 )
 {
     doc = _doc;
@@ -293,7 +293,7 @@ int KWFootNote::setStart( int _start )
 
 KWFootNote *KWFootNote::copy()
 {
-    KWFootNote *fn = new KWFootNote( doc, new QList<KWFootNoteInternal>( parts ) );
+    KWFootNote *fn = new KWFootNote( doc, new QPtrList<KWFootNoteInternal>( parts ) );
     fn->start = start;
     fn->end = end;
     fn->before = before;

@@ -928,7 +928,7 @@ bool KWFrameDia::applyChanges()
         if ( fs || createFrameset ) // Last or first case -> check frameset name unicity
         {
             // Note: this isn't recursive, so it won't find table cells.
-            QListIterator<KWFrameSet> fit = doc->framesetsIterator();
+            QPtrListIterator<KWFrameSet> fit = doc->framesetsIterator();
             for ( ; fit.current() ; ++fit )
                 if ( fit.current()->getName() == name &&
                      fs /*which is 0L when creating*/ != fit.current() &&

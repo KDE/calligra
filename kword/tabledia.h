@@ -21,7 +21,7 @@
 #define tabledia_h
 
 #include <kdialogbase.h>
-#include <qlist.h>
+#include <qptrlist.h>
 
 #include "defs.h"
 #include "koborder.h"
@@ -104,7 +104,7 @@ protected:
         QBrush bBack;
     };
 
-    QList<TableStyle> tableStyles;
+    QPtrList<TableStyle> tableStyles;
 
     KWCanvas *canvas;
     KWDocument *doc;

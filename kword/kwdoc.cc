@@ -130,7 +130,7 @@ void KWCommandHistory::redo()
 
 void KWDocument::clearUndoRedoInfos()
 {
-    QListIterator<KWFrameSet> fit = framesetsIterator();
+    QPtrListIterator<KWFrameSet> fit = framesetsIterator();
     for ( ; fit.current() ; ++fit )
     {
         KWTextFrameSet *fs = dynamic_cast<KWTextFrameSet *>( fit.current() );
@@ -294,7 +294,7 @@ void KWDocument::newZoomAndResolution( bool updateViews, bool forPrint )
     getFormulaDocument()->setResolution( m_zoomedResolutionX, m_zoomedResolutionY );
 
     // Update all fonts
-    QListIterator<KWFrameSet> fit = framesetsIterator();
+    QPtrListIterator<KWFrameSet> fit = framesetsIterator();
     for ( ; fit.current() ; ++fit )
         fit.current()->zoom( forPrint );
 
@@ -459,7 +459,7 @@ void KWDocument::recalcFrames()
     // Lookup the various header / footer framesets into the variables above
     // [Done in all cases, in order to hide unused framesets]
 
-    QListIterator<KWFrameSet> fit = framesetsIterator();
+    QPtrListIterator<KWFrameSet> fit = framesetsIterator();
     for ( ; fit.current() ; ++fit )
     {
         KWFrameSet * fs = fit.current();
@@ -954,7 +954,7 @@ void KWDocument::recalcFrames()
 
 bool KWDocument::loadChildren( KoStore *_store )
 {
-    QListIterator<KoDocumentChild> it( children() );
+    QPtrListIterator<KoDocumentChild> it( children() );
     for( ; it.current(); ++it ) {
         if ( !((KoDocumentChild*)it.current())->loadDocument( _store ) )
             return FALSE;
@@ -1198,7 +1198,7 @@ bool KWDocument::loadXML( QIODevice *, const QDomDocument & doc )
     bool _first_header = FALSE, _even_header = FALSE, _odd_header = FALSE;
     bool _footnotes = FALSE;
 
-    QListIterator<KWFrameSet> fit = framesetsIterator();
+    QPtrListIterator<KWFrameSet> fit = framesetsIterator();
     for ( ; fit.current() ; ++fit )
     {
         switch( fit.current()->frameSetInfo() ) {
@@ -1527,7 +1527,7 @@ KWFrameSet * KWDocument::loadFrameSet( QDomElement framesetElem, bool loadFrames
         if ( !tableName.isEmpty() ) {
             // Text frameset belongs to a table -> find table by name
             KWTableFrameSet *table = 0L;
-            QListIterator<KWFrameSet> fit = framesetsIterator();
+            QPtrListIterator<KWFrameSet> fit = framesetsIterator();
             for ( ; fit.current() ; ++fit ) {
                 KWFrameSet *f = fit.current();
                 if( f->type() == FT_TABLE &&
@@ -1555,7 +1555,7 @@ KWFrameSet * KWDocument::loadFrameSet( QDomElement framesetElem, bool loadFrames
             if ( framesetElem.hasAttribute( "autoCreateNewFrame" ) )
             {
                 KWFrame::FrameBehaviour behav = static_cast<KWFrame::FrameBehaviour>( framesetElem.attribute( "autoCreateNewFrame" ).toInt() );
-                QListIterator<KWFrame> frameIt( fs->frameIterator() );
+                QPtrListIterator<KWFrame> frameIt( fs->frameIterator() );
                 for ( ; frameIt.current() ; ++frameIt ) // Apply it to all frames
                     frameIt.current()->setFrameBehaviour( behav );
             }
@@ -1619,7 +1619,7 @@ bool KWDocument::completeLoading( KoStore *_store )
     recalcVariables( VT_FIELD );
 
     // Finalize all the existing framesets
-    QListIterator<KWFrameSet> fit = framesetsIterator();
+    QPtrListIterator<KWFrameSet> fit = framesetsIterator();
     for ( ; fit.current() ; ++fit )
         fit.current()->finalize();
 
@@ -1636,12 +1636,12 @@ void KWDocument::processImageRequests()
     }
     m_imageRequests.clear();
 
-    QListIterator<KWPictureFrameSet> it3( m_imageRequests2 );
+    QPtrListIterator<KWPictureFrameSet> it3( m_imageRequests2 );
     for ( ; it3.current(); ++it3 )
         it3.current()->setImage( m_imageCollection.findImage( it3.current()->key() ) );
     m_imageRequests2.clear();
 
-    QListIterator<KWClipartFrameSet> it4( m_clipartRequests );
+    QPtrListIterator<KWClipartFrameSet> it4( m_clipartRequests );
     for ( ; it4.current(); ++it4 )
         it4.current()->setClipart( m_clipartCollection.findClipart( it4.current()->key() ) );
     m_clipartRequests.clear();
@@ -1667,7 +1667,7 @@ void KWDocument::processAnchorRequests()
 void KWDocument::pasteFrames( QDomElement topElem, KMacroCommand * macroCmd )
 {
     m_pasteFramesetsMap = new QMap<QString, QString>();
-    QList<KWFrameSet> frameSetsToFinalize;
+    QPtrList<KWFrameSet> frameSetsToFinalize;
     int ref=0;
 
     QDomElement elem = topElem.firstChild().toElement();
@@ -1775,7 +1775,7 @@ void KWDocument::pasteFrames( QDomElement topElem, KMacroCommand * macroCmd )
     processAnchorRequests();
 
     // Finalize afterwards - especially in case of inline frames, made them inline in processAnchorRequests
-    for ( QListIterator<KWFrameSet> fit( frameSetsToFinalize ); fit.current(); ++fit )
+    for ( QPtrListIterator<KWFrameSet> fit( frameSetsToFinalize ); fit.current(); ++fit )
         fit.current()->finalize();
 
     repaintAllViews();
@@ -1836,7 +1836,7 @@ QDomDocument KWDocument::saveXML()
 
     QValueList<KoImageKey> saveImages;
     QValueList<KoClipartKey> saveCliparts;
-    QListIterator<KWFrameSet> fit = framesetsIterator();
+    QPtrListIterator<KWFrameSet> fit = framesetsIterator();
     for ( ; fit.current() ; ++fit )
     {
         KWFrameSet *frameSet = fit.current();
@@ -1899,7 +1899,7 @@ QDomDocument KWDocument::saveXML()
     out << etag << "</SERIALL>" << endl; */
 
     // Write "OBJECT" tag for every child
-    QListIterator<KoDocumentChild> chl( children() );
+    QPtrListIterator<KoDocumentChild> chl( children() );
     for( ; chl.current(); ++chl ) {
         QDomElement embeddedElem = doc.createElement( "EMBEDDED" );
         kwdoc.appendChild( embeddedElem );
@@ -1912,7 +1912,7 @@ QDomDocument KWDocument::saveXML()
         QDomElement settingsElem = doc.createElement( "SETTINGS" );
         embeddedElem.appendChild( settingsElem );
 
-        QListIterator<KWFrameSet> fit = framesetsIterator();
+        QPtrListIterator<KWFrameSet> fit = framesetsIterator();
         for ( ; fit.current() ; ++fit )
         {
             KWFrameSet * fs = fit.current();
@@ -1953,7 +1953,7 @@ bool KWDocument::completeSaving( KoStore *_store )
 
     QValueList<KoImageKey> saveImages;
     QValueList<KoClipartKey> saveCliparts;
-    QListIterator<KWFrameSet> fit = framesetsIterator();
+    QPtrListIterator<KWFrameSet> fit = framesetsIterator();
     for ( ; fit.current() ; ++fit )
     {
         KWFrameSet *frameSet = fit.current();
@@ -1981,7 +1981,7 @@ bool KWDocument::saveChildren( KoStore *_store, const QString &_path )
 {
     int i = 0;
 
-    QListIterator<KoDocumentChild> it( children() );
+    QPtrListIterator<KoDocumentChild> it( children() );
     for( ; it.current(); ++it ) {
         QString internURL = QString( "%1/%2" ).arg( _path ).arg( i++ );
         if ( !((KoDocumentChild*)(it.current()))->document()->saveToStore( _store, internURL ) )
@@ -2044,7 +2044,7 @@ void KWDocument::paintContent( QPainter& painter, const QRect& _rect, bool trans
         eraseEmptySpace( &painter, emptyRegion, cg.brush( QColorGroup::Base ) );
     }
 
-    QListIterator<KWFrameSet> fit = framesetsIterator();
+    QPtrListIterator<KWFrameSet> fit = framesetsIterator();
     for ( ; fit.current() ; ++fit )
     {
         KWFrameSet * frameset = fit.current();
@@ -2057,7 +2057,7 @@ void KWDocument::paintContent( QPainter& painter, const QRect& _rect, bool trans
 
 void KWDocument::createEmptyRegion( const QRect & crect, QRegion & emptyRegion, KWViewMode * viewMode )
 {
-    QListIterator<KWFrameSet> fit = framesetsIterator();
+    QPtrListIterator<KWFrameSet> fit = framesetsIterator();
     for ( ; fit.current() ; ++fit )
     {
         KWFrameSet *frameset = fit.current();
@@ -2119,7 +2119,7 @@ KWStyle* KWDocument::findStyle( const QString & _name )
     if ( m_lastStyle && m_lastStyle->name() == _name )
         return m_lastStyle;
 
-    QListIterator<KWStyle> styleIt( m_styleList );
+    QPtrListIterator<KWStyle> styleIt( m_styleList );
     for ( ; styleIt.current(); ++styleIt )
     {
         if ( styleIt.current()->name() == _name ) {
@@ -2174,8 +2174,8 @@ void KWDocument::updateAllStyleLists()
 
 void KWDocument::applyStyleChange( KWStyle * changedStyle, int paragLayoutChanged, int formatChanged )
 {
-    QList<KWTextFrameSet> textFramesets;
-    QListIterator<KWFrameSet> fit = framesetsIterator();
+    QPtrList<KWTextFrameSet> textFramesets;
+    QPtrListIterator<KWFrameSet> fit = framesetsIterator();
     for ( ; fit.current() ; ++fit ) {
         fit.current()->addTextFramesets(textFramesets);
     }
@@ -2201,7 +2201,7 @@ void KWDocument::appendPage( /*unsigned int _page*/ )
 #endif
     m_pages++;
 
-    QListIterator<KWFrameSet> fit = framesetsIterator();
+    QPtrListIterator<KWFrameSet> fit = framesetsIterator();
     for ( ; fit.current() ; ++fit )
     {
         KWFrameSet * frameSet = fit.current();
@@ -2213,9 +2213,9 @@ void KWDocument::appendPage( /*unsigned int _page*/ )
 #endif
         // KWFrameSet::addFrame triggers a reshuffle in the frames list (KWTextFrameSet::updateFrames)
         // which destroys the iterators -> append the new frames at the end.
-        QList<KWFrame> newFrames;
+        QPtrList<KWFrame> newFrames;
 
-        QListIterator<KWFrame> frameIt( frameSet->frameIterator() );
+        QPtrListIterator<KWFrame> frameIt( frameSet->frameIterator() );
         for ( ; frameIt.current(); ++frameIt )
         {
             KWFrame * frame = frameIt.current();
@@ -2249,7 +2249,7 @@ void KWDocument::appendPage( /*unsigned int _page*/ )
                 //kdDebug(32002) << "   => created frame " << frm << endl;
             }
         }
-        QListIterator<KWFrame> newFrameIt( newFrames );
+        QPtrListIterator<KWFrame> newFrameIt( newFrames );
         for ( ; newFrameIt.current() ; ++newFrameIt )
             frameSet->addFrame( newFrameIt.current() );
     }
@@ -2265,7 +2265,7 @@ void KWDocument::appendPage( /*unsigned int _page*/ )
 
 bool KWDocument::canRemovePage( int num )
 {
-    QListIterator<KWFrameSet> fit = framesetsIterator();
+    QPtrListIterator<KWFrameSet> fit = framesetsIterator();
     for ( ; fit.current() ; ++fit )
     {
         KWFrameSet * frameSet = fit.current();
@@ -2285,14 +2285,14 @@ void KWDocument::removePage( int num )
 #ifdef DEBUG_PAGES
     kdDebug() << "KWDocument::removePage " << num << endl;
 #endif
-    QListIterator<KWFrameSet> fit = framesetsIterator();
+    QPtrListIterator<KWFrameSet> fit = framesetsIterator();
     for ( ; fit.current() ; ++fit )
     {
         KWFrameSet * frameSet = fit.current();
         if ( frameSet->frameSetInfo() != KWFrameSet::FI_BODY )
             continue;
-        QListIterator<KWFrame> frameIt( frameSet->frameIterator() );
-        QList<KWFrame> toDelete;
+        QPtrListIterator<KWFrame> frameIt( frameSet->frameIterator() );
+        QPtrList<KWFrame> toDelete;
         for ( ; frameIt.current(); ++frameIt )
         {
             KWFrame * frm = frameIt.current();
@@ -2304,7 +2304,7 @@ void KWDocument::removePage( int num )
                 toDelete.append( frm ); // Can't remove the frame here, it screws up the iterator -> toDelete
             }
         }
-        QListIterator<KWFrame> delIt( toDelete );
+        QPtrListIterator<KWFrame> delIt( toDelete );
         for ( ; delIt.current(); ++delIt )
             frameSet->delFrame( delIt.current(), true );
     }
@@ -2321,7 +2321,7 @@ void KWDocument::removePage( int num )
 KWFrameSet * KWDocument::getFrameSetByName( const QString & name )
 {
     // Note: this isn't recursive, so it won't find table cells.
-    QListIterator<KWFrameSet> fit = framesetsIterator();
+    QPtrListIterator<KWFrameSet> fit = framesetsIterator();
     for ( ; fit.current() ; ++fit )
         if ( fit.current()->getName() == name )
             return fit.current();
@@ -2331,7 +2331,7 @@ KWFrameSet * KWDocument::getFrameSetByName( const QString & name )
 KWFrame * KWDocument::frameUnderMouse( const QPoint& nPoint, bool* border )
 {
     KoPoint docPoint( unzoomPoint( nPoint ) );
-    QListIterator<KWFrameSet> fit = framesetsIterator();
+    QPtrListIterator<KWFrameSet> fit = framesetsIterator();
     for ( fit.toLast(); fit.current() ; --fit ) // z-order
     {
         KWFrameSet *frameSet = fit.current();
@@ -2371,7 +2371,7 @@ QString KWDocument::generateFramesetName( const QString & templateName )
 
 QCursor KWDocument::getMouseCursor( const QPoint &nPoint, bool controlPressed )
 {
-    QListIterator<KWFrameSet> fit = framesetsIterator();
+    QPtrListIterator<KWFrameSet> fit = framesetsIterator();
     for ( fit.toLast(); fit.current() ; --fit )
     {
         KWFrameSet *frameSet = fit.current();
@@ -2386,10 +2386,10 @@ QCursor KWDocument::getMouseCursor( const QPoint &nPoint, bool controlPressed )
     return ibeamCursor;
 }
 
-QList<KWFrame> KWDocument::getSelectedFrames() {
-    QList<KWFrame> frames;
+QPtrList<KWFrame> KWDocument::getSelectedFrames() {
+    QPtrList<KWFrame> frames;
     frames.setAutoDelete( FALSE );
-    QListIterator<KWFrameSet> fit = framesetsIterator();
+    QPtrListIterator<KWFrameSet> fit = framesetsIterator();
     for ( ; fit.current() ; ++fit )
     {
         KWFrameSet *frameSet = fit.current();
@@ -2397,7 +2397,7 @@ QList<KWFrame> KWDocument::getSelectedFrames() {
             continue;
         if ( frameSet->isRemoveableHeader() )
             continue;
-        QListIterator<KWFrame> frameIt = frameSet->frameIterator();
+        QPtrListIterator<KWFrame> frameIt = frameSet->frameIterator();
         for ( ; frameIt.current(); ++frameIt )
             if ( frameIt.current()->isSelected() )
                 frames.append( frameIt.current() );
@@ -2408,7 +2408,7 @@ QList<KWFrame> KWDocument::getSelectedFrames() {
 
 KWFrame *KWDocument::getFirstSelectedFrame()
 {
-    QListIterator<KWFrameSet> fit = framesetsIterator();
+    QPtrListIterator<KWFrameSet> fit = framesetsIterator();
     for ( ; fit.current() ; ++fit )
     {
         KWFrameSet *frameSet = fit.current();
@@ -2427,7 +2427,7 @@ KWFrame *KWDocument::getFirstSelectedFrame()
 void KWDocument::updateAllFrames()
 {
     kdDebug(32002) << "KWDocument::updateAllFrames " << frames.count() << " framesets." << endl;
-    QListIterator<KWFrameSet> fit = framesetsIterator();
+    QPtrListIterator<KWFrameSet> fit = framesetsIterator();
     for ( ; fit.current() ; ++fit )
         fit.current()->updateFrames();
 }
@@ -2453,12 +2453,12 @@ void KWDocument::frameChanged( KWFrame * frame, KWView * view )
         updateFrameStatusBarItem();
 }
 
-void KWDocument::framesChanged( const QList<KWFrame> & frames, KWView * view )
+void KWDocument::framesChanged( const QPtrList<KWFrame> & frames, KWView * view )
 {
     //kdDebug() << "KWDocument::framesChanged" << endl;
     updateAllFrames();
     // Is there at least one frame with a text runaround set ?
-    QListIterator<KWFrame> it( frames );
+    QPtrListIterator<KWFrame> it( frames );
     for ( ; it.current() ; ++it )
         if ( it.current()->runAround() != KWFrame::RA_NO )
         {
@@ -2470,7 +2470,7 @@ void KWDocument::framesChanged( const QList<KWFrame> & frames, KWView * view )
         }
     updateRulerFrameStartEnd();
     // Is at least one frame selected ?
-    QListIterator<KWFrame> it2( frames );
+    QPtrListIterator<KWFrame> it2( frames );
     for ( ; it2.current() ; ++it2 )
         if ( it2.current()->isSelected() ) {
             updateFrameStatusBarItem();
@@ -2481,7 +2481,7 @@ void KWDocument::framesChanged( const QList<KWFrame> & frames, KWView * view )
 void KWDocument::setHeaderVisible( bool h )
 {
     m_headerVisible = h;
-    QListIterator<KWFrameSet> fit = framesetsIterator();
+    QPtrListIterator<KWFrameSet> fit = framesetsIterator();
     for ( ; fit.current() ; ++fit )
     {
         KWFrameSet * frameSet = fit.current();
@@ -2501,7 +2501,7 @@ void KWDocument::setHeaderVisible( bool h )
 void KWDocument::setFooterVisible( bool f )
 {
     m_footerVisible = f;
-    QListIterator<KWFrameSet> fit = framesetsIterator();
+    QPtrListIterator<KWFrameSet> fit = framesetsIterator();
     for ( ; fit.current() ; ++fit )
     {
         KWFrameSet * frameSet = fit.current();
@@ -2600,8 +2600,8 @@ void KWDocument::unregisterVariable( KWVariable *var )
 void KWDocument::recalcVariables( int type )
 {
     bool update = false;
-    QListIterator<KWVariable> it( variables );
-    QList<KWTextFrameSet> toRepaint;
+    QPtrListIterator<KWVariable> it( variables );
+    QPtrList<KWTextFrameSet> toRepaint;
     for ( ; it.current() ; ++it )
     {
         if ( it.current()->type() == type )
@@ -2727,7 +2727,7 @@ void KWDocument::printDebug()
     kdDebug() << "Footer visible: " << isFooterVisible() << endl;
     kdDebug() << "Units: " << getUnit() <<endl;
     kdDebug() << "# Framesets: " << getNumFrameSets() <<endl;
-    QListIterator<KWFrameSet> fit = framesetsIterator();
+    QPtrListIterator<KWFrameSet> fit = framesetsIterator();
     for ( unsigned int iFrameset = 0; fit.current() ; ++fit, iFrameset++ )
     {
         KWFrameSet * frameset = fit.current();
@@ -2748,7 +2748,7 @@ void KWDocument::printDebug()
 
 void KWDocument::layout()
 {
-    QListIterator<KWFrameSet> it = framesetsIterator();
+    QPtrListIterator<KWFrameSet> it = framesetsIterator();
     for (; it.current(); ++it )
         if ( it.current()->isVisible() )
             it.current()->layout();
@@ -2756,7 +2756,7 @@ void KWDocument::layout()
 
 void KWDocument::invalidate()
 {
-    QListIterator<KWFrameSet> it = framesetsIterator();
+    QPtrListIterator<KWFrameSet> it = framesetsIterator();
     for (; it.current(); ++it )
         it.current()->invalidate();
 }
@@ -2771,7 +2771,7 @@ void KWDocument::slotRepaintChanged( KWFrameSet * frameset )
 {
     // This has to be a loop instead of a signal, so that we can
     // send "true" for the last view (see KWFrameSet::drawContents)
-    QListIterator<KWView> it( m_lstViews );
+    QPtrListIterator<KWView> it( m_lstViews );
     for ( ; it.current() ; ++it )
         it.current()->getGUI()->canvasWidget()->repaintChanged( frameset, it.atLast() );
 }
@@ -2782,7 +2782,7 @@ void KWDocument::refreshFrameBorderButton()
     KWFrame *frame= getFirstSelectedFrame();
     if (frame)
     {
-        QListIterator<KWView> it( m_lstViews );
+        QPtrListIterator<KWView> it( m_lstViews );
         frame = KWFrameSet::settingsFrame(frame);
         for ( ; it.current() ; ++it )
         {
@@ -2793,7 +2793,7 @@ void KWDocument::refreshFrameBorderButton()
 
 void KWDocument::updateResizeHandles( )
 {
-   QList<KWFrame> selectedFrames = getSelectedFrames();
+   QPtrList<KWFrame> selectedFrames = getSelectedFrames();
    KWFrame *frame=0L;
    for(frame=selectedFrames.first(); frame != 0; frame=selectedFrames.next() )
    {
@@ -2870,7 +2870,7 @@ void KWDocument::deleteFrame( KWFrame * frame )
 
 void KWDocument::deleteSeveralFrame()
 {
-    QList<KWFrame> frames=getSelectedFrames();
+    QPtrList<KWFrame> frames=getSelectedFrames();
     int nbCommand=0;
     KWFrame *tmp=0;
 
@@ -2948,7 +2948,7 @@ void KWDocument::deleteSeveralFrame()
 
 void KWDocument::reorganizeGUI()
 {
-   QListIterator<KWView> it( m_lstViews );
+   QPtrListIterator<KWView> it( m_lstViews );
    for ( ; it.current() ; ++it )
        it.current()->getGUI()->reorganize();
 }
@@ -3013,7 +3013,7 @@ QColor KWDocument::defaultBgColor( QPainter * painter )
 void KWDocument::renameButtonTOC(bool b)
 {
     m_hasTOC=b;
-    QListIterator<KWView> it( m_lstViews );
+    QPtrListIterator<KWView> it( m_lstViews );
     for ( ; it.current() ; ++it )
     {
         it.current()->renameButtonTOC(b);
@@ -3022,7 +3022,7 @@ void KWDocument::renameButtonTOC(bool b)
 
 void KWDocument::refreshMenuExpression()
 {
-    QListIterator<KWView> it( m_lstViews );
+    QPtrListIterator<KWView> it( m_lstViews );
     for ( ; it.current() ; ++it )
         it.current()->refreshMenuExpression();
 }
@@ -3034,7 +3034,7 @@ void KWDocument::frameSelectedChanged()
 
 void KWDocument::updateZoomRuler()
 {
-    QListIterator<KWView> it( m_lstViews );
+    QPtrListIterator<KWView> it( m_lstViews );
     for ( ; it.current() ; ++it )
     {
         it.current()->getGUI()->getHorzRuler()->setZoom( zoomedResolutionX() );
@@ -3045,14 +3045,14 @@ void KWDocument::updateZoomRuler()
 
 void KWDocument::updateRulerFrameStartEnd()
 {
-    QListIterator<KWView> it( m_lstViews );
+    QPtrListIterator<KWView> it( m_lstViews );
     for ( ; it.current() ; ++it )
         it.current()->slotUpdateRuler();
 }
 
 void KWDocument::updateFrameStatusBarItem()
 {
-    QListIterator<KWView> it( m_lstViews );
+    QPtrListIterator<KWView> it( m_lstViews );
     for ( ; it.current() ; ++it )
         it.current()->updateFrameStatusBarItem();
 }

@@ -17,7 +17,7 @@
    Boston, MA 02111-1307, USA.
 */
 
-#include <qlist.h>
+#include <qptrlist.h>
 #include "kwstyle.h"
 #include <koRuler.h>
 #include <koparagcounter.h>

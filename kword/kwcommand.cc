@@ -214,7 +214,7 @@ FrameIndex::FrameIndex( KWFrame *frame )
     m_iFrameIndex=m_pFrameSet->getFrameFromPtr(frame);
 }
 
-KWFrameBorderCommand::KWFrameBorderCommand( const QString &name, QList<FrameIndex> &_listFrameIndex, QList<FrameBorderTypeStruct> &_frameTypeBorder,const KoBorder & _newBorder):
+KWFrameBorderCommand::KWFrameBorderCommand( const QString &name, QPtrList<FrameIndex> &_listFrameIndex, QPtrList<FrameBorderTypeStruct> &_frameTypeBorder,const KoBorder & _newBorder):
     KCommand(name),
     m_indexFrame(_listFrameIndex),
     m_oldBorderFrameType(_frameTypeBorder),
@@ -293,7 +293,7 @@ void KWFrameBorderCommand::unexecute()
     }
 }
 
-KWFrameBackGroundColorCommand::KWFrameBackGroundColorCommand( const QString &name, QList<FrameIndex> &_listFrameIndex, QList<QBrush> &_oldBrush,const QBrush & _newColor ):
+KWFrameBackGroundColorCommand::KWFrameBackGroundColorCommand( const QString &name, QPtrList<FrameIndex> &_listFrameIndex, QPtrList<QBrush> &_oldBrush,const QBrush & _newColor ):
     KCommand(name),
     m_indexFrame(_listFrameIndex),
     m_oldBackGroundColor(_oldBrush),
@@ -499,7 +499,7 @@ bool KWFramePartMoveCommand::frameMoved()
     return  (m_frameMove.sizeOfBegin!=m_frameMove.sizeOfEnd);
 }
 
-KWFrameMoveCommand::KWFrameMoveCommand( const QString &name, QList<FrameIndex> &_frameIndex, QList<FrameResizeStruct>&_frameMove  ) :
+KWFrameMoveCommand::KWFrameMoveCommand( const QString &name, QPtrList<FrameIndex> &_frameIndex, QPtrList<FrameResizeStruct>&_frameMove  ) :
     KCommand(name),
     m_indexFrame(_frameIndex),
     m_frameMove(_frameMove)
@@ -1092,7 +1092,7 @@ void KWSplitCellCommand::unexecute()
 
 
 
-KWJoinCellCommand::KWJoinCellCommand( const QString &name, KWTableFrameSet * _table,unsigned int colBegin,unsigned int rowBegin, unsigned int colEnd,unsigned int rowEnd, QList<KWFrameSet> listFrameSet,QList<KWFrame> listCopyFrame):
+KWJoinCellCommand::KWJoinCellCommand( const QString &name, KWTableFrameSet * _table,unsigned int colBegin,unsigned int rowBegin, unsigned int colEnd,unsigned int rowEnd, QPtrList<KWFrameSet> listFrameSet,QPtrList<KWFrame> listCopyFrame):
     KCommand(name),
     m_pTable(_table),
     m_colBegin(colBegin),

@@ -174,7 +174,7 @@ void KWFrame::copySettings(KWFrame *frm)
 // Insert all resize handles
 void KWFrame::createResizeHandles() {
     removeResizeHandles();
-    QList <KWView> pages = getFrameSet()->kWordDocument()->getAllViews();
+    QPtrList <KWView> pages = getFrameSet()->kWordDocument()->getAllViews();
     for (int i=pages.count() -1; i >= 0; i--)
         createResizeHandlesForPage(pages.at(i)->getGUI()->canvasWidget());
 }
@@ -507,7 +507,7 @@ void KWFrameSet::createEmptyRegion( const QRect & crect, QRegion & emptyRegion, 
 {
     int paperHeight = m_doc->paperHeight();
     //kdDebug() << "KWFrameSet::createEmptyRegion " << getName() << endl;
-    QListIterator<KWFrame> frameIt = frameIterator();
+    QPtrListIterator<KWFrame> frameIt = frameIterator();
     for ( ; frameIt.current(); ++frameIt )
     {
         QRect outerRect( viewMode->normalToView( frameIt.current()->outerRect() ) );
@@ -565,7 +565,7 @@ void KWFrameSet::drawFrameBorder( QPainter *painter, KWFrame *frame, KWFrame *se
 void KWFrameSet::setFloating()
 {
     // Find main text frame
-    QListIterator<KWFrameSet> fit = m_doc->framesetsIterator();
+    QPtrListIterator<KWFrameSet> fit = m_doc->framesetsIterator();
     for ( ; fit.current() ; ++fit )
     {
         KWTextFrameSet * frameSet = dynamic_cast<KWTextFrameSet *>( fit.current() );
@@ -610,7 +610,7 @@ void KWFrameSet::setAnchored( KWTextFrameSet* textfs )
 KWAnchor * KWFrameSet::findAnchor( int frameNum )
 {
     Q_ASSERT( m_anchorTextFs );
-    QListIterator<QTextCustomItem> cit( m_anchorTextFs->textDocument()->allCustomItems() );
+    QPtrListIterator<QTextCustomItem> cit( m_anchorTextFs->textDocument()->allCustomItems() );
     for ( ; cit.current() ; ++cit )
     {
         KWAnchor * anchor = dynamic_cast<KWAnchor *>( cit.current() );
@@ -641,7 +641,7 @@ void KWFrameSet::createAnchors( KWTextParag * parag, int index, bool placeHolder
 {
     kdDebug() << "KWFrameSet::createAnchors" << endl;
     Q_ASSERT( m_anchorTextFs );
-    QListIterator<KWFrame> frameIt = frameIterator();
+    QPtrListIterator<KWFrame> frameIt = frameIterator();
     for ( ; frameIt.current(); ++frameIt, ++index )
     {
         //if ( ! frameIt.current()->anchor() )
@@ -679,7 +679,7 @@ void KWFrameSet::deleteAnchors()
     Q_ASSERT( textfs );
     if ( !textfs )
         return;
-    QListIterator<KWFrame> frameIt = frameIterator();
+    QPtrListIterator<KWFrame> frameIt = frameIterator();
     int frameNum = 0;
     // At the moment there's only one anchor per frameset
     // With tables the loop below will be wrong anyway...
@@ -738,7 +738,7 @@ KCommand * KWFrameSet::anchoredObjectDeleteCommand( int frameNum )
 
 KWFrame * KWFrameSet::frameByBorder( const QPoint & nPoint )
 {
-    QListIterator<KWFrame> frameIt = frameIterator();
+    QPtrListIterator<KWFrame> frameIt = frameIterator();
     for ( ; frameIt.current(); ++frameIt )
     {
         QRect outerRect( frameIt.current()->outerRect() );
@@ -765,7 +765,7 @@ KWFrame * KWFrameSet::frameByBorder( const QPoint & nPoint )
 KWFrame * KWFrameSet::frameAtPos( double _x, double _y )
 {
     KoPoint docPoint( _x, _y );
-    QListIterator<KWFrame> frameIt = frameIterator();
+    QPtrListIterator<KWFrame> frameIt = frameIterator();
     for ( ; frameIt.current(); ++frameIt )
         if ( frameIt.current()->contains( docPoint ) )
             return frameIt.current();
@@ -784,7 +784,7 @@ int KWFrameSet::getFrameFromPtr( KWFrame *frame )
 
 KWFrame * KWFrameSet::settingsFrame(KWFrame* frame)
 {
-    QListIterator<KWFrame> frameIt( frame->getFrameSet()->frameIterator() );
+    QPtrListIterator<KWFrame> frameIt( frame->getFrameSet()->frameIterator() );
     if ( !frame->isCopy() )
         return frame;
     KWFrame* lastRealFrame=0L;
@@ -818,7 +818,7 @@ void KWFrameSet::updateFrames()
     // Iterate over ALL framesets, to find those which have frames on top of us.
     // We'll use this information in various methods (adjust[LR]Margin, drawContents etc.)
     // So we want it cached.
-    QListIterator<KWFrameSet> framesetIt( m_doc->framesetsIterator() );
+    QPtrListIterator<KWFrameSet> framesetIt( m_doc->framesetsIterator() );
     bool foundThis = false;
     for (; framesetIt.current(); ++framesetIt )
     {
@@ -839,12 +839,12 @@ void KWFrameSet::updateFrames()
 
         //kdDebug() << "KWFrameSet::updateFrames considering frameset " << frameSet << endl;
 
-        QListIterator<KWFrame> frameIt( frameSet->frameIterator() );
+        QPtrListIterator<KWFrame> frameIt( frameSet->frameIterator() );
         for ( ; frameIt.current(); ++frameIt )
         {
             KWFrame *frameOnTop = frameIt.current();
             // Is this frame over any of our frames ?
-            QListIterator<KWFrame> fIt( frameIterator() );
+            QPtrListIterator<KWFrame> fIt( frameIterator() );
             for ( ; fIt.current(); ++fIt )
             {
                 KoRect intersect = fIt.current()->intersect( frameOnTop->outerKoRect() );
@@ -863,7 +863,7 @@ void KWFrameSet::updateFrames()
     if ( isFloating() )
     {
         //kdDebug() << "KWFrameSet::updateFrames " << getName() << " is floating" << endl;
-        QListIterator<KWFrame> frameIt = frameIterator();
+        QPtrListIterator<KWFrame> frameIt = frameIterator();
         int frameNum = 0;
         // At the moment there's only one anchor per frameset
         //for ( ; frameIt.current(); ++frameIt, ++frameNum )
@@ -888,7 +888,7 @@ void KWFrameSet::drawContents( QPainter *p, const QRect & crect, QColorGroup &cg
     m_currentDrawnCanvas = canvas;
     bool drawBorders = ( getGroupManager() == 0 );
 
-    QListIterator<KWFrame> frameIt( frameIterator() );
+    QPtrListIterator<KWFrame> frameIt( frameIterator() );
     KWFrame * lastRealFrame = 0L;
     int lastRealFrameTop = 0;
     int totalHeight = 0;
@@ -978,7 +978,7 @@ void KWFrameSet::drawContents( QPainter *p, const QRect & crect, QColorGroup &cg
 
 bool KWFrameSet::contains( double mx, double my )
 {
-    QListIterator<KWFrame> frameIt = frameIterator();
+    QPtrListIterator<KWFrame> frameIt = frameIterator();
     for ( ; frameIt.current(); ++frameIt )
         if ( frameIt.current()->contains( KoPoint( mx, my ) ) )
             return true;
@@ -1023,7 +1023,7 @@ void KWFrameSet::saveCommon( QDomElement &parentElem, bool saveFrames )
 
     if ( saveFrames )
     {
-        QListIterator<KWFrame> frameIt = frameIterator();
+        QPtrListIterator<KWFrame> frameIt = frameIterator();
         for ( ; frameIt.current(); ++frameIt )
         {
             KWFrame *frame = frameIt.current();
@@ -1213,7 +1213,7 @@ QRegion KWFrameSet::frameClipRegion( QPainter * painter, KWFrame *frame, const Q
 
 bool KWFrameSet::canRemovePage( int num )
 {
-    QListIterator<KWFrame> frameIt( frameIterator() );
+    QPtrListIterator<KWFrame> frameIt( frameIterator() );
     for ( ; frameIt.current(); ++frameIt )
     {
         KWFrame * frame = frameIt.current();
@@ -1253,7 +1253,7 @@ void KWFrameSet::printDebug()
     kdDebug() << " |  Floating: " << isFloating() << endl;
     kdDebug() << " |  Number of frames on top: " << m_framesOnTop.count() << endl;
 
-    QListIterator<KWFrame> frameIt = frameIterator();
+    QPtrListIterator<KWFrame> frameIt = frameIterator();
     for ( unsigned int j = 0; frameIt.current(); ++frameIt, ++j ) {
         KWFrame * frame = frameIt.current();
         QCString copy = frame->isCopy() ? "[copy]" : "";
@@ -1413,7 +1413,7 @@ KWFrame *KWPictureFrameSet::frameByBorder( const QPoint & nPoint )
 {
     // For pictures/cliparts there is nothing to do when clicking
     // inside the frame, so the whole frame is a 'border' (clicking in it selects the frame)
-    QListIterator<KWFrame> frameIt = frameIterator();
+    QPtrListIterator<KWFrame> frameIt = frameIterator();
     for ( ; frameIt.current(); ++frameIt )
     {
         QRect outerRect( frameIt.current()->outerRect() );
@@ -1498,7 +1498,7 @@ KWFrame *KWClipartFrameSet::frameByBorder( const QPoint & nPoint )
 {
     // For pictures/cliparts there is nothing to do when clicking
     // inside the frame, so the whole frame is a 'border' (clicking in it selects the frame)
-    QListIterator<KWFrame> frameIt = frameIterator();
+    QPtrListIterator<KWFrame> frameIt = frameIterator();
     for ( ; frameIt.current(); ++frameIt )
     {
         QRect outerRect( frameIt.current()->outerRect() );
@@ -1620,7 +1620,7 @@ void KWPartFrameSetEdit::slotChildChanged()
 {
     // This is called when the KoDocumentChild is resized (using the KoFrame)
     // We need to react on it in KWPartFrameSetEdit because the view-mode has to be taken into account
-    QListIterator<KWFrame>listFrame=partFrameSet()->frameIterator();
+    QPtrListIterator<KWFrame>listFrame=partFrameSet()->frameIterator();
     KWFrame *frame = listFrame.current();
     if ( frame  )
     {
@@ -1650,7 +1650,7 @@ void KWPartFrameSetEdit::mousePressEvent( QMouseEvent *e, const QPoint &, const 
 
     // activate child part
     partFrameSet()->updateFrames();
-    QListIterator<KWFrame>listFrame = partFrameSet()->frameIterator();
+    QPtrListIterator<KWFrame>listFrame = partFrameSet()->frameIterator();
     KWFrame *frame = listFrame.current();
     // Set the child geometry from the frame geometry, applying the viewmode
     // (the child is in unzoomed view coords!)

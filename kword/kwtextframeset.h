@@ -151,7 +151,7 @@ public:
     void highlightPortion( Qt3::QTextParag * parag, int index, int length, KWCanvas * canvas );
     void removeHighlight();
 
-    virtual void addTextFramesets( QList<KWTextFrameSet> & /*lst*/ );
+    virtual void addTextFramesets( QPtrList<KWTextFrameSet> & /*lst*/ );
 
     /** Update the paragraph that use the given style, after this style was changed.
      *  The flags tell which changes should be applied.
@@ -208,7 +208,7 @@ protected slots:
 protected:
     void getMargins( int yp, int h, int* marginLeft, int* marginRight, int* breakBegin, int* breakEnd, int paragLeftMargin = 0 );
     bool checkVerticalBreak( int & yp, int & h, Qt3::QTextParag * parag, bool linesTogether, int breakBegin, int breakEnd );
-    const QList<KWFrame> & framesInPage( int pageNum ) const;
+    const QPtrList<KWFrame> & framesInPage( int pageNum ) const;
     void frameResized( KWFrame *theFrame );
     double footerHeaderSizeMax( KWFrame *theFrame );
     QDomElement saveInternal( QDomElement &parentElem, bool saveFrames, bool saveAnchorsFramesets );
@@ -223,11 +223,11 @@ private:
 
     // Cached info for optimization
     /** This array provides a direct access to the frames on page N */
-    QVector< QList<KWFrame> > m_framesInPage;
+    QVector< QPtrList<KWFrame> > m_framesInPage;
     /** always equal to m_framesInPage[0].first()->pageNum() :) */
     int m_firstPage;
     /** always empty, for convenience in @ref framesInPage */
-    QList<KWFrame> m_emptyList;
+    QPtrList<KWFrame> m_emptyList;
 };
 
 /**
@@ -303,7 +303,7 @@ public:
 
     void showPopup( KWFrame *frame, KWView *view, const QPoint &point );
 
-    QList<KAction> dataToolActionList();
+    QPtrList<KAction> dataToolActionList();
 
 public slots:
     // Reimplemented from KWFrameSet and connected to KoTextView's signals
@@ -326,7 +326,7 @@ private slots:
     void slotToolActivated( const KoDataToolInfo & info, const QString & command );
 
 private:
-    QList<KAction> m_actionList; // for the kodatatools
+    QPtrList<KAction> m_actionList; // for the kodatatools
 
     KoParagLayout m_paragLayout;
     QString m_wordUnderCursor;

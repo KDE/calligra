@@ -456,7 +456,7 @@ private:
     struct {
 	KSpell *kspell;
 	int spellCurrFrameSetNum;
-	QList<KWTextFrameSet> textFramesets;
+	QPtrList<KWTextFrameSet> textFramesets;
 	QStringList ignoreWord;
 	KMacroCommand * macroCmdSpellCheck;
      } m_spell;

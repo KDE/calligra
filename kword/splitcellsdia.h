@@ -21,7 +21,7 @@
 #define splitcelldia_h
 
 #include <kdialogbase.h>
-#include <qlist.h>
+#include <qptrlist.h>
 
 #include "defs.h"
 

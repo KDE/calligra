@@ -1204,7 +1204,7 @@ void KWParagCounterWidget::fillStyleCombo(KoParagCounter::Numbering type) {
 
     lstStyle->clear();
 
-    QListIterator<StyleRepresenter> style( stylesList );
+    QPtrListIterator<StyleRepresenter> style( stylesList );
     while ( style.current() ) {
         if(style.current()->style() == KoParagCounter::STYLE_NONE) {
             if(type == KoParagCounter::NUM_NONE)

@@ -644,8 +644,8 @@ kdDebug() << "setMinFrameHeight2("<< cell->getFrame(0)->height() + postAdjust <<
             if ( addHeaderRow ) {
                 //kdDebug() << "KWTableFrameSet::recalcRows adding header at row " << j << endl;
                 m_hasTmpHeaders = true;
-                QList<KWFrameSet> listFrameSet=QList<KWFrameSet>();
-                QList<KWFrame> listFrame=QList<KWFrame>();
+                QPtrList<KWFrameSet> listFrameSet=QPtrList<KWFrameSet>();
+                QPtrList<KWFrame> listFrame=QPtrList<KWFrame>();
                 insertRow( j, listFrameSet, listFrame, false, true );
             }
             for(i = 0; i < m_cells.count(); i++) {
@@ -879,7 +879,7 @@ bool KWTableFrameSet::getFirstSelected( unsigned int &row, unsigned int &col )
     return false;
 }
 
-void KWTableFrameSet::insertRow( unsigned int _idx,QList<KWFrameSet> listFrameSet, QList<KWFrame> listFrame,bool _recalc, bool isAHeader )
+void KWTableFrameSet::insertRow( unsigned int _idx,QPtrList<KWFrameSet> listFrameSet, QPtrList<KWFrame> listFrame,bool _recalc, bool isAHeader )
 {
     unsigned int i = 0;
     unsigned int _rows = m_rows;
@@ -927,7 +927,7 @@ void KWTableFrameSet::insertRow( unsigned int _idx,QList<KWFrameSet> listFrameSe
 
     //add right position of table.
     colStart.append(br.right());
-    QList<KWTableFrameSet::Cell> nCells;
+    QPtrList<KWTableFrameSet::Cell> nCells;
     nCells.setAutoDelete( false );
     if(_idx==0)
         copyFromRow=1;
@@ -1001,7 +1001,7 @@ void KWTableFrameSet::insertRow( unsigned int _idx,QList<KWFrameSet> listFrameSe
         finalize();
 }
 
-void KWTableFrameSet::insertCol( unsigned int col,QList<KWFrameSet> listFrameSet, QList<KWFrame>listFrame )
+void KWTableFrameSet::insertCol( unsigned int col,QPtrList<KWFrameSet> listFrameSet, QPtrList<KWFrame>listFrame )
 {
     unsigned int _cols = m_cols;
     double x=0, width = 60;
@@ -1266,8 +1266,8 @@ KCommand *KWTableFrameSet::joinCells(unsigned int colBegin,unsigned int rowBegin
     double bottom=getCell(rowEnd, colBegin)->getFrame(0)->bottom();
     double right=getCell(rowEnd, colEnd)->getFrame(0)->right();
 
-    QList<KWFrameSet> listFrameSet;
-    QList<KWFrame> listCopyFrame;
+    QPtrList<KWFrameSet> listFrameSet;
+    QPtrList<KWFrame> listCopyFrame;
 
     // do the actual merge.
     for(unsigned int i=colBegin; i<=colEnd;i++) {
@@ -1301,7 +1301,7 @@ KCommand *KWTableFrameSet::joinCells(unsigned int colBegin,unsigned int rowBegin
     return new KWJoinCellCommand( i18n("Join Cells"), this,colBegin,rowBegin, colEnd,rowEnd,listFrameSet,listCopyFrame);
 }
 
-KCommand *KWTableFrameSet::splitCell(unsigned int intoRows, unsigned int intoCols, int _col, int _row,QList<KWFrameSet> listFrameSet, QList<KWFrame>listFrame) {
+KCommand *KWTableFrameSet::splitCell(unsigned int intoRows, unsigned int intoCols, int _col, int _row,QPtrList<KWFrameSet> listFrameSet, QPtrList<KWFrame>listFrame) {
     //kdDebug()<<"intoRows :"<<intoRows<<" intoCols :"<< intoCols <<" _col :"<<_col<<" _row "<<_row<<" listFrameSet :"<<listFrameSet.count()<<" listFrame :"<<listFrame.count()<<endl;
     if(intoRows < 1 || intoCols < 1)
         return 0L;
@@ -1449,7 +1449,7 @@ void KWTableFrameSet::validate()
         }
     }
 
-    QList<Cell> misplacedCells;
+    QPtrList<Cell> misplacedCells;
 
     for(unsigned int row=0; row < getRows(); row++) {
         for(unsigned int col=0; col <getCols(); col++) {
@@ -1566,7 +1566,7 @@ void KWTableFrameSet::createEmptyRegion( const QRect & crect, QRegion & emptyReg
     // Avoid iterating over all cells if we are out of view
     if ( !viewMode->normalToView( m_doc->zoomRect( boundingRect() ) ).intersects( crect ) )
         return;
-    QListIterator<KWFrame> frameIt = frameIterator();
+    QPtrListIterator<KWFrame> frameIt = frameIterator();
     for ( ; frameIt.current(); ++frameIt )
     {
         QRect outerRect( viewMode->normalToView( frameIt.current()->outerRect() ) );
@@ -1583,7 +1583,7 @@ void KWTableFrameSet::drawBorders( QPainter& painter, const QRect &crect, KWView
     painter.save();
 
     // We need 'i'
-    //QListIterator<KWFrame> frameIt = frameIterator();
+    //QPtrListIterator<KWFrame> frameIt = frameIterator();
     //for ( ; frameIt.current(); ++frameIt )
     bool topOfPage = true;
     for(uint i = 0; i < m_cells.count(); i++)
@@ -1803,7 +1803,7 @@ bool KWTableFrameSet::canRemovePage( int num ) {
         to check if the frame contains something, the simple existence of a frame
         is enough
     */
-    QListIterator<KWFrame> frameIt( frameIterator() );
+    QPtrListIterator<KWFrame> frameIt( frameIterator() );
     for ( ; frameIt.current(); ++frameIt ) {
         if ( frameIt.current()->pageNum() == num ) {
             return false;
@@ -1812,7 +1812,7 @@ bool KWTableFrameSet::canRemovePage( int num ) {
     return true;
 }
 
-void KWTableFrameSet::addTextFramesets( QList<KWTextFrameSet> & lst )
+void KWTableFrameSet::addTextFramesets( QPtrList<KWTextFrameSet> & lst )
 {
     for (unsigned int i =0; i < m_cells.count(); i++) {
         lst.append(m_cells.at(i));

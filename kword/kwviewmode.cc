@@ -290,7 +290,7 @@ void KWViewModeText::drawPageBorders( QPainter * painter, const QRect & crect,
     painter->save();
     KWDocument * doc = m_canvas->kWordDocument();
     QRegion grayRegion( crect );
-    QListIterator<KWFrame> it( textfs->frameIterator() );
+    QPtrListIterator<KWFrame> it( textfs->frameIterator() );
     painter->setPen( QApplication::palette().active().color( QColorGroup::Dark ) );
     // Draw a line on the right of every frame
     for ( ; it.current() ; ++it )

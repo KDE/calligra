@@ -23,7 +23,7 @@
 #include "variable.h"
 
 #include <qdialog.h>
-#include <qlist.h>
+#include <qptrlist.h>
 #include <qstring.h>
 #include <qlistview.h>
 
@@ -47,7 +47,7 @@ public:
     // For KWSerialLetterVariableInsertDia
     KWVariableNameDia( QWidget *parent );
     // For kwview
-    KWVariableNameDia( QWidget *parent, const QList<KWVariable> &vars );
+    KWVariableNameDia( QWidget *parent, const QPtrList<KWVariable> &vars );
     QString getName() const;
 
 protected slots:
@@ -117,7 +117,7 @@ class KWCustomVariablesDia : public QDialog
     Q_OBJECT
 
 public:
-    KWCustomVariablesDia( QWidget *parent, const QList<KWVariable> &variables );
+    KWCustomVariablesDia( QWidget *parent, const QPtrList<KWVariable> &variables );
 protected slots:
     void slotOk();
 

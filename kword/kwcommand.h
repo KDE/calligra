@@ -75,15 +75,15 @@ struct FrameBorderTypeStruct {
 class KWFrameBorderCommand : public KCommand
 {
 public:
-    KWFrameBorderCommand( const QString &name, QList<FrameIndex> &_listFrameIndex, QList<FrameBorderTypeStruct> &_frameTypeBorder,const KoBorder & _newBorder ) ;
+    KWFrameBorderCommand( const QString &name, QPtrList<FrameIndex> &_listFrameIndex, QPtrList<FrameBorderTypeStruct> &_frameTypeBorder,const KoBorder & _newBorder ) ;
     ~ KWFrameBorderCommand() {}
 
     void execute();
     void unexecute();
 
 protected:
-    QList<FrameIndex> m_indexFrame;
-    QList<FrameBorderTypeStruct> m_oldBorderFrameType;
+    QPtrList<FrameIndex> m_indexFrame;
+    QPtrList<FrameBorderTypeStruct> m_oldBorderFrameType;
     KoBorder m_newBorder;
 };
 
@@ -93,15 +93,15 @@ protected:
 class KWFrameBackGroundColorCommand : public KCommand
 {
 public:
-    KWFrameBackGroundColorCommand( const QString &name, QList<FrameIndex> &_listFrameIndex, QList<QBrush> &_oldBrush, const QBrush & _newColor ) ;
+    KWFrameBackGroundColorCommand( const QString &name, QPtrList<FrameIndex> &_listFrameIndex, QPtrList<QBrush> &_oldBrush, const QBrush & _newColor ) ;
     ~KWFrameBackGroundColorCommand() {}
 
     void execute();
     void unexecute();
 
 protected:
-    QList<FrameIndex> m_indexFrame;
-    QList<QBrush> m_oldBackGroundColor;
+    QPtrList<FrameIndex> m_indexFrame;
+    QPtrList<QBrush> m_oldBackGroundColor;
     QBrush m_newColor;
 };
 
@@ -152,15 +152,15 @@ protected:
 class KWFrameMoveCommand : public KCommand
 {
 public:
-    KWFrameMoveCommand( const QString &name,QList<FrameIndex> &_frameIndex,QList<FrameResizeStruct>&_frameMove ) ;
+    KWFrameMoveCommand( const QString &name,QPtrList<FrameIndex> &_frameIndex,QPtrList<FrameResizeStruct>&_frameMove ) ;
     ~KWFrameMoveCommand() {}
 
     void execute();
     void unexecute();
-    QList<FrameResizeStruct> & listFrameMoved() { return m_frameMove; }
+    QPtrList<FrameResizeStruct> & listFrameMoved() { return m_frameMove; }
 protected:
-    QList<FrameIndex> m_indexFrame;
-    QList<FrameResizeStruct> m_frameMove;
+    QPtrList<FrameIndex> m_indexFrame;
+    QPtrList<FrameResizeStruct> m_frameMove;
 };
 
 /**
@@ -291,7 +291,7 @@ public:
     void unexecute();
 protected:
     KWTableFrameSet *m_pTable;
-    QList<KWFrameSet> m_ListFrame;
+    QPtrList<KWFrameSet> m_ListFrame;
 };
 
 /**
@@ -337,7 +337,7 @@ public:
     void unexecute();
 protected:
     KWTableFrameSet *m_pTable;
-    QList<KWFrameSet> m_ListFrameSet;
+    QPtrList<KWFrameSet> m_ListFrameSet;
     unsigned int m_colPos;
 };
 
@@ -355,7 +355,7 @@ public:
     void unexecute();
 protected:
     KWTableFrameSet *m_pTable;
-    QList<KWFrameSet> m_ListFrameSet;
+    QPtrList<KWFrameSet> m_ListFrameSet;
     unsigned int m_rowPos;
 };
 
@@ -372,8 +372,8 @@ public:
     void unexecute();
 protected:
     KWTableFrameSet *m_pTable;
-    QList<KWFrameSet> m_ListFrameSet;
-    QList<KWFrame> m_copyFrame;
+    QPtrList<KWFrameSet> m_ListFrameSet;
+    QPtrList<KWFrame> m_copyFrame;
     unsigned int m_rowPos;
 };
 
@@ -391,8 +391,8 @@ public:
     void unexecute();
 protected:
     KWTableFrameSet *m_pTable;
-    QList<KWFrameSet> m_ListFrameSet;
-    QList<KWFrame> m_copyFrame;
+    QPtrList<KWFrameSet> m_ListFrameSet;
+    QPtrList<KWFrame> m_copyFrame;
     unsigned int m_colPos;
 };
 
@@ -413,7 +413,7 @@ protected:
     unsigned int m_rowBegin;
     unsigned int m_colEnd;
     unsigned int m_rowEnd;
-    QList<KWFrameSet> m_ListFrameSet;
+    QPtrList<KWFrameSet> m_ListFrameSet;
 };
 
 /**
@@ -422,7 +422,7 @@ protected:
 class KWJoinCellCommand : public KCommand
 {
 public:
-    KWJoinCellCommand( const QString &name, KWTableFrameSet * _table,unsigned int colBegin,unsigned int rowBegin, unsigned int colEnd,unsigned int rowEnd, QList<KWFrameSet> listFrameSet,QList<KWFrame> listCopyFrame);
+    KWJoinCellCommand( const QString &name, KWTableFrameSet * _table,unsigned int colBegin,unsigned int rowBegin, unsigned int colEnd,unsigned int rowEnd, QPtrList<KWFrameSet> listFrameSet,QPtrList<KWFrame> listCopyFrame);
     ~KWJoinCellCommand() {}
 
     void execute();
@@ -433,8 +433,8 @@ protected:
     unsigned int m_rowBegin;
     unsigned int m_colEnd;
     unsigned int m_rowEnd;
-    QList<KWFrameSet> m_ListFrameSet;
-    QList<KWFrame> m_copyFrame;
+    QPtrList<KWFrameSet> m_ListFrameSet;
+    QPtrList<KWFrame> m_copyFrame;
 };
 
 #endif
