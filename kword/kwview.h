@@ -317,15 +317,18 @@ public slots:
     void changeClipart();
 
     void configureHeaderFooter();
+
     void inlineFrame();
+
     /** Move the selected frame above maximum 1 frame that is in front of it. */
-    void raiseFrame();
+    void raiseFrame() { adjustZOrderOfSelectedFrames(RaiseFrame); };
     /** Move the selected frame behind maximum 1 frame that is behind it */
-    void lowerFrame();
+    void lowerFrame() { adjustZOrderOfSelectedFrames(LowerFrame); };
     /** Move the selected frame(s) to be in the front most position. */
-    void bringToFront();
+    void bringToFront() { adjustZOrderOfSelectedFrames(BringToFront); };
     /** Move the selected frame(s) to be behind all other frames */
-    void sendToBack();
+    void sendToBack() { adjustZOrderOfSelectedFrames(SendToBack); };
+
     void openLink();
     void changeLink();
     void editComment();
@@ -410,6 +413,14 @@ protected:
     void tableSplitCells(int col, int row);
 
     void startKSpell();
+
+    // Helper stuff for the frame adjustment;
+    enum moveFrameType  { RaiseFrame, LowerFrame, BringToFront, SendToBack };
+    void adjustZOrderOfSelectedFrames(moveFrameType moveType);
+    int raiseFrame(const QPtrList<KWFrame> frameSelection, const KWFrame *frame);
+    int lowerFrame(const QPtrList<KWFrame> frameSelection, const KWFrame *frame);
+    int bringToFront(const QPtrList<KWFrame> frameSelection, const KWFrame *frame);
+    int sendToBack(const QPtrList<KWFrame> frameSelection, const KWFrame *frame);
 
 private:
     KWDocument *m_doc;
