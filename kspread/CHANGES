@@ -6,6 +6,7 @@ Since RC1:
 Bugfixes:
 - Fix display and printout with special files (offset by 1 pixel).
 - Fix printout of thick cell borders on page borders
+- Fix printout of children, when they overlap one page
 
 Until RC1:
 ----------
