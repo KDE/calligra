@@ -355,7 +355,7 @@ private:
     QPoint limitOfPoint(const QPoint& _point);
 
     void calcBoundingRect();
-
+    bool objectIsAHeaderFooterHidden(KPObject *obj);
 
 private slots:
     void toFontChanged( const QFont &font ) { emit fontChanged( font ); }

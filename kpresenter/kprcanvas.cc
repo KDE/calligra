@@ -306,7 +306,7 @@ void KPrCanvas::drawObjectsInPage(QPainter *painter, const KoRect& rect2, bool d
     QPtrListIterator<KPObject> it( obj );
     for ( ; it.current() ; ++it )
     {
-        if ( (m_view->kPresenterDoc()->header()==it.current() && !m_view->kPresenterDoc()->hasHeader()) ||(m_view->kPresenterDoc()->footer()==it.current() && !m_view->kPresenterDoc()->hasFooter()) )
+        if ( objectIsAHeaderFooterHidden(it.current()) )
             continue;
 
 	if ( it.current()->isSticky() || editMode ||
@@ -517,7 +517,7 @@ void KPrCanvas::mousePressEvent( QMouseEvent *e )
                         kpobject = m_view->kPresenterDoc()->stickyPage()->getObjectResized( docPoint, modType, deSelAll, overObject, _resizeObj );
                         if( kpobject && m_view->kPresenterDoc()->isHeaderFooter(kpobject))
                         {
-                            if((kpobject==m_view->kPresenterDoc()->header() && !m_view->kPresenterDoc()->hasHeader())||(kpobject==m_view->kPresenterDoc()->footer() && !m_view->kPresenterDoc()->hasFooter()))
+                            if(objectIsAHeaderFooterHidden(kpobject))
                                 kpobject=0L;
                         }
                         if( kpobject && _resizeObj ) {
@@ -839,7 +839,7 @@ void KPrCanvas::mouseReleaseEvent( QMouseEvent *e )
                     {
                         if( m_view->kPresenterDoc()->isHeaderFooter(sIt.current()))
                         {
-                            if((sIt.current()==m_view->kPresenterDoc()->header() && !m_view->kPresenterDoc()->hasHeader())||(sIt.current()==m_view->kPresenterDoc()->footer() && !m_view->kPresenterDoc()->hasFooter()))
+                            if( objectIsAHeaderFooterHidden(sIt.current()))
                                 continue;
                         }
                         selectObj( sIt.current() );
@@ -1360,7 +1360,7 @@ void KPrCanvas::mouseDoubleClickEvent( QMouseEvent *e )
       kpobject=m_view->kPresenterDoc()->stickyPage()->getEditObj(docPoint );
       if( kpobject && m_view->kPresenterDoc()->isHeaderFooter(kpobject))
       {
-          if((kpobject==m_view->kPresenterDoc()->header() && !m_view->kPresenterDoc()->hasHeader())||(kpobject==m_view->kPresenterDoc()->footer() && !m_view->kPresenterDoc()->hasFooter()))
+          if( objectIsAHeaderFooterHidden(kpobject))
               kpobject=0L;
       }
     }
@@ -5089,4 +5089,10 @@ void KPrCanvas::slotSetActivePage( KPrPage* _active)
     m_activePage=_active;
 }
 
-
+//return true if object is a header/footer hidden
+bool KPrCanvas::objectIsAHeaderFooterHidden(KPObject *obj)
+{
+    if((obj==m_view->kPresenterDoc()->header() && !m_view->kPresenterDoc()->hasHeader())||(obj==m_view->kPresenterDoc()->footer() && !m_view->kPresenterDoc()->hasFooter()))
+        return true;
+    return false;
+}
