@@ -1818,20 +1818,16 @@ QString ClassExportFilterHtmlStyle::getParagraphElement(const QString& strTag, c
     QString strElement;
     strElement+='<';
     strElement+=strTag;
-    strElement+='>';
 
     // Opening elements
-    strElement+="<span style=\"";
+    strElement+=" style=\"";
 
-    if (strTag!="li")
+    // We do not set "left" explicitly, since KWord cannot do bi-di
+    if (( layout.alignment== "right") || (layout.alignment=="center") || (layout.alignment=="justify"))
     {
-        // We do not set "left" explicitly, since KWord cannot do bi-di
-        if (( layout.alignment== "right") || (layout.alignment=="center") || (layout.alignment=="justify"))
-        {
-
-            strElement+=QString("text-align:%1;").arg(layout.alignment);
-        }
+        strElement+=QString("text-align:%1;").arg(layout.alignment);
     }
+
     // Font name
     QString fontName = layout.formatData.fontName;
     if ( !fontName.isEmpty() )
@@ -1899,7 +1895,8 @@ QString ClassExportFilterHtmlStyle::getParagraphElement(const QString& strTag, c
         strElement+="none";
     }
     //strElement+="; ";
-    strElement+="\">"; // close span opening tag
+    strElement+="\">"; // close opening tag
+
     if ( 1==layout.formatData.verticalAlignment )
     {
         strElement+="<sub>"; //Subscript
@@ -1921,7 +1918,7 @@ QString ClassExportFilterHtmlStyle::getParagraphElement(const QString& strTag, c
     {
         strElement+="</sub>"; //Subscript
     }
-    strElement+="</span>";
+
     strElement+="</";
     strElement+=strTag;
     strElement+=">\n";
