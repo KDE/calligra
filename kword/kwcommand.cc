@@ -138,6 +138,7 @@ KoTextCursor * KWPasteTextCommand::execute( KoTextCursor *c )
         parag = static_cast<KWTextParag *>(parag->next());
         //kdDebug() << "KWPasteTextCommand::execute going to next parag: " << parag << endl;
     }
+    textFs->textObject()->setNeedSpellCheck( true );
     textFs->zoom( false );
     // In case loadFormatting queued any image request
     KWDocument * doc = textFs->kWordDocument();
