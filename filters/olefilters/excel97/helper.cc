@@ -562,6 +562,10 @@ const QString Helper::getFormula(Q_UINT16 row, Q_UINT16 column, QDataStream &rgc
 	while (!rgce.atEnd())
 	{
 		rgce >> ptg;
+		
+		// Correct ptg parsing!
+		ptg = ((ptg & 0x40) ? (ptg | 0x20) : ptg) & 0x3F;
+		
 		switch (ptg)
 		{
 			case 0x01:  // ptgExpr
