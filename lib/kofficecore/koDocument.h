@@ -390,8 +390,9 @@ public:
    */
   void removeShell( KoMainWindow *shell );
 
-  virtual const KoMainWindow *firstShell();
-  virtual const KoMainWindow *nextShell();
+  // Doesn't really have any reason to be virtual anymore
+  virtual KoMainWindow *firstShell();
+  virtual KoMainWindow *nextShell();
   virtual unsigned int shellCount() const;
 
   /**

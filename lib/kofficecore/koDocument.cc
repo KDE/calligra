@@ -345,7 +345,7 @@ void KoDocument::slotChildChanged( KoChild *c )
 void KoDocument::slotChildDestroyed()
 {
     setModified( true );
-	
+
     const KoDocumentChild *child = static_cast<const KoDocumentChild *>( sender() );
     d->m_children.removeRef( child );
 }
@@ -900,12 +900,12 @@ void KoDocument::removeShell( KoMainWindow *shell )
   d->m_shells.removeRef( shell );
 }
 
-const KoMainWindow *KoDocument::firstShell()
+KoMainWindow *KoDocument::firstShell()
 {
     return d->m_shells.first();
 }
 
-const KoMainWindow *KoDocument::nextShell()
+KoMainWindow *KoDocument::nextShell()
 {
     return d->m_shells.next();
 }
