@@ -2644,6 +2644,22 @@
       </Help>
     </Function>
 
+    <Function>
+      <Name>NORMSDIST</Name>
+      <Type>Float</Type>
+      <Parameter>
+        <Comment>value to which the standard normal distribution is calculated</Comment>
+        <Type>Float</Type>
+      </Parameter>
+      <Help>
+        <Text>
+          Returns the standard normal distribution.
+        </Text>
+        <Syntax>NORMSDIST(Number)</Syntax>
+        <Example>NORMSDIST(1) equals 0.84</Example>
+      </Help>
+    </Function>
+
   </Group>
   <Group>
     <GroupName>Financial</GroupName>
