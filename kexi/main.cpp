@@ -15,7 +15,6 @@
  *                                                                         *
  ***************************************************************************/
 
-#include <iostream.h>
 
 #include <kcmdlineargs.h>
 #include <kaboutdata.h>
