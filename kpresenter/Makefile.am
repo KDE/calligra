@@ -1,5 +1,5 @@
 
-INCLUDES = $(MICO_INCLUDES) $(KOFFICE_INCLUDES) $(all_includes) 
+INCLUDES = $(MICO_INCLUDES) $(KOFFICE_INCLUDES) $(all_includes)
 LDFLAGS	= $(all_libraries) $(MICO_LDFLAGS) $(KDE_RPATH)
 LDADD = autoformEdit/libaf.a ../lib/kofficeui/libkofficeui.la $(LIB_KIMGIO)
 
@@ -62,10 +62,13 @@ idl_DATA =	kpresenter.idl
 kdelnk_DATA = kpresenter.desktop
 kdelnkdir = $(kde_appsdir)/KOffice
 
+kdemime_DATA = x-kpresenter.desktop
+kdemimedir = $(kde_mimedir)/application
+
 SUBDIRS = autoformEdit autoforms . pics toolbar templates dtd slideshow
 
 messages:
 	$(XGETTEXT) -C -ki18n -ktranslate -x $(includedir)/kde.pot */*.cc *.cc *.h && mv messages.po ../po/kpresenter.pot
 
-IDL_FLAGS = --query-server-for-narrow --relative-paths -I$(top_srcdir)/lib/kofficecore -I$(top_srcdir)/lib/store -I$(idldir) 
+IDL_FLAGS = --query-server-for-narrow --relative-paths -I$(top_srcdir)/lib/kofficecore -I$(top_srcdir)/lib/store -I$(idldir)
 

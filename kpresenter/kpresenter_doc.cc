@@ -1458,20 +1458,22 @@ bool KPresenterDoc::insertNewTemplate( int /*diffx*/, int /*diffy*/, bool clean 
 {
     QString _template;
     KoTemplateChooseDia::ReturnType ret;
-    
+
     QString filter = KoFilterManager::self()->fileSelectorList( KoFilterManager::Import,
                                                                 "application/x-kpresenter",
-								"*.kpt", "KPresenter",
-								false );
-    
-    ret = KoTemplateChooseDia::chooseTemplate( "kpresenter_template", _template, true, false, filter, "application/x-kpresenter" );
+								"*.kpr", "KPresenter",
+								FALSE );
+
+    ret = KoTemplateChooseDia::chooseTemplate( "kpresenter_template", _template, true, false, filter, 
+					       "application/x-kpresenter" );
 
     if ( ret == KoTemplateChooseDia::Template )
     {
 	QFileInfo fileInfo( _template );
 	QString fileName( fileInfo.dirPath( true ) + "/" + fileInfo.baseName() + ".kpt" );
 	_clean = clean;
-	objStartY = getPageSize( _backgroundList.count() - 1, 0, 0 ).y() + getPageSize( _backgroundList.count() - 1, 0, 0 ).height();
+	objStartY = getPageSize( _backgroundList.count() - 1, 0, 0 ).y() + getPageSize( _backgroundList.count() - 1,
+											0, 0 ).height();
 	load_template( fileName.data() );
 	objStartY = 0;
 	_clean = true;

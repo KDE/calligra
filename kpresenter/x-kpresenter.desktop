@@ -1,0 +1,8 @@
+# KDE Config File
+[KDE Desktop Entry]
+MimeType=application/x-kpresenter
+Comment=KPresenter
+DefaultApp=KPresenter
+Icon=txt.xpm
+Type=MimeType
+Patterns=*.kpr;

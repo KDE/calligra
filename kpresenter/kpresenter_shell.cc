@@ -33,6 +33,7 @@
 #include <klocale.h>
 #include <kfiledialog.h>
 #include <kimgio.h>
+#include <koFilterManager.h>
 
 #include <stdlib.h>
 
@@ -266,7 +267,7 @@ bool KPresenterShell::saveDocument( const char *_url, const char *_format )
 	cmd = cmd.arg( _url ).arg( _url );
 	system( cmd.latin1() );
     }
-    
+
     return m_pDoc->saveToURL( _url, _format );
 }
 
@@ -395,10 +396,19 @@ void KPresenterShell::slotFileOpen()
         m_pView->getPage()->setToolEditMode( TEM_MOUSE );
     if ( m_pDoc )
         m_pDoc->enableEmbeddedParts( false );
-    QString file = KFileDialog::getOpenFileName( getenv( "HOME" ) );
 
+    QString filter = KoFilterManager::self()->fileSelectorList( KoFilterManager::Import,
+                                                                "application/x-kpresenter",
+                                                                "*.kpr", "KPresenter",
+                                                                TRUE );
+
+    QString file = KFileDialog::getOpenFileName( getenv( "HOME" ), filter );
     if ( file.isNull() )
-        return;
+	return;
+
+    file = KoFilterManager::self()->import( file, "application/x-kpresenter" );
+    if ( file.isNull() )
+	return;
 
     if ( !openDocument( file, "" ) )
     {
