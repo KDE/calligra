@@ -220,6 +220,10 @@ class KEXICORE_EXPORT KexiDialogBase : public KMdiChildView, public KexiActionPr
 		 Activated by KexiViewBase::setDirty(). */
 		void dirtyChanged(KexiDialogBase*);
 
+	protected slots:
+		/*!  Sets 'dirty' flag on every dialog's view. */
+		void setDirty(bool dirty);
+
 	protected:
 
 		void registerDialog();
@@ -275,6 +279,7 @@ class KEXICORE_EXPORT KexiDialogBase : public KMdiChildView, public KexiActionPr
 		int m_creatingViewsMode; 
 
 		bool m_destroying : 1; //!< true after entering to the dctor
+		bool m_disableDirtyChanged; //!< used in setDirty(), affects dirtyChanged()
 
 		friend class KexiMainWindow;
 //		friend class KexiMainWindowImpl;

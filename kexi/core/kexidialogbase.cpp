@@ -47,6 +47,7 @@ KexiDialogBase::KexiDialogBase(KexiMainWindow *parent, const QString &caption)
  , m_origCaption(caption)
  , m_schemaData(0)
  , m_destroying(false)
+ , m_disableDirtyChanged(false)
 // , m_neverSaved(false)
 {
 	m_supportedViewModes = 0; //will be set by KexiPart
@@ -212,6 +213,21 @@ bool KexiDialogBase::dirty() const
 	return v ? v->dirty() : false;*/
 }
 
+void KexiDialogBase::setDirty(bool dirty)
+{
+	m_disableDirtyChanged = true;
+	int m = m_openedViewModes, mode = 1;
+	while (m>0) {
+		if (m & 1) {
+			static_cast<KexiViewBase*>(m_stack->widget(mode))->setDirty(dirty);
+		}
+		m >>= 1;
+		mode <<= 1;
+	}
+	m_disableDirtyChanged = false;
+	dirtyChanged(); //update
+}
+
 QString KexiDialogBase::itemIcon()
 {
 	if (!m_part || !m_part->info()) {
@@ -354,6 +370,8 @@ bool KexiDialogBase::eventFilter(QObject *obj, QEvent *e)
 
 void KexiDialogBase::dirtyChanged()
 {
+	if (m_disableDirtyChanged)
+		return;
 /*	if (!dirty()) {
 		if (caption()!=m_origCaption)
 			KMdiChildView::setCaption(m_origCaption);
@@ -422,7 +440,9 @@ bool KexiDialogBase::storeNewData(bool &cancel)
 		setStatus(i18n("Saving object's definition failed."),""); 
 		return false;
 	}
-	v->setDirty(false);
+	/* Sets 'dirty' flag on every dialog's view. */
+	setDirty(false);
+//	v->setDirty(false);
 	//new schema data has now ID updated to a unique value 
 	//-assign that to item's identifier
 	m_item->setIdentifier( m_schemaData->id() );
@@ -445,7 +465,9 @@ bool KexiDialogBase::storeData(bool &cancel)
 		setStatus(i18n("Saving object's data failed."),""); 
 		return false;
 	}
-	v->setDirty(false);
+	/* Sets 'dirty' flag on every dialog's view. */
+	setDirty(false);
+//	v->setDirty(false);
 	return true;
 }
 

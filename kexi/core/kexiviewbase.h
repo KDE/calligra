@@ -101,7 +101,8 @@ class KEXICORE_EXPORT KexiViewBase : public QWidget, public KexiActionProxy
 
 		/*! \sets dirty flag on or off. It the flag changes, 
 		 dirty(bool) signal is emitted by parent dialog (KexiDialog),
-		 to inform the world about that. 
+		 to inform the world about that. If this view has a parent view, setDirty() 
+		 is called also on parent view.
 		 Always use this function to update 'dirty' flag information. */
 		void setDirty(bool set);
 

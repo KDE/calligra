@@ -344,6 +344,9 @@ Forms
 - form's initial sizeHint is now hardcoded to (400,300), will be fixed later
 Query Designer
 - saving existing queries work in SQL View
+Core
+- after successful storeData() or storeNewData(): 'dirty' flag is cleared 
+  for _every_ dialog's view
 
 2004-07-14
 Kexi
