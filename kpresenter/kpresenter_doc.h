@@ -239,6 +239,7 @@ public:
 
     void updateAllStyleLists();
     void applyStyleChange( KoStyle * changedStyle, int paragLayoutChanged, int formatChanged );
+    void updateStyleListOrder( const QStringList &list );
 
     void addCommand( KCommand * cmd );
 

@@ -110,3 +110,5 @@ Bugfixes:
 - Fix draw gradient + rectangle object
 - Fix presentation mode : Don't draw grid and helpline in this mode
 - Fix update ruler tabs when we switch between two text object
+- Fix move up/down style
+

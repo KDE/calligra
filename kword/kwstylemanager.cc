@@ -55,3 +55,10 @@ void KWStyleManager::updateAllStyleLists()
 {
     m_doc->updateAllStyleLists();
 }
+
+void KWStyleManager::updateStyleListOrder( const QStringList & list)
+{
+    m_doc->updateStyleListOrder( list );
+}
+
+

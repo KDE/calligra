@@ -406,6 +406,8 @@ public:
     // If both are -1, it means the style has been deleted.
     void applyStyleChange( KWStyle * changedStyle, int paragLayoutChanged, int formatChanged );
     void updateAllStyleLists();
+    void updateStyleListOrder( const QStringList &list );
+
     void updateAllFrameStyleLists();
     void updateAllTableStyleLists();
 

@@ -3332,5 +3332,10 @@ void KPresenterDoc::removeView( KoView *_view )
         static_cast<KPresenterView*>(it.current())->deSelectAllObject();
 }
 
+void KPresenterDoc::updateStyleListOrder( const QStringList &list )
+{
+    styleCollection()->updateStyleListOrder( list );
+}
+
 
 #include <kpresenter_doc.moc>

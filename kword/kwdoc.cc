@@ -2701,6 +2701,11 @@ void KWDocument::updateAllStyleLists()
         viewPtr->updateStyleList();
 }
 
+void KWDocument::updateStyleListOrder( const QStringList &list )
+{
+    styleCollection()->updateStyleListOrder( list );
+}
+
 void KWDocument::applyStyleChange( KWStyle * changedStyle, int paragLayoutChanged, int formatChanged )
 {
     QPtrList<KWTextFrameSet> textFramesets;
@@ -2842,7 +2847,7 @@ void KWDocument::removePage( int num )
 void KWDocument::afterRemovePages()
 {
     recalcFrames();
-    updateAllFrames(); // Do this before recalcVariables (which repaints). The removed frames must be removed from the frame caches. 
+    updateAllFrames(); // Do this before recalcVariables (which repaints). The removed frames must be removed from the frame caches.
     //### IMHO recalcFrames should take care of updateAllFrames (it already does it partially).
     recalcVariables( VT_PGNUM );
     emit newContentsSize();

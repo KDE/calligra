@@ -55,3 +55,8 @@ void KPrStyleManager::updateAllStyleLists()
 {
     m_doc->updateAllStyleLists();
 }
+
+void KPrStyleManager::updateStyleListOrder( const QStringList & list)
+{
+    m_doc->updateStyleListOrder( list );
+}

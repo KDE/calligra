@@ -39,6 +39,7 @@ public:
     virtual void applyStyleChange( KoStyle * changedStyle, int paragLayoutChanged, int formatChanged );
     virtual void removeStyleTemplate( KoStyle *style );
     virtual void updateAllStyleLists();
+    virtual void updateStyleListOrder( const QStringList & list);
 protected:
     KWDocument *m_doc;
 };
