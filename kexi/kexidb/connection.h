@@ -337,7 +337,7 @@ class KEXI_DB_EXPORT Connection : public QObject, public KexiDB::Object
 		 This is convenient method when we need only first recors from query result,
 		 or when we know that query result has only one record.
 		 \return true if query was successfully executed and first record has been found. */
-		bool querySingleRecord(QString sql, KexiDB::RecordData &data);
+		bool querySingleRecord(const QString& sql, KexiDB::RecordData &data);
 
 		//PROTOTYPE:
 		#define A , const QVariant&
@@ -431,6 +431,20 @@ class KEXI_DB_EXPORT Connection : public QObject, public KexiDB::Object
 		 in such meaning that these database are not persistent
 		*/
 		bool useTemporaryDatabaseIfNeeded(QString &tmpdbName);
+
+		/*! \return autoincrement field's \a aiFieldName value 
+		 of last inserted record. This refers \a tableName table.
+		 
+		 Simply, method internally fetches last inserted record and returns selected 
+		 field's value. Requirements: field must be of integer type, there must be a
+		 record inserted in current database session (whatever this means).
+		 On error -1 is returned.
+		*/
+		int lastInsertedAutoIncValue(const QString& aiFieldName, const QString& tableName);
+		
+		/*! \overload int lastInsertedAutoIncValue(const QString&, const QString&)
+		*/
+		int lastInsertedAutoIncValue(const QString& aiFieldName, const KexiDB::TableSchema& table);
 		
 	protected:
 		/*! Used by Driver */

@@ -45,7 +45,7 @@ class DriverBehaviour
 	//! May be also used as full definition if SPECIAL_AUTO_INCREMENT_DEF is true.
 	QString AUTO_INCREMENT_FIELD_OPTION; 
 	
-	/*! True if autoincrement field need has special definition 
+	/*! True if autoincrement field has special definition 
 	 e.g. like "INTEGER PRIMARY KEY" for SQLite.
 	 Special definition string should be stored in AUTO_INCREMENT_FIELD_OPTION.
 	 False by default. */

@@ -858,6 +858,22 @@ Field* Connection::findSystemFieldName(KexiDB::FieldList* fieldlist)
 	return 0;
 }
 
+int Connection::lastInsertedAutoIncValue(const QString& aiFieldName, const QString& tableName)
+{
+	int row_id = drv_lastInsertRowID();
+	KexiDB::RecordData rdata;
+	if (row_id<=0 || !querySingleRecord(
+	 QString("select ")+aiFieldName+" from "+tableName+" where "+m_driver->beh->ROW_ID_FIELD_NAME
+	 +"="+QString::number(row_id), rdata))
+	 	return -1;
+	return rdata[0].toInt();
+}
+
+int Connection::lastInsertedAutoIncValue(const QString& aiFieldName, const KexiDB::TableSchema& table)
+{
+	return lastInsertedAutoIncValue(aiFieldName,table.name());
+}
+
 bool Connection::createTable( KexiDB::TableSchema* tableSchema )
 {
 	if (!tableSchema || !checkIsDatabaseUsed())
@@ -907,8 +923,8 @@ bool Connection::createTable( KexiDB::TableSchema* tableSchema )
 //	if (!insertRecord(*ts, QVariant()/*autoinc*/, QVariant(tableSchema->type()), QVariant(tableSchema->name()),
 //		QVariant(tableSchema->caption()), QVariant(tableSchema->helpText())))
 //		createTable_ERR;
-	int obj_id = drv_lastInsertRowID();
-	if (obj_id<=0) //sanity check
+	int obj_id = lastInsertedAutoIncValue("o_id",*ts);
+	if (obj_id<=0)
 		createTable_ERR;
 	KexiDBDbg << "######## obj_id == " << obj_id << endl;
 	
@@ -1260,7 +1276,7 @@ bool Connection::setupObjectSchemaData( const KexiDB::RecordData &data, SchemaDa
 	return true;
 }
 
-bool Connection::querySingleRecord(QString sql, KexiDB::RecordData &data)
+bool Connection::querySingleRecord(const QString& sql, KexiDB::RecordData &data)
 {
 	KexiDB::Cursor *cursor;
 	if (!(cursor = executeQuery( sql )))
