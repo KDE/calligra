@@ -30,6 +30,7 @@
 #include <kiconloader.h>
 #include <koIconChooser.h>
 #include <kfiledialog.h>
+#include <kmessagebox.h>
 
 #include <karbon_factory.h>
 #include <karbon_resourceserver.h>
@@ -41,7 +42,7 @@
 #include <commands/vfillcmd.h>
 
 VPatternWidget::VPatternWidget( QPtrList<KoIconItem>* patterns, VTool*, QWidget* parent )
-	: KDialogBase( parent, "", true, i18n( "Choose Pattern" ), Ok | Cancel )
+	: KDialogBase( parent, "", true, i18n( "Choose Pattern" ), Ok | Cancel ), m_pattern( 0 )
 {
 	KIconLoader il;
 
@@ -175,58 +176,66 @@ VPatternTool::mouseButtonRelease()
 {
 	if( view()->part()->document().selection()->objects().count() == 0 ) 
 		return;
-	
-	VPattern pattern = *m_optionsWidget->selectedPattern();
-	pattern.setOrigin( first() );
-	pattern.setVector( KoPoint( first().x() + 10, first().y() ) );
-
-	/*if( target == fill )
-	{*/
-		VFill fill;
-		fill.pattern() = pattern;
-		fill.setType( VFill::patt );
-		view()->part()->addCommand(
-			new VFillCmd( &view()->part()->document(), fill, "14_pattern" ), true );
-/*	}
+	else if( !m_optionsWidget->selectedPattern() )
+		KMessageBox::error( 0L, i18n( "Please select a pattern" ), "" );
 	else
 	{
-		VStroke stroke;
-		stroke.pattern() = pattern;
-		stroke.setType( VStroke::patt );
-		view()->part()->addCommand(
-			new VStrokeCmd( &view()->part()->document(), &stroke, "14_pattern" ), true );
-	}*/
+		VPattern pattern = *m_optionsWidget->selectedPattern();
+		pattern.setOrigin( first() );
+		pattern.setVector( KoPoint( first().x() + 10, first().y() ) );
+
+		/*if( target == fill )
+		{*/
+			VFill fill;
+			fill.pattern() = pattern;
+			fill.setType( VFill::patt );
+			view()->part()->addCommand(
+				new VFillCmd( &view()->part()->document(), fill, "14_pattern" ), true );
+/*		}
+		else
+		{
+			VStroke stroke;
+			stroke.pattern() = pattern;
+			stroke.setType( VStroke::patt );
+			view()->part()->addCommand(
+				new VStrokeCmd( &view()->part()->document(), &stroke, "14_pattern" ), true );
+		}*/
+	}
 } // VPatternTool::mouseButtonRelease
 
 void
 VPatternTool::mouseDragRelease()
 {
 	if( view()->part()->document().selection()->objects().count() == 0 )
+		draw();
+	else if( !m_optionsWidget->selectedPattern() )
 	{
 		draw();
-		return;
+		KMessageBox::error( 0L, i18n( "Please select a pattern" ), "" );
 	}
-	
-	VPattern pattern = *m_optionsWidget->selectedPattern();
-	pattern.setOrigin( first() );
-	pattern.setVector( KoPoint( last().x(), first().y() + first().y() - last().y() ) );
-
-/*	if( target == fill )
-	{*/
-		VFill fill;
-		fill.pattern() = pattern;
-		fill.setType( VFill::patt );
-		view()->part()->addCommand(
-			new VFillCmd( &view()->part()->document(), fill, "14_pattern" ), true );
-/*	}
 	else
 	{
-		VStroke stroke;
-		stroke.pattern() = pattern;
-		stroke.setType( VStroke::patt );
-		view()->part()->addCommand(
-			new VStrokeCmd( &view()->part()->document(), &stroke, "14_pattern" ), true );
-	}*/
+		VPattern pattern = *m_optionsWidget->selectedPattern();
+		pattern.setOrigin( first() );
+		pattern.setVector( KoPoint( last().x(), first().y() + first().y() - last().y() ) );
+
+/*		if( target == fill )
+		{*/
+			VFill fill;
+			fill.pattern() = pattern;
+			fill.setType( VFill::patt );
+			view()->part()->addCommand(
+				new VFillCmd( &view()->part()->document(), fill, "14_pattern" ), true );
+/*		}
+		else
+		{
+			VStroke stroke;
+			stroke.pattern() = pattern;
+			stroke.setType( VStroke::patt );
+			view()->part()->addCommand(
+				new VStrokeCmd( &view()->part()->document(), &stroke, "14_pattern" ), true );
+		}*/
+	}
 } // VPatternTool::mouseDragRelease
 
 void
