@@ -130,9 +130,12 @@ void KWAnchor::draw( QPainter* p, int x, int y, int cx, int cy, int cw, int ch, 
         frameIt.toLast(); // from the end to avoid a 2*N in the worst case
         while ( !frameIt.atFirst() && frameIt.current() != frame ) // look for 'frame'
             --frameIt;
+        if ( frameIt.atFirst() && frameIt.current() != frame )
+            kdWarning() << "KWAnchor::draw: frame not found " << frame << endl;
         while ( !frameIt.atFirst() && frameIt.current()->isCopy() ) // go back to last non-copy
             --frameIt;
         frame = frameIt.current();
+        //kdDebug() << "KWAnchor::draw frame=" << frame << endl;
     }
     QPoint frameTopLeft = fs->kWordDocument()->zoomPoint( frame->topLeft() );
 
