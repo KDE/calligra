@@ -381,6 +381,15 @@ void KWView::setupActions()
     actionLowerFrame->setToolTip( i18n( "Lower the currently selected frame so that it disappears under any frame that overlaps it" ) );
     actionLowerFrame->setWhatsThis( i18n( "Lower the currently selected frame so that it disappears under any frame that overlaps it. If multiple frames are selected they are all lowered in turn." ) );
 
+    actionBringForward= new KAction( i18n( "Bring Forward" ), "bring_forward",
+                                          0, this, SLOT( bringForward() ),
+                                          actionCollection(), "bring_forward_frame" );
+
+    actionSendBackward= new KAction( i18n( "Send Backward" ), "send_backward",
+                                          0, this, SLOT( sendBackward() ),
+                                          actionCollection(), "send_backward_frame" );
+
+
     // -------------- View menu
     actionViewTextMode = new KToggleAction( i18n( "Text mode" ), 0,
                                             this, SLOT( viewTextMode() ),
@@ -1876,6 +1885,121 @@ void KWView::lowerFrame()
         m_doc->layout();
         m_doc->repaintAllViews();
     }
+}
+
+void KWView::bringForward()
+{
+    KMacroCommand* macroCmd = 0L;
+    // For each selected frame...
+    QPtrList<KWFrame> frames = m_doc->getSelectedFrames();
+    QPtrListIterator<KWFrame> fIt( frames );
+    for ( ; fIt.current() ; ++fIt ) {
+        KWFrame* frame = fIt.current();
+
+        int pageNum = frame->pageNum();
+        // Look for frame in same page that is most on top
+        KWFrame* frameOfFirstFrameSet = frame;
+        int newZOrder = frameOfFirstFrameSet->zOrder() - 1 ;
+        KWFrame* frameChangeLevel = 0L;
+        QPtrList<KWFrame> framesInPage = m_doc->framesInPage( pageNum );
+        QPtrListIterator<KWFrame> frameIt( framesInPage );
+        for ( ; frameIt.current(); ++frameIt ) {
+            if ( frameIt.current() != frameOfFirstFrameSet && !(m_doc->processingType() == KWDocument::WP && m_doc->frameSetNum( frameIt.current()->frameSet() ) == 0) && frameIt.current()->zOrder()==newZOrder )
+            {
+                frameChangeLevel = frameIt.current();
+                break;
+            }
+
+        }
+        if ( frameChangeLevel)
+        {
+
+            KWFrame* frameCopy = frameOfFirstFrameSet->getCopy();
+            frameOfFirstFrameSet->setZOrder( newZOrder );
+            KWFramePropertiesCommand* cmd = new KWFramePropertiesCommand( QString::null, frameCopy, frameOfFirstFrameSet);
+            if(!macroCmd)
+                macroCmd = new KMacroCommand( i18n("Bring Forward Frame") );
+            macroCmd->addCommand(cmd);
+
+            frameCopy = frameChangeLevel->getCopy();
+            frameChangeLevel->setZOrder( newZOrder + 1 );
+
+            cmd = new KWFramePropertiesCommand( QString::null, frameCopy, frameChangeLevel );
+            if(!macroCmd)
+                macroCmd = new KMacroCommand( i18n("Bring Forward Frame") );
+            macroCmd->addCommand(cmd);
+        }
+        // Can't lower under the main frame in a WP document.
+        // If we just did that, fix it by lowering the zorder of the main frame.
+        // Hopefully no need for undo/redo for that one, the main frame remains under.
+    }
+    if ( macroCmd )
+    {
+        m_doc->addCommand(macroCmd);
+        // Calling updateFrames() on the selected frames' framesets isn't enough,
+        // we also need other framesets to notice the new frames on top.
+        m_doc->updateAllFrames();
+        m_doc->layout();
+        m_doc->repaintAllViews();
+    }
+}
+
+void KWView::sendBackward()
+{
+    KMacroCommand* macroCmd = 0L;
+    // For each selected frame...
+    QPtrList<KWFrame> frames = m_doc->getSelectedFrames();
+    QPtrListIterator<KWFrame> fIt( frames );
+    for ( ; fIt.current() ; ++fIt ) {
+        KWFrame* frame = fIt.current();
+
+        int pageNum = frame->pageNum();
+        // Look for frame in same page that is most on top
+        KWFrame* frameOfFirstFrameSet = frame;
+        int newZOrder = frameOfFirstFrameSet->zOrder() + 1 ;
+        KWFrame* frameChangeLevel = 0L;
+        QPtrList<KWFrame> framesInPage = m_doc->framesInPage( pageNum );
+        QPtrListIterator<KWFrame> frameIt( framesInPage );
+        for ( ; frameIt.current(); ++frameIt ) {
+            if ( frameIt.current() != frameOfFirstFrameSet && !(m_doc->processingType() == KWDocument::WP && m_doc->frameSetNum( frameIt.current()->frameSet() ) == 0) && frameIt.current()->zOrder()==newZOrder )
+            {
+                frameChangeLevel = frameIt.current();
+                break;
+            }
+
+        }
+        if ( frameChangeLevel )
+        {
+            KWFrame* frameCopy = frameOfFirstFrameSet->getCopy();
+            frameOfFirstFrameSet->setZOrder( newZOrder );
+
+            KWFramePropertiesCommand* cmd = new KWFramePropertiesCommand( QString::null, frameCopy, frameOfFirstFrameSet);
+            if(!macroCmd)
+                macroCmd = new KMacroCommand( i18n("Send Backward Frame") );
+            macroCmd->addCommand(cmd);
+
+            frameCopy = frameChangeLevel->getCopy();
+            frameChangeLevel->setZOrder( newZOrder - 1 );
+
+            cmd = new KWFramePropertiesCommand( QString::null, frameCopy, frameChangeLevel );
+            if(!macroCmd)
+                macroCmd = new KMacroCommand( i18n("Send Backward Frame") );
+            macroCmd->addCommand(cmd);
+        }
+        // Can't lower under the main frame in a WP document.
+        // If we just did that, fix it by lowering the zorder of the main frame.
+        // Hopefully no need for undo/redo for that one, the main frame remains under.
+    }
+    if ( macroCmd )
+    {
+        m_doc->addCommand(macroCmd);
+        // Calling updateFrames() on the selected frames' framesets isn't enough,
+        // we also need other framesets to notice the new frames on top.
+        m_doc->updateAllFrames();
+        m_doc->layout();
+        m_doc->repaintAllViews();
+    }
+
 }
 
 void KWView::editDeleteFrame()
@@ -4428,6 +4552,8 @@ void KWView::frameSelectedChanged()
         actionEditCut->setEnabled( okForDelete );
         actionLowerFrame->setEnabled( okForLowerRaise );
         actionRaiseFrame->setEnabled( okForLowerRaise );
+        actionSendBackward->setEnabled( okForLowerRaise );
+        actionBringForward->setEnabled( okForLowerRaise );
     } else
     {   // readonly document, or no frame selected -> disable
         actionEditDelFrame->setEnabled( false );
@@ -4435,6 +4561,8 @@ void KWView::frameSelectedChanged()
         actionEditCut->setEnabled( false );
         actionLowerFrame->setEnabled( false );
         actionRaiseFrame->setEnabled( false );
+        actionSendBackward->setEnabled( false );
+        actionBringForward->setEnabled( false );
     }
     bool frameDifferentOfPart=false;
     if(nbFrame >= 1)

@@ -311,6 +311,8 @@ public slots:
     void inlineFrame();
     void raiseFrame();
     void lowerFrame();
+    void bringForward();
+    void sendBackward();
     void openLink();
     void changeLink();
     void editComment();
@@ -383,6 +385,9 @@ private:
     KAction *actionEditDelFrame;
     KAction *actionRaiseFrame;
     KAction *actionLowerFrame;
+    KAction *actionSendBackward;
+    KAction *actionBringForward;
+
     KAction *actionEditCustomVars;
     KAction *actionEditFind;
     KAction *actionEditReplace;
