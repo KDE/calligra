@@ -23,12 +23,15 @@
 #include <qvbox.h>
 #include <kdebug.h>
 #include <qlabel.h>
+#include <qcombobox.h>
 
 #include <klineedit.h>
 #include <kurlrequester.h>
 #include <kseparator.h>
 #include <kiconloader.h>
 #include "koInsertLink.h"
+#include <kdesktopfile.h>
+#include <krecentdocument.h>
 
 
 KoInsertLinkDia::KoInsertLinkDia( QWidget */*parent*/, const char */*name*/ )
@@ -305,6 +308,31 @@ fileLinkPage::fileLinkPage( QWidget *parent , char *name  )
 
   tmpQLabel = new QLabel( this);
   lay2->addWidget(tmpQLabel);
+  tmpQLabel->setText(i18n("Recent File:"));
+
+
+  QComboBox * recentFile = new QComboBox( this );
+  lay2->addWidget(recentFile);
+
+  QStringList fileList = KRecentDocument::recentDocuments();
+  QStringList lst;
+  for (QStringList::ConstIterator it = fileList.begin();it != fileList.end(); ++it)
+  {
+      KDesktopFile f(*it, true /* read only */);
+      if ( !f.readURL().isEmpty())
+          lst.append( f.readURL());
+  }
+  if ( lst.isEmpty())
+  {
+      recentFile->insertItem( i18n("No Entries") );
+      recentFile->setEnabled( false );
+  }
+  else
+      recentFile->insertStringList( lst);
+  connect( recentFile , SIGNAL(highlighted ( const QString &)), this,  SLOT( slotSelectRecentFile( const QString & )));
+
+  tmpQLabel = new QLabel( this);
+  lay2->addWidget(tmpQLabel);
 
   tmpQLabel->setText(i18n("File location:"));
   m_hrefName = new KURLRequester( this );
@@ -317,6 +345,11 @@ fileLinkPage::fileLinkPage( QWidget *parent , char *name  )
   KSeparator* bar1 = new KSeparator( KSeparator::HLine, this);
   bar1->setFixedHeight( 10 );
   lay2->addWidget( bar1 );
+}
+
+void fileLinkPage::slotSelectRecentFile( const QString &_file )
+{
+    m_hrefName->lineEdit()->setText(_file );
 }
 
 QString fileLinkPage::createFileLink()

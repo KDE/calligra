@@ -75,6 +75,7 @@ public:
 
 private slots:
   void textChanged ( const QString & );
+    void slotSelectRecentFile( const QString & );
 private:
   QString createFileLink();
   QLineEdit* m_linkName;
