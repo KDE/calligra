@@ -2320,11 +2320,14 @@ KWTextFrameSetEdit::KWTextFrameSetEdit( KWTextFrameSet * fs, KWCanvas * canvas )
     updateUI( true, true );
 
     m_actionList.setAutoDelete( true );
+    if( canvas->gui() && canvas->gui()->getHorzRuler())
+        canvas->gui()->getHorzRuler()->changeFlags(KoRuler::F_INDENTS | KoRuler::F_TABS);
 }
 
 KWTextFrameSetEdit::~KWTextFrameSetEdit()
 {
     //kdDebug(32001) << "KWTextFrameSetEdit::~KWTextFrameSetEdit" << endl;
+    m_canvas->gui()->getHorzRuler()->changeFlags(0);
 }
 
 void KWTextFrameSetEdit::terminate()

@@ -3376,10 +3376,7 @@ void KWView::slotUpdateRuler()
     KWFrame * frame = 0L;
     // Use the currently edited (fallback: the first selected) frame
     if ( edit && edit->currentFrame() )
-    {
         frame = edit->currentFrame();
-        m_gui->getHorzRuler()->changeFlags(KoRuler::F_INDENTS | KoRuler::F_TABS);
-    }
     else
         frame = m_doc->getFirstSelectedFrame();
     if ( frame )
@@ -3447,7 +3444,6 @@ void KWView::frameSelectedChanged()
 
     actionEditCopy->setEnabled( nbFrame >= 1 );
 
-    m_gui->getHorzRuler()->changeFlags(0);
     KWTableFrameSet *table = m_gui->canvasWidget()->getCurrentTable();
     actionTableJoinCells->setEnabled( table && (nbFrame>1));
 
