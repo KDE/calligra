@@ -143,6 +143,9 @@ KWView::KWView( QWidget *_parent, const char *_name, KWDocument* _doc )
     connect( gui->canvasWidget(), SIGNAL(selectionChanged(bool)),
              actionEditCopy, SLOT(setEnabled(bool)) );
 
+    connect( gui->canvasWidget(), SIGNAL(frameSelectedChanged()),
+             this, SLOT(frameSelectedChanged()));
+
     gui->canvasWidget()->updateCurrentFormat();
     setFocusProxy( gui->canvasWidget() );
 }
@@ -1002,17 +1005,11 @@ void KWView::setTool( MouseMode _mouseMode )
         actionTableDelRow->setEnabled( table );
         actionTableDelCol->setEnabled( table );
         actionTableDelete->setEnabled( table );
-
-        actionTableJoinCells->setEnabled( TRUE );
-        actionTableSplitCells->setEnabled( TRUE );
-
-        actionTableUngroup->setEnabled( TRUE );
+        actionTableUngroup->setEnabled( table );
         actionBackgroundColor->setEnabled(FALSE);
     } break;
     case MM_EDIT_FRAME: {
-        actionTableJoinCells->setEnabled( TRUE );
-        actionTableSplitCells->setEnabled( TRUE );
-        actionTableUngroup->setEnabled( TRUE );
+        frameSelectedChanged();
         actionBackgroundColor->setEnabled(TRUE);
     } break;
     default: break;
@@ -2631,7 +2628,15 @@ void KWView::updateButtons()
     actionTableDelRow->setEnabled( table );
     actionTableDelCol->setEnabled( table );
     actionTableDelete->setEnabled( table );
+    actionTableUngroup->setEnabled( table );
 
+}
+
+void KWView::frameSelectedChanged()
+{
+    KWTableFrameSet *table = gui->canvasWidget()->getCurrentTable();
+    actionTableJoinCells->setEnabled( table );
+    actionTableSplitCells->setEnabled( table );
 }
 
 /******************************************************************/

@@ -242,6 +242,7 @@ public slots:
     void slotSpecialChar(QChar , const QString &);
     void updateButtons();
     void setTool( MouseMode _mouseMode );
+    void frameSelectedChanged();
 protected:
     void addVariableActions( int type, const QStringList & texts,
                              KActionMenu * parentMenu, const QString & menuText );

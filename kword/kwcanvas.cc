@@ -276,6 +276,7 @@ void KWCanvas::mpEditFrame( QMouseEvent *e, int mx, int my ) // mouse press in e
                 else curTable = 0L;
             }
         }
+        emit frameSelectedChanged();
     }
     // At least one frame selected ?
     if( doc->getFirstSelectedFrame() )

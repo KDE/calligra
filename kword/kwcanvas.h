@@ -185,6 +185,9 @@ signals:
     void selectionChanged( bool hasSelection );
     //Emitted when Mouse Mode changed
     void currentMouseModeChanged(MouseMode newMouseMode);
+    //emit when you selected a other frame (disable/enable table button)
+    void frameSelectedChanged();
+
 
 private slots:
     void slotContentsMoving( int, int );
