@@ -7,8 +7,6 @@ INCLUDES = $(KOFFICE_INCLUDES) $(KOPAINTER_INCLUDES) \
 	$(LIBART_CFLAGS) \
 	$(all_includes)
 
-libvpainter_la_LIBADD = $(LIBART_LIBS) ./xrgbrender/libkarbonxrgbrender.la
-
 noinst_LTLIBRARIES = libvpainter.la
 
 noinst_HEADERS = \

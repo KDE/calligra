@@ -4,8 +4,7 @@ kde_module_LTLIBRARIES = karbon_shadoweffectplugin.la
 
 karbon_shadoweffectplugin_la_SOURCES = shadoweffectplugin.cc vshadowdecorator.cc 
 karbon_shadoweffectplugin_la_LIBADD = $(LIB_KPARTS) $(LIB_KOFFICEUI) \
-									../../core/libkarboncore.la \
-									../../libkarbonbase.la
+					../../libkarbonpart.la
 
 karbon_shadoweffectplugin_la_LDFLAGS = $(all_libraries) -module $(KDE_PLUGIN)
 

@@ -24,6 +24,3 @@ libkarbonvisitors_la_SOURCES = \
 
 libkarbonvisitors_la_METASOURCES = \
 	AUTO
-
-libkarbonvisitors_la_LDFLAGS = $(KDE_RPATH) $(LIBFREETYPE_RPATH)
-libkarbonvisitors_la_LIBADD = $(LIBFREETYPE_LIBS)

@@ -34,16 +34,22 @@ libkarbonbase_la_SOURCES = \
 libkarbonbase_la_LDFLAGS = $(KDE_PLUGIN) 
 libkarbonbase_la_LIBADD = $(LIB_KOFFICEUI)
 
-libkarbonpart_la_LDFLAGS = $(KDE_PLUGIN) 
+libkarbonpart_la_LDFLAGS = $(KDE_PLUGIN) $(LIBFREETYPE_RPATH)
 libkarbonpart_la_LIBADD = $(LIB_KOFFICEUI) $(LIB_KOPAINTER) \
 	dockers/libkarbondockers.la \
 	widgets/libkarbonwidgets.la \
 	render/libvpainter.la \
+	render/xrgbrender/libkarbonxrgbrender.la \
 	tools/libkarbontools.la \
 	shapes/libkarbonshapes.la \
 	core/libkarboncore.la \
+	commands/libkarboncommands.la \
+	visitors/libkarbonvisitors.la \
 	dialogs/libkarbondialogs.la \
-	libkarbonbase.la
+	libkarbonbase.la \
+	$(LIBART_LIBS) \
+	$(FONTCONFIG_LIBS) \
+	$(LIBFREETYPE_LIBS)
 
 libkarbonpart_la_METASOURCES = AUTO
 

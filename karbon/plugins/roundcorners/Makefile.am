@@ -4,8 +4,7 @@ kde_module_LTLIBRARIES = karbon_roundcornersplugin.la
 
 karbon_roundcornersplugin_la_SOURCES = roundcornersplugin.cc
 karbon_roundcornersplugin_la_LIBADD = $(LIB_KPARTS) \
-									../../core/libkarboncore.la \
-									../../libkarbonbase.la
+					../../libkarbonpart.la
 
 karbon_roundcornersplugin_la_LDFLAGS = $(all_libraries) -module $(KDE_PLUGIN)
 

@@ -4,8 +4,7 @@ kde_module_LTLIBRARIES = karbon_insertknotsplugin.la
 
 karbon_insertknotsplugin_la_SOURCES = insertknotsplugin.cc
 karbon_insertknotsplugin_la_LIBADD = $(LIB_KPARTS) \
-									../../core/libkarboncore.la \
-									../../libkarbonbase.la
+					../../libkarbonpart.la
 
 karbon_insertknotsplugin_la_LDFLAGS = $(all_libraries) -module $(KDE_PLUGIN)
 

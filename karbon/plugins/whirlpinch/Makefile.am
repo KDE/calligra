@@ -4,8 +4,7 @@ kde_module_LTLIBRARIES = karbon_whirlpinchplugin.la
 
 karbon_whirlpinchplugin_la_SOURCES = whirlpinchplugin.cc
 karbon_whirlpinchplugin_la_LIBADD = $(LIB_KPARTS) \
-									../../core/libkarboncore.la \
-									../../libkarbonbase.la
+				../../libkarbonpart.la
 
 
 karbon_whirlpinchplugin_la_LDFLAGS = $(all_libraries) -module $(KDE_PLUGIN)
