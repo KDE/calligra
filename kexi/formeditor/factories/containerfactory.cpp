@@ -243,7 +243,7 @@ ContainerFactory::ContainerFactory(QObject *parent, const char *name, const QStr
 	m_classes.append(wWidget);
 
 	KFormDesigner::Widget *wGroupBox = new KFormDesigner::Widget(this);
-	wGroupBox->setPixmap("frame");
+	wGroupBox->setPixmap("groupbox");
 	wGroupBox->setClassName("QGroupBox");
 	wGroupBox->setName(i18n("Group Box"));
 	wGroupBox->setDescription(i18n("A container to group some widgets"));
@@ -257,7 +257,7 @@ ContainerFactory::ContainerFactory(QObject *parent, const char *name, const QStr
 	m_classes.append(wFrame);
 
 	KFormDesigner::Widget *wWidgetStack = new KFormDesigner::Widget(this);
-	wWidgetStack->setPixmap("frame");
+	wWidgetStack->setPixmap("widgetstack");
 	wWidgetStack->setClassName("QWidgetStack");
 	wWidgetStack->setName(i18n("Widget Stack"));
 	wWidgetStack->setDescription(i18n("A container with multiple pages"));
