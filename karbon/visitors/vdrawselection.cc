@@ -61,16 +61,16 @@ VDrawSelection::visitVComposite( VComposite &composite )
 		// Draw center node:
 		//if( m_drawCenterNode )
 		//{
-			const KoPoint center = composite.boundingBox().center();
+//			const KoPoint center = composite.boundingBox().center();
 
-			m_painter->newPath();
+//			m_painter->newPath();
 			//m_painter->setRasterOp( Qt::XorROP );
-			m_painter->setPen( Qt::NoPen );
-			m_painter->setBrush( Qt::yellow );
+//			m_painter->setPen( Qt::NoPen );
+//			m_painter->setBrush( Qt::yellow );
 
-			m_painter->drawNode( center, 2 );
+//			m_painter->drawNode( center, 2 );
 
-			m_painter->fillPath();
+//			m_painter->fillPath();
 		//}
 	}
 
