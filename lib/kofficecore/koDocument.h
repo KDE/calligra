@@ -281,6 +281,11 @@ public:
     virtual void paintContent( QPainter &painter, const QRect &rect, bool transparent = false, double zoomX = 1.0, double zoomY = 1.0 ) = 0;
 
     /**
+     * Called by koApplication to check for an autosave file in $HOME
+     */
+    bool checkAutoSaveFile();
+
+    /**
      *  Initializes an empty document (display the template dialog!).
      *  You have to overload this method to initalize all your document variables.
      */
@@ -382,10 +387,8 @@ public:
     virtual bool saveNativeFormat( const QString & file );
 
     /**
-     * Activate/deactive/configure the autosave feature.
-     * This feature is initially disabled, you need to call this method
-     * to activate it.
-     * @param delay in seconds, 0 to disable )
+     * Activate/deactivate/configure the autosave feature.
+     * @param delay in seconds, 0 to disable
      */
     void setAutoSave( int delay );
 
@@ -395,8 +398,8 @@ public:
     bool isAutosaving();
 
     /**
-     * Retrieve the default value for autosave. Called by the applications
-     * to use the correct default in their config
+     * Retrieve the default value for autosave in seconds.
+     * Called by the applications to use the correct default in their config
      */
     static int defaultAutoSave() { return s_defaultAutoSave; }
 

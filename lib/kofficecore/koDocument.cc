@@ -46,6 +46,8 @@
 #include <qtimer.h>
 #include <qimage.h>
 #include <kiconloader.h>
+#include <qdir.h>
+#include <qfileinfo.h>
 
 // Define the protocol used here for embedded documents' URL
 // This used to "store" but KURL didn't like it,
@@ -286,7 +288,10 @@ bool KoDocument::saveFile()
     if ( ret )
     {
         // Eliminate any auto-save file
-        QString asf = autoSaveFile( m_file );
+        QString asf = autoSaveFile( m_file ); // the one in the current dir
+        if ( QFile::exists( asf ) )
+            unlink( QFile::encodeName( asf ) );
+        asf = autoSaveFile( QString::null ); // and the one in $HOME
         if ( QFile::exists( asf ) )
             unlink( QFile::encodeName( asf ) );
     }
@@ -315,9 +320,8 @@ QCString KoDocument::outputMimeType() const
 
 void KoDocument::slotAutoSave()
 {
-    //kdDebug() << "KoDocument::slotAutoSave m_file=" << m_file << endl;
-    //kdDebug()<<"Autosave : modifiedAfterAutosave "<<d->modifiedAfterAutosave<<endl;
-    if ( !m_file.isEmpty() && isModified() && d->modifiedAfterAutosave )
+    kdDebug()<<"Autosave : modifiedAfterAutosave "<<d->modifiedAfterAutosave<<endl;
+    if ( isModified() && d->modifiedAfterAutosave )
     {
         connect( this, SIGNAL( sigProgress( int ) ), shells().current(), SLOT( slotProgress( int ) ) );
         d->m_autosaving = true;
@@ -650,7 +654,7 @@ bool KoDocument::saveNativeFormat( const QString & _file )
         KoStoreDevice dev( store );
         if ( !saveToStream( &dev ) )
         {
-		kdDebug() << "saveToStream failed" << endl;
+            kdDebug() << "saveToStream failed" << endl;
             delete store;
             return false;
         }
@@ -794,11 +798,56 @@ QPixmap KoDocument::generatePreview( const QSize& size )
 
 QString KoDocument::autoSaveFile( const QString & path ) const
 {
-    KURL url( path );
-    Q_ASSERT( url.isLocalFile() );
-    QString dir = url.directory(false);
-    QString filename = url.fileName();
-    return dir + '.' + filename + ".autosave";
+    // Using the extension allows to avoid relying on the mime magic when opening
+    KMimeType::Ptr mime = KMimeType::mimeType( nativeFormatMimeType() );
+    QString extension = mime->property( "X-KDE-NativeExtension" ).toString();
+    if ( path.isEmpty() )
+    {
+        // Never saved? Use a temp file in $HOME then
+        // Yes, two open unnamed docs will overwrite each other's autosave file,
+        // but hmm, we can only do something if that's in the same process anyway...
+        QString ret = QDir::homeDirPath() + "/." + QString::fromLatin1(instance()->instanceName()) + ".autosave" + extension;
+        kdDebug() << "KoDocument::autosave ret=" << ret << endl;
+        return ret;
+    }
+    else
+    {
+        KURL url( path );
+        Q_ASSERT( url.isLocalFile() );
+        QString dir = url.directory(false);
+        QString filename = url.fileName();
+        return dir + '.' + filename + ".autosave" + extension;
+    }
+}
+
+bool KoDocument::checkAutoSaveFile()
+{
+    QString asf = autoSaveFile( QString::null ); // the one in $HOME
+    kdDebug() << "asf=" << asf << endl;
+    if ( QFile::exists( asf ) )
+    {
+        QDateTime date = QFileInfo(asf).lastModified();
+        QString dateStr = date.toString(Qt::LocalDate);
+        int res = KMessageBox::warningYesNoCancel(
+            0, i18n( "An autosaved file for an unnamed document exists in %1.\nThis file is dated %2\nDo you want to open it?" )
+            .arg(asf).arg(dateStr) );
+        switch(res) {
+        case KMessageBox::Yes : {
+            KURL url;
+            url.setPath( asf );
+            bool ret = openURL( url );
+            if ( ret )
+                resetURL();
+            return ret;
+        }
+        case KMessageBox::No :
+            unlink( QFile::encodeName( asf ) );
+            return false;
+        default: // Cancel
+            return false;
+        }
+    }
+    return false;
 }
 
 bool KoDocument::openURL( const KURL & _url )
@@ -1167,6 +1216,8 @@ bool KoDocument::isStoredExtern()
 
 void KoDocument::setModified( bool mod )
 {
+    d->modifiedAfterAutosave=mod;
+
     if ( mod == isModified() )
         return;
 
@@ -1178,8 +1229,6 @@ void KoDocument::setModified( bool mod )
 
     // This influences the title
     setTitleModified();
-    d->modifiedAfterAutosave=mod;
-
 }
 
 void KoDocument::setTitleModified()

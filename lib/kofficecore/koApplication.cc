@@ -89,7 +89,7 @@ bool KoApplication::start()
         shell->show();
         QObject::connect(doc, SIGNAL(sigProgress(int)), shell, SLOT(slotProgress(int)));
         doc->addShell( shell ); // for initDoc to fill in the recent docs list
-        if ( doc->initDoc() )
+        if ( doc->checkAutoSaveFile() || doc->initDoc() )
         {
             doc->removeShell( shell ); // setRootDocument will redo it
             shell->setRootDocument( doc );
