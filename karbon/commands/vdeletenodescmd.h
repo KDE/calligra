@@ -24,18 +24,21 @@
 #include "vcommand.h"
 
 class VSegment;
+class VPath;
 
 class VDeleteNodeCmd : public VCommand
 {
 public:
-	VDeleteNodeCmd( VSegment *segment );
+	VDeleteNodeCmd( VDocument *doc );
 	virtual ~VDeleteNodeCmd();
 
 	virtual void execute();
 	virtual void unexecute();
 
+	virtual void visitVPath( VPath& path );
+
 protected:
-	VSegment *m_segment;
+	QPtrList<VSegment> m_segments;
 };
 
 #endif

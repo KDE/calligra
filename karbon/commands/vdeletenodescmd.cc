@@ -22,10 +22,12 @@
 #include <klocale.h>
 
 #include "vdeletenodescmd.h"
+#include "vselection.h"
 #include "vsegment.h"
+#include "vpath.h"
 
-VDeleteNodeCmd::VDeleteNodeCmd( VSegment *segment )
-	: VCommand( 0L, i18n( "Delete Node" ) ), m_segment( segment )
+VDeleteNodeCmd::VDeleteNodeCmd( VDocument *doc )
+	: VCommand( doc, i18n( "Delete Node" ) )
 {
 }
 
@@ -34,18 +36,39 @@ VDeleteNodeCmd::~VDeleteNodeCmd()
 }
 
 void
+VDeleteNodeCmd::visitVPath( VPath& path )
+{
+	VSegment* segment = path.first();
+
+	path.next(); // skip begin segment
+	while( segment )
+	{
+		if( segment->knotIsSelected() )
+		{
+			segment->setState( VSegment::deleted );
+			m_segments.append( segment );
+		}
+		segment = segment->next();
+	}
+}
+
+void
 VDeleteNodeCmd::execute()
 {
-	if( m_segment->type() != VSegment::begin )
-		m_segment->setState( VSegment::deleted );
+	VObjectListIterator itr( document()->selection()->objects() );
+
+	for( ; itr.current() ; ++itr )
+		visit( *itr.current() );
+
 	setSuccess( true );
 }
 
 void
 VDeleteNodeCmd::unexecute()
 {
-	if( m_segment->type() != VSegment::begin )
-		m_segment->setState( VSegment::normal );
+	QPtrListIterator<VSegment> itr( m_segments );
+	for( ; itr.current() ; ++itr )
+		itr.current()->setState( VSegment::normal );
 	setSuccess( false );
 }
 
