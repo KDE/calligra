@@ -3280,11 +3280,12 @@ void KSpreadView::setZoom( int zoom, bool /*updateViews*/ )
   m_pDoc->setZoom( zoom );
   m_pDoc->newZoom();
 
+  m_pCanvas->slotMaxColumn( m_pTable->maxColumn() );
+  m_pCanvas->slotMaxRow( m_pTable->maxRow() );
+
   m_pVBorderWidget->repaint();
   m_pHBorderWidget->repaint();
   m_pCanvas->repaint();
-  m_pCanvas->slotMaxColumn( m_pTable->maxColumn() );
-  m_pCanvas->slotMaxRow( m_pTable->maxRow() );
 
   refreshView();
 }

@@ -8,6 +8,7 @@ Bugfixes:
 - Fix repainting cells too many times
 - Fix print header/footer makros
 - Fix print header/footer makro "<sheet>" (was internally switched to "<table>")
+- Fix repaint loops, when at end of range and zooming to lower resolution
 
 
 Changes from 1.1 to 1.2
