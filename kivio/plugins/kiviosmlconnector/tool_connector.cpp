@@ -24,6 +24,8 @@
 #include <kstandarddirs.h>
 #include <koPoint.h>
 #include <kozoomhandler.h>
+#include <kactionclasses.h>
+#include <klocale.h>
 
 #include "kivio_view.h"
 #include "kivio_canvas.h"
@@ -40,13 +42,11 @@
 #include "sml_connector.h"
 
 SMLConnector::SMLConnector( KivioView* view )
-:Tool(view,"SMLConnector")
+ : Kivio::MouseTool(view, "SMLConnector")
 {
-  setSortNum(3);
-
-  ToolSelectAction* connector = new ToolSelectAction( actionCollection(), "ToolAction" );
-  KAction* m_z1 = new KAction( i18n("Edit Stencil Connector"), "kivio_connector", 0, actionCollection(), "sml_connector" );
-  connector->insert(m_z1);
+  m_connectorAction = new KToggleAction(i18n("Polyline Connector"), "kivio_connector", 0,
+    actionCollection(), "sml_connector");
+  connect(m_connectorAction, SIGNAL(toggled(bool)), this, SLOT(setActivated(bool)));
 
   m_mode = stmNone;
 
@@ -88,26 +88,22 @@ void SMLConnector::processEvent( QEvent* e )
     }
 }
 
-void SMLConnector::activate()
+void SMLConnector::setActivated(bool a)
 {
-   kdDebug(43000) << "SMLConnector activate" << endl;
-    m_pCanvas->setCursor(*m_pConnectorCursor1);
+  m_connectorAction->setChecked(a);
+  
+  if(a) {
+    kdDebug(43000) << "SMLConnector activate" << endl;
+    view()->canvasWidget()->setCursor(*m_pConnectorCursor1);
     m_mode = stmNone;
     m_pStencil = 0;
     m_pDragData = 0;
-}
-
-void SMLConnector::deactivate()
-{
+    emit activated(this);
+  } else {
     m_pStencil = 0;
-    if (m_pDragData)
-      delete m_pDragData;
-
+    delete m_pDragData;
     m_pDragData = 0;
-}
-
-void SMLConnector::configure()
-{
+  }
 }
 
 void SMLConnector::connector(QRect)
@@ -118,8 +114,8 @@ void SMLConnector::connector(QRect)
     delete m_pDragData;
     m_pDragData = 0;
 
-    KivioDoc* doc = m_pView->doc();
-    KivioPage* page = m_pCanvas->activePage();
+    KivioDoc* doc = view()->doc();
+    KivioPage* page = view()->activePage();
 
     if (m_pStencil->w() < 3.0 && m_pStencil->h() < 3.0) {
         page->unselectAllStencils();
@@ -130,7 +126,7 @@ void SMLConnector::connector(QRect)
         return;
     }
 
-    m_pStencil->searchForConnections(page, m_pView->zoomHandler()->unzoomItY(4));
+    m_pStencil->searchForConnections(page, view()->zoomHandler()->unzoomItY(4));
     doc->updateView(page);
 }
 
@@ -138,7 +134,6 @@ void SMLConnector::mousePress( QMouseEvent *e )
 {
   if(e->button() == RightButton)
   {
-    controller()->activateDefault();
     return;
   }
   if( startRubberBanding( e ) )
@@ -153,10 +148,11 @@ void SMLConnector::mousePress( QMouseEvent *e )
  */
 bool SMLConnector::startRubberBanding( QMouseEvent *e )
 {
-  KivioDoc* doc = m_pView->doc();
-  KivioPage* pPage = m_pCanvas->activePage();
+  KivioDoc* doc = view()->doc();
+  KivioPage* pPage = view()->activePage();
+  KivioCanvas* canvas = view()->canvasWidget();
 
-  startPoint = m_pCanvas->snapToGrid(m_pCanvas->mapFromScreen( e->pos() ));
+  startPoint = canvas->snapToGrid(canvas->mapFromScreen( e->pos() ));
 
   // Create the stencil
     KivioStencilSpawner* ss = doc->findInternalStencilSpawner("SML Connector");
@@ -166,7 +162,7 @@ bool SMLConnector::startRubberBanding( QMouseEvent *e )
     return false;
   }
 
-  startPoint = m_pCanvas->snapToGrid(m_pCanvas->mapFromScreen( e->pos() ));
+  startPoint = canvas->snapToGrid(canvas->mapFromScreen( e->pos() ));
 
   // Create the stencil
   m_pStencil = (KivioSMLConnector*)ss->newStencil("basic_line");
@@ -189,8 +185,8 @@ bool SMLConnector::startRubberBanding( QMouseEvent *e )
   m_pStencil->customDrag(m_pDragData);
 
 
-  m_pCanvas->repaint();
-  m_pCanvas->setCursor(*m_pConnectorCursor2);
+  canvas->repaint();
+  canvas->setCursor(*m_pConnectorCursor2);
   return true;
 }
 
@@ -209,37 +205,39 @@ void SMLConnector::mouseMove( QMouseEvent * e )
 
 void SMLConnector::continueRubberBanding( QMouseEvent *e )
 {
-    KoPoint endPoint = m_pCanvas->mapFromScreen( e->pos() );
-    endPoint = m_pCanvas->snapToGrid(endPoint);
+  KivioCanvas* canvas = view()->canvasWidget();
+  KoPoint endPoint = canvas->mapFromScreen( e->pos() );
+  endPoint = canvas->snapToGrid(endPoint);
 
-    m_pStencil->setStartPoint(endPoint.x(), endPoint.y());
+  m_pStencil->setStartPoint(endPoint.x(), endPoint.y());
 
 
-    m_pDragData->x = endPoint.x();
-    m_pDragData->y = endPoint.y();
-    m_pDragData->id = kctCustom + 1;
-    m_pStencil->customDrag(m_pDragData);
+  m_pDragData->x = endPoint.x();
+  m_pDragData->y = endPoint.y();
+  m_pDragData->id = kctCustom + 1;
+  m_pStencil->customDrag(m_pDragData);
 
-    m_pStencil->updateGeometry();
-    m_pCanvas->repaint();
+  m_pStencil->updateGeometry();
+  canvas->repaint();
 }
 
 void SMLConnector::mouseRelease( QMouseEvent *e )
 {
-    switch( m_mode )
-    {
-        case stmDrawRubber:
-            endRubberBanding(e);
-            break;
-    }
+  switch( m_mode )
+  {
+    case stmDrawRubber:
+      endRubberBanding(e);
+      break;
+  }
 
-    m_pCanvas->setCursor(*m_pConnectorCursor1);
-  	m_mode = stmNone;
+  view()->canvasWidget()->setCursor(*m_pConnectorCursor1);
+  m_mode = stmNone;
 }
 
 void SMLConnector::endRubberBanding(QMouseEvent *)
 {
-    connector(m_pCanvas->rect());
-    m_pStencil = 0;
+  connector(view()->canvasWidget()->rect());
+  m_pStencil = 0;
 }
+
 #include "tool_connector.moc"

@@ -19,29 +19,31 @@
 #ifndef SML_TOOL_CONNECTOR_H
 #define SML_TOOL_CONNECTOR_H
 
-#include "tool.h"
+#include "kivio_mousetool.h"
 #include <koPoint.h>
 
 class QMouseEvent;
 class QCursor;
+
+class KToggleAction;
 
 class KivioView;
 class KivioPage;
 class KivioSMLConnector;
 class KivioCustomDragData;
 
-class SMLConnector : public Tool
+class SMLConnector : public Kivio::MouseTool
 { Q_OBJECT
 public:
   SMLConnector( KivioView* view );
   ~SMLConnector();
 
   virtual void processEvent( QEvent* );
-  virtual void activate();
-  virtual void deactivate();
-  virtual void configure();
 
   void connector(QRect);
+  
+public slots:
+  virtual void setActivated(bool a);
 
 signals:
   void operationDone();
@@ -74,6 +76,8 @@ private:
   KivioSMLConnector* m_pStencil;
   KoPoint startPoint;
   KivioCustomDragData* m_pDragData;
+
+  KToggleAction* m_connectorAction;
 };
 
 #endif

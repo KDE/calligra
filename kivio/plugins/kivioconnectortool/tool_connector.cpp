@@ -44,7 +44,7 @@
 
 ConnectorTool::ConnectorTool( KivioView* parent ) : Kivio::MouseTool(parent, "Connector Mouse Tool")
 {
-  m_connectorAction = new KToggleAction(i18n("Stencil Connector"), "kivio_connector", 0, actionCollection(), "connector");
+  m_connectorAction = new KToggleAction(i18n("Straight Connector"), "kivio_connector", 0, actionCollection(), "connector");
   connect(m_connectorAction, SIGNAL(toggled(bool)), this, SLOT(setActivated(bool)));
 
   m_mode = stmNone;
