@@ -58,7 +58,7 @@ public:
 	KarbonPart* part() { return m_part; }
 
 	void reorganizeGUI();
-	void changeNbOfRecentFiles( int _nb );
+	void setNumberOfRecentFiles( int number );
 
 public slots:
 	// editing:
@@ -81,9 +81,9 @@ public slots:
 	// TODO: remove this someday:
 	void dummyForTesting();
 
-    void configure();
-protected slots:
+	void configure();
 
+protected slots:
 	// object related operations:
 	void objectTrafoTranslate();
 	void objectTrafoScale();
@@ -109,6 +109,7 @@ protected slots:
 
 	// path:
 	void pathInsertKnots();
+	void pathPolygonize();
 
 	// view:
 	void viewModeChanged();
@@ -132,14 +133,11 @@ private:
 	KarbonPart* m_part;
 	VCanvas* m_canvas;
 
-	VTool* s_currentTool;
-
 	VPainterFactory *m_painterFactory;
 
-	// zoom action:
-	KSelectAction* m_zoomAction;
-	KSelectAction* m_viewAction;
-	// shape actions:
+	VTool* m_currentTool;
+
+	// tools:
 	KToggleAction* m_ellipseToolAction;
 	KToggleAction* m_polygonToolAction;
 	KToggleAction* m_rectangleToolAction;
@@ -153,7 +151,7 @@ private:
 	KToggleAction* m_starToolAction;
 	KToggleAction* m_textToolAction;
 
-	// text
+	// text:
 	KFontAction *m_setFontFamily;
 	KFontSizeAction *m_setFontSize;
 	KToggleAction *m_setFontBold;
@@ -161,14 +159,19 @@ private:
 	KToggleAction *m_setUnderline;
 	//KSelectColorAction *m_setTextColor;
 
+	// view:
+	KSelectAction* m_zoomAction;
+	KSelectAction* m_viewAction;
 
-    KAction * actionConfigure;
+	// settings:
+	KAction* m_configureAction;
+
 	//toolbox
 	KSharedPtr< VToolContainer > m_toolbox;
-	DCOPObject *m_dcop;
+	DCOPObject* m_dcop;
 
 	//status bar message
-	QLabel *m_status;
+	QLabel* m_status;
 };
 
 #endif

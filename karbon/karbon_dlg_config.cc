@@ -140,7 +140,7 @@ void configureInterfacePage::apply()
     if(nbRecent!=oldNbRecentFiles)
     {
         config->writeEntry( "NbRecentFile", nbRecent);
-        m_pView->changeNbOfRecentFiles(nbRecent);
+		m_pView->setNumberOfRecentFiles( nbRecent );
         oldNbRecentFiles=nbRecent;
     }
     bool refreshGUI=false;

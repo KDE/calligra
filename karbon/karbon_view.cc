@@ -80,14 +80,14 @@ KarbonView::KarbonView( KarbonPart* part, QWidget* parent, const char* name )
 	m_status->setMinimumWidth( 300 );
 	addStatusBarItem( m_status, 0 );
 
-        if ( shell() )
-        {
-            changeNbOfRecentFiles( m_part->maxRecentFiles() );
-        }
+	if( shell() )
+	{
+		setNumberOfRecentFiles( m_part->maxRecentFiles() );
+	}
 
 	// initial tool is select-tool:
 	selectTool();
-        reorganizeGUI();
+	reorganizeGUI();
 }
 
 KarbonView::~KarbonView()
@@ -301,7 +301,7 @@ void
 KarbonView::ellipseTool()
 {
 	m_status->setText( i18n( "Ellipse" ) );
-	s_currentTool = VCToolEllipse::instance( m_part );
+	m_currentTool = VCToolEllipse::instance( m_part );
 	m_canvas->viewport()->setCursor( QCursor( crossCursor ) );
 }
 
@@ -310,11 +310,11 @@ KarbonView::polygonTool()
 {
 	if( shell()->rootView() == this )
 	{
-		if( s_currentTool == VCToolPolygon::instance( m_part ) )
-			( (VShapeTool *) s_currentTool )->showDialog();
+		if( m_currentTool == VCToolPolygon::instance( m_part ) )
+			( (VShapeTool *) m_currentTool )->showDialog();
 		else
 		{
-			s_currentTool = VCToolPolygon::instance( m_part );
+			m_currentTool = VCToolPolygon::instance( m_part );
 			m_canvas->viewport()->setCursor( QCursor( crossCursor ) );
 		}
 	}
@@ -323,7 +323,7 @@ KarbonView::polygonTool()
 void
 KarbonView::rectangleTool()
 {
-	s_currentTool = VCToolRectangle::instance( m_part );
+	m_currentTool = VCToolRectangle::instance( m_part );
 	m_canvas->viewport()->setCursor( QCursor( crossCursor ) );
 }
 
@@ -332,11 +332,11 @@ KarbonView::roundRectTool()
 {
 	if( shell()->rootView() == this )
 	{
-		if( s_currentTool == VCToolRoundRect::instance( m_part ) )
-			( (VShapeTool *) s_currentTool )->showDialog();
+		if( m_currentTool == VCToolRoundRect::instance( m_part ) )
+			( (VShapeTool *) m_currentTool )->showDialog();
 		else
 		{
-			s_currentTool = VCToolRoundRect::instance( m_part );
+			m_currentTool = VCToolRoundRect::instance( m_part );
 			m_canvas->viewport()->setCursor( QCursor( crossCursor ) );
 		}
 	}
@@ -346,7 +346,7 @@ void
 KarbonView::selectTool()
 {
 	m_status->setText( i18n( "Selection" ) );
-	s_currentTool = VMToolSelect::instance( m_part );
+	m_currentTool = VMToolSelect::instance( m_part );
 	m_canvas->viewport()->setCursor( QCursor( arrowCursor ) );
 	m_selectToolAction->setChecked( true );
 }
@@ -354,7 +354,7 @@ KarbonView::selectTool()
 void
 KarbonView::rotateTool()
 {
-	s_currentTool = VMToolRotate::instance( m_part );
+	m_currentTool = VMToolRotate::instance( m_part );
 	m_canvas->viewport()->setCursor( QCursor( arrowCursor ) );
 	m_rotateToolAction->setChecked( true );
 }
@@ -363,7 +363,7 @@ void
 KarbonView::scaleTool()
 {
 	kdDebug() << "KarbonView::scaleTool()" << endl;
-	s_currentTool = VMToolScale::instance( m_part );
+	m_currentTool = VMToolScale::instance( m_part );
 	m_canvas->viewport()->setCursor( QCursor( arrowCursor ) );
 	m_scaleToolAction->setChecked( true );
 }
@@ -387,7 +387,7 @@ void
 KarbonView::shearTool()
 {
 	kdDebug() << "KarbonView::shearTool()" << endl;
-	s_currentTool = VMToolShear::instance( m_part );
+	m_currentTool = VMToolShear::instance( m_part );
 	m_canvas->viewport()->setCursor( QCursor( arrowCursor ) );
 	m_shearToolAction->setChecked( true );
 }
@@ -397,11 +397,11 @@ KarbonView::sinusTool()
 {
 	if( shell()->rootView() == this )
 	{
-		if( s_currentTool == VCToolSinus::instance( m_part ) )
-			( (VShapeTool *) s_currentTool )->showDialog();
+		if( m_currentTool == VCToolSinus::instance( m_part ) )
+			( (VShapeTool *) m_currentTool )->showDialog();
 		else
 		{
-			s_currentTool = VCToolSinus::instance( m_part );
+			m_currentTool = VCToolSinus::instance( m_part );
 			m_canvas->viewport()->setCursor( QCursor( crossCursor ) );
 		}
 	}
@@ -412,11 +412,11 @@ KarbonView::spiralTool()
 {
 	if( shell()->rootView() == this )
 	{
-		if( s_currentTool == VCToolSpiral::instance( m_part ) )
-			( (VShapeTool *) s_currentTool )->showDialog();
+		if( m_currentTool == VCToolSpiral::instance( m_part ) )
+			( (VShapeTool *) m_currentTool )->showDialog();
 		else
 		{
-			s_currentTool = VCToolSpiral::instance( m_part );
+			m_currentTool = VCToolSpiral::instance( m_part );
 			m_canvas->viewport()->setCursor( QCursor( crossCursor ) );
 		}
 	}
@@ -427,11 +427,11 @@ KarbonView::starTool()
 {
 	if( shell()->rootView() == this )
 	{
-		if( s_currentTool == VCToolStar::instance( m_part ) )
-			( (VShapeTool *) s_currentTool )->showDialog();
+		if( m_currentTool == VCToolStar::instance( m_part ) )
+			( (VShapeTool *) m_currentTool )->showDialog();
 		else
 		{
-			s_currentTool = VCToolStar::instance( m_part );
+			m_currentTool = VCToolStar::instance( m_part );
 			m_canvas->viewport()->setCursor( QCursor( crossCursor ) );
 		}
 	}
@@ -441,7 +441,7 @@ KarbonView::starTool()
 void
 KarbonView::handleTool()
 {
-	s_currentTool = VMToolHandle::instance( m_part );
+	m_currentTool = VMToolHandle::instance( m_part );
 	m_canvas->viewport()->setCursor( QCursor( arrowCursor ) );
 }
 
@@ -456,6 +456,20 @@ KarbonView::pathInsertKnots()
 			m_part, m_part->selection(), dialog->valueKnots() ), true );
 
 	delete( dialog );
+}
+
+void
+KarbonView::pathPolygonize()
+{
+/*
+	VMDlgPolygonize* dialog = new VMDlgPolygonize();
+
+	if( dialog->exec() )
+		m_part->addCommand( new VMCmdPolygonize(
+			m_part, m_part->selection(), dialog->valueFlatness() ), true );
+
+	delete( dialog );
+*/
 }
 
 
@@ -683,6 +697,9 @@ KarbonView::initActions()
 	new KAction(
 		i18n( "&Insert Knots" ), 0, 0, this,
 		SLOT( pathInsertKnots() ), actionCollection(), "path_insert_knots" );
+	new KAction(
+		i18n( "&Polygonize" ), 0, 0, this,
+		SLOT( pathPolygonize() ), actionCollection(), "path_polygonize" );
 	// path <-----
 
 	// view ----->
@@ -711,6 +728,7 @@ KarbonView::initActions()
 		<< i18n( "300%" )
 		<< i18n( "400%" )
 		<< i18n( "800%" );
+
 	m_zoomAction->setItems( stl );
 	m_zoomAction->setEditable( true );
 	m_zoomAction->setCurrentItem( 2 );
@@ -724,31 +742,63 @@ KarbonView::initActions()
 		SLOT( refreshView() ), actionCollection(), "view_refresh" );
 	// view <-----
 
+	// toolbox ---->
 	m_toolbox = VToolContainer::instance( m_part, this );
 
-	connect( m_toolbox, SIGNAL(selectToolActivated()), this, SLOT(selectTool()) );
-	connect( m_toolbox, SIGNAL(scaleToolActivated()), this, SLOT(scaleTool()) );
-	connect( m_toolbox, SIGNAL(rotateToolActivated()), this, SLOT(rotateTool()) );
-	connect( m_toolbox, SIGNAL(shearToolActivated()), this, SLOT(shearTool()) );
-	connect( m_toolbox, SIGNAL(ellipseToolActivated()), this, SLOT(ellipseTool()) );
-	connect( m_toolbox, SIGNAL(rectangleToolActivated()), this, SLOT(rectangleTool()) );
-	connect( m_toolbox, SIGNAL(roundRectToolActivated()), this, SLOT(roundRectTool()) );
-	connect( m_toolbox, SIGNAL(polygonToolActivated()), this, SLOT(polygonTool()) );
-	connect( m_toolbox, SIGNAL(starToolActivated()), this, SLOT(starTool()) );
-	connect( m_toolbox, SIGNAL(sinusToolActivated()), this, SLOT(sinusTool()) );
-	connect( m_toolbox, SIGNAL(spiralToolActivated()), this, SLOT(spiralTool()) );
-	connect( m_toolbox, SIGNAL(textToolActivated()), this, SLOT(textTool()) );
-	connect( m_toolbox, SIGNAL(solidFillActivated()), this, SLOT(solidFillClicked()) );
-	connect( m_toolbox, SIGNAL(strokeActivated()), this, SLOT(strokeClicked()) );
-	connect( m_toolbox, SIGNAL(strokeColorChanged(const QColor &)), this, SLOT(slotStrokeColorChanged(const QColor &)) );
-	connect( m_toolbox, SIGNAL(fillColorChanged(const QColor &)), this, SLOT(slotFillColorChanged(const QColor &)) );
+	connect(
+		m_toolbox, SIGNAL( selectToolActivated() ),
+		this, SLOT( selectTool() ) );
+	connect(
+		m_toolbox, SIGNAL( scaleToolActivated() ),
+		this, SLOT( scaleTool() ) );
+	connect(
+		m_toolbox, SIGNAL( rotateToolActivated() ),
+		this, SLOT( rotateTool() ) );
+	connect(
+		m_toolbox, SIGNAL( shearToolActivated() ),
+		this, SLOT( shearTool() ) );
+	connect(
+		m_toolbox, SIGNAL( ellipseToolActivated() ),
+		this, SLOT( ellipseTool() ) );
+	connect(
+		m_toolbox, SIGNAL( rectangleToolActivated() ),
+		this, SLOT( rectangleTool() ) );
+	connect(
+		m_toolbox, SIGNAL( roundRectToolActivated() ),
+		this, SLOT( roundRectTool() ) );
+	connect(
+		m_toolbox, SIGNAL( polygonToolActivated() ),
+		this, SLOT( polygonTool() ) );
+	connect(
+		m_toolbox, SIGNAL( starToolActivated() ),
+		this, SLOT( starTool() ) );
+	connect(
+		m_toolbox, SIGNAL( sinusToolActivated() ),
+		this, SLOT( sinusTool() ) );
+	connect(
+		m_toolbox, SIGNAL( spiralToolActivated() ),
+		this, SLOT( spiralTool() ) );
+	connect(
+		m_toolbox, SIGNAL( textToolActivated() ),
+		this, SLOT( textTool() ) );
+	connect(
+		m_toolbox, SIGNAL( solidFillActivated() ),
+		this, SLOT( solidFillClicked() ) );
+	connect(
+		m_toolbox, SIGNAL( strokeActivated() ),
+		this, SLOT( strokeClicked() ) );
+	connect(
+		m_toolbox, SIGNAL( strokeColorChanged( const QColor & ) ),
+		this, SLOT( slotStrokeColorChanged( const QColor & ) ) );
+	connect( m_toolbox, SIGNAL( fillColorChanged( const QColor & ) ),
+		this, SLOT( slotFillColorChanged( const QColor & ) ) );
+
 	shell()->moveDockWindow( m_toolbox, Qt::DockLeft );
 	m_toolbox->show();
 
-        actionConfigure = new KAction( i18n( "Configure Karbon..." ),
-					"configure", 0,
-					this, SLOT( configure() ),
-					actionCollection(), "configure" );
+	m_configureAction = new KAction(
+		i18n( "Configure Karbon..." ), "configure", 0, this,
+		SLOT( configure() ), actionCollection(), "configure" );
 }
 
 void
@@ -761,10 +811,10 @@ KarbonView::paintEverything( QPainter& /*p*/, const QRect& /*rect*/,
 bool
 KarbonView::eventFilter( QObject* object, QEvent* event )
 {
-	if ( object == m_canvas->viewport() )
+	if( object == m_canvas->viewport() )
 	{
-		s_currentTool->m_part = m_part;
-		return s_currentTool->eventFilter( this, event );
+		m_currentTool->m_part = m_part;
+		return m_currentTool->eventFilter( this, event );
 	}
 	else
 		return false;
@@ -774,17 +824,17 @@ void KarbonView::reorganizeGUI()
 {
 	if( statusBar())
 	{
-		if(m_part->showStatusBar())
+		if( m_part->showStatusBar() )
 			statusBar()->show();
 		else
 			statusBar()->hide();
 	}
 }
 
-void KarbonView::changeNbOfRecentFiles( int _nb )
+void KarbonView::setNumberOfRecentFiles( int number )
 {
-	if ( shell() ) // 0 when embedded into konq !
-		shell()->setMaxRecentItems( _nb );
+	if( shell() ) // 0 when embedded into konq !
+		shell()->setMaxRecentItems( number );
 }
 
 void KarbonView::configure()

@@ -28,7 +28,7 @@
 			<Action name="object_trafo_shear"/>
 		</Menu>
 		<Separator/>
-		<Menu name="object_arrange">
+		<Menu name="object_order">
 			<text>&amp;Order</text>
 			<Action name="object_move_totop"/>
 			<Action name="object_move_up"/>
@@ -39,7 +39,7 @@
 		<Action name="selection_ungroup"/>
 		<Separator/>
 		<Menu name="object_insert">
-			<text>&amp;Insert Shape</text>
+			<text>&amp;Insert Object</text>
 			<Action name="tool_ellipse"/>
 			<Action name="tool_polygon"/>
 			<Action name="tool_rectangle"/>
@@ -57,6 +57,7 @@
 	<Menu name="path">
 		<text>&amp;Path</text>
 		<Action name="path_insert_knots"/>
+		<Action name="path_polygonize"/>
 	</Menu>
 	<Menu name="view">
 		<text>&amp;View</text>
