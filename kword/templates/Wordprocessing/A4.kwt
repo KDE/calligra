@@ -12,7 +12,6 @@
   <STYLE>
    <NAME value="Standard" />
    <FLOW align="left" />
-   <COUNTER numberingtype="0" righttext="" type="0" start="0" depth="0" />
    <FOLLOWING name="Standard" />
    <FORMAT id="1">
     <!-- Use KDE settings for the font -->

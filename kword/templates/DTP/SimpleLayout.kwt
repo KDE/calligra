@@ -6,53 +6,16 @@
  <FRAMESETS>
   <FRAMESET removable="0" frameType="1" frameInfo="0" name="Frameset 1" visible="1" >
    <FRAME right="293" left="28" bottom="416" runaroundGap="2" top="42" />
-   <PARAGRAPH>
-    <TEXT></TEXT>
-    <LAYOUT>
-     <NAME value="Standard" />
-     <FLOW align="left" />
-     <COUNTER bullet="45" numberingtype="0" bulletfont="times" type="0" start="0" depth="0" />
-     <FORMAT id="1" >
-      <WEIGHT value="50" />
-      <COLOR blue="0" red="0" green="0" />
-      <FONT name="times" />
-      <SIZE value="12" />
-      <ITALIC value="0" />
-      <UNDERLINE value="0" />
-      <STRIKEOUT value="0" />
-      <VERTALIGN value="0" />
-     </FORMAT>
-    </LAYOUT>
-   </PARAGRAPH>
   </FRAMESET>
   <FRAMESET removable="0" frameType="1" frameInfo="0" name="Frameset 2" visible="1" >
    <FRAME right="293" left="28" bottom="797" runaroundGap="2" top="423" />
    <FRAME right="565" left="300" bottom="797" runaroundGap="2" top="42" />
-   <PARAGRAPH>
-    <TEXT></TEXT>
-    <LAYOUT>
-     <NAME value="Standard" />
-     <FLOW align="left" />
-     <COUNTER bullet="176" numberingtype="0" bulletfont="times" type="0" start="0" depth="0" />
-     <FORMAT id="1" >
-      <WEIGHT value="50" />
-      <COLOR blue="0" red="0" green="0" />
-      <FONT name="times" />
-      <SIZE value="12" />
-      <ITALIC value="0" />
-      <UNDERLINE value="0" />
-      <STRIKEOUT value="0" />
-      <VERTALIGN value="0" />
-     </FORMAT>
-    </LAYOUT>
-   </PARAGRAPH>
   </FRAMESET>
  </FRAMESETS>
  <STYLES>
   <STYLE>
    <NAME value="Standard" />
    <FLOW align="left" />
-   <COUNTER numberingtype="0" righttext="" type="0" start="0" depth="0" />
    <FOLLOWING name="Standard" />
    <FORMAT id="1">
     <!-- Use KDE settings for the font -->
