@@ -1,3 +1,4 @@
+
 // -*- Mode: c++; c-basic-offset: 4; indent-tabs-mode: nil; tab-width: 4; -*-
 /* This file is part of the KDE project
    Copyright (C) 1998, 1999 Reginald Stadlbauer <reggie@kde.org>
@@ -77,8 +78,9 @@ class KPrCanvas : public QWidget
 
 public:
 
-    // constructor - destructor
+    /// constructor
     KPrCanvas( QWidget *parent=0,const char *name=0,KPresenterView *_view=0 );
+    /// destructor
     ~KPrCanvas();
 
     KPresenterView * getView()const { return m_view; }
@@ -123,8 +125,10 @@ public:
     void setDecreaseFontSize();
     KPTextObject* kpTxtObj() const;
 
-    // Start a screen presentation
-    // All pages if curPgNum is -1, otherwise just curPgNum (1-based)
+    /**
+     * Start a screen presentation
+     * All pages if @p curPgNum is -1, otherwise just @p curPgNum (1-based)
+     */
     void startScreenPresentation( float presFakt, int curPgNum = -1);
     void stopScreenPresentation();
     
@@ -246,7 +250,7 @@ exportPage( 0, s, 800, 600, "/home/khz/page0.png", "PNG", 100 );
 
     void stopSound();
 
-    //for KPTextView
+    ///for KPTextView
     void dragStarted() { mousePressed = false; }
 
     void setXimPosition( int x, int y, int w, int h, QFont *f );
@@ -314,11 +318,11 @@ exportPage( 0, s, 800, 600, "/home/khz/page0.png", "PNG", 100 );
     KoRect zoomAllObject();
 
 
-    //return pos of kptextobj
+    ///@return pos of kptextobj
     int textObjectNum( KPTextObject * obj ) const;
     KPTextObject * textObjectByPos( int pos ) const;
 
-    /*
+    /**
      * Align all selected and not protected objects on the 
      * active and on the sticky page according to the AlignType
      */
@@ -331,8 +335,10 @@ exportPage( 0, s, 800, 600, "/home/khz/page0.png", "PNG", 100 );
 
     bool getProtect( bool prot ) const;
     bool getKeepRatio( bool _ratio ) const;
-    //return true if we are selected several object and there are not
-    //the same "keep ratio" properties"
+    /**
+     * @return true if we are selected several object and there are not
+     * the same "keep ratio" properties"
+     */
     bool differentKeepRatio( bool p )const;
     bool differentProtect( bool p )const;
 
@@ -412,7 +418,7 @@ signals:
     void restartPresentation();
     void objectSelectedChanged();
     void objectSizeChanged();
-    // Emitted when the current frameset edit changes
+    /// Emitted when the current frameset edit changes
     void currentObjectEditChanged();
 
     void selectionChanged( bool hasSelection );
@@ -509,12 +515,12 @@ protected:
      */
     void drawPresPage( QPainter *painter, const QRect &_rect, PresStep step ) const;
 
-    // draw all helpline
+    /// draw all helpline
     void drawHelplines(QPainter *painter, const QRect &rect2) const;
 
     void drawHelpPoints( QPainter *painter, const QRect &rect2) const;
 
-    // draw grid
+    /// draw grid
     void drawGrid(QPainter *painter, const QRect &rect2) const;
 
 
@@ -540,7 +546,7 @@ protected:
 
     void eraseEmptySpace( QPainter * painter, const QRegion & emptySpaceRegion, const QBrush & brush ) const;
 
-    // setup popupmenus
+    /// setup popupmenus
     void setupMenus();
 
     unsigned int currPgNum() const;
@@ -620,9 +626,9 @@ private:
     void moveObject( int x, int y, bool key );
 
     //---- stuff needed for resizing ----
-    // resize the m_resizeObject
+    /// resize the m_resizeObject
     void resizeObject( ModifyType _modType, int _dx, int _dy );
-    // create ResizeCmd
+    /// create ResizeCmd
     void finishResizeObject( const QString &name, int mx, int my, bool layout = true );
 
     void raiseObject( KPObject *_kpobject );
@@ -719,28 +725,30 @@ private:
     QRect rubber;
     
     //---- stuff needed for resizing ----
-    // object which gets resized
+    /// object which gets resized
     KPObject *m_resizeObject;
-    // size of the object at when resizing is started
+    /// size of the object at when resizing is started
     KoRect m_rectBeforeResize;
-    // should the ratio of the object kept during resize
+    /// should the ratio of the object kept during resize
     bool m_keepRatio;
-    // ratio of the object ( width / height )
+    /// ratio of the object ( width / height )
     double m_ratio;
     
     //---- stuff needed for rotating ----
-    // object which gets rotated
+    /// object which gets rotated
     KPObject *m_rotateObject;
-    // center of the rotated object
+    /// center of the rotated object
     KoPoint m_rotateCenter;
-    // angle of the object at start of rotate 
+    /// angle of the object at start of rotate 
     double m_angleBeforeRotate;
     
     ToolEditMode toolEditMode;
     QRect insRect;
     KoDocumentEntry partEntry;
-    // List of objects to draw, from the previous step in the presentation
-    // (those that remain on screen between two steps)
+    /**
+     * List of objects to draw, from the previous step in the presentation
+     * (those that remain on screen between two steps)
+     */
     QPtrList <KPObject> tmpObjs;
     QString autoform;
     QPixmap buffer;
@@ -762,11 +770,11 @@ private:
     int m_xOffset, m_yOffset;
     int m_xOffsetSaved, m_yOffsetSaved; // saved when going fullscreen
 
-    KoRect m_boundingRect; // when moving object(s)
-    KoPoint m_hotSpot; // when moving frame(s)
+    KoRect m_boundingRect; ///< when moving object(s)
+    KoPoint m_hotSpot; ///< when moving frame(s)
 
-    KoPoint moveStartPosMouse; // start position for move with mouse
-    KoPoint moveStartPosKey; // start position for move with key
+    KoPoint moveStartPosMouse; ///< start position for move with mouse
+    KoPoint moveStartPosKey; ///< start position for move with key
     int m_tmpHelpPoint;
     KoPoint tmpHelpPointPos;
 
@@ -780,8 +788,8 @@ private:
     bool m_keyPressEvent;
     bool m_drawSymetricObject;
 
-    KoRect m_origBRect;  // Start rect for move
-    QPoint m_origPos;  // Start point for move
+    KoRect m_origBRect;  ///< Start rect for move
+    QPoint m_origPos;  ///< Start point for move
 };
 
 #endif // __KPRCANVAS__
