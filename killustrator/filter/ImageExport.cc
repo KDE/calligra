@@ -53,8 +53,9 @@ bool ImageExport::setup (GDocument *doc, const char* fmt) {
   char* str = formats.first ();
   format = QString ();
   while (str) {
-    if (strcmp (str, fmt) == 0) {
+    if (strcasecmp (str, fmt) == 0) {
       format = fmt;
+      format = format.upper ();
       formatSupported = true;
       break;
     }

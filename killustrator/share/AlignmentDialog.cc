@@ -242,6 +242,7 @@ QWidget* AlignmentDialog::createDistributionWidget (QWidget* parent) {
   sbutton = new QRadioButton (group);
   sbutton->setText (i18n ("Selection"));
   sbutton->move (15, 20);
+  sbutton->setChecked (true);
 
   pbutton = new QRadioButton (group);
   pbutton->setText (i18n ("Page"));

@@ -222,8 +222,8 @@ void KIllustrator::setupMainView () {
   connect (tool, SIGNAL(modeSelected(const char*)),
 	   this, SLOT(showCurrentMode(const char*)));
   tcontroller->registerTool (ID_TOOL_EDITPOINT, 
-			     tool = new EditPointTool (&cmdHistory));
-  connect (tool, SIGNAL(modeSelected(const char*)),
+			     editPointTool = new EditPointTool (&cmdHistory));
+  connect (editPointTool, SIGNAL(modeSelected(const char*)),
 	   this, SLOT(showCurrentMode(const char*)));
   tcontroller->registerTool (ID_TOOL_FREEHAND, 
 			     tool = new FreeHandTool (&cmdHistory));
@@ -377,6 +377,8 @@ void KIllustrator::initToolBars () {
 
   connect (toolPalette, SIGNAL (clicked (int)), tcontroller,
   	   SLOT(toolSelected (int)));
+  connect (toolPalette, SIGNAL (clicked (int)), this,
+  	   SLOT(toolSelected (int)));
   connect (toolPalette, SIGNAL (doubleClicked (int)), tcontroller,
 	   SLOT(configureTool (int)));
   resetTools ();
@@ -400,6 +402,36 @@ void KIllustrator::initToolBars () {
   }
   colorPalette->setBarPos (KToolBar::Right);
   addToolBar (colorPalette);
+
+  /* the "edit point" toolbar */
+  editPointToolbar = new KToolBar (this);
+  KRadioGroup* toolGroup2 = new KRadioGroup (editPointToolbar);
+  editPointToolbar->insertButton (loader->loadIcon ("pointtool.xpm"), 
+			     ID_TOOL_EP_MOVE, true, i18n ("Move Point"));
+  editPointToolbar->setToggle (ID_TOOL_EP_MOVE);
+  toolGroup2->addButton (ID_TOOL_EP_MOVE);
+  editPointToolbar->insertButton (loader->loadIcon ("pointtool.xpm"), 
+			     ID_TOOL_EP_ADD, true, i18n ("Insert Point"));
+  editPointToolbar->setToggle (ID_TOOL_EP_ADD);
+  toolGroup2->addButton (ID_TOOL_EP_ADD);
+  editPointToolbar->insertButton (loader->loadIcon ("pointtool.xpm"), 
+			     ID_TOOL_EP_DEL, true, i18n ("Remove Point"));
+  editPointToolbar->setToggle (ID_TOOL_EP_DEL);
+  toolGroup2->addButton (ID_TOOL_EP_DEL);
+  editPointToolbar->insertButton (loader->loadIcon ("pointtool.xpm"), 
+			     ID_TOOL_EP_SPLIT, true, i18n ("Split Line"));
+  editPointToolbar->setToggle (ID_TOOL_EP_SPLIT);
+  toolGroup2->addButton (ID_TOOL_EP_SPLIT);
+  editPointToolbar->insertButton (loader->loadIcon ("pointtool.xpm"), 
+			     ID_TOOL_EP_JOIN, true, i18n ("Join Lines"));
+  editPointToolbar->setToggle (ID_TOOL_EP_JOIN);
+  toolGroup2->addButton (ID_TOOL_EP_JOIN);
+
+  connect (editPointToolbar, SIGNAL (clicked(int)), 
+	   this, SLOT (menuCallback (int)));
+  editPointToolbar->setBarPos (KToolBar::Floating);
+  editPointToolbar->enable (KToolBar::Hide);
+  addToolBar (editPointToolbar);
 }
 
 void KIllustrator::initMenu () {
@@ -430,27 +462,8 @@ void KIllustrator::initMenu () {
   file->setAccel (CTRL + Key_W, ID_FILE_CLOSE);
   file->insertSeparator ();
 
-  QPopupMenu* efilters = new QPopupMenu ();
-  QPopupMenu* ifilters = new QPopupMenu ();
-  FilterManager* filterMgr = FilterManager::instance ();
-  QStrList ftypes = filterMgr->getInstalledFilters ();
-  const char* ftype = ftypes.first ();
-  unsigned int tid = 1;
-  while (ftype) {
-    FilterInfo* finfo = filterMgr->getFilterForType (ftype);
-    if (finfo->kind () == FilterInfo::FKind_Export) {
-      efilters->insertItem (ftype, ID_EXPORT + tid);
-    }
-    else if (finfo->kind () == FilterInfo::FKind_Import) {
-      ifilters->insertItem (ftype, ID_IMPORT + tid);
-    }
-    tid++;
-    ftype = ftypes.next ();
-  }
-  connect (efilters, SIGNAL (activated (int)), SLOT (menuCallback (int)));
-  connect (ifilters, SIGNAL (activated (int)), SLOT (menuCallback (int)));
-  file->insertItem (i18n ("Import"), ifilters);
-  file->insertItem (i18n ("Export"), efilters);
+  file->insertItem (i18n ("Import..."), ID_IMPORT);
+  file->insertItem (i18n ("Export..."), ID_EXPORT);
 
   file->insertSeparator ();
   file->insertItem (i18n ("&Print"), ID_FILE_PRINT);
@@ -540,7 +553,7 @@ void KIllustrator::initMenu () {
   extras->insertItem (i18n ("&Options..."), ID_EXTRAS_OPTIONS);
   extras->insertSeparator ();
   extras->insertItem (i18n ("&Clipart..."), ID_EXTRAS_CLIPART);
-  extras->insertItem (i18n ("&Scripts..."), ID_EXTRAS_SCRIPTS);
+  //  extras->insertItem (i18n ("&Scripts..."), ID_EXTRAS_SCRIPTS);
   connect (extras, SIGNAL (activated (int)), SLOT (menuCallback (int)));
 
   help->insertItem (i18n ("&Help..."), ID_HELP_HELP);
@@ -630,8 +643,8 @@ void KIllustrator::menuCallback (int item) {
     {
       if (askForSave ()) {
 	QString fname = 
-	  KFilePreviewDialog::getOpenFileURL (0, 
-					      "*.kil | KIllustrator File", this);
+	  KFilePreviewDialog::getOpenFileURL 
+	  (0, "*.kil | KIllustrator File", this);
 	if (! fname.isEmpty ()) {
 	  document->initialize ();
 	  openURL ((const char *)fname);
@@ -662,6 +675,12 @@ void KIllustrator::menuCallback (int item) {
       w->show ();
       break;
     }
+  case ID_IMPORT:
+    importFromFile ();
+    break;
+  case ID_EXPORT:
+    exportToFile ();
+    break;
   case ID_FILE_EXIT:
     quit ();
     break;
@@ -806,18 +825,25 @@ void KIllustrator::menuCallback (int item) {
     break;
   case ID_HELP_ABOUT_APP:
   case ID_HELP_ABOUT_KDE:
-      about (item);
-      break;
+    about (item);
+    break;
+  case ID_TOOL_EP_MOVE:
+    editPointTool->setMode (EditPointTool::MovePoint);
+    break;
+  case ID_TOOL_EP_ADD:
+    editPointTool->setMode (EditPointTool::InsertPoint);
+    break;
+  case ID_TOOL_EP_DEL:
+    editPointTool->setMode (EditPointTool::RemovePoint);
+    break;
+  case ID_TOOL_EP_SPLIT:
+    editPointTool->setMode (EditPointTool::Split);
+    break;
+  case ID_TOOL_EP_JOIN:
+    editPointTool->setMode (EditPointTool::Join);
+    break;
   default:
-    if (item > ID_IMPORT && item < ID_IMPORT + 100) {
-      resetTools ();
-      importFromFile (item - ID_IMPORT);
-    }
-    if (item > ID_EXPORT && item < ID_EXPORT + 100) {
-      resetTools ();
-      exportToFile (item - ID_EXPORT);
-    }
-    else if (item > ID_FILE_OPEN_RECENT && item < ID_FILE_OPEN_RECENT + 10) {
+    if (item > ID_FILE_OPEN_RECENT && item < ID_FILE_OPEN_RECENT + 10) {
       QStrList recentFiles = PStateManager::instance ()->getRecentFiles ();
       const char* fname = recentFiles.at (item - ID_FILE_OPEN_RECENT - 1);
       if (fname) {
@@ -1071,53 +1097,62 @@ void KIllustrator::updateZoomFactor (float zFactor) {
   }
 }
 
-void KIllustrator::exportToFile (int id) {
+void KIllustrator::exportToFile () {
   FilterManager* filterMgr = FilterManager::instance ();
-  QStrList ftypes = filterMgr->getInstalledFilters ();
-  const char* format = ftypes.at (id - 1);
-  FilterInfo* filterInfo = filterMgr->getFilterForType (format);
-  if (filterInfo == 0L)
-    return;
+  QString filter = filterMgr->exportFilters ();
+  
+  QString fname = 
+    KFileDialog::getSaveFileName (0, (const char *) filter, this);
 
-  QString mask;
-  mask.sprintf ("*.%s", filterInfo->extension ());
-
-  QString fname = KFileDialog::getSaveFileName (0, (const char *) mask, this);
   if (! fname.isEmpty ()) {
-    ExportFilter* filter = filterInfo->exportFilter ();
+    FilterInfo* filterInfo = filterMgr->findFilter (fname, 
+						    FilterInfo::FKind_Export);
     
-    if (filter && filter->setup (document, format)) {
-      filter->setOutputFileName (fname);
-      filter->exportToFile (document);
+    if (filterInfo) {
+      ExportFilter* filter = filterInfo->exportFilter ();
+      if (filter->setup (document, filterInfo->extension ())) {
+	filter->setOutputFileName (fname);
+	filter->exportToFile (document);
+      }
+      else
+	QMessageBox::critical (this, i18n ("KIllustrator Error"), 
+			       i18n ("Cannot export to file"), i18n ("OK"));
     }
+    else
+      QMessageBox::critical (this, i18n ("KIllustrator Error"), 
+			     i18n ("Unknown export format"), i18n ("OK"));
   }
+  resetTools ();
 }
 
-void KIllustrator::importFromFile (int id) {
+void KIllustrator::importFromFile () {
   FilterManager* filterMgr = FilterManager::instance ();
-  QStrList ftypes = filterMgr->getInstalledFilters ();
-  const char* format = ftypes.at (id - 1);
-  FilterInfo* filterInfo = filterMgr->getFilterForType (format);
-  if (filterInfo == 0L)
-    return;
-
-  QString mask;
-  mask.sprintf ("*.%s", filterInfo->extension ());
-
-  QString fname = KFilePreviewDialog::getOpenFileName (0, (const char *) mask,
-						       this);
+  QString filter = filterMgr->importFilters ();
+  
+  QString fname = 
+    KFilePreviewDialog::getOpenFileName (0, (const char *) filter, this);
   if (! fname.isEmpty ()) {
     QFileInfo finfo ((const char *) fname);
     if (!finfo.isFile () || !finfo.isReadable ())
       return;
 
-    ImportFilter* filter = filterInfo->importFilter ();
-    
-    if (filter && filter->setup (document, format)) {
-      filter->setInputFileName (fname);
-      filter->importFromFile (document);
+    FilterInfo* filterInfo = filterMgr->findFilter (fname, 
+						    FilterInfo::FKind_Import);
+    if (filterInfo) {
+      ImportFilter* filter = filterInfo->importFilter ();
+      if (filter->setup (document, filterInfo->extension ())) {
+	filter->setInputFileName (fname);
+	filter->importFromFile (document);
+      }
+      else
+	QMessageBox::critical (this, i18n ("KIllustrator Error"), 
+			       i18n ("Cannot import from file"), i18n ("OK"));
     }
+    else
+      QMessageBox::critical (this, i18n ("KIllustrator Error"), 
+			     i18n ("Unknown import format"), i18n ("OK"));
   }
+  resetTools ();
 }
 
 void KIllustrator::showTransformationDialog (int id) {
@@ -1130,7 +1165,6 @@ void KIllustrator::showTransformationDialog (int id) {
 }
 
 void KIllustrator::updateRecentFiles () {
-  //  KIllustratorApp* myapp = (KIllustratorApp *) kapp;
   QStrList files = PStateManager::instance ()->getRecentFiles ();
   const char* fname = files.first ();
   unsigned int id = 1;
@@ -1150,7 +1184,20 @@ void KIllustrator::popupForObject (int x, int y, GObject* obj) {
 }
 
 void KIllustrator::resetTools () {
+  if (toolPalette->isButtonOn (ID_TOOL_EDITPOINT))
+    return;
+  
   if (! toolPalette->isButtonOn (ID_TOOL_SELECT))
     toolPalette->toggleButton (ID_TOOL_SELECT);
   tcontroller->toolSelected (ID_TOOL_SELECT);
+}
+
+void KIllustrator::toolSelected (int id) {
+  if (id == ID_TOOL_EDITPOINT) {
+    if (! editPointToolbar->isButtonOn (ID_TOOL_EP_MOVE))
+      editPointToolbar->toggleButton (ID_TOOL_EP_MOVE);
+    editPointToolbar->enable (KToolBar::Show);
+  }
+  else
+    editPointToolbar->enable (KToolBar::Hide);
 }

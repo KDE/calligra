@@ -54,15 +54,18 @@ public:
   
   virtual void setPoint (int idx, const Coord& p);
   virtual void addPoint (int idx, const Coord& p, bool update = true);
+  virtual void insertPoint (int idx, const Coord& p, bool update = true);
   void _addPoint (int idx, const Coord& p);
   void movePoint (int idx, float dx, float dy);
 
   const Coord& getPoint (int idx);
   QList<Coord>& getPoints ();
 
+  virtual int containingSegment (float xpos, float ypos);
+
   int getNeighbourPoint (const Coord& p);
   unsigned int numOfPoints () const;
-  void removePoint (int idx, bool update = true);
+  virtual void removePoint (int idx, bool update = true);
 
   virtual const char* typeName ();
 

@@ -184,21 +184,22 @@ void GText::drawPathText (Painter& p) {
       p.drawText (0, 0, &s[i], 1);
     }
   }
-  /*
   if (cursorActive) {
-    float x1, x2, y1, y2;
-    y1 = cursy * fm->height () - 1 + opos.y ();
-    y2 = y1 + fm->height () + 2;
-    const char* s = text[cursy];
-    x1 = 0;
-    for (int i = 0; i < cursx; i++) 
-	x1 += fm->width (s[i]);
-    x1 += opos.x ();
-    x2 = x1;
+    idx = 0;
+    int line = 0;
+    vector<QString>::iterator it = text.begin (); 
+    while (line < cursy) {
+      idx += it->length ();
+      it++;
+      line++;
+    }
+    idx += cursx;
+
+    p.setWorldMatrix (m);
+    p.setWorldMatrix (cmatrices[idx], true);
     p.setPen (black);
-    p.drawLine (x1, y1, x2, y2);
+    p.drawLine (0, 2, 0, -fm->height () - 1);
   }
-  */
 }
 
 void GText::setCursor (int x, int y) {
@@ -322,18 +323,23 @@ void GText::showCursor (bool flag) {
 
 void GText::updateCursor (const Coord& p) {
   if (box.contains (p)) {
-    QPoint pp = iMatrix.map (QPoint ((int) p.x (), (int) p.y ()));
-
-    cursy = (int) (pp.y () / fm->height ());
-    int x = (int) pp.x ();
-    const char *s = (const char *)line (cursy);
-    int n = ::strlen (s);
-    int width = 0;
-    for (int i = 0; i < n; i++) {
-      width += fm->width (s[i]);
-      if (x <= width) {
-	cursx = i;
-	break;
+    if (pathObj) {
+      cursx = cursy = 0;
+    }
+    else {
+      QPoint pp = iMatrix.map (QPoint ((int) p.x (), (int) p.y ()));
+      
+      cursy = (int) (pp.y () / fm->height ());
+      int x = (int) pp.x ();
+      const char *s = (const char *)line (cursy);
+      int n = ::strlen (s);
+      int width = 0;
+      for (int i = 0; i < n; i++) {
+	width += fm->width (s[i]);
+	if (x <= width) {
+	  cursx = i;
+	  break;
+	}
       }
     }
   }
@@ -431,6 +437,8 @@ void GText::writeToXml (XmlWriter& xml) {
   xml.startTag ("text", false);
   writePropertiesToXml (xml);
   xml.addAttribute ("align", (int) textInfo.align);
+  if (pathObj)
+    xml.addAttribute ("ref", pathObj->getId ());
   xml.closeTag (false);
 
   xml.startTag ("font", false);
@@ -439,7 +447,6 @@ void GText::writeToXml (XmlWriter& xml) {
   xml.addAttribute ("weight", textInfo.font.weight ());
   if (textInfo.font.italic ())
     xml.addAttribute ("italic", 1);
-
   xml.closeTag (false);
 
   int i = 1;
@@ -531,6 +538,9 @@ void GText::setPathObject (GObject* obj) {
   if (pathObj != 0L) {
     cout << "update matrices" << endl;
     pathObj->ref ();
+    // force generation of id for refering in XMLK
+    (void) pathObj->getId ();
+
     connect (obj, SIGNAL(changed(const Rect&)), 
 	     this, SLOT(updateMatricesForPath ()));
     updateMatricesForPath ();

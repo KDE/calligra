@@ -43,6 +43,7 @@ public:
   // C++
   virtual void cleanUp ();
   void setDocument (KIllustratorDocument* doc);
+  virtual void createFileMenu (OPMenuBar* mbar);
 
   // C++
   virtual bool newDocument ();
@@ -56,7 +57,10 @@ protected slots:
   void slotFileOpen ();
   void slotFileSave ();
   void slotFileSaveAs ();
+  void slotFileImport ();
+  void slotFileExport ();
   void slotFilePrint ();
+  void slotFileInfo ();
   void slotFileClose ();
   void slotFileQuit ();
   void slotHelpAbout ();
@@ -74,7 +78,12 @@ protected:
   KIllustratorDocument* m_pDoc;
   KIllustratorView* m_pView;
 
+  int m_idMenuFile_Import;
+  int m_idMenuFile_Export;
+  int m_idMenuFile_Info;
+
   static list<KIllustratorShell*>* s_lstShells;
+  static bool previewHandlerRegistered;
 };
 
 #endif

@@ -38,9 +38,16 @@ public:
 
   virtual void processEvent (QEvent* e, GDocument* doc, Canvas* canvas);
   virtual void activate (GDocument* doc, Canvas* canvas);
-  
+
+  virtual void configure ();
+
+  void aroundFixedCenter (bool flag);
+  bool aroundFixedCenter () const { return useFixedCenter; }
+
 private:
   GOval* oval;
+  bool useFixedCenter;
+  Coord pos;
 };
 
 #endif

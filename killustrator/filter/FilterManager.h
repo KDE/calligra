@@ -39,10 +39,16 @@ protected:
 public:
   static FilterManager* instance ();
 
+  FilterInfo* findFilter (const char* fname, FilterInfo::Kind kind);
+
   FilterInfo* getFilterForType (const char* ftype);
   QStrList getInstalledFilters ();
+  QString importFilters ();
+  QString exportFilters ();
 
 private:
+  QString extension (const char *fname);
+
   QDict<FilterInfo> filters;
   static FilterManager* managerInstance;
 };

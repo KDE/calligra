@@ -23,6 +23,7 @@ noinst_HEADERS = Handle.h GObject.h GPolyline.h GPolygon.h GOval.h \
 		 SetPropertyCmd.h ReorderCmd.h \
 		 AddLineSegmentCmd.h EditPointCmd.h \
 		 CreatePolygonCmd.h CreateBezierCmd.h \
+		 RemovePointCmd.h InsertPointCmd.h \
 		 InsertObjCmd.h ShearCmd.h CommandHistory.h \
 		 FilterInfo.h ExportFilter.h ImportFilter.h \
 		 Ruler.h AboutDialog.h \
@@ -33,7 +34,8 @@ noinst_HEADERS = Handle.h GObject.h GPolyline.h GPolygon.h GOval.h \
 		 Preview.h units.h UnitBox.h ScriptDialog.h \
 		 GLayer.h LayerDialog.h LayerView.h \
 		 DocumentInfo.h Gradient.h GradientShape.h \
-		 BrushCells.h PathTextTool.h
+		 BrushCells.h PathTextTool.h \
+		 EllipseConfigDialog.h
 
 libkillu_a_SOURCES = Handle.cc GObject.cc GPolyline.cc GPolygon.cc \
 			  GOval.cc GClipart.cc GBezier.cc \
@@ -57,6 +59,7 @@ libkillu_a_SOURCES = Handle.cc GObject.cc GPolyline.cc GPolygon.cc \
 			  SetTextCmd.cc SetPropertyCmd.cc ReorderCmd.cc \
 			  AddLineSegmentCmd.cc EditPointCmd.cc \
 			  CreatePolygonCmd.cc CreateBezierCmd.cc \
+			  RemovePointCmd.cc InsertPointCmd.cc \
 			  InsertObjCmd.cc ShearCmd.cc CommandHistory.cc \
 			  FilterInfo.cc ExportFilter.cc \
 			  ImportFilter.cc \
@@ -67,7 +70,8 @@ libkillu_a_SOURCES = Handle.cc GObject.cc GPolyline.cc GPolygon.cc \
 			  Preview.cc units.cc UnitBox.cc ScriptDialog.cc \
 			  GLayer.cc LayerDialog.cc LayerView.cc \
 			  DocumentInfo.cc Gradient.cc GradientShape.cc \
-			  BrushCells.cc PathTextTool.cc
+			  BrushCells.cc PathTextTool.cc \
+			  EllipseConfigDialog.cc
 
 # just to make sure, automake makes them 
 BUILTSOURCES =	Handle.moc GObject.moc GPolyline.moc GPolygon.moc GOval.moc \
@@ -87,7 +91,8 @@ BUILTSOURCES =	Handle.moc GObject.moc GPolyline.moc GPolygon.moc GOval.moc \
 		PStateManager.moc OptionDialog.moc UnitBox.moc \
 		ScriptDialog.moc GLayer.moc LayerDialog.moc \
 		LayerView.moc CommandHistory.moc \
-		DocumentInfo.moc BrushCells.moc PathTextTool.moc
+		DocumentInfo.moc BrushCells.moc PathTextTool.moc \
+		EllipseConfigDialog.moc
 
 DISTCLEANFILES = $(BUILTSOURCES)
 
@@ -147,5 +152,6 @@ LayerView.cc: LayerView.moc
 DocumentInfo.cc: DocumentInfo.moc
 BrushCells.cc: BrushCells.moc
 PathTextTool.cc: PathTextTool.moc
+EllipseConfigDialog.cc: EllipseConfigDialog.moc
 
 

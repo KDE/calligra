@@ -97,16 +97,9 @@ QWidget (parent), KoViewIf (doc), OPViewIf (doc), KIllustrator::View_skel () {
   mainWidget = 0L;
   viewport = 0L;
   layerDialog = 0L;
+  objMenu = 0L;
   // restore default settings
   PStateManager::instance ();
-
-  const QColor cpalette[] = { white, red, green, blue, cyan, magenta, yellow,
-			      darkRed, darkGreen, darkBlue, darkCyan,
-			      darkMagenta, darkYellow, white, lightGray,
-			      gray, darkGray, black };
-  colorPalette.resize (18);
-  for (int i = 0; i < 18; i++)
-    colorPalette.insert (i, new QColor (cpalette[i]));
 
   zFactors.resize (5);
   zFactors[0] = 0.5;
@@ -142,15 +135,33 @@ void KIllustratorView::init () {
 }
 
 KIllustratorView::~KIllustratorView () {
+  cout << "~KIllustratorView ()" << endl;
   cleanUp ();
 }
 
 void KIllustratorView::createGUI () {
-  setupColorToolbar ();
   setupCanvas ();
+  setupPopups ();
   setUndoStatus (false, false);
   QObject::connect (&cmdHistory, SIGNAL(changed(bool, bool)), 
 		    SLOT(setUndoStatus(bool, bool)));
+}
+
+void KIllustratorView::setupPopups () {
+  objMenu = new QPopupMenu ();
+  objMenu->insertItem (i18n ("Copy"), this, SLOT (editCopySlot ()));
+  objMenu->insertItem (i18n ("Cut"), this, SLOT (editCutSlot ()));
+  objMenu->insertSeparator ();
+  objMenu->insertItem (i18n ("Properties"), this, 
+		       SLOT (editPropertiesSlot ()));
+  objMenu->insertSeparator ();
+  objMenu->insertItem (i18n ("Align"), this, SLOT (arrangeAlignSlot ()));
+  objMenu->insertSeparator ();
+  objMenu->insertItem (i18n ("To Front"), this, SLOT (arrangeToFrontSlot ()));
+  objMenu->insertItem (i18n ("To Back"), this, SLOT (arrangeToBackSlot ()));
+  objMenu->insertItem (i18n ("Forward One"), this, 
+		       SLOT (arrangeOneForwardSlot ()));
+  objMenu->insertItem (i18n ("Back One"), this, SLOT (arrangeOneBackSlot ())); 
 }
 
 bool KIllustratorView::event (const char* _event, const CORBA::Any& _value) {
@@ -289,6 +300,9 @@ bool KIllustratorView::mappingCreateToolbar (OpenPartsUI::ToolBarFactory_ptr
 					     factory) {
   if (CORBA::is_nil (factory)) {
     m_vToolBarTools = 0L;
+    m_vToolBarEdit = 0L;
+    m_vColorBar = 0L;
+    m_vToolBarEditPoint = 0L;
     return true;
   }
  
@@ -377,6 +391,8 @@ bool KIllustratorView::mappingCreateToolbar (OpenPartsUI::ToolBarFactory_ptr
 				    "toolEllipse", true, 
 				    i18n ("Create Ellipse"), -1);
   m_vToolBarTools->setToggle (ID_TOOL_ELLIPSE, true);
+  m_vToolBarTools->addConnection (ID_TOOL_ELLIPSE, SIGNAL(doubleClicked(int)),
+				  this, "configEllipseTool");
 
   tmp = kapp->kde_datadir().copy ();
   tmp += "/killustrator/pics/texttool.xpm";
@@ -398,7 +414,139 @@ bool KIllustratorView::mappingCreateToolbar (OpenPartsUI::ToolBarFactory_ptr
 				    i18n ("Zoom In"), -1);
   m_vToolBarTools->setToggle (ID_TOOL_ZOOM, true);
 
+  m_vToolBarTools->setBarPos (OpenPartsUI::Left);
   m_vToolBarTools->enable (OpenPartsUI::Show);
+
+  /*
+   * ToolBar: Edit 
+   */
+  
+  m_vToolBarEdit = factory->create (OpenPartsUI::ToolBarFactory::Transient);
+  m_vToolBarEdit->setFullWidth (false);
+
+  tmp = kapp->kde_datadir ().copy ();
+  tmp += "/kpresenter/toolbar/undo.xpm";
+  pix = OPUIUtils::loadPixmap (tmp);
+  m_idEditUndo = 
+    m_vToolBarEdit->insertButton2 (pix, ID_EDIT_UNDO, SIGNAL (clicked ()), 
+				   this, "editUndo", true, i18n ("Undo"), -1);
+  //  m_vToolBarEdit->setItemEnabled (ID_EDIT_UNDO, false);
+  
+  tmp = kapp->kde_datadir ().copy ();
+  tmp += "/kpresenter/toolbar/redo.xpm";
+  pix = OPUIUtils::loadPixmap (tmp);
+  m_idEditRedo = 
+    m_vToolBarEdit->insertButton2 (pix, ID_EDIT_REDO, SIGNAL (clicked ()), 
+				   this, "editRedo", true, i18n ("Redo"), -1);
+  //  m_vToolBarEdit->setItemEnabled (ID_EDIT_REDO, false);
+  m_vToolBarEdit->insertSeparator (-1);
+
+  tmp = kapp->kde_toolbardir ().copy ();
+  tmp += "/editcut.xpm";
+  pix = OPUIUtils::loadPixmap (tmp);
+  m_idEditCut = 
+    m_vToolBarEdit->insertButton2 (pix, ID_EDIT_CUT, SIGNAL (clicked ()), 
+				   this, "editCut", true, i18n ("Cut"), -1);
+
+  tmp = kapp->kde_toolbardir ().copy ();
+  tmp += "/editcopy.xpm";
+  pix = OPUIUtils::loadPixmap (tmp);
+  m_idEditCopy = 
+    m_vToolBarEdit->insertButton2 (pix, ID_EDIT_COPY, SIGNAL (clicked ()), 
+				   this, "editCopy", true, i18n ("Copy"), -1);
+
+  tmp = kapp->kde_toolbardir ().copy ();
+  tmp += "/editpaste.xpm";
+  pix = OPUIUtils::loadPixmap (tmp);
+  m_idEditPaste = 
+    m_vToolBarEdit->insertButton2 (pix, ID_EDIT_PASTE, SIGNAL (clicked ()), 
+				   this, "editPaste", true, 
+				   i18n ("Paste"), -1);
+  m_vToolBarEdit->insertSeparator (-1);
+  
+  tmp = kapp->kde_datadir ().copy ();
+  tmp += "/kpresenter/toolbar/delete.xpm";
+  pix = OPUIUtils::loadPixmap (tmp);
+  m_idEditDelete = 
+    m_vToolBarEdit->insertButton2 (pix, ID_EDIT_DELETE, SIGNAL (clicked ()), 
+				   this, "editDelete", true, 
+				   i18n ("Delete"), -1);
+  m_vToolBarEdit->insertSeparator (-1);
+
+  OpenPartsUI::StrList zoomSizes;
+  zoomSizes.length (5);
+  for (int i = 0; i < 5; i++) {
+    char buf[8];
+    sprintf (buf, "%3.0f%%", zFactors[i] * 100);
+    zoomSizes[i] = CORBA::string_dup (buf);
+  }
+  m_idEditZoom = 
+  m_vToolBarEdit->insertCombo (zoomSizes, ID_EDIT_ZOOM, true, 
+			       SIGNAL (activated (const char*)),
+			       this, "zoomSizeSelected", true,
+			       i18n ("Zoom Factors"), 85, -1, 
+			       OpenPartsUI::AtBottom);
+  m_vToolBarEdit->setCurrentComboItem (ID_EDIT_ZOOM, 1);
+  m_vToolBarEdit->enable (OpenPartsUI::Show);
+
+  /*
+   * ColorBar
+   */
+  
+  m_vColorBar = 
+    factory->createColorBar (OpenPartsUI::ToolBarFactory::Transient);
+  m_vColorBar->setFullWidth (false);
+  
+  int i = 0;
+  const QColor cpalette[] = { white, red, green, blue, cyan, magenta, yellow,
+			      darkRed, darkGreen, darkBlue, darkCyan,
+			      darkMagenta, darkYellow, white, lightGray,
+			      gray, darkGray, black };
+
+  for (i = 0; i < 18; i++)
+     m_vColorBar->insertRgbColor (i, cpalette[i].red (),
+				  cpalette[i].green (),
+				  cpalette[i].blue (),
+				  i != 0);
+
+  m_vColorBar->addConnection (SIGNAL (fgColorSelected(int)), this, 
+			      "setPenColor");
+  m_vColorBar->addConnection (SIGNAL (bgColorSelected(int)), this, 
+			      "setFillColor");
+
+  m_vColorBar->setBarPos (OpenPartsUI::Right);
+  m_vColorBar->enable (OpenPartsUI::Show);
+
+  m_vToolBarEditPoint = 
+    factory->create (OpenPartsUI::ToolBarFactory::Transient);
+
+  tmp = kapp->kde_datadir ().copy ();
+  tmp += "/killustrator/pics/pointtool.xpm";
+  pix = OPUIUtils::loadPixmap (tmp);
+  m_idMovePoint = 
+    m_vToolBarEditPoint->insertButton2 (pix, 1, 
+					SIGNAL (clicked ()), 
+					this, "toolMovePoint", true, 
+					i18n ("Move Point"), -1);
+  tmp = kapp->kde_datadir ().copy ();
+  tmp += "/killustrator/pics/pointtool.xpm";
+  pix = OPUIUtils::loadPixmap (tmp);
+  m_idMovePoint = 
+    m_vToolBarEditPoint->insertButton2 (pix, 1, 
+					SIGNAL (clicked ()), 
+					this, "toolInsertPoint", true, 
+					i18n ("Insert Point"), -1);
+  tmp = kapp->kde_datadir ().copy ();
+  tmp += "/killustrator/pics/pointtool.xpm";
+  pix = OPUIUtils::loadPixmap (tmp);
+  m_idMovePoint = 
+    m_vToolBarEditPoint->insertButton2 (pix, 1, 
+					SIGNAL (clicked ()), 
+					this, "toolRemovePoint", true, 
+					i18n ("Remove Point"), -1);
+
+  m_vToolBarEditPoint->setBarPos (OpenPartsUI::Floating);
+  m_vToolBarEditPoint->enable (OpenPartsUI::Hide);
   return true;
 }
 
@@ -436,6 +584,8 @@ void KIllustratorView::setupCanvas () {
 	   hRuler, SLOT(updatePointer(int, int)));
   QObject::connect (canvas, SIGNAL(mousePositionChanged (int, int)),
 	   vRuler, SLOT(updatePointer(int, int)));
+  QObject::connect (canvas, SIGNAL(rightButtonAtSelectionClicked (int, int)),
+	   this, SLOT(popupForSelection (int, int)));
 
   grid->addWidget (viewport, 1, 1);
   grid->setRowStretch (1, 20);
@@ -448,8 +598,8 @@ void KIllustratorView::setupCanvas () {
   QObject::connect (tool, SIGNAL(modeSelected(const char*)),
 		    this, SLOT(showCurrentMode(const char*)));
   tcontroller->registerTool (ID_TOOL_EDITPOINT, 
-			     tool = new EditPointTool (&cmdHistory));
-  QObject::connect (tool, SIGNAL(modeSelected(const char*)),
+			     editPointTool = new EditPointTool (&cmdHistory));
+  QObject::connect (editPointTool, SIGNAL(modeSelected(const char*)),
 		    this, SLOT(showCurrentMode(const char*)));
   tcontroller->registerTool (ID_TOOL_FREEHAND, 
 			     tool = new FreeHandTool (&cmdHistory));
@@ -494,32 +644,6 @@ void KIllustratorView::setupCanvas () {
 
 void KIllustratorView::showCurrentMode (const char* msg) {
     //  statusbar->changeItem (msg, 2);
-}
-
-// XXXXXXXXXXXXXXXXXXX
-void KIllustratorView::setupColorToolbar () {
-#if 0
-    m_vToolBarFactory = m_vPartShell->toolBarFactory ();
-    if (! CORBA::is_nil (m_vToolBarFactory)) {
-	m_rToolBarColors = 
-	    m_vToolBarFactory->createToolBar (this, 
-					      CORBA::string_dup 
-					      (i18n ("Colors")));
-
-	for (int i = 0; i < 18; i++) {
-	  CORBA::Long id;
-	  id = m_rToolBarColors->insertColorButton (colorPalette[i]->red (),
-						    colorPalette[i]->green (),
-						    colorPalette[i]->blue ());
-	  if (i == 0)
-	    m_idFirstColor = id;
-	}
-
-	m_rToolBarColors->connect ("rightPressed", this, "setFillColor");
-	m_rToolBarColors->connect ("pressed", this, "setPenColor");
-	m_rToolBarColors->setPos(KToolBar::Right);
-    }
-#endif
 }
 
 void KIllustratorView::cleanUp () {
@@ -597,37 +721,6 @@ void KIllustratorView::resizeEvent (QResizeEvent* ) {
   }
 }
 
-#if 0
-void KIllustratorView::setMode (OPParts::Part::Mode m) {
-  Part_impl::setMode (m);
-  if (mode () == OPParts::Part::ChildMode && ! m_bFocus)
-    m_bShowGUI = false;
-  else
-    m_bShowGUI = true;
-}
-
-void KIllustratorView::setFocus (CORBA::Boolean m) {
-  Part_impl::setFocus (m);
-  bool old = m_bShowGUI;
-
-  if (mode () == OPParts::Part::ChildMode && ! m_bFocus)
-    m_bShowGUI = false;
-  else
-    m_bShowGUI = true;
-
-  if (m)
-    activateTool (m_idSelectionTool);
-
-  if (! m && m_pDoc != 0L) {
-    // we lost the focus, so deselect all objects
-    m_pDoc->unselectAllObjects ();
-  }
-
-  if (old != m_bShowGUI)
-    resizeEvent (0L);
-}
-#endif
-
 void KIllustratorView::showTransformationDialog (int id) {
   TransformationDialog *transformationDialog = 
     new TransformationDialog (&cmdHistory);
@@ -639,7 +732,40 @@ void KIllustratorView::showTransformationDialog (int id) {
 
 
 CORBA::Boolean KIllustratorView::printDlg () {
-  return false;
+  canvas->printDocument ();
+  return true;
+}
+
+void KIllustratorView::editCutSlot () {
+  editCut ();
+}
+
+void KIllustratorView::editCopySlot () {
+  editCopy ();
+}
+
+void KIllustratorView::editPropertiesSlot () {
+  editProperties ();
+}
+
+void KIllustratorView::arrangeAlignSlot () {
+  arrangeAlign ();
+}
+
+void KIllustratorView::arrangeToFrontSlot () {
+  arrangeToFront ();
+}
+
+void KIllustratorView::arrangeToBackSlot () {
+  arrangeToBack ();
+}
+
+void KIllustratorView::arrangeOneForwardSlot () {
+  arrangeOneForward ();
+}
+
+void KIllustratorView::arrangeOneBackSlot () {
+  arrangeOneBack ();
 }
 
 void KIllustratorView::editUndo () {
@@ -766,12 +892,16 @@ void KIllustratorView::alignToGrid () {
 }
 
 void KIllustratorView::setPenColor (CORBA::Long id) {
-  int idx = id - m_idFirstColor;
+  CORBA::Short red, green, blue;
+  CORBA::Boolean fill;
+  if(! m_vColorBar->getRgbColor (id, red, green, blue, fill))
+    return;
+  
   GObject::OutlineInfo oInfo;
   oInfo.mask = GObject::OutlineInfo::Color | GObject::OutlineInfo::Style;
-  oInfo.color = *(colorPalette[idx]);
-  oInfo.style = (idx == 0 ? NoPen : SolidLine);
-  
+  oInfo.color = QColor (red, green, blue);
+  oInfo.style = fill ? SolidLine : NoPen;
+
   GObject::FillInfo fInfo;
   fInfo.mask = 0;
     
@@ -790,15 +920,19 @@ void KIllustratorView::setPenColor (CORBA::Long id) {
 }
 
 void KIllustratorView::setFillColor (CORBA::Long id) {
-  int idx = id - m_idFirstColor;
+  CORBA::Short red, green, blue;
+  CORBA::Boolean fill;
+  if(! m_vColorBar->getRgbColor (id, red, green, blue, fill))
+    return;
+
   GObject::OutlineInfo oInfo;
   oInfo.mask = 0;
   
   GObject::FillInfo fInfo;
   fInfo.mask = GObject::FillInfo::Color | GObject::FillInfo::FillStyle;
-  fInfo.color = *(colorPalette[idx]);
-  fInfo.fstyle = (idx == 0 ? GObject::FillInfo::NoFill :
-		GObject::FillInfo::SolidFill);
+  fInfo.color = QColor (red, green, blue);
+  fInfo.fstyle = fill ? GObject::FillInfo::SolidFill : 
+    GObject::FillInfo::NoFill;
 
   if (! m_pDoc->selectionIsEmpty ()) {
     SetPropertyCmd *cmd = new SetPropertyCmd (m_pDoc, oInfo, fInfo);
@@ -823,56 +957,70 @@ void KIllustratorView::editLayers () {
 
 void KIllustratorView::toolSelection () {
   m_vToolBarTools->setButton (m_idActiveTool, false);
+  m_vToolBarEditPoint->enable (OpenPartsUI::Hide);
   tcontroller->toolSelected (m_idActiveTool = ID_TOOL_SELECT);
 }
 
 void KIllustratorView::toolEditPoint () {
   m_vToolBarTools->setButton (m_idActiveTool, false);
+  m_vToolBarEditPoint->enable (OpenPartsUI::Show);
   tcontroller->toolSelected (m_idActiveTool = ID_TOOL_EDITPOINT);
 }
 
 void KIllustratorView::toolFreehandLine () {
   m_vToolBarTools->setButton (m_idActiveTool, false);
+  m_vToolBarEditPoint->enable (OpenPartsUI::Hide);
   tcontroller->toolSelected (m_idActiveTool = ID_TOOL_FREEHAND);
 }
 
 void KIllustratorView::toolPolyline () {
   m_vToolBarTools->setButton (m_idActiveTool, false);
+  m_vToolBarEditPoint->enable (OpenPartsUI::Hide);
   tcontroller->toolSelected (m_idActiveTool = ID_TOOL_LINE);
 }
 
 void KIllustratorView::toolBezier () {
   m_vToolBarTools->setButton (m_idActiveTool, false);
+  m_vToolBarEditPoint->enable (OpenPartsUI::Hide);
   tcontroller->toolSelected (m_idActiveTool = ID_TOOL_BEZIER);
 }
 
 void KIllustratorView::toolRectangle () {
   m_vToolBarTools->setButton (m_idActiveTool, false);
+  m_vToolBarEditPoint->enable (OpenPartsUI::Hide);
   tcontroller->toolSelected (m_idActiveTool = ID_TOOL_RECTANGLE);
 }
 
 void KIllustratorView::toolPolygon () {
   m_vToolBarTools->setButton (m_idActiveTool, false);
+  m_vToolBarEditPoint->enable (OpenPartsUI::Hide);
   tcontroller->toolSelected (m_idActiveTool = ID_TOOL_POLYGON);
 }
 
 void KIllustratorView::toolEllipse () {
   m_vToolBarTools->setButton (m_idActiveTool, false);
+  m_vToolBarEditPoint->enable (OpenPartsUI::Hide);
   tcontroller->toolSelected (m_idActiveTool = ID_TOOL_ELLIPSE);
 }
 
 void KIllustratorView::toolText () {
   m_vToolBarTools->setButton (m_idActiveTool, false);
+  m_vToolBarEditPoint->enable (OpenPartsUI::Hide);
   tcontroller->toolSelected (m_idActiveTool = ID_TOOL_TEXT);
 }
 
 void KIllustratorView::toolZoom () {
   m_vToolBarTools->setButton (m_idActiveTool, false);
+  m_vToolBarEditPoint->enable (OpenPartsUI::Hide);
   tcontroller->toolSelected (m_idActiveTool = ID_TOOL_ZOOM);
 }
 
 void KIllustratorView::configPolygonTool () {
   tcontroller->configureTool (ID_TOOL_POLYGON);
+}
+
+void KIllustratorView::configEllipseTool () {
+  tcontroller->configureTool (ID_TOOL_ELLIPSE);
 }
 
 void KIllustratorView::viewOutline () {
@@ -894,4 +1042,33 @@ void KIllustratorView::setupPage () {
   if (KoPageLayoutDia::pageLayout (pLayout, header, 
 				   FORMAT_AND_BORDERS))
     m_pDoc->setPageLayout (pLayout);
+}
+
+void KIllustratorView::zoomSizeSelected (const char* s) {
+  float value;
+  sscanf (s, "%3f", &value);
+  if (canvas)
+    canvas->setZoomFactor (value / 100.0);
+}
+
+void KIllustratorView::popupForSelection (int x, int y) {
+  objMenu->popup (QCursor::pos ());
+}
+
+void KIllustratorView::toolMovePoint () {
+  editPointTool->setMode (EditPointTool::MovePoint);
+  m_vToolBarEditPoint->setButton (m_idInsertPoint, false);
+  m_vToolBarEditPoint->setButton (m_idRemovePoint, false);
+}
+
+void KIllustratorView::toolInsertPoint () {
+  editPointTool->setMode (EditPointTool::InsertPoint);
+  m_vToolBarEditPoint->setButton (m_idMovePoint, false);
+  m_vToolBarEditPoint->setButton (m_idRemovePoint, false);
+}
+
+void KIllustratorView::toolRemovePoint () {
+  editPointTool->setMode (EditPointTool::RemovePoint);
+  m_vToolBarEditPoint->setButton (m_idMovePoint, false);
+  m_vToolBarEditPoint->setButton (m_idInsertPoint, false);
 }

@@ -26,11 +26,19 @@
 #include "KIllustrator_shell.moc"
 
 #include "KIllustrator_view.h"
+#include "Preview.h"
+#include "DocumentInfo.h"
+#include "filter/FilterManager.h"
+#include "FilterInfo.h"
 
 #include <kfiledialog.h>
+#include <kiconloader.h>
 #include <qmsgbox.h>
+#include <qkeycode.h>
+#include <qfileinfo.h>
 
 list<KIllustratorShell*>* KIllustratorShell::s_lstShells = 0L;
+bool KIllustratorShell::previewHandlerRegistered = false;
 
 KIllustratorShell::KIllustratorShell () {
   m_pDoc = 0L;
@@ -40,6 +48,15 @@ KIllustratorShell::KIllustratorShell () {
     s_lstShells = new list<KIllustratorShell*>;
 
   s_lstShells->push_back (this);
+
+  if (! previewHandlerRegistered) {
+    KFilePreviewDialog::registerPreviewModule ("kil", kilPreviewHandler,
+					       PreviewPixmap);
+    KFilePreviewDialog::registerPreviewModule ("wmf", wmfPreviewHandler,
+					       PreviewPixmap);
+    previewHandlerRegistered = true;
+  }
+
 }
 
 KIllustratorShell::~KIllustratorShell () {
@@ -54,6 +71,64 @@ bool KIllustratorShell::isModified () {
 void KIllustratorShell::cleanUp () {
   releaseDocument ();
   KoMainWindow::cleanUp ();
+}
+
+void KIllustratorShell::createFileMenu (OPMenuBar* mbar) {
+  // Do we loose control over the menubar ?
+  if ( mbar == 0L) {
+    m_pFileMenu = 0L;
+    return;
+  }
+  
+  m_pFileMenu = new OPMenu (mbar);
+
+  m_idMenuFile_New = 
+    m_pFileMenu->insertItem (Icon ("filenew.xpm" ), i18n ("&New"), 
+			     this, SLOT (slotFileNew ()), CTRL + Key_N);
+  m_idMenuFile_Open = 
+    m_pFileMenu->insertItem (Icon ("fileopen.xpm"), i18n ("&Open..."), 
+			     this, SLOT (slotFileOpen ()), CTRL + Key_O);
+  m_pFileMenu->insertSeparator (-1);
+  m_idMenuFile_Save = 
+    m_pFileMenu->insertItem (Icon ("filefloppy.xpm"), i18n ("&Save"), 
+			     this, SLOT (slotFileSave ()), CTRL + Key_S);
+  m_pFileMenu->setItemEnabled (m_idMenuFile_Save, false);
+  
+  m_idMenuFile_SaveAs = 
+    m_pFileMenu->insertItem (i18n ("&Save as..."), this, 
+			     SLOT (slotFileSaveAs ()));
+  m_pFileMenu->setItemEnabled (m_idMenuFile_SaveAs, false);
+
+  m_pFileMenu->insertSeparator (-1);
+
+  m_idMenuFile_Import = 
+    m_pFileMenu->insertItem (i18n ("Import..."), this, 
+			     SLOT (slotFileImport ()));
+  m_idMenuFile_Export = 
+    m_pFileMenu->insertItem (i18n ("Export..."), this, 
+			     SLOT (slotFileExport ()));
+
+  m_pFileMenu->insertSeparator (-1);
+  m_idMenuFile_Print = 
+    m_pFileMenu->insertItem (i18n ("&Print..."), this, 
+			     SLOT (slotFilePrint ()));
+  m_pFileMenu->setItemEnabled (m_idMenuFile_Print, false);
+  
+  m_idMenuFile_Info = 
+    m_pFileMenu->insertItem (i18n ("Document Info..."), this, 
+			     SLOT (slotFileInfo ()));
+  
+  m_pFileMenu->insertSeparator (-1);
+  m_idMenuFile_Close = 
+    m_pFileMenu->insertItem (i18n ("&Close"), this, 
+			     SLOT (slotFileClose ()), CTRL + Key_W);
+  m_pFileMenu->setItemEnabled (m_idMenuFile_Close, false);
+  
+  m_idMenuFile_Quit = 
+    m_pFileMenu->insertItem (i18n ("&Quit"), this, 
+			     SLOT (slotFileQuit ()), CTRL + Key_Q);
+
+  mbar->insertItem (i18n ("&File"), m_pFileMenu);
 }
 
 void KIllustratorShell::setDocument (KIllustratorDocument* doc) {
@@ -77,8 +152,8 @@ void KIllustratorShell::setDocument (KIllustratorDocument* doc) {
     m_pFileMenu->setItemEnabled (m_idMenuFile_Quit, true);
   }
   
-//  opToolBar ()->setItemEnabled (TOOLBAR_PRINT, true);
-//  opToolBar ()->setItemEnabled (TOOLBAR_SAVE, true);
+  opToolBar ()->setItemEnabled (TOOLBAR_PRINT, true);
+  opToolBar ()->setItemEnabled (TOOLBAR_SAVE, true);
 }
 
 bool KIllustratorShell::newDocument () {
@@ -113,8 +188,8 @@ bool KIllustratorShell::newDocument () {
     m_pFileMenu->setItemEnabled (m_idMenuFile_Quit, true);
   }
   
-  //  opToolBar ()->setItemEnabled (TOOLBAR_PRINT, true);
-  //  opToolBar ()->setItemEnabled (TOOLBAR_SAVE, true);
+  opToolBar ()->setItemEnabled (TOOLBAR_PRINT, true);
+  opToolBar ()->setItemEnabled (TOOLBAR_SAVE, true);
 
   return true;
 }
@@ -122,12 +197,14 @@ bool KIllustratorShell::newDocument () {
 bool KIllustratorShell::openDocument (const char* url, const char* fmt) {
   if (fmt == 0L || *fmt == '\0')
     fmt = "application/x-killustrator";
-  
+
+  /*  
   if (m_pDoc && m_pDoc->isEmpty ()) {
     cout << "release document" << endl;
-    //    releaseDocument ();
+    releaseDocument ();
   }
-  else if (m_pDoc && ! m_pDoc->isEmpty ()) {
+  */
+  if (m_pDoc && ! m_pDoc->isEmpty ()) {
     KIllustratorShell *shell = new KIllustratorShell ();
     shell->show ();
     return shell->openDocument (url, fmt);
@@ -155,8 +232,8 @@ bool KIllustratorShell::openDocument (const char* url, const char* fmt) {
     m_pFileMenu->setItemEnabled (m_idMenuFile_Quit, true);
   }
   
-  //  opToolBar ()->setItemEnabled (TOOLBAR_PRINT, true);
-  //  opToolBar ()->setItemEnabled (TOOLBAR_SAVE, true);
+  opToolBar ()->setItemEnabled (TOOLBAR_PRINT, true);
+  opToolBar ()->setItemEnabled (TOOLBAR_SAVE, true);
   m_pDoc->setURL (url);
 
   cout << "loading done !" << endl;
@@ -222,12 +299,13 @@ void KIllustratorShell::slotFileNew () {
 }
 
 void KIllustratorShell::slotFileOpen () {
-  QString file = KFileDialog::getOpenFileName (getenv ("HOME"));
+  QString fname = 
+    KFilePreviewDialog::getOpenFileURL (0, "*.kil | KIllustrator File", this);
 
-  if (file.isNull ())
+  if (fname.isNull ())
     return;
   
-  if (! openDocument (file, "")) {
+  if (! openDocument (fname, "")) {
     QMessageBox::critical (this, i18n ("KIllustrator Error"), 
 			   i18n ("Could not open file"), i18n ("OK"));
   }
@@ -267,9 +345,70 @@ void KIllustratorShell::slotFileClose () {
   delete this;
 }
 
+void KIllustratorShell::slotFileImport () {
+  FilterManager* filterMgr = FilterManager::instance ();
+  QString filter = filterMgr->importFilters ();
+  
+  QString fname = 
+    KFilePreviewDialog::getOpenFileName (0, (const char *) filter, this);
+  if (! fname.isEmpty ()) {
+    QFileInfo finfo ((const char *) fname);
+    if (!finfo.isFile () || !finfo.isReadable ())
+      return;
+
+    FilterInfo* filterInfo = filterMgr->findFilter (fname, 
+						    FilterInfo::FKind_Import);
+    if (filterInfo) {
+      ImportFilter* filter = filterInfo->importFilter ();
+      if (filter->setup (m_pDoc, filterInfo->extension ())) {
+	filter->setInputFileName (fname);
+	filter->importFromFile (m_pDoc);
+      }
+      else
+	QMessageBox::critical (this, i18n ("KIllustrator Error"), 
+			       i18n ("Cannot import from file"), i18n ("OK"));
+    }
+    else
+      QMessageBox::critical (this, i18n ("KIllustrator Error"), 
+			     i18n ("Unknown import format"), i18n ("OK"));
+  }
+}
+
+void KIllustratorShell::slotFileExport () {
+  FilterManager* filterMgr = FilterManager::instance ();
+  QString filter = filterMgr->exportFilters ();
+  
+  QString fname = 
+    KFileDialog::getSaveFileName (0, (const char *) filter, this);
+
+  if (! fname.isEmpty ()) {
+    FilterInfo* filterInfo = filterMgr->findFilter (fname, 
+						    FilterInfo::FKind_Export);
+    
+    if (filterInfo) {
+      ExportFilter* filter = filterInfo->exportFilter ();
+      if (filter->setup (m_pDoc, filterInfo->extension ())) {
+	filter->setOutputFileName (fname);
+	filter->exportToFile (m_pDoc);
+      }
+      else
+	QMessageBox::critical (this, i18n ("KIllustrator Error"), 
+			       i18n ("Cannot export to file"), i18n ("OK"));
+    }
+    else
+      QMessageBox::critical (this, i18n ("KIllustrator Error"), 
+			     i18n ("Unknown export format"), i18n ("OK"));
+  }
+}
+
 void KIllustratorShell::slotFilePrint () {
   assert (m_pView != 0L);
   m_pView->printDlg ();
+}
+
+void KIllustratorShell::slotFileInfo () {
+  if (m_pDoc)
+    DocumentInfo::showInfo (m_pDoc);
 }
 
 void KIllustratorShell::slotFileQuit () {
@@ -306,7 +445,6 @@ void KIllustratorShell::releaseDocument () {
   int views = 0;
   if (m_pDoc)
     views = m_pDoc->viewCount();
-  /*
   setRootPart (0);
   interface ()->setActivePart (0);
   if (m_pView)
@@ -317,5 +455,4 @@ void KIllustratorShell::releaseDocument () {
     CORBA::release (m_pDoc);
   m_pView = 0L;
   m_pDoc = 0L;
-  */
 }

@@ -62,9 +62,9 @@ void KIllustratorApp::start () {
 }
 
 int main (int argc, char** argv) {
-  KIllustratorAutoLoader loader ("IDL:KOffice/DocumentFactory:1.0");
+  KIllustratorAutoLoader loader ("IDL:KOffice/DocumentFactory:1.0", 
+                                 "KIllustrator");
   KIllustratorApp app (argc, argv);
-
   for (int i = 1; i < argc; i++) {
     if (::strcmp (argv[i], "-s") == 0 || 
 	::strcmp (argv[i], "--server") == 0)

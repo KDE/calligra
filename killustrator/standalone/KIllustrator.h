@@ -48,6 +48,7 @@ class GDocument;
 class PStateManager;
 class ScriptDialog;
 class LayerDialog;
+class EditPointTool;
 
 #define ID_FILE_NEW              1
 #define ID_FILE_OPEN             2
@@ -60,8 +61,8 @@ class LayerDialog;
 #define ID_FILE_INFO             9
 #define ID_FILE_EXIT            10 
 
-#define ID_IMPORT             1000
-#define ID_EXPORT             2000
+#define ID_IMPORT               11
+#define ID_EXPORT               12
 
 #define ID_EDIT_UNDO           200
 #define ID_EDIT_REDO           201
@@ -116,6 +117,12 @@ class LayerDialog;
 #define ID_TOOL_ZOOM          1010
 #define ID_TOOL_PATHTEXT      1011
 
+#define ID_TOOL_EP_MOVE       1100
+#define ID_TOOL_EP_ADD        1101
+#define ID_TOOL_EP_DEL        1102
+#define ID_TOOL_EP_JOIN       1103
+#define ID_TOOL_EP_SPLIT      1104
+
 class KIllustrator : public KTopLevelWidget, public MainView {
   Q_OBJECT
 
@@ -150,6 +157,7 @@ public slots:
   void updateSettings ();
 
 protected slots:
+  void toolSelected (int id);
   void zoomFactorSlot (int);
   void selectColor (int flag, const QBrush& b);
   void setUndoStatus(bool undoPossible, bool redoPossible);
@@ -176,14 +184,14 @@ private:
 
   void openFile (const char* fname);
   void openURL (const char* url);
-  void exportToFile (int id);
-  void importFromFile (int id);
+  void exportToFile ();
+  void importFromFile ();
 
   void setFileCaption (const char* fname);
 
   void showTransformationDialog (int id);
 
-  KToolBar *toolbar, *toolPalette, *colorPalette;
+  KToolBar *toolbar, *toolPalette, *colorPalette, *editPointToolbar;
   KStatusBar* statusbar;
   KMenuBar* menubar;
   
@@ -199,6 +207,7 @@ private:
   Ruler *hRuler, *vRuler;
   ScriptDialog *scriptDialog;
   LayerDialog *layerDialog;
+  EditPointTool *editPointTool;
 
   // direction of file transfer
   TransferDirection ioDir;

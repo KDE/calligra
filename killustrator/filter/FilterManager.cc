@@ -45,41 +45,101 @@ void FilterManager::installDefaultFilters () {
   ImageExport* filter = new ImageExport ();
 #ifdef HAVE_QIMGIO
   filters.insert ("JPEG", new FilterInfo (FilterInfo::FKind_Export,
-					  "JPEG", "jpg",
+					  "JPEG Image Format", "jpg",
 					  "Kai-Uwe Sattler",
 					  "1.0", 0L, filter));
   filters.insert ("PNG", new FilterInfo (FilterInfo::FKind_Export,
-					  "PNG", "png",
+					  "PNG Image Format", "png",
 					  "Kai-Uwe Sattler",
 					  "1.0", 0L, filter));
 #endif
   filters.insert ("PPM", new FilterInfo (FilterInfo::FKind_Export,
-					  "PPM", "ppm",
+					  "PPM Image Format", "ppm",
 					  "Kai-Uwe Sattler",
 					  "1.0", 0L, filter));
   filters.insert ("XPM", new FilterInfo (FilterInfo::FKind_Export,
-					  "XPM", "xpm",
+					  "XPM Image Format", "xpm",
 					  "Kai-Uwe Sattler",
 					  "1.0", 0L, filter));
   filters.insert ("GIF", new FilterInfo (FilterInfo::FKind_Export,
-					  "GIF", "gif",
+					  "GIF Image Format", "gif",
 					  "Kai-Uwe Sattler",
 					  "1.0", 0L, filter));
   KilluImport* killuFilter = new KilluImport ();
   filters.insert ("KIllustrator", new FilterInfo (FilterInfo::FKind_Import,
-						  "KIllustrator", "kil",
+						  "KIllustrator Document", 
+						  "kil",
 						  "Kai-Uwe Sattler",
 						  "0.1", killuFilter, 0L));
   XfigImport* xfigFilter = new XfigImport ();
   filters.insert ("Xfig", new FilterInfo (FilterInfo::FKind_Import,
-						  "Xfig", "fig",
+						  "Xfig Document", "fig",
 						  "Kai-Uwe Sattler",
 						  "0.1", xfigFilter, 0L));
   EPSExport* epsFilter = new EPSExport ();
   filters.insert ("EPS", new FilterInfo (FilterInfo::FKind_Export,
-					  "EPS", "eps",
+					  "Encapsulated PostScript", "eps",
 					  "Kai-Uwe Sattler",
 					  "0.1", 0L, epsFilter));
+}
+
+QString FilterManager::importFilters () {
+  QString s;
+  QDictIterator<FilterInfo> iter (filters);
+  for (; iter.current (); ++iter) {
+    FilterInfo *fi = iter.current ();
+    if (fi->kind () == FilterInfo::FKind_Import) {
+      QString buf;
+      buf.sprintf ("*.%s|%s (*.%s)", fi->extension (), fi->type (), 
+		   fi->extension ());
+      if (s.length () > 0)
+	s += "\n";
+      s += buf;
+    }
+  }
+  return s;
+}
+
+QString FilterManager::exportFilters () {
+  QString s;
+  QDictIterator<FilterInfo> iter (filters);
+  for (; iter.current (); ++iter) {
+    FilterInfo *fi = iter.current ();
+    if (fi->kind () == FilterInfo::FKind_Export) {
+      QString buf;
+      buf.sprintf ("*.%s|%s (*.%s)", fi->extension (), fi->type (),
+		   fi->extension ());
+      if (s.length () > 0)
+	s += "\n";
+      s += buf;
+    }
+  }
+  return s;
+}
+
+QString FilterManager::extension (const char *fname) {
+  QString file (fname);
+  QString ext;
+  int pos = file.find ('.', 0, false);
+  if (pos != -1)
+    ext = file.mid (pos + 1, file.length () - pos);
+  return ext;
+}
+
+FilterInfo* FilterManager::findFilter (const char* fname, 
+				       FilterInfo::Kind kind) {
+  FilterInfo* info = 0L;
+  QString ext = extension (fname);
+
+  QDictIterator<FilterInfo> iter (filters);
+  for (; iter.current (); ++iter) {
+    FilterInfo *fi = iter.current ();
+    if (fi->kind () == kind && ext == fi->extension ()) {
+      info = fi;
+      break;
+    }
+  }
+  return info;
 }
 
 FilterManager* FilterManager::instance () {

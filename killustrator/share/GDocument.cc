@@ -34,6 +34,7 @@
 #include "GGroup.h"
 
 #include <string>
+#include <map>
 #include <iostream.h>
 #include <fstream.h>
 #include <strstream.h>
@@ -556,6 +557,7 @@ bool GDocument::parseBody (XmlReader& xml, list<GObject*>& newObjs,
   bool finished = false;
   XmlElement elem;
   bool endOfBody = false;
+  map<string, GObject*> idtable;
 
   do {
     if (! xml.readElement (elem))
@@ -701,6 +703,9 @@ bool GDocument::parseBody (XmlReader& xml, list<GObject*>& newObjs,
         else { 
 	    if (markNew)
 		newObjs.push_back (obj);
+	    if (obj->hasId ())
+	      idtable.insert (pair<string, GObject*> (obj->getId (), obj));
+
 	    insertObject (obj);
 	}
         obj = 0L;
@@ -708,6 +713,25 @@ bool GDocument::parseBody (XmlReader& xml, list<GObject*>& newObjs,
       finished = false;
     }
   } while (! endOfBody);
+
+  // update object connections
+  vector<GLayer*>::iterator i = layers.begin ();
+  for (; i != layers.end (); i++) {
+    GLayer* layer = *i;
+    list<GObject*>& contents = layer->objects ();
+    for (list<GObject*>::iterator oi = contents.begin ();
+	 oi != contents.end (); oi++) {
+      // this should be more general !!
+      if ((*oi)->hasRefId () && (*oi)->isA ("GText")) {
+	const char* id = (*oi)->getRefId ();
+	map<string, GObject*>::iterator mi = idtable.find (id);
+	if (mi != idtable.end ()) {
+	  GText *tobj = (GText *) *oi;
+	  tobj->setPathObject (mi->second);
+	}
+      }
+    }
+  }
 
   setAutoUpdate (true);
   return true;

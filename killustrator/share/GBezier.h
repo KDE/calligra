@@ -52,6 +52,8 @@ public:
 
   virtual void setPoint (int idx, const Coord& p);
   virtual void movePoint (int idx, float dx, float dy);
+  virtual void removePoint (int idx, bool update = true);
+  virtual void insertPoint (int idx, const Coord& p, bool update = true);
   
   virtual const char* typeName ();
 
@@ -61,6 +63,7 @@ public:
 
   virtual bool findNearestPoint (const Coord& p, float max_dist, 
 				 float& dist, int& pidx);
+  virtual int containingSegment (float xpos, float ypos);
 
   bool isEndPoint (int idx) { return (idx % 3) == 1; }
   void initBasePoint (int idx);

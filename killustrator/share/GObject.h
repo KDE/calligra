@@ -347,6 +347,13 @@ public:
 
   void invalidateClipRegion  ();
 
+  // used for saving/restoring of object connections (like text on path)
+  const char* getId ();
+  bool hasId () const { return ! id.isEmpty (); }
+
+  const char* getRefId () { return (const char *) refid; }
+  bool hasRefId () const { return ! refid.isEmpty (); }
+
 signals:
   void changed ();
   void changed (const Rect& r);
@@ -375,6 +382,7 @@ protected:
   bool inWork;             // the object is currently manipulated,
                            // so don't fill it now
 
+  QString id, refid;
   // default value
   static OutlineInfo defaultOutlineInfo;
   static FillInfo defaultFillInfo;

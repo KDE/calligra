@@ -23,6 +23,7 @@
 */
 
 #include <iostream.h>
+#include <math.h>
 #include "OvalTool.h"
 #include "OvalTool.moc"
 #include "GDocument.h"
@@ -30,12 +31,19 @@
 #include "Coord.h"
 #include "CreateOvalCmd.h"
 #include "CommandHistory.h"
+#include "EllipseConfigDialog.h"
 #include <qkeycode.h>
 #include <kapp.h>
 #include <klocale.h>
 
 OvalTool::OvalTool (CommandHistory *history) : Tool (history) {
   oval = NULL;
+  KConfig* config = kapp->getConfig ();
+  QString oldgroup = config->group ();
+
+  config->setGroup ("EllipseTool");
+  useFixedCenter = config->readBoolEntry ("FixedCenter", false);
+  config->setGroup (oldgroup);
 }
 
 void OvalTool::processEvent (QEvent* e, GDocument *doc, Canvas* canvas) {
@@ -44,10 +52,11 @@ void OvalTool::processEvent (QEvent* e, GDocument *doc, Canvas* canvas) {
     int xpos = me->x (), ypos = me->y ();
     canvas->snapPositionToGrid (xpos, ypos);
 
+    pos = Coord (xpos, ypos);
     bool flag = me->state () & ControlButton;
     oval = new GOval (flag);
-    oval->setStartPoint (Coord (xpos, ypos));
-    oval->setEndPoint (Coord (xpos, ypos));
+    oval->setStartPoint (pos);
+    oval->setEndPoint (pos);
     doc->insertObject (oval);
   }
   else if (e->type () == Event_MouseMove) {
@@ -55,9 +64,29 @@ void OvalTool::processEvent (QEvent* e, GDocument *doc, Canvas* canvas) {
       return; 
     QMouseEvent *me = (QMouseEvent *) e;
     int xpos = me->x (), ypos = me->y ();
+
     canvas->snapPositionToGrid (xpos, ypos);
 
-    oval->setEndPoint (Coord (xpos, ypos));
+    if (useFixedCenter) {
+      float dx = fabs (xpos - pos.x ()), 
+	dy = fabs (ypos - pos.y ());
+      Coord ps, pe;
+      if (oval->isCircle ()) {
+	float off = qRound ((dx > dy ? dx : dy) / 2.0);
+	ps = Coord (pos.x () - off, pos.y () - off);
+	pe = Coord (pos.x () + off, pos.y () + off);
+      }
+      else {
+	ps = Coord (pos.x () - qRound (dx / 2.0), 
+		    pos.y () - qRound (dy / 2.0));
+	pe = Coord (pos.x () + qRound (dx / 2.0), 
+		    pos.y () + qRound (dy / 2.0));
+      }
+      oval->setStartPoint (ps);
+      oval->setEndPoint (pe);
+    }
+    else
+      oval->setEndPoint (Coord (xpos, ypos));
   }
   else if (e->type () == Event_MouseButtonRelease) {
     if (oval == NULL)
@@ -66,7 +95,10 @@ void OvalTool::processEvent (QEvent* e, GDocument *doc, Canvas* canvas) {
     int xpos = me->x (), ypos = me->y ();
     canvas->snapPositionToGrid (xpos, ypos);
 
-    oval->setEndPoint (Coord (xpos, ypos));
+    if (useFixedCenter) {
+    }
+    else
+      oval->setEndPoint (Coord (xpos, ypos));
     doc->unselectAllObjects ();
     doc->setLastObject (oval);
 
@@ -79,6 +111,24 @@ void OvalTool::processEvent (QEvent* e, GDocument *doc, Canvas* canvas) {
 }
 
 void OvalTool::activate (GDocument* doc, Canvas* canvas) {
-  emit modeSelected (i18n ("Create Oval"));
+  emit modeSelected (i18n ("Create Ellipse"));
 }
+
+void OvalTool::aroundFixedCenter (bool flag) {
+  if (useFixedCenter != flag) {
+    useFixedCenter = flag;
+
+    KConfig* config = kapp->getConfig ();
+    QString oldgroup = config->group ();
+
+    config->setGroup ("EllipseTool");
+    config->writeEntry ("FixedCenter", useFixedCenter);
+    config->setGroup (oldgroup);
+  }
+}
+
+void OvalTool::configure () {
+  EllipseConfigDialog::setupTool (this);
+}
+
 

@@ -22,39 +22,30 @@
 
 */
 
-#ifndef EditPointTool_h_
-#define EditPointTool_h_
+#ifndef EllipseConfigDialog_h
+#define EllipseConfigDialog_h
 
-#include <qobject.h>
-#include <qevent.h>
-#include <qcursor.h>
+#include <qdialog.h>
+#include <qradiobt.h>
 
-#include "GObject.h"
-#include "Tool.h"
 
-class EditPointTool : public Tool {
+#include "OvalTool.h"
+
+class EllipseConfigDialog : public QDialog {
   Q_OBJECT
 public:
-  enum Mode { 
-    MovePoint, InsertPoint, RemovePoint, Join, Split
-  };
+  EllipseConfigDialog (QWidget* parent = 0L, const char* name = 0L);
 
-  EditPointTool (CommandHistory *history);
-  ~EditPointTool ();
+  static void setupTool (OvalTool* tool);
 
-  virtual void processEvent (QEvent* e, GDocument* doc, Canvas* canvas);
+protected:
+  QWidget* createWidget (QWidget* parent);
 
-  void setMode (Mode m);
-
-  void activate (GDocument* doc, Canvas* canvas);
-  void deactivate (GDocument* doc, Canvas* canvas);
+private slots:
+  void helpPressed ();
 
 private:
-  Mode mode;
-  GObject* obj;
-  int pointIdx;
-  Coord startPos, lastPos;
-  QCursor *cursor;
+  QRadioButton *radiusButton, *diameterButton;
 };
 
 #endif

@@ -7,56 +7,63 @@
  
 module KIllustrator {
   interface View : KOffice::View {
-    oneway void editUndo ();
-    oneway void editRedo ();
-    oneway void editCut ();
-    oneway void editCopy ();
-    oneway void editPaste ();
-    oneway void editSelectAll ();
-    oneway void editDelete ();
-    oneway void editInsertOject ();
-    oneway void editProperties ();
+    slot void editUndo ();
+    slot void editRedo ();
+    slot void editCut ();
+    slot void editCopy ();
+    slot void editPaste ();
+    slot void editSelectAll ();
+    slot void editDelete ();
+    slot void editInsertOject ();
+    slot void editProperties ();
 
-    oneway void viewOutline ();
-    oneway void viewNormal ();
+    slot void viewOutline ();
+    slot void viewNormal ();
 
-    oneway void transformPosition ();
-    oneway void transformDimension ();
-    oneway void transformRotation ();
-    oneway void transformMirror ();
+    slot void transformPosition ();
+    slot void transformDimension ();
+    slot void transformRotation ();
+    slot void transformMirror ();
 
-    oneway void arrangeAlign ();
-    oneway void arrangeToFront ();
-    oneway void arrangeToBack ();
-    oneway void arrangeOneForward ();
-    oneway void arrangeOneBack ();
-    oneway void arrangeGroup ();
-    oneway void arrangeUngroup ();
+    slot void arrangeAlign ();
+    slot void arrangeToFront ();
+    slot void arrangeToBack ();
+    slot void arrangeOneForward ();
+    slot void arrangeOneBack ();
+    slot void arrangeGroup ();
+    slot void arrangeUngroup ();
 
-    oneway void editLayers ();
-    oneway void setupPage ();
+    slot void editLayers ();
+    slot void setupPage ();
 
-    oneway void toggleRuler ();
-    oneway void toggleGrid ();
+    slot void toggleRuler ();
+    slot void toggleGrid ();
 
-    oneway void setupGrid ();
-    oneway void alignToGrid ();
+    slot void setupGrid ();
+    slot void alignToGrid ();
 
-    oneway void toolSelection ();
-    oneway void toolEditPoint ();
-    oneway void toolFreehandLine ();
-    oneway void toolPolyline ();
-    oneway void toolBezier ();
-    oneway void toolRectangle ();
-    oneway void toolPolygon ();
-    oneway void toolEllipse ();
-    oneway void toolText ();
-    oneway void toolZoom ();
+    slot void toolSelection ();
+    slot void toolEditPoint ();
+    slot void toolFreehandLine ();
+    slot void toolPolyline ();
+    slot void toolBezier ();
+    slot void toolRectangle ();
+    slot void toolPolygon ();
+    slot void toolEllipse ();
+    slot void toolText ();
+    slot void toolZoom ();
 
-    oneway  void configPolygonTool ();
+    slot void toolMovePoint ();
+    slot void toolInsertPoint ();
+    slot void toolRemovePoint ();
+
+    slot void configPolygonTool ();
+    slot void configEllipseTool ();
 	
-    oneway void setPenColor (in long id);
-    oneway void setFillColor (in long id);
+    slot void setPenColor (in long id);
+    slot void setFillColor (in long id);
+
+    slot void zoomSizeSelected (in string size);
   };
   
   interface Document : KOffice::Document, KOffice::Print {

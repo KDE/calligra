@@ -441,6 +441,57 @@ void GBezier::calcBoundingBox () {
   updateBoundingBox (r);
 }
 
+void GBezier::removePoint (int idx, bool update) {
+  if (points.count () > 6) {
+    points.remove (idx - 1);
+    points.remove (idx - 1);
+    points.remove (idx - 1);
+    if (update) 
+      updateRegion ();
+  }
+}
+
+void GBezier::insertPoint (int idx, const Coord& p, bool update) {
+  Coord p0 (p.x () - 20, p.y () - 20);
+  Coord p1 (p.x () + 20, p.y () + 20);
+  addPoint (idx, p0, false);
+  addPoint (idx + 1, p, false);
+  addPoint (idx + 2, p1, update);
+}
+
+int GBezier::containingSegment (float xpos, float ypos) {
+  Coord p (xpos, ypos);
+  Coord pc = p.transform (iMatrix);
+  int seg = 0;
+
+  for (unsigned int i = 1; i + 3 < points.count (); i += 3) {
+    // detect the containing curve segment
+    Rect r;
+    Coord p = *(points.at (i));
+    r.left (p.x ());
+    r.top (p.y ());
+    r.right (p.x ());
+    r.bottom (p.y ());
+    
+    for (unsigned int j = i + 1; j < i + 4; j++) {
+      Coord pn = *(points.at (j));
+      r.left (QMIN(pn.x (), r.left ()));
+      r.top (QMIN(pn.y (), r.top ()));
+      r.right (QMAX(pn.x (), r.right ()));
+      r.bottom (QMAX(pn.y (), r.bottom ()));
+    }
+    if (r.contains (pc)) {
+      if (bezier_segment_contains (*(points.at (i)), *(points.at (i + 1)),
+				   *(points.at (i + 2)), 
+				   *(points.at (i + 3)), pc)) {
+	return seg;
+      }
+    }
+    seg++;
+  }
+  return -1;
+}
+
 int GBezier::cPoint (int idx) { 
   if (idx > 1)
     return idx + (isEndPoint (idx - 1) ? -2 : 2); 

@@ -24,6 +24,7 @@
 #include <stdlib.h>
 #include <iostream.h>
 #include <math.h>
+#include <time.h>
 #include "GObject.h"
 #include "GObject.moc"
 
@@ -115,6 +116,11 @@ GObject::GObject (const list<XmlAttribute>& attribs) {
       fillInfo.gradient.setColor2 ((*first).colorValue ());
     else if (attr == "gradstyle")
       fillInfo.gradient.setStyle ((Gradient::Style) (*first).intValue ());
+    else if (attr == "id")
+      id = (*first).stringValue ().c_str ();
+    else if (attr == "ref")
+      refid = (*first).stringValue ().c_str ();
+    
     first++;
   }
 }
@@ -393,6 +399,8 @@ void GObject::initPen (QPen& pen) {
 }
 
 void GObject::writePropertiesToXml (XmlWriter& xml) {
+  if (hasId ())
+    xml.addAttribute ("id", (const char *) id);
   xml.addAttribute ("matrix", tMatrix);
   xml.addAttribute ("strokecolor", outlineInfo.color);
   xml.addAttribute ("strokestyle", (int) outlineInfo.style);
@@ -427,3 +435,8 @@ void GObject::invalidateClipRegion  () {
     gShape.setInvalid ();
 }
 
+const char* GObject::getId () {
+  if (! hasId ())
+    id.sprintf ("%ld", (long) time ((time_t) 0L));
+  return (const char *) id;
+}

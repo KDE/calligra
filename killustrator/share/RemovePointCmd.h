@@ -22,39 +22,27 @@
 
 */
 
-#ifndef EditPointTool_h_
-#define EditPointTool_h_
+#ifndef RemovePointCmd_h_
+#define RemovePointCmd_h_
 
-#include <qobject.h>
-#include <qevent.h>
-#include <qcursor.h>
+#include "GDocument.h"
+#include "GPolyline.h"
+#include "Command.h"
 
-#include "GObject.h"
-#include "Tool.h"
-
-class EditPointTool : public Tool {
-  Q_OBJECT
+class RemovePointCmd : public Command {
 public:
-  enum Mode { 
-    MovePoint, InsertPoint, RemovePoint, Join, Split
-  };
+  RemovePointCmd (GDocument* doc, GPolyline* o, int idx);
 
-  EditPointTool (CommandHistory *history);
-  ~EditPointTool ();
+  ~RemovePointCmd ();
 
-  virtual void processEvent (QEvent* e, GDocument* doc, Canvas* canvas);
-
-  void setMode (Mode m);
-
-  void activate (GDocument* doc, Canvas* canvas);
-  void deactivate (GDocument* doc, Canvas* canvas);
+  void execute ();
+  void unexecute ();
 
 private:
-  Mode mode;
-  GObject* obj;
-  int pointIdx;
-  Coord startPos, lastPos;
-  QCursor *cursor;
+  GDocument* document;
+  GPolyline* obj;
+  int index;
+  Coord point;
 };
 
 #endif

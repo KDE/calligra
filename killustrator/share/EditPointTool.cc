@@ -30,6 +30,10 @@
 #include "Coord.h"
 #include "CommandHistory.h"
 #include "EditPointCmd.h"
+#include "InsertPointCmd.h"
+#include "RemovePointCmd.h"
+#include "GPolyline.h"
+#include "GBezier.h"
 #include <qkeycode.h>
 #include <qbitmap.h>
 #include <kapp.h>
@@ -54,7 +58,7 @@ static unsigned char right_ptrmsk_bits[] = {
 EditPointTool::EditPointTool (CommandHistory* history) : Tool (history) {
   obj = 0L;
   pointIdx = -1;
-
+  mode = MovePoint;
   cursor = new QCursor (QBitmap (right_ptr_width,
 				 right_ptr_height,
 				 right_ptr_bits, true), 
@@ -68,6 +72,10 @@ EditPointTool::~EditPointTool () {
   delete cursor;
 }
 
+void EditPointTool::setMode (Mode m) {
+  mode = m;
+}
+
 void EditPointTool::processEvent (QEvent* e, GDocument *doc, 
 				  Canvas* canvas) {
   if (doc->selectionIsEmpty ())
@@ -79,13 +87,13 @@ void EditPointTool::processEvent (QEvent* e, GDocument *doc,
     canvas->snapPositionToGrid (xpos, ypos);
 
     obj = 0L;
-
+    pointIdx = -1;
     for (list<GObject*>::iterator it = doc->getSelection ().begin ();
 	 it != doc->getSelection ().end (); it++) {
       GObject* o = *it;
+      obj = o;
       int idx = o->getNeighbourPoint (Coord (xpos, ypos));
       if (idx != -1) {
-	obj = o;
 	pointIdx = idx;
 	startPos = Coord (xpos, ypos);
 	lastPos = startPos;
@@ -95,24 +103,37 @@ void EditPointTool::processEvent (QEvent* e, GDocument *doc,
     }
   }
   else if (e->type () == Event_MouseMove) {
+    if (mode == InsertPoint)
+      return;
+
     QMouseEvent *me = (QMouseEvent *) e;
     int xpos = me->x (), ypos = me->y ();
     canvas->snapPositionToGrid (xpos, ypos);
 
     if (obj == 0L) {
       bool isOver = false;
+      int pidx;
+
       for (list<GObject*>::iterator it = doc->getSelection ().begin ();
 	   it != doc->getSelection ().end (); it++) {
 	GObject* o = *it;
-	if (o->getNeighbourPoint (Coord (xpos, ypos)) != -1)
-	  isOver = true;
+	if ((pidx = o->getNeighbourPoint (Coord (xpos, ypos))) != -1) {
+	  if (mode == RemovePoint && o->isA ("GBezier")) {
+	    if (((GBezier *) o)->isEndPoint (pidx)) {
+	      isOver = true;
+	      break;
+	    }
+	  }
+	  else
+	    isOver = true;
+	}
       }
       if (isOver)
 	canvas->setCursor (*cursor);
       else
 	canvas->setCursor (arrowCursor);
     }
-    else {
+    else if (pointIdx != -1) {
       float dx = xpos - lastPos.x ();
       float dy = ypos - lastPos.y ();
       if (dx != 0 || dy != 0) {
@@ -128,15 +149,47 @@ void EditPointTool::processEvent (QEvent* e, GDocument *doc,
     QMouseEvent *me = (QMouseEvent *) e;
     int xpos = me->x (), ypos = me->y ();
     canvas->snapPositionToGrid (xpos, ypos);
-    float dx = xpos - lastPos.x ();
-    float dy = ypos - lastPos.y ();
-    if (dx != 0 || dy != 0) 
-      obj->movePoint (pointIdx, dx, dy);
+    if (mode == MovePoint) {
+      float dx = xpos - lastPos.x ();
+      float dy = ypos - lastPos.y ();
+      if (dx != 0 || dy != 0) 
+	obj->movePoint (pointIdx, dx, dy);
+      
+      EditPointCmd *cmd = new EditPointCmd (doc, obj, pointIdx,
+					    xpos - startPos.x (), 
+					    ypos - startPos.y ());
+      history->addCommand (cmd);
+    }
+    else if (mode == InsertPoint && obj->inherits ("GPolyline")) {
+      GPolyline* pline = (GPolyline *) obj;
+      // compute the segment of intersection
+      int idx = pline->containingSegment (xpos, ypos);
+      if (idx != -1) {
+	cout << "insert in segment: " << idx << endl;
+	if (obj->isA ("GBezier"))
+	  idx = (idx + 1) * 3;
+	else
+	  idx += 1;
+	InsertPointCmd *cmd = new InsertPointCmd (doc, pline, idx,
+						  xpos, ypos);
+	history->addCommand (cmd, true);
+      }
+    }
+    else if (mode == RemovePoint) {
+      bool removable = true;
+      if (pointIdx != -1 && obj->inherits ("GPolyline")) {
+	if (obj->isA ("GBezier"))
+	  // we cannot remove control points of bezier curves
+	  removable = ((GBezier *) obj)->isEndPoint (pointIdx);
 
-    EditPointCmd *cmd = new EditPointCmd (doc, obj, pointIdx,
-					  xpos - startPos.x (), 
-					  ypos - startPos.y ());
-    history->addCommand (cmd);
+	if (removable) {
+	  GPolyline *pline = (GPolyline *) obj;
+	  RemovePointCmd *cmd = new RemovePointCmd (doc, pline, pointIdx);
+	  history->addCommand (cmd, true);
+	}
+      }
+    }
+
     canvas->setCursor (arrowCursor);
 
     obj = 0L;

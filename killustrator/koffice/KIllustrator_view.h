@@ -52,6 +52,14 @@
 #define ID_TOOL_ZOOM          1010
 #define ID_TOOL_PATHTEXT      1011
 
+#define ID_EDIT_UNDO          2001
+#define ID_EDIT_REDO          2002
+#define ID_EDIT_CUT           2003
+#define ID_EDIT_COPY          2004
+#define ID_EDIT_PASTE         2005
+#define ID_EDIT_DELETE        2006
+#define ID_EDIT_ZOOM          2007
+
 class KIlustratorView;
 class KIllustratorDocument;
 class Canvas;
@@ -61,6 +69,7 @@ class LayerDialog;
 class ToolController;
 class Canvas;
 class Ruler;
+class EditPointTool;
 
 class KIllustratorFrame : public KoFrame {
   Q_OBJECT
@@ -145,7 +154,14 @@ public:
   void toolText ();
   void toolZoom ();
 
+  void toolMovePoint ();
+  void toolInsertPoint ();
+  void toolRemovePoint ();
+
   void configPolygonTool ();
+  void configEllipseTool ();
+
+  void zoomSizeSelected (const char* s);
 
 protected:
   void init ();
@@ -155,11 +171,21 @@ protected:
 
   void showTransformationDialog (int id);
 
-  void setupColorToolbar ();
   void setupCanvas ();
+  void setupPopups ();
   void resizeEvent (QResizeEvent*);
 
 protected slots:
+  void editCutSlot ();
+  void editCopySlot ();
+  void editPropertiesSlot ();
+  void arrangeAlignSlot ();
+  void arrangeToFrontSlot ();
+  void arrangeToBackSlot ();
+  void arrangeOneForwardSlot ();
+  void arrangeOneBackSlot ();
+
+  void popupForSelection (int x, int y);
   void setUndoStatus(bool undoPossible, bool redoPossible);
   void showCurrentMode (const char* msg);
 
@@ -208,13 +234,28 @@ protected:
   CORBA::Long m_idZoomTool;
   CORBA::Long m_idActiveTool;
 
+  /* Toolbar: Edit */
+  OpenPartsUI::ToolBar_var m_vToolBarEdit;
+  CORBA::Long m_idEditCut;
+  CORBA::Long m_idEditCopy;
+  CORBA::Long m_idEditPaste;
+  CORBA::Long m_idEditDelete;
+  CORBA::Long m_idEditUndo;
+  CORBA::Long m_idEditRedo;
+  CORBA::Long m_idEditZoom;
+
   /* Toolbar: Colors */
-  OpenPartsUI::ToolBar_var m_vToolBarColors;
-  CORBA::Long m_idFirstColor;
-  QVector<QColor> colorPalette;
+  OpenPartsUI::ColorBar_var m_vColorBar;
+
+  /* Toolbar: Edit Point */
+  OpenPartsUI::ToolBar_var m_vToolBarEditPoint;
+  CORBA::Long m_idMovePoint;
+  CORBA::Long m_idInsertPoint;
+  CORBA::Long m_idRemovePoint;
 
   KIllustratorDocument *m_pDoc;
-
+  EditPointTool *editPointTool;
+  QPopupMenu *objMenu;
   QList<KIllustratorFrame> m_lstFrames;
   QArray<float> zFactors;
 

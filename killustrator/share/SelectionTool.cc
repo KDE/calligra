@@ -289,9 +289,6 @@ void SelectionTool::processButtonPressEvent (QMouseEvent *me, GDocument *doc,
   int hmask;
   GObject *obj = 0L;
 
-  //  oldpos.setX (me->x ());
-  //  oldpos.setY (me->y ());
-
   int xpos = me->x (), ypos = me->y ();
   canvas->snapPositionToGrid (xpos, ypos);
 
@@ -317,6 +314,7 @@ void SelectionTool::processButtonPressEvent (QMouseEvent *me, GDocument *doc,
     else {
       // no object
       state = S_Rubberband;
+      doc->unselectAllObjects ();
       selPoint[0].x(me->x ()); selPoint[0].y(me->y ());
       selPoint[1].x(me->x ()); selPoint[1].y(me->y ());
     }
