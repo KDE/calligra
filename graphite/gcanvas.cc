@@ -36,19 +36,23 @@ GCanvas::GCanvas(GraphiteView *view, GraphitePart *doc)
 void GCanvas::viewportPaintEvent(QPaintEvent */*e*/) {
 
     // TODO: 1 - define the region which has to be
-    //           repainted (soon we'll have to subtract
-    //           our Children (other KParts) from that
-    // 	         region). Don't forget to add the offset!
-    //       2 - call m_doc->painContent()
-    //       3 - let all the children (in the region we
-    //           have to repaint draw themselves)
+    //           repainted. (Don't forget to add the offset!)
+    //           Create a dbuffer and create a painter on this buffer.
+    //       2 - call m_doc->painContent(). This draws
+    //           the objects to the buffer. Note: don't
+    //           draw active or deleted objects to the buffer
+    //       3 - bitBlt the buffer
+    //       4 - let the active object draw itself (no problem
+    //           when embedded, since we don't have an active
+    //           object...
     // - m_doc->paintContent() is responsilbe to traverse
     //   the tree of gobject's and let them paint themselves.
     // - Each object decides if it has to repaint itself
-    //   depending on it's position. If the transparent
+    //   depending on it's position/state. If the transparent
     //   flag is false each object is authorized to use
     //   a double buffer! (Normally we won't use dbuffers
-    //   unless there are *real* problems (flickering,...)
+    //   for normal objects, unless there are *real* problems
+    //   (flickering,...)
     // - Double buffers are invalidated via: zoomfactor
     //   changes, background changes,...
     /*kdDebug(37001) << "paintEvent: x=" << e->rect().x()

@@ -39,9 +39,9 @@ GLine::GLine(const QDomElement &element) : GObject(element.namedItem("gobject").
     // TODO
     //bool ok;
     //static QString tagName=QString::fromLatin1("name");
-    
+
     //if(m_ok) // loading was successful
-    
+
     /*
     if(element.hasAttribute(tagName))
 	m_name=element.attribute(tagName);
@@ -110,7 +110,7 @@ GLine::GLine(const QDomElement &element) : GObject(element.namedItem("gobject").
 GLine *GLine::clone() const {
     return new GLine(*this);
 }
-    
+
 GLine *GLine::instantiate(const QDomElement &element) const {
     return new GLine(element);
 }
@@ -136,7 +136,7 @@ const bool GLine::intersects(const QRect &/*r*/) const {
     // TODO
     return false;
 }
- 
+
 const QRect &GLine::boundingRect() const {
     // TODO
     return m_boundingRect;
@@ -167,6 +167,10 @@ void GLine::rotate(const QPoint &/*center*/, const double &/*angle*/) {
 }
 
 void GLine::scale(const QPoint &/*origin*/, const double &/*xfactor*/, const double &/*yfactor*/) {
+    // TODO
+}
+
+void GLine::resize(const QRect &/*boundingRect*/) {
     // TODO
 }
 

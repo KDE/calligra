@@ -56,10 +56,6 @@ void GObject::setParent(GObject *parent) {
 	m_parent=parent;
 }
 
-void GObject::setZoom(const short &zoom) {
-    m_zoom=zoom;
-}
-
 GObject::GObject(const QString &name) : m_name(name) {
 
     m_state=Visible;

@@ -53,9 +53,15 @@ public:
     virtual void moveX(const int &dx);
     virtual void moveY(const int &dy);
     virtual void move(const int &dx, const int &dy);
+
     virtual void rotate(const QPoint &center, const double &angle);
+    virtual void setAngle(const double &angle) { m_angle=angle; }
+    const double &angle() const { return m_angle; }
+        
     virtual void scale(const QPoint &origin, const double &xfactor, const double &yfactor);
     
+    virtual void resize(const QRect &boundingRect);
+
     const QPoint &a() const { return m_a; }
     void setA(const QPoint &a) { m_a=a; }
     const QPoint &b() const { return m_b; }
@@ -63,7 +69,7 @@ public:
 
 private:
     GLine &operator=(const GLine &rhs);    // don't assign the objects, clone them
-    
+
     QPoint m_a, m_b;
 };
 
