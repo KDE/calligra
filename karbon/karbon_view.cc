@@ -77,7 +77,6 @@
 // Dialogs.
 #include "vconfiguredlg.h"
 #include "vfilldlg.h"
-#include "vinsertknotsdlg.h"
 #include "vstrokedlg.h"
 
 // Dockers.
