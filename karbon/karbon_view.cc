@@ -620,9 +620,8 @@ KarbonView::zoomChanged( const KoPoint &p )
 	}
 
 	KoView::setZoom( zoomFactor );
-	// TODO : I guess we should define a document size member at this point...
-	//kdDebug() << "part()->pageLayout().ptWidth :" << part()->pageLayout().ptWidth << endl;
-	//kdDebug() << "part()->pageLayout().ptHeight :" << part()->pageLayout().ptHeight << endl;
+	m_horizRuler->setZoom( zoomFactor );
+	m_vertRuler->setZoom( zoomFactor );
 
 	m_canvas->viewport()->setUpdatesEnabled( false );
 
@@ -870,11 +869,14 @@ KarbonView::pageLayout()
 	if( KoPageLayoutDia::pageLayout( layout, hf, FORMAT_AND_BORDERS, unit ) )
 	{
 		part()->setPageLayout( layout, unit );
+		m_horizRuler->setPageLayout( layout );
+		m_horizRuler->setUnit( unit );
+		m_vertRuler->setPageLayout( layout );
+		m_vertRuler->setUnit( unit );
 		m_canvas->resizeContents( int( ( part()->pageLayout().ptWidth + 40 ) * zoom() ),
 								  int( ( part()->pageLayout().ptHeight + 80 ) * zoom() ) );
 		part()->repaintAllViews();
 	}
-
 }
 
 void
