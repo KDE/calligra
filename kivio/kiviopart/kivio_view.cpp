@@ -242,6 +242,8 @@ KivioView::KivioView( QWidget *_parent, const char *_name, KivioDoc* doc )
   connect(vRuler, SIGNAL(openPageLayoutDia()), SLOT(paperLayoutDlg()));
   connect(hRuler, SIGNAL(openPageLayoutDia()), SLOT(paperLayoutDlg()));
   connect( m_pDoc, SIGNAL(unitsChanged(KoUnit::Unit)), SLOT(setRulerUnit(KoUnit::Unit)) );
+  vRuler->installEventFilter(m_pCanvas);
+  hRuler->installEventFilter(m_pCanvas);
 
   QGridLayout* layout = new QGridLayout(pRightSide);
   layout->addWidget(hRuler, 0, 1);

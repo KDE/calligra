@@ -42,6 +42,7 @@
 #include <koGlobal.h>
 #include <kozoomhandler.h>
 #include <koSize.h>
+#include <koRuler.h>
 
 #include <assert.h>
 #include <stdio.h>
@@ -1250,7 +1251,7 @@ void KivioCanvas::updateGuidesCursor()
 
 bool KivioCanvas::eventFilter(QObject* o, QEvent* e)
 {
-/*  if ((o == view()->vertRuler() || o == view()->horzRuler()) && (e->type() == QEvent::MouseMove || e->type() ==
+  if ((o == view()->vertRuler() || o == view()->horzRuler()) && (e->type() == QEvent::MouseMove || e->type() ==
     QEvent::MouseButtonRelease) && m_pView->isShowGuides())
   {
     QMouseEvent* me = (QMouseEvent*)e;
@@ -1266,10 +1267,12 @@ bool KivioCanvas::eventFilter(QObject* o, QEvent* e)
         gl->unselectAll();
         KivioGuideLineData* gd;
         KoPoint tp = mapFromScreen(p);
-        if (o == view()->vertRuler())
+
+        if (o == view()->vertRuler()) {
           gd = gl->add(tp.x(),Qt::Vertical);
-        else
+        } else {
           gd = gl->add(tp.y(),Qt::Horizontal);
+        }
 
         pressGuideline = gd;
         gl->select(gd);
@@ -1298,13 +1301,11 @@ bool KivioCanvas::eventFilter(QObject* o, QEvent* e)
           }
 
           pressGuideline = 0;
-        } else {
-          if (pressGuideline && f) {
-            QMouseEvent* m = new QMouseEvent(QEvent::MouseMove, p, me->globalPos(), me->button(), me->state());
-            mouseMoveEvent(m);
-            delete m;
-            delegateThisEvent = true;
-          }
+        } else if (pressGuideline && f) {
+          QMouseEvent* m = new QMouseEvent(QEvent::MouseMove, p, me->globalPos(), me->button(), me->state());
+          mouseMoveEvent(m);
+          delete m;
+          delegateThisEvent = true;
         }
       }
     }
@@ -1327,9 +1328,15 @@ bool KivioCanvas::eventFilter(QObject* o, QEvent* e)
       delete m;
       delegateThisEvent = true;
     }
+
+    if(o == view()->vertRuler()) {
+      view()->vertRuler()->update();
+    } else {
+      view()->horzRuler()->update();
+    }
   }
-*/
-  return QWidget::eventFilter(o,e);
+
+  return QWidget::eventFilter(o, e);
 }
 
 void KivioCanvas::eraseGuides()
