@@ -3,7 +3,7 @@
 
 #include <config.h>
 
-#ifdef HAVE_KPRINTER
+#ifdef HAVE_KDEPRINT
 #include <koprinter.h>
 #else
 #include <qprinter.h>
