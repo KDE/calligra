@@ -48,12 +48,15 @@ public:
 
     void setPixmap( const QString & filename )
     {
-        m_type = IPD_IMAGE;
         m_pixmap.load( filename );
-        //kdDebug() << "setPixmap: m_pixmap is " << m_pixmap.width() << ", " << m_pixmap.height() << endl;
-        const QBitmap nullBitmap;
-        m_pixmap.setMask( nullBitmap );  //don't show transparency
-        repaint(false);
+        if ( m_pixmap.height() > 0 ) // we divide by the height in kwcanvas...
+        {
+            m_type = IPD_IMAGE;
+            //kdDebug() << "setPixmap: m_pixmap is " << m_pixmap.width() << ", " << m_pixmap.height() << endl;
+            const QBitmap nullBitmap;
+            m_pixmap.setMask( nullBitmap );  //don't show transparency
+            repaint(false);
+        }
     }
 
     QSize pixmapSize() const { return m_type == IPD_IMAGE ? m_pixmap.size() : QSize(); }
