@@ -147,20 +147,24 @@ void PComboBox::updateProperty(int val)
 PFontCombo::PFontCombo (const PropertyEditor *editor, const QString pname, const QString value, QWidget *parent, const char *name):
     KFontCombo(parent, name)
 {
-    setEditable(false);
+    //AD: KFontCombo seems to have a bug: when it is not editable, the signals
+    //activated(int) and textChanged(const QString &) are not emitted
+//    setEditable(false);
     setPName(pname);
     setValue(value, false);
-    connect(this, SIGNAL(activated(int)), this, SLOT(updateProperty(int)));
+    connect(this, SIGNAL(textChanged(const QString&)), this, SLOT(updateProperty(const QString&)));
     connect(this, SIGNAL(propertyChanged(QString, QString)), editor, SLOT(emitPropertyChange(QString, QString)));
 }
 
 PFontCombo::PFontCombo (const PropertyEditor *editor, const QString pname, const QString value, const QStringList &fonts, QWidget *parent, const char *name):
     KFontCombo(fonts, parent, name)
 {
-    setEditable(false);
+    //AD: KFontCombo seems to have a bug: when it is not editable, the signals
+    //activated(int) and textChanged(const QString &) are not emitted
+//    setEditable(false);
     setValue(value, false);
     setPName(pname);
-    connect(this, SIGNAL(activated(int)), this, SLOT(updateProperty(int)));
+    connect(this, SIGNAL(textChanged(const QString&)), this, SLOT(updateProperty(const QString&)));
     connect(this, SIGNAL(propertyChanged(QString, QString)), editor, SLOT(emitPropertyChange(QString, QString)));
 }
 
@@ -176,9 +180,9 @@ void PFontCombo::setValue(const QString value, bool emitChange)
         emit propertyChanged(pname(), value);
 }
 
-void PFontCombo::updateProperty(int val)
+void PFontCombo::updateProperty(const QString &val)
 {
-    emit propertyChanged(pname(), value());
+    emit propertyChanged(pname(), val);
 }
 
 

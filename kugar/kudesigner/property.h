@@ -107,7 +107,7 @@ public:
     virtual QWidget *editorOfType(const PropertyEditor *editor);
 };
 
-
+/** Smart pointer to Property */
 class PropPtr{
 public:
     PropPtr()

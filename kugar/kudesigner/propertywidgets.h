@@ -103,7 +103,7 @@ public:
 signals:
     void propertyChanged(QString name, QString newValue);
 private slots:
-    void updateProperty(int val);
+    void updateProperty(const QString &val);
 };
 
 class PColorCombo: public KColorCombo, PropertyWidget{
