@@ -44,6 +44,11 @@ QString KChartParamsIface::barChartSubType() const
     return params->barChartSubTypeToString(params->barChartSubType());
 }
 
+void KChartParamsIface::setBarChartSubType( const QString &sub )
+{
+    params->setBarChartSubType(params->stringToBarChartSubType( sub ));
+}
+
 bool KChartParamsIface::threeDBars()
 {
     return params->threeDBars();
@@ -166,6 +171,17 @@ uint KChartParamsIface::legendSpacing()
     return params->legendSpacing();
 }
 
+void KChartParamsIface::setLineChartSubType( const QString & sub)
+{
+    params->setLineChartSubType(params->stringToLineChartSubType(sub));
+}
+
+QString KChartParamsIface::lineChartSubType() const
+{
+    return params->lineChartSubTypeToString(params->lineChartSubType());
+}
+
+
 bool KChartParamsIface::lineMarker() const
 {
     return params->lineMarker();
@@ -220,4 +236,24 @@ void KChartParamsIface::setOutlineDataLineWidth( uint width )
 uint KChartParamsIface::outlineDataLineWidth() const
 {
     return params->outlineDataLineWidth();
+}
+
+void KChartParamsIface::setAreaChartSubType(const QString &sub)
+{
+    params->setAreaChartSubType(params->stringToAreaChartSubType(sub));
+}
+
+QString KChartParamsIface::areaChartSubType() const
+{
+    return params->areaChartSubTypeToString(params->areaChartSubType());
+}
+
+void KChartParamsIface::setHiLoChartSubType(const QString &sub)
+{
+    params->setHiLoChartSubType(params->stringToHiLoChartSubType(sub));
+}
+
+QString KChartParamsIface::hiLoChartSubType() const
+{
+    return params->hiLoChartSubTypeToString(params->hiLoChartSubType());
 }

@@ -46,12 +46,15 @@ k_dcop:
     virtual void setThreeDBarDepth( double depth );
     virtual double threeDBarDepth() const;
     virtual QString barChartSubType() const;
+    virtual void setBarChartSubType( const QString & );
 
     //line chart config
     virtual bool lineMarker() const;
     virtual void setLineMarker( bool );
     virtual void setLineWidth( uint width );
     virtual uint lineWidth() const;
+    virtual void setLineChartSubType( const QString & );
+    virtual QString lineChartSubType() const;
 
     //pie config
     virtual bool threeDPies();
@@ -64,6 +67,14 @@ k_dcop:
     virtual void setExplodeFactor( double factor );
     virtual double explodeFactor() const;
     virtual void setThreeDPies( bool threeDPies );
+
+    //area chart
+    virtual void setAreaChartSubType(const QString &);
+    virtual QString areaChartSubType() const;
+
+    //hilo chart
+    virtual void setHiLoChartSubType(const QString &);
+    virtual QString hiLoChartSubType() const;
 
     //legend
     virtual void hideLegend();
