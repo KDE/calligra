@@ -977,6 +977,13 @@ bool KPresenterDoc::saveOasis( KoStore* store, KoXmlWriter* manifestWriter )
     for ( ; it != styles.end() ; ++it ) {
         (*it).style->writeStyle( &contentWriter, mainStyles, "style:style", (*it).name, "style:paragraph-properties" );
     }
+
+    styles = mainStyles.styles( KoGenStyle::STYLE_LIST );
+    it = styles.begin();
+    for ( ; it != styles.end() ; ++it ) {
+        ( *it ).style->writeStyle( &contentWriter, mainStyles, "text:list-style", (*it).name, 0 );
+    }
+
     styles = mainStyles.styles( STYLE_BACKGROUNDPAGEAUTO );
     it = styles.begin();
     for ( ; it != styles.end() ; ++it ) {
