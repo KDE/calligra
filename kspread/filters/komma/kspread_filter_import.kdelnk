@@ -2,6 +2,7 @@
 [KDE Desktop Entry]
 Name=KSpreadFilter
 Name[da]=Regnearksfilter
+Name[fr]=Filtre de KSpread
 Name[hu]=KSzámolótáblaSzûrõ
 Name[sv]=Kalkyl-filter
 Exec=kspread_filter.bin --server
