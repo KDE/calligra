@@ -32,6 +32,8 @@ public:
 	virtual void unexecute();
 	virtual bool isExecuted() { return m_executed; }
 
+	virtual bool changesSelection() const { return true; }
+
 private:
 	VObject* m_clipart;
 	bool m_executed;
