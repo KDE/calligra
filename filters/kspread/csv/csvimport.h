@@ -40,10 +40,6 @@ class CSVFilter : public KoFilter {
 public:
     CSVFilter(KoFilter *parent, QString name);
     virtual ~CSVFilter() {}
-    /** filtering :) */
-    virtual const bool I_filter(const QCString &file, const QCString &from,
-				QDomDocument &document, const QCString &to,
-				const QString &config=QString::null);
     virtual const bool I_filter(const QCString &file, KoDocument *document,
 				const QCString &from, const QCString &to,
 				const QString &config=QString::null);

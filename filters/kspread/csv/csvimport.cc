@@ -36,146 +36,6 @@ CSVFilter::CSVFilter(KoFilter *parent, QString name) :
                      KoFilter(parent, name) {
 }
 
-const bool CSVFilter::I_filter(const QCString &file, const QCString &from,
-			       QDomDocument &document, const QCString &to,
-			       const QString &config) {
-
-    bool bSuccess=true;
-
-    if(to!="application/x-kspread" || from!="text/x-csv")
-        return 0;
-
-    QFile in(file);
-    if(!in.open(IO_ReadOnly)) {
-        //kdError(30501) << "Unable to open input file!" << endl;
-        KMessageBox::sorry( 0L, i18n("CSV filter can't open input file - please report.") );
-        in.close();
-        return 0;
-    }
-
-    QTextStream inputStream(&in);
-    XMLTree tree(document);
-
-    QChar csv_delimiter;
-
-    // is there a config info or do we have to use a dialog box?
-    if(config!=QString::null) {
-        kdDebug(30501) << "CSVFilter::CSVFilter(): config found" << endl;
-        kdDebug(30501) << config << endl;
-        csv_delimiter=QChar(config[0]);
-    }
-    else {
-        QString firstLine = inputStream.readLine();
-        firstLine.truncate(100);
-        switch (QMessageBox::information( 0L, i18n( "Information needed" ),
-                                  i18n( "What is the separator used in this file ? First line is \n%1" ).arg(firstLine),
-                                  i18n( "Comma" ), i18n( "Semicolon" ), i18n( "Tabulator" ) )) {
-            case 2:
-                csv_delimiter = '\t';
-                break;
-            case 1:
-                csv_delimiter = ';';
-                break;
-            default:
-                csv_delimiter = ','; // "Comma" chosen or Escape typed
-        }
-        // Now rewind to the beginning of the file
-        in.at(0);
-    }
-
-    QChar x;
-    enum { S_START, S_QUOTED_FIELD, S_MAYBE_END_OF_QUOTED_FIELD, S_NORMAL_FIELD } state = S_START;
-    QString field = "";
-    int step=in.size()/50;
-    kdDebug() << "step: " << step << endl;
-    int value=0;
-    int i=0;
-    emit sigProgress(value);
-
-    while ( !inputStream.eof() && bSuccess==true )
-    {
-	++i;
-	if(i>step) {
-	    kdDebug() << "emitted" << endl;
-	    i=0;
-	    value+=2;
-	    emit sigProgress(value);
-	}
-        inputStream >> x; // read one char
-        if (x == '\r') inputStream >> x; // eat '\r', to handle DOS/LOSEDOWS files correctly
-        switch (state)
-        {
-            case S_START :
-                if (x == '"') state = S_QUOTED_FIELD;
-                else if (x == csv_delimiter || x == '\n') tree.emptycell();
-                else
-                {
-                    field += x;
-                    state = S_NORMAL_FIELD;
-                }
-                break;
-            case S_QUOTED_FIELD :
-                if (x == '"') state = S_MAYBE_END_OF_QUOTED_FIELD;
-                else field += x;
-                break;
-            case S_MAYBE_END_OF_QUOTED_FIELD :
-                if (x == '"')
-                {
-                    field += x;
-                    state = S_QUOTED_FIELD;
-                } else if (x == csv_delimiter || x == '\n')
-                {
-                    tree.cell( field );
-                    field = "";
-                    if (x == '\n') tree.newline();
-                    state = S_START;
-                } else
-                { // should never happen
-                    field += "*** Error : unexpected character : ";
-                    field += x;
-                    state = S_START;
-                    bSuccess=false;
-                }
-                break;
-            case S_NORMAL_FIELD :
-                if (x == csv_delimiter || x == '\n')
-                {
-                    tree.cell( field );
-                    field = "";
-                    if (x == '\n') tree.newline();
-                    state = S_START;
-                }
-                else field += x;
-        }
-    }
-
-    emit sigProgress(100);
-    //for debugging only
-#if 0
-    kdDebug(30501) << "XXYYYYYYZZ" << endl;
-    QString tmp=tree.part();
-    kdDebug(30501) << "Size: " << tmp.length() << endl
-    		   << "String: " << tmp << endl;
-    kdDebug(30501) << "XXYYYYYYZZ" << endl;
-
-#if 0
-    KoStore out=KoStore("/tmp/debug_csvfilter.tgz", KoStore::Write);
-    if(!out.open("root", "")) {
-        kdError(30501) << "Unable to open output file!" << endl;
-        in.close();
-        out.close();
-        return false;
-    }
-    out.write((const char*)tmp, tmp.length());
-    kdDebug(30501) << tmp.data() << endl;
-    out.close();
-#endif
-#endif
-
-    in.close();
-    return bSuccess;
-}
-
 const bool CSVFilter::I_filter(const QCString &file, KoDocument *document,
 			       const QCString &from, const QCString &to,
 			       const QString &config) {
@@ -246,9 +106,21 @@ const bool CSVFilter::I_filter(const QCString &file, KoDocument *document,
     QChar x;
     enum { S_START, S_QUOTED_FIELD, S_MAYBE_END_OF_QUOTED_FIELD, S_NORMAL_FIELD } state = S_START;
     QString field = "";
+    int step=in.size()/50;
+    int value=0;
+    int i=0;
+    emit sigProgress(value);
+
     while ( !inputStream.eof() && bSuccess==true )
     {
-        inputStream >> x; // read one char
+	++i;
+	if(i>step) {
+	    kdDebug() << "emitted" << endl;
+	    i=0;
+	    value+=2;
+	    emit sigProgress(value);
+	}
+	inputStream >> x; // read one char
 		
         if (x == '\r') inputStream >> x; // eat '\r', to handle DOS/LOSEDOWS files correctly
         switch (state)
@@ -313,6 +185,7 @@ const bool CSVFilter::I_filter(const QCString &file, KoDocument *document,
 		    field += x;
         }
     }
+    emit sigProgress(100);
     in.close();
     return bSuccess;
 }
