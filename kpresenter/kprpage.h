@@ -57,7 +57,7 @@ class KoGenStyles;
 class KPrPage
 {
 public:
-    KPrPage(KPresenterDoc *_doc);
+    KPrPage(KPresenterDoc *_doc, KPrPage *masterPage = 0 );
     virtual ~KPrPage();
 
     virtual DCOPObject* dcopObject();
@@ -70,6 +70,15 @@ public:
 
     void setNoteText( const QString &_text );
     QString noteText( )const;
+
+    /**
+     * set the master page to masterPage
+     */
+    void setMasterPage( const KPrPage masterPage );
+    /**
+     * return the master page
+     */
+    KPrPage * masterPage();
 
     /**
      * @return the object of the page
@@ -365,6 +374,7 @@ private:
     // list of objects
     QPtrList<KPObject> m_objectList;
     KPresenterDoc *m_doc;
+    KPrPage *m_masterPage;
     KPBackGround *m_kpbackground;
     QString m_manualTitle;
     QString m_noteText;

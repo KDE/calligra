@@ -250,9 +250,9 @@ KPresenterDoc::KPresenterDoc( QWidget *parentWidget, const char *widgetName, QOb
     oldGridX = m_gridX;
     oldGridY = m_gridY;
 
-    KPrPage *newpage=new KPrPage(this);
-    m_pageList.insert( 0,newpage);
     m_stickyPage=new KPrPage(this);
+    KPrPage *newpage = new KPrPage( this, m_stickyPage );
+    m_pageList.insert( 0,newpage);
     m_bInsertDirectCursor = false;
 
     objStartY = 0;
@@ -1494,7 +1494,7 @@ bool KPresenterDoc::loadOasis( const QDomDocument& doc, KoOasisStyles&oasisStyle
             KPrPage *newpage = 0L;
             if ( pos != 0 )
             {
-                newpage=new KPrPage(this);
+                newpage = new KPrPage( this, m_stickyPage );
                 m_pageList.insert( pos,newpage);
             }
             else //we create a first page into KPresenterDoc()
@@ -2257,7 +2257,7 @@ bool KPresenterDoc::loadXML( const QDomDocument &doc )
                             if ( nr > ( (int)m_pageList.count() - 1 ) )
                             {
                                 for (int i=(m_pageList.count()-1); i<nr;i++)
-                                    m_pageList.append(new KPrPage(this));
+                                    m_pageList.append( new KPrPage( this, m_stickyPage ) );
                             }
                             m_pageList.at(nr)->slideSelected(show);
                         } else kdWarning(33001) << "Parse error. No nr in <SLIDE> !" << endl;
@@ -2323,7 +2323,7 @@ void KPresenterDoc::loadBackground( const QDomElement &element )
             //test if there is a page at this index
             //=> don't add new page if there is again a page
             if ( i > ( (int)m_pageList.count() - 1 ) )
-                m_pageList.append(new KPrPage(this));
+                m_pageList.append( new KPrPage( this, m_stickyPage ) );
             m_pageList.at(i)->background()->load(page);
             i++;
         }
@@ -2714,7 +2714,7 @@ void KPresenterDoc::loadTitle( const QDomElement &element )
             if(!m_pageWhereLoadObject)
             {
                 if ( i > ( (int)m_pageList.count() - 1 ) )
-                    m_pageList.append(new KPrPage(this));
+                    m_pageList.append( new KPrPage( this, m_stickyPage ) );
                 m_pageList.at(i)->insertManualTitle(title.attribute("title"));
                 i++;
             }
@@ -2737,7 +2737,7 @@ void KPresenterDoc::loadNote( const QDomElement &element )
             if(!m_pageWhereLoadObject)
             {
                 if ( i > ( (int)m_pageList.count() - 1 ) )
-                    m_pageList.append(new KPrPage(this));
+                    m_pageList.append( new KPrPage( this, m_stickyPage ) );
                 m_pageList.at(i)->setNoteText(note.attribute("note"));
                 i++;
             }
@@ -3243,7 +3243,7 @@ int KPresenterDoc::insertNewPage( const QString &cmdName, int _page, InsertPos _
     objStartY=-1;
 
     //insert page.
-    KPrPage *newpage=new KPrPage(this);
+    KPrPage *newpage = new KPrPage( this, m_stickyPage );
 
     m_pageWhereLoadObject=newpage;
 
@@ -3488,7 +3488,7 @@ void KPresenterDoc::copyPage( int from )
     savePage( tempFile.name(), from );
 
     //insert page.
-    KPrPage *newpage = new KPrPage(this);
+    KPrPage *newpage = new KPrPage( this, m_stickyPage );
 
     m_pageWhereLoadObject = newpage;
 
@@ -3733,7 +3733,7 @@ void KPresenterDoc::insertObjectInPage(double offset, KPObject *_obj)
     if ( page > ( (int)m_pageList.count()-1 ) )
     {
         for (int i=(m_pageList.count()-1); i<page;i++)
-            m_pageList.append(new KPrPage(this));
+            m_pageList.append( new KPrPage( this, m_stickyPage ) );
     }
     _obj->setOrig(_obj->getOrig().x(),newPos);
 

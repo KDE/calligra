@@ -74,8 +74,9 @@ struct listAnimation {
 typedef QMap<int, QPtrList<listAnimation> > lstMap;
 
 
-KPrPage::KPrPage(KPresenterDoc *_doc )
+KPrPage::KPrPage(KPresenterDoc *_doc, KPrPage *masterPage )
 : m_doc( _doc )
+, m_masterPage( masterPage ) 
 , m_dcop( 0 )
 , m_selectedSlides( true )
 {
