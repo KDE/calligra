@@ -136,7 +136,9 @@ public:
            STYLE_USER = 1,
            STYLE_AUTO = 2,
            STYLE_MASTER = 3,
-           STYLE_LIST = 4 };
+           STYLE_LIST = 4,
+           STYLE_NUMERIC_DATE = 5,
+	   STYLE_NUMERIC_TIME = 6 };
     /**
      * Start the definition of a new style. Its name will be set later by KoGenStyles::lookup(),
      * but first you must define its properties and attributes.

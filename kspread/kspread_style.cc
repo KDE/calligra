@@ -629,7 +629,7 @@ QString KSpreadStyle::saveOasisStyleNumericScientific( KoGenStyles&mainStyles )
 
 QString KSpreadStyle::saveOasisStyleNumericDate( KoGenStyles&mainStyles )
 {
-    KoGenStyle currentCellStyle( KSpreadDoc::STYLE_NUMERIC_DATE );
+    KoGenStyle currentCellStyle( KoGenStyle::STYLE_NUMERIC_DATE );
     switch( m_formatType )
     {
     case ShortDate_format:
@@ -683,7 +683,7 @@ QString KSpreadStyle::saveOasisStyleNumericCustom( KoGenStyles&mainStyles )
     // <number:text> </number:text>
     //<number:am-pm/>
     //</number:date-style>
-    KoGenStyle currentCellStyle( KSpreadDoc::STYLE_NUMERIC_DATE );
+    KoGenStyle currentCellStyle( KoGenStyle::STYLE_NUMERIC_DATE );
     QBuffer buffer;
     buffer.open( IO_WriteOnly );
     KoXmlWriter elementWriter( &buffer );  // TODO pass indentation level
@@ -705,7 +705,7 @@ QString KSpreadStyle::saveOasisStyleNumericTime( KoGenStyles& mainStyles )
     //<number:am-pm/>
     //</number:time-style>
 
-    KoGenStyle currentCellStyle( KSpreadDoc::STYLE_NUMERIC_TIME );
+    KoGenStyle currentCellStyle( KoGenStyle::STYLE_NUMERIC_TIME );
     QBuffer buffer;
     buffer.open( IO_WriteOnly );
     KoXmlWriter elementWriter( &buffer );  // TODO pass indentation level
