@@ -11,8 +11,10 @@ GUI:
 -	we need a gradient widget, maybe cooperate with krita too
 -	remove the dialog which opens when double clicking the gradient tool and but the functionality
 	into a docker together with the gradient widget
+-	imho "View->Refresh" is an excuse for not being able to code properly
 
 REAL BUGS:
+-	y-mirroring while being embedded
 -	scale gradient coords while zooming as well
 -	fix i18n singular/plural
 -	zooming has problems (zoom out: shapes and selection coords are different. zoom back:
