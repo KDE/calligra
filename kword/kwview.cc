@@ -2252,6 +2252,7 @@ void KWView::borderWidth( const QString &width )
     m_border.top.ptWidth = m_border.common.ptWidth;
     m_border.bottom.ptWidth = m_border.common.ptWidth;
     borderSet();
+    gui->canvasWidget()->setFocus();
 }
 
 /*================================================================*/
@@ -2272,6 +2273,7 @@ void KWView::borderStyle( const QString &style )
     m_border.top.style = m_border.common.style;
     m_border.bottom.style = m_border.common.style;
     borderSet();
+    gui->canvasWidget()->setFocus();
 }
 
 /*================================================================*/
