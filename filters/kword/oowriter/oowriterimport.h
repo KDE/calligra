@@ -54,6 +54,7 @@ private:
     QDomDocument    m_content;
     QDomDocument    m_meta;
     QDomDocument    m_settings;
+    QDomElement     m_masterPage;
 
     QDict<QDomElement>   m_styles;
     StyleStack m_styleStack;

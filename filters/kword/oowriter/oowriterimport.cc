@@ -156,12 +156,27 @@ void OoWriterImport::prepareDocument( QDomDocument& mainDocument, QDomElement& f
     docElement.setAttribute( "mime", "application/x-kword" );
     docElement.setAttribute( "syntaxVersion", "2" );
 
+    QDomElement *style = m_styles[m_masterPage.attribute( "style:page-master-name" )];
+    Q_ASSERT(style);
+    QDomElement properties = style->namedItem( "style:properties" ).toElement();
+
     QDomElement elementPaper = mainDocument.createElement("PAPER");
 
-    elementPaper.setAttribute("format",PG_US_LETTER);
-    elementPaper.setAttribute("width", KoPageFormat::width (PG_US_LETTER,PG_PORTRAIT));
-    elementPaper.setAttribute("height",KoPageFormat::height(PG_US_LETTER,PG_PORTRAIT));
-    elementPaper.setAttribute("orientation",PG_PORTRAIT);
+    bool landscape = properties.attribute("style:print-orientation") != "portrait";
+    elementPaper.setAttribute("orientation", landscape ? PG_LANDSCAPE : PG_PORTRAIT );
+
+    double width = OoUtils::toPoint(properties.attribute("fo:page-width"));
+    double height = OoUtils::toPoint(properties.attribute("fo:page-height"));
+    elementPaper.setAttribute("width", width);
+    elementPaper.setAttribute("height", height);
+
+    // guessFormat takes millimeters
+    // ## TODO use style:num-format instead of guessing
+    width = POINT_TO_MM( width );
+    height = POINT_TO_MM( height );
+    KoFormat paperFormat = KoPageFormat::guessFormat( landscape ? height : width, landscape ? width : height );
+    elementPaper.setAttribute("format",paperFormat);
+
     elementPaper.setAttribute("columns",1);
     elementPaper.setAttribute("columnspacing",2);
     elementPaper.setAttribute("hType",0);
@@ -170,6 +185,8 @@ void OoWriterImport::prepareDocument( QDomDocument& mainDocument, QDomElement& f
     elementPaper.setAttribute("spFootBody",9);
     elementPaper.setAttribute("zoom",100);
     docElement.appendChild(elementPaper);
+
+    // ## TODO use fo:margin-{left/right/top/bottom}
 
     framesetsElem=mainDocument.createElement("FRAMESETS");
     docElement.appendChild(framesetsElem);
@@ -359,12 +376,17 @@ bool OoWriterImport::createStyleMap( const QDomDocument & styles )
   QDomElement master = masterStyles.namedItem( "style:master-page").toElement();
   if ( !master.isNull() )
   {
-    QString name( "pm" );
+    kdDebug() << master.attribute( "style:name" ) << endl;
+#if 0 // I don't understand this code
+      QString name( "pm" );
     name += master.attribute( "style:name" );
     kdDebug() << "Master style: '" << name << "' loaded " << endl;
     m_styles.insert( name, new QDomElement( master ) );
 
     master = master.nextSibling().toElement();
+#else
+    m_masterPage = master;
+#endif
   }
 
 
