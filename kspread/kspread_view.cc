@@ -491,6 +491,7 @@ if( config->hasGroup("Parameters" ))
 	QColor _col(Qt::lightGray);
 	_col= config->readColorEntry("GridColor",&_col);
 	m_pDoc->changeDefaultGridPenColor(_col);
+	m_pDoc->setShowMessageError(config->readBoolEntry( "Msg error" ,false) );
 	m_pDoc->setShowCommentIndicator(config->readBoolEntry("Comment Indicator",true));
 	}
 }
@@ -540,7 +541,7 @@ void KSpreadView::initialPosition()
 
     slotUpdateView( activeTable() );
     m_bLoading =true;
-    m_pDoc->setShowMessageError(true);
+    m_pDoc->setShowMessageError(false);
 }
 
 void KSpreadView::updateEditWidget()

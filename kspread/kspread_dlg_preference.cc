@@ -339,13 +339,13 @@ miscParameters::miscParameters( KSpreadView* _view,QWidget *parent , char *name 
   lay1->setSpacing( 10 );
   config = KSpreadFactory::global()->config();
   int _indent=10;
-  bool m_bMsgError=true;
+  bool m_bMsgError=false;
   bool m_bCommentIndicator=true;
   if( config->hasGroup("Parameters" ))
         {
         config->setGroup( "Parameters" );
         _indent=config->readNumEntry( "Indent" ,10) ;
-        m_bMsgError=config->readBoolEntry( "Msg error" ,true) ;
+        m_bMsgError=config->readBoolEntry( "Msg error" ,false) ;
 	m_bCommentIndicator=config->readBoolEntry( "Comment Indicator",true);
         }
 
@@ -477,12 +477,12 @@ switch( m_pView->doc()->getTypeOfCalc())
 
 void miscParameters::slotDefault()
 {
-valIndent->setValue(10);
-typeCompletion->setCurrentItem(3);
-typeOfMove->setCurrentItem(0);
-msgError->setChecked(true);
-typeCalc->setCurrentItem(0);
-commentIndicator->setChecked(true);
+  valIndent->setValue(10);
+  typeCompletion->setCurrentItem(3);
+  typeOfMove->setCurrentItem(0);
+  msgError->setChecked(false);
+  typeCalc->setCurrentItem(0);
+  commentIndicator->setChecked(true);
 }
 
 
