@@ -20,8 +20,6 @@ TODO:
 		- devide gui and meta
 
 	+ relationeditor
-		- look why only n-1 tables are in the "avaible datasources" list
-		- look why a table can't hold more than 1 relation (already worked)
 		- try fixing the repaintbugs (worked long before koffice ;)
 
 	+ general
