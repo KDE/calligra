@@ -131,25 +131,27 @@ class KEXI_DB_EXPORT Parser
 
 
 		/**
-		 * sets the operation (only parser will need to call that)
+		 * sets the operation (only parser will need to call this)
 		 */
 		void		setOperation(OPCode op) { m_operation = op; }
 
 		/**
-		 * creates a new table (only parser will need to call that)
+		 * creates a new table (only parser will need to call this)
 		 */
 		void		createTable(const char *t);
 
 		/**
-		 * creates a new select object (only parser will need to call that)
+		 * @internal
+		 * sets \a query schema object (only parser will need to call this)
 		 */
-		void		createSelect();
+//todo: other query types
+		void setQuerySchema(QuerySchema *query);
 
 		/**
 		 * @internal
 		 * \return a INTERNAL list of fields
 		 */
-		Field::List *fieldList() { return m_fieldList; }
+//		Field::List *fieldList() { return m_fieldList; }
 
 		/**
 		 * @internal
@@ -169,7 +171,7 @@ class KEXI_DB_EXPORT Parser
 		TableSchema	*m_table;
 		QuerySchema	*m_select;
 		Connection	*m_db;
-		Field::List	*m_fieldList;
+//		Field::List	*m_fieldList;
 		QString		m_statement;
 		ParserError	m_error;
 };

@@ -714,18 +714,20 @@ bool parseData(KexiDB::Parser *p, const char *data);
 
 
 #ifndef YYSTYPE
-#line 580 "sqlparser.y"
+#line 670 "sqlparser.y"
 typedef union {
 	char stringValue[255];
 	int integerValue;
 	struct realType realValue;
-	KexiDB::Field::Type coltype;
+	KexiDB::Field::Type colType;
 	KexiDB::Field *field;
 	KexiDB::BaseExpr *expr;
-	KexiDB::NArgExpr *exprlist;
+	KexiDB::NArgExpr *exprList;
+	KexiDB::ConstExpr *constExpr;
+	KexiDB::QuerySchema *querySchema;
 } yystype;
 /* Line 1281 of /usr/share/bison/yacc.c.  */
-#line 724 "sqlparser.tab.h"
+#line 726 "sqlparser.tab.h"
 # define YYSTYPE yystype
 #endif
 

@@ -45,14 +45,15 @@ Parser::createTable(const char *t)
 }
 
 void
-Parser::createSelect()
+Parser::setQuerySchema(QuerySchema *query)
 {
 	if(m_select)
-		return;
-
-	m_select = new QuerySchema();
-	m_select->setStatement(m_statement);
-	m_fieldList = new Field::List();
+		delete m_select;
+	
+	m_select = query;
+//	m_select = new QuerySchema();
+//	m_select->setStatement(m_statement);
+//	m_fieldList = new Field::List();
 }
 
 bool
