@@ -6332,7 +6332,7 @@ bool KSpreadSheet::loadOasis( const QDomElement& tableElement, const KoOasisStyl
         }
     }
 
-    int rowIndex = 0;
+    int rowIndex = 1;
     QDomNode rowNode = tableElement.firstChild();
     while( !rowNode.isNull() )
     {
@@ -6346,6 +6346,7 @@ bool KSpreadSheet::loadOasis( const QDomElement& tableElement, const KoOasisStyl
                 kdDebug()<<"style row !!!!!!!!!!!!!!!!!!!!!!!!!!!!! :"<<str<<endl;
                 QDomElement *style = oasisStyles.styles()[str];
                 kdDebug()<<" style :"<<style<<endl;
+                loadRowFormat( rowElement, style, rowIndex );
             }
             if( rowElement.tagName() == "table:table-row" )
             {
@@ -6419,6 +6420,90 @@ bool KSpreadSheet::loadOasis( const QDomElement& tableElement, const KoOasisStyl
       kdDebug(30518) << "Password hash: '" << passwd << "'" << endl;
       m_strPassword = passwd;
     }
+    return true;
+}
+
+bool KSpreadSheet::loadRowFormat( const QDomElement& row, QDomElement * rowStyle, int &rowIndex )
+{
+    QDomNode rowNode = rowStyle->firstChild();
+    double height = -1.0;
+    while ( !rowNode.isNull() )
+    {
+        QDomElement property = rowNode.toElement();
+        if ( !property.isNull() && property.tagName() == "style:properties" )
+        {
+            if ( property.hasAttribute( "style:row-height" ) )
+            {
+                kdDebug()<<" properties style:row-height!!!!!!!!!!!!!!!!!!\n";
+                QString sHeight = property.attribute( "style:row-height" );
+                int p = sHeight.find( "cm" );
+                if ( p != -1 )
+                {
+                    sHeight = sHeight.left( p );
+
+                    kdDebug(30518) << "Parsing height (cm): " << sHeight << endl;
+
+                    bool ok = true;
+                    double d = sHeight.toDouble( &ok );
+                    if ( ok )
+                        height = d * 10; // we work with mm
+                }
+                else
+                {
+                    p = sHeight.find( "mm" );
+
+                    if ( p != -1 )
+                    {
+                        sHeight = sHeight.left( p );
+
+                        kdDebug(30518) << "Parsing height (mm): " << sHeight << endl;
+
+                        bool ok = true;
+                        double d = sHeight.toDouble( &ok );
+                        if ( ok )
+                            height = d;
+                    }
+                }
+
+            }
+        }
+        rowNode = rowNode.nextSibling();
+    }
+    int number = 1;
+    if ( row.hasAttribute( "table:number-rows-repeated" ) )
+    {
+        bool ok = true;
+        int n = row.attribute( "table:number-rows-repeated" ).toInt( &ok );
+        if ( ok )
+            number = n;
+        kdDebug() << "Row repeated: " << number << endl;
+    }
+    kdDebug()<<" height !!!!!!!!!!!!!!!!!!!!!!! :"<<height<<endl;
+#if 0
+    if ( isLast )
+    {
+        if ( number > 30 )
+            number = 30;
+    }
+    else
+    {
+        if ( number > 256 )
+            number = 256;
+    }
+#endif
+    for ( int i = 0; i < number; ++i )
+    {
+        RowFormat * rowL = nonDefaultRowFormat( rowIndex );
+        rowL->copy( *m_defaultFormat );
+
+        if ( height != -1 )
+        {
+            kdDebug() << "Setting row height to " << height << endl;
+            rowL->setMMHeight( height );
+        }
+        ++rowIndex;
+    }
+
     return true;
 }
 

@@ -450,7 +450,7 @@ public:
 
     virtual QDomElement save( QDomDocument&, int yshift = 0, bool copy = false ) const;
     virtual bool load( const QDomElement& row, int yshift = 0, PasteMode sp = Normal, bool paste = false );
-    virtual bool loadOasis( QDomElement * rowStyle );
+    virtual bool loadOasis( const QDomElement& row, QDomElement * rowStyle );
 
     /**
      * @param _canvas is needed to get information about the zooming factor.
