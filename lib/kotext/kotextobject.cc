@@ -1294,6 +1294,52 @@ KCommand * KoTextObject::setShadowCommand( KoTextCursor * cursor,double dist, sh
     return new KoTextCommand( this, /*cmd, */i18n("Change Shadow") );
 }
 
+KCommand * KoTextObject::setParagDirectionCommand( KoTextCursor * cursor, QChar::Direction d, int selectionId )
+{
+    if ( protectContent() )
+        return 0L;
+    KoTextDocument * textdoc = textDocument();
+    if ( !textdoc->hasSelection( selectionId ) && cursor &&
+         cursor->parag()->direction() == d )
+        return 0L; // No change needed.
+
+    emit hideCursor();
+    if(cursor)
+        storeParagUndoRedoInfo( cursor, selectionId );
+
+    if ( !textdoc->hasSelection( selectionId ) && cursor ) {
+        cursor->parag()->setDirection( d );
+        setLastFormattedParag( cursor->parag() );
+    }
+    else
+    {
+        KoTextParag *start = textDocument()->selectionStart( selectionId );
+        KoTextParag *end = textDocument()->selectionEnd( selectionId );
+        setLastFormattedParag( start );
+        for ( ; start && start != end->next() ; start = start->next() )
+            start->setDirection( d );
+    }
+
+    formatMore();
+    emit repaintChanged( this );
+    ////// ### TODO
+#if 0
+    undoRedoInfo.newParagLayout.direction = d;
+    KoTextParagCommand *cmd = new KoTextParagCommand(
+        textdoc, undoRedoInfo.id, undoRedoInfo.eid,
+        undoRedoInfo.oldParagLayouts, undoRedoInfo.newParagLayout,
+        KoParagLayout::Shadow);
+    textdoc->addCommand( cmd );
+#endif
+    undoRedoInfo.clear();
+    emit showCursor();
+    emit updateUI( true );
+#if 0
+    return new KoTextCommand( this, /*cmd, */i18n("Change Shadow") );
+#else
+    return 0L;
+#endif
+}
 
 void KoTextObject::removeSelectedText( KoTextCursor * cursor, int selectionId, const QString & cmdName, bool createUndoRedo )
 {

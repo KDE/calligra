@@ -483,7 +483,7 @@ void KoTextParag::drawParagStringInternal( QPainter &painter, const QString &s, 
 {
     //kdDebug(32001) << "KoTextParag::drawParagStringInternal start=" << start << " len=" << len << endl;
     //kdDebug(32001) << "In pixels:  startX=" << startX << " lastY=" << lastY << " baseLine=" << baseLine
-    //          << " bw=" << bw << " h=" << h << endl;
+    //               << " bw=" << bw << " h=" << h << " rightToLeft=" << rightToLeft << endl;
 
     // 1) Sort out the color
     QColor textColor( lastFormat->color() );
@@ -879,7 +879,7 @@ void KoTextParag::setParagLayout( const KoParagLayout & layout, int flags )
     if ( flags & KoParagLayout::Alignment )
         setAlign( layout.alignment );
     if ( flags & KoParagLayout::Margins )
-         setMargins( layout.margins );
+        setMargins( layout.margins );
     if ( flags & KoParagLayout::LineSpacing )
         setLineSpacing( layout.lineSpacing );
     if ( flags & KoParagLayout::Borders )
@@ -896,8 +896,11 @@ void KoTextParag::setParagLayout( const KoParagLayout & layout, int flags )
     if ( flags & KoParagLayout::Shadow )
         setShadow( layout.shadowDistance, layout.shadowDirection,layout.shadowColor );
     if ( flags == KoParagLayout::All )
+    {
+        setDirection( static_cast<QChar::Direction>(layout.direction) );
         // Don't call applyStyle from here, it would overwrite any paragraph-specific settings
         setStyle( layout.style );
+    }
 }
 
 void KoTextParag::setCustomItem( int index, KoTextCustomItem * custom, KoTextFormat * currentFormat )
@@ -973,7 +976,9 @@ void KoTextParag::printRTDebug( int info )
                       << " text='" << m_layout.counter->text( this ) << "'"
                       << " width=" << m_layout.counter->width( this ) << endl;
         static const char * const s_align[] = { "Auto", "Left", "Right", "ERROR", "HCenter", "ERR", "ERR", "ERR", "Justify", };
-        kdDebug() << "  align: " << s_align[alignment()] << "  resolveAlignment: " << s_align[resolveAlignment()] << endl;
+        static const char * const s_dir[] = { "DirL", "DirR", "DirEN", "DirES", "DirET", "DirAN", "DirCS", "DirB", "DirS", "DirWS", "DirON", "DirLRE", "DirLRO", "DirAL", "DirRLE", "DirRLO", "DirPDF", "DirNSM", "DirBN" };
+        kdDebug() << "  align: " << s_align[alignment()] << "  resolveAlignment: " << s_align[resolveAlignment()]
+                  << "  dir: " << s_dir[direction()] << endl;
         QRect pixr = pixelRect( textDocument()->paintingZoomHandler() );
         kdDebug() << "  rect() : " << DEBUGRECT( rect() )
                   << "  pixelRect() : " << DEBUGRECT( pixr ) << endl;

@@ -5040,6 +5040,9 @@ void KoTextParag::setDirection( QChar::Direction d )
     if ( str && str->direction() != d ) {
 	str->setDirection( d );
 	invalidate( 0 );
+        //// kotext
+        m_layout.direction = d;
+        ////
     }
 }
 

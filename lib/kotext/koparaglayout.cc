@@ -48,6 +48,7 @@ void KoParagLayout::operator=( const KoParagLayout &layout )
     shadowDistance = layout.shadowDistance;
     shadowColor = layout.shadowColor;
     shadowDirection = layout.shadowDirection;
+    direction = layout.direction;
     setTabList( layout.tabList() );
 }
 
@@ -94,6 +95,9 @@ int KoParagLayout::compare( const KoParagLayout & layout ) const
          || ( shadowDistance > 0 && shadowColor != layout.shadowColor )
          || ( shadowDistance > 0 && shadowDirection != layout.shadowDirection ) )
          flags |= Shadow;
+
+    // This method is used for the GUI stuff only, so we don't have a flag
+    // for the Direction value.
     return flags;
 }
 
@@ -113,6 +117,7 @@ void KoParagLayout::initialise()
     shadowDistance = 0;
     shadowColor = QColor();
     shadowDirection = SD_RIGHT_BOTTOM;
+    direction = QChar::DirON;
     m_tabList.clear();
 }
 
@@ -157,6 +162,16 @@ void KoParagLayout::loadParagLayout( KoParagLayout& layout, const QDomElement& p
                          flow=="center" ? Qt::AlignCenter :
                          flow=="justify" ? Qt::AlignJustify :
                          flow=="left" ? Qt::AlignLeft : Qt::AlignAuto;
+
+            QString dir = element.attribute( "dir" ); // KWord-1.2
+            if ( !dir.isEmpty() ) {
+                if ( dir == "L" )
+                    layout.direction = QChar::DirL;
+                else if ( dir == "R" )
+                    layout.direction = QChar::DirR;
+                else
+                    kdWarning() << "Unexpected value for paragraph direction: " << dir << endl;
+            }
         } else {
             flow = element.attribute( "value" ); // KWord-0.8
             static const int flow2align[] = { Qt::AlignAuto, Qt::AlignRight, Qt::AlignCenter, Qt::AlignJustify };
@@ -301,6 +316,9 @@ void KoParagLayout::saveParagLayout( QDomElement & parentElem, int alignment ) c
                           alignment==Qt::AlignJustify ? "justify" :
                           alignment==Qt::AlignAuto ? "auto" : "left" ); // Note: styles can have AlignAuto. Not paragraphs.
 
+    if ( static_cast<QChar::Direction>(layout.direction) == QChar::DirR )
+        element.setAttribute( "dir", "R" );
+
     if ( layout.margins[QStyleSheetItem::MarginFirstLine] != 0 ||
          layout.margins[QStyleSheetItem::MarginLeft] != 0 ||
          layout.margins[QStyleSheetItem::MarginRight] != 0 )
@@ -393,7 +411,7 @@ void KoParagLayout::saveParagLayout( QDomElement & parentElem, int alignment ) c
         element.setAttribute( "filling", (*it).filling );
         element.setAttribute( "width", (*it).ptWidth );
     }
-    if(layout.shadowDistance!=0 || layout.shadowDirection!=KoParagLayout::SD_RIGHT_BOTTOM)
+    if(layout.shadowDistance!=0)
     {
         element = doc.createElement( "SHADOW" );
         parentElem.appendChild( element );

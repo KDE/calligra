@@ -79,12 +79,14 @@ public:
         SD_BOTTOM = 6,
         SD_LEFT_BOTTOM = 7,
         SD_LEFT = 8
-    };
-    short int shadowDirection;
+    } ShadowDirection;
+    char shadowDirection; // SD_*
+    char pageBreaking;    // Page breaking flags
+    char direction;       // QChar::Direction
+    char unused;          // for future use
     KoBorder leftBorder, rightBorder, topBorder, bottomBorder;
     /** can be 0 if no counter set */
     KoParagCounter* counter;
-    int pageBreaking;
 
     KoStyle* style;
 
@@ -113,6 +115,9 @@ public:
 
 private:
     KoTabulatorList m_tabList;
+
+    class Private;
+    Private *d;
 
     /** Common setup. */
     void initialise();

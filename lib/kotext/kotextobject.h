@@ -260,6 +260,7 @@ public:
     KCommand* setTabListCommand( KoTextCursor * cursor,const KoTabulatorList & tabList , int selectionId = KoTextDocument::Standard );
 
     KCommand * setShadowCommand( KoTextCursor * cursor,double dist, short int direction, const QColor &col,int selectionId= KoTextDocument::Standard  );
+    KCommand * setParagDirectionCommand( KoTextCursor * cursor, QChar::Direction d, int selectionId = KoTextDocument::Standard );
 
     KCommand* applyStyle( KoTextCursor * cursor, const KoStyle * style,
                      int selectionId = KoTextDocument::Standard,

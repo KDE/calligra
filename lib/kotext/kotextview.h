@@ -207,8 +207,8 @@ protected:
     /** Reimplement this to handle CTRL+PageDown. Default implementation calls pgDownKeyPressed */
     virtual void ctrlPgDownKeyPressed() { pgDownKeyPressed(); }
 
-    void deleteWordBack();
-    void deleteWordForward();
+    void deleteWordLeft();
+    void deleteWordRight();
 
 private slots:
     void blinkCursor();

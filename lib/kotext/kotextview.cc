@@ -112,7 +112,7 @@ void KoTextView::terminate(bool removeselection)
     hideCursor();
 }
 
-void KoTextView::deleteWordForward()
+void KoTextView::deleteWordRight()
 {
     if ( textDocument()->hasSelection( KoTextDocument::Standard ) ) {
         textObject()->removeSelectedText( m_cursor );
@@ -128,7 +128,7 @@ void KoTextView::deleteWordForward()
     textObject()->removeSelectedText( m_cursor, KoTextDocument::Standard, i18n("Remove Word") );
 }
 
-void KoTextView::deleteWordBack()
+void KoTextView::deleteWordLeft()
 {
     if ( textDocument()->hasSelection( KoTextDocument::Standard ) ) {
         textObject()->removeSelectedText( m_cursor );
@@ -144,6 +144,7 @@ void KoTextView::deleteWordBack()
     textObject()->removeSelectedText( m_cursor, KoTextDocument::Standard, i18n("Remove Word") );
 }
 
+// Compare with QTextEdit::keyPressEvent
 void KoTextView::handleKeyPressEvent( QKeyEvent * e )
 {
     textObject()->typingStarted();
@@ -161,21 +162,33 @@ void KoTextView::handleKeyPressEvent( QKeyEvent * e )
 
     if ( KShortcut( KKey( e ) ) == KStdAccel::deleteWordBack() )
     {
-        deleteWordBack();
+        if ( m_cursor->parag()->string()->isRightToLeft() )
+            deleteWordRight();
+        else
+            deleteWordLeft();
         clearUndoRedoInfo = TRUE;
     } else if ( KShortcut( KKey( e ) ) == KStdAccel::deleteWordForward() )
     {
-        deleteWordForward();
+        if ( m_cursor->parag()->string()->isRightToLeft() )
+            deleteWordLeft();
+        else
+            deleteWordRight();
         clearUndoRedoInfo = TRUE;
     }
     else
     switch ( e->key() ) {
     case Key_Left:
-        moveCursor( e->state() & ControlButton ? MoveWordBackward : MoveBackward, e->state() & ShiftButton );
+    case Key_Right: {
+        // a bit hacky, but can't change this without introducing new enum values for move and keeping the
+        // correct semantics and movement for BiDi and non BiDi text.
+        CursorAction a;
+        if ( m_cursor->parag()->string()->isRightToLeft() == (e->key() == Key_Right) )
+            a = e->state() & ControlButton ? MoveWordBackward : MoveBackward;
+        else
+            a = e->state() & ControlButton ? MoveWordForward : MoveForward;
+        moveCursor( a, e->state() & ShiftButton );
         break;
-    case Key_Right:
-        moveCursor( e->state() & ControlButton ? MoveWordForward : MoveForward, e->state() & ShiftButton );
-        break;
+    }
     case Key_Up:
         moveCursor( e->state() & ControlButton ? MoveParagUp : MoveUp, e->state() & ShiftButton );
         break;
@@ -240,6 +253,21 @@ void KoTextView::handleKeyPressEvent( QKeyEvent * e )
     case Key_F20:  // Cut key on Sun keyboards
         emit cut();
         break;
+    case Key_Direction_L: {
+	if ( !m_cursor->parag() || m_cursor->parag()->direction() == QChar::DirL )
+	    return;
+        //// TODO load/save this attrib
+        KCommand* cmd = textObject()->setParagDirectionCommand( m_cursor, QChar::DirL );
+        textObject()->emitNewCommand( cmd );
+    break;
+    }
+    case Key_Direction_R: {
+	if ( !m_cursor->parag() || m_cursor->parag()->direction() == QChar::DirR )
+	    return;
+        KCommand* cmd = textObject()->setParagDirectionCommand( m_cursor, QChar::DirR );
+        textObject()->emitNewCommand( cmd );
+	break;
+    }
     default: {
             //kdDebug() << "KoTextView::keyPressEvent ascii=" << e->ascii() << " text=" << e->text()[0].unicode() << " state=" << e->state() << endl;
             if ( e->text().length() &&
@@ -278,12 +306,23 @@ void KoTextView::handleKeyPressEvent( QKeyEvent * e )
 
                 if ( !text.isEmpty() )
                 {
-                    if( !doIgnoreDoubleSpace(m_cursor->parag(),m_cursor->index()-1 ,text[ text.length() - 1 ]))
+                    // Bidi support: need to reverse mirrored chars (e.g. parenthesis)
+                    KoTextParag *p = m_cursor->parag();
+                    if ( p && p->string() && p->string()->isRightToLeft() ) {
+                        QChar *c = (QChar *)text.unicode();
+                        int l = text.length();
+                        while( l-- ) {
+                            if ( c->mirrored() )
+                                *c = c->mirroredChar();
+                            c++;
+                        }
+                    }
+
+                    if( !doIgnoreDoubleSpace( p, m_cursor->index()-1, text[ text.length() - 1 ] ) )
                     {
                         insertText( text );
 
-                        doAutoFormat( m_cursor, m_cursor->parag(),
-                                      m_cursor->index() - 1, text[ text.length() - 1 ] );
+                        doAutoFormat( m_cursor, p, m_cursor->index() - 1, text[ text.length() - 1 ] );
                     }
                 }
                 break;
@@ -374,16 +413,16 @@ void KoTextView::moveCursor( CursorAction action )
 {
     switch ( action ) {
         case MoveBackward:
-            m_cursor->gotoLeft();
+            m_cursor->gotoPreviousLetter();
             break;
         case MoveWordBackward:
-            m_cursor->gotoWordLeft();
+            m_cursor->gotoPreviousWord();
             break;
         case MoveForward:
-            m_cursor->gotoRight();
+            m_cursor->gotoNextLetter();
             break;
         case MoveWordForward:
-            m_cursor->gotoWordRight();
+            m_cursor->gotoNextWord();
             break;
         case MoveUp:
             m_cursor->gotoUp();
