@@ -553,8 +553,16 @@ Reggie, 24.11.1999:
 - Key_Escape works now always for exitting the edit mode of a txt obj
 - Key_Home and Key_End work now for txt objs
 
+David, 24.11.1999:
+------------------
+- Ported to the new kofficecore API (especially KoDocument which uses KURL now)
+- Fixed crash in kpresenter and kword, in setRootPart() on exit
+- Fixed Unicode problems related to urls.
+
 David, 28.11.1999:
 ------------------
 - Added mkstandalone.sh
-- Added handling for KoTempChooseDia's TempFile return type
+- Added handling for KoTemplateChooseDia's TempFile return type
+- Changed Find to Ctrl+F, so that Ctrl+S for save works.
 - Fixed bug when saving text with '>' or '<' (a space was added).
+
