@@ -218,10 +218,10 @@ void KSpreadFormat::setNoFallBackProperties( Properties p )
 //
 /////////////
 
-void KSpreadFormat::saveOasisCellStyle( KoGenStyle &currentCellStyle, KoGenStyles &mainStyle )
+QString KSpreadFormat::saveOasisCellStyle( KoGenStyle &currentCellStyle, KoGenStyles &mainStyle )
 {
     kdDebug()<<"void KSpreadFormat::saveOasisCellStyle( KoGenStyle &currentCellStyle )***************\n";
-
+    QString styleFormatName;
     //FIXME fallback ????
     KSpreadFormat::Align a = KSpreadFormat::Undefined;
     if ( hasProperty( PFont,true ) || hasNoFallBackProperties( PFont ) )
@@ -362,11 +362,11 @@ void KSpreadFormat::saveOasisCellStyle( KoGenStyle &currentCellStyle, KoGenStyle
         if ( ( pen.width() != 0 ) && ( pen.style() != Qt::NoPen ) )
             currentCellStyle.addProperty( "style:diagonal-bl-tr", convertOasisPenToString( pen ) );
     }
-    if ( hasProperty( PFormatType, true ) || hasNoFallBackProperties( PFormatType ) /*|| force*/ )
+    if ( /*hasProperty( PFormatType, true ) || hasNoFallBackProperties( PFormatType )*/1 /*|| force*/ )
     {
-        //TODO
-        //format.setAttribute( "format", (int)getFormatType( _col, _row ));
+        styleFormatName =  KSpreadStyle::saveOasisStyleNumeric( mainStyle, m_pStyle->formatType(), m_pStyle->prefix( ),  m_pStyle->postfix( ) );
     }
+    return styleFormatName;
 
 }
 
@@ -388,7 +388,7 @@ void KSpreadFormat::saveOasisFontCellStyle( KoGenStyle &currentCellStyle, const 
     currentCellStyle.addPropertyPt( "fo:font-size", _font.pointSize() );
 }
 
-void KSpreadFormat::saveOasisCellStyle( KoGenStyle &currentCellStyle, KoGenStyles &mainStyle, int _col, int _row )
+QString KSpreadFormat::saveOasisCellStyle( KoGenStyle &currentCellStyle, KoGenStyles &mainStyle, int _col, int _row )
 {
     if ( m_pStyle->type() == KSpreadStyle::BUILTIN || m_pStyle->type() == KSpreadStyle::CUSTOM )
     {
@@ -544,6 +544,8 @@ void KSpreadFormat::saveOasisCellStyle( KoGenStyle &currentCellStyle, KoGenStyle
         if ( ( pen.width() != 0 ) && ( pen.style() != Qt::NoPen ) )
             currentCellStyle.addProperty( "style:diagonal-bl-tr", convertOasisPenToString( pen ) );
     }
+    //TODO FIXME!!!!
+    return "";
 }
 
 QDomElement KSpreadFormat::saveFormat( QDomDocument & doc, int _col, int _row, bool force, bool copy ) const

@@ -4534,11 +4534,12 @@ void KSpreadCell::saveOasisAnnotation( KoXmlWriter &xmlwriter )
 
 
 
-void KSpreadCell::saveOasisCellStyle( KoGenStyle &currentCellStyle, KoGenStyles &mainStyles)
+QString KSpreadCell::saveOasisCellStyle( KoGenStyle &currentCellStyle, KoGenStyles &mainStyles)
 {
-    KSpreadFormat::saveOasisCellStyle( currentCellStyle, mainStyles, column(), row() );
+    QString formatCellStyle = KSpreadFormat::saveOasisCellStyle( currentCellStyle, mainStyles, column(), row() );
     if ( d->hasExtra() && d->extra()->conditions )
         d->extra()->conditions->saveOasisConditions( currentCellStyle );
+    return formatCellStyle;
 }
 
 
@@ -4562,8 +4563,11 @@ bool KSpreadCell::saveOasis( KoXmlWriter& xmlwriter, KoGenStyles &mainStyles, in
     }
 #endif
     KoGenStyle currentCellStyle( KSpreadDoc::STYLE_CELL,"table-cell" );
-    saveOasisCellStyle( currentCellStyle,mainStyles );
+    QString cellNumericStyle = saveOasisCellStyle( currentCellStyle,mainStyles );
     xmlwriter.addAttribute( "table:style-name", mainStyles.lookup( currentCellStyle, "ce" ) );
+    if ( !cellNumericStyle.isEmpty() )
+        xmlwriter.addAttribute( "style:data-style-name", cellNumericStyle );
+
     // group empty cells with the same style
     if ( isEmpty() && !hasProperty( KSpreadFormat::PComment ) && !isObscuringForced() && !isForceExtraCells() )
     {
@@ -4827,16 +4831,13 @@ bool KSpreadCell::loadOasis( const QDomElement &element, const KoOasisStyles& oa
     QDomElement textP = KoDom::namedItemNS( element, KoXmlNS::text, "p" );
     if ( !textP.isNull() )
     {
-        kdDebug()<<" !textP.isNull()333333333333333333333333333333333333333333\n";
         QDomElement subText = textP.firstChild().toElement();
         if ( !subText.isNull() )
         {
             // something in <text:p>, e.g. links
             text = subText.text();
-            kdDebug()<<" text subText !!!!!!!!!!!!!!!!! 11111111111111 :"<<text<<endl;
             if ( subText.hasAttributeNS( KoXmlNS::xlink, "href" ) )
             {
-                kdDebug()<<"  subText.hasAttributeNS link !!!!!!!!!!!!!!!!!!!!!!!!!!!!!! \n";
                 QString link = subText.attributeNS( KoXmlNS::xlink, "href", QString::null );
                 kdDebug()<<" link :"<<link<<endl;
                 d->extra()->link = link;
