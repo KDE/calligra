@@ -112,8 +112,6 @@ class KPresenterDoc : public KoDocument
     Q_PROPERTY( double tabStopValue READ tabStopValue WRITE setTabStopValue )
     Q_PROPERTY( bool snapToGrid READ snapToGrid WRITE setSnapToGrid )
     Q_PROPERTY( bool backgroundSpellCheckEnabled READ backgroundSpellCheckEnabled WRITE enableBackgroundSpellCheck )
-    Q_PROPERTY( bool dontCheckUpperWord READ dontCheckUpperWord WRITE setDontCheckUpperWord )
-    Q_PROPERTY( bool dontCheckTitleCase READ dontCheckTitleCase WRITE setDontCheckTitleCase )
     Q_PROPERTY( bool spInfiniteLoop READ spInfiniteLoop WRITE setInfiniteLoop )
     Q_PROPERTY( bool spManualSwitch READ spManualSwitch WRITE setManualSwitch )
     Q_PROPERTY( bool presentationDuration READ presentationDuration WRITE setPresentationDuration )
@@ -281,13 +279,6 @@ class KPresenterDoc : public KoDocument
      */
     void setKOSpellConfig(KOSpellConfig _kspell);
     KOSpellConfig * getKOSpellConfig()const {return m_pKOSpellConfig;}
-
-
-    bool dontCheckUpperWord() const { return m_bDontCheckUpperWord; }
-    void setDontCheckUpperWord(bool _b);
-
-    bool dontCheckTitleCase() const {return  m_bDontCheckTitleCase;}
-    void setDontCheckTitleCase(bool _b);
 
     bool showStatusBar() const { return m_bShowStatusBar;}
     void setShowStatusBar( bool _status ) { m_bShowStatusBar = _status;}
@@ -577,8 +568,6 @@ protected:
     KoAutoFormat * m_autoFormat;
     KOSpellConfig *m_pKOSpellConfig;
 
-    bool m_bDontCheckUpperWord;
-    bool m_bDontCheckTitleCase;
     bool m_bShowRuler;
     bool m_bShowStatusBar;
     bool m_bAllowAutoFormat;

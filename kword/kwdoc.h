@@ -643,12 +643,6 @@ public:
     bool pgUpDownMovesCaret() const { return m_pgUpDownMovesCaret; }
     void setPgUpDownMovesCaret( bool b ) { m_pgUpDownMovesCaret = b; }
 
-    bool dontCheckUpperWord() const { return m_bDontCheckUpperWord; }
-    void setDontCheckUpperWord(bool _b);
-
-    bool dontCheckTitleCase() const {return  m_bDontCheckTitleCase;}
-    void setDontCheckTitleCase(bool _b);
-
     bool showdocStruct() const {return  m_bShowDocStruct;}
     void setShowDocStruct(bool _b){m_bShowDocStruct=_b;}
 
@@ -963,8 +957,6 @@ private:
     bool m_headerVisible, m_footerVisible;
     bool m_viewFrameBorders;
     bool m_bShowRuler;
-    bool m_bDontCheckUpperWord;
-    bool m_bDontCheckTitleCase;
     bool m_bShowDocStruct;
     bool m_hasTOC;
     bool m_bShowStatusBar;

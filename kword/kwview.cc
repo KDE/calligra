@@ -5277,6 +5277,7 @@ void KWView::openPopupMenuEditFrame( const QPoint & _point )
 
 void KWView::startKSpell()
 {
+    kdDebug()<<"void KWView::startKSpell()**************\n";
     if(m_doc->getKOSpellConfig())
     {
         m_doc->getKOSpellConfig()->setIgnoreList(m_doc->spellListIgnoreAll());
@@ -5285,9 +5286,6 @@ void KWView::startKSpell()
     m_spell.kospell = KOSpell::createKoSpell( this, i18n( "Spell Checking" ), this,SLOT( spellCheckerReady() ) ,m_doc->getKOSpellConfig(), true,true /*FIXME !!!!!!!!!*/ );
     //new KOSpell( this, i18n( "Spell Checking" ), this, SLOT( spellCheckerReady() ), m_doc->getKOSpellConfig() );
 
-
-    m_spell.kospell->setIgnoreUpperWords(m_doc->dontCheckUpperWord());
-    m_spell.kospell->setIgnoreTitleCase(m_doc->dontCheckTitleCase());
 
     QObject::connect( m_spell.kospell, SIGNAL( death() ),
                       this, SLOT( spellCheckerFinished() ) );
@@ -5303,10 +5301,12 @@ void KWView::startKSpell()
     QObject::connect( m_spell.kospell, SIGNAL( replaceall( const QString &  ,  const QString & )), this, SLOT( spellCheckerReplaceAll( const QString &  ,  const QString & )));
     QObject::connect( m_spell.kospell, SIGNAL( spellCheckerReady()), this, SLOT( spellCheckerReady()));
 
+    kdDebug()<<" end void KWView::startKSpell() \n";
 }
 
 void KWView::spellCheckerReady()
 {
+    kdDebug()<<"void KWView::spellCheckerReady() ******************\n";
     // Spell-check the next paragraph
     Q_ASSERT( m_spell.textIterator );
     if ( !m_spell.textIterator->atEnd() )

@@ -255,8 +255,6 @@ KWDocument::KWDocument(QWidget *parentWidget, const char *widgetName, QObject* p
     m_recalcFramesPending = -1;
     m_bShowDocStruct = true;
     m_bShowRuler = true;
-    m_bDontCheckUpperWord = false;
-    m_bDontCheckTitleCase = false;
     m_bShowStatusBar = true;
     m_bAllowAutoFormat = true;
     m_pgUpDownMovesCaret = false;
@@ -414,8 +412,6 @@ void KWDocument::initConfig()
 
       setKOSpellConfig( kosconfig );
 
-      setDontCheckUpperWord(config->readBoolEntry("KSpell_dont_check_upper_word",false));
-      setDontCheckTitleCase(config->readBoolEntry("KSpell_dont_check_title_case",false));
       // Default is false for spellcheck, but the spell-check config dialog
       // should write out "true" when the user configures spell checking.
       if ( isReadWrite() )
@@ -4550,18 +4546,6 @@ void KWDocument::changeFootNoteConfig()
         }
     }
     slotRepaintVariable();
-}
-
-void KWDocument::setDontCheckUpperWord(bool _b)
-{
-    m_bDontCheckUpperWord=_b;
-    m_bgSpellCheck->setIgnoreUpperWords( _b);
-}
-
-void KWDocument::setDontCheckTitleCase(bool _b)
-{
-    m_bDontCheckTitleCase=_b;
-    m_bgSpellCheck->setIgnoreTitleCase( _b );
 }
 
 

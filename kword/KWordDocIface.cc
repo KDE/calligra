@@ -109,16 +109,6 @@ bool KWordDocIface::showRuler() const
     return doc->showRuler();
 }
 
-bool KWordDocIface::dontCheckUpperWord()const
-{
-    return doc->dontCheckUpperWord();
-}
-
-bool KWordDocIface::dontCheckTitleCase() const
-{
-    return doc->dontCheckTitleCase();
-}
-
 bool KWordDocIface::showdocStruct() const
 {
     return doc->showdocStruct();

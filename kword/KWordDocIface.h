@@ -47,8 +47,6 @@ k_dcop:
     virtual QString unitName()const;
 
     virtual bool showRuler() const;
-    virtual bool dontCheckUpperWord()const;
-    virtual bool dontCheckTitleCase() const;
     virtual bool showdocStruct() const;
     virtual bool viewFrameBorders() const;
 

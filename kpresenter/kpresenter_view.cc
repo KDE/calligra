@@ -5010,9 +5010,6 @@ void KPresenterView::startKSpell()
     //                           this, SLOT( spellCheckerReady() ), m_pKPresenterDoc->getKSpellConfig() );
 
 
-    m_spell.kospell->setIgnoreUpperWords(m_pKPresenterDoc->dontCheckUpperWord());
-    m_spell.kospell->setIgnoreTitleCase(m_pKPresenterDoc->dontCheckTitleCase());
-
     QObject::connect( m_spell.kospell, SIGNAL( death() ),
                       this, SLOT( spellCheckerFinished() ) );
     QObject::connect( m_spell.kospell, SIGNAL( misspelling( const QString &, const QStringList &, unsigned int) ),

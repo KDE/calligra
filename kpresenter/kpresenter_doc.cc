@@ -197,8 +197,6 @@ KPresenterDoc::KPresenterDoc( QWidget *parentWidget, const char *widgetName, QOb
     _otxtBackCol = lightGray;
     m_pKOSpellConfig = 0;
 
-    m_bDontCheckUpperWord=false;
-    m_bDontCheckTitleCase=false;
     m_bShowRuler=true;
     m_bAllowAutoFormat = true;
 
@@ -379,8 +377,6 @@ void KPresenterDoc::initConfig()
         kosconfig.setSpellWordWithNumber( config->readNumEntry("KSpell_SpellWordWithNumber", false));
         setKOSpellConfig(kosconfig);
 
-        setDontCheckUpperWord(config->readBoolEntry("KSpell_dont_check_upper_word",false));
-        setDontCheckTitleCase(config->readBoolEntry("KSpell_dont_check_title_case",false));
         m_bgSpellCheck->enableBackgroundSpellCheck(config->readBoolEntry( "SpellCheck", false ));
 
     }
@@ -3167,18 +3163,6 @@ void KPresenterDoc::updateObjectSelected()
     QPtrListIterator<KoView> it( views() );
     for (; it.current(); ++it )
         ((KPresenterView*)it.current())->objectSelectedChanged();
-}
-
-void KPresenterDoc::setDontCheckUpperWord(bool _b)
-{
-    m_bDontCheckUpperWord=_b;
-    m_bgSpellCheck->setIgnoreUpperWords( _b);
-}
-
-void KPresenterDoc::setDontCheckTitleCase(bool _b)
-{
-    m_bDontCheckTitleCase=_b;
-    m_bgSpellCheck->setIgnoreTitleCase( _b );
 }
 
 void KPresenterDoc::setTabStopValue ( double _tabStop )
