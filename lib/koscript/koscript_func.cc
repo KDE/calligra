@@ -28,10 +28,12 @@
 #include <dcopclient.h>
 #include <klocale.h>
 
-#include <iostream.h>
+#include <iostream>
 
 // Imported from scanner.ll
 extern KLocale* s_koscript_locale;
+
+using namespace std;
 
 bool KSScriptFunction::call( KSContext& context )
 {
