@@ -39,6 +39,9 @@
 #include <zlib.h>
 #include "processors.h"
 
+//Temporary
+#undef USE_QDOMDOCUMENT
+
 ABIWORDExport::ABIWORDExport(KoFilter *parent, const char *name) :
                      KoFilter(parent, name) {
 }
@@ -297,14 +300,18 @@ static void ProcessParagraphData ( QString &paraText, QValueList<FormatData> &pa
         const QString strAmp ("&amp;");
         const QString strLt  ("&lt;");
         const QString strGt  ("&gt;");
+        const QString strApos("&apos;");
+        const QString strQuot("&quot;");
 
         const QRegExp regExpAmp ("&");
         const QRegExp regExpLt  ("<");
         const QRegExp regExpGt  (">");
+        const QRegExp regExpApos("'");
+        const QRegExp regExpQuot("\"");
 
-		QValueList<FormatData>::Iterator  paraFormatDataIt;  //Warning: cannot use "->" with it!!
+	QValueList<FormatData>::Iterator  paraFormatDataIt;  //Warning: cannot use "->" with it!!
 
-		QString partialText;
+	QString partialText;
 	
         for ( paraFormatDataIt = paraFormatDataList.begin ();
               paraFormatDataIt != paraFormatDataList.end ();
@@ -312,12 +319,13 @@ static void ProcessParagraphData ( QString &paraText, QValueList<FormatData> &pa
         { 	    
 	    //Retrieve text
 	    partialText=paraText.mid ( (*paraFormatDataIt).pos, (*paraFormatDataIt).len );
-	    //Code it correctly into XML
-	    partialText.replace (regExpAmp, strAmp); //Must be the first!!
-	    partialText.replace (regExpLt , strLt);
-	    partialText.replace (regExpGt , strGt);
-	    // TODO? The other two XML predefined: &apos; &quot; (does AbiWord like them?)
-   	    // TODO: AbiWord tries to be 7bit clean! (So may be other replacements are needed!)
+	    //Code all posible predefined XML entities
+	    partialText.replace (regExpAmp , strAmp); //Must be the first!!
+	    partialText.replace (regExpLt  , strLt);
+	    partialText.replace (regExpGt  , strGt);
+	    partialText.replace (regExpApos, strApos);
+	    partialText.replace (regExpQuot, strQuot);
+  	    // TODO: AbiWord tries to be 7bit clean! (So may be other replacements are needed!)
             
 	    if ((*paraFormatDataIt).abiprops.isEmpty())
             { 
@@ -531,19 +539,19 @@ const bool ABIWORDExport::filter(const QString  &filenameIn,
     QByteArray byteArrayIn = koStoreIn.read ( koStoreIn.size () );
     koStoreIn.close ();
 
-    QString stringBufIn = QString::fromUtf8 ( (const char *) byteArrayIn, byteArrayIn.size () );
-
     QDomDocument qDomDocumentIn;
-    qDomDocumentIn.setContent (stringBufIn);
+    
+    // let parse the buffer just read from the file
+    qDomDocumentIn.setContent(byteArrayIn);
+    
+    QDomNode docNodeIn = qDomDocumentIn.documentElement ();
 
-    QDomNode docNode = qDomDocumentIn.documentElement ();
-    
     QString stringBufOut;
-    
+
     // Make the file header
     
     // First the XML header in UTF-8 version
-    // (QString handles UTF-8 well, so we stay with this encoding!)
+    // (AbiWord and QString handles UTF-8 well, so we stay with this encoding!)
     stringBufOut = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n";
     // First magic: "<abiword"
     stringBufOut += "<abiword version=\"unnumbered\">\n";	
@@ -564,8 +572,8 @@ const bool ABIWORDExport::filter(const QString  &filenameIn,
 #endif
 
     // Now that we have the header, we can do the real work!
-    ProcessDocTag (docNode, NULL, stringBufOut);
-
+    ProcessDocTag (docNodeIn, NULL, stringBufOut);
+    
     // Add the tail of the file
     stringBufOut += "</abiword>\n"; //Close the file for XML
 
