@@ -2111,6 +2111,23 @@ bool KSpreadTable::insertColumn( int col, int nbCol, bool makeUndo )
     for( ; it.current(); ++it )
         it.current()->changeNameCellRef( QPoint( col, 1 ), true, KSpreadTable::ColumnInsert, name(), nbCol+1 );
 
+    //update print range, when it has been defined
+    if ( m_printRange != QRect( QPoint(1, 1), QPoint(KS_colMax, KS_rowMax) ) )
+    {
+        int left = m_printRange.left();
+        int right = m_printRange.right();
+        
+        for( int i=0; i<=nbCol; i++ )
+        {
+            if ( left >= col ) left++;
+            if ( right >= col ) right++;
+        }
+        //Validity checks
+        if ( left > KS_colMax ) left = KS_colMax;
+        if ( right > KS_colMax ) right = KS_colMax;
+        setPrintRange( QRect( QPoint( left, m_printRange.top() ), QPoint( right, m_printRange.bottom() ) ) );
+    }
+
     refreshChart( QPoint( col, 1 ), true, KSpreadTable::ColumnInsert );
     refreshMergedCell();
     recalc();
@@ -2148,6 +2165,23 @@ bool KSpreadTable::insertRow( int row, int nbRow, bool makeUndo )
     for( ; it.current(); ++it )
         it.current()->changeNameCellRef( QPoint( 1, row ), true, KSpreadTable::RowInsert, name(), nbRow+1 );
 
+    //update print range, when it has been defined
+    if ( m_printRange != QRect( QPoint(1, 1), QPoint(KS_colMax, KS_rowMax) ) )
+    {
+        int top = m_printRange.top();
+        int bottom = m_printRange.bottom();
+        
+        for( int i=0; i<=nbRow; i++ )
+        {
+            if ( top >= row ) top++;
+            if ( bottom >= row ) bottom++;
+        }
+        //Validity checks
+        if ( top > KS_rowMax ) top = KS_rowMax;
+        if ( bottom > KS_rowMax ) bottom = KS_rowMax;
+        setPrintRange( QRect( QPoint( m_printRange.left(), top ), QPoint( m_printRange.right(), bottom ) ) );
+    }
+
     refreshChart( QPoint( 1, row ), true, KSpreadTable::RowInsert );
     refreshMergedCell();
     recalc();
@@ -2180,6 +2214,24 @@ void KSpreadTable::removeColumn( int col, int nbCol, bool makeUndo )
     QPtrListIterator<KSpreadTable> it( map()->tableList() );
     for( ; it.current(); ++it )
         it.current()->changeNameCellRef( QPoint( col, 1 ), true, KSpreadTable::ColumnRemove, name(), nbCol+1 );
+
+    //update print range, when it has been defined
+    if ( m_printRange != QRect( QPoint(1, 1), QPoint(KS_colMax, KS_rowMax) ) )
+    {
+        int left = m_printRange.left();
+        int right = m_printRange.right();
+        
+        for( int i=0; i<=nbCol; i++ )
+        {
+            if ( left > col ) left--;
+            if ( right >= col ) right--;
+        }
+        //Validity checks
+        if ( left < 1 ) left = 1;
+        if ( right < 1 ) right = 1;
+        setPrintRange( QRect( QPoint( left, m_printRange.top() ), QPoint( right, m_printRange.bottom() ) ) );
+    }
+
     refreshChart( QPoint( col, 1 ), true, KSpreadTable::ColumnRemove );
     recalc();
     refreshMergedCell();
@@ -2210,6 +2262,23 @@ void KSpreadTable::removeRow( int row, int nbRow, bool makeUndo )
     QPtrListIterator<KSpreadTable> it( map()->tableList() );
     for( ; it.current(); ++it )
         it.current()->changeNameCellRef( QPoint( 1, row ), true, KSpreadTable::RowRemove, name(), nbRow+1 );
+
+    //update print range, when it has been defined
+    if ( m_printRange != QRect( QPoint(1, 1), QPoint(KS_colMax, KS_rowMax) ) )
+    {
+        int top = m_printRange.top();
+        int bottom = m_printRange.bottom();
+        
+        for( int i=0; i<=nbRow; i++ )
+        {
+            if ( top > row ) top--;
+            if ( bottom >= row ) bottom--;
+        }
+        //Validity checks
+        if ( top < 1 ) top = 1;
+        if ( bottom < 1 ) bottom = 1;
+        setPrintRange( QRect( QPoint( m_printRange.left(), top ), QPoint( m_printRange.right(), bottom ) ) );
+    }
 
     refreshChart( QPoint( 1, row ), true, KSpreadTable::RowRemove );
     recalc();
