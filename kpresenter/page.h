@@ -261,9 +261,6 @@ protected:
     void insertEllipse( QRect );
     void insertPie( QRect );
     void insertObject( QRect );
-    void insertTable( QRect );
-    void insertDiagramm( QRect );
-    void insertFormula( QRect );
     void insertAutoform( QRect, bool );
 
     void selectNext();

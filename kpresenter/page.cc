@@ -156,6 +156,8 @@ bool Page::eventFilter( QObject *o, QEvent *e )
         if ( m_currentTextObjectView  )
             m_currentTextObjectView->focusOutEvent();
         return TRUE;
+    default:
+	break;
     }
     return false;
 }
@@ -763,7 +765,7 @@ void Page::mouseReleaseEvent( QMouseEvent *e )
         }
     } break;
     case INS_TEXT: {
-        if ( insRect.width() > 0 && insRect.height() > 0 ) {
+        if ( !insRect.isNull() ) {
             insertText( insRect );
             setToolEditMode( TEM_MOUSE );
         }
@@ -793,33 +795,24 @@ void Page::mouseReleaseEvent( QMouseEvent *e )
         }
     } break;
     case INS_RECT:
-        if ( insRect.width() > 0 && insRect.height() > 0 ) insertRect( insRect );
+        if ( !insRect.isNull() ) insertRect( insRect );
         break;
     case INS_ELLIPSE:
-        if ( insRect.width() > 0 && insRect.height() > 0 ) insertEllipse( insRect );
+        if ( !insRect.isNull() ) insertEllipse( insRect );
         break;
     case INS_PIE:
-        if ( insRect.width() > 0 && insRect.height() > 0 ) insertPie( insRect );
+        if ( !insRect.isNull() ) insertPie( insRect );
         break;
-    case INS_OBJECT: {
-        if ( insRect.width() > 0 && insRect.height() > 0 ) insertObject( insRect );
-        setToolEditMode( TEM_MOUSE );
-    } break;
-    case INS_DIAGRAMM: {
-        if ( insRect.width() > 0 && insRect.height() > 0 ) insertDiagramm( insRect );
-        setToolEditMode( TEM_MOUSE );
-    } break;
-    case INS_TABLE: {
-        if ( insRect.width() > 0 && insRect.height() > 0 ) insertTable( insRect );
-        setToolEditMode( TEM_MOUSE );
-    } break;
+    case INS_OBJECT: 
+    case INS_DIAGRAMM:
+    case INS_TABLE:
     case INS_FORMULA: {
-        if ( insRect.width() > 0 && insRect.height() > 0 ) insertFormula( insRect );
+        if ( !insRect.isNull() ) insertObject( insRect );
         setToolEditMode( TEM_MOUSE );
     } break;
     case INS_AUTOFORM: {
         bool reverse = insRect.left() > insRect.right() || insRect.top() > insRect.bottom();
-        if ( insRect.width() > 0 && insRect.height() > 0 ) insertAutoform( insRect, reverse );
+        if ( !insRect.isNull() ) insertAutoform( insRect, reverse );
         setToolEditMode( TEM_MOUSE );
     } break;
     }
@@ -3354,24 +3347,6 @@ void Page::insertAutoform( QRect _r, bool rev )
 
 /*================================================================*/
 void Page::insertObject( QRect _r )
-{
-    view->kPresenterDoc()->insertObject( _r, partEntry, diffx(), diffy() );
-}
-
-/*================================================================*/
-void Page::insertTable( QRect _r )
-{
-    view->kPresenterDoc()->insertObject( _r, partEntry, diffx(), diffy() );
-}
-
-/*================================================================*/
-void Page::insertDiagramm( QRect _r )
-{
-    view->kPresenterDoc()->insertObject( _r, partEntry, diffx(), diffy() );
-}
-
-/*================================================================*/
-void Page::insertFormula( QRect _r )
 {
     view->kPresenterDoc()->insertObject( _r, partEntry, diffx(), diffy() );
 }
