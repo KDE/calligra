@@ -227,7 +227,7 @@ void KoTemplateChooseDia::setupTabs()
 	    d->m_grpPtr->m_loadWid->setBackgroundColor( colorGroup().base() );
 	    d->m_grpPtr->m_loadWid->setWordWrapIconText( true ); // DF
 	    d->m_grpPtr->m_loadWid->show();
-	    connect( d->m_grpPtr->m_loadWid, SIGNAL( doubleClicked( QIconViewItem * ) ),
+	    connect( d->m_grpPtr->m_loadWid, SIGNAL( executed( QIconViewItem * ) ),
 		     this, SLOT( chosen() ) );
 	    connect( d->m_grpPtr->m_loadWid, SIGNAL( currentChanged( const QString & ) ),
 		    this, SLOT( currentChanged( const QString & ) ) );
