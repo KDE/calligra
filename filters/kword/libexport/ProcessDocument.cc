@@ -402,7 +402,6 @@ static void SubProcessFormatOneTag(QDomNode myNode,
     }
 
     FormatData formatData(1, formatPos, formatLen);
-
     QValueList<TagProcessing> tagProcessingList;
     AppendTagProcessingFormatOne(tagProcessingList,formatData);
     ProcessSubtags (myNode, tagProcessingList, leader);
@@ -462,7 +461,6 @@ static void SubProcessFormatSixTag(QDomNode myNode,
 static void ProcessFormatTag (QDomNode myNode, void *tagData, KWEFKWordLeader *leader)
 {
     ValueListFormatData *formatDataList = (ValueListFormatData *) tagData;
-
     int formatId  = -1;
     int formatPos = -1;
     int formatLen = -1;
@@ -500,6 +498,7 @@ static void ProcessFormatTag (QDomNode myNode, void *tagData, KWEFKWordLeader *l
             kdWarning(30508) << "Unexpected FORMAT attribute id value " << formatId << " !" << endl;
             AllowNoSubtags (myNode, leader);
     }
+
 }
 
 

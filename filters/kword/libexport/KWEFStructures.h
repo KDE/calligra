@@ -114,7 +114,7 @@ class ParaData;
 class TableCell
 {
    public:
-      TableCell () {}
+      TableCell (): col( 0 ), row( 0 ), paraList( 0 ) {}
 
       TableCell ( int                   c,
                   int                   r,
@@ -155,7 +155,8 @@ class Picture
 class FrameAnchor
 {
    public:
-      FrameAnchor () {}
+      FrameAnchor ():
+       type(-1), top( 0.0 ), bottom( 0.0 ), left( 0.0 ), right( 0.0 ) {}
 
       FrameAnchor ( const KoPictureKey& n  ) : key (n), type (-1) {}
 
@@ -174,8 +175,10 @@ class FrameAnchor
 class VariableData
 {
 public:
-    VariableData () {}
-    VariableData ( const QString& text ) : m_text(text) {}
+    VariableData (): m_type(-1) {}
+    VariableData ( const QString& text ) : m_text(text), m_type(-1) {}
+    VariableData ( const VariableData& other ) : 
+      m_key(other.m_key), m_text(other.m_text), m_type(other.m_type) {}
 public:
     /**
      * Set parameters of a <LINK> element
@@ -211,6 +214,10 @@ public:
 
     FormatData ( const int p, const int l, const FrameAnchor& t )
         : id (6), pos (p), len (l), frameAnchor (t) {}
+
+    FormatData ( const FormatData& other )
+        : id(other.id), pos(other.pos), len(other.len),
+          text(other.text), frameAnchor(other.frameAnchor), variable(other.variable) {}
 public:
     int id;
     int pos;    // Start of text to which this format applies
