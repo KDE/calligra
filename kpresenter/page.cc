@@ -247,7 +247,7 @@ void Page::mousePressEvent(QMouseEvent *e)
 		}
 	      else if (kpobject->getType() == OT_TEXT)
 		{
-		  if (!(e->state() & ShiftButton) && !(e->state() & ControlButton))
+		  if (!(e->state() & ShiftButton) && !(e->state() & ControlButton) && !kpobject->isSelected())
 		    deSelectAllObj();
 		  selectObj(kpobject);
 		  QPoint pnt = QCursor::pos();
@@ -257,7 +257,7 @@ void Page::mousePressEvent(QMouseEvent *e)
 		}
 	      else
 		{
-		  if (!(e->state() & ShiftButton) && !(e->state() & ControlButton))
+		  if (!(e->state() & ShiftButton) && !(e->state() & ControlButton) && !kpobject->isSelected())
 		    deSelectAllObj();
 		  selectObj(kpobject);
 		  QPoint pnt = QCursor::pos();

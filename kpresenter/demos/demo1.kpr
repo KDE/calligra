@@ -439,7 +439,7 @@
    </TEXTOBJ>
   </OBJECT>
   <OBJECT type="2">
-   <ORIG x="200" y="770"/>
+   <ORIG x="214" y="758"/>
    <SIZE width="270" height="50"/>
    <SHADOW distance="0" direction="5" red="160" green="160" blue="164"/>
    <EFFECTS effect="7" effect2="0"/>
@@ -450,7 +450,7 @@
    <ANGLE value="0"/>
   </OBJECT>
   <OBJECT type="4">
-   <ORIG x="220" y="780"/>
+   <ORIG x="229" y="768"/>
    <SIZE width="240" height="30"/>
    <SHADOW distance="0" direction="5" red="160" green="160" blue="164"/>
    <EFFECTS effect="8" effect2="0"/>

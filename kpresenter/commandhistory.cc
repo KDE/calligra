@@ -36,19 +36,24 @@ CommandHistory::~CommandHistory()
 /*====================== add command =============================*/
 void CommandHistory::addCommand(Command *_command)
 {
-  QList<Command> _commands;
-  _commands.setAutoDelete(false);
-
-  for (int i = 0;i < present;i++)
-    {    
-      _commands.insert(i,commands.at(0));
-      commands.take(0);
+  if (present < static_cast<int>(commands.count()))
+    {
+      QList<Command> _commands;
+      _commands.setAutoDelete(false);
+  
+      for (int i = 0;i < present;i++)
+	{    
+	  _commands.insert(i,commands.at(0));
+	  commands.take(0);
+	}
+      
+      _commands.append(_command);
+      commands.clear();
+      commands = _commands;
+      commands.setAutoDelete(true);
     }
-
-  _commands.append(_command);
-  commands.clear();
-  commands = _commands;
-  commands.setAutoDelete(true);
+  else
+    commands.append(_command);
 
   if (commands.count() > MAX_UNDO_REDO)
     commands.removeFirst();
