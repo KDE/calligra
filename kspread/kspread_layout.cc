@@ -1701,7 +1701,7 @@ RowLayout::RowLayout( KSpreadTable *_table, int _row ) : KSpreadLayout( _table )
     m_prev = 0;
 
     m_bDisplayDirtyFlag = false;
-    m_fHeight = POINT_TO_MM(heightOfRow);
+    m_fHeight = heightOfRow;
     m_iRow = _row;
     m_bDefault = false;
     m_bHide=false;
@@ -1725,11 +1725,11 @@ DCOPObject* RowLayout::dcopObject()
 }
 
 
-void RowLayout::setMMHeight( float _h )
+void RowLayout::setMMHeight( double _h )
 {
   UPDATE_BEGIN;
 
-  m_fHeight = _h;
+  m_fHeight = MM_TO_POINT ( _h );
 
   UPDATE_END;
 }
@@ -1747,9 +1747,9 @@ void RowLayout::setHeight( int _h, KSpreadCanvas *_canvas )
   _table->adjustSizeMaxY ( - height() );
 
   if ( _canvas )
-    m_fHeight = POINT_TO_MM( _h / _canvas->zoom() );
+    m_fHeight = ( _h / _canvas->zoom() );
   else
-    m_fHeight = POINT_TO_MM( _h  );
+    m_fHeight = (double) _h;
 
   // Rise maximum size by new height
   _table->adjustSizeMaxY ( height() );
@@ -1759,18 +1759,27 @@ void RowLayout::setHeight( int _h, KSpreadCanvas *_canvas )
 
 int RowLayout::height( KSpreadCanvas *_canvas )
 {
-  if(m_bHide)
-        return 0;
+  if( m_bHide )
+    return 0;
+
   if ( _canvas )
-    return (int)( MM_TO_POINT(_canvas->zoom() * m_fHeight));
+    return (int) ( _canvas->zoom() * m_fHeight );
   else
-    return (int)(MM_TO_POINT(m_fHeight));
+    return (int) m_fHeight;
+}
+
+double RowLayout::mmHeight()
+{
+  if ( m_bHide )
+    return 0.0;
+  else
+    return POINT_TO_MM ( m_fHeight );
 }
 
 QDomElement RowLayout::save( QDomDocument& doc, int yshift )
 {
     QDomElement row = doc.createElement( "row" );
-    row.setAttribute( "height", m_fHeight );
+    row.setAttribute( "ptHeight", m_fHeight );
     row.setAttribute( "row", m_iRow - yshift );
     if( m_bHide)
         row.setAttribute( "hide", (int)m_bHide );
@@ -1782,9 +1791,15 @@ QDomElement RowLayout::save( QDomDocument& doc, int yshift )
 bool RowLayout::load( const QDomElement& row, int yshift, PasteMode sp)
 {
     bool ok;
+    if ( row.hasAttribute( "ptHeight" ) )
+    {
+	m_fHeight = row.attribute( "ptHeight" ).toDouble( &ok );
+	if ( !ok ) return false;
+    }
+    //compatibility with old format - was in millimeter
     if ( row.hasAttribute( "height" ) )
     {
-	m_fHeight = row.attribute( "height" ).toFloat( &ok );
+	m_fHeight = MM_TO_POINT ( row.attribute( "height" ).toFloat( &ok ) );
 	if ( !ok ) return false;
     }
 
@@ -1917,7 +1932,7 @@ bool RowLayout::isDefault() const
 ColumnLayout::ColumnLayout( KSpreadTable *_table, int _column ) : KSpreadLayout( _table )
 {
   m_bDisplayDirtyFlag = false;
-  m_fWidth = POINT_TO_MM( static_cast<int>(colWidth) );
+  m_fWidth = colWidth;
   m_iColumn = _column;
   m_bDefault=false;
   m_bHide=false;
@@ -1942,11 +1957,11 @@ DCOPObject* ColumnLayout::dcopObject()
     return m_dcop;
 }
 
-void ColumnLayout::setMMWidth( float _w )
+void ColumnLayout::setMMWidth( double _w )
 {
   UPDATE_BEGIN;
 
-  m_fWidth = _w;
+  m_fWidth = MM_TO_POINT ( _w );
 
   UPDATE_END;
 }
@@ -1965,9 +1980,9 @@ void ColumnLayout::setWidth( int _w, KSpreadCanvas *_canvas )
   _table->adjustSizeMaxX ( - width() );
 
   if ( _canvas )
-      m_fWidth = POINT_TO_MM(_w / _canvas->zoom());
+      m_fWidth = ( _w / _canvas->zoom() );
   else
-      m_fWidth = POINT_TO_MM(_w);
+      m_fWidth = (double) _w;
 
   // Rise maximum size by new width
   _table->adjustSizeMaxX ( width() );
@@ -1977,18 +1992,28 @@ void ColumnLayout::setWidth( int _w, KSpreadCanvas *_canvas )
 
 int ColumnLayout::width( KSpreadCanvas *_canvas )
 {
-  if(m_bHide)
-        return 0;
+  if( m_bHide )
+    return 0;
+
   if ( _canvas )
-    return (int)(MM_TO_POINT( _canvas->zoom() * m_fWidth));
+    return (int) ( _canvas->zoom() * m_fWidth );
   else
-    return (int)(MM_TO_POINT( m_fWidth ));
+    return (int) m_fWidth;
 }
+
+double ColumnLayout::mmWidth()
+{
+  if ( m_bHide )
+    return 0.0;
+  else
+    return POINT_TO_MM( m_fWidth );
+}
+
 
 QDomElement ColumnLayout::save( QDomDocument& doc, int xshift )
 {
   QDomElement col = doc.createElement( "column" );
-  col.setAttribute( "width", m_fWidth );
+  col.setAttribute( "ptWidth", m_fWidth );
   col.setAttribute( "column", m_iColumn - xshift );
   if( m_bHide)
         col.setAttribute( "hide", (int)m_bHide );
@@ -2000,9 +2025,16 @@ QDomElement ColumnLayout::save( QDomDocument& doc, int xshift )
 bool ColumnLayout::load( const QDomElement& col, int xshift,PasteMode sp )
 {
     bool ok;
+    if ( col.hasAttribute( "ptWidth" ) )
+    {
+	m_fWidth = col.attribute( "ptWidth" ).toDouble( &ok );
+	if ( !ok ) return false;
+    }
+
+    //combatibility to old format - was in millimeter
     if ( col.hasAttribute( "width" ) )
     {
-	m_fWidth = col.attribute( "width" ).toFloat( &ok );
+	m_fWidth = MM_TO_POINT ( col.attribute( "width" ).toFloat( &ok ) );
 	if ( !ok ) return false;
     }
 

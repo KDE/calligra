@@ -513,8 +513,9 @@ ColumnLayout* KSpreadTable::nonDefaultColumnLayout( int _column, bool force_crea
         return p;
 
     p = new ColumnLayout( this, _column );
-    //p->setWidth( m_pDefaultColumnLayout->width() );
-    p->setWidth( static_cast<int>(colWidth) );
+    p->setWidth( m_pDefaultColumnLayout->width() );
+    
+    //p->setWidth( static_cast<int>(colWidth) );
     m_columns.insertElement( p, _column );
 
     return p;
@@ -528,13 +529,14 @@ RowLayout* KSpreadTable::nonDefaultRowLayout( int _row, bool force_creation )
 
     p = new RowLayout( this, _row );
     // TODO: copy the default RowLayout here!!
-    //    p->setHeight( m_pDefaultRowLayout->height() );
+    p->setHeight( m_pDefaultRowLayout->height() );
+
     //Laurent :
     // I used  heightOfRow because before it doesn't work:
     //  we used POINT_TO_MM  and after  MM_TO_POINT
     //  POINT_TO_MM !=  1/MM_TO_POINT
     // so it didn't give the good result
-    p->setHeight(static_cast<int>(heightOfRow));
+//    p->setHeight(static_cast<int>(heightOfRow));
 
     m_rows.insertElement( p, _row );
 

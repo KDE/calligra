@@ -498,7 +498,7 @@ public:
     /**
      * @return the height in millimeters.
      */
-    float mmHeight() { return m_bHide ? 0 : m_fHeight; }
+    double mmHeight();
     /**
      * Sets the height to _h zoomed pixels.
      *
@@ -511,7 +511,7 @@ public:
      *
      * @param '_h' is assumed to be a unzoomed millimeter value.
      */
-    void setMMHeight( float _h );
+    void setMMHeight( double _h );
 
     /**
      * Use this function to tell this layout that it is the default layout.
@@ -573,9 +573,9 @@ protected:
     const KSpreadLayout* fallbackLayout( int col, int row ) const;
 
     /**
-     * Width of the cell in unzoomed millimeters.
+     * Width of the cell in unzoomed points.
      */
-    float m_fHeight;
+    double m_fHeight;
 
     /**
      * Flag that indicates whether this is the default layout.
@@ -619,7 +619,7 @@ public:
     /**
      * @return the width in millimeters.
      */
-    float mmWidth() { return m_bHide ? 0 : m_fWidth; }
+    double mmWidth();
     /**
      * Sets the width to _w zoomed pixels.
      *
@@ -633,7 +633,7 @@ public:
      *
      * @param _w is assumed to be a unzoomed millimeter value.
      */
-    void setMMWidth( float _w );
+    void setMMWidth( double _w );
 
     /**
      * Use this function to tell this layout that it is the default layout.
@@ -693,9 +693,9 @@ protected:
     const KSpreadLayout* fallbackLayout( int col, int row ) const;
 
     /**
-     * Height of the cells in unzoomed millimeters.
+     * Width of the cells in unzoomed pixels.
      */
-    float m_fWidth;
+    double m_fWidth;
 
     /**
      * Flag that indicates whether this is the default layout.
