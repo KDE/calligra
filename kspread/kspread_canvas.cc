@@ -801,13 +801,25 @@ void KSpreadCanvas::mouseReleaseEvent( QMouseEvent* _ev )
   // The user started the drag in the lower right corner of the marker ?
   if ( m_eMouseAction == ResizeCell )
   {
-    KSpreadCell *cell = table->nonDefaultCell( m_iMouseStartColumn, m_iMouseStartRow );
-    cell->forceExtraCells( m_iMouseStartColumn, m_iMouseStartRow,
-                           selection.right() - selection.left(),
-                           selection.bottom() - selection.top() );
+    int x=m_iMouseStartColumn;
+    int y=m_iMouseStartRow;
+    if( m_iMouseStartColumn>selection.left())
+        x=selection.left();
+    if( m_iMouseStartRow > selection.top() )
+        y =selection.top();
+    KSpreadCell *cell = table->nonDefaultCell( x, y );
+    if ( !m_pView->doc()->undoBuffer()->isLocked() )
+    {
+        KSpreadUndoMergedCell *undo = new KSpreadUndoMergedCell( m_pView->doc(), table, x, y,cell->extraXCells() ,cell->extraYCells());
+        m_pView->doc()->undoBuffer()->appendUndo( undo );
+    }
+    cell->forceExtraCells( x,y,
+                           abs(selection.right() - selection.left()),
+                           abs(selection.bottom() - selection.top()) );
 
     selection.setCoords( 0, 0, 0, 0 );
     table->setSelection( selection, this );
+    m_pView->updateEditWidget();
     // m_pView->doc()->setModified( TRUE );
   }
   else if ( m_eMouseAction == AutoFill )
@@ -834,6 +846,8 @@ void KSpreadCanvas::mouseReleaseEvent( QMouseEvent* _ev )
       selection.setCoords( 0, 0, 0, 0 );
       table->setSelection( selection, this );
     }
+    else
+        m_pView->updateEditWidget();
   }
 
   m_eMouseAction = NoAction;

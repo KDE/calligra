@@ -1645,7 +1645,6 @@ for ( int incr=start;incr<=end; )
                 incr=incr*step;
         numberOfCell++;
         }
-
 int extraX=_marker.x();
 int extraY=_marker.y();
 if(mode==Column)
