@@ -7,11 +7,5 @@ libkiscore_la_SOURCES = kis_factory.cc kis_shell.cc kis_doc.cc kis_view.cc \
 	kis_channeldata.cc kis_util.cc kis_layer.cc kis_tool.cc kis_vec.cc kis_color.cc \
 	kis_canvas.cc kis_cursor.cc
 
-libkiscore_la_METASOURCES = kis_shell.moc kis_doc.moc kis_view.moc \
-	kis_factory.moc kis_config.moc kis_layer.moc kis_tool.moc \
-	kis_canvas.moc kis_image.moc kis_tabbar.moc
+libkiscore_la_METASOURCES = AUTO
 
-#include_HEADERS =
-
-messages:
-	$(XGETTEXT) -C -ki18n -x $(includedir)/kde.pot *.cc *.h && mv messages.po ../../po/libkiscore.pot
