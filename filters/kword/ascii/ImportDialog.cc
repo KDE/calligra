@@ -38,14 +38,13 @@ AsciiImportDialog :: AsciiImportDialog(QWidget* parent)
 
     kapp->restoreOverrideCursor();
 
-    QStringList encodings(KGlobal::charsets()->availableEncodingNames());
+    QStringList encodings(KGlobal::charsets()->descriptiveEncodingNames());
     // Add a few non-standard encodings
     encodings << "Apple Roman"; // Apple 
     encodings << "IBM 850" << "IBM 866"; // MS DOS
     encodings << "CP 1258"; // Windows
 
     m_dialog->comboBoxEncoding->insertStringList(encodings);
-    //m_dialog->comboBoxEncoding->insertStringList(encodings);
 
     resize(size()); // Is this right?
 
