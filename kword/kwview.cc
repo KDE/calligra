@@ -367,41 +367,16 @@ void KWView::setupActions()
                                                actionCollection(), "tools_part" );
     actionToolsCreatePart->setExclusiveGroup( "tools" );
 
-    actionInsertVarDateFix = new KAction( i18n( "Date (&fix)" ), 0,
-                                          this, SLOT( insertVariableDateFix() ),
-                                          actionCollection(), "insert_var_datefix" );
-    actionInsertVarDate = new KAction( i18n( "&Date (variable)" ), 0,
-                                       this, SLOT( insertVariableDateVar() ),
-                                       actionCollection(), "insert_var_datevar" );
-    actionInsertVarTimeFix = new KAction( i18n( "Time (&fix)" ), 0,
-                                          this, SLOT( insertVariableTimeFix() ),
-                                          actionCollection(), "insert_var_timefix" );
-    actionInsertVarTime = new KAction( i18n( "&Time (variable)" ), 0,
-                                       this, SLOT( insertVariableTimeVar() ),
-                                       actionCollection(), "insert_var_timevar" );
-    actionInsertVarPgNum = new KAction( i18n( "&Page Number" ), 0,
-                                        this, SLOT( insertVariablePageNum() ),
-                                        actionCollection(), "insert_var_pgnum" );
-    actionInsertVarFileName = new KAction( i18n( "File Name" ), 0,
-                                        this, SLOT( insertVariableFileName() ),
-                                        actionCollection(), "insert_var_filename" );
-    actionInsertVarAuthorName = new KAction( i18n( "Author Name" ), 0,
-                                        this, SLOT( insertVariableAuthorName() ),
-                                        actionCollection(), "insert_var_authorname" );
-    actionInsertVarEmail = new KAction( i18n( "Email" ), 0,
-                                        this, SLOT( insertVariableEmail() ),
-                                        actionCollection(), "insert_var_email" );
-    actionInsertVarCompanyName = new KAction( i18n( "Company Name" ), 0,
-                                        this, SLOT( insertVariableCompanyName() ),
-                                        actionCollection(), "insert_var_companyname" );
-
-    actionInsertVarCustom = new KAction( i18n( "&Custom..." ), 0,
-                                         this, SLOT( insertVariableCustom() ),
-                                         actionCollection(), "insert_var_custom" );
-    actionInsertVarSerialLetter = new KAction( i18n( "&Serial Letter..." ), 0,
-                                               this, SLOT( insertVariableSerialLetter() ),
-                                               actionCollection(), "insert_var_serialletter" );
-
+    m_variableDefMap.clear();
+    actionInsertVariable = new KActionMenu( i18n( "&Variable" ),
+                                            actionCollection(), "insert_variable" );
+    // The last argument is only needed if a submenu is to be created
+    addVariableActions( VT_DATE, KWDateVariable::actionTexts(), actionInsertVariable, i18n("&Date") );
+    addVariableActions( VT_TIME, KWTimeVariable::actionTexts(), actionInsertVariable, i18n("&Time") );
+    addVariableActions( VT_PGNUM, KWPgNumVariable::actionTexts(), actionInsertVariable, QString::null );
+    addVariableActions( VT_CUSTOM, KWCustomVariable::actionTexts(), actionInsertVariable, QString::null );
+    addVariableActions( VT_SERIALLETTER, KWSerialLetterVariable::actionTexts(), actionInsertVariable, QString::null );
+    addVariableActions( VT_FIELD, KWFieldVariable::actionTexts(), actionInsertVariable, i18n("&Property") );
 
     // ------------------------- Format menu
     actionFormatFont = new KAction( i18n( "&Font..." ), ALT + CTRL + Key_F,
@@ -568,6 +543,33 @@ void KWView::setupActions()
 
     //------------------------ Settings menu
     KStdAction::preferences(this, SLOT(configure()), actionCollection(), "configure" );
+}
+
+void KWView::addVariableActions( int type, const QStringList & texts,
+                                 KActionMenu * parentMenu, const QString & menuText )
+{
+    // Single items go directly into parentMenu.
+    // For multiple items we create a submenu.
+    if ( texts.count() > 1 && !menuText.isEmpty() )
+    {
+        KActionMenu * subMenu = new KActionMenu( menuText, actionCollection() );
+        parentMenu->insert( subMenu );
+        parentMenu = subMenu;
+    }
+    QStringList::ConstIterator it = texts.begin();
+    for ( int i = 0; it != texts.end() ; ++it, ++i )
+    {
+        if ( !(*it).isEmpty() ) // in case of removed subtypes
+        {
+            VariableDef v;
+            v.type = type;
+            v.subtype = i;
+            KAction * act = new KAction( (*it), 0, this, SLOT( insertVariable() ),
+                                         actionCollection(), "var-action" );
+            m_variableDefMap.insert( act, v );
+            parentMenu->insert( act );
+        }
+    }
 }
 
 void KWView::fileStatistics()
@@ -1397,93 +1399,22 @@ void KWView::insertFrameBreak()
 }
 
 /*===============================================================*/
-void KWView::insertVariableDateFix()
+void KWView::insertVariable()
 {
     KWTextFrameSetEdit * edit = currentTextEdit();
     if ( edit )
-        edit->insertVariable( VT_DATE_FIX );
+    {
+        KAction * act = (KAction *)(sender());
+        VariableDefMap::Iterator it = m_variableDefMap.find( act );
+        if ( it == m_variableDefMap.end() )
+            kdWarning() << "Action not found in m_variableDefMap." << endl;
+        else
+        {
+            edit->insertVariable( (*it).type, (*it).subtype );
+        }
+    }
 }
 
-/*===============================================================*/
-void KWView::insertVariableDateVar()
-{
-    KWTextFrameSetEdit * edit = currentTextEdit();
-    if ( edit )
-        edit->insertVariable( VT_DATE_VAR );
-}
-
-/*===============================================================*/
-void KWView::insertVariableTimeFix()
-{
-    KWTextFrameSetEdit * edit = currentTextEdit();
-    if ( edit )
-        edit->insertVariable( VT_TIME_FIX );
-}
-
-/*===============================================================*/
-void KWView::insertVariableTimeVar()
-{
-    KWTextFrameSetEdit * edit = currentTextEdit();
-    if ( edit )
-        edit->insertVariable( VT_TIME_VAR );
-}
-
-/*===============================================================*/
-void KWView::insertVariablePageNum()
-{
-    KWTextFrameSetEdit * edit = currentTextEdit();
-    if ( edit )
-        edit->insertVariable( VT_PGNUM );
-}
-
-/*===============================================================*/
-void KWView::insertVariableFileName()
-{
-    KWTextFrameSetEdit * edit = currentTextEdit();
-    if ( edit )
-        edit->insertVariable( VT_FIELD, VST_FILENAME );
-}
-
-/*===============================================================*/
-void KWView::insertVariableAuthorName()
-{
-    KWTextFrameSetEdit * edit = currentTextEdit();
-    if ( edit )
-        edit->insertVariable( VT_FIELD, VST_AUTHORNAME );
-}
-/*===============================================================*/
-void KWView::insertVariableEmail()
-{
-    KWTextFrameSetEdit * edit = currentTextEdit();
-    if ( edit )
-        edit->insertVariable( VT_FIELD, VST_EMAIL );
-}
-
-/*===============================================================*/
-void KWView::insertVariableCompanyName()
-{
-    KWTextFrameSetEdit * edit = currentTextEdit();
-    if ( edit )
-        edit->insertVariable( VT_FIELD, VST_COMPANYNAME );
-}
-
-/*===============================================================*/
-void KWView::insertVariableCustom()
-{
-    KWTextFrameSetEdit * edit = currentTextEdit();
-    if ( edit )
-        edit->insertVariable( VT_CUSTOM );
-}
-
-/*===============================================================*/
-void KWView::insertVariableSerialLetter()
-{
-    KWTextFrameSetEdit * edit = currentTextEdit();
-    if ( edit )
-        edit->insertVariable( VT_SERIALLETTER );
-}
-
-/*===============================================================*/
 void KWView::insertFootNoteEndNote()
 {
 #if 0
@@ -1503,14 +1434,12 @@ void KWView::insertFootNoteEndNote()
 #endif
 }
 
-/*===============================================================*/
 void KWView::insertContents()
 {
     doc->createContents();
     gui->canvasWidget()->repaintAll();
 }
 
-/*===============================================================*/
 void KWView::formatFont()
 {
     //kdDebug(32002) << "KWView::formatFont" << endl;
@@ -1525,7 +1454,6 @@ void KWView::formatFont()
     gui->canvasWidget()->setFocus();
 }
 
-/*===============================================================*/
 void KWView::formatParagraph()
 {
     KWTextFrameSetEdit *edit = currentTextEdit();
@@ -1594,7 +1522,6 @@ void KWView::formatParagraph()
 
 }
 
-/*===============================================================*/
 void KWView::formatPage()
 {
     if( !doc->isReadWrite())
@@ -1639,7 +1566,6 @@ void KWView::formatPage()
     }
 }
 
-/*===============================================================*/
 void KWView::formatFrameSet()
 {
     if ( doc->getFirstSelectedFrame() )
@@ -1650,7 +1576,6 @@ void KWView::formatFrameSet()
                             i18n("Format Frameset"));
 }
 
-/*===============================================================*/
 void KWView::extraSpelling()
 {
     if (kspell) return; // Already in progress
@@ -1667,14 +1592,12 @@ void KWView::extraSpelling()
                       this, SLOT( spellCheckerDone( const QString & ) ) );
 }
 
-/*===============================================================*/
 void KWView::extraAutoFormat()
 {
     KWAutoFormatDia dia( this, 0, doc, gui->canvasWidget() );
     dia.show();
 }
 
-/*===============================================================*/
 void KWView::extraStylist()
 {
     KWStyleManager * styleManager = new KWStyleManager( this, doc, doc->fontList() );
@@ -1683,7 +1606,6 @@ void KWView::extraStylist()
     delete styleManager;
 }
 
-/*===============================================================*/
 void KWView::extraCreateTemplate()
 {
     QPixmap pix( 45, 60 );
@@ -1702,7 +1624,6 @@ void KWView::extraCreateTemplate()
                                                     "kword/templates/");
 }
 
-/*===============================================================*/
 void KWView::toolsEdit()
 {
     if ( actionToolsEdit->isChecked() )
@@ -1711,7 +1632,6 @@ void KWView::toolsEdit()
         actionToolsEdit->setChecked( true ); // always one has to be checked !
 }
 
-/*===============================================================*/
 void KWView::toolsEditFrame()
 {
     if ( actionToolsEditFrames->isChecked() )
@@ -1720,7 +1640,6 @@ void KWView::toolsEditFrame()
         actionToolsEditFrames->setChecked( true ); // always one has to be checked !
 }
 
-/*===============================================================*/
 void KWView::toolsCreateText()
 {
     if ( actionToolsCreateText->isChecked() )
@@ -1729,7 +1648,6 @@ void KWView::toolsCreateText()
         actionToolsCreateText->setChecked( true ); // always one has to be checked !
 }
 
-/*===============================================================*/
 void KWView::toolsCreatePix()
 {
     if ( !actionToolsCreatePix->isChecked() )
@@ -1776,7 +1694,6 @@ void KWView::toolsCreatePix()
         gui->canvasWidget()->setMouseMode( MM_EDIT );
 }
 
-/*===============================================================*/
 void KWView::insertTable()
 {
     KWCanvas * canvas = gui->canvasWidget();
@@ -1791,7 +1708,6 @@ void KWView::insertTable()
     delete tableDia;
 }
 
-/*===============================================================*/
 void KWView::toolsFormula()
 {
     KWTextFrameSetEdit *edit = currentTextEdit();
@@ -1808,7 +1724,6 @@ void KWView::toolsFormula()
     }
 }
 
-/*===============================================================*/
 void KWView::toolsPart()
 {
     if ( !actionToolsCreatePart->isChecked() )
@@ -1826,7 +1741,6 @@ void KWView::toolsPart()
     gui->canvasWidget()->setPartEntry( pe );
 }
 
-/*===============================================================*/
 void KWView::tableInsertRow()
 {
     gui->canvasWidget()->setMouseMode( MM_EDIT );
@@ -1844,7 +1758,6 @@ void KWView::tableInsertRow()
     }
 }
 
-/*===============================================================*/
 void KWView::tableInsertCol()
 {
     gui->canvasWidget()->setMouseMode( MM_EDIT );
@@ -1873,7 +1786,6 @@ void KWView::tableInsertCol()
     }
 }
 
-/*===============================================================*/
 void KWView::tableDeleteRow()
 {
     gui->canvasWidget()->setMouseMode( MM_EDIT );
@@ -1912,7 +1824,6 @@ void KWView::tableDeleteRow()
 
 }
 
-/*===============================================================*/
 void KWView::tableDeleteCol()
 {
     gui->canvasWidget()->setMouseMode( MM_EDIT );
@@ -1950,7 +1861,6 @@ void KWView::tableDeleteCol()
     }
 }
 
-/*===============================================================*/
 void KWView::tableJoinCells()
 {
     gui->canvasWidget()->setMouseMode( MM_EDIT_FRAME );
@@ -1979,7 +1889,6 @@ void KWView::tableJoinCells()
     }
 }
 
-/*===============================================================*/
 void KWView::tableSplitCells()
 {
     gui->canvasWidget()->setMouseMode( MM_EDIT_FRAME );
@@ -2015,7 +1924,6 @@ void KWView::tableSplitCells()
 
 }
 
-/*===============================================================*/
 void KWView::tableUngroupTable()
 {
     gui->canvasWidget()->setMouseMode( MM_EDIT );
@@ -2044,7 +1952,6 @@ void KWView::tableUngroupTable()
     }
 }
 
-/*===============================================================*/
 void KWView::tableDelete()
 {
     KWTableFrameSet *table = gui->canvasWidget()->getTable();
@@ -2061,7 +1968,6 @@ void KWView::tableDelete()
     }
 }
 
-/*====================== text style selected  ===================*/
 void KWView::textStyleSelected( int index )
 {
     if(gui->canvasWidget()->currentFrameSetEdit())
@@ -2073,7 +1979,6 @@ void KWView::textStyleSelected( int index )
     }
 }
 
-/*======================= text size selected  ===================*/
 void KWView::textSizeSelected( int size )
 {
     KWTextFrameSetEdit * edit = currentTextEdit();
@@ -2082,7 +1987,6 @@ void KWView::textSizeSelected( int size )
     gui->canvasWidget()->setFocus(); // the combo keeps focus...
 }
 
-/*======================= text font selected  ===================*/
 void KWView::textFontSelected( const QString & font )
 {
     KWTextFrameSetEdit * edit = currentTextEdit();
@@ -2091,7 +1995,6 @@ void KWView::textFontSelected( const QString & font )
     gui->canvasWidget()->setFocus(); // the combo keeps focus...
 }
 
-/*========================= text bold ===========================*/
 void KWView::textBold()
 {
     KWTextFrameSetEdit * edit = currentTextEdit();
@@ -2099,7 +2002,6 @@ void KWView::textBold()
         edit->setBold(actionFormatBold->isChecked());
 }
 
-/*========================== text italic ========================*/
 void KWView::textItalic()
 {
     KWTextFrameSetEdit * edit = currentTextEdit();
@@ -2108,7 +2010,6 @@ void KWView::textItalic()
 
 }
 
-/*======================== text underline =======================*/
 void KWView::textUnderline()
 {
     KWTextFrameSetEdit * edit = currentTextEdit();
@@ -2116,7 +2017,6 @@ void KWView::textUnderline()
         edit->setUnderline(actionFormatUnderline->isChecked());
 }
 
-/*======================== text strike out =======================*/
 void KWView::textStrikeOut()
 {
     KWTextFrameSetEdit * edit = currentTextEdit();
@@ -2124,7 +2024,6 @@ void KWView::textStrikeOut()
         edit->setStrikeOut(actionFormatStrikeOut->isChecked());
 }
 
-/*=========================== text color ========================*/
 void KWView::textColor()
 {
     KWTextFrameSetEdit * edit = currentTextEdit();
@@ -2138,7 +2037,6 @@ void KWView::textColor()
     }
 }
 
-/*======================= text align left =======================*/
 void KWView::textAlignLeft()
 {
     if ( actionFormatAlignLeft->isChecked() )
@@ -2150,7 +2048,6 @@ void KWView::textAlignLeft()
         actionFormatAlignLeft->setChecked( true );
 }
 
-/*======================= text align center =====================*/
 void KWView::textAlignCenter()
 {
     if ( actionFormatAlignCenter->isChecked() )
@@ -2162,7 +2059,6 @@ void KWView::textAlignCenter()
         actionFormatAlignCenter->setChecked( true );
 }
 
-/*======================= text align right ======================*/
 void KWView::textAlignRight()
 {
     if ( actionFormatAlignRight->isChecked() )
@@ -2174,7 +2070,6 @@ void KWView::textAlignRight()
         actionFormatAlignRight->setChecked( true );
 }
 
-/*======================= text align block ======================*/
 void KWView::textAlignBlock()
 {
     if ( actionFormatAlignBlock->isChecked() )
@@ -2186,7 +2081,6 @@ void KWView::textAlignBlock()
         actionFormatAlignBlock->setChecked( true );
 }
 
-/*====================== list ========================*/
 void KWView::textList()
 {
     Counter c;
@@ -2205,7 +2099,6 @@ void KWView::textList()
         edit->setCounter( c );
 }
 
-/*===============================================================*/
 void KWView::textSuperScript()
 {
     KWTextFrameSetEdit * edit = currentTextEdit();
@@ -2213,7 +2106,6 @@ void KWView::textSuperScript()
         edit->setTextSuperScript(actionFormatSuper->isChecked());
 }
 
-/*===============================================================*/
 void KWView::textSubScript()
 {
     KWTextFrameSetEdit * edit = currentTextEdit();
@@ -2221,7 +2113,6 @@ void KWView::textSubScript()
         edit->setTextSubScript(actionFormatSub->isChecked());
 }
 
-/*===============================================================*/
 void KWView::textIncreaseIndent()
 {
     KWTextFrameSetEdit * edit = currentTextEdit();
@@ -2239,7 +2130,6 @@ void KWView::textIncreaseIndent()
     }
 }
 
-/*===============================================================*/
 void KWView::textDecreaseIndent()
 {
     KWTextFrameSetEdit * edit = currentTextEdit();
@@ -2733,16 +2623,7 @@ void KWView::updateButtons()
     actionInsertPicture->setEnabled(state);
     actionInsertFormula->setEnabled(state);
 
-    actionInsertVarDateFix->setEnabled(state);
-    actionInsertVarDate->setEnabled(state);
-    actionInsertVarTimeFix->setEnabled(state);
-    actionInsertVarTime->setEnabled(state);
-    actionInsertVarPgNum->setEnabled(state);
-    actionInsertVarCustom->setEnabled(state);
-    actionInsertVarFileName->setEnabled(state);
-    actionInsertVarEmail->setEnabled(state);
-    actionInsertVarAuthorName->setEnabled(state);
-    actionInsertVarCompanyName->setEnabled(state);
+    actionInsertVariable->setEnabled(state);
 
     KWTableFrameSet *table = gui->canvasWidget()->getTable();
     actionTableInsertRow->setEnabled( table );

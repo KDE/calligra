@@ -32,74 +32,64 @@ class QTextFormat;
 using namespace Qt3;
 
 // Always add new types at the _end_ of this list.
+// (and update KWView::setupActions)
 enum VariableType { VT_NONE = -1,
-                    VT_DATE_FIX = 0, VT_DATE_VAR = 1, VT_TIME_FIX = 2, VT_TIME_VAR = 3, VT_PGNUM = 4,
-                    VT_NUMPAGES = 5, VT_CUSTOM = 6, VT_SERIALLETTER = 7, VT_FIELD = 8 };
+                    VT_DATE = 0, VT_TIME = 2, VT_PGNUM = 4,
+                    VT_CUSTOM = 6, VT_SERIALLETTER = 7, VT_FIELD = 8 };
 
-// For VT_FIELD
-enum VariableSubType { VST_NONE = -1,
-                       VST_FILENAME = 0, VST_AUTHORNAME = 1, VST_EMAIL = 2, VST_COMPANYNAME = 3 };
-
-//enum VariableFormatType { VFT_DATE = 0, VFT_TIME = 1, VFT_PGNUM = 2, VFT_NUMPAGES = 3, VFT_CUSTOM = 4,
-//                          VFT_SERIALLETTER = 5 };
+enum VariableFormat { VF_DATE = 0, VF_TIME = 1, VF_STRING = 2, VF_NUM = 3 };
 
 /**
  * Class: KWVariableFormat
  * Base class for a variable format - held by KWDocument.
- * The variable itself is implemented by KWVariable
+ * Example of formats are time, date, string, number, floating-point number...
  * The reason for formats to be separated is that it allows to
- * customize the formats - for instance, KWVariablePgNumFormat has
- * 'pre' and 'post' variables.
+ * customize the formats, to implement subformats (various date formats, etc.). Still TBD.
  */
 class KWVariableFormat
 {
 public:
     KWVariableFormat() {}
     virtual ~KWVariableFormat() {}
-//    virtual VariableFormatType getType() const = 0;
-    virtual QString convert( KWVariable *_var ) = 0;
+    // TODO load,save...
 };
 
-/******************************************************************/
-/* Class: KWVariableDateFormat                                    */
-/******************************************************************/
 class KWVariableDateFormat : public KWVariableFormat
 {
 public:
     KWVariableDateFormat() : KWVariableFormat() {}
-
-//    virtual VariableFormatType getType() const
-//    { return VFT_DATE; }
-
-    virtual QString convert( KWVariable *_var );
-
+    QString convert( const QDate & date );
+    // TODO various date formats.
 };
 
-/******************************************************************/
-/* Class: KWVariableTimeFormat                                    */
-/******************************************************************/
 class KWVariableTimeFormat : public KWVariableFormat
 {
 public:
     KWVariableTimeFormat() : KWVariableFormat() {}
-
-//    virtual VariableFormatType getType() const
-//    { return VFT_TIME; }
-
-    virtual QString convert( KWVariable *_var );
-
+    QString convert( const QTime & time );
+    // TODO various time formats.
 };
 
-/******************************************************************/
-/* Class: KWVariablePgNumFormat                                   */
-/******************************************************************/
-class KWVariablePgNumFormat : public KWVariableFormat
+class KWVariableStringFormat : public KWVariableFormat
 {
 public:
-    KWVariablePgNumFormat() { pre = "-"; post = "-"; }
+    KWVariableStringFormat() : KWVariableFormat() {}
+    QString convert( const QString & string );
+};
 
-//    virtual VariableFormatType getType() const
-//    { return VFT_PGNUM; }
+class KWVariableNumberFormat : public KWVariableFormat
+{
+public:
+    KWVariableNumberFormat() : KWVariableFormat() {}
+    QString convert( int number );
+};
+
+/* TODO find a name :)
+   and add a UI for it
+   class ... : public KWVariableFormat
+{
+public:
+    ...() { pre = "-"; post = "-"; }
 
     virtual QString convert( KWVariable *_var );
 
@@ -112,70 +102,24 @@ public:
 
 protected:
     QString pre, post;
-
-};
-
-/******************************************************************/
-/* Class: KWVariableFieldFormat                                */
-/******************************************************************/
-class KWVariableFieldFormat : public KWVariableFormat
-{
-public:
-    KWVariableFieldFormat() : KWVariableFormat() {}
-
-//    virtual VariableFormatType getType() const
-//    { return VFT_FIELD; }
-
-    virtual QString convert( KWVariable *_var );
-
-};
-
-/******************************************************************/
-/* Class: KWVariableCustomFormat                                   */
-/******************************************************************/
-class KWVariableCustomFormat : public KWVariableFormat
-{
-public:
-    KWVariableCustomFormat() {}
-
-//    virtual VariableFormatType getType() const
-//    { return VFT_CUSTOM; }
-
-    virtual QString convert( KWVariable *_var );
-
-};
-
-/******************************************************************/
-/* Class: KWVariableSerialLetterFormat                            */
-/******************************************************************/
-class KWVariableSerialLetterFormat : public KWVariableFormat
-{
-public:
-    KWVariableSerialLetterFormat() {}
-
-//    virtual VariableFormatType getType() const
-//    { return VFT_SERIALLETTER; }
-
-    virtual QString convert( KWVariable *_var );
-
-};
-
+};*/
 
 // ----------------------------------------------------------------------------------------------
 
 #include <qrichtext_p.h>
 using namespace Qt3;
 
-/******************************************************************/
-/* Class: KWVariable                                              */
-/******************************************************************/
+/**
+ * A KWVariable is a custom item, i.e. considered as a single character.
+ * KWVariable is the abstract base class.
+ */
 class KWVariable : public KWTextCustomItem
 {
 public:
-    KWVariable( KWTextFrameSet *fs, KWVariableFormat *_varFormat );
+    KWVariable( KWTextFrameSet *fs, KWVariableFormat *varFormat );
     virtual ~KWVariable();
 
-    virtual VariableType getType() const { return VT_NONE; }
+    virtual VariableType type() const = 0;
 
     // QTextCustomItem stuff
     virtual Placement placement() const { return PlaceInline; }
@@ -186,19 +130,20 @@ public:
 
     QTextFormat * format() const;
 
-// Somewhat dangerous.
-//    void setVariableFormat( KWVariableFormat *_varFormat, bool _deleteOld = false )
-//    { if ( _deleteOld && varFormat ) delete varFormat; varFormat = _varFormat; }
+    void setVariableFormat( KWVariableFormat *_varFormat, bool _deleteOld = false )
+    { if ( _deleteOld && m_varFormat ) delete m_varFormat; m_varFormat = _varFormat; }
 
-//    KWVariableFormat *getVariableFormat() const
-//    { return varFormat; }
+    KWVariableFormat *variableFormat() const
+    { return m_varFormat; }
 
     // Returns the text to be displayed for this variable
     // It doesn't need to be cached, convert() is fast, and it's the actual
     // value (date, time etc.) that is cached in the variable already.
-    QString getText()
-    { return varFormat->convert( this ); }
+    virtual QString text() = 0;
+    // { return varFormat->convert( variantValue() ); } too bad QVariant doesn't have QDate/QTime :(
 
+    // Variables reimplement this method to recalculate their value
+    // They must call resize() after having done that.
     virtual void recalc() {}
 
     virtual void save( QDomElement &parentElem );
@@ -207,150 +152,173 @@ public:
     static KWVariable * createVariable( int type, int subtype, KWTextFrameSet * textFrameSet );
 
 protected:
-    KWDocument *doc;
-    KWVariableFormat *varFormat;
+    KWDocument *m_doc;
+    KWVariableFormat *m_varFormat;
 };
 
-/******************************************************************/
-/* Class: KWPgNumVariable                                         */
-/******************************************************************/
-class KWPgNumVariable : public KWVariable
-{
-public:
-    KWPgNumVariable( KWTextFrameSet *fs, KWVariableFormat *_varFormat )
-        : KWVariable( fs, _varFormat ) { pgNum = 0; }
-
-    virtual VariableType getType() const
-    { return VT_PGNUM; }
-
-    virtual void recalc();
-    int getPgNum() const { return pgNum; }
-
-    virtual void save( QDomElement &parentElem );
-    virtual void load( QDomElement &elem );
-
-protected:
-    int pgNum;
-};
-
-/******************************************************************/
-/* Class: KWDateVariable                                          */
-/******************************************************************/
+/**
+ * Date-related variables
+ */
 class KWDateVariable : public KWVariable
 {
 public:
-    KWDateVariable( KWTextFrameSet *fs, bool _fix, QDate _date, KWVariableFormat *_varFormat );
-    //KWDateVariable( KWTextFrameSet *fs ) : KWVariable( fs ) {}
+    KWDateVariable( KWTextFrameSet *fs, int subtype, KWVariableFormat *_varFormat );
 
-    virtual VariableType getType() const
-    { return fix ? VT_DATE_FIX : VT_DATE_VAR; }
+    virtual VariableType type() const
+    { return VT_DATE; }
+
+    enum { VST_DATE_FIX = 0, VST_DATE_CURRENT = 1 };
+    static QStringList actionTexts();
 
     virtual void recalc();
 
-    QDate getDate() const { return date; }
-    void setDate( const QDate & _date ) { date = _date; }
+    virtual QString text();
+    //QDate date() const { return m_date; }
+    void setDate( const QDate & _date ) { m_date = _date; }
 
     virtual void save( QDomElement &parentElem );
     virtual void load( QDomElement &elem );
 
 protected:
-    QDate date;
-    bool fix;
+    short int m_subtype;
+    QDate m_date;
 };
 
 /******************************************************************/
 /* Class: KWTimeVariable                                          */
 /******************************************************************/
+/**
+ * Time-related variables
+ */
 class KWTimeVariable : public KWVariable
 {
 public:
-    KWTimeVariable( KWTextFrameSet *fs, bool _fix, QTime _time, KWVariableFormat *_varFormat );
-    //KWTimeVariable( KWTextFrameSet *fs ) : KWVariable( fs ) {}
+    KWTimeVariable( KWTextFrameSet *fs, int subtype, KWVariableFormat *varFormat );
 
-    virtual VariableType getType() const
-    { return fix ? VT_TIME_FIX : VT_TIME_VAR; }
+    virtual VariableType type() const
+    { return VT_TIME; }
+
+    enum { VST_TIME_FIX = 0, VST_TIME_CURRENT = 1 };
+    static QStringList actionTexts();
 
     virtual void recalc();
 
-    QTime getTime() const { return time; }
-    void setTime( const QTime & _time ) { time = _time; }
+    //QTime time() const { return m_time; }
+    virtual QString text();
+    void setTime( const QTime & _time ) { m_time = _time; }
 
     virtual void save( QDomElement &parentElem );
     virtual void load( QDomElement &elem );
 
 protected:
-    QTime time;
-    bool fix;
+    short int m_subtype;
+    QTime m_time;
 };
 
-/******************************************************************/
-/* Class: KWFieldVariable                                         */
-/* Any variable that is a string, and whose value is automatically*/
-/* determined - as opposed to custom variables whose value is     */
-/* entered by the user                                            */
-/******************************************************************/
+/**
+ * "current page number" and "number of pages" variables
+ */
+class KWPgNumVariable : public KWVariable
+{
+public:
+    KWPgNumVariable( KWTextFrameSet *fs, int subtype, KWVariableFormat *varFormat );
+
+    virtual VariableType type() const
+    { return VT_PGNUM; }
+
+    enum { VST_PGNUM_CURRENT = 0, VST_PGNUM_TOTAL = 1 };
+    static QStringList actionTexts();
+
+    virtual void recalc();
+    virtual QString text();
+
+    virtual void save( QDomElement &parentElem );
+    virtual void load( QDomElement &elem );
+
+protected:
+    short int m_subtype;
+    int m_pgNum;
+};
+
+/**
+ * A custom variable is a variable whose value is entered
+ * by the user.
+ */
+class KWCustomVariable : public KWVariable
+{
+public:
+    KWCustomVariable( KWTextFrameSet *fs, const QString &name, KWVariableFormat *varFormat );
+
+    virtual VariableType type() const
+    { return VT_CUSTOM; }
+    static QStringList actionTexts();
+
+    virtual void save( QDomElement &parentElem );
+    virtual void load( QDomElement &elem );
+
+    QString name() const { return m_name; }
+    virtual QString text() { return value(); } // use a format when they are customizable
+    QString value() const;
+    void setValue( const QString &v );
+
+protected:
+    QString m_name;
+};
+
+/**
+ * Serial letter variable
+ */
+class KWSerialLetterVariable : public KWVariable
+{
+public:
+    KWSerialLetterVariable( KWTextFrameSet *fs, const QString &name, KWVariableFormat *varFormat );
+
+    virtual VariableType type() const
+    { return VT_SERIALLETTER; }
+    static QStringList actionTexts();
+
+    virtual void save( QDomElement &parentElem );
+    virtual void load( QDomElement &elem );
+
+    virtual QString text();
+    QString name() const { return m_name; }
+    QString value() const;
+
+protected:
+    QString m_name;
+
+};
+
+/**
+ * Any variable that is a string, and whose value is automatically
+ * determined - as opposed to custom variables whose value is
+ * entered by the user
+ */
 class KWFieldVariable : public KWVariable
 {
 public:
     KWFieldVariable( KWTextFrameSet *fs, int subtype, KWVariableFormat *varFormat );
-    virtual VariableType getType() const
+
+    // Always add new types at the _end_ of this list.
+    enum FieldSubType { VST_NONE = -1,
+                        VST_FILENAME = 0, VST_DIRECTORYNAME = 1,
+                        VST_AUTHORNAME = 2, VST_EMAIL = 3, VST_COMPANYNAME = 4 };
+
+    virtual VariableType type() const
     { return VT_FIELD; }
 
     virtual void save( QDomElement &parentElem );
     virtual void load( QDomElement &elem );
 
     virtual void recalc();
+    virtual QString text() { return value(); } // use a format when they are customizable
     QString value() const { return m_value; }
+
+    static QStringList actionTexts();
+
 protected:
-    int m_subtype;
+    short int m_subtype;
     QString m_value;
-};
-
-/******************************************************************/
-/* Class: KWCustomVariable                                        */
-/******************************************************************/
-class KWCustomVariable : public KWVariable
-{
-public:
-    KWCustomVariable( KWTextFrameSet *fs, const QString &name_, KWVariableFormat *_varFormat );
-    //KWCustomVariable( KWTextFrameSet *fs ) : KWVariable( fs ) {}
-
-    virtual VariableType getType() const
-    { return VT_CUSTOM; }
-
-    virtual void save( QDomElement &parentElem );
-    virtual void load( QDomElement &elem );
-
-    QString getName() const { return name; }
-    QString getValue() const;
-
-    void setValue( const QString &v );
-
-protected:
-    QString name;
-};
-
-/******************************************************************/
-/* Class: KWSerialLetterVariable                                  */
-/******************************************************************/
-class KWSerialLetterVariable : public KWVariable
-{
-public:
-    KWSerialLetterVariable( KWTextFrameSet *fs, const QString &name_, KWVariableFormat *_varFormat );
-    //KWSerialLetterVariable( KWTextFrameSet *fs ) : KWVariable( fs ) {}
-
-    virtual VariableType getType() const
-    { return VT_SERIALLETTER; }
-
-    virtual void save( QDomElement &parentElem );
-    virtual void load( QDomElement &elem );
-
-    QString getName() const { return name; }
-    QString getValue() const;
-
-protected:
-    QString name;
-
 };
 
 #endif

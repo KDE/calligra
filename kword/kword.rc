@@ -1,4 +1,4 @@
-<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd" ><kpartgui name="KWord" version="12">
+<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd" ><kpartgui name="KWord" version="13">
 <MenuBar>
  <Menu name="file"><text>&amp;File</text>
   <Action name="extra_template"/>
@@ -42,19 +42,7 @@
   <Action name="insert_framebreak"/>
   <Action name="insert_footendnote"/>
   <Action name="insert_contents"/>
-  <Menu name="Variable"><text>&amp;Variable</text>
-   <Action name="insert_var_datefix"/>
-   <Action name="insert_var_datevar"/>
-   <Action name="insert_var_timefix"/>
-   <Action name="insert_var_timevar"/>
-   <Action name="insert_var_filename"/>
-   <Action name="insert_var_authorname"/>
-   <Action name="insert_var_email"/>
-   <Action name="insert_var_companyname"/>
-   <Action name="insert_var_pgnum"/>
-   <Separator/>
-   <Action name="insert_var_custom"/>
-  </Menu>
+  <Action name="insert_variable"/> <!-- menu -->
   <Separator/>
   <!-- frames -->
   <Action name="insert_table"/>

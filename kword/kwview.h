@@ -55,6 +55,7 @@ class KSpell;
 class QScrollView;
 class QSplitter;
 class KAction;
+class KActionMenu;
 class KSelectAction;
 class KToggleAction;
 class KSelectColorAction;
@@ -160,17 +161,7 @@ public slots:
     void insertPicture(const QString &filename);
     void insertSpecialChar();
     void insertFrameBreak();
-    void insertVariableDateFix();
-    void insertVariableDateVar();
-    void insertVariableTimeFix();
-    void insertVariableTimeVar();
-    void insertVariablePageNum();
-    void insertVariableCustom();
-    void insertVariableSerialLetter();
-    void insertVariableFileName();
-    void insertVariableCompanyName();
-    void insertVariableEmail();
-    void insertVariableAuthorName();
+    void insertVariable();
     void insertFootNoteEndNote();
     void insertContents();
 
@@ -252,7 +243,8 @@ public slots:
     void updateButtons();
     void setTool( MouseMode _mouseMode );
 protected:
-
+    void addVariableActions( int type, const QStringList & texts,
+                             KActionMenu * parentMenu, const QString & menuText );
     KWTextFrameSetEdit *currentTextEdit();
 
     void setupActions();
@@ -288,17 +280,13 @@ private:
     KAction *actionInsertFrameBreak;
     KAction *actionInsertFootEndNote;
     KAction *actionInsertContents;
-    KAction *actionInsertVarDateFix;
-    KAction *actionInsertVarDate;
-    KAction *actionInsertVarTimeFix;
-    KAction *actionInsertVarTime;
-    KAction *actionInsertVarPgNum;
-    KAction *actionInsertVarFileName;
-    KAction *actionInsertVarCustom;
-    KAction *actionInsertVarSerialLetter;
-    KAction *actionInsertVarAuthorName;
-    KAction *actionInsertVarEmail;
-    KAction *actionInsertVarCompanyName;
+    KActionMenu *actionInsertVariable;
+    struct VariableDef {
+        int type;
+        int subtype;
+    };
+    typedef QMap<KAction *, VariableDef> VariableDefMap;
+    VariableDefMap m_variableDefMap;
     KAction *actionInsertFormula;
 
     KToggleAction *actionToolsEdit;

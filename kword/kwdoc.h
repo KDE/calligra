@@ -300,6 +300,10 @@ public:
      */
     void unregisterVariable( KWVariable *var );
     /**
+     * Recalculate all variables of a given type
+     */
+    void recalcVariables( int type );
+    /**
      * Returns the list of all variables. Used by the dialog.
      */
     const QList<KWVariable>& getVariables() const {

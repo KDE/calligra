@@ -445,12 +445,15 @@ void KWDocument::recalcFrames()
                 }
             }
         }
-        int pages2=static_cast<int>( ceil( maxBottom / ptPaperHeight() ) );
+        int pages2 = static_cast<int>( ceil( maxBottom / ptPaperHeight() ) );
         kdDebug(32002) << "KWDocument::recalcFrames, WP, m_pages=" << m_pages << " pages2=" << pages2 << " ptPaperHeight=" << ptPaperHeight() << endl;
 
-        m_pages=QMAX(pages2, m_pages);
+        m_pages = QMAX( pages2, m_pages );
         if ( m_pages != oldPages )
+        {
             emit pageNumChanged();
+            recalcVariables( VT_PGNUM );
+        }
 
         for ( unsigned int j = 0;
               j < static_cast<unsigned int>( ceil( static_cast<double>( frms ) /
@@ -1444,6 +1447,9 @@ bool KWDocument::completeLoading( KoStore *_store )
     }
     m_anchorRequests.clear();
 
+    // The fields from documentinfo.xml just got loaded -> update vars
+    recalcVariables( VT_FIELD );
+
     // Finalize all the existing framesets
     QListIterator<KWFrameSet> fit = framesetsIterator();
     for ( ; fit.current() ; ++fit )
@@ -1926,6 +1932,7 @@ void KWDocument::appendPage( /*unsigned int _page, bool redrawBackgroundWhenAppe
     kdDebug(32002) << "KWDocument::appendPage m_pages=" << m_pages << " so thisPageNum=" << thisPageNum << endl;
     m_pages++;
     emit pageNumChanged();
+    recalcVariables( VT_PGNUM );
 
     QListIterator<KWFrameSet> fit = framesetsIterator();
     for ( ; fit.current() ; ++fit )
@@ -2027,6 +2034,7 @@ void KWDocument::removePage( int num )
     m_pages--;
     //kdDebug() << "KWDocument::removePage -- -> " << m_pages << endl;
     emit pageNumChanged();
+    recalcVariables( VT_PGNUM );
     recalcFrames();
 }
 
@@ -2274,10 +2282,6 @@ void KWDocument::addAnchorRequest( int fsnum, const KWAnchorPosition &anchorPos 
 
 KWVariableFormat * KWDocument::variableFormat( int type )
 {
-    // Those can share the same format object
-    // A more flexible solution would be a conversion to VariableFormatType (currently unused)
-    if ( type == VT_DATE_FIX ) type = VT_DATE_VAR;
-    if ( type == VT_TIME_FIX ) type = VT_TIME_VAR;
     // Look into the map
     QMap<int,KWVariableFormat*>::Iterator it = m_mapVariableFormats.find( type );
     if ( it != m_mapVariableFormats.end() )
@@ -2288,32 +2292,26 @@ KWVariableFormat * KWDocument::variableFormat( int type )
     {
         KWVariableFormat * format = 0L;
         // The formats are created on demand.
-        // TODO save those that have settings (e.g. pre/post for pgnum)
+        // TODO save those that have settings
         switch( type )
         {
-            case VT_DATE_VAR:
+            case VF_DATE:
                 format = new KWVariableDateFormat();
                 break;
-            case VT_TIME_VAR:
+            case VF_TIME:
                 format = new KWVariableTimeFormat();
                 break;
-            case VT_PGNUM:
-                format = new KWVariablePgNumFormat();
+            case VF_NUM:
+                format = new KWVariableNumberFormat();
                 break;
-            case VT_FIELD:
-                format = new KWVariableFieldFormat();
-                break;
-            case VT_CUSTOM:
-                format = new KWVariableCustomFormat();
-                break;
-            case VT_SERIALLETTER:
-                format = new KWVariableSerialLetterFormat();
+            case VF_STRING:
+                format = new KWVariableStringFormat();
                 break;
             default:
                 break;
         }
         if ( format )
-            m_mapVariableFormats.insert( (int)type, format );
+            m_mapVariableFormats.insert( type, format );
         return format;
     }
 }
@@ -2322,51 +2320,58 @@ void KWDocument::registerVariable( KWVariable *var )
 {
     if ( !var )
         return;
-
     variables.append( var );
-    if ( var->getType() == VT_CUSTOM ) {
-        if ( !varValues.contains( ( (KWCustomVariable*)var )->getName() ) )
-            varValues[ ( (KWCustomVariable*)var )->getName() ] = i18n( "No value" );
-    }
 }
 
-/*================================================================*/
 void KWDocument::unregisterVariable( KWVariable *var )
 {
     variables.take( variables.findRef( var ) );
 }
 
-/*================================================================*/
+void KWDocument::recalcVariables( int type )
+{
+    kdDebug() << "KWDocument::recalcVariables " << type << endl;
+    bool update = false;
+    QListIterator<KWVariable> it( variables );
+    for ( ; it.current() ; ++it )
+    {
+        if ( it.current()->type() == type )
+        {
+            update = true;
+            it.current()->recalc();
+        }
+    }
+    if ( update )
+        repaintAllViews();
+}
+
 void KWDocument::setVariableValue( const QString &name, const QString &value )
 {
     varValues[ name ] = value;
 }
 
-/*================================================================*/
 QString KWDocument::getVariableValue( const QString &name ) const
 {
+    if ( !varValues.contains( name ) )
+        return i18n( "No value" );
     return varValues[ name ];
 }
 
-/*================================================================*/
 KWSerialLetterDataBase *KWDocument::getSerialLetterDataBase() const
 {
     return slDataBase;
 }
 
-/*================================================================*/
 int KWDocument::getSerialLetterRecord() const
 {
     return slRecordNum;
 }
 
-/*================================================================*/
 void KWDocument::setSerialLetterRecord( int r )
 {
     slRecordNum = r;
 }
 
-/*================================================================*/
 void KWDocument::createContents()
 {
     contents->createContents();

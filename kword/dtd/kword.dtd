@@ -693,23 +693,20 @@ don't put a </?xml...> at the end of the file!).
 <!--    Variable
 -->
 <!ELEMENT VARIABLE
-    (TYPE,PGNUM,DATE,TIME,CUSTOM,SERIALLETTER)>
+    (TYPE,PGNUM,DATE,TIME,CUSTOM,SERIALLETTER,FIELD)>
 <!ATTLIST VARIABLE
     EMPTY>
 
 <!--    Variable type
-        0... Date fixed (uses DATE to save it)
-        1... Current date
+        0... Date (uses DATE to save it)
+        1... [currently unused]
         2... Time fixed (uses TIME to save it)
-        3... Current time 
-        4... Page number (uses PGNUM to save it)
-        5... Number of pages (TODO)
+        3... [currently unused]
+        4... Page number / number of pages (uses PGNUM to save it)
+        5... [currently unused]
         6... Custom (uses CUSTOM to save it)
         7... Serial Letter (uses SERIALLETTER to save it)
-        8... Filename
-        9... Author (as saved in documentinfo.xml)
-        10.. Email (as saved in documentinfo.xml)
-        11.. Company Name (as saved in documentinfo.xml)
+        8... Field (uses FIELD to save it)
 -->
 <!ELEMENT TYPE
     EMPTY>
@@ -717,6 +714,23 @@ don't put a </?xml...> at the end of the file!).
     type CDATA #REQUIRED>
 
 <!-- TODO PGNUM,DATE,TIME,CUSTOM,SERIALLETTER -->
+<!-- TODO modifiers in DATE and TIME - see #24242 -->
+
+<!--    A "field" variable (property of the document)
+        subtype... Field subtype:
+                   0... Filename
+                   1... Directory name
+                   2... Author (as saved in documentinfo.xml)
+                   3... Email (as saved in documentinfo.xml)
+                   4... Company Name (as saved in documentinfo.xml)
+
+        value... the value of the field (text)
+-->
+<!ELEMENT FIELD
+    EMPTY>
+<!ATTLIST FIELD
+    subtype CDATA #REQUIRED,
+    value CDATA #REQUIRED>
 
 <!--
         Embedded object

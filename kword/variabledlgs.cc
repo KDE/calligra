@@ -58,8 +58,8 @@ KWVariableNameDia::KWVariableNameDia( QWidget *parent, const QList<KWVariable>& 
     QListIterator<KWVariable> it( vars );
      for ( ; it.current() ; ++it ) {
         KWVariable *var = it.current();
-        if ( var->getType() == VT_CUSTOM )
-            names->insertItem( ( (KWCustomVariable*) var )->getName(), -1 );
+        if ( var->type() == VT_CUSTOM )
+            names->insertItem( ( (KWCustomVariable*) var )->name(), -1 );
     }
 }
 
@@ -141,8 +141,8 @@ void KWCustomVariablesListItem::update()
 void KWCustomVariablesListItem::setVariable( KWCustomVariable *v )
 {
     var = v;
-    editWidget->setText( var->getValue() );
-    setText( 0, v->getName() );
+    editWidget->setText( var->value() );
+    setText( 0, v->name() );
 }
 
 /*================================================================*/
@@ -232,10 +232,10 @@ KWCustomVariablesDia::KWCustomVariablesDia( QWidget *parent, const QList<KWVaria
     QListIterator<KWVariable> it( variables );
     for ( ; it.current() ; ++it ) {
         KWVariable *var = it.current();
-        if ( var->getType() == VT_CUSTOM ) {
+        if ( var->type() == VT_CUSTOM ) {
             KWCustomVariable *v = (KWCustomVariable*)var;
-            if ( !lst.contains( v->getName() ) ) {
-                lst.append( v->getName() );
+            if ( !lst.contains( v->name() ) ) {
+                lst.append( v->name() );
                 KWCustomVariablesListItem *item = new KWCustomVariablesListItem( list );
                 item->setVariable( v );
             }

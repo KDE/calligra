@@ -20,6 +20,7 @@
 #include "variable.h"
 #include "defs.h"
 #include "kwdoc.h"
+#include "koDocumentInfo.h"
 #include "kwtextframeset.h"
 #include "kwutils.h"
 #include "serialletter.h"
@@ -29,112 +30,48 @@
 #include <kglobal.h>
 #include <kdebug.h>
 
-/******************************************************************/
-/* Class: KWVariablePgNumFormat                                   */
-/******************************************************************/
-QString KWVariablePgNumFormat::convert( KWVariable *_var )
+QString KWVariableDateFormat::convert( const QDate & date )
 {
-    if ( _var->getType() != VT_PGNUM ) {
-        kdWarning() << "Can't convert variable of type " <<  _var->getType()  << " to a page num!!!" << endl;
-        return QString();
-    }
+    return KGlobal::locale()->formatDate( date );
+}
 
+QString KWVariableTimeFormat::convert( const QTime & time )
+{
+    return KGlobal::locale()->formatTime( time );
+}
+
+QString KWVariableStringFormat::convert( const QString & string )
+{
+    return string;
+}
+
+QString KWVariableNumberFormat::convert( int value /*double ? QVariant ?*/ )
+{
+    return QString::number( value );
+}
+
+/* for the prefix+suffix string format
     QString str;
-    str.setNum( dynamic_cast<KWPgNumVariable*>( _var )->getPgNum() );
     str.prepend( pre );
     str.append( post );
     return QString( str );
-}
-
-/******************************************************************/
-/* Class: KWVariableDateFormat                                    */
-/******************************************************************/
-QString KWVariableDateFormat::convert( KWVariable *_var )
-{
-    if ( _var->getType() != VT_DATE_FIX && _var->getType() != VT_DATE_VAR ) {
-        kdWarning() << "Can't convert variable of type " <<  _var->getType()  << " to a date!!!" << endl;
-        return QString();
-    }
-
-    return KGlobal::locale()->formatDate( dynamic_cast<KWDateVariable*>( _var )->getDate() );
-}
-
-/******************************************************************/
-/* Class: KWVariableTimeFormat                                    */
-/******************************************************************/
-QString KWVariableTimeFormat::convert( KWVariable *_var )
-{
-    if ( _var->getType() != VT_TIME_FIX && _var->getType() != VT_TIME_VAR ) {
-        kdWarning() << "Can't convert variable of type " <<  _var->getType()  << " to a time!!!" << endl;
-        return QString();
-    }
-
-    return KGlobal::locale()->formatTime( dynamic_cast<KWTimeVariable*>( _var )->getTime() );
-}
-
-/******************************************************************/
-/* Class: KWVariableFieldFormat                                */
-/******************************************************************/
-QString KWVariableFieldFormat::convert( KWVariable *_var )
-{
-    KWFieldVariable * var = dynamic_cast<KWFieldVariable *>(_var);
-    if ( var == 0L ) {
-        kdWarning() << "Can't convert variable of type " << _var->getType() << " to a field!!!" << endl;
-        return QString::null;
-    }
-
-    return var->value();
-}
-
-/******************************************************************/
-/* Class: KWVariableCustomFormat                                  */
-/******************************************************************/
-QString KWVariableCustomFormat::convert( KWVariable *_var )
-{
-    if ( _var->getType() != VT_CUSTOM ) {
-        kdWarning() << "Can't convert variable of type " << _var->getType() << " to a custom var!" << endl;
-        return QString();
-    }
-
-    return dynamic_cast<KWCustomVariable*>( _var )->getValue();
-}
-
-/******************************************************************/
-/* Class: KWVariableSerialLetterFormat                            */
-/******************************************************************/
-QString KWVariableSerialLetterFormat::convert( KWVariable *_var )
-{
-    if ( _var->getType() != VT_SERIALLETTER ) {
-        kdWarning() << "Can't convert variable of type " << _var->getType() << " to a serial letter!!!" << endl;
-        return QString();
-    }
-
-    KWSerialLetterVariable * var = dynamic_cast<KWSerialLetterVariable*>( _var );
-    QString value = var->getValue();
-    if ( value == var->getName() )
-        return "<" + value + ">";
-    return value;
-}
-
-
-// ----------------------------------------------------------------------------------
-
+*/
 
 /******************************************************************/
 /* Class: KWVariable                                              */
 /******************************************************************/
-KWVariable::KWVariable( KWTextFrameSet *fs, KWVariableFormat *_varFormat )
+KWVariable::KWVariable( KWTextFrameSet *fs, KWVariableFormat *varFormat )
     : KWTextCustomItem( fs->textDocument() )
 {
-    varFormat = _varFormat;
-    doc = fs->kWordDocument();
-    doc->registerVariable( this );
+    m_varFormat = varFormat;
+    m_doc = fs->kWordDocument();
+    m_doc->registerVariable( this );
 }
 
 KWVariable::~KWVariable()
 {
     //kdDebug() << "KWVariable::~KWVariable " << this << endl;
-    doc->unregisterVariable( this );
+    m_doc->unregisterVariable( this );
 }
 
 QTextFormat * KWVariable::format() const
@@ -151,11 +88,11 @@ void KWVariable::resize()
     if ( m_deleted )
         return;
     QTextFormat fmt = *format(); // make an out-of-collection copy
-    QTextString text;
-    text.insert( 0, getText(), &fmt );
+    QTextString txt;
+    txt.insert( 0, text(), &fmt );
     width = 0;
-    for ( uint i = 0 ; i < text.length() ; ++i )
-        width += text.width( i );
+    for ( uint i = 0 ; i < txt.length() ; ++i )
+        width += txt.width( i );
     //kdDebug() << "KWVariable::resize width=" << width << endl;
 }
 
@@ -171,7 +108,7 @@ void KWVariable::draw( QPainter* p, int x, int y, int cx, int cy, int cw, int ch
     kdDebug() << "KWVariable::draw index=" << index << " x=" << x << " y=" << y << endl;
     parag->lineHeightOfChar( index, &bl, &_y );
     kdDebug() << "KWVariable::draw bl=" << bl << " _y=" << _y << endl;
-    p->drawText( x, y /*+ _y*/ + bl, getText() );
+    p->drawText( x, y /*+ _y*/ + bl, text() );
     p->restore();
 }
 
@@ -181,7 +118,7 @@ void KWVariable::save( QDomElement &formatElem )
     formatElem.setAttribute( "id", 4 ); // code for a variable
     QDomElement typeElem = formatElem.ownerDocument().createElement( "TYPE" );
     formatElem.appendChild( typeElem );
-    typeElem.setAttribute( "type", static_cast<int>( getType() ) );
+    typeElem.setAttribute( "type", static_cast<int>( type() ) );
 }
 
 void KWVariable::load( QDomElement & )
@@ -192,89 +129,65 @@ void KWVariable::load( QDomElement & )
 KWVariable * KWVariable::createVariable( int type, int subtype, KWTextFrameSet * textFrameSet )
 {
     KWDocument * doc = textFrameSet->kWordDocument();
-    KWVariableFormat * varFormat = doc->variableFormat( type );
-    if ( !varFormat )
-    {
-        kdWarning() << "No variable format found for type " << (int)type << endl;
-        return 0L;
-    }
+    KWVariableFormat * varFormat = 0L;
     KWVariable * var = 0L;
     switch ( type ) {
-    case VT_DATE_FIX:
-        var = new KWDateVariable( textFrameSet, TRUE, QDate::currentDate(), varFormat );
-    break;
-    case VT_DATE_VAR:
-        var = new KWDateVariable( textFrameSet, FALSE, QDate::currentDate(), varFormat );
-    break;
-    case VT_TIME_FIX:
-        var = new KWTimeVariable( textFrameSet, TRUE, QTime::currentTime(), varFormat );
-    break;
-    case VT_TIME_VAR:
-        var = new KWTimeVariable( textFrameSet, FALSE, QTime::currentTime(), varFormat );
-    break;
-    case VT_PGNUM:
-        var = new KWPgNumVariable( textFrameSet, varFormat );
-    break;
-    case VT_FIELD:
-        var = new KWFieldVariable( textFrameSet, subtype, varFormat );
-    break;
-    case VT_CUSTOM:
-       var = new KWCustomVariable( textFrameSet, QString::null, doc->variableFormat( type ) );
-        break;
-    case VT_SERIALLETTER:
-        var = new KWSerialLetterVariable( textFrameSet, QString::null, doc->variableFormat( type ) );
-        break;
+        case VT_DATE:
+            varFormat = doc->variableFormat( VF_DATE );
+            var = new KWDateVariable( textFrameSet, subtype, varFormat );
+            break;
+        case VT_TIME:
+            varFormat = doc->variableFormat( VF_TIME );
+            var = new KWTimeVariable( textFrameSet, subtype, varFormat );
+            break;
+        case VT_PGNUM:
+            varFormat = doc->variableFormat( VF_NUM );
+            var = new KWPgNumVariable( textFrameSet, subtype, varFormat );
+            break;
+        case VT_FIELD:
+            varFormat = doc->variableFormat( VF_STRING );
+            var = new KWFieldVariable( textFrameSet, subtype, varFormat );
+            break;
+        case VT_CUSTOM:
+            varFormat = doc->variableFormat( VF_STRING );
+            var = new KWCustomVariable( textFrameSet, QString::null, varFormat );
+            break;
+        case VT_SERIALLETTER:
+            varFormat = doc->variableFormat( VF_STRING );
+            var = new KWSerialLetterVariable( textFrameSet, QString::null, varFormat );
+            break;
     }
     return var;
 }
 
-/******************************************************************/
-/* Class: KWPgNumVariable                                         */
-/******************************************************************/
-
-void KWPgNumVariable::save( QDomElement& parentElem )
-{
-    KWVariable::save( parentElem );
-    QDomElement pgNumElem = parentElem.ownerDocument().createElement( "PGNUM" );
-    parentElem.appendChild( pgNumElem );
-    pgNumElem.setAttribute( "value", pgNum );
-}
-
-void KWPgNumVariable::load( QDomElement& elem )
-{
-    KWVariable::load( elem );
-    QDomElement pgNumElem = elem.namedItem( "PGNUM" ).toElement();
-    if (!pgNumElem.isNull())
-    {
-        pgNum = pgNumElem.attribute("value").toInt();
-    }
-}
-
-void KWPgNumVariable::recalc()
-{
-    KWTextParag * parag = static_cast<KWTextParag *>( paragraph() );
-    KWTextFrameSet * fs = parag->textDocument()->textFrameSet();
-    QPoint iPoint = parag->rect().topLeft(); // small bug if a paragraph is cut between two pages.
-    QPoint cPoint;
-    KWFrame * frame = fs->internalToContents( iPoint, cPoint );
-    if ( frame )
-        pgNum = frame->pageNum() + 1;
-}
 
 /******************************************************************/
 /* Class: KWDateVariable                                          */
 /******************************************************************/
-
-KWDateVariable::KWDateVariable( KWTextFrameSet *fs, bool _fix, QDate _date, KWVariableFormat *_varFormat )
-    : KWVariable( fs, _varFormat ), date( _date ), fix( _fix )
+KWDateVariable::KWDateVariable( KWTextFrameSet *fs, int subtype, KWVariableFormat *_varFormat )
+    : KWVariable( fs, _varFormat ), m_subtype( subtype )
 {
-    recalc();
 }
 
 void KWDateVariable::recalc()
 {
-    if ( !fix )
-        date = QDate::currentDate();
+    if ( m_subtype == VST_DATE_CURRENT )
+        m_date = QDate::currentDate();
+    else
+    {
+        // Only if never set before (i.e. upon insertion)
+        if ( m_date.isNull() )
+            m_date = QDate::currentDate();
+    }
+    resize();
+}
+
+QString KWDateVariable::text()
+{
+    KWVariableDateFormat * format = dynamic_cast<KWVariableDateFormat *>( m_varFormat );
+    ASSERT( format );
+    if ( format )
+        return format->convert( m_date );
 }
 
 void KWDateVariable::save( QDomElement& parentElem )
@@ -283,10 +196,10 @@ void KWDateVariable::save( QDomElement& parentElem )
 
     QDomElement elem = parentElem.ownerDocument().createElement( "DATE" );
     parentElem.appendChild( elem );
-    elem.setAttribute( "year", date.year() );
-    elem.setAttribute( "month", date.month() );
-    elem.setAttribute( "day", date.day() );
-    elem.setAttribute( "fix", static_cast<int>( fix ) );
+    elem.setAttribute( "year", m_date.year() );
+    elem.setAttribute( "month", m_date.month() );
+    elem.setAttribute( "day", m_date.day() );
+    elem.setAttribute( "fix", m_subtype == VST_DATE_FIX ); // to be extended
 }
 
 void KWDateVariable::load( QDomElement& elem )
@@ -299,29 +212,49 @@ void KWDateVariable::load( QDomElement& elem )
         int y = e.attribute("year").toInt();
         int m = e.attribute("month").toInt();
         int d = e.attribute("day").toInt();
-        fix = static_cast<bool>( e.attribute("fix").toInt() );
+        bool fix = e.attribute("fix").toInt() == 1;
         if ( fix )
-            date.setYMD( y, m, d );
+            m_date.setYMD( y, m, d );
+        m_subtype = fix ? VST_DATE_FIX : VST_DATE_CURRENT;
     }
+}
 
-    if ( !fix )
-        date = QDate::currentDate();
+QStringList KWDateVariable::actionTexts()
+{
+    QStringList lst;
+    lst << i18n( "Current date (fixed)" );
+    lst << i18n( "Current date (variable)" );
+    // TODO add date created, date printed, date last modified( BR #24242 )
+    return lst;
 }
 
 /******************************************************************/
 /* Class: KWTimeVariable                                          */
 /******************************************************************/
-
-KWTimeVariable::KWTimeVariable( KWTextFrameSet *fs, bool _fix, QTime _time, KWVariableFormat *_varFormat )
-    : KWVariable( fs, _varFormat ), time( _time ), fix( _fix )
+KWTimeVariable::KWTimeVariable( KWTextFrameSet *fs, int subtype, KWVariableFormat *varFormat )
+    : KWVariable( fs, varFormat ), m_subtype( subtype )
 {
-    recalc();
 }
 
 void KWTimeVariable::recalc()
 {
-    if ( !fix )
-        time = QTime::currentTime();
+    if ( m_subtype == VST_TIME_CURRENT )
+        m_time = QTime::currentTime();
+    else
+    {
+        // Only if never set before (i.e. upon insertion)
+        if ( m_time.isNull() )
+            m_time = QTime::currentTime();
+    }
+    resize();
+}
+
+QString KWTimeVariable::text()
+{
+    KWVariableTimeFormat * format = dynamic_cast<KWVariableTimeFormat *>( m_varFormat );
+    ASSERT( format );
+    if ( format )
+        return format->convert( m_time );
 }
 
 void KWTimeVariable::save( QDomElement& parentElem )
@@ -330,11 +263,11 @@ void KWTimeVariable::save( QDomElement& parentElem )
 
     QDomElement elem = parentElem.ownerDocument().createElement( "TIME" );
     parentElem.appendChild( elem );
-    elem.setAttribute( "hour", time.hour() );
-    elem.setAttribute( "minute", time.minute() );
-    elem.setAttribute( "second", time.second() );
-    elem.setAttribute( "msecond", time.msec() );
-    elem.setAttribute( "fix", static_cast<int>( fix ) );
+    elem.setAttribute( "hour", m_time.hour() );
+    elem.setAttribute( "minute", m_time.minute() );
+    elem.setAttribute( "second", m_time.second() );
+    elem.setAttribute( "msecond", m_time.msec() );
+    elem.setAttribute( "fix", m_subtype == VST_TIME_FIX );
 }
 
 void KWTimeVariable::load( QDomElement& elem )
@@ -348,13 +281,169 @@ void KWTimeVariable::load( QDomElement& elem )
         int m = e.attribute("minute").toInt();
         int s = e.attribute("second").toInt();
         int ms = e.attribute("msecond").toInt();
-        fix = static_cast<bool>( e.attribute("fix").toInt() );
+        bool fix = static_cast<bool>( e.attribute("fix").toInt() );
         if ( fix )
-            time.setHMS( h, m, s, ms );
+            m_time.setHMS( h, m, s, ms );
+        m_subtype = fix ? VST_TIME_FIX : VST_TIME_CURRENT;
     }
+}
 
-    if ( !fix )
-        time = QTime::currentTime();
+QStringList KWTimeVariable::actionTexts()
+{
+    QStringList lst;
+    lst << i18n( "Current time (fixed)" );
+    lst << i18n( "Current time (variable)" );
+    // TODO add time created, time printed, time last modified( BR #24242 )
+    return lst;
+}
+
+/******************************************************************/
+/* Class: KWPgNumVariable                                         */
+/******************************************************************/
+KWPgNumVariable::KWPgNumVariable( KWTextFrameSet *fs, int subtype, KWVariableFormat *varFormat )
+        : KWVariable( fs, varFormat ), m_subtype( subtype ), m_pgNum( 0 )
+{
+}
+
+void KWPgNumVariable::save( QDomElement& parentElem )
+{
+    KWVariable::save( parentElem );
+    QDomElement pgNumElem = parentElem.ownerDocument().createElement( "PGNUM" );
+    parentElem.appendChild( pgNumElem );
+    pgNumElem.setAttribute( "subtype", m_subtype );
+    pgNumElem.setAttribute( "value", m_pgNum );
+}
+
+void KWPgNumVariable::load( QDomElement& elem )
+{
+    KWVariable::load( elem );
+    QDomElement pgNumElem = elem.namedItem( "PGNUM" ).toElement();
+    if (!pgNumElem.isNull())
+    {
+        m_subtype = pgNumElem.attribute("subtype").toInt();
+        m_pgNum = pgNumElem.attribute("value").toInt();
+    }
+}
+
+void KWPgNumVariable::recalc()
+{
+    if ( m_subtype == VST_PGNUM_CURRENT )
+    {
+        KWTextParag * parag = static_cast<KWTextParag *>( paragraph() );
+        KWTextFrameSet * fs = parag->textDocument()->textFrameSet();
+        QPoint iPoint = parag->rect().topLeft(); // small bug if a paragraph is cut between two pages.
+        QPoint cPoint;
+        KWFrame * frame = fs->internalToContents( iPoint, cPoint );
+        if ( frame )
+            m_pgNum = frame->pageNum() + 1;
+    }
+    else
+        m_pgNum = m_doc->getPages();
+    resize();
+}
+
+QString KWPgNumVariable::text()
+{
+    KWVariableNumberFormat * format = dynamic_cast<KWVariableNumberFormat *>( m_varFormat );
+    ASSERT( format );
+    if ( format )
+        return format->convert( m_pgNum );
+}
+
+QStringList KWPgNumVariable::actionTexts()
+{
+    QStringList lst;
+    lst << i18n( "Page Number" );
+    lst << i18n( "Number Of Pages" );
+    return lst;
+}
+
+
+/******************************************************************/
+/* Class: KWCustomVariable                                        */
+/******************************************************************/
+KWCustomVariable::KWCustomVariable( KWTextFrameSet *fs, const QString &name, KWVariableFormat *varFormat )
+    : KWVariable( fs, varFormat ), m_name( name )
+{
+}
+
+void KWCustomVariable::save( QDomElement& parentElem )
+{
+    KWVariable::save( parentElem );
+    QDomElement elem = parentElem.ownerDocument().createElement( "CUSTOM" );
+    parentElem.appendChild( elem );
+    elem.setAttribute( "name", correctQString( m_name ) );
+    elem.setAttribute( "value", correctQString( value() ) );
+}
+
+void KWCustomVariable::load( QDomElement& elem )
+{
+    KWVariable::load( elem );
+    QDomElement e = elem.namedItem( "CUSTOM" ).toElement();
+    if (!e.isNull())
+    {
+        m_name = e.attribute( "name" );
+        setValue( e.attribute( "value" ) );
+    }
+}
+
+QString KWCustomVariable::value() const
+{
+    return m_doc->getVariableValue( m_name );
+}
+
+void KWCustomVariable::setValue( const QString &v )
+{
+    m_doc->setVariableValue( m_name, v );
+}
+
+QStringList KWCustomVariable::actionTexts()
+{
+    return QStringList( i18n( "Custom..." ) );
+}
+
+
+/******************************************************************/
+/* Class: KWSerialLetterVariable                                  */
+/******************************************************************/
+KWSerialLetterVariable::KWSerialLetterVariable( KWTextFrameSet *fs, const QString &name, KWVariableFormat *varFormat )
+    : KWVariable( fs, varFormat ), m_name( name )
+{
+}
+
+void KWSerialLetterVariable::save( QDomElement& parentElem )
+{
+    KWVariable::save( parentElem );
+    QDomElement elem = parentElem.ownerDocument().createElement( "SERIALLETTER" );
+    parentElem.appendChild( elem );
+    elem.setAttribute( "name", correctQString( m_name ) );
+}
+
+void KWSerialLetterVariable::load( QDomElement& elem )
+{
+    KWVariable::load( elem );
+    QDomElement e = elem.namedItem( "SERIALLETTER" ).toElement();
+    if (!e.isNull())
+        m_name = e.attribute( "name" );
+}
+
+QString KWSerialLetterVariable::value() const
+{
+    return m_doc->getSerialLetterDataBase()->getValue( m_name );
+}
+
+QString KWSerialLetterVariable::text()
+{
+    // ## should use a format maybe
+    QString v = value();
+    if ( v == name() )
+        return "<" + v + ">";
+    return v;
+}
+
+QStringList KWSerialLetterVariable::actionTexts()
+{
+    return QStringList( i18n( "&Serial Letter..." ) );
 }
 
 /******************************************************************/
@@ -363,9 +452,6 @@ void KWTimeVariable::load( QDomElement& elem )
 KWFieldVariable::KWFieldVariable( KWTextFrameSet *fs, int subtype, KWVariableFormat *varFormat )
     : KWVariable( fs, varFormat ), m_subtype( subtype )
 {
-    // m_subtype is VST_NONE when loading, it will be read in load()
-    if ( m_subtype != VST_NONE )
-        recalc();
 }
 
 void KWFieldVariable::save( QDomElement& parentElem )
@@ -374,7 +460,7 @@ void KWFieldVariable::save( QDomElement& parentElem )
     KWVariable::save( parentElem );
     QDomElement elem = parentElem.ownerDocument().createElement( "FIELD" );
     parentElem.appendChild( elem );
-    elem.setAttribute( "field", m_subtype );
+    elem.setAttribute( "subtype", m_subtype );
     elem.setAttribute( "value", correctQString( m_value ) );
 }
 
@@ -384,14 +470,12 @@ void KWFieldVariable::load( QDomElement& elem )
     QDomElement e = elem.namedItem( "FIELD" ).toElement();
     if (!e.isNull())
     {
-        m_subtype = e.attribute( "field" ).toInt();
+        m_subtype = e.attribute( "subtype" ).toInt();
         if ( m_subtype == VST_NONE )
             kdWarning() << "Field subtype of -1 found in the file !" << endl;
         m_value = e.attribute( "value" );
     } else
         kdWarning() << "FIELD element not found !" << endl;
-
-    recalc();
 }
 
 void KWFieldVariable::recalc()
@@ -401,12 +485,30 @@ void KWFieldVariable::recalc()
             kdWarning() << "KWFieldVariable::recalc() called with m_subtype = VST_NONE !" << endl;
             break;
         case VST_FILENAME:
-            m_value = doc->url().filename();
+            m_value = m_doc->url().filename();
+            break;
+        case VST_DIRECTORYNAME:
+            m_value = m_doc->url().directory();
             break;
         case VST_AUTHORNAME:
         case VST_EMAIL:
         case VST_COMPANYNAME:
         {
+            KoDocumentInfo * info = m_doc->documentInfo();
+            KoDocumentInfoAuthor * authorPage = static_cast<KoDocumentInfoAuthor *>(info->page( "author" ));
+            if ( !authorPage )
+                kdWarning() << "Author information not found in documentInfo !" << endl;
+            else
+            {
+                if ( m_subtype == VST_AUTHORNAME )
+                    m_value = authorPage->fullName();
+                else if ( m_subtype == VST_EMAIL )
+                    m_value = authorPage->email();
+                else if ( m_subtype == VST_COMPANYNAME )
+                    m_value = authorPage->company();
+            }
+
+#if 0
             KConfig config( "kofficerc", true );
             if( config.hasGroup( "Author" ))
             {
@@ -429,84 +531,22 @@ void KWFieldVariable::recalc()
                 else if ( m_subtype == VST_EMAIL )
                     m_value = config.readEntry("EmailAddress");
             }
+#endif
         }
     }
 
     if ( m_value.isEmpty() )
         m_value = i18n("<None>");
+    resize();
 }
 
-
-/******************************************************************/
-/* Class: KWCustomVariable                                        */
-/******************************************************************/
-KWCustomVariable::KWCustomVariable( KWTextFrameSet *fs, const QString &name_, KWVariableFormat *_varFormat )
-    : KWVariable( fs, _varFormat ), name( name_ )
+QStringList KWFieldVariable::actionTexts()
 {
-    doc->unregisterVariable( this );
-    doc->registerVariable( this );
-    recalc();
-}
-
-void KWCustomVariable::save( QDomElement& parentElem )
-{
-    KWVariable::save( parentElem );
-    QDomElement elem = parentElem.ownerDocument().createElement( "CUSTOM" );
-    parentElem.appendChild( elem );
-    elem.setAttribute( "name", correctQString( name ) );
-    elem.setAttribute( "value", correctQString( getValue() ) );
-}
-
-void KWCustomVariable::load( QDomElement& elem )
-{
-    doc->unregisterVariable( this );
-    doc->registerVariable( this );
-    recalc();
-    KWVariable::load( elem );
-    QDomElement e = elem.namedItem( "CUSTOM" ).toElement();
-    if (!e.isNull())
-    {
-        name = e.attribute( "name" );
-        setValue( e.attribute( "value" ) );
-    }
-}
-
-QString KWCustomVariable::getValue() const
-{
-    return doc->getVariableValue( name );
-}
-
-void KWCustomVariable::setValue( const QString &v )
-{
-    doc->setVariableValue( name, v );
-}
-
-/******************************************************************/
-/* Class: KWSerialLetterVariable                                  */
-/******************************************************************/
-KWSerialLetterVariable::KWSerialLetterVariable( KWTextFrameSet *fs, const QString &name_, KWVariableFormat *_varFormat )
-    : KWVariable( fs, _varFormat ), name( name_ )
-{
-}
-
-void KWSerialLetterVariable::save( QDomElement& parentElem )
-{
-    KWVariable::save( parentElem );
-    QDomElement elem = parentElem.ownerDocument().createElement( "SERIALLETTER" );
-    parentElem.appendChild( elem );
-    elem.setAttribute( "name", correctQString( name ) );
-}
-
-void KWSerialLetterVariable::load( QDomElement& elem )
-{
-    recalc();
-    KWVariable::load( elem );
-    QDomElement e = elem.namedItem( "SERIALLETTER" ).toElement();
-    if (!e.isNull())
-        name = e.attribute( "name" );
-}
-
-QString KWSerialLetterVariable::getValue() const
-{
-    return doc->getSerialLetterDataBase()->getValue( name );
+    QStringList lst;
+    lst << i18n( "File Name" );
+    lst << i18n( "Directory Name" ); // is "Name" necessary ?
+    lst << i18n( "Author Name" ); // is "Name" necessary ?
+    lst << i18n( "Email" );
+    lst << i18n( "Company Name" ); // is "Name" necessary ?
+    return lst;
 }
