@@ -1031,7 +1031,10 @@ void KPresenterView::extraShadow()
 
 	KPObject *object=m_canvas->activePage()->getSelectedObj();
 	shadowDia->setShadowDirection( object->getShadowDirection() );
-	shadowDia->setShadowDistance( object->getShadowDistance() );
+	if ( object->getShadowDistance() != 0 )
+	    shadowDia->setShadowDistance( object->getShadowDistance() );
+	else
+	    shadowDia->setShadowDistance( 3 );
 	shadowDia->resize( shadowDia->minimumSize() );
 	shadowDia->setShadowColor( object->getShadowColor() );
 	m_canvas->setToolEditMode( TEM_MOUSE );
