@@ -8,15 +8,10 @@ Others bugs not in BT system (Report by - taken by):
 
 - Clicking into canvas causes to much flickering if many items
         (especially multirow cells) are in visible rect
+	--(John) I've done updates on this, does anyone think this is still
+	         a big problem?
+		 
 - MultiRow cells will only be drawn if obscuring is forced!
-
-- Merged cells are always obscured by others even if something is in there
----(John) - I'm not convinced this is a bug.  If you merge a group of cells where
-            more than one has text in it, there's no good consistant way to
-            "merge" the data.  Currently, the top-left corner cell's data will
-            become the large merged cell's data.  Maybe that isn't ideal but 
-            what is a better solution?
--- (Norbert): it's fixed anyway :-)
 
 
 Other things: (please add the things you are working on!)
@@ -71,7 +66,8 @@ John
 - Pulling the cell 'result' into it's own class for future enhancements to 
   calculation precision, new datatypes (matrix?), and cleaner code (KSpreadCell
   is absolutely HUGE)
-  -- I've started on this now since we pushed the beta back.
+  -- I've started on this now since we pushed the beta back, but I'm probably
+     not going to finish it by then anyway since I'm moving.
 
 Philipp
 =======

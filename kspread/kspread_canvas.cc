@@ -1187,6 +1187,11 @@ void KSpreadCanvas::moveDirection(KSpread::MoveTo direction, bool extendSelectio
   if (m_bChoose)
   {
     cursor = table->getChooseCursor();
+    /* if the cursor is unset, pretend we're starting at the regular cursor */
+    if (cursor.x() == 0 || cursor.y() == 0)
+    {
+      cursor = activeTable()->getCursorPosition();
+    }
   }
   else
   {
