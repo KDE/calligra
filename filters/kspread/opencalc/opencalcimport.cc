@@ -34,6 +34,7 @@
 #include <kmdcodec.h>
 #include <koFilterChain.h>
 #include <koGlobal.h>
+#include <koUnit.h>
 
 #include <kspread_cell.h>
 #include <kspread_doc.h>
@@ -163,37 +164,6 @@ int getFontSize( QString s )
   return result;
 }
 
-double convertToPoint( QString s )
-{
-  double mm = 0.0;
-  int p = s.find( "cm" );
-  if ( p != -1 )
-  {
-    s = s.left( p );
-    bool ok = true;
-    double d = s.toDouble( &ok );
-
-    if ( ok )
-      mm = d / 0.035;
-
-    kdDebug(30518) << "Width: " << d << ", new: " << mm << endl;
-  }
-  else
-  {
-    p = s.find( "mm" );
-    if ( p != -1 )
-    {
-      s = s.left( p );
-      bool ok = true;
-      double d = s.toDouble( &ok );
-      if ( ok )
-        mm = d / 100 * 0.035; // TODO check this!
-    }
-  }
-
-  return mm;//( MM_TO_POINT( mm ) < 1 ? 1 : MM_TO_POINT( mm ) );
-}
-
 bool OpenCalcImport::readRowFormat( QDomElement & rowNode, QDomElement * rowStyle,
                                     KSpreadSheet * table, int & row, int & number,
                                     bool isLast )
@@ -221,35 +191,7 @@ bool OpenCalcImport::readRowFormat( QDomElement & rowNode, QDomElement * rowStyl
     {
       if ( property.hasAttribute( "style:row-height" ) )
       {
-        QString sHeight = property.attribute( "style:row-height" );
-        int p = sHeight.find( "cm" );
-        if ( p != -1 )
-        {
-          sHeight = sHeight.left( p );
-
-          kdDebug(30518) << "Parsing height (cm): " << sHeight << endl;
-
-          bool ok = true;
-          double d = sHeight.toDouble( &ok );
-          if ( ok )
-            height = d * 10; // we work with mm
-        }
-        else
-        {
-          p = sHeight.find( "mm" );
-
-          if ( p != -1 )
-          {
-            sHeight = sHeight.left( p );
-
-            kdDebug(30518) << "Parsing height (mm): " << sHeight << endl;
-
-            bool ok = true;
-            double d = sHeight.toDouble( &ok );
-            if ( ok )
-              height = d;
-          }
-        }
+          height = KoUnit::parseValue( property.attribute( "style:row-height" ) , -1 );
       }
 
       if ( property.hasAttribute( "fo:break-before" ) )
@@ -1778,7 +1720,7 @@ void OpenCalcImport::loadBorder( KSpreadFormat * layout, QString const & borderD
 
   QPen pen;
   QString w = borderDef.left( p );
-  pen.setWidth( (int)convertToPoint( w ) );
+  pen.setWidth( (int)KoUnit::parseValue( w ) );
 
 
   ++p;
@@ -1925,7 +1867,7 @@ void OpenCalcImport::loadStyleProperties( KSpreadFormat * layout, QDomElement co
   }
 
   if ( property.hasAttribute( "fo:padding-left" ) )
-    layout->setIndent( convertToPoint( property.attribute( "fo:padding-left" ) ) );
+    layout->setIndent( KoUnit::parseValue( property.attribute( "fo:padding-left" ) ) );
 
   if ( property.hasAttribute( "fo:vertical-align" ) )
   {
