@@ -1951,10 +1951,11 @@ void KPresenterDocument_impl::repaint(unsigned int x,unsigned int y,unsigned int
 QList<int> KPresenterDocument_impl::reorderPage(unsigned int num,int diffx,int diffy,float fakt = 1.0)
 {
   QList<int> orderList;
-
+  bool inserted;
+  
   if (!_objList.isEmpty())
     {
-      for (unsigned int i = 0;i <= _objList.count()-1;i++)
+      for (unsigned int i = 0;i < _objList.count();i++)
 	{
 	  objPtr = _objList.at(i);
 	  if (getPageOfObj(objPtr->objNum,diffx,diffy,fakt) == num)
@@ -1966,14 +1967,17 @@ QList<int> KPresenterDocument_impl::reorderPage(unsigned int num,int diffx,int d
 		    orderList.append((int*)objPtr->presNum);
 		  else
 		    {
-		      for (unsigned int j = 0;j < orderList.count();j++)
+		      inserted = false;
+		      for (int j = orderList.count()-1;j >= 0;j--)
 			{
 			  if ((int*)objPtr->presNum > orderList.at(j))
 			    {
-			      orderList.append((int*)objPtr->presNum);
-			      break;
+			      orderList.insert(j+1,(int*)objPtr->presNum);
+			      j = -1;
+			      inserted = true;
 			    }
 			}
+		      if (!inserted) orderList.insert(0,(int*)objPtr->presNum);
 		    }
 		}
 	    }

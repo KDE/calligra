@@ -219,11 +219,7 @@ void Page::paintObjects(QPainter *painter,QRect rect)
       /* draw the objects */
       if ((rect.intersects(QRect(objPtr->ox - diffx(),objPtr->oy - diffy(),
 				 objPtr->ow,objPtr->oh)) && editMode) ||
-	  (!editMode && QRect(objPtr->ox - diffx(),objPtr->oy - diffy(),
-			      objPtr->ow,objPtr->oh).intersects(QRect((width() - getPageSize(currPresPage,_presFakt).width()) / 2 + 10,
-								      (height() - getPageSize(currPresPage,_presFakt).height()) / 2 + 10,
-								      getPageSize(currPresPage,_presFakt).width(),
-								      getPageSize(currPresPage,_presFakt).height())) &&
+	  (!editMode && getPageOfObj(objPtr->objNum,_presFakt) == currPresPage &&
 	   objPtr->presNum <= currPresStep))
 	{     
 	  switch (objPtr->objType)
@@ -241,7 +237,7 @@ void Page::paintObjects(QPainter *painter,QRect rect)
 	      {
  		objPtr->objPic = objPtr->textObj->getPic(objPtr->ox - diffx(),objPtr->oy - diffy(),
 							 objPtr->ow,objPtr->oh);
- 		painter->translate((float)objPtr->ox - diffx(),(float)objPtr->oy - diffy());
+ 		painter->translate((float)objPtr->ox - (float)diffx(),(float)objPtr->oy - (float)diffy());
  		objPtr->objPic->play(painter);
  		painter->resetXForm();
  		painter->setClipping(false);
@@ -251,7 +247,7 @@ void Page::paintObjects(QPainter *painter,QRect rect)
 	    default:
 	      {
 		if (objPtr->objType != OT_CLIPART)
-		  painter->translate((float)objPtr->ox - diffx(),(float)objPtr->oy - diffy());
+		  painter->translate((float)objPtr->ox - (float)diffx(),(float)objPtr->oy - (float)diffy());
 		if (objPtr->objType == OT_CLIPART)
 		  {
 		    r = painter->viewport();
@@ -265,7 +261,7 @@ void Page::paintObjects(QPainter *painter,QRect rect)
 		    objPtr->objPic = objPtr->graphObj->getPic(objPtr->ox - diffx(),objPtr->oy - diffy(),objPtr->ow,objPtr->oh);
 		    objPtr->objPic->play(painter);
 		  }
-		painter->translate((float)objPtr->ox - diffx(),(float)objPtr->oy - diffy());
+		painter->translate((float)objPtr->ox - (float)diffx(),(float)objPtr->oy - (float)diffy());
 		if (objPtr->objType == OT_CLIPART)
 		  {
 		    painter->setViewport(r);
@@ -1099,12 +1095,13 @@ void Page::startScreenPresentation()
       objPtr->oow = objPtr->ow;
       objPtr->ooh = objPtr->oh;
       objPtr->ox = (int)((float)objPtr->ox * _presFakt);
-      pgNum = getPageOfObj(i+1);
-      objPtr = objList()->at(i);
-      objPtr->oy -= getPageSize(pgNum).y();
       objPtr->oy = (int)((float)objPtr->oy * _presFakt);
-      objPtr->oy += getPageSize(pgNum,_presFakt).y() - diffy();
-      objPtr->oy -= (int)(_presFakt * 2.0);
+      pgNum = getPageOfObj(objPtr->objNum,_presFakt);
+      objPtr = objList()->at(i);
+
+      // igiiiiiiit - but it helps a little bit....
+      objPtr->oy -= (int)(_presFakt * (float)(pgNum) * (float)(QApplication::desktop()->height() / 200));
+
       objPtr->ow = (int)((float)objPtr->ow * _presFakt);
       objPtr->oh = (int)((float)objPtr->oh * _presFakt);
 
@@ -1150,7 +1147,7 @@ void Page::stopScreenPresentation()
       else
 	{
 	  objPtr->textObj->setGeometry(objPtr->ox,objPtr->oy,objPtr->ow,objPtr->oh);
-	  objPtr->textObj->zoomOrig();//(1.0/_presFakt);
+	  objPtr->textObj->zoomOrig();
 	}
     }
 

@@ -138,7 +138,7 @@ protected:
   bool spManualSwitch() {return view->KPresenterDoc()->spManualSwitch();}
   QRect getPageSize(unsigned int p,float fakt=1.0) {return view->KPresenterDoc()->getPageSize(p,diffx(),diffy(),fakt);}
   unsigned int pageNums() {return view->KPresenterDoc()->getPageNums();}
-  int getPageOfObj(int i) {return view->KPresenterDoc()->getPageOfObj(i,diffx(),diffy());}
+  int getPageOfObj(int i,float fakt = 1.0) {return view->KPresenterDoc()->getPageOfObj(i,diffx(),diffy(),fakt);}
 
   void drawBackColor(QColor,QColor,BCType,QPainter*,QSize);
   void _repaint(bool erase=true) {view->KPresenterDoc()->repaint(erase);}
