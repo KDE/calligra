@@ -1239,7 +1239,7 @@ KarbonView::selectionChanged()
 	if( count > 0)
 	{
 		VGroup *group = dynamic_cast<VGroup *>( part()->document().selection()->objects().getFirst() );
-		m_groupObjects->setEnabled( !group && ( count > 1 ) );
+		m_groupObjects->setEnabled( count > 1 );
 		m_ungroupObjects->setEnabled( group && ( count == 1 ) );
 		if( count == 1 )
 		{
