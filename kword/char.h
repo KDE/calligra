@@ -14,7 +14,7 @@
 class KWordDocument;
 class KWTextFrameSet;
 
-enum ClassIDs {ID_KWCharNone = 0,ID_KWCharFormat = 1,ID_KWCharImage = 2};
+enum ClassIDs {ID_KWCharNone = 0,ID_KWCharFormat = 1,ID_KWCharImage = 2,ID_KWCharTab = 3};
  
 class KWCharAttribute
 {
@@ -81,6 +81,13 @@ protected:
 
 };
 
+class KWCharTab : public KWCharAttribute
+{
+public:
+  KWCharTab() { classId = ID_KWCharTab; }
+
+};
+
 // Be prepared for unicode
 #define kwchar char
 
@@ -108,6 +115,7 @@ public:
   void insert(unsigned int _pos,QString _text);
   void insert(unsigned int _pos,const char _c);
   void insert(unsigned int _pos,KWCharImage *_image);
+  void insert(unsigned int _pos,KWCharTab *_tab);
   void resize(unsigned int _size,bool del = true);
   bool remove(unsigned int _pos,unsigned int _len = 1);
   KWChar* split(unsigned int _pos);

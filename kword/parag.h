@@ -128,6 +128,7 @@ public:
 
     void insertText( unsigned int _pos,QString _text);
     void insertPictureAsChar(unsigned int _pos,QString _filename);
+    void insertTab(unsigned int _pos);
     void appendText(KWChar *_text,unsigned int _len);
     bool deleteText( unsigned int _pos, unsigned int _len = 1);
     void setFormat( unsigned int _pos, unsigned int _len, const KWFormat &format );

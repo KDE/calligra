@@ -429,3 +429,39 @@ void KWParagLayout::setTabList(QList<KoTabulator> *_tabList)
       tabList.append(t);
     }
 }
+
+bool KWParagLayout::getNextTab(unsigned int _ptPos,unsigned int _lBorder,unsigned int _rBorder,unsigned int &_tabPos,KoTabulators &_tabType)
+{
+  _tabPos = 0;
+  _tabType = T_LEFT;
+
+  if (tabList.isEmpty()) return false;
+
+  int _mostLeft = -1,_best = -1;
+  unsigned int ptPos = 0;
+
+  for (unsigned int i = 0;i < tabList.count();i++)
+    {
+      ptPos = tabList.at(i)->ptPos + _lBorder;
+      if (ptPos > _ptPos && ptPos < _rBorder && (_best == -1 || ptPos < static_cast<unsigned int>(tabList.at(_best)->ptPos)))
+	_best = i;
+      if (ptPos < _ptPos && ptPos > _lBorder && (_mostLeft == -1 || ptPos < static_cast<unsigned int>(tabList.at(_mostLeft)->ptPos)))
+	_mostLeft = i;
+    }
+
+  if (_best != -1)
+    {
+      _tabPos = tabList.at(_best)->ptPos + _lBorder;
+      _tabType = tabList.at(_best)->type;
+      return true;
+    }
+
+  if (_mostLeft != -1)
+    {
+      _tabPos = tabList.at(_mostLeft)->ptPos + _lBorder;
+      _tabType = tabList.at(_mostLeft)->type;
+      return true;
+    }
+
+  return false;
+}

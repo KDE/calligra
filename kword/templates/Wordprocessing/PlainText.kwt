@@ -32,10 +32,8 @@
       <UNDERLINE value="0"/>
       <VERTALIGN value="0"/>
      </FORMAT> 
-     <TABULATOR mmpos="40" ptpos="113" type="0"/>
-     <TABULATOR mmpos="80" ptpos="226" type="0"/>
-     <TABULATOR mmpos="120" ptpos="340" type="0"/>
-     <TABULATOR mmpos="160" ptpos="453" type="0"/>
+     <TABULATOR mmpos="63" ptpos="179" type="0"/>
+     <TABULATOR mmpos="128" ptpos="363" type="0"/>
     </LAYOUT>
    </PARAGRAPH>
   </FRAMESET>
@@ -62,10 +60,8 @@
     <UNDERLINE value="0"/>
     <VERTALIGN value="0"/>
    </FORMAT> 
-   <TABULATOR mmpos="40" ptpos="113" type="0"/>
-   <TABULATOR mmpos="80" ptpos="226" type="0"/>
-   <TABULATOR mmpos="120" ptpos="340" type="0"/>
-   <TABULATOR mmpos="160" ptpos="453" type="0"/>
+   <TABULATOR mmpos="63" ptpos="179" type="0"/>
+   <TABULATOR mmpos="128" ptpos="363" type="0"/>
   </STYLE>
   <STYLE>
    <NAME value="Head 1"/>

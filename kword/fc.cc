@@ -16,6 +16,7 @@ KWFormatContext::KWFormatContext(KWordDocument *_doc,unsigned int _frameSet)
   setDefaults( _doc );
   
   document = _doc;
+  doc = _doc;
 
   during_vertical_cursor_movement = FALSE;
 
@@ -530,9 +531,40 @@ void KWFormatContext::cursorGotoPos( unsigned int _textpos, QPainter & )
         if ( text[ pos ].c == 0 )
 	{
 	  // Handle specials here
-	  ptPos += ((KWCharImage*)text[pos].attrib)->getImage()->width();
-	  specialHeight = max(specialHeight,(unsigned int)((KWCharImage*)text[pos].attrib)->getImage()->height());
-	  pos++;
+	  switch (text[pos].attrib->getClassId())
+	    {
+	    case ID_KWCharImage:
+	      {
+		ptPos += ((KWCharImage*)text[pos].attrib)->getImage()->width();
+		specialHeight = max(specialHeight,(unsigned int)((KWCharImage*)text[pos].attrib)->getImage()->height());
+		pos++;
+	      } break;
+	    case ID_KWCharTab:
+	      {
+		unsigned int tabPos = 0;
+		KoTabulators tabType;
+		if (parag->getParagLayout()->getNextTab(ptPos,document->getFrameSet(frameSet - 1)->getFrame(frame - 1)->left(),
+							document->getFrameSet(frameSet - 1)->getFrame(frame - 1)->right(),tabPos,tabType))
+		  {
+		    // next tab is in this line
+		    if (tabPos > ptPos)
+		      {
+			switch (tabType)
+			  {
+			  case T_LEFT:
+			    ptPos = tabPos;
+			    break;
+			  default: break;
+			  }
+		      }
+		    // next tab is in the next line
+		    else
+		      {
+		      }
+		  }
+		pos++;
+	      } break;
+	    }
 	}
 	else
 	{
@@ -642,9 +674,40 @@ int KWFormatContext::cursorGotoNextChar(QPainter & _painter)
   if ( text[ pos ].c == 0 )
     {
       // Handle specials here
-      ptPos += ((KWCharImage*)text[pos].attrib)->getImage()->width();
-      specialHeight = max(specialHeight,(unsigned int)((KWCharImage*)text[pos].attrib)->getImage()->height());
-      pos++;
+      switch (text[pos].attrib->getClassId())
+	{
+	case ID_KWCharImage:
+	  {
+	    ptPos += ((KWCharImage*)text[pos].attrib)->getImage()->width();
+	    specialHeight = max(specialHeight,(unsigned int)((KWCharImage*)text[pos].attrib)->getImage()->height());
+	    pos++;
+	  } break;
+	case ID_KWCharTab:
+	  {
+	    unsigned int tabPos = 0;
+	    KoTabulators tabType;
+	    if (parag->getParagLayout()->getNextTab(ptPos,document->getFrameSet(frameSet - 1)->getFrame(frame - 1)->left(),
+						    document->getFrameSet(frameSet - 1)->getFrame(frame - 1)->right(),tabPos,tabType))
+	      {
+		// next tab is in this line
+		if (tabPos > ptPos)
+		  {
+		    switch (tabType)
+		      {
+		      case T_LEFT:
+			ptPos = tabPos;
+			break;
+		      default: break;
+		      }
+		  }
+		// next tab is in the next line
+		else
+		  {
+		  }
+	      }
+	    pos++;
+	  } break;
+	}
     }
   else
     {
@@ -859,7 +922,7 @@ bool KWFormatContext::makeLineLayout( QPainter &_painter, bool _checkIntersects 
 		xShift + document->getFrameSet(frameSet - 1)->getFrame(frame - 1)->width() - indent - _right && _broken)
 	      break;
 	  }
-	else
+	else if (c == 0 && text[textPos].attrib->getClassId() == ID_KWCharImage)
 	  {
 	    if (((KWCharImage*)text[textPos].attrib)->getImage()->width() + ptPos >= 
 		xShift + document->getFrameSet(frameSet - 1)->getFrame(frame - 1)->width() - indent - _right && _broken)
@@ -890,10 +953,41 @@ bool KWFormatContext::makeLineLayout( QPainter &_painter, bool _checkIntersects 
 	// Do we have some format definition here ?
 	if ( c == 0 )
 	{
-	  ptPos += ((KWCharImage*)text[textPos].attrib)->getImage()->width();
-	  tmpPTWidth += ((KWCharImage*)text[textPos].attrib)->getImage()->width();
-	  specialHeight = max(specialHeight,(unsigned int)((KWCharImage*)text[textPos].attrib)->getImage()->height());
-	  textPos++;
+	  switch (text[textPos].attrib->getClassId())
+	    {
+	    case ID_KWCharImage:
+	      {
+		ptPos += ((KWCharImage*)text[textPos].attrib)->getImage()->width();
+		tmpPTWidth += ((KWCharImage*)text[textPos].attrib)->getImage()->width();
+		specialHeight = max(specialHeight,(unsigned int)((KWCharImage*)text[textPos].attrib)->getImage()->height());
+		textPos++;
+	      } break;
+	    case ID_KWCharTab:
+	      {
+		unsigned int tabPos = 0;
+		KoTabulators tabType;
+		if (parag->getParagLayout()->getNextTab(ptPos,document->getFrameSet(frameSet - 1)->getFrame(frame - 1)->left(),
+							document->getFrameSet(frameSet - 1)->getFrame(frame - 1)->right(),tabPos,tabType))
+		  {
+		    // next tab is in this line
+		    if (tabPos > ptPos)
+		      {
+			switch (tabType)
+			  {
+			  case T_LEFT:
+			    ptPos = tabPos;
+			    break;
+			  default: break;
+			  }
+		      }
+		    // next tab is in the next line
+		    else
+		      {
+		      }
+		  }
+		textPos++;
+	      } break;
+	    }
 	}
 	else // A usual character ...
 	{ 

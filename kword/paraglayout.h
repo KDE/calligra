@@ -161,6 +161,8 @@ public:
     QList<KoTabulator> *getTabList() { return &tabList; }
     void setTabList(QList<KoTabulator> *tabList);
 
+    bool getNextTab(unsigned int _ptPos,unsigned int _lBorder,unsigned int _rBorder,unsigned int &_tabPos,KoTabulators &_tabType);
+
 protected:
     Flow flow;
     unsigned int mmParagFootOffset;

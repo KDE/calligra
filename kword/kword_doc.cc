@@ -1034,12 +1034,21 @@ bool KWordDocument::printLine( KWFormatContext &_fc, QPainter &_painter, int xOf
 			     _fc.getParag()->getParagLayout()->getPTLineSpacing() - yOffset + plus, buffer );
 	  i = 0;
 
-	  _painter.drawImage(KPoint(tmpPTPos - xOffset, _fc.getPTY() - yOffset + 
-				    ((_fc.getLineHeight() - _fc.getParag()->getParagLayout()->getPTLineSpacing()) 
-				     - ((KWCharImage*)text[ _fc.getTextPos() ].attrib)->getImage()->height())),
-			     *((KWCharImage*)text[ _fc.getTextPos() ].attrib)->getImage());
-	  _fc.cursorGotoNextChar( _painter );
-	  // Torben: TODO: Handle special objects like images here
+	  switch (text[_fc.getTextPos()].attrib->getClassId())
+	    {
+	    case ID_KWCharImage:
+	      {
+		_painter.drawImage(KPoint(tmpPTPos - xOffset, _fc.getPTY() - yOffset + 
+					  ((_fc.getLineHeight() - _fc.getParag()->getParagLayout()->getPTLineSpacing()) 
+					   - ((KWCharImage*)text[ _fc.getTextPos() ].attrib)->getImage()->height())),
+				   *((KWCharImage*)text[ _fc.getTextPos() ].attrib)->getImage());
+		_fc.cursorGotoNextChar( _painter );
+	      } break;
+	    case ID_KWCharTab:
+	      {
+		_fc.cursorGotoNextChar( _painter );
+	      } break;
+	    }
 	}
       else
 	{

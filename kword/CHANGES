@@ -462,3 +462,8 @@ Reggie, 5.12.1998:
 - Improved Style Templates
 - Improved applying/updating Style Templates
 - Fixed frame calculations
+
+Reggie, 6.12.1998:
+------------------
+- More work on tabulators (left aligned tabs work already somehow)
+- Fixed a bug with loading/saving docs (now it doesn't crash anymore when loading special objs like pictures)

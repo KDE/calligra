@@ -13,38 +13,217 @@
     </FORMATS>
     <LAYOUT>
      <NAME value="Standard"/>
+     <FOLLOWING name="Standard"/>
      <FLOW value="0"/>
      <OFFSETS head="0" foot="0"/>
      <INDENTS first="0" left="0"/>
-     <COUNTER type="0" depth="0" bullet="45" start="0" numberingtype="0" lefttext="" righttext=""/>
+     <COUNTER type="0" depth="0" bullet="45" start="0" numberingtype="0" lefttext="" righttext="" bulletfont="symbol"/>
      <LINESPACING value="0"/>
      <LEFTBORDER red="255" green="255" blue="255" style="0" width="0"/>
      <RIGHTBORDER red="255" green="255" blue="255" style="0" width="0"/>
      <TOPBORDER red="255" green="255" blue="255" style="0" width="0"/>
      <BOTTOMBORDER red="255" green="255" blue="255" style="0" width="0"/>
+     <FORMAT>
+      <COLOR red="0" green="0" blue="0"/>
+      <FONT name="times"/>
+      <SIZE value="12"/>
+      <WEIGHT value="50"/>
+      <ITALIC value="0"/>
+      <UNDERLINE value="0"/>
+      <VERTALIGN value="0"/>
+     </FORMAT> 
+     <TABULATOR mmpos="46" ptpos="133" type="0"/>
     </LAYOUT>
    </PARAGRAPH>
   </FRAMESET>
   <FRAMESET frameType="1" autoCreateNewFrame="1">
-   <FRAME left="300" top="42" right="565" bottom="797" runaround="0" runaroundGap="1"/>
    <FRAME left="28" top="423" right="293" bottom="797" runaround="0" runaroundGap="1"/>
+   <FRAME left="300" top="42" right="565" bottom="797" runaround="0" runaroundGap="1"/>
    <PARAGRAPH>
     <TEXT value=""/>
     <FORMATS>
     </FORMATS>
     <LAYOUT>
      <NAME value="Standard"/>
+     <FOLLOWING name="Standard"/>
      <FLOW value="0"/>
      <OFFSETS head="0" foot="0"/>
      <INDENTS first="0" left="0"/>
-     <COUNTER type="0" depth="0" bullet="45" start="0" numberingtype="0" lefttext="" righttext=""/>
+     <COUNTER type="0" depth="0" bullet="45" start="0" numberingtype="0" lefttext="" righttext="" bulletfont="symbol"/>
      <LINESPACING value="0"/>
      <LEFTBORDER red="255" green="255" blue="255" style="0" width="0"/>
      <RIGHTBORDER red="255" green="255" blue="255" style="0" width="0"/>
      <TOPBORDER red="255" green="255" blue="255" style="0" width="0"/>
      <BOTTOMBORDER red="255" green="255" blue="255" style="0" width="0"/>
+     <FORMAT>
+      <COLOR red="0" green="0" blue="0"/>
+      <FONT name="times"/>
+      <SIZE value="12"/>
+      <WEIGHT value="50"/>
+      <ITALIC value="0"/>
+      <UNDERLINE value="0"/>
+      <VERTALIGN value="0"/>
+     </FORMAT> 
+     <TABULATOR mmpos="46" ptpos="133" type="0"/>
     </LAYOUT>
    </PARAGRAPH>
   </FRAMESET>
  </FRAMESETS>
+ <STYLES>
+  <STYLE>
+   <NAME value="Standard"/>
+   <FOLLOWING name="Standard"/>
+   <FLOW value="0"/>
+   <OFFSETS head="0" foot="0"/>
+   <INDENTS first="0" left="0"/>
+   <COUNTER type="0" depth="0" bullet="-73" start="0" numberingtype="0" lefttext="" righttext="" bulletfont="symbol"/>
+   <LINESPACING value="0"/>
+   <LEFTBORDER red="255" green="255" blue="255" style="0" width="0"/>
+   <RIGHTBORDER red="255" green="255" blue="255" style="0" width="0"/>
+   <TOPBORDER red="255" green="255" blue="255" style="0" width="0"/>
+   <BOTTOMBORDER red="255" green="255" blue="255" style="0" width="0"/>
+   <FORMAT>
+    <COLOR red="0" green="0" blue="0"/>
+    <FONT name="times"/>
+    <SIZE value="12"/>
+    <WEIGHT value="50"/>
+    <ITALIC value="0"/>
+    <UNDERLINE value="0"/>
+    <VERTALIGN value="0"/>
+   </FORMAT> 
+   <TABULATOR mmpos="46" ptpos="133" type="0"/>
+  </STYLE>
+  <STYLE>
+   <NAME value="Head 1"/>
+   <FOLLOWING name="Standard"/>
+   <FLOW value="0"/>
+   <OFFSETS head="0" foot="0"/>
+   <INDENTS first="0" left="0"/>
+   <COUNTER type="1" depth="0" bullet="-73" start="1" numberingtype="1" lefttext="" righttext="." bulletfont="symbol"/>
+   <LINESPACING value="0"/>
+   <LEFTBORDER red="255" green="255" blue="255" style="0" width="0"/>
+   <RIGHTBORDER red="255" green="255" blue="255" style="0" width="0"/>
+   <TOPBORDER red="255" green="255" blue="255" style="0" width="0"/>
+   <BOTTOMBORDER red="255" green="255" blue="255" style="0" width="0"/>
+   <FORMAT>
+    <COLOR red="0" green="0" blue="0"/>
+    <FONT name="helvetica"/>
+    <SIZE value="24"/>
+    <WEIGHT value="75"/>
+    <ITALIC value="0"/>
+    <UNDERLINE value="0"/>
+    <VERTALIGN value="0"/>
+   </FORMAT> 
+  </STYLE>
+  <STYLE>
+   <NAME value="Head 2"/>
+   <FOLLOWING name="Standard"/>
+   <FLOW value="0"/>
+   <OFFSETS head="0" foot="0"/>
+   <INDENTS first="0" left="0"/>
+   <COUNTER type="1" depth="1" bullet="-73" start="1" numberingtype="1" lefttext="" righttext="." bulletfont="symbol"/>
+   <LINESPACING value="0"/>
+   <LEFTBORDER red="255" green="255" blue="255" style="0" width="0"/>
+   <RIGHTBORDER red="255" green="255" blue="255" style="0" width="0"/>
+   <TOPBORDER red="255" green="255" blue="255" style="0" width="0"/>
+   <BOTTOMBORDER red="255" green="255" blue="255" style="0" width="0"/>
+   <FORMAT>
+    <COLOR red="0" green="0" blue="0"/>
+    <FONT name="helvetica"/>
+    <SIZE value="16"/>
+    <WEIGHT value="75"/>
+    <ITALIC value="0"/>
+    <UNDERLINE value="0"/>
+    <VERTALIGN value="0"/>
+   </FORMAT> 
+  </STYLE>
+  <STYLE>
+   <NAME value="Head 3"/>
+   <FOLLOWING name="Standard"/>
+   <FLOW value="0"/>
+   <OFFSETS head="0" foot="0"/>
+   <INDENTS first="0" left="0"/>
+   <COUNTER type="1" depth="2" bullet="-73" start="1" numberingtype="1" lefttext="" righttext="." bulletfont="symbol"/>
+   <LINESPACING value="0"/>
+   <LEFTBORDER red="255" green="255" blue="255" style="0" width="0"/>
+   <RIGHTBORDER red="255" green="255" blue="255" style="0" width="0"/>
+   <TOPBORDER red="255" green="255" blue="255" style="0" width="0"/>
+   <BOTTOMBORDER red="255" green="255" blue="255" style="0" width="0"/>
+   <FORMAT>
+    <COLOR red="0" green="0" blue="0"/>
+    <FONT name="helvetica"/>
+    <SIZE value="12"/>
+    <WEIGHT value="75"/>
+    <ITALIC value="0"/>
+    <UNDERLINE value="0"/>
+    <VERTALIGN value="0"/>
+   </FORMAT> 
+  </STYLE>
+  <STYLE>
+   <NAME value="Enumerated List"/>
+   <FOLLOWING name="Enumerated List"/>
+   <FLOW value="0"/>
+   <OFFSETS head="0" foot="0"/>
+   <INDENTS first="0" left="0"/>
+   <COUNTER type="1" depth="0" bullet="-73" start="1" numberingtype="0" lefttext="" righttext="." bulletfont="symbol"/>
+   <LINESPACING value="0"/>
+   <LEFTBORDER red="255" green="255" blue="255" style="0" width="0"/>
+   <RIGHTBORDER red="255" green="255" blue="255" style="0" width="0"/>
+   <TOPBORDER red="255" green="255" blue="255" style="0" width="0"/>
+   <BOTTOMBORDER red="255" green="255" blue="255" style="0" width="0"/>
+   <FORMAT>
+    <COLOR red="0" green="0" blue="0"/>
+    <FONT name="times"/>
+    <SIZE value="12"/>
+    <WEIGHT value="50"/>
+    <ITALIC value="0"/>
+    <UNDERLINE value="0"/>
+    <VERTALIGN value="0"/>
+   </FORMAT> 
+  </STYLE>
+  <STYLE>
+   <NAME value="Alphabetical List"/>
+   <FOLLOWING name="Alphabetical List"/>
+   <FLOW value="0"/>
+   <OFFSETS head="0" foot="0"/>
+   <INDENTS first="0" left="0"/>
+   <COUNTER type="2" depth="0" bullet="-73" start="a" numberingtype="0" lefttext="" righttext=")" bulletfont="symbol"/>
+   <LINESPACING value="0"/>
+   <LEFTBORDER red="255" green="255" blue="255" style="0" width="0"/>
+   <RIGHTBORDER red="255" green="255" blue="255" style="0" width="0"/>
+   <TOPBORDER red="255" green="255" blue="255" style="0" width="0"/>
+   <BOTTOMBORDER red="255" green="255" blue="255" style="0" width="0"/>
+   <FORMAT>
+    <COLOR red="0" green="0" blue="0"/>
+    <FONT name="times"/>
+    <SIZE value="12"/>
+    <WEIGHT value="50"/>
+    <ITALIC value="0"/>
+    <UNDERLINE value="0"/>
+    <VERTALIGN value="0"/>
+   </FORMAT> 
+  </STYLE>
+  <STYLE>
+   <NAME value="Bullet List"/>
+   <FOLLOWING name="Bullet List"/>
+   <FLOW value="0"/>
+   <OFFSETS head="0" foot="0"/>
+   <INDENTS first="0" left="0"/>
+   <COUNTER type="6" depth="0" bullet="-73" start="1" numberingtype="0" lefttext="" righttext="" bulletfont="symbol"/>
+   <LINESPACING value="0"/>
+   <LEFTBORDER red="255" green="255" blue="255" style="0" width="0"/>
+   <RIGHTBORDER red="255" green="255" blue="255" style="0" width="0"/>
+   <TOPBORDER red="255" green="255" blue="255" style="0" width="0"/>
+   <BOTTOMBORDER red="255" green="255" blue="255" style="0" width="0"/>
+   <FORMAT>
+    <COLOR red="0" green="0" blue="0"/>
+    <FONT name="times"/>
+    <SIZE value="12"/>
+    <WEIGHT value="50"/>
+    <ITALIC value="0"/>
+    <UNDERLINE value="0"/>
+    <VERTALIGN value="0"/>
+   </FORMAT> 
+  </STYLE>
+ </STYLES>
 </DOC>

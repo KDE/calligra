@@ -158,6 +158,12 @@ void KWParag::insertPictureAsChar(unsigned int _pos,QString _filename)
   text.insert(_pos,i);
 }
 
+void KWParag::insertTab(unsigned int _pos)
+{
+  KWCharTab *_tab = new KWCharTab();
+  text.insert(_pos,_tab);
+}
+
 void KWParag::appendText(KWChar *_text,unsigned int _len)
 {
   text.append(_text,_len);
@@ -208,7 +214,10 @@ void KWParag::load(KOMLParser& parser,vector<KOMLAttrib>& lst)
 	  for(;it != lst.end();it++)
 	    {
 	      if ((*it).m_strName == "value")
-		text.insert(text.size(),(*it).m_strValue.c_str());
+		{
+		  if (text.size() == 1 && (*it).m_strValue.length() > 0) text.remove(0);
+		  text.insert(text.size(),(*it).m_strValue.c_str());
+		}
 	    }
 	}
 
@@ -383,7 +392,6 @@ void KWParag::applyStyle(QString _style)
 void KWParag::tabListChanged(QList<KoTabulator>* _tabList)
 {
   paragLayout->setTabList(_tabList);
-  debug("tabs changed: %d",paragLayout->getTabList()->count());
 }
 
 

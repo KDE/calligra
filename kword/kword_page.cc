@@ -528,6 +528,7 @@ void KWPage::mousePressEvent(QMouseEvent *e)
 					fc->getParag()->getParagLayout()->getBottomBorder());
 		      gui->getHorzRuler()->setLeftIndent(fc->getParag()->getParagLayout()->getMMLeftIndent());
 		      gui->getHorzRuler()->setFirstIndent(fc->getParag()->getParagLayout()->getMMFirstLineLeftIndent());
+		      gui->getHorzRuler()->setFrameStart(doc->getFrameSet(fc->getFrameSet() - 1)->getFrame(fc->getFrame() - 1)->x());
 		      gui->getHorzRuler()->setTabList(fc->getParag()->getParagLayout()->getTabList());
 		    }
 		}
@@ -643,6 +644,7 @@ void KWPage::mouseReleaseEvent(QMouseEvent *e)
 					fc->getParag()->getParagLayout()->getBottomBorder());
 	gui->getHorzRuler()->setLeftIndent(fc->getParag()->getParagLayout()->getMMLeftIndent());
 	gui->getHorzRuler()->setFirstIndent(fc->getParag()->getParagLayout()->getMMFirstLineLeftIndent());
+	gui->getHorzRuler()->setFrameStart(doc->getFrameSet(fc->getFrameSet() - 1)->getFrame(fc->getFrame() - 1)->x());
 	gui->getHorzRuler()->setTabList(fc->getParag()->getParagLayout()->getTabList());
 	format = *((KWFormat*)fc);
       } break;
@@ -764,6 +766,7 @@ void KWPage::mouseDoubleClickEvent(QMouseEvent *e)
 	{	  
 	  gui->getHorzRuler()->setLeftIndent(fc->getParag()->getParagLayout()->getMMLeftIndent());
 	  gui->getHorzRuler()->setFirstIndent(fc->getParag()->getParagLayout()->getMMFirstLineLeftIndent());
+	  gui->getHorzRuler()->setFrameStart(doc->getFrameSet(fc->getFrameSet() - 1)->getFrame(fc->getFrame() - 1)->x());
 	  gui->getHorzRuler()->setTabList(fc->getParag()->getParagLayout()->getTabList());
 	}
     }
@@ -1381,6 +1384,7 @@ void KWPage::keyPressEvent(QKeyEvent *e)
 					    fc->getParag()->getParagLayout()->getRightBorder(),
 					    fc->getParag()->getParagLayout()->getTopBorder(),
 					    fc->getParag()->getParagLayout()->getBottomBorder());
+	    gui->getHorzRuler()->setFrameStart(doc->getFrameSet(fc->getFrameSet() - 1)->getFrame(fc->getFrame() - 1)->x());
 	    gui->getHorzRuler()->setTabList(fc->getParag()->getParagLayout()->getTabList());
 	  }
 	if (doc->getProcessingType() == KWordDocument::DTP && oldFrame != fc->getFrame())
@@ -1530,6 +1534,7 @@ void KWPage::keyPressEvent(QKeyEvent *e)
 		gui->getView()->updateStyle(fc->getParag()->getParagLayout()->getName());
 		gui->getHorzRuler()->setLeftIndent(fc->getParag()->getParagLayout()->getMMLeftIndent());
 		gui->getHorzRuler()->setFirstIndent(fc->getParag()->getParagLayout()->getMMFirstLineLeftIndent());
+		gui->getHorzRuler()->setFrameStart(doc->getFrameSet(fc->getFrameSet() - 1)->getFrame(fc->getFrame() - 1)->x());
 		gui->getHorzRuler()->setTabList(fc->getParag()->getParagLayout()->getTabList());
 		gui->getView()->setFormat(*((KWFormat*)fc));
 		gui->getView()->setFlow(fc->getParag()->getParagLayout()->getFlow());
@@ -1672,8 +1677,72 @@ void KWPage::keyPressEvent(QKeyEvent *e)
 	  }
       } break;
     case Key_Shift: case Key_Control: case Key_Alt: case Key_Meta:
-      // these keys do nothing at the moment
       break;
+    case Key_Tab:
+      {
+	if (has_to_copy) copyBuffer(); 
+	    
+	draw_buffer = false;
+	unsigned int tmpTextPos = fc->getTextPos();
+	fc->getParag()->insertTab(fc->getTextPos());
+	fc->makeLineLayout(painter);
+	KWFormatContext paintfc(doc,fc->getFrameSet());
+
+	paintfc = *fc;
+	bool bend = false;
+	    
+	unsigned int currFrameNum = paintfc.getFrame() - 1;
+	unsigned int ptYEnd = fc->getParag()->getPTYEnd();
+	
+	while (!bend)
+	  {
+	    if (paintfc.getParag() != fc->getParag() && paintfc.getParag() != fc->getParag()->getPrev() && 
+		fc->getParag()->getPTYEnd() == ptYEnd) break;
+	    if (frameSet->getFrame(currFrameNum)->isMostRight() && frameSet->getNumFrames() > currFrameNum + 1 &&
+		frameSet->getFrame(paintfc.getFrame())->top() - static_cast<int>(yOffset) >
+		static_cast<int>(lastVisiblePage) * static_cast<int>(ptPaperHeight()) &&
+		static_cast<int>(paintfc.getPTY() - yOffset) > height())
+	      break;
+	    if (frameSet->getFrame(paintfc.getFrame() - 1)->top() - static_cast<int>(yOffset) >
+		static_cast<int>(lastVisiblePage) * static_cast<int>(ptPaperHeight())) 
+	      break;
+	    unsigned int _x = frameSet->getFrame(paintfc.getFrame() - 1)->x() - xOffset;
+	    unsigned int _wid = frameSet->getFrame(paintfc.getFrame() - 1)->width();
+	    painter.fillRect(_x + frameSet->getFrame(paintfc.getFrame() - 1)->getLeftIndent(paintfc.getPTY(),paintfc.getLineHeight()),
+			     paintfc.getPTY() - yOffset,
+			     _wid - frameSet->getFrame(paintfc.getFrame() - 1)->getLeftIndent(paintfc.getPTY(),paintfc.getLineHeight()) -
+			     frameSet->getFrame(paintfc.getFrame() - 1)->getRightIndent(paintfc.getPTY(),paintfc.getLineHeight()),
+			     paintfc.getLineHeight(),QBrush(white));
+	    if (doc->printLine(paintfc,painter,xOffset,yOffset,width(),height()))
+	      {
+		drawBuffer(KRect(_x + frameSet->getFrame(paintfc.getFrame() - 1)->getLeftIndent(paintfc.getPTY(),paintfc.getLineHeight()),
+				 paintfc.getPTY() - yOffset,
+				 _wid - frameSet->getFrame(paintfc.getFrame() - 1)->getLeftIndent(paintfc.getPTY(),
+												  paintfc.getLineHeight()) -
+				 frameSet->getFrame(paintfc.getFrame() - 1)->getRightIndent(paintfc.getPTY(),paintfc.getLineHeight()),
+				 paintfc.getLineHeight()));
+	      }
+	    bend = !paintfc.makeNextLineLayout(painter);
+	    
+	    if (paintfc.getFrame() - 1 != currFrameNum)
+	      currFrameNum = paintfc.getFrame() - 1;
+	    
+	    if (paintfc.getPage() > lastVisiblePage)
+	      bend = true;
+	  }
+	      
+	fc->makeLineLayout(painter);
+	
+	if (tmpTextPos + 1 <= fc->getLineEndPos())
+	  fc->cursorGotoPos(tmpTextPos + 1,painter);
+	else 
+	  {
+	    fc->cursorGotoNextLine(painter);
+	    fc->cursorGotoPos(tmpTextPos + 1,painter);
+	  }
+	
+	doc->updateAllViews(gui->getView());
+      } break;
     default:
       {
 	if (e->ascii() && e->ascii() > 31)
@@ -1791,6 +1860,7 @@ void KWPage::keyPressEvent(QKeyEvent *e)
 				      fc->getParag()->getParagLayout()->getRightBorder(),
 				      fc->getParag()->getParagLayout()->getTopBorder(),
 				      fc->getParag()->getParagLayout()->getBottomBorder());
+      gui->getHorzRuler()->setFrameStart(doc->getFrameSet(fc->getFrameSet() - 1)->getFrame(fc->getFrame() - 1)->x());
       gui->getHorzRuler()->setTabList(fc->getParag()->getParagLayout()->getTabList());
     }
   if (doc->getProcessingType() == KWordDocument::DTP && oldFrame != fc->getFrame())
@@ -2135,6 +2205,7 @@ void KWPage::setRuler2Frame(unsigned int _frameset,unsigned int _frame)
   _layout.ptBottom = _layout.ptHeight - frame->bottom() + page * ptPaperHeight();
   gui->getHorzRuler()->setPageLayout(_layout);
   gui->getVertRuler()->setPageLayout(_layout);
+  gui->getHorzRuler()->setFrameStart(doc->getFrameSet(fc->getFrameSet() - 1)->getFrame(fc->getFrame() - 1)->x());
 }
 
 /*================================================================*/
@@ -2175,7 +2246,7 @@ void KWPage::setMouseMode(MouseMode _mm)
 /*================================================================*/
 void KWPage::setupMenus()
 {
-  QString pixdir;;
+  QString pixdir;
   QPixmap pixmap;
 
   mm_menu = new QPopupMenu();

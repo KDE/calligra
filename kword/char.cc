@@ -123,6 +123,21 @@ void KWString::insert(unsigned int _pos,KWCharImage *_image)
   _data_[ _pos ].attrib = _image;
 }
 
+void KWString::insert(unsigned int _pos,KWCharTab *_tab)
+{
+  assert(_pos <= _len_);
+
+  unsigned int l = _len_;
+  
+  resize(_len_ + 1);
+  
+  if (_pos < l)
+    memmove(_data_ + _pos + 1,_data_ + _pos,sizeof(KWChar) * (l - _pos));
+  
+  _data_[ _pos ].c = 0;
+  _data_[ _pos ].attrib = _tab;
+}
+
 bool KWString::remove( unsigned int _pos,unsigned int _len = 1 )
 {
   if (_pos + _len <= _len_ && (int)_pos >= 0)
@@ -189,6 +204,11 @@ void KWString::saveFormat(ostream &out)
 		_data_[i].attrib->save(out);
 		out << etag << "</FORMAT>" << endl;
 	      } break;
+	    case ID_KWCharTab:
+	      {
+		out << otag << "<FORMAT id=\"" << _data_[i].attrib->getClassId() << "\" pos=\"" << i << "\">" << endl;
+		out << etag << "</FORMAT>" << endl;
+	      } break;
 	    default: break;
 	    }
 	  start = i + 1;
@@ -221,10 +241,6 @@ void KWString::loadFormat(KOMLParser& parser,vector<KOMLAttrib>& lst,KWordDocume
   string tag;
   string name;
 
-  unsigned int addToPos = 0;
-  if (!_frameset->getFirstParag()->getNext() && _doc->getNumFrameSets() == 0)
-    addToPos = 1;
-
   while (parser.open(0L,tag))
     {
       KOMLParser::parseTag(tag.c_str(),name,lst);
@@ -238,6 +254,7 @@ void KWString::loadFormat(KOMLParser& parser,vector<KOMLAttrib>& lst,KWordDocume
 	  KWImage *_image = 0L,*image = 0L;
 	  KWCharImage *_kwimage = 0L;
 	  KWCharFormat *_kwformat = 0L;
+	  KWCharTab *_kwtab = 0L;
 	  KOMLParser::parseTag(tag.c_str(),name,lst);
 	  vector<KOMLAttrib>::const_iterator it = lst.begin();
 	  bool _load = false;
@@ -249,7 +266,7 @@ void KWString::loadFormat(KOMLParser& parser,vector<KOMLAttrib>& lst,KWordDocume
 		  _load = true;
 		}
 	      else if ((*it).m_strName == "pos")
-		__pos = atoi((*it).m_strValue.c_str()) + addToPos;
+		__pos = atoi((*it).m_strValue.c_str());
 	      else if ((*it).m_strName == "len")
 		__len = atoi((*it).m_strValue.c_str());
 	    }
@@ -283,6 +300,13 @@ void KWString::loadFormat(KOMLParser& parser,vector<KOMLAttrib>& lst,KWordDocume
 		    _data_[__pos].attrib = _kwimage;
 		    delete _image;
 		    _image = 0;
+		  } break;
+		case ID_KWCharTab:
+		  {
+		    _kwtab = new KWCharTab();
+		    freeChar(_data_[__pos]);
+		    _data_[__pos].c = 0;
+		    _data_[__pos].attrib = _kwtab;
 		  } break;
 		default: break;
 		}
@@ -359,6 +383,11 @@ KWChar* KWString::copy(KWChar *_data,unsigned int _len)
 		KWCharImage *f = new KWCharImage(attrib->getImage());
 		__data[i].attrib = f;
 	      } break;
+	    case ID_KWCharTab:
+	      {
+		KWCharTab *f = new KWCharTab();
+		__data[i].attrib = f;
+	      } break;
 	    }
 	}
       else __data[i].attrib = 0L;
@@ -374,6 +403,7 @@ void freeChar( KWChar& _char )
       {
       case ID_KWCharFormat:
       case ID_KWCharImage:
+      case ID_KWCharTab:
 	delete _char.attrib;
 	break;
       default:
@@ -385,8 +415,15 @@ void freeChar( KWChar& _char )
 
 ostream& operator<<(ostream &out,KWString &_string)
 {
+  char c = 1;
+
   for (unsigned int i = 0;i < _string.size();i++)
-    out << _string.data()[i].c;
+    {
+      if (_string.data()[i].c != 0)
+	out << _string.data()[i].c;
+      else
+	out << c;
+    }
 
   return out;
 }
