@@ -2269,16 +2269,23 @@ bool KWordDocument::printLine( KWFormatContext &_fc, QPainter &_painter, int xOf
                 _fc.apply( *f->getFormat() );
                 // Change the painter
                 if ( _fc.getVertAlign() == KWFormat::VA_NORMAL ) {
-                    _painter.setFont( *_fc.loadFont( this ) );
+                    QFont _font = *_fc.loadFont( this );
+                    if ( zoom != 100 )
+                        _font.setPointSize( zoomIt( _font.pointSize() ) );
+                    _painter.setFont( _font );
                     plus = 0;
                 } else if ( _fc.getVertAlign() == KWFormat::VA_SUB ) {
                     QFont _font = *_fc.loadFont( this );
                     _font.setPointSize( ( 2 * _font.pointSize() ) / 3 );
+                    if ( zoom != 100 )
+                        _font.setPointSize( zoomIt( _font.pointSize() ) );
                     _painter.setFont( _font );
                     plus = _font.pointSize() / 2;
                 } else if ( _fc.getVertAlign() == KWFormat::VA_SUPER ) {
                     QFont _font = *_fc.loadFont( this );
                     _font.setPointSize( ( 2 * _font.pointSize() ) / 3 );
+                    if ( zoom != 100 )
+                        _font.setPointSize( zoomIt( _font.pointSize() ) );
                     _painter.setFont( _font );
                     plus = - _fc.getPTAscender() + _font.pointSize() / 2;
                 }
@@ -2380,11 +2387,15 @@ bool KWordDocument::printLine( KWFormatContext &_fc, QPainter &_painter, int xOf
                 } else if ( _fc.getVertAlign() == KWFormat::VA_SUB ) {
                     QFont _font = *_fc.loadFont( this );
                     _font.setPointSize( ( 2 * _font.pointSize() ) / 3 );
+                    if ( zoom != 100 )
+                        _font.setPointSize( zoomIt( _font.pointSize() ) );
                     _painter.setFont( _font );
                     plus = _font.pointSize() / 2;
                 } else if ( _fc.getVertAlign() == KWFormat::VA_SUPER ) {
                     QFont _font = *_fc.loadFont( this );
                     _font.setPointSize( ( 2 * _font.pointSize() ) / 3 );
+                    if ( zoom != 100 )
+                        _font.setPointSize( zoomIt( _font.pointSize() ) );
                     _painter.setFont( _font );
                     plus = - _fc.getPTAscender() + _font.pointSize() / 2;
                 }
