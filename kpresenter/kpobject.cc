@@ -27,6 +27,8 @@
 #include <qregion.h>
 #include <qdom.h>
 
+#include <kapplication.h>
+
 #include <stdlib.h>
 #include <fstream.h>
 #include <math.h>
@@ -531,43 +533,39 @@ void KPObject::getShadowCoords( double& _x, double& _y ,KoZoomHandler *_zoomHand
 /*======================== paint selection =======================*/
 void KPObject::paintSelection( QPainter *_painter, KoZoomHandler *_zoomHandler, SelectionMode mode )
 {
-    if ( !selected )
+    if ( !selected || mode == SM_NONE )
 	return;
 
     _painter->save();
     _painter->translate( _zoomHandler->zoomItX(orig.x()), _zoomHandler->zoomItY(orig.y()) );
-    Qt::RasterOp rop = _painter->rasterOp();
-
-    _painter->setRasterOp( Qt::NotROP );
-
-    _painter->setPen( QPen( Qt::black, 1, Qt::SolidLine ) );
-    _painter->setBrush( Qt::black );
+    _painter->setPen( QPen::NoPen );
+    _painter->setBrush( kapp->palette().color( QPalette::Active, QColorGroup::Highlight ) );
 
     KoRect r = rotateRectObject(_zoomHandler );
     int x = _zoomHandler->zoomItX( r.left() - orig.x() );
     int y = _zoomHandler->zoomItY( r.top() - orig.y() );
+    int zX6 = _zoomHandler->zoomItX( 6 );
+    int zY6 = _zoomHandler->zoomItY( 6 );
+    int w = _zoomHandler->zoomItX(r.width() - 6);
+    int h = _zoomHandler->zoomItY(r.height() - 6);
 
-    _painter->fillRect( x, y,  _zoomHandler->zoomItX(6),
-			_zoomHandler->zoomItY(6), Qt::black );
-    _painter->fillRect( x, y + _zoomHandler->zoomItY( r.height() / 2 - 3),
-			_zoomHandler->zoomItX(6), _zoomHandler->zoomItY(6), Qt::black );
-    _painter->fillRect( x, y + _zoomHandler->zoomItY(r.height() - 6),
-			_zoomHandler->zoomItX(6), _zoomHandler->zoomItY(6), Qt::black );
-    _painter->fillRect( x + _zoomHandler->zoomItX(r.width() - 6), y,
-			_zoomHandler->zoomItX(6), _zoomHandler->zoomItY(6), Qt::black );
-    _painter->fillRect( x + _zoomHandler->zoomItX(r.width() - 6),
-			y + _zoomHandler->zoomItY(r.height() / 2 - 3),
-			_zoomHandler->zoomItX(6), _zoomHandler->zoomItY(6), Qt::black );
-    _painter->fillRect( x + _zoomHandler->zoomItX(r.width() - 6),
-			y + _zoomHandler->zoomItY(r.height() - 6),
-			_zoomHandler->zoomItX(6), _zoomHandler->zoomItY(6), Qt::black );
-    _painter->fillRect( x + _zoomHandler->zoomItX(r.width() / 2 - 3),
-			y,_zoomHandler->zoomItX(6), _zoomHandler->zoomItY(6), Qt::black );
-    _painter->fillRect( x + _zoomHandler->zoomItX(r.width() / 2 - 3),
-			y + _zoomHandler->zoomItY(r.height() - 6),
-			_zoomHandler->zoomItX(6), _zoomHandler->zoomItY(6), Qt::black );
+    if ( mode == SM_MOVERESIZE ) {
+	_painter->drawRect( x, y,  zX6, zY6 );
+	_painter->drawRect( x, y + h / 2, zX6, zY6 );
+	_painter->drawRect( x, y + h, zX6, zY6 );
+	_painter->drawRect( x + w, y, zX6, zY6 );
+	_painter->drawRect( x + w, y + h / 2, zX6, zY6 );
+	_painter->drawRect( x + w, y + h, zX6, zY6 );
+	_painter->drawRect( x + w / 2, y,zX6, zY6 );
+	_painter->drawRect( x + w / 2, y + h, zX6, zY6 );
+    }
+    else if ( mode == SM_ROTATE ) {
+	_painter->drawEllipse( x, y,  zX6, zY6 );
+	_painter->drawEllipse( x, y + h, zX6, zY6 );
+	_painter->drawEllipse( x + w, y, zX6, zY6 );
+	_painter->drawEllipse( x + w, y + h, zX6, zY6 );
+    }
 
-    _painter->setRasterOp( rop );
     _painter->restore();
 }
 

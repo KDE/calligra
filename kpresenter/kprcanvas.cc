@@ -249,7 +249,15 @@ void KPrCanvas::paintEvent( QPaintEvent* paintEvent )
 
         drawBackground( &bufPainter, crect );
 
-        SelectionMode selectionMode = SM_MOVERESIZE;
+        SelectionMode selectionMode;
+
+	if ( toolEditMode == TEM_MOUSE )
+	    selectionMode = SM_MOVERESIZE;
+	else if ( toolEditMode == TEM_ROTATE )
+	    selectionMode = SM_ROTATE;
+	else
+	    selectionMode = SM_NONE;
+
         if ( !editMode )
             selectionMode = SM_NONE; // case of screen presentation mode
         drawObjects( &bufPainter, crect, true, selectionMode, true );
@@ -4120,6 +4128,7 @@ void KPrCanvas::setToolEditMode( ToolEditMode _m, bool updateView )
 
     if ( updateView )
         m_view->setTool( toolEditMode );
+    repaint();
 }
 
 
