@@ -2079,6 +2079,17 @@ void KWPartFrameSet::endEditing()
 
 }
 
+void KWPartFrameSet::moveFloatingFrame( int frameNum, const KoPoint &position )
+{
+    //kdDebug()<<k_funcinfo<<" frame no="<<frameNum<<" to pos="<<position.x()<<","<<position.y()<<endl;
+    KWFrame * frame = frames.at( frameNum );
+    if ( frame )
+    {
+        KWFrameSet::moveFloatingFrame( frameNum, position );
+        m_child->setGeometry( frame->toQRect(), true /* avoid circular events */ );
+    }
+}
+
 KWFrameSetEdit * KWPartFrameSet::createFrameSetEdit( KWCanvas * canvas )
 {
     return new KWPartFrameSetEdit( this, canvas );

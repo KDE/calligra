@@ -917,6 +917,13 @@ public:
     void startEditing();
     void endEditing();
 
+    /**
+     * Move the frame 'frameNum' to the given position and
+     * move the document child window with it
+     * This is called when the frame is anchored and the anchor moves (see KWAnchor). 
+    */ 
+    virtual void moveFloatingFrame( int frameNum, const KoPoint &position );
+
 #ifndef NDEBUG
     virtual void printDebug();
 #endif
