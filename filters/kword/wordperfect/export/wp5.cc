@@ -166,10 +166,27 @@ bool WPFiveWorker::doFullParagraph(const QString& paraText,
     if( formatData.id == 1 )
     {
 
+      Q_UINT8 attr = 0; //invalid
+       if( formatData.text.weight >= 75 ) attr = 12; // bold
+       if( formatData.text.italic ) attr = 8;
+       if( formatData.text.underline ) attr = 14;
+       if( formatData.text.underlineIsDouble ) attr = 11;
+       if( formatData.text.verticalAlignment == 1 ) attr = 6; //subscript
+       if( formatData.text.verticalAlignment == 2 ) attr = 5; //superscript
+       if( formatData.text.strikeout ) attr = 13;
+
+       // due to the file format, before writing the text we must
+       // write some prefix-code (such as Bold On) and possibly appropriate suffix-code (Bold Off)
+
+       // attribute on
+       if( attr > 0 ) output << (Q_UINT8)0xc3 << attr << (Q_UINT8)0xc3;
+
        // the text itself, "escape" it first
        QCString out = WPFiveEscape( paraText.mid( formatData.pos, formatData.len ) );
        output.writeRawBytes( (const char*)out, out.length() );
 
+       // attribute off
+       if( attr > 0 ) output << (Q_UINT8)0xc4 << attr << (Q_UINT8)0xc4;
     }
   }
 
