@@ -1,0 +1,40 @@
+--- ../_cxx_5.3.0/CXX/Objects.hxx	2004-11-14 21:52:52.000000000 +0100
++++ CXX/Objects.hxx	2004-12-14 17:02:56.000000000 +0100
+@@ -572,6 +572,12 @@
+ 			{
+ 			validate();
+ 			}
++		// create from unsigned long
++		explicit Long (unsigned long v)
++			: Object(PyLong_FromUnsignedLong(v), true)
++			{
++			validate();
++			}
+ 
+ 		// try to create from any object
+ 		Long (const Object& ob)
+@@ -607,6 +613,10 @@
+ 			{
+ 			return PyLong_AsDouble (ptr());
+ 			}
++		operator unsigned long() const
++			{
++			return PyLong_AsUnsignedLong (ptr());
++			}
+ 		// assign from an int
+ 		Long& operator= (int v)
+ 			{
+@@ -619,6 +629,13 @@
+ 			set(PyLong_FromLong (v), true);
+ 			return *this;
+ 			}
++		// assign from unsigned long
++		Long& operator= (unsigned long v)
++			{
++			set(PyLong_FromUnsignedLong (v), true);
++			return *this;
++			}
++
+ 		};
+ 
+ 	// ===============================================
