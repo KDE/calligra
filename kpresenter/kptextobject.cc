@@ -666,6 +666,7 @@ void KPTextObject::loadKTextObject( const QDomElement &elem )
                 else
                     kdDebug(33001) << "Error in e.attribute( attrAlign ).toInt()" << endl;
             }
+            // ######## TODO  paragraph direction (LTR or RTL)
 
             // TODO check/convert values
             bool firstTextTag = true;
