@@ -3391,6 +3391,9 @@ void KSpreadCell::paintCellDiagonalLines( QPainter& painter,
   }
 }
 
+//                        End of Painting
+// ================================================================
+
 
 
 int KSpreadCell::defineAlignX()
