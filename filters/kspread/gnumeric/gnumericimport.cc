@@ -23,7 +23,7 @@
 #include <gnumericimport.h>
 #include <qmessagebox.h>
 #include <kmessagebox.h>
-#include <qdict.h> 
+#include <qdict.h>
 
 // hehe >:->
 #include <kspread_doc.h>
@@ -41,7 +41,7 @@ GNUMERICFilter::GNUMERICFilter(KoFilter *parent, const char*name) :
 void  convert_string_to_qcolor(QString color_string, QColor *color)
 {
   int red, green, blue,first_col_pos,second_col_pos;
-		      
+
   bool number_ok;
 
   first_col_pos = color_string.find(":",0);
@@ -58,7 +58,7 @@ void  convert_string_to_qcolor(QString color_string, QColor *color)
   color->setRgb(red,green,blue);
 }
 /* This sets the documentation information from the information stored in
-   the GNUmeric file. Particularly in the "gmr:Summary" subcategory. 
+   the GNUmeric file. Particularly in the "gmr:Summary" subcategory.
 */
 void set_document_info(KoDocument *document,QDomElement *docElem)
 {
@@ -112,7 +112,7 @@ void set_document_info(KoDocument *document,QDomElement *docElem)
 	  gmr_item = gmr_item.nextSibling();
 	}
 
-	/* Summany Handling STOP */ 
+	/* Summany Handling STOP */
 }
 
 
@@ -136,7 +136,7 @@ void setColInfo(QDomNode *sheet, KSpreadTable *table){
 	  if (e.hasAttribute("Unit"))
 	    {
 
-	      //  xmm = (x_points) * (1 inch / 72 points) * (25.4 mm/ 1 inch) 
+	      //  xmm = (x_points) * (1 inch / 72 points) * (25.4 mm/ 1 inch)
 	      cl->setWidth((e.attribute("Unit").toDouble()*4)/3);
 	      //cl->setWidth(e.attribute("Unit").toInt());
 	    }
@@ -164,9 +164,9 @@ void setRowInfo(QDomNode *sheet, KSpreadTable *table){
 	    }
 	  if (e.hasAttribute("Unit"))
 	    {
-	      //  xmm = (x_points) * (1 inch / 72 points) * (25.4 mm/ 1 inch) 
-	      // 
-	      // This formula is magic.. I don't understand it. 
+	      //  xmm = (x_points) * (1 inch / 72 points) * (25.4 mm/ 1 inch)
+	      //
+	      // This formula is magic.. I don't understand it.
 	      rl->setHeight((e.attribute("Unit").toDouble()*4)/3);
 	      //	      rl->setHeight(e.attribute("Unit").toInt());
 	    }
@@ -207,7 +207,7 @@ void setObjectInfo(QDomNode *sheet, KSpreadTable *table){
 	    {
 	      if (e.attribute("Text")=="1")
 		{
-		  1; 
+		  1;
 		}
 	    }
 
@@ -219,26 +219,24 @@ void setObjectInfo(QDomNode *sheet, KSpreadTable *table){
 void setStyleInfo(QDomNode *sheet, KSpreadTable *table){
   int row,column;
   QDomNode styles =  sheet->namedItem("gmr:Styles");
-	if (!styles.isNull()) 
+	if (!styles.isNull())
 	  {
 	    // Get a style region within that sheet.
 	    QDomNode style_region =  styles.namedItem("gmr:StyleRegion");
-	    
-	    while (!style_region.isNull()){
 
-	      QDomElement e = style_region.toElement(); // try to convert the node to an element.	  
+	    while (!style_region.isNull()){
+	      QDomElement e = style_region.toElement(); // try to convert the node to an element.
 
 	      QDomNode style = style_region.namedItem("gmr:Style");
 	      QDomNode font = style.namedItem("gmr:Font");
 	      QDomNode gmr_styleborder = style.namedItem("gmr:StyleBorder");
-	      
+
 	      for(column = (e.attribute("startCol").toInt()+1); column <=(e.attribute("endCol").toInt()+1); column++)
 		{
 		  for(row = (e.attribute("startRow").toInt()+1); row<= (e.attribute("endRow").toInt()+1); row++)
 		    {
 		      KSpreadCell * kspread_cell = table->cellAt(column, row, true );
-		      
-		      QDomElement style_element = style.toElement(); // try to convert the node to an element.	  
+		      QDomElement style_element = style.toElement(); // try to convert the node to an element.
 
 
 		      if (style_element.hasAttribute("Fore"))
@@ -248,7 +246,7 @@ void setStyleInfo(QDomNode *sheet, KSpreadTable *table){
 			  convert_string_to_qcolor(color_string,&color);
 			  kspread_cell->setTextColor(color);
 			}
-		      
+
 		      if (style_element.hasAttribute("Back"))
 			{
 			  QString color_string=style_element.attribute("Back");
@@ -364,8 +362,8 @@ void setStyleInfo(QDomNode *sheet, KSpreadTable *table){
 			      kspread_cell->setBackGroundBrushStyle(Qt::Dense2Pattern);
 			    }
 			}
-		      
-		      
+
+
 		      if (style_element.hasAttribute("HAlign"))
 			{
 			QString halign_string=style_element.attribute("HAlign");
@@ -385,7 +383,7 @@ void setStyleInfo(QDomNode *sheet, KSpreadTable *table){
 			  }
 			else if (halign_string=="8")
 			  {
-			    kspread_cell->setAlign(KSpreadCell::Center);			    
+			    kspread_cell->setAlign(KSpreadCell::Center);
 			  }
 			else if (halign_string=="16")
 			  {
@@ -403,7 +401,7 @@ void setStyleInfo(QDomNode *sheet, KSpreadTable *table){
 		      if (style_element.hasAttribute("VAlign"))
 			{
 			QString valign_string=style_element.attribute("VAlign");
-			
+
 			if (valign_string=="1")
 			  {
 			    /* General: No equivalent in Kspread. */
@@ -424,11 +422,10 @@ void setStyleInfo(QDomNode *sheet, KSpreadTable *table){
 			  }
 
 			}
-		      
+
 		      if (!gmr_styleborder.isNull())
 			{
-
-			  QDomElement style_element = style.toElement(); // try to convert the node to an element.	  
+			  QDomElement style_element = style.toElement(); // try to convert the node to an element.
 
 			  QDomNode gmr_diagonal = gmr_styleborder.namedItem("gmr:Diagonal");
 			  QDomNode gmr_rev_diagonal = gmr_styleborder.namedItem("gmr:Rev-Diagonal");
@@ -436,7 +433,7 @@ void setStyleInfo(QDomNode *sheet, KSpreadTable *table){
 			  QDomNode gmr_bottom = gmr_styleborder.namedItem("gmr:Bottom");
 			  QDomNode gmr_left = gmr_styleborder.namedItem("gmr:Left");
 			  QDomNode gmr_right = gmr_styleborder.namedItem("gmr:Right");
-			  
+
 
 			  // NoPen - no line at all. For example,
 			  // QPainter::drawRect() fills but does not
@@ -455,7 +452,7 @@ void setStyleInfo(QDomNode *sheet, KSpreadTable *table){
 			      //			      kspread_cell->setLeftBorderStyle(Qt::DashLine);
 			      kspread_cell->setLeftBorderStyle(DotLine);
 			      kspread_cell->setLeftBorderColor( Qt::red );
-			      kspread_cell->setLeftBorderWidth( 1 );	    
+			      kspread_cell->setLeftBorderWidth( 1 );
 			      //			      setLeftBorderWidth( o->leftBorderWidth( _column, _row ) );
 			      //			      setLeftBorderStyle( o->leftBorderStyle( _column, _row ) );
 			      //			      setLeftBorderColor( o->leftBorderColor( _column, _row ) );
@@ -469,7 +466,7 @@ void setStyleInfo(QDomNode *sheet, KSpreadTable *table){
 			  /* gmr:Left */
 			  /* gmr:Right */
 
-			  
+
 			  QDomElement gmr_styleborder_element = gmr_styleborder.toElement();
 			}
 
@@ -489,17 +486,17 @@ void setStyleInfo(QDomNode *sheet, KSpreadTable *table){
 
 			      if (font_element.attribute("StrikeThrough")=="1")
 				{ kspread_cell->setTextFontStrike(TRUE); }
-			      
+
 			      if (font_element.hasAttribute("Unit"))
 				{ kspread_cell->setTextFontSize(font_element.attribute("Unit").toInt()); }
-			      
+
 			    }
 			}
 		    }
 		}
 	      style_region = style_region.nextSibling();
 	    }
-	    
+
 	  }
 }
 
@@ -510,9 +507,9 @@ void setStyleInfo(QDomNode *sheet, KSpreadTable *table){
 	 an hour or so. --PGE
   */
 
-bool GNUMERICFilter::filterImport(const QString &file, 
+bool GNUMERICFilter::filterImport(const QString &file,
 					KoDocument *document,
-					const QString &from, 
+					const QString &from,
 					const QString &to,
 					const QString &config) {
     bool bSuccess=true;
@@ -551,13 +548,13 @@ bool GNUMERICFilter::filterImport(const QString &file,
 
 #define GZIP_SIZE 512
 
-    char temp_data[GZIP_SIZE]; 
+    char temp_data[GZIP_SIZE];
 
 
     gzFile gzfile;
     gzfile = gzopen( QFile::encodeName(file), "rb");
     /* Check for a failure to open... */
-    
+
     if (gzfile==NULL)
       {
         kdWarning(30501) << "Couldn't open the requested file." << endl;
@@ -570,7 +567,7 @@ bool GNUMERICFilter::filterImport(const QString &file,
 
     while((size=gzread(gzfile,&temp_data, GZIP_SIZE))!=0)
       {
-	QCString TempString(temp_data, size+1); 
+	QCString TempString(temp_data, size+1);
 	TotalString=TotalString+TempString;
       }
     gzclose(gzfile);
@@ -581,19 +578,19 @@ bool GNUMERICFilter::filterImport(const QString &file,
     int value=0;
 
     QDomElement docElem = doc.documentElement();
-    QDomNode sheets = docElem.namedItem("gmr:Sheets"); 
+    QDomNode sheets = docElem.namedItem("gmr:Sheets");
     QDomNode sheet =  sheets.namedItem("gmr:Sheet");
 
     /* This sets the Document information. */
     set_document_info(document,&docElem);
 
     KSpreadTable *table;
-    
+
     // This is a mapping of exprID to expressions.
 
     QDict<char> exprID_dict( 17, FALSE );
 
-    while (!sheet.isNull()) 
+    while (!sheet.isNull())
       {
 	table=ksdoc->createTable();
 
@@ -611,7 +608,7 @@ bool GNUMERICFilter::filterImport(const QString &file,
 	/* CELL handling START */
 	QDomNode cells =  sheet.namedItem("gmr:Cells");
 	QDomNode cell = cells.namedItem("gmr:Cell");
-	
+
 	while( !cell.isNull() ) {
 	  value+=2;
 	  emit sigProgress(value);
@@ -625,11 +622,11 @@ bool GNUMERICFilter::filterImport(const QString &file,
 		column= e.attribute("Col").toInt()+1;
 		row =   e.attribute("Row").toInt()+1;
 		QString cell_content;
-		
+
 		cell_content = Content.text();
-		
-		table->setText(row, column, Content.text(), false); 	    
-		
+
+		table->setText(row, column, Content.text(), false);
+
 		if (e.hasAttribute("ExprID"))
 		  {
 		    //		    QString encoded_string(table->cellAt(column,row, true)->encodeFormula(row,column).utf8());
@@ -664,16 +661,15 @@ bool GNUMERICFilter::filterImport(const QString &file,
 		    qDebug("%s",table->cellAt(column,row, true)->decodeFormula(expr,column,row).latin1());
 		    qDebug("%s",expr);
 
-		    table->setText(row, column, table->cellAt(column,row, true)->decodeFormula(expr,column,row), false); 	    
+		    table->setText(row, column, table->cellAt(column,row, true)->decodeFormula(expr,column,row), false);
 		  }
 	      }
 	  }
 	  cell = cell.nextSibling();
 	}
-	
 
 
-	/* There is a memory leak here... 
+	/* There is a memory leak here...
 	 * The strings in the exprID_dict have been allocated, but they have not been freed.
 	 */
 
@@ -682,8 +678,13 @@ bool GNUMERICFilter::filterImport(const QString &file,
 	/* CELL handling STOP */
 
 	/* STYLE handling START */
-
-	setStyleInfo(&sheet,table);
+        //Laurent - 2001-12-07  desactivate this code : otherwise we
+        //create 65535*255 cells (Styleregion is define for a area and
+        //not for cell, so gnumeric define a style as : col start=0 col end=255
+        //rowstart=0 rowend=255 => we create 255*255 cells
+        //and gnumeric stocke all area and not just modify area
+        //=> not good for kspread.
+	//setStyleInfo(&sheet,table);
 
 	/* STYLE handling STOP */
 
