@@ -90,7 +90,7 @@ public:
 
     KCommand * deleteObjs( bool _add=true );
     int numSelected() const;
-    void pasteObjs( const QByteArray & data );
+    void pasteObjs( const QByteArray & data, int nbCopy = 1 );
     KCommand * replaceObjs( bool createUndoRedo, unsigned int _orastX,unsigned int _orastY,const QColor & _txtBackCol, const QColor & _otxtBackCol);
 
     void copyObjs(QDomDocument &doc, QDomElement &presenter);

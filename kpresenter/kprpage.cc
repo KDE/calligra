@@ -168,15 +168,27 @@ void KPrPage::copyObjs(QDomDocument &doc, QDomElement &presenter)
     }
 }
 
-void KPrPage::pasteObjs( const QByteArray & data )
+void KPrPage::pasteObjs( const QByteArray & data,int nbCopy )
 {
     m_doc->deSelectAllObj();
     int num = m_objectList.count();
     QString clip_str = QString::fromUtf8( data );
     if ( clip_str.isEmpty() ) return;
-    KCommand *cmd = m_doc->loadPastedObjs( clip_str,this );
-    if (cmd )
-        m_doc->addCommand( cmd );
+    KMacroCommand *macro = new KMacroCommand( i18n("Paste Objects" ));
+    bool createMacro = false;
+    for ( int i = 0 ; i < nbCopy ; i++ )
+    {
+        KCommand *cmd = m_doc->loadPastedObjs( clip_str,this );
+        if (cmd )
+        {
+            macro->addCommand( cmd );
+            createMacro = true ;
+        }
+    }
+    if (createMacro)
+        m_doc->addCommand(macro);
+    else
+        delete macro;
 
     //move and select all new pasted in objects
     KPObject *_tempObj;

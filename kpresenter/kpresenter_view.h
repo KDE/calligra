@@ -376,6 +376,8 @@ public slots:
     void flipHorizontal();
     void flipVertical();
 
+
+    void duplicateObj();
 public:
     // create GUI
     virtual void createGUI();
@@ -933,6 +935,8 @@ private:
 
     KAction *actionFlipHorizontal;
     KAction *actionFlipVertical;
+
+    KAction *actionDuplicateObj;
 
 
     QTimer automaticScreenPresTimer;

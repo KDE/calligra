@@ -130,7 +130,7 @@
 #include <koCommentDia.h>
 
 #include "kprhelplinedia.h"
-
+#include "kprduplicateobjdia.h"
 #include <kstdaccel.h>
 #include <koDocumentInfo.h>
 #include <kaccelgen.h>
@@ -3087,6 +3087,9 @@ void KPresenterView::setupActions()
                                        this, SLOT( flipVertical() ),
                                        actionCollection(), "vertical_flip" );
 
+    actionDuplicateObj = new KAction( i18n( "Duplicate Object" ), 0,
+                                       this, SLOT( duplicateObj() ),
+                                       actionCollection(), "duplicate_obj" );
 }
 
 void KPresenterView::textSubScript()
@@ -3145,6 +3148,7 @@ void KPresenterView::objectSelectedChanged()
     actionEditDelete->setEnabled(state);
     actionExtraRaise->setEnabled(state && m_canvas->numberOfObjectSelected()==1);
     actionExtraLower->setEnabled(state && m_canvas->numberOfObjectSelected()==1);
+    actionDuplicateObj->setEnabled(state && m_canvas->numberOfObjectSelected()==1);
     //actionExtraConfigPicture->setEnabled( state && m_canvas->haveASelectedPixmapObj() );
     //actionBrushColor->setEnabled(state);
     //actionPenColor->setEnabled(state);
@@ -6330,6 +6334,31 @@ void KPresenterView::slotObjectEditChanged()
     actionEditReplace->setEnabled(state);
 
     slotUpdateRuler();
+}
+
+void KPresenterView::duplicateObj()
+{
+    if (m_canvas->currentTextObjectView() )
+        return;
+
+    KPrDuplicatObjDia *dlg= new KPrDuplicatObjDia(this);
+    if ( dlg->exec())
+    {
+        int nbCopy= dlg->nbCopy();
+        m_canvas->copyObjs();
+        m_canvas->setToolEditMode( TEM_MOUSE );
+        m_canvas->deSelectAllObj();
+        QMimeSource *data = QApplication::clipboard()->data();
+        QString clip_str = QString::fromUtf8( data->encodedData("application/x-kpresenter-selection") );
+        if ( data->provides( "application/x-kpresenter-selection" ) )
+        {
+            m_canvas->activePage()->pasteObjs( data->encodedData("application/x-kpresenter-selection"), nbCopy);
+
+            m_canvas->setMouseSelectedObject(true);
+            emit objectSelectedChanged();
+        }
+    }
+    delete dlg;
 
 }
 

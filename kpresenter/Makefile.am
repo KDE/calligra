@@ -44,7 +44,8 @@ libkpresenterpart_la_SOURCES = koPointArray.cc kprcanvas.cc kprpage.cc searchdia
 	rotationdialogimpl.cc rotationdialog.ui \
 	KPFreehandObjectIface.skel KPFreehandObjectIface.cc kprstylemanager.cc \
 	kprbgspellcheck.cc kprhelplinedia.cc confpicturedia.cc \
-	KPPolyLineObjectIface.skel KPPolyLineObjectIface.cc
+	KPPolyLineObjectIface.skel KPPolyLineObjectIface.cc \
+	kprduplicateobjdia.cc
 
 libkpresenterpart_la_LDFLAGS = $(all_libraries) $(KDE_PLUGIN)
 libkpresenterpart_la_LIBADD = autoformEdit/libaf.la $(LIB_KOFFICEUI) $(LIB_KOTEXT) -lkspell  -lqtmcop -lkmedia2_idl -lsoundserver_idl -lartskde
@@ -88,7 +89,7 @@ noinst_HEADERS = koPointArray.h kprcanvas.h kprpage.h kpresenter_doc.h kpresente
 		KPCubicbeziercurveObjectIface.h textpreview.h \
 		rotationdialogimpl.h KPFreehandObjectIface.h kprstylemanager.h \
 		kprbgspellcheck.h kprhelplinedia.h confpicturedia.h \
-		KPPolyLineObjectIface.h
+		KPPolyLineObjectIface.h kprduplicateobjdia.h
 
 kdelnk_DATA = kpresenter.desktop
 kdelnkdir = $(kde_appsdir)/Office
