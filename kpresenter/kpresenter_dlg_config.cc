@@ -629,10 +629,8 @@ configureDefaultDocPage::configureDefaultDocPage(KPresenterView *_view, QWidget 
     QLabel *languageTitle = new QLabel(i18n("Global language:"), languageContainer);
 
     m_globalLanguage = new QComboBox( languageContainer );
-    m_globalLanguage->insertStringList( KoGlobal::listOfLanguages());
-
-
-    m_globalLanguage->setCurrentItem(KoGlobal::languageIndexFromTag(doc->globalLanguage()));
+    m_globalLanguage->insertStringList( KoGlobal::listOfLanguages() );
+    m_globalLanguage->setCurrentText( KoGlobal::languageFromTag( doc->globalLanguage() ) );
 
     languageLayout->addWidget(languageTitle, 0, 0);
     languageLayout->addWidget(m_globalLanguage, 0, 1);
@@ -726,10 +724,10 @@ KCommand *configureDefaultDocPage::apply()
 
     //Laurent Todo add a message box to inform user that
     //global language will change after re-launch kword
-    QString lang = KoGlobal::tagOfLanguage( m_globalLanguage->currentText() );
+    const QString lang = KoGlobal::tagOfLanguage( m_globalLanguage->currentText() );
     config->writeEntry( "language" , lang);
     m_oldLanguage = lang;
-    //don't call this fiunction otherwise we can have a textobject with
+    //don't call this function otherwise we can have a textobject with
     // a default language and other textobject with other default language.
     //doc->setGlobalLanguage( lang );
 
@@ -769,7 +767,7 @@ void configureDefaultDocPage::slotDefault()
     m_tabStopWidth->setValue(KoUnit::toUserValue( MM_TO_POINT(15), m_pView->kPresenterDoc()->getUnit()));
     m_createBackupFile->setChecked( true );
     m_directInsertCursor->setChecked( false );
-    m_globalLanguage->setCurrentItem(KoGlobal::languageIndexFromTag(KGlobal::locale()->language()));
+    m_globalLanguage->setCurrentText( KoGlobal::languageFromTag( KGlobal::locale()->language() ) );
     m_autoHyphenation->setChecked( false );
 }
 

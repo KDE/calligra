@@ -343,13 +343,21 @@ public:
     QButtonGroup* m_fontAttribute;
 #endif
     QComboBox *m_language;
+#ifdef HAVE_LIBKSPELL2
+    KSpell2::Broker::Ptr m_broker;
+#endif
     QCheckBox *m_hyphenation;
 };
 
-KoFontChooser::KoFontChooser( QWidget* parent, const char* name, bool _withSubSuperScript, uint fontListCriteria)
+KoFontChooser::KoFontChooser( QWidget* parent, const char* name, bool _withSubSuperScript, uint fontListCriteria
+#ifdef HAVE_LIBKSPELL2
+                   , KSpell2::Broker::Ptr broker
+#endif
+    )
     : QTabWidget( parent, name )
 {
     d = new KoFontChooserPrivate;
+    d->m_broker = broker;
     setupTab1( fontListCriteria );
     setupTab2( _withSubSuperScript );
     // More modular solution: one widget per tab....
@@ -442,7 +450,7 @@ void KoFontChooser::setupTab2( bool _withSubSuperScript )
 
     d->m_wordByWord = new QCheckBox( i18n("&Word by word"), grp);
     grid->addWidget( d->m_wordByWord, 4, 0);
-       
+
     QVGroupBox *grp1 = new QVGroupBox(i18n("Position"), page);
     grid->addMultiCellWidget( grp1, 5, 5, 0, grid->numCols()-1 );
     QWidget* grpBox = new QWidget( grp1 ); // container for the grid - laid out inside the QVGroupBox
@@ -487,7 +495,7 @@ void KoFontChooser::setupTab2( bool _withSubSuperScript )
         d->m_relativeSize->setEnabled( false );
         d->m_lRelativeSize->setEnabled( false );
     }
-    
+
 
 #ifdef ATTRCOMBO
     QLabel * lab3 = new QLabel( i18n("A&ttribute:"), grp);
@@ -513,7 +521,23 @@ void KoFontChooser::setupTab2( bool _withSubSuperScript )
     grid->addWidget( lab4, 8, 0);
 
     d->m_language = new QComboBox( grp );
-    d->m_language->insertStringList( KoGlobal::listOfLanguages() );
+    // TODO insert an icon in front of each language for which spellchecking is available, like in OOo.
+    const QStringList langNames = KoGlobal::listOfLanguages();
+    const QStringList langTags = KoGlobal::listTagOfLanguages();
+    QStringList spellCheckLanguages;
+#ifdef HAVE_LIBKSPELL2
+    if ( d->m_broker )
+        spellCheckLanguages = d->m_broker->languages();
+#endif
+    QStringList::ConstIterator itName = langNames.begin();
+    QStringList::ConstIterator itTag = langTags.begin();
+    for ( ; itName != langNames.end() && itTag != langTags.end(); ++itName, ++itTag )
+    {
+        if ( spellCheckLanguages.find( *itTag ) != spellCheckLanguages.end() )
+            d->m_language->insertItem( SmallIcon( "spellcheck" ), *itName );
+        else
+            d->m_language->insertItem( *itName );
+    }
     lab4->setBuddy( d->m_language );
     grid->addWidget( d->m_language, 9, 0 );
 
@@ -526,11 +550,11 @@ void KoFontChooser::setupTab2( bool _withSubSuperScript )
 
     connect( d->m_strikeOut, SIGNAL(activated ( int )), this, SLOT( slotStrikeOutTypeChanged( int ) ) );
     connect( m_underlineColorButton, SIGNAL(clicked()), this, SLOT( slotUnderlineColor() ) );
-    connect( m_underlining,  SIGNAL( activated ( int  ) ), this, SLOT( slotChangeUnderlining( int )));
-    connect( m_strikeOutType,  SIGNAL( activated ( int  ) ), this, SLOT( slotChangeStrikeOutType( int )));
-    connect( m_underlineType,  SIGNAL( activated ( int  ) ), this, SLOT( slotChangeUnderlineType( int )));
+    connect( m_underlining,  SIGNAL( activated ( int ) ), this, SLOT( slotChangeUnderlining( int )));
+    connect( m_strikeOutType,  SIGNAL( activated ( int ) ), this, SLOT( slotChangeStrikeOutType( int )));
+    connect( m_underlineType,  SIGNAL( activated ( int ) ), this, SLOT( slotChangeUnderlineType( int )));
     connect( d->m_wordByWord, SIGNAL(clicked()), this, SLOT( slotWordByWordClicked() ) );
-    connect( d->m_language,  SIGNAL( activated ( int  ) ), this, SLOT( slotChangeLanguage( int )));
+    connect( d->m_language,  SIGNAL( activated ( int ) ), this, SLOT( slotChangeLanguage( int )));
     connect( d->m_hyphenation, SIGNAL( clicked()), this, SLOT( slotHyphenationClicked()));
     connect( m_subScript, SIGNAL(clicked()), this, SLOT( slotSubScriptClicked() ) );
     connect( m_superScript, SIGNAL(clicked()), this, SLOT( slotSuperScriptClicked() ) );
@@ -551,7 +575,7 @@ void KoFontChooser::updatePositionButton()
 
 void KoFontChooser::setLanguage( const QString & _tag)
 {
-    d->m_language->setCurrentItem (KoGlobal::languageIndexFromTag( _tag));
+    d->m_language->setCurrentText( KoGlobal::languageFromTag( _tag ) );
 }
 
 QString KoFontChooser::language() const
@@ -1107,10 +1131,29 @@ KoFontDia::KoFontDia( const KoTextFormat& initialFormat, QWidget* parent, const 
                    i18n("Select Font"), Ok|Cancel|User1|Apply, Ok ),
       m_initialFormat(initialFormat)
 {
-    setButtonText( KDialogBase::User1, i18n("&Reset") );
-
     m_chooser = new KoFontChooser( this, "kofontchooser", true /*_withSubSuperScript*/,
                                    KFontChooser::SmoothScalableFonts);
+    init();
+}
+
+#ifdef HAVE_LIBKSPELL2
+KoFontDia::KoFontDia( const KoTextFormat& initialFormat,
+                      KSpell2::Broker::Ptr broker,
+                      QWidget* parent, const char* name )
+    : KDialogBase( parent, name, true,
+                   i18n("Select Font"), Ok|Cancel|User1|Apply, Ok ),
+      m_initialFormat(initialFormat)
+{
+    m_chooser = new KoFontChooser( this, "kofontchooser", true /*_withSubSuperScript*/,
+                                   KFontChooser::SmoothScalableFonts, broker );
+    init();
+}
+#endif
+
+void KoFontDia::init()
+{
+    setButtonText( KDialogBase::User1, i18n("&Reset") );
+
     setMainWidget( m_chooser );
     connect( this, SIGNAL( user1Clicked() ), this, SLOT(slotReset()) );
 

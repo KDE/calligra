@@ -130,6 +130,7 @@ QMap<KoParagStyle*, QString> KoStyleCollection::saveOasis( KoGenStyles& styles, 
 
     for( QPtrListIterator<KoParagStyle> p( m_styleList ); *p; ++p ) {
         const QString name = (*p)->saveStyle( styles, styleType, refStyleName );
+        kdDebug() << k_funcinfo << "Saved style " << (*p)->displayName() << " to OASIS format as " << name << endl;
         autoNames.insert( *p, name );
         if ( refStyleName.isEmpty() ) // i.e. first style
             refStyleName = name;
@@ -321,7 +322,7 @@ void KoStyleCollection::saveOasisOutlineStyles( KoXmlWriter& writer ) const
 	        first = false;
 	    }
             writer.startElement( "text:outline-level-style" );
-            styles[i]->paragLayout().counter->saveOasisListLevel( writer );
+            styles[i]->paragLayout().counter->saveOasisListLevel( writer, true, true );
             writer.endElement();
         }
     }
@@ -554,7 +555,7 @@ void KoParagStyle::loadStyle( QDomElement & styleElem, KoOasisContext& context )
         const bool ordered = listStyle.localName() == "list-level-style-number";
         Q_ASSERT( !layout.counter );
         layout.counter = new KoParagCounter;
-        layout.counter->loadOasis( context, -1, ordered, m_bOutline, level );
+        layout.counter->loadOasis( context, -1, ordered, m_bOutline, level, true );
         context.listStyleStack().pop();
     }
 
@@ -580,7 +581,7 @@ QString KoParagStyle::saveStyle( KoGenStyles& genStyles, int styleType, const QS
             gs.addAttribute( "style:default-level", (int)m_paragLayout.counter->depth() + 1 );
 
         KoGenStyle listStyle( KoGenStyle::STYLE_LIST /*, no family*/ );
-        m_paragLayout.counter->saveOasis( listStyle );
+        m_paragLayout.counter->saveOasis( listStyle, true );
 
         QString autoListStyleName = genStyles.lookup( listStyle, "L", true );
         gs.addAttribute( "style:list-style-name", autoListStyleName );

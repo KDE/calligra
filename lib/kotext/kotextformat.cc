@@ -476,8 +476,11 @@ void KoTextFormat::load( KoOasisContext& context )
     }
     if ( styleStack.hasAttributeNS( KoXmlNS::fo, "language") ) { // 3.10.17
         m_language = styleStack.attributeNS( KoXmlNS::fo, "language");
-        if ( m_language == "en" )
-            m_language = "en_US";
+        const QString country = styleStack.attributeNS( KoXmlNS::fo, "country" );
+        if ( !country.isEmpty() ) {
+            m_language += '_';
+            m_language += country;
+        }
     }
     // ###### TODO ensure that it's loaded from text-properties, not paragraph-properties
     if ( styleStack.hasAttributeNS( KoXmlNS::fo, "background-color") ) {
@@ -569,7 +572,16 @@ void KoTextFormat::save( KoGenStyle& gs ) const
     else if ( m_attributeFont == ATT_LOWER )
         gs.addProperty( "fo:text-transform", "lowercase", tt );
 
-    gs.addProperty( "fo:language", m_language == "en_US" ? QString("en") : m_language, tt );
+    QString lang = m_language;
+    QString country;
+    const int pos = lang.find( '_' );
+    if ( pos != -1 ) {
+        country = lang.mid( pos + 1 );
+        lang = lang.left( pos );
+    }
+
+    gs.addProperty( "fo:language", lang, tt );
+    gs.addProperty( "fo:country", country, tt );
     gs.addProperty( "fo:background-color",
                     m_textBackColor.isValid() ? m_textBackColor.name() : "transparent", tt );
     gs.addProperty( "fo:text-shadow", shadowAsCss(), tt );

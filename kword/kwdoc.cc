@@ -3089,7 +3089,7 @@ QDomDocument KWDocument::saveXML()
     {
         QDomElement spellCheckIgnore = doc.createElement( "SPELLCHECKIGNORELIST" );
         kwdoc.appendChild( spellCheckIgnore );
-        for ( QStringList::Iterator it = m_spellListIgnoreAll.begin(); it != m_spellListIgnoreAll.end(); ++it )
+        for ( QStringList::ConstIterator it = m_spellListIgnoreAll.begin(); it != m_spellListIgnoreAll.end(); ++it )
         {
             QDomElement spellElem = doc.createElement( "SPELLCHECKIGNOREWORD" );
             spellCheckIgnore.appendChild( spellElem );

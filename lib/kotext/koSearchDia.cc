@@ -239,6 +239,15 @@ void KoFindReplace::emitUndoRedo()
     m_macroCmd = 0L;
 }
 
+/**
+*
+* This whole code should be rewritten at some point:
+* if we want to allow matches across paragraph borders,
+* then we need to send the whole text of a textobject at once,
+* instead of paragraph-after-paragraph.
+*
+*/
+
 bool KoFindReplace::findNext()
 {
     KFind::Result res = KFind::NoMatch;
@@ -571,7 +580,7 @@ KoFormatDia::KoFormatDia( QWidget* parent, const QString & _caption, KoSearchCon
     m_checkLanguage = new QCheckBox( i18n( "Language:" ), page);
     m_languageItem = new QComboBox( page );
     m_languageItem->insertStringList( KoGlobal::listOfLanguages() );
-    m_languageItem->setCurrentItem( (int)KoGlobal::languageIndexFromTag(m_ctx->m_language) );
+    m_languageItem->setCurrentText( KoGlobal::languageFromTag( m_ctx->m_language ) );
 
 
     m_checkVertAlign = new QCheckBox( i18n( "Vertical alignment:" ), page );

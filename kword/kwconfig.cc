@@ -718,10 +718,8 @@ ConfigureDefaultDocPage::ConfigureDefaultDocPage( KWView *_view, QVBox *box, cha
     QLabel *languageTitle = new QLabel(i18n("Global language:"), languageContainer);
 
     m_globalLanguage = new QComboBox( languageContainer );
-    m_globalLanguage->insertStringList( KoGlobal::listOfLanguages());
-
-
-    m_globalLanguage->setCurrentItem(KoGlobal::languageIndexFromTag(m_oldLanguage));
+    m_globalLanguage->insertStringList( KoGlobal::listOfLanguages() );
+    m_globalLanguage->setCurrentText( KoGlobal::languageFromTag( m_oldLanguage ) );
 
     languageLayout->addWidget(languageTitle, 0, 0);
     languageLayout->addWidget(m_globalLanguage, 0, 1);
@@ -871,7 +869,7 @@ void ConfigureDefaultDocPage::slotDefault()
    m_tabStopWidth->setValue( MM_TO_POINT(15) );
    m_createBackupFile->setChecked( true );
    m_directInsertCursor->setChecked( false );
-   m_globalLanguage->setCurrentItem(KoGlobal::languageIndexFromTag(KGlobal::locale()->language()));
+   m_globalLanguage->setCurrentText( KoGlobal::languageFromTag( KGlobal::locale()->language() ) );
    m_autoHyphenation->setChecked( false );
 }
 

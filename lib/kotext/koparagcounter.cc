@@ -177,17 +177,18 @@ static QChar exportCounterType( KoParagCounter::Style style )
 }
 
 void KoParagCounter::loadOasis( KoOasisContext& context, int restartNumbering,
-                                bool orderedList, bool heading, int level )
+                                bool orderedList, bool heading, int level, bool loadingStyle )
 {
     const QDomElement listStyle = context.listStyleStack().currentListStyle();
     const QDomElement listStyleProperties = context.listStyleStack().currentListStyleProperties();
-    loadOasisListStyle( listStyle, listStyleProperties, restartNumbering, orderedList, heading, level );
+    loadOasisListStyle( listStyle, listStyleProperties, restartNumbering, orderedList, heading, level, loadingStyle );
 }
 
 void KoParagCounter::loadOasisListStyle( const QDomElement& listStyle,
                                          const QDomElement& listStyleProperties,
                                          int restartNumbering,
-                                         bool orderedList, bool heading, int level )
+                                         bool orderedList, bool heading, int level,
+                                         bool loadingStyle )
 {
     m_numbering = heading ? 1 : 0;
     m_depth = level - 1; // depth start at 0
@@ -195,8 +196,11 @@ void KoParagCounter::loadOasisListStyle( const QDomElement& listStyle,
     if ( restartNumbering == -1 && listStyle.hasAttributeNS( KoXmlNS::text, "start-value" ) )
         restartNumbering = listStyle.attributeNS( KoXmlNS::text, "start-value", QString::null ).toInt();
 
-    m_restartCounter = restartNumbering != -1;
-    m_startNumber = m_restartCounter ? restartNumbering : 1;
+    // styles have a start-value, but that doesn't mean restartNumbering, as it does for paragraphs
+    m_restartCounter = loadingStyle ? false : ( restartNumbering != -1 );
+    m_startNumber = ( restartNumbering != -1 ) ? restartNumbering : 1;
+    //kdDebug() << k_funcinfo << "IN: restartNumbering=" << restartNumbering << " OUT: m_restartCounter=" << m_restartCounter << " m_startNumber=" << m_startNumber << endl;
+
     if ( orderedList || heading ) {
         m_style = importCounterType( listStyle.attributeNS( KoXmlNS::style, "num-format", QString::null)[0] );
         m_prefix = listStyle.attributeNS( KoXmlNS::style, "num-prefix", QString::null );
@@ -246,7 +250,7 @@ void KoParagCounter::loadOasisListStyle( const QDomElement& listStyle,
     invalidate();
 }
 
-void KoParagCounter::saveOasis( KoGenStyle& listStyle ) const
+void KoParagCounter::saveOasis( KoGenStyle& listStyle, bool savingStyle ) const
 {
     Q_ASSERT( (Style)m_style != STYLE_NONE );
     // We're supposed to invent a display:name and save it in the list style, so OOo displays it.
@@ -259,14 +263,14 @@ void KoParagCounter::saveOasis( KoGenStyle& listStyle ) const
     const char* tagName = isBullet() ? "text:list-level-style-bullet" : "text:list-level-style-number";
     listLevelWriter.startElement( tagName );
 
-    saveOasisListLevel( listLevelWriter );
+    saveOasisListLevel( listLevelWriter, true, savingStyle );
 
     listLevelWriter.endElement();
-    QString listLevelContents = QString::fromUtf8( buffer.buffer(), buffer.buffer().size() );
+    const QString listLevelContents = QString::fromUtf8( buffer.buffer(), buffer.buffer().size() );
     listStyle.addChildElement( tagName, listLevelContents );
 }
 
-void KoParagCounter::saveOasisListLevel( KoXmlWriter& listLevelWriter, bool includeLevelAndProperties ) const
+void KoParagCounter::saveOasisListLevel( KoXmlWriter& listLevelWriter, bool includeLevelAndProperties, bool savingStyle ) const
 {
     if ( includeLevelAndProperties ) // false when called for footnotes-configuration
         listLevelWriter.addAttribute( "text:level", (int)m_depth + 1 );
@@ -275,7 +279,6 @@ void KoParagCounter::saveOasisListLevel( KoXmlWriter& listLevelWriter, bool incl
 
     if ( isBullet() )
     {
-        // TODO implement
         QChar bulletChar;
         if ( (Style)m_style == STYLE_CUSTOMBULLET )
         {
@@ -294,12 +297,16 @@ void KoParagCounter::saveOasisListLevel( KoXmlWriter& listLevelWriter, bool incl
         listLevelWriter.addAttribute( "style:num-suffix", m_suffix );
         if ( includeLevelAndProperties ) // not for KWVariableSettings
             listLevelWriter.addAttribute( "text:display-levels", m_displayLevels );
-        listLevelWriter.addAttribute( "text:start-value", m_startNumber );
         if ( (Style)m_style == STYLE_CUSTOM )
             ; // not implemented
         else
             listLevelWriter.addAttribute( "style:num-format", QString( exportCounterType( (Style)m_style ) ) );
-        // m_startNumber/m_restartCounter is saved by kotextparag itself. ### TODO: save for paragstyles?
+
+        // m_startNumber/m_restartCounter is saved by kotextparag itself, except for styles.
+        if ( savingStyle && m_restartCounter ) {
+            listLevelWriter.addAttribute( "text:start-value", m_startNumber );
+        }
+
     }
     // m_numbering isn't saved, it's set depending on context (NUM_CHAPTER for headings).
 

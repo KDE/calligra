@@ -78,12 +78,12 @@ void KWVariableSettings::loadOasis( const QDomElement& parent )
         {
             const QString noteClass = e.attributeNS( KoXmlNS::text, "note-class", QString::null );
             if ( noteClass == "footnote" ) {
-                m_footNoteCounter.loadOasisListStyle( e, QDomElement(), -1, true, false, 1 );
+                m_footNoteCounter.loadOasisListStyle( e, QDomElement(), -1, true, false, 1, false );
                 m_footNoteCounter.setNumbering( KoParagCounter::NUM_FOOTNOTE );
                 m_footNoteCounter.setRestartCounter( false );
             }
             else if ( noteClass == "endnote" ) {
-                m_endNoteCounter.loadOasisListStyle( e, QDomElement(), -1, true, false, 1 );
+                m_endNoteCounter.loadOasisListStyle( e, QDomElement(), -1, true, false, 1, false );
                 m_endNoteCounter.setNumbering( KoParagCounter::NUM_FOOTNOTE );
                 m_endNoteCounter.setRestartCounter( false );
             }

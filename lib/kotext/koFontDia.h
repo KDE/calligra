@@ -24,6 +24,12 @@
 #include <qtabwidget.h>
 #include <kotextformat.h>
 #include <qcheckbox.h>
+
+/// OK including config.h in public headers is bad practice - to be removed once kspell2 is required
+#include <config.h>
+#ifdef HAVE_LIBKSPELL2
+#include <kspell2/broker.h>
+#endif
 class QComboBox;
 
 /**
@@ -37,9 +43,16 @@ public:
      * Constructor
      * @param fontListCriteria should contain all the restrictions for font selection as OR-ed values
      *        @see KFontChooser::FontListCriteria for the individual values
+     * @param broker If your application supports spell-checking, pass here the KSpell2 Broker
+     * so that the font dialog can show which languages are supported for spellchecking.
      */
-    KoFontChooser( QWidget * parent, const char* name = 0L,
-            bool _withSubSuperScript = true, uint fontListCriteria=0);
+    KoFontChooser( QWidget * parent, const char* name = 0,
+                   bool _withSubSuperScript = true, uint fontListCriteria=0
+#ifdef HAVE_LIBKSPELL2
+                   , KSpell2::Broker::Ptr broker = 0
+#endif
+                   );
+
     virtual ~KoFontChooser();
 
     /// Set the text format to be displayed.
@@ -162,33 +175,13 @@ public:
     KoFontDia( const KoTextFormat& initialFormat,
                QWidget* parent, const char* name );
 
-    /*
-    bool getHyphenation() const { return m_chooser->getHyphenation(); }
-    bool getSuperScript() const { return m_chooser->getSuperScript(); }
-    bool getSubScript() const { return m_chooser->getSubScript(); }
-    QFont getNewFont() const { return m_chooser->getNewFont(); }
-    QColor color() const { return m_chooser->color(); }
-    QColor backGroundColor() const {return m_chooser->backGroundColor();}
-    QColor underlineColor() const { return m_chooser->underlineColor() ; }
-    KoTextFormat::UnderlineType getUnderlineType() const { return m_chooser->getUnderlineType();}
-    KoTextFormat::StrikeOutType getStrikeOutType() const { return m_chooser->getStrikeOutType();}
-
-    KoTextFormat::UnderlineStyle getUnderlineStyle() const { return m_chooser->getUnderlineStyle();}
-    KoTextFormat::StrikeOutStyle getStrikeOutStyle() const { return m_chooser->getStrikeOutStyle();}
-
-    double shadowDistanceX() const { return m_chooser->shadowDistanceX(); }
-    double shadowDistanceY() const { return m_chooser->shadowDistanceY(); }
-    QColor shadowColor() const { return m_chooser->shadowColor(); }
-
-    double getRelativeTextSize()const{ return m_chooser->getRelativeTextSize();}
-
-    int getOffsetFromBaseLine() const {return m_chooser->getOffsetFromBaseLine();}
-    bool getWordByWord()const{ return m_chooser->getWordByWord();}
-
-    QString getLanguage() const { return m_chooser->getLanguage();}
-
-    KoTextFormat::AttributeStyle getFontAttribute()const { return m_chooser->getFontAttribute();}
-    */
+#ifdef HAVE_LIBKSPELL2
+    /// If your application supports spell-checking, pass here the KSpell2 Broker
+    /// so that the font dialog can show which languages are supported for spellchecking.
+    KoFontDia( const KoTextFormat& initialFormat,
+               KSpell2::Broker::Ptr broker,
+               QWidget* parent, const char* name );
+#endif
 
     int changedFlags() const { return m_chooser->changedFlags(); }
 
@@ -202,26 +195,9 @@ signals:
     void applyFont();
 
 private:
+    void init();
+
     KoFontChooser * m_chooser;
-    /*
-    QFont m_font;
-    bool m_bSubscript;
-    bool m_bSuperscript;
-    bool m_bStrikeOut;
-    QColor m_color;
-    QColor m_backGroundColor;
-    QColor m_underlineColor;
-    KoTextFormat::UnderlineType m_underlineType;
-    KoTextFormat::UnderlineStyle m_underlineStyle;
-    KoTextFormat::StrikeOutStyle m_strikeOutStyle;
-    KoTextFormat::StrikeOutType m_strikeOutType;
-    double m_relativeSize;
-    int m_offsetBaseLine;
-    bool m_bWordByWord;
-    bool m_bHyphenation;
-    KoTextFormat::AttributeStyle m_fontAttribute;
-    QString m_language;
-    */
     KoTextFormat m_initialFormat;
 };
 

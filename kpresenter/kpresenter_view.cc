@@ -1816,7 +1816,11 @@ void KPresenterView::mtextFont()
 
     delete m_fontDlg;
 
-    m_fontDlg = new KoFontDia( *textIface->currentFormat(), this, 0L );
+    m_fontDlg = new KoFontDia( *textIface->currentFormat()
+#ifdef HAVE_LIBKSPELL2
+                               , m_broker
+#endif
+                               , this, 0 );
 
     connect( m_fontDlg, SIGNAL( applyFont() ),
              this, SLOT( slotApplyFont() ) );
@@ -3426,7 +3430,7 @@ void KPresenterView::styleOk()
     // stick has to be done before the object name is set,
     // so that the name is set in the right page
     bool bSticky=styleDia->isSticky();
-#if !MASTERPAGE    
+#if !MASTERPAGE
     if ( !styleDia->stickyNoChange())
     {
         bSticky=styleDia->isSticky();

@@ -73,17 +73,19 @@ public:
     /** Load from OASIS XML
      * @param heading true if heading, false if normal list
      * @param level 1-based
+     * @param loadingStyle true if loading a style, false if loading a paragraph
      */
-    void loadOasis( KoOasisContext& context, int restartNumbering, bool orderedList, bool heading, int level );
-    /// Part of loadOasis that is shared with KWVariableSettings::loadOasis
+    void loadOasis( KoOasisContext& context, int restartNumbering, bool orderedList, bool heading, int level, bool loadingStyle = false );
+    /// Part of loadOasis that is shared with KWVariableSettings::loadOasis for footnotes/endnotes
     void loadOasisListStyle( const QDomElement& listStyle,
-                        const QDomElement& listStyleProperties,
-                        int restartNumbering,
-                        bool orderedList, bool heading, int level );
+                             const QDomElement& listStyleProperties,
+                             int restartNumbering,
+                             bool orderedList, bool heading, int level, bool loadingStyle );
     /// Save as OASIS XML
-    void saveOasis( KoGenStyle& listStyle ) const;
+    void saveOasis( KoGenStyle& listStyle, bool savingStyle = false ) const;
     /// Part of saveOasis that is shared with KoStyleCollection::saveOasisOutlineStyles
-    void saveOasisListLevel( KoXmlWriter& listLevelWriter, bool includeLevelAndProperties = true ) const;
+    /// and KWVariableSettings::saveOasis for footnotes/endnotes
+    void saveOasisListLevel( KoXmlWriter& listLevelWriter, bool includeLevelAndProperties, bool savingStyle = false ) const;
 
     bool operator==( const KoParagCounter & c2 ) const;
     bool operator!=( const KoParagCounter & c2 ) const { return !(*this == c2); }

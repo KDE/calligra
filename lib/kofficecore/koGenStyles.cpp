@@ -31,8 +31,8 @@ KoGenStyles::~KoGenStyles()
 
 QString KoGenStyles::lookup( const KoGenStyle& style, const QString& name, bool forceNumbering )
 {
-    StyleMap::iterator it = m_styles.find( style );
-    if ( it == m_styles.end() ) {
+    StyleMap::iterator it = m_styleMap.find( style );
+    if ( it == m_styleMap.end() ) {
         // Not found, try if this style is in fact equal to its parent (the find above
         // wouldn't have found it, due to m_parentName being set).
         if ( !style.parentName().isEmpty() ) {
@@ -53,36 +53,40 @@ QString KoGenStyles::lookup( const KoGenStyle& style, const QString& name, bool 
             forceNumbering = true;
         }
         styleName = makeUniqueName( styleName, forceNumbering );
-        m_names.insert( styleName, true );
-        it = m_styles.insert( style, styleName );
+        m_styleNames.insert( styleName, true );
+        it = m_styleMap.insert( style, styleName );
+        NamedStyle s;
+        s.style = &it.key();
+        s.name = styleName;
+        m_styleArray.append( s );
     }
     return it.data();
 }
 
 QString KoGenStyles::makeUniqueName( const QString& base, bool forceNumbering ) const
 {
-    if ( !forceNumbering && m_names.find( base ) == m_names.end() )
+    if ( !forceNumbering && m_styleNames.find( base ) == m_styleNames.end() )
         return base;
     int num = 1;
     QString name;
     do {
         name = base;
         name += QString::number( num++ );
-    } while ( m_names.find( name ) != m_names.end() );
+    } while ( m_styleNames.find( name ) != m_styleNames.end() );
     return name;
 }
 
 QValueList<KoGenStyles::NamedStyle> KoGenStyles::styles( int type ) const
 {
     QValueList<KoGenStyles::NamedStyle> lst;
-    StyleMap::const_iterator it = m_styles.begin();
-    StyleMap::const_iterator end = m_styles.end();
+    StyleArray::const_iterator it = m_styleArray.begin();
+    StyleArray::const_iterator end = m_styleArray.end();
     for ( ; it != end ; ++it ) {
-        if ( it.key().type() == type ) {
-            NamedStyle s;
-            s.style = & it.key();
-            s.name = it.data();
-            lst.append( s );
+        if ( (*it).style->type() == type ) {
+            //NamedStyle s;
+            //s.style = (*it).style;
+            //s.name = (*it).name;
+            lst.append( *it );
         }
     }
     return lst;
@@ -90,16 +94,11 @@ QValueList<KoGenStyles::NamedStyle> KoGenStyles::styles( int type ) const
 
 const KoGenStyle* KoGenStyles::style( const QString& name ) const
 {
-#if 0 // This is if NameMap contains KoGenStyle. But then we have two copies of it...
-    NameMap::const_iterator it = m_names.find( name );
-    if ( it != m_names.end() )
-        return &it.data();
-#endif
-    StyleMap::const_iterator it = m_styles.begin();
-    StyleMap::const_iterator end = m_styles.end();
+    StyleArray::const_iterator it = m_styleArray.begin();
+    const StyleArray::const_iterator end = m_styleArray.end();
     for ( ; it != end ; ++it ) {
-        if ( it.data() == name )
-            return &it.key();
+        if ( (*it).name == name )
+            return (*it).style;
     }
     return 0;
 }
@@ -113,6 +112,7 @@ KoGenStyle* KoGenStyles::styleForModification( const QString& name )
 
 void KoGenStyle::writeStyle( KoXmlWriter* writer, KoGenStyles& styles, const char* elementName, const QString& name, const char* propertiesElementName, bool closeElement, bool drawElement ) const
 {
+    //kdDebug(30003) << "writing out style " << name << " " << m_attributes["style:display-name"] << endl;
     writer->startElement( elementName );
     if ( !drawElement )
         writer->addAttribute( "style:name", name );

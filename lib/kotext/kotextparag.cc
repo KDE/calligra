@@ -1820,14 +1820,16 @@ KoParagLayout KoTextParag::loadParagLayout( KoOasisContext& context, KoStyleColl
 
 void KoTextParag::loadOasis( const QDomElement& parent, KoOasisContext& context, KoStyleCollection *styleCollection, uint& pos )
 {
-    // first load layout from style
+    // First load layout from style
     KoParagLayout paragLayout = loadParagLayout( context, styleCollection, true );
     setParagLayout( paragLayout );
 
-    // Load default format from style.
-    KoTextFormat *defaultFormat = style() ? &style()->format() : 0L;
-    setFormat( document()->formatCollection()->format( defaultFormat ) );
+    // Load paragraph format
+    KoTextFormat defaultFormat;
+    defaultFormat.load( context );
+    setFormat( document()->formatCollection()->format( &defaultFormat ) );
 
+    // Load text
     loadOasisSpan( parent, context, pos );
 
     // Apply default format to trailing space
@@ -1890,7 +1892,7 @@ void KoTextParag::saveOasis( KoXmlWriter& writer, KoSavingContext& context,
 
     const int cursorIndex = context.cursorTextParagraph() == this ? context.cursorTextIndex() : -1;
 
-    kdDebug() << k_funcinfo << "'" << text << "' from=" << from << " to=" << to << " cursorIndex=" << cursorIndex << endl;
+    //kdDebug() << k_funcinfo << "'" << text << "' from=" << from << " to=" << to << " cursorIndex=" << cursorIndex << endl;
 
     // A helper method would need no less than 7 params...
 #define WRITESPAN( next ) { \

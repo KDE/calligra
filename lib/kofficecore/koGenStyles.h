@@ -21,6 +21,7 @@
 
 #include <qdict.h>
 #include <qmap.h>
+#include <qvaluevector.h>
 
 class KoXmlWriter;
 class KoGenStyle;
@@ -78,7 +79,7 @@ public:
      * Return the entire collection of styles
      * Use this for saving the styles
      */
-    const StyleMap& styles() const { return m_styles; }
+    const StyleMap& styles() const { return m_styleMap; }
 
     struct NamedStyle {
         const KoGenStyle* style; ///< @note owned by the collection
@@ -108,11 +109,18 @@ private:
     QString makeUniqueName( const QString& base, bool forceNumbering ) const;
 
     /// style definition -> name
-    StyleMap m_styles;
+    StyleMap m_styleMap;
 
     /// name -> style   (used to check for name uniqueness)
     typedef QMap<QString, bool> NameMap;
-    NameMap m_names;
+    NameMap m_styleNames;
+
+    /// List of styles (used to preserve ordering)
+    typedef QValueVector<NamedStyle> StyleArray;
+    StyleArray m_styleArray;
+
+    class Private;
+    Private *d;
 };
 
 /**

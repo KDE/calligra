@@ -24,6 +24,7 @@
 
 #include <qstringlist.h>
 #include <qfont.h>
+#include <qmap.h>
 class KConfig;
 
 class KoGlobal
@@ -59,19 +60,22 @@ public:
     static int dpiY() {
         return self()->m_dpiY;
     }
-    // For KoApplication
+    /// @internal, for KoApplication
     static void setDPI( int x, int y );
 
-    // ##### TODO: document (Laurent?)
-
+    /// Return the list of available languages, in their displayable form
+    /// (translated names)
     static QStringList listOfLanguages() {
         return self()->_listOfLanguages();
     }
-    static QStringList listTagOfLanguages() {
-        return self()->_listTagOfLanguages();
+    /// Return the list of available languages, in their internal form
+    /// e.g. "fr" or "en_US", here called "tag"
+    static QStringList listTagOfLanguages() { // TODO rename to listOfLanguageTags
+        return self()->_listOfLanguageTags();
     }
+    /// For a given language display name, return its tag
     static QString tagOfLanguage( const QString & _lang );
-    static int languageIndexFromTag( const QString &_lang );
+    /// For a given language tag, return its display name
     static QString languageFromTag( const QString &_lang );
 
     ~KoGlobal();
@@ -81,13 +85,13 @@ private:
     KoGlobal();
     QFont _defaultFont();
     QStringList _listOfLanguages();
-    QStringList _listTagOfLanguages();
+    QStringList _listOfLanguageTags();
     KConfig* _kofficeConfig();
     void createListOfLanguages();
 
     int m_pointSize;
-    QStringList m_languageList;
-    QStringList m_languageTag;
+    typedef QMap<QString, QString> LanguageMap;
+    LanguageMap m_langMap; // display-name -> language tag
     KConfig* m_kofficeConfig;
     int m_dpiX;
     int m_dpiY;
