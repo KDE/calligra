@@ -20,9 +20,12 @@
 #include "keximainwindow.h"
 #include "kexidialogbase.h"
 #include "kexicontexthelp_p.h"
+#include "kexipart.h"
+#include "kexipartinfo.h"
 
 #include <kdebug.h>
 #include <kapplication.h>
+#include <kiconloader.h>
 
 KexiDialogBase::KexiDialogBase(KexiMainWindow *parent, const QString &caption)
  : KMdiChildView(caption, parent, "KexiDialogBase"),m_isRegistered(false)
@@ -83,6 +86,15 @@ void KexiDialogBase::setContextHelp(const QString& caption, const QString& text,
 
 }
 
+/*
+void KexiDialogBase::detach()
+{
+	KMdiChildView::detach();
+	// update icon
+	if (m_part) {
+//		setIcon( DesktopIcon(m_part->info()->itemIcon()) );
+	}
+}*/
 
 #include "kexidialogbase.moc"
 

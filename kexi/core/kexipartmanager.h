@@ -61,7 +61,7 @@ class Manager : public QObject
 
 	public:
 		/**
-		 * creates a emty instance
+		 * creates an empty instance
 		 */
 		Manager(QObject *parent = 0);
 		~Manager();

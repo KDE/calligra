@@ -20,6 +20,8 @@
 #ifndef KEXIDIALOGBASE_H
 #define KEXIDIALOGBASE_H
 
+#include <qguardedptr.h>
+
 #include <kmdichildview.h>
 #include <kxmlguiclient.h>
 
@@ -55,13 +57,16 @@ class KEXICORE_EXPORT KexiDialogBase : public KMdiChildView
 		void	setDocID(int id);
 		int	docID() { return m_docID; }
 		KInstance *instance();
+
+		//! Kexi part used to create this window
+		inline KexiPart::Part* part() const { return m_part; }
+
 	public slots:
+//		virtual void detach();
 
 	signals:
 		void updateContextHelp();
 	protected:
-		friend class KexiMainWindow;
-		friend class KexiPart::Part;
 		void registerDialog();
 	private:
 		KexiMainWindow *m_parentWindow;
@@ -69,6 +74,10 @@ class KEXICORE_EXPORT KexiDialogBase : public KMdiChildView
 		KexiContextHelpInfo *m_contextHelpInfo;
 		int m_docID;
 		KInstance *m_instance;
+		QGuardedPtr<KexiPart::Part> m_part;
+
+		friend class KexiMainWindow;
+		friend class KexiPart::Part;
 };
 
 #endif

@@ -910,9 +910,16 @@ KexiMainWindow::closeWindow(KMdiChildView *pWnd, bool layoutTaskBar)
 void KexiMainWindow::detachWindow(KMdiChildView *pWnd,bool bShow)
 {
 	KMdiMainFrm::detachWindow(pWnd,bShow);
-	pWnd->setIcon( QPixmap(*pWnd->icon()) );
+	// update icon
+	pWnd->setIcon( DesktopIcon( static_cast<KexiDialogBase *>(pWnd)->part()->info()->itemIcon() ) );
 }
 
+void KexiMainWindow::attachWindow(KMdiChildView *pWnd,bool bShow,bool bAutomaticResize)
+{
+	KMdiMainFrm::attachWindow(pWnd,true,bAutomaticResize);
+	// update icon
+	pWnd->mdiParent()->setIcon( SmallIcon( static_cast<KexiDialogBase *>(pWnd)->part()->info()->itemIcon() ) );
+}
 
 bool KexiMainWindow::eventFilter( QObject *obj, QEvent * e )
 {

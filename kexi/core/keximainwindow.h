@@ -77,6 +77,7 @@ class KEXICORE_EXPORT KexiMainWindow : public KMdiMainFrm
 		virtual void closeWindow(KMdiChildView *pWnd, bool layoutTaskBar = true); 
 
 		virtual void detachWindow(KMdiChildView *pWnd,bool bShow=true);
+		virtual void attachWindow(KMdiChildView *pWnd,bool bShow=true,bool bAutomaticResize=false);
 	protected:
 		//! reimplementation of events
 		virtual void	closeEvent(QCloseEvent *);

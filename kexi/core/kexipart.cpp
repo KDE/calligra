@@ -51,6 +51,7 @@ KexiDialogBase* Part::execute(KexiMainWindow *win, const KexiPart::Item &item)
 	KexiDialogBase *dlg = createInstance(win,item);
 	if (!dlg)
 		return 0;
+	dlg->m_part = this;
 	dlg->resize(dlg->sizeHint());
 	dlg->setMinimumSize(dlg->minimumSizeHint().width(),dlg->minimumSizeHint().height());
 
