@@ -340,6 +340,9 @@ public slots:
     void changeFootNoteType();
     void savePicture();
     void saveClipart();
+
+    void autoSpellCheck();
+
 protected slots:
     void spellCheckerReady();
     void spellCheckerMisspelling( const QString &, const QStringList &, unsigned int );
@@ -417,6 +420,7 @@ private:
     KToggleAction *actionShowRuler;
     KToggleAction *actionAllowAutoFormat;
 
+    KToggleAction *actionAllowBgSpellCheck;
 
     KSelectAction *actionViewZoom;
 
@@ -557,7 +561,7 @@ private:
     QPtrList<KAction> m_variableActionList;
 
     int m_currentPage; // 0-based current page number
- 
+
     // Statusbar items
     QLabel * m_sbPageLabel; // 'Current page number and page count' label
     QLabel * m_sbFramesLabel; // Info about selected frames

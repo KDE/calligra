@@ -316,7 +316,7 @@ void KWView::initGui()
     renameButtonTOC(m_doc->isTOC());
     //at the beginning actionBackgroundColor should be active
     actionBackgroundColor->setEnabled(true);
-
+    actionAllowBgSpellCheck->setChecked( m_doc->backgroundSpellCheckEnabled() );
 }
 
 
@@ -486,7 +486,7 @@ void KWView::setupActions()
                                     actionCollection(), "insert_comment" );
     actionInsertComment->setToolTip( i18n( "Insert a comment about the selected text." ) );
     actionInsertComment->setWhatsThis( i18n( "Insert a comment about the selected text.  These comments are not desinged to appear on the final page." ) );
-    
+
     actionEditComment = new KAction( i18n("Edit Comment..."), 0,
                                   this,SLOT(editComment()),
                                   actionCollection(), "edit_comment");
@@ -887,7 +887,7 @@ void KWView::setupActions()
                                             actionCollection(), "inline_frame" );
     actionInlineFrame->setToolTip( i18n( "Convert current frame to an inline frame." ) );
     actionInlineFrame->setWhatsThis( i18n( "Convert the current frame to an inline frame.<br><br>Place the inline frame within the text at the point nearest to the frames current position." ) );
-    
+
     actionOpenLink = new KAction( i18n( "Open Link" ), 0,
                                      this, SLOT( openLink() ),
                                      actionCollection(), "open_link" );
@@ -991,6 +991,10 @@ void KWView::setupActions()
     actionSaveClipart= new KAction( i18n("Save Clipart..."), 0,
                                     this, SLOT( saveClipart() ),
                                     actionCollection(), "save_clipart");
+
+    actionAllowBgSpellCheck = new KToggleAction( i18n( "AutoSpellCheck" ), 0,
+                                            this, SLOT( autoSpellCheck() ),
+                                            actionCollection(), "tool_auto_spellcheck" );
 
 }
 
@@ -5226,6 +5230,16 @@ void KWView::changeFootNoteType()
             }
         }
     }
+}
+
+
+void KWView::autoSpellCheck()
+{
+    m_doc->changeBgSpellCheckingState( actionAllowBgSpellCheck->isChecked() );
+#if 0
+    m_doc->enableBackgroundSpellCheck( state );
+    m_doc->reactivateBgSpellChecking();
+#endif
 }
 
 /******************************************************************/

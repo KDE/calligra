@@ -3529,4 +3529,13 @@ void KWDocument::switchViewMode( KWViewMode * newViewMode )
     repaintAllViews( true );
 }
 
+void KWDocument::changeBgSpellCheckingState( bool b )
+{
+    enableBackgroundSpellCheck( b );
+    reactivateBgSpellChecking();
+    KConfig *config = KWFactory::global()->config();
+    config->setGroup("KSpell kword" );
+    config->writeEntry( "SpellCheck", (int)b );
+}
+
 #include "kwdoc.moc"

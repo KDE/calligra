@@ -88,7 +88,7 @@ public:
     KWChild( KWDocument *_wdoc );
     ~KWChild();
 
-    KWDocument* parent()
+    KWDocument* parent()const
     { return m_pKWordDoc; }
 
 protected:
@@ -122,7 +122,7 @@ public:
     static const int U_TABS;
     static const int U_SMART;
     */
-    
+
     /** when in position to select rows/cols from a table (slightly on the left/top of the table),
         * where exactly is the table? if it's NONE, we are not in position to select rows/cols */
     enum TableToSelectPosition {TABLE_POSITION_NONE = 0, TABLE_POSITION_RIGHT = 1, TABLE_POSITION_BOTTOM = 2};
@@ -258,9 +258,9 @@ public:
      * shedule a repaint of all views but don't execute immediately
      **/
      void delayedRepaintAllViews();
-     
-     
-     
+
+
+
     /**
      * Tell this method when a frame is moved / resized / created / deleted
      * and everything will be update / repainted accordingly.
@@ -338,16 +338,16 @@ public:
 
     void recalcFrames( int fromPage = 0, int toPage = -1 );
 
-    KoHFType getHeaderType() { return m_pageHeaderFooter.header; }
-    KoHFType getFooterType() { return m_pageHeaderFooter.footer; }
+    KoHFType getHeaderType()const { return m_pageHeaderFooter.header; }
+    KoHFType getFooterType()const { return m_pageHeaderFooter.footer; }
 
     bool isOnlyOneFrameSelected();
     void setFrameMargins( double l, double r, double t, double b );
     void setFrameCoords( double x, double y, double w, double h );
 
     // The user-chosen global unit
-    QString getUnitName() { return KoUnit::unitName( m_unit ); }
-    KoUnit::Unit getUnit() { return m_unit; }
+    QString getUnitName()const { return KoUnit::unitName( m_unit ); }
+    KoUnit::Unit getUnit()const { return m_unit; }
     void setUnit( KoUnit::Unit _unit );
 
     void addCommand( KCommand * cmd );
@@ -576,6 +576,8 @@ public:
     void setTabStopValue ( double _tabStop );
 
     TableToSelectPosition positionToSelectRowcolTable(const QPoint& nPoint, KWTableFrameSet **ppTable =0L);
+
+    void changeBgSpellCheckingState( bool b );
 
 signals:
     void sig_insertObject( KWChild *_child, KWPartFrameSet* );
