@@ -24,11 +24,11 @@
 #include <koIconChooser.h>
 #include <qimage.h>
 #include <qpixmap.h>
-
+#include <koffice_export.h>
 class QDomElement;
 
 
-class VPattern : public KoIconItem
+class KARBONBASE_EXPORT VPattern : public KoIconItem
 {
 public:
 	VPattern();

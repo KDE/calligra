@@ -28,7 +28,7 @@
 #include "vobject.h"
 #include "svgpathparser.h"
 #include "vfillrule.h"
-
+#include <koffice_export.h>
 
 class QDomElement;
 class VPainter;
@@ -44,7 +44,7 @@ typedef QPtrListIterator<VSubpath> VSubpathListIterator;
  * A composite path consists of one or many subpaths.
  */
 
-class VPath : public VObject, SVGPathParser
+class KARBONBASE_EXPORT VPath : public VObject, SVGPathParser
 {
 public:
 	VPath( VObject* parent, VState state = normal );

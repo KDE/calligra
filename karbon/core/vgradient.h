@@ -24,6 +24,7 @@
 #include <qptrvector.h>
 #include <koPoint.h>
 #include "vcolor.h"
+#include <koffice_export.h>
 
 class QDomElement;
 class KoGenStyle;
@@ -52,7 +53,7 @@ class VColorStop
 				{ return s1.rampPoint == s2.rampPoint; };
 }; // VColorStop
 
-class VGradient
+class KARBONBASE_EXPORT VGradient
 {
 friend class VGradientWidget;
 

@@ -22,7 +22,7 @@
 
 #include "vgroup.h"
 #include "vvisitor.h"
-
+#include <koffice_export.h>
 class VPainter;
 
 /**
@@ -30,7 +30,7 @@ class VPainter;
  * the first child element is used for clipping
  */
 
-class VClipGroup : public VGroup
+class KARBONBASE_EXPORT VClipGroup : public VGroup
 {
 public:
 	VClipGroup( VObject* parent, VState state = normal );

@@ -21,8 +21,9 @@
 #define __VRECTANGLE_H__
 
 #include "vcomposite.h"
+#include <koffice_export.h>
 
-class VRectangle : public VPath
+class KARBONBASE_EXPORT VRectangle : public VPath
 {
 public:
 	VRectangle( VObject* parent, VState state = edit );

@@ -21,8 +21,9 @@
 #define __VELLIPSE_H__
 
 #include "vcomposite.h"
+#include <koffice_export.h>
 
-class VEllipse : public VPath
+class KARBONBASE_EXPORT VEllipse : public VPath
 {
 public:
 	enum VEllipseType

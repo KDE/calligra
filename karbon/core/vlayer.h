@@ -21,7 +21,7 @@
 #define __VLAYER_H__
 
 #include "vgroup.h"
-
+#include <koffice_export.h>
 class QDomElement;
 class DCOPObject;
 
@@ -33,7 +33,7 @@ class DCOPObject;
  * in other layers.
  */
 
-class VLayer : public VGroup
+class KARBONBASE_EXPORT VLayer : public VGroup
 {
 public:
 	VLayer( VObject* parent, VState state = normal );

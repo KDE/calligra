@@ -23,7 +23,7 @@
 
 #include "vcommand.h"
 #include "vgroup.h"
-
+#include <koffice_export.h>
 // Transform object(s) with a specified matrix and allow undo.
 
 
@@ -34,7 +34,7 @@ class VSegment;
 class VSelection;
 
 
-class VTransformCmd : public VCommand
+class KARBONBASE_EXPORT VTransformCmd : public VCommand
 {
 public:
 	VTransformCmd( VDocument *doc, const QWMatrix& mat, bool duplicate = false );
@@ -65,7 +65,7 @@ protected:
 };
 
 
-class VTranslateCmd : public VTransformCmd
+class KARBONBASE_EXPORT VTranslateCmd : public VTransformCmd
 {
 public:
 	VTranslateCmd( VDocument *doc, double d1, double d2, bool duplicate = false );

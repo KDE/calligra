@@ -23,7 +23,7 @@
 #include <qptrlist.h>
 
 #include "vobject.h"
-
+#include <koffice_export.h>
 typedef QPtrList<VObject> VObjectList;
 typedef QPtrListIterator<VObject> VObjectListIterator;
 
@@ -31,7 +31,7 @@ typedef QPtrListIterator<VObject> VObjectListIterator;
  * Base class for all sort of VObject conglomerats.
  */
 
-class VGroup : public VObject
+class KARBONBASE_EXPORT VGroup : public VObject
 {
 public:
 	VGroup( VObject* parent, VState state = normal );

@@ -176,7 +176,7 @@ private:
  * in undo/redo operations with (deleted) segments.
  */
 
-class VSubpathIterator
+class KARBONBASE_EXPORT VSubpathIterator
 {
 	friend class VSubpathIteratorList;
 

@@ -25,7 +25,7 @@
 #include "vpainter.h"
 #include <qwmatrix.h>
 #include <qptrlist.h>
-
+#include <koffice_export.h>
 class QPainter;
 struct _ArtVpath;
 struct _ArtBpath;
@@ -35,7 +35,7 @@ class VGradient;
 class VPattern;
 class KoRect;
 
-class VKoPainter : public VPainter
+class KARBONBASE_EXPORT VKoPainter : public VPainter
 {
 public:
 	VKoPainter( QPaintDevice *target, unsigned int w = 0, unsigned int h = 0, bool = true );
