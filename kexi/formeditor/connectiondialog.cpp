@@ -330,7 +330,7 @@ ConnectionDialog::checkConnection(KexiTableItem *item)
 	{
 		if( !item || (*item)[i].toString().isEmpty())
 		{
-			setStatusError( i18n("<qt>You have not selected a <b>%1</b>.</qt>").arg(m_data->column(i)->nameOrCaption()),
+			setStatusError( i18n("<qt>You have not selected a <b>%1</b>.</qt>").arg(m_data->column(i)->captionAliasOrName()),
 				item);
 			return;
 		}
