@@ -1,4 +1,4 @@
-dnl Rename this file configure.in.in to have a check for KOffice in your configure check
+dnl Rename this file configure.in.in to have a check for KOffice in during configure
 
 dnl
 dnl Check for koffice. Argument is the minimum required version, in the form a.b.c.
@@ -36,10 +36,6 @@ AC_DEFUN(AC_PATH_KOFFICE,
   if ! test -f "$koffice_incdir/kofficeversion.h"; then
     AC_MSG_ERROR([Cannot find KOffice headers in $ac_koffice_includes. Please check your installation, or use --with-koffice-includes.])
   fi
-
-#  koffice_ver_maj=`cat $koffice_incdir/kofficeversion.h | grep "define KOFFICE_VERSION_MAJOR" | sed -e 's/.*VERSION_MAJOR //'`;
-#  koffice_ver_min=`cat $koffice_incdir/kofficeversion.h | grep "define KOFFICE_VERSION_MINOR" | sed -e 's/.*VERSION_MINOR //'`;
-#  koffice_ver_pat=`cat $koffice_incdir/kofficeversion.h | grep "define KOFFICE_VERSION_RELEASE" | sed -e 's/.*VERSION_RELEASE //'`;
 
   AC_LANG_SAVE
   AC_LANG_CPLUSPLUS
