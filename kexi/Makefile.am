@@ -46,9 +46,8 @@ INCLUDES = $(LIB_KEXI_KMDI_INCLUDES) $(all_includes)
 METASOURCES = AUTO
 
 messages: rc.cpp
-	$(EXTRACTRC) data/*.rc > rc.cpp; \
+	$(EXTRACTRC) data/*.rc >> rc.cpp; \
 	LIST=`find . -name \*.ui`; \
-	echo $$LIST; \
 	if test -n "$$LIST"; then \
 	 $(EXTRACTRC) $$LIST >> rc.cpp; \
 	fi; \
