@@ -418,21 +418,6 @@ signals:
   void childChanged( KoDocumentChild *child );
   void sigProgress(int value);
 
-// KDE invents public signals :)
-#undef signals
-#define signals public
-signals:
-  
-  /**
-    * Make it possible for ie. plugins to request 
-    * the embedding of an image into the current
-    * document. Used ie. by the scan-plugin
-  */
-  void embeddImage(const QString &filename);
-  
-#undef signals
-#define signals protected
-
 protected:
 
   virtual KoView *createViewInstance( QWidget *parent, const char *name ) = 0;

@@ -289,6 +289,21 @@ signals:
 
   void invalidated();
 
+// KDE invents public signals :)
+#undef signals
+#define signals public
+signals:
+
+  /**
+    * Make it possible for ie. plugins to request
+    * the embedding of an image into the current
+    * document. Used ie. by the scan-plugin
+  */
+  void embeddImage(const QString &filename);
+
+#undef signals
+#define signals protected
+
 protected slots:
   virtual void slotChildActivated( bool a );
   virtual void slotChildChanged( KoDocumentChild *child );
