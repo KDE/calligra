@@ -353,7 +353,7 @@ int KSpreadTable::leftColumn( int _xpos, double &_left,
         if ( col > KS_colMax - 1 )
 	{
 	    kdDebug(36001) << "KSpreadTable:leftColumn: invalid column (col: " << col + 1 << ")" << endl;
-	    return 1;
+	    return KS_colMax + 1; //Return out of range value, so other code can react on this
 	}
         _left += columnLayout( col )->dblWidth( _canvas );
         col++;
@@ -376,7 +376,7 @@ int KSpreadTable::rightColumn( int _xpos, const KSpreadCanvas *_canvas ) const
         if ( col > KS_colMax )
 	{
 	    kdDebug(36001) << "KSpreadTable:rightColumn: invalid column (col: " << col << ")" << endl;
-            return KS_colMax + 1;
+            return KS_colMax + 1; //Return out of range value, so other code can react on this
 	}
         x += columnLayout( col )->dblWidth( _canvas );
         col++;
@@ -404,7 +404,7 @@ int KSpreadTable::topRow( int _ypos, double & _top,
         if ( row > KS_rowMax - 1 )
         {
             kdDebug(36001) << "KSpreadTable:topRow: invalid row (row: " << row + 1 << ")" << endl;
-            return 1;
+            return KS_rowMax + 1; //Return out of range value, so other code can react on this
         }
         _top += rowLayout( row )->dblHeight( _canvas );
         row++;
@@ -427,7 +427,7 @@ int KSpreadTable::bottomRow( int _ypos, const KSpreadCanvas *_canvas ) const
         if ( row > KS_rowMax )
 	{
 	    kdDebug(36001) << "KSpreadTable:bottomRow: invalid row (row: " << row << ")" << endl;
-            return KS_rowMax + 1;
+            return KS_rowMax + 1; //Return out of range value, so other code can react on this
 	}
         y += rowLayout( row )->dblHeight( _canvas );
         row++;

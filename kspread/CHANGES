@@ -9,6 +9,7 @@ Bugfixes:
 - Fix print header/footer makros
 - Fix print header/footer makro "<sheet>" (was internally switched to "<table>")
 - Fix repaint loops, when at end of range and zooming to lower resolution
+- Fix endless loop, when selecting until out of range
 
 
 Changes from 1.1 to 1.2
