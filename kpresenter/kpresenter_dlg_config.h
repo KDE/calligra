@@ -70,12 +70,15 @@ public:
     ConfigureSpellPage( KPresenterView *_view, QVBox *box, char *name = 0 );
     void apply();
     void slotDefault();
+private slots:
+    void slotClearIgnoreAllHistory();
 private:
     KPresenterView* m_pView;
     KSpellConfig *_spellConfig;
     QCheckBox *_dontCheckUpperWord;
     QCheckBox *_dontCheckTilteCase;
     QCheckBox *cbBackgroundSpellCheck;
+    QPushButton * clearIgnoreAllHistory;
     KConfig* config;
     bool oldSpellCheck;
 };

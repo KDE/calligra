@@ -334,6 +334,9 @@ ConfigureSpellPage::ConfigureSpellPage( KPresenterView *_view, QVBox *box, char 
   cbBackgroundSpellCheck->setChecked( oldSpellCheck );
   grid1->addWidget(cbBackgroundSpellCheck,4,0);
 
+  clearIgnoreAllHistory= new QPushButton( i18n("Clear Ignore All Word History"),tmpQGroupBox);
+  grid1->addMultiCellWidget(clearIgnoreAllHistory,5,5,0,1);
+  connect( clearIgnoreAllHistory, SIGNAL(clicked()),this, SLOT(slotClearIgnoreAllHistory()));
 
   if( config->hasGroup("KSpell kpresenter") )
     {
@@ -342,6 +345,11 @@ ConfigureSpellPage::ConfigureSpellPage( KPresenterView *_view, QVBox *box, char 
         _dontCheckTilteCase->setChecked(config->readBoolEntry("KSpell_dont_check_title_case",false));
     }
 
+}
+
+void ConfigureSpellPage::slotClearIgnoreAllHistory()
+{
+    m_pView->kPresenterDoc()->clearIgnoreWordAll();
 }
 
 void ConfigureSpellPage::apply()

@@ -4815,8 +4815,8 @@ void KPresenterView::spellAddTextObject()
 void KPresenterView::startKSpell()
 {
     // m_spellCurrFrameSetNum is supposed to be set by the caller of this method
-    if(m_pKPresenterDoc->getKSpellConfig() && !m_ignoreWord.isEmpty())
-        m_pKPresenterDoc->getKSpellConfig()->setIgnoreList(m_ignoreWord);
+    if(m_pKPresenterDoc->getKSpellConfig())
+        m_pKPresenterDoc->getKSpellConfig()->setIgnoreList(m_pKPresenterDoc->spellListIgnoreAll());
     m_spell.kspell = new KSpell( this, i18n( "Spell Checking" ), this, SLOT( spellCheckerReady() ), m_pKPresenterDoc->getKSpellConfig() );
 
 
@@ -4831,7 +4831,16 @@ void KPresenterView::startKSpell()
                       this, SLOT( spellCheckerCorrected( const QString &, const QString &, unsigned int ) ) );
     QObject::connect( m_spell.kspell, SIGNAL( done( const QString & ) ),
                       this, SLOT( spellCheckerDone( const QString & ) ) );
+    QObject::connect( m_spell.kspell, SIGNAL( ignoreall (const QString & ) ),
+                      this, SLOT( spellCheckerIgnoreAll( const QString & ) ) );
+
 }
+
+void KPresenterView::spellCheckerIgnoreAll( const QString & word)
+{
+    m_pKPresenterDoc->addIgnoreWordAll( word );
+}
+
 
 void KPresenterView::spellCheckerReady()
 {
@@ -4868,7 +4877,6 @@ void KPresenterView::spellCheckerReady()
         m_spell.firstSpellPage=-1;
         m_spell.currentSpellPage=-1;
         m_spell.textObject.clear();
-        m_spell.ignoreWord.clear();
         m_spell.firstSpellPage=-1;
         if(m_spell.macroCmdSpellCheck)
             m_pKPresenterDoc->addCommand(m_spell.macroCmdSpellCheck);
@@ -4956,8 +4964,6 @@ void KPresenterView::spellCheckerDone( const QString & )
 
     int result = m_spell.kspell->dlgResult();
 
-    //store ignore word
-    m_spell.ignoreWord=m_spell.kspell->ksConfig().ignoreList ();
 
     m_spell.kspell->cleanUp();
     delete m_spell.kspell;
@@ -4971,7 +4977,6 @@ void KPresenterView::spellCheckerDone( const QString & )
     else
     {
         m_spell.textObject.clear();
-        m_ignoreWord.clear();
         if(m_spell.macroCmdSpellCheck)
             m_pKPresenterDoc->addCommand(m_spell.macroCmdSpellCheck);
         m_spell.macroCmdSpellCheck=0L;
@@ -5003,7 +5008,6 @@ void KPresenterView::spellCheckerFinished()
             textobj->removeHighlight();
     }
     m_spell.textObject.clear();
-    m_ignoreWord.clear();
     if(m_spell.macroCmdSpellCheck)
         m_pKPresenterDoc->addCommand(m_spell.macroCmdSpellCheck);
 

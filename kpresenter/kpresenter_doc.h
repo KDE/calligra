@@ -395,6 +395,10 @@ public:
     bool helpLineToFront() const { return m_bHelplinesToFront; }
     void setHelpLineToFront( bool _front ) { m_bHelplinesToFront = _front; }
 
+    QStringList spellListIgnoreAll() const { return m_spellListIgnoreAll;}
+    void addIgnoreWordAll( const QString & );
+    void clearIgnoreWordAll( );
+
 public slots:
     void movePage( int from, int to );
     void copyPage( int from, int to );
@@ -540,6 +544,8 @@ private:
     QValueList<KoPoint> m_helpPoints;
 
     QPtrList<KPrPage> m_pageList;
+
+    QStringList m_spellListIgnoreAll;
 
     double m_gridX;
     double m_gridY;

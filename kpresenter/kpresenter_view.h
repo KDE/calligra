@@ -322,6 +322,7 @@ public slots:
     void spellCheckerCorrected( const QString &, const QString &, unsigned int);
     void spellCheckerDone( const QString & );
     void spellCheckerFinished( );
+    void spellCheckerIgnoreAll( const QString &);
     void startKSpell();
 
     void alignChanged( int );
@@ -930,7 +931,6 @@ private:
     KoCharSelectDia *m_specialCharDlg;
 
 
-    QStringList m_ignoreWord;
     // Spell-checking
     struct {
 	KSpell *kspell;
@@ -938,7 +938,6 @@ private:
         int currentSpellPage;
 	int spellCurrTextObjNum;
 	QPtrList<KPTextObject> textObject;
-	QStringList ignoreWord;
 	KMacroCommand * macroCmdSpellCheck;
      } m_spell;
 

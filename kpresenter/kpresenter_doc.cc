@@ -2914,5 +2914,18 @@ int KPresenterDoc::indexOfHelpPoint( KoPoint pos )
     return -1;
 }
 
+void KPresenterDoc::addIgnoreWordAll( const QString & word)
+{
+    if( m_spellListIgnoreAll.findIndex( word )==-1)
+        m_spellListIgnoreAll.append( word );
+    m_bgSpellCheck->addIgnoreWordAll( word );
+}
+
+void KPresenterDoc::clearIgnoreWordAll( )
+{
+    m_spellListIgnoreAll.clear();
+    m_bgSpellCheck->clearIgnoreWordAll( );
+}
+
 
 #include <kpresenter_doc.moc>
