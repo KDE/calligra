@@ -46,7 +46,7 @@ public:
     AbiPropsMap() {};
     virtual ~AbiPropsMap() {};
 public:
-    bool setProperty(QString newName, QString newValue);
+    bool setProperty(const QString& newName, const QString& newValue);
     void splitAndAddAbiProps(const QString& strProps);
 };
 

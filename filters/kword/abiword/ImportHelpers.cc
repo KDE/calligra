@@ -19,14 +19,14 @@
    Boston, MA 02111-1307, USA.
 */
 
+#include <qstringlist.h>
+#include <qregexp.h>
+
 #include <kdebug.h>
 
 #include "ImportHelpers.h"
 
-// Rough rule for including code in this file:
-//   use nothing of QT except QMap, QValueList and QString
-
-bool AbiPropsMap::setProperty(QString newName, QString newValue)
+bool AbiPropsMap::setProperty(const QString& newName, const QString& newValue)
 {
     replace(newName,AbiProps(newValue));
     return true;
@@ -35,83 +35,70 @@ bool AbiPropsMap::setProperty(QString newName, QString newValue)
 // Treat the "props" attribute of AbiWord's tags and split it in separates names and values
 void AbiPropsMap::splitAndAddAbiProps(const QString& strProps)
 {
-    // NOTE: we assume that all AbiWord properties are in the form:
-    //     property:value;
-    //  If, as in CSS2, any new AbiWord property is not anymore in this form,
-    //  then this method will need to be changed (perhaps with QStringList::split())
     if (strProps.isEmpty())
         return;
-
+    // Split the properties (we do not want empty ones)
+    QStringList list=QStringList::split(';',strProps,false);
     QString name,value;
-    bool notFinished=true;
-    int position=0;
-    int result;
-    while (notFinished)
+
+    QStringList::ConstIterator it;
+    for (it=list.begin();it!=list.end();it++)
     {
-        //Find next name and its value
-        result=strProps.find(':',position);
+        const int result=(*it).find(':');
         if (result==-1)
         {
-            name=strProps.mid(position).stripWhiteSpace();
-            value="";
-            notFinished=false;
+            name=(*it);
+            value=QString::null;
+            kdWarning(30506) << "Property without value: " << name << endl;
         }
         else
         {
-            name=strProps.mid(position,result-position).stripWhiteSpace();
-            position=result+1;
-            result=strProps.find(';',position);
-            if (result==-1)
-            {
-                value=strProps.mid(position).stripWhiteSpace();
-                notFinished=false;
-            }
-            else
-            {
-                value=strProps.mid(position,result-position).stripWhiteSpace();
-                position=result+1;
-            }
+            name=(*it).left(result);
+            value=(*it).mid(result+1);
         }
         kdDebug(30506) << "========== (Property :" << name << "=" << value <<":)"<<endl;
         // Now set the property
-        setProperty(name,value);
+        setProperty(name.stripWhiteSpace(),value.stripWhiteSpace());
     }
 }
 
-// Do not put this function inline (it's too long!)
 double ValueWithLengthUnit(const QString& _str)
 {
-    double d;
-    int pos=0;
-    if ((pos=_str.find("cm"))>=0)
+    double result;
+    // We search an unit (defined by a sequence of lower case characters)
+    QRegExp unitExp("[a-z]+");
+    const int pos=unitExp.search(_str);
+    if (pos==-1)
     {
-        d=CentimetresToPoints(_str.left(pos).toDouble());
-    }
-    else if ((pos=_str.find("in"))>=0)
-    {
-        d=InchesToPoints(_str.left(pos).toDouble());
-    }
-    else if ((pos=_str.find("mm"))>=0)
-    {
-        d=MillimetresToPoints(_str.left(pos).toDouble());
-    }
-    else if((pos=_str.find("pt"))>=0)
-    {
-        d=_str.left(pos).toDouble();
-    }
-    else if((pos=_str.find("pi"))>=0)
-    {
-        d=PicaToPoints(_str.left(pos).toDouble());
+        bool flag=false;
+        result=_str.toDouble(&flag);
+        if (!flag)
+            kdWarning(30506) << "Unknown value: " << _str << " (ValueWithLengthUnit)" << endl;
     }
     else
     {
-        bool b=false;
-        d=_str.toDouble(&b);
-        if (!b)
+        const double rawValue=_str.left(pos).toDouble();
+        const QString strUnit=unitExp.cap();
+        if (strUnit=="cm")
+            result=CentimetresToPoints(rawValue);
+        else if (strUnit=="in")
+            result=InchesToPoints(rawValue);
+        else if (strUnit=="mm")
+            result=MillimetresToPoints(rawValue);
+        else if (strUnit=="pt")
+            result=rawValue;
+        else if(strUnit=="pi")
+            result=PicaToPoints(rawValue);
+        else
         {
-            d=0;
-            kdWarning(30506) << "Unknown value: " << _str << " (ValueWithLengthUnit)" << endl;
+            kdWarning(30506) << "Value " << _str << " has non-supported unit: "
+                << strUnit << " (ValueWithLengthUnit)" << endl;
+            result=rawValue;
         }
+#if 1
+        kdDebug(30506) << "Value: " << _str << " Unit: " << strUnit
+            << " Result: " << result << endl;
+#endif
     }
-    return d;
+    return result;
 }
