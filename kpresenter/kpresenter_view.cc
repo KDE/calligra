@@ -181,6 +181,7 @@ KPresenterView::KPresenterView( KPresenterDoc* _doc, QWidget *_parent, const cha
     yOffset = 0;
     v_ruler = 0;
     h_ruler = 0;
+    searchDialog=0L;
     pen = QPen( black, 1, SolidLine );
     brush = QBrush( white, SolidPattern );
     lineBegin = L_NORMAL;
@@ -241,6 +242,7 @@ KPresenterView::~KPresenterView()
         config->setGroup("Global");
         config->writeEntry("Sidebar", sidebar->isVisible());
     }
+    delete searchDialog;
     delete rb_oalign;
     delete rb_lbegin;
     delete rb_lend;
