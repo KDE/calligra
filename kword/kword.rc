@@ -22,7 +22,11 @@
   <Action name="view_newview"/>
   <Action name="view_closeallviews"/>
   <Separator/>
+  <Separator/>
+  <Separator/>
+  <Separator/>
   <ActionList name="view_split" />
+  <Separator/>
   <Separator/>
   <Action name="view_formattingchars"/>
   <Action name="view_frameborders"/>

@@ -252,10 +252,6 @@ void KWordView::setupActions()
 					actionCollection(), "edit_sldatabase" );
 
     // -------------- View actions
-/*
-    actionViewNewView = new KAction( i18n( "&New View" ), 0,
-				     this, SLOT( newView() ),
-				     actionCollection(), "view_newview" ); */
     actionViewFormattingChars = new KToggleAction( i18n( "&Formatting Characters" ), 0,
 						   this, SLOT( viewFormattingChars() ),
 						   actionCollection(), "view_formattingchars" );
@@ -1188,17 +1184,6 @@ void KWordView::editSerialLetterDataBase()
     gui->getPaperWidget()->repaintScreen( FALSE );
     delete dia;
 }
-
-/*================================================================*/
-/*
-void KWordView::newView()
-{
-    assert( ( m_pKWordDoc != 0L ) );
-
-    KoMainWindow* shell = m_pKWordDoc->createShell();
-    shell->show();
-    shell->setRootDocument( m_pKWordDoc );
-}  */
 
 /*===============================================================*/
 void KWordView::viewFormattingChars()
