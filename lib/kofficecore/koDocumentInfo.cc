@@ -197,7 +197,8 @@ void KoDocumentInfoAuthor::initParameters()
     KConfig* config = KoGlobal::kofficeConfig();
     if ( config->hasGroup( "Author" ) ) {
         KConfigGroupSaver cgs( config, "Author" );
-        m_telephone=config->readEntry( "telephone" );
+        m_telephoneHome=config->readEntry( "telephone" );
+        m_telephoneWork=config->readEntry( "telephone-work" );
         m_fax=config->readEntry( "fax" );
         m_country=config->readEntry( "country" );
         m_postalCode=config->readEntry( "postal-code" );
@@ -246,7 +247,9 @@ bool KoDocumentInfoAuthor::load( const QDomElement& e )
         else if ( e.tagName() == "email" )
             m_email = e.text();
         else if ( e.tagName() == "telephone" )
-            m_telephone = e.text();
+            m_telephoneHome = e.text();
+        else if ( e.tagName() == "telephone-work" )
+            m_telephoneWork = e.text();
         else if ( e.tagName() == "fax" )
             m_fax = e.text();
         else if ( e.tagName() == "country" )
@@ -288,7 +291,11 @@ QDomElement KoDocumentInfoAuthor::save( QDomDocument& doc )
 
     t = doc.createElement( "telephone" );
     e.appendChild( t );
-    t.appendChild( doc.createTextNode( m_telephone ) );
+    t.appendChild( doc.createTextNode( m_telephoneHome ) );
+
+    t = doc.createElement( "telephone-work" );
+    e.appendChild( t );
+    t.appendChild( doc.createTextNode( m_telephoneWork ) );
 
     t = doc.createElement( "fax" );
     e.appendChild( t );
@@ -338,9 +345,14 @@ QString KoDocumentInfoAuthor::email() const
     return m_email;
 }
 
-QString KoDocumentInfoAuthor::telephone() const
+QString KoDocumentInfoAuthor::telephoneHome() const
 {
-    return m_telephone;
+    return m_telephoneHome;
+}
+
+QString KoDocumentInfoAuthor::telephoneWork() const
+{
+    return m_telephoneWork;
 }
 
 QString KoDocumentInfoAuthor::fax() const
@@ -394,9 +406,14 @@ void KoDocumentInfoAuthor::setEmail( const QString& n )
     m_email = n;
 }
 
-void KoDocumentInfoAuthor::setTelephone( const QString& n )
+void KoDocumentInfoAuthor::setTelephoneHome( const QString& n )
 {
-    m_telephone = n;
+    m_telephoneHome = n;
+}
+
+void KoDocumentInfoAuthor::setTelephoneWork( const QString& n )
+{
+    m_telephoneWork = n;
 }
 
 void KoDocumentInfoAuthor::setFax( const QString& n )

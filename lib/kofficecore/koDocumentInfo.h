@@ -86,7 +86,8 @@ public:
     QString title() const;
     QString company() const;
     QString email() const;
-    QString telephone() const;
+    QString telephoneHome() const;
+    QString telephoneWork() const;
     QString fax() const;
     QString country() const;
     QString postalCode() const;
@@ -97,7 +98,8 @@ public:
     void setTitle( const QString& n );
     void setCompany( const QString& n );
     void setEmail( const QString& n );
-    void setTelephone( const QString& n );
+    void setTelephoneHome( const QString& n );
+    void setTelephoneWork( const QString& n );
     void setFax( const QString& n );
     void setCountry( const QString& n );
     void setPostalCode( const QString& n );
@@ -111,7 +113,8 @@ private:
     QString m_title;
     QString m_company;
     QString m_email;
-    QString m_telephone;
+    QString m_telephoneHome;
+    QString m_telephoneWork;
     QString m_fax;
     QString m_country;
     QString m_postalCode;

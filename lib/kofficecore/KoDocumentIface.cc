@@ -167,6 +167,12 @@ QString KoDocumentIface::documentInfoCompanyName() const
 
 QString KoDocumentIface::documentInfoTelephone() const
 {
+    kdDebug()<<" Keep compatibility with koffice <= 1.3 : use documentInfoTelephoneWork\n";
+    return documentInfoTelephoneWork();
+}
+
+QString KoDocumentIface::documentInfoTelephoneWork() const
+{
     KoDocumentInfo * info = m_pDoc->documentInfo();
     KoDocumentInfoAuthor * authorPage = static_cast<KoDocumentInfoAuthor *>(info->page( "author" ));
     if ( !authorPage )
@@ -175,9 +181,23 @@ QString KoDocumentIface::documentInfoTelephone() const
         return QString::null;
     }
     else
-        return authorPage->telephone();
-
+        return authorPage->telephoneWork();
 }
+
+QString KoDocumentIface::documentInfoTelephoneHome() const
+{
+    KoDocumentInfo * info = m_pDoc->documentInfo();
+    KoDocumentInfoAuthor * authorPage = static_cast<KoDocumentInfoAuthor *>(info->page( "author" ));
+    if ( !authorPage )
+    {
+        kdWarning() << "Author information not found in documentInfo !" << endl;
+        return QString::null;
+    }
+    else
+        return authorPage->telephoneHome();
+}
+
+
 QString KoDocumentIface::documentInfoFax() const
 {
     KoDocumentInfo * info = m_pDoc->documentInfo();
@@ -324,6 +344,12 @@ void KoDocumentIface::setDocumentInfoCompanyName(const QString &text)
 
 void KoDocumentIface::setDocumentInfoTelephone(const QString &text)
 {
+    kdDebug()<<"Keep compatibility with koffice <= 1.3 : use setDocumentInfoTelephoneWork\n";
+    setDocumentInfoTelephoneWork(text);
+}
+
+void KoDocumentIface::setDocumentInfoTelephoneWork(const QString &text)
+{
     KoDocumentInfo * info = m_pDoc->documentInfo();
     KoDocumentInfoAuthor * authorPage = static_cast<KoDocumentInfoAuthor *>(info->page( "author" ));
     if ( !authorPage )
@@ -331,9 +357,21 @@ void KoDocumentIface::setDocumentInfoTelephone(const QString &text)
         kdWarning() << "Author information not found in documentInfo !" << endl;
     }
     else
-        authorPage->setTelephone(text);
-
+        authorPage->setTelephoneWork(text);
 }
+
+void KoDocumentIface::setDocumentInfoTelephoneHome(const QString &text)
+{
+    KoDocumentInfo * info = m_pDoc->documentInfo();
+    KoDocumentInfoAuthor * authorPage = static_cast<KoDocumentInfoAuthor *>(info->page( "author" ));
+    if ( !authorPage )
+    {
+        kdWarning() << "Author information not found in documentInfo !" << endl;
+    }
+    else
+        authorPage->setTelephoneHome(text);
+}
+
 
 void KoDocumentIface::setDocumentInfoFax(const QString &text)
 {

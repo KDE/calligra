@@ -65,7 +65,8 @@ public:
   QLineEdit *m_leAuthorTitle;
   QLineEdit *m_leCompany;
   QLineEdit *m_leEmail;
-  QLineEdit *m_leTelephone;
+  QLineEdit *m_leTelephoneWork;
+  QLineEdit *m_leTelephoneHome;
   QLineEdit *m_leFax;
   QLineEdit *m_leCountry;
   QLineEdit *m_lePostalCode;
@@ -162,7 +163,10 @@ void KoDocumentInfoDlg::loadFromKABC()
   d->m_leEmail->setText( addr.preferredEmail() );
 
   KABC::PhoneNumber phone = addr.phoneNumber( KABC::PhoneNumber::Home );
-  d->m_leTelephone->setText( phone.number() );
+  d->m_leTelephoneHome->setText( phone.number() );
+  phone = addr.phoneNumber( KABC::PhoneNumber::Work );
+  d->m_leTelephoneWork->setText( phone.number() );
+
   phone = addr.phoneNumber( KABC::PhoneNumber::Fax );
   d->m_leFax->setText( phone.number() );
 
@@ -223,32 +227,36 @@ void KoDocumentInfoDlg::addAuthorPage( KoDocumentInfoAuthor *authorInfo )
       d->m_leEmail->setText( email );
   }
 
-  layout->addWidget( new QLabel( i18n( "Telephone:" ), page ), 5, 0 );
-  d->m_leTelephone = new QLineEdit( authorInfo->telephone(), page );
-  layout->addWidget( d->m_leTelephone, 5, 1 );
+  layout->addWidget( new QLabel( i18n( "Telephone (Home):" ), page ), 5, 0 );
+  d->m_leTelephoneHome = new QLineEdit( authorInfo->telephoneHome(), page );
+  layout->addWidget( d->m_leTelephoneHome, 5, 1 );
 
-  layout->addWidget( new QLabel( i18n( "Fax:" ), page ), 6, 0 );
+  layout->addWidget( new QLabel( i18n( "Telephone (Work):" ), page ), 6, 0 );
+  d->m_leTelephoneWork = new QLineEdit( authorInfo->telephoneWork(), page );
+  layout->addWidget( d->m_leTelephoneWork, 6, 1 );
+
+  layout->addWidget( new QLabel( i18n( "Fax:" ), page ), 7, 0 );
   d->m_leFax = new QLineEdit( authorInfo->fax(), page );
-  layout->addWidget( d->m_leFax, 6, 1 );
+  layout->addWidget( d->m_leFax, 7, 1 );
 
-  layout->addWidget( new QLabel( i18n( "Street:" ), page ), 7, 0 );
+  layout->addWidget( new QLabel( i18n( "Street:" ), page ), 8, 0 );
   d->m_leStreet = new QLineEdit( authorInfo->street(), page );
-  layout->addWidget( d->m_leStreet, 7, 1 );
+  layout->addWidget( d->m_leStreet, 8, 1 );
 
-  layout->addWidget( new QLabel( i18n( "Postal code:" ), page ), 8, 0 );
+  layout->addWidget( new QLabel( i18n( "Postal code:" ), page ), 9, 0 );
   d->m_lePostalCode = new QLineEdit( authorInfo->postalCode(), page );
-  layout->addWidget( d->m_lePostalCode, 8, 1 );
+  layout->addWidget( d->m_lePostalCode, 9, 1 );
 
-  layout->addWidget( new QLabel( i18n( "City:" ), page ), 9, 0 );
+  layout->addWidget( new QLabel( i18n( "City:" ), page ), 10, 0 );
   d->m_leCity = new QLineEdit( authorInfo->city(), page );
-  layout->addWidget( d->m_leCity, 9, 1 );
+  layout->addWidget( d->m_leCity, 10, 1 );
 
-  layout->addWidget( new QLabel( i18n( "Country:" ), page ), 10, 0 );
+  layout->addWidget( new QLabel( i18n( "Country:" ), page ), 11, 0 );
   d->m_leCountry = new QLineEdit( authorInfo->country(), page );
-  layout->addWidget( d->m_leCountry, 10, 1 );
+  layout->addWidget( d->m_leCountry, 11, 1 );
 
   d->m_pbLoadKABC = new QPushButton( i18n( "Load From Address Book" ), page );
-  layout->addMultiCellWidget( d->m_pbLoadKABC, 11, 11, 0, 1 );
+  layout->addMultiCellWidget( d->m_pbLoadKABC, 12, 12, 0, 1 );
 
   connect( d->m_leFullName, SIGNAL( textChanged( const QString & ) ),
            this, SIGNAL( changed() ) );
@@ -261,7 +269,9 @@ void KoDocumentInfoDlg::addAuthorPage( KoDocumentInfoAuthor *authorInfo )
            this, SIGNAL( changed() ) );
   connect( d->m_leEmail, SIGNAL( textChanged( const QString & ) ),
            this, SIGNAL( changed() ) );
-  connect( d->m_leTelephone, SIGNAL( textChanged( const QString & ) ),
+  connect( d->m_leTelephoneWork, SIGNAL( textChanged( const QString & ) ),
+           this, SIGNAL( changed() ) );
+  connect( d->m_leTelephoneHome, SIGNAL( textChanged( const QString & ) ),
            this, SIGNAL( changed() ) );
   connect( d->m_leFax, SIGNAL( textChanged( const QString & ) ),
            this, SIGNAL( changed() ) );
@@ -329,7 +339,8 @@ void KoDocumentInfoDlg::save( KoDocumentInfoAuthor *authorInfo )
   authorInfo->setTitle( d->m_leAuthorTitle->text() );
   authorInfo->setCompany( d->m_leCompany->text() );
   authorInfo->setEmail( d->m_leEmail->text() );
-  authorInfo->setTelephone( d->m_leTelephone->text() );
+  authorInfo->setTelephoneWork( d->m_leTelephoneWork->text() );
+  authorInfo->setTelephoneHome( d->m_leTelephoneHome->text() );
   authorInfo->setFax( d->m_leFax->text() );
   authorInfo->setCountry( d->m_leCountry->text() );
   authorInfo->setPostalCode( d->m_lePostalCode->text() );
@@ -338,7 +349,8 @@ void KoDocumentInfoDlg::save( KoDocumentInfoAuthor *authorInfo )
 
   KConfig* config = KoGlobal::kofficeConfig();
   KConfigGroupSaver cgs( config, "Author" );
-  config->writeEntry("telephone", d->m_leTelephone->text());
+  config->writeEntry("telephone", d->m_leTelephoneHome->text());
+  config->writeEntry("telephone-work", d->m_leTelephoneWork->text());
   config->writeEntry("fax", d->m_leFax->text());
   config->writeEntry("country",d->m_leCountry->text());
   config->writeEntry("postal-code",d->m_lePostalCode->text());

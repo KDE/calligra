@@ -1954,8 +1954,11 @@ QString KoFieldVariable::fieldCode()
     case VST_COMPANYNAME:
         return i18n("Company Name");
         break;
-    case VST_TELEPHONE:
-        return i18n("Telephone");
+    case VST_TELEPHONE_WORK:
+        return i18n("Telephone (Work)");
+        break;
+    case VST_TELEPHONE_HOME:
+        return i18n("Telephone (Home)");
         break;
     case VST_FAX:
         return i18n("Fax");
@@ -2066,9 +2069,9 @@ void KoFieldVariable::loadOasis( const QDomElement &elem, KoOasisContext& /*cont
     else if ( localName == "sender-position" )
         m_subtype = VST_AUTHORTITLE; // TODO separate variable
     else if ( localName == "sender-phone-private" )
-        m_subtype = VST_TELEPHONE;
+        m_subtype = VST_TELEPHONE_HOME;
     else if ( localName == "sender-phone-work" )
-        m_subtype = VST_TELEPHONE; // ### TODO separate type
+        m_subtype = VST_TELEPHONE_WORK;
     else if ( localName == "sender-fax" )
         m_subtype = VST_FAX;
     else if ( localName == "sender-email" )
@@ -2108,8 +2111,11 @@ void KoFieldVariable::saveOasis( KoXmlWriter& writer, KoSavingContext& /*context
         writer.startElement("text:display" );
         writer.addAttribute( "text:display", "name-and-extension" ); // ???????? not define !
         break;
-    case VST_TELEPHONE:
+    case VST_TELEPHONE_WORK:
         writer.startElement("text:sender-phone-work" );
+        break;
+    case VST_TELEPHONE_HOME:
+        writer.startElement("text:sender-phone-private" );
         break;
     case VST_FAX:
         writer.startElement("text:sender-fax" );
@@ -2172,7 +2178,8 @@ void KoFieldVariable::recalc()
         case VST_AUTHORNAME:
         case VST_EMAIL:
         case VST_COMPANYNAME:
-        case VST_TELEPHONE:
+        case VST_TELEPHONE_WORK:
+        case VST_TELEPHONE_HOME:
         case VST_FAX:
         case VST_COUNTRY:
         case VST_POSTAL_CODE:
@@ -2193,8 +2200,10 @@ void KoFieldVariable::recalc()
                     value = authorPage->email();
                 else if ( m_subtype == VST_COMPANYNAME )
                     value = authorPage->company();
-                else if ( m_subtype == VST_TELEPHONE )
-                    value = authorPage->telephone();
+                else if ( m_subtype == VST_TELEPHONE_WORK )
+                    value = authorPage->telephoneWork();
+                else if ( m_subtype == VST_TELEPHONE_HOME )
+                    value = authorPage->telephoneHome();
                 else if ( m_subtype == VST_FAX )
                     value = authorPage->fax();
                 else if ( m_subtype == VST_COUNTRY )
@@ -2249,7 +2258,9 @@ QStringList KoFieldVariable::actionTexts()
     lst << i18n( "Title" );
     lst << i18n( "Company" );
     lst << i18n( "Email" );
-    lst << i18n( "Telephone");
+    lst << i18n( "Telephone (work)");
+    lst << i18n( "Telephone (private)");
+
     lst << i18n( "Fax");
     lst << i18n( "Street" );
     lst << i18n( "Postal Code" );
@@ -2286,31 +2297,33 @@ KoFieldVariable::FieldSubType KoFieldVariable::fieldSubType(short int menuNumber
                 break;
         case 3: v = VST_EMAIL;
                 break;
-        case 4: v = VST_TELEPHONE;
+        case 4: v = VST_TELEPHONE_WORK;
                 break;
-        case 5: v = VST_FAX;
+        case 5: v = VST_TELEPHONE_HOME;
                 break;
-        case 6: v = VST_STREET;
+        case 6: v = VST_FAX;
                 break;
-        case 7: v = VST_POSTAL_CODE;
+        case 7: v = VST_STREET;
                 break;
-        case 8: v = VST_CITY;
+        case 8: v = VST_POSTAL_CODE;
                 break;
-        case 9: v = VST_COUNTRY;
+        case 9: v = VST_CITY;
                 break;
-        case 10: v = VST_TITLE;
+        case 10: v = VST_COUNTRY;
                 break;
-        case 11: v = VST_ABSTRACT;
+        case 11: v = VST_TITLE;
                 break;
-        case 12: v = VST_FILENAME;
+        case 12: v = VST_ABSTRACT;
                 break;
-        case 13: v = VST_FILENAMEWITHOUTEXTENSION;
+        case 13: v = VST_FILENAME;
                 break;
-        case 14: v = VST_DIRECTORYNAME;
+        case 14: v = VST_FILENAMEWITHOUTEXTENSION;
                 break;
-        case 15: v = VST_PATHFILENAME;
+        case 15: v = VST_DIRECTORYNAME;
                 break;
-        case 16: v = VST_INITIAL;
+        case 16: v = VST_PATHFILENAME;
+                break;
+        case 17: v = VST_INITIAL;
                 break;
         default:
             v = VST_NONE;

@@ -117,6 +117,8 @@ k_dcop:
     QString documentInfoTitle() const;
     QString documentInfoAbstract() const;
     QString documentInfoTelephone() const;
+    QString documentInfoTelephoneWork() const;
+    QString documentInfoTelephoneHome() const;
     QString documentInfoFax() const;
     QString documentInfoCountry() const;
     QString documentInfoPostalCode() const;
@@ -127,6 +129,8 @@ k_dcop:
     void setDocumentInfoEmail(const QString &text);
     void setDocumentInfoCompanyName(const QString &text);
     void setDocumentInfoTelephone(const QString &text);
+    void setDocumentInfoTelephoneWork(const QString &text);
+    void setDocumentInfoTelephoneHome(const QString &text);
     void setDocumentInfoFax(const QString &text);
     void setDocumentInfoCountry(const QString &text);
     void setDocumentInfoTitle(const QString & text);

@@ -569,10 +569,10 @@ public:
                         VST_FILENAME = 0, VST_DIRECTORYNAME = 1,
                         VST_AUTHORNAME = 2, VST_EMAIL = 3, VST_COMPANYNAME = 4,
 			VST_PATHFILENAME = 5, VST_FILENAMEWITHOUTEXTENSION=6,
-                        VST_TELEPHONE = 7, VST_FAX = 8, VST_COUNTRY = 9,
+                        VST_TELEPHONE_WORK = 7, VST_FAX = 8, VST_COUNTRY = 9,
                         VST_TITLE = 10, VST_ABSTRACT = 11,
                         VST_POSTAL_CODE = 12, VST_CITY = 13, VST_STREET = 14,
-                        VST_AUTHORTITLE = 15, VST_INITIAL = 16};
+                        VST_AUTHORTITLE = 15, VST_INITIAL = 16, VST_TELEPHONE_HOME = 17 };
 
     virtual VariableType type() const
     { return VT_FIELD; }
