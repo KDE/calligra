@@ -119,9 +119,9 @@ VClipartWidget::VClipartWidget( QPtrList<VClipartIconItem>* clipartItems, Karbon
 
 	setFrameStyle( Box | Sunken );
 	layout->setMargin( 3 );
-	
+
 	connect( m_buttonGroup, SIGNAL( clicked( int ) ), this, SLOT( slotButtonClicked( int ) ) );
-	connect( m_deleteClipartButton, SIGNAL( clicked() ), this, SLOT( deleteClipart() ) );
+	//connect( m_deleteClipartButton, SIGNAL( clicked() ), this, SLOT( deleteClipart() ) );
 	connect( m_clipartChooser, SIGNAL( selected( KoIconItem* ) ), this, SLOT( clipartSelected( KoIconItem* ) ) );
 	
 	m_clipartChooser->setAutoDelete( false );
@@ -187,21 +187,19 @@ void VClipartWidget::deleteClipart()
 	VClipartIconItem* clipartItem = m_clipartItem;
 	KarbonFactory::rServer()->removeClipart( clipartItem );
 	m_clipartChooser->removeItem( clipartItem );
+	m_clipartChooser->updateContents();
 } // VClipartWidget::deleteClipart
 
 void VClipartWidget::slotButtonClicked( int id )
 {
-	switch ( id )
+	switch( id )
 	{
-		case 1:
-				addClipart();
-			break;
-		case 2:
-				//importClipart();
-			break;
-		case 3:
-				deleteClipart();
-			break;
+		case 0: addClipart();
+				break;
+		case 1: //importClipart();
+				break;
+		case 2: deleteClipart();
+				break;
 	} 
 } // VClipartWidget::slotButtonClicked
 
