@@ -45,6 +45,7 @@ class WMLHandler: public QXmlDefaultHandler
 
     WMLFormat m_currentFormat;
     WMLFormatList m_formatList;
+    WMLLayout m_currentLayout;
     
     bool flushParagraph();
 };
@@ -67,6 +68,8 @@ bool WMLHandler::startElement( const QString&, const QString&,
 
   if( tag == "card" ) 
   {
+    m_currentFormat = WMLFormat();
+    m_currentLayout = WMLLayout();
     QString card_id = attr.value("id");
     QString card_title = attr.value("title");
     return m_parser->doOpenCard( card_id, card_title );
@@ -74,11 +77,19 @@ bool WMLHandler::startElement( const QString&, const QString&,
 
   if( tag == "p" )
   {
+    m_currentLayout = WMLLayout();
     m_inBlock = TRUE;
     if( m_currentFormat.bold || 
         m_currentFormat.italic ||
         m_currentFormat.underline )
       m_formatList.append( m_currentFormat );
+
+    QString align = attr.value("align").lower();
+    if( align == "right" )
+      m_currentLayout.align =  WMLLayout::Right;
+    if( align == "center" )
+      m_currentLayout.align =  WMLLayout::Center;
+
     return TRUE;
   }
 
@@ -124,10 +135,6 @@ bool WMLHandler::endElement( const QString&, const QString&,
     m_inBlock = FALSE;
     if( !m_text.isEmpty() )
       flushParagraph();
-
-    // force to reset formatting
-    m_currentFormat = WMLFormat();
-
     return m_parser->doCloseCard();
   }
 
@@ -189,11 +196,12 @@ bool WMLHandler::flushParagraph()
     format.len = nextpos - format.pos;
   }
 
-  bool result = m_parser->doParagraph( m_text, m_formatList );
+  bool result = m_parser->doParagraph( m_text, m_formatList, m_currentLayout );
 
   // ready for next paragraph
   m_text = "";
   m_formatList.clear();
+  m_currentLayout = WMLLayout();
 
   // m_currentFormat = WMLFormat();
   // FIXME should we reset formatting ?
@@ -228,6 +236,28 @@ WMLFormat& WMLFormat::operator=( const WMLFormat& f )
   return *this;
 }
 
+// paragraph layout info
+WMLLayout::WMLLayout()
+{
+  align = Left;
+}
+
+void WMLLayout::assign( const WMLLayout& l )
+{
+  align = l.align;
+}
+
+WMLLayout::WMLLayout( const WMLLayout& l )
+{
+  assign( l );
+}
+
+WMLLayout& WMLLayout::operator=( const WMLLayout& l )
+{
+  assign( l );
+  return *this;
+}
+ 
 // The basic WML parser
 void WMLParser::parse( const char* filename )
 {
@@ -259,7 +289,13 @@ bool WMLParser::doCloseCard()
   return TRUE;
 }
 
-bool WMLParser::doParagraph( QString text, WMLFormatList formatList )
+bool WMLParser::doParagraph( QString, WMLFormatList )
 {
   return TRUE;
 }
+
+bool WMLParser::doParagraph( QString, WMLFormatList, WMLLayout )
+{
+  return TRUE;
+}
+

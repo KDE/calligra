@@ -34,6 +34,16 @@ class WMLFormat
     void assign( const WMLFormat& );
 };
 
+class WMLLayout
+{
+  public:
+    enum { Left, Center, Right } align;
+    WMLLayout();
+    WMLLayout( const WMLLayout& );
+    WMLLayout& operator=( const WMLLayout& );
+    void assign( const WMLLayout& );
+};
+
 typedef QValueList<WMLFormat> WMLFormatList;
 
 class WMLParser
@@ -48,6 +58,7 @@ class WMLParser
     virtual bool doOpenCard( QString id, QString title );
     virtual bool doCloseCard();
     virtual bool doParagraph( QString text, WMLFormatList list );
+    virtual bool doParagraph( QString, WMLFormatList, WMLLayout );
 };
 
 #endif

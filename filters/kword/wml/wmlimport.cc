@@ -52,7 +52,8 @@ class WMLConverter: public WMLParser
     virtual void parse( const char* filename );
     virtual bool doOpenCard( QString, QString );
     virtual bool doCloseCard();
-    virtual bool doParagraph( QString text, WMLFormatList formatList );
+    virtual bool doParagraph( QString text, WMLFormatList formatList,
+      WMLLayout layout );
   private:
     QString m_title;
 };
@@ -77,6 +78,41 @@ static QString WMLFormatAsXML( WMLFormat format )
   return result;
 }
 
+static QString WMLLayoutAsXML( WMLLayout layout )
+{
+  QString result;
+
+  QString align = "left";
+  if( layout.align == WMLLayout::Center ) align = "center";
+  if( layout.align == WMLLayout::Right ) align = "right";
+
+  result.append( "<LAYOUT>\n" );
+  result.append( "  <NAME value=\"Standard\" />\n" );
+  result.append( "  <FLOW align=\"" + align + "\" />\n" );
+  result.append( "  <LINESPACING value=\"0\" />\n" );
+  result.append( "  <LEFTBORDER width=\"0\" style=\"0\" />\n" );
+  result.append( "  <RIGHTBORDER width=\"0\" style=\"0\" />\n" );
+  result.append( "  <TOPBORDER width=\"0\" style=\"0\" />\n" );
+  result.append( "  <BOTTOMBORDER width=\"0\" style=\"0\" />\n" );
+  result.append( "  <INDENTS />\n" );
+  result.append( "  <OFFSETS />\n" );
+  result.append( "  <PAGEBREAKING />\n" );
+  result.append( "  <COUNTER />\n" );
+  result.append( "  <FORMAT id=\"1\">\n" );
+  result.append( "    <WEIGHT value=\"50\" />\n" );
+  result.append( "    <ITALIC value=\"0\" />\n" );
+  result.append( "    <UNDERLINE value=\"0\" />\n" );
+  result.append( "    <STRIKEOUT value=\"0\" />\n" );
+  result.append( "    <CHARSET value=\"0\" />\n" );
+  result.append( "    <VERTALIGN value=\"0\" />\n" );
+  result.append( "    <FONT name=\"Helvetica\" />\n" );
+  result.append( "    <SIZE value=\"11\" />\n" );
+  result.append( "  </FORMAT>\n" );
+  result.append( "</LAYOUT>\n" );
+
+  return result;
+}
+
 // use the first card title (or id) as document title
 bool WMLConverter::doOpenCard( QString id, QString title )
 {
@@ -90,12 +126,13 @@ bool WMLConverter::doOpenCard( QString id, QString title )
 bool WMLConverter::doCloseCard()
 {
   // add extra paragraph between cards
-  doParagraph( " ", WMLFormatList() );
+  doParagraph( " ", WMLFormatList(), WMLLayout() );
 }
 
-bool WMLConverter::doParagraph( QString atext, WMLFormatList formatList  )
+bool WMLConverter::doParagraph( QString atext, WMLFormatList formatList,
+  WMLLayout layout  )
 {
-  QString text, formats, layout;
+  QString text, formats;
 
   // encode the text for XML-ness
   text = atext;
@@ -110,37 +147,12 @@ bool WMLConverter::doParagraph( QString atext, WMLFormatList formatList  )
     WMLFormat& format = *it;
     formats.append( WMLFormatAsXML(format) );
   }
-
-  // hard-coded layout
-  layout.append( "<LAYOUT>\n" );
-  layout.append( "  <NAME value=\"Standard\" />\n" );
-  layout.append( "  <FLOW align=\"left\" />\n" );
-  layout.append( "  <LINESPACING value=\"0\" />\n" );
-  layout.append( "  <LEFTBORDER width=\"0\" style=\"0\" />\n" );
-  layout.append( "  <RIGHTBORDER width=\"0\" style=\"0\" />\n" );
-  layout.append( "  <TOPBORDER width=\"0\" style=\"0\" />\n" );
-  layout.append( "  <BOTTOMBORDER width=\"0\" style=\"0\" />\n" );
-  layout.append( "  <INDENTS />\n" );
-  layout.append( "  <OFFSETS />\n" );
-  layout.append( "  <PAGEBREAKING />\n" );
-  layout.append( "  <COUNTER />\n" );
-  layout.append( "  <FORMAT id=\"1\">\n" );
-  layout.append( "    <WEIGHT value=\"50\" />\n" );
-  layout.append( "    <ITALIC value=\"0\" />\n" );
-  layout.append( "    <UNDERLINE value=\"0\" />\n" );
-  layout.append( "    <STRIKEOUT value=\"0\" />\n" );
-  layout.append( "    <CHARSET value=\"0\" />\n" );
-  layout.append( "    <VERTALIGN value=\"0\" />\n" );
-  layout.append( "    <FONT name=\"Helvetica\" />\n" );
-  layout.append( "    <SIZE value=\"11\" />\n" );
-  layout.append( "  </FORMAT>\n" );
-  layout.append( "</LAYOUT>\n" );
-
+  
   // assemble
   root.append( "<PARAGRAPH>\n" );
   root.append( "<TEXT>" + text + "</TEXT>\n" );
   root.append( "<FORMATS>" + formats + "</FORMATS>\n" );
-  root.append( layout );
+  root.append( WMLLayoutAsXML( layout) );
   root.append( "</PARAGRAPH>\n" );
 
   return TRUE;
