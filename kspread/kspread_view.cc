@@ -3144,9 +3144,9 @@ if(tmpRect.bottom()==0x7FFF)
    }
 
 
- KoMainWindow * tmpKo = m_pDoc->firstShell();
- for ( ; tmpKo ; tmpKo = m_pDoc->nextShell() )
-   tmpKo->statusBarLabel()->setText(tmp);
+   KoMainWindow * tmpKo = shell();
+   if ( tmpKo )
+     tmpKo->statusBarLabel()->setText(tmp);
 }
 
 void KSpreadView::slotUnselect( KSpreadTable *_table, const QRect& _old )
