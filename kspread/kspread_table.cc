@@ -29,7 +29,7 @@
 #include <qpoint.h>
 #include <koprinter.h>
 #include <qcursor.h>
-#include <qstack.h>
+#include <qptrstack.h>
 #include <qbuffer.h>
 #include <qmessagebox.h>
 #include <qclipboard.h>
@@ -4200,7 +4200,7 @@ bool KSpreadTable::testAreaPasteInsert()
 void KSpreadTable::deleteCells( const QRect& rect )
 {
     // A list of all cells we want to delete.
-    QStack<KSpreadCell> cellStack;
+    QPtrStack<KSpreadCell> cellStack;
 
     QRect tmpRect;
     bool extraCell=false;

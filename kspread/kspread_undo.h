@@ -29,7 +29,7 @@ class ColumnLayout;
 class RowLayout;
 
 #include "kspread_cell.h"
-#include <qstack.h>
+#include <qptrstack.h>
 #include <qstring.h>
 #include <qrect.h>
 #include <qptrlist.h>
@@ -571,8 +571,8 @@ public:
     QString getRedoName();
 
 protected:
-    QStack<KSpreadUndoAction> m_stckUndo;
-    QStack<KSpreadUndoAction> m_stckRedo;
+    QPtrStack<KSpreadUndoAction> m_stckUndo;
+    QPtrStack<KSpreadUndoAction> m_stckRedo;
 
     KSpreadDoc *m_pDoc;
 
