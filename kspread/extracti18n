@@ -6,7 +6,7 @@ $filename = "";
 
 sub writeoutstring($)
 {
-   print STDOUT "i18n(\"@_[0]\");\n";
+   print STDOUT "// xgettext:no-c-format\ni18n(\"@_[0]\");\n";
 }
 
 use Getopt::Long; # This is just a TEST
