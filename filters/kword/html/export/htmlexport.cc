@@ -53,7 +53,7 @@
 #include <htmlexport.moc>
 
 typedef KGenericFactory<HTMLExport, KoFilter> HTMLExportFactory;
-K_EXPORT_COMPONENT_FACTORY( libhtmlexport, HTMLExportFactory( "kwordhtmlexportfilter" ) )
+K_EXPORT_COMPONENT_FACTORY( libhtmlexport, HTMLExportFactory( "kofficefilters" ) )
 
 //
 // HTMLExport
