@@ -1,5 +1,5 @@
 Source: koffice
-Build-Depends: automake, libtool, debhelper, libqt2.2-dev, kdelibs3-dev, jade, sgml-base, docbook, libpng2-dev, zlib1g-dev, libtiff3g-dev, docbook, gettext, libgl-dev, docbook-stylesheets, xlib6g-dev | xlibs-dev
+Build-Depends: automake, libtool, debhelper, libqt2.2-dev, kdelibs3-dev (>= 4:2.0-final-0), jade, sgml-base, docbook, libpng2-dev, zlib1g-dev, libtiff3g-dev, docbook, gettext, docbook-stylesheets, xlib6g-dev | xlibs-dev
 Section: x11
 Priority: optional
 Maintainer: Ivan E. Moore II <rkrusty@debian.org>
@@ -92,7 +92,7 @@ Description: KDE Office Suite - KWord
 Package: koffice-dev
 Architecture: any
 Section: devel
-Depends: koffice-libs (= ${Source-Version}), kdelibs3-dev
+Depends: koffice-libs (= ${Source-Version}), libc6-dev, kdelibs3-dev
 Description: Core libraries for KOffice (Development files)
  Core libraries for Koffice (Development files)
 
