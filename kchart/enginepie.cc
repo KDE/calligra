@@ -143,7 +143,7 @@ pie_gif( short imagewidth,
         // maximum: no labels, explosions
         // gotta start somewhere
         rad = (float)QMIN( imagewidth/2-(1+ABS(xdepth_3D)), imageheight/2-(1+ABS(ydepth_3D))-title_hgt );
-
+	
         /* ok fix center, i.e., no floating re labels, explosion, etc. */
         cx = imagewidth/2 /* - xdepth_3D */ ;
         cy = (imageheight-title_hgt)/2 + title_hgt /* + ydepth_3D */ ;
@@ -152,13 +152,14 @@ pie_gif( short imagewidth,
         cwidth  = cx;
 
         /* walk around pie. determine spacing to edge */
-        for( i=0; i<num_points; ++i ) {
+        for( i=0; i<num_points; ++i ) 
+	  {
             float this_pct = val[i]/tot_val;    /* should never be > 100% */
             float that = this_pct*(2.0*M_PI);   /* pie-portion */
-
-           if( (this_pct > min_grphable) ||     /* too small */
+	    
+	    if( (this_pct > min_grphable) ||     /* too small */
                 (params->missing.isNull() || !params->missing[offsetCol+i]) )
-                  {     /* still want angles */
+	      {     /* still want angles */
                 int this_explode = !params->explode.isNull() ? params->explode[offsetCol+i]: 0;
 
                 double  this_sin;
@@ -185,9 +186,9 @@ pie_gif( short imagewidth,
                         int lbl_len = 0;
 
                         lbl_hgt = ( cnt_nl(params->legend[i].latin1(), &lbl_len) + (params->percent_labels == KCHARTPCTTYPE_ABOVE ||
-                                                                        params->percent_labels == KCHARTPCTTYPE_BELOW? 1: 0) )
+										    params->percent_labels == KCHARTPCTTYPE_BELOW? 1: 0) )
                           * (params->labelFontHeight()+1);
-
+			
                         sprintf( foo,
                                  (params->percent_labels==KCHARTPCTTYPE_LEFT ||
                                   params->percent_labels==KCHARTPCTTYPE_RIGHT) &&
@@ -199,7 +200,8 @@ pie_gif( short imagewidth,
                                      params->percent_labels == KCHARTPCTTYPE_LEFT? lbl_len+1+pct_len:
                                      QMAX(lbl_len,pct_len) )
                           * params->labelFontWidth();
-                    } else
+                    } 
+		    else
                         lbl_wdth = lbl_hgt = 0;
                     /* end label height, width */
 
@@ -280,10 +282,12 @@ pie_gif( short imagewidth,
                     }
                 }
                 others[i] = FALSE;
-            } else {
+            } 
+	    else 
+	      {
                 others[i] = TRUE;
                 slice_angle[i][0] = -MAXFLOAT;
-            }
+	      }
             last += that;
         }
     }
@@ -385,9 +389,9 @@ pie_gif( short imagewidth,
                     p->drawPie( CX(i,1)-(rad*2/2), // x
                                 CY(i,1)-(rad*2/2), // y
                                 rad*2, rad*2,           // w, h
-                                -(TO_INT_DEG_FLOOR(slice_angle[1][i])+270)*16,
-                                -((TO_INT_DEG_CEIL(slice_angle[2][i])+270)-
-                                 (TO_INT_DEG_FLOOR(slice_angle[1][i])+270))*16 );
+                                -(TO_INT_DEG_FLOOR(slice_angle[i][1])+270)*16,
+                                -((TO_INT_DEG_CEIL(slice_angle[i][2])+270)-
+                                 (TO_INT_DEG_FLOOR(slice_angle[i][1])+270))*16 );
 
                     rad1 = rad;
                     rad *= 3.0/4.0;
@@ -431,41 +435,43 @@ pie_gif( short imagewidth,
             int t,num_slice_angles = 0;
 
             for( i=0; i<num_points; ++i )
-              //if( !GDCPIE_missing || !GDCPIE_missing[i] )     {
                  if( params->missing.isNull() || !params->missing[offsetCol+i] )
                    {
 
-                 if( RAD_DIST1(slice_angle[1][i]) < RAD_DIST2(slice_angle[0][i]) )
-                        tmp_slice[num_slice_angles].hidden = FALSE;
-                    else
-                        tmp_slice[num_slice_angles].hidden = TRUE;
+		     if( RAD_DIST1(slice_angle[i][1]) < RAD_DIST2(slice_angle[i][0]) )
+		       tmp_slice[num_slice_angles].hidden = FALSE;
+		     else
+		       tmp_slice[num_slice_angles].hidden = TRUE;
+
                     tmp_slice[num_slice_angles].i       = i;
-                    tmp_slice[num_slice_angles].slice   = slice_angle[0][i];
-                    tmp_slice[num_slice_angles++].angle = slice_angle[1][i];
-                    if( RAD_DIST1(slice_angle[2][i]) < RAD_DIST2(slice_angle[0][i]) )
-                        tmp_slice[num_slice_angles].hidden = FALSE;
+                    tmp_slice[num_slice_angles].slice   = slice_angle[i][0];
+                    tmp_slice[num_slice_angles++].angle = slice_angle[i][1];
+                    if( RAD_DIST1(slice_angle[i][2]) < RAD_DIST2(slice_angle[i][0]) )
+		      tmp_slice[num_slice_angles].hidden = FALSE;
                     else
-                        tmp_slice[num_slice_angles].hidden = TRUE;
+		      tmp_slice[num_slice_angles].hidden = TRUE;
                     tmp_slice[num_slice_angles].i       = i;
-                    tmp_slice[num_slice_angles].slice   = slice_angle[0][i];
-                    tmp_slice[num_slice_angles++].angle = slice_angle[2][i];
+                    tmp_slice[num_slice_angles].slice   = slice_angle[i][0];
+                    tmp_slice[num_slice_angles++].angle = slice_angle[i][2];
                     // identify which 2 slices (i) have a tangent parallel to depth angle
-                    if( slice_angle[1][i]<MOD_2PI(pie_3D_rad+M_PI_2) && slice_angle[2][i]>MOD_2PI(pie_3D_rad+M_PI_2) )  {
-                        tmp_slice[num_slice_angles].i       = i;
+                    if( slice_angle[i][1]<MOD_2PI(pie_3D_rad+M_PI_2) && slice_angle[i][2]>MOD_2PI(pie_3D_rad+M_PI_2) )  
+		      {
+			tmp_slice[num_slice_angles].i       = i;
                         tmp_slice[num_slice_angles].hidden  = FALSE;
-                        tmp_slice[num_slice_angles].slice   = slice_angle[0][i];
+                        tmp_slice[num_slice_angles].slice   = slice_angle[i][0];
                         tmp_slice[num_slice_angles++].angle = MOD_2PI( pie_3D_rad+M_PI_2 );
-                    }
-                    if( slice_angle[1][i]<MOD_2PI(pie_3D_rad+3.0*M_PI_2) && slice_angle[2][i]>MOD_2PI(pie_3D_rad+3.0*M_PI_2) )  {
-                        tmp_slice[num_slice_angles].i       = i;
-                        tmp_slice[num_slice_angles].hidden  = FALSE;
-                        tmp_slice[num_slice_angles].slice   = slice_angle[0][i];
-                        tmp_slice[num_slice_angles++].angle = MOD_2PI( pie_3D_rad+3.0*M_PI_2 );
+		      }
+                    if( slice_angle[i][1]<MOD_2PI(pie_3D_rad+3.0*M_PI_2) && slice_angle[i][2]>MOD_2PI(pie_3D_rad+3.0*M_PI_2) )  {
+		      tmp_slice[num_slice_angles].i       = i;
+		      tmp_slice[num_slice_angles].hidden  = FALSE;
+		      tmp_slice[num_slice_angles].slice   = slice_angle[i][0];
+		      tmp_slice[num_slice_angles++].angle = MOD_2PI( pie_3D_rad+3.0*M_PI_2 );
                     }
                 }
 
             qsort( tmp_slice, num_slice_angles, sizeof(struct tmp_slice_t), ocmpr );
-            for( t=0; t<num_slice_angles; ++t ) {
+            for( t=0; t<num_slice_angles; ++t ) 
+	      {
                 QPointArray     gdp( 4 );
 
                 i = tmp_slice[t].i;
@@ -474,51 +480,54 @@ pie_gif( short imagewidth,
                 gdp.setPoint( 1, CX(i,1), CY(i,1) );
                 gdp.setPoint( 2, OX(i,tmp_slice[t].angle,1),
                               OY(i,tmp_slice[t].angle,1) );
-                                gdp.setPoint( 3, OX(i,tmp_slice[t].angle,0),
-                                           OY(i,tmp_slice[t].angle,0) );
+		gdp.setPoint( 3, OX(i,tmp_slice[t].angle,0),
+			      OY(i,tmp_slice[t].angle,0) );
 
-                                if( !(tmp_slice[t].hidden) ) {
-                                        p->setBrush( SliceColorShd[i] );
-                                        p->setPen( SliceColorShd[i] );
-                                        p->drawPolygon( gdp );
-                                } else {
-                                        rad -= 2.0;                                                                             /* no peeking */
-                                        gdp.setPoint( 0, OX(i,slice_angle[0][i],0),
-                                             OY(i,slice_angle[0][i],0) );
-                                        gdp.setPoint( 1, OX(i,slice_angle[0][i],1),
-                                                                  OY(i,slice_angle[0][i],1) );
-                                        rad += 2.0;
-                                        gdp.setPoint( 2, OX(i,slice_angle[1][i],1),
-                                                                  OY(i,slice_angle[1][i],1) );
-                                        gdp.setPoint( 3, OX(i,slice_angle[1][i],0),
-                                                                  OY(i,slice_angle[1][i],0) );
-                                        p->setBrush( SliceColorShd[i] );
-                                        p->setPen( SliceColorShd[i] );
-                                        p->drawPolygon( gdp );
-                                        gdp.setPoint( 2, OX(i,slice_angle[2][i],1),
-                                                                  OY(i,slice_angle[2][i],1) );
-                                        gdp.setPoint( 3, OX(i,slice_angle[2][i],0),
-                                                                  OY(i,slice_angle[2][i],0) );
-                                        p->setBrush( SliceColorShd[i] );
-                                        p->setPen( SliceColorShd[i] );
-                                        p->drawPolygon( gdp );
-                                }
+		if( !(tmp_slice[t].hidden) ) 
+		  {
+		    p->setBrush( SliceColorShd[i] );
+		    p->setPen( SliceColorShd[i] );
+		    p->drawPolygon( gdp );
+		  } 
+		else 
+		  {
+		    rad -= 2.0;                                                                             /* no peeking */
+		    gdp.setPoint( 0, OX(i,slice_angle[i][0],0),
+				  OY(i,slice_angle[i][0],0) );
+		    gdp.setPoint( 1, OX(i,slice_angle[i][0],1),
+				  OY(i,slice_angle[i][0],1) );
+		    rad += 2.0;
+		    gdp.setPoint( 2, OX(i,slice_angle[i][1],1),
+				  OY(i,slice_angle[i][1],1) );
+		    gdp.setPoint( 3, OX(i,slice_angle[i][1],0),
+				  OY(i,slice_angle[i][1],0) );
+		    p->setBrush( SliceColorShd[i] );
+		    p->setPen( SliceColorShd[i] );
+		    p->drawPolygon( gdp );
+		    gdp.setPoint( 2, OX(i,slice_angle[i][2],1),
+				  OY(i,slice_angle[i][2],1) );
+		    gdp.setPoint( 3, OX(i,slice_angle[i][2],0),
+				  OY(i,slice_angle[i][2],0) );
+		    p->setBrush( SliceColorShd[i] );
+		    p->setPen( SliceColorShd[i] );
+		    p->drawPolygon( gdp );
+		  }
 
 
                                 /*if( params->EdgeColor != QColor() )
                                   {
-                                    p->setPen( EdgeColorShd );
-                                    p->drawLine( CX(i,0),CY(i,0),
+				  p->setPen( EdgeColorShd );
+				  p->drawLine( CX(i,0),CY(i,0),
                                                  CX(i,1),CY(i,1) );
-                                    p->drawLine( OX(i,tmp_slice[t].angle,0),
+						 p->drawLine( OX(i,tmp_slice[t].angle,0),
                                                  OY(i,tmp_slice[t].angle,0),
                                                  OX(i,tmp_slice[t].angle,1),
                                                  OY(i,tmp_slice[t].angle,1) );
                                                  }*/
-                        }
+	      }
             delete [] tmp_slice;
         }
-
+	
     }
 
 
@@ -528,37 +537,35 @@ pie_gif( short imagewidth,
                 float   rad1 = rad;
                 for( i=0; i<num_points; ++i )
 
-                  /*if( !others[i] &&
-                    (!GDCPIE_missing || !GDCPIE_missing[i]) )*/
                   if( !others[i] &&
-                   (params->missing.isNull() || !params->missing[offsetCol+i]) )
-                          {
-                                float   rad = rad1;
-
+		      (params->missing.isNull() || !params->missing[offsetCol+i]) )
+		    {
+		      float   rad = rad1;
+		      
                                 // last += val[i];
                                 // EXPLODE_CX_CY( slice_angle[0][i], i );
-                                p->setPen( SliceColor[i] );
-
-                                p->drawLine( CX(i,0),CY(i,0),
-                                             IX(i,1,0), IY(i,1,0) );
-                                p->drawLine( CX(i,0),CY(i,0),
-                                             IX(i,2,0), IY(i,2,0) );
-
+		      p->setPen( SliceColor[i] );
+		      
+		      p->drawLine( CX(i,0),CY(i,0),
+				   IX(i,1,0), IY(i,1,0) );
+		      p->drawLine( CX(i,0),CY(i,0),
+				   IX(i,2,0), IY(i,2,0) );
+		      
                                 // For the differences between Qt arc handling and gd
                                 // arc handling, please see first call to
                                 // QPainter::drawArc() in this file.
 
                                 // New - Qt:
                                 //put slice color
-                                p->setBrush(SliceColor[i]);
-
-
-                                p->drawPie( CX(i,0)-rad, // x
-                                            CY(i,0)-rad, // y
-                                            rad*2, rad*2,// w, h
-                                -(TO_INT_DEG_FLOOR(slice_angle[1][i])+270)*16,
-                                -((TO_INT_DEG_CEIL(slice_angle[2][i])+270)-
-                               (TO_INT_DEG_FLOOR(slice_angle[1][i])+270))*16 );
+		      p->setBrush(SliceColor[i]);
+		      
+		      
+		      p->drawPie( CX(i,0)-rad, // x
+				  CY(i,0)-rad, // y
+				  rad*2, rad*2,// w, h
+				  -(TO_INT_DEG_FLOOR(slice_angle[i][1])+270)*16,
+				  -((TO_INT_DEG_CEIL(slice_angle[i][2])+270)-
+				    (TO_INT_DEG_FLOOR(slice_angle[i][1])+270))*16 );
 
 
                                 // Original - gd:
@@ -567,17 +574,17 @@ pie_gif( short imagewidth,
                                 //                                                      TO_INT_DEG_FLOOR(slice_angle[1][i])+270,
                                 //                                                      TO_INT_DEG_CEIL(slice_angle[2][i])+270,
                                 //                                                      SliceColor[i] );
-                                rad1 = rad;
-                                rad *= 3.0/4.0;
+		      rad1 = rad;
+		      rad *= 3.0/4.0;
                                 // PENDING(kalle) Can it really be that Qt has no
                                 // flood fill?
                                 //                              gdImageFillToBorder( im, IX(i,0,0), IY(i,0,0), SliceColor[i], SliceColor[i] );
                                 /* catch missed pixels on narrow slices */
-                                p->setPen( SliceColor[i] );
-                                p->drawLine( CX(i,0),CY(i,0),
-                                             IX(i,0,0), IY(i,0,0) );
-
-                                rad = rad1;
+		      p->setPen( SliceColor[i] );
+		      p->drawLine( CX(i,0),CY(i,0),
+				   IX(i,0,0), IY(i,0,0) );
+		      
+		      rad = rad1;
                                 /*if( params->EdgeColor != QColor() )
                                   {
                                         p->setPen( EdgeColor );
@@ -606,116 +613,117 @@ pie_gif( short imagewidth,
                                         //                                                              TO_INT_DEG(slice_angle[1][i])+270, TO_INT_DEG(slice_angle[2][i])+270,
                                         //                                                              EdgeColor );
                                         }*/
-                        }
+		    }
         }
 
 
         /* labels */
-        if( !params->legend.isEmpty() )
-                {
-                float   liner = rad;
+    if( !params->legend.isEmpty() )
+      {
+	float   liner = rad;
+	
+	rad += params->label_dist;
+	for( i=0; i<num_points; ++i ) 
+	  {
+	    if( !others[i] &&
+		(params->missing.isNull() || !params->missing[offsetCol+i]) )
+	      {
+		char pct_str[1+4+1+1];
+		int pct_wdth;
+		int lbl_wdth;
+		short num_nl = cnt_nl( params->legend[i].latin1(), &lbl_wdth );
+		int lblx,  pctx;
+		int lbly,  pcty = 0;
+		int linex, liney;
 
-                rad += params->label_dist;
-                for( i=0; i<num_points; ++i ) {
-                if( !others[i] &&
-                     (params->missing.isNull() || !params->missing[offsetCol+i]) )
-                     {
-                                char pct_str[1+4+1+1];
-                                int pct_wdth;
-                                int lbl_wdth;
-                                short num_nl = cnt_nl( params->legend[i].latin1(), &lbl_wdth );
-                                int lblx,  pctx;
-                                int lbly,  pcty = 0;
-                                int linex, liney;
-
-                                lbl_wdth *= params->labelFontWidth();
-                                sprintf( pct_str,(params->percent_labels==KCHARTPCTTYPE_LEFT ||params->percent_labels==KCHARTPCTTYPE_RIGHT) &&
-                                                 !params->legend[i].isEmpty()? "(%.0f%%)":
-                                                 "%.0f%%",
-                                                 (val[i]/tot_val) * 100.0 );
-
-                                pct_wdth = params->percent_labels == KCHARTPCTTYPE_NONE?0:strlen(pct_str) * params->labelFontWidth();
-
-                                lbly = (liney = IY(i,0,0))-( num_nl * (1+params->labelFontHeight()) ) / 2;
-                                lblx = pctx = linex = IX(i,0,0);
-
-                                if( slice_angle[0][i] > M_PI )
-                                  {  /* which semicircle */
-                                        lblx -= lbl_wdth;
-                                        pctx = lblx;
-                                        ++linex;
-                                  }
-                                else
-                                  {
-                                    --linex;
-                                  }
-
-                                switch( params->percent_labels )
-                                {
-                                case KCHARTPCTTYPE_LEFT:
-                                        if( slice_angle[0][i] > M_PI )
-                                                pctx -= lbl_wdth-1;
-                                        else
-                                                lblx += pct_wdth+1;
-                                        pcty = IY(i,0,0) - ( 1+params->labelFontHeight() ) / 2;
-                                        break;
-                                case KCHARTPCTTYPE_RIGHT:
-                                        if( slice_angle[0][i] > M_PI )
-                                                lblx -= pct_wdth-1;
-                                        else
-                                                pctx += lbl_wdth+1;
-                                        pcty = IY(i,0,0) - ( 1+params->labelFontHeight() ) / 2;
-                                        break;
-                                case KCHARTPCTTYPE_ABOVE:
-                                        lbly += (1+params->labelFontHeight()) / 2;
-                                        pcty = lbly - (params->labelFontHeight());
-                                        break;
-                                case KCHARTPCTTYPE_BELOW:
-                                        lbly -= (1+params->labelFontHeight()) / 2;
-                                        pcty = lbly + (params->labelFontHeight()) * num_nl;
-                                        break;
-                                case KCHARTPCTTYPE_NONE:
-                                default:
-                                        break;
-
-                                }
-
-
-                                if( params->percent_labels != KCHARTPCTTYPE_NONE )
-                                {
-                                        p->setPen( LineColor );
-                                        p->setFont( params->labelFont() );
-                                        p->drawText( slice_angle[0][i] <= M_PI? pctx:
-                                                     pctx+lbl_wdth-pct_wdth,
-                                                     pcty,
-                                                     pct_str );
-                                }
-                                /*if( lbl[i] )*/
-                                if( !params->legend[i].isNull() )
-                                  {
-                                    QRect br = QFontMetrics( params->labelFont() ).boundingRect( 0, 0, MAXINT, MAXINT, slice_angle[0][i] <= M_PI ?
-                                                                                                 Qt::AlignLeft : Qt::AlignRight, params->legend[i] );
-                                    p->setPen( LineColor);
-                                    p->setFont( params->labelFont() );
-                                    p->drawText( lblx, lbly,
-                                                 br.width(), br.height(),
-                                                 slice_angle[0][i] <= M_PI ?
-                                                 Qt::AlignLeft : Qt::AlignRight,
-                                                 params->legend[i] );
-                                  }
-                                if( params->label_line )
-                                  {
-                                        float rad = liner;
-                                        p->setPen( LineColor );
-                                        p->drawLine( linex, liney,
-                                                  IX(i,0,0), IY(i,0,0) );
-                                  }
-                        }
-                }
-                rad -= params->label_dist;
-        }
-        delete [] SliceColor;
-        delete [] SliceColorShd;
-        delete [] slice_angle;
-        delete others;
+		lbl_wdth *= params->labelFontWidth();
+		sprintf( pct_str,(params->percent_labels==KCHARTPCTTYPE_LEFT ||params->percent_labels==KCHARTPCTTYPE_RIGHT) &&
+			 !params->legend[i].isEmpty()? "(%.0f%%)":
+			 "%.0f%%",
+			 (val[i]/tot_val) * 100.0 );
+		
+		pct_wdth = params->percent_labels == KCHARTPCTTYPE_NONE?0:strlen(pct_str) * params->labelFontWidth();
+		
+		lbly = (liney = IY(i,0,0))-( num_nl * (1+params->labelFontHeight()) ) / 2;
+		lblx = pctx = linex = IX(i,0,0);
+		
+		if( slice_angle[i][0] > M_PI )
+		  {  /* which semicircle */
+		    lblx -= lbl_wdth;
+		    pctx = lblx;
+		    ++linex;
+		  }
+		else
+		  {
+		    --linex;
+		  }
+		
+		switch( params->percent_labels )
+		  {
+		  case KCHARTPCTTYPE_LEFT:
+		    if( slice_angle[i][0] > M_PI )
+		      pctx -= lbl_wdth-1;
+		    else
+		      lblx += pct_wdth+1;
+		    pcty = IY(i,0,0) - ( 1+params->labelFontHeight() ) / 2;
+		    break;
+		  case KCHARTPCTTYPE_RIGHT:
+		    if( slice_angle[i][0] > M_PI )
+		      lblx -= pct_wdth-1;
+		    else
+		      pctx += lbl_wdth+1;
+		    pcty = IY(i,0,0) - ( 1+params->labelFontHeight() ) / 2;
+		    break;
+		  case KCHARTPCTTYPE_ABOVE:
+		    lbly += (1+params->labelFontHeight()) / 2;
+		    pcty = lbly - (params->labelFontHeight());
+		    break;
+		  case KCHARTPCTTYPE_BELOW:
+		    lbly -= (1+params->labelFontHeight()) / 2;
+		    pcty = lbly + (params->labelFontHeight()) * num_nl;
+		    break;
+		  case KCHARTPCTTYPE_NONE:
+		  default:
+		    break;
+		    
+		  }
+		
+		
+		if( params->percent_labels != KCHARTPCTTYPE_NONE )
+		  {
+		    p->setPen( LineColor );
+		    p->setFont( params->labelFont() );
+		    p->drawText( slice_angle[i][0] <= M_PI? pctx:
+				 pctx+lbl_wdth-pct_wdth,
+				 pcty,
+				 pct_str );
+		  }
+                               
+		if( !params->legend[i].isNull() )
+		  {
+		    QRect br = QFontMetrics( params->labelFont() ).boundingRect( 0, 0, MAXINT, MAXINT, slice_angle[i][0] <= M_PI ?
+										 Qt::AlignLeft : Qt::AlignRight, params->legend[i] );
+		    p->setPen( LineColor);
+		    p->setFont( params->labelFont() );
+		    p->drawText( lblx, lbly,
+				 br.width(), br.height(),
+				 slice_angle[i][0] <= M_PI ?
+				 Qt::AlignLeft : Qt::AlignRight,
+				 params->legend[i] );
+		  }
+		if( params->label_line )
+		  {
+		    float rad = liner;
+		    p->setPen( LineColor );
+		    p->drawLine( linex, liney,
+				 IX(i,0,0), IY(i,0,0) );
+		  }
+	      }
+	  }
+	rad -= params->label_dist;
+      }
+    delete [] SliceColor;
+    delete [] SliceColorShd;
+    delete [] slice_angle;
+    delete others;
 }
