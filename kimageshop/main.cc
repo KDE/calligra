@@ -24,9 +24,6 @@
 #include <kcmdlineargs.h>
 
 #include <koApplication.h>
-#include <koDocument.h>
-#include <koMainWindow.h>
-#include <koQueryTypes.h>
 
 static const char *description=I18N_NOOP("A KDE Image Processor");
 
