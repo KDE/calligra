@@ -47,6 +47,10 @@
 #include <kapplication.h>
 #include <kmessagebox.h>
 #include <kmultipledrag.h>
+#include <kurl.h>
+#include <kurldrag.h>
+#include <kio/netaccess.h>
+#include <kmimetype.h> 
 
 #include <assert.h>
 
@@ -2265,7 +2269,7 @@ void KWCanvas::contentsDragEnterEvent( QDragEnterEvent *e )
 {
     bool providesImage, providesKWordText, providesKWord, providesFormula;
     KWView::checkClipboard( e, providesImage, providesKWordText, providesKWord, providesFormula );
-    if ( providesImage )
+    if ( providesImage || KURLDrag::canDecode( e ) )
     {
         m_imageDrag = true;
         e->acceptAction();
@@ -2312,9 +2316,43 @@ void KWCanvas::contentsDropEvent( QDropEvent *e )
 {
     QPoint normalPoint = m_viewMode->viewToNormal( e->pos() );
     KoPoint docPoint = m_doc->unzoomPoint( normalPoint );
-    if ( m_imageDrag )
-    {
+
+    if ( QImageDrag::canDecode( e ) ) {
         pasteImage( e, docPoint );
+    } else if ( KURLDrag::canDecode( e ) ) {
+
+        KURL::List lst;
+        KURLDrag::decode( e, lst );
+
+        KURL::List::ConstIterator it = lst.begin();
+        for ( ; it != lst.end(); ++it ) {
+            const KURL &url( *it );
+
+            QString filename;
+            if ( !KIO::NetAccess::download( url, filename, this ) )
+                continue;
+
+            KMimeType::Ptr res = KMimeType::findByFileContent( filename );
+
+            if ( res && res->isValid() ) {
+                QString mimetype = res->name();
+                if ( mimetype.contains( "image" ) ) {
+                    QImage i( filename );
+                    m_pixmapSize = i.size();
+                    // Prepare things for mrCreatePixmap
+                    KoPictureKey key;
+                    key.setKeyFromFile( filename );
+                    KoPicture newKoPicture;
+                    newKoPicture.setKey( key );
+                    newKoPicture.loadFromFile( filename );
+                    m_kopicture = newKoPicture;
+                    m_insRect = KoRect( docPoint.x(), docPoint.y(), m_doc->unzoomItX( i.width() ), m_doc->unzoomItY( i.height() ) );
+                    m_keepRatio = true;
+                    mrCreatePixmap();
+                }
+            }
+            KIO::NetAccess::removeTempFile( filename );
+        }
     }
     else if ( m_currentFrameSetEdit )
     {
