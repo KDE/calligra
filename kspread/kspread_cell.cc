@@ -692,48 +692,41 @@ void KSpreadCell::makeLayout( QPainter &_painter, int _col, int _row )
 
     QString f2;
 
-    char buff[ 1024 ];
 
     double v = m_dValue * m_dFaktor;
 	
     if ( floatFormat() == KSpreadCell::AlwaysUnsigned && v < 0.0)
       v *= -1.0;
 
-    f2 = "%";
-    if ( floatFormat() == KSpreadCell::AlwaysSigned )
-      f2 += "+";
-    if ( precision() != -1 )
-    {
-      sprintf( buff, ".%i", precision() ); // '.' is expected by sprintf, whatever the locale
-      f2 += buff;
-    }
-    f2 += "f";
-    sprintf( buff, f2.data(), v );
+    // if precision is -1, ask for a huge number of decimals, we'll remove
+    // the zeros later. Is 8 ok ?
+    int p = (m_iPrecision == -1) ? 8 : m_iPrecision;
+    QString localizedNumber = KGlobal::locale()->formatNumber(v, p);
 
-    // Remove trailing zeros and the dot if neccessary
-    if ( precision() == -1 )
+    // Remove trailing zeros and the decimal point if necessary
+    // unless the number has no decimal point
+    if ( m_iPrecision == -1 && localizedNumber.find(decimal_point) >= 0 )
     {
-      int i = strlen( buff );
+      int i = localizedNumber.length();
       bool bend = FALSE;
       while ( !bend && i > 0 )
       {
-	if ( buff[ i - 1 ] == '0' )
-	  i--;
-	else if ( buff[ i - 1 ] == decimal_point )
+	if ( localizedNumber[ i - 1 ] == '0' )
+	  localizedNumber.truncate( --i );
+	else if ( localizedNumber[ i - 1 ] == decimal_point )
 	{
 	  bend = TRUE;
-	  i--;
+	  localizedNumber.truncate( --i );
 	}
 	else
 	  bend = TRUE;
       }
-      buff[ i ] = 0;
     }
 
     m_strOutText = "";
     if ( prefix() != 0L )
       m_strOutText += prefix();	
-    m_strOutText += buff;
+    m_strOutText += localizedNumber;
     if ( postfix() != 0L )
       m_strOutText += postfix();
 
@@ -1858,14 +1851,12 @@ void KSpreadCell::incPrecision()
 
   if ( m_iPrecision == -1 )
   {
-    const char *val = valueString();
-    int len = strlen( val );
-    int pos = 0;
-    while( val[pos] && val[pos] != decimal_point ) pos++;
-    if ( pos == len )
+    int pos = m_strOutText.find(decimal_point);
+    if ( pos == -1 )
       m_iPrecision = 1;
-    else
-      m_iPrecision = len - pos;
+    m_iPrecision = m_strOutText.length() - pos;
+    if ( m_iPrecision < 0 )
+      m_iPrecision = 0;
     m_bLayoutDirtyFlag = TRUE;
   }
   else if ( m_iPrecision < 10 )
@@ -1882,13 +1873,10 @@ void KSpreadCell::decPrecision()
 
   if ( m_iPrecision == -1 )
   {
-    const char *val = valueString();
-    int len = strlen( val );
-    int pos = 0;
-    while( val[pos] && val[pos] != decimal_point ) pos++;
-    if ( pos == len )
+    int pos = m_strOutText.find(decimal_point);
+    if ( pos == -1 )
       return;
-    m_iPrecision = len - pos - 2;
+    m_iPrecision = m_strOutText.length() - pos - 2;
     if ( m_iPrecision < 0 )
       m_iPrecision = 0;
     m_bLayoutDirtyFlag = TRUE;
