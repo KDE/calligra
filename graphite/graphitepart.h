@@ -26,10 +26,9 @@ class QPainter;
 class QMouseEvent;
 class QKeyEvent;
 class KAction;
+class KCommandHistory;
 
 class GraphiteView;
-class GCommandHistory;
-
 
 class GraphitePart : public KoDocument {
 
@@ -45,7 +44,7 @@ public:
 
     virtual bool loadXML( QIODevice *, const QDomDocument & ) { return false; }
 
-    GCommandHistory *history() { return m_history; }
+    KCommandHistory *history() { return m_history; }
 
     // The canvas forwards the Events to us. We test if any
     // object has been hit (z-order!) and handle the event.
@@ -72,7 +71,7 @@ private:
     GraphitePart &operator=(const GraphitePart &rhs);
     void setGlobalZoom(const double &zoom=1.0); // set the global zoom factor (for this view)
 
-    GCommandHistory *m_history;
+    KCommandHistory *m_history;
     // TODO: Do we need isLoading() like in KSpread?
     // TODO: If an object is selected, store a pointer
     //       to its M9r here and draw the handles after

@@ -20,12 +20,12 @@
 #include <gprimitivecmds.h>
 
 
-GMoveCmd::GMoveCmd(GObject *object, const QString &name) : GCommand(name),
+GMoveCmd::GMoveCmd(GObject *object, const QString &name) : KCommand(name),
                                                            m_object(object) {
 }
 
 GMoveCmd::GMoveCmd(GObject *object, const QString &name, const QPoint &from,
-                   const QPoint &to) : GCommand(name), m_object(object),
+                   const QPoint &to) : KCommand(name), m_object(object),
                                        m_from(from), m_to(to) {
 }
 
@@ -42,12 +42,12 @@ void GMoveCmd::unexecute() {
 }
 
 
-GResizeCmd::GResizeCmd(GObject *object, const QString &name) : GCommand(name),
+GResizeCmd::GResizeCmd(GObject *object, const QString &name) : KCommand(name),
                                                                m_object(object) {
 }
 
 GResizeCmd::GResizeCmd(GObject *object, const QString &name, const QRect &oldSize,
-                       const QRect &newSize) : GCommand(name), m_object(object),
+                       const QRect &newSize) : KCommand(name), m_object(object),
                                                m_old(oldSize), m_new(newSize) {
 }
 
@@ -64,12 +64,12 @@ void GResizeCmd::unexecute() {
 }
 
 
-GRotateCmd::GRotateCmd(GObject *object, const QString &name) : GCommand(name),
+GRotateCmd::GRotateCmd(GObject *object, const QString &name) : KCommand(name),
                                                                m_object(object) {
 }
 
 GRotateCmd::GRotateCmd(GObject *object, const QString &name, const QPoint &center,
-                       const double &angle) : GCommand(name), m_object(object),
+                       const double &angle) : KCommand(name), m_object(object),
                                               m_center(center), m_angle(angle) {
 }
 
@@ -86,13 +86,13 @@ void GRotateCmd::unexecute() {
 }
 
 
-GScaleCmd::GScaleCmd(GObject *object, const QString &name) : GCommand(name),
+GScaleCmd::GScaleCmd(GObject *object, const QString &name) : KCommand(name),
                                                              m_object(object) {
 }
 
 GScaleCmd::GScaleCmd(GObject *object, const QString &name,
                      const QPoint &origin, const double &xfactor,
-                     const double &yfactor) : GCommand(name), m_object(object),
+                     const double &yfactor) : KCommand(name), m_object(object),
                                               m_origin(origin), m_xfactor(xfactor),
                                               m_yfactor(yfactor) {
 }
@@ -110,12 +110,12 @@ void GScaleCmd::unexecute() {
 }
 
 
-GSetBrushCmd::GSetBrushCmd(GObject *object, const QString &name) : GCommand(name),
+GSetBrushCmd::GSetBrushCmd(GObject *object, const QString &name) : KCommand(name),
                                                                    m_object(object) {
 }
 
 GSetBrushCmd::GSetBrushCmd(GObject *object, const QString &name, const QBrush &oldBrush,
-                           const QBrush &newBrush) : GCommand(name), m_object(object),
+                           const QBrush &newBrush) : KCommand(name), m_object(object),
                                                      m_old(oldBrush), m_new(newBrush) {
 }
 
@@ -132,12 +132,12 @@ void GSetBrushCmd::unexecute() {
 }
 
 
-GSetPenCmd::GSetPenCmd(GObject *object, const QString &name) : GCommand(name),
+GSetPenCmd::GSetPenCmd(GObject *object, const QString &name) : KCommand(name),
                                                                m_object(object) {
 }
 
 GSetPenCmd::GSetPenCmd(GObject *object, const QString &name, const QPen &oldPen,
-                       const QPen &newPen) : GCommand(name), m_object(object),
+                       const QPen &newPen) : KCommand(name), m_object(object),
                                                  m_old(oldPen), m_new(newPen) {
 }
 
@@ -154,12 +154,12 @@ void GSetPenCmd::unexecute() {
 }
 
 
-GSetNameCmd::GSetNameCmd(GObject *object, const QString &name) : GCommand(name),
+GSetNameCmd::GSetNameCmd(GObject *object, const QString &name) : KCommand(name),
                                                                  m_object(object) {
 }
 
 GSetNameCmd::GSetNameCmd(GObject *object, const QString &name, const QString &oldName,
-                         const QString &newName) : GCommand(name), m_object(object),
+                         const QString &newName) : KCommand(name), m_object(object),
                                                    m_old(oldName), m_new(newName) {
 }
 
@@ -177,13 +177,13 @@ void GSetNameCmd::unexecute() {
 
 
 GSetFillStyleCmd::GSetFillStyleCmd(GObject *object, const QString &name)
-    : GCommand(name), m_object(object) {
+    : KCommand(name), m_object(object) {
 }
 
 GSetFillStyleCmd::GSetFillStyleCmd(GObject *object, const QString &name,
                                    const GObject::FillStyle &oldFillStyle,
                                    const GObject::FillStyle &newFillStyle)
-    : GCommand(name), m_object(object), m_old(oldFillStyle), m_new(newFillStyle) {
+    : KCommand(name), m_object(object), m_old(oldFillStyle), m_new(newFillStyle) {
 }
 
 void GSetFillStyleCmd::execute() {
@@ -200,13 +200,13 @@ void GSetFillStyleCmd::unexecute() {
 
 
 GSetGradientCmd::GSetGradientCmd(GObject *object, const QString &name)
-    : GCommand(name), m_object(object) {
+    : KCommand(name), m_object(object) {
 }
 
 GSetGradientCmd::GSetGradientCmd(GObject *object, const QString &name,
                                  const Gradient &oldGradient,
                                  const Gradient &newGradient)
-    : GCommand(name), m_object(object), m_old(oldGradient), m_new(newGradient) {
+    : KCommand(name), m_object(object), m_old(oldGradient), m_new(newGradient) {
 }
 
 void GSetGradientCmd::execute() {

@@ -23,11 +23,11 @@
 #include <kaction.h>
 #include <kstdaction.h>
 #include <kdebug.h>
+#include <kcommand.h>
 
 #include <graphiteview.h>
 #include <graphitefactory.h>
 #include <graphitepart.h>
-#include <gcommand.h>
 //#include <gobjectfactory.h>
 
 // test
@@ -41,7 +41,7 @@ GraphitePart::GraphitePart(QWidget *parentWidget, const char *widgetName, QObjec
     : KoDocument(parentWidget, widgetName, parent, name, singleViewMode) {
 
     setInstance(GraphiteFactory::global());
-    m_history=new GCommandHistory(actionCollection());
+    m_history=new KCommandHistory(actionCollection());
 
     KStdAction::cut(this, SLOT(edit_cut()), actionCollection(), "edit_cut" );
 

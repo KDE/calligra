@@ -10,7 +10,7 @@ lib_LTLIBRARIES = graphite.la libgraphitepart.la
 
 libgraphitepart_la_SOURCES = graphitepart.cc \
     graphiteview.cc graphitefactory.cc gobject.cc \
-    gcanvas.cc gobjectfactory.cc gcommand.cc gline.cc \
+    gcanvas.cc gobjectfactory.cc gline.cc \
     graphiteglobal.cc ggroup.cc gprimitivecmds.cc
 libgraphitepart_la_LDFLAGS = -module -avoid-version -no-undefined
 libgraphitepart_la_LIBADD = ../lib/kofficeui/libkofficeui.la
@@ -29,7 +29,7 @@ dummy.cc:
 
 noinst_HEADERS =  graphiteglobal.h \
     graphitepart.h graphiteview.h graphitefactory.h \
-    gobject.h gcanvas.h gobjectfactory.h gcommand.h \
+    gobject.h gcanvas.h gobjectfactory.h \
     gline.h ggroup.h gprimitivecmds.h
 
 kdelnk_DATA = graphite.desktop

@@ -20,8 +20,8 @@
 #ifndef gprimitivecmds_h
 #define gprimitivecmds_h
 
-#include <gcommand.h>
 #include <gobject.h>
+#include <kcommand.h>
 
 class QPoint;
 class QRect;
@@ -29,7 +29,7 @@ class QBrush;
 class QPen;
 
 
-class GMoveCmd : public GCommand {
+class GMoveCmd : public KCommand {
 
 public:
     GMoveCmd(GObject *object, const QString &name);
@@ -51,7 +51,7 @@ private:
 };
 
 
-class GResizeCmd : public GCommand {
+class GResizeCmd : public KCommand {
 
 public:
     GResizeCmd(GObject *object, const QString &name);
@@ -73,7 +73,7 @@ private:
 };
 
 
-class GRotateCmd : public GCommand {
+class GRotateCmd : public KCommand {
 
 public:
     GRotateCmd(GObject *object, const QString &name);
@@ -96,7 +96,7 @@ private:
 };
 
 
-class GScaleCmd : public GCommand {
+class GScaleCmd : public KCommand {
 
 public:
     GScaleCmd(GObject *object, const QString &name);
@@ -121,7 +121,7 @@ private:
 };
 
 
-class GSetBrushCmd : public GCommand {
+class GSetBrushCmd : public KCommand {
 
 public:
     GSetBrushCmd(GObject *object, const QString &name);
@@ -143,7 +143,7 @@ private:
 };
 
 
-class GSetPenCmd : public GCommand {
+class GSetPenCmd : public KCommand {
 
 public:
     GSetPenCmd(GObject *object, const QString &name);
@@ -165,7 +165,7 @@ private:
 };
 
 
-class GSetNameCmd : public GCommand {
+class GSetNameCmd : public KCommand {
 
 public:
     GSetNameCmd(GObject *object, const QString &name);
@@ -187,7 +187,7 @@ private:
 };
 
 
-class GSetFillStyleCmd : public GCommand {
+class GSetFillStyleCmd : public KCommand {
 
 public:
     GSetFillStyleCmd(GObject *object, const QString &name);
@@ -210,7 +210,7 @@ private:
 };
 
 
-class GSetGradientCmd : public GCommand {
+class GSetGradientCmd : public KCommand {
 
 public:
     GSetGradientCmd(GObject *object, const QString &name);
