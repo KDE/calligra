@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2002, The Karbon Developers
+   Copyright (C) 2002, Rob Buis(buis@kde.org)
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -95,12 +95,6 @@ VUnitDoubleLineEdit::VUnitDoubleLineEdit( QWidget *parent, double lower, double 
 	m_validator = new KoUnitDoubleValidator( this, this );
 	setValidator( m_validator );
 	changeValue( value );
-}
-
-void
-VUnitDoubleLineEdit::setValidator( const QValidator *v )
-{
-	QLineEdit::setValidator( v );
 }
 
 void
