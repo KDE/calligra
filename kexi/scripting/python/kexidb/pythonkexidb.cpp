@@ -9,7 +9,7 @@
  ***************************************************************************/
 
 #include "pythonkexidb.h"
-#include "../pythonutils.h"
+#include "../main/pythonutils.h"
 #include "pythonkexidbdriver.h"
 #include "pythonkexidbconnectiondata.h"
 #include "pythonkexidbconnection.h"

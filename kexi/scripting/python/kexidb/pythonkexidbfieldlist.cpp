@@ -11,7 +11,7 @@
 #include "pythonkexidbfieldlist.h"
 //#include "pythonkexidbfield.h"
 //#include "pythonkexidb.h"
-//#include "../pythonutils.h"
+//#include "../main/pythonutils.h"
 
 #include <kexidb/drivermanager.h>
 //#include <kexidb/field.h>
@@ -55,29 +55,43 @@ void PythonKexiDBFieldList::init_type(void)
 
 Py::Object PythonKexiDBFieldList::fieldCount(const Py::Tuple&)
 {
+    //TODO
+    return Py::None();
 }
 
 Py::Object PythonKexiDBFieldList::addField(const Py::Tuple&)
 {
+    //TODO
+    return Py::None();
 }
 
 Py::Object PythonKexiDBFieldList::insertField(const Py::Tuple&)
 {
+    //TODO
+    return Py::None();
 }
 
 Py::Object PythonKexiDBFieldList::removeField(const Py::Tuple&)
 {
+    //TODO
+    return Py::None();
 }
 
 Py::Object PythonKexiDBFieldList::field(const Py::Tuple&)
 {
+    //TODO
+    return Py::None();
 }
 
 Py::Object PythonKexiDBFieldList::hasField(const Py::Tuple&)
 {
+    //TODO
+    return Py::None();
 }
 
 Py::Object PythonKexiDBFieldList::names(const Py::Tuple&)
 {
+    //TODO
+    return Py::None();
 }
 

@@ -11,7 +11,7 @@
 #include "pythonkexidbconnection.h"
 #include "pythonkexidbconnectiondata.h"
 #include "pythonkexidb.h"
-#include "../pythonutils.h"
+#include "../main/pythonutils.h"
 #include "pythonkexidbdriver.h"
 #include "pythonkexidbcursor.h"
 

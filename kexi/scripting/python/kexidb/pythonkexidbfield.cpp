@@ -10,7 +10,7 @@
 
 #include "pythonkexidbfield.h"
 //#include "pythonkexidb.h"
-#include "../pythonutils.h"
+#include "../main/pythonutils.h"
 
 #include <kexidb/drivermanager.h>
 #include <kexidb/field.h>

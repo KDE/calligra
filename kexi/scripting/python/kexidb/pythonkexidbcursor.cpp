@@ -10,7 +10,7 @@
 
 #include "pythonkexidbcursor.h"
 //#include "pythonkexidb.h"
-#include "../pythonutils.h"
+#include "../main/pythonutils.h"
 #include "pythonkexidbconnection.h"
 
 using namespace Kross;

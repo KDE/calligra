@@ -8,15 +8,15 @@ export KEXI_LIB = \
     -lkexidbparser \
     -lkexidb
 
-SUBDIRS = CXX kexidb test .
+SUBDIRS = CXX kexidb main test .
 
-krosspython_SOURCES = \
-    pythonutils.cpp
+krosspython_SOURCES =
 
 INCLUDES = \
     -I$(srcdir)/test \
     -I$(srcdir)/CXX \
     -I$(srcdir)/kexidb \
+    -I$(srcdir)/main \
     $(PYTHON_INCLUDE) \
     $(KEXI_INCLUDE) \
     $(all_includes)
@@ -27,6 +27,8 @@ krosspython_LDADD = \
     $(LIB_QT) \
     $(LIB_KDECORE) \
     CXX/libkrosspythoncxx.la \
+    kexidb/libkrosspythonkexidb.la \
+    main/libkrosspythonmain.la \
     test/libkrosspythontest.la \
     $(KEXI_LIB) \
     $(PYTHON_LIB)

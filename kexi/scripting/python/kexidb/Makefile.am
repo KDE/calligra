@@ -7,13 +7,15 @@ libkrosspythonkexidb_la_SOURCES = \
     pythonkexidbcursor.cpp \
     pythonkexidbfield.cpp pythonkexidbfieldlist.cpp
 
-libkrosspythonkexidb_la_LDFLAGS = ${PYTHON_FLAGS} $(all_libraries) -Wnounresolved
+libkrosspythonkexidb_la_LDFLAGS = $(PYTHON_FLAGS) $(all_libraries) -Wnounresolved
 libkrosspythonkexidb_la_LIBADD = \
     $(LIB_QT) \
     $(LIB_KDECORE) \
     ../CXX/libkrosspythoncxx.la \
     $(KEXI_LIB) \
     $(PYTHON_LIB)
+
+##../main/libkrosspythonmain.la
 
 KDE_CXXFLAGS = $(USE_EXCEPTIONS)
 
@@ -25,6 +27,7 @@ INCLUDES = \
     -I$(top_srcdir)/CXX \
     -I$(top_srcdir)/test \
     -I$(top_srcdir)/kexidb \
+    -I$(top_srcdir)/main \
     $(KEXI_INCLUDE) \
     $(PYTHON_INCLUDE) \
     $(all_includes)

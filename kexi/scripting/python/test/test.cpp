@@ -10,61 +10,23 @@
 
 #include <Python.h>
 
-//#include <stdlib.h>
-//#include <cstdlib>
-//#include <string>
-//#include <sstream>
-#include <iostream>
-
-//#include <qobject.h>
 #include <qstring.h>
 #include <qstringlist.h>
-//#include <qmap.h>
 #include <qfile.h>
 
+#include <kdebug.h>
 #include <kinstance.h>
 #include <kapplication.h>
 #include <kcmdlineargs.h>
 #include <kaboutdata.h>
 
+#include "../CXX/Objects.hxx"
 #include "../kexidb/pythonkexidb.h"
 #include "../kexidb/pythonkexidbdriver.h"
-
-#include "../CXX/Objects.hxx"
+#include "../main/pythonmanager.h"
 
 KApplication *app = 0;
 KInstance *instance = 0;
-
-bool test_simple(int argc, char **argv)
-{
-    PyEval_AcquireLock();
-    PyThreadState *tstate = Py_NewInterpreter();
-    if(! tstate) {
-        std::cerr << "Py_NewInterpreter() failed" << std::endl;
-        exit(1);
-    }
-    PySys_SetArgv(argc, argv) ;
-
-    Kross::PythonKexiDB* database = new Kross::PythonKexiDB();
-    Py::Module module = database->module();
-    //std::cout << "module->as_string() = " << module.as_string() << std::endl;
-
-    QFile f( QFile::encodeName("test/test.py") );
-    if(f.exists() && f.open(IO_ReadOnly)) {
-        QString data = f.readAll();
-        f.close();
-
-        if(! data.isEmpty())
-            PyRun_SimpleString(data.latin1());
-    }
-
-    delete database;
-
-    Py_EndInterpreter(tstate);
-    PyEval_ReleaseLock();
-
-    return true;
-}
 
 int main(int argc, char **argv)
 {
@@ -80,23 +42,19 @@ int main(int argc, char **argv)
     app = new KApplication(true, true);
     instance = new KInstance("test");
 
-    Py_SetProgramName("Kross");
+    Kross::PythonManager* pymanager = new Kross::PythonManager("Kross");
 
-    Py_Initialize();
-    PyEval_InitThreads();
-    PyThreadState *gtstate = PyEval_SaveThread();
-    if(! gtstate) {
-        std::cerr << "PyEval_SaveThread() failed" << std::endl;
-        exit(1);
+    kdDebug() << "##############################################" << endl;
+    QFile f( QFile::encodeName("test/test.py") );
+    if(f.exists() && f.open(IO_ReadOnly)) {
+        QString data = f.readAll();
+        f.close();
+
+        pymanager->execute(data, QStringList() << "kexidb");
     }
+    kdDebug() << "##############################################" << endl;
 
-    std::cout << "##############################################" << std::endl;
-    test_simple(argc, argv);
-    //test_simple(argc, argv);
-    std::cout << "##############################################" << std::endl;
-
-    PyEval_AcquireThread(gtstate);
-    Py_Finalize();
+    delete pymanager;
 
     delete instance;
     delete app;

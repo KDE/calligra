@@ -10,7 +10,7 @@
 
 #include "pythonkexidbdriver.h"
 //#include "pythonkexidb.h"
-#include "../pythonutils.h"
+#include "../main/pythonutils.h"
 #include "pythonkexidbconnection.h"
 #include "pythonkexidbconnectiondata.h"
 
