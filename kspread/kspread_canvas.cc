@@ -2616,7 +2616,7 @@ void KSpreadVBorder::mousePressEvent( QMouseEvent * _ev )
 
     QRect rect = m_pCanvas->activeTable()->selectionRect();
     QRect selection;
-    if(!rect.contains( QPoint(1,hit_row)) || !(_ev->button() == RightButton))
+    if(!rect.contains( QPoint(1,hit_row)) || !(_ev->button() == RightButton) || (rect.right()!=0x7FFF))
         {
         selection.setCoords( 1, hit_row, 0x7FFF, hit_row );
         table->setSelection( selection, m_pCanvas );
@@ -3066,7 +3066,7 @@ void KSpreadHBorder::mousePressEvent( QMouseEvent * _ev )
 
     QRect rect = m_pCanvas->activeTable()->selectionRect();
     QRect r;
-    if(!rect.contains( QPoint(hit_col,10)) || !(_ev->button() == RightButton))
+    if(!rect.contains( QPoint(hit_col,1)) || !(_ev->button() == RightButton) || (rect.bottom()!=0x7FFF))
         {
         r.setCoords( hit_col, 1, hit_col, 0x7FFF );
         table->setSelection( r, m_pCanvas );
