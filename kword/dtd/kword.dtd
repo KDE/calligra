@@ -340,7 +340,7 @@ don't put a </?xml...> at the end of the file!).
             frameType:      0...Base frame (for internal use only!!!)
                             1...Text frame (contains PARAGRAPH tags)
                             2...Picture frame (contains a PICTURE tag, or an IMAGE tag for KWord 1.1)
-                            3...Part frame (defined in EMBEDDED at the doc level)
+                            3...Part frame (defined in EMBEDDED at the doc level) ### FIXME: does not happen in a <FRAMESET> but only in <SETTINGS>
                             4...Formula frame (contains a FORMULA tag)
                             5...Clipart frame (contains a CLIPART tag, only for KWord 1.1)
                             6...Horizontal line frame (contains a PICTURE tag)
@@ -1395,6 +1395,7 @@ For the QtSQL-power-plugin, the contents of DATASOURCE is
         Additionnal attributes of the embedded object.
         In KWord's case, it's the definition of the frame around the object,
         and the name of the part-frameset.
+        ### FIXME: the attribute list is the same as <FRAMESET>
 -->
 <!ELEMENT SETTINGS
     (FRAME)>
