@@ -26,9 +26,11 @@ public:
 protected:
 	virtual void setupTranslations( void )
 	{
-		KGlobal::locale()->insertCatalogue( "karbonepsfilter" );
+		KGlobal::locale()->insertCatalogue( "karbonaifilter" );
 	}
 };
+
+K_EXPORT_COMPONENT_FACTORY( libkarbonaiimport, AiImportFactory() );
 
 AiImport::AiImport( KoFilter*, const char*, const QStringList& )
 	: KoFilter(), m_result ()
