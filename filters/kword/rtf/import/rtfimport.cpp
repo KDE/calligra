@@ -12,6 +12,7 @@
 #include <config.h>
 #include <kdebug.h>
 #include <qfontinfo.h>
+#include <qpicture.h>
 #include <stddef.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -20,11 +21,7 @@
 #include "rtfimport.moc"
 #include <koFilterChain.h>
 #include <kgenericfactory.h>
-
-#ifdef HAVE_LIBWMF
-#include <libwmf/api.h>
-#include <libwmf/svg.h>
-#endif
+#include <qwmf.h>
 
 typedef KGenericFactory<RTFImport, KoFilter> RTFImportFactory;
 K_EXPORT_COMPONENT_FACTORY( librtfimport, RTFImportFactory( "rtfimport" ) );
@@ -1794,51 +1791,22 @@ void RTFImport::writeOutPart( const char *name, QByteArray &array )
  */
 void RTFImport::writeOutMetafile( const char *name, QByteArray &array )
 {
-#ifdef HAVE_LIBWMF
-    // WMF/EMF to SVG conversion
-    wmfD_Rect bbox;
-    wmfAPI_Options options;
-    wmfAPI *API;
+    QWinMetaFile wmf;
+    QPicture pic;
+    QBuffer buf( array );
 
-    options.function = wmf_svg_function;
+    buf.open( IO_ReadOnly );
 
-    if (wmf_E_None != wmf_api_create( &API, WMF_OPT_FUNCTION, &options ))
-    {
-	wmf_api_destroy (API);
-	return;
-    }
-    if (wmf_E_None != wmf_mem_open( API, (unsigned char *)array.data(), array.size() ))
-    {
-	wmf_api_destroy( API );
-	return;
-    }
-    if (wmf_E_None != wmf_scan( API, 0, &bbox ))
-    {
-	wmf_mem_close( API );
-	wmf_api_destroy( API );
-	return;
-    }
-    wmf_svg_t *ddata = WMF_SVG_GetData( API );
-    ddata->flags |= WMF_SVG_INLINE_IMAGES;
-    ddata->out = wmf_stream_create( API, 0 );
-    ddata->bbox = bbox;
+    if (wmf.load( buf ))
+	wmf.paint( &pic );
 
-    if (wmf_E_None != wmf_play( API, 0, &bbox ))
-    {
-	wmf_stream_destroy( API, ddata->out, 0, 0 );
-	wmf_mem_close( API );
-	wmf_api_destroy( API );
-	return;
-    }
-    char *svgdata;
-    unsigned long svglength;
+    buf.close();
 
-    wmf_stream_destroy( API, ddata->out, &svgdata, &svglength );
-    array.duplicate( svgdata, svglength );
-
-    wmf_mem_close( API );
-    wmf_api_destroy( API );
-#endif
+    array.truncate( 0 );
+    buf.setBuffer( array );
+    buf.open( IO_WriteOnly );
+    pic.save( &buf, "svg" );
+    buf.close();
 
     // Store clipart
     writeOutPart( name, array );
