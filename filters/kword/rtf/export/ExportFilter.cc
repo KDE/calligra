@@ -29,7 +29,6 @@
 #include <qfontinfo.h>
 #include <qfontdatabase.h>
 #include <qpicture.h>
-#include <qregion.h> // for #include <kdebugclasses.h>
 #include <qimage.h>
 #include <qregexp.h>
 #include <qcolor.h>
@@ -38,7 +37,6 @@
 #include <klocale.h>
 #include <kglobal.h>
 #include <kdebug.h>
-#include <kdebugclasses.h>
 
 #include <KWEFUtil.h>
 #include <KWEFBaseWorker.h>
