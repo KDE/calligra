@@ -25,13 +25,56 @@
 #include <qvariant.h>
 
 #include <kexidb/connection.h>
+#include <kexidb/driver.h>
 
 namespace KexiDB
 {
 	//! for convenience
-	KEXI_DB_EXPORT bool deleteRow(Connection &conn, TableSchema *table, const QString &keyname, const QString &keyval);
-	KEXI_DB_EXPORT bool deleteRow(Connection &conn, TableSchema *table, const QString &keyname, int keyval);
-	KEXI_DB_EXPORT bool replaceRow(Connection &conn, TableSchema *table, const QString &keyname, const QString &keyval, const QString &valname, QVariant val, int ftype);
+	inline KEXI_DB_EXPORT bool deleteRow(Connection &conn, TableSchema *table, 
+		const QString &keyname, const QString &keyval)
+	{
+		return table!=0 && conn.executeSQL("DELETE FROM " + table->name() + " WHERE " 
+			+ keyname + "=" + conn.driver()->valueToSQL( Field::Text, QVariant(keyval) ));
+	}
+
+	inline KEXI_DB_EXPORT bool deleteRow(Connection &conn, const QString &tableName, 
+		const QString &keyname, const QString &keyval)
+	{
+		return conn.executeSQL("DELETE FROM " + tableName + " WHERE " 
+			+ keyname + "=" + conn.driver()->valueToSQL( Field::Text, QVariant(keyval) ));
+	}
+
+	inline KEXI_DB_EXPORT bool deleteRow(Connection &conn, TableSchema *table, 
+		const QString &keyname, int keyval)
+	{
+		return table!=0 && conn.executeSQL("DELETE FROM " + table->name() + " WHERE " 
+			+ keyname + "=" + conn.driver()->valueToSQL( Field::Integer, QVariant(keyval) ));
+	}
+
+	inline KEXI_DB_EXPORT bool deleteRow(Connection &conn, const QString &tableName, 
+		const QString &keyname, int keyval)
+	{
+		return conn.executeSQL("DELETE FROM " + tableName + " WHERE " 
+			+ keyname + "=" + conn.driver()->valueToSQL( Field::Integer, QVariant(keyval) ));
+	}
+
+	/*! Delete row with two generic criterias. */
+	inline KEXI_DB_EXPORT bool deleteRow(Connection &conn, const QString &tableName, 
+		const QString &keyname1, Field::Type keytype1, const QVariant& keyval1, 
+		const QString &keyname2, Field::Type keytype2, const QVariant& keyval2)
+	{
+		return conn.executeSQL("DELETE FROM " + tableName + " WHERE " 
+			+ keyname1 + "=" + conn.driver()->valueToSQL( keytype1, keyval1 )
+			+ " AND " + keyname2 + "=" + conn.driver()->valueToSQL( keytype2, keyval2 ));
+	}
+
+	inline KEXI_DB_EXPORT bool replaceRow(Connection &conn, TableSchema *table, 
+		const QString &keyname, const QString &keyval, const QString &valname, QVariant val, int ftype)
+	{
+		if (!table || !KexiDB::deleteRow(conn, table, keyname, keyval))
+			return false;
+		return conn.executeSQL("INSERT INTO " + table->name() + " (" + keyname + "," + valname + ") VALUES (" + conn.driver()->valueToSQL( Field::Text, QVariant(keyval) ) + "," + conn.driver()->valueToSQL( ftype, val) + ")");
+	}
 
 	typedef QValueList<uint> TypeGroupList;
 
@@ -71,7 +114,13 @@ namespace KexiDB
 	Constructs an sql string like "fielname = value" for specific \a drv driver,
 	 field type \a t, \a fieldName and \a value. If \a value is null, "fieldname is NULL" 
 	 string is returned. */
-	KEXI_DB_EXPORT QString sqlWhere(KexiDB::Driver *drv, KexiDB::Field::Type t, const QString fieldName, const QVariant value);
+	inline KEXI_DB_EXPORT QString sqlWhere(KexiDB::Driver *drv, KexiDB::Field::Type t, 
+		const QString fieldName, const QVariant value)
+	{
+		if (value.isNull())
+			return fieldName + " is NULL";
+		return fieldName + "=" + drv->valueToSQL( t, value );
+	}
 }
 
 #endif

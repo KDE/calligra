@@ -18,7 +18,6 @@
 */
 
 #include <kexidb/utils.h>
-#include <kexidb/driver.h>
 #include <kexidb/cursor.h>
 
 #include <qmap.h>
@@ -26,23 +25,6 @@
 #include <klocale.h>
 
 using namespace KexiDB;
-
-bool KexiDB::deleteRow(Connection &conn, TableSchema *table, const QString &keyname, const QString &keyval)
-{
-	return table!=0 && conn.executeSQL("DELETE FROM " + table->name() + " WHERE " + keyname + "=" + conn.driver()->valueToSQL( Field::Text, QVariant(keyval) ));
-}
-
-bool KexiDB::deleteRow(Connection &conn, TableSchema *table, const QString &keyname, int keyval)
-{
-	return table!=0 && conn.executeSQL("DELETE FROM " + table->name() + " WHERE " + keyname + "=" + conn.driver()->valueToSQL( Field::Integer, QVariant(keyval) ));
-}
-
-bool KexiDB::replaceRow(Connection &conn, TableSchema *table, const QString &keyname, const QString &keyval, const QString &valname, QVariant val, int ftype)
-{
-	if (!table || !KexiDB::deleteRow(conn, table, keyname, keyval))
-		return false;
-	return conn.executeSQL("INSERT INTO " + table->name() + " (" + keyname + "," + valname + ") VALUES (" + conn.driver()->valueToSQL( Field::Text, QVariant(keyval) ) + "," + conn.driver()->valueToSQL( ftype, val) + ")");
-}
 
 //! Cache
 QMap< uint, TypeGroupList > tlist;
@@ -132,9 +114,3 @@ void KexiDB::getHTMLErrorMesage(Object* obj, ResultInfo *result)
 	getHTMLErrorMesage(obj, result->msg, result->desc);
 }
 
-QString KexiDB::sqlWhere(KexiDB::Driver *drv, KexiDB::Field::Type t, const QString fieldName, const QVariant value)
-{
-	if (value.isNull())
-		return fieldName + " is NULL";
-	return fieldName + "=" + drv->valueToSQL( t, value );
-}
