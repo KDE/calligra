@@ -37,6 +37,7 @@ KoBgSpellCheck::KoBgSpellCheck()
     m_bDontCheckUpperWord=false;
     m_bSpellCheckEnabled=false;
     m_bDontCheckTitleCase=false;
+    m_bSpellCheckConfigure=false;
     m_bgSpell.currentTextObj=0L;
 }
 
@@ -290,7 +291,11 @@ void KoBgSpellCheck::spellCheckerFinished()
     {
         // KSpell badly configured... what to do?
         kdWarning() << "ISpell/ASpell not configured correctly." << endl;
-        configurateSpellChecker();
+        if ( !m_bSpellCheckConfigure )
+        {
+            configurateSpellChecker();
+            m_bSpellCheckConfigure=true;
+        }
         return;
     }
     else if (status == KoSpell::Crashed)
@@ -319,6 +324,7 @@ void KoBgSpellCheck::setKSpellConfig(KSpellConfig _kspell)
   m_pKSpellConfig->setDictFromList(_kspell.dictFromList());
   m_pKSpellConfig->setEncoding(_kspell.encoding());
   m_pKSpellConfig->setClient(_kspell.client());
+  m_bSpellCheckConfigure = false;
   startBackgroundSpellCheck();
 }
 

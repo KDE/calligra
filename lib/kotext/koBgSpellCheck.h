@@ -51,7 +51,6 @@ public:
     virtual KoTextObject* nextTextObject( KoTextObject *obj )=0;
 
     virtual void configurateSpellChecker()=0;
-
     void addIgnoreWordAll( const QString & word);
     void clearIgnoreWordAll( );
     void addIgnoreWordAllList( const QStringList & list);
@@ -92,5 +91,6 @@ private:
     bool m_bSpellCheckEnabled;
     bool m_bDontCheckUpperWord;
     bool m_bDontCheckTitleCase;
+    bool m_bSpellCheckConfigure;
 };
 #endif
