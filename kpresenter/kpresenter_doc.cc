@@ -1073,7 +1073,6 @@ void KPresenterDoc::saveOasisSettings( KoXmlWriter &settingsWriter )
 {
     //ooimpress save it as this line.
     //<config:config-item config:name="SnapLinesDrawing" config:type="string">H2260V14397H7693H12415H15345H1424</config:config-item>
-    settingsWriter.startElement( "config:config-item" );
     QString helpLineOasis;
     //save in pixel
     for(QValueList<double>::Iterator it = m_vertHelplines.begin(); it != m_vertHelplines.end(); ++it)
@@ -1092,11 +1091,31 @@ void KPresenterDoc::saveOasisSettings( KoXmlWriter &settingsWriter )
     }
     if ( !helpLineOasis.isEmpty() )
     {
+        settingsWriter.startElement( "config:config-item" );
         settingsWriter.addAttribute( "config:name", "SnapLinesDrawing" );
         settingsWriter.addAttribute( "config:type", "string" );
         settingsWriter.addTextNode(helpLineOasis);
+        settingsWriter.endElement();
     }
+    //<config:config-item config:name="IsSnapToGrid" config:type="boolean">false</config:config-item>
+    settingsWriter.startElement( "config:config-item" );
+    settingsWriter.addAttribute( "config:name", "IsSnapToGrid" );
+    settingsWriter.addAttribute( "config:type", "boolean" );
+    settingsWriter.addTextNode(m_bSnapToGrid ? "true" : "false" );
     settingsWriter.endElement();
+
+    //<config:config-item config:name="SelectedPage" config:type="short">3</config:config-item>
+    settingsWriter.startElement( "config:config-item" );
+    settingsWriter.addAttribute( "config:name", "SelectedPage" );
+    settingsWriter.addAttribute( "config:type", "short" );
+    //store first view parameter.
+    int activePage=0;
+    if ( m_initialActivePage )
+        activePage=m_pageList.findRef(m_initialActivePage);
+    activePage = QMAX( activePage, 0);
+    settingsWriter.addTextNode( QString::number( activePage ) );
+    settingsWriter.endElement();
+
 }
 
 void KPresenterDoc::loadOasisSettings()
