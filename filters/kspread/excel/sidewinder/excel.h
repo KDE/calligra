@@ -2815,12 +2815,14 @@ private:
   void handleMulBlank( MulBlankRecord* record );
   void handleMulRK( MulRKRecord* record );
   void handleNumber( NumberRecord* record );
+  void handlePalette( PaletteRecord* record );
   void handleRString( RStringRecord* record );
   void handleRK( RKRecord* record );
   void handleRow( RowRecord* record );
   void handleSST( SSTRecord* record );
   void handleXF( XFRecord* record );    
   
+  Color convertColor( unsigned colorIndex );
   Format convertFormat( unsigned xfIndex );
   
   // no copy or assign

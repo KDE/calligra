@@ -487,6 +487,9 @@ Record* Record::create( unsigned type )
   else if( type == NumberRecord::id )
     record = new NumberRecord();
     
+  else if( type == PaletteRecord::id )
+    record = new PaletteRecord();
+    
   if( type == RightMarginRecord::id )
     record = new RightMarginRecord();
     
@@ -2003,6 +2006,58 @@ void NumberRecord::dump( std::ostream& out ) const
   out << "    Value : " << number() << std::endl;
 }
 
+// ========== PALETTE ========== 
+
+const unsigned int PaletteRecord::id = 0x0092;
+
+class PaletteRecord::Private
+{
+public:
+  std::vector<Color> colors;
+};
+
+PaletteRecord::PaletteRecord():
+  Record()
+{
+  d = new PaletteRecord::Private();
+}
+
+PaletteRecord::~PaletteRecord()
+{
+  delete d;
+}
+
+Color PaletteRecord::color( unsigned i ) const
+{
+  return d->colors[ i ];
+}
+
+unsigned PaletteRecord::count() const
+{
+  return d->colors.size();
+}
+
+void PaletteRecord::setData( unsigned size, const unsigned char* data )
+{
+  if( size < 14 ) return;
+  
+  unsigned num = readU16( data );
+  
+  unsigned p = 2;
+  for( unsigned i = 0; i < num; i++ )
+  {
+    unsigned red = data[ p ];
+    unsigned green = data[ p+1 ];
+    unsigned blue = data[ p+2 ];
+    d->colors.push_back( Color( red, green, blue ) );
+  }
+}
+
+void PaletteRecord::dump( std::ostream& out ) const
+{
+  out << "PALETTE" << std::endl;
+}
+
 // ========== RIGHTMARGIN ========== 
 
 const unsigned int RightMarginRecord::id = 0x0026;
@@ -2949,6 +3004,9 @@ public:
   
   // table of Xformat
   std::vector<XFRecord> xfTable;
+  
+  // color table (from Palette record)
+  std::vector<Color> colorTable;
 };
 
 ExcelReader::ExcelReader(): Reader()
@@ -3063,6 +3121,7 @@ void ExcelReader::handleRecord( Record* record )
   handleMulBlank( dynamic_cast<MulBlankRecord*>( record ) );
   handleMulRK( dynamic_cast<MulRKRecord*>( record ) );
   handleNumber( dynamic_cast<NumberRecord*>( record ) );
+  handlePalette( dynamic_cast<PaletteRecord*>( record ) );
   handleRK( dynamic_cast<RKRecord*>( record ) );
   handleRow( dynamic_cast<RowRecord*>( record ) );
   handleRString( dynamic_cast<RStringRecord*>( record ) );
@@ -3289,7 +3348,6 @@ void ExcelReader::handleMergedCells( MergedCellsRecord* record )
   }
 }
 
-
 void ExcelReader::handleMulBlank( MulBlankRecord* record )
 {
   if( !record ) return;
@@ -3356,6 +3414,15 @@ void ExcelReader::handleNumber( NumberRecord* record )
   }
 }
 
+void ExcelReader::handlePalette( PaletteRecord* record )
+{
+  if( !record ) return;
+  
+  d->colorTable.clear();
+  for( unsigned i = 0; i < record->count(); i++ )
+    d->colorTable.push_back( record->color( i ) );
+}
+  
 void ExcelReader::handleRK( RKRecord* record )
 {
   if( !record ) return;
@@ -3431,6 +3498,40 @@ void ExcelReader::handleSST( SSTRecord* record )
     d->stringTable.push_back( str );
   }
   
+}
+
+Color ExcelReader::convertColor( unsigned colorIndex )
+{  
+  if( ( colorIndex >= 8 ) && ( colorIndex < 0x40 ) )
+    return d->colorTable[ colorIndex-8 ];
+  
+  // FIXME the following colors depend on system color settings
+  // 0x0040  system window text colour for border lines    
+  // 0x0041  system window background colour for pattern background
+  // 0x7fff  system window text colour for fonts
+  if( colorIndex == 0x40 ) return Color( 0, 0, 0 );
+  if( colorIndex == 0x41 ) return Color( 255, 255, 255 );
+  if( colorIndex == 0x7fff ) return Color( 0, 0, 0 );
+  
+  // fallback: just "black"
+  Color color;
+
+  // standard colors: black, white, red, green, blue,
+  // yellow, magenta, cyan
+  switch( colorIndex )
+  {
+    case 0:   color = Color( 0, 0, 0 ); break; 
+    case 1:   color = Color( 255, 255, 255 ); break; 
+    case 2:   color = Color( 255, 0, 0 ); break;
+    case 3:   color = Color( 0, 255, 0 ); break;
+    case 4:   color = Color( 0, 0, 255 ); break;
+    case 5:   color = Color( 255, 255, 0 ); break;
+    case 6:   color = Color( 255, 0, 255 ); break;
+    case 7:   color = Color( 0, 255, 255 ); break;
+    default:  break;
+  }
+  
+  return color;
 }
 
 // convert border style, e.g MediumDashed to a Pen
