@@ -122,6 +122,7 @@ KWView::KWView( QWidget *_parent, const char *_name, KWDocument* _doc )
     m_zoomViewModeNormal = m_doc->zoom();
     m_zoomViewModePreview = 33;
     m_viewFrameBorders = m_doc->viewFrameBorders();
+    KoView::setZoom( m_doc->zoomedResolutionY() /* KoView only supports one zoom */ ); // initial value
     //m_viewTableGrid = true;
 
     setInstance( KWFactory::global() );
@@ -1632,11 +1633,6 @@ void KWView::showZoom( int zoom )
     QStringList list = actionViewZoom->items();
     QString zoomStr = QString::number( zoom ) + '%';
     actionViewZoom->setCurrentItem( list.findIndex(zoomStr)  );
-
-    // Also set the zoom in KoView (for embedded views)
-    //KoView::setZoom( static_cast<double>( zoom ) / 100 );
-    kdDebug() << "KWView::showZoom setting koview zoom to " << m_doc->zoomedResolutionY() << endl;
-    KoView::setZoom( m_doc->zoomedResolutionY() /* KoView only supports one zoom */ );
 }
 
 void KWView::slotViewFormattingChars()
@@ -1738,6 +1734,10 @@ void KWView::setZoom( int zoom, bool updateViews )
 {
     m_doc->setZoomAndResolution( zoom, QPaintDevice::x11AppDpiX(), QPaintDevice::x11AppDpiY(), updateViews, false );
     m_doc->updateZoomRuler();
+
+    // Also set the zoom in KoView (for embedded views)
+    kdDebug() << "KWView::showZoom setting koview zoom to " << m_doc->zoomedResolutionY() << endl;
+    KoView::setZoom( m_doc->zoomedResolutionY() /* KoView only supports one zoom */ );
 }
 
 void KWView::insertPicture()
