@@ -33,6 +33,7 @@
 #include <kstatusbar.h>
 #include <knuminput.h>
 #include <kspell.h>
+#include <kmessagebox.h>
 
 KSpreadpreference::KSpreadpreference( KSpreadView* parent, const char* /*name*/)
   : KDialogBase(KDialogBase::IconList,i18n("Configure KSpread") ,
@@ -899,7 +900,10 @@ configureSpellPage::configureSpellPage( KSpreadView* _view,QVBox *box , char *na
 
 void configureSpellPage::slotClearIgnoreAllHistory()
 {
-    m_pView->doc()->clearIgnoreWordAll();
+    int ret = KMessageBox::warningContinueCancel(0L,
+                                                 i18n("Warning! You are about to erase the entire Ignore word history."));
+    if (ret == KMessageBox::Continue)
+        m_pView->doc()->clearIgnoreWordAll();
 }
 
 void configureSpellPage::apply()
