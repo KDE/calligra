@@ -1056,11 +1056,11 @@ public:
 					int width = abs (dimen.width ());
 					int height = abs (dimen.height ());
 					kdDebug (30509) << "\tRaw WMF dimensions: " << width << "x" << height << endl;
-					
+
 					if (wmf.isPlaceable ())
 					{
 						kdDebug (30509) << "\tConverting Placeable WMF" << endl;
-					
+
 						// convert twip measurements that aren't in 72dpi
 						int defaultDpi = wmf.defaultDpi ();
 						imageActualWidth = width * 1440 / defaultDpi;
@@ -1083,7 +1083,7 @@ public:
 					else
 					{
 						kdDebug (30509) << "\tStandard WMF - no conversion required" << endl;
-						
+
 						// assume width & height were in 72dpi points
 						imageActualWidth = Point2Twip (width);
 						imageActualHeight = Point2Twip (height);
@@ -1508,10 +1508,11 @@ public:
 				break;
 			}
 
-			if ((*tabIt).m_type == 3)
+			// Write only supports Decimal and Left tabs
+			// TODO: KOffice 1.3 alignchar (modify libexport)
+			if ((*tabIt).m_type == 3 /* && (*tabIt).m_alignchar == '.' */)
 				tab.setIsDecimal ();
 			else
-				// Write only supports Decimal and Left tabs
 				tab.setIsNormal ();
 
 			tab.setIndent (MSWrite::Word (Point2Twip ((*tabIt).m_ptpos)));
