@@ -274,6 +274,7 @@ void KImageShopView::createGUI()
 
   // create move tool
   m_pMoveTool = new MoveTool(m_pDoc);
+  m_pTool = m_pMoveTool;
 
   // we have no brush -> create a default one
   QString _image = locate("data", "kimageshop/brushes/brush.jpg");
@@ -282,8 +283,7 @@ void KImageShopView::createGUI()
   
   // create brush tool
   m_pBrushTool = new BrushTool(m_pDoc, m_pBrush);
-  m_pTool = m_pBrushTool;
-  
+
   // layerlist
   m_pLayerDialog = new LayerDialog(m_pDoc);
   m_pLayerDialog->show();

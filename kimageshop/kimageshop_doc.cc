@@ -41,35 +41,24 @@
 #define MM_TO_POINT 2.83465
 #define POINT_TO_MM 0.3527772388
 
-/*****************************************************************************
- *
- * KImageShopDoc
- *
- *****************************************************************************/
-
 KImageShopDoc::KImageShopDoc(int w, int h) : Canvas(w, h)
 {
   ADD_INTERFACE("IDL:KOffice/Print:1.0");
 
-  m_bEmpty = true;
   m_bModified = false;
-
-  m_leftBorder = 20.0;
-  m_rightBorder = 20.0;
-  m_topBorder = 20.0;
-  m_bottomBorder = 20.0;
-  m_paperFormat = PG_DIN_A4;
-  m_paperWidth = PG_A4_WIDTH;
-  m_paperHeight = PG_A4_HEIGHT;
-  calcPaperSize();
-  m_orientation = PG_PORTRAIT;
-
-  m_executeCommand = false;
+  m_bEmpty = true;
 
   kimgioRegister();
 
-  m_lstViews.setAutoDelete( false );
+  m_lstViews.setAutoDelete(false);
+}
 
+KImageShopDoc::~KImageShopDoc()
+{
+}
+
+CORBA::Boolean KImageShopDoc::initDoc()
+{
   // load some test layers
   QString _image = locate("data", "kimageshop/images/cam9b.jpg");	
   addRGBLayer(_image);
@@ -94,24 +83,19 @@ KImageShopDoc::KImageShopDoc(int w, int h) : Canvas(w, h)
   setLayerOpacity(80);
   
   compositeImage(QRect());
-}
-
-CORBA::Boolean KImageShopDoc::initDoc()
-{
   return true;
 }
 
 void KImageShopDoc::cleanUp()
 {
-  kdebug( KDEBUG_INFO, 0, "CleanUp KImageShopDoc" );
+  kdebug(KDEBUG_INFO, 0, "CleanUp KImageShopDoc");
 
-  if ( m_bIsClean )
+  if (m_bIsClean)
     return;
 
-  ASSERT( m_lstViews.count() == 0 );
+  ASSERT(m_lstViews.count() == 0);
 
   m_lstAllChildren.clear();
-
   KoDocument::cleanUp();
 }
 
@@ -119,14 +103,14 @@ KOffice::MainWindow_ptr KImageShopDoc::createMainWindow()
 {
   KImageShopShell* shell = new KImageShopShell;
   shell->show();
-  shell->setDocument( this );
+  shell->setDocument(this);
 
   return KOffice::MainWindow::_duplicate( shell->koInterface() );
 }
 
-void KImageShopDoc::removeView( KImageShopView* _view )
+void KImageShopDoc::removeView(KImageShopView* _view)
 {
-  m_lstViews.removeRef( _view );
+  m_lstViews.removeRef(_view);
 }
 
 KImageShopView* KImageShopDoc::createImageView( QWidget* _parent )
@@ -144,6 +128,7 @@ OpenParts::View_ptr KImageShopDoc::createView()
 
 void KImageShopDoc::slotUpdateViews(const QRect &area)
 {
+  // canvas was modified -> send update signal to all views
   emit sigUpdateView(area);
 }
 
@@ -166,6 +151,7 @@ int KImageShopDoc::viewCount()
 
 bool KImageShopDoc::save( ostream& out, const char* /* format */ )
 {
+  /*
   out << "<?xml version=\"1.0\"?>" << endl;
   out << otag << "<DOC author=\"" << "Torben Weis" << "\" email=\"" << "weis@kde.org" << "\" editor=\"" << "kimageshop"
       << "\" mime=\"" << "application/x-kimageshop" << "\" >" << endl;
@@ -178,14 +164,15 @@ bool KImageShopDoc::save( ostream& out, const char* /* format */ )
   out << etag << "</PAPER>" << endl;
 
   out << etag << "</DOC>" << endl;
+  */
 
-  setModified( FALSE );
-
+  setModified(false);
   return true;
 }
 
 bool KImageShopDoc::completeSaving( KOStore::Store_ptr _store )
 {
+  /*
   CORBA::String_var u = url();
   QString u2 = u.in();
   u2 += "/image";
@@ -197,23 +184,13 @@ bool KImageShopDoc::completeSaving( KOStore::Store_ptr _store )
     out.flush();
   }
   _store->close();
-
+  */
   return true;
 }
 
-/*
-bool KImageShopDoc::loadBinary( istream& _stream, bool _randomaccess, KOStore::Store_ptr _store )
-{
-  kdebug( KDEBUG_INFO, 0, "------------------------ LOADING --------------------" );
-
-  // implement binary loading here.  
-
-  kdebug( KDEBUG_INFO, 0, "--------------------- LOADING DONE ------------------" );
-}
-*/
-
 bool KImageShopDoc::loadXML( KOMLParser& parser, KOStore::Store_ptr  )
 {
+  /*
   kdebug( KDEBUG_INFO, 0, "------------------------ LOADING --------------------" );
 
   string tag;
@@ -370,12 +347,13 @@ bool KImageShopDoc::loadXML( KOMLParser& parser, KOStore::Store_ptr  )
   setHeadFootLine( hl, hm, hr, fl, fm, fr );
 
   kdebug( KDEBUG_INFO, 0, "------------------------ LOADING DONE --------------------" );
-
+  */
   return true;
 }
 
 bool KImageShopDoc::completeLoading( KOStore::Store_ptr _store )
 {
+  /*
   kdebug( KDEBUG_INFO, 0, "------------------------ COMPLETION DONE --------------------" );
 
   CORBA::String_var str = url();
@@ -390,12 +368,13 @@ bool KImageShopDoc::completeLoading( KOStore::Store_ptr _store )
 
   m_bModified = false;
   m_bEmpty = false;
-
+  */
   return true;
 }
 
 void KImageShopDoc::print( QPaintDevice* _dev )
 {
+  /*
   QPainter painter;
   painter.begin( _dev );
 
@@ -449,11 +428,13 @@ void KImageShopDoc::print( QPaintDevice* _dev )
 		     m_image );
 
   painter.end();
+  */
 }
 
 void KImageShopDoc::draw( QPaintDevice* _dev, CORBA::Long _width, CORBA::Long _height,
 		      CORBA::Float _scale )
 {
+  /*
   kdebug( KDEBUG_INFO, 0, "DRAWING w=%li h=%li", _width, _height );
 
   QPainter painter;
@@ -492,255 +473,12 @@ void KImageShopDoc::draw( QPaintDevice* _dev, CORBA::Long _width, CORBA::Long _h
   painter.drawImage( p, m_image, rect );
 
   painter.end();
+  */
 }
 
-void KImageShopDoc::paperLayoutDlg()
+bool KImageShopDoc::openDocument( const char */*_filename*/, const char */*_format*/ )
 {
-  KoPageLayout pl;
-  pl.format = paperFormat();
-  pl.orientation = orientation();
-  pl.unit = PG_MM;
-  pl.width = m_paperWidth;
-  pl.height = m_paperHeight;
-  pl.left = leftBorder();
-  pl.right = rightBorder();
-  pl.top = topBorder();
-  pl.bottom = bottomBorder();
-
-  KoHeadFoot hf;
-  hf.headLeft = headLeft();
-  hf.headRight = headRight();
-  hf.headMid = headMid();
-  hf.footLeft = footLeft();
-  hf.footRight = footRight();
-  hf.footMid = footMid();
-
-  if ( !KoPageLayoutDia::pageLayout( pl, hf, FORMAT_AND_BORDERS | HEADER_AND_FOOTER ) )
-    return;
-
-  if ( pl.format == PG_CUSTOM )
-  {
-    m_paperWidth = pl.width;
-    m_paperHeight = pl.height;
-  }
-
-  setPaperLayout( pl.left, pl.top, pl.right, pl.bottom, pl.format, pl.orientation );
-
-  setHeadFootLine( hf.headLeft, hf.headMid, hf.headRight, hf.footLeft, hf.footMid, hf.footRight );
-
-}
-
-void KImageShopDoc::setHeadFootLine( const char *_headl, const char *_headm, const char *_headr,
-				    const char *_footl, const char *_footm, const char *_footr )
-{
-  m_headLeft = _headl;
-  m_headRight = _headr;
-  m_headMid = _headm;
-  m_footLeft = _footl;
-  m_footRight = _footr;
-  m_footMid = _footm;
-
-  m_bModified = TRUE;
-}
-
-void KImageShopDoc::setPaperLayout( float _leftBorder, float _topBorder, float _rightBorder, float _bottomBorder,
-				const char * _paper, const char* _orientation )
-{
-    KoFormat f = paperFormat();
-    KoOrientation o = orientation();
-
-    if ( strcmp( "A3", _paper ) == 0L )
-	f = PG_DIN_A3;
-    else if ( strcmp( "A4", _paper ) == 0L )
-	f = PG_DIN_A4;
-    else if ( strcmp( "A5", _paper ) == 0L )
-	f = PG_DIN_A5;
-    else if ( strcmp( "B5", _paper ) == 0L )
-	f = PG_DIN_B5;
-    else if ( strcmp( "Executive", _paper ) == 0L )
-	f = PG_US_EXECUTIVE;
-    else if ( strcmp( "Letter", _paper ) == 0L )
-	f = PG_US_LETTER;
-    else if ( strcmp( "Legal", _paper ) == 0L )
-	f = PG_US_LEGAL;
-    else if ( strcmp( "Screen", _paper ) == 0L )
-	f = PG_SCREEN;
-    else if ( strcmp( "Custom", _paper ) == 0L )
-    {
-      m_paperWidth = 0.0;
-      m_paperHeight = 0.0;
-      f = PG_CUSTOM;
-      QString tmp( _paper );
-      m_paperWidth = atof( _paper );
-      int i = tmp.find( 'x' );
-      if ( i != -1 )
-	m_paperHeight = atof( tmp.data() + i + 1 );
-      if ( m_paperWidth < 10.0 )
-	m_paperWidth = PG_A4_WIDTH;
-      if ( m_paperHeight < 10.0 )
-	m_paperWidth = PG_A4_HEIGHT;
-    }
-
-    if ( strcmp( "Portrait", _orientation ) == 0L )
-	o = PG_PORTRAIT;
-    else if ( strcmp( "Landscape", _orientation ) == 0L )
-	o = PG_LANDSCAPE;
-
-    setPaperLayout( _leftBorder, _topBorder, _rightBorder, _bottomBorder, f, o );
-}
-
-void KImageShopDoc::setPaperLayout( float _leftBorder, float _topBorder, float _rightBorder, float _bottomBorder,
-				   KoFormat _paper, KoOrientation _orientation )
-{
-  m_leftBorder = _leftBorder;
-  m_rightBorder = _rightBorder;
-  m_topBorder = _topBorder;
-  m_bottomBorder = _bottomBorder;
-  m_orientation = _orientation;
-  m_paperFormat = _paper;
-
-  calcPaperSize();
-
-  m_bModified = TRUE;
-}
-
-QString KImageShopDoc::completeHeading( const char *_data, 
-					int /*_page */, 
-					const char */*_table*/ )
-{
-  /* QString page;
-    page.sprintf( "%i", _page );
-    QString f = m_strFileURL.data();
-    if ( f.isNull() )
-	f = "";
-    QString n = "";
-    if ( f != "" )
-    {
-	KURL u( f.data() );
-	n = u.filename();
-	} */
-    QString t = QTime::currentTime().toString().copy();
-    QString d = QDate::currentDate().toString().copy();
-
-    QString tmp = _data;
-    int pos = 0;
-    /* while ( ( pos = tmp.find( "<file>", pos ) ) != -1 )
-       tmp.replace( pos, 6, f.data() ); */
-    pos = 0;
-    /* while ( ( pos = tmp.find( "<name>", pos ) ) != -1 )
-       tmp.replace( pos, 6, n.data() ); */
-    pos = 0;
-    while ( ( pos = tmp.find( "<time>", pos ) ) != -1 )
-	tmp.replace( pos, 6, t.data() );
-    pos = 0;
-    while ( ( pos = tmp.find( "<date>", pos ) ) != -1 )
-	tmp.replace( pos, 6, d.data() );
-    pos = 0;
-    while ( ( pos = tmp.find( "<author>", pos ) ) != -1 )
-	tmp.replace( pos, 8, "??" );
-    pos = 0;
-    while ( ( pos = tmp.find( "<email>", pos ) ) != -1 )
-	tmp.replace( pos, 7, "??" );
-
-    return QString( tmp.data() );
-}
-
-void KImageShopDoc::calcPaperSize()
-{
-    switch( m_paperFormat )
-    {
-    case PG_DIN_A5:
-        m_paperWidth = PG_A5_WIDTH;
-	m_paperHeight = PG_A5_HEIGHT;
-	break;
-    case PG_DIN_A4:
-	m_paperWidth = PG_A4_WIDTH;
-	m_paperHeight = PG_A4_HEIGHT;
-	break;
-    case PG_DIN_A3:
-	m_paperWidth = PG_A3_WIDTH;
-	m_paperHeight = PG_A3_HEIGHT;
-	break;
-    case PG_DIN_B5:
-	m_paperWidth = PG_B5_WIDTH;
-	m_paperHeight = PG_B5_HEIGHT;
-	break;
-    case PG_US_EXECUTIVE:
-	m_paperWidth = PG_US_EXECUTIVE_WIDTH;
-	m_paperHeight = PG_US_EXECUTIVE_HEIGHT;
-	break;
-    case PG_US_LETTER:
-	m_paperWidth = PG_US_LETTER_WIDTH;
-	m_paperHeight = PG_US_LETTER_HEIGHT;
-	break;
-    case PG_US_LEGAL:
-	m_paperWidth = PG_US_LEGAL_WIDTH;
-	m_paperHeight = PG_US_LEGAL_HEIGHT;
-	break;
-    case PG_SCREEN:
-        m_paperWidth = PG_SCREEN_WIDTH;
-        m_paperHeight = PG_SCREEN_HEIGHT;
-    case PG_CUSTOM:
-        return;
-    }
-}
-
-QString KImageShopDoc::paperFormatString()
-{
-  QString paperFormatStr;
-  
-  switch( m_paperFormat )
-  {
-    case PG_DIN_A5:
-	  paperFormatStr = "A5";
-	  break;
-    case PG_DIN_A4:
-	  paperFormatStr = "A4";
-	  break;
-    case PG_DIN_A3:
-	  paperFormatStr = "A3";
-	  break;
-    case PG_DIN_B5:
-	  paperFormatStr = "B5";
-	  break;
-    case PG_US_EXECUTIVE:
-	  paperFormatStr = "Executive";
-	  break;
-    case PG_US_LETTER:
-	  paperFormatStr = "Letter";
-	  break;
-    case PG_US_LEGAL:
-	  paperFormatStr = "Legal";
-	  break;
-    case PG_SCREEN:
-	  paperFormatStr = "Screen";
-	  break;
-    case PG_CUSTOM:
-      QString tmp;
-      tmp.sprintf( "%fx%f", m_paperWidth, m_paperHeight );
-      paperFormatStr = tmp;
-  }
-  return paperFormatStr;
-}
-
-QString KImageShopDoc::orientationString()
-{
-  QString orientationStr;
-  
-  switch( m_orientation )
-  {
-    case QPrinter::Portrait :
-      orientationStr = "Portrait";
-      break;
-    case QPrinter::Landscape :
-      orientationStr = "Landscape";
-      break;
-  }
-  return orientationStr;
-}
-
-bool KImageShopDoc::openDocument( const char *_filename, const char *_format )
-{
+  /*
   if ( !m_image.load( _filename, _format ) )
     return false;
 
@@ -752,16 +490,16 @@ bool KImageShopDoc::openDocument( const char *_filename, const char *_format )
 
   m_bModified = true;
   m_bEmpty = false;
-
+  */
   return true;
 }
 
-bool KImageShopDoc::saveDocument( const char *_filename, 
+bool KImageShopDoc::saveDocument( const char */*_filename*/, 
 				  const char */*_format*/ )
 {
-  ASSERT( !isEmpty() );
-
-  return m_image.save( _filename, m_strImageFormat );
+  // ASSERT( !isEmpty() );
+  // return m_image.save( _filename, m_strImageFormat );
+  return true;
 }
 
 char* KImageShopDoc::mimeType()
@@ -786,168 +524,6 @@ void KImageShopDoc::setModified( bool _c )
 bool KImageShopDoc::isEmpty()
 {
   return m_bEmpty;
-}
-
-float KImageShopDoc::printableWidth()
-{
-  return m_paperWidth - m_leftBorder - m_rightBorder;
-}
-
-float KImageShopDoc::printableHeight()
-{
-  return m_paperHeight - m_topBorder - m_bottomBorder;
-}
-
-float KImageShopDoc::paperHeight()
-{
-  return m_paperHeight;
-}
-
-float KImageShopDoc::paperWidth()
-{
-  return m_paperWidth;
-}
-  
-float KImageShopDoc::leftBorder()
-{
-  return m_leftBorder;
-}
-
-float KImageShopDoc::rightBorder()
-{
-  return m_rightBorder;
-}
-
-float KImageShopDoc::topBorder()
-{
-  return m_topBorder;
-}
-
-float KImageShopDoc::bottomBorder()
-{
-  return m_bottomBorder;
-}
-
-KoOrientation KImageShopDoc::orientation()
-{
-  return m_orientation;
-}
-
-KoFormat KImageShopDoc::paperFormat()
-{
-  return m_paperFormat;
-}
-
-QString KImageShopDoc::headLeft( int _p, const char* _t )
-{
-  if( m_headLeft.isNull() )
-  {
-    return "";
-  }
-  return completeHeading( m_headLeft.data(), _p, _t );
-}
-
-QString KImageShopDoc::headRight( int _p, const char* _t )
-{
-  if( m_headRight.isNull() )
-  {
-    return "";
-  }
-  return completeHeading( m_headRight.data(), _p, _t );
-}
-
-QString KImageShopDoc::headMid( int _p, const char* _t )
-{
-  if( m_headMid.isNull() )
-  {
-    return "";
-  }
-  return completeHeading( m_headMid.data(), _p, _t );
-}
-
-QString KImageShopDoc::footLeft( int _p, const char* _t )
-{
-  if( m_footLeft.isNull() )
-  {
-    return "";
-  }
-  return completeHeading( m_footLeft.data(), _p, _t );
-}
-
-QString KImageShopDoc::footMid( int _p, const char* _t )
-{
-  if( m_footMid.isNull() )
-  {
-    return "";
-  }
-  return completeHeading( m_footMid.data(), _p, _t );
-}
-
-QString KImageShopDoc::footRight( int _p, const char* _t )
-{
-  if( m_footRight.isNull() )
-  {
-    return "";
-  }
-  return completeHeading( m_footRight.data(), _p, _t );
-}
-
-QString KImageShopDoc::headLeft()
-{
-  if( m_headLeft.isNull() )
-  {
-    return "";
-  }
-  return m_headLeft.data();
-}
-
-QString KImageShopDoc::headMid()
-{
-  if( m_headMid.isNull() )
-  {
-    return "";
-  }
-  return m_headMid.data();
-}
-
-QString KImageShopDoc::headRight()
-{
-  if( m_headRight.isNull() )
-  {
-    return "";
-  }
-  return m_headRight.data();
-}
-
-QString KImageShopDoc::footLeft()
-{
-  if( m_footLeft.isNull() )
-  {
-    return "";
-  }
-  return m_footLeft.data();
-}
-
-QString KImageShopDoc::footMid()
-{
-  if( m_footMid.isNull() )
-  {
-    return "";
-  }
-  return m_footMid.data();
-}
-
-QString KImageShopDoc::footRight()
-{
-  if( m_footRight.isNull() )
-  {
-    return "";
-  }
-  return m_footRight.data();
-}
-
-KImageShopDoc::~KImageShopDoc()
-{
 }
 
 #include "kimageshop_doc.moc"
