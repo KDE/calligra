@@ -189,7 +189,7 @@ format="PNG"/></imageobject></inlinemediaobject></entry>
 <row>
 <entry>Text Aside Icons</entry>
 <entry><inlinemediaobject><imageobject> <imagedata fileref="tb3.png"
-format="PNG" /></imageobject></inlinemediaobject></entry>
+format="PNG"/></imageobject></inlinemediaobject></entry>
 </row>
 
 <row>
@@ -260,8 +260,8 @@ Document</link>.</para>
 
 <para>Typing <keycombo
 action="simul">&Ctrl;<keycap>N</keycap></keycombo> or clicking
-<inlinemediaobject><imageobject><imagedata fileref="filenew2.png"
-format="PNG"/></imageobject></inlinemediaobject> are equivalent to using
+<inlinemediaobject><imageobject>
+<imagedata fileref="filenew2.png" format="PNG"/></imageobject></inlinemediaobject> are equivalent to using
 the menubar.</para>
 </listitem>
 </varlistentry>
@@ -280,8 +280,9 @@ For Step by Step instructions see <link linkend="loading">Retrieving a
 Saved Document</link>.</para>
 <para>Typing <keycombo
 action="simul">&Ctrl;<keycap>O</keycap></keycombo> or clicking
-<inlinemediaobject><imageobject><imagedata fileref="fileopen.png"
-format="PNG"/></imageobject></inlinemediaobject> are equivalent to using
+<inlinemediaobject><imageobject>
+<imagedata fileref="fileopen.png" format="PNG"/>
+</imageobject></inlinemediaobject> are equivalent to using
 the menubar.</para>
 </listitem>
 </varlistentry>
@@ -310,8 +311,8 @@ saved the file yet, you will be prompted for a filename. For more
 details, see <link linkend="saving">Saving a Document</link>.</para> 
 <para>Typing <keycombo
 action="simul">&Ctrl;<keycap>S</keycap></keycombo> or clicking
-<inlinemediaobject><imageobject><imagedata fileref="filefloppy.png"
-format="PNG"/></imageobject></inlinemediaobject> are equivalent to
+<inlinemediaobject><imageobject><imagedata fileref="filefloppy.png" format="PNG"/>
+</imageobject></inlinemediaobject> are equivalent to
 using the menubar. </para> 
 </listitem>
 </varlistentry>
@@ -392,8 +393,8 @@ options see <link linkend="printing">Printing a Document</link>.</para>
 
 <para>Typing <keycombo
 action="simul">&Ctrl;<keycap>P</keycap></keycombo> or clicking
-<inlinemediaobject><imageobject><imagedata fileref="fileprint.png"
-format="PNG"/></imageobject></inlinemediaobject> are equivalent to using
+<inlinemediaobject><imageobject><imagedata fileref="fileprint.png" format="PNG"/>
+</imageobject></inlinemediaobject> are equivalent to using
 the menubar.</para>
 </listitem>
 </varlistentry>
@@ -411,9 +412,8 @@ operation of your postscript viewer will vary depending on which viewer
 you use.  Refer to the help files for your viewer for
 help.</action></para> 
 
-<para>Clicking <inlinemediaobject><imageobject><imagedata
-fileref="fileprint2.png"
-format="PNG"/></imageobject></inlinemediaobject> are equivalent to using
+<para>Clicking <inlinemediaobject><imageobject>
+<imagedata fileref="fileprint2.png" format="PNG"/></imageobject></inlinemediaobject> are equivalent to using
 the menubar.</para>
 </listitem>
 </varlistentry>
@@ -492,8 +492,8 @@ of Undo/Redo, <link linkend="undo-redo">click here</link>.</para>
 
 <para>Typing <keycombo
 action="simul">&Ctrl;<keycap>Z</keycap></keycombo> or clicking
-<inlinemediaobject><imageobject><imagedata fileref="undo.png"
-format="PNG"/></imageobject></inlinemediaobject> are equivalent to using
+<inlinemediaobject><imageobject><imagedata fileref="undo.png" format="PNG"/>
+</imageobject></inlinemediaobject> are equivalent to using
 the menubar.</para>
 </listitem>
 </varlistentry>
@@ -510,8 +510,9 @@ option is unavailable, the Toolbar will replace
 <guimenuitem>Redo</guimenuitem> with <guimenuitem>No Redo
 Possible</guimenuitem>. For a more thourough discussion of Undo/Redo,
 <link linkend="undo-redo">click here</link>.</para>
-<para>Clicking <inlinemediaobject><imageobject><imagedata
-fileref="redo.png" format="PNG"/></imageobject></inlinemediaobject> are
+<para>Clicking <inlinemediaobject><imageobject>
+<imagedata fileref="redo.png" format="PNG"/>
+</imageobject></inlinemediaobject> are
 equivalent to using the menubar.</para>
 </listitem>
 </varlistentry>
@@ -533,8 +534,9 @@ linkend="clipboard">click here</link>.</para>
 
 <para>Typing <keycombo
 action="simul">&Ctrl;<keycap>X</keycap></keycombo> or clicking
-<inlinemediaobject><imageobject><imagedata fileref="editcut.png"
-format="PNG"/></imageobject></inlinemediaobject>
+<inlinemediaobject><imageobject>
+<imagedata fileref="editcut.png" format="PNG"/>
+</imageobject></inlinemediaobject>
  are equivalent to using the menubar.</para>
 </listitem>
 </varlistentry>
@@ -556,8 +558,7 @@ clipboard, <link linkend="clipboard">click here</link>.</para>
  
 <para>Typing <keycombo
 action="simul">&Ctrl;<keycap>C</keycap></keycombo> or clicking
-<inlinemediaobject><imageobject><imagedata fileref="editcopy.png"
-format="PNG"/></imageobject></inlinemediaobject> are equivalent to using
+<inlinemediaobject><imageobject><imagedata fileref="editcopy.png" format="PNG"/></imageobject></inlinemediaobject> are equivalent to using
 the menubar.</para>
 </listitem>
 </varlistentry>
@@ -581,8 +582,7 @@ linkend="clipboard">click here</link>.</para>
 
 <para>Typing <keycombo
 action="simul">&Ctrl;<keycap>V</keycap></keycombo> or clicking
-<inlinemediaobject><imageobject><imagedata fileref="editpaste.png"
-format="PNG"/></imageobject></inlinemediaobject> are equivalent to using
+<inlinemediaobject><imageobject><imagedata fileref="editpaste.png" format="PNG"/></imageobject></inlinemediaobject> are equivalent to using
 the menubar.</para>
 </listitem>
 </varlistentry>
@@ -622,8 +622,7 @@ linkend="search-and-replace">Searching for Text</link>.</para>
 
 <para>Typing <keycombo
 action="simul">&Ctrl;<keycap>F</keycap></keycombo> or clicking
-<inlinemediaobject><imageobject><imagedata fileref="find.png"
-format="PNG" /></imageobject></inlinemediaobject> are equivalent to
+<inlinemediaobject><imageobject><imagedata fileref="find.png" format="PNG"/></imageobject></inlinemediaobject> are equivalent to
 using the menubar.</para></listitem></varlistentry>
 
 <varlistentry>
@@ -845,8 +844,7 @@ documents.</para>
 <para><action>Insert a picture from a file into the current cursor
 position.</action></para> 
 <para>Typing <keycombo action="simul"><keycap>F2</keycap></keycombo> or
-clicking <inlinemediaobject><imageobject><imagedata
-fileref="picture.png" format="PNG"/></imageobject></inlinemediaobject>
+clicking <inlinemediaobject><imageobject><imagedata fileref="picture.png" format="PNG"/></imageobject></inlinemediaobject>
 are equivalent to using the menubar.</para>
 </listitem>
 </varlistentry>
@@ -863,8 +861,7 @@ information on formulas in &kword; can be found <link
 linkend="formulas">here</link>.</para> 
 
 <para>Clicking <inlinemediaobject><imageobject><imagedata
-fileref="part-kformula.png"
-format="PNG"/></imageobject></inlinemediaobject> are equivalent to using
+fileref="part-kformula.png" format="PNG"/></imageobject></inlinemediaobject> are equivalent to using
 the menubar.</para>
 </listitem>
 </varlistentry>
@@ -962,8 +959,7 @@ cursor location.</action> For more information, please see <link
 linkend="tables">Working with Tables</link>.</para> 
 
 <para>Clicking <inlinemediaobject><imageobject><imagedata
-fileref="part-kspread.png" format="PNG"
-/></imageobject></inlinemediaobject> are equivalent to using the
+fileref="part-kspread.png" format="PNG"/></imageobject></inlinemediaobject> are equivalent to using the
 menubar.</para>
 </listitem>
 </varlistentry>
@@ -990,8 +986,7 @@ frames in your document.  For more information on this subject, see
 
 <para>Typing <keycombo action="simul"><keycap>F6</keycap></keycombo> or
 clicking <inlinemediaobject><imageobject><imagedata
-fileref="tfcreatebut.png" format="PNG"
-/></imageobject></inlinemediaobject> are equivalent to using the
+fileref="tfcreatebut.png" format="PNG"/></imageobject></inlinemediaobject> are equivalent to using the
 menubar.</para>
 </listitem>
 </varlistentry>
@@ -1024,7 +1019,7 @@ frame.</para>
 
 <para>Typing <keycombo action="simul"><keycap>F7</keycap></keycombo> or
 clicking <inlinemediaobject><imageobject><imagedata
-fileref="fpicture.png" format="PNG" /></imageobject></inlinemediaobject>
+fileref="fpicture.png" format="PNG"/></imageobject></inlinemediaobject>
 are equivalent to using the menubar. </para>
 </listitem>
 </varlistentry>
@@ -1044,7 +1039,7 @@ of the &koffice; applications. This will allow you to insert any data
 into your &kword; document.</action></para> 
 <para>Typing <keycombo action="simul"><keycap>F12</keycap></keycombo> or
 clicking <inlinemediaobject><imageobject><imagedata fileref="kpart.png"
-format="PNG" /></imageobject></inlinemediaobject> are equivalent to
+format="PNG"/></imageobject></inlinemediaobject> are equivalent to
 using the menubar. </para>
 </listitem>
 </varlistentry>
@@ -1221,7 +1216,7 @@ detailed information see <link linkend="frames">Working with
 Frames</link>.</para> 
 <para>Typing <keycombo action="simul"><keycap>F4</keycap></keycombo> or
 clicking <inlinemediaobject><imageobject><imagedata
-fileref="textmode.png" format="PNG" /></imageobject></inlinemediaobject>
+fileref="textmode.png" format="PNG"/></imageobject></inlinemediaobject>
 are equivalent to using the menubar.</para>
 </listitem>
 </varlistentry>
@@ -1269,7 +1264,7 @@ are equivalent to using the menubar.</para>
 <para><action>Allows you to insert a row into a table.</action> For more
 on tables, <link linkend="tables">click here</link>.</para> 
 <para>Clicking <inlinemediaobject><imageobject><imagedata
-fileref="rowin.png" format="PNG" /></imageobject></inlinemediaobject> is
+fileref="rowin.png" format="PNG"/></imageobject></inlinemediaobject> is
 equivalent to using the menubar.</para>
 </listitem>
 </varlistentry>
@@ -1284,7 +1279,7 @@ equivalent to using the menubar.</para>
 <para><action>Allows you to insert a column into a table.</action> For
 more on tables, <link linkend="tables">click here</link>.</para> 
 <para>Clicking <inlinemediaobject><imageobject><imagedata
-fileref="colin.png" format="PNG" /></imageobject></inlinemediaobject> is
+fileref="colin.png" format="PNG"/></imageobject></inlinemediaobject> is
 equivalent to using the menubar.</para>
 </listitem>
 </varlistentry>
@@ -1300,7 +1295,7 @@ equivalent to using the menubar.</para>
 <link linkend="tables">click here</link>.</para> 
 
 <para>Clicking <inlinemediaobject><imageobject><imagedata
-fileref="rowout.png" format="PNG" /></imageobject></inlinemediaobject>
+fileref="rowout.png" format="PNG"/></imageobject></inlinemediaobject>
 is equivalent to using the menubar.</para> 
 </listitem>
 </varlistentry>
@@ -1315,7 +1310,7 @@ is equivalent to using the menubar.</para>
 <para><action>Delete a column from a table.</action> For more on tables,
 <link linkend="tables">click here</link>.</para> 
 <para>Clicking <inlinemediaobject><imageobject><imagedata
-fileref="colout.png" format="PNG" /></imageobject></inlinemediaobject>
+fileref="colout.png" format="PNG"/></imageobject></inlinemediaobject>
 is equivalent to using the menubar.</para> 
 </listitem>
 </varlistentry>
@@ -1388,7 +1383,7 @@ tables, <link linkend="tables">click here</link>.</para>
 <para>Will <link linkend="spell-check"><action>spell
 check</action></link> the document.</para> 
 <para>Clicking <inlinemediaobject><imageobject><imagedata
-fileref="spell.png" format="PNG" /></imageobject></inlinemediaobject> is
+fileref="spell.png" format="PNG"/></imageobject></inlinemediaobject> is
 equivalent to using the menubar. </para>
 </listitem>
 </varlistentry>
@@ -1682,27 +1677,27 @@ task from the menubar.  Click on that task for more details. </para>
 <tgroup cols="2">
 <tbody>
 <row><entry>
-<link linkend="menu-new"><inlinemediaobject><imageobject><imagedata fileref="filenew2.png" format="PNG" /></imageobject></inlinemediaobject></link>
+<link linkend="menu-new"><inlinemediaobject><imageobject><imagedata fileref="filenew2.png" format="PNG"/></imageobject></inlinemediaobject></link>
 </entry><entry>
 <link linkend="menu-new">Open New File</link>
 </entry></row>
 <row><entry>
-<link linkend="menu-open"><inlinemediaobject><imageobject><imagedata fileref="fileopen.png" format="PNG" /></imageobject></inlinemediaobject></link>
+<link linkend="menu-open"><inlinemediaobject><imageobject><imagedata fileref="fileopen.png" format="PNG"/></imageobject></inlinemediaobject></link>
 </entry><entry>
 <link linkend="menu-open">Open Saved File</link>
 </entry></row>
 <row><entry>
-<link linkend="menu-save"><inlinemediaobject><imageobject><imagedata fileref="filefloppy.png" format="PNG" /></imageobject></inlinemediaobject></link>
+<link linkend="menu-save"><inlinemediaobject><imageobject><imagedata fileref="filefloppy.png" format="PNG"/></imageobject></inlinemediaobject></link>
 </entry><entry>
 <link linkend="menu-save">Save File</link>
 </entry></row>
 <row><entry>
-<link linkend="menu-print"><inlinemediaobject><imageobject><imagedata fileref="fileprint.png" format="PNG" /></imageobject></inlinemediaobject></link>
+<link linkend="menu-print"><inlinemediaobject><imageobject><imagedata fileref="fileprint.png" format="PNG"/></imageobject></inlinemediaobject></link>
 </entry><entry>
 <link linkend="menu-print">Print File</link>
 </entry></row>
 <row><entry>
-<link linkend="menu-print-preview"><inlinemediaobject><imageobject><imagedata fileref="fileprint2.png" format="PNG" /></imageobject></inlinemediaobject></link>
+<link linkend="menu-print-preview"><inlinemediaobject><imageobject><imagedata fileref="fileprint2.png" format="PNG"/></imageobject></inlinemediaobject></link>
 </entry><entry>
 <link linkend="menu-print-preview">Print Preview</link>
 </entry></row>

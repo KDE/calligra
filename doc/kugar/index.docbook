@@ -122,12 +122,14 @@ Copyright 2000, 2001, Phil Thompson
 
 </chapter>
 
+<!-- c/p the usual installation stuff here
 <appendix>
 <title>Installation</title>
 
-<para><!-- c/p the usual installation stuff here --></para>
+<para></para>
 
 </appendix>
+-->
 
 &datadtd;
 &templatedtd;
