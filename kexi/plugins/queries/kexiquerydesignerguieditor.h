@@ -25,6 +25,7 @@
 #include <qsplitter.h>
 
 #include <kexiviewbase.h>
+#include <kexipropertybuffer.h>
 
 class KexiMainWindow;
 class KexiTableViewData;
@@ -32,6 +33,7 @@ class KexiDataTable;
 class KexiTableItem;
 class KexiRelationWidget;
 class KexiSectionHeader;
+class KexiTableViewPropertyBuffer;
 
 namespace KexiPart
 {
@@ -43,6 +45,7 @@ namespace KexiDB
 	class Connection;
 	class QuerySchema;
 	class TableSchema;
+	class ResultInfo;
 };
 
 class KexiQueryDocument;
@@ -75,22 +78,41 @@ class KexiQueryDesignerGuiEditor : public KexiViewBase
 		 Tabular Data in combo box popups is updated as well. */
 		void updateColumsData();
 
+		/*! \return property buffer associated with currently selected row (i.e. field)
+		 or 0 if current row is empty. */
+		virtual KexiPropertyBuffer *propertyBuffer();
+
+		KexiPropertyBuffer* createPropertyBuffer( int row, 
+			const QString& tableName, const QString& fieldName, bool newOne = false );
+
 	protected slots:
 		void slotDragOverTableRow(KexiTableItem *item, int row, QDragMoveEvent* e);
-		void slotDroppedAtRow(KexiTableItem *item, int row, QDropEvent *ev);
+		void slotDroppedAtRow(KexiTableItem *item, int row, 
+			QDropEvent *ev, KexiTableItem*& newItem);
 		void slotTableAdded(KexiDB::TableSchema &t);
 		void slotTableHidden(KexiDB::TableSchema &t);
+
+		//! Called before cell change in tableview.
+		void slotBeforeCellChanged(KexiTableItem *item, int colnum, 
+			QVariant newValue, KexiDB::ResultInfo* result);
+
+		void slotRowInserted(KexiTableItem* item, uint row);
 
 	private:
 		KexiTableViewData *m_data;
 		KexiDataTable *m_dataTable;
 		QGuardedPtr<KexiDB::Connection> m_conn;
+
 		KexiRelationWidget *m_relations;
 		KexiQueryDocument *m_doc;
 		KexiSectionHeader *m_head;
 		QSplitter *m_spl;
 
 		KexiTableViewData *m_fieldColumnData, *m_tablesColumnData;
+		KexiTableViewPropertyBuffer* m_buffers;
+		KexiTableItem *m_droppedNewItem;
+
+		QString m_droppedNewTable, m_droppedNewField;
 };
 
 #endif

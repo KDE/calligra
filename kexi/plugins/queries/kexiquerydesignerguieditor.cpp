@@ -43,18 +43,17 @@
 #include "kexidatatable.h"
 #include "kexi_utils.h"
 #include "kexisectionheader.h"
+#include "kexitableviewpropertybuffer.h"
 
 #include "widget/relations/kexirelationwidget.h"
 #include "widget/relations/kexirelationviewtable.h"
-
-#define MAX_FIELDS 101 //nice prime number
-
 
 KexiQueryDesignerGuiEditor::KexiQueryDesignerGuiEditor(KexiMainWindow *mainWin, QWidget *parent, KexiQueryDocument *doc, const char *name)
  : KexiViewBase(mainWin, parent, name)
 {
 	m_conn = mainWin->project()->dbConnection();
 	m_doc = doc;
+	m_droppedNewItem = 0;
 
 	m_spl = new QSplitter(Vertical, this);
 	m_spl->setChildrenCollapsible(false);
@@ -78,8 +77,12 @@ KexiQueryDesignerGuiEditor::KexiQueryDesignerGuiEditor(KexiMainWindow *mainWin, 
 //	setFocusProxy(m_dataTable);
 
 	m_data = new KexiTableViewData();
+	m_buffers = new KexiTableViewPropertyBuffer( this, m_dataTable->tableView() );
 	initTable();
 	m_dataTable->tableView()->setData(m_data);
+
+//	m_buffers = new KexiTableViewPropertyBuffer( this, m_dataTable->tableView() );
+
 //	//last column occupies the rest of the area
 //	m_dataTable->tableView()->setColumnStretchEnabled( true, m_data->columnsCount()-1 ); 
 //	m_dataTable->tableView()->setColumnStretchEnabled(true, 0);
@@ -93,8 +96,13 @@ KexiQueryDesignerGuiEditor::KexiQueryDesignerGuiEditor(KexiMainWindow *mainWin, 
 	m_dataTable->tableView()->setDropsAtRowEnabled(true);
 	connect(m_dataTable->tableView(), SIGNAL(dragOverRow(KexiTableItem*,int,QDragMoveEvent*)),
 		this, SLOT(slotDragOverTableRow(KexiTableItem*,int,QDragMoveEvent*)));
-	connect(m_dataTable->tableView(), SIGNAL(droppedAtRow(KexiTableItem*,int,QDropEvent*)),
-		this, SLOT(slotDroppedAtRow(KexiTableItem*,int,QDropEvent*)));
+	connect(m_dataTable->tableView(), SIGNAL(droppedAtRow(KexiTableItem*,int,QDropEvent*,KexiTableItem*&)),
+		this, SLOT(slotDroppedAtRow(KexiTableItem*,int,QDropEvent*,KexiTableItem*&)));
+	connect(m_data, SIGNAL(aboutToChangeCell(KexiTableItem*,int,QVariant,KexiDB::ResultInfo*)),
+		this, SLOT(slotBeforeCellChanged(KexiTableItem*,int,QVariant,KexiDB::ResultInfo*)));
+
+	connect(m_data, SIGNAL(rowInserted(KexiTableItem*,uint)), 
+		this, SLOT(slotRowInserted(KexiTableItem*,uint)));
 
 	kdDebug() << "KexiQueryDesignerGuiEditor::KexiQueryDesignerGuiEditor() data = " << m_data << endl;
 //	m_table = new KexiTableView(m_data, s, "designer");
@@ -169,7 +177,7 @@ f= new KexiDB::Field(i18n("Sort"), KexiDB::Field::Enum);
 //	m_data->addColumn(col7);
 
 	const int columns = m_data->columnsCount();
-	for (int i=0; i<MAX_FIELDS; i++) {
+	for (int i=0; i<(int)m_buffers->size(); i++) {
 //		KexiPropertyBuffer *buff = new KexiPropertyBuffer(this);
 //		buff->insert("primaryKey", KexiProperty("pkey", QVariant(false, 4), i18n("Primary Key")));
 //		buff->insert("len", KexiProperty("len", QVariant(200), i18n("Length")));
@@ -177,6 +185,7 @@ f= new KexiDB::Field(i18n("Sort"), KexiDB::Field::Enum);
 		KexiTableItem *item = new KexiTableItem(columns);
 		m_data->append(item);
 	}
+
 	updateColumsData();
 }
 
@@ -188,9 +197,14 @@ void KexiQueryDesignerGuiEditor::updateColumsData()
 	//update 'table' and 'field' columns
 	m_tablesColumnData->clear();
 	m_fieldColumnData->clear();
-	for (TablesDictIterator it(*m_relations->tables());it.current();++it) {
+	QStringList sortedTableNames;
+	for (TablesDictIterator it(*m_relations->tables());it.current();++it)
+		sortedTableNames += it.current()->table()->name();
+	qHeapSort( sortedTableNames );
+	for (QStringList::Iterator it = sortedTableNames.begin(); it!=sortedTableNames.end(); ++it) {
 		//table
-		KexiDB::TableSchema *table = it.current()->table();
+		KexiDB::TableSchema *table = m_relations->tables()->find(*it)->table();
+//	for (TablesDictIterator it(*m_relations->tables());it.current();++it) {
 		KexiTableItem *item = new KexiTableItem(2);
 		(*item)[0]=table->name();
 		(*item)[1]=(*item)[0];
@@ -202,7 +216,7 @@ void KexiQueryDesignerGuiEditor::updateColumsData()
 		m_fieldColumnData->append( item );
 		for (KexiDB::Field::ListIterator t_it = table->fieldsIterator();t_it.current();++t_it) {
 			item = new KexiTableItem(2);
-			(*item)[0]=t_it.current()->name();
+			(*item)[0]=table->name()+"."+t_it.current()->name();
 			(*item)[1]=QString("  ") + t_it.current()->name();
 			m_fieldColumnData->append( item );
 		}
@@ -353,7 +367,8 @@ void KexiQueryDesignerGuiEditor::slotDragOverTableRow(KexiTableItem *item, int r
 }
 
 void
-KexiQueryDesignerGuiEditor::slotDroppedAtRow(KexiTableItem *item, int row, QDropEvent *ev)
+KexiQueryDesignerGuiEditor::slotDroppedAtRow(KexiTableItem *item, int row, 
+	QDropEvent *ev, KexiTableItem*& newItem)
 {
 	//TODO: better check later if the source is really a table
 	QString srcTable;
@@ -361,8 +376,26 @@ KexiQueryDesignerGuiEditor::slotDroppedAtRow(KexiTableItem *item, int row, QDrop
 	QString dummy;
 
 	KexiFieldDrag::decode(ev,dummy,srcTable,srcField);
+	//insert new row at specific place
+	newItem = new KexiTableItem(m_data->columnsCount());
+	(*newItem)[0]=srcTable+"."+srcField;
+	(*newItem)[1]=srcTable;
+	(*newItem)[2]=QVariant(true,1);//visible
+	(*newItem)[3]=QVariant(0);//totals
+
+	m_droppedNewItem = newItem;
+	m_droppedNewTable = srcTable;
+	m_droppedNewField = srcField;
 	//TODO
-//	addRow(srcTable, srcField);
+}
+
+void KexiQueryDesignerGuiEditor::slotRowInserted(KexiTableItem* item, uint row)
+{
+	if (m_droppedNewItem && m_droppedNewItem==item) {
+		createPropertyBuffer( row, m_droppedNewTable, m_droppedNewField, true );
+		propertyBufferSwitched();
+		m_droppedNewItem=0;
+	}
 }
 
 void KexiQueryDesignerGuiEditor::slotTableAdded(KexiDB::TableSchema &t)
@@ -373,6 +406,89 @@ void KexiQueryDesignerGuiEditor::slotTableAdded(KexiDB::TableSchema &t)
 void KexiQueryDesignerGuiEditor::slotTableHidden(KexiDB::TableSchema &t)
 {
 	updateColumsData();
+}
+
+void KexiQueryDesignerGuiEditor::slotBeforeCellChanged(KexiTableItem *item, int colnum, 
+	QVariant newValue, KexiDB::ResultInfo* result)
+{
+	if (colnum==0) {//'field'
+		if (newValue.isNull()) {
+			m_data->updateRowEditBuffer(item, 1, QVariant(), false/*!allowSignals*/);
+			m_data->updateRowEditBuffer(item, 2, QVariant(false,1));//invisible
+			m_data->updateRowEditBuffer(item, 3, QVariant());//remove totals
+			m_buffers->removeCurrentPropertyBuffer();
+		}
+		else {
+			//auto fill 'table' column
+			QString fieldName = newValue.toString(), tableName;
+			tableName = fieldName;
+			int id = tableName.find('.');
+			if (id>=0)
+				tableName = tableName.left(id);
+			m_data->updateRowEditBuffer(item, 1, tableName, false/*!allowSignals*/);
+			m_data->updateRowEditBuffer(item, 2, QVariant(true,1));//visible
+			m_data->updateRowEditBuffer(item, 3, QVariant(0));//totals
+			if (!propertyBuffer()) {
+				createPropertyBuffer( m_dataTable->tableView()->currentRow(), 
+					tableName, fieldName, true );
+				propertyBufferSwitched();
+			}
+		}
+	}
+	else if (colnum==1) {//'table'
+		if (newValue.isNull()) {
+			if (!item->at(0).toString().isEmpty())
+				m_data->updateRowEditBuffer(item, 0, QVariant(), false/*!allowSignals*/);
+			m_data->updateRowEditBuffer(item, 2, QVariant(false,1));//invisible
+			m_data->updateRowEditBuffer(item, 3, QVariant());//remove totals
+			m_buffers->removeCurrentPropertyBuffer();
+		}
+	}
+	else if (colnum==2) {//'visible'
+		if (!propertyBuffer()) {
+			createPropertyBuffer( m_dataTable->tableView()->currentRow(), 
+				item->at(1).toString(), item->at(0).toString(), true );
+			propertyBufferSwitched();
+		}
+	}
+}
+
+KexiPropertyBuffer *KexiQueryDesignerGuiEditor::propertyBuffer()
+{
+	return m_buffers->currentPropertyBuffer();
+}
+
+KexiPropertyBuffer *
+KexiQueryDesignerGuiEditor::createPropertyBuffer( int row, 
+	const QString& tableName, const QString& fieldName, bool newOne )
+{
+	const bool asterisk = (tableName=="*");
+	QString typeName = "KexiQueryDesignerGuiEditor::Column";
+	KexiPropertyBuffer *buff = new KexiPropertyBuffer(this, typeName);
+
+	KexiProperty *prop;
+	buff->add(prop = new KexiProperty("table", QVariant(tableName)) );
+	prop->setVisible(false);//always hidden
+
+	buff->add(prop = new KexiProperty("field", QVariant(fieldName)) );
+	prop->setVisible(false);//always hidden
+
+	buff->add(prop = new KexiProperty("caption", QVariant(QString::null), i18n("Caption") ) );
+	if (asterisk)
+		prop->setVisible(false);
+
+	buff->add(prop = new KexiProperty("alias", QVariant(QString::null), i18n("Alias")) );
+	if (asterisk)
+		prop->setVisible(false);
+
+	//sorting
+	QStringList slist, nlist;
+	slist << "nosorting" << "ascending" << "descending";
+	nlist << i18n("None") << i18n("Ascending") << i18n("Descending");
+	buff->add(prop = new KexiProperty("sorting", slist[0], slist, nlist, i18n("Sorting")));
+
+	m_buffers->insert(row, buff, newOne);
+	return buff;
 }
 
 #include "kexiquerydesignerguieditor.moc"
