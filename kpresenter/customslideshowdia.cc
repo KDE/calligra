@@ -115,9 +115,20 @@ void CustomSlideShowDia::slotDoubleClicked(QListBoxItem *)
     slotModify();
 }
 
+void CustomSlideShowDia::slotPresentationFinished()
+{
+    kdDebug()<<"void CustomSlideShowDia::slotPresentationFinished()*************************\n";
+    show();
+}
+
 void CustomSlideShowDia::slotTest()
 {
-    //TODO
+    QListBoxItem *item = list->selectedItem();
+    if ( item )
+    {
+        m_doc->addTestCustomSlideShow( m_customListMap[item->text()] );
+        hide();
+    }
 }
 
 void CustomSlideShowDia::slotAdd()

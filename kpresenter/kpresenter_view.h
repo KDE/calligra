@@ -170,7 +170,7 @@ public:
 
 signals:
     void currentPageChanged( int );
-
+    void presentationFinished();
 
 public slots:
     // edit menu

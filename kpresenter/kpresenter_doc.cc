@@ -136,7 +136,7 @@ KoDocument *KPresenterChild::hitTest( const QPoint &, const QWMatrix & )
 KPresenterDoc::KPresenterDoc( QWidget *parentWidget, const char *widgetName, QObject* parent, const char* name,
                               bool singleViewMode )
     : KoDocument( parentWidget,widgetName, parent, name, singleViewMode ),
-      _gradientCollection()
+      _gradientCollection(), m_customListTest( 0L )
 {
     setInstance( KPresenterFactory::global() );
     //Necessary to define page where we load object otherwise copy-duplicate page doesn't work.
@@ -423,6 +423,7 @@ KPresenterDoc::~KPresenterDoc()
 {
     if(isReadWrite())
         saveConfig();
+    clearTestCustomSlideShow();
     //Be carefull !!!!!! don't delete this pointer delete in stickypage
 #if 0
     delete _header;
@@ -3756,6 +3757,8 @@ QValueList<int> KPresenterDoc::listOfDisplaySelectedSlides( const QValueList<KPr
 QValueList<int> KPresenterDoc::displaySelectedSlides()  /* returned list is 0-based */
 {
     QValueList<int> result;
+    if ( m_customListTest )
+        return *m_customListTest;
     if ( m_presentationName.isEmpty() )
         return selectedSlides();
     else
@@ -4555,6 +4558,23 @@ QStringList KPresenterDoc::presentationList()
             lst << it.key();
     }
     return lst;
+}
+
+void KPresenterDoc::addTestCustomSlideShow( const QStringList &lst )
+{
+    delete m_customListTest;
+    m_customListTest = new QValueList<int>( listOfDisplaySelectedSlides( customListPage( lst) ) );
+    KPresenterView *view = firstView();
+    kdDebug()<<"KPresenterDoc::addTestCustomSlideShow( const QStringList &lst ) :"<<view<<endl;
+    if ( view )
+        view->screenStartFromFirst();
+
+}
+
+void KPresenterDoc::clearTestCustomSlideShow()
+{
+    delete m_customListTest;
+    m_customListTest = 0L;
 }
 
 

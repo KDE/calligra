@@ -511,6 +511,8 @@ class KPresenterDoc : public KoDocument
     //otherwise return list of custom slide show
     QValueList<int> displaySelectedSlides();
     QValueList<int> listOfDisplaySelectedSlides( const QValueList<KPrPage*>& lst );
+    void addTestCustomSlideShow( const QStringList &lst );
+    void clearTestCustomSlideShow();
 
 public slots:
     void movePage( int from, int to );
@@ -705,6 +707,7 @@ private:
     QString m_presentationName;
     bool m_bGlobalHyphenation;
     KPRLoadingInfo *m_loadingInfo;
+    QValueList<int> *m_customListTest;
 };
 
 #endif

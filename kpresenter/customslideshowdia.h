@@ -47,6 +47,7 @@ public slots:
     void slotModify();
     void slotCopy();
     void slotTest();
+    void slotPresentationFinished();
 
 protected:
     void init();
