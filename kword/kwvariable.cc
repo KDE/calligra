@@ -431,8 +431,6 @@ void KWFootNoteVariable::finalize()
 
 void KWFootNoteVariable::resize()
 {
-    kdDebug()<<" this :" <<this<<endl;
-    kdDebug()<<" m_deleted :"<<m_deleted<<endl;
     if ( m_deleted )
         return;
     KoTextFormat *fmt = format();
