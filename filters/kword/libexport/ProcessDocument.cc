@@ -59,7 +59,7 @@
 void ProcessTextTag ( QDomNode myNode, void *tagData, KWEFKWordLeader *leader )
 {
     QString *tagText = (QString *) tagData;
-    
+
     *tagText = myNode.toElement().text(); // Get the text, also from a CDATA section
 
     AllowNoAttributes (myNode);
@@ -101,6 +101,7 @@ static void ProcessAuthorTag ( QDomNode         myNode,
     tagProcessingList.append ( TagProcessing ( "postal-code", ProcessTextTag, &docInfo->postalCode ) );
     tagProcessingList.append ( TagProcessing ( "city",        ProcessTextTag, &docInfo->city       ) );
     tagProcessingList.append ( TagProcessing ( "street",      ProcessTextTag, &docInfo->street     ) );
+    tagProcessingList.append ( TagProcessing ( "initial",     ProcessTextTag, &docInfo->initial    ) );
     ProcessSubtags (myNode, tagProcessingList, leader);
 }
 
@@ -280,7 +281,7 @@ static void ProcessStrikeoutTag (QDomNode myNode, void *tagData, KWEFKWordLeader
         text->strikeout = false;
     else if( type == "0" )
         text->strikeout = false;
-    else 
+    else
     {
         text->strikeout = true;
         text->strikeoutType = type;
@@ -403,7 +404,7 @@ static void ProcessFootnoteTag (QDomNode myNode, void *tagData, KWEFKWordLeader 
     // search for frameset in the footnoteList
     for(unsigned i=0;i<leader->footnoteList.count();i++)
     {
-       if( leader->footnoteList[i].frameName == frameset ) 
+       if( leader->footnoteList[i].frameName == frameset )
        {
            variable->setFootnote(numberingtype=="auto",value, &leader->footnoteList[i].para);
            break;

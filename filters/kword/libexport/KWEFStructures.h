@@ -57,7 +57,7 @@ class TextFormatting
 {
     public:
         TextFormatting(): italic (false), underline (false), underlineWord(false),
-            strikeout (false), 
+            strikeout (false),
             weight (50), fontSize (0), verticalAlignment (0), missing (true) {}
 
         TextFormatting(const bool newMissing) : italic (false),
@@ -75,7 +75,7 @@ class TextFormatting
                          QColor  bg,
                          int     v) :
             fontName (f), italic (i), underline (u), underlineWord(false),
-            strikeout(s), 
+            strikeout(s),
             weight (w), fontSize (sz), fgColor (fg),
             bgColor (bg), verticalAlignment (v), missing (false) {}
 
@@ -92,7 +92,7 @@ class TextFormatting
         QString    underlineStyle; // underline style: solid, dash, dot dash, ....
         bool       underlineWord;  // true if word-by-word (i.e spaces aren't underlined)
         QColor     underlineColor; // color of the line
-        
+
         bool    strikeout;             // true if strikeout
         QString strikeoutType;         // single, bold, double
         QString strikeoutLineStyle;    // solid, dash, dot, ....
@@ -102,7 +102,7 @@ class TextFormatting
         QColor  fgColor;
         QColor  bgColor;
         int     verticalAlignment;
-        
+
         QString fontAttribute;
 
         bool    missing;   // true if the FormatData does not correspond to a real <FORMAT> element
@@ -176,8 +176,8 @@ class VariableData
 public:
     VariableData (): m_type(-1), footnotePara(0) {}
     VariableData ( const QString& text ) : m_text(text), m_type(-1) {}
-    VariableData ( const VariableData& other ) : 
-      m_key(other.m_key), m_text(other.m_text), 
+    VariableData ( const VariableData& other ) :
+      m_key(other.m_key), m_text(other.m_text),
       m_type(other.m_type), propertyMap(other.propertyMap),
       footnotePara(other.footnotePara) {}
 public:
@@ -197,7 +197,7 @@ public:
      * Set parameters of a <FIELD> element
      */
     void setField(const QString& subtype, const QString& value);
-    QString getFieldName(void) const; 
+    QString getFieldName(void) const;
     QString getFieldValue(void) const;
     /*
      * Set parameters of a <FOOTNOTE> element
@@ -316,15 +316,15 @@ public:
 class TabulatorData
 {
 public:
-    
-    enum 
+
+    enum
     {
-        TF_NONE       = 0, 
-        TF_DOT        = 1, 
-        TF_LINE       = 2, 
-        TF_DASH       = 3,  
-        TF_DASHDOT    = 4,  
-        TF_DASHDOTDOT = 5 
+        TF_NONE       = 0,
+        TF_DOT        = 1,
+        TF_LINE       = 2,
+        TF_DASH       = 3,
+        TF_DASHDOT    = 4,
+        TF_DASHDOTDOT = 5
     };
 
     TabulatorData() : m_type(0), m_ptpos(0.0), m_filling(0), m_width(0.0) {}
@@ -399,7 +399,7 @@ struct ParaData
 
 struct HeaderFooterData
 {
-    enum HeaderFooterPage 
+    enum HeaderFooterPage
     {
       PAGE_FIRST,
       PAGE_ODD,
@@ -459,6 +459,7 @@ public:
     QString postalCode;
     QString city;
     QString street;
+    QString initial;
 };
 
 // Helper functions
