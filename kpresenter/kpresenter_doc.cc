@@ -1047,7 +1047,7 @@ bool KPresenterDoc::loadXML( const QDomDocument &doc )
     // DOC
     if(document.tagName()!="DOC") {
         kdWarning(33001) << "Missing DOC" << endl;
-        setErrorMessage( i18n("Invalid document, DOC tag missing") );
+        setErrorMessage( i18n("Invalid document, DOC tag missing.") );
         return false;
     }
 

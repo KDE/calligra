@@ -312,7 +312,7 @@ ConfigureInterfacePage::ConfigureInterfacePage( KWView *_view, QVBox *box, char 
 
     m_nbPagePerRow=new KIntNumInput( indent, nbPagePerRow, gbInterfaceGroup );
     m_nbPagePerRow->setRange(1, 10, 1);
-    m_nbPagePerRow->setLabel(i18n("Preview mode - Number of pa&ges per row:"));
+    m_nbPagePerRow->setLabel(i18n("Number of pa&ges per row in preview mode:"));
     QWhatsThis::add(m_nbPagePerRow , i18n("After selecting preview mode (via the \"View\" "
                     "menu, option \"Preview mode\") this is the amount of pages KWord will "
                     "position on one horizontal row") );
@@ -473,7 +473,7 @@ ConfigureMiscPage::ConfigureMiscPage( KWView *_view, QVBox *box, char *name )
     }
     m_unit->setCurrentItem(m_oldUnit);
     QString unitHelp = i18n("Select the unit type used every time a distance or width/height "
-                            "is displayed or entered. This one setting is for the whole of KWord");
+                            "is displayed or entered. This one setting is for the whole of KWord.");
     QWhatsThis::add( unitLabel, unitHelp);
     QWhatsThis::add( m_unit, unitHelp);
 
@@ -997,7 +997,7 @@ void ConfigurePathPage::slotDefault()
     if ( item )
         item->setText(1, QString::null );
 
-    item = m_pPathView->findItem(i18n("Horizontal Line path"), 0);
+    item = m_pPathView->findItem(i18n("Horizontal Line Path"), 0);
     if ( item )
         item->setText(1, KWFactory::global()->dirs()->resourceDirs("horizontalLine").join(";") );
 
@@ -1017,7 +1017,7 @@ void ConfigurePathPage::apply()
         }
     }
 
-    item = m_pPathView->findItem(i18n("Horizontal Line path"), 0);
+    item = m_pPathView->findItem(i18n("Horizontal Line Path"), 0);
     if ( item )
     {
         QStringList lst = QStringList::split(QString(";"), item->text(1));

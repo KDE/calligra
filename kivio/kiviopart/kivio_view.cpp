@@ -405,7 +405,7 @@ void KivioView::setupActions()
 
   /* Create the fg color button */
   m_setFGColor = new TKSelectColorAction( i18n("Set Foreground Color"), TKSelectColorAction::LineColor, actionCollection(), "setFGColor" );
-  m_setFGColor->setWhatsThis(i18n("The Foreground Color allows you to choose a color for the lines of the stencils."));
+  m_setFGColor->setWhatsThis(i18n("The foreground color allows you to choose a color for the lines of the stencils."));
   connect(m_setFGColor,SIGNAL(activated()),SLOT(setFGColor()));
   m_setBGColor = new TKSelectColorAction( i18n("Set Background Color"), TKSelectColorAction::FillColor, actionCollection(), "setBGColor" );
   m_setBGColor->setWhatsThis(i18n("You can choose a color for the background of a stencil by using this button."));
@@ -508,7 +508,7 @@ void KivioView::setupActions()
 
   m_viewZoom = new KSelectAction(i18n("Zoom &Level"), "viewmag", 0, actionCollection(), "viewZoom");
   m_viewZoom->setEditable(true);
-  m_viewZoom->setWhatsThis(i18n("Zoom Level allows you to zoom in or out of a document. You can either choose one of the predefined zoomfactors or enter a new zoomfactor (in percent)."));
+  m_viewZoom->setWhatsThis(i18n("This allows you to zoom in or out of a document. You can either choose one of the predefined zoomfactors or enter a new zoomfactor (in percent)."));
   connect(m_viewZoom, SIGNAL(activated(const QString&)), SLOT(viewZoom(const QString&)));
   changeZoomMenu();
 

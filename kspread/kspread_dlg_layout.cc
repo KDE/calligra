@@ -1036,7 +1036,7 @@ void CellFormatDlg::slotApply()
       rect.setCoords( left, top, right + 1, bottom  );
     }
     
-    QString title = i18n( "Change format" );
+    QString title = i18n( "Change Format" );
     KSpreadUndoCellFormat * undo = new KSpreadUndoCellFormat( m_doc, m_table, rect, title );
     // m_doc->undoBuffer()->appendUndo( undo );
     macroUndo->addCommand( undo );

@@ -84,7 +84,7 @@ void KSUtil::castingError( KSContext& context, KSValue* v, KSValue::Type t )
 
 void KSUtil::argumentsMismatchError( KSContext& context, const QString& methodname )
 {
-  QString tmp( i18n("Arguments did not match the methods %1 parameter list") );
+  QString tmp( i18n("Arguments did not match the methods %1 parameter list.") );
   context.setException( new KSException( "ParameterMismatch", tmp.arg( methodname ) ) );
 }
 

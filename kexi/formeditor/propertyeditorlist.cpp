@@ -76,8 +76,8 @@ PropertyEditorList::valueChanged()
 PropertyEditorBool::PropertyEditorBool(QWidget *parent, QVariant::Type type, QVariant value, const char *name)
  : PropertyEditorList(parent, type, value, name)
 {
-	m_combo->insertItem(i18n("true"));
-	m_combo->insertItem(i18n("false"));
+	m_combo->insertItem(i18n("True"));
+	m_combo->insertItem(i18n("False"));
 
 	if(value.toBool())
 		m_combo->setCurrentItem(0);

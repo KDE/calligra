@@ -40,11 +40,11 @@ i18n( "Style name", "Borders 2" );
 i18n( "Style name", "Borders 3" );
 i18n( "Style name", "Row" );
 i18n( "Style name", "Column" );
-i18n( "Style name", "Light gray" );
-i18n( "Style name", "Dark gray" );
+i18n( "Style name", "Light Gray" );
+i18n( "Style name", "Dark Gray" );
 i18n( "Style name", "Black" );
-i18n( "Style name", "Light blue" );
-i18n( "Style name", "Dark blue" );
+i18n( "Style name", "Light Blue" );
+i18n( "Style name", "Dark Blue" );
 i18n( "Style name", "Red" );
 i18n( "Style name", "Yellow" );
 i18n( "Style name", "Colorful" );
@@ -58,15 +58,15 @@ i18n( "Style name", "Header 1" );
 i18n( "Style name", "Header 2" );
 i18n( "Style name", "Header 3" );
 i18n( "Style name", "Header 4" );
-      
+
 // Translations for the standard tabletemplate names
 i18n( "Style name", "Grid 1" );
 i18n( "Style name", "Grid 2" );
 i18n( "Style name", "Grid 3" );
-i18n( "Style name", "Gray heading" );
-i18n( "Style name", "Blue heading" );
-i18n( "Style name", "Blue traditional" );
-i18n( "Style name", "Gray traditional" );
-i18n( "Style name", "Blue top and bottom" );
-i18n( "Style name", "Gray top and bottom" );
-      
+i18n( "Style name", "Gray Heading" );
+i18n( "Style name", "Blue Heading" );
+i18n( "Style name", "Blue Traditional" );
+i18n( "Style name", "Gray Traditional" );
+i18n( "Style name", "Blue Top and Bottom" );
+i18n( "Style name", "Gray Top and Bottom" );
+

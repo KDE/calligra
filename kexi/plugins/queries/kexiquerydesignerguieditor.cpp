@@ -75,11 +75,11 @@ KexiQueryDesignerGuiEditor::KexiQueryDesignerGuiEditor(KexiView *view,QWidget *p
 	m_sourceList = view->project()->db()->tableNames();
 	m_sourceList.prepend(i18n("[no table]"));
 
-	m_designTable->addColumn(i18n("source"), QVariant::StringList, true, QVariant(m_sourceList));
-	m_designTable->addColumn(i18n("field"), QVariant::String, true);
-	m_designTable->addColumn(i18n("shown"), QVariant::Bool, true);
-	m_designTable->addColumn(i18n("AND condition"), QVariant::String, true);
-	m_designTable->addColumn(i18n("OR condition"), QVariant::String, true);
+	m_designTable->addColumn(i18n("Source"), QVariant::StringList, true, QVariant(m_sourceList));
+	m_designTable->addColumn(i18n("Field"), QVariant::String, true);
+	m_designTable->addColumn(i18n("Shown"), QVariant::Bool, true);
+	m_designTable->addColumn(i18n("AND Condition"), QVariant::String, true);
+	m_designTable->addColumn(i18n("OR Condition"), QVariant::String, true);
 
 	m_content = item->designData();
 	setUpTable();

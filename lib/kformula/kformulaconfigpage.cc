@@ -166,13 +166,13 @@ ConfigurePage::ConfigurePage( Document* document, QWidget* view, KConfig* config
     grid = new QGridLayout( styleBox->layout(), 3, 1 );
     grid->setSpacing( KDialog::spacingHint() );
 
-    esstixStyle = new QRadioButton( i18n( "Esstix Font Style" ), styleBox, "esstixStyle" );
+    esstixStyle = new QRadioButton( i18n( "Esstix font style" ), styleBox, "esstixStyle" );
     esstixStyle->setChecked( contextStyle.getFontStyle() == "esstix" );
 
-    cmStyle = new QRadioButton( i18n( "Computer Modern (TeX) Style" ), styleBox, "cmStyle" );
+    cmStyle = new QRadioButton( i18n( "Computer modern (TeX) style" ), styleBox, "cmStyle" );
     cmStyle->setChecked( contextStyle.getFontStyle() == "tex" );
 
-    symbolStyle = new QRadioButton( i18n( "Symbol Font Style" ), styleBox, "symbolStyle" );
+    symbolStyle = new QRadioButton( i18n( "Symbol font style" ), styleBox, "symbolStyle" );
     symbolStyle->setChecked( !esstixStyle->isChecked() && !cmStyle->isChecked() );
 
     grid->addWidget( symbolStyle, 0, 0 );

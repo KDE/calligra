@@ -5127,7 +5127,7 @@ void KPresenterView::spellCheckerDone( const QString & )
         if ( m_spell.bSpellSelection )
         {
             KMessageBox::information(this,
-                                     i18n("SpellCheck selection finished."),
+                                     i18n("Spellcheck selection finished."),
                                      i18n("Spell Checking"));
             m_pKPresenterDoc->setReadWrite(true);
 

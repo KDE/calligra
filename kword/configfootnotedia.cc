@@ -66,13 +66,13 @@ void KWConfigFootNoteDia::setupTab3()
 {
     QFrame * page = addPage( i18n( "Separator Line" ) );
     QString comment= i18n ("Configure the separator line. The separator line "
-        "is drawn directly above the frame for the footnotes");
+        "is drawn directly above the frame for the footnotes.");
     QWhatsThis::add(page, comment);
     QVBoxLayout *pageLayout= new QVBoxLayout( page, 11, 6);
 
     QButtonGroup *positionGroupBox = new QButtonGroup( i18n( "Position"), page );
     comment= i18n ("The separator can be positioned horizontally by picking one "
-        "of the three alignments");
+        "of the three alignments.");
     QWhatsThis::add(positionGroupBox, comment);
     positionGroupBox->setColumnLayout(0, Qt::Vertical );
     QVBoxLayout *positionLayout = new QVBoxLayout( positionGroupBox->layout() );
@@ -116,7 +116,7 @@ void KWConfigFootNoteDia::setupTab3()
 
     QLabel *lSize = new QLabel( i18n("arg is a unit such as pt", "&Width (%1):").arg("pt"), page );
     lSize->setBuddy( spWidth );
-    comment= i18n ("The width is the thickness of the separator line, set to 0 for no seperator line");
+    comment= i18n ("The width is the thickness of the separator line, set to 0 for no seperator line.");
     QWhatsThis::add(lSize, comment);
     QWhatsThis::add(spWidth, comment);
     layout->addWidget( lSize, 1, 0 );
@@ -126,7 +126,7 @@ void KWConfigFootNoteDia::setupTab3()
 
     QLabel *lWidth = new QLabel( i18n("&Size on page:"), page, "lWidth" );
     lWidth->setBuddy( spLength );
-    comment= i18n ("The size of the separator line can be defined in a percentage of the width of the page");
+    comment= i18n ("The size of the separator line can be defined in a percentage of the width of the page.");
     QWhatsThis::add(spLength, comment);
     QWhatsThis::add(lWidth, comment);
     layout->addWidget( lWidth, 0, 0 );

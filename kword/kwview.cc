@@ -2373,11 +2373,11 @@ void KWView::adjustZOrderOfSelectedFrames(moveFrameType moveType) {
         switch(moveType) {
             case RaiseFrame:
                 newZOrder=raiseFrame(frames,frame);
-                actionName=i18n("Raise frame");
+                actionName=i18n("Raise Frame");
                 break;
             case LowerFrame:
                 newZOrder=lowerFrame(frames,frame);
-                actionName=i18n("Lower frame");
+                actionName=i18n("Lower Frame");
                 break;
             case BringToFront:
                 newZOrder=bringToFront(frames,frame);
@@ -5381,7 +5381,7 @@ void KWView::spellCheckerReady()
     if ( m_spell.textIterator->options() & KFindDialog::SelectedText )
     {
         KMessageBox::information(this,
-                                 i18n("SpellCheck selection finished."),
+                                 i18n("Spellcheck selection finished."),
                                  i18n("Spell Checking"));
     }
     //m_doc->setReadWrite(true);

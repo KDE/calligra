@@ -75,7 +75,7 @@ ClipartChooser::startDrag()
 VStyleDocker::VStyleDocker( KarbonPart* part, KarbonView* parent, const char* /*name*/ )
 	: VDocker( parent->shell() ), m_part ( part ), m_view( parent )
 {
-	setCaption( i18n( "Style settings" ) );
+	setCaption( i18n( "Style Settings" ) );
 
 	mainWidget = new QWidget( this );
 	mTabWidget = new QTabWidget( mainWidget );

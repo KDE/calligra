@@ -1106,7 +1106,7 @@ void KoTextView::insertLineBreak()
 void KoTextView::insertNonbreakingSpace()
 {
     textObject()->insert( cursor(), currentFormat(), QChar(0xa0) /* see QRichText */,
-                          false /* no newline */, true, i18n("Insert non-breaking Space") );
+                          false /* no newline */, true, i18n("Insert Non-Breaking Space") );
 }
 
 void KoTextView::insertSpecialChar(QChar _c, const QString& font)

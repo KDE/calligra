@@ -1593,7 +1593,7 @@ QStringList KoFieldVariable::actionTexts()
     lst << i18n( "Document Abstract" );
 
     lst << i18n( "File Name" );
-    lst << i18n( "File Name Without Extension" );
+    lst << i18n( "File Name without Extension" );
     lst << i18n( "Directory Name" ); // is "Name" necessary ?
     lst << i18n( "Directory && File Name" );
     lst << i18n( "Initials" );

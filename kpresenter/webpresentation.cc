@@ -1055,7 +1055,7 @@ void KPWebPresentationCreateDialog::setupGUI()
 
     step1 = new QLabel( i18n( "Initialize (create file structure, etc.)" ), back );
     step2 = new QLabel( i18n( "Create Pictures of the Slides" ), back );
-    step3 = new QLabel( i18n( "Create HTML pages for the Slides" ), back );
+    step3 = new QLabel( i18n( "Create HTML Pages for the Slides" ), back );
     step4 = new QLabel( i18n( "Create Main Page (Table of Contents)" ), back );
 
     line = new QFrame( back );

@@ -490,7 +490,7 @@ bool KSpreadDoc::loadXML( QIODevice *, const QDomDocument& doc )
   {
     if ( !m_pStyleManager->loadXML( styles ) )
     {
-      setErrorMessage( i18n( "Styles cannot be loaded" ) );
+      setErrorMessage( i18n( "Styles cannot be loaded." ) );
       m_bLoading = false;
       return false;
     }

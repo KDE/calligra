@@ -213,13 +213,13 @@ void KugarPart::slotPreferedTemplate(const QString &tpl)
 					if (tmpStore->open("maindoc.xml")) 
 					{
 						if (!m_reportEngine -> setReportTemplate(tmpStore->device()))
-							KMessageBox::sorry(0,i18n("%1 is not a valid Kugar Designer template file").arg(localtpl));	
+							KMessageBox::sorry(0,i18n("%1 is not a valid Kugar Designer template file.").arg(localtpl));
 						else
 							m_templateOk=true;
 						tmpStore->close();
 					}
 					else
-						KMessageBox::sorry(0,i18n("%1 is not a valid Kugar Designer template file").arg(localtpl));	
+						KMessageBox::sorry(0,i18n("%1 is not a valid Kugar Designer template file.").arg(localtpl));	
 					
 					delete tmpStore;
 				}

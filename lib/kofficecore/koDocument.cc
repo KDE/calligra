@@ -355,7 +355,7 @@ bool KoDocument::saveFile()
     kdDebug(30003) << "KoDocument::saveFile() doc='" << url().url() <<"'"<< endl;
     if ( !kapp->inherits( "KoApplication" ) )
     {
-        d->lastErrorMessage = i18n( "Internal error: not a KOffice application, saving not allowed" );
+        d->lastErrorMessage = i18n( "Internal error: not a KOffice application, saving not allowed." );
         return false;
     }
 
@@ -943,7 +943,7 @@ bool KoDocument::saveNativeFormat( const QString & _file )
     }
     else
     {
-        d->lastErrorMessage = i18n( "Not able to write maindoc.xml" );
+        d->lastErrorMessage = i18n( "Not able to write 'maindoc.xml'." );
         delete store;
         return false;
     }
@@ -1406,7 +1406,7 @@ bool KoDocument::loadNativeFormat( const QString & file )
         if ( !in.open( IO_ReadOnly ) )
         {
             QApplication::restoreOverrideCursor();
-            d->lastErrorMessage = i18n( "Couldn't open the file for reading (check read permissions)" );
+            d->lastErrorMessage = i18n( "Couldn't open the file for reading (check read permissions)." );
             return false;
         }
 
@@ -1416,7 +1416,7 @@ bool KoDocument::loadNativeFormat( const QString & file )
         {
             QApplication::restoreOverrideCursor();
             in.close();
-            d->lastErrorMessage = i18n( "Couldn't read the beginning of the file" );
+            d->lastErrorMessage = i18n( "Couldn't read the beginning of the file." );
             return false;
         }
         isRawXML = (strncasecmp( buf, "<?xm", 4 ) == 0);
@@ -1459,7 +1459,7 @@ bool KoDocument::loadNativeFormat( const QString & file )
 
         if ( store->bad() )
         {
-            d->lastErrorMessage = i18n( "Not a valid KOffice file" );
+            d->lastErrorMessage = i18n( "Not a valid KOffice file." );
             delete store;
             QApplication::restoreOverrideCursor();
             return false;
@@ -1492,7 +1492,7 @@ bool KoDocument::loadNativeFormat( const QString & file )
         } else
         {
             kdError(30003) << "ERROR: No maindoc.xml" << endl;
-            d->lastErrorMessage = i18n( "Invalid document: no file 'maindoc.xml'" );
+            d->lastErrorMessage = i18n( "Invalid document: no file 'maindoc.xml'." );
             delete store;
             QApplication::restoreOverrideCursor();
             return false;
@@ -1504,7 +1504,7 @@ bool KoDocument::loadNativeFormat( const QString & file )
 // Proceed nonetheless
 #if 0
             if ( d->lastErrorMessage.isEmpty() )
-                d->lastErrorMessage = i18n( "Couldn't load embedded objects" );
+                d->lastErrorMessage = i18n( "Couldn't load embedded objects." );
             delete store;
             QApplication::restoreOverrideCursor();
             return false;

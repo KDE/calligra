@@ -1117,7 +1117,7 @@ bool KSEval_t_dict( KSParseNode* node, KSContext& context )
     //    we can not provide a left expression
     else
     {
-      context.setException( new KSException( "NoLeftExpr", i18n("Expected a left expression"), node->getLineNo() ) );
+      context.setException( new KSException( "NoLeftExpr", i18n("Expected a left expression."), node->getLineNo() ) );
       return false;
     }
   }
@@ -1722,7 +1722,7 @@ bool KSEval_t_decr( KSParseNode* node, KSContext& context )
 
   if ( context.value()->mode() != KSValue::LeftExpr )
   {
-    context.setException( new KSException( "NoLeftExpr", i18n("Expected a left expression in assignment"), node->getLineNo() ) );
+    context.setException( new KSException( "NoLeftExpr", i18n("Expected a left expression in assignment."), node->getLineNo() ) );
     return false;
   }
 
@@ -1977,7 +1977,7 @@ bool KSEval_t_subst( KSParseNode* node, KSContext& context )
 
     if ( l.value()->mode() != KSValue::LeftExpr )
     {
-        context.setException( new KSException( "NoLeftExpr", i18n("Expected a left expression in substitute"), node->getLineNo() ) );
+        context.setException( new KSException( "NoLeftExpr", i18n("Expected a left expression in substitute."), node->getLineNo() ) );
         return false;
     }
 
@@ -2429,7 +2429,7 @@ bool KSEval_plus_assign( KSParseNode* node, KSContext& context )
 
     if ( l.value()->mode() != KSValue::LeftExpr )
     {
-        context.setException( new KSException( "NoLeftExpr", i18n("Expected a left expression in assignment"), node->getLineNo() ) );
+        context.setException( new KSException( "NoLeftExpr", i18n("Expected a left expression in assignment."), node->getLineNo() ) );
         return false;
     }
 
@@ -2498,7 +2498,7 @@ bool KSEval_minus_assign( KSParseNode* node, KSContext& context )
 
     if ( l.value()->mode() != KSValue::LeftExpr )
     {
-        context.setException( new KSException( "NoLeftExpr", i18n("Expected a left expression in assignment"), node->getLineNo() ) );
+        context.setException( new KSException( "NoLeftExpr", i18n("Expected a left expression in assignment."), node->getLineNo() ) );
         return false;
     }
 

@@ -374,7 +374,7 @@ void KoChangeVariableSubType::unexecute()
 
 QString KoChangeVariableSubType::name() const
 {
-    return i18n( "Change Variable SubType" );
+    return i18n( "Change Variable Subtype" );
 }
 
 ////

@@ -21,7 +21,7 @@
 DateFormatWidget::DateFormatWidget( QWidget* parent,  const char* name, WFlags fl )
     : TimeDateFormatWidgetPrototype( parent, name, fl )
 {
-    setCaption( i18n( "DateFormat", "This dialog allows you to set the format of the date variable" ) );
+    setCaption( i18n( "DateFormat", "Format of Date Variable" ) );
     QStringList listDateFormat = KoVariableDateFormat::staticTranslatedFormatPropsList();
     combo1->insertStringList(listDateFormat);
 

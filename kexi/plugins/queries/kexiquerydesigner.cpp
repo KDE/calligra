@@ -52,7 +52,7 @@ KexiQueryDesigner::KexiQueryDesigner(KexiView *view,QWidget *parent, const char 
  : KexiDialogBase(view,parent, name),m_item(item)
 {
 	QVBoxLayout *l = new QVBoxLayout(this);
-	setCaption(i18n("%1 - query").arg(name));
+	setCaption(i18n("%1 - Query").arg(name));
 
 	m_tab = new QTabWidget(this);
 	m_tab->setTabPosition(QTabWidget::Bottom);

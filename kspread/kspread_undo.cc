@@ -2669,7 +2669,7 @@ KSpreadUndoCellPaste::KSpreadUndoCellPaste( KSpreadDoc *_doc, KSpreadSheet* tabl
     if(!insert)
         name=i18n("Paste");
     else
-        name=i18n("Paste and Insert");
+        name=i18n("Paste & Insert");
 
     m_tableName = table->tableName();
     m_selection = _selection;

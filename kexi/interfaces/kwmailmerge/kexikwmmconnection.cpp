@@ -50,7 +50,7 @@ KexiKWMMConnection::load()
 	}
 	else
 	{
-		KMessageBox::error(0, i18n("Error while reading the document"), i18n("Kexi Mail Merge"));
+		KMessageBox::error(0, i18n("Error while reading the document."), i18n("Kexi Mail Merge"));
 	}
 
 	return false;

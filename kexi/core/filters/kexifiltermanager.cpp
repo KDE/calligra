@@ -76,7 +76,7 @@ bool KexiFilterManager::import(unsigned long importType)
 	kdDebug()<<dialogfilter<<endl;
 
 	if (dialogfilter.isEmpty()) return false; //perhaps show a message
-	dialogfilter=allSupported+"|"+i18n("All supported file types")+"\n"+dialogfilter;
+	dialogfilter=allSupported+"|"+i18n("All Supported File Types")+"\n"+dialogfilter;
 
 	KFileDialog *dialog=new KFileDialog(QString::null, QString::null, 0L, "file dialog", true);
 	dialog->setFilter( dialogfilter);

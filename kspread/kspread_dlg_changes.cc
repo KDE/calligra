@@ -834,8 +834,8 @@ void KSpreadAcceptDlg::fillList()
     m_changes->fillDependancyList();
 
   kdDebug() << "Filling list" <<  endl;
-  m_acceptElement = new KListViewItem( m_dialog->m_listView, i18n( " Accepted" ) );
-  m_rejectElement = new KListViewItem( m_dialog->m_listView, i18n( " Rejected" ) );                         
+  m_acceptElement = new KListViewItem( m_dialog->m_listView, i18n( "Accepted" ) );
+  m_rejectElement = new KListViewItem( m_dialog->m_listView, i18n( "Rejected" ) );
 
   m_acceptElement->setSelectable( false );
   m_rejectElement->setSelectable( false );
@@ -845,7 +845,7 @@ void KSpreadAcceptDlg::fillList()
   {
     kdDebug() << "Adding record as top level: " << it.current()->m_id <<  endl;
     addChangeRecord( 0, it.current() );
-  }  
+  }
   kdDebug() << "Filling list done" <<  endl;
 }
 
