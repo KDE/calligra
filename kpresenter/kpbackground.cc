@@ -198,8 +198,8 @@ QDomElement KPBackGround::save( QDomDocument &doc, const bool saveAsKOffice1Dot1
 
 void KPBackGround::loadOasis(KoOasisContext & context )
 {
-    KoStyleStack styleStack = context.styleStack();
-    kdDebug()<<"void KPBackGround::loadOasis( const KoStyleStack &styleStack )**********************************\n";
+    KoStyleStack& styleStack = context.styleStack();
+    kdDebug()<<"KPBackGround::loadOasis()\n";
     kdDebug()<<"stylePage->hasAttribute( draw:fill ) :"<<styleStack.hasAttribute( "draw:fill" )<<endl;
 
     if ( styleStack.hasAttribute( "draw:fill" ) )
