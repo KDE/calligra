@@ -372,10 +372,10 @@ void KoOasisStyles::importDataStyle( const QDomElement& parent )
     }
 
     const QString styleName = parent.attributeNS( KoXmlNS::style, "name", QString::null );
-    kdDebug(30518) << "datetime style: " << styleName << " qt format=" << format << endl;
+    kdDebug(30003) << "datetime style: " << styleName << " qt format=" << format << endl;
     if ( !prefix.isEmpty() )
     {
-        kdDebug()<<" format.left( prefix.length() ) :"<<format.left( prefix.length() )<<" prefix :"<<prefix<<endl;
+        kdDebug(30003)<<" format.left( prefix.length() ) :"<<format.left( prefix.length() )<<" prefix :"<<prefix<<endl;
         if ( format.left( prefix.length() )==prefix )
         {
             format = format.right( format.length()-prefix.length() );
@@ -385,7 +385,7 @@ void KoOasisStyles::importDataStyle( const QDomElement& parent )
     }
     if ( !suffix.isEmpty() )
     {
-        kdDebug()<<"format.right( suffix.length() ) :"<<format.right( suffix.length() )<<" suffix :"<<suffix<<endl;
+        kdDebug(30003)<<"format.right( suffix.length() ) :"<<format.right( suffix.length() )<<" suffix :"<<suffix<<endl;
         if ( format.right( suffix.length() )==suffix )
         {
             format = format.left( format.length()-suffix.length() );
@@ -413,7 +413,7 @@ void KoOasisStyles::importDataStyle( const QDomElement& parent )
 
 void KoOasisStyles::parseOasisTimeKlocale(KoXmlWriter &elementWriter, QString & format, QString & text )
 {
-    kdDebug()<<"parseOasisTimeKlocale(KoXmlWriter &elementWriter, QString & format, QString & text ) :"<<format<<endl;
+    kdDebug(30003)<<"parseOasisTimeKlocale(KoXmlWriter &elementWriter, QString & format, QString & text ) :"<<format<<endl;
     do
     {
         if ( !saveOasisKlocaleTimeFormat( elementWriter, format, text ) )
@@ -580,7 +580,7 @@ bool KoOasisStyles::saveOasisTimeFormat( KoXmlWriter &elementWriter, QString & f
 
 QString KoOasisStyles::saveOasisTimeStyle( KoGenStyles &mainStyles, const QString & _format, bool klocaleFormat )
 {
-    kdDebug()<<"QString KoOasisStyles::saveOasisTimeStyle( KoGenStyles &mainStyles, const QString & _format ) :"<<_format<<endl;
+    kdDebug(30003)<<"QString KoOasisStyles::saveOasisTimeStyle( KoGenStyles &mainStyles, const QString & _format ) :"<<_format<<endl;
     QString format( _format );
     KoGenStyle currentStyle( KoGenStyle::STYLE_NUMERIC_TIME );
     QBuffer buffer;
@@ -622,7 +622,7 @@ QString KoOasisStyles::saveOasisTimeStyle( KoGenStyles &mainStyles, const QStrin
 //convert klocale string to good format
 void KoOasisStyles::parseOasisDateKlocale(KoXmlWriter &elementWriter, QString & format, QString & text )
 {
-    kdDebug()<<"KoOasisStyles::parseOasisDateKlocale(KoXmlWriter &elementWriter, QString & format, QString & text ) :"<<format<<endl;
+    kdDebug(30003)<<"KoOasisStyles::parseOasisDateKlocale(KoXmlWriter &elementWriter, QString & format, QString & text ) :"<<format<<endl;
     do
     {
         if ( format.startsWith( "%Y" ) )
@@ -729,7 +729,7 @@ void KoOasisStyles::parseOasisDateKlocale(KoXmlWriter &elementWriter, QString & 
 
 QString KoOasisStyles::saveOasisDateStyle( KoGenStyles &mainStyles, const QString & _format, bool klocaleFormat )
 {
-    kdDebug()<<"QString KoOasisStyles::saveOasisDateStyle( KoGenStyles &mainStyles, const QString & _format ) :"<<_format<<endl;
+    kdDebug(30003)<<"QString KoOasisStyles::saveOasisDateStyle( KoGenStyles &mainStyles, const QString & _format ) :"<<_format<<endl;
     QString format( _format );
 
     // Not supported into Qt: "era" "week-of-year" "quarter"
@@ -905,7 +905,7 @@ QString KoOasisStyles::saveOasisDateStyle( KoGenStyles &mainStyles, const QStrin
 
 QString KoOasisStyles::saveOasisFractionStyle( KoGenStyles &mainStyles, const QString & _format, const QString &_prefix, const QString &_suffix )
 {
-    kdDebug()<<"QString saveOasisFractionStyle( KoGenStyles &mainStyles, const QString & _format ) :"<<_format<<endl;
+    kdDebug(30003)<<"QString saveOasisFractionStyle( KoGenStyles &mainStyles, const QString & _format ) :"<<_format<<endl;
     QString format( _format );
 
     KoGenStyle currentStyle( KoGenStyle::STYLE_NUMERIC_FRACTION );
@@ -971,7 +971,7 @@ QString KoOasisStyles::saveOasisPercentageStyle( KoGenStyles &mainStyles, const 
     //<number:text>%</number:text>
     //</number:percentage-style>
 
-    kdDebug()<<"QString saveOasisPercentageStyle( KoGenStyles &mainStyles, const QString & _format ) :"<<_format<<endl;
+    kdDebug(30003)<<"QString saveOasisPercentageStyle( KoGenStyles &mainStyles, const QString & _format ) :"<<_format<<endl;
     QString format( _format );
 
     KoGenStyle currentStyle( KoGenStyle::STYLE_NUMERIC_PERCENTAGE );
@@ -991,7 +991,7 @@ QString KoOasisStyles::saveOasisPercentageStyle( KoGenStyles &mainStyles, const 
         else if ( format[0]=='0' && !beforeSeparator )
             decimalplaces++;
         else
-            kdDebug()<<" error format 0 \n";
+            kdDebug(30003)<<" error format 0 \n";
         format.remove( 0,1 );
     }
     while ( format.length() > 0 );
@@ -1020,7 +1020,7 @@ QString KoOasisStyles::saveOasisScientificStyle( KoGenStyles &mainStyles, const 
     //</number:number-style>
 
     //example 000,000e+0000
-    kdDebug()<<"QString saveOasisScientificStyle( KoGenStyles &mainStyles, const QString & _format ) :"<<_format<<endl;
+    kdDebug(30003)<<"QString saveOasisScientificStyle( KoGenStyles &mainStyles, const QString & _format ) :"<<_format<<endl;
     QString format( _format );
 
     KoGenStyle currentStyle( KoGenStyle::STYLE_NUMERIC_SCIENTIFIC );
@@ -1052,7 +1052,7 @@ QString KoOasisStyles::saveOasisScientificStyle( KoGenStyles &mainStyles, const 
                 else if ( format[0]=='-' )
                     positive = false;
                 else
-                    kdDebug()<<"Error into scientific number\n";
+                    kdDebug(30003)<<"Error into scientific number\n";
                 exponential = true;
             }
         }
@@ -1063,13 +1063,13 @@ QString KoOasisStyles::saveOasisScientificStyle( KoGenStyles &mainStyles, const 
             else if ( format[0]=='0' && !positive )
                 exponentdigits--;
             else
-                kdDebug()<<" error into scientific number exponential value\n";
+                kdDebug(30003)<<" error into scientific number exponential value\n";
         }
         format.remove( 0,1 );
     }
     while ( format.length() > 0 );
     elementWriter.startElement( "number:scientific-number" );
-    kdDebug()<<" decimalplace :"<<decimalplace<<" integerdigits :"<<integerdigits<<" exponentdigits :"<<exponentdigits<<endl;
+    kdDebug(30003)<<" decimalplace :"<<decimalplace<<" integerdigits :"<<integerdigits<<" exponentdigits :"<<exponentdigits<<endl;
     elementWriter.addAttribute( "number:decimal-places", decimalplace );
     elementWriter.addAttribute( "number:min-integer-digits",integerdigits );
     elementWriter.addAttribute( "number:min-exponent-digits",exponentdigits );
@@ -1095,7 +1095,7 @@ QString KoOasisStyles::saveOasisCurrencyStyle( KoGenStyles &mainStyles, const QS
     //<number:currency-symbol>VEB</number:currency-symbol>
     //</number:currency-style>
 
-    kdDebug()<<"QString saveOasisCurrencyStyle( KoGenStyles &mainStyles, const QString & _format ) :"<<_format<<endl;
+    kdDebug(30003)<<"QString saveOasisCurrencyStyle( KoGenStyles &mainStyles, const QString & _format ) :"<<_format<<endl;
     QString format( _format );
 
     KoGenStyle currentStyle( KoGenStyle::STYLE_NUMERIC_CURRENCY );
@@ -1130,7 +1130,7 @@ QString KoOasisStyles::saveOasisTextStyle( KoGenStyles &mainStyles, const QStrin
     //<number:text-content/>
     ///</number:text-style>
 
-    kdDebug()<<"QString saveOasisTextStyle( KoGenStyles &mainStyles, const QString & _format ) :"<<_format<<endl;
+    kdDebug(30003)<<"QString saveOasisTextStyle( KoGenStyles &mainStyles, const QString & _format ) :"<<_format<<endl;
     QString format( _format );
 
     KoGenStyle currentStyle( KoGenStyle::STYLE_NUMERIC_TEXT );
