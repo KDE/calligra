@@ -67,12 +67,29 @@ public:
 
   /**
    *  This function will query ksycoca to find all available components.
+   *  The result will only contain parts, which are embeddable into a document
    *
    *  @param _constr is a constraint expression as used by KTrader.
    *                 You can use it to set additional restrictions on the available
    *                 components.
    */
   static QValueList<KoDocumentEntry> query( const QString &  _constr = QString::null );
+
+  /**
+   *  This function will query KDED to find all available filters.
+   *
+   *  @param _onlyDocEmb specifies if only KOffice Parts should be listed, which are
+   *                 embeddable into other koDocuments, or all (if false)
+   *                 (eg.: it makes no sense to embedd Kexi into KWord,
+   *                 but it makes sense to embedd it into KoShell)
+   *  @param _constr is a constraint expression as used by KDEDs trader interface.
+   *                 You can use it to set additional restrictions on the available
+   *                 components.
+   */
+  // MERGE WITH ABOVE METHODE WHEN BIC CHANGES ARE ALLOWED
+  static QValueList<KoDocumentEntry> query( bool _onlyDocEmb /*=true */,const QString& _constr = QString::null );
+
+
 
   /**
    *  This is only a convenience function.

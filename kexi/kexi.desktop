@@ -32,4 +32,4 @@ Comment[sv]=Ett databashanteringsprogram
 ServiceTypes=KOfficePart,KParts/ReadOnlyPart,KParts/ReadWritePart
 X-KDE-NativeMimeType=application/x-vnd.kde.kexi
 X-KDE-Library=libkexipart
-
+X-KDE-NOTKoDocumentEmbeddable=true

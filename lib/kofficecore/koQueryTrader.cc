@@ -76,7 +76,7 @@ KoDocumentEntry KoDocumentEntry::queryByMimeType( const QString & mimetype )
 {
   QString constr = QString::fromLatin1( "[X-KDE-NativeMimeType] == '%1'" ).arg( mimetype );
 
-  QValueList<KoDocumentEntry> vec = query( constr );
+  QValueList<KoDocumentEntry> vec = query( false,constr );
   if ( vec.isEmpty() )
   {
     kdWarning(30003) << "Got no results with " << constr << endl;
@@ -105,6 +105,12 @@ KoDocumentEntry KoDocumentEntry::queryByMimeType( const QString & mimetype )
 
 QValueList<KoDocumentEntry> KoDocumentEntry::query( const QString & _constr )
 {
+  return query(true,_constr);
+}
+
+QValueList<KoDocumentEntry> KoDocumentEntry::query( bool _onlyDocEmb, const QString & _constr )
+{
+
   QValueList<KoDocumentEntry> lst;
 
   // Query the trader
@@ -119,16 +125,21 @@ QValueList<KoDocumentEntry> KoDocumentEntry::query( const QString & _constr )
     //kdDebug(30003) << "   desktopEntryPath=" << (*it)->desktopEntryPath()
     //               << "   library=" << (*it)->library() << endl;
     // Parse the service
-    KoDocumentEntry d( *it );
-
-    // Append converted offer
-    lst.append( d );
-    // Next service
+    if ((!_onlyDocEmb) || ((*it)->property("X-KDE-NOTKoDocumentEmbeddable").toString()!="1"))
+    {
+      KoDocumentEntry d( *it );
+      // Append converted offer
+      lst.append( d );
+      // Next service
+    }
     ++it;
   }
 
   return lst;
 }
+
+
+
 
 /*******************************************************************
  *
