@@ -12,6 +12,7 @@ TODO:
 
 REAL BUGS:
 -	mirror coordinate-system so origin is bottom-left
+-	rename VOrderSelection to something more descriptive (VChangeZOrder)
 -	add undo/redo to shape commands like VFlattenCmd etc
 -	scale tool should only scale in one direction while dragging a slection node
 -	if selecting many shapes, the fill/stroke state should be "unknown",
