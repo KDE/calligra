@@ -27,7 +27,7 @@ private:
     KChartParams* _params;
     QCheckBox *polarMarker;
     QCheckBox *showCircularLabel;
-    QSpinBox *angle;
+    QSpinBox *angle, *lineWidth;
 };
 
 #endif
