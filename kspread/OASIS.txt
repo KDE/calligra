@@ -36,6 +36,7 @@ Format
    [X] Borders
    [ ] Border shadow
    [ ] Font color
+   [X] Background style
 
 Sheet
    [x] Sheet name
