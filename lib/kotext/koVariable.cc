@@ -548,12 +548,12 @@ KoVariable * KoVariableCollection::createVariable( int type, int subtype, KoVari
             //varFormat = coll->format( "DATE" );
             KDialogBase* dialog=new KDialogBase(0, 0, true, i18n("Date Format"), KDialogBase::Ok|KDialogBase::Cancel);
             DateFormatWidget* widget=new DateFormatWidget(dialog);
+            int count=0;
             dialog->setMainWidget(widget);
             KConfig config( "kofficerc" );
             bool selectLast=false;
             if( config.hasGroup("Date format history") )
             {
-                int count=0;
                 config.setGroup("Date format history");
                 int noe=config.readNumEntry("Number Of Entries", 5);
                 for(int i=0;i<noe;i++)
@@ -621,10 +621,10 @@ KoVariable * KoVariableCollection::createVariable( int type, int subtype, KoVari
             TimeFormatWidget* widget=new TimeFormatWidget(dialog);
             dialog->setMainWidget(widget);
             KConfig config( "kofficerc" );
+            int count=0;
             bool selectLast=false;
             if( config.hasGroup("Time format history") )
             {
-                int count=0;
                 config.setGroup("Time format history");
                 int noe=config.readNumEntry("Number Of Entries", 5);
                 for(int i=0;i<noe;i++)
