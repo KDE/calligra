@@ -53,6 +53,7 @@ public:
 
     virtual int isInHolder(const QPoint p);
     virtual void drawHolders(QPainter &painter);
+    virtual void fastProperty() { };
 
 protected:
     friend class ReportCanvas;

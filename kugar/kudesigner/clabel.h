@@ -39,6 +39,8 @@ public:
     {
         CanvasReportItem::updateGeomProps();
     }
+
+    virtual void fastProperty();
 };
 
 #endif

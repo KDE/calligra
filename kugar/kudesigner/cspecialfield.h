@@ -30,6 +30,7 @@ public:
     {
         CanvasLabel::updateGeomProps();
     }
+    virtual void fastProperty() {};
 };
 
 #endif

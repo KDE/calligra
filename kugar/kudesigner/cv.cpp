@@ -559,6 +559,20 @@ void ReportCanvas::contentsMouseMoveEvent(QMouseEvent* e)
     }
 }
 
+
+void ReportCanvas::contentsMouseDoubleClickEvent( QMouseEvent *e )
+{
+    CanvasReportItem *item = 0L;
+    
+    if ( m_canvas->selected.count() == 1 )
+        item = static_cast<CanvasReportItem *>( m_canvas->selected.first() );
+    if ( item ) {
+        item->fastProperty();
+        item->hide();
+        item->show();
+    }
+}
+
 void ReportCanvas::setRequest(RequestType r)
 {
     switch (r)

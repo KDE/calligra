@@ -15,6 +15,7 @@
  *                                                                         *
  ***************************************************************************/
 #include <klocale.h>
+#include <klineeditdlg.h>
 
 #include <qpainter.h>
 
@@ -197,3 +198,14 @@ QString CanvasLabel::getXml()
 {
     return "\t\t<Label" + CanvasReportItem::getXml() + " />\n";
 }
+
+void CanvasLabel::fastProperty()
+{
+    bool accepted;
+
+    QString sText = KLineEditDlg::getText( i18n( "Change label" ), 
+            "", props["Text"]->value(), &accepted );
+    if ( accepted )
+        props["Text"]->setValue( sText );
+}
+

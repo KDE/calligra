@@ -15,6 +15,8 @@
  *                                                                         *
  ***************************************************************************/
 #include <klocale.h>
+#include <klineeditdlg.h>
+
 #include "cfield.h"
 #include "property.h"
 
@@ -71,3 +73,18 @@ QString CanvasField::getXml()
 {
     return "\t\t<Field" + CanvasReportItem::getXml() + " />\n";
 }
+
+void CanvasField::fastProperty()
+{
+    bool accepted;
+    QString sValue = props["Field"]->value();
+    
+    /* Remove the [] brackets around the text */
+//    sValue = sValue.mid( 1, sValue.length() - 2 );
+    QString sText = KLineEditDlg::getText( i18n( "Change field" ),
+            "Field:", sValue , &accepted );
+    if ( accepted )
+        props["Field"]->setValue( sText );
+
+}
+

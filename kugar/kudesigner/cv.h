@@ -58,6 +58,7 @@ protected:
     void contentsMousePressEvent(QMouseEvent*);
     void contentsMouseReleaseEvent(QMouseEvent*);
     void contentsMouseMoveEvent(QMouseEvent*);
+    void contentsMouseDoubleClickEvent( QMouseEvent * );
   
     void contentsDragEnterEvent ( QDragEnterEvent * );
     void contentsDragMoveEvent ( QDragMoveEvent * );
