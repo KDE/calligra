@@ -30,6 +30,11 @@ KChartBackgroundPixmapConfigPage::KChartBackgroundPixmapConfigPage( KChartParame
   : QWidget( parent, "KChartBackgroundPixmapConfigPage" ),
 	_params( params )
 {
+  QWhatsThis::add( this, i18n( "On this page, you can select an image that "
+							   "will be displayed behind the chart. You can "
+							   "also select whether the image should be "
+							   "scaled or centered" ) );
+
   QHBoxLayout* toplevel = new QHBoxLayout( this, 10 );
   QVBoxLayout* left = new QVBoxLayout( 10 );
   toplevel->addLayout( left, 2 );

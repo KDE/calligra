@@ -115,12 +115,11 @@ int KChartEngine::out_graph() {
     kdDebug(35001) << "Title text is coming" << endl;
     titleText();
     kdDebug(35001) << "start drawing, first the grids" << endl;
-    if(!params->isPie())
-    	{
-    	drawGridAndLabels(do_ylbl_fractions);
-    	kdDebug(35001) << "more advanced grids" << endl;
-    	}
-    /* interviening set grids */
+    if(!params->isPie()) {
+	  drawGridAndLabels(do_ylbl_fractions);
+	  kdDebug(35001) << "more advanced grids" << endl;
+	}
+    /* intervening set grids */
     /*  0 < setno < num_sets   non-inclusive, they've already been covered */
     if( params->grid && params->threeD() && !params->isPie())
     {
