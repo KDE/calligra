@@ -78,18 +78,6 @@ const bool WMFImport::filter(
     return true;
 }
 
-void WMFImport::pointArray(
-    const QPointArray &points)
-{
-
-    for (unsigned i = 0; i < points.count(); i++)
-    {
-        m_text += "<point x=\"" + QString::number(points.point(i).x()) +
-                    "\" y=\"" + QString::number(points.point(i).y()) +
-                     "\"/>\n";
-    }
-}
-
 void WMFImport::gotEllipse(
     const DrawContext &dc,
     QString type,
@@ -182,4 +170,16 @@ void WMFImport::gotRectangle(
     m_text += " </gobject>\n";
     m_text += "</polyline>\n";
     m_text += "</rectangle>\n";
+}
+
+void WMFImport::pointArray(
+    const QPointArray &points)
+{
+
+    for (unsigned i = 0; i < points.count(); i++)
+    {
+        m_text += "<point x=\"" + QString::number(points.point(i).x()) +
+                    "\" y=\"" + QString::number(points.point(i).y()) +
+                     "\"/>\n";
+    }
 }

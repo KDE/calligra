@@ -38,11 +38,6 @@ Wmf::Wmf(
 {
     m_dpi = dpi;
     m_objectHandles = new WinObjHandle*[s_maxHandles];
-    m_dc.m_brushColour = 0x808080;
-    m_dc.m_brushStyle = 1;
-    m_dc.m_penColour = 0x808080;
-    m_dc.m_penStyle = 1;
-    m_dc.m_penWidth = 1;
 }
 
 Wmf::~Wmf()
@@ -211,8 +206,8 @@ void Wmf::invokeHandler(
         { "FRAMEREGION",          0x0429, 0 },
         { "INTERSECTCLIPRECT",    0x0416, 0 },
         { "INVERTREGION",         0x012A, 0 },
-        { "LINETO",               0x0213, 0 },
-        { "MOVETO",               0x0214, 0 },
+        { "LINETO",               0x0213, &Wmf::opLineTo },
+        { "MOVETO",               0x0214, &Wmf::opMoveTo },
         { "OFFSETCLIPRGN",        0x0220, 0 },
         { "OFFSETVIEWPORTORG",    0x0211, 0 },
         { "OFFSETWINDOWORG",      0x020F, 0 },
@@ -225,9 +220,9 @@ void Wmf::invokeHandler(
         { "REALIZEPALETTE",       0x0035, 0 },
         { "RECTANGLE",            0x041B, &Wmf::opRectangle },
         { "RESIZEPALETTE",        0x0139, 0 },
-        { "RESTOREDC",            0x0127, 0 },
+        { "RESTOREDC",            0x0127, &Wmf::opRestoreDc },
         { "ROUNDRECT",            0x061C, 0 },
-        { "SAVEDC",               0x001E, 0 },
+        { "SAVEDC",               0x001E, &Wmf::opSaveDc },
         { "SCALEVIEWPORTEXT",     0x0412, 0 },
         { "SCALEWINDOWEXT",       0x0410, 0 },
         { "SELECTCLIPREGION",     0x012C, 0 },
@@ -300,7 +295,6 @@ void Wmf::invokeHandler(
         (this->*result)(wordOperands, operands);
     }
 }
-
 
 QPoint Wmf::normalisePoint(
     QDataStream &operands)
@@ -563,6 +557,30 @@ void Wmf::opEllipse(
     gotEllipse(m_dc, "full", ellipse.center(), ellipse.size() / 2, 0, 0);
 }
 
+void Wmf::opLineTo(
+    U32 /*wordOperands*/,
+    QDataStream &operands)
+{
+    QPoint lineTo;
+
+    lineTo = normalisePoint(operands);
+    QPointArray points(2);
+    points.setPoint(0, m_lineFrom);
+    points.setPoint(1, lineTo);
+    gotPolyline(m_dc, points);
+
+    // Remember this point for next time.
+
+    m_lineFrom = lineTo;
+}
+
+void Wmf::opMoveTo(
+    U32 /*wordOperands*/,
+    QDataStream &operands)
+{
+    m_lineFrom = normalisePoint(operands);
+}
+
 void Wmf::opNoop(
     U32 wordOperands,
     QDataStream &operands)
@@ -609,25 +627,24 @@ void Wmf::opPenCreateIndirect(
         Qt::DashDotLine,
         Qt::DashDotDotLine,
         Qt::NoPen,
-        Qt::SolidLine
+        Qt::SolidLine,  // PS_INSIDEFRAME
+        Qt::SolidLine,  // PS_USERSTYLE
+        Qt::SolidLine   // PS_ALTERNATE
     };
-    Qt::PenStyle style;
     WinObjPenHandle *handle = handleCreatePen();
     S16 arg;
     S32 colour;
 
     operands >> arg;
-    if (arg >= 0 && arg < 6)
+    if (arg >= 0 && arg < 8)
     {
-        style = styleTab[arg];
+        handle->m_style = styleTab[arg];
     }
     else
     {
         kdError(s_area) << "createPenIndirect: invalid pen " << arg << endl;
-        style = Qt::SolidLine;
+        handle->m_style = Qt::SolidLine;
     }
-
-    handle->m_style = style;
     operands >> arg;
     handle->m_width = arg;
     operands >> arg >> colour;
@@ -702,6 +719,29 @@ void Wmf::opRectangle(
     gotRectangle(m_dc, points);
 }
 
+void Wmf::opRestoreDc(
+    U32 /*wordOperands*/,
+    QDataStream &operands)
+{
+    S16 pop;
+    S16 i;
+
+    operands >> pop;
+    for (i = 0; i < pop; i++)
+    {
+        m_dc = m_savedDcs.pop();
+    }
+}
+
+void Wmf::opSaveDc(
+    U32 /*wordOperands*/,
+    QDataStream &/*operands*/)
+{
+    m_savedDcs.push(m_dc);
+
+    // TBD: reinitialise m_dc.
+}
+
 void Wmf::opWindowSetOrg(
     U32 /*wordOperands*/,
     QDataStream &operands)
@@ -762,6 +802,16 @@ void Wmf::skip(
             operands >> discard;
         }
     }
+}
+
+Wmf::DrawContext::DrawContext()
+{
+    // TBD: initalise with proper values.
+    m_brushColour = 0x808080;
+    m_brushStyle = 1;
+    m_penColour = 0x808080;
+    m_penStyle = 1;
+    m_penWidth = 1;
 }
 
 void Wmf::WinObjBrushHandle::apply(

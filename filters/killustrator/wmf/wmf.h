@@ -33,6 +33,7 @@ DESCRIPTION
 #include <qdatastream.h>
 #include <qpointarray.h>
 #include <qrect.h>
+#include <qvaluestack.h>
 
 class Wmf
 {
@@ -52,6 +53,7 @@ public:
     class DrawContext
     {
     public:
+        DrawContext();
         bool m_winding;
         unsigned m_brushColour;
         unsigned m_brushStyle;
@@ -186,6 +188,8 @@ private:
     int m_windowFlipX;
     int m_windowFlipY;
     DrawContext m_dc;
+    QValueStack<DrawContext> m_savedDcs;
+    QPoint m_lineFrom;
 
     // Windows handle management.
 
@@ -248,6 +252,10 @@ private:
     // create a logical brush
     void opBrushCreateIndirect(U32 wordOperands, QDataStream &operands);
     void opEllipse(U32 wordOperands, QDataStream &operands);
+    // draw line to coord
+    void opLineTo(U32 wordOperands, QDataStream &operands);
+    // move pen to coord
+    void opMoveTo(U32 wordOperands, QDataStream &operands);
     // do nothing
     void opNoop(U32 wordOperands, QDataStream &operands);
     // Free object handle
@@ -264,6 +272,10 @@ private:
     // draw series of lines
     void opPolyline(U32 wordOperands, QDataStream &operands);
     void opRectangle(U32 wordOperands, QDataStream &operands);
+    // restore drawing context
+    void opRestoreDc(U32 wordOperands, QDataStream &operands);
+    // save drawing context
+    void opSaveDc(U32 wordOperands, QDataStream &operands);
     // set window origin
     void opWindowSetOrg(U32 wordOperands, QDataStream &operands);
     // set window extents
@@ -273,18 +285,10 @@ private:
     void opsetBkColor(U32 wordOperands, QDataStream &operands);
     // set background pen mode
     void opsetBkMode(U32 wordOperands, QDataStream &operands);
-    // draw line to coord
-    void oplineTo(U32 wordOperands, QDataStream &operands);
-    // move pen to coord
-    void opmoveTo(U32 wordOperands, QDataStream &operands);
     // Set raster operation mode
     void opsetRop(U32 wordOperands, QDataStream &operands);
     // Escape (enhanced command set)
     void opescape(U32 wordOperands, QDataStream &operands);
-    // save drawing context
-    void opsaveDC(U32 wordOperands, QDataStream &operands);
-    // restore drawing context
-    void oprestoreDC(U32 wordOperands, QDataStream &operands);
 */
 };
 
