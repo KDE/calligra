@@ -64,6 +64,9 @@ KWFootNoteDia::KWFootNoteDia( NoteType _noteType, KWFootNoteVariable::Numbering 
     grp = new QButtonGroup( 2, Qt::Vertical, page );
     m_rbFootNote = new QRadioButton( i18n("Footnote"), grp );
     m_rbEndNote = new QRadioButton( i18n("Endnote"), grp );
+
+    m_rbEndNote->setEnabled( false ); // ### not implemented yet
+
     grp->setExclusive( true );
     grp->insert( m_rbFootNote );
     grp->insert( m_rbEndNote );

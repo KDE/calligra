@@ -1274,14 +1274,34 @@ void KWFrameSet::setVisible( bool v )
 
 bool KWFrameSet::isVisible( KWViewMode* viewMode ) const
 {
-    return ( m_visible &&
-             !frames.isEmpty() &&
-             (!isAHeader() || m_doc->isHeaderVisible()) &&
-             (!isAFooter() || m_doc->isFooterVisible()) &&
-             !isAWrongHeader( m_doc->getHeaderType() ) &&
-             !isAWrongFooter( m_doc->getFooterType() ) &&
-             (!viewMode || viewMode->isFrameSetVisible(this))
-           );
+    if ( !m_visible || frames.isEmpty() )
+        return false;
+    if ( isAHeader() && !m_doc->isHeaderVisible() )
+        return false;
+    if ( isAFooter() && !m_doc->isFooterVisible() )
+        return false;
+    if (viewMode && !viewMode->isFrameSetVisible(this))
+        return false;
+
+    KoHFType ht = m_doc->getHeaderType();
+    KoHFType ft = m_doc->getFooterType();
+    switch( m_info )
+    {
+    case FI_FIRST_HEADER:
+        return ( ht == HF_FIRST_DIFF || ht == HF_FIRST_EO_DIFF );
+    case FI_EVEN_HEADER:
+        return true;
+    case FI_ODD_HEADER:
+        return ( ht == HF_EO_DIFF || ht == HF_FIRST_EO_DIFF );
+    case FI_FIRST_FOOTER:
+        return ( ft == HF_FIRST_DIFF || ft == HF_FIRST_EO_DIFF );
+    case FI_EVEN_FOOTER:
+        return true;
+    case FI_ODD_FOOTER:
+        return ( ft == HF_EO_DIFF || ft == HF_FIRST_EO_DIFF );
+    default:
+        return true;
+    }
 }
 
 bool KWFrameSet::isAHeader() const
@@ -1297,42 +1317,6 @@ bool KWFrameSet::isAFooter() const
 bool KWFrameSet::isFootEndNote() const
 {
     return m_info == FI_FOOTNOTE;
-}
-
-bool KWFrameSet::isAWrongHeader( KoHFType t ) const
-{
-    switch ( m_info ) {
-    case FI_FIRST_HEADER: {
-        if ( t == HF_FIRST_DIFF ) return false;
-        return true;
-    } break;
-    case FI_EVEN_HEADER: {
-        return false;
-    } break;
-    case FI_ODD_HEADER: {
-        if ( t == HF_EO_DIFF ) return false;
-        return true;
-    } break;
-    default: return false;
-    }
-}
-
-bool KWFrameSet::isAWrongFooter( KoHFType t ) const
-{
-    switch ( m_info ) {
-    case FI_FIRST_FOOTER: {
-        if ( t == HF_FIRST_DIFF ) return false;
-        return true;
-    } break;
-    case FI_EVEN_FOOTER: {
-        return false;
-    } break;
-    case FI_ODD_FOOTER: {
-        if ( t == HF_EO_DIFF ) return false;
-        return true;
-    } break;
-    default: return false;
-    }
 }
 
 bool KWFrameSet::isMainFrameset() const

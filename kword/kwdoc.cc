@@ -555,6 +555,7 @@ void KWDocument::recalcFrames( int fromPage, int toPage /*-1 for all*/ )
                 } else { fs->setVisible( false ); fs->deleteAllCopies(); }
                 break;
             case KWFrameSet::FI_EVEN_HEADER:
+                kdDebug() << " FI_EVEN_HEADER vis:" << isHeaderVisible() << " fs:" << fs->className() << endl;
                 if ( isHeaderVisible() ) {
                     evenHeader = dynamic_cast<KWTextFrameSet*>( fs );
                 } else { fs->setVisible( false ); fs->deleteAllCopies(); }
@@ -596,6 +597,9 @@ void KWDocument::recalcFrames( int fromPage, int toPage /*-1 for all*/ )
 
     // Now hide & forget the unused header/footer framesets (e.g. 'odd pages' if we are in 'all the same' mode etc.)
     if ( isHeaderVisible() ) {
+        Q_ASSERT( firstHeader );
+        Q_ASSERT( evenHeader );
+        Q_ASSERT( oddHeader );
         switch ( getHeaderType() ) {
             case HF_SAME:
                 evenHeader->setVisible( true );
@@ -606,6 +610,17 @@ void KWDocument::recalcFrames( int fromPage, int toPage /*-1 for all*/ )
 
                 headerFooterList.append( new KWFrameLayout::HeaderFooterFrameset(
                                              evenHeader, 0, -1, m_pageHeaderFooter.ptHeaderBodySpacing ) );
+                break;
+            case HF_FIRST_EO_DIFF: // added for koffice-1.2-beta2
+                firstHeader->setVisible( true );
+                evenHeader->setVisible( true );
+                oddHeader->setVisible( true );
+                headerFooterList.append( new KWFrameLayout::HeaderFooterFrameset(
+                                             firstHeader, 0, 0, m_pageHeaderFooter.ptHeaderBodySpacing ) );
+                headerFooterList.append( new KWFrameLayout::HeaderFooterFrameset(
+                                             evenHeader, 2, -1, m_pageHeaderFooter.ptHeaderBodySpacing, KWFrameLayout::HeaderFooterFrameset::Even ) );
+                headerFooterList.append( new KWFrameLayout::HeaderFooterFrameset(
+                                             oddHeader, 1, -1, m_pageHeaderFooter.ptHeaderBodySpacing, KWFrameLayout::HeaderFooterFrameset::Odd ) );
                 break;
             case HF_FIRST_DIFF:
                 evenHeader->setVisible( true );
@@ -632,6 +647,9 @@ void KWDocument::recalcFrames( int fromPage, int toPage /*-1 for all*/ )
         }
     }
     if ( isFooterVisible() ) {
+        Q_ASSERT( firstFooter );
+        Q_ASSERT( evenFooter );
+        Q_ASSERT( oddFooter );
         switch ( getFooterType() ) {
             case HF_SAME:
                 evenFooter->setVisible( true );
@@ -642,6 +660,20 @@ void KWDocument::recalcFrames( int fromPage, int toPage /*-1 for all*/ )
 
                 headerFooterList.append( new KWFrameLayout::HeaderFooterFrameset(
                                              evenFooter, 0, -1, m_pageHeaderFooter.ptFooterBodySpacing ) );
+                break;
+            case HF_FIRST_EO_DIFF: // added for koffice-1.2-beta2
+                evenFooter->setVisible( true );
+                oddFooter->setVisible( true );
+                firstFooter->setVisible( true );
+
+                headerFooterList.append( new KWFrameLayout::HeaderFooterFrameset(
+                                             firstFooter, 1, -1, m_pageHeaderFooter.ptFooterBodySpacing ) );
+                headerFooterList.append( new KWFrameLayout::HeaderFooterFrameset(
+                                             evenFooter, 2, -1, m_pageHeaderFooter.ptFooterBodySpacing,
+                                             KWFrameLayout::HeaderFooterFrameset::Even ) );
+                headerFooterList.append( new KWFrameLayout::HeaderFooterFrameset(
+                                             oddFooter, 1, -1, m_pageHeaderFooter.ptFooterBodySpacing,
+                                             KWFrameLayout::HeaderFooterFrameset::Odd ) );
                 break;
             case HF_FIRST_DIFF:
                 evenFooter->setVisible( true );
@@ -1024,11 +1056,11 @@ bool KWDocument::loadXML( QIODevice *, const QDomDocument & doc )
     {
         switch( fit.current()->frameSetInfo() ) {
         case KWFrameSet::FI_FIRST_HEADER: _first_header = TRUE; break;
-        case KWFrameSet::FI_EVEN_HEADER: _odd_header = TRUE; break;
-        case KWFrameSet::FI_ODD_HEADER: _even_header = TRUE; break;
+        case KWFrameSet::FI_EVEN_HEADER: _even_header = TRUE; break;
+        case KWFrameSet::FI_ODD_HEADER: _odd_header = TRUE; break;
         case KWFrameSet::FI_FIRST_FOOTER: _first_footer = TRUE; break;
-        case KWFrameSet::FI_EVEN_FOOTER: _odd_footer = TRUE; break;
-        case KWFrameSet::FI_ODD_FOOTER: _even_footer = TRUE; break;
+        case KWFrameSet::FI_EVEN_FOOTER: _even_footer = TRUE; break;
+        case KWFrameSet::FI_ODD_FOOTER: _odd_footer = TRUE; break;
         default: break;
         }
     }

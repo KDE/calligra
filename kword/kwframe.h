@@ -414,9 +414,6 @@ public:
     virtual bool isFootNote() const { return false; }
     virtual bool isEndNote() const { return false; }
 
-    bool isAWrongHeader( KoHFType t ) const;
-    bool isAWrongFooter( KoHFType t ) const;
-
     bool isMainFrameset() const;
     bool isMoveable() const;
 

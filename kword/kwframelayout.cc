@@ -3,7 +3,7 @@
 #include "kwdoc.h"
 #include <qtimer.h>
 
-//#define DEBUG_FRAMELAYOUT
+#define DEBUG_FRAMELAYOUT
 
 #ifdef NDEBUG
 #undef DEBUG_FRAMELAYOUT
