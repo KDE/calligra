@@ -1062,12 +1062,12 @@ void KoTimeVariable::resize()
 void KoTimeVariable::recalc()
 {
     if ( m_subtype == VST_TIME_CURRENT )
-        m_varValue = QVariant( QTime::currentTime().addSecs(m_correctTime));
+        m_varValue = QVariant( QTime::currentTime().addSecs(60*m_correctTime));
     else
     {
         // Only if never set before (i.e. upon insertion)
         if ( m_varValue.toTime().isNull() )
-            m_varValue = QVariant( QTime::currentTime().addSecs(m_correctTime));
+            m_varValue = QVariant( QTime::currentTime().addSecs(60*m_correctTime));
     }
     resize();
 }
@@ -1078,7 +1078,7 @@ void KoTimeVariable::saveVariable( QDomElement& parentElem )
     QDomElement elem = parentElem.ownerDocument().createElement( "TIME" );
     parentElem.appendChild( elem );
     QTime time = m_varValue.toTime();
-    time = time.addSecs(-m_correctTime);
+    time = time.addSecs(-60*m_correctTime);
     elem.setAttribute( "hour", time.hour() );
     elem.setAttribute( "minute", time.minute() );
     elem.setAttribute( "second", time.second() );
@@ -1106,7 +1106,7 @@ void KoTimeVariable::load( QDomElement& elem )
         {
             QTime time;
             time.setHMS( h, m, s, ms );
-            time = time.addSecs( m_correctTime );
+            time = time.addSecs( 60*m_correctTime );
             m_varValue = QVariant( time);
 
         }
