@@ -50,6 +50,9 @@ k_dcop:
 	// TODO: remove this someday:
 	void dummyForTesting();
 
+    void groupSelection();
+    void ungroupSelection();
+
 private:
 	KarbonView *m_view;
 };

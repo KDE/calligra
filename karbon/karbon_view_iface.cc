@@ -107,3 +107,13 @@ KarbonViewIface::dummyForTesting()
 {
 	m_view->dummyForTesting();
 }
+
+void KarbonViewIface::groupSelection()
+{
+    m_view->groupSelection();
+}
+
+void KarbonViewIface::ungroupSelection()
+{
+    m_view->ungroupSelection();
+}
