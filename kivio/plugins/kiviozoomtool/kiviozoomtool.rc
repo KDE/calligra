@@ -1,5 +1,5 @@
-<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd" ><kpartgui name="KivioZoomTool" library="libkiviozoomtool" version="1">
-<ToolBar name="ZoomToolBar" fullWidth="false" position="top" >
+<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd" ><kpartgui name="KivioZoomTool" library="libkiviozoomtool" version="2">
+<ToolBar name="ZoomToolBar" fullWidth="false" position="top"><text>Zoom</text>
   <Action name="zoom"/>
   <Action name="zoomHand"/>
   <Action name="---"/>
