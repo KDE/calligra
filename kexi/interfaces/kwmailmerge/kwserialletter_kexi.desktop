@@ -1,0 +1,12 @@
+[Desktop Entry]
+Encoding=UTF-8
+Type=Service
+ServiceTypes=KWord/MailMergePlugin
+
+Name=Kexi source
+
+Comment=This datasource allows you choosing a existing kexi project
+
+X-KDE-Library=kwmailmerge_kexi
+X-KDE-Capabilities=edit,open
+X-KDE_InternalName=Kexi
