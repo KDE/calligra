@@ -113,6 +113,10 @@ public:
 
     virtual ~KoTextObject();
 
+
+    void setBeedSpellCheck(bool b){ m_beedsSpellCheck = b;}
+    bool beedSpellCheck(){ return m_beedsSpellCheck;}
+
     /**
      * Return the text document contained in this KoTextObject
      */
@@ -410,7 +414,7 @@ private:
 #endif
 
     static const char s_customItemChar = '#'; // Has to be transparent to kspell but still be saved (not space)
-
+    bool m_beedsSpellCheck;
 };
 
 #endif

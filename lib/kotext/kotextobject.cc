@@ -59,6 +59,7 @@ KoTextObject::KoTextObject( KoTextDocument* _textdoc, KoStyle* defaultStyle,
 void KoTextObject::init()
 {
     d = new KoTextObjectPrivate;
+    m_beedsSpellCheck = true;
     m_visible=true;
     m_availableHeight = -1;
     m_lastFormatted = textdoc->firstParag();

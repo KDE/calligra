@@ -454,6 +454,10 @@ void KoFindReplace::replace( const QString &, int matchingIndex,
     QTextCursor cursor( textdoc );
     cursor.setParag( m_currentParag );
     cursor.setIndex( index );
+
+    //reactive spellchecking
+    m_currentTextObj->setBeedSpellCheck(true);
+
     m_macroCmd->addCommand(m_currentTextObj->replaceSelectionCommand(
         &cursor, m_replaceDlg->replacement(), KoTextObject::HighlightSelection, QString::null ));
 }
