@@ -180,7 +180,7 @@ class KoContextHelpAction : public KToggleAction
 	
 	public:
 		KoContextHelpAction( KActionCollection* parent, QWidget* parent = 0 );
-		~KoContextHelpAction();
+		virtual ~KoContextHelpAction();
 		
 	public slots:
 		void updateHelp( const QString& title, const QString& text, const QPixmap* icon = 0 );
