@@ -28,6 +28,7 @@
 #include <kpresenter_doc.h>
 #include "kpresenter_view.h"
 #include "kprcanvas.h"
+#include <kdebug.h>
 
 KPresenterPageIface::KPresenterPageIface( KPrPage *_page )
     : DCOPObject()
@@ -187,67 +188,99 @@ void KPresenterPageIface::setPageSoundFileName(  const QString &fileName )
     m_page->setPageSoundFileName(fileName);
 }
 
-int KPresenterPageIface::getBackXFactor()const
+int KPresenterPageIface::backXFactor()const
 {
     return m_page->getBackXFactor();
 }
 
-int KPresenterPageIface::getBackYFactor( )const
+int KPresenterPageIface::backYFactor( )const
 {
     return m_page->getBackYFactor();
 }
 
-int KPresenterPageIface::getPageTimer(  )const
+int KPresenterPageIface::pageTimer(  )const
 {
     return m_page->getPageTimer();
 }
 
-bool KPresenterPageIface::getPageSoundEffect( )const
+bool KPresenterPageIface::pageSoundEffect( )const
 {
     return m_page->getPageSoundEffect();
 }
 
-int KPresenterPageIface::getBackType()const
+int KPresenterPageIface::backType()const
 {
   return (int)m_page->getBackType();
 }
 
-int KPresenterPageIface::getBackView()const
+int KPresenterPageIface::backView()const
 {
     return (int)m_page->getBackView();
 }
 
-QColor KPresenterPageIface::getBackColor1()const
+QColor KPresenterPageIface::backColor1()const
 {
     return m_page->getBackColor1();
 }
 
-QColor KPresenterPageIface::getBackColor2()const
+QColor KPresenterPageIface::backColor2()const
 {
     return m_page->getBackColor2();
 }
 
-int KPresenterPageIface::getBackColorType()const
+int KPresenterPageIface::backColorType()const
 {
     return  (int)m_page->getBackColorType();
 }
 
-QString KPresenterPageIface::getBackPixFilename()const
+QString KPresenterPageIface::backPixFilename()const
 {
     return m_page->getBackPixKey().filename();
 }
 
-QString KPresenterPageIface::getBackClipFilename()const
+QString KPresenterPageIface::backClipFilename()const
 {
     return m_page->getBackPixKey().filename();
 }
 
-int KPresenterPageIface::getPageEffect()const
+int KPresenterPageIface::pageEffect()const
 {
     return (int)m_page->getPageEffect();
 }
 
-bool KPresenterPageIface::getBackUnbalanced()const
+void KPresenterPageIface::setPageEffect(const QString &effect )
+{
+    if(effect=="NONE")
+        m_page->setPageEffect(PEF_NONE);
+    else if(effect=="CLOSE_HORZ")
+        m_page->setPageEffect(PEF_CLOSE_HORZ);
+        else if(effect=="CLOSE_VERT")
+        m_page->setPageEffect(PEF_CLOSE_VERT);
+    else if(effect=="CLOSE_ALL")
+        m_page->setPageEffect(PEF_CLOSE_ALL);
+    else if(effect=="OPEN_HORZ")
+        m_page->setPageEffect(PEF_OPEN_HORZ);
+    else if(effect=="OPEN_VERT")
+        m_page->setPageEffect(PEF_OPEN_VERT);
+    else if(effect=="OPEN_ALL")
+        m_page->setPageEffect(PEF_OPEN_ALL);
+    else if(effect=="INTERLOCKING_HORZ_1")
+        m_page->setPageEffect(PEF_INTERLOCKING_HORZ_1);
+    else if(effect=="INTERLOCKING_HORZ_2")
+        m_page->setPageEffect(PEF_INTERLOCKING_HORZ_2);
+    else if(effect=="INTERLOCKING_VERT_1")
+        m_page->setPageEffect(PEF_INTERLOCKING_VERT_1);
+    else if(effect=="INTERLOCKING_VERT_2")
+        m_page->setPageEffect(PEF_INTERLOCKING_VERT_2);
+    else if(effect=="SURROUND1")
+        m_page->setPageEffect(PEF_SURROUND1);
+    else if(effect=="FLY1")
+        m_page->setPageEffect(PEF_FLY1);
+    else
+        kdDebug()<<"Error in setPageEffect\n";
+}
+
+bool KPresenterPageIface::backUnbalanced()const
 {
     return (int)m_page->getBackUnbalanced();
 }
@@ -257,22 +290,22 @@ bool KPresenterPageIface::setRectSettings( int _rx, int _ry )
     return m_page->setRectSettings(_rx,_ry);
 }
 
-QString KPresenterPageIface::getPageSoundFileName()const
+QString KPresenterPageIface::pageSoundFileName()const
 {
     return m_page->getPageSoundFileName();
 }
 
-int KPresenterPageIface::getPieAngle( int pieAngle )const
+int KPresenterPageIface::pieAngle( int pieAngle )const
 {
     return m_page->getPieAngle(pieAngle);
 }
 
-int KPresenterPageIface::getPieLength( int pieLength )const
+int KPresenterPageIface::pieLength( int pieLength )const
 {
     return m_page->getPieLength(pieLength);
 }
 
-QRect KPresenterPageIface::getPageRect() const
+QRect KPresenterPageIface::pageRect() const
 {
     return m_page->getZoomPageRect();
 }

@@ -69,29 +69,31 @@ k_dcop:
     virtual void setPageTimer(  int pageTimer );
     virtual void setPageSoundEffect(  bool soundEffect );
     virtual void setPageSoundFileName(  const QString &fileName );
-    virtual QString getPageSoundFileName()const;
+    virtual QString pageSoundFileName()const;
 
-    virtual bool getPageSoundEffect() const;
-    virtual int getPageTimer() const;
-    virtual int getBackYFactor() const;
-    virtual int getBackXFactor() const;
+    virtual bool pageSoundEffect() const;
+    virtual int pageTimer() const;
+    virtual int backYFactor() const;
+    virtual int backXFactor() const;
 
-    virtual int getBackType()const ;
-    virtual int getBackView()const;
-    virtual QColor getBackColor1()const;
-    virtual QColor getBackColor2()const ;
-    virtual int getBackColorType()const;
-    virtual QString getBackPixFilename()const;
-    virtual QString getBackClipFilename()const;
-    virtual int getPageEffect()const;
-    virtual bool getBackUnbalanced()const ;
+    virtual int backType()const ;
+    virtual int backView()const;
+    virtual QColor backColor1()const;
+    virtual QColor backColor2()const ;
+    virtual int backColorType()const;
+    virtual QString backPixFilename()const;
+    virtual QString backClipFilename()const;
+    virtual int pageEffect()const;
+    virtual void setPageEffect(const QString & );
+
+    virtual bool backUnbalanced()const ;
 
     virtual bool setRectSettings( int _rx, int _ry );
 
-    virtual int getPieAngle( int pieAngle )const;
-    virtual int getPieLength( int pieLength )const;
+    virtual int pieAngle( int pieAngle )const;
+    virtual int pieLength( int pieLength )const;
 
-    virtual QRect getPageRect()const;
+    virtual QRect pageRect()const;
 
     virtual bool isSlideSelected();
     virtual void slideSelected(bool _b);
