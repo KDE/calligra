@@ -225,7 +225,11 @@ public:
     /** Bring to front (e.g. when menuitem called twice) */
     void setActiveWindow();
 
+    /** Emit undo/redo command for the last replacements made. */
+    void emitUndoRedo();
+
     virtual void emitNewCommand(KCommand *) = 0;
+
     /**
      * Highlight a match.
      */
@@ -266,6 +270,7 @@ private:
     KoSearchContext m_replaceContext;
     bool m_searchContextEnabled;
     bool m_doCounting;
+    bool m_lastResult;
 
     KMacroCommand *m_macroCmd;
     int m_offset;

@@ -188,14 +188,13 @@ void KoFindReplace::connectFind( KFind* find )
     // Connect findNext signal - called when pressing the button in the dialog
     connect( find, SIGNAL( findNext() ),
              this, SLOT( slotFindNext() ) );
+    m_lastResult = KFind::NoMatch;
 }
 
 KoFindReplace::~KoFindReplace()
 {
-    if ( m_lastTextObjectHighlighted )
-        m_lastTextObjectHighlighted->removeHighlight(true);
-
-    Q_ASSERT( !m_macroCmd );
+    removeHighlight();
+    emitUndoRedo();
     //kdDebug(32500) << "KoFindReplace::~KoFindReplace" << endl;
     delete m_find;
     delete m_replace;
@@ -221,12 +220,28 @@ void KoFindReplace::removeHighlight()
     m_lastTextObjectHighlighted = 0L;
 }
 
+void KoFindReplace::emitUndoRedo()
+{
+    // Emit the command containing the replace operations
+    // #### We allow editing text during a replace operation, so we need
+    // to call this more often... so that 'undo' undoes the last
+    // replace operations. TODO!
+    if(m_macroCmd)
+        emitNewCommand(m_macroCmd);
+    m_macroCmd = 0L;
+}
+
 bool KoFindReplace::findNext()
 {
     KFind::Result res = KFind::NoMatch;
     while ( res == KFind::NoMatch && !m_textIterator.atEnd() ) {
-        kdDebug() << "findNext loop. needData=" << needData() << endl;
+        kdDebug() << "findNext loop. m_lastResult=" << m_lastResult << " needData=" << needData() << endl;
         if ( needData() ) {
+            if ( m_lastResult == KFind::Match ) {
+                ++m_textIterator;
+                if ( m_textIterator.atEnd() )
+                    break;
+            }
             QPair<int, QString> c = m_textIterator.currentTextAndIndex();
             m_offset = c.first;
             setData( c.second );
@@ -237,21 +252,13 @@ bool KoFindReplace::findNext()
             res = m_find->find();
         else
             res = m_replace->replace();
-
-        if ( res == KFind::NoMatch || needData() ) {
-            ++m_textIterator;
-        }
     }
+    m_lastResult = res;
 
     kdDebug() << k_funcinfo << "res=" << res << endl;
     if ( res == KFind::NoMatch ) // i.e. at end
     {
-        // Emit the command containing the replace operations
-        // ### if we allow editing text during a replace operation, then we need
-        // something like a clearUndoRedoInfo()...
-        if(m_macroCmd)
-            emitNewCommand(m_macroCmd);
-        m_macroCmd = 0L;
+        emitUndoRedo();
         removeHighlight();
         if ( shouldRestart() ) {
             m_textIterator.setOptions( m_textIterator.options() & ~KFindDialog::FromCursor );
@@ -283,19 +290,10 @@ bool KoFindReplace::findPrevious()
 {
     int opt = options();
     bool forw = ! ( options() & KFindDialog::FindBackwards );
-    bool atEnd = m_textIterator.atEnd();
     if ( forw )
         setOptions( opt | KFindDialog::FindBackwards );
     else
         setOptions( opt & ~KFindDialog::FindBackwards );
-
-    if ( !atEnd && needData() ) {
-        kdDebug() << k_funcinfo << " needData => ++m_textIterator" << endl;
-        // The next setData() by findNext() will assume the whole parag is to be read
-        // But that's not the case here.
-        // This happens when a match is at pos 0, and then using "Find Previous".
-        ++m_textIterator;
-    }
 
     bool ret = findNext();
 
@@ -878,7 +876,7 @@ bool KoFindReplace::shouldRestart()
 
 void KoFindReplace::changeListObject(const QValueList<KoTextObject *> & lstObject)
 {
-    // todo
+    // todo - get rid of this and fix kpresenter
 }
 
 #include "koSearchDia.moc"
