@@ -163,8 +163,8 @@ KPixmap KexiLabelPrivate::getShadowPixmap( void ) {
 	p_shadowRect.setX( QMAX( p_shadowRect.x() - ( p_shadowRect.width() / 4 ), 0 ) );
 	p_shadowRect.setY( QMAX( p_shadowRect.y() - ( p_shadowRect.height() / 4 ), 0 ) );
 	p_shadowRect.setBottomRight( QPoint(
-		QMIN( p_shadowRect.x() + ( p_shadowRect.width() * 1.5 ), shadowImage.width() ),
-		QMIN( p_shadowRect.y() + ( p_shadowRect.height() * 1.5 ), shadowImage.height() ) ) );
+		QMIN( p_shadowRect.x() + ( p_shadowRect.width() * 3 / 2 ), shadowImage.width() ),
+		QMIN( p_shadowRect.y() + ( p_shadowRect.height() * 3 / 2 ), shadowImage.height() ) ) );
 
 	shadowImage = makeShadow( shadowImage,
 		qGray( textColor.rgb() ) < 127 ? Qt::black : Qt::white,
