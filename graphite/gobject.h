@@ -392,25 +392,12 @@ inline const double normalizeDeg(const double &deg) {
 
 inline void GObject::rotatePoint(int &x, int &y, const double &angle, const QPoint &center) const {
 
-    double alpha=angle/2.0;
     double dx=static_cast<double>(x-center.x());
-    double dy=static_cast<double>(y-center.y());
-    double r=std::sqrt(dx*dx+dy*dy);
-    double s=QABS(2*r*std::sin(alpha));
-    double gamma=std::acos( QABS(dy)/r );
-    double beta;
-
-    if(dx>=0 && dy>=0)
-        beta=-gamma-alpha;
-    else if(dx<0 && dy>=0)
-        beta=-(M_PI-gamma-QABS(alpha));
-    else if(dx<0 && dy<0)
-        beta=M_PI-gamma+M_PI-alpha;
-    else // dx>=0 && dy<0
-        beta=QABS(gamma)+QABS(alpha);
-
-    y+=Graphite::double2Int(s*std::sin(beta));
-    x+=Graphite::double2Int(s*std::cos(beta));
+    double dy=static_cast<double>(center.y()-y); // Attention: Qt coordinate system!
+    double sinalpha=std::sin(angle);
+    double cosalpha=std::cos(angle);
+    x=center.x()+Graphite::double2Int(dx*cosalpha-dy*sinalpha);
+    y=center.y()-Graphite::double2Int(dx*sinalpha+dy*cosalpha); // here too
 }
 
 inline void GObject::rotatePoint(unsigned int &x, unsigned int &y, const double &angle, const QPoint &center) const {
@@ -426,25 +413,12 @@ inline void GObject::rotatePoint(unsigned int &x, unsigned int &y, const double 
 
 inline void GObject::rotatePoint(double &x, double &y, const double &angle, const QPoint &center) const {
 
-    double alpha=angle/2.0;
     double dx=x-static_cast<double>(center.x());
-    double dy=y-static_cast<double>(center.y());
-    double r=std::sqrt(dx*dx+dy*dy);
-    double s=QABS(2*r*std::sin(alpha));
-    double gamma=std::acos( QABS(dy)/r );
-    double beta;
-
-    if(dx>=0 && dy>=0)
-        beta=-gamma-alpha;
-    else if(dx<0 && dy>=0)
-        beta=-(M_PI-gamma-QABS(alpha));
-    else if(dx<0 && dy<0)
-        beta=M_PI-gamma+M_PI-alpha;
-    else // dx>=0 && dy<0
-        beta=QABS(gamma)+QABS(alpha);
-
-    y+=s*std::sin(beta);
-    x+=s*std::cos(beta);
+    double dy=static_cast<double>(center.y())-y; // Attention: Qt coordinate system!
+    double sinalpha=std::sin(angle);
+    double cosalpha=std::cos(angle);
+    x=static_cast<double>(center.x())+(dx*cosalpha-dy*sinalpha);
+    y=static_cast<double>(center.y())-(dx*sinalpha+dy*cosalpha); // here too
 }
 
 inline void GObject::rotatePoint(QPoint &p, const double &angle, const QPoint &center) const {

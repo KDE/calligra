@@ -190,10 +190,9 @@ void GLine::recalculate() {
 
 const GLine *GLine::hit(const QPoint &p) const {
 
-    QRect fuzzyRect(boundingRect().x()-GraphiteGlobal::self()->fuzzyBorder(),
-                    boundingRect().y()-GraphiteGlobal::self()->fuzzyBorder(),
-                    boundingRect().width()+GraphiteGlobal::self()->fuzzyBorder(),
-                    boundingRect().height()+GraphiteGlobal::self()->fuzzyBorder());
+    int fBorder=GraphiteGlobal::self()->fuzzyBorder();
+    QRect fuzzyRect(boundingRect().x()-fBorder, boundingRect().y()-fBorder,
+                    boundingRect().width()+fBorder, boundingRect().height()+fBorder);
     if(!fuzzyRect.contains(p))
         return 0L;
 
@@ -209,27 +208,31 @@ const GLine *GLine::hit(const QPoint &p) const {
         double alpha1=std::asin( QABS(dy)/r );
         double alpha;
 
-        if(dx>=0 && dy>=0)
-            alpha=-alpha1;
-        else if(dx<0 && dy>=0)
-            alpha=alpha1+M_PI;
-        else if(dx<0 && dy<0)
-            alpha=M_PI-alpha1;
-        else // dx>=0 && dy<0
-            alpha=alpha1;
+        if(dx>=0) {
+            if(dy>=0)
+                alpha=-alpha1;
+            else
+                alpha=alpha1;
+        }
+        else {
+            if(dy>=0)
+                alpha=alpha1+M_PI;
+            else
+                alpha=M_PI-alpha1;
+        }
 
         // make it easier for the user to select something by
         // adding a (configurable) "fuzzy zone" :)
         int w=Graphite::double2Int(static_cast<double>(m_pen.width())/2.0);
-        int fb=GraphiteGlobal::self()->fuzzyBorder();
-        QRect fuzzyZone=QRect( QMIN( m_a.x(), m_a.x() + ir ) - fb - w,
-                               m_a.y() - fb - w,
-                               ir + 2*fb + w + 1, 2*fb + w + 1 );
+        int tmp1=fBorder-w;
+        int tmp2=2*fBorder+w+1;
+        QRect fuzzyZone=QRect( QMIN( m_a.x(), m_a.x() + ir ) - tmp1,
+                               m_a.y() - tmp1, ir + tmp2, tmp2 );
         // Don't change the original point!
-        QPoint tmp(p);
-        rotatePoint(tmp, -alpha, m_a);
+        QPoint tmp3(p);
+        rotatePoint(tmp3, -alpha, m_a);
 
-        if(fuzzyZone.contains(tmp))
+        if(fuzzyZone.contains(tmp3))
             return this;
     }
     return 0L;
