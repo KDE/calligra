@@ -198,8 +198,13 @@ void KSpreadTabBar::setActiveTab( const QString& _text )
     if ( i == -1 )
 	return;
 
+    if ( i + 1 == activeTab )
+	return;
+    
     activeTab = i + 1;
     repaint( false );
+    
+    emit tabChanged( _text );
 }
 
 void KSpreadTabBar::slotRemove( )

@@ -1139,17 +1139,8 @@ void KSpreadView::setActiveTable( KSpreadTable *_t )
   if ( m_pTable == 0L )
     return;
 
+  qDebug("SET ACTIVE TABLE");
   m_pTabBar->setActiveTab( _t->tableName() );
-
-  // Create views for child documents
-  // ####### TODO
-  /* if ( m_bInitialized )
-  {
-    m_lstFrames.clear();
-    QListIterator<KSpreadChild> it = m_pTable->childIterator();
-    for( ; it.current(); ++it )
-      slotInsertChild( it.current() );
-      } */
 
   m_pVBorderWidget->repaint();
   m_pHBorderWidget->repaint();
@@ -1161,6 +1152,9 @@ void KSpreadView::setActiveTable( KSpreadTable *_t )
 
 void KSpreadView::changeTable( const QString& _name )
 {
+    if ( activeTable()->tableName() == _name )
+	return;
+
     KSpreadTable *t = m_pDoc->map()->findTable( _name );
     if ( !t )
     {
@@ -1169,7 +1163,6 @@ void KSpreadView::changeTable( const QString& _name )
     }
 
     setActiveTable( t );
-    tabBar()->setActiveTab( _name );
 	
     updateEditWidget();
 }
@@ -1465,11 +1458,11 @@ void KSpreadView::resizeEvent( QResizeEvent * )
     m_pTabBarFirst->show();
     m_pTabBarLeft->setGeometry( 16, height() - 16, 16, 16 );
     m_pTabBarLeft->show();
-    m_pTabBarRight->setGeometry( 40, height() - 16, 16, 16 );
+    m_pTabBarRight->setGeometry( 32, height() - 16, 16, 16 );
     m_pTabBarRight->show();
-    m_pTabBarLast->setGeometry( 60, height() - 16, 16, 16 );
+    m_pTabBarLast->setGeometry( 48, height() - 16, 16, 16 );
     m_pTabBarLast->show();
-    m_pTabBar->setGeometry( 80, height() - 16, width() / 2 - 80, 16 );
+    m_pTabBar->setGeometry( 64, height() - 16, width() / 2 - 64, 16 );
     m_pTabBar->show();
 	
     m_pHorzScrollBar->setGeometry( width() / 2, height() - 16, width() / 2 - 16, 16 );
@@ -1821,7 +1814,7 @@ void KSpreadView::slotClear()
 {
     ASSERT( m_pTable );
     m_pTable->clearSelection( QPoint( m_pCanvas->markerColumn(), m_pCanvas->markerRow() ) );
-    
+
     updateEditWidget();
 }
 

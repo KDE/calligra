@@ -741,165 +741,120 @@ static bool kspreadfunc_conc( KSContext& context )
   return b;
 }
 
-static bool kspreadfunc_no( KSContext& context )
+static bool kspreadfunc_not( KSContext& context )
 {
   QValueList<KSValue::Ptr>& args = context.value()->listValue();
 
-  if ( !KSUtil::checkArgumentsCount( context, 1, "NO", true ) )
+  if ( !KSUtil::checkArgumentsCount( context, 1, "not", true ) )
     return false;
 
   if ( !KSUtil::checkType( context, args[0], KSValue::BoolType, true ) )
     return false;
 
-  bool toto;
-  if( args[0]->boolValue()==true)
-  	toto=false;
-   else if  (args[0]->boolValue()==false)
-   	toto=true;
-   else		
-   	cout <<"Pb in function NO\n";
+  bool toto = !args[0]->boolValue();
   context.setValue( new KSValue(toto)); 	
   return true;
 }
-
-static bool kspreadfunc_TRUE( KSContext& context )
-{
-  QValueList<KSValue::Ptr>& args = context.value()->listValue();
-
-  if ( !KSUtil::checkArgumentsCount( context, 0, "true", true ) )
-    return false;
-
-  bool toto=true;
-  context.setValue( new KSValue(toto)); 	
-  return true;
-}
-
-static bool kspreadfunc_FALSE( KSContext& context )
-{
-  QValueList<KSValue::Ptr>& args = context.value()->listValue();
-
-  if ( !KSUtil::checkArgumentsCount( context, 0, "false", true ) )
-    return false;
-
-  bool toto=false;
-  context.setValue( new KSValue(toto)); 	
-  return true;
-}
-
 
 static bool kspreadfunc_if( KSContext& context )
 {
-  QValueList<KSValue::Ptr>& args = context.value()->listValue();
+    QValueList<KSValue::Ptr>& args = context.value()->listValue();
 
-  if ( !KSUtil::checkArgumentsCount( context, 3, "IF", true ) )
-    return false;
+    if ( !KSUtil::checkArgumentsCount( context, 3, "if", true ) )
+	return false;
 
-  if ( !KSUtil::checkType( context, args[0], KSValue::BoolType, true ) )
-    return false;
+    if ( !KSUtil::checkType( context, args[0], KSValue::BoolType, true ) )
+	return false;
 
-  if(  args[0]->boolValue()==true)
-    {
-      if ( KSUtil::checkType( context, args[1], KSValue::StringType, true ) )
-	{
-	  context.setValue( new KSValue(args[1]->stringValue()));
-	}
-      else if(KSUtil::checkType( context, args[1], KSValue::DoubleType, true ) )
-        {
-          context.setValue( new KSValue(args[1]->doubleValue()));
-        }
-      /*else if(KSUtil::checkType( context, args[1], KSValue::BoolType, true ) )
-	{
-	cout <<"booleen :\n";*/
-	 /*bool toto;
-  	if( args[1]->boolValue()==true)
-  		toto=false;
-   	else if  (args[1]->boolValue()==false)
-   		toto=true;
-   	else		
-   		cout <<"Pb in function IF\n";*/
-  	//context.setValue( new KSValue(toto));
-	 // context.setValue( new KSValue(args[1]->boolValue()));
-	//}
-      else
-	{
-	  cout <<"Pb in function IF\n";
-	  return false;
-	}
-    }
-  else
-  {
-    if ( KSUtil::checkType( context, args[2], KSValue::StringType, true ) )
-      {
-          context.setValue( new KSValue(args[2]->stringValue()));
-      }
-    else if(KSUtil::checkType( context, args[2], KSValue::DoubleType, true ) )
-	{
- 	 context.setValue( new KSValue(args[2]->doubleValue()));
-	}
-   /* else if(KSUtil::checkType( context, args[2], KSValue::BoolType, true ) )
-	{
-          cout <<"booleen :\n";*/
-        /*   bool toto;
-  	if( args[2]->boolValue()==true)
-  		toto=false;
-   	else if  (args[2]->boolValue()==false)
-   		toto=true;
-   	else		
-   		cout <<"Pb in function IF\n"; */
-  	//context.setValue( new KSValue(toto));
-          //context.setValue( new KSValue(args[2]->boolValue()));
-	//}
+    if (  args[0]->boolValue() == true )
+	context.setValue( new KSValue( *(args[1]) ) );
     else
-    	{
-    	cout <<"Pb in function IF\n";
-    	return false;
-    	}
-   }	
+	context.setValue( new KSValue( *(args[2]) ) );
 
-  return true;
+    return true;
 }
 
-static bool kspreadfunc_LEFT( KSContext& context )
+static bool kspreadfunc_left( KSContext& context )
+{
+    QValueList<KSValue::Ptr>& args = context.value()->listValue();
+
+    if ( !KSUtil::checkArgumentsCount( context, 2, "left", true ) )
+	return false;
+
+    if ( !KSUtil::checkType( context, args[0], KSValue::StringType, true ) )
+	return false;
+    int nb;
+    if( KSUtil::checkType( context, args[1], KSValue::DoubleType, false ) )
+	nb = (int) args[1]->doubleValue();
+    else if( KSUtil::checkType( context, args[1], KSValue::IntType, true ) )
+	nb = args[1]->intValue();
+    else
+	return false;
+
+    QString tmp = args[0]->stringValue().left(nb);
+    context.setValue( new KSValue( tmp ) ); 	
+    return true;
+}
+
+static bool kspreadfunc_right( KSContext& context )
+{
+    QValueList<KSValue::Ptr>& args = context.value()->listValue();
+
+    if ( !KSUtil::checkArgumentsCount( context, 2, "right", true ) )
+	return false;
+
+    if ( !KSUtil::checkType( context, args[0], KSValue::StringType, true ) )
+	return false;
+    int nb;
+    if( KSUtil::checkType( context, args[1], KSValue::DoubleType, false ) )
+	nb = (int) args[1]->doubleValue();
+    else if( KSUtil::checkType( context, args[1], KSValue::IntType, true ) )
+	nb = args[1]->intValue();
+    else
+	return false;
+
+    QString tmp = args[0]->stringValue().right(nb);
+    context.setValue( new KSValue(tmp)); 	
+    return true;
+}
+
+static bool kspreadfunc_mid( KSContext& context )
+{
+    QValueList<KSValue::Ptr>& args = context.value()->listValue();
+
+    uint len = 0xffffffff;
+    if ( KSUtil::checkArgumentsCount( context, 3, "mid", false ) )
+    {
+	if( KSUtil::checkType( context, args[2], KSValue::DoubleType, false ) )
+	    len = (uint) args[2]->doubleValue();
+	else if( KSUtil::checkType( context, args[2], KSValue::IntType, true ) )
+	    len = (uint) args[2]->intValue();
+	else
+	    return false;
+    }
+    else if ( !KSUtil::checkArgumentsCount( context, 2, "mid", true ) )
+	return false;
+
+    if ( !KSUtil::checkType( context, args[0], KSValue::StringType, true ) )
+	return false;
+    int pos;
+    if( KSUtil::checkType( context, args[1], KSValue::DoubleType, false ) )
+	pos = (int) args[1]->doubleValue();
+    else if( KSUtil::checkType( context, args[1], KSValue::IntType, true ) )
+	pos = args[1]->intValue();
+    else
+	return false;
+
+    QString tmp = args[0]->stringValue().mid( pos, len );
+    context.setValue( new KSValue(tmp)); 	
+    return true;
+}
+
+static bool kspreadfunc_nbcar( KSContext& context )
 {
   QValueList<KSValue::Ptr>& args = context.value()->listValue();
 
-  if ( !KSUtil::checkArgumentsCount( context, 2, "LEFT", true ) )
-    return false;
-
-  if ( !KSUtil::checkType( context, args[0], KSValue::StringType, true ) )
-    return false;
-  if( !KSUtil::checkType( context, args[1], KSValue::DoubleType, true ) )
-    return false;
-
-  int nb=(int) args[1]->doubleValue();
-  QString tmp=args[0]->stringValue().left(nb);
-  context.setValue( new KSValue(tmp)); 	
-  return true;
-}
-
-static bool kspreadfunc_RIGHT( KSContext& context )
-{
-  QValueList<KSValue::Ptr>& args = context.value()->listValue();
-
-  if ( !KSUtil::checkArgumentsCount( context, 2, "RIGHT", true ) )
-    return false;
-
-  if ( !KSUtil::checkType( context, args[0], KSValue::StringType, true ) )
-    return false;
-  if( !KSUtil::checkType( context, args[1], KSValue::DoubleType, true ) )
-    return false;
-
-  int nb=(int) args[1]->doubleValue();
-  QString tmp=args[0]->stringValue().right(nb);
-  context.setValue( new KSValue(tmp)); 	
-  return true;
-}
-
-static bool kspreadfunc_NBCAR( KSContext& context )
-{
-  QValueList<KSValue::Ptr>& args = context.value()->listValue();
-
-  if ( !KSUtil::checkArgumentsCount( context, 1, "NBCAR", true ) )
+  if ( !KSUtil::checkArgumentsCount( context, 1, "nbcar", true ) )
     return false;
 
   if ( !KSUtil::checkType( context, args[0], KSValue::StringType, true ) )
@@ -1142,7 +1097,35 @@ static bool kspreadfunc_app( KSContext& context )
 {
     KSpreadDoc* doc = ((KSpreadInterpreter*)context.interpreter())->document();
 
+    // ############## Dont return the document here, but we have no app iface currently
     context.setValue( new KSValue( new KSProxy( kapp->dcopClient()->appId(), doc->dcopObject()->objId() ) ) );
+
+    return TRUE;
+}
+
+static bool kspreadfunc_doc( KSContext& context )
+{
+    KSpreadDoc* doc = ((KSpreadInterpreter*)context.interpreter())->document();
+
+    context.setValue( new KSValue( new KSProxy( kapp->dcopClient()->appId(), doc->dcopObject()->objId() ) ) );
+
+    return TRUE;
+}
+
+static bool kspreadfunc_map( KSContext& context )
+{
+    KSpreadMap* map = ((KSpreadInterpreter*)context.interpreter())->document()->map();
+
+    context.setValue( new KSValue( new KSProxy( kapp->dcopClient()->appId(), map->dcopObject()->objId() ) ) );
+
+    return TRUE;
+}
+
+static bool kspreadfunc_table( KSContext& context )
+{
+    KSpreadTable* table = ((KSpreadInterpreter*)context.interpreter())->table();
+
+    context.setValue( new KSValue( new KSProxy( kapp->dcopClient()->appId(), table->dcopObject()->objId() ) ) );
 
     return TRUE;
 }
@@ -1180,13 +1163,12 @@ static KSModule::Ptr kspreadCreateModule_KSpread( KSInterpreter* interp )
   module->addObject( "mult", new KSValue( new KSBuiltinFunction( module, "mult", kspreadfunc_mult) ) );
   module->addObject( "ecartype", new KSValue( new KSBuiltinFunction( module, "ecartype", kspreadfunc_ecarttype) ) );
   module->addObject( "conc", new KSValue( new KSBuiltinFunction( module, "conc", kspreadfunc_conc) ) );
-  module->addObject( "NO", new KSValue( new KSBuiltinFunction( module, "NO", kspreadfunc_no) ) );
-  module->addObject( "IF", new KSValue( new KSBuiltinFunction( module, "IF", kspreadfunc_if) ) );
-  module->addObject( "true", new KSValue( new KSBuiltinFunction( module, "true", kspreadfunc_TRUE) ) );
-  module->addObject( "false", new KSValue( new KSBuiltinFunction( module, "false", kspreadfunc_FALSE) ) );
-  module->addObject( "LEFT", new KSValue( new KSBuiltinFunction( module, "LEFT", kspreadfunc_LEFT) ) );
-  module->addObject( "RIGHT", new KSValue( new KSBuiltinFunction( module, "RIGHT", kspreadfunc_RIGHT) ) );
-  module->addObject( "NBCAR", new KSValue( new KSBuiltinFunction( module, "NBCAR", kspreadfunc_NBCAR) ) );
+  module->addObject( "not", new KSValue( new KSBuiltinFunction( module, "not", kspreadfunc_not) ) );
+  module->addObject( "if", new KSValue( new KSBuiltinFunction( module, "if", kspreadfunc_if) ) );
+  module->addObject( "left", new KSValue( new KSBuiltinFunction( module, "left", kspreadfunc_left) ) );
+  module->addObject( "right", new KSValue( new KSBuiltinFunction( module, "right", kspreadfunc_right) ) );
+  module->addObject( "mid", new KSValue( new KSBuiltinFunction( module, "mid", kspreadfunc_mid) ) );
+  module->addObject( "nbcar", new KSValue( new KSBuiltinFunction( module, "nbcar", kspreadfunc_nbcar) ) );
   module->addObject( "EXACT", new KSValue( new KSBuiltinFunction( module, "EXACT", kspreadfunc_EXACT) ) );
   module->addObject( "STXT", new KSValue( new KSBuiltinFunction( module, "STXT", kspreadfunc_STXT) ) );
   module->addObject( "ENT", new KSValue( new KSBuiltinFunction( module, "ENT",kspreadfunc_ENT) ) );
@@ -1197,8 +1179,11 @@ static KSModule::Ptr kspreadCreateModule_KSpread( KSInterpreter* interp )
   module->addObject( "ISNUM", new KSValue( new KSBuiltinFunction( module,"ISNUM",kspreadfunc_isnum) ) );
   module->addObject( "cell", new KSValue( new KSBuiltinFunction( module,"cell",kspreadfunc_cell) ) );
   module->addObject( "select", new KSValue( new KSBuiltinFunction( module,"select",kspreadfunc_select) ) );
-  module->addObject( "Application", new KSValue( new KSBuiltinFunction( module, "Application", kspreadfunc_app ) ) );
-
+  module->addObject( "application", new KSValue( new KSBuiltinFunction( module, "application", kspreadfunc_app ) ) );
+  module->addObject( "document", new KSValue( new KSBuiltinFunction( module, "document", kspreadfunc_doc ) ) );
+  module->addObject( "map", new KSValue( new KSBuiltinFunction( module, "map", kspreadfunc_map ) ) );
+  module->addObject( "table", new KSValue( new KSBuiltinFunction( module, "table", kspreadfunc_table ) ) );
+  
   return module;
 }
 
@@ -1351,7 +1336,13 @@ KSParseNode* KSpreadInterpreter::parse( KSContext& context, KSpreadTable* table,
 
 bool KSpreadInterpreter::evaluate( KSContext& context, KSParseNode* node, KSpreadTable* table )
 {
-  m_table = table;
+    // Save the current table to make this function reentrant.
+    KSpreadTable* t = m_table;
+    m_table = table;
 
-  return node->eval( context );
+    bool b = node->eval( context );
+
+    m_table = t;
+
+    return b;
 }

@@ -18,6 +18,8 @@
 */
 
 #include <qprinter.h>
+#include <qdom.h>
+#include <qmsgbox.h>
 
 #include "kspread_map.h"
 #include "kspread_doc.h"
@@ -26,11 +28,7 @@
 #include "KSpreadMapIface.h"
 
 #include <time.h>
-#include <qmsgbox.h>
-#include <stdio.h>
 #include <stdlib.h>
-
-#include <komlWriter.h>
 
 KSpreadMap::KSpreadMap( KSpreadDoc *_doc, const char* name )
     : QObject( _doc, name )
@@ -85,44 +83,36 @@ void KSpreadMap::moveTable( const char* _from, const char* _to, bool _before )
   }
 }
 
-bool KSpreadMap::save( ostream& out )
+QDomElement KSpreadMap::save( QDomDocument& doc )
 {
-  out << otag << "<MAP>" << endl;
+  QDomElement mymap = doc.createElement( "map" );
 
   QListIterator<KSpreadTable> it( m_lstTables );
   for( ; it.current(); ++it )
-    it.current()->save( out );
+  {
+    QDomElement e = it.current()->save( doc );
+    if ( e.isNull() )
+      return e;
+    mymap.appendChild( e );
+  }
 
-  out << etag << "</MAP>" << endl;
-
-  return true;
+  return mymap;
 }
 
-bool KSpreadMap::load( KOMLParser& parser, vector<KOMLAttrib>& )
+bool KSpreadMap::loadXML( const QDomElement& mymap )
 {
-  string tag, name;
-  vector<KOMLAttrib> lst;
-
-  // TABLE
-  while( parser.open( 0L, tag ) )
+  QDomNode n = mymap.firstChild();
+  while( !n.isNull() )
   {
-    KOMLParser::parseTag( tag.c_str(), name, lst );
-
-    if ( name == "TABLE" )
+    QDomElement e = n.toElement();
+    if ( !e.isNull() && e.tagName() == "table" )
     {
       KSpreadTable *t = m_pDoc->createTable();
-      addTable( t );
-      if ( !t->load( parser, lst ) )
+      m_pDoc->addTable( t );
+      if ( !t->loadXML( e ) )
 	return false;
     }
-    else
-      cerr << "Unknown tag '" << tag << "'" << endl;
-
-    if ( !parser.close( tag ) )
-    {
-      cerr << "ERR: Closing Child" << endl;
-      return false;
-    }
+    n = n.nextSibling();
   }
 
   return true;
@@ -141,7 +131,7 @@ KSpreadTable* KSpreadMap::findTable( const QString & _name )
 
     for ( t = m_lstTables.first(); t != 0L; t = m_lstTables.next() )
     {
-	if ( _name == t->name() )
+	if ( _name == t->tableName() )
 	    return t;
     }
 

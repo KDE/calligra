@@ -26,6 +26,7 @@ public:
   virtual bool processExtension( KSContext& context, KSParseNode* node );
 
   KSpreadDoc* document() { return m_doc; }
+  KSpreadTable* table() { return m_table; }
     
 private:
   KSpreadDoc* m_doc;

@@ -27,6 +27,9 @@ class KoStore;
 
 class DCOPObject;
 
+class QDomElement;
+class QDomDocument;
+
 #include <iostream.h>
 #include <komlParser.h>
 
@@ -53,10 +56,9 @@ public:
    */
   virtual ~KSpreadMap();
 
-  // C++
-  virtual bool save( ostream& );
-  virtual bool load( KOMLParser&, vector<KOMLAttrib>& );
-  virtual bool loadChildren( KoStore* _store );
+  QDomElement save( QDomDocument& doc );
+  bool loadXML( const QDomElement& mymap );
+  bool loadChildren( KoStore* _store );
 
   bool saveChildren( KoStore* _store, const char *_path );
   /*
@@ -120,7 +122,7 @@ public:
   virtual DCOPObject* dcopObject();
 
   KSpreadDoc* doc();
-    
+
 private:
   /**
    * List of all tables in this map. The list has autodelete turned on.

@@ -25,6 +25,8 @@
 
 #include <stdlib.h>
 
+#include <qdom.h>
+
 /*****************************************************************************
  *
  * KSpreadLayout
@@ -86,24 +88,14 @@ void KSpreadLayout::copy( KSpreadLayout &_l )
   setPostfix( _l.postfix() );
 }
 
-const char* KSpreadLayout::prefix()
+QString KSpreadLayout::prefix() const
 {
-    if ( m_strPrefix.data() == 0 )
-	return 0L;
-    if ( m_strPrefix.data()[0] == 0 )
-	return 0L;
-
-    return m_strPrefix.data();
+    return m_strPrefix;
 }
 
-const char* KSpreadLayout::postfix()
+QString KSpreadLayout::postfix() const
 {
-    if ( m_strPostfix.data() == 0 )
-	return 0L;
-    if ( m_strPostfix.data()[0] == 0 )
-	return 0L;
-
-    return m_strPostfix.data();
+    return m_strPostfix;
 }
 
 int KSpreadLayout::leftBorderWidth( KSpreadCanvas *_canvas )
@@ -168,29 +160,26 @@ int RowLayout::height( KSpreadCanvas *_canvas )
     return (int)(m_fHeight * MM_TO_POINT);
 }
 
-bool RowLayout::save( ostream &out )
+QDomElement RowLayout::save( QDomDocument& doc )
 {
-  out << indent << "<ROW height=\"" << m_fHeight << "\" row=\"" << m_iRow << "\"/>" << endl;
+  QDomElement row = doc.createElement( "row" );
+  row.setAttribute( "height", m_fHeight );
+  row.setAttribute( "row", m_iRow );
 
-  return true;
+  return row;
 }
 
-bool RowLayout::load( KOMLParser& , vector<KOMLAttrib>& _attribs )
+bool RowLayout::load( const QDomElement& row )
 {
-  vector<KOMLAttrib>::const_iterator it = _attribs.begin();
-  for( ; it != _attribs.end(); it++ )
+  bool ok;
+  if ( row.hasAttribute( "height" ) )
   {
-    if ( (*it).m_strName == "height" )
-    {
-      m_fHeight = atof( (*it).m_strValue.c_str() );
-    }
-    else if ( (*it).m_strName == "row" )
-    {
-      m_iRow = atoi( (*it).m_strValue.c_str() );
-    }
-    else
-      cerr << "Unknown attrib '" << (*it).m_strName << "'" << endl;
+    m_fHeight = row.attribute( "height" ).toFloat( &ok );
+    if ( !ok ) return false;
   }
+
+  m_iRow = row.attribute( "row" ).toInt( &ok );
+  if ( !ok ) return false;
 
   // Validation
   if ( m_fHeight < 1 )
@@ -206,42 +195,6 @@ bool RowLayout::load( KOMLParser& , vector<KOMLAttrib>& _attribs )
 
   return true;
 }
-
-/*
-bool RowLayout::load( KorbSession *korb, OBJECT o_rl )
-{
-    PROPERTY p_height = korb->findProperty( "KDE:kxcl:Height" );
-    PROPERTY p_row = korb->findProperty( "KDE:kxcl:Row" );
-
-    if ( p_height == 0L )
-    {
-	printf("ERROR: Could not find Property KDE:kxcl:Height \n");
-	return FALSE;
-    }
-
-    PROPERTY prop = 0;
-    do
-    {
-	prop = korb->getNextObjectProperty( o_rl, prop );
-	if ( prop == p_height )
-	{
-	    float h;
-	    if ( !korb->readFloatValue( o_rl, prop, h ) )
-		return FALSE;
-	    height = h;
-	}
-	else if ( prop == p_row )
-	{
-	    unsigned int r;
-	    if ( !korb->readUIntValue( o_rl, prop, r ) )
-		return FALSE;
-	    row = r;
-	}
-    } while ( prop );
-
-    return TRUE;
-}
-*/
 
 /*****************************************************************************
  *
@@ -292,104 +245,41 @@ int ColumnLayout::width( KSpreadCanvas *_canvas )
     return (int)( m_fWidth * MM_TO_POINT );
 }
 
-bool ColumnLayout::save( ostream &out )
+QDomElement ColumnLayout::save( QDomDocument& doc )
 {
-  out << indent << "<COLUMN width=\"" << m_fWidth << "\" column=\"" << m_iColumn << "\"/>" << endl;
+  QDomElement col = doc.createElement( "col" );
+  col.setAttribute( "width", m_fWidth );
+  col.setAttribute( "col", m_iColumn );
 
-  return true;
+  return col;
 }
 
-bool ColumnLayout::load( KOMLParser& , vector<KOMLAttrib>& _attribs )
+bool ColumnLayout::load( const QDomElement& col )
 {
-  vector<KOMLAttrib>::const_iterator it = _attribs.begin();
-  for( ; it != _attribs.end(); it++ )
+  bool ok;
+  if ( col.hasAttribute( "width" ) )
   {
-    if ( (*it).m_strName == "width" )
-    {
-      m_fWidth = atof( (*it).m_strValue.c_str() );
-    }
-    else if ( (*it).m_strName == "column" )
-    {
-      m_iColumn = atoi( (*it).m_strValue.c_str() );
-    }
-    else
-      cerr << "Unknown attrib '" << (*it).m_strName << "'" << endl;
+    m_fWidth = col.attribute( "width" ).toFloat( &ok );
+    if ( !ok ) return false;
   }
+
+  m_iColumn = col.attribute( "col" ).toInt( &ok );
+  if ( !ok ) return false;
 
   // Validation
   if ( m_fWidth < 1 )
   {
-    cerr << "Value height=" << m_fWidth << " out of range" << endl;
+    cerr << "Value width=" << m_fWidth << " out of range" << endl;
     return false;
   }
   if ( m_iColumn < 1 || m_iColumn >= 0xFFFF )
   {
-    cerr << "Value row=" << m_iColumn << " out of range" << endl;
+    cerr << "Value col=" << m_iColumn << " out of range" << endl;
     return false;
   }
 
   return true;
 }
-
-/*
-OBJECT ColumnLayout::save( KorbSession *korb )
-{
-    // For use as values in the ObjectType property
-    TYPE t_cl  =  korb->registerType( "KDE:kxcl:ColumnLayout" );
-
-    PROPERTY p_width = korb->registerProperty( "KDE:kxcl:Width" );
-    PROPERTY p_column = korb->registerProperty( "KDE:kxcl:Column" );
-
-    OBJECT o_cl( korb->newObject( t_cl ) );
-	
-    korb->writeFloatValue( o_cl, p_width, width );
-    korb->writeUIntValue( o_cl, p_column, column );
-
-    return o_cl;
-}
-
-bool ColumnLayout::load( KorbSession *korb, OBJECT o_cl )
-{
-    PROPERTY p_width = korb->findProperty( "KDE:kxcl:Width" );
-    PROPERTY p_column = korb->findProperty( "KDE:kxcl:Column" );
-
-    if ( p_width == 0L )
-    {
-	printf("ERROR: Could not find Property KDE:kxcl:Width \n");
-	return FALSE;
-    }
-    if ( p_column == 0L )
-    {
-	printf("ERROR: Could not find Property KDE:kxcl:Column \n");
-	return FALSE;
-    }
-
-    PROPERTY prop = 0;
-    do
-    {
-	prop = korb->getNextObjectProperty( o_cl, prop );
-	if ( prop == p_width )
-	{
-	    float w;
-	    if ( !korb->readFloatValue( o_cl, prop, w ) )
-		return FALSE;
-	    printf("Width = %f\n",w);
-	    width = w;
-	}
-	else if ( prop == p_column )
-	{
-	    unsigned int c;
-	    if ( !korb->readUIntValue( o_cl, prop, c ) )
-		return FALSE;
-	    printf("Width = %i\n",c);
-	    column = c;
-	}
-    } while ( prop );
-
-    return TRUE;
-}
-*/
-
 
 #undef UPDATE_BEGIN
 #undef UPDATE_END

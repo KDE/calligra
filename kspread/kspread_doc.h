@@ -32,6 +32,8 @@ class View;
 
 class DCOPObject;
 
+class QDomDocument;
+
 #include <koDocument.h>
 #include <koPageLayoutDia.h>
 
@@ -45,6 +47,8 @@ class DCOPObject;
 #include <qpen.h>
 
 #include "kspread_interpreter.h"
+
+#include <kscript_context.h>
 
 #define MIME_TYPE "application/x-kspread"
 
@@ -61,7 +65,8 @@ public:
   virtual bool save( ostream&, const char *_format );
 
   virtual bool loadChildren( KoStore* _store );
-  virtual bool loadXML( KOMLParser&, KoStore* _store );
+  virtual bool loadXML( const QDomDocument& doc, KoStore* store );
+  virtual bool load( istream& in, KoStore* _store );
 
   virtual bool initDoc();
 
@@ -177,6 +182,11 @@ public:
    */
   void resetInterpreter();
   /**
+   * @return a context that can be used for evaluating formulas.
+   *         This function does remove any exception from the context.
+   */
+  KSContext& context() { m_context.setException( 0 ); return m_context; }
+  /**
    * Searches in all KSpread extension modules for the keyword.
    * The most specific ones are searches first. The modules in the
    * users apps/kspread directory are considered to be more specific
@@ -227,6 +237,8 @@ public:
 
   virtual DCOPObject* dcopObject();
 
+  static QList<KSpreadDoc>& documents();
+    
 public slots:
   /**
    * Open a dialog for the "Page Layout".
@@ -285,11 +297,6 @@ protected:
    * Destroys the interpreter.
    */
   void destroyInterpreter();
-  /**
-   * @return the full qualified filenames of scripts in
-   *         the requested path.
-   */
-  QStringList findScripts( const QString& path );
 
   /**
    * Looks at @ref #m_paperFormat and calculates @ref #m_paperWidth and @ref #m_paperHeight.
@@ -428,12 +435,29 @@ protected:
   /**
    * TRUE if loading is in process, otherwise FALSE.
    * This flag is used to avoid updates etc. during loading.
+   *
+   * @see #isLoading
    */
   bool m_bLoading;
 
   QPen m_defaultGridPen;
-    
+
+  /**
+   * This DCOP object represents the document.
+   */
   DCOPObject* m_dcop;
+
+  /**
+   * This module is used to execute formulas of this table.
+   */
+  KSModule::Ptr m_module;
+  /**
+   * This context is used to execute formulas of this table.
+   */
+  KSContext m_context;
+
+  static QList<KSpreadDoc>* s_docs;
+  static int s_docId;
 };
 
 #endif

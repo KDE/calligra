@@ -34,6 +34,7 @@ class KoDocumentEntry;
 
 class QWidget;
 class QPainter;
+class QDomElement;
 
 class DCOPObject;
 
@@ -219,8 +220,8 @@ public:
     void setTableName( QString _name ) { m_strName = _name; }
 
     // C++
-    virtual bool save( ostream& );
-    virtual bool load( KOMLParser&, vector<KOMLAttrib>& );
+    virtual QDomElement save( QDomDocument& );
+    virtual bool loadXML( const QDomElement& );
     virtual bool loadChildren( KoStore* _store );
 
     virtual bool saveChildren( KoStore* _store, const char *_path );
@@ -555,12 +556,6 @@ public:
     int maxRow() { return m_iMaxRow; }
     void enableScrollBarUpdates( bool _enable );
 
-    /**
-     * @return a context that can be used for evaluating formulas.
-     *         This function does remove any exception from the context.
-     */
-    KSContext& context() { m_context.setException( 0 ); return m_context; }
-
     virtual DCOPObject* dcopObject();
 
     static KSpreadTable* find( int _id );
@@ -608,20 +603,6 @@ protected:
     void fillSequence( QList<KSpreadCell>& _srcList, QList<KSpreadCell>& _destList, QList<AutoFillSequence>& _seqList );
 
     bool saveCellRect( ostream&, const QRect& );
-
-    /**
-     * Initialized @ref #m_module and @ref #m_context.
-     */
-    void initInterpreter();
-
-    /**
-     * This module is used to execute formulas of this table.
-     */
-    KSModule::Ptr m_module;
-    /**
-     * This context is used to execute formulas of this table.
-     */
-    KSContext m_context;
 
     QIntDict<KSpreadCell> m_dctCells;
     QIntDict<RowLayout> m_dctRows;

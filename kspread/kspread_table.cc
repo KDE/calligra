@@ -35,6 +35,8 @@
 #include <qmsgbox.h>
 #include <qclipbrd.h>
 #include <qpicture.h>
+#include <qdom.h>
+
 #include <klocale.h>
 #include <kglobal.h>
 
@@ -218,8 +220,6 @@ KSpreadTable::KSpreadTable( KSpreadMap *_map, const char *_name )
       s.sprintf("Table%i", s_id );
       QObject::setName( s.data() );
   }
-
-  initInterpreter();
 }
 
 bool KSpreadTable::isEmpty( unsigned long int x, unsigned long int y )
@@ -3058,7 +3058,8 @@ bool KSpreadTable::loadSelection( istream& _in, int _xshift, int _yshift, PasteM
     if ( name == "CELL" )
     {
       KSpreadCell *cell = new KSpreadCell( this, 0, 0 );
-      cell->load( parser, lst, _xshift, _yshift,sp_cell,m_strName,op_cell );
+      // ############## Torben
+      // cell->load( parser, lst, _xshift, _yshift,sp_cell,m_strName,op_cell );
       insertCell( cell );
     }
     else
@@ -3419,8 +3420,9 @@ bool KSpreadTable::saveCellRect( ostream &out, const QRect &_rect )
     if ( !it.current()->isDefault() )
     {
       QPoint p( it.current()->column(), it.current()->row() );
-      if ( _rect.contains( p ) )
-	it.current()->save( out, _rect.left() - 1, _rect.top() - 1,name());
+      // ########## Torben
+      // if ( _rect.contains( p ) )
+      // it.current()->save( out, _rect.left() - 1, _rect.top() - 1 );
     }
   }
 
@@ -3429,23 +3431,22 @@ bool KSpreadTable::saveCellRect( ostream &out, const QRect &_rect )
   return true;
 }
 
-bool KSpreadTable::save( ostream &out )
+QDomElement KSpreadTable::save( QDomDocument& doc )
 {
-if(!isHide())
-  	{
-  	  out << otag << "<TABLE name=\"" << m_strName.ascii()<< "\">" << endl;
-  	}
-  else
-  	{
-  	 out << otag << "<TABLE name=\"" << m_strName.ascii()<< "\" hide" << ">" << endl;
-  	}
+  QDomElement table = doc.createElement( "table" );
+  table.setAttribute( "name", m_strName );
 
   // Save all cells.
   QIntDictIterator<KSpreadCell> it( m_dctCells );
   for ( ; it.current(); ++it )
   {
     if ( !it.current()->isDefault() )
-      it.current()->save( out );
+    {
+      QDomElement e = it.current()->save( doc );
+      if ( e.isNull() )
+	return QDomElement();
+      table.appendChild( e );
+    }
   }
 
   // Save all RowLayout objects.
@@ -3453,7 +3454,12 @@ if(!isHide())
   for ( ; rl.current(); ++rl )
   {
     if ( !rl.current()->isDefault() )
-      rl.current()->save( out );
+    {
+      QDomElement e = rl.current()->save( doc );
+      if ( e.isNull() )
+	return QDomElement();
+      table.appendChild( e );
+    }
   }
 
   // Save all ColumnLayout objects.
@@ -3461,18 +3467,24 @@ if(!isHide())
   for ( ; cl.current(); ++cl )
   {
     if ( !cl.current()->isDefault() )
-      cl.current()->save( out );
+    {
+      QDomElement e = cl.current()->save( doc );
+      if ( e.isNull() )
+	return QDomElement();
+      table.appendChild( e );
+    }
   }
 
   QListIterator<KSpreadChild> chl( m_lstChildren );
   for( ; chl.current(); ++chl )
   {
-    chl.current()->save( out );
+    QDomElement e = chl.current()->save( doc );
+    if ( e.isNull() )
+      return QDomElement();
+    table.appendChild( e );
   }
 
-  out << etag << "</TABLE>" << endl;
-
-  return true;
+  return table;
 }
 
 bool KSpreadTable::isLoading()
@@ -3480,77 +3492,55 @@ bool KSpreadTable::isLoading()
   return m_pDoc->isLoading();
 }
 
-bool KSpreadTable::load( KOMLParser& parser, vector<KOMLAttrib>& _attribs )
+bool KSpreadTable::loadXML( const QDomElement& table )
 {
-  // enableScrollBarUpdates( false );
+  m_strName = table.attribute( "name" );
+  if ( m_strName.isEmpty() )
+    return false;
 
-  vector<KOMLAttrib>::const_iterator it = _attribs.begin();
-  for( ; it != _attribs.end(); it++ )
+  QDomNode n = table.firstChild();
+  while( !n.isNull() )
   {
-    if ( (*it).m_strName == "name" )
-    {
-      m_strName = (*it).m_strValue.c_str();
-    }
-   else if( (*it).m_strName =="hide")
-    {
-      setHide(true);
-      cout <<"Hide";
-    }
-    else
-      cerr << "Unknown attrib 'TABLE:" << (*it).m_strName << "'" << endl;
-  }
-
-  string tag;
-  vector<KOMLAttrib> lst;
-  string name;
-
-  // CELL, ROW, COLUMN, OBJECT
-  while( parser.open( 0L, tag ) )
-  {
-    KOMLParser::parseTag( tag.c_str(), name, lst );
-
-    if ( name == "CELL" )
+    QDomElement e = n.toElement();
+    if ( !e.isNull() && e.tagName() == "cell" )
     {
       KSpreadCell *cell = new KSpreadCell( this, 0, 0 );
-      cell->load( parser, lst );
+      if ( !cell->load( e, 0, 0 ) )
+	return false;
       insertCell( cell );
     }
-    else if ( name == "ROW" )
+    else if ( !e.isNull() && e.tagName() == "row" )
     {
       RowLayout *rl = new RowLayout( this, 0 );
-      rl->load( parser, lst );
+      if ( !rl->load( e ) )
+	return false;
       insertRowLayout( rl );
     }
-    else if ( name == "COLUMN" )
+    else if ( !e.isNull() && e.tagName() == "column" )
     {
       ColumnLayout *cl = new ColumnLayout( this, 0 );
-      cl->load( parser, lst );
+      if ( !cl->load( e ) )
+	return false;
       insertColumnLayout( cl );
     }
-    else if ( name == "OBJECT" )
+    else if ( !e.isNull() && e.tagName() == "object" )
     {
       KSpreadChild *ch = new KSpreadChild( m_pDoc, this );
-      ch->load( parser, lst );
+      if ( !ch->load( e ) )
+	return false;
       insertChild( ch );
     }
-    else if ( name == "CHART" )
+    else if ( !e.isNull() && e.tagName() == "chart" )
     {
-	// ########## TODO
-	/* ChartChild *ch = new ChartChild( m_pDoc, this );
-      ch->load( parser, lst );
-      insertChild( ch ); */
+	// ############ Torben
+	/*
+      ChartChild *ch = new ChartChild( m_pDoc, this );
+      if ( !ch->load( e ) )
+	return false;
+	insertChild( ch ); */
     }
-    else
-      cerr << "Unknown tag '" << tag << "' in TABLE" << endl;
-
-    if ( !parser.close( tag ) )
-    {
-      cerr << "ERR: Closing Child" << endl;
-      return false;
-    }
+    n = n.nextSibling();
   }
-
-  // enableScrollBarUpdates( false );
 
   return true;
 }
@@ -3869,12 +3859,6 @@ KSpreadTable::~KSpreadTable()
 void KSpreadTable::enableScrollBarUpdates( bool _enable )
 {
   m_bScrollbarUpdates = _enable;
-}
-
-void KSpreadTable::initInterpreter()
-{
-  m_module = new KSModule( doc()->interpreter(), m_strName, 0 );
-  m_context.setScope( new KSScope( doc()->interpreter()->globalNamespace(), m_module ) );
 }
 
 DCOPObject* KSpreadTable::dcopObject()

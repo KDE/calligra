@@ -19,6 +19,9 @@
 
 #include <qprinter.h>
 #include <qmessagebox.h>
+#include <qdom.h>
+#include <qtextstream.h>
+#include <qbuffer.h>
 
 #include "kspread_doc.h"
 #include "kspread_shell.h"
@@ -29,14 +32,6 @@
 #include "kspread_factory.h"
 
 #include "KSpreadDocIface.h"
-
-#include <komlParser.h>
-#include <komlStreamFeed.h>
-#include <komlWriter.h>
-#include <komlMime.h>
-
-#include <fstream>
-#include <string>
 
 #include <unistd.h>
 #include <qmsgbox.h>
@@ -57,9 +52,31 @@
  *
  *****************************************************************************/
 
+QList<KSpreadDoc>* KSpreadDoc::s_docs = 0;
+int KSpreadDoc::s_docId = 0;
+
+QList<KSpreadDoc>& KSpreadDoc::documents()
+{
+    if ( s_docs == 0 )
+	s_docs = new QList<KSpreadDoc>;
+    return *s_docs;
+}
+
 KSpreadDoc::KSpreadDoc( QObject* parent, const char* name )
     : KoDocument( parent, name )
 {
+  if ( s_docs == 0 )
+      s_docs = new QList<KSpreadDoc>;
+  s_docs->append( this );
+
+  // Set a name if there is no name specified
+  if ( !name )
+  {
+      QString tmp( "Document%1" );
+      tmp = tmp.arg( s_docId++ );
+      setName( tmp.latin1() );
+  }
+
   m_iTableId = 1;
   m_dcop = 0;
   m_leftBorder = 20.0;
@@ -124,26 +141,82 @@ bool KSpreadDoc::hasToWriteMultipart()
   return m_pMap->hasToWriteMultipart();
 }
 
-bool KSpreadDoc::save( ostream& out, const char* /* format */ )
+bool KSpreadDoc::save( ostream& out, const char* )
 {
-  out << "<?xml version=\"1.0\"?>" << endl;
-  out << otag << "<DOC author=\"" << "Torben Weis" << "\" email=\"" << "weis@kde.org" << "\" editor=\"" << "KSpread"
-      << "\" mime=\"" << "application/x-kspread" << "\" >" << endl;
+  QDomDocument doc( "spreadsheet" );
+  doc.appendChild( doc.createProcessingInstruction( "xml", "version=\"1.0\" encoding=\"UTF-8\"" ) );
+  QDomElement spread = doc.createElement( "spreadsheet" );
+  spread.setAttribute( "author", "Torben Weis" );
+  spread.setAttribute( "email", "weis@kde.org" );
+  spread.setAttribute( "editor", "KSpread" );
+  spread.setAttribute( "mime", "application/x-kspread" );
+  doc.appendChild( spread );
+  QDomElement paper = doc.createElement( "paper" );
+  paper.setAttribute( "format", paperFormatString() );
+  paper.setAttribute( "orientation", orientationString() );
+  spread.appendChild( paper );
+  QDomElement borders = doc.createElement( "borders" );
+  borders.setAttribute( "left", leftBorder() );
+  borders.setAttribute( "top", topBorder() );
+  borders.setAttribute( "right", rightBorder() );
+  borders.setAttribute( "bottom", bottomBorder() );
+  paper.appendChild( borders );
+  QDomElement head = doc.createElement( "head" );
+  paper.appendChild( head );
+  if ( !headLeft().isEmpty() )
+  {
+    QDomElement left = doc.createElement( "left" );
+    head.appendChild( left );
+    left.appendChild( doc.createTextNode( headLeft() ) );
+  }
+  if ( !headMid().isEmpty() )
+  {
+    QDomElement center = doc.createElement( "center" );
+    head.appendChild( center );
+    center.appendChild( doc.createTextNode( headMid() ) );
+  }
+  if ( !headRight().isEmpty() )
+  {
+    QDomElement right = doc.createElement( "right" );
+    head.appendChild( right );
+    right.appendChild( doc.createTextNode( headRight() ) );
+  }
+  QDomElement foot = doc.createElement( "foot" );
+  paper.appendChild( foot );
+  if ( !footLeft().isEmpty() )
+  {
+    QDomElement left = doc.createElement( "left" );
+    foot.appendChild( left );
+    left.appendChild( doc.createTextNode( footLeft() ) );
+  }
+  if ( !footMid().isEmpty() )
+  {
+    QDomElement center = doc.createElement( "center" );
+    foot.appendChild( center );
+    center.appendChild( doc.createTextNode( footMid() ) );
+  }
+  if ( !footRight().isEmpty() )
+  {
+    QDomElement right = doc.createElement( "right" );
+    foot.appendChild( right );
+    right.appendChild( doc.createTextNode( footRight() ) );
+  }
 
-  // TODO: Save KScript code in some CDATA here
+  QDomElement e = m_pMap->save( doc );
+  if ( e.isNull() )
+    return false;
+  spread.appendChild( e );
 
-  out << otag << "<PAPER format=\"" << paperFormatString() << "\" orientation=\"" << orientationString() << "\">" << endl;
-  out << indent << "<PAPERBORDERS left=\"" << leftBorder() << "\" top=\"" << topBorder() << "\" right=\"" << rightBorder()
-      << " bottom=\"" << bottomBorder() << "\"/>" << endl;
-  out << indent << "<HEAD left=\"" << headLeft() << "\" center=\"" << headMid() << "\" right=\"" << headRight() << "\"/>" << endl;
-  out << indent << "<FOOT left=\"" << footLeft() << "\" center=\"" << footMid() << "\" right=\"" << footRight() << "\"/>" << endl;
-  out << etag << "</PAPER>" << endl;
+  // Save to buffer
+  QBuffer buffer;
+  buffer.open( IO_WriteOnly );
+  QTextStream str( &buffer );
+  str << doc;
+  buffer.close();
 
-  m_pMap->save( out );
+  out.write( buffer.buffer().data(), buffer.buffer().size() );
 
-  out << etag << "</DOC>" << endl;
-
-  setModified( FALSE );
+  setModified( false );
 
   return true;
 }
@@ -153,158 +226,111 @@ bool KSpreadDoc::loadChildren( KoStore* _store )
     return m_pMap->loadChildren( _store );
 }
 
-bool KSpreadDoc::loadXML( KOMLParser& parser, KoStore* )
+bool KSpreadDoc::load( istream& in, KoStore* store )
 {
-  cerr << "------------------------ LOADING --------------------" << endl;
+    QBuffer buffer;
+    buffer.open( IO_WriteOnly );
 
-  m_bLoading = true;
+    char buf[ 4096 ];
+    int anz;
+    do
+    {
+	in.read( buf, 4096 );
+	anz = in.gcount();
+	buffer.writeBlock( buf, anz );
+    } while( anz > 0 );
 
-  string tag;
-  vector<KOMLAttrib> lst;
-  string name;
+    buffer.close();
 
-  // DOC
-  if ( !parser.open( "DOC", tag ) )
+    buffer.open( IO_ReadOnly );
+    QDomDocument doc( &buffer );
+
+    bool b = loadXML( doc, store );
+
+    buffer.close();
+
+    return b;
+}
+
+bool KSpreadDoc::loadXML( const QDomDocument& doc, KoStore* )
+{
+  m_bLoading = TRUE;
+
+  // <spreadsheet>
+  if ( doc.doctype().name() != "spreadsheet" )
   {
-    cerr << "Missing DOC" << endl;
     m_bLoading = false;
     return false;
   }
+  QDomElement spread = doc.documentElement();
 
-  KOMLParser::parseTag( tag.c_str(), name, lst );
-  vector<KOMLAttrib>::const_iterator it = lst.begin();
-  for( ; it != lst.end(); it++ )
+  if ( spread.attribute( "mime" ) != "application/x-kspread" )
+    return false;
+
+  // <paper>
+  QDomElement paper = spread.namedItem( "paper" ).toElement();
+  if ( !paper.isNull() )
   {
-    if ( (*it).m_strName == "mime" )
+    QString format = paper.attribute( "format" );
+    QString orientation = paper.attribute( "orientation" );
+
+    // <borders>
+    QDomElement borders = paper.namedItem( "borders" ).toElement();
+    if ( borders.isNull() )
+      return false;
+    bool ok;
+    float left = borders.attribute( "left" ).toFloat( &ok );
+    if ( !ok ) { m_bLoading = false; return false; }
+    float right = borders.attribute( "right" ).toFloat( &ok );
+    if ( !ok ) { m_bLoading = false; return false; }
+    float top = borders.attribute( "top" ).toFloat( &ok );
+    if ( !ok ) { m_bLoading = false; return false; }
+    float bottom = borders.attribute( "bottom" ).toFloat( &ok );
+    if ( !ok ) { m_bLoading = false; return false; }
+
+    setPaperLayout( left, top, right, bottom, format, orientation );
+
+    QString hleft, hright, hcenter;
+    QString fleft, fright, fcenter;
+    // <head>
+    QDomElement head = paper.namedItem( "head" ).toElement();
+    if ( !head.isNull() )
     {
-      if ( (*it).m_strValue != "application/x-kspread" )
-      {
-	cerr << "Unknown mime type " << (*it).m_strValue << endl;
-	m_bLoading = false;
-	return false;
-      }
+      QDomElement left = head.namedItem( "left" ).toElement();
+      if ( !left.isNull() )
+	hleft = left.text();
+      QDomElement center = head.namedItem( "center" ).toElement();
+      if ( !center.isNull() )
+      hcenter = center.text();
+      QDomElement right = head.namedItem( "right" ).toElement();
+      if ( !right.isNull() )
+	hright = right.text();
     }
+    // <foot>
+    QDomElement foot = paper.namedItem( "foot" ).toElement();
+    if ( !foot.isNull() )
+    {
+      QDomElement left = foot.namedItem( "left" ).toElement();
+      if ( !left.isNull() )
+	fleft = left.text();
+      QDomElement center = foot.namedItem( "center" ).toElement();
+      if ( !center.isNull() )
+	fcenter = center.text();
+      QDomElement right = foot.namedItem( "right" ).toElement();
+      if ( !right.isNull() )
+	fright = right.text();
+    }
+    setHeadFootLine( hleft, hcenter, hright, fleft, fcenter, fright );
   }
 
-  // PAPER, MAP
-  while( parser.open( 0L, tag ) )
-  {
-    KOMLParser::parseTag( tag.c_str(), name, lst );
-
-    if ( name == "PAPER" )
+  // <map>
+  QDomElement mymap = spread.namedItem( "map" ).toElement();
+  if ( !mymap.isNull() )
+    if ( !m_pMap->loadXML( mymap ) )
     {
-      KOMLParser::parseTag( tag.c_str(), name, lst );
-      vector<KOMLAttrib>::const_iterator it = lst.begin();
-      for( ; it != lst.end(); it++ )
-      {
-	if ( (*it).m_strName == "format" )
-	{
-	}
-	else if ( (*it).m_strName == "orientation" )
-	{
-	}
-	else
-	  cerr << "Unknown attrib PAPER:'" << (*it).m_strName << "'" << endl;
-      }
-
-      // PAPERBORDERS, HEAD, FOOT
-      while( parser.open( 0L, tag ) )
-      {
-	KOMLParser::parseTag( tag.c_str(), name, lst );
-
-	if ( name == "PAPERBORDERS" )
-	{
-	  KOMLParser::parseTag( tag.c_str(), name, lst );
-	  vector<KOMLAttrib>::const_iterator it = lst.begin();
-	  for( ; it != lst.end(); it++ )
-	  {
-	    if ( (*it).m_strName == "left" )
-	    {
-	    }
-	    else if ( (*it).m_strName == "top" )
-	    {
-	    }
-	    else if ( (*it).m_strName == "right" )
-	    {
-	    }
-	    else if ( (*it).m_strName == "bottom" )
-	    {
-	    }
-	    else
-	      cerr << "Unknown attrib 'PAPERBORDERS:" << (*it).m_strName << "'" << endl;
-	  }
-	}
-      	else if ( name == "HEAD" )
-	{
-	  KOMLParser::parseTag( tag.c_str(), name, lst );
-	  vector<KOMLAttrib>::const_iterator it = lst.begin();
-	  for( ; it != lst.end(); it++ )
-	  {
-	    if ( (*it).m_strName == "left" )
-	    {
-	    }
-	    else if ( (*it).m_strName == "center" )
-	    {
-	    }
-	    else if ( (*it).m_strName == "right" )
-	    {
-	    }
-	    else
-	      cerr << "Unknown attrib 'HEAD:" << (*it).m_strName << "'" << endl;
-	  }
-	}
-      	else if ( name == "FOOT" )
-	{
-	  KOMLParser::parseTag( tag.c_str(), name, lst );
-	  vector<KOMLAttrib>::const_iterator it = lst.begin();
-	  for( ; it != lst.end(); it++ )
-	  {
-	    if ( (*it).m_strName == "left" )
-	    {
-	    }
-	    else if ( (*it).m_strName == "center" )
-	    {
-	    }
-	    else if ( (*it).m_strName == "right" )
-	    {
-	    }
-	    else
-	      cerr << "Unknown attrib 'FOOT:" << (*it).m_strName << "'" << endl;
-	  }
-	}
-	else
-	  cerr << "Unknown tag '" << tag << "' in PAPER" << endl;
-	
-	if ( !parser.close( tag ) )
-        {
-	  cerr << "ERR: Closing Child" << endl;
-	  m_bLoading = false;
-	  return false;
-	}
-      }
-    }
-    else if ( name == "MAP" )
-    {
-      if ( !m_pMap->load( parser, lst ) )
-      {
-	m_bLoading = false;
-	return false;
-      }
-    }
-    else
-      cerr << "Unknown tag '" << tag << "' in TABLE" << endl;
-
-    if ( !parser.close( tag ) )
-    {
-      cerr << "ERR: Closing Child" << endl;
       m_bLoading = false;
       return false;
     }
-  }
-
-  parser.close( tag );
-
-  cerr << "------------------------ LOADING DONE --------------------" << endl;
 
   return true;
 }
@@ -570,21 +596,12 @@ void KSpreadDoc::initInterpreter()
 {
   m_pInterpreter = new KSpreadInterpreter( this );
 
-  QString koffice_global_path = locate( "data", "/koffice/scripts" );
-  m_pInterpreter->addSearchPath( koffice_global_path );
+  // Create the module which is used to evaluate all formulas
+  m_module = m_pInterpreter->module( "kspread" );
+  m_context.setScope( new KSScope( m_pInterpreter->globalNamespace(), m_module ) );
 
-  QString global_path = locate( "data", "/koffice/scripts" );
-  m_pInterpreter->addSearchPath( global_path );
-
-  QString koffice_local_path = locate( "data", "/share/apps/kspread/scripts" );
-  m_pInterpreter->addSearchPath( koffice_local_path );
-
-  QString local_path = locate( "data", "/share/apps/kspread/scripts" );
-  m_pInterpreter->addSearchPath( local_path );
-
-  // Get all modules which contain kspread extensions
-  m_kscriptModules += findScripts( global_path );
-  m_kscriptModules += findScripts( local_path );
+  // Find all scripts
+  m_kscriptModules = KSpreadFactory::global()->dirs()->findAllResources( "scripts", "*.ks", TRUE );
 
   // Remove dupes
   QMap<QString,QString> m;
@@ -601,50 +618,33 @@ void KSpreadDoc::initInterpreter()
     }
   }
 
-  // Load the extension scripts
+  // Load and execute the scripts
   QMap<QString,QString>::Iterator mip = m.begin();
   for( ; mip != m.end(); ++mip )
   {
+    qDebug("SCRIPT=%s, %s", mip.key().latin1(), mip.data().latin1() );
     KSContext context;
     if ( !m_pInterpreter->runModule( context, mip.key(), mip.data() ) )
       QMessageBox::critical( 0L, i18n("KScript error"), context.exception()->toString(), i18n("OK") );
   }
 }
 
-QStringList KSpreadDoc::findScripts( const QString& path )
-{
-  QStringList lst;
-
-  DIR *dp = 0L;
-  struct dirent *ep;
-
-  dp = opendir( path );
-  if ( dp == 0L )
-    return lst;
-
-  while ( ( ep = readdir( dp ) ) != 0L )
-  {
-    QString f = path;
-    f += "/";
-    f += ep->d_name;
-    struct stat buff;
-    if ( f != "." && f != ".." && ( stat( f, &buff ) == 0 ) && S_ISREG( buff.st_mode ) &&
-	 f[ f.length() - 1 ] != '%' && f[ f.length() - 1 ] != '~' )
-      lst.append( f );
-  }
-
-  closedir( dp );
-
-  return lst;
-}
-
 void KSpreadDoc::destroyInterpreter()
 {
-  m_kscriptMap.clear();
+    // ######## Torben: Not needed any more
+    m_kscriptMap.clear();
 
-  // TODO
+    m_context.setValue( 0 );
+    m_context.setScope( 0 );
+    m_context.setException( 0 );
+
+    m_module = 0;
+
+    m_pInterpreter = 0;
 }
 
+// ################# Torben: I think this and associated
+// member variables are not needed.
 KSValue* KSpreadDoc::lookupKeyword( const QString& keyword )
 {
   QMap<QString,KSValue::Ptr>::Iterator it = m_kscriptMap.find( keyword );
@@ -670,6 +670,7 @@ KSValue* KSpreadDoc::lookupKeyword( const QString& keyword )
   return 0;
 }
 
+// ########### Torben: I think that is not needed any more
 KSValue* KSpreadDoc::lookupClass( const QString& name )
 {
   // Is the module loaded ?

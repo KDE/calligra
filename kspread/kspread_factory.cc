@@ -1,6 +1,8 @@
 #include "kspread_factory.h"
 #include "kspread_doc.h"
 
+#include "KSpreadAppIface.h"
+
 #include <kinstance.h>
 #include <kstddirs.h>
 
@@ -20,6 +22,10 @@ KSpreadFactory::KSpreadFactory( QObject* parent, const char* name )
     s_global = new KInstance( "kspread" );
     s_global->dirs()->addResourceType( "toolbar",
 				       KStandardDirs::kde_default("data") + "koffice/toolbar/");
+    s_global->dirs()->addResourceType( "scripts", KStandardDirs::kde_default("data") + "koffice/scripts/");
+    s_global->dirs()->addResourceType( "scripts", KStandardDirs::kde_default("data") + "kspread/scripts/");
+
+    (void)new KSpreadAppIface;
 }
 
 KSpreadFactory::~KSpreadFactory()

@@ -27,6 +27,8 @@ class KSpreadCanvas;
 class KFormula;
 
 class QSimpleRichText;
+class QDomElement;
+class QDomDocument;
 
 class KSParseNode;
 
@@ -104,10 +106,11 @@ public:
     KSpreadCell( KSpreadTable *_table, int _column, int _row, const char* _text = 0L );
     ~KSpreadCell();
 
-    virtual bool save( ostream&, int _x_offset = 0, int _y_offset = 0,QString name=0  );
+    virtual QDomElement save( QDomDocument& doc, int _x_offset = 0, int _y_offset = 0 );
 
-    virtual bool load( KOMLParser&, vector<KOMLAttrib>&, int _xshift, int _yshift,PasteMode sp=ALL,QString name=0,Operation=Any);
-    virtual bool load( KOMLParser& _parser, vector<KOMLAttrib>& _attrib ) { return load( _parser, _attrib, 0, 0 ); }
+    // virtual bool load( KOMLParser&, vector<KOMLAttrib>&, int _xshift, int _yshift,PasteMode sp=ALL,QString name=0,Operation=Any);
+    bool load( const QDomElement& cell, int _xshift, int _yshift );
+
     /**
      * Copyies the layout from the cell at the position (_column|_row).
      */
@@ -250,7 +253,7 @@ public:
     void setMultiRow( bool _b ) { m_bMultiRow = _b; m_bLayoutDirtyFlag = TRUE; }
 
     void setStyle( Style _s );
-    void setAction( const char* _action ) { m_strAction = _action; }
+    void setAction( const QString& _action ) { m_strAction = _action; }
 
     /**
      * Since the GUI supports zooming, you can get the value zoomed
@@ -286,10 +289,10 @@ public:
      */
     const QColor& bgColor( int _col, int _row );
 
-    const QColor& bgColor() { return m_bgColor; }
+    const QColor& bgColor() const { return m_bgColor; }
 
-    Style style() { return m_style; }
-    QString action() { return m_strAction; }
+    Style style() const { return m_style; }
+    QString action() const { return m_strAction; }
 
     /**
      * @param _col the column this cell is assumed to be in

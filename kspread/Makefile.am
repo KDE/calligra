@@ -28,7 +28,8 @@ libkspread_la_SOURCES = kspread_canvas.cc \
 	kspread_events.cc  kspread_dlg_assistant2.cc kspread_dlg_show.cc \
 	kspread_dlg_insert.cc KSpreadDocIface_skel.cpp KSpreadMapIface_skel.cpp \
 	KSpreadTableIface_skel.cpp KSpreadDocIface.cc KSpreadMapIface.cc \
-	KSpreadTableIface.cc KSpreadCellIface.cc KSpreadCellIface_skel.cpp
+	KSpreadTableIface.cc KSpreadCellIface.cc KSpreadCellIface_skel.cpp \
+	KSpreadAppIface.cc KSpreadAppIface_skel.cpp
 
 kspread_SOURCES = main.cc
 
@@ -45,7 +46,8 @@ noinst_HEADERS = kspread_shell.h kspread_doc.h \
 	kspread_dlg_resize.h kspread_factory.h kspread_handler.h \
 	kspread_events.h kspread_global.h  \
 	kspread_dlg_assistant2.h kspread_dlg_show.h kspread_dlg_insert.h \
-	KSpreadCellIface.h KSpreadMapIface.h KSpreadTableIface.h KSpreadDocIface.h
+	KSpreadCellIface.h KSpreadMapIface.h KSpreadTableIface.h KSpreadDocIface.h \
+	KSpreadAppIface.h
 
 libkspread_la_METASOURCES = kspread_shell.moc kspread_doc.moc \
 		  	    kspread_view.moc kspread_tabbar.moc kspread_canvas.moc \
@@ -66,7 +68,7 @@ kdemimedir = $(kde_mimedir)/application
 rcdir = $(kde_datadir)/kspread
 rc_DATA = kspread.rc kspread_shell.rc
 
-SUBDIRS =  . plugins pics dtd toolbar
+SUBDIRS =  . plugins pics dtd toolbar scripts
 
 KSpreadDocIface.kidl: KSpreadDocIface.h
 	( dcopidl KSpreadDocIface.h >KSpreadDocIface.kidl; dcopidl2cpp --no-stub KSpreadDocIface.kidl )
@@ -80,6 +82,9 @@ KSpreadMapIface_skel.cpp: KSpreadMapIface.kidl
 KSpreadCellIface.kidl: KSpreadCellIface.h
 	( dcopidl KSpreadCellIface.h >KSpreadCellIface.kidl; dcopidl2cpp --no-stub KSpreadCellIface.kidl )
 KSpreadCellIface_skel.cpp: KSpreadCellIface.kidl
+KSpreadAppIface.kidl: KSpreadAppIface.h
+	( kidl KSpreadAppIface.h >KSpreadAppIface.kidl; kidl2cpp --no-stub KSpreadAppIface.kidl )
+KSpreadAppIface_skel.cpp: KSpreadAppIface.kidl
 
 parser:
 	flex lex.l
