@@ -228,30 +228,27 @@ KSpreadSortDlg::~KSpreadSortDlg()
 
 void KSpreadSortDlg::init()
 {
-  QString month;
-  month += i18n("January") + ", ";
-  month += i18n("February") + ", ";
-  month += i18n("March") + ", ";
-  month += i18n("April") + ", ";
-  month += i18n("May") + ", ";
-  month += i18n("June") + ", ";
-  month += i18n("July") + ", ";
-  month += i18n("August") + ", ";
-  month += i18n("September") + ", ";
-  month += i18n("October") + ", ";
-  month += i18n("November") + ", ";
-  month += i18n("December");
-  QStringList lst;
-  lst.append(month);
+    QStringList lst;
+    lst<<i18n("January");
+    lst<<i18n("February");
+    lst<<i18n("March");
+    lst<<i18n("April");
+    lst<<i18n("May");
+    lst<<i18n("June");
+    lst<<i18n("July");
+    lst<<i18n("August");
+    lst<<i18n("September");
+    lst<<i18n("October");
+    lst<<i18n("November");
+    lst<<i18n("December");
 
-  QString day( i18n("Monday") + ", " );
-  day += i18n("Tuesday") + ", ";
-  day += i18n("Wednesday") + ", ";
-  day += i18n("Thursday") + ", ";
-  day += i18n("Friday") + ", ";
-  day += i18n("Saturday") + ", ";
-  day += i18n("Sunday");
-  lst.append(day);
+    lst<<i18n("Monday");
+    lst<<i18n("Tuesday");
+    lst<<i18n("Wednesday");
+    lst<<i18n("Thursday");
+    lst<<i18n("Friday");
+    lst<<i18n("Saturday");
+    lst<<i18n("Sunday");
 
   KConfig * config = KSpreadFactory::global()->config();
   config->setGroup( "Parameters" );
@@ -527,12 +524,8 @@ void KSpreadSortDlg::slotOk()
     kdDebug(36001) << "Err in radiobutton" << endl;
   }
 
-  if ( firstKey )
-  {
-    delete firstKey;
-    firstKey = 0L;
-  }
-
+  delete firstKey;
+  firstKey = 0L;
   accept();
 }
 
