@@ -34,7 +34,9 @@ class QDomElement;
 // Always add new types at the _end_ of this list (but before VT_ALL of course).
 // (and update KWView::setupActions)
 enum VariableType { VT_NONE = -1,
-                    VT_DATE = 0, VT_TIME = 2, VT_PGNUM = 4,
+                    VT_DATE = 0, VT_DATE_VAR_KWORD10 = 1,
+                    VT_TIME = 2, VT_TIME_VAR_KWORD10 = 3,
+                    VT_PGNUM = 4,
                     VT_CUSTOM = 6, VT_MAILMERGE = 7, VT_FIELD = 8, VT_LINK = 9,
                     VT_NOTE = 10, VT_FOOTNOTE = 11,
                     VT_ALL=256 };

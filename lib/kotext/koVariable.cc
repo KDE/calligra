@@ -545,6 +545,7 @@ KoVariable * KoVariableCollection::createVariable( int type, int subtype, KoVari
         // Get the default format for this variable (this method is only called in the interactive case, not when loading)
         switch ( type ) {
         case VT_DATE:
+        case VT_DATE_VAR_KWORD10:  // compatibility with kword 1.0
         {
             //varFormat = coll->format( "DATE" );
             KDialogBase* dialog=new KDialogBase(0, 0, true, i18n("Date Format"), KDialogBase::Ok|KDialogBase::Cancel);
@@ -617,7 +618,9 @@ KoVariable * KoVariableCollection::createVariable( int type, int subtype, KoVari
                 + string );
             break;
         }
-        case VT_TIME: {
+        case VT_TIME: 
+        case VT_TIME_VAR_KWORD10:  // compatibility with kword 1.0
+        {
             KDialogBase* dialog=new KDialogBase(0, 0, true, i18n("Time Format"), KDialogBase::Ok|KDialogBase::Cancel);
             TimeFormatWidget* widget=new TimeFormatWidget(dialog);
             dialog->setMainWidget(widget);
@@ -704,9 +707,11 @@ KoVariable * KoVariableCollection::createVariable( int type, int subtype, KoVari
     KoVariable * var = 0L;
     switch ( type ) {
         case VT_DATE:
+        case VT_DATE_VAR_KWORD10:  // compatibility with kword 1.0
             var = new KoDateVariable( textdoc, subtype, varFormat,this );
             break;
         case VT_TIME:
+        case VT_TIME_VAR_KWORD10:  // compatibility with kword 1.0
             var = new KoTimeVariable( textdoc, subtype, varFormat, this );
             break;
         case VT_PGNUM:
