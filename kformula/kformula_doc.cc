@@ -119,46 +119,6 @@ void KFormulaDoc::documentRestored()
 }
 
 
-void KFormulaDoc::enlarge()
-{
-    kdDebug(39001) <<"enlarge()\n";
-}
-
-void KFormulaDoc::reduce()
-{
-    kdDebug(39001) <<"reduce()\n";
-}
-
-void KFormulaDoc::enlargeRecur()
-{
-    kdDebug(39001) <<"enlargeRecur()\n";
-}
-
-void KFormulaDoc::reduceRecur()
-{
-    kdDebug(39001) <<"redureRecur()\n";
-}
-
-void KFormulaDoc::enlargeAll()
-{
-    kdDebug(39001) <<"enlargeAll()\n";
-}
-
-void KFormulaDoc::reduceAll()
-{
-    kdDebug(39001) <<"reduceAll()\n";
-}
-
-void KFormulaDoc::pro()
-{
-    kdDebug(39001) <<"pro()\n";
-}
-
-void KFormulaDoc::dele()
-{
-    kdDebug(39001) <<"delete()\n";
-}
-
 bool KFormulaDoc::initDoc()
 {
     // If nothing is loaded, do initialize here

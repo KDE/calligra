@@ -5,8 +5,7 @@ KDE_CXXFLAGS = $(USE_RTTI)
 ## The part
 kde_module_LTLIBRARIES = libkformulapart.la
 libkformulapart_la_SOURCES = kformula_doc.cc \
-	kformula_view.cc kformula_factory.cc \
-	matrixwidget.cc
+	kformula_view.cc kformula_factory.cc kformulawidget.cc 
 libkformulapart_la_LDFLAGS = $(KDE_PLUGIN)
 libkformulapart_la_LIBADD = ../lib/kofficeui/libkofficeui.la ../lib/kformula/libkformula.la
 libkformulapart_la_METASOURCES = AUTO

@@ -63,17 +63,6 @@ public:
     KFormulaContainer* getFormula() const { return formula; }
     KFormulaDocument* getDocument() const { return document; }
 
-public slots:
-
-    void enlarge();
-    void reduce();
-    void enlargeRecur();
-    void reduceRecur();
-    void enlargeAll();
-    void reduceAll();
-    void pro();
-    void dele();
-
 protected slots:
 
     void commandExecuted();
