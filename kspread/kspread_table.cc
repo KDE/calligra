@@ -7131,9 +7131,22 @@ void KSpreadTable::updateNewPageListX( int _col )
 {
     if ( _col < m_lnewPageListX.last() )
     {
-        QValueList<int>::iterator it = m_lnewPageListX.find( _col );
+        //Find first page
+        QValueList<int>::iterator it;
+        it = m_lnewPageListX.find( _col );
+        while ( ( it == m_lnewPageListX.end() ) && _col > m_printRange.left() )
+        {
+            _col--;
+            it = m_lnewPageListX.find( _col );
+        }
+
+        //Remove later pages
         while ( it != m_lnewPageListX.end() )
             it = m_lnewPageListX.remove( it );
+
+        //Add default page when list is now empty
+        if ( m_lnewPageListX.empty() )
+            m_lnewPageListX.append( m_printRange.left() );
     }
 }
 
@@ -7141,9 +7154,22 @@ void KSpreadTable::updateNewPageListY( int _row )
 {
     if ( _row < m_lnewPageListY.last() )
     {
-        QValueList<int>::iterator it = m_lnewPageListY.find( _row );
+        //Find first page
+        QValueList<int>::iterator it;
+        it = m_lnewPageListY.find( _row );
+        while ( ( it == m_lnewPageListY.end() ) && _row > m_printRange.top() )
+        {
+            _row--;
+            it = m_lnewPageListY.find( _row );
+        }
+
+        //Remove later pages
         while ( it != m_lnewPageListY.end() )
             it = m_lnewPageListY.remove( it );
+
+        //Add default page when list is now empty
+        if ( m_lnewPageListY.empty() )
+            m_lnewPageListY.append( m_printRange.top() );
     }
 }
 
@@ -8108,6 +8134,12 @@ void KSpreadTable::setPrintRange( QRect _printRange )
   if ( m_printRange == _printRange )
     return;
 
+  //Refresh calculation of stored page breaks, the lower one of old and new
+  if ( m_printRange.left() != _printRange.left() )
+    updateNewPageListX( QMIN( m_printRange.left(), _printRange.left() ) );
+  if ( m_printRange.top() != _printRange.top() )
+    updateNewPageListY( QMIN( m_printRange.top(), _printRange.top() ) );
+
   m_printRange = _printRange;
   m_pDoc->setModified( true );
 
@@ -8141,6 +8173,33 @@ void KSpreadTable::setPrintFormulaIndicator( bool _printFormulaIndicator )
   m_pDoc->setModified( true );
 }
 
+
+void KSpreadTable::updatePrintRepeatColumnsWidth()
+{
+    m_dPrintRepeatColumnsWidth = 0.0;
+    if ( m_printRepeatColumns.first != 0 )
+    {
+        for ( int i = m_printRepeatColumns.first; i <= m_printRepeatColumns.second; i++)
+        {
+            m_dPrintRepeatColumnsWidth += columnLayout( i )->mmWidth();
+        }
+    }
+}
+
+
+void KSpreadTable::updatePrintRepeatRowsHeight()
+{
+    m_dPrintRepeatRowsHeight += 0.0;
+    if ( m_printRepeatRows.first != 0 )
+    {
+        for ( int i = m_printRepeatRows.first; i <= m_printRepeatRows.second; i++)
+        {
+            m_dPrintRepeatRowsHeight += rowLayout( i )->mmHeight();
+        }
+    }
+}
+
+
 void KSpreadTable::setPrintRepeatColumns( QPair<int, int> _printRepeatColumns )
 {
     //Bring arguments in order
@@ -8155,17 +8214,13 @@ void KSpreadTable::setPrintRepeatColumns( QPair<int, int> _printRepeatColumns )
     if ( m_printRepeatColumns == _printRepeatColumns )
         return;
 
+    //Refresh calculation of stored page breaks, the lower one of old and new
+    updateNewPageListX( QMIN( m_printRepeatColumns.first, _printRepeatColumns.first ) );
+
     m_printRepeatColumns = _printRepeatColumns;
 
     //Recalcualte the space needed for the repeated columns
-    m_dPrintRepeatColumnsWidth = 0.0;
-    if ( m_printRepeatColumns.first != 0 )
-    {
-        for ( int i = m_printRepeatColumns.first; i <= m_printRepeatColumns.second; i++)
-        {
-            m_dPrintRepeatColumnsWidth += columnLayout( i )->mmWidth();
-        }
-    }
+    updatePrintRepeatColumnsWidth();
 
     //Refresh view, if page borders are shown
     if ( m_bShowPageBorders ) emit sig_updateView( this );
@@ -8186,17 +8241,13 @@ void KSpreadTable::setPrintRepeatRows( QPair<int, int> _printRepeatRows )
     if ( m_printRepeatRows == _printRepeatRows )
         return;
 
+    //Refresh calculation of stored page breaks, the lower one of old and new
+    updateNewPageListY( QMIN( m_printRepeatRows.first, _printRepeatRows.first ) );
+
     m_printRepeatRows = _printRepeatRows;
   
     //Recalcualte the space needed for the repeated rows
-    m_dPrintRepeatRowsHeight += 0.0;
-    if ( m_printRepeatRows.first != 0 )
-    {
-        for ( int i = m_printRepeatRows.first; i <= m_printRepeatRows.second; i++)
-        {
-            m_dPrintRepeatRowsHeight += rowLayout( i )->mmHeight();
-        }
-    }
+    updatePrintRepeatRowsHeight();
 
     //Refresh view, if page borders are shown
     if ( m_bShowPageBorders ) emit sig_updateView( this );

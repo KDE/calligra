@@ -1525,6 +1525,17 @@ public:
      */
     void setPrintFormulaIndicator( bool _printFormulaIndicator );
 
+    /**
+     * Updates m_dPrintRepeatColumnsWidth according to the new settings
+     */
+    void updatePrintRepeatColumnsWidth();
+
+    /**
+     * Updates m_dPrintRepeatColumnsWidth according to the new settings
+     */
+    void updatePrintRepeatRowsHeight();
+
+
 public slots:
     /**
      * Open a dialog for the "Page Layout".

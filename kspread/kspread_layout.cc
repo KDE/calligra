@@ -1727,35 +1727,12 @@ DCOPObject* RowLayout::dcopObject()
 
 void RowLayout::setMMHeight( double _h )
 {
-  UPDATE_BEGIN;
-
-  m_fHeight = MM_TO_POINT ( _h );
-
-  UPDATE_END;
+  setDblHeight( MM_TO_POINT ( _h ) );
 }
+
 void RowLayout::setHeight( int _h, KSpreadCanvas *_canvas )
 {
-  KSpreadTable *_table;
-  if ( _canvas )
-      _table = _canvas->activeTable();
-  else
-      _table = m_pTable;
-
-  UPDATE_BEGIN;
-
-  // Lower maximum size by old height
-  _table->adjustSizeMaxY ( - height() );
-
-  if ( _canvas )
-    m_fHeight = ( _h / _canvas->zoom() );
-  else
-    m_fHeight = (double) _h;
-
-  // Rise maximum size by new height
-  _table->adjustSizeMaxY ( height() );
-  _table->updateNewPageListY ( row() );
-
-  UPDATE_END;
+  setDblHeight( (double)_h, _canvas );
 }
 
 void RowLayout::setDblHeight( double _h, KSpreadCanvas *_canvas )
@@ -1778,19 +1755,15 @@ void RowLayout::setDblHeight( double _h, KSpreadCanvas *_canvas )
 
   // Rise maximum size by new height
   _table->adjustSizeMaxY ( height() );
+  _table->updatePrintRepeatRowsHeight();
+  _table->updateNewPageListY ( row() );
 
   UPDATE_END;
 }
 
 int RowLayout::height( KSpreadCanvas *_canvas )
 {
-  if( m_bHide )
-    return 0;
-
-  if ( _canvas )
-    return (int) ( _canvas->zoom() * m_fHeight );
-  else
-    return (int) m_fHeight;
+  return (int) dblHeight( _canvas );
 }
 
 double RowLayout::dblHeight( KSpreadCanvas *_canvas )
@@ -1806,10 +1779,7 @@ double RowLayout::dblHeight( KSpreadCanvas *_canvas )
 
 double RowLayout::mmHeight()
 {
-  if ( m_bHide )
-    return 0.0;
-  else
-    return POINT_TO_MM ( m_fHeight );
+  return POINT_TO_MM ( dblHeight() );
 }
 
 QDomElement RowLayout::save( QDomDocument& doc, int yshift )
@@ -1993,36 +1963,12 @@ DCOPObject* ColumnLayout::dcopObject()
 
 void ColumnLayout::setMMWidth( double _w )
 {
-  UPDATE_BEGIN;
-
-  m_fWidth = MM_TO_POINT ( _w );
-
-  UPDATE_END;
+  setDblWidth( MM_TO_POINT ( _w ) );
 }
 
 void ColumnLayout::setWidth( int _w, KSpreadCanvas *_canvas )
 {
-  KSpreadTable *_table;
-  if ( _canvas )
-      _table = _canvas->activeTable();
-  else
-      _table = m_pTable;
-
-  UPDATE_BEGIN;
-
-  // Lower maximum size by old width
-  _table->adjustSizeMaxX ( - width() );
-
-  if ( _canvas )
-      m_fWidth = ( _w / _canvas->zoom() );
-  else
-      m_fWidth = (double) _w;
-
-  // Rise maximum size by new width
-  _table->adjustSizeMaxX ( width() );
-  _table->updateNewPageListX ( column() );
-
-  UPDATE_END;
+  setDblWidth( (double)_w, _canvas );
 }
 
 void ColumnLayout::setDblWidth( double _w, KSpreadCanvas *_canvas )
@@ -2045,19 +1991,15 @@ void ColumnLayout::setDblWidth( double _w, KSpreadCanvas *_canvas )
 
   // Rise maximum size by new width
   _table->adjustSizeMaxX ( width() );
+  _table->updatePrintRepeatColumnsWidth();
+  _table->updateNewPageListX ( column() );
 
   UPDATE_END;
 }
 
 int ColumnLayout::width( KSpreadCanvas *_canvas )
 {
-  if( m_bHide )
-    return 0;
-
-  if ( _canvas )
-    return (int) ( _canvas->zoom() * m_fWidth );
-  else
-    return (int) m_fWidth;
+  return (int) dblWidth( _canvas );
 }
 
 double ColumnLayout::dblWidth( KSpreadCanvas *_canvas )
@@ -2073,10 +2015,7 @@ double ColumnLayout::dblWidth( KSpreadCanvas *_canvas )
 
 double ColumnLayout::mmWidth()
 {
-  if ( m_bHide )
-    return 0.0;
-  else
-    return POINT_TO_MM( m_fWidth );
+  return POINT_TO_MM( dblWidth() );
 }
 
 
