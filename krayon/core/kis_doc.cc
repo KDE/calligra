@@ -20,15 +20,6 @@
  *  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  */
 
-
-#include <string.h>
-#include <stdio.h>
-
-#include <iostream.h>
-
-#include <sys/time.h>
-#include <unistd.h>
-
 #include <qpainter.h>
 #include <qwidget.h>
 #include <qregexp.h>
@@ -38,6 +29,7 @@
 #include <qbuffer.h>
 #include <qimage.h>
 
+#include <kcommand.h>
 #include <kstandarddirs.h>
 #include <kglobal.h>
 #include <kmimetype.h>
@@ -62,7 +54,6 @@
 #include "kis_channel.h"
 #include "kis_selection.h"
 #include "kis_framebuffer.h"
-#include "koUndo.h"
 #include "kis_timer.h"
 
 #define KIS_DEBUG(AREA, CMD)
