@@ -112,6 +112,7 @@ class KFORMEDITOR_EXPORT Container : public QObject
 		   following their position (such as HorWidgetList or VerWidgetList).
 		  */
 		void		createBoxLayout(WidgetList *list);
+		void		createGridLayout();
 
 	private:
 		// the watched container and it's toplevel one...

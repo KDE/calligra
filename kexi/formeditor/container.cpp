@@ -22,11 +22,14 @@
 #include <qpixmap.h>
 #include <qrect.h>
 #include <qcursor.h>
+#include <qvaluevector.h>
 #include <qlayout.h>
 
 #include <kdebug.h>
 #include <klocale.h>
 #include <kpopupmenu.h>
+
+#include <cstdlib> // for abs()
 
 #include "container.h"
 #include "widgetlibrary.h"
@@ -399,10 +402,7 @@ Container::setLayout(LayoutType type)
 		}
 		case Grid:
 		{
-		//	QGridLayout *grid = new QGridLayout(m_container, 10);
-		//	m_layout = (QLayout*)grid;
-			// TODO: Make Grid Layout work :-)
-			kdDebug() << "GridLayout not implemented yet !! " << endl;
+			createGridLayout();
 			return;
 		}
 		default:
@@ -428,6 +428,189 @@ Container::createBoxLayout(WidgetList *list)
 
 //	if(!m_container->parentWidget()->inherits("QWidgetStack"))
 //		m_container->resize(layout->sizeHint());
+	layout->activate();
+}
+
+void
+Container::createGridLayout()
+{
+	VerWidgetList *vlist = new VerWidgetList();
+	HorWidgetList *hlist = new HorWidgetList();
+	int ncol = 0;
+	QValueVector<int> cols;
+	int nrow = 0;
+	QValueVector<int> rows;
+	int end=-1000;
+	bool same = false;
+
+	for(ObjectTreeItem *tree = m_tree->children()->first(); tree; tree = m_tree->children()->next())
+		vlist->append( tree->widget());
+	vlist->sort();
+
+	for(ObjectTreeItem *tree = m_tree->children()->first(); tree; tree = m_tree->children()->next())
+		hlist->append( tree->widget());
+	hlist->sort();
+
+	for(QWidget *w = vlist->first(); w; w = vlist->next())
+	{
+		QWidget *nextw = vlist->next();
+		if(!nextw)
+			break;
+		while(w->y() <= nextw->y() <= w->geometry().bottom())
+		{
+			//kdDebug() << "examining the widget " << nextw->name() << "compared to " << w->name() << endl;
+			if(w->geometry().intersects(nextw->geometry()))
+			{
+				if((nextw->y() - w->y()) > abs(nextw->x() - w->x()))
+					nextw->move(nextw->x(), w->geometry().bottom()+1);
+				else if(nextw->x() >= w->x())
+					nextw->move(w->geometry().right()+1, nextw->y());
+				else
+					w->move(nextw->geometry().right()+1, nextw->y());
+			}
+			else
+				break;
+			nextw = vlist->next();
+			if(!nextw)
+				break;
+		}
+		QWidget *widg = vlist->prev();
+		//kdDebug() << "examining the next widget is" << widg << "and w is " << w->name() << endl;
+		if(!widg)
+			break;
+		while(w->name() != widg->name())
+		{
+			widg = vlist->prev();
+			//if(widg)
+				//kdDebug() << "making prev in the list " << widg->name() << endl;
+		}
+	}
+
+	for(QWidget *w = vlist->first(); w; w = vlist->next())
+	{
+		if(!same)
+		{
+			end = w->geometry().bottom();
+			nrow++;
+			rows.append(w->y());
+		}
+
+		QWidget *nextw = vlist->next();
+		if(!nextw)
+			break;
+
+		if(nextw->y() >= end)
+		{
+			vlist->prev();
+			same = false;
+		}
+		else
+		{
+			if(same && (nextw->y() >= w->geometry().bottom()))
+				same = false;
+			else
+				same = true;
+			vlist->prev();
+			if(!same)
+				end = w->geometry().bottom();
+		}
+	}
+	kdDebug() << "the new grid will have n rows: n == " << nrow << endl;
+
+	end = -10000;
+	same = false;
+	for(QWidget *w = hlist->first(); w; w = hlist->next())
+	{
+		if(!same)
+		{
+			end = w->geometry().right();
+			ncol++;
+			cols.append(w->x());
+		}
+
+		QWidget *nextw = hlist->next();
+		if(!nextw)
+			break;
+
+		if(nextw->x() >= end)
+		{
+			hlist->prev();
+			same = false;
+		}
+		else
+		{
+			if(same && (nextw->x() >= w->geometry().right()))
+				same = false;
+			else
+				same = true;
+			hlist->prev();
+			if(!same)
+				end = w->geometry().right();
+		}
+	}
+	kdDebug() << "the new grid will have n columns: n == " << ncol << endl;
+
+	QGridLayout *layout = new QGridLayout(m_container, nrow, ncol, 10, 2, "grid");
+	m_layout = (QLayout*)layout;
+
+	for(QWidget *w = vlist->first(); w; w = vlist->next())
+	{
+		QRect r = w->geometry();
+		uint wcol=0, wrow=0, endrow=0, endcol=0;
+		uint i = 0;
+
+		while(r.y() >= rows[i])
+		{
+			if(rows.size() <= i+1)
+			{
+				wrow = i;
+				break;
+			}
+			if(r.y() < rows[i+1])
+			{
+				wrow = i;
+				uint j = i + 1;
+				while(rows.size() >= j+1 && r.bottom() > rows[j])
+				{
+					endrow = j;
+					j++;
+				}
+
+				break;
+			}
+			i++;
+		}
+		//kdDebug() << "the widget " << w->name() << " wil be in the row " << wrow <<  " and will go to the row " << endrow << endl;
+
+		i = 0;
+		while(r.x() >= cols[i])
+		{
+			if(cols.size() <= i+1)
+			{
+				wcol = i;
+				break;
+			}
+			if(r.x() < cols[i+1])
+			{
+				wcol = i;
+				uint j = i + 1;
+				while(cols.size() >= j+1 && r.right() > cols[j])
+				{
+					endcol = j;
+					j++;
+				}
+
+				break;
+			}
+			i++;
+		}
+		//kdDebug() << "the widget " << w->name() << " wil be in the col " << wcol <<  " and will go to the col " << endcol << endl;
+
+		if(!endrow && !endcol)
+			layout->addWidget(w, wrow, wcol);
+		else
+			layout->addMultiCellWidget(w, wrow, endrow ? endrow : wrow, wcol, endcol ? endcol : wcol);
+	}
 	layout->activate();
 }
 
