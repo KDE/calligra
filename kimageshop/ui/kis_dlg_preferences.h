@@ -57,7 +57,7 @@ class DirectoriesTab : public QWidget
 
 public:
 
-  DirectoriesTab( QWidget *_parent = 0, const char *_name = 0 );
+    DirectoriesTab( QWidget *_parent = 0, const char *_name = 0 );
 
 private slots:
 
@@ -68,17 +68,19 @@ private:
     KURLRequester *m_pLineEdit, *m_pGimpGradients;
 };
 
-/* jwc - undo-redo not working yet */
-/*
+/* jwc - undo-redo not working yet - still we can show the 
+options and keep them in mind.  Harmless as the actions don't
+do anything yet */
+
 class UndoRedoTab : public QWidget
 {
-  Q_OBJECT
+    Q_OBJECT
 
 public:
 
-  UndoRedoTab( QWidget *_parent = 0, const char *_name = 0 );
+    UndoRedoTab( QWidget *_parent = 0, const char *_name = 0 );
 };
-*/
+
 
 /**
  *  Preferences dialog of KImageShop
@@ -89,18 +91,18 @@ class PreferencesDialog : public KDialogBase
 
 public:
 
-  static void editPreferences();
+    static void editPreferences();
 
 protected:
 
-  PreferencesDialog( QWidget *_parent = 0, const char *_name = 0 );
-  ~PreferencesDialog();
+    PreferencesDialog( QWidget *_parent = 0, const char *_name = 0 );
+    ~PreferencesDialog();
 
 private:
 
-  GeneralTab     *m_general;
-  DirectoriesTab *m_directories;
-  // UndoRedoTab    *m_undoRedo; //jwc
+    GeneralTab     *m_general;
+    DirectoriesTab *m_directories;
+    UndoRedoTab    *m_undoRedo; 
 };
 
 #endif

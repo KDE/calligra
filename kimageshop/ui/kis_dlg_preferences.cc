@@ -40,11 +40,14 @@ GeneralTab::GeneralTab( QWidget *_parent, const char *_name )
   QGridLayout* grid = new QGridLayout( this, 3, 1, 7, 15);
 
   // checkbutton
-  m_saveOnExit = new QCheckBox( i18n( "Save and restore dialog geometries" ), this );
+  m_saveOnExit 
+    = new QCheckBox( i18n( "Save and restore dialog geometries" ), this );
   grid->addWidget( m_saveOnExit, 0, 0 );
 
   // only for testing it
-  //KIntNumInput* i = new KIntNumInput( "a", 1, 100, 1, 1, QString::null, 10, true, this );
+  /* KIntNumInput* i = new KIntNumInput( "a", 1, 100, 1, 1, 
+      QString::null, 10, true, this ); */
+        
   KIntNumInput* i = new KIntNumInput(1, this, 10, "a");
   i->setRange(1, 100, 1);
   grid->addWidget( i, 1, 0 );
@@ -52,10 +55,12 @@ GeneralTab::GeneralTab( QWidget *_parent, const char *_name )
   grid->setRowStretch( 2, 1 );
 }
 
+
 bool GeneralTab::saveOnExit()
 {
   return m_saveOnExit->isChecked();
 }
+
 
 DirectoriesTab::DirectoriesTab( QWidget *_parent, const char *_name )
   : QWidget( _parent, _name )
@@ -96,8 +101,7 @@ void DirectoriesTab::slotRequesterClicked( KURLRequester *requester )
     requester->fileDialog()->setMode(KFile::Directory);
 }
 
-//jwc
-#if 0
+
 UndoRedoTab::UndoRedoTab( QWidget *_parent, const char *_name  )
   : QWidget( _parent, _name )
 {
@@ -114,7 +118,7 @@ UndoRedoTab::UndoRedoTab( QWidget *_parent, const char *_name  )
 
   grid->setRowStretch( 2, 1 );
 }
-#endif
+
 
 PreferencesDialog::PreferencesDialog( QWidget* parent, const char* name )
   : KDialogBase( IconList, i18n("Preferences"), Ok | Cancel | Help | Default | Apply, Ok, parent, name, true, true )

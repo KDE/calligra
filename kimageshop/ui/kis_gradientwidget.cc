@@ -19,7 +19,7 @@
  */
 
 #include <qpainter.h>
-
+#include <qimage.h>
 #include "kis_gradient.h"
 #include "kis_gradientwidget.h"
 
