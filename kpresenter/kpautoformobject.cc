@@ -1,3 +1,4 @@
+// -*- Mode: c++-mode; c-basic-offset: 4; indent-tabs-mode: nil; tab-width: 4; -*-
 /* This file is part of the KDE project
    Copyright (C) 1998, 1999 Reginald Stadlbauer <reggie@kde.org>
 
@@ -35,11 +36,6 @@
 #include <math.h>
 using namespace std;
 
-/******************************************************************/
-/* Class: KPAutoformObject                                        */
-/******************************************************************/
-
-/*================ default constructor ===========================*/
 KPAutoformObject::KPAutoformObject()
     : KP2DObject(), atfInterp()
 {
@@ -48,7 +44,6 @@ KPAutoformObject::KPAutoformObject()
     redrawPix = false;
 }
 
-/*================== overloaded constructor ======================*/
 KPAutoformObject::KPAutoformObject( const QPen & _pen, const QBrush &_brush, const QString & _filename, LineEnd _lineBegin, LineEnd _lineEnd,
                                     FillType _fillType, const QColor &_gColor1, const QColor &_gColor2, BCType _gType,
                                     bool _unbalanced, int _xfactor, int _yfactor)
@@ -70,7 +65,6 @@ KPAutoformObject::KPAutoformObject( const QPen & _pen, const QBrush &_brush, con
         gradient = 0;
 }
 
-/*================================================================*/
 KPAutoformObject &KPAutoformObject::operator=( const KPAutoformObject & )
 {
     return *this;
@@ -79,19 +73,17 @@ KPAutoformObject &KPAutoformObject::operator=( const KPAutoformObject & )
 DCOPObject* KPAutoformObject::dcopObject()
 {
     if ( !dcop )
-	dcop = new KPAutoFormObjectIface( this );
+        dcop = new KPAutoFormObjectIface( this );
     return dcop;
 }
 
 
-/*====================== set filename ============================*/
 void KPAutoformObject::setFileName( const QString & _filename )
 {
     filename = _filename;
     atfInterp.load( filename );
 }
 
-/*================================================================*/
 void KPAutoformObject::setFillType( FillType _fillType )
 {
     fillType = _fillType;
@@ -108,7 +100,6 @@ void KPAutoformObject::setFillType( FillType _fillType )
     }
 }
 
-/*========================= save =================================*/
 QDomDocumentFragment KPAutoformObject::save( QDomDocument& doc, double offset )
 {
     QDomDocumentFragment fragment=KP2DObject::save(doc, offset);
@@ -135,7 +126,6 @@ QDomDocumentFragment KPAutoformObject::save( QDomDocument& doc, double offset )
     return fragment;
 }
 
-/*========================== load ================================*/
 double KPAutoformObject::load(const QDomElement &element)
 {
     double offset=KP2DObject::load(element);
@@ -180,19 +170,18 @@ double KPAutoformObject::load(const QDomElement &element)
     return offset;
 }
 
-/*======================== paint =================================*/
 void KPAutoformObject::paint( QPainter* _painter, KoZoomHandler *_zoomHandler,
-			      bool drawingShadow, bool drawContour )
+                              bool drawingShadow, bool drawContour )
 {
     unsigned int pw = 0, pwOrig = 0, px, py;
     QPen pen2;
     QSize size( _zoomHandler->zoomSize( ext ) );
 
     if ( drawContour )
-	pen2 = QPen( Qt::black, 1, Qt::DotLine );
+        pen2 = QPen( Qt::black, 1, Qt::DotLine );
     else {
-	pen2 = pen;
-	pen2.setWidth( _zoomHandler->zoomItX( pen.width() ) );
+        pen2 = pen;
+        pen2.setWidth( _zoomHandler->zoomItX( pen.width() ) );
     }
 
     _painter->setPen( pen2 );
@@ -364,6 +353,5 @@ void KPAutoformObject::paint( QPainter* _painter, KoZoomHandler *_zoomHandler,
             _painter->setPen( pen2 );
             _painter->drawPolyline( pntArray2 );
         }
-
     }
 }

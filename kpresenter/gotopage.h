@@ -1,3 +1,4 @@
+// -*- Mode: c++-mode; c-basic-offset: 4; indent-tabs-mode: nil; tab-width: 4; -*-
 /* This file is part of the KDE project
    Copyright (C) 1998, 1999 Reginald Stadlbauer <reggie@kde.org>
 
@@ -29,20 +30,16 @@ class QResizeEvent;
 class QListBox;
 class KPresenterDoc;
 
-/******************************************************************/
-/* class KPGotoPage                                               */
-/******************************************************************/
-
-class KPGotoPage : public KDialogBase 
+class KPGotoPage : public KDialogBase
 {
 public:
     KPGotoPage( const KPresenterDoc *doc,
-		const QValueList<int> &slides, int start,
-		QWidget *parent = 0L, const char *name = 0L );
+                const QValueList<int> &slides, int start,
+                QWidget *parent = 0L, const char *name = 0L );
 
     static int gotoPage( const KPresenterDoc *doc,
-			 const QValueList<int> &slides, int start,
-			 QWidget *parent = 0L );
+                         const QValueList<int> &slides, int start,
+                         QWidget *parent = 0L );
 
     int page() const;
 

@@ -1,3 +1,4 @@
+// -*- Mode: c++-mode; c-basic-offset: 4; indent-tabs-mode: nil; tab-width: 4; -*-
 /* This file is part of the KDE project
    Copyright (C) 1998, 1999 Reginald Stadlbauer <reggie@kde.org>
 
@@ -29,29 +30,24 @@
 
 #include <kpresenter_doc.h>
 
-/******************************************************************/
-/* class KPGotoPage						  */
-/******************************************************************/
-
-/*================================================================*/
 KPGotoPage::KPGotoPage( const KPresenterDoc *doc,
-			const QValueList<int> &slides, int start,
-			QWidget *parent, const char *name )
-    : KDialogBase( parent, name, true, i18n("Goto Slide..."), Ok|Cancel)
-    , oldPage(start)
+                        const QValueList<int> &slides, int start,
+                        QWidget *parent, const char *name )
+    : KDialogBase( parent, name, true, i18n("Goto Slide..."), Ok|Cancel),
+      oldPage(start)
 {
 
     QWidget *page = new QWidget( this );
     setMainWidget(page);
     QVBoxLayout *ml = new QVBoxLayout( page, KDialog::marginHint(),
-                                         KDialog::spacingHint());
+                                       KDialog::spacingHint());
     QLabel *label = new QLabel( i18n( "Go to slide:" ), page );
     ml->addWidget( label );
     spinbox = new QListBox( page );
     connect( spinbox, SIGNAL(doubleClicked( QListBoxItem* )),
-	     this, SLOT(accept()) );
+             this, SLOT(accept()) );
     connect( spinbox, SIGNAL(returnPressed( QListBoxItem* )),
-	     this, SLOT(accept()) );
+             this, SLOT(accept()) );
     ml->addWidget( spinbox );
 
     QPtrList<KPrPage> pageList = doc->getPageList(); // because of const doc, we can't do doc->pageList()->at()
@@ -72,10 +68,9 @@ KPGotoPage::KPGotoPage( const KPresenterDoc *doc,
         parent->setCursor( Qt::forbiddenCursor );
 }
 
-/*================================================================*/
 int KPGotoPage::gotoPage( const KPresenterDoc *doc,
-			  const QValueList<int> &slides, int start,
-			  QWidget *parent)
+                          const QValueList<int> &slides, int start,
+                          QWidget *parent)
 {
     KPGotoPage dia( doc, slides, start,parent, 0L );
     dia.exec();

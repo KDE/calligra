@@ -1,3 +1,4 @@
+// -*- Mode: c++-mode; c-basic-offset: 4; indent-tabs-mode: nil; tab-width: 4; -*-
 /* This file is part of the KDE project
    Copyright (C) 1998, 1999 Reginald Stadlbauer <reggie@kde.org>
 
@@ -28,8 +29,9 @@
 #include <qcursor.h>
 #include <kozoomhandler.h>
 #include <koPoint.h>
-/*========================== draw a figure =======================*/
-void drawFigure( LineEnd figure, QPainter* painter, const KoPoint &coord, const QColor &color,int  _w, float angle, KoZoomHandler*_zoomHandler)
+
+void drawFigure( LineEnd figure, QPainter* painter, const KoPoint &coord, const QColor &color,
+                 int _w, float angle, KoZoomHandler* _zoomHandler)
 {
     painter->save();
     painter->setPen( Qt::NoPen );
@@ -44,14 +46,20 @@ void drawFigure( LineEnd figure, QPainter* painter, const KoPoint &coord, const 
         painter->translate( _zoomHandler->zoomItX(coord.x()), _zoomHandler->zoomItY( coord.y()) );
         painter->rotate( angle );
         painter->scale( 1, 1 );
-        painter->fillRect( _zoomHandler->zoomItX( -6 - _w ),_zoomHandler->zoomItY( -3 - _h / 2),_zoomHandler->zoomItX( 6 + _w),_zoomHandler->zoomItY( 6 + _h), color );
+        painter->fillRect( _zoomHandler->zoomItX( -6 - _w ),
+                           _zoomHandler->zoomItY( -3 - _h / 2),
+                           _zoomHandler->zoomItX( 6 + _w),
+                           _zoomHandler->zoomItY( 6 + _h), color );
     } break;
     case L_CIRCLE:
     {
         painter->translate( _zoomHandler->zoomItX(coord.x()), _zoomHandler->zoomItY(coord.y()) );
         painter->rotate( angle );
         painter->setBrush( color );
-        painter->drawEllipse( _zoomHandler->zoomItX( -6 - _w ), _zoomHandler->zoomItY( -3 - _w / 2 ),_zoomHandler->zoomItX( 6 + _w), _zoomHandler->zoomItY(6 + _w) );
+        painter->drawEllipse( _zoomHandler->zoomItX( -6 - _w ),
+                              _zoomHandler->zoomItY( -3 - _w / 2 ),
+                              _zoomHandler->zoomItX( 6 + _w),
+                              _zoomHandler->zoomItY(6 + _w) );
     } break;
     case L_ARROW:
     {
@@ -140,7 +148,8 @@ void drawFigure( LineEnd figure, QPainter* painter, const KoPoint &coord, const 
     painter->restore();
 }
 
-void drawFigureWithOffset( LineEnd figure, QPainter* painter, const QPoint &coord, const QColor &color,int  _w, float angle, KoZoomHandler*_zoomHandler)
+void drawFigureWithOffset( LineEnd figure, QPainter* painter, const QPoint &coord, const QColor &color,
+                           int  _w, float angle, KoZoomHandler*_zoomHandler)
 {
     KoSize diff = getOffset( figure, _w, angle );
     KoPoint offsetPoint(diff.width(), diff.height());
@@ -148,8 +157,6 @@ void drawFigureWithOffset( LineEnd figure, QPainter* painter, const QPoint &coor
     drawFigure( figure, painter, offsetPoint, color, _w, angle,_zoomHandler );
 }
 
-//todo used kozoomhandled
-/*================== get bounding with of figure =================*/
 KoSize getBoundingSize( LineEnd figure, int _w, const KoZoomHandler*_zoomHandler )
 {
     switch ( figure )
@@ -203,7 +210,7 @@ KoSize getOffset( LineEnd figure, int _w, float angle )
         x = _w + 3;
         y = _w + 3;
         break;
-    }   
+    }
     case L_LINE_ARROW:
     case L_DOUBLE_LINE_ARROW:
     {
@@ -284,9 +291,6 @@ KoPointArray getCloseObject( KoPointArray points, bool close, bool objClosed )
     return tmpPoints;
 }
 
-/*
- * Custom cursors. Use the X utility "bitmap" to create new cursors.
- */
 QCursor KPresenterUtils::penCursor()
 {
     static unsigned char pen_bits[] = {

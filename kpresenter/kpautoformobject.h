@@ -1,3 +1,4 @@
+// -*- Mode: c++-mode; c-basic-offset: 4; indent-tabs-mode: nil; tab-width: 4; -*-
 /* This file is part of the KDE project
    Copyright (C) 1998, 1999 Reginald Stadlbauer <reggie@kde.org>
 
@@ -29,10 +30,6 @@
 class KPGradient;
 class DCOPObject;
 
-/******************************************************************/
-/* Class: KPAutoformObject                                        */
-/******************************************************************/
-
 class KPAutoformObject : public KP2DObject
 {
 public:
@@ -48,34 +45,34 @@ public:
 
     virtual void setFileName( const QString &_filename );
     virtual void setLineBegin( LineEnd _lineBegin )
-    { lineBegin = _lineBegin; }
+        { lineBegin = _lineBegin; }
     virtual void setLineEnd( LineEnd _lineEnd )
-    { lineEnd = _lineEnd; }
+        { lineEnd = _lineEnd; }
     virtual void setFillType( FillType _fillType );
     virtual void setGColor1( const QColor &_gColor1 )
-    { KP2DObject::setGColor1(_gColor1); redrawPix = true; }
+        { KP2DObject::setGColor1(_gColor1); redrawPix = true; }
     virtual void setGColor2( const QColor &_gColor2 )
-    { KP2DObject::setGColor2(_gColor2); redrawPix = true; }
+        { KP2DObject::setGColor2(_gColor2); redrawPix = true; }
     virtual void setGType( BCType _gType )
-    { KP2DObject::setGType(_gType); redrawPix = true; }
+        { KP2DObject::setGType(_gType); redrawPix = true; }
 
     virtual ObjType getType() const
-    { return OT_AUTOFORM; }
+        { return OT_AUTOFORM; }
     virtual QString getTypeString() const
-    { return i18n("Autoform"); }
+        { return i18n("Autoform"); }
 
     QString getFileName() const
-    { return filename; }
+        { return filename; }
     virtual LineEnd getLineBegin() const
-    { return lineBegin; }
+        { return lineBegin; }
     virtual LineEnd getLineEnd() const
-    { return lineEnd; }
+        { return lineEnd; }
 
     virtual QDomDocumentFragment save( QDomDocument& doc,double offset );
     virtual double load(const QDomElement &element);
 protected:
     virtual void paint( QPainter *_painter, KoZoomHandler *_zoomHandler,
-			bool drawingShadow, bool drawContour = FALSE );
+                        bool drawingShadow, bool drawContour = FALSE );
 
     QString filename;
     LineEnd lineBegin, lineEnd;
