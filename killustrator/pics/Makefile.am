@@ -28,7 +28,8 @@ ellipse2.xpm \
 ellipse3.xpm \
 hmirror.xpm \
 vmirror.xpm \
-killustrator.xpm
+killustrator.xpm \
+logo.xpm
 
 EXTRA_DIST = $(data_DATA) 
 

@@ -1,5 +1,5 @@
 INCLUDES= $(all_includes) -I.. 
-EXTRA_DIST = prolog.ps fontmap
+EXTRA_DIST = prolog.ps prolog.ps.in fontmap
 
 datadir = $(kde_datadir)/killustrator
 
