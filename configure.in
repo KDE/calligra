@@ -44,10 +44,10 @@ AC_FIND_QIMGIO
 AC_C_BIGENDIAN
 
 topdir=`pwd`
-KOFFICE_LIBS="$topdir/lib/kofficeui/libkofficeui.la $topdir/lib/kofficecore/libkofficecore.la $topdir/lib/koml/libkoml.la"
+KOFFICE_LIBS="$topdir/lib/kofficeui/libkofficeui.la $topdir/lib/kofficecore/libkofficecore.la $topdir/lib/koml/libkoml.la $topdir/lib/store/libkstore.la"
 AC_SUBST(KOFFICE_LIBS)
 
-KOFFICE_INCLUDES="-I $topdir/lib/kofficeui -I $topdir/lib/kofficecore -I $topdir/lib/koml"
+KOFFICE_INCLUDES="-I $topdir/lib/kofficeui -I $topdir/lib/kofficecore -I $topdir/lib/koml -I $topdir/lib/store"
 AC_SUBST(KOFFICE_INCLUDES)
 
 dnl add here all your Makefiles. These are created by configure
