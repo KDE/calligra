@@ -16,7 +16,7 @@ DISTCLEANFILES = koStore_idl.h koStore_idl.cc
 
 ####### Build rules
 
-BUILT_SOURCES = koStore_idl.h
 koStore_idl.h: koStore.idl $(micodir)/include/CORBA.h
 	$(IDL) -I./ --relative-paths --query-server-for-narrow --name koStore_idl $(srcdir)/koStore.idl
+koStore_idl.cc: koStore_idl.h
 
