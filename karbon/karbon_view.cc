@@ -137,16 +137,13 @@ KarbonView::KarbonView( KarbonPart* p, QWidget* parent, const char* name )
 
 	reorganizeGUI();
 
-	left = new QWidget( this );
-	left->show();
-
 	// widgets:
-	m_canvas = new VCanvas( left, this, p );
+	m_canvas = new VCanvas( this, this, p );
 	m_canvas->setGeometry( 0, 0, width(), height() );
 
-	m_horizRuler = new KoRuler( left, m_canvas->viewport(), Qt::Horizontal, part()->pageLayout(), KoRuler::F_INDENTS | KoRuler::F_TABS, part()->unit() );
+	m_horizRuler = new KoRuler( this, m_canvas->viewport(), Qt::Horizontal, part()->pageLayout(), KoRuler::F_INDENTS | KoRuler::F_TABS, part()->unit() );
 	m_horizRuler->showMousePos( true );
-	m_vertRuler = new KoRuler( left, m_canvas->viewport(), Qt::Vertical, part()->pageLayout(), 0, part()->unit() );
+	m_vertRuler = new KoRuler( this, m_canvas->viewport(), Qt::Vertical, part()->pageLayout(), 0, part()->unit() );
 	m_vertRuler->showMousePos( true );
 
 	m_canvas->show();
@@ -272,9 +269,8 @@ void
 KarbonView::resizeEvent( QResizeEvent* /*event*/ )
 {
 	int space = 20;
-	left->setGeometry( 0, 0, width(), height() );
-	m_horizRuler->setGeometry( space, 0, left->width() - space, space );
-	m_vertRuler->setGeometry( 0, space, space, left->height() - space );
+	m_horizRuler->setGeometry( space, 0, width() - space, space );
+	m_vertRuler->setGeometry( 0, space, space, height() - space );
 	m_canvas->resize( width(), height() );
 	reorganizeGUI();
 }

@@ -185,7 +185,6 @@ private:
 	void initActions();
 
 	VCanvas					*m_canvas;
-	QWidget					*left;
 	KoRuler					*m_horizRuler;
 	KoRuler					*m_vertRuler;
 
