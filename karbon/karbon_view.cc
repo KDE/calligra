@@ -1280,7 +1280,7 @@ KarbonView::initActions()
 							i18n( "Configure Karbon..." ), "configure", 0, this,
 							SLOT( configure() ), actionCollection(), "configure" );
 
-	m_contextHelpAction = new KoContextHelpAction( actionCollection() );
+	m_contextHelpAction = new KoContextHelpAction( actionCollection(), this );
 }
 
 void

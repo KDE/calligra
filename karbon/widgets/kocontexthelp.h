@@ -109,6 +109,8 @@ class KoContextHelpPopup : public QWidget
 		void setContextHelp( const QString& title, const QString& text, const QPixmap* icon = 0 );
   
 	protected:
+		virtual void mousePressEvent( QMouseEvent* );
+		virtual void mouseMoveEvent( QMouseEvent* );
 		virtual void resizeEvent( QResizeEvent* );
 		virtual void paintEvent( QPaintEvent* );
     
@@ -116,6 +118,8 @@ class KoContextHelpPopup : public QWidget
 		KoHelpWidget*    m_helpViewer;
 		KoVerticalLabel* m_helpTitle;
 		QLabel*          m_helpIcon;
+		
+		QPoint           m_mousePos;
 }; // KoContextHelpPopup
 
 /**
@@ -124,12 +128,12 @@ class KoContextHelpPopup : public QWidget
  * This action displays on demand a context help in a popup.
  * The context help is set by the updateHelp slot.
  */
-class KoContextHelpAction : public KAction
+class KoContextHelpAction : public KToggleAction
 {
 	Q_OBJECT
 	
 	public:
-		KoContextHelpAction( KActionCollection* parent );
+		KoContextHelpAction( KActionCollection* parent, QWidget* parent = 0 );
 		~KoContextHelpAction();
 		
 	public slots:

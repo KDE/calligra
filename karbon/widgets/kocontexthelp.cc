@@ -28,6 +28,7 @@
 
 #include <kpixmap.h>
 #include <klocale.h>
+#include <kdebug.h>
 #include <kiconloader.h>
 
 #define HELPWIDTH 140 
@@ -184,7 +185,7 @@ void KoHelpWidget::stopScroll()
 } // KoHelpWidget::stopScroll
 
 KoContextHelpPopup::KoContextHelpPopup( QWidget* parent )
-		: QWidget( parent, "", WType_Popup )
+		: QWidget( parent, "", WType_Dialog | WStyle_Customize | WStyle_NoBorder )
 {
 	QGridLayout* layout = new QGridLayout( this );
 	layout->addWidget( m_helpIcon = new QLabel( this ), 0, 0 );
@@ -205,6 +206,19 @@ void KoContextHelpPopup::setContextHelp( const QString& title, const QString& te
 	m_helpTitle->setText( title );
 	m_helpViewer->setText( text );
 } // KoContextHelpPopup::updateHelp
+
+void KoContextHelpPopup::mousePressEvent( QMouseEvent* e )
+{
+	m_mousePos = e->globalPos();
+} // KoContextHelpPopup::mousePressEvent
+
+void KoContextHelpPopup::mouseMoveEvent( QMouseEvent* e )
+{
+	move( pos() + e->globalPos() - m_mousePos );
+	kdDebug() << m_mousePos.x() << endl;
+	m_mousePos = e->globalPos();
+	kdDebug() << m_mousePos.x() << endl;
+} // KoContextHelpPopup::mouseMoveEvent
 
 void KoContextHelpPopup::resizeEvent( QResizeEvent* )
 {
@@ -232,11 +246,11 @@ void KoContextHelpPopup::paintEvent( QPaintEvent* )
 	p.drawLine( width() - 3, height() - 2, width() - 4, height() - 2 );
 } // KoContextHelpPopup::paintEvent
 
-KoContextHelpAction::KoContextHelpAction( KActionCollection* parent )
-		: KAction( i18n( "Context help" ), BarIcon( "help" ), KShortcut( "CTRL+SHIFT+F1" ), 0, 0, parent, "help_context" )
+KoContextHelpAction::KoContextHelpAction( KActionCollection* parent, QWidget* popupParent )
+		: KToggleAction( i18n( "Context help" ), BarIcon( "help" ), KShortcut( "CTRL+SHIFT+F1" ), 0, 0, parent, "help_context" )
 {
-	m_popup = new KoContextHelpPopup();
-	connect( this, SIGNAL( activated() ), m_popup, SLOT( show() ) );
+	m_popup = new KoContextHelpPopup( popupParent );
+	connect( this, SIGNAL( toggled( bool ) ), m_popup, SLOT( setShown( bool ) ) );
 } // KoContextHelpAction::KoContextHelpAction
 
 KoContextHelpAction::~KoContextHelpAction()
