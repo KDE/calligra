@@ -466,7 +466,7 @@ KSpreadView::KSpreadView( QWidget *_parent, const char *_name, KSpreadDoc* doc )
     QObject::connect( m_pDoc, SIGNAL( sig_addTable( KSpreadSheet* ) ), SLOT( slotAddTable( KSpreadSheet* ) ) );
 
 
-    QObject::connect( m_pDoc, SIGNAL( sig_refreshView(  ) ), this, SLOT( refreshView() ) );
+    QObject::connect( m_pDoc, SIGNAL( sig_refreshView(  ) ), this, SLOT( slotRefreshView() ) );
 
     QObject::connect( m_pDoc, SIGNAL( sig_refreshLocale() ), this, SLOT( refreshLocale()));
 
@@ -1336,7 +1336,6 @@ void KSpreadView::initializeBorderActions()
 KSpreadView::~KSpreadView()
 {
     //  ElapsedTime el( "~KSpreadView" );
-    m_pDoc->increaseNumOperation(); // no paints anymore...
     if ( m_pDoc->isReadWrite() ) // make sure we're not embedded in Konq
         deleteEditor( true );
     if ( !m_transformToolBox.isNull() )
@@ -1350,12 +1349,12 @@ KSpreadView::~KSpreadView()
     delete m_selectionInfo;
     delete m_spell.kspell;
 
+    m_pCanvas->endChoose();
     m_pTable = 0; // set the active table to 0L so that when during destruction
     // of embedded child documents possible repaints in KSpreadSheet are not
     // performed. The repains can happen if you delete an embedded document,
     // which leads to an regionInvalidated() signal emission in KoView, which calls
     // repaint, etc.etc. :-) (Simon)
-    m_pCanvas->endChoose();
 
     delete m_pPopupColumn;
     delete m_pPopupRow;
@@ -4000,9 +3999,7 @@ void KSpreadView::print( KPrinter &prt )
     // Repaint at correct zoom
     m_pDoc->emitBeginOperation( false );
     setZoom( oldZoom, false );
-    QRect r( m_pTable->visibleRect( m_pCanvas ) );
-    activeTable()->setRegionPaintDirty( r );
-    m_pDoc->emitEndOperation( r );
+    m_pDoc->emitEndOperation();
 
     painter.end();
 }
@@ -4579,24 +4576,14 @@ void KSpreadView::setZoom( int zoom, bool /*updateViews*/ )
 
   // Set the zoom in KoView (for embedded views)
   m_pDoc->emitBeginOperation( false );
-  // KoView::setZoom( (double) zoom / 100 );
-  // m_pDoc->setZoom( zoom );
-  // m_pDoc->newZoom();
 
   m_pDoc->setZoomAndResolution( zoom, QPaintDevice::x11AppDpiX(), QPaintDevice::x11AppDpiY());
   KoView::setZoom( m_pDoc->zoomedResolutionY() /* KoView only supports one zoom */ );
 
-  // m_pDoc->newZoomAndResolution( updateViews, false )
+  m_pTable->setRegionPaintDirty(QRect(QPoint(0,0), QPoint(KS_colMax, KS_rowMax)));
+  m_pDoc->refreshInterface();
 
-  m_pCanvas->slotMaxColumn( m_pTable->maxColumn() );
-  m_pCanvas->slotMaxRow( m_pTable->maxRow() );
-
-  m_pVBorderWidget->repaint();
-  m_pHBorderWidget->repaint();
-  // m_pTable->setRegionPaintDirty(QRect(QPoint(0,0), QPoint(KS_colMax, KS_rowMax)));
-
-  refreshView();
-  m_pDoc->emitEndOperation( m_pTable->visibleRect( m_pCanvas ) );
+  m_pDoc->emitEndOperation();
 }
 
 void KSpreadView::preference()
@@ -4816,6 +4803,9 @@ void KSpreadView::refreshView()
   }
   active = m_pDoc->getShowFormulaBar();
   editWidget()->showEditWidget( active );
+
+  QString zoomStr( i18n("%1%").arg( m_pDoc->zoom() ) );
+  m_viewZoom->setCurrentItem( m_viewZoom->items().findIndex( zoomStr ) );
 
   int posFrame = 30;
   if ( active )
