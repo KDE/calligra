@@ -213,8 +213,6 @@ bool HtmlWorker::makeTable(const FrameAnchor& anchor)
 
 bool HtmlWorker::makeImage(const FrameAnchor& anchor)
 {
-    *m_streamOut << "<img "; // This is an emüty element!
-
     QString strImageName=m_fileName;
     strImageName+='.';
 
@@ -229,26 +227,34 @@ bool HtmlWorker::makeImage(const FrameAnchor& anchor)
     }
 
     QByteArray image;
+    bool isImage=false;
 
     // TODO: verify return value!
     if (m_kwordLeader)
-        m_kwordLeader->loadKoStoreFile(anchor.picture.koStoreName,image);
+        isImage=m_kwordLeader->loadKoStoreFile(anchor.picture.koStoreName,image);
 
-    // TODO: test if file is empty and abort!
-    QFile file(strImageName);
-
-    if ( !file.open (IO_WriteOnly) )
+    if (isImage)
     {
-        kdError(30503) << "Unable to open image output file!" << endl;
-        return false;
+        QFile file(strImageName);
+
+        if ( !file.open (IO_WriteOnly) )
+        {
+            kdError(30503) << "Unable to open image output file!" << endl;
+            return false;
+        }
+
+        file.writeBlock(image);
+        file.close();
+
+        *m_streamOut << "<img "; // This is an emüty element!
+        *m_streamOut << "src=\"" << strImageName << "\" ";
+        *m_streamOut << "alt=\"" << escapeHtmlText(anchor.picture.key) << "\"";
+        *m_streamOut << (isXML()?"/>":">") << "\n";
     }
-
-    file.writeBlock(image);
-    file.close();
-
-    *m_streamOut << "src=\"" << strImageName << "\" ";
-    *m_streamOut << "alt=\"" << escapeHtmlText(anchor.picture.key) << "\"";
-    *m_streamOut << (isXML()?"/>":">") << "\n";
+    else
+    {
+        kdDebug(30503) << "Unable to load image " << anchor.picture.koStoreName << endl;
+    }
 
     return true;
 }

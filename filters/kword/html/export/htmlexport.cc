@@ -2,7 +2,7 @@
 
 /*
    This file is part of the KDE project
-   Copyright (C) 2001 Nicolas GOUTTE <nicog@snafu.de>
+   Copyright (C) 2001, 2002 Nicolas GOUTTE <nicog@snafu.de>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -101,13 +101,10 @@ KoFilter::ConversionStatus HTMLExport::convert( const QCString& from, const QCSt
         return KoFilter::StupidError;
     }
 
-    bool flag=leader->filter(m_chain->inputFile(),m_chain->outputFile(),from,to,"");
+    KoFilter::ConversionStatus result=leader->convert(m_chain,from,to);
 
     delete leader;
     delete worker;
 
-    if ( flag )
-        return KoFilter::OK;
-    else
-        return KoFilter::StupidError;
+    return result;
 }

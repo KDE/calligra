@@ -1,7 +1,7 @@
 // $Header$
 
 /* This file is part of the KDE project
-   Copyright (C) 2001 Nicolas GOUTTE <nicog@snafu.de>
+   Copyright (C) 2001, 2002 Nicolas GOUTTE <nicog@snafu.de>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -215,44 +215,54 @@ bool AbiWordWorker::doCloseDocument(void)
         for (it=m_mapData.begin(); it!=m_mapData.end(); it++)
         {
             QByteArray image;
-            m_kwordLeader->loadKoStoreFile(it.key(),image);
+            bool isImage=false;
 
-            QString strExtension=it.key();
-            const int result=it.key().findRev(".");
-            if (result>=0)
-            {
-                strExtension=it.key().mid(result+1);
-            }
+            if (m_kwordLeader)
+                isImage=m_kwordLeader->loadKoStoreFile(it.key(),image);
 
-            QString strMime;
-            if (strExtension=="png")
+            if (isImage)
             {
-                strMime="image/png";
+                QString strExtension=it.key();
+                const int result=it.key().findRev(".");
+                if (result>=0)
+                {
+                    strExtension=it.key().mid(result+1);
+                }
+
+                QString strMime;
+                if (strExtension=="png")
+                {
+                    strMime="image/png";
+                }
+                else if ((strExtension=="jpg") || (strExtension=="jpeg"))
+                {
+                    strMime="image/jpeg";
+                }
+                // TODO: mathml and svg
+                else
+                {
+                    kdWarning(30506) << "Unknown extension! Image type not supported!" << endl;
+                    strMime="application/octet-stream"; // AbiWord eats this without crashing
+                }
+
+                kdDebug(30506) << "Image " << it.key() << " Type: " << strMime << endl;
+
+                // WARNING: the attributes base64 and mime are only defined in AbiWord's source code
+                //   not in AbiWord's DTD!
+                *m_streamOut << "<d name=\"" << it.data() << "\""
+                    << " base64=\"yes\"" // For now, we always encode (TODO: not for mathml and svg)
+                    << " mime=\"" << strMime << "\">\n";
+
+                QCString base64=KCodecs::base64Encode(image,true);
+
+                *m_streamOut << base64 << "\n"; // QCString is taken as Latin1 by QTextStream
+
+                *m_streamOut << "</d>\n";
             }
-            else if ((strExtension=="jpg") || (strExtension=="jpeg"))
-            {
-                strMime="image/jpeg";
-            }
-            // TODO: mathml and svg
             else
             {
-                kdWarning(30506) << "Unknown extension! Image type not supported!" << endl;
-                strMime="application/octet-stream"; // AbiWord eats this without crashing
+                kdWarning(30506) << "Unable to load image: " << it.key() << endl;
             }
-
-            kdDebug(30506) << "Image " << it.key() << " Type: " << strMime << endl;
-
-            // WARNING: the attributes base64 and mime are only defined in AbiWord's source code
-            //   not in AbiWord's DTD!
-            *m_streamOut << "<d name=\"" << it.data() << "\""
-                << " base64=\"yes\"" // For now, we always encode (TODO: not for mathml and svg)
-                << " mime=\"" << strMime << "\">\n";
-
-            QCString base64=KCodecs::base64Encode(image,true);
-
-            *m_streamOut << base64 << "\n"; // QCString is taken as Latin1 by QTextStream
-
-            *m_streamOut << "</d>\n";
         }
 
         *m_streamOut << "</data>\n";
@@ -807,15 +817,10 @@ KoFilter::ConversionStatus ABIWORDExport::convert( const QCString& from, const Q
         return KoFilter::StupidError;
     }
 
-    QString inputFile = m_chain->inputFile();
-    QString outputFile = m_chain->outputFile();
-    bool flag=leader->filter(inputFile,outputFile,from,to,"");
+    KoFilter::ConversionStatus result=leader->convert(m_chain,from,to);
 
     delete leader;
     delete worker;
 
-    if ( flag )
-        return KoFilter::OK;
-    else
-        return KoFilter::StupidError;
+    return result;
 }

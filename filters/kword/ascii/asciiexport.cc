@@ -4,7 +4,7 @@
    Copyright (C) 1998, 1999 Reginald Stadlbauer <reggie@kde.org>
    Copyright (c) 2000 ID-PRO Deutschland GmbH. All rights reserved.
                       Contact: Wolf-Michael Bolle <Bolle@ID-PRO.de>
-   Copyright (C) 2001 Nicolas GOUTTE <nicog@snafu.de>
+   Copyright (C) 2001, 2002 Nicolas GOUTTE <nicog@snafu.de>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -354,13 +354,10 @@ KoFilter::ConversionStatus ASCIIExport::convert( const QCString& from, const QCS
         return KoFilter::StupidError;
     }
 
-    bool flag=leader->filter(m_chain->inputFile(),m_chain->outputFile(),from,to,"");
+    KoFilter::ConversionStatus result=leader->convert(m_chain,from,to);
 
     delete leader;
     delete worker;
 
-    if ( flag )
-        return KoFilter::OK;
-    else
-        return KoFilter::StupidError;
+    return result;
 }
