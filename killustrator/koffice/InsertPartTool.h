@@ -29,7 +29,7 @@
 #include <qevent.h>
 
 //#include <koScanParts.h>
-#include <koQueryTypes.h>
+#include <koQueryTrader.h>
 #include "Tool.h"
 
 class InsertPartTool : public Tool {

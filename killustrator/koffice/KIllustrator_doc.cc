@@ -36,7 +36,7 @@
 #include <klocale.h>
 #include <kstddirs.h>
 
-#include <koQueryTypes.h>
+#include <koQueryTrader.h>
 #include <koStore.h>
 
 KIllustratorChild::KIllustratorChild (KIllustratorDocument* killu,
