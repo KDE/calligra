@@ -16,35 +16,22 @@
    Boston, MA 02111-1307, USA.
  */
 
-#ifndef EXCELFILTER_H
-#define EXCELFILTER_H
+#ifndef HANDLER_H
+#define HANDLER_H
 
-#include <filterbase.h>
+#include "worker.h"
 
-class QDataStream;
-class Handler;
-
-class ExcelFilter : public FilterBase
+class Handler
 {
 public:
-    ExcelFilter(const QByteArray &mainStream);
-    ~ExcelFilter();
+	Handler();
+	~Handler();
 
-    virtual bool filter();
-    virtual const QDomDocument *const part();
-
-//private slots:
-//    void slotGotAuthor(const QString &author);
-
+	const QDomDocument *const part();
+	bool invokeHandler(Q_UINT16 opcode, Q_UINT32 bytes, QDataStream &operands);
+		
 private:
-    ExcelFilter(const ExcelFilter &);
-    const ExcelFilter &operator=(const ExcelFilter &);
-
-    QDataStream *m_stream;
-	Handler *m_handler;
-
-    const unsigned m_length;
-    static const int MAX_RECORD_SIZE = 0x2024;
+	Worker *m_worker;
 };
 
 #endif

@@ -7,9 +7,9 @@ LDFLAGS	= $(all_libraries)
 
 noinst_LTLIBRARIES = libexcel97.la
 
-libexcel97_la_SOURCES = excelfilter.cc xmltree.cc
+libexcel97_la_SOURCES = helper.cc excelfilter.cc handler.cc worker.cc
 
-noinst_HEADERS = excelfilter.h xmltree.h
+noinst_HEADERS = excelfilter.h handler.h worker.h helper.h definitions.h
 
 METASOURCES = AUTO
 
