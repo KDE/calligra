@@ -46,7 +46,7 @@
 
 class KoTemplateCreateDiaPrivate {
 public:
-    KoTemplateCreateDiaPrivate()
+    KoTemplateCreateDiaPrivate( QWidget* parent ) : m_parent( parent )
     {
         m_tree=0L;
         m_name=0L;
@@ -72,6 +72,7 @@ public:
     KListView *m_groups;
     QPushButton *m_add, *m_remove;
     bool m_changed;
+    QWidget* m_parent;
 };
 
 
@@ -86,7 +87,7 @@ KoTemplateCreateDia::KoTemplateCreateDia( const QCString &templateType, KInstanc
     KDialogBase( parent, "template create dia", true, i18n( "Create Template" ),
                  KDialogBase::Ok | KDialogBase::Cancel, KDialogBase::Ok ), m_file(file), m_pixmap(pix) {
 
-    d=new KoTemplateCreateDiaPrivate();
+    d=new KoTemplateCreateDiaPrivate( parent );
 
     QFrame *mainwidget=makeMainWidget();
     QHBoxLayout *mbox=new QHBoxLayout(mainwidget, KDialogBase::marginHint(),
@@ -261,19 +262,23 @@ void KoTemplateCreateDia::slotOk() {
     }
 
     // copy the template file
-    KURL dest;
+    KURL orig, dest;
+    orig.setPath( m_file );
     dest.setPath(templateDir+file);
-    KIO::NetAccess::copy(m_file, dest);
+    // We copy the file with overwrite
+    KIO::NetAccess::file_copy(orig, dest, -1, true, false, d->m_parent);
 
     // if there's a .directory file, we copy this one, too
     bool ready=false;
     QStringList tmp=group->dirs();
     for(QStringList::ConstIterator it=tmp.begin(); it!=tmp.end() && !ready; ++it) {
         if((*it).contains(dir)==0) {
-            QString f=(*it)+".directory";
-            QFileInfo info(f);
-            if(info.exists()) {
-                KIO::NetAccess::copy(f, dir+"/.directory");
+            orig.setPath( (*it)+".directory" );
+            // Check if we can read the file
+            if(KIO::NetAccess::exists( orig, true, d->m_parent )) {
+                dest.setPath( dir+"/.directory" );
+                // We copy the file with overwrite
+                KIO::NetAccess::file_copy(orig, dest, -1, true, false, d->m_parent );
                 ready=true;
             }
         }
