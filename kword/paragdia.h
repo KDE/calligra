@@ -26,7 +26,7 @@
 #include <koRuler.h>
 #include <kwunit.h>
 #include <qdict.h>
-
+#include <qlineedit.h>
 #include "kwtextparag.h"
 #include <koparagcounter.h>
 
@@ -45,7 +45,6 @@ class QComboBox;
 class QGridLayout;
 class QGroupBox;
 class QLabel;
-class QLineEdit;
 class QListBox;
 class QPushButton;
 class QRadioButton;
@@ -267,6 +266,21 @@ private:
 };
 
 /**
+ * 
+ */
+class KWTabulatorsLineEdit : public QLineEdit
+{
+    Q_OBJECT
+public:
+    KWTabulatorsLineEdit ( QWidget * parent, const char * name=0 );
+
+protected:
+    virtual void keyPressEvent ( QKeyEvent * );
+ signals:
+    void keyReturnPressed();
+};
+
+/**
  * The widget for editing tabulators (tab 5)
  */
 class KWParagTabulatorsWidget : public KWParagLayoutWidget
@@ -300,7 +314,7 @@ protected:
 
     QListBox* lstTabs;
     QGroupBox* gPosition;
-    QLineEdit* sTabPos;
+    KWTabulatorsLineEdit* sTabPos;
     QButtonGroup* bgAlign;
     QRadioButton* rAlignLeft;
     QRadioButton* rAlignCentre;

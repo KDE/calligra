@@ -1353,9 +1353,24 @@ void KWParagCounterWidget::save( KWParagLayout & lay ) {
         lay.counter = new KoParagCounter( m_counter );
 }
 
+KWTabulatorsLineEdit::KWTabulatorsLineEdit( QWidget * parent, const char * name)
+    :QLineEdit ( parent, name )
+{
+}
+
+void KWTabulatorsLineEdit::keyPressEvent ( QKeyEvent *ke )
+{
+    if( ke->key()  == QKeyEvent::Key_Return ||
+        ke->key()  == QKeyEvent::Key_Enter )
+    {
+        emit keyReturnPressed();
+        return;
+    }
+    QLineEdit::keyPressEvent (ke);
+}
 
 KWParagTabulatorsWidget::KWParagTabulatorsWidget( KWUnit::Unit unit, double frameWidth,QWidget * parent, const char * name )
-    : KWParagLayoutWidget( KWParagDia::PD_TABS, parent, name ), m_unit(unit) { 
+    : KWParagLayoutWidget( KWParagDia::PD_TABS, parent, name ), m_unit(unit) {
     QString length;
     if(frameWidth==-1) {
         frameWidth=9999;
@@ -1363,11 +1378,11 @@ KWParagTabulatorsWidget::KWParagTabulatorsWidget( KWUnit::Unit unit, double fram
         frameWidth=KWUnit::userValue(frameWidth,m_unit);
         length=i18n("\nFrame width : %1").arg(frameWidth);
     }
-    QVBoxLayout* Form1Layout = new QVBoxLayout( this ); 
+    QVBoxLayout* Form1Layout = new QVBoxLayout( this );
     Form1Layout->setSpacing( 6 );
     Form1Layout->setMargin( 11 );
 
-    QHBoxLayout* Layout13 = new QHBoxLayout; 
+    QHBoxLayout* Layout13 = new QHBoxLayout;
     Layout13->setSpacing( 6 );
     Layout13->setMargin( 0 );
 
@@ -1376,7 +1391,7 @@ KWParagTabulatorsWidget::KWParagTabulatorsWidget( KWUnit::Unit unit, double fram
     lstTabs->setMaximumSize( QSize( 200, 32767 ) );
     Layout13->addWidget( lstTabs );
 
-    editLayout = new QVBoxLayout; 
+    editLayout = new QVBoxLayout;
     editLayout->setSpacing( 6 );
     editLayout->setMargin( 0 );
 
@@ -1390,11 +1405,11 @@ KWParagTabulatorsWidget::KWParagTabulatorsWidget( KWUnit::Unit unit, double fram
     GroupBox2Layout->setSpacing( 6 );
     GroupBox2Layout->setMargin( 11 );
 
-    QHBoxLayout* Layout5 = new QHBoxLayout; 
+    QHBoxLayout* Layout5 = new QHBoxLayout;
     Layout5->setSpacing( 6 );
     Layout5->setMargin( 0 );
 
-    sTabPos = new QLineEdit( gPosition);
+    sTabPos = new KWTabulatorsLineEdit( gPosition);
     sTabPos->setMaximumSize( QSize( 100, 32767 ) );
     sTabPos->setValidator( new KFloatValidator( 0,frameWidth,sTabPos ) );
     Layout5->addWidget( sTabPos );
@@ -1431,7 +1446,7 @@ KWParagTabulatorsWidget::KWParagTabulatorsWidget( KWUnit::Unit unit, double fram
     rAlignRight->setText( i18n( "Right" ) );
     ButtonGroup1Layout->addWidget( rAlignRight );
 
-    QHBoxLayout* Layout8 = new QHBoxLayout; 
+    QHBoxLayout* Layout8 = new QHBoxLayout;
     Layout8->setSpacing( 6 );
     Layout8->setMargin( 0 );
 
@@ -1462,7 +1477,7 @@ KWParagTabulatorsWidget::KWParagTabulatorsWidget( KWUnit::Unit unit, double fram
     TextLabel1_2->setText( i18n( "The space a tab uses can be filled with a pattern." ) );
     GroupBox5Layout->addWidget( TextLabel1_2 );
 
-    QHBoxLayout* layout11 = new QHBoxLayout; 
+    QHBoxLayout* layout11 = new QHBoxLayout;
     layout11->setSpacing( 6 );
     layout11->setMargin( 0 );
 
@@ -1485,7 +1500,7 @@ KWParagTabulatorsWidget::KWParagTabulatorsWidget( KWUnit::Unit unit, double fram
     Layout13->addLayout( editLayout );
     Form1Layout->addLayout( Layout13 );
 
-    QHBoxLayout* Layout4 = new QHBoxLayout; 
+    QHBoxLayout* Layout4 = new QHBoxLayout;
     Layout4->setSpacing( 6 );
     Layout4->setMargin( 0 );
 
@@ -1501,6 +1516,7 @@ KWParagTabulatorsWidget::KWParagTabulatorsWidget( KWUnit::Unit unit, double fram
     Form1Layout->addLayout( Layout4 );
 
     connect(sTabPos,SIGNAL(textChanged( const QString & )), this, SLOT(slotTabValueChanged( const QString & )));
+    connect(sTabPos,SIGNAL( keyReturnPressed()),this,SLOT(newClicked()));
     connect(sAlignChar,SIGNAL(textChanged( const QString & )), this, SLOT(slotAlignCharChanged( const QString & )));
     connect(bNew,SIGNAL(clicked ()),this,SLOT(newClicked()));
     connect(bDelete,SIGNAL(clicked ()),this,SLOT(deleteClicked()));
@@ -1514,7 +1530,7 @@ void KWParagTabulatorsWidget::slotTabValueChanged( const QString &text ) {
     noSignals=true;
     m_tabList[lstTabs->currentItem()].ptPos = KWUnit::fromUserValue( text.toDouble(), m_unit );
     lstTabs->changeItem(tabToString(&m_tabList[lstTabs->currentItem()]), lstTabs->currentItem());
-    
+
     sortLists();
     noSignals=false;
 }
@@ -1564,20 +1580,20 @@ void KWParagTabulatorsWidget::deleteClicked() {
     }
 }
 
-void KWParagTabulatorsWidget::setActiveItem(int selected) { 
+void KWParagTabulatorsWidget::setActiveItem(int selected) {
     if(noSignals) return;
     if(selected < 0) return;
     noSignals=true;
     KoTabulator *selectedTab = &m_tabList[selected];
     switch( selectedTab->type) {
-        case T_CENTER: 
+        case T_CENTER:
             bgAlign->setButton(1); break;
-        case  T_RIGHT: 
+        case  T_RIGHT:
             bgAlign->setButton(2); break;
-        case T_DEC_PNT: 
+        case T_DEC_PNT:
             bgAlign->setButton(3); break;
         case T_LEFT:
-        default: 
+        default:
             bgAlign->setButton(0);
     }
     sTabPos->setText( tabToString(selectedTab));
@@ -1588,22 +1604,22 @@ void KWParagTabulatorsWidget::setActiveItem(int selected) {
     noSignals=false;
 }
 
-QString KWParagTabulatorsWidget::tabToString(KoTabulator *tab) { 
+QString KWParagTabulatorsWidget::tabToString(KoTabulator *tab) {
     return QString::number( KWUnit::userValue( tab->ptPos, m_unit) );
 }
 
-void KWParagTabulatorsWidget::updateAlign(int selected) { 
+void KWParagTabulatorsWidget::updateAlign(int selected) {
     KoTabulator *selectedTab = &m_tabList[lstTabs->currentItem()];
 
     switch( selected) {
-        case 1: 
+        case 1:
             selectedTab->type=T_CENTER; break;
-        case  2: 
+        case  2:
             selectedTab->type=T_RIGHT; break;
-        case 3: 
+        case 3:
             selectedTab->type=T_DEC_PNT; break;
         case 0:
-        default: 
+        default:
             selectedTab->type=T_LEFT;
     }
 }
@@ -1619,12 +1635,12 @@ void KWParagTabulatorsWidget::sortLists() {
 
         KoTabulatorList::Iterator sort = m_tabList.begin();
         for ( ; sort != m_tabList.end() && done; ++sort ) {
-            if((*sort).ptPos > m_tabList.last().ptPos) { 
+            if((*sort).ptPos > m_tabList.last().ptPos) {
                 // greater then last, place at end.
                 m_tabList.remove(*sort);
                 m_tabList.append(*sort);
                 done=false;
-            } else if(sort != m_tabList.begin() && (*sort).ptPos < (*m_tabList.begin()).ptPos) { 
+            } else if(sort != m_tabList.begin() && (*sort).ptPos < (*m_tabList.begin()).ptPos) {
                 // smaller then first; place at begin.
                 m_tabList.remove(*sort);
                 m_tabList.prepend(*sort);
@@ -1636,7 +1652,7 @@ void KWParagTabulatorsWidget::sortLists() {
     lstTabs->clear();
     KoTabulatorList::ConstIterator it = m_tabList.begin();
     for ( ; it != m_tabList.end(); ++it )
-        lstTabs->insertItem( QString::number( KWUnit::userValue( (*it).ptPos, m_unit ) ) ); 
+        lstTabs->insertItem( QString::number( KWUnit::userValue( (*it).ptPos, m_unit ) ) );
 
     lstTabs->setCurrentItem(lstTabs->findItem(curValue));
     noSignals=false;
