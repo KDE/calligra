@@ -43,9 +43,9 @@ KWUserFont::KWUserFont( KWordDocument *_doc, const QString& _name )
 /*================================================================*/
 KWUserFont::~KWUserFont()
 {
-    document->userFontList.setAutoDelete( true );
-    document->userFontList.removeRef( this );
-    document->userFontList.setAutoDelete( false );
+    int index = document->userFontList.findRef(this);
+    if (index >= 0)
+        document->userFontList.take( index );
 }
 
 /******************************************************************/
