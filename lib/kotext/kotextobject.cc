@@ -566,7 +566,7 @@ void KoTextObject::insert( KoTextCursor * cursor, KoTextFormat * currentFormat,
         }
         else
         {
-            removeSelectedTextCommand( cursor,selectionId  );
+            emitNewCommand(removeSelectedTextCommand( cursor,selectionId  ));
         }
     }
     KoTextCursor c2 = *cursor;
