@@ -374,8 +374,8 @@ public:
     // Reimplemented from KoTextView
     virtual void drawCursor( bool b );
     virtual void showFormat( KoTextFormat *format );
-    virtual void pgUpKeyPressed();
-    virtual void pgDownKeyPressed();
+    virtual bool pgUpKeyPressed();
+    virtual bool pgDownKeyPressed();
     virtual void ctrlPgUpKeyPressed();
     virtual void ctrlPgDownKeyPressed();
 

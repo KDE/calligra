@@ -209,6 +209,10 @@ public:
 
     KCommand * createTextBox(const KoRect & rect );
 
+    // Called by KWTextFrameSetEdit when pgup/pgdown can't go further
+    // or directly called by pgup/pgdown if not using 'moves caret' feature.
+    void viewportScroll( bool up );
+
 protected:
     void applyGrid( KoPoint &p );
     void applyAspectRatio( double ratio, KoRect& insRect );

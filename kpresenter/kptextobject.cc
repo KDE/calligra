@@ -1,4 +1,4 @@
-// -*- Mode: c++-mode; c-basic-offset: 4; indent-tabs-mode: nil; tab-width: 4; -*-
+// -*- Mode: c++; c-basic-offset: 4; indent-tabs-mode: nil; tab-width: 4; -*-
 /* This file is part of the KDE project
    Copyright (C) 1998, 1999 Reginald Stadlbauer <reggie@kde.org>
 
@@ -1888,7 +1888,7 @@ void KPTextView::showFormat( KoTextFormat *format )
     m_canvas->getView()->showFormat( *format );
 }
 
-void KPTextView::pgUpKeyPressed()
+bool KPTextView::pgUpKeyPressed()
 {
     KoTextCursor *cursor = textView()->cursor();
     KoTextParag *s = cursor->parag();
@@ -1896,15 +1896,17 @@ void KPTextView::pgUpKeyPressed()
 
     textView()->cursor()->setParag( s );
     textView()->cursor()->setIndex( 0 );
+    return true;
 }
 
-void KPTextView::pgDownKeyPressed()
+bool KPTextView::pgDownKeyPressed()
 {
     KoTextCursor *cursor = textView()->cursor();
     KoTextParag *s = cursor->parag();
     s = textDocument()->lastParag();
     cursor->setParag( s );
     cursor->setIndex( s->length() - 1 );
+    return true;
 }
 
 void KPTextView::keyPressEvent( QKeyEvent *e )

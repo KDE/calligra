@@ -395,32 +395,33 @@ void KoTextView::completion()
 void KoTextView::moveCursor( CursorAction action, bool select )
 {
     hideCursor();
+    bool cursorMoved = false;
     if ( select ) {
         if ( !textDocument()->hasSelection( KoTextDocument::Standard ) )
             textDocument()->setSelectionStart( KoTextDocument::Standard, m_cursor );
-        moveCursor( action );
+        cursorMoved = moveCursor( action );
         if ( textDocument()->setSelectionEnd( KoTextDocument::Standard, m_cursor ) ) {
-            //      m_cursor->parag()->document()->nextDoubleBuffered = TRUE; ##### we need that only if we have nested items/documents
             textObject()->selectionChangedNotify();
-        } else {
-            showCursor();
         }
     } else {
         bool redraw = textDocument()->removeSelection( KoTextDocument::Standard );
-        moveCursor( action );
+        cursorMoved = moveCursor( action );
         if ( redraw ) {
-            //m_cursor->parag()->document()->nextDoubleBuffered = TRUE; // we need that only if we have nested items/documents
             textObject()->selectionChangedNotify();
         }
     }
 
-    ensureCursorVisible();
+    if ( cursorMoved ) // e.g. not when pressing Ctrl/PgDown after the last parag
+    {
+        ensureCursorVisible();
+        // updateUI( true ); // done by moveCursor
+    }
     showCursor();
-    updateUI( true );
 }
 
-void KoTextView::moveCursor( CursorAction action )
+bool KoTextView::moveCursor( CursorAction action )
 {
+    bool cursorMoved = true;
     switch ( action ) {
         case MoveBackward:
             m_cursor->gotoPreviousLetter();
@@ -441,10 +442,10 @@ void KoTextView::moveCursor( CursorAction action )
             m_cursor->gotoDown();
             break;
         case MoveViewportUp:
-            pgUpKeyPressed();
+            cursorMoved = pgUpKeyPressed();
             break;
         case MoveViewportDown:
-            pgDownKeyPressed();
+            cursorMoved = pgDownKeyPressed();
             break;
         case MovePgUp:
             ctrlPgUpKeyPressed();
@@ -484,6 +485,7 @@ void KoTextView::moveCursor( CursorAction action )
     }
 
     updateUI( true );
+    return cursorMoved;
 }
 
 KoTextCursor KoTextView::selectWordUnderCursor( const KoTextCursor& cursor, int selectionId )

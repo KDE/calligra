@@ -3400,26 +3400,16 @@ void KWTextFrameSetEdit::drawCursor( bool visible )
     textFrameSet()->drawCursor( &p, cursor(), visible, m_canvas, m_currentFrame );
 }
 
-void KWTextFrameSetEdit::pgUpKeyPressed()
+bool KWTextFrameSetEdit::pgUpKeyPressed()
 {
     QRect crect( m_canvas->contentsX(), m_canvas->contentsY(),
                  m_canvas->visibleWidth(), m_canvas->visibleHeight() );
     crect = m_canvas->viewMode()->viewToNormal( crect );
 
-#if 0
-    // One idea would be: move up until first-visible-paragraph wouldn't be visible anymore
-    // First find the first-visible paragraph...
-    KoTextParag *firstVis = m_cursor->parag();
-    while ( firstVis && crect.intersects( s->rect() ) )
-        firstVis = firstVis->prev();
-    if ( !firstVis )
-        firstVis = textFrameSet()->textDocument()->firstParag();
-    else if ( firstVis->next() )
-        firstVis = firstVis->next();
-#endif
     // Go up of 90% of crect.height()
     int h = frameSet()->kWordDocument()->pixelToLayoutUnitY( (int)( (double)crect.height() * 0.9 ) );
     KoTextParag *s = textView()->cursor()->parag();
+    KoTextParag* oldParag = s;
     int y = s->rect().y();
     while ( s ) {
         if ( y - s->rect().y() >= h )
@@ -3432,9 +3422,15 @@ void KWTextFrameSetEdit::pgUpKeyPressed()
 
     textView()->cursor()->setParag( s );
     textView()->cursor()->setIndex( 0 );
+    if ( s == oldParag )
+    {
+        m_canvas->viewportScroll( true );
+        return false;
+    }
+    return true;
 }
 
-void KWTextFrameSetEdit::pgDownKeyPressed()
+bool KWTextFrameSetEdit::pgDownKeyPressed()
 {
     QRect crect( m_canvas->contentsX(), m_canvas->contentsY(),
                  m_canvas->visibleWidth(), m_canvas->visibleHeight() );
@@ -3444,6 +3440,7 @@ void KWTextFrameSetEdit::pgDownKeyPressed()
 
     KoTextCursor *cursor = textView()->cursor();
     KoTextParag *s = cursor->parag();
+    KoTextParag* oldParag = s;
     int y = s->rect().y();
     while ( s ) {
         if ( s->rect().y() - y >= h )
@@ -3459,6 +3456,12 @@ void KWTextFrameSetEdit::pgDownKeyPressed()
         cursor->setParag( s );
         cursor->setIndex( 0 );
     }
+    if ( s == oldParag )
+    {
+        m_canvas->viewportScroll( false );
+        return false;
+    }
+    return true;
 }
 
 void KWTextFrameSetEdit::ctrlPgUpKeyPressed()

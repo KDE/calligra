@@ -1,4 +1,4 @@
-// -*- Mode: c++-mode; c-basic-offset: 4; indent-tabs-mode: nil; tab-width: 4; -*-
+// -*- Mode: c++; c-basic-offset: 4; indent-tabs-mode: nil; tab-width: 4; -*-
 /* This file is part of the KDE project
    Copyright (C) 1998, 1999 Reginald Stadlbauer <reggie@kde.org>
 
@@ -270,8 +270,8 @@ protected:
 
     virtual void showFormat( KoTextFormat *format ) ;
 
-    virtual void pgUpKeyPressed();
-    virtual void pgDownKeyPressed();
+    virtual bool pgUpKeyPressed();
+    virtual bool pgDownKeyPressed();
 
     QPoint cursorPosition( const QPoint & pos );
 

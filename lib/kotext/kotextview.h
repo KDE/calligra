@@ -209,10 +209,10 @@ protected:
 
     /** Reimplement this to handle PageUp. Example implementation:
         textView->cursor()->gotoPageUp( scrollview->visibleHeight() ); */
-    virtual void pgUpKeyPressed() = 0;
+    virtual bool pgUpKeyPressed() = 0;
     /** Reimplement this to handle PageDown. Example implementation:
         textView->cursor()->gotoPageDown( scrollview->visibleHeight() ); */
-    virtual void pgDownKeyPressed() = 0;
+    virtual bool pgDownKeyPressed() = 0;
     /** Reimplement this to handle CTRL+PageUp. Default implementation calls pgUpKeyPressed */
     virtual void ctrlPgUpKeyPressed() { pgUpKeyPressed(); }
     /** Reimplement this to handle CTRL+PageDown. Default implementation calls pgDownKeyPressed */
@@ -250,7 +250,7 @@ protected:
     };
 
     void moveCursor( CursorAction action, bool select );
-    void moveCursor( CursorAction action );
+    bool moveCursor( CursorAction action );
 
 private:
     KoTextObject *m_textobj;

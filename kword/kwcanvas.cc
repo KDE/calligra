@@ -2519,10 +2519,7 @@ bool KWCanvas::eventFilter( QObject *o, QEvent *e )
                 if ( !m_doc->pgUpDownMovesCaret() && ( (keyev->state() & ShiftButton) == 0 )
                      && ( keyev->key() == Key_PageUp || keyev->key() == Key_PageDown ) )
                 {
-                    if ( keyev->key() == Key_PageUp )
-                        setContentsPos( contentsX(), contentsY() - visibleHeight() );
-                    else // Key_PageDown
-                        setContentsPos( contentsX(), contentsY() + visibleHeight() );
+                    viewportScroll( keyev->key() == Key_PageUp );
                 }
                 else if ( keyev->key() == Key_Escape  )
                 {
@@ -2647,6 +2644,14 @@ int KWCanvas::currentTableCol() const
     if ( textfs && textfs->getGroupManager() )
         return static_cast<KWTableFrameSet::Cell *>(textfs)->firstCol();
     return -1;
+}
+
+void KWCanvas::viewportScroll( bool up )
+{
+    if ( up )
+        setContentsPos( contentsX(), contentsY() - visibleHeight() );
+    else
+        setContentsPos( contentsX(), contentsY() + visibleHeight() );
 }
 
 #include "kwcanvas.moc"
