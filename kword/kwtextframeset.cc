@@ -118,8 +118,8 @@ int KWTextFrameSet::availableHeight() const
 KWFrame * KWTextFrameSet::normalToInternal( QPoint nPoint, QPoint &iPoint, bool mouseSelection ) const
 {
     int totalHeight = 0;
-    KWFrame * copyFrame = 0L;
-    int copyFrameTop = 0;
+    KWFrame * lastRealFrame = 0L;
+    int lastRealFrameTop = 0;
     QListIterator<KWFrame> frameIt( frameIterator() );
     for ( ; frameIt.current(); ++frameIt )
     {
@@ -131,7 +131,7 @@ KWFrame * KWTextFrameSet::normalToInternal( QPoint nPoint, QPoint &iPoint, bool 
             // into the QTextDocument's coordinate system
             // (which doesn't have frames, borders, etc.)
             int offsetX = frameRect.left();
-            int offsetY = frameRect.top() - ( copyFrame ? copyFrameTop : totalHeight );
+            int offsetY = frameRect.top() - ( ( frame->isCopy() && lastRealFrame ) ? lastRealFrameTop : totalHeight );
 
             iPoint.setX( nPoint.x() - offsetX );
             iPoint.setY( nPoint.y() - offsetY );
@@ -147,7 +147,7 @@ KWFrame * KWTextFrameSet::normalToInternal( QPoint nPoint, QPoint &iPoint, bool 
             if ( openLeftRect.contains( nPoint ) )
             {
                 // We are at the left of this frame (and not in any other frame of this frameset)
-                int offsetY = frameRect.top() - ( copyFrame ? copyFrameTop : totalHeight );
+                int offsetY = frameRect.top() - ( ( frame->isCopy() && lastRealFrame ) ? lastRealFrameTop : totalHeight );
                 iPoint.setX( 0 );
                 iPoint.setY( nPoint.y() - offsetY );
                 return frame;
@@ -163,12 +163,10 @@ KWFrame * KWTextFrameSet::normalToInternal( QPoint nPoint, QPoint &iPoint, bool 
             }
         }
 
-        if ( frame->getNewFrameBehaviour() != Copy )
-            copyFrame = 0L;
-        else if ( !copyFrame )
+        if ( !lastRealFrame || !frame->isCopy() )
         {
-            copyFrame = frame;
-            copyFrameTop = totalHeight;
+            lastRealFrame = frame;
+            lastRealFrameTop = totalHeight;
         }
         totalHeight += frameRect.height();
     }
@@ -180,14 +178,14 @@ KWFrame * KWTextFrameSet::internalToNormal( QPoint iPoint, QPoint & nPoint, QPoi
 {
     int totalHeight = 0;
     QListIterator<KWFrame> frameIt( frameIterator() );
-    KWFrame * copyFrame = 0L;
-    int copyFrameTop = 0;
+    KWFrame * lastRealFrame = 0L;
+    int lastRealFrameTop = 0;
     for ( ; frameIt.current(); ++frameIt )
     {
         KWFrame *frame = frameIt.current();
         QRect frameRect = kWordDocument()->zoomRect( *frame );
         int offsetX = frameRect.left();
-        int offsetY = frameRect.top() - ( copyFrame ? copyFrameTop : totalHeight );
+        int offsetY = frameRect.top() - ( ( frame->isCopy() && lastRealFrame ) ? lastRealFrameTop : totalHeight );
         QRect r( frameRect );
         r.moveBy( -offsetX, -offsetY );   // frame in qrt coords
         if ( r.contains( iPoint ) ) // both r and p are in "qrt coordinates"
@@ -198,12 +196,10 @@ KWFrame * KWTextFrameSet::internalToNormal( QPoint iPoint, QPoint & nPoint, QPoi
                 return frame;
             // The above test uses hintNPoint only if specified, and if this frame isn't copied.
         }
-        if ( frame->getNewFrameBehaviour() != Copy )
-            copyFrame = 0L;
-        else if ( !copyFrame )
+        if ( !lastRealFrame || !frame->isCopy() )
         {
-            copyFrame = frame;
-            copyFrameTop = totalHeight;
+            lastRealFrame = frame;
+            lastRealFrameTop = totalHeight;
         }
         totalHeight += frameRect.height();
     }
@@ -221,7 +217,7 @@ void KWTextFrameSet::drawFrame( KWFrame *frame, QPainter *painter, const QRect &
                                 KWFrameSetEdit *edit )
 {
     //m_currentDrawnFrame = frame;
-    if ( frame->getNewFrameBehaviour() == Copy ) // ## in theory we should test the behaviour of the previous frame. Bah.
+    if ( frame->isCopy() )
     {
         // Update variables for each frame (e.g. for page-number)
         // If more than KWPgNumVariable need this functionality, create an intermediary base class
@@ -302,8 +298,8 @@ void KWTextFrameSet::drawCursor( QPainter *p, QTextCursor *cursor, bool cursorVi
     QListIterator<KWFrame> frameIt( frameIterator() );
     int totalHeight = 0;
     bool drawn = false;
-    KWFrame * copyFrame = 0L;
-    int copyFrameTop = 0;
+    KWFrame * lastRealFrame = 0L;
+    int lastRealFrameTop = 0;
     for ( ; frameIt.current(); ++frameIt )
     {
         KWFrame *frame = frameIt.current();
@@ -315,7 +311,7 @@ void KWTextFrameSet::drawCursor( QPainter *p, QTextCursor *cursor, bool cursorVi
         // The parag is in the qtextdoc coordinates -> first translate frame to qtextdoc coords
         QRect rf( normalFrameRect );
         int offsetX = normalFrameRect.left();
-        int offsetY = normalFrameRect.top() - ( copyFrame ? copyFrameTop : totalHeight );
+        int offsetY = normalFrameRect.top() - ( ( frame->isCopy() && lastRealFrame ) ? lastRealFrameTop : totalHeight );
 
         rf.moveBy( -offsetX, -offsetY ); // rf is now in QRT internal coords
 
@@ -343,9 +339,12 @@ void KWTextFrameSet::drawCursor( QPainter *p, QTextCursor *cursor, bool cursorVi
                 // translate to qrt coords - after setting the clip region !
                 p->translate( cPoint.x() - topLeft.x(), cPoint.y() - topLeft.y() );
 
+                // The settings come from this frame
+                KWFrame * settingsFrame = ( frame->isCopy() && lastRealFrame ) ? lastRealFrame : frame;
+
                 QPixmap *pix = 0;
                 QColorGroup cg = QApplication::palette().active();
-                QBrush bgBrush( frame->getBackgroundColor() );
+                QBrush bgBrush( settingsFrame->getBackgroundColor() );
                 bgBrush.setColor( KWDocument::resolveBgColor( bgBrush.color(), p ) );
                 cg.setBrush( QColorGroup::Base, bgBrush );
 
@@ -359,12 +358,10 @@ void KWTextFrameSet::drawCursor( QPainter *p, QTextCursor *cursor, bool cursorVi
         else
             if ( drawn ) // Ok, we've drawn it, and now we're after it -> exit
                 break;   // Note that we might go into the above block twice, if parag is over two frames.
-        if ( frame->getNewFrameBehaviour() != Copy )
-            copyFrame = 0L;
-        else if ( !copyFrame )
+        if ( !lastRealFrame || !frame->isCopy() )
         {
-            copyFrame = frame;
-            copyFrameTop = totalHeight;
+            lastRealFrame = frame;
+            lastRealFrameTop = totalHeight;
         }
         totalHeight += normalFrameRect.height();
     }
@@ -1478,7 +1475,6 @@ bool KWTextFrameSet::isFrameEmpty( KWFrame * frame )
 
 bool KWTextFrameSet::canRemovePage( int num )
 {
-    KWFrame * copyFrame = 0;
     QListIterator<KWFrame> frameIt( frameIterator() );
     for ( ; frameIt.current(); ++frameIt )
     {
@@ -1491,13 +1487,10 @@ bool KWTextFrameSet::canRemovePage( int num )
                       << " found a frame on page " << num << " empty:" << isEmpty << endl;
 #endif
             // Ok, so we have a frame on that page -> we can't remove it unless it's a copied frame OR it's empty
-            if ( !copyFrame && !isEmpty )
+            bool isCopy = frame->isCopy() && frameIt.current() != frames.first();
+            if ( !isCopy && !isEmpty )
                 return false;
         }
-        if ( frame->getNewFrameBehaviour() != Copy )
-            copyFrame = 0L;
-        else if ( !copyFrame )
-            copyFrame = frame;
     }
     return true;
 }

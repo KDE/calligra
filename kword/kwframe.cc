@@ -47,8 +47,8 @@ KWFrame::KWFrame(KWFrameSet *fs, double left, double top, double width, double h
       frameBehaviour( AutoCreateNewFrame ),
       newFrameBehaviour( Reconnect ),
       runAroundGap( _gap ),
+      m_bCopy( false ),
       selected( false ),
-      //mostRight( false ),
       m_pageNum( 0 ),
       backgroundColor( QBrush( QColor() ) ), // valid brush with invalid color ( default )
       brd_left( QColor(), Border::SOLID, 0 ),
@@ -59,8 +59,7 @@ KWFrame::KWFrame(KWFrameSet *fs, double left, double top, double width, double h
       bright( 0 ),
       btop( 0 ),
       bbottom( 0 ),
-      frameSet( fs )/*,
-      m_anchor( 0 )*/
+      frameSet( fs )
 {
     //kdDebug() << "KWFrame::KWFrame " << this << " left=" << left << " top=" << top << endl;
     m_pageNum = fs ? fs->kWordDocument()->getPageOfRect( *this ) : 0;
@@ -134,6 +133,7 @@ KWFrame *KWFrame::getCopy() {
     frm->setBRight(getBRight());
     frm->setBTop(getBTop());
     frm->setBBottom(getBBottom());
+    frm->setCopy(isCopy());
     /*if(anchor())
         frm->setAnchor(anchor());*/
     return frm;
@@ -534,6 +534,23 @@ int KWFrameSet::getFrameFromPtr( KWFrame *frame )
     return frames.findRef( frame );
 }
 
+KWFrame * KWFrameSet::settingsFrame(KWFrame* frame)
+{
+    QListIterator<KWFrame> frameIt( frame->getFrameSet()->frameIterator() );
+    if ( !frame->isCopy() )
+        return frame;
+    KWFrame* lastRealFrame=0L;
+    for ( ; frameIt.current(); ++frameIt )
+    {
+        KWFrame *curFrame = frameIt.current();
+        if( curFrame == frame )
+            return lastRealFrame ? lastRealFrame : frame;
+        if ( !lastRealFrame || !curFrame->isCopy() )
+            lastRealFrame = curFrame;
+    }
+    return frame; //fallback, should never happen
+}
+
 void KWFrameSet::updateFrames()
 {
     m_framesOnTop.clear();
@@ -628,8 +645,8 @@ void KWFrameSet::drawContents( QPainter *p, const QRect & crect, QColorGroup &cg
     //               << endl;
 
     QListIterator<KWFrame> frameIt( frameIterator() );
-    KWFrame * copyFrame = 0L;
-    int copyFrameTop = 0;
+    KWFrame * lastRealFrame = 0L;
+    int lastRealFrameTop = 0;
     int totalHeight = 0;
     for ( ; frameIt.current(); ++frameIt )
     {
@@ -653,7 +670,7 @@ void KWFrameSet::drawContents( QPainter *p, const QRect & crect, QColorGroup &cg
             // into the QTextDocument's coordinate system
             // (which doesn't have frames, borders, etc.)
             int offsetX = normalFrameRect.left();
-            int offsetY = normalFrameRect.top() - ( copyFrame ? copyFrameTop : totalHeight );
+            int offsetY = normalFrameRect.top() - ( ( frame->isCopy() && lastRealFrame ) ? lastRealFrameTop : totalHeight );
 
             QRect icrect = viewMode->viewToNormal( r );
             icrect.moveBy( -offsetX, -offsetY );   // portion of the frame to be drawn, in qrt coords
@@ -666,7 +683,7 @@ void KWFrameSet::drawContents( QPainter *p, const QRect & crect, QColorGroup &cg
                 p->translate( r.x() - icrect.x(), r.y() - icrect.y() ); // This assume that viewToNormal() is only a translation
 
                 // The settings come from this frame
-                KWFrame * settingsFrame = copyFrame ? copyFrame : frame;
+                KWFrame * settingsFrame = ( frame->isCopy() && lastRealFrame ) ? lastRealFrame : frame;
 
                 QBrush bgBrush( settingsFrame->getBackgroundColor() );
                 bgBrush.setColor( KWDocument::resolveBgColor( bgBrush.color(), p ) );
@@ -688,12 +705,10 @@ void KWFrameSet::drawContents( QPainter *p, const QRect & crect, QColorGroup &cg
                 }
             }
         }
-        if ( frame->getNewFrameBehaviour() != Copy )
-            copyFrame = 0L;
-        else if ( !copyFrame )
+        if ( !lastRealFrame || !frame->isCopy() )
         {
-            copyFrame = frame;
-            copyFrameTop = totalHeight;
+            lastRealFrame = frame;
+            lastRealFrameTop = totalHeight;
         }
         totalHeight += frameRect.height();
     }
@@ -934,6 +949,8 @@ void KWFrameSet::load( QDomElement &attributes )
             frame->setFrameBehaviour( autoCreateNewValue );
             frame->setSheetSide( sheetSide );
             frame->setNewFrameBehaviour( newFrameBehaviour);
+            if ( isAHeader() || isAFooter() )
+                frame->setCopy( true );
             addFrame( frame );
             m_doc->progressItemLoaded();
         }
@@ -1056,7 +1073,6 @@ QRegion KWFrameSet::frameClipRegion( QPainter * painter, KWFrame *frame, const Q
 
 bool KWFrameSet::canRemovePage( int num )
 {
-    KWFrame * copyFrame = 0;
     QListIterator<KWFrame> frameIt( frameIterator() );
     for ( ; frameIt.current(); ++frameIt )
     {
@@ -1064,13 +1080,9 @@ bool KWFrameSet::canRemovePage( int num )
         if ( frame->pageNum() == num )
         {
             // Ok, so we have a frame on that page -> we can't remove it unless it's a copied frame
-            if ( !copyFrame )
+            if ( ! ( frame->isCopy() && frameIt.current() != frames.first() ) )
                 return false;
         }
-        if ( frame->getNewFrameBehaviour() != Copy )
-            copyFrame = 0L;
-        else if ( !copyFrame )
-            copyFrame = frame;
     }
     return true;
 }

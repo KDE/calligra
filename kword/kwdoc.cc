@@ -383,7 +383,7 @@ void KWDocument::recalcFrames()
     KWTextFrameSet *firstFooter = 0L, *evenFooter = 0L, *oddFooter = 0L;
 
     // Lookup the various header / footer framesets into the variables above
-    // [Done in all cases, in order to hide unused framesets
+    // [Done in all cases, in order to hide unused framesets]
 
     QListIterator<KWFrameSet> fit = framesetsIterator();
     for ( ; fit.current() ; ++fit )
@@ -587,6 +587,7 @@ void KWDocument::recalcFrames()
                                                   ptRightBorder(), h );
                     frame->setFrameBehaviour( AutoExtendFrame );
                     frame->setNewFrameBehaviour( Copy );
+                    frame->setCopy( true );
                     evenHeader->addFrame( frame );
                 }
             }
@@ -623,6 +624,7 @@ void KWDocument::recalcFrames()
                                                       ptRightBorder(), h2 );
                         frame->setFrameBehaviour( AutoExtendFrame );
                         frame->setNewFrameBehaviour( Copy );
+                        frame->setCopy( true );
                         oddHeader->addFrame( frame );
                     }
                 } else {
@@ -645,6 +647,7 @@ void KWDocument::recalcFrames()
                                                       ptRightBorder(), h1 );
                         frame->setFrameBehaviour( AutoExtendFrame );
                         frame->setNewFrameBehaviour( Copy );
+                        frame->setCopy( true );
                         evenHeader->addFrame( frame );
                     }
                 }
@@ -693,6 +696,7 @@ void KWDocument::recalcFrames()
                                                   ptRightBorder(), h );
                     frame->setFrameBehaviour( AutoExtendFrame );
                     frame->setNewFrameBehaviour( Copy );
+                    frame->setCopy( true );
                     evenHeader->addFrame( frame );
                 }
             }
@@ -728,6 +732,7 @@ void KWDocument::recalcFrames()
                                                   ptRightBorder(), h );
                     frame->setFrameBehaviour( AutoExtendFrame );
                     frame->setNewFrameBehaviour( Copy );
+                    frame->setCopy( true );
                     evenFooter->addFrame( frame );
                 }
             }
@@ -763,6 +768,7 @@ void KWDocument::recalcFrames()
                                                       ptRightBorder(), h2 );
                         frame->setFrameBehaviour( AutoExtendFrame );
                         frame->setNewFrameBehaviour( Copy );
+                        frame->setCopy( true );
                         oddFooter->addFrame( frame );
                     }
                 } else {
@@ -785,6 +791,7 @@ void KWDocument::recalcFrames()
                                                       ptRightBorder(), h1 );
                         frame->setFrameBehaviour( AutoExtendFrame );
                         frame->setNewFrameBehaviour( Copy );
+                        frame->setCopy( true );
                         evenFooter->addFrame( frame );
                     }
                 }
@@ -829,6 +836,7 @@ void KWDocument::recalcFrames()
                                                   ptRightBorder(), h );
                     frame->setFrameBehaviour( AutoExtendFrame );
                     frame->setNewFrameBehaviour( Copy );
+                    frame->setCopy( true );
                     evenFooter->addFrame( frame );
                 }
             }
@@ -2025,6 +2033,9 @@ void KWDocument::appendPage( /*unsigned int _page*/ )
                 frm->moveBy( 0, ptPaperHeight() );
                 frm->setPageNum( frame->pageNum()+1 );
                 newFrames.append( frm );
+
+                if ( frame->getNewFrameBehaviour()==Copy )
+                    frm->setCopy( true );
                 //kdDebug(32002) << "   => created frame " << frm << endl;
             }
         }
@@ -2546,10 +2557,10 @@ void KWDocument::refreshFrameBorderButton()
     if (frame)
     {
         QListIterator<KWView> it( m_lstViews );
-        frame=it.toFirst()->getGUI()->canvasWidget()->settingsFrame(frame);
+        frame = KWFrameSet::settingsFrame(frame);
         for ( ; it.current() ; ++it )
         {
-            it.current()->getGUI()->getView()->showFrameBorders( frame->getLeftBorder(), frame->getRightBorder(), frame->getTopBorder(), frame->getBottomBorder() );
+            it.current()->showFrameBorders( frame->getLeftBorder(), frame->getRightBorder(), frame->getTopBorder(), frame->getBottomBorder() );
         }
     }
 }

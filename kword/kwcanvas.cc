@@ -334,7 +334,7 @@ void KWCanvas::mpEditFrame( QMouseEvent *e, const QPoint &nPoint ) // mouse pres
     if( m_doc->getFirstSelectedFrame() )
     {
         KWFrame * frame = m_doc->getFirstSelectedFrame();
-        frame=settingsFrame(frame);
+        frame=KWFrameSet::settingsFrame(frame);
         m_resizedFrameInitialSize = frame->normalize();
     }
 
@@ -347,7 +347,7 @@ void KWCanvas::mpEditFrame( QMouseEvent *e, const QPoint &nPoint ) // mouse pres
     m_boundingRect = KoRect();
     for(frame=selectedFrames.first(); frame != 0; frame=selectedFrames.next() )
     {
-        frame=settingsFrame(frame);
+        frame=KWFrameSet::settingsFrame(frame);
         KWFrameSet * fs = frame->getFrameSet();
         if ( !(m_doc->processingType() == KWDocument::WP && m_doc->getFrameSetNum( fs ) == 0 )&& !fs->isAHeader() && !fs->isAFooter()  )
         {
@@ -554,7 +554,7 @@ void KWCanvas::mmEditFrameResize( bool top, bool bottom, bool left, bool right, 
     // Can't resize the main frame of a WP document
     KWFrame *frame = m_doc->getFirstSelectedFrame();
     //necesary to have other frame otherwise resize doesn't work
-    KWFrame *frame2=settingsFrame(frame);
+    KWFrame *frame2=KWFrameSet::settingsFrame(frame);
 
     KWFrameSet *fs = frame->getFrameSet();
     if ( m_doc->processingType() == KWDocument::WP && fs == m_doc->getFrameSet(0))
@@ -764,7 +764,7 @@ void KWCanvas::mmEditFrameMove( int mx, int my )
         {
             KWFrame *frame = frameIt.current();
             if ( frame->isSelected() ) {
-                frame=settingsFrame(frame);
+                frame=KWFrameSet::settingsFrame(frame);
                 if ( frameset->getFrameType() == FT_TABLE ) {
                     if ( tablesMoved.findRef( static_cast<KWTableFrameSet *> (frameset) ) == -1 )
                         tablesMoved.append( static_cast<KWTableFrameSet *> (frameset));
@@ -930,7 +930,7 @@ void KWCanvas::mrEditFrame( QMouseEvent *e, const QPoint &nPoint ) // Can be cal
         if ( frameResized )
         {
             KWFrame *frame = m_doc->getFirstSelectedFrame();
-            frame=settingsFrame(frame);
+            frame=KWFrameSet::settingsFrame(frame);
             ASSERT( frame );
             if ( frame )
             {
@@ -1187,7 +1187,7 @@ void KWCanvas::setLeftFrameBorder( Border _frmBrd, bool _b )
     KWFrame *frame=0L;
     for(frame=selectedFrames.first(); frame != 0; frame=selectedFrames.next() )
     {
-        frame=settingsFrame(frame);
+        frame=KWFrameSet::settingsFrame(frame);
         FrameIndex *index=new FrameIndex( frame );
         FrameBorderTypeStruct *tmp=new FrameBorderTypeStruct;
         tmp->m_OldBorder=frame->getLeftBorder();
@@ -1234,7 +1234,7 @@ void KWCanvas::setRightFrameBorder( Border _frmBrd, bool _b )
 
     for(frame=selectedFrames.first(); frame != 0; frame=selectedFrames.next() )
     {
-        frame=settingsFrame(frame);
+        frame=KWFrameSet::settingsFrame(frame);
         FrameIndex *index=new FrameIndex( frame );
         FrameBorderTypeStruct *tmp=new FrameBorderTypeStruct;
         tmp->m_OldBorder=frame->getRightBorder();
@@ -1283,7 +1283,7 @@ void KWCanvas::setTopFrameBorder( Border _frmBrd, bool _b )
         _frmBrd.ptWidth=0;
     for(frame=selectedFrames.first(); frame != 0; frame=selectedFrames.next() )
     {
-        frame=settingsFrame(frame);
+        frame=KWFrameSet::settingsFrame(frame);
         FrameIndex *index=new FrameIndex( frame );
         FrameBorderTypeStruct *tmp=new FrameBorderTypeStruct;
         tmp->m_OldBorder=frame->getTopBorder();
@@ -1330,7 +1330,7 @@ void KWCanvas::setBottomFrameBorder( Border _frmBrd, bool _b )
 
     for(frame=selectedFrames.first(); frame != 0; frame=selectedFrames.next() )
     {
-        frame=settingsFrame(frame);
+        frame=KWFrameSet::settingsFrame(frame);
         FrameIndex *index=new FrameIndex( frame );
         FrameBorderTypeStruct *tmp=new FrameBorderTypeStruct;
         tmp->m_OldBorder=frame->getBottomBorder();
@@ -1385,7 +1385,7 @@ void KWCanvas::setOutlineFrameBorder( Border _frmBrd, bool _b )
     //int m_IindexFrameSet;
     for(frame=selectedFrames.first(); frame != 0; frame=selectedFrames.next() )
     {
-        frame=settingsFrame(frame);
+        frame=KWFrameSet::settingsFrame(frame);
         FrameIndex *index=new FrameIndex;
         FrameBorderTypeStruct *tmp=new FrameBorderTypeStruct;
         tmp->m_OldBorder=frame->getBottomBorder();
@@ -1470,28 +1470,6 @@ void KWCanvas::setOutlineFrameBorder( Border _frmBrd, bool _b )
     m_doc->repaintAllViews();
 }
 
-KWFrame * KWCanvas::settingsFrame(KWFrame* frame)
-{
-    QListIterator<KWFrame> frameIt( frame->getFrameSet()->frameIterator() );
-    KWFrame* copyFrame=0L;
-    for ( ; frameIt.current(); ++frameIt  )
-    {
-        KWFrame *frame2 = frameIt.current();
-        if(frame==frame2)
-            break;
-        if ( frame->getNewFrameBehaviour() != Copy )
-            copyFrame = 0L;
-        else if ( !copyFrame )
-        {
-            copyFrame = frame2;
-        }
-    }
-    if(copyFrame)
-        frame=copyFrame;
-
-    return frame;
-}
-
 void KWCanvas::setFrameBackgroundColor( const QBrush &_backColor )
 {
     QList <KWFrame> selectedFrames = m_doc->getSelectedFrames();
@@ -1503,7 +1481,7 @@ void KWCanvas::setFrameBackgroundColor( const QBrush &_backColor )
     QList<QBrush> oldColor;
     for(frame=selectedFrames.first(); frame != 0; frame=selectedFrames.next() )
     {
-        frame=settingsFrame(frame);
+        frame=KWFrameSet::settingsFrame(frame);
 
         FrameIndex *index=new FrameIndex( frame );
         frameindexList.append(index);

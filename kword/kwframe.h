@@ -93,6 +93,7 @@ public:
     void setRunAround( RunAround _ra ) { runAround = _ra; }
     RunAround getRunAround() { return runAround; }
 
+    /* What happens when the [text] frame is full (autoextend, create new frame, ignore) */
     FrameBehaviour getFrameBehaviour() { return frameBehaviour; }
     void setFrameBehaviour( FrameBehaviour fb ) { frameBehaviour = fb; }
 
@@ -100,18 +101,19 @@ public:
     SheetSide getSheetSide() { return sheetSide; }
     void setSheetSide( SheetSide ss ) { sheetSide = ss; }
 
+    /* What happens on new page (reconnect, nofollowup, copy) */
     NewFrameBehaviour getNewFrameBehaviour() { return newFrameBehaviour; }
     void setNewFrameBehaviour( NewFrameBehaviour nfb ) { newFrameBehaviour = nfb; }
+
+    /* Drawing property: if isCopy, this frame is a copy of the previous frame in the frameset */
+    bool isCopy() { return m_bCopy; }
+    void setCopy( bool copy ) { m_bCopy = copy; }
 
     /* Data stucture methods */
     KWFrameSet *getFrameSet() const { return frameSet; }
     void setFrameSet( KWFrameSet *fs ) { frameSet = fs; }
 
-/*    KWAnchor *anchor() const { return m_anchor; }
-    // Called by KWFrameSet's createAnchor and deleteAnchor
-    void setAnchor( KWAnchor * anchor ) { m_anchor = anchor; }
-    void deleteAnchor();
-*/
+    /* The page on which this frame is */
     void setPageNum( int i ) { m_pageNum = i; }
     int pageNum() { return m_pageNum; }
 
@@ -171,6 +173,7 @@ private:
     FrameBehaviour frameBehaviour;
     NewFrameBehaviour newFrameBehaviour;
     double runAroundGap;
+    bool m_bCopy;
     bool selected;
     int m_pageNum;
 
@@ -290,6 +293,10 @@ public:
 
     /** get a frame by number */
     KWFrame *getFrame( unsigned int _num );
+
+    /** get the frame whose settings apply for @p frame
+        (usually @p frame, but can also be the real frame if frame is a copy) */
+    static KWFrame * settingsFrame(KWFrame* frame);
 
     /* Iterator over the child frames */
     const QList<KWFrame> &frameIterator() const { return frames; }
