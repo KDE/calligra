@@ -52,7 +52,8 @@ CSVDialog::CSVDialog(QWidget* parent, QByteArray& fileArray, const QString /*sep
       m_delimiter(","),
       m_ignoreDups(false),
       m_fileArray(fileArray),
-      m_dialog(new DialogUI(this))
+      m_dialog(new DialogUI(this)),
+      m_codec( QTextCodec::codecForName( "UTF-8" ) )
 {
     setCaption( i18n( "Import" ) );
     kapp->restoreOverrideCursor();
@@ -92,6 +93,8 @@ CSVDialog::CSVDialog(QWidget* parent, QByteArray& fileArray, const QString /*sep
             this, SLOT(ignoreDuplicatesChanged(int)));
     connect(m_dialog->m_updateButton, SIGNAL(clicked()),
             this, SLOT(updateClicked()));
+    connect(m_dialog->comboBoxEncoding, SIGNAL(textChanged ( const QString & )),
+            this, SLOT(encodingChanged ( const QString & ) ));
 }
 
 CSVDialog::~CSVDialog()
@@ -118,9 +121,10 @@ void CSVDialog::fillTable( )
     int maxColumn = 1;
     row = column = 1;
     QTextStream inputStream(m_fileArray, IO_ReadOnly);
-    inputStream.setEncoding(QTextStream::Locale);
+    kdDebug(30501) << "Encoding: " << m_codec->name() << endl;
+    inputStream.setCodec( m_codec );
 
-    bool lastCharWasCr = false; // Last character was a Carraige Return
+    bool lastCharWasCr = false; // Last character was a Carriage Return
     while (!inputStream.atEnd()) 
     {
         inputStream >> x; // read one char
@@ -593,4 +597,17 @@ QTextCodec* CSVDialog::getCodec(void) const
 
     return codec;
 }
+
+void CSVDialog::encodingChanged ( const QString & )
+{
+    QTextCodec* codec = getCodec();
+
+    if ( codec )
+    {
+        m_codec = codec;
+        fillTable();
+    }
+}
+
+
 #include <csvdialog.moc>

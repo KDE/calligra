@@ -59,6 +59,7 @@ private:
     bool    m_ignoreDups;
     QByteArray m_fileArray;
     DialogUI * m_dialog;
+    QTextCodec* m_codec;
 
 private slots:
     void returnPressed();
@@ -69,6 +70,7 @@ private slots:
     void textChanged ( const QString & );
     void ignoreDuplicatesChanged( int );
     void updateClicked();
+    void encodingChanged ( const QString & );
 };
 
 #endif
