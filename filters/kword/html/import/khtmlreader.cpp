@@ -48,7 +48,6 @@ bool KHTMLReader::filter(KURL url) {
 	QObject::connect(_html,SIGNAL(completed()),this,SLOT(completed()));
 
 	_state.clear();
-	_html->begin();
 	_list_depth=0;
 
 	_html->view()->resize(600,530);
