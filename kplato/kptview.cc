@@ -115,54 +115,47 @@ KPTView::KPTView(KPTPart* part, QWidget* parent, const char* /*name*/)
 
 	// The menu items
     // ------ Edit
-    KStdAction::cut( this, SLOT( slotEditCut() ), actionCollection(), "edit_cut" );
-    KStdAction::copy( this, SLOT( slotEditCopy() ), actionCollection(), "edit_copy" );
-    KStdAction::paste( this, SLOT( slotEditPaste() ), actionCollection(), "edit_paste" );
+    actionCut = KStdAction::cut( this, SLOT( slotEditCut() ), actionCollection(), "edit_cut" );
+    actionCopy = KStdAction::copy( this, SLOT( slotEditCopy() ), actionCollection(), "edit_copy" );
+    actionPaste = KStdAction::paste( this, SLOT( slotEditPaste() ), actionCollection(), "edit_paste" );
 
-	new KAction(i18n("Indent Task"), "indent_task", 0, this,
-		SLOT(slotIndentTask()), actionCollection(), "indent_task");
-    new KAction(i18n("Unindent Task"), "unindent_task", 0, this,
-		SLOT(slotUnindentTask()), actionCollection(), "unindent_task");
-    new KAction(i18n("Move Up"), "move_task_up", 0, this,
-		SLOT(slotMoveTaskUp()), actionCollection(), "move_task_up");
-    new KAction(i18n("Move Down"), "move_task_down", 0, this,
-		SLOT(slotMoveTaskDown()), actionCollection(), "move_task_down");
+    actionIndentTask = new KAction(i18n("Indent Task"), "indent_task", 0, this,
+        SLOT(slotIndentTask()), actionCollection(), "indent_task");
+    actionUnindentTask = new KAction(i18n("Unindent Task"), "unindent_task", 0, this,
+        SLOT(slotUnindentTask()), actionCollection(), "unindent_task");
+    actionMoveTaskUp = new KAction(i18n("Move Up"), "move_task_up", 0, this,
+        SLOT(slotMoveTaskUp()), actionCollection(), "move_task_up");
+    actionMoveTaskDown = new KAction(i18n("Move Down"), "move_task_down", 0, this,
+        SLOT(slotMoveTaskDown()), actionCollection(), "move_task_down");
 
     // ------ View
-    new KAction(i18n("Gantt"), "gantt_chart", 0, this,
-		SLOT(slotViewGantt()), actionCollection(), "view_gantt");
-    new KAction(i18n("PERT"), "pert_chart", 0, this,
-		SLOT(slotViewPert()), actionCollection(), "view_pert");
-    new KAction(i18n("Resources"), "resources", 0, this,
-		SLOT(slotViewResources()), actionCollection(), "view_resources");
+    actionViewGantt = new KAction(i18n("Gantt"), "gantt_chart", 0, this, SLOT(slotViewGantt()), actionCollection(), "view_gantt");
+    actionViewPert = new KAction(i18n("PERT"), "pert_chart", 0, this, SLOT(slotViewPert()), actionCollection(), "view_pert");
+    actionViewResources = new KAction(i18n("Resources"), "resources", 0, this, SLOT(slotViewResources()), actionCollection(), "view_resources");
 
     // ------ Insert
-    new KAction(i18n("Task..."), "add_task", 0, this,
-		SLOT(slotAddTask()), actionCollection(), "add_task");
-    new KAction(i18n("Sub-Task..."), "add_sub_task", 0, this,
-		SLOT(slotAddSubTask()), actionCollection(), "add_sub_task");
-    new KAction(i18n("Milestone..."), "add_milestone", 0, this,
-		SLOT(slotAddMilestone()), actionCollection(), "add_milestone");
+    actionAddTask = new KAction(i18n("Task..."), "add_task", 0, this,
+        SLOT(slotAddTask()), actionCollection(), "add_task");
+    actionAddSubtask = new KAction(i18n("Sub-Task..."), "add_sub_task", 0, this,
+        SLOT(slotAddSubTask()), actionCollection(), "add_sub_task");
+    actionAddMilestone = new KAction(i18n("Milestone..."), "add_milestone", 0, this,
+        SLOT(slotAddMilestone()), actionCollection(), "add_milestone");
 
     // ------ Project
-    new KAction(i18n("Edit Main Project..."), "project_edit", 0, this,
-		SLOT(slotProjectEdit()), actionCollection(), "project_edit");
-    new KAction(i18n("Edit Calendar..."), "project_calendar", 0, this,
-		SLOT(slotProjectCalendar()), actionCollection(), "project_calendar");
-    new KAction(i18n("Edit Standard Worktime..."), "project_worktime", 0, this,
-		SLOT(slotProjectWorktime()), actionCollection(), "project_worktime");
-    new KAction(i18n("Calculate"), "project_calculate", 0, this,
-		SLOT(slotProjectCalculate()), actionCollection(), "project_calculate");
+    actionEditMainProject = new KAction(i18n("Edit Main Project..."), "project_edit", 0, this, SLOT(slotProjectEdit()), actionCollection(), "project_edit");
+    actionEditCalendar = new KAction(i18n("Edit Calendar..."), "project_calendar", 0, this, SLOT(slotProjectCalendar()), actionCollection(), "project_calendar");
+    actionEditStandardWorktime = new KAction(i18n("Edit Standard Worktime..."), "project_worktime", 0, this, SLOT(slotProjectWorktime()), actionCollection(), "project_worktime");
+    actionCalculate = new KAction(i18n("Calculate"), "project_calculate", 0, this, SLOT(slotProjectCalculate()), actionCollection(), "project_calculate");
 
     // ------ Reports
     actionReportGenerate = new KSelectAction(i18n("Generate"), 0, actionCollection(), "report_generate");
     setReportGenerateMenu();
     connect(actionReportGenerate, SIGNAL(activated(int)), SLOT(slotReportGenerate(int)));
 
-	KStdAction::firstPage(m_reportview,SLOT(slotPrevPage()),actionCollection(),"go_firstpage");
-	KStdAction::prior(m_reportview,SLOT(slotPrevPage()),actionCollection(),"go_prevpage");
-	KStdAction::next(m_reportview,SLOT(slotNextPage()),actionCollection(), "go_nextpage");
-	KStdAction::lastPage(m_reportview,SLOT(slotLastPage()),actionCollection(), "go_lastpage");
+    actionFirstpage = KStdAction::firstPage(m_reportview,SLOT(slotPrevPage()),actionCollection(),"go_firstpage");
+    actionPriorpage = KStdAction::prior(m_reportview,SLOT(slotPrevPage()),actionCollection(),"go_prevpage");
+    actionNextpage = KStdAction::next(m_reportview,SLOT(slotNextPage()),actionCollection(), "go_nextpage");
+    actionLastpage = KStdAction::lastPage(m_reportview,SLOT(slotLastPage()),actionCollection(), "go_lastpage");
 
 //     new KAction(i18n("Design..."), "report_design", 0, this,
 //         SLOT(slotReportDesign()), actionCollection(), "report_design");
@@ -173,17 +166,17 @@ KPTView::KPTView(KPTPart* part, QWidget* parent, const char* /*name*/)
 	//	SLOT(slotEditResource()), actionCollection(), "edit_resource");
 
     // ------ Settings
-    new KAction(i18n("Configure..."), "configure", 0, this,
-		SLOT(slotConfigure()), actionCollection(), "configure");
+    actionConfigure = new KAction(i18n("Configure..."), "configure", 0, this,
+        SLOT(slotConfigure()), actionCollection(), "configure");
 
     // ------ Popup
-    new KAction(i18n("Node Properties"), "node_properties", 0, this,
-		SLOT(slotOpenNode()), actionCollection(), "node_properties");
-    new KAction(i18n("Delete Task"), "editdelete", 0, this,
-		SLOT(slotDeleteTask()), actionCollection(), "delete_task");
+    actionOpenNode = new KAction(i18n("Node Properties"), "node_properties", 0, this,
+        SLOT(slotOpenNode()), actionCollection(), "node_properties");
+    actionDeleteTask = new KAction(i18n("Delete Task"), "editdelete", 0, this,
+        SLOT(slotDeleteTask()), actionCollection(), "delete_task");
 
-    new KAction(i18n("Edit Resource"), "edit_resource", 0, this,
-		SLOT(slotEditResource()), actionCollection(), "edit_resource");
+    actionEditResource = new KAction(i18n("Edit Resource"), "edit_resource", 0, this,
+        SLOT(slotEditResource()), actionCollection(), "edit_resource");
 
 
     // ------------------- Actions with a key binding and no GUI item

@@ -132,12 +132,48 @@ private:
     int m_viewGrp;
     int m_defaultFontSize;
 
-    KAction *actionEditCut;
-    KAction *actionEditCopy;
-    KAction *actionEditPaste;
-    KSelectAction *actionReportGenerate;
     DCOPObject* m_dcop;
 
+    // ------ Edit
+    KAction *actionCut;
+    KAction *actionCopy;
+    KAction *actionPaste;
+
+    KAction *actionIndentTask;
+    KAction *actionUnindentTask;
+    KAction *actionMoveTaskUp;
+    KAction *actionMoveTaskDown;
+    
+    // ------ View
+    KAction *actionViewGantt;
+    KAction *actionViewPert;
+    KAction *actionViewResources;
+
+    // ------ Insert
+    KAction *actionAddTask;
+    KAction *actionAddSubtask;
+    KAction *actionAddMilestone;
+    
+    // ------ Project
+    KAction *actionEditMainProject;
+    KAction *actionEditCalendar;
+    KAction *actionEditStandardWorktime;
+    KAction *actionCalculate;
+
+    // ------ Reports
+    KSelectAction *actionReportGenerate;
+    KAction *actionFirstpage;
+    KAction *actionPriorpage;
+    KAction *actionNextpage;
+    KAction *actionLastpage;
+    
+    // ------ Settings
+    KAction *actionConfigure;
+
+    // ------ Popup
+    KAction *actionOpenNode;
+    KAction *actionDeleteTask;
+    KAction *actionEditResource;
 };
 
 #endif
