@@ -178,6 +178,14 @@ QString OpenCalcStyles::sheetStyle( SheetStyle const & ts )
   return t->name;
 }
 
+QString convertPenToString( QPen const & pen )
+{
+  QString s( QString( "%1cm solid " ).arg( pen.width() * 0.035 ) );
+  s += pen.color().name();
+
+  return s;
+}
+
 void OpenCalcStyles::addCellStyles( QDomDocument & doc, QDomElement & autoStyles )
 {
   CellStyle * t = m_cellStyles.first();
@@ -257,6 +265,26 @@ void OpenCalcStyles::addCellStyles( QDomDocument & doc, QDomElement & autoStyles
     {
       prop.setAttribute( "style:cell-protect", "protected" );
       prop.setAttribute( "style:print-content", "false" );
+    }
+
+    if ( ( t->left == t->right ) && ( t->left == t->top ) && ( t->left == t->bottom ) )
+    {
+      if ( ( t->left.width() != 0 ) && ( t->left.style() != Qt::NoPen ) )
+        prop.setAttribute( "fo:border", convertPenToString( t->left ) );      
+    }
+    else
+    {
+      if ( ( t->left.width() != 0 ) && ( t->left.style() != Qt::NoPen ) )
+        prop.setAttribute( "fo:border-left", convertPenToString( t->left ) );
+      
+      if ( ( t->right.width() != 0 ) && ( t->right.style() != Qt::NoPen ) )
+        prop.setAttribute( "fo:border-right", convertPenToString( t->right ) );
+      
+      if ( ( t->top.width() != 0 ) && ( t->top.style() != Qt::NoPen ) )
+        prop.setAttribute( "fo:border-top", convertPenToString( t->top ) );
+      
+      if ( ( t->bottom.width() != 0 ) && ( t->bottom.style() != Qt::NoPen ) )
+        prop.setAttribute( "fo:border-bottom", convertPenToString( t->bottom ) );
     }
 
     ts.appendChild( prop );
@@ -348,6 +376,10 @@ CellStyle::CellStyle()
     vertical( false ),
     angle( 0 ),
     print( true ),
+    left ( Qt::black, 0, Qt::NoPen ),
+    right( Qt::black, 0, Qt::NoPen ),
+    top  ( Qt::black, 0, Qt::NoPen ),
+    bottom( Qt::black, 0, Qt::NoPen ),
     alignX( KSpreadFormat::Undefined ),
     alignY( KSpreadFormat::Middle )
 {
@@ -364,6 +396,10 @@ void CellStyle::copyData( CellStyle const & ts )
   vertical    = ts.vertical;
   angle       = ts.angle;
   print       = ts.print;
+  left        = ts.left;
+  right       = ts.right;
+  top         = ts.top;
+  bottom      = ts.bottom;
   alignX      = ts.alignX;
   alignY      = ts.alignY;
 }
@@ -375,7 +411,9 @@ bool CellStyle::isEqual( CellStyle const * const t1, CellStyle const & t2 )
        && ( t1->alignX == t2.alignX ) && ( t1->alignY == t2.alignY )
        && ( t1->indent == t2.indent ) && ( t1->wrap == t2.wrap ) 
        && ( t1->vertical == t2.vertical ) && ( t1->angle == t2.angle )
-       && ( t1->print == t2.print )
+       && ( t1->print == t2.print ) && ( t1->left == t2.left )
+       && ( t1->right == t2.right ) && ( t1->top == t2.top )
+       && ( t1->bottom == t2.bottom )
       )
     return true;
 
@@ -424,6 +462,18 @@ void CellStyle::loadData( CellStyle & cs, KSpreadCell const * const cell )
   if ( cell->hasProperty( KSpreadFormat::PDontPrintText )
        || !cell->hasNoFallBackProperties( KSpreadFormat::PDontPrintText ) )
     cs.print = cell->getDontprintText( col, row );
+
+  if ( cell->hasProperty( KSpreadFormat::PLeftBorder ) || !cell->hasNoFallBackProperties( KSpreadFormat::PLeftBorder ) )
+    cs.left  = cell->leftBorderPen( col, row );
+
+  if ( cell->hasProperty( KSpreadFormat::PRightBorder ) || !cell->hasNoFallBackProperties( KSpreadFormat::PRightBorder ) )
+    cs.right = cell->rightBorderPen( col, row );
+
+  if ( cell->hasProperty( KSpreadFormat::PTopBorder ) || !cell->hasNoFallBackProperties( KSpreadFormat::PTopBorder ) )
+    cs.top  = cell->topBorderPen( col, row );
+
+  if ( cell->hasProperty( KSpreadFormat::PBottomBorder ) || !cell->hasNoFallBackProperties( KSpreadFormat::PBottomBorder ) )
+    cs.bottom  = cell->bottomBorderPen( col, row );
 }
 
 bool NumberStyle::isEqual( NumberStyle const * const t1, NumberStyle const & t2 )

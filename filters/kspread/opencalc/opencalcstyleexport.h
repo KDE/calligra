@@ -95,6 +95,10 @@ class CellStyle
   bool        vertical;
   int         angle;
   bool        print;
+  QPen        left;
+  QPen        right;
+  QPen        top;
+  QPen        bottom;
 
   KSpreadFormat::Align  alignX;
   KSpreadFormat::AlignY alignY;
