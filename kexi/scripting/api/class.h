@@ -67,6 +67,7 @@ namespace Kross { namespace Api {
 
             /// List of callable functions this instance spends.
             QMap<QString, Function*> m_functions;
+            QStringList m_functionnames;
 
         protected:
 
@@ -89,6 +90,7 @@ namespace Kross { namespace Api {
                 f->arglist = arglist;
                 f->documentation = documentation;
                 m_functions.replace(name, f);
+                m_functionnames.append(name);
             }
 
         public:
@@ -166,17 +168,13 @@ namespace Kross { namespace Api {
             }
 
             /**
-             * Return a list of avaible functions.
+             * Return a list of avaible functionnames.
              *
-             * \return List of avaible functions.
+             * \return List of avaible functionnames.
              */
             QStringList getCalls()
             {
-                QStringList list;
-                QMap<QString, Function*>::Iterator it(m_functions.begin());
-                for(; it != m_functions.end(); ++it)
-                    list.append(it.key());
-                return list;
+                return m_functionnames;
             }
     };
 
