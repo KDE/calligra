@@ -68,8 +68,6 @@ mHandle(this)
   active_layer->setVisible(true);
   active_layer->setPrintable(true);
   active_layer->setEditable(true);
-
-  selBoxIsValid = false;
 }
 
 GPage::~GPage()
@@ -279,7 +277,6 @@ void GPage::deleteObject(GObject *obj)
     mGDoc->emitChanged(obj->boundingBox());
     if(selected)
     {
-      selBoxIsValid = false;
       updateHandle();
     }
   }
@@ -327,8 +324,7 @@ void GPage::selectObject(GObject *obj)
     /* object isn't yet in selection list */
     obj->select(true);
     selection.append(obj);
-    selBoxIsValid = false;
-    updateHandle();
+    updateSelection();
     document()->emitSelectionChanged();
   }
 }
@@ -341,8 +337,7 @@ void GPage::unselectObject(GObject *obj)
     /* remove object from the selection list */
     obj->select(false);
     selection.remove(i);
-//    selBoxIsValid = false;
-    updateHandle();
+    updateSelection();
     document()->emitSelectionChanged();
   }
 }
@@ -364,7 +359,6 @@ void GPage::selectAllObjects()
       }
     }
   }
-  selBoxIsValid = false;
   updateHandle();
   document()->emitSelectionChanged();
 }
@@ -378,7 +372,6 @@ void GPage::unselectAllObjects()
   for(GObject *o = selection.first(); o != 0L; o = selection.next())
     o->select(false);
   selection.clear();
-  selBoxIsValid = false;
   updateHandle();
   document()->emitSelectionChanged();
 }
@@ -426,7 +419,6 @@ void GPage::deleteSelectedObjects()
     }
     selection.clear ();
     //setModified ();
-    selBoxIsValid = false;
 /*    if (autoUpdate)
     {
       emit changed ();
@@ -623,7 +615,6 @@ bool GPage::findObjectsContainedIn(const KoRect &r, QPtrList<GObject> &olist)
 void GPage::updateHandle()
 {
   kdDebug(38000) << "Update handle" << endl;
-  KoRect r = mSelBox;
   if(selectionIsEmpty())
     mHandle.show(false);
   else
@@ -631,11 +622,17 @@ void GPage::updateHandle()
     KoRect rr = boundingBoxForSelection();
     mHandle.box(rr);
     mHandle.show();
-    kdDebug(38000) << "L=" << r.left() << endl;
-    kdDebug(38000) << "R=" << r.right() << endl;
-    r = r.unite(rr);
-//    document()->emitChanged(r, true);
+    kdDebug(38000) << "L=" << rr.left() << endl;
+    kdDebug(38000) << "R=" << rr.right() << endl;
   }
+}
+
+void GPage::updateSelection()
+{
+  KoRect r = mSelBox;
+  updateHandle();
+  r = r.unite(mSelBox);
+  document()->emitChanged(r, true);  
 }
 
 void GPage::changePaintStyles(const KoColor &c)
@@ -643,7 +640,7 @@ void GPage::changePaintStyles(const KoColor &c)
   for(GObject *o = selection.first(); o != 0L; o = selection.next())
     o->changePaintStyle(c);
 
-  updateHandle();
+  updateSelection();
 }
 
 void GPage::changeOutlineStyles(const KoColor &c)
@@ -651,7 +648,7 @@ void GPage::changeOutlineStyles(const KoColor &c)
   for(GObject *o = selection.first(); o != 0L; o = selection.next())
     o->changeOutlineStyle(c);
 
-  updateHandle();
+  updateSelection();
 }
 
 void GPage::changeStroked(bool stroked)
@@ -659,7 +656,7 @@ void GPage::changeStroked(bool stroked)
   for(GObject *o = selection.first(); o != 0L; o = selection.next())
     o->changeStroked(stroked);
 
-  updateHandle();
+  updateSelection();
 }
 
 void GPage::changeFilled(bool filled)
@@ -667,7 +664,7 @@ void GPage::changeFilled(bool filled)
   for(GObject *o = selection.first(); o != 0L; o = selection.next())
     o->changeFilled(filled);
 
-  updateHandle();
+  updateSelection();
 }
 
 void GPage::changeLinewidth(unsigned int lwidth)
@@ -678,7 +675,7 @@ void GPage::changeLinewidth(unsigned int lwidth)
 	o->calcBoundingBox();
   }
 
-  updateHandle();
+  updateSelection();
 }
 
 void GPage::changeBrushStyle(Qt::BrushStyle bstyle)
@@ -688,7 +685,7 @@ void GPage::changeBrushStyle(Qt::BrushStyle bstyle)
     o->changeBrushStyle(bstyle);
   }
 
-  updateHandle();
+  updateSelection();
 }
 
 /*******************[OLD]*********************

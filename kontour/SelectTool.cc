@@ -338,6 +338,7 @@ void SelectTool::translate(GPage *page, double dx, double dy, bool snap, bool pe
       (*it)->initTmpMatrix();
       (*it)->ttransform(m, true);
     }
+    page->updateSelection();
   }
   
   MeasurementUnit unit = toolController()->view()->unit();

@@ -29,9 +29,6 @@
 #include <qpainter.h>
 #include <kdebug.h>
 
-#include "GDocument.h"
-#include "GPage.h"
-#include "GLayer.h"
 #include "GOval.h"
 #include "GRect.h"
 #include "GPath.h"
@@ -161,15 +158,13 @@ void GObject::transform(const QWMatrix &m, bool update)
   tMatrix = tMatrix * m;
   iMatrix = tMatrix.invert();
   initTmpMatrix();
-  if(update)
-    updateRegion();
+  calcBoundingBox();
 }
 
 void GObject::ttransform(const QWMatrix &m, bool update)
 {
   tmpMatrix = tmpMatrix * m;
-  if(update)
-    updateRegion();
+  calcBoundingBox();
 }
   
 bool GObject::contains(const KoPoint &p)
@@ -262,7 +257,8 @@ void GObject::calcUntransformedBoundingBox(const KoPoint &tleft, const KoPoint &
 
 void GObject::updateRegion(bool recalcBBox)
 {
-  KoRect newbox = boundingBox();//redrawBox();
+  kdDebug(38000) << "GObject::updateRegion()" << endl;
+/*  KoRect newbox = boundingBox();//redrawBox();
   if(recalcBBox)
   {
     calcBoundingBox();
@@ -270,7 +266,7 @@ void GObject::updateRegion(bool recalcBBox)
   }
 
   layer()->page()->updateHandle();
-  layer()->page()->document()->emitChanged(newbox, true);
+  layer()->page()->document()->emitChanged(newbox, true);*/
 }
 
 void GObject::invalidateClipRegion()

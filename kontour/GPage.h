@@ -133,6 +133,8 @@ public:
   
   void updateHandle();
 
+  void updateSelection();
+
   /*
    * Style management
    */
@@ -164,10 +166,7 @@ private:
 
   KoPageLayout mPageLayout;
 
-  bool autoUpdate:1;
-
   KoRect mSelBox;
-  bool selBoxIsValid:1;  
   Handle mHandle;
 };
 
