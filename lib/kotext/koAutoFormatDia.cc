@@ -1216,6 +1216,8 @@ void KoCompletionDia::setup()
     lst << i18n( "Enter" );
     lst << i18n( "Tab" );
     lst << i18n( "Space" );
+    lst << i18n( "End" );
+    lst << i18n( "Right" );
     m_completionKeyAction->insertStringList( lst );
     m_listCompletion = m_docAutoFormat->listCompletion();
 }
@@ -1245,6 +1247,12 @@ void KoCompletionDia::slotResetConf()
         break;
     case KoAutoFormat::Space:
         m_completionKeyAction->setCurrentItem( 2 );
+        break;
+    case KoAutoFormat::End:
+        m_completionKeyAction->setCurrentItem( 3 );
+        break;
+    case KoAutoFormat::Right:
+        m_completionKeyAction->setCurrentItem( 4 );
         break;
     default:
         m_completionKeyAction->setCurrentItem( 0 );
@@ -1309,6 +1317,12 @@ bool KoCompletionDia::applyConfig()
         break;
     case 2:
         m_docAutoFormat->configKeyCompletionAction( KoAutoFormat::Space );
+        break;
+    case 3:
+        m_docAutoFormat->configKeyCompletionAction( KoAutoFormat::End );
+        break;
+    case 4:
+        m_docAutoFormat->configKeyCompletionAction( KoAutoFormat::Right );
         break;
     default:
         m_docAutoFormat->configKeyCompletionAction( KoAutoFormat::Enter );

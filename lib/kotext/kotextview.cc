@@ -184,14 +184,17 @@ void KoTextView::handleKeyPressEvent( QKeyEvent * e, QWidget *widget, const QPoi
     switch ( e->key() ) {
     case Key_Left:
     case Key_Right: {
-        // a bit hacky, but can't change this without introducing new enum values for move and keeping the
-        // correct semantics and movement for BiDi and non BiDi text.
-        CursorAction a;
-        if ( m_cursor->parag()->string()->isRightToLeft() == (e->key() == Key_Right) )
-            a = e->state() & ControlButton ? MoveWordBackward : MoveBackward;
-        else
-            a = e->state() & ControlButton ? MoveWordForward : MoveForward;
-        moveCursor( a, e->state() & ShiftButton );
+        if (!doToolTipCompletion(m_cursor, m_cursor->parag(), m_cursor->index() - 1, e->key()) )
+        {
+            // a bit hacky, but can't change this without introducing new enum values for move and keeping the
+            // correct semantics and movement for BiDi and non BiDi text.
+            CursorAction a;
+            if ( m_cursor->parag()->string()->isRightToLeft() == (e->key() == Key_Right) )
+                a = e->state() & ControlButton ? MoveWordBackward : MoveBackward;
+            else
+                a = e->state() & ControlButton ? MoveWordForward : MoveForward;
+            moveCursor( a, e->state() & ShiftButton );
+        }
         break;
     }
     case Key_Up:
@@ -204,7 +207,8 @@ void KoTextView::handleKeyPressEvent( QKeyEvent * e, QWidget *widget, const QPoi
         moveCursor( e->state() & ControlButton ? MoveHome : MoveLineStart, e->state() & ShiftButton );
         break;
     case Key_End:
-        moveCursor( e->state() & ControlButton ? MoveEnd : MoveLineEnd, e->state() & ShiftButton );
+        if (!doToolTipCompletion(m_cursor, m_cursor->parag(), m_cursor->index() - 1, e->key()) )
+            moveCursor( e->state() & ControlButton ? MoveEnd : MoveLineEnd, e->state() & ShiftButton );
         break;
     case Key_Prior:
         moveCursor( e->state() & ControlButton ? MovePgUp : MoveViewportUp, e->state() & ShiftButton );

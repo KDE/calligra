@@ -997,7 +997,9 @@ bool KoAutoFormat::doToolTipCompletion( KoTextCursor* textEditCursor, KoTextPara
         if ( ( keyPressed == Qt::Key_Return && m_keyCompletionAction==Enter )
              || ( keyPressed == Qt::Key_Enter && m_keyCompletionAction==Enter )
              || ( keyPressed == Qt::Key_Tab && m_keyCompletionAction==Tab )
-             || ( keyPressed == Qt::Key_Space && m_keyCompletionAction==Space ) )
+             || ( keyPressed == Qt::Key_Space && m_keyCompletionAction==Space )
+             || ( keyPressed == Qt::Key_End && m_keyCompletionAction==End )
+             || ( keyPressed == Qt::Key_Right && m_keyCompletionAction==Right ))
         {
             return doCompletion(textEditCursor, parag, index, txtObj);
         }

@@ -107,7 +107,7 @@ public:
 
     ~KoAutoFormat();
 
-    enum KeyCompletionAction { Enter = 0, Tab = 1, Space = 2};
+    enum KeyCompletionAction { Enter = 0, Tab = 1, Space = 2, End = 3, Right = 4};
 
     KCommand *applyAutoFormat( KoTextObject * obj );
     /**
