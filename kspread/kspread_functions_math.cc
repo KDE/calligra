@@ -862,6 +862,31 @@ bool kspreadfunc_fact( KSContext& context )
   return true;
 }
 
+// Function: FACTDOUBLE
+bool kspreadfunc_factdouble( KSContext& context )
+{
+  QValueList<KSValue::Ptr>& args = context.value()->listValue();
+
+  if ( !KSUtil::checkArgumentsCount( context, 1, "FACTDOUBLE",true ) )
+    return false;
+
+  if ( !KSUtil::checkType( context, args[0], KSValue::IntType, true ) )
+    return false;
+
+  int number = args[0]->intValue();
+  if( number < 0 )
+    return false;
+
+  double result = 1;
+  for( int n = number; n > 0; n -= 2 )
+    result *= n;
+
+  context.setValue( new KSValue( result ) );
+
+  return true;
+}
+
+
 // Function: sign
 bool kspreadfunc_sign( KSContext& context )
 {

@@ -61,6 +61,7 @@ bool kspreadfunc_eps( KSContext& context );
 bool kspreadfunc_even( KSContext& context );
 bool kspreadfunc_exp( KSContext& context );
 bool kspreadfunc_fact( KSContext& context );
+bool kspreadfunc_factdouble( KSContext& context );
 bool kspreadfunc_fib( KSContext& context );
 bool kspreadfunc_floor( KSContext& context );
 bool kspreadfunc_int( KSContext& context );
@@ -487,6 +488,7 @@ static const functionEntry funcTab[] = {
   { "EVEN", kspreadfunc_even },
   { "EXP", kspreadfunc_exp },
   { "FACT", kspreadfunc_fact },
+  { "FACTDOUBLE", kspreadfunc_factdouble },
   { "FIB", kspreadfunc_fib }, // KSpread-specific, like Quattro-Pro's FIB
   { "FLOOR", kspreadfunc_floor },
   { "IMABS", kspreadfunc_imabs },

@@ -213,6 +213,21 @@
     </Function>
 
     <Function>
+      <Name>FACTDOUBLE</Name>
+      <Type>Float</Type>
+      <Parameter>
+	<Comment>A floating point value</Comment>
+	<Type>Float</Type>
+      </Parameter>
+      <Help>
+	<Text>The FACTDOUBLE() function calculates the double factorial of a number, i.e., x!!".</Text>
+	<Syntax>FACTDOUBLE(number)</Syntax>
+	<Example>FACTDOUBLE(6) returns 48</Example>
+	<Example>FACTDOUBLE(7) returns 105</Example>
+      </Help>
+    </Function>
+
+    <Function>
       <Name>SUM</Name>
       <Type>Float</Type>
       <Parameter optional="true">
