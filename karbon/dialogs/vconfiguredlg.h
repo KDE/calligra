@@ -68,6 +68,9 @@ public:
 
 	void apply();
 
+signals:
+	void unitChanged( int );
+
 public slots:
 	void slotDefault();
 
@@ -118,6 +121,11 @@ public:
 
 public slots:
 	void slotDefault();
+	void slotUnitChanged( int );
+
+protected slots:
+	void setMaxHorizSnap( double v );
+	void setMaxVertSnap( double v );
 
 private:
 	KarbonView* m_view;

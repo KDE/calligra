@@ -73,11 +73,13 @@ VDocument::drawPage( VPainter *p ) const
 	// Draw Grid
 	if( m_gridData.isShow )
 	{
-		VStroke s( 0, 0.5 );
-		s.setColor( m_gridData.color);
+		VStroke s( 0, 1 );
+		s.setColor( m_gridData.color );
+		double dx = m_gridData.freq.width();
+		double dy = m_gridData.freq.height();
 		p->setPen( s );
 		p->setBrush( Qt::NoBrush );
-		KoPoint p0( 40, 40 );
+		KoPoint p0( dx, dy );
 		while( p0.x() < m_width )
 		{
 			p->newPath();
@@ -85,7 +87,7 @@ VDocument::drawPage( VPainter *p ) const
 			p->lineTo( KoPoint( p0.x(), m_height ) );
 			p->strokePath();
 
-			p0.rx() += 40;
+			p0.rx() += dx;
 		}
 		while( p0.y() < m_height )
 		{
@@ -94,7 +96,7 @@ VDocument::drawPage( VPainter *p ) const
 			p->lineTo( KoPoint( m_width, p0.y() ) );
 			p->strokePath();
 
-			p0.ry() += 40;
+			p0.ry() += dy;
 		}
 	}
 }

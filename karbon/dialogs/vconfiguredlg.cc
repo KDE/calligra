@@ -66,6 +66,7 @@ VConfigureDlg::VConfigureDlg( KarbonView* parent )
 			   BarIcon( "grid", KIcon::SizeMedium ) );
 
 	m_gridPage = new VConfigGridPage( parent, page );
+	connect( m_miscPage, SIGNAL( unitChanged( int ) ), m_gridPage, SLOT( slotUnitChanged( int ) ) );
 
 	page = addVBoxPage(
 			   i18n( "Document" ), i18n( "Document Settings" ),
@@ -80,26 +81,22 @@ void VConfigureDlg::slotApply()
 {
 	m_interfacePage->apply();
 	m_miscPage->apply();
-	m_gridPage->apply();
 	m_defaultDocPage->apply();
+	m_gridPage->apply();
 }
 
 void VConfigureDlg::slotDefault()
 {
 	switch( activePageIndex() )
 	{
-		case 0:
-			m_interfacePage->slotDefault();
+		case 0: m_interfacePage->slotDefault();
 			break;
-
-		case 1:
-			m_miscPage->slotDefault();
+		case 1: m_miscPage->slotDefault();
 			break;
-
-		case 2:
-			m_defaultDocPage->slotDefault();
+		case 2: m_gridPage->slotDefault();
 			break;
-
+		case 3: m_defaultDocPage->slotDefault();
+			break;
 		default:
 			break;
 	}
@@ -236,7 +233,7 @@ VConfigMiscPage::VConfigMiscPage( KarbonView* view, QVBox* box, char* name )
     listUnit << KoUnit::unitDescription( KoUnit::U_CC );
 
     m_unit = new QComboBox( tmpQGroupBox );
-    m_unit->insertStringList( listUnit );
+    m_unit->insertStringList( KoUnit::listOfUnitName() );
     grid->addWidget( m_unit, 1, 1 );
     m_oldUnit = 0;
 
@@ -270,6 +267,7 @@ VConfigMiscPage::VConfigMiscPage( KarbonView* view, QVBox* box, char* name )
     }
 
     m_unit->setCurrentItem( m_oldUnit );
+	connect( m_unit, SIGNAL( activated( int ) ), SIGNAL( unitChanged( int ) ) );
 }
 
 void VConfigMiscPage::apply()
@@ -288,43 +286,36 @@ void VConfigMiscPage::apply()
 
         case 0:
             unitName = KoUnit::unitName( KoUnit::U_MM );
-            part->setUnit( KoUnit::U_MM );
             break;
 
         case 1:
             unitName = KoUnit::unitName( KoUnit::U_CM );
-            part->setUnit( KoUnit::U_CM );
             break;
 
         case 2:
             unitName = KoUnit::unitName( KoUnit::U_DM );
-            part->setUnit( KoUnit::U_DM );
             break;
 
         case 3:
             unitName = KoUnit::unitName( KoUnit::U_INCH );
-            part->setUnit( KoUnit::U_INCH );
             break;
 
         case 4:
             unitName = KoUnit::unitName( KoUnit::U_PT );
-            part->setUnit( KoUnit::U_PT );
             break;
         case 5:
             unitName = KoUnit::unitName( KoUnit::U_PI );
-            part->setUnit( KoUnit::U_PI );
             break;
         case 6:
             unitName = KoUnit::unitName( KoUnit::U_DD );
-            part->setUnit( KoUnit::U_DD );
             break;
         case 7:
         default:
             unitName = KoUnit::unitName( KoUnit::U_CC );
-            part->setUnit( KoUnit::U_CC );
             break;
         }
 
+	part->setUnit( static_cast<KoUnit::Unit>( m_oldUnit ) );
         m_config->writeEntry( "Units", unitName );
     }
 
@@ -389,6 +380,28 @@ VConfigGridPage::VConfigGridPage( KarbonView* view, QVBox* page, char* name )
 	gl->addMultiCellWidget( spacingGrp, 3, 3, 0, 2 );
 	gl->addMultiCellWidget( snapGrp, 4, 4, 0, 2 );
 	gl->addMultiCell( new QSpacerItem( 0, 0 ), 5, 5, 0, 2 );
+
+	connect( m_spaceHorizUSpin, SIGNAL( valueChanged( double ) ), SLOT( setMaxHorizSnap( double ) ) );
+	connect( m_spaceVertUSpin, SIGNAL( valueChanged( double ) ), SLOT( setMaxVertSnap( double ) ) ) ;
+}
+
+void VConfigGridPage::setMaxHorizSnap( double v )
+{
+	m_snapHorizUSpin->setMaxValue( v );
+}
+
+void VConfigGridPage::setMaxVertSnap( double v )
+{
+	m_snapVertUSpin->setMaxValue( v );
+}
+
+void VConfigGridPage::slotUnitChanged( int u )
+{
+	KoUnit::Unit unit = static_cast<KoUnit::Unit>( u );
+	m_snapHorizUSpin->setUnit( unit );
+	m_snapVertUSpin->setUnit( unit );
+	m_spaceHorizUSpin->setUnit( unit );
+	m_spaceVertUSpin->setUnit( unit );
 }
 
 void VConfigGridPage::apply()
@@ -407,6 +420,14 @@ void VConfigGridPage::apply()
 
 void VConfigGridPage::slotDefault()
 {
+	KoUnit::Unit unit = m_view->part()->document().unit();
+	m_spaceHorizUSpin->setValue( KoUnit::ptToUnit( 20.0, unit ) );
+	m_spaceVertUSpin->setValue( KoUnit::ptToUnit( 20.0, unit ) );
+	m_snapHorizUSpin->setValue( KoUnit::ptToUnit( 20.0, unit ) );
+	m_snapVertUSpin->setValue( KoUnit::ptToUnit( 20.0, unit ) );
+	m_gridChBox->setChecked( true );
+	m_snapChBox->setChecked( true );
+	m_gridColorBtn->setColor( QColor( 228, 228, 228 ) );
 }
 
 VConfigDefaultPage::VConfigDefaultPage( KarbonView* view,

@@ -22,9 +22,9 @@
 
 KarbonGridData::KarbonGridData()
 {
-	color = QColor( 200, 200, 200 );
-	freq = KoSize( 40.0, 40.0 );
-	snap = KoSize( 10.0, 10.0 );
+	color = QColor( 228, 228, 228 );
+	freq = KoSize( 20, 20 );
+	snap = KoSize( 20, 20 );
 	isSnap = false;
 	isShow = false;
 }
