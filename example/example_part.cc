@@ -29,7 +29,7 @@ ExamplePart::ExamplePart( QWidget *parentWidget, const char *widgetName, QObject
     setInstance( ExampleFactory::global(), false );
 }
 
-bool ExamplePart::initDoc()
+bool ExamplePart::initDoc(InitDocFlags flags, QWidget* parentWidget)
 {
     // If nothing is loaded, do initialize here
     // Most KOffice applications use the template dialog here, with code like:
