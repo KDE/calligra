@@ -275,7 +275,7 @@ void KoCounterStyleWidget::selectCustomBullet() {
 
     QString f = m_counter.customBulletFont();
     if ( f.isEmpty() )
-        f = "Symbol";
+        f = "symbol";
     QChar c = m_counter.customBulletCharacter();
 
     if ( KoCharSelectDia::selectChar( f, c ) ) {
