@@ -118,6 +118,10 @@ KSpreadResizeColumn::KSpreadResizeColumn( KSpreadView* parent, const char* name 
     m_pWidth->setSuffix( m_pView->doc()->getUnitName() );
     lay->addWidget( m_pWidth );
 
+    QWidget *spacer = new QWidget( page );
+    spacer->setMinimumSize( spacingHint(), spacingHint() );
+    lay->addWidget( spacer );
+
     m_pWidth->setFocus();
 
     //store the visible value, for later check for changes
