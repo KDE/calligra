@@ -380,7 +380,7 @@ KoFilter::ConversionStatus RTFImport::convert( const QCString& from, const QCStr
 	    if (state.brace0)
 	    {
 		// Close the current destination
-		(this->*destination.destproc)();
+		(this->*destination.destproc)(0L);
 		destination = destinationStack.pop();
 	    }
 	    if (stateStack.count() > 1)
@@ -435,7 +435,7 @@ KoFilter::ConversionStatus RTFImport::convert( const QCString& from, const QCStr
 	}
 	else if (token.type == RTFTokenizer::PlainText)
 	{
-	    (this->*destination.destproc)();
+	    (this->*destination.destproc)(0L);
 	}
     }
 
@@ -1045,7 +1045,7 @@ void RTFImport::insertUTF8( int ch )
     }
     *text++ = 0;
 
-    (this->*destination.destproc)();
+    (this->*destination.destproc)(0L);
     token.text = tk;
 }
 
@@ -1110,7 +1110,7 @@ void RTFImport::insertUnicodeSymbol( RTFProperty * )
 	token.text[0] = 0;
     }
     insertUTF8( ch );
-    (this->*destination.destproc)();
+    (this->*destination.destproc)(0L);
 }
 
 /**
@@ -1555,7 +1555,7 @@ void RTFImport::parseFldrslt( RTFProperty * )
 	}
 	else if (token.type != RTFTokenizer::CloseGroup)
 	{
-	    (this->*destinationStack[flddst].destproc)();
+	    (this->*destinationStack[flddst].destproc)(0L);
 	}
     }
     else if (token.type == RTFTokenizer::OpenGroup)
@@ -1742,7 +1742,7 @@ void RTFImport::changeDestination( RTFProperty *property )
 
     // Send OpenGroup to destination
     token.type = RTFTokenizer::OpenGroup;
-    (this->*destination.destproc)();
+    (this->*destination.destproc)(0L);
 }
 
 /**
