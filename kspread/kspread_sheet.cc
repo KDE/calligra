@@ -6677,7 +6677,7 @@ bool KSpreadSheet::loadTableStyleFormat( QDomElement *style )
             kdDebug() << "Header right: " << hright << endl;
         }
     }
-    //todo implement it under kspread
+    //TODO implement it under kspread
     QDomNode headerleft = KoDom::namedItemNS( *style, KoXmlNS::style, "header-left" );
     if ( !headerleft.isNull() )
     {
@@ -6687,7 +6687,7 @@ bool KSpreadSheet::loadTableStyleFormat( QDomElement *style )
         else
             kdDebug()<<"header left doesn't has attribute  style:display  \n";
     }
-    //implement it under kspread
+    //TODO implement it under kspread
     QDomNode footerleft = KoDom::namedItemNS( *style, KoXmlNS::style, "footer-left" );
     if ( !footerleft.isNull() )
     {
@@ -6961,7 +6961,7 @@ void KSpreadSheet::loadOasisMasterLayoutPage( KoStyleStack &styleStack )
 
         if (str.contains( "headers" ) )
         {
-            //todo implement it into kspread
+            //TODO implement it into kspread
         }
         if ( str.contains( "grid" ) )
         {
@@ -6969,34 +6969,33 @@ void KSpreadSheet::loadOasisMasterLayoutPage( KoStyleStack &styleStack )
         }
         if ( str.contains( "annotations" ) )
         {
-            //todo it's not implemented
+            //TODO it's not implemented
         }
         if ( str.contains( "objects" ) )
         {
-            //todo it's not implemented
+            //TODO it's not implemented
         }
         if ( str.contains( "charts" ) )
         {
-            //todo it's not implemented
+            //TODO it's not implemented
         }
         if ( str.contains( "drawings" ) )
         {
-            //todo it's not implemented
+            //TODO it's not implemented
         }
         if ( str.contains( "formulas" ) )
         {
-            //todo it's not implemented
             d->showFormula = true;
         }
         if ( str.contains( "zero-values" ) )
         {
-            //todo it's not implemented
+            //TODO it's not implemented
         }
     }
     if ( styleStack.hasAttributeNS( KoXmlNS::style, "table-centering" ) )
     {
         QString str = styleStack.attributeNS( KoXmlNS::style, "table-centering" );
-        //not implemented into kspread
+        //TODO not implemented into kspread
         kdDebug()<<" styleStack.attribute( style:table-centering ) :"<<str<<endl;
 #if 0
         if ( str == "horizontal" )
