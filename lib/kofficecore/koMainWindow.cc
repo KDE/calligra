@@ -395,7 +395,7 @@ bool KoMainWindow::openDocument( const KURL & url )
 bool KoMainWindow::openDocumentInternal( KoFilterManager * filterManager, const KURL & url )
 {
     //kdDebug(30003) << "KoMainWindow::openDocument " << url.url() << endl;
-    KoDocument* doc = rootDocument();
+    //KoDocument* doc = rootDocument();
     KoDocument *newdoc=createDoc();
 
     // Pass the filterManager to the document (who will own it from now on)
