@@ -68,15 +68,20 @@ bool KoDocumentInfo::load( const QDomDocument& doc )
 
 bool KoDocumentInfo::loadOasis( const QDomDocument& metaDoc )
 {
-    //kdDebug()<<" metaDoc.toString() :"<<metaDoc.toString()<<endl;
+    kdDebug()<<" metaDoc.toString() :"<<metaDoc.toString()<<endl;
     QStringList lst = pages();
     QStringList::ConstIterator it = lst.begin();
     for( ; it != lst.end(); ++it )
     {
         KoDocumentInfoPage* p = page( *it );
         Q_ASSERT( p );
+
+        //TODO fixme it ! It doesn't work :(((
         QDomNode meta   = KoDom::namedItemNS( metaDoc, KoXmlNS::office, "document-meta" );
         QDomNode office = KoDom::namedItemNS( meta, KoXmlNS::office, "meta" );
+        kdDebug()<<" meta.isNull()"<< meta.isNull()<<endl;
+        kdDebug()<<" office.isNull()"<< office.isNull()<<endl;
+
         if ( office.isNull() )
             return false;
 
@@ -483,7 +488,9 @@ bool KoDocumentInfoAbout::saveOasis( KoXmlWriter &xmlWriter )
 
 bool KoDocumentInfoAbout::loadOasis( const QDomNode& metaDoc )
 {
+    //kdDebug()<<"bool KoDocumentInfoAbout::loadOasis( const QDomNode& metaDoc )****************\n";
     QDomElement e  = KoDom::namedItemNS( metaDoc, KoXmlNS::dc, "title" );
+    //kdDebug()<<" e.isNull() :"<<e.isNull()<<endl;
     if ( !e.isNull() && !e.text().isEmpty() )
     {
         m_title = e.text();
@@ -518,6 +525,10 @@ bool KoDocumentInfoAbout::load( const QDomElement& e )
             m_abstract = e.text();
         else if ( e.tagName() == "title" )
             m_title = e.text();
+        else if ( e.tagName() == "subject" )
+            m_subject = e.text();
+        else if ( e.tagName() == "keyword" )
+            m_keywords = e.text();
     }
 
     return true;
@@ -535,6 +546,14 @@ QDomElement KoDocumentInfoAbout::save( QDomDocument& doc )
     t = doc.createElement( "title" );
     e.appendChild( t );
     t.appendChild( doc.createTextNode( m_title ) );
+
+    t = doc.createElement( "keyword" );
+    e.appendChild( t );
+    t.appendChild( doc.createTextNode( m_keywords ) );
+
+    t = doc.createElement( "subject" );
+    e.appendChild( t );
+    t.appendChild( doc.createTextNode( m_subject ) );
 
     return e;
 }
