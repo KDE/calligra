@@ -400,9 +400,9 @@ void KSpreadCell::setValue( const KSpreadValue& v )
 
   setFlag(Flag_LayoutDirty);
   setFlag(Flag_TextFormatDirty);
-  
+
   setOutputText();
-  
+
   //set the displayed text, if we hold an error value
   if (d->value.type() == KSpreadValue::Error)
     d->strOutText = d->value.errorMessage ();
@@ -5319,7 +5319,7 @@ void KSpreadCell::loadOasisValidation( const QString& validationName )
         {
             d->extra()->validity->m_allow = Allow_Text;
         }
-        //cell-content-text-length-is-between(Value, Value) | cell-content-text-length-is-not-between(Value, Value)
+        //cell-content-text-length-is-between(Value, Value) | cell-content-text-length-is-not-between(Value, Value) | cell-content-is-in-list( StringList )
         else if ( valExpression.contains( "cell-content-text-length-is-between" ) )
         {
             d->extra()->validity->m_allow = Allow_TextLength;
@@ -5340,6 +5340,15 @@ void KSpreadCell::loadOasisValidation( const QString& validationName )
             kdDebug()<<" valExpression :"<<valExpression<<endl;
             QStringList listVal = QStringList::split( ",", valExpression );
             loadOasisValidationValue( listVal );
+        }
+        else if ( valExpression.contains( "cell-content-is-in-list(" ) )
+        {
+            d->extra()->validity->m_allow = Allow_List;
+            valExpression = valExpression.remove( "cell-content-is-in-list(" );
+            kdDebug()<<" valExpression :"<<valExpression<<endl;
+            valExpression = valExpression.remove( ")" );
+            d->extra()->validity->listValidity = QStringList::split( ";", valExpression );
+
         }
         //TrueFunction ::= cell-content-is-whole-number() | cell-content-is-decimal-number() | cell-content-is-date() | cell-content-is-time()
         else

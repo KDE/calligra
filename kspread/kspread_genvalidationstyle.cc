@@ -155,7 +155,18 @@ QString KSpreadGenValidationStyle::createValidationCondition( KSpreadValidity* _
     case Allow_TextLength:
         result = createTextValidationCondition( _val );
          break;
+    case Allow_List:
+        result = createListValidationCondition( _val );
+        break;
     }
+    return result;
+}
+
+QString KSpreadGenValidationStyle::createListValidationCondition( KSpreadValidity* _val )
+{
+    QString result = "cell-content-is-in-list(";
+    result = _val->listValidity.join( ";" );
+    result +=")";
     return result;
 }
 

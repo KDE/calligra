@@ -365,7 +365,7 @@ Done:
 -> save/load column/row attribute (without font)
 -> save/load note
 -> save/load protect doc/sheet
--> save/load validation
+-> save/load validation (all + list)
 -> save/load page master layout
 -> save/load header/footer
 -> save/load print range
@@ -382,5 +382,4 @@ Fixe todo:
 -> Save/load spell checking ignore word into settings.xml
 -> Save/load col-width/row-height into settings.xml
 -> Save/load numeric-style
--> Fix cell validation (list )
 -> Fix load conditional attribute, for the moment it load just one style

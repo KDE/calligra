@@ -75,6 +75,7 @@ private:
     QString createTimeValidationCondition( KSpreadValidity* _val );
     QString createDateValidationCondition( KSpreadValidity* _val );
     QString createNumberValidationCondition( KSpreadValidity* _val );
+    QString createListValidationCondition( KSpreadValidity* _val );
 
     void initVal( KSpreadValidity *_val );
 
