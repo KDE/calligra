@@ -40,6 +40,6 @@ protected:
     QDomDocument outdoc;
     QDomElement frameset;
     QString titleStyleName;
-    QString aFont;
+    QString titleFont;
 };
 #endif // KPRKWORD_H

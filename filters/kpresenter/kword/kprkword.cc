@@ -123,14 +123,22 @@ KoFilter::ConversionStatus KprKword::convert( const QCString& from, const QCStri
     style.appendChild( format );
     QDomElement font = outdoc.createElement( "FONT" );
     format.appendChild( font );
-    // by picking up a font from the kpr doc we ensure that it's installed, at least
-    font.setAttribute( "name", aFont );
+    font.setAttribute( "name", titleFont ); // found when reading the first title
     QDomElement size = outdoc.createElement( "SIZE" );
     format.appendChild( size );
     size.setAttribute( "value", 24 );
     QDomElement bold = outdoc.createElement( "WEIGHT" );
     format.appendChild( bold );
     bold.setAttribute( "value", 75 );
+
+    // Create the standard style
+    style = outdoc.createElement( "STYLE" );
+    styles.appendChild( style );
+    elem = outdoc.createElement( "NAME" );
+    style.appendChild( elem );
+    elem.setAttribute( "value", "Standard" ); // no i18n here!
+    format = outdoc.createElement( "FORMAT" );
+    style.appendChild( format ); // empty format == use defaults
 
     // Write output file
 
@@ -147,7 +155,7 @@ KoFilter::ConversionStatus KprKword::convert( const QCString& from, const QCStri
 // This class is used to sort the objects by y position
 class KprObject {
  public:
-    int y;
+    double y;
     QDomElement elem;
     bool operator < ( const KprObject & c ) const
     {
@@ -180,14 +188,18 @@ void KprKword::convert()
         if ( object.attribute( "type" ).toInt() == 4 ) // we only care about text objs
         {
             QDomElement orig = object.namedItem( "ORIG" ).toElement();
-            KprObject * obj = new KprObject;
-            obj->y = orig.attribute( "y" ).toInt();
-            obj->elem = object;
-            objList.inSort( obj );
+            if ( !orig.isNull() )
+            {
+                KprObject * obj = new KprObject;
+                obj->y = orig.attribute( "y" ).toDouble();
+                obj->elem = object;
+                objList.inSort( obj );
+            }
         }
     }
 
     int curPage = -1;
+    //kdDebug() << "found " << objList.count() << " objects" << endl;
 
     for ( QPtrListIterator<KprObject> it(objList); it.current(); ++it )
     {
@@ -304,10 +316,10 @@ void KprKword::convert()
                     e.setAttribute( "value", 75 );
                     outFormatElem.appendChild( e );
                 }*/ // doesn't look good
-                if ( aFont.isEmpty() )
-                    aFont = textElem.attribute( "family" );
+                if ( titleFont.isEmpty() && isTitle )
+                    titleFont = textElem.attribute( "family" );
 
-                // Family, colour and point size are voluntarily NOT passed over.
+                // Family and point size are voluntarily NOT passed over.
                 if ( !textElem.attribute( "color" ).isEmpty())
                 {
                     QColor col;
@@ -387,7 +399,8 @@ void KprKword::convert()
                     outFormatsElem.appendChild( outFormatElem );
                 }
 
-            }
+            } // end "for each text element"
+
             // KPresenter seems to save a trailing space (bug!)
             int len = text.length();
             if ( len > 0 && text[ len - 1 ] == ' ' )
