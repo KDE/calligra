@@ -69,4 +69,4 @@ Comment[zh_CN]=此数据源允许您选择一个现有的 Kexi 项目
 
 X-KDE-Library=kwmailmerge_kexi
 X-KDE-Capabilities=edit,open
-X-KDE_InternalName=Kexi
+X-KDE-InternalName=Kexi
