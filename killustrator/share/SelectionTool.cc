@@ -566,7 +566,7 @@ void SelectionTool::translate (GDocument* doc, Canvas* canvas,
   emit modeSelected (msgbuf);
 }
 
-void SelectionTool::rotate (GDocument* doc, float dx, float dy,
+void SelectionTool::rotate (GDocument* doc, float , float ,
 			    float xp, float yp, bool permanent) {
   //  float adx = fabs (dx);
   //  float ady = fabs (dy);

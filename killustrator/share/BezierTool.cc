@@ -310,7 +310,7 @@ void BezierTool::processEvent (QEvent* e, GDocument *doc, Canvas* canvas) {
   return;
 }
 
-void BezierTool::activate (GDocument* doc, Canvas*) {
+void BezierTool::activate (GDocument* , Canvas*) {
   emit modeSelected (i18n ("Create Bezier Curve"));
 }
 

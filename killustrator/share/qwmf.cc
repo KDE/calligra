@@ -600,7 +600,7 @@ void QWinMetaFile::polypolygon(short num, short* parm)
 
 
 //-----------------------------------------------------------------------------
-void QWinMetaFile::polygon(short num, short* parm)
+void QWinMetaFile::polygon(short /*num*/, short* parm)
 {
   QPointArray* pa;
 
@@ -610,7 +610,7 @@ void QWinMetaFile::polygon(short num, short* parm)
 
 
 //-----------------------------------------------------------------------------
-void QWinMetaFile::polyline(short num, short* parm)
+void QWinMetaFile::polyline(short /*num*/, short* parm)
 {
   QPointArray* pa;
 
@@ -620,14 +620,14 @@ void QWinMetaFile::polyline(short num, short* parm)
 
 
 //-----------------------------------------------------------------------------
-void QWinMetaFile::setPolyFillMode(short num, short* parm)
+void QWinMetaFile::setPolyFillMode(short /*num*/, short* parm)
 {
   mWinding = parm[0];
 }
 
 
 //-----------------------------------------------------------------------------
-void QWinMetaFile::escape(short num, short* parm)
+void QWinMetaFile::escape(short /*num*/, short* parm)
 {
   if (parm[0]==15)
   {
@@ -638,14 +638,14 @@ void QWinMetaFile::escape(short num, short* parm)
 
 
 //-----------------------------------------------------------------------------
-void QWinMetaFile::setBkColor(short num, short* parm)
+void QWinMetaFile::setBkColor(short /*num*/, short* parm)
 {
   mPainter.setBackgroundColor(color(parm));
 }
 
 
 //-----------------------------------------------------------------------------
-void QWinMetaFile::setBkMode(short num, short* parm)
+void QWinMetaFile::setBkMode(short /*num*/, short* parm)
 {
   if (parm[0]==1) mPainter.setBackgroundMode(QT_PRFX::TransparentMode);
   else mPainter.setBackgroundMode(QT_PRFX::OpaqueMode);
@@ -653,7 +653,7 @@ void QWinMetaFile::setBkMode(short num, short* parm)
 
 
 //-----------------------------------------------------------------------------
-void QWinMetaFile::setRop(short num, short* parm)
+void QWinMetaFile::setRop(short /*num*/, short* parm)
 {
   QT_PRFX::RasterOp opTab[] =
   {
@@ -673,7 +673,7 @@ void QWinMetaFile::setRop(short num, short* parm)
 
 
 //-----------------------------------------------------------------------------
-void QWinMetaFile::createBrushIndirect(short num, short* parm)
+void QWinMetaFile::createBrushIndirect(short /*num*/, short* parm)
 {
   static QT_PRFX::BrushStyle hatchedStyleTab[] =
   { 
@@ -724,7 +724,7 @@ void QWinMetaFile::createBrushIndirect(short num, short* parm)
 
 
 //-----------------------------------------------------------------------------
-void QWinMetaFile::createPenIndirect(short num, short* parm)
+void QWinMetaFile::createPenIndirect(short /*num*/, short* parm)
 {
   static QT_PRFX::PenStyle styleTab[] =
   { QT_PRFX::SolidLine, QT_PRFX::DashLine, QT_PRFX::DotLine, QT_PRFX::DashDotLine, QT_PRFX::DashDotDotLine,

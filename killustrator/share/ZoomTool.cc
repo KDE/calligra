@@ -52,7 +52,7 @@ void ZoomTool::processEvent (QEvent* e, GDocument */*doc*/,
   }
 }
 
-void ZoomTool::activate (GDocument* doc, Canvas* canvas) {
+void ZoomTool::activate (GDocument* /*doc*/, Canvas* /*canvas*/) {
   emit modeSelected (i18n ("Zoom In"));
 }
 
