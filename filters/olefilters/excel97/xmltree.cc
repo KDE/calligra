@@ -1709,6 +1709,9 @@ bool XMLTree::_mulrk(Q_UINT32 size, QDataStream &body)
     }
 
     switch (xfs[xf]->ifmt) {
+    case 0:
+     s = QString::number((int) value);  
+     break;
     case 14: // Dates
     case 15:
     case 16:
@@ -1726,6 +1729,8 @@ bool XMLTree::_mulrk(Q_UINT32 size, QDataStream &body)
       int year, month, day;
       getDate((int) value, year, month, day);
       s.sprintf("%d/%d/%d", year, month, day);
+    case 164:
+      s = "'0" + QString::number((int) value);
       break;
     default: // Number
       s = m_locale.formatNumber(value);
