@@ -32,7 +32,7 @@ Anchor::Anchor(Para* para): Format(para)
 
 Anchor::~Anchor()
 {
-	kdDebug() << "Destruction of an anchor." << endl;
+	kdDebug(30522) << "Destruction of an anchor." << endl;
 }
 
 void Anchor::analyse(const QDomNode balise)
@@ -41,28 +41,28 @@ void Anchor::analyse(const QDomNode balise)
 	Format::analyse(balise);
 
 	/* Parameters Analyse */
-	kdDebug() << "ANALYSE AN ANCHOR" << endl;
+	kdDebug(30522) << "ANALYSE AN ANCHOR" << endl;
 	
 	/* Children Markups Analyse */
 	_type = getAttr(getChild(balise, "ANCHOR"), "type");
 	_instance = getAttr(getChild(balise, "ANCHOR"), "instance");
-	kdDebug() << "type = " << _type << " instance = " << _instance << endl;
+	kdDebug(30522) << "type = " << _type << " instance = " << _instance << endl;
 	
-	kdDebug() << "END OF AN ANCHOR" << endl;
+	kdDebug(30522) << "END OF AN ANCHOR" << endl;
 }
 
 void Anchor::generate(QTextStream &out)
 {
 	Element *elt = 0;
 
-	kdDebug() << "  GENERATION ANCHOR" << endl;
+	kdDebug(30522) << "  GENERATION ANCHOR" << endl;
 	/* research the element in all the special elements list
 	 * and display it
 	 */
-	kdDebug() << "anchor : " << _instance << endl;
+	kdDebug(30522) << "anchor : " << _instance << endl;
 	if((elt = getRoot()->searchAnchor(_instance)) != 0)
 		elt->generate(out);
-	kdDebug() << "ANCHOR GENERATED" << endl;
+	kdDebug(30522) << "ANCHOR GENERATED" << endl;
 }
 
 

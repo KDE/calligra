@@ -11,16 +11,16 @@
 
 int main(int argc, char* argv[])
 {
-	kdDebug() << argv[1] << endl;
-	kdDebug() << argv[2] << endl;
+	kdDebug(30522) << argv[1] << endl;
+	kdDebug(30522) << argv[2] << endl;
 
 	QString fileIn = argv[1];
 	QString fileOut = argv[2];
 	
-	kdDebug() << "TEXGRAPH FILTER --> BEGIN" << endl;
+	kdDebug(30522) << "TEXGRAPH FILTER --> BEGIN" << endl;
 	Xml2LatexParser parser(fileIn, fileOut);
 	parser.analyse();
-	kdDebug() << "---------- generate file -------------" << endl;
+	kdDebug(30522) << "---------- generate file -------------" << endl;
 	parser.generate();
-	kdDebug() << "TEXGRAPH FILTER --> END" << endl;
+	kdDebug(30522) << "TEXGRAPH FILTER --> END" << endl;
 }

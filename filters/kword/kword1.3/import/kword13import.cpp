@@ -224,7 +224,7 @@ KoFilter::ConversionStatus KWord13Import::convert( const QCString& from, const Q
     
     KWord13OasisGenerator generator;
     
-    kdDebug() << __FILE__ << ":" << __LINE__ << endl;
+    kdDebug(30520) << __FILE__ << ":" << __LINE__ << endl;
         
     if ( ! generator.prepare( kwordDocument ) )
     {

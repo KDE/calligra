@@ -45,7 +45,7 @@ Document::Document()
 /*******************************************/
 Document::~Document()
 {
-	kdDebug() << "Document destructor" << endl;
+	kdDebug(30522) << "Document destructor" << endl;
 }
 
 /*******************************************/
@@ -54,30 +54,30 @@ Document::~Document()
 void Document::analyse(const QDomNode balise)
 {
 	//QDomNode balise = getChild(balise_initial, "FRAMESET");
-	kdDebug() << getChildName(balise, 0) << endl;
+	kdDebug(30522) << getChildName(balise, 0) << endl;
 	for(int index= 0; index < getNbChild(balise); index++)
 	{
 		Element *elt = 0;
-		kdDebug() << "--------------------------------------------------" << endl;
+		kdDebug(30522) << "--------------------------------------------------" << endl;
 
-		kdDebug() << getChildName(balise, index) << endl;
+		kdDebug(30522) << getChildName(balise, index) << endl;
 		switch(getTypeFrameset(getChild(balise, index)))
 		{
 			case ST_NONE:
-				kdDebug() << "NONE" << endl;
+				kdDebug(30522) << "NONE" << endl;
 				break;
 			case ST_TEXT:
-				kdDebug() << "TEXT" << endl;
+				kdDebug(30522) << "TEXT" << endl;
 				elt = new TextFrame;
 				elt->analyse(getChild(balise, index));
 				break;
 			case ST_PICTURE:
-				kdDebug() << "PICTURE" << endl;
+				kdDebug(30522) << "PICTURE" << endl;
 				elt = new PixmapFrame();
 				elt->analyse(getChild(balise, index));
 				break;
 			case ST_PART:
-				kdDebug() << "PART" << endl;
+				kdDebug(30522) << "PART" << endl;
 				//elt = new Part;
 				//elt->analyse(getChild(balise, index));
 				break;
@@ -87,27 +87,27 @@ void Document::analyse(const QDomNode balise)
 				 * save in output
 				 * generate : write the output
 				 */
-				kdDebug() << "FORMULA" << endl;
+				kdDebug(30522) << "FORMULA" << endl;
 				elt = new Formula;
 				elt->analyse(getChild(balise, index));
 				break;
 			case ST_HLINE:
-				kdDebug() << "HLINE" << endl;
+				kdDebug(30522) << "HLINE" << endl;
 				break;
 			default:
-				kdDebug() << "error " << elt->getType() << " " << ST_TEXT << endl;
+				kdDebug(30522) << "error " << elt->getType() << " " << ST_TEXT << endl;
 		}
 
 		/* 3. Add the Element in one of the lists */
 		if(elt != 0)
 		{
-			kdDebug() << "INFO : " << elt->getSection() << endl;
+			kdDebug(30522) << "INFO : " << elt->getSection() << endl;
 			switch(elt->getSection())
 			{
-				case SS_FOOTERS: kdDebug() << " FOOTER" <<endl;
+				case SS_FOOTERS: kdDebug(30522) << " FOOTER" <<endl;
 					       _footers.append(elt);
 					       break;
-				case SS_HEADERS: kdDebug() << " HEADER" << endl;
+				case SS_HEADERS: kdDebug(30522) << " HEADER" << endl;
 						_headers.append(elt);
 					break;
 				case SS_BODY:
@@ -117,27 +117,27 @@ void Document::analyse(const QDomNode balise)
 						{
 							case ST_TEXT:
 									_corps.append(elt);
-									kdDebug() << " BODY" << endl;
+									kdDebug(30522) << " BODY" << endl;
 								break;
 							case ST_PART:
-									kdDebug() << " PART" <<endl;
+									kdDebug(30522) << " PART" <<endl;
 									//_parts.append(elt);
 								break;
 							case ST_FORMULA:
-									kdDebug() << " FORMULA" <<endl;
+									kdDebug(30522) << " FORMULA" <<endl;
 									_formulas.append(elt);
 								break;
 							case ST_PICTURE:
-									kdDebug() << " PIXMAP" <<endl;
+									kdDebug(30522) << " PIXMAP" <<endl;
 									_pixmaps.append(elt);
 								break;
 							default:
-									kdError() << "Element frame type no supported or type unexpected." << endl;
+									kdError(30522) << "Element frame type no supported or type unexpected." << endl;
 						}
 					}
 					break;
 				case SS_TABLE:
-					kdDebug() << " TABLE" <<endl;
+					kdDebug(30522) << " TABLE" <<endl;
 					/* Don't add simplely the cell */
 					/* heriter ListTable de ListElement et surcharger
 					 * la methode add. Une cellule est un element.
@@ -148,11 +148,11 @@ void Document::analyse(const QDomNode balise)
 				case SS_FOOTNOTES: /* Just for the new kwd file version */
 						_footnotes.append(elt);
 				break;
-				default: kdDebug() << "UNKNOWN" << endl;
+				default: kdDebug(30522) << "UNKNOWN" << endl;
 					break;
 			}
 		}
-		kdDebug() << "END OF ANALYSE OF A FRAMESET" << endl;
+		kdDebug(30522) << "END OF ANALYSE OF A FRAMESET" << endl;
 	}
 }
 
@@ -165,7 +165,7 @@ void Document::analysePixmaps(const QDomNode balise)
 	for(int index= 0; index < getNbChild(balise); index++)
 	{
 		Key *key = 0;
-		kdDebug() << "NEW PIXMAP" << endl;
+		kdDebug(30522) << "NEW PIXMAP" << endl;
 
 		key = new Key(Key::PIXMAP);
 		key->analyse(getChild(balise, "KEY"));
@@ -188,14 +188,14 @@ SType Document::getTypeFrameset(const QDomNode balise)
 /*******************************************/
 void Document::generate(QTextStream &out, bool hasPreambule)
 {
-	kdDebug() << "DOC. GENERATION." << endl;
+	kdDebug(30522) << "DOC. GENERATION." << endl;
 
 	if(hasPreambule)
 		generatePreambule(out);
-	kdDebug() << "preambule : " << hasPreambule << endl;
+	kdDebug(30522) << "preambule : " << hasPreambule << endl;
 
 	/* Body */
-	kdDebug() << endl << "body : " << _corps.count() << endl;
+	kdDebug(30522) << endl << "body : " << _corps.count() << endl;
 
 	if(hasPreambule)
 	{
@@ -222,7 +222,7 @@ void Document::generate(QTextStream &out, bool hasPreambule)
 		out << "\\end{document}" << endl;
 	Config::instance()->desindent();
 	if(Config::instance()->getIndentation() != 0)
-			kdError() << "Error : indent != 0 at the end ! " << endl;
+			kdError(30522) << "Error : indent != 0 at the end ! " << endl;
 }
 
 /*******************************************/
@@ -236,7 +236,7 @@ void Document::generatePreambule(QTextStream &out)
 	/* For each header */
 	if(FileHeader::instance()->hasHeader())
 	{
-		kdDebug() << "header : " << _headers.count() << endl;
+		kdDebug(30522) << "header : " << _headers.count() << endl;
 
 		/* default : no rule */
 		out << "\\renewcommand{\\headrulewidth}{0pt}" << endl;
@@ -249,7 +249,7 @@ void Document::generatePreambule(QTextStream &out)
 	/* For each footer */
 	if(FileHeader::instance()->hasFooter())
 	{
-		kdDebug() << "footer : " << _footers.count() << endl;
+		kdDebug(30522) << "footer : " << _footers.count() << endl;
 
 		/* default : no rule */
 		out << "\\renewcommand{\\footrulewidth}{0pt}" << endl;
@@ -272,7 +272,7 @@ void Document::generatePreambule(QTextStream &out)
 /*******************************************/
 void Document::generateTypeHeader(QTextStream &out, Element *header)
 {
-	kdDebug() << "generate header" << endl;
+	kdDebug(30522) << "generate header" << endl;
 	if((FileHeader::instance()->getHeadType() == FileHeader::TH_ALL ||
 		FileHeader::instance()->getHeadType() == FileHeader::TH_FIRST) && header->getInfo() == SI_EVEN)
 	{
@@ -361,12 +361,12 @@ Element* Document::searchAnchor(QString anchor)
 	Element *elt = _tables.first();
 	while(elt != 0)
 	{
-		kdDebug() << elt->getGrpMgr() << endl;
+		kdDebug(30522) << elt->getGrpMgr() << endl;
 		if(elt->getGrpMgr() == anchor)
 			return elt;
 		elt = _tables.next();
 	}
-	kdDebug() << "No in table, search in formulae list." << endl;
+	kdDebug(30522) << "No in table, search in formulae list." << endl;
 	elt = _formulas.first();
 	while(elt != 0)
 	{
@@ -374,7 +374,7 @@ Element* Document::searchAnchor(QString anchor)
 			return elt;
 		elt = _formulas.next();
 	}
-	kdDebug() << "No in table and formulae, search in pictures." << endl;
+	kdDebug(30522) << "No in table and formulae, search in pictures." << endl;
 	elt = _pixmaps.first();
 	while(elt != 0)
 	{
@@ -404,7 +404,7 @@ Key* Document::searchKey(QString keyName)
 	Key* key = _keys.first();
 	while(key != 0)
 	{
-		kdDebug() << "key " << key->getFilename() << endl;
+		kdDebug(30522) << "key " << key->getFilename() << endl;
 		if(key->getFilename() == keyName)
 			return key;
 		key = _keys.next();
@@ -416,12 +416,12 @@ Key* Document::searchKey(QString keyName)
 QString Document::extractData(QString key)
 {
 	QString data = searchKey(key)->getName();
-	kdDebug() << "Opening " << data << endl;
+	kdDebug(30522) << "Opening " << data << endl;
 	if(!getStorage()->isOpen())
 	{
 		if(!getStorage()->open(data))
 		{
-			kdError() << "Unable to open " << data << endl;
+			kdError(30522) << "Unable to open " << data << endl;
 			return QString("");
 		}
 	}
@@ -443,9 +443,9 @@ QString Document::extractData(QString key)
 	temp.close();
 	if(!getStorage()->close())
 	{
-		kdError() << "Unable to close " << data << endl;
+		kdError(30522) << "Unable to close " << data << endl;
 		return QString("");
 	}
-	kdDebug() << "temp filename : " << temp.name() << endl;
+	kdDebug(30522) << "temp filename : " << temp.name() << endl;
 	return temp.name();
 }

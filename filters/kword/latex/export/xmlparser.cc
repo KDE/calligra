@@ -66,7 +66,7 @@ XmlParser::XmlParser(Config* config, const KoStore* in): _config(config)
 	_document.setContent(array);
 	if(!_in->close())
 	{
-		kdError() << "unable to close input file" << endl;
+		kdError(30522) << "unable to close input file" << endl;
 		return;
 	}
 }
@@ -90,7 +90,7 @@ XmlParser::~XmlParser()
 QDomNode XmlParser::getChild(QDomNode balise, QString name)
 {
 	QDomNode node = getChild(balise, name, 0);
-	kdDebug() << node.nodeName() << endl;
+	kdDebug(30522) << node.nodeName() << endl;
 	return node;
 }
 

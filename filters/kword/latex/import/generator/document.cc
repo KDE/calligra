@@ -77,7 +77,7 @@ bool Document::generate(KoStore* store)
 	/* generate body */
 	_body.generate(body, doc);
 	
-	kdDebug() << "serialize" << endl;
+	kdDebug(30522) << "serialize" << endl;
 	serialize(store, doc);
 	return true;
 }

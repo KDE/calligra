@@ -93,7 +93,7 @@ class Layout: public TextFormat
 		 * Nothing to do.
 		 */
 		virtual ~Layout() {
-			kdDebug() << "Destruction of a layout." << endl;
+			kdDebug(30522) << "Destruction of a layout." << endl;
 		}
 
 		/**

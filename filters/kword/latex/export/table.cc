@@ -45,7 +45,7 @@ Table::Table(QString grpMgr)
 /*******************************************/
 Table::~Table()
 {
-	kdDebug() << "Destruction of a list of frames" << endl;
+	kdDebug(30522) << "Destruction of a list of frames" << endl;
 }
 
 /*******************************************/
@@ -58,11 +58,11 @@ EEnv Table::getCellFlow(int col)
 		Element* elt = at(row * getMaxRow() + col);
 		if(elt->getType() == ST_TEXT)
 		{
-			kdDebug() << ((TextFrame*) elt)->getFirstPara()->getEnv() << endl;
+			kdDebug(30522) << ((TextFrame*) elt)->getFirstPara()->getEnv() << endl;
 			return ((TextFrame*) elt)->getFirstPara()->getEnv();
 		}
 	}
-	kdDebug() << "Default flow for cell" << endl;
+	kdDebug(30522) << "Default flow for cell" << endl;
 	return ENV_JUSTIFY;
 }
 
@@ -77,11 +77,11 @@ double Table::getCellSize(int col)
 		Element* elt = at(row * getMaxRow() + col);
 		if(elt->getType() == ST_TEXT)
 		{
-			kdDebug() << "size : " << ((TextFrame*) elt)->getLeft() << endl;
+			kdDebug(30522) << "size : " << ((TextFrame*) elt)->getLeft() << endl;
 			return ((TextFrame*) elt)->getRight() - ((TextFrame*) elt)->getLeft();
 		}
 	}
-	kdDebug() << "Default size for cell" << endl;
+	kdDebug(30522) << "Default size for cell" << endl;
 	return 3;
 }
 
@@ -95,7 +95,7 @@ Element* Table::searchCell(int row, int col)
 	/* Parcourir les tables et tester chaque nom de table */
 	for(current = first(); current != 0; current = next())
 	{
-		kdDebug() << "+" << current->getRow() << "," << current->getCol() << endl;
+		kdDebug(30522) << "+" << current->getRow() << "," << current->getCol() << endl;
 		if(current->getRow() == row && current->getCol() == col)
 			return current;
 	}
@@ -122,7 +122,7 @@ void Table::append(Element* elt)
 void Table::generate(QTextStream& out)
 {
 	Element* elt = 0;
-	kdDebug() << "GENERATION OF A TABLE " << count() << endl;
+	kdDebug(30522) << "GENERATION OF A TABLE " << count() << endl;
 	out << endl << "\\begin{tabular}";
 	generateTableHeader(out);
 	out << endl;
@@ -160,7 +160,7 @@ void Table::generate(QTextStream& out)
 	generateBottomLineBorder(out, row - 1);
 	out << "\\end{tabular}" << endl << endl;
 	Config::instance()->desindent();
-	kdDebug() << "END OF GENERATINO OF A TABLE" << endl;
+	kdDebug(30522) << "END OF GENERATINO OF A TABLE" << endl;
 }
 
 /*******************************************/
@@ -176,7 +176,7 @@ void Table::generateTopLineBorder(QTextStream& out, int row)
 	{
 		/* Search the cell in the list */
 		elt = searchCell(row, index);
-		kdDebug() << endl << "name (" << row << ", " << index << ") = " << elt->getName() << endl << endl;
+		kdDebug(30522) << endl << "name (" << row << ", " << index << ") = " << elt->getName() << endl << endl;
 
 		/* If the element has a border display it here */
 		if(elt->hasTopBorder())
@@ -277,7 +277,7 @@ void Table::generateCell(QTextStream& out, int row, int col)
 {
 	Element* elt = 0;
 
-	kdDebug() << "NEW CELL : " << row << "," << col << endl;
+	kdDebug(30522) << "NEW CELL : " << row << "," << col << endl;
 
 	/* Search the cell in the list */
 	elt = searchCell(row, col);
@@ -285,7 +285,7 @@ void Table::generateCell(QTextStream& out, int row, int col)
 	/* Generate it */
 	if(elt != 0)
 		elt->generate(out);
-	kdDebug() << "END OF A CELL" << endl;
+	kdDebug(30522) << "END OF A CELL" << endl;
 }
 
 /*******************************************/

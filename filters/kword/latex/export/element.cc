@@ -46,7 +46,7 @@ Element::Element()
 /*******************************************/
 Element::~Element()
 {
-	kdDebug() << "Element Destructor" << endl;
+	kdDebug(30522) << "Element Destructor" << endl;
 }
 
 /*******************************************/
@@ -57,7 +57,7 @@ void Element::analyse(const QDomNode balise_initiale)
 	/* ANALYSE A FRAMESET MARKUP */
 	
 	/* Parameters Analyse */
-	kdDebug() << "FRAMESET PARAMETERS ANALYSE (Element)" << endl;
+	kdDebug(30522) << "FRAMESET PARAMETERS ANALYSE (Element)" << endl;
 	analyseParam(balise_initiale);
 }
 
@@ -97,7 +97,7 @@ void Element::analyseParam(const QDomNode balise)
 			break;
 		default:
 			_section = SS_NONE;
-			kdDebug() << "error : frameinfo unknown!" << endl;
+			kdDebug(30522) << "error : frameinfo unknown!" << endl;
 	}
 	setRemovable(getAttr(balise, "removable").toInt());
 	setVisible(getAttr(balise, "visible").toInt());
@@ -111,5 +111,5 @@ void Element::analyseParam(const QDomNode balise)
 	setRows(getAttr(balise, "rows").toInt());
 	setCols(getAttr(balise, "cols").toInt());
 
-	kdDebug() << "FIN PARAM" << endl;
+	kdDebug(30522) << "FIN PARAM" << endl;
 }

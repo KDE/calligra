@@ -67,14 +67,14 @@ void ListTable::add(Element* elt)
 	 */
 	if((newTable = isNewTable(elt->getGrpMgr())) == 0)
 	{
-		kdDebug() << "NEW TABLE !!" << endl;
+		kdDebug(30522) << "NEW TABLE !!" << endl;
 		newTable = new Table(elt->getGrpMgr());
 		newTable->append(elt);
 		append(newTable);
 	}
 	else
 	{
-		kdDebug() << "UPDATE TABLE : " << elt->getGrpMgr() << endl;
+		kdDebug(30522) << "UPDATE TABLE : " << elt->getGrpMgr() << endl;
 		newTable->append(elt);
 	}
 }

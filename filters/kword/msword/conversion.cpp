@@ -69,7 +69,7 @@ QColor Conversion::color(int number, int defaultcolor, bool defaultWhite)
 	    return Qt::lightGray;
 
 	default:
-            kdDebug() << "Conversion::color: unknown color: " << number << endl;
+            kdDebug(30513) << "Conversion::color: unknown color: " << number << endl;
 	    if(defaultcolor == -1)
 		return QColor("black");
 	    else
@@ -150,7 +150,7 @@ int Conversion::fillPatternStyle( int ipat )
     case 25: // Diagonal Cross
         return Qt::DiagCrossPattern;
     default:
-        kdWarning() << "Unhandled undocumented SHD ipat value: " << ipat << endl;
+        kdWarning(30513) << "Unhandled undocumented SHD ipat value: " << ipat << endl;
         return Qt::NoBrush;
     }
 }
@@ -281,7 +281,7 @@ QString Conversion::lineSpacing( const wvWare::Word97::LSPD& lspd )
         // Better implement line-height-at-least like OOo has.
     }
     else
-        kdWarning() << "Unhandled LSPD::fMultLinespace value: " << lspd.fMultLinespace << endl;
+        kdWarning(30513) << "Unhandled LSPD::fMultLinespace value: " << lspd.fMultLinespace << endl;
     return value;
 }
 
@@ -350,7 +350,7 @@ int Conversion::numberFormatCode( int nfc )
     case 0: // arabic
         return 1;
     }
-    kdWarning() << k_funcinfo << "Unknown NFC: " << nfc << endl;
+    kdWarning(30513) << k_funcinfo << "Unknown NFC: " << nfc << endl;
     return 1;
 }
 
@@ -408,7 +408,7 @@ int Conversion::headerMaskToHType( unsigned char mask )
     bool hasFirst = ( mask & wvWare::HeaderData::HeaderFirst );
     // Odd is always there. We have even!=odd only if Even is there too.
     bool hasEvenOdd = ( mask & wvWare::HeaderData::HeaderEven );
-    //kdDebug() << k_funcinfo << " hasEvenOdd=" << hasEvenOdd << endl;
+    //kdDebug(30513) << k_funcinfo << " hasEvenOdd=" << hasEvenOdd << endl;
     if ( hasFirst )
         return hasEvenOdd ? 1 : 2;
     return hasEvenOdd ? 3 : 0;
@@ -419,7 +419,7 @@ int Conversion::headerMaskToFType( unsigned char mask )
     bool hasFirst = ( mask & wvWare::HeaderData::FooterFirst );
     bool hasEvenOdd = ( mask & wvWare::HeaderData::FooterEven );
     // Odd is always there. We have even!=odd only if Even is there too.
-    kdDebug() << k_funcinfo << " hasEvenOdd=" << hasEvenOdd << endl;
+    kdDebug(30513) << k_funcinfo << " hasEvenOdd=" << hasEvenOdd << endl;
     if ( hasFirst )
         return hasEvenOdd ? 1 : 2;
     return hasEvenOdd ? 3 : 0;
@@ -452,7 +452,7 @@ int Conversion::fldToFieldType( const wvWare::FLD* fld )
     }
 
     if( m_fieldType < 0 )
-        kdDebug() << "unhandled field: fld.ftl: " << (int)fld->flt << endl;
+        kdDebug(30513) << "unhandled field: fld.ftl: " << (int)fld->flt << endl;
 
     return m_fieldType;
 }

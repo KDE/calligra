@@ -46,7 +46,7 @@ PixmapFrame::PixmapFrame()
 /*******************************************/
 PixmapFrame::~PixmapFrame()
 {
-	kdDebug() << "Destruction of a pixmap" << endl;
+	kdDebug(30522) << "Destruction of a pixmap" << endl;
 }
 void PixmapFrame::setKeepAspectRatio(const QString ratio)
 {
@@ -69,7 +69,7 @@ void PixmapFrame::analyse(const QDomNode balise)
 	/* Parameters Analyse */
 	Element::analyse(balise);
 
-	kdDebug() << "FRAME ANALYSE (Pixmap)" << endl;
+	kdDebug(30522) << "FRAME ANALYSE (Pixmap)" << endl;
 
 	/* Chlidren markups Analyse */
 	for(int index = 0; index < getNbChild(balise); index++)
@@ -84,7 +84,7 @@ void PixmapFrame::analyse(const QDomNode balise)
 		}
 
 	}
-	kdDebug() << "END OF A FRAME" << endl;
+	kdDebug(30522) << "END OF A FRAME" << endl;
 }
 
 /*******************************************/
@@ -95,7 +95,7 @@ void PixmapFrame::analyse(const QDomNode balise)
 /*******************************************/
 void PixmapFrame::getPixmap(const QDomNode balise_initiale)
 {
-	kdDebug() << "PIXMAP" << endl;
+	kdDebug(30522) << "PIXMAP" << endl;
 	setKeepAspectRatio(getAttr(balise_initiale, "keepAspectRatio"));
 	QDomNode balise = getChild(balise_initiale, "KEY");
 	setKey(getAttr(balise, "filename"));
@@ -107,8 +107,8 @@ void PixmapFrame::getPixmap(const QDomNode balise_initiale)
 	/* Remove the path */
 	file = file.section('/', -1);
 	setFilenamePS(file + ".eps");
-	kdDebug() << "PS : " << getFilenamePS() << endl;
-	kdDebug() << "END PIXMAP" << endl;
+	kdDebug(30522) << "PS : " << getFilenamePS() << endl;
+	kdDebug(30522) << "END PIXMAP" << endl;
 }
 
 /*******************************************/
@@ -135,7 +135,7 @@ void PixmapFrame::analyseParamFrame(const QDomNode balise)
 void PixmapFrame::convert()
 {
 #ifdef HAVE_MAGICK
-	kdDebug() << "CONVERT PICTURE IN EPS" << endl;
+	kdDebug(30522) << "CONVERT PICTURE IN EPS" << endl;
 	ExceptionInfo exception;
 
 	Image* image;
@@ -170,8 +170,8 @@ void PixmapFrame::convert()
 		}
 		else
 			dir = Config::instance()->getPicturesDir();
-		kdDebug() << "file " << getFilename() << endl;
-		kdDebug() << "path " << dir << endl;
+		kdDebug(30522) << "file " << getFilename() << endl;
+		kdDebug(30522) << "path " << dir << endl;
 		(void) strcpy(image->filename, (dir + "/" + getFilenamePS()).latin1());
 		WriteImage(image_info, image);
 		DestroyImage(image);
@@ -179,7 +179,7 @@ void PixmapFrame::convert()
 	DestroyImageInfo(image_info);
 	DestroyExceptionInfo(&exception);
 	DestroyMagick();
-	kdDebug() << "CONVERTION DONE" << endl;
+	kdDebug(30522) << "CONVERTION DONE" << endl;
 #endif
 }
 

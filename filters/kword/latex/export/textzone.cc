@@ -68,7 +68,7 @@ TextZone::TextZone(QString texte, Para *para): _texte(texte)
 /*******************************************/
 TextZone::~TextZone()
 {
-	kdDebug() << "Destruction of a area" << endl;
+	kdDebug(30522) << "Destruction of a area" << endl;
 }
 
 /*******************************************/
@@ -281,7 +281,7 @@ void TextZone::convert(QString& text, int unicode, const char* escape)
 /*******************************************/
 void TextZone::analyse(const QDomNode balise)
 {
-	kdDebug() << "FORMAT" << endl;
+	kdDebug(30522) << "FORMAT" << endl;
 	/* Get header information (size, position)
 	 * Get infos. to format the text
 	 */
@@ -291,9 +291,9 @@ void TextZone::analyse(const QDomNode balise)
 	/* Format the text */
 	setTexte(getTexte().mid(getPos(), getLength()));
 	
-	kdDebug() << getTexte().length() << endl;
-	kdDebug() << getTexte().latin1() << endl;
-	kdDebug() << "END FORMAT" << endl;
+	kdDebug(30522) << getTexte().length() << endl;
+	kdDebug(30522) << getTexte().latin1() << endl;
+	kdDebug(30522) << "END FORMAT" << endl;
 }
 
 /*******************************************/
@@ -304,14 +304,14 @@ void TextZone::analyse(const QDomNode balise)
 /*******************************************/
 void TextZone::analyse()
 {
-	kdDebug() << "ZONE" << endl;
+	kdDebug(30522) << "ZONE" << endl;
 	
 	/* Format the text */
 	setTexte(getTexte().mid(getPos(), getLength()));
 	
-	kdDebug() << "String of " << getTexte().length() << " caracters :" << endl;
-	kdDebug() << getTexte().latin1() << endl;
-	kdDebug() << "END ZONE" << endl;
+	kdDebug(30522) << "String of " << getTexte().length() << " caracters :" << endl;
+	kdDebug(30522) << getTexte().latin1() << endl;
+	kdDebug(30522) << "END ZONE" << endl;
 }
 
 /*******************************************/
@@ -364,7 +364,7 @@ void TextZone::display(QString texte, QTextStream& out)
 		end = texte.find(' ', index + 60, false);
 		line = texte.mid(index, end - index);
 	}
-	kdDebug() << line << endl;
+	kdDebug(30522) << line << endl;
 	if(Config::instance()->mustUseUnicode())
 		out << line.utf8();
 	else if(Config::instance()->getEncoding() == "ascii")
@@ -380,7 +380,7 @@ void TextZone::display(QString texte, QTextStream& out)
 /*******************************************/
 void TextZone::generate_format_begin(QTextStream & out)
 {
-	kdDebug() << "GENERATE FORMAT BEGIN" << endl;
+	kdDebug(30522) << "GENERATE FORMAT BEGIN" << endl;
 
 	/* Bold, Italic or underlined */
 	if(getWeight() > 50)
@@ -453,7 +453,7 @@ void TextZone::generate_format_begin(QTextStream & out)
 /*******************************************/
 void TextZone::generate_format_end(QTextStream & out)
 {
-	kdDebug() << "GENERATE FORMAT END" << endl;
+	kdDebug(30522) << "GENERATE FORMAT END" << endl;
 	
 	/* Alignement */
 	if(getAlign() == EA_SUPER)

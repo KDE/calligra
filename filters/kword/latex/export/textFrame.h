@@ -74,7 +74,7 @@ class TextFrame: public Element
 		virtual ~TextFrame() 
 		{
 			//delete _footnotes;
-			kdDebug() << "Destruction of a txt frame" << endl;
+			kdDebug(30522) << "Destruction of a txt frame" << endl;
 		}
 
 		/**

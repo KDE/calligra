@@ -47,7 +47,7 @@ KoFilter::ConversionStatus MSWordImport::convert( const QCString& from, const QC
     if ( to != "application/x-kword" || from != "application/msword" )
         return KoFilter::NotImplemented;
 
-    kdDebug() << "######################## MSWordImport::convert ########################" << endl;
+    kdDebug(30513) << "######################## MSWordImport::convert ########################" << endl;
 
     QDomDocument mainDocument;
     QDomElement framesetsElem;
@@ -86,7 +86,7 @@ KoFilter::ConversionStatus MSWordImport::convert( const QCString& from, const QC
     out->writeBlock( cstr, cstr.length() );
     out->close();
 
-    kdDebug() << "######################## MSWordImport::convert done ####################" << endl;
+    kdDebug(30513) << "######################## MSWordImport::convert done ####################" << endl;
     return KoFilter::OK;
 }
 

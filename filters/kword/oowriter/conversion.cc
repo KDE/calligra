@@ -10,7 +10,7 @@ QString Conversion::importAlignment( const QString& align )
         return "left";
     if ( align == "end" )
         return "right";
-    kdWarning() << "Conversion::importAlignment unknown alignment " << align << endl;
+    kdWarning(30518) << "Conversion::importAlignment unknown alignment " << align << endl;
     return "auto";
 }
 
@@ -22,7 +22,7 @@ QString Conversion::exportAlignment( const QString& align )
         return "start";
     if ( align == "right" )
         return "end";
-    kdWarning() << "Conversion::exportAlignment unknown alignment " << align << endl;
+    kdWarning(30518) << "Conversion::exportAlignment unknown alignment " << align << endl;
     return "auto";
 }
 

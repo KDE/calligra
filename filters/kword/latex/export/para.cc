@@ -55,7 +55,7 @@ Para::Para(TextFrame* textFrame)
 /*******************************************/
 Para::~Para()
 {
-	kdDebug() << "Destruction of a parag." << endl;
+	kdDebug(30522) << "Destruction of a parag." << endl;
 	if(_lines != 0)
 		delete _lines;
 }
@@ -96,7 +96,7 @@ int Para::getNbCharPara() const
 
 	if(_lines != 0)
 	{
-		kdDebug() << "  NB ZONE : " << _lines->count() << endl;
+		kdDebug(30522) << "  NB ZONE : " << _lines->count() << endl;
 
 		for(zone = _lines->first(); zone != 0; zone = _lines->next())
 		{
@@ -130,7 +130,7 @@ void Para::analyse(const QDomNode balise)
 {
 	/* MARKUP TYPE :  PARAGRAPH */
 
-	kdDebug() << "**** PARAGRAPH ****" << endl;
+	kdDebug(30522) << "**** PARAGRAPH ****" << endl;
 
 	/* Analyse of the children markups */
 	for(int index = 0; index < getNbChild(balise); index++)
@@ -138,7 +138,7 @@ void Para::analyse(const QDomNode balise)
 		if(getChildName(balise, index).compare("TEXT")== 0)
 		{
 			_text =  getData(balise, index);
-			kdDebug() << "TEXT : " << _text << endl;
+			kdDebug(30522) << "TEXT : " << _text << endl;
 		}
 		else if(getChildName(balise, index).compare("NAME")== 0)
 		{
@@ -155,17 +155,17 @@ void Para::analyse(const QDomNode balise)
 		else if(getChildName(balise, index).compare("FORMATS")== 0)
 		{
 			// IMPORTANT ==> police + style
-			kdDebug() << "FORMATS" << endl;
+			kdDebug(30522) << "FORMATS" << endl;
 			analyseFormats(getChild(balise, index));
 
 		}
 		else if(getChildName(balise, index).compare("LAYOUT")== 0)
 		{
-			kdDebug() << "LAYOUT" << endl;
+			kdDebug(30522) << "LAYOUT" << endl;
 			analyseLayoutPara(getChild(balise, index));
 		}
 	}
-	kdDebug() << " **** END PARAGRAPH ****" << endl;
+	kdDebug(30522) << " **** END PARAGRAPH ****" << endl;
 }
 
 /*******************************************/
@@ -241,7 +241,7 @@ void Para::analyseLayoutPara(const QDomNode balise)
 			}
 		}
 		/*else
-			kdDebug() << " FORMAT FIELD UNKNOWN" << endl;*/
+			kdDebug(30522) << " FORMAT FIELD UNKNOWN" << endl;*/
 	}
 }
 
@@ -258,11 +258,11 @@ void Para::analyseFormats(const QDomNode balise)
 	{
 		if(getChildName(balise, index).compare("FORMAT")== 0)
 		{
-			kdDebug() << "A FORMAT !!!" << endl;
+			kdDebug(30522) << "A FORMAT !!!" << endl;
 			analyseFormat(getChild(balise, index));
 		}
 		else
-			kdDebug() << " FORMAT UNUSEFULL HERE" << endl;
+			kdDebug(30522) << " FORMAT UNUSEFULL HERE" << endl;
 	}
 }
 
@@ -278,10 +278,10 @@ void Para::analyseFormat(const QDomNode balise)
 	Format *zone      = 0;
 	Format *zoneFirst = 0;
 
-	kdDebug() << "ANALYSE FORMAT BODY" << endl;
+	kdDebug(30522) << "ANALYSE FORMAT BODY" << endl;
 	switch(getTypeFormat(balise))
 	{
-		case EF_ERROR: kdDebug() << "Id format error" << endl;
+		case EF_ERROR: kdDebug(30522) << "Id format error" << endl;
 			break;
 		case EF_TEXTZONE: /* It's a text line (1) */
 				zone = new TextZone(_text, this);
@@ -321,7 +321,7 @@ void Para::analyseFormat(const QDomNode balise)
 				zone->analyse(balise);
 			break;
 		default: /* Unknown */
-				kdDebug() << "Format not yet supported" << endl;
+				kdDebug(30522) << "Format not yet supported" << endl;
 	}
 
 	if(zone->getPos() != _currentPos)
@@ -333,7 +333,7 @@ void Para::analyseFormat(const QDomNode balise)
 		zoneFirst->setPos(_currentPos);
 		zoneFirst->setLength(zone->getPos() - _currentPos);
 		((TextZone*) zoneFirst)->analyse();
-		kdDebug() << "pos courante : " << _currentPos << endl;
+		kdDebug(30522) << "pos courante : " << _currentPos << endl;
 		/* Add the text without format */
 		_lines->append(zoneFirst);
 		_currentPos = _currentPos + zoneFirst->getLength();
@@ -359,7 +359,7 @@ void Para::analyseFormat(const QDomNode balise)
 void Para::generate(QTextStream &out)
 {
 
-	kdDebug() << "  GENERATION PARA" << endl;
+	kdDebug(30522) << "  GENERATION PARA" << endl;
 
 	if(getInfo() != EP_FOOTNOTE && getFrameType() != SS_HEADERS &&
 	   getFrameType() != SS_FOOTERS)
@@ -379,7 +379,7 @@ void Para::generate(QTextStream &out)
 	else if(_lines != 0)
 	{
 		Format* zone = 0;
-		kdDebug() << "  NB ZONE : " << _lines->count() << endl;
+		kdDebug(30522) << "  NB ZONE : " << _lines->count() << endl;
 
 		for(zone = _lines->first(); zone != 0; zone = _lines->next())
 		{
@@ -398,7 +398,7 @@ void Para::generate(QTextStream &out)
 		if(isHardBreakAfter())
 			out << "\\newpage" << endl;
 	}
-	kdDebug() << "PARA GENERATED" << endl;
+	kdDebug(30522) << "PARA GENERATED" << endl;
 }
 
 /*******************************************/
@@ -419,10 +419,10 @@ void Para::generateDebut(QTextStream &out)
 		 * It can be 20 char. / 5 cm  = 4 char / cm so */
 		/* nbLines = nb_char_para / (4 * cell size) + 1 */
 		//sizeCell = (_element->getRight() - _element->getLeft()) / 27;
-		//kdDebug() << "SIZE OF CELL : " << sizeCell << endl;
+		//kdDebug(30522) << "SIZE OF CELL : " << sizeCell << endl;
 		// TODO : arrondir au superieur avec tgmath.h ??
 		//_nbLines = ((_element->getBottom() - _element->getTop()) / 27) + 1;
-		//kdDebug() << "NB OF LINES : " << _nbLines << endl;
+		//kdDebug(30522) << "NB OF LINES : " << _nbLines << endl;
 		/* 2 at least, 1 for the line, 1 for the space line */
 		/*if(_nbLines < 2)
 			_nbLines = 2;
@@ -446,7 +446,7 @@ void Para::generateDebut(QTextStream &out)
 
 void Para::generateBeginEnv(QTextStream &out)
 {
-	kdDebug() << "Begin new Env : " << getEnv() << endl;
+	kdDebug(30522) << "Begin new Env : " << getEnv() << endl;
 
 	Config::instance()->writeIndent(out);
 
@@ -521,7 +521,7 @@ void Para::openList(QTextStream &out)
 
 	/* Keep the list type */
 	type_temp = new EType(getCounterType());
-	kdDebug() << " type list to open : " << *type_temp << endl;
+	kdDebug(30522) << " type list to open : " << *type_temp << endl;
 	_historicList.push(type_temp);
 }
 
@@ -544,7 +544,7 @@ void Para::generateFin(QTextStream &out)
 /*******************************************/
 void Para::generateEndEnv(QTextStream &out)
 {
-	kdDebug() << "end of an environment : " << getEnv() << endl;
+	kdDebug(30522) << "end of an environment : " << getEnv() << endl;
 	
 	Config::instance()->desindent();
 	
@@ -590,7 +590,7 @@ void Para::closeList(QTextStream &out, Para* next)
 		/* We must close all the lists since
 		 * after this paragraph it's a normal paragraph.
 		 */
-		kdDebug() << "lists to close" << endl;
+		kdDebug(30522) << "lists to close" << endl;
 		while(!_historicList.isEmpty())
 		{
 			EType *type_temp = 0;
@@ -611,7 +611,7 @@ void Para::closeList(QTextStream &out, Para* next)
 void Para::closeList(EType type, QTextStream &out)
 {
 	//out << endl;
-	kdDebug() << " type list to close : " << type << endl;
+	kdDebug(30522) << " type list to close : " << type << endl;
 
 	/* Because of a new markup, we need a new line. */
 	out << endl;
@@ -648,7 +648,7 @@ void Para::closeList(EType type, QTextStream &out)
 
 	/* Pop the list which has been closed */
 	_historicList.remove();
-	kdDebug() << "removed" << endl;
+	kdDebug(30522) << "removed" << endl;
 }
 
 /*******************************************/
