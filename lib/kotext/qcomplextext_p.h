@@ -1,5 +1,54 @@
+/****************************************************************************
+** $Id$
+**
+** Internal header file.
+**
+** Created :
+**
+** Copyright (C) 2001 Trolltech AS.  All rights reserved.
+**
+** This file is part of the kernel module of the Qt GUI Toolkit.
+**
+** This file may be distributed under the terms of the Q Public License
+** as defined by Trolltech AS of Norway and appearing in the file
+** LICENSE.QPL included in the packaging of this file.
+**
+** This file may be distributed and/or modified under the terms of the
+** GNU General Public License version 2 as published by the Free Software
+** Foundation and appearing in the file LICENSE.GPL included in the
+** packaging of this file.
+**
+** Licensees holding valid Qt Enterprise Edition or Qt Professional Edition
+** licenses may use this file in accordance with the Qt Commercial License
+** Agreement provided with the Software.
+**
+** This file is provided AS IS with NO WARRANTY OF ANY KIND, INCLUDING THE
+** WARRANTY OF DESIGN, MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.
+**
+** See http://www.trolltech.com/pricing.html or email sales@trolltech.com for
+**   information about Qt Commercial License Agreements.
+** See http://www.trolltech.com/qpl/ for QPL licensing information.
+** See http://www.trolltech.com/gpl/ for GPL licensing information.
+**
+** Contact info@trolltech.com if any conditions of this licensing are
+** not clear to you.
+**
+**********************************************************************/
+
 #ifndef QCOMPLEXTEXT_H
 #define QCOMPLEXTEXT_H
+
+//
+//  W A R N I N G
+//  -------------
+//
+// This file is not part of the Qt API.  It exists for the convenience
+// of Qt Remote Control. This header file may change from version to
+// version without notice, or even be removed.
+//
+// We mean it.
+//
+//
 
 #ifndef QT_H
 #include <qstring.h>
@@ -10,9 +59,8 @@
 #include <qshared.h>
 #endif // QT_H
 
-class QFontPrivate;
-
 namespace Qt3 {
+#ifndef QT_NO_COMPLEXTEXT
 
 // bidi helper classes. Internal to Qt
 struct Q_EXPORT QBidiStatus {
@@ -21,9 +69,9 @@ struct Q_EXPORT QBidiStatus {
 	lastStrong = QChar::DirON;
 	last = QChar:: DirON;
     }
-    QChar::Direction eor 		: 5;
-    QChar::Direction lastStrong 	: 5;
-    QChar::Direction last		: 5;
+    QChar::Direction eor;
+    QChar::Direction lastStrong;
+    QChar::Direction last;
 };
 
 struct Q_EXPORT QBidiContext : public QShared {
@@ -49,25 +97,7 @@ struct Q_EXPORT QBidiControl {
 };
 
 struct Q_EXPORT QTextRun {
-    QTextRun(int _start, int _stop, QBidiContext *context, QChar::Direction dir) {
-	start = _start;
-	stop = _stop;
-	if(dir == QChar::DirON) dir = context->dir;
-
-	level = context->level;
-
-	// add level of run (cases I1 & I2)
-	if( level % 2 ) {
-	    if(dir == QChar::DirL || dir == QChar::DirAN)
-		level++;
-	} else {
-	    if( dir == QChar::DirR )
-		level++;
-	    else if( dir == QChar::DirAN )
-		level += 2;
-	}
-	//printf("new run: level = %d\n", level);
-    }
+    QTextRun(int _start, int _stop, QBidiContext *context, QChar::Direction dir);
 
     int start;
     int stop;
@@ -78,25 +108,27 @@ struct Q_EXPORT QTextRun {
 class Q_EXPORT QComplexText {
 public:
     enum Shape {
-        XIsolated,
-        XFinal,
-        XInitial,
-        XMedial
+	XIsolated,
+	XFinal,
+	XInitial,
+	XMedial
     };
     static Shape glyphVariant( const QString &str, int pos);
     static Shape glyphVariantLogical( const QString &str, int pos);
 
-    //QT2HACK
-    //static QString shapedString( const QString &str, int from = 0, int len = -1, QPainter::TextDirection dir = QPainter::Auto);
+    static QString shapedString( const QString &str, int from = 0, int len = -1, QPainter::TextDirection dir = QPainter::Auto);
     static QChar shapedCharacter(const QString &str, int pos);
 
+#if 0
     // positions non spacing marks relative to the base character at position pos.
     static QPointArray positionMarks( QFontPrivate *f, const QString &str, int pos, QRect *boundingRect = 0 );
+#endif
 
     static QPtrList<QTextRun> *bidiReorderLine( QBidiControl *control, const QString &str, int start, int len );
     static QString bidiReorderString( const QString &str, QChar::Direction basicDir = QChar::DirON );
 };
 
 }; // namespace
+#endif //QT_NO_COMPLEXTEXT
 
 #endif

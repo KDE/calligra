@@ -147,6 +147,13 @@ protected:
                                   int lastY, int baseLine, int bw, int h, bool drawSelections,
                                   QTextFormat *lastFormat, int i, const QMemArray<int> &selectionStarts,
                                   const QMemArray<int> &selectionEnds, const QColorGroup &cg, bool rightToLeft );
+
+    /** Helper for drawParagString */
+    void drawParagStringInternal( QPainter &painter, const QString &s, int start, int len, int startX,
+                                  int lastY, int baseLine, int bw, int h, bool drawSelections,
+                                  KoTextFormat *lastFormat, int i, const QMemArray<int> &selectionStarts,
+                                  const QMemArray<int> &selectionEnds, const QColorGroup &cg, bool rightToLeft, KoZoomHandler* zh );
+
     /** Hook for KWTextParag. Default implementation does nothing. */
     virtual void drawFormattingChars( QPainter &, const QString &, int, int, int,
                                       int , int, int, int, bool,

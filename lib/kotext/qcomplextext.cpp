@@ -1,10 +1,49 @@
+/****************************************************************************
+** $Id$
+**
+** Implementation of some internal classes
+**
+** Created :
+**
+** Copyright (C) 2001 Trolltech AS.  All rights reserved.
+**
+** This file is part of the kernel module of the Qt GUI Toolkit.
+**
+** This file may be distributed under the terms of the Q Public License
+** as defined by Trolltech AS of Norway and appearing in the file
+** LICENSE.QPL included in the packaging of this file.
+**
+** This file may be distributed and/or modified under the terms of the
+** GNU General Public License version 2 as published by the Free Software
+** Foundation and appearing in the file LICENSE.GPL included in the
+** packaging of this file.
+**
+** Licensees holding valid Qt Enterprise Edition or Qt Professional Edition
+** licenses may use this file in accordance with the Qt Commercial License
+** Agreement provided with the Software.
+**
+** This file is provided AS IS with NO WARRANTY OF ANY KIND, INCLUDING THE
+** WARRANTY OF DESIGN, MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.
+**
+** See http://www.trolltech.com/pricing.html or email sales@trolltech.com for
+**   information about Qt Commercial License Agreements.
+** See http://www.trolltech.com/qpl/ for QPL licensing information.
+** See http://www.trolltech.com/gpl/ for GPL licensing information.
+**
+** Contact info@trolltech.com if any conditions of this licensing are
+** not clear to you.
+**
+**********************************************************************/
+
 #include "qcomplextext_p.h"
+
+#ifndef QT_NO_COMPLEXTEXT
 #include "qrichtext_p.h"
 //#include "qfontdata_p.h"
 #include "qfontmetrics.h"
 #include "qrect.h"
-#include <stdlib.h>
 
+#include <stdlib.h>
 using namespace Qt3;
 
 // -----------------------------------------------------
@@ -28,8 +67,8 @@ QBidiContext::~QBidiContext()
 	delete parent;
 }
 
-//static QChar *shapeBuffer = 0;
-//static int shapeBufSize = 0;
+static QChar *shapeBuffer = 0;
+static int shapeBufSize = 0;
 
 /*
    Arabic shaping obeys a number of rules according to the joining classes (see Unicode book, section on
@@ -48,11 +87,11 @@ QBidiContext::~QBidiContext()
    (R3 A left joining character, that has a left join-causing char on the left will get form XLeft)
    Note: the above rule is meaningless, as there are no pure left joining characters defined in Unicode
    R4 A dual joining character, that has a left join-causing char on the left and a right join-causing char on
-             the right will get form XMedial
+	     the right will get form XMedial
    R5  A dual joining character, that has a right join causing char on the right, and no left join causing char on the left
-         will get form XRight
+	 will get form XRight
    R6 A dual joining character, that has a  left join causing char on the left, and no right join causing char on the right
-         will get form XLeft
+	 will get form XLeft
    R7 Otherwise the character will get form XIsolated
 
    Additionally we have to do the minimal ligature support for lam-alef ligatures:
@@ -78,10 +117,10 @@ static inline const QChar *prevChar( const QString &str, int pos )
     pos--;
     const QChar *ch = str.unicode() + pos;
     while( pos > -1 ) {
-        if( !ch->isMark() )
-            return ch;
-        pos--;
-        ch--;
+	if( !ch->isMark() )
+	    return ch;
+	pos--;
+	ch--;
     }
     return &QChar::replacement;
 }
@@ -92,12 +131,12 @@ static inline const QChar *nextChar( const QString &str, int pos)
     int len = str.length();
     const QChar *ch = str.unicode() + pos;
     while( pos < len ) {
-        //qDebug("rightChar: %d isLetter=%d, joining=%d", pos, ch.isLetter(), ch.joining());
-        if( !ch->isMark() )
-            return ch;
-        // assume it's a transparent char, this might not be 100% correct
-        pos++;
-        ch++;
+	//qDebug("rightChar: %d isLetter=%d, joining=%d", pos, ch.isLetter(), ch.joining());
+	if( !ch->isMark() )
+	    return ch;
+	// assume it's a transparent char, this might not be 100% correct
+	pos++;
+	ch++;
     }
     return &QChar::replacement;
 }
@@ -113,8 +152,6 @@ static inline bool nextVisualCharJoins( const QString &str, int pos)
     return ( join == QChar::Dual || join == QChar::Center );
 }
 
-// QT2HACK
-#if 0
 
 QComplexText::Shape QComplexText::glyphVariant( const QString &str, int pos)
 {
@@ -122,27 +159,27 @@ QComplexText::Shape QComplexText::glyphVariant( const QString &str, int pos)
     QChar::Joining joining = str[pos].joining();
     //qDebug("checking %x, joining=%d", str[pos].unicode(), joining);
     switch ( joining ) {
-        case QChar::OtherJoining:
-        case QChar::Center:
-            // these don't change shape
-            return XIsolated;
-        case QChar::Right:
-            // only rule R2 applies
-            if( nextVisualCharJoins( str, pos ) )
-                return XFinal;
-            return XIsolated;
-        case QChar::Dual:
-            bool right = nextVisualCharJoins( str, pos );
-            bool left = prevVisualCharJoins( str, pos );
-            //qDebug("dual: right=%d, left=%d", right, left);
-            if( right && left )
-                return XMedial;
-            else if ( right )
-                return XFinal;
-            else if ( left )
-                return XInitial;
-            else
-                return XIsolated;
+	case QChar::OtherJoining:
+	case QChar::Center:
+	    // these don't change shape
+	    return XIsolated;
+	case QChar::Right:
+	    // only rule R2 applies
+	    if( nextVisualCharJoins( str, pos ) )
+		return XFinal;
+	    return XIsolated;
+	case QChar::Dual:
+	    bool right = nextVisualCharJoins( str, pos );
+	    bool left = prevVisualCharJoins( str, pos );
+	    //qDebug("dual: right=%d, left=%d", right, left);
+	    if( right && left )
+		return XMedial;
+	    else if ( right )
+		return XFinal;
+	    else if ( left )
+		return XInitial;
+	    else
+		return XIsolated;
     }
     return XIsolated;
 }
@@ -167,27 +204,27 @@ QComplexText::Shape QComplexText::glyphVariantLogical( const QString &str, int p
     QChar::Joining joining = str[pos].joining();
     //qDebug("checking %x, joining=%d", str[pos].unicode(), joining);
     switch ( joining ) {
-        case QChar::OtherJoining:
-        case QChar::Center:
-            // these don't change shape
-            return XIsolated;
-        case QChar::Right:
-            // only rule R2 applies
-            if( nextLogicalCharJoins( str, pos ) )
-                return XFinal;
-            return XIsolated;
-        case QChar::Dual:
-            bool right = nextLogicalCharJoins( str, pos );
-            bool left = prevLogicalCharJoins( str, pos );
-            //qDebug("dual: right=%d, left=%d", right, left);
-            if( right && left )
-                return XMedial;
-            else if ( right )
-                return XFinal;
-            else if ( left )
-                return XInitial;
-            else
-                return XIsolated;
+	case QChar::OtherJoining:
+	case QChar::Center:
+	    // these don't change shape
+	    return XIsolated;
+	case QChar::Right:
+	    // only rule R2 applies
+	    if( nextLogicalCharJoins( str, pos ) )
+		return XFinal;
+	    return XIsolated;
+	case QChar::Dual:
+	    bool right = nextLogicalCharJoins( str, pos );
+	    bool left = prevLogicalCharJoins( str, pos );
+	    //qDebug("dual: right=%d, left=%d", right, left);
+	    if( right && left )
+		return XMedial;
+	    else if ( right )
+		return XFinal;
+	    else if ( left )
+		return XInitial;
+	    else
+		return XIsolated;
     }
     return XIsolated;
 }
@@ -320,8 +357,8 @@ static const ushort arabicUnicodeMapping[256][4] = {
     { 0x066e, 0 }, // 0x66e
     { 0x066f, 0 }, // 0x66f
 
-        // ### some glyphs do not have shaped mappings in the presentation forms A.
-        // these have the shaping set to 0 for the moment. Will have to find out better mappings for them.
+	// ### some glyphs do not have shaped mappings in the presentation forms A.
+	// these have the shaping set to 0 for the moment. Will have to find out better mappings for them.
     { 0x0670, 0 }, // 0x670
     { 0xfb50, 1 }, // 0x671 R   Alef Wasla
     { 0x0672, 0 }, // 0x672 R    Alef with wavy Hamza above
@@ -492,9 +529,9 @@ static const ushort arabicUnicodeLamAlefMapping[6][4] = {
 QString QComplexText::shapedString(const QString& uc, int from, int len, QPainter::TextDirection dir )
 {
     if( len < 0 )
-        len = uc.length() - from;
+	len = uc.length() - from;
     if( len == 0 ) {
-        return QString::null;
+	return QString::null;
     }
 
     // we have to ignore NSMs at the beginning and add at the end.
@@ -518,7 +555,7 @@ QString QComplexText::shapedString(const QString& uc, int from, int len, QPainte
       shapeBuffer = (QChar *) malloc( len*sizeof( QChar ) );
 //        delete [] shapeBuffer;
 //        shapeBuffer = new QChar[ len + 1];
-        shapeBufSize = len;
+	shapeBufSize = len;
     }
 
     int lenOut = 0;
@@ -526,56 +563,56 @@ QString QComplexText::shapedString(const QString& uc, int from, int len, QPainte
     if ( dir == QPainter::RTL )
 	ch += len - 1;
     for ( int i = 0; i < len; i++ ) {
-        uchar r = ch->row();
-        uchar c = ch->cell();
-        if ( r != 0x06 ) {
-            *data = *ch;
+	uchar r = ch->row();
+	uchar c = ch->cell();
+	if ( r != 0x06 ) {
+	    *data = *ch;
 	    data++;
-            lenOut++;
-        } else {
+	    lenOut++;
+	} else {
 	    int pos = i + from;
 	    if ( dir == QPainter::RTL )
 		pos = from + len - 1 - i;
-            int shape = glyphVariantLogical( uc, pos );
-            //qDebug("mapping U+%x to shape %d glyph=0x%x", ch->unicode(), shape, arabicUnicodeMapping[ch->cell()][shape]);
-            // take care of lam-alef ligatures (lam right of alef)
-            ushort map;
-            switch ( c ) {
-                case 0x44: { // lam
-                    const QChar *pch = nextChar( uc, pos );
-                    if ( pch->row() == 0x06 ) {
-                        switch ( pch->cell() ) {
-                            case 0x22:
-                            case 0x23:
-                            case 0x25:
-                            case 0x27:
-                                //qDebug(" lam of lam-alef ligature");
-                                map = arabicUnicodeLamAlefMapping[pch->cell() - 0x22][shape];
-                                goto next;
-                            default:
-                                break;
-                        }
-                    }
-                    break;
-                }
-                case 0x22: // alef with madda
-                case 0x23: // alef with hamza above
-                case 0x25: // alef with hamza below
-                case 0x27: // alef
-                    if ( prevChar( uc, pos )->unicode() == 0x0644 ) {
-                        // have a lam alef ligature
-                        //qDebug(" alef of lam-alef ligature");
-                        goto skip;
-                    }
-                default:
-                    break;
-            }
-            map = arabicUnicodeMapping[c][0] + shape;
-        next:
-            *data = map;
+	    int shape = glyphVariantLogical( uc, pos );
+	    //qDebug("mapping U+%x to shape %d glyph=0x%x", ch->unicode(), shape, arabicUnicodeMapping[ch->cell()][shape]);
+	    // take care of lam-alef ligatures (lam right of alef)
+	    ushort map;
+	    switch ( c ) {
+		case 0x44: { // lam
+		    const QChar *pch = nextChar( uc, pos );
+		    if ( pch->row() == 0x06 ) {
+			switch ( pch->cell() ) {
+			    case 0x22:
+			    case 0x23:
+			    case 0x25:
+			    case 0x27:
+				//qDebug(" lam of lam-alef ligature");
+				map = arabicUnicodeLamAlefMapping[pch->cell() - 0x22][shape];
+				goto next;
+			    default:
+				break;
+			}
+		    }
+		    break;
+		}
+		case 0x22: // alef with madda
+		case 0x23: // alef with hamza above
+		case 0x25: // alef with hamza below
+		case 0x27: // alef
+		    if ( prevChar( uc, pos )->unicode() == 0x0644 ) {
+			// have a lam alef ligature
+			//qDebug(" alef of lam-alef ligature");
+			goto skip;
+		    }
+		default:
+		    break;
+	    }
+	    map = arabicUnicodeMapping[c][0] + shape;
+	next:
+	    *data = map;
 	    data++;
-            lenOut++;
-        }
+	    lenOut++;
+	}
     skip:
 	if ( dir == QPainter::RTL )
 	    ch--;
@@ -583,6 +620,9 @@ QString QComplexText::shapedString(const QString& uc, int from, int len, QPainte
 	    ch++;
     }
 
+    if ( dir == QPainter::Auto && !uc.simpleText() ) {
+	return bidiReorderString( QConstString( shapeBuffer, lenOut ).string() );
+    }
     if ( dir == QPainter::RTL ) {
 	// reverses the non spacing marks to be again after the base char
 	QChar *s = shapeBuffer;
@@ -623,57 +663,60 @@ QChar QComplexText::shapedCharacter( const QString &str, int pos )
 {
     const QChar *ch = str.unicode() + pos;
     if ( ch->row() != 0x06 )
-        return *ch;
+	return *ch;
     else {
-        int shape = glyphVariantLogical( str, pos );
-        //qDebug("mapping U+%x to shape %d glyph=0x%x", ch->unicode(), shape, arabicUnicodeMapping[ch->cell()][shape]);
-        // lam aleph ligatures
-        switch ( ch->cell() ) {
-            case 0x44: { // lam
-                const QChar *nch = nextChar( str, pos );
-                if ( nch->row() == 0x06 ) {
-                    switch ( nch->cell() ) {
-                        case 0x22:
-                        case 0x23:
-                        case 0x25:
-                        case 0x27:
-                            return QChar(arabicUnicodeLamAlefMapping[nch->cell() - 0x22][shape]);
-                        default:
-                            break;
-                    }
-                }
-                break;
-            }
-            case 0x22: // alef with madda
-            case 0x23: // alef with hamza above
-            case 0x25: // alef with hamza below
-            case 0x27: // alef
-                if ( prevChar( str, pos )->unicode() == 0x0644 )
-                    // have a lam alef ligature
-                    return QChar(0);
-            default:
-                break;
-        }
-        return QChar(arabicUnicodeMapping[ch->cell()][0] + shape);
+	int shape = glyphVariantLogical( str, pos );
+	//qDebug("mapping U+%x to shape %d glyph=0x%x", ch->unicode(), shape, arabicUnicodeMapping[ch->cell()][shape]);
+	// lam aleph ligatures
+	switch ( ch->cell() ) {
+	    case 0x44: { // lam
+		const QChar *nch = nextChar( str, pos );
+		if ( nch->row() == 0x06 ) {
+		    switch ( nch->cell() ) {
+			case 0x22:
+			case 0x23:
+			case 0x25:
+			case 0x27:
+			    return QChar(arabicUnicodeLamAlefMapping[nch->cell() - 0x22][shape]);
+			default:
+			    break;
+		    }
+		}
+		break;
+	    }
+	    case 0x22: // alef with madda
+	    case 0x23: // alef with hamza above
+	    case 0x25: // alef with hamza below
+	    case 0x27: // alef
+		if ( prevChar( str, pos )->unicode() == 0x0644 )
+		    // have a lam alef ligature
+		    return QChar(0);
+	    default:
+		break;
+	}
+	return QChar(arabicUnicodeMapping[ch->cell()][0] + shape);
     }
 }
 
-QPointArray QComplexText::positionMarks( QFontPrivate *f, const QString &str, int pos, QRect *boundingRect )
+#if 0 // we don't have QFontPrivate, and positionMarks isn't called from QRT anyway
+QPointArray QComplexText::positionMarks( QFontPrivate *f, const QString &str,
+					 int pos, QRect *boundingRect )
 {
     int len = str.length();
     int nmarks = 0;
     while ( pos + nmarks < len && str[pos+nmarks +1].combiningClass() > 0 )
-        nmarks++;
+	nmarks++;
 
     if ( !nmarks )
-        return QPointArray();
+	return QPointArray();
 
     QChar baseChar = QComplexText::shapedCharacter( str, pos );
     QRect baseRect = f->boundingRect( baseChar );
     int baseOffset = f->textWidth( str, pos, 1 );
 
     //qDebug( "base char: bounding rect at %d/%d (%d/%d)", baseRect.x(), baseRect.y(), baseRect.width(), baseRect.height() );
-    int offset = f->request.pixelSize / 10 + 1;
+    int offset = f->actual.pixelSize / 10 + 1;
+    //qDebug("offset = %d", offset );
     QPointArray pa( nmarks );
     int i;
     unsigned char lastCmb = 0;
@@ -681,83 +724,140 @@ QPointArray QComplexText::positionMarks( QFontPrivate *f, const QString &str, in
     if ( boundingRect )
 	*boundingRect = baseRect;
     for( i = 0; i < nmarks; i++ ) {
-        QChar mark = str[pos+i+1];
-        unsigned char cmb = mark.combiningClass();
-        // combining marks of different class don't interact. Reset the rectangle.
-        if ( cmb != lastCmb ) {
-            //qDebug( "resetting rect" );
-            attachmentRect = baseRect;
-        }
+	QChar mark = str[pos+i+1];
+	unsigned char cmb = mark.combiningClass();
+	if ( cmb < 200 ) {
+	    // fixed position classes. We approximate by mapping to one of the others.
+	    // currently I added only the ones for arabic, hebrew and thai.
 
-        QPoint p;
-        QRect markRect = f->boundingRect( mark );
-        switch( cmb ) {
-        case QChar::Combining_DoubleBelow:
-                // ### wrong in rtl context!
-        case QChar::Combining_BelowLeft:
-            p += QPoint( 0, offset );
-        case QChar::Combining_BelowLeftAttached:
-            p += attachmentRect.bottomLeft() - markRect.topLeft();
-            break;
-        case QChar::Combining_Below:
-            p += QPoint( 0, offset );
-        case QChar::Combining_BelowAttached:
-            p += attachmentRect.bottomLeft() - markRect.topLeft();
-            p += QPoint( (attachmentRect.width() - markRect.width())/2 , 0 );
-            break;
-            case QChar::Combining_BelowRight:
-            p += QPoint( 0, offset );
-        case QChar::Combining_BelowRightAttached:
-            p += attachmentRect.bottomRight() - markRect.topRight();
-            break;
-            case QChar::Combining_Left:
-            p += QPoint( -offset, 0 );
-        case QChar::Combining_LeftAttached:
-            break;
-            case QChar::Combining_Right:
-            p += QPoint( offset, 0 );
-        case QChar::Combining_RightAttached:
-            break;
-        case QChar::Combining_DoubleAbove:
-            // ### wrong in RTL context!
-        case QChar::Combining_AboveLeft:
-            p += QPoint( 0, -offset );
-        case QChar::Combining_AboveLeftAttached:
-            p += attachmentRect.topLeft() - markRect.bottomLeft();
-            break;
-            case QChar::Combining_Above:
-            p += QPoint( 0, -offset );
-        case QChar::Combining_AboveAttached:
-            p += attachmentRect.topLeft() - markRect.bottomLeft();
-            p += QPoint( (attachmentRect.width() - markRect.width())/2 , 0 );
-            break;
-            case QChar::Combining_AboveRight:
-            p += QPoint( 0, -offset );
-        case QChar::Combining_AboveRightAttached:
-            p += attachmentRect.topRight() - markRect.bottomRight();
-            break;
+	    // ### add a bit more offset to arabic, a bit hacky
+	    if ( cmb >= 27 && cmb <= 36 )
+		offset +=1;
+	    // below
+	    if ( (cmb >= 10 && cmb <= 18) ||
+		 cmb == 20 || cmb == 22 ||
+		 cmb == 29 || cmb == 32 )
+		cmb = QChar::Combining_Below;
+	    // above
+	    else if ( cmb == 23 || cmb == 27 || cmb == 28 ||
+		      cmb == 30 || cmb == 31 || (cmb >= 33 && cmb <= 36 ) )
+		cmb = QChar::Combining_Above;
+	    //below-right
+	    else if ( cmb == 103 )
+		cmb = QChar::Combining_BelowRight;
+	    // above-right
+	    else if ( cmb == 24 || cmb == 107 )
+		cmb = QChar::Combining_AboveRight;
+	    else if ( cmb == 25 )
+		cmb = QChar::Combining_AboveLeft;
+	    // fixed:
+	    //  19 21
 
-        case QChar::Combining_IotaSubscript:
-            default:
-                break;
-        }
-        //qDebug( "char=%x combiningClass = %d offset=%d/%d", mark.unicode(), cmb, p.x(), p.y() );
-        markRect.moveBy( p.x(), p.y() );
-        p += QPoint( -baseOffset, 0 );
-        attachmentRect |= markRect;
+	}
+
+	// combining marks of different class don't interact. Reset the rectangle.
+	if ( cmb != lastCmb ) {
+	    //qDebug( "resetting rect" );
+	    attachmentRect = baseRect;
+	}
+
+	QPoint p;
+	QRect markRect = f->boundingRect( mark );
+	switch( cmb ) {
+	case QChar::Combining_DoubleBelow:
+		// ### wrong in rtl context!
+	case QChar::Combining_BelowLeft:
+	    p += QPoint( 0, offset );
+	case QChar::Combining_BelowLeftAttached:
+	    p += attachmentRect.bottomLeft() - markRect.topLeft();
+	    break;
+	case QChar::Combining_Below:
+	    p += QPoint( 0, offset );
+	case QChar::Combining_BelowAttached:
+	    p += attachmentRect.bottomLeft() - markRect.topLeft();
+	    p += QPoint( (attachmentRect.width() - markRect.width())/2 , 0 );
+	    break;
+	    case QChar::Combining_BelowRight:
+	    p += QPoint( 0, offset );
+	case QChar::Combining_BelowRightAttached:
+	    p += attachmentRect.bottomRight() - markRect.topRight();
+	    break;
+	    case QChar::Combining_Left:
+	    p += QPoint( -offset, 0 );
+	case QChar::Combining_LeftAttached:
+	    break;
+	    case QChar::Combining_Right:
+	    p += QPoint( offset, 0 );
+	case QChar::Combining_RightAttached:
+	    break;
+	case QChar::Combining_DoubleAbove:
+	    // ### wrong in RTL context!
+	case QChar::Combining_AboveLeft:
+	    p += QPoint( 0, -offset );
+	case QChar::Combining_AboveLeftAttached:
+	    p += attachmentRect.topLeft() - markRect.bottomLeft();
+	    break;
+	    case QChar::Combining_Above:
+	    p += QPoint( 0, -offset );
+	case QChar::Combining_AboveAttached:
+	    p += attachmentRect.topLeft() - markRect.bottomLeft();
+	    p += QPoint( (attachmentRect.width() - markRect.width())/2 , 0 );
+	    break;
+	    case QChar::Combining_AboveRight:
+	    p += QPoint( 0, -offset );
+	case QChar::Combining_AboveRightAttached:
+	    p += attachmentRect.topRight() - markRect.bottomRight();
+	    break;
+
+	case QChar::Combining_IotaSubscript:
+	    default:
+		break;
+	}
+	//qDebug( "char=%x combiningClass = %d offset=%d/%d", mark.unicode(), cmb, p.x(), p.y() );
+	markRect.moveBy( p.x(), p.y() );
+	p += QPoint( -baseOffset, 0 );
+	attachmentRect |= markRect;
 	if ( boundingRect )
 	    *boundingRect |= markRect;
-        lastCmb = cmb;
-        pa.setPoint( i, p );
+	lastCmb = cmb;
+	pa.setPoint( i, p );
     }
     return pa;
 }
+#endif
 
-//#define BIDI_DEBUG 2
-#ifdef BIDI_DEBUG
+#define BIDI_DEBUG 0
+#if (BIDI_DEBUG-0 >= 1)
 #include <iostream>
 #endif
 
+static QChar::Direction basicDirection(const QString &str, int start = 0)
+{
+    int len = str.length();
+    int pos = start > len ? len -1 : start;
+    const QChar *uc = str.unicode() + pos;
+    while( pos < len ) {
+	switch( uc->direction() )
+	{
+	case QChar::DirL:
+	case QChar::DirLRO:
+	case QChar::DirLRE:
+	    return QChar::DirL;
+	case QChar::DirR:
+	case QChar::DirAL:
+	case QChar::DirRLO:
+	case QChar::DirRLE:
+	    return QChar::DirR;
+	default:
+	    break;
+	}
+	++pos;
+	++uc;
+    }
+    if ( start != 0 )
+	return basicDirection( str );
+    return QChar::DirL;
+}
 
 // transforms one line of the paragraph to visual order
 // the caller is responisble to delete the returned list of QTextRuns.
@@ -787,18 +887,20 @@ QPtrList<QTextRun> *QComplexText::bidiReorderLine( QBidiControl *control, const 
     int eor = start;
 
     int current = start;
-    while(current < last) {
+    while(current <= last) {
 	QChar::Direction dirCurrent;
 	if(current == (int)text.length()) {
 	    QBidiContext *c = context;
 	    while ( c->parent )
 		c = c->parent;
 	    dirCurrent = c->dir;
+	} else if ( current == last ) {
+	    dirCurrent = basicDirection( text, current );
 	} else
 	    dirCurrent = text.at(current).direction();
 
 
-#if BIDI_DEBUG > 1
+#if (BIDI_DEBUG-0 >= 2)
 	cout << "directions: dir=" << dir << " current=" << dirCurrent << " last=" << status.last << " eor=" << status.eor << " lastStrong=" << status.lastStrong << " embedding=" << context->dir << " level =" << (int)context->level << endl;
 #endif
 
@@ -926,7 +1028,7 @@ QPtrList<QTextRun> *QComplexText::bidiReorderLine( QBidiControl *control, const 
 			    runs->append( new QTextRun(sor, eor, context, dir) );
 			    ++eor; sor = eor; dir = QChar::DirON; status.eor = QChar::DirON;
 			} else {
-			    if(status.eor == QChar::DirR) {
+			    if(status.eor != QChar::DirL) {
 				runs->append( new QTextRun(sor, eor, context, dir) );
 				++eor; sor = eor; dir = QChar::DirON; status.eor = QChar::DirON;
 				dir = QChar::DirL;
@@ -1022,7 +1124,7 @@ QPtrList<QTextRun> *QComplexText::bidiReorderLine( QBidiControl *control, const 
 			dir = QChar::DirAN; break;
 		    case QChar::DirES:
 		    case QChar::DirCS:
-			if(status.eor == QChar::DirEN) {
+			if(status.eor == QChar::DirEN || dir == QChar::DirAN) {
 			    eor = current; break;
 			}
 		    case QChar::DirBN:
@@ -1176,12 +1278,13 @@ QPtrList<QTextRun> *QComplexText::bidiReorderLine( QBidiControl *control, const 
 	++current;
     }
 
-#ifdef BIDI_DEBUG
+#if (BIDI_DEBUG-0 >= 1)
     cout << "reached end of line current=" << current << ", eor=" << eor << endl;
 #endif
-    eor = current;
+    eor = current - 1; // remove dummy char
 
-    runs->append( new QTextRun(sor, eor, context, dir) );
+    if ( sor <= eor )
+	runs->append( new QTextRun(sor, eor, context, dir) );
 
     // reorder line according to run structure...
 
@@ -1205,7 +1308,7 @@ QPtrList<QTextRun> *QComplexText::bidiReorderLine( QBidiControl *control, const 
     // reversing is only done up to the lowest odd level
     if(!(levelLow%2)) levelLow++;
 
-#ifdef BIDI_DEBUG
+#if (BIDI_DEBUG-0 >= 1)
     cout << "reorderLine: lineLow = " << (uint)levelLow << ", lineHigh = " << (uint)levelHigh << endl;
     cout << "logical order is:" << endl;
     QPtrListIterator<QTextRun> it2(*runs);
@@ -1243,7 +1346,7 @@ QPtrList<QTextRun> *QComplexText::bidiReorderLine( QBidiControl *control, const 
 	levelHigh--;
     }
 
-#ifdef BIDI_DEBUG
+#if (BIDI_DEBUG-0 >= 1)
     cout << "visual order is:" << endl;
     QPtrListIterator<QTextRun> it3(*runs);
     QTextRun *r3;
@@ -1263,7 +1366,7 @@ QPtrList<QTextRun> *QComplexText::bidiReorderLine( QBidiControl *control, const 
 QString QComplexText::bidiReorderString( const QString &str, QChar::Direction /*basicDir*/ )
 {
     // ### fix basic direction
-    QBidiControl *control = new QBidiControl();
+    QBidiControl control;
     int lineStart = 0;
     int lineEnd = 0;
     int len = str.length();
@@ -1277,7 +1380,7 @@ QString QComplexText::bidiReorderString( const QString &str, QChar::Direction /*
 	    ch++;
 	    lineEnd++;
 	}
-	QPtrList<QTextRun> *runs = bidiReorderLine( control, str, lineStart, lineEnd - lineStart );
+	QPtrList<QTextRun> *runs = bidiReorderLine( &control, str, lineStart, lineEnd - lineStart );
 
 	// reorder the content of the line, and output to visual
 	QTextRun *r = runs->first();
@@ -1310,4 +1413,27 @@ QString QComplexText::bidiReorderString( const QString &str, QChar::Direction /*
     }
     return visual;
 }
+
+QTextRun::QTextRun(int _start, int _stop, QBidiContext *context, QChar::Direction dir) {
+    start = _start;
+    stop = _stop;
+    if(dir == QChar::DirON) dir = context->dir;
+
+    level = context->level;
+
+    // add level of run (cases I1 & I2)
+    if( level % 2 ) {
+	if(dir == QChar::DirL || dir == QChar::DirAN)
+	    level++;
+    } else {
+	if( dir == QChar::DirR )
+	    level++;
+	else if( dir == QChar::DirAN )
+	    level += 2;
+    }
+#if (BIDI_DEBUG-0 >= 1)
+    printf("new run: dir=%d from %d, to %d level = %d\n", dir, _start, _stop, level);
 #endif
+}
+
+#endif //QT_NO_COMPLEXTEXT

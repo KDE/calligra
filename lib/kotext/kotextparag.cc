@@ -189,26 +189,24 @@ void KoTextParag::drawLabel( QPainter* p, int x, int y, int /*w*/, int h, int ba
 
     int size = m_layout.counter->width( this );
 
-    // Draw the complete label.
-    QTextFormat *format = at( 0 )->format(); // paragFormat();
+    // We use the formatting of the first char as the formatting of the counter
+    KoTextFormat *format = static_cast<KoTextFormat *>( at( 0 )->format() ); // paragFormat();
     p->save();
-    QPen tmpPen=p->pen();
 
-    QColor newColor(format->color());
-    QFont newFont(format->font());
+    QColor textColor( format->color() );
+    if ( !textColor.isValid() ) // Resolve the color at this point
+        textColor = KoTextFormat::defaultTextColor( p );
+    p->setPen( QPen( textColor ) );
+
     KoZoomHandler * zh = textDocument()->zoomHandler();
-    bool forPrint = ( p->device()->devType() == QInternal::Printer );
-    newFont.setPointSizeFloat( zh->layoutUnitToFontSize( newFont.pointSize(), forPrint ) );
+    //bool forPrint = ( p->device()->devType() == QInternal::Printer );
+    p->setFont( format->screenFont( zh ) );
 
     x = zh->layoutUnitToPixelX( x );
     y = zh->layoutUnitToPixelY( y );
     h = zh->layoutUnitToPixelY( y, h );
     base = zh->layoutUnitToPixelY( y, base );
     size = zh->layoutUnitToPixelX( size );
-
-    p->setFont( newFont );
-    tmpPen.setColor( newColor);
-    p->setPen(tmpPen);
 
     // Now draw any bullet that is required over the space left for it.
     if ( m_layout.counter->isBullet() )
@@ -236,12 +234,12 @@ void KoTextParag::drawLabel( QPainter* p, int x, int y, int /*w*/, int h, int ba
         switch ( m_layout.counter->style() )
         {
             case KoParagCounter::STYLE_DISCBULLET:
-                p->setBrush( QBrush(newColor) );
+                p->setBrush( QBrush(textColor) );
                 p->drawEllipse( er );
                 p->setBrush( Qt::NoBrush );
                 break;
             case KoParagCounter::STYLE_SQUAREBULLET:
-                p->fillRect( er , QBrush(newColor) );
+                p->fillRect( er, QBrush(textColor) );
                 break;
             case KoParagCounter::STYLE_CIRCLEBULLET:
                 p->drawEllipse( er );
@@ -251,11 +249,10 @@ void KoTextParag::drawLabel( QPainter* p, int x, int y, int /*w*/, int h, int ba
                 // font with the given family. This conserves the right size etc.
                 if ( !m_layout.counter->customBulletFont().isEmpty() )
                 {
-                    QFont bulletFont=newFont;
+                    QFont bulletFont( p->font() );
                     bulletFont.setFamily( m_layout.counter->customBulletFont() );
                     p->setFont( bulletFont );
                 }
-                p->setFont( newFont );
                 p->drawText( x - width, y - h + base, m_layout.counter->customBulletCharacter() );
                 break;
             default:
@@ -269,23 +266,7 @@ void KoTextParag::drawLabel( QPainter* p, int x, int y, int /*w*/, int h, int ba
         // Just draw the text! Note: one space is always appended.
         QString counterText = m_layout.counter->text( this );
         if ( !counterText.isEmpty() )
-        {
-            //code from qt3stuff
-            if (format->vAlign() == QTextFormat::AlignSuperScript )
-            {
-                QFont tmpFont( p->font() );
-                tmpFont.setPointSize( ( tmpFont.pointSize() * 2 ) / 3 );
-                p->setFont( tmpFont );
-                base=base*2/3;
-            }
-            else if ( format->vAlign() == QTextFormat::AlignSubScript )
-            {
-                QFont tmpFont( p->font() );
-                tmpFont.setPointSize( ( tmpFont.pointSize() * 2 ) / 3 );
-                p->setFont( tmpFont );
-            }
             p->drawText( x - size, y - h + base, counterText + ' ' );
-        }
     }
     p->restore();
 }
@@ -428,20 +409,11 @@ void KoTextParag::paint( QPainter &painter, const QColorGroup &cg, QTextCursor *
 // Reimplemented from QTextParag - and called by QTextParag::paint
 void KoTextParag::drawParagString( QPainter &painter, const QString &s, int start, int len, int startX,
                                    int lastY, int baseLine, int bw, int h, bool drawSelections,
-                                   QTextFormat *lastFormat, int i, const QMemArray<int> &selectionStarts,
+                                   QTextFormat *_lastFormat, int i, const QMemArray<int> &selectionStarts,
                                    const QMemArray<int> &selectionEnds, const QColorGroup &cg, bool rightToLeft )
 {
-    KoTextFormat localFormat=(*static_cast<KoTextFormat *>(lastFormat));
-    if ( !lastFormat->color().isValid() ) // Resolve the color at this point
-        localFormat.setColor( KoTextFormat::defaultTextColor( &painter ) );
-    bool forPrint = ( painter.device()->devType() == QInternal::Printer );
+    KoTextFormat* lastFormat=static_cast<KoTextFormat *>(_lastFormat);
     KoZoomHandler * zh = textDocument()->zoomHandler();
-    localFormat.setPointSizeFloat( zh->layoutUnitToFontSize( localFormat.font().pointSize(), forPrint ) );
-    QFontInfo fi( localFormat.font() );
-    //kdDebug() << "KoTextParag::drawParagString requested font " << localFormat.font().pointSizeFloat() << " using font " << fi.pointSize() << " (pt for layout-unit size " << lastFormat->font().pointSizeFloat() << ")" << endl;
-    //kdDebug() << "KoTextParag::drawParagString in pixelsizes : " << localFormat.font().pixelSize() << " (" << lastFormat->font().pixelSize() << " for lu)" << endl;
-
-    lastFormat = &localFormat;
 
     //kdDebug() << "startX in LU: " << startX << " layoutUnitToPt( startX )*zoomedResolutionX : " << zh->layoutUnitToPt( startX ) << "*" << zh->zoomedResolutionX() << endl;
 
@@ -455,18 +427,15 @@ void KoTextParag::drawParagString( QPainter &painter, const QString &s, int star
     int baseLine_pix = zh->layoutUnitToPixelY( lastY, baseLine );
     int h_pix = zh->layoutUnitToPixelY( lastY, h );
 
+    if ( lastFormat->textBackgroundColor().isValid() )
+        painter.fillRect( startXpix, lastY_pix, bw, h_pix, lastFormat->textBackgroundColor() );
 
-    if ( localFormat.textBackgroundColor().isValid() )
-        painter.fillRect(  startXpix, lastY_pix, bw, h_pix,localFormat.textBackgroundColor() );
+    drawParagStringInternal( painter, s, start, len, startXpix,
+                             lastY_pix, baseLine_pix,
+                             bw, // Note that bw is already in pixels (see QTextParag::paint)
+                             h_pix, drawSelections, lastFormat, i, selectionStarts,
+                             selectionEnds, cg, rightToLeft, zh );
 
-
-
-
-    QTextParag::drawParagString( painter, s, start, len, startXpix,
-                                 lastY_pix, baseLine_pix,
-                                 bw, // Note that bw is already in pixels (see QTextParag::paint)
-                                 h_pix, drawSelections, lastFormat, i, selectionStarts,
-                                 selectionEnds, cg, rightToLeft );
     // Draw "invisible chars"
     int end = QMIN( start + len, length() - 1 ); // don't look at the trailing space
     for ( int idx = start ; idx < end ; ++idx )
@@ -495,12 +464,106 @@ void KoTextParag::drawParagString( QPainter &painter, const QString &s, int star
 
 }
 
+// Copied from QTextParag
+// (we have to copy it here, so that color & font changes don't require changing
+// a local copy of the text format)
+// And we have to keep it separate from drawParagString to avoid s/startX/startXpix/ etc.
+void KoTextParag::drawParagStringInternal( QPainter &painter, const QString &s, int start, int len, int startX,
+                                   int lastY, int baseLine, int bw, int h, bool drawSelections,
+                                   KoTextFormat *lastFormat, int i, const QMemArray<int> &selectionStarts,
+                                   const QMemArray<int> &selectionEnds, const QColorGroup &cg, bool rightToLeft, KoZoomHandler* zh )
+{
+    // 1) Sort out the color
+    QColor textColor( lastFormat->color() );
+    if ( !textColor.isValid() ) // Resolve the color at this point
+        textColor = KoTextFormat::defaultTextColor( &painter );
+
+    // 2) Sort out the font
+    //bool forPrint = ( painter.device()->devType() == QInternal::Printer );
+    QFont font( lastFormat->screenFont( zh ) );
+    //QFontInfo fi( font );
+    //kdDebug() << "KoTextParag::drawParagString requested font " << localFormat.font().pointSizeFloat() << " using font " << fi.pointSize() << " (pt for layout-unit size " << lastFormat->font().pointSizeFloat() << ")" << endl;
+    //kdDebug() << "KoTextParag::drawParagString in pixelsizes : " << localFormat.font().pixelSize() << " (" << lastFormat->font().pixelSize() << " for lu)" << endl;
+
+    // 3) Go (almost verbatim from QTextFormat::drawParagString)
+    QString str( s );
+    if ( str[ (int)str.length() - 1 ].unicode() == 0xad )
+	str.remove( str.length() - 1, 1 );
+    painter.setPen( QPen( textColor ) );
+    painter.setFont( font );
+
+    QTextDocument* doc = document();
+    if ( doc && lastFormat->isAnchor() && !lastFormat->anchorHref().isEmpty() && lastFormat->useLinkColor() ) {
+	painter.setPen( QPen( cg.link()  ) );
+	if ( doc->underlineLinks() ) {
+	    font.setUnderline( TRUE );
+	    painter.setFont( font );
+	}
+    }
+
+    if ( drawSelections ) {
+	const int nSels = doc ? doc->numSelections() : 1;
+	const int startSel = painter.device()->devType() != QInternal::Printer ? 0 : 1;
+	for ( int j = startSel; j < nSels; ++j ) {
+	    if ( i > selectionStarts[ j ] && i <= selectionEnds[ j ] ) {
+		if ( !doc || doc->invertSelectionText( j ) )
+		    painter.setPen( QPen( cg.color( QColorGroup::HighlightedText ) ) );
+		if ( j == QTextDocument::Standard )
+		    painter.fillRect( startX, lastY, bw, h, cg.color( QColorGroup::Highlight ) );
+		else
+		    painter.fillRect( startX, lastY, bw, h, doc ? doc->selectionColor( j ) : cg.color( QColorGroup::Highlight ) );
+	    }
+	}
+    }
+
+    QPainter::TextDirection dir = rightToLeft ? QPainter::RTL : QPainter::LTR;
+
+    if ( str[ start ] != '\t' && str[ start ].unicode() != 0xad ) {
+	if ( lastFormat->vAlign() == QTextFormat::AlignNormal ) {
+	    painter.drawText( startX, lastY + baseLine, str, start, len, dir );
+#ifdef BIDI_DEBUG
+	    painter.save();
+	    painter.setPen ( Qt::red );
+	    painter.drawLine( startX, lastY, startX, lastY + baseLine );
+	    painter.drawLine( startX, lastY + baseLine/2, startX + 10, lastY + baseLine/2 );
+	    int w = 0;
+	    int i = 0;
+	    while( i < len )
+		w += painter.fontMetrics().charWidth( str, start + i++ );
+	    painter.setPen ( Qt::blue );
+	    painter.drawLine( startX + w - 1, lastY, startX + w - 1, lastY + baseLine );
+	    painter.drawLine( startX + w - 1, lastY + baseLine/2, startX + w - 1 - 10, lastY + baseLine/2 );
+	    painter.restore();
+#endif
+	} else if ( lastFormat->vAlign() == QTextFormat::AlignSuperScript ) {
+	    painter.drawText( startX, lastY + baseLine - ( h - painter.fontMetrics().height() ), str, start, len, dir );
+	} else if ( lastFormat->vAlign() == QTextFormat::AlignSubScript ) {
+	    painter.drawText( startX, lastY + baseLine + ( painter.fontMetrics().height() / 6 ), str, start, len, dir );
+	}
+    }
+    if ( i + 1 < length() && at( i + 1 )->lineStart && at( i )->c.unicode() == 0xad ) {
+	painter.drawText( startX + bw, lastY + baseLine, "\xad" );
+    }
+    if ( lastFormat->isMisspelled() ) {
+	painter.save();
+	painter.setPen( QPen( Qt::red, 1, Qt::DotLine ) );
+	painter.drawLine( startX, lastY + baseLine + 1, startX + bw, lastY + baseLine + 1 );
+	painter.restore();
+    }
+
+    i -= len;
+    if ( doc && lastFormat->isAnchor() && !lastFormat->anchorHref().isEmpty() &&
+	 doc->isFocusForParagString( this, i, len ) ) {
+	painter.drawWinFocusRect( QRect( startX, lastY, bw, h ) );
+    }
+}
+
 // Reimplemented from QTextParag
 void KoTextParag::drawCursor( QPainter &painter, QTextCursor *cursor, int curx, int cury, int curh, const QColorGroup &cg )
 {
     KoZoomHandler * zh = textDocument()->zoomHandler();
     int x = zh->layoutUnitToPixelX( curx ) + cursor->parag()->at( cursor->index() )->pixelxadj;
-    //qDebug("  drawCursor: LU: [cur]x=%d -> PIX: x=%d", curx, x );
+    //qDebug("  drawCursor: LU: [cur]x=%d, cury=%d -> PIX: x=%d, y=%d", curx, cury, x, zh->layoutUnitToPixelY( cury ) );
     QTextParag::drawCursor( painter, cursor, x,
                             zh->layoutUnitToPixelY( cury ),
                             zh->layoutUnitToPixelY( cury, curh ), cg );

@@ -21,6 +21,7 @@
 #define kotextformat_h
 #include "qrichtext_p.h"
 using namespace Qt3;
+class KoZoomHandler;
 
 /**
  * Our reimplementation of QTextFormat, to add setPixelSizeFloat(),
@@ -30,10 +31,9 @@ class KoTextFormat : public QTextFormat
 {
 public:
     KoTextFormat();
-    virtual ~KoTextFormat() {}
+    virtual ~KoTextFormat();
     //KoTextFormat( const QStyleSheetItem *s );
-    KoTextFormat( const QFont &f, const QColor &c, QTextFormatCollection * coll )
-      : QTextFormat( f, c, coll ) { generateKey(); }
+    KoTextFormat( const QFont &f, const QColor &c, QTextFormatCollection * coll );
     KoTextFormat( const KoTextFormat &fm );
     //KoTextFormat& operator=( const KoTextFormat &fm );
 
@@ -58,13 +58,32 @@ public:
     void setTextBackgroundColor(const QColor &);
     QColor textBackgroundColor()const {return m_textBackColor;}
 
+    /**
+     * @return the point size to use on screen, given @p zh
+     * This method takes care of superscript and subscript (smaller font).
+     */
+    float screenPointSize( const KoZoomHandler* zh ) const;
+
+    /**
+     * Returns the font metrics for the font used at the zoom & resolution
+     * given by 'zh'. Despite the name, this is probably valid for printing too.
+     * This method takes care of superscript and subscript (smaller font).
+     */
+    QFontMetrics screenFontMetrics( const KoZoomHandler* zh );
+
+    /**
+     * Returns the font to be used at the zoom & resolution given by 'zh'.
+     * Despite the name, this is probably valid for printing too.
+     * This method takes care of superscript and subscript (smaller font).
+     */
+    QFont screenFont( const KoZoomHandler* zh );
+
 protected:
     virtual void generateKey();
     QColor m_textBackColor;
-
-    // NOTE: adding a member var here will make KoTextFormat bigger than QTextFormat,
-    // which might break some casts somewhere. We'll need to do this, but carefully :)
-    // (i.e. making sure that all formats are created as KoTextFormats)
+    // caching for speedup when formatting
+    QFont* m_screenFont; // font to be used when painting (zoom-dependent)
+    QFontMetrics* m_screenFontMetrics; // font metrics on screen (zoom-dependent)
 };
 
 /**
@@ -78,6 +97,8 @@ public:
 
     virtual QTextFormat *format( const QFont &f, const QColor &c );
     virtual void remove( QTextFormat *f );
+
+    bool hasFormat( QTextFormat *f );
 
     virtual QTextFormat *createFormat( const QTextFormat &fm ) { return new KoTextFormat( static_cast<const KoTextFormat &>(fm) ); }
     virtual QTextFormat *createFormat( const QFont &f, const QColor &c ) { return new KoTextFormat( f, c, this ); }

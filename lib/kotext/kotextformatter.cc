@@ -117,18 +117,8 @@ int KoTextFormatter::format( QTextDocument *doc, Qt3::QTextParag *parag,
                 int r = c->c.row();
                 if( r < 0x06 || r > 0x1f )
                 {
-                    // Code from QTextFormat::width, duplicated to avoid having to actually create the format
-                    //w = tmpFormat.width( c->c );
-                    QFont f( origFormat->font() );
-                    f.setPointSizeFloat( zh->layoutUnitToFontSize( f.pointSize(), false /* TODO forPrint*/ ) );
-                    if ( origFormat->vAlign() == QTextFormat::AlignNormal ) {
-                        QFontMetrics fm( f );
-                        pixelww = fm.width( c->c );
-                    } else {
-                        f.setPointSize( ( f.pointSize() * 2 ) / 3 );
-                        QFontMetrics fm_( f );
-                        pixelww = fm_.width( c->c );
-                    }
+                    // The fast way: use the cached font metrics from KoTextFormat
+                    pixelww = origFormat->screenFontMetrics( zh ).width( c->c );
                 }
                 else {
                     // Here we have no choice, we need to create the format

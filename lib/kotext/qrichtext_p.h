@@ -525,6 +525,7 @@ private:
 
 };
 
+#ifdef QTEXTTABLE_AVAILABLE
 class QTextTable;
 
 class Q_EXPORT QTextTableCell : public QLayoutItem
@@ -654,6 +655,7 @@ private:
     void adjustCells( int y , int shift );
     int pageBreakFor;
 };
+#endif
 
 // +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
@@ -796,6 +798,7 @@ public:
     QBrush *paper() const { return backBrush; }
 
     void doLayout( QPainter *p, int w );
+#if 0 // see KoTextDocument
     void draw( QPainter *p, const QRect& rect, const QColorGroup &cg, const QBrush *paper = 0 );
     void drawParag( QPainter *p, QTextParag *parag, int cx, int cy, int cw, int ch,
 		    QPixmap *&doubleBuffer, const QColorGroup &cg,
@@ -803,6 +806,7 @@ public:
     QTextParag *draw( QPainter *p, int cx, int cy, int cw, int ch, const QColorGroup &cg,
 		      bool onlyChanged = FALSE, bool drawCursor = FALSE, QTextCursor *cursor = 0,
 		      bool resetChanged = TRUE );
+#endif
 
     void setDefaultFont( const QFont &f );
 
@@ -822,8 +826,10 @@ public:
     void setUseFormatCollection( bool b ) { useFC = b; }
     bool useFormatCollection() const { return useFC; }
 
+#ifdef QTEXTTABLE_AVAILABLE
     QTextTableCell *tableCell() const { return tc; }
     void setTableCell( QTextTableCell *c ) { tc = c; }
+#endif
 
     void setPlainText( const QString &text );
     void setRichText( const QString &text, const QString &context );
@@ -858,17 +864,22 @@ public:
 
     bool hasFocusParagraph() const;
     QString focusHref() const;
+    bool isFocusForParagString( QTextParag* parag, int start, int len ) const;
 
 signals:
     void minimumWidthChanged( int );
 
 private:
     void init();
+#if 0
     QPixmap *bufferPixmap( const QSize &s );
+#endif
     // HTML parser
     bool hasPrefix(const QString& doc, int pos, QChar c);
     bool hasPrefix(const QString& doc, int pos, const QString& s);
+#ifdef QTEXTTABLE_AVAILABLE
     QTextCustomItem* parseTable( const QMap<QString, QString> &attr, const QTextFormat &fmt, const QString &doc, int& pos, QTextParag *curpar );
+#endif
     bool eatSpace(const QString& doc, int& pos, bool includeNbsp = FALSE );
     bool eat(const QString& doc, int& pos, QChar c);
     QString parseOpenTag(const QString& doc, int& pos, QMap<QString, QString> &attr, bool& emptyTag);
@@ -903,7 +914,9 @@ private:
     QTextDocument *par;
     QTextParag *parParag;
     bool useFC;
+#ifdef QTEXTTABLE_AVAILABLE
     QTextTableCell *tc;
+#endif
     bool withoutDoubleBuffer;
     QTextCursor *tmpCursor;
     bool underlLinks;
@@ -1203,8 +1216,10 @@ public:
     void setFullWidth( bool b ) { fullWidth = b; }
     bool isFullWidth() const { return fullWidth; }
 
+#ifdef QTEXTTABLE_AVAILABLE
     QTextTableCell *tableCell() const { return tc; }
     void setTableCell( QTextTableCell *c ) { tc = c; }
+#endif
 
     void addCustomItem();
     void removeCustomItem();
@@ -1283,7 +1298,9 @@ private:
     int tm, bm, lm, rm, flm;
     QTextFormat *defFormat;
     QPtrList<QTextCustomItem> floatingItems;
+#ifdef QTEXTTABLE_AVAILABLE
     QTextTableCell *tc;
+#endif
     int numCustomItems;
     QRect docRect;
     QTextFormatter *pFormatter;
@@ -1319,8 +1336,8 @@ protected:
     //					       QTextStringChar *last, int align = Qt3::AlignAuto, int space = 0 );
     //QTextStringChar
 
-    //virtual QTextParagLineStart *bidiReorderLine( QTextParag *parag, QTextString *string, QTextParagLineStart *line, QTextStringChar *start,
-    //					    QTextStringChar *last, int align, int space );
+    virtual QTextParagLineStart *bidiReorderLine( QTextParag *parag, QTextString *string, QTextParagLineStart *line, QTextStringChar *start,
+    					    QTextStringChar *last, int align, int space );
     virtual bool isBreakable( QTextString *string, int pos ) const;
     void insertLineStart( QTextParag *parag, int index, QTextParagLineStart *ls );
 
@@ -1416,7 +1433,7 @@ public:
     enum VerticalAlignment { AlignNormal, AlignSubScript, AlignSuperScript };
 
     QTextFormat();
-    virtual ~QTextFormat() {}
+    virtual ~QTextFormat();
 
     QTextFormat( const QStyleSheetItem *s );
     QTextFormat( const QFont &f, const QColor &c, QTextFormatCollection *parent = 0 );
@@ -2056,7 +2073,10 @@ inline int QTextParag::customItems() const
 
 inline QBrush *QTextParag::background() const
 {
+#ifdef QTEXTTABLE_AVAILABLE
     return tc ? tc->backGround() : 0;
+#endif
+    return 0;
 }
 
 

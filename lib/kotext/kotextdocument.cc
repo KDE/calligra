@@ -161,8 +161,10 @@ void KoTextDocument::drawWithoutDoubleBuffer( QPainter *p, const QRect &cr, cons
 	    continue;
 	}
 	p->translate( 0, pr.y() );
+        //p->setBrushOrigin( p->brushOrigin() + QPoint( 0, pr.y() ) );
 	parag->paint( *p, cg, 0, FALSE );
 	p->translate( 0, -pr.y() );
+        //p->setBrushOrigin( p->brushOrigin() - QPoint( 0, pr.y() ) );
 	parag = parag->next();
     }
 }
@@ -177,7 +179,7 @@ void KoTextDocument::drawParagWYSIWYG( QPainter *p, Qt3::QTextParag *parag, int 
 	parag->setChanged( FALSE );
     QRect rect = static_cast<KoTextParag *>(parag)->pixelRect();
     QRect ir( rect );
-    QRect crect( cx, cy, cw, ch );
+    QRect crect( cx, cy, cw, ch ); // in pixels
 
     //kdDebug() << "KoTextDocument::drawParagWYSIWYG parag->rect=" << DEBUGRECT( parag->rect() )
     //          << " ir=" << DEBUGRECT(ir) << endl;
@@ -205,7 +207,8 @@ void KoTextDocument::drawParagWYSIWYG( QPainter *p, Qt3::QTextParag *parag, int 
 	painter->translate( ir.x(), ir.y() );
     }
 
-    painter->setBrushOrigin( -ir.x(), -ir.y() );
+    // Cumulate ir.x(), ir.y() with the current brush origin
+    //painter->setBrushOrigin( painter->brushOrigin() + ir.topLeft() );
 
     if ( useDoubleBuffer || is_printer( painter ) ) {
 	if ( !parag->backgroundColor() )
@@ -226,10 +229,12 @@ void KoTextDocument::drawParagWYSIWYG( QPainter *p, Qt3::QTextParag *parag, int 
     }
 
     painter->translate( rect.x() - ir.x(), rect.y() - ir.y() );
+    //painter->setBrushOrigin( painter->brushOrigin() + rect.topLeft() - ir.topLeft() );
 
     // The cliprect is checked in layout units, in QTextParag::paint
     QRect crect_lu( m_zoomHandler->pixelToLayoutUnit( crect ) );
     //kdDebug() << "KoTextDocument::drawParagWYSIWYG crect_lu=" << DEBUGRECT( crect_lu ) << endl;
+
     parag->paint( *painter, cg, drawCursor ? cursor : 0, TRUE,
                   crect_lu.x(), crect_lu.y(), crect_lu.width(), crect_lu.height() );
 
@@ -247,6 +252,7 @@ void KoTextDocument::drawParagWYSIWYG( QPainter *p, Qt3::QTextParag *parag, int 
 	p->drawPixmap( ir.topLeft(), *doubleBuffer, QRect( QPoint( 0, 0 ), ir.size() ) );
     } else {
 	painter->translate( -ir.x(), -ir.y() );
+        //painter->setBrushOrigin( painter->brushOrigin() - ir.topLeft() );
     }
 
     int docright = m_zoomHandler->layoutUnitToPixelX( parag->document()->x() + parag->document()->width() );
@@ -396,28 +402,19 @@ void KoTextCustomItem::draw(QPainter* p, int x, int _y, int cx, int cy, int cw, 
     cw=zh->layoutUnitToPixelX(cw);
     //kdDebug()<<"After  x :"<<x<<" y :"<<y<<" cx :"<<cx<<" cy :"<<cy<<" ch :"<<ch<<" cw :"<<cw<<endl;
 
-    QTextFormat * f = format();
+    KoTextFormat * fmt = static_cast<KoTextFormat *>( format() );
 
-    QFont newFont(f->font());
+    //bool forPrint = ( p->device()->devType() == QInternal::Printer );
+    p->setFont( fmt->screenFont( zh ) );
 
-    bool forPrint = ( p->device()->devType() == QInternal::Printer );
-    newFont.setPointSizeFloat( zh->layoutUnitToFontSize( newFont.pointSize(), forPrint ) );
-
-    p->setFont( newFont );
     int offset=0;
-    //code from qt3stuff
-    if ( f->vAlign() == QTextFormat::AlignSuperScript )
+    if ( fmt->vAlign() == QTextFormat::AlignSuperScript )
     {
-        newFont.setPointSize( ( newFont.pointSize() * 2 ) / 3 );
-        p->setFont( newFont );
-
         int h = zh->layoutUnitToPixelY( _y, height );
         offset =- ( h - p->fontMetrics().height() );
     }
-    else if ( f->vAlign() == QTextFormat::AlignSubScript )
-        newFont.setPointSize( ( newFont.pointSize() * 2 ) / 3 );
 
-    drawCustomItem(p, x, y, cx, cy, cw, ch, cg, selected, newFont, offset);
+    drawCustomItem(p, x, y, cx, cy, cw, ch, cg, selected, offset);
 }
 
 void CustomItemsMap::insertItems( const QTextCursor & startCursor, int size )

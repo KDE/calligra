@@ -138,10 +138,21 @@ public:
     { return QRect( layoutUnitToPixel( r.topLeft() ),
                     layoutUnitToPixel( r.bottomRight() ) ); }
 
-    // Convert fontsizes from and to the layout units and the _pixels_ (for the current zoom)
+#if 0 // we don't need this
+    /**
+     * Given a font size in points (for the current zoom),
+     * this returns the font size for the font in layout units, in pt (use setPointSize())
+     */
     int fontSizeToLayoutUnit( double ptSizeFloat, bool forPrint ) const;
-    double layoutUnitToFontSize( int luSize, bool forPrint ) const;
-    // For converting fontsizes from/to layout units and pt sizes, use ptToLayoutUnit and layoutUnitToPt
+#endif
+    /**
+     * Given the font size for the font in layout units, in pt (use pointSize())
+     * this returns the font size to use on screen the current zoom, in pt (use setPointSizeFloat()),
+     */
+    double layoutUnitToFontSize( int luSize, bool /*forPrint*/ ) const;
+
+    // For converting fontsizes from/to layout units and zoom-independent pt sizes (like the one the user sees, e.g. 12pt)
+    // use ptToLayoutUnit and layoutUnitToPt
 
 protected:
     int m_zoom;

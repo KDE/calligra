@@ -65,9 +65,11 @@ bool QTextCustomItem::up( QTextCursor *, QTextDocument *&doc, QTextParag *&parag
     doc = doc; parag = parag; idx = idx; ox = ox; oy = oy; return TRUE;
 }
 
+#ifdef QTEXTTABLE_AVAILABLE
 void QTextTableCell::invalidate() { cached_width = -1; cached_sizehint = -1; }
 
 void QTextTable::invalidate() { cachewidth = -1; }
+#endif
 
 int QTextCursor::x() const
 {
@@ -185,7 +187,7 @@ QTextFormat::QTextFormat( const QTextFormat &f )
     //qDebug("QTextFormat::QTextFormat %p copy ctor (copying %p). Will addRef.",this,&f);
 #endif
     ref = 0;
-    collection = 0;
+    collection = 0; // f might be in the collection, but we are not
     fn = f.fn;
     col = f.col;
     painter = f.painter;
@@ -208,13 +210,17 @@ QTextFormat::QTextFormat( const QTextFormat &f )
     addRef();
 }
 
+QTextFormat::~QTextFormat()
+{
+}
+
 QTextFormat& QTextFormat::operator=( const QTextFormat &f )
 {
 #ifdef DEBUG_COLLECTION
     qDebug("QTextFormat::operator= %p (copying %p). Will addRef",this,&f);
 #endif
     ref = 0;
-    collection = f.collection;
+    collection = 0; // f might be in the collection, but we are not
     fn = f.fn;
     col = f.col;
     fm = f.fm;
