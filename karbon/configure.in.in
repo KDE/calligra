@@ -60,37 +60,57 @@ AC_SUBST(LIBART_RPATH)
 
 
 # Check for fontconfig
-KDE_FIND_PATH(fontconfig-config, FONTCONFIG_CONFIG, [${prefix}/bin ${exec_prefix}/bin /usr/local/bin /opt/local/bin], [
-  AC_MSG_WARN([Could not find fontconfig-config anywhere])
+KDE_FIND_PATH(fontconfig-config, FONTCONFIG_CONFIG, [${prefix}/bin ${exec_prefix}/bin /usr/bin /usr/local/bin /opt/local/bin], [
+        KDE_FIND_PATH(pkg-config, PKGCONFIG, [${prefix}/bin ${exec_prefix}/bin /usr/bin /usr/local/bin /opt/local/bin], [
+            AC_MSG_WARN([Could not find neither pkg-config nor fontconfig-config, check http://www.fontconfig.org/ ])
+        ])
 ])
 
-if test -n "$FONTCONFIG_CONFIG"; then
-  vers=`$FONTCONFIG_CONFIG --version 2>/dev/null | awk 'BEGIN { FS = "."; } { printf "%d", ($1 * 1000 + $2) * 1000 + $3;}'`
+if test -n "$PKGCONFIG"; then
+  vers=`$PKGCONFIG fontconfig --modversion 2>/dev/null | sed -e 's/libfontconfig //' | awk 'BEGIN { FS = "."; } { printf "%d", ($1 * 1000 + $2) * 1000 + $3;}'`
   if test -n "$vers" && test "$vers" -ge 1000001
   then
-     FONTCONFIG_LIBS="`$FONTCONFIG_CONFIG --libs`"
-     FONTCONFIG_RPATH=
-     for args in $FONTCONFIG_LIBS; do
-	  case $args in
-	    -L*)
-  	       FONTCONFIG_RPATH="$FONTCONFIG_RPATH $args"
- 	       ;;
+     LIBFONTCONFIG_LIBS="`$PKGCONFIG fontconfig --libs`"
+     LIBFONTCONFIG_RPATH=
+     for args in $LIBFONTCONFIG_LIBS; do
+          case $args in
+            -L*)
+               LIBFONTCONFIG_RPATH="$LIBFONTCONFIG_RPATH $args"
+               ;;
           esac
      done
-     FONTCONFIG_RPATH=`echo $FONTCONFIG_RPATH | sed -e "s/-L/-R/g"`
-     FONTCONFIG_CFLAGS="`$FONTCONFIG_CONFIG --cflags`"
-  else
-     AC_MSG_WARN([You need at least fontconfig 1.0.1])
+     LIBFONTCONFIG_RPATH=`echo $LIBFONTCONFIG_RPATH | sed -e "s/-L/-R/g"`
+     LIBFONTCONFIG_CFLAGS="`$PKGCONFIG fontconfig --cflags`"
+
+     AC_DEFINE_UNQUOTED(HAVE_FONTCONFIG, 1, [Defines if your system has the libfontconfig library])
   fi
 fi
 
-if test -z "$FONTCONFIG_CONFIG"; then
-	KOFFICE_PKG_CHECK_MODULES(FONTCONFIG, fontconfig)
+if test -n "$FONTCONFIG_CONFIG"; then
+  vers=`$FONTCONFIG_CONFIG --version 2>/dev/null | sed -e 's/libfontconfig //' | awk 'BEGIN { FS = "."; } { printf "%d", ($1 * 1000 + $2) * 1000 + $3;}'`
 fi
 
-AC_SUBST(FONTCONFIG_LIBS)
-AC_SUBST(FONTCONFIG_CFLAGS)
-AC_SUBST(FONTCONFIG_RPATH)
+  if test -n "$vers" && test "$vers" -ge 1000001
+  then
+     LIBFONTCONFIG_LIBS="`$FONTCONFIG_CONFIG --libs`"
+     LIBFONTCONFIG_RPATH=
+     for args in $LIBFONTCONFIG_LIBS; do
+          case $args in
+            -L*)
+               LIBFONTCONFIG_RPATH="$LIBFONTCONFIG_RPATH $args"
+               ;;
+          esac
+     done
+     LIBFONTCONFIG_RPATH=`echo $LIBFONTCONFIG_RPATH | sed -e "s/-L/-R/g"`
+     LIBFONTCONFIG_CFLAGS="`$FONTCONFIG_CONFIG --cflags`"
+
+     AC_DEFINE_UNQUOTED(HAVE_FONTCONFIG, 1, [Defines if your system has the libfontconfig library])
+  fi
+fi
+
+AC_SUBST(LIBFONTCONFIG_LIBS)
+AC_SUBST(LIBFONTCONFIG_CFLAGS)
+AC_SUBST(LIBFONTCONFIG_RPATH)
 
 if test -z "$LIBART_LIBS"; then
 	DO_NOT_COMPILE="$DO_NOT_COMPILE karbon"
