@@ -235,16 +235,10 @@ bool Connection::drv_databaseExists( const QString &dbName, bool ignoreErrors )
 
 bool Connection::databaseExists( const QString &dbName, bool ignoreErrors )
 {
+	KexiDBDbg << "Connection::databaseExists(" << dbName << "," << ignoreErrors << ")" << endl;
 	if (!checkConnected())
 		return false;
 	clearError();
-
-	QString tmpdbName;
-	//some engines need to have opened any database before executing "create database"
-	d->m_skip_databaseExists_check_in_useDatabase = true;
-	if (!useTemporaryDatabaseIfNeeded(tmpdbName))
-		return false;
-	d->m_skip_databaseExists_check_in_useDatabase = false;
 
 	if (m_driver->isFileDriver()) {
 		//for file-based db: file must exists and be accessible
@@ -265,7 +259,15 @@ bool Connection::databaseExists( const QString &dbName, bool ignoreErrors )
 				setError(ERR_ACCESS_RIGHTS, i18n("Database file '%1' is not writable.").arg(m_data.fileName()) );
 			return false;
 		}
+		return true;
 	}
+
+	QString tmpdbName;
+	//some engines need to have opened any database before executing "create database"
+	d->m_skip_databaseExists_check_in_useDatabase = true;
+	if (!useTemporaryDatabaseIfNeeded(tmpdbName))
+		return false;
+	d->m_skip_databaseExists_check_in_useDatabase = false;
 
 	bool ret = drv_databaseExists(dbName, ignoreErrors);
 	
