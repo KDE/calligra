@@ -2,13 +2,25 @@
 [KDE Desktop Entry]
 Name=KSpreadFilter
 Name[da]=Regnearksfilter
+Name[eo]=Ekrananimaºo
+Name[es]=KSpread
+Name[hu]=KÈpernyıvÈdı
+Name[it]=Salva Schermo
 Name[sv]=Kalkyl-filter
 Exec=kspread_filter.bin --server
 Comment=Torben's KSpread Filter
 Comment[ca]=El filtre de la fulla de c‡lcul de Torben
 Comment[cs]=Klient pro ËtenÌ diskusnÌch skupin (NEWS)
 Comment[da]=Torbens regneark filter
+Comment[de]=Torbens KSpread-Filter
+Comment[eo]=Stircentro de KDE
+Comment[es]=Hoja de C·lculo de Torben
+Comment[fi]=Torbenin taulukkolaskentasuodatin
+Comment[hr]=Program za Ëitanje USENet grupa
+Comment[hu]=News olvasÛ
+Comment[it]=Lettore newsgroup
 Comment[no]=Torbens KSpread-filter
+Comment[pl]=Filtr do KSpread
 Comment[pt_BR]=Filtro do KSpread
 Comment[ru]=Ê…Ãÿ‘“ ‘¡¬Ã…√ Torben'¡
 Comment[sk]=Torbenov KSpread Filter
