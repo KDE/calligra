@@ -1053,7 +1053,7 @@ QString RTFWorker::layoutToRtf(const LayoutData& layoutOrigin,
         else if ( layout.alignment=="auto")
         {
             // ### TODO: what for BIDI?
-            strLayout += "\\ql";
+            //strLayout += "\\ql";
         }
         else
         {
