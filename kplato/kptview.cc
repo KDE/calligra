@@ -460,9 +460,13 @@ void KPTView::slotOpenNode() {
     switch (node->type()) {
         case KPTNode::Type_Project: {
             KPTProject *project = dynamic_cast<KPTProject *>(node);
-            KPTProjectDialog *dia = new KPTProjectDialog(*project);
-            if (dia->exec())
-                slotUpdate(true);
+            KPTMainProjectDialog *dia = new KPTMainProjectDialog(*project);
+            if (dia->exec()){
+                KCommand *m = dia->buildCommand(getPart());
+                if (m) {
+                    getPart()->addCommand(m);
+                }
+            }
             delete dia;
             break;
         }
