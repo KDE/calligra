@@ -5962,6 +5962,7 @@ void KPresenterView::viewHelpLines()
 {
     bool state=actionViewShowHelpLine->isChecked();
     m_pKPresenterDoc->setShowHelplines( state );
+    m_canvas->deSelectAllObj();
     refreshRuler( state );
     m_canvas->repaint(false);
 }
