@@ -125,21 +125,23 @@ bool HTMLExport::filterExport(const QString &file, KoDocument * document,
 
       for ( currentrow = 1 ; currentrow < iMaxRow ; ++currentrow)
       {
+        KSpreadCell * cell;
         iUsedColumn=0;
         for ( currentcolumn = 1 ; currentcolumn < iMaxColumn ; currentcolumn++ )
-        {	
-            KSpreadCell * cell = table->cellAt( currentcolumn, currentrow, true );
+        {
+            cell = table->cellAt( currentcolumn, currentrow, true );
             QString text;
             if ( !cell->isDefault() && !cell->isEmpty() )
             {
                 iUsedColumn = currentcolumn;
             }
         }
+        iUsedColumn += cell->extraXCells();
 	if (iUsedColumn > iMaxUsedColumn)
 	  iMaxUsedColumn = iUsedColumn;
 	if ( iUsedColumn > 0 )
 	  iMaxUsedRow = currentrow;
-	
+
       }
       iMaxUsedRow++;
       iMaxUsedColumn++;
@@ -162,13 +164,15 @@ bool HTMLExport::filterExport(const QString &file, KoDocument * document,
 
         QString separators;
         QString line;
-        unsigned int nonempty_fields=0;
+        unsigned int nonempty_cells=0;
+        unsigned int colspan_cells=0;
 
         for ( currentcolumn = 1 ; currentcolumn < iMaxUsedColumn ; currentcolumn++ )
         {
             KSpreadCell * cell = table->cellAt( currentcolumn, currentrow, true );
+            colspan_cells=cell->extraXCells();
             if (cell->needsPrinting())
-              nonempty_fields++;
+              nonempty_cells++;
             QString text;
             QColor bgcolor = cell->bgColor(currentcolumn,currentrow);
             switch( cell->content() ) {
@@ -184,15 +188,23 @@ bool HTMLExport::filterExport(const QString &file, KoDocument * document,
                   text = cell->valueString();
                   break;
             }
-            line += "<" + html_cell_tag + html_cell_options;
+            line += "  <" + html_cell_tag + html_cell_options;
             if (bgcolor.name()!="#ffffff") // change color only for non-white cells
               line += " bgcolor=\"" + bgcolor.name() + "\"";
-            line += ">";
-            line += text;
-            line += "</" + html_cell_tag + ">\n";
+            if (cell->extraXCells()>0)
+            {
+              QString tmp;
+              int extra_cells=cell->extraXCells();
+              line += " colspan=\"" + tmp.setNum(extra_cells+1) + "\"";
+              currentcolumn += extra_cells;
+            }
+            QString tmp;
+            line += ">\n";
+            line += "  " + text;
+            line += "\n  </" + html_cell_tag + ">\n";
         }
 
-        if (nonempty_fields>0)
+        if (nonempty_cells>0)
         {
           str += emptyLines;
           str += "<" + html_row_tag + html_row_options + ">\n";
