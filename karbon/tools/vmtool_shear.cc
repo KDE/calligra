@@ -69,24 +69,24 @@ VMToolShear::drawTemporaryObject( KarbonView* view )
 
 	QPoint fp = view->canvasWidget()->viewportToContents( m_fp );
 
-	QRect rect =  part()->selection().boundingBox( view->zoomFactor() );
 	// already selected, so must be a handle operation (move, scale etc.)
-	if( !part()->selection().isEmpty() && ( rect.contains( fp ) ) )
+	if( !part()->selection().isEmpty() && VMToolHandle::instance( m_part )->activeNode() != NODE_MM )
 	{
+		QRect rect =  part()->selection().boundingBox( view->zoomFactor() );
 		if( VMToolHandle::instance( m_part )->activeNode() == NODE_LT )
 		{
 		}
 		else if( VMToolHandle::instance( m_part )->activeNode() == NODE_MT )
 		{
 			m_s1 = 0;
-			m_s2 = ( m_lp.y() - m_fp.y() ) / double( rect.height() / 2 );
+			m_s2 = ( m_lp.y() - m_fp.y() ) / double( ( rect.height() / 2 ) * view->zoomFactor() );
 		}
 		else if( VMToolHandle::instance( m_part )->activeNode() == NODE_RT )
 		{
 		}
 		else if( VMToolHandle::instance( m_part )->activeNode() == NODE_RM)
 		{
-			m_s1 = ( m_lp.x() - m_fp.x() ) / double( rect.width() / 2 );
+			m_s1 = ( m_lp.x() - m_fp.x() ) / double( ( rect.width() / 2 ) * view->zoomFactor() );
 			m_s2 = 0;
 		}
 		else if( VMToolHandle::instance( m_part )->activeNode() == NODE_RB )
@@ -95,14 +95,14 @@ VMToolShear::drawTemporaryObject( KarbonView* view )
 		else if( VMToolHandle::instance( m_part )->activeNode() == NODE_MB )
 		{
 			m_s1 = 0;
-			m_s2 = ( m_lp.y() - m_fp.y() ) / double( rect.height() / 2 );
+			m_s2 = ( m_lp.y() - m_fp.y() ) / double( ( rect.height() / 2 ) * view->zoomFactor() );
 		}
 		else if( VMToolHandle::instance( m_part )->activeNode() == NODE_LB )
 		{
 		}
 		else if( VMToolHandle::instance( m_part )->activeNode() == NODE_LM )
 		{
-			m_s1 = ( m_lp.x() - m_fp.x() ) / double( rect.width() / 2 );
+			m_s1 = ( m_lp.x() - m_fp.x() ) / double( ( rect.width() / 2 ) * view->zoomFactor() );
 			m_s2 = 0;
 		}
 		// shear operation
