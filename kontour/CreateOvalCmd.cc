@@ -35,12 +35,13 @@ CreateOvalCmd::CreateOvalCmd(GDocument *aGDoc, GOval *oval):
 Command(aGDoc, i18n("Create Oval"))
 {
   object = oval;
+  object->ref();
 }
 
 CreateOvalCmd::~CreateOvalCmd()
 {
-//  if(object)
-//    object->unref();
+  if(object)
+    object->unref();
 }
 
 void CreateOvalCmd::execute()

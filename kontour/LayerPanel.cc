@@ -115,7 +115,11 @@ void LayerTreeItem::paintCell(QPainter *p, const QColorGroup &cg, int column, in
   else
     p->fillRect(0, 0, width,height(), cg.base());
 
-  p->drawText( 1, 0, width, height(), align | AlignVCenter, layer()->name(), -1);
+  if(layer()->page()->activeLayer() == layer())
+  {
+    p->drawRect(4, 4, 10, 10);
+  }
+  p->drawText(19, 0, width, height(), align | AlignVCenter, layer()->name(), -1);
 }
 
 
@@ -221,13 +225,11 @@ void LayerPanel::downPressed()
 
 void LayerPanel::newPressed()
 {
-/*    if(!document->document()->isReadWrite())
-        return;
-  GLayer* layer = document->activePage()->addLayer ();
-  document->activePage()->setActiveLayer (layer);
-  // force update
-  layerView->setActiveDocument (document);
-  stateOfButton();*/
+  if(!mGDoc->document()->isReadWrite())
+    return;
+  GLayer *layer = mGDoc->activePage()->addLayer();
+  mGDoc->activePage()->activeLayer(layer);
+  updatePanel();
 }
 
 void LayerPanel::deletePressed()

@@ -34,9 +34,10 @@
 
 #include <koColorChooser.h>
 #include <klocale.h>
-#include <ktoolbarbutton.h>
+#include <kiconloader.h>
 #include <kdebug.h>
 
+#include "kontour_factory.h"
 #include "GStyle.h"
 #include "BrushCells.h"
 
@@ -167,58 +168,21 @@ QTabWidget(parent, name)
   mRoundBtn->setToggleButton(true);
   mRoundBtn->setFixedWidth(20);
   mRoundBtn->setFixedHeight(20);
+  mRoundBtn->setPixmap(SmallIcon("join_round", KontourFactory::global()));
   QPushButton *mMiterBtn = new QPushButton(mJoinBox);
   mMiterBtn->setToggleButton(true);
   mMiterBtn->setFixedWidth(20);
   mMiterBtn->setFixedHeight(20);
+  mMiterBtn->setPixmap(SmallIcon("join_miter", KontourFactory::global()));
   QPushButton *mBevelBtn = new QPushButton(mJoinBox);
   mBevelBtn->setToggleButton(true);
   mBevelBtn->setFixedWidth(20);
   mBevelBtn->setFixedHeight(20);
+  mBevelBtn->setPixmap(SmallIcon("join_bevel", KontourFactory::global()));
   connect(mJoinBox, SIGNAL(pressed(int)), this, SLOT(slotJoinPressed(int)));
 
   QLabel *mJoinText = new QLabel(i18n("Join"), mOutlineStyle);
   
-/*  QPixmap pix(JOIN_WIDTH, JOIN_HEIGHT);
-  QBitmap bmap(JOIN_WIDTH, JOIN_HEIGHT);
-  pix.fill();
-  QPainter p(&pix);
-  QPen pen;
-  pen.setColor(Qt::black);
-  pen.setWidth(8);
-  pen.setJoinStyle(Qt::RoundJoin);
-  p.setPen(pen);
-  QPointArray pa;
-  pa.setPoints(3, JOIN_WIDTH / 3, JOIN_HEIGHT - 1, JOIN_WIDTH / 3, JOIN_HEIGHT / 3, JOIN_WIDTH - 1, JOIN_HEIGHT / 3);
-  p.drawPolyline(pa);
-  bmap = pix;
-  pix.setMask(bmap);
-  round->setPixmap(pix);
-
-  QPushButton *miter = new QPushButton(mJoinBox);
-  miter->setToggleButton(true);
-  miter->setMaximumWidth(JOIN_WIDTH);
-  miter->setMaximumHeight(JOIN_HEIGHT);
-  pix.fill();
-  pen.setJoinStyle(Qt::MiterJoin);
-  p.setPen(pen);
-  p.drawPolyline(pa);
-  bmap = pix;
-  pix.setMask(bmap);
-  miter->setPixmap(pix);
-
-  QPushButton *bevel = new QPushButton(mJoinBox);
-  bevel->setToggleButton(true);
-  bevel->setMaximumWidth(JOIN_WIDTH);
-  bevel->setMaximumHeight(JOIN_HEIGHT);
-  pix.fill();
-  pen.setJoinStyle(Qt::BevelJoin);
-  p.setPen(pen);
-  p.drawPolyline(pa);
-  bmap = pix;
-  pix.setMask(bmap);
-  bevel->setPixmap(pix);*/
-
   /* Cap style selection */
   mCapBox = new QButtonGroup(3, Qt::Horizontal, mOutlineStyle);
   mCapBox->setFrameStyle(QFrame::NoFrame);
@@ -228,14 +192,17 @@ QTabWidget(parent, name)
   mCRoundBtn->setToggleButton(true);
   mCRoundBtn->setFixedWidth(20);
   mCRoundBtn->setFixedHeight(20);
+  mCRoundBtn->setPixmap(SmallIcon("cap_round", KontourFactory::global()));
   QPushButton *mSquareBtn = new QPushButton(mCapBox);
   mSquareBtn->setToggleButton(true);
   mSquareBtn->setFixedWidth(20);
   mSquareBtn->setFixedHeight(20);
+  mSquareBtn->setPixmap(SmallIcon("cap_square", KontourFactory::global()));
   QPushButton *mFlatBtn = new QPushButton(mCapBox);
   mFlatBtn->setToggleButton(true);
   mFlatBtn->setFixedWidth(20);
   mFlatBtn->setFixedHeight(20);
+  mFlatBtn->setPixmap(SmallIcon("cap_flat", KontourFactory::global()));
   connect(mCapBox, SIGNAL(pressed(int)), this, SLOT(slotJoinPressed(int)));
 
   QLabel *mCapText = new QLabel(i18n("Cap"), mOutlineStyle);
@@ -248,46 +215,6 @@ QTabWidget(parent, name)
   mOutlineStyleLayout->addWidget(mJoinBox, 2, 1);
   mOutlineStyleLayout->addWidget(mCapText, 3, 0);
   mOutlineStyleLayout->addWidget(mCapBox, 3, 1);
-
-/*  mCapBox = new QButtonGroup(3, Qt::Horizontal, cap);
-  mCapBox->setFrameStyle(QFrame::NoFrame);
-  mCapBox->setExclusive(true);
-  QPushButton *cround = new QPushButton(mCapBox);
-  cround->setToggleButton(true);
-  cround->setMaximumWidth(CAP_WIDTH);
-  cround->setMaximumHeight(CAP_HEIGHT);
-  pix.fill();
-  pen.setCapStyle(Qt::RoundCap);
-  p.setPen(pen);
-  pa.setPoints(2, CAP_WIDTH / 3, CAP_HEIGHT / 2, CAP_WIDTH - 1, CAP_HEIGHT / 2);
-  p.drawPolyline(pa);
-  bmap = pix;
-  pix.setMask(bmap);
-  cround->setPixmap(pix);
-
-  QPushButton *square = new QPushButton(mCapBox);
-  square->setToggleButton(true);
-  square->setMaximumWidth(CAP_WIDTH);
-  square->setMaximumHeight(CAP_HEIGHT);
-  pix.fill();
-  pen.setCapStyle(Qt::SquareCap);
-  p.setPen(pen);
-  p.drawPolyline(pa);
-  bmap = pix;
-  pix.setMask(bmap);
-  square->setPixmap(pix);
-
-  QPushButton *flat = new QPushButton(mCapBox);
-  flat->setToggleButton(true);
-  flat->setMaximumWidth(CAP_WIDTH);
-  flat->setMaximumHeight(CAP_HEIGHT);
-  pix.fill();
-  pen.setCapStyle(Qt::FlatCap);
-  p.setPen(pen);
-  p.drawPolyline(pa);
-  bmap = pix;
-  pix.setMask(bmap);
-  flat->setPixmap(pix);*/
 
   insertTab(mOutlineStyle, i18n("Style"));
 }

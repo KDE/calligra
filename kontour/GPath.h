@@ -116,47 +116,6 @@ private:
   KoPoint points[4];
 };
 
-/**
- * Quadratic Bezier segment.
- *
- */
-
-/*class GQuadBezier : public GSegment
-{
-public:
-
-private:
-  KoPoint points[3];
-};*/
-
-/**
- * Arc segment.
- *
- */
-
-class GArc : public GSegment
-{
-public:
-  GArc();
-  GArc(const QDomElement &element);
-
-  const KoPoint &point(int i) const;
-  void point(int i, const KoPoint &c);
-
-  QDomElement writeToXml(QDomDocument &document);
-  void draw(QPainter &p, QWMatrix &m, bool withBasePoints, bool outline);
-  void movePoint(int idx, double dx, double dy, bool ctrlPressed = false);
-
-  KoRect boundingBox();
-  bool contains(const KoPoint &p);
-
-  QPointArray getPoints() const;
-
-  double length() const;
-private:
-  KoPoint points[2];
-};
-
 
 class GPath : public GObject
 {
@@ -194,12 +153,5 @@ private:
   double endx;
   double endy;
 };
-
-/*
-  virtual void getPath(QValueList<Coord>& path);
-
-  const GSegment& getSegment (int idx);
-  int numOfSegments () const { return segments.count(); }
-*/
 
 #endif

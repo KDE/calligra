@@ -83,7 +83,7 @@ void GObject::unref()
 {
   if(--rcount == 0)
     delete this;
-  kdDebug(38000) << "UNREF: " << rcount << endl;
+  kdDebug(38000) << "id = " << mId << " UNREF: " << rcount << endl;
 }
 
 void GObject::layer(GLayer *l)
