@@ -57,6 +57,17 @@ class KFORMEDITOR_EXPORT FormIO : public QObject
 		    \todo Add errors code and error dialog
 		*/
 		static int saveForm(Form *form, const QString &filename=QString::null);
+
+		/*! \return 0 if faild otherwiese 1
+		 * uses a QByteArray as dest
+		 */
+		static int saveForm(Form *form, QByteArray &dest);
+
+		/*! \return 0 if faild otherwise 1
+		 * loads widgets on ground and sets properties to ground
+		 */
+		static int loadForm(Form *form, QByteArray &src, QWidget *ground);
+
 		/*! \return 0 if loading failed, 1 otherwise\n
 		   Load the .ui file \a filename in the Form \a form. If \a filename is null or not given,
 		   a Open File dialog will be shown to select the file to open.
@@ -64,6 +75,7 @@ class KFORMEDITOR_EXPORT FormIO : public QObject
 		   \todo Add errors code and error dialog
 		*/
 		static int loadForm(Form *form, QWidget *parent, const QString &filename=QString::null);
+
 		/*! Save the widget associated to the ObjectTreeItem \a item into DOM document \a domDoc, 
 		    with \a parent as parent node.
 		    It calls readProp() for each object property, readAttribute() for each attribute and 

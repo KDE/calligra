@@ -127,6 +127,37 @@ FormIO::saveForm(Form *form, const QString &filename)
 }
 
 int
+FormIO::saveForm(Form *form, QByteArray &dest)
+{
+	QDomDocument domDoc("UI");
+        QDomElement uiElement = domDoc.createElement("UI");
+	domDoc.appendChild(uiElement);
+	uiElement.setAttribute("version", "3.1");
+	uiElement.setAttribute("stdsetdef", 1);
+
+	QDomElement baseClass = domDoc.createElement("class");
+	uiElement.appendChild(baseClass);
+	QDomText baseClassV = domDoc.createTextNode("QWidget");
+	baseClass.appendChild(baseClassV);
+
+	saveWidget(form->objectTree(), uiElement, domDoc);
+
+	dest = domDoc.toCString();
+
+	return 1;
+}
+
+int
+FormIO::loadForm(Form *form, QByteArray &src, QWidget *ground)
+{
+	QString errMsg;
+	int errLine;
+	int errCol;
+
+	return 0;
+}
+
+int
 FormIO::loadForm(Form *form, QWidget *parent, const QString &filename)
 {
 	QString errMsg;
