@@ -24,18 +24,42 @@
 #include "kspread_dlg_preference.h"
 #include "kspread_view.h"
 #include "kspread_table.h"
+#include "kspread_doc.h"
 #include <qlayout.h>
 #include <kapp.h>
 #include <klocale.h>
 #include <kbuttonbox.h>
+#include <kdialogbase.h>
+#include <qvbox.h>
+#include <qlabel.h>
 
 
-KSpreadpreference::KSpreadpreference( KSpreadView* parent, const char* name)
-	: QDialog( parent, name,TRUE )
+KSpreadpreference::KSpreadpreference( KSpreadView* parent, const char* /*name*/)
+	: KDialogBase(KDialogBase::IconList,
+                                    i18n("Configure Kspread") ,
+                                    KDialogBase::Ok | KDialogBase::Cancel,
+                                    KDialogBase::Ok)
+
 {
-  m_pView = parent;
+  QVBox *page=addVBoxPage(i18n("Preference"), QString::null);
 
-  setCaption( i18n("Preference") );
+  _preferenceConfig = new  preference(parent,page );
+  connect(this, SIGNAL(okClicked()),this,SLOT(slotApply()));
+
+  page=addVBoxPage(i18n("Local Parameters"), QString::null);
+  parameterLocale *_ParamLocal = new  parameterLocale(parent,page );
+}
+
+void KSpreadpreference::slotApply()
+{
+_preferenceConfig->apply();
+}
+
+ preference::preference( KSpreadView* _view,QWidget *parent , char *name )
+ :QWidget ( parent,name)
+ {
+
+  m_pView = _view;
   QVBoxLayout *box = new QVBoxLayout( this );
   box->setMargin( 5 );
   box->setSpacing( 10 );
@@ -75,21 +99,10 @@ KSpreadpreference::KSpreadpreference( KSpreadView* parent, const char* name)
   m_pFirstLetterUpper->setChecked(m_pView->activeTable()->getFirstLetterUpper());
 
   box->addWidget( tmpQGroupBox);
-
-  KButtonBox *bb = new KButtonBox( this );
-  bb->addStretch();
-  m_pOk = bb->addButton( i18n("OK") );
-  m_pOk->setDefault( TRUE );
-  m_pClose = bb->addButton( i18n( "Close" ) );
-  bb->layout();
-  box->addWidget( bb);
-  connect( m_pOk, SIGNAL( clicked() ), this, SLOT( slotOk() ) );
-  connect( m_pClose, SIGNAL( clicked() ), this, SLOT( slotClose() ) );
-
 }
 
 
-void KSpreadpreference::slotOk()
+void preference::apply()
 {
   if(m_pView->activeTable()->getLcMode()==m_pLcMode->isChecked()
   && m_pView->activeTable()->getShowColumnNumber()==m_pColumn->isChecked()
@@ -99,10 +112,7 @@ void KSpreadpreference::slotOk()
   && m_pView->activeTable()->getHideZero()==m_pHideZero->isChecked()
   && m_pView->activeTable()->getFirstLetterUpper()==m_pFirstLetterUpper->isChecked())
   {
-  //if there is any changes
-  //so it's not necessary to refresh table
-  //=> reject()
-        reject();
+  //nothing
   }
   else
   {
@@ -113,14 +123,35 @@ void KSpreadpreference::slotOk()
         m_pView->activeTable()->setAutoCalc(m_pAutoCalc->isChecked());
         m_pView->activeTable()->setHideZero(m_pHideZero->isChecked());
         m_pView->activeTable()->setFirstLetterUpper(m_pFirstLetterUpper->isChecked());
-        accept();
   }
 }
 
-
-void KSpreadpreference::slotClose()
+parameterLocale::parameterLocale( KSpreadView* _view,QWidget *parent , char *name )
+ :QWidget ( parent,name)
 {
-reject();
-}
+  QVBoxLayout *box = new QVBoxLayout( this );
+  box->setMargin( 5 );
+  box->setSpacing( 10 );
 
+  QGroupBox* tmpQGroupBox = new QGroupBox( this, "GroupBox" );
+  tmpQGroupBox->setTitle(i18n("Parameters"));
+  QVBoxLayout *lay1 = new QVBoxLayout(tmpQGroupBox);
+  lay1->setMargin( 20 );
+  lay1->setSpacing( 10 );
+  QLabel *label=new QLabel( tmpQGroupBox,"label");
+  label->setText( i18n("Number : %1").arg( _view->doc()->locale()->formatNumber(12.55) ));
+  lay1->addWidget(label);
+  label=new QLabel( tmpQGroupBox,"label1");
+  label->setText( i18n("Date : %1").arg( _view->doc()->locale()->formatDate(QDate(2000,10,23)) ));
+  lay1->addWidget(label);
+  label=new QLabel( tmpQGroupBox,"label2");
+  label->setText( i18n("Time : %1").arg( _view->doc()->locale()->formatTime(QTime(15,10,53)) ));
+  lay1->addWidget(label);
+  label=new QLabel( tmpQGroupBox,"label3");
+  label->setText( i18n("Money : %1").arg( _view->doc()->locale()->formatMoney(12.55) ));
+  lay1->addWidget(label);
+  box->addWidget( tmpQGroupBox);
+
+
+}
 #include "kspread_dlg_preference.moc"

@@ -6,17 +6,17 @@
    modify it under the terms of the GNU Library General Public
    License as published by the Free Software Foundation; either
    version 2 of the License, or (at your option) any later version.
- 
+
    This library is distributed in the hope that it will be useful,
    but WITHOUT ANY WARRANTY; without even the implied warranty of
    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
    Library General Public License for more details.
- 
+
    You should have received a copy of the GNU Library General Public License
    along with this library; see the file COPYING.LIB.  If not, write to
    the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
    Boston, MA 02111-1307, USA.
-*/     
+*/
 
 #ifndef __kspread_dlg_preference__
 #define __kspread_dlg_preference__
@@ -25,25 +25,20 @@
 #include <qpushbutton.h>
 #include <qcheckbox.h>
 #include <qrect.h>
+#include <kdialogbase.h>
 
 
 class KSpreadView;
 class KSpreadTable;
 
-
-class KSpreadpreference : public QDialog
+class preference : public QWidget
 {
   Q_OBJECT
 public:
-  KSpreadpreference( KSpreadView* parent, const char* name);
-
-public slots:
-  void slotOk();
-  void slotClose();
+  preference( KSpreadView* _view, QWidget *parent = 0, char *name = 0 );
+  void apply();
 
 protected:
-
-  KSpreadView* m_pView;
   QCheckBox *m_pFormula;
   QCheckBox *m_pAutoCalc;
   QCheckBox *m_pGrid;
@@ -51,8 +46,26 @@ protected:
   QCheckBox *m_pLcMode;
   QCheckBox *m_pHideZero;
   QCheckBox *m_pFirstLetterUpper;
-  QPushButton* m_pOk;
-  QPushButton* m_pClose;
+  KSpreadView* m_pView;
+} ;
+
+class parameterLocale : public QWidget
+{
+public:
+   parameterLocale( KSpreadView* _view,QWidget *parent = 0, char *name = 0);
 };
+
+class KSpreadpreference : public KDialogBase
+{
+  Q_OBJECT
+public:
+  KSpreadpreference( KSpreadView* parent, const char* name);
+public slots:
+  void slotApply();
+private :
+  preference *_preferenceConfig;
+};
+
+
 
 #endif

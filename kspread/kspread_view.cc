@@ -348,7 +348,7 @@ KSpreadView::KSpreadView( QWidget *_parent, const char *_name, KSpreadDoc* doc )
                                actionCollection(), "insertCell" );
     m_removeCell = new KAction( i18n("Remove Cell(s) ..."), "removecell", 0, this, SLOT( slotRemove() ),
                                actionCollection(), "removeCell" );
-    m_insertCellCopy = new KAction( i18n("Paste with insertion"), "insertcellcopy", 0, this, SLOT( slotInsertCellCopy() ),
+    m_insertCellCopy = new KAction( i18n("Paste with insertion..."), "insertcellcopy", 0, this, SLOT( slotInsertCellCopy() ),
                                actionCollection(), "insertCellCopy" );
     m_cellLayout = new KAction( i18n("Cell Layout..."),"cell_layout", CTRL + Key_L, this, SLOT( layoutDlg() ),
                                actionCollection(), "cellLayout" );
