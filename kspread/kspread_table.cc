@@ -6089,12 +6089,33 @@ void KSpreadTable::print( QPainter &painter, KPrinter *_printer )
     if ( cell_range.bottom() > m_printRange.bottom()-1 ) cell_range.setBottom( m_printRange.bottom()-1 );
     if ( cell_range.right() > m_printRange.right()-1 ) cell_range.setRight( m_printRange.right()-1 );
 
+    //If we have repeated columns/rows, children get an offset on pages
+    int offsetX = 0;
+    int offsetY = 0;
+    int currentOffsetX = 0;
+    int currentOffsetY = 0;
+    //Calculate offsetX for repeated columns
+    if ( m_printRepeatColumns.first != 0 )
+    {
+        //When we need repeated columns, reservate space for them
+        for ( int i = m_printRepeatColumns.first; i <= m_printRepeatColumns.second; i++)
+            offsetX += columnLayout( i )->width();
+    }
+    //Calculate offsetY for repeated rows
+    if ( m_printRepeatRows.first != 0 )
+    {
+        //When we need repeated rows, reservate space for them
+        for ( int i = m_printRepeatRows.first; i <= m_printRepeatRows.second; i++)
+            offsetY += rowLayout( i )->height();
+    }
+
     //
     // Find out how many pages need printing
     // and which cells to print on which page.
     //
     QValueList<QRect> page_list;
     QValueList<QRect> page_frame_list;
+    QValueList<QPoint> page_frame_list_offset;
 
     // How much space is on every page for table content ?
     QRect rect;
@@ -6129,8 +6150,8 @@ void KSpreadTable::print( QPainter &painter, KPrinter *_printer )
             if ( ( m_printRepeatColumns.first != 0 ) && ( col > m_printRepeatColumns.first ) )
             {
                 //When we need repeated columns, reservate space for them
-                for ( int i = m_printRepeatColumns.first; i <= m_printRepeatColumns.second; i++)
-                    x += columnLayout( i )->width();
+                x += offsetX;
+                currentOffsetX = offsetX;
             }
 
             //Count the columns which still fit on the page
@@ -6152,8 +6173,8 @@ void KSpreadTable::print( QPainter &painter, KPrinter *_printer )
             if ( ( m_printRepeatRows.first != 0 ) && ( row > m_printRepeatRows.first ) )
             {
                 //When we need repeated rows, reservate space for them
-                for ( int i = m_printRepeatRows.first; i <= m_printRepeatRows.second; i++)
-                    y += rowLayout( i )->height();
+                y += offsetY;
+                currentOffsetY = offsetY;
             }
 
             //Count the rows, which still fit on the page
@@ -6184,9 +6205,10 @@ void KSpreadTable::print( QPainter &painter, KPrinter *_printer )
                         empty = FALSE;
 
             // Look for children
-            QRect view( columnPos( page_range.left() ), rowPos( page_range.top() ),
-                        rect.width(), rect.height() );
-
+            QRect view = QRect( QPoint( columnPos( page_range.left() ), 
+                                        rowPos( page_range.top() ) ),
+                                QPoint( columnPos( col-1 ) + columnLayout( col-1 )->width(), 
+                                        rowPos( row-1 ) + rowLayout( row-1 )->height() ) );
             QPtrListIterator<KoDocumentChild> it( m_pDoc->children() );
             for( ; empty && it.current(); ++it )
             {
@@ -6199,13 +6221,14 @@ void KSpreadTable::print( QPainter &painter, KPrinter *_printer )
             {
                 page_list.append( page_range );
                 page_frame_list.append( view );
+                page_frame_list_offset.append( QPoint( currentOffsetX, currentOffsetY ) );
             }
         }
 
         top = bottom + 1;
     }
 
-     kdDebug(36001)<<"PRINTING "<< page_list.count()<<" pages"<<endl;
+    kdDebug(36001) << "PRINTING " << page_list.count() << " pages" << endl;
 
     int pagenr = 1;
 
@@ -6215,8 +6238,9 @@ void KSpreadTable::print( QPainter &painter, KPrinter *_printer )
 
     QValueList<QRect>::Iterator it = page_list.begin();
     QValueList<QRect>::Iterator fit = page_frame_list.begin();
+    QValueList<QPoint>::Iterator fito = page_frame_list_offset.begin();
     int w;
-    for( ; it != page_list.end(); ++it, ++fit, ++pagenr )
+    for( ; it != page_list.end(); ++it, ++fit, ++fito, ++pagenr )
     {
         // print head line
         QFont font( "Times", 10 );
@@ -6259,7 +6283,7 @@ void KSpreadTable::print( QPainter &painter, KPrinter *_printer )
         painter.translate( MM_TO_POINT ( leftBorder()),
                            MM_TO_POINT ( topBorder() ));
         // Print the page
-        printPage( painter, *it, *fit );
+        printPage( painter, *it, *fit, *fito );
 
         painter.translate( - MM_TO_POINT ( leftBorder()),
                            - MM_TO_POINT ( topBorder() ));
@@ -6276,7 +6300,7 @@ void KSpreadTable::print( QPainter &painter, KPrinter *_printer )
     m_bShowGrid = oldShowGrid;
 }
 
-void KSpreadTable::printPage( QPainter &_painter, const QRect& page_range, const QRect& view )
+void KSpreadTable::printPage( QPainter &_painter, const QRect& page_range, const QRect& view, const QPoint _childOffset )
 {
     // kdDebug(36001) << "Rect x=" << page_range->left() << " y=" << page_range->top() << ", w="
     // << page_range->width() << " h="  << page_range->height() << endl;
@@ -6337,7 +6361,7 @@ void KSpreadTable::printPage( QPainter &_painter, const QRect& page_range, const
                 col_lay = columnLayout( x );
 
                 cell = cellAt( x, y );
-                QRect r( 0, 0, view.width(), view.height() );
+                QRect r( 0, 0, view.width() + xpos, view.height() );
                 cell->paintCell( r, _painter, QPoint(xpos, ypos), QPoint(x,y));
 
                 xpos += col_lay->width();
@@ -6363,7 +6387,7 @@ void KSpreadTable::printPage( QPainter &_painter, const QRect& page_range, const
                 col_lay = columnLayout( x );
 
                 cell = cellAt( x, y );
-                QRect r( 0, 0, view.width(), view.height() );
+                QRect r( 0, 0, view.width() + xpos, view.height() + ypos );
                 cell->paintCell( r, _painter, QPoint(xpos, ypos), QPoint(x,y));
 
                 xpos += col_lay->width();
@@ -6387,7 +6411,7 @@ void KSpreadTable::printPage( QPainter &_painter, const QRect& page_range, const
             col_lay = columnLayout( x );
 
             cell = cellAt( x, y );
-            QRect r( 0, 0, view.width(), view.height() );
+            QRect r( 0, 0, view.width() + xpos, view.height() + ypos );
             cell->paintCell( r, _painter, QPoint(xpos, ypos), QPoint(x,y));
 
             xpos += col_lay->width();
@@ -6407,14 +6431,15 @@ void KSpreadTable::printPage( QPainter &_painter, const QRect& page_range, const
         .arg(it.current()->contentRect().top())
         .arg(it.current()->contentRect().right())
         .arg(it.current()->contentRect().bottom())
-        .arg(view.left()).arg(view.top()).arg(view.right()).arg(view.bottom() );
-        kdDebug(36001)<<tmp<<endl;
+        .arg(view.left()).arg(view.top()).arg(view.right()).arg(view.bottom());
+        kdDebug(36001)<<tmp<<" offset "<<_childOffset.x()<<"/"<<_childOffset.y()<<endl;
 
         QRect bound = it.current()->boundingRect();
         if ( ((KSpreadChild*)it.current())->table() == this && bound.intersects( view ) )
         {
             _painter.save();
-            _painter.translate( -view.left(), -view.top() );
+
+            _painter.translate( -view.left()+_childOffset.x(), -view.top()+_childOffset.y() );
 
             it.current()->transform( _painter );
             it.current()->document()->paintEverything( _painter,

@@ -1195,10 +1195,12 @@ protected:
      *
      * @return the last vertical line which was printed plus one.
      *
-     * @paran _page_rangs QRect defines a rectangle of cells which should be painted
+     * @param _page_range QRect defines a rectangle of cells which should be painted
      *                    to the device 'prn'.
+     * @param _childOffset QPoint used to calculate the correct position of children,
+     *                    if there are repeated columns/rows
      */
-    void printPage( QPainter &_painter, const QRect& page_range, const QRect& view );
+    void printPage( QPainter &_painter, const QRect& page_range, const QRect& view, const QPoint _childOffset );
 
     /**
      * @see #autofill
