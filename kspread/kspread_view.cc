@@ -4468,7 +4468,7 @@ void KSpreadView::slotUpdateView( KSpreadTable *_table, const QRect& _rect )
     if ( _table != m_pTable )
         return;
 
-    m_pCanvas->updateCellRect( _rect );
+    m_pCanvas->updateCellRect( _rect, TRUE );
 }
 
 void KSpreadView::slotUpdateHBorder( KSpreadTable *_table )

@@ -1110,7 +1110,7 @@ void KSpreadCanvas::paintEvent( QPaintEvent* _ev )
   int bottom_row = table->bottomRow( br.y() );
 
   updateCellRect(QRect(left_col, top_row, right_col - left_col + 1,
-                       bottom_row - top_row + 1));
+                       bottom_row - top_row + 1), TRUE);
 }
 
 void KSpreadCanvas::focusInEvent( QFocusEvent* )
@@ -2522,16 +2522,19 @@ void KSpreadCanvas::updateChooseRect(const QPoint &newMarker, const QPoint &newA
 //
 //---------------------------------------------
 
-void KSpreadCanvas::updateCellRect( const QRect &_rect )
+void KSpreadCanvas::updateCellRect( const QRect &_rect, bool forceRect )
 {
-    updateSelection( _rect, marker() );
+    if( forceRect )
+        paintSelectionChange( _rect, QRect( 0, 0, 0, 0 ) );
+    else
+        paintSelectionChange( _rect, selection() );
 }
 
 void KSpreadCanvas::updateSelection( const QRect & oldSelection,
                                      const QPoint& /*oldMarker*/ )
   /* for now oldMarker is unused.  Maybe we can just remove it? */
 {
-  paintSelectionChange(oldSelection, selection());
+    paintSelectionChange( oldSelection, selection() );
 }
 
 void KSpreadCanvas::paintSelectionChange(QRect area1, QRect area2)
@@ -2541,6 +2544,9 @@ void KSpreadCanvas::paintSelectionChange(QRect area1, QRect area2)
     return;
 
   QValueList<QRect> cellRegions;
+
+  //If we call this from updateCellRect, maybe we want to force the update of a defined rect
+  bool secondRegion = ( area2 != QRect( 0, 0, 0, 0 ) );
 
   /* let's try to only paint where the selection is actually changing*/
   bool newLeft   = area1.left() != area2.left();
@@ -2559,9 +2565,12 @@ void KSpreadCanvas::paintSelectionChange(QRect area1, QRect area2)
        want to calculate all the cells bordering these regions.
     */
     ExtendRectBorder(area1);
-    ExtendRectBorder(area2);
     cellRegions.append(area1);
-    cellRegions.append(area2);
+    if( secondRegion )
+    {
+        ExtendRectBorder(area2);
+        cellRegions.append(area2);
+    }
   }
   else
   {
