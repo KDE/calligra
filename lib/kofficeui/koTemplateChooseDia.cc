@@ -218,9 +218,10 @@ KoTemplateChooseDia::ReturnType KoTemplateChooseDia::choose(KInstance* global, Q
 	const QCString &format, const QString &nativePattern,
 	const QString &nativeName,
 	const KoTemplateChooseDia::DialogType &dialogType,
-	const QCString& templateType) {
+	const QCString& templateType,
+	QWidget* parent) {
 
-    KoTemplateChooseDia *dlg = new KoTemplateChooseDia( 0, "Choose", global, format, nativePattern,
+    KoTemplateChooseDia *dlg = new KoTemplateChooseDia( parent, "Choose", global, format, nativePattern,
 	    nativeName, dialogType, templateType);
 
     KoTemplateChooseDia::ReturnType rt = Cancel;

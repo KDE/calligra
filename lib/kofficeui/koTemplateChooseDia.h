@@ -191,7 +191,8 @@ public:
 		const QString &nativePattern=QString::null,
 		const QString &nativeName=QString::null,
 		const DialogType &dialogType=Everything,
-		const QCString& templateType="");
+		const QCString& templateType="",
+		QWidget* parent = 0);
 
 	/**
 	 * Method to get the current template
