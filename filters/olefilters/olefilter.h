@@ -35,7 +35,7 @@
 #include <qtextstream.h>
 
 #include <koFilter.h>
-#include <koTarStore.h>
+#include <koStore.h>
 #include <klaola.h>
 #include <filterbase.h>
 #include <wordfilter.h>
@@ -87,7 +87,7 @@ private:
     myFile olefile;
     int numPic;                      // for the "unique name generation"
     KLaola *docfile;                 // used to split up the OLE 2 file
-    KoTarStore *store;               // KOffice Storage structure
+    KoStore *store;               // KOffice Storage structure
     bool success;
 };
 #endif // OLEFILTER_H

@@ -29,7 +29,7 @@
 #include <kglobal.h>
 #include <klocale.h>
 #include <koFilter.h>
-#include <koTarStore.h>
+#include <koStore.h>
 
 #include <xmltree.h>
 

@@ -140,7 +140,7 @@ const bool CSVFilter::I_filter(const QCString &file, const QCString &from,
     kdDebug(30501) << "XXYYYYYYZZ" << endl;
 
 #if 0
-    KoTarStore out=KoTarStore("/tmp/debug_csvfilter.tgz", KoStore::Write);
+    KoStore out=KoStore("/tmp/debug_csvfilter.tgz", KoStore::Write);
     if(!out.open("root", "")) {
         kdError(30501) << "Unable to open output file!" << endl;
         in.close();

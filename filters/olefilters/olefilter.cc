@@ -73,7 +73,7 @@ const bool OLEFilter::filter(const QCString &fileIn, const QCString &fileOut,
         return false;
     }
 
-    store=new KoTarStore(fileOut, KoStore::Write);
+    store=new KoStore(fileOut, KoStore::Write);
     if(store->bad()) {
         kdError(30510) << "OLEFilter::filter(): Unable to open output file!" << endl;
         delete [] olefile.data;
@@ -258,7 +258,7 @@ void OLEFilter::convert(const QString &dirname) {
         slotPart(dirname, &tmp);
         if(!store->open(tmp)) {
             success=false;
-            kdError(30510) << "OLEFilter::convert(): Could not open KoTarStore!" << endl;
+            kdError(30510) << "OLEFilter::convert(): Could not open KoStore!" << endl;
             return;
         }
         // Write it to the gzipped tar file

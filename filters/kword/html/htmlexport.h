@@ -26,7 +26,7 @@
 #include <qobject.h>
 
 #include <koFilter.h>
-#include <koTarStore.h>
+#include <koStore.h>
 
 #include <kword_xml2html.h>
 

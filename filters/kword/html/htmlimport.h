@@ -25,7 +25,7 @@
 #include <qobject.h>
 
 #include <koFilter.h>
-#include <koTarStore.h>
+#include <koStore.h>
 
 
 class HTMLImport : public KoFilter {

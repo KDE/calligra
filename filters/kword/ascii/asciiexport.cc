@@ -32,7 +32,7 @@ const bool ASCIIExport::filter(const QCString &fileIn, const QCString &fileOut,
     if(to!="text/plain" || from!="application/x-kword")
         return false;
 
-    KoTarStore in=KoTarStore(QString(fileIn), KoStore::Read);
+    KoStore in=KoStore(QString(fileIn), KoStore::Read);
     if(!in.open("root")) {
         kdError(30502) << "Unable to open input file!" << endl;
         in.close();
