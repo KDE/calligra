@@ -90,8 +90,12 @@ KoStore* KoStore::createStore( QIODevice *device, Mode mode, const QCString & ap
   {
     if ( mode == KoStore::Write )
       backend = DefaultFormat;
-    else
-      backend = determineBackend( device );
+    else {
+      if ( device->open( IO_ReadOnly ) ) {
+        backend = determineBackend( device );
+        device->close();
+      }
+    }
   }
   switch ( backend )
   {
