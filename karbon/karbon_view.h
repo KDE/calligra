@@ -166,6 +166,8 @@ protected slots:
 	void slotStrokeChanged( const VStroke& );
 	void slotFillChanged( const VFill & );
 
+	void canvasContentsMoving( int x, int y );
+
 signals:
 	void zoomChanged( double );
 	void selectionChange();

@@ -139,7 +139,7 @@ KarbonView::KarbonView( KarbonPart* p, QWidget* parent, const char* name )
 
 	// widgets:
 	m_canvas = new VCanvas( this, this, p );
-	m_canvas->setGeometry( 0, 0, width(), height() );
+	connect( m_canvas, SIGNAL( contentsMoving( int, int ) ), this, SLOT( canvasContentsMoving( int, int ) ) );
 
 	m_horizRuler = new KoRuler( this, m_canvas->viewport(), Qt::Horizontal, part()->pageLayout(), KoRuler::F_INDENTS | KoRuler::F_TABS, part()->unit() );
 	m_horizRuler->showMousePos( true );
@@ -875,6 +875,13 @@ KarbonView::pageLayout()
 		part()->repaintAllViews();
 	}
 
+}
+
+void
+KarbonView::canvasContentsMoving( int x, int y )
+{
+	m_horizRuler->setOffset( x, 0 );
+	m_vertRuler->setOffset( 0, y );
 }
 
 void
