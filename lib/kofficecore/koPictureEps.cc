@@ -18,8 +18,12 @@
    Boston, MA 02111-1307, USA.
 */
 
+#include <unistd.h>
+#include <stdio.h>
+
 #include <qbuffer.h>
 #include <qpainter.h>
+#include <qfile.h>
 #include <qtextstream.h>
 #include <qregexp.h>
 #include <qimage.h>
@@ -28,6 +32,7 @@
 
 #include <kdebug.h>
 #include <kdebugclasses.h>
+#include <ktempfile.h>
 
 #include "koPictureKey.h"
 #include "koPictureBase.h"
@@ -57,6 +62,80 @@ KoPictureType::Type KoPictureEps::getType(void) const
 bool KoPictureEps::isNull(void) const
 {
     return m_rawData.isNull();
+}
+
+void KoPictureEps::scaleWithGhostScript(const QSize& size)
+// Based on the code of the file kdelibs/kimgio/eps.cpp
+{
+    if (!m_boundingBox.width() || !m_boundingBox.height())
+    {
+        kdDebug(30003) << "EPS image has a null size! (in KoPictureEps::scaleWithGhostScript)" << endl;
+        return;
+    }
+
+    KTempFile tmpFile;
+    tmpFile.setAutoDelete(true);
+
+    if( tmpFile.status() != 0 )
+    {
+        kdError(30003) << "No KTempFile! (in KoPictureEps::scaleWithGhostScript)" << endl;
+        return;
+    }
+
+    const int wantedWidth = size.width();
+    const int wantedHeight = size.height();
+    const double xScale = double(size.width()) / double(m_boundingBox.width());
+    const double yScale = double(size.height()) / double(m_boundingBox.height());
+
+    // create GS command line
+
+    QString cmdBuf ( "gs -sOutputFile=" );
+    cmdBuf += tmpFile.name();
+    cmdBuf += " -q -g";
+    cmdBuf += QString::number( wantedWidth );
+    cmdBuf += "x";
+    cmdBuf += QString::number( wantedHeight );
+    cmdBuf += " -dNOPAUSE -sDEVICE=png16m "; // Device was formally ppm
+    //cmdBuf += "-c 255 255 255 setrgbcolor fill 0 0 0 setrgbcolor";
+    cmdBuf += " -";
+    cmdBuf += " -c showpage quit";
+
+    // run ghostview
+
+    FILE* ghostfd = popen (QFile::encodeName(cmdBuf), "w");
+
+    if ( ghostfd == 0 )
+    {
+        kdError(30003) << "No connection to GhostScript (in KoPictureEps::scaleWithGhostScript)" << endl;
+        return;
+    }
+
+    fprintf (ghostfd, "\n%d %d translate\n", -qRound(m_boundingBox.left()*xScale), -qRound(m_boundingBox.top()*yScale));
+    fprintf (ghostfd, "%g %g scale\n", xScale, yScale);
+
+    // write image to gs
+
+    fwrite(m_rawData.data(), sizeof(char), m_rawData.size(), ghostfd);
+
+    pclose ( ghostfd );
+
+    // load image
+    QImage image;
+    if( !image.load (tmpFile.name()) )
+    {
+        kdError(30003) << "Image from GhostScript cannot be loaded (in KoPictureEps::scaleWithGhostScript)" << endl;
+        return;
+    }
+    if ( image.size() != size ) // this can happen due to rounding problems
+    {
+        //kdDebug() << "fixing size to " << size.width() << "x" << size.height()
+        //          << " (was " << image.width() << "x" << image.height() << ")" << endl;
+        image = image.scale( size ); // hmm, smoothScale instead?
+    }
+    kdDebug(30003) << "Image parameters: " << image.width() << "x" << image.height() << "x" << image.depth() << endl;
+    m_cachedPixmap = image;
+    m_cacheIsInFastMode=false;
+    m_cachedSize=size;
 }
 
 void KoPictureEps::scaleAndCreatePixmap(const QSize& size, bool fastMode)
@@ -93,9 +172,18 @@ void KoPictureEps::scaleAndCreatePixmap(const QSize& size, bool fastMode)
         m_cachedPixmap.resize( size ); // Only resize, do not scale!
 #endif
         m_cacheIsInFastMode=true;
+        m_cachedSize=size;
     }
     else
     {
+        QTime time;
+        time.start();
+#if 1
+        kdDebug(30003) << "Sampling with GhostScript!" << endl;
+        QApplication::setOverrideCursor( Qt::waitCursor );
+        scaleWithGhostScript(size);
+        QApplication::restoreOverrideCursor();
+#else
         kdDebug(30003) << "Sampling!" << endl;
         QApplication::setOverrideCursor( Qt::waitCursor );
         QBuffer buffer( m_rawData );
@@ -120,8 +208,10 @@ void KoPictureEps::scaleAndCreatePixmap(const QSize& size, bool fastMode)
         m_cachedPixmap = image;
         QApplication::restoreOverrideCursor();
         m_cacheIsInFastMode=false;
+        m_cachedSize=size;
+#endif
+        kdDebug(30003) << "Time: " << (time.elapsed()/1000.0) << " s" << endl;
     }
-    m_cachedSize=size;
     kdDebug(30003) << "New size: " << size << endl;
 }
 
@@ -220,6 +310,7 @@ bool KoPictureEps::load(QIODevice* io, const QString& /*extension*/)
     rect.setTop(exp.cap(2).toDouble());
     rect.setRight(exp.cap(3).toDouble());
     rect.setBottom(exp.cap(4).toDouble());
+    m_boundingBox=rect;
     m_originalSize=rect.size();
     kdDebug(30003) << "Rect: " << rect << " Size: "  << m_originalSize << endl;
     return true;

@@ -85,20 +85,21 @@ public:
 protected:
     QPixmap getPixmap(QImage& image);
     void scaleAndCreatePixmap(const QSize& size, bool fastMode=false);
+    void scaleWithGhostScript(const QSize& size);
     bool extractPostScriptStream( void );
+
 
 private:
     QByteArray m_rawData;
     QPixmap m_cachedPixmap;
     QSize m_originalSize;
     QSize m_cachedSize;
+    QRect m_boundingBox;
     /**
      * true, if the last cached image was done using fast mode.
      * false, if the last cached image was done using slow mode.
      */
     bool m_cacheIsInFastMode;
-    class Private;
-    Private* d;
 };
 
 #endif /* __koPictureEps_h__ */
