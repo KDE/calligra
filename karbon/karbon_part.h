@@ -49,9 +49,12 @@ public:
 	// insert a command into the undo/redo-history:
 	void addCommand( VCommand* cmd );
 
+	// remove all vobjects which are marked "deleted" and clear command-history:
+	void purgeHistory();
+
 	// read-only access to layers:
 	const QPtrList<VLayer>& layers() const { return m_layers; }
-	// sacrifying privatness:
+	// sacrifying privateness: TODO: still needed?
 	VLayer* activeLayer() const { return m_activeLayer; }
 	// draw handle
 	void drawHandle( QPainter &p ) const;

@@ -27,6 +27,7 @@ public:
 	void selectAllObjects();
 	void unselectObjects();
 	void deleteObjects( QPtrList<VObject> &list );
+	void removeDeletedObjects();
 
 	const bool& isVisible() const { return m_isVisible; }
 	const bool& isReadOnly() const { return m_isReadOnly; }

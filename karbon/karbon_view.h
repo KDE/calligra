@@ -43,6 +43,7 @@ protected slots:
 	void editPaste();
 	void editSelectAll();
 	void editDeleteSelection();
+	void editPurgeHistory();
 
 	// shape-tools:
 	void ellipseTool();

@@ -186,10 +186,20 @@ KarbonPart::undeleteObjects( QPtrList<VObject> &list )
 void
 KarbonPart::addCommand( VCommand* cmd )
 {
-	kdDebug() << "KarbonPart::addCommand " << cmd->name() << endl;
 	m_commandHistory->addCommand( cmd );
 	setModified( true );
 	repaintAllViews();
+}
+
+void
+KarbonPart::purgeHistory()
+{
+	// remove "deleted" objects from all layers:
+	QPtrListIterator<VLayer> itr( m_layers );
+	for ( ; itr.current() ; ++itr )
+		itr.current()->removeDeletedObjects();
+
+	m_commandHistory->clear();
 }
 
 void

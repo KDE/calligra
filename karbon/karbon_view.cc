@@ -8,6 +8,7 @@
 
 #include <kaction.h>
 #include <klocale.h>
+#include <kmessagebox.h>
 #include <kstdaction.h>
 
 #include "karbon_factory.h"
@@ -91,6 +92,20 @@ KarbonView::editDeleteSelection()
 }
 
 void
+KarbonView::editPurgeHistory()
+{
+// TODO: check for history size != 0
+	if( KMessageBox::warningContinueCancel( this,
+		i18n( "This action cannot be undone later. Do you really want to continue?" ),
+		i18n( "Purge History" ),
+		i18n( "C&ontinue" ),	// TODO: is there a constant for this?
+		"edit_purge_history" ) )
+	{
+		m_part->purgeHistory();
+	}
+}
+
+void
 KarbonView::ellipseTool()
 {
 	s_currentTool = VCToolEllipse::instance( m_part );
@@ -166,9 +181,11 @@ KarbonView::initActions()
 	KStdAction::paste( this, SLOT( editPaste() ), actionCollection(),
 		"edit_paste" );
   	KStdAction::selectAll( this, SLOT( editSelectAll() ), actionCollection(),
-		"edit_selectall" );
+		"edit_select_all" );
   	new KAction( i18n( "&Delete" ), "editdelete", 0, this, SLOT( editDeleteSelection() ), actionCollection(),
-		"editdelete" );
+		"edit_delete" );
+	new KAction( i18n( "&History" ), 0, 0, this, SLOT( editPurgeHistory() ), actionCollection(),
+		"edit_purge_history" );
 
 	// tools:
 	m_ellipseToolAction = new KToggleAction(

@@ -14,7 +14,7 @@ VLayer::VLayer()
 VLayer::~VLayer()
 {
 	QPtrListIterator<VObject> itr = m_objects;
-	for ( ; itr.current() ; ++itr )
+	for ( ; itr.current(); ++itr )
 	{
 		delete( itr.current() );
 	}
@@ -24,7 +24,7 @@ void
 VLayer::draw( QPainter& painter, const QRect& rect, const double& zoomFactor )
 {
 	QPtrListIterator<VObject> itr = m_objects;
-	for ( ; itr.current() ; ++itr )
+	for ( ; itr.current(); ++itr )
 		itr.current()->draw( painter, rect, zoomFactor );
 }
 
@@ -39,10 +39,10 @@ void
 VLayer::selectAllObjects()
 {
 	// select all objects within this layer
-    QPtrListIterator<VObject> itr = m_objects;
-    for ( ; itr.current() ; ++itr )
-        if( itr.current()->state() != VObject::deleted )
-            itr.current()->setState( VObject::selected );
+	QPtrListIterator<VObject> itr = m_objects;
+	for ( ; itr.current(); ++itr )
+		if( itr.current()->state() != VObject::deleted )
+			itr.current()->setState( VObject::selected );
 }
 
 void
@@ -50,7 +50,7 @@ VLayer::selectObjects( const QRect &rect, QPtrList<VObject> &list )
 {
 	// select all objects within the rect coords
 	QPtrListIterator<VObject> itr = m_objects;
-    for ( ; itr.current() ; ++itr )
+    for ( ; itr.current(); ++itr )
     {
 		if( itr.current()->state() != VObject::deleted &&
 			itr.current()->boundingBox().intersects( rect ) )
@@ -66,23 +66,36 @@ VLayer::unselectObjects()
 {
 	// unselect all objects in this layer that were selected
 	QPtrListIterator<VObject> itr = m_objects;
-    for ( ; itr.current() ; ++itr )
-    {
+	for( ; itr.current(); ++itr )
+	{
 		if( itr.current()->state() == VObject::selected )
 			itr.current()->setState( VObject::normal );
-    }
+	}
 }
 
 void
 VLayer::deleteObjects( QPtrList<VObject> &list )
 {
 	QPtrListIterator<VObject> itr = m_objects;
-    for ( ; itr.current() ; ++itr )
-    {
+	for( ; itr.current(); ++itr )
+	{
 		if( itr.current()->state() == VObject::selected )
 		{
 			itr.current()->setState( VObject::deleted );
 			list.append( itr.current() );
+		}
+	}
+}
+
+void
+VLayer::removeDeletedObjects()
+{
+	for( m_objects.first(); m_objects.current(); m_objects.next() )
+	{
+		if( m_objects.current()->state() == VObject::deleted )
+		{
+			delete( m_objects.current() );
+			m_objects.remove();
 		}
 	}
 }
