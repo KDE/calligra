@@ -250,6 +250,60 @@ void Page::paintObjects(QPainter *painter,QRect rect)
 	    {
 	    case OT_PICTURE: /* pciture */
 	      {
+		if (objPtr->shadowDistance > 0)
+		  {
+		    painter->save();
+
+		    if (objPtr->angle == 0)
+		      {
+			int sx = objPtr->ox - diffx();
+			int sy = objPtr->oy - diffy();
+			view->KPresenterDoc()->getShadowCoords(sx,sy,objPtr->shadowDirection,objPtr->shadowDistance);
+
+			painter->setPen(QPen(objPtr->shadowColor));
+			painter->setBrush(objPtr->shadowColor);
+
+			QSize bs = objPtr->graphObj->getPix().size();
+
+			painter->drawRect(sx,sy,bs.width(),bs.height());
+		      }
+		    else
+		      {
+			r = painter->viewport();
+			painter->setViewport(objPtr->ox - diffx(),objPtr->oy - diffy(),
+					     r.width(),r.height());
+			
+			QRect br = objPtr->graphObj->getPix().rect();
+			int pw = br.width();
+			int ph = br.height();
+			QRect rr = br;
+			int pixYPos = -rr.y();
+			int pixXPos = -rr.x();
+			br.moveTopLeft(QPoint(-br.width() / 2,-br.height() / 2));
+			rr.moveTopLeft(QPoint(-rr.width() / 2,-rr.height() / 2));
+			
+			QWMatrix m,mtx;
+			mtx.rotate(objPtr->angle);
+			m.translate(pw / 2,ph / 2);
+			m = mtx * m;
+			
+			painter->setWorldMatrix(m);
+			
+			painter->setPen(QPen(objPtr->shadowColor));
+			painter->setBrush(objPtr->shadowColor);
+
+			QSize bs = objPtr->graphObj->getPix().size();
+			int dx = 0,dy = 0;
+			view->KPresenterDoc()->getShadowCoords(dx,dy,objPtr->shadowDirection,objPtr->shadowDistance);
+			painter->drawRect(rr.left() + pixXPos + dx,rr.top() + pixYPos + dy,
+					  bs.width(),bs.height());
+			
+			painter->resetXForm();
+			painter->setViewport(r);
+		      }
+		    painter->restore();
+		  }
+		
 		if (objPtr->angle == 0)
 		  {
 		    painter->drawPixmap(objPtr->ox - diffx(),objPtr->oy - diffy(),
@@ -262,7 +316,6 @@ void Page::paintObjects(QPainter *painter,QRect rect)
 		    r = painter->viewport();
 		    painter->setViewport(objPtr->ox - diffx(),objPtr->oy - diffy(),
 					 r.width(),r.height());
-
 
 		    QRect br = objPtr->graphObj->getPix().rect();
 		    int pw = br.width();
@@ -297,6 +350,71 @@ void Page::paintObjects(QPainter *painter,QRect rect)
 									    objPtr->ow,objPtr->oh),objPtr->objNum - 1);
 		_x = cr.x(); _y = cr.y(); _w = cr.width(); _h = cr.height();
 
+		r = painter->viewport();
+
+		if (objPtr->shadowDistance > 0)
+		  {
+		    painter->save();
+		    objPtr->textObj->enableDrawAllInOneColor(objPtr->shadowColor);
+		    
+		    if (!editMode && currPresStep == objPtr->presNum && !goingBack)
+		      {
+			switch (objPtr->effect2)
+			  {
+			  case EF2T_PARA:
+			    objPtr->objPic = objPtr->textObj->getPic(_x,_y,_w,_h,!editMode,0,subPresStep,true);
+			    break;
+			  default:
+			    objPtr->objPic = objPtr->textObj->getPic(_x,_y,_w,_h,!editMode,-1,-1,true);
+			  }
+		      }
+		    else
+		      objPtr->objPic = objPtr->textObj->getPic(_x,_y,_w,_h,!editMode,-1,-1,true);
+		    
+		    objPtr->textObj->disableDrawAllInOneColor();
+
+		    if (objPtr->angle == 0)
+		      {
+			int sx = objPtr->ox - diffx();
+			int sy = objPtr->oy - diffy();
+			view->KPresenterDoc()->getShadowCoords(sx,sy,objPtr->shadowDirection,objPtr->shadowDistance);
+
+			painter->setViewport(sx,sy,r.width(),r.height());
+			
+			objPtr->objPic->play(painter);
+		      }
+		    else
+		      {
+			painter->setViewport(objPtr->ox - diffx(),objPtr->oy - diffy(),
+					     r.width(),r.height());
+
+			QRect br = objPtr->textObj->rect();
+			int pw = br.width();
+			int ph = br.height();
+			QRect rr = br;
+			int yPos = -rr.y();
+			int xPos = -rr.x();
+			br.moveTopLeft(QPoint(-br.width() / 2,-br.height() / 2));
+			rr.moveTopLeft(QPoint(-rr.width() / 2,-rr.height() / 2));
+			
+			QWMatrix m,mtx;
+			mtx.rotate(objPtr->angle);
+			m.translate(pw / 2,ph / 2);
+			m = mtx * m;
+			
+			painter->setWorldMatrix(m);
+
+			int sx = 0;
+			int sy = 0;
+			view->KPresenterDoc()->getShadowCoords(sx,sy,objPtr->shadowDirection,objPtr->shadowDistance);
+
+			painter->translate(rr.left() + xPos + sx,rr.top() + yPos + sy);
+			
+			objPtr->objPic->play(painter);
+		      }
+		    painter->restore();
+		  }
+
 		if (!editMode && currPresStep == objPtr->presNum && !goingBack)
 		  {
 		    switch (objPtr->effect2)
@@ -311,7 +429,6 @@ void Page::paintObjects(QPainter *painter,QRect rect)
 		else
 		  objPtr->objPic = objPtr->textObj->getPic(_x,_y,_w,_h,!editMode,-1,-1,true);
  
-		r = painter->viewport();
 		painter->setViewport(objPtr->ox - diffx(),objPtr->oy - diffy(),
 				     r.width(),r.height());
 
@@ -345,6 +462,59 @@ void Page::paintObjects(QPainter *painter,QRect rect)
 	      } break;
 	    default:
 	      {
+		if (objPtr->shadowDistance > 0 && objPtr->objType != OT_CLIPART)
+		  {
+		    r = painter->viewport();
+		    painter->save();
+
+		    objPtr->graphObj->enableDrawAllInOneColor(objPtr->shadowColor);
+		    objPtr->objPic = objPtr->graphObj->getPic(objPtr->ox - diffx(),objPtr->oy - diffy(),objPtr->ow,objPtr->oh);
+		    objPtr->graphObj->disableDrawAllInOneColor();
+		    
+		    if (objPtr->angle == 0)
+		      {
+			int sx = objPtr->ox - diffx();
+			int sy = objPtr->oy - diffy();
+			view->KPresenterDoc()->getShadowCoords(sx,sy,objPtr->shadowDirection,objPtr->shadowDistance);
+			
+			painter->setViewport(sx,sy,r.width(),r.height());
+
+			objPtr->objPic->play(painter);
+		      }
+		    else
+		      {
+			painter->setViewport(objPtr->ox - diffx(),objPtr->oy - diffy(),
+					     r.width(),r.height());
+
+			QRect br = objPtr->graphObj->rect();
+			int pw = br.width();
+			int ph = br.height();
+			QRect rr = br;
+			int yPos = -rr.y();
+			int xPos = -rr.x();
+			br.moveTopLeft(QPoint(-br.width() / 2,-br.height() / 2));
+			rr.moveTopLeft(QPoint(-rr.width() / 2,-rr.height() / 2));
+			
+			int sx = 0;
+			int sy = 0;
+			view->KPresenterDoc()->getShadowCoords(sx,sy,objPtr->shadowDirection,objPtr->shadowDistance);
+
+			QWMatrix m,mtx,m2;
+			mtx.rotate(objPtr->angle);
+			m.translate(pw / 2,ph / 2);
+			m2.translate(rr.left() + xPos + sx,rr.top() + yPos + sy);
+			m = m2 * mtx * m;
+			
+			painter->setWorldMatrix(m);
+			objPtr->graphObj->enableDrawAllInOneColor(objPtr->shadowColor);
+			objPtr->graphObj->drawInPainter(painter);
+			objPtr->graphObj->disableDrawAllInOneColor();
+		      }
+
+		    painter->restore();
+		    painter->setViewport(r);
+		  }
+
 		painter->save();
 		if (objPtr->objType != OT_CLIPART)
 		  {
@@ -1151,6 +1321,8 @@ void Page::setupMenus()
   graphMenu->insertSeparator();
   pixmap.load(pixdir+"/kpresenter/toolbar/rotate.xpm");
   graphMenu->insertItem(pixmap,i18n("&Rotate..."),this,SLOT(rotateObjs()));
+  pixmap.load(pixdir+"/kpresenter/toolbar/shadow.xpm");
+  graphMenu->insertItem(pixmap,i18n("&Shadow..."),this,SLOT(shadowObjs()));
   graphMenu->insertSeparator();
   pixmap.load(pixdir+"/kpresenter/toolbar/style.xpm");
   graphMenu->insertItem(pixmap,i18n("&Properties..."),this,SLOT(objProperties()));
@@ -1175,6 +1347,8 @@ void Page::setupMenus()
   picMenu->insertSeparator();
   pixmap.load(pixdir+"/kpresenter/toolbar/rotate.xpm");
   picMenu->insertItem(pixmap,i18n("&Rotate..."),this,SLOT(rotateObjs()));
+  pixmap.load(pixdir+"/kpresenter/toolbar/shadow.xpm");
+  picMenu->insertItem(pixmap,i18n("&Shadow..."),this,SLOT(shadowObjs()));
   picMenu->insertSeparator();
   pixmap.load(pixdir+"/kpresenter/toolbar/picture.xpm");
   picMenu->insertItem(pixmap,i18n("&Change Picture..."),this,SLOT(chPic()));
@@ -1199,6 +1373,8 @@ void Page::setupMenus()
   clipMenu->insertSeparator();
   pixmap.load(pixdir+"/kpresenter/toolbar/rotate.xpm");
   clipMenu->insertItem(pixmap,i18n("&Rotate..."),this,SLOT(rotateObjs()));
+  pixmap.load(pixdir+"/kpresenter/toolbar/shadow.xpm");
+  clipMenu->insertItem(pixmap,i18n("&Shadow..."),this,SLOT(shadowObjs()));
   clipMenu->insertSeparator();
   pixmap.load(pixdir+"/kpresenter/toolbar/clipart.xpm");
   clipMenu->insertItem(pixmap,i18n("&Change Clipart..."),this,SLOT(chClip()));
@@ -1223,6 +1399,8 @@ void Page::setupMenus()
   txtMenu->insertSeparator();
   pixmap.load(pixdir+"/kpresenter/toolbar/rotate.xpm");
   txtMenu->insertItem(pixmap,i18n("&Rotate..."),this,SLOT(rotateObjs()));
+  pixmap.load(pixdir+"/kpresenter/toolbar/shadow.xpm");
+  txtMenu->insertItem(pixmap,i18n("&Shadow..."),this,SLOT(shadowObjs()));
   txtMenu->insertSeparator();
   pixmap.load(pixdir+"/kpresenter/toolbar/effect.xpm");
   txtMenu->insertItem(pixmap,i18n("&Assign effect..."),this,SLOT(assignEffect()));
@@ -2354,6 +2532,60 @@ void Page::drawObject(PageObjects *_objPtr,QPixmap *screen,int _x,int _y,int _w,
 	    p.setClipRect(x - diffx() + _cx,y - diffy() + _cy,w - _w,h - _h);
 	  }
 	
+	if (_objPtr->shadowDistance > 0)
+	  {
+	    p.save();
+	    
+	    if (_objPtr->angle == 0)
+	      {
+		int sx = _objPtr->ox - diffx() + _x;
+		int sy = _objPtr->oy - diffy() + _y;
+		view->KPresenterDoc()->getShadowCoords(sx,sy,_objPtr->shadowDirection,_objPtr->shadowDistance);
+		
+		p.setPen(QPen(_objPtr->shadowColor));
+		p.setBrush(_objPtr->shadowColor);
+		
+		QSize bs = _objPtr->graphObj->getPix().size();
+		
+		p.drawRect(sx,sy,bs.width(),bs.height());
+	      }
+	    else
+	      {
+		r = p.viewport();
+		p.setViewport(_objPtr->ox - diffx() + _x,_objPtr->oy - diffy() + _y,
+				     r.width(),r.height());
+		
+		QRect br = _objPtr->graphObj->getPix().rect();
+		int pw = br.width();
+		int ph = br.height();
+		QRect rr = br;
+		int pixYPos = -rr.y();
+		int pixXPos = -rr.x();
+		br.moveTopLeft(QPoint(-br.width() / 2,-br.height() / 2));
+		rr.moveTopLeft(QPoint(-rr.width() / 2,-rr.height() / 2));
+		
+		QWMatrix m,mtx;
+		mtx.rotate(_objPtr->angle);
+		m.translate(pw / 2,ph / 2);
+		m = mtx * m;
+		
+		p.setWorldMatrix(m);
+		
+		p.setPen(QPen(_objPtr->shadowColor));
+		p.setBrush(_objPtr->shadowColor);
+		
+		QSize bs = _objPtr->graphObj->getPix().size();
+		int dx = 0,dy = 0;
+		view->KPresenterDoc()->getShadowCoords(dx,dy,_objPtr->shadowDirection,_objPtr->shadowDistance);
+		p.drawRect(rr.left() + pixXPos + dx,rr.top() + pixYPos + dy,
+				  bs.width(),bs.height());
+		
+		p.resetXForm();
+		p.setViewport(r);
+	      }
+	    p.restore();
+	  }
+	
 	if (_objPtr->angle == 0)
 	  {
 	    p.drawPixmap(_objPtr->ox - diffx() + _x,_objPtr->oy - diffy() + _y,
@@ -2365,7 +2597,7 @@ void Page::drawObject(PageObjects *_objPtr,QPixmap *screen,int _x,int _y,int _w,
 	    p.save();
 	    r = p.viewport();
 	    p.setViewport(_objPtr->ox - diffx() + _x,_objPtr->oy - diffy() + _y,
-				 r.width(),r.height());
+			  r.width(),r.height());
 	    
 	    QRect br = _objPtr->graphObj->getPix().rect();
 	    int pw = br.width();
@@ -2397,6 +2629,82 @@ void Page::drawObject(PageObjects *_objPtr,QPixmap *screen,int _x,int _y,int _w,
     case OT_TEXT:
       {
 	p.save();
+	r = p.viewport();
+
+	if (_w != 0 || _h != 0)
+	  {
+	    p.setClipping(true);
+	    p.setClipRect(x - diffx() + _cx,y - diffy() + _cy,w - _w,h - _h);
+	  }
+
+	if (objPtr->shadowDistance > 0)
+	  {
+	    p.save();
+	    _objPtr->textObj->enableDrawAllInOneColor(objPtr->shadowColor);
+
+	    if (!editMode && currPresStep == _objPtr->presNum && !goingBack)
+	      {
+		switch (_objPtr->effect2)
+		  {
+		  case EF2T_PARA:
+		    _objPtr->objPic = _objPtr->textObj->getPic(0,0,kapp->desktop()->width(),kapp->desktop()->height(),
+							       !editMode,subPresStep,subPresStep,_clip);
+
+		    break;
+		  default:
+		    
+		      _objPtr->objPic = _objPtr->textObj->getPic(0,0,kapp->desktop()->width(),kapp->desktop()->height(),!editMode,
+								 -1,-1,_clip);
+		  }
+		}
+	    else
+	      _objPtr->objPic = _objPtr->textObj->getPic(_objPtr->ox - diffx(),_objPtr->oy - diffy(),
+							 _objPtr->ow,_objPtr->oh,!editMode,-1,-1,_clip);
+	    
+	    _objPtr->textObj->disableDrawAllInOneColor();
+	    
+	    if (_objPtr->angle == 0)
+	      {
+		int sx = _objPtr->ox - diffx() + _x;
+		int sy = _objPtr->oy - diffy() + _y;
+		view->KPresenterDoc()->getShadowCoords(sx,sy,_objPtr->shadowDirection,_objPtr->shadowDistance);
+		
+		p.setViewport(sx,sy,r.width(),r.height());
+		
+		_objPtr->objPic->play(&p);
+	      }
+	    else
+	      {
+		p.setViewport(_objPtr->ox - diffx() + _x,_objPtr->oy - diffy() + _y,
+			      r.width(),r.height());
+		
+		QRect br = _objPtr->textObj->rect();
+		int pw = br.width();
+		int ph = br.height();
+		QRect rr = br;
+		int yPos = -rr.y();
+		int xPos = -rr.x();
+		br.moveTopLeft(QPoint(-br.width() / 2,-br.height() / 2));
+		rr.moveTopLeft(QPoint(-rr.width() / 2,-rr.height() / 2));
+		
+		QWMatrix m,mtx;
+		mtx.rotate(_objPtr->angle);
+		m.translate(pw / 2,ph / 2);
+		m = mtx * m;
+		
+		p.setWorldMatrix(m);
+		
+		int sx = 0;
+		int sy = 0;
+		view->KPresenterDoc()->getShadowCoords(sx,sy,_objPtr->shadowDirection,_objPtr->shadowDistance);
+		
+		p.translate(rr.left() + xPos + sx,rr.top() + yPos + sy);
+		
+		_objPtr->objPic->play(&p);
+	      }
+	    p.restore();
+	  }
+	
 	if (!editMode && currPresStep == _objPtr->presNum && !goingBack)
 	  {
 	    switch (_objPtr->effect2)
@@ -2444,13 +2752,7 @@ void Page::drawObject(PageObjects *_objPtr,QPixmap *screen,int _x,int _y,int _w,
 	else
 	  _objPtr->objPic = _objPtr->textObj->getPic(_objPtr->ox - diffx(),_objPtr->oy - diffy(),
 						   _objPtr->ow,_objPtr->oh,!editMode,-1,-1,_clip);
-	if (_w != 0 || _h != 0)
-	  {
-	    p.setClipping(true);
-	    p.setClipRect(_objPtr->ox - diffx() + _cx,_objPtr->oy - diffy() + _cy,_objPtr->ow - _w,_objPtr->oh - _h);
-	  }
 
-	r = p.viewport();
 	p.setViewport(objPtr->ox - diffx() + _x,objPtr->oy - diffy() + _y,
 		      r.width(),r.height());
 	
@@ -2493,28 +2795,81 @@ void Page::drawObject(PageObjects *_objPtr,QPixmap *screen,int _x,int _y,int _w,
 	    p.setClipRect(x - diffx() + _cx,y - diffy() + _cy,w - _w,h - _h);
 	  }
 
-	p.save();
-	if (objPtr->objType != OT_CLIPART)
+	if (_objPtr->shadowDistance > 0 && _objPtr->objType != OT_CLIPART)
 	  {
 	    r = p.viewport();
-	    p.setViewport(objPtr->ox - diffx() + _x,objPtr->oy - diffy() + _y,
+	    p.save();
+	    
+	    _objPtr->graphObj->enableDrawAllInOneColor(_objPtr->shadowColor);
+	    _objPtr->objPic = _objPtr->graphObj->getPic(_objPtr->ox - diffx(),_objPtr->oy - diffy(),_objPtr->ow,_objPtr->oh);
+	    _objPtr->graphObj->disableDrawAllInOneColor();
+	    
+	    if (_objPtr->angle == 0)
+	      {
+		int sx = _objPtr->ox - diffx() + _x;
+		int sy = _objPtr->oy - diffy() + _y;
+		view->KPresenterDoc()->getShadowCoords(sx,sy,_objPtr->shadowDirection,_objPtr->shadowDistance);
+		
+		p.setViewport(sx,sy,r.width(),r.height());
+		
+		_objPtr->objPic->play(&p);
+	      }
+	    else
+	      {
+		p.setViewport(_objPtr->ox - diffx() + _x,_objPtr->oy - diffy() + _y,
+			      r.width(),r.height());
+		
+		QRect br = _objPtr->graphObj->rect();
+		int pw = br.width();
+		int ph = br.height();
+		QRect rr = br;
+		int yPos = -rr.y();
+		int xPos = -rr.x();
+		br.moveTopLeft(QPoint(-br.width() / 2,-br.height() / 2));
+		rr.moveTopLeft(QPoint(-rr.width() / 2,-rr.height() / 2));
+		
+		int sx = 0;
+		int sy = 0;
+		view->KPresenterDoc()->getShadowCoords(sx,sy,_objPtr->shadowDirection,_objPtr->shadowDistance);
+		
+		QWMatrix m,mtx,m2;
+		mtx.rotate(_objPtr->angle);
+		m.translate(pw / 2,ph / 2);
+		m2.translate(rr.left() + xPos + sx,rr.top() + yPos + sy);
+		m = m2 * mtx * m;
+		
+		p.setWorldMatrix(m);
+		_objPtr->graphObj->enableDrawAllInOneColor(_objPtr->shadowColor);
+		_objPtr->graphObj->drawInPainter(&p);
+		_objPtr->graphObj->disableDrawAllInOneColor();
+	      }
+	    
+	    p.restore();
+	    p.setViewport(r);
+	  }
+	
+	p.save();
+	if (_objPtr->objType != OT_CLIPART)
+	  {
+	    r = p.viewport();
+	    p.setViewport(_objPtr->ox - diffx() + _x,_objPtr->oy - diffy() + _y,
 			  r.width(),r.height());
 	  }
 	
-	if (objPtr->objType == OT_CLIPART)
+	if (_objPtr->objType == OT_CLIPART)
 	  {
 	    r = p.viewport();
-	    p.setViewport(objPtr->ox - diffx() + _x,objPtr->oy - diffy() + _y,
-			  objPtr->ow,objPtr->oh);
+	    p.setViewport(_objPtr->ox - diffx() + _x,_objPtr->oy - diffy() + _y,
+			  _objPtr->ow,_objPtr->oh);
 	  }
 	
-	objPtr->objPic = objPtr->graphObj->getPic(objPtr->ox - diffx(),objPtr->oy - diffy(),objPtr->ow,objPtr->oh);
+	_objPtr->objPic = _objPtr->graphObj->getPic(_objPtr->ox - diffx(),_objPtr->oy - diffy(),_objPtr->ow,_objPtr->oh);
 	
-	if (objPtr->angle == 0)
-	  objPtr->objPic->play(&p);
+	if (_objPtr->angle == 0)
+	  _objPtr->objPic->play(&p);
 	else
 	  {
-	    QRect br = objPtr->graphObj->rect();
+	    QRect br = _objPtr->graphObj->rect();
 	    int pw = br.width();
 	    int ph = br.height();
 	    QRect rr = br;
@@ -2523,23 +2878,23 @@ void Page::drawObject(PageObjects *_objPtr,QPixmap *screen,int _x,int _y,int _w,
 	    br.moveTopLeft(QPoint(-br.width() / 2,-br.height() / 2));
 	    rr.moveTopLeft(QPoint(-rr.width() / 2,-rr.height() / 2));
 	    
-	    if (objPtr->objType != OT_CLIPART)
+	    if (_objPtr->objType != OT_CLIPART)
 	      {
 		QWMatrix m,mtx,m2;
-		mtx.rotate(objPtr->angle);
+		mtx.rotate(_objPtr->angle);
 		m.translate(pw / 2,ph / 2);
 		m2.translate(rr.left() + xPos,rr.top() + yPos);
 		m = m2 * mtx * m;
 		
 		p.setWorldMatrix(m);
-		objPtr->graphObj->drawInPainter(&p);
+		_objPtr->graphObj->drawInPainter(&p);
 	      }
 	    else
 	      {
 		// this doesn't work well - has to be rewritten!!
 		
 		QWMatrix m,mtx;
-		mtx.rotate(objPtr->angle);
+		mtx.rotate(_objPtr->angle);
 		m.translate(pw / 2,ph / 2);
 		m = mtx * m;
 		
@@ -2547,10 +2902,10 @@ void Page::drawObject(PageObjects *_objPtr,QPixmap *screen,int _x,int _y,int _w,
 		pm.fill(white);
 		QPainter pnt;
 		pnt.begin(&pm);
-		objPtr->objPic->play(&pnt);
+		_objPtr->objPic->play(&pnt);
 		pnt.end();
 		
-		p.setViewport(objPtr->ox - diffx() + _x,objPtr->oy - diffy() + _y,
+		p.setViewport(_objPtr->ox - diffx() + _x,_objPtr->oy - diffy() + _y,
 				     r.width(),r.height());
 		p.setWorldMatrix(m);
 		

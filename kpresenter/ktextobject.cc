@@ -1494,6 +1494,8 @@ KTextObject::KTextObject(QWidget *parent=0,const char *name=0,ObjType ot=PLAIN,
   regExpList.setAutoDelete(true);
   
   autoReplace.setAutoDelete(true);
+
+  allInOneColor = false;
 }
 
 /*======================== destructor ============================*/
@@ -4148,7 +4150,11 @@ void KTextObject::paintCell(class QPainter* painter,int row,int)
 		    }
 		  
 		  // draw Text
-		  p->setPen(objPtr->color());
+		  if (!allInOneColor)
+		    p->setPen(objPtr->color());
+		  else
+		    p->setPen(allColor);
+
 		  p->drawText(x,(!drawPic ? 0 : y) + linePtr->ascent()-objPtr->ascent(),w,linePtr->height(),AlignLeft,objPtr->text());
 
 		  // draw Cursor

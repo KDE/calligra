@@ -110,6 +110,7 @@ public slots:
   void clipPaste();
   void deleteObjs() {view->KPresenterDoc()->deleteObjs(); setCursor(arrowCursor);}
   void rotateObjs() {view->extraRotate(); setCursor(arrowCursor);}
+  void shadowObjs() {view->extraShadow(); setCursor(arrowCursor);}
   void restoreBackColor(unsigned int);
   
 protected:

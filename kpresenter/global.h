@@ -42,6 +42,8 @@ enum Effect2 {EF2_NONE = 0,EF2T_PARA = 1};
 enum PageEffect {PEF_NONE = 0,PEF_CLOSE_HORZ = 1,PEF_CLOSE_VERT = 2,PEF_CLOSE_ALL = 3,PEF_OPEN_HORZ = 4,PEF_OPEN_VERT = 5,\
 		 PEF_OPEN_ALL = 6};
 enum LineEnd {L_NORMAL,L_ARROW,L_SQUARE,L_CIRCLE};
+enum ShadowDirection {SD_LEFT_UP = 1,SD_UP = 2,SD_RIGHT_UP = 3,SD_RIGHT = 4,SD_RIGHT_BOTTOM = 5,SD_BOTTOM = 6,\
+		      SD_LEFT_BOTTOM = 7,SD_LEFT = 8};
 
 // offsets of the effects in the Effect2 enum accoording to a objType
 const int TxtObjOffset = 0;
@@ -84,6 +86,9 @@ struct PageObjects
   Effect effect;
   Effect2 effect2;
   double angle;
+  ShadowDirection shadowDirection;
+  int shadowDistance;
+  QColor shadowColor;
 };
 
 #endif //GLOBAL_H

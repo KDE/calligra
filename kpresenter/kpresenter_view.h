@@ -74,6 +74,7 @@ class Page;
 #include "effectdia.h"
 #include "rotatedia.h"
 #include "ksearchdialogs.h"
+#include "shadowdia.h"
 
 #include <X11/Xlib.h>
 #include <signal.h>
@@ -164,6 +165,7 @@ public:
   virtual void extraRaise();
   virtual void extraLower();
   virtual void extraRotate();
+  virtual void extraShadow();
   virtual void extraBackground();
   virtual void extraLayout();
   virtual void extraOptions();
@@ -281,6 +283,7 @@ protected slots:
   void pgConfOk();
   void effectOk();
   void rotateOk();
+  void shadowOk();
 
   // scrolling
   void scrollH(int);
@@ -415,6 +418,7 @@ protected:
   CORBA::Long m_idMenuExtra_Raise;
   CORBA::Long m_idMenuExtra_Lower;
   CORBA::Long m_idMenuExtra_Rotate;
+  CORBA::Long m_idMenuExtra_Shadow;
   CORBA::Long m_idMenuExtra_Background;
   CORBA::Long m_idMenuExtra_Layout;
   CORBA::Long m_idMenuExtra_Options;
@@ -500,6 +504,7 @@ protected:
   CORBA::Long m_idButtonExtra_Raise;
   CORBA::Long m_idButtonExtra_Lower;
   CORBA::Long m_idButtonExtra_Rotate;
+  CORBA::Long m_idButtonExtra_Shadow;
 
   // screen toolbar
   ToolBar_ref m_rToolBarScreen;
@@ -532,6 +537,7 @@ protected:
   RotateDia *rotateDia;
   KSearchDialog *searchDia;
   KSearchReplaceDialog *replaceDia;
+  ShadowDia *shadowDia;
 
   // default pen and brush
   QPen pen;

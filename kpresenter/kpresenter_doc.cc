@@ -378,6 +378,9 @@ void KPresenterDocument_impl::saveObjects(ostream& out)
       out << indent << "<EFFECT value=\"" << objPtr->effect << "\"/>" << endl; 
       out << indent << "<EFFECT2 value=\"" << objPtr->effect2 << "\"/>" << endl; 
       out << indent << "<ANGLE value=\"" << objPtr->angle << "\"/>" << endl; 
+      out << indent << "<SHADOW direction=\"" << (int)objPtr->shadowDirection << "\" distance=\""
+	  << objPtr->shadowDistance << "\" sred=\"" << objPtr->shadowColor.red() << "\" sgreen=\""
+	  << objPtr->shadowColor.green() << "\" sblue=\"" << objPtr->shadowColor.blue() << "\"/>" << endl;
       
       if (objPtr->objType == OT_TEXT)
 	saveTxtObj(out,objPtr->textObj);
@@ -1034,6 +1037,9 @@ void KPresenterDocument_impl::loadObjects(KOMLParser& parser,vector<KOMLAttrib>&
 			  // just to avoid problems with older files
 			  objPtr->effect2 = EF2_NONE;
 			  objPtr->angle = 0.0;
+			  objPtr->shadowDirection = SD_RIGHT_BOTTOM;
+			  objPtr->shadowDistance = 0;
+			  objPtr->shadowColor = gray;
 			}
 		    }
 		}
@@ -1059,6 +1065,31 @@ void KPresenterDocument_impl::loadObjects(KOMLParser& parser,vector<KOMLAttrib>&
 		    {
 		      if ((*it).m_strName == "value")
 			objPtr->angle = (Effect2)atof((*it).m_strValue.c_str());
+		    }
+		}
+
+	      // shadow
+	      else if (name == "SHADOW")
+		{
+		  KOMLParser::parseTag(tag.c_str(),name,lst);
+		  vector<KOMLAttrib>::const_iterator it = lst.begin();
+		  int sr = 0,sg = 0,sb = 0;
+
+		  for(;it != lst.end();it++)
+		    {
+		      if ((*it).m_strName == "direction")
+			objPtr->shadowDirection = (ShadowDirection)atoi((*it).m_strValue.c_str());
+		      if ((*it).m_strName == "distance")
+			objPtr->shadowDistance = atoi((*it).m_strValue.c_str());
+		      if ((*it).m_strName == "sred")
+			sr = atoi((*it).m_strValue.c_str());
+		      if ((*it).m_strName == "sgreen")
+			sg = atoi((*it).m_strValue.c_str());
+		      if ((*it).m_strName == "sblue")
+			{
+			  sb = atoi((*it).m_strValue.c_str());
+			  objPtr->shadowColor = QColor(sr,sg,sb);
+			}
 		    }
 		}
 
@@ -1595,8 +1626,16 @@ void KPresenterDocument_impl::setBackPic(unsigned int pageNum,const char* backPi
 
 	  QPixmap pix;
 	  pix.load(pagePtr->backPic);
-	  pix.save("/tmp/kpresenter_tmp.xpm","XPM");
-	  pagePtr->pix_data = qstrdup(load_pixmap_native_format("/tmp/kpresenter_tmp.xpm"));
+
+	  QFileInfo fileInfo(backPic);
+
+	  if (fileInfo.extension().lower() != "xpm")
+	    {
+	      pix.save("/tmp/kpresenter_tmp.xpm","XPM");
+	      pagePtr->pix_data = qstrdup(load_pixmap_native_format("/tmp/kpresenter_tmp.xpm"));
+	    }
+	  else
+	      pagePtr->pix_data = qstrdup(load_pixmap_native_format(backPic));
 
 	  pagePtr->backPix.load(pagePtr->backPic);
 	  pagePtr->obackPix.load(pagePtr->backPic);
@@ -1946,6 +1985,9 @@ void KPresenterDocument_impl::insertPicture(const char *filename,int diffx,int d
 	  objPtr->effect = EF_NONE;
 	  objPtr->effect2 = EF2_NONE;
 	  objPtr->angle = 0.0;
+ 	  objPtr->shadowDirection = SD_RIGHT_BOTTOM;
+ 	  objPtr->shadowDistance = 0;
+ 	  objPtr->shadowColor = gray;
 	  _objList.append(objPtr);
 
 	  UndoRedoInsertPageObject* uripo = new UndoRedoInsertPageObject(&_objList,objPtr,i18n("Insert Picture"));
@@ -1982,6 +2024,9 @@ void KPresenterDocument_impl::insertClipart(const char *filename,int diffx,int d
       objPtr->effect = EF_NONE;
       objPtr->effect2 = EF2_NONE;
       objPtr->angle = 0.0;
+      objPtr->shadowDirection = SD_RIGHT_BOTTOM;
+      objPtr->shadowDistance = 0;
+      objPtr->shadowColor = gray;
       _objList.append(objPtr);
 
       UndoRedoInsertPageObject* uripo = new UndoRedoInsertPageObject(&_objList,objPtr,i18n("Insert Picture"));
@@ -2110,6 +2155,9 @@ void KPresenterDocument_impl::insertLine(QPen pen,LineEnd lb,LineEnd le,LineType
   objPtr->effect = EF_NONE;
   objPtr->effect2 = EF2_NONE;
   objPtr->angle = 0.0;
+  objPtr->shadowDirection = SD_RIGHT_BOTTOM;
+  objPtr->shadowDistance = 0;
+  objPtr->shadowColor = gray;
   _objList.append(objPtr);
 
   UndoRedoInsertPageObject* uripo = new UndoRedoInsertPageObject(&_objList,objPtr,i18n("Insert Picture"));
@@ -2142,6 +2190,9 @@ void KPresenterDocument_impl::insertRectangle(QPen pen,QBrush brush,RectType rt,
   objPtr->effect = EF_NONE;
   objPtr->effect2 = EF2_NONE;
   objPtr->angle = 0.0;
+  objPtr->shadowDirection = SD_RIGHT_BOTTOM;
+  objPtr->shadowDistance = 0;
+  objPtr->shadowColor = gray;
   _objList.append(objPtr);
 
   UndoRedoInsertPageObject* uripo = new UndoRedoInsertPageObject(&_objList,objPtr,i18n("Insert Picture"));
@@ -2172,6 +2223,9 @@ void KPresenterDocument_impl::insertCircleOrEllipse(QPen pen,QBrush brush,int di
   objPtr->effect = EF_NONE;
   objPtr->effect2 = EF2_NONE;
   objPtr->angle = 0.0;
+  objPtr->shadowDirection = SD_RIGHT_BOTTOM;
+  objPtr->shadowDistance = 0;
+  objPtr->shadowColor = gray;
   _objList.append(objPtr);
 
   UndoRedoInsertPageObject* uripo = new UndoRedoInsertPageObject(&_objList,objPtr,i18n("Insert Picture"));
@@ -2203,6 +2257,9 @@ void KPresenterDocument_impl::insertText(int diffx,int diffy)
   objPtr->effect = EF_NONE;
   objPtr->effect2 = EF2_NONE;
   objPtr->angle = 0.0;
+  objPtr->shadowDirection = SD_RIGHT_BOTTOM;
+  objPtr->shadowDistance = 0;
+  objPtr->shadowColor = gray;
   _objList.append(objPtr);
 
   UndoRedoInsertPageObject* uripo = new UndoRedoInsertPageObject(&_objList,objPtr,i18n("Insert Picture"));
@@ -2234,6 +2291,9 @@ void KPresenterDocument_impl::insertAutoform(QPen pen,QBrush brush,LineEnd lb,Li
   objPtr->effect = EF_NONE;
   objPtr->effect2 = EF2_NONE;
   objPtr->angle = 0.0;
+  objPtr->shadowDirection = SD_RIGHT_BOTTOM;
+  objPtr->shadowDistance = 0;
+  objPtr->shadowColor = gray;
   _objList.append(objPtr);
   objPtr->graphObj->resize(objPtr->ow,objPtr->oh);
 
@@ -2607,6 +2667,31 @@ void KPresenterDocument_impl::copyObjs(int diffx,int diffy)
 		  clipStr += str;
 		  clipStr += "}";
 
+		  clipStr += "[SHADOW_DIRECTION]{";
+		  sprintf(str,"%d",(int)objPtr->shadowDirection);
+		  clipStr += str;
+		  clipStr += "}";
+
+		  clipStr += "[SHADOW_DISTANCE]{";
+		  sprintf(str,"%d",objPtr->shadowDistance);
+		  clipStr += str;
+		  clipStr += "}";
+
+		  clipStr += "[SHADOW_RED]{";
+		  sprintf(str,"%d",objPtr->shadowColor.red());
+		  clipStr += str;
+		  clipStr += "}";
+
+		  clipStr += "[SHADOW_GREEN]{";
+		  sprintf(str,"%d",objPtr->shadowColor.green());
+		  clipStr += str;
+		  clipStr += "}";
+
+		  clipStr += "[SHADOW_BLUE]{";
+		  sprintf(str,"%d",objPtr->shadowColor.blue());
+		  clipStr += str;
+		  clipStr += "}";
+
 		  clipStr += "[NEW_OBJECT_END]";
 		}
 	    }
@@ -2690,6 +2775,28 @@ void KPresenterDocument_impl::pasteObjs(int diffx,int diffy)
 		    objPtr->ox = atoi(value) + diffx;
 		  else if (tag == "ANGLE" && objPtr)
 		    objPtr->angle = atof(value);
+		  else if (tag == "SHADOW_DIRECTION" && objPtr)
+		    objPtr->shadowDirection = (ShadowDirection)atoi(value);
+		  else if (tag == "SHADOW_DISTANCE" && objPtr)
+		    objPtr->shadowDistance = atoi(value);
+		  else if (tag == "SHADOW_RED" && objPtr)
+		    {
+		      color = objPtr->shadowColor;
+		      color.setRgb(atoi(value),color.green(),color.blue());
+		      objPtr->shadowColor = color;
+		    }
+		  else if (tag == "SHADOW_GREEN" && objPtr)
+		    {
+		      color = objPtr->shadowColor;
+		      color.setRgb(color.red(),atoi(value),color.blue());
+		      objPtr->shadowColor = color;
+		    }
+		  else if (tag == "SHADOW_BLUE" && objPtr)
+		    {
+		      color = objPtr->shadowColor;
+		      color.setRgb(color.red(),color.green(),atoi(value));
+		      objPtr->shadowColor = color;
+		    }
 		  else if (tag == "OBJ_Y" && objPtr)
 		    objPtr->oy = atoi(value) + diffy;
 		  else if (tag == "OBJ_W" && objPtr)
@@ -2917,6 +3024,14 @@ QRect KPresenterDocument_impl::getRealBoundingRect(QRect r,int objnum)
     {
       objPtr = _objList.at(objnum);
 
+      if (objPtr->shadowDistance > 0)
+	{
+	  int sx = r.x(),sy = r.y();
+	  getShadowCoords(sx,sy,objPtr->shadowDirection,objPtr->shadowDistance);
+	  QRect r2(sx,sy,r.width(),r.height());
+	  r = r.unite(r2);
+	}
+
       if (objPtr->angle == 0.0)
 	return r;
       else
@@ -2935,3 +3050,58 @@ QRect KPresenterDocument_impl::getRealBoundingRect(QRect r,int objnum)
 
   return r;
 }
+
+/*========================= get shadow coordinates ==============*/
+void KPresenterDocument_impl::getShadowCoords(int& _x,int& _y,ShadowDirection shadowDirection,int shadowDistance)
+{
+  int sx = 0,sy = 0;
+
+  switch (shadowDirection)
+    {
+    case SD_LEFT_UP:
+      {
+	sx = _x - shadowDistance;
+	sy = _y - shadowDistance;
+      } break;
+    case SD_UP:
+      {
+	sx = _x;
+	sy = _y - shadowDistance;
+      } break;
+    case SD_RIGHT_UP:
+      {
+	sx = _x + shadowDistance;
+	sy = _y - shadowDistance;
+      } break;
+    case SD_RIGHT:
+      {
+	sx = _x + shadowDistance;
+	sy = _y;
+      } break;
+    case SD_RIGHT_BOTTOM:
+      {
+	sx = _x + shadowDistance;
+	sy = _y + shadowDistance;
+      } break;
+    case SD_BOTTOM:
+      {
+	sx = _x;
+	sy = _y + shadowDistance;
+      } break;
+    case SD_LEFT_BOTTOM:
+      {
+	sx = _x - shadowDistance;
+	sy = _y + shadowDistance;
+      } break;
+    case SD_LEFT:
+      {
+	sx = _x - shadowDistance;
+	sy = _y;
+      } break;
+    }
+
+  _x = sx; _y = sy;
+}
+
+
+

@@ -41,6 +41,7 @@ class KPresenterView_impl;
 #include <qstring.h>
 #include <qclipbrd.h>
 #include <qregexp.h>
+#include <qfileinf.h>
 
 #include <koPageLayoutDia.h>
 #include <koIMR.h>
@@ -302,6 +303,7 @@ public:
   PageObjects* getSelectedObj();
 
   QRect getRealBoundingRect(QRect,int);
+  void getShadowCoords(int&,int&,ShadowDirection,int);
 
 signals:
 

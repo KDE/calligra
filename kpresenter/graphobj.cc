@@ -48,6 +48,8 @@ GraphObj::GraphObj(QWidget* parent=0,const char* name=0,ObjType _objType=OT_LINE
 
   pix_data = "";
   pix_data_native = "";
+
+  allInOneColor = false;
 }
 
 /*===================== destructor ===============================*/
@@ -84,12 +86,23 @@ void GraphObj::loadPixmap()
 {
   if (pix_data.isEmpty())
     {
+      QFileInfo fileInfo(fileName);
+      
       QPixmap _pix;
       _pix.load(fileName);
-      _pix.save("/tmp/kpresenter_tmp.xpm","XPM");
-      pix_data = load_pixmap("/tmp/kpresenter_tmp.xpm");
-      pix_data_native = load_pixmap_native_format("/tmp/kpresenter_tmp.xpm");
       
+      if (fileInfo.extension().lower() != "xpm")
+	{
+	  _pix.save("/tmp/kpresenter_tmp.xpm","XPM");
+	  pix_data = load_pixmap("/tmp/kpresenter_tmp.xpm");
+	  pix_data_native = load_pixmap_native_format("/tmp/kpresenter_tmp.xpm");
+	}
+      else
+	{
+	  pix_data = load_pixmap(fileName);
+	  pix_data_native = load_pixmap_native_format(fileName);
+	}
+
       pix.load(fileName);
       origPix.load(fileName);
     }
@@ -402,6 +415,16 @@ void GraphObj::paintObj(QPainter *painter)
 
   painter->save();
 
+  QPen savePen;
+  QBrush saveBrush;
+  if (allInOneColor)
+    {
+      savePen = oPen;
+      saveBrush = oBrush;
+      oPen.setColor(allColor);
+      oBrush.setColor(allColor);
+    }
+
   switch (objType)
     {
    case OT_LINE: /* line */
@@ -662,6 +685,12 @@ void GraphObj::paintObj(QPainter *painter)
 
       } break;
     default: break;
+    }
+
+  if (allInOneColor)
+    {
+      oPen = savePen;
+      oBrush = saveBrush;
     }
 
   painter->restore();

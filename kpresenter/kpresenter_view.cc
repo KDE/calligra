@@ -63,6 +63,7 @@ KPresenterView_impl::KPresenterView_impl(QWidget *_parent = 0L,const char *_name
   rotateDia = 0;
   searchDia = 0;
   replaceDia = 0;
+  shadowDia = 0;
   xOffset = 0;
   yOffset = 0;
   pen.operator=(QPen(black,1,SolidLine));
@@ -193,6 +194,7 @@ void KPresenterView_impl::editCopy()
 /*========================== edit paste =========================*/
 void KPresenterView_impl::editPaste()
 {
+  page->deSelectAllObj();
   m_pKPresenterDoc->pasteObjs(xOffset,yOffset);
 }
 
@@ -433,7 +435,7 @@ void KPresenterView_impl::extraRotate()
       rotateDia = 0;
     }
 
-  if (m_pKPresenterDoc->numSelected() == 1)
+  if (m_pKPresenterDoc->numSelected() > 0)
     {
       rotateDia = new RotateDia(0,"Rotate");
       rotateDia->setMaximumSize(rotateDia->width(),rotateDia->height());
@@ -443,10 +445,31 @@ void KPresenterView_impl::extraRotate()
       rotateDia->setAngle(m_pKPresenterDoc->getSelectedObj()->angle);
       rotateDia->show();
     }
-  else
-    QMessageBox::critical((QWidget*)0L,i18n("KPresenter Error"),
-			  i18n("I can only rotate ONE object!"),
-			  i18n("OK"));
+}
+
+/*========================== extra shadow =======================*/
+void KPresenterView_impl::extraShadow()
+{
+  if (shadowDia)
+    {
+      QObject::disconnect(shadowDia,SIGNAL(shadowDiaOk()),this,SLOT(shadowOk()));
+      shadowDia->close();
+      delete shadowDia;
+      shadowDia = 0;
+    }
+
+  if (m_pKPresenterDoc->numSelected() > 0)
+    {
+      shadowDia = new ShadowDia(0,"Shadow");
+      shadowDia->setMaximumSize(shadowDia->width(),shadowDia->height());
+      shadowDia->setMinimumSize(shadowDia->width(),shadowDia->height());
+      shadowDia->setCaption(i18n("KPresenter - Shadow"));
+      QObject::connect(shadowDia,SIGNAL(shadowDiaOk()),this,SLOT(shadowOk()));
+      shadowDia->setShadowDirection(m_pKPresenterDoc->getSelectedObj()->shadowDirection);
+      shadowDia->setShadowDistance(m_pKPresenterDoc->getSelectedObj()->shadowDistance);
+      shadowDia->setShadowColor(m_pKPresenterDoc->getSelectedObj()->shadowColor);
+      shadowDia->show();
+    }
 }
 
 /*====================== extra background =======================*/
@@ -1247,8 +1270,33 @@ void KPresenterView_impl::effectOk()
 /*=================== rotate dialog ok ===========================*/
 void KPresenterView_impl::rotateOk()
 {
-  PageObjects* objPtr = KPresenterDoc()->getSelectedObj();
-  objPtr->angle = rotateDia->getAngle();
+  PageObjects* objPtr;
+
+  for (int i = 0;i < (int)KPresenterDoc()->objList()->count();i++)
+    {
+      objPtr = KPresenterDoc()->objList()->at(i);
+      if (objPtr->isSelected)
+	objPtr->angle = rotateDia->getAngle();
+    }
+
+  KPresenterDoc()->repaint(false);
+}
+
+/*=================== shadow dialog ok ==========================*/
+void KPresenterView_impl::shadowOk()
+{
+  PageObjects* objPtr;
+
+  for (int i = 0;i < (int)KPresenterDoc()->objList()->count();i++)
+    {
+      objPtr = KPresenterDoc()->objList()->at(i);
+      if (objPtr->isSelected)
+	{
+	  objPtr->shadowDirection = shadowDia->getShadowDirection();
+	  objPtr->shadowDistance = shadowDia->getShadowDistance();
+	  objPtr->shadowColor = shadowDia->getShadowColor();
+	}
+    }
 
   KPresenterDoc()->repaint(false);
 }
@@ -2287,6 +2335,12 @@ void KPresenterView_impl::setupMenu()
       m_idMenuExtra_Rotate = m_rMenuBar->insertItemP(CORBA::string_dup(pix),
 						     CORBA::string_dup(i18n("Rot&ate object(s)...")),m_idMenuExtra,
 						     this,CORBA::string_dup("extraRotate"));
+      tmp = kapp->kde_datadir().copy();
+      tmp += "/kpresenter/toolbar/shadow.xpm";
+      pix = loadPixmap(tmp);
+      m_idMenuExtra_Shadow = m_rMenuBar->insertItemP(CORBA::string_dup(pix),
+						     CORBA::string_dup(i18n("&Shadow object(s)...")),m_idMenuExtra,
+						     this,CORBA::string_dup("extraShadow"));
       m_rMenuBar->insertSeparator(m_idMenuExtra);
       m_idMenuExtra_Background = m_rMenuBar->insertItem(CORBA::string_dup(i18n("Page &Background...")),m_idMenuExtra,
 							this,CORBA::string_dup("extraBackground"));
@@ -2750,6 +2804,13 @@ void KPresenterView_impl::setupExtraToolbar()
       m_idButtonExtra_Rotate = m_rToolBarExtra->insertButton(CORBA::string_dup(pix),
 							     CORBA::string_dup(i18n("Rotate object(s)")),
 							     this,CORBA::string_dup("extraRotate"));
+      // shadow
+      tmp = kapp->kde_datadir().copy();
+      tmp += "/kpresenter/toolbar/shadow.xpm";
+      pix = loadPixmap(tmp);
+      m_idButtonExtra_Shadow = m_rToolBarExtra->insertButton(CORBA::string_dup(pix),
+							     CORBA::string_dup(i18n("Shadow object(s)")),
+							     this,CORBA::string_dup("extraShadow"));
     }
 }
 

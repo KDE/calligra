@@ -98,6 +98,12 @@ public:
 
   GraphObj& operator=(GraphObj&);
 
+  void enableDrawAllInOneColor(QColor c)
+    { allColor = c; allInOneColor = true;}
+
+  void disableDrawAllInOneColor() 
+    { allInOneColor = false; }
+
 protected:
 
   // events
@@ -128,6 +134,8 @@ private:
   QString pix_data;
   QString pix_data_native;
   LineEnd lineBegin,lineEnd;
+  bool allInOneColor;
+  QColor allColor;
 
 };
 #endif //GRAPHOBJ_H

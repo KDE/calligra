@@ -17,7 +17,8 @@ kpresenter_bin_SOURCES = kpresenter_main.cc kpresenter_doc.cc \
 	backdia.cc page.cc ktextobject.cc styledia.cc \
 	jpeg.cc formats.cc qwmf.cc kenumlistdia.cc kcharselect.cc \
 	kcharselectdia.cc optiondia.cc pgconfdia.cc effectdia.cc \
-	kpresenter_utils.cc undo_redo.cc rotatedia.cc ksearchdialogs.cc
+	kpresenter_utils.cc undo_redo.cc rotatedia.cc ksearchdialogs.cc \
+	shadowdia.cc
 
 noinst_HEADERS = kpresenter_main.h kpresenter_doc.h kpresenter_view.h \
 		kpresenter_shell.h kpresenter.h graphobj.h \
@@ -25,14 +26,14 @@ noinst_HEADERS = kpresenter_main.h kpresenter_doc.h kpresenter_view.h \
 		jpeg.h formats.h qwmf.h global.h \
 		kenumlistdia.h kcharselect.h kcharselectdia.h optiondia.h \
 		pgconfdia.h effectdia.h kpresenter_utils.h undo_redo.h \
-		rotatedia.h ksearchdialogs.h
+		rotatedia.h ksearchdialogs.h shadowdia.h
 
 SRCMETA =	kpresenter_main.moc kpresenter_doc.moc kpresenter_view.moc \
 		kpresenter_shell.moc graphobj.moc moc \
 		page.moc ktextobject.mocbackdia.moc styledia.moc \
 		kenumlistdia.moc kcharselect.moc kcharselectdia.moc \
 		optiondia.moc pgconfdia.moc effectdia.moc undo_redo.moc \
-		rotatedia.moc ksearchdialogs.moc
+		rotatedia.moc ksearchdialogs.moc shadowdia.moc
 
 idl_DATA =	kpresenter.idl
 idl_HEADERS =    kpresenter.h
@@ -82,3 +83,4 @@ effectdia.cc: effectdia.moc
 undo_redo.cc: undo_redo.moc
 rotatedia.cc: rotatedia.moc
 ksearchdialogs.cc: ksearchdialogs.moc
+shadowdia.cc: shadowdia.moc

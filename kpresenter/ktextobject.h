@@ -1729,6 +1729,18 @@ public:
    */
   bool replaceNextRev(QString search,QString replace,TxtCursor *from,TxtCursor *to,bool caseSensitive);
 
+  /**
+   * With this function you can set, that the whole text should be written in one color.
+   */
+  void enableDrawAllInOneColor(QColor c,bool _repaint=false)
+    { allColor = c; allInOneColor = true; if (_repaint) repaint(false); }
+
+  /**
+   * Disable drawing the whole text in one color. Now the objectspecific colors are used again.
+   */
+  void disableDrawAllInOneColor(bool _repaint=false) 
+    { allInOneColor = false; if (_repaint) repaint(false); }
+
 signals:
 
   /**
@@ -1910,6 +1922,9 @@ protected:
   bool regexpMode;
 
   QList<AutoReplace> autoReplace;
+
+  QColor allColor;
+  bool allInOneColor;
 
   int CB_CUT,CB_COPY,CB_PASTE;
 
