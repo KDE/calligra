@@ -24,11 +24,40 @@
 #include "kprcommand.h"
 #include <klocale.h>
 #include <kdebug.h>
+#include <koxmlns.h>
+#include <kodom.h>
 
 
 KPrVariableCollection::KPrVariableCollection(KoVariableSettings *_setting, KoVariableFormatCollection* coll)
     : KoVariableCollection(_setting, coll)
 {
+}
+
+KoVariable* KPrVariableCollection::loadOasisField( KoTextDocument* textdoc, const QDomElement& tag, KoOasisContext& context )
+{
+    const QString localName( tag.localName() );
+    const bool isTextNS = tag.namespaceURI() == KoXmlNS::text;
+    if ( isTextNS )
+    {
+        if ( localName == "table-count"  ||
+                  localName == "object-count"  ||
+                  localName == "image-count"  ||
+                  localName == "paragraph-count"  ||
+                  localName == "word-count"  ||
+                  localName == "character-count" ||
+                  localName == "sentence-count" ||
+                  localName == "line-count" ||
+                  localName == "frame-count" )
+        {
+            QString key = "NUMBER";
+            int type = VT_STATISTIC;
+            return loadOasisFieldCreateVariable( textdoc, tag, context, key, type );
+        }
+        else
+            return KoVariableCollection::loadOasisField( textdoc, tag, context );
+    }
+    else
+        return KoVariableCollection::loadOasisField( textdoc, tag, context );
 }
 
 KoVariable *KPrVariableCollection::createVariable( int type, short int subtype, KoVariableFormatCollection * coll,
@@ -47,6 +76,11 @@ KoVariable *KPrVariableCollection::createVariable( int type, short int subtype, 
         var = new KPrPgNumVariable( textdoc,subtype, varFormat,this,m_doc  );
         break;
     }
+    case VT_STATISTIC:
+        if ( !varFormat )
+            varFormat = coll->format("NUMBER");
+        var = new KPrStatisticVariable( textdoc, subtype, varFormat, this, m_doc );
+        break;
     default:
         return KoVariableCollection::createVariable( type, subtype, coll, varFormat, textdoc,
                                                      doc, _correct, _forceDefaultFormat);
@@ -72,3 +106,89 @@ void KPrPgNumVariable::recalc()
     if ( width == -1 )
         width = 0;
 }
+
+KPrStatisticVariable::KPrStatisticVariable( KoTextDocument *textdoc,  int subtype, KoVariableFormat *varFormat,KoVariableCollection *_varColl, KPresenterDoc *doc )
+    : KoStatisticVariable( textdoc, subtype, varFormat, _varColl ),
+      m_doc(doc)
+{
+}
+
+void KPrStatisticVariable::recalc()
+{
+    int nb = 0;
+    ulong charsWithSpace = 0L;
+    ulong charsWithoutSpace = 0L;
+    ulong words = 0L;
+    ulong sentences = 0L;
+    ulong lines = 0L;
+    ulong syllables = 0L;
+    bool frameInfo = ( m_subtype == VST_STATISTIC_NB_WORD ||
+                        m_subtype == VST_STATISTIC_NB_SENTENCE ||
+                        m_subtype == VST_STATISTIC_NB_LINES ||
+                        m_subtype == VST_STATISTIC_NB_CHARACTERE);
+#if 0 //TODO
+    QPtrListIterator<KWFrameSet> framesetIt( m_doc->framesetsIterator() );
+    //TODO chnage int to ulong
+    for ( framesetIt.toFirst(); framesetIt.current(); ++framesetIt )
+    {
+        KWFrameSet *frameSet = framesetIt.current();
+        if ( frameSet->isVisible() )
+        {
+            if ( m_subtype == VST_STATISTIC_NB_FRAME )
+                ++nb;
+            else if( m_subtype == VST_STATISTIC_NB_PICTURE && frameSet->type() == FT_PICTURE)
+            {
+                ++nb;
+            }
+            else if( m_subtype == VST_STATISTIC_NB_TABLE && frameSet->type() == FT_TABLE)
+            {
+                ++nb;
+            }
+            else if( m_subtype == VST_STATISTIC_NB_EMBEDDED && frameSet->type() == FT_PART )
+            {
+                ++nb;
+            }
+            if ( frameInfo )
+            {
+            if ( (frameSet->frameSetInfo() == KWFrameSet::FI_FOOTNOTE || frameSet->frameSetInfo() == KWFrameSet::FI_BODY) && frameSet->isVisible() )
+                frameSet->statistics( 0L, charsWithSpace, charsWithoutSpace, words, sentences, syllables, lines, false );
+            }
+        }
+        if ( frameInfo )
+        {
+            if( m_subtype == VST_STATISTIC_NB_WORD )
+            {
+                nb = words;
+            }
+            else if( m_subtype == VST_STATISTIC_NB_SENTENCE )
+            {
+                nb = sentences;
+            }
+            else if( m_subtype == VST_STATISTIC_NB_LINES )
+            {
+                nb = lines;
+            }
+            else if ( m_subtype == VST_STATISTIC_NB_CHARACTERE )
+            {
+                nb = charsWithSpace;
+            }
+            else
+                nb = 0;
+        }
+    }
+#endif
+    m_varValue = QVariant(nb);
+    resize();
+    if ( width == -1 )
+        width = 0;
+}
+
+QString KPrStatisticVariable::text(bool realValue)
+{
+    if (m_varColl->variableSetting()->displayFieldCode()&& !realValue)
+        return fieldCode();
+    else
+        return m_varFormat->convert( m_varValue );
+}
+
+

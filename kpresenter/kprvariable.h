@@ -39,6 +39,7 @@ public:
     virtual KoVariable *createVariable( int type, short int subtype, KoVariableFormatCollection * coll,
                                         KoVariableFormat *varFormat,KoTextDocument *textdoc, KoDocument * doc,
                                         int _correct, bool _forceDefaultFormat=false , bool loadFootNote= true);
+    virtual KoVariable* loadOasisField( KoTextDocument* textdoc, const QDomElement& tag, KoOasisContext& context );
 };
 
 /**
@@ -56,4 +57,15 @@ private:
     KPresenterDoc *m_doc;
 };
 
+
+class KPrStatisticVariable : public KoStatisticVariable
+{
+public:
+    KPrStatisticVariable( KoTextDocument *textdoc, int subtype, KoVariableFormat *varFormat,KoVariableCollection *_varColl, KPresenterDoc *doc );
+    virtual void recalc();
+    virtual QString text(bool realValue=false);
+
+protected:
+    KPresenterDoc *m_doc;
+};
 #endif

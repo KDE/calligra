@@ -159,9 +159,9 @@ SetBackCmd::SetBackCmd( const QString &name, const KPBackGround::Settings &setti
 : KNamedCommand( name )
 , m_settings( settings )
 , m_oldSettings( oldSettings )
-, m_takeGlobal( takeGlobal )    
-, m_doc( doc )   
-, m_page( page )    
+, m_takeGlobal( takeGlobal )
+, m_doc( doc )
+, m_page( page )
 {
 }
 
@@ -472,7 +472,7 @@ GroupObjCmd::~GroupObjCmd()
 void GroupObjCmd::execute()
 {
     KoRect r;
-    int position;
+    int position = 0;
     QPtrListIterator<KPObject> it( m_objectsToGroup );
     for ( ; it.current() ; ++it )
     {

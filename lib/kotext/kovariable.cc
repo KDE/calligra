@@ -2338,6 +2338,7 @@ void KoPageVariable::setSectionTitle( const QString& _title )
 }
 
 
+bool KoStatisticVariable::m_extendedType = false;
 KoStatisticVariable::KoStatisticVariable( KoTextDocument *textdoc,  short int subtype, KoVariableFormat *varFormat,KoVariableCollection *_varColl )
     : KoVariable( textdoc, varFormat, _varColl ),
       m_subtype( subtype )
@@ -2354,7 +2355,8 @@ QStringList KoStatisticVariable::actionTexts()
     lst << i18n( "Number of Frame" );
     lst << i18n( "Number of Embedded Object" );
     lst << i18n( "Number of Picture" );
-    lst << i18n( "Number of Table" );
+    if (  m_extendedType )
+        lst << i18n( "Number of Table" );
     return lst;
 }
 

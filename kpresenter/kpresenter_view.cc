@@ -2971,6 +2971,7 @@ void KPresenterView::setupActions()
     refreshCustomMenu();
 
     addVariableActions( VT_PGNUM, KoPageVariable::actionTexts(), actionInsertVariable, i18n("&Page") );
+    addVariableActions( VT_STATISTIC, KPrStatisticVariable::actionTexts(), actionInsertVariable, i18n("&Statistic") );
 
     actionInsertVariable->popupMenu()->insertSeparator();
     actionRefreshAllVariable = new KAction( i18n( "&Refresh All Variables" ), 0,
@@ -3281,7 +3282,7 @@ void KPresenterView::backOk( BackDia* backDia, bool takeGlobal )
 {
     KPrPage *page=m_canvas->activePage();
     SetBackCmd *setBackCmd = new SetBackCmd( i18n( "Set Background" ),
-                                             backDia->getBackGround(), 
+                                             backDia->getBackGround(),
                                              page->background()->getBackGround(),
                                              takeGlobal, m_pKPresenterDoc,page);
     setBackCmd->execute();

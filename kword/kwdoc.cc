@@ -140,6 +140,7 @@ KWDocument::KWDocument(QWidget *parentWidget, const char *widgetName, QObject* p
     : KoDocument( parentWidget, widgetName, parent, name, singleViewMode ),
       m_urlIntern()
 {
+    KWStatisticVariable::setExtendedType(  true );
     dcop = 0;
     if (KGlobal::locale()->measureSystem() == KLocale::Imperial) {
         m_unit = KoUnit::U_INCH;

@@ -750,8 +750,12 @@ public:
 
     QString value() const;
     void setValue( const QString &v );
+    static void setExtendedType( bool _b) { m_extendedType = _b; }
+    static bool extendedType() { return m_extendedType; }
 protected:
     short int m_subtype;
+    // extend type for kword.
+    static bool m_extendedType;
 };
 
 
