@@ -59,10 +59,16 @@ KugarFactory::~KugarFactory()
 
 // Create a new part.
 
-QObject *KugarFactory::createObject(QObject *parent,const char *name,const char *,const QStringList &)
+QObject *KugarFactory::createObject(QObject *parent,const char *name,const char *,const QStringList &data)
 {
-	QObject *obj = new KugarPart((QWidget*)parent,name);
-
+	QString forcedUserTemplate;
+	for (QStringList::const_iterator it=data.begin();it!=data.end();++it)
+	{
+		QString tmp=(*it);
+		if (tmp.startsWith("template="))
+			forcedUserTemplate=tmp.right(tmp.length()-9);
+	}
+	QObject *obj = new KugarPart((QWidget*)parent,name,forcedUserTemplate);
 
 	return obj;
 }
@@ -89,9 +95,10 @@ KInstance *KugarFactory::instance()
 
 // The view ctor.
 
-KugarPart::KugarPart(QWidget *parent,const char *name)
+KugarPart::KugarPart(QWidget *parent,const char *name,const QString &forcedUserTemplate)
 	: KParts::ReadOnlyPart(parent,name)
 {
+	m_forcedUserTemplate=forcedUserTemplate;
 	setInstance(KugarFactory::instance());
 
 	view = new MReportViewer(parent);
@@ -174,7 +181,7 @@ void KugarPart::print()
 
 void KugarPart::slotPreferedTemplate(const QString &tpl)
 {
-	KURL url(tpl);
+	KURL url(m_forcedUserTemplate.isEmpty()?tpl:m_forcedUserTemplate);
 	QString localtpl;
 	bool isTemp = false;
 

@@ -39,7 +39,7 @@ class KugarPart: public KParts::ReadOnlyPart
 	Q_OBJECT
 
 public:
-	KugarPart(QWidget *parent,const char *name);
+	KugarPart(QWidget *parent,const char *name,const QString& forcedUserTemplate);
 	virtual ~KugarPart();
 
 	void print();
@@ -59,6 +59,7 @@ private slots:
 private:
 	MReportViewer *view;
 	KugarBrowserExtension *m_extension;
+	QString m_forcedUserTemplate;
 };
 
 
