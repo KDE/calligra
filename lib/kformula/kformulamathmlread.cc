@@ -458,7 +458,7 @@ void MathML2KFormulaPrivate::mstyle( QDomElement element, QDomNode docnode )
 
     if ( element.hasAttribute( "scriptlevel" ) ) {
         QString scriptlevel = element.attribute( "scriptlevel" );
-        if ( scriptlevel.startsWith( "+" ) or scriptlevel.startsWith( "-" ) )
+        if ( scriptlevel.startsWith( "+" ) || scriptlevel.startsWith( "-" ) )
             style.scriptlevel += scriptlevel.toInt( &ok );
         else
             style.scriptlevel = scriptlevel.toInt( &ok );
