@@ -32,7 +32,7 @@
 #include <qcheckbox.h>
 #include <qpushbutton.h>
 #include <qlabel.h>
-
+#include <qspinbox.h>
 
 KoAutoFormatLineEdit::KoAutoFormatLineEdit ( QWidget * parent, const char * name )
     : QLineEdit(parent,name)
@@ -137,6 +137,7 @@ KoAutoFormatDia::KoAutoFormatDia( QWidget *parent, const char *name, KoAutoForma
     setupTab2();
     setupTab3();
     setupTab4();
+    setupTab5();
     setInitialSize( QSize(500, 300) );
 }
 
@@ -390,6 +391,35 @@ void KoAutoFormatDia::setupTab4()
     ( void )new QWidget( tab4 );
 }
 
+void KoAutoFormatDia::setupTab5()
+{
+    tab5 = addPage( i18n( "Auto Completion" ) );
+    QVBoxLayout *grid = new QVBoxLayout(tab5, 5, 5);
+    grid->setAutoAdd( true );
+
+    cbAllowAutoCompletion = new QCheckBox( tab5 );
+    cbAllowAutoCompletion->setText( i18n( "Autocompletion" ) );
+    cbAllowAutoCompletion->resize( cbAllowAutoCompletion->sizeHint() );
+    cbAllowAutoCompletion->setChecked( m_autoFormat.getConfigAutoCompletion());
+
+    m_listCompletion = new QListBox( tab5 );
+    m_listCompletion->insertStringList(m_autoFormat.listCompletion());
+
+    QLabel *lab=new QLabel( i18n("Min. word length:"), tab5);
+    lab->resize( lab->sizeHint() );
+
+    m_minWordLength = new QSpinBox( tab5);
+    m_minWordLength->setMinValue (     m_docAutoFormat->getConfigMinWordLength() );
+    m_minWordLength->resize( m_minWordLength->sizeHint() );
+
+    cbAppendSpace = new QCheckBox( tab5 );
+    cbAppendSpace->setText( i18n( "Append Space" ) );
+    cbAppendSpace->resize( cbAppendSpace->sizeHint() );
+    cbAppendSpace->setChecked( m_autoFormat.getConfigAppendSpace() );
+
+}
+
+
 void KoAutoFormatDia::slotRemoveEntry()
 {
     //find entry in listbox
@@ -557,6 +587,12 @@ bool KoAutoFormatDia::applyConfig()
     m_docAutoFormat->copyListException(abbreviation->getListException());
     m_docAutoFormat->copyListTwoUpperCaseException(twoUpperLetter->getListException());
     m_docAutoFormat->configAdvancedAutocorrect( cbAdvancedAutoCorrection->isChecked() );
+
+    m_docAutoFormat->configAutoCompletion( cbAllowAutoCompletion->isChecked());
+
+    m_docAutoFormat->configAppendSpace( cbAppendSpace->isChecked() );
+
+    m_docAutoFormat->configMinWordLength( m_minWordLength->value() );
     // Save to config file
     m_docAutoFormat->saveConfig();
 

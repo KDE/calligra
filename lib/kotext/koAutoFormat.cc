@@ -37,6 +37,7 @@
 #include "koparagcounter.h"
 #include <kcommand.h>
 #include <kotextformat.h>
+#include <kcompletion.h>
 
 /******************************************************************/
 /* Class: KoAutoFormat						  */
@@ -54,11 +55,19 @@ KoAutoFormat::KoAutoFormat( KoDocument *_doc, KoVariableCollection *_varCollecti
       m_autoChangeFormat(false),
       m_autoReplaceNumber(false),
       m_useAutoNumberStyle(false),
+      m_autoCompletion(false),
+      m_completionAppendSpace(false),
       m_typographicSimpleQuotes(),
       m_typographicDoubleQuotes(),
       m_maxlen( 0 ),
+      m_minCompletionWordLength( 5 ),
       m_ignoreUpperCase(false)
 {
+    m_listCompletion=new KCompletion();
+    m_listCompletion->addItem( "kword" );
+    m_listCompletion->addItem( "kspread" );
+    m_listCompletion->addItem( "kpresenter" );
+    m_listCompletion->addItem( "koffice" );
 }
 
 void KoAutoFormat::readConfig()
@@ -88,6 +97,7 @@ void KoAutoFormat::readConfig()
 
     m_useAutoNumberStyle = config.readBoolEntry( "AutoNumberStyle", false );
 
+
     QString begin = config.readEntry( "TypographicQuotesBegin", "«" );
     m_typographicDoubleQuotes.begin = begin[0];
     QString end = config.readEntry( "TypographicQuotesEnd", "»" );
@@ -104,6 +114,12 @@ void KoAutoFormat::readConfig()
                                   && !begin.isEmpty()
                                   && !end.isEmpty();
 
+
+    config.setGroup( "AutoFormatEntries" );
+    m_autoCompletion = config.readBoolEntry( "AutoCompletion", false );
+
+    m_completionAppendSpace = config.readBoolEntry( "CompletionAppendSpace", false );
+    m_minCompletionWordLength = config.readNumEntry( "CompletionMinWordLength", 5 );
 
     Q_ASSERT( m_entries.isEmpty() ); // readConfig is only called once...
     config.setGroup( "AutoFormatEntries" );
@@ -192,6 +208,11 @@ void KoAutoFormat::saveConfig()
 
     config.writeEntry( "AutoNumberStyle", m_useAutoNumberStyle );
 
+    config.setGroup( "AutoCompletion" );
+    config.writeEntry( "AutoCompletion", m_autoCompletion );
+    config.writeEntry( "CompletionAppendSpace", m_completionAppendSpace );
+
+
     config.setGroup( "AutoFormatEntries" );
     KoAutoFormatEntryMap::Iterator it = m_entries.begin();
 
@@ -278,13 +299,44 @@ QString KoAutoFormat::getWordAfterSpace(KoTextParag *parag, int index)
 
 }
 
+void KoAutoFormat::doAutoCompletion( QTextCursor* textEditCursor, KoTextParag *parag, int index, KoTextObject *txtObj )
+{
+    if( m_autoCompletion )
+    {
+        QString lastWord = getLastWord(parag, index+1);
+        QString word=m_listCompletion->makeCompletion( lastWord );
+        if( !word.isEmpty() )
+        {
+            unsigned int length = lastWord.length();
+            int start = index+1 - length;
+            QTextCursor cursor( parag->document() );
+            cursor.setParag( parag );
+            cursor.setIndex( start );
+            KoTextDocument * textdoc = parag->textDocument();
+            if( m_completionAppendSpace )
+                word+=" ";
+            textdoc->setSelectionStart( KoTextObject::HighlightSelection, &cursor );
+            cursor.setIndex( start + length );
+            textdoc->setSelectionEnd( KoTextObject::HighlightSelection, &cursor );
+            txtObj->emitNewCommand(txtObj->replaceSelectionCommand( textEditCursor, word,
+                                                                    KoTextObject::HighlightSelection,
+                                                                    i18n("Autocorrect word") ));
+            // The space/tab/CR that we inserted is still there but delete/insert moved the cursor
+            // -> go right
+            txtObj->emitHideCursor();
+            textEditCursor->gotoRight();
+            txtObj->emitShowCursor();
+        }
+    }
+}
+
 void KoAutoFormat::doAutoFormat( QTextCursor* textEditCursor, KoTextParag *parag, int index, QChar ch,KoTextObject *txtObj )
 {
     if ( !m_configRead )
         readConfig();
 
     if ( !m_useBulletStyle && !m_removeSpaceBeginEndLine && !m_autoDetectUrl
-         && !m_convertUpperUpper && !m_convertUpperCase && ! m_autoReplaceNumber && m_autoChangeFormat
+         && !m_convertUpperUpper && !m_convertUpperCase && ! m_autoReplaceNumber && m_autoChangeFormat && m_autoCompletion
          && !m_typographicDoubleQuotes.replace && !m_typographicSimpleQuotes.replace && m_entries.count()==0)
         return;
 
@@ -295,6 +347,10 @@ void KoAutoFormat::doAutoFormat( QTextCursor* textEditCursor, KoTextParag *parag
         m_ignoreUpperCase=false;
 
         QString word=getWordAfterSpace(parag,index);
+
+        if( word.length()>= m_minCompletionWordLength)
+            m_listCompletion->addItem( word );
+
         if ( m_autoChangeFormat && index > 3)
         {
             doAutoChangeFormat( textEditCursor, parag,index, word, txtObj );
@@ -404,7 +460,7 @@ bool KoAutoFormat::doAutoCorrect( QTextCursor* textEditCursor, KoTextParag *para
 
 void KoAutoFormat::doTypographicQuotes( QTextCursor* textEditCursor, KoTextParag *parag, int index, KoTextObject *txtObj, bool doubleQuotes )
 {
-    kdDebug() << "KoAutoFormat::doTypographicQuotes" << endl;
+    //kdDebug() << "KoAutoFormat::doTypographicQuotes" << endl;
     KoTextDocument * textdoc = parag->textDocument();
     QTextCursor cursor( parag->document() );
     cursor.setParag( parag );
@@ -909,6 +965,22 @@ void KoAutoFormat::configAutoNumberStyle( bool b )
     m_useAutoNumberStyle = b;
 }
 
+void KoAutoFormat::configAutoCompletion( bool b )
+{
+    m_autoCompletion = b;
+}
+
+void KoAutoFormat::configAppendSpace( bool b)
+{
+    m_completionAppendSpace= b;
+}
+
+void KoAutoFormat::configMinWordLength( uint val )
+{
+   m_minCompletionWordLength = val;
+}
+
+
 bool KoAutoFormat::isUpper( const QChar &c )
 {
     return c.lower() != c;
@@ -941,3 +1013,9 @@ void KoAutoFormat::buildMaxLen()
     for ( ; it != m_entries.end(); ++it )
 	m_maxlen = QMAX( m_maxlen, it.key().length() );
 }
+
+QStringList KoAutoFormat::listCompletion()
+{
+   return m_listCompletion->items();
+}
+

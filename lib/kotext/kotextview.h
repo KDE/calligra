@@ -155,6 +155,8 @@ public slots:
 
     void openLink();
 
+    void autoCompletion();
+
 protected slots:
     /** Start a drag */
     virtual void startDrag() = 0;
@@ -171,6 +173,8 @@ protected:
      */
     virtual void doAutoFormat( QTextCursor* /*cursor*/, KoTextParag * /*parag*/,
                                int /*index*/, QChar /*ch*/ ) { }
+
+    virtual void doAutoCompletion( QTextCursor* /*textEditCursor*/, KoTextParag */*parag*/, int /*index*/ ) { }
 
     //return true if we are a doubleSpace
     virtual bool doIgnoreDoubleSpace(KoTextParag * /*parag*/,

@@ -337,6 +337,12 @@ void KoTextView::handleKeyReleaseEvent( QKeyEvent * e )
     }
 }
 
+void KoTextView::autoCompletion()
+{
+    doAutoCompletion(m_cursor, static_cast<KoTextParag*>(m_cursor->parag()),
+                     m_cursor->index() - 1);
+}
+
 void KoTextView::moveCursor( CursorAction action, bool select )
 {
     hideCursor();

@@ -33,7 +33,7 @@ class KoTextParag;
 class KoTextObject;
 class KoVariableCollection;
 class KoVariableFormatCollection;
-
+class KCompletion;
 namespace Qt3 {
     class QTextCursor;
 }
@@ -69,12 +69,17 @@ public:
      * (and a temporary one in the auto-format dialog).
      */
     KoAutoFormat( KoDocument *_doc, KoVariableCollection *_varCollection, KoVariableFormatCollection *_varFormatCollection );
-
     /**
      * Called by edit widget when a character (@p ch) has been inserted
      * into @p parag, at the given @p index.
      */
     void doAutoFormat( QTextCursor* cursor, KoTextParag *parag, int index, QChar ch,KoTextObject *txtObj );
+
+    /**
+     * Called by edit widget when a call a competion
+     */
+    void doAutoCompletion( QTextCursor* textEditCursor, KoTextParag *parag, int index,KoTextObject *txtObj );
+
 
     bool doIgnoreDoubleSpace( KoTextParag *parag, int index,QChar ch );
 
@@ -117,6 +122,12 @@ public:
 
     void configAutoNumberStyle( bool b );
 
+    void configAutoCompletion( bool b );
+
+    void configAppendSpace( bool b);
+
+    void configMinWordLength( uint val );
+
     TypographicQuotes getConfigTypographicSimpleQuotes() const
     { return m_typographicSimpleQuotes; }
 
@@ -153,6 +164,16 @@ public:
     bool getConfigAutoNumberStyle() const
     { return m_useAutoNumberStyle; }
 
+    bool getConfigAutoCompletion() const
+    { return m_autoCompletion; }
+
+    bool getConfigAppendSpace() const
+    { return m_completionAppendSpace; }
+
+    uint getConfigMinWordLength() const
+    { return m_minCompletionWordLength; }
+
+
     // Add/remove entries, called by the dialog
     void addAutoFormatEntry( const QString &key, const KoAutoFormatEntry &entry ) {
 	m_entries.insert( key, entry );
@@ -188,6 +209,7 @@ public:
 
     QStringList listTwoUpperLetterException() {return twoUpperLetterException;}
 
+    QStringList listCompletion();
     // Read/save config ( into kwordrc )
     void readConfig();
     void saveConfig();
@@ -224,20 +246,24 @@ private:
     bool m_autoDetectUrl, m_ignoreDoubleSpace, m_removeSpaceBeginEndLine;
     bool m_useBulletStyle, m_autoChangeFormat, m_autoReplaceNumber;
     bool m_useAutoNumberStyle;
-
+    bool m_autoCompletion;
+    bool m_completionAppendSpace;
     QChar bulletStyle;
 
     TypographicQuotes m_typographicSimpleQuotes;
 
     TypographicQuotes m_typographicDoubleQuotes;
 
-
+    KCompletion *m_listCompletion;
     typedef QMap< QString, KoAutoFormatEntry > KoAutoFormatEntryMap;
     KoAutoFormatEntryMap m_entries;
     QStringList upperCaseExceptions;
     QStringList twoUpperLetterException;
     uint m_maxlen;
     uint m_maxFindLength;
+
+    uint m_minCompletionWordLength;
+
     bool m_ignoreUpperCase;
 };
 

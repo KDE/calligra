@@ -33,7 +33,7 @@ class KCharSelect;
 class KListView;
 class KLineEdit;
 class QListBox;
-
+class QSpinBox;
 
 /**
  *
@@ -95,6 +95,7 @@ protected:
     void setupTab2();
     void setupTab3();
     void setupTab4();
+    void setupTab5();
 
     void refreshEntryList();
 
@@ -102,8 +103,10 @@ protected:
     QWidget *tab2;
     QWidget *tab3;
     QWidget *tab4;
+    QWidget *tab5;
+
     QCheckBox *cbTypographicSimpleQuotes, *cbTypographicDoubleQuotes,*cbUpperCase, *cbUpperUpper, *cbDetectUrl,
-        *cbBackgroundSpellCheck, *cbAdvancedAutoCorrection,*cbIgnoreDoubleSpace , *cbRemoveSpaceBeginEndLine, *cbUseBulletStyle, *cbAutoChangeFormat, *cbAutoReplaceNumber, *cbUseNumberStyle;
+        *cbBackgroundSpellCheck, *cbAdvancedAutoCorrection,*cbIgnoreDoubleSpace , *cbRemoveSpaceBeginEndLine, *cbUseBulletStyle, *cbAutoChangeFormat, *cbAutoReplaceNumber, *cbUseNumberStyle, *cbAllowAutoCompletion, *cbAppendSpace;
     QPushButton *pbDoubleQuote1, *pbDoubleQuote2, /**pbEdit,*/ *pbRemove, *pbAdd, *pbDoubleDefault,
                 *pbSpecialChar1, *pbSpecialChar2, *pbBulletStyle, *pbDefaultBulletStyle;
 
@@ -122,7 +125,8 @@ protected:
 
     KoAutoFormatExceptionWidget *abbreviation;
     KoAutoFormatExceptionWidget *twoUpperLetter;
-
+    QListBox *m_listCompletion;
+    QSpinBox *m_minWordLength;
 protected slots:
     virtual void slotOk();
     void slotItemRenamed(QListViewItem * item, const QString & newText, int column);
