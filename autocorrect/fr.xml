@@ -1,11 +1,6 @@
 <!DOCTYPE autocorrection>
 <Word>
  <items>
-  <item find="(c)" replace="©" />
-  <item find="(r)" replace="®" />
-  <item find="A moins" replace="À moins" />
-  <item find="A propos" replace="À propos" />
-  <item find="A t'on" replace="A-t-on" />
   <item find="A-t'il" replace="A-t-il" />
   <item find="Allemange" replace="Allemagne" />
   <item find="Allo" replace="Allô" />
@@ -67,15 +62,12 @@
   <item find="a conçut" replace="a conçu" />
   <item find="a définit" replace="a défini" />
   <item find="a investit" replace="a investi" />
+  <item find="a peu près" replace="à peu près" />
   <item find="a propos" replace="à propos" />
   <item find="a reçut" replace="a reçu" />
   <item find="a subit" replace="a subi" />
   <item find="a t'on" replace="a-t-on" />
   <item find="a-t'il" replace="a-t-il" />
-  <item find="abcisse" replace="abscisse" />
-  <item find="abimer" replace="abîmer" />
-  <item find="abimé" replace="abîmé" />
-  <item find="abimées" replace="abîmées" />
   <item find="abimés" replace="abîmés" />
   <item find="abisses" replace="abysses" />
   <item find="abscent" replace="absent" />
@@ -197,6 +189,7 @@
   <item find="autoinduction" replace="auto-induction" />
   <item find="autremnt" replace="autrement" />
   <item find="autrment" replace="autrement" />
+  <item find="aux dépend" replace="aux dépens" />
   <item find="avatn" replace="avant" />
   <item find="avior" replace="avoir" />
   <item find="avrli" replace="avril" />
@@ -294,7 +287,7 @@
   <item find="changment" replace="changement" />
   <item find="changments" replace="changements" />
   <item find="chaques" replace="chaque" />
-  <item find="charète" replace="charette" />
+  <item find="charète" replace="charrette" />
   <item find="chausse trape" replace="chausse-trape" />
   <item find="chausse-trappe" replace="chausse-trape" />
   <item find="chef d'oeuvre" replace="chef-d'oeuvre" />
@@ -409,6 +402,7 @@
   <item find="déviser" replace="dévisser" />
   <item find="dûe" replace="due" />
   <item find="dûs" replace="dus" />
+  <item find="eau de chaud" replace="eau de chaux" />
   <item find="ellaborer" replace="élaborer" />
   <item find="ellaboré" replace="élaboré" />
   <item find="ellaborée" replace="élaborée" />
@@ -731,6 +725,10 @@
   <item find="mêches" replace="mèches" />
   <item find="n'ia" replace="n'ai" />
   <item find="navigateru" replace="navigateur" />
+  <item find="navigue au pré" replace="navigue au près" />
+  <item find="navigue au prêt" replace="navigue au près" />
+  <item find="naviguer au pré" replace="naviguer au près" />
+  <item find="naviguer au prêt" replace="naviguer au près" />
   <item find="neptune" replace="Neptune" />
   <item find="niger" replace="Niger" />
   <item find="normallement" replace="normalement" />
@@ -760,8 +758,8 @@
   <item find="ont investit" replace="ont investi" />
   <item find="ontario" replace="Ontario" />
   <item find="optionel" replace="optionnel" />
-  <item find="optionelle" replace="opionnelle" />
-  <item find="optionelles" replace="opionnelles" />
+  <item find="optionelle" replace="optionnelle" />
+  <item find="optionelles" replace="optionnelles" />
   <item find="optionels" replace="optionnels" />
   <item find="ordinateru" replace="ordinateur" />
   <item find="orielle" replace="oreille" />
@@ -850,6 +848,8 @@
   <item find="poids cassés" replace="pois cassés" />
   <item find="poids de senteur" replace="pois de senteur" />
   <item find="point virgule" replace="point-virgule" />
+  <item find="point-virgules" replace="points-virgules" />
+  <item find="points-virgule" replace="points-virgules" />
   <item find="pois lourd" replace="poids lourd" />
   <item find="poitn" replace="point" />
   <item find="poitns" replace="points" />
@@ -878,9 +878,10 @@
   <item find="prudamment" replace="prudemment" />
   <item find="prudhomme" replace="prud'homme" />
   <item find="prudhommes" replace="prud'hommes" />
+  <item find="prè salé" replace="pré-salé" />
+  <item find="près salés" replace="prés salés" />
   <item find="précosse" replace="précoce" />
   <item find="précosses" replace="précoces" />
-  <item find="prêt de" replace="près de" />
   <item find="pylone" replace="pylône" />
   <item find="pâques" replace="Pâques" />
   <item find="pèriode" replace="période" />
@@ -1103,7 +1104,6 @@
   <item find="utliser" replace="utiliser" />
   <item find="va et vient" replace="va-et-vient" />
   <item find="va nu pieds" replace="va-nu-pieds" />
-  <item find="va tout" replace="va-tout" />
   <item find="valloir" replace="valoir" />
   <item find="vanuatu" replace="Vanuatu" />
   <item find="vasy" replace="vas-y" />
@@ -1123,8 +1123,12 @@
   <item find="wallis" replace="Wallis" />
   <item find="À pirori" replace="A priori" />
   <item find="À priori" replace="A priori" />
+  <item find="à peu pré" replace="à peu près" />
+  <item find="à peu prés" replace="à peu près" />
+  <item find="à peu prêt" replace="à peu près" />
   <item find="à priori" replace="a priori" />
   <item find="àla" replace="à la" />
+  <item find="ça dépends" replace="ça dépend" />
   <item find="çette" replace="cette" />
   <item find="éceuil" replace="écueil" />
   <item find="écrna" replace="écran" />
