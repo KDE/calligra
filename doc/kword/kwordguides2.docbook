@@ -148,7 +148,7 @@ the clipboard.  You can then move to another part of the document, and
 <quote>Paste</quote> this text back into the document at the new
 position.</para>
 
-<para>The most common use for the clipboard is to move or coppy text
+<para>The most common use for the clipboard is to move or copy text
 which you have already entered into one part of your document to another
 part of the same document or to another document entirely.</para>
 
@@ -183,7 +183,7 @@ action="simul">&Ctrl;<keycap>V</keycap></keycombo></para>
 
 <para>The resulting sentence is: </para>
 
-<para><quote>The fox jumped over the lazy big, red dog</quote></para>
+<para><quote>The big, red fox jumped over the lazy big, red dog</quote></para>
 
 <sect2 id="local-copy">
 <title>The Copy Command</title>
@@ -338,7 +338,7 @@ the toolbar.</para>
 provides a place for you to enter the text of your search command. In
 the screenshot, that box is currently filled with
 <emphasis>KDE</emphasis>)</para> <para>If you click on
-<guibutton>OK</guibutton>, then &kde; will search the document until it
+<guibutton>OK</guibutton>, then &kword; will search the document until it
 finds a match to your text.  If &kword; cannot find a match, a dialog
 box will appear that says <guilabel>No match found</guilabel>.  </para>
 
