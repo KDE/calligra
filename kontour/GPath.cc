@@ -30,6 +30,7 @@
 
 #include <klocale.h>
 #include <kdebug.h>
+#include <stdlib.h> // for abs
 
 #include "kontour_global.h"
 #include "GDocument.h"
@@ -733,7 +734,7 @@ void GPath::movePoint(int idx, double dx, double dy, bool ctrlPressed)
 {
 }
 
-void GPath::removePoint(int idx, bool update = true)
+void GPath::removePoint(int idx, bool update)
 {
 }
 

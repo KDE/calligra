@@ -121,7 +121,7 @@ void GObject::initTmpMatrix()
   tmpMatrix = tMatrix;
 }
 
-void GObject::transform(const QWMatrix &m, bool update = false)
+void GObject::transform(const QWMatrix &m, bool update)
 {
   tMatrix = tMatrix * m;
   iMatrix = tMatrix.invert();
@@ -131,7 +131,7 @@ void GObject::transform(const QWMatrix &m, bool update = false)
     updateRegion();
 }
 
-void GObject::ttransform(const QWMatrix &m, bool update = false)
+void GObject::ttransform(const QWMatrix &m, bool update)
 {
   tmpMatrix = tmpMatrix * m;
   if(update)

@@ -41,6 +41,7 @@ class GSegment
 public:
   GSegment();
   GSegment(const QDomElement &element);
+  virtual ~GSegment() {}
 
   virtual const KoPoint &point(int i) const = 0;
   virtual void point(int i, const KoPoint &c) = 0;
