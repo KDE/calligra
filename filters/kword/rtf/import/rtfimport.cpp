@@ -625,7 +625,7 @@ KoFilter::ConversionStatus RTFImport::convert( const QCString& from, const QCStr
 		if (styleSheet[k].layout.style == style.next)
 		{
                 mainDoc.addNode( "FOLLOWING" );
-                mainDoc.setAttribute( "name", (const char *)styleSheet[k].name );
+                mainDoc.setAttribute( "name", CheckAndEscapeXmlText( styleSheet[k].name ));
                 mainDoc.closeNode( "FOLLOWING");
 		    break;
 		}
@@ -1253,13 +1253,13 @@ void RTFImport::parseStyleSheet( RTFProperty * )
     else if (token.type == RTFTokenizer::PlainText)
     {
 	// Semicolons separate styles
-	if (strchr( token.text, ';' ) == 0L)
-	    style.name += token.text;
+	if (strchr( token.text, ';' ) == 0L) // ### TODO: is this allowed with multi-byte Asian characters?
+	    style.name += textCodec->toUnicode( token.text );
 	else
 	{
 	    // Add style to style sheet
-	    *strchr( token.text, ';' ) = 0;
-	    style.name  += token.text;
+	    *strchr( token.text, ';' ) = 0; // ### TODO: is this allowed with multi-byte Asian characters?
+	    style.name  += textCodec->toUnicode( token.text );
 	    style.format = state.format;
 	    style.layout = state.layout;
 	    style.next   = (style.next == -1) ? style.layout.style : style.next;
@@ -2188,11 +2188,11 @@ void RTFImport::addFormat( DomNode &node, KWFormat &format, RTFFormat *baseForma
  * @param layout the paragraph layout information
  * @param frameBreak paragraph is always the last in a frame if true
  */
-void RTFImport::addLayout( DomNode &node, QCString &name, RTFLayout &layout, bool frameBreak )
+void RTFImport::addLayout( DomNode &node, const QString &name, RTFLayout &layout, bool frameBreak )
 {
     // Style name and alignment
     node.addNode( "NAME" );
-      node.setAttribute( "value", name );
+      node.setAttribute( "value", CheckAndEscapeXmlText(name) );
     node.closeNode( "NAME" );
     node.addNode( "FLOW" );
       node.setAttribute( "align", alignN[layout.alignment] );
@@ -2317,7 +2317,7 @@ void RTFImport::addParagraph( DomNode &node, bool frameBreak )
       node.closeNode( "TEXT" );
 
     // Search for style in style sheet
-    QCString name = "Standard";
+    QString name ( "Standard" );
     RTFFormat *format = &state.format;
     int s = state.layout.style;
 
