@@ -21,7 +21,6 @@
 */
 
 #include <qstring.h>
-#include <qregexp.h>
 #include <qtextcodec.h>
 #include <qfile.h>
 #include <qfileinfo.h>
@@ -571,7 +570,7 @@ bool HtmlWorker::doOpenHead(void)
     // Eliminate the dollar signs
     //  (We don't want that the version number changes if the HTML file is itself put in a CVS storage.)
     *m_streamOut << "<meta name=\"Generator\" content=\"KWord HTML Export Filter Version"
-              << strVersion.mid(10).replace(QRegExp("\\$"),"") // Note: double character (one for C++, one for QRegExp!)
+              << strVersion.mid(10).replace('$',"")
               << "\""<< (isXML()?" /":"") // X(HT)ML closes empty elements, HTML not!
               << ">\n";
 

@@ -33,7 +33,6 @@
 */
 
 #include <qmap.h>
-#include <qregexp.h>
 #include <qiodevice.h>
 #include <qbuffer.h>
 #include <qimage.h>
@@ -250,7 +249,7 @@ bool AbiWordWorker::doOpenDocument(void)
     QString strVersion("$Revision$");
     // Remove the dollar signs
     //  (We don't want that the version number changes if the AbiWord file is itself put in a CVS storage.)
-    *m_streamOut << strVersion.mid(10).replace(QRegExp("\\$"),""); // Note: double escape character (one for C++, one for QRegExp!)
+    *m_streamOut << strVersion.mid(10).replace('$',"");
 
     *m_streamOut << " -->\n\n";
 
