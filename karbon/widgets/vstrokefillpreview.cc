@@ -82,19 +82,20 @@ VStrokeFillPreview::paintEvent( QPaintEvent* event )
 bool
 VStrokeFillPreview::eventFilter( QObject *, QEvent *event )
 {
+	QMouseEvent *e = static_cast<QMouseEvent *>( event );
+	int ex = e->x() - ( width() - PANEL_SIZEX ) / 2;
+	int ey = e->y() - ( height() - PANEL_SIZEY ) / 2;
 	if( event && event->type() == QEvent::MouseButtonPress )
 	{
-		QMouseEvent *e = static_cast<QMouseEvent *>( event );
-		if( e->x() >= FILL_TOPX && e->x() <= FILL_BOTTOMX && e->y() >= FILL_TOPY && e->y() <= FILL_BOTTOMY )
+		if( ex >= FILL_TOPX && ex <= FILL_BOTTOMX && ey >= FILL_TOPY && ey <= FILL_BOTTOMY )
 			emit fillSelected();
-		else if( e->x() >= STROKE_TOPX && e->x() <= STROKE_BOTTOMX && e->y() >= STROKE_TOPY && e->y() <= STROKE_BOTTOMY )
+		else if( ex >= STROKE_TOPX && ex <= STROKE_BOTTOMX && ey >= STROKE_TOPY && ey <= STROKE_BOTTOMY )
 			emit strokeSelected();
 	}
 
 	if( event && event->type() == QEvent::MouseButtonDblClick )
 	{
-		QMouseEvent *e = static_cast<QMouseEvent *>( event );
-		if( e->x() >= FILL_TOPX && e->x() <= FILL_BOTTOMX && e->y() >= FILL_TOPY && e->y() <= FILL_BOTTOMY )
+		if( ex >= FILL_TOPX && ex <= FILL_BOTTOMX && ey >= FILL_TOPY && ey <= FILL_BOTTOMY )
 		{
 			VFillDlg* dialog = new VFillDlg( m_part );
 			connect( dialog, SIGNAL( fillChanged( const VFill & ) ), this, SIGNAL( fillChanged( const VFill & ) ) );
@@ -102,7 +103,7 @@ VStrokeFillPreview::eventFilter( QObject *, QEvent *event )
 			delete dialog;
 			disconnect( dialog, SIGNAL( fillChanged( const VFill & ) ), this, SIGNAL( fillChanged( const VFill & ) ) );
 		}
-		else if( e->x() >= STROKE_TOPX && e->x() <= STROKE_BOTTOMX && e->y() >= STROKE_TOPY && e->y() <= STROKE_BOTTOMY )
+		else if( ex >= STROKE_TOPX && ex <= STROKE_BOTTOMX && ey >= STROKE_TOPY && ey <= STROKE_BOTTOMY )
 		{
 			VStrokeDlg* dialog = new VStrokeDlg( m_part );
 			connect( dialog, SIGNAL( strokeChanged( const VStroke & ) ), this, SIGNAL( strokeChanged( const VStroke & ) ) );
