@@ -2286,6 +2286,9 @@ void KSpreadCanvas::doAutoScroll()
         mouseMoveEvent(event);
         delete event;
     }
+
+    //Restart timer
+    m_scrollTimer->start( 50 );
 }
 
 void KSpreadCanvas::deleteEditor( bool saveChanges )
