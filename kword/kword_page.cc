@@ -4895,11 +4895,11 @@ void KWPage::repaintScreen( int currFS, bool erase )
 }
 
 /*================================================================*/
-void KWPage::contentsWillMove( int, int )
+void KWPage::contentsWillMove( int x, int y )
 {
     calcVisiblePages();
-    gui->getVertRuler()->setOffset( 0, -getVertRulerPos() );
-    gui->getHorzRuler()->setOffset( -getHorzRulerPos(), 0 );
+    gui->getVertRuler()->setOffset( 0, y );
+    gui->getHorzRuler()->setOffset( x, 0 );
     _scrolled = TRUE;
 }
 
@@ -5248,7 +5248,7 @@ void KWPage::cursorGotoPrevTableCell()
 /*================================================================*/
 void KWPage::verticalSliderMoved( int value )
 {
-    ++scrollDummy;
+   ++scrollDummy;
     if ( scrollDummy % 2 || value == verticalScrollBar()->minValue() ||
 	 value == verticalScrollBar()->maxValue() )
 	setContentsPos( contentsX(), value );
