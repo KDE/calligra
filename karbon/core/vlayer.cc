@@ -3,6 +3,7 @@
 */
 
 #include "vlayer.h"
+#include "vobject.h"
 #include <kdebug.h>
 
 VLayer::VLayer()
@@ -45,7 +46,7 @@ VLayer::selectAllObjects()
 }
 
 void
-VLayer::selectObjects( const QRect &rect )
+VLayer::selectObjects( const QRect &rect, QPtrList<VObject> &list )
 {
 	// select all objects within the rect coords
 	QPtrListIterator<VObject> itr = m_objects;
@@ -53,7 +54,10 @@ VLayer::selectObjects( const QRect &rect )
     {
 		if( itr.current()->state() != VObject::deleted &&
 			itr.current()->boundingBox().intersects( rect ) )
+		{
 			itr.current()->setState( VObject::selected );
+			list.append( itr.current() );
+		}
     }
 }
 

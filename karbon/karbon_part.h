@@ -10,6 +10,7 @@
 
 #include "vlayer.h"
 
+class VHandle;
 class VCommand;
 class VCommandHistory;
 
@@ -51,6 +52,8 @@ public:
 	const QPtrList<VLayer>& layers() const { return m_layers; }
 	// sacrifying privatness:
 	VLayer* activeLayer() const { return m_activeLayer; }
+	// draw handle
+	void drawHandle( QPainter &p ) const;
 
 public slots:
     void repaintAllViews( bool erase = false );
@@ -63,6 +66,8 @@ private:
 	QPtrList<VLayer> m_layers;
 	// the active/current layer:
 	VLayer* m_activeLayer;
+	// each part has one handle:
+	VHandle *m_handle;
 
 	// everybody loves undo/redo:
 	VCommandHistory* m_commandHistory;

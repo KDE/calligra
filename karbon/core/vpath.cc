@@ -639,10 +639,10 @@ VPath::draw( QPainter& painter, const QRect& rect,
 	{
 		// draw bbox:
 		// TODO : selection -> handle, editing -> nodes/boxes ?
-		painter.setBrush( Qt::NoBrush );
+/*		painter.setBrush( Qt::NoBrush );
 		painter.setPen( Qt::blue.light() );
 		QRect rect = boundingBox(); // only calculate once
-		painter.drawRect( rect );
+		painter.drawRect( rect ); */
 
 		// rotation center
 		//painter.setBrush( Qt::blue );
@@ -658,7 +658,7 @@ VPath::draw( QPainter& painter, const QRect& rect,
 		}
 
 		// draw boxes
-		painter.setPen( Qt::blue.light() );
+/*		painter.setPen( Qt::blue.light() );
 		painter.setBrush( Qt::white );
 		drawBox( painter, rect.left(), rect.top() );
 		drawBox( painter, rect.left() + rect.width() / 2, rect.top() );
@@ -667,7 +667,7 @@ VPath::draw( QPainter& painter, const QRect& rect,
 		drawBox( painter, rect.right(), rect.bottom() );
 		drawBox( painter, rect.left() + rect.width() / 2, rect.bottom() );
 		drawBox( painter, rect.left(), rect.bottom() );
-		drawBox( painter, rect.left(), rect.top() + rect.height() / 2 );
+		drawBox( painter, rect.left(), rect.top() + rect.height() / 2 ); */
 	}
 	if( state() == edit )
 	{

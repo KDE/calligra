@@ -11,6 +11,8 @@
 
 // Each graphical object lies on a layer.
 
+class VObject;
+
 class VLayer
 {
 public:
@@ -21,7 +23,7 @@ public:
 
 	void insertObject( const VObject* object );
 
-	void selectObjects( const QRect &rect );
+	void selectObjects( const QRect &rect, QPtrList<VObject> &list );
 	void selectAllObjects();
 	void unselectObjects();
 	void deleteObjects( QPtrList<VObject> &list );

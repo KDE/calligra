@@ -8,6 +8,7 @@
 
 #include "vcommand.h"
 #include "vpath.h"
+#include "vhandle.h"
 
 #include "karbon_part.h"
 #include "karbon_view.h"
@@ -28,6 +29,9 @@ KarbonPart::KarbonPart( QWidget* parentWidget, const char* widgetName,
 	// create a layer. we need at least one:
 	m_layers.append( new VLayer() );
 	m_activeLayer = m_layers.getLast();
+
+	// create one and only handle:
+	m_handle = new VHandle();
 }
 
 KarbonPart::~KarbonPart()
@@ -39,6 +43,8 @@ KarbonPart::~KarbonPart()
 
 	// delete the command-history:
 	delete m_commandHistory;
+
+	delete m_handle;
 }
 
 bool
@@ -130,16 +136,25 @@ KarbonPart::selectAllObjects()
 	// select objects from all layers
 	QPtrListIterator<VLayer> itr( m_layers );
 	for ( ; itr.current() ; ++itr )
-		activeLayer()->selectAllObjects();
+		itr.current()->selectAllObjects();
 }
 
 void
 KarbonPart::selectObjects( const QRect &rect )
 {
+	// clear handle
+	m_handle->reset();
+
+	QPtrList<VObject> list;
 	// select objects from all layers
 	QPtrListIterator<VLayer> itr( m_layers );
 	for ( ; itr.current() ; ++itr )
-		activeLayer()->selectObjects( rect );
+		itr.current()->selectObjects( rect, list );
+
+	// now add the selected items to the handle
+	QPtrListIterator<VObject> oitr( list );
+	for ( ; oitr.current() ; ++oitr )
+		m_handle->addObject( oitr.current() );
 }
 
 void
@@ -148,7 +163,7 @@ KarbonPart::unselectObjects()
 	// unselect objects from all layers
 	QPtrListIterator<VLayer> itr( m_layers );
 	for ( ; itr.current() ; ++itr )
-		activeLayer()->unselectObjects();
+		itr.current()->unselectObjects();
 }
 
 void
@@ -157,7 +172,7 @@ KarbonPart::deleteObjects( QPtrList<VObject> &list )
 	// delete selected objects from all layers
 	QPtrListIterator<VLayer> itr( m_layers );
 	for ( ; itr.current() ; ++itr )
-		activeLayer()->deleteObjects( list );
+		itr.current()->deleteObjects( list );
 }
 
 void
@@ -187,6 +202,12 @@ KarbonPart::paintContent( QPainter& /*p*/, const QRect& /*rect*/,
 	bool /*transparent*/, double /*zoomX*/, double /*zoomY*/ )
 {
 	kdDebug() << "part->paintContent()" << endl;
+}
+
+void
+KarbonPart::drawHandle( QPainter &p ) const
+{
+	m_handle->draw( p );
 }
 
 #include "karbon_part.moc"
