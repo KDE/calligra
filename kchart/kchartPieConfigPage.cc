@@ -77,9 +77,7 @@ KChartPieConfigPage::KChartPieConfigPage( KDChartParams* params,
     grid->addColSpacing(2,list->width());
     grid->addColSpacing(3,list->width());
 
-    if(!_params->threeDPies()) {
-        depth->setEnabled(false);
-    }
+    depth->setEnabled(_params->threeDPies());
 
     initList();
     dist->setEnabled(false);

@@ -58,10 +58,9 @@ KChartConfigDialog::KChartConfigDialog( KDChartParams* params,
     _backgroundpixpage = new KChartBackgroundPixmapConfigPage( _params, this );
     addTab( _backgroundpixpage, i18n( "&Background pixmap" ) );
 
-    if( ( _params->chartType() == KDChartParams::Pie &&
-          _params->threeDPies() ) ||
-        ( _params->chartType() == KDChartParams::Bar &&
-          _params->threeDBars() ) ) {
+    if( ( _params->chartType() == KDChartParams::Bar &&
+          _params->threeDBars() ) )
+    {
         _parameter3dpage = new KChartParameter3dConfigPage(_params,this );
         addTab( _parameter3dpage,i18n("3D Parameters"));
     }
@@ -159,9 +158,7 @@ void KChartConfigDialog::apply()
         _piepage->apply();
     }
 
-    if( ( _params->chartType() == KDChartParams::Pie &&
-          _params->threeDPies() ) ||
-        ( _params->chartType() == KDChartParams::Bar &&
+    if( ( _params->chartType() == KDChartParams::Bar &&
           _params->threeDBars() ) )
         _parameter3dpage->apply();
 
@@ -214,9 +211,7 @@ void KChartConfigDialog::defaults()
         _piepage->init();
     }
 
-    if( ( _params->chartType() == KDChartParams::Pie &&
-          _params->threeDPies() ) ||
-        ( _params->chartType() == KDChartParams::Bar &&
+    if( ( _params->chartType() == KDChartParams::Bar &&
           _params->threeDBars() ) )
         _parameter3dpage->init();
 
