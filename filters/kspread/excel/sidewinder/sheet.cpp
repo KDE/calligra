@@ -60,10 +60,10 @@ Sheet::Sheet( Workbook* wb )
   d->maxColumn = 0;
   d->visible      = true;
   d->protect      = false;
-  d->leftMargin   = 1.0;
-  d->rightMargin  = 1.0;
-  d->topMargin    = 1.0;
-  d->bottomMargin = 1.0;
+  d->leftMargin   = 54;  // 0.75 inch
+  d->rightMargin  = 54;  // 0.75 inch
+  d->topMargin    = 72;  // 1 inch
+  d->bottomMargin = 72;  // 1 inch
 }
 
 Sheet::~Sheet()

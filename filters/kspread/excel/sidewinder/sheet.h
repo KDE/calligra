@@ -61,15 +61,19 @@ public:
   bool protect() const;
   void setProtect( bool p );
   
+  // left margin, in points (pt)
   double leftMargin() const;
   void setLeftMargin( double m );
   
+  // right margin, in points (pt)
   double rightMargin() const;
   void setRightMargin( double m );
   
+  // top margin, in points (pt)
   double topMargin() const;
   void setTopMargin( double m );
   
+  // bottom margin, in points (pt)
   double bottomMargin() const;
   void setBottomMargin( double m );
 
