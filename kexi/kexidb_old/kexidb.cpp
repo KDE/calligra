@@ -114,6 +114,10 @@ KexiDB::relations() const
 const QString
 KexiDB::decode(const char *c)
 {
+/*	kdDebug() << "fromLatin1: " << QString::fromLatin1(c) << endl;
+	kdDebug() << "fromAscii: " << QString::fromAscii(c) << endl;
+	kdDebug() << "fromLocal8Bit: " << QString::fromLocal8Bit(c) << endl;
+	kdDebug() << "fromUtf8: " << QString::fromUtf8(c) << endl;*/
 	switch(m_encoding)
 	{
 		case Latin1:
