@@ -94,6 +94,7 @@ public:
     void setCtxOptions( long options );
     void setCtxHistory( const QStringList & history );
     KoSearchContext *context() const { return m_ctx;}
+    bool optionSelected() const { return m_bOptionsShown;}
 private slots:
     void slotShowOptions();
 
@@ -118,6 +119,8 @@ public:
     KoSearchContext * searchContext() {
         return m_findUI->context();
     }
+    bool optionSelected() const { return m_findUI->optionSelected();}
+
 protected slots:
     void slotOk();
 
@@ -142,7 +145,7 @@ public:
     KoSearchContext * replaceContext() {
         return m_replaceUI->context();
     }
-
+    bool optionSelected() const { return m_findUI->optionSelected();}
 
 protected slots:
     void slotOk();

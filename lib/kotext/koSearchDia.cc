@@ -728,7 +728,8 @@ void KoFormatDia::ctxOptions( )
 bool KoFindReplace::validateMatch( const QString & /*text*/, int index, int matchedlength )
 {
     KoSearchContext* searchContext = m_findDlg ? m_findDlg->searchContext() : m_replaceDlg->searchContext();
-    if ( !searchContext || !searchContext->m_optionsMask)
+    bool optionSelected = m_findDlg ? m_findDlg->optionSelected() : m_replaceDlg->optionSelected();
+    if ( !searchContext || !searchContext->m_optionsMask || !optionSelected)
         return true;
     KoTextString * s = currentParag()->string();
     for ( int i = index ; i < index+matchedlength ; ++i )
