@@ -278,30 +278,44 @@ public:
 
     virtual void display( const KWParagLayout & lay );
     virtual void save( KWParagLayout & lay );
-    //virtual bool isModified();
     virtual QString tabName();
 
     KoTabulatorList tabList() const { return m_tabList; }
 
+
 protected slots:
-    void addClicked();
-    void modifyClicked();
-    void delClicked();
-    void slotDoubleClicked( QListBoxItem * );
-    void slotTabValueChanged( const QString &);
+    void slotTabValueChanged( const QString &_text );
+    void slotAlignCharChanged( const QString &_text );
+    void newClicked();
+    void deleteClicked();
+    void setActiveItem(int selected);
+    void updateAlign(int selected);
 
 protected:
-    void setActiveItem(double value);
-    bool findExistingValue(double val);
 
-private:
-    QLineEdit *eTabPos;
-    QPushButton *bFont, *bAdd, *bDel, *bModify;
-    QListBox *lTabs;
-    QLabel *lTab;
-    QRadioButton *rtLeft, *rtCenter, *rtRight, *rtDecimal;
+    void sortLists();
+    QString tabToString(KoTabulator *tab);
+
+    QVBoxLayout* editLayout;
+
+    QListBox* lstTabs;
+    QGroupBox* gPosition;
+    QLineEdit* sTabPos;
+    QButtonGroup* bgAlign;
+    QRadioButton* rAlignLeft;
+    QRadioButton* rAlignCentre;
+    QRadioButton* rAlignRight;
+    QRadioButton* rAlignVar;
+    QLineEdit* sAlignChar;
+    QGroupBox* gTabLeader;
+    QComboBox* cFilling;
+    QPushButton* bNew;
+    QPushButton* bDelete;
+
     KoTabulatorList m_tabList;
     KWUnit::Unit m_unit;
+
+    bool noSignals;
 };
 
 /**

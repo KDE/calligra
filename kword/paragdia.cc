@@ -1353,223 +1353,318 @@ void KWParagCounterWidget::save( KWParagLayout & lay ) {
         lay.counter = new KoParagCounter( m_counter );
 }
 
+
 KWParagTabulatorsWidget::KWParagTabulatorsWidget( KWUnit::Unit unit, double frameWidth,QWidget * parent, const char * name )
-    : KWParagLayoutWidget( KWParagDia::PD_TABS, parent, name ), m_unit(unit)
-{
-    QGridLayout *grid = new QGridLayout( this, 4, 2, KDialog::marginHint(), KDialog::spacingHint() );
-
-    lTab = new QLabel(  this );
-    grid->addWidget( lTab, 0, 0 );
-
-    eTabPos = new QLineEdit( this );
+    : KWParagLayoutWidget( KWParagDia::PD_TABS, parent, name ), m_unit(unit) { 
     QString length;
-    if(frameWidth==-1)
-    {
+    if(frameWidth==-1) {
         frameWidth=9999;
-    }
-    else
-    {
+    } else {
         frameWidth=KWUnit::userValue(frameWidth,m_unit);
         length=i18n("\nFrame width : %1").arg(frameWidth);
     }
-    eTabPos->setValidator( new KFloatValidator( 0,frameWidth,eTabPos ) );
-    grid->addWidget( eTabPos, 1, 0 );
-    connect(eTabPos,SIGNAL(returnPressed () ),this,SLOT(addClicked()));
+    QVBoxLayout* Form1Layout = new QVBoxLayout( this ); 
+    Form1Layout->setSpacing( 6 );
+    Form1Layout->setMargin( 11 );
 
+    QHBoxLayout* Layout13 = new QHBoxLayout; 
+    Layout13->setSpacing( 6 );
+    Layout13->setMargin( 0 );
+
+    lstTabs = new QListBox( this);
+    lstTabs->insertItem( "mytabvalue" );
+    lstTabs->setMaximumSize( QSize( 200, 32767 ) );
+    Layout13->addWidget( lstTabs );
+
+    editLayout = new QVBoxLayout; 
+    editLayout->setSpacing( 6 );
+    editLayout->setMargin( 0 );
+
+    gPosition = new QGroupBox( this );
+    gPosition->setTitle( i18n( "Position" ) );
+    gPosition->setColumnLayout(0, Qt::Vertical );
+    gPosition->layout()->setSpacing( 0 );
+    gPosition->layout()->setMargin( 0 );
+    QVBoxLayout* GroupBox2Layout = new QVBoxLayout( gPosition->layout() );
+    GroupBox2Layout->setAlignment( Qt::AlignTop );
+    GroupBox2Layout->setSpacing( 6 );
+    GroupBox2Layout->setMargin( 11 );
+
+    QHBoxLayout* Layout5 = new QHBoxLayout; 
+    Layout5->setSpacing( 6 );
+    Layout5->setMargin( 0 );
+
+    sTabPos = new QLineEdit( gPosition);
+    sTabPos->setMaximumSize( QSize( 100, 32767 ) );
+    sTabPos->setValidator( new KFloatValidator( 0,frameWidth,sTabPos ) );
+    Layout5->addWidget( sTabPos );
+    QSpacerItem* spacer = new QSpacerItem( 20, 20, QSizePolicy::Expanding, QSizePolicy::Minimum );
+    Layout5->addItem( spacer );
+    GroupBox2Layout->addLayout( Layout5 );
+    editLayout->addWidget( gPosition );
+
+    QLabel* TextLabel1 = new QLabel( gPosition );
     QString unitDescription = KWUnit::unitDescription( m_unit );
-    lTab->setText(i18n( "1 is a unit name", "Tabulator positions are given in %1").arg(unitDescription)+length);
+    TextLabel1->setText( i18n( "1 is a unit name", "Tabulator positions are given in %1" ).arg(unitDescription)+length);
+    GroupBox2Layout->addWidget( TextLabel1 );
 
-    KButtonBox * bbTabs = new KButtonBox( this );
-    bAdd = bbTabs->addButton( i18n( "Add" ), false );
-    bDel = bbTabs->addButton( i18n( "Delete" ), false );
-    bModify = bbTabs->addButton( i18n( "Modify" ), false );
-    grid->addWidget( bbTabs, 2, 0 );
 
-    lTabs = new QListBox( this );
-    grid->addWidget( lTabs, 3, 0 );
+    bgAlign = new QButtonGroup( this );
+    bgAlign->setTitle( i18n( "Alignment" ) );
+    bgAlign->setColumnLayout(0, Qt::Vertical );
+    bgAlign->layout()->setSpacing( 0 );
+    bgAlign->layout()->setMargin( 0 );
+    QVBoxLayout* ButtonGroup1Layout = new QVBoxLayout( bgAlign->layout() );
+    ButtonGroup1Layout->setAlignment( Qt::AlignTop );
+    ButtonGroup1Layout->setSpacing( 6 );
+    ButtonGroup1Layout->setMargin( 11 );
 
-    QButtonGroup * g3 = new QButtonGroup( this );
-    QGridLayout * tabGrid = new QGridLayout( g3, 5, 1, KDialog::marginHint(), KDialog::spacingHint() );
-    g3->setExclusive( true );
+    rAlignLeft = new QRadioButton( bgAlign );
+    rAlignLeft->setText( i18n( "Left" ) );
+    ButtonGroup1Layout->addWidget( rAlignLeft );
 
-    rtLeft = new QRadioButton( i18n( "Left" ), g3 );
-    rtLeft->setChecked(true);
-    tabGrid->addWidget( rtLeft, 0, 0 );
-    g3->insert( rtLeft );
+    rAlignCentre = new QRadioButton( bgAlign );
+    rAlignCentre->setText( i18n( "Centre" ) );
+    ButtonGroup1Layout->addWidget( rAlignCentre );
 
-    rtCenter = new QRadioButton( i18n( "Center" ), g3 );
-    tabGrid->addWidget( rtCenter, 1, 0 );
-    g3->insert( rtCenter );
+    rAlignRight = new QRadioButton( bgAlign );
+    rAlignRight->setText( i18n( "Right" ) );
+    ButtonGroup1Layout->addWidget( rAlignRight );
 
-    rtRight = new QRadioButton( i18n( "Right" ), g3 );
-    tabGrid->addWidget( rtRight, 2, 0 );
-    g3->insert( rtRight );
+    QHBoxLayout* Layout8 = new QHBoxLayout; 
+    Layout8->setSpacing( 6 );
+    Layout8->setMargin( 0 );
 
-    rtDecimal = new QRadioButton( i18n( "Decimal" ), g3 );
-    tabGrid->addWidget( rtDecimal, 3, 0 );
-    g3->insert( rtDecimal );
+    rAlignVar = new QRadioButton( bgAlign );
+    rAlignVar->setText( i18n( "On following character: " ) );
+    Layout8->addWidget( rAlignVar );
 
-    tabGrid->setRowStretch( 4, 1 );
-    tabGrid->setColStretch( 0, 1 );
-    grid->addWidget( g3, 3, 1 );
-    grid->setRowStretch( 3, 1 );
-    if(lTabs->count()==0)
-    {
-	bDel->setEnabled(false);
-	bModify->setEnabled(false);
+    sAlignChar = new QLineEdit( bgAlign);
+    sAlignChar->setMaximumSize( QSize( 60, 32767 ) );
+    sAlignChar->setText("."); // for now we only use this char, no need to i18n it, we have to fix it anyway.
+    Layout8->addWidget( sAlignChar );
+    QSpacerItem* spacer_2 = new QSpacerItem( 20, 20, QSizePolicy::Expanding, QSizePolicy::Minimum );
+    Layout8->addItem( spacer_2 );
+    ButtonGroup1Layout->addLayout( Layout8 );
+    editLayout->addWidget( bgAlign );
+
+    gTabLeader = new QGroupBox( this);
+    gTabLeader->setTitle( i18n( "Tab leader" ) );
+    gTabLeader->setColumnLayout(0, Qt::Vertical );
+    gTabLeader->layout()->setSpacing( 0 );
+    gTabLeader->layout()->setMargin( 0 );
+    QVBoxLayout* GroupBox5Layout = new QVBoxLayout( gTabLeader->layout() );
+    GroupBox5Layout->setAlignment( Qt::AlignTop );
+    GroupBox5Layout->setSpacing( 6 );
+    GroupBox5Layout->setMargin( 11 );
+
+    QLabel* TextLabel1_2 = new QLabel( gTabLeader );
+    TextLabel1_2->setText( i18n( "The space a tab uses can be filled with a pattern." ) );
+    GroupBox5Layout->addWidget( TextLabel1_2 );
+
+    QHBoxLayout* layout11 = new QHBoxLayout; 
+    layout11->setSpacing( 6 );
+    layout11->setMargin( 0 );
+
+    QLabel* TextLabel2 = new QLabel( gTabLeader);
+    TextLabel2->setText( i18n( "Filling:" ) );
+    layout11->addWidget( TextLabel2 );
+
+    cFilling = new QComboBox( FALSE, gTabLeader);
+    cFilling->insertItem( i18n( "Blank" ) );
+    cFilling->insertItem( i18n( "Dots" ) );
+    cFilling->insertItem( i18n( "Line" ) );
+    layout11->addWidget( cFilling );
+    QSpacerItem* spacer_3 = new QSpacerItem( 20, 20, QSizePolicy::Expanding, QSizePolicy::Minimum );
+    layout11->addItem( spacer_3 );
+    GroupBox5Layout->addLayout( layout11 );
+    layout11->setEnabled(false);         // The world is not ready for this yet...
+    editLayout->addWidget( gTabLeader );
+    QSpacerItem* spacer_4 = new QSpacerItem( 20, 20, QSizePolicy::Minimum, QSizePolicy::Expanding );
+    editLayout->addItem( spacer_4 );
+    Layout13->addLayout( editLayout );
+    Form1Layout->addLayout( Layout13 );
+
+    QHBoxLayout* Layout4 = new QHBoxLayout; 
+    Layout4->setSpacing( 6 );
+    Layout4->setMargin( 0 );
+
+    bNew = new QPushButton( this);
+    bNew->setText( i18n( "New" ) );
+    Layout4->addWidget( bNew );
+
+    bDelete = new QPushButton( this);
+    bDelete->setText( i18n( "Delete" ) );
+    Layout4->addWidget( bDelete );
+    QSpacerItem* spacer_5 = new QSpacerItem( 20, 20, QSizePolicy::Expanding, QSizePolicy::Minimum );
+    Layout4->addItem( spacer_5 );
+    Form1Layout->addLayout( Layout4 );
+
+    connect(sTabPos,SIGNAL(textChanged( const QString & )), this, SLOT(slotTabValueChanged( const QString & )));
+    connect(sAlignChar,SIGNAL(textChanged( const QString & )), this, SLOT(slotAlignCharChanged( const QString & )));
+    connect(bNew,SIGNAL(clicked ()),this,SLOT(newClicked()));
+    connect(bDelete,SIGNAL(clicked ()),this,SLOT(deleteClicked()));
+    connect(bgAlign,SIGNAL(clicked (int)),this,SLOT(updateAlign(int)));
+    connect(lstTabs,SIGNAL(highlighted (int)),this,SLOT(setActiveItem(int)));
+    noSignals=false;
+}
+
+void KWParagTabulatorsWidget::slotTabValueChanged( const QString &text ) {
+    if(noSignals) return;
+    noSignals=true;
+    m_tabList[lstTabs->currentItem()].ptPos = KWUnit::fromUserValue( text.toDouble(), m_unit );
+    lstTabs->changeItem(tabToString(&m_tabList[lstTabs->currentItem()]), lstTabs->currentItem());
+    
+    sortLists();
+    noSignals=false;
+}
+
+void KWParagTabulatorsWidget::slotAlignCharChanged( const QString &/*_text*/ ) {
+    // select align 3 and update data structures.
+    bgAlign->setButton(3);
+    sAlignChar->setText(".");// for now we only use this char, no need to i18n it, we have to fix it anyway.
+}
+
+void KWParagTabulatorsWidget::newClicked() {
+    int selected=lstTabs->currentItem();
+    KoTabulator *newTab = new KoTabulator;
+    if(selected < 0) {
+        newTab->ptPos=0;
+        newTab->type=T_LEFT;
+        m_tabList.append(*newTab);
+        lstTabs->insertItem(tabToString(newTab));
+        lstTabs->setCurrentItem(0);
+    } else {
+        double pos = m_tabList[selected].ptPos;
+        double add=1.0;
+        if(m_unit==KWUnit::U_INCH) // inches are 25 times as big as mm, take it easy with adding..
+            add=0.1;
+
+        newTab->ptPos=pos + KWUnit::fromUserValue( add , m_unit );
+        newTab->type=m_tabList[selected].type;
+        m_tabList.insert(m_tabList.at(selected), *newTab);
+        lstTabs->insertItem( tabToString(newTab), selected);
+        lstTabs->setCurrentItem(lstTabs->findItem(tabToString(newTab)));
+        sortLists();
     }
-    bAdd->setEnabled(false);
-    connect(eTabPos,SIGNAL(textChanged ( const QString & )),
-            this, SLOT(slotTabValueChanged( const QString & )));
-    connect(bAdd,SIGNAL(clicked ()),this,SLOT(addClicked()));
-    connect(bModify,SIGNAL(clicked ()),this,SLOT(modifyClicked()));
-    connect(bDel,SIGNAL(clicked ()),this,SLOT(delClicked()));
-    connect(lTabs,SIGNAL(doubleClicked( QListBoxItem * ) ),
-            this,SLOT(slotDoubleClicked( QListBoxItem * ) ));
-    connect(lTabs,SIGNAL(clicked( QListBoxItem * ) ),
-            this,SLOT(slotDoubleClicked( QListBoxItem * ) ));
 }
 
-void KWParagTabulatorsWidget::slotTabValueChanged( const QString &_text )
-{
-    bool state=!_text.isEmpty();
-    bAdd->setEnabled(state);
-    bModify->setEnabled(state && lTabs->currentItem()!=-1);
-}
-
-void KWParagTabulatorsWidget::addClicked()
-{
-    if(!eTabPos->text().isEmpty())
-    {
-        if(findExistingValue(eTabPos->text().toDouble()))
-	{
-            QString tmp=i18n("There is a tabulator at this position");
-            KMessageBox::error( this, tmp );
-            eTabPos->setText("");
-            return;
-	}
-
-        lTabs->insertItem(eTabPos->text());
-        bDel->setEnabled(lTabs->currentItem()!=-1);
-        bModify->setEnabled(true);
-
-        KoTabulator tab;
-        if(rtLeft->isChecked())
-            tab.type=T_LEFT;
-        else if(rtCenter->isChecked())
-            tab.type=T_CENTER;
-        else if(rtRight->isChecked())
-            tab.type=T_RIGHT;
-        else if(rtDecimal->isChecked())
-            tab.type=T_DEC_PNT;
-        else
-            tab.type=T_LEFT;
-        tab.ptPos = KWUnit::fromUserValue( eTabPos->text().toDouble(), m_unit );
-        m_tabList.append(tab);
-        eTabPos->setText("");
+void KWParagTabulatorsWidget::deleteClicked() {
+    int selected = lstTabs->currentItem();
+    if (selected < 0) return;
+    lstTabs->removeItem(selected);
+    m_tabList.remove(m_tabList[selected]);
+    if(lstTabs->count() >0) {
+        lstTabs->setCurrentItem(QMIN(static_cast<unsigned int>(selected), lstTabs->count()-1 ));
+    } else {
+        bDelete->setEnabled(false);
+        gPosition->setEnabled(false);;
+        bgAlign->setEnabled(false);;
+        gTabLeader->setEnabled(false);;
     }
 }
 
-bool KWParagTabulatorsWidget::findExistingValue(double val /* user value */)
-{
-    KoTabulatorList::Iterator it = m_tabList.begin();
-    for ( ; it != m_tabList.end(); ++it )
-    {
-        if ( KWUnit::userValue( ( *it ).ptPos, m_unit ) == val )
-            return true;
+void KWParagTabulatorsWidget::setActiveItem(int selected) { 
+    if(noSignals) return;
+    if(selected < 0) return;
+    noSignals=true;
+    KoTabulator *selectedTab = &m_tabList[selected];
+    switch( selectedTab->type) {
+        case T_CENTER: 
+            bgAlign->setButton(1); break;
+        case  T_RIGHT: 
+            bgAlign->setButton(2); break;
+        case T_DEC_PNT: 
+            bgAlign->setButton(3); break;
+        case T_LEFT:
+        default: 
+            bgAlign->setButton(0);
     }
-    return false;
+    sTabPos->setText( tabToString(selectedTab));
+    bDelete->setEnabled(true);
+    gPosition->setEnabled(true);;
+    bgAlign->setEnabled(true);;
+    //gTabLeader->setEnabled(false);;
+    noSignals=false;
 }
 
-void KWParagTabulatorsWidget::modifyClicked()
-{
-    if(!eTabPos->text().isEmpty() && lTabs->currentItem()!=-1)
-    {
-        m_tabList.remove( m_tabList.at( lTabs->currentItem() ) );
-        lTabs->removeItem(lTabs->currentItem());
-        addClicked();
-        eTabPos->setText("");
+QString KWParagTabulatorsWidget::tabToString(KoTabulator *tab) { 
+    return QString::number( KWUnit::userValue( tab->ptPos, m_unit) );
+}
+
+void KWParagTabulatorsWidget::updateAlign(int selected) { 
+    KoTabulator *selectedTab = &m_tabList[lstTabs->currentItem()];
+
+    switch( selected) {
+        case 1: 
+            selectedTab->type=T_CENTER; break;
+        case  2: 
+            selectedTab->type=T_RIGHT; break;
+        case 3: 
+            selectedTab->type=T_DEC_PNT; break;
+        case 0:
+        default: 
+            selectedTab->type=T_LEFT;
     }
 }
 
-void KWParagTabulatorsWidget::delClicked()
-{
-    if(lTabs->currentItem()!=-1)
-    {
-        m_tabList.remove( m_tabList.at( lTabs->currentItem() ) );
-        eTabPos->setText("");
-        lTabs->removeItem(lTabs->currentItem());
-        if(lTabs->count()==0)
-	{
-            bDel->setEnabled(false);
-            bModify->setEnabled(false);
+void KWParagTabulatorsWidget::sortLists() {
 
-	}
-        else
-	{
-            lTabs->setCurrentItem(0);
-            setActiveItem(lTabs->currentText().toDouble());
+    noSignals=true;
+    QString curValue=lstTabs->currentText();
+    bool done=false;
+    while(! done) {
+        done=true;
+        //double top=0.0;
+
+        KoTabulatorList::Iterator sort = m_tabList.begin();
+        for ( ; sort != m_tabList.end() && done; ++sort ) {
+            if((*sort).ptPos > m_tabList.last().ptPos) { 
+                // greater then last, place at end.
+                m_tabList.remove(*sort);
+                m_tabList.append(*sort);
+                done=false;
+            } else if(sort != m_tabList.begin() && (*sort).ptPos < (*m_tabList.begin()).ptPos) { 
+                // smaller then first; place at begin.
+                m_tabList.remove(*sort);
+                m_tabList.prepend(*sort);
+                done=false;
+            }
         }
     }
-}
 
-void KWParagTabulatorsWidget::setActiveItem(double value /* user value */)
-{
-    KoTabulatorList::Iterator it = m_tabList.begin();
+    lstTabs->clear();
+    KoTabulatorList::ConstIterator it = m_tabList.begin();
     for ( ; it != m_tabList.end(); ++it )
-    {
-       if ( KWUnit::userValue( ( *it ).ptPos, m_unit ) == value )
-       {
-            switch(( *it ).type)
-            {
-            case T_CENTER:
-                rtCenter->setChecked(true);
-                break;
-            case  T_RIGHT:
-                rtRight->setChecked(true);
-                break;
-            case T_DEC_PNT:
-                rtDecimal->setChecked(true);
-                break;
-            case T_LEFT:
-            default:
-                rtLeft->setChecked(true);
-                break;
-            }
-       }
-       break;
-    }
+        lstTabs->insertItem( QString::number( KWUnit::userValue( (*it).ptPos, m_unit ) ) ); 
+
+    lstTabs->setCurrentItem(lstTabs->findItem(curValue));
+    noSignals=false;
 }
 
-void KWParagTabulatorsWidget::slotDoubleClicked( QListBoxItem * )
-{
-    if(lTabs->currentItem()!=-1)
-    {
-        eTabPos->setText(lTabs->currentText());
-        double value = lTabs->currentText().toDouble();
-        bDel->setEnabled(true);
-        bModify->setEnabled(true);
-        setActiveItem(value);
-    }
-}
-
-void KWParagTabulatorsWidget::display( const KWParagLayout & lay )
-{
+void KWParagTabulatorsWidget::display( const KWParagLayout &lay ) {
     m_tabList.clear();
-    lTabs->clear();
+    lstTabs->clear();
     m_tabList = lay.tabList();
     KoTabulatorList::ConstIterator it = m_tabList.begin();
     for ( ; it != m_tabList.end(); ++it )
-        lTabs->insertItem( QString::number( KWUnit::userValue( (*it).ptPos, m_unit ) ) );
+        lstTabs->insertItem( QString::number( KWUnit::userValue( (*it).ptPos, m_unit ) ) );
+
+    if(lstTabs->count() > 0)
+        lstTabs->setCurrentItem(0);
+    else {
+        bDelete->setEnabled(false);
+        gPosition->setEnabled(false);;
+        bgAlign->setEnabled(false);;
+        gTabLeader->setEnabled(false);;
+    }
 }
 
-void KWParagTabulatorsWidget::save( KWParagLayout & lay )
-{
+void KWParagTabulatorsWidget::save( KWParagLayout & lay ) {
     lay.setTabList( m_tabList );
 }
 
-QString KWParagTabulatorsWidget::tabName()
-{
+QString KWParagTabulatorsWidget::tabName() {
     return i18n( "Tabulators" );
 }
 
