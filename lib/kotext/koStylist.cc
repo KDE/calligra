@@ -358,6 +358,7 @@ void KoStyleManager::addStyle() {
     m_changedStyles.append(m_currentStyle);
     m_stylesList->insertItem( str );
     m_styleCombo->insertItem( str );
+    m_inheritCombo->insertItem( str );
     m_stylesList->setCurrentItem( m_stylesList->count() - 1 );
     noSignals=false;
     m_styleOrder<< str;
@@ -375,13 +376,28 @@ void KoStyleManager::updateFollowingStyle( KoStyle *s )
 
 }
 
+void KoStyleManager::updateInheritStyle( KoStyle *s )
+{
+    for ( KoStyle* p = m_changedStyles.first(); p != 0L; p = m_changedStyles.next() )
+    {
+        //when we remove style, we must replace inherite style to 0L
+        //when parent style was removed.
+        //##########Laurent change inherited style attribute
+        if ( p->parentStyle() == s)
+            p->setParentStyle(0L);
+    }
+
+}
+
 void KoStyleManager::deleteStyle() {
 
     unsigned int cur = styleIndex( m_stylesList->currentItem() );
     unsigned int curItem = m_stylesList->currentItem();
+    QString name = m_stylesList->currentText();
     KoStyle *s = m_changedStyles.at(cur);
     m_styleOrder.remove( s->name());
     updateFollowingStyle( s );
+    updateInheritStyle( s );
     Q_ASSERT( s == m_currentStyle );
     delete s;
     m_currentStyle = 0L;
@@ -392,6 +408,9 @@ void KoStyleManager::deleteStyle() {
     // we display it automatically
     m_stylesList->removeItem(curItem);
     m_styleCombo->removeItem(curItem);
+
+    m_inheritCombo->listBox()->removeItem( m_inheritCombo->listBox()->index(m_inheritCombo->listBox()->findItem(name )));
+
     numStyles--;
     m_stylesList->setSelected( m_stylesList->currentItem(), true );
 }
