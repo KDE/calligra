@@ -165,7 +165,11 @@ void ConnectorTool::mousePress( QMouseEvent *e )
           point = canvas->snapToGrid(startPoint);
         }
         
-        connector->addPoint(point);
+        if((m_mode == stmDrawRubber) && hit) {
+          endRubberBanding(e);
+        } else {
+          connector->addPoint(point);
+        }
       }
     }
     
