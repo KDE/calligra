@@ -660,11 +660,11 @@ void KWParagDia::setupTab3()
 
 #define OFFSETX 15
 #define OFFSETY 7
-#define SPACE 30
+#define KW_SPACE 30
 void KWParagDia::slotPressEvent(QMouseEvent *_ev)
 {
     QRect r = prev3->contentsRect();
-    QRect rect(r.x()+OFFSETX,r.y()+OFFSETY,r.width()-OFFSETX,r.y()+OFFSETY+SPACE);
+    QRect rect(r.x()+OFFSETX,r.y()+OFFSETY,r.width()-OFFSETX,r.y()+OFFSETY+KW_SPACE);
     if(rect.contains(QPoint(_ev->x(),_ev->y())))
         {
             if( (  ((int)m_topBorder.ptWidth != cWidth->currentText().toInt()) ||(m_topBorder.color != bColor->color() )
@@ -678,7 +678,7 @@ void KWParagDia::slotPressEvent(QMouseEvent *_ev)
             else
                 bTop->setOn(!bTop->isOn());
         }
-    rect.setCoords(r.x()+OFFSETX,r.height()-OFFSETY-SPACE,r.width()-OFFSETX,r.height()-OFFSETY);
+    rect.setCoords(r.x()+OFFSETX,r.height()-OFFSETY-KW_SPACE,r.width()-OFFSETX,r.height()-OFFSETY);
     if(rect.contains(QPoint(_ev->x(),_ev->y())))
         {
             if( (  ((int)m_bottomBorder.ptWidth != cWidth->currentText().toInt()) ||(m_bottomBorder.color != bColor->color() )
@@ -693,7 +693,7 @@ void KWParagDia::slotPressEvent(QMouseEvent *_ev)
                 bBottom->setOn(!bBottom->isOn());
         }
 
-    rect.setCoords(r.x()+OFFSETX,r.y()+OFFSETY,r.x()+SPACE+OFFSETX,r.height()-OFFSETY);
+    rect.setCoords(r.x()+OFFSETX,r.y()+OFFSETY,r.x()+KW_SPACE+OFFSETX,r.height()-OFFSETY);
     if(rect.contains(QPoint(_ev->x(),_ev->y())))
         {
 
@@ -708,7 +708,7 @@ void KWParagDia::slotPressEvent(QMouseEvent *_ev)
             else
                 bLeft->setOn(!bLeft->isOn());
         }
-    rect.setCoords(r.width()-OFFSETX-SPACE,r.y()+OFFSETY,r.width()-OFFSETX,r.height()-OFFSETY);
+    rect.setCoords(r.width()-OFFSETX-KW_SPACE,r.y()+OFFSETY,r.width()-OFFSETX,r.height()-OFFSETY);
     if(rect.contains(QPoint(_ev->x(),_ev->y())))
         {
 
@@ -729,7 +729,7 @@ void KWParagDia::slotPressEvent(QMouseEvent *_ev)
 
 #undef OFFSETX
 #undef OFFSETY
-#undef SPACE
+#undef KW_SPACE
 
 /*================================================================*/
 void KWParagDia::setupTab4()
