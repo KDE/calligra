@@ -1491,34 +1491,79 @@ void KPresenterView::effectOk()
 void KPresenterView::rotateOk()
 {
   KPObject *kpobject = 0;
-  
+  QList<KPObject> _objects;
+  QList<RotateCmd::RotateValues> _oldRotate;
+  float _newAngle;
+  RotateCmd::RotateValues *tmp;
+
+  _objects.setAutoDelete(false);
+  _oldRotate.setAutoDelete(false);
+
+  _newAngle = rotateDia->getAngle();
+
   for (int i = 0;i < static_cast<int>(kPresenterDoc()->objectList()->count());i++)
     {
       kpobject = kPresenterDoc()->objectList()->at(i);
+      tmp = new RotateCmd::RotateValues;
+      tmp->angle = kpobject->getAngle();
+      _oldRotate.append(tmp);
+
       if (kpobject->isSelected())
-	kpobject->rotate(rotateDia->getAngle());
+	_objects.append(kpobject);
     }
 
-  kPresenterDoc()->repaint(false);
+  if (!_objects.isEmpty())
+    {
+      RotateCmd *rotateCmd = new RotateCmd(i18n("Change Rotation"),_oldRotate,_newAngle,_objects,kPresenterDoc());
+      kPresenterDoc()->commands()->addCommand(rotateCmd);
+      rotateCmd->execute();
+    }
+  else
+    {
+      _oldRotate.setAutoDelete(true);
+      _oldRotate.clear();
+    }
 }
 
 /*=================== shadow dialog ok ==========================*/
 void KPresenterView::shadowOk()
 {
   KPObject *kpobject = 0;
-  
+  QList<KPObject> _objects;
+  QList<ShadowCmd::ShadowValues> _oldShadow;
+  ShadowCmd::ShadowValues _newShadow,*tmp;
+
+  _objects.setAutoDelete(false);
+  _oldShadow.setAutoDelete(false);
+
+  _newShadow.shadowDirection = shadowDia->getShadowDirection();
+  _newShadow.shadowDistance = shadowDia->getShadowDistance();
+  _newShadow.shadowColor = shadowDia->getShadowColor();
+
   for (int i = 0;i < static_cast<int>(kPresenterDoc()->objectList()->count());i++)
     {
       kpobject = kPresenterDoc()->objectList()->at(i);
+      tmp = new ShadowCmd::ShadowValues;
+      tmp->shadowDirection = kpobject->getShadowDirection();
+      tmp->shadowDistance = kpobject->getShadowDistance();
+      tmp->shadowColor = kpobject->getShadowColor();
+      _oldShadow.append(tmp);
+
       if (kpobject->isSelected())
-	{
-	  kpobject->setShadowDirection(shadowDia->getShadowDirection());
-	  kpobject->setShadowDistance(shadowDia->getShadowDistance());
-	  kpobject->setShadowColor(shadowDia->getShadowColor());
-	}
+	_objects.append(kpobject);
     }
 
-  kPresenterDoc()->repaint(false);
+  if (!_objects.isEmpty())
+    {
+      ShadowCmd *shadowCmd = new ShadowCmd(i18n("Change Shadow"),_oldShadow,_newShadow,_objects,kPresenterDoc());
+      kPresenterDoc()->commands()->addCommand(shadowCmd);
+      shadowCmd->execute();
+    }
+  else
+    {
+      _oldShadow.setAutoDelete(true);
+      _oldShadow.clear();
+    }
 }
 
 /*================================================================*/

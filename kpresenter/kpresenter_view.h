@@ -80,6 +80,8 @@ class Page;
 #include "pgconfcmd.h"
 #include "confpiedia.h"
 #include "pglayoutcmd.h"
+#include "shadowcmd.h"
+#include "rotatecmd.h"
 
 #include <X11/Xlib.h>
 #include <signal.h>

@@ -29,7 +29,8 @@ kpresenter_bin_SOURCES = kpresenter_main.cc kpresenter_doc.cc \
 	kppixmapcollection.cc kpgradientcollection.cc \
 	command.cc movecmd.cc resizecmd.cc insertcmd.cc deletecmd.cc \
 	setoptionscmd.cc chgclipcmd.cc chgpixcmd.cc setbackcmd.cc \
-	effectcmd.cc pgconfcmd.cc pglayoutcmd.cc \
+	effectcmd.cc pgconfcmd.cc pglayoutcmd.cc shadowcmd.cc \
+	rotatecmd.cc \
 	commandhistory.cc
 
 noinst_HEADERS = kpresenter_main.h kpresenter_doc.h kpresenter_view.h \
@@ -47,7 +48,8 @@ noinst_HEADERS = kpresenter_main.h kpresenter_doc.h kpresenter_view.h \
 		kppixmapcollection.h kpgradientcollection.h \
 		command.h movecmd.h resizecmd.h insertcmd.h deletecmd.h \
 		setoptionscmd.h chgclipcmd.h chgpixcmd.h setbackcmd.h \
-		effectcmd.h pgconfcmd.h pglayoutcmd.h \
+		effectcmd.h pgconfcmd.h pglayoutcmd.h shadowcmd.h \
+		rotatecmd.h \
 		commandhistory.h
 
 SRCMETA =	kpresenter_main.moc kpresenter_doc.moc kpresenter_view.moc \
@@ -64,7 +66,8 @@ SRCMETA =	kpresenter_main.moc kpresenter_doc.moc kpresenter_view.moc \
 		kppixmapcollection.moc kpgradientcollection.moc \
 		command.moc movecmd.moc resizecmd.moc insertcmd.moc deletecmd.moc \
 		setoptionscmd.moc chgclipcmd.moc chgpixcmd.moc setbackcmd.moc \
-		effectcmd.moc pgconfcmd.moc pglayoutcmd.moc \
+		effectcmd.moc pgconfcmd.moc pglayoutcmd.moc shadowcmd.moc \
+		rotatecmd.moc \
 		commandhistory.moc
 
 idl_DATA =	kpresenter.idl
@@ -147,4 +150,6 @@ setbackcmd.cc: setbackcmd.moc
 effectcmd.cc: effectcmd.moc
 pgconfcmd.cc: pgconfcmd.moc
 pglayoutcmd.cc: pglayoutcmd.moc
+shadowcmd.cc: shadowcmd.moc
+rotatecmd.cc: rotatecmd.moc
 commandhistory.cc: commandhistory.moc
