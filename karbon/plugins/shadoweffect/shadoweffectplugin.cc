@@ -160,19 +160,22 @@ VCreateShadowCmd::execute()
 			{
 				//kdDebug() << "Its a decorator!!!" << endl;
 				//dynamic_cast<VShadowDecorator *>( itr.current() )->setShadow
-				newObject = itr.current();
+				newObject = 0L;//itr.current();
 			}
 			else
 				newObject = new VShadowDecorator( itr.current()->clone(), 0L, m_distance, m_angle, m_opacity );
 
 			successfull = true;
 
+			if(newObject)
+			{
 			// Insert new shape right before old shape.
 			itr.current()->parent()->insertInfrontOf(
 				newObject, itr.current() );
 
 			// Add new shape to list of new objects.
 			m_newObjects->append( newObject );
+			}
 		}
 	}
 
