@@ -1,7 +1,7 @@
-// $Header$
+//
 
 /* This file is part of the KDE project
-   Copyright (C) 2001, 2002, 2003 Nicolas GOUTTE <goutte@kde.org>
+   Copyright (C) 2001, 2002, 2003, 2004 Nicolas GOUTTE <goutte@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -34,6 +34,7 @@
 
 #include <qmap.h>
 #include <qiodevice.h>
+#include <qbuffer.h>
 #include <qtextstream.h>
 #include <qdom.h>
 
@@ -42,6 +43,7 @@
 
 #include <koGlobal.h>
 #include <koPictureKey.h>
+#include <koPicture.h>
 
 #include <KWEFStructures.h>
 #include <KWEFUtil.h>
@@ -688,7 +690,9 @@ bool OOWriterWorker::makePicture(const FrameAnchor& anchor, const bool useFrameS
 
     kdDebug(30518) << "Picture loaded: " << koStoreName << endl;
 
-    double height, width;
+    double height = 0.0;
+    double width = 0.0;
+
     if ( useFrameSize )
     {
         height=anchor.frame.bottom - anchor.frame.top;
@@ -696,9 +700,32 @@ bool OOWriterWorker::makePicture(const FrameAnchor& anchor, const bool useFrameS
     }
     else
     {
-        // dummy values (### TODO)
-        height=72;
-        width=72;
+        // We need to load the picture to get its size
+        QBuffer buffer( image.copy() ); // Be more safe than sorry and do not allow shallow copy
+        KoPicture pic;
+        buffer.open( IO_ReadOnly );
+        if ( pic.load( &buffer, strExtension ) )
+        {
+            const QSize size ( pic.getOriginalSize() );
+            height = size.height();
+            width = size.width();
+        }
+        else
+        {
+            kdWarning(30518) << "Could not load KoPicture: " << koStoreName << endl;
+        }
+        buffer.close();
+    }
+
+    if ( height < 1.0 )
+    {
+        kdWarning(30518) << "Silly height for " << koStoreName << " : "  << height << endl;
+        height = 72.0;
+    }
+    if ( width < 1.0 )
+    {
+        kdWarning(30518) << "Silly width for " << koStoreName << " : "  << width << endl;
+        width = 72.0;
     }
 
      // We need a 32 digit hex value of the picture number
