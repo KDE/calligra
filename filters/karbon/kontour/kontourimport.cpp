@@ -119,6 +119,8 @@ KontourImport::parseGObject( VObject *object, const QDomElement &e )
 		int strokestyle = e.attribute( "strokestyle" ).toInt();
 		switch( strokestyle )
 		{
+			case 0:	stroke.setType( VStroke::none );
+					break;
 			case 1:
 					{
 					QColor c;
