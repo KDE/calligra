@@ -523,4 +523,4 @@ Reggie, 14.11.1999:
   if the current slide is the first slide (page) at the moment - I´ll improve that
   tomorrow. It´s also not well tested yet - will do that tomorrow
   too. Now it should be possible even for Matthias to create a template :-))
-
+- The colorbar works now for textobjects too

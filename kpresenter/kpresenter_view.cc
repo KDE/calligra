@@ -1400,26 +1400,42 @@ void KPresenterView::textObjectToContents()
 /*===============================================================*/
 void KPresenterView::penChosen( const QColor &c )
 {
-    bool fill = TRUE;
+    if ( !page->kTxtObj() ) {
+	bool fill = TRUE;
 
-    if ( !m_pKPresenterDoc->setPenColor( c, fill ) ) {
-	if ( fill )
-	    pen.setColor( c );
-	else
-	    pen = NoPen;
+	if ( !m_pKPresenterDoc->setPenColor( c, fill ) ) {
+	    if ( fill )
+		pen.setColor( c );
+	    else
+		pen = NoPen;
+	}
+    } else {
+	tbColor = c;
+	page->setTextColor( &tbColor );
+	( (KColorAction*)actionTextColor )->blockSignals( TRUE );
+	( (KColorAction*)actionTextColor )->setColor( tbColor );
+	( (KColorAction*)actionTextColor )->blockSignals( FALSE );
     }
 }
 
 /*===============================================================*/
 void KPresenterView::brushChosen( const QColor &c )
 {
-    bool fill = TRUE;
+    if ( !page->kTxtObj() ) {
+	bool fill = TRUE;
 
-    if ( !m_pKPresenterDoc->setBrushColor( c, fill ) ) {
-	if ( fill )
-	    brush.setColor( c );
-	else
-	    brush = NoBrush;
+	if ( !m_pKPresenterDoc->setBrushColor( c, fill ) ) {
+	    if ( fill )
+		brush.setColor( c );
+	    else
+		brush = NoBrush;
+	}
+    } else {
+	tbColor = c;
+	page->setTextColor( &tbColor );
+	( (KColorAction*)actionTextColor )->blockSignals( TRUE );
+	( (KColorAction*)actionTextColor )->setColor( tbColor );
+	( (KColorAction*)actionTextColor )->blockSignals( FALSE );
     }
 }
 
