@@ -46,7 +46,7 @@ KWConfigFootNoteDia::KWConfigFootNoteDia( QWidget *parent, const char *name, KWD
 void KWConfigFootNoteDia::setupTab1()
 {
     QVBox * page = addVBoxPage( i18n( "Footnotes" ) );
-    m_footNoteConfig = new KoCounterStyleWidget( false, true, page );
+    m_footNoteConfig = new KoCounterStyleWidget( false, true, false, page );
     //m_footNoteConfig->numTypeChanged( KoParagCounter::NUM_LIST );
     m_footNoteConfig->setCounter (static_cast<KWVariableSettings*>(m_doc->getVariableCollection()->variableSetting())->footNoteCounter() );
 }
@@ -54,7 +54,7 @@ void KWConfigFootNoteDia::setupTab1()
 void KWConfigFootNoteDia::setupTab2()
 {
     QVBox * page = addVBoxPage( i18n( "Endnotes" ) );
-    m_endNoteConfig = new KoCounterStyleWidget( false, true/*onlyStyleLetter*/, page );
+    m_endNoteConfig = new KoCounterStyleWidget( false, true/*onlyStyleLetter*/,false, page );
     //m_endNoteConfig->numTypeChanged( KoParagCounter::NUM_LIST );
     m_endNoteConfig->setCounter (static_cast<KWVariableSettings*>(m_doc->getVariableCollection()->variableSetting())->endNoteCounter() );
 }

@@ -154,7 +154,7 @@ public:
     virtual void setDeleted( bool del );
 
     void formatedNote();
-
+    virtual QString fieldCode();
 protected:
     QString applyStyle();
 

@@ -327,6 +327,8 @@ QString KWFootNoteVariable::applyStyle(  )
 
 QString KWFootNoteVariable::text()
 {
+    if (m_varColl->variableSetting()->displayFiedCode())
+        return fieldCode();
     return m_varFormat->convert( m_varValue );
 }
 
@@ -336,6 +338,10 @@ void KWFootNoteVariable::setNumDisplay( int val )
     formatedNote();
 }
 
+QString KWFootNoteVariable::fieldCode()
+{
+    return (noteType()==FootNote) ?i18n("FootNote"):i18n("EndNote");
+}
 
 void KWFootNoteVariable::drawCustomItem( QPainter* p, int x, int y, int /*cx*/, int /*cy*/, int /*cw*/, int /*ch*/, const QColorGroup& cg, bool selected, const int _offset ) // TODO s/const int/int/
 {
