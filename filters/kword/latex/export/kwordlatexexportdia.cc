@@ -41,6 +41,7 @@
 #include <knuminput.h>
 
 #include <dcopclient.h>
+#include <latexexportIface.h>
 
 #include "xml2latexparser.h"
 
@@ -57,8 +58,7 @@
  */
 KWordLatexExportDia::KWordLatexExportDia(KoStore* in, QWidget* parent, 
 		const char* name_, bool modal, WFlags fl )
-    : LatexExportDia( parent, name_, modal, fl ),
-						DCOPObject("LatexFilterConfigDia"), _in( in )
+    : LatexExportDia( parent, name_, modal, fl ),_in( in )
 {
 	int i = 0;
 
@@ -83,11 +83,12 @@ KWordLatexExportDia::KWordLatexExportDia(KoStore* in, QWidget* parent,
 		i = i + 1;
 	}
 
-	/*if(!kapp->dcopClient()->isRegistered() )
+	_iface = new LatexExportIface(this);
+	if(!kapp->dcopClient()->isRegistered() )
 	{
 		kapp->dcopClient()->registerAs("FilterConfigDia");
-		kapp->dcopClient()->setDefaultObject(objId());
-	}*/
+		kapp->dcopClient()->setDefaultObject(_iface->objId());
+	}
 }
 
 /*
@@ -95,7 +96,8 @@ KWordLatexExportDia::KWordLatexExportDia(KoStore* in, QWidget* parent,
  */
 KWordLatexExportDia::~KWordLatexExportDia()
 {
-    delete _config;
+	delete _iface;
+  delete _config;
 }
 
 /**
@@ -145,7 +147,8 @@ void KWordLatexExportDia::accept()
 	}
 	
 	/* The default language is the first language in the list */
-	config->setDefaultLanguage(langUsedList->item(0)->text());
+	if(langUsedList->item(0) != NULL)
+		config->setDefaultLanguage(langUsedList->item(0)->text());
 	kdDebug() << "default lang. : " << langUsedList->currentText() << endl;
 	config->setDefaultLanguage(langUsedList->currentText());
 

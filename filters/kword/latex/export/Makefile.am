@@ -10,14 +10,15 @@ kde_module_LTLIBRARIES = libkwordlatexexport.la
 
 libkwordlatexexport_la_SOURCES = anchor.cc config.cc document.cc element.cc fileheader.cc \
 																 latexexportdia.ui footnote.cc format.cc formula.cc key.cc \
-																 kwordlatexexportdia.cc latexexport.cc \
-																 layout.cc listtable.cc para.cc pixmapFrame.cc table.cc \
+																 kwordlatexexportdia.cc latexexport.cc latexexportIface.cc \
+																 latexexportIface.skel layout.cc listtable.cc para.cc \
+																 pixmapFrame.cc table.cc \
 																 textFrame.cc textformat.cc textzone.cc variableformat.cc \
 																 variablezone.cc xml2latexparser.cc xmlparser.cc
 
 noinst_HEADERS = anchor.h border.h config.h document.h element.h fileheader.h footnote.h \
 								 format.h formula.h key.h kwordlatexexportdia.h latexexport.h latexexportdia.h \
-								 layout.h \
+								 latexexportIface.h layout.h \
 								 listtable.h para.h pixmapFrame.h table.h textFrame.h textformat.h \
 								 textzone.h variableformat.h variablezone.h xml2latexparser.h xmlparser.h
 

@@ -15,41 +15,31 @@
    along with this library; see the file COPYING.LIB.  If not, write to
    the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
    Boston, MA 02111-1307, USA.
+   This file use code from koTemplateOpenDia for the method chooseSlot.
 */
 
-#ifndef __KWORDLATEXEXPORTDIA_H__
-#define __KWORDLATEXEXPORTDIA_H__
+#include <latexexportIface.h>
+#include "kwordlatexexportdia.h"
 
-#include <latexexportdia.h>
-#include <qstringlist.h>
-#include <kurl.h>
-
-class KoStore;
-class KConfig;
-class LatexExportIface;
-
-class KWordLatexExportDia : public LatexExportDia
+/*
+ *  Constructs a KWordLatexExportDia which is a child of 'parent', with the
+ *  name 'name' and widget flags set to 'f'.
+ *
+ *  The dialog will by default be modeless, unless you set 'modal' to
+ *  TRUE to construct a modal dialog.
+ */
+LatexExportIface::LatexExportIface(KWordLatexExportDia* dia)
+    :	DCOPObject("FilterConfigDia")
 {
-    Q_OBJECT
+	_dialog = dia;
+}
 
-	private:
-    QString _fileOut;
-    KoStore* _in;
-    KConfig* _config;
-		LatexExportIface* _iface;
+LatexExportIface::~LatexExportIface()
+{
+}
 
-	public:
-    KWordLatexExportDia( KoStore*, QWidget* parent = 0,
-				const char* name = 0, bool modal = FALSE, WFlags fl = 0 );
-    virtual ~KWordLatexExportDia();
+void LatexExportIface::useDefaultConfig()
+{
+	_dialog->accept();
+}
 
-    void setOutputFile(QString file) { _fileOut = file; }
-	
-	public slots:
-    virtual void reject();
-    virtual void accept();
-    virtual void addLanguage();
-    virtual void removeLanguage();
-};
-
-#endif /* __KWORDLATEXEXPORTDIA_H__ */
