@@ -53,9 +53,13 @@ SelectTool::SelectTool( KivioView* parent ) : Kivio::MouseTool(parent, "Selectio
 
   m_selectAction = new KRadioAction(i18n("&Select"), "select", Key_Space, actionCollection(), "select");
   connect(m_selectAction, SIGNAL(toggled(bool)), this, SLOT(setActivated(bool)));
-  (void) new KAction(i18n("&Properties..."), 0, 0, this, SLOT(showProperties()), actionCollection(), "properties");
 
   (void) new KAction(i18n("&Edit Text..."), "text", Key_F2, this, SLOT(editStencilText()), actionCollection(), "editText");
+  (void) new KAction(i18n("Format &Text..."), 0, 0, view(), SLOT(textFormat()), actionCollection(), "formatText");
+  (void) new KAction(i18n("Format &Stencils && Connectors..."), 0, 0, view(), SLOT(stencilFormat()),
+                          actionCollection(), "formatStencil");
+  m_arrowHeadAction = new KAction(i18n("Format &Arrowheads..."), 0, 0, view(), SLOT(arrowHeadFormat()),
+                                  actionCollection(), "formatConnector");
   
   m_mode = stmNone;
   m_pResizingStencil = NULL;
@@ -1072,6 +1076,7 @@ void SelectTool::showPopupMenu( const QPoint &pos )
     menu = static_cast<KPopupMenu*>(view()->factory()->container("PagePopup", view()));
   } else {
     menu = static_cast<KPopupMenu*>(view()->factory()->container("StencilPopup", view()));
+    m_arrowHeadAction->setEnabled(view()->activePage()->checkForStencilTypeInSelection(kstConnector));
   }
 
   if(menu) {    

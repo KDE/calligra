@@ -10,6 +10,10 @@
   </ToolBar>
 
   <Menu name="StencilPopup">
-    <Action name="editText" append="topMerge" />
+    <Action name="editText" />
+    <Separator />
+    <Action name="formatText" />
+    <Action name="formatStencil" />
+    <Action name="formatConnector" />
   </Menu>
 </kpartgui>

@@ -30,6 +30,7 @@ class QMouseEvent;
 class QKeyEvent;
 class KPopupMenu;
 class KRadioAction;
+class KAction;
 
 class KivioStencil;
 
@@ -123,6 +124,7 @@ class SelectTool : public Kivio::MouseTool
     KoRect m_selectedRect;
 
     KRadioAction* m_selectAction;
+    KAction* m_arrowHeadAction;
 
     bool m_firstTime;
 };
