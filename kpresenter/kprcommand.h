@@ -34,7 +34,6 @@
 #include <koparaglayout.h>
 #include <kocommand.h>
 #include <koPoint.h>
-#include "kprvariable.h"
 class KPresenterDoc;
 class KPTextObject;
 class KPObject;
@@ -47,6 +46,10 @@ class KPrPage;
 class KoCustomVariable;
 class KoLinkVariable;
 class KPPolylineObject;
+class KPrFieldVariable;
+class KPrTimeVariable;
+class KPrDateVariable;
+class KPrPgNumVariable;
 
 /******************************************************************/
 /* Class: ShadowCmd                                               */
