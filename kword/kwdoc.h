@@ -177,6 +177,7 @@ class KWDocument : public KoDocument, public KoZoomHandler
     Q_PROPERTY( double defaultColumnSpacing READ defaultColumnSpacing WRITE setDefaultColumnSpacing )
     Q_PROPERTY( int maxRecentFiles READ maxRecentFiles )
     Q_PROPERTY( QString globalLanguage READ globalLanguage WRITE setGlobalLanguage )
+    Q_PROPERTY( bool globalHyphen READ globalHyphen WRITE setGlobalHyphen )
     Q_PROPERTY( QStringList horizontalLinePath READ horizontalLinePath WRITE setHorizontalLinePath )
     Q_PROPERTY( bool insertDirectCursor READ insertDirectCursor WRITE setInsertDirectCursor )
     Q_PROPERTY( QString picturePath READ picturePath WRITE setPicturePath )
