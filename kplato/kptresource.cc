@@ -1274,6 +1274,10 @@ void KPTResourceGroupRequest::reserve(const KPTDateTime &start, const KPTDuratio
     m_duration = duration;
 }
 
+bool KPTResourceGroupRequest::isEmpty() const {
+    return m_resourceRequests.isEmpty() && m_units == 0;
+}
+
 /////////
 KPTResourceRequestCollection::KPTResourceRequestCollection(KPTTask &task)
     : m_task(task) {
@@ -1345,6 +1349,9 @@ int KPTResourceRequestCollection::workUnits() const {
 // "Material type" of resourcegroups does not (atm) affect the duration.
 KPTDuration KPTResourceRequestCollection::duration(const KPTDateTime &time, const KPTDuration &effort, bool backward) {
     //kdDebug()<<k_funcinfo<<"time="<<time.toString()<<" effort="<<effort.toString(KPTDuration::Format_Day)<<" backward="<<backward<<endl;
+    if (isEmpty()) {
+        return effort;
+    }
     KPTDuration dur;
     int units = workUnits();
     if (units == 0)
@@ -1408,6 +1415,14 @@ void KPTResourceRequestCollection::reserve(const KPTDateTime &start, const KPTDu
     }
 }
 
+bool KPTResourceRequestCollection::isEmpty() const {
+    QPtrListIterator<KPTResourceGroupRequest> it(m_requests);
+    for (; it.current(); ++it) {
+        if (!it.current()->isEmpty())
+            return false;
+    }
+    return true;
+}
 #ifndef NDEBUG
 
 void KPTResourceGroup::printDebug(QString indent)

@@ -1161,7 +1161,7 @@ KPTDateTime KPTTask::summarytaskLatestFinish() {
 
 KPTDuration KPTTask::calcDuration(const KPTDateTime &time, const KPTDuration &effort, bool backward) {
     //kdDebug()<<"calcDuration "<<m_name<<" effort="<<effort.toString(KPTDuration::Format_Day)<<endl;
-    if (!m_requests) {
+    if (!m_requests || m_requests->isEmpty()) {
         m_resourceError = true;
         return effort;
     }

@@ -594,6 +594,8 @@ class KPTResourceGroupRequest {
          */
         void reserve(const KPTDateTime &start, const KPTDuration &duration);
 
+        bool isEmpty() const;
+    
     private:
         KPTResourceGroup *m_group;
         int m_units;
@@ -623,7 +625,7 @@ public:
     void takeRequest(KPTResourceGroupRequest *request) { m_requests.take(m_requests.findRef(request)); }
     KPTResourceGroupRequest *find(KPTResourceGroup *resource) const;
     KPTResourceRequest *find(KPTResource *resource) const;
-    bool isEmpty() { return m_requests.isEmpty(); }
+    bool isEmpty() const;
     
     bool load(QDomElement &element, KPTProject *project);
     void save(QDomElement &element);
