@@ -725,13 +725,9 @@ void WinWordDoc::gotTableBegin(
 
     m_cellEdges.resize(tableNumber);
     m_cellEdges.insert(tableNumber - 1, new QArray<unsigned>);
-    m_body.append("<PARAGRAPH>\n<TEXT>");
-
-    // This '0' will be replaced with the anchor character.
-
-    m_body.append('0');
-    m_body.append("</TEXT>\n<FORMATS>\n<FORMAT id=\"6\" pos=\"0\">\n");
-    m_body.append("<ANCHOR type=\"grpMgr\" instance=\"grpmgr_");
+    m_body.append("<PARAGRAPH>\n<TEXT>@</TEXT>\n");
+    m_body.append("<FORMATS>\n<FORMAT id=\"6\" pos=\"0\">\n");
+    m_body.append("<ANCHOR type=\"frameset\" instance=\"floattable_");
     m_body.append(QString::number(tableNumber));
     m_body.append("\"/>\n</FORMAT>\n</FORMATS>\n</PARAGRAPH>\n");
 }
