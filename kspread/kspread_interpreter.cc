@@ -4214,7 +4214,7 @@ bool KSpreadInterpreter::processExtension( KSContext& context, KSParseNode* node
     }
 
     if ( cell->isDefault())
-      context.setValue( new KSValue(  KSValue::Empty/*0.0*/ ) );
+      context.setValue( new KSValue(  /*KSValue::Empty*/ 0.0 ) );
     else if(cell->isObscured() && cell->isObscuringForced())
       context.setValue( new KSValue( 0.0 ) );
     else if ( cell->isValue() )
@@ -4226,7 +4226,7 @@ bool KSpreadInterpreter::processExtension( KSContext& context, KSParseNode* node
     else if ( cell->isDate() )
       context.setValue( new KSValue( cell->valueDate() ) );
     else if ( cell->valueString().isEmpty() )
-      context.setValue( new KSValue( /*0.0*/  KSValue::Empty ) );
+      context.setValue( new KSValue( 0.0  /*KSValue::Empty*/ ) );
     else
       context.setValue( new KSValue( cell->valueString() ) );
     return true;
@@ -4267,7 +4267,7 @@ bool KSpreadInterpreter::processExtension( KSContext& context, KSParseNode* node
         }
 
         if ( cell->isDefault() )
-          c = new KSValue( /*0.0*/ KSValue::Empty);
+          c = new KSValue( 0.0 /*KSValue::Empty*/);
         else if ( cell->isValue() )
           c = new KSValue( cell->valueDouble() );
         else if ( cell->isBool() )
@@ -4277,7 +4277,7 @@ bool KSpreadInterpreter::processExtension( KSContext& context, KSParseNode* node
         else if ( cell->isTime() )
           c = new KSValue( cell->valueTime() );
         else if ( cell->valueString().isEmpty() )
-          c = new KSValue( /*0.0*/ KSValue::Empty );
+          c = new KSValue( 0.0 /*KSValue::Empty*/ );
         else
           c = new KSValue( cell->valueString() );
         if ( !(cell->isObscured() && cell->isObscuringForced()) )
