@@ -24,6 +24,7 @@
 #include "kspread_view.h"
 #include "kspread_table.h"
 #include "kspread_doc.h"
+#include "kspread_canvas.h"
 #include <qlayout.h>
 #include <kapp.h>
 #include <klocale.h>
@@ -169,6 +170,8 @@ configure::configure( KSpreadView* _view,QWidget *parent , char *name )
   m_pView = _view;
   bool vertical=true;
   bool horizontal=true;
+  bool rowHeader=true;
+  bool colHeader=true;
 
   QVBoxLayout *box = new QVBoxLayout( this );
   box->setMargin( 5 );
@@ -187,6 +190,8 @@ configure::configure( KSpreadView* _view,QWidget *parent , char *name )
         _page=config->readNumEntry( "NbPage" ,1) ;
         horizontal=config->readBoolEntry("Horiz ScrollBar",true);
         vertical=config->readBoolEntry("Vert ScrollBar",true);
+        colHeader=config->readBoolEntry("Column Header",true);
+        rowHeader=config->readBoolEntry("Row Header",true);
         }
 
   nbPage=new KIntNumInput(_page, tmpQGroupBox , 10);
@@ -200,6 +205,14 @@ configure::configure( KSpreadView* _view,QWidget *parent , char *name )
   showHScrollBar=new QCheckBox(i18n("Show horizontal scrollbar"),tmpQGroupBox);
   lay1->addWidget(showHScrollBar);
   showHScrollBar->setChecked(horizontal);
+
+
+  showColHeader=new QCheckBox(i18n("Show Column Header"),tmpQGroupBox);
+  lay1->addWidget(showColHeader);
+  showColHeader->setChecked(colHeader);
+  showRowHeader=new QCheckBox(i18n("Show Row Header"),tmpQGroupBox);
+  lay1->addWidget(showRowHeader);
+  showRowHeader->setChecked(rowHeader);
 
   QLabel *label=new QLabel(tmpQGroupBox);
   label->setText(i18n("Completion mode :"));
@@ -222,7 +235,7 @@ configure::configure( KSpreadView* _view,QWidget *parent , char *name )
 
 void configure::initComboBox()
 {
-switch( m_pView->completionMode( ))
+switch( m_pView->doc()->completionMode( ))
         {
         case  KGlobalSettings::CompletionNone:
                 typeCompletion->setCurrentItem(0);
@@ -257,7 +270,7 @@ if( m_pView->horzScrollBar()->isVisible()!=showHScrollBar->isChecked())
                 m_pView->horzScrollBar()->show();
         else
                 m_pView->horzScrollBar()->hide();
-        m_pView->setShowHorizontalScrollBar(showHScrollBar->isChecked());
+        m_pView->doc()->setShowHorizontalScrollBar(showHScrollBar->isChecked());
         }
 if( m_pView->vertScrollBar()->isVisible()!=showVScrollBar->isChecked())
         {
@@ -266,31 +279,53 @@ if( m_pView->vertScrollBar()->isVisible()!=showVScrollBar->isChecked())
                 m_pView->vertScrollBar()->show();
         else
                 m_pView->vertScrollBar()->hide();
-        m_pView->setShowVerticalScrollBar(showVScrollBar->isChecked());
-        m_pView->activeTable()->refreshInterface();
+        m_pView->doc()->setShowVerticalScrollBar(showVScrollBar->isChecked());
+
         }
+
+if( m_pView->hBorderWidget()->isVisible()!=showColHeader->isChecked())
+        {
+        config->writeEntry( "Column Header", showColHeader->isChecked());
+        if( showColHeader->isChecked())
+                m_pView->hBorderWidget()->show();
+        else
+                m_pView->hBorderWidget()->hide();
+        m_pView->doc()->setShowColHeader(showColHeader->isChecked());
+        }
+
+if( m_pView->vBorderWidget()->isVisible()!=showRowHeader->isChecked())
+        {
+        config->writeEntry( "Row Header", showRowHeader->isChecked());
+        if( showRowHeader->isChecked())
+                m_pView->vBorderWidget()->show();
+        else
+                m_pView->vBorderWidget()->hide();
+        m_pView->doc()->setShowRowHeader(showRowHeader->isChecked());
+        }
+
 switch(typeCompletion->currentItem())
         {
         case 0:
-                m_pView->setCompletionMode(KGlobalSettings::CompletionNone);
+                m_pView->doc()->setCompletionMode(KGlobalSettings::CompletionNone);
                 config->writeEntry( "Completion Mode", (int)KGlobalSettings::CompletionNone);
                 break;
         case 1:
-                m_pView->setCompletionMode(KGlobalSettings::CompletionShell);
+                m_pView->doc()->setCompletionMode(KGlobalSettings::CompletionShell);
                 config->writeEntry( "Completion Mode", (int)KGlobalSettings::CompletionShell);
                 break;
         case 2:
-                m_pView->setCompletionMode(KGlobalSettings::CompletionPopup);
+                m_pView->doc()->setCompletionMode(KGlobalSettings::CompletionPopup);
                 config->writeEntry( "Completion Mode", (int)KGlobalSettings::CompletionPopup);
                 break;
         case 3:
-                m_pView->setCompletionMode(KGlobalSettings::CompletionAuto);
+                m_pView->doc()->setCompletionMode(KGlobalSettings::CompletionAuto);
                 config->writeEntry( "Completion Mode", (int)KGlobalSettings::CompletionAuto);
                 break;
         case 4:
-                m_pView->setCompletionMode(KGlobalSettings::CompletionMan);
+                m_pView->doc()->setCompletionMode(KGlobalSettings::CompletionMan);
                 config->writeEntry( "Completion Mode", (int)KGlobalSettings::CompletionMan);
                 break;
         }
+m_pView->doc()->refreshInterface();
 }
 #include "kspread_dlg_preference.moc"

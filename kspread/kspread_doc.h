@@ -261,6 +261,31 @@ public:
 
   void changeAreaTableName(QString oldName,QString tableName);
 
+  /**
+  * hide/show scrollbar
+  */
+  void setShowVerticalScrollBar(bool _show) {   m_bVerticalScrollBarShow=_show;}
+  void setShowHorizontalScrollBar(bool _show) {   m_bHorizontalScrollBarShow=_show;}
+
+  bool getShowVerticalScrollBar() { return  m_bVerticalScrollBarShow;}
+  bool getShowHorizontalScrollBar() {  return  m_bHorizontalScrollBarShow;}
+
+  /**
+  * completion mode
+  */
+
+  KGlobalSettings::Completion completionMode( ) { return m_iCompletionMode;}
+  void setCompletionMode( KGlobalSettings::Completion _complMode) {  m_iCompletionMode=_complMode;}
+
+  /**
+  * hide/show row/col header
+  */
+  void setShowColHeader(bool _show) {   m_bShowColHeader=_show;}
+  void setShowRowHeader(bool _show) {   m_bShowRowHeader=_show;}
+
+  bool getShowColHeader() { return  m_bShowColHeader;}
+  bool getShowRowHeader() {  return  m_bShowRowHeader;}
+
 public slots:
   /**
    * Open a dialog for the "Page Layout".
@@ -270,6 +295,8 @@ public slots:
    void paperLayoutDlg();
 
   //void newView(); obsloete (Werner)
+
+  void refreshInterface();
 
 signals:
   // Document signals
@@ -281,6 +308,10 @@ signals:
    * Emitted if all views have to be updated.
    */
   void sig_updateView();
+  /**
+  *  Emitted if all interfaces have to be updated.
+  */
+  void sig_refreshView();
 
 protected:
   KoView* createViewInstance( QWidget* parent, const char* name );
@@ -464,8 +495,26 @@ protected:
 
   QValueList<Reference> m_refs;
   KCompletion listCompletion;
-    
+
   KSpreadLocale m_locale;
+
+  /**
+  * bool which define if you can show scroolbar
+  */
+  bool m_bVerticalScrollBarShow;
+  bool m_bHorizontalScrollBarShow;
+
+  /**
+  * completion mode
+  */
+  KGlobalSettings::Completion m_iCompletionMode;
+
+  /**
+  * bool which define if you can show col/row header
+  */
+  bool m_bShowColHeader;
+  bool m_bShowRowHeader;
+
 };
 
 #endif

@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 1998, 1999 Torben Weis <weis@kde.org>
-   Copyright (C) 1999 Montel Laurent <montell@club-internet.fr>
+   Copyright (C) 1999 Montel Laurent <lmontel@mandrakesoft.com>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -70,6 +70,8 @@ protected:
   KIntNumInput  *nbPage;
   QCheckBox *showVScrollBar;
   QCheckBox *showHScrollBar;
+  QCheckBox *showColHeader;
+  QCheckBox *showRowHeader;
   KConfig* config;
   QComboBox *typeCompletion;
 } ;

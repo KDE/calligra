@@ -1111,3 +1111,7 @@ Add RANDBETWEEN function
 ----------------------------------------------------
 -Now you can configure the number of page when you begin kspread (when you don't specify
 a file name)
+
+2000-12-11-Montel laurent <lmontel@mandrakesoft.com>
+----------------------------------------------------
+-Now you can hide/show col/row header

@@ -41,7 +41,7 @@ KSpreadTextEditor::KSpreadTextEditor( KSpreadCell* _cell, KSpreadCanvas* _parent
   m_pEdit = new KLineEdit( this );
   m_pEdit->installEventFilter( this );
   m_pEdit->setFrame( FALSE );
-  m_pEdit->setCompletionMode(/*KGlobalSettings::CompletionAuto*/(KGlobalSettings::Completion)canvas()->view()->completionMode()  );
+  m_pEdit->setCompletionMode(/*KGlobalSettings::CompletionAuto*/(KGlobalSettings::Completion)canvas()->view()->doc()->completionMode()  );
   m_pEdit->setCompletionObject( &canvas()->view()->doc()->completion(),true );
   setFocusProxy( m_pEdit );
   setFontPropagation( AllChildren );

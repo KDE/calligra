@@ -3902,11 +3902,6 @@ void KSpreadTable::refreshPreference()
   emit sig_updateView( this );
 }
 
-void KSpreadTable::refreshInterface()
-{
- emit sig_RefreshView( this );
-}
-
 bool KSpreadTable::areaIsEmpty()
 {
     bool selected = ( m_rctSelection.left() != 0 );

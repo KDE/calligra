@@ -120,10 +120,6 @@ KSpreadView::KSpreadView( QWidget *_parent, const char *_name, KSpreadDoc* doc )
 
     m_dcop = 0;
     m_bLoading =false;
-    m_iCompletionMode=KGlobalSettings::CompletionAuto;
-
-    m_bVerticalScrollBarShow=true;
-    m_bHorizontalScrollBarShow=true;
 
     // Vert. Scroll Bar
     m_pVertScrollBar = new QScrollBar( this, "ScrollBar_2" );
@@ -211,6 +207,9 @@ KSpreadView::KSpreadView( QWidget *_parent, const char *_name, KSpreadDoc* doc )
         setActiveTable(m_pDoc->map()->findTable(m_pTabBar->listshow().first()));
 
     QObject::connect( m_pDoc, SIGNAL( sig_addTable( KSpreadTable* ) ), SLOT( slotAddTable( KSpreadTable* ) ) );
+
+
+    QObject::connect( m_pDoc, SIGNAL( sig_refreshView(  ) ), this, SLOT( slotRefreshView() ) );
 
     // Handler for moving and resizing embedded parts
     ContainerHandler* h = new ContainerHandler( this, m_pCanvas );
@@ -384,7 +383,7 @@ KSpreadView::KSpreadView( QWidget *_parent, const char *_name, KSpreadDoc* doc )
     m_formulaProduct = new KAction( i18n("Formula Product"), "prod", 0, this, SLOT( formulaProduct() ),
                                     actionCollection(), "formulaProduct");
     m_formulaSelection = new KSelectAction( i18n("Formula Selection"), 0, actionCollection(), "formulaSelection" );
-	
+
     QStringList lst;
     lst.append( "sum");
     lst.append( "cos");
@@ -465,9 +464,11 @@ KConfig *config = KSpreadFactory::global()->config();
 if( config->hasGroup("Parameters" ))
         {
         config->setGroup( "Parameters" );
-        m_bHorizontalScrollBarShow=config->readBoolEntry("Horiz ScrollBar",true);
-        m_bVerticalScrollBarShow=config->readBoolEntry("Vert ScrollBar",true);
-        m_iCompletionMode=(KGlobalSettings::Completion)config->readNumEntry("Completion Mode",(int)(KGlobalSettings::CompletionAuto));
+        m_pDoc->setShowHorizontalScrollBar(config->readBoolEntry("Horiz ScrollBar",true));
+        m_pDoc->setShowVerticalScrollBar(config->readBoolEntry("Vert ScrollBar",true));
+        m_pDoc->setShowColHeader(config->readBoolEntry("Column Header",true));
+        m_pDoc->setShowRowHeader(config->readBoolEntry("Row Header",true));
+        m_pDoc->setCompletionMode((KGlobalSettings::Completion)config->readNumEntry("Completion Mode",(int)(KGlobalSettings::CompletionAuto)));
         }
 }
 
@@ -1243,8 +1244,6 @@ void KSpreadView::addTable( KSpreadTable *_t )
                       this, SLOT( slotTableRemoved( KSpreadTable* ) ) );
     QObject::connect( _t, SIGNAL( sig_TableActivated( KSpreadTable* ) ),
                       this, SLOT( slotTableActivated( KSpreadTable* ) ) );
-    QObject::connect( _t, SIGNAL( sig_RefreshView( KSpreadTable* ) ),
-                      this, SLOT( slotRefreshView( KSpreadTable* ) ) );
     // ########### Why do these signals not send a pointer to the table?
     // This will lead to bugs.
     QObject::connect( _t, SIGNAL( sig_updateChildGeometry( KSpreadChild* ) ),
@@ -1306,9 +1305,9 @@ void KSpreadView::setActiveTable( KSpreadTable *_t,bool updateTable )
   }
 }
 
-void KSpreadView::slotRefreshView( KSpreadTable* )
-{                                                        
-        refreshView();
+void KSpreadView::slotRefreshView(  )
+{
+  refreshView();
 }
 
 void KSpreadView::slotTableActivated( KSpreadTable* table )
@@ -1859,7 +1858,7 @@ int KSpreadView::bottomBorder() const
 }
 
 void KSpreadView::refreshView()
-{                                                
+{
     m_pToolWidget->show();
     // If this value (30) is changed then topBorder() needs to
     // be changed, too.
@@ -1879,35 +1878,53 @@ void KSpreadView::refreshView()
 
     // David's suggestion: move the scrollbars to KSpreadCanvas, but keep those resize statements
     int widthScrollbarVertical=16;
-    if( m_bHorizontalScrollBarShow)
+    if(m_pDoc->getShowHorizontalScrollBar())
         m_pHorzScrollBar->show();
     else
         m_pHorzScrollBar->hide();
 
     m_pVertScrollBar->setGeometry( width() - 16, top , 16, height() - 16 - top );
     m_pVertScrollBar->setSteps( 20 /*linestep*/, m_pVertScrollBar->height() /*pagestep*/);
-    if(m_bVerticalScrollBarShow)
+    if(m_pDoc->getShowVerticalScrollBar())
         m_pVertScrollBar->show();
     else
         {
         widthScrollbarVertical=0;
         m_pVertScrollBar->hide();
         }
+
+    int widthRowHeader=YBORDER_WIDTH;
+    if(m_pDoc->getShowRowHeader())
+        m_pVBorderWidget->show();
+    else
+        {
+        widthRowHeader=0;
+        m_pVBorderWidget->hide();
+        }
+
+    int heightColHeader=XBORDER_HEIGHT;
+    if(m_pDoc->getShowColHeader())
+         m_pHBorderWidget->show();
+    else
+        {
+        heightColHeader=0;
+        m_pHBorderWidget->hide();
+        }
+
+
     m_pHorzScrollBar->setGeometry( width() / 2, height() - 16, width() / 2 - widthScrollbarVertical/*16*/, 16 );
     m_pHorzScrollBar->setSteps( 20 /*linestep*/, m_pHorzScrollBar->width() /*pagestep*/);
 
     m_pFrame->setGeometry( 0, top, width()-widthScrollbarVertical /*- 16*/, height() - 16 - top );
     m_pFrame->show();
 
-    m_pCanvas->setGeometry( YBORDER_WIDTH, XBORDER_HEIGHT,
-                            m_pFrame->width() - YBORDER_WIDTH, m_pFrame->height() - XBORDER_HEIGHT );
+    m_pCanvas->setGeometry( /*YBORDER_WIDTH*/widthRowHeader, /*XBORDER_HEIGHT*/heightColHeader,
+                            m_pFrame->width() -widthRowHeader /*YBORDER_WIDTH*/, m_pFrame->height() - heightColHeader/*XBORDER_HEIGHT*/ );
 
-    m_pHBorderWidget->setGeometry( YBORDER_WIDTH, 0, m_pFrame->width() - YBORDER_WIDTH, XBORDER_HEIGHT );
-    m_pHBorderWidget->show();
+    m_pHBorderWidget->setGeometry( /*YBORDER_WIDTH*/widthRowHeader, 0, m_pFrame->width() - /*YBORDER_WIDTH*/widthRowHeader, /*XBORDER_HEIGHT*/heightColHeader );
 
-    m_pVBorderWidget->setGeometry( 0, XBORDER_HEIGHT, YBORDER_WIDTH,
-                                   m_pFrame->height() - XBORDER_HEIGHT );
-    m_pVBorderWidget->show();
+    m_pVBorderWidget->setGeometry( 0, /*XBORDER_HEIGHT*/heightColHeader, /*YBORDER_WIDTH*/widthRowHeader,
+                                   m_pFrame->height() - heightColHeader/*XBORDER_HEIGHT*/ );
 }
 
 void KSpreadView::resizeEvent( QResizeEvent * )

@@ -115,6 +115,13 @@ KSpreadDoc::KSpreadDoc( QWidget *parentWidget, const char *widgetName, QObject* 
   // Make us scriptable if the document has a name
   if ( name )
       dcopObject();
+
+  m_iCompletionMode=KGlobalSettings::CompletionAuto;
+
+  m_bVerticalScrollBarShow=true;
+  m_bHorizontalScrollBarShow=true;
+  m_bShowColHeader=true;
+  m_bShowRowHeader=true;
 }
 
 bool KSpreadDoc::initDoc()
@@ -993,4 +1000,8 @@ void KSpreadDoc::addStringCompletion(QString stringCompletion)
            listCompletion.addItem(stringCompletion);
 }
 
+void KSpreadDoc::refreshInterface()
+{
+emit sig_refreshView();
+}
 #include "kspread_doc.moc"
