@@ -431,8 +431,10 @@ VPath::counterClockwise() const
 void
 VPath::revert()
 {
-	if(!m_last)
+	// In the case the list is (nearly) empty (which should actually never happen):
+	if( count() <= 1 )
 		return;
+
 	VPath list( parent() );
 	list.moveTo( m_last->knot() );
 
