@@ -835,8 +835,11 @@ public:
 
     /**
      * @see #copy
+     *
+     * @param era set this to true if you want to encode relative references absolutely (they will
+     *            be switched back to relative references during decoding) - used for cut to clipboard
      */
-    QDomDocument saveCellRect( const QRect &, bool copy = false );
+    QDomDocument saveCellRect( const QRect &, bool copy = false, bool era = false );
 
     /**
     * insertTo defined if you insert to the bottom or right

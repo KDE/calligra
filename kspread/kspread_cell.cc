@@ -510,7 +510,7 @@ void KSpreadCell::clicked( KSpreadCanvas * _canvas )
       }
 }
 
-QString KSpreadCell::encodeFormula( int _col, int _row )
+QString KSpreadCell::encodeFormula( bool _era, int _col, int _row )
 {
     if ( _col == -1 )
         _col = m_iColumn;
@@ -612,12 +612,18 @@ QString KSpreadCell::encodeFormula( int _col, int _row )
                         if ( fix1 )
                             erg += QString( "$%1" ).arg( col );
                         else
-                            erg += QString( "#%1" ).arg( col - _col );
+                            if (_era)
+                                erg += QString( "\%%1" ).arg( col );
+                            else
+                                erg += QString( "#%1" ).arg( col - _col );
 
                         if ( fix2 )
                             erg += QString( "$%1#").arg( row );
                         else
-                            erg += QString( "#%1#" ).arg( row - _row );
+                            if (_era)
+                                erg += QString( "\%%1#" ).arg( row );
+                            else
+                                erg += QString( "#%1#" ).arg( row - _row );
                     }
                 }
                 else
@@ -670,28 +676,34 @@ QString KSpreadCell::decodeFormula( const QString &_text, int _col, int _row )
             if ( pos < length )
                 erg += _text[pos++];
         }
-        else if ( _text[pos] == '#' || _text[pos] == '$' )
+        else if ( _text[pos] == '#' || _text[pos] == '$' || _text[pos] == '%')
         {
-            bool fix1 = FALSE;
-            bool fix2 = FALSE;
-            if ( _text[pos++] == '$' )
-                fix1 = TRUE;
+            bool abs1 = FALSE;
+            bool abs2 = FALSE;
+            bool era1 = FALSE; // if 1st is relative but encoded absolutely
+            bool era2 = FALSE;
+            switch ( _text[pos++] ) {
+                case '$': abs1 = TRUE; break ;
+                case '%': era1 = TRUE; break ;
+            }
             int col = 0;
             unsigned int oldPos = pos;
             while ( pos < length && ( _text[pos].isDigit() || _text[pos] == '-' ) ) ++pos;
             if ( pos != oldPos )
                 col = _text.mid(oldPos, pos-oldPos).toInt();
-            if ( !fix1 )
+            if ( !abs1 && !era1 )
                 col += _col;
             // Skip '#' or '$'
-            if ( _text[pos++] == '$' )
-                fix2 = TRUE;
+            switch ( _text[pos++] ) {
+                case '$': abs2 = TRUE; break ;
+                case '%': era2 = TRUE; break ;
+            }
             int row = 0;
             oldPos = pos;
             while ( pos < length && ( _text[pos].isDigit() || _text[pos] == '-' ) ) ++pos;
             if ( pos != oldPos )
                 row = _text.mid(oldPos, pos-oldPos).toInt();
-            if ( !fix2 )
+            if ( !abs2 && !era2)
                 row += _row;
             // Skip '#' or '$'
             ++pos;
@@ -701,11 +713,11 @@ QString KSpreadCell::decodeFormula( const QString &_text, int _col, int _row )
                 erg = "=\"#### " + i18n("REFERENCE TO COLUMN OR ROW IS OUT OF RANGE") + "\"";
                 return erg;
             }
-            if ( fix1 )
+            if ( abs1 )
                 erg += "$";
             erg += util_encodeColumnLabelText(col); //Get column text
 
-            if ( fix2 )
+            if ( abs2 )
                 erg += "$";
             erg += QString::number( row );
         }
@@ -4729,7 +4741,7 @@ bool KSpreadCell::cellDependsOn(KSpreadSheet *table, int col, int row)
   return isdep;
 }
 
-QDomElement KSpreadCell::save( QDomDocument& doc, int _x_offset, int _y_offset, bool force, bool copy )
+QDomElement KSpreadCell::save( QDomDocument& doc, int _x_offset, int _y_offset, bool force, bool copy, bool era )
 {
     // Save the position of this cell
     QDomElement cell = doc.createElement( "cell" );
@@ -4836,7 +4848,8 @@ QDomElement KSpreadCell::save( QDomDocument& doc, int _x_offset, int _y_offset, 
         if ( isFormula() )
         {
             QDomElement text = doc.createElement( "text" );
-            text.appendChild( doc.createTextNode( encodeFormula() ) );
+            // if we are cutting to the clipboard, relative references need to be encoded absolutely
+            text.appendChild( doc.createTextNode( encodeFormula( era ) ) );
             cell.appendChild( text );
 
             /* we still want to save the results of the formula */

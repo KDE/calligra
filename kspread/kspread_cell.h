@@ -165,9 +165,11 @@ public:
      * @param _x_offset ...
      * @param _y_offset ...
      * @param force if set to true, all the properties of the format are stored (used for "Copy")
+     * @param era set this to true if you want to encode relative references as absolutely (they will be switched
+     *            back to relative references during decoding) - is used for cutting to clipboard
      * Usually this is false, to only store the properties explicitly set.
      */
-    QDomElement save( QDomDocument& doc, int _x_offset = 0, int _y_offset = 0, bool force = false, bool copy = false );
+    QDomElement save( QDomDocument& doc, int _x_offset = 0, int _y_offset = 0, bool force = false, bool copy = false, bool era = false );
 
     bool load( const QDomElement& cell, int _xshift, int _yshift, PasteMode pm = Normal,
 	       Operation op = OverWrite, bool paste = false );
@@ -604,7 +606,14 @@ public:
 
     bool isFormula() const { return m_content == Formula; }
 
-    QString encodeFormula( int _col = -1, int _row = -1 );
+    /**
+     * encode a formula into a text representation
+     *
+     * @param _era encode relative references absolutely (this is used for copying
+     *             a cell to make the paste operation create a formula that points
+     *             to the original cells, not the cells at the same relative position)
+     */
+    QString encodeFormula( bool _era = false, int _col = -1, int _row = -1 );
     QString decodeFormula( const QString &_text, int _col = -1, int _row = -1 );
 
     /**

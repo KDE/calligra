@@ -5377,7 +5377,26 @@ void KSpreadSheet::copySelection( KSpreadSelection* selectionInfo )
 
 void KSpreadSheet::cutSelection( KSpreadSelection* selectionInfo )
 {
-    copySelection( selectionInfo );
+    QRect rct;
+
+    rct = selectionInfo->selection();
+
+    QDomDocument doc = saveCellRect( rct, true, true );
+
+    // Save to buffer
+    QBuffer buffer;
+    buffer.open( IO_WriteOnly );
+    QTextStream str( &buffer );
+    str.setEncoding( QTextStream::UnicodeUTF8 );
+    str << doc;
+    buffer.close();
+
+    KSpreadTextDrag * kd = new KSpreadTextDrag( 0L );
+    kd->setPlain( copyAsText(selectionInfo) );
+    kd->setKSpread( buffer.buffer() );
+
+    QApplication::clipboard()->setData( kd );
+
     deleteSelection( selectionInfo );
 }
 
@@ -6019,7 +6038,7 @@ bool KSpreadSheet::testListChoose(KSpreadSelection* selectionInfo)
 
 
 
-QDomDocument KSpreadSheet::saveCellRect( const QRect &_rect, bool copy )
+QDomDocument KSpreadSheet::saveCellRect( const QRect &_rect, bool copy, bool era )
 {
     QDomDocument doc( "spreadsheet-snippet" );
     doc.appendChild( doc.createProcessingInstruction( "xml", "version=\"1.0\" encoding=\"UTF-8\"" ) );
@@ -6045,7 +6064,7 @@ QDomDocument KSpreadSheet::saveCellRect( const QRect &_rect, bool copy )
             {
                 QPoint p( c->column(), c->row() );
                 if ( _rect.contains( p ) )
-                    spread.appendChild( c->save( doc, 0, _rect.top() - 1, copy ) );
+                    spread.appendChild( c->save( doc, 0, _rect.top() - 1, copy, copy, era ) );
             }
         }
 
@@ -6083,7 +6102,7 @@ QDomDocument KSpreadSheet::saveCellRect( const QRect &_rect, bool copy )
             {
                 QPoint p( c->column(), c->row() );
                 if ( _rect.contains( p ) )
-                    spread.appendChild( c->save( doc, _rect.left() - 1, 0, copy ) );
+                    spread.appendChild( c->save( doc, _rect.left() - 1, 0, copy, copy, era ) );
             }
         }
 
@@ -6122,7 +6141,7 @@ QDomDocument KSpreadSheet::saveCellRect( const QRect &_rect, bool copy )
 		insertCell( cell );
 		insert=true;
 	    }
-	    spread.appendChild( cell->save( doc, _rect.left() - 1, _rect.top() - 1, true, copy ) );
+	    spread.appendChild( cell->save( doc, _rect.left() - 1, _rect.top() - 1, true, copy, era ) );
 	    if( insert )
 	        m_cells.remove(i,j);
 	}
