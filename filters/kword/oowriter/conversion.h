@@ -44,6 +44,9 @@ namespace Conversion
     // Convert overflow behavior ("what to do if the text is bigger than the frame")
     int importOverflowBehavior( const QString& oasisOverflowBehavior );
     QString exportOverflowBehavior( const QString& kwordAutoCreateNewFrame );
+
+    // Convert numbering format (for a list) to a kword counter type
+    int importCounterType( const QString& numFormat );
 }
 
 #endif

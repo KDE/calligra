@@ -655,7 +655,7 @@ void OoWriterImport::applyListStyle( QDomDocument& doc, QDomElement& layoutEleme
         counter.setAttribute( "depth", m_listStyleStack.level() - 1 );
 
         if ( m_insideOrderedList ) {
-            counter.setAttribute("type", 1); // TODO convert style:num-format
+            counter.setAttribute("type", Conversion::importCounterType( listStyle.attribute( "style:num-format" ) ) );
             counter.setAttribute("lefttext", listStyle.attribute( "style:num-prefix" ) );
             counter.setAttribute("righttext", listStyle.attribute( "style:num-suffix" ) );
         }
