@@ -1,5 +1,5 @@
 KDE_CXXFLAGS=-UQT_NO_COMPAT
-INCLUDES=$(all_includes)
+INCLUDES=-I$(top_srcdir) $(all_includes)
 lib_LTLIBRARIES = libqt3stuff.la
 libqt3stuff_la_SOURCES = qrichtext.cpp qstylesheet.cpp qtextview.cpp qtextedit.cpp
 libqt3stuff_la_LDFLAGS = $(all_libraries) -no-undefined
