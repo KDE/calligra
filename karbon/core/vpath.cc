@@ -522,29 +522,6 @@ VPath::saveSvgPath( QString &d ) const
 }
 
 void
-VPath::save( QDomElement& element ) const
-{
-	// Don't save if the list is "empty".
-	if( isEmpty() )
-		return;
-
-	QDomElement me = element.ownerDocument().createElement( "PATH" );
-	element.appendChild( me );
-
-	if( m_isClosed )
-		me.setAttribute( "isClosed", m_isClosed );
-
-	// save segments:
-	VSegment* segment = m_first;
-	while( segment )
-	{
-		segment->save( me );
-
-		segment = segment->m_next;
-	}
-}
-
-void
 VPath::load( const QDomElement& element )
 {
 	clear();	// we already might have a "begin".

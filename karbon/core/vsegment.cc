@@ -907,45 +907,6 @@ VSegment::transform( const QWMatrix& m )
 	}
 }
 
-
-void
-VSegment::save( QDomElement& element ) const
-{
-	if( state() == deleted )
-		return;
-
-
-	QDomElement me;
-
-	if( m_type == curve )
-	{
-		me = element.ownerDocument().createElement( "CURVE" );
-		me.setAttribute( "x1", point( 0 ).x() );
-		me.setAttribute( "y1", point( 0 ).y() );
-		me.setAttribute( "x2", point( 1 ).x() );
-		me.setAttribute( "y2", point( 1 ).y() );
-		me.setAttribute( "x3", knot().x() );
-		me.setAttribute( "y3", knot().y() );
-	}
-	else if( m_type == line )
-	{
-		me = element.ownerDocument().createElement( "LINE" );
-		me.setAttribute( "x", knot().x() );
-		me.setAttribute( "y", knot().y() );
-	}
-	else if( m_type == begin )
-	{
-		me = element.ownerDocument().createElement( "MOVE" );
-		me.setAttribute( "x", knot().x() );
-		me.setAttribute( "y", knot().y() );
-	}
-
-	if( m_ctrlPointFixing )
-		me.setAttribute( "ctrlPointFixing", m_ctrlPointFixing );
-
-	element.appendChild( me );
-}
-
 void
 VSegment::load( const QDomElement& element )
 {

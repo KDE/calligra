@@ -83,7 +83,7 @@ public:
 
 	virtual const KoRect& boundingBox() const;
 
-	virtual void save( QDomElement& element ) const;
+	virtual void save( QDomElement & ) const {}	// VPaths cant be saved...
 	virtual void load( const QDomElement& element );
 	void saveSvgPath( QString & ) const;
 

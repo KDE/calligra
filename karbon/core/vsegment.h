@@ -373,10 +373,7 @@ public:
 	void transform( const QWMatrix& m );
 
 
-	void save( QDomElement& element ) const;
-
 	void load( const QDomElement& element );
-
 
 	/**
 	 * Returns a pointer to a copy of this segment.
