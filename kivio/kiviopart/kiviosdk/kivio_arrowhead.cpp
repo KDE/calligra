@@ -76,6 +76,7 @@ void KivioArrowHead::setType(int t)
         case kahtBackSlash:
         case kahtPipe:
         case kahtCrowFoot:
+        case kahtFork:
             m_cut = 0.0f;
             break;
 
@@ -181,6 +182,10 @@ void KivioArrowHead::paint( KivioPainter *painter, float x, float y, float vecX,
 
         case kahtCrowFoot:
             paintCrowFoot( &d );
+            break;
+
+        case kahtFork:
+            paintFork( &d );
             break;
 /*
         case kahtCircleSolid:
@@ -582,6 +587,61 @@ void KivioArrowHead::paintCrowFoot( KivioArrowHeadData *d )
 
     pvecX *= -1.0f;
     pvecY *= -1.0f;
+
+    _x = zoomHandler->zoomItX(d->x + pvecX*(m_w/2.0f));
+    _y = zoomHandler->zoomItY(d->y + pvecY*(m_w/2.0f));
+
+    l.append( new KivioPoint( _x, _y ) );
+
+
+    painter->drawPolyline( &l );
+}
+
+void KivioArrowHead::paintFork( KivioArrowHeadData *d )
+{
+    KivioPainter *painter = d->painter;
+
+    float vecX = d->vecX;
+    float vecY = d->vecY;
+
+    float length;
+
+    KoZoomHandler* zoomHandler = d->zoomHandler;
+
+    float nvecX, nvecY; // normalized vectors
+    float pvecX, pvecY; // normal perpendicular vector
+
+    length = sqrt( vecX*vecX + vecY*vecY );
+
+    nvecX = - vecX / length;
+    nvecY = - vecY / length;
+
+    pvecX = nvecY;
+    pvecY = -nvecX;
+
+    QPtrList<KivioPoint>l;
+    l.setAutoDelete(true);
+
+    float _x;
+    float _y;
+
+    _x = zoomHandler->zoomItX(d->x + pvecX*(m_w/2.0f));
+    _y = zoomHandler->zoomItY(d->y + pvecY*(m_w/2.0f));
+
+    l.append( new KivioPoint( _x, _y ) );
+
+    _x = zoomHandler->zoomItX((d->x + nvecX * m_l) + pvecX*(m_w/2.0f));
+    _y = zoomHandler->zoomItY((d->y + nvecY * m_l) + pvecY*(m_w/2.0f));
+
+    l.append( new KivioPoint( _x, _y ) );
+
+    pvecX *= -1.0f;
+    pvecY *= -1.0f;
+
+    _x = zoomHandler->zoomItX((d->x + nvecX * m_l) + pvecX*(m_w/2.0f));
+    _y = zoomHandler->zoomItY((d->y + nvecY * m_l) + pvecY*(m_w/2.0f));
+
+    l.append( new KivioPoint( _x, _y ) );
 
     _x = zoomHandler->zoomItX(d->x + pvecX*(m_w/2.0f));
     _y = zoomHandler->zoomItY(d->y + pvecY*(m_w/2.0f));
