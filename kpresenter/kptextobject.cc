@@ -438,7 +438,9 @@ QDomElement KPTextObject::saveHelper(const QString &tmpText,KoTextFormat*lastFor
         element.setAttribute(attrBold, tmpBold);
     if(tmpItalic)
         element.setAttribute(attrItalic, tmpItalic);
-    if(tmpUnderline)
+    if(lastFormat->doubleUnderline())
+        element.setAttribute(attrUnderline, "double");
+    else if(tmpUnderline)
         element.setAttribute(attrUnderline, tmpUnderline);
     if(tmpStrikeOut)
         element.setAttribute(attrStrikeOut, tmpStrikeOut);
@@ -578,7 +580,15 @@ KoTextFormat KPTextObject::loadFormat( QDomElement &n )
         italic=(bool)n.attribute( attrItalic ).toInt();
     bool underline=false;
     if(n.hasAttribute( attrUnderline ))
-        underline = (bool)n.attribute( attrUnderline ).toInt();
+    {
+        QString value = n.attribute( attrUnderline );
+        if ( value == "double" )
+            format.setDoubleUnderline(true);
+        else if ( value == "single" )
+            underline = true;
+        else
+            underline = (bool).toInt();
+    }
     bool strikeOut=false;
     if(n.hasAttribute(attrStrikeOut))
         strikeOut = (bool)n.attribute( attrStrikeOut ).toInt();

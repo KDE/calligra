@@ -86,3 +86,4 @@ QColor ShadowDialogImpl::shadowColor()
 {
     return colorButton->color();
 }
+#include "shadowdialogimpl.moc"

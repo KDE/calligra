@@ -2192,7 +2192,7 @@ void KPrCanvas::chClip()
     stickyPage()->chClip(m_view);
 }
 
-void KPrCanvas::setFont(const QFont &font, bool _subscript, bool _superscript, const QColor &col, const QColor &backGroundColor, int flags)
+void KPrCanvas::setFont(const QFont &font, bool _subscript, bool _superscript, bool _doubleUnderline, const QColor &col, const QColor &backGroundColor, int flags)
 
 {
     QPtrList<KoTextFormatInterface> lst = applicableTextInterfaces();
@@ -2200,7 +2200,7 @@ void KPrCanvas::setFont(const QFont &font, bool _subscript, bool _superscript, c
     KMacroCommand* macroCmd = new KMacroCommand( i18n("Change text font") );
     QPtrListIterator<KoTextFormatInterface> it( lst );
     for ( ; it.current() ; ++it ) {
-        KCommand* cmd = it.current()->setFontCommand( font, _subscript, _superscript, col, backGroundColor, flags );
+        KCommand* cmd = it.current()->setFontCommand( font, _subscript, _superscript, _doubleUnderline, col, backGroundColor, flags );
         if (cmd)
             macroCmd->addCommand( cmd );
     }

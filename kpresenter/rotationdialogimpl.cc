@@ -80,3 +80,4 @@ void RotationDialogImpl::angleMode( int id )
 	a = customInput->value();
     _preview->setAngle( a );
 }
+#include "rotationdialogimpl.moc"

@@ -1689,9 +1689,10 @@ void KPresenterView::mtextFont()
     if (textIface)
         col = textIface->textBackgroundColor();
     col = col.isValid() ? col : QApplication::palette().color( QPalette::Active, QColorGroup::Base );
+    bool doubleUnderline = textIface->currentFormat()->doubleUnderline();
     KoFontDia *fontDia = new KoFontDia( this, "", textIface->textFont(),
                                         actionFormatSub->isChecked(), actionFormatSuper->isChecked(),
-                                        textIface->textColor(), col );
+                                        doubleUnderline, textIface->textColor(), col );
     if ( fontDia->exec() )
     {
         int flags = fontDia->changedFlags();
@@ -1700,6 +1701,7 @@ void KPresenterView::mtextFont()
             // The "change all the format" call
             m_canvas->setFont(fontDia->getNewFont(),
                               fontDia->getSubScript(), fontDia->getSuperScript(),
+			      fontDia->getDoubleUnderline(),
                               fontDia->color(), fontDia->backGroundColor(),
                               flags);
         }

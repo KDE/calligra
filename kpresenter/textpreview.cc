@@ -98,3 +98,4 @@ void TextPreview::drawContents( QPainter* painter )
 
     painter->restore();
 }
+#include "textpreview.moc"
