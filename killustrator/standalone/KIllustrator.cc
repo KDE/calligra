@@ -1052,7 +1052,7 @@ void KIllustrator::openURL (const char* surl) {
     KIOJob * kiojob = new KIOJob;
     QString tmpFile;
 
-    connect (kiojob, SIGNAL(finished ( int )), this, SLOT (slotKFMJobDone ( int )));
+    connect (kiojob, SIGNAL(sigFinished ( int )), this, SLOT (slotKFMJobDone ( int )));
     tmpFile.sprintf ("file:/tmp/killu%i", time (0L));
     kiojob->copy (surl, tmpFile);
     KURL tmpURL (tmpFile);
