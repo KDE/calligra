@@ -1509,16 +1509,16 @@ QTextCursor * KPrPasteTextCommand::execute( QTextCursor *c )
         }
         else
         {
-#if 0
+
             if ( item == 0 ) // This paragraph existed, store its parag layout
                 m_oldParagLayout = parag->paragLayout();
-#endif
+
             KoParagLayout paragLayout = textdoc->textObject()->loadParagLayout(paragElem);
             parag->setParagLayout( paragLayout );
             // Last paragraph: some of the text might be from before the paste
             int len = (item == count-1) ? c->index() : parag->string()->length();
             // Apply default format
-            parag->setFormat( 0, len, parag->paragFormat(), TRUE );
+            parag->setFormat( 0, len, textdoc->textObject()->loadFormat( paragElem ), TRUE );
         }
         parag->format();
         parag->setChanged( TRUE );
@@ -1553,9 +1553,7 @@ QTextCursor * KPrPasteTextCommand::unexecute( QTextCursor *c )
     // Delete all custom items
 
     doc->removeSelectedText( QTextDocument::Temp, c /* sets c to the correct position */ );
-#if 0
     if ( m_idx == 0 )
         static_cast<KoTextParag *>( firstParag )->setParagLayout( m_oldParagLayout );
-#endif
     return c;
 }
