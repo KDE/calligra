@@ -26,7 +26,8 @@
 
 #include "kexialtertable.h"
 #include "kexitableview.h"
-#include "kexiDB/kexidbrecord.h"
+#include "kexiDB/kexidbfield.h"
+#include "kexiDB/kexidb.h"
 #include "kexiproject.h"
 
 KexiAlterTable::KexiAlterTable(KexiView *view, QWidget *parent, const QString &table, const char *name)
@@ -68,23 +69,22 @@ KexiAlterTable::KexiAlterTable(KexiView *view, QWidget *parent, const QString &t
 
 void KexiAlterTable::initTable()
 {
-	KexiDBRecord* record = kexiProject()->db()->queryRecord("select * from " + m_table + " limit 1 ", false);
-	record->next();
+	KexiDBTableStruct dbStruct = kexiProject()->db()->getStructure(m_table);
 	m_fieldnames.clear();
 	int fc = 0;
-
-	for(uint i = 0; i < record->fieldCount(); i++)
+	
+	for(KexiDBField* field = dbStruct.first(); field; field = dbStruct.next())
 	{
 		KexiTableItem *it = new KexiTableItem(m_view);
-		it->setValue(0, record->fieldInfo(i)->name());
-		m_fieldnames.append(record->fieldInfo(i)->name());
-		it->setValue(1, record->fieldInfo(i)->sqlType() - 1);
-		it->setValue(2, record->fieldInfo(i)->length());
-		it->setValue(3, record->fieldInfo(i)->not_null());
-		it->setValue(4, record->fieldInfo(i)->defaultValue());
-		it->setValue(5, record->fieldInfo(i)->unsignedType());
-		it->setValue(6, record->fieldInfo(i)->precision());
-		it->setValue(7, record->fieldInfo(i)->auto_increment());
+		it->setValue(0, field->name());
+		m_fieldnames.append(field->name());
+		it->setValue(1, field->sqlType() - 1);
+		it->setValue(2, field->length());
+		it->setValue(3, field->not_null());
+		it->setValue(4, field->defaultValue());
+		it->setValue(5, field->unsignedType());
+		it->setValue(6, field->precision());
+		it->setValue(7, field->auto_increment());
 		it->setHint(QVariant(fc++));
 	}
 
@@ -94,8 +94,6 @@ void KexiAlterTable::initTable()
 	insert->setValue(2, 1);
 	insert->setHint(QVariant(fc));
 	insert->setInsertItem(true);
-
-	delete record;
 }
 
 void KexiAlterTable::slotItemChanged(KexiTableItem *i, int /*col*/)
@@ -150,16 +148,15 @@ void KexiAlterTable::slotItemChanged(KexiTableItem *i, int /*col*/)
 		else
 		{
 			// If the query faild revert
-			KexiDBRecord* record = kexiProject()->db()->queryRecord("select * from " + m_table + " limit 1 ", false);
-			record->next();
-			i->setValue(0, record->fieldInfo(field)->name());
-			i->setValue(1, record->fieldInfo(field)->sqlType() - 1);
-			i->setValue(2, record->fieldInfo(field)->length());
-			i->setValue(3, record->fieldInfo(field)->not_null());
-			i->setValue(4, record->fieldInfo(field)->defaultValue());
-			i->setValue(5, record->fieldInfo(field)->unsignedType());
-			i->setValue(6, record->fieldInfo(field)->auto_increment());
-			delete record;
+			KexiDBTableStruct dbStruct = kexiProject()->db()->getStructure(m_table);
+			KexiDBField* f = dbStruct.at(field);
+			i->setValue(0, f->name());
+			i->setValue(1, f->sqlType() - 1);
+			i->setValue(2, f->length());
+			i->setValue(3, f->not_null());
+			i->setValue(4, f->defaultValue());
+			i->setValue(5, f->unsignedType());
+			i->setValue(6, f->auto_increment());
 		}
 	}
 }

@@ -399,10 +399,27 @@ MySqlDB::createDefinition(const QString& field, KexiDBField::ColumnType dtype, i
 	return qstr;
 }
 
-KexiDBTableStruct*
-MySqlDB::getStructure(const QString)
+KexiDBTableStruct
+MySqlDB::getStructure(const QString& table)
 {
-	return 0;
+	KexiDBTableStruct dbStruct;
+	MYSQL_RES* result= mysql_list_fields(m_mysql, table.local8Bit().data(), 0);
+	kdDebug() << "MySqlDB::getStructure: Get fields..." << endl;
+	
+	if(result)
+	{
+		MYSQL_FIELD* field;
+		int i = 0;
+		
+		while((field = mysql_fetch_field(result)))
+		{
+			dbStruct.append(new MySqlField(field, i++));
+		}
+		
+		mysql_free_result(result);
+	}
+	
+	return dbStruct;
 }
 
 MySqlDB::~MySqlDB()

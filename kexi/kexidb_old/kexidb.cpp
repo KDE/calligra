@@ -176,10 +176,10 @@ KexiDB::affectedRows()
 	return 0;
 }
 
-KexiDBTableStruct*
-KexiDB::getStructure(QString)
+KexiDBTableStruct
+KexiDB::getStructure(const QString&)
 {
-	return 0;
+	return KexiDBTableStruct();
 }
 
 KexiDB::~KexiDB()

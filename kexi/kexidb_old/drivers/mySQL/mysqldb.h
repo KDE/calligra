@@ -104,7 +104,7 @@ class MySqlDB : public KexiDB
 
 		unsigned long	lastAuto();
 
-		KexiDBTableStruct *getStructure(const QString table);
+		KexiDBTableStruct	getStructure(const QString& table);
 
 	protected:
 		int		reconnect();

@@ -74,7 +74,7 @@ class KexiDB : public QObject
 
 		virtual KexiDBResult		*getResult();
 
-		virtual KexiDBTableStruct	*getStructure(const QString table);
+		virtual KexiDBTableStruct	getStructure(const QString& table);
 
 		virtual unsigned long		affectedRows();
 
