@@ -377,111 +377,156 @@ QString RTFWorker::ProcessParagraphData ( const QString &paraText,
         markup += "\\intbl";
 
 //lists
-    if (layout.counter.style)
-    {
-        markup += "{\\pntext ";
+if (layout.counter.style)
+        {
+        markup += "{\\pntext\\pard\\plain";
+        if( layout.formatData.text.fontSize >= 0)
+        {
+                markup += "\\fs";
+                markup += QString::number((2 * layout.formatData.text.fontSize));
+                markup += lookupFont(layout.formatData.text.fontName);
+        }
+        markup += " ";
         markup += layout.counter.text;
-        markup += " }{\\*\\pn";
+        markup += "\\tab}{\\*\\pn";
         if (layout.counter.style > 5)
         {
-            markup += "\\pnlvlblt ";
-            markup += "{\\pntxtb ";
-            if (!layout.counter.lefttext.isEmpty())
-	    {
-		markup += layout.counter.lefttext;
-	    }
-            if (layout.counter.style==6)
-            {
-	        //custom bullets (one char)
-	        //TODO: use correct character/sign for bullet
-                markup += layout.counter.customCharacter;
-
-            }
-            if (layout.counter.style==7)
-            {
-	        //custom bullets (complex)
-                markup += layout.counter.text;
-            }
-            if (layout.counter.style==8)
-            {
-	        //circle bullets
-	        //TODO: use correct character/sign for bullet
-                markup += "\\u-2002";
-            }
-            if (layout.counter.style==9)
-            {
-	        //square bullets
-	        //TODO: use correct character/sign for bullet
-                markup += layout.counter.text;
-            }
-            if (layout.counter.style==10)
-            {
-	        //disc bullets
-	        //TODO: make work in OO
-                markup += "\\bullet";
-            }
-            if (layout.counter.style==11)
-            {
-	        //disc bullets
-	        //TODO: use correct character/sign for bullet
-                markup += layout.counter.text;
-            }
-                markup += "}";
-        }
-	else
+        markup += "\\pnlvlblt ";
+        markup += "{\\pntxtb ";
+        if (!layout.counter.lefttext.isEmpty() && layout.counter.lefttext != "{" && layout.counter.lefttext != "}")
         {
-        if (layout.counter.numbering!=0)
-	{
-	    markup += "\\pnlvl";
-	    markup += QString::number(layout.counter.depth + 1);
-	    markup += "\\pnprev";
-            markup += "\\pndec";
-	}
-	else if (layout.counter.style==1)
-	{
-	    markup += "\\pnlvlbody";
-	}
-	else
-	{
-	    markup += "\\pnlvl";
-	    markup += QString::number(11 - layout.counter.style);
-	}
-	if (layout.counter.style==1)
+                markup += layout.counter.lefttext;
+        }        
+        switch (layout.counter.style)
         {
-            markup += "\\pndec";
-        }
-        else if (layout.counter.style==2)
+        case 6:
         {
-            markup += "\\pnlcltr";
+                //custom bullets (one char)
+                //TODO: use correct character/sign for bullet
+                
+            markup += layout.counter.customCharacter;
+            break;
         }
-        else if (layout.counter.style==3)
+        case 7:
         {
-            markup += "\\pnucltr";
+                //custom bullets (complex)
+            markup += layout.counter.text;
+            break;
         }
-        else if (layout.counter.style==4)
+        case 8:
         {
-            markup += "\\pnlcrm";
+                //circle bullets
+                //TODO: use correct character/sign for bullet
+            markup += "\\bullet";
+            break;
         }
-        else if (layout.counter.style==5)
+        case 9:
         {
-            markup += "\\pnucrm";
+                //square bullets
+                //TODO: use correct character/sign for bullet
+            markup += "\\bullet";
+            break;
         }
+        case 10:
+        {
+                //disc bullets
+                //TODO: make work in OO
+            markup += "\\bullet";
+            break;
         }
-        markup += "{\\pntxta ";
-	markup += layout.counter.righttext;  
-	markup += " }";
-        if (layout.counter.start!=0)
-	{
-            markup += "\\pnstart";
-	    markup += QString::number(layout.counter.start);
-	}
-	else
-	{
-	    markup += "\\pnstart1";
-	}
-	markup += "\\pnindent0";
+        case 11:
+        {
+                //disc bullets
+                //TODO: use correct character/sign for bullet
+            markup += layout.counter.text;
+            break;
+        }
+        default:
+            markup += "\\bullet";
+        }
         markup += "}";
+        }
+        else
+        {
+            if (layout.counter.numbering!=0)
+		{
+        	    markup += "\\pnlvl";
+        	    markup += QString::number(layout.counter.depth + 1);
+        	    markup += "\\pnprev1";
+		}
+        else if (layout.counter.style==1)
+        {
+        markup += "\\pnlvlbody";
+        }
+        else
+        {
+        markup += "\\pnlvl";
+        markup += QString::number(11 - layout.counter.style);
+        }
+        
+        switch (layout.counter.style)
+        {        
+        case 1:
+        {
+        markup += "\\pndec";
+        break;
+        }
+        case 2:
+        {
+        markup += "\\pnlcltr";
+        break;
+        }
+        case 3:
+        {
+        markup += "\\pnucltr";
+        break;
+        }
+        case 4:
+        {
+        markup += "\\pnlcrm";
+        break;
+        }
+        case 5:
+        {
+        markup += "\\pnucrm";
+        break;
+        }
+        default:
+        markup += "\\pndec";
+        }
+        markup += "{\\pntxtb ";
+        markup += layout.counter.lefttext;  
+        markup += " }";
     }
+        markup += "{\\pntxta ";
+        markup += layout.counter.righttext;  
+        markup += " }";
+        
+        if (layout.counter.start!=0)
+        {
+        markup += "\\pnstart";
+        markup += QString::number(layout.counter.start);
+        }
+        else
+        {
+        markup += "\\pnstart1";
+        }
+        markup += "\\pnindent0\\pnhang";
+        
+        if( layout.formatData.text.fontSize > 0 )
+        {
+        markup += "\\pnfs";
+        markup += QString::number((2 * layout.formatData.text.fontSize));
+        }
+
+        if( layout.formatData.text.fontName != "" )
+        {
+            markup += lookupFont(layout.formatData.text.fontName).insert( 1, "pn" );
+        }
+        
+        markup += "}";
+}    
+
 
     LayoutData styleLayout;
     markup += lookupStyle(layout.styleName, styleLayout);
