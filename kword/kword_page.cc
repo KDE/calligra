@@ -588,9 +588,9 @@ kdDebug() << "KWPage::vmpEdit" << endl;
         editNum = frameset;
         KWFormat *f = fs->getFormat();
         fc->apply( *f );
-        formatChanged( *f, FALSE );
+        //formatChanged( *f, FALSE );
         gui->getView()->setFormat( *f, TRUE );
-        delete f;
+        //delete f;
 
         return TRUE;
     }
@@ -939,7 +939,7 @@ void KWPage::vmrEditFrame( int /*mx*/, int /*my*/ )
 void KWPage::vmrCreateText()
 {
 kdDebug() << "KWPage::vmrCreateText\n";
-    //repaintScreen( FALSE );
+    repaintScreen( FALSE );
     KWFrame *frame = new KWFrame(0L, insRect.x() + contentsX(), insRect.y() + contentsY(), insRect.width(), insRect.height() );
 
     insRect = insRect.normalize();
@@ -3657,12 +3657,14 @@ void KWPage::newFirstIndent( double _first )
 /*================================================================*/
 void KWPage::frameDiaClosed()
 {
+kdDebug() << "KWPage::frameDiaClosed" << endl;
     hiliteFrameSet = -1;
     recalcAll = TRUE;
     recalcText();
     recalcCursor();
     recalcAll = FALSE;
     repaintScreen (true);
+kdDebug() << "KWPage::frameDiaClosed end" << endl;
 }
 
 /*================================================================*/
