@@ -60,7 +60,8 @@ class KivioDiaStencilSpawner : public KivioStencilSpawner
 	float m_lowesty;
 	float m_highestx;
 	float m_highesty;
-	float m_scale;
+	float m_xscale;
+	float m_yscale;
 };
 
 #endif
