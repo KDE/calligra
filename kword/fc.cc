@@ -415,6 +415,9 @@ void KWFormatContext::cursorGotoPos( unsigned int _textpos, QPainter & )
     KWChar *text = parag->getText();
     KWParagLayout *lay = parag->getParagLayout();
     
+    unsigned int bp = 0;
+    float ddx = 0.0;
+    char buffer[_textpos + 2];
     unsigned int pos = lineStartPos;
     ptPos = ptStartPos;
     *((KWFormat*)this) = lineStartFormat;
@@ -447,18 +450,23 @@ void KWFormatContext::cursorGotoPos( unsigned int _textpos, QPainter & )
 	    float dx = floor( sp );
 	    spacingError = sp - dx;
 	    
+	    ddx += dx;
+	    buffer[bp++] = text[pos].c;
 	    ptPos += (unsigned int)dx + displayFont->getPTWidth( text[pos].c );
 
 	    pos++;
 	  }
 	  else
 	  {
+	    buffer[bp++] = text[pos].c;
 	    ptPos += displayFont->getPTWidth( text[ pos ].c );
 	    pos++;   
 	  }
 	}
     }
-
+    //buffer[bp] = '\0';
+    //ptPos += (unsigned int)ddx + displayFont->getPTWidth(buffer);
+    
     textPos = _textpos;
 }
 
@@ -473,9 +481,11 @@ int KWFormatContext::cursorGotoNextChar(QPainter & _painter)
     return -2;
   
   if ( parag->getText()[ textPos ].c != 0 && parag->getText()[ textPos ].attrib == 0 ||
-       textPos - 1 >= 0 && parag->getText()[ textPos -1 ].c != 0 && 
-       *parag->getText()[ textPos - 1 ].attrib == *parag->getText()[ textPos ].attrib)
-    return 1;
+       textPos - 1 >= 0 && parag->getText()[ textPos - 1 ].c != 0 && 
+       *((KWCharFormat*)parag->getText()[ textPos - 1 ].attrib) == *((KWCharFormat*)parag->getText()[ textPos ].attrib))
+    {
+      return 1;
+    }
   
   if ( parag->getText()[ textPos ].c != 0 )
     return 0;
@@ -732,6 +742,7 @@ void KWFormatContext::apply( KWFormat &_format )
   KWFormat::apply(_format);
   if (displayFont)
     {
+      displayFont->setFamily(_format.getUserFont()->getFontName());
       if (_format.getPTFontSize() != -1)
 	displayFont->setPTSize(_format.getPTFontSize());
       if (_format.getWeight() != -1)

@@ -29,14 +29,16 @@ class KWCharFormat : public KWCharAttribute
 public:
   KWCharFormat() : KWCharAttribute() { classId = ID_KWCharFormat; format = 0L; }
   KWCharFormat( KWFormat* _format ) : KWCharAttribute() { classId = ID_KWCharFormat; format = _format; }
-  virtual ~KWCharFormat() { format->decRef(); format = 0L; }
+  ~KWCharFormat() { format->decRef(); format = 0L; }
 
   virtual KWFormat* getFormat()
     { return format; }
   virtual void setFormat(KWFormat *_format)
     { format = _format; }
-  virtual bool operator==(const KWCharFormat &_attrib)
-    { return classId == const_cast<KWCharFormat>(_attrib).getClassId() && *format == *const_cast<KWCharFormat>(_attrib).getFormat(); }
+  virtual bool operator==(KWCharFormat &_attrib) { 
+    return classId == _attrib.getClassId() && 
+      (format) && *format == *_attrib.getFormat(); 
+  }
 
 protected:
   KWFormat *format;
@@ -47,10 +49,7 @@ class KWCharImage : public KWCharAttribute
 {
 public:
   KWCharImage() { classId = ID_KWCharImage; }
-  virtual ~KWCharImage() {}
-
-  virtual int getClassId()
-    { return ID_KWCharImage; }
+  ~KWCharImage() {}
 
 protected:
   // We need the image because it has full resolution and
