@@ -329,10 +329,41 @@ void KprKword::convert()
                     outFormatElem.appendChild( e );
                 }
 
+                //before VERTICAL align
+                double relative = 0;
+                if( textElem.attribute("relativetextsize").toDouble())
+                {
+                    relative = textElem.attribute("relativetextsize").toDouble();
+                }
+
+
                 if( textElem.attribute("VERTALIGN").toInt())
                 {
                     QDomElement e = outdoc.createElement("VERTALIGN");
                     e.setAttribute( "value", textElem.attribute("VERTALIGN").toInt() );
+                    if ( relative != 0)
+                        e.setAttribute( "relativetextsize", relative );
+                    outFormatElem.appendChild( e );
+                }
+
+                if( textElem.hasAttribute("shadowtext"))
+                {
+                    QDomElement e = outdoc.createElement("SHADOWTEXT");
+                    e.setAttribute( "value", textElem.attribute("shadowtext").toInt() );
+                    outFormatElem.appendChild( e );
+                }
+
+                if( textElem.hasAttribute("offsetfrombaseline"))
+                {
+                    QDomElement e = outdoc.createElement("OFFSETFROMBASELINE");
+                    e.setAttribute( "value", textElem.attribute("offsetfrombaseline").toInt() );
+                    outFormatElem.appendChild( e );
+                }
+
+                if( textElem.hasAttribute("wordbyword"))
+                {
+                    QDomElement e = outdoc.createElement("WORDBYWORD");
+                    e.setAttribute( "value", textElem.attribute("wordbyword").toInt() );
                     outFormatElem.appendChild( e );
                 }
 
