@@ -14,6 +14,7 @@
  *   License, or (at your option) any later version.                       *
  *                                                                         *
  ***************************************************************************/
+#include <algorithm>
 #include "cv.h"
 #include <qwmatrix.h>
 #include <qevent.h>
