@@ -116,6 +116,9 @@ don't put a </?xml...> at the end of the file!).
             columns:        the number of columns (only in wordprocessing
                             mode).
 
+	    pages:          the number of pages. This is saved for information purposes,
+	                    but not required nor used by KWord.
+
             columnspacing:  the gap (in pt) between the columns (only in
                             wordprocessing mode).
 
@@ -156,6 +159,7 @@ don't put a </?xml...> at the end of the file!).
     orientation CDATA #REQUIRED
     columns CDATA #REQUIRED
     columnspacing CDATA #REQUIRED
+    pages CDATA #IMPLIED
     hType CDATA #IMPLIED
     fType CDATA #IMPLIED
     spHeadBody CDATA #IMPLIED
@@ -163,6 +167,7 @@ don't put a </?xml...> at the end of the file!).
     spFootNoteBody CDATA #IMPLIED
     slFootNotePosition CDATA #IMPLIED
     slFootNoteLength CDATA #IMPLIED
+    slFootNoteWidth CDATA #IMPLIED
     slFootNoteType CDATA #IMPLIED>
 
 
@@ -236,18 +241,20 @@ don't put a </?xml...> at the end of the file!).
 
         Attributes:
             startingPageNumber:     the starting page number.
-            displaylink TODO: document! (#REQUIRED or #IMPLIED)
-            underlinelink:          Underlink or not by default
-            displaycomment:         Display comment
+            displaylink TODO: document!
+            underlinelink:          Underline links by default (true/false)
+            displaycomment:         Display comment (true/false)
+            displayfieldcode:       Display the name of the variables if true (instead of their value)
 
 -->
 <!ELEMENT VARIABLESETTINGS
     EMPTY>
 <!ATTLIST VARIABLESETTINGS
     startingPageNumber CDATA #IMPLIED
-    displaylink CDATA #REQUIRED
-    underlinelink CDATA #REQUIRED
-    displaycomment CDATA #REQUIRED>
+    displaylink CDATA #IMPLIED
+    underlinelink CDATA #IMPLIED
+    displaycomment CDATA #IMPLIED>
+    displayfieldcode CDATA #IMPLIED>
 
 
 <!--    Contains general attributes for footnote.
@@ -262,7 +269,7 @@ don't put a </?xml...> at the end of the file!).
     depth CDATA #REQUIRED
     bullet CDATA #IMPLIED
     start CDATA #IMPLIED
-    numberingtype CDATA #REQUIRED
+    numberingtype CDATA #IMPLIED
     lefttext CDATA #IMPLIED
     righttext CDATA #IMPLIED
     bulletfont CDATA #IMPLIED
@@ -280,7 +287,7 @@ don't put a </?xml...> at the end of the file!).
     depth CDATA #REQUIRED
     bullet CDATA #IMPLIED
     start CDATA #IMPLIED
-    numberingtype CDATA #REQUIRED
+    numberingtype CDATA #IMPLIED
     lefttext CDATA #IMPLIED
     righttext CDATA #IMPLIED
     bulletfont CDATA #IMPLIED
@@ -347,10 +354,10 @@ don't put a </?xml...> at the end of the file!).
 
             protectcontent: Protect content of text object
 
-            protectSize:    Don't allow user to change size and position
-                            of frameset
+            protectSize:    Prevent user from changing size and position
+                            of the frames in this frameset.
 
-                                0...no (default )
+                                0...no (default)
                                 1...yes
 
 
@@ -369,6 +376,7 @@ don't put a </?xml...> at the end of the file!).
     rows CDATA #IMPLIED
     cols CDATA #IMPLIED
     protectcontent CDATA #IMPLIED>
+    protectSize CDATA #IMPLIED>
 
 <!ELEMENT FRAME
     EMPTY>
@@ -437,6 +445,7 @@ don't put a </?xml...> at the end of the file!).
     top CDATA #REQUIRED
     bottom CDATA #REQUIRED
     runaround CDATA #IMPLIED
+    runaroundSide CDATA #IMPLIED
     runaroundGap CDATA #IMPLIED
     autoCreateNewFrame CDATA #IMPLIED
     newFrameBehavior CDATA #REQUIRED
