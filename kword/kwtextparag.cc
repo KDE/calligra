@@ -326,7 +326,7 @@ void KWTextParag::paint( QPainter &painter, const QColorGroup &cg, QTextCursor *
 void KWTextParag::copyParagData( QTextParag *_parag )
 {
     KWTextParag * parag = static_cast<KWTextParag *>(_parag);
-    KWDocument * doc = textDocument()->textFrameSet()->kWordDocument();
+    // KWDocument * doc = textDocument()->textFrameSet()->kWordDocument(); // not used (Werner)
     // Style of the previous paragraph
     KWStyle * style = parag->style();
     // Obey "following style" setting
@@ -402,14 +402,13 @@ int KWTextParag::findCustomItem( const QTextCustomItem * custom ) const
 void KWTextParag::setTabList( const KoTabulatorList &tabList )
 {
     KoTabulatorList lst( tabList );
-    qHeapSort( lst );
     m_layout.setTabList( lst );
     if ( !tabList.isEmpty() )
     {
         KWDocument * doc = textDocument()->textFrameSet()->kWordDocument();
         int * tabs = new int[ tabList.count() + 1 ]; // will be deleted by ~QTextParag
         KoTabulatorList::Iterator it = lst.begin();
-        int i = 0;
+        unsigned int i = 0;
         for ( ; it != lst.end() ; ++it, ++i )
             tabs[i] = (int)doc->zoomItX( (*it).ptPos );
         tabs[i] = 0;
