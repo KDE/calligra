@@ -533,17 +533,15 @@ void KisImage::renderTileQuadrant(const KisLayer *srcLay, int srcTile,
 		  
 		  if (m_cMode == cm_RGBA)
 			{
-			  opac = (*sptr3 * opacity)/255;
+			  opac = (*sptr3*opacity)/255;
 			  invOpac=255-opac;
 
 			  *dptr0++ = (((*dptr0 * *dptr3)/255) * invOpac + *sptr0++ * opac)/255;
 			  *dptr1++ = (((*dptr1 * *dptr3)/255) * invOpac + *sptr1++ * opac)/255;
 			  *dptr2++ = (((*dptr2 * *dptr3)/255) * invOpac + *sptr2++ * opac)/255;
 			  *dptr3++ = *sptr3 + *dptr3 - (*sptr3 * *dptr3)/255;
-
 			  sptr3++;
-			  dptr3 += leadIn;
-			  sptr3 += leadIn;
+
 			}
 		  else
 			{
@@ -559,6 +557,12 @@ void KisImage::renderTileQuadrant(const KisLayer *srcLay, int srcTile,
 	  sptr0 += leadIn;
 	  sptr1 += leadIn;
 	  sptr2 += leadIn;
+
+	  if (m_cMode == cm_RGBA)
+		{
+		  dptr3 += leadIn;
+		  sptr3 += leadIn;
+		}
 	}
 }
 
