@@ -1025,6 +1025,14 @@ void KSpreadView::initializeTableActions()
                                "insertTable" );
   m_insertTable->setToolTip(i18n("Insert a new sheet."));
 
+  /* basically the same action here, but it's in the insert menu so we don't
+     want to also have 'insert' in the caption
+  */
+  m_menuInsertTable = new KAction( i18n("Sheet"),"inserttable", 0, this,
+                               SLOT( insertTable() ), actionCollection(),
+                               "menuInsertTable" );
+  m_menuInsertTable->setToolTip(i18n("Insert a new sheet."));
+
   m_removeTable = new KAction( i18n("Remove Sheet..."), "delete_table",0,this,
                                SLOT( removeTable() ), actionCollection(),
                                "removeTable" );

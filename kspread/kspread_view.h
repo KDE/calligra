@@ -506,6 +506,7 @@ private:
     KAction* m_insertFromTextfile;
     KAction* m_insertFromClipboard;
     KAction* m_insertTable;
+    KAction* m_menuInsertTable;
     KAction* m_removeTable;
     KAction* m_renameTable;
     KAction* m_nextTable;
