@@ -21,19 +21,42 @@
 #define __kprhelplinedia__
 
 #include <kdialogbase.h>
+#include <qrect.h>
 
 class KIntNumInput;
+class QRadioButton;
 
-class KPrHelpLineDia : public KDialogBase
+class KPrMoveHelpLineDia : public KDialogBase
 {
     Q_OBJECT
 public:
-    KPrHelpLineDia( QWidget *parent, int  value, int  limitTop, int limitBottom , const char *name=0L);
+    KPrMoveHelpLineDia( QWidget *parent, int  value, int  limitTop, int limitBottom , const char *name=0L);
 
     int newPosition();
 
 protected:
     KIntNumInput* position;
 };
+
+class KPrInsertHelpLineDia : public KDialogBase
+{
+    Q_OBJECT
+public:
+    KPrInsertHelpLineDia( QWidget *parent, const QRect &r, const char *name=0L);
+
+    int newPosition();
+    //return true if we add a new horizontal line help
+    bool addHorizontalHelpLine();
+
+private slots:
+    void slotRadioButtonClicked();
+
+protected:
+    QRect limitOfPage;
+    KIntNumInput* position;
+    QRadioButton *m_rbHoriz;
+    QRadioButton *m_rbVert;
+};
+
 
 #endif

@@ -552,6 +552,8 @@ protected slots:
 
     void changeHelpLinePosition();
 
+    void addHelpLine();
+
 
 // end of protected slots
 protected:
@@ -837,6 +839,8 @@ private:
 
     KAction *actionRemoveHelpLine;
     KAction *actionChangeHelpLinePosition;
+
+    KAction *actionAddHelpLine;
 
 
     QTimer automaticScreenPresTimer;

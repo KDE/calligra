@@ -1,4 +1,4 @@
-<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd"><kpartgui name="KPresenter" version="46">
+<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd"><kpartgui name="KPresenter" version="47">
 <MenuBar>
  <Menu name="file"><text>&amp;File</text>
   <Separator/>
@@ -262,6 +262,8 @@
 <Menu name="menupage_popup">
   <Action name="extra_layout"/>
   <Action name="extra_background"/>
+  <Separator/>
+  <Action name="add_helpline"/>
   <Separator/>
   <Action name="screen_configpages"/>
   <Action name="screen_presstruct"/>

@@ -2992,10 +2992,13 @@ void KPresenterView::setupActions()
                                     actionCollection(), "remove_helpline" );
 
 
-    actionChangeHelpLinePosition= new KAction( i18n( "Change Help Line Position" ), 0,
+    actionChangeHelpLinePosition= new KAction( i18n( "Change Help Line Position..." ), 0,
                                     this, SLOT( changeHelpLinePosition() ),
                                                actionCollection(), "change_helplinepos" );
 
+    actionAddHelpLine = new KAction( i18n( "Add new help line..."), 0,
+                                     this, SLOT(addHelpLine()),
+                                     actionCollection(), "add_helpline");
 }
 
 void KPresenterView::textSubScript()
@@ -5756,7 +5759,7 @@ void KPresenterView::changeHelpLinePosition()
         limitBottom = r.right();
     }
 
-    KPrHelpLineDia *dlg= new KPrHelpLineDia(this, pos, limitTop , limitBottom);
+    KPrMoveHelpLineDia *dlg= new KPrMoveHelpLineDia(this, pos, limitTop , limitBottom);
     if ( dlg->exec())
     {
         m_canvas->changeHelpLinePosition( dlg->newPosition() );
@@ -5771,5 +5774,21 @@ void KPresenterView::openPopupMenuHelpLine( const QPoint & _point )
     static_cast<QPopupMenu*>(factory()->container("helpline_popup",this))->popup(_point);
 }
 
+void KPresenterView::addHelpLine()
+{
+    QRect r=m_canvas->activePage()->getZoomPageRect();
+
+    KPrInsertHelpLineDia *dlg= new KPrInsertHelpLineDia(this, r);
+    if ( dlg->exec())
+    {
+        double pos = dlg->newPosition();
+        if ( dlg->addHorizontalHelpLine() )
+            m_pKPresenterDoc->addHorizHelpline(zoomHandler()->zoomItY( pos ));
+        else
+            m_pKPresenterDoc->addVertHelpline( zoomHandler()->zoomItX( pos ));
+    }
+    delete dlg;
+    m_canvas->repaint( false );
+}
 
 #include <kpresenter_view.moc>

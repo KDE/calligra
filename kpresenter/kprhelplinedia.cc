@@ -23,8 +23,10 @@
 #include <qlayout.h>
 #include <qlabel.h>
 #include <knuminput.h>
+#include <qbuttongroup.h>
+#include <qradiobutton.h>
 
-KPrHelpLineDia::KPrHelpLineDia( QWidget *parent, int value, int limitTop, int limitBottom,const char *name)
+KPrMoveHelpLineDia::KPrMoveHelpLineDia( QWidget *parent, int value, int limitTop, int limitBottom,const char *name)
     : KDialogBase( parent, name , true, "", Ok|Cancel, Ok, true )
 {
     setCaption( i18n("Change Help Line position") );
@@ -35,9 +37,54 @@ KPrHelpLineDia::KPrHelpLineDia( QWidget *parent, int value, int limitTop, int li
     resize( 300,100 );
 }
 
-int KPrHelpLineDia::newPosition()
+int KPrMoveHelpLineDia::newPosition()
 {
     return position->value();
+}
+
+
+KPrInsertHelpLineDia::KPrInsertHelpLineDia( QWidget *parent, const QRect & _pageRect ,const char *name)
+    : KDialogBase( parent, name , true, "", Ok|Cancel, Ok, true )
+{
+    limitOfPage=_pageRect;
+
+    setCaption( i18n("Add new help line") );
+    QVBox *page = makeVBoxMainWidget();
+    QButtonGroup *group = new QButtonGroup( 1, QGroupBox::Horizontal,"", page );
+    group->setRadioButtonExclusive( TRUE );
+    group->layout();
+    m_rbHoriz = new QRadioButton( i18n("Horizontal"), group );
+    m_rbVert = new QRadioButton( i18n("Vertical"), group );
+
+    connect( group , SIGNAL( clicked( int) ), this, SLOT( slotRadioButtonClicked() ));
+
+    QLabel *lab=new QLabel(i18n("Position:"), page);
+    position = new KIntNumInput(0, page);
+    position->setRange( limitOfPage.top(),  limitOfPage.bottom(),  1,  false);
+    m_rbHoriz->setChecked( true );
+    resize( 300,100 );
+}
+
+int KPrInsertHelpLineDia::newPosition()
+{
+    return position->value();
+}
+
+bool KPrInsertHelpLineDia::addHorizontalHelpLine()
+{
+    return m_rbHoriz->isChecked();
+}
+
+void KPrInsertHelpLineDia::slotRadioButtonClicked()
+{
+    if ( m_rbHoriz->isChecked() )
+    {
+        position->setRange( limitOfPage.top(), limitOfPage.bottom(), 1, false);
+    }
+    else if ( m_rbVert->isChecked() )
+    {
+        position->setRange( limitOfPage.left(), limitOfPage.right(), 1, false);
+    }
 }
 
 #include "kprhelplinedia.moc"
