@@ -7,7 +7,7 @@ libkarbonaiimport_la_LIBADD = \
 libkarbonaiimport_la_LDFLAGS = \
 	$(all_libraries) \
 	$(KDE_RPATH) \
-	-version-info 1:0:0 -no-undefined
+	-module -avoid-version -no-undefined
 
 INCLUDES = \
 	$(KOFFICE_INCLUDES) \
