@@ -327,7 +327,7 @@ void Document::slotTableCellStart( int row, int column, int rowSize, int columnS
     QDomElement framesetElement = m_mainDocument.createElement("FRAMESET");
     framesetElement.setAttribute( "frameType", 1 /* text */ );
     framesetElement.setAttribute( "frameInfo", 0 /* normal text */ );
-    framesetElement.setAttribute( "grpmgr", tableName );
+    framesetElement.setAttribute( "grpMgr", tableName );
     framesetElement.setAttribute( "name", i18n("Table_Name Cell row,column", "%1 Cell %2,%3").arg(tableName).arg(row).arg(column) );
     framesetElement.setAttribute( "row", row );
     framesetElement.setAttribute( "column", column );
