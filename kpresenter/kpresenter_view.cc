@@ -5554,10 +5554,7 @@ void KPresenterView::viewZoom( const QString &s )
     }
     else if ( z == i18n("Zoom to Whole Page") )
     {
-        double height = zoomHandler()->resolutionY() * m_pKPresenterDoc->pageLayout().ptHeight;
-        double width = zoomHandler()->resolutionX() * m_pKPresenterDoc->pageLayout().ptWidth;
-        zoom = QMIN( qRound( static_cast<double>(m_canvas->visibleRect().height() * 100 ) / height ),
-                     qRound( static_cast<double>(m_canvas->visibleRect().width() * 100 ) / width ) );
+        zoom = getZoomEntirePage();
         ok = true;
     }
     else
@@ -5592,9 +5589,8 @@ void KPresenterView::setZoomRect( const QRect & rect, bool drawRubber )
     {
         double height = zoomHandler()->resolutionY() * zoomHandler()->unzoomItY( rect.height() );
         double width = zoomHandler()->resolutionX() * zoomHandler()->unzoomItY( rect.width() );
-        int zoom = QMIN( qRound( static_cast<double>(m_canvas->visibleRect().height() * 100 ) / height ),
+        zoom = QMIN( qRound( static_cast<double>(m_canvas->visibleRect().height() * 100 ) / height ),
                          qRound( static_cast<double>(m_canvas->visibleRect().width() * 100 ) / width ) );
-        viewZoom( QString::number(zoom ) );
     }
     else
     {
@@ -6113,16 +6109,21 @@ void KPresenterView::zoomPageWidth()
 
 void KPresenterView::zoomEntirePage()
 {
-    double height = zoomHandler()->resolutionY() * m_pKPresenterDoc->pageLayout().ptHeight;
-    double width = zoomHandler()->resolutionX() * m_pKPresenterDoc->pageLayout().ptWidth;
-    int zoom = QMIN( qRound( static_cast<double>(m_canvas->visibleRect().height() * 100 ) / height ),
-                     qRound( static_cast<double>(m_canvas->visibleRect().width() * 100 ) / width ) );
-    viewZoom( QString::number(zoom ) );
+    viewZoom( QString::number(getZoomEntirePage() ) );
 }
 
 void KPresenterView::zoomPlus()
 {
     setZoomRect( QRect(0,0,0,0),false);
+}
+
+int KPresenterView::getZoomEntirePage()
+{
+    double height = zoomHandler()->resolutionY() * m_pKPresenterDoc->pageLayout().ptHeight;
+    double width = zoomHandler()->resolutionX() * m_pKPresenterDoc->pageLayout().ptWidth;
+    int zoom = QMIN( qRound( static_cast<double>(m_canvas->visibleRect().height() * 100 ) / height ),
+                     qRound( static_cast<double>(m_canvas->visibleRect().width() * 100 ) / width ) );
+    return zoom;
 }
 
 #include <kpresenter_view.moc>

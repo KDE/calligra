@@ -624,6 +624,8 @@ protected:
     void openThePresentationDurationDialog();
     QString presentationDurationDataFormatChange( int _time );
 
+    int getZoomEntirePage();
+
 private:
 // ********** variables **********
 
