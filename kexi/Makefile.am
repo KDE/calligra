@@ -1,6 +1,6 @@
 bin_PROGRAMS = kexi
 
-kexi_SOURCES = kexidoc.cpp kexidialogbase.cpp kexibrowseritem.cpp kexiworkspace.cpp kexiinterfacetemplate.cpp kexiformbase.cpp kexiinterfacemanager.cpp kexiinterface.cpp kexicreateproject.cpp kexibrowser.cpp keximainwindow.cpp kexiapplication.cpp main.cpp kexiproject.cpp 
+kexi_SOURCES = kexitable.cpp kexidoc.cpp kexidialogbase.cpp kexibrowseritem.cpp kexiworkspace.cpp kexiinterfacetemplate.cpp kexiformbase.cpp kexiinterfacemanager.cpp kexiinterface.cpp kexicreateproject.cpp kexibrowser.cpp keximainwindow.cpp kexiapplication.cpp main.cpp kexiproject.cpp 
 kexi_LDADD   =  $(LIB_KIO) $(LIB_KDEUI) $(LIB_KDECORE) $(LIB_QT) $(LIBSOCKET)
 
 SUBDIRS = . interfaces pics 

@@ -37,13 +37,12 @@ public:
 	KexiBrowser(QWidget *parent=0, const char *name=0);
 	~KexiBrowser();
 	
-	void addTableItem(QString name);
 	void clearView();
+	void			generateView();
 	
 protected:
 	void			createForm();
-	void			generateView();
-	
+	void            addTables(KexiBrowserItem *parent);
 	KexiBrowserItem*	m_tables;
 	KexiBrowserItem*	m_queries;
 	KexiBrowserItem*	m_forms;
@@ -58,7 +57,7 @@ protected:
 		
 protected slots:
 	void		slotContextMenu(KListView*, QListViewItem *i, const QPoint &point);
-	void		slotCreate();
+	void		slotCreate(QListViewItem* i);
 	void		slotDelete();
 	void		slotEdit();
 	

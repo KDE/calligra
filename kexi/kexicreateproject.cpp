@@ -42,7 +42,7 @@
 
 KexiCreateProject::KexiCreateProject(QWidget *parent, const char *name, bool modal, WFlags f) : KWizard(parent,name,modal,f)
 {
-	setCaption(i18n("create project"));
+	setCaption(i18n("Create Project"));
 
 	m_wpic = QPixmap(locate("data","kexi/createproject.png"));
 	
@@ -183,12 +183,13 @@ void KexiCreateProject::nextClicked(const QString &pageTitle)
 		if(kexi->project()->initDbConnection(projCred))
 		{
 			KListViewItem *i = new KListViewItem(m_connectionLog, i18n("1. connected to the database"));
+			kexi->mainWindow()->browser()->generateView();
 			setFinishEnabled(m_page2, true);
 		}
 		else
 		{
 			QString msg = i18n("Connection failed: ");
-			//msg += kexi->project()->db()->lastError().databaseText();
+			msg += kexi->project()->db()->lastError().databaseText();
 			KListViewItem *i = new KListViewItem(m_connectionLog, msg);
 		}
 		

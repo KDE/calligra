@@ -40,7 +40,7 @@ class KexiProject : public QObject
 {
 Q_OBJECT
 public:
-	KexiProject(QObject* parent, const QString &file);
+	KexiProject(QObject* parent);
 	~KexiProject();
 
 	void saveProject(const QString& path);

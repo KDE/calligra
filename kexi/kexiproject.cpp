@@ -23,7 +23,7 @@
 
 #include <kdebug.h>
 
-KexiProject::KexiProject(QObject* parent, const QString& file)
+KexiProject::KexiProject(QObject* parent)
 {
 }
 
