@@ -516,7 +516,6 @@ QString KSpreadDlgFormula::createParameter( const QString& _text, int param )
 static void showEntry( QLineEdit* edit, QLabel* label, KSpreadFunctionDescription* desc, int param )
 {
     edit->show();
-
     label->setText( desc->param( param ).helpText()+":" );
     label->show();
     KSpreadParameterType elementType = desc->param( param ).type();
@@ -532,9 +531,11 @@ static void showEntry( QLineEdit* edit, QLabel* label, KSpreadFunctionDescriptio
         validate=new KFloatValidator (edit);
         validate->setAcceptLocalizedNumbers(true);
         edit->setValidator(validate);
+        edit->setText( "0" );
       break;
     case KSpread_Int:
       edit->setValidator(new QIntValidator (edit));
+      edit->setText( "0" );
       break;
       }
 
@@ -542,6 +543,7 @@ static void showEntry( QLineEdit* edit, QLabel* label, KSpreadFunctionDescriptio
 
 void KSpreadDlgFormula::slotDoubleClicked( QListBoxItem* item )
 {
+    refresh_result = false;
     if ( !item )
 	return;
 
@@ -619,7 +621,7 @@ void KSpreadDlgFormula::slotDoubleClicked( QListBoxItem* item )
     {
         kdDebug(36001) << "Error in param->nb_param" << endl;
     }
-
+    refresh_result= true;
     //
     // Put the new function call in the result.
     //
