@@ -324,37 +324,48 @@
 #define	USER	574
 #define	IDENTIFIER	575
 #define	IDENTIFIER_DOT_ASTERISK	576
-#define	ERROR_DIGIT_BEFORE_IDENTIFIER	577
-#define	USING	578
-#define	VALUE	579
-#define	VALUES	580
-#define	VARBINARY	581
-#define	VARCHAR	582
-#define	VARYING	583
-#define	VENDOR	584
-#define	VIEW	585
-#define	WEEK	586
-#define	WHEN	587
-#define	WHENEVER	588
-#define	WHERE	589
-#define	WHERE_CURRENT_OF	590
-#define	WITH	591
-#define	WORD_WRAPPED	592
-#define	WORK	593
-#define	WRAPPED	594
-#define	XOR	595
-#define	YEAR	596
-#define	YEARS_BETWEEN	597
+#define	USING	577
+#define	VALUE	578
+#define	VALUES	579
+#define	VARBINARY	580
+#define	VARCHAR	581
+#define	VARYING	582
+#define	VENDOR	583
+#define	VIEW	584
+#define	WEEK	585
+#define	WHEN	586
+#define	WHENEVER	587
+#define	WHERE	588
+#define	WHERE_CURRENT_OF	589
+#define	WITH	590
+#define	WORD_WRAPPED	591
+#define	WORK	592
+#define	WRAPPED	593
+#define	XOR	594
+#define	YEAR	595
+#define	YEARS_BETWEEN	596
+#define	SCAN_ERROR	597
 #define	__LAST_TOKEN	598
 #define	ILIKE	599
 
-#line 428 "sqlparser.y"
+#line 430 "sqlparser.y"
 
 #include <stdio.h>
 #include <string.h>
 #include <string>
 #include <iostream>
 #include <assert.h>
+#include <limits.h>
+//TODO OK?
+#ifndef LLONG_MAX
+# define LLONG_MAX     0x7fffffffffffffff
+#endif
+#ifndef LLONG_MIN
+# define LLONG_MIN     0x8000000000000000
+#endif
+#ifndef LLONG_MAX
+# define ULLONG_MAX    0xffffffffffffffff
+#endif
 
 #ifdef _WIN32
 # include <malloc.h>
@@ -401,10 +412,10 @@ using namespace KexiDB;
 	}
 #endif
 
-#line 481 "sqlparser.y"
+#line 494 "sqlparser.y"
 typedef union {
 	char stringValue[255];
-	int integerValue;
+	Q_LLONG integerValue;
 	struct realType realValue;
 	KexiDB::Field::Type colType;
 	KexiDB::Field *field;
@@ -423,11 +434,11 @@ typedef union {
 
 
 
-#define	YYFINAL		152
+#define	YYFINAL		156
 #define	YYFLAG		-32768
 #define	YYNTBASE	369
 
-#define YYTRANSLATE(x) ((unsigned)(x) <= 599 ? yytranslate[x] : 399)
+#define YYTRANSLATE(x) ((unsigned)(x) <= 599 ? yytranslate[x] : 401)
 
 static const short yytranslate[] = {     0,
      2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
@@ -501,9 +512,9 @@ static const short yyprhs[] = {     0,
    129,   133,   137,   141,   145,   149,   153,   155,   158,   161,
    163,   167,   171,   173,   177,   181,   185,   189,   191,   195,
    199,   203,   205,   208,   211,   214,   217,   219,   222,   226,
-   228,   230,   232,   234,   236,   240,   244,   248,   251,   255,
-   257,   259,   262,   266,   270,   272,   274,   276,   280,   283,
-   285,   290,   295,   297
+   228,   230,   232,   234,   236,   240,   244,   248,   252,   255,
+   259,   261,   263,   266,   270,   274,   276,   278,   280,   284,
+   287,   289,   294,   296
 };
 
 static const short yyrhs[] = {   370,
@@ -512,12 +523,12 @@ static const short yyrhs[] = {   370,
    374,   355,     0,   374,   351,   375,     0,   375,     0,   321,
    378,     0,   321,   378,   376,     0,   376,   377,     0,   377,
      0,   239,   170,     0,   206,   210,     0,    31,     0,     4,
-     0,     4,   354,   273,   355,     0,   328,   354,   273,   355,
-     0,     0,   380,   395,     0,   380,   395,   392,     0,   380,
-   392,     0,   380,   395,   381,     0,   380,   395,   392,   381,
-     0,   380,   392,   381,     0,   265,     0,   335,   382,     0,
+     0,     4,   354,   273,   355,     0,   327,   354,   273,   355,
+     0,     0,   380,   397,     0,   380,   397,   394,     0,   380,
+   394,     0,   380,   397,   381,     0,   380,   397,   394,   381,
+     0,   380,   394,   381,     0,   265,     0,   334,   382,     0,
    383,     0,   384,    20,   383,     0,   384,   224,   383,     0,
-   384,   341,   383,     0,   384,     0,   385,   361,   384,     0,
+   384,   340,   383,     0,   384,     0,   385,   361,   384,     0,
    385,   145,   384,     0,   385,   360,   384,     0,   385,   176,
    384,     0,   385,   359,   384,     0,   385,     0,   386,   207,
    385,     0,   386,   208,   385,     0,   386,   178,   385,     0,
@@ -528,31 +539,31 @@ static const short yyrhs[] = {   370,
    389,   366,   388,     0,   389,   367,   388,     0,   389,     0,
    390,   358,   389,     0,   390,   347,   389,     0,   390,   348,
    389,     0,   390,     0,   345,   390,     0,   346,   390,     0,
-   368,   390,     0,   206,   390,     0,   321,     0,   321,     0,
+   368,   390,     0,   206,   390,     0,   321,     0,   321,   392,
      0,   321,   352,   321,     0,   210,     0,    53,     0,   273,
      0,   274,     0,   391,     0,   354,   382,   355,     0,   354,
-     0,   355,     0,   382,   351,     0,     0,   138,   393,     0,
-   393,   351,   394,     0,   394,     0,   321,     0,   321,   321,
-     0,   321,    23,   321,     0,   395,   351,   396,     0,   396,
-     0,   397,     0,   398,     0,   397,    23,   321,     0,   397,
-   321,     0,   382,     0,   321,   354,   395,   355,     0,   108,
-   354,   397,   355,     0,   347,     0,   321,   352,   347,     0
+   393,   355,     0,   382,   351,   393,     0,   382,   351,   382,
+     0,   138,   395,     0,   395,   351,   396,     0,   396,     0,
+   321,     0,   321,   321,     0,   321,    23,   321,     0,   397,
+   351,   398,     0,   398,     0,   399,     0,   400,     0,   399,
+    23,   321,     0,   399,   321,     0,   382,     0,   108,   354,
+   399,   355,     0,   347,     0,   321,   352,   347,     0
 };
 
 #endif
 
 #if YYDEBUG != 0
 static const short yyrline[] = { 0,
-   545,   555,   560,   561,   570,   575,   581,   587,   590,   591,
-   596,   606,   620,   621,   626,   632,   637,   644,   650,   657,
-   663,   671,   679,   684,   690,   696,   702,   710,   720,   727,
-   732,   738,   742,   746,   751,   756,   760,   764,   768,   772,
-   777,   782,   787,   791,   795,   799,   803,   808,   813,   817,
-   822,   827,   831,   836,   842,   846,   850,   854,   859,   864,
-   868,   872,   877,   883,   887,   891,   895,   908,   914,   925,
-   932,   940,   948,   953,   958,   966,   975,   986,  1027,  1033,
-  1040,  1076,  1085,  1098,  1105,  1113,  1123,  1128,  1140,  1154,
-  1159,  1198,  1206,  1216
+   558,   568,   573,   574,   583,   588,   594,   600,   603,   604,
+   609,   619,   633,   634,   639,   645,   650,   657,   663,   670,
+   676,   684,   692,   697,   703,   709,   715,   723,   733,   740,
+   745,   751,   755,   759,   764,   769,   773,   777,   781,   785,
+   790,   795,   800,   804,   808,   812,   816,   821,   826,   830,
+   835,   840,   844,   849,   855,   859,   863,   867,   872,   877,
+   881,   885,   890,   896,   900,   904,   908,   921,   927,   938,
+   945,   953,   969,   974,   979,   987,   997,  1003,  1011,  1052,
+  1058,  1065,  1101,  1110,  1123,  1130,  1138,  1148,  1153,  1165,
+  1179,  1224,  1232,  1242
 };
 #endif
 
@@ -600,15 +611,15 @@ static const char * const yytname[] = {   "$","error","$undefined.","UMINUS",
 "TIME","TIMESTAMP","TIMEZONE_HOUR","TIMEZONE_MINUTE","TINYINT","TO","TO_CHAR",
 "TO_DATE","TRANSACTION","TRANSLATE","TRANSLATION","TRUNCATE","GENERAL_TITLE",
 "TWO_DIGITS","UCASE","UNION","UNIQUE","SQL_UNKNOWN","UPDATE","UPPER","USAGE",
-"USER","IDENTIFIER","IDENTIFIER_DOT_ASTERISK","ERROR_DIGIT_BEFORE_IDENTIFIER",
-"USING","VALUE","VALUES","VARBINARY","VARCHAR","VARYING","VENDOR","VIEW","WEEK",
-"WHEN","WHENEVER","WHERE","WHERE_CURRENT_OF","WITH","WORD_WRAPPED","WORK","WRAPPED",
-"XOR","YEAR","YEARS_BETWEEN","__LAST_TOKEN","'-'","'+'","'*'","'%'","'@'","';'",
-"','","'.'","'$'","'('","')'","'?'","'\\''","'/'","'='","'<'","'>'","ILIKE",
-"'^'","'['","']'","'&'","'|'","'~'","TopLevelStatement","StatementList","Statement",
-"CreateTableStatement","@1","ColDefs","ColDef","ColKeys","ColKey","ColType",
-"SelectStatement","Select","WhereClause","aExpr","aExpr2","aExpr3","aExpr4",
-"aExpr5","aExpr6","aExpr7","aExpr8","aExpr9","aExpr10","Tables","FlatTableList",
+"USER","IDENTIFIER","IDENTIFIER_DOT_ASTERISK","USING","VALUE","VALUES","VARBINARY",
+"VARCHAR","VARYING","VENDOR","VIEW","WEEK","WHEN","WHENEVER","WHERE","WHERE_CURRENT_OF",
+"WITH","WORD_WRAPPED","WORK","WRAPPED","XOR","YEAR","YEARS_BETWEEN","SCAN_ERROR",
+"__LAST_TOKEN","'-'","'+'","'*'","'%'","'@'","';'","','","'.'","'$'","'('","')'",
+"'?'","'\\''","'/'","'='","'<'","'>'","ILIKE","'^'","'['","']'","'&'","'|'",
+"'~'","TopLevelStatement","StatementList","Statement","CreateTableStatement",
+"@1","ColDefs","ColDef","ColKeys","ColKey","ColType","SelectStatement","Select",
+"WhereClause","aExpr","aExpr2","aExpr3","aExpr4","aExpr5","aExpr6","aExpr7",
+"aExpr8","aExpr9","aExpr10","aExprList","aExprList2","Tables","FlatTableList",
 "FlatTable","ColViews","ColItem","ColExpression","ColWildCard", NULL
 };
 #endif
@@ -620,10 +631,10 @@ static const short yyr1[] = {     0,
    383,   383,   383,   383,   384,   384,   384,   384,   384,   384,
    385,   385,   385,   385,   385,   385,   385,   386,   386,   386,
    387,   387,   387,   388,   388,   388,   388,   388,   389,   389,
-   389,   389,   390,   390,   390,   390,   390,    -1,   390,   390,
-   390,   390,   390,   390,   391,    -1,    -1,   392,   393,   393,
-   394,   394,   394,   395,   395,   396,   396,   396,   396,   397,
-   397,   397,   398,   398
+   389,   389,   390,   390,   390,   390,   390,   390,   390,   390,
+   390,   390,   390,   390,   391,   392,   393,   393,   394,   395,
+   395,   396,   396,   396,   397,   397,   398,   398,   398,   398,
+   399,   399,   400,   400
 };
 
 static const short yyr2[] = {     0,
@@ -634,135 +645,137 @@ static const short yyr2[] = {     0,
      3,     3,     3,     3,     3,     3,     1,     2,     2,     1,
      3,     3,     1,     3,     3,     3,     3,     1,     3,     3,
      3,     1,     2,     2,     2,     2,     1,     2,     3,     1,
-     1,     1,     1,     1,     3,     3,     3,     2,     3,     1,
-     1,     2,     3,     3,     1,     1,     1,     3,     2,     1,
-     4,     4,     1,     3
+     1,     1,     1,     1,     3,     3,     3,     3,     2,     3,
+     1,     1,     2,     3,     3,     1,     1,     1,     3,     2,
+     1,     4,     1,     3
 };
 
 static const short yydefact[] = {     0,
      0,    28,     1,     3,     5,     6,     0,     0,     4,    71,
      0,     0,     0,    70,    72,    73,    67,     0,     0,    93,
-     0,     0,    90,    30,    34,    40,    47,    50,    53,    58,
-    62,    74,    24,    22,    85,    86,    87,     7,     2,     0,
-    81,    78,    80,    67,    66,     0,     0,    63,    64,     0,
-    65,     0,     0,     0,     0,     0,     0,     0,     0,     0,
-     0,     0,     0,    48,    49,     0,     0,     0,     0,     0,
-     0,     0,     0,     0,     0,     0,     0,    27,     0,    25,
-    23,     0,    89,     0,    67,     0,     0,    82,     0,     0,
-    69,    94,     0,    75,    31,    32,    33,    36,    38,    39,
-    37,    35,    44,    43,    41,    42,    45,    46,    51,    52,
-    55,    54,    56,    57,    60,    61,    59,    29,    84,    26,
-    88,     0,    92,    83,    79,    91,    21,     0,    10,    18,
-     0,    11,     0,     8,     0,     0,    17,     0,     0,    12,
-    14,     9,     0,     0,    16,    15,    13,    19,    20,     0,
-     0,     0
+     0,     0,    91,    30,    34,    40,    47,    50,    53,    58,
+    62,    74,    24,    22,    86,    87,    88,     7,     2,     0,
+    82,    79,    81,    67,    66,     0,     0,    68,    63,    64,
+     0,    65,     0,     0,     0,     0,     0,     0,     0,     0,
+     0,     0,     0,     0,    48,    49,     0,     0,     0,     0,
+     0,     0,     0,     0,     0,     0,     0,     0,    27,     0,
+    25,    23,     0,    90,     0,     0,     0,    83,     0,     0,
+    69,    94,     0,     0,    75,    31,    32,    33,    36,    38,
+    39,    37,    35,    44,    43,    41,    42,    45,    46,    51,
+    52,    55,    54,    56,    57,    60,    61,    59,    29,    85,
+    26,    89,     0,    92,    84,    80,     0,    76,    21,     0,
+    10,    78,    77,    18,     0,    11,     0,     8,     0,     0,
+    17,     0,     0,    12,    14,     9,     0,     0,    16,    15,
+    13,    19,    20,     0,     0,     0
 };
 
-static const short yydefgoto[] = {   150,
-     3,     4,     5,    84,   128,   129,   140,   141,   132,     6,
-     7,    78,    23,    24,    25,    26,    27,    28,    29,    30,
-    31,    32,    33,    42,    43,    34,    35,    36,    37
+static const short yydefgoto[] = {   154,
+     3,     4,     5,    85,   130,   131,   144,   145,   136,     6,
+     7,    79,    23,    24,    25,    26,    27,    28,    29,    30,
+    31,    32,    48,    94,    33,    42,    43,    34,    35,    36,
+    37
 };
 
-static const short yypact[] = {   -66,
-  -272,-32768,-32768,  -324,-32768,-32768,   -51,  -292,   -66,-32768,
-  -318,  -266,   -38,-32768,-32768,-32768,  -321,   -38,   -38,-32768,
-   -38,   -38,-32768,-32768,   -19,  -142,  -143,-32768,     0,  -329,
-  -328,-32768,  -276,  -127,-32768,   -17,-32768,-32768,-32768,   -45,
-   -16,  -289,-32768,  -286,-32768,  -308,   -48,-32768,-32768,  -288,
--32768,   -38,   -38,   -38,   -38,   -38,   -38,   -38,   -38,   -38,
-   -38,   -38,   -38,-32768,-32768,   -38,   -38,   -38,   -38,   -38,
-   -38,   -38,   -38,   -38,   -38,   -38,   -38,-32768,   -48,-32768,
-  -276,  -240,-32768,  -271,  -296,  -273,  -237,-32768,  -266,  -236,
--32768,-32768,  -330,-32768,-32768,-32768,-32768,-32768,-32768,-32768,
+static const short yypact[] = {   -68,
+  -272,-32768,-32768,  -321,-32768,-32768,   -51,  -285,   -68,-32768,
+  -298,  -259,   -38,-32768,-32768,-32768,  -326,   -38,   -38,-32768,
+   -38,   -38,-32768,-32768,   -19,  -141,  -144,-32768,     7,  -329,
+  -328,-32768,  -269,  -130,-32768,   -20,-32768,-32768,-32768,   -41,
+   -12,  -276,-32768,  -293,-32768,  -307,   -38,-32768,-32768,-32768,
+  -289,-32768,   -38,   -38,   -38,   -38,   -38,   -38,   -38,   -38,
+   -38,   -38,   -38,   -38,-32768,-32768,   -38,   -38,   -38,   -38,
+   -38,   -38,   -38,   -38,   -38,   -38,   -38,   -38,-32768,   -48,
+-32768,  -269,  -242,-32768,  -274,  -273,  -240,-32768,  -259,  -238,
+-32768,-32768,  -267,  -270,-32768,-32768,-32768,-32768,-32768,-32768,
 -32768,-32768,-32768,-32768,-32768,-32768,-32768,-32768,-32768,-32768,
 -32768,-32768,-32768,-32768,-32768,-32768,-32768,-32768,-32768,-32768,
--32768,  -235,-32768,-32768,-32768,-32768,    -4,  -323,-32768,  -265,
-  -264,   -27,  -235,-32768,  -185,  -182,-32768,  -118,   -77,   -27,
--32768,-32768,  -261,  -260,-32768,-32768,-32768,-32768,-32768,    96,
-    97,-32768
+-32768,-32768,  -235,-32768,-32768,-32768,   -38,-32768,    -4,  -330,
+-32768,  -267,-32768,  -266,  -265,   -25,  -235,-32768,  -183,  -182,
+-32768,  -118,   -77,   -25,-32768,-32768,  -261,  -260,-32768,-32768,
+-32768,-32768,-32768,    96,    97,-32768
 };
 
 static const short yypgoto[] = {-32768,
-    89,-32768,-32768,-32768,-32768,   -34,-32768,   -40,-32768,-32768,
--32768,   -20,    -9,    23,    -5,   -18,-32768,   -22,     1,     4,
-     5,-32768,    67,-32768,    13,    56,    25,    65,-32768
+    89,-32768,-32768,-32768,-32768,   -37,-32768,   -45,-32768,-32768,
+-32768,   -24,    -8,   -22,    -5,   -18,-32768,   -28,     0,     1,
+     5,-32768,-32768,   -26,    68,-32768,    14,-32768,    24,    65,
+-32768
 };
 
 
 #define	YYLAST		330
 
 
-static const short yytable[] = {   130,
-    52,    10,    55,   137,    10,    82,    87,    10,     1,    60,
-    12,    50,    91,    80,    10,    70,    71,    45,    74,    75,
-    79,     8,    48,    49,   126,     9,    51,   133,    38,    76,
-    46,   134,    47,    56,    61,    40,    72,    73,    92,    68,
-    69,   103,   104,   105,   106,   109,   110,   107,   108,    98,
-    99,   100,   101,   102,    41,    90,    11,    47,    77,    11,
-   120,    89,    11,    62,    63,    90,    94,   118,    64,    65,
-   111,   112,   113,   114,    95,    96,    97,   115,   116,   117,
-   121,   123,   122,   124,    91,   127,    12,   143,   135,   136,
-   144,   145,   146,   148,   149,   151,   152,    39,   142,   147,
-    81,   125,    93,   119,    86,     0,     0,     0,     0,     0,
-     0,     0,     0,     0,     0,     0,     0,     0,     0,     0,
-     0,     0,     0,     0,     0,     0,     0,    66,    67,     0,
+static const short yytable[] = {   134,
+    53,    10,    83,    56,    10,   141,     1,    12,    61,    81,
+    87,    10,    51,    91,    10,    71,    72,    45,    75,    76,
+   137,     8,    49,    50,   138,    46,    52,    47,     9,    77,
+    96,    97,    98,    62,    57,    38,    73,    74,    93,    92,
+   110,   111,   104,   105,   106,   107,    69,    70,   108,   109,
+    99,   100,   101,   102,   103,    40,    11,   121,    90,    11,
+    47,    41,    63,    64,    78,    95,    11,    65,    66,   119,
+   112,   113,   114,   115,    89,   116,   117,   118,   122,   123,
+   125,   124,    91,   127,   128,   129,    12,   139,   140,   147,
+   148,   149,   150,   152,   153,   155,   156,    39,   151,   146,
+   133,    82,   126,   120,    86,     0,     0,     0,     0,     0,
+     0,     0,     0,     0,     0,     0,     0,     0,   132,     0,
+     0,     0,     0,     0,     0,     0,    67,    68,     0,     0,
      0,     0,     0,     0,     0,     0,     0,     0,     0,     0,
      0,     0,     0,     0,     0,     0,     0,     0,     0,     0,
      0,     0,     0,     0,    13,     0,     0,    13,    14,     0,
-    13,    14,     0,     0,    14,     0,     0,    13,     0,     0,
-     0,    14,     0,     0,     0,     0,     0,     0,   138,     0,
-     0,     0,     0,     0,     0,     0,     0,     0,     0,     0,
-     0,     0,     0,     0,     0,     0,     0,     0,     2,     0,
-     0,     0,     0,     0,    53,     0,     0,    77,     0,     0,
-     0,   139,     0,     0,     0,     0,    57,    58,    59,     0,
-     0,    15,    16,    79,    15,    16,     0,    15,    16,     0,
-     0,     0,     0,     0,    15,    16,     0,     0,     0,     0,
+     0,    14,     0,     0,    13,     0,     0,    13,    14,     0,
+     0,    14,     0,     0,     0,     0,     0,     0,     0,     0,
+   142,     0,     0,     0,     0,     0,     0,     0,     0,     0,
+     0,     0,     0,     0,     0,     0,     2,     0,     0,     0,
+     0,     0,     0,    78,    54,     0,     0,     0,     0,     0,
+     0,     0,     0,   143,     0,     0,     0,    58,    59,    60,
+    80,    15,    16,     0,    15,    16,     0,     0,     0,     0,
+     0,    15,    16,     0,    15,    16,     0,     0,     0,     0,
      0,     0,     0,     0,     0,     0,     0,     0,     0,     0,
      0,     0,     0,     0,     0,     0,     0,     0,     0,     0,
      0,     0,     0,     0,     0,     0,     0,     0,     0,    17,
-     0,     0,    17,     0,     0,    85,     0,     0,     0,     0,
+     0,     0,    17,     0,     0,     0,     0,     0,     0,    44,
      0,     0,    44,     0,     0,     0,     0,     0,     0,     0,
-     0,     0,     0,    18,    19,    20,    18,    19,    20,    18,
-    19,     0,    21,    83,    88,    21,    18,    19,    21,     0,
-     0,     0,     0,     0,     0,    21,    22,     0,     0,    22,
-     0,    54,    22,   131,     0,     0,     0,     0,     0,    22
+     0,     0,     0,    18,    19,    20,    18,    19,    20,     0,
+    84,     0,    21,    18,    19,    21,    18,    19,    88,     0,
+     0,     0,    21,     0,     0,    21,    22,     0,     0,    22,
+    55,     0,   135,     0,     0,     0,    22,     0,     0,    22
 };
 
 static const short yycheck[] = {     4,
-    20,    53,   145,    31,    53,    23,    23,    53,    75,   153,
-   138,    21,   321,    34,    53,   345,   346,    13,   347,   348,
-   351,   294,    18,    19,   355,   350,    22,   351,   321,   358,
-   352,   355,   354,   176,   178,   354,   366,   367,   347,    40,
-    41,    60,    61,    62,    63,    68,    69,    66,    67,    55,
-    56,    57,    58,    59,   321,   352,   108,   354,   335,   108,
-    81,   351,   108,   207,   208,   352,   355,    77,   212,   213,
-    70,    71,    72,    73,    52,    53,    54,    74,    75,    76,
-   321,   355,   354,   321,   321,   321,   138,   273,   354,   354,
-   273,   210,   170,   355,   355,     0,     0,     9,   133,   140,
-    34,    89,    47,    79,    40,    -1,    -1,    -1,    -1,    -1,
-    -1,    -1,    -1,    -1,    -1,    -1,    -1,    -1,    -1,    -1,
-    -1,    -1,    -1,    -1,    -1,    -1,    -1,   271,   272,    -1,
+    20,    53,    23,   145,    53,    31,    75,   138,   153,    34,
+    23,    53,    21,   321,    53,   345,   346,    13,   347,   348,
+   351,   294,    18,    19,   355,   352,    22,   354,   350,   358,
+    53,    54,    55,   178,   176,   321,   366,   367,    47,   347,
+    69,    70,    61,    62,    63,    64,    40,    41,    67,    68,
+    56,    57,    58,    59,    60,   354,   108,    82,   352,   108,
+   354,   321,   207,   208,   334,   355,   108,   212,   213,    78,
+    71,    72,    73,    74,   351,    75,    76,    77,   321,   354,
+   321,   355,   321,   351,   355,   321,   138,   354,   354,   273,
+   273,   210,   170,   355,   355,     0,     0,     9,   144,   137,
+   127,    34,    89,    80,    40,    -1,    -1,    -1,    -1,    -1,
+    -1,    -1,    -1,    -1,    -1,    -1,    -1,    -1,   127,    -1,
+    -1,    -1,    -1,    -1,    -1,    -1,   271,   272,    -1,    -1,
     -1,    -1,    -1,    -1,    -1,    -1,    -1,    -1,    -1,    -1,
     -1,    -1,    -1,    -1,    -1,    -1,    -1,    -1,    -1,    -1,
     -1,    -1,    -1,    -1,   206,    -1,    -1,   206,   210,    -1,
-   206,   210,    -1,    -1,   210,    -1,    -1,   206,    -1,    -1,
-    -1,   210,    -1,    -1,    -1,    -1,    -1,    -1,   206,    -1,
-    -1,    -1,    -1,    -1,    -1,    -1,    -1,    -1,    -1,    -1,
-    -1,    -1,    -1,    -1,    -1,    -1,    -1,    -1,   265,    -1,
-    -1,    -1,    -1,    -1,   224,    -1,    -1,   335,    -1,    -1,
-    -1,   239,    -1,    -1,    -1,    -1,   359,   360,   361,    -1,
-    -1,   273,   274,   351,   273,   274,    -1,   273,   274,    -1,
-    -1,    -1,    -1,    -1,   273,   274,    -1,    -1,    -1,    -1,
+    -1,   210,    -1,    -1,   206,    -1,    -1,   206,   210,    -1,
+    -1,   210,    -1,    -1,    -1,    -1,    -1,    -1,    -1,    -1,
+   206,    -1,    -1,    -1,    -1,    -1,    -1,    -1,    -1,    -1,
+    -1,    -1,    -1,    -1,    -1,    -1,   265,    -1,    -1,    -1,
+    -1,    -1,    -1,   334,   224,    -1,    -1,    -1,    -1,    -1,
+    -1,    -1,    -1,   239,    -1,    -1,    -1,   359,   360,   361,
+   351,   273,   274,    -1,   273,   274,    -1,    -1,    -1,    -1,
+    -1,   273,   274,    -1,   273,   274,    -1,    -1,    -1,    -1,
     -1,    -1,    -1,    -1,    -1,    -1,    -1,    -1,    -1,    -1,
     -1,    -1,    -1,    -1,    -1,    -1,    -1,    -1,    -1,    -1,
     -1,    -1,    -1,    -1,    -1,    -1,    -1,    -1,    -1,   321,
-    -1,    -1,   321,    -1,    -1,   321,    -1,    -1,    -1,    -1,
+    -1,    -1,   321,    -1,    -1,    -1,    -1,    -1,    -1,   321,
     -1,    -1,   321,    -1,    -1,    -1,    -1,    -1,    -1,    -1,
-    -1,    -1,    -1,   345,   346,   347,   345,   346,   347,   345,
-   346,    -1,   354,   321,   321,   354,   345,   346,   354,    -1,
-    -1,    -1,    -1,    -1,    -1,   354,   368,    -1,    -1,   368,
-    -1,   341,   368,   328,    -1,    -1,    -1,    -1,    -1,   368
+    -1,    -1,    -1,   345,   346,   347,   345,   346,   347,    -1,
+   321,    -1,   354,   345,   346,   354,   345,   346,   321,    -1,
+    -1,    -1,   354,    -1,    -1,   354,   368,    -1,    -1,   368,
+   340,    -1,   327,    -1,    -1,    -1,   368,    -1,    -1,   368
 };
 /* -*-C-*-  Note some compilers choke on comments on `#line' lines.  */
 #line 3 "/usr/local/share/bison.simple"
@@ -1308,7 +1321,7 @@ yyreduce:
   switch (yyn) {
 
 case 1:
-#line 547 "sqlparser.y"
+#line 560 "sqlparser.y"
 {
 //todo: multiple statements
 //todo: not only "select" statements
@@ -1317,43 +1330,43 @@ case 1:
 ;
     break;}
 case 2:
-#line 557 "sqlparser.y"
+#line 570 "sqlparser.y"
 {
 //todo: multiple statements
 ;
     break;}
 case 4:
-#line 562 "sqlparser.y"
+#line 575 "sqlparser.y"
 {
 	yyval.querySchema = yyvsp[-1].querySchema;
 ;
     break;}
 case 5:
-#line 572 "sqlparser.y"
+#line 585 "sqlparser.y"
 {
 YYACCEPT;
 ;
     break;}
 case 6:
-#line 576 "sqlparser.y"
+#line 589 "sqlparser.y"
 {
 	yyval.querySchema = yyvsp[0].querySchema;
 ;
     break;}
 case 7:
-#line 583 "sqlparser.y"
+#line 596 "sqlparser.y"
 {
 	parser->setOperation(Parser::OP_CreateTable);
 	parser->createTable(yyvsp[0].stringValue);
 ;
     break;}
 case 10:
-#line 592 "sqlparser.y"
+#line 605 "sqlparser.y"
 {
 ;
     break;}
 case 11:
-#line 598 "sqlparser.y"
+#line 611 "sqlparser.y"
 {
 	kdDebug() << "adding field " << yyvsp[-1].stringValue << endl;
 	field->setName(yyvsp[-1].stringValue);
@@ -1364,7 +1377,7 @@ case 11:
 ;
     break;}
 case 12:
-#line 607 "sqlparser.y"
+#line 620 "sqlparser.y"
 {
 	kdDebug() << "adding field " << yyvsp[-2].stringValue << endl;
 	field->setName(yyvsp[-2].stringValue);
@@ -1378,40 +1391,40 @@ case 12:
 ;
     break;}
 case 14:
-#line 622 "sqlparser.y"
+#line 635 "sqlparser.y"
 {
 ;
     break;}
 case 15:
-#line 628 "sqlparser.y"
+#line 641 "sqlparser.y"
 {
 	field->setPrimaryKey(true);
 	kdDebug() << "primary" << endl;
 ;
     break;}
 case 16:
-#line 633 "sqlparser.y"
+#line 646 "sqlparser.y"
 {
 	field->setNotNull(true);
 	kdDebug() << "not_null" << endl;
 ;
     break;}
 case 17:
-#line 638 "sqlparser.y"
+#line 651 "sqlparser.y"
 {
 	field->setAutoIncrement(true);
 	kdDebug() << "ainc" << endl;
 ;
     break;}
 case 18:
-#line 646 "sqlparser.y"
+#line 659 "sqlparser.y"
 {
 	field = new Field();
 	field->setType(yyvsp[0].colType);
 ;
     break;}
 case 19:
-#line 651 "sqlparser.y"
+#line 664 "sqlparser.y"
 {
 	kdDebug() << "sql + length" << endl;
 	field = new Field();
@@ -1420,7 +1433,7 @@ case 19:
 ;
     break;}
 case 20:
-#line 658 "sqlparser.y"
+#line 671 "sqlparser.y"
 {
 	field = new Field();
 	field->setPrecision(yyvsp[-1].integerValue);
@@ -1428,7 +1441,7 @@ case 20:
 ;
     break;}
 case 21:
-#line 664 "sqlparser.y"
+#line 677 "sqlparser.y"
 {
 	// SQLITE compatibillity
 	field = new Field();
@@ -1436,7 +1449,7 @@ case 21:
 ;
     break;}
 case 22:
-#line 673 "sqlparser.y"
+#line 686 "sqlparser.y"
 {
 	kdDebug() << "Select ColViews=" << yyvsp[0].exprList->debugString() << endl;
 
@@ -1445,14 +1458,14 @@ case 22:
 ;
     break;}
 case 23:
-#line 680 "sqlparser.y"
+#line 693 "sqlparser.y"
 {
 	if (!(yyval.querySchema = parseSelect( yyvsp[-2].querySchema, yyvsp[-1].exprList, yyvsp[0].exprList )))
 		return 0;
 ;
     break;}
 case 24:
-#line 685 "sqlparser.y"
+#line 698 "sqlparser.y"
 {
 	kdDebug() << "Select ColViews Tables" << endl;
 	if (!(yyval.querySchema = parseSelect( yyvsp[-1].querySchema, 0, yyvsp[0].exprList )))
@@ -1460,7 +1473,7 @@ case 24:
 ;
     break;}
 case 25:
-#line 691 "sqlparser.y"
+#line 704 "sqlparser.y"
 {
 	kdDebug() << "Select ColViews Conditions" << endl;
 	if (!(yyval.querySchema = parseSelect( yyvsp[-2].querySchema, yyvsp[-1].exprList, 0, yyvsp[0].expr )))
@@ -1468,7 +1481,7 @@ case 25:
 ;
     break;}
 case 26:
-#line 697 "sqlparser.y"
+#line 710 "sqlparser.y"
 {
 	kdDebug() << "Select ColViews Tables Conditions" << endl;
 	if (!(yyval.querySchema = parseSelect( yyvsp[-3].querySchema, yyvsp[-2].exprList, yyvsp[-1].exprList, yyvsp[0].expr )))
@@ -1476,7 +1489,7 @@ case 26:
 ;
     break;}
 case 27:
-#line 703 "sqlparser.y"
+#line 716 "sqlparser.y"
 {
 	kdDebug() << "Select Tables Conditions" << endl;
 	if (!(yyval.querySchema = parseSelect( yyvsp[-2].querySchema, 0, yyvsp[-1].exprList, yyvsp[0].expr )))
@@ -1484,7 +1497,7 @@ case 27:
 ;
     break;}
 case 28:
-#line 712 "sqlparser.y"
+#line 725 "sqlparser.y"
 {
 	kdDebug() << "SELECT" << endl;
 //	parser->createSelect();
@@ -1493,189 +1506,189 @@ case 28:
 ;
     break;}
 case 29:
-#line 722 "sqlparser.y"
+#line 735 "sqlparser.y"
 {
 	yyval.expr = yyvsp[0].expr;
 ;
     break;}
 case 31:
-#line 734 "sqlparser.y"
+#line 747 "sqlparser.y"
 {
 //	kdDebug() << "AND " << $3.debugString() << endl;
 	yyval.expr = new BinaryExpr( KexiDBExpr_Logical, yyvsp[-2].expr, AND, yyvsp[0].expr );
 ;
     break;}
 case 32:
-#line 739 "sqlparser.y"
+#line 752 "sqlparser.y"
 {
 	yyval.expr = new BinaryExpr( KexiDBExpr_Logical, yyvsp[-2].expr, OR, yyvsp[0].expr );
 ;
     break;}
 case 33:
-#line 743 "sqlparser.y"
+#line 756 "sqlparser.y"
 {
 	yyval.expr = new BinaryExpr( KexiDBExpr_Arithm, yyvsp[-2].expr, XOR, yyvsp[0].expr );
 ;
     break;}
 case 35:
-#line 753 "sqlparser.y"
+#line 766 "sqlparser.y"
 {
 	yyval.expr = new BinaryExpr(KexiDBExpr_Relational, yyvsp[-2].expr, '>', yyvsp[0].expr);
 ;
     break;}
 case 36:
-#line 757 "sqlparser.y"
+#line 770 "sqlparser.y"
 {
 	yyval.expr = new BinaryExpr(KexiDBExpr_Relational, yyvsp[-2].expr, GREATER_OR_EQUAL, yyvsp[0].expr);
 ;
     break;}
 case 37:
-#line 761 "sqlparser.y"
+#line 774 "sqlparser.y"
 {
 	yyval.expr = new BinaryExpr(KexiDBExpr_Relational, yyvsp[-2].expr, '<', yyvsp[0].expr);
 ;
     break;}
 case 38:
-#line 765 "sqlparser.y"
+#line 778 "sqlparser.y"
 {
 	yyval.expr = new BinaryExpr(KexiDBExpr_Relational, yyvsp[-2].expr, LESS_OR_EQUAL, yyvsp[0].expr);
 ;
     break;}
 case 39:
-#line 769 "sqlparser.y"
+#line 782 "sqlparser.y"
 {
 	yyval.expr = new BinaryExpr(KexiDBExpr_Relational, yyvsp[-2].expr, '=', yyvsp[0].expr);
 ;
     break;}
 case 41:
-#line 779 "sqlparser.y"
+#line 792 "sqlparser.y"
 {
 	yyval.expr = new BinaryExpr(KexiDBExpr_Relational, yyvsp[-2].expr, NOT_EQUAL, yyvsp[0].expr);
 ;
     break;}
 case 42:
-#line 784 "sqlparser.y"
+#line 797 "sqlparser.y"
 {
 	yyval.expr = new BinaryExpr(KexiDBExpr_Relational, yyvsp[-2].expr, NOT_EQUAL2, yyvsp[0].expr);
 ;
     break;}
 case 43:
-#line 788 "sqlparser.y"
+#line 801 "sqlparser.y"
 {
 	yyval.expr = new BinaryExpr(KexiDBExpr_Relational, yyvsp[-2].expr, LIKE, yyvsp[0].expr);
 ;
     break;}
 case 44:
-#line 792 "sqlparser.y"
+#line 805 "sqlparser.y"
 {
 	yyval.expr = new BinaryExpr(KexiDBExpr_Relational, yyvsp[-2].expr, SQL_IN, yyvsp[0].expr);
 ;
     break;}
 case 45:
-#line 796 "sqlparser.y"
+#line 809 "sqlparser.y"
 {
 	yyval.expr = new BinaryExpr(KexiDBExpr_Relational, yyvsp[-2].expr, SIMILAR_TO, yyvsp[0].expr);
 ;
     break;}
 case 46:
-#line 800 "sqlparser.y"
+#line 813 "sqlparser.y"
 {
 	yyval.expr = new BinaryExpr(KexiDBExpr_Relational, yyvsp[-2].expr, NOT_SIMILAR_TO, yyvsp[0].expr);
 ;
     break;}
 case 48:
-#line 810 "sqlparser.y"
+#line 823 "sqlparser.y"
 {
 	yyval.expr = new UnaryExpr( SQL_IS_NULL, yyvsp[-1].expr );
 ;
     break;}
 case 49:
-#line 814 "sqlparser.y"
+#line 827 "sqlparser.y"
 {
 	yyval.expr = new UnaryExpr( SQL_IS_NOT_NULL, yyvsp[-1].expr );
 ;
     break;}
 case 51:
-#line 824 "sqlparser.y"
+#line 837 "sqlparser.y"
 {
 	yyval.expr = new BinaryExpr(KexiDBExpr_Arithm, yyvsp[-2].expr, BITWISE_SHIFT_LEFT, yyvsp[0].expr);
 ;
     break;}
 case 52:
-#line 828 "sqlparser.y"
+#line 841 "sqlparser.y"
 {
 	yyval.expr = new BinaryExpr(KexiDBExpr_Arithm, yyvsp[-2].expr, BITWISE_SHIFT_RIGHT, yyvsp[0].expr);
 ;
     break;}
 case 54:
-#line 838 "sqlparser.y"
+#line 851 "sqlparser.y"
 {
 	yyval.expr = new BinaryExpr(KexiDBExpr_Arithm, yyvsp[-2].expr, '+', yyvsp[0].expr);
 	yyval.expr->debug();
 ;
     break;}
 case 55:
-#line 843 "sqlparser.y"
+#line 856 "sqlparser.y"
 {
 	yyval.expr = new BinaryExpr(KexiDBExpr_Arithm, yyvsp[-2].expr, '-', yyvsp[0].expr);
 ;
     break;}
 case 56:
-#line 847 "sqlparser.y"
+#line 860 "sqlparser.y"
 {
 	yyval.expr = new BinaryExpr(KexiDBExpr_Arithm, yyvsp[-2].expr, '&', yyvsp[0].expr);
 ;
     break;}
 case 57:
-#line 851 "sqlparser.y"
+#line 864 "sqlparser.y"
 {
 	yyval.expr = new BinaryExpr(KexiDBExpr_Arithm, yyvsp[-2].expr, '|', yyvsp[0].expr);
 ;
     break;}
 case 59:
-#line 861 "sqlparser.y"
+#line 874 "sqlparser.y"
 {
 	yyval.expr = new BinaryExpr(KexiDBExpr_Arithm, yyvsp[-2].expr, '/', yyvsp[0].expr);
 ;
     break;}
 case 60:
-#line 865 "sqlparser.y"
+#line 878 "sqlparser.y"
 {
 	yyval.expr = new BinaryExpr(KexiDBExpr_Arithm, yyvsp[-2].expr, '*', yyvsp[0].expr);
 ;
     break;}
 case 61:
-#line 869 "sqlparser.y"
+#line 882 "sqlparser.y"
 {
 	yyval.expr = new BinaryExpr(KexiDBExpr_Arithm, yyvsp[-2].expr, '%', yyvsp[0].expr);
 ;
     break;}
 case 63:
-#line 880 "sqlparser.y"
+#line 893 "sqlparser.y"
 {
 	yyval.expr = new UnaryExpr( '-', yyvsp[0].expr );
 ;
     break;}
 case 64:
-#line 884 "sqlparser.y"
+#line 897 "sqlparser.y"
 {
 	yyval.expr = new UnaryExpr( '+', yyvsp[0].expr );
 ;
     break;}
 case 65:
-#line 888 "sqlparser.y"
+#line 901 "sqlparser.y"
 {
 	yyval.expr = new UnaryExpr( '~', yyvsp[0].expr );
 ;
     break;}
 case 66:
-#line 892 "sqlparser.y"
+#line 905 "sqlparser.y"
 {
 	yyval.expr = new UnaryExpr( NOT, yyvsp[0].expr );
 ;
     break;}
 case 67:
-#line 896 "sqlparser.y"
+#line 909 "sqlparser.y"
 {
 	yyval.expr = new VariableExpr( QString::fromLatin1(yyvsp[0].stringValue) );
 	
@@ -1690,14 +1703,14 @@ case 67:
 ;
     break;}
 case 68:
-#line 909 "sqlparser.y"
+#line 922 "sqlparser.y"
 {
 	kdDebug() << "  + function: " << yyvsp[-1].stringValue << "(" << yyvsp[0].exprList->debugString() << ")" << endl;
 	yyval.expr = new FunctionExpr(yyvsp[-1].stringValue, yyvsp[0].exprList);
 ;
     break;}
 case 69:
-#line 915 "sqlparser.y"
+#line 928 "sqlparser.y"
 {
 	yyval.expr = new VariableExpr( QString::fromLatin1(yyvsp[-2].stringValue) + "." + QString::fromLatin1(yyvsp[0].stringValue) );
 	kdDebug() << "  + identifier.identifier: " << yyvsp[0].stringValue << "." << yyvsp[-2].stringValue << endl;
@@ -1710,7 +1723,7 @@ case 69:
 ;
     break;}
 case 70:
-#line 926 "sqlparser.y"
+#line 939 "sqlparser.y"
 {
 	yyval.expr = new ConstExpr( SQL_NULL, QVariant() );
 	kdDebug() << "  + NULL" << endl;
@@ -1719,7 +1732,7 @@ case 70:
 ;
     break;}
 case 71:
-#line 933 "sqlparser.y"
+#line 946 "sqlparser.y"
 {
 	yyval.expr = new ConstExpr( CHARACTER_STRING_LITERAL, yyvsp[0].stringValue );
 //	$$ = new Field();
@@ -1729,64 +1742,83 @@ case 71:
 ;
     break;}
 case 72:
-#line 941 "sqlparser.y"
+#line 954 "sqlparser.y"
 {
-	yyval.expr = new ConstExpr( INTEGER_CONST, yyvsp[0].integerValue );
-//	$$ = new Field();
-//	$$->setName(QString::number($1));
-//	parser->select()->addField(field);
-	kdDebug() << "  + int constant: " << yyvsp[0].integerValue << endl;
+	QVariant val;
+	if (yyvsp[0].integerValue < INT_MAX && yyvsp[0].integerValue > INT_MIN)
+		val = (int)yyvsp[0].integerValue;
+	if (yyvsp[0].integerValue < UINT_MAX && yyvsp[0].integerValue >= 0)
+		val = (uint)yyvsp[0].integerValue;
+	if (yyvsp[0].integerValue < LLONG_MAX && yyvsp[0].integerValue > LLONG_MIN)
+		val = (Q_LLONG)yyvsp[0].integerValue;
+//	if ($1 < ULLONG_MAX)
+//		val = (Q_ULLONG)$1;
+//TODO ok?
+
+	yyval.expr = new ConstExpr( INTEGER_CONST, val );
+	kdDebug() << "  + int constant: " << val << endl;
 ;
     break;}
 case 73:
-#line 949 "sqlparser.y"
+#line 970 "sqlparser.y"
 {
 	yyval.expr = new ConstExpr( REAL_CONST, QPoint( yyvsp[0].realValue.integer, yyvsp[0].realValue.fractional ) );
 	kdDebug() << "  + real constant: " << yyvsp[0].realValue.integer << "." << yyvsp[0].realValue.fractional << endl;
 ;
     break;}
 case 75:
-#line 960 "sqlparser.y"
+#line 981 "sqlparser.y"
 {
 	kdDebug() << "(expr)" << endl;
 	yyval.expr = new UnaryExpr('(', yyvsp[-1].expr);
 ;
     break;}
 case 76:
-#line 968 "sqlparser.y"
+#line 989 "sqlparser.y"
 {
 //	$$ = new NArgExpr(0, 0);
 //	$$->add( $1 );
 //	$$->add( $3 );
+	yyval.exprList = yyvsp[-1].exprList;
 ;
     break;}
 case 77:
-#line 977 "sqlparser.y"
+#line 999 "sqlparser.y"
 {
+	yyval.exprList = yyvsp[0].exprList;
+	yyval.exprList->prepend( yyvsp[-2].expr );
 ;
     break;}
 case 78:
-#line 988 "sqlparser.y"
+#line 1004 "sqlparser.y"
+{
+	yyval.exprList = new NArgExpr(0, 0);
+	yyval.exprList->add( yyvsp[-2].expr );
+	yyval.exprList->add( yyvsp[0].expr );
+;
+    break;}
+case 79:
+#line 1013 "sqlparser.y"
 {
 	yyval.exprList = yyvsp[0].exprList;
 ;
     break;}
-case 79:
-#line 1029 "sqlparser.y"
+case 80:
+#line 1054 "sqlparser.y"
 {
 	yyval.exprList = yyvsp[-2].exprList;
 	yyval.exprList->add(yyvsp[0].expr);
 ;
     break;}
-case 80:
-#line 1034 "sqlparser.y"
+case 81:
+#line 1059 "sqlparser.y"
 {
 	yyval.exprList = new NArgExpr(KexiDBExpr_TableList, IDENTIFIER); //ok?
 	yyval.exprList->add(yyvsp[0].expr);
 ;
     break;}
-case 81:
-#line 1042 "sqlparser.y"
+case 82:
+#line 1067 "sqlparser.y"
 {
 	kdDebug() << "FROM: '" << yyvsp[0].stringValue << "'" << endl;
 
@@ -1822,8 +1854,8 @@ case 81:
 	}*/
 ;
     break;}
-case 82:
-#line 1077 "sqlparser.y"
+case 83:
+#line 1102 "sqlparser.y"
 {
 	//table + alias
 	yyval.expr = new BinaryExpr(
@@ -1833,8 +1865,8 @@ case 82:
 	);
 ;
     break;}
-case 83:
-#line 1086 "sqlparser.y"
+case 84:
+#line 1111 "sqlparser.y"
 {
 	//table + alias
 	yyval.expr = new BinaryExpr(
@@ -1844,24 +1876,24 @@ case 83:
 	);
 ;
     break;}
-case 84:
-#line 1100 "sqlparser.y"
+case 85:
+#line 1125 "sqlparser.y"
 {
 	yyval.exprList = yyvsp[-2].exprList;
 	yyval.exprList->add( yyvsp[0].expr );
 	kdDebug() << "ColViews: ColViews , ColItem" << endl;
 ;
     break;}
-case 85:
-#line 1106 "sqlparser.y"
+case 86:
+#line 1131 "sqlparser.y"
 {
 	yyval.exprList = new NArgExpr(0,0);
 	yyval.exprList->add( yyvsp[0].expr );
 	kdDebug() << "ColViews: ColItem" << endl;
 ;
     break;}
-case 86:
-#line 1115 "sqlparser.y"
+case 87:
+#line 1140 "sqlparser.y"
 {
 //	$$ = new Field();
 //	dummy->addField($$);
@@ -1871,15 +1903,15 @@ case 86:
 	kdDebug() << " added column expr: '" << yyvsp[0].expr->debugString() << "'" << endl;
 ;
     break;}
-case 87:
-#line 1124 "sqlparser.y"
+case 88:
+#line 1149 "sqlparser.y"
 {
 	yyval.expr = yyvsp[0].expr;
 	kdDebug() << " added column wildcard: '" << yyvsp[0].expr->debugString() << "'" << endl;
 ;
     break;}
-case 88:
-#line 1129 "sqlparser.y"
+case 89:
+#line 1154 "sqlparser.y"
 {
 //	$$ = new Field();
 //	$$->setExpression( $1 );
@@ -1892,8 +1924,8 @@ case 88:
 	kdDebug() << " added column expr: " << yyval.expr->debugString() << endl;
 ;
     break;}
-case 89:
-#line 1141 "sqlparser.y"
+case 90:
+#line 1166 "sqlparser.y"
 {
 //	$$ = new Field();
 //	$$->setExpression( $1 );
@@ -1906,20 +1938,14 @@ case 89:
 	kdDebug() << " added column expr: " << yyval.expr->debugString() << endl;
 ;
     break;}
-case 90:
-#line 1156 "sqlparser.y"
+case 91:
+#line 1181 "sqlparser.y"
 {
 	yyval.expr = yyvsp[0].expr;
 ;
     break;}
-case 91:
-#line 1160 "sqlparser.y"
-{
-	yyval.expr = new FunctionExpr( yyvsp[-3].stringValue, yyvsp[-1].exprList );
-;
-    break;}
 case 92:
-#line 1199 "sqlparser.y"
+#line 1225 "sqlparser.y"
 {
 	yyval.expr = yyvsp[-1].expr;
 //TODO
@@ -1927,7 +1953,7 @@ case 92:
 ;
     break;}
 case 93:
-#line 1208 "sqlparser.y"
+#line 1234 "sqlparser.y"
 {
 	yyval.expr = new VariableExpr("*");
 	kdDebug() << "all columns" << endl;
@@ -1938,7 +1964,7 @@ case 93:
 ;
     break;}
 case 94:
-#line 1217 "sqlparser.y"
+#line 1243 "sqlparser.y"
 {
 	QString s = QString::fromLatin1(yyvsp[-2].stringValue);
 	s+=".*";
@@ -2168,7 +2194,7 @@ yyerrhandle:
     }
   return 1;
 }
-#line 1231 "sqlparser.y"
+#line 1257 "sqlparser.y"
 
 
 const char * const tname(int offset) { return yytname[offset]; }

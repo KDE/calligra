@@ -87,7 +87,7 @@ void yyerror(const char *str)
 	const bool otherError = (qstrnicmp(str, "other error", 11)==0);
 	
 	if (parser->error().type().isEmpty() 
-		&& (strlen(str)==0 
+		&& (str==0 || strlen(str)==0 
 		|| qstrnicmp(str, "syntax error", 12)==0 || qstrnicmp(str, "parse error", 11)==0)
 		|| otherError)
 	{
@@ -422,7 +422,7 @@ QuerySchema* parseSelect(
 				assert(t_with_alias);
 				assert(t_with_alias->left()->exprClass() == KexiDBExpr_Variable);
 				assert(t_with_alias->right()->exprClass() == KexiDBExpr_Variable
-					&& (t_with_alias->type()==AS || t_with_alias->type()==0));
+					&& (t_with_alias->token()==AS || t_with_alias->token()==0));
 				t_e = dynamic_cast<VariableExpr*>(t_with_alias->left());
 				aliasString = dynamic_cast<VariableExpr*>(t_with_alias->right())->name.latin1();
 			}
@@ -492,13 +492,13 @@ QuerySchema* parseSelect(
 	if (colViews) {
 		BaseExpr *e;
 		columnNum = 0;
-		for (BaseExpr::ListIterator it(colViews->list); (e = it.current()); columnNum++)
+		for (BaseExpr::ListIterator it(colViews->list);(e = it.current()); columnNum++)
 		{
 			bool moveNext = true; //used to avoid ++it when an item is taken from the list
 			BaseExpr *columnExpr = e;
 			VariableExpr* aliasVariable = 0;
 			if (e->exprClass() == KexiDBExpr_SpecialBinary && dynamic_cast<BinaryExpr*>(e)
-				&& (e->type()==AS || e->type()==0))
+				&& (e->token()==AS || e->token()==0))
 			{
 				//KexiDBExpr_SpecialBinary: with alias
 				columnExpr = dynamic_cast<BinaryExpr*>(e)->left();
@@ -528,7 +528,9 @@ QuerySchema* parseSelect(
 			}
 			else if (isExpressionField) {
 				//expression object will be reused, take, will be owned, do not destroy
-				colViews->list.take();
+		KexiDBDbg << colViews->list.count() << " " << it.current()->debugString() << endl;
+KexiDBDbg << 	it.atFirst () << endl;
+				colViews->list.take(0); //take() doesn't work
 				moveNext = false;
 			}
 			else if (aliasVariable) {

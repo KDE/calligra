@@ -31,6 +31,7 @@
 #include <qbitarray.h>
 
 #include <kdebug.h>
+#include <klocale.h>
 
 using namespace KexiDB;
 
@@ -39,8 +40,9 @@ namespace KexiDB {
 class QuerySchemaPrivate
 {
 	public:
-		QuerySchemaPrivate()
-		 : parent_table(0)
+		QuerySchemaPrivate(QuerySchema* q)
+		 : query(q)
+		 , parent_table(0)
 		 , maxIndexWithAlias(-1)
 		 , visibility(64)
 		 , fieldsExpanded(0)
@@ -49,13 +51,16 @@ class QuerySchemaPrivate
 		 , pkeyFieldsOrder(0)
 		 , tablesBoundToColumns(64, -1)
 		 , tablePositionsForAliases(67, false)
+		 , columnPositionsForAliases(67, false)
 		 , whereExpr(0)
+		 , regenerateExprAliases(false)
 		{
-			aliases.setAutoDelete(true);
+			columnAliases.setAutoDelete(true);
 			tableAliases.setAutoDelete(true);
 			asterisks.setAutoDelete(true);
 			relations.setAutoDelete(true);
 			tablePositionsForAliases.setAutoDelete(true);
+			columnPositionsForAliases.setAutoDelete(true);
 			visibility.fill(false);
 		}
 		~QuerySchemaPrivate()
@@ -65,6 +70,23 @@ class QuerySchemaPrivate
 			delete fieldsOrder;
 			delete pkeyFieldsOrder;
 			delete whereExpr;
+		}
+
+		void clear()
+		{
+			columnAliases.clear();
+			tableAliases.clear();
+			asterisks.clear();
+			relations.clear();
+			parent_table = 0;
+			tables.clear();
+			clearCachedData();
+			delete pkeyFieldsOrder;
+			pkeyFieldsOrder=0;
+			visibility.fill(false);
+			tablesBoundToColumns = QValueVector<int>(64,-1);
+			tablePositionsForAliases.clear();
+			columnPositionsForAliases.clear();
 		}
 
 		void clearCachedData()
@@ -79,7 +101,43 @@ class QuerySchemaPrivate
 				autoIncrementSQLFieldsList = QString::null;
 			}
 		}
-		
+
+		void setColumnAliasInternal(uint position, const QCString& alias)
+		{
+			columnAliases.replace(position, new QCString(alias));
+			columnPositionsForAliases.replace(alias, new int(position));
+			maxIndexWithAlias = QMAX( maxIndexWithAlias, (int)position );
+		}
+
+		void setColumnAlias(uint position, const QCString& alias)
+		{
+			QCString *oldAlias = columnAliases.take(position);
+			if (oldAlias) {
+				tablePositionsForAliases.remove(*oldAlias);
+				delete oldAlias;
+			}
+			if (alias.isEmpty()) {
+				maxIndexWithAlias = -1;
+			}
+			else {
+				setColumnAliasInternal(position, alias);
+			}
+		}
+
+		bool hasColumnAliases()
+		{
+			tryRegenerateExprAliases();
+			return !columnAliases.isEmpty();
+		}
+
+		QCString* columnAlias(uint position)
+		{
+			tryRegenerateExprAliases();
+			return columnAliases[position];
+		}
+
+		QuerySchema *query;
+
 		/*! Parent table of the query. (may be NULL)
 			Any data modifications can be performed if we know parent table.
 			If null, query's records cannot be modified. */
@@ -87,10 +145,37 @@ class QuerySchemaPrivate
 		
 		/*! List of tables used in this query */
 		TableSchema::List tables;
-		
+
+	protected:
+		void tryRegenerateExprAliases()
+		{
+			if (!regenerateExprAliases)
+				return;
+			//regenerate missing aliases for experessions
+			Field *f;
+			uint p=0;
+			uint colNum=0; //used to generate a name
+			QCString columnAlias;
+			for (Field::ListIterator it(query->fieldsIterator()); (f = it.current()); ++it, p++) {
+				if (f->isExpression() && !columnAliases[p]) {
+					//missing
+					for (;;) { //find 1st unused
+						colNum++;
+						columnAlias = (i18n("short for expression (only latin letters, please)", "expr") 
+							+ QString::number(colNum)).latin1();
+						if (!tablePositionsForAliases[columnAlias])
+							break;
+					}
+					setColumnAliasInternal(p, columnAlias);
+				}
+			}
+			regenerateExprAliases = false;
+		}
+
 		/*! Used to mapping columns to its aliases for this query */
-		QIntDict<QCString> aliases;
-		
+		QIntDict<QCString> columnAliases;
+
+	public:
 		/*! Used to mapping tables to its aliases for this query */
 		QIntDict<QCString> tableAliases;
 		
@@ -150,22 +235,27 @@ class QuerySchemaPrivate
 		*/
 		QValueVector<int> tablesBoundToColumns;
 		
-		/*! Collects table positions for aliases: used in tablePositionsForAlias(). */
+		/*! Collects table positions for aliases: used in tablePositionForAlias(). */
 		QAsciiDict<int> tablePositionsForAliases;
+
+		/*! Collects column positions for aliases: used in columnPositionForAlias(). */
+		QAsciiDict<int> columnPositionsForAliases;
 
 		/*! WHERE expression */
 		BaseExpr *whereExpr;
+
+		/*! Set by insertField(): true, if aliases for expression columns should 
+		 be generated on next columnAlias() call. */
+		bool regenerateExprAliases : 1;
 };
 }
-
-//=======================================
 
 //=======================================
 
 QuerySchema::QuerySchema()
 	: FieldList(false)//fields are not owned by QuerySchema object
 	, SchemaData(KexiDB::QueryObjectType)
-	, d( new QuerySchemaPrivate() )
+	, d( new QuerySchemaPrivate(this) )
 {
 	init();
 }
@@ -173,7 +263,7 @@ QuerySchema::QuerySchema()
 QuerySchema::QuerySchema(TableSchema* tableSchema)
 	: FieldList(false)
 	, SchemaData(KexiDB::QueryObjectType)
-	, d( new QuerySchemaPrivate() )
+	, d( new QuerySchemaPrivate(this) )
 {
 	d->parent_table = tableSchema;
 	assert(d->parent_table);
@@ -206,18 +296,7 @@ void QuerySchema::clear()
 {
 	FieldList::clear();
 	SchemaData::clear();
-	d->aliases.clear();
-	d->tableAliases.clear();
-	d->asterisks.clear();
-	d->relations.clear();
-	d->parent_table = 0;
-	d->tables.clear();
-	d->clearCachedData();
-	delete d->pkeyFieldsOrder;
-	d->pkeyFieldsOrder=0;
-	d->visibility.fill(false);
-	d->tablesBoundToColumns = QValueVector<int>(64,-1);
-	d->tablePositionsForAliases.clear();
+	d->clear();
 }
 
 FieldList& QuerySchema::insertField(uint position, Field *field, bool visible)
@@ -293,6 +372,10 @@ FieldList& QuerySchema::insertField(uint position, Field *field,
 	for (uint i=0; i<fieldCount();i++)
 		s+= (QString::number(d->tablesBoundToColumns[i]) + " ");
 	kdDebug() << "tablesBoundToColumns == [" << s << "]" <<endl;
+
+	if (field->isExpression())
+		d->regenerateExprAliases = true;
+
 	return *this;
 }
 
@@ -398,11 +481,11 @@ QString QuerySchema::debugString()
 	dbg += (QString("-TABLES:\n") + table_names);
 	QString aliases;
 	Field::ListIterator it( m_fields );
-	if (d->aliases.isEmpty())
+	if (!d->hasColumnAliases())
 		aliases = "<NONE>\n";
 	else {
 		for (int i=0; it.current(); ++it, i++) {
-			QCString *alias = d->aliases[i];
+			QCString *alias = d->columnAlias(i);
 			if (alias)
 				aliases += (QString("field #%1: ").arg(i) 
 					+ (it.current()->name().isEmpty() ? "<noname>" : it.current()->name())
@@ -506,31 +589,30 @@ bool QuerySchema::contains(TableSchema *table) const
 
 QCString QuerySchema::columnAlias(uint position) const
 {
-	QCString *a = d->aliases[position];
+	QCString *a = d->columnAlias(position);
 	return a ? *a : QCString();
 }
 
 bool QuerySchema::hasColumnAlias(uint position) const
 {
-	return d->aliases[position]!=0;
+	return d->columnAlias(position)!=0;
 }
 
 void QuerySchema::setColumnAlias(uint position, const QCString& alias)
 {
 	if (position >= m_fields.count()) {
-		KexiDBWarning << "QuerySchema::setColumnAlias(): position ("  << position 
+		KexiDBWarn << "QuerySchema::setColumnAlias(): position ("  << position 
 			<< ") out of range!" << endl;
 		return;
 	}
 	QCString fixedAlias = alias.stripWhiteSpace();
-	if (fixedAlias.isEmpty()) {
-		d->aliases.remove(position);
-		d->maxIndexWithAlias = -1;
+	Field *f = field(position);
+	if (f->captionOrName().isEmpty() && fixedAlias.isEmpty()) {
+		KexiDBWarn << "QuerySchema::setColumnAlias(): position ("  << position 
+			<< ") could not remove alias when no name is specified for expression column!" << endl;
+		return;
 	}
-	else {
-		d->aliases.replace(position, new QCString(fixedAlias));
-		d->maxIndexWithAlias = QMAX( d->maxIndexWithAlias, (int)position );
-	}
+	d->setColumnAlias(position, fixedAlias);
 }
 
 QCString QuerySchema::tableAlias(uint position) const
@@ -575,10 +657,18 @@ bool QuerySchema::hasTableAlias(uint position) const
 	return d->tableAliases[position]!=0;
 }
 
+int QuerySchema::columnPositionForAlias(const QCString& name) const
+{
+	int *num = d->columnPositionsForAliases[name];
+	if (!num)
+		return -1;
+	return *num;
+}
+
 void QuerySchema::setTableAlias(uint position, const QCString& alias)
 {
 	if (position >= d->tables.count()) {
-		KexiDBWarning << "QuerySchema::setTableAlias(): position ("  << position 
+		KexiDBWarn << "QuerySchema::setTableAlias(): position ("  << position 
 			<< ") out of range!" << endl;
 		return;
 	}
@@ -747,7 +837,7 @@ QueryColumnInfo::List* QuerySchema::autoIncrementFields()
 		d->autoincFields = new QueryColumnInfo::List();
 	}
 	if (!d->parent_table) {
-		KexiDBWarning << "QuerySchema::autoIncrementFields(): no parent table!" << endl;
+		KexiDBWarn << "QuerySchema::autoIncrementFields(): no parent table!" << endl;
 		return d->autoincFields;
 	}
 	if (d->autoincFields->isEmpty()) {//no cache
@@ -866,7 +956,7 @@ QueryAsterisk::QueryAsterisk( QuerySchema *query, TableSchema *table )
 {
 	assert(query);
 	m_parent = query;
-	m_type = Field::Asterisk;
+	setType(Field::Asterisk);
 }
 
 QueryAsterisk::~QueryAsterisk()

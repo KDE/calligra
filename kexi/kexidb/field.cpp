@@ -68,7 +68,6 @@ Field::Field(const QString& name, Type ctype,
  uint width)
 	: m_parent(0)
 	,m_name(name)
-	,m_type(ctype)
 	,m_length(length)
 	,m_precision(precision)
 	,m_options(options)
@@ -78,6 +77,7 @@ Field::Field(const QString& name, Type ctype,
 	,m_desc(description)
 	,m_width(width)
 	,m_expr(0)
+	,m_type(ctype)
 {
 	setConstraints(cconst);
 	if (m_length==0) {//0 means default length:
@@ -115,6 +115,13 @@ void Field::init()
 	m_order = -1;
 	m_width = 0;
 	m_expr = 0;
+}
+
+Field::Type Field::type() const
+{
+	if (m_expr)
+		return m_expr->type();
+	return m_type;
 }
 
 QVariant::Type Field::variantType(uint type)
@@ -307,6 +314,11 @@ Field::setName(const QString& n)
 void
 Field::setType(Type t)
 {
+	if (m_expr) {
+		KexiDBWarn << QString("Field::setType(%1)").arg(t) 
+			<< " could not set type because the filed has expression assigned!" << endl;
+		return;
+	}
 	m_type = t;
 }
 
@@ -329,7 +341,7 @@ Field::setConstraints(uint c)
 void
 Field::setLength(uint l)
 {
-	if (m_type!=Field::Text)
+	if (type()!=Field::Text)
 		return;
 	m_length = l;
 }
@@ -362,7 +374,7 @@ Field::setDefaultValue(const QCString& def)
 	}
 	
 	bool ok;
-	switch(m_type)
+	switch(type())
 	{
 		case Byte: {
 			unsigned int v = def.toUInt(&ok);
@@ -543,7 +555,7 @@ QString Field::debugString()
 	QString dbg = (m_name.isEmpty() ? "<NONAME> " : m_name + " ");
 	if (m_options & Field::Unsigned)
 		dbg += " UNSIGNED ";
-	dbg += (conn && conn->driver()) ? conn->driver()->sqlTypeName(m_type) : Driver::defaultSQLTypeName(m_type);
+	dbg += (conn && conn->driver()) ? conn->driver()->sqlTypeName(type()) : Driver::defaultSQLTypeName(type());
 	QString prec_str;
 	if (m_precision > 0 && isFPNumericType())
 		prec_str = QString(", ") + QString::number(m_precision);

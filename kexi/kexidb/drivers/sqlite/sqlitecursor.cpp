@@ -132,12 +132,16 @@ class KexiDB::SQLiteCursorData : public SQLiteConnectionInternal
 		else if (type==SQLITE_INTEGER) {
 			if (f->isIntegerType())
 				return QVariant( sqlite3_column_int(prepared_st_handle, i) );
+			else if (f->isFPNumericType()) //WEIRD, YEAH?
+				return QVariant( (double)sqlite3_column_int(prepared_st_handle, i) );
 			else
 				return QVariant(); //TODO
 		}
 		else if (type==SQLITE_FLOAT) {
 			if (f->isFPNumericType())
 				return QVariant( sqlite3_column_double(prepared_st_handle, i) );
+			else if (f->isIntegerType())
+				return QVariant( (double)sqlite3_column_double(prepared_st_handle, i) );
 			else
 				return QVariant(); //TODO
 		}

@@ -5,7 +5,7 @@
 bool parseData(KexiDB::Parser *p, const char *data);
 typedef union {
 	char stringValue[255];
-	int integerValue;
+	Q_LLONG integerValue;
 	struct realType realValue;
 	KexiDB::Field::Type colType;
 	KexiDB::Field *field;
@@ -334,27 +334,27 @@ typedef union {
 #define	USER	574
 #define	IDENTIFIER	575
 #define	IDENTIFIER_DOT_ASTERISK	576
-#define	ERROR_DIGIT_BEFORE_IDENTIFIER	577
-#define	USING	578
-#define	VALUE	579
-#define	VALUES	580
-#define	VARBINARY	581
-#define	VARCHAR	582
-#define	VARYING	583
-#define	VENDOR	584
-#define	VIEW	585
-#define	WEEK	586
-#define	WHEN	587
-#define	WHENEVER	588
-#define	WHERE	589
-#define	WHERE_CURRENT_OF	590
-#define	WITH	591
-#define	WORD_WRAPPED	592
-#define	WORK	593
-#define	WRAPPED	594
-#define	XOR	595
-#define	YEAR	596
-#define	YEARS_BETWEEN	597
+#define	USING	577
+#define	VALUE	578
+#define	VALUES	579
+#define	VARBINARY	580
+#define	VARCHAR	581
+#define	VARYING	582
+#define	VENDOR	583
+#define	VIEW	584
+#define	WEEK	585
+#define	WHEN	586
+#define	WHENEVER	587
+#define	WHERE	588
+#define	WHERE_CURRENT_OF	589
+#define	WITH	590
+#define	WORD_WRAPPED	591
+#define	WORK	592
+#define	WRAPPED	593
+#define	XOR	594
+#define	YEAR	595
+#define	YEARS_BETWEEN	596
+#define	SCAN_ERROR	597
 #define	__LAST_TOKEN	598
 #define	ILIKE	599
 

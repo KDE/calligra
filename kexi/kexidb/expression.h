@@ -57,7 +57,7 @@ public:
 	BaseExpr(int token);
 	virtual ~BaseExpr();
 	int token() const { return m_token; }
-	virtual int type();
+	virtual Field::Type type();
 	BaseExpr *BaseExpr::parent() const { return m_par; }
 	virtual void setParent(BaseExpr *p) { m_par = p; }
 	virtual bool validate(ParseInfo& parseInfo);
@@ -82,7 +82,9 @@ class KEXI_DB_EXPORT NArgExpr : public BaseExpr
 {
 public:
 	NArgExpr(int aClass, int token);
+	virtual ~NArgExpr();
 	void add(BaseExpr *expr);
+	void prepend(BaseExpr *expr);
 	BaseExpr *arg(int n);
 	int args();
 	virtual QString debugString();
@@ -97,6 +99,7 @@ class KEXI_DB_EXPORT UnaryExpr : public NArgExpr
 public:
 	UnaryExpr(int token, BaseExpr *n);
 	virtual ~UnaryExpr();
+	virtual Field::Type type();
 	virtual QString debugString();
 	virtual QString toString();
 	BaseExpr *arg() { return NArgExpr::arg(0); }
@@ -115,6 +118,8 @@ class KEXI_DB_EXPORT BinaryExpr : public NArgExpr
 {
 public:
 	BinaryExpr(int aClass, BaseExpr *left_expr, int token, BaseExpr *right_expr);
+	virtual ~BinaryExpr();
+	virtual Field::Type type();
 	virtual QString debugString();
 	virtual QString toString();
 	BaseExpr *left();
@@ -130,6 +135,8 @@ class KEXI_DB_EXPORT ConstExpr : public BaseExpr
 {
 public:
 	ConstExpr(int token, const QVariant& val);
+	virtual ~ConstExpr();
+	virtual Field::Type type();
 	virtual QString debugString();
 	virtual QString toString();
 	virtual bool validate(ParseInfo& parseInfo);
@@ -141,6 +148,8 @@ class KEXI_DB_EXPORT VariableExpr : public BaseExpr
 {
 public:
 	VariableExpr(const QString& _name);
+	virtual ~VariableExpr();
+	virtual Field::Type type();
 	virtual QString debugString();
 	virtual QString toString();
 	/*! Validation. Sets field, tablePositionForField 
@@ -179,6 +188,7 @@ class KEXI_DB_EXPORT FunctionExpr : public BaseExpr
 public:
 	FunctionExpr(const QString& _name, NArgExpr* args_);
 	virtual ~FunctionExpr();
+	virtual Field::Type type();
 	virtual QString debugString();
 	virtual QString toString();
 	virtual bool validate(ParseInfo& parseInfo);

@@ -174,7 +174,11 @@ bool Driver::transactionsSupported() const
 { return d->features & (SingleTransactions | MultipleTransactions); }
 
 QString Driver::sqlTypeName(int id_t) const
-{ return d->typeNames[id_t]; }
+{ 
+	if (id_t==Field::Null)
+		return "Null";
+	return d->typeNames[id_t];
+}
 
 Connection *Driver::createConnection( ConnectionData &conn_data )
 {
@@ -203,6 +207,8 @@ Connection* Driver::removeConnection( Connection *conn )
 
 QString Driver::defaultSQLTypeName(int id_t)
 {
+	if (id_t==Field::Null)
+		return "Null";
 	if (dflt_typeNames.isEmpty()) {
 		dflt_typeNames.resize(Field::LastType + 1);
 		dflt_typeNames[Field::Byte]="Byte";

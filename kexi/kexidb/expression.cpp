@@ -71,14 +71,14 @@ BaseExpr::~BaseExpr()
 {
 }
 
-int BaseExpr::type()
+Field::Type BaseExpr::type()
 {
-	return 0; //unknown
+	return Field::InvalidType;
 }
 
 QString BaseExpr::debugString()
 {
-	return QString("BaseExpr(%1)").arg(m_token);
+	return QString("BaseExpr(%1,type=%1)").arg(m_token).arg(Driver::defaultSQLTypeName(type()));
 }
 
 bool BaseExpr::validate(ParseInfo& /*parseInfo*/)
@@ -107,6 +107,10 @@ NArgExpr::NArgExpr(int aClass, int token)
 {
 	m_cl = aClass;
 	list.setAutoDelete(TRUE);
+}
+
+NArgExpr::~NArgExpr()
+{
 }
 
 QString NArgExpr::debugString()
@@ -141,6 +145,11 @@ BaseExpr* NArgExpr::arg(int nr)
 void NArgExpr::add(BaseExpr *expr)
 {
 	list.append(expr);
+}
+
+void NArgExpr::prepend(BaseExpr *expr)
+{
+	list.prepend(expr);
 }
 
 int NArgExpr::args()
@@ -178,7 +187,7 @@ QString UnaryExpr::debugString()
 	return "UnaryExpr('" 
 		+ tokenToString() + "', "
 		+ (arg() ? arg()->debugString() : QString("<NONE>")) 
-		+ ")";
+		+ QString(",type=%1)").arg(Driver::defaultSQLTypeName(type()));
 }
 
 QString UnaryExpr::toString()
@@ -194,6 +203,24 @@ QString UnaryExpr::toString()
 	if (m_token==SQL_IS_NOT_NULL)
 		return arg()->toString() + " IS NOT NULL";
 	return QString("{INVALID_OPERATOR#%1} ").arg(m_token) + arg()->toString();
+}
+
+Field::Type UnaryExpr::type()
+{
+	//NULL IS NOT NULL : BOOLEAN
+	//NULL IS NULL : BOOLEAN
+	switch (m_token) {
+	case SQL_IS_NULL:
+	case SQL_IS_NOT_NULL:
+		return Field::Boolean;
+	}
+	const Field::Type t = arg()->type();
+	if (t==Field::Null)
+		return Field::Null;
+	if (m_token==NOT)
+		return Field::Boolean;
+
+	return t;
 }
 
 bool UnaryExpr::validate(ParseInfo& parseInfo)
@@ -238,6 +265,10 @@ BinaryExpr::BinaryExpr(int aClass, BaseExpr *l_n, int typ, BaseExpr *r_n)
 	r_n->setParent(this);
 }
 
+BinaryExpr::~BinaryExpr()
+{
+}
+
 BaseExpr *BinaryExpr::left()
 {
 	return arg(0);
@@ -256,6 +287,30 @@ bool BinaryExpr::validate(ParseInfo& parseInfo)
 	return true;
 }
 
+Field::Type BinaryExpr::type()
+{
+	const Field::Type lt = left()->type(), rt = right()->type();
+	if (lt==Field::Null || rt == Field::Null) {
+		if (m_token!=OR) //note that NULL OR something   != NULL
+			return Field::Null;
+	}
+
+	switch (m_token) {
+	case AND:
+	case OR:
+	case XOR:
+	case SIMILAR_TO:
+		return Field::Boolean;
+	}
+
+	if (Field::isFPNumericType(lt) && Field::isIntegerType(rt))
+		return lt;
+	//case BITWISE_SHIFT_LEFT:
+	//case BITWISE_SHIFT_RIGHT:
+//TODO
+	return left()->type();
+}
+
 QString BinaryExpr::debugString()
 {
 	return QString("BinaryExpr(")
@@ -263,7 +318,7 @@ QString BinaryExpr::debugString()
 		+ "," + (left() ? left()->debugString() : QString("<NONE>")) 
 		+ ",'" + tokenToString() + "',"
 		+ (right() ? right()->debugString() : QString("<NONE>")) 
-		+ ")";
+		+ QString(",type=%1)").arg(Driver::defaultSQLTypeName(type()));
 }
 
 QString BinaryExpr::toString()
@@ -318,9 +373,43 @@ ConstExpr::ConstExpr( int token, const QVariant& val)
 	m_cl = KexiDBExpr_Const;
 }
 
+ConstExpr::~ConstExpr()
+{
+}
+
+Field::Type ConstExpr::type()
+{
+	if (m_token==SQL_NULL)
+		return Field::Null;
+	if (m_token==INTEGER_CONST) {
+//TODO ok?
+//TODO: add sign info?
+		if (value.type() == QVariant::Int || value.type() == QVariant::UInt) {
+			Q_LLONG v = value.toInt();
+			if (v <= 0xff && v > -0x80)
+				return Field::Byte;
+			if (v <= 0xffff && v > -0x8000)
+				return Field::ShortInteger;
+			return Field::Integer;
+		}
+		return Field::BigInteger;
+	}
+	if (m_token==REAL_CONST)
+		return Field::Double;
+	if (m_token==CHARACTER_STRING_LITERAL) {
+//TODO: Field::defaultTextLength() is hardcoded now!
+		if (value.toString().length() > Field::defaultTextLength())
+			return Field::LongText;
+		else
+			return Field::Text;
+	}
+	return Field::InvalidType;
+}
+
 QString ConstExpr::debugString()
 {
-	return QString("ConstExpr('") + tokenToString() +"'," + toString() + ")";
+	return QString("ConstExpr('") + tokenToString() +"'," + toString()
+		+ QString(",type=%1)").arg(Driver::defaultSQLTypeName(type()));
 }
 
 QString ConstExpr::toString()
@@ -337,7 +426,7 @@ bool ConstExpr::validate(ParseInfo& parseInfo)
 	if (!BaseExpr::validate(parseInfo))
 		return false;
 
-	return true;
+	return type()!=Field::InvalidType;
 }
 
 //=========================================
@@ -351,14 +440,29 @@ VariableExpr::VariableExpr( const QString& _name)
 	m_cl = KexiDBExpr_Variable;
 }
 
+VariableExpr::~VariableExpr()
+{
+}
+
 QString VariableExpr::debugString()
 {
-	return QString("VariableExpr(") + name + ")";
+	return QString("VariableExpr(") + name
+		+ QString(",type=%1)").arg(Driver::defaultSQLTypeName(type()));
 }
 
 QString VariableExpr::toString()
 {
 	return name;
+}
+
+//! We're assuming it's called after VariableExpr::validate()
+Field::Type VariableExpr::type()
+{
+	if (field)
+		return field->type();
+	
+	//BTW, asterisks are not stored in VariableExpr outside of parser, so ok.
+	return Field::InvalidType;
 }
 
 #define IMPL_ERROR(errmsg) parseInfo.errMsg = "Implementation error"; parseInfo.errDescr = errmsg
@@ -541,12 +645,19 @@ FunctionExpr::~FunctionExpr()
 
 QString FunctionExpr::debugString()
 {
-	return QString("FunctionExpr(") + name + "," + args->debugString() + ")";
+	return QString("FunctionExpr(") + name + "," + args->debugString()
+		+ QString(",type=%1)").arg(Driver::defaultSQLTypeName(type()));
 }
 
 QString FunctionExpr::toString()
 {
 	return name + "(" + args->toString() + ")";
+}
+
+Field::Type FunctionExpr::type()
+{
+	//TODO
+	return Field::InvalidType;
 }
 
 bool FunctionExpr::validate(ParseInfo& parseInfo)

@@ -345,7 +345,7 @@
 %token USER
 %token IDENTIFIER
 %token IDENTIFIER_DOT_ASTERISK
-%token ERROR_DIGIT_BEFORE_IDENTIFIER
+//%token ERROR_DIGIT_BEFORE_IDENTIFIER
 %token USING
 %token VALUE
 %token VALUES
@@ -366,6 +366,8 @@
 %token XOR
 %token YEAR
 %token YEARS_BETWEEN
+
+%token SCAN_ERROR
 %token __LAST_TOKEN /* sentinel */
 
 %token '-' '+'
@@ -431,6 +433,17 @@
 #include <string>
 #include <iostream>
 #include <assert.h>
+#include <limits.h>
+//TODO OK?
+#ifndef LLONG_MAX
+# define LLONG_MAX     0x7fffffffffffffff
+#endif
+#ifndef LLONG_MIN
+# define LLONG_MIN     0x8000000000000000
+#endif
+#ifndef LLONG_MAX
+# define ULLONG_MAX    0xffffffffffffffff
+#endif
 
 #ifdef _WIN32
 # include <malloc.h>
@@ -480,7 +493,7 @@ using namespace KexiDB;
 
 %union {
 	char stringValue[255];
-	int integerValue;
+	Q_LLONG integerValue;
 	struct realType realValue;
 	KexiDB::Field::Type colType;
 	KexiDB::Field *field;
@@ -939,11 +952,19 @@ aExpr9:
 }
 | INTEGER_CONST
 {
-	$$ = new ConstExpr( INTEGER_CONST, $1 );
-//	$$ = new Field();
-//	$$->setName(QString::number($1));
-//	parser->select()->addField(field);
-	kdDebug() << "  + int constant: " << $1 << endl;
+	QVariant val;
+	if ($1 < INT_MAX && $1 > INT_MIN)
+		val = (int)$1;
+	if ($1 < UINT_MAX && $1 >= 0)
+		val = (uint)$1;
+	if ($1 < LLONG_MAX && $1 > LLONG_MIN)
+		val = (Q_LLONG)$1;
+//	if ($1 < ULLONG_MAX)
+//		val = (Q_ULLONG)$1;
+//TODO ok?
+
+	$$ = new ConstExpr( INTEGER_CONST, val );
+	kdDebug() << "  + int constant: " << val << endl;
 }
 | REAL_CONST
 {
@@ -964,23 +985,27 @@ aExpr10:
 ;
 
 aExprList:
-'(' aExprList ')'
+'(' aExprList2 ')'
 {
 //	$$ = new NArgExpr(0, 0);
 //	$$->add( $1 );
 //	$$->add( $3 );
+	$$ = $2;
 }
 ;
 
 aExprList2:
 aExpr ',' aExprList2
 {
+	$$ = $3;
+	$$->prepend( $1 );
 }
-/*| aExpr
+| aExpr ',' aExpr
 {
 	$$ = new NArgExpr(0, 0);
 	$$->add( $1 );
-}*/
+	$$->add( $3 );
+}
 ;
 
 Tables:
@@ -1156,10 +1181,11 @@ aExpr
 {
 	$$ = $1;
 }
+/* HANDLED BY 'IDENTIFIER aExprList'
 | IDENTIFIER '(' ColViews ')'
 {
 	$$ = new FunctionExpr( $1, $3 );
-}
+}*/
 /*
 | SUM '(' ColExpression ')'
 {

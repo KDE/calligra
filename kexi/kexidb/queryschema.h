@@ -183,7 +183,7 @@ class KEXI_DB_EXPORT QuerySchema : public FieldList, public SchemaData
 		 invalidated. */
 		void removeTable(TableSchema *table);
 
-		/*! \return table with name \a tableName or 0 if this query has no such table */
+		/*! \return table with name \a tableName or 0 if this query has no such table. */
 		TableSchema* table(const QString& tableName) const;
 		
 		/*! \return true if the query uses \a table. */
@@ -191,7 +191,10 @@ class KEXI_DB_EXPORT QuerySchema : public FieldList, public SchemaData
 
 		/*! \return alias of a column at \a position or null string 
 		 If there is no alias for this column
-		 or if there is no such column within the query defined */
+		 or if there is no such column within the query defined. 
+		 If the column is an expression and has no alias defined, 
+		 a new unique alias will be generated automatically on this call.
+		*/
 		QCString columnAlias(uint position) const;
 		
 		/*! Provided for convenience. 
@@ -266,6 +269,10 @@ class KEXI_DB_EXPORT QuerySchema : public FieldList, public SchemaData
 		 If there is no alias for this table,
 		 or if there is no such table in the query defined, false is returned. */
 		bool hasTableAlias(uint position) const;
+
+		/*! \return column position that has defined alias \a name.
+		 If there is no such alias, -1 is returned. */
+		int columnPositionForAlias(const QCString& name) const;
 
 		/*! Sets \a alias for a table at \a position (within FROM section 
 		 of the the query).

@@ -93,22 +93,24 @@ class KEXI_DB_EXPORT Field
 			Time = 8,        /*!< */
 			Float = 9,       /*!< 4 bytes */
 			Double = 10,     /*!< 8 bytes */
-			Text = 11,       /*!< other name: Varchar; no more than 200 bytes, for efficiency */
-			LongText = 12,   /*!< other name: Memo. More than 200 bytes*/
-			BLOB = 13,       /*!< large binary object */
+			Text = 11,       /*!< Other name: Varchar; no more than 200 bytes, for efficiency */
+			LongText = 12,   /*!< Other name: Memo. More than 200 bytes*/
+			BLOB = 13,       /*!< Large binary object */
 
 			LastType = 13,   /*!< This line should be at the end of the list of types! */
-			
-			//! special, interanal types:
-			Asterisk = 128,  /*!< type used in QueryAsterisk subclass objects only,
+
+			Null = 64,       /*!< Used for fields that are "NULL" expressions. */
+
+			//! Special, internal types:
+			Asterisk = 128,  /*!< Used in QueryAsterisk subclass objects only,
 			                       not used in table definitions,
 			                       but only in query definitions */
-			Enum = 129,      /*!< an integer internal with a string list of hints */
-			Map = 130        /*!< mapping from string to string list (more generic than Enum */
+			Enum = 129,      /*!< An integer internal with a string list of hints */
+			Map = 130        /*!< Mapping from string to string list (more generic than Enum */
 		};
 
 //TODO: make this configurable
-		static int defaultTextLength() { return 200; }
+		static uint defaultTextLength() { return 200; }
 
 		/*! Type groups for fields. */
 		enum TypeGroup
@@ -241,35 +243,35 @@ class KEXI_DB_EXPORT Field
 		inline bool isIndexed() const { return constraints() & Indexed; }
 
 		/*! \return true if the field is of any numeric type (integer or floating point) */
-		inline bool isNumericType() const { return Field::isNumericType(m_type); }
+		inline bool isNumericType() const { return Field::isNumericType(type()); }
 		
 		/*! static version of isNumericType() method
 		 *! \return true if the field is of any numeric type (integer or floating point)*/
 		static bool isNumericType(uint type);
 
 		/*! \return true if the field is of any integer type */
-		inline bool isIntegerType() const { return Field::isIntegerType(m_type); }
+		inline bool isIntegerType() const { return Field::isIntegerType(type()); }
 		
 		/*! static version of isIntegerType() method
 		 *! \return true if the field is of any integer type */
 		static bool isIntegerType(uint type);
 		
 		/*! \return true if the field is of any floating point numeric type */
-		inline bool isFPNumericType() const { return Field::isFPNumericType(m_type); }
+		inline bool isFPNumericType() const { return Field::isFPNumericType(type()); }
 		
 		/*! static version of isFPNumericType() method 
 		 *! \return true if the field is of any floating point numeric type */
 		static bool isFPNumericType(uint type);
 
 		/*! \return true if the field is of any date or time related type */
-		inline bool isDateTimeType() const { return Field::isDateTimeType(m_type); }
+		inline bool isDateTimeType() const { return Field::isDateTimeType(type()); }
 		
 		/*! static version of isDateTimeType() method
 		 *! \return true if the field is of any date or time related type */
 		static bool isDateTimeType(uint type);
 
 		/*! @return true if the field is of any text type */
-		inline bool isTextType() const { return Field::isTextType(m_type); }
+		inline bool isTextType() const { return Field::isTextType(type()); }
 		
 		/*! static version of isTextType() method
 		 *! \return true if the field is of any text type */
@@ -279,19 +281,21 @@ class KEXI_DB_EXPORT Field
 
 		void setOptions(uint options) { m_options = options; }
 
-		inline QVariant::Type variantType() const { return variantType(m_type); }
+		inline QVariant::Type variantType() const { return variantType(type()); }
 
-		inline Type type() const { return m_type; }
+		/*! Return a type for this field. If there's expression assigned,
+		 type of the expression is returned instead. */
+		Type type() const;
 
-		inline QString typeName() const { return Field::typeName(m_type); }
+		inline QString typeName() const { return Field::typeName(type()); }
 
-		inline TypeGroup typeGroup() const { return Field::typeGroup(m_type); }
+		inline TypeGroup typeGroup() const { return Field::typeGroup(type()); }
 
-		inline QString typeGroupName() const { return Field::typeGroupName(m_type); }
+		inline QString typeGroupName() const { return Field::typeGroupName(type()); }
 
-		inline QString typeString() const { return Field::typeString(m_type); }
+		inline QString typeString() const { return Field::typeString(type()); }
 
-		inline QString typeGroupString() const { return Field::typeGroupString(m_type); }
+		inline QString typeGroupString() const { return Field::typeGroupString(type()); }
 
 		/*! \return (optional) subtype for this field. 
 		 Subtype is a string providing additional hint for field's type. 
@@ -340,7 +344,7 @@ class KEXI_DB_EXPORT Field
 
 		/*! \return true if this field has EMPTY property (i.e. it is of type
 		string or is a BLOB). */
-		inline bool hasEmptyProperty() const { return Field::hasEmptyProperty(m_type); }
+		inline bool hasEmptyProperty() const { return Field::hasEmptyProperty(type()); }
 
 		/*! static version of hasEmptyProperty() method
 		 \return true if this field type has EMPTY property (i.e. it is string or BLOB type) */
@@ -348,15 +352,18 @@ class KEXI_DB_EXPORT Field
 
 		/*! \return true if this field can be auto-incremented. 
 		 Actually, returns true for integer field type. \sa IntegerType, isAutoIncrement() */
-		inline bool isAutoIncrementAllowed() const { return Field::isAutoIncrementAllowed(m_type); }
+		inline bool isAutoIncrementAllowed() const { return Field::isAutoIncrementAllowed(type()); }
 
 		/*! static version of isAutoIncrementAllowed() method
 		 \return true if this field type can be auto-incremented. */
 		static bool isAutoIncrementAllowed(uint type);
 
+		/*! Sets type \a t for this field. This does nothing if there's already expression assigned,
+		 see expression(). */
 		void setType(Type t);
 
-		void setName(const QString& n);
+		/*! Sets name \a name for this field. */
+		void setName(const QString& name);
 
 		/*! Sets constraints to \a c. If PrimaryKey is set in \a c, also 
 		 constraits implied by being primary key are enforced (see setPrimaryKey()).
@@ -445,7 +452,7 @@ class KEXI_DB_EXPORT Field
 		 Every QueryAsterisk object returns true here,
 		 and every Field object returns false.
 		*/
-		inline bool isQueryAsterisk() const { return m_type == Asterisk; }
+		inline bool isQueryAsterisk() const { return type() == Asterisk; }
 		
 		/*! \return string for debugging purposes. */
 		virtual QString debugString();
@@ -489,7 +496,6 @@ class KEXI_DB_EXPORT Field
 		FieldList *m_parent; //!< In most cases this points to a TableSchema 
 		                     //!< object that field is assigned.
 		QString m_name;
-		Type m_type;
 		QString m_subType;
 		uint m_constraints;
 		uint m_length;
@@ -527,15 +533,14 @@ class KEXI_DB_EXPORT Field
 		//! real i18n'd type group names (and not-i18n'd group name strings)
 		static FieldTypeGroupNames m_typeGroupNames;
 
+	private:
+		Type m_type;
 
 	friend class Connection;
 	friend class FieldList;
 	friend class TableSchema;
 	friend class QuerySchema;
 };
-
-
-
 
 } //namespace KexiDB
 

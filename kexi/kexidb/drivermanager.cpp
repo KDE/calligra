@@ -92,7 +92,7 @@ bool DriverManagerInternal::lookupDrivers()
 		connect(qApp,SIGNAL(aboutToQuit()),this,SLOT(slotAppQuits()));
 	}
 //TODO: for QT-only version check for KInstance wrapper
-//		KexiDBWarning << "DriverManagerInternal::lookupDrivers(): cannot work without KInstance (KGlobal::instance()==0)!" << endl;
+//		KexiDBWarn << "DriverManagerInternal::lookupDrivers(): cannot work without KInstance (KGlobal::instance()==0)!" << endl;
 //		setError("Driver Manager cannot work without KInstance (KGlobal::instance()==0)!");
 
 	lookupDriversNeeded = false;
@@ -104,7 +104,7 @@ bool DriverManagerInternal::lookupDrivers()
 		KService::Ptr ptr = (*it);
 		QString srv_name = ptr->property("X-Kexi-DriverName").toString();
 		if (srv_name.isEmpty()) {
-			KexiDBWarning << "DriverManagerInternal::lookupDrivers(): X-Kexi-DriverName must be set for KexiDB driver \"" << ptr->property("Name").toString() << "\" service!\n -- skipped!" << endl;
+			KexiDBWarn << "DriverManagerInternal::lookupDrivers(): X-Kexi-DriverName must be set for KexiDB driver \"" << ptr->property("Name").toString() << "\" service!\n -- skipped!" << endl;
 			delete ptr;
 			continue;
 		}
@@ -123,7 +123,7 @@ bool DriverManagerInternal::lookupDrivers()
 				m_services_by_mimetype.insert(mime, ptr);
 			}
 			else {
-				KexiDBWarning << "DriverManagerInternal::lookupDrivers(): more than one driver for '" << mime << "' mime type!" << endl;
+				KexiDBWarn << "DriverManagerInternal::lookupDrivers(): more than one driver for '" << mime << "' mime type!" << endl;
 			}
 		}
 	}

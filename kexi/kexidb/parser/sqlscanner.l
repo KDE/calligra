@@ -84,8 +84,16 @@ real				((({digit}*\.{digit}+)|({digit}+\.{digit}*)|({digit}+))([Ee][-+]?{digit}
 }
 
 {integer} {
-	yylval.integerValue = atoi(yytext);
+//TODO: what about hex or octal values?
+	//we're using QString:toLongLong() here because atoll() is not so portable:
 	ECOUNT;
+	bool ok;
+	yylval.integerValue = QString(yytext).toLongLong( &ok );
+	if (!ok) {
+		setError(i18n("Invalid integer number"),i18n("This integer number may be too large."));
+		return SCAN_ERROR;
+	}
+//	yylval.integerValue = atol(yytext);
 	return INTEGER_CONST;
 }
 
@@ -252,7 +260,8 @@ real				((({digit}*\.{digit}+)|({digit}+\.{digit}*)|({digit}+))([Ee][-+]?{digit}
 	strncpy(yylval.stringValue, yytext, yyleng + 1);
 	if (yytext[0]>='0' && yytext[0]<='9') {
 		setError(i18n("Invalid identifier"),i18n("Identifiers should start with a letter or '_' character"));
-		return ERROR_DIGIT_BEFORE_IDENTIFIER;
+		return SCAN_ERROR;
+//		return ERROR_DIGIT_BEFORE_IDENTIFIER;
 	}
 	return IDENTIFIER;
 }
