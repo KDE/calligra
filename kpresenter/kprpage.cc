@@ -1227,7 +1227,7 @@ void KPrPage::raiseObjs(bool forward)
     m_doc->raiseAndLowerObject = true;
 }
 
-void KPrPage::insertObject( const QString &name, KPObject * object, const KoRect &r )
+KCommand *KPrPage::insertObject( const QString &name, KPObject * object, const KoRect &r, bool addCommand )
 {
     object->setOrig( r.x(), r.y() );
     object->setSize( r.width(), r.height() );
@@ -1235,7 +1235,12 @@ void KPrPage::insertObject( const QString &name, KPObject * object, const KoRect
 
     InsertCmd *insertCmd = new InsertCmd( name, object, m_doc, this );
     insertCmd->execute();
-    m_doc->addCommand( insertCmd );
+    if ( addCommand )
+    {
+        m_doc->addCommand( insertCmd );
+        return 0L;
+    }
+    return insertCmd;
 }
 
 void KPrPage::insertLine( const KoRect &r, const QPen & pen, LineEnd lb, LineEnd le, LineType lt )
@@ -1272,11 +1277,18 @@ void KPrPage::insertPie( const KoRect &r, const QPen &pen, const QBrush &brush, 
     insertObject( i18n( "Insert Pie/Arc/Chord" ), kppieobject, r );
 }
 
-KPTextObject* KPrPage::insertTextObject( const KoRect& r, const QString& /* text */, KPresenterView * /*_view*/ )
+KPTextObject* KPrPage::insertTextObject( const KoRect& r, const QString&  text , KPresenterView * _view )
 {
     KPTextObject *kptextobject = new KPTextObject( m_doc );
     insertObject( i18n( "Insert Textbox" ), kptextobject, r );
-
+    if (  !text.isEmpty() )
+    {
+        KPTextView *view =  kptextobject->createKPTextView( _view ? _view->getCanvas() : 0L );
+        view->insertText( text );
+        view->terminate();
+        delete view;
+        m_doc->repaint( kptextobject );
+    }
     return kptextobject;
 }
 

@@ -4413,7 +4413,7 @@ void KPrCanvas::dropEvent( QDropEvent *e )
                     QFile f( filename );
                     QTextStream t( &f );
                     QString text = QString::null, tmp;
-
+                    kdDebug()<<" filename :"<<filename<<endl;
                     if ( f.open( IO_ReadOnly ) ) {
                         while ( !t.eof() ) {
                             tmp = t.readLine();
@@ -4422,6 +4422,7 @@ void KPrCanvas::dropEvent( QDropEvent *e )
                         }
                         f.close();
                     }
+                    kdDebug()<<" text :"<<endl;
                     m_activePage->insertTextObject( m_view->zoomHandler()->unzoomRect(QRect( e->pos().x(), e->pos().y(), 250, 250 )),
                                                     text, m_view );
 
@@ -4441,6 +4442,7 @@ void KPrCanvas::dropEvent( QDropEvent *e )
 
         QString text;
         QTextDrag::decode( e, text );
+        //kdDebug()<<" QTextDrag::decode( e, text ); :"<<text<<endl;
         m_activePage->insertTextObject( m_view->zoomHandler()->unzoomRect( QRect( e->pos().x(), e->pos().y(), 250, 250 )),
                                         text, m_view );
         e->accept();

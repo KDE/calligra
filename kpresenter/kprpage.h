@@ -87,7 +87,7 @@ public:
 
     /**
      * @return object at position num
-     */ 
+     */
     KPObject *getObject( int num );
 
     /**
@@ -107,9 +107,9 @@ public:
      * delete selected objects from m_objectList
      */
     KCommand * deleteSelectedObjects();
-#if 0 //not used 
+#if 0 //not used
     void removeObject( int pos);
-#endif    
+#endif
     void insertObject( KPObject *object, int pos );
     void completeLoading( bool _clean, int lastObj );
     /**
@@ -150,7 +150,7 @@ public:
     KPObject* getSelectedObj() const;
     /**
      * @return All selected objets.
-     * If withoutHeaderFooter is set to true a selected header 
+     * If withoutHeaderFooter is set to true a selected header
      * or footer are not returned.
      */
     QPtrList<KPObject> getSelectedObjects( bool withoutHeaderFooter = false ) const;
@@ -210,7 +210,7 @@ public:
     /**
      * Insert an object into the page
      */
-    void insertObject( const QString &name, KPObject * object, const KoRect &r );
+    KCommand * insertObject( const QString &name, KPObject * object, const KoRect &r, bool addCommand = true );
 
     virtual KPPartObject* insertObject( const KoRect&, KoDocumentEntry& );
 
@@ -225,7 +225,7 @@ public:
                     const QColor &g1, const QColor &g2,BCType gt, PieType pt, int _angle, int _len,
                     LineEnd lb,LineEnd le,bool unbalanced, int xfactor, int yfactor );
 
-    KPTextObject* insertTextObject( const KoRect& r, const QString& text = QString::null, KPresenterView *_view = 0L );
+    KPTextObject*  insertTextObject( const KoRect& r, const QString& text = QString::null, KPresenterView *_view = 0L );
     void insertLine( const KoRect &r, const QPen &pen, LineEnd lb, LineEnd le, LineType lt );
 
     void insertAutoform( const KoRect &r, const QPen &pen, const QBrush &brush, LineEnd lb, LineEnd le,
