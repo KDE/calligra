@@ -1,0 +1,10 @@
+koffice-cvs (2.0-19990612-1) experimental; urgency=low
+
+  * Initial release
+
+ -- Ivan E. Moore II <rkrusty@debian.org>  Sat, 12 Jun 1999 03:00:29 -0400
+
+Local variables:
+mode: debian-changelog
+add-log-mailing-address: "coolo@kde.org"
+End:

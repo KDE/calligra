@@ -1,0 +1,12 @@
+Source: koffice-cvs
+Section: contrib/utils
+Priority: extra
+Maintainer: Stephan Kulow <coolo@kde.org>
+Standards-Version: 2.5.0
+
+Package: koffice-cvs
+Architecture: any
+Depends: ${shlibs:Depends}
+Suggests: kdebase-cvs
+Description: An office suite for KDE
+ An office suite for KDE
