@@ -29,6 +29,8 @@
 #include <qtabwidget.h>
 #include <qlabel.h>
 #include <qcombobox.h>
+#include <qradiobutton.h>
+
 KoFontChooser::KoFontChooser( QWidget* parent, const char* name, bool _withSubSuperScript, uint fontListCriteria)
     : QTabWidget( parent, name )
 {
@@ -51,10 +53,10 @@ void KoFontChooser::setupTab1(bool _withSubSuperScript, uint fontListCriteria )
     lay1->addWidget(grp);
     QGridLayout *grid = new QGridLayout( grp, 2, 3, KDialog::marginHint(), KDialog::spacingHint() );
 
-    m_superScript = new QCheckBox(i18n("SuperScript"),grp);
+    m_superScript = new QRadioButton(i18n("SuperScript"),grp);
     grid->addWidget(m_superScript,0,0);
 
-    m_subScript = new QCheckBox(i18n("SubScript"),grp);
+    m_subScript = new QRadioButton(i18n("SubScript"),grp);
     grid->addWidget(m_subScript,1,0);
 
     if(!_withSubSuperScript)

@@ -20,10 +20,10 @@
 #ifndef __kofontdia_h__
 #define __kofontdia_h__
 
-#include <qcheckbox.h>
 #include <kfontdialog.h>
 #include <qtabwidget.h>
 #include <qrichtext_p.h>
+#include <qradiobutton.h>
 class QComboBox;
 // The embeddable font chooser widget
 class KoFontChooser : public QTabWidget
@@ -85,8 +85,8 @@ protected slots:
     void slotChangeStrikeOutType( int );
 private:
     KFontChooser *m_chooseFont;
-    QCheckBox *m_superScript;
-    QCheckBox *m_subScript;
+    QRadioButton *m_superScript;
+    QRadioButton *m_subScript;
     QComboBox *m_strikeOut;
 
     QComboBox *m_underlining;
