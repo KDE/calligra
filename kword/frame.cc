@@ -23,6 +23,7 @@
 
 #include <koView.h>
 #include <koPageLayoutDia.h>
+#include <koApplication.h>
 
 #include <limits.h>
 
@@ -311,7 +312,7 @@ QCursor KWFrame::getMouseCursor( int mx, int my, bool table )
 void  KWFrame::saveLeftBrd2( QDomElement &e )
 {
     e.setAttribute( "lWidth", (int)brd_left.ptWidth );
-    e.setAttribute( "lColor", brd_left.color.name() );
+    e.setAttribute( "lColor", colorToName( brd_left.color ) );
     e.setAttribute( "lStyle", (int)brd_left.style );
 }
 
@@ -319,7 +320,7 @@ void  KWFrame::saveLeftBrd2( QDomElement &e )
 void KWFrame::saveRightBrd2( QDomElement &e )
 {
     e.setAttribute( "rWidth", (int)brd_right.ptWidth );
-    e.setAttribute( "rColor", brd_right.color.name() );
+    e.setAttribute( "rColor", colorToName( brd_right.color ) );
     e.setAttribute( "rStyle", (int)brd_right.style );
 }
 
@@ -327,7 +328,7 @@ void KWFrame::saveRightBrd2( QDomElement &e )
 void KWFrame::saveTopBrd2( QDomElement &e )
 {
     e.setAttribute( "tWidth", (int)brd_top.ptWidth );
-    e.setAttribute( "tColor", brd_top.color.name() );
+    e.setAttribute( "tColor", colorToName( brd_top.color ) );
     e.setAttribute( "tStyle", (int)brd_top.style );
 }
 
@@ -335,7 +336,7 @@ void KWFrame::saveTopBrd2( QDomElement &e )
 void KWFrame::saveBottomBrd2( QDomElement &e )
 {
     e.setAttribute( "bWidth", (int)brd_bottom.ptWidth );
-    e.setAttribute( "bColor", brd_bottom.color.name() );
+    e.setAttribute( "bColor", colorToName( brd_bottom.color ) );
     e.setAttribute( "bStyle", (int)brd_bottom.style );
 }
 
@@ -526,7 +527,7 @@ QDomElement KWFrameSet::save( QDomDocument &doc )
 	frame->saveRightBrd2( frm );
 	frame->saveTopBrd2( frm );
 	frame->saveBottomBrd2( frm );
-	frm.setAttribute( "background-color", frame->getBackgroundColor().color().name() );
+	frm.setAttribute( "background-color", colorToName( frame->getBackgroundColor().color() ) );
 	frm.setAttribute( "border-left-pt", (int)frame->getBLeft().pt() );
 	frm.setAttribute( "border-right-pt", (int)frame->getBRight().pt() );
 	frm.setAttribute( "border-top-pt", (int)frame->getBTop().pt() );

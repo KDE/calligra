@@ -2,6 +2,7 @@
 #include "kword_doc.h"
 #include "defs.h"
 #include "kword_utils.h"
+#include <koApplication.h>
 
 #include <unistd.h>
 
@@ -150,25 +151,25 @@ QDomElement KWParagLayout::save( QDomDocument& doc )
     c.setAttribute( "bullet-font", counter.bulletFont );
 
     QDomElement b = doc.createElement( "LEFTBORDER" );
-    b.setAttribute( "color", left.color.name() );
+    b.setAttribute( "color", colorToName( left.color ) );
     b.setAttribute( "width", (int)left.ptWidth );
     b.setAttribute( "style", (int)left.style );
     layout.appendChild( b );
 
     b = doc.createElement( "RIGHTBORDER" );
-    b.setAttribute( "color", right.color.name() );
+    b.setAttribute( "color", colorToName( right.color ) );
     b.setAttribute( "width", (int)right.ptWidth );
     b.setAttribute( "style", (int)right.style );
     layout.appendChild( b );
 
     doc.createElement( "TOPBORDER" );
-    b.setAttribute( "color", top.color.name() );
+    b.setAttribute( "color", colorToName( top.color ) );
     b.setAttribute( "width", (int)top.ptWidth );
     b.setAttribute( "style", (int)top.style );
     layout.appendChild( b );
 
     b = doc.createElement( "BOTTOMBORDER" );
-    b.setAttribute( "color", bottom.color.name() );
+    b.setAttribute( "color", colorToName( bottom.color ) );
     b.setAttribute( "width", (int)bottom.ptWidth );
     b.setAttribute( "style", (int)bottom.style );
     layout.appendChild( b );
