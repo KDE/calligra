@@ -22,6 +22,7 @@
 #include "kspread_canvas.h"
 #include "kspread_doc.h"
 #include "kspread_util.h"
+#include <qlabel.h>
 
 #include <qlayout.h>
 
@@ -33,6 +34,9 @@ KSpreadGotoDlg::KSpreadGotoDlg( KSpreadView* parent, const char* name )
   QWidget *page = new QWidget( this );
   setMainWidget(page);
   QVBoxLayout *lay1 = new QVBoxLayout( page, 0, spacingHint() );
+
+  QLabel *label = new QLabel(i18n("Enter cell:"), page);
+  lay1->addWidget(label);
 
   m_nameCell = new QLineEdit( page );
   lay1->addWidget(m_nameCell);
