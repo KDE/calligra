@@ -67,7 +67,7 @@
 //            NAME value=
 
 
-void ProcessLayoutNameTag ( QDomNode myNode, void *tagData, QString &, KWEFBaseClass* )
+static void ProcessLayoutNameTag ( QDomNode myNode, void *tagData, QString &, KWEFBaseClass* )
 {
     LayoutData *layout = (LayoutData *) tagData;
 
@@ -85,7 +85,7 @@ void ProcessLayoutNameTag ( QDomNode myNode, void *tagData, QString &, KWEFBaseC
     AllowNoSubtags (myNode);
 }
 
-void ProcessLayoutFlowTag ( QDomNode myNode, void *tagData, QString &, KWEFBaseClass* )
+static void ProcessLayoutFlowTag ( QDomNode myNode, void *tagData, QString &, KWEFBaseClass* )
 {
     LayoutData *layout = (LayoutData *) tagData;
 
@@ -99,6 +99,9 @@ void ProcessLayoutFlowTag ( QDomNode myNode, void *tagData, QString &, KWEFBaseC
 
 static void ProcessLayoutTabulatorTag ( QDomNode myNode, void *tagData, QString &, KWEFBaseClass*)
 {
+    // WARNING: This is exactly the format AbiWord needs for defining its tabulators
+    // TODO: make this function independant of the AbiWord export filter
+
     LayoutData *layout = (LayoutData *) tagData;
 
     double ptPos;
@@ -183,7 +186,7 @@ static void ProcessLineBreakingTag ( QDomNode myNode, void *tagData, QString &, 
     AllowNoSubtags (myNode);
 }
 
-void ProcessCounterTag ( QDomNode myNode, void *tagData, QString &, KWEFBaseClass* )
+static void ProcessCounterTag ( QDomNode myNode, void *tagData, QString &, KWEFBaseClass* )
 {
     CounterData *counter = (CounterData *) tagData;
     QValueList<AttrProcessing> attrProcessingList;
@@ -324,7 +327,7 @@ static void ProcessVertAlignTag (QDomNode myNode, void* formatDataPtr , QString&
     formatData->verticalAlignment=value;
 }
 
-void ProcessSingleFormatTag (QDomNode myNode, void *tagData, QString &, KWEFBaseClass* exportFilter)
+static void ProcessSingleFormatTag (QDomNode myNode, void *tagData, QString &, KWEFBaseClass* exportFilter)
 {
     FormatData *formatData = (FormatData*) tagData;
 
@@ -349,16 +352,6 @@ void ProcessSingleFormatTag (QDomNode myNode, void *tagData, QString &, KWEFBase
         kdError(30503) << "Missing formatting!" << endl;
     }
 
-    if ( 6 == formatId )
-    {// <FORMAT id=6> have no length but has one character in <TEXT>
-        //TODO: verifiy that KWord 0.9 still does it!
-        formatData->realLen=1;
-    }
-    else
-    {
-        formatData->realLen=formatData->len;
-    }
-
     QValueList<TagProcessing> tagProcessingList;
     tagProcessingList.append ( TagProcessing ( "ITALIC",    ProcessItalicTag,   (void*) formatData ) );
     tagProcessingList.append ( TagProcessing ( "UNDERLINE", ProcessUnderlineTag,(void*) formatData ) );
@@ -377,7 +370,7 @@ void ProcessSingleFormatTag (QDomNode myNode, void *tagData, QString &, KWEFBase
 
 }
 
-void ProcessIndentsTag (QDomNode myNode, void* tagData , QString&, KWEFBaseClass*)
+static void ProcessIndentsTag (QDomNode myNode, void* tagData , QString&, KWEFBaseClass*)
 {
     LayoutData *layout = (LayoutData *) tagData;
 

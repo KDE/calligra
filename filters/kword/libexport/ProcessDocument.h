@@ -26,11 +26,6 @@
 #include <qdom.h>
 #include <KWEFBaseClass.h>
 
-void ProcessLayoutNameTag ( QDomNode myNode, void *tagData, QString &, KWEFBaseClass* );
-void ProcessLayoutFlowTag ( QDomNode myNode, void *tagData, QString &, KWEFBaseClass* );
-void ProcessCounterTag ( QDomNode myNode, void *tagData, QString &, KWEFBaseClass* );
-void ProcessSingleFormatTag (QDomNode myNode, void *tagData, QString &, KWEFBaseClass* exportFilter);
-void ProcessIndentsTag (QDomNode myNode, void* tagData , QString&, KWEFBaseClass*);
 void ProcessLayoutTag ( QDomNode myNode, void *tagData, QString &outputText, KWEFBaseClass* exportFilter );
 void ProcessFormatsTag ( QDomNode myNode, void *tagData, QString &outputText, KWEFBaseClass* exportFilter );
 void ProcessTextTag ( QDomNode myNode, void *tagData, QString &, KWEFBaseClass*);

@@ -46,15 +46,13 @@ class FormatData
         FormatData ()
         { init(); }
         FormatData ( int p,
-                     int l  ) : pos (p), len (l), realLen (l)
+                     int l  ) : pos (p), len (l)
         { init(); }
 
         QString fontName;
 
         int  pos; // Start of text to which this format applies
         int  len; // Len of text to which this format applies
-        int  realLen; //Real length of text (in case "len" is not the truth!)
-        // TODO: get rid of realLen!
 
         int  weight;
         int  fontSize;
@@ -70,16 +68,12 @@ class FormatData
     private:
         void init()
         {
-            //Initialize member variables
-            // (initialize all variables, even those to 0!)
             weight=0;
             fontSize=-1;
-            colour=QColor();
             verticalAlignment=0;
             italic=false;
             underline=false;
             strikeout=false;
-            fontName=QString::null;
             missing=false;
         }
 };
@@ -138,7 +132,6 @@ public:
     FormatData formatData;
     double indentFirst, indentLeft, indentRight, marginBottom, marginTop,lineSpacing;
     bool pageBreakBefore, pageBreakAfter;
-    QString abiprops; // AbiWord properties (TODO: get rid of it)
     QString tabulator;
 };
 

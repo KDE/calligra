@@ -37,7 +37,7 @@ void CreateMissingFormatData(QString &paraText, ValueListFormatData &paraFormatD
             formatData.missing=true;
             paraFormatDataList.insert(paraFormatDataIt,formatData);
         }
-        lastPos=(*paraFormatDataIt).pos+(*paraFormatDataIt).realLen;
+        lastPos=(*paraFormatDataIt).pos+(*paraFormatDataIt).len;
         paraFormatDataIt++; // To the next one, please!
     }
     // Add the last one if needed
