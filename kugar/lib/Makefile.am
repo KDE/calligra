@@ -22,7 +22,9 @@ libkugar_la_SOURCES = \
 	mreportviewer.cpp \
 	kreportviewer.cpp \
 	mspecialobject.cpp \
-	mutil.cpp
+	mutil.cpp \
+	mdatabasereportengine.cpp \
+	sqlcursor.cpp
 
 include_HEADERS = \
 	kugar.h \
@@ -40,6 +42,8 @@ include_HEADERS = \
 	mreportviewer.h \
 	kreportviewer.h \
 	mspecialobject.h \
-	mutil.h
+	mutil.h \
+	mdatabasereportengine.h \
+	sqlcursor.h
 
 CLEANFILES = libkugar_la_meta_unload.cpp
