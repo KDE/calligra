@@ -13,8 +13,8 @@
       <Help>
 	<Text>The cos() function returns the cosine of x, where x is given in radians.</Text>
 	<Syntax>cos(Float)</Syntax>
-	<Example>sin(0) equals 0.0</Example>
-	<Example>sin(PI) equals 1.0</Example>
+	<Example>cos(0) equals 1.0</Example>
+	<Example>cos(PI/2) equals 0.0</Example>
       </Help>
     </Function>
 
@@ -27,9 +27,9 @@
       </Parameter>
       <Help>
 	<Text>The sin() function returns the sine of x, where x is given in radians.</Text>
-	<Syntax>cos(Float)</Syntax>
+	<Syntax>sin(Float)</Syntax>
 	<Example>sin(0) equals 0</Example>
-	<Example>sin(PI) equals 1</Example>
+	<Example>sin(PI/2) equals 1</Example>
       </Help>
     </Function>
 
@@ -305,7 +305,7 @@
       <Help>
 	<Text>The time() function returns the time formatted with local parameters.</Text>
 	<Syntax>time( hours, minutes, seconds )</Syntax>
-	<Example>date(2000,5,5) returns Friday 05 May 2000</Example>
+	<Example>time(10,2,2) returns 10:02:02</Example>
       </Help>
     </Function>
 
@@ -603,9 +603,9 @@
       </Parameter>
       <Help>
 	<Text>The lower() function converts a string to lower case.</Text>
-	<Syntax>upper( text )</Syntax>
-	<Example>upper( "hello" ) returns "hello"</Example>
-	<Example>upper( "HELLO" ) returns "hello"</Example>
+	<Syntax>lower( text )</Syntax>
+	<Example>lower( "hello" ) returns "hello"</Example>
+	<Example>lower( "HELLO" ) returns "hello"</Example>
       </Help>
     </Function>
 
@@ -678,7 +678,7 @@
 	<Text>This function multiplies each value by -1</Text>
 	<Syntax>INV( Value )</Syntax>
 	<Example>INV(-5) equals 5</Example>
-	<Example>INV(-5) equals 5</Example>
+	<Example>INV(5) equals 5</Example>
 	<Example>INV(0) equals 0</Example>
       </Help>
     </Function>
@@ -785,9 +785,9 @@
       </Parameter>
       <Help>
 	<Text>The min() function returns the smallest value given in the parameters.</Text>
-	<Syntax>max( values, values, ... )</Syntax>
-	<Example>max(12,5,7) returns 5</Example>
-	<Example>max(12.5,2) returns 2</Example>
+	<Syntax>min( values, values, ... )</Syntax>
+	<Example>min(12,5,7) returns 5</Example>
+	<Example>min(12.5,2) returns 2</Example>
       </Help>
     </Function>
 
