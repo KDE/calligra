@@ -3193,11 +3193,7 @@ KWTextFrameSet* KWDocument::nextTextFrameSet(KWTextFrameSet *obj)
     {
         KWTextFrameSetEdit * edit = dynamic_cast<KWTextFrameSetEdit *>(m_lstViews.first()->getGUI()->canvasWidget()->currentFrameSetEdit());
         if(edit)
-        {
             active=(edit->textFrameSet()==obj);
-            if( active)
-                obj->textObject()->setNeedSpellCheck(true);
-        }
     }
     QPtrList<KWTextFrameSet> textFramesets;
     QPtrListIterator<KWFrameSet> fit = framesetsIterator();
@@ -3456,9 +3452,8 @@ void KWDocument::setTabStopValue ( double _tabStop )
     for ( frm=textFramesets.first(); frm != 0; frm=textFramesets.next() ){
         frm->textDocument()->setTabStops( ptToLayoutUnitPt( _tabStop ));
         frm->layout();
-        repaintAllViews();
     }
-
+    repaintAllViews();
 }
 
 
