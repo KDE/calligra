@@ -3105,15 +3105,17 @@ void QTextParag::join( QTextParag *s )
     else if ( doc )
 	doc->setLastParag( this );
 
-  // keep existing trailing space if joining non-empty parag to an empty parag
-  if ( length() == 0 || s->length() > 1 )
+  bool hasTrailingSpace = length() > 0 && at( length() - 1 )->c == ' ';
+  // keep existing trailing space if we already have one and we're joining to an empty parag
+  if ( !hasTrailingSpace || s->length() > 1 )
   {
     int start = str->length();
-    if ( length() > 0 && at( length() - 1 )->c == ' ' ) {
+    if ( hasTrailingSpace ) {
 	remove( length() - 1, 1 );
 	--start;
     }
     append( s->str->toString(), TRUE );
+    //qDebug("copying %d chars", s->length());
     for ( int i = 0; i < s->length(); ++i ) {
 	if ( !doc || doc->useFormatCollection() ) {
 	    s->str->at( i ).format()->addRef();
@@ -3125,7 +3127,10 @@ void QTextParag::join( QTextParag *s )
 	    s->str->at( i ).loseCustomItem();
 	}
     }
-  }// else qDebug("join: empty parag -> not copying");
+  }
+  //else
+    //qDebug("join: empty parag -> not copying");
+  ASSERT(str->at(str->length()-1).c == ' ');
 
     if ( !extraData() && s->extraData() ) {
 	setExtraData( s->extraData() );
