@@ -1,4 +1,4 @@
-<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd"><kpartgui name="KPresenter" version="108">
+<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd"><kpartgui name="KPresenter" version="109">
 <MenuBar>
  <Menu name="file"><text>&amp;File</text>
   <Separator/>
@@ -115,7 +115,6 @@
   <Action name="extra_layout"/>
   <Separator/>
   <Action name="extra_background"/>
-  <Separator/>
  </Menu>
  <Menu name="Text"><text>Te&amp;xt</text>
   <Action name="text_default"/>
