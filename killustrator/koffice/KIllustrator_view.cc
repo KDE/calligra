@@ -157,8 +157,11 @@ void KIllustratorView::createMyGUI()
     m_properties = new KAction( i18n("&Properties..."), 0, this, SLOT( slotProperties() ), actionCollection(), "properties" );
 
     // View menu
-    new KAction( i18n("Zoom in..."), Key_Plus, this, SLOT( slotZoomIn() ), actionCollection(), "view_zoomin" );
-    new KAction( i18n("Zoom out..."), Key_Minus, this, SLOT( slotZoomOut() ), actionCollection(), "view_zoomout" );
+    //new KAction( i18n("Zoom in..."), Key_Plus, this, SLOT( slotZoomIn() ), actionCollection(), "zoomin" );
+    //new KAction( i18n("Zoom out..."), Key_Minus, this, SLOT( slotZoomOut() ), actionCollection(), "zoomout" );
+    new KAction( i18n("Zoom in"), "viewmag+", Key_Plus, this, SLOT( slotZoomIn() ), actionCollection(), "zoomin");
+    new KAction( i18n("Zoom out"), "viewmag-", Key_Minus, this, SLOT( slotZoomOut() ), actionCollection(), "zoomout");
+
     KToggleAction *m_outline = new KToggleAction( i18n("Ou&tline"), 0, actionCollection(), "outline" );
     m_outline->setExclusiveGroup( "Outline" );
     connect( m_outline, SIGNAL( toggled( bool ) ), this, SLOT( slotOutline( bool ) ) );
@@ -273,8 +276,7 @@ void KIllustratorView::createMyGUI()
 
     m_viewZoom->setItems (zooms);
     m_viewZoom->setEditable (true);
-    connect (m_viewZoom, SIGNAL(activated(const QString &)),
-             this, SLOT(slotViewZoom(const QString &)));
+    connect(m_viewZoom, SIGNAL(activated(const QString &)),this, SLOT(slotViewZoom(const QString &)));
     m_viewZoom->setCurrentItem(1);
 
 
@@ -377,10 +379,12 @@ void KIllustratorView::setupCanvas()
     connect(mLayerDockBase, SIGNAL(visibleChange(bool)), SLOT(slotLayersPanel(bool)));
     slotLayersPanel(false);
     
-    QObject::connect (canvas, SIGNAL(visibleAreaChanged (int, int)),
+    connect(canvas,SIGNAL(visibleAreaChanged(const QRect&)),hRuler,SLOT(updateVisibleArea(const QRect&)));
+    connect(canvas,SIGNAL(visibleAreaChanged(const QRect&)),vRuler,SLOT(updateVisibleArea(const QRect&)));
+/*    QObject::connect (canvas, SIGNAL(visibleAreaChanged (int, int)),
                       hRuler, SLOT(updateVisibleArea (int, int)));
     QObject::connect (canvas, SIGNAL(visibleAreaChanged (int, int)),
-                      vRuler, SLOT(updateVisibleArea (int, int)));
+                      vRuler, SLOT(updateVisibleArea (int, int)));*/
 
     connect (canvas, SIGNAL(zoomFactorChanged (float)),
                       this, SLOT(slotZoomFactorChanged(float)));

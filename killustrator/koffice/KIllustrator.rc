@@ -19,8 +19,8 @@
   <Action name="properties"/>
  </Menu>
  <Menu name="view"><text>&amp;View</text>
-  <Action name="view_zoomin"/>
-  <Action name="view_zoomout"/>
+  <Action name="zoomin"/>
+  <Action name="zoomout"/>
   <Action name="zoom"/>
   <Separator/>
   <Action name="view_newview"/>
@@ -94,8 +94,8 @@
   <Action name="paste"/>
   <Action name="view_zoom"/>
   <Separator/>
-  <Action name="tool_zoomin"/>
-  <Action name="tool_zoomout"/>
+  <Action name="zoomin"/>
+  <Action name="zoomout"/>
 </ToolBar>
 <ToolBar fullWidth="false" name="colorbar"><Text>Color</Text>
   <Action name="colorbar"/>
