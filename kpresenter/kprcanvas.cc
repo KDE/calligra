@@ -562,7 +562,10 @@ void KPrCanvas::mousePressEvent( QMouseEvent *e )
                         if( kpobject && m_view->kPresenterDoc()->isHeaderFooter(kpobject))
                         {
                             if(objectIsAHeaderFooterHidden(kpobject))
+                            {
                                 kpobject=0L;
+                                overObject=false;
+                            }
                         }
                         if( kpobject && _resizeObj ) {
                             oldBoundingRect = getOldBoundingRect( kpobject );

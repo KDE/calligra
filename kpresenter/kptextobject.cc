@@ -265,7 +265,6 @@ void KPTextObject::paint( QPainter *_painter, KoZoomHandler*_zoomHandler,
     _painter->save();
     //kdDebug() << "KPTextObject::paint cliprect:" << DEBUGRECT(_zoomHandler->zoomRect( getBoundingRect( _zoomHandler ) )) << endl;
     //setupClipRegion( _painter, _zoomHandler->zoomRect( getBoundingRect( _zoomHandler ) ) );
-    //kdDebug() << "Painting text object at " << ox << "," << oy << ":" << m_textobj->textDocument()->text() << endl;
 
     QPen pen2(pen);
     pen2.setWidth(_zoomHandler->zoomItX(pen.width()));
