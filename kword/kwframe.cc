@@ -980,22 +980,24 @@ void KWFrameSet::load( QDomElement &framesetElem, bool loadFrames )
     else
         m_removeableHeader = static_cast<bool>( KWDocument::getAttribute( framesetElem, "removable", false ) );
 
-
-    // <FRAME>
-    QDomElement frameElem = framesetElem.firstChild().toElement();
-    for ( ; !frameElem.isNull() ; frameElem = frameElem.nextSibling().toElement() )
+    if ( loadFrames )
     {
-        if ( frameElem.tagName() == "FRAME" )
+        // <FRAME>
+        QDomElement frameElem = framesetElem.firstChild().toElement();
+        for ( ; !frameElem.isNull() ; frameElem = frameElem.nextSibling().toElement() )
         {
-            KoRect rect;
-            rect.setLeft( KWDocument::getAttribute( frameElem, "left", 0.0 ) );
-            rect.setTop( KWDocument::getAttribute( frameElem, "top", 0.0 ) );
-            rect.setRight( KWDocument::getAttribute( frameElem, "right", 0.0 ) );
-            rect.setBottom( KWDocument::getAttribute( frameElem, "bottom", 0.0 ) );
-            KWFrame * frame = new KWFrame(this, rect.x(), rect.y(), rect.width(), rect.height() );
-            frame->load( frameElem, isHeaderOrFooter(), m_doc->syntaxVersion() );
-            addFrame( frame );
-            m_doc->progressItemLoaded();
+            if ( frameElem.tagName() == "FRAME" )
+            {
+                KoRect rect;
+                rect.setLeft( KWDocument::getAttribute( frameElem, "left", 0.0 ) );
+                rect.setTop( KWDocument::getAttribute( frameElem, "top", 0.0 ) );
+                rect.setRight( KWDocument::getAttribute( frameElem, "right", 0.0 ) );
+                rect.setBottom( KWDocument::getAttribute( frameElem, "bottom", 0.0 ) );
+                KWFrame * frame = new KWFrame(this, rect.x(), rect.y(), rect.width(), rect.height() );
+                frame->load( frameElem, isHeaderOrFooter(), m_doc->syntaxVersion() );
+                addFrame( frame );
+                m_doc->progressItemLoaded();
+            }
         }
     }
 }
