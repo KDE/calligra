@@ -164,7 +164,7 @@ KexiDBConnectionTabWidget::~KexiDBConnectionTabWidget()
 void KexiDBConnectionTabWidget::setData(const KexiProjectData& data, const QString& shortcutFileName)
 {
 	mainWidget->setData( data, shortcutFileName );
-	detailsWidget->chkUseSocket->setChecked( !data.constConnectionData()->localSocketFileName.isEmpty() );
+	detailsWidget->chkUseSocket->setChecked( data.constConnectionData()->useLocalSocketFile );
 	detailsWidget->customSocketEdit->setURL(data.constConnectionData()->localSocketFileName);
 	detailsWidget->chkSocketDefault->setChecked(data.constConnectionData()->localSocketFileName.isEmpty());
 	detailsWidget->descriptionEdit->setText( data.description() );
@@ -204,6 +204,7 @@ KexiProjectData KexiDBConnectionTabWidget::currentData()
 		? 0 : mainWidget->customPortEdit->value();
 	data.connectionData()->localSocketFileName = detailsWidget->chkSocketDefault->isChecked() 
 		? QString::null : detailsWidget->customSocketEdit->url();
+	data.connectionData()->useLocalSocketFile = detailsWidget->chkUseSocket->isChecked();
 //UNSAFE!!!!
 	data.connectionData()->userName = mainWidget->userEdit->text();
 	data.connectionData()->password = mainWidget->passwordEdit->text();

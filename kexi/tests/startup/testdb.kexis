@@ -54,7 +54,6 @@ comment=My favourite test project
 # Set this to 1, if you want to use socket file (named pipe) 
 # instead of TCP/IP for your local connection here.
 # Ignored for remote connections. 
-# NOT YET IMPLEMENTED!
 useLocalSocketFile=0
 
 # Enter local socket file name (named pipe) for your local connection here.

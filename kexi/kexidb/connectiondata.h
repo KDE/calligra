@@ -36,7 +36,7 @@ namespace KexiDB {
 class ConnectionDataBase
 {
 	public:
-		ConnectionDataBase() : id(-1), port(0) {}
+		ConnectionDataBase();
 
 		/*! 
 		\brief The name of the connection
@@ -88,9 +88,17 @@ class ConnectionDataBase
 		unsigned short int port;
 
 		/*! 
+		\brief True if local socket file should be used instead of TCP/IP port.
+		
+		For local connections only. False by default.
+		If true, @a hostName and @a port will be ignored.
+		*/
+		bool useLocalSocketFile;
+
+		/*! 
 		\brief Name of local (named) socket file. 
 		
-		For local connections only.
+		For local connections only. Empty by default.
 		*/
 		QString localSocketFileName;
 		

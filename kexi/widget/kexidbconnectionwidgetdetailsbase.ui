@@ -181,10 +181,10 @@
     </connection>
 </connections>
 <tabstops>
+    <tabstop>customSocketEdit</tabstop>
     <tabstop>descriptionEdit</tabstop>
     <tabstop>chkUseSocket</tabstop>
     <tabstop>chkSocketDefault</tabstop>
-    <tabstop>customSocketEdit</tabstop>
 </tabstops>
 <includes>
     <include location="local" impldecl="in implementation">kexidbconnectionwidgetdetailsbase.ui.h</include>

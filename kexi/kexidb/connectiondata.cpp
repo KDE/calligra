@@ -42,6 +42,13 @@ public:
 
 /*================================================================*/
 
+ConnectionDataBase::ConnectionDataBase()
+	: id(-1), port(0), useLocalSocketFile(false)
+{
+}
+
+/*================================================================*/
+
 ConnectionData::ConnectionData()
 : QObject()
 , ConnectionDataBase()

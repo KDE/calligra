@@ -307,6 +307,7 @@ CCPASTEUR:
 	-perhaps we'd reuse KDE Menu editor GUI?
 
 === KexiDB TODO ===
+- reuse ConnectionData::useLocalSocketFile for connections using socket file
 - Connection::alterTableName():
 --alter table name for server DB backends!
 --what about objects (queries/forms) that use old name?
@@ -425,10 +426,12 @@ TODO: 0.1 stable: reuse http://segfault.is-a-geek.net:8001/feedback-kinitiator/
 
 TODO: look at recent Martin's stuff: http://homepages.cs.ncl.ac.uk/m.a.ellis/kexi/
 
-2005-02-17
-Forms
-- Avoid errors and handle invalid dataSource property values within forms
-- show errors as "#NAME?" in line edits and other data-aware widgets
+Startup TODO:
+- add "Save Special->Shortcut file for this project" action
+
+2005-02-21
+Kexi Startup
+- "useLocalSocketFile" option for .kexis file implemented
 
 2005-02-11...2005-02-20
 Kexi Startup
@@ -442,6 +445,11 @@ Kexi Startup
 - KexiDBShortcutFile class added
 - database/connection dialog reimplemented
 - KexiDBDriverComboBox added: a combo box for selecting a database driver
+
+2005-02-17
+Forms
+- Avoid errors and handle invalid dataSource property values within forms
+- show errors as "#NAME?" in line edits and other data-aware widgets
 
 2005-02-04
 KexiDB

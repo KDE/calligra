@@ -125,6 +125,7 @@ bool KexiDBShortcutFile::loadConnectionData(KexiProjectData& data, QString* _gro
 	}
 	data.connectionData()->hostName = config.readEntry("server"); //empty allowed
 	data.connectionData()->port = config.readNumEntry("port", 0);
+	data.connectionData()->useLocalSocketFile = config.readBoolEntry("useLocalSocketFile", false);
 	data.connectionData()->localSocketFileName = config.readEntry("localSocketFile");
 //UNSAFE!!!!
 	data.connectionData()->password = config.readEntry("password");
@@ -178,6 +179,7 @@ bool KexiDBShortcutFile::saveConnectionData(const KexiProjectData& data,
 
 	if (data.constConnectionData()->port!=0)
 		config.writeEntry("port", data.constConnectionData()->port);
+	config.writeEntry("useLocalSocketFile", data.constConnectionData()->useLocalSocketFile);
 	if (!data.constConnectionData()->localSocketFileName.isEmpty())
 		config.writeEntry("localSocketFile", data.constConnectionData()->localSocketFileName);
 
