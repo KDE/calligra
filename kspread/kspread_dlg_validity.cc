@@ -157,6 +157,8 @@ void KSpreadDlgValidity::changeIndexType(int _index)
 switch(_index)
         {
         case 0:
+                edit1->setText("");
+                edit2->setText("");
                 message->setEnabled(false);
                 title->setEnabled(false);
                 val_max->setEnabled(false);
@@ -166,19 +168,9 @@ switch(_index)
                 choose->setEnabled(false);
                 chooseAction->setEnabled(false);
                 break;
-        case 2:
         case 3:
-        case 4:
-                val_max->setEnabled(false);
-                val_min->setEnabled(false);
-                edit1->setEnabled(false);
-                edit2->setEnabled(false);
-                choose->setEnabled(false);
-                message->setEnabled(true);
-                title->setEnabled(true);
-                chooseAction->setEnabled(true);
-                break;
-        case 1:
+                edit1->setText(i18n("Date : "));
+                edit2->setText("");
                 val_max->setEnabled(true);
                 val_min->setEnabled(true);
                 edit1->setEnabled(true);
@@ -188,6 +180,47 @@ switch(_index)
                 message->setEnabled(true);
                 title->setEnabled(true);
                 chooseAction->setEnabled(true);
+                val_min->clearValidator();
+                val_max->clearValidator();
+                break;
+        case 4:
+                edit1->setText(i18n("Time : "));
+                edit2->setText("");
+                val_max->setEnabled(true);
+                val_min->setEnabled(true);
+                edit1->setEnabled(true);
+                edit2->setEnabled(true);
+                changeIndexCond(choose->currentItem());
+                choose->setEnabled(true);
+                message->setEnabled(true);
+                title->setEnabled(true);
+                chooseAction->setEnabled(true);
+                val_min->clearValidator();
+                val_max->clearValidator();
+                break;
+        case 2:
+                edit1->setText("");
+                edit2->setText("");
+                val_max->setEnabled(false);
+                val_min->setEnabled(false);
+                choose->setEnabled(false);
+                edit1->setEnabled(false);
+                edit2->setEnabled(false);
+                break;
+        case 1:
+                val_max->setEnabled(true);
+                val_min->setEnabled(true);
+                edit1->setText(i18n("Number : "));
+                edit2->setText("");
+                edit1->setEnabled(true);
+                edit2->setEnabled(true);
+                changeIndexCond(choose->currentItem());
+                choose->setEnabled(true);
+                message->setEnabled(true);
+                title->setEnabled(true);
+                chooseAction->setEnabled(true);
+                val_min->setValidator( new KFloatValidator( val_min ) );
+                val_max->setValidator( new KFloatValidator( val_max ) );
                 break;
         }
 }
@@ -202,7 +235,14 @@ switch(_index)
         case 3:
         case 4:
                 val_max->setEnabled(false);
-                edit1->setText(i18n("Number :"));
+                if(chooseType->currentItem()==1)
+                        edit1->setText(i18n("Number :"));
+                else if( chooseType->currentItem()==2)
+                        edit1->setText("");
+                else if( chooseType->currentItem()==3)
+                        edit1->setText(i18n("Date :"));
+                else if( chooseType->currentItem()==4)
+                        edit1->setText(i18n("Time :"));
                 edit2->setText("");
                 edit2->setEnabled(false);
                 break;
@@ -211,8 +251,26 @@ switch(_index)
                 val_max->setEnabled(true);
                 edit2->setEnabled(true);
                 edit1->setEnabled(true);
-                edit1->setText(i18n("Minimum : " ));
-                edit2->setText(i18n("Maximum : " ));
+                if(chooseType->currentItem()==1)
+                        {
+                        edit1->setText(i18n("Minimum : " ));
+                        edit2->setText(i18n("Maximum : " ));
+                        }
+                else if(chooseType->currentItem()==2)
+                        {
+                        edit1->setText("");
+                        edit2->setText("");
+                        }
+                else if(chooseType->currentItem()==3)
+                        {
+                        edit1->setText(i18n("Date minimum"));
+                        edit2->setText(i18n("Date maximum"));
+                        }
+                else if(chooseType->currentItem()==4)
+                        {
+                        edit1->setText(i18n("Time minimum"));
+                        edit2->setText(i18n("Time maximum"));
+                        }
                 break;
         }
 }
@@ -226,8 +284,6 @@ void KSpreadDlgValidity::init()
         message->setText(tmpValidity->message);
         title->setText(tmpValidity->title);
         QString tmp;
-        val_max->setText(tmp.setNum(tmpValidity->valMax));
-        val_min->setText(tmp.setNum(tmpValidity->valMin));
         switch( tmpValidity->m_allow)
                 {
                 case Allow_All:
@@ -235,15 +291,21 @@ void KSpreadDlgValidity::init()
                         break;
                 case Allow_Number:
                         chooseType->setCurrentItem(1);
+                        val_max->setText(tmp.setNum(tmpValidity->valMax));
+                        val_min->setText(tmp.setNum(tmpValidity->valMin));
                         break;
                 case Allow_Text:
                         chooseType->setCurrentItem(2);
                         break;
                 case Allow_Date:
                         chooseType->setCurrentItem(3);
+                        val_max->setText(KGlobal::locale()->formatDate(tmpValidity->dateMax,true));
+                        val_min->setText(KGlobal::locale()->formatDate(tmpValidity->dateMin,true));
                         break;
                 case Allow_Time:
                         chooseType->setCurrentItem(4);
+                        val_max->setText(KGlobal::locale()->formatTime(tmpValidity->timeMax,true));
+                        val_min->setText(KGlobal::locale()->formatTime(tmpValidity->timeMin,true));
                         break;
                 default :
                         chooseType->setCurrentItem(0);
@@ -307,6 +369,10 @@ if( chooseType->currentItem()==0)
         result.title=title->text();
         result.valMin=0;
         result.valMax=0;
+        result.timeMin=QTime(0,0,0);
+        result.timeMax=QTime(0,0,0);
+        result.dateMin=QDate(0,0,0);
+        result.dateMax=QDate(0,0,0);
         }
 else
         {
@@ -372,8 +438,28 @@ else
                 }
         result.message=message->text();
         result.title=title->text();
-        result.valMin=QMIN(val_min->text().toDouble(),val_max->text().toDouble());
-        result.valMax=QMAX(val_max->text().toDouble(),val_min->text().toDouble());
+        result.valMin=0;
+        result.valMax=0;
+        result.timeMin=QTime(0,0,0);
+        result.timeMax=QTime(0,0,0);
+        result.dateMin=QDate(0,0,0);
+        result.dateMax=QDate(0,0,0);
+
+        if( chooseType->currentItem()==1)
+                {
+                result.valMin=QMIN(val_min->text().toDouble(),val_max->text().toDouble());
+                result.valMax=QMAX(val_max->text().toDouble(),val_min->text().toDouble());
+                }
+        else  if(  chooseType->currentItem()==4)
+                {
+                result.timeMin=KGlobal::locale()->readTime(val_min->text());
+                result.timeMax=KGlobal::locale()->readTime(val_max->text());
+                }
+        else  if(  chooseType->currentItem()==3)
+                {
+                result.dateMin=KGlobal::locale()->readDate(val_min->text());
+                result.dateMax=KGlobal::locale()->readDate(val_max->text());
+                }
         }
 
 m_pView->activeTable()->setValidity( QPoint(  m_pView->canvasWidget()->markerColumn(),

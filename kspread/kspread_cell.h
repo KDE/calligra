@@ -67,6 +67,10 @@ struct KSpreadValidity
  Conditional m_cond;
  Action m_action;
  Allow m_allow;
+ QTime  timeMin;
+ QTime  timeMax;
+ QDate  dateMin;
+ QDate  dateMax;
 };
 
 struct KSpreadDepend

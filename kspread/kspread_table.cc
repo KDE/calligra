@@ -5505,6 +5505,10 @@ void KSpreadTable::setValidity(const QPoint &_marker,KSpreadValidity tmp )
                         tmpValidity->m_cond=tmp.m_cond;
                         tmpValidity->m_action=tmp.m_action;
                         tmpValidity->m_allow=tmp.m_allow;
+                        tmpValidity->timeMin=tmp.timeMin;
+                        tmpValidity->timeMax=tmp.timeMax;
+                        tmpValidity->dateMin=tmp.dateMin;
+                        tmpValidity->dateMax=tmp.dateMax;
                         }
                 c->clearDisplayDirtyFlag();
             }
@@ -5536,6 +5540,10 @@ void KSpreadTable::setValidity(const QPoint &_marker,KSpreadValidity tmp )
                         tmpValidity->m_cond=tmp.m_cond;
                         tmpValidity->m_action=tmp.m_action;
                         tmpValidity->m_allow=tmp.m_allow;
+                        tmpValidity->timeMin=tmp.timeMin;
+                        tmpValidity->timeMax=tmp.timeMax;
+                        tmpValidity->dateMin=tmp.dateMin;
+                        tmpValidity->dateMax=tmp.dateMax;
                         }
 
                 c->clearDisplayDirtyFlag();
@@ -5578,6 +5586,10 @@ void KSpreadTable::setValidity(const QPoint &_marker,KSpreadValidity tmp )
                         tmpValidity->m_cond=tmp.m_cond;
                         tmpValidity->m_action=tmp.m_action;
                         tmpValidity->m_allow=tmp.m_allow;
+                        tmpValidity->timeMin=tmp.timeMin;
+                        tmpValidity->timeMax=tmp.timeMax;
+                        tmpValidity->dateMin=tmp.dateMin;
+                        tmpValidity->dateMax=tmp.dateMax;
                         }
 
                 cell->clearDisplayDirtyFlag();

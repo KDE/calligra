@@ -3614,12 +3614,82 @@ if(m_Validity!=0)
         else if(m_Validity->m_allow==Allow_Time)
                 {
                  if(isTime())
-                        valid=true;
+                        {
+                        switch( m_Validity->m_cond)
+                                {
+                                case Equal:
+                                        if(m_Time ==m_Validity->timeMin)
+                                                valid=true;
+                                        break;
+                                case Superior:
+                                        if(m_Time >m_Validity->timeMin)
+                                                valid=true;
+                                        break;
+                                case Inferior:
+                                        if(m_Time <m_Validity->timeMin)
+                                                valid=true;
+                                        break;
+                                case SuperiorEqual:
+                                        if(m_Time >=m_Validity->timeMin)
+                                                valid=true;
+                                        break;
+                                case InferiorEqual:
+                                        if(m_Time <=m_Validity->timeMin)
+                                                valid=true;
+                                        break;
+                                case Between:
+                                        if(m_Time >=m_Validity->timeMin && m_Time <=m_Validity->timeMax)
+                                                valid=true;
+                                        break;
+                                case Different:
+                                        if(m_Time <m_Validity->timeMin || m_Time >m_Validity->timeMax)
+                                                valid=true;
+                                        break;
+                                default :
+                                        break;
+
+                                }
+                        }
                 }
         else if(m_Validity->m_allow==Allow_Date)
                 {
                  if(isDate())
-                        valid=true;
+                        {
+                        switch( m_Validity->m_cond)
+                                {
+                                case Equal:
+                                        if(m_Date ==m_Validity->dateMin)
+                                                valid=true;
+                                        break;
+                                case Superior:
+                                        if(m_Date >m_Validity->dateMin)
+                                                valid=true;
+                                        break;
+                                case Inferior:
+                                        if(m_Date <m_Validity->dateMin)
+                                                valid=true;
+                                        break;
+                                case SuperiorEqual:
+                                        if(m_Date>=m_Validity->dateMin)
+                                                valid=true;
+                                        break;
+                                case InferiorEqual:
+                                        if(m_Date <=m_Validity->dateMin)
+                                                valid=true;
+                                        break;
+                                case Between:
+                                        if(m_Date >=m_Validity->dateMin && m_Date <=m_Validity->dateMax)
+                                                valid=true;
+                                        break;
+                                case Different:
+                                        if(m_Date <m_Validity->dateMin || m_Date >m_Validity->dateMax)
+                                                valid=true;
+                                        break;
+                                default :
+                                        break;
+
+                                }
+                        }
                 }
 
         }
