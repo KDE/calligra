@@ -222,8 +222,7 @@ VSegment::splitAt( double t )
 {
 	VSegment* segment = new VSegment();
 
-	// no need to change the current segment for these
-	// segment types:
+	// lines are easy: no need to change the current segment:
 	if(
 		m_type == segment_line ||
 		m_type == segment_end )
@@ -235,13 +234,13 @@ VSegment::splitAt( double t )
 		return segment;
 	}
 
-	// these make our life a bit easier:
+	// these references make our life a bit easier:
 	KoPoint& p0 = m_prev->m_point[2];
 	KoPoint& p3 = m_point[2];
 	KoPoint& p1 = m_type == segment_curve1 ? p0 : m_point[0];
 	KoPoint& p2 = m_type == segment_curve2 ? p3 : m_point[1];
 
-
+	// calculate the 2 new beziers:
 	segment->m_point[0] = p0 + ( p1 - p0 ) * t;
 	segment->m_point[1] = p1 + ( p2 - p1 ) * t;
 
@@ -253,7 +252,7 @@ VSegment::splitAt( double t )
 	segment->m_point[2] =
 		segment->m_point[1] + ( p1 - segment->m_point[1] ) * t;
 
-
+	// and finally set the new segment types properly:
 	if( m_type == segment_curve1 )
 	{
 		segment->m_type = segment_curve1;

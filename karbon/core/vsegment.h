@@ -89,7 +89,7 @@ public:
 	/**
 	 *  Splits segment at 0 <= t <= 1. Returns the first segment and transforms
 	 *  the current one to the second segment. Make sure yourself, this segment
-	 *  has a m_prev != 0L.
+	 *  has a m_prev != 0L and t is in proper range.
 	 */
 	VSegment* splitAt( double t );
 

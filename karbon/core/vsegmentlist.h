@@ -53,6 +53,9 @@ public:
 
 	// general list stuff:
 	VSegmentList& operator=( const VSegmentList& list );
+
+	bool insert( uint i, const VSegment* segment );
+	void prepend( const VSegment* segment );
 	void append( const VSegment* segment );
 	void clear();
 
@@ -67,6 +70,8 @@ public:
 	VSegment* next();
 
 private:
+	VSegment* locate( uint index );
+
 	bool m_isClosed;
 
 	VSegment* m_first;

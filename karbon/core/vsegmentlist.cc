@@ -25,9 +25,9 @@ public:
 
 	void add( VSegmentListIterator* itr )
 	{
-		if ( !m_iterator )
+		if( !m_iterator )
 			m_iterator = itr;
-		else if ( m_list )
+		else if( m_list )
 			m_list->push_front( itr );
 		else
 		{
@@ -37,13 +37,13 @@ public:
 	}
 
 	void remove( VSegmentListIterator* itr ) {
-		if ( m_iterator == itr )
+		if( m_iterator == itr )
 			m_iterator = 0L;
-		else if ( m_list )
+		else if( m_list )
 		{
 			m_list->remove( itr );
 
-			if ( m_list->isEmpty() )
+			if( m_list->isEmpty() )
 			{
 				delete m_list;
 				m_list = 0L;
@@ -53,22 +53,22 @@ public:
 
 	void notifyClear( bool zeroList )
 	{
-		if ( m_iterator )
+		if( m_iterator )
 		{
-			if ( zeroList )
+			if( zeroList )
 				m_iterator->m_list = 0L;
 
 			m_iterator->m_current = 0L;
 		}
 
-		if ( m_list )
+		if( m_list )
 		{
 			for(
 				QValueList<VSegmentListIterator*>::Iterator itr = m_list->begin();
 				itr != m_list->end();
 				++itr )
 			{
-				if ( zeroList )
+				if( zeroList )
 					( *itr )->m_list = 0L;
 
 				( *itr )->m_current = 0L;
@@ -78,20 +78,20 @@ public:
 
 	void notifyRemove( VSegment* segment, VSegment* current )
 	{
-		if ( m_iterator )
+		if( m_iterator )
 		{
-			if ( m_iterator->m_current == segment )
+			if( m_iterator->m_current == segment )
 				m_iterator->m_current = current;
 		}
 
-		if ( m_list )
+		if( m_list )
 		{
 			for(
 				QValueList<VSegmentListIterator*>::Iterator itr = m_list->begin();
 				itr != m_list->end();
 				++itr )
 			{
-			if ( ( *itr )->m_current == segment )
+			if( ( *itr )->m_current == segment )
 				( *itr )->m_current = current;
 			}
 		}
@@ -383,11 +383,11 @@ VSegmentList::load( const QDomElement& element )
 VSegmentList&
 VSegmentList::operator=( const VSegmentList& list )
 {
-	if ( &list == this )
+	if( &list == this )
 		return *this;
 
 	clear();
-	if ( list.count() > 0 )
+	if( list.count() > 0 )
 	{
 		VSegment* segment = list.m_first;
 		while ( segment )
@@ -401,6 +401,57 @@ VSegmentList::operator=( const VSegmentList& list )
 	}
 
 	return *this;
+}
+
+bool
+VSegmentList::insert( uint index, const VSegment* segment )
+{
+	VSegment* s = const_cast<VSegment*>( segment );
+
+	if( index == 0 )
+	{
+		prepend( s );
+		return true;
+	}
+	else if( index == m_number )
+	{
+		append( s );
+		return true;
+	}
+
+	VSegment* next = locate( index );
+	if( !next )
+		return false;
+
+	VSegment* prev = next->m_prev;
+
+	next->m_prev = s;
+	prev->m_next = s;
+	s->m_prev = prev;
+	s->m_next = next;
+
+	m_current = s;
+	++m_number;
+
+	return true;
+}
+
+void
+VSegmentList::prepend( const VSegment* segment )
+{
+	VSegment* s = const_cast<VSegment*>( segment );
+
+	s->m_prev = 0L;
+
+	if( ( s->m_next = m_first ) )
+		m_first->m_prev = s;
+	else
+		m_last = s;
+
+	m_first = m_current = s;
+
+	++m_number;
+	m_currentIndex = 0;
 }
 
 void
@@ -445,7 +496,7 @@ VSegmentList::clear()
 VSegment*
 VSegmentList::first()
 {
-	if ( m_first )
+	if( m_first )
 	{
 		m_currentIndex = 0;
 		return m_current = m_first;
@@ -457,7 +508,7 @@ VSegmentList::first()
 VSegment*
 VSegmentList::last()
 {
-	if ( m_last )
+	if( m_last )
 	{
 		m_currentIndex = m_number - 1;
 		return m_current = m_last;
@@ -469,7 +520,7 @@ VSegmentList::last()
 VSegment*
 VSegmentList::prev()
 {
-	if ( m_current )
+	if( m_current )
 	{
 		if( m_current->m_prev )
 		{
@@ -487,7 +538,7 @@ VSegmentList::prev()
 VSegment*
 VSegmentList::next()
 {
-	if ( m_current )
+	if( m_current )
 	{
 		if( m_current->m_next )
 		{
@@ -502,13 +553,72 @@ VSegmentList::next()
 	return 0L;
 }
 
+VSegment*
+VSegmentList::locate( uint index )
+{
+	if( index == static_cast<uint>( m_currentIndex ) )
+		return m_current;
+
+	if( !m_current && m_first )
+	{
+		m_current = m_first;
+		m_currentIndex = 0;
+	}
+
+	VSegment* segment;
+	int distance = index - m_currentIndex;
+	bool forward;
+
+	if( index >= m_number )
+		return 0L;
+
+	if( distance < 0 )
+		distance = -distance;
+
+	if(
+		static_cast<uint>( distance ) < index &&
+		static_cast<uint>( distance ) < m_number - index )
+	{
+		segment = m_current;
+		forward = index > static_cast<uint>( m_currentIndex );
+	}
+	else if( index < m_number - index )
+	{
+		segment = m_first;
+		distance = index;
+		forward = true;
+	}
+	else
+	{
+		segment = m_last;
+		distance = m_number - index - 1;
+		if( distance < 0 )
+			distance = 0;
+		forward = false;
+	}
+
+	if( forward )
+	{
+		while ( distance-- )
+			segment = segment->m_next;
+	}
+	else
+	{
+		while ( distance-- )
+			segment = segment->m_prev;
+	}
+
+	m_currentIndex = index;
+	return m_current = segment;
+}
+
 
 VSegmentListIterator::VSegmentListIterator( const VSegmentList& list )
 {
 	m_list = const_cast<VSegmentList*>( &list );
 	m_current = m_list->m_first;
 
-	if ( !m_list->m_iteratorList )
+	if( !m_list->m_iteratorList )
 		m_list->m_iteratorList = new VSegmentListIteratorList();
 
 	m_list->m_iteratorList->add( this );
@@ -519,26 +629,26 @@ VSegmentListIterator::VSegmentListIterator( const VSegmentListIterator& itr )
 	m_list = itr.m_list;
 	m_current = itr.m_current;
 
-	if ( m_list )
+	if( m_list )
 		m_list->m_iteratorList->add( this );
 }
 
 VSegmentListIterator::~VSegmentListIterator()
 {
-	if ( m_list )
+	if( m_list )
 		m_list->m_iteratorList->remove( this );
 }
 
 VSegmentListIterator&
 VSegmentListIterator::operator=( const VSegmentListIterator& itr )
 {
-	if ( m_list )
+	if( m_list )
 		m_list->m_iteratorList->remove( this );
 
 	m_list = itr.m_list;
 	m_current = itr.m_current;
 
-	if ( m_list )
+	if( m_list )
 		m_list->m_iteratorList->add( this );
 
 	return *this;
@@ -547,7 +657,7 @@ VSegmentListIterator::operator=( const VSegmentListIterator& itr )
 VSegment*
 VSegmentListIterator::operator()()
 {
-	if ( m_current )
+	if( m_current )
 	{
 		VSegment* const old = m_current;
 		m_current = m_current->m_next;
@@ -560,7 +670,7 @@ VSegmentListIterator::operator()()
 VSegment*
 VSegmentListIterator::operator++()
 {
-	if ( m_current )
+	if( m_current )
 		return m_current = m_current->m_next;
 
 	return 0L;
@@ -578,7 +688,7 @@ VSegmentListIterator::operator+=( uint i )
 VSegment*
 VSegmentListIterator::operator--()
 {
-	if ( m_current )
+	if( m_current )
 		return m_current = m_current->m_prev;
 
 	return 0L;
