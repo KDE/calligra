@@ -1,0 +1,29 @@
+/* XPM */
+/* Drawn for the K Desktop Environment */
+/* See http://www.kde.org */
+static char*killustrator[]={
+"16 16 8 1",
+"d c #ff8000",
+". c None",
+"e c #c00000",
+"# c #000000",
+"c c #ffa858",
+"a c #ffc0c0",
+"f c #ffffff",
+"b c #ff0000",
+"....##.....##...",
+"..#####..#####..",
+"##ababa##babab##",
+"##bcbcb##cbcbc##",
+".#cbcbcbcbcbcb#.",
+".#bdbdbdbdbdbd#.",
+"..#bbbbbbbbbb#..",
+"..#ebebebebeb#..",
+"..##bbbbbbbb##..",
+"..##ebebeb#b##..",
+"....#ebeb#f##...",
+".....#eeee#ff#..",
+"......#ee##ff#..",
+".......##..##f#.",
+".......##....#f#",
+"..............#."};

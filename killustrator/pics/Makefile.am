@@ -44,4 +44,10 @@ EXTRA_DIST = $(data_DATA)
 # directory for pixmaps
 datadir = $(kde_datadir)/killustrator/pics
 
+install-data-local:
+	$(mkinstalldirs) $(kde_minidir)
+	$(INSTALL_DATA) mini-killustrator.xpm $(kde_minidir)/killustrator.xpm
+
+uninstall-local:
+	-rm -f $(kde_minidir)/killustrator.xpm
 
