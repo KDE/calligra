@@ -373,12 +373,12 @@ void KoCommandHistory::slotRedoActivated( QListBoxItem * item)
 
 void KoCommandHistory::slotChangeUndoNumberOfSelectedItem( int pos)
 {
-    d->m_undoLabel->setText( i18n("Undo %1 action").arg(pos+1));
+    d->m_undoLabel->setText( i18n("Undo %n action", "Undo %n actions", pos+1) );
 }
 
 void KoCommandHistory::slotChangeRedoNumberOfSelectedItem( int pos)
 {
-    d->m_redoLabel->setText( i18n("Redo %1 action").arg(pos+1));
+    d->m_redoLabel->setText( i18n("Redo %n action", "Redo %n actions", pos+1) );
 }
 
 
