@@ -64,18 +64,29 @@ void KWAnchor::move( int x, int y )
 }
 
 //#define DEBUG_DRAWING
+//#define DEBUG_DRAWING2
 
 void KWAnchor::draw( QPainter* p, int x, int y, int cx, int cy, int cw, int ch, const QColorGroup& cg, bool selected )
 {
     if ( m_deleted )
         return;
 
+    // containing text-frameset.
     KWTextFrameSet * fs = static_cast<KWTextDocument *>(textDocument())->textFrameSet();
     KoZoomHandler* zh = fs->textDocument()->paintingZoomHandler();
-    int paragy = /*zh->layoutUnitToPixelY*/( paragraph()->rect().y() );
+    int paragy = paragraph()->rect().y();
 #ifdef DEBUG_DRAWING
     kdDebug(32001) << "KWAnchor::draw x:" << x << ", y:" << y << " paragy=" << paragy
                    << "  cliprect(LU)" << DEBUGRECT( QRect( cx,cy,cw,ch ) ) << endl;
+#endif
+
+    // What are we going to draw and where; (all in Layout Units)
+    int leftLU = QMAX(cx > 0 ? cx : 0,x);
+    int topLU = QMAX(y+paragy,-cy);
+    int rightLU = leftLU + QMIN(width,cw);
+    int bottomLU = QMIN(y + paragy + height, paragy+cy+ch);
+#ifdef DEBUG_DRAWING
+    kdDebug(32001) << "KWAnchor::draw x1: " << leftLU << ", y1: " << topLU << ", x2: " << rightLU << ", y2: " << bottomLU << endl;
 #endif
 
     if ( x != xpos || y != ypos ) { // shouldn't happen I guess ?
@@ -83,38 +94,38 @@ void KWAnchor::draw( QPainter* p, int x, int y, int cx, int cy, int cw, int ch, 
         move( x, y );
     }
 
-    p->save();
-    // Determine crect in view coords
+    KoPoint tmpPoint;
+    KWFrame *containingFrame=fs->internalToDocument(QPoint(leftLU, topLU), tmpPoint );
 
-    // 1 - in internal (LU) coords
-    QRect crect_lu;
-    if ( cx == -1 && cy+paragy == -1 && cw == -1 && ch == -1 )
-        crect_lu = QRect( x, y+paragy, width, height );
-    else
-        crect_lu = QRect( cx > 0 ? cx : 0, cy+paragy, cw, ch );
-#ifdef DEBUG_DRAWING
-    kdDebug() << "KWAnchor::draw crect ( in internal coords; LU ) = " << DEBUGRECT( crect_lu ) << endl;
-#endif
+    if(containingFrame==0L) {
+        kdDebug() << "KWAnchor::paint Hmm? it seems my frame is positioned outside all text areas!!, aboring draw\n";
+        return;
+    }
+
+    // left side from the containing frameset and we can get the top from the calculated point of our parag.
+    tmpPoint.setX(containingFrame->x());
+    KoPoint topLeft=zh->zoomPoint(tmpPoint);
+
+    // Determine crect in view coords
+    // 1 - use the LU ints above..
     // 2 - convert to view coords, first topleft then bottomright
-    QPoint cnPoint = crect_lu.topLeft(); //fallback
-    KoPoint dPoint;
-    if ( fs->internalToDocument( crect_lu.topLeft(), dPoint ) )
-        cnPoint = zh->zoomPoint( dPoint );
-    else
-        kdDebug() << "KWAnchor::draw internalToNormal returned 0L for topLeft of crect!" << endl;
-#ifdef DEBUG_DRAWING
+    fs->internalToDocument( QPoint(leftLU, topLU), tmpPoint);
+    QPoint cnPoint = zh->zoomPoint( tmpPoint );
+    /*else
+        kdDebug() << "KWAnchor::draw internalToNormal returned 0L for topLeft of crect!" << endl; */
+#ifdef DEBUG_DRAWING2
     kdDebug() << "KWAnchor::draw cnPoint in normal coordinates " << cnPoint.x() << "," << cnPoint.y() << endl;
 #endif
     cnPoint = fs->currentViewMode()->normalToView( cnPoint );
     //kdDebug() << "KWAnchor::draw cnPoint in view coordinates " << cnPoint.x() << "," << cnPoint.y() << endl;
-    QRect crect;
+
+    QRect crect; // clipping rect in view coordinates. (pixels)
     crect.setLeft( cnPoint.x() );
     crect.setTop( cnPoint.y() );
-    QPoint brnPoint; // bottom right in normal coords
-    if ( fs->internalToDocument( crect_lu.bottomRight(), dPoint ) )
+    if ( fs->internalToDocument( QPoint(rightLU, bottomLU), tmpPoint ) )
     {
-        brnPoint = zh->zoomPoint( dPoint );
-#ifdef DEBUG_DRAWING
+        QPoint brnPoint = zh->zoomPoint( tmpPoint );
+#ifdef DEBUG_DRAWING2
         kdDebug() << "KWAnchor::draw brnPoint in normal coordinates " << brnPoint.x() << "," << brnPoint.y() << endl;
 #endif
         brnPoint = fs->currentViewMode()->normalToView( brnPoint );
@@ -124,7 +135,7 @@ void KWAnchor::draw( QPainter* p, int x, int y, int cx, int cy, int cw, int ch, 
     else
         kdWarning() << "internalToNormal returned 0L for bottomRight=" << crect.right() << "," << crect.bottom() << endl;
 #ifdef DEBUG_DRAWING
-    kdDebug() << "KWAnchor::draw crect (in view coords) = " << DEBUGRECT( crect ) << endl;
+    kdDebug() << "KWAnchor::draw crect (in pixel) = " << DEBUGRECT( crect ) << endl;
 #endif
 
     KWFrame *frame = fs->currentDrawnFrame();
@@ -147,26 +158,11 @@ void KWAnchor::draw( QPainter* p, int x, int y, int cx, int cy, int cw, int ch, 
     // (this is exactly the opposite of the code in KWFrameSet::drawContents)
     // (It does translate(view - internal), so we do translate(internal - view))
 
-    // The amount we have to move depends on the frame we are positioned in, as we don't know this
-    // lets find out via our containting frameset.
-    KoPoint topLeft = KoPoint(
-        zh->unzoomItX(m_frameset->frame(m_frameNum)->outerRect().x()) + 2, // we add one to x and y to 
-        zh->unzoomItY(m_frameset->frame(m_frameNum)->outerRect().y()) + 2);// compensate for rounding errors.
-
-    QPoint dud;
-    KWFrame *containingFrame=fs->documentToInternal(topLeft, dud, false);
-
-    if(containingFrame==0L) {
-        kdDebug() << "KWAnchor::paint Hmm? it seems my frame is positioned outside all text areas!!, aboring draw\n";
-        return;
-    }
-    // left side from the containing frameset and we can get the top from the m_frameset frame.
-    topLeft=zh->zoomPoint(containingFrame->topLeft());
-
 #ifdef DEBUG_DRAWING
-    kdDebug() << "KWAnchor::draw translating by " << 0-topLeft.x() << "," << -1-m_frameset->frame(m_frameNum)->outerRect().y() << endl;
+    kdDebug() << "KWAnchor::draw translating by " << -topLeft.x() << "," << -topLeft.y() << endl;
 #endif
-    p->translate( 0-topLeft.x(), -1 - m_frameset->frame(m_frameNum)->outerRect().y());
+    p->save();
+    p->translate( -topLeft.x(),-topLeft.y());
     QColorGroup cg2( cg );
     m_frameset->drawContents( p, crect, cg2, false, true, 0L, fs->currentViewMode(), fs->currentDrawnCanvas() );
 
