@@ -3491,7 +3491,7 @@ KPObject * KPrPage::getCursor(const QPoint &pos )
     QPtrListIterator<KPObject> it( m_objectList );
     for ( ; it.current() ; ++it )
     {
-        if(it.current()->contains(pos)) {
+        if(it.current()->contains(pos,m_doc->zoomHandler())) {
             if(it.current()->isSelected())
                 return it.current();
             break;
@@ -3547,7 +3547,7 @@ KPObject * KPrPage::getEditObj(const KoPoint & pos)
     if ( (int)m_objectList.count() - 1 >= 0 ) {
         for ( int i = m_objectList.count()  - 1; i >= 0; i-- ) {
             kpobject = m_objectList.at( i );
-            if ( kpobject->contains( pos ) ) {
+            if ( kpobject->contains( pos,m_doc->zoomHandler() ) ) {
                 return kpobject;
             }
         }
@@ -3562,7 +3562,7 @@ KPObject* KPrPage::getObjectAt( const KoPoint&pos )
   KPObject *obj=0L;
   for ( int i = m_objectList.count() - 1; i >= 0 ; i-- ) {
     obj = m_objectList.at( i );
-    if ( obj->contains( pos ) )
+    if ( obj->contains( pos,m_doc->zoomHandler() ) )
       return obj;
   }
   obj=0L;

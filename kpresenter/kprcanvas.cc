@@ -393,7 +393,7 @@ void KPrCanvas::mousePressEvent( QMouseEvent *e )
     {
         KPTextObject *txtObj=m_currentTextObjectView->kpTextObject();
         Q_ASSERT(txtObj);
-        if(txtObj->contains( docPoint ))
+        if(txtObj->contains( docPoint,m_view->zoomHandler() ))
         {
             KoPoint pos = docPoint - txtObj->getOrig(); // in pt, but now translated into the object's coordinate system
             mousePressed=true;
@@ -417,7 +417,7 @@ void KPrCanvas::mousePressEvent( QMouseEvent *e )
 
     //disallow selecting objects outside the "page"
     if ( editMode ) {
-        if( !m_activePage->getPageRect().contains( docPoint ) )
+        if( !m_activePage->getPageRect().contains( docPoint,m_view->zoomHandler() ) )
             return;
     }
 
@@ -764,7 +764,7 @@ void KPrCanvas::mouseReleaseEvent( QMouseEvent *e )
     {
         KPTextObject *txtObj=m_currentTextObjectView->kpTextObject();
         Q_ASSERT(txtObj);
-        if(txtObj->contains( docPoint ))
+        if(txtObj->contains( docPoint,m_view->zoomHandler() ))
         {
             m_currentTextObjectView->mouseReleaseEvent( e, contentsPoint );
             mousePressed=false;
@@ -834,14 +834,14 @@ void KPrCanvas::mouseReleaseEvent( QMouseEvent *e )
                 QPtrListIterator<KPObject> it( getObjectList() );
                 for ( ; it.current() ; ++it )
                 {
-                    if ( it.current()->intersects( m_view->zoomHandler()->unzoomRect(rubber) ) )
+                    if ( it.current()->intersects( m_view->zoomHandler()->unzoomRect(rubber),m_view->zoomHandler() ) )
                         selectObj( it.current() );
                 }
 
                 QPtrListIterator<KPObject> sIt(m_view->kPresenterDoc()->stickyPage()->objectList() );
                 for ( ; sIt.current() ; ++sIt )
                 {
-                    if ( sIt.current()->intersects( m_view->zoomHandler()->unzoomRect(rubber) ) )
+                    if ( sIt.current()->intersects( m_view->zoomHandler()->unzoomRect(rubber),m_view->zoomHandler() ) )
                         selectObj( sIt.current() );
                 }
 
@@ -1080,7 +1080,7 @@ void KPrCanvas::mouseMoveEvent( QMouseEvent *e )
     {
         KPTextObject *txtObj=m_currentTextObjectView->kpTextObject();
         Q_ASSERT(txtObj);
-        if(txtObj->contains( docPoint )&&mousePressed)
+        if(txtObj->contains( docPoint,m_view->zoomHandler() )&&mousePressed)
         {
             KoPoint pos = docPoint - txtObj->getOrig();
             m_currentTextObjectView->mouseMoveEvent( e, m_view->zoomHandler()->ptToLayoutUnitPix( pos ) ); // in LU pixels
@@ -1335,7 +1335,7 @@ void KPrCanvas::mouseDoubleClickEvent( QMouseEvent *e )
     {
       KPTextObject *txtObj=m_currentTextObjectView->kpTextObject();
       Q_ASSERT(txtObj);
-      if(txtObj->contains( docPoint ))
+      if(txtObj->contains( docPoint,m_view->zoomHandler() ))
         {
 	  KoPoint pos = contentsPoint - txtObj->getOrig();
 	  //pos=m_view->zoomHandler()->pixelToLayoutUnit(QPoint(pos.x(),pos.y()));
@@ -1345,7 +1345,7 @@ void KPrCanvas::mouseDoubleClickEvent( QMouseEvent *e )
     }
 
   //disallow activating objects outside the "page"
-  if ( !m_activePage->getPageRect().contains(docPoint))
+  if ( !m_activePage->getPageRect().contains(docPoint,m_view->zoomHandler()))
     return;
 
   if ( toolEditMode != TEM_MOUSE || !editMode ) return;
@@ -4025,7 +4025,7 @@ void KPrCanvas::selectNext()
         }
     }
     if ( !QRect( diffx(), diffy(), width(), height() ).
-         contains( m_view->zoomHandler()->zoomRect(m_activePage->getSelectedObj()->getBoundingRect( m_view->zoomHandler() ) ) ))
+         contains( m_view->zoomHandler()->zoomRect(m_activePage->getSelectedObj()->getBoundingRect( m_view->zoomHandler() ) ),m_view->zoomHandler() ))
         m_view->makeRectVisible( m_view->zoomHandler()->zoomRect( m_activePage->getSelectedObj()->getBoundingRect( m_view->zoomHandler() ) ));
     _repaint( false );
 }
