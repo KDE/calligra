@@ -27,7 +27,6 @@
 #include "koSpell.h"
 #ifdef HAVE_LIBASPELL
 
-class QTextCodec;
 class KOSpellDlg;
 class AspellSpeller;
 class AspellConfig;

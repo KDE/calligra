@@ -52,13 +52,6 @@
 
 #define MAXLINELENGTH 10000
 
-enum {
-	GOOD=     0,
-	IGNORE=   1,
-	REPLACE=  2,
-	MISTAKE=  3
-};
-
 
 KOASpell::KOASpell( KOSpellConfig *_ksc )
     :KOSpell(_ksc)
