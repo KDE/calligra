@@ -24,24 +24,26 @@
 #include <unistd.h>
 #endif
 
+#include <kdebug.h>
 #include <qfile.h>
 #include <qtextstream.h>
 #include <qmessagebox.h>
-#include <applixgraphicimport.h>
-#include <kdebug.h>
 #include <koFilterChain.h>
 #include <kgenericfactory.h>
 #include <math.h>
 
-typedef KGenericFactory<APPLIXGRAPHICImport, KoFilter> APPLIXGRAPHICImportFactory;
-K_EXPORT_COMPONENT_FACTORY( libapplixgraphicimport, APPLIXGRAPHICImportFactory( "kontourapplixgraphicsfilter" ) );
+#include <applixgraphicimport.h>
 
+typedef KGenericFactory<APPLIXGRAPHICImport, KoFilter> APPLIXGRAPHICImportFactory;
+K_EXPORT_COMPONENT_FACTORY( libapplixgraphicimport, APPLIXGRAPHICImportFactory( "karbonapplixgraphicsfilter" ) );
+
+int s_area = 30517;
 
 /******************************************************************************
- *  class: applixGraphicsLine          funktion:  constructor                 *
+ *  class: applixGraphicsLine          function:  constructor                 *
  ******************************************************************************
  *                                                                            *
- *  Short description : - Inialize all variables                              *
+ *  Short description : - Initialize all variables                            *
  *                                                                            *
  *                                                                            *
  ******************************************************************************/
@@ -64,10 +66,10 @@ applixGraphicsLine::applixGraphicsLine()
 
 
 /******************************************************************************
- *  class: applixGraphicsRect          funktion:  constructor                 *
+ *  class: applixGraphicsRect          function:  constructor                 *
  ******************************************************************************
  *                                                                            *
- *  Short description : - Inialize all variables                              *
+ *  Short description : - Initialize all variables                            *
  *                                                                            *
  *                                                                            *
  ******************************************************************************/
@@ -99,12 +101,7 @@ applixGraphicsRect::applixGraphicsRect() : applixGraphicsLine()
     xr[i] = 0;
   }
 
-
-
 }
-
-
-
 
 
 
@@ -127,7 +124,7 @@ APPLIXGRAPHICImport::APPLIXGRAPHICImport (KoFilter *, const char *, const QStrin
 
 
 /******************************************************************************
- *  class: APPLIXGRAPHICImport          funktion:  filter                     *
+ *  class: APPLIXGRAPHICImport          function:  filter                     *
  ******************************************************************************
  *                                                                            *
  *  Short description : - Read inputfile,                                     *
@@ -140,7 +137,7 @@ KoFilter::ConversionStatus APPLIXGRAPHICImport::convert( const QCString& from, c
 {
 
     // Check MIME Types
-    if (to!="application/x-kontour" || from!="application/x-applixgraphic")
+    if (to!="application/x-karbon" || from!="application/x-applixgraphic")
         return KoFilter::NotImplemented;
 
     // Open Inputfile
@@ -154,23 +151,23 @@ KoFilter::ConversionStatus APPLIXGRAPHICImport::convert( const QCString& from, c
 
     QString str;
 
-    // Create killstrator header
+    // Create karbon header
     str += "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n";
-    str += "<!DOCTYPE killustrator>\n";
-    str += " <killustrator mime=\"application/x-killustrator\" version=\"2\" editor=\"APPLIXGRAPHICS import filter\">\n";
-    str += "  <head>\n";
-    str += "   <layout width=\"210\" lmargin=\"0\" format=\"a4\" bmargin=\"0\" height=\"297\" rmargin=\"0\" tmargin=\"0\" orientation=\"portrait\"/>\n";
-    str += "   <grid dx=\"20\" dy=\"20\" align=\"0\">\n";
-    str += "    <helplines align=\"0\"/>\n";
-    str += "   </grid>\n";
-    str += "  </head>\n";
-    str += "  <layer>\n";
+    str += "<!DOCTYPE karbon>\n";
+    str += " <karbon mime=\"application/x-karbon\" version=\"2\" editor=\"APPLIXGRAPHICS import filter\">\n";
+//      str += "  <head>\n";
+//      str += "   <layout width=\"210\" lmargin=\"0\" format=\"a4\" bmargin=\"0\" height=\"297\" rmargin=\"0\" tmargin=\"0\" orientation=\"portrait\"/>\n";
+//      str += "   <grid dx=\"20\" dy=\"20\" align=\"0\">\n";
+//      str += "    <helplines align=\"0\"/>\n";
+//      str += "   </grid>\n";
+//      str += "  </head>\n";
+    str += "  <layer name=\"ag-layer\" visible=\"1\">\n";
 
     QTextStream stream(&in);
     int step  = in.size()/50;
     int value = 0;
     int i     = 0;
-    int merker= 0;
+    int picture_rememberer = 0;
     int pos   = 0;
     int vers[3] = { 0, 0, 0 };
     int rueck;  // Check scanf inputs
@@ -181,13 +178,13 @@ KoFilter::ConversionStatus APPLIXGRAPHICImport::convert( const QCString& from, c
     rueck = sscanf ((const char *) mystr.latin1() ,
                     "*BEGIN GRAPHICS VERSION=%d/%d ENCODING=%dBIT",
 	             &vers[0], &vers[1], &vers[2]);
-    printf ("Versions info: %d %d %d\n", vers[0], vers[1], vers[2]);
+    kdDebug (s_area) << "Versions info: " << vers[0] << vers[1] << vers[2] << endl;
 
     // Check the headline
     if (rueck <= 0)
     {
-      printf ("Header not correkt - May be it is not an applixgraphics file\n");
-      printf ("Headerline: <%s>\n", (const char *) mystr.latin1());
+      kdDebug (s_area) << "Header not correkt - May be it is not an applixgraphics file" << endl;
+      kdDebug (s_area) << "Headerline: " << mystr << endl;
 
       QMessageBox::critical (0L, "Applixgraphics header problem",
                                   QString ("The Applixgraphics header is not correct. "
@@ -205,21 +202,22 @@ KoFilter::ConversionStatus APPLIXGRAPHICImport::convert( const QCString& from, c
 
         // Read one line
         mystr = stream.readLine ();
-        printf ("<<%s>>\n", (const char *) mystr.latin1());
+        kdDebug (s_area) << "<<" << mystr << ">>" << endl;
 
-        if      (mystr == "PICTURE")     merker = 1;
-        else if (mystr == "END PICTURE") merker = 0;
+        if      (mystr == "PICTURE")     picture_rememberer = 1;
+        else if (mystr == "END PICTURE") picture_rememberer = 0;
 
 
-        // Detect Point at the first place of the Linie
-        else if ((mystr[0] == '.') && (merker == 1))
+        // Detect a point at the first place of the ascii_linie
+        else if ((mystr[0] == '.') && (picture_rememberer == 1))
 	{
-          // Delete  Point at the first place of the Linie
+          // Delete point at the first place of the ascii_linie
           mystr.remove (0, 1);
-          printf ("StartPoint recognized <%s>\n", (const char *) mystr.latin1() );
+          kdDebug (s_area) << "StartPoint recognized <" << mystr << ">" << endl;
+
 
           /********************************************************************
-           * Element LINE                                                     *
+           * Element "LINE"                                                   *
            ********************************************************************/
           if (mystr.startsWith ("LINE AT") )
 	  {
@@ -228,59 +226,69 @@ KoFilter::ConversionStatus APPLIXGRAPHICImport::convert( const QCString& from, c
 
             //str += agLine.read (int, mystr);
 
-            printf (" Linie recognized: \n");
+            kdDebug (s_area) << " Linie recognized: " << endl;
             mystr.remove (0, 8);
+            //mystr.remove (0, 7);
 
+
+            //remove_pos = mystr.find ('(');
+            //mystr.remove (0, remove_pos);
+            //agLine.offX= mystr.toInt();
+
+            //remove_pos = mystr.find (',');
+            //mystr.remove (0, remove_pos);
+            //agLine.offY= mystr.toInt();
             rueck = sscanf ((const char *) mystr.latin1(), "(%d,%d)",
                             &agLine.offX, &agLine.offY);
-	    printf ("  Offset ->   x:%2d  y:%2d\n", agLine.offX, agLine.offY);
+	    kdDebug (s_area) << "  Offset ->   x:" << agLine.offX << "  y:" << agLine.offY << endl;
             if (rueck <= 0)
 	    {
-              printf ("LINE tag not correkt \n");
-              printf ("LINE: <%s>\n", (const char *) mystr.latin1());
+              kdDebug (s_area) << "LINE tag not correkt" << endl;
+              kdDebug (s_area) << "LINE: <" << mystr << ">" << endl;
               return KoFilter::StupidError;
 	    }
 
             do
 	    {
-              // Akutelle Position bestimmen
+              // Get acutal position 
               pos = in.at ();
-              // Zeile einlesen
+              // Read one line
               mystr = stream.readLine ();
+
 	      if      (mystr.startsWith (" RECOLOR ") )
 	      {
-                printf ("  Recolor  ");
+                kdDebug (s_area) << "  Recolor  ";
                 mystr.remove (0, 9);
                 if      (mystr == "ON")
                 {
-                  printf ("On\n");
+                  kdDebug (s_area) << "On" << endl;
                   agLine.reColor = true;
                 }
                 else if (mystr == "OFF")
                 {
-                  printf ("Off\n");
+                  kdDebug (s_area) << "Off" << endl;
                   agLine.reColor = false;
                 }
                 else
                 {
-                   printf ("!!!!!    Whats that <%s>\n", (const char *) mystr.latin1() );
+                   kdDebug (s_area) << "!!!!!    Unknown RECOLOR item <" << mystr << ">" << endl;
                 }
 	      }
 	      else if (mystr.startsWith (" THICKNESS ") )
 	      {
-                printf ("  Thickness: ");
+                kdDebug (s_area) << "  Thickness: ";
                 mystr.remove (0, 11);
                 sscanf ((const char *) mystr.latin1(), "%d", &agLine.thickNess);
-                printf ("%d\n", agLine.thickNess);
+                // 
+                kdDebug (s_area) <<  agLine.thickNess << endl;
 	      }
 	      else if (mystr.startsWith (" PNTS ") )
 	      {
-                printf ("  Pnts    : ");
+                kdDebug (s_area) << "  Pnts    : ";
                 mystr.remove (0, 6);
                 sscanf ((const char *) mystr.latin1(), "(%d,%d)(%d,%d)",
                         &agLine.ptX[0], &agLine.ptY[0], &agLine.ptX[1], &agLine.ptY[1]);
-                printf ("%d %d %d %d\n",
-                         agLine.ptX[0],  agLine.ptY[0],  agLine.ptX[1],  agLine.ptY[1]);
+                kdDebug (s_area) << agLine.ptX[0] << " " << agLine.ptY[0] << " "  << agLine.ptX[1] << " "  << agLine.ptY[1] << endl;
 	      }
 
 	    }
@@ -325,16 +333,16 @@ KoFilter::ConversionStatus APPLIXGRAPHICImport::convert( const QCString& from, c
 
             //str += agLine.read (int, mystr);
 
-            printf (" RPOL recognized: \n");
+            kdDebug (s_area) << " RPOL recognized: " << endl;
             mystr.remove (0, 8);
 
             rueck = sscanf ((const char *) mystr.latin1(), "(%d,%d)",
                             &agLine.offX, &agLine.offY);
-	    printf ("  Offset ->   x:%2d  y:%2d\n", agLine.offX, agLine.offY);
+	    kdDebug (s_area) << "  Offset ->   x:" << agLine.offX << "  y:" << agLine.offY << endl;
             if (rueck <= 0)
 	    {
-              printf ("RPOL tag not correkt \n");
-              printf ("RPOL: <%s>\n", (const char *) mystr.latin1());
+              kdDebug (s_area) << "RPOL tag not correkt " << endl;
+              kdDebug (s_area) << "RPOL: <" << mystr << ">" << endl;
               return KoFilter::StupidError;
 	    }
 
@@ -344,48 +352,53 @@ KoFilter::ConversionStatus APPLIXGRAPHICImport::convert( const QCString& from, c
               pos = in.at ();
               // Zeile einlesen
               mystr = stream.readLine ();
+//checkSubElement (mystr, subelements)
 	      if      (mystr.startsWith (" RECOLOR ") )
 	      {
-                printf ("  Recolor  ");
+                kdDebug (s_area) << "  Recolor  " ;
                 mystr.remove (0, 9);
                 if      (mystr == "ON")
                 {
-                  printf ("On\n");
+                  kdDebug (s_area) << "On" << endl;
                   agLine.reColor = true;
                 }
                 else if (mystr == "OFF")
                 {
-                  printf ("Off\n");
+                  kdDebug (s_area) << "Off" << endl;
                   agLine.reColor = false;
                 }
                 else
                 {
-                   printf ("!!!!!    Whats that <%s>\n", (const char *) mystr.latin1() );
+                   kdDebug (s_area) << "!!!!!    Whats that <" << mystr << ">" << endl;
                 }
 	      }
 	      else if (mystr.startsWith (" NSIDES") )
 	      {
-                printf ("  NSIDES: ");
+                kdDebug (s_area) << "  NSIDES: " ;
                 mystr.remove (0, 8);
                 pos = sscanf ((const char *) mystr.latin1(), "%d", &nsides);
-                printf ("%d(%d)\n", nsides, pos);
+                kdDebug (s_area) << nsides << "(" << pos << ")" << endl;
 	      }
 	      else if (mystr.startsWith (" PNTS ") )
 	      {
-                printf ("  Pnts    : ");
+                kdDebug (s_area) << "  Pnts    : ";
                 mystr.remove (0, 6);
                 sscanf ((const char *) mystr.latin1(), "(%d,%d)(%d,%d)(%d,%d)(%d,%d)(%d,%d)",
                         &agLine.ptX[0], &agLine.ptY[0], &agLine.ptX[1], &agLine.ptY[1],
                         &agLine.ptX[2], &agLine.ptY[2], &agLine.ptX[3], &agLine.ptY[3],
                         &agLine.ptX[4], &agLine.ptY[4]);
-                printf ("%d %d   %d %d   %d %d   %d %d   %d %d\n",
-                         agLine.ptX[0],  agLine.ptY[0],  agLine.ptX[1],  agLine.ptY[1],
-                         agLine.ptX[2],  agLine.ptY[2],  agLine.ptX[3],  agLine.ptY[3],
-                         agLine.ptX[4],  agLine.ptY[4]);
+                kdDebug (s_area) << agLine.ptX[0] << " " << agLine.ptY[0] << "   " <<
+                                    agLine.ptX[1] << " " << agLine.ptY[1] << "   " <<
+                                    agLine.ptX[2] << " " << agLine.ptY[2] << "   " <<
+                                    agLine.ptX[3] << " " << agLine.ptY[3] << "   " <<
+		                    agLine.ptX[4] << " " << agLine.ptY[4] << endl;
 	      }
+//checkSubElement() ende
 
 	    }
 	    while ((mystr[0] != '.') && (mystr[0] != 'E'));
+
+
 
             // An die Position zurueckspringen
             in.at (pos);
@@ -433,64 +446,64 @@ KoFilter::ConversionStatus APPLIXGRAPHICImport::convert( const QCString& from, c
             //applixGraphicsText agText;
             applixGraphicsLine agText;
 
-            printf (" Habe Text erkannt (keine Werte uebernommen)\n");
+            kdDebug (s_area) << " Habe Text erkannt (keine Werte uebernommen)" << endl;
             mystr.remove (0, 7);
             sscanf ((const char *) mystr.latin1(), "(%d,%d)",
                     &agText.offX, &agText.offY);
-	    printf ("  Offset ->   x:%2d  y:%2d\n",
-                    agText.offX,   agText.offY);
+	    kdDebug (s_area) << "  Offset ->   x:" << agText.offX << "  y:" << agText.offY << endl;
 
 
             do
 	    {
-              // Akutelle Position bestimmen
+              // Aktuelle Position bestimmen
               pos = in.at ();
               // Zeile einlesen
               mystr = stream.readLine ();
+//checkSubElement() 
 	      if      (mystr.startsWith (" RECOLOR ") )
 	      {
-                printf ("  Recolor  : ");
+                kdDebug (s_area) << "  Recolor  : ";
                 mystr.remove (0, 9);
                 if      (mystr == "ON")
                 {
-                  printf ("On\n");
+                  kdDebug (s_area) << "On" << endl;
                   agText.reColor = true;
                 }
                 else if (mystr == "OFF")
                 {
-                  printf ("Off\n");
+                  kdDebug (s_area) << "Off" << endl;
                   agText.reColor = false;
                 }
                 else
                 {
-                   printf ("!!!!!     Whats that <%s>\n", (const char *) mystr.latin1() );
+                   kdDebug (s_area) << "!!!!!     Whats that <" << mystr << ">" << endl;
                 }
 	      }
 	      else if (mystr.startsWith (" .STR") )
 	      {
-                printf (" Textstring: ");
+                kdDebug (s_area) << " Textstring: ";
 
                 // Zeile einlesen
                 agText.str = stream.readLine ();
                 agText.str.remove (0, 3);  // delete ront part
-                printf ("%s\n", (const char *) agText.str.latin1());
+                kdDebug (s_area) << agText.str;
 	      }
 	      else if (mystr.startsWith (" THICKNESS ") )
 	      {
-                printf ("  Thickness: ");
+                kdDebug (s_area) << "  Thickness: ";
                 mystr.remove (0, 11);
                 sscanf ((const char *) mystr.latin1(), "%d", &agText.thickNess);
-                printf ("%d\n", agText.thickNess);
+                kdDebug (s_area) <<  agText.thickNess << endl;
 	      }
 	      else if (mystr.startsWith (" PNTS ") )
 	      {
-                printf ("  Pnts    : ");
+                kdDebug (s_area) << "  Pnts    : ";
                 mystr.remove (0, 6);
                 sscanf ((const char *) mystr.latin1(), "(%d,%d)(%d,%d)",
                         &agText.ptX[0], &agText.ptY[0], &agText.ptX[1], &agText.ptY[1]);
-                printf ("%d %d %d %d",
-                         agText.ptX[0],  agText.ptY[0],  agText.ptX[1],  agText.ptY[1]);
+                kdDebug (s_area) << agText.ptX[0] << " " << agText.ptY[0] << " " << agText.ptX[1] << " " << agText.ptY[1];
 	      }
+//checkSubElement() ende
 
 	    }
 	    while ((mystr[0] != '.') && (mystr[0] != 'E'));
@@ -521,11 +534,11 @@ KoFilter::ConversionStatus APPLIXGRAPHICImport::convert( const QCString& from, c
 	  {
             applixGraphicsRect agRect;
 
-            printf (" Habe Rectangle erkannt \n");
+            kdDebug (s_area) << " Habe Rectangle erkannt " << endl;
             mystr.remove (0, 8);
             rueck = sscanf ((const char *)mystr.latin1(), "(%d,%d)",    &agRect.offX, &agRect.offY);
-	    if (rueck < 1) printf ("Fehler im String <%s>\n", (const char *)mystr.latin1());
-	    printf ("  Offset ->   x:%2d  y:%2d\n", agRect.offX, agRect.offY);
+	    if (rueck < 1) kdDebug (s_area) <<"Fehler im String <" << mystr.latin1() << ">" << endl;
+	    kdDebug (s_area) << "  Offset ->   x:" << agRect.offX << "  y:" << agRect.offY << endl;
 
 
             do
@@ -535,117 +548,121 @@ KoFilter::ConversionStatus APPLIXGRAPHICImport::convert( const QCString& from, c
               // read one line
               mystr = stream.readLine ();
 
+//checkSubElement()
               // option RECOLOR
 	      if      (mystr.startsWith (" RECOLOR ") )
 	      {
-                printf ("  Recolor : ");
+                kdDebug (s_area) <<("  Recolor : ");
                 mystr.remove (0, 9);
                 if      (mystr == "ON")
-                {  printf ("On\n");  agRect.reColor = true;}
+                {  kdDebug (s_area) << "On" << endl;  agRect.reColor = true;}
                 else if (mystr == "OFF")
-                { printf ("Off\n");  agRect.reColor = false;}
+                { kdDebug (s_area) << "Off" << endl;  agRect.reColor = false;}
                 else
                 {
-                   printf ("!!!!!     Whats that <%s>\n", (const char *) mystr.latin1() );
+                   kdDebug (s_area) << "!!!!!    Whats that <" << mystr << ">" << endl;
                 }
 	      }
               // option BACKFILL
 	      else if (mystr.startsWith (" BACKFILL ") )
 	      {
-                printf ("  Backfill: ");
+                kdDebug (s_area) <<("  Backfill: ");
                 mystr.remove (0, 12);
                 sscanf ((const char *)mystr.latin1(), "<%d %d %d %d %d %d %d>",
                         &agRect.bf[0], &agRect.bf[1], &agRect.bf[2],
                         &agRect.bf[3], &agRect.bf[4], &agRect.bf[5],
                         &agRect.bf[6]);
-                printf ("%d %d %d %d %d %d %d\n",
-                        agRect.bf[0], agRect.bf[1], agRect.bf[2],
-                        agRect.bf[3], agRect.bf[4], agRect.bf[5],
-                        agRect.bf[6]);
+                kdDebug (s_area) << agRect.bf[0] << " " << agRect.bf[1] << " "  <<
+                                    agRect.bf[2] << " " << agRect.bf[3] << " "  << 
+                                    agRect.bf[4] << " " << agRect.bf[5] << " "  <<
+                                    agRect.bf[6];
+
 	      }
               // option LINEFILL
 	      else if (mystr.startsWith (" LINEFILL ") )
 	      {
-                printf ("  Linefill: ");
+                kdDebug (s_area) << "  Linefill: ";
                 mystr.remove (0, 12);
                 sscanf ((const char *)mystr.latin1(), "<%d %d %d %d %d %d %d>",
                         &agRect.lf[0], &agRect.lf[1], &agRect.lf[2],
                         &agRect.lf[3], &agRect.lf[4], &agRect.lf[5],
                         &agRect.lf[6]);
-                printf ("%d %d %d %d %d %d %d\n",
-                        agRect.lf[0], agRect.lf[1], agRect.lf[2],
-                        agRect.lf[3], agRect.lf[4], agRect.lf[5],
-                        agRect.lf[6]);
+                kdDebug (s_area) << agRect.lf[0] << " " << agRect.lf[1] << " "  <<
+                                    agRect.lf[2] << " " << agRect.lf[3] << " "  << 
+                                    agRect.lf[4] << " " << agRect.lf[5] << " "  <<
+                                    agRect.lf[6];
+
 	      }
               // option SHADOW
 	      else if (mystr.startsWith (" SHADOW ")  )
 	      {
-                printf ("  Shadow  : ");
+                kdDebug (s_area) << "  Shadow  : ";
                 mystr.remove (0, 12);
                 sscanf ((const char *)mystr.latin1(), "<%d %d %d %d %d>",
                         &agRect.sh[0], &agRect.sh[1], &agRect.sh[2],
                         &agRect.sh[3], &agRect.sh[4]);
-                printf ("%d %d %d %d %d\n",
-                        agRect.sh[0], agRect.sh[1], agRect.sh[2],
-                        agRect.sh[3], agRect.sh[4]);
+                kdDebug (s_area) << agRect.sh[0] << " " << agRect.sh[1] << " "  <<
+                                    agRect.sh[2] << " " << agRect.sh[3] << " "  << 
+                                    agRect.sh[4];
 	      }
               // option PARA
 	      else if (mystr.startsWith (" PARA ")  )
 	      {
-                printf ("  Para    : ");
+                kdDebug (s_area) << "  Para    : ";
                 mystr.remove (0, 12);
                 sscanf ((const char *)mystr.latin1(), "<%d %d %d %d %d %d %d %d>",
                         &agRect.pa[0], &agRect.pa[1], &agRect.pa[2],
                         &agRect.pa[3], &agRect.pa[4], &agRect.pa[5],
                         &agRect.pa[6], &agRect.pa[7]);
-                printf ("%d %d %d %d %d %d %d %d\n",
-                        agRect.pa[0], agRect.pa[1], agRect.pa[2],
-                        agRect.pa[3], agRect.pa[4], agRect.pa[5],
-                        agRect.pa[6], agRect.pa[7]);
+                kdDebug (s_area) << agRect.pa[0] << " " << agRect.pa[1] << " "  <<
+                                    agRect.pa[2] << " " << agRect.pa[3] << " "  << 
+                                    agRect.pa[4] << " " << agRect.pa[5] << " "  <<
+                                    agRect.pa[6] << " " << agRect.pa[7] ;
+
 	      }
               // option THICKNESS
 	      else if (mystr.startsWith (" THICKNESS ") )
 	      {
-                printf ("  Thickness: ");
+                kdDebug (s_area) << "  Thickness: ";
                 mystr.remove (0, 11);
                 sscanf ((const char *) mystr.latin1(), "%d", &agRect.thickNess);
-                printf ("%d\n", agRect.thickNess);
+                kdDebug (s_area) << agRect.thickNess << endl;
 	      }
               // option V_SPACE
 	      else if (mystr.startsWith (" V_SPACE ") )
 	      {
-                printf ("  V_Space : ");
+                kdDebug (s_area) << "  V_Space : ";
                 mystr.remove (0, 9);
                 sscanf ((const char *)mystr.latin1(), "(%d %d %d)",
                          &agRect.vs[0], &agRect.vs[1], &agRect.vs[2]);
-                printf ("%d %d %d\n",
-                          agRect.vs[0],  agRect.vs[1],  agRect.vs[2]);
+                kdDebug (s_area) << agRect.vs[0] << " " << agRect.vs[1] << " " <<  agRect.vs[2];
 	      }
               // option XYRAD
 	      else if (mystr.startsWith (" XYRAD ") )
 	      {
-                printf ("  XYRad   : ");
+                kdDebug (s_area) << "  XYRad   : ";
                 mystr.remove (0, 7);
                 sscanf ((const char *)mystr.latin1(), "<%d %d>",
                          &agRect.xr[0], &agRect.xr[1]);
-                printf ("%d %d\n",
-                          agRect.xr[0],  agRect.xr[1]);
+                kdDebug (s_area) << agRect.xr[0] << " " << agRect.xr[1];
 	      }
               // option PNTS
 	      else if (mystr.startsWith (" PNTS ") )
 	      {
-                printf ("  Pnts    : ");
+                kdDebug (s_area) << "  Pnts    : ";
                 mystr.remove (0, 6);
                 sscanf ((const char *)mystr.latin1(), "(%d,%d)(%d,%d)(%d,%d)(%d,%d)(%d,%d)",
                         &agRect.ptX[0], &agRect.ptY[0], &agRect.ptX[1], &agRect.ptY[1],
                         &agRect.ptX[2], &agRect.ptY[2], &agRect.ptX[3], &agRect.ptY[3],
                         &agRect.ptX[4], &agRect.ptY[4]);
-                printf ("%d %d  %d %d   %d %d  %d %d  %d %d\n",
-                        agRect.ptX[0], agRect.ptY[0], agRect.ptX[1], agRect.ptY[1],
-                        agRect.ptX[2], agRect.ptY[2], agRect.ptX[3], agRect.ptY[3],
-                        agRect.ptX[4], agRect.ptY[4]);
+                kdDebug (s_area) << agRect.ptX[0] << " " << agRect.ptY[0] << "  " <<
+                                    agRect.ptX[1] << " " << agRect.ptY[1] << "   " <<
+                                    agRect.ptX[2] << " " << agRect.ptY[2] << "  " <<
+                                    agRect.ptX[3] << " " << agRect.ptY[3] << "  " <<
+		                    agRect.ptX[4] << " " << agRect.ptY[4] << endl;
 	      }
 
+//checkSubElement() ende
 	    }
 	    while ((mystr[0] != '.') && (mystr[0] != 'E'));
 
@@ -709,53 +726,57 @@ KoFilter::ConversionStatus APPLIXGRAPHICImport::convert( const QCString& from, c
 	  {
             applixGraphicsRect agEll;
 
-            printf (" Habe ELL erkannt (keine Werte uebernommen)\n");
+            kdDebug (s_area) << " Habe ELL erkannt (keine Werte uebernommen " << endl;
             mystr.remove (0, 7);
             sscanf ((const char *)mystr.latin1(), "(%d,%d)",
                     &agEll.offX, &agEll.offY);
-	    printf ("  Offset ->   x:%2d  y:%2d\n", agEll.offX, agEll.offY);
+	    kdDebug (s_area) << "  Offset ->   x:" << agEll.offX << "  y:" << agEll.offY << endl;
 
             do
 	    {
-              // Akutelle Position bestimmen
+              // Aktuelle Position bestimmen
               pos = in.at ();
               // read one line
               mystr = stream.readLine ();
 
+//checkSubElement() 
               // option RECOLOR
 	      if      (mystr.startsWith (" RECOLOR ") )
 	      {
-                printf ("  Recolor: ");
+                kdDebug (s_area) << "  Recolor: ";
                 mystr.remove (0, 9);
                 if      (mystr == "ON")
                 {
-                  printf ("On\n");
+                  kdDebug (s_area) << "On" << endl;
                   agEll.reColor = true;
                 }
                 else if (mystr == "OFF")
                 {
-                  printf ("Off\n");
+                  kdDebug (s_area) << "Off" << endl;
                   agEll.reColor = false;
                 }
                 else
                 {
-                   printf ("!!!!!    Whats that <%s>\n", (const char *) mystr.latin1() );
+                   kdDebug (s_area) << "!!!!!    Whats that <" << mystr << ">" << endl;
                 }
 	      }
 	      else if (mystr.startsWith (" PNTS ") )
 	      {
-                printf ("  Pnts   : ");
+                kdDebug (s_area) <<("  Pnts   : ");
                 mystr.remove (0, 6);
 		//
                 sscanf ((const char *)mystr.latin1(), "(%d,%d)(%d,%d)(%d,%d)(%d,%d)(%d,%d)",
                         &agEll.ptX[0], &agEll.ptY[0], &agEll.ptX[1], &agEll.ptY[1],
                         &agEll.ptX[2], &agEll.ptY[2], &agEll.ptX[3], &agEll.ptY[3],
                         &agEll.ptX[4], &agEll.ptY[4]);
-                printf ("%d %d  %d %d   %d %d  %d %d  %d %d\n",
-                        agEll.ptX[0], agEll.ptY[0], agEll.ptX[1], agEll.ptY[1],
-                        agEll.ptX[2], agEll.ptY[2], agEll.ptX[3], agEll.ptY[3],
-                        agEll.ptX[4], agEll.ptY[4]);
+                kdDebug (s_area) << agEll.ptX[0] << " " << agEll.ptY[0] << "  " <<
+                                    agEll.ptX[1] << " " << agEll.ptY[1] << "   " <<
+                                    agEll.ptX[2] << " " << agEll.ptY[2] << "  " <<
+                                    agEll.ptX[3] << " " << agEll.ptY[3] << "  " <<
+		                    agEll.ptX[4] << " " << agEll.ptY[4] << endl;
+
 	      }
+//checkSubElement() ende
 	    }
 	    while ((mystr[0] != '.') && (mystr[0] != 'E'));
 
@@ -768,7 +789,7 @@ KoFilter::ConversionStatus APPLIXGRAPHICImport::convert( const QCString& from, c
 	  }
           else
 	  {
-            printf ("Unbekannt : %s \n", (const char *) mystr.latin1() );
+            kdDebug (s_area) << "Unbekannt : " << mystr << endl;
 	  }
 
 	}
@@ -784,15 +805,15 @@ KoFilter::ConversionStatus APPLIXGRAPHICImport::convert( const QCString& from, c
     emit sigProgress(100);
 
     str += "  </layer>\n";
-    str += " </killustrator>\n";
+    str += " </karbon>\n";
 //  str += "</DOC>\n";
 
-    printf ("Text %s\n", (const char *) str.utf8());
+    kdDebug (s_area) << "Text " << str.utf8() << endl;
 
     KoStoreDevice* out= m_chain->storageFile( "root", KoStore::Write );
     if (!out)
     {
-      kdError(38000/*30502*/) << "Unable to open output file!" << endl;
+        kdError(s_area) << "Unable to open output file!" << endl;
         in.close  ();
         return KoFilter::StorageCreationError;
     }
@@ -805,3 +826,7 @@ KoFilter::ConversionStatus APPLIXGRAPHICImport::convert( const QCString& from, c
 }
 
 #include <applixgraphicimport.moc>
+
+
+
+
