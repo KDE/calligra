@@ -1151,7 +1151,7 @@ KexiMainWindowImpl::storeWindowConfiguration(KConfig *config)
 	config->setGroup("MainWindow");
 	QString dockGrp;
 
-#if KDE_IS_VERSION(3,1,9)
+#if KDE_IS_VERSION(3,1,9) && !defined(Q_WS_WIN)
 	if (kapp->sessionSaving())
 		dockGrp=config->group()+"-Docking";
 	else

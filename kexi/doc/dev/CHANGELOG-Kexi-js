@@ -274,6 +274,9 @@ TODO: fix lucijan's hack, with part loading (29 feb)
 -add "key" information icon @ the left hand of line with primary key(s)
 -add "index" information icon @ the left hand of line with key(s) that is/are indexed
 -save schema changes before switching to "view mode"
+-in propeditor: auto-sync pkey, unique, required & indexed properties on changing;
+  add message boxes if needed
+-for 'column width' property: add 'default' value at the beginning
 
 ==== Property Editor TODO: =========
 - text does not fit well inside combobox editor
@@ -327,6 +330,12 @@ TODO: make KexiQueryDocument inherit KexiDialogTempData
 Global
 - version: beta3 pre2
 - updated readme_en
+- Kexi backported to KDE3.1 and Qt3.1.1
+KexiDB
+- setting length is only available for Text fields
+Kexi Alter Table
+- 'length' property is set to 0 on changing type from Text to any other, and set to default (200)
+   otherwise
 
 2004-04-15
 Kexi Main
