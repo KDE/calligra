@@ -495,13 +495,10 @@ static void FreeCellParaLists ( QValueList<ParaData> &paraList )
 }
 
 
-static void ProcessDocTag ( QDomNode         myNode,
-                            void             *tagData,
-                            KWEFKWordLeader  *leader )
+/*static*/ void ProcessDocTag ( QDomNode         myNode,
+    void* /*tagData*/, KWEFKWordLeader* leader )
 {
-#if 0
-    kdDebug (30508) << "ProcessDocTag () - Begin" << endl;
-#endif
+    //kdDebug (30508) << "Entering ProcessDocTag" << endl;
 
     QValueList<AttrProcessing> attrProcessingList;
     attrProcessingList << AttrProcessing ( "editor",        "", NULL )
@@ -555,9 +552,7 @@ static void ProcessDocTag ( QDomNode         myNode,
 
     leader->doCloseBody();
 
-#if 0
-    kdDebug (30508) << "ProcessDocTag () - End" << endl;
-#endif
+    //kdDebug (30508) << "Exiting ProcessDocTag" << endl;
 }
 
 
@@ -654,36 +649,55 @@ bool KWEFKWordLeader::doFullDefineStyle ( LayoutData &layout )
     return false;
 }
 
+static bool ParseFile ( QIODevice* subFile, QDomDocument& doc)
+{
+    QString errorMsg;
+    int errorLine;
+    int errorColumn;
+
+    if ( !doc.setContent (subFile, &errorMsg, &errorLine, &errorColumn) )
+    {
+        kdError (30508) << "Parsing Error! Aborting! (in ParseFile)" << endl
+            << "  Line: " << errorLine << " Column: " << errorColumn << endl
+            << "  Message: " << errorMsg << endl;
+        // TODO: user message
+        return false;
+    }
+    return true;
+}
 
 static bool ProcessStoreFile ( QIODevice* subFile,
     void (*processor) (QDomNode, void *, KWEFKWordLeader *),
     KWEFKWordLeader* leader)
 {
-    QDomDocument qDomDocumentIn;
-
-    QString errorMsg;
-    int errorLine;
-    int errorColumn;
-
-    if ( !qDomDocumentIn.setContent (subFile, &errorMsg, &errorLine, &errorColumn) )
+    if (!subFile)
     {
-        kdError (30508) << "Parsing Error! Aborting! (in ProcessStoreFile)" << endl
-            << "  Line: " << errorLine << " Column: " << errorColumn << endl
-            << "  Message: " << errorMsg << endl;
-
-        return false;
+        kdWarning(30508) << "Could not get a device for the document!" << endl;
     }
+    else if ( subFile->open ( IO_ReadOnly ) )
+    {
+        kdDebug (30508) << "Processing Document..." << endl;
+        QDomDocument doc;
+        if (!ParseFile(subFile, doc))
+        {
+            subFile->close();
+            return false;
+        }
+        // We must close the subFile before processing,
+        //  as the processing could open other sub files.
+        //  However, it would crash if two sub files are opened together
+        subFile->close();
 
-#if 0
-    kdDebug (30508) << "DOM document type "
-                    << qDomDocumentIn.doctype ().name () << "." << endl;
-#endif
-
-    QDomNode docNode = qDomDocumentIn.documentElement ();
-
-    processor (docNode, NULL, leader);
-
-    return true;
+        QDomNode docNode = doc.documentElement();
+        processor (docNode, NULL, leader);
+        return true;
+    }
+    else
+    {
+        // Note: we do not worry too much if we cannot open the document info!
+        kdWarning (30508) << "Unable to open document!" << endl;
+    }
+    return false;
 }
 
 QIODevice* KWEFKWordLeader::getSubFileDevice(const QString& fileName)
@@ -726,7 +740,6 @@ bool KWEFKWordLeader::loadSubFile(const QString& fileName, QByteArray& array)
     return true;
 }
 
-
 KoFilter::ConversionStatus KWEFKWordLeader::convert( KoFilterChain* chain,
     const QCString& from, const QCString& to)
 {
@@ -749,7 +762,6 @@ KoFilter::ConversionStatus KWEFKWordLeader::convert( KoFilterChain* chain,
         return KoFilter::StupidError;
     }
 
-
     if ( !doOpenDocument () )
     {
         kdError (30508) << "Worker could not open document! Aborting!" << endl;
@@ -760,40 +772,14 @@ KoFilter::ConversionStatus KWEFKWordLeader::convert( KoFilterChain* chain,
     KoStoreDevice* subFile;
 
     subFile=chain->storageFile("documentinfo.xml",KoStore::Read);
-
-    if (!subFile)
-    {
-        kdWarning(30508) << "Could not get a device for document info!" << endl;
-    }
-    else if ( subFile->open ( IO_ReadOnly ) )
-    {
-        kdDebug (30508) << "Processing Document Info..." << endl;
-        ProcessStoreFile (subFile, ProcessDocumentInfoTag, this);
-        subFile->close ();
-    }
-    else
-    {
-        // Note: we do not worry too much if we cannot open the document info!
-        kdWarning (30508) << "Unable to open documentinfo.xml sub-file!" << endl;
-    }
+    kdDebug (30508) << "Processing documentinfo.xml..." << endl;
+    // Do not care if we cannot open the document info.
+    ProcessStoreFile (subFile, ProcessDocumentInfoTag, this);
 
     subFile=chain->storageFile("root",KoStore::Read);
-
-    if (!subFile)
+    kdDebug (30508) << "Processing root..." << endl;
+    if (!ProcessStoreFile (subFile, ProcessDocTag, this))
     {
-        kdDebug(30508) << "Could not get a device for root document!" << endl;
-        doAbortFile ();
-        return KoFilter::StupidError;
-    }
-    else if ( subFile->open ( IO_ReadOnly ) )
-    {
-        kdDebug (30508) << "Processing root document..." << endl;
-        ProcessStoreFile (subFile, ProcessDocTag, this);
-        subFile->close ();
-    }
-    else
-    {
-        kdError(30508) << "Could not open root sub-file!" << endl;
         doAbortFile ();
         return KoFilter::StupidError;
     }
