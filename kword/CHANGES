@@ -1,4 +1,4 @@
-Changed between 1.3.3 and 1.3.4
+Changed between 1.3.4 and 1.3.5
 ===============================
 - Insert picture dialog: keep current picture if cancelling file dialog (#72827)
 - Fixes when changing properties of multiple frames at once. Allow changing "protect size" for multiple frames.
