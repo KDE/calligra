@@ -41,7 +41,7 @@
 
 #include <stdlib.h>
 #include "koparagcounter.h" //// kotext
-//#include <kdebug.h>
+#include <kdebug.h>
 //#include <kdebugclasses.h>
 
 //#define PARSER_DEBUG
@@ -4029,6 +4029,7 @@ void KoTextParag::format( int start, bool doMove )
             if ( chr->isCustom() ) {
                 int x = chr->x;
                 KoTextCustomItem* item = chr->customItem();
+                Q_ASSERT( baseLine >= item->ascent() ); // something went wrong in KoTextFormatter if this isn't the case
                 int y = lineY + baseLine - item->ascent();
 #ifdef DEBUG_CI_PLACEMENT
                 qDebug("Custom item: i=%d x=%d lineY=%d baseLine=%d ascent=%d -> y=%d", i, x, lineY, baseLine, item->ascent(), y);
@@ -4292,14 +4293,11 @@ void KoTextParag::paintDefault( QPainter &painter, const QColorGroup &cg, KoText
 	    curh = h;
 	    cury = cy;
 	    curline = line;
-#if 0 // code from current Qt. To be tested - uses height of char on the left??
-            QTextStringChar *c = chr;
+            KoTextStringChar *c = chr;
             if ( i > 0 )
                 --c;
             curh = c->format()->height();
-            cury = cy + baseLine - c->format()->ascent();
-#endif
-
+            cury = cy + baseLine - c->ascent();
 	}
 
 	// first time - start again...
@@ -4350,8 +4348,8 @@ void KoTextParag::paintDefault( QPainter &painter, const QColorGroup &cg, KoText
 		bw = cw;
 	    } else {
 		if ( chr->customItem()->placement() == KoTextCustomItem::PlaceInline ) {
-                   chr->customItem()->draw( &painter, chr->x, cy + baseLine - chr->customItem()->ascent(), clipx - r.x(), clipy - r.y(), clipw, cliph, cg,
-					     nSels && selectionStarts[ 0 ] <= i && selectionEnds[ 0 ] > i );
+                    chr->customItem()->draw( &painter, chr->x, cy + baseLine - chr->customItem()->ascent(), clipx - r.x(), clipy - r.y(), clipw, cliph, cg,
+					     drawSelections && nSels && selectionStarts[ 0 ] <= i && selectionEnds[ 0 ] > i );
 		    paintStart = i+1;
 		    paintEnd = -1;
 		    lastFormat = chr->format();
