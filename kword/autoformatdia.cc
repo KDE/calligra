@@ -67,8 +67,15 @@ KWAutoFormatExceptionWidget::KWAutoFormatExceptionWidget(QWidget *parent, const 
     exceptionList->insertStringList(m_listException);
     grid->addMultiCellWidget(exceptionList,2,6,0,0);
     pbRemoveException->setEnabled(m_listException.count()>0);
+    connect(exceptionLine ,SIGNAL(textChanged ( const QString & )),this,SLOT(textChanged ( const QString & )));
+    pbAddException->setEnabled(false);
 }
 
+
+void KWAutoFormatExceptionWidget::textChanged ( const QString &_text )
+{
+    pbAddException->setEnabled(!_text.isEmpty());
+}
 
 void KWAutoFormatExceptionWidget::slotAddException()
 {
@@ -83,6 +90,7 @@ void KWAutoFormatExceptionWidget::slotAddException()
         exceptionList->insertStringList(m_listException);
         pbRemoveException->setEnabled(m_listException.count()>0);
         exceptionLine->clear();
+        pbAddException->setEnabled(false);
     }
 }
 
@@ -92,6 +100,7 @@ void KWAutoFormatExceptionWidget::slotRemoveException()
     {
         m_listException.remove(exceptionList->currentText());
         exceptionList->clear();
+        pbAddException->setEnabled(false);
         pbRemoveException->setEnabled(m_listException.count()>0);
         exceptionList->insertStringList(m_listException);
     }
