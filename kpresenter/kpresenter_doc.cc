@@ -1234,7 +1234,11 @@ void KPresenterDoc::loadOasisSettings(const QDomDocument&settingsDoc)
         m_gridX = MM_TO_POINT( valx / 100.0 );
         int valy = firstView.parseConfigItemInt( "GridFineHeight" );
         m_gridY = MM_TO_POINT( valy / 100.0 );
+        // ## TODO IsSnapToGrid
+        // ## TODO SelectedPage
     }
+    loadOasisIgnoreList( settings );
+    m_varColl->variableSetting()->loadOasis( settings );
 }
 
 void KPresenterDoc::parseOasisHelpLine( const QString &text )
@@ -1628,8 +1632,6 @@ bool KPresenterDoc::loadOasis( const QDomDocument& doc, KoOasisStyles&oasisStyle
     if ( !settingsDoc.isNull() )
     {
         loadOasisSettings( settingsDoc );
-        loadOasisIgnoreList( settingsDoc );
-        m_varColl->variableSetting()->loadOasis( settingsDoc );
     }
     emit sigProgress( 100 );
     recalcVariables( VT_FIELD );
