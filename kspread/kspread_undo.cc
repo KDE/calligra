@@ -128,6 +128,41 @@ QString KSpreadUndo::getUndoName()
 
 /****************************************************************************
  *
+ * KSpreadMacroUndoAction
+ *
+ ***************************************************************************/
+KSpreadMacroUndoAction::KSpreadMacroUndoAction( KSpreadDoc *_doc, const QString& _name ):
+ KSpreadUndoAction( _doc )
+{
+    name=_name;
+}
+
+KSpreadMacroUndoAction::~KSpreadMacroUndoAction()
+{
+
+}
+
+void KSpreadMacroUndoAction::addCommand(KSpreadUndoAction *command)
+{
+    m_commands.append(command);
+}
+
+void KSpreadMacroUndoAction::undo()
+{
+    QListIterator<KSpreadUndoAction> it(m_commands);
+    for ( ; it.current() ; ++it )
+        it.current()->undo();
+}
+
+void KSpreadMacroUndoAction::redo()
+{
+    QListIterator<KSpreadUndoAction> it(m_commands);
+    for ( ; it.current() ; ++it )
+        it.current()->redo();
+}
+
+/****************************************************************************
+ *
  * KSpreadUndoRemoveColumn
  *
  ***************************************************************************/

@@ -24,10 +24,10 @@ class KSpreadUndo;
 class KSpreadUndoAction;
 class KSpreadTable;
 class KSpreadLayout;
-//class KSpreadCell;
 class KSpreadDoc;
 class ColumnLayout;
 class RowLayout;
+
 #include "kspread_cell.h"
 #include <qstack.h>
 #include <qstring.h>
@@ -96,6 +96,21 @@ public:
 protected:
     KSpreadDoc *m_pDoc;
     QString name;
+};
+
+class KSpreadMacroUndoAction : public KSpreadUndoAction
+{
+public:
+    KSpreadMacroUndoAction( KSpreadDoc *_doc,const QString& _name );
+    virtual ~KSpreadMacroUndoAction();
+    
+    void addCommand(KSpreadUndoAction *command);
+    
+    virtual void undo();
+    virtual void redo();
+
+protected:
+    QList<KSpreadUndoAction> m_commands;
 };
 
 class KSpreadUndoRemoveColumn : public KSpreadUndoAction

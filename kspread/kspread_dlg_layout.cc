@@ -774,6 +774,7 @@ void CellLayoutDlg::slotApply()
                 }
 
     }
+    KSpreadMacroUndoAction *macroUndo=new KSpreadMacroUndoAction( table->doc(),i18n("Change Layout") );
     // Prepare the undo buffer
     if ( !table->doc()->undoBuffer()->isLocked() )
     {
@@ -807,13 +808,15 @@ void CellLayoutDlg::slotApply()
                 }
         QString title=i18n("Change layout");
         KSpreadUndoCellLayout *undo = new KSpreadUndoCellLayout( table->doc(), table, rect,title );
-        table->doc()->undoBuffer()->appendUndo( undo );
+//        table->doc()->undoBuffer()->appendUndo( undo );
+        macroUndo->addCommand(undo);
 
 	if( miscPage->getStyle()!=eStyle)
 	  {
 	    //make undo for style of cell
 	    KSpreadUndoStyleCell *undo3 = new KSpreadUndoStyleCell( table->doc(), table, rect);
-	    table->doc()->undoBuffer()->appendUndo( undo3 );
+	    //table->doc()->undoBuffer()->appendUndo( undo3 );
+            macroUndo->addCommand(undo3);
 	  }
     }
     borderPage->applyOutline( left, top, right, bottom );
@@ -845,7 +848,8 @@ void CellLayoutDlg::slotApply()
                 QRect rect;
                 rect.setCoords( left, top, right , bottom  );
                 KSpreadUndoResizeColRow *undo2 = new KSpreadUndoResizeColRow( table->doc(),table , rect );
-                table->doc()->undoBuffer()->appendUndo( undo2 );
+                //table->doc()->undoBuffer()->appendUndo( undo2 );
+                macroUndo->addCommand(undo2);
         }
     }
     if(positionPage->getSizeHeight()!=heigthSize)
@@ -882,7 +886,8 @@ void CellLayoutDlg::slotApply()
                 QRect rect;
                 rect.setCoords( left, top, right , bottom  );
                 KSpreadUndoResizeColRow *undo2 = new KSpreadUndoResizeColRow( table->doc(),table , rect );
-                table->doc()->undoBuffer()->appendUndo( undo2 );
+                //table->doc()->undoBuffer()->appendUndo( undo2 );
+                macroUndo->addCommand(undo2);
                 }
         for ( int x = top; x <= bottom; x++ )
                 m_pView->vBorderWidget()->resizeRow(positionPage->getSizeHeight(),x,false );
@@ -907,13 +912,17 @@ void CellLayoutDlg::slotApply()
                 QRect rect;
                 rect.setCoords( left, top, right , bottom  );
                 KSpreadUndoResizeColRow *undo2 = new KSpreadUndoResizeColRow( table->doc(),table , rect );
-                table->doc()->undoBuffer()->appendUndo( undo2 );
+                //table->doc()->undoBuffer()->appendUndo( undo2 );
+                macroUndo->addCommand(undo2);
                 }
         for ( int x = left; x <= right; x++ )
                 m_pView->hBorderWidget()->resizeColumn(positionPage->getSizeWidth(),x,false );
         }
     }
-
+    if ( !table->doc()->undoBuffer()->isLocked())
+    {
+        table->doc()->undoBuffer()->appendUndo( macroUndo );
+    }
     // m_pView->drawVisibleCells();
     QRect r;
     r.setCoords( left, top, right, bottom );
