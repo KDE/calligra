@@ -2893,7 +2893,7 @@ void KPresenterDoc::startBackgroundSpellCheck()
     //don't start spell checking when document is embedded in konqueror
     if(backgroundSpellCheckEnabled() && isReadWrite())
     {
-        if(m_initialActivePage->objectText().count()>0)
+        if(m_initialActivePage->objectText(m_initialActivePage->objectList()).count()>0)
         {
             m_bgSpellCheck->objectForSpell(m_initialActivePage->textFrameSet (0));
             m_bgSpellCheck->startBackgroundSpellCheck();

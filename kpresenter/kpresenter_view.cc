@@ -5958,8 +5958,8 @@ void KPresenterView::editFind()
     m_switchPage=m_pKPresenterDoc->pageList().findRef(m_canvas->activePage());
 
     //add sticky obj at first page
-    QPtrList<KoTextObject> list=m_canvas->activePage()->objectText();
-    QPtrList<KoTextObject> list2=stickyPage()->objectText();
+    QPtrList<KoTextObject> list=m_canvas->activePage()->objectText(m_canvas->activePage()->objectList());
+    QPtrList<KoTextObject> list2=stickyPage()->objectText(stickyPage()->objectList());
     QPtrListIterator<KoTextObject> it( list2 );
     for ( ; it.current() ; ++it )
     {
@@ -5991,8 +5991,8 @@ void KPresenterView::editReplace()
     bool hasSelection=edit && (edit->kpTextObject())->textObject()->hasSelection();
     KoReplaceDia dialog( m_canvas, "replace", m_searchEntry, m_replaceEntry,hasSelection );
     //add sticky text object at first page
-    QPtrList<KoTextObject> list=m_canvas->activePage()->objectText();
-    QPtrList<KoTextObject> list2=stickyPage()->objectText();
+    QPtrList<KoTextObject> list=m_canvas->activePage()->objectText(m_canvas->activePage()->objectList());
+    QPtrList<KoTextObject> list2=stickyPage()->objectText(stickyPage()->objectList());
 
     QPtrListIterator<KoTextObject> it( list2 );
     for ( ; it.current() ; ++it )
@@ -6023,7 +6023,7 @@ void KPresenterView::doFindReplace()
 
     while( ret && switchInOtherPage(i18n( "Do you want to search in new page?")) )
     {
-        m_findReplace->changeListObject(m_canvas->activePage()->objectText());
+        m_findReplace->changeListObject(m_canvas->activePage()->objectText(m_canvas->activePage()->objectList()));
         ret = findReplace->proceed();
     }
     m_switchPage=-1;
@@ -6975,8 +6975,8 @@ void KPresenterView::applyAutoFormat()
     KMacroCommand *macro = 0L;
     m_switchPage=m_pKPresenterDoc->pageList().findRef(m_canvas->activePage());
     m_initSwitchPage=m_switchPage;
-    QPtrList<KoTextObject> list=m_canvas->activePage()->objectText();
-    QPtrList<KoTextObject> list2=stickyPage()->objectText();
+    QPtrList<KoTextObject> list=m_canvas->activePage()->objectText(m_canvas->activePage()->objectList());
+    QPtrList<KoTextObject> list2=stickyPage()->objectText(stickyPage()->objectList());
     QPtrListIterator<KoTextObject> it( list2 );
     for ( ; it.current() ; ++it )
     {
@@ -6993,7 +6993,7 @@ void KPresenterView::applyAutoFormat()
 
     while(switchInOtherPage(i18n( "Do you want to apply autoformat in new page?")) )
     {
-        KCommand * cmd = applyAutoFormatToCurrentPage(m_canvas->activePage()->objectText());
+        KCommand * cmd = applyAutoFormatToCurrentPage(m_canvas->activePage()->objectText(m_canvas->activePage()->objectList()));
         if ( cmd )
         {
             if ( !macro )

@@ -3335,20 +3335,30 @@ KCommand *KPrPage::shadowObj(ShadowDirection dir,int dist, const QColor &col)
 }
 
 
-QPtrList<KoTextObject> KPrPage::objectText()
+QPtrList<KoTextObject> KPrPage::objectText(QPtrList<KPObject> list)
 {
     QPtrList<KoTextObject>lst;
-    QPtrListIterator<KPObject> it( m_objectList );
+    QPtrListIterator<KPObject> it( list );
     for ( ; it.current() ; ++it )
     {
         if(it.current()->getType() == OT_TEXT)
-	  {
+        {
 	    KPTextObject* obj=dynamic_cast<KPTextObject*>(it.current());
 	    if(obj && !obj->isProtectContent())
-	      {
+            {
 		lst.append(obj->textObject());
-	      }
-	  }
+            }
+        }
+        else if (it.current()->getType() == OT_GROUP)
+        {
+            QPtrList<KoTextObject> lst2 = objectText(static_cast<KPGroupObject*>(it.current())->objectList() );
+            QPtrListIterator<KoTextObject> it2( lst2 );
+            for ( ; it2.current() ; ++it2 )
+            {
+                lst.append(it2.current());
+            }
+
+        }
     }
     return lst;
 }
