@@ -113,22 +113,22 @@ void HtmlExportDialog::comboBoxEncodingActivated(int)
     m_dialog->buttonGroupEncoding->setButton(2); // Select the "other" button
 }
 
-int HtmlExportDialog::getMode(void) const
+HtmlExportDialog::Mode HtmlExportDialog::getMode(void) const
 {
     if (m_dialog->radioModeEnhanced==m_dialog->buttonGroupMode->selected())
     {
-        return 0;
+        return CSS;
     }
     else if (m_dialog->radioModeBasic==m_dialog->buttonGroupMode->selected())
     {
-        return 1;
+        return Basic;
     }
     else if (m_dialog->radioModeLight==m_dialog->buttonGroupMode->selected())
     {
-        return 10;
+        return Light;
     }
 
-    return 0;
+    return CSS;
 }
 
 

@@ -83,13 +83,18 @@ KoFilter::ConversionStatus HTMLExport::convert( const QCString& from, const QCSt
 
     HtmlWorker* worker;
 
-    const int workerMode=dialog->getMode();
-    if (10==workerMode)
-        worker=new HtmlDocStructWorker();
-    else if (1==workerMode)
-        worker=new HtmlBasicWorker();
-    else
-        worker=new HtmlCssWorker();
+    const HtmlExportDialog::Mode mode =dialog->getMode();
+    switch (mode)
+    {
+    case HtmlExportDialog::Light:
+      worker=new HtmlDocStructWorker();
+      break;
+    case HtmlExportDialog::Basic:
+      worker=new HtmlBasicWorker();
+      break;
+    default: // CSS
+      worker=new HtmlCssWorker();
+    }
 
     worker->setXML(dialog->isXHtml());
     worker->setCodec(dialog->getCodec());

@@ -33,11 +33,17 @@ class HtmlExportDialog : public KDialogBase
     Q_OBJECT
 public:
 
+    enum Mode {
+      Light =0,
+      Basic,
+      CSS
+    };
+
     HtmlExportDialog(QWidget* parent=NULL);
     ~HtmlExportDialog(void);
     bool isXHtml(void) const;
     QTextCodec* getCodec(void) const;
-    int getMode(void) const;
+    Mode getMode(void) const;
 private:
     ExportDialogUI* m_dialog;
 private slots:
