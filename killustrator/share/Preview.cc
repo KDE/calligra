@@ -34,8 +34,9 @@
 bool kilPreviewHandler (const KFileInfo* fInfo, const QString fileName,
 			QString&, QPixmap& pixmap) {
   bool res = false;
+  QString ext = fileName.right (3).lower ();
 
-  if (fInfo->isFile ()) {
+  if (fInfo->isFile () && (ext == "kil")) {
     // create a temporary document
     GDocument *tmpDoc = new GDocument ();
 
@@ -79,8 +80,9 @@ bool kilPreviewHandler (const KFileInfo* fInfo, const QString fileName,
 bool wmfPreviewHandler (const KFileInfo* fInfo, const QString fileName,
 			QString&, QPixmap& pixmap) {
   bool res = false;
+  QString ext = fileName.right (3).lower ();
 
-  if (fInfo->isFile ()) {
+  if (fInfo->isFile () && (ext == "wmf")) {
     QWinMetaFile wmf;
 
     if (wmf.load ((const char *) fileName)) {
