@@ -64,8 +64,10 @@ class KWFrameDia : public KDialogBase
 {
     Q_OBJECT
 public:
+    /** Contructor when the dialog is used on creation of frame */
     KWFrameDia( QWidget *parent, KWFrame *_frame,KWDocument *_doc,FrameSetType _ft);
     KWFrameDia( QWidget *parent, KWFrame *_frame);
+    KWFrameDia( QWidget *parent, QPtrList<KWFrame> allFrames);
     //KWFrameDia( QWidget *parent, KWCanvas *_canvas);
 
     //void setCanvas(KWCanvas *_canvas) {canvas =_canvas;}
@@ -78,7 +80,6 @@ protected:
     void setupTab3();
     void setupTab4();
     void setupTab5();
-    void uncheckAllRuns();
     void updateFrames();
     void enableRunAround();
     void enableOnNewPageOptions();
@@ -89,7 +90,7 @@ protected:
     QWidget *tab1;
     QGridLayout *grid1, *eofGrid, *onpGrid, *sideGrid;
     QGroupBox *endOfFrame, *onNewPage, *sideHeads;
-    QCheckBox *cbCopy, *cbAspectRatio;
+    QCheckBox *cbCopy, *cbAspectRatio, *cbAllFrames;
     QRadioButton *rResizeFrame, *rAppendFrame, *rNoShow, *reconnect, *noFollowup, *copyRadio;
     QLabel *sideTitle1, *sideTitle2;
     QLineEdit *sideWidth, *sideGap;
@@ -97,9 +98,9 @@ protected:
 
     // TAB 2:
     QWidget *tab2;
-    QGridLayout *grid2, *runGrid;
+    //QGridLayout *grid2, *runGrid;
     QRadioButton *rRunNo, *rRunBounding, *rRunContur;
-    QLabel *runAroundLabel, *lRunNo, *lRunBounding, *lRunContur, *lRGap;
+    //QLabel *runAroundLabel, *lRunNo, *lRunBounding, *lRunContur, *lRGap;
     QGroupBox *runGroup;
     QLineEdit *eRGap;
 
@@ -127,6 +128,7 @@ protected:
     KWBrushStylePreview *brushPreview;
 
     KWFrame *frame;
+    QPtrList<KWFrame> allFrames;
     KWDocument *doc;
     FrameSetType frameType;
     bool frameSetFloating;
@@ -139,9 +141,6 @@ protected:
     QBrush newBrushStyle;
 
 protected slots:
-    void runNoClicked();
-    void runBoundingClicked();
-    void runConturClicked();
     virtual void slotOk();
     void connectListSelected( QListViewItem * );
     void setFrameBehaviourInputOn();

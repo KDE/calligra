@@ -1246,6 +1246,17 @@ void KWFrameSet::showPopup( KWFrame *, KWFrameSetEdit *, KWView *view, const QPo
         popup->popup( point );
 }
 
+void KWFrameSet::setFrameBehaviour( KWFrame::FrameBehaviour fb ) {
+    for(KWFrame *f=frames.first();f;f=frames.next())
+        f->setFrameBehaviour(fb);
+}
+
+void KWFrameSet::setNewFrameBehavior( KWFrame::NewFrameBehavior nfb ) {
+    for(KWFrame *f=frames.first();f;f=frames.next())
+        f->setNewFrameBehavior(nfb);
+}
+
+
 #ifndef NDEBUG
 void KWFrameSet::printDebug()
 {

@@ -550,6 +550,12 @@ public:
     QString getName() const { return m_name; }
     void setName( const QString &_name ) { m_name = _name; }
 
+    /** set frameBehavior on all frames, see KWFrame for specifics */
+    void setFrameBehaviour( KWFrame::FrameBehaviour fb );
+
+    /** set newFrameBehavior on all frames, see KWFrame for specifics */
+    void setNewFrameBehavior( KWFrame::NewFrameBehavior nfb );
+
 #ifndef NDEBUG
     virtual void printDebug();
     virtual void printDebug( KWFrame * );

@@ -89,7 +89,12 @@ KWFrameDia::KWFrameDia( QWidget* parent, KWFrame *_frame)
     : KDialogBase( Tabbed, i18n("Frame settings"), Ok | Cancel, Ok, parent, "framedialog", true)
 {
     frame = _frame;
-    KWFrameSet * fs = frame->frameSet();
+    KWFrameSet *fs = frame->frameSet()->getGroupManager();
+    if(fs==0L) fs=frame->frameSet();
+    frameType = fs->type();
+    frameSetFloating = fs->isFloating();
+
+/*    KWFrameSet * fs = frame->frameSet();
     KWTableFrameSet *table = fs->getGroupManager();
     if(table)
         frameType = table->type();
@@ -97,7 +102,7 @@ KWFrameDia::KWFrameDia( QWidget* parent, KWFrame *_frame)
         frameType = frame->frameSet() ? frame->frameSet()->type() : (FrameSetType) -1;
     // parentFs is the table in case of a table, fs otherwise
     KWFrameSet * parentFs = fs->getGroupManager() ? fs->getGroupManager() : fs;
-    frameSetFloating = parentFs->isFloating();
+    frameSetFloating = parentFs->isFloating(); */
     doc = 0;
     init();
 }
@@ -111,6 +116,37 @@ KWFrameDia::KWFrameDia( QWidget* parent, KWFrame *_frame, KWDocument *_doc, Fram
     frame= _frame;
     frameSetFloating = false;
     init();
+}
+
+KWFrameDia::KWFrameDia( QWidget *parent, QPtrList<KWFrame> listOfFrames) : KDialogBase( Tabbed, i18n("Frame settings"), Ok | Cancel, Ok, parent, "framedialog", true) , allFrames() {
+    frame=0L;
+
+    KWFrame *f=listOfFrames.first();
+    if(f==0) {
+        kdDebug() << "ERROR: KWFrameDia::constructor no frames.."<<endl;
+        return;
+    }
+
+    KWFrameSet *fs = f->frameSet()->getGroupManager();
+    if(fs==0L) fs=f->frameSet();
+    frameType = fs->type();
+    doc = fs->kWordDocument();
+
+    allFrames.append(f);
+    f=listOfFrames.next();
+
+    while(f) {
+        allFrames.append(f);
+
+        KWFrameSet *fs2 = f->frameSet()->getGroupManager();
+        if(fs2==0L) fs2=f->frameSet();
+        if(frameType != fs2->type()) frameType= FT_TEXT;
+        f=listOfFrames.next();
+    }
+    //init();
+    tab1 = tab2 = tab3 = tab4 = tab5 = 0;
+    setupTab1();
+    setupTab2();
 }
 
 void KWFrameDia::init() {
@@ -182,7 +218,6 @@ void KWFrameDia::init() {
     setInitialSize( QSize(550, 400) );
 }
 
-
 void KWFrameDia::setupTab1(){ // TAB Frame Options
     //kdDebug() << "setup tab 1 Frame options"<<endl;
     tab1 = addPage( i18n("Options") );
@@ -199,9 +234,30 @@ void KWFrameDia::setupTab1(){ // TAB Frame Options
     cbCopy = new QCheckBox( i18n("Frame is a copy of the previous frame"),tab1 );
     grid1->addWidget(cbCopy,1,0);
 
-    cbCopy->setChecked( frame->isCopy() );
-    cbCopy->setEnabled( frame->frameSet() && frame->frameSet()->frame( 0 ) != frame ); // First one can't be a copy
-    // Well, for images, formulas etc. it doesn't make sense to deactivate 'is copy'. What else would it show ?
+    if(frame) {
+        cbCopy->setChecked( frame->isCopy() );
+        cbCopy->setEnabled( frame->frameSet() && frame->frameSet()->frame( 0 ) != frame ); // First one can't be a copy
+    } else { // list of frames as input.
+        KWFrame *f=allFrames.first();
+        bool show=true;
+        bool enabled=f->frameSet() && f->frameSet()->frame( 0 ) != f; // First one can't be a copy
+        bool checked=f->isCopy();
+        f=allFrames.next();
+        while(f) {
+            enabled=enabled || (f->frameSet() && f->frameSet()->frame( 0 ) != f);
+            if(checked != f->isCopy()) show=false;
+            f=allFrames.next();
+        }
+kdDebug() << "show: " << show << endl;
+        if(! show) {
+            cbCopy->setTristate();
+            cbCopy->setNoChange();
+        }
+        else cbCopy->setChecked(checked);
+        cbCopy->setEnabled( enabled );
+    }
+
+    // Well, for images, formulas etc. it doesn't make sense to activate 'is copy'. What else would it show ?
     if(frameType!=FT_TEXT)
         cbCopy->setEnabled( false );
 
@@ -212,10 +268,13 @@ void KWFrameDia::setupTab1(){ // TAB Frame Options
     if(frameType==FT_PICTURE)
     {
         cbAspectRatio = new QCheckBox (i18n("Retain original aspect ratio"),tab1);
-        if ( frame->frameSet() )
-            cbAspectRatio->setChecked( static_cast<KWPictureFrameSet *>( frame->frameSet() )->keepAspectRatio() );
-        else
-            cbAspectRatio->setChecked( true );
+        if(frame) {
+            if ( frame->frameSet() )
+                cbAspectRatio->setChecked( static_cast<KWPictureFrameSet *>( frame->frameSet() )->keepAspectRatio() );
+            else
+                cbAspectRatio->setChecked( true );
+        } else { // TODO
+        }
         grid1->addWidget(cbAspectRatio, row, 0);
         ++row;
     }
@@ -246,17 +305,33 @@ void KWFrameDia::setupTab1(){ // TAB Frame Options
         grp->insert( rNoShow );
 
         eofGrid->addRowSpacing( 0, KDialog::marginHint() + 5 );
-
-        if(frame->frameBehavior() == KWFrame::AutoExtendFrame) {
-            rResizeFrame->setChecked(true);
-        } else if (frame->frameBehavior() == KWFrame::AutoCreateNewFrame) {
-            rAppendFrame->setChecked(true);
+        KWFrame::FrameBehaviour fb;
+        bool show=true;
+        if(frame) {
+            fb = frame->frameBehavior();
         } else {
-            rNoShow->setChecked(true);
+            KWFrame *f=allFrames.first();
+            fb = f->frameBehavior();
+            f=allFrames.next();
+            while(f) {
+                if(fb != f->frameBehavior()) {
+                    show=false;
+                    break;
+                }
+                f=allFrames.next();
+            }
+        }
+        if(show) {
+            if(fb == KWFrame::AutoExtendFrame) {
+                rResizeFrame->setChecked(true);
+            } else if (fb == KWFrame::AutoCreateNewFrame) {
+                rAppendFrame->setChecked(true);
+            } else {
+                rNoShow->setChecked(true);
+            }
         }
         column++;
-    } else
-    {
+    } else {
         rResizeFrame = 0L;
         rAppendFrame = 0L;
         rNoShow = 0L;
@@ -292,13 +367,31 @@ void KWFrameDia::setupTab1(){ // TAB Frame Options
     grp2->insert( noFollowup );
     grp2->insert( copyRadio );
     grid1->addRowSpacing( row, onNewPage->height());
-    if(frame->newFrameBehavior() == KWFrame::Reconnect) {
-        reconnect->setChecked(true);
-    } else if(frame->newFrameBehavior() == KWFrame::NoFollowup) {
-        noFollowup->setChecked(true);
+    KWFrame::NewFrameBehavior nfb;
+    bool show=true;
+    if(frame) {
+        nfb = frame->newFrameBehavior();
     } else {
-        copyRadio->setChecked(true);
-        setFrameBehaviourInputOff();
+        KWFrame *f=allFrames.first();
+        nfb = f->newFrameBehavior();
+        f=allFrames.next();
+        while(f) {
+            if(nfb != f->newFrameBehavior()) {
+                show=false;
+                break;
+            }
+            f=allFrames.next();
+        }
+    }
+    if(show) {
+        if(nfb == KWFrame::Reconnect) {
+            reconnect->setChecked(true);
+        } else if(nfb == KWFrame::NoFollowup) {
+            noFollowup->setChecked(true);
+        } else {
+            copyRadio->setChecked(true);
+            setFrameBehaviourInputOff();
+        }
     }
 
 
@@ -342,11 +435,17 @@ void KWFrameDia::setupTab1(){ // TAB Frame Options
         // add rest of sidehead init..
     }
 
+    cbAllFrames = new QCheckBox (i18n("Changes will be applied to all frames in frameset"),tab1);
+    if( frameType == FT_TEXT && (frame==0 || frame->frameSet()!=0)) {
+        cbAllFrames->setChecked(frame!=0L);
+        grid1->addMultiCellWidget(cbAllFrames,++row,row+1, 0, 1);
+    } else
+        cbAllFrames->setChecked(false);
+
     for(int i=0;i < row;i++)
         grid1->setRowStretch( i, 0 );
     grid1->setRowStretch( row + 1, 1 );
 }
-
 
 void KWFrameDia::setupTab2() // TAB Text Runaround
 {
@@ -354,52 +453,50 @@ void KWFrameDia::setupTab2() // TAB Text Runaround
 
     tab2 = addPage( i18n( "Text run around" ) );
 
-    grid2 = new QGridLayout( tab2, 3, 2, KDialog::marginHint(), KDialog::spacingHint() );
+    QVBoxLayout *form1Layout = new QVBoxLayout( tab2, 11, 6, "tab2Layout"); 
 
-    runGroup = new QGroupBox( i18n( "Text in other frames will:" ), tab2 );
-
-    runGrid = new QGridLayout( runGroup, 4, 3, KDialog::marginHint(), KDialog::spacingHint() );
-
-    QPixmap pixmap = KWBarIcon( "run_not" );
-    lRunNo = new QLabel( runGroup );
-    lRunNo->setBackgroundPixmap( pixmap );
-    lRunNo->setFixedSize( pixmap.size() );
-    runGrid->addWidget( lRunNo, 1, 0 );
-    runGrid->addColSpacing( 0, pixmap.width());
-
-    pixmap = KWBarIcon( "run_bounding" );
-    lRunBounding = new QLabel( runGroup );
-    lRunBounding->setBackgroundPixmap( pixmap );
-    lRunBounding->setFixedSize( pixmap.size() );
-    runGrid->addWidget( lRunBounding, 2, 0 );
-
-    pixmap = KWBarIcon( "run_skip" );
-    lRunContur = new QLabel( runGroup );
-    lRunContur->setBackgroundPixmap( pixmap );
-    lRunContur->setFixedSize( pixmap.size() );
-    runGrid->addWidget( lRunContur, 3, 0 );
+    runGroup = new QButtonGroup(  i18n( "Text in other frames will:" ), tab2);
+    runGroup->setColumnLayout(0, Qt::Vertical );
+    runGroup->layout()->setSpacing( 6 );
+    runGroup->layout()->setMargin( 11 );
+    QGridLayout *groupBox1Layout = new QGridLayout( runGroup->layout() );
+    groupBox1Layout->setAlignment( Qt::AlignTop );
 
     rRunNo = new QRadioButton( i18n( "&Run through this frame" ), runGroup );
-    runGrid->addWidget( rRunNo, 1, 1 );
-    connect( rRunNo, SIGNAL( clicked() ), this, SLOT( runNoClicked() ) );
+    groupBox1Layout->addWidget( rRunNo, 1, 1 );
 
     rRunBounding = new QRadioButton( i18n( "Run around the &boundary rectangle of this frame" ), runGroup );
-    runGrid->addWidget( rRunBounding, 2, 1 );
-    connect( rRunBounding, SIGNAL( clicked() ), this, SLOT( runBoundingClicked() ) );
+    groupBox1Layout->addWidget( rRunBounding, 0, 1 );
 
     rRunContur = new QRadioButton( i18n( "Do&n't run around this frame" ), runGroup );
-    runGrid->addWidget( rRunContur, 3, 1 );
-    connect( rRunContur, SIGNAL( clicked() ), this, SLOT( runConturClicked() ) );
+    groupBox1Layout->addWidget( rRunContur, 2, 1 );
 
-    runGrid->addRowSpacing( 0, KDialog::marginHint() + 5 );
+    QPixmap pixmap = KWBarIcon( "run_not" );
+    QLabel *lRunNo = new QLabel( runGroup );
+    lRunNo->setBackgroundPixmap( pixmap );
+    lRunNo->setFixedSize( pixmap.size() );
+    groupBox1Layout->addWidget( lRunNo, 0, 0 );
 
-    grid2->addWidget( runGroup, 0, 0 );
-    grid2->addMultiCellWidget( runGroup, 0, 0, 0, 1 );
+    pixmap = KWBarIcon( "run_bounding" );
+    QLabel *lRunBounding = new QLabel( runGroup );
+    lRunBounding->setBackgroundPixmap( pixmap );
+    lRunBounding->setFixedSize( pixmap.size() );
+    groupBox1Layout->addWidget( lRunBounding, 1, 0 );
 
-    lRGap = new QLabel( i18n( "Run around gap (%1):" ).arg(doc->getUnitName()), tab2 );
-    lRGap->resize( lRGap->sizeHint() );
-    lRGap->setAlignment( AlignRight | AlignVCenter );
-    grid2->addWidget( lRGap, 1, 0 );
+    pixmap = KWBarIcon( "run_skip" );
+    QLabel *lRunContur = new QLabel( runGroup );
+    lRunContur->setBackgroundPixmap( pixmap );
+    lRunContur->setFixedSize( pixmap.size() );
+    groupBox1Layout->addWidget( lRunContur, 2, 0 );
+
+    form1Layout->addWidget( runGroup );
+
+    QHBoxLayout *Layout1 = new QHBoxLayout( 0, 0, 6); 
+    QSpacerItem* spacer = new QSpacerItem( 10, 10, QSizePolicy::Expanding, QSizePolicy::Minimum );
+    Layout1->addItem( spacer );
+
+    QLabel *lRGap = new QLabel( i18n( "Run around gap (%1):" ).arg(doc->getUnitName()), tab2 );
+    Layout1->addWidget( lRGap );
 
     eRGap = new QLineEdit( tab2 );
     eRGap->setValidator( new KFloatValidator(0,9999, eRGap ) );
@@ -407,42 +504,52 @@ void KWFrameDia::setupTab2() // TAB Text Runaround
     eRGap->setMaxLength( 5 );
     eRGap->setEchoMode( QLineEdit::Normal );
     eRGap->setFrame( true );
-    eRGap->resize( eRGap->sizeHint() );
-    grid2->addWidget( eRGap, 1, 1 );
+    Layout1->addWidget( eRGap );
+    form1Layout->addLayout( Layout1 );
+    QSpacerItem* spacer_2 = new QSpacerItem( 20, 20, QSizePolicy::Minimum, QSizePolicy::Expanding );
+    form1Layout->addItem( spacer_2 );
+
 
     eRGap->setEnabled( false ); // ### not implemented currently
-
+    bool show=true;
     KWFrame::RunAround ra = KWFrame::RA_NO;
     if ( frame )
         ra = frame->runAround();
-    else
-    {
-        KWFrame *firstFrame = doc->getFirstSelectedFrame();
-        if ( firstFrame )
-            ra = firstFrame->runAround();
+    else {
+        KWFrame *f=allFrames.first();
+        ra = f->runAround();
+        f=allFrames.next();
+        while(f) {
+            if(ra != f->runAround()) show=false;
+            f=allFrames.next();
+        }
     }
 
-    switch ( ra ) {
-    case KWFrame::RA_NO: rRunNo->setChecked( true );
-        break;
-    case KWFrame::RA_BOUNDINGRECT: rRunBounding->setChecked( true );
-        break;
-    case KWFrame::RA_SKIP: rRunContur->setChecked( true );
-        break;
+    if(show) {
+        switch ( ra ) {
+            case KWFrame::RA_NO: rRunNo->setChecked( true ); break;
+            case KWFrame::RA_BOUNDINGRECT: rRunBounding->setChecked( true ); break;
+            case KWFrame::RA_SKIP: rRunContur->setChecked( true ); break;
+        }
     }
 
+    show=true;
     double ragap = 0;
     if ( frame )
         ragap = frame->runAroundGap();
-    else
-    {
-        KWFrame *firstFrame = doc->getFirstSelectedFrame();
-        if ( firstFrame )
-            ragap = firstFrame->runAroundGap();
+    else {
+        KWFrame *f=allFrames.first();
+        ragap = f->runAroundGap();
+        f=allFrames.next();
+        while(f) {
+            if(ragap != f->runAroundGap()) show=false;
+            f=allFrames.next();
+        }
     }
 
     QString str;
-    str.setNum( KoUnit::userValue( ragap, doc->getUnit() ) );
+    if(show)
+        str.setNum( KoUnit::userValue( ragap, doc->getUnit() ) );
     eRGap->setText( str );
 
     enableRunAround();
@@ -932,32 +1039,6 @@ void KWFrameDia::updateBrushConfiguration()
     brushPreview->repaint(true);
 }
 
-void KWFrameDia::uncheckAllRuns()
-{
-    rRunNo->setChecked( false );
-    rRunBounding->setChecked( false );
-    rRunContur->setChecked( false );
-}
-
-void KWFrameDia::runNoClicked()
-{
-    uncheckAllRuns();
-    rRunNo->setChecked( true );
-}
-
-void KWFrameDia::runBoundingClicked()
-{
-    uncheckAllRuns();
-    rRunBounding->setChecked( true );
-}
-
-void KWFrameDia::runConturClicked()
-{
-
-    uncheckAllRuns();
-    rRunContur->setChecked( true );
-}
-
 // Called when "reconnect" or "no followup" is checked
 void KWFrameDia::setFrameBehaviourInputOn() {
     if ( tab4 && floating->isChecked() )
@@ -1036,8 +1117,7 @@ void KWFrameDia::enableOnNewPageOptions()
 
         if( frameType != FT_TEXT )
             reconnect->setEnabled( false );
-        else
-        {
+        else if(frame) {
             KWFrameSet *fs = frame->frameSet(); // 0 when creating a frame
             if ( fs && fs->isHeaderOrFooter() )
             {
@@ -1056,9 +1136,8 @@ void KWFrameDia::enableRunAround()
             runGroup->setEnabled( false ); // Runaround options don't make sense for floating frames
         else
         {
-            KWFrameSet *fs = frame->frameSet();
-            if ( fs )
-                runGroup->setEnabled( !frameSetFloating && !fs->isMainFrameset() && !fs->isHeaderOrFooter() );
+            if ( frame && frame->frameSet() )
+                runGroup->setEnabled( !frameSetFloating && !frame->frameSet()->isMainFrameset() && !frame->frameSet()->isHeaderOrFooter() );
             else
                 runGroup->setEnabled( true );
         }
@@ -1067,12 +1146,13 @@ void KWFrameDia::enableRunAround()
 
 bool KWFrameDia::applyChanges()
 {
-    //kdDebug() << "KWFrameDia::applyChanges************************"<<endl;
-    Q_ASSERT(frame);
-    if ( !frame )
-        return false;
-    KWFrame *frameCopy = frame->getCopy(); // keep a copy of the original (for undo/redo)
-    bool isNewFrame = frame->frameSet() == 0L; // true if we are creating a newframe
+    kdDebug() << "KWFrameDia::applyChanges************************"<<endl;
+    KWFrame *frameCopy;
+    bool isNewFrame=false;
+    if(frame) { // only do undo/redo when we have 1 frame to change for now..
+        frameCopy = frame->getCopy(); // keep a copy of the original (for undo/redo)
+        isNewFrame = frame->frameSet() == 0L; // true if we are creating a newframe
+    }
     QString name=QString::null;
 
     KMacroCommand * macroCmd=0L;
@@ -1181,52 +1261,115 @@ bool KWFrameDia::applyChanges()
     if ( tab1 )
     {
         // Copy
-        frame->setCopy( cbCopy->isChecked() );
+        if(frame)
+            frame->setCopy( cbCopy->isChecked() );
+        else if(cbCopy->state() != QButton::NoChange) {
+            for(KWFrame *f=allFrames.first();f; f=allFrames.next()) {
+                if(f == f->frameSet()->frame(0))  continue; // skip first frame of any frameset.
+                f->setCopy( cbCopy->isChecked() );
+            }
+        }
 
         // FrameBehaviour
         if ( frameType == FT_TEXT )
         {
+            bool update=true;
+            KWFrame::FrameBehaviour fb;
             if(rResizeFrame->isChecked())
-                frame->setFrameBehaviour(KWFrame::AutoExtendFrame);
+                fb = KWFrame::AutoExtendFrame;
             else if ( rAppendFrame->isChecked())
-                frame->setFrameBehaviour(KWFrame::AutoCreateNewFrame);
+                fb = KWFrame::AutoCreateNewFrame;
+            else if ( rNoShow->isChecked())
+                fb = KWFrame::Ignore;
             else
-                frame->setFrameBehaviour(KWFrame::Ignore);
+                update=false;
+
+            if(frame)
+                if(cbAllFrames->isChecked() && frame->frameSet())
+                    frame->frameSet()->setFrameBehaviour(fb);
+                else
+                    frame->setFrameBehaviour(fb);
+            else if(update) {
+                for(KWFrame *f=allFrames.first();f; f=allFrames.next())
+                    if(cbAllFrames->isChecked())
+                        f->frameSet()->setFrameBehaviour(fb);
+                    else
+                        f->setFrameBehaviour(fb);
+            }
         }
 
         // NewFrameBehavior
+        bool update=true;
+        KWFrame::NewFrameBehavior nfb;
         if( reconnect && reconnect->isChecked() )
-            frame->setNewFrameBehavior(KWFrame::Reconnect);
+            nfb = KWFrame::Reconnect;
         else if ( noFollowup->isChecked() )
-            frame->setNewFrameBehavior(KWFrame::NoFollowup);
+            nfb = KWFrame::NoFollowup;
+        else if ( copyRadio->isChecked() )
+            nfb = KWFrame::Copy;
         else
-            frame->setNewFrameBehavior(KWFrame::Copy);
+            update=false;
 
-        if ( cbAspectRatio && frame->frameSet() )
+        if(frame)
+            if(cbAllFrames->isChecked() && frame->frameSet())
+                frame->frameSet()->setNewFrameBehavior(nfb);
+            else
+                frame->setNewFrameBehavior(nfb);
+        else if(update)
+            for(KWFrame *f=allFrames.first();f; f=allFrames.next())
+                if(cbAllFrames->isChecked())
+                    f->frameSet()->setNewFrameBehavior(nfb);
+                else
+                    f->setNewFrameBehavior(nfb);
+
+        // aspect ratio
+        if ( cbAspectRatio && frameType==FT_PICTURE )
         {
-            KWPictureFrameSet * frm=static_cast<KWPictureFrameSet *>( frame->frameSet() );
-            if(frm->keepAspectRatio()!=cbAspectRatio->isChecked())
-            {
-                if(!macroCmd)
-                    macroCmd = new KMacroCommand( i18n("Frame Properties") );
-                KWFrameSetPropertyCommand *cmd = new KWFrameSetPropertyCommand( QString::null,frame->frameSet(), KWFrameSetPropertyCommand::FSP_KEEPASPECTRATION, cbAspectRatio->isChecked()? "keepRatio" : "dontKeepRatio" );
-                cmd->execute();
+            if(frame) {
+                KWPictureFrameSet * frm=static_cast<KWPictureFrameSet *>( frame->frameSet() );
+                if(frm->keepAspectRatio()!=cbAspectRatio->isChecked())
+                {
+                    if(!macroCmd)
+                        macroCmd = new KMacroCommand( i18n("Frame Properties") );
+                    KWFrameSetPropertyCommand *cmd = new KWFrameSetPropertyCommand( QString::null,frame->frameSet(), KWFrameSetPropertyCommand::FSP_KEEPASPECTRATION, cbAspectRatio->isChecked()? "keepRatio" : "dontKeepRatio" );
+                    cmd->execute();
 
-                macroCmd->addCommand(cmd);
+                    macroCmd->addCommand(cmd);
+                }
+            } else {
+                kdDebug() << "TODO: implement multi-frame set aspect ratio..\n";
             }
         }
     }
+
     if ( tab2 )
     {
         // Run around
+        KWFrame::RunAround ra;
+        bool update=true;
         if ( rRunNo->isChecked() )
-            frame->setRunAround( KWFrame::RA_NO );
+             ra = KWFrame::RA_NO;
         else if ( rRunBounding->isChecked() )
-            frame->setRunAround( KWFrame::RA_BOUNDINGRECT );
+            ra = KWFrame::RA_BOUNDINGRECT;
         else if ( rRunContur->isChecked() )
-            frame->setRunAround( KWFrame::RA_SKIP );
-
-        frame->setRunAroundGap( KoUnit::fromUserValue( eRGap->text().toDouble(), doc->getUnit() ) );
+            ra = KWFrame::RA_SKIP;
+        else 
+            update=false;
+        if(frame)
+            frame->setRunAround(ra);
+        else if (update) {
+            for(KWFrame *f=allFrames.first();f; f=allFrames.next())
+                f->setRunAround(ra);
+        }
+        // run around gap.
+        if(! eRGap->text().isEmpty()) {
+            double newValue = KoUnit::fromUserValue( eRGap->text().toDouble(), doc->getUnit() );
+            if(frame) 
+                frame->setRunAroundGap(newValue);
+            else
+                for(KWFrame *f=allFrames.first();f; f=allFrames.next())
+                    f->setRunAroundGap(newValue);
+        }
     }
 
     if(tab5)
@@ -1240,6 +1383,7 @@ bool KWFrameDia::applyChanges()
     }
 
     // Undo/redo for frame properties
+  if(frame) { // only do undo/redo when we edit 1 frame for now..
     if(!isNewFrame && (frameCopy->isCopy()!=frame->isCopy()
                    || frameCopy->frameBehavior()!=frame->frameBehavior()
                    || frameCopy->newFrameBehavior()!=frame->newFrameBehavior()
@@ -1271,6 +1415,7 @@ bool KWFrameDia::applyChanges()
 
     }
     frameCopy = 0L; // don't even think about using it below this point :)
+  }
 
     if ( tab4 )
     {
