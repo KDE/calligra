@@ -1528,9 +1528,14 @@ void KoFieldVariable::recalc()
         break;
     }
 
-    if ( value.isEmpty() )
+    if (value.isEmpty())        // try the initial value
+        value = m_varValue.toString();
+
+    if (value.isEmpty())        // still empty? give up
         value = i18n("<None>");
+
     m_varValue = QVariant( value );
+
     resize();
 }
 
