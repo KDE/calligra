@@ -542,12 +542,12 @@ void KPObject::paintSelection( QPainter *_painter, KoZoomHandler *_zoomHandler, 
     _painter->setBrush( kapp->palette().color( QPalette::Active, QColorGroup::Highlight ) );
 
     KoRect r = rotateRectObject(_zoomHandler );
-    int x = _zoomHandler->zoomItX( r.left() - orig.x() );
-    int y = _zoomHandler->zoomItY( r.top() - orig.y() );
-    int zX6 = _zoomHandler->zoomItX( 6 );
-    int zY6 = _zoomHandler->zoomItY( 6 );
-    int w = _zoomHandler->zoomItX(r.width() - 6);
-    int h = _zoomHandler->zoomItY(r.height() - 6);
+    int x = _zoomHandler->zoomItX( r.left() - orig.x());
+    int y = _zoomHandler->zoomItY( r.top() - orig.y());
+    int zX6 = /*_zoomHandler->zoomItX(*/ 6 ;
+    int zY6 = /*_zoomHandler->zoomItY(*/ 6 ;
+    int w = _zoomHandler->zoomItX(r.width()) - 6;
+    int h = _zoomHandler->zoomItY(r.height()) - 6;
 
     if ( mode == SM_MOVERESIZE ) {
 	_painter->drawRect( x, y,  zX6, zY6 );
