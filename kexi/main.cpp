@@ -65,14 +65,15 @@ bool startupActions(KexiProjectData * &projectData)
 	if (args->count()>1) {
 		//TODO: KRun another Kexi instances
 	}
-#if 0 //TODO(js)
+
+	//---autoopen objects:
 	QString not_found_msg;
 	QCStringList list = args->getOptionList("open");
 	QCStringList::const_iterator it;
 	for ( it = list.begin(); it!=list.end(); ++it) {
 		QString type_name, obj_name, item=*it;
 		int idx;
-		//option with " " (type: default)
+		//option with " " (default type == "table")
 		if (item.left(1)=="\"" && item.right(1)=="\"") {
 			obj_name = item.mid(1, item.length()-2);
 			type_name = "table";
@@ -92,6 +93,10 @@ bool startupActions(KexiProjectData * &projectData)
 		}
 		if (type_name.isEmpty() || obj_name.isEmpty())
 			continue;
+
+		//ok, now add info for this object
+		projectData->autoopenObjects.append( QPair<QString,QString>(type_name, obj_name) );
+/*
 		//ok, now open this object
 		QString obj_mime = QString("kexi/") + type_name;
 		QString obj_identifier = obj_mime + "/" + obj_name;
@@ -105,7 +110,8 @@ bool startupActions(KexiProjectData * &projectData)
 	}
 	if (!not_found_msg.isEmpty())
 		KMessageBox::sorry(0, "<p><b>" + I18N_NOOP("Requested objects cannot be opened:") + "</b><p>" + not_found_msg );
-#endif //0
+	*/
+	}
 	return true;
 }
 

@@ -195,6 +195,37 @@ TODO: improove security for password information in .kexis files
 TODO: for .kexis files' conenction data - if password attr. is not present - ask for password
 IDEA: integrate password information in .kexis files with KWallet
 
+2003-12-12
+- added caching to KexiProject::items() and KexiPartInfo
+- objects lookup-and-opening functionality moved from navigator (KexiBrowser) to keximainwindow
+- "-open" CLO reintroduced
+- KexiMainWindow: error messaging generalized a bit
+- KexiTableView - editors API and behaviour improoved
+
+2003-12-11
+- Cursor::movePrev() impl. updated
+- DriverManager: result names are available for KParts::ComponentFactory::ComponentLoadingError errors
+
+- Detached KexiDialogBase windows now have proper icons
+- KexiTableView:
+  - size hint and minimum size hint fixed
+	- better widths for text fields in navigator
+	- cell redrawing & colors fixed
+- KexiDataTable: size hint and minimum size hint is reused from KexiTableView
+- Some fixes for KMDI taskbar
+- KexiInputTableEdit:
+	- fixed adding first char on starting edit
+	- numeric field == 0 is cleared on edit
+- KexiDialogBase, KexiPart::Part: creating part instances and registering generalized
+- KexiMainWindow: foxusing improoved, added action for focusing navigator
+- KexiMainWindow: members moved to d-pointer
+- KexiPart::GUIClient is created by KexiPart on demand, if GUI window available
+
+2003-12-10
+- KexiMainWindow: 
+  * "show navigator" action is auto-handled by kmdi
+  * fixed : pointer to current xmlgui is now cleared before closing kexidialog
+- KexiTableView::paintRow() fixed crash when col number was ==-1
 
 2003-12-08
 - Kexi MainWindows' settings are now stored and restored:
