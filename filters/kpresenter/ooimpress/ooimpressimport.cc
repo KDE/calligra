@@ -610,6 +610,29 @@ void OoImpressImport::append2DGeometry( QDomDocument& doc, QDomElement& e, const
     size.setAttribute( "width", KoUnit::parseValue( object.attribute( "svg:width" ) ) );
     size.setAttribute( "height", KoUnit::parseValue( object.attribute( "svg:height" ) ) );
     e.appendChild( size );
+    if( object.hasAttribute( "draw:transform" ))
+        {
+            kdDebug()<<" object transform \n";
+            //todo parse it
+            QString transform = object.attribute( "draw:transform" );
+            if( transform.contains("rotate ("))
+                {
+                    kdDebug()<<" rotate object \n";
+                    transform = transform.remove("rotate (" );
+                    transform = transform.left(transform.find(")"));
+                    kdDebug()<<" transform :"<<transform<<endl;
+                    bool ok;
+                    double radian = transform.toDouble(&ok);
+                    if( ok )
+                        {
+                            QDomElement angle = doc.createElement( "ANGLE" );
+                            //angle is defined as a radian in oo but degree into kpresenter.
+                            angle.setAttribute("value", (-1 * ((radian*180)/M_PI)));
+
+                            e.appendChild( angle );
+                        }
+                }
+        }
 }
 
 //return true if (x1 < x2) necessary to load correctly start-line and end-line
