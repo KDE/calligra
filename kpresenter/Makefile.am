@@ -53,7 +53,7 @@ libkpresenterpart_la_SOURCES = koPointArray.cc kprcanvas.cc kprpage.cc searchdia
 	kprimportstyledia.cc \
 	imageEffectDia.cc imageEffectBase.ui customslideshowdia.cc \
 	pbpreview.cc penstyle.ui penstylewidget.cc \
-	rectpreview.cc \
+	rectpreview.cc rectpropertyui.ui rectproperty.cc \
 	piepreview.cc \
 	polygonpreview.cc \
 	brushpropertyui.ui gradientpropertyui.ui brushproperty.cc \

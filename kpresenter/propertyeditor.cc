@@ -7,6 +7,7 @@
 #include "kprcommand.h"
 #include "penstylewidget.h"
 #include "brushproperty.h"
+#include "rectproperty.h"
 
 #include <klocale.h>
 
@@ -17,6 +18,7 @@ PropertyEditor::PropertyEditor( QWidget *parent, const char *name, KPrPage *page
     , m_objects( page->getSelectedObjects() )
     , m_penProperty( 0 )
     , m_brushProperty( 0 )
+    , m_rectProperty( 0 )
 {
 
     setCancelButton( i18n( "&Cancel" ) );
@@ -83,6 +85,25 @@ KCommand * PropertyEditor::getCommand()
         }
     }
 
+    if ( m_rectProperty )
+    {
+        int change = m_rectProperty->getRectPropertyChange();
+
+        if ( change )
+        {
+            RectValueCmd::RectValues rectValue( m_rectProperty->getRectValues() );
+
+            RectValueCmd *cmd = new RectValueCmd( i18n( "Apply Styles" ), m_objects, rectValue, m_doc, m_page, change );
+
+            if ( !macro )
+            {
+                macro = new KMacroCommand( i18n( "Apply Properties" ) );
+            }
+
+            macro->addCommand( cmd );
+        }
+    }
+
     return macro;
 }
 
@@ -96,6 +117,9 @@ void PropertyEditor::setupTabs()
 
     if ( flags & PtBrush )
         setupTabBrush();
+
+    if ( flags & PtRectangle )
+        setupTabRect();
 }
 
 
@@ -132,6 +156,19 @@ void PropertyEditor::setupTabBrush()
 }
 
 
+void PropertyEditor::setupTabRect()
+{
+    if ( m_rectProperty == 0 )
+    {
+        RectValueCmd::RectValues rectValue;
+        rectValue.xRnd = m_page->getRndX( 0 );
+        rectValue.yRnd = m_page->getRndY( 0 );
+        m_rectProperty = new RectProperty( this, 0, rectValue );
+        addTab( m_rectProperty, i18n( "&Rectangle" ) );
+    }
+}
+
+
 void PropertyEditor::slotDone()
 {
     emit propertiesOk();
@@ -140,6 +177,8 @@ void PropertyEditor::slotDone()
         m_penProperty->apply();
     if ( m_brushProperty )
         m_brushProperty->apply();
+    if ( m_rectProperty )
+        m_rectProperty->apply();
 }
 
 #include "propertyeditor.moc"

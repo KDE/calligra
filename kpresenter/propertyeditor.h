@@ -9,6 +9,7 @@ class KPrPage;
 class KPresenterDoc;
 class PenStyleWidget;
 class BrushProperty;
+class RectProperty;
 
 class PropertyEditor : public QTabDialog
 {
@@ -27,6 +28,7 @@ private:
     void setupTabs();
     void setupTabPen( bool configureLineEnds );
     void setupTabBrush();
+    void setupTabRect();
 
     KPrPage *m_page;
     KPresenterDoc *m_doc;
@@ -34,6 +36,7 @@ private:
 
     PenStyleWidget *m_penProperty;
     BrushProperty *m_brushProperty;
+    RectProperty *m_rectProperty;
 
 signals:
     void propertiesOk();
