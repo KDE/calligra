@@ -2424,7 +2424,12 @@ void KWTableFrameSetEdit::keyPressEvent( QKeyEvent * e )
         }
     }
     if ( fs )
+    {
+        //don't switch to cell protected and cursor not display in protected area.
+        if ( fs->textObject()->protectContent() && !tableFrameSet()->kWordDocument()->cursorInProtectedArea())
+            return;
         setCurrentCell( fs );
+    }
     else
     {
         if ( !textframeSet->textObject()->protectContent() )
