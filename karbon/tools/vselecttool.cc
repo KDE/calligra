@@ -256,7 +256,8 @@ VSelectTool::arrowKeyReleased( Qt::Key key )
 		case Qt::Key_Up: dy = 10; break;
 		case Qt::Key_Down: dy = -10; break;
 		case Qt::Key_Right: dx = 10; break;
-		case Qt::Key_Left: dx = -10;
+		case Qt::Key_Left: dx = -10; break;
+		default: break;
 	}
 	m_state = normal;
 	view()->part()->addCommand(
