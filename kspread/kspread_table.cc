@@ -2531,7 +2531,7 @@ void KSpreadTable::changeNameCellRef(const QPoint & pos, bool fullRowOrColumn, C
   }
 }
 
-void KSpreadTable::find( QString _find, long options, KSpreadCanvas *canvas )
+void KSpreadTable::find( const QString &_find, long options, KSpreadCanvas *canvas )
 {
   KSpreadSelection* selectionInfo = canvas->view()->selectionInfo();
 
@@ -2593,7 +2593,7 @@ void KSpreadTable::find( QString _find, long options, KSpreadCanvas *canvas )
     }
 }
 
-void KSpreadTable::replace( QString _find, QString _replace, long options,
+void KSpreadTable::replace( const QString &_find, const QString &_replace, long options,
                             KSpreadCanvas *canvas )
 {
   KSpreadSelection* selectionInfo = canvas->view()->selectionInfo();
@@ -3161,7 +3161,7 @@ void KSpreadTable::borderRemove( KSpreadSelection* selectionInfo )
 }
 
 
-void KSpreadTable::sortByRow( QRect area, int ref_row, SortingOrder mode )
+void KSpreadTable::sortByRow( const QRect &area, int ref_row, SortingOrder mode )
 {
   KSpreadPoint point;
   point.table = this;
@@ -3173,7 +3173,7 @@ void KSpreadTable::sortByRow( QRect area, int ref_row, SortingOrder mode )
   sortByRow( area, ref_row, 0, 0, mode, mode, mode, 0, false, false, point );
 }
 
-void KSpreadTable::sortByColumn( QRect area, int ref_column, SortingOrder mode )
+void KSpreadTable::sortByColumn( const QRect &area, int ref_column, SortingOrder mode )
 {
   KSpreadPoint point;
   point.table = this;
@@ -3206,7 +3206,7 @@ void KSpreadTable::checkCellContent(KSpreadCell * cell1, KSpreadCell * cell2, in
   ret = 0;
 }
 
-void KSpreadTable::sortByRow( QRect area, int key1, int key2, int key3,
+void KSpreadTable::sortByRow( const QRect &area, int key1, int key2, int key3,
                               SortingOrder order1, SortingOrder order2,
                               SortingOrder order3,
                               QStringList const * firstKey, bool copyLayout,
@@ -3543,7 +3543,7 @@ void KSpreadTable::sortByRow( QRect area, int key1, int key2, int key3,
   doc()->emitEndOperation();
 }
 
-void KSpreadTable::sortByColumn( QRect area, int key1, int key2, int key3,
+void KSpreadTable::sortByColumn( const QRect &area, int key1, int key2, int key3,
                                  SortingOrder order1, SortingOrder order2,
                                  SortingOrder order3,
                                  QStringList const * firstKey, bool copyLayout,
@@ -7049,7 +7049,7 @@ bool KSpreadTable::saveChildren( KoStore* _store, const QString &_path )
 
 KSpreadTable::~KSpreadTable()
 {
-    kdDebug()<<" KSpreadTable::~KSpreadTable() :"<<this<<endl;
+    //kdDebug()<<" KSpreadTable::~KSpreadTable() :"<<this<<endl;
     s_mapTables->remove( m_id );
 
     //when you remove all table (close file)

@@ -522,21 +522,21 @@ public:
     /**
      * Find support.
      */
-    void find( QString _find, long options, KSpreadCanvas *canvas );
+    void find( const QString &_find, long options, KSpreadCanvas *canvas );
 
     /**
      * Find'n'Replace support.
      */
-    void replace( QString _find, QString _replace, long options,
+    void replace( const QString &_find, const QString &_replace, long options,
                   KSpreadCanvas *canvas );
 
-    void sortByRow( QRect area, int ref_row, SortingOrder );
-    void sortByRow( QRect area, int key1, int key2, int key3,
+    void sortByRow( const QRect &area, int ref_row, SortingOrder );
+    void sortByRow( const QRect &area, int key1, int key2, int key3,
                     SortingOrder order1, SortingOrder order2, SortingOrder order3,
                     QStringList const * firstKey, bool copyLayout, bool headerRow,
                     KSpreadPoint const & outputPoint );
-    void sortByColumn( QRect area, int ref_column, SortingOrder );
-    void sortByColumn( QRect area, int key1, int key2, int key3,
+    void sortByColumn( const QRect &area, int ref_column, SortingOrder );
+    void sortByColumn( const QRect &area, int key1, int key2, int key3,
                        SortingOrder order1, SortingOrder order2, SortingOrder order3,
                        QStringList const * firstKey, bool copyLayout, bool headerRow,
                        KSpreadPoint const & outputPoint );
