@@ -781,7 +781,7 @@ void KWFrameDia::setupTab4(){ // TAB Geometry
             _h.sprintf( "%.2f", POINT_TO_INCH( h ) );
             break;
         case U_PT:
-            _x.sprintf( "%.d", x );
+            _x.sprintf( "%d", x );
             _y.sprintf( "%d", y );
             _w.sprintf( "%d", w );
             _h.sprintf( "%d", h );
@@ -986,22 +986,22 @@ bool KWFrameDia::applyChanges()
                 unsigned int px, py, pw, ph;
                 switch ( KWUnit::unitType( doc->getUnit() ) ) {
                 case U_MM:
-                    px = static_cast<int>(MM_TO_POINT( sx->text().toDouble() ));
-                    py = static_cast<int>(MM_TO_POINT( sy->text().toDouble() ));
-                    pw = static_cast<int>(MM_TO_POINT( sw->text().toDouble() ));
-                    ph = static_cast<int>(MM_TO_POINT( sh->text().toDouble() ));
+                    px = static_cast<int>(MM_TO_POINT( QMAX(sx->text().toDouble(),0) ));
+                    py = static_cast<int>(MM_TO_POINT( QMAX(sy->text().toDouble(),0) ));
+                    pw = static_cast<int>(MM_TO_POINT( QMAX(sw->text().toDouble(),0) ));
+                    ph = static_cast<int>(MM_TO_POINT( QMAX(sh->text().toDouble(),0) ));
                     break;
                 case U_INCH:
-                    px = static_cast<int>(INCH_TO_POINT( sx->text().toDouble() ));
-                    py = static_cast<int>(INCH_TO_POINT( sy->text().toDouble() ));
-                    pw = static_cast<int>(INCH_TO_POINT( sw->text().toDouble() ));
-                    ph = static_cast<int>(INCH_TO_POINT( sh->text().toDouble() ));
+                    px = static_cast<int>(INCH_TO_POINT( QMAX(sx->text().toDouble(),0) ));
+                    py = static_cast<int>(INCH_TO_POINT( QMAX(sy->text().toDouble(),0) ));
+                    pw = static_cast<int>(INCH_TO_POINT( QMAX(sw->text().toDouble(),0) ));
+                    ph = static_cast<int>(INCH_TO_POINT( QMAX(sh->text().toDouble(),0) ));
                     break;
                 case U_PT:
-                    px = sx->text().toInt();
-                    py = sy->text().toInt();
-                    pw = sw->text().toInt();
-                    ph = sh->text().toInt();
+                    px = QMAX(sx->text().toInt(),0);
+                    py = QMAX(sy->text().toInt(),0);
+                    pw = QMAX(sw->text().toInt(),0);
+                    ph = QMAX(sh->text().toInt(),0);
                     break;
                 }
                 doc->setFrameCoords( px, py, pw, ph );
@@ -1011,22 +1011,22 @@ bool KWFrameDia::applyChanges()
         KWUnit u1, u2, u3, u4;
         switch ( KWUnit::unitType( doc->getUnit() ) ) {
         case U_MM:
-            u1.setMM( sml->text().toDouble() );
-            u2.setMM( smr->text().toDouble() );
-            u3.setMM( smt->text().toDouble() );
-            u4.setMM( smb->text().toDouble() );
+            u1.setMM( QMAX(sml->text().toDouble(),0) );
+            u2.setMM( QMAX(smr->text().toDouble(),0) );
+            u3.setMM( QMAX(smt->text().toDouble(),0) );
+            u4.setMM( QMAX(smb->text().toDouble(),0) );
             break;
         case U_INCH:
-            u1.setINCH( sml->text().toDouble() );
-            u2.setINCH( smr->text().toDouble() );
-            u3.setINCH( smt->text().toDouble() );
-            u4.setINCH( smb->text().toDouble() );
+            u1.setINCH( QMAX(sml->text().toDouble(),0) );
+            u2.setINCH( QMAX(smr->text().toDouble(),0) );
+            u3.setINCH( QMAX(smt->text().toDouble(),0) );
+            u4.setINCH( QMAX(smb->text().toDouble(),0) );
             break;
         case U_PT:
-            u1.setPT( sml->text().toInt() );
-            u2.setPT( smr->text().toInt() );
-            u3.setPT( smt->text().toInt() );
-            u4.setPT( smb->text().toInt() );
+            u1.setPT( QMAX(sml->text().toInt(),0) );
+            u2.setPT( QMAX(smr->text().toInt(),0) );
+            u3.setPT( QMAX(smt->text().toInt(),0) );
+            u4.setPT( QMAX(smb->text().toInt(),0) );
             break;
         }
         doc->setFrameMargins( u1, u2, u3, u4 );
