@@ -56,3 +56,20 @@ bool Interpreter::addModule(Object* module)
     return true;
 }
 
+const QString& Interpreter::getScript()
+{
+    return m_script;
+}
+
+bool Interpreter::setScript(const QString& script)
+{
+    QString s = script;
+    bool ok = parseString(s);
+    m_script = ok ? s : QString::null;
+    return ok;
+}
+
+bool Interpreter::parseString(QString&)
+{
+    return false;
+}

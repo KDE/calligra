@@ -62,7 +62,22 @@ namespace Kross { namespace Kjs {
              *
              * See \see Kross::Api::Interpreter::execute()
              */
-            virtual bool execute(const QString& execstring);
+            virtual bool execute();
+
+            /**
+             * Execute a function in a KJS-string.
+             *
+             * See \see Kross::Api::Interpreter::executeFunction
+             */
+            virtual Kross::Api::Object* execute(const QString& name, Kross::Api::List* args);
+
+        protected:
+
+            /**
+             * Overloaded method to parse a KJS script string.
+             * See \see Kross::Api::Interpreter::parseString
+             */
+            virtual bool parseString(QString&);
 
         private:
 

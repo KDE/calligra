@@ -52,9 +52,22 @@ const QStringList KjsInterpreter::mimeTypes()
     return QStringList() << "application/x-javascript";
 }
 
-bool KjsInterpreter::execute(const QString& execstring)
+bool KjsInterpreter::parseString(QString&)
 {
+    //TODO
+    return false;
+}
+
+bool KjsInterpreter::execute()
+{
+    //TODO
     //d->kjspart->execute(execstring);
-    return true;
+    return false;
+}
+
+Kross::Api::Object* KjsInterpreter::execute(const QString& name, Kross::Api::List* args)
+{
+    //TODO
+    return 0;
 }
 

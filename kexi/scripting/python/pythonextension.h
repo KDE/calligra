@@ -35,6 +35,7 @@
 #include "../api/object.h"
 #include "../api/list.h"
 #include "../api/class.h"
+#include "pythoninterpreter.h"
 
 namespace Kross { namespace Python {
 
@@ -46,6 +47,7 @@ namespace Kross { namespace Python {
      */
     class PythonExtension : public Py::PythonExtension<PythonExtension>
     {
+            friend class PythonInterpreter;
         public:
 
             /**
@@ -130,7 +132,7 @@ namespace Kross { namespace Python {
              * \param variant The QVariant to convert.
              * \return The to a Py::Object converted QVariant.
              */
-            static Py::Object PythonExtension::toPyObject(const QVariant& variant);
+            static Py::Object toPyObject(const QVariant& variant);
 
             /**
              * Converts a \a Kross::Api::Object to a Py::Object.
@@ -139,6 +141,14 @@ namespace Kross { namespace Python {
              * \return The to a Py::Object converted Kross::Api::Object.
              */
             static Py::Object toPyObject(Kross::Api::Object* object);
+
+            /**
+             * Converts a \a Kross::Api::List into a Py::Tuple.
+             *
+             * \param list The Kross::Api::List to convert.
+             * \return The to a Py::Tuple converted Kross::Api::List.
+             */
+            static Py::Tuple toPyTuple(Kross::Api::List* list);
 
             /**
              * Callback function called from within python. This

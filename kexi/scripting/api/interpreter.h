@@ -81,6 +81,22 @@ namespace Kross { namespace Api {
             bool addModule(Object* module);
 
             /**
+             * Return the script-string.
+             *
+             * \return The script as string.
+             */
+            const QString& getScript();
+
+            /**
+             * Set the script-string.
+             *
+             * \param script The script as string.
+             * \return true on success else (e.g. on
+             *         parsing-error) false.
+             */
+            bool setScript(const QString& script);
+
+            /**
              * List of mimetypes this interpreter supports.
              *
              * \return QStringList with mimetypes like
@@ -89,19 +105,48 @@ namespace Kross { namespace Api {
             virtual const QStringList mimeTypes() = 0;
 
             /**
-             * Execute/interpret a string.
+             * Execute a script-string. Use \a setScript to
+             * set the string that should be executed via this
+             * function.
              *
-             * \param execstring The string to execute.
-             * \return true if execution was successfully
-             *         else false.
+             * \return true if execution was successfully else false.
              */
-            virtual bool execute(const QString& execstring) = 0;
+            virtual bool execute() = 0;
+
+            /**
+             * Execute a function in a script-string. This function
+             * behaves similar as the one above.
+             *
+             * \throw Kross::Api::Exception if execution failed.
+             * \param name The name of the function to execute.
+             * \param args The arguments passed to the function as
+             *        \a List object.
+             * \return A \a Object object representing the returnvalue
+             *         of the function call.
+             */
+            virtual Kross::Api::Object* execute(const QString& name, Kross::Api::List* args) = 0;
 
         protected:
             /// List of avaible modules.
             QMap<QString, Object*> m_modules;
+            /// The script-string.
+            QString m_script;
             /// List of mimetypes this interpreter supports.
             QStringList m_mimetypes;
+
+            /**
+             * Parse the as argument passed string. Classes inherited
+             * from this class to implementate an interpreter need to
+             * overload this method. This function got called from
+             * within \a setScript to validate the string.
+             * Interpreter-specific stuff like validating the string
+             * should be done in this method.
+             *
+             * \param s The string to parse. The overloaded method
+             *        is able to change the passed string.
+             * \return true on success else false.
+             */
+            virtual bool parseString(QString& s);
     };
 
 }}

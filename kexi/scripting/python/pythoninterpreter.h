@@ -20,18 +20,17 @@
 #define KROSS_PYTHON_INTERPRETER_H
 
 #include <Python.h>
-//#include "CXX/Objects.hxx"
-//#include "CXX/Extensions.hxx"
 
 #include <qstring.h>
 #include <kdebug.h>
 
 #include "../api/object.h"
 #include "../api/interpreter.h"
-#include "pythonmodule.h"
-//#include "pythonextension.h"
 
 namespace Kross { namespace Python {
+
+    // Forward declaration.
+    class PythonModule;
 
     /**
      * Python interpreter bridge.
@@ -53,19 +52,33 @@ namespace Kross { namespace Python {
             virtual ~PythonInterpreter();
 
             /**
-             * Return a list of mimetypes the Python-Interpreter
-             * supports.
-             *
-             * See \see Kross::Api::Interpreter::execute()
+             * Return a list of mimetypes the Python-Interpreter supports.
+             * See \see Kross::Api::Interpreter::execute
              */
             virtual const QStringList mimeTypes();
 
+            //const QString& getScript();
+            //bool setScript(const QString&);
+
             /**
-             * Execute/interpret a Python-string.
-             *
-             * See \see Kross::Api::Interpreter::execute()
+             * Execute a Python-string.
+             * See \see Kross::Api::Interpreter::execute
              */
-            virtual bool execute(const QString& execstring);
+            virtual bool execute();
+
+            /**
+             * Execute a function in a Python-string.
+             * See \see Kross::Api::Interpreter::execute
+             */
+            virtual Kross::Api::Object* execute(const QString& name, Kross::Api::List* args);
+
+        protected:
+
+            /**
+             * Overloaded method to parse a python script string.
+             * See \see Kross::Api::Interpreter::parseString
+             */
+            virtual bool parseString(QString&);
 
         private:
 
@@ -75,12 +88,29 @@ namespace Kross { namespace Python {
              * thread we use for this Python bridge.
              */
             PyThreadState *m_gtstate;
+            PyThreadState *tstate;
 
             /**
              * The to \a PythonModule translated
              * \a Kross::Api::Module instances.
              */
             QMap<QString, PythonModule*> m_pythonmodules;
+
+            /**
+             * Initialize interpreter run.
+             * This function got called e.g. from within \a execute
+             * to prepare the interpreter before the string got
+             * executed.
+             */
+            bool init();
+
+            /**
+             * Finalize interpreter run.
+             * This function got called e.g. from within \a execute
+             * to finalize the interpreter after the string got
+             * executed.
+             */
+            bool finesh();
 
     };
 

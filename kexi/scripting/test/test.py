@@ -161,6 +161,10 @@ class KexiDBClass:
         print "alterTableName from=%s to=%s tableschema=%s" % (tablename, newtablename, tableschema)
         connection.alterTableName(tableschema, newtablename)
 
+def myTestFunc():
+    print "myTestFunc() called !!!"
+    return "This is the returnvalue!"
+
 if __name__ == '__main__':
 
     print "BEGIN KROSS::KEXIDB TEST ###############################################"
@@ -180,20 +184,19 @@ if __name__ == '__main__':
 
     mykexidbclass.printQueryString(myfileconnection, "SELECT * FROM table2")
 
-    #mykexidbclass.createTable(myfileconnection, "mytable123")
-    #mykexidbclass.dropTable(myfileconnection, "mytable123")
-    #mykexidbclass.alterTableName(myfileconnection, "table1", "table111")
-
-    #############################################################
-    # TODO
-
-    #CRASH !!!
     #myqueryschema = mykexidbclass.drivermanager.querySchema()
     #myqueryschema.setName("myqueryname")
     #myqueryschema.setCaption("myquerycaption")
     #myqueryschema.setStatement("SELECT * FROM table2")
     #print "myqueryschema = %s" % myqueryschema.statement()
     #mykexidbclass.printQuerySchema(myfileconnection, myqueryschema)
+
+    #mykexidbclass.createTable(myfileconnection, "mytable123")
+    #mykexidbclass.dropTable(myfileconnection, "mytable123")
+    #mykexidbclass.alterTableName(myfileconnection, "table1", "table111")
+
+    #############################################################
+    # TODO
 
     #TODO: new table isn't usuable!!!
     #ts1 = myfileconnection.tableSchema("table2")
@@ -211,4 +214,3 @@ if __name__ == '__main__':
     #del(mykexidbclass)
 
     print "END KROSS::KEXIDB TEST ###############################################"
-

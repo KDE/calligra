@@ -40,6 +40,8 @@ static KCmdLineOptions options[] =
 {
     { "interpreter <interpretername>", I18N_NOOP("Name of the used interpreter."), "python" },
     { "scriptfile <filename>", I18N_NOOP("Scriptfile to execute with the defined interpreter."), "test.py" },
+    //{ "functionname <functioname>", I18N_NOOP("Execute the function in the defined scriptfile."), "" },
+    //{ "functionargs <functioarguments>", I18N_NOOP("List of arguments to pass to the function on execution."), "" },
     { 0, 0, 0 }
 };
 
@@ -59,8 +61,12 @@ void runInterpreter(const QString& interpretername, const QString& script)
         Kross::KexiDB::KexiDBModule* module = new Kross::KexiDB::KexiDBModule();
         interpreter->addModule(module);
 
-        if(! interpreter->execute(script))
-            kdWarning() << "Interpreter failed to execute script!" << endl;
+        if(! interpreter->setScript(script))
+            kdWarning() << "Interpreter failed to parse script!" << endl;
+        else {
+            if(! interpreter->execute())
+                kdWarning() << "Interpreter failed to execute script!" << endl;
+        }
 
         //TODO garbage collect them too?
         delete module; module = 0;

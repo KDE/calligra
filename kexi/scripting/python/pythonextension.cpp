@@ -317,6 +317,19 @@ Py::Object PythonExtension::toPyObject(Kross::Api::Object* object)
     return Py::asObject( new PythonExtension(object) );
 }
 
+Py::Tuple PythonExtension::toPyTuple(Kross::Api::List* list)
+{
+#ifdef KROSS_PYTHON_EXTENSION_DEBUG
+    kdDebug() << QString("Kross::Python::PythonExtension::toPyTuple(Kross::Api::List) name='%1'").arg(list.getName()) << endl;
+#endif
+
+    uint count = list->count();
+    Py::Tuple tuple(count);
+    for(int i = 0; i < count; i++)
+        tuple.setItem(i, toPyObject(list->item(i)));
+    return tuple;
+}
+
 Py::Object PythonExtension::_call_(const Py::Tuple& args)
 {
 #ifdef KROSS_PYTHON_EXTENSION_DEBUG
