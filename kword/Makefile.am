@@ -46,7 +46,7 @@ libkwordpart_la_SOURCES = kwtableframeset.cc kwcanvas.cc kwframe.cc kwformulafra
 
 
 libkwordpart_la_LDFLAGS = $(all_libraries) $(KDE_PLUGIN)
-libkwordpart_la_LIBADD = $(LIB_KOFFICEUI) $(LIB_KOTEXT) ../lib/kformula/libkformula.la ./libkwmailmerge_interface.la 
+libkwordpart_la_LIBADD = $(LIB_KOFFICEUI) $(LIB_KOTEXT) ../lib/kformula/libkformulalib.la ./libkwmailmerge_interface.la 
 METASOURCES = AUTO
 
 lib_LTLIBRARIES = libkwmailmerge_interface.la
