@@ -724,6 +724,9 @@ public:
 
     QPtrListIterator<KWBookMark> bookmarkIterator() const { return QPtrListIterator<KWBookMark>(m_bookmarkList); }
 
+    QStringList personalExpresssionPath() const { return m_personalExpressionPath;}
+    void setPersonalExpressionPath( const QStringList & );
+
 signals:
     void sig_insertObject( KWChild *_child, KWPartFrameSet* );
 
@@ -915,6 +918,9 @@ private:
     QPtrList<KWBookMark>m_bookmarkList;
     //necessary before when we load bookmark.
     QPtrList<bookMark>m_tmpBookMarkList;
+
+    QStringList m_personalExpressionPath;
+
 };
 
 

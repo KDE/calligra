@@ -220,6 +220,8 @@ KWDocument::KWDocument(QWidget *parentWidget, const char *widgetName, QObject* p
     m_tableStyleColl = new KWTableStyleCollection();
     m_tableTemplateColl = new KWTableTemplateCollection();
 
+    m_personalExpressionPath = KWFactory::global()->dirs()->resourceDirs("expression");
+
     setInstance( KWFactory::global(), false );
 
     m_gridX = m_gridY = 10.0;
@@ -4449,5 +4451,12 @@ void KWDocument::configureSpellChecker()
         view->configureSpellChecker();
     }
 }
+
+void KWDocument::setPersonalExpressionPath( const QStringList & lst)
+{
+    m_personalExpressionPath = lst;
+    refreshMenuExpression();
+}
+
 
 #include "kwdoc.moc"

@@ -47,6 +47,7 @@
 
 #include <float.h>
 #include <kmessagebox.h>
+#include <klistview.h>
 #include <kdeversion.h>
 
 // little helper stolen from kmail
@@ -859,6 +860,22 @@ ConfigurePathPage::ConfigurePathPage( KWView *_view, QVBox *box, char *name )
     m_pView=_view;
     KWDocument * doc = m_pView->kWordDocument();
     config = KWFactory::global()->config();
+    QVGroupBox* gbPathGroup = new QVGroupBox( i18n("Path"), box, "GroupBox" );
+    gbPathGroup->setMargin( 10 );
+    gbPathGroup->setInsideSpacing( KDialog::spacingHint() );
+
+    m_pPathView = new KListView( gbPathGroup );
+    m_pPathView->addColumn( i18n( "Type" ) );
+    m_pPathView->addColumn( i18n( "Path" ) );
+    (void) new QListViewItem( m_pPathView, i18n("Personal Expression"), doc->personalExpresssionPath().join(";") );
+    m_modifyPath = new QPushButton( i18n("Modify path..."), gbPathGroup);
+    connect( m_modifyPath, SIGNAL( clicked ()), this, SLOT( slotModifyPath()));
+
+}
+
+void ConfigurePathPage::slotModifyPath()
+{
+    //todo
 }
 
 void ConfigurePathPage::slotDefault()

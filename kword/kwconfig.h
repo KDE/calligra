@@ -36,6 +36,8 @@ class QComboBox;
 class KIntNumInput;
 class KCommand;
 class KWDocument;
+class KListView;
+
 class ConfigureSpellPage : public QObject
 {
     Q_OBJECT
@@ -127,9 +129,13 @@ class ConfigurePathPage : public QObject
 public:
     ConfigurePathPage( KWView *_view, QVBox *box, char *name = 0 );
     void slotDefault();
+private slots:
+    void slotModifyPath();
 private:
     KWView* m_pView;
     KConfig* config;
+    KListView* m_pPathView;
+    QPushButton *m_modifyPath;
 };
 
 class KWConfig : public KDialogBase
