@@ -166,9 +166,6 @@ public:
     void dropEvent( QDropEvent * );
 
     void clearSelection();
-    void insertSpecialChar(QChar _c);
-    void insertLink(const QString &_linkName, const QString & hrefName);
-    void insertSoftHyphen();
     void selectAll();
     virtual void drawCursor( bool b );
 

@@ -1005,16 +1005,13 @@ void KPTextView::copy()
 
 void KPTextView::paste()
 {
-    kdDebug()<<"KPTextView::paste()\n";
-
     QMimeSource *data = QApplication::clipboard()->data();
     if ( data->provides( KPrTextDrag::selectionMimeType() ) )
     {
         QByteArray arr = data->encodedData( KPrTextDrag::selectionMimeType() );
         if ( arr.size() )
         {
-            //todo
-            kdDebug()<<"QCString( arr ) :"<<QCString( arr )<<endl;
+            //kdDebug()<<"QCString( arr ) :"<<QCString( arr )<<endl;
             kpTextObject()->kPresenterDocument()->addCommand(kpTextObject()->pasteKPresenter( cursor(), QCString( arr ), true ));
         }
     }
@@ -1105,7 +1102,6 @@ void KPTextView::doAutoFormat( QTextCursor* cursor, KoTextParag *parag, int inde
 
 void KPTextView::startDrag()
 {
-    kdDebug()<<"KPTextView::startDrag()\n";
     textView()->dragStarted();
     //m_canvas->dragStarted();
     KPrTextDrag *drag = newDrag( m_page );
@@ -1154,29 +1150,6 @@ void KPTextView::clearSelection()
     {
         textDocument()->removeSelection(QTextDocument::Standard );
     }
-}
-
-void KPTextView::insertSpecialChar(QChar _c)
-{
-    if(textObject()->hasSelection() )
-        m_kptextobj->kPresenterDocument()->addCommand(textObject()->replaceSelectionCommand(
-            cursor(), _c, QTextDocument::Standard, i18n("Insert Special Char")));
-    else
-        textObject()->insert( cursor(), currentFormat(), _c, false /* no newline */, true, i18n("Insert Special Char") );
-}
-
-void KPTextView::insertLink(const QString &_linkName, const QString & hrefName)
-{
-    KoTextFormat format=*currentFormat();
-    format.setAnchorName(_linkName);
-    format.setAnchorHref( hrefName);
-    textObject()->insert( cursor(), &format, _linkName+" " , false , true, i18n("Insert Link") );
-}
-
-void KPTextView::insertSoftHyphen()
-{
-    textObject()->insert( cursor(), currentFormat(), QChar(0xad) /* see QRichText */,
-                          false /* no newline */, true, i18n("Insert Soft Hyphen") );
 }
 
 void KPTextView::selectAll()
@@ -1232,7 +1205,7 @@ void KPTextView::showPopup( KPresenterView *view, const QPoint &point )
     view->unplugActionList( "datatools_link" );
     m_actionList.clear();
     m_actionList = dataToolActionList(view->kPresenterDoc()->instance());
-    kdDebug() << "KWView::openPopupMenuInsideFrame plugging actionlist with " << m_actionList.count() << " actions" << endl;
+    //kdDebug() << "KWView::openPopupMenuInsideFrame plugging actionlist with " << m_actionList.count() << " actions" << endl;
     if(refLink().isNull())
     {
         view->plugActionList( "datatools", m_actionList );
@@ -1262,7 +1235,7 @@ void KPTextView::insertCustomVariable( const QString &name)
 
 void KPTextView::insertVariable( int type, int subtype )
 {
-    kdDebug() << "KWTextFrameSetEdit::insertVariable " << type << endl;
+    //kdDebug() << "KPTextView::insertVariable " << type << endl;
     KPresenterDoc * doc = kpTextObject()->kPresenterDocument();
 
     KoVariable * var = 0L;
@@ -1291,7 +1264,7 @@ void KPTextView::insertVariable( KoVariable *var )
     {
         CustomItemsMap customItemsMap;
         customItemsMap.insert( 0, var );
-        kdDebug() << "KPTextView::insertVariable inserting into paragraph" << endl;
+        //kdDebug() << "KPTextView::insertVariable inserting into paragraph" << endl;
 #ifdef DEBUG_FORMATS
         kdDebug() << "KPTextView::insertVariable currentFormat=" << currentFormat() << endl;
 #endif
@@ -1344,7 +1317,6 @@ KPrTextDrag * KPTextView::newDrag( QWidget * parent ) const
 
 void KPTextView::dragEnterEvent( QDragEnterEvent *e )
 {
-    kdDebug()<<"KPTextView::dragEnterEvent( QDragEnterEvent * )\n";
     if ( !kpTextObject()->kPresenterDocument()->isReadWrite() || !KPrTextDrag::canDecode( e ) )
     {
         e->ignore();
@@ -1354,7 +1326,6 @@ void KPTextView::dragEnterEvent( QDragEnterEvent *e )
 }
 void KPTextView::dragMoveEvent( QDragMoveEvent *e, const QPoint & )
 {
-    kdDebug()<<"    KPTextView::dragMoveEvent( QDragMoveEvent *, const QPoint & )\n";
     if ( !kpTextObject()->kPresenterDocument()->isReadWrite() || !KPrTextDrag::canDecode( e ) )
     {
         e->ignore();
@@ -1370,7 +1341,6 @@ void KPTextView::dragMoveEvent( QDragMoveEvent *e, const QPoint & )
 }
 void KPTextView::dragLeaveEvent( QDragLeaveEvent * )
 {
-    kdDebug()<<"KPTextView::dragLeaveEvent( QDragLeaveEvent * )\n";
 }
 
 

@@ -2801,21 +2801,6 @@ void KWTextFrameSetEdit::ctrlPgDownKeyPressed()
     }
 }
 
-void KWTextFrameSetEdit::insertSpecialChar(QChar _c)
-{
-    if(textObject()->hasSelection() )
-        frameSet()->kWordDocument()->addCommand(textObject()->replaceSelectionCommand(
-            cursor(), _c, QTextDocument::Standard, i18n("Insert Special Char")));
-    else
-        textObject()->insert( cursor(), currentFormat(), _c, false /* no newline */, true, i18n("Insert Special Char") );
-}
-
-void KWTextFrameSetEdit::insertSoftHyphen()
-{
-    textObject()->insert( cursor(), currentFormat(), QChar(0xad) /* see QRichText */,
-                          false /* no newline */, true, i18n("Insert Soft Hyphen") );
-}
-
 void KWTextFrameSetEdit::insertExpression(const QString &_c)
 {
     if(textObject()->hasSelection() )
@@ -2823,14 +2808,6 @@ void KWTextFrameSetEdit::insertExpression(const QString &_c)
             cursor(), _c, QTextDocument::Standard , i18n("Insert Expression")));
     else
        textObject()->insert( cursor(), currentFormat(), _c, false /* no newline */, true, i18n("Insert Expression") );
-}
-
-void KWTextFrameSetEdit::insertLink(const QString &_linkName, const QString & hrefName)
-{
-    KoTextFormat format=*currentFormat();
-    format.setAnchorName(_linkName);
-    format.setAnchorHref( hrefName);
-    textObject()->insert( cursor(), &format, _linkName+" " , false , true, i18n("Insert Link") );
 }
 
 void KWTextFrameSetEdit::insertFloatingFrameSet( KWFrameSet * fs, const QString & commandName )
