@@ -2116,9 +2116,9 @@ void KSpreadCell::paintCommentIndicator(QPainter& painter, QPoint corner,
         ( !painter.device()->isExtDev() && table()->doc()->getShowCommentIndicator() ) ) )
   {
     QPointArray point( 3 );
-    point.setPoint( 0, corner.x() + width - 10, corner.y() );
+    point.setPoint( 0, corner.x() + width - 5, corner.y() );
     point.setPoint( 1, corner.x() + width, corner.y() );
-    point.setPoint( 2, corner.x() + width, corner.y() + 10 );
+    point.setPoint( 2, corner.x() + width, corner.y() + 5 );
     painter.setBrush( QBrush(Qt::red ) );
     painter.setPen( Qt::NoPen );
     painter.drawPolygon( point );

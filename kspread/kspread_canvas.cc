@@ -3134,7 +3134,7 @@ void KSpreadVBorder::paintEvent( QPaintEvent* _ev )
 
   for ( int y = top_row; y <= bottom_row; y++ )
   {
-    bool highlighted = (area && y >= selection.top() && y <= selection.bottom() );
+    bool highlighted = ( area && y >= selection.top() && y <= selection.bottom() );
     bool selected = ( highlighted && (table->isRowSelected()) );
 
     RowLayout *row_lay = table->rowLayout( y );
@@ -3781,7 +3781,7 @@ void KSpreadToolTip::maybeTip( const QPoint& p )
 
     // Is the cursor over the comment marker (if there is any) then
     // show the comment.
-    QRect marker( xpos + u - 10, ypos, 10, 10 );
+    QRect marker( xpos + u - 6, ypos -1, 7, 7 );
     if ( marker.contains( p ) )
     {
         tip( marker, comment );
