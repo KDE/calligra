@@ -21,5 +21,5 @@ METASOURCES = kdbcalendar.moc kdbcriteria.moc kdbdatabase.moc kdbdatafield.moc \
 	kdbdataset.moc kdbfieldedit.moc kdbmoneyedit.moc kdbpickdate.moc \
 	kdbrecordview.moc kdbrelation.moc
 
-IDL_FLAGS = --query-server-for-narrow --relative-paths --any -I$(top_srcdir)/lib/store -I$(interfacedir) -I$(srcdir) -I$(idldir)
+IDL_FLAGS = --relative-paths --any -I$(top_srcdir)/lib/store -I$(interfacedir) -I$(srcdir) -I$(idldir)
 

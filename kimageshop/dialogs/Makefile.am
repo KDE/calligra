@@ -1,6 +1,6 @@
 INCLUDES = -I$(srcdir)/.. -I$(srcdir)/../widgets $(KOFFICE_INCLUDES) $(all_includes) $(MICO_INCLUDES)
 
-IDL_FLAGS = --query-server-for-narrow --relative-paths -I$(top_srcdir)/lib/kofficecore -I$(top_srcdir)/lib/store -I$(interfacedir) -I$(idldir)
+IDL_FLAGS = --relative-paths -I$(top_srcdir)/lib/kofficecore -I$(top_srcdir)/lib/store -I$(interfacedir) -I$(idldir)
 
 lib_LTLIBRARIES = libkisdialogs.la
 libkisdialogs_la_LDFLAGS = $(all_libraries) -version-info 1:0

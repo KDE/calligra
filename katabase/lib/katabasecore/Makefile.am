@@ -14,5 +14,5 @@ noinst_HEADERS = kbDatabase.h kbRecordSet.h kbTable.h
 
 idl_DATA = katabase.idl
 
-IDL_FLAGS = --query-server-for-narrow --relative-paths --any -I$(top_srcdir)/lib/store -I$(interfacedir) -I$(srcdir) -I$(idldir)
+IDL_FLAGS = --relative-paths --any -I$(top_srcdir)/lib/store -I$(interfacedir) -I$(srcdir) -I$(idldir)
 

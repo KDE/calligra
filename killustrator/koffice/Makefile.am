@@ -39,5 +39,5 @@ idl_DATA = KIllustrator.idl
 kdelnk_DATA = killustrator.desktop
 kdelnkdir = $(kde_appsdir)/KOffice
 
-IDL_FLAGS = --query-server-for-narrow --relative-paths -I$(top_srcdir)/lib/kofficecore -I$(top_srcdir)/lib/store -I$(idldir)
+IDL_FLAGS = --relative-paths -I$(top_srcdir)/lib/kofficecore -I$(top_srcdir)/lib/store -I$(idldir)
 

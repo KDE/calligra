@@ -30,5 +30,5 @@ kdelnkdir = $(kde_datadir)/koffice/partlnk
 messages:
 	$(XGETTEXT) -C -ki18n -x $(includedir)/kde.pot *.cc */*.cpp && mv messages.po ../po/kchart.pot
 
-IDL_FLAGS = --query-server-for-narrow -I$(idldir) -I$(interfacedir)
+IDL_FLAGS = -I$(idldir) -I$(interfacedir)
 

@@ -19,7 +19,7 @@ servicedir = $(kde_servicesdir)
 messages:
 	$(XGETTEXT) -C -ki18n -x $(includedir)/kde.pot  *.cc && mv messages.po ../../po/spell_tool.pot
 
-IDL_FLAGS = --query-server-for-narrow --relative-paths --any -I$(idldir)
+IDL_FLAGS = --relative-paths --any -I$(idldir)
 
 datatools_IDLDIR = $(idldir)
 

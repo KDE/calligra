@@ -476,7 +476,7 @@ Chart::SimpleChart_skel::SimpleChart_skel( const CORBA::BOA::ReferenceData &_id 
     _find_impl( "IDL:Chart/SimpleChart:1.0", "SimpleChart" );
   assert( !CORBA::is_nil( _impl ) );
   _create_ref( _id,
-    CORBA::InterfaceDef::_nil(),
+    0,
     _impl,
     "IDL:Chart/SimpleChart:1.0" );
   register_dispatcher( new StaticInterfaceDispatcherWrapper<SimpleChart_skel>( this ) );
@@ -489,7 +489,7 @@ Chart::SimpleChart_skel::SimpleChart_skel( CORBA::Object_ptr _obj )
   assert( !CORBA::is_nil( _impl ) );
   _restore_ref( _obj,
     CORBA::BOA::ReferenceData(),
-    CORBA::InterfaceDef::_nil(),
+    0,
     _impl );
   register_dispatcher( new StaticInterfaceDispatcherWrapper<SimpleChart_skel>( this ) );
 }

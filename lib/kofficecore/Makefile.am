@@ -25,7 +25,7 @@ libkofficecore_la_METASOURCES = koFrame.moc koMainWindow.moc \
 
 idl_DATA = koffice.idl
 
-IDL_FLAGS = --query-server-for-narrow --relative-paths --any -I$(top_srcdir)/lib/store -I$(interfacedir) -I$(srcdir) -I$(idldir)
+IDL_FLAGS = --relative-paths --any -I$(top_srcdir)/lib/store -I$(interfacedir) -I$(srcdir) -I$(idldir)
 
 koffice.idl: $(idldir)/openparts.idl $(idldir)/openparts_ui.idl $(idldir)/kom.idl $(top_srcdir)/lib/store/koStoreIf.idl
 
