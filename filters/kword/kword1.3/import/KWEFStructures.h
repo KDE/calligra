@@ -162,17 +162,17 @@ class ParaData;
 class TableCell
 {
    public:
-      TableCell (): col( 0 ), row( 0 ), paraList( 0 ) {}
+      TableCell (): col( 0 ), row( 0 ), m_cols( 0 ), m_rows( 0 ), paraList( 0 ) {}
 
-      TableCell ( int                   c,
-                  int                   r,
-                  QValueList<ParaData> *p,
-                  FrameData &frameData  ) : col (c), row (r), paraList (p), frame (frameData) {}
+      TableCell ( int c, int r, int _cols, int _rows, QValueList<ParaData> *p, FrameData &frameData  )
+         : col (c), row (r), m_cols( _cols ), m_rows( _rows ), paraList (p), frame (frameData) {}
 
       ~TableCell ();
 
       int                   col;
       int                   row;
+      int m_cols;
+      int m_rows;
       QValueList<ParaData> *paraList;
       FrameData   frame;
 };
@@ -183,17 +183,14 @@ class Table
    public:
       Table () : cols (0) {}
 
-      void addCell ( int                   c,
-                     int                   r,
-                     QValueList<ParaData> &p,
-                     FrameData &frameData  );
+      void addCell ( int c, int r, int _cols, int _rows, QValueList<ParaData> &p, FrameData &frameData );
 
       int                   cols;
       QValueList<TableCell> cellList;
 };
 
 
-//This is basically FRAMESET tag
+/// This is basically FRAMESET tag
 class FrameAnchor
 {
    public:

@@ -449,7 +449,7 @@ static void ProcessFramesetTag ( QDomNode        myNode,
             {
                 if ( col != -1 && row != -1 )
                 {
-                    if ( cols == 1 && rows == 1 )
+                    if ( cols > 0 && rows > 0 )
                     {
 #if 0
                         kdDebug (30508) << "DEBUG - FRAMESET: table " << name << " col, row = "
@@ -469,7 +469,7 @@ static void ProcessFramesetTag ( QDomNode        myNode,
                                           << TagProcessing ( "PARAGRAPH", ProcessParagraphTag, &cellParaList );
                         ProcessSubtags (myNode, tagProcessingList, leader);
 
-                        frameAnchor->table.addCell (col, row, cellParaList, frameAnchor->frame);
+                        frameAnchor->table.addCell (col, row, cols, rows, cellParaList, frameAnchor->frame);
                     }
                     else
                     {
