@@ -140,13 +140,13 @@ configureInterfacePage::configureInterfacePage( KWView *_view, QWidget *parent ,
     if( config->hasGroup("Interface") )
     {
         config->setGroup( "Interface" );
-        m_iGridX=config->readNumEntry("GridX",10);
-        m_iGridY=config->readNumEntry("GridY",10);
+        m_iGridX=config->readNumEntry("GridX",m_iGridX);
+        m_iGridY=config->readNumEntry("GridY",m_iGridY);
         ptIndent = config->readDoubleNumEntry("Indent", MM_TO_POINT(10.0));
-        oldNbRecentFiles=config->readNumEntry("NbRecentFile",10);
+        oldNbRecentFiles=config->readNumEntry("NbRecentFile",oldNbRecentFiles);
         m_bShowRuler=config->readBoolEntry("Rulers",true);
         oldAutoSaveValue=config->readNumEntry("AutoSave",oldAutoSaveValue);
-        nbPagePerRow=config->readNumEntry("nbPagePerRow",4);
+        nbPagePerRow=config->readNumEntry("nbPagePerRow",nbPagePerRow);
     }
 
 
