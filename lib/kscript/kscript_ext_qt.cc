@@ -3,6 +3,9 @@
 #include "kscript_ext_qapplication.h"
 #include "kscript_ext_qrect.h"
 #include "kscript_ext_qpushbutton.h"
+#include "kscript_ext_qradiobutton.h"
+#include "kscript_ext_qcheckbox.h"
+#include "kscript_ext_qlabel.h"
 #include "kscript_value.h"
 #include "kscript_util.h"
 
@@ -17,6 +20,9 @@ KSModule::Ptr ksCreateModule_Qt( KSInterpreter* interp )
   module->addObject( "QApplication", new KSValue( new KSClass_QApplication( module ) ) );
   module->addObject( "QRect", new KSValue( new KSClass_QRect( module ) ) );
   module->addObject( "QPushButton", new KSValue( new KSClass_QPushButton( module ) ) );
+  module->addObject( "QLabel", new KSValue( new KSClass_QLabel( module ) ) );
+  module->addObject( "QRadioButton", new KSValue( new KSClass_QRadioButton( module ) ) );
+  module->addObject( "QCheckBox", new KSValue( new KSClass_QCheckBox( module ) ) );
 
   return module;
 }

@@ -85,7 +85,7 @@ KSValue::Ptr KSObject_QPushButton::member( KSContext& context, const QString& na
 
   CHECK_LEFTEXPR( context, name );
 
-  RETURN_LEFTEXPR( "caption", new KSValue( WIDGET->caption() ) );
+  RETURN_LEFTEXPR( "text", new KSValue( WIDGET->text() ) );
   RETURN_LEFTEXPR( "geometry", new KSValue( new KSObject_QRect( WIDGET->geometry() ) ) );
 
   return KS_Qt_Object::member( context, name );
@@ -93,7 +93,7 @@ KSValue::Ptr KSObject_QPushButton::member( KSContext& context, const QString& na
 
 bool KSObject_QPushButton::setMember( KSContext& context, const QString& name, KSValue* v )
 {
-  SET_PROP( "caption", WIDGET->setCaption( v->stringValue() ), StringType )
+  SET_PROP( "text", WIDGET->setText( v->stringValue() ), StringType )
   SET_PROP( "geometry", WIDGET->setGeometry( *KSObject_QRect::convert( v ) ), RectType )
   else
     return KS_Qt_Object::setMember( context, name, v );

@@ -1,0 +1,41 @@
+Tasks for KScript:
+
+[ ] not started
+[s] started
+[X] done
+
+------------------------------------------------
+    Add more classes to the Qt extension:
+[s] QPushButton
+[s] QRadioButton
+[ ] QButtonGroup
+[s] QCheckBox
+[ ] QListBox*
+[ ] QComboBox
+[ ] QListView*
+[ ] QFile
+[s] QLabel
+[s] QLineEdit
+[ ] QMultiLineEdit
+[ ] QPopupMenu
+[ ] QScrollView
+
+------------------------------------------------
+[ ] Add a KDE extension (-> global name space)
+    Add classes to KDE extension:
+[ ] KFileDialog
+[ ] KToolBar*
+
+------------------------------------------------
+    Reimplement certain simple classes natively:
+[ ] QRect
+[ ] QPoint
+[ ] QString
+[ ] QChar
+
+------------------------------------------------
+[ ] write a nifty perl script that generates the
+    _ext_-files out of c++-headers. Would be 
+    nice for people that want to link KScript to
+    their own apps.
+------------------------------------------------
