@@ -32,6 +32,7 @@
 #include "vgradienttabwidget.h"
 #include "vfillcmd.h"
 #include "vstrokecmd.h"
+#include "vselection.h"
 
 #include <kdebug.h>
 
@@ -106,9 +107,10 @@ VGradientTool::mouseButtonPress()
 void
 VGradientTool::mouseButtonRelease()
 {
+	if( view()->part()->document().selection()->objects().count() == 0 ) return;
 	m_gradient.setOrigin( first() );
 	KoPoint p = last();
-	if(first().x() == last().x() && first().y() == last().y()) // workaround for a libart 2.3.10 bug
+	if( first().x() == last().x() && first().y() == last().y() ) // workaround for a libart 2.3.10 bug
 		p.setX( first().x() + 1 );
 	m_gradient.setVector( p );
 
@@ -135,6 +137,11 @@ VGradientTool::mouseButtonRelease()
 void
 VGradientTool::mouseDragRelease()
 {
+	if( view()->part()->document().selection()->objects().count() == 0 )
+	{
+		draw();
+		return;
+	}
 	// Y mirroring
 	KoPoint fp = first();
 	//fp.setY( -fp.y() + view()->canvasWidget()->viewport()->height() );
