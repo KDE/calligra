@@ -54,18 +54,18 @@ class VDocumentPreview : public QWidget
 		virtual bool eventFilter( QObject* object, QEvent* event );
 
 	private:
-		VDocument* m_document;
-		KarbonView* m_view;
-		KoPoint m_firstPoint;
-		KoPoint m_lastPoint;
-		bool m_dragging;
-		QPixmap *m_docpixmap;
+		VDocument	*m_document;
+		KarbonView	*m_view;
+		KoPoint		m_firstPoint;
+		KoPoint		m_lastPoint;
+		bool		m_dragging;
+		QPixmap		*m_docpixmap;
 }; // VDocumentPreview
 
 class VDocumentTab : public QWidget
 {
 	Q_OBJECT
-	
+
 	public:
 		VDocumentTab( KarbonView* view, QWidget* parent );
 		~VDocumentTab();
@@ -75,13 +75,13 @@ class VDocumentTab : public QWidget
 		void slotCommandAdded( VCommand* command );
 
 	private:
-		VDocumentPreview* m_documentPreview;
-		QLabel*           m_height;
-		QLabel*           m_width;
-		QLabel*           m_layers;
-		QLabel*           m_format;
-		
-		KarbonView*        m_view;
+		VDocumentPreview*	m_documentPreview;
+		QLabel*				m_height;
+		QLabel*				m_width;
+		QLabel*				m_layers;
+		QLabel*				m_format;
+
+		KarbonView*			m_view;
 }; // VDocumentTab
 
 /*************************************************************************
@@ -130,10 +130,10 @@ protected:
 	VLayerListViewItem* listItem( int pos );
 
 private:	
-	QListView* m_layersListView;
-	QHButtonGroup* m_buttonGroup;
-	KarbonView* m_view;
-	VDocument* m_document;
+	QListView*		m_layersListView;
+	QHButtonGroup*	m_buttonGroup;
+	KarbonView*		m_view;
+	VDocument*		m_document;
 }; // VLayersTab
 
 /*************************************************************************
@@ -154,7 +154,7 @@ class VHistoryGroupItem : public QListViewItem
 		virtual int rtti() const { return 1001; }
 
 	private:
-		QString     m_key;
+		QString	m_key;
 }; // VHistoryGroupItem
  
 class VHistoryItem : public QListViewItem
@@ -185,7 +185,7 @@ class VHistoryTab : public QWidget
 	public:
 		VHistoryTab( KarbonPart* part, QWidget* parent );
 		~VHistoryTab();
-		
+
 		bool groupingEnabled();
 
 	public slots:
@@ -220,17 +220,17 @@ class VHistoryTab : public QWidget
 class VDocumentDocker : public VDocker
 {
 	Q_OBJECT
-	
+
 	public:
 		VDocumentDocker( KarbonView* view );
 		~VDocumentDocker();
-		
-			// It would be great to get rid of these methods by providing 
-			// appropriate signals in the KarbonPart instead of direct calls...
+
+		// It would be great to get rid of these methods by providing 
+		// appropriate signals in the KarbonPart instead of direct calls...
 		VDocumentTab* documentTab() { return m_documentTab; }
 		VLayersTab*   layersTab()   { return m_layersTab; }
 		VHistoryTab*  historyTab()  { return m_historyTab; }
-		
+
 	protected:
 		VDocumentTab* m_documentTab;
 		VLayersTab*   m_layersTab;

@@ -138,8 +138,8 @@ VDocumentPreview::eventFilter( QObject* object, QEvent* event )
 	return QWidget::eventFilter( object, event );
 }
 
-
-void VDocumentPreview::paintEvent( QPaintEvent* )
+void
+VDocumentPreview::paintEvent( QPaintEvent* )
 {
 	// TODO : use NotROP, otherwise too slow
 	QPixmap pixmap( width(), height() );
@@ -253,7 +253,8 @@ VDocumentTab::~VDocumentTab()
 {
 } // VDocumentTab::~VDocumentTab
 
-void VDocumentTab::updateDocumentInfo()
+void
+VDocumentTab::updateDocumentInfo()
 {
 	m_width->setText( KoUnit::userValue( m_view->part()->document().width(), m_view->part()->unit() ) + m_view->part()->unitName() );
 	m_height->setText( KoUnit::userValue( m_view->part()->document().height(), m_view->part()->unit() ) + m_view->part()->unitName() );
@@ -517,7 +518,8 @@ VHistoryGroupItem::~VHistoryGroupItem()
 {
 } // VHistoryGroupItem::~VHistoryGroupItem
 
-void VHistoryGroupItem::paintCell( QPainter* p, const QColorGroup& cg, int column, int width, int align )
+void
+VHistoryGroupItem::paintCell( QPainter* p, const QColorGroup& cg, int column, int width, int align )
 {
 	int e = 0;
 	int n = 0;
@@ -566,7 +568,8 @@ VHistoryItem::VHistoryItem( VCommand* command, VHistoryGroupItem* parent, QListV
 	init();
 } // VHistoryItem::VHistoryItem
 
-void VHistoryItem::init()
+void
+VHistoryItem::init()
 {
 	kdDebug() << "In VHistoryItem::init() : " << m_command->name() << endl;
 	char buffer[64];
@@ -580,7 +583,8 @@ VHistoryItem::~VHistoryItem()
 {
 } // VHistoryItem::~VHistoryItem
 
-void VHistoryItem::paintCell( QPainter* p, const QColorGroup& cg, int column, int width, int align )
+void
+VHistoryItem::paintCell( QPainter* p, const QColorGroup& cg, int column, int width, int align )
 {
 	p->fillRect( 0, 0, width - 1, height() - 1, ( m_command->success() ? cg.base() : cg.base().dark( 140 ) ) );
 
@@ -659,17 +663,20 @@ VHistoryTab::~VHistoryTab()
 {
 } // VHistoryTab::~VHistoryTab
 
-bool VHistoryTab::groupingEnabled()
+bool
+VHistoryTab::groupingEnabled()
 {
 	return m_groupCommands->isChecked();
 } // VHistoryTab::groupingEnabled
 
-void VHistoryTab::historyCleared()
+void
+VHistoryTab::historyCleared()
 {
 	m_history->clear();
 } // VHistoryTab::historyCleared
 
-void VHistoryTab::commandExecuted( VCommand* command )
+void
+VHistoryTab::commandExecuted( VCommand* command )
 {
 	QListViewItem* item = m_history->firstChild();
 	bool found = false;
@@ -700,7 +707,8 @@ void VHistoryTab::commandExecuted( VCommand* command )
 	}
 } // VHistoryTab::commandExecuted
 
-void VHistoryTab::slotCommandAdded( VCommand* command )
+void
+VHistoryTab::slotCommandAdded( VCommand* command )
 {
 	if ( !command )
 		return;
@@ -742,7 +750,8 @@ void VHistoryTab::slotCommandAdded( VCommand* command )
 	m_history->update();
 } // VHistoryTab::slotCommandAdded
 
-void VHistoryTab::removeFirstCommand()
+void
+VHistoryTab::removeFirstCommand()
 {
 	if ( m_history->childCount() > 0 )
 		if ( m_history->firstChild()->rtti() == 1002 )
@@ -759,7 +768,8 @@ void VHistoryTab::removeFirstCommand()
 		}
 } // VHistoryTab::removeFirstCommand
 
-void VHistoryTab::removeLastCommand()
+void
+VHistoryTab::removeLastCommand()
 {
 	if ( m_history->childCount() > 0 )
 	{
@@ -784,7 +794,8 @@ void VHistoryTab::removeLastCommand()
 	}
 } // VHistoryTab::removeLastCommand
 
-void VHistoryTab::commandClicked( int button, QListViewItem* item, const QPoint&, int )
+void
+VHistoryTab::commandClicked( int button, QListViewItem* item, const QPoint&, int )
 {
 	if ( !item || item->rtti() == 1001 )
 		return;
@@ -802,7 +813,8 @@ void VHistoryTab::commandClicked( int button, QListViewItem* item, const QPoint&
 			emit redoCommand( ( (VHistoryItem*)item )->command() );
 } // VHistoryTab::commandClicked
 
-void VHistoryTab::groupingChanged( int )
+void
+VHistoryTab::groupingChanged( int )
 {
 	if ( m_groupCommands->isChecked() && m_history->childCount() > 1 )
 	{
@@ -871,4 +883,4 @@ VDocumentDocker::~VDocumentDocker()
 {
 } // VDocumentDocker::~VDocumentDocker
   
- #include "vdocumentdocker.moc"
+#include "vdocumentdocker.moc"
