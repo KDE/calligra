@@ -21,6 +21,7 @@ char s_FONT_CCId[]="$Id$";
 
 #include "font.h"
 #include "kword_doc.h"
+#include <kcharsets.h>
 
 #include <qpainter.h>
 #include <qlist.h>
@@ -57,6 +58,8 @@ KWDisplayFont::KWDisplayFont( KWordDocument *_doc, KWUserFont *_font, unsigned i
                               int _weight, bool _italic, bool _underline )
     : QFont( _font->getFontName(), _size, _weight, _italic ), fm( *this )
 {
+    KGlobal::charsets()->setQFont(*this, KGlobal::locale()->charset());
+
     lastZoom = 100;
     setUnderline( _underline );
 
