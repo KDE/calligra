@@ -33,7 +33,7 @@
 	Level		CDATA	#REQUIRED>
 
 <!ELEMENT DetailFooter (Line*, Label*, Special*)>
-<!ATTLIST Detail 
+<!ATTLIST DetailFooter
 	Height		CDATA   #REQUIRED
 	Level		CDATA	#REQUIRED>
 
