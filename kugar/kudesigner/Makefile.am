@@ -16,7 +16,8 @@ kudesigner_la_SOURCES = canvbox.cpp \
 	clabel.cpp \
 	cline.cpp \
 	property.cpp \
-	propertyeditor.cpp
+	propertyeditor.cpp \
+	propertywidgets.cpp
 kudesigner_la_LDFLAGS = $(all_libraries) $(KDE_RPATH) -module -avoid-version
 kudesigner_la_LIBADD = $(LIB_KOFFICEUI) $(LIB_KPARTS) $(LIB_KOFFICECORE) $(LIB_KIO) $(LIB_KDEPRINT)
 
@@ -63,6 +64,7 @@ EXTRA_DIST = \
 	kudesigner_view.h \
 	property.h \
 	propertyeditor.h \
+	propertywidgets.h \
 	$(rc_DATA) \
 	$(apps_DATA)
 

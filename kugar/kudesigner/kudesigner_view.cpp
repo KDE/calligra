@@ -67,8 +67,8 @@ KudesignerView::KudesignerView( KudesignerPart* part, QWidget* parent, const cha
         shell()->addDockWindow(pe, DockRight);
         pe->show();
 
-        connect(rc, SIGNAL( selectionMade(std::map<QString, Property>*) ), pe,
-            SLOT( populateProperties(std::map<QString, Property>*) ));
+        connect(rc, SIGNAL( selectionMade(std::map<QString, Property* >*) ), pe,
+            SLOT( populateProperties(std::map<QString, Property* >*) ));
         connect(rc, SIGNAL( selectionClear() ), pe, SLOT( clearProperties() ));
     }
 

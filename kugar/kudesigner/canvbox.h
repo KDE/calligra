@@ -30,6 +30,7 @@ class CanvasReportHeader;
 class CanvasReportFooter;
 class CanvasPageHeader;
 class CanvasPageFooter;
+class Property;
 
 class CanvasBox: public QCanvasRectangle{
 public:
@@ -38,6 +39,7 @@ public:
     {
         setSelected(false);
     }
+    virtual ~CanvasBox();
 
     virtual int rtti() const { return RttiCanvasBox; }
     virtual void draw(QPainter &painter);
@@ -48,14 +50,19 @@ public:
     virtual void drawHolders(QPainter &painter) {}
 
     /**
-      properties format
+      DEPRECATED: properties format
       map<key_name, pair<key_value, key_description> >
       key_description << key_hint -- to display helpful tips
                       << key_type (string, int, int_from_list, color, font)
                          -- to organize appropriate input
 		      << probably_key_value << ... -- values
     */
-    std::map<QString, std::pair<QString, QStringList> > props;
+//    std::map<QString, std::pair<QString, QStringList> > props;
+    /**
+      NEW property format
+      map<QString, Property* >
+    */
+    std::map<QString, Property* > props;
 };
 
 class CanvasSection: public CanvasBox{

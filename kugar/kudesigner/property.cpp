@@ -70,7 +70,7 @@ void Property::setValue(QString value)
 
 QWidget *Property::editorOfType()
 {
-/*    switch (type())
+    switch (type())
     {
         case IntegerValue:
             return new PLineEdit(0);
@@ -91,7 +91,7 @@ QWidget *Property::editorOfType()
             PLineEdit *l = new PLineEdit(0);
             l->setValue(value());
             return l;
-    }*/
+    }
     return 0;
 }
 
@@ -109,16 +109,12 @@ void DescriptionProperty::setCorrespList(std::map<QString, QString> list)
 
 QWidget *DescriptionProperty::editorOfType()
 {
-/*    switch (type())
+    switch (type())
     {
         case ValueFromList:
-            QComboBox *b = new QComboBox(false, 0, 0);
-            for (std::map<QString, QString>::iterator it = corerspList.begin(); it != correspList.end(); ++it)
-            {
-                b->insertItem((*it).first);
-            }
-            break;
-        default:
-            return Property::editorOfType();*/
-    return 0;
+            PComboBox *b = new PComboBox(&correspList, false, 0, 0);
+            b->setValue(value());
+            return b;
+    }
+    return Property::editorOfType();;
 }

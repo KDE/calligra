@@ -485,8 +485,12 @@ void ReportCanvas::selectItem(CanvasBox *it, bool addToSelection)
     selected.append(it);
     it->setSelected(true);
 
-    std::map<QString, Property> selProps;
-    Property p(StringValue, "Text", "");
+    std::map<QString, Property* > selProps;
+    std::map<QString, QString> m;
+    m["Text1"] = "1";
+    m["Text2"] = "2";
+    m["Text3"] = "3";
+    DescriptionProperty *p = new DescriptionProperty("Text", "3", m);
     selProps["Text"] = p;
     
     emit selectionMade(&selProps);

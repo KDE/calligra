@@ -57,7 +57,7 @@ enum PropertyType {
   Value is of QString type, not QVariant - may be I'm wrong here.
   Property has operator < to be able to be included in std::map<>
   (all objects with properties must have
-   map<QString, Property> propertyList
+   map<QString, Property* > propertyList
    or similar).
   Those property lists can be intersected as sets of Property by
   set_intersection() - STL algo function.
@@ -68,7 +68,7 @@ class Property {
 public:
     Property() {}
     Property(int type, QString name, QString value=QString::null);
-    ~Property();
+    virtual ~Property();
 
     bool operator<(const Property &prop) const;
 

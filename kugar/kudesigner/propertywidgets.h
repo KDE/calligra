@@ -23,7 +23,7 @@
 class PropertyWidget{
 public:
     virtual QString value() const = 0;
-    virtual void setValue(QString value)=0;
+    virtual void setValue(const QString value)=0;
 };
 
 class PLineEdit: public QLineEdit, PropertyWidget{
@@ -34,21 +34,24 @@ public:
         QLineEdit(contents, parent, name) {};
 
     virtual QString value() const;
-    virtual void setValue(QString value);
+    virtual void setValue(const QString value);
 };
 
 class PComboBox: public QComboBox, PropertyWidget{
 public:
-    PComboBox ( std::map<QString, QString> v_corresp, QWidget * parent = 0, const char * name = 0 ):
-        QComboBox(parent, name), corresp(v_corresp) {}
-    PComboBox ( std::map<QString, QString> v_corresp,  bool rw, QWidget * parent = 0, const char * name = 0 ):
-        QComboBox(rw, parent, name), corresp(v_corresp) {}
-
+    PComboBox ( std::map<QString, QString> *v_corresp, QWidget * parent = 0, const char * name = 0 );
+    PComboBox ( std::map<QString, QString> *v_corresp,  bool rw, QWidget * parent = 0, const char * name = 0 );
+ 
     virtual QString value() const;
-    virtual void setValue(QString value);
+    virtual void setValue(const QString value);
 
 private:
     /** map<description, value>*/
-    std::map<QString, QString> corresp;
+    std::map<QString, QString> *corresp;
+    /** map<value, description>*/
+    std::map<QString, QString> r_corresp;
+
+protected:
+    virtual void fillBox();
 };
 

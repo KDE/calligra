@@ -29,6 +29,12 @@
 
 //CanvasBox class
 
+CanvasBox::~CanvasBox()
+{
+    
+}
+
+
 void CanvasBox::scale(int scale)
 {
     setSize(width()*scale, height()*scale);
