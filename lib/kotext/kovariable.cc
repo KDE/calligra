@@ -932,7 +932,7 @@ void KoVariable::loadOasis( const QDomElement &/*elem*/, KoOasisContext& /*conte
     // nothing to do here, reimplemented in subclasses (make it pure virtual?)
 }
 
-void KoVariable::saveOasis( KoXmlWriter& writer, KoSavingContext& context ) const
+void KoVariable::saveOasis( KoXmlWriter& /*writer*/, KoSavingContext& /*context*/ ) const
 {
 }
 
@@ -1057,7 +1057,7 @@ void KoDateVariable::load( QDomElement& elem )
     }
 }
 
-void KoDateVariable::saveOasis( KoXmlWriter& writer, KoSavingContext& context ) const
+void KoDateVariable::saveOasis( KoXmlWriter& writer, KoSavingContext& /*context*/ ) const
 {
     switch( m_subtype )
     {
@@ -1299,7 +1299,7 @@ void KoTimeVariable::loadOasis( const QDomElement &elem, KoOasisContext& /*conte
     }
 }
 
-void KoTimeVariable::saveOasis( KoXmlWriter& writer, KoSavingContext& context ) const
+void KoTimeVariable::saveOasis( KoXmlWriter& writer, KoSavingContext& /*context*/ ) const
 {
     writer.startElement( "text:time" );
     writer.addAttribute( "text:time-adjust", m_correctTime );
@@ -1450,7 +1450,7 @@ void KoCustomVariable::loadOasis( const QDomElement &elem, KoOasisContext& /*con
     }
 }
 
-void KoCustomVariable::saveOasis( KoXmlWriter& writer, KoSavingContext& context ) const
+void KoCustomVariable::saveOasis( KoXmlWriter& writer, KoSavingContext& /*context*/ ) const
 {
     kdWarning(32500) << "Not implemented: OASIS saving of custom variables" << endl;
 
@@ -1495,7 +1495,7 @@ void KoMailMergeVariable::loadOasis( const QDomElement &elem, KoOasisContext& /*
     // TODO
 }
 
-void KoMailMergeVariable::saveOasis( KoXmlWriter& writer, KoSavingContext& context ) const
+void KoMailMergeVariable::saveOasis( KoXmlWriter& writer, KoSavingContext& /*context*/ ) const
 {
         kdWarning(32500) << "Not implemented: OASIS saving of mail merge variables" << endl;
 }
@@ -1588,7 +1588,7 @@ void KoPgNumVariable::load( QDomElement& elem )
     }
 }
 
-void KoPgNumVariable::saveOasis( KoXmlWriter& writer, KoSavingContext& context ) const
+void KoPgNumVariable::saveOasis( KoXmlWriter& writer, KoSavingContext& /*context*/ ) const
 {
     if ( m_subtype == VST_PGNUM_PREVIOUS || m_subtype ==VST_PGNUM_NEXT )
     {
@@ -1819,7 +1819,7 @@ void KoFieldVariable::loadOasis( const QDomElement &elem, KoOasisContext& /*cont
     m_varValue = QVariant( elem.text() );
 }
 
-void KoFieldVariable::saveOasis( KoXmlWriter& writer, KoSavingContext& context ) const
+void KoFieldVariable::saveOasis( KoXmlWriter& writer, KoSavingContext& /*context*/ ) const
 {
     switch( m_subtype )
     {
@@ -2090,7 +2090,7 @@ void KoLinkVariable::loadOasis( const QDomElement &elem, KoOasisContext& /*conte
     }
 }
 
-void KoLinkVariable::saveOasis( KoXmlWriter& writer, KoSavingContext& context ) const
+void KoLinkVariable::saveOasis( KoXmlWriter& writer, KoSavingContext& /*context*/ ) const
 {
     //<text:a xlink:type="simple" xlink:href="http://www.kde.org/" office:name="sdgfsdfgs">kde org wxc &lt;wxc </text:a>
     writer.startElement( "text:a" );
@@ -2174,7 +2174,7 @@ void KoNoteVariable::loadOasis( const QDomElement &elem, KoOasisContext& /*conte
     // TODO
 }
 
-void KoNoteVariable::saveOasis( KoXmlWriter& writer, KoSavingContext& context ) const
+void KoNoteVariable::saveOasis( KoXmlWriter& writer, KoSavingContext& /*context*/ ) const
 {
     kdWarning(32500) << "Not implemented: OASIS saving of note variables" << endl;
 }
