@@ -27,6 +27,7 @@
 #include <kmessagebox.h>
 #include "kwcommand.h"
 #include "kwcreatebookmarkdia.h"
+#include "kwcreatebookmarkdiabase.h"
 
 KWCreateBookmarkDia::KWCreateBookmarkDia( const QStringList & _list, QWidget *parent, const char *name )
     : KDialogBase( parent, name , true, "", Ok|Cancel, Ok, true )
@@ -47,20 +48,19 @@ KWCreateBookmarkDia::KWCreateBookmarkDia( const QStringList & _list, const QStri
 
 void KWCreateBookmarkDia::init()
 {
-    QVBox *page = makeVBoxMainWidget();
-    m_bookmarkName = new QLineEdit( page );
-    connect( m_bookmarkName, SIGNAL(textChanged ( const QString & )), this, SLOT(nameChanged( const QString &)));
-    m_bookmarkName->setFocus();
+    KWCreateBookmarkDiaBase *dia = new KWCreateBookmarkDiaBase( this );
+    m_bookmarkName=dia->m_bookmarkName;
     enableButtonOK( false );
-    resize( 300, 80);
-
+    connect( m_bookmarkName, SIGNAL(textChanged ( const QString & )), this, SLOT(nameChanged( const QString &)));
+    setMainWidget(dia);
+    resize( 300, 200);
 }
 
 void KWCreateBookmarkDia::slotOk()
 {
     if ( listBookMark.findIndex(m_bookmarkName->text() ) != -1 )
     {
-        KMessageBox::error(this, i18n("Name already exists! Choose another name."));
+        KMessageBox::error(this, i18n("That name already exists, please choose another name."));
     }
     else
         KDialogBase::slotOk();
@@ -76,6 +76,8 @@ void KWCreateBookmarkDia::nameChanged( const QString &text)
     enableButtonOK( !text.isEmpty() );
 }
 
+
+/* ****************************  */
 KWSelectBookmarkDia::KWSelectBookmarkDia( const QStringList & _list, KWDocument *_doc, QWidget *parent, const char *name )
     : KDialogBase( parent, name , true, "", Ok|Cancel, Ok, true )
 {
