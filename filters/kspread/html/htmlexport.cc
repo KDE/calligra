@@ -135,7 +135,6 @@ KoFilter::ConversionStatus HTMLExport::convert( const QCString& from, const QCSt
     str += " \"http://www.w3.org/TR/html4/loose.dtd\"> \n";
     str += "<html>\n";
     str += "<head>\n";
-    // TODO: possibility of choosing other encodings
     str += "<meta http-equiv=\"Content-Type\" ";
     str += QString("content=\"text/html; charset=%1\">\n").arg( dialog.encoding()->mimeName() );
     str += "<meta name=\"Generator\" ";
