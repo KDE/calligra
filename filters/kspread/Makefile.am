@@ -1,1 +1,1 @@
-SUBDIRS = applixspread csv dbase gnumeric opencalc html qpro
+SUBDIRS = applixspread csv dbase gnumeric latex opencalc html qpro
