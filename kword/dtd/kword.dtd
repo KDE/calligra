@@ -425,7 +425,7 @@ don't put a </?xml...> at the end of the file!).
 
             min-height:         If set (and >0), this is the minimum height. Applies to AutoExtendFrame.
 
-            runaround:          0...No run around
+            runaround:          0...No run around, the text runs through the frame
                                 1...Frame repels text in overlapping frames
                                 2...Text in overlapping frames will avoid the
                                     complete horizontal space of this frame.
@@ -475,18 +475,53 @@ don't put a </?xml...> at the end of the file!).
             None = 0, SolidPattern = 1, Dense1Pattern = 2, Dense2Pattern = 3, Dense3Pattern = 4, Dense4Pattern = 5 etc... (look at in qbrush documentation)
 
             bleftpt, brightpt, btoppt, bbottompt: frame margins
+
+            z-index: z index (signed int).
+                     Relative to the other frame in the same page.
+                     The frame with the biggest z index in a given page, is on top.
 -->
 <!ATTLIST FRAME
     left CDATA #REQUIRED
     right CDATA #REQUIRED
     top CDATA #REQUIRED
     bottom CDATA #REQUIRED
+    min-height CDATA #IMPLIED
     runaround CDATA #IMPLIED
     runaroundSide CDATA #IMPLIED
     runaroundGap CDATA #IMPLIED
     autoCreateNewFrame CDATA #IMPLIED
     newFrameBehavior CDATA #REQUIRED
-    copy CDATA #IMPLIED>
+    copy CDATA #IMPLIED
+    sheetSide CDATA #IMPLIED
+    lWidth CDATA #IMPLIED
+    rWidth CDATA #IMPLIED
+    tWidth CDATA #IMPLIED
+    bWidth CDATA #IMPLIED
+    lRed CDATA #IMPLIED
+    lGreen CDATA #IMPLIED
+    lBlue CDATA #IMPLIED
+    rRed CDATA #IMPLIED
+    rGreen CDATA #IMPLIED
+    rBlue CDATA #IMPLIED
+    tRed CDATA #IMPLIED
+    tGreen CDATA #IMPLIED
+    tBlue CDATA #IMPLIED
+    bRed CDATA #IMPLIED
+    bGreen CDATA #IMPLIED
+    bBlue CDATA #IMPLIED
+    lStyle CDATA #IMPLIED
+    rStyle CDATA #IMPLIED
+    tStyle CDATA #IMPLIED
+    bStyle CDATA #IMPLIED
+    bkRed CDATA #IMPLIED
+    bkGreen CDATA #IMPLIED
+    bkBlue CDATA #IMPLIED
+    bkStyle CDATA #IMPLIED
+    bleftpt CDATA #IMPLIED
+    brightpt CDATA #IMPLIED
+    btoppt CDATA #IMPLIED
+    bbottompt CDATA #IMPLIED
+    z-index CDATA #IMPLIED>
 
 <!ELEMENT PARAGRAPH
     (TEXT|FORMATS|LAYOUT)*>

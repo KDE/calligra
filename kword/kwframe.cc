@@ -456,6 +456,8 @@ void KWFrame::save( QDomElement &frameElem )
 
     if(sheetSide()!= AnySide)
         frameElem.setAttribute( "sheetSide", static_cast<int>( sheetSide()) );
+
+    frameElem.setAttribute( "z-index", zOrder() );
 }
 
 void KWFrame::load( QDomElement &frameElem, KWFrameSet* frameSet, int syntaxVersion )
@@ -544,6 +546,7 @@ void KWFrame::load( QDomElement &frameElem, KWFrameSet* frameSet, int syntaxVers
     btop = frameElem.attribute( "btoppt" ).toDouble();
     bbottom = frameElem.attribute( "bbottompt" ).toDouble();
     m_bCopy = KWDocument::getAttribute( frameElem, "copy", frameSet->isHeaderOrFooter() /* default to true for h/f */ );
+    m_zOrder = frameElem.attribute( "z-index" ).toInt();
 }
 
 
