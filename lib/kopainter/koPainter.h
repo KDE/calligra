@@ -46,8 +46,7 @@ public:
   void drawHorizLineRGB(const int x1, const int x2, const int y, const KoColor &c);
   void drawVertLineRGB(const int x, const int y1, const int y2, const KoColor &c);
 
-  void drawLine(double x1, double y1, double x2, double y2)
-;
+  void drawLine(double x1, double y1, double x2, double y2);
   void drawRect(double x, double y, double w, double h, double rx, double ry);
 
   void blit(QWidget *w);
