@@ -132,7 +132,9 @@ private:
     // We use QValueList instead of QValueStack because we need access to all styles
     // not only the top one.
     QValueList<QDomElement> m_stack;
-};
 
+    KoStyleStack( const KoStyleStack& );
+    void operator=( const KoStyleStack& );
+};
 
 #endif /* KOSTYLESTACK_H */
