@@ -89,7 +89,7 @@ int KPGotoPage::gotoPage( KPresenterDoc *doc, float fakt, const QValueList<int> 
 
 int KPGotoPage::getPage() {
     if(result()==QDialog::Accepted)
-        return spinbox->currentItem()+1;
+        return spinbox->currentText().left( spinbox->currentText().find( "-" ) - 1 ).toInt();
     return oldPage;
 }
 
