@@ -33,8 +33,11 @@ Comment[tr]=Kexi SQl-Sürücüsü eki
 Comment[xx]=xxKexi SQL-Driver pluginxx
 Comment[zh_CN]=Kexi SQL 驱动插件
 
-[PropertyDef::X-Kexi-Location]
+[PropertyDef::X-Kexi-FileDBDriverMime]
 Type=QString
 
-[PropertyDef::X-Kexi-DBFileMime]
+[PropertyDef::X-Kexi-DriverName]
+Type=QString
+
+[PropertyDef::X-Kexi-DriverType]
 Type=QString
