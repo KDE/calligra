@@ -20,14 +20,14 @@
 #ifndef __FLATTENPATHPLUGIN_H__
 #define __FLATTENPATHPLUGIN_H__
 
-#include <core/vkarbonplugin.h>
+#include <kparts/plugin.h>
 #include <kdialogbase.h>
 #include <commands/vreplacingcmd.h>
 
 class KarbonViewBase;
 class VFlattenDlg;
 
-class FlattenPathPlugin : public VKarbonPlugin
+class FlattenPathPlugin : public KParts::Plugin
 {
 	Q_OBJECT
 public:

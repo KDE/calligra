@@ -37,7 +37,7 @@ typedef KGenericFactory<FlattenPathPlugin, KarbonViewBase> FlattenPathPluginFact
 K_EXPORT_COMPONENT_FACTORY( karbon_flattenpathplugin, FlattenPathPluginFactory( "karbonflattenpathplugin" ) );
 
 FlattenPathPlugin::FlattenPathPlugin( KarbonViewBase *parent, const char* name, const QStringList & )
-: VKarbonPlugin( parent, name )
+: Plugin( parent, name )
 {
 	new KAction(
 		i18n( "&Flatten path" ), 0, 0, this,
