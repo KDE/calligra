@@ -764,6 +764,8 @@ void KoTextView::insertParagraph(const QPoint &pos)
     f = last->at( last->length()-1 )->format();
     int height =f->height();
     int nbParag = (diff / height);
+
+    QFontMetrics fm = f->refFontMetrics();
     for (int i = 0; i < nbParag ;i++)
     {
         KoTextParag *s=textDocument()->createParag( textDocument(), last );

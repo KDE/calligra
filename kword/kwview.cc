@@ -3254,6 +3254,7 @@ void KWView::formatFont()
                                textIface->underlineLineType(),
                                textIface->strikeOutLineType(),
                                textIface->strikeOutLineStyle(),
+                               textIface->fontAttribute(),
                                textIface->relativeTextSize(),
                                textIface->offsetFromBaseLine());
 
@@ -3287,6 +3288,7 @@ void KWView::slotApplyFont()
                                                          m_fontDlg->getUnderlineLineType(),
                                                          m_fontDlg->getStrikeOutLineType(),
                                                          m_fontDlg->getStrikeOutLineStyle(),
+                                                         m_fontDlg->getFontAttribute(),
                                                          m_fontDlg->getShadowText(),
                                                          m_fontDlg->getRelativeTextSize(),
                                                          m_fontDlg->getOffsetFromBaseLine(),

@@ -2192,6 +2192,11 @@ bool KoTextFormatInterface::textShadow() const
     return (currentFormat()->shadowText());
 }
 
+KoTextFormat::AttributeStyle KoTextFormatInterface::fontAttribute() const
+{
+    return currentFormat()->attributeFont();
+}
+
 double KoTextFormatInterface::relativeTextSize() const
 {
     return ( currentFormat()->relativeTextSize());
@@ -2246,7 +2251,7 @@ QString KoTextFormatInterface::spellCheckingLanguage() const
     return currentFormat()->spellCheckingLanguage();
 }
 
-KCommand *KoTextFormatInterface::setFontCommand(const QFont &font, bool _subscript, bool _superscript,  const QColor &col, const QColor &backGroundColor, const QColor &underlineColor, KoTextFormat::UnderlineLineStyle _underlineLineStyle, KoTextFormat::UnderlineLineType _underlineType, KoTextFormat::StrikeOutLineType _strikeOutType, KoTextFormat::StrikeOutLineStyle _strikeOutStyle, bool _shadowText, double _relativeTextSize, int _offsetFromBaseLine, bool _wordByWord,int flags)
+KCommand *KoTextFormatInterface::setFontCommand(const QFont &font, bool _subscript, bool _superscript,  const QColor &col, const QColor &backGroundColor, const QColor &underlineColor, KoTextFormat::UnderlineLineStyle _underlineLineStyle, KoTextFormat::UnderlineLineType _underlineType, KoTextFormat::StrikeOutLineType _strikeOutType, KoTextFormat::StrikeOutLineStyle _strikeOutStyle, KoTextFormat::AttributeStyle _fontAttribute, bool _shadowText, double _relativeTextSize, int _offsetFromBaseLine, bool _wordByWord,int flags)
 {
     KoTextFormat format( *currentFormat() );
     format.setFont( font );
@@ -2261,6 +2266,7 @@ KCommand *KoTextFormatInterface::setFontCommand(const QFont &font, bool _subscri
     format.setRelativeTextSize( _relativeTextSize);
     format.setOffsetFromBaseLine( _offsetFromBaseLine);
     format.setWordByWord( _wordByWord );
+    format.setAttributeFont( _fontAttribute);
     if(!_subscript)
     {
         if(!_superscript)
@@ -2325,6 +2331,13 @@ KCommand *KoTextFormatInterface::setShadowTextCommand( bool _b )
     KoTextFormat format( *currentFormat() );
     format.setShadowText( _b );
     return setFormatCommand( &format, KoTextFormat::ShadowText );
+}
+
+KCommand *KoTextFormatInterface::setFontAttributeCommand( KoTextFormat::AttributeStyle _att)
+{
+    KoTextFormat format( *currentFormat() );
+    format.setAttributeFont( _att );
+    return setFormatCommand( &format, KoTextFormat::Attribute );
 }
 
 KCommand *KoTextFormatInterface::setRelativeTextSizeCommand( double _size )

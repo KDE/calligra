@@ -689,4 +689,3 @@ void KoTextViewIface::copyTextOfComment()
 {
     m_textView->copyTextOfComment();
 }
-

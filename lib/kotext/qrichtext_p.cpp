@@ -141,6 +141,7 @@ KoTextFormat::KoTextFormat()
     d->m_relativeTextSize = 0.66;
     d->m_offsetFromBaseLine= 0;
     d->m_bWordByWord = false;
+    m_attributeFont = ATT_NONE;
     ////
 //#ifdef DEBUG_COLLECTION
 //    qDebug("KoTextFormat simple ctor, no addRef, no generateKey ! %p",this);
@@ -217,6 +218,7 @@ KoTextFormat::KoTextFormat( const QFont &f, const QColor &c, KoTextFormatCollect
     d->m_relativeTextSize= 0.66;
     d->m_offsetFromBaseLine = 0;
     d->m_bWordByWord = false;
+    m_attributeFont = ATT_NONE;
     ////
     generateKey();
     addRef();
@@ -261,6 +263,7 @@ KoTextFormat::KoTextFormat( const KoTextFormat &f )
     d->m_relativeTextSize = f.d->m_relativeTextSize;
     d->m_offsetFromBaseLine = f.d->m_offsetFromBaseLine;
     d->m_bWordByWord = f.d->m_bWordByWord;
+    m_attributeFont = f.m_attributeFont;
     ////
     addRef();
 }
@@ -317,6 +320,7 @@ KoTextFormat& KoTextFormat::operator=( const KoTextFormat &f )
     d->m_relativeTextSize = f.d->m_relativeTextSize;
     d->m_offsetFromBaseLine = f.d->m_offsetFromBaseLine;
     d->m_bWordByWord = f.d->m_bWordByWord;
+    m_attributeFont = f.m_attributeFont;
     ////
     addRef();
     return *this;
@@ -417,6 +421,8 @@ void KoTextFormat::generateKey()
     k += QString::number( d->m_offsetFromBaseLine);
     k += '/';
     k += QString::number( (int)d->m_bWordByWord);
+    k += '/';
+    k += QString::number( (int)m_attributeFont);
     ////
 }
 

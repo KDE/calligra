@@ -63,12 +63,14 @@ public:
     int compare( const KoTextFormat & format ) const;
 
     /** Extending the base KoTextFormat enum */
-    enum { StrikeOut = 512, TextBackgroundColor = 1024, ExtendUnderLine = 2048 , SpellCheckingLanguage = 4096, ShadowText = 8192, OffsetFromBaseLine = 16384, WordByWord = 32768 };
+    enum { StrikeOut = 512, TextBackgroundColor = 1024, ExtendUnderLine = 2048 , SpellCheckingLanguage = 4096, ShadowText = 8192, OffsetFromBaseLine = 16384, WordByWord = 32768, Attribute = 65536 };
 
     enum UnderlineLineType { U_NONE = 0, U_SIMPLE = 1, U_DOUBLE = 2, U_SIMPLE_BOLD = 3, U_WAVE = 4};
     enum StrikeOutLineType { S_NONE = 0, S_SIMPLE = 1, S_DOUBLE = 2, S_SIMPLE_BOLD = 3};
     enum UnderlineLineStyle { U_SOLID = 0 , U_DASH = 1, U_DOT = 2, U_DASH_DOT = 3, U_DASH_DOT_DOT = 4};
     enum StrikeOutLineStyle { S_SOLID = 0 , S_DASH = 1, S_DOT = 2, S_DASH_DOT = 3, S_DASH_DOT_DOT = 4};
+
+    enum AttributeStyle { ATT_NONE = 0, ATT_MAJ = 1, ATT_MIN = 2 };
 
     /** Set a decimal point size. NOTE: this value isn't stored in the formay key.
         You should NOT call this - it's a special treat for KoTextFormatter */
@@ -101,6 +103,9 @@ public:
 
     void setSpellCheckingLanguage( const QString & _lang);
     QString spellCheckingLanguage() const { return m_spellCheckLanguage;}
+
+    void setAttributeFont( KoTextFormat::AttributeStyle _att );
+    KoTextFormat::AttributeStyle attributeFont() const { return m_attributeFont;}
 
     bool shadowText() const { return d->m_bShadowText;}
     void setShadowText(bool _b);
@@ -199,5 +204,6 @@ protected:
     UnderlineLineStyle m_underlineLineStyle;
     StrikeOutLineStyle m_strikeOutLineStyle;
     QString m_spellCheckLanguage;
+    AttributeStyle m_attributeFont;
     class KoTextFormatPrivate;
     KoTextFormatPrivate *d;

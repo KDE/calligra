@@ -74,6 +74,9 @@ public:
     bool getWordByWord()const;
     void setWordByWord( bool _b);
 
+    KoTextFormat::AttributeStyle getFontAttribute()const;
+    void setFontAttribute( KoTextFormat::AttributeStyle _att);
+
 
     double getRelativeTextSize()const;
     void setRelativeTextSize(double _size);
@@ -100,6 +103,7 @@ protected slots:
     void slotShadowClicked();
     void slotRelativeSizeChanged( int );
     void slotOffsetFromBaseLineChanged( int );
+    void slotChangeAttributeFont( int );
     void slotWordByWordClicked();
 private:
     KFontChooser *m_chooseFont;
@@ -140,6 +144,7 @@ public:
                KoTextFormat::UnderlineLineType _underlineType,
                KoTextFormat::StrikeOutLineType _strikeOutType,
                KoTextFormat::StrikeOutLineStyle _strikeOutLine,
+               KoTextFormat::AttributeStyle _fontAttribute,
                double _relativeSize,
                int _offsetFromBaseLine,
                bool _withSubSuperScript=true );
@@ -162,6 +167,8 @@ public:
     bool getWordByWord()const{ return m_chooser->getWordByWord();}
 
     int changedFlags() const { return m_chooser->changedFlags(); }
+
+    KoTextFormat::AttributeStyle getFontAttribute()const { return m_chooser->getFontAttribute();}
 
 protected slots:
     void slotReset();
@@ -187,6 +194,7 @@ private:
     double m_relativeSize;
     int m_offsetBaseLine;
     bool m_wordByWord;
+    KoTextFormat::AttributeStyle m_fontAttribute;
 };
 
 #endif

@@ -163,7 +163,6 @@ k_dcop:
     void copyLink();
     void removeLink();
     void copyTextOfComment();
-
 private:
     KoTextView *m_textView;
 protected:

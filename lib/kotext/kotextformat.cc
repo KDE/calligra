@@ -122,6 +122,15 @@ void KoTextFormat::setWordByWord( bool _b )
 }
 
 
+void KoTextFormat::setAttributeFont(KoTextFormat::AttributeStyle _att )
+{
+    if ( m_attributeFont == _att)
+        return;
+    m_attributeFont = _att;
+    update();
+
+}
+
 int KoTextFormat::compare( const KoTextFormat & format ) const
 {
     int flags = 0;
@@ -155,6 +164,8 @@ int KoTextFormat::compare( const KoTextFormat & format ) const
         flags |= KoTextFormat::OffsetFromBaseLine;
     if ( wordByWord() != format.wordByWord() )
         flags |= KoTextFormat::WordByWord;
+    if ( attributeFont() != format.attributeFont() )
+        flags |= KoTextFormat::Attribute;
     return flags;
 }
 

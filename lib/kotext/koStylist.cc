@@ -559,6 +559,8 @@ void KoStyleFontTab::update()
     bool subScript = m_style->format().vAlign() == KoTextFormat::AlignSubScript;
     bool superScript = m_style->format().vAlign() == KoTextFormat::AlignSuperScript;
     QFont fn = m_style->format().font();
+    kdDebug()<<" fn.bold() :"<<fn.bold()<<" fn.italic():"<<fn.italic()<<endl;
+    kdDebug()<<" fn.family() :"<<fn.family()<<endl;
     fn.setPointSize( (int)m_zoomHandler->layoutUnitPtToPt( fn.pointSize() ) );
     m_chooser->setFont( fn, subScript, superScript );
     m_chooser->setColor( m_style->format().color() );
@@ -583,6 +585,9 @@ void KoStyleFontTab::save()
 {
     QFont fn = m_chooser->getNewFont();
     fn.setPointSize( m_zoomHandler->ptToLayoutUnitPt( fn.pointSize() ) );
+    kdDebug()<<" save fn.bold() :"<<fn.bold()<<" fn.italic():"<<fn.italic()<<endl;
+    kdDebug()<<" save fn.family() :"<<fn.family()<<endl;
+
     m_style->format().setFont( fn );
     if ( m_chooser->getSubScript() )
         m_style->format().setVAlign( KoTextFormat::AlignSubScript );

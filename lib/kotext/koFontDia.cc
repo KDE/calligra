@@ -43,6 +43,7 @@ public:
     QLabel *m_lRelativeSize;
     KIntNumInput *m_offsetBaseLine;
     QCheckBox *m_wordByWord;
+    QComboBox *m_fontAttribute;
 };
 
 KoFontChooser::KoFontChooser( QWidget* parent, const char* name, bool _withSubSuperScript, uint fontListCriteria)
@@ -196,6 +197,18 @@ void KoFontChooser::setupTab2()
     d->m_wordByWord = new QCheckBox( i18n("Word By Word"), grp);
     grid->addWidget( d->m_wordByWord, 5, 0);
 
+    lab = new QLabel( i18n("Attribute:"), grp);
+    grid->addWidget( lab, 6, 0);
+
+    d->m_fontAttribute = new QComboBox( grp );
+    grid->addWidget( d->m_fontAttribute, 7, 0);
+
+    lst.clear();
+    lst <<i18n("Without");
+    lst <<i18n("Uppercase");
+    lst <<i18n("LowerCase");
+    d->m_fontAttribute->insertStringList( lst );
+
     connect( d->m_strikeOut, SIGNAL(activated ( int )), this, SLOT( slotStrikeOutTypeChanged( int ) ) );
     connect( m_underlineColorButton, SIGNAL(clicked()), this, SLOT( slotUnderlineColor() ) );
     connect( m_underlining,  SIGNAL( activated ( int  ) ), this, SLOT( slotChangeUnderlining( int )));
@@ -203,6 +216,7 @@ void KoFontChooser::setupTab2()
     connect( m_underlineType,  SIGNAL( activated ( int  ) ), this, SLOT( slotChangeUnderlineType( int )));
     connect( d->m_shadow, SIGNAL(clicked()), this, SLOT( slotShadowClicked() ) );
     connect( d->m_wordByWord, SIGNAL(clicked()), this, SLOT( slotWordByWordClicked() ) );
+    connect( d->m_fontAttribute,  SIGNAL( activated ( int  ) ), this, SLOT( slotChangeAttributeFont( int )));
 
 }
 
@@ -223,6 +237,33 @@ void KoFontChooser::setShadowText( bool _b)
     d->m_shadow->setChecked( _b);
 }
 
+KoTextFormat::AttributeStyle KoFontChooser::getFontAttribute()const
+{
+    switch (d->m_fontAttribute->currentItem () )
+    {
+    case 0:
+        return KoTextFormat::ATT_NONE;
+        break;
+    case 1:
+        return KoTextFormat::ATT_MAJ;
+        break;
+    case 2:
+        return KoTextFormat::ATT_MIN;
+        break;
+    default:
+        return KoTextFormat::ATT_NONE;
+    }
+}
+
+void KoFontChooser::setFontAttribute( KoTextFormat::AttributeStyle _att)
+{
+    if ( _att ==KoTextFormat::ATT_NONE)
+        d->m_fontAttribute->setCurrentItem( 0);
+    else if ( _att ==KoTextFormat::ATT_MAJ)
+        d->m_fontAttribute->setCurrentItem( 1 );
+    else if ( _att ==KoTextFormat::ATT_MIN )
+        d->m_fontAttribute->setCurrentItem( 2 );
+}
 
 bool KoFontChooser::getWordByWord()const
 {
@@ -257,7 +298,10 @@ void KoFontChooser::setOffsetFromBaseLine(int _offset)
 
 void KoFontChooser::setFont( const QFont &_font, bool _subscript, bool _superscript )
 {
+
     m_newFont = _font;
+    kdDebug()<<" setFont m_newFont.bold() :"<<m_newFont.bold()<<" m_newFont.italic():"<<m_newFont.italic()<<endl;
+    kdDebug()<<" setfont m_newFont.family() :"<<m_newFont.family()<<endl;
 
     m_subScript->setChecked( _subscript );
     m_superScript->setChecked( _superscript );
@@ -290,6 +334,9 @@ void KoFontChooser::setBackGroundColor ( const QColor & col )
 
 void KoFontChooser::slotFontChanged(const QFont & f)
 {
+    kdDebug()<<" slotFontChanged m_newFont.bold() :"<<f.bold()<<" m_newFont.italic():"<<f.italic()<<endl;
+    kdDebug()<<" slotFontChanged m_newFont.family() :"<<f.family()<<endl;
+
     if ( f.weight() != m_newFont.weight() )
         m_changedFlags |= KoTextFormat::Bold;
     if ( f.italic() != m_newFont.italic() )
@@ -345,6 +392,10 @@ void KoFontChooser::slotWordByWordClicked()
     m_changedFlags |= KoTextFormat::WordByWord;
 }
 
+void KoFontChooser::slotChangeAttributeFont( int )
+{
+    m_changedFlags |= KoTextFormat::Attribute;
+}
 
 void KoFontChooser::slotChangeColor()
 {
@@ -609,6 +660,7 @@ KoFontDia::KoFontDia( QWidget* parent, const char* name, const QFont &_font,
                       KoTextFormat::UnderlineLineType _underlineType,
                       KoTextFormat::StrikeOutLineType _strikeOutType,
                       KoTextFormat::StrikeOutLineStyle _strikeOutLine,
+                      KoTextFormat::AttributeStyle _fontAttribute,
                       double _relativeSize,
                       int _offsetFromBaseLine,
                       bool _withSubSuperScript )
@@ -627,7 +679,8 @@ KoFontDia::KoFontDia( QWidget* parent, const char* name, const QFont &_font,
       m_shadowText( _shadowText),
       m_relativeSize( _relativeSize ),
       m_offsetBaseLine( _offsetFromBaseLine),
-      m_wordByWord( _wordByWord )
+      m_wordByWord( _wordByWord ),
+      m_fontAttribute( _fontAttribute)
 {
     setButtonText( KDialogBase::User1, i18n("&Reset") );
 
@@ -665,6 +718,7 @@ void KoFontDia::slotReset()
     m_chooser->setWordByWord( m_wordByWord );
     m_chooser->setRelativeTextSize( m_relativeSize);
     m_chooser->setOffsetFromBaseLine( m_offsetBaseLine );
+    m_chooser->setFontAttribute( m_fontAttribute );
     m_chooser->updatePositionButton();
 }
 

@@ -1872,6 +1872,7 @@ void KPresenterView::mtextFont()
                                textIface->underlineLineType(),
                                textIface->strikeOutLineType(),
                                textIface->strikeOutLineStyle(),
+                               textIface->fontAttribute(),
                                textIface->relativeTextSize(),
                                textIface->offsetFromBaseLine());
 
@@ -1892,7 +1893,6 @@ void KPresenterView::slotApplyFont()
         m_canvas->setFont(m_fontDlg->getNewFont(),
                           m_fontDlg->getSubScript(),
                           m_fontDlg->getSuperScript(),
-
                           m_fontDlg->color(),
                           m_fontDlg->backGroundColor(),
                           m_fontDlg->underlineColor(),
@@ -1900,6 +1900,7 @@ void KPresenterView::slotApplyFont()
                           m_fontDlg->getUnderlineLineStyle(),
                           m_fontDlg->getStrikeOutLineType(),
                           m_fontDlg->getStrikeOutLineStyle(),
+                          m_fontDlg->getFontAttribute(),
                           m_fontDlg->getShadowText(),
                           m_fontDlg->getRelativeTextSize(),
                           m_fontDlg->getOffsetFromBaseLine(),
