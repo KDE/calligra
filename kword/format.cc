@@ -163,8 +163,10 @@ void KWFormat::decRef()
     //QString key = doc->getFormatCollection()->generateKey( this );
     //debug( "dec ref ( %d ): %s", ref, key.data() );
 
-    if ( ref <= 0 && doc )
+    if ( ref <= 0 && doc ) {
         doc->getFormatCollection()->removeFormat( this );
+        return;
+    }
 
     if ( !doc && ref == 0 ) kdWarning() << "RefCount of the format == 0, but I couldn't delete it, "
                                 " because I have not a pointer to the document!" << endl;
