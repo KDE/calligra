@@ -55,3 +55,4 @@ Kivio 1.3.x -> 1.4
 -------------------
 - Non blocking stencilset loading.
 - Added Nassi Schneiderman stencils.
+- Moving selected stencils with the keyboard.

@@ -34,11 +34,13 @@ namespace Kivio {
   {
   }
   
-  void PluginManager::delegateEvent(QEvent* e)
+  bool PluginManager::delegateEvent(QEvent* e)
   {
     if(activeTool()) {
-      activeTool()->processEvent(e);
+      return activeTool()->processEvent(e);
     }
+    
+    return false;
   }
   
   Kivio::MouseTool* PluginManager::activeTool()

@@ -33,7 +33,7 @@ namespace Kivio {
       PluginManager(KivioView* parent, const char* name = 0);
       ~PluginManager();
 
-      void delegateEvent(QEvent* e);
+      bool delegateEvent(QEvent* e);
             
       /** Returns the tool that is in use. */
       Kivio::MouseTool* activeTool();

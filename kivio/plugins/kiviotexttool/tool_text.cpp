@@ -68,25 +68,30 @@ TextTool::~TextTool()
  * @param e The event to be identified and processed
  *
  */
-void TextTool::processEvent( QEvent* e )
+bool TextTool::processEvent( QEvent* e )
 {
   switch (e->type())
   {
   case QEvent::MouseButtonPress:
     mousePress( (QMouseEvent*)e );
+    return true;
     break;
 
   case QEvent::MouseButtonRelease:
     mouseRelease( (QMouseEvent*)e );
+    return true;
     break;
 
   case QEvent::MouseMove:
     mouseMove( (QMouseEvent*)e );
+    return true;
     break;
 
   default:
     break;
   }
+
+  return false;
 }
 
 void TextTool::setActivated(bool a)

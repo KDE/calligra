@@ -38,7 +38,7 @@ public:
   SMLConnector( KivioView* view );
   ~SMLConnector();
 
-  virtual void processEvent( QEvent* );
+  virtual bool processEvent( QEvent* );
 
   void connector(QRect);
   

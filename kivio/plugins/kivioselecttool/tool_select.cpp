@@ -79,7 +79,7 @@ SelectTool::~SelectTool()
  * @param e The event to be identified and processed
  *
  */
-void SelectTool::processEvent( QEvent* e )
+bool SelectTool::processEvent( QEvent* e )
 {
   QMouseEvent *m;
   KivioCanvas* canvas = view()->canvasWidget();
@@ -94,6 +94,7 @@ void SelectTool::processEvent( QEvent* e )
       }
 
       canvas->setFocus();
+      return true;
       break;
 
     case QEvent::MouseButtonPress:
@@ -102,7 +103,7 @@ void SelectTool::processEvent( QEvent* e )
       if( m->button() == RightButton ) {
         showPopupMenu(m->globalPos());
       } else if( m->button() == LeftButton ) {
-        if(m->state() & ShiftButton) {
+        if((m->state() & ShiftButton) || (m->state() & ControlButton)) {
           m_shiftKey = true;
         } else {
           m_shiftKey = false;
@@ -112,20 +113,32 @@ void SelectTool::processEvent( QEvent* e )
       }
 
       canvas->setFocus();
+      return true;
       break;
 
     case QEvent::MouseButtonRelease:
       mouseRelease( ((QMouseEvent *)e)->pos() );
       canvas->setFocus();
+      return true;
       break;
 
     case QEvent::MouseMove:
-      mouseMove( ((QMouseEvent *)e)->pos() );
+      mouseMove( static_cast<QMouseEvent*>(e));
+      return true;
+      break;
+    
+    case QEvent::KeyPress:
+      if((static_cast<QKeyEvent*>(e)->key() >= Key_Left) && (static_cast<QKeyEvent*>(e)->key() <= Key_Down)) {
+        keyPress(static_cast<QKeyEvent*>(e));
+        return true;
+      }
       break;
 
     default:
       break;
   }
+  
+  return false;
 }
 
 void SelectTool::setActivated(bool a)
@@ -442,8 +455,11 @@ bool SelectTool::startResizing(const QPoint &pos)
 
 
 
-void SelectTool::mouseMove(const QPoint &pos)
+void SelectTool::mouseMove(QMouseEvent* e)
 {
+    QPoint pos = e->pos();
+    bool ignoreGridGuides = e->state() & ShiftButton;
+    
     switch( m_mode )
     {
         case stmDrawRubber:
@@ -451,7 +467,7 @@ void SelectTool::mouseMove(const QPoint &pos)
             break;
 
         case stmDragging:
-            continueDragging(pos);
+            continueDragging(pos, ignoreGridGuides);
             break;
 
         case stmCustomDragging:
@@ -483,7 +499,7 @@ void SelectTool::continueRubberBanding(const QPoint &pos)
  * geometry of all the selected stencils.  We use that to calculate delta
  * movements and snap them to the grid.
  */
-void SelectTool::continueDragging(const QPoint &pos)
+void SelectTool::continueDragging(const QPoint &pos, bool ignoreGridGuides)
 {
   KivioCanvas* canvas = view()->canvasWidget();
   KoPoint pagePoint = canvas->mapFromScreen( pos );
@@ -505,34 +521,37 @@ void SelectTool::continueDragging(const QPoint &pos)
   newX = m_selectedRect.x() + dx;
   newY = m_selectedRect.y() + dy;
 
-  // First attempt a snap-to-grid
-  p.setCoords(newX, newY);
-  p = canvas->snapToGrid(p);
-
-  newX = p.x();
-  newY = p.y();
-
-  // Now the guides override the grid so we attempt to snap to them
-  p.setCoords(m_selectedRect.x() + dx + m_selectedRect.width(), m_selectedRect.y() + dy + m_selectedRect.height());
-  p = canvas->snapToGuides(p, snappedX, snappedY);
-
-  if(snappedX) {
-    newX = p.x() - m_selectedRect.width();
-  }
-
-  if(snappedY) {
-    newY = p.y() - m_selectedRect.height();
-  }
-
-  p.setCoords(m_selectedRect.x() + dx, m_selectedRect.y() + dy);
-  p = canvas->snapToGuides(p, snappedX, snappedY);
-
-  if(snappedX) {
+  if(!ignoreGridGuides) {
+    // First attempt a snap-to-grid
+    p.setCoords(newX, newY);
+    
+    p = canvas->snapToGrid(p);
+  
     newX = p.x();
-  }
-
-  if(snappedY) {
     newY = p.y();
+  
+    // Now the guides override the grid so we attempt to snap to them
+    p.setCoords(m_selectedRect.x() + dx + m_selectedRect.width(), m_selectedRect.y() + dy + m_selectedRect.height());
+    p = canvas->snapToGuides(p, snappedX, snappedY);
+  
+    if(snappedX) {
+      newX = p.x() - m_selectedRect.width();
+    }
+  
+    if(snappedY) {
+      newY = p.y() - m_selectedRect.height();
+    }
+  
+    p.setCoords(m_selectedRect.x() + dx, m_selectedRect.y() + dy);
+    p = canvas->snapToGuides(p, snappedX, snappedY);
+  
+    if(snappedX) {
+      newX = p.x();
+    }
+  
+    if(snappedY) {
+      newY = p.y();
+    }
   }
 
   dx = newX - m_selectedRect.x();
@@ -1154,6 +1173,73 @@ void SelectTool::showProperties()
 void SelectTool::editStencilText()
 {
   editText(view()->activePage()->selectedStencils());
+}
+
+void SelectTool::keyPress(QKeyEvent* e)
+{
+  KivioCanvas* canvas = view()->canvasWidget();
+  
+  canvas->setEnabled(false);
+
+  // Create a new painter object
+  canvas->beginUnclippedSpawnerPainter();
+  canvas->drawSelectedStencilsXOR();
+
+  // Build the list of old geometry
+  KivioSelectDragData *pData;
+  m_lstOldGeometry.clear();
+  KivioStencil* pStencil = canvas->activePage()->selectedStencils()->first();
+
+  while( pStencil )
+  {
+    pData = new KivioSelectDragData;
+    pData->rect = pStencil->rect();
+    m_lstOldGeometry.append(pData);
+
+
+    pStencil = canvas->activePage()->selectedStencils()->next();
+  }
+
+  m_selectedRect = view()->activePage()->getRectForAllSelectedStencils();
+  // Set the mode
+  m_mode = stmDragging;
+  canvas->setEnabled(true);
+  m_origPoint = m_selectedRect.topLeft();
+  KivioGridData gd = view()->doc()->grid();
+  bool ignoreGridGuides = e->state() & ShiftButton;
+  double distX, distY;
+  
+  if(ignoreGridGuides || !view()->doc()->grid().isSnap) {
+    distX = view()->zoomHandler()->unzoomItX(1);
+    distY = view()->zoomHandler()->unzoomItY(1);
+  } else {
+    distX = gd.freq.width();
+    distY = gd.freq.height();
+  }
+  
+  switch(e->key()) {
+    case Key_Left:
+      continueDragging(canvas->mapToScreen(KoPoint(m_selectedRect.x() - distX,
+        m_selectedRect.y())), ignoreGridGuides);
+      break;
+    case Key_Up:
+      continueDragging(canvas->mapToScreen(KoPoint(m_selectedRect.x(),
+        m_selectedRect.y() - distY)), ignoreGridGuides);
+      break;
+    case Key_Right:
+      continueDragging(canvas->mapToScreen(KoPoint(m_selectedRect.x() + distX,
+        m_selectedRect.y())), ignoreGridGuides);
+      break;
+    case Key_Down:
+      continueDragging(canvas->mapToScreen(KoPoint(m_selectedRect.x(),
+        m_selectedRect.y() + distY)), ignoreGridGuides);
+      break;
+    default:
+      break;
+  }
+  
+  endDragging(QPoint());
+  canvas->setFocus();
 }
 
 #include "tool_select.moc"

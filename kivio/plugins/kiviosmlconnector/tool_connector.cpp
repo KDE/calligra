@@ -67,25 +67,30 @@ SMLConnector::~SMLConnector()
  * @param e The event to be identified and processed
  *
  */
-void SMLConnector::processEvent( QEvent* e )
+bool SMLConnector::processEvent( QEvent* e )
 {
     switch (e->type())
     {
     case QEvent::MouseButtonPress:
         mousePress( (QMouseEvent*)e );
+        return true;
         break;
 
     case QEvent::MouseButtonRelease:
         mouseRelease( (QMouseEvent*)e );
+        return true;
         break;
 
     case QEvent::MouseMove:
         mouseMove( (QMouseEvent*)e );
+        return true;
         break;
 
     default:
       break;
     }
+
+    return false;
 }
 
 void SMLConnector::setActivated(bool a)

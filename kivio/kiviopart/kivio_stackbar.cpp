@@ -30,6 +30,7 @@ KivioStackBar::KivioStackBar( QWidget* parent, const char* name )
 {
   m_layout = new QVBoxLayout( this );
   m_visiblePage = 0;
+  setFocusPolicy(NoFocus);
 }
 
 KivioStackBar::~KivioStackBar()
@@ -43,6 +44,7 @@ void KivioStackBar::insertPage( QWidget* w, const QString& title )
     w->reparent(this,QPoint(0,0));
 
   w->hide();
+  w->setFocusPolicy(NoFocus);
 
   setMinimumWidth( QMAX(minimumSize().width(),w->minimumSize().width() ) );
   setMaximumWidth( QMAX(maximumSize().width(),w->maximumSize().width() ) );

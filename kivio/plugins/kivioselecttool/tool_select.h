@@ -27,6 +27,7 @@
 class KivioView;
 class KivioPage;
 class QMouseEvent;
+class QKeyEvent;
 class KPopupMenu;
 class KRadioAction;
 
@@ -55,7 +56,7 @@ class SelectTool : public Kivio::MouseTool
     SelectTool( KivioView* parent );
     ~SelectTool();
 
-    virtual void processEvent( QEvent* );
+    virtual bool processEvent( QEvent* );
 
     void select(const QRect&);
   
@@ -72,7 +73,7 @@ class SelectTool : public Kivio::MouseTool
 
   protected:
     void mousePress(const QPoint&);
-    void mouseMove(const QPoint&);
+    void mouseMove(QMouseEvent*);
     void mouseRelease(const QPoint&);
     void leftDoubleClick(const QPoint&);
 
@@ -81,7 +82,7 @@ class SelectTool : public Kivio::MouseTool
     bool startCustomDragging(const QPoint&, bool);
     bool startRubberBanding(const QPoint&);
 
-    void continueDragging(const QPoint&);
+    void continueDragging(const QPoint&, bool ignoreGridGuides = false);
     void continueCustomDragging(const QPoint&);
     void continueResizing(const QPoint&);
     void continueRubberBanding(const QPoint&);
@@ -95,6 +96,9 @@ class SelectTool : public Kivio::MouseTool
 
     void changeMouseCursor(const QPoint&);
     int isOverResizeHandle( KivioStencil *pStencil, const double x, const double y );
+    
+    void keyPress(QKeyEvent* e);
+    
     QPoint m_startPoint, m_releasePoint;
     KoPoint m_lastPoint;
     KoPoint m_origPoint;

@@ -38,7 +38,7 @@ class TextTool : public Kivio::MouseTool
     TextTool( KivioView* parent );
     ~TextTool();
   
-    virtual void processEvent( QEvent* );
+    virtual bool processEvent( QEvent* );
   
     void text(QRect);
   

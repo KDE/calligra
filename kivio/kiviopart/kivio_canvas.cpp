@@ -400,7 +400,7 @@ bool KivioCanvas::event( QEvent* e )
 {
   bool f = QWidget::event(e);
   if (m_pView->pluginManager() && delegateThisEvent)
-    m_pView->pluginManager()->delegateEvent(e);
+    f = m_pView->pluginManager()->delegateEvent(e);
 
   delegateThisEvent = true;
   return f;

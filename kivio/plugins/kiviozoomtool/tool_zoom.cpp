@@ -103,7 +103,7 @@ ZoomTool::~ZoomTool()
   delete m_handCursor;
 }
 
-void ZoomTool::processEvent(QEvent* e)
+bool ZoomTool::processEvent(QEvent* e)
 {
   KivioCanvas* canvas = view()->canvasWidget();
   
@@ -113,12 +113,14 @@ void ZoomTool::processEvent(QEvent* e)
         if (!m_bLockKeyboard && (static_cast<QKeyEvent*>(e)->key() == Key_Shift)) {
           m_pCurrent = m_pMinus;
           canvas->setCursor(*m_pMinusCursor);
+          return true;
         }
         break;
       case QEvent::KeyRelease:
         if (!m_bLockKeyboard && (static_cast<QKeyEvent*>(e)->key() == Key_Shift)) {
           m_pCurrent = m_pPlus;
           canvas->setCursor(*m_pPlusCursor);
+          return true;
         }
         break;
       case QEvent::MouseButtonPress:
@@ -136,6 +138,8 @@ void ZoomTool::processEvent(QEvent* e)
         } else {
           showPopupMenu(me->globalPos());
         }
+        
+        return true;
         break;
       }
       case QEvent::MouseButtonRelease:
@@ -144,11 +148,13 @@ void ZoomTool::processEvent(QEvent* e)
           m_bDrawRubber = false;
           m_bLockKeyboard = false;
           zoomRect(canvas->rect());
+          return true;
         }
         break;
       case QEvent::MouseMove:
         if (m_bDrawRubber) {
           canvas->continueRectDraw(static_cast<QMouseEvent*>(e)->pos(), KivioCanvas::Rubber);
+          return true;
         }
         break;
       default:
@@ -159,9 +165,11 @@ void ZoomTool::processEvent(QEvent* e)
       case QEvent::MouseButtonPress:
         isHandMousePressed = true;
         mousePos = static_cast<QMouseEvent*>(e)->pos();
+        return true;
         break;
       case QEvent::MouseButtonRelease:
         isHandMousePressed = false;
+        return true;
         break;
       case QEvent::MouseMove:
         if (isHandMousePressed) {
@@ -172,12 +180,15 @@ void ZoomTool::processEvent(QEvent* e)
           canvas->scrollDy(-mousePos.y());
           mousePos = newPos;
           canvas->setUpdatesEnabled(true);
+          return true;
         }
         break;
       default:
         break;
     }
   }
+
+  return false;
 }
 
 void ZoomTool::setActivated(bool a)
