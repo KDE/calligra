@@ -306,6 +306,9 @@ public slots:
 
     void slotSoftHyphen();
 
+    void slotActionStatusText( const QString &text );
+    void slotClearStatusText();
+
     // end of slots
 
 protected:
