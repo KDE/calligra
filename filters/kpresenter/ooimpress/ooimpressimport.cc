@@ -16,9 +16,10 @@
    the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
    Boston, MA 02111-1307, USA.
 */
-#include <math.h>
 
 #include "ooimpressimport.h"
+
+#include <math.h>
 
 #include <kdebug.h>
 #include <koUnit.h>
@@ -456,10 +457,26 @@ QDomElement OoImpressImport::parseTextBox( QDomDocument& doc, const QDomElement&
 
 QDomElement OoImpressImport::parseList( QDomDocument& doc, const QDomElement& list )
 {
-    QDomNode item = list.namedItem( "text:list-item" );
-    QDomElement paragraph = item.namedItem( "text:p" ).toElement();
+    // take care of nested lists
+    int indentation = 0;
+    QDomElement e;
+    for ( QDomNode n = list.firstChild(); !n.isNull(); n = n.firstChild() )
+    {
+        e = n.toElement();
+        if ( e.tagName() == "text:unordered-list" || e.tagName() == "text:ordered-list" )
+            indentation += 10;
+        if ( e.tagName() == "text:p" )
+            break;
+    }
 
-    QDomElement p = parseParagraph( doc, paragraph );
+    QDomElement p = parseParagraph( doc, e );
+    if (indentation)
+    {
+        QDomElement indent = doc.createElement( "INDENTS" );
+        indent.setAttribute( "left", MM_TO_POINT( indentation ) );
+        p.appendChild( indent );
+    }
+
     QDomElement counter = doc.createElement( "COUNTER" ); // TODO when styles are done
     counter.setAttribute( "numberingtype", 0 );
     counter.setAttribute( "type", 10 );
@@ -475,22 +492,18 @@ QDomElement OoImpressImport::parseParagraph( QDomDocument& doc, const QDomElemen
 
     // parse the paragraph-properties
     QDomElement *style = m_styles[paragraph.attribute( "text:style-name" )];
-    QDomElement properties;
-    
-    if (style) {
-	properties = style->namedItem( "style:properties" ).toElement();
+    QDomElement properties = style->namedItem( "style:properties" ).toElement();
 
-        if ( properties.hasAttribute( "fo:text-align" ) )
-	{
-    	    if ( properties.attribute( "fo:text-align" ) == "center" )
-        	p.setAttribute( "align", 4 );
-            else if ( properties.attribute( "fo:text-align" ) == "justify" )
-	        p.setAttribute( "align", 8 );
-    	    else if ( properties.attribute( "fo:text-align" ) == "start" )
-        	p.setAttribute( "align", 0 );
-            else if ( properties.attribute( "fo:text-align" ) == "end" )
-	        p.setAttribute( "align", 2 );
-        }
+    if ( properties.hasAttribute( "fo:text-align" ) )
+    {
+        if ( properties.attribute( "fo:text-align" ) == "center" )
+            p.setAttribute( "align", 4 );
+        else if ( properties.attribute( "fo:text-align" ) == "justify" )
+            p.setAttribute( "align", 8 );
+        else if ( properties.attribute( "fo:text-align" ) == "start" )
+            p.setAttribute( "align", 0 );
+        else if ( properties.attribute( "fo:text-align" ) == "end" )
+            p.setAttribute( "align", 2 );
     }
     else
         p.setAttribute( "align", 0 ); // use left aligned as default
