@@ -114,6 +114,8 @@ public:
 	QSize		minimumSizeHint() const;
 	void		setFont(const QFont &f);
 
+	void		addDropFilter(QString filter);
+
 	void		inserted();
 
 	void		emitSelected();
@@ -168,6 +170,8 @@ protected:
 	void	focusOutEvent(QFocusEvent*);
 	void	resizeEvent(QResizeEvent *);
 	void	showEvent(QShowEvent *e);
+	void	contentsDragMoveEvent(QDragMoveEvent *e);
+	void	contentsDropEvent(QDropEvent *ev);
 
 	void	createEditor(int row, int col, QString addText = QString::null, bool backspace = false);
 	bool	focusNextPrevChild(bool next);
@@ -200,6 +204,7 @@ signals:
 	void			itemChanged(KexiTableItem *, int);
 	void			itemRemoveRequest(KexiTableItem *);
 	void			addRecordRequest();
+	void			dropped(QDropEvent *);
 
 protected:
 	// cursor position
@@ -233,6 +238,8 @@ protected:
 
 	bool			m_needAutoScroll;
 	QTimer			*m_scrollTimer;
+
+	QStringList		m_dropFilters;
 
 	enum ScrollDirection
 	{

@@ -125,6 +125,10 @@ KexiTableView::KexiTableView(QWidget *parent, const char *name)
 	connect(m_pUpdateTimer, SIGNAL(timeout()), this, SLOT(slotUpdate()));
 }
 
+void KexiTableView::addDropFilter(QString filter)
+{
+	m_dropFilters.append(filter);
+}
 
 void KexiTableView::addColumn(QString name, QVariant::Type type, bool editable, QVariant defaultValue,
  int width, bool autoinc)
@@ -946,6 +950,25 @@ void KexiTableView::showEvent(QShowEvent *e)
 	QRect r(cellGeometry(rows() - 1, cols() - 1 ));
 	resizeContents(r.right() + 1, r.bottom() + 1);
 	updateGeometries();
+}
+
+
+void KexiTableView::contentsDragMoveEvent(QDragMoveEvent *e)
+{
+	for(QStringList::Iterator it = m_dropFilters.begin(); it != m_dropFilters.end(); it++)
+	{
+		if(e->provides((*it)))
+		{
+			e->acceptAction(true);
+			return;
+		}
+	}
+	e->acceptAction(false);
+}
+
+void KexiTableView::contentsDropEvent(QDropEvent *ev)
+{
+	emit dropped(ev);
 }
 
 void KexiTableView::updateCell(int row, int col)

@@ -26,8 +26,11 @@
 
 class QGridLayout;
 class QFrame;
+class QComboBox;
+class QPushButton;
+class KexiDB;
 class KexiTableView;
-class KexiQueryDesignerGuiTables;
+class KexiRelationView;
 
 class KexiQueryDesignerGuiEditor : public QWidget
 {
@@ -37,9 +40,18 @@ class KexiQueryDesignerGuiEditor : public QWidget
 		KexiQueryDesignerGuiEditor(KexiQueryDesigner *parent, const char *name=0);
 		~KexiQueryDesignerGuiEditor();
 
+	protected slots:
+		void			slotAddTable();
+		void			slotDropped(QDropEvent *ev);
+
 	private:
-		KexiQueryDesignerGuiTables	*m_tables;
-		KexiTableView			*m_designTable;
+		KexiDB			*m_db;
+
+		KexiRelationView	*m_tables;
+		KexiTableView		*m_designTable;
+
+		QComboBox		*m_tableCombo;
+		QPushButton		*m_addButton;
 };
 
 #endif

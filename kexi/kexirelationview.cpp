@@ -40,8 +40,8 @@ KexiRelationView::KexiRelationView(QWidget *parent, const char *name)
 	m_tableCount = 0;
 
 	m_floatingSource = 0;
-	m_floatingX = 0;
-	m_floatingY = 0;
+	m_grabOffsetX = 0;
+	m_grabOffsetY = 0;
 	
 	viewport()->setPaletteBackgroundColor(colorGroup().mid());
 }
@@ -92,8 +92,6 @@ KexiRelationView::drawContents(QPainter *p, int cx, int cy, int cw, int ch)
 	{
 		SourceConnection *c = &(*itC);
 
-		kdDebug() << "KexiRelationView::addConnection(): rect: " << (*c).geometry.x() << ", " << (*c).geometry.y() << endl;
-
 		if(clip.intersects(c->geometry))
 			drawConnection(p, c, true);
 	}
@@ -127,9 +125,6 @@ KexiRelationView::drawConnection(QPainter *p, SourceConnection *conn, bool paint
 
 //	p->drawLine(0, srcY, 0, rcvY);
 
-	kdDebug() << "KexiRelationView::drawConnection() srcY=" << srcY << endl;
-	kdDebug() << "KexiRelationView::drawConnection() rcvY=" << rcvY << endl;
-
 	int srcX = m_tables[(*conn).srcTable].geometry.x();
 	int srcW = m_tables[(*conn).srcTable].geometry.width();
 
@@ -158,13 +153,10 @@ KexiRelationView::drawConnection(QPainter *p, SourceConnection *conn, bool paint
 		if(srcY < rcvY)
 		{
 			(*conn).geometry = QRect(srcX + srcW, srcY - 4, rcvX, rcvY + 4);
-			kdDebug() << "KexiRelationView::drawConnection() using 1" << endl;
-
 		}
 		else
 		{
 			(*conn).geometry = QRect(srcX + srcW, rcvY - 4, rcvX, srcY + 4);
-			kdDebug() << "KexiRelationView::drawConnection() using 2" << endl;
 		}
 	}
 	else
@@ -185,12 +177,10 @@ KexiRelationView::drawConnection(QPainter *p, SourceConnection *conn, bool paint
 		if(rcvY < srcY)
 		{
 			(*conn).geometry = QRect(rcvX + rcvW, rcvY - 4, srcX, srcY + 4);
-			kdDebug() << "KexiRelationView::drawConnection() using 3" << endl;
 		}
 		else
 		{
 			(*conn).geometry = QRect(rcvX + rcvW, srcY - 4, srcX, rcvY + 4);
-			kdDebug() << "KexiRelationView::drawConnection() using 4" << endl;
 		}
 	}
 	
@@ -208,8 +198,9 @@ KexiRelationView::contentsMouseMoveEvent(QMouseEvent *ev)
 			if(ev->x() > itemX - 20 && ev->x() < itemX + (*it).geometry.width() && ev->y() > itemY - 20 && ev->y() < itemY + 20)
 			{
 				m_floatingSource = &(*it);
-				m_floatingX = ev->x();
-				m_floatingY = ev->y();
+
+				m_grabOffsetX = ev->x() - (*m_floatingSource).geometry.x();
+				m_grabOffsetY = ev->y() - (*m_floatingSource).geometry.y();
 
 				break;
 			}
@@ -219,10 +210,8 @@ KexiRelationView::contentsMouseMoveEvent(QMouseEvent *ev)
 	{
 		QRect old = (*m_floatingSource).geometry;
 
-		int grepOffsetX = ev->x() - (*m_floatingSource).geometry.x();
-
-		int realX = ev->x();
-		int realY = ev->y();
+		int realX = ev->x() - m_grabOffsetX;
+		int realY = ev->y() - m_grabOffsetY;
 
 		(*m_floatingSource).geometry.moveBy(realX, realY);
 
@@ -250,8 +239,8 @@ KexiRelationView::contentsMouseReleaseEvent(QMouseEvent *ev)
 	if(m_floatingSource)
 	{
 		m_floatingSource = 0;
-		m_floatingX = 0;
-		m_floatingY = 0;
+		m_grabOffsetX = 0;
+		m_grabOffsetY = 0;
 	}
 }
 
@@ -293,10 +282,13 @@ KexiRelationViewTable::KexiRelationViewTable(KexiRelationView *parent, QString t
 	setAcceptDrops(true);
 	viewport()->setAcceptDrops(true);
 	setDropVisualizer(false);
-	
+
 	addColumn("fields");
 	setResizeMode(QListView::LastColumn);
 	header()->hide();
+
+	setSorting(-1, true); // disable sorting
+
 	for(QStringList::Iterator it = m_fieldList.begin(); it != m_fieldList.end(); it++)
 	{
 		KListViewItem *i = new KListViewItem(this, (*it));

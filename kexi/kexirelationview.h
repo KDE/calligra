@@ -80,8 +80,8 @@ class KexiRelationView : public QScrollView
 		int		m_tableCount;
 		
 		RelationSource	*m_floatingSource;
-		int		m_floatingX;
-		int		m_floatingY;
+		int		m_grabOffsetX;
+		int		m_grabOffsetY;
 
 		TableList	m_tables;
 		ConnectionList	m_connections;
