@@ -7844,7 +7844,7 @@ void KSpreadSheet::printDebug()
             cell = cellAt( currentcolumn, currentrow );
             if ( !cell->isDefault() && !cell->isEmpty() )
             {
-                QString cellDescr = util_cellName( currentcolumn, currentrow );
+                QString cellDescr = KSpreadCell::name( currentcolumn, currentrow );
                 cellDescr = cellDescr.rightJustify( 4,' ' );
                 //QString cellDescr = "Cell ";
                 //cellDescr += QString::number(currentrow).rightJustify(3,'0') + ',';

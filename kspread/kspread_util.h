@@ -140,8 +140,6 @@ private:
 };
 
 
-QString util_cellName( KSpreadSheet*, int _col, int _row );
-QString util_cellName( int _col, int _row );
 QString util_rangeName( const QRect &_area );
 QString util_rangeName( KSpreadSheet *_table, const QRect &_area );
 QString util_rangeColumnName( const QRect &_area);

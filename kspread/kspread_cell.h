@@ -687,6 +687,24 @@ public:
     QString dataTypeToString( DataType dt ) const;
     DataType stringToDataType( const QString& str ) const;
 
+    /**
+     * @return the name of this cell. Example: "A1"
+     */
+    QString name() const;
+    /**
+     * @return the name of this cell including the table it belongs, too.
+     * Example: "MyTable!A1"
+     */
+    QString fullName() const;
+    /**
+     * @see #name
+     */
+    static QString name( int col, int row );
+    /**
+     * @see #fullName
+     */
+    static QString fullName( const KSpreadSheet *s, int col, int row );
+
     /* descriptions of the flags are just below */
     enum CellFlags{
     /* this uses the same flags variable as KSpreadLayout.  The least significant
@@ -1034,7 +1052,6 @@ private:
   bool loadCellData(const QDomElement &text, Operation op);
   bool saveCellResult( QDomDocument& doc, QDomElement& result,
                        QString defaultStr );
-
 };
 
 #endif

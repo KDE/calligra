@@ -77,7 +77,7 @@ KSpreadGoalSeekDlg::KSpreadGoalSeekDlg( KSpreadView * parent,  QPoint const & ma
 
   m_targetEdit = new QLineEdit( m_startFrame, "m_targetEdit" );
   m_startFrameLayout->addWidget( m_targetEdit, 0, 1 );
-  m_targetEdit->setText( util_cellName( marker.x(), marker.y() ) );
+  m_targetEdit->setText( KSpreadCell::name( marker.x(), marker.y() ) );
 
   m_sourceEdit = new QLineEdit( m_startFrame, "m_sourceEdit" );
   m_startFrameLayout->addWidget( m_sourceEdit, 2, 1 );

@@ -92,9 +92,7 @@ DCOPRef KSpreadSheetIface::cell( int x, int y )
     if ( y == 0 )
         y = 1;
 
-    QCString str = objId();
-    str += '/';
-    str += util_cellName( x, y ).latin1();
+    QCString str = objId() + '/' + KSpreadCell::name( x, y ).latin1();
 
     return DCOPRef( kapp->dcopClient()->appId(), str );
 }

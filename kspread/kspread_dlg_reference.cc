@@ -210,8 +210,10 @@ void KSpreadreference::slotOk()
         m_pView->setActiveTable(table);
     }
 
-    m_pView->canvasWidget()->gotoLocation(KSpreadPoint( m_pView->activeTable()->tableName()
-                                                        + "!"+util_cellName(area[ index ].rect.left(), area[ index ].rect.top()  ), m_pView->doc()->map() ) );
+    m_pView->canvasWidget()->
+	gotoLocation(KSpreadPoint(KSpreadCell::fullName(m_pView->activeTable(),
+        area[ index ].rect.left(), area[ index ].rect.top() ),
+				  m_pView->doc()->map() ) );
     m_pView->selectionInfo()->setSelection(area[ index ].rect.topLeft(),
                                            area[index].rect.bottomRight(),
                                            m_pView->activeTable() );

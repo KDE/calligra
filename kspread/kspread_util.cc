@@ -910,21 +910,6 @@ QString util_encodeColumnLabelText( int column )
     return QString("@@@");
 }
 
-QString util_cellName(int _col, int _row)
-{
-    return QString("%1%2")
-	    .arg(util_encodeColumnLabelText( _col ))
-	    .arg(_row);
-}
-
-QString util_cellName(KSpreadSheet * table, int _col, int _row)
-{
-    return QString("%1!%2%3")
-	    .arg(table->tableName())
-	    .arg(util_encodeColumnLabelText(_col))
-	    .arg(_row);
-}
-
 QString util_rangeColumnName( const QRect &_area)
 {
     return QString("%1:%2")
@@ -942,17 +927,13 @@ QString util_rangeRowName( const QRect &_area)
 
 QString util_rangeName(const QRect &_area)
 {
-    return QString("%1:%2")
-	    .arg(util_cellName(_area.left(), _area.top()))
-	    .arg(util_cellName(_area.right(), _area.bottom()));
+    return KSpreadCell::name( _area.left(), _area.top() ) + ":" +
+	KSpreadCell::name( _area.right(), _area.bottom() );
 }
 
 QString util_rangeName(KSpreadSheet * _table, const QRect &_area)
 {
-    return QString("%1!%2")
-	    .arg(_table->tableName())
-	    .arg(util_rangeName(_area));
-
+    return _table->tableName() + "!" + util_rangeName(_area);
 }
 
 KSpreadPoint::KSpreadPoint(const QString & _str)

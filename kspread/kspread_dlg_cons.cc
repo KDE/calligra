@@ -246,9 +246,10 @@ void KSpreadConsolidate::slotOk()
 	  KSpreadCell *c = t->cellAt( x + (*it).range.left(), y + (*it).range.top() );
           if(!c->isDefault())
                 novalue=false;
-	  if ( it != ranges.begin() ) formula += ";";
+	  if ( it != ranges.begin() )
+	    formula += ";";
 	  formula += (*it).tableName + "!";
-	  formula += util_cellName( x + (*it).range.left(), y + (*it).range.top() );
+	  formula += c->name();
 	}
 	formula += ")";
 
@@ -324,9 +325,10 @@ void KSpreadConsolidate::slotOk()
 	      {
 //		KSpreadCell *c2 = t->cellAt( i, y + (*it).range.top() );
 		count++;
-		if ( it != ranges.begin() ) formula += ";";
+		if ( it != ranges.begin() )
+		  formula += ";";
 		formula += (*it).tableName + "!";
-		formula += util_cellName( i, y + (*it).range.top() );
+		formula += KSpreadCell::name( i, y + (*it).range.top() );
 	      }
 	    }
 	  }
@@ -406,7 +408,7 @@ void KSpreadConsolidate::slotOk()
 		count++;
 		if ( it != ranges.begin() ) formula += ";";
 		formula += (*it).tableName + "!";
-		formula += util_cellName( i, y + (*it).range.top() );
+		formula += KSpreadCell::name( i, y + (*it).range.top() );
 	      }
 	    }
 	  }
@@ -547,7 +549,7 @@ void KSpreadConsolidate::slotOk()
 	    count++;
   	    if ( it != ranges.begin() ) formula += ";";
 	    formula += (*it).tableName + "!";
-	    formula += util_cellName( i, y + (*it).range.top() );
+	    formula += KSpreadCell::name( i, y + (*it).range.top() );
 	  }
 	}
 	formula += ")";

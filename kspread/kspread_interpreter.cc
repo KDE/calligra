@@ -91,7 +91,7 @@ void makeDepends( KSContext& context, KSParseNode* node, KSpreadMap* m, KSpreadS
     if ( node->getType() == t_cell )
     {
       KSParseNodeExtraPoint* extra = new KSParseNodeExtraPoint( node->getStringLiteral(), m, t );
-      kdDebug(36001) << "-------- Got dep " << util_cellName( extra->point()->pos.x(), extra->point()->pos.y() ) << endl;
+      kdDebug(36001) << "-------- Got dep " << KSpreadCell::name( extra->point()->pos.x(), extra->point()->pos.y() ) << endl;
       KSpreadDependency* d = new KSpreadDependency(extra->point()->pos.x(), extra->point()->pos.y(),
 					       extra->point()->table);
       if (!d->Table())
@@ -302,7 +302,7 @@ bool KSpreadInterpreter::processExtension( KSContext& context, KSParseNode* node
     if ( cell->hasError() )
     {
       QString tmp( i18n("The cell %1 has an error:\n\n%2") );
-      tmp = tmp.arg( util_cellName( cell->table(), cell->column(), cell->row() ) );
+      tmp = tmp.arg( cell->fullName() );
       tmp = tmp.arg( node->getStringLiteral() );
       context.setException( new KSException( "ErrorInCell", tmp ) );
       return false;
@@ -349,7 +349,7 @@ bool KSpreadInterpreter::processExtension( KSContext& context, KSParseNode* node
       if ( cell->hasError() )
       {
         QString tmp( i18n("The cell %1 has an error:\n\n%2") );
-        tmp = tmp.arg( util_cellName( cell->table(), cell->column(), cell->row() ) );
+        tmp = tmp.arg( cell->fullName() );
         tmp = tmp.arg( node->getStringLiteral() );
         context.setException( new KSException( "ErrorInCell", tmp ) );
         return false;
@@ -389,7 +389,7 @@ bool KSpreadInterpreter::processExtension( KSContext& context, KSParseNode* node
         if ( cell->hasError() )
         {
           QString tmp( i18n("The cell %1 has an error:\n\n%2") );
-          tmp = tmp.arg( util_cellName( cell->table(), cell->column(), cell->row() ) );
+          tmp = tmp.arg( cell->fullName() );
           tmp = tmp.arg( node->getStringLiteral() );
           context.setException( new KSException( "ErrorInCell", tmp ) );
           return false;

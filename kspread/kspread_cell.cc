@@ -423,12 +423,11 @@ void KSpreadCell::clicked( KSpreadCanvas *_canvas )
   // Did a syntax error occur ?
   if ( context.exception() )
   {
-    kdDebug(36001) << "Failed action in cell " <<
-      util_cellName(m_iColumn, m_iRow) << endl;
+    kdDebug(36001) << "Failed action in cell " << name() << endl;
     if (m_pTable->doc()->getShowMessageError())
     {
       QString tmp(i18n("Error in cell %1\n\n"));
-      tmp = tmp.arg( util_cellName( m_pTable, m_iColumn, m_iRow ) );
+      tmp = tmp.arg( fullName() );
       tmp += context.exception()->toString( context );
       KMessageBox::error((QWidget*)0L , tmp);
     }
@@ -441,7 +440,7 @@ void KSpreadCell::clicked( KSpreadCanvas *_canvas )
       if ( context2.exception() &&m_pTable->doc()->getShowMessageError())
       {
           QString tmp(i18n("Error in cell %1\n\n"));
-          tmp = tmp.arg( util_cellName( m_pTable, m_iColumn, m_iRow ) );
+          tmp = tmp.arg( fullName() );
           tmp += context2.exception()->toString( context2 );
           KMessageBox::error( (QWidget*)0L, tmp);
       }
@@ -1502,7 +1501,7 @@ bool KSpreadCell::makeFormula()
     if (m_pTable->doc()->getShowMessageError())
     {
       QString tmp(i18n("Error in cell %1\n\n"));
-      tmp = tmp.arg( util_cellName( m_pTable, m_iColumn, m_iRow ) );
+      tmp = tmp.arg( fullName() );
       tmp += context.exception()->toString( context );
       KMessageBox::error( (QWidget*)0L, tmp);
     }
@@ -1633,7 +1632,7 @@ bool KSpreadCell::calc(bool delay)
     if ( context.exception() && m_pTable->doc()->getShowMessageError())
     {
       QString tmp(i18n("Error in cell %1\n\n"));
-      tmp = tmp.arg( util_cellName( m_pTable, m_iColumn, m_iRow ) );
+      tmp = tmp.arg( fullName() );
       tmp += context.exception()->toString( context );
       KMessageBox::error( (QWidget*)0L, tmp);
     }
@@ -3863,7 +3862,7 @@ void KSpreadCell::update()
     {
         return;
     }
-    kdDebug(36001) << util_cellName( m_iColumn, m_iRow ) << " update" << endl;
+    kdDebug(36001) << name() << " update" << endl;
     if ( !isObscured() )
     {
         QValueList<KSpreadCell*>::iterator it = m_ObscuringCells.begin();
@@ -3893,7 +3892,7 @@ void KSpreadCell::updateDepending()
 
   calc();
 
-  kdDebug(36001) << util_cellName( m_iColumn, m_iRow ) << " updateDepending" << endl;
+  kdDebug(36001) << name() << " updateDepending" << endl;
 
   KSpreadDependency* d = NULL;
 
@@ -3917,7 +3916,7 @@ void KSpreadCell::updateDepending()
 
   calc();
 
-  kdDebug(36001) << util_cellName( m_iColumn, m_iRow ) << " updateDepending done" << endl;
+  kdDebug(36001) << name() << " updateDepending done" << endl;
 
   clearFlag(Flag_UpdatingDeps);
   updateChart();
@@ -5273,6 +5272,25 @@ KSpreadCellPrivate* SelectPrivate::copy( KSpreadCell* cell )
     return p;
 }
 
+QString KSpreadCell::name() const
+{
+    return name( m_iColumn, m_iRow );
+}
+
+QString KSpreadCell::fullName() const
+{
+    return fullName( table(), m_iColumn, m_iRow );
+}
+
+QString KSpreadCell::name( int col, int row )
+{
+    return util_encodeColumnLabelText( col ) + QString::number( row );
+}
+
+QString KSpreadCell::fullName( const KSpreadSheet* s, int col, int row )
+{
+    return s->tableName() + "!" + name( col, row );
+}
 
 #include "kspread_cell.moc"
 

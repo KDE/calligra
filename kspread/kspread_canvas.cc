@@ -2540,14 +2540,14 @@ void KSpreadCanvas::updateChooseRect(const QPoint &newMarker, const QPoint &newA
     if( m_chooseStartTable != table )
     {
       if ( newMarker == newAnchor )
-        name_cell = util_cellName( table, newChooseRect.left(), newChooseRect.top() );
+        name_cell = KSpreadCell::fullName( table, newChooseRect.left(), newChooseRect.top() );
       else
         name_cell = util_rangeName( table, newChooseRect );
     }
     else
     {
       if ( newMarker == newAnchor )
-        name_cell = util_cellName( newChooseRect.left(), newChooseRect.top() );
+        name_cell = KSpreadCell::name( newChooseRect.left(), newChooseRect.top() );
       else
         name_cell = util_rangeName( newChooseRect );
     }
