@@ -236,7 +236,7 @@ void KWBorderPreview::drawContents( QPainter* painter )
 }
 
 /*================================================================*/
-QPen KWBorderPreview::setBorderPen( KWParagLayout::Border _brd )
+QPen KWBorderPreview::setBorderPen( Border _brd )
 {
     QPen pen( black, 1, SolidLine );
 
@@ -244,19 +244,19 @@ QPen KWBorderPreview::setBorderPen( KWParagLayout::Border _brd )
     pen.setColor( _brd.color );
 
     switch ( _brd.style ) {
-    case KWParagLayout::SOLID:
+    case Border::SOLID:
         pen.setStyle( SolidLine );
         break;
-    case KWParagLayout::DASH:
+    case Border::DASH:
         pen.setStyle( DashLine );
         break;
-    case KWParagLayout::DOT:
+    case Border::DOT:
         pen.setStyle( DotLine );
         break;
-    case KWParagLayout::DASH_DOT:
+    case Border::DASH_DOT:
         pen.setStyle( DashDotLine );
         break;
-    case KWParagLayout::DASH_DOT_DOT:
+    case Border::DASH_DOT_DOT:
         pen.setStyle( DashDotDotLine );
         break;
     }
@@ -1002,18 +1002,7 @@ void KWParagDia::brdLeftToggled( bool _on )
     else {
         leftBorder.ptWidth = cWidth->currentText().toInt();
         leftBorder.color = QColor( bColor->color() );
-        QString stl( cStyle->currentText() );
-
-        if ( stl == i18n( "solid line" ) )
-            leftBorder.style = KWParagLayout::SOLID;
-        else if ( stl == i18n( "dash line ( ---- )" ) )
-            leftBorder.style = KWParagLayout::DASH;
-        else if ( stl == i18n( "dot line ( **** )" ) )
-            leftBorder.style = KWParagLayout::DOT;
-        else if ( stl == i18n( "dash dot line ( -*-* )" ) )
-            leftBorder.style = KWParagLayout::DASH_DOT;
-        else if ( stl == i18n( "dash dot dot line ( -**- )" ) )
-            leftBorder.style = KWParagLayout::DASH_DOT_DOT;
+        leftBorder.style= Border::getStyle( cStyle->currentText() );
     }
     prev3->setLeftBorder( leftBorder );
 }
@@ -1026,18 +1015,7 @@ void KWParagDia::brdRightToggled( bool _on )
     else {
         rightBorder.ptWidth = cWidth->currentText().toInt();
         rightBorder.color = QColor( bColor->color() );
-        QString stl( cStyle->currentText() );
-
-        if ( stl == i18n( "solid line" ) )
-            rightBorder.style = KWParagLayout::SOLID;
-        else if ( stl == i18n( "dash line ( ---- )" ) )
-            rightBorder.style = KWParagLayout::DASH;
-        else if ( stl == i18n( "dot line ( **** )" ) )
-            rightBorder.style = KWParagLayout::DOT;
-        else if ( stl == i18n( "dash dot line ( -*-* )" ) )
-            rightBorder.style = KWParagLayout::DASH_DOT;
-        else if ( stl == i18n( "dash dot dot line ( -**- )" ) )
-            rightBorder.style = KWParagLayout::DASH_DOT_DOT;
+        rightBorder.style= Border::getStyle( cStyle->currentText() );
     }
     prev3->setRightBorder( rightBorder );
 }
@@ -1050,18 +1028,7 @@ void KWParagDia::brdTopToggled( bool _on )
     else {
         topBorder.ptWidth = cWidth->currentText().toInt();
         topBorder.color = QColor( bColor->color() );
-        QString stl( cStyle->currentText() );
-
-        if ( stl == i18n( "solid line" ) )
-            topBorder.style = KWParagLayout::SOLID;
-        else if ( stl == i18n( "dash line ( ---- )" ) )
-            topBorder.style = KWParagLayout::DASH;
-        else if ( stl == i18n( "dot line ( **** )" ) )
-            topBorder.style = KWParagLayout::DOT;
-        else if ( stl == i18n( "dash dot line ( -*-* )" ) )
-            topBorder.style = KWParagLayout::DASH_DOT;
-        else if ( stl == i18n( "dash dot dot line ( -**- )" ) )
-            topBorder.style = KWParagLayout::DASH_DOT_DOT;
+        topBorder.style= Border::getStyle( cStyle->currentText() );
     }
     prev3->setTopBorder( topBorder );
 }
@@ -1074,18 +1041,7 @@ void KWParagDia::brdBottomToggled( bool _on )
     else {
         bottomBorder.ptWidth = cWidth->currentText().toInt();
         bottomBorder.color = QColor( bColor->color() );
-        QString stl( cStyle->currentText() );
-
-        if ( stl == i18n( "solid line" ) )
-            bottomBorder.style = KWParagLayout::SOLID;
-        else if ( stl == i18n( "dash line ( ---- )" ) )
-            bottomBorder.style = KWParagLayout::DASH;
-        else if ( stl == i18n( "dot line ( **** )" ) )
-            bottomBorder.style = KWParagLayout::DOT;
-        else if ( stl == i18n( "dash dot line ( -*-* )" ) )
-            bottomBorder.style = KWParagLayout::DASH_DOT;
-        else if ( stl == i18n( "dash dot dot line ( -**- )" ) )
-            bottomBorder.style = KWParagLayout::DASH_DOT_DOT;
+        bottomBorder.style=Border::getStyle(cStyle->currentText());
     }
     prev3->setBottomBorder( bottomBorder );
 }

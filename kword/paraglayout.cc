@@ -54,16 +54,16 @@ KWParagLayout::KWParagLayout( KWordDocument *_doc, bool _add, QString _name )
     counter.customCounterDef = "";
 
     left.color = Qt::white;
-    left.style = SOLID;
+    left.style = Border::SOLID;
     left.ptWidth = 0;
     right.color = Qt::white;
-    right.style = SOLID;
+    right.style = Border::SOLID;
     right.ptWidth = 0;
     top.color = Qt::white;
-    top.style = SOLID;
+    top.style = Border::SOLID;
     top.ptWidth = 0;
     bottom.color = Qt::white;
-    bottom.style = SOLID;
+    bottom.style = Border::SOLID;
     bottom.ptWidth = 0;
 
     format.setDefaults( _doc );
@@ -416,7 +416,7 @@ void KWParagLayout::load( KOMLParser& parser, QValueList<KOMLAttrib>& lst )
                     b = ( *it ).m_strValue.toInt();
                     left.color.setRgb( r, g, b );
                 } else if ( ( *it ).m_strName == "style" )
-                    left.style = static_cast<BorderStyle>( ( *it ).m_strValue.toInt() );
+                    left.style = static_cast<Border::BorderStyle>( ( *it ).m_strValue.toInt() );
                 else if ( ( *it ).m_strName == "width" )
                     left.ptWidth = ( *it ).m_strValue.toInt();
             }
@@ -435,7 +435,7 @@ void KWParagLayout::load( KOMLParser& parser, QValueList<KOMLAttrib>& lst )
                     b = ( *it ).m_strValue.toInt();
                     right.color.setRgb( r, g, b );
                 } else if ( ( *it ).m_strName == "style" )
-                    right.style = static_cast<BorderStyle>(( *it ).m_strValue.toInt() );
+                    right.style = static_cast<Border::BorderStyle>(( *it ).m_strValue.toInt() );
                 else if ( ( *it ).m_strName == "width" )
                     right.ptWidth = ( *it ).m_strValue.toInt();
             }
@@ -454,7 +454,7 @@ void KWParagLayout::load( KOMLParser& parser, QValueList<KOMLAttrib>& lst )
                     b = ( *it ).m_strValue.toInt();
                     bottom.color.setRgb( r, g, b );
                 } else if ( ( *it ).m_strName == "style" )
-                    bottom.style = static_cast<BorderStyle>( ( *it ).m_strValue.toInt() );
+                    bottom.style = static_cast<Border::BorderStyle>( ( *it ).m_strValue.toInt() );
                 else if ( ( *it ).m_strName == "width" )
                     bottom.ptWidth = ( *it ).m_strValue.toInt();
             }
@@ -473,7 +473,7 @@ void KWParagLayout::load( KOMLParser& parser, QValueList<KOMLAttrib>& lst )
                     b = ( *it ).m_strValue.toInt();
                     top.color.setRgb( r, g, b );
                 } else if ( ( *it ).m_strName == "style" )
-                    top.style = static_cast<BorderStyle>( ( *it ).m_strValue.toInt() );
+                    top.style = static_cast<Border::BorderStyle>( ( *it ).m_strValue.toInt() );
                 else if ( ( *it ).m_strName == "width" )
                     top.ptWidth = ( *it ).m_strValue.toInt();
             }

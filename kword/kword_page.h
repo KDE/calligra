@@ -22,6 +22,7 @@
 
 #include "defs.h"
 #include "fc.h"
+#include "border.h"
 #include "format.h"
 #include "paraglayout.h"
 #include "searchdia.h"
@@ -123,10 +124,10 @@ public:
     void setSpaceAfterParag( KWUnit _after );
     void setLineSpacing( KWUnit _spacing );
 
-    void setParagLeftBorder( KWParagLayout::Border _brd );
-    void setParagRightBorder( KWParagLayout::Border _brd );
-    void setParagTopBorder( KWParagLayout::Border _brd );
-    void setParagBottomBorder( KWParagLayout::Border _brd );
+    void setParagLeftBorder( Border _brd );
+    void setParagRightBorder( Border _brd );
+    void setParagTopBorder( Border _brd );
+    void setParagBottomBorder( Border _brd );
 
     KWParagLayout::Flow getFlow()
     { return fc->getParag()->getParagLayout()->getFlow(); }
@@ -140,13 +141,13 @@ public:
     { return fc->getParag()->getParagLayout()->getParagFootOffset(); }
     KWUnit getLineSpacing()
     { return fc->getParag()->getParagLayout()->getLineSpacing(); }
-    KWParagLayout::Border getLeftBorder()
+    Border getLeftBorder()
     { return fc->getParag()->getParagLayout()->getLeftBorder(); }
-    KWParagLayout::Border getRightBorder()
+    Border getRightBorder()
     { return fc->getParag()->getParagLayout()->getRightBorder(); }
-    KWParagLayout::Border getTopBorder()
+    Border getTopBorder()
     { return fc->getParag()->getParagLayout()->getTopBorder(); }
-    KWParagLayout::Border getBottomBorder()
+    Border getBottomBorder()
     { return fc->getParag()->getParagLayout()->getBottomBorder(); }
 
     KWParagLayout::Counter getCounter()
@@ -211,10 +212,10 @@ public:
         twid = wid; thei = hei;
     }
 
-    void setLeftFrameBorder( KWParagLayout::Border _brd, bool _enable );
-    void setRightFrameBorder( KWParagLayout::Border _brd, bool _enable );
-    void setTopFrameBorder( KWParagLayout::Border _brd, bool _enable );
-    void setBottomFrameBorder( KWParagLayout::Border _brd, bool _enable );
+    void setLeftFrameBorder( Border _brd, bool _enable );
+    void setRightFrameBorder( Border _brd, bool _enable );
+    void setTopFrameBorder( Border _brd, bool _enable );
+    void setBottomFrameBorder( Border _brd, bool _enable );
     void setFrameBorderColor(const QColor &_color);
     void setFrameBackgroundColor( QBrush _color );
 

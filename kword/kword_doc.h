@@ -306,7 +306,7 @@ public:
     KWGroupManager *getGroupManager( int i ) { return grpMgrs.at( i ); }
     void delGroupManager( KWGroupManager *g, bool deleteit = true );
 
-    QPen setBorderPen( KWParagLayout::Border _brd );
+    QPen setBorderPen( Border _brd );
     void enableEmbeddedParts( bool f );
 
     RunAround getRunAround();

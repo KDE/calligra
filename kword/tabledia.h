@@ -97,11 +97,11 @@ protected:
     struct TableStyle {
         bool hasHeader, hasFirstCol;
 
-        KWParagLayout::Border hTop, hBottom, hRight, hLeft;
+        Border hTop, hBottom, hRight, hLeft;
         QBrush hBack;
-        KWParagLayout::Border frTop, frBottom, frRigfrt, frLeft;
+        Border frTop, frBottom, frRigfrt, frLeft;
         QBrush frBack;
-        KWParagLayout::Border bTop, bBottom, bRigbt, bLeft;
+        Border bTop, bBottom, bRigbt, bLeft;
         QBrush bBack;
 
         KWFormat header, firstRow, Body;

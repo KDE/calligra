@@ -104,22 +104,22 @@ KWordView::KWordView( QWidget *_parent, const char *_name, KWordDocument* _doc )
     styleManager = 0L;
     vertAlign = KWFormat::VA_NORMAL;
     left.color = white;
-    left.style = KWParagLayout::SOLID;
+    left.style = Border::SOLID;
     left.ptWidth = 0;
     right.color = white;
-    right.style = KWParagLayout::SOLID;
+    right.style = Border::SOLID;
     right.ptWidth = 0;
     top.color = white;
-    top.style = KWParagLayout::SOLID;
+    top.style = Border::SOLID;
     top.ptWidth = 0;
     bottom.color = white;
-    bottom.style = KWParagLayout::SOLID;
+    bottom.style = Border::SOLID;
     bottom.ptWidth = 0;
     tmpBrd.color = black;
-    tmpBrd.style = KWParagLayout::SOLID;
+    tmpBrd.style = Border::SOLID;
     tmpBrd.ptWidth = 1;
     frmBrd.color = black;
-    frmBrd.style = KWParagLayout::SOLID;
+    frmBrd.style = Border::SOLID;
     frmBrd.ptWidth = 1;
     _viewFormattingChars = FALSE;
     _viewFrameBorders = TRUE;
@@ -906,8 +906,8 @@ void KWordView::setLineSpacing( int _spc )
 }
 
 /*================================================================*/
-void KWordView::setParagBorders( KWParagLayout::Border _left, KWParagLayout::Border _right,
-                                 KWParagLayout::Border _top, KWParagLayout::Border _bottom )
+void KWordView::setParagBorders( Border _left, Border _right,
+                                 Border _top, Border _bottom )
 {
     if ( left != _left || right != _right || top != _top || bottom != _bottom ) {
         left = _left;
@@ -2200,15 +2200,15 @@ void KWordView::textBorderStyle( const QString &style )
     QString stl = style;
 
     if ( stl == i18n( "solid line" ) )
-        tmpBrd.style = KWParagLayout::SOLID;
+        tmpBrd.style = Border::SOLID;
     else if ( stl == i18n( "dash line ( ---- )" ) )
-        tmpBrd.style = KWParagLayout::DASH;
+        tmpBrd.style = Border::DASH;
     else if ( stl == i18n( "dot line ( **** )" ) )
-        tmpBrd.style = KWParagLayout::DOT;
+        tmpBrd.style = Border::DOT;
     else if ( stl == i18n( "dash dot line ( -*-* )" ) )
-        tmpBrd.style = KWParagLayout::DASH_DOT;
+        tmpBrd.style = Border::DASH_DOT;
     else if ( stl == i18n( "dash dot dot line ( -**- )" ) )
-        tmpBrd.style = KWParagLayout::DASH_DOT_DOT;
+        tmpBrd.style = Border::DASH_DOT_DOT;
 }
 
 /*================================================================*/
@@ -2264,15 +2264,15 @@ void KWordView::frameBorderStyle( const QString &style )
     QString stl = style;
 
     if ( stl == i18n( "solid line" ) )
-        frmBrd.style = KWParagLayout::SOLID;
+        frmBrd.style = Border::SOLID;
     else if ( stl == i18n( "dash line ( ---- )" ) )
-        frmBrd.style = KWParagLayout::DASH;
+        frmBrd.style = Border::DASH;
     else if ( stl == i18n( "dot line ( **** )" ) )
-        frmBrd.style = KWParagLayout::DOT;
+        frmBrd.style = Border::DOT;
     else if ( stl == i18n( "dash dot line ( -*-* )" ) )
-        frmBrd.style = KWParagLayout::DASH_DOT;
+        frmBrd.style = Border::DASH_DOT;
     else if ( stl == i18n( "dash dot dot line ( -**- )" ) )
-        frmBrd.style = KWParagLayout::DASH_DOT_DOT;
+        frmBrd.style = Border::DASH_DOT_DOT;
 }
 
 /*================================================================*/

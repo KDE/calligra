@@ -15,7 +15,8 @@ libkwordpart_la_SOURCES = kword_doc.cc searchdia.cc char.cc kword_view.cc \
                 tabledia.cc insdia.cc deldia.cc variable.cc docstruct.cc \
                 kword_undo.cc clipbrd_dnd.cc footnote.cc footnotedia.cc \
 		autoformat.cc autoformatdia.cc variabledlgs.cc \
-                serialletter.cc contents.cc kword_factory.cc
+                serialletter.cc contents.cc kword_factory.cc \
+                border.cc
 libkwordpart_la_LDFLAGS = $(KDE_LDFLAGS) -avoid-version -module -no-undefined
 libkwordpart_la_LIBADD = ../lib/kofficeui/libkofficeui.la ../lib/kformula/libkformula.la -lkspell
 libkwordpart_la_METASOURCES = AUTO
@@ -38,7 +39,8 @@ noinst_HEADERS = char.h kword_doc.h kword_view.h \
 		kword_utils.h searchdia.h preview.h tabledia.h insdia.h \
                 deldia.h variable.h docstruct.h kword_undo.h clipbrd_dnd.h \
                 footnote.h footnotedia.h autoformat.h autoformatdia.h \
-                variabledlgs.h serialletter.h contents.h kword_factory.h
+                variabledlgs.h serialletter.h contents.h kword_factory.h \
+                border.h
 
 kdelnk_DATA = kword.desktop
 kdelnkdir = $(kde_appsdir)/Office

@@ -22,6 +22,7 @@
 
 #include "format.h"
 #include "defs.h"
+#include "border.h"
 
 #include <qstring.h>
 #include <qcolor.h>
@@ -52,23 +53,6 @@ public:
                       CT_ROM_NUM_L = 4, CT_ROM_NUM_U = 5, CT_BULLET = 6,
                       CT_CUSTOM = 7 };
     enum NumType {NT_LIST = 0, NT_CHAPTER = 1};
-
-    enum BorderStyle {SOLID = 0, DASH = 1, DOT = 2, DASH_DOT = 3, DASH_DOT_DOT = 4};
-    struct Border
-    {
-        Border()
-            : color( Qt::black ), style( SOLID ), ptWidth( 1 ) {
-        }
-        QColor color;
-        BorderStyle style;
-        unsigned int ptWidth;
-        bool operator==( const Border _brd ) const {
-            return ( style == _brd.style && color == _brd.color && ptWidth == _brd.ptWidth );
-        }
-        bool operator!=( const Border _brd ) const {
-            return ( style != _brd.style || color != _brd.color || ptWidth != _brd.ptWidth );
-        }
-    };
 
     struct Counter
     {

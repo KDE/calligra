@@ -108,20 +108,20 @@ public:
     KWBorderPreview( QWidget*, const char* );
     ~KWBorderPreview() {}
 
-    KWParagLayout::Border getLeftBorder() { return leftBorder; }
-    void setLeftBorder( KWParagLayout::Border _leftBorder ) { leftBorder = _leftBorder; repaint( true ); }
-    KWParagLayout::Border getRightBorder() { return rightBorder; }
-    void setRightBorder( KWParagLayout::Border _rightBorder ) { rightBorder = _rightBorder; repaint( true ); }
-    KWParagLayout::Border getTopBorder() { return topBorder; }
-    void setTopBorder( KWParagLayout::Border _topBorder ) { topBorder = _topBorder; repaint( true ); }
-    KWParagLayout::Border getBottomBorder() { return bottomBorder; }
-    void setBottomBorder( KWParagLayout::Border _bottomBorder ) { bottomBorder = _bottomBorder; repaint( true ); }
+    Border getLeftBorder() { return leftBorder; }
+    void setLeftBorder( Border _leftBorder ) { leftBorder = _leftBorder; repaint( true ); }
+    Border getRightBorder() { return rightBorder; }
+    void setRightBorder( Border _rightBorder ) { rightBorder = _rightBorder; repaint( true ); }
+    Border getTopBorder() { return topBorder; }
+    void setTopBorder( Border _topBorder ) { topBorder = _topBorder; repaint( true ); }
+    Border getBottomBorder() { return bottomBorder; }
+    void setBottomBorder( Border _bottomBorder ) { bottomBorder = _bottomBorder; repaint( true ); }
 
 protected:
     void drawContents( QPainter* );
-    QPen setBorderPen( KWParagLayout::Border _brd );
+    QPen setBorderPen( Border _brd );
 
-    KWParagLayout::Border leftBorder, rightBorder, topBorder, bottomBorder;
+    Border leftBorder, rightBorder, topBorder, bottomBorder;
 
 };
 
@@ -184,14 +184,14 @@ public:
 
     KWParagLayout::Flow getFlow();
 
-    KWParagLayout::Border getLeftBorder() { return leftBorder; }
-    void setLeftBorder( KWParagLayout::Border _leftBorder ) { leftBorder = _leftBorder; updateBorders(); }
-    KWParagLayout::Border getRightBorder() { return rightBorder; }
-    void setRightBorder( KWParagLayout::Border _rightBorder ) { rightBorder = _rightBorder; updateBorders(); }
-    KWParagLayout::Border getTopBorder() { return topBorder; }
-    void setTopBorder( KWParagLayout::Border _topBorder ) { topBorder = _topBorder; updateBorders(); }
-    KWParagLayout::Border getBottomBorder() { return bottomBorder; }
-    void setBottomBorder( KWParagLayout::Border _bottomBorder ) { bottomBorder = _bottomBorder; updateBorders(); }
+    Border getLeftBorder() { return leftBorder; }
+    void setLeftBorder( Border _leftBorder ) { leftBorder = _leftBorder; updateBorders(); }
+    Border getRightBorder() { return rightBorder; }
+    void setRightBorder( Border _rightBorder ) { rightBorder = _rightBorder; updateBorders(); }
+    Border getTopBorder() { return topBorder; }
+    void setTopBorder( Border _topBorder ) { topBorder = _topBorder; updateBorders(); }
+    Border getBottomBorder() { return bottomBorder; }
+    void setBottomBorder( Border _bottomBorder ) { bottomBorder = _bottomBorder; updateBorders(); }
 
     void setCounter( KWParagLayout::Counter _counter );
     KWParagLayout::Counter getCounter() { return counter; }
@@ -231,7 +231,7 @@ protected:
     QRadioButton *rtLeft, *rtCenter, *rtRight, *rtDecimal;
 
 
-    KWParagLayout::Border leftBorder, rightBorder, topBorder, bottomBorder;
+    Border leftBorder, rightBorder, topBorder, bottomBorder;
     int flags;
     KWParagLayout::Counter counter;
     QStringList fontList;

@@ -32,6 +32,7 @@
 #include <komlParser.h>
 #include <komlWriter.h>
 #include <koFilterManager.h>
+#include "paraglayout.h"
 #include <koTemplateChooseDia.h>
 #include <koStore.h>
 #include <koStoreDevice.h>
@@ -842,8 +843,8 @@ bool KWordDocument::loadXML( QIODevice *, const QDomDocument & doc )
     lay->setFollowingParagLayout( "Standard" );
     lay->setCounterType( KWParagLayout::CT_NONE );
     lay->setCounterDepth( 0 );
-    lay->setTopBorder( KWParagLayout::Border() );
-    lay->setBottomBorder( KWParagLayout::Border() );
+    lay->setTopBorder( Border() );
+    lay->setBottomBorder( Border() );
     lay->setFlow( KWParagLayout::CENTER );
     lay->setFormat( f );
 
@@ -1963,7 +1964,7 @@ void KWordDocument::draw( QPaintDevice *, long int, long int, float )
 }
 
 /*================================================================*/
-QPen KWordDocument::setBorderPen( KWParagLayout::Border _brd )
+QPen KWordDocument::setBorderPen( Border _brd )
 {
     QPen pen( black, 1, SolidLine );
 
@@ -1971,19 +1972,19 @@ QPen KWordDocument::setBorderPen( KWParagLayout::Border _brd )
     pen.setColor( _brd.color );
 
     switch ( _brd.style ) {
-    case KWParagLayout::SOLID:
+    case Border::SOLID:
         pen.setStyle( SolidLine );
         break;
-    case KWParagLayout::DASH:
+    case Border::DASH:
         pen.setStyle( DashLine );
         break;
-    case KWParagLayout::DOT:
+    case Border::DOT:
         pen.setStyle( DotLine );
         break;
-    case KWParagLayout::DASH_DOT:
+    case Border::DASH_DOT:
         pen.setStyle( DashDotLine );
         break;
-    case KWParagLayout::DASH_DOT_DOT:
+    case Border::DASH_DOT_DOT:
         pen.setStyle( DashDotDotLine );
         break;
     }

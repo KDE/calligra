@@ -64,16 +64,16 @@ KWFrame::KWFrame()
 
     backgroundColor = QBrush( Qt::white );
     brd_left.color = getBackgroundColor().color();
-    brd_left.style = KWParagLayout::SOLID;
+    brd_left.style = Border::SOLID;
     brd_left.ptWidth = 1;
     brd_right.color = getBackgroundColor().color();
-    brd_right.style = KWParagLayout::SOLID;
+    brd_right.style = Border::SOLID;
     brd_right.ptWidth = 1;
     brd_top.color = getBackgroundColor().color();
-    brd_top.style = KWParagLayout::SOLID;
+    brd_top.style = Border::SOLID;
     brd_top.ptWidth = 1;
     brd_bottom.color = getBackgroundColor().color();
-    brd_bottom.style = KWParagLayout::SOLID;
+    brd_bottom.style = Border::SOLID;
     brd_bottom.ptWidth = 1;
 
     frameBehaviour= AutoExtendFrame;
@@ -96,16 +96,16 @@ KWFrame::KWFrame(KWFrameSet *fs, const QPoint &topleft, const QPoint &bottomrigh
 
     backgroundColor = QBrush( Qt::white );
     brd_left.color = getBackgroundColor().color();
-    brd_left.style = KWParagLayout::SOLID;
+    brd_left.style = Border::SOLID;
     brd_left.ptWidth = 1;
     brd_right.color = getBackgroundColor().color();
-    brd_right.style = KWParagLayout::SOLID;
+    brd_right.style = Border::SOLID;
     brd_right.ptWidth = 1;
     brd_top.color = getBackgroundColor().color();
-    brd_top.style = KWParagLayout::SOLID;
+    brd_top.style = Border::SOLID;
     brd_top.ptWidth = 1;
     brd_bottom.color = getBackgroundColor().color();
-    brd_bottom.style = KWParagLayout::SOLID;
+    brd_bottom.style = Border::SOLID;
     brd_bottom.ptWidth = 1;
 
     frameBehaviour=AutoCreateNewFrame;
@@ -128,16 +128,16 @@ KWFrame::KWFrame( KWFrameSet *fs,const QPoint &topleft, const QSize &size )
 
     backgroundColor = QBrush( Qt::white );
     brd_left.color = getBackgroundColor().color();
-    brd_left.style = KWParagLayout::SOLID;
+    brd_left.style = Border::SOLID;
     brd_left.ptWidth = 1;
     brd_right.color = getBackgroundColor().color();
-    brd_right.style = KWParagLayout::SOLID;
+    brd_right.style = Border::SOLID;
     brd_right.ptWidth = 1;
     brd_top.color = getBackgroundColor().color();
-    brd_top.style = KWParagLayout::SOLID;
+    brd_top.style = Border::SOLID;
     brd_top.ptWidth = 1;
     brd_bottom.color = getBackgroundColor().color();
-    brd_bottom.style = KWParagLayout::SOLID;
+    brd_bottom.style = Border::SOLID;
     brd_bottom.ptWidth = 1;
 
     frameBehaviour=AutoCreateNewFrame;
@@ -160,16 +160,16 @@ KWFrame::KWFrame(KWFrameSet *fs, int left, int top, int width, int height )
 
     backgroundColor = QBrush( Qt::white );
     brd_left.color = getBackgroundColor().color();
-    brd_left.style = KWParagLayout::SOLID;
+    brd_left.style = Border::SOLID;
     brd_left.ptWidth = 1;
     brd_right.color = getBackgroundColor().color();
-    brd_right.style = KWParagLayout::SOLID;
+    brd_right.style = Border::SOLID;
     brd_right.ptWidth = 1;
     brd_top.color = getBackgroundColor().color();
-    brd_top.style = KWParagLayout::SOLID;
+    brd_top.style = Border::SOLID;
     brd_top.ptWidth = 1;
     brd_bottom.color = getBackgroundColor().color();
-    brd_bottom.style = KWParagLayout::SOLID;
+    brd_bottom.style = Border::SOLID;
     brd_bottom.ptWidth = 1;
 
     newFrameBehaviour = Reconnect;
@@ -192,16 +192,16 @@ KWFrame::KWFrame(KWFrameSet *fs, int left, int top, int width, int height, RunAr
 
     backgroundColor = QBrush( Qt::white );
     brd_left.color = getBackgroundColor().color();
-    brd_left.style = KWParagLayout::SOLID;
+    brd_left.style = Border::SOLID;
     brd_left.ptWidth = 1;
     brd_right.color = getBackgroundColor().color();
-    brd_right.style = KWParagLayout::SOLID;
+    brd_right.style = Border::SOLID;
     brd_right.ptWidth = 1;
     brd_top.color = getBackgroundColor().color();
-    brd_top.style = KWParagLayout::SOLID;
+    brd_top.style = Border::SOLID;
     brd_top.ptWidth = 1;
     brd_bottom.color = getBackgroundColor().color();
-    brd_bottom.style = KWParagLayout::SOLID;
+    brd_bottom.style = Border::SOLID;
     brd_bottom.ptWidth = 1;
 
     frameBehaviour=AutoCreateNewFrame;
@@ -224,16 +224,16 @@ KWFrame::KWFrame(KWFrameSet *fs, const QRect &_rect )
 
     backgroundColor = QBrush( Qt::white );
     brd_left.color = getBackgroundColor().color();
-    brd_left.style = KWParagLayout::SOLID;
+    brd_left.style = Border::SOLID;
     brd_left.ptWidth = 1;
     brd_right.color = getBackgroundColor().color();
-    brd_right.style = KWParagLayout::SOLID;
+    brd_right.style = Border::SOLID;
     brd_right.ptWidth = 1;
     brd_top.color = getBackgroundColor().color();
-    brd_top.style = KWParagLayout::SOLID;
+    brd_top.style = Border::SOLID;
     brd_top.ptWidth = 1;
     brd_bottom.color = getBackgroundColor().color();
-    brd_bottom.style = KWParagLayout::SOLID;
+    brd_bottom.style = Border::SOLID;
     brd_bottom.ptWidth = 1;
 
     frameBehaviour=AutoCreateNewFrame;
@@ -634,7 +634,7 @@ void KWFrameSet::save( QTextStream&out )
                 << frame->getLeftBorder().color.green() << "\" lBlue=\"" 
                 << frame->getLeftBorder().color.blue() << "\" ";
         }
-        if(frame->getLeftBorder().style != KWParagLayout::SOLID) {
+        if(frame->getLeftBorder().style != Border::SOLID) {
             out << "lStyle=\"" <<  static_cast<int>( frame->getLeftBorder().style ) << "\" ";
         }
 
@@ -646,7 +646,7 @@ void KWFrameSet::save( QTextStream&out )
                 << frame->getRightBorder().color.green() << "\" rBlue=\"" 
                 << frame->getRightBorder().color.blue() << "\" ";
         }
-        if(frame->getRightBorder().style != KWParagLayout::SOLID) {
+        if(frame->getRightBorder().style != Border::SOLID) {
             out << "rStyle=\"" <<  static_cast<int>( frame->getRightBorder().style ) << "\" ";
         }
 
@@ -658,7 +658,7 @@ void KWFrameSet::save( QTextStream&out )
                 << frame->getTopBorder().color.green() << "\" tBlue=\"" 
                 << frame->getTopBorder().color.blue() << "\" ";
         }
-        if(frame->getTopBorder().style != KWParagLayout::SOLID) {
+        if(frame->getTopBorder().style != Border::SOLID) {
             out << "tStyle=\"" <<  static_cast<int>( frame->getTopBorder().style ) << "\" ";
         }
 
@@ -670,7 +670,7 @@ void KWFrameSet::save( QTextStream&out )
                 << frame->getBottomBorder().color.green() << "\" bBlue=\"" 
                 << frame->getBottomBorder().color.blue() << "\" ";
         }
-        if(frame->getBottomBorder().style != KWParagLayout::SOLID) {
+        if(frame->getBottomBorder().style != Border::SOLID) {
             out << "bStyle=\"" <<  static_cast<int>( frame->getBottomBorder().style ) << "\" ";
         }
         if(frame->getBackgroundColor().color() != Qt::white) {
@@ -1093,21 +1093,21 @@ void KWTextFrameSet::load( KOMLParser& parser, QValueList<KOMLAttrib>& lst )
             NewFrameBehaviour newFrameBehaviour = Reconnect;
             FrameBehaviour autoCreateNewValue = AutoCreateNewFrame;
             SheetSide sheetSide = AnySide;
-            KWParagLayout::Border l, r, t, b;
+            Border l, r, t, b;
             double lmm = 0.0, linch = 0.0, rmm = 0.0, rinch = 0.0, tmm = 0.0, tinch = 0.0, bmm = 0.0, binch = 0.0, ramm = 1.0, rainch = 0.0393701;
             double lpt = 0.0, rpt = 0.0, tpt = 0.0, bpt = 0.0, rapt = 2.0;
 
             l.color = Qt::white;
-            l.style = KWParagLayout::SOLID;
+            l.style = Border::SOLID;
             l.ptWidth = 1;
             r.color = Qt::white;
-            r.style = KWParagLayout::SOLID;
+            r.style = Border::SOLID;
             r.ptWidth = 1;
             t.color = Qt::white;
-            t.style = KWParagLayout::SOLID;
+            t.style = Border::SOLID;
             t.ptWidth = 1;
             b.color = Qt::white;
-            b.style = KWParagLayout::SOLID;
+            b.style = Border::SOLID;
             b.ptWidth = 1;
             QColor c( Qt::white );
 
@@ -1165,13 +1165,13 @@ void KWTextFrameSet::load( KOMLParser& parser, QValueList<KOMLAttrib>& lst )
                 else if ( ( *it ).m_strName == "bBlue" )
                     b.color.setRgb( b.color.red(), b.color.green(), ( *it ).m_strValue.toInt() );
                 else if ( ( *it ).m_strName == "lStyle" )
-                    l.style = static_cast<KWParagLayout::BorderStyle>( ( *it ).m_strValue.toInt() );
+                    l.style = static_cast<Border::BorderStyle>( ( *it ).m_strValue.toInt() );
                 else if ( ( *it ).m_strName == "rStyle" )
-                    r.style = static_cast<KWParagLayout::BorderStyle>( ( *it ).m_strValue.toInt() );
+                    r.style = static_cast<Border::BorderStyle>( ( *it ).m_strValue.toInt() );
                 else if ( ( *it ).m_strName == "tStyle" )
-                    t.style = static_cast<KWParagLayout::BorderStyle>( ( *it ).m_strValue.toInt() );
+                    t.style = static_cast<Border::BorderStyle>( ( *it ).m_strValue.toInt() );
                 else if ( ( *it ).m_strName == "bStyle" )
-                    b.style = static_cast<KWParagLayout::BorderStyle>( ( *it ).m_strValue.toInt() );
+                    b.style = static_cast<Border::BorderStyle>( ( *it ).m_strValue.toInt() );
                 else if ( ( *it ).m_strName == "bkRed" )
                     c.setRgb( ( *it ).m_strValue.toInt(), c.green(), c.blue() );
                 else if ( ( *it ).m_strName == "bkGreen" )
@@ -1457,21 +1457,21 @@ void KWPictureFrameSet::load( KOMLParser& parser, QValueList<KOMLAttrib>& lst )
             delete _image;
         } else if ( name == "FRAME" ) {
             KWFrame rect;
-            KWParagLayout::Border l, r, t, b;
+            Border l, r, t, b;
             double lmm = 0.0, linch = 0.0, rmm = 0.0, rinch = 0.0, tmm = 0.0, tinch = 0.0, bmm = 0.0, binch = 0.0, ramm = 1.0, rainch = 0.0393701;
             double lpt = 0.0, rpt = 0.0, tpt = 0.0, bpt = 0.0, rapt = 2.83465;
 
             l.color = Qt::white;
-            l.style = KWParagLayout::SOLID;
+            l.style = Border::SOLID;
             l.ptWidth = 1;
             r.color = Qt::white;
-            r.style = KWParagLayout::SOLID;
+            r.style = Border::SOLID;
             r.ptWidth = 1;
             t.color = Qt::white;
-            t.style = KWParagLayout::SOLID;
+            t.style = Border::SOLID;
             t.ptWidth = 1;
             b.color = Qt::white;
-            b.style = KWParagLayout::SOLID;
+            b.style = Border::SOLID;
             b.ptWidth = 1;
             QColor c( Qt::white );
 
@@ -1529,13 +1529,13 @@ void KWPictureFrameSet::load( KOMLParser& parser, QValueList<KOMLAttrib>& lst )
                 else if ( ( *it ).m_strName == "bBlue" )
                     b.color.setRgb( b.color.red(), b.color.green(), ( *it ).m_strValue.toInt() );
                 else if ( ( *it ).m_strName == "lStyle" )
-                    l.style = static_cast<KWParagLayout::BorderStyle>( ( *it ).m_strValue.toInt() );
+                    l.style = static_cast<Border::BorderStyle>( ( *it ).m_strValue.toInt() );
                 else if ( ( *it ).m_strName == "rStyle" )
-                    r.style = static_cast<KWParagLayout::BorderStyle>( ( *it ).m_strValue.toInt() );
+                    r.style = static_cast<Border::BorderStyle>( ( *it ).m_strValue.toInt() );
                 else if ( ( *it ).m_strName == "tStyle" )
-                    t.style = static_cast<KWParagLayout::BorderStyle>( ( *it ).m_strValue.toInt() );
+                    t.style = static_cast<Border::BorderStyle>( ( *it ).m_strValue.toInt() );
                 else if ( ( *it ).m_strName == "bStyle" )
-                    b.style = static_cast<KWParagLayout::BorderStyle>( ( *it ).m_strValue.toInt() );
+                    b.style = static_cast<Border::BorderStyle>( ( *it ).m_strValue.toInt() );
                 else if ( ( *it ).m_strName == "bkRed" )
                     c.setRgb( ( *it ).m_strValue.toInt(), c.green(), c.blue() );
                 else if ( ( *it ).m_strName == "bkGreen" )
@@ -1668,21 +1668,21 @@ void KWPartFrameSet::load( KOMLParser& parser, QValueList<KOMLAttrib>& lst )
 
         if ( name == "FRAME" ) {
             KWFrame rect;
-            KWParagLayout::Border l, r, t, b;
+            Border l, r, t, b;
             double lmm = 0.0, linch = 0.0, rmm = 0.0, rinch = 0.0, tmm = 0.0, tinch = 0.0, bmm = 0.0, binch = 0.0, ramm = 0.0, rainch = -1.0;
             double lpt = 0.0, rpt = 0.0, tpt = 0.0, bpt = 0.0, rapt = 0.0;
 
             l.color = Qt::white;
-            l.style = KWParagLayout::SOLID;
+            l.style = Border::SOLID;
             l.ptWidth = 1;
             r.color = Qt::white;
-            r.style = KWParagLayout::SOLID;
+            r.style = Border::SOLID;
             r.ptWidth = 1;
             t.color = Qt::white;
-            t.style = KWParagLayout::SOLID;
+            t.style = Border::SOLID;
             t.ptWidth = 1;
             b.color = Qt::white;
-            b.style = KWParagLayout::SOLID;
+            b.style = Border::SOLID;
             b.ptWidth = 1;
             QColor c( Qt::white );
 
@@ -1740,13 +1740,13 @@ void KWPartFrameSet::load( KOMLParser& parser, QValueList<KOMLAttrib>& lst )
                 else if ( ( *it ).m_strName == "bBlue" )
                     b.color.setRgb( b.color.red(), b.color.green(), ( *it ).m_strValue.toInt() );
                 else if ( ( *it ).m_strName == "lStyle" )
-                    l.style = static_cast<KWParagLayout::BorderStyle>( ( *it ).m_strValue.toInt() );
+                    l.style = static_cast<Border::BorderStyle>( ( *it ).m_strValue.toInt() );
                 else if ( ( *it ).m_strName == "rStyle" )
-                    r.style = static_cast<KWParagLayout::BorderStyle>( ( *it ).m_strValue.toInt() );
+                    r.style = static_cast<Border::BorderStyle>( ( *it ).m_strValue.toInt() );
                 else if ( ( *it ).m_strName == "tStyle" )
-                    t.style = static_cast<KWParagLayout::BorderStyle>( ( *it ).m_strValue.toInt() );
+                    t.style = static_cast<Border::BorderStyle>( ( *it ).m_strValue.toInt() );
                 else if ( ( *it ).m_strName == "bStyle" )
-                    b.style = static_cast<KWParagLayout::BorderStyle>( ( *it ).m_strValue.toInt() );
+                    b.style = static_cast<Border::BorderStyle>( ( *it ).m_strValue.toInt() );
                 else if ( ( *it ).m_strName == "bkRed" )
                     c.setRgb( ( *it ).m_strValue.toInt(), c.green(), c.blue() );
                 else if ( ( *it ).m_strName == "bkGreen" )
@@ -1998,21 +1998,21 @@ void KWFormulaFrameSet::load( KOMLParser& parser, QValueList<KOMLAttrib>& lst )
             color = f.getColor();
         } else if ( name == "FRAME" ) {
             KWFrame rect;
-            KWParagLayout::Border l, r, t, b;
+            Border l, r, t, b;
             double lmm = 0.0, linch = 0.0, rmm = 0.0, rinch = 0.0, tmm = 0.0, tinch = 0.0, bmm = 0.0, binch = 0.0, ramm = 1.0, rainch = 0.0393701;
             double lpt = 0.0, rpt = 0.0, tpt = 0.0, bpt = 0.0, rapt = 2.83465;
 
             l.color = Qt::white;
-            l.style = KWParagLayout::SOLID;
+            l.style = Border::SOLID;
             l.ptWidth = 1;
             r.color = Qt::white;
-            r.style = KWParagLayout::SOLID;
+            r.style = Border::SOLID;
             r.ptWidth = 1;
             t.color = Qt::white;
-            t.style = KWParagLayout::SOLID;
+            t.style = Border::SOLID;
             t.ptWidth = 1;
             b.color = Qt::white;
-            b.style = KWParagLayout::SOLID;
+            b.style = Border::SOLID;
             b.ptWidth = 1;
             QColor c( Qt::white );
 
@@ -2070,13 +2070,13 @@ void KWFormulaFrameSet::load( KOMLParser& parser, QValueList<KOMLAttrib>& lst )
                 else if ( ( *it ).m_strName == "bBlue" )
                     b.color.setRgb( b.color.red(), b.color.green(), ( *it ).m_strValue.toInt() );
                 else if ( ( *it ).m_strName == "lStyle" )
-                    l.style = static_cast<KWParagLayout::BorderStyle>( ( *it ).m_strValue.toInt() );
+                    l.style = static_cast<Border::BorderStyle>( ( *it ).m_strValue.toInt() );
                 else if ( ( *it ).m_strName == "rStyle" )
-                    r.style = static_cast<KWParagLayout::BorderStyle>( ( *it ).m_strValue.toInt() );
+                    r.style = static_cast<Border::BorderStyle>( ( *it ).m_strValue.toInt() );
                 else if ( ( *it ).m_strName == "tStyle" )
-                    t.style = static_cast<KWParagLayout::BorderStyle>( ( *it ).m_strValue.toInt() );
+                    t.style = static_cast<Border::BorderStyle>( ( *it ).m_strValue.toInt() );
                 else if ( ( *it ).m_strName == "bStyle" )
-                    b.style = static_cast<KWParagLayout::BorderStyle>( ( *it ).m_strValue.toInt() );
+                    b.style = static_cast<Border::BorderStyle>( ( *it ).m_strValue.toInt() );
                 else if ( ( *it ).m_strName == "bkRed" )
                     c.setRgb( ( *it ).m_strValue.toInt(), c.green(), c.blue() );
                 else if ( ( *it ).m_strName == "bkGreen" )

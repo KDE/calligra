@@ -103,8 +103,8 @@ public:
 			    bool _update_page = true, bool _redraw = true );
     virtual void setFlow( KWParagLayout::Flow _flow );
     virtual void setLineSpacing( int _spc );
-    virtual void setParagBorders( KWParagLayout::Border _left, KWParagLayout::Border _right,
-				  KWParagLayout::Border _top, KWParagLayout::Border _bottom );
+    virtual void setParagBorders( Border _left, Border _right,
+				  Border _top, Border _bottom );
 
     virtual void setNoteType(KWFootNoteManager::NoteType nt, bool change=true);
 
@@ -431,7 +431,7 @@ protected:
     KWFormat format;
     KWParagLayout::Flow flow;
     KWFormat::VertAlign vertAlign;
-    KWParagLayout::Border left, right, top, bottom, tmpBrd, frmBrd;
+    Border left, right, top, bottom, tmpBrd, frmBrd;
     KWSearchDia::KWSearchEntry *searchEntry, *replaceEntry;
     QBrush backColor;
     int spc;

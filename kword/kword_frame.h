@@ -30,6 +30,7 @@
 #include <qpainter.h>
 #include <qpicture.h>
 
+#include "border.h"
 #include "paraglayout.h"
 #include "defs.h"
 
@@ -192,20 +193,20 @@ public:
     int getPageNum() { return pageNum; }
 
     /* All borders can be custum drawn with their own colors etc. */
-    KWParagLayout::Border &getLeftBorder() { return brd_left; }
-    KWParagLayout::Border &getRightBorder() { return brd_right; }
-    KWParagLayout::Border &getTopBorder() { return brd_top; }
-    KWParagLayout::Border &getBottomBorder() { return brd_bottom; }
+    Border &getLeftBorder() { return brd_left; }
+    Border &getRightBorder() { return brd_right; }
+    Border &getTopBorder() { return brd_top; }
+    Border &getBottomBorder() { return brd_bottom; }
 
-    KWParagLayout::Border getLeftBorder2() { return brd_left; }
-    KWParagLayout::Border getRightBorder2() { return brd_right; }
-    KWParagLayout::Border getTopBorder2() { return brd_top; }
-    KWParagLayout::Border getBottomBorder2() { return brd_bottom; }
+    Border getLeftBorder2() { return brd_left; }
+    Border getRightBorder2() { return brd_right; }
+    Border getTopBorder2() { return brd_top; }
+    Border getBottomBorder2() { return brd_bottom; }
 
-    void setLeftBorder( KWParagLayout::Border _brd ) { brd_left = _brd; }
-    void setRightBorder( KWParagLayout::Border _brd ) { brd_right = _brd; }
-    void setTopBorder( KWParagLayout::Border _brd ) { brd_top = _brd; }
-    void setBottomBorder( KWParagLayout::Border _brd ) { brd_bottom = _brd; }
+    void setLeftBorder( Border _brd ) { brd_left = _brd; }
+    void setRightBorder( Border _brd ) { brd_right = _brd; }
+    void setTopBorder( Border _brd ) { brd_top = _brd; }
+    void setBottomBorder( Border _brd ) { brd_bottom = _brd; }
 
     /* Resize handles (in kword_page.h) are the dots that are drawn on selected 
        frames, this creates and deletes then */
@@ -253,7 +254,7 @@ protected:
     QRegion emptyRegion;
     bool emptyRegionDirty;
 
-    KWParagLayout::Border brd_left, brd_right, brd_top, brd_bottom;
+    Border brd_left, brd_right, brd_top, brd_bottom;
     QBrush backgroundColor;
 
     KWUnit bleft, bright, btop, bbottom;

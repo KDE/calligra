@@ -3977,7 +3977,7 @@ void KWPage::setLineSpacing( KWUnit _spacing )
 }
 
 /*================================================================*/
-void KWPage::setParagLeftBorder( KWParagLayout::Border _brd )
+void KWPage::setParagLeftBorder( Border _brd )
 {
     if ( !doc->has_selection() )
         fc->getParag()->getParagLayout()->setLeftBorder( _brd );
@@ -3995,7 +3995,7 @@ void KWPage::setParagLeftBorder( KWParagLayout::Border _brd )
 }
 
 /*================================================================*/
-void KWPage::setParagRightBorder( KWParagLayout::Border _brd )
+void KWPage::setParagRightBorder( Border _brd )
 {
     if ( !doc->has_selection() )
         fc->getParag()->getParagLayout()->setRightBorder( _brd );
@@ -4013,7 +4013,7 @@ void KWPage::setParagRightBorder( KWParagLayout::Border _brd )
 }
 
 /*================================================================*/
-void KWPage::setParagTopBorder( KWParagLayout::Border _brd )
+void KWPage::setParagTopBorder( Border _brd )
 {
     if ( !doc->has_selection() )
         fc->getParag()->getParagLayout()->setTopBorder( _brd );
@@ -4031,7 +4031,7 @@ void KWPage::setParagTopBorder( KWParagLayout::Border _brd )
 }
 
 /*================================================================*/
-void KWPage::setParagBottomBorder( KWParagLayout::Border _brd )
+void KWPage::setParagBottomBorder( Border _brd )
 {
     if ( !doc->has_selection() )
         fc->getParag()->getParagLayout()->setBottomBorder( _brd );
@@ -4277,7 +4277,7 @@ void KWPage::removeSelection()
 }
 
 /*================================================================*/
-void KWPage::setLeftFrameBorder( KWParagLayout::Border _brd, bool _enable )
+void KWPage::setLeftFrameBorder( Border _brd, bool _enable )
 {
     KWFrameSet *frameset = 0L;
     KWFrame *frame = 0L;
@@ -4305,7 +4305,7 @@ void KWPage::setLeftFrameBorder( KWParagLayout::Border _brd, bool _enable )
 }
 
 /*================================================================*/
-void KWPage::setRightFrameBorder( KWParagLayout::Border _brd, bool _enable )
+void KWPage::setRightFrameBorder( Border _brd, bool _enable )
 {
     KWFrameSet *frameset = 0L;
     KWFrame *frame = 0L;
@@ -4333,7 +4333,7 @@ void KWPage::setRightFrameBorder( KWParagLayout::Border _brd, bool _enable )
 }
 
 /*================================================================*/
-void KWPage::setTopFrameBorder( KWParagLayout::Border _brd, bool _enable )
+void KWPage::setTopFrameBorder( Border _brd, bool _enable )
 {
     KWFrameSet *frameset = 0L;
     KWFrame *frame = 0L;
@@ -4361,7 +4361,7 @@ void KWPage::setTopFrameBorder( KWParagLayout::Border _brd, bool _enable )
 }
 
 /*================================================================*/
-void KWPage::setBottomFrameBorder( KWParagLayout::Border _brd, bool _enable )
+void KWPage::setBottomFrameBorder( Border _brd, bool _enable )
 {
     KWFrameSet *frameset = 0L;
     KWFrame *frame = 0L;
@@ -4402,7 +4402,7 @@ void KWPage::setFrameBorderColor( const QColor &_color )
         for ( unsigned int j = 0; j < frameset->getNumFrames(); j++ ) {
             frame = frameset->getFrame( j );
             if ( frame->isSelected() ) {
-                KWParagLayout::Border _brd;
+                Border _brd;
                 if(frame->getLeftBorder().color!=frame->getBackgroundColor().color()
                 && frame->getLeftBorder().color!=_color
                 && frame->getLeftBorder().ptWidth>0)
