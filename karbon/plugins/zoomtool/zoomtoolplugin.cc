@@ -96,7 +96,11 @@ VZoomTool::mouseButtonPress()
 void
 VZoomTool::mouseButtonRelease()
 {
-	view()->setZoom( view()->zoom() * 1.5 );
+	double viewportX = view()->canvasWidget()->visibleWidth() * 0.75 / view()->zoom();
+	double viewportY = view()->canvasWidget()->visibleHeight() * 0.75 / view()->zoom();
+	KoRect rect( last().x() - viewportX / 2.0, last().y() - viewportY / 2.0, viewportX, viewportY );
+	rect = rect.normalize();
+	view()->canvasWidget()->setContentsRect( rect );
 	view()->part()->repaintAllViews();
 }
 
@@ -113,10 +117,10 @@ VZoomTool::mouseDrag()
 void
 VZoomTool::mouseDragRelease()
 {
-	KoPoint fp = first();
-	KoPoint lp = last();
-	view()->canvasWidget()->setContentsRect( KoRect( fp.x(), fp.y(), lp.x() - fp.x(), lp.y() - fp.y() ).normalize() );
-	view()->part()->repaintAllViews( KoRect( fp.x(), fp.y(), lp.x() - fp.x(), lp.y() - fp.y() ).normalize() );
+	KoRect rect( first().x(), first().y(), last().x() - first().x(), last().y() - first().y() );
+	rect = rect.normalize();
+	view()->canvasWidget()->setContentsRect( rect );
+	view()->part()->repaintAllViews( rect );
 }
 
 void
