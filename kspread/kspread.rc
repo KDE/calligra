@@ -104,7 +104,7 @@
   <Action name="reloadScripts"/>
  </Menu>
 </MenuBar>
-<ToolBar name="editAndColumnAndSortAndPartToolBar">
+<ToolBar name="editAndColumnAndSortAndPartToolBar"><Text>Edit</Text>
  <Action name="undo"/>
  <Action name="redo"/>
  <Separator/>
@@ -124,14 +124,14 @@
  <Action name="insertPart"/>
  <Action name="transform"/>
 </ToolBar>
-<ToolBar name="fontPropertyToolBar">
+<ToolBar name="fontPropertyToolBar"><Text>Font Property</Text>
  <Action name="bold"/>
  <Action name="italic"/>
  <Action name="underline"/>
  <Action name="selectFont"/>
  <Action name="selectFontSize"/>
 </ToolBar>
-<ToolBar name="calcAndAlignToolBar">
+<ToolBar name="cellFormatToolBar"><Text>Cell Format</Text>
  <Action name="percent"/>
  <Action name="precplus"/>
  <Action name="precminus"/>
@@ -147,12 +147,12 @@
  <Action name="multiRow"/>
  <Action name="verticaltext"/>
 </ToolBar>
-<ToolBar name="mathToolBar">
+<ToolBar name="mathToolBar"><Text>Math</Text>
  <Action name="autoSum"/>
  <Action name="function"/>
  <Action name="formulaSelection"/>
 </ToolBar>
-<ToolBar name="formulaToolBar">
+<ToolBar name="formulaToolBar"><Text>Formula</Text>
  <Action name="formulaPower"/>
  <Action name="formulaSubscript"/>
  <Action name="formulaParentheses"/>
@@ -167,7 +167,7 @@
  <Action name="formulaSum"/>
  <Action name="formulaProduct"/>
 </ToolBar>
-<ToolBar name="colorAndBorderToolBar">
+<ToolBar name="colorAndBorderToolBar"><Text>Color/Border</Text>
  <Action name="textColor"/>
  <Action name="backgroundColor"/>
  <Separator/>

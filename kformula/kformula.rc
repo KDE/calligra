@@ -25,23 +25,23 @@
    <Action name="fracup"/>
    <Action name="fracmiddle"/>
    <Action name="fracdown"/>
-  </Menu> 
+  </Menu>
   <Menu name="HA"><text>Horizontal align</text>
    <Action name="fracleft"/>
    <Action name="fraccenter"/>
    <Action name="fracright"/>
-  </Menu> 
+  </Menu>
   <Menu name="HA"><text>Fraction vertical distance</text>
    <Action name="fracnear"/>
    <Action name="fracfar"/>
-  </Menu> 
+  </Menu>
   <Menu name="matrix"><text>Matrix</text>
    <Action name="matrixset"/>
    <Action name="matrixinsrow"/>
    <Action name="matrixinscol"/>
    <Action name="matrixremrow"/>
    <Action name="matrixremcol"/>
-  </Menu> 
+  </Menu>
 
   <Action name="fracmidline"/>
  </Menu>
@@ -57,12 +57,12 @@
   <Action name="fontchild"/>
   <Action name="fontnext"/>
 
-  </Menu> 
+  </Menu>
  </Menu>
 
 </MenuBar>
 
- <ToolBar name="Add">
+ <ToolBar name="Add"><Text>Add</Text>
   <Action name="addtext"/>
   <Action name="addroot"/>
   <Action name="addfrac"/>
@@ -73,7 +73,7 @@
   <Action name="addmatrix"/>
   <Action name="addindex"/>
  </ToolBar>
- <ToolBar name="Font">
+ <ToolBar name="Font"><Text>Font</Text>
   <Action name="textfont"/>
   <Action name="textsize"/>
   <Action name="textbold"/>
@@ -85,7 +85,7 @@
   <Action name="fontnext"/>
 
  </ToolBar>
- <ToolBar name="Element">
+ <ToolBar name="Element"><Text>Element</Text>
   <Action name="textsplit"/>
   <Action name="rootindex"/>
   <Action name="typeleft"/>

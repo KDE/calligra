@@ -50,7 +50,7 @@
   <Action name="help_about"/>
  </Menu>
 </MenuBar>
-<ToolBar name="edit" position="top">
+<ToolBar name="edit" position="top"><Text>Edit</Text>
   <Action name="undo"/>
   <Action name="redo"/>
   <Separator/>
@@ -58,11 +58,11 @@
   <Action name="cut"/>
   <Action name="paste"/>
 </ToolBar>
-<ToolBar name="gradient" position="top">
+<ToolBar name="gradient" position="top"><Text>Gradient</Text>
   <Action name="dialog_gradient"/>
   <Action name="dialog_gradienteditor"/>
 </ToolBar>
-<ToolBar name="tools" position="left">
+<ToolBar name="tools" position="left"><Text>Tools</Text>
   <Action name="tool_select_rect"/>
   <Action name="tool_move"/>
   <Action name="tool_zoom"/>

@@ -19,6 +19,8 @@
  <Merge />
  <Menu name="settings"><text>&amp;Settings</text>
   <Merge />
+  <ActionList name="toolbarlist"/>
+  <Separator/>
   <Action name="configurekeys"/>
   <Action name="configuretoolbars"/>
  </Menu>
@@ -33,7 +35,7 @@
   <Action name="about_kde"/>
  </Menu>
 </MenuBar>
-<ToolBar name="kofficeshelltoolbar" fullWidth="false">
+<ToolBar name="kofficeshelltoolbar" fullWidth="false"><Text>File</Text>
   <Action name="file_new" />
   <Action name="file_open" />
   <Action name="file_save" />

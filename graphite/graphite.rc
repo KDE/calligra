@@ -6,7 +6,7 @@
   <Action name="edit_cut"/>
  </Menu>
 </MenuBar>
-<ToolBar name="edit_bar" fullWidth="false">
+<ToolBar name="edit_bar" fullWidth="false"><Text>Edit</Text>
   <Action name="edit_undo"/>
   <Action name="edit_redo"/>
   <Action name="edit_cut"/>

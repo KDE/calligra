@@ -12,7 +12,7 @@
   <Separator />
  </Menu>
 </MenuBar>
-<ToolBar name="KChartToolBar">
+<ToolBar name="KChartToolBar"><Text>Chart</Text>
  <Action name="wizard"/>
  <Action name="edit"/>
  <Action name="config"/>
