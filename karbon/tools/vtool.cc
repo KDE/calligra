@@ -53,7 +53,7 @@ VTool::eventFilter( QEvent* event )
 	// Mouse events:
 	if ( event->type() == QEvent::MouseButtonDblClick )
 	{
-	kdDebug() << event->type() << " " << QEvent::MouseButtonDblClick << " - ";
+	kdDebug() << event->type() << " " << QEvent::MouseButtonDblClick << " - " << endl;
 
 		mouseButtonDblClick();
 		
@@ -109,7 +109,7 @@ VTool::eventFilter( QEvent* event )
 	{
 		QKeyEvent* keyEvent = static_cast<QKeyEvent*>( event );
 
-		kdDebug() << keyEvent->key() << " " << Qt::Key_Enter << " " << Qt::Key_Return;
+		kdDebug() << keyEvent->key() << " " << Qt::Key_Enter << " " << Qt::Key_Return << endl;
 
 		// Terminate the current drawing with the Enter-key:
 		if ( ( keyEvent->key() == Qt::Key_Enter || keyEvent->key() == Qt::Key_Return ) && !m_isDragging )
