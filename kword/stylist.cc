@@ -58,7 +58,7 @@ KWStyleManager::KWStyleManager( QWidget *_parent, KWDocument *_doc, QStringList 
     editor = 0L;
 
     setupTab1();
-    setupTab2();
+    /// setupTab2(); // The functionality isn't implemented at the moment
 
     setInitialSize( QSize(500, 400) );
 }
@@ -66,7 +66,7 @@ KWStyleManager::KWStyleManager( QWidget *_parent, KWDocument *_doc, QStringList 
 /*================================================================*/
 void KWStyleManager::setupTab1()
 {
-    tab1 = addPage( i18n( "Style Manager" ) );
+    tab1 = addPage( i18n( "Style Management" ) );
 
     grid1 = new QGridLayout( tab1, 1, 2, 15, 7 );
     QList<KWStyle> styles = const_cast<QList<KWStyle> & >(doc->styleList());
@@ -77,19 +77,19 @@ void KWStyleManager::setupTab1()
     grid1->addWidget( lStyleList, 0, 0 );
 
     bButtonBox = new KButtonBox( tab1, Vertical );
-    bAdd = bButtonBox->addButton( i18n( "&Add.." ), false );
+    bAdd = bButtonBox->addButton( i18n( "&Add..." ), false );
     connect( bAdd, SIGNAL( clicked() ), this, SLOT( addStyle() ) );
     bDelete = bButtonBox->addButton( i18n( "&Delete" ), false );
     connect( bDelete, SIGNAL( clicked() ), this, SLOT( deleteStyle() ) );
     bButtonBox->addStretch();
     bEdit = bButtonBox->addButton( i18n( "&Edit..." ), false );
     connect( bEdit, SIGNAL( clicked() ), this, SLOT( editStyle() ) );
-    bCopy = bButtonBox->addButton( i18n( "&Copy..." ), false );
+    bCopy = bButtonBox->addButton( i18n( "Co&py..." ), false );
     connect( bCopy, SIGNAL( clicked() ), this, SLOT( copyStyle() ) );
     bButtonBox->addStretch();
-    bUp = bButtonBox->addButton( i18n( "Up" ), false );
+    bUp = bButtonBox->addButton( i18n( "&Up" ), false );
     connect( bUp, SIGNAL( clicked() ), this, SLOT( upStyle() ) );
-    bDown = bButtonBox->addButton( i18n( "D&own" ), false );
+    bDown = bButtonBox->addButton( i18n( "Do&wn" ), false );
     connect( bDown, SIGNAL( clicked() ), this, SLOT( downStyle() ) );
     bButtonBox->layout();
     grid1->addWidget( bButtonBox, 0, 1 );
@@ -238,7 +238,7 @@ void KWStyleManager::editStyle()
     KWStyle *tmpStyle=styles.at( lStyleList->currentItem() );
     editor = new KWStyleEditor( this, tmpStyle, doc, fontList );
     connect( editor, SIGNAL( updateStyleList() ), this, SLOT( updateStyleList() ) );
-    editor->setCaption( i18n( "Stylist" ) );
+    editor->setCaption( i18n( "Style Editor" ) );
     editor->show();
 }
 
@@ -369,6 +369,7 @@ void KWStyleManager::updateStyleList()
 /*================================================================*/
 void KWStyleManager::updateButtons( const QString &s )
 {
+/* // Give user freedom :)
     if ( s == QString( "Standard" ) ||
          s == QString( "Head 1" ) ||
          s == QString( "Head 2" ) ||
@@ -379,8 +380,9 @@ void KWStyleManager::updateButtons( const QString &s )
         bDelete->setEnabled( false );
     else
         bDelete->setEnabled( true );
+*/
     if(lStyleList->currentItem()==0)
-	bUp->setEnabled(false);
+      bUp->setEnabled(false);
     else
       bUp->setEnabled(true);
 
@@ -430,14 +432,12 @@ void KWStylePreview::drawContents( QPainter *painter )
 
 /*================================================================*/
 KWStyleEditor::KWStyleEditor( QWidget *_parent, KWStyle *_style, KWDocument *_doc, QStringList _fontList )
-    : KDialogBase( Tabbed, QString::null, Ok | Cancel, Ok, _parent, "", true )
+    : KDialogBase( Plain/*Tabbed*/, QString::null, Ok | Cancel, Ok, _parent, "", true )
 {
     fontList = _fontList;
     paragDia = 0;
     ostyle = _style;
-    //    style = new KWParagLayout( _doc, false );
-    //*style = *_style;
-    style=new KWStyle(*_style);
+    style = new KWStyle(*_style);
     doc = _doc;
     setupTab1();
 
@@ -445,9 +445,16 @@ KWStyleEditor::KWStyleEditor( QWidget *_parent, KWStyle *_style, KWDocument *_do
 }
 
 /*================================================================*/
+KWStyleEditor::~KWStyleEditor()
+{
+    delete style;
+}
+
+/*================================================================*/
 void KWStyleEditor::setupTab1()
 {
-    tab1 = addPage( i18n( "Style Editor" ) );
+    //tab1 = addPage( i18n( "Style Editor" ) );
+    tab1 = plainPage();
 
     grid1 = new QGridLayout( tab1, 2, 2, 15, 7 );
 
@@ -464,6 +471,7 @@ void KWStyleEditor::setupTab1()
     eName->setText( style->name() );
     grid2->addWidget( eName, 0, 1 );
 
+/*
         if ( style->name() == QString( "Standard" ) ||
          style->name()== QString( "Head 1" ) ||
          style->name() == QString( "Head 2" ) ||
@@ -472,8 +480,9 @@ void KWStyleEditor::setupTab1()
          style->name() == QString( "Bullet List" ) ||
          style->name() == QString( "Alphabetical List" ) )
         eName->setEnabled( false );
+*/
 
-    lFollowing = new QLabel( i18n( "Following Style Template:" ), nwid );
+    lFollowing = new QLabel( i18n( "Following Style:" ), nwid );
     lFollowing->resize( lFollowing->sizeHint() );
     lFollowing->setAlignment( AlignRight | AlignVCenter );
     grid2->addWidget( lFollowing, 1, 0 );
@@ -549,10 +558,10 @@ void KWStyleEditor::setupTab1()
 /*================================================================*/
 void KWStyleEditor::changeFont()
 {
-  QFont f( style->format().font().family(), style->format().font().pointSize() );
-  f.setBold( style->format().font().weight() == 75 ? true : false );
-    f.setItalic( style->format().font().italic()  );
-    f.setUnderline( style->format().font().underline()  );
+    QFont f( style->format().font().family(), style->format().font().pointSize() );
+    f.setBold( style->format().font().weight() == 75 ? true : false );
+    f.setItalic( style->format().font().italic() );
+    f.setUnderline( style->format().font().underline() );
 
     if ( KFontDialog::getFont( f ) ) {
 	style->format().setFont(f);
@@ -561,7 +570,7 @@ void KWStyleEditor::changeFont()
         style->getFormat().setItalic( static_cast<int>( f.italic() ) );
         style->getFormat().setUnderline( static_cast<int>( f.underline() ) );*/
         preview->repaint( true );
-	}
+    }
 }
 
 /*================================================================*/
@@ -695,6 +704,7 @@ void KWStyleEditor::paragDiaOk()
 
     preview->repaint( true );
 }
+
 /*================================================================*/
 bool KWStyleEditor::apply()
 {
@@ -717,6 +727,7 @@ bool KWStyleEditor::apply()
     return true;
 }
 
+/*================================================================*/
 void KWStyleEditor::slotOk()
 {
    if (apply())

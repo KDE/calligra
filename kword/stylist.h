@@ -109,7 +109,7 @@ class KWStyleEditor : public KDialogBase
 
 public:
     KWStyleEditor( QWidget *_parent, KWStyle *_style, KWDocument *_doc, QStringList _fontList );
-    ~KWStyleEditor() { delete style; }
+    ~KWStyleEditor();
 
 protected:
     void setupTab1();
@@ -142,11 +142,7 @@ protected slots:
     void changeNumbering();
     void changeTabulators();
     void paragDiaOk();
-    //void fplChanged( const QString & n ) { style->setFollowingParagLayout( QString( n ) ); }
 };
 
 #endif
-
-
-
 
