@@ -224,7 +224,6 @@ public:
 
     virtual int paragraphs();
     virtual int paragraphsSelected();
-    int numberOfparagraphLineSelected(KoTextParag *parag);
     /** Calculate statistics for this frameset */
     virtual bool statistics( QProgressDialog *progress, ulong & charsWithSpace, ulong & charsWithoutSpace,
         ulong & words, ulong& sentences, ulong & syllables, ulong & lines, bool selected );

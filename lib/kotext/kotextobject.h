@@ -28,6 +28,8 @@
 class KoSavingContext;
 class KCommand;
 class KoTextFormat;
+class QProgressDialog;
+
 //#define TIMING_FORMAT
 //#include <qdatetime.h>
 
@@ -412,6 +414,10 @@ public:
 #ifndef NDEBUG
     void printRTDebug(int);
 #endif
+
+    bool statistics( QProgressDialog *progress, ulong & charsWithSpace, ulong & charsWithoutSpace, ulong & words, ulong & sentences, ulong & syllables, ulong & lines, bool selected );
+    int numberOfparagraphLineSelected( KoTextParag *parag);
+
 
     enum ParagModifyType { AddChar = 0, RemoveChar = 1, ChangeFormat = 2 };
 

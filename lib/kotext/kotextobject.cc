@@ -25,12 +25,16 @@
 #include "koFontDia.h"
 #include "kooasiscontext.h"
 #include <koxmlns.h>
+#include "koAutoFormat.h"
 
 #include <klocale.h>
 #include <kdebug.h>
+#include <kapplication.h>
 
 #include <qtimer.h>
 #include <qregexp.h>
+#include <qprogressdialog.h>
+
 #include <assert.h>
 
 //#define DEBUG_FORMATS
@@ -2052,6 +2056,154 @@ void KoTextObject::setNeedSpellCheck(bool b)
     for (KoTextParag * parag = textdoc->firstParag(); parag ; parag = parag->next())
         parag->string()->setNeedsSpellCheck( b );
 }
+
+bool KoTextObject::statistics( QProgressDialog *progress, ulong & charsWithSpace, ulong & charsWithoutSpace, ulong & words, ulong & sentences, ulong & syllables, ulong & lines, bool selected )
+{
+    // parts of words for better counting of syllables:
+    // (only use reg exp if necessary -> speed up)
+
+    QStringList subs_syl;
+    subs_syl << "cial" << "tia" << "cius" << "cious" << "giu" << "ion" << "iou";
+    QStringList subs_syl_regexp;
+    subs_syl_regexp << "sia$" << "ely$";
+
+    QStringList add_syl;
+    add_syl << "ia" << "riet" << "dien" << "iu" << "io" << "ii";
+    QStringList add_syl_regexp;
+    add_syl_regexp << "[aeiouym]bl$" << "[aeiou]{3}" << "^mc" << "ism$"
+        << "[^l]lien" << "^coa[dglx]." << "[^gq]ua[^auieo]" << "dnt$";
+
+    QString s;
+    KoTextParag * parag = textdoc->firstParag();
+    for ( ; parag ; parag = parag->next() )
+    {
+        if (  progress )
+        {
+            progress->setProgress(progress->progress()+1);
+            // MA: resizing if KWStatisticsDialog does not work correct with this enabled, don't know why
+            kapp->processEvents();
+            if ( progress->wasCancelled() )
+                return false;
+        }
+        // start of a table
+/*        if ( parag->at(0)->isCustom())
+        {
+            KoLinkVariable *var=dynamic_cast<KoLinkVariable *>(parag->at(0)->customItem());
+            if(!var)
+                continue;
+                }*/
+        bool hasTrailingSpace = true;
+        if ( !selected ) {
+            s = parag->string()->toString();
+            lines += parag->lines();
+        } else {
+            if ( parag->hasSelection( KoTextDocument::Standard ) ) {
+                hasTrailingSpace = false;
+                s = parag->string()->toString();
+                if ( !( parag->fullSelected( KoTextDocument::Standard ) ) ) {
+                    s = s.mid( parag->selectionStart( KoTextDocument::Standard ), parag->selectionEnd( KoTextDocument::Standard ) - parag->selectionStart( KoTextDocument::Standard ) );
+                    lines+=numberOfparagraphLineSelected(parag);
+                }
+                else
+                    lines += parag->lines();
+            } else {
+                continue;
+            }
+        }
+
+        // Character count
+        for ( uint i = 0 ; i < s.length() - ( hasTrailingSpace ? 1 : 0 ) ; ++i )
+        {
+            QChar ch = s[i];
+            ++charsWithSpace;
+            if ( !ch.isSpace() )
+                ++charsWithoutSpace;
+        }
+
+        // Syllable and Word count
+        // Algorithm mostly taken from Greg Fast's Lingua::EN::Syllable module for Perl.
+        // This guesses correct for 70-90% of English words, but the overall value
+        // is quite good, as some words get a number that's too high and others get
+        // one that's too low.
+        // IMPORTANT: please test any changes against demos/statistics.kwd
+        QRegExp re("\\s+");
+        QStringList wordlist = QStringList::split(re, s);
+        words += wordlist.count();
+        re.setCaseSensitive(false);
+        for ( QStringList::Iterator it = wordlist.begin(); it != wordlist.end(); ++it ) {
+            QString word = *it;
+            re.setPattern("[!?.,:_\"-]");    // clean word from punctuation
+            word.remove(re);
+            if ( word.length() <= 3 ) {  // extension to the original algorithm
+                syllables++;
+                continue;
+            }
+            re.setPattern("e$");
+            word.remove(re);
+            re.setPattern("[^aeiouy]+");
+            QStringList syls = QStringList::split(re, word);
+            int word_syllables = 0;
+            for ( QStringList::Iterator it = subs_syl.begin(); it != subs_syl.end(); ++it ) {
+                if( word.find(*it, 0, false) != -1 )
+                    word_syllables--;
+            }
+            for ( QStringList::Iterator it = subs_syl_regexp.begin(); it != subs_syl_regexp.end(); ++it ) {
+                re.setPattern(*it);
+                if( word.find(re) != -1 )
+                    word_syllables--;
+            }
+            for ( QStringList::Iterator it = add_syl.begin(); it != add_syl.end(); ++it ) {
+                if( word.find(*it, 0, false) != -1 )
+                    word_syllables++;
+            }
+            for ( QStringList::Iterator it = add_syl_regexp.begin(); it != add_syl_regexp.end(); ++it ) {
+                re.setPattern(*it);
+                if( word.find(re) != -1 )
+                    word_syllables++;
+            }
+            word_syllables += syls.count();
+            if ( word_syllables == 0 )
+                word_syllables = 1;
+            syllables += word_syllables;
+        }
+        re.setCaseSensitive(true);
+
+        // Sentence count
+        // Clean up for better result, destroys the original text but we only want to count
+        s = s.stripWhiteSpace();
+        QChar lastchar = s.at(s.length());
+        if( ! s.isEmpty() && ! KoAutoFormat::isMark( lastchar ) ) {  // e.g. for headlines
+            s = s + ".";
+        }
+        re.setPattern("[.?!]+");         // count "..." as only one "."
+        s.replace(re, ".");
+        re.setPattern("\\d\\.\\d");      // don't count floating point numbers as sentences
+        s.replace(re, "0,0");
+        re.setPattern("[A-Z]\\.+");      // don't count "U.S.A." as three sentences
+        s.replace(re, "*");
+        for ( uint i = 0 ; i < s.length() ; ++i )
+        {
+            QChar ch = s[i];
+            if ( KoAutoFormat::isMark( ch ) )
+                ++sentences;
+        }
+    }
+    return true;
+}
+
+int KoTextObject::numberOfparagraphLineSelected( KoTextParag *parag)
+{
+    int indexOfLineStart;
+    int lineStart;
+    int lineEnd;
+    KoTextCursor c1 = textdoc->selectionStartCursor( KoTextDocument::Standard );
+    KoTextCursor c2 = textdoc->selectionEndCursor( KoTextDocument::Standard );
+    parag->lineStartOfChar( c1.index(), &indexOfLineStart, &lineStart );
+
+    parag->lineStartOfChar( c2.index(), &indexOfLineStart, &lineEnd );
+    return (lineEnd - lineStart+1);
+}
+
 
 #ifndef NDEBUG
 void KoTextObject::printRTDebug(int info)
