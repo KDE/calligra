@@ -126,12 +126,12 @@ double KoUnit::parseValue( QString value, double defaultVal )
         return defaultVal;
 
     int index = value.find( QRegExp( "[a-z]+$" ) );
-    double val = value.toDouble();
     if ( index == -1 )
-        return val;
+        return value.toDouble();
 
     QString unit = value.mid( index );
-    //value.truncate ( index );
+    value.truncate ( index );
+    double val = value.toDouble();
 
     if ( unit == "pt" )
         return val;
