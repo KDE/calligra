@@ -28,8 +28,15 @@
 // #include <config.h>
 #endif
 
+#include "version.h"
 #include "FontSelector.h"
-#include "FontSelector.moc"
+
+#ifdef NEWKDE
+#include "FontSelector2.moc"
+#else
+#include "FontSelector1.moc"
+#endif
+
 #include "stdio.h"
 #include "stdlib.h"
 #include "qfile.h"
@@ -41,7 +48,6 @@
 
 #include <klocale.h>
 #include <kapp.h>
-#include "version.h"
 
 #define YOFFSET  5
 #define XOFFSET  5
@@ -167,8 +173,13 @@ FontSelector::FontSelector (QWidget *parent, const char *name,
 
   family_combo->setGeometry(6*XOFFSET + LABLE_LENGTH
 			    ,8*YOFFSET - COMBO_ADJUST -5 ,4* LABLE_LENGTH,COMBO_BOX_HEIGHT);
+#ifdef NEWKDE
+  connect( family_combo, SIGNAL(activated(const QString &)),
+	   SLOT(family_chosen_slot(const QString &)) );
+#else
   connect( family_combo, SIGNAL(activated(const char *)),
 	   SLOT(family_chosen_slot(const char *)) );
+#endif
   //   QToolTip::add( family_combo, "Select Font Family" );
 
   if (fontlist != 0L){
@@ -233,8 +244,13 @@ FontSelector::FontSelector (QWidget *parent, const char *name,
   size_combo->setGeometry(10*XOFFSET + 6*LABLE_LENGTH
 			    ,8*YOFFSET - COMBO_ADJUST -5
 			  ,2*LABLE_LENGTH + 20,COMBO_BOX_HEIGHT);
+#ifdef NEWKDE
+  connect( size_combo, SIGNAL(activated(const QString&)),
+	   SLOT(size_chosen_slot(const QString&)) );
+#else
   connect( size_combo, SIGNAL(activated(const char *)),
 	   SLOT(size_chosen_slot(const char *)) );
+#endif
   //  QToolTip::add( size_combo, "Select Font Size in Points" );
 
 
@@ -245,8 +261,13 @@ FontSelector::FontSelector (QWidget *parent, const char *name,
 			    ,19*YOFFSET - COMBO_ADJUST -20
 			    ,4*LABLE_LENGTH,COMBO_BOX_HEIGHT);
   weight_combo->setInsertionPolicy(QComboBox::NoInsertion);
+#ifdef NEWKDE
+  connect( weight_combo, SIGNAL(activated(const QString&)),
+	   SLOT(weight_chosen_slot(const QString&)) );
+#else
   connect( weight_combo, SIGNAL(activated(const char *)),
 	   SLOT(weight_chosen_slot(const char *)) );
+#endif
   // QToolTip::add( weight_combo, "Select Font Weight" );
 
   style_combo = new QComboBox( TRUE, this, i18n("Style") );
@@ -256,8 +277,13 @@ FontSelector::FontSelector (QWidget *parent, const char *name,
 			    ,19*YOFFSET- COMBO_ADJUST - 20
 			   ,2*LABLE_LENGTH + 20,COMBO_BOX_HEIGHT);
   style_combo->setInsertionPolicy(QComboBox::NoInsertion);
+#ifdef NEWKDE
+  connect( style_combo, SIGNAL(activated(const QString &)),
+	   SLOT(style_chosen_slot(const QString &)) );
+#else
   connect( style_combo, SIGNAL(activated(const char *)),
 	   SLOT(style_chosen_slot(const char *)) );
+#endif
   //QToolTip::add( style_combo, "Select Font Style" );
   
 
@@ -321,26 +347,36 @@ void FontSelector::setFont( const QFont& aFont){
   display_example(selFont);
 }  
 
-
-void FontSelector::family_chosen_slot(const char* family){
+#ifdef NEWKDE
+void FontSelector::family_chosen_slot(const QString &family)
+#else
+void FontSelector::family_chosen_slot(const char* family)
+#endif
+{
 
   selFont.setFamily(family);
   //display_example();
   emit fontSelected(selFont);
 }
 
+#ifdef NEWKDE
+void FontSelector::size_chosen_slot(const QString &size_string){
+#else
 void FontSelector::size_chosen_slot(const char* size){
-  
   QString size_string = size;
+#endif
 
   selFont.setPointSize(size_string.toInt());
   //display_example();
   emit fontSelected(selFont);
 }
 
-void FontSelector::weight_chosen_slot(const char* weight){
-
+#ifdef NEWKDE
+void FontSelector::weight_chosen_slot(const QString &weight_string){
+#else
+void FontSelector::weight_chosen_slot(const char* weight) {
   QString weight_string = weight;
+#endif
 
   if ( weight_string == QString(i18n("normal")))
     selFont.setBold(false);
@@ -350,10 +386,12 @@ void FontSelector::weight_chosen_slot(const char* weight){
   emit fontSelected(selFont);
 }
 
+#ifdef NEWKDE
+void FontSelector::style_chosen_slot(const QString &style_string){
+#else
 void FontSelector::style_chosen_slot(const char* style){
-
-
   QString style_string = style;
+#endif
 
   if ( style_string == QString(i18n("roman")))
     selFont.setItalic(false);
