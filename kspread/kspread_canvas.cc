@@ -172,6 +172,8 @@ KSpreadCanvas::KSpreadCanvas( QWidget *_parent, KSpreadView *_view, KSpreadDoc* 
   m_bMousePressed = false;
 
   choose_visible = false;
+
+  setFocus();
 }
 
 void KSpreadCanvas::startChoose()
@@ -288,10 +290,10 @@ void KSpreadCanvas::gotoLocation( int x, int y, KSpreadTable* table, bool make_s
   int xpos = table->columnPos( x, this );
   int ypos = table->rowPos( y, this );
 
-  int minX = 100 * zoom(); // less than that, we scroll
-  int minY = 50 * zoom();
-  int maxX = width() - 100 * zoom(); // more than that, we scroll
-  int maxY = height() - 50 * zoom();
+  int minX = (int) (100 * zoom()); // less than that, we scroll
+  int minY = (int) (50 * zoom());
+  int maxX = (int) (width() - 100 * zoom()); // more than that, we scroll
+  int maxY = (int) (height() - 50 * zoom());
 
   if ( xpos < minX )
     horzScrollBar()->setValue( xOffset() + xpos - minX );
@@ -354,10 +356,10 @@ void KSpreadCanvas::chooseGotoLocation( int x, int y, KSpreadTable* table, bool 
   int xpos = table->columnPos( x, this );
   int ypos = table->rowPos( y, this );
 
-  int minX = 100 * zoom(); // less than that, we scroll
-  int minY = 50 * zoom();
-  int maxX = width() - 100 * zoom(); // more than that, we scroll
-  int maxY = height() - 50 * zoom();
+  int minX = (int) (100 * zoom()); // less than that, we scroll
+  int minY = (int) (50 * zoom());
+  int maxX = (int) (width() - 100 * zoom()); // more than that, we scroll
+  int maxY = (int) (height() - 50 * zoom());
 
   if ( xpos < minX )
     horzScrollBar()->setValue( xOffset() + xpos - minX);
