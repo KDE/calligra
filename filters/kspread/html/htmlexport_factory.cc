@@ -26,7 +26,7 @@
 
 extern "C"
 {
-    void* init_libhtmlexport()
+    void* init_libkspreadhtmlexport()
     {
         return new HTMLExportFactory;
     }

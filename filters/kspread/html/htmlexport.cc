@@ -32,6 +32,7 @@
 #include <kspread_map.h>
 #include <kspread_table.h>
 #include <kspread_doc.h>
+#include <koDocumentInfo.h>
 
 class Cell {
  public:
@@ -88,6 +89,14 @@ bool HTMLExport::filterExport(const QString &file, KoDocument * document,
     // Ah ah ah - the document is const, but the map and table aren't. Safety:0.
     QString str;
     QString emptyLines;
+
+    QString title;
+    KoDocumentInfo *info = document->documentInfo();
+    KoDocumentInfoAbout *aboutPage = static_cast<KoDocumentInfoAbout *>(info->page( "about" ));
+    if ( !aboutPage )
+      title = file;
+    else
+      title = aboutPage->title();
     
     // header
     str = "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01 Transitional//EN\" ";
@@ -99,7 +108,7 @@ bool HTMLExport::filterExport(const QString &file, KoDocument * document,
     str += "<meta name=\"Generator\" ";
     str += "content=\"KSpread HTML Export Filter Version = 0.1 \">\n";
     // I have no idea where to get the document name from :-(  table->tableName()
-    str += "<title>KSpread Export</title>\n";
+    str += "<title>" + title + "</title>\n";
     str += "</head>\n";
     str += "<body bgcolor=\"#FFFFFF\">\n";
 
@@ -179,7 +188,7 @@ bool HTMLExport::filterExport(const QString &file, KoDocument * document,
                 case KSpreadCell::Text:
                   text = cell->text();
                   break;
-                case KSpreadCell::RichText:
+                case KSpreadCell::RichText:   
                 case KSpreadCell::VisualFormula:
                   text = cell->text(); // untested
                   break;

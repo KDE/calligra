@@ -5,11 +5,11 @@ INCLUDES= -I$(srcdir) -I$(top_srcdir)/kspread $(KOFFICE_INCLUDES) \
 
 ####### Files
 
-kde_module_LTLIBRARIES = libhtmlexport.la
+kde_module_LTLIBRARIES = libkspreadhtmlexport.la
 
-libhtmlexport_la_SOURCES = htmlexport.cc htmlexport_factory.cc
-libhtmlexport_la_LDFLAGS = -module -avoid-version -no-undefined
-libhtmlexport_la_LIBADD  = $(KOFFICE_LIBS) ../../../kspread/libkspreadpart.la
+libkspreadhtmlexport_la_SOURCES = htmlexport.cc htmlexport_factory.cc
+libkspreadhtmlexport_la_LDFLAGS = -module -avoid-version -no-undefined
+libkspreadhtmlexport_la_LIBADD  = $(KOFFICE_LIBS) ../../../kspread/libkspreadpart.la
 
 METASOURCES = AUTO
 

@@ -45,5 +45,5 @@ Name[zh_TW.Big5]=KSpread 的 CVS 匯出過濾器
 Export=text/html
 Import=application/x-kspread
 Implemented=kodocument
-X-KDE-Library=libhtmlexport
+X-KDE-Library=libkspreadhtmlexport
 ServiceTypes=KOfficeFilter
