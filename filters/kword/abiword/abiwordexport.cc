@@ -70,7 +70,7 @@ public:
 class AbiWordWorker : public KWEFBaseWorker
 {
 public:
-    AbiWordWorker(void) : m_ioDevice(NULL), m_streamOut(NULL) { }
+    AbiWordWorker(void);
     virtual ~AbiWordWorker(void) { }
 public:
     virtual bool doOpenFile(const QString& filenameOut, const QString& to);
@@ -83,6 +83,8 @@ public:
     virtual bool doCloseTextFrameSet(void); // AbiWord's </section>
     virtual bool doFullPaperFormat(const int format,
         const double width, const double height, const int orientation); // Calc AbiWord's <papersize>
+    virtual bool doFullPaperBorders (const double top, const double left,
+        const double bottom, const double right); // Like KWord's <PAPERBORDERS>
     virtual bool doCloseHead(void); // Write <papersize>
     virtual bool doOpenStyles(void); // AbiWord's <styles>
     virtual bool doCloseStyles(void); // AbiWord's </styles>
@@ -93,7 +95,7 @@ private:
         const ValueListFormatData& paraFormatDataList);
     QString textFormatToAbiProps(const TextFormatting& formatOrigin,
         const TextFormatting& formatData, const bool force) const;
-    QString AbiWordWorker::layoutToCss(const LayoutData& layoutOrigin,
+    QString layoutToCss(const LayoutData& layoutOrigin,
         const LayoutData& layout, const bool force) const;
     QString escapeAbiWordText(const QString& strText) const;
     bool makeImage(const FrameAnchor& anchor, const bool isImage);
@@ -108,7 +110,14 @@ private:
     QMap<QString,QString> m_mapImageData;
     QMap<QString,QString> m_mapClipartData;
     StyleMap m_styleMap;
+    double m_paperBorderTop,m_paperBorderLeft,m_paperBorderBottom,m_paperBorderRight;
 };
+
+AbiWordWorker::AbiWordWorker(void) : m_ioDevice(NULL), m_streamOut(NULL),
+    m_paperBorderTop(0.0),m_paperBorderLeft(0.0),
+    m_paperBorderBottom(0.0),m_paperBorderRight(0.0)
+{
+}
 
 QString AbiWordWorker::escapeAbiWordText(const QString& strText) const
 {
@@ -386,7 +395,20 @@ bool AbiWordWorker::doCloseDocument(void)
 
 bool AbiWordWorker::doOpenTextFrameSet(void)
 {
-    *m_streamOut << "<section>\n";
+    *m_streamOut << "<section props=\"";
+    *m_streamOut << "page-margin-top: ";
+    *m_streamOut << m_paperBorderTop;
+    *m_streamOut << "pt; ";
+    *m_streamOut << "page-margin-left: ";
+    *m_streamOut << m_paperBorderLeft;
+    *m_streamOut << "pt; ";
+    *m_streamOut << "page-margin-bottom: ";
+    *m_streamOut << m_paperBorderBottom;
+    *m_streamOut << "pt; ";
+    *m_streamOut << "page-margin-right: ";
+    *m_streamOut << m_paperBorderRight;
+    *m_streamOut << "pt"; // Last one, so no semi-comma
+    *m_streamOut << "\">\n";
     return true;
 }
 
@@ -950,6 +972,16 @@ bool AbiWordWorker::doFullPaperFormat(const int format,
     outputText += "page-scale=\"1.0\"/>\n"; // KWord has no page scale, so assume 100%
 
     m_pagesize=outputText;
+    return true;
+}
+
+bool AbiWordWorker::doFullPaperBorders (const double top, const double left,
+    const double bottom, const double right)
+{
+    m_paperBorderTop=top;
+    m_paperBorderLeft=left;
+    m_paperBorderBottom=bottom;
+    m_paperBorderRight=right;
     return true;
 }
 
