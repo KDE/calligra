@@ -78,6 +78,7 @@ protected:
   KWordView* m_pView;
 
   static QList<KWordShell>* s_lstShells;
+  static bool previewHandlerRegistered;
 };
 
 #endif

@@ -612,3 +612,7 @@ Reggie, 6.1.1998:
 - Fixed some more redraw bugs
 - Last imput in the search dia is remembered
 - Implemented searching backwards (also with formats)
+
+Reggie, 7.1.1999:
+-----------------
+- Added filedialog preview widgets for pictures and cliparts

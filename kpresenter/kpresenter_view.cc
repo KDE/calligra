@@ -444,18 +444,18 @@ void KPresenterView::insertPicture()
   page->setToolEditMode(TEM_MOUSE);
   page->deSelectAllObj();
 
-  QString file = KFileDialog::getOpenFileName(0,
-					      i18n("*.gif *GIF *.bmp *.BMP *.xbm *.XBM *.xpm *.XPM *.pnm *.PNM "
-					      "*.PBM *.PGM *.PPM *.PBMRAW *.PGMRAW *.PPMRAW *.jpg *.JPG *.jpeg *.JPEG "
-					      "*.pbm *.pgm *.ppm *.pbmdraw *.pgmdraw *.ppmdraw|All pictures\n"
-					      "*.gif *.GIF|GIF-Pictures\n"
-					      "*.jpg *.JPG *.jpeg *.JPEG|JPEG-Pictures\n"
-					      "*.bmp *.BMP|Windows Bitmaps\n"
-					      "*.xbm *.XBM|XWindow Pitmaps\n"
-					      "*.xpm *.XPM|Pixmaps\n"
-					      "*.pnm *.PNM *.PBM *.PGM *.PPM *.PBMRAW *.PGMRAW *.PPMRAW "
-					      "*.pbm *.pgm *.ppm *.pbmdraw *.pgmdraw *.ppmdraw|PNM-Pictures"),0);
-
+  QString file = KFilePreviewDialog::getOpenFileName(0,
+						     i18n("*.gif *GIF *.bmp *.BMP *.xbm *.XBM *.xpm *.XPM *.pnm *.PNM "
+							  "*.PBM *.PGM *.PPM *.PBMRAW *.PGMRAW *.PPMRAW *.jpg *.JPG *.jpeg *.JPEG "
+							  "*.pbm *.pgm *.ppm *.pbmdraw *.pgmdraw *.ppmdraw|All pictures\n"
+							  "*.gif *.GIF|GIF-Pictures\n"
+							  "*.jpg *.JPG *.jpeg *.JPEG|JPEG-Pictures\n"
+							  "*.bmp *.BMP|Windows Bitmaps\n"
+							  "*.xbm *.XBM|XWindow Pitmaps\n"
+							  "*.xpm *.XPM|Pixmaps\n"
+							  "*.pnm *.PNM *.PBM *.PGM *.PPM *.PBMRAW *.PGMRAW *.PPMRAW "
+							  "*.pbm *.pgm *.ppm *.pbmdraw *.pgmdraw *.ppmdraw|PNM-Pictures"),0);
+  
   if (!file.isEmpty()) m_pKPresenterDoc->insertPicture(file.data(),xOffset,yOffset);
 
 //   QEvent ev(Event_Leave);
@@ -470,7 +470,7 @@ void KPresenterView::insertClipart()
 {
   page->setToolEditMode(TEM_MOUSE);
   page->deSelectAllObj();
-  QString file = KFileDialog::getOpenFileName(0,i18n("*.WMF *.wmf|Windows Metafiles"),0);
+  QString file = KFilePreviewDialog::getOpenFileName(0,i18n("*.WMF *.wmf|Windows Metafiles"),0);
   if (!file.isEmpty()) m_pKPresenterDoc->insertClipart(file.data(),xOffset,yOffset);
 
 //   QEvent ev(Event_Leave);
@@ -2491,17 +2491,17 @@ void KPresenterView::changePicture(unsigned int,const char* filename)
 {
   QFileInfo fileInfo(filename);
 
-  QString file = KFileDialog::getOpenFileName(0,
-					      i18n("*.gif *GIF *.bmp *.BMP *.xbm *.XBM *.xpm *.XPM *.pnm *.PNM "
-					      "*.PBM *.PGM *.PPM *.PBMRAW *.PGMRAW *.PPMRAW *.jpg *.JPG *.jpeg *.JPEG "
-					      "*.pbm *.pgm *.ppm *.pbmdraw *.pgmdraw *.ppmdraw|All pictures\n"
-					      "*.gif *.GIF|GIF-Pictures\n"
-					      "*.jpg *.JPG *.jpeg *.JPEG|JPEG-Pictures\n"
-					      "*.bmp *.BMP|Windows Bitmaps\n"
-					      "*.xbm *.XBM|XWindow Pitmaps\n"
-					      "*.xpm *.XPM|Pixmaps\n"
-					      "*.pnm *.PNM *.PBM *.PGM *.PPM *.PBMRAW *.PGMRAW *.PPMRAW "
-					      "*.pbm *.pgm *.ppm *.pbmdraw *.pgmdraw *.ppmdraw|PNM-Pictures"),0);
+  QString file = KFilePreviewDialog::getOpenFileName(0,
+						     i18n("*.gif *GIF *.bmp *.BMP *.xbm *.XBM *.xpm *.XPM *.pnm *.PNM "
+							  "*.PBM *.PGM *.PPM *.PBMRAW *.PGMRAW *.PPMRAW *.jpg *.JPG *.jpeg *.JPEG "
+							  "*.pbm *.pgm *.ppm *.pbmdraw *.pgmdraw *.ppmdraw|All pictures\n"
+							  "*.gif *.GIF|GIF-Pictures\n"
+							  "*.jpg *.JPG *.jpeg *.JPEG|JPEG-Pictures\n"
+							  "*.bmp *.BMP|Windows Bitmaps\n"
+							  "*.xbm *.XBM|XWindow Pitmaps\n"
+							  "*.xpm *.XPM|Pixmaps\n"
+							  "*.pnm *.PNM *.PBM *.PGM *.PPM *.PBMRAW *.PGMRAW *.PPMRAW "
+							  "*.pbm *.pgm *.ppm *.pbmdraw *.pgmdraw *.ppmdraw|PNM-Pictures"),0);
 
   if (!file.isEmpty()) m_pKPresenterDoc->changePicture(file,xOffset,yOffset);
 }
@@ -2510,7 +2510,7 @@ void KPresenterView::changePicture(unsigned int,const char* filename)
 void KPresenterView::changeClipart(unsigned int,QString filename)
 {
   QFileInfo fileInfo(filename);
-  QString file = KFileDialog::getOpenFileName(fileInfo.dirPath(false),i18n("*.WMF *.wmf|Windows Metafiles"),0);
+  QString file = KFilePreviewDialog::getOpenFileName(fileInfo.dirPath(false),i18n("*.WMF *.wmf|Windows Metafiles"),0);
 
   if (!file.isEmpty()) m_pKPresenterDoc->changeClipart(file,xOffset,yOffset);
 }

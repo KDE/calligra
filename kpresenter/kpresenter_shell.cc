@@ -24,13 +24,37 @@
 #include <kapp.h>
 #include <qmsgbox.h>
 
+#include <kfiledialog.h>
+
+#include "preview.h"
+
 QList<KPresenterShell>* KPresenterShell::s_lstShells = 0L;
+bool KPresenterShell::previewHandlerRegistered = false;
 
 KPresenterShell::KPresenterShell()
 {
   m_pDoc = 0L;
   m_pView = 0L;
   
+  if (!previewHandlerRegistered) 
+    {
+      KFilePreviewDialog::registerPreviewModule("wmf",wmfPreviewHandler,PreviewPixmap);
+      KFilePreviewDialog::registerPreviewModule("gif",pixmapPreviewHandler,PreviewPixmap);
+      KFilePreviewDialog::registerPreviewModule("jpeg",pixmapPreviewHandler,PreviewPixmap);
+      KFilePreviewDialog::registerPreviewModule("jpg",pixmapPreviewHandler,PreviewPixmap);
+      KFilePreviewDialog::registerPreviewModule("xpm",pixmapPreviewHandler,PreviewPixmap);
+      KFilePreviewDialog::registerPreviewModule("xbm",pixmapPreviewHandler,PreviewPixmap);
+      KFilePreviewDialog::registerPreviewModule("png",pixmapPreviewHandler,PreviewPixmap);
+      KFilePreviewDialog::registerPreviewModule("WMF",wmfPreviewHandler,PreviewPixmap);
+      KFilePreviewDialog::registerPreviewModule("GIF",pixmapPreviewHandler,PreviewPixmap);
+      KFilePreviewDialog::registerPreviewModule("JPEG",pixmapPreviewHandler,PreviewPixmap);
+      KFilePreviewDialog::registerPreviewModule("JPG",pixmapPreviewHandler,PreviewPixmap);
+      KFilePreviewDialog::registerPreviewModule("XPM",pixmapPreviewHandler,PreviewPixmap);
+      KFilePreviewDialog::registerPreviewModule("XBM",pixmapPreviewHandler,PreviewPixmap);
+      KFilePreviewDialog::registerPreviewModule("PNG",pixmapPreviewHandler,PreviewPixmap);
+      previewHandlerRegistered = true;
+    }
+
   if ( s_lstShells == 0L )
     s_lstShells = new QList<KPresenterShell>;
   

@@ -293,17 +293,17 @@ void BackDia::selectPic()
   radioColor->setChecked(false);
   radioClip->setChecked(false);
 
-  QString file = KFileDialog::getOpenFileName(0,
-					      i18n("*.gif *GIF *.bmp *.BMP *.xbm *.XBM *.xpm *.XPM *.pnm *.PNM "
-					      "*.PBM *.PGM *.PPM *.PBMRAW *.PGMRAW *.PPMRAW *.jpg *.JPG *.jpeg *.JPEG "
-					      "*.pbm *.pgm *.ppm *.pbmdraw *.pgmdraw *.ppmdraw|All pictures\n"
-					      "*.gif *.GIF|GIF-Pictures\n"
-					      "*.jpg *.JPG *.jpeg *.JPEG|JPEG-Pictures\n"
-					      "*.bmp *.BMP|Windows Bitmaps\n"
-					      "*.xbm *.XBM|XWindow Pitmaps\n"
-					      "*.xpm *.XPM|Pixmaps\n"
-					      "*.pnm *.PNM *.PBM *.PGM *.PPM *.PBMRAW *.PGMRAW *.PPMRAW "
-					      "*.pbm *.pgm *.ppm *.pbmdraw *.pgmdraw *.ppmdraw|PNM-Pictures"),0);
+  QString file = KFilePreviewDialog::getOpenFileName(0,
+						     i18n("*.gif *GIF *.bmp *.BMP *.xbm *.XBM *.xpm *.XPM *.pnm *.PNM "
+							  "*.PBM *.PGM *.PPM *.PBMRAW *.PGMRAW *.PPMRAW *.jpg *.JPG *.jpeg *.JPEG "
+							  "*.pbm *.pgm *.ppm *.pbmdraw *.pgmdraw *.ppmdraw|All pictures\n"
+							  "*.gif *.GIF|GIF-Pictures\n"
+							  "*.jpg *.JPG *.jpeg *.JPEG|JPEG-Pictures\n"
+							  "*.bmp *.BMP|Windows Bitmaps\n"
+							  "*.xbm *.XBM|XWindow Pitmaps\n"
+							  "*.xpm *.XPM|Pixmaps\n"
+							  "*.pnm *.PNM *.PBM *.PGM *.PPM *.PBMRAW *.PGMRAW *.PPMRAW "
+							  "*.pbm *.pgm *.ppm *.pbmdraw *.pgmdraw *.ppmdraw|PNM-Pictures"),0);
   
   if (!file.isEmpty()) openPic(file.data());
 }
@@ -315,7 +315,7 @@ void BackDia::selectClip()
   radioColor->setChecked(false);
   radioPic->setChecked(false);
 
-  QString file = KFileDialog::getOpenFileName(0,i18n("*.WMF *.wmf|Windows Metafiles"),0);
+  QString file = KFilePreviewDialog::getOpenFileName(0,i18n("*.WMF *.wmf|Windows Metafiles"),0);
   if (!file.isEmpty()) openClip(file.data());
 }
 

@@ -28,7 +28,7 @@ kpresenter_bin_SOURCES = kpresenter_main.cc kpresenter_doc.cc \
 	setoptionscmd.cc chgclipcmd.cc chgpixcmd.cc setbackcmd.cc \
 	effectcmd.cc pgconfcmd.cc pglayoutcmd.cc shadowcmd.cc \
 	rotatecmd.cc lowraicmd.cc pievaluecmd.cc rectvaluecmd.cc \
-	commandhistory.cc
+	commandhistory.cc preview.cc
 
 noinst_HEADERS = kpresenter_main.h kpresenter_doc.h kpresenter_view.h \
 		kpresenter_shell.h kpresenter.h \
@@ -47,7 +47,7 @@ noinst_HEADERS = kpresenter_main.h kpresenter_doc.h kpresenter_view.h \
 		setoptionscmd.h chgclipcmd.h chgpixcmd.h setbackcmd.h \
 		effectcmd.h pgconfcmd.h pglayoutcmd.h shadowcmd.h \
 		rotatecmd.h lowraicmd.h pievaluecmd.h rectvaluecmd.h \
-		commandhistory.h
+		commandhistory.h preview.h
 
 SRCMETA =	kpresenter_main.moc kpresenter_doc.moc kpresenter_view.moc \
 		kpresenter_shell.moc \

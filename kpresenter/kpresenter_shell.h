@@ -70,6 +70,8 @@ protected:
   KPresenterView* m_pView;
 
   static QList<KPresenterShell>* s_lstShells;
+  static bool previewHandlerRegistered;
+
 };
 
 #endif
