@@ -30,9 +30,7 @@ KFormulaDocument::KFormulaDocument()
 	isFree[firstfree] = true;
     // Blocks[firstfree]=NULL;
     isFree[0]=false;
-
-    Blocks[0] = new FormulaBlock(this,-1,0,-1,-1,"");
-
+    pos = current = 0;
 }
 
 CORBA::Boolean KFormulaDocument::init()
@@ -117,7 +115,7 @@ int KFormulaDocument::getPos()
 void KFormulaDocument::setCurrent(int cur)
 {
     if( current != cur )
-	pos = Blocks[cur]->getcont().length();   
+	pos = Blocks[cur]->getcont().length();
     Blocks[current]->setactive(0);
     Blocks[cur]->setactive(1); 
     current = cur; 
@@ -248,13 +246,11 @@ void KFormulaDocument::dele()
 
 void KFormulaDocument::addB1()
 {   
-    int nextold=-1; 
-    int Id,cur;
-    cur=getCurrent();
-    Id=cur;
+    int cur=getCurrent();
+    int Id=cur;
     if( Blocks[cur]->gettype() != -1 )
 	{
-	    nextold=Blocks[cur]->getnext();
+	    int nextold=Blocks[cur]->getnext();
 	    Id = addBlock(1,-1,nextold,cur,"c");
 	    Blocks[cur]->setnext(Id);
 	}
@@ -263,9 +259,10 @@ void KFormulaDocument::addB1()
 	    Blocks[cur]->settype(1);
 	    checkAndCreate(Blocks[cur]);
 	}
-    setCurrent(Blocks[Id]->getchild1());	
+    setCurrent(Blocks[Id]->getchild1());
     emit sig_modified();
 }
+
 void KFormulaDocument::addB2()
 {   
     int cur=getCurrent();
@@ -441,10 +438,18 @@ void KFormulaDocument::deleteIt(FormulaBlock *bl)
 	QMessageBox::critical( 0L, i18n("Error"), i18n("Can not delete First Block !!"), i18n( "Ok" ) );
 }
 
+void KFormulaDocument::paintEvent( QPaintEvent *_ev, QWidget *paintGround )
+{
+    QPainter painter(paintGround);
+    Blocks[0]->getDimensions(); // Get dimension of Block0 (all formula dimension)
+    painter.setPen( black );
+    Blocks[0]->PaintIt(&painter,1+xOff,1+yOff+Blocks[0]->getLYU(),1);
+    isBlack=false;
+}
+
 void KFormulaDocument::checkAndCreate(FormulaBlock *bl)
 {
-    int ID;
-    ID=bl->getID();
+    int ID=bl->getID();
     switch ( bl->gettype() )
 	{
 	case 1:
@@ -503,7 +508,8 @@ void KFormulaDocument::checkAndCreate(FormulaBlock *bl)
  * more info about child1,child2,child3 on widget.h
  */
 
-FormulaBlock::FormulaBlock( KFormulaDocument *_doc, int Type, int ID, int nextID, int prevID,
+FormulaBlock::FormulaBlock( KFormulaDocument *_doc, int Type, int ID, 
+			    int nextID, int prevID,
 			    QString Cont, int Child1, int Child2, int Child3 )
 {
     active = 0;
@@ -983,8 +989,7 @@ void FormulaBlock::PaintIt( QPainter *here, int x, int y, int corr )
 
 int FormulaBlock::getClick(QPoint click)
 {
-    int retu;
-    retu=0;
+    int retu=0;
     if ( where.contains( click ) ) 
 	{
 	    if( child1 != -1 )
@@ -1310,21 +1315,26 @@ int FormulaBlock::getOX()
 {
     return(ox);
 }
+
 int FormulaBlock::getTX()
 {
     return(tx);
 }
+
 int FormulaBlock::getLYU()
 {
     return(lyu);
 }
+
 int FormulaBlock::getLYD()
 {
     return(lyd);
 }
+
 int FormulaBlock::getTY()
 {
     return(lyd+lyu);
 }
+
 
 #include "kformula_doc.moc"

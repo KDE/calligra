@@ -65,11 +65,13 @@ void KFormulaView::setDocument( KFormulaDocument *_doc )
 
     m_pDoc->addView( this );
 
-    QObject::connect( m_pDoc, SIGNAL( sig_modified() ), this, SLOT( slotModified() ) );
+    QObject::connect( m_pDoc, SIGNAL( sig_modified() ), 
+		      this, SLOT( slotModified() ) );
 }
 
 void KFormulaView::paintEvent( QPaintEvent *_ev )
 {
+    m_pDoc->paintEvent(_ev, this);
 }
 
 void KFormulaView::resizeEvent( QResizeEvent *_ev )
