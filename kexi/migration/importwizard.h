@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2004 Adam Pigg <adam@piggz.co.uk>
-   Copyright (C) 2004 Jaroslaw Staniek <js@iidea.pl>
+   Copyright (C) 2004-2005 Jaroslaw Staniek <js@iidea.pl>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -31,6 +31,7 @@ class KLineEdit;
 class QLabel;
 class KexiConnSelectorWidget;
 class KexiProjectSelectorWidget;
+class KexiProjectSet;
 class KexiDBTitlePage;
 
 namespace KexiMigration {
@@ -43,15 +44,16 @@ class KEXIMIGR_EXPORT importWizard : public KWizard
 Q_OBJECT
 private:
     QVBox *introPage, *srcTypePage, *srcConnPage, *srcdbPage, *dstTypePage, 
-		*dstPage, *srcdbControls;
-	KexiDBTitlePage* dstTitlePage;
+     *dstPage, *srcdbControls;
+    KexiDBTitlePage* dstTitlePage;
     QHBox *finishPage;
     KComboBox *srcTypeCombo, *dstTypeCombo;
     KexiConnSelectorWidget *srcConn, *dstConn;
     KLineEdit *dstNewDBName;
     KexiProjectSelectorWidget *srcdbname;
     QLabel *lblfinishTxt;
-    bool fileBasedSrc, fileBasedDst;
+    bool fileBasedSrc, fileBasedDst, fileBasedDstWasPresented;
+    KexiProjectSet* m_prjSet;
 
     void setupintro();
     void setupsrcType();

@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2004 Adam Pigg <adam@piggz.co.uk>
-   Copyright (C) 2004 Jaroslaw Staniek <js@iidea.pl>
+   Copyright (C) 2004-2005 Jaroslaw Staniek <js@iidea.pl>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -50,8 +50,15 @@ using namespace KexiMigration;
 importWizard::importWizard(QWidget *parent, const char *name)
         : KWizard(parent, name)
 {
+    m_prjSet = 0;
+    fileBasedDstWasPresented = false;
     //=========================Temporary===================================
+    Kexi::connset().clear();
     KexiDB::ConnectionData *conndata;
+
+#ifdef KEXI_CUSTOM_HARDCODED_CONNDATA
+#include <custom_connectiondata.h>
+#endif
 
     conndata = new KexiDB::ConnectionData();
     conndata->connName = "Local pgsql connection";
@@ -110,7 +117,9 @@ importWizard::importWizard(QWidget *parent, const char *name)
 //===========================================================
 //
 importWizard::~importWizard()
-{}
+{
+	delete m_prjSet;
+}
 
 //===========================================================
 //
@@ -287,10 +296,9 @@ void importWizard::arriveSrcDBPage()
     {
       srcdbControls->hide();
       kdDebug() << "Looks like we need a project selector widget!" << endl;
-      KexiProjectSet *prj_set = 
-          new KexiProjectSet(*(srcConn->selectedConnectionData()));
+      m_prjSet = new KexiProjectSet(*(srcConn->selectedConnectionData()));
       srcdbname = new KexiProjectSelectorWidget(srcdbControls,
-          "KexiMigrationProjectSelector", prj_set);
+          "KexiMigrationProjectSelector", m_prjSet);
       srcdbControls->show();
     }
   }
@@ -299,8 +307,8 @@ void importWizard::arriveSrcDBPage()
 void importWizard::arriveDstTitlePage()
 {
   if(fileBasedSrc) {
-    // Might want to show the filename here instead
-    dstNewDBName->setText("Imported Database");
+    // @todo Might want to show the filename here instead
+    dstNewDBName->setText(i18n("Imported Database"));
   } else {
     dstNewDBName->setText( srcdbname->selectedProjectData()->databaseName() );
   }
@@ -314,6 +322,11 @@ void importWizard::arriveDstPage()
   if(fileBasedDst) {
     dstConn->showSimpleConn();
     dstConn->m_fileDlg->setMode( KexiStartupFileDialog::SavingFileBasedDB );
+    if (!fileBasedDstWasPresented) {
+      //without extension - it will be added automatically
+      dstConn->m_fileDlg->setLocationText(dstNewDBName->text());
+    }
+    fileBasedDstWasPresented = true;
   } else {
     dstConn->showAdvancedConn();
   }
@@ -321,6 +334,13 @@ void importWizard::arriveDstPage()
 }
 
 void importWizard::arriveFinishPage() {
+  checkIfDstTypeFileBased(dstTypeCombo->currentText());
+  if (fileBasedDstWasPresented) {
+     if (!dstConn->m_fileDlg->checkFileName()) {
+       back();
+       return;
+     }
+  }
   if (checkUserInput()) {
     setFinishEnabled(finishPage, true);
   }
@@ -383,15 +403,13 @@ void importWizard::accept()
     else if (dstTypeCombo->currentText().lower() == KexiDB::Driver::defaultFileBasedDriverName()) 
     {
         //file-based project
-      	kdDebug() << "File Destination..." << endl;
+        kdDebug() << "File Destination..." << endl;
         cdata = new KexiDB::ConnectionData;
         cdata->connName = dstNewDBName->text();
         cdata->driverName = KexiDB::Driver::defaultFileBasedDriverName();
-        cdata->setFileName( dstConn->selectedFileName() );
-	
-	kdDebug() << "Current file name: " << dstConn->selectedFileName() << endl;
-	
-	dbname = dstConn->selectedFileName();
+        dbname = dstConn->selectedFileName();
+        cdata->setFileName( dbname );
+        kdDebug() << "Current file name: " << dbname << endl;
     }
     else
     {
@@ -428,10 +446,12 @@ void importWizard::accept()
     kdDebug() << "Performing import..." << endl;
     if (import->performImport())
     {
+        KWizard::accept(); //tmp, before adding "final page"
         KMessageBox::information(this, i18n("Import Succeeded."), i18n("Success"));
     }
     else
     {
+//??        KWizard::reject(); //tmp, before adding "final page"
         KMessageBox::error(this, i18n("Import failed because: "), i18n("Failure"));
     }
 }
