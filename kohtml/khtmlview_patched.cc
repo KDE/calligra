@@ -59,7 +59,7 @@ KHTMLView_Patched::~KHTMLView_Patched()
 {
 }
 
-void KHTMLView_Patched::draw(SavedPage *p, QPaintDevice *dev, int width, int height)
+void KHTMLView_Patched::draw(SavedPage *p, QPaintDevice *dev, int width, int height, float scale)
 {
 //  cerr << "drawing right??????????????" << endl;
   
@@ -83,6 +83,10 @@ void KHTMLView_Patched::draw(SavedPage *p, QPaintDevice *dev, int width, int hei
   
   QPainter tmpPainter;
   tmpPainter.begin(dev);
+  
+  if (scale != 1.0)
+     tmpPainter.scale(scale, scale);
+     
   tmpPainter.drawPixmap(p->xOffset, p->yOffset, pix);
   tmpPainter.end();  
 //  bitBlt(dev, p->xOffset, p->yOffset, &pix, 0, 0, pix.width(), pix.height(), CopyROP, true);
@@ -92,7 +96,7 @@ void KHTMLView_Patched::draw(SavedPage *p, QPaintDevice *dev, int width, int hei
        cerr << "iterating" << endl;
        QListIterator<SavedPage> it(*p->frames);
        for (; it.current(); ++it)
-           draw(it.current(), dev, width, height);
+           draw(it.current(), dev, width, height, scale);
      }     
 }
 

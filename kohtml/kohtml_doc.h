@@ -89,6 +89,7 @@ signals:
   
 protected slots:
   void slotJobFinished();
+  void slotError();
   
 private:
   KHTMLView *topParent, *parent;

@@ -74,6 +74,8 @@ KoHTMLJob::KoHTMLJob(KHTMLView *_topParent, KHTMLView *_parent, const char *_url
   
   connect(this, SIGNAL(sigFinished(int)),
           this, SLOT(slotJobFinished()));
+  connect(this, SIGNAL(sigError(int, int, const char *)),
+          this, SLOT(slotError()));	  
 }
 
 KoHTMLJob::~KoHTMLJob()
@@ -100,6 +102,11 @@ void KoHTMLJob::slotJobFinished()
   cout << "KoHTMLJob::slotJobFinished()" << endl;
 
   emit jobDone(this, topParent, parent, url.data(), tmpFile.data());
+}
+
+void KoHTMLJob::slotError()
+{
+  emit jobDone(this, topParent, parent, url.data(), 0L); //hm... this doesn't work that fine :-(
 }
 
 KoHTMLDoc::KoHTMLDoc()
@@ -246,8 +253,20 @@ void KoHTMLDoc::slotHTMLCodeLoaded(KoHTMLJob *, KHTMLView *, KHTMLView *, const 
 void KoHTMLDoc::draw(QPaintDevice *dev, CORBA::Long width, CORBA::Long height,
 		     CORBA::Float _scale )
 { 
-  // FIXME!!!! Obeye the _scale
-  if (!m_bDocumentDone) return;
+  if (m_vCurrentURL.isEmpty())
+     {
+       QPainter p;
+       p.begin(dev);
+       
+       if (_scale != 1.0) p.translate(_scale, _scale);
+       
+       p.drawText(0, 0, i18n("KoHTML: No document loaded!"));
+       
+       p.end();
+       return;
+     }
+     
+//  if (!m_bDocumentDone) return;
 
   cerr << "void KoHTMLDoc::draw(QPaintDevice *dev, CORBA::Long width, CORBA::Long height)" << endl;
 
@@ -255,7 +274,7 @@ void KoHTMLDoc::draw(QPaintDevice *dev, CORBA::Long width, CORBA::Long height,
   SavedPage *p = m_vInternalView->saveYourself();
 
   cerr << "drawing" << endl;
-  m_vInternalView->draw(p, dev, width, height);
+  m_vInternalView->draw(p, dev, width, height, _scale);
   
   delete p;
 }

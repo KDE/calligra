@@ -13,3 +13,8 @@ Sun Jan 3 16:08:47 1999 Simon Hausmann <tronical@gmx.net>
 
         * started settings dialog (but it's not used yet)
 
+Wed Jan 6 01:15:58 1999 Simon Hausmann <tronical@gmx.net>
+
+        * making use of the scale value when drawing
+
+        * fixes with the KIO-handling

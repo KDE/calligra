@@ -60,6 +60,8 @@ KoHTMLView::KoHTMLView(QWidget *parent, const char *name, KoHTMLDoc *_doc)
   
   OPPartIf::setFocusPolicy(OpenParts::Part::ClickFocus);
   
+//  OPPartIf::setCaption("KoHTML");
+  
   m_pDoc = _doc;
   
   m_lstFrames.setAutoDelete(true);
@@ -793,6 +795,8 @@ void KoHTMLView::slotSetCaption(const char *title)
   caption.prepend("KoHTML : ");
   
 //  setCaption(caption);
+
+//  OPPartIf::setCaption(caption);
 }
 
 void KoHTMLView::slotShowURL(KHTMLView *view, const char *url)
