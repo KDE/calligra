@@ -55,9 +55,9 @@
 #include <assert.h>
 
 //#define DEBUG_MARGINS
-//#define DEBUG_FLOW
+//#define DEBUG_FORMATVERTICALLY
 //#define DEBUG_FORMATS
-#define DEBUG_FORMAT_MORE
+//#define DEBUG_FORMAT_MORE
 //#define DEBUG_VIEWAREA
 //#define DEBUG_CURSOR
 
@@ -912,7 +912,7 @@ bool KWTextFrameSet::checkVerticalBreak( int & yp, int & h, KoTextParag * parag,
     {
         if ( !parag || linesTogether ) // Paragraph-level breaking
         {
-#ifdef DEBUG_FLOW
+#ifdef DEBUG_FORMATVERTICALLY
             kdDebug(32002) << "checkVerticalBreak ADJUSTING yp=" << yp << " h=" << h
                            << " breakEnd+2 [new value for yp]=" << breakEnd+2 << endl;
 #endif
@@ -922,7 +922,7 @@ bool KWTextFrameSet::checkVerticalBreak( int & yp, int & h, KoTextParag * parag,
         else // Line-level breaking
         {
             QMap<int, KoTextParagLineStart*>& lineStarts = parag->lineStartList();
-#ifdef DEBUG_FLOW
+#ifdef DEBUG_FORMATVERTICALLY
             kdDebug(32002) << "checkVerticalBreak parag " << parag->paragId()
                            << ". lineStarts has " << lineStarts.count()
                            << " items" << endl;
@@ -935,7 +935,7 @@ bool KWTextFrameSet::checkVerticalBreak( int & yp, int & h, KoTextParag * parag,
                 KoTextParagLineStart * ls = it.data();
                 Q_ASSERT( ls );
                 int y = parag->rect().y() + ls->y;
-#ifdef DEBUG_FLOW
+#ifdef DEBUG_FORMATVERTICALLY
                 kdDebug(32002) << "checkVerticalBreak parag " << parag->paragId()
                                << " line " << line << " ls->y=" << ls->y
                                << " ls->h=" << ls->h << " y=" << y
@@ -948,7 +948,7 @@ bool KWTextFrameSet::checkVerticalBreak( int & yp, int & h, KoTextParag * parag,
                     {
                         if ( line == 0 ) // First line ? It's like a paragraph breaking then
                         {
-#ifdef DEBUG_FLOW
+#ifdef DEBUG_FORMATVERTICALLY
                             kdDebug(32002) << "checkVerticalBreak parag " << parag->paragId()
                                            << " BREAKING first line -> parag break" << endl;
 #endif
@@ -956,8 +956,8 @@ bool KWTextFrameSet::checkVerticalBreak( int & yp, int & h, KoTextParag * parag,
                             return true;
                         }
                         dy = breakEnd + 1 - y;
-                        ls->y = breakEnd - parag->rect().y();
-#ifdef DEBUG_FLOW
+                        ls->y = breakEnd + 1 - parag->rect().y();
+#ifdef DEBUG_FORMATVERTICALLY
                         kdDebug(32002) << "checkVerticalBreak parag " << parag->paragId()
                                        << " BREAKING at line " << line << " dy=" << dy << "  Setting ls->y to " << ls->y << ", y=" << breakEnd << endl;
 #endif
@@ -966,7 +966,7 @@ bool KWTextFrameSet::checkVerticalBreak( int & yp, int & h, KoTextParag * parag,
                 else
                 {
                     ls->y += dy;
-#ifdef DEBUG_FLOW
+#ifdef DEBUG_FORMATVERTICALLY
                     if ( dy )
                         kdDebug(32002) << "                   moving down to position ls->y=" << ls->y << endl;
 #endif
@@ -974,7 +974,7 @@ bool KWTextFrameSet::checkVerticalBreak( int & yp, int & h, KoTextParag * parag,
             }
             parag->setMovedDown( true );
             parag->setHeight( h + dy );
-#ifdef DEBUG_FLOW
+#ifdef DEBUG_FORMATVERTICALLY
             kdDebug(32002) << "Paragraph height set to " << h+dy << endl;
 #endif
             h += dy;
@@ -1007,7 +1007,7 @@ int KWTextFrameSet::formatVertically( KoTextParag * _parag )
     if ( !hardFrameBreak && parag && parag->prev() )
         hardFrameBreak = static_cast<KWTextParag *>(parag->prev())->hardFrameBreakAfter();
 
-#ifdef DEBUG_FLOW
+#ifdef DEBUG_FORMATVERTICALLY
     kdDebugBody(32002) << "KWTextFrameSet::formatVertically parag=" << parag
                        << " linesTogether=" << linesTogether << " hardFrameBreak=" << hardFrameBreak
                        << " yp=" << yp
@@ -1044,14 +1044,14 @@ int KWTextFrameSet::formatVertically( KoTextParag * _parag )
                 // The last check is for whether we did the frame break already
                 // (formatVertically is called twice for each paragraph, if a break was done)
                 yp = bottom /*+ 2*/;
-#ifdef DEBUG_FLOW
+#ifdef DEBUG_FORMATVERTICALLY
                 kdDebug(32002) << "KWTextFrameSet::formatVertically -> HARD FRAME BREAK" << endl;
                 kdDebug(32002) << "KWTextFrameSet::formatVertically yp now " << yp << endl;
 #endif
                 break;
             }
 
-#ifdef DEBUG_FLOW
+#ifdef DEBUG_FORMATVERTICALLY
             kdDebug(32002) << "KWTextFrameSet::formatVertically frameHeight=" << frameHeight << " bottom=" << bottom << endl;
 #endif
             // don't move down parags that have only one line and are bigger than the page (e.g. floating tables)
@@ -1146,7 +1146,7 @@ int KWTextFrameSet::formatVertically( KoTextParag * _parag )
         parag->setRect( r );
         parag->setMovedDown( true );
     }
-#ifdef DEBUG_FLOW
+#ifdef DEBUG_FORMATVERTICALLY
     kdDebug() << "KWTextFrameSet::formatVertically returning " << ( yp + hp ) - ( oldY + oldHeight ) << endl;
 #endif
     return ( yp + hp ) - ( oldY + oldHeight );
@@ -1682,8 +1682,6 @@ void KWTextFrameSet::slotAfterFormatting( int bottom, KoTextParag *lastFormatted
                     lastFormatted->invalidate( 0 );
                 }
 
-                //interval = 0;
-                // not good enough, we need to keep formatting right now
                 m_textobj->formatMore();
                 *abort = true;
                 return;
@@ -3117,10 +3115,10 @@ void KWTextFrameSetEdit::showPopup( KWFrame * /*frame*/, KWView *view, const QPo
 
 void KWFootNoteFrameSet::createInitialFrame( int pageNum )
 {
-     KWFrame *frame = new KWFrame(this, 0, pageNum * m_doc->ptPaperHeight() + 1, 20, 20 );
-     frame->setFrameBehavior(KWFrame::AutoExtendFrame);
-     frame->setNewFrameBehavior(KWFrame::NoFollowup);
-     addFrame( frame );
+    KWFrame *frame = new KWFrame(this, 0, pageNum * m_doc->ptPaperHeight() + 1, 20, 20 );
+    frame->setFrameBehavior(KWFrame::AutoExtendFrame);
+    frame->setNewFrameBehavior(KWFrame::NoFollowup);
+    addFrame( frame );
 }
 
 void KWFootNoteFrameSet::setCounterText( const QString& text )
