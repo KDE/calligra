@@ -21,7 +21,7 @@
 #ifndef __layerdlg_h__
 #define __layerdlg_h__
 
-#include <ktabctl.h>
+#include <kfloatingtabdialog.h>
 
 class KImageShopDoc;
 
@@ -43,13 +43,15 @@ public:
   ChannelTab( KImageShopDoc* doc, QWidget* _parent = 0, const char* _name = 0, WFlags _flags = 0 );
 };
 
-class LayerDialog : public KTabCtl
+class LayerDialog : public KFloatingTabDialog
 {
   Q_OBJECT
 
 public:
-
   LayerDialog( KImageShopDoc* doc, QWidget* _parent = 0, const char* _name = 0, WFlags _flags = 0 );
+
+private:
+  QWidget *m_pLayerTab, *m_pChannelTab;
 };
 
 #endif // __layerdlg_h__

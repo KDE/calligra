@@ -36,7 +36,7 @@ class KFloatingDialog : public QFrame
   Q_OBJECT
  
  public:
-  KFloatingDialog(QWidget *parent = 0L);
+  KFloatingDialog(QWidget *parent = 0, const char* _name = 0);
   ~KFloatingDialog();
 
   // usable client space:
@@ -44,6 +44,11 @@ class KFloatingDialog : public QFrame
   int _top() { return TITLE_HEIGHT; }
   int _width() { return width() - 2*FRAMEBORDER; }
   int _height() { return height() - TITLE_HEIGHT - FRAMEBORDER; }
+
+ public slots:
+  void slotClose();
+  void slotMinimize();
+  void slotDock();
 
  protected:
   virtual void paintEvent(QPaintEvent *);
@@ -65,6 +70,7 @@ class KFloatingDialog : public QFrame
   bool     m_resizing;
   bool     m_shaded;
   bool     m_cursor;
+  bool     m_docked;
 
   QPoint   m_start;
   int      m_unshadedHeight;

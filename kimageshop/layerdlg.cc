@@ -68,7 +68,8 @@ LayerTab::LayerTab( KImageShopDoc *_doc, QWidget *_parent, const char *_name , W
   buttonlayout->addWidget( pbDown );
   connect( pbDown, SIGNAL( clicked() ), layerview, SLOT( slotLowerLayer() ) );
 
-  setMinimumSize( sizeHint() );
+  // Matthias: Never use fixed sizes with kfloatingdialog.
+  //setMinimumSize( sizeHint() );
 }
 
 ChannelTab::ChannelTab( KImageShopDoc *_doc, QWidget *_parent, const char *_name , WFlags _flags )
@@ -101,15 +102,12 @@ ChannelTab::ChannelTab( KImageShopDoc *_doc, QWidget *_parent, const char *_name
 }
 
 LayerDialog::LayerDialog( KImageShopDoc *_doc, QWidget *_parent, const char *_name, WFlags _flags )
-  : KTabCtl( _parent, _name )
+  : KFloatingTabDialog(_parent, _name)
 {
-  LayerTab *layerTab = new LayerTab( _doc, this, _name );
-  ChannelTab *channelTab =  new ChannelTab( _doc, this, _name );
-
-  addTab( layerTab, i18n( "Layers" ) );
-  addTab( channelTab, i18n( "Channels" ) );
-
-  setMinimumSize( layerTab->sizeHint() );
+  m_pLayerTab = new LayerTab(_doc, this, _name);
+  m_pChannelTab =  new ChannelTab(_doc, this, _name);
+  
+  addTab(m_pLayerTab, i18n("Layers"));
+  addTab(m_pChannelTab, i18n("Channels"));
 }
-
 #include "layerdlg.moc"
