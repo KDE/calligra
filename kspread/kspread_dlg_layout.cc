@@ -1200,6 +1200,7 @@ CellFormatPageFloat::CellFormatPageFloat( QWidget* parent, CellFormatDlg *_dlg )
 
     customFormat=new QRadioButton(i18n("Custom"),grp);
     grid->addWidget(customFormat,9,0);
+    customFormat->setEnabled( false );
 
     QGroupBox *box2 = new QGroupBox( grp, "Box");
     box2->setTitle(i18n("Preview"));

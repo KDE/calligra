@@ -140,16 +140,6 @@
     <Action name="protectSheet"/>
     <Action name="protectDoc"/>
   </Menu>
-  <Menu name="Protect"><text>&amp;Changes</text>
-    <Action name="recordChanges"/>
-    <Action name="protectRecords"/>
-    <Action name="filterChanges"/>
-    <Separator/>
-    <Action name="acceptRejectChanges"/>
-    <Action name="commentChanges"/>
-    <Separator/>
-    <Action name="mergeDocument"/>
-  </Menu>
   <Separator/>
   <Action name="RecalcWorkSheet"/>
   <Action name="RecalcWorkBook"/>
