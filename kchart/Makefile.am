@@ -62,7 +62,7 @@ noinst_HEADERS =  kchart_global.h \
 		kchartColorConfigPage.h \
 		kchartParameterConfigPage.h \
 		kchartParameter3dConfigPage.h \
-		kchartBarSubTypeChartPage.h
+		kchartBarSubTypeChartPage.h \
 		kchartParameterPieConfigPage.h \
 		kchartFontConfigPage.h \
 		kchartPieConfigPage.h \
