@@ -360,20 +360,24 @@ OoDrawImport::appendPen( VObject &obj )
 			stroke.setType( VStroke::none );
 		else if( m_styleStack.attribute( "draw:stroke" ) == "solid" )
 			stroke.setType( VStroke::solid );
-/*else if( m_styleStack.attribute( "draw:stroke" ) == "dash" )
-{
-QString style = m_styleStack.attribute( "draw:stroke-dash" );
-if( style == "Ultrafine Dashed" || style == "Fine Dashed" ||
-style == "Fine Dashed (var)" || style == "Dashed (var)" )
-pen.setAttribute( "style", 2 );
-else if( style == "Fine Dotted" || style == "Ultrafine Dotted (var)" ||
-style == "Line with Fine Dots" )
-pen.setAttribute( "style", 3 );
-else if( style == "3 Dashes 3 Dots (var)" || style == "Ultrafine 2 Dots 3 Dashes" )
-pen.setAttribute( "style", 4 );
-else if( style == "2 Dots 1 Dash" )
-pen.setAttribute( "style", 5 );
-}*/
+		else if( m_styleStack.attribute( "draw:stroke" ) == "dash" )
+		{
+			QValueList<float> dashes;
+			stroke.setType( VStroke::solid );
+			QString style = m_styleStack.attribute( "draw:stroke-dash" );
+			if( style == "Ultrafine Dashed" || 
+				style == "Fine Dashed (var)" || style == "Dashed (var)" )
+				stroke.dashPattern().setArray( dashes << 2 << 2 );
+			else if( style == "Fine Dashed" )
+				stroke.dashPattern().setArray( dashes << 10 << 10 );
+			else if( style == "Fine Dotted" || style == "Ultrafine Dotted (var)" ||
+				style == "Line with Fine Dots" )
+				stroke.dashPattern().setArray( dashes << 2 << 10 );
+			else if( style == "3 Dashes 3 Dots (var)" || style == "Ultrafine 2 Dots 3 Dashes" )
+				stroke.dashPattern().setArray( dashes << 3 << 3 );
+			else if( style == "2 Dots 1 Dash" )
+				stroke.dashPattern().setArray( dashes << 2 << 1 );
+		}
 		if( m_styleStack.hasAttribute( "svg:stroke-width" ) )
 		{
 			double lwidth = KoUnit::parseValue( m_styleStack.attribute( "svg:stroke-width" ) );
