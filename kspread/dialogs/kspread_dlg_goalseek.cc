@@ -270,7 +270,7 @@ void KSpreadGoalSeekDlg::buttonOkClicked()
     }
 
     bool ok = false;
-    double goal = m_targetValueEdit->text().toDouble( &ok );
+    double goal = m_pView->doc()->locale()->readNumber(m_targetValueEdit->text(), &ok );
     if ( !ok )
     {
       KMessageBox::error( this, i18n("Target value is invalid.") );
@@ -470,8 +470,8 @@ void KSpreadGoalSeekDlg::startCalc(double _start, double _goal)
     m_targetCell->calc( false );
 
     m_resultText->setText( i18n( "Goal seeking with cell %1 found a solution:" ).arg( m_sourceEdit->text() ) );
-    m_newValue->setText( QString::number( startA ) );
-    m_currentValue->setText( QString::number( m_oldSource ) );
+    m_newValue->setText( m_pView->doc()->locale()->formatNumber( startA ) );
+    m_currentValue->setText( m_pView->doc()->locale()->formatNumber( m_oldSource ) );
     m_restored = false;
   }
   else
@@ -483,7 +483,7 @@ void KSpreadGoalSeekDlg::startCalc(double _start, double _goal)
     m_targetCell->calc( false );
     m_resultText->setText( i18n( "Goal seeking with cell %1 has found NO solution." ).arg( m_sourceEdit->text() ) );
     m_newValue->setText( "" );
-    m_currentValue->setText( QString::number( m_oldSource ) );
+    m_currentValue->setText( m_pView->doc()->locale()->formatNumber( m_oldSource ) );
     m_restored = true;
   }
 
