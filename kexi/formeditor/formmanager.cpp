@@ -468,5 +468,10 @@ FormManager::deleteWidgetLaterTimeout()
 	m_deleteWidgetLater_list.clear();
 }
 
+FormManager::~FormManager()
+{
+	delete m_popup;
+}
+
 #include "formmanager.moc"
 

@@ -205,6 +205,8 @@ ObjectTree::debug()
 
 ObjectTree::~ObjectTree()
 {
+	for(ObjectTreeItem *it = children()->first(); it; it = children()->next())
+		removeChild(it->name());
 }
 
 }

@@ -334,8 +334,8 @@ Form::fixPos(QDomElement el)
 
 Form::~Form()
 {
-	if(m_topTree)
-		delete m_topTree;
+	delete m_history;
+	delete m_topTree;
 	m_resizeHandles.setAutoDelete(false); // otherwise, it tries to delete widgets which doesn't exist anymore
 }
 

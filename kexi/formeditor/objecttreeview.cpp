@@ -150,6 +150,7 @@ ObjectTreeViewItem::setup()
 ObjectTreeView::ObjectTreeView(QWidget *parent, const char *name)
  : KListView(parent, name)
 {
+	m_form = 0;
 	addColumn(i18n("Name"), 130);
 	addColumn(i18n("Class"), 100);
 

@@ -173,6 +173,8 @@ InsertPageCommand::name() const
 ContainerFactory::ContainerFactory(QObject *parent, const char *name, const QStringList &)
  : KFormDesigner::WidgetFactory(parent, name)
 {
+	m_classes.setAutoDelete(true);
+
 	KFormDesigner::Widget *wBtnGroup = new KFormDesigner::Widget(this);
 	wBtnGroup->setPixmap("frame");
 	wBtnGroup->setClassName("QButtonGroup");

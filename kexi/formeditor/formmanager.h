@@ -58,7 +58,7 @@ class KFORMEDITOR_EXPORT FormManager : public QObject
 
 	public:
 		FormManager(QWidget *container, QObject *parent, const char *name);
-		~FormManager(){;}
+		~FormManager();
 
 		/*! Creates all the KAction related to widget insertion, and plug them into the KActionCollection \a parent.
 		  These actions are automatically connected to insertWidget() slot.

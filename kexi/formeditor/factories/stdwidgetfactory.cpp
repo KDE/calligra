@@ -267,6 +267,8 @@ Line::orientation() const
 StdWidgetFactory::StdWidgetFactory(QObject *parent, const char *name, const QStringList &)
  : KFormDesigner::WidgetFactory(parent, name)
 {
+	m_classes.setAutoDelete(true);
+
 	KFormDesigner::Widget *wLabel = new KFormDesigner::Widget(this);
 	wLabel->setPixmap("label");
 	wLabel->setClassName("QLabel");
