@@ -6315,7 +6315,7 @@ void KSpreadSheet::checkContentDirection( QString const & name )
     emit sig_refreshView();
 }
 
-bool KSpreadSheet::loadOasis( const QDomElement& tableElement, KoOasisStyles& oasisStyles )
+bool KSpreadSheet::loadOasis( const QDomElement& tableElement, const KoOasisStyles& oasisStyles )
 {
     if ( tableElement.hasAttribute( "table:style-name" ) )
     {
@@ -6345,7 +6345,7 @@ bool KSpreadSheet::loadOasis( const QDomElement& tableElement, KoOasisStyles& oa
         {
             if( rowElement.tagName() == "table:table-row" )
             {
-                bool b = loadCellsOasis( rowElement );
+                bool b = loadCellsOasis( rowElement,oasisStyles );
                 // TODO load cells
             }
         }
@@ -6378,10 +6378,17 @@ bool KSpreadSheet::loadOasis( const QDomElement& tableElement, KoOasisStyles& oa
     return true;
 }
 
-bool KSpreadSheet::loadCellsOasis( const QDomElement &element )
+bool KSpreadSheet::loadCellsOasis( const QDomElement &element, const KoOasisStyles& oasisStyles )
 {
     kdDebug()<<"bool KSpreadSheet::loadCellsOasis( const QDomElement &element )*****************\n";
-    //todo parse cell
+#if 0
+    KSpreadCell *cell = new KSpreadCell( this, 0, 0 );
+    if ( cell->loadOasis( e, 0, 0 ) )
+        insertCell( cell );
+    else
+        delete cell; // Allow error handling: just skip invalid cells
+#endif
+//todo parse cell
     return true;
 }
 

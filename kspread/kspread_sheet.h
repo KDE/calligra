@@ -55,6 +55,7 @@ class KPrinter;
 #include <qrect.h>
 #include <qwidget.h>
 #include <qdragobject.h>
+#include <koOasisStyles.h>
 
 #define BORDER_SPACE 1
 
@@ -277,7 +278,7 @@ public:
      */
     virtual bool loadXML( const QDomElement& );
 
-    virtual bool loadOasis( const QDomElement& table, KoOasisStyles& oasisStyles );
+    virtual bool loadOasis( const QDomElement& table, const KoOasisStyles& oasisStyles );
 
     /**
      * Saves a children
@@ -1165,7 +1166,7 @@ protected:
      */
     void changeCellTabName( QString const & old_name,QString const & new_name );
 
-    bool loadCellsOasis( const QDomElement &element );
+    bool loadCellsOasis( const QDomElement &element, const KoOasisStyles& oasisStyles );
 
     void insertChild( KSpreadChild *_child );
 

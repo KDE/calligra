@@ -46,6 +46,7 @@ class KSParseNode;
 
 #include <kspread_value.h>
 #include <kozoomhandler.h>
+#include <koOasisStyles.h>
 
 struct KSpreadValidity
 {
@@ -175,6 +176,8 @@ public:
     bool load( const QDomElement& cell, int _xshift, int _yshift, PasteMode pm = Normal,
 	       Operation op = OverWrite, bool paste = false );
 
+    bool loadOasis( const QDomElement & element, const KoOasisStyles &oasisStyles );
+
     QTime toTime(const QDomElement &element) ;
     QDate toDate(const QDomElement &element);
 
@@ -216,12 +219,12 @@ public:
      */
     void paintCell( const KoRect & rect, QPainter & painter,
                     KSpreadView * view, const KoPoint & coordinate,
-                    const QPoint & cellRef, 
+                    const QPoint & cellRef,
                     bool paintBorderRight,
                     bool paintBorderBottom,
                     bool paintBorderLeft,
                     bool paintBorderTop,
-                    QPen & rightPen, 
+                    QPen & rightPen,
                     QPen & bottomPen,
                     QPen & leftPen,
                     QPen & topPen,
@@ -346,11 +349,11 @@ public:
     //
     ////////////////////////////////
 
-    const QPen & effLeftBorderPen( int col, int row ) const; 
+    const QPen & effLeftBorderPen( int col, int row ) const;
     const QPen & effTopBorderPen( int col, int row ) const;
     const QPen & effRightBorderPen( int col, int row ) const;
     const QPen & effBottomBorderPen( int col, int row ) const;
-    const QPen & effGoUpDiagonalPen( int col, int row ) const; 
+    const QPen & effGoUpDiagonalPen( int col, int row ) const;
     const QPen & effFallDiagonalPen( int col, int row ) const;
     const QColor & effTextColor( int col, int row ) const;
 
@@ -1056,8 +1059,8 @@ private:
                              KSpreadView* view, const KoRect &cellRect,
                              const QPoint &cellRef,
                              bool paintBorderRight, bool paintBorderBottom,
-                             bool paintBorderLeft, bool paintBorderTop, 
-                             QPen & rightPen, QPen & bottomPen, 
+                             bool paintBorderLeft, bool paintBorderTop,
+                             QPen & rightPen, QPen & bottomPen,
                              QPen & leftPen, QPen & topPen );
     void paintCellDiagonalLines( QPainter& painter, const KoRect &cellRect,
                                  const QPoint &cellRef );

@@ -2511,7 +2511,7 @@ void KSpreadCell::paintDefaultBorders( QPainter& painter, const KoRect &rect,
     }
 
     painter.setPen( QPen( table()->doc()->gridColor(), 1, Qt::SolidLine ) );
-    
+
     //If we are on paper printout, we limit the length of the lines
     //On paper, we always have full cells, on screen not
     if ( painter.device()->isExtDev() )
@@ -2547,7 +2547,7 @@ void KSpreadCell::paintDefaultBorders( QPainter& painter, const KoRect &rect,
     }
 
     painter.setPen( QPen( table()->doc()->gridColor(), 1, Qt::SolidLine ) );
-    
+
     //If we are on paper printout, we limit the length of the lines
     //On paper, we always have full cells, on screen not
     if ( painter.device()->isExtDev() )
@@ -2583,7 +2583,7 @@ void KSpreadCell::paintDefaultBorders( QPainter& painter, const KoRect &rect,
     }
 
     painter.setPen( QPen( table()->doc()->gridColor(), 1, Qt::SolidLine ) );
-    
+
     //If we are on paper printout, we limit the length of the lines
     //On paper, we always have full cells, on screen not
     if ( painter.device()->isExtDev() )
@@ -4492,7 +4492,7 @@ void KSpreadCell::checkTextInput()
     {
         if(m_pTable->getFirstLetterUpper() && !m_strText.isEmpty())
             m_strText=m_strText[0].upper()+m_strText.right(m_strText.length()-1);
-        
+
         m_value.setValue(m_strText);
         //setFormatType(Text_format); // shouldn't be necessary. Won't apply with StringData anyway.
         return;
@@ -4965,6 +4965,12 @@ bool KSpreadCell::saveCellResult( QDomDocument& doc, QDomElement& result,
   result.appendChild( doc.createTextNode( str ) );
 
   return true; /* really isn't much of a way for this function to fail */
+}
+
+bool KSpreadCell::loadOasis( const QDomElement &element, const KoOasisStyles& oasisStyles )
+{
+    //todo load cell
+    return true;
 }
 
 bool KSpreadCell::load( const QDomElement & cell, int _xshift, int _yshift,
