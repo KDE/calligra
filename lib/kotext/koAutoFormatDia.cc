@@ -198,7 +198,7 @@ void KoAutoFormatDia::setupTab1()
     ( void )new QWidget( tab1 );
 
     cbDetectUrl=new QCheckBox( tab1 );
-    cbDetectUrl->setText( i18n( "Auto detect url" ) );
+    cbDetectUrl->setText( i18n( "Auto detect URL" ) );
     cbDetectUrl->resize( cbDetectUrl->sizeHint() );
     cbDetectUrl->setChecked( m_autoFormat.getConfigAutoDetectUrl());
     ( void )new QWidget( tab1 );
