@@ -680,17 +680,18 @@ KWFrame * KWFrameSet::frameByBorder( const QPoint & nPoint )
     {
         QRect outerRect( frameIt.current()->outerRect() );
         // Give the user a bit of margin for clicking on it :)
-        outerRect.rLeft() -= 1;
-        outerRect.rTop() -= 1;
-        outerRect.rRight() += 1;
-        outerRect.rBottom() += 1;
+        const int margin = 2;
+        outerRect.rLeft() -= margin;
+        outerRect.rTop() -= margin;
+        outerRect.rRight() += margin;
+        outerRect.rBottom() += margin;
         if ( outerRect.contains( nPoint ) )
         {
             QRect innerRect( m_doc->zoomRect( *frameIt.current() ) );
-            innerRect.rLeft() += 1;
-            innerRect.rTop() += 1;
-            innerRect.rRight() -= 1;
-            innerRect.rBottom() -= 1;
+            innerRect.rLeft() += margin;
+            innerRect.rTop() += margin;
+            innerRect.rRight() -= margin;
+            innerRect.rBottom() -= margin;
             if ( !innerRect.contains( nPoint ) )
                 return frameIt.current();
         }
