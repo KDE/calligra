@@ -108,6 +108,9 @@
   <Action name="formula_typeright"/>
   <Separator/>
   <Action name="formula_textsize"/>
+  <Separator/>
+  <Action name="formula_format_bold"/>
+  <Action name="formula_format_italic"/>
  </ToolBar>
 <!--
  <ToolBar name="Font"><Text>Font</Text>

@@ -34,7 +34,7 @@
 KFORMULA_NAMESPACE_BEGIN
 
 TextElement::TextElement(QChar ch, bool beSymbol, BasicElement* parent)
-        : BasicElement(parent), character(ch), symbol(beSymbol)
+        : BasicElement(parent), character(ch), symbol(beSymbol), charStyle( anyChar )
 {
 }
 
@@ -178,13 +178,21 @@ void TextElement::draw( QPainter& painter, const LuPixelRect& r,
 }
 
 
+void TextElement::setCharStyle( ElementStyleList& list,
+                                CharStyle cs )
+{
+    list.push_back( ElementStylePair( this, charStyle ) );
+    charStyle = cs;
+    formula()->changed();
+}
+
 QChar TextElement::getRealCharacter()
 {
     if ( !isSymbol() ) {
         return character;
     }
     else {
-        return getSymbolTable().character(character);
+        return getSymbolTable().character(character, charStyle);
     }
 }
 
@@ -192,14 +200,36 @@ QChar TextElement::getRealCharacter()
 QFont TextElement::getFont(const ContextStyle& context)
 {
     if ( !isSymbol() ) {
+        QFont font;
         if (getElementType() != 0) {
-            return getElementType()->getFont(context);
+            font = getElementType()->getFont(context);
         }
         else {
-            return context.getDefaultFont();
+            font = context.getDefaultFont();
         }
+        switch ( charStyle ) {
+        case anyChar:
+            break;
+        case normalChar:
+            font.setItalic( false );
+            font.setBold( false );
+            break;
+        case boldChar:
+            font.setItalic( false );
+            font.setBold( true );
+            break;
+        case italicChar:
+            font.setItalic( true );
+            font.setBold( false );
+            break;
+        case boldItalicChar:
+            font.setItalic( true );
+            font.setBold( true );
+            break;
+        }
+        return font;
     }
-    return context.symbolTable().font(character);
+    return context.symbolTable().font( character, charStyle );
 }
 
 
@@ -227,6 +257,14 @@ void TextElement::writeDom(QDomElement& element)
     BasicElement::writeDom(element);
     element.setAttribute("CHAR", QString(character));
     if (symbol) element.setAttribute("SYMBOL", "3");
+
+    switch ( charStyle ) {
+    case anyChar: break;
+    case normalChar: element.setAttribute("style", "normal"); break;
+    case boldChar: element.setAttribute("style", "bold"); break;
+    case italicChar: element.setAttribute("style", "italic"); break;
+    case boldItalicChar: element.setAttribute("style", "bolditalic"); break;
+    }
 }
 
 /**
@@ -266,6 +304,23 @@ bool TextElement::readAttributesFromDom(QDomElement& element)
             }
         }
         symbol = symbolInt != 0;
+    }
+
+    QString styleStr = element.attribute("style");
+    if ( styleStr == QString( "normal" ) ) {
+        charStyle = normalChar;
+    }
+    else if ( styleStr == QString( "bold" ) ) {
+        charStyle = boldChar;
+    }
+    else if ( styleStr == QString( "italic" ) ) {
+        charStyle = italicChar;
+    }
+    else if ( styleStr == QString( "bolditalic" ) ) {
+        charStyle = boldItalicChar;
+    }
+    else {
+        charStyle = anyChar;
     }
     return true;
 }

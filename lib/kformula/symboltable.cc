@@ -347,20 +347,48 @@ QString SymbolTable::name( QChar symbol ) const
 
 QFont SymbolTable::font( QChar symbol, CharStyle style ) const
 {
-    char f = unicodeTable( style )[symbol].font();
-    return fontTable[f];
+    const UnicodeTable& table = unicodeTable( style );
+    if ( table.contains( symbol ) ) {
+        char f = table[symbol].font();
+        return fontTable[f];
+    }
+    if ( ( style != normalChar ) && ( style != anyChar ) ) {
+        if ( normalChars.contains( symbol ) ) {
+            char f = normalChars[symbol].font();
+            return fontTable[f];
+        }
+    }
+    return QFont();
 }
 
 
 uchar SymbolTable::character( QChar symbol, CharStyle style ) const
 {
-    return unicodeTable( style )[symbol].character();
+    const UnicodeTable& table = unicodeTable( style );
+    if ( table.contains( symbol ) ) {
+        return table[symbol].character();
+    }
+    if ( ( style != normalChar ) && ( style != anyChar ) ) {
+        if ( normalChars.contains( symbol ) ) {
+            return normalChars[symbol].character();
+        }
+    }
+    return 0;
 }
 
 
 CharClass SymbolTable::charClass( QChar symbol, CharStyle style ) const
 {
-    return unicodeTable( style )[symbol].charClass();
+    const UnicodeTable& table = unicodeTable( style );
+    if ( table.contains( symbol ) ) {
+        return table[symbol].charClass();
+    }
+    if ( ( style != normalChar ) && ( style != anyChar ) ) {
+        if ( normalChars.contains( symbol ) ) {
+            return normalChars[symbol].charClass();
+        }
+    }
+    return ORDINARY;
 }
 
 

@@ -164,6 +164,8 @@ public:
     KSelectAction* getRightBracketAction();
     KSelectAction* getSymbolNamesAction();
     KToggleAction* getSyntaxHighlightingAction();
+    KToggleAction* getFormatBoldAction();
+    KToggleAction* getFormatItalicAction();
 
     SymbolType leftBracketChar() const;
     SymbolType rightBracketChar() const;
@@ -221,6 +223,8 @@ public slots:
     void removeRow();
 
     void toggleSyntaxHighlighting();
+    void textBold();
+    void textItalic();
     void delimiterLeft();
     void delimiterRight();
     void symbolNames();

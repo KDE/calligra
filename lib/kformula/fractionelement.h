@@ -77,6 +77,8 @@ public:
                        ContextStyle::IndexStyle istyle,
                        const LuPixelPoint& parentOrigin );
 
+    virtual void setCharStyle( ElementStyleList& list, CharStyle cs );
+
     /**
      * Enters this element while moving to the left starting inside
      * the element `from'. Searches for a cursor position inside

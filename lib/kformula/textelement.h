@@ -86,6 +86,8 @@ public:
                        ContextStyle::IndexStyle istyle,
                        const LuPixelPoint& parentOrigin );
 
+    virtual void setCharStyle( ElementStyleList& list, CharStyle cs );
+
     /**
      * Moves the cursor away from the given child. The cursor is
      * guaranteed to be inside this element.
@@ -160,6 +162,11 @@ private:
      * Whether this character is a symbol.
      */
     bool symbol;
+
+    /**
+     * The attribute of the char. "anyChar" means leave the default.
+     */
+    CharStyle charStyle;
 };
 
 

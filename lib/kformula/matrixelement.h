@@ -83,6 +83,7 @@ public:
                        ContextStyle::IndexStyle istyle,
                        const LuPixelPoint& parentOrigin );
 
+    virtual void setCharStyle( ElementStyleList& list, CharStyle cs );
 
     // navigation
     //
@@ -310,6 +311,8 @@ public:
                        ContextStyle::TextStyle tstyle,
                        ContextStyle::IndexStyle istyle,
                        const LuPixelPoint& parentOrigin );
+
+    virtual void setCharStyle( ElementStyleList& list, CharStyle cs );
 
     virtual void insert(FormulaCursor*, QPtrList<BasicElement>&, Direction);
     virtual void remove(FormulaCursor*, QPtrList<BasicElement>&, Direction);

@@ -257,6 +257,15 @@ void RootElement::draw( QPainter& painter, const LuPixelRect& r,
                       style.layoutUnitToPixelY( y+unit+unit/2 ) );
 }
 
+
+void RootElement::setCharStyle( ElementStyleList& list, CharStyle cs )
+{
+    content->setCharStyle( list, cs );
+    if (hasIndex()) {
+        index->setCharStyle( list, cs );
+    }
+}
+
 /**
  * Enters this element while moving to the left starting inside
  * the element `from'. Searches for a cursor position inside

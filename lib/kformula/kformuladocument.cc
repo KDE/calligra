@@ -93,6 +93,9 @@ struct Document::Document_Impl {
     KAction* removeRowAction;
 
     KToggleAction* syntaxHighlightingAction;
+    KToggleAction* formatBoldAction;
+    KToggleAction* formatItalicAction;
+
     KSelectAction* leftBracket;
     KSelectAction* rightBracket;
     SymbolAction* symbolNamesAction;
@@ -191,6 +194,8 @@ KSelectAction* Document::getLeftBracketAction()  { return impl->leftBracket; }
 KSelectAction* Document::getRightBracketAction() { return impl->rightBracket; }
 KSelectAction* Document::getSymbolNamesAction()  { return impl->symbolNamesAction; }
 KToggleAction* Document::getSyntaxHighlightingAction() { return impl->syntaxHighlightingAction; }
+KToggleAction* Document::getFormatBoldAction()   { return impl->formatBoldAction; }
+KToggleAction* Document::getFormatItalicAction() { return impl->formatItalicAction; }
 
 Container* Document::formula() const { return impl->formula; }
 
@@ -550,6 +555,15 @@ void Document::createActions(KActionCollection* collection)
                                                  0,
                                                  this, SLOT(toggleSyntaxHighlighting()),
                                                  collection, "formula_syntaxhighlighting");
+
+    impl->formatBoldAction = new KToggleAction( i18n( "&Bold" ), "text_bold",
+                                                0, //CTRL + Key_B,
+                                                this, SLOT( textBold() ),
+                                                collection, "formula_format_bold" );
+    impl->formatItalicAction = new KToggleAction( i18n( "&Italic" ), "text_italic",
+                                                  0, //CTRL + Key_I,
+                                                  this, SLOT( textItalic() ),
+                                                  collection, "formula_format_italic" );
 
     QStringList delimiter;
     delimiter.append(QString("("));
@@ -943,6 +957,32 @@ void Document::toggleSyntaxHighlighting()
     // Only to notify all views. We don't expect to get new values.
     // Here is a really bad bug.
     recalc();
+}
+
+void Document::textBold()
+{
+    if ( hasFormula() ) {
+        //FormulaCursor* cursor = formula()->activeCursor();
+        //formula()->setCharStyle( getFormatBoldAction()->isChecked(),
+        //                         getFormatItalicAction()->isChecked() );
+        CharStyleRequest r( req_formatBold,
+                            getFormatBoldAction()->isChecked(),
+                            getFormatItalicAction()->isChecked() );
+        formula()->performRequest( &r );
+    }
+}
+
+void Document::textItalic()
+{
+    if ( hasFormula() ) {
+        //FormulaCursor* cursor = formula()->activeCursor();
+        //formula()->setCharStyle( getFormatBoldAction()->isChecked(),
+        //                         getFormatItalicAction()->isChecked() );
+        CharStyleRequest r( req_formatItalic,
+                            getFormatBoldAction()->isChecked(),
+                            getFormatItalicAction()->isChecked() );
+        formula()->performRequest( &r );
+    }
 }
 
 void Document::delimiterLeft()

@@ -78,6 +78,7 @@ public:
                        ContextStyle::IndexStyle istyle,
                        const LuPixelPoint& parentOrigin );
 
+    virtual void setCharStyle( ElementStyleList& list, CharStyle cs );
 
     // navigation
     //

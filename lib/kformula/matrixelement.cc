@@ -505,6 +505,19 @@ void MatrixElement::draw( QPainter& painter, const LuPixelRect& rect,
 }
 
 
+void MatrixElement::setCharStyle( ElementStyleList& list, CharStyle cs )
+{
+    uint rows = getRows();
+    uint columns = getColumns();
+
+    for (uint r = 0; r < rows; r++) {
+        for (uint c = 0; c < columns; c++) {
+            getElement(r, c)->setCharStyle( list, cs );
+        }
+    }
+}
+
+
 // navigation
 //
 // The elements are responsible to handle cursor movement themselves.
@@ -1566,6 +1579,16 @@ void MultilineElement::draw( QPainter& painter, const LuPixelRect& r,
     for ( uint i = 0; i < count; ++i ) {
         MultilineSequenceElement* line = content.at(i);
         line->draw( painter, r, context, tstyle, istyle, myPos );
+    }
+}
+
+
+void MultilineElement::setCharStyle( ElementStyleList& list, CharStyle cs )
+{
+    uint count = content.count();
+    for ( uint i = 0; i < count; ++i ) {
+        MultilineSequenceElement* line = content.at(i);
+        line->setCharStyle( list, cs );
     }
 }
 

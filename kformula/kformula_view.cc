@@ -213,6 +213,12 @@ void KFormulaPartView::cursorChanged(bool visible, bool selecting)
         int y = formulaWidget->getCursorPoint().y();
         scrollview->ensureVisible(x, y);
     }
+
+    if ( !selecting ) {
+        KFormula::Document* doc = document()->getDocument();
+        doc->getFormatBoldAction()->setChecked( false );
+        doc->getFormatItalicAction()->setChecked( false );
+    }
 }
 
 void KFormulaPartView::formulaString()

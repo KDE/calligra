@@ -245,6 +245,17 @@ void SequenceElement::draw( QPainter& painter, const LuPixelRect& r,
 //                       context.layoutUnitToPixelY( parentOrigin.y() + getY() + getBaseline() ) );
 }
 
+
+void SequenceElement::setCharStyle( ElementStyleList& list, CharStyle cs )
+{
+    QPtrListIterator<BasicElement> it( children );
+    for ( ; it.current(); ++it ) {
+        BasicElement* child = it.current();
+        child->setCharStyle( list, cs );
+    }
+}
+
+
 void SequenceElement::drawEmptyRect( QPainter& painter, const ContextStyle& context,
                                      const LuPixelPoint& upperLeft )
 {
@@ -994,6 +1005,23 @@ KCommand* SequenceElement::buildCommand( Container* container, Request* request 
     case req_paste:
     case req_copy:
     case req_cut:
+        break;
+    case req_formatBold:
+    case req_formatItalic: {
+        FormulaCursor* cursor = container->activeCursor();
+        if ( cursor->isSelection() ) {
+            CharStyleRequest* csr = static_cast<CharStyleRequest*>( request );
+            CharStyle cs = normalChar;
+            if ( csr->bold() ) cs = static_cast<CharStyle>( cs | boldChar );
+            if ( csr->italic() ) cs = static_cast<CharStyle>( cs | italicChar );
+            CharStyleCommand* cmd = new CharStyleCommand( cs, i18n( "Change Char Style" ), container );
+            int end = cursor->getSelectionEnd();
+            for ( int i = cursor->getSelectionStart(); i<end; ++i ) {
+                cmd->addElement( children.at( i ) );
+            }
+            return cmd;
+        }
+    }
         break;
     default:
         break;

@@ -348,4 +348,35 @@ void KFCChangeBaseSize::unexecute()
     m_document->recalc();
 }
 
+
+
+CharStyleCommand::CharStyleCommand( CharStyle cs, const QString& name, Container* document )
+    : Command( name, document ), charStyle( cs )
+{
+    elementList.setAutoDelete( false );
+}
+
+void CharStyleCommand::execute()
+{
+    styleList.clear();
+    uint count = elementList.count();
+    for ( uint i=0; i<count; ++i ) {
+        elementList.at( i )->setCharStyle( styleList, charStyle );
+    }
+    testDirty();
+}
+
+void CharStyleCommand::unexecute()
+{
+    BasicElement::ElementStyleList tmp;
+    for ( BasicElement::ElementStyleList::iterator iter = styleList.begin();
+          iter != styleList.end();
+          ++iter ) {
+        //BasicElement::ElementStylePair pair = *iter;
+        ( *iter ).first->setCharStyle( tmp, ( *iter ).second );
+    }
+    testDirty();
+}
+
+
 KFORMULA_NAMESPACE_END

@@ -131,11 +131,11 @@ typedef CharClass TokenType;
 
 
 enum CharStyle {
-    anyChar,
-    normalChar,
-    boldChar,
-    italicChar,
-    boldItalicChar
+    normalChar = 0,
+    boldChar = 1,
+    italicChar = 2,
+    boldItalicChar = 3,
+    anyChar = 0xff
 };
 
 
@@ -235,7 +235,9 @@ enum RequestID {
     req_remove,
     req_removeEnclosing,
     req_removeColumn,
-    req_removeRow
+    req_removeRow,
+    req_formatBold,
+    req_formatItalic
 };
 
 
@@ -307,6 +309,16 @@ public:
     uint rows() const { return m_rows; }
     uint columns() const { return m_columns; }
 };
+
+class CharStyleRequest : public Request {
+    bool m_bold;
+    bool m_italic;
+public:
+    CharStyleRequest( RequestID id, bool bold, bool italic ) : Request( id ), m_bold( bold ), m_italic( italic ) {}
+    bool bold() const { return m_bold; }
+    bool italic() const { return m_italic; }
+};
+
 
 KFORMULA_NAMESPACE_END
 

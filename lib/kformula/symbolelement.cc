@@ -304,6 +304,17 @@ void SymbolElement::draw( QPainter& painter, const LuPixelRect& r,
 }
 
 
+void SymbolElement::setCharStyle( ElementStyleList& list, CharStyle cs )
+{
+    content->setCharStyle( list, cs );
+    if ( hasUpper() ) {
+        upper->setCharStyle( list, cs );
+    }
+    if ( hasLower() ) {
+        lower->setCharStyle( list, cs );
+    }
+}
+
 // navigation
 //
 // The elements are responsible to handle cursor movement themselves.

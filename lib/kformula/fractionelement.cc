@@ -154,6 +154,12 @@ void FractionElement::draw( QPainter& painter, const LuPixelRect& r,
 }
 
 
+void FractionElement::setCharStyle( ElementStyleList& list, CharStyle cs )
+{
+    numerator->setCharStyle( list, cs );
+    denominator->setCharStyle( list, cs );
+}
+
 /**
  * Enters this element while moving to the left starting inside
  * the element `from'. Searches for a cursor position inside

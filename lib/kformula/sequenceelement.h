@@ -99,6 +99,8 @@ public:
                        ContextStyle::IndexStyle istyle,
                        const LuPixelPoint& parentOrigin );
 
+    virtual void setCharStyle( ElementStyleList& list, CharStyle cs );
+
     virtual void drawEmptyRect( QPainter& painter, const ContextStyle& context,
                                 const LuPixelPoint& upperLeft );
 

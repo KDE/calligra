@@ -76,6 +76,11 @@ BasicElement* SingleContentElement::goToPos( FormulaCursor* cursor, bool& handle
     return 0;
 }
 
+void SingleContentElement::setCharStyle( ElementStyleList& list, CharStyle cs )
+{
+    content->setCharStyle( list, cs );
+}
+
 void SingleContentElement::moveLeft(FormulaCursor* cursor, BasicElement* from)
 {
     if (cursor->isSelectionMode()) {

@@ -491,6 +491,30 @@ void IndexElement::draw( QPainter& painter, const LuPixelRect& r,
 }
 
 
+void IndexElement::setCharStyle( ElementStyleList& list, CharStyle cs )
+{
+    content->setCharStyle( list, cs );
+    if (hasUpperLeft()) {
+        upperLeft->setCharStyle( list, cs );
+    }
+    if (hasUpperMiddle()) {
+        upperMiddle->setCharStyle( list, cs );
+    }
+    if (hasUpperRight()) {
+        upperRight->setCharStyle( list, cs );
+    }
+    if (hasLowerLeft()) {
+        lowerLeft->setCharStyle( list, cs );
+    }
+    if (hasLowerMiddle()) {
+        lowerMiddle->setCharStyle( list, cs );
+    }
+    if (hasLowerRight()) {
+        lowerRight->setCharStyle( list, cs );
+    }
+}
+
+
 // navigation
 //
 // The elements are responsible to handle cursor movement themselves.

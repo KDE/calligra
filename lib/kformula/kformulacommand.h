@@ -377,6 +377,29 @@ private:
     int m_oldSize;
 };
 
+
+/**
+ * Changes the char style of a number of elements an their children.
+ */
+class CharStyleCommand : public Command {
+public:
+    CharStyleCommand( CharStyle cs, const QString& name, Container* document );
+
+    virtual void execute();
+    virtual void unexecute();
+
+    /**
+     * Collects all elements that are to be changend.
+     */
+    void addElement( BasicElement* element ) { elementList.append( element ); }
+
+private:
+    BasicElement::ElementStyleList styleList;
+    QPtrList<BasicElement> elementList;
+    CharStyle charStyle;
+};
+
+
 KFORMULA_NAMESPACE_END
 
 #endif // KFORMULACOMMAND_H
