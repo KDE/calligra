@@ -28,18 +28,18 @@ TKSelectColorAction::TKSelectColorAction( const QString& text, Type type, QObjec
   setText(text);
   iconColorRect = QRect(0,12,16,4);
 
-  m_pStandartColor = new TKColorPanel();
+  m_pStandardColor = new TKColorPanel();
   m_pRecentColor = new TKColorPanel();
 
-  connect(m_pStandartColor,SIGNAL(colorSelected(const QColor&)),SLOT(panelColorSelected(const QColor&)));
-  connect(m_pStandartColor,SIGNAL(reject()),SLOT(panelReject()));
+  connect(m_pStandardColor,SIGNAL(colorSelected(const QColor&)),SLOT(panelColorSelected(const QColor&)));
+  connect(m_pStandardColor,SIGNAL(reject()),SLOT(panelReject()));
   connect(m_pRecentColor,SIGNAL(colorSelected(const QColor&)),SLOT(panelColorSelected(const QColor&)));
   connect(m_pRecentColor,SIGNAL(reject()),SLOT(panelReject()));
 
   m_pRecentColor->clear();
 
   m_pMenu = new TKColorPopupMenu();
-  m_pMenu->insertItem(m_pStandartColor);
+  m_pMenu->insertItem(m_pStandardColor);
   m_pMenu->insertSeparator();
   m_pMenu->insertItem(m_pRecentColor);
   m_pMenu->insertSeparator();
@@ -66,7 +66,7 @@ TKSelectColorAction::TKSelectColorAction( const QString& text, Type type, QObjec
       break;
   }
 
-  connect(m_pStandartColor,SIGNAL(sizeChanged()),m_pMenu,SLOT(updateItemSize()));
+  connect(m_pStandardColor,SIGNAL(sizeChanged()),m_pMenu,SLOT(updateItemSize()));
   connect(m_pRecentColor,SIGNAL(sizeChanged()),m_pMenu,SLOT(updateItemSize()));
 }
 
@@ -115,7 +115,7 @@ void TKSelectColorAction::setCurrentColor( const QColor& color )
 
 void TKSelectColorAction::setActiveColor( const QColor& color )
 {
-  m_pStandartColor->setActiveColor(color);
+  m_pStandardColor->setActiveColor(color);
 }
 
 void TKSelectColorAction::selectColorDialog()
@@ -156,6 +156,7 @@ TKColorPanel::TKColorPanel( QWidget* parent, const char* name  )
   m_pLayout = 0L;
   setNumCols(15);
 
+  // For all i18n gurus: I don't think we can translate these color names, can we? (Werner)
   insertColor(qRgb(     255     ,       0       ,       0       ),      "Red");
   insertColor(qRgb(	255	,	165	,	0	),	"Orange");
   insertColor(qRgb(	255	,	0	,	255	),	"Magenta");
@@ -303,145 +304,6 @@ TKColorPanel::TKColorPanel( QWidget* parent, const char* name  )
   insertColor(qRgb(	25	,	25	,	112	),	"Midnight Blue");
   insertColor(qRgb(	0	,	0	,	205	),	"Medium Blue");
   insertColor(qRgb(	0	,	0	,	128	),	"Navy");
-
-
-/*
-  insertColor(qRgb(	255	,	255	,	255	),	"white");
-  insertColor(qRgb(	255	,	255	,	240	),	"ivory");
-  insertColor(qRgb(	255	,	250	,	250	),	"snow");
-  insertColor(qRgb(	245	,	255	,	250	),	"mintcream");
-  insertColor(qRgb(	255	,	250	,	240	),	"floralwhite");
-  insertColor(qRgb(	255	,	255	,	224	),	"lightyellow");
-  insertColor(qRgb(	240	,	255	,	255	),	"azure");
-  insertColor(qRgb(	248	,	248	,	255	),	"ghostwhite");
-  insertColor(qRgb(	240	,	255	,	240	),	"honeydew");
-  insertColor(qRgb(	255	,	245	,	238	),	"seashell");
-  insertColor(qRgb(	240	,	248	,	255	),	"aliceblue");
-  insertColor(qRgb(	255	,	248	,	220	),	"cornsilk");
-  insertColor(qRgb(	255	,	240	,	245	),	"lavenderblush");
-  insertColor(qRgb(	253	,	245	,	230	),	"oldlace");
-  insertColor(qRgb(	245	,	245	,	245	),	"whitesmoke");
-  insertColor(qRgb(	255	,	250	,	205	),	"lemonchiffon");
-  insertColor(qRgb(	224	,	255	,	255	),	"lightcyan");
-  insertColor(qRgb(	250	,	250	,	210	),	"lightgoldenrodyellow");
-  insertColor(qRgb(	250	,	240	,	230	),	"linen");
-  insertColor(qRgb(	245	,	245	,	220	),	"beige");
-  insertColor(qRgb(	255	,	239	,	213	),	"papayawhip");
-  insertColor(qRgb(	255	,	235	,	205	),	"blanchedalmond");
-  insertColor(qRgb(	250	,	235	,	215	),	"antiquewhite");
-  insertColor(qRgb(	255	,	228	,	225	),	"mistyrose");
-  insertColor(qRgb(	230	,	230	,	250	),	"lavender");
-  insertColor(qRgb(	255	,	228	,	196	),	"bisque");
-  insertColor(qRgb(	255	,	228	,	181	),	"moccasin");
-  insertColor(qRgb(	255	,	222	,	173	),	"navajowhite");
-  insertColor(qRgb(	255	,	218	,	185	),	"peachpuff");
-  insertColor(qRgb(	238	,	232	,	170	),	"palegoldenrod");
-  insertColor(qRgb(	245	,	222	,	179	),	"wheat");
-  insertColor(qRgb(	220	,	220	,	220	),	"gainsboro");
-  insertColor(qRgb(	240	,	230	,	140	),	"khaki");
-  insertColor(qRgb(	175	,	238	,	238	),	"paleturquoise");
-  insertColor(qRgb(	255	,	192	,	203	),	"pink");
-  insertColor(qRgb(	255	,	255	,	0	),	"yellow");
-  insertColor(qRgb(	238	,	221	,	130	),	"lightgoldenrod");
-  insertColor(qRgb(	211	,	211	,	211	),	"lightgrey");
-  insertColor(qRgb(	255	,	182	,	193	),	"lightpink");
-  insertColor(qRgb(	176	,	224	,	230	),	"powderblue");
-  insertColor(qRgb(	127	,	255	,	212	),	"aquamarine");
-  insertColor(qRgb(	216	,	191	,	216	),	"thistle");
-  insertColor(qRgb(	173	,	216	,	230	),	"lightblue");
-  insertColor(qRgb(	152	,	251	,	152	),	"palegreen");
-  insertColor(qRgb(	255	,	215	,	0	),	"gold");
-  insertColor(qRgb(	173	,	255	,	47	),	"greenyellow");
-  insertColor(qRgb(	176	,	196	,	222	),	"lightsteelblue");
-  insertColor(qRgb(	144	,	238	,	144	),	"lightgreen");
-  insertColor(qRgb(	221	,	160	,	221	),	"plum");
-  insertColor(qRgb(	190	,	190	,	190	),	"gray");
-  insertColor(qRgb(	222	,	184	,	135	),	"burlywood");
-  insertColor(qRgb(	135	,	206	,	250	),	"lightskyblue");
-  insertColor(qRgb(	255	,	160	,	122	),	"lightsalmon");
-  insertColor(qRgb(	135	,	206	,	235	),	"skyblue");
-  insertColor(qRgb(	210	,	180	,	140	),	"tan");
-  insertColor(qRgb(	238	,	130	,	238	),	"violet");
-  insertColor(qRgb(	244	,	164	,	96	),	"sandybrown");
-  insertColor(qRgb(	233	,	150	,	122	),	"darksalmon");
-  insertColor(qRgb(	189	,	183	,	107	),	"darkkhaki");
-  insertColor(qRgb(	127	,	255	,	0	),	"chartreuse");
-  insertColor(qRgb(	255	,	165	,	0	),	"orange");
-  insertColor(qRgb(	169	,	169	,	169	),	"darkgray");
-  insertColor(qRgb(	124	,	252	,	0	),	"lawngreen");
-  insertColor(qRgb(	255	,	105	,	180	),	"hotpink");
-  insertColor(qRgb(	250	,	128	,	114	),	"salmon");
-  insertColor(qRgb(	0	,	255	,	255	),	"cyan");
-  insertColor(qRgb(	240	,	128	,	128	),	"lightcoral");
-  insertColor(qRgb(	64	,	224	,	208	),	"turquoise");
-  insertColor(qRgb(	143	,	188	,	143	),	"darkseagreen");
-  insertColor(qRgb(	218	,	112	,	214	),	"orchid");
-  insertColor(qRgb(	102	,	205	,	170	),	"mediumaquamarine");
-  insertColor(qRgb(	255	,	127	,	80	),	"coral");
-  insertColor(qRgb(	154	,	205	,	50	),	"yellowgreen");
-  insertColor(qRgb(	218	,	165	,	32	),	"goldenrod");
-  insertColor(qRgb(	72	,	209	,	204	),	"mediumturquoise");
-  insertColor(qRgb(	188	,	143	,	143	),	"rosybrown");
-  insertColor(qRgb(	255	,	140	,	0	),	"darkorange");
-  insertColor(qRgb(	219	,	112	,	147	),	"palevioletred");
-  insertColor(qRgb(	0	,	250	,	154	),	"mediumspringgreen");
-  insertColor(qRgb(	255	,	99	,	71	),	"tomato");
-  insertColor(qRgb(	0	,	255	,	127	),	"springgreen");
-  insertColor(qRgb(	205	,	133	,	63	),	"peru");
-  insertColor(qRgb(	100	,	149	,	237	),	"cornflowerblue");
-  insertColor(qRgb(	132	,	112	,	255	),	"lightslateblue");
-  insertColor(qRgb(	147	,	112	,	219	),	"mediumpurple");
-  insertColor(qRgb(	186	,	85	,	211	),	"mediumorchid");
-  insertColor(qRgb(	95	,	158	,	160	),	"cadetblue");
-  insertColor(qRgb(	0	,	206	,	209	),	"darkturquoise");
-  insertColor(qRgb(	0	,	191	,	255	),	"deepskyblue");
-  insertColor(qRgb(	119	,	136	,	153	),	"lightslategrey");
-  insertColor(qRgb(	184	,	134	,	11	),	"darkgoldenrod");
-  insertColor(qRgb(	123	,	104	,	238	),	"mediumslateblue");
-  insertColor(qRgb(	205	,	92	,	92	),	"indianred");
-  insertColor(qRgb(	210	,	105	,	30	),	"chocolate");
-  insertColor(qRgb(	60	,	179	,	113	),	"mediumseagreen");
-  insertColor(qRgb(	0	,	255	,	0	),	"green");
-  insertColor(qRgb(	50	,	205	,	50	),	"limegreen");
-  insertColor(qRgb(	255	,	0	,	255	),	"magenta");
-  insertColor(qRgb(	32	,	178	,	170	),	"lightseagreen");
-  insertColor(qRgb(	112	,	128	,	144	),	"slategray");
-  insertColor(qRgb(	30	,	144	,	255	),	"dodgerblue");
-  insertColor(qRgb(	255	,	69	,	0	),	"orangered");
-  insertColor(qRgb(	255	,	20	,	147	),	"deeppink");
-  insertColor(qRgb(	70	,	130	,	180	),	"steelblue");
-  insertColor(qRgb(	106	,	90	,	205	),	"slateblue");
-  insertColor(qRgb(	107	,	142	,	35	),	"olivedrab");
-  insertColor(qRgb(	65	,	105	,	225	),	"royalblue");
-  insertColor(qRgb(	208	,	32	,	144	),	"violetred");
-  insertColor(qRgb(	153	,	50	,	204	),	"darkorchid");
-  insertColor(qRgb(	160	,	32	,	240	),	"purple");
-  insertColor(qRgb(	105	,	105	,	105	),	"dimgray");
-  insertColor(qRgb(	138	,	43	,	226	),	"blueviolet");
-  insertColor(qRgb(	160	,	82	,	45	),	"sienna");
-  insertColor(qRgb(	199	,	21	,	133	),	"mediumvioletred");
-  insertColor(qRgb(	176	,	48	,	96	),	"maroon");
-  insertColor(qRgb(	46	,	139	,	87	),	"seagreen");
-  insertColor(qRgb(	0	,	139	,	139	),	"darkcyan");
-  insertColor(qRgb(	85	,	107	,	47	),	"darkolivegreen");
-  insertColor(qRgb(	255	,	0	,	0	),	"red");
-  insertColor(qRgb(	34	,	139	,	34	),	"forestgreen");
-  insertColor(qRgb(	139	,	69	,	19	),	"saddlebrown");
-  insertColor(qRgb(	165	,	42	,	42	),	"brown");
-  insertColor(qRgb(	148	,	0	,	211	),	"darkviolet");
-  insertColor(qRgb(	178	,	34	,	34	),	"firebrick");
-  insertColor(qRgb(	72	,	61	,	139	),	"darkslateblue");
-  insertColor(qRgb(	139	,	0	,	139	),	"darkmagenta");
-  insertColor(qRgb(	47	,	79	,	79	),	"darkslategray");
-  insertColor(qRgb(	0	,	100	,	0	),	"darkgreen");
-  insertColor(qRgb(	139	,	0	,	0	),	"darkred");
-  insertColor(qRgb(	0	,	0	,	255	),	"blue");
-  insertColor(qRgb(	25	,	25	,	112	),	"midnightblue");
-  insertColor(qRgb(	0	,	0	,	205	),	"mediumblue");
-  insertColor(qRgb(	0	,	0	,	139	),	"darkblue");
-  insertColor(qRgb(	0	,	0	,	128	),	"navy");
-  insertColor(qRgb(	0	,	0	,	0	),	"black");
-*/
 }
 
 void TKColorPanel::setNumCols( int col )

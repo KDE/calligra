@@ -62,7 +62,7 @@ protected:
 
 protected:
   TKColorPopupMenu* m_pMenu;
-  TKColorPanel* m_pStandartColor;
+  TKColorPanel* m_pStandardColor;
   TKColorPanel* m_pRecentColor;
   int m_type;
 

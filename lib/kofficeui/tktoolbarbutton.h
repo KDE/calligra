@@ -19,19 +19,15 @@
 #ifndef TKTOOLBARBUTTON_H
 #define TKTOOLBARBUTTON_H
 
-#include "tkaction.h"
+#include <tkaction.h>
 
 #include <qpixmap.h>
 #include <qbutton.h>
-#include <qintdict.h>
-#include <qstring.h>
 #include <qfont.h>
 #include <kglobal.h>
 
 class KToolBar;
-class TKToolBarButtonPrivate;
 class KInstance;
-class QEvent;
 class QPopupMenu;
 class QPainter;
 
@@ -206,6 +202,7 @@ private:
   QPixmap activePixmap;
   QPixmap disabledPixmap;
   virtual void setIcon(const QPixmap &p) { QButton::setIcon(p); }
+  class TKToolBarButtonPrivate;
   TKToolBarButtonPrivate *d;
 
 

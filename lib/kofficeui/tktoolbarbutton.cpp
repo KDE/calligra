@@ -16,8 +16,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  */
-#include "tktoolbarbutton.h"
-#include "tkaction.h"
+#include <tktoolbarbutton.h>
 
 #include <qimage.h>
 #include <qtimer.h>
@@ -36,12 +35,10 @@
 // needed to get our instance
 #include <kmainwindow.h>
 
-template class QIntDict<TKToolBarButton>;
-
 // Delay in ms before delayed popup pops up
 #define POPUP_DELAY 500
 
-class TKToolBarButtonPrivate
+class TKToolBarButton::TKToolBarButtonPrivate
 {
 public:
   TKToolBarButtonPrivate()
@@ -431,7 +428,7 @@ void TKToolBarButton::makeDefaultPixmap()
 {
   if (activePixmap.isNull())
     return;
-  
+
   KIconEffect effect;
   defaultPixmap = effect.apply(activePixmap, KIcon::Toolbar, KIcon::DefaultState);
 }
@@ -440,7 +437,7 @@ void TKToolBarButton::makeDisabledPixmap()
 {
   if (activePixmap.isNull())
     return;
-  
+
   KIconEffect effect;
   disabledPixmap = effect.apply(activePixmap, KIcon::Toolbar, KIcon::DisabledState);
 }
@@ -526,4 +523,5 @@ void TKToolBarButton::setIconMode( TK::IconMode m )
   modeChange();
   repaint();
 }
-#include "tktoolbarbutton.moc"
+
+#include <tktoolbarbutton.moc>
