@@ -38,7 +38,6 @@
 #include <qwidget.h>
 #include <qtimer.h>
 #include <qdialog.h>
-#include <qmessagebox.h>
 #include <qpixmap.h>
 #include <qapplication.h>
 #include <qfont.h>

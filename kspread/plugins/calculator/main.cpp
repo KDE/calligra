@@ -27,7 +27,6 @@
 #include "kspread_util.h"
 #include "kspread_map.h"
 
-#include <qmessagebox.h>
 #include <qstring.h>
 
 #include <kaction.h>

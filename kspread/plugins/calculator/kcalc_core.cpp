@@ -29,13 +29,14 @@
 */
 
 #include <config.h>
-#include <cassert>
+#include <assert.h>
 #include <stdio.h>
 #include <errno.h>
 #include <limits.h>
 #include <math.h>
 #include <signal.h>
 #include <klocale.h>
+#include <kmessagebox.h>
 
 #include "kcalc.h"
 
@@ -1760,16 +1761,14 @@ int UpdateStack(int run_precedence)
                 return_value = 1;
 
                 if ((top_item = PopStack())->s_item_type != ITEM_AMOUNT){
-                  QMessageBox::message( "Error",
-                                        "Stack processing error - right_op", "O.K." );
+                  KMessageBox::error( 0, "Stack processing error - right_op");
 
                 }
                 right_op = top_item->s_item_data.item_amount;
 
                 if (!((top_item = PopStack()) &&
                 top_item->s_item_type == ITEM_FUNCTION)) {
-                  QMessageBox::message( "Error",
-                                        "Stack processing error - function", "O.K." );
+                  KMessageBox::error( 0, "Stack processing error - function");
 
                 }
                 op_function =
@@ -1777,8 +1776,7 @@ int UpdateStack(int run_precedence)
 
                 if (!((top_item = PopStack()) &&
                 top_item->s_item_type == ITEM_AMOUNT)) {
-                  QMessageBox::message( "Error",
-                                        "Stack processing error - left_op", "O.K." );
+                  KMessageBox::error( 0, "Stack processing error - left_op");
                 }
                 left_op = top_item->s_item_data.item_amount;
 
@@ -2082,7 +2080,7 @@ stack_ptr AllocStackItem (void) {
                 return &process_stack[stack_next++];
         }
 
-        QMessageBox::message( "Emergency", "Stack Error !", "O.K." );
+        KMessageBox::error( 0, "Stack Error !");
         return &process_stack[stack_next];
 }
 
@@ -2090,7 +2088,7 @@ void UnAllocStackItem (stack_ptr return_item) {
 
         if (return_item != &process_stack[--stack_next]) {
 
-          QMessageBox::message( "Emergency", "Stack Error !", "O.K." );
+          KMessageBox::error( 0, "Stack Error !");
         }
 
 }
