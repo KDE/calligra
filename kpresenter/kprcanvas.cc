@@ -5499,7 +5499,7 @@ void KPrCanvas::raiseObject( KPObject *_kpobject )
 
 void KPrCanvas::lowerObject()
 {
-    if( objectList().count() <= 1 )
+    if( objectList().count() <= 1 || (int)objectList().count() <= selectedObjectPosition )
         return;
     KPObject *kpobject = objectList().last();
     QPtrList<KPObject> _list = objectList();
@@ -5507,7 +5507,7 @@ void KPrCanvas::lowerObject()
 
     if ( kpobject->isSelected() ) {
         _list.take( _list.count() - 1 );
-        if(objectList().find( kpobject )!=-1)
+        if ( objectList().find( kpobject ) != -1 )
             _list.insert( selectedObjectPosition, kpobject );
     }
     m_activePage->setObjectList( _list );
