@@ -22,7 +22,7 @@
 #include <qinputdialog.h>
 #include <qlayout.h> 
 #include <qptrvector.h>
-#include <qpushbutton.h>
+#include <qtoolbutton.h>
 
 #include <kiconloader.h>
 #include <klocale.h>
@@ -93,7 +93,7 @@ VLayersDocker::VLayersDocker( KarbonView* view )
 	
 	setCaption( i18n( "Layers Manager" ) );
 
-	QPushButton* button;
+	QToolButton* button;
 	QFrame* mainWidget = new QFrame( this );
 	mainWidget->setFrameStyle( QFrame::Box | QFrame::Sunken );
 	QVBoxLayout* layout = new QVBoxLayout( mainWidget, 1 );
@@ -101,13 +101,25 @@ VLayersDocker::VLayersDocker( KarbonView* view )
 	m_buttonGroup = new QHButtonGroup( mainWidget );
 	m_buttonGroup->setFrameShape( NoFrame );
 	m_buttonGroup->setInsideMargin( 1 );
-	button = new QPushButton( SmallIcon( "14_layer_newlayer.png" ), "", m_buttonGroup );
+	button = new QToolButton( m_buttonGroup );
+	button->setIconSet( SmallIcon( "14_layer_newlayer.png" ) );
+	button->setTextLabel( "New" );
+	button->setTextPosition( QToolButton::Under );
 	m_buttonGroup->insert( button );
-	button = new QPushButton( SmallIcon( "14_layer_raiselayer.png" ), "", m_buttonGroup );
+	button = new QToolButton( m_buttonGroup );
+	button->setIconSet( SmallIcon( "14_layer_raiselayer.png" ) );
+	button->setTextLabel( "Raise" );
+	button->setTextPosition( QToolButton::Under );
 	m_buttonGroup->insert( button );
-	button = new QPushButton( SmallIcon( "14_layer_lowerlayer.png" ), "", m_buttonGroup );
+	button = new QToolButton( m_buttonGroup );
+	button->setIconSet( SmallIcon( "14_layer_lowerlayer.png" ) );
+	button->setTextLabel( "Lower" );
+	button->setTextPosition( QToolButton::Under );
 	m_buttonGroup->insert( button );
-	button = new QPushButton( SmallIcon( "14_layer_deletelayer.png" ), "", m_buttonGroup );
+	button = new QToolButton( m_buttonGroup );
+	button->setIconSet( SmallIcon( "14_layer_deletelayer.png" ) );
+	button->setTextLabel( "Delete" );
+	button->setTextPosition( QToolButton::Under );
 	m_buttonGroup->insert( button );
 	layout->addWidget( m_buttonGroup, 1);
 	layout->setSpacing( 0 );

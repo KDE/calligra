@@ -32,7 +32,8 @@
 
 
 class VObject;
-class QPushButton;
+class QToolButton;
+class QHButtonGroup;
 
 class VClipartIconItem : public KoIconItem
 {
@@ -70,12 +71,14 @@ class VClipartWidget : public QFrame
 		void addClipart();
 		void deleteClipart();
 		void clipartSelected( KoIconItem* item );
+		
+		void slotButtonClicked( int id );
 
 	private:
 		KoIconChooser*        m_clipartChooser;
-		QPushButton*          m_addClipartButton;
-		QPushButton*          m_importClipartButton;
-		QPushButton*          m_deleteClipartButton;
+		QHButtonGroup*        m_buttonGroup;
+		QToolButton*          m_importClipartButton;
+		QToolButton*          m_deleteClipartButton;
 		KarbonView*           m_view;
 		VClipartIconItem*     m_clipartItem;
 }; // VClipartWidget
@@ -98,6 +101,8 @@ class VClipartTool : public VTool
 		virtual void mouseButtonPress();
 		virtual void mouseButtonRelease();
 		virtual void mouseDrag();
+		virtual void mouseDragShiftPressed();
+		virtual void mouseDragShiftReleased();
 		virtual void mouseDragRelease();
 		virtual void cancel();
 
@@ -120,6 +125,7 @@ class VClipartTool : public VTool
 		VObject*        m_clipart;
 		KoPoint         m_last;
 		VClipartWidget* m_optionsWidget;
+		bool            m_keepRatio;
 }; // VClipartTool
 
 #endif /* __VCLIPARTTOOL_H__ */

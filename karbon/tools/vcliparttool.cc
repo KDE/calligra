@@ -19,7 +19,8 @@
 */
 
 #include <qlayout.h>
-#include <qpushbutton.h>
+#include <qtoolbutton.h>
+#include <qhbuttongroup.h>
 #include <qfileinfo.h>
 #include <qlabel.h>
 #include <qcursor.h>
@@ -94,23 +95,32 @@ VClipartWidget::VClipartWidget( QPtrList<VClipartIconItem>* clipartItems, Karbon
 {
 	KIconLoader il;
 
-	QGridLayout* layout = new QGridLayout( this );
-	layout->addMultiCellWidget( m_clipartChooser = new KoIconChooser( QSize( 32, 32 ), this ), 0, 0, 0, 2 );
-	layout->addWidget( m_addClipartButton = new QPushButton( QPixmap( il.iconPath( "14_clipart_add.png", KIcon::Small ) ), "", this ), 1, 0, Qt::AlignCenter );
-	layout->addWidget( m_importClipartButton = new QPushButton( QPixmap( il.iconPath( "14_clipart_import.png", KIcon::Small ) ), "", this ), 1, 1, Qt::AlignCenter );
-	layout->addWidget( m_deleteClipartButton = new QPushButton( QPixmap( il.iconPath( "14_clipart_delete.png", KIcon::Small ) ), "", this ), 1, 2, Qt::AlignCenter );
+	QVBoxLayout* layout = new QVBoxLayout( this );
+	layout->addWidget( m_clipartChooser = new KoIconChooser( QSize( 32, 32 ), this ) );
+	layout->addWidget( m_buttonGroup = new QHButtonGroup( this ) );
+	QToolButton* m_addClipartButton;
+	m_buttonGroup->insert( m_addClipartButton = new QToolButton( m_buttonGroup ) );
+	m_buttonGroup->insert( m_importClipartButton = new QToolButton( m_buttonGroup ) );
+	m_buttonGroup->insert( m_deleteClipartButton = new QToolButton( m_buttonGroup ) );
 	m_clipartChooser->setFixedSize( 180, 120 );
-	m_addClipartButton->setFixedSize( 30, 30 );
-	m_importClipartButton->setFixedSize( 30, 30 );
-	m_deleteClipartButton->setFixedSize( 30, 30 );
+	m_addClipartButton->setIconSet( QPixmap( il.iconPath( "14_clipart_add.png", KIcon::Small ) ) );
+	m_addClipartButton->setTextLabel( "Add" );
+	m_addClipartButton->setTextPosition( QToolButton::Under );
+	m_importClipartButton->setIconSet( QPixmap( il.iconPath( "14_clipart_import.png", KIcon::Small ) ) );
+	m_importClipartButton->setTextLabel( "Import" );
+	m_importClipartButton->setTextPosition( QToolButton::Under );
+	m_deleteClipartButton->setIconSet( QPixmap( il.iconPath( "14_clipart_delete.png", KIcon::Small ) ) );
+	m_deleteClipartButton->setTextLabel( "Delete" );
+	m_deleteClipartButton->setTextPosition( QToolButton::Under );
 
+	m_buttonGroup->setInsideMargin( 3 );
 	m_importClipartButton->setEnabled( false );
 	m_deleteClipartButton->setEnabled( false );
 
 	setFrameStyle( Box | Sunken );
 	layout->setMargin( 3 );
 	
-	connect( m_addClipartButton, SIGNAL( clicked() ), this, SLOT( addClipart() ) );
+	connect( m_buttonGroup, SIGNAL( clicked( int ) ), this, SLOT( slotButtonClicked( int ) ) );
 	connect( m_deleteClipartButton, SIGNAL( clicked() ), this, SLOT( deleteClipart() ) );
 	connect( m_clipartChooser, SIGNAL( selected( KoIconItem* ) ), this, SLOT( clipartSelected( KoIconItem* ) ) );
 	
@@ -179,6 +189,22 @@ void VClipartWidget::deleteClipart()
 	m_clipartChooser->removeItem( clipartItem );
 } // VClipartWidget::deleteClipart
 
+void VClipartWidget::slotButtonClicked( int id )
+{
+	switch ( id )
+	{
+		case 1:
+				addClipart();
+			break;
+		case 2:
+				//importClipart();
+			break;
+		case 3:
+				deleteClipart();
+			break;
+	} 
+} // VClipartWidget::slotButtonClicked
+
 VClipartTool::VClipartTool( KarbonView* view )
 		: VTool( view )
 {
@@ -195,7 +221,7 @@ QString VClipartTool::contextHelp()
 	QString s = "<qt><b>Clipart tool:</b><br>";
 	s += "Choose the clipart in the options docker.<br>";
 	s += "<i>Click and drag</i> to place the clipart.<br>";
-	s += "<i>Click</i> to place the clipart using the size in the options docker.</qt>";
+	s += "<i>Click and drag</i> while pressing <i>SHIFT</i> to place the clipart using the original sizeof the cliaprt.</qt>";
 	return s;
 } // VClipartTool::contextHelp
 
@@ -223,6 +249,8 @@ void VClipartTool::draw()
 
 void VClipartTool::mouseButtonPress()
 {
+	m_keepRatio = false;
+
 	VClipartIconItem* clipartItem = m_optionsWidget->selectedClipart();
 	m_clipart = clipartItem->clipart()->clone();
 	m_clipart->setState( VObject::edit );
@@ -243,7 +271,13 @@ void VClipartTool::mouseDrag()
 	{
 		draw();
 
-		m_last = last();
+		if ( m_keepRatio )
+		{
+			double s = QMAX( last().x() - first().x(), -last().y() + first().y() );
+			m_last.setCoords( first().x() + s, first().y() - s );
+		}
+		else
+			m_last = last();
 
 		draw();
 	}
@@ -255,7 +289,14 @@ void VClipartTool::mouseDragRelease()
 	{
 		//draw();
 
-		m_last = last();
+		if ( m_keepRatio )
+		{
+			double s = QMAX( last().x() - first().x(), -last().y() + first().y() );
+			m_last.setCoords( first().x() + s, first().y() - s );
+		}
+		else
+			m_last = last();
+
 		QWMatrix mat( m_last.x() - first().x(), 0, 0, m_last.y() - first().y(), first().x(), first().y() );
 		m_clipart->transform( mat );
 		VClipartCmd* cmd = new VClipartCmd(
@@ -269,6 +310,16 @@ void VClipartTool::mouseDragRelease()
 		delete m_clipart;
 	}
 } // VClipartTool::mouseDragRelease
+
+void VClipartTool::mouseDragShiftPressed()
+{
+	m_keepRatio = true;
+} // VClipartTool::mouseDragShiftPressed
+
+void VClipartTool::mouseDragShiftReleased()
+{
+	m_keepRatio = false;
+} // VClipartTool::mouseDragShiftReleased
 
 void VClipartTool::cancel()
 {
