@@ -397,6 +397,8 @@ QDomDocument KPresenterDoc::saveXML()
     paper.appendChild(paperBorders);
     presenter.appendChild(paper);
 
+    getVariableCollection()->variableSetting()->save(presenter );
+
     QDomElement element=doc.createElement("BACKGROUND");
     element.setAttribute("rastX", _rastX);
     element.setAttribute("rastY", _rastY);
@@ -841,7 +843,10 @@ bool KPresenterDoc::loadXML( const QDomDocument &doc )
                 if(borders.hasAttribute("mmBottom"))    //compatibility
                     __pgLayout.mmBottom = borders.attribute("inchBottom").toDouble();
             }
-        } else if(elem.tagName()=="BACKGROUND") {
+        } else if(elem.tagName()=="VARIABLESETTINGS"){
+            getVariableCollection()->variableSetting()->load(document);
+        }
+        else if(elem.tagName()=="BACKGROUND") {
             int red=0, green=0, blue=0;
             if(elem.hasAttribute("rastX"))
                 _rastX = elem.attribute("rastX").toInt();

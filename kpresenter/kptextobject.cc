@@ -836,7 +836,7 @@ void KPTextObject::recalcPageNum( KPresenterDoc *doc )
         KPrPgNumVariable * var = dynamic_cast<KPrPgNumVariable *>( cit.current() );
         if ( var && !var->isDeleted() && var->subtype() == KPrPgNumVariable::VST_PGNUM_CURRENT )
         {
-            var->setPgNum( pgnum );
+            var->setPgNum( pgnum + kPresenterDocument()->getVariableCollection()->variableSetting()->numberOffset());
             var->resize();
             var->paragraph()->invalidate( 0 ); // size may have changed -> need reformatting !
             var->paragraph()->setChanged( true );

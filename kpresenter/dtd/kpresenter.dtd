@@ -21,7 +21,7 @@
 		editor:		The program this file was written with
 		mime:		The MIME type (must always have the value application/x-kpresenter
 -->
-<!ELEMENT DOC (PAPER | BACKGROUND | HEADER | FOOTER | PAGETITLES | PAGENOTES | OBJECTS | INFINITLOOP | MANUALSWITCH | PRESSPEED | PIXMAPS | SELSLIDES | PIXMAPS | CLIPARTS)* >
+<!ELEMENT DOC (PAPER | BACKGROUND | ,VARIABLESETTINGS | HEADER | FOOTER | PAGETITLES | PAGENOTES | OBJECTS | INFINITLOOP | MANUALSWITCH | PRESSPEED | PIXMAPS | SELSLIDES | PIXMAPS | CLIPARTS)* >
 <!ATTLIST DOC	author CDATA #IMPLIED
 				email CDATA #IMPLIED
 				editor CDATA #IMPLIED
@@ -61,6 +61,15 @@
 			ptBottom NMTOKEN #REQUIRED>
 
 
+<!--    Contains general attributes variables. Has no children.
+
+        Attributes:
+            number_offset:     define variable offset.
+-->
+<!ELEMENT VARIABLESETTINGS
+    EMPTY>
+<!ATTLIST VARIABLESETTINGS
+    processing CDATA #REQUIRED>
 
 <!--	Contains all the objects on the pages.
 -->

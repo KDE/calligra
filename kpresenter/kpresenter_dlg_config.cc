@@ -24,6 +24,7 @@
 #include <kiconloader.h>
 #include <knuminput.h>
 #include <kcolorbutton.h>
+#include <kprvariable.h>
 
 #include <qgroupbox.h>
 #include <qlabel.h>
@@ -362,16 +363,31 @@ ConfigureMiscPage::ConfigureMiscPage( KPresenterView *_view, QVBox *box, char *n
     m_undoRedoLimit->setLabel(i18n("Undo/redo limit:"));
     m_undoRedoLimit->setRange(10, 60, 1);
     grid->addWidget(m_undoRedoLimit,0,0);
+
+
+    KPresenterDoc* doc = m_pView->kPresenterDoc();
+    m_oldVariableOffset=doc->getVariableCollection()->variableSetting()->numberOffset();
+    m_variableNumberOffset=new KIntNumInput(m_oldVariableOffset,tmpQGroupBox);
+    m_variableNumberOffset->setLabel(i18n("Variable number offset:"));
+    m_variableNumberOffset->setRange(0,100,1);
+    grid->addWidget(m_variableNumberOffset,1,0);
 }
 
 void ConfigureMiscPage::apply()
 {
     config->setGroup( "Misc" );
     int newUndo=m_undoRedoLimit->value();
+    KPresenterDoc* doc = m_pView->kPresenterDoc();
     if(newUndo!=m_oldNbRedo)
     {
         config->writeEntry("UndoRedo",newUndo);
-        m_pView->kPresenterDoc()->setUndoRedoLimit(newUndo);
+        doc->setUndoRedoLimit(newUndo);
+    }
+    int newVarOffset=m_variableNumberOffset->value();
+    if(newVarOffset!=m_oldVariableOffset)
+    {
+        doc->getVariableCollection()->variableSetting()->setNumberOffset(m_variableNumberOffset->value());
+        doc->recalcVariables( VT_PGNUM );
     }
 }
 
