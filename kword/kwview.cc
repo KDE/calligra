@@ -1189,7 +1189,7 @@ void KWView::loadexpressionActions( KActionMenu * parentMenu)
 void KWView::createExpressionActions( KActionMenu * parentMenu,const QString& filename,int &i, bool insertSepar )
 {
     QFile file( filename );
-    if ( !file.open( IO_ReadOnly ) )
+    if ( !file.exists() || !file.open( IO_ReadOnly ) )
         return;
 
     QDomDocument doc;
