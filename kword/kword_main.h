@@ -16,10 +16,9 @@
 #ifndef kword_main_h
 #define kword_main_h
 
-#include <koApplication.h>
-
 class KoMainWindow;
 
+#include <koApplication.h>
 #include "kword_shell.h"
 
 /******************************************************************/
@@ -34,7 +33,7 @@ public:
     KWordApp( int &argc, char** argv );
     ~KWordApp();
 
-	KoMainWindow* createNewShell() { return new KWordShell; }
+	KoMainWindow* createNewShell() { return new KWordShell; };
 };
 
 #endif
