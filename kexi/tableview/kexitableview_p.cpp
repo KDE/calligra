@@ -125,6 +125,7 @@ KexiTableViewPrivate::KexiTableViewPrivate()
 	rowWillBeDeleted = -1;
 	dropsAtRowEnabled = false;
 	initDataContentsOnShow = false;
+	cursorPositionSetExplicityBeforeShow = false;
 	pVerticalHeaderAlreadyAdded = false;
 	ensureCellVisibleOnShow = QPoint(-1,-1);
 }

@@ -553,34 +553,35 @@ void KexiTableView::setData( KexiTableViewData *data, bool owner )
 
 void KexiTableView::initDataContents()
 {
-	//set current row:
-	d->pCurrentItem = 0;
-	int curRow = -1, curCol = -1;
-//	d->curRow = -1;
-//	d->curCol = -1;
-	if (m_data->columnsCount()>0) {
-		if (rows()>0) {
-			d->pCurrentItem = m_data->first();
-			curRow = 0;
-			curCol = 0;
-		}
-		else {//no data
-			if (isInsertingEnabled()) {
-				d->pCurrentItem = d->pInsertItem;
+	QSize s(tableSize());
+	resizeContents(s.width(),s.height());
+
+	if (!d->cursorPositionSetExplicityBeforeShow) {
+		//set current row:
+		d->pCurrentItem = 0;
+		int curRow = -1, curCol = -1;
+		if (m_data->columnsCount()>0) {
+			if (rows()>0) {
+				d->pCurrentItem = m_data->first();
 				curRow = 0;
 				curCol = 0;
 			}
+			else {//no data
+				if (isInsertingEnabled()) {
+					d->pCurrentItem = d->pInsertItem;
+					curRow = 0;
+					curCol = 0;
+				}
+			}
 		}
+
+		setCursor(curRow, curCol);
 	}
-	
-	QSize s(tableSize());
-	resizeContents(s.width(),s.height());
-	
+	ensureVisible(d->curRow,d->curCol);
 	updateRowCountInfo();
-	
-	setCursor(curRow, curCol);
-	ensureVisible(0,0);
 	updateContents();
+
+	d->cursorPositionSetExplicityBeforeShow = false;
 
 	emit dataRefreshed();
 }
@@ -2871,6 +2872,10 @@ void KexiTableView::setCursor(int row, int col/*=-1*/, bool forceSet)
 
 		emit itemSelected(d->pCurrentItem);
 		emit cellSelected(d->curCol, d->curRow);
+	}
+
+	if(d->initDataContentsOnShow) {
+		d->cursorPositionSetExplicityBeforeShow = true;
 	}
 }
 

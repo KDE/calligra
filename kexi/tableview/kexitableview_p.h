@@ -170,6 +170,11 @@ class KexiTableViewPrivate
 	/*! true, if initDataContents() should be called on show event. */
 	bool initDataContentsOnShow : 1;
 
+	/*! Set to true in setCursor() to indicate that cursor position was set
+	 before show() and it shouldn't be changed on show(). 
+	 Only used if initDataContentsOnShow is true. */
+	bool cursorPositionSetExplicityBeforeShow : 1;
+
 	/*! true, if certical header shouldn't be increased in
 	 KexiTableView::slotRowInserted() because it was already done 
 	 in KexiTableView::createEditor(). */
