@@ -32,15 +32,16 @@
 #include <koApplication.h>
 
 #include "kexirelationview.h"
+#include "kexirelationviewconnection.h"
 #include "kexirelation.h"
 
 KexiRelationView::KexiRelationView(QWidget *parent, const char *name,KexiRelation *relation)
- : QWorkspace(parent, name)
+ : QScrollView(parent, name)
 {
 	m_relation=relation;
 	m_relation->incUsageCount();
 	m_readOnly=false;
-//	setFrameStyle(QFrame::WinPanel | QFrame::Sunken);
+	setFrameStyle(QFrame::WinPanel | QFrame::Sunken);
 
 	m_tableCount = 0;
 
@@ -48,7 +49,7 @@ KexiRelationView::KexiRelationView(QWidget *parent, const char *name,KexiRelatio
 	m_grabOffsetX = 0;
 	m_grabOffsetY = 0;
 
-//	viewport()->setPaletteBackgroundColor(colorGroup().mid());
+	viewport()->setPaletteBackgroundColor(colorGroup().mid());
 	
 //	c->resize(250,250);
 //	c->show(); 
@@ -78,8 +79,8 @@ KexiRelationView::addTable(const QString &table, QStringList columns)
 	s.geometry = QRect(widest + 20, 5, 100, 150);
 
 	KexiRelationViewTableContainer *c = new KexiRelationViewTableContainer(this, table, columns);
-	c->show(); 
-//	addChild(c, 100,100);
+//	c->show(); 
+	addChild(c, 100,100);
 	
 /*	KexiRelationViewTable *tableView = new KexiRelationViewTable(this, table, columns, "someTable");
 	tableView->setReadOnly(m_readOnly);
@@ -286,12 +287,19 @@ KexiRelationView::slotTableScrolling(QString table)
 }
 
 void
-KexiRelationView::addConnection(SourceConnection connection, bool interactive)
+KexiRelationView::addConnection(SourceConnection conn, bool interactive)
 {
 	kdDebug() << "KexiRelationView::addConnection()" << endl;
-	SourceConnection *conn = &connection;
-	bool add=true;
-	for (RelationList::iterator it=m_connections.begin();it!=m_connections.end();++it)
+
+	
+	kdDebug() << "KexiRelationView::addConnection() source: " << (&conn)->srcTable << endl;
+//	KexiRelationViewTable *src = m_tables[(&conn)->srcTable];
+//	KexiRelationViewTable *rcv = m_tables[(&conn)->rcvTable];
+
+//	KexiRelationViewConnection *conn = new KexiRelationViewConnection(src, rcv, conn.srcField, conn.rcvField);
+//	SourceConnection *conn = &connection;
+//	bool add=true;
+/*	for (RelationList::iterator it=m_connections.begin();it!=m_connections.end();++it)
 	{
 		if (
 			(connection.srcTable==(*it).srcTable) &&
@@ -306,14 +314,15 @@ KexiRelationView::addConnection(SourceConnection connection, bool interactive)
 		}
 	}
 	kdDebug() << "KexiRelationView::addConnection()" << conn->srcTable << ":" << conn->rcvTable << endl;
+*/
 
-	recalculateConnectionRect(conn);
+//	recalculateConnectionRect(conn);
 
-	if (add) m_connections.append((*conn));
-	if (interactive) m_relation->updateRelationList(this,m_connections);
+//	if (add) m_connections.append((*conn));
+//	if (interactive) m_relation->updateRelationList(this,m_connections);
 
 //	updateContents((*conn).geometry);
-	kdDebug() << "KexiRelationView::addConnection(): rect: " << (*conn).geometry.x() << ", " << (*conn).geometry.y() << endl;
+//	kdDebug() << "KexiRelationView::addConnection(): rect: " << (*conn).geometry.x() << ", " << (*conn).geometry.y() << endl;
 }
 
 QRect
@@ -321,7 +330,7 @@ KexiRelationView::recalculateConnectionRect(SourceConnection *conn)
 {
 	drawConnection(0, conn, false);
 
-	return (*conn).geometry;
+//	return (*conn).geometry;
 }
 
 void KexiRelationView::setReadOnly(bool b) 

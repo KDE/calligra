@@ -29,7 +29,6 @@ typedef struct SourceConnection
         QString rcvTable;
         QString srcField;
         QString rcvField;
-        QRect   geometry;
 };
 
 typedef QValueList<SourceConnection> RelationList;

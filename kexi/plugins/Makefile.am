@@ -11,7 +11,8 @@ kexihandler_query_la_LDFLAGS = $(all_libraries) $(KDE_PLUGIN) -module
 kexihandler_query_la_LIBADD = ../core/libkexicore.la ../tableview/libkexidatatable.la ../widget/libkexiextendedwidgets.la
 
 kexihandler_relation_la_SOURCES = kexirelationhandler.cpp kexirelationhandlerproxy.cpp kexirelationview.cpp \
-				kexirelationviewtable.cpp kexirelationdialog.cpp
+				kexirelationviewtable.cpp kexirelationdialog.cpp \
+				kexirelationviewconnection.cpp
 kexihandler_relation_la_LDFLAGS = $(all_libraries) $(KDE_PLUGIN) -module
 kexihandler_relation_la_LIBADD = ../core/libkexicore.la
 

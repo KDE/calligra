@@ -29,27 +29,31 @@
 #include "kexirelationview.h"
 
 class KexiRelationView;
+class KexiRelationViewTable;
 
 class KexiRelationViewTableContainer : public QFrame
 {
 	Q_OBJECT
 	
 	public:
-		KexiRelationViewTableContainer(QWidget *parent, QString table, QStringList fields);
+		KexiRelationViewTableContainer(KexiRelationView *parent, QString table, QStringList fields);
 		~KexiRelationViewTableContainer();
 
 	protected:
-		void	mouseMoveEvent(QMouseEvent *ev);
-		void	mousePressEvent(QMouseEvent *ev);
-		void	mouseReleaseEvent(QMouseEvent *ev);
+		void			mouseMoveEvent(QMouseEvent *ev);
+		void			mousePressEvent(QMouseEvent *ev);
+		void			mouseReleaseEvent(QMouseEvent *ev);
 
-		bool	m_mousePressed;
-		int	m_bX;
-		int	m_bY;
-		int	m_grabX;
-		int	m_grabY;
+		bool			m_mousePressed;
+		int			m_bX;
+		int			m_bY;
+		int			m_grabX;
+		int			m_grabY;
 
-		int	m_tbHeight;
+		int			m_tbHeight;
+
+	private:
+		KexiRelationViewTable	*m_tableView;
 };
 
 
@@ -58,7 +62,7 @@ class KexiRelationViewTable : public KListView
 	Q_OBJECT
 
 	public:
-		KexiRelationViewTable(QWidget *parent, QString table, QStringList fields, const char *name=0);
+		KexiRelationViewTable(QWidget *parent, KexiRelationView *view, QString table, QStringList fields, const char *name=0);
 		~KexiRelationViewTable();
 
 		QString			table() const { return m_table; };
@@ -80,7 +84,7 @@ class KexiRelationViewTable : public KListView
 		QStringList		m_fieldList;
 		QString			m_table;
 
-		KexiRelationView	*m_parent;
+		KexiRelationView	*m_view;
 };
 
 #endif

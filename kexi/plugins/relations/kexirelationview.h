@@ -20,8 +20,8 @@
 #ifndef KEXIRELATIONVIEW_H
 #define KEXIRELATIONVIEW_H
 
-//#include <qscrollview.h>
-#include <qworkspace.h>
+#include <qscrollview.h>
+//#include <qworkspace.h>
 #include <qvaluelist.h>
 #include <qmap.h>
 #include <qdragobject.h>
@@ -48,7 +48,7 @@ typedef struct RelationSource
 
 typedef QMap<QString, RelationSource> TableList;
 
-class KexiRelationView : public QWorkspace
+class KexiRelationView : public QScrollView
 {
 	Q_OBJECT
 
@@ -57,7 +57,7 @@ class KexiRelationView : public QWorkspace
 		~KexiRelationView();
 
 		void		addTable(const QString &table, QStringList columns);
-		void		addConnection(SourceConnection con,bool interactive=true);
+		void		addConnection(SourceConnection con, bool interactive=true);
 
 		RelationList	getConnections()const { return m_connections; };
 		void setReadOnly(bool);

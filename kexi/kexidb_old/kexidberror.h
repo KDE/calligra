@@ -20,8 +20,12 @@
 #ifndef KEXIDBERROR_H
 #define KEXIDBERROR_H
 
+#include <qmap.h>
+
 class QWidget;
 class QString;
+
+typedef QMap<int, QString> ErrorList;
 
 class KexiDBError
 {

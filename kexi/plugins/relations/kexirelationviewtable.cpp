@@ -26,10 +26,11 @@
 #include <kdebug.h>
 
 #include "kexirelationviewtable.h"
+#include "kexirelationview.h"
 
 #include <kexidragobjects.h>
 
-KexiRelationViewTableContainer::KexiRelationViewTableContainer(QWidget *parent, QString table, QStringList fields)
+KexiRelationViewTableContainer::KexiRelationViewTableContainer(KexiRelationView *prent, QString table, QStringList fields)
  : QFrame(parent,"tv", QFrame::Panel | QFrame::Raised)
 {
 //	setFixedSize(100, 150);
@@ -49,10 +50,10 @@ KexiRelationViewTableContainer::KexiRelationViewTableContainer(QWidget *parent, 
 	btnClose->setFixedSize(15, 15);
 //	btnClose->setFlat(true);
 
-	KexiRelationViewTable *t = new KexiRelationViewTable(this, table, fields, "tbl-list");
+	m_tableView = new KexiRelationViewTable(this, prent, table, fields, "tbl-list");
 
 	g->addWidget(btnClose, 0, 1);
-	g->addMultiCellWidget(t, 1, 1, 0, 1);
+	g->addMultiCellWidget(m_tableView, 1, 1, 0, 1);
 
 	m_tbHeight = l->height();
 
@@ -118,7 +119,7 @@ KexiRelationViewTableContainer::~KexiRelationViewTableContainer()
 {
 }
 
-KexiRelationViewTable::KexiRelationViewTable(QWidget *parent, QString table, QStringList fields, const char *name)
+KexiRelationViewTable::KexiRelationViewTable(QWidget *parent, KexiRelationView *view, QString table, QStringList fields, const char *name)
  : KListView(parent)
 {
 	m_fieldList = fields;
@@ -149,6 +150,8 @@ KexiRelationViewTable::KexiRelationViewTable(QWidget *parent, QString table, QSt
 //	setDragEnabled
 	connect(this, SIGNAL(dropped(QDropEvent *, QListViewItem *)), this, SLOT(slotDropped(QDropEvent *)));
 	connect(this, SIGNAL(contentsMoving(int, int)), this, SLOT(slotContentsMoving(int,int)));
+
+	m_view = view;
 }
 
 void KexiRelationViewTable::setReadOnly(bool b)
@@ -219,6 +222,7 @@ KexiRelationViewTable::slotDropped(QDropEvent *ev)
 		s.rcvField = rcvField;
 
 //		m_parent->addConnection(s);
+		m_view->addConnection(s);
 
 		kdDebug() << "KexiRelationViewTable::slotDropped() " << srcTable << ":" << srcField << " " << m_table << ":" << rcvField << endl;
 		ev->accept();
