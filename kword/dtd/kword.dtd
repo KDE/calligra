@@ -9,7 +9,7 @@ the original version were made.
 
 
 About the version
------------------
+=================
 
 This is the DTD version 2, for KWord-1.0.
 It has changed a bit since the DTD version 1, for KWord-0.8 (the one included in KDE-2.0)
@@ -18,7 +18,7 @@ the most complete format, we highly encourage you to use this format.
 
 
 KWord overview
---------------
+==============
 
 The main structure of each KWord document is a header and a body. The header
 contains things like the paper size, the margins and so on.
@@ -34,7 +34,7 @@ text is "flowed".
 
 
 Some basic notes on XML
------------------------
+=======================
 
 - All kinds of numbers are stored like this: foo="1" (between " and " :)
 
@@ -302,8 +302,8 @@ don't put a </?xml...> at the end of the file!).
                                     Place a new frame on next page.
                                 2...Ignore extra text
 
-            newFrameBehaviour:  DEPRICATED use newFrameBehavior instead.
-            newFrameBehavior:  0...On creating a new page, reconnect frame
+            newFrameBehaviour:  DEPRECATED use newFrameBehavior instead.
+            newFrameBehavior:   0...On creating a new page, reconnect frame
                                     to current frameset (use this for the normal text body).
                                 1...Don't create a followup frame on the new
                                     page.
@@ -342,7 +342,7 @@ don't put a </?xml...> at the end of the file!).
     runaround CDATA #IMPLIED
     runaroundGap CDATA #IMPLIED
     autoCreateNewFrame CDATA #REQUIRED
-    newFrameBehaviour CDATA #REQUIRED
+    newFrameBehavior CDATA #REQUIRED
     copy CDATA #IMPLIED>
 
 <!ELEMENT PARAGRAPH
@@ -351,9 +351,15 @@ don't put a </?xml...> at the end of the file!).
 <!--    Just guess :) The text is stored as UTF-8 compressed Unicode
         glyphs. Note: the format-tags navigate in the text using an index
         which starts at 0 and runs up till it reaches length-1.
+        
+        Attribues:
+            
+             xml:space:          "preserve" tells to keep white spaces
 -->
 <!ELEMENT TEXT
     (#PCDATA)>
+<!ATTLIST TEXT
+    xml:space (preserve) #FIXED "preserve">
 
 <!--    List of formats that apply to a given paragraph
 -->
