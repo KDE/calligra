@@ -56,7 +56,7 @@ public:
         repaint(false);
     }
 
-    QSize pixmapSize() const { return m_pixmap.size(); }
+    QSize pixmapSize() const { return m_type == IPD_IMAGE ? m_pixmap.size() : QSize(); }
 
     void setClipart( const QString & filename )
     {
@@ -149,6 +149,8 @@ void KWInsertPicDia::slotChooseImage()
         m_type = IPD_IMAGE;
         m_preview->setPixmap( m_filename );
         enableButtonOK( true );
+        m_cbKeepRatio->setEnabled( true );
+        m_cbKeepRatio->setChecked( true );
     }
 }
 
@@ -163,6 +165,8 @@ void KWInsertPicDia::slotChooseClipart()
         m_type = IPD_CLIPART;
         m_preview->setClipart( m_filename );
         enableButtonOK( true );
+        m_cbKeepRatio->setEnabled( false );
+        m_cbKeepRatio->setChecked( false );
     }
 }
 
@@ -184,7 +188,6 @@ QString KWInsertPicDia::selectPicture( KFileDialog & fd )
 
 QSize KWInsertPicDia::pixmapSize() const
 {
-    ASSERT( m_type == IPD_IMAGE );
     return m_preview->pixmapSize();
 }
 

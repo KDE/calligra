@@ -646,10 +646,16 @@ void KWCanvas::mmEditFrameResize( bool top, bool bottom, bool left, bool right, 
 
             double width = newRight - newLeft;
             double height = newBottom - newTop;
-            if ( top || bottom )
-                width = height * resizedFrameRatio;
-            else
-                height = width / resizedFrameRatio;
+            if ( ( top || bottom ) && ( left || right ) ) // resizing by a corner
+                if ( width < height )
+                    width = height * resizedFrameRatio;
+                else
+                    height = width / resizedFrameRatio;
+            else  // resizing by a border
+                if ( top || bottom )
+                    width = height * resizedFrameRatio;
+                else
+                    height = width / resizedFrameRatio;
             //kdDebug() << "KWCanvas::mmEditFrameResize after aspect ratio: width=" << width << " height=" << height << endl;
             if ( left )
                 newLeft = frame->right() - width;
@@ -910,6 +916,21 @@ void KWCanvas::mmCreate( int mx, int my ) // Mouse move when creating a frame
         // #### QCursor::setPos( viewport()->mapToGlobal( m_insRect.bottomRight() ) );
     }
 
+    // Apply keep-aspect-ratio feature
+    if ( m_mouseMode == MM_CREATE_PIX && m_keepRatio )
+    {
+        double ratio = m_pixmapSize.width() / m_pixmapSize.height();
+        double width = m_insRect.width();
+        double height = m_insRect.height();
+        if ( width < height )
+            width = height * ratio;
+        else
+            height = width / ratio;
+        //kdDebug() << "KWCanvas::mmCreate after aspect ratio: width=" << width << " height=" << height << endl;
+        m_insRect.setRight( m_insRect.left() + width );
+        m_insRect.setBottom( m_insRect.top() + height );
+    }
+
     drawMovingRect( p );
     p.end();
     m_deleteMovingRect = true;
@@ -1093,7 +1114,6 @@ void KWCanvas::mrCreatePixmap()
         {
             KWClipartFrameSet *frameset = new KWClipartFrameSet( m_doc, QString::null /*automatic name*/ );
             frameset->loadClipart( m_pictureFilename );
-            //frameset->setKeepAspectRatio( m_keepRatio);
             fs = frameset;
         }
         else
