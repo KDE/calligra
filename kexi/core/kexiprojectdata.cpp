@@ -41,29 +41,29 @@
 class KexiProjectDataPrivate
 {
 public:
-	KexiProjectDataPrivate(const KexiDB::ConnectionData &cdata)
-	 : connData(cdata)
-	 , finalMode(false)
+	KexiProjectDataPrivate()
+	 : finalMode(false)
 	{}
 	
 	KexiDB::ConnectionData connData;
 	QDateTime lastOpened;
-	QString desc;
 	bool finalMode : 1;
 };
 
 //---------------------------------------
 
 KexiProjectData::KexiProjectData()
- : QObject(0, "KexiProjectData"), KexiDB::SchemaData()
- , d( new KexiProjectDataPrivate(KexiDB::ConnectionData()) )
+ : QObject(0, "KexiProjectData")
+ , KexiDB::SchemaData()
+ , d( new KexiProjectDataPrivate() )
 {
 }
 
 KexiProjectData::KexiProjectData( 
 	const KexiDB::ConnectionData &cdata, const QString& dbname, const QString& caption )
- : QObject(0, "KexiProjectData"), KexiDB::SchemaData()
- , d( new KexiProjectDataPrivate(cdata) )
+ : QObject(0, "KexiProjectData")
+ , KexiDB::SchemaData()
+ , d( new KexiProjectDataPrivate() )
 {
 	d->connData = cdata;
 	setDatabaseName(dbname);
@@ -72,15 +72,32 @@ KexiProjectData::KexiProjectData(
 
 KexiProjectData::KexiProjectData( KexiProjectData& pdata )
  : QObject(0, "KexiProjectData"), KexiDB::SchemaData()
- , d( new KexiProjectDataPrivate(*pdata.connectionData()) )
+ , d( 0 )
 {
+	*this = pdata;
+/*
+	d->connData = *pdata.connectionData();
 	setDatabaseName(pdata.databaseName());
-	setCaption(pdata.caption());
+	setCaption(pdata.caption());*/
 }
 
 KexiProjectData::~KexiProjectData()
 {
 	delete d;
+}
+
+KexiProjectData& KexiProjectData::operator=(const KexiProjectData& pdata)
+{
+	delete d; //this is old
+	static_cast<KexiDB::SchemaData&>(*this) = static_cast<const KexiDB::SchemaData&>(pdata);
+	//deep copy
+	d = new KexiProjectDataPrivate();
+	*d = *pdata.d;
+//	d->connData = *pdata.constConnectionData();
+//	setDatabaseName(pdata.databaseName());
+//	setCaption(pdata.caption());
+//	setDescription(pdata.description());
+	return *this;
 }
 
 KexiDB::ConnectionData* KexiProjectData::connectionData()
@@ -95,12 +112,12 @@ const KexiDB::ConnectionData* KexiProjectData::constConnectionData() const
 
 QString KexiProjectData::databaseName() const
 {
-	return static_cast<const KexiDB::SchemaData*>(this)->name();
+	return KexiDB::SchemaData::name();
 }
 
 void KexiProjectData::setDatabaseName(const QString& dbName)
 {
-	static_cast<KexiDB::SchemaData*>(this)->setName(dbName);
+	KexiDB::SchemaData::setName(dbName);
 }
 
 bool KexiProjectData::finalMode() const
@@ -120,12 +137,12 @@ void KexiProjectData::setLastOpened(const QDateTime& lastOpened)
 }
 QString KexiProjectData::description() const
 {
-	return d->desc;
+	return KexiDB::SchemaData::description();
 }
 
 void KexiProjectData::setDescription(const QString& desc)
 {
-	d->desc=desc;
+	return KexiDB::SchemaData::setDescription(desc);
 }
 
 /*

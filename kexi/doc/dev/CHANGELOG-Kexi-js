@@ -335,6 +335,30 @@ PiggZ_	js: and to ensure you always have id 1 and 2, well.....they would be anyw
 - add permissions information to connection : and - for sqlite - check if file is RO
    and then set RO flag
 - add kexi__toremove table, and use it to remove objects on begin connection
+- [Kexi 0.2?] sometimes a user has got only one database availaliable on a server 
+  (eg. when server is commercially hosted). Somethime user isn't just able 
+  to create database because of insuffficient privileges. 
+  Solutions --> add a possibility of sharing multiple projects within the same database
+      * kexi__* tables will be shared
+      * prefixes can be needed for table names (add option to set or unset this)
+      * prefixes will be hidden (stripped out) by KexiDB from real names, eg. 'mydb_mytable' -> 'mytable'
+      * let's set default prefix equal to database name
+      * within a group of "projects sharing the same databse" it will be easier to:
+       ** mount (attach) external projects to an opened Kexi project
+       ** run queries using tables from many projects
+      * disadvantages:
+       ** decreased modularity and data encapsulation
+       ** possible problems with transactions and user access rights
+       ** custom table names can look weird outside Kexi
+       ** the feature adds another level of complexity to KexiDB
+
+?????	is it possible to just use a database and store the kexi stuff in a .kexi file?
+	jstaniek	ruurd: you just dont want to create kexi__* tables on your database?
+	ruurd	yes, and use an existing database.
+	jstaniek	ruurd: that's planned but note:
+	jstaniek	this option doesn't offer you atomic changes to database schema, by definition, because two database conenctions are started concurrently.
+	jstaniek	So we'll need to behave with care...
+	jstaniek	ruurd: of course this is easier to do with read only databases or even databases where you don't plan to change schema (but just process db records)
 
 === KexiDB Parser TODO ===
 - add a method for replacing a single given table name in the statement (useful on table renames)
@@ -397,6 +421,27 @@ TODO: add time zones support: 1994-11-05T08:15:30-05:00
 TODO: update to sqlite3.1 and use it's features http://www.sqlite.org/releasenotes310.html
 TODO: 0.1 stable: reuse http://segfault.is-a-geek.net:8001/feedback-kinitiator/
 	gfx can be found here: http://cvs.sourceforge.net/viewcvs.py/kinitiator/
+
+
+TODO: look at recent Martin's stuff: http://homepages.cs.ncl.ac.uk/m.a.ellis/kexi/
+
+2005-02-17
+Forms
+- Avoid errors and handle invalid dataSource property values within forms
+- show errors as "#NAME?" in line edits and other data-aware widgets
+
+2005-02-11...2005-02-20
+Kexi Startup
+- Support for ".kexis" shortcut files added. You can now easily create 
+  a shortcut file once, and connect to your remote database server with 
+  just one click :)
+- "-type" command line option added 
+  (specifies a type of a file provided as argument)
+- opened file types are additionally checked by name extension 
+  (if mimetype was not detected) -- this is useful for shortcut files
+- KexiDBShortcutFile class added
+- database/connection dialog reimplemented
+- KexiDBDriverComboBox added: a combo box for selecting a database driver
 
 2005-02-04
 KexiDB

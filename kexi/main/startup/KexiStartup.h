@@ -25,6 +25,7 @@
 
 #include <core/kexistartupdata.h>
 #include <core/kexi.h>
+#include <tristate.h>
 
 class KexiProjectData;
 class KexiProjectData;
@@ -34,51 +35,62 @@ namespace KexiDB {
 	class ConnectionData;
 }
 
+/*! Handles startup actions for Kexi application.
+*/
 class KEXIMAIN_EXPORT KexiStartupHandler 
 	: public QObject, public KexiStartupData, public Kexi::ObjectStatus
 {
-public:
-	
-	KexiStartupHandler();
-	virtual ~KexiStartupHandler();
+	Q_OBJECT
 
-	virtual bool init(int argc, char **argv);
-	
-#if 0
-	/*! Used for opening existing projects. 
-	 Detects project file type by mime type and returns project data, if it can be detected,
-	 otherwise - NULL. \a parent is passed as parent for potential error message boxes.
-	 Also uses \a cdata connection data for server-based projects.
-	 cdata.driverName is adjusted, if a file-based project has been detected.
-	*/
-	static KexiProjectData* detectProjectData( 
-		KexiDB::ConnectionData& cdata, const QString &dbname, QWidget *parent);
-#endif
+	public:
+		KexiStartupHandler();
+		virtual ~KexiStartupHandler();
 
-	/*! Options for detectDriverForFile() */
-	enum DetectDriverForFileOptions { 
-		DontConvert = 1 //skip asking for conversion (used e.g. when dropdb is called)
-	};
+		virtual tristate init(int argc, char **argv);
+		
+	#if 0
+		/*! Used for opening existing projects. 
+		 Detects project file type by mime type and returns project data, if it can be detected,
+		 otherwise - NULL. \a parent is passed as parent for potential error message boxes.
+		 Also uses \a cdata connection data for server-based projects.
+		 cdata.driverName is adjusted, if a file-based project has been detected.
+		*/
+		static KexiProjectData* detectProjectData( 
+			KexiDB::ConnectionData& cdata, const QString &dbname, QWidget *parent);
+	#endif
 
-	/*! Used for opening existing file-based projects. 
-	 Detects project file type by mime type and returns driver name suitable for it
-	 -- if it can be detected, otherwise - NULL. 
-	 \a parent is passed as a parent for potential error message boxes.
-	 \a driverName is a preferred driver name. For 
-	 cdata.driverName is adjusted, if a file-based project has been detected.
-	*/
-	static QString detectDriverForFile( const QString& driverName, 
-		const QString &dbFileName, QWidget *parent = 0, int options = 0 );
+		/*! Options for detectDriverForFile() */
+		enum DetectDriverForFileOptions { 
+			DontConvert = 1, //!< skip asking for conversion (used e.g. when dropdb is called)
+			ThisIsAProjectFile = 2, //!< a hint, forces detection of the file as a project file
+			ThisIsAShortcutToAProjectFile = 4, //!< a hint, forces detection of the file 
+											   //!< as a shortcut to a project file
+		};
 
-	/*! Allows user to select a project with KexiProjectSelectorDialog.
-		\return selected project's data or NULL if dialog was cancelled.
-	*/
-	KexiProjectData* selectProject(KexiDB::ConnectionData *cdata, QWidget *parent = 0);
+		/*! Used for opening existing file-based projects. 
+		 Detects project file type by mime type and returns driver name suitable for it
+		 -- if it can be detected, otherwise - NULL. 
+		 \return "shortcut" string if the file looks like a shortcut to a project/connection file.
+		 \a parent is passed as a parent for potential error message boxes.
+		 \a driverName is a preferred driver name. For 
+		 cdata.driverName is adjusted, if a file-based project has been detected.
+		*/
+		static QString detectDriverForFile( const QString& driverName, 
+			const QString &dbFileName, QWidget *parent = 0, int options = 0 );
 
-protected:
-	bool getAutoopenObjects(KCmdLineArgs *args, const QCString &action_name);
+		/*! Allows user to select a project with KexiProjectSelectorDialog.
+			\return selected project's data or NULL if dialog was cancelled.
+		*/
+		KexiProjectData* selectProject(KexiDB::ConnectionData *cdata, QWidget *parent = 0);
 
-	KexiStartupHandlerPrivate *d;
+	protected slots:
+		void slotSaveShortcutFileChanges();
+		void slotShowConnectionDetails();
+
+	protected:
+		bool getAutoopenObjects(KCmdLineArgs *args, const QCString &action_name);
+
+		KexiStartupHandlerPrivate *d;
 };
 
 namespace Kexi

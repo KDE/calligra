@@ -28,6 +28,7 @@
 #include "kexiprojectdata.h"
 #include "kexiprojectset.h"
 #include "kexiguimsghandler.h"
+#include "KexiDBShortcutFile.h"
 
 #include <kexidb/driver.h>
 #include <kexidb/drivermanager.h>
@@ -36,6 +37,7 @@
 #include "KexiProjectSelectorBase.h"
 #include "KexiProjectSelector.h"
 #include "KexiNewProjectWizard.h"
+#include <kexidbconnectionwidget.h>
 
 #include <kdebug.h>
 #include <klocale.h>
@@ -45,6 +47,7 @@
 #include <kdeversion.h>
 #include <kpassdlg.h>
 #include <kprogress.h>
+#include <ktextedit.h>
 
 #include <unistd.h>
 
@@ -54,6 +57,7 @@
 
 #include <qcstring.h>
 #include <qapplication.h>
+#include <qlayout.h>
 
 namespace Kexi {
 	static KexiStartupHandler _startupHandler;
@@ -67,10 +71,21 @@ class KexiStartupHandlerPrivate
 {
 	public:
 		KexiStartupHandlerPrivate()
+		 : passwordDialog(0), showConnectionDetailsExecuted(false), shortcutFile(0), connDialog(0)
 		{
 		}
 
-		int dummy;
+		~KexiStartupHandlerPrivate()
+		{
+			delete passwordDialog;
+			delete connDialog;
+		}
+
+		KPasswordDialog* passwordDialog;
+		bool showConnectionDetailsExecuted : 1;
+		KexiDBShortcutFile *shortcutFile;
+		KexiDBConnectionDialog *connDialog;
+		QString shortcutFileGroupKey;
 };
 
 //---------------------------------
@@ -172,15 +187,24 @@ bool KexiStartupHandler::getAutoopenObjects(KCmdLineArgs *args, const QCString &
 	return atLeastOneFound;
 }
 
-bool KexiStartupHandler::init(int argc, char **argv)
+tristate KexiStartupHandler::init(int argc, char **argv)
 {
 	m_action = DoNothing;
+	d->showConnectionDetailsExecuted = false;
 	KCmdLineArgs *args = KCmdLineArgs::parsedArgs(0);
 	if (!args)
 		return true;
 
 	KexiDB::ConnectionData cdata;
 	cdata.driverName = args->getOption("dbdriver");
+
+	QString fileType( args->getOption("type").lower() );
+	if (args->count()>0 && (!fileType.isEmpty() && fileType!="project" && fileType!="shortcut")) {
+		KMessageBox::sorry( 0, 
+			i18n("You have specified invalid argument (\"%1\") for \"type\" command-line option.")
+			.arg(fileType));
+		return false;
+	}
 
 //	if (cdata.driverName.isEmpty())
 //		cdata.driverName = KexiDB::Driver::defaultFileBasedDriverName();
@@ -271,9 +295,11 @@ bool KexiStartupHandler::init(int argc, char **argv)
 //TODO: add option for non-gui; integrate with KWallet; 
 //      move to static KexiProject method
 	if (!fileDriverSelected && !cdata.driverName.isEmpty() && cdata.password.isEmpty()) {
-		QString msg = cdata.userName.isEmpty() ?
+		QString msg = "<H2>" + i18n("Opening database") + "</H2><p>"
+		 + i18n("Please enter the password.") + "</p>";
+/*		msg += cdata.userName.isEmpty() ?
 			"<p>"+i18n("Please enter the password.")
-			: "<p>"+i18n("Please enter the password for user %1.").arg(cdata.userName);
+			: "<p>"+i18n("Please enter the password for user.").arg("<b>"+cdata.userName+"</b>");*/
 
 		QString srv = cdata.serverInfoString(false);
 		if (srv.isEmpty() || srv.lower()=="localhost")
@@ -287,13 +313,27 @@ bool KexiStartupHandler::init(int argc, char **argv)
 			usr = cdata.userName;
 		msg += ("<p>"+i18n("Username: %1").arg(usr)+"</p>");
 
-		QCString pwd;
-		if (QDialog::Accepted == KPasswordDialog::getPassword(pwd, msg)) {
-			cdata.password = QString(pwd);
-		}
-		else {
-			m_action = Exit;
-			return true;
+		{
+			delete d->passwordDialog;
+			d->passwordDialog = new KPasswordDialog(int(KPasswordDialog::Password), msg, 
+				false /*keep*/, KDialogBase::User1);
+			connect( d->passwordDialog, SIGNAL(user1Clicked()), 
+				this, SLOT(slotShowConnectionDetails()) );
+			d->passwordDialog->setButtonText(KDialogBase::User1, i18n("&Details")+ " >>");
+			d->passwordDialog->setButtonOK(KGuiItem(i18n("&Open"), "fileopen"));
+			int ret = d->passwordDialog->exec();
+			QCString pwd( d->passwordDialog->password() );
+			delete d->passwordDialog;
+			d->passwordDialog = 0;
+			if (d->showConnectionDetailsExecuted || ret == QDialog::Accepted) {
+//				if ( ret == QDialog::Accepted ) {
+		//		if (QDialog::Accepted == KPasswordDialog::getPassword(pwd, msg)) {
+				cdata.password = QString(pwd);
+//				}
+			} else {
+				m_action = Exit;
+				return true;
+			}
 		}
 	}
 
@@ -304,7 +344,7 @@ bool KexiStartupHandler::init(int argc, char **argv)
 
 	if (m_forcedFinalMode && m_forcedDesignMode) {
 		KMessageBox::sorry( 0, i18n(
-		"You have used both \"final-mode\" and \"design-mode\" ""startup options.")+couldnotMsg);
+		"You have used both \"final-mode\" and \"design-mode\" startup options.")+couldnotMsg);
 		return false;
 	}
 
@@ -336,22 +376,86 @@ bool KexiStartupHandler::init(int argc, char **argv)
 		else {
 			if (fileDriverSelected) {
 				int detectOptions = 0;
+				if (fileType=="project")
+					detectOptions |= ThisIsAProjectFile;
+				else if (fileType=="shortcut")
+					detectOptions |= ThisIsAShortcutToAProjectFile;
+
 				if (m_dropDB)
 					detectOptions |= DontConvert;
 				cdata.driverName = KexiStartupHandler::detectDriverForFile( cdata.driverName,
 					cdata.fileName(), 0, detectOptions );
 				if (cdata.driverName.isEmpty())
 					return false;
-				m_projectData = new KexiProjectData(cdata, prjName);
+
+				if (cdata.driverName=="shortcut") {
+					//get information for a shortcut file
+					d->shortcutFile = new KexiDBShortcutFile(cdata.fileName());
+					m_projectData = new KexiProjectData();
+					if (!d->shortcutFile->loadConnectionData(*m_projectData, &d->shortcutFileGroupKey)) {
+						KMessageBox::sorry(0, i18n("Could not open shortcut file\n\"%1\".")
+							.arg(cdata.fileName()));
+						delete m_projectData;
+						m_projectData = 0;
+						delete d->shortcutFile;
+						d->shortcutFile = 0;
+						return false;
+					}
+					d->connDialog = new KexiDBConnectionDialog(*m_projectData, d->shortcutFile->fileName());
+					connect(d->connDialog->tabWidget->mainWidget, SIGNAL(saveChanges()), 
+						this, SLOT(slotSaveShortcutFileChanges()));
+					int res = d->connDialog->exec();
+
+					if (res == QDialog::Accepted) {
+						//get (possibly changed) prj data
+						*m_projectData = d->connDialog->currentData();
+					}
+
+					delete d->connDialog;
+					d->connDialog = 0;
+					delete d->shortcutFile;
+					d->shortcutFile = 0;
+
+					if (res == QDialog::Rejected) {
+						delete m_projectData;
+						m_projectData = 0;
+						return cancelled;
+					}
+				}
+				else
+					m_projectData = new KexiProjectData(cdata, prjName);
 			}
 			else
 				m_projectData = new KexiProjectData(cdata, prjName);
+
 		}
 //		if (!m_projectData)
 //			return false;
 	}
 	if (args->count()>1) {
 		//TODO: KRun another Kexi instances
+	}
+
+	//let's show connection details, user asked for that in the "password dialog"
+	if (d->showConnectionDetailsExecuted) {
+		d->connDialog = new KexiDBConnectionDialog(*m_projectData);
+//		connect(d->connDialog->tabWidget->mainWidget, SIGNAL(saveChanges()), 
+//			this, SLOT(slotSaveShortcutFileChanges()));
+		int res = d->connDialog->exec();
+
+		if (res == QDialog::Accepted) {
+			//get (possibly changed) prj data
+			*m_projectData = d->connDialog->currentData();
+		}
+
+		delete d->connDialog;
+		d->connDialog = 0;
+
+		if (res == QDialog::Rejected) {
+			delete m_projectData;
+			m_projectData = 0;
+			return cancelled;
+		}
 	}
 
 	//---autoopen objects:
@@ -369,13 +473,13 @@ bool KexiStartupHandler::init(int argc, char **argv)
 	}
 
 	if (m_createDB) {
-		bool cancelled;
+		bool creationNancelled;
 		KexiGUIMessageHandler gui;
-		KexiProject *prj = KexiProject::createBlankProject(cancelled, projectData(), &gui);
+		KexiProject *prj = KexiProject::createBlankProject(creationNancelled, projectData(), &gui);
 		bool ok = prj!=0;
 		delete prj;
-		if (cancelled)
-			return true;
+		if (creationNancelled)
+			return cancelled;
 		if (!m_alsoOpenDB) {
 			if (ok) {
 				KMessageBox::information( 0, i18n("Project \"%1\" created successfully.")
@@ -507,15 +611,28 @@ QString KexiStartupHandler::detectDriverForFile(
 	if (!finfo.isWritable()) {
 		//TODO: if file is ro: change project mode
 	}
-	KMimeType::Ptr ptr = KMimeType::findByFileContent(dbFileName);
-	QString mimename = ptr.data()->name();
-	kdDebug() << "KexiStartupHandler::detectProjectData(): found mime is: " 
-		<< ptr.data()->name() << endl;
-	if (mimename=="application/x-kexiproject-shortcut") {
-		return QString::null;//TODO: get information for xml shortcut file
+
+	KMimeType::Ptr ptr;
+	QString mimename;
+
+	if ((options & ThisIsAProjectFile) || !(options & ThisIsAShortcutToAProjectFile)) {
+		//try this detection if "project file" mode is forced or no type is forced:
+		ptr = KMimeType::findByFileContent(dbFileName);
+		mimename = ptr.data()->name();
+		kdDebug() << "KexiStartupHandler::detectProjectData(): found mime is: " 
+			<< mimename << endl;
+		if (mimename.isEmpty() || mimename=="application/octet-stream" || mimename=="text/plain") {
+			//try by URL:
+			ptr = KMimeType::findByURL(dbFileName);
+			mimename = ptr.data()->name();
+		}
 	}
-	// "application/x-kexiproject-sqlite", etc
+	if ((options & ThisIsAShortcutToAProjectFile) || mimename=="application/x-kexiproject-shortcut")
+		return "shortcut";
+
+	// "application/x-kexiproject-sqlite", etc.
 	QString detectedDriverName = Kexi::driverManager().lookupByMime(mimename).latin1();
+//@todo What about trying to reuse KOFFICE FILTER CHANINS here?
 	if (/*cdata.driverName.isEmpty() 
 		||*/ (!driverName.isEmpty() && driverName.lower()!=detectedDriverName.lower() 
 			&& KMessageBox::Yes == KMessageBox::warningYesNo(parent, i18n(
@@ -562,6 +679,7 @@ QString KexiStartupHandler::detectDriverForFile(
 			i18n( "The file \"%1\" is not recognized as being supported by Kexi.").arg(dbFileName),
 			QString::fromLatin1("<p>")
 			+i18n("Database driver for this file type not found.\nDetected MIME type: %1").arg(mimename)
+			+(ptr.data()->comment().isEmpty() ? QString::fromLatin1(".") : QString(" (%1).").arg(ptr.data()->comment()))
 			+QString::fromLatin1("</p>")
 			+possibleProblemsInfoMsg);
 		return QString::null;
@@ -592,3 +710,21 @@ KexiStartupHandler::selectProject(KexiDB::ConnectionData *cdata, QWidget *parent
 	return projectData;
 }
 
+void KexiStartupHandler::slotSaveShortcutFileChanges()
+{
+	if (!d->shortcutFile->saveConnectionData(d->connDialog->currentData(), 
+		d->connDialog->savePasswordSelected(), 
+		&d->shortcutFileGroupKey ))
+	{
+		KMessageBox::sorry(0, i18n("Failed saving connection data to\n\"%1\" file.")
+			.arg(d->shortcutFile->fileName()));
+	}
+}
+
+void KexiStartupHandler::slotShowConnectionDetails()
+{
+	d->passwordDialog->close();
+	d->showConnectionDetailsExecuted = true;
+}
+
+#include "KexiStartup.moc"

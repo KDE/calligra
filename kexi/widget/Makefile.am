@@ -6,7 +6,8 @@ libkexiextendedwidgets_la_SOURCES = kexidataawareview.cpp \
 	kexiquerydesignersqleditor.cpp kexidatasourcecombo.cpp \
 	kexidatasourcewizard.cpp kexidswelcome.cpp kexidssource.cpp \
 	kexidatasourcefields.cpp kexisectionheader.cpp pixmapcollection.cpp \
-	kexiscrollview.cpp
+	kexiscrollview.cpp kexidbconnectionwidgetbase.ui kexidbconnectionwidget.cpp \
+	kexidbconnectionwidgetdetailsbase.ui kexidbdrivercombobox.cpp
 
 libkexiextendedwidgets_la_LDFLAGS = $(all_libraries) -Wnounresolved
 libkexiextendedwidgets_la_LIBADD = $(LIB_KDEUI) ./utils/libkexiguiutils.la tableview/libkexidatatable.la ../core/libkexicore.la -lktexteditor

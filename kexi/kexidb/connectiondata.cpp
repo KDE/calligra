@@ -69,7 +69,7 @@ ConnectionData::~ConnectionData()
 
 ConnectionData& ConnectionData::operator=(const ConnectionData& cd)
 {
-	delete priv;
+	delete priv; //this is old
 	static_cast<ConnectionDataBase&>(*this) = static_cast<const ConnectionDataBase&>(cd);//copy data members
 	priv = new ConnectionData::Private();
 	*priv = *cd.priv;

@@ -53,7 +53,9 @@ class KEXICORE_EXPORT KexiProjectData : public QObject, public KexiDB::SchemaDat
 //			 const QString& userName, const QString &password, const QString& fileName);
 
 		~KexiProjectData();
-		
+
+		KexiProjectData& operator=(const KexiProjectData& pdata);
+
 		/*! \return true if there is final mode set in internal 
 		 project settings. */
 		bool finalMode() const;

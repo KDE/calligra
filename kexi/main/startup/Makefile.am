@@ -9,14 +9,14 @@ libkeximainstartup_la_SOURCES = KexiConnSelectorBase.ui KexiProjectSelectorBase.
 	KexiConnSelector.cpp KexiProjectSelector.cpp \
 	KexiStartupDialog.cpp \
 	KexiStartupFileDialog.cpp KexiNewProjectWizard.cpp \
-	KexiStartup.cpp KexiStartup_p.cpp
-
-#KexiXMLStorage.cpp 
+	KexiStartup.cpp KexiStartup_p.cpp \
+	KexiDBShortcutFile.cpp
 
 noinst_HEADERS = KexiStartup_p.h
 
 libkeximainstartup_la_LDFLAGS = $(all_libraries) -Wnounresolved
-libkeximainstartup_la_LIBADD =
+libkeximainstartup_la_LIBADD = \
+	../../widget/libkexiextendedwidgets.la
 
 libkeximainstartup_la_METASOURCES = AUTO
 
