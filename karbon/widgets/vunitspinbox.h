@@ -65,8 +65,6 @@ public:
 	KoUnitDoubleSpinBox( QWidget *parent, double lower, double upper, double step, double value = 0.0,
 					 unsigned int precision = 2, const char *name = 0 );
 
-	virtual void setValidator( const QValidator * );
-
 	virtual void changeValue( double );
 	virtual void setUnit( KoUnit::Unit = KoUnit::U_PT );
 };
