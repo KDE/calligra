@@ -70,15 +70,15 @@ KexiInputTableEdit::KexiInputTableEdit(QVariant value, QVariant::Type type, QStr
 	}
 	else
 	{
-//		qDebug("KexiInputTableEdit::KexiInputTableEdit(): have to mark! (%i)", text().length());
-//		setText(value.toString());
 		static_cast<QLineEdit*>(m_view)->insert(value.toString());
-		qDebug("KexiInputTableEdit::KexiInputTableEdit(): have to mark! (%i)", static_cast<QLineEdit*>(m_view)->text().length());
+		kdDebug() << "KexiInputTableEdit::KexiInputTableEdit(): have to mark! (%i)"
+			<< static_cast<QLineEdit*>(m_view)->text().length() << endl;
 		static_cast<QLineEdit*>(m_view)->setSelection(0, static_cast<QLineEdit*>(m_view)->text().length());
 		static_cast<QLineEdit*>(m_view)->selectAll();
 	}
 
 	m_calculatedCell = false;
+	setFocusProxy(m_view);
 }
 
 bool
@@ -97,14 +97,10 @@ KexiInputTableEdit::eventFilter(QObject* watched, QEvent* e)
 					if(ev->text() == KGlobal::_locale->decimalSymbol() || ev->text() == KGlobal::_locale->monetaryDecimalSymbol())
 						return false;
 						
-					return true;
-				
 				case QVariant::Int:
 					if(ev->text() == KGlobal::_locale->negativeSign())
 						return false;
 						
-					return true;
-
 				case QVariant::UInt:
 					if(m_calculatedCell)
 					{
