@@ -29,23 +29,6 @@
 
 /////
 
-// There is one QStyleSheetItems per paragraph, created on demand,
-// in order to set the DisplayMode for counters.
-void KoTextParag::checkItem( QStyleSheetItem * & item, const char * name )
-{
-    // ### Note: now that we forked QRT, we could get rid of this
-    // (useless memory allocation) and call drawLabel directly
-    if ( !item )
-    {
-        item = new QStyleSheetItem( 0, QString::fromLatin1(name) /* For debugging purposes only */ );
-        QPtrVector<QStyleSheetItem> vec = styleSheetItems();
-        vec.resize( vec.size() + 1 );
-        vec.insert( vec.size() - 1, item );
-        //kdDebug() << "KoTextParag::checkItem inserting QStyleSheetItem " << name << " at position " << vec.size()-1 << endl;
-        setStyleSheetItems( vec );
-    }
-}
-
 // Return the counter associated with this paragraph.
 KoParagCounter *KoTextParag::counter()
 {
@@ -123,10 +106,6 @@ void KoTextParag::setCounter( const KoParagCounter & counter )
     {
         delete m_layout.counter;
         m_layout.counter = new KoParagCounter( counter );
-
-        checkItem( m_item, "m_item" );
-        // Set the display mode (in order for drawLabel to get called by KoTextParag)
-        m_item->setDisplayMode( QStyleSheetItem::DisplayListItem );
 
         // Invalidate the counters
         invalidateCounters();
@@ -388,6 +367,14 @@ void KoTextParag::paint( QPainter &painter, const QColorGroup &cg, KoTextCursor 
     //kdDebug() << "KoTextParag::paint clipx=" << clipx << " clipy=" << clipy << " clipw=" << clipw << " cliph=" << cliph << endl;
     //kdDebug() << " clipw in pix (approx) : " << textDocument()->paintingZoomHandler()->layoutUnitToPixelX( clipw ) << endl;
     //kdDebug() << " cliph in pix (approx) : " << textDocument()->paintingZoomHandler()->layoutUnitToPixelX( cliph ) << endl;
+
+    // Let's call drawLabel ourselves, rather than having to deal with QStyleSheetItem to get paintDefault to call it!
+    if ( m_layout.counter && m_layout.counter->numbering() != KoParagCounter::NUM_NONE )
+    {
+        int cy, h, baseLine;
+        lineInfo( 0, cy, h, baseLine );
+        drawLabel( &painter, at(0)->x, cy, 0, 0, baseLine, cg );
+    }
 
     // We force the alignment to justify during drawing, so that drawParagString is called
     // for at most one word at a time, never more. This allows to make the spaces slightly

@@ -3700,7 +3700,6 @@ KoTextParag::KoTextParag( KoTextDocument *d, KoTextParag *pr, KoTextParag *nx, b
     str = new KoTextString();
     str->insert( 0, " ", formatCollection()->defaultFormat() );
     //// kotext
-    m_item = 0L;
     setNewLinesAllowed(TRUE);
     ////
 }
@@ -3738,7 +3737,6 @@ KoTextParag::~KoTextParag()
         emit document()->paragraphDeleted( this );
     }
     //kdDebug() << "KoTextParag::~KoTextParag " << this << endl;
-    delete m_item;
     ////
 }
 

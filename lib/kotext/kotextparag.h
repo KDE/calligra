@@ -147,7 +147,6 @@ public:
 
 protected:
     void invalidateCounters();
-    void checkItem( QStyleSheetItem * & item, const char * name );
 
     void drawParagStringInternal( QPainter &painter, const QString &s, int start, int len, int startX,
                                   int lastY, int baseLine, int bw, int h, bool drawSelections,
@@ -161,6 +160,5 @@ protected:
                                       bool, KoTextFormat *, int, const QMemArray<int> &,
                                       const QMemArray<int> &, const QColorGroup &, bool ) { }
 protected:
-    QStyleSheetItem * m_item;
     KoParagLayout m_layout;
     QMap<int, int> m_tabCache;
