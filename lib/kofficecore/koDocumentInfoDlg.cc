@@ -24,6 +24,7 @@
 
 #include <sys/stat.h>
 #include <unistd.h>
+#include <assert.h>
 
 #include <qlabel.h>
 #include <qlineedit.h>
@@ -36,6 +37,8 @@
 #include <ktar.h>
 #include <kdebug.h>
 #include <ktempfile.h>
+#include <kmimetype.h>
+#include <kfilterdev.h>
 #include <qgrid.h>
 
 class KoDocumentInfoDlg::KoDocumentInfoDlgPrivate
@@ -303,7 +306,7 @@ KoDocumentInfoPropsPage::KoDocumentInfoPropsPage( KPropertiesDialog *props,
 
   d->m_dst = 0;
 
-  d->m_src = new KTarGz( d->m_url.path() );
+  d->m_src = new KTarGz( d->m_url.path(), "application/x-gzip" );
 
   if ( !d->m_src->open( IO_ReadOnly ) )
     return;
@@ -369,10 +372,20 @@ void KoDocumentInfoPropsPage::applyChanges()
   if ( !tempFile.close() )
     return;
 
-  d->m_dst = new KTarGz( tempFile.name() );
+  d->m_dst = new KTarGz( tempFile.name(), "application/x-gzip" );
 
   if ( !d->m_dst->open( IO_WriteOnly ) )
     return;
+
+  KMimeType::Ptr mimeType = KMimeType::findByURL( d->m_url, 0, true );
+  if ( mimeType && dynamic_cast<KFilterDev *>( d->m_dst->device() ) != 0 )
+  {
+      QCString appIdentification( "KOffice " ); // We are limited in the number of chars.
+      appIdentification += mimeType->name().latin1();
+      appIdentification += '\004'; // Two magic bytes to make the identification
+      appIdentification += '\006'; // more reliable (DF)
+      d->m_dst->setOrigFileName( appIdentification );
+  }
 
   bool docInfoSaved = false;
 
@@ -382,6 +395,8 @@ void KoDocumentInfoPropsPage::applyChanges()
   for (; it != end; ++it )
   {
     const KTarEntry *entry = root->entry( *it );
+
+    assert( entry );
 
     if ( entry->name() == "documentinfo.xml" ||
          ( !docInfoSaved && !entries.contains( "documentinfo.xml" ) ) )
@@ -415,7 +430,7 @@ void KoDocumentInfoPropsPage::applyChanges()
 
 void KoDocumentInfoPropsPage::copy( const QString &path, const KTarEntry *entry )
 {
-  kdDebug( 30003 ) << "copy" << endl;
+  kdDebug( 30003 ) << "copy " << entry->name() << endl;
   if ( entry->isFile() )
   {
     const KTarFile *file = static_cast<const KTarFile *>( entry );
@@ -445,5 +460,8 @@ void KoDocumentInfoPropsPage::copy( const QString &path, const KTarEntry *entry 
       copy( p, dir->entry( *it ) );
   }
 }
+
+/* vim: sw=2 et
+ */
 
 #include <koDocumentInfoDlg.moc>
