@@ -21,7 +21,7 @@
 #define __main_h__
 
 class KSpell;
-class KSpellConfig;
+
 #include <qobject.h>
 
 #include <koDataTool.h>
@@ -34,7 +34,7 @@ class SpellChecker : public KoDataTool
 public:
     SpellChecker( QObject* parent = 0, const char* name = 0 );
 
-    virtual bool run( const QString& command, void* data, const QString& datatype, const QString& mimetype, KSpellConfig *_ksconf=0);
+    virtual bool run( const QString& command, void* data, const QString& datatype, const QString& mimetype);
 };
 
 class SpellCheckerFactory : public KLibFactory

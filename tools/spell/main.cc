@@ -59,12 +59,17 @@ QObject* SpellCheckerFactory::create( QObject* parent, const char* name, const c
  *
  ***************************************************/
 
+struct spellStruct {
+  QString _data;
+  KSpellConfig * _ksconf;
+};
+
 SpellChecker::SpellChecker( QObject* parent, const char* name )
     : KoDataTool( parent, name )
 {
 }
 
-bool SpellChecker::run( const QString& command, void* data, const QString& datatype, const QString& mimetype, KSpellConfig *_ksconf )
+bool SpellChecker::run( const QString& command, void* data, const QString& datatype, const QString& mimetype )
 {
     if ( command != "spellcheck" )
     {
@@ -86,16 +91,20 @@ bool SpellChecker::run( const QString& command, void* data, const QString& datat
     }
 
     // Get data
-    QString buffer = *((QString*)data);
+    //QString buffer = *((QString*)data);
+    spellStruct tmpStruct = *((spellStruct*)data);
+    QString buffer = tmpStruct._data;
     buffer = buffer.stripWhiteSpace();
 
     // #### handle errors
     // Call the spell checker
-    KSpell::modalCheck( buffer, _ksconf );
+    //KSpell::modalCheck( buffer, _ksconf );
+    KSpell::modalCheck( buffer, tmpStruct._ksconf );
 
     // Set data
-    *((QString*)data) = buffer;
-
+    //*((QString*)data) = buffer;
+    tmpStruct._data=buffer;
+    *((spellStruct*)data) = tmpStruct;
     return TRUE;
 }
 
