@@ -445,6 +445,8 @@ KSpreadView::KSpreadView( QWidget *_parent, const char *_name, KSpreadDoc* doc )
       }
       setActiveTable( tbl );
     }
+    adjustActions( !m_pTable->isProtected() );
+    adjustMapActions( !m_pDoc->map()->isProtected() );
 
     QObject::connect( m_pDoc, SIGNAL( sig_addTable( KSpreadSheet* ) ), SLOT( slotAddTable( KSpreadSheet* ) ) );
 
@@ -466,7 +468,6 @@ KSpreadView::KSpreadView( QWidget *_parent, const char *_name, KSpreadDoc* doc )
     QStringList list = m_viewZoom->items();
     QString zoomStr = QString::number(m_pDoc->zoom() ) + '%';
     m_viewZoom->setCurrentItem( list.findIndex(zoomStr)  );
-
 }
 
 
@@ -2006,8 +2007,16 @@ void KSpreadView::updateReadWrite( bool readwrite )
   m_transform->setEnabled( false );
   m_redo->setEnabled( false );
   m_undo->setEnabled( false );
-  m_showTable->setEnabled( true );
-  m_hideTable->setEnabled( true );
+  if ( !m_pDoc || !m_pDoc->map() || m_pDoc->map()->isProtected() )
+  {
+    m_showTable->setEnabled( false );
+    m_hideTable->setEnabled( false );
+  }
+  else
+  {
+    m_showTable->setEnabled( true );
+    m_hideTable->setEnabled( true );
+  }
   m_gotoCell->setEnabled( true );
   m_viewZoom->setEnabled( true );
   m_showPageBorders->setEnabled( true );
@@ -2944,7 +2953,9 @@ void KSpreadView::setActiveTable( KSpreadSheet *_t,bool updateTable )
 
   m_showPageBorders->setChecked( m_pTable->isShowPageBorders() );
   m_protectSheet->setChecked( m_pTable->isProtected() );
+  m_protectDoc->setChecked( m_pDoc->map()->isProtected() );
   adjustActions( !m_pTable->isProtected() );
+  adjustMapActions( !m_pDoc->map()->isProtected() );
 
   /* see if there was a previous selection on this other table */
   QMapIterator<KSpreadSheet*, QPoint> it = savedAnchors.find(m_pTable);
@@ -3049,6 +3060,13 @@ void KSpreadView::insertTable()
   KSpreadUndoAddTable *undo = new KSpreadUndoAddTable(m_pDoc, t);
   m_pDoc->undoBuffer()->appendUndo( undo );
   setActiveTable( t );
+
+  if ( m_pTabBar->listshow().count() > 1 )
+  {
+    m_removeTable->setEnabled( true );
+    m_hideTable->setEnabled( true );
+  }
+  
   m_pDoc->emitEndOperation();
 }
 
@@ -3641,6 +3659,76 @@ void KSpreadView::slotUpdateChildGeometry( KSpreadChild */*_child*/ )
     */
 }
 
+void KSpreadView::toggleProtectDoc( bool mode )
+{
+   if ( !m_pDoc || !m_pDoc->map() )
+       return;
+
+   QCString passwd;
+   if ( mode )
+   {
+     int result = KPasswordDialog::getNewPassword( passwd, i18n( "Protect document" ) );
+     if ( result != KPasswordDialog::Accepted )
+     {
+       m_protectDoc->setChecked( false );
+       return;
+     }
+
+     QCString hash;
+     QString password( passwd );
+     SHA1::getHash( password, hash );
+     m_pDoc->map()->setProtected( hash );
+   }
+   else
+   {
+     int result = KPasswordDialog::getPassword( passwd, i18n( "Unprotect document" ) );
+     if ( result != KPasswordDialog::Accepted )
+     {
+       m_protectDoc->setChecked( true );
+       return;
+     }
+
+     QCString hash;
+     QString password( passwd );
+     SHA1::getHash( password, hash );
+     if ( !m_pDoc->map()->checkPassword( hash ) )
+     {
+       KMessageBox::error( 0, i18n( "Incorrect password" ) );
+       m_protectDoc->setChecked( true );
+       return;
+     }
+
+     m_pDoc->map()->setProtected( QCString() );
+   }
+
+   m_pDoc->setModified( true );
+   adjustMapActions( !mode );
+}
+
+void KSpreadView::adjustMapActions( bool mode )
+{
+  m_hideTable->setEnabled( mode );
+  m_showTable->setEnabled( mode );
+  m_insertTable->setEnabled( mode );
+  m_menuInsertTable->setEnabled( mode );
+  m_removeTable->setEnabled( mode );
+
+  if ( mode )
+  {
+    if ( m_pTable && !m_pTable->isProtected() )
+    {
+      bool state = ( m_pTabBar->listshow().count() > 1 );
+      m_removeTable->setEnabled( state );
+      m_hideTable->setEnabled( state );
+    }
+    m_showTable->setEnabled( m_pTabBar->listhide().count() > 0 );
+    if ( m_pTable->isProtected() )
+      m_renameTable->setEnabled( false );
+    else
+      m_renameTable->setEnabled( true );
+  }
+}
+
 void KSpreadView::toggleProtectSheet( bool mode )
 {
    if ( !m_pTable )
@@ -3683,6 +3771,7 @@ void KSpreadView::toggleProtectSheet( bool mode )
 
      m_pTable->setProtected( QCString() );     
    }
+   m_pDoc->setModified( true );
    adjustActions( !mode );
 }
 
@@ -3762,7 +3851,6 @@ void KSpreadView::adjustActions( bool mode )
   m_borderRemove->setEnabled( mode );
   m_borderColor->setEnabled( mode );
   m_removeTable->setEnabled( mode );
-  m_renameTable->setEnabled( mode );
   m_autoSum->setEnabled( mode );
   //   m_scripts->setEnabled( mode );
   m_default->setEnabled( mode );
@@ -3801,16 +3889,13 @@ void KSpreadView::adjustActions( bool mode )
   m_sortInc->setEnabled( false );
   m_transform->setEnabled( false );
 
+  if ( mode && m_pDoc && m_pDoc->map() && !m_pDoc->map()->isProtected() )
+    m_renameTable->setEnabled( true );
+  else
+    m_renameTable->setEnabled( false );
+
   if ( mode )
     canvasWidget()->gotoLocation( m_selectionInfo->marker(), m_pTable );
-}
-
-void KSpreadView::toggleProtectDoc( bool mode )
-{
-   if ( !m_pDoc || !m_pDoc->map() )
-       return;
-
-   //   m_pDoc->map()->setProtected( passwd );
 }
 
 void KSpreadView::togglePageBorders( bool mode )
@@ -5607,11 +5692,24 @@ void KSpreadView::openPopupMenuMenuPage( const QPoint & _point )
         return;
     if( m_pTabBar )
     {
-        bool state = (m_pTabBar->listshow().count()>1);
-        if ( !m_pTable && !m_pTable->isProtected() )
+        bool state = ( m_pTabBar->listshow().count() > 1 );
+        if ( !m_pTable || m_pTable->isProtected() )
+        {
+          m_removeTable->setEnabled( false );
+          m_hideTable->setEnabled( false );          
+        }
+        else
         {
           m_removeTable->setEnabled( state);
           m_hideTable->setEnabled( state );
+        }
+        if ( !m_pDoc || !m_pDoc->map() || m_pDoc->map()->isProtected() )
+        {
+          m_insertTable->setEnabled( false );
+          m_renameTable->setEnabled( false );
+          m_showTable->setEnabled( false );
+          m_hideTable->setEnabled( false );
+          m_removeTable->setEnabled( false );
         }
         static_cast<QPopupMenu*>(factory()->container("menupage_popup",this))->popup(_point);
     }
@@ -5630,7 +5728,8 @@ void KSpreadView::removeTable( KSpreadSheet *_t )
   QString m_tablName=_t->tableName();
   m_pTabBar->removeTab( m_tablName );
   setActiveTable( m_pDoc->map()->findTable( m_pTabBar->listshow().first() ));
-  bool state =m_pTabBar->listshow().count()>1;
+
+  bool state = m_pTabBar->listshow().count() > 1;
   m_removeTable->setEnabled( state );
   m_hideTable->setEnabled( state );
   m_pDoc->emitEndOperation();
@@ -5648,7 +5747,7 @@ void KSpreadView::insertTable( KSpreadSheet* table )
   {
     m_pTabBar->addHiddenTab(tabName);
   }
-  bool state =m_pTabBar->listshow().count()>1;
+  bool state = ( m_pTabBar->listshow().count() > 1 );
   m_removeTable->setEnabled( state );
   m_hideTable->setEnabled( state );
   m_pDoc->emitEndOperation();
@@ -5662,7 +5761,10 @@ QColor KSpreadView::borderColor() const
 void KSpreadView::updateShowTableMenu()
 {
   m_pDoc->emitBeginOperation(false);
-  m_showTable->setEnabled(m_pTabBar->listhide().count()>0);
+  if ( m_pTable->isProtected() )
+    m_showTable->setEnabled( false );
+  else
+    m_showTable->setEnabled( m_pTabBar->listhide().count() > 0 );
   m_pDoc->emitEndOperation();
 }
 

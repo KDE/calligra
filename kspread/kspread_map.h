@@ -30,6 +30,7 @@ class DCOPObject;
 class QDomElement;
 class QDomDocument;
 
+#include <qcstring.h>
 #include <qptrlist.h>
 #include <qstring.h>
 #include <qintdict.h>
@@ -58,6 +59,10 @@ public:
   bool loadChildren( KoStore* _store );
 
   bool saveChildren( KoStore* _store );
+
+  bool isProtected() const { return !m_strPassword.isNull(); }
+  void setProtected( QCString const & passwd );
+  bool checkPassword( QCString const & passwd ) const { return ( passwd == m_strPassword ); }
 
   /**
    * The table named @param _from is being moved to the table @param _to.
@@ -133,6 +138,10 @@ private:
    */
   KSpreadDoc *m_pDoc;
 
+  /** 
+   * Password to protect the map from being changed.
+   */
+  QCString m_strPassword;
   /**
    * Set from the XML
    */

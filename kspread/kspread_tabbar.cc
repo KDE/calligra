@@ -399,6 +399,7 @@ void KSpreadTabBar::slotRename()
                 KMessageBox::information( this, i18n("This name is already used."), i18n("Change Sheet Name") );
                 // Recursion
                 slotRename();
+                return;
              }
              m_pView->updateEditWidget();
              m_pView->doc()->setModified( true );

@@ -24,6 +24,8 @@
 
 #include "KSpreadMapIface.h"
 
+#include <kmdcodec.h>
+
 #include <time.h>
 #include <stdlib.h>
 
@@ -42,6 +44,11 @@ KSpreadMap::KSpreadMap( KSpreadDoc *_doc, const char* name )
 KSpreadMap::~KSpreadMap()
 {
     delete m_dcop;
+}
+
+void KSpreadMap::setProtected( QCString const & passwd )
+{
+  m_strPassword = passwd;
 }
 
 void KSpreadMap::addTable( KSpreadSheet *_table )
@@ -90,6 +97,17 @@ QDomElement KSpreadMap::save( QDomDocument& doc )
     mymap.setAttribute( "markerRow", canvas->markerRow() );
   }
 
+  if ( !m_strPassword.isNull() )
+  {
+    if ( m_strPassword.size() > 0 )
+    {
+      QCString str = KCodecs::base64Encode( m_strPassword ); 
+      mymap.setAttribute( "protected", QString( str.data() ) );
+    }
+    else
+      mymap.setAttribute( "protected", "" );      
+  }
+
   QPtrListIterator<KSpreadSheet> it( m_lstTables );
   for( ; it.current(); ++it )
   {
@@ -107,6 +125,20 @@ bool KSpreadMap::loadXML( const QDomElement& mymap )
   QString activeTable = mymap.attribute( "activeTable" );
   m_initialMarkerColumn = mymap.attribute( "markerColumn" ).toInt();
   m_initialMarkerRow = mymap.attribute( "markerRow" ).toInt();
+
+  if ( mymap.hasAttribute( "protected" ) )
+  {
+    QString passwd = mymap.attribute( "protected" );
+    
+    if ( passwd.length() > 0 )
+    {
+      QCString str( passwd.latin1() );
+      m_strPassword = KCodecs::base64Decode( str );        
+    }
+    else
+      m_strPassword = QCString( "" );
+  }
+
   QDomNode n = mymap.firstChild();
   if ( n.isNull() )
   {

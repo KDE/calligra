@@ -59,7 +59,9 @@
 #include "kspread_sheet.moc"
 
 #define NO_MODIFICATION_POSSIBLE \
-  KMessageBox::error( 0, i18n ( "You cannot change a protected sheet" ) ); return
+do { \
+  KMessageBox::error( 0, i18n ( "You cannot change a protected sheet" ) ); return; \
+} while(0)
 
 /*****************************************************************************
  *
@@ -6354,7 +6356,7 @@ QDomElement KSpreadSheet::saveXML( QDomDocument& doc )
     table.setAttribute( "showFormulaIndicator", (int)m_bShowFormulaIndicator);
     table.setAttribute( "lcmode", (int)m_bLcMode);
     table.setAttribute( "borders1.2", 1);
-    if ( !m_strName.isNull() )
+    if ( !m_strPassword.isNull() )
     {
       if ( m_strPassword.size() > 0 )
       {
@@ -6362,8 +6364,7 @@ QDomElement KSpreadSheet::saveXML( QDomDocument& doc )
         table.setAttribute( "protected", QString( str.data() ) );
       }
       else
-        table.setAttribute( "protected", "" );
-      
+        table.setAttribute( "protected", "" );      
     }
 
     // paper parameters
@@ -7267,7 +7268,10 @@ bool KSpreadSheet::setTableName( const QString& name, bool init, bool makeUndo )
         return FALSE;
 
     if ( isProtected() )
-      NO_MODIFICATION_POSSIBLE false;
+    {
+      KMessageBox::error( 0, i18n ( "You cannot change a protected sheet" ) ); 
+      return false;
+    }
 
     if ( m_strName == name )
         return TRUE;
