@@ -3904,8 +3904,23 @@ bool KSpreadCell::tryParseDate( const QString& str )
 
 	QString fmt = locale()->dateFormatShort();
 	if( ( fmt.contains( "%y" ) == 1 ) && ( tmpDate.year() > 2999 ) )
-		tmpDate = tmpDate.addYears( -1900 );
-		
+             tmpDate = tmpDate.addYears( -1900 );
+
+        // this is another HACK !
+        // with two digit years, 0-69 is treated as year 2000-2069 (see KLocale)
+        // however, in Excel only 0-29 is year 2000-2029, 30 or later is 1930 onwards
+
+        // the following provides workaround for KLocale so we're compatible with Excel
+        // (e.g 3/4/45 is Mar 4, 1945 not Mar 4, 2045)
+        if( ( tmpDate.year() >= 2030 ) && ( tmpDate.year() <= 2069 ) )
+        {
+            QString yearFourDigits = QString::number( tmpDate.year() );
+            QString yearTwoDigits = QString::number( tmpDate.year() % 100 );
+
+            // if year is 2045, check to see if "2045" isn't there --> actual input is "45"
+            if( ( str.contains( yearTwoDigits ) >= 1 ) && ( str.contains( yearFourDigits ) == 0 ) )
+                tmpDate = tmpDate.addYears( -100 );
+        }
     }
     if (valid)
     {

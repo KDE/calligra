@@ -123,6 +123,12 @@ void KSpreadPaperLayout::slotOk()
         m_table->doc()->undoBuffer()->appendUndo( undo );
     }
 
+    // get new values for borders
+    leftChanged();
+    rightChanged();
+    topChanged();
+    bottomChanged();
+
     KoPageLayout pl = getLayout();
     KoHeadFoot hf = getHeadFoot();
     KoUnit::Unit unit = m_table->doc()->getUnit();
