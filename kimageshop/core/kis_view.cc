@@ -275,7 +275,7 @@ void KisView::setupSideBar()
         SIGNAL(selected(KisGradient *)), 
         this, SLOT(slotSetGradient(KisGradient*)));
     */        
-    m_pGradientChooser->setCaption("Gradients");
+    m_pGradientChooser->setCaption(i18n("Gradients"));
     m_pSideBar->plug(m_pGradientChooser);
     
    // image file chooser
@@ -286,7 +286,7 @@ void KisView::setupSideBar()
         SIGNAL(selected(KisImageFile *)),
         this, SLOT(slotSetImageFile(KisImageFile*)));
     */   
-    m_pImageChooser->setCaption("Images");
+    m_pImageChooser->setCaption(i18n("Images"));
     m_pSideBar->plug(m_pImageChooser);
 
    // palette chooser
@@ -297,7 +297,7 @@ void KisView::setupSideBar()
         SIGNAL(selected(KisPalette *)),
         this, SLOT(slotSetPalette(KisPalette *)));
     */
-    m_pPaletteChooser->setCaption("Palettes");
+    m_pPaletteChooser->setCaption(i18n("Palettes"));
     m_pSideBar->plug(m_pPaletteChooser);
     
     // layer view
@@ -701,7 +701,7 @@ void KisView::setupActions()
         0, this, SLOT( remove_layer() ),
         actionCollection(), "remove_layer" );
 
-    (void) new KAction( i18n("&Link/Unilnk layer..."),
+    (void) new KAction( i18n("&Link/Unlink layer..."),
         0, this, SLOT( link_layer() ),
         actionCollection(), "link_layer" );
 
