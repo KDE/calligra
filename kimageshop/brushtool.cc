@@ -20,10 +20,10 @@
 
 #include "brushtool.h"
 #include "brush.h"
-#include "canvas.h"
+#include "kimageshop_doc.h"
 #include "kvector.h"
 
-BrushTool::BrushTool(Canvas *_canvas, brush *_brush) : Tool(_canvas)
+BrushTool::BrushTool(KImageShopDoc *doc, brush *_brush) : Tool(doc)
 {
   m_dragging = false;
   m_pBrush = _brush;
@@ -45,11 +45,11 @@ void BrushTool::mousePress(const KImageShop::MouseEvent& e)
   if (!m_pBrush)
     return;
 
-  m_pCanvas->paintBrush(pos, m_pBrush);
+  m_pDoc->paintBrush(pos, m_pBrush);
 
   QRect updateRect(pos - m_pBrush->hotSpot(), m_pBrush->brushSize());
-  m_pCanvas->compositeImage(updateRect);
-  m_pCanvas->repaintAll(updateRect);
+  m_pDoc->compositeImage(updateRect);
+  m_pDoc->slotUpdateViews(updateRect);
 }
 
 void BrushTool::mouseMove(const KImageShop::MouseEvent& e)
@@ -71,7 +71,7 @@ void BrushTool::mouseMove(const KImageShop::MouseEvent& e)
 
       if (length < 10)
 	{
-	  m_pCanvas->paintBrush(pos, m_pBrush);
+	  m_pDoc->paintBrush(pos, m_pBrush);
 	  updateRect = QRect(pos - m_pBrush->hotSpot(), m_pBrush->brushSize());
 	}
       else
@@ -83,12 +83,12 @@ void BrushTool::mouseMove(const KImageShop::MouseEvent& e)
 	    {
 	      if (i == steps)
 		{
-		  m_pCanvas->paintBrush(pos, m_pBrush);
+		  m_pDoc->paintBrush(pos, m_pBrush);
 		}
 	      else
 		{
 		  KVector bpos = start + moveVec * i * 10;
-		  m_pCanvas->paintBrush(QPoint(bpos.x(), bpos.y()), m_pBrush);
+		  m_pDoc->paintBrush(QPoint(bpos.x(), bpos.y()), m_pBrush);
 		}
 	    }
             
@@ -96,8 +96,8 @@ void BrushTool::mouseMove(const KImageShop::MouseEvent& e)
 			   QSize(e.posX, e.posY) + m_pBrush->brushSize());
 	}
       
-      m_pCanvas->compositeImage(updateRect);
-      m_pCanvas->repaintAll(updateRect);
+      m_pDoc->compositeImage(updateRect);
+      m_pDoc->slotUpdateViews(updateRect);
 
       m_dragStart = pos;
     }

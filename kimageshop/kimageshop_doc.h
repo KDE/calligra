@@ -38,7 +38,7 @@
 #define MIME_TYPE "application/x-kimageshop"
 #define EDITOR "IDL:KImageShop/Document:1.0"
 
-class KImageShopDoc : public QObject,
+class KImageShopDoc : public Canvas,
 		      virtual public KoDocument,
 		      virtual public KoPrintExt,
 		      virtual public KImageShop::Document_skel
@@ -46,10 +46,9 @@ class KImageShopDoc : public QObject,
   Q_OBJECT
     
  public:
-  KImageShopDoc();
+  KImageShopDoc(int w = 510, int h = 510);
   ~KImageShopDoc();
 
-  Canvas* canvas_() { return m_pCanvas; }
   virtual bool save( ostream&, const char* _format );
   virtual bool completeSaving( KOStore::Store_ptr _store );
   virtual bool hasToWriteMultipart() { return true; }
@@ -144,23 +143,12 @@ class KImageShopDoc : public QObject,
   bool openDocument( const char* _filename, const char* _format = 0L );
   bool saveDocument( const char* _filename, const char* _format = 0L );
 
-  /**
-   * Returns the image, that is stored in the document.
-   * 
-   * @result The returned image.
-   */
-  const QImage& image();
+public slots:
+ void slotUpdateViews(const QRect &area);
 
-  /**
-   * Transforms the image with the given matrix.
-   * 
-   * @param The matrix to transform the image.
-   */
-  void transformImage( const QWMatrix& matrix );
-  
 signals:
   // Document signals
-  void sigUpdateView();
+  void sigUpdateView(const QRect &area);
   
 protected:
   virtual bool completeLoading( KOStore::Store_ptr /* _store */ );
@@ -261,7 +249,6 @@ protected:
 public:
   QString m_strImageFormat;
   bool m_executeCommand;
-  Canvas *m_pCanvas;
 };
 
 #endif

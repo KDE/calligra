@@ -28,7 +28,7 @@
 class MoveTool : public Tool
 {
  public:
-  MoveTool(Canvas *_canvas);
+  MoveTool(KImageShopDoc *doc);
   ~MoveTool();
 
   virtual char* toolName() { return CORBA::string_dup("MoveTool"); }

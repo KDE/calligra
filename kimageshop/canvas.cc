@@ -31,8 +31,6 @@
 
 Canvas::Canvas(int width, int height)
 {
-  views.setAutoDelete(false);
-  
   w=width;
   h=height;
   viewportRect=QRect(0,0,w,h);
@@ -82,32 +80,22 @@ Canvas::~Canvas()
     free(imageData);
 }
 
-void Canvas::addView(CanvasView *view)
-{
-  views.append(view);
-}
-
-void Canvas::removeView(CanvasView *view)
-{
-  views.removeRef(view);
-}
-
 int Canvas::height()
 {
   return h;
 }
 
-
 int Canvas::width()
 {
   return w;
 }
-void Canvas::repaintView(CanvasView *view, QRect area)
+
+void Canvas::paintPixmap(QWidget *w, QRect area, QPoint offset, int zoomFactor)
 {
-  if (!view)
+  if (!w)
     return;
   
-  QPainter p(view);
+  QPainter p(w);
   
   // XXX clip it correctly
   // XXX paint only what is needed
@@ -128,20 +116,6 @@ void Canvas::repaintView(CanvasView *view, QRect area)
 	    }
 	  //p.drawRect(tileRect);
 	}
-    }
-}
-
-void Canvas::repaintAll(QRect area)
-{
-  if (views.isEmpty())
-    return;
-
-  // repaint area in all views
-  CanvasView *view = views.first();	  
-  while(view)
-    {
-      repaintView(view, area);
-      view = views.next();
     }
 }
 
@@ -480,16 +454,7 @@ void Canvas::setLayerOpacity(uchar o, layer *lay)
   lay->setOpacity(o);
   printf("set layer: %s opacity to %d\n",lay->name().data(), o);
   
-  if (!views.isEmpty())
-    {
-      CanvasView *current = views.first();
-      
-      while(current)
-	{
-	  current->repaint(false);
-	  current = views.next();
-	}
-    }
+  // FIXME: repaint
 }
 
 void Canvas::moveLayer(int dx, int dy, layer *lay=0)
@@ -592,3 +557,5 @@ void Canvas::paintBrush(QPoint pt, brush *brsh)
       }
     }
 }
+
+#include "canvas.moc"

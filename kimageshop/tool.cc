@@ -19,10 +19,11 @@
  */
 
 #include "tool.h"
+#include "canvas.h"
 
-Tool::Tool(Canvas *_canvas)
+Tool::Tool(KImageShopDoc *doc)
 {
-  m_pCanvas = _canvas;
+  m_pDoc = doc;
 }
 
 Tool::~Tool() {}

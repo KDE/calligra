@@ -47,7 +47,7 @@
  *
  *****************************************************************************/
 
-KImageShopDoc::KImageShopDoc()
+KImageShopDoc::KImageShopDoc(int w, int h) : Canvas(w, h)
 {
   ADD_INTERFACE("IDL:KOffice/Print:1.0");
 
@@ -70,33 +70,30 @@ KImageShopDoc::KImageShopDoc()
 
   m_lstViews.setAutoDelete( false );
 
-  // setup canvas
-  m_pCanvas = new Canvas( 510, 510);
-
   // load some test layers
   QString _image = locate("data", "kimageshop/images/cam9b.jpg");	
-  m_pCanvas->addRGBLayer(_image);
-  m_pCanvas->setLayerOpacity(200);
+  addRGBLayer(_image);
+  setLayerOpacity(200);
 
   _image = locate("data", "kimageshop/images/cambw12.jpg");
-  m_pCanvas->addRGBLayer(_image);
-  m_pCanvas->moveLayer(256,384);
-  m_pCanvas->setLayerOpacity(180);
+  addRGBLayer(_image);
+  moveLayer(256,384);
+  setLayerOpacity(180);
 
   _image = locate("data", "kimageshop/images/cam05.jpg");
-  m_pCanvas->addRGBLayer(_image);
-  m_pCanvas->setLayerOpacity(255);
+  addRGBLayer(_image);
+  setLayerOpacity(255);
 
   _image = locate("data", "kimageshop/images/cam6.jpg");
-  m_pCanvas->addRGBLayer(_image);
-  m_pCanvas->moveLayer(240,280);
-  m_pCanvas->setLayerOpacity(255);
+  addRGBLayer(_image);
+  moveLayer(240,280);
+  setLayerOpacity(255);
 
   _image = locate("data", "kimageshop/images/img2.jpg");
-  m_pCanvas->addRGBLayer(_image);
-  m_pCanvas->setLayerOpacity(80);
+  addRGBLayer(_image);
+  setLayerOpacity(80);
   
-  m_pCanvas->compositeImage(QRect());
+  compositeImage(QRect());
 }
 
 CORBA::Boolean KImageShopDoc::initDoc()
@@ -143,6 +140,11 @@ KImageShopView* KImageShopDoc::createImageView( QWidget* _parent )
 OpenParts::View_ptr KImageShopDoc::createView()
 {
   return OpenParts::View::_duplicate( createImageView() );
+}
+
+void KImageShopDoc::slotUpdateViews(const QRect &area)
+{
+  emit sigUpdateView(area);
 }
 
 void KImageShopDoc::viewList( OpenParts::Document::ViewList*& _list )
@@ -389,8 +391,6 @@ bool KImageShopDoc::completeLoading( KOStore::Store_ptr _store )
   m_bModified = false;
   m_bEmpty = false;
 
-  emit sigUpdateView();
-
   return true;
 }
 
@@ -528,7 +528,6 @@ void KImageShopDoc::paperLayoutDlg()
 
   setHeadFootLine( hf.headLeft, hf.headMid, hf.headRight, hf.footLeft, hf.footMid, hf.footRight );
 
-  emit sigUpdateView();
 }
 
 void KImageShopDoc::setHeadFootLine( const char *_headl, const char *_headm, const char *_headr,
@@ -750,7 +749,6 @@ bool KImageShopDoc::openDocument( const char *_filename, const char *_format )
   else
     m_strImageFormat = QImage::imageFormat( _filename );
 
-  emit sigUpdateView();
 
   m_bModified = true;
   m_bEmpty = false;
@@ -764,20 +762,6 @@ bool KImageShopDoc::saveDocument( const char *_filename,
   ASSERT( !isEmpty() );
 
   return m_image.save( _filename, m_strImageFormat );
-}
-
-void KImageShopDoc::transformImage( const QWMatrix& matrix )
-{
-  QPixmap pix, newpix;
-
-  pix.convertFromImage( m_image );
-  newpix = pix.xForm( matrix );
-  m_image = newpix.convertToImage();
-  emit sigUpdateView();
-  m_bModified = true;
-  m_bEmpty = false;
-
-  kdebug( KDEBUG_INFO, 0, "Image manipulated with matrix" );
 }
 
 char* KImageShopDoc::mimeType()
@@ -960,11 +944,6 @@ QString KImageShopDoc::footRight()
     return "";
   }
   return m_footRight.data();
-}
-
-const QImage& KImageShopDoc::image()
-{
-  return m_image;
 }
 
 KImageShopDoc::~KImageShopDoc()

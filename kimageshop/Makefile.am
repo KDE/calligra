@@ -21,7 +21,7 @@ noinst_HEADERS = kimageshop_main.h kimageshop_shell.h \
 
 METASOURCES = kimageshop_main.moc kimageshop_shell.moc \
 	kimageshop_doc.moc kimageshop_view.moc preferencesdlg.moc zoomfactordlg.moc \
-	canvasview.moc layer.moc layerlist.moc layerdlg.moc
+	canvasview.moc canvas.moc layer.moc layerlist.moc layerdlg.moc
 
 idl_DATA = kimageshop.idl
 

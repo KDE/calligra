@@ -12,7 +12,7 @@
 
 #include <qdialog.h>
 
-class Canvas;
+class KImageShopDoc;
 
 class LayerDialog : public QDialog
 {
@@ -20,8 +20,7 @@ class LayerDialog : public QDialog
 
 public:
 
-//LayerDialog( QWidget* _parent = 0, const char* _name = 0, WFlags _flags = 0 );
-  LayerDialog( Canvas* _camvas, QWidget* _parent = 0, const char* _name = 0, WFlags _flags = 0 );
+  LayerDialog(KImageShopDoc* doc, QWidget* _parent = 0, const char* _name = 0, WFlags _flags = 0 );
 };
 
 #endif // __layerdlg_h__

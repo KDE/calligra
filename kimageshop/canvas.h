@@ -11,13 +11,13 @@
 #define __canvas_h__
 
 #include <qimage.h>
+#include <qobject.h>
 #include <qlist.h>
 #include <stdlib.h>
 #include <X11/Xlib.h>
 
 #include "layer.h"
 #include "brush.h"
-#include "canvasview.h"
 
 struct canvasTileDescriptor
 {
@@ -25,21 +25,18 @@ struct canvasTileDescriptor
 };
 
 
-class Canvas
+class Canvas : public QObject
 {
+  Q_OBJECT
+
  public:
   Canvas(int width, int height);
   ~Canvas();
 
-  // add a CanvasView to be managed by the Canvas
-  void addView(CanvasView *view);
-  // remove a CanvasView from the "views" list
-  void removeView(CanvasView *view);
-  // repaint a rectangular area in a canvasview
-  void repaintView(CanvasView *view, QRect area);
-  // repaint a rectangular area in all canvasviews
-  void repaintAll(QRect area);
-
+  // Paint a area of image data on widget w.
+  // Handle zoomFactor and offset.
+  void paintPixmap(QWidget *w, QRect area, QPoint offset = QPoint(0,0), int zoomFactor = 0);
+ 
   // return current layer
   layer* getCurrentLayer() { return currentLayer; }
 
@@ -60,10 +57,10 @@ class Canvas
   void paintBrush(QPoint pt, brush *brsh);
   QList<layer> layerList() { return layers; };
 
- public slots:
+public slots:
   void setCurrentLayerOpacity(double o) { setLayerOpacity((uchar)(o*255/100)); };
   
- protected:
+protected:
   void compositeTile(int x, int y, layer *dstLay=0, int dstTile=-1);
   void convertTileToPixmap(layer *lay, int tileNo, QPixmap *pix);
 
@@ -75,7 +72,6 @@ private:
   QRect viewportRect;
   int xTiles, yTiles;
   QList<layer> layers;
-  QList<CanvasView> views;
   layer *compose;
   QImage img;
   layer *currentLayer;

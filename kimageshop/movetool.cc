@@ -19,9 +19,9 @@
  */
 
 #include "movetool.h"
-#include "canvas.h"
+#include "kimageshop_doc.h"
 
-MoveTool::MoveTool(Canvas *_canvas) : Tool(_canvas)
+MoveTool::MoveTool(KImageShopDoc *doc) : Tool(doc)
 {
   m_dragging = false;
 }
@@ -42,14 +42,14 @@ void MoveTool::mouseMove(const KImageShop::MouseEvent& e)
       QPoint pos(e.posX, e.posY);
       QPoint dragSize = pos - m_dragStart;
 
-      QRect updateRect(m_pCanvas->getCurrentLayer()->imageExtents());
-      m_pCanvas->moveLayer(dragSize.x(), dragSize.y());
-      updateRect=updateRect.unite(m_pCanvas->getCurrentLayer()->imageExtents());
-      m_pCanvas->compositeImage(updateRect);
+      QRect updateRect(m_pDoc->getCurrentLayer()->imageExtents());
+      m_pDoc->moveLayer(dragSize.x(), dragSize.y());
+      updateRect=updateRect.unite(m_pDoc->getCurrentLayer()->imageExtents());
+      m_pDoc->compositeImage(updateRect);
 
       m_dragStart = pos;
 
-      m_pCanvas->repaintAll(updateRect);
+      m_pDoc->slotUpdateViews(updateRect);
     }
 }
 

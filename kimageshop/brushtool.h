@@ -30,7 +30,7 @@ class brush;
 class BrushTool : public Tool
 {
  public:
-  BrushTool(Canvas *_canvas, brush *_brush);
+  BrushTool(KImageShopDoc *doc, brush *_brush);
   ~BrushTool();
 
   virtual char* toolName() { return CORBA::string_dup("BrushTool"); }

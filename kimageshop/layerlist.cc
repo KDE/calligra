@@ -22,7 +22,7 @@
 #include <klocale.h>
 
 #include "misc.h"
-#include "canvas.h"
+#include "kimageshop_doc.h"
 #include "layerlist.h"
 
 #define WIDTH   200
@@ -38,24 +38,24 @@ LayerList::LayerList( QWidget* _parent, const char* _name )
   init( 0 );
 }
 
-LayerList::LayerList( Canvas* _canvas, QWidget* _parent, const char* _name )
+LayerList::LayerList( KImageShopDoc* doc, QWidget* _parent, const char* _name )
   : QTableView( _parent, _name )
 {
-  init( _canvas );
+  init( doc );
 }
 
-void LayerList::init( Canvas* _canvas )
+void LayerList::init( KImageShopDoc* doc )
 {
   setTableFlags( Tbl_autoHScrollBar | Tbl_autoVScrollBar );
 
-  m_canvas = _canvas;
+  m_doc = doc;
 
   setBackgroundColor( white );
   updateTable();
 
   setCellWidth( WIDTH );
   setCellHeight( HEIGHT );
-  m_selected = m_canvas->layerList().count() - 1;
+  m_selected = m_doc->layerList().count() - 1;
   if( !m_eyeIcon )
   {
     QString _icon = locate( "appdata", "pics/eye.xpm" );
@@ -98,13 +98,13 @@ void LayerList::paintCell( QPainter* p, int _row, int )
   {
     p->fillRect( 0, 0, cellWidth( 0 ) - 1, cellHeight() - 1, QColor( 15, 175, 50 ) );
   }
-  if( m_canvas->layerList().at( _row )->isVisible() )
+  if( m_doc->layerList().at( _row )->isVisible() )
     p->drawPixmap( m_eyeRect.topLeft(), *m_eyeIcon );
-  if( m_canvas->layerList().at( _row )->isLinked() )
+  if( m_doc->layerList().at( _row )->isLinked() )
     p->drawPixmap( m_linkRect.topLeft(), *m_linkIcon );
 
   p->drawRect( 0, 0, cellWidth( 0 ) - 1, cellHeight() - 1);
-  p->drawText( 80, 20, m_canvas->layerList().at( _row )->name() );
+  p->drawText( 80, 20, m_doc->layerList().at( _row )->name() );
 }
 
 void LayerList::updateList()
@@ -113,9 +113,9 @@ void LayerList::updateList()
 
 void LayerList::updateTable()
 {
-  if( m_canvas )
+  if( m_doc )
   {
-    m_items = m_canvas->layerList().count();
+    m_items = m_doc->layerList().count();
     setNumRows( m_items );
     setNumCols( 1 );
   }
@@ -130,8 +130,8 @@ void LayerList::updateTable()
 
 void LayerList::update_contextmenu( int _index )
 {
-  m_contextmenu->setItemChecked( 1, m_canvas->layerList().at( _index )->isVisible() );
-  m_contextmenu->setItemChecked( 2, m_canvas->layerList().at( _index )->isLinked() );
+  m_contextmenu->setItemChecked( 1, m_doc->layerList().at( _index )->isVisible() );
+  m_contextmenu->setItemChecked( 2, m_doc->layerList().at( _index )->isLinked() );
 }
 
 void LayerList::selectLayer( int _index )
@@ -140,34 +140,34 @@ void LayerList::selectLayer( int _index )
   m_selected = -1;
   updateCell( currentSel, 0 );
   m_selected = _index;
-  m_canvas->setCurrentLayer( m_selected );
+  m_doc->setCurrentLayer( m_selected );
   updateCell( m_selected, 0 );
 }
 
 void LayerList::inverseVisibility( int _index )
 {
-  m_canvas->layerList().at( _index )->setVisible( !m_canvas->layerList().at( _index )->isVisible() );
+  m_doc->layerList().at( _index )->setVisible( !m_doc->layerList().at( _index )->isVisible() );
   updateCell( _index, 0 );
-  m_canvas->compositeImage( m_canvas->layerList().at( _index )->imageExtents() );
-  m_canvas->repaintAll(m_canvas->layerList().at( _index )->imageExtents());
+  m_doc->compositeImage( m_doc->layerList().at( _index )->imageExtents() );
+  m_doc->slotUpdateViews(m_doc->layerList().at( _index )->imageExtents());
 }
 
 void LayerList::inverseLinking( int _index )
 {
-  m_canvas->layerList().at( _index )->setLinked( !m_canvas->layerList().at( _index )->isLinked() );
+  m_doc->layerList().at( _index )->setLinked( !m_doc->layerList().at( _index )->isLinked() );
   updateCell( _index, 0 );
 }
 
 void LayerList::renameLayer( int _index )
 {
-  QString layername = m_canvas->layerList().at( _index )->name();
+  QString layername = m_doc->layerList().at( _index )->name();
 
   if( layername.left( 3 ) == "___" )
     layername = layername.right( layername.length() - 3 );
   else
     layername = "___" + layername;
 
-  m_canvas->layerList().at( _index )->setName( layername );
+  m_doc->layerList().at( _index )->setName( layername );
   updateCell( _index, 0 );
 }
 

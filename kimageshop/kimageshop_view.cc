@@ -48,7 +48,7 @@
 #include "kimageshop_doc.h"
 #include "kimageshop_view.h"
 #include "kimageshop_shell.h"
-#include "canvas.h"
+#include "canvasview.h"
 #include "brush.h"
 #include "layerdlg.h"
 #include "tool.h"
@@ -92,9 +92,7 @@ KImageShopView::KImageShopView( QWidget* _parent, const char* _name, KImageShopD
   m_pHRuler = 0L;
   m_pVRuler = 0L;
 
-  QObject::connect( m_pDoc, SIGNAL( sigUpdateView() ), this, SLOT( slotUpdateView() ) );
-
-  slotUpdateView();
+  QObject::connect( m_pDoc, SIGNAL( sigUpdateView(const QRect&) ), this, SLOT( slotUpdateView(const QRect&) ) );
 }
 
 KImageShopView::~KImageShopView()
@@ -268,9 +266,6 @@ void KImageShopView::createGUI()
   setupRulers();
   setRanges();
 
-  // register canvasview at the canvas
-  m_pDoc->canvas_()->addView(m_pCanvasView);
-
   // connect canvasview
   QObject::connect(m_pCanvasView, SIGNAL(sigPaint(QPaintEvent*)), this, SLOT(slotCVPaint(QPaintEvent*)));
   QObject::connect(m_pCanvasView, SIGNAL(sigMousePress(QMouseEvent*)), this, SLOT(slotCVMousePress(QMouseEvent*)));
@@ -278,11 +273,11 @@ void KImageShopView::createGUI()
   QObject::connect(m_pCanvasView, SIGNAL(sigMouseRelease(QMouseEvent*)), this, SLOT(slotCVMouseRelease(QMouseEvent*)));
 
   // create default (move) tool
-  m_pMoveTool = new MoveTool(m_pDoc->canvas_());
+  m_pMoveTool = new MoveTool(m_pDoc);
   m_pTool = m_pMoveTool;
   
   // layerlist
-  m_pLayerDialog = new LayerDialog(m_pDoc->canvas_());
+  m_pLayerDialog = new LayerDialog(m_pDoc);
   m_pLayerDialog->show();
   m_pLayerDialog->resize(150,200);
 
@@ -337,11 +332,11 @@ void KImageShopView::setupRulers()
 
 void KImageShopView::setRanges()
 {
-  m_pVRuler->setRange(0, m_pDoc->canvas_()->height());
-  m_pHRuler->setRange(0, m_pDoc->canvas_()->width());
+  m_pVRuler->setRange(0, m_pDoc->height());
+  m_pHRuler->setRange(0, m_pDoc->width());
 
-  int docHeight = m_pDoc->canvas_()->height();
-  int docWidth = m_pDoc->canvas_()->width();
+  int docHeight = m_pDoc->height();
+  int docWidth = m_pDoc->width();
 
   if(docHeight <= height() - 20)
     {
@@ -457,15 +452,13 @@ void KImageShopView::resizeEvent( QResizeEvent* )
       m_pCanvasView->move( 0, 0 );
       m_pCanvasView->resize( widget()->width(), widget()->height() );
     }
-
-  slotUpdateView();
 }
 
 void KImageShopView::slotActivateMoveTool()
 {
   if (!m_pMoveTool)
     {
-      m_pMoveTool = new MoveTool(m_pDoc->canvas_());
+      m_pMoveTool = new MoveTool(m_pDoc);
     }
 
   m_pTool = m_pMoveTool;
@@ -494,7 +487,7 @@ void KImageShopView::slotActivateBrushTool()
     }
   
   if (!m_pBrushTool)
-    m_pBrushTool = new BrushTool(m_pDoc->canvas_(), m_pBrush);
+    m_pBrushTool = new BrushTool(m_pDoc, m_pBrush);
 
   m_pTool = m_pBrushTool;
 
@@ -512,20 +505,14 @@ void KImageShopView::slotActivateBrushTool()
     m_vToolBarTools->toggleButton(TBTOOLS_MOVETOOL);
 }
 
-void KImageShopView::slotUpdateView()
+void KImageShopView::slotUpdateView(const QRect &area)
 {
-  // if( m_pDoc->image().isNull() )
-  //{
-  //  return;
-  // }
-
-  //m_pixmap.convertFromImage( m_pDoc->image() );
-  QWidget::update();
+  m_pDoc->paintPixmap(m_pCanvasView,area);
 }
 
 void KImageShopView::slotCVPaint(QPaintEvent *e)
 {
-  m_pDoc->canvas_()->repaintView(m_pCanvasView, e->rect());
+  m_pDoc->paintPixmap(m_pCanvasView,e->rect());
 }
 
 void KImageShopView::slotCVMousePress(QMouseEvent *e)

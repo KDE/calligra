@@ -125,7 +125,7 @@ bool KImageShopShell::newDocument()
     return true;
   }
 
-  m_pDoc = new KImageShopDoc;
+  m_pDoc = new KImageShopDoc(510, 510);
   if ( !m_pDoc->initDoc() )
   {
     releaseDocument();
@@ -174,7 +174,7 @@ bool KImageShopShell::openDocument( const char *_url, const char *_format )
 
   kdebug( KDEBUG_INFO, 0, "Creating new document" );
 
-  m_pDoc = new KImageShopDoc;
+  m_pDoc = new KImageShopDoc(510, 510);
   if ( !m_pDoc->loadFromURL( _url, _format ) )
     return false;
 

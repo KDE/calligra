@@ -16,21 +16,14 @@
 
 #include "layerdlg.h"
 #include "layerlist.h"
-#include "canvas.h"
+#include "kimageshop_doc.h"
 
-/*
-LayerDialog::LayerDialog( QWidget* _parent, const char* _name, WFlags _flags )
-  : QDialog( _parent, _name, _flags)
-{
-}
-*/
-
-LayerDialog::LayerDialog( Canvas* _canvas, QWidget* _parent, const char* _name, WFlags _flags )
+LayerDialog::LayerDialog(KImageShopDoc* doc, QWidget* _parent, const char* _name, WFlags _flags )
   : QDialog( _parent, _name, _flags )
 {
   QGridLayout* layout = new QGridLayout( this, 6, 2, 15, 7 );
 
-  LayerList* layerlist = new LayerList( _canvas, this, "layerlist" );
+  LayerList* layerlist = new LayerList( doc, this, "layerlist" );
   layout->addMultiCellWidget( layerlist, 0, 5, 0, 0 );
 
   QPushButton* pbAddLayer = new QPushButton( this, "addlayer" );

@@ -24,12 +24,12 @@
 #include "qmessagebox.h"
 #include "kimageshop.h"
 
-class Canvas;
+class KImageShopDoc;
 
 class Tool : public KImageShop::Tool_skel
 {
  public:
-  Tool(Canvas *_canvas = 0L);
+  Tool(KImageShopDoc *doc);
   ~Tool();
 
   virtual char* toolName();
@@ -42,7 +42,7 @@ class Tool : public KImageShop::Tool_skel
   virtual void mouseRelease(const KImageShop::MouseEvent& e) = 0;
     
  protected:
-  Canvas  *m_pCanvas;
+  KImageShopDoc  *m_pDoc;
 };
 
 #endif

@@ -62,7 +62,7 @@ public:
   CORBA::Boolean printDlg();
 
 public slots:
-  void slotUpdateView();
+  void slotUpdateView(const QRect &area);
   // slots the CanvasView connects to 
   void slotCVPaint(QPaintEvent *e);
   void slotCVMousePress(QMouseEvent *e);

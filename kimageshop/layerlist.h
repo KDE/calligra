@@ -13,7 +13,7 @@
 #include <qtableview.h>
 #include <qrect.h>
 
-class Canvas;
+class KImageShopDoc;
 class QPopupMenu;
 
 class LayerList : public QTableView
@@ -23,7 +23,7 @@ class LayerList : public QTableView
 public:
 
   LayerList(QWidget* _parent = 0, const char* _name = 0 );
-  LayerList(Canvas* _canvas, QWidget* _parent = 0, const char* name = 0 );
+  LayerList(KImageShopDoc* doc, QWidget* _parent = 0, const char* name = 0 );
 
   void updateTable();
   void updateList();
@@ -49,9 +49,9 @@ protected:
 
 private:
 
-  void init( Canvas* _canvas );
+  void init(KImageShopDoc* doc);
 
-  Canvas* m_canvas;
+  KImageShopDoc* m_doc;
   int m_items, m_selected;
   static QPixmap *m_eyeIcon, *m_linkIcon;
   static QRect m_eyeRect, m_linkRect;
