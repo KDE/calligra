@@ -19,6 +19,7 @@
 
 #include "testrunner.h"
 
+#include <qapplication.h>
 #include <qdict.h>
 #include <qlabel.h>
 #include <qlayout.h>
@@ -104,7 +105,11 @@ void TestRunner::runTest()
   {
     d->logView->clear();
     d->logView->append( QString("Test: %1").arg( testName ) );
+    
+    QApplication::setOverrideCursor(Qt::waitCursor);
     tester->run();
+    QApplication::restoreOverrideCursor();
+    
     QStringList errorList = tester->errors();
     if( tester->failed() )
     {
