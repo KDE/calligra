@@ -666,6 +666,8 @@ void KPWebPresentationWizard::setupPage3()
         item->setText( 1, infos[ i ].slideTitle );
     }
 
+    slideTitles->setSelected( slideTitles->firstChild(), true );
+
     addPage( page3, i18n( "Slide Titles" ) );
 
     setHelpEnabled(page3, false);  //doesn't do anything currently

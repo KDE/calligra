@@ -5801,6 +5801,8 @@ void KPrCanvas::resizeObject( ModifyType _modType, int _dx, int _dy )
 
 void KPrCanvas::raiseObject( KPObject *_kpobject )
 {
+    if( objectList().count() <= 1 )
+        return;
     if ( selectedObjectPosition == -1 ) {
         if ( m_activePage->numSelected() == 1 ) { // execute this if user selected is one object.
             QPtrList<KPObject> _list = objectList();
@@ -5821,7 +5823,7 @@ void KPrCanvas::raiseObject( KPObject *_kpobject )
 
 void KPrCanvas::lowerObject()
 {
-    if( objectList().count()==0)
+    if( objectList().count() <= 1 )
         return;
     KPObject *kpobject = objectList().last();
     QPtrList<KPObject> _list = objectList();
