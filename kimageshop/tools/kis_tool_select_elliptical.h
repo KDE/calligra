@@ -1,7 +1,7 @@
 /*
- *  selecttool.h - part of KImageShop
+ *  kis_tool_select_elliptical.h - part of Krayon
  *
- *  Copyright (c) 1999 Michael Koch <koch@kde.org>
+ *  Copyright (c) 2000 John Califf <jcaliff@compuzone.net>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by

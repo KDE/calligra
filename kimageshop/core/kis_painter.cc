@@ -50,9 +50,12 @@ KisPainter::KisPainter(KisDoc *doc, KisView *view)
   	pDoc  = doc;
     pView = view;
 
-    lineThickness = 4;
+    lineThickness = 1;
     lineOpacity = 255;
     
+    filledEllipse = false;
+    filledRectangle = false;
+        
     painterPixmap.resize(512, 512);
     clearAll();  
 }

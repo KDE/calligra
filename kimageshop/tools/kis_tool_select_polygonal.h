@@ -1,7 +1,7 @@
 /*
- *  selecttool.h - part of KImageShop
+ *  selecttool.h - part of Krayon
  *
- *  Copyright (c) 1999 Michael Koch <koch@kde.org>
+ *  Copyright (c) 2000 John Califf <jcaliff@compuzone.net>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -22,8 +22,11 @@
 #define __selecttoolpolygonal_h__
 
 #include <qpoint.h>
+#include <qpointarray.h>
+
 #include "kis_view.h"
 #include "kis_tool.h"
+
 
 class KisDoc;
 class KisCanvas;
@@ -31,11 +34,13 @@ class KisView;
 
 class PolygonalSelectTool : public KisTool
 {
+
 public:
+
     PolygonalSelectTool( KisDoc* _doc, KisView* _view, KisCanvas* _canvas );
     ~PolygonalSelectTool();
 
-    virtual QString toolName() { return QString( "SelectTool" ); }
+    virtual QString toolName() { return QString("Polygonal Select Tool"); }
 
     virtual void mousePress( QMouseEvent *_event );
     virtual void mouseMove( QMouseEvent *_event );
@@ -43,20 +48,29 @@ public:
 
     virtual void clearOld();
 
-protected:
-    void drawRect( const QPoint&, const QPoint& ); 
+    void start(QPoint p);
+    void finish(QPoint p); 
 
 protected:
-    QPoint     m_dragStart;
-    QPoint     m_dragEnd;
-    bool       m_dragging;
-    bool       m_drawn;   
-    bool       m_init;
 
-    KisView   *m_view;  
-    KisCanvas *m_canvas;
+    void drawLine( const QPoint&, const QPoint& ); 
+ 
+private:
 
-    QRect      m_selectRect;
+    QPoint      m_dragStart;
+    QPoint      m_dragEnd;
+    
+    QPoint      mStart;
+    QPoint      mFinish;
+
+    bool        m_dragging;
+    bool        m_drawn;   
+
+    KisView     *m_view;  
+    KisCanvas   *m_canvas;
+
+    QRect       m_selectRect;
+    QPointArray m_pointArray;
 };
 
 #endif //__selecttoolpolygonal_h__

@@ -51,7 +51,7 @@ protected:
 
     void drawLine( const QPoint&, const QPoint& );
 
-protected:
+private:
 
     int         lineThickness;
     int         lineOpacity;

@@ -1,7 +1,7 @@
 /*
- *  selecttool.h - part of KImageShop
+ *  kis_tool_select_polygonal.h - part of Krayon
  *
- *  Copyright (c) 1999 Michael Koch <koch@kde.org>
+ *  Copyright (c) 2000 John Califf <jcaliff@compuzone.net>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -27,32 +27,50 @@
 #include "kis_cursor.h"
 #include "kis_tool_select_polygonal.h"
 
-PolygonalSelectTool::PolygonalSelectTool( KisDoc* _doc, KisView* _view, KisCanvas* _canvas )
+
+PolygonalSelectTool::PolygonalSelectTool( KisDoc* _doc, 
+    KisView* _view, KisCanvas* _canvas )
   : KisTool( _doc, _view)
   , m_dragging( false ) 
   , m_view( _view )  
   , m_canvas( _canvas )
 
 {
-      m_drawn = false;
-      m_init  = true;
-      m_dragStart = QPoint(-1,-1);
-      m_dragEnd =   QPoint(-1,-1);
+    m_dragStart = QPoint(-1,-1);
+    m_dragEnd =   QPoint(-1,-1);
+
+    mStart  = QPoint(-1, -1);
+    mFinish = QPoint(-1, -1);     
       
-      m_Cursor = KisCursor::selectCursor();
+    m_Cursor = KisCursor::selectCursor();
 }
 
 PolygonalSelectTool::~PolygonalSelectTool()
 {
 }
 
+
+void PolygonalSelectTool::start(QPoint p)
+{
+    mStart = p;
+}
+
+
+void PolygonalSelectTool::finish(QPoint p)
+{
+    mFinish = p;
+    drawLine( mStart, mFinish );
+}
+
+
 void PolygonalSelectTool::clearOld()
 {
    if (m_pDoc->isEmpty()) return;
         
-   if(m_dragStart.x() != -1)
-        drawRect( m_dragStart, m_dragEnd ); 
+   // if(m_dragStart.x() != -1)
+        // drawRect( m_dragStart, m_dragEnd ); 
 
+    // clear everything in 
     QRect updateRect(0, 0, m_pDoc->current()->width(), 
         m_pDoc->current()->height());
     m_view->updateCanvas(updateRect);
@@ -66,116 +84,97 @@ void PolygonalSelectTool::mousePress( QMouseEvent* event )
     if ( m_pDoc->isEmpty() )
         return;
 
+    // start the polyline, and/or complete the segment
     if( event->button() == LeftButton )
     {
-        if(m_drawn) // erase old rectangle
+        if( m_dragging )
         {
-            m_drawn = false;
-           
-            if(m_dragStart.x() != -1)
-                drawRect( m_dragStart, m_dragEnd ); 
+            // erase old line on canvas
+            drawLine( m_dragStart, m_dragEnd );
+
+            // get current position
+            m_dragEnd = event->pos();
+
+            // draw new and final line for this segment
+            drawLine( m_dragStart, m_dragEnd );
+            
+            // here we need to add the point to the point array
+            // so it can be passed to the selection class to determine
+            // selection area and bounds.
+
+            // draw final line into layer
+            //KisPainter *p = m_pView->kisPainter();
+            //p->drawLine(zoomed(m_dragStart.x()), zoomed(m_dragStart.y()),
+            //    zoomed(m_dragEnd.x()),   zoomed(m_dragEnd.y()));
         }
-                
-        m_init = false;
+        else
+        {
+            start(event->pos());
+            // todo: add the start point to the point array
+        }
+        
         m_dragging = true;
         m_dragStart = event->pos();
         m_dragEnd = event->pos();
     }
+    // stop drawing on right or middle click
+    else
+    {   
+        m_dragging = false;
+        finish(event->pos());
+
+        // need to connect start and end positions to close the
+        // polyline 
+        
+        // we need a bounding rectangle and a point array of 
+        // points in the polyline
+        // m_pDoc->getSelection()->setBounds(m_selectRect);        
+    }    
 }
 
 
 void PolygonalSelectTool::mouseMove( QMouseEvent* event )
 {
-    if ( m_pDoc->isEmpty() )
-        return;
+    if (m_pDoc->isEmpty()) return;
 
     if( m_dragging )
     {
-        drawRect( m_dragStart, m_dragEnd );
+        drawLine( m_dragStart, m_dragEnd );
         m_dragEnd = event->pos();
-        drawRect( m_dragStart, m_dragEnd );
+        drawLine( m_dragStart, m_dragEnd );
     }
 }
 
 
-void PolygonalSelectTool::mouseRelease( QMouseEvent* event )
+void PolygonalSelectTool::mouseRelease( QMouseEvent * /* event */ )
 {
-    if ( m_pDoc->isEmpty() )
-        return;
 
-    if( ( m_dragging ) && ( event->button() == LeftButton ) )
-    {
-        m_dragging = false;
-        m_drawn = true;
-        
-        QPoint zStart = zoomed(m_dragStart);
-        QPoint zEnd   = zoomed(m_dragEnd);
-                
-        /* jwc - leave selection rectange boundary on screen
-        it is only drawn to canvas, not to retained imagePixmap,
-        and therefore will disappear when another tool action is used */
-        // drawRect( m_dragStart, m_dragEnd ); 
-        
-        /* get selection rectangle after mouse is released
-        there always is one, even if width and height are 0 
-        left and right, top and bottom are sometimes reversed! */
-        
-        if(zStart.x() <= zEnd.x())
-        {
-            m_selectRect.setLeft(zStart.x());
-            m_selectRect.setRight(zEnd.x());
-        }    
-        else 
-        {
-            m_selectRect.setLeft(zEnd.x());                   
-            m_selectRect.setRight(zStart.x());
-        }
-        
-        if(zStart.y() <= zEnd.y())
-        {
-            m_selectRect.setTop(zStart.y());
-            m_selectRect.setBottom(zEnd.y());            
-        }    
-        else
-        {
-            m_selectRect.setTop(zEnd.y());
-            m_selectRect.setBottom(zStart.y());            
-        }
-                    
-        m_pDoc->getSelection()->setBounds(m_selectRect);
-
-        kdDebug(0) << "selectRect" 
-            << " left: "   << m_selectRect.left() 
-            << " top: "    << m_selectRect.top()
-            << " right: "  << m_selectRect.right() 
-            << " bottom: " << m_selectRect.bottom()
-            << endl;
-    }
 }
 
 
-void PolygonalSelectTool::drawRect( const QPoint& start, const QPoint& end )
+void PolygonalSelectTool::drawLine( const QPoint& start, const QPoint& end )
 {
-    QPainter p, pCanvas;
-
+    int lineThickness = 1;
+    
+    QPainter p;
+    QPen pen;
+    pen.setWidth(lineThickness);
+    
     p.begin( m_canvas );
+    p.setPen(pen);
     p.setRasterOp( Qt::NotROP );
+    float zF = m_pView->zoomFactor();
 
-    float zF = m_view->zoomFactor();
-    
-    //p.drawRect( QRect( start, end ) );
-    /* adjust for scroll ofset as this draws on the canvas, not on
-    the image itself QRect(left, top, width, height) */
-    
-    p.drawRect( QRect(start.x() + m_view->xPaintOffset() 
-                                - (int)(zF * m_view->xScrollOffset()),
-                      start.y() + m_view->yPaintOffset() 
-                                - (int)(zF * m_view->yScrollOffset()), 
-                      end.x() - start.x(), 
-                      end.y() - start.y()) );
+    p.drawLine( QPoint( start.x() + m_pView->xPaintOffset() 
+                          - (int)(zF * m_pView->xScrollOffset()),
+                        start.y() + m_pView->yPaintOffset() 
+                           - (int)(zF * m_pView->yScrollOffset())), 
+                QPoint( end.x() + m_pView->xPaintOffset() 
+                          - (int)(zF * m_pView->xScrollOffset()),
+                        end.y() + m_pView->yPaintOffset() 
+                           - (int)(zF * m_pView->yScrollOffset())) );
+
     p.end();
-    
-    // jwc - don't update retained graphics, only canvas
-    //QRect updateRect(0, 0, m_pDoc->current()->width(), m_pDoc->current()->height());
-    //m_view->updateCanvas(updateRect);
 }
+
+

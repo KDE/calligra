@@ -82,9 +82,8 @@ bool PasteTool::setClip()
         return false;
     }
             
-    // use this to establish clip size and the
-    // "hot spot" in center of image, will be the
-    // same for all clips, no need to vary it.
+    /* use this to establish clip size and the "hot spot" in center 
+    of image, will be the  same for all clips, no need to vary it. */
     
     clipWidth = clipPix.width();
     clipHeight = clipPix.height();
@@ -258,8 +257,11 @@ bool PasteTool::pasteToCanvas(QPoint pos)
 
     QRect ur(pos.x(), pos.y(), clipPix.width(), clipPix.height());
     
-    // check image bounds.  The image extends are a rectangle 
-    // containing all the layers that contribute to it
+    /* check image bounds.  The image extents are a rectangle 
+    containing all the layers that contribute to it, or maybe
+    just the current layer in terms of canvas coords.  This
+    is not clear, so also check layerExtents() below. */
+    
     ur = ur.intersect(img->imageExtents());
 
     if (ur.top() - mHotSpotY > img->height()
@@ -271,9 +273,12 @@ bool PasteTool::pasteToCanvas(QPoint pos)
         return false;
     }
 
-    // check the layer bounds. There may be several different
-    // layers visible at once and we only want to draw over the
-    // current layer - which usually is also the topmost one
+    /* check the layer bounds. There may be several different
+    layers visible at once and we only want to draw over the
+    current layer - which usually is also the topmost one
+    This may be unnecessary because imageExtents above may
+    be the same as layerExtents, but just to be sure.. */
+    
     if (!ur.intersects(lay->layerExtents()))
     {
         p.end();
@@ -284,14 +289,16 @@ bool PasteTool::pasteToCanvas(QPoint pos)
     int startX = 0;
     int startY = 0;
 
-    if(((pos.x() > 0 - mHotSpotX) && (pos.x() < mHotSpotX))) 
-        startX += (mHotSpotX - pos.x());    
-    if(startX > ur.width())
-        startX = ur.width();
-    if(((pos.y() > 0 - mHotSpotY) && (pos.y() < mHotSpotY))) 
-        startY += (mHotSpotY - pos.y());    
-    if(startY > ur.height())
-        startY = ur.height();
+    if(clipPix.width() > ur.right())
+        startX = clipPix.width() - ur.right();
+    if(clipPix.height() > ur.bottom())    
+        startY = clipPix.height() - ur.bottom();
+    
+    // paranioa
+    if(startX < 0) startX = 0;
+    if(startY < 0) startY = 0;
+    if(startX > clipPix.width())  startX = clipPix.width();
+    if(startY > clipPix.height()) startY = clipPix.height();
 
     int xt = m_pView->xPaintOffset() - m_pView->xScrollOffset();
     int yt = m_pView->yPaintOffset() - m_pView->yScrollOffset();
@@ -300,7 +307,9 @@ bool PasteTool::pasteToCanvas(QPoint pos)
 
     p.drawPixmap( ur.left(), ur.top(), 
                   clipPix, 
-                  startX, startY, ur.width(), ur.height() );
+                  startX, startY, 
+                  ur.width(), ur.height() );
+                  
     p.end();
     
     return true;

@@ -156,8 +156,11 @@ bool StampTool::stampToCanvas(QPoint pos)
     QRect ur(pos.x() - mHotSpotX, pos.y()- mHotSpotY, 
         patternWidth, patternHeight);
     
-    // check image bounds.  The image extends are a rectangle 
-    // containing all the layers that contribute to it
+    /* check image bounds.  The image extents are a rectangle 
+    containing all the layers that contribute to it, or 
+    maybe just a rectangle containing the current layer in
+    terms of canvas coords.  This is unclear... */
+    
     ur = ur.intersect(img->imageExtents());
  
     if (ur.top()    > img->height() 
@@ -169,27 +172,33 @@ bool StampTool::stampToCanvas(QPoint pos)
         return false;
     }
 
-    // check the layer bounds. There may be several different
-    // layers visible at once and we only want to draw on the
-    // current layer - which usually is also the topmost one
+    /* check the layer bounds. There may be several different
+    layers visible at once and we only want to draw on the
+    current layer - which usually is also the topmost one
+    Note:  This is probably unnecessary because intersects
+    imageExtents() above is probably the same, but I'm not sure.
+    Better to be safe... */
+    
     if (!ur.intersects(lay->layerExtents()))
     {
         p.end();
         return false;
     }
     ur = ur.intersect(lay->layerExtents());
-
+    
     int startX = 0;
     int startY = 0;
-
-    if(((pos.x() > 0 - mHotSpotX) && (pos.x() < mHotSpotX))) 
-        startX += (mHotSpotX - pos.x());    
-    if(startX > ur.width())
-        startX = ur.width();
-    if(((pos.y() > 0 - mHotSpotY) && (pos.y() < mHotSpotY))) 
-        startY += (mHotSpotY - pos.y());    
-    if(startY > ur.height())
-        startY = ur.height();
+    
+    if(patternWidth > ur.right())
+        startX = patternWidth - ur.right();
+    if(patternHeight > ur.bottom())    
+        startY = patternHeight - ur.bottom();
+    
+    // paranioa
+    if(startX < 0) startX = 0;
+    if(startY < 0) startY = 0;
+    if(startX > patternWidth)  startX = patternWidth;
+    if(startY > patternHeight) startY = patternHeight;
 
     int xt = m_pView->xPaintOffset() - m_pView->xScrollOffset();
     int yt = m_pView->yPaintOffset() - m_pView->yScrollOffset();
@@ -199,7 +208,7 @@ bool StampTool::stampToCanvas(QPoint pos)
     p.drawPixmap( ur.left(), ur.top(), 
                   m_pPattern->pixmap(), 
                   startX, startY, 
-                  ur.width(), ur.height() );
+                  ur.width(), ur.height());
                   
     p.end();
 

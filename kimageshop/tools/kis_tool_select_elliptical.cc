@@ -1,7 +1,7 @@
 /*
- *  selecttool.h - part of KImageShop
+ *  tool_select_elliptical.cc - part of Krayon
  *
- *  Copyright (c) 1999 Michael Koch <koch@kde.org>
+ *  Copyright (c) 2000 John Califf <jcaliff@compuzone.net>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -142,7 +142,6 @@ void EllipticalSelectTool::mouseRelease( QMouseEvent* event )
             m_selectRect.setBottom(zStart.y());            
         }
                     
-        // m_pDoc->getSelection()->setBounds(m_selectRect);
         m_pDoc->getSelection()->setEllipticalSelection( m_selectRect,
             m_pDoc->current()->getCurrentLayer());
 
@@ -165,7 +164,6 @@ void EllipticalSelectTool::drawRect( const QPoint& start, const QPoint& end )
 
     float zF = m_view->zoomFactor();
     
-    //p.drawRect( QRect( start, end ) );
     /* adjust for scroll ofset as this draws on the canvas, not on
     the image itself QRect(left, top, width, height) */
     
@@ -176,8 +174,4 @@ void EllipticalSelectTool::drawRect( const QPoint& start, const QPoint& end )
                       end.x() - start.x(), 
                       end.y() - start.y()) );
     p.end();
-    
-    // jwc - don't update retained graphics, only canvas
-    //QRect updateRect(0, 0, m_pDoc->current()->width(), m_pDoc->current()->height());
-    //m_view->updateCanvas(updateRect);
 }
