@@ -2344,7 +2344,9 @@ void KSpreadTable::emit_updateColumn( ColumnLayout *_layout, int _column )
 
 void KSpreadTable::insertChart( const QRect& _rect, KoDocumentEntry& _e, const QRect& _data )
 {
+  cerr << "Createing document" << endl;
   KOffice::Document_var doc = _e.createDoc();
+  cerr << "Created" << endl;
   if ( CORBA::is_nil( doc ) )
     // Error message is already displayed, so just return
     return;
@@ -2380,13 +2382,15 @@ void KSpreadTable::insertChart( const QRect& _rect, KoDocumentEntry& _e, const Q
 
 void KSpreadTable::insertChild( const QRect& _rect, KoDocumentEntry& _e )
 {
+  cerr << "Createing document" << endl;
   KOffice::Document_var doc = _e.createDoc();
+  cerr << "Created" << endl;
   if ( CORBA::is_nil( doc ) )
     // Error message is already displayed, so just return
     return;
 
   doc->initDoc();
-
+  cerr << "Initialized" << endl;
   KSpreadChild* ch = new KSpreadChild( m_pDoc, this, _rect, doc );
   insertChild( ch );
 }
