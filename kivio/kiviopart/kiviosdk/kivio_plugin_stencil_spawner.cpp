@@ -18,6 +18,7 @@
  */
 #include <dlfcn.h>
 
+#include <config.h>
 #include "kivio_plugin_stencil_spawner.h"
 
 #include "kivio_intra_stencil_data.h"
