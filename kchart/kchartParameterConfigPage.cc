@@ -186,8 +186,6 @@ void KChartParameterConfigPage::init()
     // PENDING(kalle) adapt these to KDChart
     //     grid->setChecked(_params->grid);
     //     border->setChecked(_params->border);
-    //     xaxis->setChecked(_params->xaxis);
-    //     yaxis->setChecked(_params->yaxis);
     //     xlabel->setChecked(_params->hasxlabel);
     //     shelf->setChecked(_params->shelf);
 
@@ -196,6 +194,7 @@ void KChartParameterConfigPage::init()
     yaxis->setChecked(_params->axisVisible(KDChartAxisParams::AxisPosLeft));
 
     llabel->setChecked(_params->legendPosition()!=KDChartParams::NoLegend);
+    grid->setChecked(_params->showGrid());
 
 //     if( _params->chartType() == KDChartParams::Line ) {
 //         cross->setEnabled(true);
@@ -262,11 +261,11 @@ void KChartParameterConfigPage::apply()
     _params->setAxisVisible(KDChartAxisParams::AxisPosBottom,xaxis->isChecked());
     _params->setAxisVisible(KDChartAxisParams::AxisPosLeft,yaxis->isChecked());
 
+    _params->setAxisShowGrid(KDChartAxisParams::AxisPosLeft,grid->isChecked() );
+    _params->setAxisShowGrid(KDChartAxisParams::AxisPosBottom,grid->isChecked() );
+
 // PENDING(kalle) Adapt this
-    //     _params->grid=grid->isChecked();
     //     _params->border=border->isChecked();
-    //     _params->xaxis=xaxis->isChecked();
-    //     _params->yaxis=yaxis->isChecked();
     //     _params->llabel=llabel->isChecked();
     //     if(xaxis->isChecked())
     //     	_params->hasxlabel=xlabel->isChecked();
