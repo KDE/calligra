@@ -349,7 +349,7 @@ public:
      */
     QString text() const;
 
-    QString strOutText() const {return m_strOutText;}
+    QString strOutText() const;
 
     void setAction( const QString& _action ) { m_strAction = _action; }
 
@@ -473,8 +473,8 @@ public:
     /**
      * return size of the text
      */
-    double textWidth() const { return m_dOutTextWidth; }
-    double textHeight() const { return m_dOutTextHeight; }
+    double textWidth() const;
+    double textHeight() const;
 
 
     /**
@@ -605,22 +605,23 @@ public:
      * @return the number of obscured cells in the horizontal direction as a
      *         result of cell merging (forced obscuring)
      */
-    int mergedXCells()const {return m_iMergedXCells; }
+    int mergedXCells() const;
 
     /**
      * @return the number of obscured cells in the vertical direction as a
      *         result of cell merging (forced obscuring)
      */
-    int mergedYCells()const {return m_iMergedYCells; }
+    int mergedYCells() const;
 
     /**
      * @return the amount of obscured cells in the horizontal direction
      */
-    int extraXCells() const { return m_iExtraXCells; }
+    int extraXCells() const;
     /**
      * @return the amount of obscured cells in the vertical direction
      */
-    int extraYCells() const { return m_iExtraYCells; }
+    int extraYCells() const;
+    
     double extraWidth() const { return m_dExtraWidth; }
     double extraHeight() const { return m_dExtraHeight; }
 
@@ -892,34 +893,10 @@ private:
     CellPrivate* d;
 
     /**
-     * This is the text we want to display
-     * Not necessarily the same as m_strText, e.g. m_strText="1" and m_strOutText="1.00".
-     */
-    QString m_strOutText;
-    double m_dOutTextWidth;
-    double m_dOutTextHeight;
-    double m_dTextX, m_dTextY;
-    /**
      * Result of "fm.ascent()" in makeLayout.
      * used in offsetAlign.
      */
     int m_fmAscent;
-
-    int m_iMergedXCells;
-    int m_iMergedYCells;
-
-    /**
-     * The amount of additional cells horizontal
-     *
-     * @persistent
-     */
-    int m_iExtraXCells;
-    /**
-     * The amount of additional cells vertical
-     *
-     * @persistent
-     */
-    int m_iExtraYCells;
 
     /**
      * If a cell overlapps other cells, then we have the cells width stored here.
