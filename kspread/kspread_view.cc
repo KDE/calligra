@@ -1201,8 +1201,12 @@ void KSpreadView::initConfig()
    {
      config->setGroup( "KSpread Color" );
      QColor _col(Qt::lightGray);
-     _col= config->readColorEntry("GridColor",&_col);
+     _col = config->readColorEntry("GridColor", &_col);
      m_pDoc->changeDefaultGridPenColor(_col);
+
+     QColor _pbCol(Qt::red);
+     _pbCol = config->readColorEntry("PageBorderColor", &_pbCol);
+     m_pDoc->changePageBorderColor(_pbCol);
    }
 
  if( config->hasGroup("KSpread Page Layout" ) )

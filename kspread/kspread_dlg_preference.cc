@@ -704,35 +704,56 @@ colorParameters::colorParameters( KSpreadView* _view,QVBox *box , char *name )
 
   QColor _gridColor(Qt::lightGray);
 
-if(  config->hasGroup("KSpread Color" ) )
-   {
-     config->setGroup( "KSpread Color" );
-     _gridColor= config->readColorEntry("GridColor",&_gridColor);
-   }
+  if ( config->hasGroup("KSpread Color" ) )
+  {
+    config->setGroup( "KSpread Color" );
+    _gridColor = config->readColorEntry("GridColor",&_gridColor);
+  }
 
   QGroupBox* tmpQGroupBox = new QVGroupBox( i18n("Color"), box, "GroupBox" );
 
-  QLabel *label=new QLabel(i18n("&Grid Color:"), tmpQGroupBox,"label20");
+  QLabel *label = new QLabel(i18n("&Grid Color:"), tmpQGroupBox,"label20" );
 
-  gridColor=new KColorButton(tmpQGroupBox);
+  gridColor = new KColorButton( tmpQGroupBox );
   label->setBuddy(gridColor);
   gridColor->setColor(_gridColor);
+
+  QColor _pbColor(Qt::red);
+  if ( config->hasGroup("KSpread Color" ) )
+  {
+    config->setGroup( "KSpread Color" );
+    _pbColor = config->readColorEntry("PageBorderColor", &_pbColor);
+  }
+
+  QLabel * label2 = new QLabel( i18n("&Page Borders:"), tmpQGroupBox, "label21" );
+  pageBorderColor = new KColorButton( tmpQGroupBox );
+  label2->setBuddy(pageBorderColor);
+  pageBorderColor->setColor(_pbColor);
 }
 
 void colorParameters::apply()
 {
-    QColor _col=gridColor->color();
-    if(m_pView->doc()->defaultGridPen().color()!=_col)
-        {
-	 m_pView->doc()->changeDefaultGridPenColor( _col);
-	 config->setGroup( "KSpread Color" );
-	 config->writeEntry("GridColor",_col);
-	}
+  QColor _col = gridColor->color();
+  if ( m_pView->doc()->defaultGridPen().color() != _col )
+  {
+    m_pView->doc()->changeDefaultGridPenColor( _col );
+    config->setGroup( "KSpread Color" );
+    config->writeEntry( "GridColor", _col );
+  }
+
+  QColor _pbColor = pageBorderColor->color();
+  if ( m_pView->doc()->pageBorderColor() != _pbColor )
+  {
+    m_pView->doc()->changePageBorderColor( _pbColor );
+    config->setGroup( "KSpread Color" );
+    config->writeEntry( "PageBorderColor", _pbColor );
+  }
 }
 
 void colorParameters::slotDefault()
 {
-    gridColor->setColor(lightGray);
+  gridColor->setColor( lightGray );
+  pageBorderColor->setColor( red );
 }
 
 

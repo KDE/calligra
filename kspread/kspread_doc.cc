@@ -67,7 +67,8 @@ QPtrList<KSpreadDoc>& KSpreadDoc::documents()
 }
 
 KSpreadDoc::KSpreadDoc( QWidget *parentWidget, const char *widgetName, QObject* parent, const char* name, bool singleViewMode )
-    : KoDocument( parentWidget, widgetName, parent, name, singleViewMode )
+  : KoDocument( parentWidget, widgetName, parent, name, singleViewMode ),
+    m_pageBorderColor( Qt::red )
 {
   m_bDelayCalculation = false;
 
@@ -102,7 +103,7 @@ KSpreadDoc::KSpreadDoc( QWidget *parentWidget, const char *widgetName, QObject* 
 
   m_defaultGridPen.setColor( lightGray );
   m_defaultGridPen.setWidth( 1 );
-  m_defaultGridPen.setStyle( SolidLine );
+  m_defaultGridPen.setStyle( SolidLine ); 
 
   initInterpreter();
 

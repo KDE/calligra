@@ -330,6 +330,9 @@ public:
 
   void changeDefaultGridPenColor( const QColor &_col){m_defaultGridPen.setColor(_col);}
 
+  QColor pageBorderColor() const { return m_pageBorderColor; }
+  void changePageBorderColor( QColor const & _color) { m_pageBorderColor = _color; }
+
   /**
    * show/hide comment indicator
    */
@@ -590,6 +593,7 @@ protected:
   bool m_bLoading;
 
   QPen m_defaultGridPen;
+  QColor m_pageBorderColor;
 
   /**
    * This DCOP object represents the document.

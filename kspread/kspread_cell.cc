@@ -2268,13 +2268,13 @@ void KSpreadCell::paintPageBorders(QPainter& painter, QPoint corner,
   {
     if ( m_pTable->isOnNewPageY( cellRef.y() ) )
     {
-      painter.setPen( Qt::red );
+      painter.setPen( table()->doc()->pageBorderColor() );
       painter.drawLine( corner.x(), corner.y(), corner.x() + width,
                         corner.y() );
     }
     if ( m_pTable->isOnNewPageX( cellRef.x() ) )
     {
-      painter.setPen( Qt::red );
+      painter.setPen( table()->doc()->pageBorderColor() );
       painter.drawLine( corner.x(), corner.y(), corner.x(),
                         corner.y() + height );
     }

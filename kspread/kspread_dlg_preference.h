@@ -129,6 +129,7 @@ public:
 protected:
   KSpreadView* m_pView;
   KColorButton* gridColor;
+  KColorButton* pageBorderColor;
   KConfig* config;
 } ;
 
