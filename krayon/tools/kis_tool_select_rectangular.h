@@ -39,6 +39,7 @@ public:
 	virtual bool willModify() const;
 
 public slots:
+	virtual void paintEvent(QPaintEvent *e);
 	virtual void mousePress(QMouseEvent *event);
 	virtual void mouseMove(QMouseEvent *event);
 	virtual void mouseRelease(QMouseEvent *event);

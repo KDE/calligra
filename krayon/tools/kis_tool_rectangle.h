@@ -37,7 +37,6 @@ public:
 	virtual ~RectangleTool();
 
 	virtual void optionsDialog();
-	virtual void update(QPainter& gc);
 	virtual QDomElement saveSettings(QDomDocument& doc) const;
 	virtual bool loadSettings(QDomElement& elem);
 

@@ -225,8 +225,3 @@ bool RectangleTool::loadSettings(QDomElement& elem)
 	return rc;
 }
 
-void RectangleTool::update(QPainter&)
-{
-	kdDebug() << "RectangleTool::update\n";
-}
-

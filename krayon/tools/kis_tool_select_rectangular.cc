@@ -51,58 +51,51 @@ RectangularSelectTool::~RectangularSelectTool()
 
 void RectangularSelectTool::clearOld()
 {
-//   if (m_pDoc->isEmpty()) return;
-        
    if(m_dragStart.x() != -1)
         drawRect( m_dragStart, m_dragEnd ); 
 
+    m_dragStart = QPoint(-1,-1);
+    m_dragEnd =   QPoint(-1,-1);
     QRect updateRect(0, 0, m_pDoc->current()->width(), 
         m_pDoc->current()->height());
     m_pView->updateCanvas(updateRect);
     m_selectRegion = QRegion();
 
-    m_dragStart = QPoint(-1,-1);
-    m_dragEnd =   QPoint(-1,-1);
 }
 
 void RectangularSelectTool::mousePress( QMouseEvent* event )
 {
-//    if ( m_pDoc->isEmpty() )
- //       return;
+	if( event->button() == LeftButton && !moveSelectArea ) {
+		clearOld();
+		// erase old rectangle
+		if(m_drawn) 
+		{
+			m_drawn = false;
 
-    if( event->button() == LeftButton && !moveSelectArea )
-    {
-        clearOld();
-        // erase old rectangle
-        if(m_drawn) 
-        {
-            m_drawn = false;
-           
-            if(m_dragStart.x() != -1)
-                drawRect( m_dragStart, m_dragEnd ); 
-        }
-                
-        m_dragging = true;
-        m_dragStart = event->pos();
-        m_dragEnd = event->pos();
+			if(m_dragStart.x() != -1)
+				drawRect( m_dragStart, m_dragEnd ); 
+		}
 
-        dragSelectArea = false;
-    }
-    else if( event->button() == LeftButton && moveSelectArea ) {
-        dragSelectArea = true;
-        dragFirst = true;
-        m_dragStart = event->pos();
-        m_dragdist = 0;
+		m_dragging = true;
+		m_dragStart = event->pos();
+		m_dragEnd = event->pos();
 
-        m_hotSpot = event->pos();
-        int x = zoomed( m_hotSpot.x() );
-        int y = zoomed( m_hotSpot.y() );
+		dragSelectArea = false;
+	} else if( event->button() == LeftButton && moveSelectArea ) {
+		dragSelectArea = true;
+		dragFirst = true;
+		m_dragStart = event->pos();
+		m_dragdist = 0;
 
-        m_hotSpot = QPoint( x - m_imageRect.topLeft().x(), y - m_imageRect.topLeft().y() );
+		m_hotSpot = event->pos();
+		int x = zoomed( m_hotSpot.x() );
+		int y = zoomed( m_hotSpot.y() );
 
-        oldDragPoint = event->pos();
-        setClipImage();
-    }
+		m_hotSpot = QPoint( x - m_imageRect.topLeft().x(), y - m_imageRect.topLeft().y() );
+
+		oldDragPoint = event->pos();
+		setClipImage();
+	}
 }
 
 
@@ -315,3 +308,11 @@ bool RectangularSelectTool::willModify() const
 {
 	return false;
 }
+
+void RectangularSelectTool::paintEvent(QPaintEvent *e)
+{
+	if (m_dragStart.x() != -1)
+		drawRect(m_dragStart, m_dragEnd);
+}
+
+
