@@ -298,7 +298,7 @@ unsigned short QWinMetaFile::calcCheckSum(WmfPlaceableHeader* apmfh)
 {
   WORD*  lpWord;
   WORD   wResult, i;
-  
+
   // Start with the first word
   wResult = *(lpWord = (WORD*)(apmfh));
   // XOR in each of the other 9 words
@@ -344,7 +344,7 @@ bool QWinMetaFile::paint(const QPaintDevice* aTarget)
   for (cmd=mFirstCmd; cmd; cmd=cmd->next)
   {
     idx = cmd->funcIndex;
-    if (idx < 0) 
+    if (idx < 0)
     {
       debug("invalid index %d", idx);
       continue;
@@ -352,7 +352,7 @@ bool QWinMetaFile::paint(const QPaintDevice* aTarget)
 
     if (mSingleStep || metaFuncTab[idx].method==0)
     {
-      fprintf(stderr, "QWinMetaFile: %s%s", 
+      fprintf(stderr, "QWinMetaFile: %s%s",
 	      metaFuncTab[idx].method==0?"unimplemented ":"",
 	      metaFuncTab[idx].name);
       for (i=0; i<cmd->numParm; i++)
@@ -461,8 +461,8 @@ QPointArray* QWinMetaFile::pointArray(short num, short* parm)
 unsigned int QWinMetaFile::toDWord(short* parm)
 {
   unsigned int l;
- 
-#if LITTLE_ENDIAN
+
+#if defined(LITTLE_ENDIAN)
   l = *(unsigned int*)parm;
 #else
   char swap[4];
@@ -658,7 +658,7 @@ void QWinMetaFile::setRop(short /*num*/, short* parm)
 {
   QT_PRFX::RasterOp opTab[] =
   {
-    QT_PRFX::CopyROP/*none*/, 
+    QT_PRFX::CopyROP/*none*/,
     QT_PRFX::CopyROP, QT_PRFX::CopyROP, QT_PRFX::EraseROP, QT_PRFX::NotCopyROP,    /*  1...4 */
     QT_PRFX::CopyROP, QT_PRFX::NotROP, QT_PRFX::XorROP, QT_PRFX::CopyROP,          /*  5...8 */
     QT_PRFX::NotEraseROP, QT_PRFX::NotXorROP, QT_PRFX::CopyROP, QT_PRFX::NotOrROP, /*  9..12 */
@@ -677,15 +677,15 @@ void QWinMetaFile::setRop(short /*num*/, short* parm)
 void QWinMetaFile::createBrushIndirect(short /*num*/, short* parm)
 {
   static QT_PRFX::BrushStyle hatchedStyleTab[] =
-  { 
-    QT_PRFX::HorPattern, 
-    QT_PRFX::FDiagPattern, 
-    QT_PRFX::BDiagPattern, 
-    QT_PRFX::CrossPattern, 
+  {
+    QT_PRFX::HorPattern,
+    QT_PRFX::FDiagPattern,
+    QT_PRFX::BDiagPattern,
+    QT_PRFX::CrossPattern,
     QT_PRFX::DiagCrossPattern
   };
   static QT_PRFX::BrushStyle styleTab[] =
-  { QT_PRFX::SolidPattern, 
+  { QT_PRFX::SolidPattern,
     QT_PRFX::NoBrush,
     QT_PRFX::FDiagPattern,   /* hatched */
     QT_PRFX::Dense4Pattern,  /* should be custom bitmap pattern */
@@ -698,7 +698,7 @@ void QWinMetaFile::createBrushIndirect(short /*num*/, short* parm)
   QT_PRFX::BrushStyle style;
   short arg;
   WinObjBrushHandle* handle = createBrush();
-  
+
   arg = parm[0];
   if (arg==2)
   {

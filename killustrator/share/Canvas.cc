@@ -843,7 +843,7 @@ bool Canvas::showHelplines () {
 }
 
 int Canvas::indexOfHorizHelpline (float pos) {
-  for (int i = 0; i < horizHelplines.size (); i++) {
+  for (uint i = 0; i < horizHelplines.size (); i++) {
     if (pos - NEAR_DISTANCE < horizHelplines[i] &&
 	pos + NEAR_DISTANCE > horizHelplines[i])
       return i;
@@ -885,7 +885,7 @@ void Canvas::updateGridInfos () {
   }
 }
 
-bool Canvas::eventFilter (QObject *o, QEvent *e) {
+bool Canvas::eventFilter (QObject *, QEvent *e) {
   if (e->type () == QEvent::KeyPress) {
     QKeyEvent *ke = (QKeyEvent *) e;
     if (ke->key () == Key_Tab) {

@@ -7,7 +7,7 @@
 
   This program is free software; you can redistribute it and/or modify
   it under the terms of the GNU Library General Public License as
-  published by  
+  published by
   the Free Software Foundation; either version 2 of the License, or
   (at your option) any later version.
 
@@ -15,7 +15,7 @@
   but WITHOUT ANY WARRANTY; without even the implied warranty of
   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
   GNU General Public License for more details.
-  
+
   You should have received a copy of the GNU Library General Public License
   along with this program; if not, write to the Free Software
   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
@@ -74,7 +74,7 @@ void FilterManager::installDefaultFilters () {
   }
   KilluImport* killuFilter = new KilluImport ();
   filters.insert ("KIllustrator", new FilterInfo (FilterInfo::FKind_Import,
-						  "KIllustrator Document", 
+						  "KIllustrator Document",
 						  "kil",
 						  "Kai-Uwe Sattler",
 						  "0.1", killuFilter, 0L));
@@ -93,7 +93,7 @@ void FilterManager::installDefaultFilters () {
 					  "Scalable Vector Graphics", "svg",
 					  "Kai-Uwe Sattler",
 					  "0.1", 0L, svgFilter));
-#if not_yet
+#if defined(not_yet)
   CmxImport* cmxFilter = new CmxImport ();
   filters.insert ("CMX", new FilterInfo (FilterInfo::FKind_Import,
 						  "Corel Exchange", "cmx",
@@ -115,7 +115,7 @@ QString FilterManager::importFilters () {
     FilterInfo *fi = iter.current ();
     if (fi->kind () == FilterInfo::FKind_Import) {
       QString buf;
-      buf.sprintf ("*.%s|%s (*.%s)", fi->extension (), fi->type (), 
+      buf.sprintf ("*.%s|%s (*.%s)", fi->extension (), fi->type (),
 		   fi->extension ());
       if (s.length () > 0)
 	s += "\n";
@@ -126,7 +126,7 @@ QString FilterManager::importFilters () {
 }
 
 QString FilterManager::exportFilters (const char* defaultExt) {
-  // filter info for defaultExt should be at top of the list 
+  // filter info for defaultExt should be at top of the list
   QString s;
   QDictIterator<FilterInfo> iter (filters);
   if (defaultExt != 0L) {
@@ -144,7 +144,7 @@ QString FilterManager::exportFilters (const char* defaultExt) {
   for (iter.toFirst (); iter.current (); ++iter) {
     FilterInfo *fi = iter.current ();
     if (fi->kind () == FilterInfo::FKind_Export) {
-	if (defaultExt != 0L && 
+	if (defaultExt != 0L &&
 	    ::strcmp (fi->extension (), defaultExt) == 0)
 	    continue;
 
@@ -168,7 +168,7 @@ QString FilterManager::extension (const char *fname) {
   return ext;
 }
 
-FilterInfo* FilterManager::findFilter (const char* fname, 
+FilterInfo* FilterManager::findFilter (const char* fname,
 				       FilterInfo::Kind kind) {
   FilterInfo* info = 0L;
   QString ext = extension (fname);

@@ -58,6 +58,8 @@ public:
 
     virtual bool saveChildren (KoStore* _store, const char *_path);
     bool save (std::ostream& os, const char *fmt);
+    virtual bool save() { return KParts::ReadWritePart::save(); }
+
     bool completeSaving (KoStore* store);
 
     bool load (std::istream& is, KoStore* store);
