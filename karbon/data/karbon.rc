@@ -1,5 +1,5 @@
 <!DOCTYPE kpartgui SYSTEM "kpartgui.dtd" >
-<kpartgui name="Karbon" version="5">
+<kpartgui name="Karbon" version="6">
 <MenuBar>
 	<Menu name="file"><text>&amp;File</text>
 		<Action name="file_import"/>
