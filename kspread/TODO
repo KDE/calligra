@@ -381,3 +381,4 @@ Done:
 -> save/load header/footer
 -> save/load print range
 -> save/load conditional cell attribute
+-> save/load style

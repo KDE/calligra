@@ -119,21 +119,81 @@ KSpreadStyle::~KSpreadStyle()
 
 void KSpreadStyle::loadOasisStyle( const QDomElement & element )
 {
+    kdDebug()<<"void KSpreadStyle::loadOasisStyle( const QDomElement & element )**************: name :"<<endl;
     KoStyleStack styleStack;
     styleStack.push( element );
     styleStack.setTypeProperties( "cell" );
+    QString str;
     if ( styleStack.hasAttribute( "fo:text-align" ) )
     {
-        QString str( styleStack.attribute( "fo:text-align" ) );
+
+        str = styleStack.attribute( "fo:text-align" );
+        kdDebug()<<"str :"<<str<<endl;
         if ( str == "center" )
-            m_alignX == KSpreadFormat::Center;
+            m_alignX = KSpreadFormat::Center;
         else if ( str == "end" )
-            m_alignX == KSpreadFormat::Right;
+            m_alignX = KSpreadFormat::Right;
         else if ( str == "start" )
-            m_alignX == KSpreadFormat::Left;
+            m_alignX = KSpreadFormat::Left;
         else
-            m_alignX == KSpreadFormat::Undefined;
+            m_alignX = KSpreadFormat::Undefined;
         m_featuresSet |= SAlignX;
+    }
+    if ( styleStack.hasAttribute( "fo:vertical-align" ) )
+    {
+        str = styleStack.attribute( "fo:vertical-align" );
+        if ( str == "bottom" )
+            m_alignY = KSpreadFormat::Bottom;
+        else if ( str =="top" )
+            m_alignY = KSpreadFormat::Top;
+        else if ( str =="middle" )//FIXME !!!
+            m_alignY = KSpreadFormat::Middle;
+        m_featuresSet |= SAlignY;
+    }
+    if ( styleStack.hasAttribute( "fo:background-color" ) )
+    {
+        m_bgColor = QColor(  styleStack.attribute( "fo:background-color" ) );
+        m_featuresSet |= SAlignY;
+    }
+
+    if ( styleStack.hasAttribute( "fo:wrap-option" )&&( styleStack.attribute( "fo:wrap-option" )=="wrap" ) )
+    {
+       setProperty( PMultiRow );
+       m_featuresSet |= SMultiRow;
+    }
+    if ( styleStack.hasAttribute( "style:cell-protect" ) )
+    {
+        str = styleStack.attribute( "style:cell-protect" );
+        if ( str=="hidden-and-protected" )
+        {
+            setProperty( PHideAll );
+            m_featuresSet |= SHideAll;
+        }
+        else if ( str == "protected formula-hidden" )
+        {
+            setProperty( PHideFormula );
+            m_featuresSet |= SHideFormula;
+        }
+        else if ( str == "protected" )
+        {
+            setProperty( PNotProtected );
+            m_featuresSet |= SNotProtected;
+        }
+        else if ( str =="formula-hidden" )
+        {
+            //FIXME !!!!
+#if 0
+            setNotProtected( true );
+            setHideFormula( true );
+            setHideAll( false );
+#endif
+        }
+    }
+    if ( styleStack.hasAttribute( "style:print-content" ) && ( styleStack.attribute( "style:print-content" )=="false" ) )
+    {
+        setProperty( PDontPrintText );
+        m_featuresSet |= SDontPrintText;
+
     }
 
 #if 0
@@ -143,41 +203,6 @@ void KSpreadStyle::loadOasisStyle( const QDomElement & element )
     m_type = (StyleType) format.attribute( "type" ).toInt( &ok );
     if ( !ok )
       return false;
-  }
-
-  if ( format.hasAttribute( "alignX" ) )
-  {
-    KSpreadFormat::Align a = (KSpreadFormat::Align) format.attribute( "alignX" ).toInt( &ok );
-    if ( !ok )
-      return false;
-    if ( (unsigned int) a >= 1 || (unsigned int) a <= 4 )
-    {
-      m_alignX = a;
-      m_featuresSet |= SAlignX;
-    }
-  }
-  if ( format.hasAttribute( "alignY" ) )
-  {
-    KSpreadFormat::AlignY a = (KSpreadFormat::AlignY) format.attribute( "alignY" ).toInt( &ok );
-    if ( !ok )
-      return false;
-    if ( (unsigned int) a >= 1 || (unsigned int) a < 4 )
-    {
-      m_alignY = a;
-      m_featuresSet |= SAlignY;
-    }
-  }
-
-  if ( format.hasAttribute( "bgcolor" ) )
-  {
-    m_bgColor = QColor( format.attribute( "bgcolor" ) );
-    m_featuresSet |= SBackgroundColor;
-  }
-
-  if ( format.hasAttribute( "multirow" ) )
-  {
-    setProperty( PMultiRow );
-    m_featuresSet |= SMultiRow;
   }
 
   if ( format.hasAttribute( "verticaltext" ) )
@@ -268,29 +293,6 @@ void KSpreadStyle::loadOasisStyle( const QDomElement & element )
     if ( !ok )
       return false;
     m_featuresSet |= SIndent;
-  }
-  if ( format.hasAttribute( "dontprinttext" ) )
-  {
-    setProperty( PDontPrintText );
-    m_featuresSet |= SDontPrintText;
-  }
-
-  if ( format.hasAttribute( "noprotection" ) )
-  {
-    setProperty( PNotProtected );
-    m_featuresSet |= SNotProtected;
-  }
-
-  if ( format.hasAttribute( "hideall" ) )
-  {
-    setProperty( PHideAll );
-    m_featuresSet |= SHideAll;
-  }
-
-  if ( format.hasAttribute( "hideformula" ) )
-  {
-    setProperty( PHideFormula );
-    m_featuresSet |= SHideFormula;
   }
 
   // TODO: remove that...

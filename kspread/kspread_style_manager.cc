@@ -101,6 +101,22 @@ void KSpreadStyleManager::loadOasisStyleTemplate(  KoOasisStyles& oasisStyles )
 
         }
     }
+    Styles::iterator iter = m_styles.begin();
+    Styles::iterator end  = m_styles.end();
+
+    while ( iter != end )
+    {
+        KSpreadCustomStyle * styleData = iter.data();
+
+        if ( !styleData->parent() && !styleData->parentName().isNull() )
+            styleData->setParent( m_styles[ styleData->parentName() ] );
+
+        ++iter;
+    }
+
+    m_defaultStyle->setName( "Default" );
+    m_defaultStyle->setType( KSpreadStyle::BUILTIN );
+
 }
 
 QDomElement KSpreadStyleManager::save( QDomDocument & doc )
