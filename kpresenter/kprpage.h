@@ -324,6 +324,12 @@ public:
     KPObject * getCursor(const QPoint &pos );
     KPObject * getCursor(const KoPoint &pos );
 
+    /**
+     * Returns the object at position pos
+     * @param pos the position in the document on which to look
+     * @param withoutProtected if set to true only unprotecred objects are returned
+     * @return the object at position pos
+     */
     KPObject* getObjectAt( const KoPoint &pos, bool withoutProtected = false ) const;
     KPPixmapObject * picViewOrigHelper() const;
     void applyStyleChange( KoStyleChangeDefMap changed );

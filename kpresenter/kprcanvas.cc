@@ -737,19 +737,10 @@ void KPrCanvas::mousePressEvent( QMouseEvent *e )
 
             switch ( toolEditMode ) {
             case TEM_MOUSE: {
-                KPObject *kpobject = NULL;
-
                 firstX = contentsPoint.x();
                 firstY = contentsPoint.y();
-                kpobject = m_activePage->getObjectAt( docPoint, true );
-                if ( ! kpobject )
-                {
-                    kpobject = stickyPage()->getObjectAt( docPoint, true );
-                    if(objectIsAHeaderFooterHidden(kpobject))
-                    {
-                        kpobject = NULL;
-                    }
-                }
+                KPObject *kpobject = getObjectAt( docPoint, true );
+
                 if ( kpobject ) {
                     // use ctrl + Button to select / deselect object
                     if ( e->state() & ControlButton && kpobject->isSelected() )
@@ -833,20 +824,11 @@ void KPrCanvas::mousePressEvent( QMouseEvent *e )
                 rubber = QRect( e->x(), e->y(), 0, 0 );
             }break;
             case TEM_ROTATE: {
-                KPObject *kpobject = 0;
 
                 firstX = contentsPoint.x();
                 firstY = contentsPoint.y();
 
-                // find object on active page
-                kpobject = m_activePage->getObjectAt( docPoint );
-
-                // find object on sticky page (ignore header/footer)
-                if ( !kpobject ) {
-                    kpobject = stickyPage()->getObjectAt( docPoint );
-                    if( kpobject && objectIsAHeaderFooterHidden( kpobject ) )
-                        kpobject=0L;
-                }
+                KPObject *kpobject = getObjectAt( docPoint );
 
                 // clear old selections even if shift or control are pressed
                 // we don't support rotating multiple objects yet
@@ -993,9 +975,7 @@ void KPrCanvas::mousePressEvent( QMouseEvent *e )
         }
 
         if ( e->button() == RightButton && toolEditMode == TEM_MOUSE ) {
-            KPObject*obj = getObjectAt( docPoint );
-            if(objectIsAHeaderFooterHidden(obj))
-                obj=0L;
+            KPObject * obj = getObjectAt( docPoint );
             if ( obj ) {
                 kpobject = obj;
                 QPoint pnt = QCursor::pos();
@@ -2019,14 +1999,7 @@ void KPrCanvas::mouseDoubleClickEvent( QMouseEvent *e )
     if ( toolEditMode != TEM_MOUSE || !editMode ) return;
 
     deSelectAllObj();
-    KPObject *kpobject = 0;
-    kpobject=m_activePage->getObjectAt(docPoint);
-    if( !kpobject)
-    {
-        kpobject=stickyPage()->getObjectAt(docPoint );
-        if( kpobject && objectIsAHeaderFooterHidden( kpobject ) )
-            kpobject=0L;
-    }
+    KPObject *kpobject = getObjectAt( docPoint );
     if(kpobject)
     {
         if ( kpobject->getType() == OT_TEXT )
@@ -2369,12 +2342,19 @@ void KPrCanvas::resizeEvent( QResizeEvent *e )
     buffer.resize( size() );
 }
 
-KPObject* KPrCanvas::getObjectAt( const KoPoint&pos )
+KPObject * KPrCanvas::getObjectAt( const KoPoint &pos, bool withoutProtected )
 {
-    KPObject *kpobject=m_activePage->getObjectAt(pos);
-    if( !kpobject)
-        kpobject=stickyPage()->getObjectAt(pos);
-    return kpobject;
+    KPObject *object = m_activePage->getObjectAt( pos, withoutProtected );
+    
+    if ( !object )
+    {
+        object = stickyPage()->getObjectAt( pos, withoutProtected );
+    
+        if ( objectIsAHeaderFooterHidden( object ) )
+           object = 0;
+    }
+
+    return object;
 }
 
 void KPrCanvas::selectObj( KPObject *kpobject )

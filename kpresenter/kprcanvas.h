@@ -522,7 +522,13 @@ protected:
     virtual void mouseDoubleClickEvent( QMouseEvent *e );
     virtual void wheelEvent( QWheelEvent *e );
     virtual void resizeEvent( QResizeEvent *e );
-    KPObject *getObjectAt( const KoPoint&pos );
+    /**
+     * Returns the object at position pos 
+     * @param pos the position in the document on which to look
+     * @param withoutProtected if set to true only unprotecred objects are returned
+     * @return the object at position pos
+     */
+    KPObject *getObjectAt( const KoPoint &pos, bool withoutProtected = false );
     virtual void focusInEvent( QFocusEvent* ) {}
     virtual void focusOutEvent( QFocusEvent* ) {}
     virtual void enterEvent( QEvent *e );
