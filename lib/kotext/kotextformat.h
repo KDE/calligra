@@ -55,15 +55,15 @@ public:
     int m_refAscent;
     int m_refDescent;
     int m_refHeight;
+    int m_offsetFromBaseLine;
     ushort m_screenWidths[ 256 ];
     // m_refWidths[ 256 ] would speed things up too, but ushort might not be enough for it
-    bool m_bShadowText;
     double m_relativeTextSize;
-    int m_offsetFromBaseLine;
-    bool m_bWordByWord;
-    bool m_bHyphenation;
     double m_underLineWidth;
     KoCharStyle *m_charStyle;
+    bool m_bShadowText;
+    bool m_bWordByWord;
+    bool m_bHyphenation;
 };
 
 public:
