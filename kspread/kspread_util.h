@@ -43,7 +43,7 @@ public:
     rowFixed = c.rowFixed;
   }
 
-  bool isValid() const { return ( pos.x() >= 0 && ( table != 0 || tableName.isEmpty() ) ); }
+  bool isValid() const { return ( pos.x() >= 0 && ( table != 0 || !tableName.isEmpty() ) ); }
   bool isTableKnown() const { return ( !tableName.isEmpty() && table != 0 ); }
 
   KSpreadCell* cell();
