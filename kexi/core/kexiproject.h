@@ -26,9 +26,9 @@
 #include <qptrlist.h>
 
 #include <koDocument.h>
-#include "../kexidb/drivermanager.h"
-#include "../kexidb/driver.h"
-#include "../kexidb/connection.h"
+#include <kexidb/drivermanager.h>
+#include <kexidb/driver.h>
+#include <kexidb/connection.h>
 
 class KexiDoc;
 class DCOPObject;

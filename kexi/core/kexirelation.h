@@ -23,7 +23,7 @@
 
 #include <qvaluelist.h>
 #include <qvaluestack.h>
-#include "kexidb/connection.h"
+#include <kexidb/connection.h>
 
 
 class KexiProject;

@@ -65,8 +65,7 @@ KexiProject::KexiProject( QWidget *parentWidget, const char *widgetName, QObject
 	kdDebug()<<"KexiProject::KexiProject()"<<endl;
 	dcop = 0;
 	setInstance( KexiFactory::global(), false );
-	m_dbDriverManager=KexiDB::DriverManager::self();
-	m_dbDriverManager->incRefCount();
+	m_dbDriverManager = new KexiDB::DriverManager;
 	m_filterManager=new KexiFilterManager(this);
 	m_relationManager=new KexiRelation(this);
 	m_invokeActionsOnStartup = true;
@@ -81,7 +80,7 @@ KexiProject::~KexiProject()
 {
 	delete m_dbConnection;
 	delete dcop;
-	m_dbDriverManager->decRefCount();
+	delete m_dbDriverManager;
 }
 
 KexiRelation *KexiProject::relationManager() { return m_relationManager;}
