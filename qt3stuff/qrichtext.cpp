@@ -1233,9 +1233,9 @@ QTextDocument::QTextDocument( QTextDocument *p, QTextFormatCollection *c )
 
 void QTextDocument::init()
 {
-//#if defined(PARSER_DEBUG)
+#if defined(PARSER_DEBUG)
     qDebug( "new QTextDocument (%p)", this );
-//#endif
+#endif
     if ( par )
 	par->insertChild( this );
     pProcessor = 0;
@@ -2810,10 +2810,10 @@ void QTextString::clear()
 
 void QTextString::setFormat( int index, QTextFormat *f, bool useCollection )
 {
-    qDebug("QTextString::setFormat index=%d f=%p",index,f);
+//    qDebug("QTextString::setFormat index=%d f=%p",index,f);
     if ( useCollection && data[ index ].format() )
     {
-        qDebug("QTextString::setFormat removing ref on old format %p",data[ index ].format());
+        //qDebug("QTextString::setFormat removing ref on old format %p",data[ index ].format());
 	data[ index ].format()->removeRef();
     }
     data[ index ].setFormat( f );
@@ -3019,9 +3019,9 @@ QTextParag::QTextParag( QTextDocument *d, QTextParag *pr, QTextParag *nx, bool u
 	tabStopWidth = defFormat->width( 'x' ) * 8;
 	commandHistory = new QTextCommandHistory( 100 );
     }
-//#if defined(PARSER_DEBUG)
+#if defined(PARSER_DEBUG)
     qDebug( "new QTextParag" );
-//#endif
+#endif
     fullWidth = TRUE;
 
     if ( p ) {
@@ -3563,7 +3563,7 @@ void QTextParag::paint( QPainter &painter, const QColorGroup &cg, QTextCursor *c
 	    if ( !chr->isCustom() && chr->c != '\n' )
 		paintEnd = i;
 	    bw = cw;
-	    //if ( !chr->isCustom() )
+	    if ( !chr->isCustom() )
 		continue;
 	}
 
@@ -4870,7 +4870,9 @@ QTextIndent::QTextIndent()
 QTextFormatCollection::QTextFormatCollection()
     : cKey( 307 ), sheet( 0 )
 {
+#ifdef DEBUG_COLLECTION
     qDebug("QTextFormatCollection::QTextFormatCollection %p", this);
+#endif
     defFormat = new QTextFormat( QApplication::font(),
 				     QApplication::palette().color( QPalette::Active, QColorGroup::Text ) );
     lastFormat = cres = 0;
@@ -4881,7 +4883,9 @@ QTextFormatCollection::QTextFormatCollection()
 
 QTextFormatCollection::~QTextFormatCollection()
 {
+#ifdef DEBUG_COLLECTION
     qDebug("QTextFormatCollection::~QTextFormatCollection %p", this);
+#endif
     delete defFormat;
 }
 
