@@ -30,7 +30,6 @@
 #include "vqpainter.h"
 #include "vpainterfactory.h"
 #include "vselection.h"
-#include "vlayersdocker.h"
 
 #include <kdebug.h>
 
