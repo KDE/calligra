@@ -18,6 +18,7 @@
 */
 
 #include <qfileinfo.h>
+#include <qguardedptr.h>
 
 #include <kdebug.h>
 #include <kinstance.h>
@@ -40,7 +41,7 @@ QCString test_name;
 int cursor_options = 0;
 
 KexiDB::ConnectionData conn_data;
-KexiDB::Connection *conn = 0;
+QGuardedPtr<KexiDB::Connection> conn;
 KInstance *instance;
 KApplication *app;
 
@@ -91,7 +92,7 @@ int main(int argc, char** argv)
 		//GUI test
 		app = new KApplication(argc, argv, prgname);
 		KGlobal::iconLoader()->addAppDir("kexi");
-    		instance = app;
+			instance = app;
 	}
 	else {
 		//CLI test
