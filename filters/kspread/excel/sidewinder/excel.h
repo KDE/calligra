@@ -2416,7 +2416,6 @@ private:
   void handleSST( SSTRecord* record );
   void handleXF( XFRecord* record );    
   
-  Format convertFormat( const XFRecord& xf );
   Format convertFormat( unsigned xfIndex );
   
   // no copy or assign
