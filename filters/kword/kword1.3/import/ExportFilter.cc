@@ -479,21 +479,32 @@ void OOWriterWorker::writeContentXml(void)
     if (!m_zip)
         return;
 
+    kdDebug(30520) << "content.xml: preparing..." << endl;
     zipPrepareWriting("content.xml");
 
+    kdDebug(30520) << "content.xml: start file..." << endl;
     writeStartOfFile("content");
 
+    kdDebug(30520) << "content.xml: declare fonts..." << endl;
     writeFontDeclaration();
 
+    kdDebug(30520) << "content.xml: writing automatical styles..." << endl;
     zipWriteData(" <office:automatic-styles>\n");
+
     zipWriteData(m_contentAutomaticStyles);
+    m_contentAutomaticStyles = QString::null; // Release memory
+
     zipWriteData(" </office:automatic-styles>\n");
 
+    kdDebug(30520) << "content.xml: writing body..." << endl;
     zipWriteData(m_contentBody);
+    m_contentBody.resize( 0 ); // Release memory
 
     zipWriteData( "</office:document-content>\n" );
 
+    kdDebug(30520) << "content.xml: closing file..." << endl;
     zipDoneWriting();
+    kdDebug(30520) << "content.xml: done!" << endl;
 }
 
 void OOWriterWorker::writeMetaXml(void)
