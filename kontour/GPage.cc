@@ -29,6 +29,8 @@
 
 #include <qdom.h>
 
+#include <kdebug.h>
+
 #include "kontour_global.h"
 #include "GObject.h"
 #include "GLayer.h"
@@ -525,7 +527,7 @@ KoRect GPage::boundingBoxForAllObjects()
 
 void GPage::drawContents(QPainter &p, bool withBasePoints, bool outline, bool withEditMarks)
 {
-/*  for(QPtrListIterator<GLayer> i(layers); i.current(); ++i)
+  for(QPtrListIterator<GLayer> i(layers); i.current(); ++i)
   {
     if((*i)->isVisible())
     {
@@ -534,12 +536,12 @@ void GPage::drawContents(QPainter &p, bool withBasePoints, bool outline, bool wi
       for(; oi.current(); ++oi)
         (*oi)->draw(p, withBasePoints && (*oi)->isSelected(), outline, withEditMarks);
     }
-  }*/
+  }
 }
 
 void GPage::drawContentsInRegion(QPainter &p, const KoRect &r, bool withBasePoints, bool outline, bool withEditMarks)
 {
-/*  GLayer *i = layers.first();
+  GLayer *i = layers.first();
   for(; i != 0; i = layers.next())
   {
     if(i->isVisible())
@@ -552,11 +554,11 @@ void GPage::drawContentsInRegion(QPainter &p, const KoRect &r, bool withBasePoin
         // intersects the active region
         //      const KoRect& bbox = (*oi)->boundingBox ();
         //      if (r.intersects (bbox))
-        if((*oi)->intersects(rr))
+        if((*oi)->intersects(r))
           (*oi)->draw(p, withBasePoints && (*oi)->isSelected(), outline, withEditMarks);
       }
     }
-  }*/
+  }
 }
 
 void GPage::invalidateClipRegions ()

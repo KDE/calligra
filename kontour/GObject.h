@@ -76,7 +76,7 @@ public:
    * The destructor.
    *
    */
-  virtual ~GObject ();
+  virtual ~GObject();
   
   /**
    *
@@ -131,15 +131,8 @@ public:
    * @param f new zoom factor
    * @param pf previous zoom factor
    */
-  virtual void setZoomFactor(double f, double pf) = 0;
+  virtual void setZoomFactor(double f, double pf);
   
-  /**
-   * Convert object to path.
-   * 
-   * @return pointer to new path
-   */
-  virtual GPath *convertToPath() const = 0;
-
   GStyle &style() {return st; }
 
   /**
@@ -148,9 +141,10 @@ public:
    */
   virtual int getNeighbourPoint(const KoPoint &point) = 0;
   virtual void movePoint(int idx, double dx, double dy, bool ctrlPressed = false) = 0;
-  virtual void removePoint(int , bool) = 0;
+  virtual void removePoint(int idx, bool update = true) = 0;
+  // TODO need update?
 
-  virtual bool findNearestPoint (const KoPoint &p, double max_dist, double &dist, int &pidx, bool all) = 0;
+  virtual bool findNearestPoint(const KoPoint &p, double max_dist, double &dist, int &pidx, bool all) = 0;
 
   /**
    * Retrieve the transformation matrix associated with the object.
@@ -190,6 +184,7 @@ public:
   void ttransform(const QWMatrix &m, bool update = false);
   
   virtual void calcBoundingBox() = 0;
+  // TODO protected?
   
   /**
    * Test, if the object contains the given point.
@@ -206,6 +201,13 @@ public:
 
   void invalidateClipRegion();
 
+  /**
+   * Convert object to path.
+   * 
+   * @return pointer to new path
+   */
+  virtual GPath *convertToPath() const = 0;
+
 signals:
   void deleted();
   void changed();
@@ -219,7 +221,7 @@ protected:
   void calcUntransformedBoundingBox(const KoPoint &tleft, const KoPoint &tright, const KoPoint &bright, const KoPoint &bleft);
   void updateRegion(bool recalcBBox = true);
   
-private:
+protected:
   GLayer *mLayer;            // the layer containing this object
   
   bool sflag:1;              // object is selected

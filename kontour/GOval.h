@@ -2,8 +2,9 @@
 
   $Id$
 
-  This file is part of KIllustrator.
+  This file is part of Kontour.
   Copyright (C) 1998 Kai-Uwe Sattler (kus@iti.cs.uni-magdeburg.de)
+  Copyright (C) 2001 Igor Janssen (rm@linux.ru.net)
 
   This program is free software; you can redistribute it and/or modify
   it under the terms of the GNU Library General Public License as
@@ -22,58 +23,55 @@
 
 */
 
-#ifndef GOval_h_
-#define GOval_h_
+#ifndef __GOval_h__
+#define __GOval_h__
 
-#include <GObject.h>
+#include "GObject.h"
 
 class GOval : public GObject
 {
   Q_OBJECT
 public:
-  GOval (GDocument* parent, bool cFlag = false);
-  GOval (GDocument* parent, const QDomElement &element, bool cFlag = false);
-  GOval (const GOval& obj);
-  ~GOval () {}
+  enum Type{ Ellipse, Pie, Segment };
 
-  virtual void draw (QPainter& p, bool withBasePoints = false,
-                     bool outline = false, bool withEditMarks=true);
-  virtual bool contains (const Coord& p);
+  GOval(bool cFlag = false);
+  GOval(const QDomElement &element, bool cFlag = false);
+  GOval(const GOval &obj);
 
-  void setStartPoint (const Coord& p);
-  void setEndPoint (const Coord& p);
+  Type type() const {return mType; }
+  void type(Type t);
 
-  void setAngles (float a1, float a2);
+  bool isCircle() const {return circleFlag; }
 
-  const Coord& startPoint () const { return sPoint; }
-  const Coord& endPoint () const { return ePoint; }
-  bool isCircle () const { return circleFlag; }
+  const KoPoint &startPoint() const {return sPoint; }
+  void startPoint(const KoPoint &p);
 
-  virtual bool isValid ();
+  const KoPoint &endPoint() const {return ePoint; }
+  void endPoint(const KoPoint &p);
 
-  virtual GObject* copy ();
-  //virtual GObject* create (GDocument *doc, const QDomElement &element);
+  void setAngles(double sa, double ea);
 
-  virtual QDomElement writeToXml(QDomDocument &document);
+  QString typeName () const;
+  QDomElement writeToXml(QDomDocument &document);
+  void draw(QPainter &p, bool withBasePoints = false, bool outline = false, bool withEditMarks = true);
 
-  virtual int getNeighbourPoint (const Coord& p);
-  virtual void movePoint (int idx, float dx, float dy, bool ctrlPressed=false);
+  int getNeighbourPoint(const KoPoint &point);
+  void movePoint(int idx, double dx, double dy, bool ctrlPressed = false);
+  void removePoint(int idx, bool update = true);
+  bool contains(const KoPoint &p);
+  bool findNearestPoint(const KoPoint &p, double max_dist, double &dist, int &pidx, bool all);
 
-  virtual QString typeName () const;
-
-  virtual void getPath (QValueList<Coord>& path);
-  virtual GCurve* convertToCurve () const;
-
-protected:
-  void updateGradientShape (QPainter& p);
-  void calcBoundingBox ();
-
-  void update_segments ();
+  void calcBoundingBox();
+  GPath *convertToPath() const;
 
 private:
-  Coord ePoint, sPoint, segPoint[2];
-  float sAngle, eAngle;
-  bool circleFlag;
+  Type mType;            // Oval type
+  KoPoint sPoint;        // Start point
+  KoPoint ePoint;        // End point
+  double sAngle;         // Start angle
+  double eAngle;         // End angle
+  bool circleFlag:1;     // Circle flag
+  KoPoint segPoint[2];   //
 };
 
 #endif

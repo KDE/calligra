@@ -2,8 +2,9 @@
 
   $Id$
 
-  This file is part of KIllustrator.
+  This file is part of Kontour.
   Copyright (C) 1998 Kai-Uwe Sattler (kus@iti.cs.uni-magdeburg.de)
+  Copyright (C) 2001 Igor Janssen (rm@linux.ru.net)
 
   This program is free software; you can redistribute it and/or modify
   it under the terms of the GNU Library General Public License as
@@ -22,7 +23,7 @@
 
 */
 
-#include <CreateOvalCmd.h>
+#include "CreateOvalCmd.h"
 
 #include <klocale.h>
 
@@ -30,42 +31,41 @@
 #include "GPage.h"
 #include "GOval.h"
 
-CreateOvalCmd::CreateOvalCmd (GDocument* doc, GOval* oval) :
-  Command(i18n("Create Oval"))
+CreateOvalCmd::CreateOvalCmd(GDocument *aGDoc, GOval *oval):
+Command(aGDoc, i18n("Create Oval"))
 {
-  document = doc;
   object = oval;
-  object->ref ();
 }
 
-CreateOvalCmd::CreateOvalCmd (GDocument* doc, const Coord& p0,
-                              const Coord& p1, bool flag) :
-  Command(i18n("Create Oval"))
+CreateOvalCmd::CreateOvalCmd(GDocument *aGDoc, const KoPoint &p0, const KoPoint &p1, bool flag):
+Command(aGDoc, i18n("Create Oval"))
 {
-  document = doc;
   object = 0L;
   spos = p0;
   epos = p1;
   cflag = flag;
 }
 
-CreateOvalCmd::~CreateOvalCmd () {
-  if (object)
-    object->unref ();
+CreateOvalCmd::~CreateOvalCmd()
+{
+//  if(object)
+//    object->unref();
 }
 
-void CreateOvalCmd::execute () {
-  if (object == 0L) {
-    // create oval
-    object = new GOval (document, cflag);
-    object->setStartPoint (spos);
-    object->setEndPoint (epos);
-    //    object->ref ();
+void CreateOvalCmd::execute()
+{
+  if(!object)
+  {
+    /* Create oval */
+    object = new GOval(cflag);
+    object->startPoint(spos);
+    object->endPoint(epos);
+    //object->ref();
   }
-  document->activePage()->insertObject (object);
+  document()->activePage()->insertObject(object);
 }
 
-void CreateOvalCmd::unexecute () {
-  document->activePage()->deleteObject (object);
+void CreateOvalCmd::unexecute()
+{
+  document()->activePage()->deleteObject(object);
 }
-

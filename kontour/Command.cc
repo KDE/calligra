@@ -25,13 +25,8 @@
 
 #include "Command.h"
 
-Command::Command(const QString &name):
+Command::Command(GDocument *aGDoc, const QString &name):
 KCommand(name)
-{
-
-}
-
-void Command::document(GDocument *aGDoc)
 {
   mGDoc = aGDoc;
 }

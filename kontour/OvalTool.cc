@@ -30,8 +30,13 @@
 #include <kdebug.h>
 
 #include "kontour_view.h"
+#include "kontour_doc.h"
+#include "GDocument.h"
+#include "GPage.h"
 #include "Canvas.h"
 #include "ToolController.h"
+#include "GOval.h"
+#include "CreateOvalCmd.h"
 
 OvalTool::OvalTool(QString aId, ToolController *tc):
 Tool(aId, tc)
@@ -85,7 +90,7 @@ void OvalTool::processEvent(QEvent *e)
   {
     if(state == S_Resize)
     {
-      QMouseEvent *me = (QMouseEvent *) e;
+      QMouseEvent *me = (QMouseEvent *)e;
       canvas->repaint(r);
       if(p1.x() <= me->x())
       {
@@ -145,6 +150,14 @@ void OvalTool::processEvent(QEvent *e)
   {
     if(state == S_Resize)
     {
+      GOval *oval = new GOval();
+      oval->startPoint(KoPoint(r.left() - canvas->xOffset(), r.top() - canvas->yOffset()));
+      oval->endPoint(KoPoint(r.right() - canvas->xOffset(), r.bottom() - canvas->yOffset()));
+      toolController()->view()->activeDocument()->activePage()->insertObject(oval);
+      CreateOvalCmd *cmd = new CreateOvalCmd(toolController()->view()->activeDocument(), oval);
+      KontourDocument *doc = (KontourDocument *)toolController()->view()->koDocument();
+      doc->history()->addCommand(cmd);
+      canvas->repaint(r);
       state = S_Init;
     }
 /*      if (rect == 0L)

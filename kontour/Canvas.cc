@@ -147,6 +147,9 @@ void Canvas::updateBuf(const QRect &rect)
   p.moveTo(w, h+1);
   p.lineTo(1, h+1);
   p.setPen(Qt::black);
+  
+  document()->activePage()->drawContents(p, false, mOutlineMode);
+  
   p.restore();
 
   p.end();
@@ -411,7 +414,6 @@ void Canvas::updateScrollBars()
 
 void Canvas::scrollX(int v)
 {
-  kdDebug() << "SCROLL X" << endl;
   mXOffset = mXCenter - v;
   emit offsetXChanged(mXOffset);
   repaint();
@@ -419,7 +421,6 @@ void Canvas::scrollX(int v)
 
 void Canvas::scrollY(int v)
 {
-  kdDebug() << "SCROLL Y" << endl;
   mYOffset = mYCenter - v;
   emit offsetYChanged(mYOffset);
   repaint();

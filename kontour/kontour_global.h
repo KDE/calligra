@@ -25,14 +25,10 @@
 #ifndef __kontour_global_h__
 #define __kontour_global_h__
 
-//#include <float.h>
-
-const double NEAR_DISTANCE = 4.0;
-
-//#ifndef M_PI // not ANSI C++, so it maybe...
-//#define M_PI            3.14159265358979323846  //
-//#endif
-
-//#define RAD_FACTOR 180.0 / M_PI */
+namespace Kontour
+{
+  const double nearDistance = 4.0;
+  const double pi = 3.14159265358979323846;
+}
 
 #endif

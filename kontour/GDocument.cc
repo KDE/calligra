@@ -154,7 +154,7 @@ int GDocument::indexOfHorizHelpline(double pos)
 {
   int ret = 0;
   for(QValueList<double>::Iterator i = mHorizHelplines.begin(); i != mHorizHelplines.end(); ++i, ++ret)
-    if(pos - NEAR_DISTANCE < *i && pos + NEAR_DISTANCE > *i)
+    if(pos - Kontour::nearDistance < *i && pos + Kontour::nearDistance > *i)
       return ret;
   return -1;
 }
@@ -163,7 +163,7 @@ int GDocument::indexOfVertHelpline(double pos)
 {
   int ret = 0;
   for(QValueList<double>::Iterator i = mVertHelplines.begin(); i != mVertHelplines.end(); ++i, ++ret)
-    if(pos - NEAR_DISTANCE < *i && pos + NEAR_DISTANCE > *i)
+    if(pos - Kontour::nearDistance < *i && pos + Kontour::nearDistance > *i)
       return ret;
   return -1;
 }

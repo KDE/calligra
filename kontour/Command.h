@@ -33,10 +33,8 @@ class GDocument;
 class Command : public KCommand
 {
 public:
-  Command(const QString &name);
-
+  Command(GDocument *aGDoc, const QString &name);
   GDocument *document() const {return mGDoc; }
-  void document(GDocument *aGDoc);
   
 private:
   GDocument *mGDoc;

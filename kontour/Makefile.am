@@ -42,8 +42,8 @@ libkontourpart_la_SOURCES = \
 	GDocument.cc \
 	GPage.cc \
 	GLayer.cc \
-	Command.cc \
 	GObject.cc \
+	GOval.cc \
 	GStyle.cc \
 	GStyleList.cc \
 	LayerPanel.cc \
@@ -53,6 +53,8 @@ libkontourpart_la_SOURCES = \
 	RectTool.cc \
 	OvalTool.cc \
 	ZoomTool.cc \
+	Command.cc \
+	CreateOvalCmd.cc \
 	OptionsDialog.cc \
 	UnitBox.cc \
 	units.cc \

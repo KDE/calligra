@@ -2,8 +2,9 @@
 
   $Id$
 
-  This file is part of KIllustrator.
+  This file is part of Kontour.
   Copyright (C) 1998 Kai-Uwe Sattler (kus@iti.cs.uni-magdeburg.de)
+  Copyright (C) 2001 Igor Janssen (rm@linux.ru.net)
 
   This program is free software; you can redistribute it and/or modify
   it under the terms of the GNU Library General Public License as
@@ -22,29 +23,29 @@
 
 */
 
-#ifndef CreateOvalCmd_h_
-#define CreateOvalCmd_h_
+#ifndef __CreateOvalCmd_h__
+#define __CreateOvalCmd_h__
 
-#include <Command.h>
+#include "Command.h"
 
-class GDocument;
+#include <koPoint.h>
+
 class GOval;
 
-class CreateOvalCmd : public Command {
+class CreateOvalCmd : public Command
+{
 public:
-  CreateOvalCmd (GDocument* doc, GOval* oval);
-  CreateOvalCmd (GDocument* doc, const Coord& p0, const Coord& p1,
-                 bool flag = false);
+  CreateOvalCmd(GDocument *aGDoc, GOval *oval);
+  CreateOvalCmd(GDocument *aGDoc, const KoPoint &p0, const KoPoint &p1, bool flag = false);
+  ~CreateOvalCmd();
 
-  ~CreateOvalCmd ();
-
-  void execute ();
-  void unexecute ();
+  void execute();
+  void unexecute();
 
 private:
-  GDocument* document;
-  GOval* object;
-  Coord spos, epos;
+  GOval *object;
+  KoPoint spos;
+  KoPoint epos;
   bool cflag;
 };
 

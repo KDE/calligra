@@ -45,6 +45,9 @@ public:
   GDocument *document() const {return mGDoc; }
 
   double zoomFactor() const {return mGDoc->zoomFactor(); }
+  
+  int xOffset() const {return mXOffset; }
+  int yOffset() const {return mYOffset; }
 
   void outlineMode(bool flag);
   void paintFlag(bool flag);
