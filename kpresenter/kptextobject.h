@@ -123,6 +123,7 @@ private:
     KoTextObject *m_textobj;
     KPresenterDoc *m_doc;
     bool drawEditRect, drawEmpty;
+    KoParagLayout m_paragLayout;
 };
 
 
@@ -152,6 +153,8 @@ public:
     void selectAll();
     virtual void drawCursor( bool b );
 
+    const KoParagLayout & currentParagLayout() const { return m_paragLayout; }
+
 public slots:
     void cut();
     void copy();
@@ -174,6 +177,7 @@ protected:
 
     KPTextObject *m_kptextobj;
     Page *m_page;
+    KoParagLayout m_paragLayout;
 };
 
 

@@ -261,6 +261,9 @@ public slots:
     void spellCheckerDone( const QString & );
     void spellCheckerFinished( );
     void startKSpell();
+
+    void alignChanged( int );
+
 public:
     // create GUI
     virtual void createGUI();
@@ -390,7 +393,6 @@ protected slots:
     // textobject
     void fontChanged( const QFont & );
     void colorChanged( const QColor &color );
-    void alignChanged( int );
 
     void extraLineBeginNormal();
     void extraLineBeginArrow();

@@ -696,6 +696,12 @@ void KPTextView::updateUI( bool updateFormat, bool force  )
 {
     kdDebug()<<"updateUI( bool updateFormat, bool force  )\n";
     KoTextView::updateUI( updateFormat, force  );
+    // Paragraph settings
+    Qt3::QTextParag * parag = cursor()->parag();
+    if ( m_paragLayout.alignment != parag->alignment() || force ) {
+        m_paragLayout.alignment = parag->alignment();
+        m_page->getView()->alignChanged(  m_paragLayout.alignment );
+    }
 }
 
 void KPTextView::ensureCursorVisible()

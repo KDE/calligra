@@ -1394,6 +1394,10 @@ void KPresenterView::textUnsortList()
 /*===============================================================*/
 void KPresenterView::textDepthPlus()
 {
+    KPTextView *edit=page->currentTextObjectView();
+    if ( !edit )
+        return;
+
 #if 0
     KPTextObject *txtObj = page->currentTextObjectView()->textObject();
     if ( !txtObj )
