@@ -32,30 +32,6 @@ class KDoubleNumInput;
 class KIntSpinBox;
 class KarbonPart;
 
-class VStarOptionsWidget : public QGroupBox
-{
-	Q_OBJECT
-
-public:
-	VStarOptionsWidget( KarbonPart*part, QWidget* parent = 0L, const char* name = 0L );
-
-	double innerR() const;
-	double outerR() const;
-	uint edges() const;
-	void setInnerR( double value );
-	void setOuterR( double value );
-	void setEdges( uint value );
-	void refreshUnit ();
-private:
-	KDoubleNumInput* m_innerR;
-	KDoubleNumInput* m_outerR;
-	KIntSpinBox* m_edges;
-	KarbonPart*m_part;
-	QLabel *m_innerRLabel;
-	QLabel *m_outerRLabel;
-};
-
-
 class VStarTool : public VShapeTool
 {
 public:
@@ -68,8 +44,23 @@ public:
 	virtual VComposite* shape( bool interactive = false ) const;
 
 	void refreshUnit();
-	
+
 private:
+	class VStarOptionsWidget : public QGroupBox
+	{
+	public:
+		VStarOptionsWidget( KarbonPart*part, QWidget* parent = 0L, const char* name = 0L );
+
+		void refreshUnit();
+
+		KDoubleNumInput* m_innerR;
+		KDoubleNumInput* m_outerR;
+		KIntSpinBox* m_edges;
+		KarbonPart*m_part;
+		QLabel *m_innerRLabel;
+		QLabel *m_outerRLabel;
+	};
+
 	VStarOptionsWidget* m_optionsWidget;
 };
 
