@@ -735,9 +735,9 @@ void KWCanvas::applyAspectRatio( double ratio, KoRect& insRect )
         width = height * ratio;
     else
         height = width / ratio;
-    //kdDebug() << "KWCanvas::applyAspectRatio: width=" << width << " height=" << height << endl;
     insRect.setRight( insRect.left() + width );
     insRect.setBottom( insRect.top() + height );
+    //kdDebug() << "KWCanvas::applyAspectRatio: width=" << width << " height=" << height << " insRect=" << DEBUGRECT(insRect) << endl;
 }
 
 void KWCanvas::mmEditFrameMove( const QPoint &normalPoint, bool shiftPressed )
@@ -926,7 +926,7 @@ void KWCanvas::mmCreate( const QPoint& normalPoint, bool shiftPressed ) // Mouse
     // Apply keep-aspect-ratio feature
     if ( m_mouseMode == MM_CREATE_PIX && m_keepRatio )
     {
-        double ratio = m_pixmapSize.width() / m_pixmapSize.height();
+        double ratio = (double)m_pixmapSize.width() / (double)m_pixmapSize.height();
         applyAspectRatio( ratio, m_insRect );
     }
 
@@ -1096,8 +1096,9 @@ void KWCanvas::mrCreateText()
 
 void KWCanvas::mrCreatePixmap()
 {
+    //kdDebug() << "KWCanvas::mrCreatePixmap m_insRect=" << DEBUGRECT(m_insRect) << endl;
     m_insRect = m_insRect.normalize();
-    if ( m_insRect.width() > m_doc->gridX() && m_insRect.height() > m_doc->gridY() && !m_pictureFilename.isEmpty() )
+    if ( m_insRect.width() > 0 /*m_doc->gridX()*/ && m_insRect.height() > 0 /*m_doc->gridY()*/ && !m_pictureFilename.isEmpty() )
     {
         KWFrameSet * fs = 0L;
         if ( m_isClipart )
