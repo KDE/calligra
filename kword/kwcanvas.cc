@@ -1425,6 +1425,7 @@ KCommand *KWCanvas::setLeftFrameBorder( KoBorder newBorder, bool on )
                 frame->setLeftBorder(newBorder);
         }
         frame->updateResizeHandles();
+	frame->frameBordersChanged();
     }
     QMap<KWTableFrameSet *, KWFrame*>::Iterator it;
     for ( it = tables.begin(); it != tables.end(); ++it )
@@ -1479,6 +1480,7 @@ KCommand *KWCanvas::setRightFrameBorder( KoBorder newBorder, bool on )
                 frame->setRightBorder(newBorder);
         }
         frame->updateResizeHandles();
+	frame->frameBordersChanged();
     }
     QMap<KWTableFrameSet *, KWFrame*>::Iterator it;
     for ( it = tables.begin(); it != tables.end(); ++it )
@@ -1534,6 +1536,7 @@ KCommand *KWCanvas::setTopFrameBorder( KoBorder newBorder, bool on )
                 frame->setTopBorder(newBorder);
         }
         frame->updateResizeHandles();
+	frame->frameBordersChanged();
     }
     QMap<KWTableFrameSet *, KWFrame*>::Iterator it;
     for ( it = tables.begin(); it != tables.end(); ++it )
@@ -1588,6 +1591,7 @@ KCommand *KWCanvas::setBottomFrameBorder( KoBorder newBorder, bool on )
                 frame->setBottomBorder(newBorder);
         }
         frame->updateResizeHandles();
+	frame->frameBordersChanged();
     }
     QMap<KWTableFrameSet *, KWFrame*>::Iterator it;
     for ( it = tables.begin(); it != tables.end(); ++it )

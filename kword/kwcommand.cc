@@ -236,6 +236,7 @@ void KWFrameBorderCommand::execute()
         KWFrame *frame=frameSet->frame(tmp->m_iFrameIndex);
         KWTableFrameSet::Cell *cell = dynamic_cast<KWTableFrameSet::Cell *>(frame->frameSet());
         FrameBorderTypeStruct *tmpFrameStruct=m_oldBorderFrameType.at(m_indexFrame.find(tmp));
+
         switch( tmpFrameStruct->m_EFrameType)
         {
             case  FBLeft:
@@ -248,13 +249,13 @@ void KWFrameBorderCommand::execute()
                 if(cell!=0L) // is a table cell
                     cell->setRightBorder(m_newBorder);
                 else
-                    frame->setRightBorder(m_newBorder);
+                     frame->setRightBorder(m_newBorder);
                 break;
             case FBTop:
                 if(cell!=0L) // is a table cell
                     cell->setTopBorder(m_newBorder);
                 else
-                    frame->setTopBorder(m_newBorder);
+                      frame->setTopBorder(m_newBorder);
                 break;
             case FBBottom:
                 if(cell!=0L) // is a table cell
@@ -265,7 +266,17 @@ void KWFrameBorderCommand::execute()
             default:
                 break;
         }
+
+	if (cell==0L) {
+		frame->frameBordersChanged();
+		if (frame->isSelected())
+			frame->updateResizeHandles();
+		    //fixme frameBorderChanged for table cells here too ?
+	}
+
     }
+
+
     if ( doc )
     {
         doc->refreshFrameBorderButton();
@@ -307,13 +318,22 @@ void KWFrameBorderCommand::unexecute()
             case FBBottom:
                 if(cell!=0L) // is a table cell
                     cell->setBottomBorder(tmpFrameStruct->m_OldBorder);
-                else
+                else 
                     frame->setBottomBorder(tmpFrameStruct->m_OldBorder);
                 break;
             default:
                 break;
         }
+	if (cell==0L) {
+		frame->frameBordersChanged();
+		if (frame->isSelected())
+			frame->updateResizeHandles();
+		    //fixme frameBorderChanged for table cells here too ?
+	}
     }
+
+
+
     if ( doc )
     {
         doc->refreshFrameBorderButton();
