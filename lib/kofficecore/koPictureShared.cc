@@ -118,6 +118,109 @@ bool KoPictureShared::loadWmf(QIODevice* io)
     }
 }
 
+bool KoPictureShared::loadTmp(QIODevice* io)
+// We have a temp file, probably from a downloaded file
+//   We must check the file type
+{
+    kdDebug(30003) << "KoPictureShared::loadTmp" << endl;
+    if (!io)
+    {
+        kdError(30003) << "No QIODevice!" << endl;
+        return false;
+    }
+
+    // The extension .wmf was used (KOffice 1.1.x) for QPicture files
+    // For an extern file or in the storage, .wmf can mean a real Windows Meta File.
+
+    QByteArray array=io->readAll();
+    QString strExtension;
+    bool flag=false;
+
+    // Try to find the file type by comparing magic on the first few bytes!
+    if ((array[0]==char(0x89)) && (array[1]=='P') &&(array[2]=='N') && (array[3]=='G'))
+    {
+        strExtension="png";
+    }
+    else if ((array[0]==char(0xff)) && (array[1]==char(0xd8)) &&(array[2]==char(0xff)) && (array[3]==char(0xe0)))
+    {
+        strExtension="jpeg";
+    }
+    else if ((array[0]=='B') && (array[1]=='M'))
+    {
+        strExtension="bmp";
+    }
+    else if ((array[0]==char(0xd7)) && (array[1]==char(0xcd)) &&(array[2]==char(0xc6)) && (array[3]==char(0x9a)))
+    {
+        strExtension="wmf";
+    }
+    else if ((array[0]=='<') && (array[1]=='?') &&(array[2]=='X') && (array[3]=='M') && (array[4]=='L'))
+    {
+        strExtension="svg";
+    }
+    else if ((array[0]=='Q') && (array[1]=='P') &&(array[2]=='I') && (array[3]=='C'))
+    {
+        strExtension="qpic";
+    }
+    else if ((array[0]=='%') && (array[1]=='!') &&(array[2]=='P') && (array[3]=='S'))
+    {
+        strExtension="eps";
+    }
+    else
+    {
+        kdDebug(30003) << "Cannot identify the type of temp file!"
+            << " Trying to convert to PNG! (in KoPictureShared::loadTmp" << endl;
+
+        QBuffer buf(array);
+        if (!buf.open(IO_ReadOnly))
+        {
+            kdError(30003) << "Could not open read buffer!" << endl;
+            return false;
+        }
+
+        QImageIO imageIO(&buf,NULL);
+
+        if (!imageIO.read())
+        {
+            kdError(30003) << "Could not read image!" << endl;
+            return false;
+        }
+
+        buf.close();
+
+        if (!buf.open(IO_WriteOnly))
+        {
+            kdError(30003) << "Could not open write buffer!" << endl;
+            return false;
+        }
+
+        imageIO.setIODevice(&buf);
+        imageIO.setFormat("PNG");
+
+        if (!imageIO.write())
+        {
+            kdError(30003) << "Could not write converted image!" << endl;
+            return false;
+        }
+        buf.close();
+
+        strExtension="png";
+    }
+
+    kdDebug(30003) << "Temp file considered to be " << strExtension << endl;
+
+    QBuffer buffer(array);
+    buffer.open(IO_ReadOnly);
+    clearAndSetMode(strExtension);
+    if (m_base)
+        flag=m_base->load(&buffer,strExtension);
+    setExtension(strExtension);
+    buffer.close();
+
+    return flag;
+}
+
+
+
 bool KoPictureShared::loadXpm(QIODevice* io)
 {
     kdDebug(30003) << "KoPictureShared::loadXpm" << endl;
@@ -236,6 +339,8 @@ bool KoPictureShared::load(QIODevice* io, const QString& extension)
     QString ext(extension.lower());
     if (ext=="wmf")
         flag=loadWmf(io);
+    else if (ext=="tmp")
+        flag=loadTmp(io);
     else
     {
         clearAndSetMode(ext);

@@ -154,6 +154,12 @@ protected:
      * Load a WMF file (a .wmf file could be a QPicture file)
      */
     bool loadWmf(QIODevice* io);
+    
+    /**
+     * @internal
+     * Loads a temporary file, probably from a downloaded file
+     */
+    bool loadTmp(QIODevice* io);
 
 protected:
     KoPictureBase* m_base;
