@@ -40,7 +40,7 @@ KexiQueryPartProxy::KexiQueryPartProxy(KexiQueryPart *part,KexiView *view)
 	m_queryPart=part;
 	kdDebug() << "KexiQueryPartProxy::KexiQueryPartProxy()" << endl;
 
-        KAction *createAction = new KAction(i18n("Create Query ..."), 0,
+        (void*) new KAction(i18n("Create &Query ..."), 0,
                 this,SLOT(slotCreateQuery()), actionCollection(), "querypart_create");
 
         setXMLFile("kexiquerypartui.rc");

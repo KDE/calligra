@@ -41,7 +41,7 @@ KexiTablePartProxy::KexiTablePartProxy(KexiTablePart *part,KexiView *view)
 	m_tablePart=part;
 	kdDebug() << "KexiTablePartProxy::KexiTablePartProxy()" << endl;
 
-	KAction *createAction = new KAction(i18n("Create Table ..."), 0,
+	(void*) new KAction(i18n("Create &Table ..."), 0,
                 this,SLOT(slotCreate()), actionCollection(), "tablepart_create");
         
 	setXMLFile("kexitablepartui.rc");	
