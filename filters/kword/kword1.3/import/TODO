@@ -13,7 +13,7 @@ Variables/fields
 ...
 
 === Abiword's rtftest.rtf test file ===
-word by word underline (error in the if?)
+word by word underline (bug in OOWriter)
 shadow (RTF import problem)
 wave (RTF import problem?)
 ...

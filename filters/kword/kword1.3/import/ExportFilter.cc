@@ -751,6 +751,7 @@ QString OOWriterWorker::textFormatToStyle(const TextFormatting& formatOrigin,
 
     key += ',';
 
+    // It seems that OOWriter 1.1 does not support word-by-word (### TODO: find issue number or report it)
     if (force || ( formatOrigin.underlineWord != formatData.underlineWord )
         || (formatOrigin.strikeoutWord != formatData.strikeoutWord ) )
     {
