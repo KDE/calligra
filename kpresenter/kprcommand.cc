@@ -406,7 +406,12 @@ void DeleteCmd::execute()
             m_page->takeObject(objects.at(i));
 	    objects.at( i )->removeFromObjList();
             if(objects.at(i)->getType()==OT_TEXT)
+            {
+                KPTextObject * tmp = dynamic_cast<KPTextObject *>(tmp);
+                if ( tmp )
+                    tmp->setEditingTextObj( false );
                 textObj=true;
+            }
 	}
 	doc->repaint( oldRect );
 	doc->repaint( objects.at( i ) );
@@ -721,7 +726,11 @@ void InsertCmd::unexecute()
 	m_page->takeObject(  object );
 	object->removeFromObjList();
         if ( object->getType() == OT_TEXT )
+        {
             doc->terminateEditing( (KPTextObject*)object );
+            ((KPTextObject*)object)->setEditingTextObj( false );
+            doc->updateRuler();
+        }
     }
     doc->repaint( oldRect );
     if ( doc->refreshSideBar())
