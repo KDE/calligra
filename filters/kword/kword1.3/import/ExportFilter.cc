@@ -341,7 +341,7 @@ void OOWriterWorker::writeStylesXml(void)
     zipWriteData(" <office:automatic-styles>\n");
     zipWriteData("  <style:page-master style:name=\"pm1\">\n"); // ### TODO: verify if style name is unique
 
-    zipWriteData("   <style:properties ");
+    zipWriteData( "   <style:properties" );
 
     zipWriteData(" fo:page-width=\"");
     zipWriteData(QString::number(m_paperWidth));
@@ -369,8 +369,27 @@ void OOWriterWorker::writeStylesXml(void)
     zipWriteData(QString::number(m_paperBorderRight));
     zipWriteData("pt\" style:first-page-number=\"");
     zipWriteData(QString::number(m_varSet.startingPageNumber));
-    zipWriteData("\"/>\n");
+    zipWriteData( "\">\n" );
 
+    if ( m_columns > 1 )
+    {
+        zipWriteData( "    <style:columns" );
+        zipWriteData( " fo:columns=\"" );
+        zipWriteData( QString::number( m_columns ) );
+        zipWriteData( "\" fo:column-gap=\"" );
+        zipWriteData( QString::number( m_columnspacing ) );
+        zipWriteData( "pt\">\n" );
+
+        for (int i=0; i < m_columns; ++i)
+        {
+            // ### TODO: style:rel-width attribute
+            zipWriteData( "     <style:column fo:margin-left=\"0cm\" fo:margin-right=\"0cm\"/>" );
+        }
+
+        zipWriteData( "    </style:columns>" );
+    }
+
+    zipWriteData("   </style:properties>\n");
     zipWriteData("  </style:page-master>\n");
     zipWriteData(" </office:automatic-styles>\n");
 
@@ -456,22 +475,25 @@ void OOWriterWorker::writeMetaXml(void)
         zipWriteData("</meta:print-date>\n");
     }
 
-    // ### TODO: put them in the right position
+    zipWriteData( "  <meta:document-statistic meta:page-count=\"" );
 
     if ( m_numPages > 0 )
     {
-        zipWriteData("  <meta:page-count>");
         zipWriteData( escapeOOText( QString::number ( m_numPages ) ) );
-        zipWriteData("</meta:page-count>\n");
     }
-
-    if ( true ) // ### TODO: any reasons not to generate it?
+    else
     {
-        zipWriteData("  <meta:image-count>");
-        zipWriteData( escapeOOText( QString::number ( m_pictureNumber ) ) );
-        zipWriteData("</meta:image-count>\n");
+        zipWriteData( "0" );
     }
 
+    zipWriteData( "\"" );
+
+    // ### TODO: any reasons not to generate it?
+    zipWriteData( " meta:image-count=\"" );
+    zipWriteData( escapeOOText( QString::number ( m_pictureNumber ) ) );
+    zipWriteData( "\"" );
+
+    zipWriteData( "/>\n" ); // meta:document-statistic
 
     zipWriteData(" </office:meta>\n");
     zipWriteData("</office:document-meta>\n");
