@@ -325,6 +325,7 @@ hnj_hyphen_load (const char *fn)
   /* put in the fallback states */
   for (i = 0; i < HASH_SIZE; i++)
     for (e = hashtab->entries[i]; e; e = e->next)
+      if ( *(e->key) ) /* not for the empty key entry */
       {
 	for (j = 1; 1; j++)
 	  {
