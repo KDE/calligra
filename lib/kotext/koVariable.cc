@@ -645,13 +645,14 @@ void KoVariable::drawCustomItemHelper( QPainter* p, int x, int y, int wpix, int 
     QString str = text();
     KoTextParag::drawFontEffects( p, fmt, zh, font, textColor, x, ascentpix, wpix, y, hpix );
     int posY = y + ascentpix + offset;
-    if ( fmt->vAlign() == KoTextFormat::AlignSuperScript )
-        posY -= ( p->fontMetrics().height() / 2 );
-    else if ( fmt->vAlign() == KoTextFormat::AlignSubScript )
+    if ( fmt->vAlign() == KoTextFormat::AlignSubScript )
         posY +=p->fontMetrics().height() / 6;
+    if ( fmt->vAlign() != KoTextFormat::AlignSuperScript )
+        posY -= fmt->offsetFromBaseLine();
+    else if ( fmt->offsetFromBaseLine() < 0 )
+        posY -= 2*fmt->offsetFromBaseLine();
 
-
-    p->drawText( x, posY - fmt->offsetFromBaseLine(), str );
+    p->drawText( x, posY, str );
     p->restore();
 }
 
