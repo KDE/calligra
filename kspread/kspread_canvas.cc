@@ -989,9 +989,11 @@ void KSpreadCanvas::paintEvent( QPaintEvent* _ev )
   if ( !activeTable() )
     return;
 
+  /*
   kdDebug(36001) << "------------PAINT EVENT " << _ev->rect().x() << ", " << _ev->rect().y()
 		 << " " << _ev->rect().width() << "|" << _ev->rect().height() << " widget "
 		 << width() << ":" << height() << endl;
+  */
   hideMarker();
 
   QPainter painter;
@@ -1003,7 +1005,7 @@ void KSpreadCanvas::paintEvent( QPaintEvent* _ev )
   QPoint tl = m.map( _ev->rect().topLeft() );
   QPoint br = m.map( _ev->rect().bottomRight() );
 
-  kdDebug(36001) << "Mapped topleft to " << tl.x() << ":" << tl.y() << endl;
+  //kdDebug(36001) << "Mapped topleft to " << tl.x() << ":" << tl.y() << endl;
 
   painter.save();
 
@@ -1379,9 +1381,11 @@ void KSpreadCanvas::createEditor( EditorType ed )
 
 void KSpreadCanvas::updateCellRect( const QRect &_rect )
 {
+  /*
   kdDebug(36001) << "======================= UPDATE RECT " << _rect.x() << ", "
 		 << _rect.y() << ", " << _rect.width() << ", " << _rect.height()
 		 << " ==================" << endl;
+  */
 
   KSpreadTable *table = activeTable();
   if ( !table )
@@ -1524,7 +1528,7 @@ void KSpreadCanvas::updateChooseMarker( const QRect& _old, const QRect& _new )
   // ##### Torben: Clean up here!
   QString name_cell;
 
-  kdDebug(36001) << m_chooseStartTable->tableName().local8Bit() << ", " 
+  kdDebug(36001) << m_chooseStartTable->tableName().local8Bit() << ", "
 		 << table->tableName().local8Bit() << endl;
   if( m_chooseStartTable != table )
   {
