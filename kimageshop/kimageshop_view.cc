@@ -232,9 +232,9 @@ void KImageShopView::createGUI()
   m_pDoc->canvas_()->addView(m_pCanvasView);
   
   // layerlist
-  //m_pLayerList  = new layerList(m_pCanvasView);
-  //m_pLayerList->show();
-  //m_pLayerList->resize(150,200);
+  m_pLayerList  = new layerList(m_pDoc->canvas_());
+  m_pLayerList->show();
+  m_pLayerList->resize(150,200);
 
   
   // setup GUI
