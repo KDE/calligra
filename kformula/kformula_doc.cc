@@ -165,11 +165,20 @@ bool KFormulaDoc::initDoc()
     return TRUE;
 }
 
-void KFormulaDoc::paintContent(QPainter& /*painter*/, const QRect& /*rect*/, bool /*transparent*/, double /*zoomX*/, double /*zoomY*/)
+void KFormulaDoc::paintContent(QPainter& painter, const QRect& rect, bool transparent, double zoomX, double zoomY)
 {
     // ####### handle transparency and zoom
-
     // Need to draw only the document rectangle described in the parameter rect.
+
+    if ((zoomX != document->getXResolution()) ||
+        (zoomY != document->getYResolution())) {
+        document->setResolution(zoomX, zoomY);
+        formula->recalc();
+    }
+    if (!transparent) {
+        painter.fillRect(rect, Qt::white);
+    }
+    formula->draw(painter, rect);
 }
 
 QString KFormulaDoc::configFile() const

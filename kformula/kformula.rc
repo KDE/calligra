@@ -9,7 +9,8 @@
   <Action name="edit_paste"/>
   <Separator/>
   <Action name="edit_select_all"/>
-  <Action name="addtext"/>
+  <Action name="formula_removeenclosing"/>
+  <Action name="formula_makegreek"/>
  </Menu>
  <Menu name="Element"><text>E&amp;lement</text>
   <Menu name="Add"><text>Add...</text>
@@ -51,8 +52,6 @@
   </Menu>
 -->
 
-  <Action name="formula_removeenclosing"/>
-  <Action name="formula_makegreek"/>
   <Action name="formula_insertsymbol"/>
   <Action name="formula_syntaxhighlighting"/>
  </Menu>
@@ -103,8 +102,6 @@
 
   <Action name="formula_typeleft"/>
   <Action name="formula_typeright"/>
-  <Separator/>
-  <Action name="formula_symbolnames"/>
  </ToolBar>
 <!--
  <ToolBar name="Font"><Text>Font</Text>
@@ -144,4 +141,9 @@
   <Action name="matrixremcol"/>
  </ToolBar>
 -->
+ <ToolBar name="Symbol"><Text>Symbol</Text>
+  <Action name="formula_symbolnames"/>
+  <Separator/>
+  <Action name="formula_insertsymbol"/>
+ </ToolBar>
 </kpartgui>
