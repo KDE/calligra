@@ -24,6 +24,10 @@ public:
 k_dcop:
     virtual DCOPRef cell( int x, int y );
     virtual DCOPRef cell( const QString& name );
+
+    virtual DCOPRef column( int _col );
+    virtual DCOPRef row( int _row );
+
     virtual QRect selection() const;
     virtual void setSelection( const QRect& selection );
     virtual QString name() const;
@@ -77,6 +81,7 @@ k_dcop:
     virtual bool showColumnNumber() const;
     virtual bool hideZero() const;
     virtual bool firstLetterUpper() const;
+    virtual void copyAsText();
 
 
 private:

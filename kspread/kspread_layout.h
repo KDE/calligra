@@ -25,6 +25,7 @@ class KSpreadCanvas;
 
 class QDomElement;
 class QDomDocument;
+class DCOPObject;
 
 #include <qpen.h>
 #include <qcolor.h>
@@ -477,6 +478,8 @@ public:
     RowLayout( KSpreadTable *_table, int _row );
     ~RowLayout();
 
+    virtual DCOPObject* dcopObject();
+
     virtual QDomElement save( QDomDocument&, int yshift = 0 );
     virtual bool load( const QDomElement& row, int yshift = 0, PasteMode sp=Normal );
 
@@ -584,6 +587,7 @@ protected:
     bool m_bHide;
     RowLayout* m_next;
     RowLayout* m_prev;
+    DCOPObject*m_dcop;
 };
 
 /**
@@ -596,7 +600,7 @@ public:
 
     virtual QDomElement save( QDomDocument&, int xshift = 0 );
     virtual bool load( const QDomElement& row, int xshift = 0,PasteMode sp=Normal );
-
+    virtual DCOPObject* dcopObject();
     /**
      * @param _canvas is needed to get information about the zooming factor.
      *
@@ -705,6 +709,7 @@ protected:
 
     ColumnLayout* m_next;
     ColumnLayout* m_prev;
+    DCOPObject*m_dcop;
 };
 
 #endif

@@ -1,5 +1,8 @@
 #include "KSpreadTableIface.h"
 #include "KSpreadCellIface.h"
+#include "KSpreadColumnIface.h"
+#include "KSpreadRowIface.h"
+
 
 #include "kspread_table.h"
 #include "kspread_util.h"
@@ -102,6 +105,24 @@ DCOPRef KSpreadTableIface::cell( const QString& name )
 
     return DCOPRef( kapp->dcopClient()->appId(), str );
 }
+
+DCOPRef KSpreadTableIface::column( int _col )
+{
+    if(_col <0)
+        return DCOPRef();
+    return DCOPRef( kapp->dcopClient()->appId(),
+		    m_table->nonDefaultColumnLayout( _col )->dcopObject()->objId() );
+
+}
+
+DCOPRef KSpreadTableIface::row( int _row )
+{
+    if(_row <0)
+        return DCOPRef();
+    return DCOPRef( kapp->dcopClient()->appId(),
+		    m_table->nonDefaultRowLayout( _row )->dcopObject()->objId() );
+}
+
 
 QRect KSpreadTableIface::selection() const
 {
@@ -364,4 +385,9 @@ bool KSpreadTableIface::hideZero() const
 bool KSpreadTableIface::firstLetterUpper() const
 {
     return m_table->getFirstLetterUpper();
+}
+
+void KSpreadTableIface::copyAsText()
+{
+    m_table->copyAsText(m_table->markerRect().topLeft ());
 }

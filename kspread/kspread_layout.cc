@@ -20,6 +20,10 @@
 #include "kspread_canvas.h"
 #include "kspread_table.h"
 #include "kspread_doc.h"
+#include "KSpreadRowIface.h"
+#include "KSpreadColumnIface.h"
+#include "KSpreadLayoutIface.h"
+#include <dcopobject.h>
 
 #include <stdlib.h>
 #include <stdio.h>
@@ -1687,6 +1691,7 @@ RowLayout::RowLayout( KSpreadTable *_table, int _row ) : KSpreadLayout( _table )
     m_iRow = _row;
     m_bDefault = false;
     m_bHide=false;
+    m_dcop=0L;
 }
 
 RowLayout::~RowLayout()
@@ -1695,7 +1700,16 @@ RowLayout::~RowLayout()
 	m_next->setPrevious( m_prev );
     if ( m_prev )
 	m_prev->setNext( m_next );
+    delete m_dcop;
 }
+
+DCOPObject* RowLayout::dcopObject()
+{
+    if ( !m_dcop )
+	m_dcop = new KSpreadRowIface( this );
+    return m_dcop;
+}
+
 
 void RowLayout::setMMHeight( float _h )
 {
@@ -1862,6 +1876,7 @@ ColumnLayout::ColumnLayout( KSpreadTable *_table, int _column ) : KSpreadLayout(
   m_bHide=false;
   m_prev = 0;
   m_next = 0;
+  m_dcop = 0;
 }
 
 ColumnLayout::~ColumnLayout()
@@ -1870,6 +1885,14 @@ ColumnLayout::~ColumnLayout()
 	m_next->setPrevious( m_prev );
     if ( m_prev )
 	m_prev->setNext( m_next );
+    delete m_dcop;
+}
+#include "KSpreadColumnIface.h"
+DCOPObject* ColumnLayout::dcopObject()
+{
+    if( !m_dcop)
+        m_dcop=new KSpreadColumnIface(this);
+    return m_dcop;
 }
 
 void ColumnLayout::setMMWidth( float _w )
