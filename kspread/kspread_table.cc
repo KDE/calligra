@@ -199,6 +199,8 @@ KSpreadTable::KSpreadTable( KSpreadDoc *_doc, const char *_name )
   m_iMaxColumn = 256;
   m_iMaxRow = 256;
   m_bScrollbarUpdates = true;
+
+  initInterpreter();
 }
 
 //-----------------------------------------------------------
@@ -1722,7 +1724,7 @@ void KSpreadTable::deleteCells( int _left, int _top, int _right, int _bottom )
 {
     // A list of all cells we want to delete.
     QStack<KSpreadCell> cellStack;
-    cellStack.setAutoDelete( TRUE );
+    // cellStack.setAutoDelete( TRUE );
 
     QIntDictIterator<KSpreadCell> it( m_dctCells );
     for ( ; it.current(); ++it )
@@ -1733,13 +1735,19 @@ void KSpreadTable::deleteCells( int _left, int _top, int _right, int _bottom )
 	  cellStack.push( it.current() );
     }
 
+    m_dctCells.setAutoDelete( false );
+    // Remove the cells from the table
     while ( !cellStack.isEmpty() )
     {
 	KSpreadCell *cell = cellStack.pop();
 	
 	int key = cell->row() + ( cell->column() * 0x10000 );
 	m_dctCells.remove( key );
+	cell->updateDepending();
+	
+	delete cell;
     }
+    m_dctCells.setAutoDelete( true );
 
     setLayoutDirtyFlag();
 
@@ -2455,6 +2463,12 @@ KSpreadTable::~KSpreadTable()
 void KSpreadTable::enableScrollBarUpdates( bool _enable )
 {
   m_bScrollbarUpdates = _enable;
+}
+
+void KSpreadTable::initInterpreter()
+{
+  m_module = new KSModule( doc()->interpreter(), m_strName, 0 );
+  m_context.setScope( new KSScope( doc()->interpreter()->globalNamespace(), m_module ) );
 }
 
 /**********************************************************

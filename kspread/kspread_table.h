@@ -40,6 +40,8 @@ class QPainter;
 #include <komlMime.h>
 #include <koDocument.h>
 
+#include <kscript_context.h>
+
 #include <qpen.h>
 #include <qlist.h>
 #include <qintdict.h>
@@ -277,7 +279,8 @@ public:
     /**
      * A convenience function.
      */
-    KSpreadCell* cellAt( const QPoint& _point, bool _no_scrollbar_update = false ) { return cellAt( _point.x(), _point.y(), _no_scrollbar_update ); }
+    KSpreadCell* cellAt( const QPoint& _point, bool _no_scrollbar_update = false )
+      { return cellAt( _point.x(), _point.y(), _no_scrollbar_update ); }
     /**
      * @returns the pointer to the cell that is visible at a certain position. That means If the cell
      *          at this position is obscured then the obscuring cell is returned.
@@ -494,7 +497,13 @@ public:
     int maxColumn() { return m_iMaxColumn; }
     int maxRow() { return m_iMaxRow; }
     void enableScrollBarUpdates( bool _enable );
-  
+
+    /**
+     * @return a context that can be used for evaluating formulars.
+     *         This function does remove any exception from the context.
+     */
+    KSContext& context() { m_context.setException( 0 ); return m_context; }
+
     static KSpreadTable* find( int _id );
   
     /**
@@ -535,7 +544,21 @@ protected:
     void fillSequence( QList<KSpreadCell>& _srcList, QList<KSpreadCell>& _destList, QList<AutoFillSequence>& _seqList );
 
     bool saveCellRect( ostream&, const QRect& );
-  
+
+    /**
+     * Initialized @ref #m_module and @ref #m_context.
+     */
+    void initInterpreter();
+
+    /**
+     * This module is used to execute formulas of this table.
+     */
+    KSModule::Ptr m_module;
+    /**
+     * This context is used to execute formulas of this table.
+     */
+    KSContext m_context;
+
     QIntDict<KSpreadCell> m_dctCells;
     QIntDict<RowLayout> m_dctRows;
     QIntDict<ColumnLayout> m_dctColumns;

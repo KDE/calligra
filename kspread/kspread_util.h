@@ -32,7 +32,7 @@ struct KSpreadPoint
 public:
   KSpreadPoint() { pos.setX( -1 ); table = 0; columnFixed = false; rowFixed = false; }
   KSpreadPoint( const QString& );
-  KSpreadPoint( const QString&, KSpreadMap* );
+  KSpreadPoint( const QString&, KSpreadMap*, KSpreadTable* default_table = 0 );
   KSpreadPoint( const KSpreadPoint& c ) {
     pos = c.pos;
     table = c.table; tableName = c.tableName;
@@ -41,8 +41,10 @@ public:
   }
  
   bool isValid() const { return ( pos.x() >= 0 && ( table != 0 || tableName.isEmpty() ) ); }
-  bool isTableKnown() const { return ( table != 0 ); }
-  
+  bool isTableKnown() const { return ( tableName.isEmpty() || table != 0 ); }
+
+  KSpreadCell* cell();
+
   KSpreadTable* table;
   QString tableName;
   QPoint pos;
@@ -57,7 +59,7 @@ struct KSpreadRange
 {
   KSpreadRange() { table = 0; range.setLeft( -1 ); }
   KSpreadRange( const QString& );
-  KSpreadRange( const QString&, KSpreadMap* );
+  KSpreadRange( const QString&, KSpreadMap*, KSpreadTable* default_table = 0 );
   KSpreadRange( const KSpreadRange& r ) {
     table = r.table;
     tableName = r.tableName;
@@ -80,7 +82,7 @@ struct KSpreadRange
   }
   
   bool isValid() const { return ( range.left() >= 0 && ( table != 0 || tableName.isEmpty() ) ); }
-  bool isTableKnown() const { return ( table != 0 ); }
+  bool isTableKnown() const { return ( tableName.isEmpty() || table != 0 ); }
 
   KSpreadTable* table;
   QString tableName;

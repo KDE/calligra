@@ -13,7 +13,7 @@
 KSpreadScripts::KSpreadScripts( QWidget* parent, const char* name )
 	: QDialog( parent, name ), KSpreadScriptsData( this )
 {
-    editor = 0L;
+  // editor = 0L;
 
     setCaption( i18n( "KSpread Scripts" ) );
     connect( list, SIGNAL( highlighted( int ) ), this, SLOT( slotHighlighted( int ) ) );
@@ -47,7 +47,7 @@ void KSpreadScripts::updateList()
 	if ( t.right(3) == ".py" )
 	{
 	    list->insertItem( t.left( t.length() - 3 ).data() );
-	    nameList.append( t.data() );
+	    nameList.append( t );
 	}
 	++it;
     }
@@ -74,8 +74,8 @@ void KSpreadScripts::slotAdd()
     }
 
     QString t2 ( t.data() );
-    t2 += ".py";
-    if ( nameList.find( t2 ) != -1 )
+    t2 += ".ks";
+    if ( nameList.find( t2 ) != nameList.end() )
     {
 	QMessageBox::message( i18n("KSpread Error"),i18n( "The file already exists") );
 	return;
@@ -143,7 +143,7 @@ void KSpreadScripts::slotRename()
 
     QString t2 ( t.data() );
     t2 += ".py";
-    if ( nameList.find( t2 ) != -1 )
+    if ( nameList.find( t2 ) != nameList.end() )
     {
 	QMessageBox::message( i18n("KSpread Error"), i18n("The file already exists") );
 	return;
@@ -176,9 +176,9 @@ void KSpreadScripts::slotEdit()
 	return;
 
     QString t2( list->text( list->currentItem() ) );
-    t2 += ".py";
+    t2 += ".ks";
 
-    if ( editor == 0L )
+    /* if ( editor == 0L )
 	editor = createEditor();
 
     QString dir( kapp->kde_datadir().copy() );
@@ -187,13 +187,13 @@ void KSpreadScripts::slotEdit()
 
     editor->show();
     printf("EDITOR Opening '%s'\n",dir.data());
-    editor->openFile( dir );
+    editor->openFile( dir ); */
 }
 
 KSpreadScripts::~KSpreadScripts()
 {
-    if ( editor )
-	delete editor;
+  /* if ( editor )
+     delete editor; */
 }
 
 

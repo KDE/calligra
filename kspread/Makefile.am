@@ -6,20 +6,20 @@ LDADD = ../lib/kscript/libkscript.la ../lib/kofficeui/libkofficeui.la -lkformula
 
 bin_PROGRAMS = kspread
 
-kspread_SOURCES = kspread.idl kspread_canvas.cc kmetaedit.cc kspread_emacs.cc kspread_main.cc \
+kspread_SOURCES = kspread.idl kspread_canvas.cc kspread_main.cc \
 	kspread_shell.cc kspread_doc.cc \
 	kspread_undo.cc kspread_view.cc kspread_tabbar.cc \
-	kspread_autofill.cc \
+	kspread_autofill.cc kspread_interpreter.cc \
 	kspread_layout.cc kspread_map.cc kspread_dlg_layout.cc \
 	kspread_dlg_scripts.cc kspread_cell.cc kspread_table.cc \
 	chart.idl kspread_calc.cc y.tab.c lex.yy.c dep.tab.c lex.dep.c \
 	kspread_dlg_cons.cc datatools.idl kspread_util.cc \
 	kspread_corba_util.cc kspread_editors.cc
 
-noinst_HEADERS = kmetaedit.h kspread_emacs.h kspread_main.cc \
+noinst_HEADERS = kspread_main.h \
 	kspread_shell.h kspread_doc.h \
 	kspread.h kspread_undo.h kspread_view.h kspread_tabbar.h \
-	kspread_autofill.h \
+	kspread_autofill.h kspread_interpreter.h \
 	kspread_layout.h kspread_map.h kspread_dlg_layout.h \
 	kspread_dlg_scripts.h kspread_table.h kspread_cell.h \
 	chart.h y.tab.h dep.tab.h kspread_calc.h kspread_dlg_cons.h \

@@ -19,6 +19,7 @@
 
 #include "kspread_util.h"
 #include "kspread_map.h"
+#include "kspread_table.h"
 
 #include <sys/stat.h>
 #include <sys/types.h>
@@ -72,13 +73,13 @@ QString util_rangeName( KSpreadTable *_table, QRect _area )
 
 KSpreadPoint::KSpreadPoint( const QString& _str )
 {
+  table = 0;
   init( _str );
 }
 
 void KSpreadPoint::init( const QString& _str )
 {
   pos.setX( -1 );
-  table = 0;
   
   if ( _str.isEmpty() )
     return;
@@ -129,19 +130,25 @@ void KSpreadPoint::init( const QString& _str )
   pos = QPoint( x, y );
 }
 
-KSpreadPoint::KSpreadPoint( const QString& _str, KSpreadMap* _map )
+KSpreadPoint::KSpreadPoint( const QString& _str, KSpreadMap* _map, KSpreadTable* _table )
 {
   uint p = 0;
   int p2 = _str.find( "!" );
   if ( p2 != -1 )
   {    
     tableName = _str.left( p2++ );
+    table = _map->findTable( tableName );
     p = p2;
   }
+  else
+    table = _table;
 
   init( _str.mid( p ) );
-  
-  table = _map->findTable( tableName );
+}
+
+KSpreadCell* KSpreadPoint::cell()
+{
+  return table->cellAt( pos );
 }
 
 KSpreadRange::KSpreadRange( const QString& _str )
@@ -163,7 +170,7 @@ KSpreadRange::KSpreadRange( const QString& _str )
   bottomFixed = lr.rowFixed;
 }
 
-KSpreadRange::KSpreadRange( const QString& _str, KSpreadMap* _map )
+KSpreadRange::KSpreadRange( const QString& _str, KSpreadMap* _map, KSpreadTable* _table )
 {
   range.setLeft( -1 );
   table = 0;
@@ -176,6 +183,8 @@ KSpreadRange::KSpreadRange( const QString& _str, KSpreadMap* _map )
     table = _map->findTable( tableName );
     p = p2;
   }
+  else
+    table = _table;
   
   int p3 = _str.find( ":", p );
   if ( p3 == -1 )

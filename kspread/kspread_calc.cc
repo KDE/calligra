@@ -560,16 +560,3 @@ bool makeDepend( const char* _formular, KSpreadTable* _table, QList<KSpreadDepen
 
   return true;
 }
-  
-/*
-int main( int argc, char **argv )
-{
-  dependMainParse( argv[1] );
-  cerr << "----------------------" << endl;
-  
-  mainParse( argv[ 1 ] );
-  clearRanges();
-  
-  cerr << "The result is " << result << endl;
-}
-*/

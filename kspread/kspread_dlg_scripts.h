@@ -2,11 +2,10 @@
 #define KSpreadScripts_included
 
 #include <qdialog.h>
-#include <qstrlist.h>
+#include <qstringlist.h>
 #include <qlined.h>
 #include <qlistbox.h>
 #include <qpushbt.h>
-#include "kmetaedit.h"
 
 class KSpreadScriptsData
 {
@@ -42,9 +41,9 @@ public slots:
 protected:
     void updateList();
 
-    QStrList nameList;
+    QStringList nameList;
     
-    KMetaEditor *editor;
+    // KMetaEditor *editor;
 };
 
 #endif

@@ -22,6 +22,7 @@
 
 #include "kspread_doc.h"
 #include "kspread_shell.h"
+#include "kspread_interpreter.h"
 
 #include <komlParser.h>
 #include <komlStreamFeed.h>
@@ -37,7 +38,6 @@
 #include <kapp.h>
 #include <qdatetm.h>
 #include <klocale.h>
-#include <string>
 #include <sys/types.h>
 #include <dirent.h>
 #include <sys/stat.h>
@@ -52,6 +52,7 @@
 
 KSpreadDoc::KSpreadDoc()
 {
+  // The two supported interfaces
   ADD_INTERFACE( "IDL:KSpread/Document:1.0" );
   ADD_INTERFACE( "IDL:KOffice/Print:1.0" );
 
@@ -611,7 +612,7 @@ void KSpreadDoc::resetInterpreter()
 
 void KSpreadDoc::initInterpreter()
 {
-  m_pInterpreter = new KSInterpreter;
+  m_pInterpreter = new KSpreadInterpreter( this );
 
   QString koffice_global_path = kapp->kde_datadir();
   koffice_global_path += "/koffice/scripts";

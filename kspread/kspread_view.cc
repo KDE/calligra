@@ -1291,8 +1291,8 @@ CORBA::ULong KSpreadView::bottomGUISize()
 void KSpreadView::resizeEvent( QResizeEvent * )
 {
   // HACK
-  if ( x() == 5000 && y() == 5000 )
-    return;
+  // if ( x() == 5000 && y() == 5000 )
+  // return;
 
   if ( KoViewIf::hasFocus() || mode() == KOffice::View::RootMode )
   {

@@ -34,11 +34,15 @@
 #include "kspread_map.h"
 #include "kspread_cell.h"
 #include "kspread_calc.h"
+#include "kspread_interpreter.h"
+#include "kspread_doc.h"
 
 #include <koStream.h>
 #include <komlWriter.h>
 #include <torben.h>
 #include <kformula.h>
+#include <klocale.h>
+#include <kscript_parsenode.h>
 
 #define UPDATE_BEGIN bool b_update_begin = m_bDisplayDirtyFlag; m_bDisplayDirtyFlag = true;
 #define UPDATE_END if ( !b_update_begin && m_bDisplayDirtyFlag ) m_pTable->emit_updateCell( this, m_iColumn, m_iRow );
@@ -53,6 +57,7 @@
 KSpreadCell::KSpreadCell( KSpreadTable *_table, int _column, int _row, const char* _text )
   : KSpreadLayout( _table )
 {
+  m_pCode = 0;
   m_pPrivate = 0L;
   m_pQML = 0;
   m_pVisualFormula = 0;
@@ -647,9 +652,9 @@ void KSpreadCell::makeLayout( QPainter &_painter, int _col, int _row )
   else
     ptext = m_strText;
 
-  if ( ptext == 0L )
+  if ( ptext == 0L || *ptext = 0 )
   {
-    m_strOutText = "";
+    m_strOutText = QString::null;
     if ( isDefault() )
       return;
   }
@@ -954,6 +959,7 @@ void KSpreadCell::makeLayout( QPainter &_painter, int _col, int _row )
   m_bLayoutDirtyFlag = FALSE;
 }
 
+/*
 bool KSpreadCell::makeDepend( const char *_p, KSpreadDepend ** _dep, bool _second )
 {
     KSpreadTable *dest_table;
@@ -1054,87 +1060,43 @@ bool KSpreadCell::makeDepend( const char *_p, KSpreadDepend ** _dep, bool _secon
 	
     return TRUE;
 }
+*/
 
 bool KSpreadCell::makeFormular()
 {
-  m_strFormular = m_strText;
-  ::makeDepend( m_strFormular.data() + 1, m_pTable, &m_lstDepends );
+  // m_strFormular = m_strText;
+  // ::makeDepend( m_strText.data() + 1, m_pTable, &m_lstDepends );
 
-  /* char buffer[ 100 ];
-    char *p = m_strText.data();
-    int pos = 0;
-    int start = -1;
-    bool ok = TRUE;
-    int len = 0;
-    // Difference in the length of 'p' and 'formular'
-    int diff = 0;
-    KSpreadDepend *dep;
+  if ( m_pCode )
+    delete m_pCode;
 
-    m_strFormular = m_strText.data();
+  KSContext context;
+  m_pCode = m_pTable->doc()->interpreter()->parse( context, m_pTable, m_strText, m_lstDepends );
+  if ( context.exception() )
+  {
+    clearFormular();
+    m_strFormularOut = "####";
+    m_bBool = false;
+    m_bValue = true;
+    m_dValue = 0.0;
+    m_bLayoutDirtyFlag = true;
+    DO_UPDATE;
+    QMessageBox::critical( 0, i18n("KSpread error"), context.exception()->toString() );
+    return false;
+  }
 
-    while ( p[pos] != 0 || start != -1 )
-    {
-	if ( start != -1 && !isalpha( p[pos] ) && !isdigit( p[pos] ) && p[pos] != '$' && p[pos] != '!' )
-	{
-	    if ( p[pos] != '(' )
-	    {
-		ok = makeDepend( p + start, &dep );
-		if ( ok )
-		{
-		    if ( p[pos] == ':' )
-		    {
-			ok = makeDepend( p + pos + 1, &dep, TRUE );			
-			if ( ok )
-			{
-			    pos ++;
-			    len ++;
-			    while ( isalpha( p[pos] ) || isdigit( p[pos ] ) || p[pos] == '$' || p[pos] == '!' )
-			    {
-				len++;
-				pos++;
-			    }
-			
-			    // NOT 64 BIT CLEAN !!!
-			    sprintf( buffer, "[ %i, %i, %i, %i, %i ]", (long)dep->m_pTable, dep->m_iColumn, dep->m_iRow,
-				     dep->m_iColumn2, dep->m_iRow2 );
-			    m_strFormular.replace( start + diff, len, buffer );
-			    diff -= len - strlen( buffer );
-			}
-		    }
-		    else
-		    {
-		      // NOT 64 BIT CLEAN !!!
-		      sprintf( buffer, "Cell( %i, %i, %i )", (long)dep->m_pTable, dep->m_iColumn, dep->m_iRow );
-		      m_strFormular.replace( start + diff, len, buffer );
-		      diff -= len - strlen( buffer );
-		    }
-		}
-	    }
-	
-	    start = -1;
-	    if (p[pos] != 0 )
-		pos++;
-	}
-	else if ( start == -1 && ( isupper( p[pos] ) || p[pos] == '$' ) )
-	{
-	    len = 1;
-	    start = pos;
-	    pos++;
-	}
-	else
-	{
-	    len++;
-	    pos++;
-	}
-    }
-    */
-    return true;
+  return true;
 }
 
 void KSpreadCell::clearFormular()
 {
-  m_strFormular = "";
+  // m_strFormular = "";
   m_lstDepends.clear();
+  if ( m_pCode )
+  {
+    delete m_pCode;
+    m_pCode = 0;
+  }
 }
 
 bool KSpreadCell::calc( bool _makedepend )
@@ -1148,8 +1110,9 @@ bool KSpreadCell::calc( bool _makedepend )
   if ( m_bProgressFlag )
   {
     printf("ERROR: Circle\n");
-    m_strFormularOut = "##";
+    m_strFormularOut = "####";
     m_bLayoutDirtyFlag = true;
+    DO_UPDATE;
     return FALSE;
   }
 
@@ -1179,8 +1142,12 @@ bool KSpreadCell::calc( bool _makedepend )
 	    ok = cell->calc( _makedepend );
 	    if ( !ok )
 	    {
-	      printf("ERROR: Calculating\n");
+	      m_strFormularOut = "####";
+	      m_bValue = false;
+	      m_bBool = false;
 	      m_bProgressFlag = false;
+	      // m_bLayoutDirtyFlag = true;
+	      DO_UPDATE;
 	      return false;
 	    }
 	  }
@@ -1193,37 +1160,65 @@ bool KSpreadCell::calc( bool _makedepend )
 	ok = cell->calc( _makedepend );
 	if ( !ok )
 	{
-	  printf("ERROR: Calculating\n");
+	  m_strFormularOut = "####";
+	  m_bValue = false;
+	  m_bBool = false;
 	  m_bProgressFlag = false;
+	  // m_bLayoutDirtyFlag = true;
+	  DO_UPDATE;
 	  return false;
 	}
       }
     }
   }
 
-  KSpreadValue v = evalFormular( m_strFormular.data() + 1, m_pTable );
-  if ( v.type == KSpreadValue::ErrorType )
+  KSContext& context = m_pTable->context();
+  if ( !m_pCode || !m_pTable->doc()->interpreter()->evaluate( context, m_pCode, m_pTable ) )
   {
-    m_strFormularOut = "##";
-    checkValue();
+    // If we got an error during evaluation ...
+    if ( m_pCode )
+    {
+      if ( context.exception() )
+	QMessageBox::critical( 0, i18n("KSpread error"), context.exception()->toString() );
+     
+      m_strFormularOut = "####";
+      m_bValue = false;
+      m_bBool = false;
+    }
+    // m_bLayoutDirtyFlag = true;
+    m_bProgressFlag = false;
+    DO_UPDATE;
+    return false;
   }
-  else if ( v.type == KSpreadValue::DoubleType )
+  else if ( context.value()->type() == KSValue::DoubleType )
   {
-    m_dValue = v.value.d;
+    m_dValue = context.value()->doubleValue();
     m_bValue = true;
     m_bBool = false;
     m_strFormularOut.sprintf( "%f", m_dValue );
   }
-  else if ( v.type == KSpreadValue::BoolType )
+  else if ( context.value()->type() == KSValue::IntType )
   {
+    m_dValue = (double)context.value()->intValue();
     m_bValue = true;
+    m_bBool = false;
+    m_strFormularOut.sprintf( "%f", m_dValue );
+  }
+  else if ( context.value()->type() == KSValue::BoolType )
+  {
+    m_bValue = false;
     m_bBool = true;
-    m_dValue = v.value.b ? 1.0 : 0.0;
-    m_strFormularOut = v.value.b ? "True" : "False";
+    m_dValue = context.value()->boolValue() ? 1.0 : 0.0;
+    m_strFormularOut = context.value()->boolValue() ? "True" : "False";
   }
   else
-    ASSERT( 0 );
+  {
+    m_bValue = false;
+    m_bBool = false;
+    m_strFormularOut = context.value()->toString();
+  }
 
+  m_bLayoutDirtyFlag = true;
   m_bProgressFlag = false;
 
   DO_UPDATE;
@@ -1231,7 +1226,7 @@ bool KSpreadCell::calc( bool _makedepend )
   return true;
 }
 
-const char* KSpreadCell::valueString()
+QString KSpreadCell::valueString()
 {
   if ( isFormular() )
     return m_strFormularOut;
@@ -1883,21 +1878,21 @@ void KSpreadCell::setText( const QString& _text )
 
   m_lstDepends.clear();
 
+  // Free all content data
   if ( m_pQML )
     delete m_pQML;
   m_pQML = 0;
   if ( m_pVisualFormula )
     delete m_pVisualFormula;
   m_pVisualFormula = 0;
+  if ( isFormular() )
+    clearFormular();
 
   /**
    *  Special handling for selection boxes
    */
   if ( m_style == ST_Select )
   {
-    if ( isFormular() )
-      clearFormular();
-
     SelectPrivate *s = (SelectPrivate*)m_pPrivate;
     s->parse( m_strText );
     checkValue();
@@ -1905,6 +1900,9 @@ void KSpreadCell::setText( const QString& _text )
     m_content = Text;
   }
 
+  /**
+   * A real formula "=A1+A2*3" was entered.
+   */
   if ( !m_strText.isEmpty() && m_strText[0] == '=' )
   {
     m_bCalcDirtyFlag = true;
@@ -1917,11 +1915,11 @@ void KSpreadCell::setText( const QString& _text )
     // QString ret = encodeFormular( column, row );
     // decodeFormular( ret, column, row );
   }
+  /**
+   * QML
+   */
   else if ( !m_strText.isEmpty() && m_strText[0] == '!' )
   {
-    if ( isFormular() )
-      clearFormular();
-
     m_pQML = new QSimpleRichText( m_strText.mid(1) );//, m_pTable->widget() );
 
     m_bValue = false;
@@ -1929,11 +1927,11 @@ void KSpreadCell::setText( const QString& _text )
     m_bLayoutDirtyFlag = true;
     m_content = RichText;
   }
+  /**
+   * A visual formula.
+   */
   else if ( !m_strText.isEmpty() && m_strText[0] == '*' )
   {
-    if ( isFormular() )
-      clearFormular();
-
     m_pVisualFormula = new KFormula();
     m_pVisualFormula->parse( m_strText.mid( 1 ) );
 
@@ -1944,13 +1942,10 @@ void KSpreadCell::setText( const QString& _text )
   }
   else
   {
-    if ( isFormular() )
-      clearFormular();
-
     checkValue();
 		
     m_bLayoutDirtyFlag = true;
-    m_content = RichText;
+    m_content = Text;
   }
 
   // Do not update formulars and stuff here
@@ -1960,15 +1955,27 @@ void KSpreadCell::setText( const QString& _text )
 
 void KSpreadCell::setValue( double _d )
 {
+  // Free all content data
+  if ( m_pQML )
+    delete m_pQML;
+  m_pQML = 0;
+  if ( m_pVisualFormula )
+    delete m_pVisualFormula;
+  m_pVisualFormula = 0;
+  if ( isFormular() )
+    clearFormular();
+
+  m_lstDepends.clear();
+
   m_bValue = true;
   m_bBool = false;
   m_dValue = _d;
   m_bLayoutDirtyFlag = true;
   m_content = Text;
 
-  m_lstDepends.clear();
-
-  update();
+  // Do not update formulars and stuff here
+  if ( !m_pTable->isLoading() )
+    update();
 }
 
 void KSpreadCell::update()
@@ -2002,6 +2009,15 @@ void KSpreadCell::update()
     m_bFormular = FALSE;
   } */
 
+  updateDepending();
+
+  UPDATE_END;
+
+  cerr << "END C=" << m_iColumn << " R=" << m_iRow << endl;
+}
+
+void KSpreadCell::updateDepending()
+{
   // Every cell that references us must set its calc dirty flag
   QListIterator<KSpreadTable> it( m_pTable->map()->tableList() );
   for( ; it.current(); ++it )
@@ -2031,10 +2047,6 @@ void KSpreadCell::update()
 	bind->cellChanged( this );
     }
   }
-
-  UPDATE_END;
-
-  cerr << "END C=" << m_iColumn << " R=" << m_iRow << endl;
 }
 
 void KSpreadCell::checkValue()
@@ -2042,11 +2054,14 @@ void KSpreadCell::checkValue()
     // If the input is empty, we dont have a value
     if ( m_strText.isEmpty() )
     {
-      m_bValue = FALSE;
+      m_bValue = true;
+      m_dValue = 0;
       m_bBool = false;
+      m_strOutText = "";
       return;
     }
 
+    // Get the text that we actually display
     const char *p = m_strText.data();	
     if ( isFormular() )
       p = m_strFormularOut.data();
@@ -2054,12 +2069,30 @@ void KSpreadCell::checkValue()
       p = ((SelectPrivate*)m_pPrivate)->text();
     const char *ptext = p;
 
+    // If the output is empty, we dont have a value
     if ( p == 0L )
     {
       m_bValue = FALSE;
       m_bBool = false;
       return;
     }
+
+    // Test for boolean
+    if ( strcasecmp( p, "true") == 0 )
+    {
+      m_bValue = false;
+      m_dValue = 1.0;
+      m_bBool = true;
+      return;
+    }
+    else if ( strcasecmp( p, "false" ) == 0 )
+    {
+      m_bValue = false;
+      m_dValue = 0.0;
+      m_bBool = true;
+      return;
+    }
+    m_bBool = false;
 
     // Test wether it is a numeric value
     m_bValue = TRUE;
@@ -2418,11 +2451,14 @@ void KSpreadCell::setStyle( Style _s )
 
   if ( m_pPrivate )
     delete m_pPrivate;
-  if ( _s == ST_Select )
-    m_pPrivate = new SelectPrivate( this );
 
   if ( isFormular() )
     clearFormular();
+
+  if ( _s != ST_Select )
+    return;
+
+  m_pPrivate = new SelectPrivate( this );
 
   SelectPrivate *s = (SelectPrivate*)m_pPrivate;
   s->parse( m_strText );

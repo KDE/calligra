@@ -28,6 +28,8 @@ class KFormula;
 
 class QSimpleRichText;
 
+class KSParseNode;
+
 #include <iostream.h>
 #include <komlParser.h>
 
@@ -166,9 +168,26 @@ public:
      */
     Content content() { return m_content; }
 
+    /**
+     * @return the text the user entered.
+     */
     QString text() { return m_strText; }
 
+    /**
+     * Increases the precison of the
+     * value displayed. Precision means here the amount of
+     * digits behind the dot. If the current precision is the
+     * default of -1, then it is set to the number of digits
+     * behind the dot plus 1.
+     */
     void incPrecision();
+    /**
+     * Decreases the precison of the
+     * value displayed. Precision means here the amount of
+     * digits behind the dot. If the current precision is the
+     * default of -1, then it is set to the number of digits
+     * behind the dot minus 1.
+     */
     void decPrecision();
 
     /**
@@ -183,8 +202,8 @@ public:
     void setRow( int _r ) { m_iRow = _r; }
 
     /**
-     * This function does only store '_text', if we are in the progress of loading.
-     * If this is the case, call @ref #initAfterLoading to complete this functions job.
+     * When we are in the progress of loading, then this function will only store the
+     * text. Call @ref #initAfterLoading afterwards to complete this functions job.
      */
     void setText( const QString& _text );
     void setAlign( Align _align ) { m_eAlign = _align; m_bLayoutDirtyFlag = TRUE; }
@@ -263,7 +282,7 @@ public:
     const QColor& bgColor( int _col, int _row );
 
     Style style() { return m_style; }
-    const char* action() { return m_strAction; }
+    QString action() { return m_strAction; }
 
     /**
      * @param _col the column this cell is assumed to be in
@@ -276,14 +295,27 @@ public:
     const QColor& rightBorderColor( int _col, int _row );
     const QColor& bottomBorderColor( int _col, int _row );
 
-    bool isValue() { return m_bValue; }
-    bool isBool() {  return m_bValue; }
-    bool valueBool() { return ( m_dValue != 0.0 ); }
-    double valueDouble() { return m_dValue; }
-    const char* valueString();
+    bool isValue() const { return m_bValue; }
+    bool isBool() const {  return m_bBool; }
+    bool valueBool() const { return ( m_dValue != 0.0 ); }
+    double valueDouble() const { return m_dValue; }
+    QString valueString();
     void setValue( double _d );
 
+    /**
+     * Like @ref updateDepending, but the cells content will be refreshed
+     * on all views.
+     */
     void update();
+    /**
+     * If the contents of this cell changed, then this function has
+     * to be called so that all depending cells/charts etc.
+     * become updated. This does even work if the cell was already
+     * removed from the table.
+     *
+     * The cells content is not redisplayed and no flag of this cell is altered.
+     */
+    void updateDepending();
 
     QString testAnchor( int _x, int _y, QWidget* _canvas );
 
@@ -445,7 +477,7 @@ protected:
      * @return FALSE on error, what means that the string starting at '_p' is not a valid
      *         cell description. If an error is detected, '**dep' nor '*dep' get modified.
      */
-    bool makeDepend( const char *_p, KSpreadDepend ** _dep, bool _second = FALSE );
+    // bool makeDepend( const char *_p, KSpreadDepend ** _dep, bool _second = FALSE );
 
     /**
      * Set the @ref #m_bValue flag.
@@ -503,12 +535,6 @@ protected:
     bool m_bCalcDirtyFlag;
 
     QList<KSpreadDepend> m_lstDepends;
-    /**
-     * Holds the string we have to execute to do the calculation.
-     * This is not the formular the user entered. This one is stored
-     * in @ref #m_strText instead.
-     */
-    QString m_strFormular;
     /**
      * The value we got from calculation.
      * If @ref #isFormular is TRUE, @ref #makeLayout will use @ref #m_strFormularOut
@@ -593,6 +619,11 @@ protected:
      * Perhaps this cell contains a visual formula ?
      */
     KFormula* m_pVisualFormula;
+
+    /**
+     * The parse tree of the real formula (e.g: "=A1*A2").
+     */
+    KSParseNode* m_pCode;
 };
 
 #endif

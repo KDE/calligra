@@ -21,7 +21,7 @@
 #define __kspread_doc_h__
 
 class KSpreadDoc;
-class KSInterpreter;
+class KSpreadInterpreter;
 
 #include <koFrame.h>
 #include <koDocument.h>
@@ -40,11 +40,9 @@ class KSInterpreter;
 #include "kspread_undo.h"
 #include "kspread_view.h"
 #include "kspread_map.h"
+#include "kspread_interpreter.h"
 
 #include <koPageLayoutDia.h>
-
-#include <kscript.h>
-#include <kscript_value.h>
 
 #define MIME_TYPE "application/x-kspread"
 #define EDITOR "IDL:KSpread/Document:1.0"
@@ -205,7 +203,7 @@ public:
   /**
    * @return the KScript Interpreter used by this document.
    */
-  KSInterpreter* interpreter() { return m_pInterpreter; }
+  KSpreadInterpreter* interpreter() { return m_pInterpreter; }
   /**
    * Kills the interpreter and creates a new one and
    * reloads all scripts. This is useful if they have been
@@ -434,7 +432,7 @@ protected:
   /**
    * This variable hold the KScript Interpreter.
    */
-  KSInterpreter::Ptr m_pInterpreter;
+  KSpreadInterpreter::Ptr m_pInterpreter;
   /**
    * Maps keywords to their kscript value. These
    * keywords are usually functions. This map is used
