@@ -4062,7 +4062,7 @@ void Qt3::QTextParag::drawParagString( QPainter &painter, const QString &s, int 
     painter.setFont( lastFormat->font() );
 
     if ( doc && lastFormat->isAnchor() && !lastFormat->anchorHref().isEmpty() && lastFormat->useLinkColor() ) {
-	painter.setPen( QPen( Qt::blue /* cg.link() */ ) ); // QT2HACK
+	painter.setPen( QPen( cg.link()  ) ); 
 	if ( doc->underlineLinks() ) {
 	    QFont fn = lastFormat->font();
 	    fn.setUnderline( TRUE );
