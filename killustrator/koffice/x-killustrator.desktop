@@ -2,15 +2,14 @@
 [Desktop Entry]
 MimeType=application/x-killustrator
 Comment=KIllustrator
-Comment[eo]=KIlustranto
+Comment[eo]=Ilustrilo
 Comment[et]=KDE vektorgraafika redaktor
 Comment[is]=killustrator-skrá (mynd)
 Comment[mk]=K-илустратор
-Comment[pt]=Ilustrações
+Comment[pl]=Killustrator
 Comment[pt_BR]=Programa de desenho vetoriais
-Comment[ro]=Document KIllustrator
 Comment[ru]=Файл KIllustrator'а
-Comment[sv]=Illustrationer
+Comment[sk]=KIllustrátor
 Icon=killustrator
 Type=MimeType
 Patterns=*.kil;
