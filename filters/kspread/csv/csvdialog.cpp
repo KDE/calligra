@@ -69,7 +69,7 @@ CSVDialog::CSVDialog(QWidget* parent, QByteArray& fileArray, const QString /*sep
     encodings << description.arg("CP 1258"); // Windows
     
     m_dialog->comboBoxEncoding->insertStringList(encodings);
-    
+    m_dialog->m_table->setReadOnly( true );
     fillTable();
 
     //resize(sizeHint());
