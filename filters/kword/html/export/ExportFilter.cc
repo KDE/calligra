@@ -20,8 +20,6 @@
    Boston, MA 02111-1307, USA.
 */
 
-#include <math.h>
-
 #include <qstring.h>
 #include <qregexp.h>
 #include <qtextcodec.h>
@@ -531,7 +529,7 @@ QString HtmlWorker::layoutToCss(const LayoutData& layout) const
     else
     {
         double xDistance,yDistance;
-        double distance=rint(layout.shadowDistance); // rounf to nearest integer
+        const double distance=layout.shadowDistance;
         switch (layout.shadowDirection)
         {
         case 1: // SD_LEFT_UP
@@ -596,7 +594,8 @@ QString HtmlWorker::layoutToCss(const LayoutData& layout) const
         else
         {
             strLayout+=QString("%1 %2pt %3pt; ").arg(layout.shadowColor.name())
-                .arg(xDistance).arg(yDistance);
+                .arg(xDistance,0,'f',0).arg(yDistance,0,'f',0);
+                // We do not want any scientific notation or any decimal
         }
     }
 
