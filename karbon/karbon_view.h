@@ -35,7 +35,6 @@ class QLabel;
 class KAction;
 class KarbonPart;
 class KSelectAction;
-class KSelectColorAction;
 class KToggleAction;
 class KoContextHelpAction;
 
