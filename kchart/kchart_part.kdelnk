@@ -1,9 +1,11 @@
 # KDE Config File
 [KDE Desktop Entry]
 Name=KChart
+Name[pt_BR]=KChart
 Name[sk]=KChart
 Exec=kchart.bin --server
 Comment=Kalles Charter
+Comment[pt_BR]=Programa de desenho de fluxogramas
 MimeTypes=application/x-kchart,
 RepoID=IDL:KCharter/Factory:1.0,
 ActivationMode=shared

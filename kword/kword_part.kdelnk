@@ -1,8 +1,10 @@
 # KDE Config File
 [KDE Desktop Entry]
 Name=KWord
+Name[pt_BR]=KWord
 Exec=kword.bin --server
 Comment=KWord
+Comment[pt_BR]=KWord
 MimeTypes=application/x-kword,
 RepoID=IDL:KWord/DocumentFactory:1.0,
 ActivationMode=shared

@@ -1,8 +1,10 @@
 # KDE Config File
 [KDE Desktop Entry]
 Name=KDiagramm
+Name[pt_BR]=KDiagramm
 Exec=kdiagramm.bin --server
 Comment=Torben's Chart
+Comment[pt_BR]=Programa para confecção de diagramas
 MimeTypes=application/x-kdiagramm,
 RepoID=IDL:KDiagramm/DocumentFactory:1.0,
 ActivationMode=shared
