@@ -333,7 +333,7 @@ void KoMainWindow::slotFileSaveAs()
 void KoMainWindow::slotFileClose()
 {
     if ( closeDocument() )
-	delete this;
+	close();
 }
 
 void KoMainWindow::slotFilePrint()

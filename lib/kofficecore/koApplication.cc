@@ -38,6 +38,8 @@ KoApplication::KoApplication(int &argc, char **argv, const QCString& rAppName, c
     KGlobal::dirs()->addResourceType("toolbar", KStandardDirs::kde_default("data") + "/koffice/pics/");
 
     kimgioRegister();
+
+    connect( this, SIGNAL( lastWindowClosed() ), this, SLOT( quit() ) );
 }
 
 void KoApplication::start()
