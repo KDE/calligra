@@ -1,9 +1,9 @@
-<!DOCTYPE book PUBLIC  "-//KDE//DTD DocBook V3.1-Based Variant V1.0//EN" [
+<?xml version="1.0" ?><!DOCTYPE book PUBLIC "-//KDE//DTD DocBook XML V4.1-Based Variant V1.0//EN" "dtd/kdex.dtd" [
   <!ENTITY kappname "&kpresenter;">
   <!ENTITY % addindex "IGNORE">
-  <!ENTITY % English "INCLUDE" -- change language only here -->
-  <!ENTITY % ents PUBLIC "-//KDE//ENTITIES Documentation V1.0//EN">
-  %ents;
+  <!ENTITY % English "INCLUDE" > <!-- change language only here -->
+  
+  
 ]>
 
 <book lang="&language;">
@@ -25,7 +25,7 @@
 
 <abstract>
 <para>
-&KPresenter; is the presentations program in the KOffice
+&kpresenter; is the presentations program in the KOffice
 suite of productivity applications.
 </para>
 </abstract>
@@ -156,7 +156,7 @@ When you start <application>KPresenter</application>, the Choose
 Template dialog appears.
 </para>
 <screenshot>
-<mediaobject><imageobject><imagedata fileref="pics/tut01.png" format="PNG" align="center"></imageobject></mediaobject>
+<mediaobject><imageobject><imagedata fileref="pics/tut01.png" format="PNG" align="center"/></imageobject></mediaobject>
 </screenshot>
 <para>
 The default option is "Start with an empty document". Select the
@@ -170,20 +170,20 @@ your document. At the moment, we just have one slide, with one
 object on it, which is a text box.
 </para>
 <screenshot>
-<mediaobject><imageobject><imagedata fileref="pics/tut02.png" format="PNG" align="center"></imageobject></mediaobject>
+<mediaobject><imageobject><imagedata fileref="pics/tut02.png" format="PNG" align="center"/></imageobject></mediaobject>
 </screenshot>
 <para>
 Double-click the text box. The cursor changes to a vertical bar
 to show that you can now type some text.
 </para>
 <screenshot>
-<mediaobject><imageobject><imagedata fileref="pics/tut03.png" format="PNG" align="center"></imageobject></mediaobject>
+<mediaobject><imageobject><imagedata fileref="pics/tut03.png" format="PNG" align="center"/></imageobject></mediaobject>
 </screenshot>
 <para>
 Go ahead, type some text!
 </para>
 <screenshot>
-<mediaobject><imageobject><imagedata fileref="pics/tut04.png" format="PNG" align="center"></imageobject></mediaobject>
+<mediaobject><imageobject><imagedata fileref="pics/tut04.png" format="PNG" align="center"/></imageobject></mediaobject>
 </screenshot>
 <para>
 Click away from the text to de-select the text box when you are
@@ -198,13 +198,13 @@ Let's now add a new slide to our document. To do so, click the
 "Insert" menu item, and then click on "Page".
 </para>
 <screenshot>
-<mediaobject><imageobject><imagedata fileref="pics/tut05.png" format="PNG" align="center"></imageobject></mediaobject>
+<mediaobject><imageobject><imagedata fileref="pics/tut05.png" format="PNG" align="center"/></imageobject></mediaobject>
 </screenshot>
 <para>
 This brings up the Insert Page dialog.
 </para>
 <screenshot>
-<mediaobject><imageobject><imagedata fileref="pics/tut06.png" format="PNG" align="center"></imageobject></mediaobject>
+<mediaobject><imageobject><imagedata fileref="pics/tut06.png" format="PNG" align="center"/></imageobject></mediaobject>
 </screenshot>
 <para>
 Click OK to accept the defaults, which will add a new page after
@@ -216,7 +216,7 @@ the new slide should look like. This time, click on the "One"
 template (highlighted in red.)
 </para>
 <screenshot>
-<mediaobject><imageobject><imagedata fileref="pics/tut07.png" format="PNG" align="center"></imageobject></mediaobject>
+<mediaobject><imageobject><imagedata fileref="pics/tut07.png" format="PNG" align="center"/></imageobject></mediaobject>
 </screenshot>
 <para>
 The new slide now appears at the bottom of the editing window. To
@@ -225,14 +225,14 @@ the toolbar on top, or drag the vertical scrollbar down (these
 are highlighted in red.)
 </para>
 <screenshot>
-<mediaobject><imageobject><imagedata fileref="pics/tut08.png" format="PNG" align="center"></imageobject></mediaobject>
+<mediaobject><imageobject><imagedata fileref="pics/tut08.png" format="PNG" align="center"/></imageobject></mediaobject>
 </screenshot>
 <para>
 The newly inserted page has two text boxes. There is one for a title,
 and another to contain a bulleted list of items.
 </para>
 <screenshot>
-<mediaobject><imageobject><imagedata fileref="pics/tut09.png" format="PNG" align="center"></imageobject></mediaobject>
+<mediaobject><imageobject><imagedata fileref="pics/tut09.png" format="PNG" align="center"/></imageobject></mediaobject>
 </screenshot>
 <para>
 Double-click and type a title. Then double-click on the second
@@ -242,7 +242,7 @@ or return key. As you type new paragraphs, bullets automatically
 appear in front of them.
 </para>
 <screenshot>
-<mediaobject><imageobject><imagedata fileref="pics/tut10.png" format="PNG" align="center"></imageobject></mediaobject>
+<mediaobject><imageobject><imagedata fileref="pics/tut10.png" format="PNG" align="center"/></imageobject></mediaobject>
 </screenshot>
 <para>
 You can de-select the text box by clicking away from it.
@@ -261,7 +261,7 @@ a nice logo to the title page. To do so, the first step is to
 click on the "Insert" menu item, and then on "Picture".
 </para>
 <screenshot>
-<mediaobject><imageobject><imagedata fileref="pics/tut11.png" format="PNG" align="center"></imageobject></mediaobject>
+<mediaobject><imageobject><imagedata fileref="pics/tut11.png" format="PNG" align="center"/></imageobject></mediaobject>
 </screenshot>
 <para>
 This brings up a file selection dialog. To learn about this or
@@ -277,7 +277,7 @@ screenshot below. You can also choose any other graphic file
 if you like! Select the file, and click "Open".
 </para>
 <screenshot>
-<mediaobject><imageobject><imagedata fileref="pics/tut12.png" format="PNG" align="center"></imageobject></mediaobject>
+<mediaobject><imageobject><imagedata fileref="pics/tut12.png" format="PNG" align="center"/></imageobject></mediaobject>
 </screenshot>
 <para>
 The logo graphic is now visible in the top left corner of the
@@ -285,14 +285,14 @@ editing window. There are selection handles (little black squares)
 visible around the border of the graphic.
 </para>
 <screenshot>
-<mediaobject><imageobject><imagedata fileref="pics/tut13.png" format="PNG" align="center"></imageobject></mediaobject>
+<mediaobject><imageobject><imagedata fileref="pics/tut13.png" format="PNG" align="center"/></imageobject></mediaobject>
 </screenshot>
 <para>
 Place the mouse cursor anywhere in the middle of the logo, and
 drag it to the middle of the title page.
 </para>
 <screenshot>
-<mediaobject><imageobject><imagedata fileref="pics/tut14.png" format="PNG" align="center"></imageobject></mediaobject>
+<mediaobject><imageobject><imagedata fileref="pics/tut14.png" format="PNG" align="center"/></imageobject></mediaobject>
 </screenshot>
 <para>
 That's it. Now you have a picture on the title page!
@@ -311,7 +311,7 @@ selected, and a menu pops-up.
 Select the "Shadow" option in the pop-up menu.
 </para>
 <screenshot>
-<mediaobject><imageobject><imagedata fileref="pics/tut15.png" format="PNG" align="center"></imageobject></mediaobject>
+<mediaobject><imageobject><imagedata fileref="pics/tut15.png" format="PNG" align="center"/></imageobject></mediaobject>
 </screenshot>
 <para>
 The Shadow dialog pops up. The distance between the shadow and
@@ -319,20 +319,20 @@ the text is currently 0 so the shadow cannot be seen (this part
 of the dialog box is highlighted in red.)
 </para>
 <screenshot>
-<mediaobject><imageobject><imagedata fileref="pics/tut16.png" format="PNG" align="center"></imageobject></mediaobject>
+<mediaobject><imageobject><imagedata fileref="pics/tut16.png" format="PNG" align="center"/></imageobject></mediaobject>
 </screenshot>
 <para>
 Increase the distance value to 3. The effect of changing the
 distance can be seen in the preview window. Now click OK.
 </para>
 <screenshot>
-<mediaobject><imageobject><imagedata fileref="pics/tut17.png" format="PNG" align="center"></imageobject></mediaobject>
+<mediaobject><imageobject><imagedata fileref="pics/tut17.png" format="PNG" align="center"/></imageobject></mediaobject>
 </screenshot>
 <para>
 Now the title has a shadow!
 </para>
 <screenshot>
-<mediaobject><imageobject><imagedata fileref="pics/tut18.png" format="PNG" align="center"></imageobject></mediaobject>
+<mediaobject><imageobject><imagedata fileref="pics/tut18.png" format="PNG" align="center"/></imageobject></mediaobject>
 </screenshot>
 </sect1>
 
@@ -349,7 +349,7 @@ icon in the color palette on the right side of the editing
 window (this icon is highlighted in red.)
 </para>
 <screenshot>
-<mediaobject><imageobject><imagedata fileref="pics/tut19.png" format="PNG" align="center"></imageobject></mediaobject>
+<mediaobject><imageobject><imagedata fileref="pics/tut19.png" format="PNG" align="center"/></imageobject></mediaobject>
 </screenshot>
 <para>
 Changing the color of the selected text to blue changes its
@@ -357,13 +357,13 @@ appearance. Since the complementary color for blue is yellow, the
 highlighted text appears in yellow.
 </para>
 <screenshot>
-<mediaobject><imageobject><imagedata fileref="pics/tut20.png" format="PNG" align="center"></imageobject></mediaobject>
+<mediaobject><imageobject><imagedata fileref="pics/tut20.png" format="PNG" align="center"/></imageobject></mediaobject>
 </screenshot>
 <para>
 Now click away from the text to de-select it.
 </para>
 <screenshot>
-<mediaobject><imageobject><imagedata fileref="pics/tut21.png" format="PNG" align="center"></imageobject></mediaobject>
+<mediaobject><imageobject><imagedata fileref="pics/tut21.png" format="PNG" align="center"/></imageobject></mediaobject>
 </screenshot>
 <para>
 Now that there are two slides, why not try a slide show! To start
@@ -371,14 +371,14 @@ the slide show, press the play button (the green arrow) on the top
 toolbar. The first slide should appear on your screen.
 </para>
 <screenshot>
-<mediaobject><imageobject><imagedata fileref="pics/tut22.png" format="PNG" align="center"></imageobject></mediaobject>
+<mediaobject><imageobject><imagedata fileref="pics/tut22.png" format="PNG" align="center"/></imageobject></mediaobject>
 </screenshot>
 <para>
 To advance from the first slide to the next, just click anywhere
 on the screen, or use the PageDown key.
 </para>
 <screenshot>
-<mediaobject><imageobject><imagedata fileref="pics/tut23.png" format="PNG" align="center"></imageobject></mediaobject>
+<mediaobject><imageobject><imagedata fileref="pics/tut23.png" format="PNG" align="center"/></imageobject></mediaobject>
 </screenshot>
 <para>
 To exit the slide show, right click, and then select the
@@ -420,7 +420,7 @@ interact with the program. Perhaps the most familiar type of
 interface is the menu which appears on the top of the KPresenter
 window.
 </para>
-<mediaobject><imageobject><imagedata fileref="pics/barmenus.png" format="PNG" align="center"></imageobject></mediaobject>
+<mediaobject><imageobject><imagedata fileref="pics/barmenus.png" format="PNG" align="center"/></imageobject></mediaobject>
 <para>
 Clicking on the menu items gives you a list of commands from
 which you can choose the one you want. Many of the commands can
@@ -441,7 +441,7 @@ that toolbar. The stippled area is shown highlighted in red
 in the screenshot below:
 </para>
 <screenshot>
-<mediaobject><imageobject><imagedata fileref="pics/barstyle1.png" format="PNG" align="left"></imageobject></mediaobject>
+<mediaobject><imageobject><imagedata fileref="pics/barstyle1.png" format="PNG" align="left"/></imageobject></mediaobject>
 </screenshot>
 <para>
 Clicking on the toolbar handle results in that toolbar being
@@ -449,7 +449,7 @@ Clicking on the toolbar handle results in that toolbar being
 main editing window:
 </para>
 <screenshot>
-<mediaobject><imageobject><imagedata fileref="pics/barstyle2.png" format="PNG" align="left"></imageobject></mediaobject>
+<mediaobject><imageobject><imagedata fileref="pics/barstyle2.png" format="PNG" align="left"/></imageobject></mediaobject>
 </screenshot>
 <para>
 Clicking on the toolbar handle a second time brings the toolbar
@@ -460,14 +460,14 @@ KPresenter window. If you like, you can also have the toolbar
 window as shown in the screenshot below:
 </para>
 <screenshot>
-<mediaobject><imageobject><imagedata fileref="pics/barstyle3.png" format="PNG" align="left"></imageobject></mediaobject>
+<mediaobject><imageobject><imagedata fileref="pics/barstyle3.png" format="PNG" align="left"/></imageobject></mediaobject>
 </screenshot>
 <para>
 If you don't like dragging toolbars around, right-click on the
 handle and a menu pops up as shown in the screenshot below:
 </para>
 <screenshot>
-<mediaobject><imageobject><imagedata fileref="pics/barstyle4.png" format="PNG" align="left"></imageobject></mediaobject>
+<mediaobject><imageobject><imagedata fileref="pics/barstyle4.png" format="PNG" align="left"/></imageobject></mediaobject>
 </screenshot>
 <para>
 The first few items in the pop-up menu have to do with the placement
@@ -482,7 +482,7 @@ menu which lets you control the appearance of the items in toolbar.
 This additional cascading menu is shown in the screenshot below:
 </para>
 <screenshot>
-<mediaobject><imageobject><imagedata fileref="pics/barstyle5.png" format="PNG" align="left"></imageobject></mediaobject>
+<mediaobject><imageobject><imagedata fileref="pics/barstyle5.png" format="PNG" align="left"/></imageobject></mediaobject>
 </screenshot>
 <para>
 The default view of the toolbar is icons only. In this view, if
@@ -491,7 +491,7 @@ mouse over the icon, and after a second or so, a little hint pops
 up in a highlighted text box as shown in the screenshot below:
 </para>
 <screenshot>
-<mediaobject><imageobject><imagedata fileref="pics/barstyle6.png" format="PNG" align="left"></imageobject></mediaobject>
+<mediaobject><imageobject><imagedata fileref="pics/barstyle6.png" format="PNG" align="left"/></imageobject></mediaobject>
 </screenshot>
 <para>
 You can choose to display the toolbar items as text instead of
@@ -501,7 +501,7 @@ the text appears beside the icons or below them. All four styles
 of displaying toolbar items are shown in the screenshot below:
 </para>
 <screenshot>
-<mediaobject><imageobject><imagedata fileref="pics/barstyle7.png" format="PNG" align="left"></imageobject></mediaobject>
+<mediaobject><imageobject><imagedata fileref="pics/barstyle7.png" format="PNG" align="left"/></imageobject></mediaobject>
 </screenshot>
 
 
@@ -511,7 +511,7 @@ of displaying toolbar items are shown in the screenshot below:
 <sect2 id="filemenu">
 <title>File Menu</title>
 <screenshot>
-<mediaobject><imageobject><imagedata fileref="pics/menufile.png" format="PNG" align="left"></imageobject></mediaobject>
+<mediaobject><imageobject><imagedata fileref="pics/menufile.png" format="PNG" align="left"/></imageobject></mediaobject>
 </screenshot>
 <variablelist>
 
@@ -609,7 +609,7 @@ of displaying toolbar items are shown in the screenshot below:
 <sect2 id="editmenu">
 <title>Edit Menu</title>
 <screenshot>
-<mediaobject><imageobject><imagedata fileref="pics/menuedit.png" format="PNG" align="left"></imageobject></mediaobject>
+<mediaobject><imageobject><imagedata fileref="pics/menuedit.png" format="PNG" align="left"/></imageobject></mediaobject>
 </screenshot>
 <variablelist>
 
@@ -763,7 +763,7 @@ of displaying toolbar items are shown in the screenshot below:
 <sect2 id="viewmenu">
 <title>View Menu</title>
 <screenshot>
-<mediaobject><imageobject><imagedata fileref="pics/menuview.png" format="PNG" align="left"></imageobject></mediaobject>
+<mediaobject><imageobject><imagedata fileref="pics/menuview.png" format="PNG" align="left"/></imageobject></mediaobject>
 </screenshot>
 <variablelist>
 
@@ -783,7 +783,7 @@ of displaying toolbar items are shown in the screenshot below:
 <sect2 id="insertmenu">
 <title>Insert Menu</title>
 <screenshot>
-<mediaobject><imageobject><imagedata fileref="pics/menuinsert.png" format="PNG" align="left"></imageobject></mediaobject>
+<mediaobject><imageobject><imagedata fileref="pics/menuinsert.png" format="PNG" align="left"/></imageobject></mediaobject>
 </screenshot>
 <variablelist>
 
@@ -832,7 +832,7 @@ of displaying toolbar items are shown in the screenshot below:
 <sect2 id="toolsmenu">
 <title>Tools Menu</title>
 <screenshot>
-<mediaobject><imageobject><imagedata fileref="pics/menutools.png" format="PNG" align="left"></imageobject></mediaobject>
+<mediaobject><imageobject><imagedata fileref="pics/menutools.png" format="PNG" align="left"/></imageobject></mediaobject>
 </screenshot>
 <variablelist>
 
@@ -972,7 +972,7 @@ of displaying toolbar items are shown in the screenshot below:
 <sect2 id="textmenu">
 <title>Text Menu</title>
 <screenshot>
-<mediaobject><imageobject><imagedata fileref="pics/menutext.png" format="PNG" align="left"></imageobject></mediaobject>
+<mediaobject><imageobject><imagedata fileref="pics/menutext.png" format="PNG" align="left"/></imageobject></mediaobject>
 </screenshot>
 <variablelist>
 
@@ -1143,7 +1143,7 @@ of displaying toolbar items are shown in the screenshot below:
 <sect2 id="extramenu">
 <title>Extra Menu</title>
 <screenshot>
-<mediaobject><imageobject><imagedata fileref="pics/menuextra.png" format="PNG" align="left"></imageobject></mediaobject>
+<mediaobject><imageobject><imagedata fileref="pics/menuextra.png" format="PNG" align="left"/></imageobject></mediaobject>
 </screenshot>
 <variablelist>
 
@@ -1365,7 +1365,7 @@ of displaying toolbar items are shown in the screenshot below:
 <sect2 id="screenpresmenu">
 <title>Screen Presentations Menu</title>
 <screenshot>
-<mediaobject><imageobject><imagedata fileref="pics/menuscreen.png" format="PNG" align="left"></imageobject></mediaobject>
+<mediaobject><imageobject><imagedata fileref="pics/menuscreen.png" format="PNG" align="left"/></imageobject></mediaobject>
 </screenshot>
 <variablelist>
 
@@ -1488,7 +1488,7 @@ of displaying toolbar items are shown in the screenshot below:
 <sect2 id="helpmenu">
 <title>Help Menu</title>
 <screenshot>
-<mediaobject><imageobject><imagedata fileref="pics/menuhelp.png" format="PNG" align="left"></imageobject></mediaobject>
+<mediaobject><imageobject><imagedata fileref="pics/menuhelp.png" format="PNG" align="left"/></imageobject></mediaobject>
 </screenshot>
 <variablelist>
 
@@ -1569,5 +1569,6 @@ as published by the Free Software Foundation.
 
 <!-- oooooooooooooooooooooooooooooooooooooooooooooooooooooo -->
 
-<![ %addindex; [ &documentation.index; ]]>
+&documentation.index; 
 </book>
+

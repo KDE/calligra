@@ -1,9 +1,9 @@
-<!DOCTYPE book PUBLIC  "-//KDE//DTD DocBook V3.1-Based Variant V1.0//EN" [
+<?xml version="1.0" ?><!DOCTYPE book PUBLIC "-//KDE//DTD DocBook XML V4.1-Based Variant V1.0//EN" "dtd/kdex.dtd" [
   <!ENTITY kappname "&koffice;">
   <!ENTITY % addindex "IGNORE">
-  <!ENTITY % English "INCLUDE" -- change language only here -->
-  <!ENTITY % ents PUBLIC "-//KDE//ENTITIES Documentation V1.0//EN">
-  %ents;
+  <!ENTITY % English "INCLUDE" > <!-- change language only here -->
+  
+  
 ]>
 
 <book lang="&language;">
@@ -251,7 +251,7 @@ from the website of your distribution.
 <title>From Binary Packages</title>
 
 <para>
-To install &KOffice; from precompiled binaries, you should:
+To install &koffice; from precompiled binaries, you should:
 </para>
 
 <orderedlist numeration="arabic">
@@ -376,31 +376,31 @@ Problems STUFF
 
 
 <chapter id="firststeps">
-<title>First steps in &KOffice;</title>
+<title>First steps in &koffice;</title>
 <para></para>
 </chapter>
 
 <chapter id="kparts">
-<title>KParts - the building blocks of &KOffice;</title>
+<title>KParts - the building blocks of &koffice;</title>
 
 <para>
-Each &KOffice; application is designed to fulfill very specific needs.
-For example, &KSpread; is a program for manipulating spreadsheets,
-while &KWord; is a program for word processing. By focusing on a
+Each &koffice; application is designed to fulfill very specific needs.
+For example, &kspread; is a program for manipulating spreadsheets,
+while &kword; is a program for word processing. By focusing on a
 specific area, each program aims for perfection in exactly this
-area. However, depending on what you do with &KOffice;, you'll often 
+area. However, depending on what you do with &koffice;, you'll often 
 want to take advantage of functionality provided by different applications, 
 but in the <emphasis>same</emphasis> document.
 </para>
 
 <para>
-Suppose that you are preparing a document in &KWord; and want to illustrate
-some point using a table. While &KWord; provides its own functionality for
+Suppose that you are preparing a document in &kword; and want to illustrate
+some point using a table. While &kword; provides its own functionality for
 the insertion of tables, this may not be enough for your needs. For example,
 you may want to use certain currency data formats or to do calculations using
-spreadsheet formulae. Now, some &KWord; programmer certainly
+spreadsheet formulae. Now, some &kword; programmer certainly
 <emphasis>could</emphasis> try to implement this functionality. However,
-&KWord; would never be as good as &KSpread; in this field; and if it tried
+&kword; would never be as good as &kspread; in this field; and if it tried
 to implement all the functionality you might possibly need, it would end up
 becoming unreasonably complex and the source code would become impossible
 to maintain.
@@ -418,20 +418,20 @@ elaboration -- kt.]
 
 <para> 
 With KParts, your documents can use <emphasis>all</emphasis> functionality
-offered by <emphasis>all</emphasis> &KOffice; applications. You can take
+offered by <emphasis>all</emphasis> &koffice; applications. You can take
 advantage of this by inserting so-called "parts" into your document. Every
 one of those parts is essentially another document, that is, "a document
 within a document". 
 </para>
 
 <para>
-In the example mentioned above, you would simply insert a &KSpread;
-part into your &KWord; document. Then, whenever you edit your table,
-&KSpread; would take control in the background. Control would return to
-&KWord; when you stop working on the table and start working on text
+In the example mentioned above, you would simply insert a &kspread;
+part into your &kword; document. Then, whenever you edit your table,
+&kspread; would take control in the background. Control would return to
+&kword; when you stop working on the table and start working on text
 again. The only change you would notice is that the toolbars and
-menus, while editing the table, reflect the functionality of &KSpread;
-instead of that of &KWord;. This ability to include the functionality
+menus, while editing the table, reflect the functionality of &kspread;
+instead of that of &kword;. This ability to include the functionality
 of one application in another is called "embedding".
 </para>
 
@@ -448,9 +448,9 @@ KParts is just as easy as working with a single application.
 </para>
 
 <procedure>
-<title>Inserting a &KSpread; part into a &KWord; application</title>
+<title>Inserting a &kspread; part into a &kword; application</title>
 <step><para>
-Start &KWord;. You can do that either from the panel or by typing
+Start &kword;. You can do that either from the panel or by typing
 <command>kword</command> at the command line.
 </para></step>
 <step><para>
@@ -470,30 +470,30 @@ the button. That's it--you're done.
 </procedure>
 
 <para>
-Easy, isn't it? You should now see a table frame in your &KWord; document.
+Easy, isn't it? You should now see a table frame in your &kword; document.
 Now, click inside the table to see what happens. You'll notice that:
 </para>
 
 <itemizedlist>
 <listitem><para>
 Your menu bar and tool bars have changed. They now reflect those
-of &KSpread;.
+of &kspread;.
 </para></listitem>
 <listitem><para>
-Your table frame now contains the elements of a &KSpread; view,
+Your table frame now contains the elements of a &kspread; view,
 with scroll bars, a tab bar for the selection of tables, etc.
 </para></listitem>
 </itemizedlist>
 
 <para>
 Try editing the table. You'll see that it's not different from using
-&KSpread;. In fact you <emphasis>are</emphasis> using &KSpread;.
+&kspread;. In fact you <emphasis>are</emphasis> using &kspread;.
 </para>
 
 <para>
-Now click somewhere into your &KWord; document, outside of the table area.
-The menu bar and tool bars should change back to those of &KWord;, the 
-elements of the &KSpread; view should disappear. Your table stays and still
+Now click somewhere into your &kword; document, outside of the table area.
+The menu bar and tool bars should change back to those of &kword;, the 
+elements of the &kspread; view should disappear. Your table stays and still
 reflects all of the changes you've applied to it.
 </para>
 
@@ -508,18 +508,18 @@ KParts are easy to use. Try inserting other parts or even parts in parts.
 
 
 <chapter id="customization">
-<title>Optimizing &KOffice; and Your System</title>
+<title>Optimizing &koffice; and Your System</title>
 
 <para>
-While &KOffice; should work quite nice out of the box, there may well be some things
-to optimize to get the best out of &KOffice;. This chapter shows you what you might want to do
+While &koffice; should work quite nice out of the box, there may well be some things
+to optimize to get the best out of &koffice;. This chapter shows you what you might want to do
 to achieve the best results with your new office suite.
 </para>
 
 <sect1 id="thefontissue"><title>Optimizing Font Output</title>
 <para>
 Fonts are a difficult topic on X Windows. In this section we'll cover some problems that are
-frequently reported by people using &KOffice;. Some problems are not just &KOffice;s fault, but
+frequently reported by people using &koffice;. Some problems are not just &koffice;s fault, but
 depend on your system configuration, which is why you may need to modify system configuration
 files in order to solve them. If you don't have access to the root account on your system, please
 ask your system operator about this and point him or her to this manual. As the topic of fonts is
@@ -534,17 +534,17 @@ STUFF
 </sect2>
 <sect2><title>How to Get Correct Printout</title>
 <para>
-While &KOffice; automatically can handle all X11 fonts <emphasis>on screen</emphasis>, printout 
+While &koffice; automatically can handle all X11 fonts <emphasis>on screen</emphasis>, printout 
 can pose a problem: on most systems, printing is done via <application>ghostscript</application>. Now,
-while &KOffice; knows the font names used by X Windows, it does normally <emphasis>not</emphasis>
-know the font names used by ghostscript. &KOffice; tries to guess these names, which unfortunately
+while &koffice; knows the font names used by X Windows, it does normally <emphasis>not</emphasis>
+know the font names used by ghostscript. &koffice; tries to guess these names, which unfortunately
 doesn't work all of the time.
 </para>
 <para>
 This problem can be solved, although this is not that easy. Actually, maybe you are using a distribution
 which has done most work for you already (so if you have no reason to complain about printout you can
 skip this section). What you have to do is to tell <application>ghostscript</application> how to 
-translate the (guessed) font names &KOffice; uses to its own font names. This can be done by adding
+translate the (guessed) font names &koffice; uses to its own font names. This can be done by adding
 lines to a file called <filename>Fontmap</filename>. An alias line in <filename>Fontmap</filename>
 looks like the following example:</para>
 <example><title>An alias in the ghostscript Fontmap</title>
@@ -553,7 +553,7 @@ looks like the following example:</para>
 </example>
 <para>
 Please note that a space before the ';' is mandatory. In this example, Algerian-Roman is the name 
-&KOffice; uses for Algerian. You'll have to add such lines for the fonts &KOffice; doesn't display correctly.
+&koffice; uses for Algerian. You'll have to add such lines for the fonts &koffice; doesn't display correctly.
 To make this task easier, Donovan Rebbechi has written a perl script you can find at 
 <ulink url="http://pegasus.rutgers.edu/~elflord/font_howto/kwdfont">http://pegasus.rutgers.edu/~elflord/font_howto/kwdfont</ulink>.
 Assuming that you have a fontfile <filename>/usr/share/ghostscript/fonts/fontfile.ttf</filename> you'll enter
@@ -568,13 +568,13 @@ for more accurate and in-depth information.
 </sect1>
 
 <sect1 id="customgui">
-<title>Customizing the &KOffice; GUI</title>
+<title>Customizing the &koffice; GUI</title>
 
 <para>
-While &KOffice; comes out of the box with a GUI (graphical user interface)
+While &koffice; comes out of the box with a GUI (graphical user interface)
 that should suit most people's needs, there are good reasons why you may
 want to change the way the programs look. My mother, for example, is a bit
-afraid of buttons and menu entries she doesn't understand. To tailor &KOffice;
+afraid of buttons and menu entries she doesn't understand. To tailor &koffice;
 to her needs, I reduced the GUI to a bare minimum of functionality. As she
 only needs to write letters and use certain templates, there is no need for
 much more functionality than saving, loading, printing, etc.
@@ -582,8 +582,8 @@ much more functionality than saving, loading, printing, etc.
 
 <para>
 Thanks to the "action" concept of Qt and KDE, you can freely customize
-&KOffice; menu bars and tool bars. Unfortunately, at the moment, there are no
-easy-to-use dialogs to do this. &KOffice; stores its GUI configuration in
+&koffice; menu bars and tool bars. Unfortunately, at the moment, there are no
+easy-to-use dialogs to do this. &koffice; stores its GUI configuration in
 XML files and you'll have to edit those. Hopefully, this situation will
 change in the future; for now, you'll need some basic knowledge of how
 an XML document works (or HTML, which is a subset of XML). [The
@@ -591,10 +591,10 @@ an XML document works (or HTML, which is a subset of XML). [The
 </para>
 
 <para>
-Normally, each &KOffice; application has at least two of those XML files:
+Normally, each &koffice; application has at least two of those XML files:
 one describing the GUI of the shell (basically, that's what you see if
 there is no document open) and one describing the GUI of the respective part
-(that's what you see normally). For example, for &KWord;, these two XML files
+(that's what you see normally). For example, for &kword;, these two XML files
 are named <filename>kword_shell.rc</filename> and <filename>kword.rc</filename>.
 </para>
 
@@ -605,34 +605,32 @@ Here's a simple example of such an rc-file.
 <example>
 <title>An example of a simple rc-file</title>
 <screen>
-<![ CDATA [
-<!DOCTYPE QConfig ><qconfig>
-<menubar>
- <menu name="Edit"><text>Edit</text>
-  <action name="edit_cut"/>
-  <action name="edit_copy"/>
-  <action name="edit_paste"/>
-  <separator/>
-  <action name="edit_find"/>
- </menu>
- <menu name="Insert"><text>Insert</text>
-  <action name="insert_picture"/>
-  <action name="insert_clipart"/>
-  <menu name="Variable"><text>Variable</text>
-   <action name="insert_var_datefix"/>
-   <action name="insert_var_datevar"/>
-  </menu>
- </menu>
-</menubar>
-<toolbars>
- <toolbar name="edit_toolbar" position="right">
-  <action name="edit_cut"/>
-  <action name="edit_copy"/>
-  <action name="edit_paste"/>
- </toolbar>
-</toolbars>
-</qconfig>
-]]>
+&lt;!DOCTYPE QConfig >&lt;qconfig>
+&lt;menubar>
+ &lt;menu name="Edit">&lt;text>Edit&lt;/text>
+  &lt;action name="edit_cut"/>
+  &lt;action name="edit_copy"/>
+  &lt;action name="edit_paste"/>
+  &lt;separator/>
+  &lt;action name="edit_find"/>
+ &lt;/menu>
+ &lt;menu name="Insert">&lt;text>Insert&lt;/text>
+  &lt;action name="insert_picture"/>
+  &lt;action name="insert_clipart"/>
+  &lt;menu name="Variable">&lt;text>Variable&lt;/text>
+   &lt;action name="insert_var_datefix"/>
+   &lt;action name="insert_var_datevar"/>
+  &lt;/menu>
+ &lt;/menu>
+&lt;/menubar>
+&lt;toolbars>
+ &lt;toolbar name="edit_toolbar" position="right">
+  &lt;action name="edit_cut"/>
+  &lt;action name="edit_copy"/>
+  &lt;action name="edit_paste"/>
+ &lt;/toolbar>
+&lt;/toolbars>
+&lt;/qconfig>
 </screen>
 </example>
 
@@ -645,10 +643,10 @@ Here's a simple example of such an rc-file.
 <title>How to get more information</title>
 
 <sect1 id="othermanuals">
-<title>Other &KOffice; manuals</title>
+<title>Other &koffice; manuals</title>
 
 <para>
-For detailed information on the different &KOffice; applications,
+For detailed information on the different &koffice; applications,
 please consult their respective manuals.
 [FIXME: how do I provide links to them? Do we need set-tag?]
 </para>
@@ -666,18 +664,18 @@ about KDE or KOffice.
 
 <itemizedlist>
 <listitem><para>
-<ulink url="http://koffice.kde.org">The &KOffice; homepage</ulink>. Here you
-can find information on how to get and install &KOffice;, news about &KOffice;
+<ulink url="http://koffice.kde.org">The &koffice; homepage</ulink>. Here you
+can find information on how to get and install &koffice;, news about &koffice;
 development, screenshots etc.
 </para></listitem>
 <listitem><para>
 <ulink url="http://www.kde.org">The K Desktop Environment (KDE)</ulink>. The
 most advanced and absolutely free desktop environment for unix-like operating
-systems. &KOffice; makes use of the KDE libraries.
+systems. &koffice; makes use of the KDE libraries.
 </para></listitem>
 <listitem><para>
 <ulink url="http://www.troll.no">Troll Tech</ulink>. The creators of the
-C++-toolkit Qt. KDE and &KOffice; make use of Qt.
+C++-toolkit Qt. KDE and &koffice; make use of Qt.
 </para></listitem>
 </itemizedlist>
 
@@ -687,10 +685,10 @@ C++-toolkit Qt. KDE and &KOffice; make use of Qt.
 
 
 <chapter id="programmersinfo">
-<title>Programming &KOffice;</title>
+<title>Programming &koffice;</title>
 
 <para>
-If you want to do &KOffice; development, the following resources
+If you want to do &koffice; development, the following resources
 might be of interest:
 </para>
 
@@ -705,7 +703,7 @@ Use <application>kdoc</application> (in the <filename>kdoc</filename>
 CVS module) to generate your own KDE library documentation.
 </para></listitem>
 <listitem><para>
-In the &KOffice; sources you'll find an example application
+In the &koffice; sources you'll find an example application
 in the <filename>example</filename> directory.
 </para></listitem>
 </itemizedlist>
@@ -861,7 +859,7 @@ embedding, XML, MORE! -->
 <glossdef><para>
 The K Desktop Environment (<acronym>KDE</acronym>) is a completely
 free desktop environment for unix-like operating systems.
-&KOffice; uses the KDE-2.0 libraries. See
+&koffice; uses the KDE-2.0 libraries. See
 <ulink url="http://www.kde.org">http://www.kde.org</ulink>
 for details.
 </para></glossdef>
@@ -871,8 +869,8 @@ for details.
 <glossdef><para>
 KParts is a technology that allows the embedding of components
 ("<link linkend="gloss-part">parts</link>") in an application.
-This way, you can create compound documents in &KOffice;,
-e.g. a &KWord; document containing a &KSpread; table.
+This way, you can create compound documents in &koffice;,
+e.g. a &kword; document containing a &kspread; table.
 </para></glossdef>
 </glossentry>
 </glossdiv>
@@ -927,7 +925,7 @@ A part is an application which can be embedded into other
 <glossentry id="gloss-qt">
 <glossterm>Qt</glossterm>
 <glossdef><para>
-Qt is the underlying toolkit that was used for KDE and &KOffice;.
+&Qt; is the underlying toolkit that was used for &kde; and &koffice;.
 See <ulink url="http://www.troll.no">http://www.troll.no</ulink>
 for details.
 </para></glossdef>
@@ -1018,5 +1016,6 @@ for details.
 </glossary>
 
 
-<![ %addindex; [ &documentation.index; ]]>
+&documentation.index; 
 </book>
+

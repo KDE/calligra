@@ -1,9 +1,9 @@
-<!DOCTYPE book PUBLIC  "-//KDE//DTD DocBook V3.1-Based Variant V1.0//EN" [
+<?xml version="1.0" ?><!DOCTYPE book PUBLIC "-//KDE//DTD DocBook XML V4.1-Based Variant V1.0//EN" "dtd/kdex.dtd" [
   <!ENTITY kappname "&kspread;">
   <!ENTITY % addindex "IGNORE">
-  <!ENTITY % English "INCLUDE" -- change language only here -->
-  <!ENTITY % ents PUBLIC "-//KDE//ENTITIES Documentation V1.0//EN">
-  %ents;
+  <!ENTITY % English "INCLUDE" > <!-- change language only here -->
+  
+  
 ]>
 
 <book lang="&language;">
@@ -22,7 +22,7 @@
 
 <abstract>
 <para>
-&KSpread; is complete a spreadsheet program.
+&kspread; is complete a spreadsheet program.
 It is part of the KOffice suite of utilities.
 </para>
 </abstract>
@@ -51,7 +51,7 @@ A template only. Has to be filled with contents
 
 </chapter>
 
-<chapter ID="Introduction"><title>Introduction</title>
+<chapter id="Introduction"><title>Introduction</title>
 <para> This chapter will show the main features of KSpread </para>
 
 <sect1 id="Suite"><title>The KOffice environment</title>
@@ -192,7 +192,7 @@ STUFF</para></sect1>
 </chapter>
 
 
-<chapter id="Fundamental"><title>Fundamentals</title><para>This next section is designed to introduce
+<chapter id="fundamental"><title>Fundamentals</title><para>This next section is designed to introduce
  you to:
 
 <orderedlist Numeration="Arabic">
@@ -240,7 +240,7 @@ Each are used to perform a group of similar features. When you start the KSpread
 </para>
 
 
-<para><emphasis><anchor id="kdeframe">The KDE Frame.</emphasis></para>
+<para><emphasis><anchor id="kdeframe"/>The KDE Frame.</emphasis></para>
 <para>The KDE Frame (which is not labled in the diagram above, surrounds all applications run
 under KDE.  For more information on KDE Frames, please see the KDE User Guide.</para>
 
@@ -357,5 +357,6 @@ This program is licensed under the terms of the <ulink url="common/gpl-license.h
 </para>
 </chapter>
 
-<![ %addindex; [ &documentation.index; ]]>
+&documentation.index; 
 </book>
+
