@@ -59,11 +59,12 @@ public:
 
     QSize originalSize() const
         { return image.getOriginalSize(); }
+    
+    /// Deprecated, please use KPPixmapObject::setPicture
+    void setPixmap( const KoPictureKey & key ) KDE_DEPRECATED;
+    void setPicture( const KoPictureKey & key );
 
-    void setPixmap( const KoPictureKey & key );
-
-    void reload()
-        { setPixmap( image.getKey() ); }
+    void reload( void );
 
     virtual ObjType getType() const
         { return OT_PICTURE; }
@@ -102,7 +103,10 @@ public:
     void setPictureBright(int _bright) { bright = _bright; }
 
     KoPicture picture() const { return image;}
-    void loadImage( const QString & fileName );
+    
+    /// Deprecated, please use KPPixmapObject::loadPicture
+    void loadImage( const QString & fileName ) KDE_DEPRECATED;
+    void loadPicture( const QString & fileName );
 
     virtual void flip(bool horizontal );
 

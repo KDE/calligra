@@ -85,7 +85,7 @@ KPPixmapObject::KPPixmapObject( KoPictureCollection *_imageCollection, const KoP
     // Forbid QPixmap to cache the X-Window resources (Yes, it is slower!)
     m_cachedPixmap.setOptimization(QPixmap::MemoryOptim);
 
-    setPixmap( key );
+    setPicture( key );
 }
 
 DCOPObject* KPPixmapObject::dcopObject()
@@ -95,7 +95,13 @@ DCOPObject* KPPixmapObject::dcopObject()
     return dcop;
 }
 
+// Deprecated, same as KPPixmapObject::loadPicture
 void KPPixmapObject::loadImage( const QString & fileName )
+{
+    loadPicture( fileName );
+}
+
+void KPPixmapObject::loadPicture( const QString & fileName )
 {
     image = imageCollection->loadPicture( fileName );
 }
@@ -107,7 +113,18 @@ KPPixmapObject &KPPixmapObject::operator=( const KPPixmapObject & )
 
 void KPPixmapObject::setPixmap( const KoPictureKey & key )
 {
+    setPicture( key );
+}
+
+void KPPixmapObject::setPicture( const KoPictureKey & key )
+{
     image = imageCollection->findPicture( key );
+}
+
+void KPPixmapObject::reload( void )
+{
+    // ### FIXME: this seems wrong, KoPictureCollection will never reload it 
+    setPicture( image.getKey() ); 
 }
 
 QDomDocumentFragment KPPixmapObject::save( QDomDocument& doc, double offset )
@@ -168,6 +185,7 @@ void KPPixmapObject::loadOasis(const QDomElement &element, KoOasisContext & cont
         }
         imageCollection->insertPicture( key, image );
     }
+    // ### TODO: load remote file
 //todo load picture settings.
 }
 
@@ -343,6 +361,7 @@ QPixmap KPPixmapObject::generatePixmap(KoZoomHandler*_zoomHandler)
     const double penw = _zoomHandler->zoomItX( ( ( pen.style() == Qt::NoPen ) ? 1 : pen.width() ) / 2.0 );
 
     QSize size( _zoomHandler->zoomSize( ext ) );
+    kdDebug(333001) << "KPPixmapObject::generatePixmap size= " << size << endl;
     QPixmap pixmap(size);
     QPainter paint;
 
@@ -753,3 +772,4 @@ void KPPixmapObject::flip( bool horizontal )
         }
     }
 }
+
