@@ -96,7 +96,8 @@ class KFORMEDITOR_EXPORT FormManager : public QObject
 		bool              draggingConnection() { return m_drawingSlot; }
 		//! \return the \ref Connection being created.
 		Connection*       createdConnection() { return m_connection; }
-		/*! Resets the Connection being created. We stay in Connection creation mode, but we start a new connection (when the user clicks
+		/*! Resets the Connection being created. We stay in Connection creation mode,
+		  but we start a new connection (when the user clicks
 		 outside of signals/slots menu). */
 		void              resetCreatedConnection();
 		//! Creates and display a menu with all the signals of widget \a w.
@@ -126,7 +127,8 @@ class KFORMEDITOR_EXPORT FormManager : public QObject
 
 		/*! Shows a propertybuffer in PropertyBuffer */
 		virtual void showPropertyBuffer(ObjectPropertyBuffer *buff);
-		/*! This function creates and displays the context menu corresponding to the widget \a w. The menu item are disabled if necessary, and
+		/*! This function creates and displays the context menu corresponding to the widget \a w.
+		    The menu item are disabled if necessary, and
 		    the widget specific part is added (menu from the factory and buddy selection). */
 		void  createContextMenu(QWidget *w, Container *container/*, bool enableRemove*/);
 
@@ -143,9 +145,11 @@ class KFORMEDITOR_EXPORT FormManager : public QObject
 		void deleteWidget();
 		/*! Copies the slected widget and all its children of the active Form using an XML representation. */
 		void copyWidget();
-		/*! Cuts (ie Copies and deletes) the selected widget and all its children of the active Form using an XML representation. */
+		/*! Cuts (ie Copies and deletes) the selected widget and all its children of
+		 the active Form using an XML representation. */
 		void cutWidget();
-		/*! Pastes the XML representation of the copied or cut widget. The widget is pasted when the user clicks the Form to
+		/*! Pastes the XML representation of the copied or cut widget. The widget is
+		  pasted when the user clicks the Form to
 		  indicate the new position of the widget, or at the position of the contextual menu if there is one.
 		 */
 		void pasteWidget();
@@ -153,7 +157,8 @@ class KFORMEDITOR_EXPORT FormManager : public QObject
 		void undo();
 		void redo();
 
-		/*! Displays a dialog where the user can modify the tab order of the active Form, by drag-n-drop or using up/down buttons. */
+		/*! Displays a dialog where the user can modify the tab order of the active Form,
+		 by drag-n-drop or using up/down buttons. */
 		void editTabOrder();
 		/*! Adjusts the size of the selected widget, ie resize it to its size hint. */
 		void adjustWidgetSize();
@@ -207,7 +212,8 @@ class KFORMEDITOR_EXPORT FormManager : public QObject
 		/*! Print to the command line the ObjectTree of the active Form (ie a line for each widget, with parent and name). */
 		void debugTree();
 
-		/*! Calls this slot when the window activated changes (eg connect to QWorkspace::windowActivated(QWidget*)). You <b>need</b> to connect
+		/*! Calls this slot when the window activated changes (eg connect
+		  to QWorkspace::windowActivated(QWidget*)). You <b>need</b> to connect
 		   to this slot, it will crash otherwise.
 		  */
 		void windowChanged(QWidget *w);
@@ -219,7 +225,8 @@ class KFORMEDITOR_EXPORT FormManager : public QObject
 		void deleteWidgetLaterTimeout();
 		/*! Slot called when a buddy is choosed in the buddy list. Sets the label buddy. */
 		void buddyChoosed(int id);
-		/*! Slot called when the user chooses an item in signal (or slot) menu. The \ref createdConnection() is updated, and the connection created
+		/*! Slot called when the user chooses an item in signal (or slot) menu.
+		 The \ref createdConnection() is updated, and the connection created
 		 (for the signal menu). */
 		void menuSignalChoosed(int id);
 		/*! Slot called when the user changes current style using combbox in toolbar or menu. */
@@ -230,7 +237,8 @@ class KFORMEDITOR_EXPORT FormManager : public QObject
 	protected:
 		/*! Inits the Form, adds it to m_forms, and conects slots. */
 		void initForm(Form *form);
-		/*! Function called by the "Lay out in..." menu items. It creates a layout from the currently selected widgets (that must have the same parent).
+		/*! Function called by the "Lay out in..." menu items. It creates a layout from the
+		  currently selected widgets (that must have the same parent).
 		  Calls \ref CreateLayoutCommand. */
 		void createLayout(int layoutType);
 		/*! Function called by all other AlignWidgets*() function. Calls \ref AlignWidgetsCommand. */
@@ -257,7 +265,8 @@ class KFORMEDITOR_EXPORT FormManager : public QObject
 		/*! Signal emitted when the user choose a signal in 'Events' menu in context menu, or in 'Events' in property editor.
 		  The code editor should then create the slot connected to this signal. */
 		void createFormSlot(Form *form, const QString &widget, const QString &signal);
-		/*! Signal emitted when the Connection creation by drag-and-drop ends. \a connection is the created Connection. You should copy it,
+		/*! Signal emitted when the Connection creation by drag-and-drop ends.
+		 \a connection is the created Connection. You should copy it,
 		  because it is deleted just after the signal is emitted. */
 		void connectionCreated(Form *form, Connection &connection);
 		/*! Signal emitted when the Connection creation by drag-and-drop is aborted by user. */

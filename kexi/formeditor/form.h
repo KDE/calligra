@@ -46,21 +46,23 @@ class ConnectionBuffer;
 typedef QPtrList<ObjectTreeItem> ObjectTreeC;
 
 //! Base (virtual) class for all form widgets
-/*! You need to inherit this class, and implement the drawing functions. This is necessary because you cannot inherit QWidget twice,
- and we want form widgets to be any widget. See FormWidgetBase in test/kfd_part.cpp and just copy functions here. */
+/*! You need to inherit this class, and implement the drawing functions. This is necessary
+ because you cannot inherit QWidget twice, and we want form widgets to be any widget.
+ See FormWidgetBase in test/kfd_part.cpp and just copy functions here. */
 class KFORMEDITOR_EXPORT FormWidget
 {
 	public:
 		FormWidget() {;}
-		/*! This function draws the rect \a r in the Form, above of all widgets, using double-buffering.
-		 \a type can be 1 (selection rect) or 2 (insert rect, dotted). */
+		/*! This function draws the rect \a r in the Form, above of all widgets,
+		 using double-buffering. \a type can be 1 (selection rect)
+		 or 2 (insert rect, dotted). */
 		virtual void drawRect(const QRect& r, int type) = 0;
 		/*! This function inits the buffer used for double-buffering. Called before drawing rect. */
 		virtual void initRect() = 0;
 		/*! Clears the form, ie pastes the whole buffer to repaint the Form. */
 		virtual void clearRect() = 0;
-		/*! This function highlights two widgets (to is optional), which are sender and receiver, and draws a link
-		 between them. */
+		/*! This function highlights two widgets (to is optional), which are
+		sender and receiver, and draws a link between them. */
 		virtual void highlightWidgets(QWidget *from, QWidget *to) = 0;
 };
 
@@ -102,31 +104,37 @@ class KFORMEDITOR_EXPORT Form : public QObject
 		    and the widget's Container if it is itself a container.
 		 */
 		Container*		activeContainer();
-		/*! \return A pointer to the parent Container of the currently selected widget. It is the same as activeContainer() for
-		    a simple widget, but unlike this function it will also return the parent Container if the widget itself is a Container.
+		/*! \return A pointer to the parent Container of the currently selected widget.
+		 It is the same as activeContainer() for a simple widget, but unlike this function
+		  it will also return the parent Container if the widget itself is a Container.
 		 */
 		Container*		parentContainer(QWidget *w=0);
 
 		//! \return the widget currently selected in this form, or 0 if there is not.
 		QtWidgetList* 		selectedWidgets() {return &m_selected;}
-		/*! Unselects the widget \a w. Te widget is removed from the Cntainer 's list and its resizeHandle is removed. */
+		/*! Unselects the widget \a w. Te widget is removed from the Cntainer 's list
+		and its resizeHandle is removed. */
 		void			unSelectWidget(QWidget *w);
 		/*! Resets the form selection, ie set form widget as unique selected widget. */
 		void			resetSelection();
-		/*! Emits the action signals, and optionaly the undo/redo related signals if \a withUndoAction == true. See \a FormManager for signals
-		 description. */
+		/*! Emits the action signals, and optionaly the undo/redo related signals
+		 if \a withUndoAction == true. See \a FormManager for signals description. */
 		void			emitActionSignals(bool withUndoAction=true);
 
-		/*! Sets the Form interactivity mode. Form is not interactive when pasting widgets, or loading a Form.
+		/*! Sets the Form interactivity mode. Form is not interactive when
+		pasting widgets, or loading a Form.
 		 */
 		void			setInteractiveMode(bool interactive) { m_inter = interactive; }
-		/*! \return true if the Form is being updated by the user, ie the created widget were drawn on the Form.
-		    \return false if the Form is being updated by the program, ie the widget are created by FormIO, and so composed widgets
+		/*! \return true if the Form is being updated by the user, ie the created
+		widget were drawn on the Form.
+		    \return false if the Form is being updated by the program, ie the widget
+		     are created by FormIO, and so composed widgets
 		    should not be populated automatically (such as QTabWidget).
 		 */
 		bool			interactiveMode() const { return m_inter; }
 
-		/*! If \a design is true, the Form is in Design Mode (by default). If \a design is false, then the Form is in Preview Mode, so
+		/*! If \a design is true, the Form is in Design Mode (by default).
+		If \a design is false, then the Form is in Preview Mode, so
 		  the ObjectTree and the Containers are removed. */
 		void			setDesignMode(bool design);
 		//! \return The actual mode of the Form.
@@ -143,10 +151,14 @@ class KFORMEDITOR_EXPORT Form : public QObject
 		//! \return the default spacing for all the layout inside this Form.
 		int		defaultSpacing() { return 6;}
 
-		/*! Pastes the widget represented by the QDomElement \a widg in the Form. \a widg is created by FormManager::saveWidget().\n
-		    If \a pos is null or not given, then the widget will be pasted in the actual Container, at the same position as
-		    in its former parent widget. Otherwise, it is pasted at \a pos in the active Container (when the user used the context menu).
-		    If \a cont is 0, the Form::activeContainer() is used, otherwise the widgets are pasted in the \a cont Container.
+		/*! Pastes the widget represented by the QDomElement \a widg in the Form.
+		    \a widg is created by FormManager::saveWidget().\n
+		    If \a pos is null or not given, then the widget will be pasted
+		    in the actual Container, at the same position as
+		    in its former parent widget. Otherwise, it is pasted at \a pos in
+		    the active Container (when the user used the context menu).
+		    If \a cont is 0, the Form::activeContainer() is used, otherwise
+		    the widgets are pasted in the \a cont Container.
 		 */
 		void			pasteWidget(QDomElement &widg, Container *cont=0, QPoint pos=QPoint());
 
@@ -155,7 +167,8 @@ class KFORMEDITOR_EXPORT Form : public QObject
 		/*! This function is used by ObjectTree to emit childRemoved() signal (as it is not a QObject). */
 		void			emitChildRemoved(ObjectTreeItem *item);
 
-		//! \return The filename of the UI file this Form was saved to, or QString::null if the Form hasn't be saved yet.
+		/*! \return The filename of the UI file this Form was saved to,
+		or QString::null if the Form hasn't be saved yet. */
 		QString			filename() const { return m_filename; }
 		//! Sets the filename of this Form to \a filename.
 		void			setFilename(const QString &file) { m_filename = file; }
@@ -164,27 +177,31 @@ class KFORMEDITOR_EXPORT Form : public QObject
 		ConnectionBuffer*	connectionBuffer() { return m_connBuffer; }
 		PixmapCollection*	pixmapCollection() { return m_pixcollection; }
 
-		/*! Adds a widget in the form CommandList. Please use it instead of calling directly actionCollection()->addCommand(). */
+		/*! Adds a widget in the form CommandList. Please use it instead
+		of calling directly actionCollection()->addCommand(). */
 		void addCommand(KCommand *command, bool execute);
 
-		/*! \return A pointer to this Form tabstops list : it contains all the widget that can have focus ( ie no labels, etc)
+		/*! \return A pointer to this Form tabstops list : it contains all the widget
+		that can have focus ( ie no labels, etc)
 		    in the order of the tabs.*/
 		ObjectTreeC*		tabStops() { return &m_tabstops; }
 		/*! Adds the widget at the end of tabstops list. Called on widget creation. */
 		void			addWidgetToTabStops(ObjectTreeItem *c);
 		/*! \return True if the Form automatically handles tab stops. */
 		bool			autoTabStops() { return m_autoTabstops; }
-		/*! If \a autoTab is true, then the Form will automatically handle tab stops, and the "Edit Tab Order" dialog will be disabled.
+		/*! If \a autoTab is true, then the Form will automatically handle tab stops,
+		   and the "Edit Tab Order" dialog will be disabled.
 		   The tab widget will be set from the top-left to the bottom-right corner.\n
-		    If \ autoTab is false, then it's up to the user to change tab stops (which are by default in order of creation).*/
+		    If \ autoTab is false, then it's up to the user to change tab stops
+		    (which are by default in order of creation).*/
 		void			setAutoTabStops(bool autoTab) { m_autoTabstops = autoTab;}
-		/*! Tells the Form to reassign the tab stops because the widget layout has changed (called for example before saving or
-		   displaying the tab order dialog) */
+		/*! Tells the Form to reassign the tab stops because the widget layout has changed
+		(called for example before saving or displaying the tab order dialog) */
 		void			autoAssignTabStops();
 
 	public slots:
-		/*! This slot is called when the name of a widget was changed in Property Editor. It renames the ObjectTreeItem
-		  associated to this widget.
+		/*! This slot is called when the name of a widget was changed in Property Editor.
+		It renames the ObjectTreeItem associated to this widget.
 		 */
 		void			changeName(const QString &oldname, const QString &newname);
 		/*! Sets \a selected to be the selected widget of this Form. If \a add is true, the formerly selected widget
@@ -194,20 +211,23 @@ class KFORMEDITOR_EXPORT Form : public QObject
 		void		setSelectedWidget(QWidget *selected, bool add=false, bool dontRaise=false);
 
 	protected slots:
-		/*! This slot is called when the toplevel widget of this Form is deleted (ie the window closed) so that the Form gets deleted
-		  at the same time.
+		/*! This slot is called when the toplevel widget of this Form is deleted
+		(ie the window closed) so that the Form gets deleted at the same time.
 		 */
 		void			formDeleted();
-		/*! This slot is called when a command is executed. The undo/redo signals are emitted to update actions. */
+		/*! This slot is called when a command is executed. The undo/redo signals
+		  are emitted to update actions. */
 		void			slotCommandExecuted();
 		void			emitUndoEnabled();
 		void			emitRedoEnabled();
-		/*! This slot is called when form is restored, ie when the user has undone all actions. The form modified flag is updated, and
+		/*! This slot is called when form is restored, ie when the user has undone
+		  all actions. The form modified flag is updated, and
 		\ref FormManager::dirty() is called. */
 		void			slotFormRestored();
 
 	signals:
-		/*! This signal is emitted when user selects a new widget, to update both Property Editor and ObjectTreeView.
+		/*! This signal is emitted when user selects a new widget, to update both
+		   Property Editor and ObjectTreeView.
 		   \a w is the newly selected widget.
 		  */
 		void			selectionChanged(QWidget *w, bool add);
@@ -223,24 +243,29 @@ class KFORMEDITOR_EXPORT Form : public QObject
 		void			childRemoved(ObjectTreeItem *it);
 
 	protected:
-		/*! Internal function used to fix the coordinates of a widget before pasting it (to paste it at the position of the
-		   contextual menu). It modifies the "geometry" property of the QDomElement representing the widget.
+		/*! Internal function used to fix the coordinates of a widget before pasting it
+		   (to paste it at the position of the contextual menu). It modifies
+		   the "geometry" property of the QDomElement representing the widget.
 		   \return the modified QDomElement.
 		 */
 		QDomElement  fixPos(QDomElement el, QPoint newpos);
-		/*! Internal function used to fix the coordinates of a widget before pasting it (to avoid to have two widgets at the same position).
-		   It moves the widget by (10, 10) increment (several times if there are already asted widgets at this position).
+		/*! Internal function used to fix the coordinates of a widget before pasting it
+		   (to avoid to have two widgets at the same position). It moves the widget by
+		   (10, 10) increment (several times if there are already pasted widgets at this position).
 		   \return the modified QDomElement.
 		 */
 		QDomElement  fixPos(QDomElement el, Container *container);
-		/*! Internal function used to fix the names of the widgets before pasting them. It prevents from pasting a widget with
+		/*! Internal function used to fix the names of the widgets before pasting them.
+		  It prevents from pasting a widget with
 		  the same name as an actual widget. The child widgets are also fixed recursively.\n
-		  If the name of the widget ends with a number (eg "QLineEdit1"), the new name is just incremented by one (eg becomes "QLineEdit2").
-		  Otherwise, a "2" is just appended at the end of the name (eg "myWidget" becomes "myWidget2").
+		  If the name of the widget ends with a number (eg "QLineEdit1"), the new name is
+		  just incremented by one (eg becomes "QLineEdit2"). Otherwise, a "2" is just
+		  appended at the end of the name (eg "myWidget" becomes "myWidget2").
 		 */
 		void  fixNames(QDomElement el);
 
-		/*! \return The \ref Container which is a parent of all widgets in \a wlist. Used by \ref activeContainer(), and to find where
+		/*! \return The \ref Container which is a parent of all widgets in \a wlist.
+		 Used by \ref activeContainer(), and to find where
 		 to paste widgets when multiple widgets are selected. */
 		ObjectTreeItem*   commonParentContainer(QtWidgetList *wlist);
 

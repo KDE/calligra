@@ -74,7 +74,8 @@ class ObjectTreeItem;
 class Form;
 
 /**
- * This class is used to filter the events from any widget (and all its subwidgets) and direct it to the Container.
+ * This class is used to filter the events from any widget (and all its subwidgets)
+ and direct it to the Container.
  */
 //! A class to redirect events
 class KFORMEDITOR_EXPORT EventEater : public QObject
@@ -95,7 +96,8 @@ class KFORMEDITOR_EXPORT EventEater : public QObject
 };
 
 /**
- * This class makes a container out of any QWidget. You can then create child widgets, and the background is dotted.
+ * This class makes a container out of any QWidget. You can then create child widgets, and
+ the background is dotted.
  */
 //! A class to make a container from any widget
 class KFORMEDITOR_EXPORT Container : public QObject
@@ -106,7 +108,8 @@ class KFORMEDITOR_EXPORT Container : public QObject
 		enum LayoutType { NoLayout=0, HBox, VBox, Grid };
 
 		/**
-		 * Creates a Container from the widget \a container, which have \a toplevel as parent Container.
+		 * Creates a Container from the widget \a container, which have
+		 \a toplevel as parent Container.
 		 */
 
 		Container(Container *toplevel, QWidget *container, QObject *parent=0, const char *name=0);
@@ -138,8 +141,8 @@ class KFORMEDITOR_EXPORT Container : public QObject
 		int             layoutMargin() { return m_margin; }
 		//! \return the spacing of this Container.
 		int             layoutSpacing() { return m_spacing; }
-		/*! Sets this Container to use \a type of layout. The widget are inserted automatically in the layout
-		  following their positions.
+		/*! Sets this Container to use \a type of layout. The widget are inserted
+		 automatically in the layout following their positions.
 		  \sa createBoxLayout(), createGridLayout()
 		 */
 		void            setLayout(LayoutType type);
@@ -148,12 +151,14 @@ class KFORMEDITOR_EXPORT Container : public QObject
 		//! Sets the margin of this Container.
 		void            setLayoutMargin(int margin) { m_margin = margin;}
 
-		/*! Stops the inline editing of the current widget (as when you click on another widget or press Esc). */
+		/*! Stops the inline editing of the current widget (as when you click
+		 on another widget or press Esc). */
 		void            stopInlineEditing() { m_state = DoingNothing; }
 
-		/*! This is the main function of Container, which filters the event sent to the watched widget.\n
-		   It takes care of drawing the background and the insert rect, of creating the new child widgets, of moving the widgets and
-		   pop up a menu when right-clicking.
+		/*! This is the main function of Container, which filters the event sent
+		   to the watched widget.\n It takes care of drawing the background and
+		   the insert rect, of creating the new child widgets, of moving the widgets
+		    and pop up a menu when right-clicking.
 		  */
 		virtual bool	eventFilter(QObject *o, QEvent *e);
 
@@ -167,18 +172,24 @@ class KFORMEDITOR_EXPORT Container : public QObject
 		//! \return The form this Container belongs to.
 		Form		*form() const { return m_form; }
 
-		/*! Sets \a selected to be the selected widget of this container (and so of the Form). If \a add is true, the formerly selected widget
-		  is still selected, and the new one is just added. If false, \a selected replace the actually selected widget. If \a dontRaise is true, then
-		  the widget \a selected (and its parent) won't be raised (eg when you select widget in ObjectTreeView).
+		/*! Sets \a selected to be the selected widget of this container
+		  (and so of the Form). If \a add is true, the formerly selected widget
+		  is still selected, and the new one is just added. If false, \a selected
+		   replace the actually selected widget. If \a dontRaise is true, then
+		  the widget \a selected (and its parent) won't be raised (eg when you
+		   select widget in ObjectTreeView).
 		  \sa Form::setSelectedWidget()
 		 */
 		void		setSelectedWidget(QWidget *selected, bool add, bool dontRaise=false);
-		/*! Unselects the widget \a w. The widget is removed from the Form's list and its resizeHandles are removed. */
+		/*! Unselects the widget \a w. The widget is removed from the Form's list
+		 and its resizeHandles are removed. */
 		void		unSelectWidget(QWidget *w);
-		/*! Deletes the widget \a w. Removes it from ObjectTree, and sets selection to Container's widget. */
+		/*! Deletes the widget \a w. Removes it from ObjectTree, and sets selection
+		 to Container's widget. */
 		void		deleteWidget(QWidget *w);
 
-		/*! Recreates the Container layout. Calls this when a widget has been moved or added to update the layout. */
+		/*! Recreates the Container layout. Calls this when a widget has been moved
+		 or added to update the layout. */
 		void		reloadLayout();
 
 	protected slots:
@@ -186,7 +197,8 @@ class KFORMEDITOR_EXPORT Container : public QObject
 		void		widgetDeleted();
 
 	protected:
-		/*! Internal function to create a HBoxLayout or VBoxLayout for this container. \a list is a subclass of QObjectList that can sort widgets
+		/*! Internal function to create a HBoxLayout or VBoxLayout for this container.
+		 \a list is a subclass of QObjectList that can sort widgets
 		   following their position (such as HorWidgetList or VerWidgetList).
 		  */
 		void		createBoxLayout(QtWidgetList *list);
@@ -200,7 +212,8 @@ class KFORMEDITOR_EXPORT Container : public QObject
 		QGuardedPtr<Container> m_toplevel;
 
 		int		m_state;
-		enum { DoingNothing = 100, DrawingSelectionRect, CopyingWidget, MovingWidget, InlineEditing };
+		enum { DoingNothing = 100, DrawingSelectionRect, CopyingWidget,
+			MovingWidget, InlineEditing };
 
 		// Layout
 		QLayout		*m_layout;

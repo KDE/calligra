@@ -30,7 +30,8 @@ namespace KFormDesigner {
 class KFORMEDITOR_EXPORT Connection
 {
 	public:
-		Connection(const QString &sender, const QString &signal, const QString &receiver, const QString &slot);
+		Connection(const QString &sender, const QString &signal,
+			const QString &receiver, const QString &slot);
 		Connection() {;}
 		~Connection() {;}
 
@@ -62,8 +63,8 @@ class KFORMEDITOR_EXPORT ConnectionBuffer : public ConnectionList
 		void save(QDomNode &parentNode);
 		void load(QDomNode parentNode);
 
-		/*! This function is called when a widget is renamed from \a oldname to \a newname. All the Connections for this widget
-		   are updated. */
+		/*! This function is called when a widget is renamed from \a oldname
+		to \a newname. All the Connections for this widget are updated. */
 		void    fixName(const QString &oldname, const QString &newName);
 
 		ConnectionBuffer*     allConnectionsForWidget(const QString &widget);

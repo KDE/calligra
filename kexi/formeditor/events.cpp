@@ -24,7 +24,8 @@
 
 namespace KFormDesigner {
 
-Connection::Connection(const QString &sender, const QString &signal, const QString &receiver, const QString &slot)
+Connection::Connection(const QString &sender, const QString &signal,
+	 const QString &receiver, const QString &slot)
 {
 	m_sender = sender;
 	m_signal = signal;
