@@ -98,7 +98,7 @@ public:
 
   void update();
 
-  KivioDoc* doc();
+  KivioDoc* doc()const;
 
     virtual DCOPObject* dcopObject();
 

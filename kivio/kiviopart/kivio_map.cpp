@@ -157,7 +157,7 @@ KivioPage* KivioMap::findPage( const QString& name )
   return 0L;
 }
 
-KivioDoc* KivioMap::doc()
+KivioDoc* KivioMap::doc()const
 {
   return m_pDoc;
 }
