@@ -327,7 +327,7 @@ class KWDeleteFrameCommand : public KCommand
 {
 public:
     KWDeleteFrameCommand( const QString &name, KWFrame * frame) ;
-    ~KWDeleteFrameCommand() {}
+    ~KWDeleteFrameCommand();
 
     void execute();
     void unexecute();

@@ -938,6 +938,11 @@ KWDeleteFrameCommand::KWDeleteFrameCommand( const QString &name, KWFrame * frame
 {
 }
 
+KWDeleteFrameCommand::~KWDeleteFrameCommand()
+{
+    delete m_copyFrame;
+}
+
 void KWDeleteFrameCommand::execute()
 {
     KWFrameSet *frameSet = m_frameIndex.m_pFrameSet;
