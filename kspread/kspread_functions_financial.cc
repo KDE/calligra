@@ -439,17 +439,17 @@ bool kspreadfunc_euro( KSContext& context )
   double result = -1;
 
   if( currency == "ATS" ) result = 13.7603;  // Austria
-  if( currency == "BEF" ) result = 40.3399;  // Belgium
-  if( currency == "DEM" ) result = 1.95583;  // Germany
-  if( currency == "ESP" ) result = 166.386;  // Spain
-  if( currency == "FIM" ) result = 5.94573;  // Finland
-  if( currency == "FRF" ) result = 6.55957;  // France
-  if( currency == "GRD" ) result = 340.75;   // Greece
-  if( currency == "IEP" ) result = 0.787564; // Ireland
-  if( currency == "ITL" ) result = 1936.27;  // Italy
-  if( currency == "LUX" ) result = 40.3399;  // Luxemburg
-  if( currency == "NLG" ) result = 2.20371;  // Nederland
-  if( currency == "PIE" ) result = 200.482;  // Portugal
+  else if( currency == "BEF" ) result = 40.3399;  // Belgium
+  else if( currency == "DEM" ) result = 1.95583;  // Germany
+  else if( currency == "ESP" ) result = 166.386;  // Spain
+  else if( currency == "FIM" ) result = 5.94573;  // Finland
+  else if( currency == "FRF" ) result = 6.55957;  // France
+  else if( currency == "GRD" ) result = 340.75;   // Greece
+  else if( currency == "IEP" ) result = 0.787564; // Ireland
+  else if( currency == "ITL" ) result = 1936.27;  // Italy
+  else if( currency == "LUX" ) result = 40.3399;  // Luxemburg
+  else if( currency == "NLG" ) result = 2.20371;  // Nederland
+  else if( currency == "PTE" ) result = 200.482;  // Portugal
 
   if( result <= 0 ) return false;
 
