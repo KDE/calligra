@@ -1,6 +1,6 @@
 
-
-#DO_NOT_COMPILE="$DO_NOT_COMPILE kexi"
+# startup/ wants deleted files like kexiprojectdata.*, and linking cannot find -lkexi_compat_qextmdi
+DO_NOT_COMPILE="$DO_NOT_COMPILE kexi"
 
 
 # -- Check for KDE 3.1 and enable the compat dir --------------------
