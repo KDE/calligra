@@ -28,7 +28,7 @@ class QIODevice;
 class KoFilterChain;
 
 /**
- * The base class for import and export filters.
+ * @brief The base class for import and export filters.
  *
  * Derive your filter class from this base class and implement
  * the @ref convert() method. Don't forget to specify the Q_OBJECT
@@ -37,12 +37,13 @@ class KoFilterChain;
  * The m_chain member allows access to the @ref KoFilterChain
  * which invokes the filter to query for input/output.
  *
- * Take care: The m_chain pointer is invalid while the constructor
+ * @note Take care: The m_chain pointer is invalid while the constructor
  * runs due to the implementation -- @em don't use it in the constructor.
  * After the constructor, when running the @ref convert() method it's
  * guaranteed to be valid, so no need to check against 0.
  *
  * @author Werner Trobin <trobin@kde.org>
+ * @todo the class has no constructor and therefore cannot initialize its private class
  */
 class KoFilter : public QObject
 {
@@ -138,6 +139,7 @@ private:
  * if names and signatures are matching.
  *
  * @author Werner Trobin
+ * @todo the class has no constructor and therefore cannot initialize its private class
  */
 class KoEmbeddingFilter : public KoFilter
 {
@@ -240,8 +242,11 @@ protected:
     QCString internalPartMimeType( const QString& key ) const;
 
 private:
-    // Holds the directory's number and the mimetype of the part
-    // for internal parts. This is all we need to locate a part.
+    /**
+     * Holds the directory's number and the mimetype of the part
+     * for internal parts. This is all we need to locate a part.
+     * @internal
+     */
     struct PartReference
     {
         PartReference( int index = -1, const QCString& mimeType = "" );
@@ -251,10 +256,13 @@ private:
         QCString m_mimeType;
     };
 
-    // This struct keeps track of the last used index for a
-    // child part and all references to existing children
-    // We use it to build a whole stack, one PartState per
-    // embedding level.
+    /**
+     * This struct keeps track of the last used index for a
+     * child part and all references to existing children
+     * We use it to build a whole stack, one PartState per
+     * embedding level.
+     * @internal
+     */
     struct PartState
     {
         PartState();
@@ -263,8 +271,9 @@ private:
         QMap<QString, PartReference> m_partReferences;
     };
 
-    // Better don't copy or assign the filters
+    /// Better do not copy the filters
     KoEmbeddingFilter( const KoEmbeddingFilter& rhs );
+    /// Better do not assign the filters
     KoEmbeddingFilter& operator=( const KoEmbeddingFilter& rhs );
 
     /**
@@ -279,14 +288,23 @@ private:
      */
     virtual void savePartContents( QIODevice* file );
 
-    // Internal methods to support the start/endInternalEmbedding
-    // methods (we have to change directories and stuff).
-    // These methods are declared friends of the KoFilterChain
+    /**
+     * Internal methods to support the start/endInternalEmbedding
+     * methods (we have to change directories and stuff).
+     * These methods are declared friends of the KoFilterChain
+     */
     void filterChainEnterDirectory( const QString& directory ) const;
+    /**
+     * Internal methods to support the start/endInternalEmbedding
+     * methods (we have to change directories and stuff).
+     * These methods are declared friends of the KoFilterChain
+     */
     void filterChainLeaveDirectory() const;
 
-    // A stack which keeps track of the current part references.
-    // We push one PartState structure for every embedding level.
+    /**
+     * A stack which keeps track of the current part references.
+     * We push one PartState structure for every embedding level.
+     */
     QPtrStack<PartState> m_partStack;
 
     class Private;

@@ -31,7 +31,7 @@ class KoDocumentEntry;
 class KoXmlWriter;
 
 /**
- * Holds an embedded object.
+ * @brief Holds an embedded object.
  *
  * In addition to its base class @ref KoChild it cares about the content
  * of an embedded document. That means it supports operations like
@@ -77,7 +77,7 @@ public:
   virtual KoDocument* hitTest( const QPoint& p, const QWMatrix& _matrix = QWMatrix() );
 
   /**
-   * Can be empty (which is why it doesn't return a const KURL &)
+   * @note Can be empty (which is why it doesn't return a const KURL &)
    */
   virtual KURL url();
 

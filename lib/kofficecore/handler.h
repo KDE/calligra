@@ -30,7 +30,7 @@ class PartResizeHandlerPrivate;
 class PartMoveHandlerPrivate;
 
 /**
- * An abstract base class for event handlers.
+ * @brief An abstract base class for event handlers.
  *
  * The idea of an event handler is that it is created for a
  * certain purpose, for example moving or resizing of a part.
@@ -124,7 +124,7 @@ protected:
     bool eventFilter( QObject*, QEvent* );
 
 private:
-    // This is a little helper function to get rid of some duplicated code
+    /// This is a little helper function to get rid of some duplicated code
     KoChild *child(KoChild::Gadget &gadget, QPoint &pos, const QMouseEvent *ev);
     KoView* m_view;
 };

@@ -162,7 +162,7 @@ public:
    */
   virtual void transform( QPainter& painter );
 
-  // ### make virtual
+  /// @todo ### make virtual
   void setContentsPos( int x, int y );
 
   /**

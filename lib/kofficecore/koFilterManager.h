@@ -29,17 +29,17 @@
 class KoDocument;
 
 /**
+ *  @brief The class managing all the filters.
+ *
  *  This class manages all filters for a KOffice application. Normally
  *  you won't have to use it, since KoMainWindow takes care of loading
  *  and saving documents.
  *
- *  @short The class managing all the filters.
  *  @ref KoFilter
  *
  *  @author Kalle Dalheimer <kalle@kde.org>
  *  @author Torben Weis <weis@kde.org>
  *  @author Werner Trobin <trobin@kde.org>
- *  @version $Id$
  */
 class KoFilterManager : public QObject
 {

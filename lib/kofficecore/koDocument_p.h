@@ -23,7 +23,10 @@
 
 class KoDocument;
 
-// Used in singleViewMode, when embedded into a browser
+/**
+ * Used in singleViewMode, when embedded into a browser
+ * @internal
+ */
 class KoBrowserExtension : public KParts::BrowserExtension
 {
     Q_OBJECT
@@ -31,7 +34,7 @@ public:
     KoBrowserExtension( KoDocument * doc, const char * name = 0 );
 
 public slots:
-    // Automatically detected by konqueror
+    /// Automatically detected by konqueror
     void print();
 };
 

@@ -38,12 +38,13 @@ namespace KOffice {
 }
 
 /**
- * This class represents a chain of plain @ref KoFilter instances.
+ * @brief This class represents a chain of plain @ref KoFilter instances.
  *
  * Instances of this class are shared, so please just hold
  * @ref KoFilterChain::Ptr pointers to it.
  *
  * @author Werner Trobin <trobin@kde.org>
+ * @todo the class has no constructor and therefore cannot initialize its private class
  */
 class KoFilterChain : public KShared
 {
@@ -168,8 +169,11 @@ private:
     KoDocument* createDocument( const QString& file );
     KoDocument* createDocument( const QCString& mimeType );
 
-    // A small private helper class with represents one single filter
-    // (one link of the chain)
+    /**
+     * A small private helper class with represents one single filter
+     * (one link of the chain)
+     * @internal
+     */
     class ChainLink
     {
 
@@ -260,7 +264,10 @@ namespace KOffice
     class Vertex;
     template<class T> class PriorityQueue;
 
-    // An internal class representing a filter (=edge) in the filter graph.
+    /**
+     * An internal class representing a filter (=edge) in the filter graph.
+     * @internal
+     */
     class Edge
     {
 
@@ -295,7 +302,10 @@ namespace KOffice
     };
 
 
-    // An internal class representing a mime type (=node, vertex) in the filter graph.
+    /**
+     * An internal class representing a mime type (=node, vertex) in the filter graph.
+     * @internal
+     */
     class Vertex
     {
 
@@ -351,8 +361,11 @@ namespace KOffice
     };
 
 
-    // The main worker behind the scenes. Manages the creation of the graph,
-    // processing the information in it, and creating the filter chains.
+    /**
+     * The main worker behind the scenes. Manages the creation of the graph,
+     * processing the information in it, and creating the filter chains.
+     * @internal
+     */
     class Graph
     {
 

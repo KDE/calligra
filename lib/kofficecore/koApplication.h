@@ -27,7 +27,7 @@ using namespace std;
 class KoApplicationPrivate;
 
 /**
- *  Base class for all KOffice apps
+ *  @brief Base class for all %KOffice apps
  *
  *  This class handles arguments given on the command line and
  *  shows a generic about dialog for all KOffice apps.
@@ -37,8 +37,6 @@ class KoApplicationPrivate;
  *
  *  If the last mainwindow becomes closed, KoApplication automatically
  *  calls @ref QApplication::quit.
- *
- *  @short Base class for all KOffice apps.
  */
 class KoApplication : public KApplication
 {
@@ -78,7 +76,7 @@ public:
 private:
     bool initHack();
     KoApplicationPrivate* d;
-    static bool m_starting ; // is the application starting or not
+    static bool m_starting ; ///< is the application starting or not
     class ResetStarting;
     friend class ResetStarting;
 };
