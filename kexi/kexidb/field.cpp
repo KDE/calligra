@@ -163,6 +163,7 @@ QString Field::typeGroupString(uint typeGroup)
 bool Field::isIntegerType( uint type )
 {
 	switch (type) {
+	case Field::Byte:
 	case Field::ShortInteger:
 	case Field::Integer:
 	case Field::BigInteger:
@@ -175,6 +176,7 @@ bool Field::isIntegerType( uint type )
 bool Field::isNumericType( uint type )
 {
 	switch (type) {
+	case Field::Byte:
 	case Field::ShortInteger:
 	case Field::Integer:
 	case Field::BigInteger:
