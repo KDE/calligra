@@ -3692,7 +3692,7 @@ void KSpreadView::popupColumnMenu(const QPoint & _point)
     int i;
     ColumnLayout * col;
     QRect rect = m_selectionInfo->selection();
-    kdDebug(36001) << "Column: L: " << rect.left() << endl;
+    //kdDebug(36001) << "Column: L: " << rect.left() << endl;
     for ( i = rect.left(); i <= rect.right(); ++i )
     {
       if (i == 2) // "B"
@@ -3768,7 +3768,7 @@ void KSpreadView::popupRowMenu(const QPoint & _point )
     QRect rect = m_selectionInfo->selection();
     for ( i = rect.top(); i <= rect.bottom(); ++i )
     {
-      kdDebug(36001) << "popupRow: " << rect.top() << endl;
+        //kdDebug(36001) << "popupRow: " << rect.top() << endl;
       if (i == 2)
       {
         row = activeTable()->rowLayout( 1 );

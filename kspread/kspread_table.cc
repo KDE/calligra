@@ -4730,8 +4730,6 @@ struct ClearValiditySelectionWorker : public KSpreadTable::CellWorker {
 
 void KSpreadTable::clearValiditySelection( KSpreadSelection* selectionInfo )
 {
-  if(areaIsEmpty(selectionInfo->selection()))
-    return;
   ClearValiditySelectionWorker w;
   workOnCells( selectionInfo, w );
 }
@@ -4760,8 +4758,6 @@ struct ClearConditionalSelectionWorker : public KSpreadTable::CellWorker
 
 void KSpreadTable::clearConditionalSelection( KSpreadSelection* selectionInfo )
 {
-  if(areaIsEmpty(selectionInfo->selection()))
-    return;
   ClearConditionalSelectionWorker w;
   workOnCells( selectionInfo, w );
 }
