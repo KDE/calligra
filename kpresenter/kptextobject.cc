@@ -949,6 +949,14 @@ QString KPTextObject::decode( const QString &_str )
     // HACK
     str.append( "_" );
 
+    // When encoding the run-time form of text to its stored form,
+    // be sure to do the conversion for "&amp;" to "&" first to avoid
+    // accidentally converting user text into one of the other escape
+    // sequences. 
+    //
+    // Note that the conversion for "&amp;" allows for coexistance
+    // with QDom-based input filters.
+    str.replace( QRegExp( "&" ), "&amp;" );
     str.replace( QRegExp( "<" ), "&lt;" );
     str.replace( QRegExp( ">" ), "&gt;" );
 
