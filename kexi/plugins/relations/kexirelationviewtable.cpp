@@ -54,6 +54,9 @@ KexiRelationViewTableContainer::KexiRelationViewTableContainer(KexiRelationView 
 
 	QVBoxLayout *lyr = new QVBoxLayout(this,4,1); //js: using Q*BoxLayout is a good idea
 
+	//hack to get more space at bottom
+	QSpacerItem *iBottom = new QSpacerItem(10, 10, QSizePolicy::Fixed, QSizePolicy::Fixed);
+
 	m_tableHeader = new KexiRelationViewTableContainerHeader(t->name(), this);
 	m_tableHeader->unsetFocus();
 	m_tableHeader->setSizePolicy(QSizePolicy(QSizePolicy::Minimum, QSizePolicy::Fixed));
@@ -65,7 +68,11 @@ KexiRelationViewTableContainer::KexiRelationViewTableContainer(KexiRelationView 
 	m_tableView->setSizePolicy(QSizePolicy(QSizePolicy::Preferred, QSizePolicy::Minimum));
 	m_tableView->setMaximumSize( m_tableView->sizeHint() );
 //	m_tableView->resize( m_tableView->sizeHint() );
+
+	setMinimumSize(m_tableView->sizeHint().width() + 5, m_tableView->sizeHint().height() + m_tableHeader->sizeHint().height() + 6);
+
 	lyr->addWidget(m_tableView, 0);
+	lyr->addItem(iBottom);
 	connect(m_tableView, SIGNAL(tableScrolling()), this, SLOT(moved()));
 	connect(m_tableView, SIGNAL(contextMenu(KListView*, QListViewItem*, const QPoint&)),
 		this, SLOT(slotContextMenu(KListView*, QListViewItem*, const QPoint&)));
@@ -360,7 +367,7 @@ void KexiRelationViewTableContainerHeader::mouseReleaseEvent(QMouseEvent *ev) {
 //=====================================================================================
 
 KexiRelationViewTable::KexiRelationViewTable(QWidget *parent, KexiRelationView *view, KexiDB::TableSchema *t, const char *name)
- : KListView(parent)
+ : KListView(parent, name)
 {
 //	m_fieldList = t.;
 //	m_table = table;
@@ -529,7 +536,7 @@ KexiRelationViewTableItem::KexiRelationViewTableItem(
 {
 }
 
-void KexiRelationViewTableItem::paintFocus ( QPainter * p, const QColorGroup & cg, const QRect & r )
+void KexiRelationViewTableItem::paintFocus (QPainter * , const QColorGroup &, const QRect &)
 {
 }
 

@@ -39,12 +39,14 @@
 #include <koApplication.h>
 
 #include <kexidb/tableschema.h>
+#include <kexidb/connection.h>
+#include <kexidb/indexschema.h>
 
 #include "kexirelationview.h"
 #include "kexirelationviewtable.h"
 #include "kexirelationviewconnection.h"
 
-KexiRelationView::KexiRelationView(QWidget *parent, const char *name)
+KexiRelationView::KexiRelationView(QWidget *parent, KexiDB::Connection *conn, const char *name)
  : QScrollView(parent, name, WStaticContents)
  , KexiActionProxy(this)
 {
@@ -61,6 +63,8 @@ KexiRelationView::KexiRelationView(QWidget *parent, const char *name)
 	setFocusPolicy(StrongFocus);
 	setResizePolicy(Manual);
 
+
+	m_conn = conn;
 	//actions
 	m_tableQueryPopup = new KPopupMenu(this, "m_popup");
 	m_tableQueryPopup->insertTitle(i18n("Table/Query"));
@@ -187,6 +191,13 @@ KexiRelationView::addConnection(SourceConnection conn, bool)
 	KexiRelationViewConnection *connView = new KexiRelationViewConnection(src, rcv, conn, this);
 	m_connectionViews.append(connView);
 	updateContents(connView->connectionRect());
+
+	KexiDB::TableSchema *mtable = m_conn->tableSchema(conn.srcTable);
+	KexiDB::TableSchema *ftable = m_conn->tableSchema(conn.rcvTable);
+	KexiDB::IndexSchema *forign = new KexiDB::IndexSchema(ftable);
+
+	forign->addField(mtable->field(conn.srcField));
+	new KexiDB::Reference(forign, mtable->primaryKey());
 
 #if 0
 	if(!interactive)

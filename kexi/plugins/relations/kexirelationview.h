@@ -39,6 +39,7 @@ namespace KexiDB
 {
 	class TableSchema;
 	class Reference;
+	class Connection;
 }
 
 typedef QDict<KexiRelationViewTableContainer> TableList;
@@ -58,7 +59,7 @@ class KexiRelationView : public QScrollView, public KexiActionProxy
 	Q_OBJECT
 
 	public:
-		KexiRelationView(QWidget *parent, const char *name=0);
+		KexiRelationView(QWidget *parent, KexiDB::Connection *conn, const char *name=0);
 		~KexiRelationView();
 
 		void		addTable(KexiDB::TableSchema *t);
@@ -102,6 +103,8 @@ class KexiRelationView : public QScrollView, public KexiActionProxy
 //		KexiRelation    	*m_relation;
 		ConnectionList		m_connectionViews;
 		KexiRelationViewConnection *m_selectedConnection;
+		KexiDB::Connection	*m_conn;
+
 
 		KexiRelationViewTableContainer *m_focusedTableView;
 
