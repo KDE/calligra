@@ -78,33 +78,63 @@ KoDocument* KoDocumentEntry::createDoc( KoDocument* parent, const char* name )
 
 KoDocumentEntry KoDocumentEntry::queryByMimeType( const QString & mimetype )
 {
-    QString constr = QString::fromLatin1( "[X-KDE-NativeMimeType] == '%1'" ).arg( mimetype );
+  QString constr = QString::fromLatin1( "[X-KDE-NativeMimeType] == '%1'" ).arg( mimetype );
 
-    QValueList<KoDocumentEntry> vec = query( constr );
+  QValueList<KoDocumentEntry> vec = query( constr );
+  if ( vec.isEmpty() )
+  {
+    kdWarning(30003) << "Got no results with " << constr << endl;
+    // Fallback to the old way (which was probably wrong, but better be safe)
+    QString constr = QString::fromLatin1( "'%1' in ServiceTypes" ).arg( mimetype );
+    vec = query( constr );
     if ( vec.isEmpty() )
     {
-        kdWarning(30003) << "Got no results with " << constr << endl;
-        // Fallback to the old way (which was probably wrong, but better be safe)
-        QString constr = QString::fromLatin1( "'%1' in ServiceTypes" ).arg( mimetype );
-        vec = query( constr );
-        if ( vec.isEmpty() )
+      // Still no match. Either the mimetype itself is unknown, or we have no service for it.
+      // The third possibility is that we have to use a filter to be able to read this mimetype (Werner)
+      // Help the user debugging stuff by providing some more diagnostics
+      if ( KServiceType::serviceType( mimetype ) == 0L )
+      {
+        kdError(30003) << "Unknown KOffice MimeType " << mimetype << "." << endl;
+        kdError(30003) << "Check your installation (for instance, run 'kde-config --path mime' and check the result)." << endl;
+      } else
+      {
+        // (Werner) Okay, the mimetype exists but we don't have a *native* part for it
+        // Let's go and check if we have a filter. This "feature" is needed in KOShell
+        // if we want to be able to open non-native files.
+        constr = "'";
+        constr += mimetype;
+        constr += "' in Import";
+        QValueList<KoFilterEntry> filters = KoFilterEntry::query( constr );
+        if ( !filters.isEmpty() )
         {
-            // Still no match. Either the mimetype itself is unknown, or we have no service for it.
-            // Help the user debugging stuff by providing some more diagnostics
-            if ( KServiceType::serviceType( mimetype ) == 0L )
+          kdDebug(30003) << "Found at least one filter which can handle '" << mimetype << "'" << endl;
+          // Note: I decided *not* to recurse here as I'm not entirely sure that
+          // this recursion would stop in every single case
+          for ( unsigned int i=0; i < filters.count(); ++i )
+          {
+            QStringList exp = filters[i].export_;
+            QStringList::ConstIterator it=exp.begin();
+            while(it!=exp.end())
             {
-                kdError(30003) << "Unknown KOffice MimeType " << mimetype << "." << endl;
-                kdError(30003) << "Check your installation (for instance, run 'kde-config --path mime' and check the result)." << endl;
-            } else
-            {
-                kdError(30003) << "Found no KOffice part able to handle " << mimetype << "!" << endl;
-                kdError(30003) << "Check your installation (does the desktop file have X-KDE-NativeMimeType and KOfficePart, did you install KOffice in a different prefix than KDE, without adding the prefix to /etc/kderc ?)" << endl;
+              constr = QString::fromLatin1( "[X-KDE-NativeMimeType] == '%1'" ).arg( *it );
+              vec = query( constr );
+              // Found something useful
+              if ( !vec.isEmpty() )
+                return vec[0];
             }
-            return KoDocumentEntry();
+          }
         }
+        else
+        {
+          kdError(30003) << "Found no KOffice part able to handle " << mimetype << "!" << endl;
+          kdError(30003) << "Check your installation (does the desktop file have X-KDE-NativeMimeType and KOfficePart, did you install KOffice in a different prefix than KDE, without adding the prefix to /etc/kderc ?)" << endl;
+        }
+      }
+      return KoDocumentEntry();
     }
+  }
 
-    return vec[0];
+  return vec[0];
 }
 
 QValueList<KoDocumentEntry> KoDocumentEntry::query( const QString & _constr )
@@ -120,8 +150,8 @@ QValueList<KoDocumentEntry> KoDocumentEntry::query( const QString & _constr )
     kdWarning(30003) << "KoDocumentEntry::query " << _constr << " got " << max << " offers!" << endl;
   for( unsigned int i = 0; i < max; i++ )
   {
-    kdDebug(3003) << "   desktopEntryPath=" << (*it)->desktopEntryPath()
-                  << "   library=" << (*it)->library() << endl;
+    kdDebug(30003) << "   desktopEntryPath=" << (*it)->desktopEntryPath()
+                   << "   library=" << (*it)->library() << endl;
     // Parse the service
     KoDocumentEntry d( *it );
 
@@ -150,7 +180,7 @@ KoFilterEntry::KoFilterEntry( KService::Ptr service )
 
 QValueList<KoFilterEntry> KoFilterEntry::query( const QString & _constr )
 {
-    kdDebug(30003) << "KoFilterEntry::query( " << _constr << ")" << endl;
+  kdDebug(30003) << "KoFilterEntry::query( " << _constr << ")" << endl;
   QValueList<KoFilterEntry> lst;
 
   KTrader::OfferList offers = KTrader::self()->query( "KOfficeFilter", _constr );
@@ -160,8 +190,8 @@ QValueList<KoFilterEntry> KoFilterEntry::query( const QString & _constr )
   kdDebug(30003) << "Query returned " << max << " offers" << endl;
   for( unsigned int i = 0; i < max; i++ )
   {
-    kdDebug(3003) << "   desktopEntryPath=" << (*it)->desktopEntryPath()
-                  << "   library=" << (*it)->library() << endl;
+    kdDebug(30003) << "   desktopEntryPath=" << (*it)->desktopEntryPath()
+                   << "   library=" << (*it)->library() << endl;
     KoFilterEntry f( *it );
     // Append converted offer
     lst.append( f );
@@ -188,4 +218,3 @@ KoFilter* KoFilterEntry::createFilter( QObject* parent, const char* name )
 
     return (KoFilter*)obj;
 }
-
