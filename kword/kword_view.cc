@@ -520,13 +520,13 @@ void KWordView::setupActions()
 
     // ---------------------- formula toolbar actions
 
-    actionFormulaPower = new KAction( i18n( "Power" ), KWBarIcon( "index2" ), 0,
+    actionFormulaPower = new KAction( i18n( "Power" ), KWBarIcon( "rsup" ), 0,
 				      this, SLOT( formulaPower() ),
 				      actionCollection(), "formula_power" );
-    actionFormulaSubscript = new KAction( i18n( "Subscript" ), KWBarIcon( "index3" ), 0,
+    actionFormulaSubscript = new KAction( i18n( "Subscript" ), KWBarIcon("rsub" ), 0,
 				      this, SLOT( formulaSubscript() ),
 				      actionCollection(), "formula_subscript" );
-    actionFormulaParentheses = new KAction( i18n( "Parentheses" ), KWBarIcon( "bra" ), 0,
+    actionFormulaParentheses = new KAction( i18n( "Parentheses" ), KWBarIcon("paren" ), 0,
 				      this, SLOT( formulaParentheses() ),
 				      actionCollection(), "formula_parentheses" );
     actionFormulaAbs = new KAction( i18n( "Absolute Value" ), KWBarIcon( "abs" ), 0,
@@ -538,22 +538,22 @@ void KWordView::setupActions()
     actionFormulaFraction = new KAction( i18n( "Fraction" ), KWBarIcon( "frac" ), 0,
 					 this, SLOT( formulaFraction() ),
 				      actionCollection(), "formula_fraction" );
-    actionFormulaRoot = new KAction( i18n( "Root" ), KWBarIcon( "root" ), 0,
+    actionFormulaRoot = new KAction( i18n( "Root" ), KWBarIcon( "sqrt" ), 0,
 					 this, SLOT( formulaRoot() ),
 				     actionCollection(), "formula_root" );
-    actionFormulaIntegral = new KAction( i18n( "Integral" ), KWBarIcon( "integral" ), 0,
+    actionFormulaIntegral = new KAction( i18n( "Integral" ), KWBarIcon( "int" ), 0,
 					 this, SLOT( formulaIntegral() ),
 				      actionCollection(), "formula_integral" );
     actionFormulaMatrix = new KAction( i18n( "Matrix" ), KWBarIcon( "matrix" ), 0,
 					 this, SLOT( formulaMatrix() ),
 				      actionCollection(), "formula_matrix" );
-    actionFormulaLeftSuper = new KAction( i18n( "Left Superscript" ), KWBarIcon( "index0" ), 0,
+    actionFormulaLeftSuper = new KAction( i18n( "Left Superscript" ), KWBarIcon("lsup" ), 0,
 					 this, SLOT( formulaLeftSuper() ),
 				      actionCollection(), "formula_leftsup" );
-    actionFormulaLeftSub = new KAction( i18n( "Left Subscript" ), KWBarIcon( "index1" ), 0,
+    actionFormulaLeftSub = new KAction( i18n( "Left Subscript" ), KWBarIcon("lsub" ), 0,
 					 this, SLOT( formulaLeftSub() ),
 				      actionCollection(), "formula_leftsub" );
-    actionFormulaProduct = new KAction( i18n( "Formula Product" ), KWBarIcon( "product" ), 0,
+    actionFormulaProduct = new KAction( i18n( "Formula Product" ), KWBarIcon( "prod" ), 0,
 					 this, SLOT( formulaProduct() ),
 				      actionCollection(), "formula_product" );
     actionFormulaSum = new KAction( i18n( "Formula Sum" ), KWBarIcon( "sum" ), 0,
