@@ -194,14 +194,18 @@ void KWFrameDia::init() {
     else if ( fs && (fs->isHeaderOrFooter() || fs->isFootEndNote()) )
     {
         setupTab1();
-        setupTab2();
+        if ( !fs->isMainFrameset() && !fs->isHeaderOrFooter() && !fs->isFootEndNote())
+            setupTab2();
         setupTab4();
         setupTab5();
     }
     else if(frameType == FT_TEXT)
     {
         setupTab1();
-        setupTab2();
+        if ( fs && !fs->isMainFrameset() && !fs->isHeaderOrFooter() && !fs->isFootEndNote())
+            setupTab2();
+        else if ( !fs )
+            setupTab2();
         setupTab3();
         setupTab4();
         setupTab5();
