@@ -19,7 +19,7 @@ class VTranslate : public QWidget
 {
     Q_OBJECT
 public:
-    VTranslate(QWidget *parent=0,const char *name=0);
+    VTranslate(QWidget *parent=0, const char *name=0);
     ~VTranslate();
 public slots:
     void setUnits( const QString& units ); //sets the unit labels do display correct text (mm, cm, pixels etc);

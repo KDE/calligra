@@ -3,7 +3,7 @@
    Copyright (C) 2002, The Karbon Developers
 */
 
-/* vtranslate.cpp */
+/* vtranslate.cc */
 #include <qcheckbox.h>
 #include <qlabel.h>
 #include <qlayout.h>
@@ -14,32 +14,31 @@
 
 #include "vtranslate.h"
 
-VTranslate::VTranslate(QWidget *parent,const char *name)
-    : QWidget(parent,name)
+VTranslate::VTranslate(QWidget *parent, const char *name)
+    : QWidget(parent, name)
 {
     setCaption(i18n("Translate"));
-    //setFixedSize(75,250);
     QVBoxLayout *mainlayout = new QVBoxLayout(this, 7);
     mainlayout->addSpacing(5);
 
-    QGridLayout *inputlayout = new QGridLayout(this,5,3);
+    QGridLayout *inputlayout = new QGridLayout(this, 5, 3);
     mainlayout->addLayout(inputlayout);
     labelx = new QLabel(i18n("X:"), this);
-    inputlayout->addWidget(labelx,0,0);
+    inputlayout->addWidget(labelx, 0, 0);
     labely = new QLabel(i18n("Y:"), this);
-    inputlayout->addWidget(labely,1,0);
-    inputlayout->addColSpacing(1,1);
-    inputlayout->addColSpacing(3,5);
+    inputlayout->addWidget(labely, 1, 0);
+    inputlayout->addColSpacing(1, 1);
+    inputlayout->addColSpacing(3, 5);
     inputx = new KDoubleNumInput(0.00, this);
     inputx->setRange(-10000.00, 10000.00, 1.00, false); //range is just for example - for now :-)
-    inputlayout->addWidget(inputx,0,2);
+    inputlayout->addWidget(inputx, 0, 2);
     inputy = new KDoubleNumInput(0.00, this);
     inputy->setRange(-10000.00, 10000.00, 1.00, false);
-    inputlayout->addWidget(inputy,1,2);
+    inputlayout->addWidget(inputy, 1, 2);
     unit1 = new QLabel("", this);
-    inputlayout->addWidget(unit1,0,4);
+    inputlayout->addWidget(unit1, 0, 4);
     unit2 = new QLabel("", this);
-    inputlayout->addWidget(unit2,1,4);
+    inputlayout->addWidget(unit2, 1, 4);
     mainlayout->addSpacing(5);
     positionbox = new QCheckBox(i18n("Relative &Position"), this);
     mainlayout->addWidget(positionbox);
@@ -51,7 +50,7 @@ VTranslate::VTranslate(QWidget *parent,const char *name)
     mainlayout->addWidget(apbutton);
 
     mainlayout->activate();
-    
+
     setFixedSize(baseSize()); //Set the size tp fixed values
 }
 
