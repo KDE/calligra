@@ -20,6 +20,7 @@
 #include "kspread_condition.h"
 #include "kspread_cell.h"
 #include "kspread_sheet.h"
+#include "kspread_util.h"
 #include <qdom.h>
 #include <kdebug.h>
 #include <float.h>
@@ -146,7 +147,7 @@ QDomElement KSpreadConditions::saveConditions(QDomDocument& doc) const
     child.setAttribute("val1", condition.val1);
     child.setAttribute("val2", condition.val2);
     child.setAttribute("color", condition.colorcond.name());
-    child.appendChild( cell->createElement( "font", condition.fontcond, doc ));
+    child.appendChild( util_createElement( "font", condition.fontcond, doc ));
 
     conditions.appendChild(child);
 
@@ -195,7 +196,7 @@ void KSpreadConditions::loadConditions(const QDomElement &element)
     QDomElement font = conditionElement.namedItem( "font" ).toElement();
     if ( !font.isNull() )
     {
-      newCondition.fontcond = cell->toFont(font);
+      newCondition.fontcond = util_toFont(font);
     }
 
     if (ok)

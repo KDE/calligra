@@ -27,8 +27,12 @@
 
 class KSpreadMap;
 class KSpreadSheet;
-//class KSpreadCell;
 class KLocale;
+
+class QFont;
+class QPen;
+class QDomElement;
+class QDomDocument;
 
 struct KSpreadPoint
 {
@@ -175,5 +179,11 @@ bool util_isRowSelected(const QRect &selection);
 bool util_validateTableName(QString name);
 QDateTime util_readTime( const QString & intstr, KLocale * locale, bool withSeconds, 
                          bool * ok, bool & duration );
+
+QDomElement util_createElement( const QString & tagName, const QFont & font, QDomDocument & doc );
+QDomElement util_createElement( const QString & tagname, const QPen & pen, QDomDocument & doc );
+QFont       util_toFont( QDomElement & element );
+QPen        util_toPen( QDomElement & element );
+
 
 #endif

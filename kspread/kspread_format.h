@@ -388,11 +388,6 @@ protected:
      */
     virtual bool isDefault() const;
 
-    QDomElement createElement( const QString &tagName, const QFont &font, QDomDocument &doc ) const;
-    QDomElement createElement( const QString& tagname, const QPen& pen, QDomDocument &doc ) const;
-    QFont toFont(QDomElement &element) const;
-    QPen toPen(QDomElement &element) const;
-
     /**
      * Format of the content, e.g. #.##0.00, dd/mmm/yyyy,...
      */

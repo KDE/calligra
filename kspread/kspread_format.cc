@@ -231,85 +231,6 @@ void KSpreadFormat::setNoFallBackProperties( Properties p )
 //
 /////////////
 
-QDomElement KSpreadFormat::createElement( const QString &tagName, const QFont &font, QDomDocument &doc ) const {
-
-    QDomElement e = doc.createElement( tagName );
-
-    e.setAttribute( "family", font.family() );
-    e.setAttribute( "size", font.pointSize() );
-    e.setAttribute( "weight", font.weight() );
-    if ( font.bold() )
-	e.setAttribute( "bold", "yes" );
-    if ( font.italic() )
-	e.setAttribute( "italic", "yes" );
-    if ( font.underline() )
-    	e.setAttribute( "underline", "yes" );
-    if ( font.strikeOut() )
-    	e.setAttribute( "strikeout", "yes" );
-    //e.setAttribute( "charset", KGlobal::charsets()->name( font ) );
-
-    return e;
-}
-
-QDomElement KSpreadFormat::createElement( const QString& tagname, const QPen& pen, QDomDocument &doc ) const
-{
-    QDomElement e=doc.createElement( tagname );
-    e.setAttribute( "color", pen.color().name() );
-    e.setAttribute( "style", (int)pen.style() );
-    e.setAttribute( "width", (int)pen.width() );
-    return e;
-}
-
-QFont KSpreadFormat::toFont(QDomElement &element) const
-{
-    QFont f;
-    f.setFamily( element.attribute( "family" ) );
-
-    bool ok;
-    f.setPointSize( element.attribute("size").toInt( &ok ) );
-    if ( !ok ) return QFont();
-
-    f.setWeight( element.attribute("weight").toInt( &ok ) );
-    if ( !ok ) return QFont();
-
-    if ( element.hasAttribute( "italic" ) && element.attribute("italic") == "yes" )
-	f.setItalic( TRUE );
-
-    if ( element.hasAttribute( "bold" ) && element.attribute("bold") == "yes" )
-	f.setBold( TRUE );
-
-    if ( element.hasAttribute( "underline" ) && element.attribute("underline") == "yes" )
-	f.setUnderline( TRUE );
-
-    if ( element.hasAttribute( "strikeout" ) && element.attribute("strikeout") == "yes" )
-	f.setStrikeOut( TRUE );
-
-/* Uncomment when charset is added to kspread_dlg_layout
-   + save a document-global charset
-    if ( element.hasAttribute( "charset" ) )
-	KGlobal::charsets()->setQFont( f, element.attribute("charset") );
-    else */
-    // ######## Not needed anymore in 3.0?
-    //KGlobal::charsets()->setQFont( f, KGlobal::locale()->charset() );
-
-    return f;
-}
-
-QPen KSpreadFormat::toPen(QDomElement &element) const
-{
-    bool ok;
-    QPen p;
-    p.setStyle( (Qt::PenStyle)element.attribute("style").toInt( &ok ) );
-    if ( !ok ) return QPen();
-
-    p.setWidth( element.attribute("width").toInt( &ok ) );
-    if ( !ok ) return QPen();
-
-    p.setColor( QColor( element.attribute("color") ) );
-
-    return p;
-}
-
 QDomElement KSpreadFormat::saveFormat( QDomDocument& doc,int _col, int _row, bool force ) const
 {
     QDomElement format = doc.createElement( "format" );
@@ -381,12 +302,12 @@ QDomElement KSpreadFormat::saveFormat( QDomDocument& doc,int _col, int _row, boo
           || force ) && isHideFormula( _col, _row ) )
 	format.setAttribute( "hideformula", "yes" );
     if ( hasProperty( PFont ) || hasNoFallBackProperties( PFont ) || force )
-	format.appendChild( createElement( "font", textFont( _col, _row ), doc ) );
+	format.appendChild( util_createElement( "font", textFont( _col, _row ), doc ) );
     if ( ( hasProperty( PTextPen )
            || hasNoFallBackProperties( PTextPen )
            || force )
          && textPen(_col, _row ).color().isValid() )
-	format.appendChild( createElement( "pen", textPen(_col, _row ), doc ) );
+	format.appendChild( util_createElement( "pen", textPen(_col, _row ), doc ) );
     if ( hasProperty( PBackgroundBrush )
          || hasNoFallBackProperties( PBackgroundBrush )
          || force )
@@ -397,37 +318,37 @@ QDomElement KSpreadFormat::saveFormat( QDomDocument& doc,int _col, int _row, boo
     if ( hasProperty( PLeftBorder ) || hasNoFallBackProperties( PLeftBorder ) || force )
     {
 	QDomElement left = doc.createElement( "left-border" );
-	left.appendChild( createElement( "pen", leftBorderPen(_col, _row), doc ) );
+	left.appendChild( util_createElement( "pen", leftBorderPen(_col, _row), doc ) );
 	format.appendChild( left );
     }
     if ( hasProperty( PTopBorder ) || hasNoFallBackProperties( PTopBorder ) || force )
     {
 	QDomElement top = doc.createElement( "top-border" );
-	top.appendChild( createElement( "pen", topBorderPen(_col, _row), doc ) );
+	top.appendChild( util_createElement( "pen", topBorderPen(_col, _row), doc ) );
 	format.appendChild( top );
     }
     if ( hasProperty( PRightBorder ) || hasNoFallBackProperties( PRightBorder ) || force )
     {
 	QDomElement right = doc.createElement( "right-border" );
-	right.appendChild( createElement( "pen", rightBorderPen(_col, _row), doc ) );
+	right.appendChild( util_createElement( "pen", rightBorderPen(_col, _row), doc ) );
 	format.appendChild( right );
     }
     if ( hasProperty( PBottomBorder ) || hasNoFallBackProperties( PBottomBorder ) || force )
     {
 	QDomElement bottom = doc.createElement( "bottom-border" );
-	bottom.appendChild( createElement( "pen", bottomBorderPen(_col, _row), doc ) );
+	bottom.appendChild( util_createElement( "pen", bottomBorderPen(_col, _row), doc ) );
 	format.appendChild( bottom );
     }
     if ( hasProperty( PFallDiagonal ) || hasNoFallBackProperties( PFallDiagonal ) || force )
     {
 	QDomElement fallDiagonal  = doc.createElement( "fall-diagonal" );
-	fallDiagonal.appendChild( createElement( "pen", fallDiagonalPen(_col, _row), doc ) );
+	fallDiagonal.appendChild( util_createElement( "pen", fallDiagonalPen(_col, _row), doc ) );
 	format.appendChild( fallDiagonal );
     }
     if ( hasProperty( PGoUpDiagonal ) || hasNoFallBackProperties( PGoUpDiagonal ) || force )
     {
 	QDomElement goUpDiagonal = doc.createElement( "up-diagonal" );
-	goUpDiagonal.appendChild( createElement( "pen", goUpDiagonalPen( _col, _row ), doc ) );
+	goUpDiagonal.appendChild( util_createElement( "pen", goUpDiagonalPen( _col, _row ), doc ) );
 	format.appendChild( goUpDiagonal );
     }
     return format;
@@ -502,12 +423,12 @@ QDomElement KSpreadFormat::saveFormat( QDomDocument& doc, bool force ) const
           || force ) && testFlag( Flag_HideFormula ) )
 	format.setAttribute( "hideformula", "yes" );
     if ( hasProperty( PFont ) || hasNoFallBackProperties( PFont ) || force )
-	format.appendChild( createElement( "font", m_textFont, doc ) );
+	format.appendChild( util_createElement( "font", m_textFont, doc ) );
     if ( ( hasProperty( PTextPen )
            || hasNoFallBackProperties( PTextPen )
            || force )
          && m_textPen.color().isValid() )
-	format.appendChild( createElement( "pen", m_textPen, doc ) );
+	format.appendChild( util_createElement( "pen", m_textPen, doc ) );
     if ( hasProperty( PBackgroundBrush )
          || hasNoFallBackProperties( PBackgroundBrush )
          || force )
@@ -518,37 +439,37 @@ QDomElement KSpreadFormat::saveFormat( QDomDocument& doc, bool force ) const
     if ( hasProperty( PLeftBorder ) || hasNoFallBackProperties( PLeftBorder ) || force )
     {
 	QDomElement left = doc.createElement( "left-border" );
-	left.appendChild( createElement( "pen", m_leftBorderPen, doc ) );
+	left.appendChild( util_createElement( "pen", m_leftBorderPen, doc ) );
 	format.appendChild( left );
     }
     if ( hasProperty( PTopBorder ) || hasNoFallBackProperties( PTopBorder ) || force )
     {
 	QDomElement top = doc.createElement( "top-border" );
-	top.appendChild( createElement( "pen", m_topBorderPen, doc ) );
+	top.appendChild( util_createElement( "pen", m_topBorderPen, doc ) );
 	format.appendChild( top );
     }
     if ( hasProperty( PRightBorder ) || hasNoFallBackProperties( PRightBorder ) || force )
     {
 	QDomElement right = doc.createElement( "right-border" );
-	right.appendChild( createElement( "pen", m_rightBorderPen, doc ) );
+	right.appendChild( util_createElement( "pen", m_rightBorderPen, doc ) );
 	format.appendChild( right );
     }
     if ( hasProperty( PBottomBorder ) || hasNoFallBackProperties( PBottomBorder ) || force )
     {
 	QDomElement bottom = doc.createElement( "bottom-border" );
-	bottom.appendChild( createElement( "pen", m_bottomBorderPen, doc ) );
+	bottom.appendChild( util_createElement( "pen", m_bottomBorderPen, doc ) );
 	format.appendChild( bottom );
     }
     if ( hasProperty( PFallDiagonal ) || hasNoFallBackProperties( PFallDiagonal ) || force )
     {
 	QDomElement fallDiagonal  = doc.createElement( "fall-diagonal" );
-	fallDiagonal.appendChild( createElement( "pen", m_fallDiagonalPen, doc ) );
+	fallDiagonal.appendChild( util_createElement( "pen", m_fallDiagonalPen, doc ) );
 	format.appendChild( fallDiagonal );
     }
     if ( hasProperty( PGoUpDiagonal ) || hasNoFallBackProperties( PGoUpDiagonal ) || force )
     {
 	QDomElement goUpDiagonal = doc.createElement( "up-diagonal" );
-	goUpDiagonal.appendChild( createElement( "pen", m_goUpDiagonalPen, doc ) );
+	goUpDiagonal.appendChild( util_createElement( "pen", m_goUpDiagonalPen, doc ) );
 	format.appendChild( goUpDiagonal );
     }
     return format;
@@ -691,11 +612,11 @@ bool KSpreadFormat::loadFormat( const QDomElement& f, PasteMode pm )
 
     QDomElement pen = f.namedItem( "pen" ).toElement();
     if ( !pen.isNull() )
-        setTextPen( toPen(pen) );
+        setTextPen( util_toPen(pen) );
 
     QDomElement font = f.namedItem( "font" ).toElement();
     if ( !font.isNull() )
-        setTextFont( toFont(font) );
+        setTextFont( util_toFont(font) );
 
     if ((pm != NoBorder) && (pm != Text) && (pm != Comment))
     {
@@ -704,7 +625,7 @@ bool KSpreadFormat::loadFormat( const QDomElement& f, PasteMode pm )
         {
             QDomElement pen = left.namedItem( "pen" ).toElement();
             if ( !pen.isNull() )
-                setLeftBorderPen( toPen(pen) );
+                setLeftBorderPen( util_toPen(pen) );
         }
 
         QDomElement top = f.namedItem( "top-border" ).toElement();
@@ -712,7 +633,7 @@ bool KSpreadFormat::loadFormat( const QDomElement& f, PasteMode pm )
         {
             QDomElement pen = top.namedItem( "pen" ).toElement();
             if ( !pen.isNull() )
-                setTopBorderPen( toPen(pen) );
+                setTopBorderPen( util_toPen(pen) );
         }
 
         QDomElement right = f.namedItem( "right-border" ).toElement();
@@ -720,7 +641,7 @@ bool KSpreadFormat::loadFormat( const QDomElement& f, PasteMode pm )
         {
             QDomElement pen = right.namedItem( "pen" ).toElement();
             if ( !pen.isNull() )
-                setRightBorderPen( toPen(pen) );
+                setRightBorderPen( util_toPen(pen) );
         }
 
         QDomElement bottom = f.namedItem( "bottom-border" ).toElement();
@@ -728,7 +649,7 @@ bool KSpreadFormat::loadFormat( const QDomElement& f, PasteMode pm )
         {
             QDomElement pen = bottom.namedItem( "pen" ).toElement();
             if ( !pen.isNull() )
-                setBottomBorderPen( toPen(pen) );
+                setBottomBorderPen( util_toPen(pen) );
         }
 
         QDomElement fallDiagonal = f.namedItem( "fall-diagonal" ).toElement();
@@ -736,7 +657,7 @@ bool KSpreadFormat::loadFormat( const QDomElement& f, PasteMode pm )
         {
             QDomElement pen = fallDiagonal.namedItem( "pen" ).toElement();
             if ( !pen.isNull() )
-                setFallDiagonalPen( toPen(pen) );
+                setFallDiagonalPen( util_toPen(pen) );
         }
 
         QDomElement goUpDiagonal = f.namedItem( "up-diagonal" ).toElement();
@@ -744,7 +665,7 @@ bool KSpreadFormat::loadFormat( const QDomElement& f, PasteMode pm )
         {
             QDomElement pen = goUpDiagonal.namedItem( "pen" ).toElement();
             if ( !pen.isNull() )
-                setGoUpDiagonalPen( toPen(pen) );
+                setGoUpDiagonalPen( util_toPen(pen) );
         }
     }
 

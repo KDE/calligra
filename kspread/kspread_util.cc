@@ -611,14 +611,98 @@ QString util_rangeName(KSpreadSheet * _table, const QRect &_area)
     return _table->tableName() + "!" + util_rangeName(_area);
 }
 
+QDomElement util_createElement( const QString & tagName, const QFont & font, QDomDocument & doc )
+{
+  QDomElement e( doc.createElement( tagName ) );
+  
+  e.setAttribute( "family", font.family() );
+  e.setAttribute( "size", font.pointSize() );
+  e.setAttribute( "weight", font.weight() );
+  if ( font.bold() )
+    e.setAttribute( "bold", "yes" );
+  if ( font.italic() )
+    e.setAttribute( "italic", "yes" );
+  if ( font.underline() )
+    e.setAttribute( "underline", "yes" );
+  if ( font.strikeOut() )
+    e.setAttribute( "strikeout", "yes" );
+  //e.setAttribute( "charset", KGlobal::charsets()->name( font ) );
+
+  return e;
+}
+
+QDomElement util_createElement( const QString & tagname, const QPen & pen, QDomDocument & doc )
+{
+  QDomElement e( doc.createElement( tagname ) );
+  e.setAttribute( "color", pen.color().name() );
+  e.setAttribute( "style", (int)pen.style() );
+  e.setAttribute( "width", (int)pen.width() );
+  return e;
+}
+
+QFont util_toFont( QDomElement & element )
+{
+  QFont f;
+  f.setFamily( element.attribute( "family" ) );
+  
+  bool ok;
+  f.setPointSize( element.attribute("size").toInt( &ok ) );
+  if ( !ok ) 
+    return QFont();
+  
+  f.setWeight( element.attribute("weight").toInt( &ok ) );
+  if ( !ok ) 
+    return QFont();
+
+  if ( element.hasAttribute( "italic" ) && element.attribute("italic") == "yes" )
+    f.setItalic( TRUE );
+
+  if ( element.hasAttribute( "bold" ) && element.attribute("bold") == "yes" )
+    f.setBold( TRUE );
+  
+  if ( element.hasAttribute( "underline" ) && element.attribute("underline") == "yes" )
+    f.setUnderline( TRUE );
+  
+  if ( element.hasAttribute( "strikeout" ) && element.attribute("strikeout") == "yes" )
+    f.setStrikeOut( TRUE );
+
+  /* Uncomment when charset is added to kspread_dlg_layout
+     + save a document-global charset
+     if ( element.hasAttribute( "charset" ) )
+       KGlobal::charsets()->setQFont( f, element.attribute("charset") );
+      else 
+  */
+  // ######## Not needed anymore in 3.0?
+  //KGlobal::charsets()->setQFont( f, KGlobal::locale()->charset() );
+
+  return f;
+}
+
+QPen util_toPen( QDomElement & element )
+{
+  bool ok;
+  QPen p;
+
+  p.setStyle( (Qt::PenStyle)element.attribute("style").toInt( &ok ) );
+  if ( !ok ) 
+    return QPen();
+
+  p.setWidth( element.attribute("width").toInt( &ok ) );
+  if ( !ok ) 
+    return QPen();
+
+  p.setColor( QColor( element.attribute("color") ) );
+  
+  return p;
+}
+
 KSpreadPoint::KSpreadPoint(const QString & _str)
 {
     table = 0;
     init(_str);
 }
 
-void
- KSpreadPoint::init(const QString & _str)
+void KSpreadPoint::init(const QString & _str)
 {
     pos.setX(-1);
 
