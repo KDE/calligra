@@ -2100,7 +2100,7 @@ void KWView::adjustZOrderOfSelectedFrames(moveFrameType moveType) {
     QString actionName;
     for (QPtrListIterator<KWFrame> fIt( frames ); fIt.current() ; ++fIt ) {
         KWFrame* frame = fIt.current();
-        int newZOrder=0;
+        int newZOrder;
         switch(moveType) {
             case RaiseFrame:
                 newZOrder=raiseFrame(frames,frame);
