@@ -29,7 +29,7 @@
 #include <koDocument.h>
 #include <koView.h>
 #include <koPrintExt.h>
-#include <koStore.h>
+#include <koStoreIf.h>
 
 #include "KIllustrator.h"
 #include "GDocument.h"
