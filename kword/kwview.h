@@ -58,6 +58,7 @@ class KoPartSelectAction;
 class KCharSelectDia;
 class KWTextFrameset;
 class KMacroCommand;
+class KFileDialog;
 
 namespace Qt3 {
 class QTextFormat;
@@ -280,6 +281,10 @@ public slots:
     void slotSpecialCharDlgClosed();
 
     void refreshCustomMenu();
+
+    void changePicture();
+    void changeClipart();
+
 protected:
     void addVariableActions( int type, const QStringList & texts,
                              KActionMenu * parentMenu, const QString & menuText );
@@ -306,6 +311,7 @@ protected:
     void tableSplitCells(int col, int row);
 
     void startKSpell();
+    QString selectPicture( KFileDialog & fd );
 
 private:
     KWDocument *m_doc;
@@ -413,6 +419,9 @@ private:
     KAction *actionEditPersonnalExpr;
 
     KAction *actionConfigure;
+
+    KAction *actionChangePicture;
+    KAction *actionChangeClipart;
 
     KCharSelectDia *m_specialCharDlg;
     KWGUI *m_gui;

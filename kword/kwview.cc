@@ -95,6 +95,9 @@
 #include <kparts/event.h>
 #include <kformuladocument.h>
 
+#include <kimageio.h>
+#include <kio/netaccess.h>
+
 #include <stdlib.h>
 
 #include "preview.h"
@@ -626,8 +629,18 @@ void KWView::setupActions()
                                      this, SLOT( changeCaseOfText() ),
                                      actionCollection(), "change_case" );
 
+
     //------------------------ Settings menu
     KStdAction::preferences(this, SLOT(configure()), actionCollection(), "configure" );
+
+    //------------------------ Menu frameSet
+    actionChangePicture=new KAction( i18n( "Change picture..." ), 0,
+                                     this, SLOT( changePicture() ),
+                                     actionCollection(), "change_picture" );
+
+    actionChangeClipart=new KAction( i18n( "Change clipart..." ), 0,
+                                     this, SLOT( changeClipart() ),
+                                     actionCollection(), "change_clipart" );
 }
 
 
@@ -3070,7 +3083,22 @@ void KWView::openPopupMenuEditFrame( const QPoint & _point )
     updatePopupMenuChangeAction();
     KWTableFrameSet *table = m_gui->canvasWidget()->getCurrentTable();
     if(!table)
+    {
+        unplugActionList( "picture_action" );
+        QList<KAction> actionList= QList<KAction>();
+
+        int nbFrame=m_doc->getSelectedFrames().count();
+        if(nbFrame ==1)
+        {
+            KWFrame *frame=m_doc->getFirstSelectedFrame();
+            if(frame->getFrameSet()->type()==FT_PICTURE)
+                actionList.append(actionChangePicture);
+            else if(frame->getFrameSet()->type()==FT_CLIPART)
+                actionList.append(actionChangeClipart);
+        }
+        plugActionList( "picture_action", actionList );
         ((QPopupMenu*)factory()->container("frame_popup",this))->popup(_point);
+    }
     else
         ((QPopupMenu*)factory()->container("frame_popup_table",this))->popup(_point);
 }
@@ -3440,6 +3468,50 @@ int KWView::canvasYOffset() const
 void KWView::canvasAddChild( KoViewChild *child )
 {
     m_gui->canvasWidget()->addChild( child->frame() );
+}
+
+void KWView::changePicture()
+{
+    KFileDialog fd( QString::null, KImageIO::pattern(KImageIO::Writing), 0, 0, TRUE );
+    fd.setCaption(i18n("Change Picture"));
+    QString file = selectPicture( fd );
+    if ( !file.isEmpty() )
+    {
+        KWFrame * frame = m_doc->getFirstSelectedFrame();
+        KWPictureFrameSet *frameset = static_cast<KWPictureFrameSet *>(frame->getFrameSet());
+        frameset->loadImage( file, m_doc->zoomRect( *frame ).size() );
+        m_doc->frameChanged( frame );
+    }
+}
+
+void KWView::changeClipart()
+{
+    KFileDialog fd( QString::null, i18n( "*.wmf|Windows Metafiles (*.wmf)" ), 0, 0, true );
+    fd.setCaption(i18n("Change Clipart"));
+    QString file = selectPicture( fd );
+    if ( !file.isEmpty() )
+    {
+        KWFrame * frame = m_doc->getFirstSelectedFrame();
+
+        KWClipartFrameSet *frameset = static_cast<KWClipartFrameSet *>(frame->getFrameSet());
+        frameset->loadClipart( file );
+        m_doc->frameChanged( frame );
+    }
+}
+
+QString KWView::selectPicture( KFileDialog & fd )
+{
+    KURL url;
+    if ( fd.exec() == QDialog::Accepted )
+        url = fd.selectedURL();
+
+    if( url.isEmpty() )
+      return QString::null;
+
+    QString chosen = QString::null;
+    if (!KIO::NetAccess::download( url, chosen ))
+        return QString::null;
+    return chosen;
 }
 
 /******************************************************************/
