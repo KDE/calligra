@@ -48,88 +48,116 @@ VRoundCornersCmd::visitVPath( VPath& path )
 	// Skip "begin".
 	path.next();
 
-	// Description of the algorithm:
-	// -----------------------------
+	// This algorithm is worked out by <kudling@kde.org> to produce similar results as
+	// the "round corners" algorithms found in other applications. Neither code nor
+	// algorithms from any 3rd party is used though.
 	//
-	// Without restricting generality, let's assume the path is closed and contains segments
-	// which build a rectangle.
-	//
-	//           3
-	//    X------------X
-	//    |            |
-	//   4|            |2      (Numbers mean the segments' order
-	//    |            |        in the path. We neglect the "begin"
-	//    X------------X        segment here.)
-	//           1
-	//
-	// We want to round the corners with "radius" m_radius. Note: the algorithm
-	// doesn't really produce circular arcs, but that's ok since the algorithm
-	// achieves nice looking results and can be applied to all kind of paths.
+	// We want to replace all corners with round corners having "radius" m_radius.
+	// The algorithm doesn't really produce circular arcs, but that's ok since
+	// the algorithm achieves nice looking results and is generic enough to be applied
+	// to all kind of paths.
 	// Note also, that this algorithm doesn't touch curve/curve joins, since they
 	// are usually smooth enough.
 	//
-	// We'll manipulate the input path for bookkeeping purposes and construct a new path in 
-	// parallel. We finally replace the input path with the new path.
+	// We'll manipulate the input path for bookkeeping purposes and construct a new
+	// temporary path in parallel. We finally replace the input path with the new path.
+	//
+	//
+	// Without restricting generality, let's assume the input path is closed and
+	// contains segments which build a rectangle.
+	//
+	//           2
+	//    O------------O
+	//    |            |        Numbers reflect the segments' order
+	//   3|            |1       in the path. We neglect the "begin"
+	//    |            |        segment here.
+	//    O------------O
+	//           0
 	//
 	// There are three unique steps to process. The second step is processed
 	// many times in a loop.
 	//
 	// 1) Begin
 	//    -----
-	//    Split the first segment of the first path (called "path[1]" here)
-	//    at parameter t and move newPath to this new knot. While
+	//    Split the first segment of the input path (called "path[0]" here)
+	//    at parameter t
 	//
-	//        t = path[1]->param( m_radius )
+	//        t = path[0]->param( m_radius )
 	//
-	//    as long as path[1] isnt too small (smaller than 2 * m_radius).
-	//    In this case we set t = 0.5.
+	//    and move newPath to this new knot. If current segment is too small
+	//    (smaller than 2 * m_radius), we always set t = 0.5 here and in the further
+	//    steps as well.
 	//
-	//    path:          newPath:
+	//    path:                 new path:
 	//
-	//           3
-	//    X------------X
+	//           2
+	//    O------------O
 	//    |            |
-	//   4|            |2
+	//  3 |            | 1                    The current segment is marked with "#"s.
 	//    |            |
-	//    X--X---------X        ...X
-	//           1                     1
+	//    O##O#########O        ...O
+	//           0                     0
 	//
 	// 2) Loop
 	//    ----
-	//    This step is repeated for each following segment.
-	//    Split the current segment path[n] at parameter t
-	//    and add the first subsegment to newPath. While
+	//    The loop step is iterated over all segments. After each appliance the index n
+	//    is incremented and the loop step is reapplied until no untouched segment is left.
+	//
+	//    Split the current segment path[n] of the input path at parameter t
 	//
 	//        t = path[n]->param( path[n]->length() - m_radius )
 	//
-	//    as long as path[n] isnt too small (smaller than 2 * m_radius).
-	//    In this case we set t = 0.5.
+	//    and add the first subsegment of the curent segment to newPath.
 	//
-// TODO: round corner.
+	//    path:                 new path:
 	//
-	//    path:          newPath:
-	//
-	//           3
-	//    X------------X
+	//           2
+	//    O------------O
 	//    |            |
-	//   4|            X2                    X
-	//    |            |                    /.2
-	//    X--X------X--X           X------X...
-	//           1                     1
+	//  3 |            | 1
+	//    |            |
+	//    O--O######O##O           O------O...
+	//           0                     0
+	//
+	//    Now make the second next segment (the original path[1] segment in our example)
+	//    the current one. Split it at paramter t
+	//
+	//        t = path[n]->param( m_radius )
+	//
+	//    path:                 new path:
+	//
+	//           2
+	//    O------------O
+	//    |            #
+	//  3 |            O 1
+	//    |            #
+	//    O--O------O--O           O------O...
+	//           0                     0
+	//
+	//    Make the first subsegment of the current segment the current one.
+	//
+	//    path:                 new path:
+	//
+	//           2
+	//    O------------O
+	//    |            |
+	//  3 |            O 1                   O
+	//    |            #                    /.1
+	//    O--O------O--O           O------O...
+	//           0                     0
 	//
 	// 3) End
 	//    ---
-// TODO: end.
 	//
-	//    path:          newPath:
+	//    path:                 new path:
 	//
-	//           3                     5
-	//    X--X------X--X        6 .X------X. 4
+	//           2                     4
+	//    O--O------O--O        5 .O------O. 3
 	//    |            |         /          \
-	//   4X            X2     7 X            X 3
-	//    |            |      8 .\          /
-	//    X--X------X--X        ...X------X. 2
-	//           1                     1
+	//  3 O            O 1    6 O            O 2
+	//    |            |      7 .\          /
+	//    O--O------O--O        ...O------O. 1
+	//           0                     0
 	//
 
 	double length;
