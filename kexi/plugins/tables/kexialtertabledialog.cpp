@@ -321,8 +321,23 @@ void KexiAlterTableDialog::slotPropertyChanged(KexiPropertyBuffer& buf,KexiPrope
 void KexiAlterTableDialog::slotBeforeCellChanged(
 	KexiTableItem *item, int colnum, QVariant newValue, KexiDB::ResultInfo* result)
 {
-	//TODO
-	//-check if this change is allowed
+	if (colnum==0) {//'name'
+		//if 'type' is not filled yet
+		if (item->at(1).isNull()) {
+			//auto select 1st row of 'type' column
+			m_view->data()->updateRowEditBuffer(item, 1, QVariant((int)0));
+
+			//save row
+			m_view->acceptRowEdit();
+		}
+	}
+	else if (colnum==1) {//'type'
+		//if 'name' is already filled
+		if (!item->at(0).toString().isEmpty()) {
+			//save row
+			m_view->acceptRowEdit();
+		}
+	}
 }
 
 void KexiAlterTableDialog::slotRowUpdated(KexiTableItem *item)
