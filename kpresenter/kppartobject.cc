@@ -60,7 +60,7 @@ void KPPartObject::rotate( float _angle )
                                      zh->zoomItY( getOrig().y() + getSize().height() / 2 ) ) );
 }
 
-bool KPPartObject::saveOasisPart( KoXmlWriter &xmlWriter, KoStore *store, KoSavingContext& context, int indexObj, int partIndexObj ) const
+bool KPPartObject::saveOasisPart( KoXmlWriter &xmlWriter, KoStore *store, KoSavingContext& context, int indexObj, int partIndexObj, KoXmlWriter* manifestWriter ) const
 {
     xmlWriter.startElement( "draw:object" );
     //save default child object parameter
@@ -74,7 +74,7 @@ bool KPPartObject::saveOasisPart( KoXmlWriter &xmlWriter, KoStore *store, KoSavi
     int tmpHeight = (int)zh->unzoomItY( _rect.height() );
     child->setGeometry( QRect( tmpX, tmpY, tmpWidth, tmpHeight ) );
 
-    child->saveOasis( xmlWriter, store, partIndexObj );
+    child->saveOasis( xmlWriter, store, partIndexObj, manifestWriter );
 
     if( !objectName.isEmpty())
         xmlWriter.addAttribute( "draw:name", objectName );

@@ -963,10 +963,10 @@ bool KPresenterDoc::saveOasis( KoStore* store, KoXmlWriter* manifestWriter )
 //save page
     for ( int i = 0; i < static_cast<int>( m_pageList.count() ); i++ )
     {
-        m_pageList.at( i )->saveOasisPage( store, contentTmpWriter, ( i+1 ), savingContext, indexObj, partIndexObj );
+        m_pageList.at( i )->saveOasisPage( store, contentTmpWriter, ( i+1 ), savingContext, indexObj, partIndexObj , manifestWriter);
     }
 
-    m_stickyPage->saveOasisStickyPage( store, stickyTmpWriter , savingContext, indexObj,partIndexObj );
+    m_stickyPage->saveOasisStickyPage( store, stickyTmpWriter , savingContext, indexObj,partIndexObj, manifestWriter );
     saveOasisHeaderFooter( stickyTmpWriter , savingContext );
 
 

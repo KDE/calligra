@@ -107,15 +107,15 @@ DCOPObject* KPrPage::dcopObject()
     return dcop;
 }
 
-bool KPrPage::saveOasisStickyPage( KoStore *store, KoXmlWriter &xmlWriter, KoSavingContext& context, int & indexObj, int &partIndexObj ) const
+bool KPrPage::saveOasisStickyPage( KoStore *store, KoXmlWriter &xmlWriter, KoSavingContext& context, int & indexObj, int &partIndexObj, KoXmlWriter* manifestWriter ) const
 {
-    saveOasisObject( store, xmlWriter, context, indexObj, partIndexObj, true );
+    saveOasisObject( store, xmlWriter, context, indexObj, partIndexObj, manifestWriter, true );
     //todo for animation style for sticky object it's neccesary to use "presentation:style-name="pr1"
     // => create style presentation.
     return true;
 }
 
-void KPrPage::saveOasisObject( KoStore *store, KoXmlWriter &xmlWriter, KoSavingContext& context, int & indexObj, int &partIndexObj, bool stickyObj ) const
+void KPrPage::saveOasisObject( KoStore *store, KoXmlWriter &xmlWriter, KoSavingContext& context, int & indexObj, int &partIndexObj,  KoXmlWriter* manifestWriter, bool stickyObj ) const
 {
     KTempFile animationTmpFile;
     animationTmpFile.setAutoDelete( true );
@@ -127,7 +127,7 @@ void KPrPage::saveOasisObject( KoStore *store, KoXmlWriter &xmlWriter, KoSavingC
     {
         if ( it.current()->getType() == OT_PART )
         {
-            static_cast<KPPartObject*>( it.current() )->saveOasisPart( xmlWriter, store, context, indexObj, partIndexObj);
+            static_cast<KPPartObject*>( it.current() )->saveOasisPart( xmlWriter, store, context, indexObj, partIndexObj, manifestWriter);
             ++partIndexObj;
         }
         else
@@ -231,7 +231,7 @@ void KPrPage::saveOasisObject( KoStore *store, KoXmlWriter &xmlWriter, KoSavingC
     animationTmpFile.close();
 }
 
-bool KPrPage::saveOasisPage( KoStore *store, KoXmlWriter &xmlWriter, int posPage, KoSavingContext& context, int & indexObj, int &partIndexObj ) const
+bool KPrPage::saveOasisPage( KoStore *store, KoXmlWriter &xmlWriter, int posPage, KoSavingContext& context, int & indexObj, int &partIndexObj, KoXmlWriter* manifestWriter) const
 {
     //store use to save picture and co
     xmlWriter.startElement( "draw:page" );
@@ -245,7 +245,7 @@ bool KPrPage::saveOasisPage( KoStore *store, KoXmlWriter &xmlWriter, int posPage
     if ( !styleName.isEmpty() )
         xmlWriter.addAttribute( "draw:style-name", styleName );
 
-    saveOasisObject( store, xmlWriter, context,  indexObj,partIndexObj  );
+    saveOasisObject( store, xmlWriter, context,  indexObj,partIndexObj, manifestWriter  );
 
     saveOasisNote( xmlWriter );
     xmlWriter.endElement();

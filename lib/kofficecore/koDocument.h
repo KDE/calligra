@@ -378,7 +378,7 @@ public:
     bool checkAutoSaveFile();
 
     // ### TODO Who calls initDoc?
-    
+
     enum InitDocFlags { InitDocAppStarting, InitDocFileNew, InitDocFileClose, InitDocEmbedded, InitDocEmpty };
 
     /**
@@ -450,7 +450,7 @@ public:
      *  You should not have to reimplement this - but call it in @ref #saveChildren.
      */
 
-    virtual QString saveOasisToStore( KoStore * _store, const QString & index );
+    virtual QString saveOasisToStore( KoStore * _store, const QString & index, KoXmlWriter* manifestWriter );
 
 
     /**

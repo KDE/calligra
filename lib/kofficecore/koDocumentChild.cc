@@ -313,7 +313,7 @@ bool KoDocumentChild::createUnavailDocument( KoStore* store, bool doOpenURL )
     return true;
 }
 
-void KoDocumentChild::saveOasis(  KoXmlWriter &xmlWriter, KoStore *_store, int index )
+void KoDocumentChild::saveOasis(  KoXmlWriter &xmlWriter, KoStore *_store, int index, KoXmlWriter* manifestWriter )
 {
     //<draw:object draw:style-name="standard" draw:id="1" draw:layer="layout" svg:width="14.973cm" svg:height="4.478cm" svg:x="11.641cm" svg:y="14.613cm" xlink:href="#./Object 1" xlink:type="simple" xlink:show="embed" xlink:actuate="onLoad"/>
     xmlWriter.addAttribute( "xlink:type", "simple" );
@@ -324,7 +324,7 @@ void KoDocumentChild::saveOasis(  KoXmlWriter &xmlWriter, KoStore *_store, int i
     xmlWriter.addAttributePt( "svg:height",  geometry().height() );
     xmlWriter.addAttributePt( "svg:x",  geometry().left() );
     xmlWriter.addAttributePt( "svg:y",  geometry().top() );
-    xmlWriter.addAttribute( "xlink:href", "#./"+ document()->saveOasisToStore( _store, QString( "Object %1" ).arg( index ) ) );
+    xmlWriter.addAttribute( "xlink:href", "#./"+ document()->saveOasisToStore( _store, QString( "Object %1" ).arg( index ) ,manifestWriter ) );
 
 }
 

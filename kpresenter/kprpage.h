@@ -298,9 +298,9 @@ public:
     void getAllObjectSelectedList(QPtrList<KPObject> &lst,bool force = false );
     void getAllEmbeddedObjectSelected(QPtrList<KoDocumentChild> &embeddedObjects );
 
-    bool saveOasisPage( KoStore *store, KoXmlWriter &xmlWriter, int posPage, KoSavingContext& context, int & indexObj, int &partIndexObj ) const;
+    bool saveOasisPage( KoStore *store, KoXmlWriter &xmlWriter, int posPage, KoSavingContext& context, int & indexObj, int &partIndexObj, KoXmlWriter* manifestWriter ) const;
     bool saveOasisNote( KoXmlWriter &xmlWriter ) const;
-    bool saveOasisStickyPage( KoStore *store, KoXmlWriter &xmlWriter, KoSavingContext& context, int & indexObj, int &partIndexObj ) const;
+    bool saveOasisStickyPage( KoStore *store, KoXmlWriter &xmlWriter, KoSavingContext& context, int & indexObj, int &partIndexObj, KoXmlWriter* manifestWriter ) const;
 
 
 protected:
@@ -309,7 +309,7 @@ private:
     void makeUsedPixmapListForGroupObject( KPObject *_obj );
     void completeLoadingForGroupObject( KPObject *_obj );
     bool objectNameExists( KPObject *object, QPtrList<KPObject> &list );
-    void saveOasisObject( KoStore *store, KoXmlWriter &xmlWriter, KoSavingContext& context, int & indexObj, int &partIndexObj, bool stickyObj=false ) const;
+    void saveOasisObject( KoStore *store, KoXmlWriter &xmlWriter, KoSavingContext& context, int & indexObj, int &partIndexObj,  KoXmlWriter* manifestWriter, bool stickyObj=false ) const;
 
 
     // list of objects

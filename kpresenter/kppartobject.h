@@ -49,7 +49,7 @@ public:
 
     KPresenterChild *getChild() const { return child; }
     void enableDrawing( bool f ) { _enableDrawing = f; }
-    virtual bool saveOasisPart( KoXmlWriter &xmlWriter, KoStore *store, KoSavingContext& context, int indexObj, int partIndexObj ) const;
+    virtual bool saveOasisPart( KoXmlWriter &xmlWriter, KoStore *store, KoSavingContext& context, int indexObj, int partIndexObj, KoXmlWriter* manifestWriter ) const;
     virtual void loadOasis(const QDomElement &element, KoOasisContext &context, KPRLoadingInfo *info);
     virtual bool saveOasis( KoXmlWriter &xmlWriter, KoSavingContext &context, int indexObj ) const { return true;/* use saveOasisPart*/};
 

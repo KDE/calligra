@@ -1087,7 +1087,7 @@ bool KoDocument::saveToStream( QIODevice * dev )
     return nwritten == (int)s.size()-1;
 }
 
-QString KoDocument::saveOasisToStore( KoStore * _store, const QString & _path )
+QString KoDocument::saveOasisToStore( KoStore * _store, const QString & _path, KoXmlWriter* manifestWriter )
 {
     kdDebug(30003) << "Saving document to store " << _path << endl;
 
@@ -1102,6 +1102,7 @@ QString KoDocument::saveOasisToStore( KoStore * _store, const QString & _path )
     _store->enterDirectory( _path );
 
     QString name = _store->currentDirectory();
+    kdDebug()<<" store name :"<<name<<endl;
 #if 0
     // Save children first since they might get a new url
     if ( !saveChildren( _store ) && d->m_specialOutputFlag != SaveAsOASIS )
