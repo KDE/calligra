@@ -2916,8 +2916,18 @@ void KWView::frameSelectedChanged()
         actionEditDelFrame->setEnabled( false );
         actionEditCut->setEnabled( false );
     }
+    bool frameDifferentOfPart=false;
+    if(nbFrame >= 1)
+    {
+        QListIterator<KWFrame> it( selectedFrames );
+        for ( ; it.current(); ++it )
+        {
+            if ( it.current()->getFrameSet()->type()!=FT_PART)
+                frameDifferentOfPart=true;
+        }
+    }
+    actionBackgroundColor->setEnabled( frameDifferentOfPart );
 
-    actionBackgroundColor->setEnabled( nbFrame >= 1 );
     actionEditCopy->setEnabled( nbFrame >= 1 );
 
 
