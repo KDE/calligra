@@ -783,6 +783,12 @@ bool KSpreadFormat::loadOasisStyleProperties( KoStyleStack & styleStack, const K
             setAngle( -a + 1 );
     }
 
+    if (  styleStack.hasAttribute( "fo:margin-left" ) )
+    {
+        kdDebug()<<"margin-left :"<<KoUnit::parseValue( styleStack.attribute( "fo:margin-left" ),0.0 )<<endl;
+        setIndent( KoUnit::parseValue( styleStack.attribute( "fo:margin-left" ),0.0 ) );
+    }
+
     kdDebug()<<"property.hasAttribute( fo:text-align ) :"<<styleStack.hasAttribute( "fo:text-align" )<<endl;
     if ( styleStack.hasAttribute( "fo:text-align" ) )
     {
@@ -840,19 +846,13 @@ bool KSpreadFormat::loadOasisStyleProperties( KoStyleStack & styleStack, const K
             setHideFormula( false );
             setHideAll( false );
         }
-        else if ( prot == "formula-hidden" )
-        {
-            setHideAll( false );
-            setHideFormula( true );
-            setNotProtected( true );
-        }
-        kdDebug(30518) << "Cell " << prot << endl;
+        else
+            kdDebug()<<" Protected cell not supported :"<<prot<<endl;
+        kdDebug() << "Cell protected type" << prot << endl;
     }
 
     if ( styleStack.hasAttribute( "fo:padding-left" ) )
         setIndent(  KoUnit::parseValue( styleStack.attribute( "fo:padding-left" ) ) );
-
-    kdDebug()<<"styleStack.hasAttribute( fo:vertical-align ) :"<<styleStack.hasAttribute( "fo:vertical-align" )<<endl;
 
     if ( styleStack.hasAttribute( "fo:vertical-align" ) )
     {
