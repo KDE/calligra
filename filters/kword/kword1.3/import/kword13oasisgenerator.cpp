@@ -663,6 +663,25 @@ void KWord13OasisGenerator::writeStartOfFile(const QString& type)
     zipWriteData(">\n");
 }
 
+void KWord13OasisGenerator::generateTextFrameset( KoXmlWriter& writer, KWordTextFrameset* frameset, bool main )
+{
+    if ( ! frameset )
+    {
+        kdWarning(30520) << "Tried to generate a NULL text frameset!" << endl;
+        return;
+    }
+    
+    for ( QValueList<KWordParagraph>::Iterator it = frameset->m_paragraphGroup.begin();
+        it != frameset->m_paragraphGroup.end(); ++it)
+    {
+        // Write rawly the paragrapgh (see KoTextParag::saveOasis)
+        writer.startElement( "text:p" );
+        writer.addAttribute( "text:style-name", (*it).m_layout.m_name );
+        writer.addTextSpan( (*it).text() );
+        writer.endElement(); // text:p
+    }
+}
+
 void KWord13OasisGenerator::writeStylesXml( void )
 #if 1
 // Inspired by KWDocument::saveOasisDocumentStyles
@@ -840,6 +859,7 @@ void KWord13OasisGenerator::writeContentXml(void)
     writer.startElement( "office:text" );
 
     // ### TODO: write text document!
+    generateTextFrameset( writer, m_kwordDocument->m_normalTextFramesetList.first(), true );
     
     writer.endElement(); // office:text
     writer.endElement(); // office:body

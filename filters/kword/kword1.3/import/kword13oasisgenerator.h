@@ -42,17 +42,20 @@ public:
     bool prepare( KWord13Document& kwordDocument );
     bool generate( const QString& fileName, KWord13Document& kwordDocument );
     
-protected:
+protected: //deprecated
     QString escapeOOText(const QString& strText) const;
     QString escapeOOSpan(const QString& strText) const;
-protected: // ZIP methods
+protected: // deprecated
     bool zipPrepareWriting(const QString& name);
     bool zipDoneWriting(void);
     bool zipWriteData(const char* str);
     bool zipWriteData(const QByteArray& array);
     bool zipWriteData(const QCString& cstr);
     bool zipWriteData(const QString& str); ///< Assumes UTF-8
+protected: // Generating phase
     void writeStartOfFile( const QString& type );
+    /// @param main Is it the main frameset?
+    void generateTextFrameset( KoXmlWriter& writer, KWordTextFrameset* frameset, bool main );
     void writeStylesXml( void );
     void writeContentXml( void );
     void writeMetaXml( void );
