@@ -75,8 +75,8 @@ KoPartSelectDia::KoPartSelectDia( QWidget* parent, const char* name ) : DlgPartS
     list->insertItem( new KoBeListBoxItem( it->name, it->miniIcon ) );    
   }
 
-  connect( ok, SIGNAL( pressed() ), this, SLOT( accept() ) );
-  connect( cancel, SIGNAL( pressed() ), this, SLOT( reject() ) );
+  connect( ok, SIGNAL( clicked() ), this, SLOT( accept() ) );
+  connect( cancel, SIGNAL( clicked() ), this, SLOT( reject() ) );
 }
 
 KoDocumentEntry KoPartSelectDia::result()

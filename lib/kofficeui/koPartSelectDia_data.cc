@@ -32,8 +32,8 @@ DlgPartSelectData::DlgPartSelectData( QWidget* parent, const char* name ) : QDia
   
   QLabel* tmpQLabel;
   tmpQLabel = new QLabel( this, "Label_1" );
-  tmpQLabel->setGeometry( 10, 10, 100, 30 );
-  tmpQLabel->setText( i18n( "Select an component" ) );
+  tmpQLabel->setGeometry( 10, 10, 200, 30 );
+  tmpQLabel->setText( i18n( "Select a component" ) );
   tmpQLabel->setAlignment( 289 );
   tmpQLabel->setMargin( -1 );
 
