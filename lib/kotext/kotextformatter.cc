@@ -110,18 +110,11 @@ int KoTextFormatter::format( KoTextDocument *doc, KoTextParag *parag,
             // at most usual zoom resolutions.
 	    // ww = string->width( i );
             KoTextFormat *charFormat = c->format();
-            if ( c->isCustom() )
+            if ( c->isCustom() ) {
                 ww = c->customItem()->width;
-            else {
-                ww = charFormat->charWidth( zh, false, c, parag, i );
-                // Now go from 100% to LU
-                ww = KoTextZoomHandler::ptToLayoutUnitPt( ww );
-            }
-
-            if ( c->isCustom() )
                 pixelww = zh->layoutUnitToPixelX( ww );
-            else
-            {
+            } else {
+                ww = charFormat->charWidthLU( c, parag, i );
                 // Pixel size - we want the metrics of the font that's going to be used.
                 pixelww = charFormat->charWidth( zh, true, c, parag, i );
             }
@@ -351,18 +344,10 @@ int KoTextFormatter::format( KoTextDocument *doc, KoTextParag *parag,
 #ifdef DEBUG_FORMATTER
 		    qDebug("Restarting with i=%d x=%d y=%d h=%d initialHeight=%d initialLMargin=%d initialRMargin=%d y=%d",i,x,y,h,initialHeight,initialLMargin,initialRMargin,y);
 #endif
-		    if ( c->c.unicode() >= 32 || c->isCustom() )
-			ww = string->width( i );
-		    else if ( parag->isNewLinesAllowed() && firstChar->c == '\t' ) {
-			int nx = parag->nextTab( i, x );
-			if ( nx < x )
-			    ww = w - x;
-			else
-			    ww = nx - x + 1;
-		    } else {
-			ww = c->format()->width( ' ' );
-		    }
-		    //### minw ? tminw ?
+                    // ww and pixelww already calculated and store, no need to duplicate
+                    // code like QRT does.
+                    ww = c->width;
+                    pixelww = c->pixelwidth;
 		}
 	    }
 
@@ -508,7 +493,7 @@ KoTextParagLineStart *KoTextFormatter::formatLineKo(
     }
 
     if ( last >= 0 && last < string->length() )
-	line->w = string->at( last ).x + string->width( last );
+	line->w = string->at( last ).x + string->at( last ).width; //string->width( last );
     else
 	line->w = 0;
 

@@ -163,7 +163,7 @@ KoTextFormat::KoTextFormat( const QStyleSheetItem *style )
     dsc = fm.descent();
     missp = FALSE;
     ha = AlignNormal;
-    memset( widths, 0, 256 * sizeof( ushort ) );
+    //memset( widths, 0, 256 * sizeof( ushort ) );
     generateKey();
     addRef();
     updateStyleFlags();
@@ -191,7 +191,7 @@ KoTextFormat::KoTextFormat( const QFont &f, const QColor &c, KoTextFormatCollect
     dsc = fm.descent();
     missp = FALSE;
     ha = AlignNormal;
-    memset( widths, 0, 256 * sizeof( ushort ) );
+    //memset( widths, 0, 256 * sizeof( ushort ) );
     //// kotext
     d = new KoTextFormatPrivate;
     ////
@@ -213,7 +213,7 @@ KoTextFormat::KoTextFormat( const KoTextFormat &f )
     painter = f.painter;
     leftBearing = f.leftBearing;
     rightBearing = f.rightBearing;
-    memset( widths, 0, 256 * sizeof( ushort ) );
+    //memset( widths, 0, 256 * sizeof( ushort ) );
     hei = f.hei;
     asc = f.asc;
     dsc = f.dsc;
@@ -258,7 +258,7 @@ KoTextFormat& KoTextFormat::operator=( const KoTextFormat &f )
     fm = f.fm;
     leftBearing = f.leftBearing;
     rightBearing = f.rightBearing;
-    memset( widths, 0, 256 * sizeof( ushort ) );
+    //memset( widths, 0, 256 * sizeof( ushort ) );
     hei = f.hei;
     asc = f.asc;
     dsc = f.dsc;
@@ -288,7 +288,7 @@ void KoTextFormat::update()
     hei = fm.height();
     asc = fm.ascent();
     dsc = fm.descent();
-    memset( widths, 0, 256 * sizeof( ushort ) );
+    //memset( widths, 0, 256 * sizeof( ushort ) );
     generateKey();
     updateStyleFlags();
     //// kotext

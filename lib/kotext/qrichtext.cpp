@@ -2686,7 +2686,7 @@ bool KoTextDocument::inSelection( int selId, const QPoint &pos ) const
 		}
 		if ( pos.y() - p->rect().y() >= y && pos.y() - p->rect().y() <= y + h ) {
 		    if ( inSel && pos.x() >= p->at( i )->x &&
-			 pos.x() <= p->at( i )->x + p->at( i )->format()->width( p->at( i )->c ) )
+			 pos.x() <= p->at( i )->x + p->at( i )->width /*p->at( i )->format()->width( p->at( i )->c )*/ )
 			return TRUE;
 		}
 	    }
@@ -3198,6 +3198,8 @@ int KoTextDocument::length() const
 
 // ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
+//// kotext: implemented differently in kotextformat.cc
+#if 0
 int KoTextFormat::width( const QChar &c ) const
 {
     if ( c.unicode() == 0xad ) // soft hyphen
@@ -3209,14 +3211,11 @@ int KoTextFormat::width( const QChar &c ) const
 	    int w;
 	    if ( c.row() ) {
 		w = fm.width( c );
-                //qDebug("KoTextFormat::width fontsize=%d  NOT LATIN: width=%d", fn.pointSize(), w);
 	    } else {
 		w = widths[ c.unicode() ];
-                //if (w) qDebug("KoTextFormat::width fontsize=%d from cache: width=%d", fn.pointSize(), w);
             }
 	    if ( w == 0 && !c.row() ) {
 		w = fm.width( c );
-                //qDebug("KoTextFormat::width font=%s fontsize=%d width=%d height=%d", fn.toString().ascii(), fn.pointSize(), w, fm.height());
 		( (KoTextFormat*)this )->widths[ c.unicode() ] = w;
                 Q_ASSERT( w < 65535 );
                 Q_ASSERT( widths[ c.unicode() ] == w );
@@ -3229,7 +3228,6 @@ int KoTextFormat::width( const QChar &c ) const
 	    return fm_.width( c );
 	}
     }
-    //qDebug("KoTextFormat::width using painter!");
 
     QFont f( fn );
     if ( ha != AlignNormal )
@@ -3238,7 +3236,9 @@ int KoTextFormat::width( const QChar &c ) const
 
     return painter->fontMetrics().width( c );
 }
+#endif
 
+// Used only by KoTextFormat::charWidth
 int KoTextFormat::width( const QString &str, int pos ) const
 {
     int w = 0;
@@ -3526,6 +3526,7 @@ void KoTextStringChar::loseCustomItem() // setRegular() might be a better name
     }
 }
 
+#if 0
 int KoTextString::width( int idx ) const
 {
      int w = 0;
@@ -3556,6 +3557,7 @@ int KoTextString::width( int idx ) const
      }
      return w;
 }
+#endif
 
 QMemArray<KoTextStringChar> KoTextString::subString( int start, int len ) const
 {
@@ -3909,7 +3911,7 @@ void KoTextParag::format( int start, bool doMove )
     if ( lineStarts.count() == 1 && ( !doc || doc->flow()->isEmpty() ) ) {
 	if ( !string()->isBidi() ) {
 	    c = &str->at( str->length() - 1 );
-	    r.setWidth( c->x + str->width( str->length() - 1 ) );
+	    r.setWidth( c->x + c->width /*str->width( str->length() - 1 )*/ );
 	} else {
 	    r.setWidth( lineStarts[0]->w );
 	}

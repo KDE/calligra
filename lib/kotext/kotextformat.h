@@ -97,11 +97,25 @@ public:
 
     /**
      * Return the width of one char in one paragraph.
-     * Used by KoTextFormatter twice: once for the 100% zoom pointsize,
+     * Used by KoTextFormatter twice: once for the 100% zoom pointsize (via charWidthLU),
      * and once for the current zoom pointsize.
      */
     int charWidth( const KoZoomHandler* zh, bool applyZoom, const KoTextStringChar* c,
                    const KoTextParag* parag, int i ) const;
+
+    /**
+     * Return the width of one char in LU pixels.
+     * Equivalent to ptToLayoutUnitPt( charWidth( 0L, false, c, parag, i ) )
+     */
+    int charWidthLU( const KoTextStringChar* c,
+                     const KoTextParag* parag, int i ) const;
+
+    /**
+     * Return the width of one char (from a string, not necessarily from a paragraph) in LU pixels.
+     * Do not call this for custom items, or for complex glyphs.
+     * But this can still be used for ' ' (for parag counters), 'x' (for tabs) etc.
+     */
+    //int width( const QChar &ch ) const; // already declared in qrichtext_p.h
 
 protected:
     QColor m_textBackColor;

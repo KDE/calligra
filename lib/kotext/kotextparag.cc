@@ -746,13 +746,13 @@ int KoTextParag::nextTab( int chnum, int x )
                         {
                             if ( string()->isRightToLeft() )
                             {
-                                w = string()->width( c ) / 2; // center around the decimal point
+                                w = ch.width /*string()->width( c )*/ / 2; // center around the decimal point
                                 ++c;
                                 continue;
                             }
                             else
                             {
-                                w += string()->width( c ) / 2; // center around the decimal point
+                                w += ch.width /*string()->width( c )*/ / 2; // center around the decimal point
                                 break;
                             }
                         }
@@ -960,10 +960,13 @@ void KoTextParag::printRTDebug( int info )
 
         static const char * tabtype[] = { "T_LEFT", "T_CENTER", "T_RIGHT", "T_DEC_PNT", "error!!!" };
         KoTabulatorList tabList = m_layout.tabList();
-        KoTabulatorList::Iterator it = tabList.begin();
-        for ( ; it != tabList.end() ; it++ )
-            kdDebug() << "Tab type:" << tabtype[(*it).type] << " at: " << (*it).ptPos << endl;
-
+        if ( tabList.isEmpty() )
+            kdDebug() << "Tab width: " << tabStopWidth() << endl;
+        else {
+            KoTabulatorList::Iterator it = tabList.begin();
+            for ( ; it != tabList.end() ; it++ )
+                kdDebug() << "Tab type:" << tabtype[(*it).type] << " at: " << (*it).ptPos << endl;
+        }
     } else if ( info == 1 ) // formatting info
     {
         kdDebug() << "  Paragraph format=" << paragFormat() << " " << paragFormat()->key()

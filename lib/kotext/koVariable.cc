@@ -888,8 +888,8 @@ void KoCustomVariable::saveVariable( QDomElement& parentElem )
 {
     QDomElement elem = parentElem.ownerDocument().createElement( "CUSTOM" );
     parentElem.appendChild( elem );
-    elem.setAttribute( "name", correctQString( m_name ) );
-    elem.setAttribute( "value", correctQString( value() ) );
+    elem.setAttribute( "name", m_name );
+    elem.setAttribute( "value", value() );
 }
 
 void KoCustomVariable::load( QDomElement& elem )
@@ -935,7 +935,7 @@ void KoMailMergeVariable::saveVariable( QDomElement& parentElem )
 {
     QDomElement elem = parentElem.ownerDocument().createElement( "MAILMERGE" );
     parentElem.appendChild( elem );
-    elem.setAttribute( "name", correctQString( m_name ) );
+    elem.setAttribute( "name", m_name );
 }
 
 void KoMailMergeVariable::load( QDomElement& elem )
@@ -1044,7 +1044,7 @@ void KoFieldVariable::saveVariable( QDomElement& parentElem )
     QDomElement elem = parentElem.ownerDocument().createElement( "FIELD" );
     parentElem.appendChild( elem );
     elem.setAttribute( "subtype", m_subtype );
-    elem.setAttribute( "value", correctQString( m_value ) );
+    elem.setAttribute( "value", m_value );
 }
 
 void KoFieldVariable::load( QDomElement& elem )

@@ -238,3 +238,13 @@ int KoTextFormat::descent() const
     // Then scale to LU
     return qRound( KoTextZoomHandler::ptToLayoutUnitPt( h ) );
 }
+
+int KoTextFormat::charWidthLU( const KoTextStringChar* c, const KoTextParag* parag, int i ) const
+{
+    return KoTextZoomHandler::ptToLayoutUnitPt( charWidth( 0L, false, c, parag, i ) );
+}
+
+int KoTextFormat::width( const QChar& ch ) const
+{
+    return KoTextZoomHandler::ptToLayoutUnitPt( screenFontMetrics( 0L, false ).width( ch ) );
+}

@@ -182,7 +182,7 @@ public:
     KoTextStringChar &at( int i ) const;
     int length() const;
 
-    int width( int idx ) const;
+    //int width( int idx ) const;
 
     void insert( int index, const QString &s, KoTextFormat *f );
     void insert( int index, KoTextStringChar *c );
@@ -1525,7 +1525,6 @@ public:
     VerticalAlignment vAlign() const;
     int minLeftBearing() const;
     int minRightBearing() const;
-    //bool inFont( QChar c ) const { return fm.inFont( c ); }
     int width( const QChar &c ) const;
     int width( const QString &str, int pos ) const;
     int height() const;
@@ -1564,12 +1563,15 @@ public:
 
     int changed() const { return different; }
 
-private:
+protected:
     void generateKey();
+
+private:
     void update();
 
 #include "kotextformat.h"
 
+private:
     QFont fn;
     QColor col;
     QFontMetrics fm;
@@ -1577,8 +1579,7 @@ private:
     uint linkColor : 1;
     int leftBearing, rightBearing;
     VerticalAlignment ha;
-    //uchar widths[ 256 ];
-    ushort widths[ 256 ];
+    //uchar widths[ 256 ]; //// unused in kotext
     int hei, asc, dsc;
     KoTextFormatCollection *collection;
     int ref;
