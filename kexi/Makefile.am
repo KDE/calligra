@@ -6,7 +6,7 @@ bin_PROGRAMS = kexi
 kexi_SOURCES = kexiworkspace.cpp kexiinterfacetemplate.cpp kexiformbase.cpp kexiinterfacemanager.cpp kexiinterface.cpp kexicreateproject.cpp kexibrowser.cpp kexi.cpp main.cpp 
 kexi_LDADD   =  $(LIB_KFILE) $(LIB_KDEUI) $(LIB_KDECORE) $(LIB_QT) $(LIBSOCKET)
 
-SUBDIRS = interfaces 
+SUBDIRS = interfaces pics 
 
 EXTRA_DIST = kexiui.rc kexi.desktop kexiinterfacetemplate.h kexiinterfacetemplate.cpp kexiglobal.h main.cpp kexi.cpp kexi.h kexiformbase.cpp kexiformbase.h kexiinterfacemanager.cpp kexiinterfacemanager.h kexiinterface.cpp kexiinterface.h kexibrowser.cpp kexibrowser.h kexicreateproject.cpp kexicreateproject.h 
 
@@ -18,36 +18,7 @@ install-data-local:
 	$(mkinstalldirs) $(kde_servicedir)
 	$(INSTALL_DATA) $(srcdir)/interfaces/mysqlinterface.desktop $(kde_servicesdir)/mysqlinterface.desktop
 	
-#	$(mkinstalldirs) $(kde_icondir)/locolor/32x32/apps/
-#	$(INSTALL_DATA) $(srcdir)/lo32-app-kexi.png $(kde_icondir)/locolor/32x32/apps/kexi.png
-#	$(mkinstalldirs) $(kde_icondir)/locolor/16x16/apps/
-#	$(INSTALL_DATA) $(srcdir)/lo16-app-kexi.png $(kde_icondir)/locolor/16x16/apps/kexi.png
-	$(mkinstalldirs) $(kde_icondir)/hicolor/16x16/actions/
-	$(INSTALL_DATA)  $(srcdir)/hi16-action-table.png $(kde_icondir)/hicolor/16x16/actions/table.png
-	$(INSTALL_DATA)  $(srcdir)/hi16-action-tables.png $(kde_icondir)/hicolor/16x16/actions/tables.png
-	$(INSTALL_DATA)  $(srcdir)/hi16-action-db.png $(kde_icondir)/hicolor/16x16/actions/db.png
-	$(INSTALL_DATA)  $(srcdir)/hi16-action-form.png $(kde_icondir)/hicolor/16x16/actions/form.png
-	$(INSTALL_DATA)  $(srcdir)/hi16-action-forms.png $(kde_icondir)/hicolor/16x16/actions/forms.png
-	$(INSTALL_DATA)  $(srcdir)/hi16-action-queries.png $(kde_icondir)/hicolor/16x16/actions/queries.png
-	$(INSTALL_DATA)  $(srcdir)/hi16-action-query.png $(kde_icondir)/hicolor/16x16/actions/query.png
-	$(INSTALL_DATA)  $(srcdir)/hi16-action-reports.png $(kde_icondir)/hicolor/16x16/actions/reports.png
-	$(INSTALL_DATA)  $(srcdir)/hi16-action-report.png $(kde_icondir)/hicolor/16x16/actions/report.png
-	$(INSTALL_DATA)  $(srcdir)/hi16-action-lineedit.png $(kde_icondir)/hicolor/22x22/actions/widget-lineedit.png
-	$(INSTALL_DATA)  $(srcdir)/hi16-action-button.png $(kde_icondir)/hicolor/22x22/actions/widget-pushbutton.png
-	$(mkinstalldirs) $(kde_icondir)/hicolor/16x16/apps/
-	$(INSTALL_DATA)  $(srcdir)/hi16-app-kexi.png $(kde_icondir)/hicolor/16x16/apps/kexi.png
-	$(mkinstalldirs) $(kde_icondir)/hicolor/32x32/apps/
-	$(INSTALL_DATA)  $(srcdir)/hi32-app-kexi.png $(kde_icondir)/hicolor/32x32/apps/kexi.png
-	$(mkinstalldirs) $(kde_icondir)/hicolor/48x48/apps/
-	$(INSTALL_DATA)  $(srcdir)/hi48-app-kexi.png $(kde_icondir)/hicolor/48x48/apps/kexi.png
-	$(mkinstalldirs) $(kde_datadir)/kexi
-	$(INSTALL_DATA)  $(srcdir)/cp-wiz.png $(kde_datadir)/kexi/createproject.png
-	
-	
 uninstall-local:
-	-rm -f $(kde_appsdir)/Applications/kexi.desktop
-	-rm -f $(kde_icondir)/locolor/32x32/apps/kexi.png
-	-rm -f $(kde_icondir)/locolor/16x16/apps/kexi.png
 
 ####### kdevelop will overwrite this part!!! (end)############
 # These paths are KDE specific. Use them:
