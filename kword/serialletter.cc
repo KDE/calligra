@@ -112,9 +112,15 @@ KWSerialLetterDataSource *KWSerialLetterDataBase::loadPlugin(const QString& name
 	  if (create)
 	    {
 	      // create the module
-	      KWSerialLetterDataSource * (*func)();
-	      func = (KWSerialLetterDataSource* (*)()) create;
-	      return  func();
+	      KWSerialLetterDataSource * (*func)(KInstance*);
+	      func = (KWSerialLetterDataSource* (*)(KInstance*)) create;
+	      KWSerialLetterDataSource *tmpsource =func(KWFactory::global());
+	      if (tmpsource)
+	      {
+		QDataStream tmpstream(tmpsource->info,IO_WriteOnly);
+		tmpstream<<name;
+	      }
+	      return tmpsource;
 	    }
 
        }
@@ -163,14 +169,42 @@ void KWSerialLetterDataBase::showConfigDialog(QWidget *par)
 
 
 
-void KWSerialLetterDataBase::save( QDomElement& /*parentElem*/ )
+QDomElement KWSerialLetterDataBase::save(QDomDocument &doc) const
 {
+	kdDebug()<<"KWSerialLetterDataBase::save()"<<endl;
+	QDomElement parentElem=doc.createElement("SERIALL");
+	if (plugin)
+	{
+		kdDebug()<<"KWSerialLetterDataBase::save() There is really something to save"<<endl;
+		QDomElement el=doc.createElement(QString::fromLatin1("PLUGIN"));
+
+		QDataStream ds(plugin->info,IO_ReadOnly);
+		QString libname;
+		ds>>libname;
+		el.setAttribute("library",libname);
+ 		parentElem.appendChild(el);
+		kdDebug()<<"KWSerialLetterDataBase::save() Calling datasource save()"<<endl;
+		QDomElement el2=doc.createElement(QString::fromLatin1("DATASOURCE"));
+		plugin->save(doc,el2);
+		parentElem.appendChild(el2);
+
+	}
+	kdDebug()<<"KWSerialLetterDataBase::save() leaving now"<<endl;
+	return parentElem;
 //	if (plugin) plugin->save(parentElem); // Not completely sure, perhaps the database itself has to save something too (JoWenn)
 }
 
-void KWSerialLetterDataBase::load( QDomElement& /*elem*/ )
+void KWSerialLetterDataBase::load( QDomElement& parentElem )
 {
-//	if (plugin) plugin->load(parentElem); // Not completely sure, perhaps the database itself has to load something too (JoWenn)
+	QDomNode dn=parentElem.namedItem("PLUGIN");
+	if (dn.isNull()) return;
+	QDomElement el=dn.toElement();
+	plugin=loadPlugin(el.attribute("library"));
+
+	dn=parentElem.namedItem("DATASOURCE");
+	if (dn.isNull()) return;
+	el=dn.toElement();
+	if (plugin) plugin->load(el);
 }
 
 

@@ -21,6 +21,9 @@
 #ifndef _SERIALLETTER_INTERFACE_H_
 #define _SERIALLETTER_INTERFACE_H_
 #include <qmap.h>
+#include <qcstring.h>
+#include <qdom.h>
+#include <kinstance.h>
 
 typedef class QMap< class QString, class QString > DbRecord;
 #define KWSLEdit		1
@@ -40,7 +43,7 @@ typedef class QMap< class QString, class QString > DbRecord;
 class KWSerialLetterDataSource
 {
     public:
-    KWSerialLetterDataSource(/*KWSerialLetterDataBase *kwsldb*/){;}
+    KWSerialLetterDataSource(KInstance* inst):m_instance(inst){;}
     virtual ~KWSerialLetterDataSource(){;}
     virtual class QString getValue( const class QString &name, int record = -1 ) const=0;
 
@@ -48,15 +51,18 @@ class KWSerialLetterDataSource
         return sampleRecord;
     }
 
+    KInstance *KWInstance(){return m_instance;}
     virtual  int getNumRecords() const =0;
     virtual  bool showConfigDialog(class QWidget*,int) =0;
 
-    virtual void save( class QDomElement& parentElem )=0;
+    virtual void save(QDomDocument&, QDomElement&)=0;
     virtual void load( class QDomElement& elem )=0;
 
+    QByteArray info;
     protected:
     DbRecord sampleRecord;
-
+    private:
+    KInstance *m_instance;
 };
 
 #endif

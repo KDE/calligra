@@ -45,6 +45,7 @@
 #include "defs.h"
 #include "serialletter_interface.h"
 
+
 /******************************************************************
  *
  * Class: KWClassicSerialDataSource
@@ -55,16 +56,15 @@ typedef QValueList< DbRecord > Db;
 class KWClassicSerialDataSource: public KWSerialLetterDataSource
 {
     public:
-    KWClassicSerialDataSource(/*KWSerialLetterDataBase *kwsldb*/);
+    KWClassicSerialDataSource(KInstance *inst);
     ~KWClassicSerialDataSource();
 
-    virtual void save( QDomElement& parentElem );
+    virtual void save( QDomDocument &doc,QDomElement&);
     virtual void load( QDomElement& elem );
     virtual class QString getValue( const class QString &name, int record = -1 ) const;
     virtual int getNumRecords() const {
         return (int)db.count();
     }
-
     virtual  bool showConfigDialog(QWidget *,int);
 
     protected:

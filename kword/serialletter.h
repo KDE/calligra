@@ -33,7 +33,7 @@
 #include <qlistview.h>
 #include <qspinbox.h>
 #include <qtoolbutton.h>
-
+#include <qdom.h>
 #include <qtextstream.h>
 
 #include "serialletter_interface.h"
@@ -66,7 +66,7 @@ public:
     const QMap< QString, QString > &getRecordEntries() const; //accesses the plugin
     int getNumRecords() const; //accesses the plugin
 
-    void save( QDomElement& parentElem ); // save some global config + plugin config
+    QDomElement save(QDomDocument &doc) const; // save some global config + plugin config
     void load( QDomElement& elem ); // save some global config + plugin config
 
     KWSerialLetterDataSource *loadPlugin(const QString& name);
@@ -105,7 +105,7 @@ protected:
     KWSerialLetterDataBase *db_;
     void enableDisableEdit();
     void doNewActions();
-    
+
 protected slots:
     void slotEditClicked();
     void slotCreateClicked();

@@ -21,6 +21,10 @@
 #include "serialletter_classicplugin.h"
 #include "serialletter_classicplugin.moc"
 #include "serialletter.h"
+#include <klineeditdlg.h>
+#include <qdom.h>
+
+#define KWSLCPBarIcon( x ) BarIcon( x, db->KWInstance() )
 
 /******************************************************************
  *
@@ -28,13 +32,13 @@
  *
  ******************************************************************/
 
-KWClassicSerialDataSource::KWClassicSerialDataSource( /*KWDocument *doc_ */)
-	: KWSerialLetterDataSource()
+KWClassicSerialDataSource::KWClassicSerialDataSource(KInstance *inst)
+	: KWSerialLetterDataSource(inst)
 //    : doc( doc_ )
 {
 }
 
-KWClassicSerialDataSource::~KWClassicSerialDataSource( /*KWDocument *doc_ */)
+KWClassicSerialDataSource::~KWClassicSerialDataSource()
 {
 }
 
@@ -93,108 +97,54 @@ void KWClassicSerialDataSource::removeRecord( int i )
     db.remove( it );
 }
 
-void KWClassicSerialDataSource::save( QDomElement& /*parentElem*/ )
+void KWClassicSerialDataSource::save( QDomDocument &doc, QDomElement &parent)
 {
-#if 0
-    out << otag << "<SAMPLE>" << endl;
-
-    DbRecord::Iterator it = sampleRecord.begin();
-    for ( ; it != sampleRecord.end(); ++it )
-        out << indent << "<ENTRY key=\"" << correctQString( it.key() )
-            << "\" value=\"" << correctQString( *it ) << "\"/>" << endl;
-
-    out << etag << "</SAMPLE>" << endl;
-
-    out << otag << "<DB>" << endl;
-    Db::Iterator it2 = db.begin();
-    for ( ; it2 != db.end(); ++it2 ) {
-        out << otag << "<RECORD>" << endl;
-        it = ( *it2 ).begin();
-        for ( ; it != ( *it2 ).end(); ++it ) {
-            out << indent << "<ENTRY key=\"" << correctQString( it.key() )
-                << "\" value=\"" << correctQString( *it ) << "\"/>" << endl;
-        }
-        out << etag << "</RECORD>" << endl;
-    }
-    out << etag << "</DB>" << endl;
-#endif
+	QDomElement def=doc.createElement(QString::fromLatin1("DEFINITION"));
+	parent.appendChild(def);
+	for (DbRecord::Iterator it=sampleRecord.begin();it!=sampleRecord.end();++it)
+	{
+		QDomElement defEnt=doc.createElement(QString::fromLatin1("FIELD"));
+		defEnt.setAttribute(QString::fromLatin1("name"),it.key());
+		def.appendChild(defEnt);
+	}
+	QDomElement cont=doc.createElement(QString::fromLatin1("CONTENT"));
+	parent.appendChild(cont);
+	for (Db::Iterator dbI=db.begin();dbI!=db.end();++dbI)
+	{
+		QDomElement rec=doc.createElement(QString::fromLatin1("RECORD"));
+		cont.appendChild(rec);
+		for (DbRecord::Iterator it=sampleRecord.begin();it!=sampleRecord.end();++it)
+		{
+			QDomElement recEnt=doc.createElement(QString::fromLatin1("ITEM"));
+			recEnt.setAttribute(QString::fromLatin1("name"),it.key());
+			recEnt.setAttribute(QString::fromLatin1("data"),(*dbI)[it.key()]);
+			rec.appendChild(recEnt);
+		}
+	}
 }
 
-void KWClassicSerialDataSource::load( QDomElement& /*elem*/ )
+void KWClassicSerialDataSource::load( QDomElement& parentElem )
 {
-    db.clear();
-    sampleRecord.clear();
-
-#if 0
-    QString tag;
-    QString name;
-
-    while ( parser.open( QString::null, tag ) ) {
-        parser.parseTag( tag, name, lst );
-
-        if ( name == "SAMPLE" ) {
-            parser.parseTag( tag, name, lst );
-            while ( parser.open( QString::null, tag ) ) {
-                parser.parseTag( tag, name, lst );
-                if ( name == "ENTRY" ) {
-                    parser.parseTag( tag, name, lst );
-                    QValueList<KOMLAttrib>::ConstIterator it = lst.begin();
-                    for( ; it != lst.end(); ++it ) {
-                        if ( ( *it ).m_strName == "key" )
-                            addEntry( ( *it ).m_strValue );
-                    }
-                } else
-                    kdError(32001) << "Unknown tag '" << name << "' in SAMPLE" << endl;
-
-                if ( !parser.close( tag ) ) {
-                    kdError(32001) << "Closing " << tag << endl;
-                    return;
-                }
-            }
-        } else if ( name == "DB" ) {
-            parser.parseTag( tag, name, lst );
-            while ( parser.open( QString::null, tag ) ) {
-                parser.parseTag( tag, name, lst );
-                if ( name == "RECORD" ) {
-                    parser.parseTag( tag, name, lst );
-                    appendRecord();
-                    while ( parser.open( QString::null, tag ) ) {
-                        parser.parseTag( tag, name, lst );
-                        if ( name == "ENTRY" ) {
-                            parser.parseTag( tag, name, lst );
-                            QValueList<KOMLAttrib>::ConstIterator it = lst.begin();
-                            QString key;
-                            for( ; it != lst.end(); ++it ) {
-                                if ( ( *it ).m_strName == "key" )
-                                    key = ( *it ).m_strValue;
-                                else if ( ( *it ).m_strName == "value" )
-                                    setValue( key, ( *it ).m_strValue, db.count() - 1 );
-                            }
-                        } else
-                            kdError(32001) << "Unknown tag '" << name << "' in RECORD" << endl;
-
-                        if ( !parser.close( tag ) ) {
-                            kdError(32001) << "Closing " << tag << endl;
-                            return;
-                        }
-                    }
-                } else
-                    kdError(32001) << "Unknown tag '" << name << "' in DB" << endl;
-
-                if ( !parser.close( tag ) ) {
-                    kdError(32001) << "Closing " << tag << endl;
-                    return;
-                }
-            }
-        } else
-            kdError(32001) << "Unknown tag '" << name << "' in SERIALL" << endl;
-
-        if ( !parser.close( tag ) ) {
-            kdError(32001) << "Closing " << tag << endl;
-            return;
-        }
-    }
-#endif
+	db.clear();
+	sampleRecord.clear();
+	QDomNode defNd=parentElem.namedItem("DEFINITION");
+	if (defNd.isNull()) return;
+	QDomElement def=defNd.toElement();
+	for (QDomElement defEnt=def.firstChild().toElement();!defEnt.isNull();defEnt=defEnt.nextSibling().toElement())
+	{
+		sampleRecord[defEnt.attribute(QString::fromLatin1("name"))]=i18n( "No Value" );
+	}
+	QDomNode contNd=parentElem.namedItem("CONTENT");
+	if (contNd.isNull()) return;
+	for (QDomNode rec=contNd.firstChild();!rec.isNull();rec=rec.nextSibling())
+	{
+		appendRecord();
+		for (QDomElement recEnt=rec.firstChild().toElement();!recEnt.isNull();recEnt=recEnt.nextSibling().toElement())
+		{
+			setValue(recEnt.attribute(QString::fromLatin1("name")),
+				recEnt.attribute(QString::fromLatin1("data")),db.count()-1);
+		}
+	}
 }
 
 bool KWClassicSerialDataSource::showConfigDialog(QWidget *par,int action)
@@ -398,28 +348,28 @@ KWClassicSerialLetterEditor::KWClassicSerialLetterEditor( QWidget *parent, KWCla
     sep->setMaximumWidth( 10 );
 
     newRecord = new QToolButton( toolbar );
-    newRecord->setPixmap( KWBarIcon( "sl_addrecord" ) );
+    newRecord->setPixmap( KWSLCPBarIcon( "sl_addrecord" ) );
     newRecord->setFixedSize( newRecord->sizeHint() );
     connect( newRecord, SIGNAL( clicked() ),
              this, SLOT( addRecord() ) );
     QToolTip::add( newRecord, i18n( "Add Record" ) );
 
     newEntry = new QToolButton( toolbar );
-    newEntry->setPixmap( KWBarIcon( "sl_addentry" ) );
+    newEntry->setPixmap( KWSLCPBarIcon( "sl_addentry" ) );
     newEntry->setFixedSize( newEntry->sizeHint() );
     connect( newEntry, SIGNAL( clicked() ),
              this, SLOT( addEntry() ) );
     QToolTip::add( newEntry, i18n( "Add Entry" ) );
 
     deleteRecord = new QToolButton( toolbar );
-    deleteRecord->setPixmap( KWBarIcon( "sl_delrecord" ) );
+    deleteRecord->setPixmap( KWSLCPBarIcon( "sl_delrecord" ) );
     deleteRecord->setFixedSize( deleteRecord->sizeHint() );
     connect( deleteRecord, SIGNAL( clicked() ),
              this, SLOT( removeRecord() ) );
     QToolTip::add( deleteRecord, i18n( "Remove Record" ) );
 
     deleteEntry = new QToolButton( toolbar );
-    deleteEntry->setPixmap( KWBarIcon( "sl_delentry" ) );
+    deleteEntry->setPixmap( KWSLCPBarIcon( "sl_delentry" ) );
     deleteEntry->setFixedSize( deleteEntry->sizeHint() );
     connect( deleteEntry, SIGNAL( clicked() ),
              this, SLOT( removeEntry() ) );
@@ -456,9 +406,12 @@ void KWClassicSerialLetterEditor::changeRecord( int i )
 
 void KWClassicSerialLetterEditor::addEntry()
 {
-    KWVariableNameDia
-        *dia = new KWVariableNameDia( this );
-    if ( dia->exec() == QDialog::Accepted ) {
+//    KWVariableNameDia
+//        *dia = new KWVariableNameDia( this );
+    bool ok;
+    QString value=KLineEditDlg::getText(i18n("Enter entry name:"),QString::null,&ok,this);
+    if ((ok) && (value!=QString::null) && (value!="")) {
+//    if ( dia->exec() == QDialog::Accepted ) {
         if ( db->getNumRecords() == 0 ) {
             first->setEnabled(true);
             back_->setEnabled(true);
@@ -471,11 +424,12 @@ void KWClassicSerialLetterEditor::addEntry()
             addRecord();
         }
         dbList->clear();
-        db->addEntry( dia->getName() );
+//        db->addEntry( dia->getName() );
+        db->addEntry( value );
         changeRecord( records->value() );
         dbList->updateItems();
     }
-    delete dia;
+//    delete dia;
 }
 
 void KWClassicSerialLetterEditor::addRecord()
@@ -520,8 +474,8 @@ void KWClassicSerialLetterEditor::removeRecord()
 }
 
 extern "C" {
-	KWSerialLetterDataSource *create_kwserialletter_classic()
+	KWSerialLetterDataSource *create_kwserialletter_classic(KInstance *inst)
 	{
-		return new KWClassicSerialDataSource();
+		return new KWClassicSerialDataSource(inst);
 	}
 }

@@ -1,0 +1,9 @@
+[Desktop Entry]
+Type=Service
+ServiceTypes=KWord/SerialLetterPlugin
+
+Name=QT-SQL source (single table)
+Comment=This datasource type lets you use SQL database tables. Depending on your system configuration: MySQL,Postgres,(Oracle, if you use a licenced version of QT),....
+
+X-KDE-Library=kwserialletter_qtsqldb
+X-KDE-Capabilities=edit,open

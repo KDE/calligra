@@ -1135,6 +1135,12 @@ bool KWDocument::loadXML( QIODevice *, const QDomDocument & doc )
             footNoteManager.load( parser, lst );
         }
 #endif
+
+    QDomElement serialletter = word.namedItem( "SERIALL" ).toElement();
+    if (serialletter!=QDomElement())
+        {
+             m_slDataBase->load(serialletter);
+        }
 /*
         else if ( name == "SERIALL" ) {
             parser.parseTag( tag, name, lst );
@@ -1900,6 +1906,8 @@ QDomDocument KWDocument::saveXML()
     }
 #endif
 
+    QDomElement serialLetter=m_slDataBase->save(doc);
+    kwdoc.appendChild(serialLetter);
 /*
     out << otag << "<SERIALL>" << endl;
     m_slDataBase->save( out );
