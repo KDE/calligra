@@ -69,6 +69,8 @@ KexiQueryDesignerGuiEditor::KexiQueryDesignerGuiEditor(KexiMainWindow *mainWin, 
 	m_data = new KexiTableViewData();
 	initTable();
 	m_dataTable->tableView()->setData(m_data);
+	//last column occupies the rest of the area
+	m_dataTable->tableView()->setColumnStretchEnabled( true, m_data->columnsCount()-1 ); 
 	m_dataTable->tableView()->adjustColumnWidthToContents(-1);
 
 	kdDebug() << "KexiQueryDesignerGuiEditor::KexiQueryDesignerGuiEditor() data = " << m_data << endl;
@@ -77,7 +79,7 @@ KexiQueryDesignerGuiEditor::KexiQueryDesignerGuiEditor(KexiMainWindow *mainWin, 
 	l->addWidget(s);
 
 	connect(m_dataTable->tableView(), SIGNAL(dropped(QDropEvent *)), this, SLOT(slotDropped(QDropEvent *)));
-	restore();
+//	restore();
 }
 
 KexiQueryDesignerGuiEditor::~KexiQueryDesignerGuiEditor()
