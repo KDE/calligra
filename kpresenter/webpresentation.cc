@@ -23,9 +23,7 @@
 #include "kprcanvas.h"
 
 #include <kstandarddirs.h>
-#include <kprocess.h>
 #include <unistd.h>
-#include <pwd.h>
 #include <sys/types.h>
 
 #include <qfile.h>
@@ -64,6 +62,8 @@
 #include <klistview.h>
 #include <knuminput.h>
 #include <kcombobox.h>
+#include <kurl.h>
+#include <kio/netaccess.h>
 
 #include "koDocumentInfo.h"
 
@@ -182,23 +182,17 @@ void KPWebPresentation::initCreation( KProgress *progressBar )
     QString format = "." + imageFormat( imgFormat );
 
     const char *pics[] = { "home", "first", "next", "prev", "last", 0 };
-    uint index = 0;
 
-    QString filename;
-    QString fullpath;
-
-    while ( pics[ index ] ) {
-        filename = pics[index] + format;
-        fullpath = path + "/pics/" + filename;
-        QString cmd("cp ");
-        cmd += KProcess::quote(locate( "slideshow", filename, KPresenterFactory::global() ));
-        cmd += " ";
-        cmd += KProcess::quote(fullpath);
-        system( QFile::encodeName( cmd ) );
+    for ( uint index = 0; pics[ index ]; index ++ )    
+    {
+        QString filename( pics[ index ] + format );
+        KURL srcurl ( locate( "slideshow", filename, KPresenterFactory::global() ) );
+        KURL desturl ( path + "/pics/" + filename );
+        KIO::NetAccess::del( desturl ); // Copy does not remove existing destination file
+        KIO::NetAccess::copy( srcurl, desturl );
         p = progressBar->progress();
         progressBar->setProgress( ++p );
         kapp->processEvents();
-        index++;
     }
 }
 
