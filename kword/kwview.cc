@@ -5728,6 +5728,7 @@ void KWView::changePicture()
 
         frameset->insertPicture( picture );
         m_doc->frameChanged( frame );
+        m_doc->refreshDocStructure( FT_PICTURE );
         m_doc->addCommand(cmd);
     }
     else

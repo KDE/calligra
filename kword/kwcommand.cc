@@ -712,6 +712,7 @@ void KWFrameChangePictureCommand::execute()
     KWDocument * doc = frameSet->kWordDocument();
     KWPictureFrameSet *frameset = static_cast<KWPictureFrameSet *>(frame->frameSet());
     frameset->reloadPicture( m_newKey );
+    frameSet->kWordDocument()->refreshDocStructure( frameSet->type() );
     doc->frameChanged( frame );
 }
 
@@ -722,6 +723,7 @@ void KWFrameChangePictureCommand::unexecute()
     KWDocument * doc = frameSet->kWordDocument();
     KWPictureFrameSet *frameset = static_cast<KWPictureFrameSet *>(frame->frameSet());
     frameset->reloadPicture( m_oldKey );
+    frameSet->kWordDocument()->refreshDocStructure( frameSet->type() );
     doc->frameChanged( frame );
 }
 
