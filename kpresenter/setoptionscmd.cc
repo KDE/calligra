@@ -25,7 +25,7 @@
 /******************************************************************/
 
 /*======================== constructor ===========================*/
-SetOptionsCmd::SetOptionsCmd( QString _name, QList<QPoint> &_diffs, QList<KPObject> &_objects,
+SetOptionsCmd::SetOptionsCmd( QString _name, QPtrList<QPoint> &_diffs, QPtrList<KPObject> &_objects,
                               int _rastX, int _rastY, int _orastX, int _orastY,
                               QColor _txtBackCol, QColor _otxtBackCol, KPresenterDoc *_doc )
     : Command( _name ), diffs( _diffs ), objects( _objects ), txtBackCol( _txtBackCol ), otxtBackCol( _otxtBackCol )

@@ -1005,7 +1005,7 @@ void KPresenterView::screenAssignEffect()
 {
     page->setToolEditMode( TEM_MOUSE );
 
-    QList<KPObject> objs;
+    QPtrList<KPObject> objs;
     if ( page->canAssignEffect( objs ) ) {
         EffectDia *effectDia = new EffectDia( this, "Effect", objs, this );
 	effectDia->setCaption( i18n( "KPresenter - Assign Effects" ) );
@@ -2471,8 +2471,8 @@ void KPresenterView::rotateOk()
 {
     bool newAngle=false;
     KPObject *kpobject = 0;
-    QList<KPObject> _objects;
-    QList<RotateCmd::RotateValues> _oldRotate;
+    QPtrList<KPObject> _objects;
+    QPtrList<RotateCmd::RotateValues> _oldRotate;
     float _newAngle;
     RotateCmd::RotateValues *tmp;
 
@@ -2511,8 +2511,8 @@ void KPresenterView::shadowOk()
 {
     bool newShadow=false;
     KPObject *kpobject = 0;
-    QList<KPObject> _objects;
-    QList<ShadowCmd::ShadowValues> _oldShadow;
+    QPtrList<KPObject> _objects;
+    QPtrList<ShadowCmd::ShadowValues> _oldShadow;
     ShadowCmd::ShadowValues _newShadow, *tmp;
 
     _objects.setAutoDelete( false );

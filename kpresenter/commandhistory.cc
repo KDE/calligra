@@ -46,7 +46,7 @@ void CommandHistory::addCommand( Command *_command )
 {
     if ( present < static_cast<int>( commands.count() ) )
     {
-        QList<Command> _commands;
+        QPtrList<Command> _commands;
         _commands.setAutoDelete( false );
 
         for ( int i = 0; i < present; i++ )

@@ -22,7 +22,7 @@
 
 #include <qobject.h>
 #include <qstring.h>
-#include <qlist.h>
+#include <qptrlist.h>
 
 #include <command.h>
 #include <global.h>
@@ -52,7 +52,7 @@ signals:
     void undoRedoChanged( QString, QString );
 
 protected:
-    QList<Command> commands;
+    QPtrList<Command> commands;
     int present;
 
 };

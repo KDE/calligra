@@ -21,7 +21,7 @@
 #define EFFECTDIA_H
 
 #include <qdialog.h>
-#include <qlist.h>
+#include <qptrlist.h>
 
 class KPresenterView;
 class QWidget;
@@ -44,7 +44,7 @@ class EffectDia : public QDialog
 public:
 
     // constructor - destructor
-    EffectDia( QWidget* parent, const char*, const QList<KPObject> &_objs,
+    EffectDia( QWidget* parent, const char*, const QPtrList<KPObject> &_objs,
 	       KPresenterView* );
 
 protected:
@@ -58,7 +58,7 @@ protected:
     QBoxLayout *topLayout;
 
     KPresenterView *view;
-    QList<KPObject> objs;
+    QPtrList<KPObject> objs;
 
 public slots:
     void slotEffectDiaOk();

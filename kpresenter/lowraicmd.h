@@ -20,7 +20,7 @@
 #ifndef lowraicmd_h
 #define lowraicmd_h
 
-#include <qlist.h>
+#include <qptrlist.h>
 
 #include <command.h>
 
@@ -34,7 +34,7 @@ class KPObject;
 class LowerRaiseCmd : public Command
 {
 public:
-    LowerRaiseCmd( QString _name, QList<KPObject> *_oldList, QList<KPObject> *_newList, KPresenterDoc *_doc );
+    LowerRaiseCmd( QString _name, QPtrList<KPObject> *_oldList, QPtrList<KPObject> *_newList, KPresenterDoc *_doc );
     ~LowerRaiseCmd();
 
     virtual void execute();
@@ -43,7 +43,7 @@ public:
 protected:
     LowerRaiseCmd() {}
 
-    QList<KPObject> *oldList, *newList;
+    QPtrList<KPObject> *oldList, *newList;
     KPresenterDoc *doc;
     bool m_executed;
 

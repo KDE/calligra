@@ -21,7 +21,7 @@
 #define PAGE_H
 
 #include <qwidget.h>
-#include <qlist.h>
+#include <qptrlist.h>
 #include <qpicture.h>
 #include <qvaluelist.h>
 
@@ -101,7 +101,7 @@ public:
     int numPresSteps() const { return presStepList.count(); }
     int numPresPages() const { return slideList.count(); }
 
-    bool canAssignEffect( QList<KPObject> &objs ) const;
+    bool canAssignEffect( QPtrList<KPObject> &objs ) const;
 
     void keyPressEvent( QKeyEvent *e );
 
@@ -178,10 +178,10 @@ protected:
     void setupMenus();
 
     // get - set data
-    QList<KPBackGround> *backgroundList();
-    QList<KPObject> *objectList();
-    const QList<KPBackGround> *backgroundList() const;
-    const QList<KPObject> *objectList() const;
+    QPtrList<KPBackGround> *backgroundList();
+    QPtrList<KPObject> *objectList();
+    const QPtrList<KPBackGround> *backgroundList() const;
+    const QPtrList<KPObject> *objectList() const;
     unsigned int objNums();
     int diffx() const;
     int diffy() const;
@@ -254,7 +254,7 @@ protected:
     KoDocumentEntry partEntry;
     // List of objects to draw, from the previous step in the presentation
     // (those that remain on screen between two steps)
-    QList <KPObject> tmpObjs;
+    QPtrList <KPObject> tmpObjs;
     QString autoform;
     bool inEffect, keepRatio;
     double ratio;

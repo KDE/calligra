@@ -20,7 +20,7 @@
 #ifndef penbrushcmd_h
 #define penbrushcmd_h
 
-#include <qlist.h>
+#include <qptrlist.h>
 #include <qpen.h>
 #include <qbrush.h>
 
@@ -75,8 +75,8 @@ public:
     static const int PEN_ONLY = 4;
     static const int BRUSH_ONLY = 8;
 
-    PenBrushCmd( QString _name, QList<Pen> &_oldPen, QList<Brush> &_oldBrush,
-		 Pen _newPen, Brush _newBrush, QList<KPObject> &_objects, KPresenterDoc *_doc, int _flags = 0 );
+    PenBrushCmd( QString _name, QPtrList<Pen> &_oldPen, QPtrList<Brush> &_oldBrush,
+		 Pen _newPen, Brush _newBrush, QPtrList<KPObject> &_objects, KPresenterDoc *_doc, int _flags = 0 );
     ~PenBrushCmd();
 
     virtual void execute();
@@ -87,9 +87,9 @@ protected:
     {; }
 
     KPresenterDoc *doc;
-    QList<Pen> oldPen;
-    QList<Brush> oldBrush;
-    QList<KPObject> objects;
+    QPtrList<Pen> oldPen;
+    QPtrList<Brush> oldBrush;
+    QPtrList<KPObject> objects;
     Pen newPen;
     Brush newBrush;
     int flags;

@@ -27,7 +27,7 @@
 
 /*==============================================================*/
 GroupObjCmd::GroupObjCmd( const QString &_name,
-			  const QList<KPObject> &_objects,
+			  const QPtrList<KPObject> &_objects,
 			  KPresenterDoc *_doc )
     : Command( _name ), objects( _objects )
 {

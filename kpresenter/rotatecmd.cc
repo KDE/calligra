@@ -25,8 +25,8 @@
 /******************************************************************/
 
 /*======================== constructor ===========================*/
-RotateCmd::RotateCmd( QString _name, QList<RotateValues> &_oldRotate, float _newAngle,
-                      QList<KPObject> &_objects, KPresenterDoc *_doc )
+RotateCmd::RotateCmd( QString _name, QPtrList<RotateValues> &_oldRotate, float _newAngle,
+                      QPtrList<KPObject> &_objects, KPresenterDoc *_doc )
     : Command( _name ), oldRotate( _oldRotate ), objects( _objects )
 {
     objects.setAutoDelete( false );

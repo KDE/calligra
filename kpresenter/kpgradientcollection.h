@@ -20,7 +20,7 @@
 #ifndef kpgradientcollection_h
 #define kpgradientcollection_h
 
-#include <qlist.h>
+#include <qptrlist.h>
 #include <global.h>
 
 class QPixmap;
@@ -49,7 +49,7 @@ protected:
     virtual int inGradientList( QColor _color1, QColor _color2, BCType _bcType, QSize _size,
 				bool _unbalanced, int _xfactor, int _yfactor );
 
-    QList<KPGradient> gradientList;
+    QPtrList<KPGradient> gradientList;
 
 };
 

@@ -23,7 +23,7 @@
 
 #include <qbitmap.h>
 #include <qpointarray.h>
-#include <qlist.h>
+#include <qptrlist.h>
 #include <qregion.h>
 #include <qdom.h>
 #include <qpainter.h>
@@ -248,7 +248,7 @@ void KPAutoformObject::paint( QPainter* _painter )
     _painter->setBrush( brush );
 
     QPointArray pntArray = atfInterp.getPointArray( ext.width(), ext.height() );
-    QList<ATFInterpreter::AttribList> atrLs = atfInterp.getAttribList();
+    QPtrList<ATFInterpreter::AttribList> atrLs = atfInterp.getAttribList();
     QPointArray pntArray2( pntArray.size() );
     for ( unsigned int i = 0; i < pntArray.size(); i++ )
     {

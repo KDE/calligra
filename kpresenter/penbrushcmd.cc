@@ -35,8 +35,8 @@
 /******************************************************************/
 
 /*======================== constructor ===========================*/
-PenBrushCmd::PenBrushCmd( QString _name, QList<Pen> &_oldPen, QList<Brush> &_oldBrush,
-			  Pen _newPen, Brush _newBrush, QList<KPObject> &_objects, KPresenterDoc *_doc, int _flags )
+PenBrushCmd::PenBrushCmd( QString _name, QPtrList<Pen> &_oldPen, QPtrList<Brush> &_oldBrush,
+			  Pen _newPen, Brush _newBrush, QPtrList<KPObject> &_objects, KPresenterDoc *_doc, int _flags )
     : Command( _name ), oldPen( _oldPen ), oldBrush( _oldBrush ), objects( _objects )
 {
     objects.setAutoDelete( false );

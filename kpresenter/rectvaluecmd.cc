@@ -26,8 +26,8 @@
 /******************************************************************/
 
 /*======================== constructor ===========================*/
-RectValueCmd::RectValueCmd( QString _name, QList<RectValues> &_oldValues, RectValues _newValues,
-                            QList<KPObject> &_objects, KPresenterDoc *_doc )
+RectValueCmd::RectValueCmd( QString _name, QPtrList<RectValues> &_oldValues, RectValues _newValues,
+                            QPtrList<KPObject> &_objects, KPresenterDoc *_doc )
     : Command( _name ), oldValues( _oldValues ), objects( _objects )
 {
     objects.setAutoDelete( false );

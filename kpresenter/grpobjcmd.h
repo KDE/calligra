@@ -20,7 +20,7 @@
 #ifndef grpobjcmd_h
 #define grpobjcmd_h
 
-#include <qlist.h>
+#include <qptrlist.h>
 
 #include <command.h>
 
@@ -36,7 +36,7 @@ class GroupObjCmd : public Command
 {
 public:
     GroupObjCmd( const QString &_name,
-		 const QList<KPObject> &_objects,
+		 const QPtrList<KPObject> &_objects,
 		 KPresenterDoc *_doc );
     ~GroupObjCmd();
 
@@ -47,7 +47,7 @@ protected:
     GroupObjCmd()
     {; }
 
-    QList<KPObject> objects;
+    QPtrList<KPObject> objects;
     KPresenterDoc *doc;
     KPGroupObject *grpObj;
 
@@ -72,7 +72,7 @@ protected:
     UnGroupObjCmd()
     {; }
 
-    QList<KPObject> objects;
+    QPtrList<KPObject> objects;
     KPresenterDoc *doc;
     KPGroupObject *grpObj;
 

@@ -26,7 +26,7 @@
 /******************************************************************/
 
 /*======================== constructor ===========================*/
-LowerRaiseCmd::LowerRaiseCmd( QString _name, QList<KPObject> *_oldList, QList<KPObject> *_newList, KPresenterDoc *_doc )
+LowerRaiseCmd::LowerRaiseCmd( QString _name, QPtrList<KPObject> *_oldList, QPtrList<KPObject> *_newList, KPresenterDoc *_doc )
     : Command( _name )
 {
     oldList = _oldList;

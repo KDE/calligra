@@ -25,7 +25,7 @@
 /******************************************************************/
 
 /*======================== constructor ===========================*/
-DeleteCmd::DeleteCmd( QString _name, QList<KPObject> &_objects, KPresenterDoc *_doc )
+DeleteCmd::DeleteCmd( QString _name, QPtrList<KPObject> &_objects, KPresenterDoc *_doc )
     : Command( _name ), objects( _objects )
 {
     objects.setAutoDelete( false );

@@ -35,7 +35,7 @@ class KPObject;
 class SetOptionsCmd : public Command
 {
 public:
-    SetOptionsCmd( QString _name, QList<QPoint> &_diffs, QList<KPObject> &_objects,
+    SetOptionsCmd( QString _name, QPtrList<QPoint> &_diffs, QPtrList<KPObject> &_objects,
                    int _rastX, int _rastY, int _orastX, int _orastY,
                    QColor _txtBackCol, QColor _otxtBackCol, KPresenterDoc *_doc );
     ~SetOptionsCmd();
@@ -47,8 +47,8 @@ protected:
     SetOptionsCmd()
     {; }
 
-    QList<QPoint> diffs;
-    QList<KPObject> objects;
+    QPtrList<QPoint> diffs;
+    QPtrList<KPObject> objects;
     int rastX, rastY;
     int orastX, orastY;
     KPresenterDoc *doc;

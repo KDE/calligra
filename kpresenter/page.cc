@@ -168,7 +168,7 @@ void Page::paintEvent( QPaintEvent* paintEvent )
 void Page::drawBackground( QPainter *painter, QRect rect )
 {
     QRegion grayRegion( rect );
-    QListIterator<KPBackGround> it(*backgroundList());
+    QPtrListIterator<KPBackGround> it(*backgroundList());
     for ( int i = 0 ; it.current(); ++it, ++i ) {
 	if ( editMode )
         {
@@ -241,7 +241,7 @@ void Page::drawObjects( QPainter *painter, QRect rect )
     int pgNum = editMode ? (int)view->getCurrPgNum() : currPresPage;
     //kdDebug(33001) << "Page::drawObjects ----- pgNum=" << pgNum << " currPresStep=" << currPresStep << " _presFakt=" << _presFakt << endl;
 
-    QListIterator<KPObject> it(*objectList());
+    QPtrListIterator<KPObject> it(*objectList());
     for ( int i = 0 ; it.current(); ++it, ++i ) {
         KPObject *kpobject = it.current();
 	int pg = getPageOfObj( i, _presFakt );
@@ -474,7 +474,7 @@ void Page::mouseReleaseEvent( QMouseEvent *e )
     my = ( my / rastY() ) * rastY();
     firstX = ( firstX / rastX() ) * rastX();
     firstY = ( firstY / rastY() ) * rastY();
-    QList<KPObject> _objects;
+    QPtrList<KPObject> _objects;
     _objects.setAutoDelete( false );
     KPObject *kpobject = 0;
 
@@ -1639,7 +1639,7 @@ void Page::startScreenPresentation( float presFakt, int curPgNum /* 1-based */)
     if ( m_showOnlyPage == -1 )
     {
         // Maybe we should do this on demand ?
-        QListIterator<KPBackGround> it(*backgroundList());
+        QPtrListIterator<KPBackGround> it(*backgroundList());
         for ( int i = 0 ; it.current(); ++it, ++i )
 	    it.current()->setBgSize( getPageRect( i, _presFakt ).size() );
     }
@@ -1649,7 +1649,7 @@ void Page::startScreenPresentation( float presFakt, int curPgNum /* 1-based */)
     //kdDebug(33001) << "Page::startScreenPresentation Zooming objects" << endl;
     // Zoom objects to the correct size for full screen
     // (might need a progress bar!)
-    QListIterator<KPObject> it(*objectList());
+    QPtrListIterator<KPObject> it(*objectList());
     for ( int i = 0 ; it.current(); ++it, ++i )
     {
         int objPage = getPageOfObj( i, _presFakt ); // 1-based
@@ -1713,7 +1713,7 @@ void Page::stopScreenPresentation()
     //kdDebug(33001) << "Page::stopScreenPresentation m_showOnlyPage=" << m_showOnlyPage << endl;
     setCursor( waitCursor );
 
-    QListIterator<KPObject> it(*objectList());
+    QPtrListIterator<KPObject> it(*objectList());
     for ( int i = 0 ; it.current(); ++it, ++i )
     {
         if ( it.current()->isZoomed() )
@@ -1729,7 +1729,7 @@ void Page::stopScreenPresentation()
     // Zoom backgrounds back
     if ( m_showOnlyPage == -1 )
     {
-        QListIterator<KPBackGround> it(*backgroundList());
+        QPtrListIterator<KPBackGround> it(*backgroundList());
         for ( int i = 0 ; it.current(); ++it, ++i )
 	    it.current()->setBgSize( getPageRect( i ).size() );
     }
@@ -1762,7 +1762,7 @@ bool Page::pNext( bool )
     kdDebug(33001) << "\n-------\nPage::pNext currPresStep=" << currPresStep << " subPresStep=" << subPresStep << endl;
 
     // First try to go one sub-step further, if any object requires it
-    QListIterator<KPObject> oit(*objectList());
+    QPtrListIterator<KPObject> oit(*objectList());
     for ( int i = 0 ; oit.current(); ++oit, ++i )
     {
         KPObject *kpobject = oit.current();
@@ -1888,9 +1888,9 @@ bool Page::pPrev( bool /*manual*/ )
 }
 
 /*================================================================*/
-bool Page::canAssignEffect( QList<KPObject> &objs ) const
+bool Page::canAssignEffect( QPtrList<KPObject> &objs ) const
 {
-    QListIterator<KPObject> oIt( *objectList() );
+    QPtrListIterator<KPObject> oIt( *objectList() );
     for (; oIt.current(); ++oIt )
         if ( oIt.current()->isSelected() )
             objs.append( oIt.current() );
@@ -1901,7 +1901,7 @@ bool Page::canAssignEffect( QList<KPObject> &objs ) const
 /*================================================================*/
 bool Page::isOneObjectSelected()
 {
-    QListIterator<KPObject> oIt( *objectList() );
+    QPtrListIterator<KPObject> oIt( *objectList() );
     for (; oIt.current(); ++oIt )
         if ( oIt.current()->isSelected() )
             return true;
@@ -1921,7 +1921,7 @@ void Page::drawPageInPix2( QPixmap &_pix, int __diffy, int pgnum, float /*_zoom*
     QPainter p;
     p.begin( &_pix );
 
-    QListIterator<KPObject> oIt( *objectList() );
+    QPtrListIterator<KPObject> oIt( *objectList() );
     for (; oIt.current(); ++oIt )
         oIt.current()->drawSelection( false );
 
@@ -2434,7 +2434,7 @@ void Page::doObjEffects()
         drawn = true;
     }
 
-    QList<KPObject> _objList;
+    QPtrList<KPObject> _objList;
     QTime _time;
     int _step = 0, _steps1 = 0, _steps2 = 0, x_pos1 = 0, y_pos1 = 0;
     int x_pos2 = kapp->desktop()->width(), y_pos2 = kapp->desktop()->height(), _step_width = 0, _step_height = 0;
@@ -2445,7 +2445,7 @@ void Page::doObjEffects()
         bitBlt( &screen_orig, 0, 0, this, 0, 0, kapp->desktop()->width(), kapp->desktop()->height() );
     QPixmap *screen = new QPixmap( screen_orig );
 
-    QListIterator<KPObject> oit(*objectList());
+    QPtrListIterator<KPObject> oit(*objectList());
     for ( int i = 0 ; oit.current(); ++oit, ++i )
     {
         KPObject *kpobject = oit.current();
@@ -2584,7 +2584,7 @@ void Page::doObjEffects()
                   ( kapp->desktop()->width() - x_pos2 ) / _step_width : ( kapp->desktop()->height() - y_pos2 ) / _step_height;
         _time.start();
 
-        QList<QRect> xy;
+        QPtrList<QRect> xy;
         xy.setAutoDelete( true );
 
         for ( ; ; )
@@ -2592,7 +2592,7 @@ void Page::doObjEffects()
             kapp->processEvents();
             if ( nothingHappens ) break; // || _step >= _steps1 && _step >= _steps2 ) break;
 
-            QList<QRect> changes;
+            QPtrList<QRect> changes;
             changes.setAutoDelete( true );
 
             if ( _time.elapsed() >= 1 )
@@ -3119,7 +3119,7 @@ void Page::print( QPainter *painter, KPrinter *printer, float left_margin, float
     progress.setProgress( printer->toPage() - printer->fromPage() + 2 );
     kapp->setWinStyleHighlightColor( c );
 
-    QListIterator<KPObject> oIt( *objectList() );
+    QPtrListIterator<KPObject> oIt( *objectList() );
     for (; oIt.current(); ++oIt )
         oIt.current()->drawSelection( true );
 #else
@@ -3165,7 +3165,7 @@ void Page::print( QPainter *painter, KPrinter *printer, float left_margin, float
     progress.setProgress( pages_.count() );
     kapp->setWinStyleHighlightColor( c );
 
-    QListIterator<KPObject> oIt( *objectList() );
+    QPtrListIterator<KPObject> oIt( *objectList() );
     for (; oIt.current(); ++oIt )
         oIt.current()->drawSelection( true );
 #endif
@@ -3586,21 +3586,21 @@ void Page::leaveEvent( QEvent * /*e*/ )
 }
 
 /*================================================================*/
-QList<KPBackGround> *Page::backgroundList()
+QPtrList<KPBackGround> *Page::backgroundList()
 {
     return view->kPresenterDoc()->backgroundList();
 }
-const QList<KPBackGround> *Page::backgroundList() const
+const QPtrList<KPBackGround> *Page::backgroundList() const
 {
     return view->kPresenterDoc()->backgroundList();
 }
 
 /*================================================================*/
-QList<KPObject> *Page::objectList()
+QPtrList<KPObject> *Page::objectList()
 {
     return view->kPresenterDoc()->objectList();
 }
-const QList<KPObject> *Page::objectList() const
+const QPtrList<KPObject> *Page::objectList() const
 {
     return view->kPresenterDoc()->objectList();
 }
@@ -3948,7 +3948,7 @@ bool Page::pagesHelper(const QString &chunk, QValueList<int> &list) {
 void Page::moveObject( int x, int y, bool key )
 {
     KPObject *kpobject;
-    QList<KPObject> _objects;
+    QPtrList<KPObject> _objects;
     QPainter p;
 
     _objects.setAutoDelete( false );

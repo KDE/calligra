@@ -1566,7 +1566,7 @@ QColor KTextEdit::getColorTextBack()
 void KTextEditCommandHistory::addCommand( KTextEditCommand *cmd )
 {
     if ( current < (int)history.count() - 1 ) {
-	QList<KTextEditCommand> commands;
+	QPtrList<KTextEditCommand> commands;
 	commands.setAutoDelete( FALSE );
 
 	for( int i = 0; i <= current; ++i ) {

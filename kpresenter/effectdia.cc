@@ -39,7 +39,7 @@
 /******************************************************************/
 
 /*================================================================*/
-EffectDia::EffectDia( QWidget* parent, const char* name, const QList<KPObject>& _objs, KPresenterView *_view )
+EffectDia::EffectDia( QWidget* parent, const char* name, const QPtrList<KPObject>& _objs, KPresenterView *_view )
     : QDialog( parent, name, true ), objs( _objs )
 {
     view = _view;

@@ -28,7 +28,7 @@ class KTextEditFormatCollection;
 #include <koDocument.h>
 #include <koDocumentChild.h>
 
-#include <qlist.h>
+#include <qptrlist.h>
 #include <qobject.h>
 #include <qstring.h>
 #include <qvaluelist.h>
@@ -180,10 +180,10 @@ public:
                          QColor, BCType, QString, bool ,int, int, int, int );
 
     // get list of pages and objects
-    QList<KPBackGround> *backgroundList() { return &_backgroundList; }
-    QList<KPObject> *objectList() { return _objectList; }
-    const QList<KPBackGround> *backgroundList() const { return &_backgroundList; }
-    const QList<KPObject> *objectList() const { return _objectList; }
+    QPtrList<KPBackGround> *backgroundList() { return &_backgroundList; }
+    QPtrList<KPObject> *objectList() { return _objectList; }
+    const QPtrList<KPBackGround> *backgroundList() const { return &_backgroundList; }
+    const QPtrList<KPObject> *objectList() const { return _objectList; }
 
     // get - set raster
     unsigned int rastX() const { return _rastX; }
@@ -261,7 +261,7 @@ public:
     int getTopBorder();
     int getBottomBorder();
 
-    void setObjectList( QList<KPObject> *_list ) {
+    void setObjectList( QPtrList<KPObject> *_list ) {
         _objectList->setAutoDelete( false ); _objectList = _list; _objectList->setAutoDelete( false );
     }
 
@@ -351,10 +351,10 @@ protected:
     // page layout
     KoPageLayout _pageLayout;
     // List of backgrounds (one per page)
-    QList<KPBackGround> _backgroundList;
+    QPtrList<KPBackGround> _backgroundList;
 
     // list of objects
-    QList<KPObject> *_objectList;
+    QPtrList<KPObject> *_objectList;
 
     // screenpresentations
     bool _spInfinitLoop, _spManualSwitch;

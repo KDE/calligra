@@ -20,7 +20,7 @@
 #ifndef effectcmd_h
 #define effectcmd_h
 
-#include <qlist.h>
+#include <qptrlist.h>
 #include <qvaluelist.h>
 
 #include <command.h>
@@ -43,7 +43,7 @@ public:
 	bool disappear;
     };
 
-    EffectCmd( QString _name, const QList<KPObject> &_objs,
+    EffectCmd( QString _name, const QPtrList<KPObject> &_objs,
 	       const QValueList<EffectStruct> &_oldEffects, EffectStruct _newEffect );
     ~EffectCmd();
 
@@ -56,7 +56,7 @@ protected:
 
     QValueList<EffectStruct> oldEffects;
     EffectStruct newEffect;
-    QList<KPObject> objs;
+    QPtrList<KPObject> objs;
 
 };
 

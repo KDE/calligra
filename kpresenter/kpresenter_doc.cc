@@ -120,7 +120,7 @@ KPresenterDoc::KPresenterDoc( QWidget *parentWidget, const char *widgetName, QOb
 
     dcop = 0;
     _clean = true;
-    _objectList = new QList<KPObject>;
+    _objectList = new QPtrList<KPObject>;
     _objectList->setAutoDelete( false );
     _backgroundList.setAutoDelete( true );
     _spInfinitLoop = false;
@@ -238,7 +238,7 @@ bool KPresenterDoc::saveChildren( KoStore* _store, const QString &_path )
     if ( saveOnlyPage == -1 ) // Don't save all children into template for one page
            // ###### TODO: save objects that are on that page
     {
-      QListIterator<KoDocumentChild> it( children() );
+      QPtrListIterator<KoDocumentChild> it( children() );
       for( ; it.current(); ++it ) {
           // Don't save children that are only in the undo/redo history
           // but not anymore in the presentation
@@ -336,7 +336,7 @@ QDomDocument KPresenterDoc::saveXML()
     }
 
     // Write "OBJECT" tag for every child
-    QListIterator<KoDocumentChild> chl( children() );
+    QPtrListIterator<KoDocumentChild> chl( children() );
     for( ; chl.current(); ++chl ) {
         // Don't save children that are only in the undo/redo history
         // but not anymore in the presentation
@@ -480,7 +480,7 @@ bool KPresenterDoc::loadChildren( KoStore* _store )
 {
     if ( objStartY == 0 ) // Don't do this when inserting a template or a page...
     {
-      QListIterator<KoDocumentChild> it( children() );
+      QPtrListIterator<KoDocumentChild> it( children() );
       for( ; it.current(); ++it ) {
         if ( !((KoDocumentChild*)it.current())->loadDocument( _store ) )
           return false;
@@ -561,7 +561,7 @@ bool KPresenterDoc::loadXML( const QDomDocument &doc )
         if ( !_backgroundList.isEmpty() )
             _backgroundList.clear();
         delete _objectList;
-        _objectList = new QList<KPObject>;
+        _objectList = new QPtrList<KPObject>;
         _objectList->setAutoDelete( false );
         _spInfinitLoop = false;
         _spManualSwitch = true;
@@ -1241,9 +1241,9 @@ bool KPresenterDoc::setPenBrush( QPen pen, QBrush brush, LineEnd lb, LineEnd le,
     KPObject *kpobject = 0;
     bool ret = false;
 
-    QList<KPObject> _objects;
-    QList<PenBrushCmd::Pen> _oldPen;
-    QList<PenBrushCmd::Brush> _oldBrush;
+    QPtrList<KPObject> _objects;
+    QPtrList<PenBrushCmd::Pen> _oldPen;
+    QPtrList<PenBrushCmd::Brush> _oldBrush;
     PenBrushCmd::Pen _newPen, *ptmp;
     PenBrushCmd::Brush _newBrush, *btmp;
 
@@ -1407,9 +1407,9 @@ bool KPresenterDoc::setLineBegin( LineEnd lb )
     KPObject *kpobject = 0;
     bool ret = false;
 
-    QList<KPObject> _objects;
-    QList<PenBrushCmd::Pen> _oldPen;
-    QList<PenBrushCmd::Brush> _oldBrush;
+    QPtrList<KPObject> _objects;
+    QPtrList<PenBrushCmd::Pen> _oldPen;
+    QPtrList<PenBrushCmd::Brush> _oldBrush;
     PenBrushCmd::Pen _newPen, *ptmp;
     PenBrushCmd::Brush _newBrush, *btmp;
 
@@ -1472,9 +1472,9 @@ bool KPresenterDoc::setLineEnd( LineEnd le )
     KPObject *kpobject = 0;
     bool ret = false;
 
-    QList<KPObject> _objects;
-    QList<PenBrushCmd::Pen> _oldPen;
-    QList<PenBrushCmd::Brush> _oldBrush;
+    QPtrList<KPObject> _objects;
+    QPtrList<PenBrushCmd::Pen> _oldPen;
+    QPtrList<PenBrushCmd::Brush> _oldBrush;
     PenBrushCmd::Pen _newPen, *ptmp;
     PenBrushCmd::Brush _newBrush, *btmp;
 
@@ -1538,8 +1538,8 @@ bool KPresenterDoc::setPieSettings( PieType pieType, int angle, int len )
     bool ret = false;
 
     KPObject *kpobject = 0;
-    QList<KPObject> _objects;
-    QList<PieValueCmd::PieValues> _oldValues;
+    QPtrList<KPObject> _objects;
+    QPtrList<PieValueCmd::PieValues> _oldValues;
     PieValueCmd::PieValues _newValues, *tmp;
 
     _objects.setAutoDelete( false );
@@ -1584,8 +1584,8 @@ bool KPresenterDoc::setRectSettings( int _rx, int _ry )
     bool ret = false;
     bool changed=false;
     KPObject *kpobject = 0;
-    QList<KPObject> _objects;
-    QList<RectValueCmd::RectValues> _oldValues;
+    QPtrList<KPObject> _objects;
+    QPtrList<RectValueCmd::RectValues> _oldValues;
     RectValueCmd::RectValues _newValues, *tmp;
 
     _objects.setAutoDelete( false );
@@ -1630,9 +1630,9 @@ bool KPresenterDoc::setPenColor( QColor c, bool fill )
     KPObject *kpobject = 0;
     bool ret = false;
 
-    QList<KPObject> _objects;
-    QList<PenBrushCmd::Pen> _oldPen;
-    QList<PenBrushCmd::Brush> _oldBrush;
+    QPtrList<KPObject> _objects;
+    QPtrList<PenBrushCmd::Pen> _oldPen;
+    QPtrList<PenBrushCmd::Brush> _oldBrush;
     PenBrushCmd::Pen _newPen, *ptmp;
     PenBrushCmd::Brush _newBrush, *btmp;
 
@@ -1763,9 +1763,9 @@ bool KPresenterDoc::setBrushColor( QColor c, bool fill )
     KPObject *kpobject = 0;
     bool ret = false;
 
-    QList<KPObject> _objects;
-    QList<PenBrushCmd::Pen> _oldPen;
-    QList<PenBrushCmd::Brush> _oldBrush;
+    QPtrList<KPObject> _objects;
+    QPtrList<PenBrushCmd::Pen> _oldPen;
+    QPtrList<PenBrushCmd::Brush> _oldBrush;
     PenBrushCmd::Pen _newPen, *ptmp;
     PenBrushCmd::Brush _newBrush, *btmp;
 
@@ -2505,7 +2505,7 @@ void KPresenterDoc::lowerObjs( int /*diffx*/, int /*diffy*/ )
 {
     KPObject *kpobject = 0;
 
-    QList<KPObject> *_new = new QList<KPObject>;
+    QPtrList<KPObject> *_new = new QPtrList<KPObject>;
 
     for ( unsigned int j = 0; j < _objectList->count(); j++ )
 	_new->append( _objectList->at( j ) );
@@ -2532,7 +2532,7 @@ void KPresenterDoc::raiseObjs( int /*diffx*/, int /*diffy*/ )
 {
     KPObject *kpobject = 0;
 
-    QList<KPObject> *_new = new QList<KPObject>;
+    QPtrList<KPObject> *_new = new QPtrList<KPObject>;
 
     for ( unsigned int j = 0; j < _objectList->count(); j++ )
 	_new->append( _objectList->at( j ) );
@@ -2753,7 +2753,7 @@ void KPresenterDoc::setRasters( unsigned int rx, unsigned int ry, bool _replace 
 /*=================== repaint all views =========================*/
 void KPresenterDoc::repaint( bool erase )
 {
-    QListIterator<KoView> it( views() );
+    QPtrListIterator<KoView> it( views() );
     for( ; it.current(); ++it ) {
 	// I am doing a cast to KPresenterView here, since some austrian hacker :-)
 	// decided to overload the non virtual repaint method!
@@ -2766,7 +2766,7 @@ void KPresenterDoc::setUnit( KoUnit _unit, QString __unit )
 {
     _pageLayout.unit = _unit;
 
-    QListIterator<KoView> it( views() );
+    QPtrListIterator<KoView> it( views() );
     for( ; it.current(); ++it ) {
 	((KPresenterView*)it.current())->getHRuler()->setUnit( __unit );
 	((KPresenterView*)it.current())->getVRuler()->setUnit( __unit );
@@ -2778,7 +2778,7 @@ void KPresenterDoc::repaint( QRect rect )
 {
     QRect r;
 
-    QListIterator<KoView> it( views() );
+    QPtrListIterator<KoView> it( views() );
     for( ; it.current(); ++it ) {
 	r = rect;
 	r.moveTopLeft( QPoint( r.x() - ((KPresenterView*)it.current())->getDiffX(),
@@ -2795,7 +2795,7 @@ void KPresenterDoc::repaint( KPObject *kpobject )
 {
     QRect r;
 
-    QListIterator<KoView> it( views() );
+    QPtrListIterator<KoView> it( views() );
     for( ; it.current(); ++it )
     {
 	r = kpobject->getBoundingRect( 0, 0 );
@@ -2945,7 +2945,7 @@ void KPresenterDoc::deletePage( int _page )
     pageTitleDelete( _page );
 
     // Update the sidebars
-    QListIterator<KoView> it( views() );
+    QPtrListIterator<KoView> it( views() );
     for (; it.current(); ++it )
         static_cast<KPresenterView*>(it.current())->updateSideBar();
 }
@@ -3018,7 +3018,7 @@ int KPresenterDoc::insertPage( int _page, InsertPos _insPos, bool chooseTemplate
     pageTitleInsert( _page );
 
     // Update the sidebars
-    QListIterator<KoView> it( views() );
+    QPtrListIterator<KoView> it( views() );
     for (; it.current(); ++it )
         static_cast<KPresenterView*>(it.current())->updateSideBar();
     return _page;
@@ -3056,7 +3056,7 @@ KPObject* KPresenterDoc::getSelectedObj()
 void KPresenterDoc::deleteObjs( bool _add )
 {
     KPObject *kpobject = 0;
-    QList<KPObject> _objects;
+    QPtrList<KPObject> _objects;
     _objects.setAutoDelete( false );
 
     for ( int i = 0; i < static_cast<int>( objectList()->count() ); i++ ) {
@@ -3134,8 +3134,8 @@ void KPresenterDoc::replaceObjs( bool createUndoRedo )
 {
     KPObject *kpobject = 0;
     int ox, oy;
-    QList<KPObject> _objects;
-    QList<QPoint> _diffs;
+    QPtrList<KPObject> _objects;
+    QPtrList<QPoint> _diffs;
     _objects.setAutoDelete( false );
     _diffs.setAutoDelete( false );
 
@@ -3198,7 +3198,7 @@ void KPresenterDoc::loadPastedObjs( const QString &in, int )
 /*================= deselect all objs ===========================*/
 void KPresenterDoc::deSelectAllObj()
 {
-    QListIterator<KoView> it( views() );
+    QPtrListIterator<KoView> it( views() );
     for (; it.current(); ++it )
 	((KPresenterView*)it.current())->getPage()->deSelectAllObj();
 }
@@ -3208,8 +3208,8 @@ void KPresenterDoc::alignObjsLeft()
 {
     bool newPosition=false;
     KPObject *kpobject = 0;
-    QList<KPObject> _objects;
-    QList<QPoint> _diffs;
+    QPtrList<KPObject> _objects;
+    QPtrList<QPoint> _diffs;
     _objects.setAutoDelete( false );
     _diffs.setAutoDelete( false );
     int _x = getPageRect( 1, 0, 0 ).x();
@@ -3242,8 +3242,8 @@ void KPresenterDoc::alignObjsCenterH()
 {
     bool newPosition=false;
     KPObject *kpobject = 0;
-    QList<KPObject> _objects;
-    QList<QPoint> _diffs;
+    QPtrList<KPObject> _objects;
+    QPtrList<QPoint> _diffs;
     _objects.setAutoDelete( false );
     _diffs.setAutoDelete( false );
     int _x = getPageRect( 1, 0, 0 ).x();
@@ -3277,8 +3277,8 @@ void KPresenterDoc::alignObjsRight()
 {
     bool newPosition=false;
     KPObject *kpobject = 0;
-    QList<KPObject> _objects;
-    QList<QPoint> _diffs;
+    QPtrList<KPObject> _objects;
+    QPtrList<QPoint> _diffs;
     _objects.setAutoDelete( false );
     _diffs.setAutoDelete( false );
     int _w = getPageRect( 1, 0, 0 ).x() + getPageRect( 1, 0, 0 ).width();
@@ -3310,8 +3310,8 @@ void KPresenterDoc::alignObjsTop()
 {
     bool newPosition=false;
     KPObject *kpobject = 0;
-    QList<KPObject> _objects;
-    QList<QPoint> _diffs;
+    QPtrList<KPObject> _objects;
+    QPtrList<QPoint> _diffs;
     _objects.setAutoDelete( false );
     _diffs.setAutoDelete( false );
     int pgnum, _y;
@@ -3348,8 +3348,8 @@ void KPresenterDoc::alignObjsCenterV()
 {
     bool newPosition=false;
     KPObject *kpobject = 0;
-    QList<KPObject> _objects;
-    QList<QPoint> _diffs;
+    QPtrList<KPObject> _objects;
+    QPtrList<QPoint> _diffs;
     _objects.setAutoDelete( false );
     _diffs.setAutoDelete( false );
     int pgnum, _y, _h;
@@ -3387,8 +3387,8 @@ void KPresenterDoc::alignObjsBottom()
 {
     bool newPosition=false;
     KPObject *kpobject = 0;
-    QList<KPObject> _objects;
-    QList<QPoint> _diffs;
+    QPtrList<KPObject> _objects;
+    QPtrList<QPoint> _diffs;
     _objects.setAutoDelete( false );
     _diffs.setAutoDelete( false );
     int pgnum, _h;
@@ -3423,7 +3423,7 @@ void KPresenterDoc::alignObjsBottom()
 /*================= undo redo changed ===========================*/
 void KPresenterDoc::slotUndoRedoChanged( QString _undo, QString _redo )
 {
-    QListIterator<KoView> it( views() );
+    QPtrListIterator<KoView> it( views() );
     for (; it.current(); ++it )
     {
 	((KPresenterView*)it.current())->changeUndo( _undo, !_undo.isEmpty() );
@@ -3481,7 +3481,7 @@ QString KPresenterDoc::getPageTitle( unsigned int pgNum, const QString &_title, 
     if ( !manualTitleList[pgNum].isEmpty() )
         return manualTitleList[pgNum];
 
-    QList<KPTextObject> objs;
+    QPtrList<KPTextObject> objs;
     QRect rect = getPageRect( pgNum, 0, 0, fakt );
 
     KPObject *kpobject = 0L;
@@ -3574,7 +3574,7 @@ KoView* KPresenterDoc::createViewInstance( QWidget* parent, const char* name )
 void KPresenterDoc::paintContent( QPainter& painter, const QRect& rect, bool /*transparent*/, double /*zoomX*/, double /*zoomY*/ )
 {
     unsigned int i = 0;
-    QListIterator<KPBackGround> bIt( _backgroundList );
+    QPtrListIterator<KPBackGround> bIt( _backgroundList );
     for (; bIt.current(); ++bIt, i++ )
     {
         QRect r = getPageRect( i, 0, 0, 1.0, false );
@@ -3583,7 +3583,7 @@ void KPresenterDoc::paintContent( QPainter& painter, const QRect& rect, bool /*t
     }
 
 
-    QListIterator<KPObject> oIt( *_objectList );
+    QPtrListIterator<KPObject> oIt( *_objectList );
     for (; oIt.current(); ++oIt )
         if ( rect.intersects( oIt.current()->getBoundingRect( 0, 0 ) ) )
         {
@@ -3597,7 +3597,7 @@ void KPresenterDoc::paintContent( QPainter& painter, const QRect& rect, bool /*t
 /*================================================================*/
 void KPresenterDoc::groupObjects()
 {
-    QList<KPObject> objs;
+    QPtrList<KPObject> objs;
     objs.setAutoDelete( false );
     KPObject *kpobject;
     for ( kpobject = _objectList->first(); kpobject; kpobject = _objectList->next() ) {
@@ -3702,7 +3702,7 @@ void KPresenterDoc::selectPage( int pgNum /* 0-based */, bool select )
     kdDebug(33001) << "KPresenterDoc::selectPage pgNum=" << pgNum << " select=" << select << endl;
     setModified(true);
     // Update the views
-    QListIterator<KoView> it( views() );
+    QPtrListIterator<KoView> it( views() );
     for (; it.current(); ++it )
         static_cast<KPresenterView*>(it.current())->updateSideBarItem( pgNum );
 }

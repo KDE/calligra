@@ -20,7 +20,7 @@
 #ifndef rotatecmd_h
 #define rotatecmd_h
 
-#include <qlist.h>
+#include <qptrlist.h>
 #include <command.h>
 
 class KPresenterDoc;
@@ -38,8 +38,8 @@ public:
         float angle;
     };
 
-    RotateCmd( QString _name, QList<RotateValues> &_oldRotate, float _newAngle,
-               QList<KPObject> &_objects, KPresenterDoc *_doc );
+    RotateCmd( QString _name, QPtrList<RotateValues> &_oldRotate, float _newAngle,
+               QPtrList<KPObject> &_objects, KPresenterDoc *_doc );
     ~RotateCmd();
 
     virtual void execute();
@@ -50,8 +50,8 @@ protected:
     {; }
 
     KPresenterDoc *doc;
-    QList<RotateValues> oldRotate;
-    QList<KPObject> objects;
+    QPtrList<RotateValues> oldRotate;
+    QPtrList<KPObject> objects;
     float newAngle;
 
 };

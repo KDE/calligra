@@ -20,7 +20,7 @@
 #ifndef shadowcmd_h
 #define shadowcmd_h
 
-#include <qlist.h>
+#include <qptrlist.h>
 #include <command.h>
 
 class KPresenterDoc;
@@ -40,8 +40,8 @@ public:
         QColor shadowColor;
     };
 
-    ShadowCmd( QString _name, QList<ShadowValues> &_oldShadow, ShadowValues _newShadow,
-               QList<KPObject> &_objects, KPresenterDoc *_doc );
+    ShadowCmd( QString _name, QPtrList<ShadowValues> &_oldShadow, ShadowValues _newShadow,
+               QPtrList<KPObject> &_objects, KPresenterDoc *_doc );
     ~ShadowCmd();
 
     virtual void execute();
@@ -52,8 +52,8 @@ protected:
     {; }
 
     KPresenterDoc *doc;
-    QList<ShadowValues> oldShadow;
-    QList<KPObject> objects;
+    QPtrList<ShadowValues> oldShadow;
+    QPtrList<KPObject> objects;
     ShadowValues newShadow;
 
 };

@@ -22,7 +22,7 @@
 
 #include <qwidget.h>
 #include <qstring.h>
-#include <qlist.h>
+#include <qptrlist.h>
 #include <qrect.h>
 #include <qfontmetrics.h>
 #include <qintdict.h>
@@ -119,7 +119,7 @@ public:
     KTextEditCursor *redo( KTextEditCursor *c );
 
 private:
-    QList<KTextEditCommand> history;
+    QPtrList<KTextEditCommand> history;
     KPresenterDoc *document;
     KPTextObject *kptextobject;
     int current, steps;

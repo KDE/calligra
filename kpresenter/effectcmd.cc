@@ -25,7 +25,7 @@
 /******************************************************************/
 
 /*================================================================*/
-EffectCmd::EffectCmd( QString _name, const QList<KPObject> &_objs,
+EffectCmd::EffectCmd( QString _name, const QPtrList<KPObject> &_objs,
 		      const QValueList<EffectStruct> &_oldEffects, EffectStruct _newEffect )
     : Command( _name ), oldEffects( _oldEffects ),
       newEffect( _newEffect ), objs( _objs )

@@ -20,7 +20,7 @@
 #ifndef rectvaluecmd_h
 #define rectvaluecmd_h
 
-#include <qlist.h>
+#include <qptrlist.h>
 #include <command.h>
 
 class KPresenterDoc;
@@ -38,8 +38,8 @@ public:
         int xRnd, yRnd;
     };
 
-    RectValueCmd( QString _name, QList<RectValues> &_oldValues, RectValues _newValues,
-                  QList<KPObject> &_objects, KPresenterDoc *_doc );
+    RectValueCmd( QString _name, QPtrList<RectValues> &_oldValues, RectValues _newValues,
+                  QPtrList<KPObject> &_objects, KPresenterDoc *_doc );
     ~RectValueCmd();
 
     virtual void execute();
@@ -50,8 +50,8 @@ protected:
     {; }
 
     KPresenterDoc *doc;
-    QList<RectValues> oldValues;
-    QList<KPObject> objects;
+    QPtrList<RectValues> oldValues;
+    QPtrList<KPObject> objects;
     RectValues newValues;
 
 };

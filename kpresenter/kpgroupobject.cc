@@ -45,7 +45,7 @@ KPGroupObject::KPGroupObject()
 }
 
 /*================================================================*/
-KPGroupObject::KPGroupObject( const QList<KPObject> &objs )
+KPGroupObject::KPGroupObject( const QPtrList<KPObject> &objs )
     : KPObject(), objects( objs ), updateObjs( false )
 {
     objects.setAutoDelete( false );

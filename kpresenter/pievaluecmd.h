@@ -20,7 +20,7 @@
 #ifndef pievaluecmd_h
 #define pievaluecmd_h
 
-#include <qlist.h>
+#include <qptrlist.h>
 #include <command.h>
 
 class KPresenterDoc;
@@ -39,8 +39,8 @@ public:
         int pieAngle, pieLength;
     };
 
-    PieValueCmd( QString _name, QList<PieValues> &_oldValues, PieValues _newValues,
-                 QList<KPObject> &_objects, KPresenterDoc *_doc );
+    PieValueCmd( QString _name, QPtrList<PieValues> &_oldValues, PieValues _newValues,
+                 QPtrList<KPObject> &_objects, KPresenterDoc *_doc );
     ~PieValueCmd();
 
     virtual void execute();
@@ -51,8 +51,8 @@ protected:
     {; }
 
     KPresenterDoc *doc;
-    QList<PieValues> oldValues;
-    QList<KPObject> objects;
+    QPtrList<PieValues> oldValues;
+    QPtrList<KPObject> objects;
     PieValues newValues;
 
 };

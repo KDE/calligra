@@ -32,7 +32,7 @@ class KPGroupObject : public KPObject
 {
 public:
     KPGroupObject();
-    KPGroupObject( const QList<KPObject> &objs );
+    KPGroupObject( const QPtrList<KPObject> &objs );
     virtual ~KPGroupObject() {}
 
     KPGroupObject &operator=( const KPGroupObject & );
@@ -68,7 +68,7 @@ public:
         updateObjs = b;
     }
 
-    QList<KPObject> getObjects() {
+    QPtrList<KPObject> getObjects() {
         return objects;
     }
 
@@ -82,7 +82,7 @@ protected:
     void updateSizes( float fx, float fy );
     void updateCoords( int dx, int dy );
 
-    QList<KPObject> objects;
+    QPtrList<KPObject> objects;
     bool updateObjs;
 
 };

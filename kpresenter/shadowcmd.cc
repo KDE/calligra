@@ -25,8 +25,8 @@
 /******************************************************************/
 
 /*======================== constructor ===========================*/
-ShadowCmd::ShadowCmd( QString _name, QList<ShadowValues> &_oldShadow, ShadowValues _newShadow,
-                      QList<KPObject> &_objects, KPresenterDoc *_doc )
+ShadowCmd::ShadowCmd( QString _name, QPtrList<ShadowValues> &_oldShadow, ShadowValues _newShadow,
+                      QPtrList<KPObject> &_objects, KPresenterDoc *_doc )
     : Command( _name ), oldShadow( _oldShadow ), objects( _objects )
 {
     objects.setAutoDelete( false );
