@@ -194,6 +194,15 @@ void KWFootNoteVariable::setNumberingType( Numbering _type )
     setVariableFormat(m_doc->variableFormatCollection()->format("STRING"));
 }
 
+void KWFootNoteVariable::loadOasis( const QDomElement &elem, KoOasisContext& context )
+{
+    //TODO
+}
+
+void KWFootNoteVariable::saveOasis( KoXmlWriter& writer, KoSavingContext& context ) const
+{
+    //TODO
+}
 
 void KWFootNoteVariable::saveVariable( QDomElement &parentElem )
 {

@@ -126,6 +126,10 @@ public:
     virtual void saveVariable( QDomElement &parentElem );
     virtual void load( QDomElement &elem );
 
+    virtual void loadOasis( const QDomElement &elem, KoOasisContext& context );
+    virtual void saveOasis( KoXmlWriter& writer, KoSavingContext& context ) const;
+
+
     virtual QString text(bool realValue=false);
     // Nothing to do here. Numbering done by KWTextFrameSet::renumberFootNotes
     virtual void recalc() { }
