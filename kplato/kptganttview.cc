@@ -418,6 +418,17 @@ void KPTGanttView::modifyTask(KDGanttViewItem *item, KPTTask *task)
         item->setListViewText(4, "  " +  task->getLatestFinish().toString(Qt::ISODate));
     }
     item->setText(task->name());
+    //TODO i18n
+    QString w="Task: " + task->name() + '\n';
+    w += "Float: " ;
+    if (task->getEarliestStart() != task->startTime())
+        w += QString("%1h").arg((double)(task->getEarliestStart().secsTo(task->startTime()))/(double(2600)), 0, 'f', 1);
+    else if (task->getLatestFinish() != task->endTime())
+        w += QString("%1h").arg((double)(task->endTime().secsTo(task->getLatestFinish()))/(double(2600)), 0, 'f', 1);
+    else
+        w+= "0h";
+
+    item->setTooltipText(w);
     setDrawn(item, true);
 }
 

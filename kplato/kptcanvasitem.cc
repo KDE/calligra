@@ -704,6 +704,11 @@ void KPTGanttViewSummaryItem::insertRelations(KPTGanttView *view)
         {
             KDGanttViewTaskLink *link = new KDGanttViewTaskLink(this, child);
             link->setLinkType(kdLinkType(it.current()->timingRelation()));
+            //TODO i18n
+            QString t = QString("From: %1").arg(this->listViewText(0));
+            t += QString("\nTo: %1").arg(child->listViewText(0));
+            t += QString("\nLag: %1").arg(it.current()->lag().toString(KPTDuration::Format_Hour));
+            link->setTooltipText(t);
             view->addTaskLink(link);
         }
     }
@@ -781,6 +786,11 @@ void KPTGanttViewTaskItem::insertRelations(KPTGanttView *view)
         {
             KDGanttViewTaskLink *link = new KDGanttViewTaskLink(this, child);
             link->setLinkType(kdLinkType(it.current()->timingRelation()));
+            //TODO i18n
+            QString t = QString("From: %1").arg(this->listViewText(0));
+            t += QString("\nTo: %1").arg(child->listViewText(0));
+            t += QString("\nLag: %1").arg(it.current()->lag().toString(KPTDuration::Format_Hour));
+            link->setTooltipText(t);
             view->addTaskLink(link);
         }
     }
@@ -859,6 +869,11 @@ void KPTGanttViewEventItem::insertRelations(KPTGanttView *view)
         {
             KDGanttViewTaskLink *link = new KDGanttViewTaskLink(this, child);
             link->setLinkType(kdLinkType(it.current()->timingRelation()));
+            //TODO i18n
+            QString t = QString("From: %1").arg(this->listViewText(0));
+            t += QString("\nTo: %1").arg(child->listViewText(0));
+            t += QString("\nLag: %1").arg(it.current()->lag().toString(KPTDuration::Format_Hour));
+            link->setTooltipText(t);
             view->addTaskLink(link);
         }
     }
