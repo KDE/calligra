@@ -155,7 +155,7 @@ QDomDocument KPTPart::saveXML() {
 
     document.appendChild(document.createProcessingInstruction(
 			"xml",
-			"version=\"0.1\" encoding=\"UTF-8\""));
+			"version=\"1.0\" encoding=\"UTF-8\""));
 
     QDomElement doc = document.createElement("kplato");
     doc.setAttribute("editor", "KPlato");
