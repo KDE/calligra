@@ -458,11 +458,23 @@ QString KSpreadCell::encodeFormula( int _col, int _row )
                         if ( fix1 )
                             erg += QString( "$%1" ).arg( col );
                         else
-                            erg += QString( "#%1" ).arg( col - _col );
+                            if ( col - _col > 1 )
+                                erg += QString( "#%1" ).arg( col - _col );
+                            else // the new col is out of range -> exit with reference error message
+                            {
+                                erg = "=\"" + i18n("REFERENCE IS OUT OF RANGE") + "\"";
+                                return erg;
+                            }
                         if ( fix2 )
                             erg += QString( "$%1#").arg( row );
                         else
-                            erg += QString( "#%1#" ).arg( row - _row );
+                            if ( row - _row > 1 )
+                                erg += QString( "#%1#" ).arg( row - _row );
+                            else // the new row is out of range -> return with reference error message
+                            {
+                                erg = "=\"" + i18n("REFERENCE IS OUT OF RANGE") + "\"";
+                                return erg;
+                            }
                     }
                 }
                 else
@@ -538,7 +550,7 @@ QString KSpreadCell::decodeFormula( const QString &_text, int _col, int _row )
                 row += _row;
             // Skip '#' or '$'
             ++pos;
-            if ( row <= 0 || col <= 0 || row > KS_rowMax || col > KS_colMax )
+            if ( row < 1 || col < 1 || row > KS_rowMax || col > KS_colMax )
             {
                 kdError(36001) << "KSpreadCell::decodeFormula: row or column out of range" << endl;
                 return _text;
