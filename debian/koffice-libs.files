@@ -2,8 +2,6 @@ usr/share/apps/koffice/*
 usr/share/services/*
 usr/share/servicetypes/*
 usr/share/mimelnk/image/x-wmf.desktop
-usr/lib/libkspelltool.so
-usr/lib/libkspelltool.la
 usr/bin/koscript
 usr/share/man/man1/koscript*
 usr/share/icons/locolor/16x16/actions/abs.png
@@ -51,7 +49,6 @@ usr/share/icons/hicolor/32x32/actions/sum.png
 usr/share/doc/kde/HTML/en/koffice/*
 usr/share/doc/kde/HTML/en/doc/*
 usr/share/mimelnk/text/x-csv.desktop
-usr/share/mimelnk/text/x-latex.desktop
 usr/lib/libkoml.so.1.0.0
 usr/lib/libkoml.so.1
 usr/lib/libkoml.la
@@ -94,6 +91,12 @@ usr/lib/libolefilter.so
 usr/lib/libolefilter.la
 usr/lib/libmsodimport.so
 usr/lib/libmsodimport.la
+usr/lib/libkspelltool.so
+usr/lib/libkspelltool.la
+usr/lib/libabiwordimport.so
+usr/lib/libabiwordimport.la
+usr/lib/libabiwordexport.so
+usr/lib/libabiwordexport.la
 usr/share/lintian/overrides/koffice-libs
 usr/share/mimelnk/image/x-msod.desktop
 usr/share/templates/.source/Presentation.kpt
