@@ -1953,21 +1953,6 @@ void KexiTableView::keyPressEvent(QKeyEvent* e)
 		if (nobtn)
 			curCol = QMIN(columns() - 1, curCol + 1);
 		break;
-	case Key_Tab:
-	case Key_Backtab:
-		if (nobtn && e->key()==Key_Tab) {
-			if (acceptEditor()) {
-				curCol = QMIN(columns() - 1, curCol + 1);
-			}
-		}
-		else if ((e->state()==ShiftButton && e->key()==Key_Tab)
-		 || (e->state()==NoButton && e->key()==Key_Backtab)
-		 || (e->state()==ShiftButton && e->key()==Key_Backtab)) {
-			if (acceptEditor()) {
-				curCol = QMAX(0, curCol - 1);
-			}
-		}
-		break;
 	case Key_Up:
 		if (nobtn) {
 //			curRow = QMAX(0, curRow - 1);
@@ -2059,7 +2044,35 @@ void KexiTableView::keyPressEvent(QKeyEvent* e)
 		break;
 	default:
 		//others:
-		if ( nobtn && (e->key()==Key_Enter || e->key()==Key_Return || shortCutPressed(e, "edit_edititem")) ) {
+		if (nobtn && e->key()==Key_Tab) {
+			//tab
+			if (acceptEditor()) {
+				if (curCol == (columns() - 1)) {
+					if (curRow < (rows()-1+(isInsertingEnabled()?1:0))) {//skip to next row
+						curRow++;
+						curCol = 0;
+					}
+				}
+				else
+					curCol++;
+			}
+		}
+		else if ((e->state()==ShiftButton && e->key()==Key_Tab)
+		 || (e->state()==NoButton && e->key()==Key_Backtab)
+		 || (e->state()==ShiftButton && e->key()==Key_Backtab)) {
+			//backward tab
+			if (acceptEditor()) {
+				if (curCol == 0) {
+					if (curRow>0) {//skip to previous row
+						curRow--;
+						curCol = columns() - 1;
+					}
+				}
+				else
+					curCol--;
+			}
+		}
+		else if ( nobtn && (e->key()==Key_Enter || e->key()==Key_Return || shortCutPressed(e, "edit_edititem")) ) {
 			startEditOrToggleValue();
 		}
 		else if (nobtn && e->key()==KGlobalSettings::contextMenuKey()) { //Key_Menu:
@@ -2352,9 +2365,10 @@ void KexiTableView::focusOutEvent(QFocusEvent*)
 
 bool KexiTableView::focusNextPrevChild(bool next)
 {
-	if (d->pEditor)
+	return false; //special Tab/BackTab meaning
+/*	if (d->pEditor)
 		return true;
-	return QScrollView::focusNextPrevChild(next);
+	return QScrollView::focusNextPrevChild(next);*/
 }
 
 void KexiTableView::resizeEvent(QResizeEvent *e)

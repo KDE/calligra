@@ -279,8 +279,8 @@ KexiMainWindowImpl::KexiMainWindowImpl()
 	connect(&Kexi::partManager(),SIGNAL(partLoaded(KexiPart::Part*)),this,SLOT(slotPartLoaded(KexiPart::Part*)));
 	connect( m_pMdi, SIGNAL(nowMaximized(bool)), this, SLOT(slotCaptionForCurrentMDIChild(bool)) );
 	connect( m_pMdi, SIGNAL(noMaximizedChildFrmLeft(KMdiChildFrm*)), this, SLOT(slotNoMaximizedChildFrmLeft(KMdiChildFrm*)));
-//	connect( m_pMdi, SIGNAL(lastChildFrmClosed()), this, SLOT(slotLastChildFrmClosed()));
-	connect( m_pMdi, SIGNAL(lastChildViewClosed()), this, SLOT(slotLastChildViewClosed()));
+	connect( this, SIGNAL(lastChildFrmClosed()), this, SLOT(slotLastChildFrmClosed()));
+//no such signal	connect( m_pMdi, SIGNAL(lastChildViewClosed()), this, SLOT(slotLastChildViewClosed()));
 
 	connect( this, SIGNAL(childViewIsDetachedNow(QWidget*)), this, SLOT(slotChildViewIsDetachedNow(QWidget*)));
 	connect( this, SIGNAL(mdiModeHasBeenChangedTo(KMdi::MdiMode)),
@@ -1037,7 +1037,7 @@ void KexiMainWindowImpl::slotNoMaximizedChildFrmLeft(KMdiChildFrm*)
 	slotCaptionForCurrentMDIChild(false);
 }
 
-void KexiMainWindowImpl::slotLastChildViewClosed()
+void KexiMainWindowImpl::slotLastChildFrmClosed()
 {
 	slotCaptionForCurrentMDIChild(false);
 	activeWindowChanged(0);
@@ -2070,7 +2070,8 @@ bool KexiMainWindowImpl::eventFilter( QObject *obj, QEvent * e )
 {
 	//KexiVDebug << "eventFilter: " <<e->type() << " " <<obj->name()<<endl;
 	if (e->type()==QEvent::KeyPress) {
-		KexiVDebug << "KEY EVENT" << endl;
+		KexiVDebug << "KEY EVENT " << QString::number(static_cast<QKeyEvent*>(e)->key(), 16) << endl;
+		KexiVDebug << endl;
 	}
 	if (e->type()==QEvent::AccelOverride) {
 		KexiVDebug << "AccelOverride EVENT" << endl;

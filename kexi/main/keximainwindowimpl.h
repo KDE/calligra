@@ -230,7 +230,7 @@ class KEXIMAIN_EXPORT KexiMainWindowImpl : public KexiMainWindow
 
 		void slotCaptionForCurrentMDIChild(bool childrenMaximized);
 		void slotNoMaximizedChildFrmLeft(KMdiChildFrm*);
-		void slotLastChildViewClosed();
+		void slotLastChildFrmClosed();
 		void slotChildViewIsDetachedNow(QWidget*);
 
 		//! Shows an error message signaled by project's objects, connections, etc.

@@ -327,6 +327,9 @@ Table View
 Table Designer
 - before switching to design view, row editing is accepted 
 
+Table View
+- Key_Tab, Key_BackTab work again
+
 2004-08-19
 KexiDB
 - DriverPrivate added to avoid binary incompatibilities
