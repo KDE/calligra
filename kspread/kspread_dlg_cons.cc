@@ -150,7 +150,7 @@ void KSpreadConsolidate::slotOk()
   if ( w <= ( ( desc == D_BOTH || desc == D_COL ) ? 1 : 0 ) ||
        h <= ( ( desc == D_BOTH || desc == D_ROW ) ? 1 : 0 ) )
   {
-    QMessageBox::critical( 0L, i18n("Error"), i18n( "The range\n%s\nis too small" ).arg( r.getFirst() ) );
+    QMessageBox::critical( 0L, i18n("Error"), i18n( "The range\n%1\nis too small" ).arg( r.getFirst() ) );
     return;
   }
   

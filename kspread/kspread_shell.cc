@@ -330,7 +330,7 @@ void KSpreadShell::slotFileOpen()
 
   if ( !openDocument( file, "" ) )
   {
-    QString tmp( i18n( "Could not open\n%s" ).arg( file.data() ) );
+    QString tmp( i18n( "Could not open\n%1" ).arg( file.data() ) );
     QMessageBox::critical( this, i18n( "IO Error" ), tmp, i18n( "OK" ) );
   }
 }
