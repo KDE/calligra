@@ -58,6 +58,7 @@ public:
      * The url it passes is the file to convert, obviously. You can't use
      * the @ref import() method -- use @ref exp0rt() to convert the file to
      * the destination mimetype you prefer.
+     *
      * @param url The file you want to export
      * @param mimetypeHint The mimetype of the file you want to export. You have
      *        to specify this information only if the automatic detection will
@@ -106,7 +107,7 @@ public:
     static QStringList mimeFilter();
 
     /**
-     * Method used to check if that filter available at all.
+     * Method used to check if that filter is available at all.
      * Note: Slow, but cached
      */
     static bool filterAvailable( KoFilterEntry::Ptr entry );

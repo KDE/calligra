@@ -71,8 +71,8 @@ public:
      * @param name is used to identify this document via DCOP so you may want to
      *        pass a meaningful name here which matches the pattern [A-Za-z_][A-Za-z_0-9]*.
      * @param singleViewMode determines whether the document may only have one view. In this case
-     *        the @param parent must be a QWidget derived class. KoDocument will then create a wrapper widget
-     *        (@ref KoViewWrapperWidget) which is a child of @param parentWidget.
+     *        the @p parent must be a QWidget derived class. KoDocument will then create a wrapper widget
+     *        (@ref KoViewWrapperWidget) which is a child of @p parentWidget.
      *        This widget can be retrieved by calling @ref #widget.
      */
     KoDocument( QWidget* parentWidget,
@@ -135,24 +135,24 @@ public:
     virtual bool openURL( const KURL & url );
 
     /**
-     * Opens the document given by @param url, without storing the URL
+     * Opens the document given by @p url, without storing the URL
      * in the KoDocument.
      * Call this instead of openURL() to implement KoMainWindow's
      * File --> Import feature.
      *
-     * Note: This will call openURL().  To differentiate this from an ordinary
+     * Note: This will call openURL(). To differentiate this from an ordinary
      *       Open operation (in any reimplementation of openURL() or openFile())
      *       call @ref isImporting().
      */
     bool import( const KURL &url );
 
     /**
-     * Saves the document as @param url without changing the state of the
-     * KoDocument (URL, modified flag etc.).  Call this instead of
+     * Saves the document as @p url without changing the state of the
+     * KoDocument (URL, modified flag etc.). Call this instead of
      * KParts::ReadWritePart::saveAs() to implement KoMainWindow's
      * File --> Export feature.
      *
-     * Note: This will call KoDocument::saveAs().  To differentiate this
+     * Note: This will call KoDocument::saveAs(). To differentiate this
      *       from an ordinary Save operation (in any reimplementation of
      *       saveFile()) call @ref isExporting().
      */
@@ -169,7 +169,7 @@ public:
     /**
      * Used by KoApplication, when no document exists yet.
      *
-     * With the help of @param instance or @ref KApplication::instance() this
+     * With the help of @p instance or @ref KApplication::instance() this
      * method figures out which .desktop file matches this application. In this
      * file it searches for the "X-KDE-NativeMimeType" entry and returns it.
      *
@@ -244,10 +244,19 @@ public:
      */
     virtual void addView( KoView *view );
 
+    /**
+     * Removes a view of the document.
+     */
     virtual void removeView( KoView *view );
 
+    /**
+     * @return a list of views this document is displayed in
+     */
     const QPtrList<KoView> & views() const;
 
+    /**
+     * @return number of views this document is displayed in
+     */
     int viewCount() const;
 
     /**
@@ -269,7 +278,7 @@ public:
      *         be used to transform a point of this parts coordinate system
      *         to the coordinate system of p.
      *
-     *  @return Pointer to the document, that was hit.
+     *  @return Pointer to the document which was hit.
      */
     virtual KoDocument *hitTest( const QPoint &pos, const QWMatrix &matrix = QWMatrix() );
 
@@ -286,6 +295,10 @@ public:
     virtual void paintEverything( QPainter &painter, const QRect &rect, bool transparent = false,
                                   KoView *view = 0L, double zoomX = 1.0, double zoomY = 1.0 );
 
+    /**
+     * Generates a preview picture of the document
+     * (to be used in the File Dialog).
+     */
     virtual QPixmap generatePreview( const QSize& size );
 
     /**
@@ -312,7 +325,8 @@ public:
      *
      *  @see #paintEverything #paintChildren #paintContent
      */
-    virtual void paintChild( KoDocumentChild *child, QPainter &painter, KoView *view, double zoomX = 1.0, double zoomY = 1.0 );
+    virtual void paintChild( KoDocumentChild *child, QPainter &painter, KoView *view,
+                             double zoomX = 1.0, double zoomY = 1.0 );
 
     /**
      *  Paints the data itself. Normally called by @ref paintEverthing. It does not
@@ -327,7 +341,8 @@ public:
      *
      *  @see #paintEverything
      */
-    virtual void paintContent( QPainter &painter, const QRect &rect, bool transparent = false, double zoomX = 1.0, double zoomY = 1.0 ) = 0;
+    virtual void paintContent( QPainter &painter, const QRect &rect, bool transparent = false,
+                               double zoomX = 1.0, double zoomY = 1.0 ) = 0;
 
     /**
      * Called by koApplication to check for an autosave file in $HOME
@@ -348,7 +363,7 @@ public:
 
     /**
      *  Tells the document that its title has been modified, either because
-     *  the modified status changes (this is done by @ref setModified) or
+     *  the modified status changes (this is done by @ref #setModified) or
      *  because the URL or the document-info's title changed.
      */
     virtual void setTitleModified();
@@ -362,7 +377,7 @@ public:
      *  Sets the document to empty. Used after loading a template
      *  (which is not empty, but not the user's input).
      *
-     * @ref #isEmpty
+     *  @see #isEmpty
      */
     virtual void setEmpty() { m_bEmpty = true; }
 
@@ -375,7 +390,7 @@ public:
 
     /**
      *  Saves a document to a store.
-     *  You should not have to reimplement this - but call it in @ref saveChildren.
+     *  You should not have to reimplement this - but call it in @ref #saveChildren.
      */
     virtual bool saveToStore( KoStore* store, const QString& path );
 
@@ -415,7 +430,7 @@ public:
 
     /**
      *  Save the document. The default implementation is to call
-     *  @ref saveXML. This method exists only for applications that
+     *  @ref #saveXML. This method exists only for applications that
      *  don't use QDomDocument for saving, i.e. kword and kpresenter.
      */
     virtual bool saveToStream( QIODevice * dev );
@@ -474,7 +489,7 @@ public:
 
     /**
      * @return the KoDocumentChild associated with the given Document, but only if
-     *         "doc" is a direct child of this document.
+     *         @p doc is a direct child of this document.
      *
      * This is a convenience function. You could get the same result
      * by traversing the list returned by @ref #children.
@@ -505,27 +520,36 @@ public:
      */
     virtual void removeShell( KoMainWindow *shell );
 
+    /**
+     * @return the list of shells for the main window
+     */
     const QPtrList<KoMainWindow>& shells() const;
 
+    /**
+     * @return the number of shells for the main window
+     */
     int shellCount() const;
 
     /**
-     * Returns the list of all the currently opened documents
+     * @return the list of all the currently opened documents
      */
     static QPtrList<KoDocument> *documentList() { return s_documentList; }
 
     /**
      * Return a DCOP interface for this document
      * KOffice parts are strongly recommended to reimplement this method,
-     * so that their dcop interface provides more functionality than the basic KoDocumentIface
+     * so that their DCOP interface provides more functionality than the basic KoDocumentIface
      */
     virtual DCOPObject * dcopObject();
 
     /**
-     * return the ID of the dcop interface for this document.
+     * @return the ID of the DCOP interface for this document.
      **/
     QCString dcopObjectId() const;
 
+    /**
+     * Signal the progress of operations such as loading or saving.
+     */
     void emitProgress( int value ) { emit sigProgress( value ); }
 
     bool isInOperation();
@@ -538,8 +562,16 @@ public:
      */
     virtual bool isStoredExtern();
 
+    /**
+     * @return the page layout associated with this document (margins, paper, etc).
+     *
+     * @see KoPageLayout
+     */
     KoPageLayout pageLayout() const { return m_pageLayout; }
 
+    /**
+     * Performs a cleanup of unneeded backup files
+     */
     void removeAutoSaveFiles();
 
     void setBackupFile( bool _b );
@@ -567,8 +599,14 @@ public:
      */
     void setDoNotSaveExtDoc( bool on = true );
 
-    void setBackupPath( const QString & );
+    /**
+     * Sets the backup path of the document
+     */
+    void setBackupPath( const QString & _path );
 
+    /**
+     * @return path to the backup document
+     */
     QString backupPath()const;
 
     /**
@@ -598,6 +636,10 @@ public:
      * Set when you want an external embedded document to be stored internally
      */
     void setStoreInternal( bool i );
+
+    /**
+     * @return true when external embedded documents are stored internally
+     */
     bool storeInternal() const;
 
     bool hasExternURL();
@@ -613,13 +655,19 @@ public:
      * failed save (remember to use setURL() to restore the URL as well).
      *
      * Do _not_ use these functions for any other purpose.
+     *
+     * @internal
      */
     QString &file() { return m_file; }
+
+    /**
+     * @internal
+     */
     void setFile( const QString &file ) { m_file = file; }
 
 signals:
     /**
-     * This signal is emitted, if a direct or indirect child document changes
+     * This signal is emitted when a direct or indirect child document changes
      * and needs to be updated in all views.
      *
      * If one of your child documents emits the childChanged signal, then you may

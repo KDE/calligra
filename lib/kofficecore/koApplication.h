@@ -53,7 +53,6 @@ public:
      */
     KoApplication();
 
-
     /**
      *  Destructor.
      */
@@ -72,6 +71,10 @@ public:
      * have to process your command line parameters by yourself.
      */
     virtual bool start();
+
+    /**
+     * @return true if the application is starting
+     */
     static bool isStarting();
 private:
     bool initHack();

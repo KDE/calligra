@@ -46,7 +46,7 @@ public:
   KoDocumentChild( KoDocument* parent, KoDocument* doc, const QRect& geometry );
 
   /**
-   * When using this constructor you must call @ref setDocument before
+   * When using this constructor you must call @ref #setDocument before
    * you can call any other function of this class.
    */
   KoDocumentChild( KoDocument* parent );
@@ -59,8 +59,18 @@ public:
    */
   virtual void setDocument( KoDocument *doc, const QRect &geometry );
 
+  /**
+   * @return document contained in this child
+   *
+   * @see KoDocument
+   */
   virtual KoDocument *document() const;
 
+  /**
+   * @return parent document of this child
+   *
+   * @see KoDocument
+   */
   virtual KoDocument *parentDocument() const;
 
   virtual KoDocument* hitTest( const QPoint& p, const QWMatrix& _matrix = QWMatrix() );
@@ -86,7 +96,7 @@ public:
 
   /**
    *  Parses the "object" tag. This does NOT mean creating the child documents.
-   *  AFTER the 'parser' finished parsing, you must use @ref #loadDocument
+   *  AFTER the 'parser' has finished parsing, you must use @ref #loadDocument
    *  to actually load the embedded documents.
    *
    *  What you should have in mind is that this method is called from within
@@ -109,7 +119,7 @@ public:
    */
   bool isDeleted() const;
   void setDeleted( bool on = true );
-  
+
 protected: // Should be private, but KWord needs access to the variables
     // because it reimplements load/save (for uppercase tags)
 

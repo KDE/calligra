@@ -76,8 +76,8 @@ public:
   virtual QPointArray pointArray( const QWMatrix &matrix = QWMatrix() ) const;
 
   /**
-   * Tests wether the part contains a certain point. The point is
-   * in tghe corrdinate system of the parent.
+   * Tests whether the part contains a certain point. The point is
+   * in the coordinate system of the parent.
    */
   virtual bool contains( const QPoint& ) const;
 
@@ -94,27 +94,54 @@ public:
    */
   virtual void setScaling( double x, double y );
 
+  /**
+   * @return the x axis scaling of the child part
+   */
   virtual double xScaling() const;
 
+  /**
+   * @return the y axis scaling of the child part
+   */
   virtual double yScaling() const;
 
-  virtual void setShearing( double, double );
+  /**
+   * Shears the content of the child part.
+   */
+  virtual void setShearing( double x, double y );
 
+  /**
+   * @return the x axis shearing of the child part
+   */
   virtual double xShearing() const;
 
+  /**
+   * @return the y axis shearing of the child part
+   */
   virtual double yShearing() const;
 
+  /**
+   * Sets the angle of rotation.
+   */
   virtual void setRotation( double );
 
+  /**
+   * @return the angle of rotation
+   */
   virtual double rotation() const;
 
+  /**
+   * Sets the center of the rotation to the point @p pos.
+   */
   virtual void setRotationPoint( const QPoint& pos );
 
+  /**
+   * @return the center of the rotation
+   */
   virtual QPoint rotationPoint() const;
 
   /**
    * @return true if the child part is an orthogonal rectangle relative
-   *         to its parents corrdinate system.
+   *         to its parents coordinate system.
    */
   virtual bool isRectangle() const;
 
@@ -122,15 +149,15 @@ public:
    * Sets the clip region of the painter, so that only pixels of the
    * child part can be drawn.
    *
-   * @param combine tells wether the new clip region is an intersection
-   *        of the current region with the childs region or wether only
+   * @param combine tells whether the new clip region is an intersection
+   *        of the current region with the childs region or whether only
    *        the childs region is set.
    */
   virtual void setClipRegion( QPainter& painter, bool combine = true );
 
   /**
    * Transforms the painter (its worldmatrix and the clipping)
-   * in such a way, that the painter can be passed to the child part
+   * in such a way that the painter can be passed to the child part
    * for drawing.
    */
   virtual void transform( QPainter& painter );
@@ -143,7 +170,7 @@ public:
    *         This value depends on the scaling and the
    *         geometry.
    *
-   * @see scaling geomtry
+   * @see #xScaling #geometry
    */
   virtual QRect contentRect() const;
 

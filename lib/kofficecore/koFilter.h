@@ -32,7 +32,7 @@ class KoFilterChain;
  *
  * Derive your filter class from this base class and implement
  * the @ref convert() method. Don't forget to specify the Q_OBJECT
- * macro in your class even if you don't use signals nor slots.
+ * macro in your class even if you don't use signals or slots.
  * This is needed as filters are created on the fly.
  * The m_chain member allows access to the @ref KoFilterChain
  * which invokes the filter to query for input/output.
@@ -71,10 +71,11 @@ public:
      * The passed mimetypes should be a pair of those you specified in your
      * .desktop file.
      * You @em have to implement this method to make the filter work.
+     *
      * @param from The mimetype of the source file/document
      * @param to The mimetype of the destination file/document
-     * @return The error status, see the @ref ConversionStatus enum.
-     *         KoFilter::OK means that everything is allright.
+     * @return The error status, see the @ref #ConversionStatus enum.
+     *         KoFilter::OK means that everything is alright.
      */
     virtual ConversionStatus convert( const QCString& from, const QCString& to ) = 0;
 
@@ -82,6 +83,7 @@ signals:
     /**
      * Emit this signal with a value in the range of 1...100 to have some
      * progress feedback for the user in the statusbar of the application.
+     *
      * @param value The actual progress state. Should always remain in
      * the range 1..100.
      */
@@ -118,14 +120,14 @@ private:
  * To make use of embedding features you have to know that there are two kinds
  * of embedding for filters: embedding the output of a different filter (library)
  * or embedding the output of several internal filters (no separate library).
- * The first case is the simpler one. You just have to override @ref savePartContents
- * and call @ref embedPart to trigger the embedding process. One example for such
+ * The first case is the simpler one. You just have to override @ref #savePartContents
+ * and call @ref #embedPart to trigger the embedding process. One example for such
  * a filter is Kontour's MSOD (MS Office Drawing) filter.
  *
  * The more complex case is embedding various streams from within the same filter
  * library. This is neccesary for OLE like files (at least with the current design
- * of the OLEFilter). In this case you have to use @ref startInternalEmbedding and
- * @ref endInternalEmbedding accordingly. Try to use the previous method if possible.
+ * of the OLEFilter). In this case you have to use @ref #startInternalEmbedding and
+ * @ref #endInternalEmbedding accordingly. Try to use the previous method if possible.
  *
  * If you're using this class you can also setup a signal/slot communication
  * between parent and child filter. To make that work you simply have to define
@@ -171,11 +173,12 @@ protected:
     /**
      * Embed some document using an external filter (i.e. a different
      * filter library). This method works according to the template method
-     * pattern and calls @ref savePartContents during execution.
+     * pattern and calls @ref #savePartContents during execution.
      * Call this method when you want to convert some data using one or more
      * KOffice filters selected via the filter manager.
      * This is the way to go when it comes to embedding unless you have very
      * special requirements.
+     *
      * @param from The mimetype of the source data
      * @param to The mimetype of the destination part. If this field is set
      *           to "" the filter manager will try to find the best native
@@ -183,7 +186,7 @@ protected:
      *           hold the string of the used mimetype.
      * @param status Returns the error status of the filter
      * @param key Optional key field to allow custom keys inside the part
-     *        map (see @ref internalPartReference). If this field is left
+     *        map (see @ref #internalPartReference). If this field is left
      *        empty we generate a key from the part number (e.g. 1 -> "1")
      * @return The number of the part (can be used to refer to the part from
      *         within the embedding filter).
@@ -196,17 +199,19 @@ protected:
      * Method to perform "internal" embedding of parts in olefilter-style.
      * This method can be used to signal the start of a new embedding
      * level within your filter. Very evil, but what shall I say ;)
-     * Unless you really have to you should always use @ref embedPart as
+     * Unless you really have to you should always use @ref #embedPart as
      * it's easier to use and not as hacky.
+     *
      * @param key The key we use to store reference/mimetype of your new part
      * @param mimeType The mimetype of the part you're about to embed
      */
     void startInternalEmbedding( const QString& key, const QCString& mimeType );
+
     /**
      * This method signals the end of an internal embedding session.
-     * You have to call that exactly as often as you call @ref startInternalEmbedding
+     * You have to call that exactly as often as you call @ref #startInternalEmbedding
      * or you'll mess up the internal stack and your file will be invalid.
-     * Again: use @ref embedPart if you can :-)
+     * Again: use @ref #embedPart if you can :-)
      */
     void endInternalEmbedding();
 
@@ -214,14 +219,17 @@ protected:
      * Query the internal part map for the reference of the part
      * matching the given key. Note that you can use that plain
      * simple int to refer to the respective part (when used as string).
+     *
      * @param key The key you would like to look up
      * @return The reference or -1 if we didn't find a part with the
      *         given key
      */
     int internalPartReference( const QString& key ) const;
+
     /**
      * Query the internal part map for the mimetype of the part
      * matching the given key.
+     *
      * @param key The key you would like to look up
      * @return The mimetype, might be empty if the part matching
      *         the given key doesn't exist.
@@ -257,12 +265,13 @@ private:
     KoEmbeddingFilter& operator=( const KoEmbeddingFilter& rhs );
 
     /**
-     * This method will be called by @ref embedPart as soon as it
+     * This method will be called by @ref #embedPart as soon as it
      * needs the data of the part (template method pattern). You
      * have to override that and simply save the part data to the
      * (already opened) file.
-     * No need to override that when you're not using @ref embedPart
+     * No need to override that when you're not using @ref #embedPart
      * (as you should ;)
+     *
      * @param file An already opened file
      */
     virtual void savePartContents( QIODevice* file );
