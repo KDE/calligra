@@ -84,35 +84,29 @@ bool KPTMilestone::openDialog() {
     return ret;
 }
 
-void KPTMilestone::drawPert(KPTPertCanvas *view, QCanvas* canvas, KPTNode *parent) {
+void KPTMilestone::drawPert(KPTPertCanvas *view, KPTNode *parent) {
 	if (!m_drawn) {
+		if ( numChildren() > 0 ) {
+			int col = view->summaryColumn();
+			m_pertItem = new KPTPertMilestoneItem(view, *this, 0, col);
+			m_pertItem->show();
+			m_drawn = true;
+			kdDebug()<<k_funcinfo<<" drawn milestone(?)("<<0<<","<<col<<"): "<<m_name<<endl;
+			return;
+		}
 		if (!allParentsDrawn()) {
 			return;
 		}
 		int col = getColumn();
 		int row = view->row(getRow(), col);
-		m_pertItem = new KPTPertCanvasItem(canvas, *this, row, col);
+		m_pertItem = new KPTPertMilestoneItem(view, *this, row, col);
 		m_pertItem->show();
 		m_drawn = true;
 	}
-	if ( numChildren() > 0 ) {
-	    QPtrListIterator<KPTNode> nit(m_nodes); 
-		for ( ; nit.current(); ++nit ) {
-		    nit.current()->drawPert(view, canvas, this);
-		}
-	}
 	QPtrListIterator<KPTRelation> cit(m_dependChildNodes);
 	for ( ; cit.current(); ++cit ) {
-		cit.current()->child()->drawPert(view, canvas);
+		cit.current()->child()->drawPert(view);
 	}
-}
-
-void KPTMilestone::drawPertRelations(QCanvas* canvas) {
-    kdDebug()<<k_funcinfo<<endl;
-    QPtrListIterator<KPTRelation> it(m_dependChildNodes); 
-    for ( ; it.current(); ++it ) {
-        it.current()->draw(canvas);
-    }
 }
 
 #ifndef NDEBUG

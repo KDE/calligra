@@ -207,7 +207,7 @@ void KPTView::slotProjectCalculate() {
 
 
 void KPTView::slotAddSubProject() {
-    KPTProject *node = new KPTProject();
+    KPTProject *node = new KPTProject(m_ganttview->currentNode());
     if (node->openDialog()) {
 		KPTNode *currNode = m_ganttview->currentNode();
 		if (currNode)
@@ -224,7 +224,7 @@ void KPTView::slotAddSubProject() {
 
 
 void KPTView::slotAddTask() {
-    KPTTask *node = new KPTTask();
+    KPTTask *node = new KPTTask(m_ganttview->currentNode());
     if (node->openDialog()) {
 		KPTNode *currNode = m_ganttview->currentNode();
 		if (currNode)
@@ -240,7 +240,7 @@ void KPTView::slotAddTask() {
 }
 
 void KPTView::slotAddMilestone() {
-    KPTMilestone *node = new KPTMilestone();
+    KPTMilestone *node = new KPTMilestone(m_ganttview->currentNode());
     node->setName(i18n("Milestone"));
 
     if (node->openDialog()) {

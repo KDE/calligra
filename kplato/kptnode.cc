@@ -33,6 +33,7 @@ KPTNode::KPTNode(KPTNode *parent) : m_nodes(), m_dependChildNodes(), m_dependPar
     earliestStart.set(KPTDuration());
     latestFinish.set(KPTDuration());
     m_constraint = KPTNode::ASAP;
+	m_ganttItem = 0;
     m_pertItem = 0;
 	m_drawn = false;
     m_effort = 0;
@@ -81,10 +82,6 @@ KPTDuration *KPTNode::getDelay() {
        Calculate the delay of this node. Use the calculated startTime and the setted startTime.
     */
     return 0L;
-}
-
-bool KPTNode::isParentOf(KPTNode *node) {
-    return m_nodes.findRef(node) != -1;
 }
 
 void KPTNode::addDependChildNode( KPTNode *node, TimingType t, TimingRelation p) {
@@ -194,6 +191,30 @@ void KPTNode::delPredesessorNode() {
     delete relation;
 }
 
+bool KPTNode::isParentOf(KPTNode *node) {
+    if (m_nodes.findRef(node) != -1)
+	    return true;
+	
+	QPtrListIterator<KPTNode> nit(childNodeIterator()); 
+	for ( ; nit.current(); ++nit ) {
+		if (nit.current()->isParentOf(node))
+		    return true;
+	}
+	return false;
+}
+
+bool KPTNode::isDependantOn(KPTNode *node) {
+    if (node->isParentOf(this))
+	    return true;
+    
+	QPtrListIterator<KPTRelation> it(m_dependChildNodes);
+	for ( ; it.current(); ++it ) {
+		if (it.current()->child()->isDependantOn(node))
+		    return true;
+	}
+    return false;
+}
+
 KPTRelation *KPTNode::findRelation(KPTNode *node) {
     for (int i=0; i<numDependParentNodes(); i++) {
         KPTRelation *rel = getDependParentNode(i);
@@ -225,7 +246,7 @@ int KPTNode::getColumn(KPTNode *parent) {
 	int col = 0;
     for (int i=0; i<numDependParentNodes(); i++) {
         KPTRelation *rel = getDependParentNode(i);
-        KPTPertCanvasItem *dp = rel->parent()->pertItem();
+        KPTPertNodeItem *dp = rel->parent()->pertItem();
         if (dp) {
 		    if (rel->timingRelation() == FINISH_START)
 		        col = QMAX(col,dp->column()+1);
@@ -246,7 +267,7 @@ int KPTNode::getRow(KPTNode *parent) {
 	int row = 0;
     for (int i=0; i<numDependParentNodes(); i++) {
         KPTRelation *rel = getDependParentNode(i);
-        KPTPertCanvasItem *dp = rel->parent()->pertItem();
+        KPTPertNodeItem *dp = rel->parent()->pertItem();
         if (dp) {
 		    row = QMAX(row,dp->row());
 	    }
@@ -414,6 +435,16 @@ bool KPTNode::allParentsDrawn() {
 	return true;
 }
 
+void KPTNode::drawPertRelations(QCanvas* canvas) {
+    QPtrListIterator<KPTRelation> it(m_dependChildNodes); 
+    for ( ; it.current(); ++it ) {
+        it.current()->draw(canvas);
+    }
+    QPtrListIterator<KPTNode> nit(m_nodes); 
+    for ( ; nit.current(); ++nit ) {
+        nit.current()->drawPertRelations(canvas);
+	}
+}
 
 ////////////////////////////////////   KPTEffort   ////////////////////////////////////////////
 

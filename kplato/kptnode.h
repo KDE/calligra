@@ -35,7 +35,10 @@ class KPTEffort;
 class KPTProject;
 class KPTTimeScale;
 class KPTPertCanvas;
-class KPTPertCanvasItem;
+class KPTPertNodeItem;
+
+class KDGanttViewItem;
+
 class QDomElement;
 
 
@@ -97,8 +100,6 @@ public:
     KPTNode &getChildNode(int number) { return *m_nodes.at(number); }
     const KPTNode &getChildNode(int number) const;
 
-	bool isParentOf(KPTNode *node);
-	
     // Time-dependent child-node-management.
     // list all nodes that are dependent upon this one.
     // Building a house requires the table to be finished, therefore the
@@ -137,6 +138,9 @@ public:
 	return m_dependParentNodes.at(number);
     }
     
+	bool isParentOf(KPTNode *node);
+	bool isDependantOn(KPTNode *node);
+	
     KPTRelation *findRelation(KPTNode *node);
     bool isDependChildOf(KPTNode *node);
 	int getRow(KPTNode *parent = 0);
@@ -217,8 +221,8 @@ public:
     const KPTDuration& pessimisticDuration(const KPTDuration &start);
     const KPTDuration& expectedDuration(const KPTDuration &start);
 
-    virtual void drawPert(KPTPertCanvas * /*view */, QCanvas*, KPTNode * /*parent*/ = 0) {;}
-    virtual void drawPertRelations(QCanvas*) {;}
+    virtual void drawPert(KPTPertCanvas * /*view */, KPTNode * /*parent*/ = 0) {;}
+    virtual void drawPertRelations(QCanvas*);
     
     virtual void setStartNotEarlier(KPTDuration time) { sneTime = time; }
     virtual KPTDuration &startNotEarlier() { return sneTime; }
@@ -233,12 +237,11 @@ public:
 	bool isDrawn() { return m_drawn; }  
 
 	// For Gantt
-    int y() { return m_y; }
-    int height() { return m_h; }
-
+    KDGanttViewItem *ganttItem() { return m_ganttItem; }
+    void setGanttItem(KDGanttViewItem *item) { m_ganttItem = item; }
 	// For pert
-	KPTPertCanvasItem *pertItem() { return m_pertItem; }
-	void setPertItem(KPTPertCanvasItem *item) { m_pertItem = item; }
+	KPTPertNodeItem *pertItem() { return m_pertItem; }
+	void setPertItem(KPTPertNodeItem *item) { m_pertItem = item; }
     int x();
     int width();
 	bool allParentsDrawn();
@@ -353,10 +356,11 @@ protected:
     KPTDuration fnlTime;
     KPTDuration msoTime;
 
-	int m_y, m_h; // For Gantt
+	// For Gantt
+	KDGanttViewItem *m_ganttItem;
 	// For Pert
 	bool m_drawn;
-	KPTPertCanvasItem *m_pertItem;
+	KPTPertNodeItem *m_pertItem;
     
  private:
     KPTDuration m_duration;

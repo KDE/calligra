@@ -48,12 +48,15 @@ class KDGanttViewItem;
 
 	KPTNode *currentNode();
 
+	void clear();
+		
 public slots:
     void popupMenuRequested(KDGanttViewItem * item, const QPoint & pos, int);
-	
+
 private slots:
     void currentItemChanged(KDGanttViewItem *);
-	
+	void slotItemDoubleClicked(KDGanttViewItem*);
+		
 private:
     void drawChildren(KDGanttViewSummaryItem *item, KPTNode &node);
     void drawProject(KDGanttViewSummaryItem *parentItem, KPTNode &node);

@@ -20,6 +20,7 @@
 #include "defs.h"
 #include "kptcanvasitem.h"
 #include "kptrelation.h"
+#include "kptpertcanvas.h"
 
 #include <qpainter.h>
 #include <qpointarray.h>
@@ -27,38 +28,39 @@
 #include <kdebug.h>
 #include <koRect.h> //DEBUGRECT
 
-KPTPertCanvasItem::KPTPertCanvasItem( QCanvas *canvas, KPTNode &node, int row, int col )
-    : QCanvasRectangle(0, 0, 100, 30, canvas),
+KPTPertNodeItem::KPTPertNodeItem( KPTPertCanvas *view, KPTNode &node, int row, int col )
+    : QCanvasPolygon(view->canvas()),
 	m_node(node),
 	m_row(row),
 	m_col(col)
 {
     //kdDebug()<<k_funcinfo<<"Node="<<node.name()<<" ("<<row<<","<<col<<")"<<endl;
-	int wgap = 20;
-	int hgap = 10;
-	int left = 12 + col * (width() + wgap);
-	int top = 6 + row * (height() + hgap);
-    m_left = QPoint(left, top + height()/2);
-	m_right = QPoint(left+width(), m_left.y());
 	
-	setX(left);
-	setY(top);
-	setBrush(Qt::yellow);
+	m_wgap = view->verticalGap();
+	m_hgap = view->horizontalGap();
+	m_width = view->itemSize().width();
+	m_height = view->itemSize().height();
+	
+	m_x = 12 + col * (m_width + m_wgap);
+	m_y = 6 + row * (m_height + m_hgap);
+    m_left = QPoint(m_x, m_y + m_height/2);
+	m_right = QPoint(m_x+m_width, m_left.y());
+	
 	setPen(Qt::black);
 	setZ(50);
 	
-	m_name = new QCanvasText(node.name(), canvas);
-	m_name->setX(left + 3);
-	m_name->setY(top + 3);
+	m_name = new QCanvasText(node.name(), view->canvas());
+	m_name->setX(m_x + 6);
+	m_name->setY(m_y + 3);
 	m_name->setZ(60);
 	
-	m_leader = new QCanvasText(node.leader(), canvas);
-	m_leader->setX(left + 3);
-	m_leader->setY(top + 15);
+	m_leader = new QCanvasText(node.leader(), view->canvas());
+	m_leader->setX(m_x + 6);
+	m_leader->setY(m_y + 15);
 	m_leader->setZ(60);
 }
 
-KPTPertCanvasItem::~KPTPertCanvasItem()
+KPTPertNodeItem::~KPTPertNodeItem()
 {
     hide();
     QCanvasItemList list = canvas()->allItems();
@@ -72,13 +74,13 @@ KPTPertCanvasItem::~KPTPertCanvasItem()
     }
 }
 
-int KPTPertCanvasItem::rtti() const { return RTTI; }
-int KPTPertCanvasItem::RTTI = 2001;
+int KPTPertNodeItem::rtti() const { return RTTI; }
+int KPTPertNodeItem::RTTI = 2000;
 
-void KPTPertCanvasItem::setVisible(bool yes)
+void KPTPertNodeItem::setVisible(bool yes)
 {
     //kdDebug()<<k_funcinfo<<m_node.name()<<endl;
-	QCanvasRectangle::setVisible(yes);
+	QCanvasPolygon::setVisible(yes);
     QCanvasItemList list = canvas()->allItems();
     QCanvasItemList::Iterator it = list.begin();
     for (; it != list.end(); ++it) 
@@ -90,24 +92,29 @@ void KPTPertCanvasItem::setVisible(bool yes)
     }
 }
 
-void KPTPertCanvasItem::drawShape(QPainter &p)
+void KPTPertNodeItem::drawShape(QPainter &p)
 {
-	isSelected() ? p.setPen(QPen(Qt::red, 2)) : p.setPen(QPen(Qt::black,1));
-	QPointArray pa = areaPoints();
-/*    kdDebug()<<k_funcinfo<<m_node.name()<<" areaPoints:"<<endl;
-    kdDebug()<<"      "<<pa[0].x()<<","<<pa[0].y()<<"      "<<pa[1].x()<<","<<pa[1].y()<<endl;
-	kdDebug()<<"      "<<pa[2].x()<<","<<pa[2].y()<<"      "<<pa[3].x()<<","<<pa[3].y()<<endl;*/
-	QCanvasRectangle::drawShape(p);
+    //QPen pen(pen());
+	if (isSelected())
+	    p.setPen(QPen(Qt::red, 2));
+	QPointArray a = poly;
+	int size = a.size()-1;
+	for(int i = 0; i < size; ++i)
+	{
+        //kdDebug()<<k_funcinfo<<" draw["<<i<<"]: "<<a[i].x()<<","<<a[i].y()<<" to "<<a[i+1].x()<<","<<a[i+1].y()<<endl;
+	    p.drawLine(a[i], a[i+1]);
+	}
+	//setPen(pen);
 }
 
-QPoint KPTPertCanvasItem::exitPoint(TimingRelation type)
+QPoint KPTPertNodeItem::exitPoint(TimingRelation type)
 {
     QPoint ret;
     switch(type)
 	{
 	    case FINISH_START:
 		case FINISH_FINISH:
-		    ret = m_right;
+		    ret = m_right + QPoint(pen().width(), 0);
 			break;
 		case START_START:
 		    ret = m_left + QPoint(0, 4);
@@ -116,26 +123,128 @@ QPoint KPTPertCanvasItem::exitPoint(TimingRelation type)
 	return ret;
 }
 
-QPoint KPTPertCanvasItem::entryPoint(TimingRelation type)
+QPoint KPTPertNodeItem::entryPoint(TimingRelation type)
 {
     QPoint ret;
     switch(type)
 	{
 	    case FINISH_START:
-		    ret = m_left;
+		    ret = m_left - QPoint(pen().width(), 0);
 			break;
 		case FINISH_FINISH:
-		    ret = m_right- QPoint(0,4);
+		    ret = m_right - QPoint(pen().width(), 4);
 			break;
 		case START_START:
-		    ret = m_left;
+		    ret = m_left  - QPoint(pen().width(), 0);
 			break;
 	}
 	return ret;
 }
 
 #ifndef NDEBUG
-void KPTPertCanvasItem::printDebug( int /*info*/ )
+void KPTPertNodeItem::printDebug( int /*info*/ )
+{
+}
+#endif
+
+////////////////////   KPTPertProjectItem   //////////////////////////
+
+KPTPertProjectItem::KPTPertProjectItem( KPTPertCanvas *view, KPTNode &node, int row, int col )
+    : KPTPertNodeItem(view, node, row, col)
+{
+    //kdDebug()<<k_funcinfo<<"Node="<<node.name()<<" ("<<row<<","<<col<<")"<<endl;
+	
+	QPointArray a;
+	a.putPoints(0, 5, 
+	    m_x+6, m_y, m_x+m_width, m_y, m_x+m_width-6, m_y+m_height, m_x, m_y+m_height, m_x+6, m_y);
+	setPoints(a);
+	
+	setPen(QPen(Qt::cyan, 2));
+}
+
+KPTPertProjectItem::~KPTPertProjectItem()
+{
+}
+
+int KPTPertProjectItem::rtti() const { return RTTI; }
+int KPTPertProjectItem::RTTI = 2001;
+
+
+#ifndef NDEBUG
+void KPTPertProjectItem::printDebug( int /*info*/ )
+{
+}
+#endif
+
+
+////////////////////   KPTPertTaskItem   //////////////////////////
+
+KPTPertTaskItem::KPTPertTaskItem( KPTPertCanvas *view, KPTNode &node, int row, int col )
+    : KPTPertNodeItem(view, node, row, col)
+{
+    //kdDebug()<<k_funcinfo<<"Node="<<node.name()<<" ("<<row<<","<<col<<")"<<endl;
+	
+	QPointArray a;
+	if (node.numChildren() > 0)
+	{
+	    a.putPoints(0, 5, m_x+6, m_y, m_x+m_width, m_y, m_x+m_width-6, m_y+m_height, m_x, m_y+m_height, m_x+6, m_y);
+    	setPen(QPen(Qt::cyan, 2));
+	}
+	else
+	{
+    	a.putPoints(0, 5, m_x, m_y, m_x+m_width, m_y, m_x+m_width, m_y+m_height, m_x, m_y+m_height, m_x, m_y);
+    	setPen(QPen(Qt::green, 2));
+	}
+	setPoints(a);
+}
+
+KPTPertTaskItem::~KPTPertTaskItem()
+{
+}
+
+int KPTPertTaskItem::rtti() const { return RTTI; }
+int KPTPertTaskItem::RTTI = 2002;
+
+
+#ifndef NDEBUG
+void KPTPertTaskItem::printDebug( int /*info*/ )
+{
+}
+#endif
+
+
+////////////////////   KPTPertMilestoneItem   //////////////////////////
+
+KPTPertMilestoneItem::KPTPertMilestoneItem( KPTPertCanvas *view, KPTNode &node, int row, int col )
+    : KPTPertNodeItem(view, node, row, col)
+{
+    //kdDebug()<<k_funcinfo<<"Node="<<node.name()<<" ("<<row<<","<<col<<")"<<endl;
+	
+	QPointArray a;
+	a.putPoints(0, 7, 
+	    m_x, m_y+m_height/2,
+	    m_x+6, m_y, 
+		m_x+m_width-6, m_y, 
+		m_x+m_width, m_y+m_height/2,
+		m_x+m_width-6, m_y+m_height, 
+	    m_x+6, m_y+m_height, 
+	    m_x, m_y+m_height/2);
+	
+	setPoints(a);
+	
+	setPen(QPen(Qt::blue, 2));
+}
+
+KPTPertMilestoneItem::~KPTPertMilestoneItem()
+{
+}
+
+int KPTPertMilestoneItem::rtti() const { return RTTI; }
+int KPTPertMilestoneItem::RTTI = 2003;
+
+
+#ifndef NDEBUG
+void KPTPertMilestoneItem::printDebug( int /*info*/ )
 {
 }
 #endif
@@ -158,15 +267,15 @@ KPTRelationCanvasItem::KPTRelationCanvasItem( QCanvas *canvas, KPTRelation *rel)
 	hgap = 10;
 
 	// could not use ...rect() here, don't know why
-	parentTop = (int)(m_rel->parent()->pertItem()->y());
-	parentBottom = parentTop + (int)(m_rel->parent()->pertItem()->height());
-	childTop = (int)(m_rel->child()->pertItem()->y());
+	parentTop = (int)(rel->parent()->pertItem()->y());
+	parentBottom = parentTop + (int)(rel->parent()->pertItem()->height());
+	childTop = (int)(rel->child()->pertItem()->y());
 	
-	childRow = m_rel->child()->pertItem()->row();
-	childCol =  m_rel->child()->pertItem()->column();
-	parentRow = m_rel->parent()->pertItem()->row();
-	parentCol =  m_rel->parent()->pertItem()->column();
-    //kdDebug()<<k_funcinfo<<"Parent="<<rel->parent()->name()<<" ("<<parentRow<<","<<parentCol<<") Child="<<rel->child()->name()<<" ("<<childRow<<","<<childCol<<")"<<endl;
+	childRow = rel->child()->pertItem()->row();
+	childCol =  rel->child()->pertItem()->column();
+	parentRow = rel->parent()->pertItem()->row();
+	parentCol =  rel->parent()->pertItem()->column();
+    kdDebug()<<k_funcinfo<<"Parent="<<rel->parent()->name()<<" ("<<parentRow<<","<<parentCol<<") Child="<<rel->child()->name()<<" ("<<childRow<<","<<childCol<<")"<<endl;
 
 	switch (rel->timingRelation())
 	{
@@ -210,7 +319,7 @@ KPTRelationCanvasItem::~KPTRelationCanvasItem()
 }
 
 int KPTRelationCanvasItem::rtti() const { return RTTI; }
-int KPTRelationCanvasItem::RTTI = 2002;
+int KPTRelationCanvasItem::RTTI = 2020;
 	
 void KPTRelationCanvasItem::setFinishStartPoints()
 {
@@ -495,9 +604,11 @@ bool KPTRelationCanvasItem::rowFree(int row, int startCol, int endCol)
     QCanvasItemList::Iterator it = list.begin();
     for (; it != list.end(); ++it) 
     {
-        if ( (*it)->rtti() == KPTPertCanvasItem::RTTI )
+		if ( (*it)->rtti() == KPTPertProjectItem::RTTI ||
+			(*it)->rtti() == KPTPertTaskItem::RTTI  ||
+			(*it)->rtti() == KPTPertMilestoneItem::RTTI )
 		{
-		    KPTPertCanvasItem *item = (KPTPertCanvasItem *)(*it);
+		    KPTPertNodeItem *item = (KPTPertNodeItem *)(*it);
             if ( item->row() == row )
 			{
 			    int col = item->column();

@@ -31,13 +31,14 @@
 #include <qrect.h>
 
 class KPTRelation;
+class KPTPertCanvas;
 class QPainter;
 
-class KPTPertCanvasItem : public QCanvasRectangle
+class KPTPertNodeItem : public QCanvasPolygon
 {
 public:
-    KPTPertCanvasItem( QCanvas *canvas, KPTNode &node, int row, int col );
-    virtual ~KPTPertCanvasItem();
+    KPTPertNodeItem( KPTPertCanvas *view, KPTNode &node, int row, int col );
+    virtual ~KPTPertNodeItem();
 
     virtual int rtti() const;
     static int RTTI;
@@ -52,17 +53,77 @@ public:
 	QRect rect() { return QRect(m_left, m_right); }
 	int row() { return m_row; }
 	int column() { return m_col; }
+	int x() { return m_x; }
+	int y() { return m_y; }
+	int width() { return m_width; }
+	int height() { return m_height; }
 	
 protected:
     void drawShape(QPainter & p);
-	
+
+	int m_wgap;
+	int m_hgap;
+	int m_width;
+	int m_height;
+	int m_x;
+	int m_y;
+
 private:
     KPTNode &m_node;
     int m_row, m_col;
-	QPoint m_right;
-	QPoint m_left;
+	QPoint m_right; // Entry/exit point
+	QPoint m_left;  // Entry/exit point
 	QCanvasText *m_name;
 	QCanvasText *m_leader;
+	
+	
+#ifndef NDEBUG
+    void printDebug( int );
+#endif
+
+};
+
+class KPTPertProjectItem : public KPTPertNodeItem
+{
+public:
+    KPTPertProjectItem( KPTPertCanvas *view, KPTNode &node, int row, int col );
+    virtual ~KPTPertProjectItem();
+
+    virtual int rtti() const;
+    static int RTTI;
+	
+	
+#ifndef NDEBUG
+    void printDebug( int );
+#endif
+
+};
+
+class KPTPertTaskItem : public KPTPertNodeItem
+{
+public:
+    KPTPertTaskItem( KPTPertCanvas *view, KPTNode &node, int row, int col );
+    virtual ~KPTPertTaskItem();
+
+    virtual int rtti() const;
+    static int RTTI;
+	
+	
+#ifndef NDEBUG
+    void printDebug( int );
+#endif
+
+};
+
+class KPTPertMilestoneItem : public KPTPertNodeItem
+{
+public:
+    KPTPertMilestoneItem( KPTPertCanvas *view, KPTNode &node, int row, int col );
+    virtual ~KPTPertMilestoneItem();
+
+    virtual int rtti() const;
+    static int RTTI;
+	
 	
 #ifndef NDEBUG
     void printDebug( int );

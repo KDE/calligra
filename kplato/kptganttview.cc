@@ -31,6 +31,7 @@
 #include "KDGanttViewTaskItem.h"
 #include "KDGanttViewSummaryItem.h"
 #include "KDGanttViewEventItem.h"
+#include "itemAttributeDialog.h"
 
 #include <kdebug.h>
 
@@ -47,16 +48,29 @@ KPTGanttView::KPTGanttView( KPTView *view, QWidget *parent )
 	m_currentItem(0)
 {
     setScale(KDGanttView::Day);
+	draw(view->getPart()->getProject());
     
 	connect(this, SIGNAL(lvContextMenuRequested ( KDGanttViewItem *, const QPoint &, int )),
 	             this, SLOT (popupMenuRequested(KDGanttViewItem *, const QPoint &, int)));
 	
 	connect(this, SIGNAL(lvCurrentChanged(KDGanttViewItem*)), this, SLOT (currentItemChanged(KDGanttViewItem*)));
 	
+	connect(this, SIGNAL(itemDoubleClicked(KDGanttViewItem*)), this, SLOT (slotItemDoubleClicked(KDGanttViewItem*)));
+	
 }
 
 void KPTGanttView::zoom(double zoom)
 {
+}
+
+void KPTGanttView::clear()
+{
+	QPtrListIterator<KPTNode> nit(m_mainview->getPart()->getProject().childNodeIterator()); 
+	for ( ; nit.current(); ++nit )
+	{
+		nit.current()->setGanttItem(0);
+	}
+	KDGanttView::clear();
 }
 
 void KPTGanttView::draw(KPTNode &node) 
@@ -75,6 +89,7 @@ void KPTGanttView::draw(KPTNode &node)
 		time->add(dur);
 	    item->setEndTime(time->dateTime());
 		item->setOpen(true);
+		node.setGanttItem(item);
 		delete time;
 		delete dur;
 	
@@ -83,7 +98,25 @@ void KPTGanttView::draw(KPTNode &node)
 	else
 		kdDebug()<<k_funcinfo<<"Not implemented yet"<<endl;
 	
+	// Relations
+	QPtrListIterator<KPTNode> nit(m_mainview->getPart()->getProject().childNodeIterator()); 
+	for ( ; nit.current(); ++nit )
+	{
+		KPTNode *n = nit.current();
+		for (int i = 0; i < n->numDependChildNodes(); ++i)
+		{
+			KPTRelation *rel = n->getDependChildNode(i);
+			if (n->ganttItem() && rel->child()->ganttItem())
+			{
+    			kdDebug()<<k_funcinfo<<"Relations for node="<<n->name()<<" to "<<rel->child()->name()<<endl;
+				//KDGanttViewTaskLink *link = KDGanttViewTaskLink(n->ganttItem(), rel->child()->ganttItem());
+				
+			}
+		}
+	}
+	setShowTaskLinks(true);
 }
+
 
 void KPTGanttView::drawChildren(KDGanttViewSummaryItem *parentItem, KPTNode &parentNode)
 {
@@ -112,6 +145,7 @@ void KPTGanttView::drawProject(KDGanttViewSummaryItem *parentItem, KPTNode &node
 	time->add(dur);
 	item->setEndTime(time->dateTime());
 	item->setOpen(true);
+	node.setGanttItem(item);
 	delete time;
 	delete dur;
 	
@@ -129,6 +163,7 @@ void KPTGanttView::drawTask(KDGanttViewSummaryItem *parentItem, KPTNode &node)
 		time->add(dur);
 		item->setEndTime(time->dateTime());
 		item->setOpen(true);
+		node.setGanttItem(item);
     	
 		drawChildren(item, node);
 	}
@@ -139,6 +174,7 @@ void KPTGanttView::drawTask(KDGanttViewSummaryItem *parentItem, KPTNode &node)
 		time->add(dur);
 		item->setEndTime(time->dateTime());
 		item->setOpen(true);
+		node.setGanttItem(item);
 	}
 	delete time;
 	delete dur;
@@ -151,6 +187,7 @@ void KPTGanttView::drawMilestone(KDGanttViewSummaryItem *parentItem, KPTNode &no
 	item->setStartTime(time->dateTime());
 	item->setLeadTime(time->dateTime().addDays(1));
 	item->setOpen(true);
+	node.setGanttItem(item);
 	delete time;
 }
 
@@ -198,4 +235,10 @@ void KPTGanttView::popupMenuRequested(KDGanttViewItem * item, const QPoint & pos
 		kdDebug()<<k_funcinfo<<"No menu!"<<endl;
 }
 
+void KPTGanttView::slotItemDoubleClicked(KDGanttViewItem* item)
+{
+/*    itemAttributeDialog *dia = new itemAttributeDialog();
+	dia->exec();
+	delete dia;*/
+}
 #include "kptganttview.moc"

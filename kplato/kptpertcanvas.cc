@@ -48,7 +48,12 @@
 #include <koRect.h> //DEBUGRECT
 
 KPTPertCanvas::KPTPertCanvas( QWidget *parent )
-    : QCanvasView( parent, "Pert canvas" /*WNorthWestGravity WStaticContents| WResizeNoErase | WRepaintNoErase */)
+    : QCanvasView( parent, "Pert canvas" /*WNorthWestGravity WStaticContents| WResizeNoErase | WRepaintNoErase */),
+	m_summaryColumn(0),
+	m_verticalGap(20),
+	m_horizontalGap(10),
+	m_itemSize(100,30)
+
 {
     //setHScrollBarMode(QScrollView::AlwaysOn);
     m_canvas = new QCanvas( this );
@@ -63,12 +68,36 @@ void KPTPertCanvas::draw(KPTProject& project)
 {
     kdDebug()<<k_funcinfo<<endl;
     clear();
+	m_summaryColumn = 0;
     updateContents();
-	project.drawPert(this, m_canvas);
+	project.setDrawn(false, true);
+	project.drawPert(this);
+	
+	QPtrListIterator<KPTNode> nit(project.childNodeIterator()); 
+    for ( ; nit.current(); ++nit ) {
+        drawChildren(nit.current());
+	}
+
+	QPtrListIterator<KPTNode> it(project.childNodeIterator()); 
+    for ( ; it.current(); ++it ) {
+        drawChildren(it.current(), true);
+	}
+
 	project.drawPertRelations(m_canvas);
 	QSize s = canvasSize();
 	m_canvas->resize(s.width(), s.height());
     update();
+}
+
+void KPTPertCanvas::drawChildren(KPTNode* node)
+{
+    kdDebug()<<k_funcinfo<<"node="<<node->name()<<endl;
+    node->drawPert(this);
+		
+	QPtrListIterator<KPTNode> nit(node->childNodeIterator()); 
+	for ( ; nit.current(); ++nit ) {
+		drawChildren(nit.current());
+	}
 }
 
 QSize KPTPertCanvas::canvasSize()
@@ -109,13 +138,15 @@ void KPTPertCanvas::contentsMouseReleaseEvent ( QMouseEvent * e )
             QCanvasItemList l = canvas()->collisions(e->pos());
             for (QCanvasItemList::Iterator it=l.begin(); it!=l.end(); ++it) 
 		    {
-	            if ( (*it)->rtti() == KPTPertCanvasItem::RTTI )
+	            if ( (*it)->rtti() == KPTPertProjectItem::RTTI ||
+	                 (*it)->rtti() == KPTPertTaskItem::RTTI  ||
+	                 (*it)->rtti() == KPTPertMilestoneItem::RTTI )
 				{
-				    KPTPertCanvasItem *item = (KPTPertCanvasItem *)(*it);
-					KPTPertCanvasItem *par = selectedItem();
+				    KPTPertNodeItem *item = (KPTPertNodeItem *)(*it);
+					KPTPertNodeItem *par = selectedItem();
 					if ( !par)
 					{
-						//kdDebug()<<k_funcinfo<<" First node="<<item->node().name()<<endl;
+						kdDebug()<<k_funcinfo<<" First node="<<item->node().name()<<endl;
 						item->setSelected(true);
 						canvas()->update();
 						return;
@@ -125,15 +156,16 @@ void KPTPertCanvas::contentsMouseReleaseEvent ( QMouseEvent * e )
 					{
 						break;
 					}
-					//kdDebug()<<k_funcinfo<<" Second node="<<item->node().name()<<endl;
+					kdDebug()<<k_funcinfo<<" Second node="<<item->node().name()<<endl;
 					// open relation dialog
 					if (par->node().isDependChildOf(&(item->node())))
 					{
 						KMessageBox::sorry(this, i18n("Cannot link to a node which I am already dependent on"));
 					}
-					else if (par->node().isParentOf(&(item->node())) || item->node().isParentOf(&(par->node())))
+					else if ( item->node().isParentOf(&(par->node())) ||
+								item->node().isDependantOn(&(par->node())) )
 					{
-						KMessageBox::sorry(this, i18n("Cannot link summary tasks to their children"));
+						KMessageBox::sorry(this, i18n("Cannot link parent/child tasks"));
 					}
 					else
 					{
@@ -162,9 +194,11 @@ void KPTPertCanvas::contentsMouseReleaseEvent ( QMouseEvent * e )
             QCanvasItemList l = canvas()->collisions(e->pos());
             for (QCanvasItemList::Iterator it=l.begin(); it!=l.end(); ++it) 
 		    {
-	            if ( (*it)->rtti() == KPTPertCanvasItem::RTTI )
+	            if ( (*it)->rtti() == KPTPertProjectItem::RTTI ||
+	                 (*it)->rtti() == KPTPertTaskItem::RTTI  ||
+	                 (*it)->rtti() == KPTPertMilestoneItem::RTTI )
 				{
-				    KPTPertCanvasItem *item = (KPTPertCanvasItem *)(*it);
+				    KPTPertNodeItem *item = (KPTPertNodeItem *)(*it);
 					{
 					    emit rightButtonPressed(&(item->node()), e->globalPos());
 						break;
@@ -185,9 +219,11 @@ int KPTPertCanvas::row(int minrow, int col)
     QCanvasItemList::Iterator it = list.begin();
     for (; it != list.end(); ++it) 
     {
-        if ( (*it)->rtti() == KPTPertCanvasItem::RTTI )
+		if ( (*it)->rtti() == KPTPertProjectItem::RTTI ||
+			(*it)->rtti() == KPTPertTaskItem::RTTI  ||
+			(*it)->rtti() == KPTPertMilestoneItem::RTTI )
 		{
-		    KPTPertCanvasItem *item = (KPTPertCanvasItem *)(*it);
+		    KPTPertNodeItem *item = (KPTPertNodeItem *)(*it);
             if ( item->column() == col )
 			{
     		    rows.append(item->row());
@@ -217,7 +253,7 @@ int KPTPertCanvas::row(int minrow, int col)
 	return row;
 }
 
-KPTPertCanvasItem *KPTPertCanvas::selectedItem()
+KPTPertNodeItem *KPTPertCanvas::selectedItem()
 {
     QCanvasItemList list = canvas()->allItems();
     QCanvasItemList::Iterator it = list.begin();
@@ -225,8 +261,10 @@ KPTPertCanvasItem *KPTPertCanvas::selectedItem()
     {
         if ( (*it)->isSelected() )
 		{
-            if ( (*it)->rtti() == KPTPertCanvasItem::RTTI )
-                return (KPTPertCanvasItem *)(*it);
+		if ( (*it)->rtti() == KPTPertProjectItem::RTTI ||
+			(*it)->rtti() == KPTPertTaskItem::RTTI  ||
+			(*it)->rtti() == KPTPertMilestoneItem::RTTI )
+                return (KPTPertNodeItem *)(*it);
 		}
     }
 	return 0;

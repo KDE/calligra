@@ -23,6 +23,7 @@
 #include "kptprojectdialog.h"
 #include "kptduration.h"
 #include "kptpertcanvas.h"
+#include "kptcanvasitem.h"
 
 #include <qdom.h>
 #include <qstring.h>
@@ -284,7 +285,7 @@ bool KPTProject::load(QDomElement &element) {
 
 	    if (e.tagName() == "project") {
 		// Load the subproject
-		KPTProject *child = new KPTProject();
+		KPTProject *child = new KPTProject(this);
 		if (child->load(e))
 		    addChildNode(child);
 		else
@@ -292,7 +293,7 @@ bool KPTProject::load(QDomElement &element) {
 		    delete child;
 	    } else if (e.tagName() == "task") {
 		// Load the task
-		KPTTask *child = new KPTTask();
+		KPTTask *child = new KPTTask(this);
 		if (child->load(e))
 		    addChildNode(child);
 		else
@@ -300,7 +301,7 @@ bool KPTProject::load(QDomElement &element) {
 		    delete child;
 	    } else if (e.tagName() == "milestone") {
 		    // Load the milestone
-		    KPTMilestone *child = new KPTMilestone();
+		    KPTMilestone *child = new KPTMilestone(this);
 		    if (child->load(e))
 		        addChildNode(child);
 		    else
@@ -391,32 +392,33 @@ void KPTProject::setStartTime(KPTDuration startTime) {
         earliestStart = startTime;
 }
 
-void KPTProject::drawPert(KPTPertCanvas *view, QCanvas* canvas, KPTNode *parent) {
-    kdDebug()<<k_funcinfo<<endl;
-	
-    QPtrListIterator<KPTNode> it(m_nodes); 
-    for ( ; it.current(); ++it ) {
-        it.current()->setDrawn(false, true);
-	}
-    QPtrListIterator<KPTNode> nit(m_nodes); 
-    for ( ; nit.current(); ++nit ) {
-	    if (nit.current()->numDependParentNodes() == 0) {
-			if (!nit.current()->isDrawn()) {
-    		    nit.current()->drawPert(view, canvas);
-			}
+void KPTProject::drawPert(KPTPertCanvas *view, KPTNode *parent) {
+    kdDebug()<<k_funcinfo<<endl;	
+	if (!m_drawn) {
+	    if (numDependChildNodes() == 0 &&
+		    numDependParentNodes() == 0) 
+		{
+			int col = view->summaryColumn();
+			m_pertItem = new KPTPertProjectItem(view, *this, 0, col);
+			m_pertItem->show();
+			m_drawn = true;
+			kdDebug()<<k_funcinfo<<" draw project("<<0<<","<<col<<"): "<<m_name<<endl;
+			return;
 		}
+		if (!allParentsDrawn()) {
+			return;
+		}
+		int col = getColumn(parent);
+		int row = view->row(getRow(parent), col);
+		m_pertItem = new KPTPertTaskItem(view, *this, row, col);
+		m_pertItem->show();
+		m_drawn = true;
+		//kdDebug()<<k_funcinfo<<" draw ("<<row<<","<<col<<"): "<<m_name<<endl;
 	}
-	m_drawn = true;
-}
-
-void KPTProject::drawPertRelations(QCanvas* canvas) {
-    kdDebug()<<k_funcinfo<<endl;
-    
-    QPtrListIterator<KPTNode> nit(m_nodes); 
-    for ( ; nit.current(); ++nit ) {
-        nit.current()->drawPertRelations(canvas);
+	QPtrListIterator<KPTRelation> cit(m_dependChildNodes);
+	for ( ; cit.current(); ++cit ) {
+		cit.current()->child()->drawPert(view);
 	}
-	m_drawn = true;
 }
 
 void KPTProject::addResourceGroup(KPTResourceGroup * group) {

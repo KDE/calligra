@@ -26,7 +26,7 @@
 #include <qcanvas.h>
 #include <qmemarray.h>
 
-class KPTProjectList;
+class KPTPertNodeItem;
 class QTimer;
 class QPainter;
 class QPoint;
@@ -45,10 +45,16 @@ public:
     QSize canvasSize();
 	
 	int row(int minrow, int col);
-	KPTPertCanvasItem *selectedItem();
+	int summaryColumn() { return m_summaryColumn++; }
+	KPTPertNodeItem *selectedItem();
 	
+	int verticalGap() { return m_verticalGap; }
+	int horizontalGap() { return m_horizontalGap; }
+	QSize itemSize() { return m_itemSize; }
+
 protected:
     void contentsMouseReleaseEvent ( QMouseEvent * e );
+    void drawChildren(KPTNode *node);
 
 signals:
     void rightButtonPressed(KPTNode *node, const QPoint & point);
@@ -60,7 +66,12 @@ private:
     QTimer *m_scrollTimer;
     bool m_mousePressed;
     bool m_printing;
+	int m_summaryColumn;
     
+	int m_verticalGap;
+	int m_horizontalGap;
+	QSize m_itemSize;
+
 #ifndef NDEBUG
     void printDebug( int );
 #endif
