@@ -126,11 +126,11 @@ void KWMailMergeVariable::recalc()
 
 KWFootNoteVariable::KWFootNoteVariable( KoTextDocument *textdoc, KoVariableFormat *varFormat, KoVariableCollection *varColl, KWDocument *doc )
     : KoVariable( textdoc, varFormat, varColl ),
+      m_doc(doc),
       m_frameset( 0L ),
-      m_doc(doc)
+      m_numberingType( Auto )
 {
     m_varValue = QVariant( 0 );
-    m_numberingType = Auto;
 }
 
 void KWFootNoteVariable::setNumberingType( Numbering _type )
@@ -144,12 +144,14 @@ void KWFootNoteVariable::setNumberingType( Numbering _type )
 
 void KWFootNoteVariable::saveVariable( QDomElement &parentElem )
 {
-    QDomElement pgNumElem = parentElem.ownerDocument().createElement( "FOOTNOTE" );
-    parentElem.appendChild( pgNumElem );
-    pgNumElem.setAttribute( "subtype", 0 ); // the only kind currently
-    pgNumElem.setAttribute( "value", m_varValue.toString() );
-    pgNumElem.setAttribute( "notetype", m_noteType );
-    pgNumElem.setAttribute( "numberingtype", m_numberingType );
+    QDomElement footnoteElem = parentElem.ownerDocument().createElement( "FOOTNOTE" );
+    parentElem.appendChild( footnoteElem );
+    //footnoteElem.setAttribute( "subtype", 0 );
+    footnoteElem.setAttribute( "value", m_varValue.toString() );
+    footnoteElem.setAttribute( "notetype", m_noteType == FootNote ? "footnote" : "endnote" );
+    footnoteElem.setAttribute( "numberingtype", m_numberingType == Auto ? "auto" : "manual" );
+    Q_ASSERT( m_frameset );
+    footnoteElem.setAttribute( "frameset", m_frameset->getName() );
 }
 
 void KWFootNoteVariable::load( QDomElement &elem )
@@ -159,12 +161,29 @@ void KWFootNoteVariable::load( QDomElement &elem )
     if (!footnoteElem.isNull())
     {
         //m_subtype = footnoteElem.attribute("subtype").toInt();
-        m_noteType = (NoteType)footnoteElem.attribute("notetype").toInt();
-        m_numberingType = (Numbering)footnoteElem.attribute("numberingtype").toInt();
+        QString str = footnoteElem.attribute("notetype").lower();
+        if ( str == "footnote" )
+            m_noteType = FootNote;
+        else if ( str == "endnote" )
+            m_noteType = EndNote;
+        else
+            kdWarning() << "Unknown footnote type: '" << str << "'" << endl;
+
+        str = footnoteElem.attribute("numberingtype").lower();
+        if ( str == "auto" )
+            m_numberingType = Auto;
+        else if ( str == "manual")
+            m_numberingType = Manual;
+        else
+            kdWarning() << "Unknown footnote numbering: '" << str << "'" << endl;
+
         if ( m_numberingType == Auto )
             m_varValue = QVariant(footnoteElem.attribute("value").toInt());
         else
             m_varValue = QVariant(footnoteElem.attribute("value"));
+
+        str = footnoteElem.attribute("frameset");
+        m_doc->addFootNoteRequest( str, this );
     }
 }
 
@@ -209,10 +228,18 @@ void KWFootNoteVariable::move( int x, int y )
     int paragy = paragraph()->rect().y();
     KWTextFrameSet * fs = static_cast<KWTextDocument *>(textDocument())->textFrameSet();
     KoPoint dPoint;
-    if ( fs->internalToDocument( QPoint( x, paragy + y + height ), dPoint ) )
+    KWFrame* containingFrame = fs->internalToDocument( QPoint( x, paragy + y + height ), dPoint );
+    if ( containingFrame )
     {
         // Ok, the (bottom of the) footnote variable is at dPoint.
-
+        KWFrame* footNoteFrame = m_frameset->frame( 0 );
+        int framePage = footNoteFrame->pageNum();
+        int varPage = containingFrame->pageNum();
+        if ( framePage != varPage )
+        {
+            kdDebug(32001) << "Footnote var at page " << varPage << ", footnote frame at page " << framePage << " -> recalcFrames()" << endl;
+            fs->kWordDocument()->recalcFrames( QMIN( varPage, framePage ), -1 );
+        }
     } else
     {
         // This can happen if the page hasn't been created yet

@@ -779,6 +779,7 @@ bool KWDocument::loadXML( QIODevice *, const QDomDocument & doc )
     m_imageRequests2.clear();
     m_anchorRequests.clear();
     m_clipartRequests.clear();
+    m_footnoteVarRequests.clear();
     m_spellListIgnoreAll.clear();
 
     m_pageColumns.columns = 1;
@@ -1285,11 +1286,11 @@ void KWDocument::loadFrameSets( QDomElement framesetsElem )
 KWFrameSet * KWDocument::loadFrameSet( QDomElement framesetElem, bool loadFrames )
 {
     FrameSetType frameSetType = static_cast<FrameSetType>( KWDocument::getAttribute( framesetElem, "frameType", FT_BASE ) );
-    QString tableName = KWDocument::getAttribute( framesetElem, "grpMgr", "" );
     QString fsname = KWDocument::getAttribute( framesetElem, "name", "" );
 
     switch ( frameSetType ) {
     case FT_TEXT: {
+        QString tableName = KWDocument::getAttribute( framesetElem, "grpMgr", "" );
         if ( !tableName.isEmpty() ) {
             // Text frameset belongs to a table -> find table by name
             KWTableFrameSet *table = 0L;
@@ -1313,19 +1314,31 @@ KWFrameSet * KWDocument::loadFrameSet( QDomElement framesetElem, bool loadFrames
         }
         else
         {
-            KWTextFrameSet *fs = new KWTextFrameSet( this, fsname );
-            fs->load( framesetElem, loadFrames );
-            m_lstFrameSet.append( fs ); // don't use addFrameSet here. We'll call finalize() once and for all in completeLoading
-
-            // Old file format had autoCreateNewFrame as a frameset attribute
-            if ( framesetElem.hasAttribute( "autoCreateNewFrame" ) )
+            KWFrameSet::Info info = static_cast<KWFrameSet::Info>( framesetElem.attribute("frameInfo").toInt() );
+            if ( info == KWFrameSet::FI_FOOTNOTE )
             {
-                KWFrame::FrameBehavior behav = static_cast<KWFrame::FrameBehavior>( framesetElem.attribute( "autoCreateNewFrame" ).toInt() );
-                QPtrListIterator<KWFrame> frameIt( fs->frameIterator() );
-                for ( ; frameIt.current() ; ++frameIt ) // Apply it to all frames
-                    frameIt.current()->setFrameBehavior( behav );
+                // Footnote -> create a KWFootNoteFrameSet
+                KWFootNoteFrameSet *fs = new KWFootNoteFrameSet( this, fsname );
+                fs->load( framesetElem, loadFrames );
+                m_lstFrameSet.append( fs );
+                return fs;
             }
-            return fs;
+            else // Normal text frame
+            {
+                KWTextFrameSet *fs = new KWTextFrameSet( this, fsname );
+                fs->load( framesetElem, loadFrames );
+                m_lstFrameSet.append( fs ); // don't use addFrameSet here. We'll call finalize() once and for all in completeLoading
+
+                // Old file format had autoCreateNewFrame as a frameset attribute
+                if ( framesetElem.hasAttribute( "autoCreateNewFrame" ) )
+                {
+                    KWFrame::FrameBehavior behav = static_cast<KWFrame::FrameBehavior>( framesetElem.attribute( "autoCreateNewFrame" ).toInt() );
+                    QPtrListIterator<KWFrame> frameIt( fs->frameIterator() );
+                    for ( ; frameIt.current() ; ++frameIt ) // Apply it to all frames
+                        frameIt.current()->setFrameBehavior( behav );
+                }
+                return fs;
+            }
         }
     } break;
     case FT_PICTURE: {
@@ -1386,7 +1399,7 @@ bool KWDocument::completeLoading( KoStore *_store )
     recalcVariables( VT_FIELD );
 
     // This computes the number of pages (from the frames)
-    // for the first time (and adds footers/headers etc.)
+    // for the first time (and adds footers/headers/footnotes etc.)
     // It is necessary to do so BEFORE calling finalize, since updateFrames
     // (in KWTextFrameSet) needs the number of pages.
     recalcFrames();
@@ -1436,13 +1449,32 @@ void KWDocument::processAnchorRequests()
         QString fsname = itanch.key();
         if ( m_pasteFramesetsMap && m_pasteFramesetsMap->contains( fsname ) )
             fsname = (*m_pasteFramesetsMap)[ fsname ];
-        kdDebug(32001) << "KWDocument::completeLoading anchoring frameset " << fsname << endl;
+        kdDebug(32001) << "KWDocument::processAnchorRequests anchoring frameset " << fsname << endl;
         KWFrameSet * fs = frameSetByName( fsname );
         Q_ASSERT( fs );
         if ( fs )
             fs->setAnchored( itanch.data().textfs, itanch.data().paragId, itanch.data().index, true );
     }
     m_anchorRequests.clear();
+
+    QMapIterator<QString, KWFootNoteVariable *> itvar = m_footnoteVarRequests.begin();
+    for ( ; itvar != m_footnoteVarRequests.end(); ++itvar )
+    {
+        QString fsname = itvar.key();
+        if ( m_pasteFramesetsMap && m_pasteFramesetsMap->contains( fsname ) )
+            fsname = (*m_pasteFramesetsMap)[ fsname ];
+        kdDebug(32001) << "KWDocument::processAnchorRequests binding footnote var and frameset " << fsname << endl;
+        KWFrameSet * fs = frameSetByName( fsname );
+        Q_ASSERT( fs );
+        Q_ASSERT( fs->type() == FT_TEXT );
+        Q_ASSERT( fs->frameSetInfo() == KWFrameSet::FI_FOOTNOTE );
+        KWFootNoteFrameSet* fnfs = dynamic_cast<KWFootNoteFrameSet *>(fs);
+        if ( fnfs )
+        {
+            fnfs->setFootNoteVariable( itvar.data() );
+            itvar.data()->setFrameSet( fnfs );
+        }
+    }
 }
 
 void KWDocument::pasteFrames( QDomElement topElem, KMacroCommand * macroCmd )
@@ -2510,6 +2542,11 @@ void KWDocument::addClipartRequest( KWClipartFrameSet *fs )
 void KWDocument::addAnchorRequest( const QString &framesetName, const KWAnchorPosition &anchorPos )
 {
     m_anchorRequests.insert( framesetName, anchorPos );
+}
+
+void KWDocument::addFootNoteRequest( const QString &framesetName, KWFootNoteVariable* var )
+{
+    m_footnoteVarRequests.insert( framesetName, var );
 }
 
 

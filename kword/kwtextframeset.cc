@@ -1542,16 +1542,16 @@ void KWTextFrameSet::slotAfterFormatting( int bottom, KoTextParag *lastFormatted
     {
 #ifdef DEBUG_FORMAT_MORE
         if(lastFormatted)
-            kdDebug(32002) << "formatMore We need more space in " << getName()
+            kdDebug(32002) << "slotAfterFormatting We need more space in " << getName()
                            << " bottom=" << bottom + lastFormatted->rect().height()
                            << " availHeight=" << availHeight << endl;
         else
-            kdDebug(32002) << "formatMore We need more space in " << getName()
+            kdDebug(32002) << "slotAfterFormatting We need more space in " << getName()
                            << " bottom2=" << bottom << " availHeight=" << availHeight << endl;
 #endif
         if ( frames.isEmpty() )
         {
-            kdWarning(32002) << "formatMore no more space, but no frame !" << endl;
+            kdWarning(32002) << "slotAfterFormatting no more space, but no frame !" << endl;
             *abort = true;
             return;
         }
@@ -1611,7 +1611,7 @@ void KWTextFrameSet::slotAfterFormatting( int bottom, KoTextParag *lastFormatted
                         theFrame->setMinFrameHeight(newPosition - theFrame->top());
                     } else {
 #ifdef DEBUG_FORMAT_MORE
-                        kdDebug(32002) << "formatMore setting bottom to " << newPosition << endl;
+                        kdDebug(32002) << "slotAfterFormatting setting bottom to " << newPosition << endl;
 #endif
                         theFrame->setBottom(newPosition);
                     }
@@ -1637,7 +1637,7 @@ void KWTextFrameSet::slotAfterFormatting( int bottom, KoTextParag *lastFormatted
         {
             // We need a new frame in this frameset.
 //#ifdef DEBUG_FORMAT_MORE
-            kdDebug(32002) << "formatMore creating new frame in frameset " << getName() << endl;
+            kdDebug(32002) << "slotAfterFormatting creating new frame in frameset " << getName() << endl;
 //#endif
             uint oldCount = frames.count();
             // First create a new page for it if necessary
@@ -1674,7 +1674,7 @@ void KWTextFrameSet::slotAfterFormatting( int bottom, KoTextParag *lastFormatted
 
                 //interval = 0;
                 // not good enough, we need to keep formatting right now
-                m_textobj->formatMore(); // that, or a goto ?
+                m_textobj->formatMore();
                 *abort = true;
                 return;
             }
@@ -1682,7 +1682,7 @@ void KWTextFrameSet::slotAfterFormatting( int bottom, KoTextParag *lastFormatted
         } break;
         case KWFrame::Ignore:
 #ifdef DEBUG_FORMAT_MORE
-            kdDebug(32002) << "formatMore frame behaviour is Ignore" << endl;
+            kdDebug(32002) << "slotAfterFormatting frame behaviour is Ignore" << endl;
 #endif
             m_textobj->setLastFormattedParag( 0 );
             break;
@@ -1694,7 +1694,7 @@ void KWTextFrameSet::slotAfterFormatting( int bottom, KoTextParag *lastFormatted
               && bottom < availHeight - m_doc->ptToLayoutUnitPixY( frames.last()->innerHeight() ) )
     {
 #ifdef DEBUG_FORMAT_MORE
-        kdDebug(32002) << "formatMore too much space (" << bottom << ", " << availHeight << ") , trying to remove last frame" << endl;
+        kdDebug(32002) << "slotAfterFormatting too much space (" << bottom << ", " << availHeight << ") , trying to remove last frame" << endl;
 #endif
         int lastPage = m_doc->getPages() - 1;
         // Last frame is empty -> try removing last page, and more if necessary
@@ -1718,7 +1718,7 @@ void KWTextFrameSet::slotAfterFormatting( int bottom, KoTextParag *lastFormatted
         // the "break at end of frame" case in formatVertically (!!).
         int difference = availHeight - ( bottom + 2 );
 #ifdef DEBUG_FORMAT_MORE
-        kdDebug(32002) << "formatMore less text than space (AutoExtendFrame) difference=" << difference << endl;
+        kdDebug(32002) << "slotAfterFormatting less text than space (AutoExtendFrame) difference=" << difference << endl;
 #endif
         // There's no point in resizing a copy, so go back to the last non-copy frame
         KWFrame *theFrame = settingsFrame( frames.last() );
@@ -1736,7 +1736,7 @@ void KWTextFrameSet::slotAfterFormatting( int bottom, KoTextParag *lastFormatted
         {
             double wantedPosition = theFrame->bottom() - m_doc->layoutUnitPtToPt( m_doc->pixelYToPt( difference ) );
 #ifdef DEBUG_FORMAT_MORE
-            kdDebug() << "formatMore wantedPosition=" << wantedPosition << " top+minheight=" << theFrame->top() + minFrameHeight << endl;
+            kdDebug() << "slotAfterFormatting wantedPosition=" << wantedPosition << " top+minheight=" << theFrame->top() + minFrameHeight << endl;
 #endif
             wantedPosition = QMAX( wantedPosition, theFrame->top() + minFrameHeight );
             if ( wantedPosition != theFrame->bottom()) {
@@ -2103,7 +2103,7 @@ void KWTextFrameSet::applyStyleChange( KoStyle * changedStyle, int paragLayoutCh
     m_textobj->applyStyleChange( changedStyle, paragLayoutChanged, formatChanged );
 }
 
-void KWTextFrameSet::showPopup( KWFrame *theFrame, KWView *view, const QPoint &point )
+void KWTextFrameSet::showPopup( KWFrame *, KWView *view, const QPoint &point )
 {
     QPopupMenu * popup = view->popupMenu("text_popup");
     Q_ASSERT(popup);
@@ -2178,23 +2178,32 @@ void KWTextFrameSet::renumberFootNotes()
             lst.append( fnv );
     }
     lst.sort();
-    short int varNumber = 1;
-    short int varNb = 1;
+    short int varNumber = 0; // absolute order number [internal, not saved nor displayed]
+    short int varNb = 1; // the number being displayed
     bool needRepaint = false;
     QPtrListIterator< KWFootNoteVariable > vit( lst );
     for ( ; vit.current() ; ++vit, ++varNumber )
     {
+        ++varNumber;
+        bool changed = false;
         KWFootNoteVariable* var = vit.current();
         if ( varNumber != var->num() )
         {
+            changed = true;
             var->setNum( varNumber );
-            if ( var->numberingType()==KWFootNoteVariable::Auto )
+        }
+        if ( var->numberingType()==KWFootNoteVariable::Auto )
+        {
+            if ( varNb != var->varValue().toInt() )
             {
+                changed = true;
                 var->setValue( varNb );
-                varNb++;
             }
-            var->frameSet()->setName( i18n("Footnote %1").arg( varNumber ) );
-            ++varNumber;
+            varNb++;
+        }
+        if ( changed )
+        {
+            var->frameSet()->setName( i18n("Footnote %1").arg( var->text() ) );
             var->paragraph()->invalidate(0);
             var->paragraph()->setChanged( true );
             needRepaint = true;

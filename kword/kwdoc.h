@@ -49,6 +49,7 @@ class KWVariableCollection;
 class KoTextObject;
 class KWBgSpellCheck;
 class KoStyleCollection;
+class KWFootNoteVariable;
 
 class DCOPObject;
 
@@ -348,6 +349,8 @@ public:
     void addClipartRequest( KWClipartFrameSet *fs );
     // For KWTextParag
     void addAnchorRequest( const QString &framesetName, const KWAnchorPosition &anchorPos );
+    // For KWFootNoteVariable
+    void addFootNoteRequest( const QString &framesetName, KWFootNoteVariable* var );
 
     // This is used by loadFrameSets() and by KWCanvas to paste framesets
     KWFrameSet *loadFrameSet( QDomElement framesetElem, bool loadFrames = true );
@@ -638,6 +641,7 @@ private:
     QPtrList<KWPictureFrameSet> m_imageRequests2;
     QPtrList<KWClipartFrameSet> m_clipartRequests;
     QMap<QString, KWAnchorPosition> m_anchorRequests;
+    QMap<QString, KWFootNoteVariable *> m_footnoteVarRequests;
 
     QMap<QString,QString> * m_pasteFramesetsMap;
 
