@@ -21,6 +21,8 @@
 
 #include <ctype.h>
 
+using namespace std;
+
 string& tstring::stripWhiteSpace( string& _res ) const
 {
   int len = length();

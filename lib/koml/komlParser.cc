@@ -26,6 +26,8 @@
 
 #include "komlParser.h"
 
+using namespace std;
+
 #define PULL if ( m_iPos == m_iLen ) { if ( !pull() ) return false; }
 
 KOMLParser::KOMLParser( KOMLFeed* _feed )

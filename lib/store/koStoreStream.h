@@ -36,7 +36,7 @@
 
 class KoStore;
 
-class ostorestreambuffer : public streambuf
+class ostorestreambuffer : public std::streambuf
 {
 protected:
   static const int m_bufferSize = 4096;   // Size of the buffer
@@ -100,11 +100,11 @@ protected:
   }
 };
 
-class ostorestream : public ostream
+class ostorestream : public std::ostream
 {
 public:
   ostorestream( KoStore* _store )
-    : ostream( &m_buf ), m_buf( _store ) { }
+    : std::ostream( &m_buf ), m_buf( _store ) { }
 
 protected:
   ostorestreambuffer m_buf;
@@ -114,7 +114,7 @@ protected:
  * Store Input Buffer
  */
 
-class istorestreambuffer : public streambuf
+class istorestreambuffer : public std::streambuf
 {
 protected:
   /* data buffer:
@@ -150,11 +150,11 @@ protected:
  * Store Input Stream
  */
 
-class istorestream : public istream
+class istorestream : public std::istream
 {
 public:
   istorestream( KoStore* _store )
-    : istream( &m_buf ), m_buf( _store ) { }
+    : std::istream( &m_buf ), m_buf( _store ) { }
 
 protected:
   istorestreambuffer m_buf;

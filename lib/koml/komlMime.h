@@ -25,6 +25,9 @@
 #include <map>
 #include <string>
 
+using std::ostream;
+using std::istream;
+
 class Base64
 {
 public:
@@ -35,9 +38,9 @@ public:
   int decode( char *_dest, unsigned char c1, unsigned char c2, unsigned char c3, unsigned char c4 );
 };
 
-#include <streambuf.h>
+#include <streambuf>
 
-class Base64EncodeBuffer : public streambuf, protected Base64
+class Base64EncodeBuffer : public std::streambuf, protected Base64
 {
 protected:
   static const int m_bufferSize = 48;   // Groesse des Datenm_buffers
@@ -141,7 +144,7 @@ protected:
 };
 
 
-class Base64DecodeBuffer : public streambuf, protected Base64
+class Base64DecodeBuffer : public std::streambuf, protected Base64
 {
 protected:
   /* Datenpuffer:

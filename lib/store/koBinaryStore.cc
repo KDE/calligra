@@ -24,6 +24,8 @@
 
 #include "koBinaryStore.h"
 
+using namespace std;
+
 KoBinaryStore::KoBinaryStore( const QString & _filename, KoStore::Mode _mode )
 {
   m_bIsOpen = false;
@@ -226,7 +228,7 @@ void KoBinaryStore::close()
   if ( m_mode == Write )
   {
     // rewrite header with correct size
-    m_current.size = m_out.tellp() - m_current.data;
+    m_current.size = m_out.tellp() - long(m_current.data);
     m_out.seekp( m_current.pos );
     writeHeader( m_current );
     m_out.seekp( 0, ios::end );

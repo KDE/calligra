@@ -20,32 +20,31 @@
 #ifndef __torben_h__
 #define __torben_h__
 
-#include <config.h>
-#include <list.h>
+#include <list>
 #include <string>
-#include <iostream.h>
+#include <iostream>
 
 
 
-typedef list<string> strlist;
+typedef std::list<std::string> strlist;
 
-class tstring : public string
+class tstring : public std::string
 {
 public:
-  tstring() : string() { }
-  tstring (const string& str) : string( str ) { }
-  tstring (const string& str, size_type pos, size_type n = npos )
-    : string( str, pos, n ) { }
+  tstring() : std::string() { }
+  tstring (const std::string& str) : std::string( str ) { }
+  tstring (const std::string& str, size_type pos, size_type n = npos )
+    : std::string( str, pos, n ) { }
   tstring (const char* s, size_type n)
-    : string( s, n ) { }
+    : std::string( s, n ) { }
   tstring (const char* s)
-    : string( s ) { }
+    : std::string( s ) { }
   tstring( size_type n, char c)
-    : string( n, c ) { }
+    : std::string( n, c ) { }
 
-  string& stripWhiteSpace( string& _res ) const;
-  string& stripWhiteSpace();
-  string& right( string &_res, int n ) const;
+  std::string& stripWhiteSpace( std::string& _res ) const;
+  std::string& stripWhiteSpace();
+  std::string& right( std::string &_res, int n ) const;
 };
 
 /**************************************************************
@@ -54,12 +53,12 @@ public:
  *
  **************************************************************/
 
-class tostrstreambuffer : public streambuf
+class tostrstreambuffer : public std::streambuf
 {
 protected:
   static const int m_bufferSize = 4096;   // Groesse des Datenm_buffers
   char m_buffer[m_bufferSize + 1];            // Datenm_buffer
-  string &m_string;
+  std::string &m_string;
   
 public:
   /* Konstruktor
@@ -67,7 +66,7 @@ public:
    *  - ein Zeichen kleiner,
    *    damit das m_bufferSize-te Zeichen overflow() ausloest
    */
-  tostrstreambuffer( string &_str ) : m_string( _str )
+  tostrstreambuffer( std::string &_str ) : m_string( _str )
   {
     setp (m_buffer, m_buffer+(m_bufferSize-1));
   }
@@ -125,10 +124,10 @@ protected:
   }
 };
 
-class tostrstream : public ostream
+class tostrstream : public std::ostream
 {
 public:
-  tostrstream( string& _str ) : ostream( &m_buf ), m_buf( _str ) { }
+  tostrstream( std::string& _str ) : std::ostream( &m_buf ), m_buf( _str ) { }
 
 protected:
   tostrstreambuffer m_buf;

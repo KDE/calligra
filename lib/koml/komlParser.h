@@ -20,12 +20,13 @@
 #ifndef __parser_h__
 #define __parser_h__
 
-#include <config.h>
-#include <string.h>
-#include <vector.h>
+#include <string>
+#include <vector>
 
 #include "torben.h"
 #include "komlFeed.h"
+
+using std::string;
 
 struct KOMLAttrib
 {
@@ -49,7 +50,7 @@ public:
 
   bool readText( string& );
 
-  static bool parseTag( const char *_tag, string& name, vector<KOMLAttrib>& _attribs );
+  static bool parseTag( const char *_tag, string& name, std::vector<KOMLAttrib>& _attribs );
 
   static void encode(string &_str);
   
@@ -63,14 +64,14 @@ protected:
   void free( KOMLData* _data );
 
   KOMLFeed *m_pFeed;
-  list<KOMLData*> m_lstData;
+  std::list<KOMLData*> m_lstData;
 
   int m_iPos;
   bool m_bEOF;
   const char *m_pData;
   int m_iLen;
 
-  vector<string> m_vecStack;
+  std::vector<string> m_vecStack;
 
   bool m_bEmit;
   int m_iEmitStart;

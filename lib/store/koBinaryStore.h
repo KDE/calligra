@@ -63,8 +63,8 @@ protected:
 
   QMap<QString, Entry> m_map;
 
-  ofstream m_out;
-  ifstream m_in;
+  std::ofstream m_out;
+  std::ifstream m_in;
   bool m_bIsOpen;
 
   Entry m_current;
