@@ -107,13 +107,13 @@
 #include "vpath.h"
 
 
-KarbonView::KarbonView( KarbonPart* part, QWidget* parent, const char* name )
-	: KoView( part, parent, name ), part()( part )
+KarbonView::KarbonView( KarbonPart* p, QWidget* parent, const char* name )
+	: KoView( p, parent, name ), m_part( p )
 {
 	setInstance( KarbonFactory::instance() );
 	setAcceptDrops( true );
 
-	if( !part->isReadWrite() )
+	if( !p->isReadWrite() )
 		setXMLFile( QString::fromLatin1( "karbon_readonly.rc" ) );
 	else
 		setXMLFile( QString::fromLatin1( "karbon.rc" ) );
@@ -166,30 +166,32 @@ KarbonView::KarbonView( KarbonPart* part, QWidget* parent, const char* name )
 	m_strokeFillPreview = 0L;
 	m_ColorManager = 0L;
 	m_strokeDocker = 0L;
-	VToolDocker *_toolContainer = part()->toolContainer();
+
+	VToolDocker* toolContainer = part()->toolContainer();
+
 	if( shell() )
 	{
-		if( !_toolContainer )
+		if( !toolContainer )
 		{
-			_toolContainer = new VToolDocker( part(), this );
-			mainWindow()->addDockWindow( _toolContainer, DockLeft );
-			part()->setToolContainer( _toolContainer );
+			toolContainer = new VToolDocker( part(), this );
+			mainWindow()->addDockWindow( toolContainer, DockLeft );
+			part()->setToolContainer( toolContainer );
 		}
-		connect( _toolContainer, SIGNAL( selectToolActivated() ),		this, SLOT( selectTool() ) );
-		connect( _toolContainer, SIGNAL( selectNodesToolActivated() ),	this, SLOT( selectNodesTool() ) );
-		connect( _toolContainer, SIGNAL( rotateToolActivated() ),		this, SLOT( rotateTool() ) );
-		connect( _toolContainer, SIGNAL( shearToolActivated() ),		this, SLOT( shearTool() ) );
-		connect( _toolContainer, SIGNAL( rectangleToolActivated() ),	this, SLOT( rectangleTool() ) );
-		connect( _toolContainer, SIGNAL( roundRectToolActivated() ),	this, SLOT( roundRectTool() ) );
-		connect( _toolContainer, SIGNAL( ellipseToolActivated() ),		this, SLOT( ellipseTool() ) );
-		connect( _toolContainer, SIGNAL( polygonToolActivated() ),		this, SLOT( polygonTool() ) );
-		connect( _toolContainer, SIGNAL( starToolActivated() ),			this, SLOT( starTool() ) );
-		connect( _toolContainer, SIGNAL( sinusToolActivated() ),		this, SLOT( sinusTool() ) );
-		connect( _toolContainer, SIGNAL( spiralToolActivated() ),		this, SLOT( spiralTool() ) );
-		connect( _toolContainer, SIGNAL( gradToolActivated() ),			this, SLOT( gradTool() ) );
-		connect( _toolContainer, SIGNAL( polylineToolActivated() ),		this, SLOT( polylineTool() ) );
+		connect( toolContainer, SIGNAL( selectToolActivated() ),		this, SLOT( selectTool() ) );
+		connect( toolContainer, SIGNAL( selectNodesToolActivated() ),	this, SLOT( selectNodesTool() ) );
+		connect( toolContainer, SIGNAL( rotateToolActivated() ),		this, SLOT( rotateTool() ) );
+		connect( toolContainer, SIGNAL( shearToolActivated() ),		this, SLOT( shearTool() ) );
+		connect( toolContainer, SIGNAL( rectangleToolActivated() ),	this, SLOT( rectangleTool() ) );
+		connect( toolContainer, SIGNAL( roundRectToolActivated() ),	this, SLOT( roundRectTool() ) );
+		connect( toolContainer, SIGNAL( ellipseToolActivated() ),		this, SLOT( ellipseTool() ) );
+		connect( toolContainer, SIGNAL( polygonToolActivated() ),		this, SLOT( polygonTool() ) );
+		connect( toolContainer, SIGNAL( starToolActivated() ),			this, SLOT( starTool() ) );
+		connect( toolContainer, SIGNAL( sinusToolActivated() ),		this, SLOT( sinusTool() ) );
+		connect( toolContainer, SIGNAL( spiralToolActivated() ),		this, SLOT( spiralTool() ) );
+		connect( toolContainer, SIGNAL( gradToolActivated() ),			this, SLOT( gradTool() ) );
+		connect( toolContainer, SIGNAL( polylineToolActivated() ),		this, SLOT( polylineTool() ) );
 		part()->toolContainer()->show();
-		m_strokeFillPreview = _toolContainer->strokeFillPreview();
+		m_strokeFillPreview = toolContainer->strokeFillPreview();
 		connect( m_strokeFillPreview, SIGNAL( strokeChanged( const VStroke & ) ), this, SLOT( selectionChanged() ) );
 		connect( m_strokeFillPreview, SIGNAL( fillChanged( const VFill & ) ), this, SLOT( selectionChanged() ) );
 
@@ -209,7 +211,7 @@ KarbonView::KarbonView( KarbonPart* part, QWidget* parent, const char* name )
 	reorganizeGUI();
 
 	// widgets:
-	m_canvas = new VCanvas( this, part );
+	m_canvas = new VCanvas( this, p );
 	m_canvas->viewport()->installEventFilter( this );
 	m_canvas->setGeometry( 0, 0, width(), height() );
 

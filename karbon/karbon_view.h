@@ -93,13 +93,13 @@ public:
 	virtual QWidget* canvas() { return m_canvas; }
 	VCanvas* canvasWidget() const { return m_canvas; }
 
-	VPainterFactory* painterFactory()const { return m_painterFactory; }
+	VPainterFactory* painterFactory() const { return m_painterFactory; }
 
 	// printing support, override from KoView
 	virtual void setupPrinter( KPrinter &printer );
 	virtual void print( KPrinter& printer );
 
-	KarbonPart* part()const { return m_part; }
+	KarbonPart* part() const { return m_part; }
 
 	VContextHelpDocker* contextHelpDocker() const
 		{ return m_contextHelpDocker; }
