@@ -52,6 +52,7 @@ VSelectNodesTool::activate()
 	if( m_state == normal )
 		view()->statusMessage()->setText( i18n( "EditNode" ) );
 	view()->canvasWidget()->viewport()->setCursor( QCursor( Qt::arrowCursor ) );
+	view()->part()->document().selection()->showHandle( false );
 	view()->part()->document().selection()->setState( VObject::selected );
 }
 

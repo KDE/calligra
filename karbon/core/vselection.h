@@ -123,11 +123,13 @@ public:
 	 */
 	VHandleNode handleNode( const KoPoint &point ) const;
 
+	void showHandle( bool handle = true ) { m_showhandle = handle; }
+
 private:
 	/**
-	 * Select or deselect?
+	 * Show/Hide handle.
 	 */
-	bool m_select;
+	bool m_showhandle;
 
 	/**
 	 * Select objects and not nodes?

@@ -31,7 +31,7 @@
 #include "vstroke.h"
 
 VSelection::VSelection( VObject* parent )
-	: VObject( parent )
+	: VObject( parent ), m_showhandle( true )
 {
 	m_handleRect = new KoRect[ 10 ];
 	setStroke( VStroke( VColor( Qt::black ) ) );
@@ -46,6 +46,8 @@ VSelection::VSelection( const VSelection& selection )
 	VObjectListIterator itr = selection.m_objects;
 	for ( ; itr.current() ; ++itr )
 		append( itr.current() );	// Don't clone objects here.
+
+	m_showhandle = true;
 }
 
 VSelection::~VSelection()
@@ -175,6 +177,8 @@ VSelection::draw( VPainter* painter, double zoomFactor ) const
 	m_handleRect[ node_mt ].setRect( center.x(), m_handleRect[0].bottom() - handleNodeSize, 2 * handleNodeSize, 2 * handleNodeSize );
 	m_handleRect[ node_lt ].setRect( m_handleRect[0].left() - handleNodeSize, m_handleRect[0].bottom() - handleNodeSize, 2 * handleNodeSize, 2 * handleNodeSize );
 	m_handleRect[ node_lm ].setRect( m_handleRect[0].left() - handleNodeSize, center.y() - handleNodeSize, 2 * handleNodeSize, 2 * handleNodeSize );
+
+	if( !m_showhandle ) return;
 
 	// draw handle rect:
 	painter->setPen( Qt::blue.light() );
