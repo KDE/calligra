@@ -22,15 +22,15 @@
 #define __kspread_dlg_anchor__
 
 #include <kdialogbase.h>
-#include <qpushbutton.h>
-#include <qlineedit.h>
 #include <qrect.h>
-#include <qcheckbox.h>
 
 class KSpreadView;
 class KSpreadTable;
 class KSpreadCell;
 class KURLRequester;
+class QLineEdit;
+class QCheckBox;
+class QPushButton;
 
 class internetAnchor : public QWidget
 {
@@ -108,7 +108,7 @@ public slots:
   void setCellText(const QString &_text);
  private:
     KSpreadView* m_pView;
-    internetAnchor *_internetAnchor; 
+    internetAnchor *_internetAnchor;
     mailAnchor *_mailAnchor;
     fileAnchor *_fileAnchor;
     cellAnchor *_cellAnchor;

@@ -84,7 +84,7 @@
 #include "kspread_dlg_showColRow.h"
 #include "kspread_dlg_list.h"
 #include "kspread_undo.h"
-
+#include <kconfig.h>
 #include "handler.h"
 
 #include "KSpreadViewIface.h"

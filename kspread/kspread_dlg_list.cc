@@ -36,6 +36,7 @@
 #include <kconfig.h>
 #include <qlabel.h>
 
+
 KSpreadList::KSpreadList( KSpreadView* parent, const char* name )
 	: QDialog( parent, name,TRUE )
 {

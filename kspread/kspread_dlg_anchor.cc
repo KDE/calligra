@@ -32,6 +32,7 @@
 #include <kurlrequester.h>
 #include <klineedit.h>
 #include <kseparator.h>
+#include <qcheckbox.h>
 
 KSpreadLinkDlg::KSpreadLinkDlg( KSpreadView* parent, const char* /*name*/ )
 :  KDialogBase(KDialogBase::IconList,i18n("Insert Link") ,
