@@ -5812,16 +5812,12 @@ void KSpreadTable::print( QPainter &painter, KPrinter *_printer )
     // Calculate all pages, but if we are embedded, print only the first one
     while ( bottom <= cell_range.bottom() /* && page_list.count() == 0 */ )
     {
-//         kdDebug(36001) << "KSpreadTable::print: bottom=" << bottom << " bottom_range=" << cell_range.bottom() << endl;
-
         // Up to this column everything is already printed, starting with the print range
         int right = m_printRange.left()-1;
         // Start of the next page
         int left = right + 1;
         while ( right <= cell_range.right() )
         {
-//             kdDebug(36001) << "KSpreadTable::print: right=" << right << " right_range=" << cell_range.right() << endl;
-
             QRect page_range;
             page_range.setLeft( left );
             page_range.setTop( top );
@@ -7667,7 +7663,7 @@ QString KSpreadTable::completeHeading( const QString &_data, int _page, const QS
     while ( ( pos = tmp.find( "<org>", pos ) ) != -1 )
         tmp.replace( pos, 5, organization );
     pos = 0;
-    while ( ( pos = tmp.find( "<table>", pos ) ) != -1 )
+    while ( ( pos = tmp.find( "<sheet>", pos ) ) != -1 )
         tmp.replace( pos, 7, ta );
 
     return tmp;

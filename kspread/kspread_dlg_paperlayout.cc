@@ -227,12 +227,12 @@ void KSpreadPaperLayout::slotOk()
 
     m_table->setPaperLayout( POINT_TO_MM(pl.ptLeft), POINT_TO_MM(pl.ptTop), POINT_TO_MM(pl.ptRight), POINT_TO_MM(pl.ptBottom), pl.format, pl.orientation );
 
-    m_table->setHeadFootLine( m_table->localizeHeadFootLine( hf.headLeft  ),
-                              m_table->localizeHeadFootLine( hf.headMid   ),
-                              m_table->localizeHeadFootLine( hf.headRight ),
-                              m_table->localizeHeadFootLine( hf.footLeft  ),
-                              m_table->localizeHeadFootLine( hf.footMid   ),
-                              m_table->localizeHeadFootLine( hf.footRight ) );
+    m_table->setHeadFootLine( m_table->delocalizeHeadFootLine( hf.headLeft  ),
+                              m_table->delocalizeHeadFootLine( hf.headMid   ),
+                              m_table->delocalizeHeadFootLine( hf.headRight ),
+                              m_table->delocalizeHeadFootLine( hf.footLeft  ),
+                              m_table->delocalizeHeadFootLine( hf.footMid   ),
+                              m_table->delocalizeHeadFootLine( hf.footRight ) );
 
     m_table->doc()->setUnit( unit );
     accept();
