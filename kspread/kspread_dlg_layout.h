@@ -103,6 +103,7 @@ public:
     void apply( KSpreadCell *_cell );
     void apply( ColumnLayout *_col );
     void apply( RowLayout *_row );
+    void applyLayout( KSpreadLayout *_obj );
 
 signals:
     /**
@@ -172,6 +173,7 @@ public:
     void apply( KSpreadCell *_cell );
     void apply( ColumnLayout *_col );
     void apply( RowLayout *_row );
+    void applyLayout( KSpreadLayout *_obj );
 public slots:
     void slotStyle( int );
 protected:
@@ -199,6 +201,7 @@ public:
     void apply( KSpreadCell *_cell );
     void apply( ColumnLayout *_col );
     void apply( RowLayout *_row );
+    void applyLayout( KSpreadLayout *_obj );
 
 public slots:
     void slotChangeState();
@@ -234,6 +237,8 @@ public:
     void apply( KSpreadCell *_cell );
     void apply( ColumnLayout *_col );
     void apply( RowLayout *_row );
+    void applyLayout( KSpreadLayout *_obj );
+
     int getSizeHeight();
     int getSizeWidth();
     bool getMergedCellState();
@@ -399,6 +404,7 @@ public:
     void apply( KSpreadCell *_cell );
     void apply( ColumnLayout *_col );
     void apply( RowLayout *_row );
+    void applyLayout( KSpreadLayout *_obj );
 
     void init();
 public slots:
@@ -571,6 +577,15 @@ public:
 
     bool isMerged;
     bool oneCell;
+
+
+    // The rectangular area for which this dlg has been opened.
+    int left;
+    int right;
+    int top;
+    int bottom;
+
+
 public slots:
     void slotApply();
 
@@ -597,11 +612,6 @@ protected:
 
     KSpreadView *m_pView;
 
-    // The rectangular area for which this dlg has been opened.
-    int left;
-    int right;
-    int top;
-    int bottom;
 
 };
 
