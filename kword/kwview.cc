@@ -2278,10 +2278,11 @@ void KWView::editPaste()
     }
     else if ( providesImage ) // must be after kwordtext
     {
-
         KoPoint docPoint( m_doc->ptLeftBorder(), m_doc->ptPageTop( m_currentPage ) + m_doc->ptTopBorder() );
+	deselectAllFrames();
         m_gui->canvasWidget()->pasteImage( data, docPoint );
     } else { // providesKWord (e.g. frames)
+    	deselectAllFrames();
         m_gui->canvasWidget()->pasteFrames();
     }
 }
@@ -7221,28 +7222,28 @@ void KWView::deleteFrameSet( KWFrameSet * frameset)
 
 QPtrList<KAction> KWView::listOfResultOfCheckWord( const QString &word )
 {
+    QPtrList<KAction> listAction;
 #ifdef HAVE_LIBASPELL
-    KOSpell *tmpSpell = new KOSpell( m_doc->getKOSpellConfig());
+    KOSpell *tmpSpell = new KOSpell( m_doc->getKOSpellConfig() );
     QStringList lst = tmpSpell->resultCheckWord(word );
     delete tmpSpell;
-    QPtrList<KAction> listAction=QPtrList<KAction>();
-    if ( !lst.contains( word ))
+    if ( !lst.contains( word ) )
     {
         QStringList::ConstIterator it = lst.begin();
-        for ( int i = 0; it != lst.end() ; ++it, ++i )
+        for ( ; it != lst.end() ; ++it )
         {
             if ( !(*it).isEmpty() ) // in case of removed subtypes or placeholders
             {
-                KAction * act = new KAction( (*it));
-                connect( act, SIGNAL(activated()),this, SLOT(slotCorrectWord()) );
+                KAction * act = new KAction( *it );
+                connect( act, SIGNAL(activated()), this, SLOT(slotCorrectWord()) );
                 listAction.append( act );
             }
         }
     }
-    return listAction;
+#else
+    Q_UNUSED( word );
 #endif
-
-    return QPtrList<KAction>();
+    return listAction;
 }
 
 void KWView::slotCorrectWord()

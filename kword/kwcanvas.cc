@@ -1366,6 +1366,7 @@ void KWCanvas::mrCreatePixmap()
         KWFrame *frame = new KWFrame(fs, picRect.x(), picRect.y(), picRect.width(),
                                      picRect.height() );
         frame->setZOrder( m_doc->maxZOrder( frame->pageNum(m_doc) ) + 1 ); // make sure it's on top
+        frame->setSelected(TRUE);
         fs->addFrame( frame, false );
         m_doc->addFrameSet( fs );
         KWCreateFrameCommand *cmd=new KWCreateFrameCommand( i18n("Create a Picture Frame"), frame );
@@ -2014,7 +2015,6 @@ void KWCanvas::pasteFrames()
             QDomElement topElem = domDoc.documentElement();
 
             KMacroCommand * macroCmd = new KMacroCommand( i18n( "Paste Frames" ) );
-            selectAllFrames( FALSE );
             m_doc->pasteFrames( topElem, macroCmd );
             m_doc->loadPictureMap( topElem );
             store->close();
