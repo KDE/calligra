@@ -1138,13 +1138,13 @@ KoRect KPrCanvas::objectSelectedBoundingRect() const
 KoRect KPrCanvas::getAlignBoundingRect() const
 {
     KoRect boundingRect;
-  
+
     for ( int i = 0; i < 2; ++i )
     {
         QPtrListIterator<KPObject> it( i == 0 ? activePage()->objectList() : stickyPage()->objectList() );
         for ( ; it.current() ; ++it )
         {
-            if ( it.current() == m_view->kPresenterDoc()->header() || 
+            if ( it.current() == m_view->kPresenterDoc()->header() ||
                  it.current() == m_view->kPresenterDoc()->footer() )
                 continue;
 
@@ -5599,7 +5599,6 @@ void KPrCanvas::createEditing( KPTextObject *textObj )
         editNum = 0L;
     }
     m_currentTextObjectView=textObj->createKPTextView( this );
-    // ## we should really replace editNum with a pointer
     editNum=textObj;
 }
 

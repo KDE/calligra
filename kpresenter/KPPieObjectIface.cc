@@ -28,7 +28,6 @@
 
 KPPieObjectIface::KPPieObjectIface( KPPieObject *_obj )
     : KPresenterObject2DIface(_obj)
-
 {
     obj = _obj;
 }

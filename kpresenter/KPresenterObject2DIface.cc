@@ -75,7 +75,6 @@ QString KPresenterObject2DIface::gradientFillType() const
         return QString("BRUSH");
     case FT_GRADIENT:
         return QString("GRADIENT");
-
     }
     return QString::null;
 }

@@ -46,7 +46,6 @@ QString KPFreehandObjectIface::lineBegin()const
 {
     LineEnd type=obj->getLineBegin();
     return lineEndBeginName( type );
-
 }
 
 QString KPFreehandObjectIface::lineEnd() const

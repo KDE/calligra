@@ -27,7 +27,6 @@
 
 KPPolygonObjectIface::KPPolygonObjectIface( KPPolygonObject *_obj )
     : KPresenterObject2DIface(_obj)
-
 {
     obj = _obj;
 }

@@ -76,7 +76,6 @@ void KPresenterViewIface::editReplace()
     view->editReplace();
 }
 
-
 void KPresenterViewIface::newView()
 {
     view->newView();
@@ -526,7 +525,6 @@ bool KPresenterViewIface::skipToPage( int _num )
     view->skipToPage(_num);
     return true;
 }
-
 
 void KPresenterViewIface::toolsRotate()
 {
