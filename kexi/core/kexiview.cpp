@@ -403,7 +403,8 @@ KexiView::registerDialog(KexiDialogBase *dlg, const QString &identifier)
 bool
 KexiView::removeDialog(const QString &identifier)
 {
-	return m_wins.remove(identifier);
+	m_wins.remove(identifier);
+	return true;
 }
 
 KexiDialogBase *
