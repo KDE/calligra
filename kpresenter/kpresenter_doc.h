@@ -499,6 +499,8 @@ class KPresenterDoc : public KoDocument
 
     CustomListMap customListSlideShow();
     void updateCustomListSlideShow( CustomListMap & map, bool loadOasis = false );
+    QValueList <KPrPage *> customListPage( const QStringList & lst, bool loadOasis=false );
+
 
     QString presentationName() const { return m_presentationName; }
     void setPresentationName( const QString &_name ) { m_presentationName = _name; }

@@ -62,12 +62,16 @@ CustomSlideShowDia::CustomSlideShowDia( QWidget* parent, KPresenterDoc *_doc, co
   m_pCopy=new QPushButton(i18n("Co&py"),page);
   grid1->addWidget(m_pCopy,4,2);
 
-  //m_pAdd->setEnabled(false);
+  m_pTest=new QPushButton(i18n("Test"),page);
+  grid1->addWidget(m_pTest,5,2);
+
 
   connect( m_pRemove, SIGNAL( clicked() ), this, SLOT( slotRemove() ) );
   connect( m_pAdd, SIGNAL( clicked() ), this, SLOT( slotAdd() ) );
   connect( m_pModify, SIGNAL( clicked() ), this, SLOT( slotModify() ) );
   connect( m_pCopy, SIGNAL( clicked() ), this, SLOT( slotCopy() ) );
+  connect( m_pTest, SIGNAL( clicked() ), this, SLOT( slotTest() ) );
+
   connect( list, SIGNAL(doubleClicked(QListBoxItem *)),this,SLOT(slotDoubleClicked(QListBoxItem *)));
   connect( list, SIGNAL(clicked ( QListBoxItem * )),this,SLOT(slotTextClicked(QListBoxItem * )));
 
@@ -97,6 +101,7 @@ void CustomSlideShowDia::updateButton()
     m_pRemove->setEnabled( state );
     m_pModify->setEnabled( state );
     m_pCopy->setEnabled( state );
+    m_pTest->setEnabled( state );
 }
 
 void CustomSlideShowDia::slotTextClicked(QListBoxItem*)
@@ -108,6 +113,11 @@ void CustomSlideShowDia::slotDoubleClicked(QListBoxItem *)
 {
     updateButton();
     slotModify();
+}
+
+void CustomSlideShowDia::slotTest()
+{
+    //TODO
 }
 
 void CustomSlideShowDia::slotAdd()

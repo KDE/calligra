@@ -4490,40 +4490,46 @@ CustomListMap KPresenterDoc::customListSlideShow()
     return listMap;
 }
 
+QValueList <KPrPage *> KPresenterDoc::customListPage( const QStringList & lst, bool loadOasis )
+{
+    QStringList tmp( lst );
+    QValueList <KPrPage *> tmpValueList;
+    for ( QStringList::Iterator itList = tmp.begin(); itList != tmp.end(); ++itList )
+    {
+        for ( int i = 0; i < static_cast<int>( m_pageList.count() ); i++ )
+        {
+            //kdDebug()<<" insert page name :"<<*itList<<endl;
+            if ( loadOasis )
+            {
+                if ( m_pageList.at( i )->oasisNamePage(i+1)== ( *itList ) )
+                {
+                    tmpValueList.append(  m_pageList.at( i ) );
+                    //kdDebug()<<" really insert\n";
+                    break;
+                }
+            }
+            else
+            {
+                if ( m_pageList.at( i )->pageTitle()== ( *itList ) )
+                {
+                    tmpValueList.append( m_pageList.at( i ) );
+                    //kdDebug()<<" really insert\n";
+                    break;
+                }
+            }
+
+        }
+    }
+    return tmpValueList;
+
+}
+
 void KPresenterDoc::updateCustomListSlideShow( CustomListMap & map, bool loadOasis )
 {
     m_customListSlideShow.clear();
     CustomListMap::Iterator it;
     for ( it = map.begin(); it != map.end(); ++it ) {
-        QStringList tmp( it.data() );
-        QValueList <KPrPage *> tmpValueList;
-        for ( QStringList::Iterator itList = tmp.begin(); itList != tmp.end(); ++itList )
-        {
-            for ( int i = 0; i < static_cast<int>( m_pageList.count() ); i++ )
-            {
-                //kdDebug()<<" insert page name :"<<*itList<<endl;
-                if ( loadOasis )
-                {
-                    if ( m_pageList.at( i )->oasisNamePage(i+1)== ( *itList ) )
-                    {
-                        tmpValueList.append(  m_pageList.at( i ) );
-                        //kdDebug()<<" really insert\n";
-                        break;
-                    }
-                }
-                else
-                {
-                    if ( m_pageList.at( i )->pageTitle()== ( *itList ) )
-                    {
-                        tmpValueList.append( m_pageList.at( i ) );
-                        //kdDebug()<<" really insert\n";
-                        break;
-                    }
-                }
-
-            }
-        }
-        m_customListSlideShow.insert( it.key(), tmpValueList );
+        m_customListSlideShow.insert( it.key(), customListPage( it.data(), loadOasis )  );
     }
     setModified( true );
 }

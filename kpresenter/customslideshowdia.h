@@ -46,6 +46,7 @@ public slots:
     void slotAdd();
     void slotModify();
     void slotCopy();
+    void slotTest();
 
 protected:
     void init();
@@ -57,6 +58,7 @@ protected:
     QPushButton* m_pAdd;
     QPushButton* m_pModify;
     QPushButton* m_pCopy;
+    QPushButton* m_pTest;
     bool m_bChanged;
     KPresenterDoc *m_doc;
     CustomListMap m_customListMap;
