@@ -13,9 +13,13 @@ Name[pl]=Proste widżety
 Name[pt]=Elementos Básicos
 Name[pt_BR]=Widgets Básicos
 Name[ru]=Стандартные виджеты
+Name[sr]=Основне контроле
+Name[sr@Latn]=Основне контроле
 Name[sv]=Standardkomponenter
 Name[ta]=அடிப்படை சாளர உருக்கள்
+Name[uk]=Основні віджети
 Name[xx]=xxBasic Widgetsxx
+Name[zh_CN]=基本部件
 
 X-KDE-Library=stdwidgets
 X-KFormDesigner-FactoryGroup=

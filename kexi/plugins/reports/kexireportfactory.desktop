@@ -4,12 +4,19 @@ Type=Service
 ServiceTypes=KFormDesigner/WidgetFactory
 
 Name=Kexi Report Widgets
+Name[da]=Kexi Rapportkontroller
 Name[es]=Widgets para informes de Kexi
+Name[et]=Kexi rapordividinad
 Name[fr]=Éléments de rapport Kexi
 Name[pt]=Elementos de Relatório do Kexi
 Name[pt_BR]=Widgets de Relatório do Kexi
 Name[ru]=Элементы управления для отчётов Kexi
+Name[sr]=Kexi-јеве контроле за извештаје
+Name[sr@Latn]=Kexi-јеве контроле за извештаје
 Name[sv]=Kexi-rapportkomponenter
+Name[uk]=Віджети звітів Kexi
+Name[xx]=xxKexi Report Widgetsxx
+Name[zh_CN]=Kexi 报表部件
 
 X-KDE-Library=kexireportwidgets
 X-KFormDesigner-FactoryGroup=kexi-report
