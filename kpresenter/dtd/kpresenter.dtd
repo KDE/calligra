@@ -1,0 +1,285 @@
+<!--	$Id$
+
+		This is an XML document type definition (DTD) for the
+		KPresenter document format. 
+		Written by Kalle Dalheimer <kalle@kde.org> with (obviously) input from 
+		KPresenter's author Reginald Stadlbauer <reggie@kde.org>.
+
+		Please report all bugs to Kalle and Reginald at the above addresses.
+-->
+		
+
+
+<!--	A KPresenter document consists of a paper description, a
+		background description, a number of objects and information
+		about the screen presentation.
+
+		Attributes:
+
+		author:		The document's author
+		email:		The document's author's email address
+		editor:		The program this file was written with
+		mime:		The MIME type (must always have the value application/x-kpresenter
+-->
+<!ELEMENT DOC (PAPER|BACKGROUND|OBJECTS|INFINITLOOP|MANUALSWITCH|PRESSPEED)>
+<!ATTLIST DOC	author CDATA #IMPLIED
+				email CDATA #IMPLIED
+				editor CDATA #IMPLIED
+				mime CDATA "application/x-kword">
+
+<!--	Describes the page format. Can have no or one PAPERBORDERS child that 
+		describes the margins.
+
+		Attributes:
+
+		format:			integer value for the page format
+		width:			width in millimeters
+		height:			height in millimeters
+		orientation:	0 for landscape, 1 for portrait
+-->
+<!ELEMENT PAPER (PAPERBORDERS?)>
+<!ATTLIST PAPER	format CDATA #REQUIRED
+				width CDATA #REQUIRED
+				height CDATA #REQUIRED
+				orientation CDATA #REQUIRED>
+
+<!--	Describes the margins of the page.
+
+		Attributes:
+		
+		left:			left margin in pixels
+		right:			right margin in pixels
+		top:			top margin in pixels
+		bottom:			bottom margin in pixels
+-->
+<!ELEMENT PAPERBORDERS EMPTY>
+<!ATTLIST PAPERBORDERS	left CDATA #REQUIRED
+						right CDATA #REQUIRED
+						top	CDATA #REQUIRED
+						bottom CDATA #REQUIRED>
+
+
+
+<!--	Contains all the objects on the pages.
+-->
+<!ELEMENT OBJECTS (OBJECT)*>
+
+
+<!--	Describes one object on the page.
+
+		Attributes:
+
+		type	the object type ??? what are those ???
+-->
+<!ELEMENT OBJECT (ORIG|SIZE|SHADOW|EFFECTS|ANGLE|TEXTOBJ|PEN|BRUSH|RNDS|PRESNUM|FILLTYPE|GRADIENT)*>
+<!ATTLIST OBJECT		type	CDATA #REQUIRED>
+
+<!--	The position of an object on its page.
+
+		Attributes:
+
+		x		the x position on the page
+		y		the y position on the page
+-->
+<!ELEMENT ORIG EMPTY>
+<!ATTLIST ORIG	x		CDATA #REQUIRED
+				y		CDATA #REQUIRED>
+
+
+<!--	The object's size.
+
+		Attributes:
+
+		width	the object's width
+		height	the object's height
+-->
+<!ELEMENT SIZE EMPTY>
+<!ATTLIST SIZE	width	CDATA #REQUIRED
+				height	CDATA #REQUIRED>
+
+
+<!--	The objects's shadow.
+
+		Attributes:
+
+		distance		distance between shadow and object
+		direction		direction of the shadow
+		red				red value of the shadow
+		green			green value of the shadow
+		blue			blue value of the shadow
+-->
+<!ELEMENT SHADOW EMPTY>
+<!ATTLIST SHADOW		distance		CDATA #REQUIRED
+						direction		CDATA #REQUIRED
+						red				CDATA #REQUIRED
+						green			CDATA #REQUIRED
+						blue			CDATA #REQUIRED>
+
+<!--	The effects for moving from page to page.
+
+		Attributes:
+
+		effect:			first effect
+		effect2:		second effect
+-->
+<!ELEMENT EFFECTS EMPTY>
+<!ATTLIST EFFECTS		effect	CDATA #REQUIRED
+						effect2 CDATA #REQUIRED>
+
+
+<!--	The number of the presentation.
+
+		Attributes:
+
+		value	the number of the presentation
+-->
+<!ELEMENT PRESNUM EMPTY>
+<!ATTLIST PRESNUM value CDATA #REQUIRED>
+
+
+<!--	The angle of the page
+
+		Attributes:
+
+		value	the angle of the page
+-->
+<!ELEMENT ANGLE EMPTY>
+<!ATTLIST ANGLE value CDATA #REQUIRED>
+
+
+<!--	Describes a text object on the page.
+
+		Attributes:
+
+		objType			the type of the object ??? which ones are there???
+-->
+<!ELEMENT TEXTOBJ (ENUMLISTTYPE|UNSORTEDLISTTYPE|PARAGRAPH)*>
+<!ATTLIST TEXTOBJ objType CDATA #REQUIRED>
+
+<!ELEMENT ENUMLISTTYPE EMPTY>
+<!ATTLIST ENUMLISTTYPE	type	CDATA #REQUIRED
+						before	CDATA #IMPLIED
+						after	CDATA #IMPLIED
+						start	CDATA #REQUIRED
+						family	CDATA #REQUIRED
+						pointSize		CDATA #REQUIRED
+						bold	CDATA #IMPLIED
+						italic	CDATA #IMPLIED
+						underline		CDATA #IMPLIED
+						red		CDATA #IMPLIED
+						green	CDATA #IMPLIED
+						blue	CDATA #IMPLIED>
+
+<!ELEMENT UNSORTEDLISTTYPE EMPTY>
+<!ATTLIST UNSORTEDLISTTYPE		family	CDATA #REQUIRED
+								pointSize		CDATA #REQUIRED
+								bold	CDATA #IMPLIED
+								italic	CDATA #IMPLIED
+								underline		CDATA #IMPLIED
+								red		CDATA #IMPLIED
+								green	CDATA #IMPLIED
+								blue	CDATA #IMPLIED
+								chr		CDATA #REQUIRED>
+
+<!ELEMENT PARAGRAPH	(LINE)*>
+<!ATTLIST PARAGRAPH		horzAlign		CDATA #REQUIRED
+						depth			CDATA #REQUIRED
+						lineSpacing		CDATA #REQUIRED
+						distBefore		CDATA #REQUIRED
+						distAfter		CDATA #REQUIRED>
+
+<!ELEMENT LINE (OBJ)*>
+
+<!ELEMENT OBJ (TYPE|FONT|COLOR|VERTALIGN|TEXT)*>
+
+<!ELEMENT TYPE EMPTY>
+<!ATTLIST TYPE value CDATA #REQUIRED>
+
+<!ELEMENT FONT EMPTY>
+<!ATTLIST FONT	family	CDATA	#REQUIRED
+				pointSize		CDATA #REQUIRED
+				bold	CDATA	#REQUIRED
+				italic	CDATA	#REQUIRED
+				underline		CDATA #REQUIRED>
+
+<!ELEMENT COLOR EMPTY>
+<!ATTLIST COLOR	red		CDATA	#REQUIRED
+				green	CDATA	#REQUIRED
+				blue	CDATA	#REQUIRED>
+
+<!ELEMENT VERTALIGN EMPTY>
+<!ATTLIST VERTALIGN value CDATA #REQUIRED>
+
+<!ELEMENT TEXT EMPTY>
+<!ATTLIST TEXT value CDATA #REQUIRED>
+
+<!ELEMENT PEN EMPTY>
+<!ATTLIST PEN	red		CDATA	#REQUIRED
+				green	CDATA	#REQUIRED
+				blue	CDATA	#REQUIRED
+				width	CDATA	#REQUIRED
+				style	CDATA	#REQUIRED>
+
+<!ELEMENT BRUSH EMPTY>
+<!ATTLIST BRUSH	red		CDATA	#REQUIRED
+				green	CDATA	#REQUIRED
+				blue	CDATA	#REQUIRED
+				style	CDATA	#REQUIRED>
+
+<!ELEMENT RNDS EMPTY>
+<!ATTLIST RNDS	x		CDATA	#REQUIRED
+				y		CDATA	#REQUIRED>
+
+<!ELEMENT FILLTYPE EMPTY>
+<!ATTLIST FILLTYPE value CDATA #REQUIRED>
+
+<!ELEMENT GRADIENT EMPTY>
+<!ATTLIST GRADIENT		red1	CDATA	#REQUIRED
+						green1	CDATA	#REQUIRED
+						blue1	CDATA	#REQUIRED
+						red2	CDATA	#REQUIRED
+						green2	CDATA	#REQUIRED
+						blue2	CDATA	#REQUIRED
+						type	CDATA	#REQUIRED>
+
+<!ELEMENT INFINITLOOP EMPTY>
+<!ATTLIST INFINITLOOP value CDATA #REQUIRED>
+
+<!ELEMENT MANUALSWITCH EMPTY>
+<!ATTLIST MANUALSWITCH value CDATA #REQUIRED>
+
+<!ELEMENT PRESSPEED EMPTY>
+<!ATTLIST PRESSPEED value CDATA #REQUIRED>
+
+
+<!ELEMENT BACKGROUND (PAGE)*>
+<!ATTLIST BACKGROUND	rastX	CDATA	#REQUIRED
+						rastY	CDATA	#REQUIRED
+						bred	CDATA	#REQUIRED
+						bgreen	CDATA	#REQUIRED
+						bblue	CDATA	#REQUIRED>
+
+<!ELEMENT PAGE (BACKTYPE|BACKVIEW|BACKCOLOR1|BACKCOLOR2|BCTYPE|PGEFFECT)*>
+
+<!ELEMENT BACKTYPE EMPTY>
+<!ATTLIST BACKTYPE value CDATA #REQUIRED>
+
+<!ELEMENT BACKVIEW EMPTY>
+<!ATTLIST BACKVIEW value CDATA #REQUIRED>
+
+<!ELEMENT BCTYPE EMPTY>
+<!ATTLIST BCTYPE value CDATA #REQUIRED>
+
+<!ELEMENT PGEFFECT EMPTY>
+<!ATTLIST PGEFFECT value CDATA #REQUIRED>
+
+<!ELEMENT BACKCOLOR1 EMPTY>
+<!ATTLIST BACKCOLOR1	red		CDATA	#REQUIRED
+						green		CDATA	#REQUIRED
+						blue		CDATA	#REQUIRED>
+
+<!ELEMENT BACKCOLOR2 EMPTY>
+<!ATTLIST BACKCOLOR2	red		CDATA	#REQUIRED
+						green		CDATA	#REQUIRED
+						blue		CDATA	#REQUIRED>
+

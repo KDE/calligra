@@ -76,7 +76,7 @@ DISTCLEANFILES = $(idl_DATA:.idl=.cc) $(idl_HEADERS) $(SRCMETA)
 kdelnk_DATA = kpresenter.kdelnk
 kdelnkdir = $(kde_datadir)/koffice/partlnk
 
-SUBDIRS = autoformEdit autoforms pics toolbar templates
+SUBDIRS = autoformEdit autoforms pics toolbar templates dtd
 
 ####### Implicit rules
 
