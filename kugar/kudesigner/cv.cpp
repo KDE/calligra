@@ -39,133 +39,188 @@ ReportCanvas::ReportCanvas(QCanvas * canvas, QWidget * parent, const char * name
     selectedItem = 0;
     moving = 0;
     resizing = 0;
+    request = RequestNone;
+}
+
+void ReportCanvas::deleteItem(QCanvasItemList &l)
+{
+    for (QCanvasItemList::Iterator it=l.begin(); it!=l.end(); ++it)
+    {
+        if ((*it)->rtti() > 2000)
+        {
+	    (*it)->hide();
+	    ((CanvasReportItem *)(*it))->section()->items.remove((*it));
+	    delete (*it);
+	    canvas()->update();
+	    emit modificationPerformed();
+	    break;
+        }
+	if ((*it)->rtti() > 1800)
+	{
+	    if ((*it)->rtti() == RttiDetail)
+	    {
+		CanvasDetail *det = (CanvasDetail*)(*it);
+		if ( det->props["Level"].first.toInt() <
+		    ((MyCanvas*)(canvas()))->templ->detailsCount - 1)
+		    return;
+	    }
+	    CanvasDetailHeader *header = 0;
+	    CanvasDetailFooter *footer = 0;
+	    ((MyCanvas*)(canvas()))->templ->removeSection((CanvasBand *)(*it),
+			&header, &footer);
+	    (*it)->hide();
+	    delete (*it);
+	    if (header)
+	    {
+		header->hide();
+		delete header;
+	    }
+	    if (footer)
+	    {
+		footer->hide();
+		delete footer;
+	    }
+	    ((MyCanvas*)(canvas()))->templ->arrangeSections();
+	    canvas()->update();
+	    emit modificationPerformed();
+	    break;
+	}
+    }
+}
+
+void ReportCanvas::editItem(QCanvasItemList &l)
+{
+    //display editor for report items or sections
+    for (QCanvasItemList::Iterator it=l.begin(); it!=l.end(); ++it)
+    {
+	if ((*it)->rtti() >= 1800) //for my own report items
+	{
+	    CanvasBox *l = (CanvasBox*)(*it);
+	    dlgItemOptions *dlgOpts = new dlgItemOptions(&(l->props), this);
+	    dlgOpts->exec();
+	    delete dlgOpts;
+	    if ((*it)->rtti() == RttiKugarTemplate)
+		((CanvasKugarTemplate*)(*it))->updatePaperProps();
+	    (*it)->hide();
+	    (*it)->show();
+	    if ((*it)->rtti() < 2000)
+		((MyCanvas *)(canvas()))->templ->arrangeSections();
+	    canvas()->update();
+	    emit modificationPerformed();
+	    break;
+	}
+    }
+}
+
+void ReportCanvas::placeItem(QCanvasItemList &l, QMouseEvent *e)
+{
+    bool used = false;
+    for (QCanvasItemList::Iterator it=l.begin(); it!=l.end(); ++it)
+    {
+        if ( ((*it)->rtti() > 1800) && (((*it)->rtti() < 2000)) )
+        {
+    	    selectedItem->setX(e->x());
+	    selectedItem->setY(e->y());
+	    selectedItem->setSection((CanvasBand *)(*it));
+	    selectedItem->updateGeomProps();
+	    selectedItem->show();
+	    ((CanvasBand *)(*it))->items.append(selectedItem);
+	    used = true;
+	    emit modificationPerformed();
+	}
+    }
+    if (!used)
+	delete selectedItem;
+    selectedItem = 0;
+    emit selectedActionProcessed();
+}
+
+void ReportCanvas::startMoveOrResizeItem(QCanvasItemList &l,
+    QMouseEvent *e, QPoint &p)
+{
+    //allow user to move any item except for page rectangle
+    for (QCanvasItemList::Iterator it=l.begin(); it!=l.end(); ++it)
+    {
+        if ((*it)->rtti() > 2001)
+        {
+    	    CanvasReportItem *item = (CanvasReportItem *)(*it);
+/*	    if (item->topLeftResizableRect().contains(e->pos()) ||
+	    item->bottomLeftResizableRect().contains(e->pos()) ||
+	    item->topRightResizableRect().contains(e->pos()) ||
+	    item->bottomRightResizableRect().contains(e->pos()))*/
+	    if (item->bottomRightResizableRect().contains(e->pos()))
+	    {
+		moving = 0;
+		resizing = item;
+		moving_start = p;
+		return;
+	    }
+	    else
+	    {
+		moving = item;
+		resizing = 0;
+		moving_start = p;
+		return;
+	    }
+	}
+    }
+    moving = 0;
+    resizing = 0;
 }
 
 void ReportCanvas::contentsMousePressEvent(QMouseEvent* e)
 {
     QPoint p = inverseWorldMatrix().QWMatrix::map(e->pos());
     QCanvasItemList l=canvas()->collisions(p);
-//    QCanvasItemList::Iterator it=l.begin();
-//    QString str = QString("%1").arg((*it)->rtti());
+    
+    //if there is a request for properties or for delete operation
+    //perform that and do not take care about mouse buttons
+    switch (request)
+    {
+	case RequestProps:
+	    clearRequest();
+	    editItem(l);
+	    return;
+	case RequestDelete:
+	    deleteItem(l);
+	    clearRequest();
+	    return;
+	case RequestNone:
+	    break;
+    }
+
+    moving = 0;
+    resizing = 0;
     switch (e->button())
     {
-        case MidButton:
-	    for (QCanvasItemList::Iterator it=l.begin(); it!=l.end(); ++it)
-	    {
-	        if ((*it)->rtti() > 2000)
-	        {
-		    (*it)->hide();
-		    ((CanvasReportItem *)(*it))->section()->items.remove((*it));
-		    delete (*it);
-		    canvas()->update();
-		    break;
-	        }
-		if ((*it)->rtti() > 1800)
-		{
-		    if ((*it)->rtti() == RttiDetail)
-		    {
-			CanvasDetail *det = (CanvasDetail*)(*it);
-			if ( det->props["Level"].first.toInt() <
-			    ((MyCanvas*)(canvas()))->templ->detailsCount - 1)
-			    return;
-		    }
-		    CanvasDetailHeader *header = 0;
-		    CanvasDetailFooter *footer = 0;
-		    ((MyCanvas*)(canvas()))->templ->removeSection((CanvasBand *)(*it),
-				&header, &footer);
-		    (*it)->hide();
-		    delete (*it);
-		    if (header)
-		    {
-			header->hide();
-			delete header;
-		    }
-		    if (footer)
-		    {
-			footer->hide();
-			delete footer;
-		    }
-		    ((MyCanvas*)(canvas()))->templ->arrangeSections();
-		    canvas()->update();
-		    break;
-		}
-	    }
-	    break;
-	case RightButton:
-	    //display editor for report items or sections
-
-	    for (QCanvasItemList::Iterator it=l.begin(); it!=l.end(); ++it)
-	    {
-		if ((*it)->rtti() >= 1800) //for my own report items
-		{
-		    CanvasBox *l = (CanvasBox*)(*it);
-		    dlgItemOptions *dlgOpts = new dlgItemOptions(&(l->props), this);
-		    dlgOpts->exec();
-		    delete dlgOpts;
-		    (*it)->hide();
-		    (*it)->show();
-		    if ((*it)->rtti() < 2000)
-			((MyCanvas *)(canvas()))->templ->arrangeSections();
-		    canvas()->update();
-		    break;
-		}
-	    }
-	    break;
 	case LeftButton:
 	    if (selectedItem)
 	    {
-	    	bool used = false;
-		    for (QCanvasItemList::Iterator it=l.begin(); it!=l.end(); ++it)
-    		{
-	    	    if ( ((*it)->rtti() > 1800) && (((*it)->rtti() < 2000)) )
-    		    {
-    			    selectedItem->setX(e->x());
-		        	selectedItem->setY(e->y());
-    	    		selectedItem->setSection((CanvasBand *)(*it));
-        			selectedItem->updateGeomProps();
-        			selectedItem->show();
-       	    		((CanvasBand *)(*it))->items.append(selectedItem);
-                    used = true;
-    		    }
-	    	}
-    		if (!used)
-        		delete selectedItem;
-            selectedItem = 0;
-      		emit selectedActionProcessed();
-//            ((fmMain *)parent())->reportAddNothing->toggle();
+		placeItem(l, e);
 	    }
 	    else
 	    {
-		//allow user to move any item except for page rectangle
-		for (QCanvasItemList::Iterator it=l.begin(); it!=l.end(); ++it)
-		{
-		    if ((*it)->rtti() > 2001)
-		    {
-			CanvasReportItem *item = (CanvasReportItem *)(*it);
-/*			    if (item->topLeftResizableRect().contains(e->pos()) ||
-				item->bottomLeftResizableRect().contains(e->pos()) ||
-				item->topRightResizableRect().contains(e->pos()) ||
-				item->bottomRightResizableRect().contains(e->pos()))*/
-			if (item->bottomRightResizableRect().contains(e->pos()))
-			{
-			    moving = 0;
-			    resizing = item;
-			    moving_start = p;
-			    return;
-			}
-			else
-			{
-			    moving = item;
-			    resizing = 0;
-			    moving_start = p;
-			    return;
-			}
-		    }
-		}
-		moving = 0;
-		resizing = 0;
-		break;
+		startMoveOrResizeItem(l, e, p);
 	    }
+	    break;
+        default:
+            break;
+    }
+}
+
+void ReportCanvas::contentsMouseReleaseEvent(QMouseEvent* e)
+{
+    QPoint p = inverseWorldMatrix().QWMatrix::map(e->pos());
+    QCanvasItemList l=canvas()->collisions(p);
+
+    switch (e->button())
+    {
+        case MidButton:
+	    deleteItem(l);
+	    break;
+	case RightButton:
+	    editItem(l);
+	    break;
         default:
             break;
     }
@@ -204,6 +259,7 @@ void ReportCanvas::contentsMouseMoveEvent(QMouseEvent* e)
 	moving_start = p;
 	moving->updateGeomProps();
 	canvas()->update();
+	emit modificationPerformed();
     }
     if (resizing)
     {
@@ -215,6 +271,42 @@ void ReportCanvas::contentsMouseMoveEvent(QMouseEvent* e)
 	moving_start = p;
 	resizing->updateGeomProps();
 	canvas()->update();
+	emit modificationPerformed();
     }
 }
+
+void ReportCanvas::setRequest(RequestType r)
+{
+    switch (r)
+    {
+	case RequestProps:
+	    QApplication::restoreOverrideCursor();
+	    QApplication::setOverrideCursor(Qt::PointingHandCursor);
+	    break;
+	case RequestDelete:
+	    QApplication::restoreOverrideCursor();
+	    QApplication::setOverrideCursor(Qt::ForbiddenCursor);
+	    break;
+	case RequestNone:
+	    QApplication::restoreOverrideCursor();
+	    break;
+    }
+    request = r;
+}
+
+void ReportCanvas::clearRequest()
+{
+    QApplication::restoreOverrideCursor();
+    request = RequestNone;
+    emit selectedEditActionProcessed();
+}
+	
+bool ReportCanvas::requested()
+{
+    if (request == RequestNone)
+	return false;
+    else
+	return true;
+}
+    
 #include "cv.moc"
