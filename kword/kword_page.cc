@@ -194,6 +194,10 @@ void KWPage::mouseMoveEvent(QMouseEvent *e)
 		{
 		  if (mx != oldMy || my != oldMy)
 		    {
+		      QList<KWGroupManager> undos,updates;
+		      undos.setAutoDelete(false);
+		      updates.setAutoDelete(false);
+
 		      QPainter p;
 		      p.begin(this);
 		      p.setRasterOp(NotROP);
@@ -213,6 +217,12 @@ void KWPage::mouseMoveEvent(QMouseEvent *e)
 			      frame = frameset->getFrame(j);
 			      if (frame->isSelected())
 				{
+				  if (frameset->getGroupManager())
+				    {
+				      if (updates.findRef(frameset->getGroupManager()) == -1)
+					updates.append(frameset->getGroupManager());
+				      continue;
+				    }
 				  if (deleteMovingRect)
 				    p.drawRect(frame->x() - xOffset,frame->y() - yOffset,frame->width(),frame->height());
 				  frame->moveBy(mx - oldMx,my - oldMy);
@@ -227,6 +237,49 @@ void KWPage::mouseMoveEvent(QMouseEvent *e)
 				}
 			    }
 			}
+
+		      if (!updates.isEmpty())
+			{
+			  for (unsigned int i = 0;i < updates.count();i++)
+			    {
+			      KWGroupManager *grpMgr = updates.at(i);
+			      for (unsigned k = 0;k < grpMgr->getNumCells();k++)
+				{
+				  frame = grpMgr->getCell(k)->frameSet->getFrame(0);
+				  if (deleteMovingRect)
+				    p.drawRect(frame->x() - xOffset,frame->y() - yOffset,frame->width(),frame->height());
+				  frame->moveBy(mx - oldMx,my - oldMy);
+				  if (frame->x() < 0 || 
+				      frame->y() < getPageOfRect(KRect(frame->x(),frame->y(),frame->width(),frame->height())) * 
+				      static_cast<int>(ptPaperHeight()) ||
+				      frame->right() > static_cast<int>(ptPaperWidth()) || 
+				      frame->bottom() > (getPageOfRect(KRect(frame->x(),frame->y(),frame->width(),
+									     frame->height())) + 1) * 
+				      static_cast<int>(ptPaperHeight()))
+				    {
+				      if (frameset->getGroupManager())
+					{
+					  if (undos.findRef(frameset->getGroupManager()) == -1)
+					    undos.append(frameset->getGroupManager());
+					}
+				      else
+					frame->moveBy(oldMx - mx,oldMy - my);
+				    }
+				  p.drawRect(frame->x() - xOffset,frame->y() - yOffset,frame->width(),frame->height());
+				}
+			    }
+			}
+
+		      if (!undos.isEmpty())
+			{
+			  for (unsigned int i = 0;i < undos.count();i++)
+			    {
+			      undos.at(i)->drawAllRects(p,xOffset,yOffset);
+			      undos.at(i)->moveBy(oldMx - mx,oldMy - my);
+			      undos.at(i)->drawAllRects(p,xOffset,yOffset);
+			    }			      
+			}
+
 		      p.end();
 		    }
 		} break;
@@ -243,7 +296,11 @@ void KWPage::mouseMoveEvent(QMouseEvent *e)
 		  p.setBrush(NoBrush);
 
 		  if (deleteMovingRect)
-		    p.drawRect(frame->x() - xOffset,frame->y() - yOffset,frame->width(),frame->height());
+		    p.drawRect(!doc->getFrameSet(frameset)->getGroupManager() ? frame->x() - xOffset : 
+			       doc->getFrameSet(frameset)->getGroupManager()->getBoundingRect().x() - xOffset, 
+			       frame->y() - yOffset,
+			       !doc->getFrameSet(frameset)->getGroupManager() ? frame->width() :
+			       doc->getFrameSet(frameset)->getGroupManager()->getBoundingRect().width(),frame->height());
 		  
 		  if (my < frame->top() + frame->height() / 2)
 		    {
@@ -276,7 +333,14 @@ void KWPage::mouseMoveEvent(QMouseEvent *e)
 			frame->setHeight(frame->height() - (my - oldMy)); 
 		    }
 
-		  p.drawRect(frame->x() - xOffset,frame->y() - yOffset,frame->width(),frame->height());
+		  if (doc->getFrameSet(frameset)->getGroupManager())
+		    doc->getFrameSet(frameset)->getGroupManager()->recalcRows();
+
+		  p.drawRect(!doc->getFrameSet(frameset)->getGroupManager() ? frame->x() - xOffset : 
+			     doc->getFrameSet(frameset)->getGroupManager()->getBoundingRect().x() - xOffset, 
+			     frame->y() - yOffset,
+			     !doc->getFrameSet(frameset)->getGroupManager() ? frame->width() :
+			     doc->getFrameSet(frameset)->getGroupManager()->getBoundingRect().width(),frame->height());
 		  p.end();		      
 		} break;
 	      case SizeHorCursor:
@@ -293,7 +357,11 @@ void KWPage::mouseMoveEvent(QMouseEvent *e)
 		  p.setBrush(NoBrush);
 
 		  if (deleteMovingRect)
-		    p.drawRect(frame->x() - xOffset,frame->y() - yOffset,frame->width(),frame->height());
+		    p.drawRect(frame->x() - xOffset,
+			       !doc->getFrameSet(frameset)->getGroupManager() ? frame->y() - yOffset : 
+			       doc->getFrameSet(frameset)->getGroupManager()->getBoundingRect().y() - yOffset,frame->width(),
+			       !doc->getFrameSet(frameset)->getGroupManager() ? frame->height() :
+			       doc->getFrameSet(frameset)->getGroupManager()->getBoundingRect().height());
 		  
 		  if (mx < frame->left() + frame->width() / 2)
 		    {
@@ -324,7 +392,14 @@ void KWPage::mouseMoveEvent(QMouseEvent *e)
 			frame->setWidth(frame->width() - (mx - oldMx)); 
 		    }
 
-		  p.drawRect(frame->x() - xOffset,frame->y() - yOffset,frame->width(),frame->height());
+		  if (doc->getFrameSet(frameset)->getGroupManager())
+		    doc->getFrameSet(frameset)->getGroupManager()->recalcCols();
+
+		  p.drawRect(frame->x() - xOffset,
+			     !doc->getFrameSet(frameset)->getGroupManager() ? frame->y() - yOffset : 
+			     doc->getFrameSet(frameset)->getGroupManager()->getBoundingRect().y() - yOffset,frame->width(),
+			     !doc->getFrameSet(frameset)->getGroupManager() ? frame->height() :
+			     doc->getFrameSet(frameset)->getGroupManager()->getBoundingRect().height());
 		  p.end();		      
 		} break;
 	      case SizeFDiagCursor:
@@ -442,7 +517,7 @@ void KWPage::mouseMoveEvent(QMouseEvent *e)
 	    deleteMovingRect = true;
 	    oldMx = mx; oldMy = my;
 	  } break;
-	case MM_CREATE_TEXT: case MM_CREATE_PIX: case MM_CREATE_PART: case MM_CREATE_TABLE: case MM_CREATE_FORMULA:
+	case MM_CREATE_TEXT: case MM_CREATE_PIX: case MM_CREATE_PART: case MM_CREATE_TABLE: case MM_CREATE_FORMULA: case MM_CREATE_KSPREAD_TABLE:
 	  {
 	    int mx = e->x() + xOffset;
 	    int my = e->y() + yOffset;
@@ -639,7 +714,7 @@ void KWPage::mousePressEvent(QMouseEvent *e)
 	      my = (my / doc->getRastX()) * doc->getRastY();
 	      oldMy = my;
 	    } break;
-	  case MM_CREATE_TEXT: case MM_CREATE_PART: case MM_CREATE_TABLE: case MM_CREATE_FORMULA:
+	  case MM_CREATE_TEXT: case MM_CREATE_PART: case MM_CREATE_TABLE: case MM_CREATE_FORMULA: case MM_CREATE_KSPREAD_TABLE:
 	    {
 	      mx = (mx / doc->getRastX()) * doc->getRastX();
 	      oldMx = mx;
@@ -797,13 +872,39 @@ void KWPage::mouseReleaseEvent(QMouseEvent *e)
 	  }
 	mmEdit();
       } break;
-    case MM_CREATE_PART: case MM_CREATE_TABLE: case MM_CREATE_FORMULA:
+    case MM_CREATE_PART: case MM_CREATE_KSPREAD_TABLE: case MM_CREATE_FORMULA:
       {
 	repaint(false);
 
 	insRect = insRect.normalize();
 	if (insRect.width() != 0 && insRect.height() != 0)
 	  doc->insertObject(insRect,partEntry,xOffset,yOffset);
+	mmEdit();
+      } break;
+    case MM_CREATE_TABLE:
+      {
+	repaint(false);
+
+	insRect = insRect.normalize();
+	if (insRect.width() != 0 && insRect.height() != 0)
+	  {
+	    KWGroupManager *grpMgr = new KWGroupManager(doc);
+	    for (unsigned int i = 0;i < trows;i++)
+	      {
+		for (unsigned int j = 0;j < tcols;j++)
+		  { 
+		    KWFrame *frame = new KWFrame(insRect.x() + xOffset,insRect.y() + yOffset,insRect.width(),insRect.height());
+		    KWTextFrameSet *_frameSet = new KWTextFrameSet(doc);
+		    _frameSet->addFrame(frame);
+		    _frameSet->setAutoCreateNewFrame(false);
+		    doc->addFrameSet(_frameSet);
+		    _frameSet->setGroupManager(grpMgr);
+		    grpMgr->addFrameSet(_frameSet,i,j);
+		  }
+	      }
+	    grpMgr->init(insRect.x() + xOffset,insRect.y() + yOffset,insRect.width(),insRect.height());
+	  }
+
 	mmEdit();
       } break;
     default: repaint(false);
@@ -1294,6 +1395,8 @@ void KWPage::paintEvent(QPaintEvent* e)
 /*================================================================*/
 void KWPage::keyPressEvent(QKeyEvent *e)
 {
+  if (mouseMode != MM_EDIT) return;
+
   inKeyEvent = true;
   unsigned int oldPage = fc->getPage();
   unsigned int oldFrame = fc->getFrame();
@@ -2362,15 +2465,23 @@ void KWPage::drawBorders(QPainter &_painter,KRect v_area)
 	    {
 	      _painter.save();
 	      _painter.setRasterOp(NotROP);
-	      _painter.fillRect(frame.x(),frame.y(),6,6,black);
-	      _painter.fillRect(frame.x() + frame.width() / 2 - 3,frame.y(),6,6,black);
-	      _painter.fillRect(frame.x(),frame.y() + frame.height() / 2 - 3,6,6,black);
-	      _painter.fillRect(frame.x() + frame.width() - 6,frame.y(),6,6,black);
-	      _painter.fillRect(frame.x(),frame.y() + frame.height() - 6,6,6,black);
-	      _painter.fillRect(frame.x() + frame.width() / 2 - 3,frame.y() + frame.height() - 6,6,6,black);
-	      _painter.fillRect(frame.x() + frame.width() - 6,frame.y() + frame.height() / 2 - 3,6,6,black);
-	      _painter.fillRect(frame.x() + frame.width() - 6,frame.y() + frame.height() - 6,6,6,black);
-	      _painter.restore();
+	      if (!frameset->getGroupManager())
+		{
+		  _painter.fillRect(frame.x(),frame.y(),6,6,black);
+		  _painter.fillRect(frame.x() + frame.width() / 2 - 3,frame.y(),6,6,black);
+		  _painter.fillRect(frame.x(),frame.y() + frame.height() / 2 - 3,6,6,black);
+		  _painter.fillRect(frame.x() + frame.width() - 6,frame.y(),6,6,black);
+		  _painter.fillRect(frame.x(),frame.y() + frame.height() - 6,6,6,black);
+		  _painter.fillRect(frame.x() + frame.width() / 2 - 3,frame.y() + frame.height() - 6,6,6,black);
+		  _painter.fillRect(frame.x() + frame.width() - 6,frame.y() + frame.height() / 2 - 3,6,6,black);
+		  _painter.fillRect(frame.x() + frame.width() - 6,frame.y() + frame.height() - 6,6,6,black);
+		  _painter.restore();
+		}
+	      else
+		{
+		  _painter.restore();
+		_painter.fillRect(frame.x(),frame.y(),frame.width(),frame.height(),kapp->selectColor);
+		}	    
 	    }
 	}
     }
@@ -2533,6 +2644,11 @@ void KWPage::setMouseMode(MouseMode _mm)
 	setCursor(crossCursor);
 	mm_menu->setItemChecked(mm_create_table,true);
       } break;
+    case MM_CREATE_KSPREAD_TABLE:
+      {
+	setCursor(crossCursor);
+	mm_menu->setItemChecked(mm_create_kspread_table,true);
+      } break;
     case MM_CREATE_FORMULA:
       {
 	setCursor(crossCursor);
@@ -2562,6 +2678,7 @@ void KWPage::setupMenus()
   mm_create_pix = mm_menu->insertItem(i18n("Create Pixmap-Frame"),this,SLOT(mmCreatePix()));
   mm_create_clipart = mm_menu->insertItem(i18n("Create Clipart-Frame"),this,SLOT(mmClipart()));
   mm_create_table = mm_menu->insertItem(i18n("Create Table-Frame"),this,SLOT(mmTable()));
+  mm_create_kspread_table = mm_menu->insertItem(i18n("Create KSpread Table-Frame"),this,SLOT(mmKSpreadTable()));
   mm_create_formula = mm_menu->insertItem(i18n("Create Formula-Frame"),this,SLOT(mmFormula()));
   mm_create_part = mm_menu->insertItem(i18n("Create Part-Frame"),this,SLOT(mmPart()));
   mm_menu->setCheckable(true);
@@ -2580,6 +2697,7 @@ void KWPage::mmUncheckAll()
   mm_menu->setItemChecked(mm_create_pix,false);
   mm_menu->setItemChecked(mm_create_clipart,false);
   mm_menu->setItemChecked(mm_create_table,false);
+  mm_menu->setItemChecked(mm_create_kspread_table,false);
   mm_menu->setItemChecked(mm_create_formula,false);
   mm_menu->setItemChecked(mm_create_part,false);
 }

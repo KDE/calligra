@@ -27,26 +27,9 @@
 #define max(a,b) ((a)>(b)?(a):(b))
 #endif
 
-/******************************************************************/
-/* Class: KWFrameGroup                                            */
-/******************************************************************/
-
-/*================================================================*/
-void KWFrameGroup::addFrame(KWFrame *_frame)
-{
-  frames.append(_frame);
-  _frame->setFrameGroup(this);
-
-  rect = KRect(0,0,0,0);
-  KRect tmp;
-  KWFrame *frame;
-
-  for (unsigned int i = 0;i < frames.count();i++)
-    {
-      tmp = KRect(frame->x(),frame->y(),frame->width(),frame->height());
-      rect = rect.unite(tmp);
-    }
-}
+#ifndef min
+#define min(a,b) ((a)<(b)?(a):(b))
+#endif
 
 /******************************************************************/
 /* Class: KWFrame                                                 */
@@ -61,7 +44,6 @@ KWFrame::KWFrame()
   selected = false;
   runAroundGap = 1;
   mostRight = false;
-  group = 0L;
 
   brd_left.color = white;
   brd_left.style = KWParagLayout::SOLID;
@@ -86,7 +68,6 @@ KWFrame::KWFrame(const KPoint &topleft,const QPoint &bottomright)
   selected = false;
   runAroundGap = 1;
   mostRight = false;
-  group = 0L;
 
   brd_left.color = white;
   brd_left.style = KWParagLayout::SOLID;
@@ -111,7 +92,6 @@ KWFrame::KWFrame(const KPoint &topleft,const KSize &size)
   selected = false;
   runAroundGap = 1;
   mostRight = false;
-  group = 0L;
 
   brd_left.color = white;
   brd_left.style = KWParagLayout::SOLID;
@@ -136,7 +116,6 @@ KWFrame::KWFrame(int left,int top,int width,int height)
   selected = false;
   runAroundGap = 1;
   mostRight = false;
-  group = 0L;
 
   brd_left.color = white;
   brd_left.style = KWParagLayout::SOLID;
@@ -161,7 +140,6 @@ KWFrame::KWFrame(int left,int top,int width,int height,RunAround _ra,int _gap)
   selected = false;
   runAroundGap = _gap;
   mostRight = false;
-  group = 0L;
 
   brd_left.color = white;
   brd_left.style = KWParagLayout::SOLID;
@@ -186,7 +164,6 @@ KWFrame::KWFrame(const QRect &_rect)
   selected = false;
   runAroundGap = 1;
   mostRight = false;
-  group = 0L;
 
   brd_left.color = white;
   brd_left.style = KWParagLayout::SOLID;
@@ -268,27 +245,38 @@ QRegion KWFrame::getEmptyRegion()
 }
 
 /*================================================================*/
-QCursor KWFrame::getMouseCursor(int mx,int my)
+QCursor KWFrame::getMouseCursor(int mx,int my,bool table)
 {
-  if (mx >= x() && my >= y() && mx <= x() + 6 && my <= y() + 6)
-    return sizeFDiagCursor;
-  if (mx >= x() && my >= y() + height() / 2 - 3 && mx <= x() + 6 && my <= y() + height() / 2 + 3)
-    return sizeHorCursor;
-  if (mx >= x() && my >= y() + height() - 6 && mx <= x() + 6 && my <= y() + height())
-    return sizeBDiagCursor;
-  if (mx >= x() + width() / 2 - 3 && my >= y() && mx <= x() + width() / 2 + 3 && my <= y() + 6)
-    return sizeVerCursor;
-  if (mx >= x() + width() / 2 - 3 && my >= y() + height() - 6 && mx <= x() + width() / 2 + 3 && my <= y() + height())
-    return sizeVerCursor;
-  if (mx >= x() + width() - 6 && my >= y() && mx <= x() + width() && my <= y() + 6)
-    return sizeBDiagCursor;
-  if (mx >= x() + width() - 6 && my >= y() + height() / 2 - 3 && mx <= x() + width() && my <= y() + height() / 2 + 3)
-    return sizeHorCursor;
-  if (mx >= x() + width() - 6 && my >= y() + height() - 6 && mx <= x() + width() && my <= y() + height())
-    return sizeFDiagCursor;
-  
-  if (selected)
-    return sizeAllCursor;
+  if (!table)
+    {
+      if (mx >= x() && my >= y() && mx <= x() + 6 && my <= y() + 6)
+	return sizeFDiagCursor;
+      if (mx >= x() && my >= y() + height() / 2 - 3 && mx <= x() + 6 && my <= y() + height() / 2 + 3)
+	return sizeHorCursor;
+      if (mx >= x() && my >= y() + height() - 6 && mx <= x() + 6 && my <= y() + height())
+	return sizeBDiagCursor;
+      if (mx >= x() + width() / 2 - 3 && my >= y() && mx <= x() + width() / 2 + 3 && my <= y() + 6)
+	return sizeVerCursor;
+      if (mx >= x() + width() / 2 - 3 && my >= y() + height() - 6 && mx <= x() + width() / 2 + 3 && my <= y() + height())
+	return sizeVerCursor;
+      if (mx >= x() + width() - 6 && my >= y() && mx <= x() + width() && my <= y() + 6)
+	return sizeBDiagCursor;
+      if (mx >= x() + width() - 6 && my >= y() + height() / 2 - 3 && mx <= x() + width() && my <= y() + height() / 2 + 3)
+	return sizeHorCursor;
+      if (mx >= x() + width() - 6 && my >= y() + height() - 6 && mx <= x() + width() && my <= y() + height())
+	return sizeFDiagCursor;
+      
+      if (selected)
+	return sizeAllCursor;
+    }
+  else
+    {
+      if (mx >= x() + width() - 6 && my >= y() && mx <= x() + width() && my <= y() + height())
+	return sizeHorCursor;
+      if (mx >= x() && my >= y() + height() - 6 && mx <= x() + width() && my <= y() + height())
+	return sizeVerCursor;
+      return sizeAllCursor;
+    }
 
   return arrowCursor;
 }
@@ -303,9 +291,9 @@ KWFrameSet::KWFrameSet(KWordDocument *_doc)
 { 
   doc = _doc; 
   frames.setAutoDelete(true); 
-  groups.setAutoDelete(true); 
   frameInfo = FI_BODY;
   current = 0;
+  grpMgr = 0L;
 }
 
 /*================================================================*/
@@ -392,9 +380,9 @@ QCursor KWFrameSet::getMouseCursor(unsigned int mx,unsigned int my)
   if (frame == -1)
     return arrowCursor;
 
-  if (!getFrame(frame)->isSelected()) return arrowCursor;
+  if (!getFrame(frame)->isSelected() && !grpMgr) return arrowCursor;
 
-  return getFrame(frame)->getMouseCursor(mx,my);
+  return getFrame(frame)->getMouseCursor(mx,my,grpMgr ? true : false);
 }
 
 /*================================================================*/
@@ -408,8 +396,7 @@ void KWFrameSet::save(ostream &out)
       out << indent << "<FRAME left=\"" << frame->left() << "\" top=\"" << frame->top()
 	  << "\" right=\"" << frame->right() << "\" bottom=\"" << frame->bottom() 
 	  << "\" runaround=\"" << static_cast<int>(frame->getRunAround()) 
-	  << "\" runaroundGap=\"" << frame->getRunAroundGap() << "\" group=\""
-	  << (frame->getFrameGroup() ? frame->getFrameGroup()->getName() : QString("")) << "\"/>" << endl;
+	  << "\" runaroundGap=\"" << frame->getRunAroundGap() << "\"/>" << endl;
     }
 }
 
@@ -423,69 +410,6 @@ int KWFrameSet::getNext(KRect _rect)
     }
 
   return -1;
-}
-
-/*================================================================*/
-KWFrameGroup *KWFrameSet::getFrameGroup(QString _name)
-{
-  for (unsigned int i = 0;i < groups.count();i++)
-    {
-      if (groups.at(i)->getName() == _name) return groups.at(i);
-    }
-
-  return 0L;
-}
-
-/*================================================================*/
-KWFrameGroup *KWFrameSet::getFrameGroup(int _num)
-{
-  return groups.at(_num);
-}
-
-/*================================================================*/
-KWFrameGroup *KWFrameSet::getFrameGroup(KWFrame *_frame)
-{
-  if (_frame && _frame->getFrameGroup())
-    return _frame->getFrameGroup();
-
-  return 0L;
-}
-
-/*================================================================*/
-int KWFrameSet::getNumFrameGroups()
-{
-  return groups.count();
-}
-
-/*================================================================*/
-void KWFrameSet::addFrameGroup(QList<KWFrame> *_frames)
-{
-  int num = -1;
-  for (unsigned int i = 0;i < doc->getNumFrameSets();i++)
-    {   
-      if (doc->getFrameSet(i) == this) num = i;
-    }
-
-  QString _name;
-  _name.sprintf("frameset%d_group%d",num,groups.count());
-
-  KWFrameGroup *grp = new KWFrameGroup(_name);
-  for (unsigned int j = 0;j < _frames->count();j++)
-    {
-      frames.append(_frames->at(j));
-      grp->addFrame(_frames->at(j));
-    }
-  update();
-}
-
-/*================================================================*/
-void KWFrameSet::resizeFrameGroupBy(KWFrameGroup *grp,int dx,int dy)
-{
-}
-
-/*================================================================*/
-void KWFrameSet::moveFrameGroupBy(KWFrameGroup *grp,int dx,int dy)
-{
 }
 
 /******************************************************************/
@@ -1098,6 +1022,193 @@ void KWPartFrameSet::update()
 {
   child->setGeometry(QRect(frames.at(0)->x(),frames.at(0)->y(),frames.at(0)->width(),frames.at(0)->height()));
 }
+
+/******************************************************************/
+/* Class: KWGroupManager                                          */
+/******************************************************************/
+
+/*================================================================*/
+void KWGroupManager::addFrameSet(KWFrameSet *fs,unsigned int row,unsigned int col)
+{
+  unsigned int sum = row * 10 + col;
+  unsigned int i = 0;
+
+  rows = max(row + 1,rows);
+  cols = max(col + 1,cols);
+
+  for (i = 0;i < cells.count();i++)
+    {
+      if (cells.at(i)->row * 10 + cells.at(i)->col > sum)
+	break;
+    }
+  
+  Cell *cell = new Cell;
+  cell->frameSet = fs;
+  cell->row = row;
+  cell->col = col;
+
+  cells.insert(i,cell);
+}
+
+/*================================================================*/
+KWFrameSet *KWGroupManager::getFrameSet(unsigned int row,unsigned int col)
+{
+  for (unsigned int i = 0;i < cells.count();i++)
+    {
+      if (cells.at(i)->row == row && cells.at(i)->col == col)
+	return cells.at(i)->frameSet;
+    }
+  
+  return 0L;
+}
+
+/*================================================================*/
+bool KWGroupManager::getFrameSet(KWFrameSet *fs,unsigned int &row,unsigned int &col)
+{
+  for (unsigned int i = 0;i < cells.count();i++)
+    {
+      if (cells.at(i)->frameSet == fs)
+	{
+	  row = cells.at(i)->row;
+	  col = cells.at(1)->col;
+	  return true;
+	}
+    }
+  
+  return false;
+}
+  
+/*================================================================*/
+void KWGroupManager::init(unsigned int x,unsigned int y,unsigned int width,unsigned int height)
+{
+  unsigned int wid = width / cols - 2 * cols;
+  unsigned int hei = height / rows - 2 * rows;
+
+  KWFrame *frame;
+
+  for (unsigned int i = 0;i < rows;i++)
+    {
+      for (unsigned int j = 0;j < cols;j++)
+	{
+	  frame = getFrameSet(i,j)->getFrame(0);
+	  frame->setRect(x + j * wid + 2 * j,y + i * hei + 2 * i,wid,hei);
+	}
+    }
+}
+
+/*================================================================*/
+void KWGroupManager::recalcCols()
+{
+  for (unsigned int i = 0;i < cols;i++)
+    {
+      unsigned int j = 0;
+      int wid = -1;
+      int _wid = 100000;
+      for (j = 0;j < rows;j++)
+	{
+	  if (getFrameSet(j,i)->getFrame(0)->isSelected())
+	    wid = getFrameSet(j,i)->getFrame(0)->width();
+	  _wid = min(getFrameSet(j,i)->getFrame(0)->width(),_wid);
+	}
+      if (wid != -1)
+	{
+	  if (getBoundingRect().x() + getBoundingRect().width() + (wid - _wid) > 
+	      static_cast<int>(doc->getPTPaperWidth()))
+	    wid = _wid;
+	  for (j = 0;j < rows;j++)
+	    getFrameSet(j,i)->getFrame(0)->setWidth(wid);
+	}
+    }
+
+  unsigned int x = getFrameSet(0,0)->getFrame(0)->x();
+  for (unsigned int i = 0;i < cols;i++)
+    {
+      unsigned int j = 0;
+      for (j = 0;j < rows;j++)
+	getFrameSet(j,i)->getFrame(0)->moveTopLeft(QPoint(x,getFrameSet(j,i)->getFrame(0)->y()));
+      x = getFrameSet(0,i)->getFrame(0)->right() + 3;
+    }
+}
+
+/*================================================================*/
+void KWGroupManager::recalcRows()
+{
+  for (unsigned int j = 0;j < rows;j++)
+    {
+      unsigned int i = 0;
+      int hei = -1;
+      int _hei = 100000;
+      for (i = 0;i < cols;i++)
+	{
+	  if (getFrameSet(j,i)->getFrame(0)->isSelected())
+	    hei = getFrameSet(j,i)->getFrame(0)->height();
+	  _hei = min(getFrameSet(j,i)->getFrame(0)->height(),_hei);
+	}
+      if (hei != -1)
+	{
+	  if (getBoundingRect().y() + getBoundingRect().height() + (hei - _hei) > 
+	      static_cast<int>(doc->getPTPaperHeight()))
+	    hei = _hei;
+	  for (i = 0;i < cols;i++)
+	    getFrameSet(j,i)->getFrame(0)->setHeight(hei);
+	}
+    }
+
+  unsigned int y = getFrameSet(0,0)->getFrame(0)->y();
+  for (unsigned int j = 0;j < rows;j++)
+    {
+      unsigned int i = 0;
+      for (i = 0;i < cols;i++)
+	getFrameSet(j,i)->getFrame(0)->moveTopLeft(QPoint(getFrameSet(j,i)->getFrame(0)->x(),y));
+      y = getFrameSet(j,0)->getFrame(0)->bottom() + 3;
+    }
+}
+
+/*================================================================*/
+KRect KWGroupManager::getBoundingRect()
+{
+  KRect r1,r2;
+  KWFrame *first = getFrameSet(0,0)->getFrame(0);
+  KWFrame *last = getFrameSet(rows - 1,cols - 1)->getFrame(0);
+  
+  r1 = KRect(first->x(),first->y(),first->width(),first->height());
+  r2 = KRect(last->x(),last->y(),last->width(),last->height());
+  
+  r1 = r1.unite(r2);
+  return KRect(r1);
+}
+
+/*================================================================*/
+bool KWGroupManager::hasSelectedFrame()
+{
+  for (unsigned int i = 0;i < cells.count();i++)
+    {
+      if (cells.at(i)->frameSet->getFrame(0)->isSelected())
+	return true;
+    }
+  
+  return false;
+}
+
+/*================================================================*/
+void KWGroupManager::moveBy(unsigned int dx,unsigned int dy)
+{
+  for (unsigned int i = 0;i < cells.count();i++)
+    cells.at(i)->frameSet->getFrame(0)->moveBy(dx,dy);
+}
+
+/*================================================================*/
+void KWGroupManager::drawAllRects(QPainter &p,int xOffset,int yOffset)
+{
+  KWFrame *frame = 0L;
+
+  for (unsigned int i = 0;i < cells.count();i++)
+    {
+      frame = cells.at(i)->frameSet->getFrame(0);
+      p.drawRect(frame->x() - xOffset,frame->y() - yOffset,frame->width(),frame->height());
+    }
+}
+
 
 /*================================================================*/
 bool isAHeader(FrameInfo fi) 

@@ -137,6 +137,7 @@ public:
   virtual void toolsCreatePix();
   virtual void toolsClipart();
   virtual void toolsTable();
+  virtual void toolsKSpreadTable();
   virtual void toolsFormula();
   virtual void toolsPart();
 
@@ -282,6 +283,7 @@ protected:
   CORBA::Long m_idMenuTools_CreatePix;
   CORBA::Long m_idMenuTools_Clipart;
   CORBA::Long m_idMenuTools_Table;
+  CORBA::Long m_idMenuTools_KSpreadTable;
   CORBA::Long m_idMenuTools_Formula;
   CORBA::Long m_idMenuTools_Part;
 
@@ -338,6 +340,7 @@ protected:
   CORBA::Long m_idButtonTools_CreatePix;
   CORBA::Long m_idButtonTools_Clipart;
   CORBA::Long m_idButtonTools_Table;
+  CORBA::Long m_idButtonTools_KSpreadTable;
   CORBA::Long m_idButtonTools_Formula;
   CORBA::Long m_idButtonTools_Part;
 
@@ -398,6 +401,7 @@ protected:
   static const int ID_TOOL_CREATE_FORMULA = 31;
   static const int ID_TOOL_CREATE_PART = 32;
   static const int ID_TOOL_CREATE_CLIPART = 33;
+  static const int ID_TOOL_CREATE_KSPREAD_TABLE = 34;
 
 };
 

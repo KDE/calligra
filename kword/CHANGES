@@ -637,3 +637,13 @@ Reggie, 10.1.1999:
 Reggie, 11.1.1999:
 ------------------
 - Implemented 'replace all'
+
+Reggie, 12.1.1999:
+------------------
+- Started with tables:
+  - Implemented internals for tables (a table consists of (rows * cols) framesets, each frameset has one frame)
+  - Inserting tables works (I'll add a widget for choosing the number of rows and cols tomorrow)
+  - Writing text in the tables and formatting works
+  - Moving tables works 
+  - Resizing rows and cols works
+  - Selecting cells works

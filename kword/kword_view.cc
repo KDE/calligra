@@ -455,6 +455,7 @@ void KWordView::uncheckAllTools()
       m_vMenuTools->setItemChecked(m_idMenuTools_CreatePix,false);
       m_vMenuTools->setItemChecked(m_idMenuTools_Clipart,false);
       m_vMenuTools->setItemChecked(m_idMenuTools_Table,false);
+      m_vMenuTools->setItemChecked(m_idMenuTools_KSpreadTable,false);
       m_vMenuTools->setItemChecked(m_idMenuTools_Formula,false);
       m_vMenuTools->setItemChecked(m_idMenuTools_Part,false);
     }
@@ -467,6 +468,7 @@ void KWordView::uncheckAllTools()
       m_vToolBarTools->setButton(ID_TOOL_CREATE_PIX,false);
       m_vToolBarTools->setButton(ID_TOOL_CREATE_CLIPART,false);
       m_vToolBarTools->setButton(ID_TOOL_CREATE_TABLE,false);
+      m_vToolBarTools->setButton(ID_TOOL_CREATE_KSPREAD_TABLE,false);
       m_vToolBarTools->setButton(ID_TOOL_CREATE_FORMULA,false);
       m_vToolBarTools->setButton(ID_TOOL_CREATE_PART,false);
     }
@@ -496,6 +498,9 @@ void KWordView::setTool(MouseMode _mouseMode)
 	  break;
 	case MM_CREATE_TABLE:
 	  m_vMenuTools->setItemChecked(m_idMenuTools_Table,true);
+	  break;
+	case MM_CREATE_KSPREAD_TABLE:
+	  m_vMenuTools->setItemChecked(m_idMenuTools_KSpreadTable,true);
 	  break;
 	case MM_CREATE_FORMULA:
 	  m_vMenuTools->setItemChecked(m_idMenuTools_Formula,true);
@@ -527,6 +532,9 @@ void KWordView::setTool(MouseMode _mouseMode)
 	  break;
 	case MM_CREATE_TABLE:
 	  m_vToolBarTools->setButton(ID_TOOL_CREATE_TABLE,true);
+	  break;
+	case MM_CREATE_KSPREAD_TABLE:
+	  m_vToolBarTools->setButton(ID_TOOL_CREATE_KSPREAD_TABLE,true);
 	  break;
 	case MM_CREATE_FORMULA:
 	  m_vToolBarTools->setButton(ID_TOOL_CREATE_FORMULA,true);
@@ -845,7 +853,14 @@ void KWordView::toolsClipart()
 /*===============================================================*/
 void KWordView::toolsTable()
 {
+  gui->getPaperWidget()->setTableConfig(3,4);
   gui->getPaperWidget()->mmTable();
+}
+
+/*===============================================================*/
+void KWordView::toolsKSpreadTable()
+{
+  gui->getPaperWidget()->mmKSpreadTable();
 
   vector<KoDocumentEntry> vec = koQueryDocuments( "'IDL:KSpread/DocumentFactory:1.0' in RepoID", 1 );
   if ( vec.size() == 0 )
@@ -1262,11 +1277,14 @@ bool KWordView::mappingCreateMenubar( OpenPartsUI::MenuBar_ptr _menubar )
   pix = OPUIUtils::convertPixmap(ICON("table.xpm"));
   m_idMenuTools_Table = m_vMenuTools->insertItem6(pix, i18n("&Create Table Frame"), this, "toolsTable", Key_F9, -1, -1 );
 
+  pix = OPUIUtils::convertPixmap(ICON("table.xpm"));
+  m_idMenuTools_KSpreadTable = m_vMenuTools->insertItem6(pix, i18n("&Create KSpread Table Frame"), this, "toolsKSpreadTable", Key_F10, -1, -1 );
+
   pix = OPUIUtils::convertPixmap(ICON("formula.xpm"));
-  m_idMenuTools_Formula = m_vMenuTools->insertItem6(pix, i18n("&Create Formula Frame"), this, "toolsFormula", Key_F10, -1, -1 );
+  m_idMenuTools_Formula = m_vMenuTools->insertItem6(pix, i18n("&Create Formula Frame"), this, "toolsFormula", Key_F11, -1, -1 );
 
   pix = OPUIUtils::convertPixmap(ICON("parts.xpm"));
-  m_idMenuTools_Part = m_vMenuTools->insertItem6(pix, i18n("&Create Part Frame"), this, "toolsPart", Key_F11, -1, -1 );
+  m_idMenuTools_Part = m_vMenuTools->insertItem6(pix, i18n("&Create Part Frame"), this, "toolsPart", Key_F12, -1, -1 );
 
   m_vMenuTools->setCheckable(true);
   m_vMenuTools->setItemChecked(m_idMenuTools_Edit,true);
@@ -1432,6 +1450,12 @@ bool KWordView::mappingCreateToolbar( OpenPartsUI::ToolBarFactory_ptr _factory )
   m_idButtonTools_Table = m_vToolBarTools->insertButton2( pix, ID_TOOL_CREATE_TABLE, SIGNAL( clicked() ), this, "toolsTable", 
 							  true, i18n("Create Table Frame"), -1);
   m_vToolBarTools->setToggle(ID_TOOL_CREATE_TABLE,true);
+
+  // create table frame
+  pix = OPUIUtils::convertPixmap(ICON("table.xpm"));
+  m_idButtonTools_KSpreadTable = m_vToolBarTools->insertButton2( pix, ID_TOOL_CREATE_KSPREAD_TABLE, SIGNAL( clicked() ), this, 
+								 "toolsKSpreadTable", true, i18n("Create KSPread Table Frame"), -1);
+  m_vToolBarTools->setToggle(ID_TOOL_CREATE_KSPREAD_TABLE,true);
 
   // create formula frame
   pix = OPUIUtils::convertPixmap(ICON("formula.xpm"));

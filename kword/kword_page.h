@@ -48,7 +48,7 @@ class KWordGUI;
 class KWordDocument;
 
 enum MouseMode {MM_EDIT = 0,MM_EDIT_FRAME = 1,MM_CREATE_TEXT = 2,MM_CREATE_PIX = 3,MM_CREATE_CLIPART = 4,MM_CREATE_TABLE = 5,\
-		MM_CREATE_FORMULA = 6,MM_CREATE_PART = 7};
+		MM_CREATE_FORMULA = 6,MM_CREATE_PART = 7,MM_CREATE_KSPREAD_TABLE = 8};
 
 /******************************************************************/
 /* Class: KWPage                                                  */
@@ -183,6 +183,9 @@ public:
   void removeSelection();
   void addLen() { currFindPos += currFindLen; }
 
+  void setTableConfig(unsigned int rows,unsigned int cols)
+    { trows = rows; tcols = cols; }
+
 public slots:
   void newLeftIndent(int _left); 
   void newFirstIndent(int _first);
@@ -199,6 +202,8 @@ public slots:
     { setMouseMode(MM_CREATE_CLIPART); mmUncheckAll(); mm_menu->setItemChecked(mm_create_clipart,true); }
   void mmTable()
     { setMouseMode(MM_CREATE_TABLE); mmUncheckAll(); mm_menu->setItemChecked(mm_create_table,true); }
+  void mmKSpreadTable()
+    { setMouseMode(MM_CREATE_KSPREAD_TABLE); mmUncheckAll(); mm_menu->setItemChecked(mm_create_kspread_table,true); }
   void mmFormula()
     { setMouseMode(MM_CREATE_FORMULA); mmUncheckAll(); mm_menu->setItemChecked(mm_create_formula,true); }
   void mmPart()
@@ -284,7 +289,8 @@ protected:
 
   MouseMode mouseMode;
   QPopupMenu *mm_menu,*frame_edit_menu;
-  int mm_edit,mm_edit_frame,mm_create_text,mm_create_pix,mm_create_clipart,mm_create_table,mm_create_formula,mm_create_part;
+  int mm_edit,mm_edit_frame,mm_create_text,mm_create_pix,mm_create_clipart,mm_create_table,
+    mm_create_formula,mm_create_part,mm_create_kspread_table;
 
   int oldMx,oldMy;
   bool deleteMovingRect;
@@ -304,6 +310,7 @@ protected:
   int currFindPos,currFindLen;
   int currFindFS;
   int selectedFrameSet,selectedFrame;
+  unsigned int tcols,trows;
 
 };
 

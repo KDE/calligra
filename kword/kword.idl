@@ -44,6 +44,7 @@ module KWord
       slot void toolsCreatePix();
       slot void toolsClipart();
       slot void toolsTable();
+      slot void toolsKSpreadTable();
       slot void toolsFormula();
       slot void toolsPart();
 
