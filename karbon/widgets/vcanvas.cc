@@ -116,7 +116,7 @@ VCanvas::toContents( const KoPoint &p ) const
 	if( contentsHeight() > height() )
 		p2.setY( ( contentsHeight() - ( p.y() + contentsY() + PAGE_OFFSETY) ) / m_view->zoom() );
 	else
-		p2.setY( ( height() - p.y() + PAGE_OFFSETY ) / m_view->zoom() );
+		p2.setY( ( height() - p.y() - PAGE_OFFSETY ) / m_view->zoom() );
 	return p2;
 }
 
@@ -152,7 +152,7 @@ VCanvas::viewportPaintEvent( QPaintEvent *e )
 	setYMirroring( m_view->painterFactory()->editpainter() );
 	kdDebug() << "viewp e->rect() : " << e->rect().x() << ", " << e->rect().y() << ", " << e->rect().width() << ", " << e->rect().height() << endl;
 	viewport()->setUpdatesEnabled( false );
-	KoRect rect( e->rect().x() - 1, e->rect().y() - 2, e->rect().width() + 2, e->rect().height() + 4 );
+	KoRect rect( e->rect().x(), e->rect().y(), e->rect().width(), e->rect().height() );
 	VPainter *p = m_view->painterFactory()->painter();
 	if( m_bScrolling )
 	{
