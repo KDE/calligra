@@ -88,7 +88,7 @@ int KoTextFormat::compare( const KoTextFormat & format ) const
     if ( textUnderlineColor()!=format.textUnderlineColor() ||
          nbLineType()!= format.nbLineType() ||
          lineType() != format.lineType())
-        flags |= KoTextFormat::Underline;
+        flags |= KoTextFormat::ExtendUnderLine;
     if ( fn.family() != format.fn.family() )
         flags |= KoTextFormat::Family;
     if ( fn.pointSize() != format.fn.pointSize() )

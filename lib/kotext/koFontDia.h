@@ -78,6 +78,7 @@ protected slots:
     void slotChangeBackGroundColor();
     void slotUnderlineColor();
     void slotChangeUnderlineType( int );
+    void slotChangeStrikeOutType( int );
 private:
     KFontChooser *m_chooseFont;
     QCheckBox *m_superScript;

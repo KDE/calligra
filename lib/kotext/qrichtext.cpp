@@ -6044,6 +6044,13 @@ void KoTextFormat::copyFormat( const KoTextFormat & nf, int flags )
         fn.setStrikeOut( nf.font().strikeOut() );
     if( flags & KoTextFormat::TextBackgroundColor)
         setTextBackgroundColor(nf.textBackgroundColor());
+    if( flags & KoTextFormat::ExtendUnderLine)
+    {
+        setTextUnderlineColor(nf.textUnderlineColor());
+        setNbLineType (nf.nbLineType());
+        setLineType (nf.lineType());
+    }
+
     //////
     update();
     //kdDebug() << "KoTextFormat " << (void*)this << " copyFormat nf=" << (void*)&nf << " " << nf.key() << " flags=" << flags

@@ -56,7 +56,7 @@ public:
     int compare( const KoTextFormat & format ) const;
 
     /** Extending the base KoTextFormat enum */
-    enum { StrikeOut = 512, TextBackgroundColor = 1024 };
+    enum { StrikeOut = 512, TextBackgroundColor = 1024, ExtendUnderLine = 2056 };
 
     enum NbLine { NONE = 0, SIMPLE = 1, DOUBLE = 2};
     enum LineType { SOLID = 0 , DASH = 1, DOT = 2, DASH_DOT = 3, DASH_DOT_DOT = 4};

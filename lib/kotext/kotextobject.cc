@@ -1940,7 +1940,7 @@ KCommand *KoTextFormatInterface::setUnderlineCommand( bool on )
 {
     KoTextFormat format( *currentFormat() );
     format.setNbLineType( on ? KoTextFormat::SIMPLE : KoTextFormat::NONE);
-    return setFormatCommand( &format, KoTextFormat::Underline );
+    return setFormatCommand( &format, KoTextFormat::ExtendUnderLine );
 }
 
 

@@ -130,6 +130,7 @@ void KoFontChooser::setupTab2()
     connect( m_strikeOut, SIGNAL(clicked()), this, SLOT( slotStrikeOutClicked() ) );
     connect( m_underlineColorButton, SIGNAL(clicked()), this, SLOT( slotUnderlineColor() ) );
     connect( m_underlining,  SIGNAL( activated ( int  ) ), this, SLOT( slotChangeUnderlineType( int )));
+    connect( m_strikeOutType,  SIGNAL( activated ( int  ) ), this, SLOT( slotChangeStrikeOutType( int )));
 }
 
 
@@ -238,7 +239,7 @@ void KoFontChooser::slotUnderlineColor()
     {
         if ( color != m_underlineColor )
         {
-            m_changedFlags |= KoTextFormat::Underline;
+            m_changedFlags |= KoTextFormat::ExtendUnderLine;
             m_underlineColor = color;
         }
     }
@@ -373,9 +374,14 @@ KoTextFormat::LineType KoFontChooser::getStrikeOutType()
 
 void KoFontChooser::slotChangeUnderlineType( int i)
 {
-    m_changedFlags |= KoTextFormat::Underline;
+    m_changedFlags |= KoTextFormat::ExtendUnderLine;
     m_underlineType->setEnabled( i!= 0);
     m_underlineColorButton->setEnabled( i!=0);
+}
+
+void KoFontChooser::slotChangeStrikeOutType( int )
+{
+    m_changedFlags |= KoTextFormat::StrikeOut;
 }
 
 KoFontDia::KoFontDia( QWidget* parent, const char* name, const QFont &_font,
