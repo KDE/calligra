@@ -948,7 +948,7 @@ void
 ConnectionDialog::setStatusError(const QString &msg)
 {
 	m_pixmapLabel->setPixmap( DesktopIcon("button_cancel") );
-	m_textLabel->setText("<qt><h2>The connection is wrong.</h2></qt>" + msg);
+	m_textLabel->setText("<qt><h2>The connection is invalid.</h2></qt>" + msg);
 }
 
 void
