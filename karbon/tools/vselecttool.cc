@@ -73,11 +73,10 @@ VSelectTool::draw()
 
 	KoRect rect = view()->part()->document().selection()->boundingBox();
 
-	if( m_state != normal || rect.contains( first() ) )
+	if( m_state != normal || rect.contains( first() ) || m_activeNode != node_none )
 	{
 		if( m_state == normal )
 		{
-			m_activeNode = view()->part()->document().selection()->handleNode( last() );
 			m_state = ( m_activeNode == node_none ) ? moving : scaling;
 		}
 
@@ -124,55 +123,6 @@ VSelectTool::draw()
 							( m_lp.y() - fp.y() ) / view()->zoom() );
 		else
 		{
-			// scale operation
-			if( m_activeNode == node_lt )
-			{
-				m_sp = KoPoint( rect.right(), rect.bottom() );
-				m_s1 = ( rect.right() - lp.x() ) / double( rect.width() );
-				m_s2 = ( rect.bottom() - lp.y() ) / double( rect.height() );
-			}
-			else if( m_activeNode == node_mt )
-			{
-				m_sp = KoPoint( ( ( rect.right() + rect.left() ) / 2 ), rect.bottom() );
-				m_s1 = 1;
-				m_s2 = ( rect.bottom() - lp.y() ) / double( rect.height() );
-			}
-			else if( m_activeNode == node_rt )
-			{
-				m_sp = KoPoint( rect.x(), rect.bottom() );
-				m_s1 = ( lp.x() - rect.x() ) / double( rect.width() );
-				m_s2 = ( rect.bottom() - lp.y() ) / double( rect.height() );
-			}
-			else if( m_activeNode == node_rm)
-			{
-				m_sp = KoPoint( rect.x(), ( rect.bottom() + rect.top() )  / 2 );
-				m_s1 = ( lp.x() - rect.x() ) / double( rect.width() );
-				m_s2 = 1;
-			}
-			else if( m_activeNode == node_rb )
-			{
-				m_sp = KoPoint( rect.x(), rect.y() );
-				m_s1 = ( lp.x() - rect.x() ) / double( rect.width() );
-				m_s2 = ( lp.y() - rect.y() ) / double( rect.height() );
-			}
-			else if( m_activeNode == node_mb )
-			{
-				m_sp = KoPoint( ( ( rect.right() + rect.left() ) / 2 ), rect.y() );
-				m_s1 = 1;
-				m_s2 = ( lp.y() - rect.y() ) / double( rect.height() );
-			}
-			else if( m_activeNode == node_lb )
-			{
-				m_sp = KoPoint( rect.right(), rect.y() );
-				m_s1 = ( rect.right() - lp.x() ) / double( rect.width() );
-				m_s2 = ( lp.y() - rect.y() ) / double( rect.height() );
-			}
-			else if( m_activeNode == node_lm )
-			{
-				m_sp = KoPoint( rect.right(), ( rect.bottom() + rect.top() )  / 2 );
-				m_s1 = ( rect.right() - lp.x() ) / double( rect.width() );
-				m_s2 = 1;
-			}
 			KoPoint sp = KoPoint( m_sp.x() - view()->canvasWidget()->contentsX(), m_sp.y() - view()->canvasWidget()->contentsY() );
 			mat.translate( sp.x(), sp.y() );
 			mat.scale( m_s1, m_s2 );
@@ -238,6 +188,8 @@ VSelectTool::mouseButtonPress()
 {
 	m_current = first();
 
+	m_activeNode = view()->part()->document().selection()->handleNode( first() );
+
 	recalc();
 /*
 	m_fp.setX( mouse_event->pos().x() );
@@ -260,15 +212,6 @@ VSelectTool::mouseDrag()
 	recalc();
 
 	draw();
-
-/*
-	if( m_lock == lockx )
-		m_lp.setX( m_fp.x() );
-	else
-		m_lp.setX( mouse_event->pos().x() );
-
-	m_lp.setY( mouse_event->pos().y() );
-*/
 }
 
 void
