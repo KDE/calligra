@@ -779,7 +779,7 @@ void configureDefaultDocPage::slotDefault()
 
 void configureDefaultDocPage::selectNewDefaultFont() {
     QStringList list;
-    KFontChooser::getFontList(list,  KFontChooser::SmoothScalableFonts);
+    KFontChooser::getFontList(list, KFontChooser::SmoothScalableFonts);
     KFontDialog dlg( this, "Font Selector", false, true, list, true );
     dlg.setFont(*font);
     int result = dlg.exec();
@@ -788,6 +788,7 @@ void configureDefaultDocPage::selectNewDefaultFont() {
         font = new QFont(dlg.font());
         fontName->setText(font->family() + ' ' + QString::number(font->pointSize()));
         fontName->setFont(*font);
+        m_pView->kPresenterDoc()->setDefaultFont( *font );
     }
 }
 

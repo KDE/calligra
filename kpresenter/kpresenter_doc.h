@@ -272,6 +272,9 @@ class KPresenterDoc : public KoDocument
 
     KoZoomHandler* zoomHandler() const { return m_zoomHandler; }
     QFont defaultFont() const { return m_defaultFont; }
+    void setDefaultFont( const QFont & newFont) {
+        m_defaultFont = newFont;
+    }
 
     /**
      * get custom kspell config
