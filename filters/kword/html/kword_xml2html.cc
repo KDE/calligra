@@ -201,12 +201,11 @@ tTableText *GetTableText(tTableText *pTableText) {
     return pTableText;
 }
 
-void SearchText(Token *pToken, HTMLTree *pHTMLTree, char *Scratch) {
+void SearchText(Token *pToken, HTMLTree *pHTMLTree) {
 
-    char *Start;
+    QCString Scratch;
     int iCount;
     Token *pSaveToken;
-    Start = Scratch;
     iCount = 0;
     if(!pToken) return;
 
@@ -283,17 +282,17 @@ void SearchText(Token *pToken, HTMLTree *pHTMLTree, char *Scratch) {
         ** pContents->pNext=Token_SPACE
         ** (pContents->pNext)->pNext=Markup PAPER
         */
-        SearchText(pToken->pNext,pHTMLTree,Start);
+        SearchText(pToken->pNext,pHTMLTree);
         return;
     }
 
-    kdDebug(30503) << "SearchText. Markup found. Token=" << pToken->zText << endl;
+    //kdDebug(30503) << "SearchText. Markup found. Token=" << pToken->zText << endl;
 
     if(!(strcmp(pToken->zText,"FRAMESET"))) {
         int iValue = 0;
         int iHaveRow = 0;
         int iAmImage = 0;
-        int iRowValue,iColValue;
+        int iRowValue = 0, iColValue = 0;
         Arg *pArg = ((Markup *)pToken)->pArg;
         int iFrameInfo = 0;
         while(pArg) {
@@ -427,12 +426,13 @@ void SearchText(Token *pToken, HTMLTree *pHTMLTree, char *Scratch) {
         // Ignore frames which are not FI_BODY (e.g. headers and footers)
         // i.e. only look into normal frames
         if ( iFrameInfo == 0 )
-            SearchText(((Markup*)pToken)->pContent,pHTMLTree,Start);
+            SearchText(((Markup*)pToken)->pContent,pHTMLTree);
 
-        SearchText(pToken->pNext,pHTMLTree,Start);
+        SearchText(pToken->pNext,pHTMLTree);
     }
     else if(!(strcmp(pToken->zText,"TEXT"))) {
-        tTableText *pTableText;
+        kdDebug(30503) << "TEXT" << endl;
+        tTableText *pTableText = 0L;
         if(pHTMLTree->ObjectType == HTML_Table) {
             /* We're inside a table.  Make sure to store all text attributes
             ** for this cell are inside the appropriate Table structure.
@@ -447,8 +447,10 @@ void SearchText(Token *pToken, HTMLTree *pHTMLTree, char *Scratch) {
             pTableText = GetTableText(pTableText);
         }
         else {
+            kdDebug(30503) << "Not in a table. Setting object type to text" << endl;
             pHTMLTree->ObjectType = HTML_Text;
             InitTextStruct(&(pHTMLTree->u.TextStruct));
+            kdDebug(30503) << "Struct initialised" << endl;
         }
         pSaveToken = pToken;
         pToken=((Markup *)pToken)->pContent;/* Go to first word in TEXT markup */
@@ -461,17 +463,24 @@ void SearchText(Token *pToken, HTMLTree *pHTMLTree, char *Scratch) {
                       ** (see 2nd comment in "FORMAT" section).  The newline will
                       ** not be printed.
                       */
-            *Scratch++='\n';
+            Scratch.append("\n");
             iCount=1;
 
         }
         else {
             while(pToken) {
+                //kdDebug(30503) << "pToken=" << pToken << endl;
+                kdDebug(30503) << "text=" << pToken->zText << endl;
+                Scratch.append( pToken->zText );
+                iCount += strlen( pToken->zText );
+                pToken->zText += iCount;
+                /*
                 while(*pToken->zText) {
                     *Scratch++=*(pToken->zText++);
                     iCount++;
+                    kdDebug(30503) << "iCount=" << iCount << endl;
                 }
-                (pToken->zText)++;            /* Increment past the null terminator
+                (pToken->zText)++;   */         /* Increment past the null terminator
                                               ** for this word.  We want one single
                                               ** terminator at the very end of the
                                               ** entire concatenated string.
@@ -481,21 +490,20 @@ void SearchText(Token *pToken, HTMLTree *pHTMLTree, char *Scratch) {
             }
         }
         if(pHTMLTree->ObjectType==HTML_Text) {
+            kdDebug(30503) << "Copying " << iCount << " chars into pHTMLTree : " << Scratch.data() << endl;
             pHTMLTree->u.TextStruct.zText=(char *)malloc(iCount+1);
-            strncpy(pHTMLTree->u.TextStruct.zText,Start,iCount);
+            strncpy(pHTMLTree->u.TextStruct.zText,Scratch.data(),iCount);
             pHTMLTree->u.TextStruct.zText[iCount]='\0';
         }
         else {
+            kdDebug(30503) << "Copying " << iCount << " chars into pTableText : " << Scratch.data() << endl;
             pTableText->sTextAttributes.zText=(char *)malloc(iCount+1);
-            strncpy(pTableText->sTextAttributes.zText,Start,iCount);
+            strncpy(pTableText->sTextAttributes.zText,Scratch.data(),iCount);
             pTableText->sTextAttributes.zText[iCount]='\0';
         }
 
-        /* When we recursively call SearchText, make sure that we use "Start".
-        ** In this way, all recursions will always be starting with the same
-        ** scratch buffer at the same point.
-        */
-        SearchText(pSaveToken->pNext,pHTMLTree,Start);
+        kdDebug(30503) << "Recursive call..." << endl;
+        SearchText(pSaveToken->pNext,pHTMLTree);
     }
     else if(!(strcmp(pToken->zText,"FORMAT"))){
         /* If this object is of type HTML_Null, then FORMAT does not
@@ -561,8 +569,8 @@ void SearchText(Token *pToken, HTMLTree *pHTMLTree, char *Scratch) {
                 pArg = pArg->pNext;
             }
         }
-        SearchText(((Markup *)pToken)->pContent,pHTMLTree,Start);
-        SearchText(pToken->pNext,pHTMLTree,Start);
+        SearchText(((Markup *)pToken)->pContent,pHTMLTree);
+        SearchText(pToken->pNext,pHTMLTree);
     }
     else if(!(strcmp(pToken->zText,"SIZE"))) {
         // Ignore e.g. paragraph formats
@@ -608,7 +616,7 @@ void SearchText(Token *pToken, HTMLTree *pHTMLTree, char *Scratch) {
                 }
             }
         }
-        SearchText(pToken->pNext,pHTMLTree,Start);
+        SearchText(pToken->pNext,pHTMLTree);
     }
     else if(!(strcmp(pToken->zText,"COLOR"))) {
         // Ignore e.g. paragraph formats
@@ -664,7 +672,7 @@ void SearchText(Token *pToken, HTMLTree *pHTMLTree, char *Scratch) {
                 }
             }
         }
-        SearchText(pToken->pNext,pHTMLTree,Start);
+        SearchText(pToken->pNext,pHTMLTree);
     }
     else if(!(strcmp(pToken->zText,"WEIGHT"))) {
         // Ignore e.g. paragraph formats
@@ -710,7 +718,7 @@ void SearchText(Token *pToken, HTMLTree *pHTMLTree, char *Scratch) {
                 }
             }
         }
-        SearchText(pToken->pNext,pHTMLTree,Start);
+        SearchText(pToken->pNext,pHTMLTree);
     }
     else if(!(strcmp(pToken->zText,"ITALIC"))) {
         // Ignore e.g. paragraph formats
@@ -768,7 +776,7 @@ void SearchText(Token *pToken, HTMLTree *pHTMLTree, char *Scratch) {
                 }
             }
         }
-        SearchText(pToken->pNext,pHTMLTree,Start);
+        SearchText(pToken->pNext,pHTMLTree);
     }
     // TODO ? UNDERLINE and VERTALIGN
     else if(!(strcmp(pToken->zText,"FLOW"))) {
@@ -800,7 +808,7 @@ void SearchText(Token *pToken, HTMLTree *pHTMLTree, char *Scratch) {
             fprintf(stderr,"Error.  FLOW markup must contain a font alignment.\n");
             exit(1);
         }
-        SearchText(pToken->pNext,pHTMLTree,Start);
+        SearchText(pToken->pNext,pHTMLTree);
     }
     else if(!(strcmp(pToken->zText,"NAME"))) {
         Arg *pArg;
@@ -841,7 +849,7 @@ void SearchText(Token *pToken, HTMLTree *pHTMLTree, char *Scratch) {
                 pArg=pArg->pNext;
             }
         }
-        SearchText(pToken->pNext,pHTMLTree,Start);
+        SearchText(pToken->pNext,pHTMLTree);
     }
     else if(!(strcmp(pToken->zText,"ILEFT"))) {
         tTextStruct *pTextStruct;
@@ -878,7 +886,7 @@ void SearchText(Token *pToken, HTMLTree *pHTMLTree, char *Scratch) {
                 }
             }
         }
-        SearchText(pToken->pNext,pHTMLTree,Start);
+        SearchText(pToken->pNext,pHTMLTree);
     }
     /* Note:  FILENAME has to do with image insertion, which is not supported
     ** within tables.  Therefore, in the following section of code, we do not
@@ -897,7 +905,7 @@ void SearchText(Token *pToken, HTMLTree *pHTMLTree, char *Scratch) {
                 pArg=pArg->pNext;
             }
         }
-        SearchText(pToken->pNext,pHTMLTree,Start);
+        SearchText(pToken->pNext,pHTMLTree);
     }
     else if((!(strcmp(pToken->zText,"FILENAME")))&&
             (pHTMLTree->ObjectType == HTML_Image)) {
@@ -912,7 +920,7 @@ void SearchText(Token *pToken, HTMLTree *pHTMLTree, char *Scratch) {
                 pArg=pArg->pNext;
             }
         }
-        SearchText(pToken->pNext,pHTMLTree,Start);
+        SearchText(pToken->pNext,pHTMLTree);
     }
     else if(!(strcmp(pToken->zText,"FRAME"))) {
         if(pHTMLTree->ObjectType == HTML_Image) {
@@ -934,19 +942,21 @@ void SearchText(Token *pToken, HTMLTree *pHTMLTree, char *Scratch) {
                 pArg=pArg->pNext;
             }
         }
-        SearchText(pToken->pNext,pHTMLTree,Start);
+        SearchText(pToken->pNext,pHTMLTree);
     }
     else {
         // Process child elements
-        SearchText(((Markup *)pToken)->pContent,pHTMLTree,Start);
+        SearchText(((Markup *)pToken)->pContent,pHTMLTree);
         // Process next sibling
-        SearchText(pToken->pNext,pHTMLTree,Start);
+        SearchText(pToken->pNext,pHTMLTree);
     }
 }
 
 
 HTMLTree *ProcessTableAndText(HTMLTree *pHTMLTree,HTMLObject egObject,
-                              char *Scratch, FILE *Outfile) {
+                              FILE *Outfile) {
+    kdDebug(30503) << "ProcessTableAndText" << endl;
+    QCString Scratch;
     ListMarkup *pCurrentListMarkup = 0;
     // tTextStruct sTextStruct;
     tTable *pCurrentTableCell;
@@ -975,18 +985,18 @@ HTMLTree *ProcessTableAndText(HTMLTree *pHTMLTree,HTMLObject egObject,
     zItalic = (char *)malloc(4);
     zItalicEnd = (char *)malloc(5);
     if(egObject == HTML_Text) {
-        fprintf(Outfile,"<p   >"); // Let's start a paragraph
+        fprintf(Outfile,"<p>"); // Let's start a paragraph
         while(pHTMLTree){
-            char align[6];
+            QCString align;
             switch(pHTMLTree->u.TextStruct.iFontFlow-1) {
             case 0:
-                strcpy(align,"left");
+                align="left";
                 break;
             case 1:
-                strcpy(align,"right");
+                align="right";
                 break;
             case 2:
-                strcpy(align,"center");
+                align="center";
                 break;
             default:
                 break;
@@ -1109,12 +1119,12 @@ HTMLTree *ProcessTableAndText(HTMLTree *pHTMLTree,HTMLObject egObject,
                 ** Only print out alignment markups if they deviate from the
                 ** default.
                 */
-                if(strcmp(align,"left")){
-                    fprintf(Outfile,"<%s>",align);
+                if(align=="left"){
+                    fprintf(Outfile,"<%s>",align.data());
                     iAlign = 1;
                 }
 #else
-                fprintf(Outfile,"<%s>",align);  /* see next comment */
+                fprintf(Outfile,"<%s>",align.data());  /* see next comment */
                 iAlign = 1;
 #endif
             }
@@ -1147,16 +1157,15 @@ HTMLTree *ProcessTableAndText(HTMLTree *pHTMLTree,HTMLObject egObject,
                     ** an in-line image.  Check this out.
                     */
                     if(pFormat->iID==2) {/* format ID=2 for pictures */
-                        fprintf(Outfile,"<%s>\n",align);
+                        fprintf(Outfile,"<%s>\n",align.data());
                         fprintf(Outfile,"<img src=%s>\n",pHTMLTree->u.TextStruct.zFileName);
-                        fprintf(Outfile,"</%s>\n",align);
+                        fprintf(Outfile,"</%s>\n",align.data());
                     }
                     else {
                         /* We will have one and only one Format structure if we're just
                         ** dealing with a blank line.
                         */
-                        *Scratch='\n';
-                        Scratch[1]='\0';
+                        Scratch="\n";
                         if(iBlankLine==1) {
                             iPutPre = 1;
                             fprintf(Outfile,"<pre>");
@@ -1169,14 +1178,15 @@ HTMLTree *ProcessTableAndText(HTMLTree *pHTMLTree,HTMLObject egObject,
                 else {
                     iBlankLine = 0;
                     iPutPre = 0;
-                    strncpy(Scratch,&(pHTMLTree->u.TextStruct.zText[iPosition]),
+                    Scratch = QCString(&(pHTMLTree->u.TextStruct.zText[iPosition]),
                             pFormat->iLength);
+                    Scratch.resize(pFormat->iLength+1); // make room for trailing 0
                     iPosition+=pFormat->iLength;
                     /* Note:  "iPosition" walks the current text fragment, while
                     ** "pFormat->iLength" indicates the length of the current
                     ** special format within the text fragment (eg:  italicized text).
                     */
-                    Scratch[pFormat->iLength]='\0';
+                    Scratch[pFormat->iLength]='\0'; // seems this is necessary even with QCString
                 }
                 if(pFormat->iID!=2) {
                     if((pFormat->iFontItalic-1)>0) {
@@ -1254,11 +1264,11 @@ HTMLTree *ProcessTableAndText(HTMLTree *pHTMLTree,HTMLObject egObject,
                             iNumHead2s = 0;
                             iNumHead3s = 0;
 #ifdef SPARTAN
-                            fprintf(Outfile,"<H1>%d.  %s</H1>\n",iNumHead1s,Scratch);
+                            fprintf(Outfile,"<H1>%d.  %s</H1>\n",iNumHead1s,Scratch.data());
 #else
                             fprintf(Outfile,"<H1>%s%s<FONT COLOR=#%.2x%.2x%.2x>%d.\n"
                                     "%s</FONT>%s%s</H1>\n",zItalic,zWeight,pFormat->iRed,
-                                    pFormat->iGreen,pFormat->iBlue,iNumHead1s,Scratch,
+                                    pFormat->iGreen,pFormat->iBlue,iNumHead1s,Scratch.data(),
                                     zWeightEnd,zItalicEnd);
 #endif
                         }
@@ -1269,35 +1279,35 @@ HTMLTree *ProcessTableAndText(HTMLTree *pHTMLTree,HTMLObject egObject,
                             */
                             iNumHead3s = 0;
 #ifdef SPARTAN
-                            fprintf(Outfile,"<H2>%d.%d.%s</H2>\n",iNumHead1s,iNumHead2s,Scratch);
+                            fprintf(Outfile,"<H2>%d.%d.%s</H2>\n",iNumHead1s,iNumHead2s,Scratch.data());
 #else
                             fprintf(Outfile,"<H2>%s%s<FONT COLOR=#%.2x%.2x%.2x>%d.%d.\n"
                                     "%s</FONT>%s%s</H2>\n",zItalic,zWeight,
                                     pFormat->iRed,pFormat->iGreen,pFormat->iBlue,
-                                    iNumHead1s,iNumHead2s,Scratch,zWeightEnd,zItalicEnd);
+                                    iNumHead1s,iNumHead2s,Scratch.data(),zWeightEnd,zItalicEnd);
 #endif
                         }
                         else if(pHTMLTree->u.TextStruct.iHeader3) {
                             iNumHead3s++;
 #ifdef SPARTAN
                             fprintf(Outfile,"<H3>%d.%d.%d. %s</H3>\n",iNumHead1s,iNumHead2s,
-                                    iNumHead3s,Scratch);
+                                    iNumHead3s,Scratch.data());
 #else
                             fprintf(Outfile,"<H3>%s%s<FONT COLOR=#%.2x%.2x%.2x>%d.%d.%d.\n"
                                     "%s</FONT>%s%s</H3>\n",zItalic,zWeight,
                                     pFormat->iRed,pFormat->iGreen,pFormat->iBlue,
-                                    iNumHead1s,iNumHead2s,iNumHead3s,Scratch,zWeightEnd,
+                                    iNumHead1s,iNumHead2s,iNumHead3s,Scratch.data(),zWeightEnd,
                                     zItalicEnd);
 #endif
                         }
                     }
                     else {
 #ifdef SPARTAN
-                        fprintf(Outfile,"%s\n",Scratch);
+                        fprintf(Outfile,"%s\n",Scratch.data());
 #else
                         fprintf(Outfile,"%s%s<FONT SIZE=%d COLOR=#%.2x%.2x%.2x>%s</FONT>%s%s\n",
                                 zItalic,zWeight,iSize,pFormat->iRed,
-                                pFormat->iGreen,pFormat->iBlue,Scratch,zWeightEnd,
+                                pFormat->iGreen,pFormat->iBlue,Scratch.data(),zWeightEnd,
                                 zItalicEnd);
 #endif
                     }
@@ -1313,7 +1323,7 @@ HTMLTree *ProcessTableAndText(HTMLTree *pHTMLTree,HTMLObject egObject,
                 iParagraph = 0;
             }
             if(iAlign) {
-                fprintf(Outfile,"</%s>\n",align);
+                fprintf(Outfile,"</%s>\n",align.data());
                 iAlign = 0;
             }
 
@@ -1460,16 +1470,16 @@ HTMLTree *ProcessTableAndText(HTMLTree *pHTMLTree,HTMLObject egObject,
         fprintf(Outfile,"<TR>\n<TD>\n");
         while(pCurrentTableCell) {
             while(pCurrentTableText) {
-                char align[6];
+                QCString align;
                 switch(pCurrentTableText->sTextAttributes.iFontFlow-1) {
                 case 0:
-                    strcpy(align,"left");
+                    align="left";
                     break;
                 case 1:
-                    strcpy(align,"right");
+                    align="right";
                     break;
                 case 2:
-                    strcpy(align,"center");
+                    align="center";
                     break;
                 default:
                     break;
@@ -1614,12 +1624,12 @@ HTMLTree *ProcessTableAndText(HTMLTree *pHTMLTree,HTMLObject egObject,
                     ** Only print out alignment markups if they deviate from the
                     ** default.
                     */
-                    if(strcmp(align,"left")){
-                        fprintf(Outfile,"<%s>",align);
+                    if(align=="left"){
+                        fprintf(Outfile,"<%s>",align.data());
                         iAlign = 1;
                     }
 #else
-                    fprintf(Outfile,"<%s>",align);  /* see next comment */
+                    fprintf(Outfile,"<%s>",align.data());  /* see next comment */
                     iAlign = 1;
 #endif
                 }
@@ -1659,22 +1669,22 @@ HTMLTree *ProcessTableAndText(HTMLTree *pHTMLTree,HTMLObject egObject,
                             /* We will have one and only one Format structure if we're just
                             ** dealing with a blank line.
                             */
-                            *Scratch='\n';
-                            Scratch[1]='\0';
+                            Scratch="\n";
                             fprintf(Outfile,"<p>");
                             iParagraph = 1;
                         }
                     }
                     else {
                         iPutPre = 0;
-                        strncpy(Scratch,&(pCurrentTableText->
+                        Scratch=QCString(&(pCurrentTableText->
                                           sTextAttributes.zText[iPosition]),pFormat->iLength);
+                        Scratch.resize(pFormat->iLength+1); // make room for trailing 0
                         iPosition+=pFormat->iLength;
                         /* Note:  "iPosition" walks the current text fragment, while
                         ** "pFormat->iLength" indicates the length of the current
                         ** special format within the text fragment (eg:  italicized text).
                         */
-                        Scratch[pFormat->iLength]='\0';
+                        Scratch[pFormat->iLength]='\0'; // see previous instance
                     }
                     if(pFormat->iID!=2) {
                         if((pFormat->iFontItalic-1)>0) {
@@ -1752,11 +1762,11 @@ HTMLTree *ProcessTableAndText(HTMLTree *pHTMLTree,HTMLObject egObject,
                                 iNumHead2s = 0;
                                 iNumHead3s = 0;
 #ifdef SPARTAN
-                                fprintf(Outfile,"<H1>%d.  %s</H1>\n",iNumHead1s,Scratch);
+                                fprintf(Outfile,"<H1>%d.  %s</H1>\n",iNumHead1s,Scratch.data());
 #else
                                 fprintf(Outfile,"<H1>%s%s<FONT COLOR=#%.2x%.2x%.2x>%d.\n"
                                         "%s</FONT>%s%s</H1>\n",zItalic,zWeight,pFormat->iRed,
-                                        pFormat->iGreen,pFormat->iBlue,iNumHead1s,Scratch,
+                                        pFormat->iGreen,pFormat->iBlue,iNumHead1s,Scratch.data(),
                                         zWeightEnd,zItalicEnd);
 #endif
                             }
@@ -1767,35 +1777,35 @@ HTMLTree *ProcessTableAndText(HTMLTree *pHTMLTree,HTMLObject egObject,
                                 */
                                 iNumHead3s = 0;
 #ifdef SPARTAN
-                                fprintf(Outfile,"<H2>%d.%d.%s</H2>\n",iNumHead1s,iNumHead2s,Scratch);
+                                fprintf(Outfile,"<H2>%d.%d.%s</H2>\n",iNumHead1s,iNumHead2s,Scratch.data());
 #else
                                 fprintf(Outfile,"<H2>%s%s<FONT COLOR=#%.2x%.2x%.2x>%d.%d.\n"
                                         "%s</FONT>%s%s</H2>\n",zItalic,zWeight,
                                         pFormat->iRed,pFormat->iGreen,pFormat->iBlue,
-                                        iNumHead1s,iNumHead2s,Scratch,zWeightEnd,zItalicEnd);
+                                        iNumHead1s,iNumHead2s,Scratch.data(),zWeightEnd,zItalicEnd);
 #endif
                             }
                             else if(pCurrentTableText->sTextAttributes.iHeader3) {
                                 iNumHead3s++;
 #ifdef SPARTAN
                                 fprintf(Outfile,"<H3>%d.%d.%d. %s</H3>\n",iNumHead1s,iNumHead2s,
-                                        iNumHead3s,Scratch);
+                                        iNumHead3s,Scratch.data());
 #else
                                 fprintf(Outfile,"<H3>%s%s<FONT COLOR=#%.2x%.2x%.2x>%d.%d.%d.\n"
                                         "%s</FONT>%s%s</H3>\n",zItalic,zWeight,
                                         pFormat->iRed,pFormat->iGreen,pFormat->iBlue,
-                                        iNumHead1s,iNumHead2s,iNumHead3s,Scratch,zWeightEnd,
+                                        iNumHead1s,iNumHead2s,iNumHead3s,Scratch.data(),zWeightEnd,
                                         zItalicEnd);
 #endif
                             }
                         }
                         else {
 #ifdef SPARTAN
-                            fprintf(Outfile,"%s\n",Scratch);
+                            fprintf(Outfile,"%s\n",Scratch.data());
 #else
                             fprintf(Outfile,"%s%s<FONT SIZE=%d COLOR=#%.2x%.2x%.2x>%s</FONT>%s%s\n",
                                     zItalic,zWeight,iSize,pFormat->iRed,
-                                    pFormat->iGreen,pFormat->iBlue,Scratch,zWeightEnd,
+                                    pFormat->iGreen,pFormat->iBlue,Scratch.data(),zWeightEnd,
                                     zItalicEnd);
 #endif
                         }
@@ -1811,7 +1821,7 @@ HTMLTree *ProcessTableAndText(HTMLTree *pHTMLTree,HTMLObject egObject,
                     iParagraph = 0;
                 }
                 if(iAlign) {
-                    fprintf(Outfile,"</%s>\n",align);
+                    fprintf(Outfile,"</%s>\n",align.data());
                     iAlign = 0;
                 }
 
@@ -1989,7 +1999,7 @@ HTMLTree *ProcessTableAndText(HTMLTree *pHTMLTree,HTMLObject egObject,
 HTMLTree *ProcessImage(HTMLTree *pHTMLTree,HTMLObject /*egObject*/,FILE *Outfile) {
     /* We've got a picture in a frame.  For now, default to center
     ** alignment.
-  */
+    */
     if(pHTMLTree->ObjectType!=HTML_Image) {
         fprintf(Outfile,"Internal error.  This object should be an image\n");
         exit(1);
@@ -2009,7 +2019,6 @@ HTMLTree *ProcessImage(HTMLTree *pHTMLTree,HTMLObject /*egObject*/,FILE *Outfile
 */
 void mainFunc( const char *data, const char *charset ) {
   // ListMarkup *pCurrentListMarkup = 0;
-    int iSizeXmlFile;
     // tTextStruct sTextStruct;
     // int iMarginIncrease = 0;
     /*#ifdef SPARTAN
@@ -2023,7 +2032,6 @@ void mainFunc( const char *data, const char *charset ) {
     FILE *OutputFile;
     HTMLTree *pHTMLTree;
     HTMLTree *pSaveHTMLTree;
-    char *Scratch;
     Token *pToken;
     int j = 0;
     pHTMLTree = (HTMLTree *)malloc(sizeof(HTMLTree));
@@ -2035,7 +2043,6 @@ void mainFunc( const char *data, const char *charset ) {
         return;
 
     OutputFile = fopen( "/tmp/kword2html" , "w" );
-    Scratch = (char *)malloc(iSizeXmlFile);
     fprintf(OutputFile,"<HTML>\n");
     fprintf(OutputFile,"<HEAD>\n");
     fprintf(OutputFile,"<META HTTP-EQUIV=\"Content-Type\" content=\"text/html; charset=%s\">\n", charset);
@@ -2056,12 +2063,12 @@ void mainFunc( const char *data, const char *charset ) {
     // Debug
     //PrintXml( pToken, 0 );
 
-    SearchText(pToken,pHTMLTree,Scratch);
+    SearchText(pToken,pHTMLTree);
 
     while((pHTMLTree)&&(pHTMLTree->ObjectType!=HTML_Null)) {
         if((pHTMLTree->ObjectType==HTML_Text)||
            (pHTMLTree->ObjectType==HTML_Table)) {
-            pHTMLTree=ProcessTableAndText(pHTMLTree,pHTMLTree->ObjectType,Scratch,
+            pHTMLTree=ProcessTableAndText(pHTMLTree,pHTMLTree->ObjectType,
                                           OutputFile);
         }
         else if(pHTMLTree->ObjectType==HTML_Image) {
