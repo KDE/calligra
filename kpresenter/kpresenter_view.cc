@@ -1447,27 +1447,31 @@ void KPresenterView::fontSelected()
 
 void KPresenterView::textBold()
 {
-    tbFont.setBold( !tbFont.bold() );
-    page->setTextBold( tbFont.bold() );
+    bool b=actionTextBold->isChecked();
+    tbFont.setBold( b );
+    page->setTextBold(b );
 }
 
 
 void KPresenterView::textStrikeOut()
 {
-    tbFont.setUnderline( !tbFont.underline() );
-    page->setTextStrikeOut(actionFormatStrikeOut->isChecked());
+    bool b=actionFormatStrikeOut->isChecked();
+    tbFont.setUnderline( b );
+    page->setTextStrikeOut( b );
 }
 
 void KPresenterView::textItalic()
 {
-    tbFont.setItalic( !tbFont.italic() );
-    page->setTextItalic( tbFont.italic() );
+    bool b=actionTextItalic->isChecked();
+    tbFont.setItalic( b );
+    page->setTextItalic( b );
 }
 
 void KPresenterView::textUnderline()
 {
-    tbFont.setUnderline( !tbFont.underline() );
-    page->setTextUnderline( tbFont.underline() );
+    bool b=actionTextUnderline->isChecked();
+    tbFont.setUnderline(b );
+    page->setTextUnderline( b );
 }
 
 void KPresenterView::textColor()
