@@ -2159,7 +2159,7 @@ void KexiMainWindowImpl::tipOfTheDay(bool onStartup)
 			d->config->writeEntry("RunOnStart",true);
 
 		KTipDialog tipDialog(new KTipDatabase(locate("data", QString("kexi/tips"))), 0);
-		tipDialog.setCaption(i18n("Important informations"));
+		tipDialog.setCaption(i18n("Important information"));
 		QObjectList *l = tipDialog.queryList( "KPushButton" );//hack: hide <- -> buttons
 		int i=0;
 		for (QObjectListIt it( *l ); it.current() && i<2; ++it, i++ )
