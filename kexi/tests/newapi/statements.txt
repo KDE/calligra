@@ -1,4 +1,19 @@
+---------- MULTIPLE COLUMNS --------------
+-- the same field used in two columns
+select id, id from persons;
+
+---------- ALIASES --------------
 -- aliases for columns
-select id myid from persons
+select id myid from persons;
 -- aliases for tables
-select id from persons p
+select id from persons p;
+
+TODO
+-- ERR: there's no "persons" table in this query (alias "p" hides it)
+select persons.id from persons p;
+-- alias "p" for table "persons" is used
+select p.id from persons p;
+-- ERR: alias "p" is used twice for tables (so "id" column is ambiguous)
+select id from persons p, cars p;
+-- like above, but it's ok, because we're not using fields from "p" tables
+select 1 from persons p, cars p;
