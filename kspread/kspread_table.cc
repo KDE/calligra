@@ -3941,7 +3941,7 @@ void KSpreadTable::copyAsText( const QPoint &_marker )
     {
         KSpreadCell * cell = cellAt( _marker.x(), _marker.y() );
         if( !cell->isDefault() )
-            QApplication::clipboard()->setText( cell->text() );
+            QApplication::clipboard()->setText( cell->strOutText() );
 
         return;
     }
