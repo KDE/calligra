@@ -41,7 +41,8 @@ typedef OPAutoLoader<KWordFactory> KWordAutoLoader;
 KWordApp::KWordApp(int &argc,char** argv) 
   : OPApplication(argc,argv,"kword")
 {
-  getLocale()->insertCatalogue("koffice");
+    getLocale()->insertCatalogue("koffice");
+    getIconLoader()->insertDirectory(3, kde_datadir() + "/koffice/toolbar");
 }
 
 /*================================================================*/

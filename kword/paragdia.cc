@@ -15,6 +15,7 @@
 
 #include "paragdia.h"
 #include "paragdia.moc"
+#include <kiconloader.h>
 
 /******************************************************************/
 /* class KWPagePreview                                            */
@@ -644,16 +645,16 @@ void KWParagDia::setupTab3()
   bb = new KButtonBox(tab3);
   bb->addStretch();
   bLeft = bb->addButton("",true);
-  bLeft->setPixmap(QPixmap(kapp->kde_datadir() + "/kword/toolbar/borderleft.xpm"));
+  bLeft->setPixmap(Icon("borderleft.xpm"));
   bLeft->setToggleButton(true);
   bRight = bb->addButton("",true);
-  bRight->setPixmap(QPixmap(kapp->kde_datadir() + "/kword/toolbar/borderright.xpm"));
+  bRight->setPixmap(Icon("borderright.xpm"));
   bRight->setToggleButton(true);
   bTop = bb->addButton("",true);
-  bTop->setPixmap(QPixmap(kapp->kde_datadir() + "/kword/toolbar/bordertop.xpm"));
+  bTop->setPixmap(Icon("bordertop.xpm"));
   bTop->setToggleButton(true);
   bBottom = bb->addButton("",true);
-  bBottom->setPixmap(QPixmap(kapp->kde_datadir() + "/kword/toolbar/borderbottom.xpm"));
+  bBottom->setPixmap(Icon("borderbottom.xpm"));
   bBottom->setToggleButton(true);
   bb->addStretch();
   bb->layout();

@@ -85,22 +85,19 @@ void KWFrameDia::setupTab2TextFrame()
 
   runGrid = new QGridLayout(runGroup,5,2,15,7);
 
-  QPixmap pixmap;
-  QString pixdir = kapp->kde_datadir() + "/kword/toolbar/";
-
-  pixmap.load(pixdir + "run_not.xpm");
+  QPixmap pixmap = Icon("run_not.xpm");
   lRunNo = new QLabel(runGroup);
   lRunNo->setBackgroundPixmap(pixmap);
   lRunNo->resize(pixmap.size());
   runGrid->addWidget(lRunNo,1,0);
 
-  pixmap.load(pixdir + "run_bounding.xpm");
+  pixmap = Icon("run_bounding.xpm");
   lRunBounding = new QLabel(runGroup);
   lRunBounding->setBackgroundPixmap(pixmap);
   lRunBounding->resize(pixmap.size());
   runGrid->addWidget(lRunBounding,2,0);
 
-  pixmap.load(pixdir + "run_contur.xpm");
+  pixmap = Icon("run_contur.xpm");
   lRunContur = new QLabel(runGroup);
   lRunContur->setBackgroundPixmap(pixmap);
   lRunContur->resize(pixmap.size());
