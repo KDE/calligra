@@ -1165,7 +1165,7 @@ void KSpreadDlgFormula::changeFunction()
                           "raised to the power of x.\n");
                 tmp1+=i18n("Syntax : %1(Double)\n").arg(m_funcName);
                 tmp1+=i18n("Example : \n");
-                tmp1+=i18n("exp(9) equals 3.\nexp(-9) equals nan.");
+                tmp1+=i18n("exp(9) equals 8 103.08392758.\nexp(-9) equals 0.00012341.");
                 tmp.help=tmp1;
                 }
         else if(m_funcName=="ceil")
@@ -1650,7 +1650,7 @@ void KSpreadDlgFormula::changeFunction()
                 tmp.secondElementLabel=i18n("Number of failure");
                 tmp.thirdElementLabel=i18n("Probability of failure");
                 tmp1=i18n("The INVBINO function returns the negative binomial\n"
-                        "distribution. The first parameter is the number of failure,\n"
+                        "distribution. The first parameter is the number of trial,\n"
                         "the second parameter is the number of failure, and\n"
                         "the third is the probability of failure. The number of\n"
                         "trials should be bigger than the number of failure.\n");
