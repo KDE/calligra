@@ -47,6 +47,7 @@
 #include <kcoloractions.h>
 #include <tkcoloractions.h>
 #include <kaction.h>
+#include <kstatusbar.h>
 
 #include <kprocess.h>
 
@@ -123,7 +124,7 @@ KSpreadView::KSpreadView( QWidget *_parent, const char *_name, KSpreadDoc* doc )
     setXMLFile( "kspread.rc" );
 
     m_toolbarLock = FALSE;
-
+    m_sbCalcLabel=0;
     m_pDoc = doc;
     m_pPopupMenu = 0;
     m_pPopupColumn = 0;
@@ -452,16 +453,23 @@ KSpreadView::KSpreadView( QWidget *_parent, const char *_name, KSpreadDoc* doc )
 
     QTimer::singleShot( 0, this, SLOT( initialPosition() ) );
     m_findOptions = 0;
+
+    KStatusBar * sb = statusBar();
+    ASSERT(sb);
+    m_sbCalcLabel = sb ? new KStatusBarLabel( QString::null, 0, sb ) : 0;
+    addStatusBarItem( m_sbCalcLabel, 0 );
+    if(m_sbCalcLabel)
+        connect(m_sbCalcLabel ,SIGNAL(itemPressed( int )),this,SLOT(statusBarClicked(int)));
 }
 
 KSpreadView::~KSpreadView()
 {
     if ( !m_transformToolBox.isNull() )
 	delete (&*m_transformToolBox);
-    if(statusBar())
+    if(m_sbCalcLabel)
     {
-        disconnect(statusBar(),SIGNAL(pressed( int )),this,SLOT(statusBarClicked(int)));
-        statusBar()->removeItem(statusCalc);
+        disconnect(m_sbCalcLabel,SIGNAL(pressed( int )),this,SLOT(statusBarClicked(int)));
+
     }
     m_pCanvas->endChoose();
     m_pTable = 0; // set the active table to 0L so that when during destruction
@@ -3079,15 +3087,15 @@ void KSpreadView::resultOfCalc()
             break;
     }
 
-    if ( statusBar() )
-        statusBar()->changeItem( QString(" ")+tmp+' ', statusCalc );
+    if ( m_sbCalcLabel )
+        m_sbCalcLabel->setText(QString(" ")+tmp+' ');
 }
 
 void KSpreadView::statusBarClicked(int _id)
 {
     if(!koDocument()->isReadWrite() )
         return;
-    if(_id==1) //menu calc
+    if(_id==0) //menu calc
     {
         QPoint mousepos =QCursor::pos();
         ((QPopupMenu*)factory()->container("calc_popup",this))->popup(mousepos);
@@ -3231,19 +3239,16 @@ void KSpreadView::guiActivateEvent( KParts::GUIActivateEvent *ev )
 {
     if ( ev->activated() )
     {
-        if ( statusBar() )
+        if ( m_sbCalcLabel )
         {
-            statusBar()->insertItem( QString(" ")+i18n("Sum: %1").arg(0)+' ', statusCalc );
-            connect(statusBar(),SIGNAL(pressed( int )),this,SLOT(statusBarClicked(int)));
             resultOfCalc();
         }
     }
     else
     {
-        if(statusBar())
+        if(m_sbCalcLabel)
         {
-            disconnect(statusBar(),SIGNAL(pressed( int )),this,SLOT(statusBarClicked(int)));
-            statusBar()->removeItem(statusCalc);
+            disconnect(m_sbCalcLabel,SIGNAL(pressed( int )),this,SLOT(statusBarClicked(int)));
         }
     }
 

@@ -45,7 +45,7 @@ class KSpreadChild;
 class KSpreadCell;
 class KSpreadLocationEditWidget;
 class KoDocumentEntry;
-
+class KStatusBarLabel;
 //class KSelectColorAction;
 class TKSelectColorAction;
 class KAction;
@@ -611,12 +611,7 @@ private:
     QStringList m_findStrings;
     QStringList m_replaceStrings;
 
-    // Statusbar items
-    enum StatusBarIds {
-        statusCalc = 1
-        // More to be added
-    };
-
+    KStatusBarLabel* m_sbCalcLabel;
 };
 
 #endif
