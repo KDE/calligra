@@ -100,6 +100,8 @@ VSelection::append( const KoRect& rect )
 				itr2.current()->boundingBox().intersects( rect ) )
 			{
 				append( itr2.current() );
+				VSelectNodes op( rect, true, 2 );
+				op.visit( *itr2.current() );
 			}
 		}
 	}
@@ -236,7 +238,7 @@ VSelection::handleNode( const QPoint& point ) const
 bool
 VSelection::checkNode( const KoPoint &p )
 {
-	VSelectNodes op( p, true, 2 );
+	VSelectNodes op( p, false, 2 );
 
 	VObjectListIterator itr = m_objects;
 	for( ; itr.current(); ++itr )
