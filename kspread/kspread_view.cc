@@ -472,16 +472,16 @@ KSpreadView::KSpreadView( QWidget *_parent, const char *_name, KSpreadDoc* doc )
 
     m_renameTable=new KAction( i18n("Rename table..."),0,this, SLOT( slotRename() ), actionCollection(), "renameTable" );
 
-    m_nextTable = new KAction( i18n("Next table"), SHIFT + Key_Right, this,
+    m_nextTable = new KAction( i18n("Next table"), CTRL + Key_PageDown, this,
                                SLOT( nextTable() ), actionCollection(),
                                "nextTable");
-    m_prevTable = new KAction( i18n("Previous table"), SHIFT + Key_Left, this,
+    m_prevTable = new KAction( i18n("Previous table"), CTRL + Key_PageUp, this,
                                SLOT( previousTable() ), actionCollection(),
                                "previousTable");
-    m_firstTable = new KAction( i18n("First table"), SHIFT + Key_Home, this,
+    m_firstTable = new KAction( i18n("First table"), 0, this,
                                SLOT( firstTable() ), actionCollection(),
                                "firstTable");
-    m_lastTable = new KAction( i18n("Last table"), SHIFT + Key_End, this,
+    m_lastTable = new KAction( i18n("Last table"), 0, this,
                                SLOT( lastTable() ), actionCollection(),
                                "lastTable");
 
