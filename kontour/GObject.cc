@@ -315,7 +315,7 @@ void GObject::setBrush(QPainter *p)
   if(st.filled())
   {
     brush.setColor(st.fillColor().color());
-    brush.setStyle(Qt::SolidPattern);
+    brush.setStyle(st.brushStyle());
   }
   p->setBrush(brush);
 }
@@ -343,6 +343,11 @@ void GObject::changeFilled(bool filled)
 void GObject::changeOutlineWidth(unsigned int lwidth)
 {
   st.outlineWidth(lwidth);
+}
+
+void GObject::changeBrushStyle(Qt::BrushStyle bstyle)
+{
+  st.brushStyle(bstyle);
 }
 
 #include "GObject.moc"

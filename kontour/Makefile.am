@@ -72,6 +72,7 @@ libkontourpart_la_SOURCES = \
 	CreateRectCmd.cc \
 	OptionsDialog.cc \
 	UnitBox.cc \
+	BrushCells.cc \
 	units.cc
 
 libkontourpart_la_LDFLAGS = $(all_libraries) $(KDE_PLUGIN)

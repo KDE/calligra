@@ -34,19 +34,21 @@ public:
 	KoColor          fcolor;
 	Qt::PenCapStyle  cap;
 	Qt::PenJoinStyle join;
+	Qt::BrushStyle   brushStyle;
 	bool             stroked;
-	bool             filled;
+	bool             filled; // TODO : not necessary because of bstyle ?
 };
 
 GStyle::GStyle() : d(new GStylePrivate)
 {
-  d->ocolor = KoColor::black();
-  d->lwidth = 1;
-  d->cap    = Qt::RoundCap;
-  d->join   = Qt::RoundJoin;
-  d->fcolor = KoColor::white();
-  d->stroked= true;
-  d->filled = false;
+  d->ocolor     = KoColor::black();
+  d->lwidth     = 1;
+  d->cap        = Qt::RoundCap;
+  d->join       = Qt::RoundJoin;
+  d->brushStyle = Qt::SolidPattern;
+  d->fcolor     = KoColor::white();
+  d->stroked    = true;
+  d->filled     = false;
 }
 
 GStyle::GStyle(const QDomElement &style)
@@ -55,13 +57,14 @@ GStyle::GStyle(const QDomElement &style)
 
 GStyle::GStyle(GStyle &obj)
 {
-  d->ocolor = obj.d->ocolor;
-  d->lwidth = obj.d->lwidth;
-  d->cap    = obj.d->cap;
-  d->join   = obj.d->join;
-  d->fcolor = obj.d->fcolor;
-  d->stroked= obj.d->stroked;
-  d->filled = obj.d->filled;
+  d->ocolor     = obj.d->ocolor;
+  d->lwidth     = obj.d->lwidth;
+  d->cap        = obj.d->cap;
+  d->join       = obj.d->join;
+  d->brushStyle = obj.d->brushStyle;
+  d->fcolor     = obj.d->fcolor;
+  d->stroked    = obj.d->stroked;
+  d->filled     = obj.d->filled;
 }
 
 GStyle::~GStyle()
@@ -125,6 +128,16 @@ void GStyle::capStyle(Qt::PenCapStyle cap)
   d->cap = cap;
 }
 
+Qt::BrushStyle GStyle::brushStyle() const
+{
+  return d->brushStyle;
+}
+
+void GStyle::brushStyle(Qt::BrushStyle brushStyle)
+{
+  d->brushStyle = brushStyle;
+}
+
 bool GStyle::stroked() const
 {
   return d->stroked;
@@ -147,12 +160,13 @@ void GStyle::filled(bool filled)
 
 GStyle &GStyle::operator=(const GStyle &s)
 {
-  d->ocolor = s.d->ocolor;
-  d->lwidth = s.d->lwidth;
-  d->cap    = s.d->cap;
-  d->join   = s.d->join;
-  d->fcolor = s.d->fcolor;
-  d->stroked= s.d->stroked;
-  d->filled = s.d->filled;
+  d->ocolor     = s.d->ocolor;
+  d->lwidth     = s.d->lwidth;
+  d->cap        = s.d->cap;
+  d->join       = s.d->join;
+  d->brushStyle = s.d->brushStyle;
+  d->fcolor     = s.d->fcolor;
+  d->stroked    = s.d->stroked;
+  d->filled     = s.d->filled;
   return *this;
 }

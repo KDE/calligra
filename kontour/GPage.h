@@ -141,6 +141,7 @@ public:
   void changeStroked(bool stroked);
   void changeFilled(bool filled);
   void changeLinewidth(unsigned int lwidth);
+  void changeBrushStyle(Qt::BrushStyle);
 
 public slots:
 //  void objectChanged ();

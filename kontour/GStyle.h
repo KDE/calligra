@@ -60,6 +60,9 @@ public:
   Qt::PenCapStyle capStyle() const;
   void capStyle(Qt::PenCapStyle cap);
 
+  Qt::BrushStyle brushStyle() const;
+  void brushStyle(Qt::BrushStyle brushStyle);
+
   bool stroked() const;
   void stroked(bool stroked);
 

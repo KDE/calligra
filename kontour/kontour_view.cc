@@ -331,6 +331,7 @@ void KontourView::setupPanels()
   mPaintPanel = new PaintPanel(win1);
   connect(mPaintPanel, SIGNAL(changeFilled(bool)), this, SLOT(changeFilled(bool)));
   connect(mPaintPanel, SIGNAL(changePaintColor(const KoColor &)), this, SLOT(changePaintColor(const KoColor &)));
+  connect(mPaintPanel, SIGNAL(changeBrushStyle(Qt::BrushStyle)), this, SLOT(changeBrushStyle(Qt::BrushStyle)));
   connect(this, SIGNAL(changedStyle(const GStyle &)), mPaintPanel, SLOT(slotStyleChanged(const GStyle &)));
   win1->setWidget(mPaintPanel);
   win1->setResizeEnabled(false);
@@ -597,6 +598,15 @@ void KontourView::changeLinewidth(unsigned int lwidth)
       !activeDocument()->activePage()->selectionIsEmpty())
   {
     activeDocument()->activePage()->changeLinewidth(lwidth);
+  }
+}
+
+void KontourView::changeBrushStyle(Qt::BrushStyle bstyle)
+{
+  if(activeDocument() && activeDocument()->activePage() &&
+      !activeDocument()->activePage()->selectionIsEmpty())
+  {
+    activeDocument()->activePage()->changeBrushStyle(bstyle);
   }
 }
 

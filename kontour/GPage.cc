@@ -677,7 +677,20 @@ void GPage::changeFilled(bool filled)
 void GPage::changeLinewidth(unsigned int lwidth)
 {
   for(GObject *o = selection.first(); o != 0L; o = selection.next())
+  {
     o->changeOutlineWidth(lwidth);
+	o->calcBoundingBox();
+  }
+
+  updateHandle();
+}
+
+void GPage::changeBrushStyle(Qt::BrushStyle bstyle)
+{
+  for(GObject *o = selection.first(); o != 0L; o = selection.next())
+  {
+    o->changeBrushStyle(bstyle);
+  }
 
   updateHandle();
 }

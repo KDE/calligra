@@ -151,6 +151,7 @@ public:
   void changeStroked(bool stroked);
   void changeFilled(bool filled);
   void changeOutlineWidth(unsigned int lwidth);
+  void changeBrushStyle(Qt::BrushStyle bstyle);
 
   /**
    * Control points.

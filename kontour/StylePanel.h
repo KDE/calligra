@@ -41,6 +41,7 @@ public slots:
 signals:
   void changePaintColor(const KoColor &);
   void changeFilled(bool);
+  void changeBrushStyle(Qt::BrushStyle);
 
 private:
   QCheckBox *mFilled;

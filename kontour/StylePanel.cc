@@ -22,6 +22,7 @@
 
 #include "StylePanel.h"
 #include "GStyle.h"
+#include "BrushCells.h"
 
 #include <qlayout.h>
 #include <qgroupbox.h>
@@ -48,7 +49,13 @@ QTabWidget(parent, name)
   insertTab(paintColor, "Color");
   // TODO : add some content here :)
   insertTab(new QWidget(this), "Gradient");
-  insertTab(new QWidget(this), "Pattern");
+
+  QGroupBox *pattern = new QGroupBox(1, Qt::Vertical, this);
+  QBoxLayout *box2 = new QBoxLayout(pattern, QBoxLayout::Down);
+  BrushCells *brushCells = new BrushCells(pattern);
+  connect(brushCells, SIGNAL(brushChanged(Qt::BrushStyle)), this, SIGNAL(changeBrushStyle(Qt::BrushStyle)));
+  box2->addWidget(brushCells);
+  insertTab(pattern, "Pattern");
 
 }
 
