@@ -77,6 +77,8 @@ const QString BrushStyleName[] = {"no brush","100% fill pattern","94% fill patte
 				  "vertical lines","crossing lines","diagonal lines (/)","diagonal lines (\\)","diagonal crossing lines"};
 const QString LineTypeName[] = {"Horizontal","Vertical","Left/Top - Right/Bottom","Left/Bottom - Right/Top"};
 const QString LineEndName[] = {"Normal","Arrow","Square","Circle"};
+const QString PresSpeedName[] = {"Slow","Normal","Fast"};
+const QString YesNo[] = {"Yes","No"};
 
 /******************************************************************/
 /* Class: PVTimeTable                                             */

@@ -129,9 +129,15 @@ void PVTimeTable::paintCell(QPainter *painter,int row,int col)
 	{
 	  KPObject *kpobject = objList.at(row - 1);
 	  if (kpobject->getPresNum() == col)
-	    painter->fillRect(0,5,cellWidth(),cellHeight() - 10,green);
+	    {
+	      painter->fillRect(0,5,cellWidth(),cellHeight() - 10,green);
+	      painter->drawText((cellWidth() - fm.width(i18n("appear"))) / 2,(cellHeight() - fm.height()) / 2 + fm.ascent(),i18n("apper"));
+	    }
 	  else if (kpobject->getPresNum() < col)
-	    painter->fillRect(0,5,cellWidth(),cellHeight() - 10,red);
+	    {
+	      painter->fillRect(0,5,cellWidth(),cellHeight() - 10,red);
+	      painter->drawText((cellWidth() - fm.width(i18n("stay"))) / 2,(cellHeight() - fm.height()) / 2 + fm.ascent(),i18n("stay"));
+	    }
 	}
 
       painter->setPen(black);
@@ -374,6 +380,18 @@ void PresStructViewer::fillWithPageInfo(KPBackGround *_page,int _num)
 
   list->appendItem(i18n("Effect for changing to next page")); 
   list->changeItemPart(i18n(PageEffectName[static_cast<int>(_page->getPageEffect())]),
+		       list->count() - 1,1);
+
+  list->appendItem(i18n("Speed for screenpresentations")); 
+  list->changeItemPart(i18n(PresSpeedName[static_cast<int>(doc->getPresSpeed())]),
+		       list->count() - 1,1);
+
+  list->appendItem(i18n("Manual switching to next page")); 
+  list->changeItemPart(i18n(YesNo[static_cast<int>(!doc->spManualSwitch())]),
+		       list->count() - 1,1);
+
+  list->appendItem(i18n("Infinit loop")); 
+  list->changeItemPart(i18n(YesNo[static_cast<int>(!doc->spInfinitLoop())]),
 		       list->count() - 1,1);
 
   view->skipToPage(_num);
@@ -704,42 +722,49 @@ QString PresStructViewer::getColor(QColor _color)
 void PresStructViewer::slotStyle()
 {
   view->extraPenBrush();
+  fillWithObjInfo(lastSelected,doc->objectList()->findRef(lastSelected));
 }
 
 /*================================================================*/
 void PresStructViewer::slotRotate()
 {
   view->extraRotate();
+  fillWithObjInfo(lastSelected,doc->objectList()->findRef(lastSelected));
 }
 
 /*================================================================*/
 void PresStructViewer::slotShadow()
 {
   view->extraShadow();
+  fillWithObjInfo(lastSelected,doc->objectList()->findRef(lastSelected));
 }
 
 /*================================================================*/
 void PresStructViewer::slotAlign()
 {
   view->extraAlignObj();
+  fillWithObjInfo(lastSelected,doc->objectList()->findRef(lastSelected));
 }
 
 /*================================================================*/
 void PresStructViewer::slotEffect()
 {
   view->screenAssignEffect();
+  fillWithObjInfo(lastSelected,doc->objectList()->findRef(lastSelected));
 }
 
 /*================================================================*/
 void PresStructViewer::slotLower()
 {
   view->extraLower();
+  fillWithObjInfo(lastSelected,doc->objectList()->findRef(lastSelected));
 }
 
 /*================================================================*/
 void PresStructViewer::slotRaise()
 {
   view->extraRaise();
+  fillWithObjInfo(lastSelected,doc->objectList()->findRef(lastSelected));
 }
 
 /*================================================================*/
@@ -777,6 +802,7 @@ void PresStructViewer::slotChangeFilename()
       else
 	view->getPage()->chClip();
     }
+  fillWithObjInfo(lastSelected,doc->objectList()->findRef(lastSelected));
 }
 
 /*================================================================*/
