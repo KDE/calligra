@@ -20,7 +20,7 @@ class QDateTimeEditor : public QWidget
 {
 	Q_OBJECT
 public:
-	uint QDateTimeEditor::sectionCount() const;
+	uint sectionCount() const;
 	int  focusSection() const;
 	bool setFocusSection( int s );
 
@@ -66,6 +66,9 @@ private:
 };
 
 #ifdef KEXIDATETIMEEDITOR_P_IMPL
+int QNumberSection::selectionStart() const { return selstart; }
+int QNumberSection::selectionEnd() const { return selend; }
+
 uint QDateTimeEditorPrivate::sectionCount() const { return (uint)sections.count(); }
 
 int QDateTimeEditorPrivate::focusSection() const { return focusSec; }
