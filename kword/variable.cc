@@ -144,7 +144,7 @@ QDomElement KWPgNumVariable::save( QDomDocument& doc )
 
     QDomElement pgnum = doc.createElement( "PGNUM" );
     var.appendChild( pgnum );
-    pgnum.setAttribute( "value", pgNum );
+    pgnum.setAttribute( "value", (int)pgNum );
 
     return var;
 }

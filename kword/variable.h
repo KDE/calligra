@@ -18,12 +18,13 @@
 
 #include <qstring.h>
 #include <qdatetime.h>
+#include <qdom.h>
 
 class KWordDocument;
 class KWVariable;
 class KWParag;
 
-enum VariableType {VT_DATE_FIX = 0, VT_DATE_VAR = 1, VT_TIME_FIX = 2, VT_TIME_VAR = 3, VT_PGNUM = 4, 
+enum VariableType {VT_DATE_FIX = 0, VT_DATE_VAR = 1, VT_TIME_FIX = 2, VT_TIME_VAR = 3, VT_PGNUM = 4,
 		   VT_NUMPAGES = 5, VT_NONE};
 enum VariableFormatType {VFT_DATE = 0, VFT_TIME = 1, VFT_PGNUM = 2, VFT_NUMPAGES = 3};
 
@@ -140,8 +141,8 @@ public:
     QString getText()
     { return varFormat->convert( this ); }
 
-    virtual void setInfo( int _frameSetNum, int _frameNum, int _pageNum, KWParag *_parag ) { 
-	frameSetNum = _frameSetNum; frameNum = _frameNum; pageNum = _pageNum; parag = _parag; 
+    virtual void setInfo( int _frameSetNum, int _frameNum, int _pageNum, KWParag *_parag ) {
+	frameSetNum = _frameSetNum; frameNum = _frameNum; pageNum = _pageNum; parag = _parag;
     }
 
     virtual void recalc() {}
