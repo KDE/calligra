@@ -1256,7 +1256,7 @@ bool OOWriterWorker::makeTable(const FrameAnchor& anchor )
     kdDebug(30520) << "Table width: " << tableWidth << endl;
 
     // An inlined table, is an "as-char" text-box
-    *m_streamOut << "<draw:text-box"; // ### TODO: style name
+    *m_streamOut << "<draw:text-box";
     *m_streamOut << " style:name=\"" << escapeOOText( automaticFrameStyle ) << "\"";
     *m_streamOut << " draw:name=\"" << escapeOOText( translatedFrameName ) << "\" text:anchor-type=\"as-char\"";
     *m_streamOut << " svg:width=\"" << tableWidth << "pt\""; // ### TODO: any supplement to the width?
@@ -1276,7 +1276,7 @@ bool OOWriterWorker::makeTable(const FrameAnchor& anchor )
     m_contentAutomaticStyles += " style:name=\"" + escapeOOText( automaticFrameStyle ) + "\"";
     m_contentAutomaticStyles += " style:family=\"graphics\"";
     m_contentAutomaticStyles += ">\n";
-    m_contentAutomaticStyles += "   <style:properties ";
+    m_contentAutomaticStyles += "   <style:properties "; // ### TODO
     m_contentAutomaticStyles += " fo:padding=\"0pt\" fo:border=\"none\"";
     m_contentAutomaticStyles += " fo:margin-left=\"0pt\"";
     m_contentAutomaticStyles += " fo:margin-top=\"0pt\"";
