@@ -236,6 +236,7 @@ bool KivioDiaStencilSpawner::load(const QString &file)
 							it++;
 							it++;
 						}
+						*/
 						else if((*it).contains('M') || (*it).contains('m'))
 						{
 							QString x, y;
@@ -245,7 +246,7 @@ bool KivioDiaStencilSpawner::load(const QString &file)
 							y = (*it);						
 							calculateDimensions(x.toFloat(), y.toFloat());	
 						}
-						*/
+						
 					}
 				}
 			}
@@ -275,7 +276,7 @@ bool KivioDiaStencilSpawner::load(const QString &file)
 	}
 
 		// scale the shape to be close to 30 by 30
-	m_scale = 30.0/(m_highesty - m_lowesty);
+	m_scale = 50.0/(m_highesty - m_lowesty);
 
 		
 	// Add KivioConnectorTarget's
@@ -469,9 +470,9 @@ bool KivioDiaStencilSpawner::load(const QString &file)
 						{
 							// set last point
 							it++;
-							l = QStringList::split(",",(*it));
-							lastPointX = (*(l.at(0))).toFloat();
-							lastPointY = (*(l.at(1))).toFloat();
+							lastPointX = (*(it)).toFloat();
+							it++;
+							lastPointY = (*(it)).toFloat();
 						}
 						else if ( (*it).contains('l') || (*it).contains( 'L'))
 						{
