@@ -8,13 +8,15 @@
 **
 *****************************************************************************/
 
+
 #include <ctype.h>
 
 #include "parser.h"
 
+
 ParsedArray::ParsedArray( int row, int col )
 {
-    data = new Data[col*row];
+    data = new Data[col * row];
     numCols = col;
     numRows = row;
     current = 0;
@@ -25,54 +27,38 @@ ParsedArray::~ParsedArray()
     delete[] data;
 }
 
+
 QString ParsedArray::rawText(int row, int col)
 {
-    return data[idx(row,col)].text;
-}
-void ParsedArray::setText( int row, int col, QString s ) //shallow copy (!?)
-{
-    data[idx(row,col)].text = s;
+    return data[idx(row, col)].text;
 }
 
-#if 0
-int ParsedArray::toInt( bool *ok )	const
+
+void ParsedArray::setText( int row, int col, QString s ) //shallow copy (!?)
 {
-    return (int) toDouble( ok ); //###
+    data[idx(row, col)].text = s;
 }
-#endif
 
 
 ParsedArray::Type ParsedArray::type( int row, int col )
 {
-    if ( !isValid(row,col) )
+    if ( !isValid(row, col) )
 	return Error;
-    if ( data[idx(row,col)].text.isNull() )
+
+    if ( data[idx(row, col)].text.isNull() )
 	return Unknown;
-    return data[idx(row,col)].type;
-}
 
-double ParsedArray::doubleVal( int row, int col )
-{
-    return data[idx(row,col)].val;
-}
-
-
-bool ParsedArray::recalc( int row, int col )
-{
-    index = 0;
-    current = &data[idx(row,col)];
-    current->type = parseExpr( current->val );
-
-    return (current->type == Number) && !get_c().unicode();
+    return data[idx(row, col)].type;
 }
 
 
 QString ParsedArray::stringVal( int row, int col )
 {
-    Data &d = data[idx(row,col)];
+    Data &d = data[idx(row, col)];
 
     if ( d.type == Number ) {
-	QString str;
+	QString  str;
+
 	str.setNum(d.val);
 	//str.detach();
 	return str;
@@ -81,17 +67,24 @@ QString ParsedArray::stringVal( int row, int col )
 }
 
 
+double ParsedArray::doubleVal( int row, int col )
+{
+    return data[idx(row, col)].val;
+}
+
+
 QString ParsedArray::calc( int row, int col, bool *ok )
 {
 
     index = 0;
-    current = &data[idx(row,col)];
+    current = &data[idx(row, col)];
     current->type = parseExpr( current->val );
 
     bool done = (current->type == Number) && !get_c().unicode();
 
     if ( ok )
 	*ok = done;
+
     if ( done ) {
 	QString str;
 	str.setNum(current->val);
@@ -102,13 +95,29 @@ QString ParsedArray::calc( int row, int col, bool *ok )
 }
 
 
+bool ParsedArray::recalc( int row, int col )
+{
+    index = 0;
+    current = &data[idx(row, col)];
+    current->type = parseExpr( current->val );
+
+    return (current->type == Number) && !get_c().unicode();
+}
+
+
+// ----------------------------------------------------------------
+//                        Expression parser
+
+
+// Get the next character or EndOfString (EOS).
+
 QChar ParsedArray::get_c()
 {
-    while ( index<(int)current->text.length() &&  QChar(current->text[index]).isSpace() )
-	    //isspace( QChar(current->text[index]) ) )
+    while ( index < (int) current->text.length() 
+	    && QChar(current->text[index]).isSpace() )
 	index++;
 
-    if ( index<(int)current->text.length() ) {
+    if ( index < (int) current->text.length() ) {
 	//debug ("get_c %d,%c,%d", index, contents[index], contents[index]);
 	return QChar(current->text[index++]).unicode();
     } else {
@@ -117,38 +126,47 @@ QChar ParsedArray::get_c()
     }
 }
 
+
+// Put the last character back into the string.
+
 void ParsedArray::putback()
 {
-    if (index>0) index--;
+    if (index > 0) index--;
 }
 
 
-
+// Parse an expression and return the calculated value of it through
+// the 'res' reference.
 
 ParsedArray::Type ParsedArray::parseExpr( double &res )
 {
-    Type t = parseTerm(res);
+    Type  t = parseTerm(res);
+
     if ( t != Number )
 	return t;
 
-    QChar ch=get_c();
-    while ( ch.unicode() ){
+    QChar  ch = get_c();
+    while ( ch.unicode() ) {
 	if ( ch.unicode() != '+' && ch.unicode() != '-' ) {
 	    putback();
 	    return Number;
 	}
+
 	double x;
 	t = parseTerm(x);
 	if ( t != Number )
 	    return String;
+
 	if ( ch.unicode() == '+' )
 	    res += x;
 	else
 	    res -= x;
         ch = get_c();
     }
+
     return Number;
 }
+
 
 ParsedArray::Type ParsedArray::parseTerm( double &res )
 {
@@ -175,16 +193,20 @@ ParsedArray::Type ParsedArray::parseTerm( double &res )
             else
                 return Error;
         }
+
         ch=get_c();
     }
+
     return Number;
 }
+
 
 ParsedArray::Type ParsedArray::parseFactor( double &res )
 {
     QChar ch = get_c();
     if ( ch.unicode() == '(' ) {
-	Type t = parseExpr( res );
+	Type  t = parseExpr( res );
+
 	if ( t != Number )
 	    return String;
 	if ( get_c().unicode() == ')' )
@@ -203,6 +225,7 @@ ParsedArray::Type ParsedArray::parseFactor( double &res )
 	return parseNumber(res);
     }
 }
+
 
 ParsedArray::Type ParsedArray::parseNumber( double &res )
 {

@@ -1,3 +1,10 @@
+2004-10-06  Inge Wallin  <inge@lysator.liu.se>
+
+	* Cleanup of the following files.  Made the code more readable,
+	fixed indentation, added some comments:
+	- parser.h
+	- parser.cc
+
 2004-10-04  Inge Wallin  <inge@lysator.liu.se>
 
 	* Cleaned the following files a little.  Made the code more
