@@ -5,7 +5,7 @@ SUBDIRS = share filter xmlutils standalone koffice pics doc
 # have all needed files, that a GNU package needs
 AUTOMAKE_OPTIONS = foreign
 
-EXTRA_DIST = README sample.wmf sample2.wmf arrow01.wmf
+EXTRA_DIST = README sample.wmf sample2.wmf arrow01.wmf cleanup_ps
 
 messages:
 	$(XGETTEXT) -C -ktranslate -ki18n -x$(includedir)/kde.pot */*.cc && mv messages.po ../po/killustrator.pot
