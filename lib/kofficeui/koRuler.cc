@@ -606,8 +606,12 @@ void KoRuler::mouseMoveEvent( QMouseEvent *e )
 			    layout.left = layout.mmLeft = cPOINT_TO_MM( mx + diffx );
 			    layout.inchLeft = cPOINT_TO_INCH( mx + diffx );
 			    layout.ptLeft = mx + diffx;
-			    d->oldMx = e->x();
-			    d->oldMy = e->y();
+			    if( i_first > right-left-10 )
+				i_first=right-left-10;
+			    if( i_left > right-left-10 )
+				i_left=right-left-10;			
+			    d->oldMx = mx;
+			    d->oldMy = my;
 			    p.end();
 			    repaint( false );
 			}
@@ -624,8 +628,12 @@ void KoRuler::mouseMoveEvent( QMouseEvent *e )
 			    layout.right = layout.mmRight = cPOINT_TO_MM( static_cast<int>( pw - ( mx + diffx ) ) );
 			    layout.ptRight = pw - ( mx + diffx );
 			    layout.inchRight = cPOINT_TO_INCH( static_cast<int>( pw - ( mx + diffx ) ) );
-			    d->oldMx = e->x();
-			    d->oldMy = e->y();
+			    if( i_first > right-left-10 )
+				i_first=right-left-10;
+			    if( i_left > right-left-10 )
+				i_left=right-left-10;
+			    d->oldMx = mx;
+			    d->oldMy = my;
 			    repaint( false );
 			}
 		    } break;
@@ -642,8 +650,8 @@ void KoRuler::mouseMoveEvent( QMouseEvent *e )
 			    } else
 				return;
 			    i_first = mx - left;
-			    d->oldMx = e->x();
-			    d->oldMy = e->y();
+			    d->oldMx = mx;
+			    d->oldMy = my;
 			    repaint( false );
 			}
 		    } break;
@@ -666,8 +674,8 @@ void KoRuler::mouseMoveEvent( QMouseEvent *e )
 				i_first=0;
 			    else if( i_first > right-left-10 )
 				i_first=right-left-10;
-			    d->oldMx = e->x();
-			    d->oldMy = e->y();
+			    d->oldMx = mx;
+			    d->oldMy = my;
 			    repaint( false );
 			}
 		    } break;
@@ -682,7 +690,7 @@ void KoRuler::mouseMoveEvent( QMouseEvent *e )
 					d->tabList.at( d->currTab )->ptPos + ( frameStart == -1 ? static_cast<int>( layout.ptLeft ) :
 									       frameStart ),
 					d->canvas->height() );
-			    d->tabList.at( d->currTab )->ptPos += ( e->x() - d->oldMx );
+			    d->tabList.at( d->currTab )->ptPos += ( mx - d->oldMx );
 			    d->tabList.at( d->currTab )->mmPos = cPOINT_TO_MM( d->tabList.at( d->currTab )->ptPos );
 			    d->tabList.at( d->currTab )->inchPos = cPOINT_TO_INCH( d->tabList.at( d->currTab )->ptPos );
 			    p.drawLine( d->tabList.at( d->currTab )->ptPos + ( frameStart == -1 ? static_cast<int>( layout.ptLeft ) :
@@ -691,8 +699,8 @@ void KoRuler::mouseMoveEvent( QMouseEvent *e )
 									       frameStart ),
 					d->canvas->height() );
 			    p.end();
-			    d->oldMx = e->x();
-			    d->oldMy = e->y();
+			    d->oldMx = mx;
+			    d->oldMy = my;
 			    repaint( false );
 			}
 		    } break;
@@ -726,8 +734,8 @@ void KoRuler::mouseMoveEvent( QMouseEvent *e )
 			    layout.top = layout.mmTop = cPOINT_TO_MM( my + diffy );
 			    layout.ptTop = my + diffy;
 			    layout.inchTop = cPOINT_TO_INCH( my + diffy );
-			    d->oldMx = e->x();
-			    d->oldMy = e->y();
+			    d->oldMx = mx;
+			    d->oldMy = my;
 			    repaint( false );
 			}
 		    } break;
@@ -743,8 +751,8 @@ void KoRuler::mouseMoveEvent( QMouseEvent *e )
 			    layout.bottom = layout.mmBottom = cPOINT_TO_MM( static_cast<int>( ph - ( my + diffy ) ) );
 			    layout.ptBottom = ph - ( my + diffy );
 			    layout.inchBottom = cPOINT_TO_INCH( static_cast<int>( ph - ( my + diffy ) ) );
-			    d->oldMx = e->x();
-			    d->oldMy = e->y();
+			    d->oldMx = mx;
+			    d->oldMy = my;
 			    repaint( false );
 			}
 		    } break;
@@ -754,8 +762,8 @@ void KoRuler::mouseMoveEvent( QMouseEvent *e )
 	} break;
     }
 
-    d->oldMx = e->x();
-    d->oldMy = e->y();
+    d->oldMx = mx;
+    d->oldMy = my;
 }
 
 /*================================================================*/
