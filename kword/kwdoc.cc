@@ -529,7 +529,7 @@ void KWDocument::recalcFrames()
             int even = 0, odd = 0;
             for ( int l = 0; l < m_pages; l++ ) {
                 if ( ( ( l + 1 ) / 2 ) * 2 != l + 1 ) {
-                    kdDebug() << "KWDocument::recalcFrames considering page " << l << "(odd)" << endl;
+                    //kdDebug() << "KWDocument::recalcFrames considering page " << l << "(odd)" << endl;
                     odd++;
                     if ( static_cast<int>( oddHeader->getCurrent() ) <
                          static_cast<int>( oddHeader->getNumFrames() ) ) {
@@ -551,7 +551,7 @@ void KWDocument::recalcFrames()
                         oddHeader->addFrame( frame );
                     }
                 } else {
-                    kdDebug() << "KWDocument::recalcFrames considering page " << l << "(even)" << endl;
+                    //kdDebug() << "KWDocument::recalcFrames considering page " << l << "(even)" << endl;
                     even++;
                     if ( static_cast<int>( evenHeader->getCurrent() ) <
                          static_cast<int>( evenHeader->getNumFrames() ) ) {
