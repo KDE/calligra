@@ -162,7 +162,6 @@ void VColorDlg::updateCMYKColorPreview()
 	m_Color->setColorSpace( VColor::cmyk );
 	m_Color->setValues( &c, &m, &y, &k );
 	m_Color->setOpacity( op );
-	// TODO: Create preview of CMYK color (VColor::toQColor() doesn't suppor this yet)
 	mCMYKColorPreview->setColor( m_Color->toQColor() );
 }
 
