@@ -18,15 +18,23 @@ class KDualColorButton;
 class VToolContainer : public QToolBar, public KShared
 {
 	Q_OBJECT
+
 public:
-	static VToolContainer *instance( KarbonPart *part, KoView* parent = 0L, const char* name = 0L );
+	static VToolContainer* instance( KarbonPart* part, KoView* parent = 0L,
+		const char* name = 0L );
 	~VToolContainer();
+
 	QButtonGroup *btngroup;
 	QButtonGroup *dlggroup;
 	KDualColorButton *m_dualColorButton;
 
 private:
-	enum ButtonChoice { Select, Scale, Rotate, Shear, Ellipse, Rectangle, Roundrect, Polygon, Star, Sinus, Spiral, Text };
+	enum ButtonChoice
+	{
+		Select, Scale, Rotate, Shear, Ellipse, Rectangle,
+		Roundrect, Polygon, Star, Sinus, Spiral, Text
+	};
+
 	enum DlgChoice { Outline, SolidFill, Gradient };
 
 	static QPtrDict< VToolContainer > m_containers;
@@ -49,8 +57,9 @@ signals:
 	void textToolActivated();
 	void solidFillActivated();
 	void strokeActivated();
-	void strokeColorChanged( const QColor & );
-	void fillColorChanged( const QColor & );
+	void strokeColorChanged( const QColor& );
+	void fillColorChanged( const QColor& );
 };
 
 #endif
+

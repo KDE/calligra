@@ -5,10 +5,12 @@ INCLUDES = $(KOFFICE_INCLUDES) $(KOTEXT_INCLUDES) \
 	-I$(srcdir)/tools \
 	-I$(srcdir)/commands \
 	-I$(srcdir)/ui \
+	-I$(srcdir)/dialogs \
+	-I$(srcdir)/widgets \
 	-I$(srcdir)/render \
 	$(all_includes)
 
-SUBDIRS = core visitors ui commands tools render . data pics
+SUBDIRS = core visitors widgets ui commands tools render . data pics
 
 bin_PROGRAMS = karbon
 lib_LTLIBRARIES = \
@@ -27,7 +29,8 @@ libkarbonpart_la_LIBADD = $(LIB_KOFFICEUI) $(LIB_KOTEXT) \
 	commands/libkarboncommands.la \
 	core/libkarboncore.la \
 	visitors/libkarbonvisitors.la \
-	render/libvpainter.la
+	render/libvpainter.la \
+	widgets/libkarbonwidgets.la
 
 libkarbonpart_la_METASOURCES = AUTO
 

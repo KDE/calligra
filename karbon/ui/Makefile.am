@@ -3,6 +3,7 @@ INCLUDES = $(KOFFICE_INCLUDES) \
 	-I$(srcdir)/../core \
 	-I$(srcdir)/../commands \
 	-I$(srcdir)/../tools \
+	-I$(srcdir)/../widgets \
 	$(all_includes)
 
 noinst_LTLIBRARIES = \
@@ -16,13 +17,11 @@ noinst_HEADERS = \
 	vcdlg_sinus.h \
 	vcdlg_spiral.h \
 	vcdlg_star.h \
-	vcolorslider.h \
 	vmdlg_insertknots.h \
 	vmdlg_polygonize.h \
 	vmdlg_solidfill.h \
 	vmdlg_stroke.h \
-	vmpanel_color.h \
-	vtoolcontainer.h
+	vmpanel_color.h
 
 libkarbonui_la_SOURCES = \
 	dummy.cc \
@@ -33,13 +32,11 @@ libkarbonui_la_SOURCES = \
 	vcdlg_sinus.cc \
 	vcdlg_spiral.cc \
 	vcdlg_star.cc \
-	vcolorslider.cc \
 	vmdlg_insertknots.cc \
 	vmdlg_polygonize.cc \
 	vmdlg_solidfill.cc \
 	vmdlg_stroke.cc \
-	vmpanel_color.cc \
-	vtoolcontainer.cc
+	vmpanel_color.cc
 
 libkarbonui_la_METASOURCES = \
 	AUTO

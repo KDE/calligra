@@ -1,3 +1,6 @@
+-	mirror coordinate-system so origin is bottom-left
+-	eps-filter cannot handle filenames with spaces. look at kdelibs/kio/kio/krun.h for
+	a solution
 -	rotate/scale/shear tool dont work
 -	optimize boundingbox: cache in vsegmentlist (+ vsegment ?) and apply affine
 	trafos (dont recalculate in that case) to them too
@@ -6,7 +9,7 @@
 -	painting (NotROP) while shape creation isnt good. creation should instead
 	insert a temporary object (state "edit") right from the start.
 	other vobjects shouldnt repaint if they didnt change put just blit their pixmap-cache.
--	mirror coordinate-system so origin is bottom-left
 -	add validators to all tool-dialog input-fields
--	examine the problem with non closed paths
+-	examine the problem with non closed paths (polygonize combined.karbon for example
+	to make the inner circles rectangles)
 -	implement gradients after libart code reorganisations (Rob)
