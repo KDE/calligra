@@ -277,9 +277,41 @@ bool OpenCalcExport::exportSettings( KoStore * store, const KSpreadDoc * ksdoc )
   {
       KSpreadCanvas * canvas = view->canvasWidget();
       activeTable = canvas->activeTable()->tableName();
+      // save current sheet selection before to save marker, otherwise current pos is not saved
+      view->saveCurrentSheetSelection();
   }
   attribute.appendChild( doc.createTextNode( activeTable ) );
   mapItem.appendChild( attribute );
+
+  QDomElement configmaped = doc.createElement( "config:config-item-map-named" );
+  configmaped.setAttribute( "config:name","Tables" );
+
+  QPtrListIterator<KSpreadSheet> it( ksdoc->map()->tableList() );
+  for( ; it.current(); ++it )
+  {
+      QPoint marker;
+      if ( view )
+      {
+          marker = view->markerFromSheet( *it );
+      }
+      QDomElement tmpItemMapNamed = doc.createElement( "config:config-item-map-entry" );
+      tmpItemMapNamed.setAttribute( "config:name", ( *it )->tableName() );
+
+      QDomElement sheetAttribute = doc.createElement( "config:config-item" );
+      sheetAttribute.setAttribute( "config:name", "CursorPositionX" );
+      sheetAttribute.setAttribute( "config:type", "int" );
+      sheetAttribute.appendChild( doc.createTextNode( QString::number(marker.x() )  ) );
+      tmpItemMapNamed.appendChild( sheetAttribute );
+
+      sheetAttribute = doc.createElement( "config:config-item" );
+      sheetAttribute.setAttribute( "config:name", "CursorPositionY" );
+      sheetAttribute.setAttribute( "config:type", "int" );
+      sheetAttribute.appendChild( doc.createTextNode( QString::number(marker.y() )  ) );
+      tmpItemMapNamed.appendChild( sheetAttribute );
+
+      configmaped.appendChild( tmpItemMapNamed );
+  }
+  mapItem.appendChild( configmaped );
 
 
 
