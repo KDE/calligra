@@ -57,11 +57,23 @@ public:
                               const QString &config=QString::null);
 
 protected slots:
-    // This slot saves a Picture to the KOffice tar storage.
+    // This slot saves an embedded Picture to the KOffice tar storage.
     void slotSavePic(
         const QString &nameIN,
         QString &storageId,
         const QString &extension,
+        unsigned int length,
+        const char *data);
+
+    // This slot saves an embedded object to the KOffice tar storage. Note that
+    // this only applies to objects within an OLE stream (like embedded WMFs)
+    // that we want to handle as parts rather than using slotSavePic() since OLE
+    // objects are handled by us, and a filter need only call slotPart().
+    void slotSavePart(
+        const QString &nameIN,
+        QString &storageId,
+        const QString &extension,
+        const char *mimeType,
         unsigned int length,
         const char *data);
 
@@ -97,6 +109,7 @@ private:
 
     myFile olefile;
     int numPic;                      // for the "unique name generation"
+    int m_nextPart;
     KLaola *docfile;                 // used to split up the OLE 2 file
     KoStore *store;               // KOffice Storage structure
     bool success;

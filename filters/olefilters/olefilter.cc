@@ -23,8 +23,12 @@ DESCRIPTION
    its child objects have been processed.
 */
 
+#include <koFilterManager.h>
+#include <koQueryTrader.h>
+#include <ktempfile.h>
 #include <olefilter.h>
 #include <olefilter.moc>
+#include <unistd.h>
 
 OLEFilter::OLEFilter(KoFilter *parent, const char *name) :
                      KoFilter(parent, name) {
@@ -33,6 +37,7 @@ OLEFilter::OLEFilter(KoFilter *parent, const char *name) :
     store=0L;
     success=true;
     numPic=0;
+    m_nextPart = 0;
 }
 
 OLEFilter::~OLEFilter() {
@@ -101,6 +106,66 @@ const bool OLEFilter::filter(const QString &fileIn, const QString &fileOut,
     delete store;
     store=0L;
     return success;
+}
+
+void OLEFilter::slotSavePart(
+    const QString &nameIN,
+    QString &storageId,
+    const QString &extension,
+    const char *mimeType,
+    unsigned int length,
+    const char *data)
+{
+    if(nameIN.isEmpty())
+        return;
+
+    QString key = m_path + nameIN;
+    QString id;
+    QMap<QString, QString>::Iterator it = partMap.find(key);
+
+    if (it != partMap.end())
+    {
+        // The key is already here - return the part id.
+        id = partMap[key];
+    }
+    else
+    {
+        KoFilterManager *mgr = KoFilterManager::self();
+        KTempFile tempFile(QString::null, "." + extension);
+
+        // Save the data supplied into a temporary file, then run the filter
+        // on it.
+
+        tempFile.file()->writeBlock(data, length);
+        QString result = mgr->import(tempFile.name(), mimeType, 0L );
+        unlink(tempFile.name().local8Bit());
+
+        // Now fetch out the root element from the resulting KoStore.
+
+        KoStore storedPart(result, KoStore::Read);
+        storedPart.open("root");
+        length = storedPart.size();
+    
+        // It's not here, so let's generate one.
+        id = m_path + '/' + QString::number(m_nextPart);
+        m_nextPart++;
+        partMap.insert(key, id);
+        mimeMap.insert(key, mimeType);
+        if(!store->open(id))
+        {
+            success = false;
+            kdError(30510) << "OLEFilter::slotSavePart(): Could not open KoStore!" << endl;
+            return;
+        }
+        // Write it to the gzipped tar file
+        bool ret = store->write(storedPart.read(length));
+        if (!ret)
+            kdError(30510) << "OLEFilter::slotSavePart(): Could write to KoStore!" << endl;
+        unlink(result.local8Bit());
+        store->close();
+    }
+    //storageId = QFile::encodeName(id);
+    storageId = (id);
 }
 
 void OLEFilter::slotSavePic(
@@ -216,6 +281,9 @@ void OLEFilter::convert(const QString &parentPath, const QString &dirname) {
                 else
                     convert(parentPath + '/' + QString::number(part), node->name);
                 part++;
+
+                // Track the last part number used at this level.
+                m_nextPart = part;
                 docfile->leaveDir();
             }
         }
@@ -330,6 +398,11 @@ void OLEFilter::connectCommon(FilterBase **myFilter) {
         SIGNAL(signalSavePic(const QString &, QString &, const QString &, unsigned int, const char *)),
         this,
         SLOT(slotSavePic(const QString &, QString &, const QString &, unsigned int, const char *)));
+    QObject::connect(
+        *myFilter,
+        SIGNAL(signalSavePart(const QString &, QString &, const QString &, const char *, unsigned int, const char *)),
+        this,
+        SLOT(slotSavePart(const QString &, QString &, const QString &, const char *, unsigned int, const char *)));
     QObject::connect(*myFilter, SIGNAL(signalPart(const char *, QString &, QString &)),
                      this, SLOT(slotPart(const char *, QString &, QString &)));
     QObject::connect(*myFilter, SIGNAL(signalGetStream(const int &, myFile &)), this,
