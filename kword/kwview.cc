@@ -267,6 +267,7 @@ KWView::~KWView()
         // Abort any find/replace
         m_findReplace->abort();
     }
+    deselectAllFrames(); // don't let resizehandles hang around
     // Delete gui while we still exist ( it needs documentDeleted() )
     delete m_gui;
     delete m_personalShortCut;
