@@ -50,7 +50,7 @@ KexiPropertyEditor::KexiPropertyEditor(QWidget *parent, bool returnToAccept, con
 
 	connect(this, SIGNAL(selectionChanged(QListViewItem *)), this, SLOT(slotClicked(QListViewItem *)));
 	connect(header(), SIGNAL(sizeChange(int, int, int)), this, SLOT(slotColumnSizeChanged(int, int, int)));
-	connect(header(), SIGNAL(clicked(int)), this, SLOT(clearEditor()));
+	connect(header(), SIGNAL(clicked(int)), this, SLOT(moveEditor()));
 	connect(header(), SIGNAL(sectionHandleDoubleClicked (int)), this, SLOT(slotColumnSizeChanged(int)));
 
 	m_defaults = new KPushButton(this);
@@ -309,9 +309,15 @@ KexiPropertyEditor::resetItem()
 }
 
 void
-KexiPropertyEditor::clearEditor()
+KexiPropertyEditor::moveEditor()
 {
-	reset(true);
+	if(m_currentEditor)
+		m_currentEditor->move(m_currentEditor->x(), itemPos(m_editItem));
+	if(m_defaults->isVisible())
+	{
+		QPoint p = viewport()->mapToParent(QPoint(0, itemPos(m_editItem)) );
+		m_defaults->move(m_defaults->x(), p.y());
+	}
 }
 
 void

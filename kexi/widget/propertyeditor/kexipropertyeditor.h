@@ -48,7 +48,7 @@ class KEXIPROPERTYEDITOR_EXPORT KexiPropertyEditor : public KListView
 	public slots:
 		void	slotClicked(QListViewItem *i);
 		void    resetItem();
-		void    clearEditor();
+		void    moveEditor();
 
 	protected slots:
 		void	slotEditorAccept(KexiPropertySubEditor *editor);

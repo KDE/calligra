@@ -186,12 +186,12 @@ PropertyEditorBool::setState(bool state)
 	if(state)
 	{
 		m_toggle->setIconSet(QIconSet(SmallIcon("button_ok")));
-		m_toggle->setTextLabel(i18n("True"));
+		m_toggle->setTextLabel(i18n("Yes"));
 	}
 	else
 	{
 		m_toggle->setIconSet(QIconSet(SmallIcon("button_cancel")));
-		m_toggle->setTextLabel(i18n("False"));
+		m_toggle->setTextLabel(i18n("No"));
 	}
 
 	emit changed(this);

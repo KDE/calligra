@@ -160,12 +160,12 @@ KexiPropertyEditorItem::paintCell(QPainter *p, const QColorGroup & cg, int colum
 				if(m_value.toBool())
 				{
 					p->drawPixmap(margin, height()/2 -8, SmallIcon("button_ok"));
-					p->drawText(QRect(margin+20,0,width,height()-1), Qt::AlignVCenter, i18n("True"));
+					p->drawText(QRect(margin+20,0,width,height()-1), Qt::AlignVCenter, i18n("Yes"));
 				}
 				else
 				{
 					p->drawPixmap(margin, height()/2 -8, SmallIcon("button_cancel"));
-					p->drawText(QRect(margin+20,0,width,height()-1), Qt::AlignVCenter, i18n("False"));
+					p->drawText(QRect(margin+20,0,width,height()-1), Qt::AlignVCenter, i18n("No"));
 				}
 				break;
 			}
