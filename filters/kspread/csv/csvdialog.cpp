@@ -10,7 +10,7 @@
 
 #include <kapp.h>
 #include <klocale.h>
-#include <kdebug.h>
+
 CSVDialog::CSVDialog(QWidget* parent, QByteArray& fileArray, const QString seperator)
     : KDialogBase(parent, 0, true, QString::null, Ok|Cancel, No, true),
       m_startline(0),
@@ -51,7 +51,8 @@ CSVDialog::~CSVDialog()
 void CSVDialog::fillTable()
 {
     int row, column;
-    enum { S_START, S_QUOTED_FIELD, S_MAYBE_END_OF_QUOTED_FIELD, S_NORMAL_FIELD } state = S_START;
+    enum { S_START, S_QUOTED_FIELD, S_MAYBE_END_OF_QUOTED_FIELD, S_END_OF_QUOTED_FIELD,
+           S_MAYBE_NORMAL_FIELD, S_NORMAL_FIELD } state = S_START;
 
     QChar x;
     QString field = "";
@@ -64,70 +65,132 @@ void CSVDialog::fillTable()
     QTextStream inputStream(m_fileArray, IO_ReadOnly);
     inputStream.setEncoding(QTextStream::Locale);
 
-    while (!inputStream.atEnd())
-    {
+    while (!inputStream.atEnd()) {
         inputStream >> x; // read one char
 
         if (x == '\r') inputStream >> x; // eat '\r', to handle DOS/LOSEDOWS files correctly
+
         switch (state)
         {
-            case S_START :
-                if (x == m_textquote) state = S_QUOTED_FIELD;
-                else if (x == m_delimiter)
-                    ++column;
-                else if (x == '\n')  {
+        case S_START :
+            if (x == m_textquote)
+            {
+                state = S_QUOTED_FIELD;
+            }
+            else if (x == m_delimiter)
+            {
+                ++column;
+            }
+            else if (x == '\n')
+            {
+                ++row;
+                column = 1;
+            }
+            else
+            {
+                field += x;
+                state = S_MAYBE_NORMAL_FIELD;
+            }
+            break;
+        case S_QUOTED_FIELD :
+            if (x == m_textquote)
+            {
+                state = S_MAYBE_END_OF_QUOTED_FIELD;
+            }
+            else if (x == '\n')
+            {
+                setText(row - m_startline, column, field);
+                field = "";
+                if (x == '\n')
+                {
                     ++row;
-                    column=1;
+                    column = 1;
                 }
                 else
                 {
-                    field += x;
-                    state = S_NORMAL_FIELD;
+                    ++column;
                 }
-                break;
-            case S_QUOTED_FIELD :
-                if (x == m_textquote) state = S_MAYBE_END_OF_QUOTED_FIELD;
-                else field += x;
-                break;
-            case S_MAYBE_END_OF_QUOTED_FIELD :
-                if (x == '"')
+                state = S_START;
+            }
+            else
+            {
+                field += x;
+            }
+            break;
+        case S_MAYBE_END_OF_QUOTED_FIELD :
+            if (x == m_textquote)
+            {
+                field += x;
+                state = S_QUOTED_FIELD;
+            }
+            else if (x == m_delimiter || x == '\n')
+            {
+                setText(row - m_startline, column, field);
+                field = "";
+                if (x == '\n')
                 {
-		  field += x;
-                    state = S_QUOTED_FIELD;
-                } else if (x == m_delimiter || x == '\n')
-                {
-                    setText(row - m_startline, column, field);
-                    field = "";
-                    if (x == '\n') {
-                        ++row;
-                        column=1;
-                    }
-                    else
-                        ++column;
-                    state = S_START;
-                } else
-                { // This field wasn't quoted. It was "blah"something
-                    state = S_NORMAL_FIELD;
-                    field.prepend(m_textquote);
-                    field += m_textquote;
-                    field += x;
-                }
-                break;
-            case S_NORMAL_FIELD :
-                if (x == m_delimiter || x == '\n')
-                {
-                    setText(row - m_startline, column, field);
-                    field = "";
-                    if (x == '\n') {
-                        ++row;
-                        column=1;
-                    }
-                    else
-                        ++column;
-                    state = S_START;
+                    ++row;
+                    column = 1;
                 }
                 else
-                    field += x;
+                {
+                    ++column;
+                }
+                state = S_START;
+            }
+            else
+            {
+                state = S_END_OF_QUOTED_FIELD;
+            }
+            break;
+        case S_END_OF_QUOTED_FIELD :
+            if (x == m_delimiter || x == '\n')
+            {
+                setText(row - m_startline, column, field);
+                field = "";
+                if (x == '\n')
+                {
+                    ++row;
+                    column = 1;
+                }
+                else
+                {
+                    ++column;
+                }
+                state = S_START;
+            }
+            else
+            {
+                state = S_END_OF_QUOTED_FIELD;
+            }
+            break;
+        case S_MAYBE_NORMAL_FIELD :
+            if (x == m_textquote)
+            {
+                field = "";
+                state = S_QUOTED_FIELD;
+                break;
+            }
+        case S_NORMAL_FIELD :
+            if (x == m_delimiter || x == '\n')
+            {
+                setText(row - m_startline, column, field);
+                field = "";
+                if (x == '\n')
+                {
+                    ++row;
+                    column = 1;
+                }
+                else
+                {
+                    ++column;
+                }
+                state = S_START;
+            }
+            else
+            {
+                field += x;
+            }
         }
     }
 
