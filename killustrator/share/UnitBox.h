@@ -27,9 +27,10 @@
 
 #include <qwidget.h>
 #include "FloatSpinBox.h"
-#include <kcombo.h>
 
 #include "units.h"
+
+class QComboBox;
 
 class UnitBox : public QWidget {
   Q_OBJECT
@@ -62,7 +63,7 @@ protected slots:
 
 private:
   FloatSpinBox *valueBox;
-  KCombo *unitCombo;
+  QComboBox *unitCombo;
   MeasurementUnit unit;
 
   static MeasurementUnit defaultUnit;

@@ -22,6 +22,8 @@
 
 */
 
+#include <qcombobox.h>
+
 #include "UnitBox.h"
 #include "UnitBox.moc"
 
@@ -31,7 +33,7 @@ UnitBox::UnitBox (QWidget* parent, const char* name) : QWidget (parent, name) {
   valueBox = new FloatSpinBox (this, "valueBox");
   valueBox->setGeometry (0, 0, 80, valueBox->height ());
 
-  unitCombo = new KCombo (this, "unitCombo");
+  unitCombo = new QComboBox (this, "unitCombo");
   unitCombo->insertItem (unitToString (UnitPoint));
   unitCombo->insertItem (unitToString (UnitMillimeter));
   unitCombo->insertItem (unitToString (UnitInch));

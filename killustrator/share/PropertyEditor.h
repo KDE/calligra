@@ -34,7 +34,6 @@
 #include <kcolordlg.h>
 #include <kspinbox.h>
 #include <kslider.h>
-#include <kcombo.h>
 #include <kcolorbtn.h>
 
 #include "GDocument.h"
@@ -45,6 +44,8 @@
 #include "CommandHistory.h"
 #include "Gradient.h"
 #include "BrushCells.h"
+
+class QComboBox;
 
 class PropertyEditor : public QDialog {
   Q_OBJECT
@@ -87,15 +88,15 @@ private:
   FloatSpinBox* widthField;
   //  ColorComboBox* penColorField;
   KColorButton* penColorBttn;
-  KCombo* penStyleField;
-  KCombo *leftArrows, *rightArrows;
+  QComboBox* penStyleField;
+  QComboBox *leftArrows, *rightArrows;
   QPushButton *ellipseKind[3];
   QPushButton *textAlign[3];
   KSlider* roundnessSlider;
 
   // Fill Tab
   QRadioButton *fillStyleBttn[5];
-  KCombo *gradStyleCombo;
+  QComboBox *gradStyleCombo;
   KColorButton *solidColorBttn, *patternColorBttn, 
     *gradColor1Bttn, *gradColor2Bttn;
   QLabel *gradPreview;

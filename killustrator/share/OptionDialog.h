@@ -30,9 +30,10 @@
 #include <qlabel.h>
 #include <qpushbt.h>
 #include <ktabctl.h>
-#include <kcombo.h>
 
 #include "UnitBox.h"
+
+class QComboBox;
 
 class OptionDialog : public QTabDialog {
   Q_OBJECT
@@ -50,7 +51,7 @@ private slots:
   void helpPressed ();
 
 private:
-  KCombo* unit;
+  QComboBox* unit;
   UnitBox *horiz, *vert;
   UnitBox *smallStep, *bigStep;
 };

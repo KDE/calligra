@@ -30,6 +30,7 @@
 #include <qlabel.h>
 #include <qlayout.h>
 #include <qgroupbox.h>
+#include <qcombobox.h>
 #include "OptionDialog.h"
 #include "OptionDialog.moc"
 #include "PStateManager.h"
@@ -67,7 +68,7 @@ QWidget* OptionDialog::createGeneralWidget (QWidget* parent) {
   label->setFixedHeight (label->sizeHint ().height ());
   label->move (10, 20);
 
-  unit = new KCombo (w);
+  unit = new QComboBox (w);
   unit->insertItem ("pt");
   unit->insertItem ("mm");
   unit->insertItem ("inch");

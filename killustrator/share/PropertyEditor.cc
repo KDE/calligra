@@ -37,6 +37,7 @@
 #include <qlabel.h>
 #include <qlayout.h>
 #include <qwidgetstack.h>
+#include <qcombobox.h>
 
 #include "GText.h"
 #include "GPolygon.h"
@@ -253,7 +254,7 @@ QWidget* PropertyEditor::createOutlineWidget (QWidget* parent) {
   label->setText (i18n ("Style:"));
   label->move (10, 100);
 
-  penStyleField = new KCombo (w);
+  penStyleField = new QComboBox (w);
   penStyleField->setGeometry (80, 100, 100, 30);
   QIntDictIterator<LineStyle> lit = LineStyle::getLineStyles ();
   for (; lit.current (); ++lit) {
@@ -267,10 +268,10 @@ QWidget* PropertyEditor::createOutlineWidget (QWidget* parent) {
     label->setAlignment (AlignLeft | AlignVCenter);
     label->setText (i18n ("Arrows:"));
     label->setGeometry (10, 140, 60, 30);
-    leftArrows = new KCombo (w);
+    leftArrows = new QComboBox (w);
     //    leftArrows->setGeometry (80, 140, 60, 30);
     leftArrows->setGeometry (80, 140, 75, 30);
-    rightArrows = new KCombo (w);
+    rightArrows = new QComboBox (w);
     //    rightArrows->setGeometry (150, 140, 60, 30);
     rightArrows->setGeometry (165, 140, 75, 30);
     QIntDictIterator<Arrow> iter = Arrow::getArrows ();
@@ -466,7 +467,7 @@ QWidget* PropertyEditor::createFillWidget (QWidget* parent) {
   label->setAlignment (AlignLeft | AlignVCenter);
   label->setText (i18n ("Style:"));
   label->move (10, 85);
-  gradStyleCombo = new KCombo (box);
+  gradStyleCombo = new QComboBox (box);
   gradStyleCombo->move (80, 85);
   gradStyleCombo->insertItem (i18n ("Horizontal"));
   gradStyleCombo->insertItem (i18n ("Vertical"));
