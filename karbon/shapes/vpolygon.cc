@@ -25,6 +25,7 @@
 
 #include "vglobal.h"
 #include "vpolygon.h"
+#include "vtransformcmd.h"
 
 
 VPolygon::VPolygon( VObject* parent,
@@ -65,6 +66,8 @@ VPolygon::VPolygon( VObject* parent,
 	// translate path to center:
 	QWMatrix m;
 	m.translate( center.x(), center.y() );
-	transform( m );
+
+	VTransformCmd cmd( 0L, m );
+	cmd.visit( *this );
 }
 

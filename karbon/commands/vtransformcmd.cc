@@ -21,6 +21,7 @@
 
 #include <klocale.h>
 
+#include "vcomposite.h"
 #include "vpath.h"
 #include "vsegment.h"
 #include "vselection.h"
@@ -54,9 +55,10 @@ void
 VTransformCmd::execute()
 {
 	VObjectListIterator itr( m_selection->objects() );
-	for ( ; itr.current() ; ++itr )
+
+	for( ; itr.current() ; ++itr )
 	{
-		itr.current()->transform( m_mat );
+		visit( *itr.current() );
 	}
 
 	setSuccess( true );
@@ -66,13 +68,29 @@ void
 VTransformCmd::unexecute()
 {
 	// inverting the matrix should undo the affine transformation
+	m_mat = m_mat.invert();
+
 	VObjectListIterator itr( m_selection->objects() );
-	for ( ; itr.current() ; ++itr )
+
+	for( ; itr.current() ; ++itr )
 	{
-		itr.current()->transform( m_mat.invert() );
+		visit( *itr.current() );
 	}
 
 	setSuccess( false );
+}
+
+void
+VTransformCmd::visitVComposite( VComposite& composite )
+{
+	// Apply transformation to gradients.
+	if( composite.stroke()->type() == VStroke::grad )
+		composite.stroke()->gradient().transform( m_mat );
+
+	if( composite.fill()->type() == VFill::grad )
+		composite.fill()->gradient().transform( m_mat );
+
+	VVisitor::visitVComposite( composite );
 }
 
 void
@@ -91,8 +109,18 @@ VTransformCmd::visitVPath( VPath& path )
 }
 
 void
-VTransformCmd::visitVText( VText& /*text*/ )
+VTransformCmd::visitVText( VText& text )
 {
+	visit( text.basePath() );
+
+	VCompositeListIterator itr( text.glyphs() );
+
+	for( ; itr.current() ; ++itr )
+	{
+		visit( *itr.current() );
+	}
+
+	text.invalidateBoundingBox();
 }
 
 

@@ -125,7 +125,7 @@ VRotateTool::recalc()
 				first().y() - m_center.y(),
 				first().x() - m_center.x() ) );
 
-	VRotateCmd cmd( &view()->part()->document(), m_center, m_angle );
+	VRotateCmd cmd( 0L, m_center, m_angle );
 
 	// Copy selected objects and transform:
 	m_objects.clear();

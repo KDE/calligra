@@ -20,6 +20,7 @@
 
 
 #include "vellipse.h"
+#include "vtransformcmd.h"
 
 
 VEllipse::VEllipse( VObject* parent,
@@ -40,6 +41,8 @@ VEllipse::VEllipse( VObject* parent,
 	QWMatrix m;
 	m.translate( topLeft.x(), topLeft.y() );
 	m.scale( width, height );
-	transform( m );
+
+	VTransformCmd cmd( 0L, m );
+	cmd.visit( *this );
 }
 

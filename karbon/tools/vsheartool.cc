@@ -169,11 +169,7 @@ VShearTool::recalc()
 	// Get center:
 	m_center = view()->part()->document().selection()->boundingBox().center();
 
-	// Build affine matrix:
-	QWMatrix mat;
-	mat.translate( m_center.x(), m_center.y() );
-	mat.shear( m_s1, m_s2 );
-	mat.translate( -m_center.x(), -m_center.y() );
+	VShearCmd cmd( 0L, m_center, m_s1, m_s2 );
 
 	// Copy selected objects and transform:
 	m_objects.clear();
@@ -185,7 +181,9 @@ VShearTool::recalc()
 		if( itr.current()->state() != VObject::deleted )
 		{
 			copy = itr.current()->clone();
-			copy->transform( mat );
+
+			cmd.visit( *copy );
+
 			copy->setState( VObject::edit );
 
 			m_objects.append( copy );

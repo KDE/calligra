@@ -26,6 +26,7 @@
 #include "vfill.h"
 #include "vglobal.h"
 #include "vspiral.h"
+#include "vtransformcmd.h"
 
 
 VSpiral::VSpiral( VObject* parent,
@@ -83,6 +84,7 @@ VSpiral::VSpiral( VObject* parent,
 		( angle + ( clockwise ? VGlobal::pi : 0.0 ) ) * // make cw-spiral start at mouse-pointer
 			VGlobal::one_pi_180 );	// one_pi_180 = 1/(pi/180) = 180/pi.
 
-	transform( m );
+	VTransformCmd cmd( 0L, m );
+	cmd.visit( *this );
 }
 

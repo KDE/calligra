@@ -501,22 +501,6 @@ VPath::clone() const
 }
 
 void
-VPath::transform( const QWMatrix& m )
-{
-	VSegment* segment = m_first;
-
-	while( segment )
-	{
-		segment->transform( m );
-
-		segment = segment->m_next;
-	}
-
-
-	invalidateBoundingBox();
-}
-
-void
 VPath::save( QDomElement& element ) const
 {
 	// Don't save if the list is "empty".

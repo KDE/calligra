@@ -258,22 +258,6 @@ VComposite::combinePath( const VPath& path )
 	m_paths.append( p );
 }
 
-void
-VComposite::transform( const QWMatrix& m )
-{
-	VPathListIterator itr( m_paths );
-	for( itr.toFirst(); itr.current(); ++itr )
-	{
-		itr.current()->transform( m );
-	}
-
-	// Apply transformation to gradients too:
-	if( m_stroke->type() == VStroke::grad )
-		m_stroke->gradient().transform( m );
-	if( m_fill->type() == VFill::grad )
-		m_fill->gradient().transform( m );
-}
-
 const KoRect&
 VComposite::boundingBox() const
 {

@@ -88,8 +88,6 @@ public:
 
 	virtual void draw( VPainter *painter, const KoRect* rect = 0L ) const;
 
-	virtual void transform( const QWMatrix& m );
-
 	virtual const KoRect& boundingBox() const;
 
 	virtual void save( QDomElement& element ) const;

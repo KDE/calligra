@@ -84,15 +84,6 @@ VGroup::draw( VPainter* painter, const KoRect* rect ) const
 		itr.current()->draw( painter, rect );
 }
 
-void
-VGroup::transform( const QWMatrix& m )
-{
-	VObjectListIterator itr = m_objects;
-
-	for ( ; itr.current() ; ++itr )
-		itr.current()->transform( m );
-}
-
 const KoRect&
 VGroup::boundingBox() const
 {

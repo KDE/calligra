@@ -23,6 +23,7 @@
 
 #include "vglobal.h"
 #include "vsinus.h"
+#include "vtransformcmd.h"
 
 
 VSinus::VSinus( VObject* parent,
@@ -109,6 +110,8 @@ VSinus::VSinus( VObject* parent,
 	QWMatrix m;
 	m.translate( topLeft.x(), topLeft.y() - height * 0.5 );
 	m.scale( width / periods, height * 0.5 );
-	transform( m );
+
+	VTransformCmd cmd( 0L, m );
+	cmd.visit( *this );
 }
 

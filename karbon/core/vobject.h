@@ -21,10 +21,10 @@
 #ifndef __VOBJECT_H__
 #define __VOBJECT_H__
 
+
 #include <koRect.h>
 
 class QDomElement;
-class QWMatrix;
 class VFill;
 class VPainter;
 class VStroke;
@@ -67,15 +67,6 @@ public:
 	 *             intersect with this area it is not drawn.
 	 */
 	virtual void draw( VPainter* /*painter*/, const KoRect* /*rect*/ = 0L ) const {}
-
-	/**
-	 * Transform the object according to the given matrix.
-	 * Note that this operation triggers an immediate object
-	 * transformation and may be slow for complex objects.
-	 *
-	 * @param m matrix to use for the transformation.
-	 */
-	virtual void transform( const QWMatrix& /*m*/ ) {}
 
 	/**
 	 * Calculates the tightest bounding box around the object.
@@ -125,7 +116,7 @@ public:
 	 */
 	virtual void setState( const VState state ) { m_state = state; }
 
-	const VStroke* stroke() const { return m_stroke; }
+	VStroke* stroke() const { return m_stroke; }
 	VFill* fill() const { return m_fill; }
 
 	virtual void setStroke( const VStroke& stroke );

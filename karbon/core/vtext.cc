@@ -196,11 +196,11 @@ VText::draw( VPainter* painter, const KoRect* /*rect*/ ) const
 		
 			for( itr.toFirst(); itr.current(); ++itr )
 			{
-				itr.current()->transform( QWMatrix( 1, 0, 0, 1, shadowDx, shadowDy ) );
+//				itr.current()->transform( QWMatrix( 1, 0, 0, 1, shadowDx, shadowDy ) );
 				itr.current()->setFill( VFill( color ) );
 				itr.current()->setStroke( VStroke( color ) );
 				itr.current()->draw( painter );
-				itr.current()->transform( QWMatrix( 1, 0, 0, 1, -shadowDx, -shadowDy ) );
+//				itr.current()->transform( QWMatrix( 1, 0, 0, 1, -shadowDx, -shadowDy ) );
 			}
 		}
 
@@ -227,18 +227,6 @@ VText::draw( VPainter* painter, const KoRect* /*rect*/ ) const
 	}
 
 	painter->restore();
-}
-
-void
-VText::transform( const QWMatrix& m )
-{
-	m_basePath.transform( m );
-
-	VCompositeListIterator itr( m_glyphs );
-	for( ; itr.current() ; ++itr )
-		itr.current()->transform( m );
-
-	m_boundingBoxIsInvalid = true;
 }
 
 const KoRect&
@@ -517,7 +505,7 @@ VText::traceText()
 		// Step 1: place (0, 0) to the rotation center of the glyph.
 		dx = *glyphXAdvance.at( i ) / 2;
 		x += dx;
-		composite->transform( QWMatrix( 1, 0, 0, 1, -dx, y + yoffset ) );
+//		composite->transform( QWMatrix( 1, 0, 0, 1, -dx, y + yoffset ) );
 
 		// Step 2: find the position where to draw.
 		//   3 possibilities: before, on, and after the basePath...
@@ -553,7 +541,7 @@ VText::traceText()
 
 		// Step 3: transform glyph and append it. That's it, we've got
 		// text following a path. Really easy, isn't it ;) ?
-		composite->transform( QWMatrix( tangent.x(), tangent.y(), tangent.y(), -tangent.x(), point.x(), point.y() ) );
+//		composite->transform( QWMatrix( tangent.x(), tangent.y(), tangent.y(), -tangent.x(), point.x(), point.y() ) );
 		composite->setState( state() );
 
 		//kdDebug() << "Glyph: " << (QString)character << " [String pos: " << x << ", " << y << " / Canvas pos: " << point.x() << ", " << point.y() << "]" << endl;

@@ -81,11 +81,6 @@ public:
 	bool isEmpty() const
 		{ return count() <= 1; }
 
-	/**
-	 * Applies an affine transformation matrix to all segments.
-	 */
-	virtual void transform( const QWMatrix& m );
-
 	virtual const KoRect& boundingBox() const;
 
 	virtual void save( QDomElement& element ) const;

@@ -27,6 +27,7 @@
 
 
 class QWMatrix;
+class VComposite;
 class VPath;
 class VSelection;
 
@@ -40,8 +41,14 @@ public:
 	virtual void execute();
 	virtual void unexecute();
 
+	virtual void visitVComposite( VComposite& composite );
 	virtual void visitVPath( VPath& path );
 	virtual void visitVText( VText& text );
+
+	void setMatrix( const QWMatrix& m )
+	{
+		m_mat = m;
+	}
 
 protected:
 	VTransformCmd( VDocument *doc, const QString& name, const QString& icon );

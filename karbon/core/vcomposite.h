@@ -21,6 +21,7 @@
 #ifndef __VCOMPOSITE_H__
 #define __VCOMPOSITE_H__
 
+
 #include <qptrlist.h>
 
 #include <koPoint.h>
@@ -141,9 +142,6 @@ public:
 
 	const VPathList& paths() const
 		{ return m_paths; }
-
-	/// Applies an affine transformation.
-	virtual void transform( const QWMatrix& m );
 
 	virtual const KoRect& boundingBox() const;
 

@@ -1,6 +1,7 @@
 INCLUDES = $(KOFFICE_INCLUDES) $(KOPAINTER_INCLUDES) \
 	-I$(srcdir)/.. \
 	-I$(srcdir)/../core \
+	-I$(srcdir)/../commands \
 	$(all_includes)
 
 noinst_LTLIBRARIES = libkarbonshapes.la

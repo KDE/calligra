@@ -39,6 +39,7 @@
 #include "vobject.h"
 #include "vpainterfactory.h"
 #include "vselection.h"
+#include "vtransformcmd.h"
 
 
 VClipartIconItem::VClipartIconItem( const VObject* clipart, double width, double height, QString filename )
@@ -50,17 +51,29 @@ VClipartIconItem::VClipartIconItem( const VObject* clipart, double width, double
 	m_pixmap.resize( 64, 64 );
 	VKoPainter p( &m_pixmap, 64, 64 );
 	QWMatrix mat( 64., 0, 0, 64., 0, 0 );
-	m_clipart->transform( mat );
+
+	VTransformCmd trafo( 0L, mat );
+	trafo.visit( *m_clipart );
+
 	m_clipart->draw( &p, &m_clipart->boundingBox() );
-	m_clipart->transform( mat.invert() );
+
+	trafo.setMatrix( mat.invert() );
+	trafo.visit( *m_clipart );
+
 	p.end();
 
 	m_thumbPixmap.resize( 32, 32 );
 	VKoPainter p2( &m_thumbPixmap, 32, 32 );
 	mat.setMatrix( 32., 0, 0, 32., 0, 0 );
-	m_clipart->transform( mat );
+
+	trafo.setMatrix( mat );
+	trafo.visit( *m_clipart );
+
 	m_clipart->draw( &p2, &m_clipart->boundingBox() );
-	m_clipart->transform( mat.invert() );
+
+	trafo.setMatrix( mat.invert() );
+	trafo.visit( *m_clipart );
+
 	p2.end();
 
 	validPixmap = true;
@@ -182,17 +195,26 @@ VClipartWidget::addClipart()
 		KoRect clipartBox = clipart->boundingBox();
 		double scaleFactor = 1. / QMAX( clipartBox.width(), clipartBox.height() );
 		QWMatrix trMatrix( scaleFactor, 0, 0, scaleFactor, -clipartBox.x() * scaleFactor, -clipartBox.y() * scaleFactor );
-		clipart->transform( trMatrix );
+
+		VTransformCmd trafo( 0L, trMatrix );
+		trafo.visit( *clipart );
+
 		// center the clipart
 		trMatrix.reset();
 		double size = QMAX( clipart->boundingBox().width(), clipart->boundingBox().height() );
 		trMatrix.translate( ( size - clipart->boundingBox().width() ) / 2, ( size - clipart->boundingBox().height() ) / 2 );
-		clipart->transform( trMatrix );
+
+		trafo.setMatrix( trMatrix );
+		trafo.visit( *clipart );
+
 		// remove Y-mirroring
 		trMatrix.reset();
 		trMatrix.scale( 1, -1 );
 		trMatrix.translate( 0, -1 );
-		clipart->transform( trMatrix );
+
+		trafo.setMatrix( trMatrix );
+		trafo.visit( *clipart );
+
 		m_clipartChooser->addItem( KarbonFactory::rServer()->addClipart( clipart, clipartBox.width(), clipartBox.height() ) );
 	}
 
@@ -267,9 +289,14 @@ VClipartTool::draw()
 		painter->setRasterOp( Qt::NotROP );
 
 		QWMatrix mat( m_bottomright.x() - m_topleft.x(), 0, 0, m_bottomright.y() - m_topleft.y(), m_topleft.x(), m_topleft.y() );
-		m_clipart->transform( mat );
+
+		VTransformCmd trafo( 0L, mat );
+		trafo.visit( *m_clipart );
+
 		m_clipart->draw( painter, &m_clipart->boundingBox() );
-		m_clipart->transform( mat.invert() );
+
+		trafo.setMatrix( mat.invert() );
+		trafo.visit( *m_clipart );
 	}
 }
 
@@ -295,7 +322,10 @@ VClipartTool::mouseButtonRelease()
 	if( m_clipart )
 	{
 		QWMatrix mat( s, 0, 0, -s, first().x() - ( s / 2 ), first().y() + ( s / 2 ) );
-		m_clipart->transform( mat );
+
+		VTransformCmd trafo( 0L, mat );
+		trafo.visit( *m_clipart );
+
 		VClipartCmd* cmd = new VClipartCmd(
 							   &view()->part()->document(),
 							   name(),
@@ -362,7 +392,8 @@ VClipartTool::mouseDragRelease()
 
 		QWMatrix mat( m_bottomright.x() - m_topleft.x(), 0, 0, m_bottomright.y() - m_topleft.y(), m_topleft.x(), m_topleft.y() );
 
-		m_clipart->transform( mat );
+		VTransformCmd trafo( 0L, mat );
+		trafo.visit( *m_clipart );
 
 		VClipartCmd* cmd = new VClipartCmd(
 							   &view()->part()->document(),

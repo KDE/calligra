@@ -25,6 +25,7 @@
 
 #include "vglobal.h"
 #include "vstar.h"
+#include "vtransformcmd.h"
 
 
 VStar::VStar( VObject* parent,
@@ -71,6 +72,8 @@ VStar::VStar( VObject* parent,
 	// translate path to center:
 	QWMatrix m;
 	m.translate( center.x(), center.y() );
-	transform( m );
+
+	VTransformCmd cmd( 0L, m );
+	cmd.visit( *this );
 }
 

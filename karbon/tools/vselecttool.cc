@@ -346,13 +346,19 @@ VSelectTool::recalc()
 		m_objects.clear();
 		VObject* copy;
 
+		VTranslateCmd cmd( 0L,
+			qRound( last().x() - first().x() ),
+			qRound( last().y() - first().y() ) );
+
 		VObjectListIterator itr = view()->part()->document().selection()->objects();
 		for ( ; itr.current() ; ++itr )
 		{
 			if( itr.current()->state() != VObject::deleted )
 			{
 				copy = itr.current()->clone();
-				copy->transform( mat );
+
+				cmd.visit( *copy );
+
 				copy->setState( VObject::edit );
 
 				m_objects.append( copy );

@@ -38,7 +38,9 @@ public:
 	VCommand( VDocument* doc, const QString& name, const QString& icon = "14_action" )
 			: m_document( doc ), m_name( name ), m_icon( icon )
 	{
-		assert( doc );
+// A crash because of an assert() is not much better than an crash becuase of a null
+// pointer. Allowing null pointers allows the usage of the vitors ascpect of a VCommand.
+//		assert( doc );
 	}
 
 	virtual ~VCommand() {}

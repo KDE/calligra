@@ -64,10 +64,6 @@ public:
 	virtual void draw( VPainter* painter, const KoRect* rect ) const;
 	void drawPage( VPainter *painter ) const;
 
-	// TODO
-	virtual void transform( const QWMatrix& )
-		{}
-
 	const QString& mime()
 		{ return m_mime; }
 	void setMime( const QString& mime )
