@@ -190,17 +190,19 @@ class KoReplace :
 
 public:
 
-    // Will create a prompt dialog and use it as needed.
+    /** Will create a prompt dialog and use it as needed. */
     KoReplace(const QString &pattern, const QString &replacement, long options, QWidget *parent = 0);
     ~KoReplace();
 
-    // Walk the text fragment (e.g. kwrite line, kspread cell) looking for matches.
-    // For each match, if prompt-on-replace is specified, emits the expose() signal
-    // and displays the prompt-for-replace dialog before doing the replace.
-    //
-    // @param text The text fragment to modify.
-    // @param exposeOnReplace The region to expose
-    // @return False if the user elected to discontinue the replace.
+    /**
+     * Walk the text fragment (e.g. kwrite line, kspread cell) looking for matches.
+     * For each match, if prompt-on-replace is specified, emits the expose() signal
+     * and displays the prompt-for-replace dialog before doing the replace.
+     *
+     * @param text The text fragment to modify.
+     * @param exposeOnReplace The region to expose
+     * @return False if the user elected to discontinue the replace.
+     */
     bool replace(QString &text, const QRect &expose);
 
     /**
@@ -221,12 +223,16 @@ public:
 
 signals:
 
-    // Connect to this slot to implement highlighting of found text during the replace
-    // operation.
+    /**
+     * Connect to this slot to implement highlighting of found text during the replace
+     * operation.
+     */
     void highlight(const QString &text, int matchingIndex, int matchedLength, const QRect &expose);
 
-    // Connect to this slot to implement updating of replaced text during the replace
-    // operation.
+    /**
+     * Connect to this slot to implement updating of replaced text during the replace
+     * operation.
+     */
     void replace(const QString &text, int replacementIndex, int replacedLength, const QRect &expose);
 
 private:
