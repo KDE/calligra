@@ -8,4 +8,8 @@ about the unavailable part, but also to be able to save itself as it was,
 so that it's possible to edit a document with a missing child document
 without losing information.
 
+Test documents:
+test-kounavail.kwd points to an invalid mimetype (case 1)
+test-kounavail2.kwd points to a non-existing external document (case 2)
+
 David Faure <david@mandrakesoft.com>

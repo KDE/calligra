@@ -36,6 +36,7 @@ public:
     virtual bool initDoc() { return true; }
 
     virtual bool loadXML( QIODevice *, const QDomDocument & );
+    virtual bool saveFile();
     virtual QDomDocument saveXML();
     virtual bool saveChildren( KoStore* /*_store*/, const QString& /*_path*/ ) { return true; }
 
