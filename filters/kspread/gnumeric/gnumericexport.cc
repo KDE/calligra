@@ -685,7 +685,7 @@ void GNUMERICExport::addSummaryItem(QDomDocument gnumeric_doc, QDomElement summa
 // approach is because we don't want to export formulas but values !
 KoFilter::ConversionStatus GNUMERICExport::convert( const QCString& from, const QCString& to )
 {
-    kdDebug(30501) << "Exporting GNUmeric" << endl;
+    kdDebug(30521) << "Exporting GNUmeric" << endl;
 
     QDomDocument gnumeric_doc=QDomDocument();
 
@@ -697,12 +697,12 @@ KoFilter::ConversionStatus GNUMERICExport::convert( const QCString& from, const 
 
     if (strcmp(document->className(), "KSpreadDoc") != 0)  // it's safer that way :)
     {
-        kdWarning(30501) << "document isn't a KSpreadDoc but a " << document->className() << endl;
+        kdWarning(30521) << "document isn't a KSpreadDoc but a " << document->className() << endl;
         return KoFilter::NotImplemented;
     }
     if (to != "application/x-gnumeric" || from != "application/x-kspread")
     {
-        kdWarning(30501) << "Invalid mimetypes " << to << " " << from << endl;
+        kdWarning(30521) << "Invalid mimetypes " << to << " " << from << endl;
         return KoFilter::NotImplemented;
     }
 
@@ -710,7 +710,7 @@ KoFilter::ConversionStatus GNUMERICExport::convert( const QCString& from, const 
 
     if (ksdoc->mimeType() != "application/x-kspread")
     {
-        kdWarning(30501) << "Invalid document mimetype " << ksdoc->mimeType() << endl;
+        kdWarning(30521) << "Invalid document mimetype " << ksdoc->mimeType() << endl;
         return KoFilter::NotImplemented;
     }
 
@@ -982,7 +982,7 @@ KoFilter::ConversionStatus GNUMERICExport::convert( const QCString& from, const 
                                 domNode = domNode.firstChild();                                
                             }                                                        
 
-                            //kdDebug() << "---> link, text = " << text << endl;
+                            //kdDebug(30521) << "---> link, text = " << text << endl;
                             
                             linkUrl = domRoot.attribute("href");                            
                             linkText = text;
@@ -1075,13 +1075,13 @@ KoFilter::ConversionStatus GNUMERICExport::convert( const QCString& from, const 
     
     if (!out)
     {
-        kdError(30501) << "No output file! Aborting!" << endl;
+        kdError(30521) << "No output file! Aborting!" << endl;
         return KoFilter::FileNotFound;
     }
 
     if (!out->open(IO_WriteOnly))
     {
-        kdError(30501) << "Unable to open output file! Aborting!" << endl;
+        kdError(30521) << "Unable to open output file! Aborting!" << endl;
         delete out;
         return KoFilter::FileNotFound;
     }

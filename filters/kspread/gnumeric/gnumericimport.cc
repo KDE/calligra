@@ -130,12 +130,12 @@ void GNUMERICFilter::GnumericDate::jul2greg( double num, int & y, int & m, int &
   if (i > g_dateSerial_19000228)
     --i;
   else if (i == g_dateSerial_19000228 + 1)
-    kdWarning() << "Request for date 02/29/1900." << endl;
+    kdWarning(30521) << "Request for date 02/29/1900." << endl;
 
-  kdDebug() << "***** Num: " << num << ", i: " << i  << endl;
+  kdDebug(30521) << "***** Num: " << num << ", i: " << i  << endl;
 
   QDate::julianToGregorian( i + g_dateOrigin, y, m, d );
-  kdDebug() << "y: " << y << ", m: " << m << ", d: " << d << endl;
+  kdDebug(30521) << "y: " << y << ", m: " << m << ", d: " << d << endl;
 }
 
 QTime GNUMERICFilter::GnumericDate::getTime( double num )
@@ -144,14 +144,14 @@ QTime GNUMERICFilter::GnumericDate::getTime( double num )
   num += HALF_SEC;
   uint secs = (num - floor(num)) * SECS_PER_DAY;
 
-  kdDebug() << "***** Num: " << num << ", secs " << secs << endl;
+  kdDebug(30521) << "***** Num: " << num << ", secs " << secs << endl;
 
   int h = secs / 3600;
   secs -= h * 3600;
   int m = secs / 60;
   secs -= h * 60;
 
-  kdDebug() << "****** h: " << h << ", m: " << m << ", secs: " << secs << endl;
+  kdDebug(30521) << "****** h: " << h << ", m: " << m << ", secs: " << secs << endl;
   QTime time( h, m, ( secs < 0 || secs > 59 ? 0 : secs ) );
 
   return time;
@@ -612,10 +612,10 @@ bool GNUMERICFilter::setType( KSpreadCell * kspread_cell,
   int i = 0;
   for ( i = 0; cell_format_date[i] ; ++i )
   {
-    kdDebug() << "Cell_format: " << cell_format_date[i] << ", FormatString: " << formatString << endl;
+    kdDebug(30521) << "Cell_format: " << cell_format_date[i] << ", FormatString: " << formatString << endl;
     if ( ( formatString == "d/m/yy" ) || ( formatString == cell_format_date[i] ) )
     {
-      kdDebug() << "   FormatString: Date: " << formatString << ", CellContent: " << cell_content << endl;
+      kdDebug(30521) << "   FormatString: Date: " << formatString << ", CellContent: " << cell_content << endl;
       QDate date;
       if ( !kspread_cell->isDate() )
       {
@@ -624,13 +624,13 @@ bool GNUMERICFilter::setType( KSpreadCell * kspread_cell,
         bool ok = true;
         int val  = cell_content.toInt( &ok );
 
-        kdDebug() << "!!!   FormatString: Date: " << formatString << ", CellContent: " << cell_content
+        kdDebug(30521) << "!!!   FormatString: Date: " << formatString << ", CellContent: " << cell_content
                   << ", Double: " << val << endl;
         if ( !ok )
           return false;
 
         GnumericDate::jul2greg( val, y, m, d );
-        kdDebug() << "     num: " << val << ", y: " << y << ", m: " << m << ", d: " << d << endl;
+        kdDebug(30521) << "     num: " << val << ", y: " << y << ", m: " << m << ", d: " << d << endl;
 
         date.setYMD( y, m, d );
       }
@@ -672,7 +672,7 @@ bool GNUMERICFilter::setType( KSpreadCell * kspread_cell,
         /* 12, 13, 14, 15, 20, 21 */
       }
 
-      kdDebug() << "i: " << i << ", Type: " << type << ", Date: " << date.toString() << endl;
+      kdDebug(30521) << "i: " << i << ", Type: " << type << ", Date: " << date.toString() << endl;
 
       kspread_cell->setValue( date );
       kspread_cell->setFormatType( type );
@@ -692,7 +692,7 @@ bool GNUMERICFilter::setType( KSpreadCell * kspread_cell,
         bool ok = true;
         double content = cell_content.toDouble( &ok );
 
-        kdDebug() << "   FormatString: Time: " << formatString << ", CellContent: " << cell_content
+        kdDebug(30521) << "   FormatString: Time: " << formatString << ", CellContent: " << cell_content
                   << ", Double: " << content << endl;
 
         if ( !ok )
@@ -716,7 +716,7 @@ bool GNUMERICFilter::setType( KSpreadCell * kspread_cell,
         type = Time_format1; break;
       }
 
-      kdDebug() << "i: " << i << ", Type: " << type << endl;
+      kdDebug(30521) << "i: " << i << ", Type: " << type << endl;
       kspread_cell->setValue( time );
       kspread_cell->setFormatType( type );
 
@@ -746,7 +746,7 @@ QString GNUMERICFilter::convertVars( QString const & str, KSpreadSheet * table )
 
     if ( n != -1 )
     {
-      kdDebug() << "Found var: " << list1[i] << endl;
+      kdDebug(30521) << "Found var: " << list1[i] << endl;
       if ( i == 0 )
         result = result.replace( n, list1[i].length(), table->tableName() );
       else
@@ -759,7 +759,7 @@ QString GNUMERICFilter::convertVars( QString const & str, KSpreadSheet * table )
 
 void GNUMERICFilter::ParsePrintInfo( QDomNode const & printInfo, KSpreadSheet * table )
 {
-  kdDebug() << "Parsing print info " << endl;
+  kdDebug(30521) << "Parsing print info " << endl;
 
   float fleft = 2.0;
   float fright = 2.0;
@@ -803,7 +803,7 @@ void GNUMERICFilter::ParsePrintInfo( QDomNode const & printInfo, KSpreadSheet * 
   QDomElement foot( printInfo.namedItem("gmr:Footer").toElement() );
   if ( !foot.isNull() )
   {
-    kdDebug() << "Parsing footer: " << foot.attribute("Left") << ", " << foot.attribute("Middle") << ", "
+    kdDebug(30521) << "Parsing footer: " << foot.attribute("Left") << ", " << foot.attribute("Middle") << ", "
               << foot.attribute("right") << ", " <<endl;
     if ( foot.hasAttribute("Left") )
       footLeft = convertVars( foot.attribute("Left"), table );
@@ -816,7 +816,7 @@ void GNUMERICFilter::ParsePrintInfo( QDomNode const & printInfo, KSpreadSheet * 
   QDomElement head( printInfo.namedItem("gmr:Header").toElement() );
   if ( !head.isNull() )
   {
-    kdDebug() << "Parsing header: " << head.attribute("Left") << ", " << head.attribute("Middle") << ", "
+    kdDebug(30521) << "Parsing header: " << head.attribute("Left") << ", " << head.attribute("Middle") << ", "
               << head.attribute("right") << ", "<< endl;
     if ( head.hasAttribute("Left") )
       headLeft = convertVars( head.attribute("Left"), table );
@@ -985,7 +985,7 @@ void GNUMERICFilter::convertFormula( QString & formula ) const
 
 void GNUMERICFilter::setStyleInfo(QDomNode * sheet, KSpreadSheet * table)
 {
-  kdDebug() << "SetStyleInfo entered " << endl;
+  kdDebug(30521) << "SetStyleInfo entered " << endl;
 
   int row, column;
   QDomNode styles =  sheet->namedItem( "gmr:Styles" );
@@ -1006,7 +1006,7 @@ void GNUMERICFilter::setStyleInfo(QDomNode * sheet, KSpreadSheet * table)
       int startRow = e.attribute( "startRow" ).toInt() + 1;
       int endRow   = e.attribute( "endRow" ).toInt() + 1;
 
-      kdDebug() << "------Style: " << startCol << ", "
+      kdDebug(30521) << "------Style: " << startCol << ", "
                 << startRow << " - " << endCol << ", " << endRow << endl;
 
       if ( endCol - startCol > 200 || endRow - startRow > 200 )
@@ -1019,20 +1019,20 @@ void GNUMERICFilter::setStyleInfo(QDomNode * sheet, KSpreadSheet * table)
       {
         for ( row = startRow; row <= endRow; ++row )
         {
-          kdDebug() << "Cell: " << column << ", " << row << endl;
+          kdDebug(30521) << "Cell: " << column << ", " << row << endl;
           KSpreadCell * kspread_cell = table->cellAt( column, row, false );
 
           // don't create new cells -> don't apply format on empty cells, if bigger region
           if ( ( kspread_cell->isDefault() || kspread_cell->isEmpty() )
                && ( ( endCol - startCol > 2 ) || ( endRow - startRow > 2 ) ) )
           {
-            kdDebug() << "CELL EMPTY OR RANGE TOO BIG " << endl;
+            kdDebug(30521) << "CELL EMPTY OR RANGE TOO BIG " << endl;
             continue;
           }
 
           QDomElement style_element = style.toElement(); // try to convert the node to an element.
 
-          kdDebug() << "Style valid for kspread" << endl;
+          kdDebug(30521) << "Style valid for kspread" << endl;
           kspread_cell = table->nonDefaultCell( column, row, false );
 
           if (style_element.hasAttribute("Fore"))
@@ -1271,7 +1271,7 @@ void GNUMERICFilter::setStyleInfo(QDomNode * sheet, KSpreadSheet * table)
           {
             QString formatString = style_element.attribute("Format");
 
-            kdDebug() << "Format: " << formatString << endl;
+            kdDebug(30521) << "Format: " << formatString << endl;
             ParseFormat(formatString, kspread_cell);
 
           } // End "Format"
@@ -1328,33 +1328,33 @@ KoFilter::ConversionStatus GNUMERICFilter::convert( const QCString & from, const
     dateInit();
     bool bSuccess=true;
 
-    qDebug("Entering GNUmeric Import filter.\n");
+    kdDebug(30521) << "Entering GNUmeric Import filter." << endl;
 
     KoDocument * document = m_chain->outputDocument();
     if ( !document )
         return KoFilter::StupidError;
 
-    kdDebug(30501) << "here we go... " << document->className() << endl;
+    kdDebug(30521) << "here we go... " << document->className() << endl;
 
     if (strcmp(document->className(), "KSpreadDoc") != 0)  // it's safer that way :)
     {
-        kdWarning(30501) << "document isn't a KSpreadDoc but a " << document->className() << endl;
+        kdWarning(30521) << "document isn't a KSpreadDoc but a " << document->className() << endl;
         return KoFilter::NotImplemented;
     }
     if ( from != "application/x-gnumeric" || to != "application/x-kspread" )
     {
-        kdWarning(30501) << "Invalid mimetypes " << from << " " << to << endl;
+        kdWarning(30521) << "Invalid mimetypes " << from << " " << to << endl;
         return KoFilter::NotImplemented;
     }
 
-    kdDebug(30501) << "...still here..." << endl;
+    kdDebug(30521) << "...still here..." << endl;
 
     // No need for a dynamic cast here, since we use Qt's moc magic
     KSpreadDoc * ksdoc = ( KSpreadDoc * ) document;
 
     if ( ksdoc->mimeType() != "application/x-kspread" )
     {
-        kdWarning(30501) << "Invalid document mimetype " << ksdoc->mimeType() << endl;
+        kdWarning(30521) << "Invalid document mimetype " << ksdoc->mimeType() << endl;
         return KoFilter::NotImplemented;
     }
 
@@ -1363,13 +1363,13 @@ KoFilter::ConversionStatus GNUMERICFilter::convert( const QCString & from, const
     
     if ( !in )
     {
-        kdError(30501) << "Cannot create device for uncompressing! Aborting!" << endl;
+        kdError(30521) << "Cannot create device for uncompressing! Aborting!" << endl;
         return KoFilter::FileNotFound;
     }
 
     if (!in->open(IO_ReadOnly))
     {
-        kdError(30501) << "Cannot open file for uncompressing! Aborting!" << endl;
+        kdError(30521) << "Cannot open file for uncompressing! Aborting!" << endl;
         delete in;
         return KoFilter::FileNotFound;
     }
@@ -1443,7 +1443,7 @@ KoFilter::ConversionStatus GNUMERICFilter::convert( const QCString & from, const
         if ( !printInfo.isNull() )
           ParsePrintInfo( printInfo, table );
 
-        kdDebug() << "Reading in cells" << endl;
+        kdDebug(30521) << "Reading in cells" << endl;
 
 	/* CELL handling START */
 	QDomNode cells = sheet.namedItem( "gmr:Cells" );
@@ -1451,7 +1451,7 @@ KoFilter::ConversionStatus GNUMERICFilter::convert( const QCString & from, const
 
         if ( cell.isNull() )
         {
-          kdWarning() << "No cells" << endl;
+          kdWarning(30521) << "No cells" << endl;
         }
 
 	while ( !cell.isNull() )
@@ -1462,7 +1462,7 @@ KoFilter::ConversionStatus GNUMERICFilter::convert( const QCString & from, const
 	  QDomElement e = cell.toElement(); // try to convert the node to an element.
 	  if ( !e.isNull() )
           { // the node was really an element.
-            kdDebug() << "New Cell " << endl;
+            kdDebug(30521) << "New Cell " << endl;
 	    QDomNode content_node = cell.namedItem("gmr:Content");
 
 	    if (!content_node.isNull())
@@ -1503,13 +1503,13 @@ KoFilter::ConversionStatus GNUMERICFilter::convert( const QCString & from, const
 		    char * tmp_string = ( char * ) malloc( strlen( encoded_string.latin1() ) );
 		    strcpy( tmp_string, encoded_string.latin1() );
 
-		    qDebug( "%s", encoded_string.latin1() );
+		    kdDebug(30521) << encoded_string.latin1() << endl;
 
 		    exprID_dict.insert(e.attribute("ExprID"), tmp_string);
 
-		    qDebug("%s", exprID_dict[e.attribute("ExprID")]);
-		    qDebug("%s", exprID_dict[QString("1")]);
-		    qDebug("%s", e.attribute("ExprID").latin1());
+		    kdDebug(30521) << exprID_dict[e.attribute("ExprID")] << endl;
+		    kdDebug(30521) << exprID_dict[QString("1")] << endl;
+		    kdDebug(30521) << e.attribute("ExprID").latin1() << endl;
 
 		  }
 	      }
@@ -1524,10 +1524,10 @@ KoFilter::ConversionStatus GNUMERICFilter::convert( const QCString & from, const
 		    expr = exprID_dict[e.attribute("ExprID")];
 		    // expr = exprID_dict[QString("1")];
 
-		    qDebug("FOO:%d %d", column, row);
-		    qDebug("%s",
-                           table->cellAt( column, row, false )->decodeFormula( expr, column, row ).latin1());
-		    qDebug("%s", expr);
+		    kdDebug(30521) << "FOO:" << column << row << endl;
+		    kdDebug(30521) << 
+                           table->cellAt( column, row, false )->decodeFormula( expr, column, row ).latin1() << endl;
+		    kdDebug(30521) << expr << endl;
 
 		    table->setText(row, column,
                                    table->cellAt( column, row, false )->decodeFormula( expr, column, row ),
@@ -1538,7 +1538,7 @@ KoFilter::ConversionStatus GNUMERICFilter::convert( const QCString & from, const
 	  cell = cell.nextSibling();
 	}
 
-        kdDebug() << "Reading in cells done" << endl;
+        kdDebug(30521) << "Reading in cells done" << endl;
 
 	/* There is a memory leak here...
 	 * The strings in the exprID_dict have been allocated, but they have not been freed.
