@@ -46,6 +46,14 @@ k_dcop:
     virtual void setSelectionbgColor( const QColor &bg_Color );
     virtual void setSelectionBorderColor(const QColor &bd_Color );
 
+    virtual void deleteSelection();
+    virtual void copySelection();
+    virtual void cutSelection();
+    virtual void clearTextSelection();
+    virtual void clearValiditySelection();
+    virtual void clearConditionalSelection();
+
+
 private:
     KSpreadTable* m_table;
     KSpreadCellProxy* m_proxy;

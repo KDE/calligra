@@ -229,3 +229,34 @@ void KSpreadTableIface::setSelectionBorderColor(const QColor &bd_Color )
 {
     m_table->setSelectionBorderColor(m_table->markerRect().topLeft (),bd_Color);
 }
+
+void KSpreadTableIface::deleteSelection()
+{
+    m_table->deleteSelection(m_table->markerRect().topLeft());
+}
+
+void KSpreadTableIface::copySelection()
+{
+    m_table->copySelection(m_table->markerRect().topLeft());
+}
+
+void KSpreadTableIface::cutSelection()
+{
+    m_table->cutSelection(m_table->markerRect().topLeft ());
+}
+
+void KSpreadTableIface::clearTextSelection()
+{
+    m_table->clearTextSelection(m_table->markerRect().topLeft());
+}
+
+void KSpreadTableIface::clearValiditySelection()
+{
+    m_table->clearValiditySelection(m_table->markerRect().topLeft());
+}
+
+void KSpreadTableIface::clearConditionalSelection()
+{
+    m_table->clearConditionalSelection(m_table->markerRect().topLeft ());
+}
+
