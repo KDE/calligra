@@ -1874,6 +1874,20 @@ KWFrame* KWTextFrameSet::loadOasis( const QDomElement &tag, KoOasisContext& cont
     return frame;
 }
 
+void KWTextFrameSet::saveOasisContent( KoXmlWriter& writer, KoGenStyles& mainStyles ) const
+{
+    if ( frames.isEmpty() ) // Deleted frameset -> don't save
+        return;
+    // TODO save protectContent
+    m_textobj->saveOasisContent( writer, mainStyles );
+}
+
+void KWTextFrameSet::saveOasis( KoXmlWriter& writer, KoGenStyles& mainStyles ) const
+{
+    // TODO save the frame stuff
+    saveOasisContent( writer, mainStyles );
+}
+
 void KWTextFrameSet::load( QDomElement &attributes, bool loadFrames )
 {
     KWFrameSet::load( attributes, loadFrames );

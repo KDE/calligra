@@ -56,6 +56,10 @@
 #include <koApplication.h>
 #include <kooasiscontext.h>
 #include <kocommandhistory.h>
+#include <koGenStyles.h>
+#include <koStore.h>
+#include <koStoreDevice.h>
+#include <koxmlwriter.h>
 
 #include <kcursor.h>
 #include <kdebug.h>
@@ -68,6 +72,7 @@
 
 #include <unistd.h>
 #include <math.h>
+#include <ktempfile.h>
 
 //#define DEBUG_PAGES
 //#define DEBUG_SPEED
@@ -2533,6 +2538,144 @@ void KWDocument::insertEmbedded( KoStore *store, QDomElement topElem, KMacroComm
     refreshDocStructure( (int)Embedded );
 }
 
+bool KWDocument::saveOasis( KoStore* store, KoXmlWriter* manifestWriter )
+{
+    if ( !store->open( "content.xml" ) )
+        return false;
+    manifestWriter->addManifestEntry( "content.xml", "text/xml" );
+    KoStoreDevice contentDev( store );
+    KoXmlWriter contentWriter( &contentDev, "office:document-content" );
+
+    m_varColl->variableSetting()->setModificationDate(QDateTime::currentDateTime());
+    recalcVariables( VT_DATE );
+    recalcVariables( VT_TIME ); // for "current time"
+    m_syntaxVersion = CURRENT_SYNTAX_VERSION; // todo clean this up
+
+    KoGenStyles mainStyles;
+
+    // TODO saveUserStyles. Must be done first so that auto-names don't clash with user names.
+
+    KTempFile contentTmpFile;
+    contentTmpFile.setAutoDelete( true );
+    QFile* tmpFile = contentTmpFile.file();
+    KoXmlWriter contentTmpWriter( tmpFile );
+    contentTmpWriter.startElement( "office:body" );
+    contentTmpWriter.startElement( "office:text" );
+
+    saveOasisBody( contentTmpWriter, mainStyles );
+    // TODO save the content into contentTmpWriter!
+    // TODO save embedded objects
+
+    contentTmpWriter.endElement(); // office:text
+    contentTmpWriter.endElement(); // office:body
+
+    // Done with writing out the contents to the tempfile, we can now write out the automatic styles
+    contentWriter.startElement( "office:automatic-styles" );
+    QValueList<KoGenStyles::NamedStyle> styles = mainStyles.styles( STYLE_AUTO );
+    QValueList<KoGenStyles::NamedStyle>::const_iterator it = styles.begin();
+    for ( ; it != styles.end() ; ++it ) {
+        (*it).style->writeStyle( &contentWriter, "style:style", (*it).name, "style:paragraph-properties" );
+    }
+    contentWriter.endElement(); // office:automatic-styles
+
+    // And now we can copy over the contents from the tempfile to the real one
+    contentDev.writeBlock( "\n", 1 );
+    tmpFile->close();
+    bool openOk = tmpFile->open( IO_ReadOnly ); Q_ASSERT( openOk );
+    static const int MAX_CHUNK_SIZE = 8*1024; // 8 KB
+    QByteArray buffer(MAX_CHUNK_SIZE);
+    while ( !tmpFile->atEnd() ) {
+        Q_LONG len = tmpFile->readBlock( buffer.data(), buffer.size() );
+        if ( len <= 0 ) // e.g. on error
+            break;
+        contentDev.writeBlock( buffer.data(), len );
+    }
+    contentTmpFile.close();
+    contentWriter.endElement(); // document-content
+    contentWriter.endDocument();
+
+    if ( !store->close() ) // done with content.xml
+        return false;
+
+
+    KoGenStyle pageLayout( STYLE_PAGELAYOUT /*no family needed*/ );
+    pageLayout.addAttribute( "style:page-usage", "all" );
+    pageLayout.addPropertyPt( "fo:page-width", m_pageLayout.ptWidth );
+    pageLayout.addPropertyPt( "fo:page-height", m_pageLayout.ptHeight );
+    pageLayout.addProperty( "style:print-orientation", m_pageLayout.orientation == PG_LANDSCAPE ? "landscape" : "portrait" );
+    pageLayout.addPropertyPt( "fo:margin-left", m_pageLayout.ptLeft );
+    pageLayout.addPropertyPt( "fo:margin-top", m_pageLayout.ptTop );
+    pageLayout.addPropertyPt( "fo:margin-right", m_pageLayout.ptRight );
+    pageLayout.addPropertyPt( "fo:margin-bottom", m_pageLayout.ptBottom );
+    // TODO (from variablesettings I guess) pageLayout.addAttribute( "style:first-page-number", ... );
+    /*QString pageLayout =*/ mainStyles.lookup( pageLayout, "pm" );
+
+    if ( !store->open( "styles.xml" ) )
+        return false;
+    manifestWriter->addManifestEntry( "styles.xml", "text/xml" );
+    saveOasisDocumentStyles( store, mainStyles );
+    if ( !store->close() ) // done with styles.xml
+        return false;
+
+    // TODO settings.xml
+    // manifestWriter->addManifestEntry( "settings.xml", "text/xml" );
+    return true;
+}
+
+void KWDocument::saveOasisDocumentStyles( KoStore* store, KoGenStyles& mainStyles ) const
+{
+    QString pageLayoutName;
+    KoStoreDevice stylesDev( store );
+    KoXmlWriter stylesWriter( &stylesDev, "office:document-styles" );
+
+    stylesWriter.startElement( "office:styles" );
+    QValueList<KoGenStyles::NamedStyle> styles = mainStyles.styles( STYLE_USER );
+    QValueList<KoGenStyles::NamedStyle>::const_iterator it = styles.begin();
+    for ( ; it != styles.end() ; ++it ) {
+        (*it).style->writeStyle( &stylesWriter, "style:style", (*it).name, "style:paragraph-properties" );
+    }
+    stylesWriter.endElement(); // office:styles
+
+    stylesWriter.startElement( "office:automatic-styles" );
+    styles = mainStyles.styles( STYLE_PAGELAYOUT );
+    Q_ASSERT( styles.count() == 1 );
+    it = styles.begin();
+    for ( ; it != styles.end() ; ++it ) {
+        (*it).style->writeStyle( &stylesWriter, "style:page-layout", (*it).name, "style:page-layout-properties", false /*don't close*/ );
+        //if ( m_pageLayout.columns > 1 ) TODO add columns element. This is a bit of a hack,
+        // which only works as long as we have only one page master
+        stylesWriter.endElement();
+        Q_ASSERT( pageLayoutName.isEmpty() ); // if there's more than one pagemaster we need to rethink all this
+        pageLayoutName = (*it).name;
+    }
+
+    stylesWriter.endElement(); // office:automatic-styles
+
+    stylesWriter.startElement( "office:master-styles" );
+    stylesWriter.startElement( "style:master-page" );
+    stylesWriter.addAttribute( "style:name", "Standard" );
+    stylesWriter.addAttribute( "style:page-layout-name", pageLayoutName );
+    stylesWriter.endElement();
+    stylesWriter.endElement(); // office:master-styles
+
+    stylesWriter.endElement(); // root element (office:document-styles)
+    stylesWriter.endDocument();
+}
+
+void KWDocument::saveOasisBody( KoXmlWriter& writer, KoGenStyles& mainStyles ) const
+{
+    if ( m_processingType == WP ) {
+        // Write out the main text frameset's contents
+        KWTextFrameSet *frameset = dynamic_cast<KWTextFrameSet *>( m_lstFrameSet.getFirst() );
+        if ( frameset ) {
+            frameset->saveOasisContent( writer, mainStyles );
+        }
+        // TODO write out the other (non-inline) framesets
+    } else {
+        // TODO write the contents page-by-page
+    }
+}
+
 QDomDocument KWDocument::saveXML()
 {
     m_varColl->variableSetting()->setModificationDate(QDateTime::currentDateTime());
@@ -2742,6 +2885,7 @@ QDomDocument KWDocument::saveXML()
     return doc;
 }
 
+// KWord-1.3 format
 void KWDocument::saveEmbeddedObjects( QDomElement& parentElem, const QPtrList<KoDocumentChild>& childList )
 {
     // Write "OBJECT" tag for every child, appending "EMBEDDING" tags to the main XML
@@ -2765,6 +2909,7 @@ void KWDocument::saveEmbeddedObjects( QDomElement& parentElem, const QPtrList<Ko
     }
 }
 
+// KWord-1.3 format
 void KWDocument::saveStyle( KoStyle *sty, QDomElement parentElem )
 {
     QDomDocument doc = parentElem.ownerDocument();
@@ -2777,6 +2922,7 @@ void KWDocument::saveStyle( KoStyle *sty, QDomElement parentElem )
     styleElem.appendChild( formatElem );
 }
 
+// KWord-1.3 format
 void KWDocument::saveFrameStyle( KWFrameStyle *sty, QDomElement parentElem )
 {
     QDomDocument doc = parentElem.ownerDocument();
@@ -2786,6 +2932,7 @@ void KWDocument::saveFrameStyle( KWFrameStyle *sty, QDomElement parentElem )
     sty->saveFrameStyle( frameStyleElem );
 }
 
+// KWord-1.3 format
 void KWDocument::saveTableStyle( KWTableStyle *sty, QDomElement parentElem )
 {
     QDomDocument doc = parentElem.ownerDocument();
@@ -2795,6 +2942,7 @@ void KWDocument::saveTableStyle( KWTableStyle *sty, QDomElement parentElem )
     sty->saveTableStyle( tableStyleElem );
 }
 
+// KWord-1.3 format
 bool KWDocument::completeSaving( KoStore *_store )
 {
     if ( !_store )

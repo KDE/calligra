@@ -26,6 +26,8 @@
 #include <koparaglayout.h>
 #include <koChangeCaseDia.h>
 #include "kwvariable.h"
+
+class KoGenStyles;
 class KWStyle;
 class KWTextDrag;
 class KWDocument;
@@ -145,8 +147,15 @@ public:
     { return saveInternal( parentElem, saveFrames, true ); }
 
     virtual void load( QDomElement &attributes, bool loadFrames = true );
+    /// Load the contents of a frame (i.e. the text)
     void loadOasisContent( const QDomElement &bodyElem, KoOasisContext& context );
+    /// Load a complete textbox (frame and text)
     KWFrame* loadOasis( const QDomElement &bodyElem, KoOasisContext& context );
+
+    /// Save the contents of a frame (i.e. the text)
+    void saveOasisContent( KoXmlWriter& writer, KoGenStyles& mainStyles ) const;
+    /// Save a complete textbox (frame and text)
+    void saveOasis( KoXmlWriter& writer, KoGenStyles& mainStyles ) const;
 
     virtual void finalize();
     virtual void zoom( bool forPrint );

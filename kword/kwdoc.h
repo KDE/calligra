@@ -24,6 +24,7 @@
 #include <config.h>
 #endif
 
+class KoGenStyles;
 class KWDocument;
 class KPrinter;
 class KWTextImage;
@@ -153,6 +154,8 @@ public:
     void initEmpty();
 
     virtual bool loadOasis( const QDomDocument& doc, KoOasisStyles& oasisStyles, KoStore* store );
+    enum { STYLE_PAGELAYOUT, STYLE_USER, STYLE_AUTO };
+    virtual bool saveOasis( KoStore* store, KoXmlWriter* manifestWriter );
     virtual bool loadXML( QIODevice *, const QDomDocument & dom );
     virtual bool loadChildren( KoStore *_store );
     virtual QDomDocument saveXML();
@@ -827,6 +830,8 @@ protected:
     void loadDefaultTableTemplates();
 
     void loadOasisHeaderFooter( const QDomElement& headerFooter, bool hasEvenOdd, QDomElement& style, KoOasisContext& context );
+    void saveOasisDocumentStyles( KoStore* store, KoGenStyles& mainStyles ) const;
+    void saveOasisBody( KoXmlWriter& writer, KoGenStyles& mainStyles ) const;
 
 private:
     void endOfLoading();
