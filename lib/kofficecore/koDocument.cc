@@ -850,10 +850,7 @@ QCString KoDocument::readNativeFormatMimeType( KInstance *instance )
   if ( !service )
     return QCString();
 
-  KDesktopFile deFile( service->desktopEntryPath(), true /*readonly*/);
-
-  QString nativeType = deFile.readEntry( "X-KDE-NativeMimeType" );
-  return nativeType.latin1();
+  return service->property( "X-KDE-NativeMimeType" ).toString().latin1();
 }
 
 void KoDocument::addShell( KoMainWindow *shell )
