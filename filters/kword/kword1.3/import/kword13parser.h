@@ -109,6 +109,8 @@ protected:
     /// Process opening tag of some elements that are children of \<DOC\> and which only define document properties
     bool startElementDocumentAttributes( const QString& name, const QXmlAttributes& attributes,
         KWord13StackItem *stackItem, const KWord13StackItemType& allowedParentType, const KWord13StackItemType& newType );
+    /// Process \<KEY\>
+    bool startElementKey( const QString& name, const QXmlAttributes& attributes, KWord13StackItem *stackItem );
     /**
      * Get a picture key out of the individual \<KEY\> attributes
      *

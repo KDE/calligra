@@ -36,7 +36,7 @@ KWord13Document::KWord13Document( void ) : m_previewFile( 0 )
     m_otherFramesetList.setAutoDelete( true );
     m_headerFooterFramesetList.setAutoDelete( true );
     m_footEndNoteFramesetList.setAutoDelete( true );
-    m_pictureList.setAutoDelete( true );
+    m_pictureDict.setAutoDelete( true );
 }
 
 KWord13Document::~KWord13Document( void )
@@ -123,6 +123,15 @@ void KWord13Document::xmldump( QIODevice* io )
     }
     
     iostream << " </styles>\n";
+    
+    iostream << " <pictures>\n";
+    
+    for ( QDictIterator<KWord13Picture> it3( m_pictureDict ) ; it3.current(); ++it3 )
+    {
+        iostream << "  <key>" << it3.currentKey() << "</key>" << endl;
+    }
+    
+    iostream << " </pictures>\n";
     
     iostream << "</kworddocument>\n";
 }

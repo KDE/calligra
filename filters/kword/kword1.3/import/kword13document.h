@@ -30,6 +30,7 @@ class KWord13Picture;
 #include <qmap.h>
 #include <qptrlist.h>
 #include <qdatetime.h>
+#include <qdict.h>
 
 #include "kword13frameset.h"
 
@@ -70,7 +71,7 @@ public:
     QPtrList<KWordTextFrameset> m_headerFooterFramesetList; ///< List of \<FRAMESET\> having footer/header
     QPtrList<KWordTextFrameset> m_footEndNoteFramesetList; ///< List of \<FRAMESET\> having footnotes or endnotes
     QPtrList<KWord13Frameset> m_otherFramesetList; ///< List of \<FRAMESET\> of other types
-    QPtrList<KWord13Picture> m_pictureList; ///< List of all pictures
+    QDict<KWord13Picture> m_pictureDict; ///< "Dictionnary" of all pictures
     KTempFile* m_previewFile;
 };
 

@@ -25,6 +25,7 @@
 #include "kword13formatother.h"
 #include "kword13layout.h"
 #include "kword13frameset.h"
+#include "kword13picture.h"
 #include "kword13document.h"
 #include "kword13parser.h"
 
@@ -398,6 +399,30 @@ bool KWord13Parser::startElementDocumentAttributes( const QString& name, const Q
     }
 }
 
+bool KWord13Parser::startElementKey( const QString& name, const QXmlAttributes& attributes, KWord13StackItem *stackItem )
+{
+    const QString key( calculatePictureKey( attributes.value( "filename" ),
+            attributes.value( "year" ), attributes.value( "month" ),  attributes.value( "day" ),
+            attributes.value( "hour" ), attributes.value( "minute" ), attributes.value( "second" ),
+            attributes.value( "msec" ) ) );
+    kdDebug(30520) << "Picture key: " << key << endl;
+            
+    if ( stackItem->elementType != KWord13TypePicturesPlural )
+        return true; // Not child of <PICTURES>, <PIXMAPS> or <CLIPARTS>
+        
+    KWord13Picture* pic = new KWord13Picture;
+    pic->m_storeName = attributes.value( "name" );
+    if ( pic->m_storeName.isEmpty() )
+    {
+        kdError(30520) << "Picture defined without store name! Aborting!" << endl;
+        return false; // Assume parse error
+    }
+    // ### TODO: catch duplicate keys (should not happen but who knows?)
+    m_kwordDocument->m_pictureDict.insert( key, pic );
+    return true;
+}
+
+
 bool KWord13Parser::startElement( const QString&, const QString&, const QString& name, const QXmlAttributes& attributes )
 {
     kdDebug(30520) << indent << "<" << name << ">" << endl; // DEBUG
@@ -489,12 +514,7 @@ bool KWord13Parser::startElement( const QString&, const QString&, const QString&
     }
     else if ( name == "KEY" )
     {
-        // ### TODO: provisory
-        kdDebug(30520) << "Key: " << calculatePictureKey( attributes.value( "filename" ),
-            attributes.value( "year" ), attributes.value( "month" ),  attributes.value( "day" ),
-            attributes.value( "hour" ), attributes.value( "minute" ), attributes.value( "second" ),
-            attributes.value( "msec" ) ) << endl;
-        success = true;
+        success = startElementKey( name, attributes, stackItem );
     }
     else if ( name == "FRAME" )
     {
