@@ -7,7 +7,6 @@ libkdchart_la_SOURCES = KDChart.cpp 		\
 			KDChartBarPainter.cpp	\
 			KDChartCustomBox.cpp 	\
 			KDChartData.cpp 	\
-			KDChartDataRegion.cpp	\
 			KDChartHiLoPainter.cpp	\
 			KDChartLinesPainter.cpp	\
 			KDChartPainter.cpp	\
