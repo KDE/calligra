@@ -43,6 +43,7 @@ private:
     void createPageDocument( QDomDocument& mainDocument, QDomElement& framesetsElem );
     QDomElement parseList( QDomDocument& doc, const QDomElement& list );
     QDomElement parseParagraph( QDomDocument& doc, const QDomElement& paragraph );
+    void parseSpanOrSimilar( QDomDocument& doc, const QDomElement& parent, QDomElement& kwordParagraph, QDomElement& kwordFormats, QString& paragraphText, uint& pos);
     // Reads from m_styleStack, writes the text properties to parentElement
     void writeFormat( QDomDocument& doc, QDomElement& parentElement, int id, int pos, int length );
     // Reads from m_styleStack, writes the paragraph properties to layoutElement

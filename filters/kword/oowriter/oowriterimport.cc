@@ -1,6 +1,7 @@
 /* This file is part of the KDE project
    Copyright (C) 2002 Laurent Montel <lmontel@mandrakesoft.com>
    Copyright (C) 2003 David Faure <faure@kde.org>
+   Copyright 2002, 2003 Nicolas GOUTTE <goutte@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -654,6 +655,127 @@ QDomElement OoWriterImport::parseList( QDomDocument& doc, const QDomElement& lis
     return p;
 }
 
+
+void OoWriterImport::parseSpanOrSimilar( QDomDocument& doc, const QDomElement& parent,
+    QDomElement& kwordParagraph, QDomElement& kwordFormats, QString& paragraphText, uint& pos)
+{
+    // parse every child node of the parent
+    for( QDomNode node ( parent.firstChild() ); !node.isNull(); node = node.nextSibling() )
+    {
+        QDomElement ts ( node.toElement() );
+        QString textData;
+        QString tagName( ts.tagName() );
+        QDomText t ( node.toText() );
+
+        bool shouldWriteFormat=false; // By default no <FORMAT> element should be written
+        
+        // Try to keep the order of the tag names by probability of happening
+        if (tagName == "text:span")
+        {
+            m_styleStack.setMark( StyleStack::SpanMark );
+            fillStyleStack( ts );
+            parseSpanOrSimilar( doc, ts, kwordParagraph, kwordFormats, paragraphText, pos);
+            m_styleStack.popToMark( StyleStack::SpanMark  );
+        }
+        else if (tagName == "text:s")
+        {
+            textData = OoUtils::expandWhitespace(ts);
+            shouldWriteFormat=true;
+        }
+        else if ( tagName == "text:tab-stop" )
+        {
+            // KWord currently uses \t.
+            // Known bug: a line with only \t\t\t\t isn't loaded - XML (QDom) strips out whitespace.
+            // One more good reason to switch to <text:tab-stop> instead...
+            textData = '\t';
+            shouldWriteFormat=true;
+        }
+        else if ( tagName == "text:line-break" )
+        {
+            textData = '\n';
+            shouldWriteFormat=true;
+        }
+        else if ( tagName == "draw:image" )
+        {
+            textData = '#'; // anchor placeholder
+            appendPicture(doc, kwordFormats, ts, pos);
+        }
+        else if ( tagName == "text:a" )
+        {
+            // ### TODO: for now, it is only a <text-span> whitout formatting
+            m_styleStack.setMark( StyleStack::SpanMark );
+            parseSpanOrSimilar( doc, ts, kwordParagraph, kwordFormats, paragraphText, pos);
+            m_styleStack.popToMark( StyleStack::SpanMark  );
+        }
+        else if (tagName == "text:date")
+        {
+            textData = '#';     // field placeholder
+            QDomElement dateElement ( doc.createElement("DATE") );
+            // As we have no idea about the current date, use the *nix epoch 1970-01-01
+            dateElement.setAttribute("year",1970);
+            dateElement.setAttribute("month",1);
+            dateElement.setAttribute("day",1);
+            dateElement.setAttribute("fix",0);  // Has OOWriter fixed dates?
+            appendKWordVariable(doc, kwordFormats, ts, pos, "DATE0Locale", 0, dateElement);
+        }
+        else if (tagName == "text:time")
+        {
+            textData = '#';     // field placeholder
+            QDomElement timeElement (doc.createElement("TIME") );
+            // We cannot calculate the time, so default to midnight
+            timeElement.setAttribute("hour",0);
+            timeElement.setAttribute("minute",0);
+            timeElement.setAttribute("second",0);
+            timeElement.setAttribute("fix",0); // Has OOWriter fixed times?
+            appendKWordVariable(doc, kwordFormats, ts, pos, "TIMELocale", 2, timeElement);
+        }
+        else if ( tagName == "text:page-number" )
+        {
+            textData = '#';     // field placeholder
+            QDomElement pgnumElement ( doc.createElement("PGNUM") );
+            pgnumElement.setAttribute("subtype",0);
+            pgnumElement.setAttribute("value",1);
+            appendKWordVariable(doc, kwordFormats, ts, pos, "NUMBER", 4, pgnumElement);
+        }
+        else if ( tagName == "text:file-name" )
+        {
+            textData = '#';     // field placeholder
+            QDomElement fieldElement ( doc.createElement("FIELD") );
+            fieldElement.setAttribute("subtype",0);
+            fieldElement.setAttribute("value","?");
+            appendKWordVariable(doc, kwordFormats, ts, pos, "STRING", 8, fieldElement);
+        }
+        else if ( tagName == "text:author-name"
+                 || tagName == "text:author-initials")
+        {
+            textData = '#';     // field placeholder
+            // ### TODO
+        }
+        else if ( t.isNull() ) // no textnode, we must ignore
+        {
+            kdWarning(30518) << "Ignoring tag " << ts.tagName() << endl;
+            continue;
+        }
+        else
+        {
+            textData = t.data();
+            shouldWriteFormat=true;
+        }
+
+        paragraphText += textData;
+        const uint length = textData.length();
+
+        if (shouldWriteFormat)
+        {
+            writeFormat( doc, kwordFormats, 1 /* id for normal text */, pos, length );
+            //appendShadow( doc, kwordParagraph ); // this is necessary to take care of shadowed paragraphs
+        }
+        
+        pos += length;
+
+    }
+}
+
 QDomElement OoWriterImport::parseParagraph( QDomDocument& doc, const QDomElement& paragraph )
 {
     QDomElement p = doc.createElement( "PARAGRAPH" );
@@ -667,118 +789,11 @@ QDomElement OoWriterImport::parseParagraph( QDomDocument& doc, const QDomElement
     QString paragraphText;
     uint pos = 0;
 
-    // parse every childnode of the paragraph
-    for( QDomNode n = paragraph.firstChild(); !n.isNull(); n = n.nextSibling() )
-    {
-        QString textData;
-        QDomElement ts = n.toElement();
-        QString tagName = ts.tagName();
-        QDomText t = n.toText();
+    // parse every child node of the paragraph
+    parseSpanOrSimilar( doc, paragraph, p, formats, paragraphText, pos);
 
-        if (tagName == "text:s")
-            textData = OoUtils::expandWhitespace(n.toElement());
-        else if (tagName == "text:date")
-        {
-            textData = '#';     // field placeholder
-            QDomElement dateElement ( doc.createElement("DATE") );
-            // As we have no idea about the current date, use the *nix epoch 1970-01-01
-            dateElement.setAttribute("year",1970);
-            dateElement.setAttribute("month",1);
-            dateElement.setAttribute("day",1);
-            dateElement.setAttribute("fix",0);  // Does OOWriter have fixed dates?
-            appendKWordVariable(doc, formats, ts, pos, "DATE0Locale", 0, dateElement);
-        }
-        else if (tagName == "text:time")
-        {
-            textData = '#';     // field placeholder
-            QDomElement timeElement (doc.createElement("TIME") );
-            // We cannot calculate the time, so default to midnight
-            timeElement.setAttribute("hour",0);
-            timeElement.setAttribute("minute",0);
-            timeElement.setAttribute("second",0);
-            timeElement.setAttribute("fix",0); // Does OOWriter have fixed times?
-            appendKWordVariable(doc, formats, ts, pos, "TIMELocale", 2, timeElement);
-        }
-        else if ( tagName == "text:page-number" )
-        {
-            textData = '#';     // field placeholder
-            QDomElement pgnumElement ( doc.createElement("PGNUM") );
-            pgnumElement.setAttribute("subtype",0);
-            pgnumElement.setAttribute("value",1);
-            appendKWordVariable(doc, formats, ts, pos, "NUMBER", 4, pgnumElement);
-        }
-        else if ( tagName == "text:file-name" )
-        {
-            textData = '#';     // field placeholder
-            QDomElement fieldElement ( doc.createElement("FIELD") );
-            fieldElement.setAttribute("subtype",0);
-            fieldElement.setAttribute("value","?");
-            appendKWordVariable(doc, formats, ts, pos, "STRING", 8, fieldElement);
-        }
-        else if ( tagName == "text:author-name"
-                 || tagName == "text:author-initials")
-        {
-            textData = '#';     // field placeholder
-            // ### TODO
-        }
-        else if ( tagName == "text:tab-stop" )
-        {
-            // KWord currently uses \t.
-            // Known bug: a line with only \t\t\t\t isn't loaded - XML (QDom) strips out whitespace.
-            // One more good reason to switch to <text:tab-stop> instead...
-            textData = '\t';
-        }
-        else if ( tagName == "draw:image" )
-        {
-            textData = '#'; // anchor placeholder
-            appendPicture(doc, formats, ts, pos);
-        }
-        else if ( t.isNull() ) // no textnode, so maybe it's a text:span
-        {
-            if ( tagName != "text:span" )
-            {
-                // TODO: are there any other possible
-                // elements or even nested test:spans?
-                // DF: yes. Footnotes, for instance, and many fields.
-                kdWarning() << "Ignoring " << ts.tagName() << endl;
-                continue;
-            }
-            fillStyleStack( ts );
-
-            // We do a look ahead to eventually find a text:span that contains
-            // only a line-break. If found, we'll add it to the current string
-            // and move on to the next sibling.
-            // DF: What proves that the line-break will be at the _beginning_ of the next item?
-            // (What if it's a footnote?). Why not treat line-break _when_ it occurs?
-            QDomNode next = n.nextSibling();
-            if ( !next.isNull() )
-            {
-                QDomNode lineBreak = next.namedItem( "text:line-break" );
-                if ( !lineBreak.isNull() ) // found a line-break
-                {
-                    textData = ts.text() + "\n";
-                    n = n.nextSibling(); // move on to the next sibling
-                }
-                else
-                    textData = ts.text();
-            }
-            else
-                textData = ts.text();
-        }
-        else
-            textData = t.data();
-
-        paragraphText += textData;
-        uint length = textData.length();
-
-        writeFormat( doc, formats, 1 /* id for normal text */, pos, length );
-
-        //appendShadow( doc, p ); // this is necessary to take care of shadowed paragraphs
-        pos += length;
-
-        m_styleStack.popToMark( StyleStack::ParagraphMark  ); // remove possible text:span styles from the stack
-    }
-
+    m_styleStack.popToMark( StyleStack::ParagraphMark  ); // remove possible garbage (should not be needed)
+    
     QDomElement text = doc.createElement( "TEXT" );
     text.appendChild( doc.createTextNode( paragraphText ) );
     text.setAttribute( "xml:space", "preserve" );
