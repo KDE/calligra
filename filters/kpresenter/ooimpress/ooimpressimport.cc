@@ -435,6 +435,16 @@ void OoImpressImport::createDocumentContent( QDomDocument &doccontent )
                 appendShadow( doc, e );
                 appendLineEnds( doc, e );
             }
+            else if (name=="draw:polyline") { // polyline
+                storeObjectStyles(o);
+                e = doc.createElement("OBJECT");
+                e.setAttribute("type", 12);
+                appendPolylineGeometry(doc, e, o, (int)offset);
+                appendPoints(doc, e, o);
+                appendPen(doc, e);
+                appendBrush(doc, e);
+                //appendShadow(doc, e);
+            }
             else if ( name == "draw:image" ) // image
             {
                 storeObjectStyles( o );
@@ -1297,8 +1307,12 @@ QDomElement OoImpressImport::parseParagraph( QDomDocument& doc, const QDomElemen
             }
         }
 
+        //lukas: doesn't work correctly in KPresenter ATM!
+        bool wordByWord = (m_styleStack.hasAttribute("fo:score-spaces"))
+                          && (m_styleStack.attribute("fo:score-spaces") == "false");
+
         // strikeout
-        if ( m_styleStack.hasAttribute( "style:text-crossing-out" )
+        if ( m_styleStack.hasAttribute("style:text-crossing-out")
              && m_styleStack.attribute("style:text-crossing-out") != "none")
         {
             QString strikeOutType = m_styleStack.attribute( "style:text-crossing-out" );
@@ -1318,6 +1332,8 @@ QDomElement OoImpressImport::parseParagraph( QDomDocument& doc, const QDomElemen
                 text.setAttribute( "strikeoutstyleline", "solid" );
             }
 
+            if (wordByWord)
+                text.setAttribute("wordbyword", 1);
         }
 
         // underlining
@@ -1376,6 +1392,8 @@ QDomElement OoImpressImport::parseParagraph( QDomDocument& doc, const QDomElemen
                 text.setAttribute( "underlinecolor", underLineColor );
             }
 
+            if (wordByWord)
+                text.setAttribute("wordbyword", 1);
         }
 
         //para bg color
@@ -1740,6 +1758,52 @@ QDomElement OoImpressImport::saveHelper(const QString &tmpText, QDomDocument &do
         element.setAttribute("whitespace", tmpText.length());
     element.appendChild(doc.createTextNode(tmpText));
     return element;
+}
+
+void OoImpressImport::appendPolylineGeometry(QDomDocument& doc, QDomElement& e, const QDomElement& object, int offset)
+{
+    double x = toPoint( object.attribute( "svg:x" ) );
+    double y = toPoint( object.attribute( "svg:y" ) );
+    double width = toPoint( object.attribute( "svg:width" ) );
+    double height = toPoint( object.attribute( "svg:height" ) );
+
+    QDomElement orig = doc.createElement( "ORIG" );
+    orig.setAttribute( "x", x );
+    orig.setAttribute( "y", y + offset );
+    e.appendChild( orig );
+
+    QDomElement size = doc.createElement( "SIZE" );
+    size.setAttribute( "width", width );
+    size.setAttribute( "height", height );
+    e.appendChild( size );
+}
+
+void OoImpressImport::appendPoints(QDomDocument& doc, QDomElement& e, const QDomElement& object)
+{
+    QDomElement ptsElem = doc.createElement("POINTS");
+
+    QStringList ptList = QStringList::split(' ', object.attribute("draw:points"));
+
+    QString pt_x, pt_y;
+    double tmp_x, tmp_y;
+    for (QStringList::Iterator it = ptList.begin(); it != ptList.end(); ++it) {
+        QDomElement point = doc.createElement("Point");
+
+        tmp_x = (*it).section(',',0,0).toInt() / 100;
+        tmp_y = (*it).section(',',1,1).toInt() / 100;
+
+        pt_x.setNum(tmp_x);
+        pt_x+="mm";
+
+        pt_y.setNum(tmp_y);
+        pt_y+="mm";
+
+        point.setAttribute("point_x", toPoint(pt_x));
+        point.setAttribute("point_y", toPoint(pt_y));
+        ptsElem.appendChild(point);
+    }
+
+    e.appendChild(ptsElem);
 }
 
 #include "ooimpressimport.moc"
