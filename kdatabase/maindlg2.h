@@ -58,6 +58,14 @@ private:
     QListView* KListView2;
     QListView* KListView3;
     QListView* KListView4;
+
+protected:
+    void closeEvent(QCloseEvent *ev);
+
+signals:
+    void hideing();
+
+
 };
 
 #endif

@@ -137,4 +137,9 @@ bool MainDlg2::refreshFormView(QDomNode formSection){
     return(true);
 }
 
+void MainDlg2::closeEvent(QCloseEvent *ev)
+{
+	emit hideing();
+}
+
 #include "maindlg2.moc"

@@ -25,6 +25,7 @@
 #include "clstbldesigner2.h"
 
 class KAction;
+class KToggleAction;
 class QPaintEvent;
 
 class KDatabasePart;
@@ -39,6 +40,7 @@ protected slots:
     void cut();
     void copy();
     void paste();
+    void toggleDocBrowser();
 
 protected:
     void paintEvent( QPaintEvent* );
@@ -47,7 +49,10 @@ protected:
 
 private:
     //KAction* m_cut;
+    KToggleAction *m_actionToggleDocBrowser;
     MainDlg2* myMainDlg;
+    
+    bool m_docBrowserVisible;
 };
 
 #endif

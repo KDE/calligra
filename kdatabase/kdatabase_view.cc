@@ -34,12 +34,21 @@ KDatabaseView::KDatabaseView( KDatabasePart* part, QWidget* parent, const char* 
 {
     setInstance( KDatabaseFactory::global() );
     setXMLFile( "kdatabase.rc" );
+    
     KStdAction::copy(this, SLOT( copy() ), actionCollection(), "copy" );
     KStdAction::cut(this, SLOT( cut() ), actionCollection(), "cut" );
     KStdAction::paste(this, SLOT( paste() ), actionCollection(), "paste" );
+    
+    m_actionToggleDocBrowser = new KToggleAction(i18n("&View document browser"), "toggle_docbrowser", this, SLOT(toggleDocBrowser()),
+    			actionCollection(), "toggle_docbrowser");
+    m_actionToggleDocBrowser->setChecked(true);
+    
+    
     myMainDlg = new MainDlg2(this,name);
+    connect(myMainDlg, SIGNAL(hideing()), this, SLOT(toggleDocBrowser()));
     myMainDlg->initStruct(part->getKDBFile());
     myMainDlg->show();
+    m_docBrowserVisible = true;
 
     // Note: Prefer KStdAction::* to any custom action if possible.
     //m_cut = new KAction( i18n("&Cut"), "editcut", 0, this, SLOT( cut() ),
@@ -81,4 +90,20 @@ void KDatabaseView::paste()
     kdDebug(31000) << "KDatabaseView::paste(): PASTE called" << endl;
 }
 
+void KDatabaseView::toggleDocBrowser()
+{
+    kdDebug(31000) << "KDatabaseView::toggleDocBrowser(): called" << endl;
+    if(m_docBrowserVisible)
+    {
+	myMainDlg->hide();
+	m_docBrowserVisible = false;
+	m_actionToggleDocBrowser->setChecked(false);
+    }
+    else
+    {
+	myMainDlg->show();
+	m_docBrowserVisible = true;
+	m_actionToggleDocBrowser->setChecked(true);
+    }
+}
 #include "kdatabase_view.moc"
