@@ -61,13 +61,14 @@ KoSearchContextUI::KoSearchContextUI( KoSearchContext *ctx, QWidget *parent )
 
 void KoSearchContextUI::slotShowOptions()
 {
-    m_bOptionsShown = true;
-    m_btnNoOptions->setEnabled( true );
     KoFormatDia * dlg = new KoFormatDia( m_parent, m_ctx );
     if ( dlg->exec())
     {
         dlg->ctxOptions( );
+        m_bOptionsShown = true;
+        m_btnNoOptions->setEnabled( true );
     }
+
     delete dlg;
 }
 
