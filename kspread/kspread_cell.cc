@@ -2800,12 +2800,24 @@ void KSpreadCell::paintCommentIndicator( QPainter& painter,
     }
 
     QPointArray point( 3 );
-    point.setPoint( 0, doc->zoomItX( cellRect.right() - 5.0 ),
-                       doc->zoomItY( cellRect.y() ) );
-    point.setPoint( 1, doc->zoomItX( cellRect.right() ),
-                       doc->zoomItY( cellRect.y() ) );
-    point.setPoint( 2, doc->zoomItX( cellRect.right() ),
-                       doc->zoomItY( cellRect.y() + 5.0 ) );
+    if ( m_pTable->layoutDirection()==KSpreadSheet::RightToLeft )
+    {
+      point.setPoint( 0, doc->zoomItX( cellRect.x() + 6.0 ),
+                         doc->zoomItY( cellRect.y() ) );
+      point.setPoint( 1, doc->zoomItX( cellRect.x() ),
+                         doc->zoomItY( cellRect.y() ) );
+      point.setPoint( 2, doc->zoomItX( cellRect.x() ),
+                         doc->zoomItY( cellRect.y() + 6.0 ) );
+    }
+    else
+    {
+      point.setPoint( 0, doc->zoomItX( cellRect.right() - 5.0 ),
+                         doc->zoomItY( cellRect.y() ) );
+      point.setPoint( 1, doc->zoomItX( cellRect.right() ),
+                         doc->zoomItY( cellRect.y() ) );
+      point.setPoint( 2, doc->zoomItX( cellRect.right() ),
+                         doc->zoomItY( cellRect.y() + 5.0 ) );
+    }
     painter.setBrush( QBrush( penColor ) );
     painter.setPen( Qt::NoPen );
     painter.drawPolygon( point );
@@ -2835,12 +2847,24 @@ void KSpreadCell::paintFormulaIndicator( QPainter& painter,
     }
 
     QPointArray point( 3 );
-    point.setPoint( 0, doc->zoomItX( cellRect.x() ),
-                       doc->zoomItY( cellRect.bottom() - 6.0 ) );
-    point.setPoint( 1, doc->zoomItX( cellRect.x() ),
-                       doc->zoomItY( cellRect.bottom() ) );
-    point.setPoint( 2, doc->zoomItX( cellRect.x() + 6.0 ),
-                       doc->zoomItY( cellRect.bottom() ) );
+    if ( m_pTable->layoutDirection()==KSpreadSheet::RightToLeft )
+    {
+      point.setPoint( 0, doc->zoomItX( cellRect.right() - 6.0 ),
+                         doc->zoomItY( cellRect.bottom() ) );
+      point.setPoint( 1, doc->zoomItX( cellRect.right() ),
+                         doc->zoomItY( cellRect.bottom() ) );
+      point.setPoint( 2, doc->zoomItX( cellRect.right() ),
+                         doc->zoomItY( cellRect.bottom() - 6.0 ) );
+    }
+    else
+    {
+      point.setPoint( 0, doc->zoomItX( cellRect.x() ),
+                         doc->zoomItY( cellRect.bottom() - 6.0 ) );
+      point.setPoint( 1, doc->zoomItX( cellRect.x() ),
+                         doc->zoomItY( cellRect.bottom() ) );
+      point.setPoint( 2, doc->zoomItX( cellRect.x() + 6.0 ),
+                         doc->zoomItY( cellRect.bottom() ) );
+    }
     painter.setBrush( QBrush( penColor ) );
     painter.setPen( Qt::NoPen );
     painter.drawPolygon( point );
