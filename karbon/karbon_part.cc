@@ -367,19 +367,19 @@ KarbonPart::saveOasis( KoStore *store, KoXmlWriter *manifestWriter )
         return false;
 
 
-    KoXmlWriter* settingsWriter = createOasisXmlWriter(&storeDev, "office:document-settings");
-    settingsWriter->startElement("office:settings");
-    settingsWriter->startElement("config:config-item-set");
-    settingsWriter->addAttribute("config:name", "view-settings");
+    KoXmlWriter& settingsWriter = *createOasisXmlWriter(&storeDev, "office:document-settings");
+    settingsWriter.startElement("office:settings");
+    settingsWriter.startElement("config:config-item-set");
+    settingsWriter.addAttribute("config:name", "view-settings");
 
-    KoUnit::saveOasis(settingsWriter, unit());
-    saveOasisSettings( *settingsWriter );
+    KoUnit::saveOasis(&settingsWriter, unit());
+    saveOasisSettings( settingsWriter );
 
-    settingsWriter->endElement(); // config:config-item-set
-    settingsWriter->endElement(); // office:settings
-    settingsWriter->endElement(); // Root element
-    settingsWriter->endDocument();
-
+    settingsWriter.endElement(); // config:config-item-set
+    settingsWriter.endElement(); // office:settings
+    settingsWriter.endElement(); // Root element
+    settingsWriter.endDocument();
+    delete &settingsWriter;
 
 
     if(!store->close())
