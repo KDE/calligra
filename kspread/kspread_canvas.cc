@@ -174,13 +174,12 @@ KSpreadEditWidget::KSpreadEditWidget( QWidget *_parent, KSpreadCanvas *_canvas,
 
   if ( !m_pCanvas->doc()->isReadWrite() || !m_pCanvas->activeTable() )
     setEnabled( false );
-  else
-  {
-    QObject::connect( m_pCancelButton, SIGNAL( clicked() ),
-                      this, SLOT( slotAbortEdit() ) );
-    QObject::connect( m_pOkButton, SIGNAL( clicked() ),
-                      this, SLOT( slotDoneEdit() ) );
-  }
+
+  QObject::connect( m_pCancelButton, SIGNAL( clicked() ),
+                    this, SLOT( slotAbortEdit() ) );
+  QObject::connect( m_pOkButton, SIGNAL( clicked() ),
+                    this, SLOT( slotDoneEdit() ) );
+
   setEditMode( false ); // disable buttons
 }
 
@@ -602,17 +601,17 @@ void KSpreadCanvas::scrollToCell(QPoint location)
     // do we need to scroll left
     if ( xpos > minX )
       horzScrollBar()->setValue( doc()->zoomItX( xOffset() - xpos + minX ) );
-    
+
     //do we need to scroll right
     else if ( xpos < maxX )
     {
       double horzScrollBarValue = xOffset() + xpos + maxX;
       double horzScrollBarValueMax = table->sizeMaxX() + unzoomedWidth;
-      
+
       //We don't want to display any area > KS_colMax widths
       if ( horzScrollBarValue > horzScrollBarValueMax )
         horzScrollBarValue = horzScrollBarValueMax;
-      
+
       horzScrollBar()->setValue( doc()->zoomItX( horzScrollBarValue ) );
     }
   }
@@ -626,17 +625,17 @@ void KSpreadCanvas::scrollToCell(QPoint location)
     // do we need to scroll left
     if ( xpos < minX )
       horzScrollBar()->setValue( doc()->zoomItX( xOffset() + xpos - minX ) );
-    
+
     //do we need to scroll right
     else if ( xpos > maxX )
     {
       double horzScrollBarValue = xOffset() + xpos - maxX;
       double horzScrollBarValueMax = table->sizeMaxX() - unzoomedWidth;
-      
+
       //We don't want to display any area > KS_colMax widths
       if ( horzScrollBarValue > horzScrollBarValueMax )
         horzScrollBarValue = horzScrollBarValueMax;
-      
+
       horzScrollBar()->setValue( doc()->zoomItX( horzScrollBarValue ) );
     }
   }
@@ -692,7 +691,7 @@ void KSpreadCanvas::slotScrollHorz( int _value )
   double tmp;
   if (dx > 0)
   {
-    area.setRight( area.left() );    
+    area.setRight( area.left() );
     if ( sheet->isRightToLeft() )
       area.setLeft( sheet->leftColumn( dwidth - unzoomedValue, tmp ) );
     else
@@ -868,10 +867,10 @@ void KSpreadCanvas::mouseMoveEvent( QMouseEvent * _ev )
   {
     height += table->rowFormat( i )->dblHeight( this );
   }
-  
+
   QRect r1( xpos - 2, ypos - 2, width + 1, height + 2 );
   QRect r2( xpos + 2, ypos + 2, width - 12, height - 8 );
-  
+
   QRect selectionHandle = m_pView->selectionInfo()->selectionHandleArea();
 
   // Test whether the mouse is over some anchor
@@ -904,13 +903,13 @@ void KSpreadCanvas::mouseMoveEvent( QMouseEvent * _ev )
     if ( !table->isProtected() )
       setCursor( KCursor::handCursor() );
   }
-  else if ( ( col == rct.left() || col - 1 == rct.right() 
+  else if ( ( col == rct.left() || col - 1 == rct.right()
               || row == rct.top() || row - 1 == rct.bottom() )
             && col >= rct.left() && col - 1 <= rct.right()
             && row >= rct.top() && row - 1 <= rct.bottom()
             && r1.contains( QPoint( ev_PosX, ev_PosY ) )
             && !r2.contains( QPoint( ev_PosX, ev_PosY ) ) )
-           
+
     setCursor( KCursor::handCursor() );
   else
     setCursor( arrowCursor );
@@ -1145,7 +1144,7 @@ void KSpreadCanvas::mousePressEvent( QMouseEvent * _ev )
 
     m_dragStart.setX( -1 );
 
-    if ( ( col == rct.left() || col - 1 == rct.right() 
+    if ( ( col == rct.left() || col - 1 == rct.right()
            || row == rct.top() || row - 1 == rct.bottom() )
          && col >= rct.left() && col - 1 <= rct.right()
          && row >= rct.top() && row - 1 <= rct.bottom()
@@ -1222,7 +1221,7 @@ void KSpreadCanvas::mousePressEvent( QMouseEvent * _ev )
   }
 
   ElapsedTime el2( "update view parts" );
-  // Update the edit box  
+  // Update the edit box
   m_pView->updateEditWidgetOnPress();
 
   // Context menu ?
@@ -1492,8 +1491,8 @@ void KSpreadCanvas::dropEvent( QDropEvent * _ev )
     {
       if ( !m_pDoc->undoBuffer()->isLocked() )
       {
-        KSpreadUndoDragDrop * undo 
-          = new KSpreadUndoDragDrop( m_pDoc, table, selectionInfo()->selection(), 
+        KSpreadUndoDragDrop * undo
+          = new KSpreadUndoDragDrop( m_pDoc, table, selectionInfo()->selection(),
                                      QRect( col, row, selectionInfo()->selection().width(),
                                             selectionInfo()->selection().height() ) );
         m_pDoc->undoBuffer()->appendUndo( undo );
@@ -1756,7 +1755,7 @@ void KSpreadCanvas::processArrowKey( QKeyEvent *event)
     Q_ASSERT(false);
     break;
   }
-  
+
   QRect r( moveDirection( direction, makingSelection ) );
   m_pDoc->emitEndOperation( r );
 }
@@ -1779,7 +1778,7 @@ void KSpreadCanvas::processEscapeKey(QKeyEvent * event)
   else
     cursor = selectionInfo()->cursorPosition();
 
-  m_pDoc->emitEndOperation( QRect( cursor, cursor ) );  
+  m_pDoc->emitEndOperation( QRect( cursor, cursor ) );
 }
 
 bool KSpreadCanvas::processHomeKey(QKeyEvent* event)
@@ -1953,7 +1952,7 @@ void KSpreadCanvas::processDeleteKey(QKeyEvent* /* event */)
   else
     cursor = selectionInfo()->cursorPosition();
 
-  m_pDoc->emitEndOperation( QRect( cursor, cursor ) );  
+  m_pDoc->emitEndOperation( QRect( cursor, cursor ) );
   return;
 }
 
@@ -1976,7 +1975,7 @@ void KSpreadCanvas::processF2Key(QKeyEvent* /* event */)
   else
     cursor = selectionInfo()->cursorPosition();
 
-  m_pDoc->emitEndOperation( QRect( cursor, cursor ) );  
+  m_pDoc->emitEndOperation( QRect( cursor, cursor ) );
   return;
 }
 
@@ -2001,7 +2000,7 @@ void KSpreadCanvas::processF4Key(QKeyEvent* event)
   else
     cursor = selectionInfo()->cursorPosition();
 
-  m_pDoc->emitEndOperation( QRect( cursor, cursor ) );  
+  m_pDoc->emitEndOperation( QRect( cursor, cursor ) );
   return;
 }
 
@@ -2037,7 +2036,7 @@ void KSpreadCanvas::processOtherKey(QKeyEvent *event)
   else
     cursor = selectionInfo()->cursorPosition();
 
-  m_pDoc->emitEndOperation( QRect( cursor, cursor ) );  
+  m_pDoc->emitEndOperation( QRect( cursor, cursor ) );
 
   return;
 }
@@ -2251,7 +2250,7 @@ bool KSpreadCanvas::processControlArrowKey( QKeyEvent *event )
 
   if ( marker == destination )
   {
-    m_pDoc->emitEndOperation( QRect( destination, destination ) );    
+    m_pDoc->emitEndOperation( QRect( destination, destination ) );
     return false;
   }
 
@@ -2279,11 +2278,11 @@ void KSpreadCanvas::keyPressEvent ( QKeyEvent * _ev )
     return;
   }
   ElapsedTime et( "KSpreadCanvas::keyPressEvent" );
-  
+
   // Always accept so that events are not
   // passed to the parent.
   _ev->accept();
-  
+
   m_pDoc->emitBeginOperation(false);
   switch( _ev->key() )
   {
@@ -2313,27 +2312,27 @@ void KSpreadCanvas::keyPressEvent ( QKeyEvent * _ev )
     processEscapeKey( _ev );
     return;
     break;
-    
+
    case Key_Home:
     if ( !processHomeKey( _ev ) )
       return;
     break;
-    
+
    case Key_End:
     if ( !processEndKey( _ev ) )
       return;
     break;
-    
+
    case Key_Prior:  /* Page Up */
     if ( !processPriorKey( _ev ) )
       return;
     break;
-    
+
    case Key_Next:   /* Page Down */
     if ( !processNextKey( _ev ) )
       return;
     break;
-    
+
    case Key_Delete:
     processDeleteKey( _ev );
     return;
@@ -2343,12 +2342,12 @@ void KSpreadCanvas::keyPressEvent ( QKeyEvent * _ev )
     processF2Key( _ev );
     return;
     break;
-    
+
    case Key_F4:
     processF4Key( _ev );
     return;
     break;
-    
+
    default:
     processOtherKey( _ev );
     return;
@@ -3668,8 +3667,8 @@ void KSpreadCanvas::retrieveMarkerInfo( const QRect &marker,
   double bottom = positions[3];
 
   if ( table->isRightToLeft() )
-    kdDebug() << "X: " << x << ", xpos: " << xpos << ", w: " << w 
-              << ", Right: " << right << ", VRight: " << viewRect.right() 
+    kdDebug() << "X: " << x << ", xpos: " << xpos << ", w: " << w
+              << ", Right: " << right << ", VRight: " << viewRect.right()
               << ", Left:  " << left  << ", VLeft:  " << viewRect.left() << endl;
 
   /* left, top, right, bottom */
@@ -3677,7 +3676,7 @@ void KSpreadCanvas::retrieveMarkerInfo( const QRect &marker,
   {
     paintSides[0] = (viewRect.left() <= left) && (left - 1 <= viewRect.right()) &&
                   (bottom >= viewRect.top()) && (top <= viewRect.bottom());
-    paintSides[1] = (viewRect.top() <= top) && (top <= viewRect.bottom()) 
+    paintSides[1] = (viewRect.top() <= top) && (top <= viewRect.bottom())
                  && (right >= viewRect.left()) && (left - 1 <= viewRect.right());
     paintSides[3] = (viewRect.top() <= bottom) && (bottom <= viewRect.bottom())
                  && (right >= viewRect.left()) && (left - 1 <= viewRect.right());
@@ -4394,12 +4393,12 @@ void KSpreadHBorder::mousePressEvent( QMouseEvent * _ev )
   if ( table->isRightToLeft() )
   {
     int tmpCol = table->leftColumn( m_pCanvas->xOffset(), x );
-    
+
     kdDebug() << "evPos: " << ev_PosX << ", x: " << x << ", COL: " << tmpCol << endl;
     while ( ev_PosX > x && ( !m_bResize ) )
     {
       double w = table->columnFormat( tmpCol )->dblWidth();
-      
+
       kdDebug() << "evPos: " << ev_PosX << ", x: " << x << ", w: " << w << ", COL: " << tmpCol << endl;
 
       ++tmpCol;
@@ -4432,7 +4431,7 @@ void KSpreadHBorder::mousePressEvent( QMouseEvent * _ev )
   else
   {
     int col = table->leftColumn( m_pCanvas->xOffset(), x );
-    
+
     // Did the user click between two columns?
     while ( x < dWidth && ( !m_bResize ) )
     {
@@ -4454,7 +4453,7 @@ void KSpreadHBorder::mousePressEvent( QMouseEvent * _ev )
     if ( table->columnFormat( tmpCol )->isHide() && tmpCol == 1 )
       m_bResize = false;
   }
-  
+
   // So he clicked between two rows ?
   if ( m_bResize )
   {
@@ -4553,7 +4552,7 @@ void KSpreadHBorder::mouseReleaseEvent( QMouseEvent * _ev )
         double x;
 
         if ( table->isRightToLeft() )
-        { 
+        {
           ev_PosX = dWidth - m_pCanvas->doc()->unzoomItX( _ev->pos().x() ) + m_pCanvas->xOffset();
           x = table->dblColumnPos( m_iResizedColumn );
 
@@ -4852,7 +4851,7 @@ void KSpreadHBorder::mouseMoveEvent( QMouseEvent * _ev )
     else
     {
       int tmpCol = table->leftColumn( m_pCanvas->xOffset(), x );
-      
+
       while ( x < m_pCanvas->doc()->unzoomItY( width() ) + m_pCanvas->xOffset() )
       {
         double w = table->columnFormat( tmpCol )->dblWidth();
@@ -5077,7 +5076,7 @@ void KSpreadHBorder::paintEvent( QPaintEvent* _ev )
                             tmp.setNum(x) );
       }
       ++x;
-    }    
+    }
   }
   else
   {

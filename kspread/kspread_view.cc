@@ -358,9 +358,9 @@ KSpreadView::KSpreadView( QWidget *_parent, const char *_name, KSpreadDoc* doc )
     hbox->addWidget( m_pPosWidget );
     hbox->addSpacing( 6 );
 
-    m_pCancelButton = newIconButton( "abort", TRUE, m_pToolWidget );
+    m_pCancelButton = newIconButton( "cancel", TRUE, m_pToolWidget );
     hbox->addWidget( m_pCancelButton );
-    m_pOkButton = newIconButton( "done", TRUE, m_pToolWidget );
+    m_pOkButton = newIconButton( "ok", TRUE, m_pToolWidget );
     hbox->addWidget( m_pOkButton );
     hbox->addSpacing( 6 );
 
