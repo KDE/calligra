@@ -10,18 +10,38 @@
 #include "kohyphen.h"
 #include <kdebug.h>
 
+static bool check(QString a, QString b)
+{
+  if (a.isEmpty())
+     a = QString::null;
+  if (b.isEmpty())
+     b = QString::null;
+  if (a == b) {
+    kdDebug() << "checking '" << a << "' against expected value '" << b << "'... " << "ok" << endl;
+  }
+  else {
+    kdDebug() << "checking '" << a << "' against expected value '" << b << "'... " << "KO !" << endl;
+    exit(1);
+  }
+  return true;
+}
+
+KoHyphenator * hypher = 0L;
+
+void check_hyphenation( const QStringList& tests, const QStringList& results, const char* lang )
+{
+    QStringList::ConstIterator it, itres;
+    for ( it = tests.begin(), itres = results.begin(); it != tests.end() ; ++it, ++itres ) {
+        QString result = hypher->hyphenate((*it), lang);
+        kdDebug() << (*it) << " hyphenates like this: " << result << endl;
+        check( result.replace(QChar(0xad),'-'), *itres );
+    }
+}
+
 int main (int argc, char ** argv)
 {
     KApplication app(argc, argv, "KoHyphenator test");
 
-    //testing Czech language, this text is in UTF-8!
-    QStringList cs_tests = QStringList() << "Žluťoučký" << "kůň" << "úpěl" <<
-                        "ďábelské" << "ódy";
-
-    //testing English
-    QStringList en_tests = QStringList() << "Follow" << "white" << "rabbit";
-
-    KoHyphenator * hypher = 0L;
     try {
         hypher = KoHyphenator::self();
     }
@@ -31,19 +51,23 @@ int main (int argc, char ** argv)
         return 1;
     }
 
-    QStringList::ConstIterator it = cs_tests.begin();
+    QStringList::ConstIterator it, itres;
 
-    while (it!=cs_tests.end()) {
+    //testing Czech language, this text is in UTF-8!
+    QStringList cs_tests = QStringList() << "Žluťoučký" << "kůň" << "úpěl" <<
+                        "ďábelské" << "ódy";
+
+    for ( it = cs_tests.begin(); it != cs_tests.end() ; ++it )
         kdDebug() << (*it) << " hyphenates like this: " << hypher->hyphenate((*it), "cs") << endl;
-        ++it;
-    }
 
-    it = en_tests.begin();
+    //testing English
+    QStringList en_tests = QStringList() << "Follow" << "white" << "rabbit";
+    QStringList en_results = QStringList() << "Fol-low" << "white" << "rab-bit";
+    check_hyphenation( en_tests, en_results, "en" );
 
-    while (it!=en_tests.end()) {
-        kdDebug() << (*it) << " hyphenates like this: " << hypher->hyphenate((*it), "en") << endl;
-        ++it;
-    }
+    QStringList fr_tests = QStringList() << "constitution" ;
+    QStringList fr_results = QStringList() << "consti-tu-tion" ;
+    check_hyphenation( fr_tests, fr_results, "fr" );
 
     return 0;
 }
