@@ -198,7 +198,8 @@ KPTResourcesPanel::KPTResourcesPanel(QWidget *parent, KPTProject *p) : Resources
 
     bEditResource->setEnabled(false);
     bRemoveResource->setEnabled(false);
-
+    resourceName->setEnabled(false);
+    
     QPtrListIterator<KPTResourceGroup> git(project->resourceGroups());
 	for(; git.current(); ++git) {
 		KPTResourceGroup *grp = git.current();
@@ -322,6 +323,7 @@ void KPTResourcesPanel::slotGroupChanged( QListBoxItem *item) {
 
     m_blockResourceRename = true;
     resourceName->clear();
+    resourceName->setEnabled(false);
     m_blockResourceRename = false;
 
     m_groupItem = (KPTGroupLBItem *)item;
