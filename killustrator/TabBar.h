@@ -25,6 +25,7 @@
 
 //class KivioPageName;
 class KIllustratorView;
+class GDocument;
 
 /**
  * This tab bar is used by @ref KivioView. It is used to choose between all
@@ -145,6 +146,7 @@ protected:
     void openPopupMenu( QPoint &_global );
 
     KIllustratorView* m_pView;
+    GDocument *doc;
 
     enum { autoScrollNo = 0, autoScrollLeft, autoScrollRight };
     enum { moveTabNo = 0, moveTabBefore, moveTabAfter };

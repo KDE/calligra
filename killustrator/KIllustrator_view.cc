@@ -35,6 +35,7 @@
 #include "tooldockbase.h"
 #include "tooldockmanager.h"
 #include <GDocument.h>
+#include "GPage.h"
 #include <Canvas.h>
 #include <Tool.h>
 #include <Ruler.h>
@@ -508,7 +509,7 @@ void KIllustratorView::print( QPrinter &printer )
 
 void KIllustratorView::editInsertObject ()
 {
-    m_pDoc->gdoc()->unselectAllObjects();
+    m_pDoc->gdoc()->activePage()->unselectAllObjects();
     KoDocumentEntry docEntry = KoPartSelectDia::selectPart ();
     if (docEntry.isEmpty ())
         return;
@@ -867,14 +868,14 @@ void KIllustratorView::slotSelectAll()
 {
     m_selectTool->setChecked( true );
     tcontroller->toolSelected( Tool::ToolSelect);
-    m_pDoc->gdoc()->selectAllObjects ();
+    m_pDoc->gdoc()->activePage()->selectAllObjects ();
 }
 
 void KIllustratorView::slotProperties()
 {
     int result = KMessageBox::Yes;
 
-    if (m_pDoc->gdoc()->selectionIsEmpty ())
+    if (m_pDoc->gdoc()->activePage()->selectionIsEmpty ())
     {
         result = KMessageBox::warningYesNo(this,
                                            i18n ("This action will set the default\n"
@@ -934,11 +935,11 @@ void KIllustratorView::slotShowHelplines( bool b )
 
 void KIllustratorView::slotPage()
 {
-    KoPageLayout pLayout = m_pDoc->gdoc()->pageLayout ();
+    KoPageLayout pLayout = m_pDoc->gdoc()->activePage()->pageLayout ();
     KoHeadFoot header;
 
     if (KoPageLayoutDia::pageLayout (pLayout, header, FORMAT_AND_BORDERS))
-        m_pDoc->gdoc()->setPageLayout (pLayout);
+        m_pDoc->gdoc()->activePage()->setPageLayout (pLayout);
 }
 
 void KIllustratorView::slotGrid()
@@ -1035,13 +1036,13 @@ void KIllustratorView::slotTextAlongPath()
 
 void KIllustratorView::slotConvertToCurve()
 {
-    if ( !m_pDoc->gdoc()->selectionIsEmpty() )
+    if ( !m_pDoc->gdoc()->activePage()->selectionIsEmpty() )
         cmdHistory.addCommand (new ToCurveCmd (m_pDoc->gdoc()), true);
 }
 
 void KIllustratorView::slotBlend()
 {
-    if ( m_pDoc->gdoc()->selectionCount () == 2)
+    if ( m_pDoc->gdoc()->activePage()->selectionCount () == 2)
     {
         int steps = BlendDialog::getNumOfSteps ();
         if (steps > 0)
@@ -1077,7 +1078,7 @@ void KIllustratorView::slotBrushChosen( const QColor & c )
     fInfo.fstyle = fill ? GObject::FillInfo::SolidFill :
                 GObject::FillInfo::NoFill;
 
-    if ( !m_pDoc->gdoc()->selectionIsEmpty () )
+    if ( !m_pDoc->gdoc()->activePage()->selectionIsEmpty () )
     {
         SetPropertyCmd *cmd = new SetPropertyCmd (m_pDoc->gdoc(), oInfo, fInfo);
         cmdHistory.addCommand (cmd, true);
@@ -1107,7 +1108,7 @@ void KIllustratorView::slotPenChosen( const QColor & c  )
     GObject::FillInfo fInfo;
     fInfo.mask = 0;
 
-    if (! m_pDoc->gdoc()->selectionIsEmpty () )
+    if (! m_pDoc->gdoc()->activePage()->selectionIsEmpty () )
     {
         SetPropertyCmd *cmd = new SetPropertyCmd (m_pDoc->gdoc(), oInfo, fInfo);
         cmdHistory.addCommand (cmd, true);

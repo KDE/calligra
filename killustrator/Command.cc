@@ -24,14 +24,15 @@
 
 #include <Command.h>
 #include <GDocument.h>
+#include "GPage.h"
 
 ObjectManipCmd::ObjectManipCmd (GDocument* doc, const QString& name) :
   Command(name)
 {
-  objects.resize (doc->selectionCount ());
-  states.resize (doc->selectionCount ());
+  objects.resize (doc->activePage()->selectionCount ());
+  states.resize (doc->activePage()->selectionCount ());
 
-  QListIterator<GObject> it(doc->getSelection());
+  QListIterator<GObject> it(doc->activePage()->getSelection());
   for (unsigned int i = 0; it.current(); ++it, ++i) {
     (*it)->ref ();
     objects.insert (i, (*it));
@@ -70,10 +71,10 @@ void ObjectManipCmd::execute () {
 
 void ObjectManipCmd::unexecute () {
   if (document)
-    document->unselectAllObjects ();
+    document->activePage()->unselectAllObjects ();
   for (unsigned int i = 0; i < objects.count (); i++) {
     objects[i]->restoreState (states[i]);
-    document->selectObject (objects[i]);
+    document->activePage()->selectObject (objects[i]);
   }
 }
 

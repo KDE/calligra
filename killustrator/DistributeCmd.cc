@@ -22,9 +22,11 @@
 
 */
 
-#include <DistributeCmd.h>
+#include "DistributeCmd.h"
+#include "GDocument.h"
+#include "GPage.h"
+
 #include <klocale.h>
-#include <GDocument.h>
 
 DistributeCmd::DistributeCmd (GDocument* doc, HorizDistribution hdistrib,
                               VertDistribution vdistrib,
@@ -42,14 +44,14 @@ void DistributeCmd::execute () {
   GObject *firstObj, *lastObj;
 
   if (mode == DMode_AtPage)
-    box = Rect (0, 0, document->getPaperWidth (),
-                document->getPaperHeight ());
+    box = Rect (0, 0, document->activePage()->getPaperWidth (),
+                document->activePage()->getPaperHeight ());
   else
-    box = document->boundingBoxForSelection ();
+    box = document->activePage()->boundingBoxForSelection ();
 
   ObjectManipCmd::execute ();
 
-  QList<GObject>& objs = document->getSelection ();
+  QList<GObject>& objs = document->activePage()->getSelection ();
 
   firstObj = objs.first();
   lastObj = objs.last();
@@ -58,13 +60,13 @@ void DistributeCmd::execute () {
   switch (hDistrib) {
   case HDistrib_Left:
     xoff = (box.width () - lastObj->boundingBox ().width ()) /
-      (document->selectionCount () - 1);
+      (document->activePage()->selectionCount () - 1);
     xpos = box.left ();
     break;
   case HDistrib_Center:
     xoff = (box.width () - firstObj->boundingBox ().width () / 2 -
             lastObj->boundingBox ().width () / 2) /
-      (document->selectionCount () - 1);
+      (document->activePage()->selectionCount () - 1);
     xpos = box.left () + firstObj->boundingBox ().width () / 2;
     break;
   case HDistrib_Distance:
@@ -72,13 +74,13 @@ void DistributeCmd::execute () {
       float w = 0;
       for (; it.current(); ++it)
         w += (*it)->boundingBox ().width ();
-      xoff = (box.width () - w) / (document->selectionCount () - 1);
+      xoff = (box.width () - w) / (document->activePage()->selectionCount () - 1);
       xpos = box.left ();
       break;
     }
   case HDistrib_Right:
     xoff = (box.width () - firstObj->boundingBox ().width ()) /
-      (document->selectionCount () - 1);
+      (document->activePage()->selectionCount () - 1);
     xpos = box.left () + firstObj->boundingBox ().width ();
     break;
   default:
@@ -88,25 +90,25 @@ void DistributeCmd::execute () {
   switch (vDistrib) {
   case VDistrib_Top:
     yoff = (box.height () - lastObj->boundingBox ().height ()) /
-      (document->selectionCount () - 1);
+      (document->activePage()->selectionCount () - 1);
     ypos = box.top ();
     break;
   case VDistrib_Bottom:
     yoff = (box.height () - firstObj->boundingBox ().height ()) /
-      (document->selectionCount () - 1);
+      (document->activePage()->selectionCount () - 1);
     ypos = box.top () + firstObj->boundingBox ().height ();;
     break;
   case VDistrib_Center:
     yoff = (box.height () - firstObj->boundingBox ().height () / 2 -
             lastObj->boundingBox ().height () / 2) /
-      (document->selectionCount () - 1);
+      (document->activePage()->selectionCount () - 1);
     ypos = box.top () + firstObj->boundingBox ().height () / 2;
   case VDistrib_Distance:
     {
       float h = 0;
       for (; it.current(); ++it)
         h += (*it)->boundingBox ().height ();
-      yoff = (box.height () - h) / (document->selectionCount () - 1);
+      yoff = (box.height () - h) / (document->activePage()->selectionCount () - 1);
       ypos = box.top ();
       break;
     }

@@ -29,6 +29,7 @@
 
 #include <GDocument.h>
 #include <GGroup.h>
+#include "GPage.h"
 
 GroupCmd::GroupCmd (GDocument* doc) : Command(i18n("Group Objects")) {
   document = doc;
@@ -36,11 +37,11 @@ GroupCmd::GroupCmd (GDocument* doc) : Command(i18n("Group Objects")) {
 
   QMap<int, GObject*> idx_map;
 
-  for (QListIterator<GObject> it(doc->getSelection()); it.current(); ++it) {
+  for (QListIterator<GObject> it(doc->activePage()->getSelection()); it.current(); ++it) {
     // remember position of object in order to keep the order of
     // objects in the group
     GObject* o = *it;
-    int idx = (int) document->findIndexOfObject (o);
+    int idx = (int) document->activePage()->findIndexOfObject (o);
     idx_map.insert(idx, o);
   }
   for (QMap<int, GObject*>::ConstIterator it=idx_map.begin();
@@ -67,17 +68,17 @@ void GroupCmd::execute () {
       group->addObject (o);
 
     // now insert the new group into the document
-    document->insertObject (group);
+    document->activePage()->insertObject (group);
 
     // and select it (but only it !)
-    document->deleteSelectedObjects ();
-    document->selectObject (group);
+    document->activePage()->deleteSelectedObjects ();
+    document->activePage()->selectObject (group);
     document->setAutoUpdate (true);
   }
 }
 
 void GroupCmd::unexecute () {
-  int pos = document->findIndexOfObject (group);
+  int pos = document->activePage()->findIndexOfObject (group);
   if (pos != -1) {
     document->setAutoUpdate (false);
     // extract the members of the group
@@ -90,11 +91,11 @@ void GroupCmd::unexecute () {
 
       // and insert it into the object list at the former position
       // of the group object
-      document->insertObjectAtIndex (obj, pos + offs);
-      document->selectObject (obj);
+      document->activePage()->insertObjectAtIndex (obj, pos + offs);
+      document->activePage()->selectObject (obj);
     }
     // remove the group object
-    document->deleteObject (group);
+    document->activePage()->deleteObject (group);
     document->setAutoUpdate (true);
   }
 }

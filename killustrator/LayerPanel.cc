@@ -32,6 +32,7 @@
 #include <LayerView.h>
 #include <GDocument.h>
 #include <GLayer.h>
+#include "GPage.h"
 
 LayerPanel::LayerPanel (QWidget* parent, const char* name) :
     QWidget(parent, name) {
@@ -65,24 +66,24 @@ void LayerPanel::manageDocument (GDocument* doc) {
 }
 
 void LayerPanel::upPressed () {
-  document->raiseLayer (document->activeLayer ());
+  document->activePage()->raiseLayer (document->activePage()->activeLayer ());
   layerView->setActiveDocument (document);
 }
 
 void LayerPanel::downPressed () {
-  document->lowerLayer (document->activeLayer ());
+  document->activePage()->lowerLayer (document->activePage()->activeLayer ());
   layerView->setActiveDocument (document);
 }
 
 void LayerPanel::newPressed () {
-  GLayer* layer = document->addLayer ();
-  document->setActiveLayer (layer);
+  GLayer* layer = document->activePage()->addLayer ();
+  document->activePage()->setActiveLayer (layer);
   // force update
   layerView->setActiveDocument (document);
 }
 
 void LayerPanel::deletePressed () {
-  document->deleteLayer (document->activeLayer ());
+  document->activePage()->deleteLayer (document->activePage()->activeLayer ());
   layerView->setActiveDocument (document);
 }
 

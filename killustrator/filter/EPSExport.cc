@@ -34,6 +34,7 @@
 #include <qpainter.h>
 #include <qglobal.h>
 #include "GDocument.h"
+#include "GPage.h"
 #include "EPSExport.h"
 
 EPSExport::EPSExport () {
@@ -48,7 +49,7 @@ bool EPSExport::setup (GDocument *, const char* ) {
 
 bool EPSExport::exportToFile (GDocument* doc) {
   // compute bounding box
-  Rect box = doc->boundingBoxForAllObjects ();
+  Rect box = doc->activePage()->boundingBoxForAllObjects ();
 
   QPrinter printer;
   printer.setDocName (doc->fileName ());
@@ -56,7 +57,7 @@ bool EPSExport::exportToFile (GDocument* doc) {
   printer.setOutputFileName (outputFileName ());
   printer.setOutputToFile (true);
   printer.setFullPage (true);
-  switch (doc->pageLayout ().format) {
+  switch (doc->activePage()->pageLayout ().format) {
   case PG_DIN_A4:
     printer.setPageSize (QPrinter::A4);
     break;
@@ -72,7 +73,7 @@ bool EPSExport::exportToFile (GDocument* doc) {
   default:
     break;
   }
-  printer.setOrientation (doc->pageLayout ().orientation == PG_PORTRAIT ?
+  printer.setOrientation (doc->activePage()->pageLayout().orientation == PG_PORTRAIT ?
                           QPrinter::Portrait : QPrinter::Landscape);
 
   QPainter paint;
@@ -88,9 +89,9 @@ bool EPSExport::exportToFile (GDocument* doc) {
                      box.width () + 2 + box.left (),
                      box.height () + 2 + box.top ());
 #endif
-  doc->invalidateClipRegions ();
-  doc->drawContents (paint);
-  doc->invalidateClipRegions ();
+  doc->activePage()->invalidateClipRegions ();
+  doc->activePage()->drawContents (paint);
+  doc->activePage()->invalidateClipRegions ();
   paint.end ();
   return true;
 }

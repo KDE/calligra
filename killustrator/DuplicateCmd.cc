@@ -27,6 +27,7 @@
 #include <klocale.h>
 
 #include <GDocument.h>
+#include "GPage.h"
 #include <GObject.h>
 #include <PStateManager.h>
 
@@ -38,7 +39,7 @@ DuplicateCmd::DuplicateCmd (GDocument* doc)
   : Command(i18n("Duplicate"))
 {
   document = doc;
-  for (QListIterator<GObject> it(doc->getSelection()); it.current(); ++it) {
+  for (QListIterator<GObject> it(doc->activePage()->getSelection()); it.current(); ++it) {
     GObject* o = *it;
     o->ref ();
     objects.append(o);
@@ -68,25 +69,25 @@ void DuplicateCmd::execute () {
   QWMatrix m;
   m.translate (xoff, yoff);
 
-  document->unselectAllObjects ();
+  document->activePage()->unselectAllObjects ();
   for (GObject *i=objects.first(); i!=0L;
        i=objects.next()) {
     GObject *o = i->copy ();
     o->ref ();
     o->transform (m, true);
-    document->insertObject (o);
-    document->selectObject (o);
+    document->activePage()->insertObject (o);
+    document->activePage()->selectObject (o);
     new_objects.append(o);
   }
 }
 
 void DuplicateCmd::unexecute () {
-    document->unselectAllObjects ();
+    document->activePage()->unselectAllObjects ();
     GObject *o;
     for (o=new_objects.first(); o!=0L; o=new_objects.next())
-        document->deleteObject(o);
+        document->activePage()->deleteObject(o);
     for (o = objects.first(); o!=0L; o=objects.next())
-        document->selectObject(o);
+        document->activePage()->selectObject(o);
 }
 
 void DuplicateCmd::resetRepetition () {

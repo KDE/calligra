@@ -22,14 +22,15 @@
 
 */
 
+#include "GLayer.h"
+#include "GPage.h"
+#include "GObject.h"
+
 #include <klocale.h>
-#include <GLayer.h>
-#include <GDocument.h>
-#include <GObject.h>
 
 int GLayer::lastID = 0;
 
-GLayer::GLayer (GDocument* doc, const QString &text) :
+GLayer::GLayer (GPage* doc, const QString &text) :
   visibleFlag (true), printableFlag (true),
   editableFlag (true), wasEditable (true), internalFlag (false),
   document (doc) {

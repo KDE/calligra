@@ -36,6 +36,7 @@
 #include <kiconloader.h>
 #include <kdebug.h>
 
+#include "GPage.h"
 #include <GDocument.h>
 #include <GObject.h>
 #include <CommandHistory.h>
@@ -222,7 +223,7 @@ AlignmentMode AlignmentDialog::getMode () {
 
 void AlignmentDialog::alignSelection (GDocument* doc,
                                       CommandHistory* history) {
-    if (! doc->selectionIsEmpty ()) {
+    if (! doc->activePage()->selectionIsEmpty ()) {
         AlignmentDialog dialog (0L, "Alignment");
 
         if (dialog.exec() == Accepted) {

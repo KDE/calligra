@@ -35,6 +35,7 @@
 #include <GDocument.h>
 #include <GObject.h>
 #include <GText.h>
+#include "GPage.h"
 
 PasteCmd::PasteCmd (GDocument* doc)
   : Command(i18n("Paste"))
@@ -66,12 +67,12 @@ void PasteCmd::execute () {
         QDomDocument d;
         d.setContent(&buffer);
         buffer.close();
-        document->insertFromXml (d, objects);
-        document->unselectAllObjects ();
+        document->activePage()->insertFromXml (d, objects);
+        document->activePage()->unselectAllObjects ();
         for (GObject *o=objects.first(); o!=0L; o=objects.next()) {
             o->ref ();
             o->transform (m, true);
-            document->selectObject(o);
+            document->activePage()->selectObject(o);
         }
     }
     else {
@@ -79,12 +80,12 @@ void PasteCmd::execute () {
         GText *tobj = new GText (document);
         tobj->setText ( QApplication::clipboard()->text() );
         objects.append(tobj);
-        document->insertObject (tobj);
+        document->activePage()->insertObject (tobj);
     }
 }
 
 void PasteCmd::unexecute () {
     for (GObject *o=objects.first(); o!=0L; o=objects.next())
-        document->deleteObject(o);
+        document->activePage()->deleteObject(o);
 }
 

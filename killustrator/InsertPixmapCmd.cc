@@ -28,6 +28,7 @@
 
 #include <GDocument.h>
 #include <GPixmap.h>
+#include "GPage.h"
 
 InsertPixmapCmd::InsertPixmapCmd (GDocument* doc, const QString &fname) :
  Command(i18n("Insert Pixmap"))
@@ -47,11 +48,11 @@ void InsertPixmapCmd::execute () {
     pixmap->unref ();
 
   pixmap = new GPixmap (document, filename);
-  document->insertObject (pixmap);
+  document->activePage()->insertObject (pixmap);
 }
 
 void InsertPixmapCmd::unexecute () {
   if (pixmap)
-    document->deleteObject (pixmap);
+    document->activePage()->deleteObject (pixmap);
 }
 

@@ -44,6 +44,7 @@
 #include <qhbox.h>
 #include <qspinbox.h>
 
+#include "GPage.h"
 #include <GText.h>
 #include <GPolygon.h>
 #include <GOval.h>
@@ -89,7 +90,7 @@ PropertyEditor::PropertyEditor (CommandHistory* history, GDocument* doc,
       textAlign[i] = 0L;
    }
 
-   isGlobal = document->selectionIsEmpty ();
+   isGlobal = document->activePage()->selectionIsEmpty ();
    if (isGlobal)
    {
       haveTextObjects = true;
@@ -102,7 +103,7 @@ PropertyEditor::PropertyEditor (CommandHistory* history, GDocument* doc,
    }
    else
    {
-      for (QListIterator<GObject> it(document->getSelection()); it.current(); ++it)
+      for (QListIterator<GObject> it(document->activePage()->getSelection()); it.current(); ++it)
       {
          GObject* o = *it;
          if (o->inherits ("GText"))
@@ -520,10 +521,10 @@ void PropertyEditor::readProperties ()
    QString ustr=" ";
    ustr+=unitToString (munit);
 
-   if (document->selectionCount () == 1)
+   if (document->activePage()->selectionCount () == 1)
    {
       cerr<<"2"<<endl;
-      GObject* object = document->getSelection().first();
+      GObject* object = document->activePage()->getSelection().first();
       // Info tab
       Rect boundingBox = object->boundingBox ();
       infoLabel[0]->setText (QString (object->typeName ()));
@@ -644,7 +645,7 @@ cerr<<"9"<<endl;
    {
       // more objects or no objects - use default values
       // Info tab
-      Rect boundingBox = document->boundingBoxForSelection ();
+      Rect boundingBox = document->activePage()->boundingBoxForSelection ();
       if (isGlobal)
          infoLabel[0]->setText (i18n ("no selection"));
       else

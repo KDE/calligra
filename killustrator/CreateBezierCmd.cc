@@ -28,6 +28,7 @@
 
 #include <GDocument.h>
 #include <GBezier.h>
+#include "GPage.h"
 
 CreateBezierCmd::CreateBezierCmd (GDocument* doc, GBezier* curve)
   : Command(i18n("Create Bezier"))
@@ -43,10 +44,10 @@ CreateBezierCmd::~CreateBezierCmd () {
 }
 
 void CreateBezierCmd::execute () {
-  document->insertObject (object);
+  document->activePage()->insertObject (object);
 }
 
 void CreateBezierCmd::unexecute () {
-  document->deleteObject (object);
+  document->activePage()->deleteObject (object);
 }
 

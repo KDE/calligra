@@ -26,16 +26,17 @@
 #include <qfile.h>
 
 #include "GPage.h"
-#include <GPolygon.h>
-#include <GText.h>
-#include <GPolyline.h>
-#include <GOval.h>
-#include <GBezier.h>
-#include <GClipart.h>
-#include <GGroup.h>
-#include <GPixmap.h>
-#include <GCurve.h>
-#include <GLayer.h>
+#include "GDocument.h"
+#include "GPolygon.h"
+#include "GText.h"
+#include "GPolyline.h"
+#include "GOval.h"
+#include "GBezier.h"
+#include "GClipart.h"
+#include "GGroup.h"
+#include "GPixmap.h"
+#include "GCurve.h"
+#include "GLayer.h"
 
 #include <assert.h>
 #include <kdebug.h>
@@ -57,8 +58,10 @@
 #define LAYER_EDITABLE  2
 #define LAYER_PRINTABLE 4
 
-GPage::GPage (GDocument *_doc)
-:doc(_doc),selHandle(this)
+#define KILLUSTRATOR_MIMETYPE "application/x-killustrator"
+
+GPage::GPage (GDocument *adoc):
+doc(adoc),selHandle(adoc)
 {
   initialize ();
 }
@@ -94,7 +97,6 @@ void GPage::initialize ()
   paperWidth = (int) cvtMmToPt (pLayout.mmWidth);
   paperHeight = (int) cvtMmToPt (pLayout.mmHeight);
   last = 0L;
-  modifyFlag = false;
   filename = i18n("<unnamed>");
 
   selection.clear ();
@@ -130,6 +132,11 @@ int GPage::getPaperWidth () const
 int GPage::getPaperHeight () const
 {
   return paperHeight;
+}
+
+void GPage::setName(QString aName)
+{
+ mName = aName;
 }
 
 void GPage::drawContents (QPainter& p, bool withBasePoints, bool outline)
@@ -184,7 +191,7 @@ void GPage::insertObject (GObject* obj)
     connect (obj, SIGNAL(changed()), this, SLOT(objectChanged ()));
     connect (obj, SIGNAL(changed(const Rect&)),
              this, SLOT(objectChanged (const Rect&)));
-    setModified ();
+//    setModified ();
     if (autoUpdate)
         emit changed ();
 }
@@ -343,7 +350,7 @@ void GPage::deleteSelectedObjects ()
     }
     selection.clear ();
     last = 0L;
-    setModified ();
+//    setModified ();
     selBoxIsValid = false;
     if (autoUpdate)
     {
@@ -365,7 +372,7 @@ void GPage::deleteObject (GObject* obj)
     if (selected)
       selection.removeRef(obj);
     last = 0L;
-    setModified ();
+//    setModified ();
     disconnect (obj, SIGNAL(changed()), this, SLOT(objectChanged ()));
     disconnect (obj, SIGNAL(changed(const Rect&)),
                 this, SLOT(objectChanged (const Rect&)));
@@ -495,7 +502,7 @@ void GPage::objectChanged ()
       emit selectionChanged ();
     }
   }
-  setModified ();
+//  setModified ();
   if (autoUpdate)
     emit changed ();
 }
@@ -516,29 +523,20 @@ void GPage::objectChanged (const Rect& r)
     }
     */
   }
-  setModified ();
+//  setModified ();
   if (autoUpdate)
     emit changed (r);
 }
 
-QDomDocument GPage::saveToXml ()
+QDomElement GPage::saveToXml (QDomDocument &document)
 {
   static const char* formats[] = {
     "a3", "a4", "a5", "us_letter", "us_legal", "screen", "custom"};
   static const char* orientations[] = {"portrait", "landscape"};
 
-  QDomDocument document("killustrator");
-  document.appendChild( document.createProcessingInstruction( "xml", "version=\"1.0\" encoding=\"UTF-8\"" ) );
-  QDomElement killustrator=document.createElement("killustaror");
-  killustrator.setAttribute("editor", "KIllustrator");
-  killustrator.setAttribute ("mime", KILLUSTRATOR_MIMETYPE);
-  killustrator.setAttribute("version", "2");
-  document.appendChild(killustrator);
+  QDomElement page = document.createElement("page");;
 
-  QDomElement head=document.createElement("head");
-  killustrator.appendChild(head);
-
-  QDomElement layout=document.createElement("layout");
+  QDomElement layout = document.createElement("layout");
   layout.setAttribute ("format", formats[pLayout.format]);
   layout.setAttribute ("orientation", orientations[pLayout.orientation]);
   layout.setAttribute ("width", pLayout.mmWidth);
@@ -547,31 +545,7 @@ QDomDocument GPage::saveToXml ()
   layout.setAttribute ("tmargin", pLayout.mmTop);
   layout.setAttribute ("rmargin", pLayout.mmRight);
   layout.setAttribute ("bmargin", pLayout.mmBottom);
-  head.appendChild(layout);
-
-  QDomElement grid=document.createElement("grid");
-  grid.setAttribute ("dx", gridx);
-  grid.setAttribute ("dy", gridy);
-  grid.setAttribute ("align", snapToGrid ? 1 : 0);
-  head.appendChild(grid);
-
-  QDomElement helplines=document.createElement("helplines");
-  helplines.setAttribute ("align", snapToHelplines ? 1 : 0);
-  QValueList<float>::Iterator hi;
-  for(hi = hHelplines.begin(); hi!=hHelplines.end(); ++hi)
-  {
-    QDomElement hl=document.createElement("hl");
-    hl.setAttribute ("pos", (*hi));
-    helplines.appendChild(hl);
-  }
-  
-  for(hi = vHelplines.begin(); hi!=vHelplines.end(); ++hi)
-  {
-    QDomElement vl=document.createElement("vl");
-    vl.setAttribute ("pos", (*hi));
-    helplines.appendChild(vl);
-  }
-  grid.appendChild(helplines);
+  page.appendChild(layout);
 
   bool save_layer_info = (layers.count() > 2);
   for (QListIterator<GLayer> li(layers); li.current(); ++li)
@@ -593,10 +567,10 @@ QDomDocument GPage::saveToXml ()
     const QList<GObject>& contents = l->objects ();
     for (QListIterator<GObject> oi(contents);oi.current(); ++oi)
       layer.appendChild((*oi)->writeToXml (document));
-    killustrator.appendChild(layer);
+    page.appendChild(layer);
   }
-  setModified (false);
-  return document;
+//  setModified (false);
+  return page;
 }
 
 bool GPage::insertFromXml (const QDomDocument &document, QList<GObject>& newObjs)
@@ -636,17 +610,18 @@ bool GPage::parseBody (const QDomElement &element, QList<GObject>& /*newObjs*/, 
       while(!cn.isNull())
       {
         QDomElement child=cn.toElement();
-        obj=KIllustrator::objectFactory(child, document());
+        obj=KIllustrator::objectFactory(child, document()->document());
         if(!obj)
-        {
-          GObject *proto = GObject::lookupPrototype (child.tagName());
-          if (proto != 0L)
-          {
-            obj = proto->clone (child);
-          }
-          else
-            kdDebug(38000) << "invalid object type: " << child.tagName() << endl;
-        }
+//                {
+//                   GObject *proto = GObject::lookupPrototype (child.tagName());
+//                   if (proto != 0L)
+//                   {
+//                      cout<<"********** calling lookupPrototype"<<endl;
+//                      obj = proto->create (this, child);
+//                   }
+//                   else
+                      kdDebug(38000) << "invalid object type: " << child.tagName() << endl;
+//                }
         if (child.tagName() == "group")
           ((GGroup*)obj)->setLayer (active_layer);
         if(obj->hasId())
@@ -680,23 +655,11 @@ bool GPage::parseBody (const QDomElement &element, QList<GObject>& /*newObjs*/, 
   return true;
 }
 
-bool GPage::readFromXml (const  QDomDocument &document)
+bool GPage::readFromXml (const QDomElement &page)
 {
-  if ( document.doctype().name() != "killustrator" )
-    return false;
-  QDomElement killustrator = document.documentElement();
-  if ( killustrator.attribute( "mime" ) != KILLUSTRATOR_MIMETYPE )
-    return false;
-  if( killustrator.attribute("version")!="2")
-  {
-    kdError(38000) << "Sorry, KIllustrator's current file format is incompatible to the old format." << endl;
-    return false;
-  }
-
-  QDomElement head=killustrator.namedItem("head").toElement();
   setAutoUpdate (false);
 
-  QDomElement layout=head.namedItem("layout").toElement();
+  QDomElement layout=page.namedItem("layout").toElement();
   QString tmp=layout.attribute("format");
   if (tmp == "a3")
     pLayout.format = PG_DIN_A3;
@@ -734,32 +697,13 @@ bool GPage::readFromXml (const  QDomDocument &document)
   pLayout.mmBottom=layout.attribute("bmargin").toFloat();
   pLayout.mmTop=layout.attribute("tmargin").toFloat();
  
-  QDomElement grid=head.namedItem("grid").toElement();
-  gridx=grid.attribute("dx").toFloat();
-  gridy=grid.attribute("dy").toFloat();
-  snapToGrid=(grid.attribute("align").toInt()==1);
-
-  QDomElement helplines=grid.namedItem("helplines").toElement();
-  snapToHelplines=(helplines.attribute("align").toInt()==1);
-
-  QDomElement l=helplines.firstChild().toElement();
-  for( ; !l.isNull(); l=helplines.nextSibling().toElement())
-  {
-    if(l.tagName()=="hl")
-      hHelplines.append(l.attribute("pos").toFloat());
-    else
-      if(l.tagName()=="vl")
-        vHelplines.append(l.attribute("pos").toFloat());
-  }
-
 // update page layout
   setPageLayout (pLayout);
 
   QList<GObject> dummy;
-  bool result = parseBody (killustrator, dummy, false);
+  bool result = parseBody (page, dummy, false);
 
-  setModified (false);
-  emit gridChanged ();
+//  setModified (false);
   return result;
 }
 
@@ -779,7 +723,7 @@ void GPage::insertObjectAtIndex (GObject* obj, unsigned int idx)
   connect (obj, SIGNAL(changed()), this, SLOT(objectChanged ()));
   connect (obj, SIGNAL(changed(const Rect&)),
            this, SLOT(objectChanged (const Rect&)));
-  setModified ();
+//  setModified ();
   if (autoUpdate)
   {
     emit changed ();
@@ -794,7 +738,7 @@ void GPage::moveObjectToIndex (GObject* obj, unsigned int idx)
     layer = active_layer;
   layer->moveObjectToIndex (obj, idx);
 
-  setModified ();
+//  setModified ();
   if (autoUpdate)
   {
     emit changed ();
@@ -824,7 +768,7 @@ void GPage::setPageLayout (const KoPageLayout& layout)
     paperHeight = (int) cvtInchToPt (pLayout.inchHeight);
     break;
   }
-  modifyFlag = true;
+//  modifyFlag = true;
   emit sizeChanged ();
 }
 

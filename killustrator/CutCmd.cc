@@ -31,18 +31,19 @@
 
 #include <GDocument.h>
 #include <GObject.h>
+#include "GPage.h"
 
 CutCmd::CutCmd (GDocument* doc)
   : Command(i18n("Cut"))
 {
   document = doc;
   objects.setAutoDelete(true);
-  for(QListIterator<GObject> it(doc->getSelection()); it.current(); ++it) {
+  for(QListIterator<GObject> it(doc->activePage()->getSelection()); it.current(); ++it) {
     MyPair *p=new MyPair;
     p->o = *it;
     p->o->ref ();
     // store the old position of the object
-    p->pos = doc->findIndexOfObject(p->o);
+    p->pos = doc->activePage()->findIndexOfObject(p->o);
     objects.append(p);
   }
 }
@@ -66,20 +67,20 @@ void CutCmd::execute () {
     for (MyPair *p=objects.first(); p!=0L;
          p=objects.next()) {
         layer.appendChild(p->o->writeToXml(docu));
-        document->deleteObject (p->o);
+        document->activePage()->deleteObject (p->o);
     }
     QApplication::clipboard()->setText(docu.toCString());
 }
 
 void CutCmd::unexecute () {
   QApplication::clipboard ()->clear ();
-  document->unselectAllObjects ();
+  document->activePage()->unselectAllObjects ();
 
   for (MyPair *p=objects.first(); p!=0; p=objects.next()) {
     // insert the object at the old position
     p->o->ref ();
-    document->insertObjectAtIndex (p->o, p->pos);
-    document->selectObject (p->o);
+    document->activePage()->insertObjectAtIndex (p->o, p->pos);
+    document->activePage()->selectObject (p->o);
   }
 }
 

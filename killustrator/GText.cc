@@ -24,6 +24,7 @@
 #include <assert.h>
 #include <GText.h>
 #include <GDocument.h>
+#include "GPage.h"
 
 #include <qdom.h>
 #include <klocale.h>

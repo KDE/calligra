@@ -29,6 +29,7 @@
 
 #include "GClipart.h"
 #include "GDocument.h"
+#include "GPage.h"
 
 InsertClipartCmd::InsertClipartCmd (GDocument* doc, const QString &fname) :
  Command(i18n("Insert Clipart"))
@@ -50,12 +51,12 @@ void InsertClipartCmd::execute () {
 
   if (wmf.load(filename)) {
     clipart = new GClipart (document, wmf, filename);
-    document->insertObject (clipart);
+    document->activePage()->insertObject (clipart);
   }
 }
 
 void InsertClipartCmd::unexecute () {
   if (clipart)
-    document->deleteObject (clipart);
+    document->activePage()->deleteObject (clipart);
 }
 

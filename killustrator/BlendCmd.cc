@@ -28,13 +28,14 @@
 #include <GDocument.h>
 #include <GObject.h>
 #include <GCurve.h>
+#include "GPage.h"
 
 BlendCmd::BlendCmd (GDocument* doc, int steps)
   : Command(i18n("Blend objects"))
 {
   document = doc;
   num_steps = steps;
-  QListIterator<GObject> it(doc->getSelection());
+  QListIterator<GObject> it(doc->activePage()->getSelection());
   for (int i = 0; it.current(); ++it, ++i) {
     if (i == 2)
       break;
@@ -77,9 +78,9 @@ void BlendCmd::execute () {
     return;
   document->setAutoUpdate (false);
   for (int i = 0; i < num_steps; i++) {
-    unsigned int idx = document->findIndexOfObject (sobj);
+    unsigned int idx = document->activePage()->findIndexOfObject (sobj);
     GCurve *curve = GCurve::blendCurves (start, end, i, num_steps);
-    document->insertObjectAtIndex (curve, idx + i + 1);
+    document->activePage()->insertObjectAtIndex (curve, idx + i + 1);
     curves.append(curve);
   }
   document->setAutoUpdate (true);
@@ -90,7 +91,7 @@ void BlendCmd::unexecute () {
     return;
   document->setAutoUpdate (false);
   for (GCurve *c=curves.first(); c!=0L; c=curves.next())
-    document->deleteObject(c);
+    document->activePage()->deleteObject(c);
   document->setAutoUpdate (true);
 }
 

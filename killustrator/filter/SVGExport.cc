@@ -37,6 +37,7 @@
  */
 #include <GDocument.h>
 #include <SVGExport.h>
+#include "GPage.h"
 
 #include <GPolygon.h>
 #include <GPolyline.h>
@@ -70,12 +71,12 @@ bool SVGExport::exportToFile (GDocument* doc) {
     //document.doctype().setPublicId("svg PUBLIC \"-//W3C//DTD SVG December 1999//EN\"\n\"http:://www.w3.org/Graphics/SVG/SVG-19991203.dtd\"");
 
     QDomElement svg=document.createElement("svg");
-    svg.setAttribute("width", doc->getPaperWidth());
-    svg.setAttribute("height", doc->getPaperHeight());
+    svg.setAttribute("width", doc->activePage()->getPaperWidth());
+    svg.setAttribute("height", doc->activePage()->getPaperHeight());
     document.appendChild(svg);
 
     // contents
-    for(QListIterator<GLayer> li(doc->getLayers());
+    for(QListIterator<GLayer> li(doc->activePage()->getLayers());
          li.current(); ++li) {
         if ((*li)->isInternal ())
             continue;

@@ -32,6 +32,7 @@
 #include <kdebug.h>
 
 #include <GDocument.h>
+#include "GPage.h"
 #include <Canvas.h>
 #include <CreateOvalCmd.h>
 #include <CommandHistory.h>
@@ -64,7 +65,7 @@ void OvalTool::processEvent (QEvent* e, GDocument *doc, Canvas* canvas)
       oval = new GOval (doc, flag);
       oval->setStartPoint (pos);
       oval->setEndPoint (pos);
-      doc->insertObject (oval);
+      doc->activePage()->insertObject (oval);
       m_toolController->emitModeSelected (m_id,flag?i18n("Create Circle"):i18n("Create Ellipse"));
    }
    else if (e->type () == QEvent::MouseMove)
@@ -134,13 +135,13 @@ void OvalTool::processEvent (QEvent* e, GDocument *doc, Canvas* canvas)
       }
       else
          oval->setEndPoint (Coord (xpos, ypos));
-      doc->unselectAllObjects ();
+      doc->activePage()->unselectAllObjects ();
 
       if (! oval->isValid ())
-         doc->deleteObject (oval);
+         doc->activePage()->deleteObject (oval);
       else
       {
-         doc->setLastObject (oval);
+         doc->activePage()->setLastObject (oval);
 
          CreateOvalCmd *cmd = new CreateOvalCmd (doc, oval);
          history->addCommand (cmd);

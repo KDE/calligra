@@ -28,6 +28,7 @@
 
 #include <GDocument.h>
 #include <GPolyline.h>
+#include "GPage.h"
 
 CreatePolylineCmd::CreatePolylineCmd (GDocument* doc, GPolyline* line)
   : Command(i18n("Create Polyline"))
@@ -60,10 +61,10 @@ void CreatePolylineCmd::execute () {
       object->addPoint (i, *(it.current ()));
     //    object->ref ();
   }
-  document->insertObject (object);
+  document->activePage()->insertObject (object);
 }
 
 void CreatePolylineCmd::unexecute () {
-  document->deleteObject (object);
+  document->activePage()->deleteObject (object);
 }
 

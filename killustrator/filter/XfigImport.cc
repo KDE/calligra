@@ -27,7 +27,8 @@
 #include <limits.h>
 #include <math.h>
 
-#include <GDocument.h>
+#include "GDocument.h"
+#include "GPage.h"
 #include <GGroup.h>
 #include <GPolyline.h>
 #include <GOval.h>
@@ -166,7 +167,7 @@ bool XfigImport::importFromFile (GDocument *doc) {
   if (! fin)
     return false;
 
-  layout = doc->pageLayout ();
+  layout = doc->activePage()->pageLayout ();
 
   fin.getline (buf, 255);
   if (::strncmp (buf, "#FIG 3", 6)) {
@@ -707,7 +708,7 @@ void XfigImport::buildDocument (GDocument *doc) {
       //kdDebug() << "Inserting object with depth=" << (*it).depth << endl;
       GObject* obj = (*it).object;
       obj->ref ();
-      doc->insertObject (obj);
+      doc->activePage()->insertObject (obj);
   }
   doc->setAutoUpdate (true);
   objList.clear(); // save memory

@@ -28,6 +28,7 @@
 
 #include <GDocument.h>
 #include <GPolygon.h>
+#include "GPage.h"
 
 CreateRectangleCmd::CreateRectangleCmd (GDocument* doc, GPolygon* obj) :
   Command(i18n("Create Rectangle"))
@@ -65,10 +66,10 @@ void CreateRectangleCmd::execute () {
     object->setEndPoint (epos);
     //    object->ref ();
   }
-  document->insertObject (object);
+  document->activePage()->insertObject (object);
 }
 
 void CreateRectangleCmd::unexecute () {
-  document->deleteObject (object);
+  document->activePage()->deleteObject (object);
 }
 

@@ -28,14 +28,14 @@
 #include <qobject.h>
 #include <qlist.h>
 
-class GDocument;
+class GPage;
 class GObject;
 class QString;
 
 class GLayer : public QObject {
   Q_OBJECT
 public:
-  GLayer (GDocument* doc, const QString &text=QString::null);
+  GLayer (GPage* doc, const QString &text=QString::null);
   ~GLayer ();
 
   /*
@@ -81,7 +81,7 @@ private:
     internalFlag;   // layer used for helplines
 
   QList<GObject> contents; // the list of objects
-  GDocument* document;
+  GPage* document;
 
   static int lastID;
 };

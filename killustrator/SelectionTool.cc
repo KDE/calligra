@@ -30,6 +30,7 @@
 #include <kdebug.h>
 
 #include <GDocument.h>
+#include "GPage.h"
 #include <Canvas.h>
 #include <Coord.h>
 #include <TranslateCmd.h>
@@ -78,7 +79,7 @@ SelectionTool::SelectionTool (CommandHistory *history)
 }
 
 void SelectionTool::processEvent (QEvent* e, GDocument *doc, Canvas* canvas) {
-  if (doc->helplineLayerIsActive ()) {
+  if (doc->activePage()->helplineLayerIsActive ()) {
     if (e->type () == QEvent::MouseButtonPress)
       processButtonPressForHelpline ((QMouseEvent *) e, doc, canvas);
     else if (e->type () == QEvent::MouseMove)
@@ -185,11 +186,11 @@ void SelectionTool::processButtonReleaseEvent (QMouseEvent *me,
   if (state == S_Rubberband) {
     QList<GObject> olist;
     Rect selRect (selPoint[0], selPoint[1]);
-    if (doc->findObjectsContainedIn (selRect.normalize (), olist)) {
+    if (doc->activePage()->findObjectsContainedIn (selRect.normalize (), olist)) {
       QListIterator<GObject> it (olist);
       doc->setAutoUpdate (false);
       for (; it.current (); ++it)
-        doc->selectObject (it.current ());
+        doc->activePage()->selectObject (it.current ());
       state = S_Pick;
       doc->setAutoUpdate (true);
     }
@@ -282,21 +283,21 @@ void SelectionTool::processButtonReleaseEvent (QMouseEvent *me,
    * S_Intermediate2
    */
   else if (state == S_Intermediate2) {
-    if (doc->findContainingObject (me->x (), me->y ()) == 0L) {
-      doc->unselectAllObjects ();
+    if (doc->activePage()->findContainingObject (me->x (), me->y ()) == 0L) {
+      doc->activePage()->unselectAllObjects ();
       state = S_Init;
     }
     else
       state = S_Pick;
     //    doc->handle ().setMode (Handle::HMode_Default);
   }
-  doc->handle ().setMode (mode, true);
-  if (doc->selectionIsEmpty ())
+  doc->activePage()->handle ().setMode (mode, true);
+  if (doc->activePage()->selectionIsEmpty ())
   {
     m_toolController->emitModeSelected (m_id,i18n ("Selection Mode"));
   }
   else {
-    Rect box = doc->boundingBoxForSelection ();
+    Rect box = doc->activePage()->boundingBoxForSelection ();
     MeasurementUnit unit =
       PStateManager::instance ()->defaultMeasurementUnit ();
     QString u = unitToString (unit);
@@ -305,7 +306,7 @@ void SelectionTool::processButtonReleaseEvent (QMouseEvent *me,
     y = cvtPtToUnit (unit, box.y ());
     w = cvtPtToUnit (unit, box.width ());
     h = cvtPtToUnit (unit, box.height ());
-    if (doc->selectionCount () > 1) {
+    if (doc->activePage()->selectionCount () > 1) {
         msgbuf=i18n("Multiple Selection");
         msgbuf+=" [";
         msgbuf+=QString::number(x, 'f', 3);
@@ -318,7 +319,7 @@ void SelectionTool::processButtonReleaseEvent (QMouseEvent *me,
         msgbuf+=QString(" ") + u + QString("]");
     }
     else {
-      GObject *sobj = doc->getSelection ().first();
+      GObject *sobj = doc->activePage()->getSelection ().first();
       msgbuf=sobj->typeName();
       msgbuf+=" [";
       msgbuf+=QString::number(x, 'f', 3);
@@ -332,7 +333,7 @@ void SelectionTool::processButtonReleaseEvent (QMouseEvent *me,
     }
     m_toolController->emitModeSelected (m_id,msgbuf);
   }
-  origbox = doc->boundingBoxForSelection ();
+  origbox = doc->activePage()->boundingBoxForSelection ();
 }
 
 void SelectionTool::processMouseMoveEvent (QMouseEvent *me, GDocument *doc,
@@ -366,7 +367,7 @@ void SelectionTool::processMouseMoveEvent (QMouseEvent *me, GDocument *doc,
     return;
   }
 
-  if (! doc->selectionIsEmpty ())
+  if (! doc->activePage()->selectionIsEmpty ())
   {
     float xpos = me->x (), ypos = me->y ();
 
@@ -576,20 +577,20 @@ void SelectionTool::processButtonPressEvent (QMouseEvent *me, GDocument *doc,
    * S_Init
    */
   if (state == S_Init) {
-    obj = doc->findContainingObject (me->x (), me->y ());
+    obj = doc->activePage()->findContainingObject (me->x (), me->y ());
     if (obj) {
       // an object will be selected
       state = S_Pick;
       if (!shiftFlag)
-        doc->unselectAllObjects ();
+        doc->activePage()->unselectAllObjects ();
       // add the object to the selection
-      doc->selectObject (obj);
-      origbox = doc->boundingBoxForSelection ();
+      doc->activePage()->selectObject (obj);
+      origbox = doc->activePage()->boundingBoxForSelection ();
     }
     else {
       // no object
       state = S_Rubberband;
-      doc->unselectAllObjects ();
+      doc->activePage()->unselectAllObjects ();
       selPoint[0].x(me->x ()); selPoint[0].y(me->y ());
       selPoint[1].x(me->x ()); selPoint[1].y(me->y ());
     }
@@ -598,21 +599,21 @@ void SelectionTool::processButtonPressEvent (QMouseEvent *me, GDocument *doc,
    * S_Pick
    */
   else if (state == S_Pick) {
-    origbox = doc->boundingBoxForSelection ();
+    origbox = doc->activePage()->boundingBoxForSelection ();
     if (hmask) {
       state = S_Intermediate1;
       oldmask = hmask;
     }
     else {
-      obj = doc->findContainingObject (me->x (), me->y ());
+      obj = doc->activePage()->findContainingObject (me->x (), me->y ());
       if (obj) {
         if (obj->isSelected ()) {
 
           //
           // a ugly workaround, because cliparts cannot be rotated (WHY NOT ?)
           //
-          if (doc->selectionCount () == 1) {
-            GObject* selObj = doc->getSelection ().first();
+          if (doc->activePage()->selectionCount () == 1) {
+            GObject* selObj = doc->activePage()->getSelection ().first();
             if (selObj->isA ("GClipart")) {
               // the selected object is a clipart,
               // so don't show rotation handles
@@ -629,21 +630,21 @@ void SelectionTool::processButtonPressEvent (QMouseEvent *me, GDocument *doc,
           // the object is already selected
           if (shiftFlag)
             // remove it from the selection
-            doc->unselectObject (obj);
+            doc->activePage()->unselectObject (obj);
           else
             state = S_Intermediate1;
         }
         else {
           if (!shiftFlag)
-            doc->unselectAllObjects ();
+            doc->activePage()->unselectAllObjects ();
           // add the object to the selection
-          doc->selectObject (obj);
+          doc->activePage()->selectObject (obj);
         }
       }
       else {
         // nothing selected
         // unselect all
-        doc->unselectAllObjects ();
+        doc->activePage()->unselectAllObjects ();
 
         // and switch to rubberband mode
         state = S_Rubberband;
@@ -657,7 +658,7 @@ void SelectionTool::processButtonPressEvent (QMouseEvent *me, GDocument *doc,
    */
   else if (state == S_RotateSelect) {
     if (hmask) {
-      origbox = doc->boundingBoxForSelection ();
+      origbox = doc->activePage()->boundingBoxForSelection ();
       oldmask = hmask;
       if (hmask == (Handle::HPos_Top | Handle::HPos_Left) ||
           hmask == (Handle::HPos_Bottom | Handle::HPos_Left) ||
@@ -665,14 +666,14 @@ void SelectionTool::processButtonPressEvent (QMouseEvent *me, GDocument *doc,
           hmask == (Handle::HPos_Bottom | Handle::HPos_Right)) {
         state = S_Rotate;
         // rotCenter = doc->boundingBoxForSelection ().center ();
-        rotCenter = doc->handle().rotCenter ();
+        rotCenter = doc->activePage()->handle().rotCenter ();
       }
       else if (hmask == Handle::HPos_Center) {
         state = S_MoveRotCenter;
       }
       else {
         state = S_Shear;
-        rotCenter = doc->handle().rotCenter ();
+        rotCenter = doc->activePage()->handle().rotCenter ();
       }
     }
     else
@@ -682,12 +683,12 @@ void SelectionTool::processButtonPressEvent (QMouseEvent *me, GDocument *doc,
 
 void SelectionTool::processKeyPressEvent (QKeyEvent *ke, GDocument *doc,
                                              Canvas* canvas) {
-  if (doc->selectionIsEmpty ())
+  if (doc->activePage()->selectionIsEmpty ())
     return;
 
   if (ke->key () == Qt::Key_Escape) {
       // clear selection
-      doc->unselectAllObjects ();
+      doc->activePage()->unselectAllObjects ();
       return;
   }
 
@@ -734,14 +735,14 @@ void SelectionTool::translate (GDocument* doc, Canvas* canvas,
 //  kdDebug(0) << "snap=" << snap << endl;
 //kdDebug(0) << "DX=" << dx << " DY=" << dy << endl;
   if (permanent) {
-      QListIterator<GObject> it(doc->getSelection());
+      QListIterator<GObject> it(doc->activePage()->getSelection());
       for( ; it.current(); ++it)
           (*it)->setWorkInProgress (false);
     TranslateCmd *cmd = new TranslateCmd (doc, dx, dy);
     history->addCommand (cmd, true);
   }
   else {
-    QListIterator<GObject> it(doc->getSelection());
+    QListIterator<GObject> it(doc->activePage()->getSelection());
     QWMatrix m;
     m.translate (dx, dy);
     for ( ; it.current(); ++it) {
@@ -807,7 +808,7 @@ void SelectionTool::rotate (GDocument* doc, float , float ,
   if (angle>180.0) angle-=360.0;
 
   if (permanent) {
-      QListIterator<GObject> it(doc->getSelection());
+      QListIterator<GObject> it(doc->activePage()->getSelection());
       for( ; it.current(); ++it)
           (*it)->setWorkInProgress(false);
       RotateCmd *cmd = new RotateCmd (doc, rotCenter, angle);
@@ -819,7 +820,7 @@ void SelectionTool::rotate (GDocument* doc, float , float ,
     m2.rotate (angle);
     m3.translate (rotCenter.x (), rotCenter.y ());
 
-    for (QListIterator<GObject> it(doc->getSelection()); it.current(); ++it) {
+    for (QListIterator<GObject> it(doc->activePage()->getSelection()); it.current(); ++it) {
       (*it)->setWorkInProgress (true);
       (*it)->initTmpMatrix ();
       (*it)->ttransform (m1);
@@ -876,7 +877,7 @@ void SelectionTool::scale (GDocument* doc, Canvas* canvas,
     yback = r.top () + r.height () * (1 - sy);
   }
   if (permanent) {
-      QListIterator<GObject> it(doc->getSelection());
+      QListIterator<GObject> it(doc->activePage()->getSelection());
       for( ; it.current(); ++it)
           (*it)->setWorkInProgress(false);
       ScaleCmd *cmd = new ScaleCmd (doc, oldmask, sx, sy, r);
@@ -889,7 +890,7 @@ void SelectionTool::scale (GDocument* doc, Canvas* canvas,
     m2.scale (sx, sy);
     m3.translate (xback, yback);
 
-    for (QListIterator<GObject> it(doc->getSelection ()); it.current(); ++it) {
+    for (QListIterator<GObject> it(doc->activePage()->getSelection ()); it.current(); ++it) {
       (*it)->setWorkInProgress (true);
       (*it)->initTmpMatrix ();
 
@@ -921,7 +922,7 @@ void SelectionTool::shear (GDocument* doc, int mask, float dx, float dy,
     sy = dy / r.height ();
 
   if (permanent) {
-      QListIterator<GObject> it(doc->getSelection());
+      QListIterator<GObject> it(doc->activePage()->getSelection());
       for( ; it.current(); ++it)
           (*it)->setWorkInProgress(false);
       ShearCmd *cmd = new ShearCmd (doc, rotCenter, sx, sy);
@@ -934,7 +935,7 @@ void SelectionTool::shear (GDocument* doc, int mask, float dx, float dy,
     m2.shear (sx, sy);
     m3.translate (rotCenter.x (), rotCenter.y ());
 
-    for (QListIterator<GObject> it(doc->getSelection()); it.current(); ++it) {
+    for (QListIterator<GObject> it(doc->activePage()->getSelection()); it.current(); ++it) {
       (*it)->setWorkInProgress (true);
       (*it)->initTmpMatrix ();
 
@@ -954,9 +955,9 @@ void SelectionTool::shear (GDocument* doc, int mask, float dx, float dy,
 
 void SelectionTool::processTabKeyEvent (GDocument* doc, Canvas*) {
   Handle::Mode mode = Handle::HMode_Default;
-  doc->selectNextObject ();
-  doc->handle ().show (true);
-  doc->handle ().setMode (mode, true);
+  doc->activePage()->selectNextObject ();
+  doc->activePage()->handle ().show (true);
+  doc->activePage()->handle ().setMode (mode, true);
   state = S_Pick;
 }
 
@@ -966,23 +967,23 @@ void SelectionTool::activate (GDocument* doc, Canvas *canvas)
  
    dragHorizHelpline = dragVertHelpline = -1;
 
-    doc->handle ().show (true);
-    if (doc->lastObject ()) {
-        if (doc->selectionIsEmpty ())
-            doc->selectObject (doc->lastObject ());
+    doc->activePage()->handle ().show (true);
+    if (doc->activePage()->lastObject ()) {
+        if (doc->activePage()->selectionIsEmpty ())
+            doc->activePage()->selectObject (doc->activePage()->lastObject ());
         else
-            doc->setAutoUpdate (true);
+            doc->activePage()->setAutoUpdate (true);
         state = S_Pick;
     }
     else
         state = S_Init;
     ctype = C_Arrow;
 
-    if (doc->selectionIsEmpty ()) {
+    if (doc->activePage()->selectionIsEmpty ()) {
         m_toolController->emitModeSelected (m_id,i18n("Selection Mode"));
     }
     else {
-        Rect box = doc->boundingBoxForSelection ();
+        Rect box = doc->activePage()->boundingBoxForSelection ();
         MeasurementUnit unit =
             PStateManager::instance ()->defaultMeasurementUnit ();
         QString u = unitToString (unit);
@@ -991,7 +992,7 @@ void SelectionTool::activate (GDocument* doc, Canvas *canvas)
         y = cvtPtToUnit (unit, box.y ());
         w = cvtPtToUnit (unit, box.width ());
         h = cvtPtToUnit (unit, box.height ());
-        if (doc->selectionCount () > 1) {
+        if (doc->activePage()->selectionCount () > 1) {
             msgbuf=i18n("Multiple Selection");
             msgbuf+=" [";
             msgbuf+=QString::number(x, 'f', 3);
@@ -1004,7 +1005,7 @@ void SelectionTool::activate (GDocument* doc, Canvas *canvas)
             msgbuf+=QString(" ") + u + QString("]");
         }
         else {
-            GObject *sobj = doc->getSelection ().first();
+            GObject *sobj = doc->activePage()->getSelection ().first();
             msgbuf=sobj->typeName();
             msgbuf+=" [";
             msgbuf+=QString::number(x, 'f', 3);
@@ -1021,8 +1022,9 @@ void SelectionTool::activate (GDocument* doc, Canvas *canvas)
     canvas->repaint();
 }
 
-void SelectionTool::deactivate (GDocument* doc, Canvas* canvas) {
-  doc->handle ().show (false);
+void SelectionTool::deactivate (GDocument* doc, Canvas* canvas)
+{
+  doc->activePage()->handle ().show (false);
   canvas->repaint ();
 }
 

@@ -24,6 +24,7 @@
 
 #include "Tool.h"
 #include "GDocument.h"
+#include "GPage.h"
 #include <CommandHistory.h>
 #include "ToolController.h"
 #include "Canvas.h"
@@ -38,7 +39,7 @@ Tool::Tool (CommandHistory *chist)
 void Tool::activate (GDocument* doc, Canvas* canvas)
 {
    canvas->setCursor(Qt::crossCursor);
-   doc->unselectAllObjects ();
+   doc->activePage()->unselectAllObjects ();
    m_toolController->emitModeSelected(m_id,"");
 }
 

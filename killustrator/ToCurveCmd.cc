@@ -28,12 +28,13 @@
 
 #include <GDocument.h>
 #include <GCurve.h>
+#include "GPage.h"
 
 ToCurveCmd::ToCurveCmd (GDocument* doc)
   : Command(i18n("Convert to curve"))
 {
   document = doc;
-  QListIterator<GObject> it(doc->getSelection());
+  QListIterator<GObject> it(doc->activePage()->getSelection());
   for (; it.current(); ++it) {
     (*it)->ref ();
     objects.append(*it);
@@ -51,13 +52,13 @@ ToCurveCmd::~ToCurveCmd () {
 void ToCurveCmd::execute () {
   document->setAutoUpdate (false);
   for (GObject *i = objects.first(); i !=0L; i=objects.next()) {
-    unsigned int idx = document->findIndexOfObject (i);
+    unsigned int idx = document->activePage()->findIndexOfObject (i);
     GCurve *curve = i->convertToCurve ();
     if (curve) {
       curves.append(curve);
-      document->deleteObject (i);
-      document->insertObjectAtIndex (curve, idx);
-      document->selectObject (curve);
+      document->activePage()->deleteObject (i);
+      document->activePage()->insertObjectAtIndex (curve, idx);
+      document->activePage()->selectObject (curve);
     }
   }
   document->setAutoUpdate (true);
@@ -67,9 +68,9 @@ void ToCurveCmd::unexecute () {
   GCurve *c=curves.first();
   GObject *o=objects.first();
   for ( ; c != 0L; c=curves.next(), o=objects.next()) {
-    unsigned int idx = document->findIndexOfObject (c);
-    document->deleteObject (c);
-    document->insertObjectAtIndex (o, idx);
+    unsigned int idx = document->activePage()->findIndexOfObject (c);
+    document->activePage()->deleteObject (c);
+    document->activePage()->insertObjectAtIndex (o, idx);
   }
 }
 

@@ -25,11 +25,12 @@
 #include <ScaleCmd.h>
 #include <klocale.h>
 #include <GDocument.h>
+#include "GPage.h"
 
 ScaleCmd::ScaleCmd (GDocument* doc, int mask, float x, float y) :
   ObjectManipCmd (doc, i18n("Scale"))
 {
-  box = doc->boundingBoxForSelection ();
+  box = doc->activePage()->boundingBoxForSelection ();
   sx = x; sy = y;
   hmask = mask;
 }

@@ -29,6 +29,7 @@
 #include <klocale.h>
 
 #include <GDocument.h>
+#include "GPage.h"
 #include <Canvas.h>
 #include <Coord.h>
 #include <GPolyline.h>
@@ -68,9 +69,9 @@ void PathTextTool::activate (GDocument* doc, Canvas* canvas)
 {
    textObj = 0L;
 
-   if (doc->selectionCount () == 1)
+   if (doc->activePage()->selectionCount () == 1)
    {
-      GObject* obj = doc->getSelection().first();
+      GObject* obj = doc->activePage()->getSelection().first();
       if (obj->isA ("GText"))
       {
          textObj = (GText *) obj;
@@ -106,7 +107,7 @@ void PathTextTool::processEvent (QEvent* e, GDocument *doc, Canvas* /*canvas*/)
          int xpos = me->x (), ypos = me->y ();
          GObject *obj = 0L;
 
-         if (textObj && (obj = doc->findContainingObject (xpos, ypos)) != 0L)
+         if (textObj && (obj = doc->activePage()->findContainingObject (xpos, ypos)) != 0L)
          {
             TextAlongPathCmd *cmd = new TextAlongPathCmd (doc, textObj, obj);
             history->addCommand (cmd, true);

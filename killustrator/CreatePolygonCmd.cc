@@ -28,6 +28,7 @@
 
 #include <GDocument.h>
 #include <GPolygon.h>
+#include "GPage.h"
 
 CreatePolygonCmd::CreatePolygonCmd (GDocument* doc, GPolygon* obj)
   : Command(i18n("Create Polygon"))
@@ -63,10 +64,10 @@ void CreatePolygonCmd::execute () {
     object->setSymmetricPolygon (spos, epos, nCorners, isConcave, sharpness);
     //    object->ref ();
   }
-  document->insertObject (object);
+  document->activePage()->insertObject (object);
 }
 
 void CreatePolygonCmd::unexecute () {
-  document->deleteObject (object);
+  document->activePage()->deleteObject (object);
 }
 

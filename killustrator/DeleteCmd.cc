@@ -28,16 +28,17 @@
 
 #include <GDocument.h>
 #include <GObject.h>
+#include "GPage.h"
 
 DeleteCmd::DeleteCmd (GDocument* doc) : Command(i18n("Delete")) {
   document = doc;
   objects.setAutoDelete(true);
-  for(QListIterator<GObject> it(doc->getSelection()); it.current(); ++it) {
+  for(QListIterator<GObject> it(doc->activePage()->getSelection()); it.current(); ++it) {
       MyPair *p=new MyPair;
       p->o=*it;
       p->o->ref ();
       // store the old position of the object
-      p->pos = doc->findIndexOfObject (p->o);
+      p->pos = doc->activePage()->findIndexOfObject (p->o);
       objects.append(p);
   }
 }
@@ -50,18 +51,18 @@ DeleteCmd::~DeleteCmd () {
 void DeleteCmd::execute () {
     document->setAutoUpdate (false);
     for (MyPair *p=objects.first(); p!=0L; p=objects.next())
-        document->deleteObject (p->o);
+        document->activePage()->deleteObject (p->o);
     document->setAutoUpdate (true);
 }
 
 void DeleteCmd::unexecute () {
   document->setAutoUpdate (false);
-  document->unselectAllObjects ();
+  document->activePage()->unselectAllObjects ();
   for (MyPair *p=objects.first(); p!=0L; p=objects.next()) {
     // insert the object at the old position
     p->o->ref ();
-    document->insertObjectAtIndex (p->o, p->pos);
-    document->selectObject (p->o);
+    document->activePage()->insertObjectAtIndex (p->o, p->pos);
+    document->activePage()->selectObject (p->o);
   }
   document->setAutoUpdate (true);
 }

@@ -26,14 +26,15 @@
 #include <klocale.h>
 #include <GDocument.h>
 #include <GLayer.h>
+#include "GPage.h"
 
 ReorderCmd::ReorderCmd (GDocument* doc, ReorderPosition pos)
   : Command(i18n("Reorder"))
 {
-  objects.resize (doc->selectionCount ());
-  oldpos.resize (doc->selectionCount ());
+  objects.resize (doc->activePage()->selectionCount ());
+  oldpos.resize (doc->activePage()->selectionCount ());
 
-  QListIterator<GObject> it(doc->getSelection());
+  QListIterator<GObject> it(doc->activePage()->getSelection());
   for (unsigned int i = 0; it.current(); ++it, ++i) {
     GObject *o = *it;
     o->ref ();
@@ -53,7 +54,7 @@ void ReorderCmd::execute () {
     unsigned int newidx =  0;
 
     // look for the object
-    unsigned int idx = document->findIndexOfObject (objects[i]);
+    unsigned int idx = document->activePage()->findIndexOfObject (objects[i]);
     oldpos[i] = idx;
     if (position == RP_ToFront || position == RP_ForwardOne) {
       if (idx == objects[i]->getLayer ()->objectCount () - 1)
@@ -77,12 +78,12 @@ void ReorderCmd::execute () {
       else
         newidx = idx - 1;
     }
-    document->moveObjectToIndex (objects[i], newidx);
+    document->activePage()->moveObjectToIndex (objects[i], newidx);
   }
 }
 
 void ReorderCmd::unexecute () {
   for (unsigned int i = 0; i < objects.count (); i++)
-    document->moveObjectToIndex (objects[i], oldpos[i]);
+    document->activePage()->moveObjectToIndex (objects[i], oldpos[i]);
 }
 

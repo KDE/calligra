@@ -35,8 +35,9 @@ lib_LTLIBRARIES = libkillustratorpart.la killustrator.la
 libkillustratorpart_la_SOURCES = KIllustrator_doc.cc \
         KIllustrator_view.cc \
         InsertPartTool.cc GPart.cc KIllustrator_factory.cc \
-        tooldockmanager.cc \
- 	Handle.cc GObject.cc GPolyline.cc GPolygon.cc \
+	GPage.cc PageNameDialog.cc \
+	tooldockmanager.cc \
+	Handle.cc GObject.cc GPolyline.cc GPolygon.cc \
 	PathTextTool.cc GOval.cc GClipart.cc GBezier.cc GPixmap.cc \
 	GText.cc GGroup.cc Tool.cc PolylineTool.cc \
 	FreeHandTool.cc \
@@ -56,8 +57,8 @@ libkillustratorpart_la_SOURCES = KIllustrator_doc.cc \
        	SetTextCmd.cc SetPropertyCmd.cc ReorderCmd.cc \
        	AddLineSegmentCmd.cc EditPointCmd.cc \
        	CreatePolygonCmd.cc CreateBezierCmd.cc \
-       	RemovePointCmd.cc InsertPointCmd.cc \
-       	TextAlongPathCmd.cc InsertPixmapCmd.cc \
+	RemovePointCmd.cc InsertPointCmd.cc \
+	TextAlongPathCmd.cc InsertPixmapCmd.cc \
        	InsertObjCmd.cc ShearCmd.cc \
        	SplitLineCmd.cc CommandHistory.cc \
        	FilterInfo.cc ExportFilter.cc \

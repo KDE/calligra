@@ -35,8 +35,6 @@
 
 #include <koPageLayoutDia.h>
 
-#define KILLUSTRATOR_MIMETYPE "application/x-killustrator"
-
 class GDocument;
 class GObject;
 class GLayer;
@@ -44,18 +42,23 @@ class QDomDocument;
 class QDomElement;
 
 class GPage : public QObject
- {
+{
   Q_OBJECT
 public:
-  GPage (GDocument *doc);
+  GPage (GDocument *adoc);
   ~GPage ();
 
   void initialize ();
   void setAutoUpdate (bool flag);
 
+  GDocument *document(void) const {return doc;};
+
   void setPaperSize (int width, int height);
   int getPaperWidth () const;
   int getPaperHeight () const;
+
+  QString name() const {return mName;};
+  void setName(QString aName);
 
   void drawContents (QPainter& p, bool withBasePoints = false,
                      bool outline = false);
@@ -129,8 +132,8 @@ public:
 /*
    Load/Save Page.
 */
-  QDomDocument saveToXml();
-  bool readFromXml (const QDomDocument &document);
+  QDomElement saveToXml(QDomDocument &document);
+  bool readFromXml (const QDomElement &page);
   bool insertFromXml (const QDomDocument &document, QList<GObject>& newObjs);
 
   Handle& handle () { return selHandle; }
@@ -161,12 +164,14 @@ signals:
   void wasModified (bool flag);
 
 protected:
+  GDocument *doc;
   bool autoUpdate;
-  QString name;  // ?
-  int paperWidth, paperHeight; // pt
-  QList<GLayer> layers; // the array of all layers
+  QString mName;                // page name
+  QString filename;
+  int paperWidth, paperHeight;  // pt
+  QList<GLayer> layers;         // the array of all layers
   QList<GObject> selection;
-  GLayer* active_layer;     // the current layer
+  GLayer* active_layer;          // the current layer
   GObject *last;
   Handle selHandle;
   Rect selBox;

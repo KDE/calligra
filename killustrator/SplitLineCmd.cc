@@ -27,6 +27,7 @@
 #include <GDocument.h>
 #include <GPolyline.h>
 #include <kdebug.h>
+#include "GPage.h"
 
 SplitLineCmd::SplitLineCmd (GDocument* doc, GPolyline* o, int idx)
   : Command(i18n("Split Line"))
@@ -52,23 +53,23 @@ void SplitLineCmd::execute () {
 
   if (obj->splitAt (index, obj1, obj2))
   {
-    pos = document->findIndexOfObject (obj);
-    document->deleteObject (obj);
-    document->unselectAllObjects ();
-    document->insertObjectAtIndex (obj1, pos);
-    document->selectObject (obj1);
+    pos = document->activePage()->findIndexOfObject (obj);
+    document->activePage()->deleteObject (obj);
+    document->activePage()->unselectAllObjects ();
+    document->activePage()->insertObjectAtIndex (obj1, pos);
+    document->activePage()->selectObject (obj1);
     if (obj2)
     {
-      document->insertObjectAtIndex (obj2, pos + 1);
-      document->selectObject (obj2);
+      document->activePage()->insertObjectAtIndex (obj2, pos + 1);
+      document->activePage()->selectObject (obj2);
     }
   }
 }
 
 void SplitLineCmd::unexecute () {
-  if (obj1) document->deleteObject (obj1);
-  if (obj2) document->deleteObject (obj2);
-  document->insertObjectAtIndex (obj, pos);
-  document->selectObject (obj);
+  if (obj1) document->activePage()->deleteObject (obj1);
+  if (obj2) document->activePage()->deleteObject (obj2);
+  document->activePage()->insertObjectAtIndex (obj, pos);
+  document->activePage()->selectObject (obj);
 }
 

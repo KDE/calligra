@@ -45,6 +45,7 @@
 #include <InsertObjCmd.h>
 #include <Handle.h> // for scaling directions
 #include <GDocument.h>
+#include "GPage.h"
 #include <GObject.h>
 #include <CommandHistory.h>
 #include <UnitBox.h>
@@ -238,7 +239,7 @@ void TransformationDialog::relativePositionSlot(){
   }
   else
   {
-     Rect r = document->boundingBoxForSelection ();
+     Rect r = document->activePage()->boundingBoxForSelection ();
      horizPosition->setValue (r.left ());
      vertPosition->setValue (r.top ());
   }
@@ -251,14 +252,14 @@ void TransformationDialog::relativeRotCenterSlot(){
   }
   else
   {
-     Rect r = document->boundingBoxForSelection ();
+     Rect r = document->activePage()->boundingBoxForSelection ();
      horizRotCenter->setValue (r.center ().x ());
      vertRotCenter->setValue (r.center ().y ());
   }
 }
 
 void TransformationDialog::applyToDuplicatePressed () {
-  if (document == 0L || document->selectionIsEmpty ())
+  if (document == 0L || document->activePage()->selectionIsEmpty ())
     return;
 
   int buttonId = -1;
@@ -287,7 +288,7 @@ void TransformationDialog::applyToDuplicatePressed () {
 }
 
 void TransformationDialog::applyPressed () {
-  if (document == 0L || document->selectionIsEmpty ())
+  if (document == 0L || document->activePage()->selectionIsEmpty ())
     return;
 
   int buttonId = -1;
@@ -323,7 +324,7 @@ void TransformationDialog::translate (bool onDuplicate) {
 
   if (! relativePosition->isChecked ()) {
     // the given values are relative to the current bounding box
-    Rect r = document->boundingBoxForSelection ();
+    Rect r = document->activePage()->boundingBoxForSelection ();
     xval -= r.left ();
     yval -= r.top ();
   }
@@ -331,7 +332,7 @@ void TransformationDialog::translate (bool onDuplicate) {
     QList<GObject> duplicates;
     duplicates.setAutoDelete (false);
 
-    for(QListIterator<GObject> it(document->getSelection()); it.current(); ++it) {
+    for(QListIterator<GObject> it(document->activePage()->getSelection()); it.current(); ++it) {
       GObject* obj = (*it)->copy ();
       QWMatrix m;
       m.translate (xval, yval);
@@ -360,18 +361,18 @@ void TransformationDialog::scale (bool onDuplicate) {
   }
   else {
     // the values are absolute values, so compute the scaling factors
-    Rect r = document->boundingBoxForSelection ();
+    Rect r = document->activePage()->boundingBoxForSelection ();
     xval /= r.width ();
     yval /= r.height ();
   }
   if (onDuplicate) {
-    Rect box = document->boundingBoxForSelection ();
+    Rect box = document->activePage()->boundingBoxForSelection ();
     float xoff = box.x (), yoff = box.y ();
 
     QList<GObject> duplicates;
     duplicates.setAutoDelete (false);
 
-    for (QListIterator<GObject> it(document->getSelection()); it.current(); ++it) {
+    for (QListIterator<GObject> it(document->activePage()->getSelection()); it.current(); ++it) {
       GObject* obj = (*it)->copy ();
       QWMatrix m1, m2, m3;
 
@@ -404,7 +405,7 @@ void TransformationDialog::rotate (bool onDuplicate) {
 
   if (relativeRotCenter->isChecked ()) {
     // the given values are relative to the current bounding box
-    Rect r = document->boundingBoxForSelection ();
+    Rect r = document->activePage()->boundingBoxForSelection ();
     xcenter += r.left ();
     ycenter += r.top ();
   }
@@ -412,7 +413,7 @@ void TransformationDialog::rotate (bool onDuplicate) {
     QList<GObject> duplicates;
     duplicates.setAutoDelete (false);
 
-    for (QListIterator<GObject> it(document->getSelection()); it.current(); ++it) {
+    for (QListIterator<GObject> it(document->activePage()->getSelection()); it.current(); ++it) {
       GObject* obj = (*it)->copy ();
       QWMatrix m1, m2, m3;
       m1.translate (-xcenter, -ycenter);
@@ -441,13 +442,13 @@ void TransformationDialog::mirror (bool onDuplicate) {
   else if (vertMirror->isOn ())
     sy = -1;
   if (onDuplicate) {
-    Rect box = document->boundingBoxForSelection ();
+    Rect box = document->activePage()->boundingBoxForSelection ();
     float xoff = box.x (), yoff = box.y ();
 
     QList<GObject> duplicates;
     duplicates.setAutoDelete (false);
 
-    for (QListIterator<GObject> it(document->getSelection()); it.current(); ++it) {
+    for (QListIterator<GObject> it(document->activePage()->getSelection()); it.current(); ++it) {
       GObject* obj = (*it)->copy ();
       QWMatrix m1, m2, m3;
 
@@ -485,7 +486,7 @@ void TransformationDialog::update () {
   if (sender () != 0L)
     document = (GDocument *) sender ();
 
-  Rect r = document->boundingBoxForSelection ();
+  Rect r = document->activePage()->boundingBoxForSelection ();
 
   // position
   horizPosition->setValue (r.left ());

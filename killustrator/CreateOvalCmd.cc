@@ -27,6 +27,7 @@
 #include <klocale.h>
 
 #include "GDocument.h"
+#include "GPage.h"
 #include "GOval.h"
 
 CreateOvalCmd::CreateOvalCmd (GDocument* doc, GOval* oval) :
@@ -61,10 +62,10 @@ void CreateOvalCmd::execute () {
     object->setEndPoint (epos);
     //    object->ref ();
   }
-  document->insertObject (object);
+  document->activePage()->insertObject (object);
 }
 
 void CreateOvalCmd::unexecute () {
-  document->deleteObject (object);
+  document->activePage()->deleteObject (object);
 }
 

@@ -22,8 +22,9 @@
 
 */
 
-#include <AlignCmd.h>
-#include <GDocument.h>
+#include "AlignCmd.h"
+#include "GDocument.h"
+#include "GPage.h"
 
 #include <klocale.h>
 
@@ -42,17 +43,17 @@ void AlignCmd::execute () {
   float dx, dy;
   unsigned int i;
 
-  unsigned int nobjs = document->selectionCount ();
+  unsigned int nobjs = document->activePage()->selectionCount ();
 
   if (nobjs == 0)
     return;
 
   ObjectManipCmd::execute ();
-  document->setAutoUpdate (false);
+  document->activePage()->setAutoUpdate (false);
   if (nobjs > 1) {
     // alignment is possible only for two or more objects
-    QListIterator<GObject> it(document->getSelection());
-    alignObject = document->getSelection().last();
+    QListIterator<GObject> it(document->activePage()->getSelection());
+    alignObject = document->activePage()->getSelection().last();
     alignBox=alignObject->boundingBox ();
 
     for (i = 0; it.current(); ++it, ++i) {
@@ -108,14 +109,14 @@ void AlignCmd::execute () {
 
   if (center) {
     // center the selection to the page
-    Rect page (0, 0, document->getPaperWidth (), document->getPaperHeight ());
+    Rect page (0, 0, document->activePage()->getPaperWidth (), document->activePage()->getPaperHeight ());
     Coord pcenter = page.center ();
-    Coord bcenter = document->boundingBoxForSelection ().center ();
+    Coord bcenter = document->activePage()->boundingBoxForSelection ().center ();
     QWMatrix matrix;
     matrix.translate (pcenter.x () - bcenter.x (),
                       pcenter.y () - bcenter.y ());
-    for (QListIterator<GObject> it(document->getSelection()); it.current(); ++it)
+    for (QListIterator<GObject> it(document->activePage()->getSelection()); it.current(); ++it)
         (*it)->transform (matrix, true);
   }
-  document->setAutoUpdate (true);
+  document->activePage()->setAutoUpdate (true);
 }

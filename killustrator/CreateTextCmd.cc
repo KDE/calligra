@@ -28,6 +28,7 @@
 
 #include <GDocument.h>
 #include <GText.h>
+#include "GPage.h"
 
 CreateTextCmd::CreateTextCmd (GDocument* doc, GText* obj) :
   Command(i18n("Create Text"))
@@ -59,10 +60,10 @@ void CreateTextCmd::execute () {
     object->setText (text);
     //    object->ref ();
   }
-  document->insertObject (object);
+  document->activePage()->insertObject (object);
 }
 
 void CreateTextCmd::unexecute () {
-  document->deleteObject (object);
+  document->activePage()->deleteObject (object);
 }
 

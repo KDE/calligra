@@ -29,6 +29,7 @@
 #include <kdebug.h>
 
 #include <GDocument.h>
+#include "GPage.h"
 #include <GPolygon.h>
 #include <Canvas.h>
 #include <Coord.h>
@@ -61,7 +62,7 @@ void RectangleTool::processEvent (QEvent* e, GDocument *doc, Canvas* canvas)
       rect->addPoint (1, Coord (xpos, ypos));
       rect->addPoint (2, Coord (xpos, ypos));
       rect->addPoint (3, Coord (xpos, ypos));
-      doc->insertObject (rect);
+      doc->activePage()->insertObject (rect);
       m_toolController->emitModeSelected(m_id,flag?i18n("Create Square"):i18n("Create Rectangle"));
    }
    else if (e->type () == QEvent::MouseMove)
@@ -109,15 +110,15 @@ void RectangleTool::processEvent (QEvent* e, GDocument *doc, Canvas* canvas)
       rect->setEndPoint (Coord (xpos, ypos));
       if (! rect->isValid ())
       {
-         doc->deleteObject (rect);
+         doc->activePage()->deleteObject (rect);
       }
       else
       {
          CreateRectangleCmd *cmd = new CreateRectangleCmd (doc, rect);
          history->addCommand (cmd);
 
-         doc->unselectAllObjects ();
-         doc->setLastObject (rect);
+         doc->activePage()->unselectAllObjects ();
+         doc->activePage()->setLastObject (rect);
       }
       rect = 0L;
    }

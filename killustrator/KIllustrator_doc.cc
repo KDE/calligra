@@ -27,6 +27,7 @@
 #include <KIllustrator_factory.h>
 
 #include <GDocument.h>
+#include "GPage.h"
 #include <GPart.h>
 #include <Coord.h>
 #include <GLayer.h>
@@ -79,7 +80,7 @@ bool KIllustratorDocument::loadXML (QIODevice *, const QDomDocument &doc)
 {
   if ( m_gdocument->readFromXml (doc)) {
     // now look for part objects in order to create the child list
-    QListIterator<GLayer> i(m_gdocument->getLayers());
+    QListIterator<GLayer> i(m_gdocument->activePage()->getLayers());
     for ( ; i.current(); ++i) {
       GLayer* layer = *i;
       const QList<GObject>& contents = layer->objects ();
@@ -144,7 +145,7 @@ void KIllustratorDocument::insertPart (const QRect& rect, KoDocumentEntry& e)
     insertChild( child );
 
     GPart* part = new GPart (gdoc(), child);
-    m_gdocument->insertObject (part);
+    m_gdocument->activePage()->insertObject (part);
     emit partInserted (child, part);
 }
 
@@ -177,7 +178,7 @@ void KIllustratorDocument::paintContent( QPainter& painter, const QRect& rect, b
 
     if ( !transparent )
         painter.fillRect( rect, white );
-    m_gdocument->drawContentsInRegion( painter, r, r );
+    m_gdocument->activePage()->drawContentsInRegion( painter, r, r );
 }
 
 GDocument* KIllustratorDocument::gdoc()

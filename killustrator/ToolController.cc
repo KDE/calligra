@@ -22,10 +22,11 @@
 
 */
 
-#include <ToolController.h>
-#include <GDocument.h>
-#include <GLayer.h>
-#include <MainView.h>
+#include "ToolController.h"
+#include "GDocument.h"
+#include "GPage.h"
+#include "GLayer.h"
+#include "MainView.h"
 #include <kdebug.h>
 
 
@@ -72,7 +73,7 @@ Tool* ToolController::getActiveTool ()
 
 void ToolController::delegateEvent (QEvent *e, GDocument *doc,
                                     Canvas *canvas) {
-  if (doc->activeLayer ()->isEditable () && activeTool)
+  if (doc->activePage()->activeLayer ()->isEditable () && activeTool)
     activeTool->processEvent (e, doc, canvas);
 }
 

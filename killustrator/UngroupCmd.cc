@@ -27,12 +27,13 @@
 #include <klocale.h>
 #include <GDocument.h>
 #include <GGroup.h>
+#include "GPage.h"
 
 UngroupCmd::UngroupCmd (GDocument* doc) : Command(i18n("Ungroup")) {
 
     groups.setAutoDelete(true);
     document = doc;
-    for(QListIterator<GObject> it(doc->getSelection()); it.current(); ++it) {
+    for(QListIterator<GObject> it(doc->activePage()->getSelection()); it.current(); ++it) {
         GObject* o = *it;
         if (o->isA ("GGroup")) {
             GGroup* gobj = (GGroup *) o;
@@ -55,7 +56,7 @@ UngroupCmd::~UngroupCmd () {
 void UngroupCmd::execute () {
     for (GPair *p=groups.first(); p!=0L; p=groups.next()) {
         GGroup *group = p->group;
-        int pos = document->findIndexOfObject (group);
+        int pos = document->activePage()->findIndexOfObject (group);
         if (pos != -1) {
             document->setAutoUpdate (false);
             // extract the members of the group
@@ -67,13 +68,13 @@ void UngroupCmd::execute () {
 
                 // and insert it into the object list at the former position
                 // of the group object
-                document->insertObjectAtIndex(mo, pos + offs);
-                document->selectObject (mo);
+                document->activePage()->insertObjectAtIndex(mo, pos + offs);
+                document->activePage()->selectObject (mo);
                 p->members.append(mo);
                 mo->ref ();
             }
             // remove the group object
-            document->deleteObject (group);
+            document->activePage()->deleteObject (group);
             document->setAutoUpdate (true);
         }
     }
@@ -81,17 +82,17 @@ void UngroupCmd::execute () {
 
 void UngroupCmd::unexecute () {
   document->setAutoUpdate (false);
-  document->unselectAllObjects ();
+  document->activePage()->unselectAllObjects ();
   for (GPair *p=groups.first(); p!=0L; p=groups.next()) {
     QWMatrix m = p->group->matrix ().invert ();
 
     for (GObject *o=p->members.first(); o!=0L; o=p->members.next()) {
       o->transform (m, true);
       p->group->addObject (o);
-      document->deleteObject (o);
+      document->activePage()->deleteObject (o);
     }
-    document->insertObject (p->group);
-    document->selectObject (p->group);
+    document->activePage()->insertObject (p->group);
+    document->activePage()->selectObject (p->group);
   }
   document->setAutoUpdate (true);
 }

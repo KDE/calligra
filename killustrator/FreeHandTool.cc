@@ -28,6 +28,7 @@
 #include <klocale.h>
 
 #include <GDocument.h>
+#include "GPage.h"
 #include <Canvas.h>
 #include <Coord.h>
 #include <GPolygon.h>
@@ -69,7 +70,7 @@ void FreeHandTool::processEvent (QEvent* e, GDocument *doc, Canvas* canvas) {
 
       QList<GObject> olist;
       // look for existing polylines with a point near the mouse pointer
-      if (doc->findContainingObjects (xpos, ypos, olist)) {
+      if (doc->activePage()->findContainingObjects (xpos, ypos, olist)) {
         QListIterator<GObject> it (olist);
         while (it.current ()) {
           if (it.current ()->isA ("GPolyline")) {
@@ -96,7 +97,7 @@ void FreeHandTool::processEvent (QEvent* e, GDocument *doc, Canvas* canvas) {
         line->addPoint (0, Coord (xpos, ypos));
         last = 1;
         newObj = true;
-        doc->insertObject (line);
+        doc->activePage()->insertObject (line);
       }
     }
 //    line->addPoint (last, Coord (xpos, ypos));
@@ -136,20 +137,20 @@ void FreeHandTool::processEvent (QEvent* e, GDocument *doc, Canvas* canvas) {
         points.append (new Coord (xpos, ypos));
     }
 
-    doc->unselectAllObjects ();
+    doc->activePage()->unselectAllObjects ();
 
     if (last > 0 && line->numOfPoints () >= 3 &&
           line->getNeighbourPoint (Coord (xpos, ypos)) == 0) {
         // the polyline is closed, so convert it into a polygon
         GPolygon* obj = new GPolygon (doc, line->getPoints ());
-        doc->deleteObject (line);
-        doc->insertObject (obj);
-        doc->setLastObject (obj);
+        doc->activePage()->deleteObject (line);
+        doc->activePage()->insertObject (obj);
+        doc->activePage()->setLastObject (obj);
         CreatePolygonCmd *cmd = new CreatePolygonCmd (doc, obj);
         history->addCommand (cmd);
     }
     else {
-        doc->setLastObject (line);
+        doc->activePage()->setLastObject (line);
         if (newObj) {
           CreatePolylineCmd *cmd = new CreatePolylineCmd (doc, line);
           history->addCommand (cmd);

@@ -45,6 +45,7 @@
 #include <kdebug.h>
 
 #include "GDocument.h"
+#include "GPage.h"
 #include "Handle.h"
 #include "ToolController.h"
 #include "GPolyline.h" // for NEAR_DISTANCE
@@ -144,8 +145,8 @@ void Canvas::resizeEvent(QResizeEvent *e)
 //it changes only when zooming or changing the paper size
 void Canvas::adjustPaperArea1()
 {
-   int w = (int) (document->getPaperWidth () * resolution * zoomFactor / 72.0);
-   int h = (int) (document->getPaperHeight () * resolution * zoomFactor / 72.0);
+   int w = (int) (document->activePage()->getPaperWidth () * resolution * zoomFactor / 72.0);
+   int h = (int) (document->activePage()->getPaperHeight () * resolution * zoomFactor / 72.0);
    m_paperArea=QRect(QPoint(0,0),QPoint(w,h));
 };
 
@@ -270,7 +271,7 @@ void Canvas::setZoomFactor (float factor, int centerX, int centerY)
    //kdDebug()<<"Canvas::setZoomFactor(): visibleArea: ( "<<m_visibleArea.left()<<" | "<<m_visibleArea.top()<<" ) - ( "<<m_visibleArea.right()<<" | "<<m_visibleArea.bottom()<<" )"<<endl;
    //kdDebug()<<"Canvas::setZoomFactor(): relativePaperArea: ( "<<m_relativePaperArea.left()<<" | "<<m_relativePaperArea.top()<<" ) - ( "<<m_relativePaperArea.right()<<" | "<<m_relativePaperArea.bottom()<<" )"<<endl;
    // recompute pixmaps of fill areas
-   document->invalidateClipRegions ();
+   document->activePage()->invalidateClipRegions ();
 
    repaint();
    blockSignals(false);
@@ -340,8 +341,8 @@ void Canvas::paintEvent (QPaintEvent* e)
   
    p.save();
 
-   int w = (int) (document->getPaperWidth () * resolution * zoomFactor / 72.0);
-   int h = (int) (document->getPaperHeight () * resolution * zoomFactor / 72.0);
+   int w = (int) (document->activePage()->getPaperWidth () * resolution * zoomFactor / 72.0);
+   int h = (int) (document->activePage()->getPaperHeight () * resolution * zoomFactor / 72.0);
    p.setPen(Qt::black);
    p.translate(m_relativePaperArea.left(),m_relativePaperArea.top());
    p.drawRect (0, 0, w, h);
@@ -354,11 +355,11 @@ void Canvas::paintEvent (QPaintEvent* e)
 
    // next the document contents
    p.scale (s, s);
-   document->drawContents (p, drawBasePoints, outlineMode);
+   document->activePage()->drawContents (p, drawBasePoints, outlineMode);
 
    // and finally the handle
-  if (! document->selectionIsEmpty ())
-   document->handle ().draw (p);
+  if (! document->activePage()->selectionIsEmpty ())
+   document->activePage()->handle ().draw (p);
   
   p.restore();
 
@@ -422,9 +423,9 @@ void Canvas::propagateMouseEvent (QMouseEvent *e)
 
   if (e->button()==RightButton && e->type()==QEvent::MouseButtonPress)
   {
-     if (document->selectionIsEmpty ())
+     if (document->activePage()->selectionIsEmpty ())
      {
-        GObject* obj = document->findContainingObject (new_pos.x (),
+        GObject* obj = document->activePage()->findContainingObject (new_pos.x (),
                                                        new_pos.y ());
         if (obj)
         {
@@ -509,11 +510,11 @@ void Canvas::retryUpdateRegion () {
 
 void Canvas::updateRegion (const Rect& reg)
  {
-  if (pendingRedraws == 0 && document->selectionCount () > 1)
+  if (pendingRedraws == 0 && document->activePage()->selectionCount () > 1)
    {
     // we have to update a multiple selection, so we collect
     // the update regions and redraw it in one call
-    pendingRedraws = document->selectionCount () - 1;
+    pendingRedraws = document->activePage()->selectionCount () - 1;
     regionForUpdate = reg;
     return;
    }
@@ -611,7 +612,7 @@ void Canvas::setupPrinter( QPrinter &printer )
 {
   printer.setDocName (document->fileName ());
   printer.setCreator ("KIllustrator");
-  switch (document->pageLayout ().format) {
+  switch (document->activePage()->pageLayout ().format) {
   case PG_DIN_A4:
     printer.setPageSize (QPrinter::A4);
     break;
@@ -627,7 +628,7 @@ void Canvas::setupPrinter( QPrinter &printer )
   default:
     break;
   }
-  printer.setOrientation (document->pageLayout ().orientation == PG_PORTRAIT ?
+  printer.setOrientation (document->activePage()->pageLayout ().orientation == PG_PORTRAIT ?
                           QPrinter::Portrait : QPrinter::Landscape);
   printer.setFullPage(true);
 }
@@ -637,7 +638,7 @@ void Canvas::print( QPrinter &printer )
     QPainter paint;
     paint.begin (&printer);
     paint.setClipping (false);
-    document->drawContents (paint);
+    document->activePage()->drawContents (paint);
     paint.end ();
 }
 
@@ -864,7 +865,7 @@ void Canvas::readGridProperties ()
    config->setGroup ("Helplines");
    helplinesAreOn = config->readBoolEntry ("showHelplines");
    helplinesSnapIsOn = config->readBoolEntry ("snapToHelplines");
-   document->layerForHelplines ()->setVisible (helplinesAreOn);
+   document->activePage()->layerForHelplines ()->setVisible (helplinesAreOn);
 
 
 }
@@ -898,8 +899,8 @@ void Canvas::updateGridInfos ()
    document->getGrid (hGridDistance, vGridDistance, gridSnapIsOn);
    //kdDebug()<<"after getGrid() gridsnapison: "<<int(gridSnapIsOn)<<endl;
    document->getHelplines (horizHelplines, vertHelplines, helplinesSnapIsOn);
-   if (helplinesAreOn != document->layerForHelplines ()->isVisible ())
-      showHelplines (document->layerForHelplines ()->isVisible ());
+   if (helplinesAreOn != document->activePage()->layerForHelplines ()->isVisible ())
+      showHelplines (document->activePage()->layerForHelplines ()->isVisible ());
    else
    {
       //saveGridProperties ();
@@ -1033,7 +1034,7 @@ void Canvas::showHelplines (bool flag)
    if (helplinesAreOn != flag)
    {
       helplinesAreOn = flag;
-      document->layerForHelplines ()->setVisible (helplinesAreOn);
+      document->activePage()->layerForHelplines ()->setVisible (helplinesAreOn);
       repaint();
       //emit gridStatusChanged ();
       //saveGridProperties ();

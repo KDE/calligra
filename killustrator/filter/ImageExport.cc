@@ -34,6 +34,7 @@
 
 #include "ImageExport.h"
 #include "GDocument.h"
+#include "GPage.h"
 
 #define RESOLUTION 72.0
 
@@ -69,8 +70,8 @@ bool ImageExport::exportToFile (GDocument* doc) {
     return false;
 
   unsigned int w, h;
-  w = qRound (doc->getPaperWidth () * RESOLUTION / 72.0);
-  h = qRound (doc->getPaperHeight () * RESOLUTION / 72.0);
+  w = qRound (doc->activePage()->getPaperWidth () * RESOLUTION / 72.0);
+  h = qRound (doc->activePage()->getPaperHeight () * RESOLUTION / 72.0);
 
   // prepare a pixmap for drawing
   QPixmap *buffer = new QPixmap (w, h);
@@ -85,12 +86,12 @@ bool ImageExport::exportToFile (GDocument* doc) {
   p.scale (RESOLUTION / 72.0, RESOLUTION / 72.0);
 
   // draw the objects
-  doc->drawContents (p);
+  doc->activePage()->drawContents (p);
 
   p.end ();
 
   // compute the bounding box
-  Rect box = doc->boundingBoxForAllObjects ();
+  Rect box = doc->activePage()->boundingBoxForAllObjects ();
   // and copy the affected area to the new pixmap
   //the +1 fixes bug #20361, Alex
   QPixmap *pixmap = new QPixmap (qRound (box.width ())+1,

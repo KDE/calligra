@@ -28,7 +28,8 @@
 #include <klocale.h>
 
 #include "GText.h"
-#include <GDocument.h>
+#include "GDocument.h"
+#include "GPage.h"
 #include <Canvas.h>
 #include <Coord.h>
 #include <CreateTextCmd.h>
@@ -55,7 +56,7 @@ void TextTool::processEvent (QEvent* e, GDocument *doc, Canvas* canvas)
          if (text->isEmpty ())
          {
             // an empty text was entered -> remove the object
-            doc->deleteObject (text);
+            doc->activePage()->deleteObject (text);
          }
          else
                 text->showCursor (false);
@@ -64,7 +65,7 @@ void TextTool::processEvent (QEvent* e, GDocument *doc, Canvas* canvas)
         text = 0L;
 
         QList<GObject> olist;
-        if (doc->findContainingObjects (me->x (), me->y (), olist)) {
+        if (doc->activePage()->findContainingObjects (me->x (), me->y (), olist)) {
             QListIterator<GObject> it (olist);
             while (it.current ()) {
                 if (it.current ()->isA ("GText")) {
@@ -93,7 +94,7 @@ void TextTool::processEvent (QEvent* e, GDocument *doc, Canvas* canvas)
 
             text->setOrigin (Coord (xpos, ypos));
             text->showCursor (true);
-            doc->insertObject (text);
+            doc->activePage()->insertObject (text);
         }
     }
     else if (e->type () == QEvent::KeyPress) {
@@ -103,7 +104,7 @@ void TextTool::processEvent (QEvent* e, GDocument *doc, Canvas* canvas)
             if (text != 0L) {
                 if (origState == 0L) {
                     // new text -> remove it
-                    doc->deleteObject (text);
+                    doc->activePage()->deleteObject (text);
                 }
                 else {
                     // undo modifications
@@ -185,12 +186,12 @@ void TextTool::activate (GDocument* /*doc*/, Canvas* canvas)
 void TextTool::deactivate (GDocument *doc, Canvas*) {
   if (text) {
     text->showCursor (false);
-    doc->unselectAllObjects ();
-    doc->setLastObject (text);
+    doc->activePage()->unselectAllObjects ();
+    doc->activePage()->setLastObject (text);
     if (origState == 0L) {
       if (text->isEmpty ()) {
         // an empty text was entered -> remove the object
-        doc->deleteObject (text);
+        doc->activePage()->deleteObject (text);
       }
       else {
         CreateTextCmd *cmd = new CreateTextCmd (doc, text);

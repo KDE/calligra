@@ -32,17 +32,17 @@
 
 #include <Handle.h>
 
-#include <koPageLayoutDia.h>
-
 #define KILLUSTRATOR_MIMETYPE "application/x-killustrator"
 
 class GObject;
 class GLayer;
+class GPage;
 class QDomDocument;
 class QDomElement;
 class KIllustratorDocument;
 
-class GDocument : public QObject {
+class GDocument : public QObject
+{
   Q_OBJECT
 public:
   GDocument (KIllustratorDocument *_doc);
@@ -54,81 +54,31 @@ public:
   KIllustratorDocument *document(void) const {return doc;};
   QString fileName () const { return filename; }
   void setFileName (const QString &s) { filename = s; }
-  void setPaperSize (int width, int height);
-  int getPaperWidth () const;
-  int getPaperHeight () const;
 
   virtual void setModified (bool flag = true);
   bool isModified () const { return modifyFlag; }
 
-  void drawContents (QPainter& p, bool withBasePoints = false,
-                     bool outline = false);
-  void drawContentsInRegion (QPainter& p, const Rect& r, const Rect& rr,
-                             bool withBasePoints = false,
-                             bool outline = false);
-
-  void invalidateClipRegions ();
-
   /*
-   * Layer management
+   * Pages management
    */
 
-  // get an array with all layers of the document
-  const QList<GLayer>& getLayers ();
+  // get an array with all pages of the document
+  const QList<GPage>& getPages ();
 
-  // set the active layer where further actions take place
-  void setActiveLayer (GLayer *layer);
+  // retrieve the active page
+  GPage *activePage();
 
-  // retrieve the active layer
-  GLayer* activeLayer ();
+  // set the active page
+  void setActivePage (GPage *page);
 
-  // raise the given layer
-  void raiseLayer (GLayer *layer);
+  // add a new page
+  GPage *addPage ();
 
-  // lower the given layer
-  void lowerLayer (GLayer *layer);
+  // delete the given page
+  void deletePage (GPage *page);
 
-  // add a new layer on top of existing layers
-  GLayer* addLayer ();
-
-  // delete the given layer as well as all contained objects
-  void deleteLayer (GLayer *layer);
-
-  // return helpline layer
-  GLayer* layerForHelplines ();
-  bool helplineLayerIsActive ();
-
-  void insertObject (GObject* obj);
-  void selectObject (GObject* obj);
-  void unselectObject (GObject* obj);
-  void unselectAllObjects ();
-  void selectAllObjects ();
-
-  void selectNextObject ();
-  void selectPrevObject ();
-
-  GObject* lastObject () { return last; }
-  void setLastObject (GObject* obj);
-
-  QList<GObject>& getSelection () { return selection; }
-  bool selectionIsEmpty () const { return selection.isEmpty (); }
-  unsigned int selectionCount () const { return selection.count(); }
-
-  unsigned int objectCount () const;
-
-  Rect boundingBoxForSelection ();
-  Rect boundingBoxForAllObjects ();
-  void deleteSelectedObjects ();
-  void deleteObject (GObject* obj);
-
-  GObject* findContainingObject (int x, int y);
-
-  bool findNearestObject (const QString &otype, int x, int y,
-                          float max_dist, GObject*& obj, int& pidx,
-                          bool all = false);
-
-  bool findContainingObjects (int x, int y, QList<GObject>& olist);
-  bool findObjectsContainedIn (const Rect& r, QList<GObject>& olist);
+  // find page with name
+  GPage *findPage(QString name);
 
   QDomDocument saveToXml();
   bool readFromXml (const QDomDocument &document);
@@ -136,13 +86,7 @@ public:
 
   Handle& handle () { return selHandle; }
 
-  unsigned int findIndexOfObject (GObject *obj);
-  void insertObjectAtIndex (GObject* obj, unsigned int idx);
-  void moveObjectToIndex (GObject* obj, unsigned int idx);
-
-  KoPageLayout pageLayout ();
-  void setPageLayout (const KoPageLayout& layout);
-
+//  Grid, Helplines
   void setGrid (float dx, float dy, bool snap);
   void getGrid (float& dx, float& dy, bool& snap);
 
@@ -152,6 +96,8 @@ public:
   void getHelplines (QValueList<float>& hlines, QValueList<float>& vlines,
                      bool& snap);
 
+
+
   void emitHandleChanged();
 
 protected:
@@ -159,9 +105,6 @@ protected:
   bool parseBody (const QDomElement &element, QList<GObject>& newObjs, bool markNew);
 
 public slots:
-  void objectChanged ();
-  void objectChanged (const Rect& r);
-  void layerChanged ();
   void helplineStatusChanged ();
 
 signals:
@@ -176,18 +119,16 @@ signals:
 
 protected:
   KIllustratorDocument *doc;
+  
   bool autoUpdate;
-  bool modifyFlag;
+  bool modifyFlag; 
   QString filename;
   int paperWidth, paperHeight; // pt
-  QList<GLayer> layers; // the array of all layers
-  QList<GObject> selection;
-  GLayer* active_layer;     // the current layer
-  GObject *last;
+  QList<GPage> pages; // the array of all pages
+  GPage *active_page;     // the current page
   Handle selHandle;
   Rect selBox;
   bool selBoxIsValid;
-  KoPageLayout pLayout;
   bool snapToGrid, snapToHelplines;
   float gridx, gridy;
   QValueList<float> hHelplines, vHelplines;

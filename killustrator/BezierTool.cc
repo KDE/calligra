@@ -33,6 +33,7 @@
 #include "BezierTool.h"
 
 #include "GDocument.h"
+#include "GPage.h"
 #include "Canvas.h"
 #include <Coord.h>
 #include "GBezier.h"
@@ -66,7 +67,7 @@ void BezierTool::processEvent (QEvent* e, GDocument *doc, Canvas* canvas) {
             if (newObj) {
                 if (last < 5) {
                     // no valid curve - delete it
-                    doc->deleteObject (curve);
+                    doc->activePage()->deleteObject (curve);
                     curve = 0L;
                 }
                 else { // valid curve
@@ -77,7 +78,7 @@ void BezierTool::processEvent (QEvent* e, GDocument *doc, Canvas* canvas) {
 
                     CreateBezierCmd *cmd = new CreateBezierCmd (doc, curve);
                     history->addCommand (cmd);
-                    doc->setLastObject (curve);
+                    doc->activePage()->setLastObject (curve);
                 }
             }
             else { // segments were added
@@ -145,7 +146,7 @@ void BezierTool::processEvent (QEvent* e, GDocument *doc, Canvas* canvas) {
                 // magnetic mode
                 GObject *o = 0L;
                 int idx = -1;
-                if (doc->findNearestObject ("GBezier", xpos, ypos,
+                if (doc->activePage()->findNearestObject ("GBezier", xpos, ypos,
                                             80, o, idx)) {
                     curve = (GBezier *) o;
                     last = idx;
@@ -158,7 +159,7 @@ void BezierTool::processEvent (QEvent* e, GDocument *doc, Canvas* canvas) {
                 QList<GObject> olist;
                 // look for existing bezier curves with an
                 // end point near the mouse pointer
-                if (doc->findContainingObjects (xpos, ypos, olist)) {
+                if (doc->activePage()->findContainingObjects (xpos, ypos, olist)) {
                     QListIterator<GObject> it (olist);
                     while (it.current ()) {
                         if (it.current ()->isA ("GBezier")) {
@@ -185,7 +186,7 @@ void BezierTool::processEvent (QEvent* e, GDocument *doc, Canvas* canvas) {
                 // first end point
                 curve->addPoint (1, Coord (xpos, ypos));
                 last = 2;
-                doc->insertObject (curve);
+                doc->activePage()->insertObject (curve);
                 // base point #2
                 curve->addPoint (last, Coord (xpos, ypos));
                 curve->setWorkingSegment (0);
@@ -253,7 +254,7 @@ void BezierTool::processEvent (QEvent* e, GDocument *doc, Canvas* canvas) {
             {
             if ((addAtEnd && last >= 5 && (last % 3 == 2)) ||
                 (!addAtEnd && last == 0 && (curve->numOfPoints () % 3 == 0))) {
-                doc->setLastObject (curve);
+                doc->activePage()->setLastObject (curve);
                 curve->setWorkingSegment (-1);
                 if (newObj) {
                     CreateBezierCmd *cmd = new CreateBezierCmd (doc, curve);
@@ -285,7 +286,7 @@ void BezierTool::processEvent (QEvent* e, GDocument *doc, Canvas* canvas) {
                 curve->addPoint (last, Coord (xpos, ypos));
                 curve->setClosed (true);
                 curve->setWorkingSegment (-1);
-                doc->setLastObject (curve);
+                doc->activePage()->setLastObject (curve);
                 curve = 0L; last = 0;
             }
         }

@@ -33,6 +33,7 @@
 #include <kdebug.h>
 
 #include <GDocument.h>
+#include "GPage.h"
 #include <Canvas.h>
 #include "GPolygon.h"
 #include <Coord.h>
@@ -61,7 +62,7 @@ void PolygonTool::processEvent (QEvent* e, GDocument *doc, Canvas* canvas)
       sPoint = Coord (xpos, ypos);
       obj->setSymmetricPolygon (sPoint, sPoint, nCorners,
                                  createConcavePolygon, sharpValue);
-      doc->insertObject (obj);
+      doc->activePage()->insertObject (obj);
    }
    else if (e->type () == QEvent::MouseMove)
    {
@@ -87,15 +88,15 @@ void PolygonTool::processEvent (QEvent* e, GDocument *doc, Canvas* canvas)
 
       if (! obj->isValid ())
       {
-         doc->deleteObject (obj);
+         doc->activePage()->deleteObject (obj);
       }
       else
       {
          CreatePolygonCmd *cmd = new CreatePolygonCmd (doc, obj);
          history->addCommand (cmd);
 
-         doc->unselectAllObjects ();
-         doc->setLastObject (obj);
+         doc->activePage()->unselectAllObjects ();
+         doc->activePage()->setLastObject (obj);
       }
       obj = 0L;
    }

@@ -30,6 +30,7 @@
 #include <klocale.h>
 
 #include <GDocument.h>
+#include "GPage.h"
 #include <Canvas.h>
 #include <Coord.h>
 #include <CommandHistory.h>
@@ -102,7 +103,7 @@ void EditPointTool::setMode (Mode m) {
 
 void EditPointTool::processEvent (QEvent* e, GDocument *doc, Canvas* canvas)
 {
-   if (doc->selectionIsEmpty ())
+   if (doc->activePage()->selectionIsEmpty ())
       return;
 
    if (e->type () == QEvent::MouseButtonPress)
@@ -115,7 +116,7 @@ void EditPointTool::processEvent (QEvent* e, GDocument *doc, Canvas* canvas)
       pointIdx = -1;
       // for performance reasons check if an object from the selection
       // has to be edited
-      for (QListIterator<GObject>it(doc->getSelection()); it.current(); ++it)
+      for (QListIterator<GObject>it(doc->activePage()->getSelection()); it.current(); ++it)
       {
          GObject* o = *it;
          int idx = o->getNeighbourPoint (Coord (xpos, ypos));
@@ -132,11 +133,11 @@ void EditPointTool::processEvent (QEvent* e, GDocument *doc, Canvas* canvas)
       // if no currently selected object was found at the mouse position ...
       if (obj == 0L)
       {
-         if ((obj = doc->findContainingObject (xpos, ypos)) != 0L)
+         if ((obj = doc->activePage()->findContainingObject (xpos, ypos)) != 0L)
          {
             // select and edit this object
-            doc->unselectAllObjects ();
-            doc->selectObject (obj);
+            doc->activePage()->unselectAllObjects ();
+            doc->activePage()->selectObject (obj);
             pointIdx = obj->getNeighbourPoint (Coord (xpos, ypos));
             startPos = Coord (xpos, ypos);
             lastPos = startPos;
@@ -158,7 +159,7 @@ void EditPointTool::processEvent (QEvent* e, GDocument *doc, Canvas* canvas)
          bool isOver = false;
          int pidx;
 
-         for (QListIterator<GObject> it(doc->getSelection()); it.current(); ++it)
+         for (QListIterator<GObject> it(doc->activePage()->getSelection()); it.current(); ++it)
          {
             GObject* o = *it;
             if ((pidx = o->getNeighbourPoint (Coord (xpos, ypos))) != -1)
@@ -279,7 +280,7 @@ void EditPointTool::activate (GDocument* doc, Canvas* canvas)
    canvas->setCursor(Qt::crossCursor);
    mode = MovePoint;
    m_toolController->emitModeSelected (m_id,i18n ("Edit Point"));
-   if (! doc->selectionIsEmpty ())
+   if (! doc->activePage()->selectionIsEmpty ())
    {
       doc->handle().show (false);
       // redraw with highlighted points
@@ -289,7 +290,7 @@ void EditPointTool::activate (GDocument* doc, Canvas* canvas)
 }
 
 void EditPointTool::deactivate (GDocument* doc, Canvas* canvas) {
-  if (!doc->selectionIsEmpty ()) {
+  if (!doc->activePage()->selectionIsEmpty ()) {
     doc->handle ().show (true);
     // redraw with unhighlighted points
     canvas->showBasePoints (false);

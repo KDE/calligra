@@ -34,12 +34,13 @@
 
 #include <GDocument.h>
 #include <GObject.h>
+#include "GPage.h"
 
 CopyCmd::CopyCmd (GDocument* doc)
   : Command(i18n("Copy"))
 {
   document = doc;
-  for(QListIterator<GObject> it(doc->getSelection()); it.current(); ++it) {
+  for(QListIterator<GObject> it(doc->activePage()->getSelection()); it.current(); ++it) {
     GObject* o = *it;
     o->ref ();
     objects.append(o);

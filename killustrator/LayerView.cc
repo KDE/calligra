@@ -29,6 +29,7 @@
 
 #include <GLayer.h>
 #include <GDocument.h>
+#include "GPage.h"
 
 #define CELL_HEIGHT 25
 #define CELL1_WIDTH 25
@@ -57,7 +58,7 @@ LayerView::~LayerView () {
 
 void LayerView::setActiveDocument (GDocument* doc) {
   document = doc;
-  showLayers(document->getLayers ());
+  showLayers(document->activePage()->getLayers ());
 }
 
 void LayerView::showLayers (const QList<GLayer>& lvec) {
@@ -77,7 +78,7 @@ int LayerView::cellHeight (int) {
 
 void LayerView::paintCell (QPainter *p, int row, int col) {
   GLayer* layer = layers.at(numRows () - 1 - row);
-  bool rowIsActive = (document->activeLayer () == layer);
+  bool rowIsActive = (document->activePage()->activeLayer () == layer);
 
   p->save ();
   p->setPen (rowIsActive ? colorGroup().highlightedText() : colorGroup().text());
@@ -177,7 +178,7 @@ void LayerView::mousePressEvent (QMouseEvent *event) {
         layer->setPrintable (! layer->isPrintable ());
         break;
       case 3:
-        document->setActiveLayer (layer);
+        document->activePage()->setActiveLayer (layer);
         break;
       default:
         break;

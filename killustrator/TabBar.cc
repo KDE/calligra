@@ -32,17 +32,14 @@
 
 #include "TabBar.h"
 #include "Canvas.h"
-#include <KIllustrator_view.h>
-/*#include "killustrator_page.h"
-#include "kivio_dlg_pagename.h"
-#include "kivio_tabbar.h"
-#include "kivio_map.h"*/
-
+#include "KIllustrator_view.h"
+#include "GDocument.h"
+#include "GPage.h"
+#include "PageNameDialog.h"
 
 TabBar::TabBar( QWidget *parent, KIllustratorView *view )
-: QWidget(parent)
+: QWidget(parent), m_pView(view)
 {
-  m_pView = view;
   m_pPopupMenu = 0L;
 
   m_pAutoScrollTimer = new QTimer(this);
@@ -59,7 +56,7 @@ TabBar::TabBar( QWidget *parent, KIllustratorView *view )
 
 void TabBar::addTab( const QString& _text )
 {
-  tabsList.append( _text );
+  //doc.append( _text );
   update();
 }
 
@@ -373,10 +370,10 @@ void TabBar::slotRename()
     QString newName;
 
     // Store the current name of the active page
-/*    KivioPage* page = m_pView->activePage();
+/*    GPage* page = doc->activePage();
     activeName = page->pageName();
 
-    KivioPageName tndlg( m_pView, "PageName" , activeName );
+    PageNameDialog tndlg( m_pView, "PageName" , activeName );
     if ( tndlg.exec() )
     {
         // Have a different name ?
