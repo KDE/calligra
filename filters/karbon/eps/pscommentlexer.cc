@@ -17,7 +17,7 @@
    Boston, MA 02111-1307, USA.
 */
 
-#include <iostream.h>
+#include <stdlib.h>
 #include <ctype.h>
 #include <qstringlist.h>
 #include "pscommentlexer.h"
@@ -40,7 +40,7 @@ int iswhitespace(char c){
   return (c==' ')||(c=='\n')||(c=='\t')||(c=='\r');
 }
 
-int isspecial(char c){
+int isSpecial(char c){
   return (c=='*')||(c=='_')||(c=='?')||(c=='~')||(c=='-')||(c=='^')||(c=='`')||(c=='!')||(c=='.')||(c=='@')||(c=='&')||(c=='$')||(c=='=');
 }
 
@@ -196,7 +196,7 @@ void PSCommentLexer::nextStep (char c, State *newState, Action *newAction) {
         case CATEGORY_WHITESPACE : found = isspace(c); break;
         case CATEGORY_ALPHA : found = isalpha(c); break;
         case CATEGORY_DIGIT : found = isdigit(c); break;
-        case CATEGORY_SPECIAL : found = isspecial(c); break;
+        case CATEGORY_SPECIAL : found = isSpecial(c); break;
         case CATEGORY_LETTERHEX : found = isletterhex(c); break;
         case CATEGORY_INTTOOLONG : found = m_buffer.length() > MAX_INTLEN; break;
         case CATEGORY_ANY : found = true; break;
