@@ -1,6 +1,7 @@
 #include "kivio_common.h"
 #include "kivio_text_style.h"
-
+#include <qdom.h>
+#include <qpainter.h>
 #include <kglobalsettings.h>
 
 KivioTextStyle::KivioTextStyle()

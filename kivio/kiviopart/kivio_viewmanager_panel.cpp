@@ -10,6 +10,7 @@
 
 #include <qheader.h>
 #include <qlayout.h>
+#include <qdom.h>
 
 #include <ktoolbar.h>
 #include <kaction.h>

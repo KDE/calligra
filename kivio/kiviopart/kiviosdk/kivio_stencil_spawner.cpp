@@ -21,6 +21,7 @@
 #include "kivio_stencil_spawner_info.h"
 #include "kivio_stencil.h"
 
+
 KivioStencilSpawner::KivioStencilSpawner( KivioStencilSpawnerSet *p )
     : m_pInfo(NULL)
 {

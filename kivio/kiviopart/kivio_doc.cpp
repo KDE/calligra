@@ -61,6 +61,10 @@
 #include <qtextstream.h>
 #include <qpixmap.h>
 
+#include <qpainter.h>
+#include <qpen.h>
+
+
 #include <kstddirs.h>
 #include <kpopupmenu.h>
 #include <kmenubar.h>

@@ -28,6 +28,8 @@ class KivioPage;
 class KivioPainter;
 class KivioPoint;
 
+class QDomElement;
+
 #include "kivio_stencil.h"
 
 #define FLOW_LAYER_VISIBLE 0x0001

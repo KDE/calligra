@@ -26,6 +26,8 @@
 #include "kivio_common.h"
 #include "kivio_stencil.h"
 
+#include <qdom.h>
+
 #include <kdebug.h>
 
 KivioPluginStencilSpawner::KivioPluginStencilSpawner( KivioStencilSpawnerSet *pSet )

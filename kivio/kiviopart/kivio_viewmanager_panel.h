@@ -3,12 +3,11 @@
 
 #include <qlistview.h>
 #include <qlist.h>
-#include <qdom.h>
-
 #include "kivio_rect.h"
 
 class KAction;
 class KivioView;
+class QDomElement;
 
 struct ViewItemData
 {

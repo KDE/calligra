@@ -19,13 +19,11 @@
 #ifndef KIVIO_STENCIL_SPAWNER_H
 #define KIVIO_STENCIL_SPAWNER_H
 
-#include <qdom.h>
 #include <qstring.h>
 #include <qpixmap.h>
-
+#include <qdom.h>
 class QPainter;
 class QRect;
-
 class KivioStencilSpawnerInfo;
 class KivioStencilSpawnerSet;
 class KivioStencil;

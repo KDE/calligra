@@ -20,6 +20,8 @@
 #include <qdom.h>
 #include <qmessagebox.h>
 
+
+
 #include "kivio_map.h"
 #include "kivio_doc.h"
 #include "kivio_view.h"
@@ -78,7 +80,7 @@ void KivioMap::movePage( const QString& fromPageName, const QString& toPageName,
 QDomElement KivioMap::save( QDomDocument& doc )
 {
     int next = 1;
-    
+
   QDomElement mymap = doc.createElement("KivioMap");
 
   // Before we save, tell all the pages/layers/stencil/targets/connectors to generate
@@ -88,7 +90,7 @@ QDomElement KivioMap::save( QDomDocument& doc )
   {
     next = it2.current()->generateStencilIds( next );
   }
-  
+
   // Now save the pages
   QListIterator<KivioPage> it(m_lstPages);
   for( ; it.current(); ++it )

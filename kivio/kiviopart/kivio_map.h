@@ -28,11 +28,9 @@ class KoStore;
 class QDomElement;
 class QDomDocument;
 
-#include <qlist.h>
-#include <qstring.h>
 #include <qintdict.h>
 #include <qobject.h>
-
+#include <qlist.h>
 /*
  * A map is a simple container for all pages. Usually a complete map is saved in one file.
  */

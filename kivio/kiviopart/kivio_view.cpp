@@ -35,7 +35,9 @@
 #include <qmime.h>
 #include <qtoolbutton.h>
 #include <qtimer.h>
+#include <qbutton.h>
 
+#include <qstringlist.h>
 #include <qstrlist.h>
 #include <qimage.h>
 #include <kfiledialog.h>

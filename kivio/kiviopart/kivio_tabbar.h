@@ -21,8 +21,8 @@
 
 #include <qwidget.h>
 #include <qpainter.h>
-#include <qstrlist.h>
 
+class QStrList;
 class KivioView;
 
 /**

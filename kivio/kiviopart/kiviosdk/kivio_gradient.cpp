@@ -18,8 +18,6 @@
  */
 #include "kivio_gradient.h"
 #include "kivio_point.h"
-
-
 /**
  * Default constructor
  *
@@ -33,11 +31,11 @@ KivioGradient::KivioGradient()
     // Allocate the color list
     m_pColors = new QList<QColor>;
     m_pColors->setAutoDelete(true);
-    
+
     // Allocate the point list
     m_pPoints = new QList<KivioPoint>;
     m_pPoints->setAutoDelete(true);
-    
+
     m_gradientType = kgtNone;
 }
 
@@ -54,7 +52,7 @@ KivioGradient::~KivioGradient()
         delete m_pColors;
         m_pColors = NULL;
     }
-    
+
     if( m_pPoints )
     {
         delete m_pPoints;
@@ -75,21 +73,21 @@ KivioGradient::KivioGradient( const KivioGradient &source )
     : m_pColors(NULL),
       m_pPoints(NULL)
 {
-    
+
     m_gradientType = source.m_gradientType;
-    
-    // Duplicate the colors list    
+
+    // Duplicate the colors list
     QColor *pColor;
     m_pColors = new QList<QColor>;
     pColor = source.m_pColors->first();
     while( pColor )
     {
         m_pColors->append( new QColor(*pColor) );
-        
+
         pColor = source.m_pColors->next();
     }
-    
-    
+
+
     // Duplicate the point list
     KivioPoint *pPoint;
     m_pPoints = new QList<KivioPoint>;
@@ -97,7 +95,7 @@ KivioGradient::KivioGradient( const KivioGradient &source )
     while( pPoint )
     {
         m_pPoints->append( new KivioPoint( *pPoint ) );
-        
+
         pPoint = source.m_pPoints->next();
     }
 }
@@ -117,44 +115,44 @@ void KivioGradient::copyInto( KivioGradient *pTarget ) const
 
     // Copy the gradient type
     pTarget->m_gradientType = m_gradientType;
-   
+
     // Delete the old color array if we have one
     if( pTarget->m_pColors )
     {
         delete pTarget->m_pColors;
         pTarget->m_pColors = NULL;
-    } 
-    
+    }
+
     // Allocate a new color array
     pTarget->m_pColors = new QList<QColor>;
     pTarget->m_pColors->setAutoDelete(true);
-    
-    
+
+
     // Copy the colors
     QColor *pColor;
     pColor = m_pColors->first();
     while( pColor )
     {
         pTarget->m_pColors->append( new QColor(*pColor) );
-        
+
         pColor = m_pColors->next();
     }
-    
+
     if( pTarget->m_pPoints )
     {
         delete pTarget->m_pPoints;
         pTarget->m_pPoints = NULL;
     }
-    
+
     pTarget->m_pPoints = new QList<KivioPoint>;
     pTarget->m_pPoints->setAutoDelete(true);
-    
+
     KivioPoint *pPoint;
     pPoint = m_pPoints->first();
     while( pPoint )
     {
         pTarget->m_pPoints->append( new KivioPoint( *pPoint ) );
-        
+
         pPoint = m_pPoints->next();
     }
 }

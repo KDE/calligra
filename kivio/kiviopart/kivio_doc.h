@@ -42,17 +42,13 @@ class QDomDocument;
 #include <koDocument.h>
 #include <koMainWindow.h>
 #include "kivio_grid_data.h"
-
-#include <iostream.h>
+#include <qlist.h>
+//#include <iostream.h>
 
 #include <qobject.h>
-#include <qrect.h>
-#include <qstring.h>
-#include <qpainter.h>
-#include <qpen.h>
-#include <qlist.h>
 #include <koprinter.h>
 
+class QPainter;
 
 #define MIME_TYPE "application/x-kivio"
 

@@ -23,11 +23,10 @@ class KivioIntraStencilData;
 class KivioPoint;
 class KivioStencil;
 
+class QDomDocument;
+
 #include "kivio_stencil_spawner.h"
 #include "kivio_stencil_spawner_info.h"
-
-#include <qcolor.h>
-#include <qdom.h>
 #include <qpixmap.h>
 
 typedef KivioStencil *(*NewStencilFunc)();

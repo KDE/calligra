@@ -64,12 +64,13 @@ class TKSizeAction;
 class TKPositionAction;
 class TKUnitsAction;
 
+
+class QStringList;
+class QButton;
+
 #include <qdom.h>
 #include <qlist.h>
 #include <qframe.h>
-#include <qbutton.h>
-#include <qpoint.h>
-#include <qstringlist.h>
 
 #include <koView.h>
 #include <koDocument.h>

@@ -25,7 +25,6 @@
 #include "kivio_stencil_spawner_set.h"
 
 #include <qdir.h>
-#include <qdom.h>
 #include <qfile.h>
 #include <qstring.h>
 #include <kdebug.h>
@@ -36,7 +35,7 @@ KivioStencilSpawnerSet::KivioStencilSpawnerSet(const QString& name)
 {
     m_dir = "";
     m_name = name.isEmpty() ? QString("Untitled") : name;
-    
+
     m_pSpawners = new QList<KivioStencilSpawner>;
     m_pSpawners->setAutoDelete(true);
 }
@@ -122,9 +121,9 @@ KivioStencilSpawner* KivioStencilSpawnerSet::loadFile( const QString &fileName )
     for (KivioStencilSpawner* ss = m_pSpawners->first(); ss; ss = m_pSpawners->next() )
         if (ss->fileName() == fileName)
             return ss;
-    
+
     KivioStencilSpawner *pSpawner;
-    
+
     if( fileName.contains( ".sml", false ) )
     {
         pSpawner = new KivioSMLStencilSpawner(this);
@@ -153,7 +152,7 @@ KivioStencilSpawner* KivioStencilSpawnerSet::loadFile( const QString &fileName )
         delete pSpawner;
         return 0;
     }
-    
+
     return pSpawner;
 }
 
@@ -174,7 +173,7 @@ QString KivioStencilSpawnerSet::readTitle( const QString &dir )
    }
 
    d.setContent(&f);
-   
+
    root = d.documentElement();
    node = root.firstChild();
 
@@ -235,7 +234,7 @@ QString KivioStencilSpawnerSet::readId( const QString &dir )
    }
 
    d.setContent(&f);
-   
+
    root = d.documentElement();
    node = root.firstChild();
 
@@ -268,10 +267,10 @@ KivioStencilSpawner* KivioStencilSpawnerSet::find( const QString& id)
         {
             return pSpawner;
         }
-    
+
         pSpawner = m_pSpawners->next();
     }
-    
+
     return NULL;
 }
 

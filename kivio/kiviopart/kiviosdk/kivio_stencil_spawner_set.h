@@ -19,12 +19,10 @@
 #ifndef KIVIO_STENCIL_SPAWNER_SET_H
 #define KIVIO_STENCIL_SPAWNER_SET_H
 
-#include <qdom.h>
 #include <qlist.h>
-#include <qstring.h>
+#include <qdom.h>
 
 class KivioStencilSpawner;
-
 class KivioStencilSpawnerSet
 {
 protected:

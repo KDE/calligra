@@ -1,5 +1,6 @@
 #include "kivio_grid_data.h"
 #include "kivio_common.h"
+#include <qdom.h>
 
 KivioGridData::KivioGridData()
 {

@@ -19,11 +19,10 @@
 #ifndef KIVIO_SML_STENCIL_H
 #define KIVIO_SML_STENCIL_H
 
-#include <qdom.h>
 #include <qlist.h>
 
 #include "kivio_stencil.h"
-
+class QDomElement;
 class QColor;
 class KivioConnectorTarget;
 class KivioFillStyle;

@@ -2,8 +2,9 @@
 #define KIVIO_GRID_DATA_H
 
 #include "tkunits.h"
-#include <qcolor.h>
-#include <qdom.h>
+
+class QColor;
+class QDomElement;
 
 class KivioGridData
 {

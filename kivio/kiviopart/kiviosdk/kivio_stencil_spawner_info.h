@@ -19,9 +19,9 @@
 #ifndef KIVIO_STENCIL_SPAWNER_INFO_H
 #define KIVIO_STENCIL_SPAWNER_INFO_H
 
-#include <qdom.h>
 #include <qstring.h>
 
+class QDomElement;
 class KivioStencilSpawnerInfo
 {
 protected:

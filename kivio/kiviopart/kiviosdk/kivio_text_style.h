@@ -5,11 +5,10 @@
 #include <config.h>
 #endif
 
-#include <qcolor.h>
-#include <qdom.h>
-#include <qfont.h>
-#include <qpainter.h>
-#include <qstring.h>
+
+class QDomDocument;
+class QPainter;
+
 
 class KivioTextStyle
 {

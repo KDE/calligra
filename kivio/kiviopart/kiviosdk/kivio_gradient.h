@@ -19,10 +19,9 @@
 #ifndef KIVIO_GRADIENT_H
 #define KIVIO_GRADIENT_H
 
+#include <qlist.h>
 #include <qcolor.h>
 #include <qdom.h>
-#include <qlist.h>
-
 class KivioPoint;
 
 class KivioGradient
