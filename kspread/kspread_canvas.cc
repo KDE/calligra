@@ -213,7 +213,7 @@ KSpreadCanvas::KSpreadCanvas( QWidget *_parent, KSpreadView *_view, KSpreadDoc* 
 
   // let the color scheme set its color!
   // setBackgroundColor( white );
-  setBackgroundMode( NoBackground );
+  setBackgroundMode( PaletteBase );
 
   setMouseTracking( TRUE );
   m_bMousePressed = false;
@@ -2199,7 +2199,6 @@ void KSpreadVBorder::adjustRow(int _row)
     m_pView->koDocument()->setModified(true);
   }
 }
-
 
 void KSpreadVBorder::resizeRow(int resize,int nb  )
 {
