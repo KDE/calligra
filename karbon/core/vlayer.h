@@ -42,4 +42,7 @@ private:
 	bool m_isReadOnly;
 };
 
+typedef QPtrList<VLayer> VLayerList;
+typedef QPtrListIterator<VLayer> VLayerListIterator;
+
 #endif

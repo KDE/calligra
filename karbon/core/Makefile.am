@@ -13,7 +13,6 @@ noinst_HEADERS = \
 	vcontour.h \
 	vfill.h \
 	vglobal.h \
-	vhandle.h \
 	vlayer.h \
 	vobject.h \
 	vpath.h \
@@ -25,7 +24,6 @@ libkarboncore_la_SOURCES = \
 	vcommand.cc \
 	vcontour.cc \
 	vfill.cc \
-	vhandle.cc \
 	vlayer.cc \
 	vpath.cc \
 	vsegment.cc
