@@ -802,7 +802,12 @@ bool RTFWorker::doCloseDocument(void)
     writeColorData();
     writeStyleData();
 
-    *m_streamOut << m_textDocInfo;   // add document author, title, operator
+    if (!m_textDocInfo.isEmpty())
+    {
+        *m_streamOut << "{\\info ";  // string of document information markup
+        *m_streamOut << m_textDocInfo;   // add document author, title, operator
+        *m_streamOut << "}";
+    }
     *m_streamOut << "\\paperw" << int(m_paperWidth);
     *m_streamOut << "\\paperh" << int(m_paperHeight);
     if (1==m_paperOrientation)
@@ -823,7 +828,6 @@ bool RTFWorker::doCloseDocument(void)
 
 bool RTFWorker::doFullDocumentInfo(const KWEFDocumentInfo& docInfo)
 {
-    m_textDocInfo += "{\\info ";  // string of document information markup
 
     if ( !docInfo.title.isEmpty() )
     {
@@ -859,30 +863,6 @@ bool RTFWorker::doFullDocumentInfo(const KWEFDocumentInfo& docInfo)
         m_textDocInfo += docInfo.abstract;
         m_textDocInfo += "}";
     }
-
-    QDateTime now;
-    now=QDateTime::currentDateTime(Qt::UTC);
-    if (now.isValid())
-    {
-        m_textDocInfo += "{\\creatim ";
-        const QDate nowDate(now.date());
-        m_textDocInfo += "\\yr";
-        m_textDocInfo += QString::number(nowDate.year());
-        m_textDocInfo += "\\mo";
-        m_textDocInfo += QString::number(nowDate.month());
-        m_textDocInfo += "\\dy";
-        m_textDocInfo += QString::number(nowDate.day());
-        const QTime nowTime(now.time());
-        m_textDocInfo += "\\hr";
-        m_textDocInfo += QString::number(nowTime.hour());
-        m_textDocInfo += "\\min";
-        m_textDocInfo += QString::number(nowTime.minute());
-        m_textDocInfo += "\\sec";
-        m_textDocInfo += QString::number(nowTime.second());
-        m_textDocInfo += "}";
-    }
-
-    m_textDocInfo += "}";
 
     return true;
 }
@@ -1021,6 +1001,45 @@ bool RTFWorker::doFullDefineStyle(LayoutData& layout)
     lookupFont(layout.formatData.text.fontName);
     lookupColor(QString::null, layout.formatData.text.fgColor);
     lookupColor(QString::null, layout.formatData.text.bgColor);
+
+    return true;
+}
+
+static QString writeDate(const QString keyword, const QDateTime& now)
+{
+    QString str;
+    if (now.isValid())
+    {
+        kdDebug(30515) << "Date " << keyword << " " << now.toString() << endl;
+        str += '{';
+        str += keyword;
+        const QDate nowDate(now.date());
+        str += "\\yr";
+        str += QString::number(nowDate.year());
+        str += "\\mo";
+        str += QString::number(nowDate.month());
+        str += "\\dy";
+        str += QString::number(nowDate.day());
+        const QTime nowTime(now.time());
+        str += "\\hr";
+        str += QString::number(nowTime.hour());
+        str += "\\min";
+        str += QString::number(nowTime.minute());
+        str += "\\sec";
+        str += QString::number(nowTime.second());
+        str += '}';
+    }
+    else
+        kdWarning(30515) << "Date " << keyword << " is not valid! Skipping!" << endl;
+
+    return str;
+}
+
+bool RTFWorker::doVariableSettings(const VariableSettingsData& vs)
+{
+    m_textDocInfo += writeDate("\\creatim",vs.creationTime);
+    m_textDocInfo += writeDate("\\revtim", vs.modificationTime);
+    m_textDocInfo += writeDate("\\printim",vs.printTime);
 
     return true;
 }

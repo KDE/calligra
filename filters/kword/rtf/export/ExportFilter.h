@@ -58,6 +58,7 @@ public:
     virtual bool doFullDefineStyle(LayoutData& layout);
     virtual bool doHeader(const HeaderData& header);
     virtual bool doFooter(const HeaderData& footer);
+    virtual bool doVariableSettings(const VariableSettingsData& vs);
 
 private:
     QString openSpan(const FormatData& formatOrigin, const FormatData& format);
