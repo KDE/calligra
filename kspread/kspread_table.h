@@ -219,7 +219,7 @@ public:
      * @see KSpreadTabBar::renameTab
      * @see #tableName
      */
-    bool setTableName( const QString& name, bool init = FALSE );
+    bool setTableName( const QString& name, bool init = FALSE,bool makeUndo=true );
 
     virtual QDomElement save( QDomDocument& );
     virtual bool loadXML( const QDomElement& );

@@ -1628,6 +1628,57 @@ int y = r.top();
 int x = r.left();
 int posx=0;
 int posy=0;
+int numberOfCell=0;
+for ( int incr=start;incr<=end; )
+        {
+        if(type==Linear)
+                incr=incr+step;
+        else if(type==Geometric)
+                incr=incr*step;
+        numberOfCell++;
+        }
+
+int extraX=_marker.x();
+int extraY=_marker.y();
+if(mode==Column)
+{
+for ( int y = _marker.y(); y <=(_marker.y()+numberOfCell); y++ )
+        {
+        KSpreadCell *cell = cellAt( _marker.x(), y );
+        if( cell->isObscuringForced())
+                {
+                numberOfCell+=cell->extraYCells()+1;
+                extraX=QMIN(extraX,cell->obscuringCellsColumn());
+                }
+        }
+}
+else if(mode==Row)
+{
+for ( int x = _marker.x(); x <=(_marker.x()+numberOfCell); x++ )
+        {
+        KSpreadCell *cell = cellAt( x,_marker.y() );
+        if( cell->isObscuringForced())
+                {
+                numberOfCell+=cell->extraXCells()+1;
+                extraY=QMIN(extraY,cell->obscuringCellsRow());
+                }
+        }
+}
+QRect rect;
+if(mode==Column)
+{
+        rect.setCoords( extraX,_marker.y(),_marker.x(),_marker.y()+numberOfCell);
+}
+else if(mode==Row)
+{
+        rect.setCoords(_marker.x(),extraY,_marker.x()+numberOfCell,_marker.y());
+}
+
+if ( !m_pDoc->undoBuffer()->isLocked() )
+        {
+                KSpreadUndoChangeAreaTextCell *undo = new KSpreadUndoChangeAreaTextCell( m_pDoc, this, rect );
+                m_pDoc->undoBuffer()->appendUndo( undo );
+        }
 
 for ( int incr=start;incr<=end; )
         {
@@ -4955,7 +5006,7 @@ DCOPObject* KSpreadTable::dcopObject()
     return m_dcop;
 }
 
-bool KSpreadTable::setTableName( const QString& name, bool init )
+bool KSpreadTable::setTableName( const QString& name, bool init, bool makeUndo )
 {
     if ( map()->findTable( name ) )
         return FALSE;
@@ -4972,11 +5023,13 @@ bool KSpreadTable::setTableName( const QString& name, bool init )
     QListIterator<KSpreadTable> it( map()->tableList() );
     for( ; it.current(); ++it )
         it.current()->changeCellTabName( old_name, name );
-
-    if ( !m_pDoc->undoBuffer()->isLocked() )
+    if(makeUndo)
     {
-        KSpreadUndoAction* undo = new KSpreadUndoSetTableName( doc(), this, old_name );
-        m_pDoc->undoBuffer()->appendUndo( undo );
+        if ( !m_pDoc->undoBuffer()->isLocked() )
+        {
+                KSpreadUndoAction* undo = new KSpreadUndoSetTableName( doc(), this, old_name );
+                m_pDoc->undoBuffer()->appendUndo( undo );
+        }
     }
 
     m_pDoc->changeAreaTableName(old_name,name);

@@ -155,17 +155,33 @@ else
 	{
 	if(step->text().toInt()>=0)
 		{
-		int val_end=QMAX(end->text().toInt(),start->text().toInt());
-		int val_start=QMIN(end->text().toInt(),start->text().toInt());
-		m_pTable->setSeries( marker,val_start,val_end,step->text().toInt(),mode,type );
+                if(linear->isChecked() &&step->text().toInt() ==0)
+                {
+                KMessageBox::error( this, i18n("Sorry but step should be supperior to zero\n"
+                "Otherwise linear series is infinite!") );
+                step->setFocus();
+                }
+                else if(geometric->isChecked() &&step->text().toInt() <=1)
+                {
+                KMessageBox::error( this, i18n("Sorry but step should be supperior to one\n"
+                "Otherwise geometric series is infinite!") );
+                step->setFocus();
+                }
+                else
+                {
+		        int val_end=QMAX(end->text().toInt(),start->text().toInt());
+		        int val_start=QMIN(end->text().toInt(),start->text().toInt());
+		        m_pTable->setSeries( marker,val_start,val_end,step->text().toInt(),mode,type );
 
-		KSpreadCell *cell = m_pTable->cellAt( marker.x(),marker.y()  );
-		if ( cell->text() != 0L )
-			m_pView->editWidget()->setText( cell->text() );
-		else
-			m_pView->editWidget()->setText( "" );
-		accept();
-		}
+		        KSpreadCell *cell = m_pTable->cellAt( marker.x(),marker.y()  );
+		        if ( cell->text() != 0L )
+			        m_pView->editWidget()->setText( cell->text() );
+		        else
+			        m_pView->editWidget()->setText( "" );
+		        accept();
+                }
+
+                }
 	else
 		{
 	 	KMessageBox::error( this, i18n("Step is negative !") );
