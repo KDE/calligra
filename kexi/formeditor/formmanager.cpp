@@ -263,7 +263,8 @@ FormManager::isTopLevel(QWidget *w)
 	if(item)
 		return (!item->parent());
 	else
-	kdDebug() << "THE IREL GHSGHSGHSGSHJGSHJSGKKJS" << endl;
+		kdDebug() << "THE IREL GHSGHSGHSGSHJGSHJSGKKJS" << endl;
+	return false;
 }
 
 void
