@@ -55,8 +55,12 @@ public:
 	const QPtrList<VLayer>& layers() const { return m_layers; }	// r/o access.
 	// TODO: still needed?
 	VLayer* activeLayer() const { return m_activeLayer; }	// active layer.
+
+	// move up/down within layer
 	void moveSelectionToTop();
 	void moveSelectionToBottom();
+	void moveSelectionDown();
+	void moveSelectionUp();
 
 	void setDefaultStrokeColor( const VColor &color ) { m_defaultStrokeColor = color; }
 	void setDefaultFillColor( const VColor &color ) { m_defaultFillColor = color; }

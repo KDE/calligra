@@ -59,10 +59,10 @@ public slots:
 	void editDeleteSelection();
 	void editPurgeHistory();
 
-	void objectMoveToTop();
-	void objectMoveToBottom();
-	void objectMoveUp();
-	void objectMoveDown();
+	void selectionMoveToTop();
+	void selectionMoveToBottom();
+	void selectionMoveUp();
+	void selectionMoveDown();
 
 protected slots:
 

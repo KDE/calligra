@@ -66,12 +66,12 @@ void KarbonViewIface::editPurgeHistory()
 
 void KarbonViewIface::objectMoveToTop()
 {
-  m_view->objectMoveToTop();
+  m_view->selectionMoveToTop();
 }
 
 void KarbonViewIface::objectMoveToBottom()
 {
-  m_view->objectMoveToBottom();
+  m_view->selectionMoveToBottom();
 }
 
 double KarbonViewIface::zoomFactor()const
@@ -81,10 +81,10 @@ double KarbonViewIface::zoomFactor()const
 
 void KarbonViewIface::objectMoveUp()
 {
-    m_view->objectMoveUp();
+    m_view->selectionMoveUp();
 }
 
 void KarbonViewIface::objectMoveDown()
 {
-    m_view->objectMoveDown();
+    m_view->selectionMoveDown();
 }

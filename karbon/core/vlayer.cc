@@ -59,6 +59,34 @@ VLayer::removeRef( const VObject* object )
 	m_objects.removeRef( object );
 }
 
+void
+VLayer::moveObjectDown( const VObject* object )
+{
+	if( m_objects.getFirst() == object ) return;
+
+	int index = m_objects.find( object );
+	bool bLast = m_objects.getLast() == object;
+	m_objects.remove();
+	if( !bLast ) m_objects.prev();
+	m_objects.insert( m_objects.at(), object );
+}
+
+void
+VLayer::moveObjectUp( const VObject* object )
+{
+	if( m_objects.getLast() == object ) return;
+
+	int index = m_objects.find( object );
+	//kdDebug() << "Index : " << index << endl;
+	m_objects.remove();
+	if( m_objects.current() != m_objects.getLast() )
+	{
+		m_objects.next();
+		m_objects.insert( m_objects.at(), object );
+	}
+	else m_objects.append( object );
+}
+
 VObjectList
 VLayer::objectsWithinRect( const KoRect& rect,
 	const double zoomFactor ) const

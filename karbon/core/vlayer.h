@@ -28,6 +28,8 @@ public:
 	void insertObject( const VObject* object );
 	void prependObject( const VObject* object );
 	void removeRef( const VObject* object );
+	void moveObjectDown( const VObject* object );
+	void moveObjectUp( const VObject* object );
 
 	VObjectList objectsWithinRect( const KoRect& rect,
 		const double zoomFactor ) const;
@@ -37,7 +39,7 @@ public:
 
 	bool visible() const { return m_visible; }
 	bool readOnly() const { return m_readOnly; }
-	
+
 	const QString& name() { return m_name; }
 	void setName( const QString& name ) { m_name= name; }
 

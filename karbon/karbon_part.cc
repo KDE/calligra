@@ -161,6 +161,84 @@ KarbonPart::selectAllObjects()
 }
 
 void
+KarbonPart::moveSelectionUp()
+{
+	//kdDebug() << "KarbonPart::moveSelectionUp" << endl;
+	VObjectList selection = m_selection;
+
+	VObjectList objects;
+
+	VLayerListIterator litr( m_layers );
+	while( !selection.isEmpty() )
+	{
+		kdDebug() << "!selection.isEmpty()" << endl;
+		for ( ; litr.current(); ++litr )
+		{
+			VObjectList todo;
+			VObjectListIterator itr( selection );
+			for ( ; itr.current() ; ++itr )
+			{
+				objects = litr.current()->objects();
+				VObjectListIterator itr2( objects );
+				// find all selected VObjects that are in the current layer
+				for ( ; itr2.current(); ++itr2 )
+					if( itr2.current() == itr.current() )
+					{
+						todo.append( itr.current() );
+						// remove from selection
+						selection.removeRef( itr.current() );
+					}
+			}
+			// we have found the affected vobjects in this vlayer
+			VObjectListIterator itr3( todo );
+			for ( ; itr3.current(); ++itr3 )
+				litr.current()->moveObjectUp( itr3.current() );
+		}
+	}
+
+	repaintAllViews();
+}
+
+void
+KarbonPart::moveSelectionDown()
+{
+	//kdDebug() << "KarbonPart::moveSelectionDown" << endl;
+	VObjectList selection = m_selection;
+
+	VObjectList objects;
+
+	VLayerListIterator litr( m_layers );
+	while( !selection.isEmpty() )
+	{
+		//kdDebug() << "!selection.isEmpty()" << endl;
+		for ( ; litr.current(); ++litr )
+		{
+			VObjectList todo;
+			VObjectListIterator itr( selection );
+			for ( ; itr.current() ; ++itr )
+			{
+				objects = litr.current()->objects();
+				VObjectListIterator itr2( objects );
+				// find all selected VObjects that are in the current layer
+				for ( ; itr2.current(); ++itr2 )
+					if( itr2.current() == itr.current() )
+					{
+						todo.append( itr.current() );
+						// remove from selection
+						selection.removeRef( itr.current() );
+					}
+			}
+			// we have found the affected vobjects in this vlayer
+			VObjectListIterator itr3( todo );
+			for ( ; itr3.current(); ++itr3 )
+				litr.current()->moveObjectDown( itr3.current() );
+		}
+	}
+
+	repaintAllViews();
+}
+
+void
 KarbonPart::moveSelectionToTop()
 {
 	VLayer *topLayer = m_layers.getLast();

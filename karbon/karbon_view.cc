@@ -173,23 +173,25 @@ KarbonView::editPurgeHistory()
 
 
 void
-KarbonView::objectMoveToTop()
+KarbonView::selectionMoveToTop()
 {
 	m_part->moveSelectionToTop();
 }
 
 void
-KarbonView::objectMoveUp()
+KarbonView::selectionMoveUp()
 {
+	m_part->moveSelectionUp();
 }
 
 void
-KarbonView::objectMoveDown()
+KarbonView::selectionMoveDown()
 {
+	m_part->moveSelectionDown();
 }
 
 void
-KarbonView::objectMoveToBottom()
+KarbonView::selectionMoveToBottom()
 {
 	m_part->moveSelectionToBottom();
 }
@@ -453,16 +455,16 @@ KarbonView::initActions()
 	// object ----->
 	new KAction(
 		i18n( "Bring To &Front" ), 0, QKeySequence("Shift+PgUp"), this,
-		SLOT( objectMoveToTop() ), actionCollection(), "object_move_totop" );
+		SLOT( selectionMoveToTop() ), actionCollection(), "object_move_totop" );
 	new KAction(
 		i18n( "&Raise" ), 0, QKeySequence("Ctrl+PgUp"), this,
-		SLOT( objectMoveUp() ), actionCollection(), "object_move_up" );
+		SLOT( selectionMoveUp() ), actionCollection(), "object_move_up" );
 	new KAction(
 		i18n( "&Lower" ), 0, QKeySequence("Ctrl+PgDown"), this,
-		SLOT( objectMoveDown() ), actionCollection(), "object_move_down" );
+		SLOT( selectionMoveDown() ), actionCollection(), "object_move_down" );
 	new KAction(
 		i18n( "Send To &Back" ), 0, QKeySequence("Shift+PgDown"), this,
-		SLOT( objectMoveToBottom() ), actionCollection(), "object_move_tobottom" );
+		SLOT( selectionMoveToBottom() ), actionCollection(), "object_move_tobottom" );
 	new KAction(
 		i18n( "&Translate" ), "translate", 0, this,
 		SLOT( objectTrafoTranslate() ), actionCollection(), "object_trafo_translate" );
