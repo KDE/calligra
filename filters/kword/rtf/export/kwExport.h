@@ -1,3 +1,28 @@
+/* This file is part of the KDE project
+   Copyright (C) 1998, 1999 Reginald Stadlbauer <reggie@kde.org>
+   Copyright (c) 2000 ID-PRO Deutschland GmbH. All rights reserved.
+                      Contact: Wolf-Michael Bolle <Bolle@ID-PRO.de>
+   Copurogjt (C) 2001 Michael Johnson <mikej@xnet.com>
+
+
+   This library is free software; you can redistribute it and/or
+   modify it under the terms of the GNU Library General Public
+   License as published by the Free Software Foundation; either
+   version 2 of the License, or (at your option) any later version.
+
+   This library is distributed in the hope that it will be useful,
+   but WITHOUT ANY WARRANTY; without even the implied warranty of
+   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+   Library General Public License for more details.
+
+   You should have received a copy of the GNU Library General Public License
+   along with this library; see the file COPYING.LIB.  If not, write to
+   the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
+   Boston, MA 02111-1307, USA.
+*/
+
+
+
 #ifndef KWEXPORT_H
 #define KWEXPORT_H
 
@@ -11,7 +36,9 @@
 #define KDEBUG_KWFILTER 30505
 
 
-
+// Global variables
+extern int GhType;  // defines header type
+extern int GfType;
 
 /***************************************************************************/
 
@@ -27,6 +54,32 @@ class TabularData
    int ptpos;  // position of the tab stop in pts
    int type;  // alignment of data - 0 = left, 1 = center, 2 = right, 3 = decimal
    }; // end TabularD
+
+/***************************************************************************/
+class Time
+   {
+   public:
+   Time() { msecond = -1; second = -1; minute = -1; hour = -1; fix = -1; }
+
+   int msecond;
+   int second;
+   int minute;
+   int hour;
+   int fix;
+   }; // end TIme
+
+
+/***************************************************************************/
+class Date
+   {
+   public:
+   Date() { day = -1; month = -1; year = -1; fix = -1; }
+
+   int day;
+   int month;
+   int year;;
+   int fix;
+   }; // end TIme
 
 /***************************************************************************/
 // Used to store LEFTBORDER, RIGHTBORDER, TOPBORDER, BOTTOMBORDER  tag data
@@ -126,9 +179,13 @@ class TextFormatting
                        int     v,
                        int     r,
                        int     b,
-                       int     g ) : formatId (id), pos (p), len (l), fontSize (s), fontWeight (w),
+                       int     g,
+                       int     pn,
+                       Time    t,
+                       Date    d,
+                       int     ty ) : formatId (id), pos (p), len (l), fontSize (s), fontWeight (w),
                        fontName (f), italic (i), underline (u), strikeout (so), vertalign(v),
-                       red (r), blue (b), green (g) {}
+                       red (r), blue (b), green (g), pageNum (pn), time (t), date (d), varType (ty){}
 
       int     formatId;
       int     pos;
@@ -143,6 +200,10 @@ class TextFormatting
       int     red;
       int     blue;
       int     green;
+      int     pageNum;
+      Time    time;
+      Date    date;
+      int     varType;
 };
 
 /***************************************************************************/
@@ -508,5 +569,17 @@ AnchoredInsert *findAnchoredInsert (AnchoredInsert   searchElement,
 void ProcessColorTag ( QDomNode    myNode,
                        void       *tagData,
                        QString    &         );
+
+void ProcessTypeTag ( QDomNode   myNode,
+                      void      *tagData,
+                      QString   &         );
+
+void ProcessDateTag ( QDomNode    myNode,
+                      void       *tagData,
+                      QString    &         );
+
+void ProcessTimeTag ( QDomNode    myNode,
+                      void       *tagData,
+                      QString    &         );
 
 #endif
