@@ -2732,7 +2732,6 @@ void KWView::slotApplyFont()
         QPtrListIterator<KoTextFormatInterface> it( lst );
         for ( ; it.current() ; ++it )
         {
-
             KCommand *cmd = it.current()->setFontCommand(m_fontDlg->getNewFont(),
                                                          m_fontDlg->getSubScript(),
                                                          m_fontDlg->getSuperScript(),

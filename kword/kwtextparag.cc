@@ -255,9 +255,8 @@ QDomElement KWTextParag::saveFormat( QDomDocument & doc, KoTextFormat * curForma
         elem = doc.createElement( "ITALIC" );
         formatElem.appendChild( elem );
         elem.setAttribute( "value", static_cast<int>(curFormat->font().italic()) );
-    }//FIXME
-    if( !refFormat || curFormat->font().underline() != refFormat->font().underline()
-        /*|| curFormat->doubleUnderline() != refFormat->doubleUnderline()*/ )
+    }
+    if( !refFormat || curFormat->underline() != refFormat->underline() )
     {
         elem = doc.createElement( "UNDERLINE" );
         formatElem.appendChild( elem );
@@ -265,12 +264,54 @@ QDomElement KWTextParag::saveFormat( QDomDocument & doc, KoTextFormat * curForma
             elem.setAttribute( "value", "double" );
         else
             elem.setAttribute( "value", static_cast<int>(curFormat->underline()) );
+        QString strLineType;
+        switch ( curFormat->lineType() )
+        {
+        case KoTextFormat::SOLID:
+            strLineType ="solid";
+            break;
+        case KoTextFormat::DASH:
+            strLineType ="dash";
+            break;
+        case KoTextFormat::DOT:
+            strLineType ="dot";
+            break;
+        case KoTextFormat::DASH_DOT:
+            strLineType="dashdot";
+            break;
+        case KoTextFormat::DASH_DOT_DOT:
+            strLineType="dashdotdot";
+            break;
+        }
+        elem.setAttribute( "styleline", strLineType );
     }
     if( !refFormat || curFormat->font().strikeOut() != refFormat->font().strikeOut() )
     {
         elem = doc.createElement( "STRIKEOUT" );
         formatElem.appendChild( elem );
         elem.setAttribute( "value", static_cast<int>(curFormat->font().strikeOut()) );
+        //todo remove duplicate code
+        QString strLineType;
+        switch ( curFormat->strikeOutType() )
+        {
+        case KoTextFormat::SOLID:
+            strLineType ="solid";
+            break;
+        case KoTextFormat::DASH:
+            strLineType ="dash";
+            break;
+        case KoTextFormat::DOT:
+            strLineType ="dot";
+            break;
+        case KoTextFormat::DASH_DOT:
+            strLineType="dashdot";
+            break;
+        case KoTextFormat::DASH_DOT_DOT:
+            strLineType="dashdotdot";
+            break;
+        }
+        elem.setAttribute( "styleline", strLineType );
+
     }
     // ######## Not needed in 3.0?
     /*
@@ -459,10 +500,47 @@ KoTextFormat KWTextParag::loadFormat( QDomElement &formatElem, KoTextFormat * re
             format.setNbLineType ( KoTextFormat::SIMPLE);
         else if ( value == "double" )
           format.setNbLineType ( KoTextFormat::DOUBLE);
+        //remove duplicate code
+        if ( elem.hasAttribute("styleline" ))
+        {
+            QString strLineType = elem.attribute("styleline");
+            kdDebug()<<" strLineType ********************************** :"<<strLineType<<endl;
+            if ( strLineType =="solid")
+                format.setLineType( KoTextFormat::SOLID );
+            else if ( strLineType =="dash" )
+                format.setLineType( KoTextFormat::DASH );
+            else if ( strLineType =="dot" )
+                format.setLineType( KoTextFormat::DOT );
+            else if ( strLineType =="dashdot")
+                format.setLineType( KoTextFormat::DASH_DOT );
+            else if ( strLineType =="dashdotdot")
+                format.setLineType( KoTextFormat::DASH_DOT_DOT );
+            else
+                format.setLineType( KoTextFormat::SOLID );
+        }
     }
     elem = formatElem.namedItem( "STRIKEOUT" ).toElement();
     if ( !elem.isNull() )
+    {
         font.setStrikeOut( elem.attribute("value").toInt() == 1 );
+        if ( elem.hasAttribute("styleline" ))
+        {
+            QString strLineType = elem.attribute("styleline");
+            if ( strLineType =="solid")
+                format.setStrikeOutType( KoTextFormat::SOLID );
+            else if ( strLineType =="dash" )
+                format.setStrikeOutType( KoTextFormat::DASH );
+            else if ( strLineType =="dot" )
+                format.setStrikeOutType( KoTextFormat::DOT );
+            else if ( strLineType =="dashdot")
+                format.setStrikeOutType( KoTextFormat::DASH_DOT );
+            else if ( strLineType =="dashdotdot")
+                format.setStrikeOutType( KoTextFormat::DASH_DOT_DOT );
+            else
+                format.setStrikeOutType( KoTextFormat::SOLID );
+        }
+
+    }
     // ######## Not needed in 3.0?
     /*
     elem = formatElem.namedItem( "CHARSET" ).toElement();
