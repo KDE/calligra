@@ -2301,7 +2301,7 @@ void KSpreadView::insertMathExpr()
     if ( m_pTable == 0L )
         return;
     KSpreadDlgFormula *dlg=new KSpreadDlgFormula( this, "Function" );
-    dlg->exec();
+    dlg->show();
     // #### Is the dialog deleted when it's closed ? (David)
     // Torben thinks that not.
 }
