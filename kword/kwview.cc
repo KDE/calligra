@@ -5138,7 +5138,7 @@ void KWView::openPopupMenuEditFrame( const QPoint & _point )
         {
             KWFrame *frame=m_doc->getFirstSelectedFrame();
             KWFrameSet *frameSet=frame->frameSet();
-            if(frameSet->type()==FT_PICTURE)
+            if(frameSet->type()==FT_PICTURE || frameSet->type()==FT_HORZLINE)
             {
                 actionList.append(separator);
                 actionList.append(actionChangePicture);
@@ -5154,7 +5154,7 @@ void KWView::openPopupMenuEditFrame( const QPoint & _point )
                 actionList.append(separator);
                 actionList.append(actionGoToFootEndNote);
             }
-            bool state = !frameSet->isHeaderOrFooter() && !frameSet->isFootEndNote() && (frameSet->type()!=FT_HORZLINE);
+            bool state = !frameSet->isHeaderOrFooter() && !frameSet->isFootEndNote();
             state = state && (m_doc->processingType() == KWDocument::WP &&frameSet!=m_doc->frameSet( 0 ));
             if(state)
             {

@@ -44,6 +44,7 @@
 #include <float.h>
 #include "KWordFrameSetIface.h"
 #include <dcopobject.h>
+#include "qdrawutil.h"
 #include "KWordTextFrameSetEditIface.h"
 #include "KWordFormulaFrameSetIface.h"
 #include "KWordFormulaFrameSetEditIface.h"
@@ -2593,7 +2594,6 @@ KWordFrameSetIface* KWHorzLineFrameSet::dcopObject()
     return m_dcop;
 }
 
-#include "qdrawutil.h"
 
 void KWHorzLineFrameSet::drawFrameContents( KWFrame *frame, QPainter *painter, const QRect &crect,
                                            const QColorGroup &cg, bool onlyChanged, bool resetChanged, KWFrameSetEdit *edit, KWViewMode * viewmode)
