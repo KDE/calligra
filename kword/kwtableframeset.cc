@@ -575,7 +575,7 @@ void KWTableFrameSet::setBoundingRect( KoRect rect )
     if ( m_widthMode == TblAuto )
     {
         rect.setLeft( m_doc->ptLeftBorder() );
-        rect.setWidth( m_doc->ptPaperWidth() - ( m_doc->ptLeftBorder() + m_doc->ptRightBorder() ) );
+        rect.setWidth( m_doc->ptPaperWidth() - ( m_doc->ptLeftBorder() + m_doc->ptRightBorder() ) - 5 /* hack */ );
     }
 
     double baseWidth = (rect.width() - (m_cols-1) * tableCellSpacing) / m_cols;
