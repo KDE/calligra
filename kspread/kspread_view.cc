@@ -4583,10 +4583,13 @@ void KSpreadView::setZoom( int zoom, bool /*updateViews*/ )
 
   d->doc->setZoomAndResolution( zoom, KoGlobal::dpiX(), KoGlobal::dpiY());
   KoView::setZoom( d->doc->zoomedResolutionY() /* KoView only supports one zoom */ );
+  
+  Q_ASSERT(d->activeSheet);
+  
+  if (d->activeSheet)  //this is 0 when viewing a document in konqueror!? (see Q_ASSERT above)
+    d->activeSheet->setRegionPaintDirty(QRect(QPoint(0,0), QPoint(KS_colMax, KS_rowMax)));
 
-  d->activeSheet->setRegionPaintDirty(QRect(QPoint(0,0), QPoint(KS_colMax, KS_rowMax)));
-  d->doc->refreshInterface();
-
+  d->doc->refreshInterface();  
   d->doc->emitEndOperation();
 }
 
@@ -4824,6 +4827,9 @@ int KSpreadView::bottomBorder() const
 
 void KSpreadView::refreshView()
 {
+
+  kdDebug() << "refreshing view" << endl;
+
   KSpreadSheet * table = activeTable();
   if ( !table )
     return;
