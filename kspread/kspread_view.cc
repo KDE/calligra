@@ -466,11 +466,11 @@ KSpreadView::~KSpreadView()
 {
     if ( !m_transformToolBox.isNull() )
 	delete (&*m_transformToolBox);
-    if(m_sbCalcLabel)
+    /*if(m_sbCalcLabel)
     {
         disconnect(m_sbCalcLabel,SIGNAL(pressed( int )),this,SLOT(statusBarClicked(int)));
 
-    }
+        }*/
     m_pCanvas->endChoose();
     m_pTable = 0; // set the active table to 0L so that when during destruction
     // of embedded child documents possible repaints in KSpreadTable are not
@@ -483,6 +483,7 @@ KSpreadView::~KSpreadView()
     delete m_pPopupMenu;
     delete m_popupChild;
     delete m_popupListChoose;
+    delete m_sbCalcLabel;
 }
 
 
@@ -3246,10 +3247,10 @@ void KSpreadView::guiActivateEvent( KParts::GUIActivateEvent *ev )
     }
     else
     {
-        if(m_sbCalcLabel)
+        /*if(m_sbCalcLabel)
         {
             disconnect(m_sbCalcLabel,SIGNAL(pressed( int )),this,SLOT(statusBarClicked(int)));
-        }
+            }*/
     }
 
     KoView::guiActivateEvent( ev );
