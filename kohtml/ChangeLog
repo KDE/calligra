@@ -18,3 +18,15 @@ Wed Jan 6 01:15:58 1999 Simon Hausmann <tronical@gmx.net>
         * making use of the scale value when drawing
 
         * fixes with the KIO-handling
+
+Wed Jan 6 22:00:41 1999 Simon Hausmann <tronical@gmx.net>
+
+        * implemented mini html-editor
+
+        * improved settings dialog
+
+        * implemented basic configuration stuff
+
+        * improved KIO-handling again (error handling)
+
+        * improved some drawing stuff

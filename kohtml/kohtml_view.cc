@@ -45,6 +45,7 @@
 #include "kohtml_shell.h"
 #include "khtmlwidget_patched.h"
 #include "settingsdlg.h"
+#include "edithtmldlg.h"
 
 KoHTMLFrame::KoHTMLFrame(KoHTMLView *_view, KoHTMLChild *_child)
 :KoFrame(_view)
@@ -59,8 +60,6 @@ KoHTMLView::KoHTMLView(QWidget *parent, const char *name, KoHTMLDoc *_doc)
   setWidget(this);
   
   OPPartIf::setFocusPolicy(OpenParts::Part::ClickFocus);
-  
-//  OPPartIf::setCaption("KoHTML");
   
   m_pDoc = _doc;
   
@@ -108,7 +107,10 @@ KoHTMLView::KoHTMLView(QWidget *parent, const char *name, KoHTMLDoc *_doc)
   m_vBackStack.setAutoDelete(false);
   m_vForwardStack.setAutoDelete(false);
  
-  slotDocumentContentChanged();
+  slotUpdateConfig();
+
+  if (browserStart == 0) slotDocumentContentChanged();
+  else if (browserStart == 1) m_pDoc->openURL(homePage);
   
 }
 
@@ -273,7 +275,7 @@ bool KoHTMLView::mappingCreateToolBar(OpenPartsUI::ToolBarFactory_ptr factory)
   m_idForward = m_vMainToolBar->insertButton2(pix, ID_FORWARD, SIGNAL(clicked()), this, "slotForward", !m_vForwardStack.isEmpty(), i18n("Forward"), -1);
 
   pix = OPUIUtils::convertPixmap(ICON("home.xpm"));
-  m_idHome = m_vMainToolBar->insertButton2(pix, ID_HOME, SIGNAL(clicked()), this, "slotHome", false, i18n("Home"), -1);
+  m_idHome = m_vMainToolBar->insertButton2(pix, ID_HOME, SIGNAL(clicked()), this, "slotHome", true, i18n("Home"), -1);
 
   pix = OPUIUtils::convertPixmap(ICON("reload.xpm"));
   m_idReload = m_vMainToolBar->insertButton2(pix, ID_RELOAD, SIGNAL(clicked()), this, "slotReload", true, i18n("Reload Page"), -1);
@@ -352,6 +354,10 @@ bool KoHTMLView::mappingCreateMenuBar(OpenPartsUI::MenuBar_ptr menuBar)
   
   pix = OPUIUtils::convertPixmap(ICON("parts.xpm"));  
   m_idMenuEdit_Insert_Object = m_vMenuEdit_Insert->insertItem6(pix, i18n("&Object..."), this, "insertObject", 0, ID_EDIT_INSERT_OBJECT, -1);
+
+  m_vMenuEdit->insertSeparator(-1);
+  
+  m_vMenuEdit->insertItem4(i18n("Edit HTML code"), this, "editHTMLCode", 0, ID_EDIT_HTMLCODE, -1);
 
   m_vMenuEdit->insertSeparator(-1);
   
@@ -494,9 +500,20 @@ void KoHTMLView::editCopy()
   clip->setText(text);
 }
 
+void KoHTMLView::editHTMLCode()
+{
+  HTMLEditDlg htmlEditDlg(QString(m_pDoc->getHTMLData()));
+  
+  if (htmlEditDlg.exec() == QDialog::Accepted)
+     m_pDoc->feedData(i18n("meta:/(manually edited code)"), htmlEditDlg.getText());
+}
+
 void KoHTMLView::editPreferences()
 {
   SettingsDlg settingsDlg;
+  
+  QObject::connect(&settingsDlg, SIGNAL(configChanged()),
+                   this, SLOT(slotUpdateConfig()));
 
   settingsDlg.exec();
 }
@@ -552,6 +569,7 @@ void KoHTMLView::statusCallback(CORBA::Long ID)
     {
       case ID_EDIT_COPY          : slotStatusMsg(i18n("Copies the selected section to the clipboard")); break;
       case ID_EDIT_INSERT_OBJECT : slotStatusMsg(i18n("Inserts an embedded object into the document")); break;
+      case ID_EDIT_HTMLCODE      : slotStatusMsg(i18n("Edit the current html code")); break;
       case ID_EDIT_PREFERENCES   : slotStatusMsg(i18n("Change user preferences")); break;
       case ID_VIEW_TOOLBAR       : slotStatusMsg(i18n("Enables / disables the toolbar")); break;
       case ID_VIEW_STATUSBAR     : slotStatusMsg(i18n("Enables / disables the statusbar")); break;
@@ -674,6 +692,7 @@ void KoHTMLView::slotForward()
 
 void KoHTMLView::slotHome()
 {
+  m_pDoc->openURL(homePage);
 }
 
 void KoHTMLView::slotReload()
@@ -795,8 +814,6 @@ void KoHTMLView::slotSetCaption(const char *title)
   caption.prepend("KoHTML : ");
   
 //  setCaption(caption);
-
-//  OPPartIf::setCaption(caption);
 }
 
 void KoHTMLView::slotShowURL(KHTMLView *view, const char *url)
@@ -897,4 +914,44 @@ void KoHTMLView::slotCopyURLtoClipboard()
      text.remove(0, 7);
      
   clip->setText(text);     
+}
+
+void KoHTMLView::slotUpdateConfig()
+{
+  KConfig *config = kapp->getConfig();
+  
+  config->setGroup("Personal Settings");
+  
+  browserStart = config->readNumEntry("BrowserStart", 0);
+  homePage = config->readEntry("HomePage", "http://www.kde.org/");
+
+  //KConfig doesn't create a proper default entry for homePage, 
+  //so we do this manually here :-(  
+  if (homePage.isEmpty())
+     {
+       homePage = "http://www.kde.org/"; 
+       config->writeEntry("HomePage", homePage);
+       config->sync(); 
+     }  
+  
+  config->setGroup("Fonts");
+  
+  QFont helvetica("helvetica");
+  QFont courier("courier");
+  
+  fontSize = config->readNumEntry("FontSize", 0);
+  standardFont = config->readFontEntry("StandardFont", &helvetica);
+  fixedFont = config->readFontEntry("FixedFont", &courier);
+    
+  config->setGroup("Colors");
+  
+  bgColor = config->readColorEntry("BackgroundColor", &white);
+  lnkColor = config->readColorEntry("LinkColor", &red);
+  txtColor = config->readColorEntry("TextColor", &black);
+  vlnkColor = config->readColorEntry("VLinkColor", &magenta);
+
+  m_pHTMLView->getKHTMLWidget()->setDefaultBGColor(bgColor);
+  m_pHTMLView->getKHTMLWidget()->setDefaultTextColors(txtColor, lnkColor, vlnkColor);  
+  m_pHTMLView->getKHTMLWidget()->setStandardFont(standardFont.family());
+  m_pHTMLView->getKHTMLWidget()->setFixedFont(fixedFont.family());
 }

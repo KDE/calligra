@@ -30,6 +30,7 @@ module KoHTML
 	interface KoHTMLView : KOffice::View
 	{
 		slot void editCopy();
+		slot void editHTMLCode();
 		slot void editPreferences();
 		
 		slot void viewToolBar();
@@ -60,6 +61,11 @@ module KoHTML
 		string getURL();
 		
                 void openURL(in string url);
+		
+		/**
+		 * Use this function to manually "load" html code.
+		 */ 
+		void feedData(in string url, in string data);
 		
 		boolean documentDone();
         };

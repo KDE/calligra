@@ -111,6 +111,7 @@ public:
   virtual char *getHTMLData();
   virtual char *getURL();
   virtual void openURL(const char *_url);
+  virtual void feedData(const char *url, const char *data);
 
   virtual CORBA::Boolean documentDone() { return (CORBA::Boolean)m_bDocumentDone; }
 
@@ -185,6 +186,7 @@ protected slots:
   void slotDocumentDoneInternal(KHTMLView *view);
 
   void slotHTMLCodeLoaded(KoHTMLJob *, KHTMLView *, KHTMLView *, const char *, const char *file);
+  void slotHTMLLoadError(int id, int errid, const char *txt);  
 
 private:
   KoHTMLJob *findJob(KHTMLView *view, const char *url, KoHTMLJob::JobType jType);

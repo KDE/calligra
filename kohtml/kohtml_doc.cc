@@ -30,6 +30,8 @@
 
 #include <khtmlsavedpage.h>
 
+#include <kio_error.h>
+
 #include "khtmlwidget_patched.h"
 #include "kfileio.h"
 
@@ -235,9 +237,19 @@ void KoHTMLDoc::openURL(const char *_url)
      
        QObject::connect(m_pMainJob, SIGNAL(jobDone(KoHTMLJob *, KHTMLView *, KHTMLView *, const char *, const char *)),
                         this, SLOT(slotHTMLCodeLoaded(KoHTMLJob *, KHTMLView *, KHTMLView *, const char *, const char *)));
+       QObject::connect(m_pMainJob, SIGNAL(sigError(int, int, const char *)),
+                        this, SLOT(slotHTMLLoadError(int, int, const char *)));			
      
        m_pMainJob->start();
      }
+}
+
+void KoHTMLDoc::feedData(const char *url, const char *data)
+{
+  m_vCurrentURL = url;
+  htmlData = data;
+  m_bDocumentDone = true;
+  emit contentChanged();
 }
 
 void KoHTMLDoc::slotHTMLCodeLoaded(KoHTMLJob *, KHTMLView *, KHTMLView *, const char *, const char *file)
@@ -250,6 +262,18 @@ void KoHTMLDoc::slotHTMLCodeLoaded(KoHTMLJob *, KHTMLView *, KHTMLView *, const 
   emit contentChanged();    
 }
 
+void KoHTMLDoc::slotHTMLLoadError(int id, int errid, const char *txt)
+{
+  QString msg;
+  
+  msg.sprintf(i18n("error while loading:\n%s\nerror message:\n%s"), m_vCurrentURL.data(), kioErrorString(errid, txt).data());
+  
+  QMessageBox::critical(0L, i18n("KoHTML IO Error"), msg, i18n("Abort"));
+  
+  htmlData = "";
+  emit contentChanged();
+}
+
 void KoHTMLDoc::draw(QPaintDevice *dev, CORBA::Long width, CORBA::Long height,
 		     CORBA::Float _scale )
 { 
@@ -260,7 +284,11 @@ void KoHTMLDoc::draw(QPaintDevice *dev, CORBA::Long width, CORBA::Long height,
        
        if (_scale != 1.0) p.translate(_scale, _scale);
        
-       p.drawText(0, 0, i18n("KoHTML: No document loaded!"));
+       const char *msg = i18n("KoHTML: No document loaded!");
+       
+       QRect r = p.fontMetrics().boundingRect(msg);
+       
+       p.drawText((width / 2) - (r.width() / 2), (height / 2) - (r.height() / 2) , msg);
        
        p.end();
        return;

@@ -14,10 +14,12 @@ public:
 protected:
   void setupMiscTab();
   void setupFontsTab();
+  void setupColorsTab();
 
 private:
   QFrame *miscFrame;
   QFrame *fontsFrame;
+  QFrame *colorsFrame;
 };
 
 #endif

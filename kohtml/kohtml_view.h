@@ -74,6 +74,7 @@ public:
   virtual void cleanUp();
 
   virtual void editCopy();
+  virtual void editHTMLCode();
   virtual void editPreferences();
   
   virtual void viewToolBar();
@@ -118,6 +119,8 @@ public slots:
   void slotURLPopup(KHTMLView *view, const char *url, const QPoint &coord);  
   void slotCopyURLtoClipboard();
 
+  void slotUpdateConfig();
+  
 protected:
   virtual void init();
   virtual bool event(const char *event, const CORBA::Any &value);
@@ -133,6 +136,7 @@ protected:
   OpenPartsUI::Menu_var m_vMenuEdit;
   OpenPartsUI::Menu_var m_vMenuEdit_Insert;
   CORBA::Long m_idMenuEdit_Copy;
+  CORBA::Long m_idMenuEdit_HTMLCode;
   CORBA::Long m_idMenuEdit_Insert_Object;
   CORBA::Long m_idMenuEdit_Preferences;
 
@@ -167,17 +171,18 @@ protected:
 
   static const int ID_EDIT_COPY = 1;
   static const int ID_EDIT_INSERT_OBJECT = 2;
-  static const int ID_EDIT_PREFERENCES = 3;
-  static const int ID_VIEW_TOOLBAR = 4;
-  static const int ID_VIEW_STATUSBAR = 5;
-  static const int ID_LOCATION = 6;
-  static const int ID_BOOKMARKS_ADD = 7;
-  static const int ID_BOOKMARKS_EDIT = 8;
-  static const int ID_BACK = 9;
-  static const int ID_FORWARD = 10;
-  static const int ID_HOME = 11;
-  static const int ID_RELOAD = 12;
-  static const int ID_STOP = 13;
+  static const int ID_EDIT_HTMLCODE = 3;
+  static const int ID_EDIT_PREFERENCES = 4;
+  static const int ID_VIEW_TOOLBAR = 5;
+  static const int ID_VIEW_STATUSBAR = 6;
+  static const int ID_LOCATION = 7;
+  static const int ID_BOOKMARKS_ADD = 8;
+  static const int ID_BOOKMARKS_EDIT = 9;
+  static const int ID_BACK = 10;
+  static const int ID_FORWARD = 11;
+  static const int ID_HOME = 12;
+  static const int ID_RELOAD = 13;
+  static const int ID_STOP = 14;
 
   KoHTMLDoc *m_pDoc;  
   
@@ -193,7 +198,17 @@ protected:
   QStack<SavedPage> m_vForwardStack;
  
   QList<KoHTMLFrame> m_lstFrames;
-  
+
+  // config variables
+  int browserStart;
+  QString homePage;
+  int fontSize;
+  QFont standardFont;
+  QFont fixedFont;
+  QColor bgColor;
+  QColor lnkColor;
+  QColor txtColor;
+  QColor vlnkColor;
 };	
 
 #endif
