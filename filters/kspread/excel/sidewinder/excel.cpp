@@ -1511,8 +1511,9 @@ void FontRecord::setData( unsigned size, const unsigned char* data )
   setFontFamily( data[11] );
   setCharacterSet( data[12] );
     
-  // FIXME how about excel < 97 ?
-  UString fn = EString::fromSheetName( data+14, size-14 ).str();
+  UString fn = ( version() >= Excel97 ) ?
+    EString::fromSheetName( data+6, size-6 ).str() :
+    EString::fromByteString( data+14, false, size-14 ).str();
   setFontName( fn );
 }
 
@@ -3424,6 +3425,7 @@ Format ExcelReader::convertFormat( unsigned xfIndex )
   
   XFRecord xf = d->xfTable[ xfIndex ];  
   unsigned fontIndex = xf.fontIndex();
+  
   if( fontIndex < d->fontTable.size() )
   {
     FontRecord fr = d->fontTable[ fontIndex ];
