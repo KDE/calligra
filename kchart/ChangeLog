@@ -1,3 +1,11 @@
+2005-03-13  Inge Wallin  <inge@lysator.liu.se>
+
+	Fix problem with mixed plurals/singulars in chart names.
+	* kchart_view.cc (KChartView): Rename some actions.
+
+	The default chart is marked as modified even when it's not.
+	* kchart_part.cc (KChartPart): Remove call to setModified().
+
 2005-03-12  Inge Wallin  <inge@lysator.liu.se>
 
 	Remove the defaults button from the config dialog.  It wasn't

@@ -13,10 +13,12 @@ Item								   Prio Status
 ------------------------------------------------------------------------------
 
 * Bugs
+  + 41612: No titles for axes					      1	KDCH
+       Fixed by new KDChart version
+  + 55606: [modified] tag doesn't work correctly.		      2 ----
+  + 90893: never-saved doc failes autosave			      2 ----
   + 77839: Program hangs when only one value for pie chart 	      1	KDCH
 	   and value = 0.
-       Fixed by new KDChart version
-  + 41612: No titles for axes					      1	KDCH
        Fixed by new KDChart version
   + 100004: Manual should describe stand-alone charting  	      2	----
             (see below also)
@@ -28,6 +30,8 @@ Item								   Prio Status
       version of KDChart.
       - Save row and column labels	 				--
       - Load row and column labels	 				--
+  + 101290: KChrt changes font for axes when Polar chart is chosen    1	KDCH
+       Fixed by new KDChart version
 
 
 * Wishes
@@ -48,11 +52,17 @@ Item								   Prio Status
     New page in config dialog like pie settings?
   + Tooltips & What's this help all over the program?		     S1 ----
   + Remove the predefined bar chart?				      2 ----
-  + Make the settings in Edit->"Page Layout" clearer?		      1 ----
-  + Singular or plural for tooltips, not both.			     S1 ----
+  + Make the settings in Edit->"Page Layout" clearer?		      2 ----
+  + Singular or plural for tooltips, not both.			     S1 DONE
 
   + Fix ChangeLog re: bug titles.					DONE
   + Grep for FIXME and fix the urgent ones.			      2 ----
+    - kchart_part.h:106:    //FIXME: To be deprecated:		      2 --
+    - kchartDataEditor.cc:275  // FIXME: Remove			      2 --
+    - kchartDataEditor.cc:304  // FIXME: Remove			      2 --
+    - kchartDataEditor.cc:316  // FIXME: Remove			      2 --
+    - kchartDataEditor.cc:345  // FIXME: Remove			      2 --
+    - kchart_view.cc:595:	// FIXME: Losing precision here.      2 --
 
 * Toolbars
   + Separate toolbar for chart types (separate from config, etc).     2 ----
@@ -75,7 +85,8 @@ Item								   Prio Status
 * Config dialog
   + Make Data page work.						DONE
   + Pie settings at the same place as Subtype?			      1 ----
-  + Check *all* subpages.					     S1 ----
+  + Type specific settings for each type?			      2 ----
+  + Check *all* subpages for uglyness and bugs			     S1 ----
     - BackgroundPixmap						     S1 --
     - Bar							     S1 --
     - Color							     S1 --
@@ -102,6 +113,19 @@ Item								   Prio Status
   + The Back button should be in the same place on all pages.	      3 ----
   + Subtype page should have icons for subtypes like config dialog.   2 ----
   + Enable Finish button for all pages.				      1 DONE
+
+* Chart types
+  + Check all chart types and see if they are drawn logically	      1 ----
+    from their input data.  Especially check strange data
+    (negative numbers, etc), and missing data.
+    - Bar							      1 --
+    - Line							      1 --
+    - Area							      1 --
+    - HiLo							      1 --
+    - Box  & Whiskers						      1 --
+    - Pie							      1 --
+    - Ring							      1 --
+    - Polar							      1 --
 
 * Manual
   + Describe stand-alone charting.				     S1 ----

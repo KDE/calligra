@@ -60,7 +60,7 @@ KChartPart::KChartPart( QWidget *parentWidget, const char *widgetName,
     m_displayData = m_currentData;
 
     // hack
-    setModified(true);
+    //setModified(true);
 }
 
 
@@ -143,8 +143,6 @@ void KChartPart::paintContent( QPainter& painter, const QRect& rect,
     // This means getting row or column headers from the document and
     // set them as X axis labels or legend according to the current
     // setting.
-    //
-    // FIXME: It seems as if the short labels are not generated properly.
     KDChartAxisParams  bottomparms = m_params->axisParams( KDChartAxisParams::AxisPosBottom );
     QStringList  longLabels;
     QStringList  shortLabels;
