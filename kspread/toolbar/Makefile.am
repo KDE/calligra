@@ -1,7 +1,7 @@
 toolbardir = $(kde_datadir)/kspread/toolbar
-toolbar_DATA = abort.xpm bold.xpm center.xpm chart.xpm colin.xpm \
-	colout.xpm done.xpm italic.xpm left.xpm money.xpm \
-	multirow.xpm neonpen.xpm paste.xpm percent.xpm precminus.xpm \
-	precplus.xpm right.xpm rowin.xpm rowout.xpm \
-	tab_first.xpm tab_last.xpm tab_left.xpm tab_right.xpm
+toolbar_DATA = abort.png bold.png center.png chart.png colin.png \
+	colout.png done.png italic.png left.png money.png \
+	multirow.png neonpen.png paste.png percent.png precminus.png \
+	precplus.png right.png rowin.png rowout.png \
+	tab_first.png tab_last.png tab_left.png tab_right.png
 
