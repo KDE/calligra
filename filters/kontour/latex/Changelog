@@ -1,3 +1,8 @@
+29 july 2001
+- bug fixes
+	o multiple pages and layers supported
+	o no use a temp file any more
+
 8 July 2001
 	- fill color, stroke color
 	- different pattern (not all)

@@ -81,7 +81,18 @@ void Document::analysePreambule(const QDomNode balise)
 void Document::analyseDocument(const QDomNode balise)
 {
 	_header.analyse(getChild(balise, "head"));
-	_page.analyse(getChild(balise, "page"));
+	
+	for(int index = 1; index < getNbChild(balise); index++)
+	{
+		Page* page = 0;
+		kdDebug() << "balise : " << getChildName(balise, index) << endl;
+		if(getChildName(balise, index).compare("page") == 0)
+		{
+			page = new Page();
+			page->analyse(getChild(balise, index));
+			_pages.append(page);
+		}
+	}
 }
 
 /*******************************************/
@@ -95,28 +106,32 @@ void Document::generate() //QTextStream &out)
 		_out.setDevice(&_file);
 		/* Generation */
 		_header.generate(_out);
-		if(_page.getFormat() == TF_CUSTOM)
+
+		if(_pages.first()->getFormat() == TF_CUSTOM)
 		{
-			_out << "\\setlength{\\paperwidth}{"  << _page.getWidth()  << "mm}" << endl;
-			_out << "\\setlength{\\paperheight}{" << _page.getHeight() << "mm}" << endl;
+			_out << "\\setlength{\\paperwidth}{"  << _pages.first()->getWidth()  << "mm}" << endl;
+			_out << "\\setlength{\\paperheight}{" << _pages.first()->getHeight() << "mm}" << endl;
 		}
 
-		_out << "\\setlength{\\textwidth}{"  << (_page.getWidth() - _page.getLeftMargin() - _page.getRightMargin())  << "mm}" << endl;
-		_out << "\\setlength{\\textheight}{" << (_page.getHeight()) << "mm}" << endl;
+		_out << "\\setlength{\\textwidth}{"  << (_pages.first()->getWidth() - _pages.first()->getLeftMargin() - _pages.first()->getRightMargin())  << "mm}" << endl;
+		_out << "\\setlength{\\textheight}{" << (_pages.first()->getHeight()) << "mm}" << endl;
 
 		/* Margin */
-		_out << "\\setlength{\\topmargin}{" << _page.getTopMargin() << "mm}" << endl;
-		_out << "\\addtolength{\\leftmargin}{" << _page.getLeftMargin() << "mm}" << endl;
+		_out << "\\setlength{\\topmargin}{" << _pages.first()->getTopMargin() << "mm}" << endl;
+		_out << "\\addtolength{\\leftmargin}{" << _pages.first()->getLeftMargin() << "mm}" << endl;
 		_out << endl;
-
+		
 		_out << "\\begin{document}" << endl;
-		if(getLatexType() == LT_PSTRICKS)
+		for(Page* page = _pages.first(); page != 0; page = _pages.next())
 		{
-			_out << "\\begin{pspicture}(";
-			_out << _page.getWidth() << "mm,";
-			_out << _page.getHeight() << "mm)" << endl;
-			_page.generatePSTRICKS(_out);
-			_out << "\\end{pspicture}" << endl;
+			if(getLatexType() == LT_PSTRICKS)
+			{
+				_out << "\\begin{pspicture}(";
+				_out << page->getWidth() << "mm,";
+				_out << page->getHeight() << "mm)" << endl;
+				page->generatePSTRICKS(_out);
+				_out << "\\end{pspicture}" << endl;
+			}
 		}
 		_out << "\\end{document}" << endl;
 		_out << getDocument();

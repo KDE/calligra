@@ -52,8 +52,24 @@ void Page::analyse(const QDomNode balise)
 {
 
 	kdDebug() <<"BEGIN ANALYSE OF A PAGE" << endl;
-	analyseLayout(getChild(balise, "layout"));
-	_layer.analyse(getChild(balise, "layer"));
+
+	for(int index = 0; index < getNbChild(balise); index++)
+	{
+		Layer* layer = 0;
+		kdDebug() << "balise : " << getChildName(balise, index) << endl;
+		if(getChildName(balise, index).compare("layout") == 0)
+		{
+			kdDebug() << "layout analyse" << endl;
+			analyseLayout(getChild(balise, index));
+		}
+		else if(getChildName(balise, index).compare("layer") == 0)
+		{
+			kdDebug() << "layer analyse" << endl;
+			layer = new Layer();
+			layer->analyse(getChild(balise, index));
+			_layers.append(layer);
+		}
+	}
 
 	kdDebug() << "END OF ANALYSE OF A PAGE" << endl;
 }
@@ -79,6 +95,9 @@ void Page::generatePSTRICKS(QTextStream &out)
 {
 	//out << "\\psset{origin={0,-" << getHeight() << "mm}}" << endl;
 	//out << "\\psset{yunit=-1pt}" << endl;
-	_layer.generatePSTRICKS(out);
+	for(Layer* index = _layers.first(); index != 0; index = _layers.next())
+	{
+		index->generatePSTRICKS(out);
+	}
 }
 

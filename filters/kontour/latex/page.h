@@ -59,14 +59,14 @@ class Page: public XmlParser
 	/* LAYOUT */
 	TFormat   _format;
 	double    _width,
-		  _height;
+			  _height;
 	TOrient   _orientation;
 	double    _leftMargin,
-		  _rightMargin,
-		  _bottomMargin,
-		  _topMargin;
+			  _rightMargin,
+			  _bottomMargin,
+			  _topMargin;
 
-	Layer _layer;
+	QList<Layer> _layers;
 
 	public:
 		/**
