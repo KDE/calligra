@@ -830,7 +830,28 @@ QString encodeSevenBit ( QString text )
       QChar Qch ( text.at( i ) );  // get out one unicode char from the string
       ushort ch = Qch.unicode();  // take unicode value of the char
 
-      if ( false ) // check if the (non-ASCII) character would be in the codepage
+      if ( ch >= 32 && ch <= 126) // ASCII character
+         escapedText += Qch;
+      else if ( ch == 0x0009 ) escapedText += "\\tab "; // tabulator
+      else if ( ch == 0x00a0 ) escapedText += "\\~"; // Non-breaking space
+      else if ( ch == 0x00ad ) escapedText += "\\-"; // Soft hyphen
+      else if ( ch == 0x00b7 ) escapedText += "\\|";
+      else if ( ch == 0x2011 ) escapedText += "\\_"; // Non-breaking hyphen
+      else if ( ch == 0x2002 ) escapedText += "\\enspace ";
+      else if ( ch == 0x2003 ) escapedText += "\\emspace ";
+      else if ( ch == 0x2004 ) escapedText += "\\qmspace ";
+      else if ( ch == 0x200c ) escapedText += "\\zwnj ";
+      else if ( ch == 0x200d ) escapedText += "\\zwj ";
+      else if ( ch == 0x200e ) escapedText += "\\ltrmark ";
+      else if ( ch == 0x200f ) escapedText += "\\rtrmark ";
+      else if ( ch == 0x2013 ) escapedText += "\\endash ";
+      else if ( ch == 0x2014 ) escapedText += "\\emdash ";
+      else if ( ch == 0x2018 ) escapedText += "\\lquote ";
+      else if ( ch == 0x2019 ) escapedText += "\\rquote ";
+      else if ( ch == 0x201c ) escapedText += "\\ldblquote ";
+      else if ( ch == 0x201d ) escapedText += "\\rdblquote ";
+      else if ( ch == 0x2022 ) escapedText += "\\bullet ";
+      else if ( false ) // check if the (non-ASCII) character would be in the codepage
       {
          // ### TODO: how do we check that we can use \'
          escapedText += "\\\'";   // escape upper page character to 7 bit
