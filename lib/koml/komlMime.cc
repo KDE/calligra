@@ -25,7 +25,7 @@ bool KOMLHeaderParser::parse()
     if ( line.empty() )
       return true;
 
-    unsigned int i = line.find( ':' );
+    int i = line.find( ':' );
     if ( i < 0 )
       cerr << "Suspicious line: " << line << endl;
     else
@@ -33,7 +33,7 @@ bool KOMLHeaderParser::parse()
       string name, arg;
       name = line.substr( 0, i );
       i++;
-      while( isspace( line[ i ] ) && i < line.length() )
+      while( isspace( line[ i ] ) && i < static_cast<int>(line.length()) )
 	i++;
       arg = line.substr( i, line.length() - i + 1 );
 
@@ -46,7 +46,7 @@ bool KOMLHeaderParser::parse()
 	{
 	  m_strMimeType = arg.substr( 0, j );
 	  j++;
-	  while( isspace( arg[ j ] ) && i < arg.length() )
+	  while( isspace( arg[ j ] ) && i < static_cast<int>(arg.length()) )
 	    j++;
 	  if ( strncasecmp( "boundary=\"", arg.c_str() + j, 10 ) == 0 )
 	  {

@@ -218,14 +218,14 @@ public:
   }
   ~QIO2CPP() { };
 
-  bool open( int mode ) { return true; }
+  bool open( int ) { return true; }
   void close() { }
   void flush() { m_out.flush(); }
   
   uint size() const { return 0xffffffff; }
-  int readBlock( char *data, uint len ) { return 0; }
+  int readBlock( char *, uint ) { return 0; }
   int writeBlock( const char *data, uint len ) { m_out.write( data, len ); return len; }
-  int readLine( char *data, uint maxlen ) { return 0; };
+  int readLine( char *, uint  ) { return 0; };
   
   int getch() { return 0; };
   int putch( int _c ) { m_out.put( _c ); return _c; }
@@ -257,7 +257,7 @@ public:
   }
   ~CPP2QIO() { };
 
-  bool open( int mode ) { return true; }
+  bool open( int ) { return true; }
   void close() { }
   void flush() { }
   bool atEnd() { if ( m_in.eof() ) return true; return false; }
@@ -266,7 +266,7 @@ public:
   
   uint size() const { return 0xffffffff; }
   int readBlock( char *data, uint len ) { m_in.read( data, len ); return m_in.gcount(); }
-  int writeBlock( const char *data, uint len ) { return -1; }
+  int writeBlock( const char *, uint ) { return -1; }
   /* int readLine( char *data, uint maxlen )
   {
     int len = 0;
@@ -286,7 +286,7 @@ public:
   } */
   
   int getch() { int c = m_in.get(); if ( c == EOF ) return -1; return c; }
-  int putch( int _c ) { return -1; }
+  int putch( int ) { return -1; }
   int ungetch( int _c ) { m_in.putback( _c ); return _c; }
 
 protected:

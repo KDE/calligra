@@ -103,7 +103,8 @@ GObject::GObject (const list<XmlAttribute>& attribs) {
   }
 }
 
-GObject::GObject (const GObject& obj) {
+GObject::GObject (const GObject& obj) : QObject() 
+{
   sflag = false;
   outlineInfo = obj.outlineInfo;
   fillInfo = obj.fillInfo;

@@ -32,6 +32,10 @@
 #include <klocale.h>
 #include <kapp.h>
 
+#ifndef M_PI // not ANSI C++, so it maybe...
+#define M_PI            3.14159265358979323846  /* pi */
+#endif
+
 #define Roundness outlineInfo.roundness
 
 static const int xfactors[] = { 0, 1, -1, 0, 0, -1, 1, 0 };

@@ -362,7 +362,7 @@ KoDocumentChild::~KoDocumentChild()
  *
  **********************************************************/
 
-CORBA::Boolean KoDocument::saveAs( const char *_url, const char *_format )
+CORBA::Boolean KoDocument::saveAs( const char *_url, const char *)
 {
   KURL u( _url );
   if ( u.isMalformed() )
@@ -426,7 +426,7 @@ CORBA::Boolean KoDocument::saveAs( const char *_url, const char *_format )
   return true;
 }
 
-CORBA::Boolean KoDocument::saveAsMimePart( const char *_url, const char *_format, const char *_boundary )
+CORBA::Boolean KoDocument::saveAsMimePart( const char *_url, const char *, const char *_boundary )
 {
   KURL u( _url );
   if ( u.isMalformed() )
@@ -579,7 +579,7 @@ CORBA::Boolean KoDocument::open( const char *_url )
   }
   cout << "Type=" << h.mimeType() << endl;
   cout << "++++++++++++++++++++++++++++++++++++++++++++++++++++" << endl;
-  if ( strcasecmp( h.mimeType(), mime ) != 0L )
+  if ( strcasecmp( h.mimeType(), mime.operator const char*() ) != 0L )
   {
     cerr << "Unknown MimeType " << h.mimeType() << endl;
     cerr << "Not supported" << endl;
@@ -651,7 +651,7 @@ CORBA::Boolean KoDocument::openMimePart( OPParts::MimeMultipartDict_ptr _dict, c
   }
   cout << "Type=" << h.mimeType() << endl;
   cout << "++++++++++++++++++++++++++++++++++++++++++++++++++++" << endl;
-  if ( strcasecmp( h.mimeType(), mime ) != 0L )
+  if ( strcasecmp( h.mimeType(), mime.operator const char*() ) != 0L )
   {
     cerr << "Unknown MimeType " << h.mimeType() << endl;
     cerr << "Not supported" << endl;

@@ -135,7 +135,7 @@ protected:
    *                      usually a @ref ifstream or a istringstream.
    */
   virtual bool load( istream &, bool _randomaccess = false );
-  virtual bool load( KOMLParser& parser ) { cerr << "KoDocument::load not implemented" << endl; assert(0); return false; };
+  virtual bool load( KOMLParser& ) { cerr << "KoDocument::load not implemented" << endl; assert(0); return false; };
   /**
    * An example implementation may look like this:
    * <PRE>

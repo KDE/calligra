@@ -324,7 +324,7 @@ void Canvas::printPSDocument () {
  
   if (QPrintDialog::getPrinterSetup (&pSetup)) {
     if (! pSetup.outputToFile ())
-     tmpName = tempnam (NULL, "kps");
+     tmpName = tmpnam ("kps");
     else 
       tmpName = pSetup.outputFileName ();
 
