@@ -234,6 +234,20 @@ void KPTextObject::saveOasisMarginElement( KoGenStyle &styleobjectauto )
     if ( bright != 0.0 )
         styleobjectauto.addPropertyPt("fo:padding-right", bright );
 
+    //add vertical alignment
+    switch( m_textVertAlign )
+    {
+    case KP_TOP:
+        styleobjectauto.addProperty("draw:textarea-vertical-align", "top" );
+        break;
+    case KP_CENTER:
+        styleobjectauto.addProperty("draw:textarea-vertical-align", "middle" );
+        break;
+    case KP_BOTTOM:
+        styleobjectauto.addProperty("draw:textarea-vertical-align", "bottom" );
+        break;
+    }
+
     // fo:padding-top="1.372cm" fo:padding-bottom="0.711cm" fo:padding-left="1.118cm" fo:padding-right="1.27cm"
 }
 
