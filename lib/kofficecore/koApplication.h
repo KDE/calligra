@@ -56,7 +56,8 @@ public:
     virtual ~KoApplication();
 
     /**
-     *  Call this to start the application
+     *  Call this to start the application.
+     *
      *  Parses command line arguments and creates the initial shells and docs
      *  from them (or an empty doc if no cmd-line argument
      */
