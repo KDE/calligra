@@ -53,4 +53,3 @@ KInstance *RTFImportFactory::global()
 {
     return s_global;
 }
-#include "rtfimport_factory.moc"

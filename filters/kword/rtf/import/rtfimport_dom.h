@@ -29,6 +29,7 @@ public:
     void addBorder( int id, QColor &color, int style, double width );
     void addColor( QColor &color );
     void addRect( int left, int top, int right, int bottom );
+    void addKey( const char *filename, const char *name = 0L );
     void addFrameSet( const char *name, int frameType, int frameInfo );
     void addFrame( int left, int top, int right, int bottom,
 		   int autoCreateNewFrame, int newFrameBehaviour,

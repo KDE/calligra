@@ -1194,18 +1194,10 @@ void RTFImport::parsePicture( RTFProperty * )
 	addAnchor( frameName );
 
 	// Add pixmap or clipart (key)
-	DomNode &key = isClipart ? cliparts : pixmaps;
-	key.addNode( "KEY" );
-	  key.setAttribute( "filename", pictName );
-	  key.setAttribute( "msec", 0 );
-	  key.setAttribute( "second", 0 );
-	  key.setAttribute( "minute", 0 );
-	  key.setAttribute( "hour", 0 );
-	  key.setAttribute( "day", 1 );
-	  key.setAttribute( "month", 1 );
-	  key.setAttribute( "year", 2001 );
-	  key.setAttribute( "name", pictName );
-	key.closeNode( "KEY" );
+	if (isClipart)
+	    cliparts.addKey( pictName, pictName );
+	else
+	    pixmaps.addKey( pictName, pictName );
 
 	// Add picture or clipart frameset
 	frameSets.addFrameSet( frameName, (isClipart ? 5 : 2), 0 );
@@ -1214,16 +1206,7 @@ void RTFImport::parsePicture( RTFProperty * )
 		    (picture.desiredHeight * picture.scaley) /100, 0, 1, 0 );
 	  frameSets.closeNode( "FRAME" );
 	  frameSets.addNode( isClipart ? "CLIPART" : "IMAGE" );
-	    frameSets.addNode( "KEY" );
-	      frameSets.setAttribute( "filename", pictName );
-	      frameSets.setAttribute( "msec", 0 );
-	      frameSets.setAttribute( "second", 0 );
-	      frameSets.setAttribute( "minute", 0 );
-	      frameSets.setAttribute( "hour", 0 );
-	      frameSets.setAttribute( "day", 1 );
-	      frameSets.setAttribute( "month", 1 );
-	      frameSets.setAttribute( "year", 2001 );
-	    frameSets.closeNode( "KEY" );
+	    frameSets.addKey( pictName );
 	  frameSets.closeNode( isClipart ? "CLIPART" : "IMAGE" );
 	frameSets.closeNode( "FRAMESET" );
     }
@@ -1857,4 +1840,3 @@ void RTFImport::writeOutMetafile( const char *name, QByteArray &array )
     // Store clipart
     writeOutPart( name, array );
 }
-#include "rtfimport.moc"

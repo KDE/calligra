@@ -9,6 +9,7 @@
    version 2 of the License, or (at your option) any later version.
 */
 
+#include <qdatetime.h>
 #include <stdio.h>
 #include <string.h>
 #include "rtfimport_dom.h"
@@ -139,6 +140,34 @@ void DomNode::addRect( int left, int top, int right, int bottom )
     setAttribute( "top", .05*top );
     setAttribute( "right", .05*right );
     setAttribute( "bottom", .05*bottom );
+}
+
+/**
+ * Add pixmap or clipart key.
+ * @param filename the filename of the image
+ * @param name the relative path to the image in the store (optional)
+ */
+void DomNode::addKey( const char *filename, const char *name )
+{
+    QDateTime dateTime = QDateTime::currentDateTime();
+    QDate date = dateTime.date();
+    QTime time = dateTime.time();
+
+    addNode( "KEY" );
+    setAttribute( "filename", filename );
+    setAttribute( "year", date.year() );
+    setAttribute( "month", date.month() );
+    setAttribute( "day", date.day() );
+    setAttribute( "hour", time.hour() );
+    setAttribute( "minute", time.minute() );
+    setAttribute( "second", time.second() );
+    setAttribute( "msec", time.msec() );
+
+    if (name)
+    {
+	setAttribute( "name", name );
+    }
+    closeNode( "KEY" );
 }
 
 /**
