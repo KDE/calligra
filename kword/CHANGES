@@ -955,3 +955,7 @@ Reggie, 21.3.1999:
 ------------------
 - Copying multiple paragraphs with formats to clipboard works
 - Some fixes and improvements in pasting formatted text
+
+Reggie, 22.3.1999:
+------------------
+- Pasting multiple paragraphs with formats works
