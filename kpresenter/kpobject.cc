@@ -299,6 +299,70 @@ void KPObject::loadOasis(const QDomElement &element, const KoStyleStack & styleS
             kdDebug()<<" not supported :"<<effectStr<<endl;
     }
 #endif
+    //shadow
+    if ( !element.hasAttribute( "type" ) ||
+         ( element.hasAttribute( "type" ) && element.attribute( "type" ) == "4" ) )
+    {
+        if ( styleStack.hasAttribute( "fo:text-shadow" ) &&
+             styleStack.attribute( "fo:text-shadow" ) != "none" )
+        {
+            QString distance = styleStack.attribute( "fo:text-shadow" );
+            distance.truncate( distance.find( ' ' ) );
+            shadowDistance = (int)KoUnit::parseValue( distance );
+            shadowDirection = SD_RIGHT_BOTTOM;
+            shadowColor= QColor("#a0a0a0" );
+        }
+    }
+    else if ( styleStack.hasAttribute( "draw:shadow" ) &&
+              styleStack.attribute( "draw:shadow" ) == "visible" )
+    {
+        // use the shadow attribute to indicate an object-shadow
+        double x = KoUnit::parseValue( styleStack.attribute( "draw:shadow-offset-x" ) );
+        double y = KoUnit::parseValue( styleStack.attribute( "draw:shadow-offset-y" ) );
+
+        if ( x < 0 && y < 0 )
+        {
+            shadowDirection = SD_LEFT_UP;
+            shadowDistance = (int) fabs ( x );
+        }
+        else if ( x == 0 && y < 0 )
+        {
+            shadowDirection = SD_UP;
+            shadowDistance = (int) fabs ( y );
+        }
+        else if ( x > 0 && y < 0 )
+        {
+            shadowDirection = SD_RIGHT_UP;
+            shadowDistance = (int) fabs ( x );
+        }
+        else if ( x > 0 && y == 0 )
+        {
+            shadowDirection = SD_RIGHT;
+            shadowDistance = (int) fabs ( x );
+        }
+        else if ( x > 0 && y > 0 )
+        {
+            shadowDirection = SD_RIGHT_BOTTOM;
+            shadowDistance = (int) fabs ( x );
+        }
+        else if ( x == 0 && y > 0 )
+        {
+            shadowDirection = SD_BOTTOM;
+            shadowDistance = (int) fabs ( y );
+        }
+        else if ( x < 0 && y > 0 )
+        {
+            shadowDirection = SD_LEFT_BOTTOM;
+            shadowDistance = (int) fabs ( x );
+        }
+        else if ( x < 0 && y == 0 )
+        {
+            shadowDirection = SD_LEFT;
+            shadowDistance = fabs ( x );
+        }
+        if ( styleStack.hasAttribute ( "draw:shadow-color" ) )
+            shadowColor= QColor(styleStack.attribute( "draw:shadow-color" ) );
+    }
 }
 
 double KPObject::load(const QDomElement &element) {
