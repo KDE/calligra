@@ -14,7 +14,5 @@ libkexidb_la_LIBADD = $(LIB_KPARTS)
 
 KDE_CXXFLAGS = $(USE_EXCEPTIONS)
 
-install-data-local:
-	$(mkinstalldirs) $(kde_servicetypesdir)/
-	$(INSTALL_DATA) $(srcdir)/kexidbdriver.desktop $(kde_servicetypesdir)/kexidbdriver.desktop
+kde_servicetypes_DATA = kexidbdriver.desktop
 
