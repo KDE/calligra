@@ -595,7 +595,7 @@ SvgImport::parseTransform( const QString &transform )
 
 		subtransform[0] = subtransform[0].stripWhiteSpace().lower();
 		subtransform[1] = subtransform[1].simplifyWhiteSpace();
-		QRegExp reg("[a-zA-Z,( ]");
+		QRegExp reg("[,( ]");
 		QStringList params = QStringList::split(reg, subtransform[1]);
 
 		if(subtransform[0].startsWith(";") || subtransform[0].startsWith(","))
@@ -605,40 +605,40 @@ SvgImport::parseTransform( const QString &transform )
 		{
 			if(params.count() == 3)
 			{
-				float x = params[1].toFloat();
-				float y = params[2].toFloat();
+				double x = params[1].toDouble();
+				double y = params[2].toDouble();
 
 				result.translate(x, y);
-				result.rotate(params[0].toFloat());
+				result.rotate(params[0].toDouble());
 				result.translate(-x, -y);
 			}
 			else
-				result.rotate(params[0].toFloat());
+				result.rotate(params[0].toDouble());
 		}
 		else if(subtransform[0] == "translate")
 		{
 			if(params.count() == 2)
-				result.translate(params[0].toFloat(), params[1].toFloat());
+				result.translate(params[0].toDouble(), params[1].toDouble());
 			else    // Spec : if only one param given, assume 2nd param to be 0
-				result.translate(params[0].toFloat() , 0);
+				result.translate(params[0].toDouble() , 0);
 		}
 		else if(subtransform[0] == "scale")
 		{
 			if(params.count() == 2)
-				result.scale(params[0].toFloat(), params[1].toFloat());
+				result.scale(params[0].toDouble(), params[1].toDouble());
 			else    // Spec : if only one param given, assume uniform scaling
-				result.scale(params[0].toFloat(), params[0].toFloat());
+				result.scale(params[0].toDouble(), params[0].toDouble());
 		}
 		else if(subtransform[0] == "skewx")
-			result.shear(tan(params[0].toFloat() * VGlobal::pi_180), 0.0F);
+			result.shear(tan(params[0].toDouble() * VGlobal::pi_180), 0.0F);
 		else if(subtransform[0] == "skewy")
-			result.shear(tan(params[0].toFloat() * VGlobal::pi_180), 0.0F);
+			result.shear(tan(params[0].toDouble() * VGlobal::pi_180), 0.0F);
 		else if(subtransform[0] == "skewy")
-			result.shear(0.0F, tan(params[0].toFloat() * VGlobal::pi_180));
+			result.shear(0.0F, tan(params[0].toDouble() * VGlobal::pi_180));
 		else if(subtransform[0] == "matrix")
 		{
 			if(params.count() >= 6)
-				result.setMatrix(params[0].toFloat(), params[1].toFloat(), params[2].toFloat(), params[3].toFloat(), params[4].toFloat(), params[5].toFloat());
+				result.setMatrix(params[0].toDouble(), params[1].toDouble(), params[2].toDouble(), params[3].toDouble(), params[4].toDouble(), params[5].toDouble());
 		}
 	}
 
