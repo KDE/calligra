@@ -2300,30 +2300,8 @@ void OpenCalcImport::loadOasisValidation( KSpreadValidity* val, const QString& v
             valExpression = valExpression.remove( "cell-content-text-length-is-between(" );
             kdDebug()<<" valExpression :"<<valExpression<<endl;
             valExpression = valExpression.remove( ")" );
-            bool ok = false;
             QStringList listVal = QStringList::split( ",", valExpression );
-            kdDebug()<<" listVal[0] :"<<listVal[0]<<" listVal[1] :"<<listVal[1]<<endl;
-
-            val->valMin = listVal[0].toDouble(&ok);
-            if ( !ok )
-            {
-                val->valMin = listVal[0].toInt(&ok);
-#if 0
-                if ( !ok )
-                    val->valMin = listVal[0];
-#endif
-            }
-            ok=false;
-            val->valMax = listVal[1].toDouble(&ok);
-            if ( !ok )
-            {
-                val->valMax = listVal[1].toInt(&ok);
-#if 0
-
-                if ( !ok )
-                    val->valMax = listVal[1];
-#endif
-            }
+            loadOasisValidationValue( val, listVal );
         }
         else if ( valExpression.contains( "cell-content-text-length-is-not-between" ) )
         {
@@ -2334,31 +2312,7 @@ void OpenCalcImport::loadOasisValidation( KSpreadValidity* val, const QString& v
             valExpression = valExpression.remove( ")" );
             kdDebug()<<" valExpression :"<<valExpression<<endl;
             QStringList listVal = QStringList::split( ",", valExpression );
-            bool ok = false;
-
-            val->valMin = listVal[0].toDouble(&ok);
-            if ( !ok )
-            {
-                val->valMin = listVal[0].toInt(&ok);
-#if 0
-                if ( !ok )
-                   bool ok = false;
-             val->valMin = listVal[0];
-#endif
-            }
-            ok=false;
-            val->valMax = listVal[1].toDouble(&ok);
-            if ( !ok )
-            {
-                val->valMax = listVal[1].toInt(&ok);
-#if 0
-
-                if ( !ok )
-                    val->valMax = listVal[1];
-#endif
-            }
-
-
+            loadOasisValidationValue( val, listVal );
 
         }
         //TrueFunction ::= cell-content-is-whole-number() | cell-content-is-decimal-number() | cell-content-is-date() | cell-content-is-time()
@@ -2398,29 +2352,8 @@ void OpenCalcImport::loadOasisValidation( KSpreadValidity* val, const QString& v
                 valExpression = valExpression.remove( "cell-content-is-between(" );
                 valExpression = valExpression.remove( ")" );
                 QStringList listVal = QStringList::split( "," , valExpression );
-                bool ok = false;
-                kdDebug()<<" listVal[0] :"<<listVal[0]<<" listVal[1] :"<<listVal[1]<<endl;
+                loadOasisValidationValue( val, listVal );
 
-                val->valMin = listVal[0].toDouble(&ok);
-                if ( !ok )
-                {
-                    val->valMin = listVal[0].toInt(&ok);
-#if 0
-                    if ( !ok )
-                        val->valMin = listVal[0];
-#endif
-                }
-                ok=false;
-                val->valMax = listVal[1].toDouble(&ok);
-                if ( !ok )
-                {
-                    val->valMax = listVal[1].toInt(&ok);
-#if 0
-
-                    if ( !ok )
-                        val->valMax = listVal[1];
-#endif
-                }
                 val->m_cond = Between;
             }
             if ( valExpression.contains( "cell-content-is-not-between(" ) )
@@ -2428,27 +2361,7 @@ void OpenCalcImport::loadOasisValidation( KSpreadValidity* val, const QString& v
                 valExpression = valExpression.remove( "cell-content-is-not-between(" );
                 valExpression = valExpression.remove( ")" );
                 QStringList listVal = QStringList::split( ",", valExpression );
-                bool ok = false;
-                kdDebug()<<" listVal[0] :"<<listVal[0]<<" listVal[1] :"<<listVal[1]<<endl;
-                val->valMin = listVal[0].toDouble(&ok);
-                if ( !ok )
-                {
-                    val->valMin = listVal[0].toInt(&ok);
-#if 0
-                    if ( !ok )
-                        val->valMin = listVal[0];
-#endif
-                }
-                ok=false;
-                val->valMax = listVal[1].toDouble(&ok);
-                if ( !ok )
-                {
-                    val->valMax = listVal[1].toInt(&ok);
-#if 0
-                    if ( !ok )
-                        val->valMax = listVal[1];
-#endif
-                }
+                loadOasisValidationValue( val, listVal );
                 val->m_cond = Different;
             }
         }
@@ -2505,6 +2418,51 @@ void OpenCalcImport::loadOasisValidation( KSpreadValidity* val, const QString& v
     }
 }
 
+void OpenCalcImport::loadOasisValidationValue( KSpreadValidity* val, const QStringList &listVal )
+{
+    bool ok = false;
+    kdDebug()<<" listVal[0] :"<<listVal[0]<<" listVal[1] :"<<listVal[1]<<endl;
+
+    if ( val->m_allow == Allow_Date )
+    {
+        val->dateMin = QDate::fromString( listVal[0] );
+        val->dateMax = QDate::fromString( listVal[1] );
+    }
+    else if ( val->m_allow == Allow_Time )
+    {
+        val->timeMin = QTime::fromString( listVal[0] );
+        val->timeMax = QTime::fromString( listVal[1] );
+    }
+    else
+    {
+        val->valMin = listVal[0].toDouble(&ok);
+        if ( !ok )
+        {
+            val->valMin = listVal[0].toInt(&ok);
+            if ( !ok )
+                kdDebug()<<" Try to parse this value :"<<listVal[0]<<endl;
+
+#if 0
+            if ( !ok )
+                val->valMin = listVal[0];
+#endif
+        }
+        ok=false;
+        val->valMax = listVal[1].toDouble(&ok);
+        if ( !ok )
+        {
+            val->valMax = listVal[1].toInt(&ok);
+            if ( !ok )
+                kdDebug()<<" Try to parse this value :"<<listVal[1]<<endl;
+
+#if 0
+            if ( !ok )
+                val->valMax = listVal[1];
+#endif
+        }
+    }
+}
+
 
 void OpenCalcImport::loadOasisValidationCondition( KSpreadValidity* val,QString &valExpression )
 {
@@ -2544,17 +2502,30 @@ void OpenCalcImport::loadOasisValidationCondition( KSpreadValidity* val,QString 
     else
         kdDebug()<<" I don't know how to parse it :"<<valExpression<<endl;
     kdDebug()<<" value :"<<value<<endl;
-    bool ok = false;
-    val->valMin = value.toDouble(&ok);
-    if ( !ok )
+    if ( val->m_allow == Allow_Date )
     {
-        val->valMin = value.toInt(&ok);
-#if 0
-        if ( !ok )
-            val->valMin = value;
-#endif
+        val->dateMin = QDate::fromString( value );
     }
+    else if ( val->m_allow == Allow_Date )
+    {
+        val->timeMin = QTime::fromString( value );
+    }
+    else
+    {
+        bool ok = false;
+        val->valMin = value.toDouble(&ok);
+        if ( !ok )
+        {
+            val->valMin = value.toInt(&ok);
+            if ( !ok )
+                kdDebug()<<" Try to parse this value :"<<value<<endl;
 
+#if 0
+            if ( !ok )
+                val->valMin = value;
+#endif
+        }
+    }
 }
 
 

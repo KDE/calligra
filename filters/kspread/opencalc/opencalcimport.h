@@ -96,7 +96,8 @@ class OpenCalcImport : public KoFilter
   void loadOasisValidationCondition( KSpreadValidity* val,QString &valExpression );
   void loadOasisAreaName( const QDomElement&body );
   void loadOasisMasterLayoutPage( KSpreadSheet * table,KoStyleStack &styleStack );
-  QString translatePar( QString & par ) const;
+    void loadOasisValidationValue( KSpreadValidity* val, const QStringList &listVal );
+    QString translatePar( QString & par ) const;
   KoFilter::ConversionStatus openFile();
 };
 
