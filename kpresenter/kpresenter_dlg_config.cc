@@ -45,7 +45,7 @@
 
 KPConfig::KPConfig( KPresenterView* parent )
   : KDialogBase(KDialogBase::IconList,i18n("Configure KPresenter") ,
-		KDialogBase::Ok | KDialogBase::Cancel| KDialogBase::Default,
+		KDialogBase::Ok | KDialogBase::Apply | KDialogBase::Cancel| KDialogBase::Default,
 		KDialogBase::Ok)
 
 {
@@ -192,17 +192,20 @@ void configureInterfacePage::apply()
     KPresenterDoc * doc = m_pView->kPresenterDoc();
 
     config->setGroup( "Interface" );
-    if( rastX != oldRastX || rastY != oldRastX ) {
+    if( rastX != oldRastX || rastY != oldRastY ) {
         config->writeEntry( "RastX", rastX );
         config->writeEntry( "RastY", rastY );
         doc->setRasters( rastX, rastY, true );
         doc->repaint( false );
+        oldRastX=rastX;
+        oldRastY=rastY;
     }
 
     int autoSaveVal = autoSave->value();
     if( autoSaveVal != oldAutoSaveValue ) {
         config->writeEntry( "AutoSave", autoSaveVal );
         m_pView->kPresenterDoc()->setAutoSave( autoSaveVal*60 );
+        oldAutoSaveValue=autoSaveVal;
     }
 
     double newIndent = KoUnit::ptToUnit( indent->value(), doc->getUnit() );
@@ -216,6 +219,7 @@ void configureInterfacePage::apply()
     {
         config->writeEntry( "NbRecentFile", nbRecent);
         m_pView->changeNbOfRecentFiles(nbRecent);
+        oldNbRecentFiles=nbRecent;
     }
     if(ruler != doc->showRuler())
     {
@@ -272,6 +276,7 @@ void configureColorBackground::apply()
         doc->setTxtBackCol( _col );
         doc->replaceObjs();
         doc->repaint( false );
+        oldBgColor=_col;
     }
 }
 
@@ -391,6 +396,7 @@ void ConfigureMiscPage::apply()
     {
         config->writeEntry("UndoRedo",newUndo);
         doc->setUndoRedoLimit(newUndo);
+        m_oldNbRedo=newUndo;
     }
     int newStartingPage=m_variableNumberOffset->text().toInt();
     KMacroCommand * macroCmd=0L;
@@ -400,6 +406,7 @@ void ConfigureMiscPage::apply()
         KPrChangeStartingPageCommand *cmd = new KPrChangeStartingPageCommand( i18n("Change starting page number"), doc, m_oldStartingPage,newStartingPage );
         cmd->execute();
         macroCmd->addCommand(cmd);
+        m_oldStartingPage=newStartingPage;
     }
     bool b=m_displayLink->isChecked();
     bool b_new=doc->getVariableCollection()->variableSetting()->displayLink();
