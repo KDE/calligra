@@ -573,8 +573,6 @@ static bool ProcessStoreFile ( QByteArray       &byteArrayIn,
                                FilterData       &filterData,
                                KWEFKWordLeader  *leader )
 {
-    QString stringBufIn = QString::fromUtf8 ( (const char *) byteArrayIn, byteArrayIn.size () );
-
     QDomDocument qDomDocumentIn;
 
     if ( !qDomDocumentIn.setContent (byteArrayIn) )
