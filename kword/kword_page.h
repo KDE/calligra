@@ -197,8 +197,10 @@ public slots:
     { setMouseMode( MM_CREATE_CLIPART ); mmUncheckAll(); mm_menu->setItemChecked( mm_create_clipart, true ); }
     void mmTable()
     { setMouseMode( MM_CREATE_TABLE ); mmUncheckAll(); mm_menu->setItemChecked( mm_create_table, true ); }
-    void mmKSpreadTable()
-    { setMouseMode( MM_CREATE_KSPREAD_TABLE ); mmUncheckAll(); mm_menu->setItemChecked( mm_create_kspread_table, true ); }
+    void mmKSpreadTable() { 
+	setMouseMode( MM_CREATE_KSPREAD_TABLE ); mmUncheckAll(); 
+	mm_menu->setItemChecked( mm_create_kspread_table, true ); 
+    }
     void mmFormula()
     { setMouseMode( MM_CREATE_FORMULA ); mmUncheckAll(); mm_menu->setItemChecked( mm_create_formula, true ); }
     void mmPart()
@@ -217,7 +219,7 @@ protected slots:
     void doAutoScroll();
     void formatMore();
     void noInput();
-
+    
 protected:
     unsigned int ptLeftBorder();
     unsigned int ptRightBorder();
@@ -240,7 +242,8 @@ protected:
     void setupMenus();
     void mmUncheckAll();
 
-    void selectText( int _pos, int _len, int _frameSetNum, KWTextFrameSet *_frameset, KWParag *_parag, bool _select = true );
+    void selectText( int _pos, int _len, int _frameSetNum, KWTextFrameSet *_frameset, 
+		     KWParag *_parag, bool _select = true );
 
     void setRulerFirstIndent( KoRuler *ruler, KWUnit _value );
     void setRulerLeftIndent( KoRuler *ruler, KWUnit _value );
@@ -367,7 +370,7 @@ protected:
     QStringList cachedLines;
     KWFormatContext *oldFc;
     QPoint cachedContentsPos;
-    bool _erase, _setErase, redrawOnlyCurrFrameset;
+    bool _erase, _setErase, redrawOnlyCurrFrameset, _scrolled;
     int currFrameSet;
 
 };
