@@ -1085,9 +1085,36 @@ bool KWordDocument::printLine( KWFormatContext &_fc, QPainter &_painter, int xOf
 				 _fc.getParag()->getParagLayout()->getPTLineSpacing() + plus,buffer );
 	      //cerr << "#'" << buffer << "'" << endl;
 	      i = 0;
-	      // Blanks are not printed at all
-	      if ( text[_fc.getTextPos()].c == ' ' )
- 		_fc.cursorGotoNextChar(_painter);
+	      // Blanks are not printed at all - but we have to underline it in some cases
+	      if (text[_fc.getTextPos()].c == ' ')
+		{
+		  bool goneForward = false;
+		  if (_fc.getUnderline() && _fc.getTextPos() > _fc.getLineStartPos() && _fc.getTextPos() < _fc.getLineEndPos() - 1)
+		    {
+		      if (text[_fc.getTextPos() - 1].c != 0 && text[_fc.getTextPos() + 1].c != 0)
+			{
+			  KWCharFormat *f1 = (KWCharFormat*)text[_fc.getTextPos() - 1].attrib;
+			  KWCharFormat *f2 = (KWCharFormat*)text[_fc.getTextPos() + 1].attrib;
+			  if (f1->getFormat()->getUnderline() && f2->getFormat()->getUnderline())
+			    {
+			      KWFormat *_f = f1->getFormat();
+			      QFontMetrics fm(*findDisplayFont(_f->getUserFont(),_f->getPTFontSize(),_f->getWeight(),
+							       _f->getItalic(),_f->getUnderline()));
+			      
+			      _painter.setPen(QPen(_fc.getColor(),fm.lineWidth(),SolidLine));
+			      int ly = _fc.getPTY() + _fc.getLineHeight() - _fc.getPTMaxDescender() - yOffset - 
+				 _fc.getParag()->getParagLayout()->getPTLineSpacing() + plus + fm.underlinePos() + fm.lineWidth() / 2;
+			      int lx1 = _fc.getPTPos();
+			      _fc.cursorGotoNextChar(_painter);
+			      goneForward = true;
+			      int lx2 = _fc.getPTPos();
+			      _painter.drawLine(lx1,ly,lx2,ly);
+			    }
+			}
+			  
+		    }
+		  if (!goneForward) _fc.cursorGotoNextChar(_painter);
+		}
 	    }
 	}
     }
@@ -1106,10 +1133,6 @@ void KWordDocument::drawMarker(KWFormatContext &_fc,QPainter *_painter,int xOffs
   pen.setWidth(2);
   _painter->setPen(pen);
   
-//   _painter->drawLine(_fc.getPTPos() - xOffset + 1,
-// 		     _fc.getPTY() + _fc.getPTMaxAscender() - _fc.getPTAscender() - yOffset,
-// 		     _fc.getPTPos() - xOffset + 1,
-// 		     _fc.getPTY() + _fc.getPTMaxAscender() + _fc.getPTDescender() - yOffset);
   unsigned int diffx1 = 1;
   unsigned int diffx2 = 1;
   if (_fc.getItalic())

@@ -614,17 +614,19 @@ void KWFormatContext::cursorGotoPixelLine(unsigned int mx,unsigned int my,QPaint
 void KWFormatContext::cursorGotoPixelInLine(unsigned int mx,unsigned int my,QPainter &_painter)
 {
   if (isCursorAtLineEnd()) return;
-  unsigned int oldPTPos;
+  unsigned int oldPTPos,oldDist = 0,dist = 0;
 
   while (!isCursorAtLineEnd())
     {
       oldPTPos = ptPos;
       cursorGotoRight(_painter);
-      if (mx >= oldPTPos && mx <= ptPos || textPos == lineStartPos)
+      dist = (ptPos - oldPTPos) / 3;
+      if (mx >= oldPTPos - oldDist && mx <= ptPos - dist || textPos == lineStartPos)
 	{
 	  cursorGotoLeft(_painter);
 	  return;
 	}
+      oldDist = dist;
     }      
 }
 

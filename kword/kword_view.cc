@@ -464,7 +464,7 @@ void KWordView::setTool(MouseMode _mouseMode)
 }
 
 /*===============================================================*/
-void KWordView::updateStyle(QString _styleName)
+void KWordView::updateStyle(QString _styleName,bool _updateFormat = true)
 {
   styleList.find(_styleName);
 
@@ -482,7 +482,7 @@ void KWordView::updateStyle(QString _styleName)
   if (_styleName == "Bullet List")
     m_vToolBarText->setButton(ID_USORT_LIST,true);  
 
-  setFormat(m_pKWordDoc->findParagLayout(_styleName)->getFormat(),false,true,false);
+  setFormat(m_pKWordDoc->findParagLayout(_styleName)->getFormat(),false,_updateFormat,false);
 }
 
 /*===============================================================*/

@@ -164,7 +164,7 @@ public:
   KWordGUI *getGUI() { return gui; }
   void uncheckAllTools();
   void setTool(MouseMode _mouseMode);
-  void updateStyle(QString _styleName);
+  void updateStyle(QString _styleName,bool _updateFormat = true);
   void updateStyleList();
 
 public slots:
