@@ -267,7 +267,7 @@ void KSpreadGoalSeekDlg::startCalc(double _start, double _goal)
   // TODO: make this configurable
   double eps = 0.0000001;
 
-  double startA, startB;
+  double startA = 0.0, startB;
   double resultA, resultB;
 
   // save old value

@@ -323,7 +323,7 @@ void KSpreadConsolidate::slotOk()
 	    {
 	      if ( c->valueString() == *s )
 	      {
-		KSpreadCell *c2 = t->cellAt( i, y + (*it).range.top() );
+//		KSpreadCell *c2 = t->cellAt( i, y + (*it).range.top() );
 		count++;
 		if ( it != ranges.begin() ) formula += ";";
 		formula += (*it).tableName + "!";
@@ -403,7 +403,7 @@ void KSpreadConsolidate::slotOk()
 	      QString v = c->valueString();
 	      if ( !v.isEmpty() && *s == v )
 	      {
-		KSpreadCell *c2 = t->cellAt( x + (*it).range.left(), i );
+//		KSpreadCell *c2 = t->cellAt( x + (*it).range.left(), i );
 		count++;
 		if ( it != ranges.begin() ) formula += ";";
 		formula += (*it).tableName + "!";
