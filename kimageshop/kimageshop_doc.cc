@@ -37,6 +37,7 @@
 #include <opUIUtils.h>
 
 #include <koStream.h>
+#include <koStoreStream.h>
 
 #include "kimageshop_doc.h"
 #include "kimageshop_shell.h"
