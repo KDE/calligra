@@ -31,6 +31,7 @@
 #include <kbuttonbox.h>
 #include <qstrlist.h>
 #include <qptrlist.h>
+#include <kdebug.h>
 
 KivioPageShow::KivioPageShow( KivioView* parent, const char* name )
 : KDialogBase( parent, name, true, i18n("Show Page"), Ok|Cancel, Ok )
@@ -50,15 +51,8 @@ KivioPageShow::KivioPageShow( KivioView* parent, const char* name )
   list = new QListBox(view);
   lay1->addWidget( list );
 
-  QString text;
-  QStringList::Iterator it;
   QStringList tabsList = m_pView->tabBar()->listhide();
-
-  for ( it = tabsList.begin(); it != tabsList.end(); ++it )
-  {
-    text = *it;
-    list->insertItem(text);
-  }
+  list->insertStringList(tabsList);
 
   connect( list, SIGNAL(doubleClicked(QListBoxItem *)), this, SLOT(slotDoubleClicked(QListBoxItem *)));
   resize( 200, 150 );
