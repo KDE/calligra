@@ -40,7 +40,7 @@ namespace KexiPart
  *  - the fileds in datasources
  *  - variables (e.g. query variables)
  */
-class DataSource
+class KEXICORE_EXPORT DataSource
 {
 	public:
 		DataSource(Part *part);
