@@ -1507,8 +1507,7 @@ void KWView::formatPage()
         doc->setPageLayout( pgLayout, cl, kwhf );
         gui->getVertRuler()->setPageLayout( pgLayout );
         gui->getHorzRuler()->setPageLayout( pgLayout );
-        doc->setModified(true);
-        gui->canvasWidget()->repaintAll();
+        gui->canvasWidget()->repaintAll(true);
         KWFrame *frame=doc->getFirstSelectedFrame();
         if(frame!=0L && frame->getFrameSet() && frame->getFrameSet()->getFrameType() == FT_TEXT)
         {
@@ -2602,7 +2601,7 @@ void KWView::newPageLayout( KoPageLayout _layout )
 
     gui->getHorzRuler()->setPageLayout( _layout );
     gui->getVertRuler()->setPageLayout( _layout );
-    gui->canvasWidget()->repaintAll();
+    gui->canvasWidget()->repaintAll(true);
 
     KWFrame *frame=doc->getFirstSelectedFrame();
     if(frame!=0L && frame->getFrameSet() && frame->getFrameSet()->getFrameType() == FT_TEXT)
