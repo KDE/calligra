@@ -381,7 +381,7 @@ VPath::counterClockwise() const
 	// same lowest coordinate, the rightmost of those vertices) and then take
 	// the cross product of the edges fore and aft of it."
 
-	if( !m_isClosed || m_number <= 1 )
+	if( !m_isClosed || count() <= 1 )
 		return false;
 
 	VSegment* segment = m_first;
@@ -431,7 +431,7 @@ VPath::counterClockwise() const
 void
 VPath::revert()
 {
-	// In the case the list is (nearly) empty (which should actually never happen):
+	// Catch case where the list is (nearly) empty (which should actually never happen):
 	if( count() <= 1 )
 		return;
 
@@ -553,7 +553,7 @@ VPath::operator=( const VPath& list )
 	clear();
 
 	VSegment* segment = list.m_first;
-	while ( segment )
+	while( segment )
 	{
 		append( segment->clone() );
 		segment = segment->m_next;
@@ -794,12 +794,12 @@ VPath::locate( uint index )
 
 	if( forward )
 	{
-		while ( distance-- )
+		while( distance-- )
 			segment = segment->m_next;
 	}
 	else
 	{
-		while ( distance-- )
+		while( distance-- )
 			segment = segment->m_prev;
 	}
 
@@ -850,12 +850,26 @@ VPathIterator::operator=( const VPathIterator& itr )
 }
 
 VSegment*
+VPathIterator::current() const
+{
+	// If m_current points to a deleted segment, find the next not
+	// deleted segment:
+	if(
+		m_current &&
+		m_current->state() == VSegment::deleted )
+	{
+		return m_current->next();
+	}
+
+	return m_current;
+}
+
+VSegment*
 VPathIterator::operator()()
 {
-	if( m_current )
+	if( VSegment* const old = current() )
 	{
-		VSegment* const old = m_current;
-		m_current = m_current->m_next;
+		m_current = current()->next();
 		return old;
 	}
 
@@ -865,8 +879,8 @@ VPathIterator::operator()()
 VSegment*
 VPathIterator::operator++()
 {
-	if( m_current )
-		return m_current = m_current->m_next;
+	if( current() )
+		return m_current = current()->next();
 
 	return 0L;
 }
@@ -874,17 +888,17 @@ VPathIterator::operator++()
 VSegment*
 VPathIterator::operator+=( uint i )
 {
-	while ( m_current && i-- )
-		m_current = m_current->m_next;
+	while( current() && i-- )
+		m_current = current()->next();
 
-	return m_current;
+	return current();
 }
 
 VSegment*
 VPathIterator::operator--()
 {
-	if( m_current )
-		return m_current = m_current->m_prev;
+	if( current() )
+		return m_current = current()->prev();
 
 	return 0L;
 }
@@ -892,9 +906,9 @@ VPathIterator::operator--()
 VSegment*
 VPathIterator::operator-=( uint i )
 {
-	while ( m_current && i-- )
-		m_current = m_current->m_prev;
+	while( current() && i-- )
+		m_current = current()->prev();
 
-	return m_current;
+	return current();
 }
 

@@ -7,6 +7,11 @@ REAL BUGS:
 -	copying works wrong: the last selected shape is pasted instead of the shape one copied
 
 TODO:
+-	use VPathIterator everywhere instead of direct VPath access where not necessary.
+	this way you'll get node undo/redo automatically.
+-	port all sophisticated VPath::functions like counterClockwise() to VPathIterator.
+-	add undo/redo to shape commands like VFlattenCmd etc
+
 -	move the stuff from PAPER to DOC. PAGE would be better than PAPER, and since we have a
 	single page format...
 -	if selecting many shapes, the fill/stroke state should be "unknown",
@@ -17,7 +22,6 @@ TODO:
 	our current non-conforming solution.
 -	port path commands to vgroup::insertNewDeleteOld(), maybe add a vpathcommand
 	similar to vshapecommand
--	add undo/redo to shape commands like VFlattenCmd etc
 -	allow for multiple strokes and fills in VPath which get rendered in the order they occur.
 -	use inside/intersection tests in vpath::combine() for changing winding.
 -	use vflatten in vselectool for more precise selection (lenny)

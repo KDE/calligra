@@ -27,13 +27,16 @@
 
 class QDomElement;
 class QWMatrix;
+class VPathIteratorList;
 class VSegment;
 class VVisitor;
 
 
-// The general list stuff is stolen from Qt.
-
-class VPathIteratorList;
+/**
+ * VPath provides a sophisticated list of VSegment. Noted: it also may contain
+ * segments which are marked "deleted". If you are not interested in those undo/redo
+ * housholding data, please always use a VPathIterator to access segments.
+ */
 
 class VPath : public VObject
 {
@@ -121,6 +124,12 @@ private:
 };
 
 
+/**
+ * VPathIterator provides an iterator class for highlevel path access.
+ * Use VPathIterator whenever you want to access segments but are not interested
+ * in undo/redo operations with (deleted) segments.
+ */
+
 class VPathIterator
 {
 friend class VPathIteratorList;
@@ -132,7 +141,7 @@ public:
 
 	VPathIterator& operator=( const VPathIterator& itr );
 
-	VSegment* current() const { return m_current; }
+	VSegment* current() const;
 	VSegment* operator()();
 	VSegment* operator++();
 	VSegment* operator+=( uint i );
