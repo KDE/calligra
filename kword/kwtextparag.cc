@@ -373,7 +373,7 @@ void KWTextParag::drawParagString( QPainter &painter, const QString &s, int star
                                  selectionEnds, cg, rightToLeft );
 
     KWDocument * doc = textDocument()->textFrameSet()->kWordDocument();
-    if ( doc && doc->viewFormattingChars() )
+    if ( doc && doc->viewFormattingChars() && painter.device()->devType() != QInternal::Printer )
     {
         painter.save();
         QPen pen( Qt::red ); // ?
