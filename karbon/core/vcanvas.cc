@@ -179,6 +179,13 @@ VCanvas::viewportPaintEvent( QPaintEvent *e )
 }
 
 void
+VCanvas::setViewport( double centerX, double centerY )
+{
+	setContentsPos( centerX * contentsWidth() - visibleWidth() / 2,
+					centerY * contentsHeight() - visibleHeight() / 2 );
+}
+
+void
 VCanvas::drawContents( QPainter* painter, int clipx, int clipy,
 	int clipw, int cliph  )
 {

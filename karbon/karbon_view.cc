@@ -625,8 +625,7 @@ KarbonView::zoomChanged()
 	VPainter *painter = painterFactory()->editpainter();
 	painter->setZoomFactor( zoomFactor );
 
-	m_canvas->setContentsPos( centerX * m_canvas->contentsWidth() - m_canvas->visibleWidth() / 2,
-							  centerY * m_canvas->contentsHeight() - m_canvas->visibleHeight() / 2 );
+	m_canvas->setViewport( centerX, centerY );
 	m_canvas->repaintAll();
 
 	m_canvas->setFocus();

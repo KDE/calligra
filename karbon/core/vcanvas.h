@@ -51,6 +51,8 @@ public:
 	KoPoint toContents( const KoPoint & ) const;
 	KoRect boundingBox() const;
 
+	void setViewport( double centerX, double centerY );
+
 protected:
 	virtual void focusInEvent( QFocusEvent * );
 	virtual void viewportPaintEvent( QPaintEvent* );
