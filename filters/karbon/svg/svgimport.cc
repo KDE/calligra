@@ -122,6 +122,7 @@ SvgImport::convert()
 	double height	= !docElem.attribute( "height" ).isEmpty() ? parseUnit( docElem.attribute( "height" ) ) : 841.0;
 	m_document.setWidth( width );
 	m_document.setHeight( height );
+	m_outerRect = m_document.boundingBox();
 
 	// undo y-mirroring
 	if( !docElem.attribute( "viewBox" ).isEmpty() )
@@ -131,6 +132,8 @@ SvgImport::convert()
 		QStringList points = QStringList::split( ' ', viewbox.replace( QRegExp(","), " ").simplifyWhiteSpace() );
 
 		gc->matrix.scale( width / points[2].toFloat() , height / points[3].toFloat() );
+		m_outerRect.setWidth( m_outerRect.width() * ( points[2].toFloat() / width ) );
+		m_outerRect.setHeight( m_outerRect.height() * ( points[3].toFloat() / height ) );
 	}
 
 	m_gc.push( gc );
@@ -415,7 +418,7 @@ SvgImport::parsePA( VObject *obj, GraphicsContext *gc, const QString &command, c
 		}
 	}
 	else if( command == "stroke-width" )
-		gc->stroke.setLineWidth( parseUnit( params, true, true ) );
+		gc->stroke.setLineWidth( parseUnit( params, true, true, m_outerRect ) );
 	else if( command == "stroke-linejoin" )
 	{
 		if( params == "miter" )
@@ -580,10 +583,10 @@ SvgImport::parseGroup( VGroup *grp, const QDomElement &e )
 		else if( b.tagName() == "rect" )
 		{
 			addGraphicContext();
-			double x		= parseUnit( b.attribute( "x" ) );
-			double y		= parseUnit( b.attribute( "y" ) );
-			double width	= parseUnit( b.attribute( "width" ), true, false );
-			double height	= parseUnit( b.attribute( "height" ), false, true );
+			double x		= parseUnit( b.attribute( "x" ), true, false, m_outerRect );
+			double y		= parseUnit( b.attribute( "y" ), false, true, m_outerRect );
+			double width	= parseUnit( b.attribute( "width" ), true, false, m_outerRect );
+			double height	= parseUnit( b.attribute( "height" ), false, true, m_outerRect );
 			setupTransform( b );
 			obj = new VRectangle( 0L, KoPoint( x, height + y ) , width, height );
 		}

@@ -90,6 +90,7 @@ private:
 	VDocument						m_document;
 	QPtrStack<GraphicsContext>		m_gc;
 	QMap<QString, GradientHelper>	m_gradients;
+	KoRect							m_outerRect;
 };
 
 #endif
