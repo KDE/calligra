@@ -12,7 +12,7 @@ bin_PROGRAMS = kautoformEdit
 ####### Files
 
 kautoformEdit_SOURCES = main.cc autoformEdit.cc editWidget.cc \
-	drawWidget.cc ../atfinterpreter.cc pntInsDia.cc afchoose.cc \
+	drawWidget.cc atfinterpreter.cc pntInsDia.cc afchoose.cc \
 	saveAsDia.cc
 
 noinst_HEADERS	= autoformEdit.h editWidget.h drawWidget.h atfinterpreter.h\
@@ -24,13 +24,7 @@ SRCMETA = autoformEdit.moc editWidget.moc drawWidget.moc atfinterpreter.moc\
 ####### Build rules
 
 
-all: symlinks $(TARGET)
-
-symlinks:	
-	ln -sf ../atfinterpreter.cc atfinterpreter.cc
-	ln -sf ../atfinterpreter.h atfinterpreter.h
-	ln -sf ../afchoose.cc afchoose.cc
-	ln -sf ../afchoose.h afchoose.h
+all:  $(TARGET)
 
 ######## Meta objects 
 

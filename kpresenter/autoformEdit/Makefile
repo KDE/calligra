@@ -1,79 +1,397 @@
+# Generated automatically from Makefile.in by configure.
+# Makefile.in generated automatically by automake 1.2 from Makefile.am
+
+# Copyright (C) 1994, 1995, 1996, 1997 Free Software Foundation, Inc.
+# This Makefile.in is free software; the Free Software Foundation
+# gives unlimited permission to copy, distribute and modify it.
+
 ####### General stuff
 
-INCDIR 	= -I/usr/X11R6/include -I$(QTDIR)/include -I$(KDEDIR)/include -I../../lib/kofficeui
-LDFLAGS = -s -L/usr/X11R6/lib -L/usr/lib -L$(KDEDIR)/lib -L$(QTDIR)/lib -L../../lib/kofficeui -lkdecore -lkdeui -lqt -lm -lXext -lX11 -lkofficeui -lkofficecore -lop -lkom -lkfile -lkfm -lkoml
-CFLAGS	=  
 
-MOC	= moc
-CC 	= gcc
+SHELL = /bin/sh
+
+srcdir = .
+top_srcdir = ../..
+prefix = /usr/local/kde
+exec_prefix = ${prefix}
+
+bindir = /usr/local/kde/bin
+sbindir = ${exec_prefix}/sbin
+libexecdir = ${exec_prefix}/libexec
+datadir = ${prefix}/share
+sysconfdir = ${prefix}/etc
+sharedstatedir = ${prefix}/com
+localstatedir = ${prefix}/var
+libdir = ${exec_prefix}/lib
+infodir = ${prefix}/info
+mandir = ${prefix}/man
+includedir = ${prefix}/include
+oldincludedir = /usr/include
+
+pkgdatadir = $(datadir)/koffice
+pkglibdir = $(libdir)/koffice
+pkgincludedir = $(includedir)/koffice
+
+top_builddir = ../..
+
+ACLOCAL = aclocal
+AUTOCONF = autoconf
+AUTOMAKE = automake
+AUTOHEADER = autoheader
+
+INSTALL = /usr/bin/install -c
+INSTALL_PROGRAM = ${INSTALL}
+INSTALL_DATA = ${INSTALL} -m 644
+INSTALL_SCRIPT = ${INSTALL_PROGRAM}
+transform = s,x,x,
+
+NORMAL_INSTALL = true
+PRE_INSTALL = true
+POST_INSTALL = true
+NORMAL_UNINSTALL = true
+PRE_UNINSTALL = true
+POST_UNINSTALL = true
+build_alias = @build_alias@
+build_triplet = @build@
+host_alias = alphaev56-unknown-linux-gnu
+host_triplet = alphaev56-unknown-linux-gnu
+target_alias = @target_alias@
+target_triplet = @target@
+CC = gcc
+CPP = gcc -E
+CXX = g++
+GLINC = @GLINC@
+GLLIB = @GLLIB@
+GMSGFMT = @GMSGFMT@
+KDE_EXTRA_RPATH = 
+KDE_INCLUDES = -I/usr/local/kde/include
+KDE_LDFLAGS = -L/usr/local/kde/lib
+KDE_RPATH = -rpath $(kde_libraries) -rpath $(x_libraries)
+LD = /usr/lib/gcc-lib/alphaev56-unknown-linux-gnu/egcs-2.90.27/ld
+LIBCOMPAT = 
+LIBCRYPT = -lcrypt
+LIBDL = @LIBDL@
+LIBJPEG = @LIBJPEG@
+LIBMICO = -lmico2.0.5 -ldl
+LIBOBJS = @LIBOBJS@
+LIBPYTHON = -lpython1.5
+LIBSOCKET = 
+LIBTOOL = $(SHELL) $(top_builddir)/libtool
+LIBUCB = 
+LN_S = ln -s
+MAKEINFO = makeinfo
+MOC = /usr/bin/moc
+MSGFMT = @MSGFMT@
+NM = /usr/bin/nm -B
+PACKAGE = koffice
+PAMINC = @PAMINC@
+PAMLIBPATHS = @PAMLIBPATHS@
+PAMLIBS = @PAMLIBS@
+PYTHONINC = -I/usr/local/include/python1.5
+PYTHONLIB = -L/usr/local/lib/python1.5/config
+QT_INCLUDES = -I/usr/lib/qt/include
+QT_LDFLAGS = 
+RANLIB = ranlib
+USE_NLS = @USE_NLS@
+VERSION = 0.1
+XGETTEXT = @XGETTEXT@
+XPMINC = @XPMINC@
+XPMLIB = @XPMLIB@
+X_EXTRA_LIBS = 
+X_INCLUDES = -I/usr/X11R6/include
+X_LDFLAGS = -L/usr/X11R6/lib
+all_includes = -I/usr/local/kde/include -I/usr/lib/qt/include -I/usr/X11R6/include
+all_libraries = -L/usr/local/kde/lib -L/usr/X11R6/lib
+idldir = $(prefix)/idl
+install_root = 
+kde_appsdir = /usr/local/kde/share/applnk
+kde_bindir = /usr/local/kde/bin
+kde_cgidir = /usr/local/kde/cgi-bin
+kde_confdir = /usr/local/kde/share/config
+kde_datadir = /usr/local/kde/share/apps
+kde_htmldir = /usr/local/kde/share/doc/HTML
+kde_icondir = /usr/local/kde/share/icons
+kde_includes = /usr/local/kde/include
+kde_libraries = /usr/local/kde/lib
+kde_locale = /usr/local/kde/share/locale
+kde_mimedir = /usr/local/kde/share/mimelnk
+kde_minidir = /usr/local/kde/share/icons/mini
+kde_partsdir = /usr/local/kde/parts
+kde_sounddir = /usr/local/kde/share/sounds
+kde_toolbardir = /usr/local/kde/share/toolbar
+kde_wallpaperdir = /usr/local/kde/share/wallpapers
+qt_includes = /usr/lib/qt/include
+qt_libraries = 
+x_includes = /usr/X11R6/include
+x_libraries = /usr/X11R6/lib
+
+INCLUDES = $(all_includes) -I../../lib/kofficeui
+LDFLAGS =  $(all_libraries)
+LDADD =  ../../lib/kofficeui/libkofficeui.la \
+	../../lib/kofficecore/libkofficecore.la ../../lib/koml/libkoml.la \
+	-lkdecore -lkdeui -lqt -lm -lXext -lX11 -lkofficeui -lop -lkom \
+	-lkfile -lkfm -lkoml
+
+bin_PROGRAMS = kautoformEdit
 
 ####### Files
 
-SOURCES = 	main.cc autoformEdit.cc editWidget.cc drawWidget.cc atfinterpreter.cc\
-		pntInsDia.cc afchoose.cc saveAsDia.cc
+kautoformEdit_SOURCES = main.cc autoformEdit.cc editWidget.cc \
+	drawWidget.cc atfinterpreter.cc pntInsDia.cc afchoose.cc \
+	saveAsDia.cc
 
-HEADERS	=	autoformEdit.h editWidget.h drawWidget.h atfinterpreter.h\
+noinst_HEADERS	= autoformEdit.h editWidget.h drawWidget.h atfinterpreter.h\
 		pntInsDia.h afchoose.h saveAsDia.h 
 
-SRCMETA =	autoformEdit.moc editWidget.moc drawWidget.moc atfinterpreter.moc\
-		pntInsDia.moc afchoose.moc saveAsDia.moc
+SRCMETA = autoformEdit.moc editWidget.moc drawWidget.moc atfinterpreter.moc\
+	pntInsDia.moc afchoose.moc saveAsDia.moc
+mkinstalldirs = $(SHELL) $(top_srcdir)/mkinstalldirs
+CONFIG_HEADER = ../../config.h
+CONFIG_CLEAN_FILES = 
+PROGRAMS =  $(bin_PROGRAMS)
 
-OBJECTS =	main.o autoformEdit.o editWidget.o drawWidget.o atfinterpreter.o\
-		pntInsDia.o afchoose.o saveAsDia.o
 
-TARGET	=	kautoformEdit
+DEFS = -DHAVE_CONFIG_H -I. -I$(srcdir) -I../..
+CPPFLAGS = 
+LIBS = 
+kautoformEdit_OBJECTS =  main.o autoformEdit.o editWidget.o drawWidget.o \
+atfinterpreter.o pntInsDia.o afchoose.o saveAsDia.o
+kautoformEdit_LDADD = $(LDADD)
+kautoformEdit_DEPENDENCIES =  ../../lib/kofficeui/libkofficeui.la \
+../../lib/kofficecore/libkofficecore.la ../../lib/koml/libkoml.la
+kautoformEdit_LDFLAGS = 
+CXXFLAGS = -O2 -Wall
+CXXCOMPILE = $(CXX) $(DEFS) $(INCLUDES) $(CPPFLAGS) $(CXXFLAGS)
+LTCXXCOMPILE = $(LIBTOOL) --mode=compile $(CXX) $(DEFS) $(INCLUDES) $(CPPFLAGS) $(CXXFLAGS)
+CXXLINK = $(LIBTOOL) --mode=link $(CXX) $(CXXFLAGS) $(LDFLAGS) -o $@
+HEADERS =  $(noinst_HEADERS)
 
-####### Install
+DIST_COMMON =  ChangeLog Makefile.am Makefile.in
 
-INSTALL = install -m 0755 -s
-INSTALL_SHELL = install -m 0755
-INSTALL_DATA = install -m 0644
-INSTALL_DIR = install -d -m 0755
-INSTALL_DIR_PRIVATE = install -d -m 0700
 
-####### Implicit rules
+DISTFILES = $(DIST_COMMON) $(SOURCES) $(HEADERS) $(TEXINFOS) $(EXTRA_DIST)
 
-.SUFFIXES: .cc
+TAR = tar
+GZIP = --best
+DEP_FILES =  .deps/afchoose.P .deps/atfinterpreter.P \
+.deps/autoformEdit.P .deps/drawWidget.P .deps/editWidget.P .deps/main.P \
+.deps/pntInsDia.P .deps/saveAsDia.P
+CXXMKDEP = $(CXX) -M $(DEFS) $(INCLUDES) $(CPPFLAGS) $(CXXFLAGS)
+SOURCES = $(kautoformEdit_SOURCES)
+OBJECTS = $(kautoformEdit_OBJECTS)
 
-.cc.o:
-	$(CC) -g -c $(CFLAGS) $(DEFS) $(INCDIR) $(HELP) $<
+default: all
+
+.SUFFIXES:
+.SUFFIXES: .c .cc .lo .o
+$(srcdir)/Makefile.in: Makefile.am $(top_srcdir)/configure.in $(ACLOCAL_M4) 
+	cd $(top_srcdir) && $(AUTOMAKE) --gnu kpresenter/autoformEdit/Makefile
+
+Makefile: $(srcdir)/Makefile.in $(top_builddir)/config.status $(BUILT_SOURCES)
+	cd $(top_builddir) \
+	  && CONFIG_FILES=$(subdir)/$@ CONFIG_HEADERS= $(SHELL) ./config.status
+
+
+mostlyclean-binPROGRAMS:
+
+clean-binPROGRAMS:
+	test -z "$(bin_PROGRAMS)" || rm -f $(bin_PROGRAMS)
+
+distclean-binPROGRAMS:
+
+maintainer-clean-binPROGRAMS:
+
+install-binPROGRAMS: $(bin_PROGRAMS)
+	@$(NORMAL_INSTALL)
+	$(mkinstalldirs) $(bindir)
+	@list='$(bin_PROGRAMS)'; for p in $$list; do \
+	  if test -f $$p; then \
+	    echo " $(LIBTOOL)  --mode=install $(INSTALL_PROGRAM) $$p $(bindir)/`echo $$p|sed '$(transform)'`"; \
+	    $(LIBTOOL)  --mode=install $(INSTALL_PROGRAM) $$p $(bindir)/`echo $$p|sed '$(transform)'`; \
+	  else :; fi; \
+	done
+
+uninstall-binPROGRAMS:
+	$(NORMAL_UNINSTALL)
+	list='$(bin_PROGRAMS)'; for p in $$list; do \
+	  rm -f $(bindir)/`echo $$p|sed '$(transform)'`; \
+	done
+
 .c.o:
-	$(CC) -g -c $(CFLAGS) $(DEFS) $(INCDIR) $(HELP) $<
+	$(COMPILE) -c $<
+
+mostlyclean-compile:
+	rm -f *.o core
+
+clean-compile:
+
+distclean-compile:
+	rm -f *.tab.c
+
+maintainer-clean-compile:
+
+.c.lo:
+	$(LIBTOOL) --mode=compile $(COMPILE) -c $<
+
+mostlyclean-libtool:
+	rm -f *.lo
+
+clean-libtool:
+	rm -rf .libs
+
+distclean-libtool:
+
+maintainer-clean-libtool:
+
+kautoformEdit: $(kautoformEdit_OBJECTS) $(kautoformEdit_DEPENDENCIES)
+	@rm -f kautoformEdit
+	$(CXXLINK) $(kautoformEdit_LDFLAGS) $(kautoformEdit_OBJECTS) $(kautoformEdit_LDADD) $(LIBS)
+.cc.o:
+	$(CXXCOMPILE) -c $<
+.cc.lo:
+	$(LTCXXCOMPILE) -c $<
+
+tags: TAGS
+
+ID: $(HEADERS) $(SOURCES)
+	here=`pwd` && cd $(srcdir) && mkid -f$$here/ID $(SOURCES) $(HEADERS)
+
+TAGS:  $(HEADERS) $(SOURCES)  $(TAGS_DEPENDENCIES)
+	tags=; \
+	here=`pwd`; \
+	test -z "$(ETAGS_ARGS)$(SOURCES)$(HEADERS)$$tags" \
+	  || (cd $(srcdir) && etags $(ETAGS_ARGS) $$tags  $(SOURCES) $(HEADERS) -o $$here/TAGS)
+
+mostlyclean-tags:
+
+clean-tags:
+
+distclean-tags:
+	rm -f TAGS ID
+
+maintainer-clean-tags:
+
+distdir = $(top_builddir)/$(PACKAGE)-$(VERSION)/$(subdir)
+
+subdir = kpresenter/autoformEdit
+
+distdir: $(DISTFILES)
+	here=`cd $(top_builddir) && pwd`; \
+	top_distdir=`cd $(top_distdir) && pwd`; \
+	cd $(top_srcdir) \
+	  && $(AUTOMAKE) --include-deps --build-dir=$$here --srcdir-name=$(top_srcdir) --output-dir=$$top_distdir --gnu kpresenter/autoformEdit/Makefile
+	@for file in $(DISTFILES); do \
+	  d=$(srcdir); \
+	  test -f $(distdir)/$$file \
+	  || ln $$d/$$file $(distdir)/$$file 2> /dev/null \
+	  || cp -p $$d/$$file $(distdir)/$$file; \
+	done
+
+MKDEP = gcc -M $(DEFS) $(INCLUDES) $(CPPFLAGS) $(CFLAGS)
+
+DEPS_MAGIC := $(shell mkdir .deps > /dev/null 2>&1 || :)
+-include .deps/.P
+.deps/.P: $(BUILT_SOURCES)
+	echo > $@
+
+-include $(DEP_FILES)
+
+mostlyclean-depend:
+
+clean-depend:
+
+distclean-depend:
+
+maintainer-clean-depend:
+	rm -rf .deps
+
+.deps/%.P: %.c
+	@echo "Computing dependencies for $<..."
+	@o='o'; \
+	test -n "$o" && o='$$o'; \
+	$(MKDEP) $< >$@.tmp \
+	  && sed "s,^\(.*\)\.o:,\1.$$o \1.l$$o $@:," < $@.tmp > $@ \
+	  && rm -f $@.tmp
+
+.deps/%.P: %.cc
+	@echo "Computing dependencies for $<..."
+	@o='o'; \
+	$(CXXMKDEP) $< >$@.tmp \
+	  && sed "s,^\(.*\)\.o:,\1.$$o \1.l$$o $@:," < $@.tmp > $@ \
+	  && rm -f $@.tmp
+info:
+dvi:
+check: all
+	$(MAKE)
+installcheck:
+install-exec: install-binPROGRAMS
+	@$(NORMAL_INSTALL)
+
+install-data: 
+	@$(NORMAL_INSTALL)
+
+install: install-exec install-data all
+	@:
+
+uninstall: uninstall-binPROGRAMS
+
+all: Makefile $(PROGRAMS) $(HEADERS)
+
+install-strip:
+	$(MAKE) INSTALL_PROGRAM='$(INSTALL_PROGRAM) -s' INSTALL_SCRIPT='$(INSTALL_PROGRAM)' install
+installdirs:
+	$(mkinstalldirs)  $(bindir)
+
+
+mostlyclean-generic:
+	test -z "$(MOSTLYCLEANFILES)" || rm -f $(MOSTLYCLEANFILES)
+
+clean-generic:
+	test -z "$(CLEANFILES)" || rm -f $(CLEANFILES)
+
+distclean-generic:
+	rm -f Makefile $(DISTCLEANFILES)
+	rm -f config.cache config.log stamp-h stamp-h[0-9]*
+	test -z "$(CONFIG_CLEAN_FILES)" || rm -f $(CONFIG_CLEAN_FILES)
+
+maintainer-clean-generic:
+	test -z "$(MAINTAINERCLEANFILES)" || rm -f $(MAINTAINERCLEANFILES)
+	test -z "$(BUILT_SOURCES)" || rm -f $(BUILT_SOURCES)
+mostlyclean:  mostlyclean-binPROGRAMS mostlyclean-compile \
+		mostlyclean-libtool mostlyclean-tags mostlyclean-depend \
+		mostlyclean-generic
+
+clean:  clean-binPROGRAMS clean-compile clean-libtool clean-tags \
+		clean-depend clean-generic mostlyclean
+
+distclean:  distclean-binPROGRAMS distclean-compile distclean-libtool \
+		distclean-tags distclean-depend distclean-generic clean
+	rm -f config.status
+	rm -f libtool
+
+maintainer-clean:  maintainer-clean-binPROGRAMS maintainer-clean-compile \
+		maintainer-clean-libtool maintainer-clean-tags \
+		maintainer-clean-depend maintainer-clean-generic \
+		distclean
+	@echo "This command is intended for maintainers to use;"
+	@echo "it deletes files that may require special tools to rebuild."
+
+.PHONY: default mostlyclean-binPROGRAMS distclean-binPROGRAMS \
+clean-binPROGRAMS maintainer-clean-binPROGRAMS uninstall-binPROGRAMS \
+install-binPROGRAMS mostlyclean-compile distclean-compile clean-compile \
+maintainer-clean-compile mostlyclean-libtool distclean-libtool \
+clean-libtool maintainer-clean-libtool tags mostlyclean-tags \
+distclean-tags clean-tags maintainer-clean-tags distdir \
+mostlyclean-depend distclean-depend clean-depend \
+maintainer-clean-depend info dvi installcheck install-exec install-data \
+install uninstall all installdirs mostlyclean-generic distclean-generic \
+clean-generic maintainer-clean-generic clean mostlyclean distclean \
+maintainer-clean
+
 
 ####### Build rules
 
-
-all: symlinks $(TARGET)
-
-symlinks:	
-	ln -sf ../atfinterpreter.cc atfinterpreter.cc
-	ln -sf ../atfinterpreter.h atfinterpreter.h
-	ln -sf ../afchoose.cc afchoose.cc
-	ln -sf ../afchoose.h afchoose.h
-
-$(TARGET): $(SOURCES) $(SRCMETA) $(OBJECTS) $(HEADER)
-	$(CC) $(OBJECTS) -o $(TARGET) $(LDFLAGS)
-
-depend:
-	@makedepend -I$(INCDIR) $(SOURCES) 2> /dev/null
-
-
-install:
-	$(INSTALL_DIR) $(KDEDIR)/bin
-	$(INSTALL_SHELL) kautoformEdit $(KDEDIR)/bin/kautoformEdit
-
-install-exec-local:
-	$(mkinstalldirs) $(bindir)
-	mv autoformEdit kautoformEdit
-	$(INSTALL_SCRIPT) kautoformEdit $(bindir)
-
-clean:	
-	rm -f *.moc *.o
-	rm -f kautoformEdit
-
-uninstall:
-	rm -f $(bindir)/kautoformEdit
-
+all:  $(TARGET)
 
 ######## Meta objects 
 
@@ -101,339 +419,21 @@ afchoose.moc: afchoose.h
 saveAsDia.moc: saveAsDia.h
 	$(MOC) saveAsDia.h -o saveAsDia.moc
 
-# DO NOT DELETE
+afchoose.cc: afchoose.moc
+atfinterpreter.cc: atfinterpreter.moc
+backdia.cc: backdia.moc
+graphobj.cc: graphobj.moc
+kcharselect.cc: kcharselect.moc
+kcharselectdia.cc: kcharselectdia.moc
+kenumlistdia.cc: kenumlistdia.moc
+kpresenter_doc.cc: kpresenter_doc.moc
+kpresenter_main.cc: kpresenter_main.moc
+kpresenter_shell.cc: kpresenter_shell.moc
+kpresenter_view.cc: kpresenter_view.moc
+ktextobject.cc: ktextobject.moc
+page.cc: page.moc
+styledia.cc: styledia.moc      
 
-main.o: autoformEdit.h /usr/local/kde/include/kapp.h
-main.o: /usr/local/kde/include/kconfig.h /usr/local/kde/include/kconfigbase.h
-main.o: /usr/lib/qt/include/qcolor.h /usr/lib/qt/include/qwindefs.h
-main.o: /usr/lib/qt/include/qobjdefs.h /usr/lib/qt/include/qglobal.h
-main.o: /usr/lib/qt/include/qfont.h /usr/lib/qt/include/qstring.h
-main.o: /usr/lib/qt/include/qarray.h /usr/lib/qt/include/qgarray.h
-main.o: /usr/lib/qt/include/qshared.h /usr/lib/qt/include/qgeneric.h
-main.o: /usr/include/string.h /usr/include/features.h
-main.o: /usr/include/sys/cdefs.h /usr/include/gnu/stubs.h
-main.o: /usr/lib/gcc-lib/alpha-redhat-linux/2.7.2.3/include/stddef.h
-main.o: /usr/lib/qt/include/qstrlist.h /usr/lib/qt/include/qlist.h
-main.o: /usr/lib/qt/include/qglist.h /usr/lib/qt/include/qcollect.h
-main.o: /usr/lib/qt/include/qdstream.h /usr/lib/qt/include/qiodev.h
-main.o: /usr/local/kde/include/kconfigdata.h /usr/lib/qt/include/qdict.h
-main.o: /usr/lib/qt/include/qgdict.h /usr/lib/qt/include/qtstream.h
-main.o: /usr/include/stdio.h /usr/include/libio.h /usr/include/_G_config.h
-main.o: /usr/include/gnu/types.h
-main.o: /usr/lib/gcc-lib/alpha-redhat-linux/2.7.2.3/include/stdarg.h
-main.o: /usr/lib/gcc-lib/alpha-redhat-linux/2.7.2.3/include/va-alpha.h
-main.o: /usr/include/stdio_lim.h /usr/lib/qt/include/qfile.h
-main.o: /usr/lib/qt/include/qobject.h /usr/lib/qt/include/qevent.h
-main.o: /usr/lib/qt/include/qrect.h /usr/lib/qt/include/qsize.h
-main.o: /usr/lib/qt/include/qpoint.h /usr/local/kde/include/kdebug.h
-main.o: /usr/local/kde/include/klocale.h /usr/lib/qt/include/qintdict.h
-main.o: /usr/local/kde/include/drag.h /usr/lib/qt/include/qapp.h
-main.o: /usr/lib/qt/include/qwidget.h /usr/lib/qt/include/qpaintd.h
-main.o: /usr/lib/qt/include/qpalette.h /usr/lib/qt/include/qcursor.h
-main.o: /usr/lib/qt/include/qfontmet.h /usr/lib/qt/include/qfontinf.h
-main.o: /usr/lib/qt/include/qpixmap.h /usr/include/X11/X.h
-main.o: /usr/lib/qt/include/qpopmenu.h /usr/lib/qt/include/qtablevw.h
-main.o: /usr/lib/qt/include/qframe.h /usr/lib/qt/include/qmenudta.h
-main.o: /usr/local/kde/include/kmenubar.h /usr/lib/qt/include/qmenubar.h
-main.o: /usr/local/kde/include/ktoolbar.h /usr/lib/qt/include/qbutton.h
-main.o: /usr/local/kde/include/kcombo.h /usr/lib/qt/include/qcombo.h
-main.o: /usr/local/kde/include/klined.h /usr/lib/qt/include/qlined.h
-main.o: /usr/local/kde/include/kstatusbar.h /usr/lib/qt/include/qlabel.h
-main.o: /usr/local/kde/include/ktopwidget.h /usr/include/stdlib.h
-main.o: /usr/include/sys/types.h /usr/include/time.h /usr/include/endian.h
-main.o: /usr/include/bytesex.h /usr/include/sys/select.h
-main.o: /usr/include/selectbits.h /usr/include/alloca.h
-main.o: /usr/local/kde/include/knewpanner.h
-main.o: /usr/local/kde/include/koAboutDia.h /usr/lib/qt/include/qdialog.h
-main.o: /usr/lib/qt/include/qpushbt.h /usr/lib/qt/include/qmsgbox.h
-main.o: /usr/lib/qt/include/qlayout.h /usr/lib/qt/include/qgmanagr.h
-main.o: /usr/local/kde/include/kbuttonbox.h /usr/lib/qt/include/qtimer.h
-main.o: /usr/lib/qt/include/qkeycode.h drawWidget.h
-main.o: /usr/lib/qt/include/qpainter.h /usr/lib/qt/include/qregion.h
-main.o: /usr/lib/qt/include/qpen.h /usr/lib/qt/include/qbrush.h
-main.o: /usr/lib/qt/include/qpntarry.h /usr/lib/qt/include/qwmatrix.h
-main.o: atfinterpreter.h /usr/lib/qt/include/qstack.h editWidget.h
-main.o: /usr/lib/qt/include/qtooltip.h /usr/local/kde/include/ktreelist.h
-main.o: /usr/local/kde/include/kbutton.h pntInsDia.h
-main.o: /usr/lib/qt/include/qradiobt.h /usr/lib/qt/include/qbttngrp.h
-main.o: /usr/lib/qt/include/qgrpbox.h /usr/local/kde/include/kspinbox.h
-main.o: afchoose.h /usr/lib/qt/include/qtabdlg.h
-main.o: /usr/lib/qt/include/qlistbox.h /usr/lib/qt/include/qfileinf.h
-main.o: /usr/lib/qt/include/qdatetm.h
-main.o: /usr/local/kde/include/kiconloaderdialog.h
-main.o: /usr/local/kde/include/kiconloader.h saveAsDia.h
-autoformEdit.o: autoformEdit.h /usr/local/kde/include/kapp.h
-autoformEdit.o: /usr/local/kde/include/kconfig.h
-autoformEdit.o: /usr/local/kde/include/kconfigbase.h
-autoformEdit.o: /usr/lib/qt/include/qcolor.h /usr/lib/qt/include/qwindefs.h
-autoformEdit.o: /usr/lib/qt/include/qobjdefs.h /usr/lib/qt/include/qglobal.h
-autoformEdit.o: /usr/lib/qt/include/qfont.h /usr/lib/qt/include/qstring.h
-autoformEdit.o: /usr/lib/qt/include/qarray.h /usr/lib/qt/include/qgarray.h
-autoformEdit.o: /usr/lib/qt/include/qshared.h /usr/lib/qt/include/qgeneric.h
-autoformEdit.o: /usr/include/string.h /usr/include/features.h
-autoformEdit.o: /usr/include/sys/cdefs.h /usr/include/gnu/stubs.h
-autoformEdit.o: /usr/lib/gcc-lib/alpha-redhat-linux/2.7.2.3/include/stddef.h
-autoformEdit.o: /usr/lib/qt/include/qstrlist.h /usr/lib/qt/include/qlist.h
-autoformEdit.o: /usr/lib/qt/include/qglist.h /usr/lib/qt/include/qcollect.h
-autoformEdit.o: /usr/lib/qt/include/qdstream.h /usr/lib/qt/include/qiodev.h
-autoformEdit.o: /usr/local/kde/include/kconfigdata.h
-autoformEdit.o: /usr/lib/qt/include/qdict.h /usr/lib/qt/include/qgdict.h
-autoformEdit.o: /usr/lib/qt/include/qtstream.h /usr/include/stdio.h
-autoformEdit.o: /usr/include/libio.h /usr/include/_G_config.h
-autoformEdit.o: /usr/include/gnu/types.h
-autoformEdit.o: /usr/lib/gcc-lib/alpha-redhat-linux/2.7.2.3/include/stdarg.h
-autoformEdit.o: /usr/lib/gcc-lib/alpha-redhat-linux/2.7.2.3/include/va-alpha.h
-autoformEdit.o: /usr/include/stdio_lim.h /usr/lib/qt/include/qfile.h
-autoformEdit.o: /usr/lib/qt/include/qobject.h /usr/lib/qt/include/qevent.h
-autoformEdit.o: /usr/lib/qt/include/qrect.h /usr/lib/qt/include/qsize.h
-autoformEdit.o: /usr/lib/qt/include/qpoint.h /usr/local/kde/include/kdebug.h
-autoformEdit.o: /usr/local/kde/include/klocale.h
-autoformEdit.o: /usr/lib/qt/include/qintdict.h /usr/local/kde/include/drag.h
-autoformEdit.o: /usr/lib/qt/include/qapp.h /usr/lib/qt/include/qwidget.h
-autoformEdit.o: /usr/lib/qt/include/qpaintd.h /usr/lib/qt/include/qpalette.h
-autoformEdit.o: /usr/lib/qt/include/qcursor.h /usr/lib/qt/include/qfontmet.h
-autoformEdit.o: /usr/lib/qt/include/qfontinf.h /usr/lib/qt/include/qpixmap.h
-autoformEdit.o: /usr/include/X11/X.h /usr/lib/qt/include/qpopmenu.h
-autoformEdit.o: /usr/lib/qt/include/qtablevw.h /usr/lib/qt/include/qframe.h
-autoformEdit.o: /usr/lib/qt/include/qmenudta.h
-autoformEdit.o: /usr/local/kde/include/kmenubar.h
-autoformEdit.o: /usr/lib/qt/include/qmenubar.h
-autoformEdit.o: /usr/local/kde/include/ktoolbar.h
-autoformEdit.o: /usr/lib/qt/include/qbutton.h /usr/local/kde/include/kcombo.h
-autoformEdit.o: /usr/lib/qt/include/qcombo.h /usr/local/kde/include/klined.h
-autoformEdit.o: /usr/lib/qt/include/qlined.h
-autoformEdit.o: /usr/local/kde/include/kstatusbar.h
-autoformEdit.o: /usr/lib/qt/include/qlabel.h
-autoformEdit.o: /usr/local/kde/include/ktopwidget.h /usr/include/stdlib.h
-autoformEdit.o: /usr/include/sys/types.h /usr/include/time.h
-autoformEdit.o: /usr/include/endian.h /usr/include/bytesex.h
-autoformEdit.o: /usr/include/sys/select.h /usr/include/selectbits.h
-autoformEdit.o: /usr/include/alloca.h /usr/local/kde/include/knewpanner.h
-autoformEdit.o: /usr/local/kde/include/koAboutDia.h
-autoformEdit.o: /usr/lib/qt/include/qdialog.h /usr/lib/qt/include/qpushbt.h
-autoformEdit.o: /usr/lib/qt/include/qmsgbox.h /usr/lib/qt/include/qlayout.h
-autoformEdit.o: /usr/lib/qt/include/qgmanagr.h
-autoformEdit.o: /usr/local/kde/include/kbuttonbox.h
-autoformEdit.o: /usr/lib/qt/include/qtimer.h /usr/lib/qt/include/qkeycode.h
-autoformEdit.o: drawWidget.h /usr/lib/qt/include/qpainter.h
-autoformEdit.o: /usr/lib/qt/include/qregion.h /usr/lib/qt/include/qpen.h
-autoformEdit.o: /usr/lib/qt/include/qbrush.h /usr/lib/qt/include/qpntarry.h
-autoformEdit.o: /usr/lib/qt/include/qwmatrix.h atfinterpreter.h
-autoformEdit.o: /usr/lib/qt/include/qstack.h editWidget.h
-autoformEdit.o: /usr/lib/qt/include/qtooltip.h
-autoformEdit.o: /usr/local/kde/include/ktreelist.h
-autoformEdit.o: /usr/local/kde/include/kbutton.h pntInsDia.h
-autoformEdit.o: /usr/lib/qt/include/qradiobt.h /usr/lib/qt/include/qbttngrp.h
-autoformEdit.o: /usr/lib/qt/include/qgrpbox.h
-autoformEdit.o: /usr/local/kde/include/kspinbox.h afchoose.h
-autoformEdit.o: /usr/lib/qt/include/qtabdlg.h /usr/lib/qt/include/qlistbox.h
-autoformEdit.o: /usr/lib/qt/include/qfileinf.h /usr/lib/qt/include/qdatetm.h
-autoformEdit.o: /usr/local/kde/include/kiconloaderdialog.h
-autoformEdit.o: /usr/local/kde/include/kiconloader.h saveAsDia.h
-autoformEdit.o: autoformEdit.moc /usr/lib/qt/include/qmetaobj.h
-autoformEdit.o: /usr/lib/qt/include/qconnect.h
-editWidget.o: editWidget.h /usr/lib/qt/include/qwidget.h
-editWidget.o: /usr/lib/qt/include/qwindefs.h /usr/lib/qt/include/qobjdefs.h
-editWidget.o: /usr/lib/qt/include/qglobal.h /usr/lib/qt/include/qobject.h
-editWidget.o: /usr/lib/qt/include/qstring.h /usr/lib/qt/include/qarray.h
-editWidget.o: /usr/lib/qt/include/qgarray.h /usr/lib/qt/include/qshared.h
-editWidget.o: /usr/lib/qt/include/qgeneric.h /usr/include/string.h
-editWidget.o: /usr/include/features.h /usr/include/sys/cdefs.h
-editWidget.o: /usr/include/gnu/stubs.h
-editWidget.o: /usr/lib/gcc-lib/alpha-redhat-linux/2.7.2.3/include/stddef.h
-editWidget.o: /usr/lib/qt/include/qevent.h /usr/lib/qt/include/qrect.h
-editWidget.o: /usr/lib/qt/include/qsize.h /usr/lib/qt/include/qpoint.h
-editWidget.o: /usr/lib/qt/include/qpaintd.h /usr/lib/qt/include/qpalette.h
-editWidget.o: /usr/lib/qt/include/qcolor.h /usr/lib/qt/include/qcursor.h
-editWidget.o: /usr/lib/qt/include/qfont.h /usr/lib/qt/include/qfontmet.h
-editWidget.o: /usr/lib/qt/include/qfontinf.h /usr/lib/qt/include/qlined.h
-editWidget.o: /usr/lib/qt/include/qtooltip.h /usr/lib/qt/include/qtimer.h
-editWidget.o: /usr/lib/qt/include/qlist.h /usr/lib/qt/include/qglist.h
-editWidget.o: /usr/lib/qt/include/qcollect.h /usr/lib/qt/include/qmsgbox.h
-editWidget.o: /usr/lib/qt/include/qdialog.h
-editWidget.o: /usr/local/kde/include/ktreelist.h /usr/lib/qt/include/qapp.h
-editWidget.o: /usr/lib/qt/include/qkeycode.h /usr/lib/qt/include/qpainter.h
-editWidget.o: /usr/lib/qt/include/qregion.h /usr/lib/qt/include/qpen.h
-editWidget.o: /usr/lib/qt/include/qbrush.h /usr/lib/qt/include/qpntarry.h
-editWidget.o: /usr/lib/qt/include/qwmatrix.h /usr/lib/qt/include/qpixmap.h
-editWidget.o: /usr/lib/qt/include/qstack.h /usr/lib/qt/include/qtablevw.h
-editWidget.o: /usr/lib/qt/include/qframe.h /usr/local/kde/include/kapp.h
-editWidget.o: /usr/local/kde/include/kconfig.h
-editWidget.o: /usr/local/kde/include/kconfigbase.h
-editWidget.o: /usr/lib/qt/include/qstrlist.h /usr/lib/qt/include/qdstream.h
-editWidget.o: /usr/lib/qt/include/qiodev.h
-editWidget.o: /usr/local/kde/include/kconfigdata.h
-editWidget.o: /usr/lib/qt/include/qdict.h /usr/lib/qt/include/qgdict.h
-editWidget.o: /usr/lib/qt/include/qtstream.h /usr/include/stdio.h
-editWidget.o: /usr/include/libio.h /usr/include/_G_config.h
-editWidget.o: /usr/include/gnu/types.h
-editWidget.o: /usr/lib/gcc-lib/alpha-redhat-linux/2.7.2.3/include/stdarg.h
-editWidget.o: /usr/lib/gcc-lib/alpha-redhat-linux/2.7.2.3/include/va-alpha.h
-editWidget.o: /usr/include/stdio_lim.h /usr/lib/qt/include/qfile.h
-editWidget.o: /usr/local/kde/include/kdebug.h
-editWidget.o: /usr/local/kde/include/klocale.h /usr/lib/qt/include/qintdict.h
-editWidget.o: /usr/local/kde/include/drag.h /usr/include/X11/X.h
-editWidget.o: /usr/lib/qt/include/qpopmenu.h /usr/lib/qt/include/qmenudta.h
-editWidget.o: /usr/local/kde/include/ktoolbar.h /usr/lib/qt/include/qbutton.h
-editWidget.o: /usr/local/kde/include/kcombo.h /usr/lib/qt/include/qcombo.h
-editWidget.o: /usr/local/kde/include/klined.h
-editWidget.o: /usr/local/kde/include/kbutton.h atfinterpreter.h
-editWidget.o: editWidget.moc /usr/lib/qt/include/qmetaobj.h
-editWidget.o: /usr/lib/qt/include/qconnect.h
-drawWidget.o: drawWidget.h /usr/lib/qt/include/qwidget.h
-drawWidget.o: /usr/lib/qt/include/qwindefs.h /usr/lib/qt/include/qobjdefs.h
-drawWidget.o: /usr/lib/qt/include/qglobal.h /usr/lib/qt/include/qobject.h
-drawWidget.o: /usr/lib/qt/include/qstring.h /usr/lib/qt/include/qarray.h
-drawWidget.o: /usr/lib/qt/include/qgarray.h /usr/lib/qt/include/qshared.h
-drawWidget.o: /usr/lib/qt/include/qgeneric.h /usr/include/string.h
-drawWidget.o: /usr/include/features.h /usr/include/sys/cdefs.h
-drawWidget.o: /usr/include/gnu/stubs.h
-drawWidget.o: /usr/lib/gcc-lib/alpha-redhat-linux/2.7.2.3/include/stddef.h
-drawWidget.o: /usr/lib/qt/include/qevent.h /usr/lib/qt/include/qrect.h
-drawWidget.o: /usr/lib/qt/include/qsize.h /usr/lib/qt/include/qpoint.h
-drawWidget.o: /usr/lib/qt/include/qpaintd.h /usr/lib/qt/include/qpalette.h
-drawWidget.o: /usr/lib/qt/include/qcolor.h /usr/lib/qt/include/qcursor.h
-drawWidget.o: /usr/lib/qt/include/qfont.h /usr/lib/qt/include/qfontmet.h
-drawWidget.o: /usr/lib/qt/include/qfontinf.h /usr/lib/qt/include/qpainter.h
-drawWidget.o: /usr/lib/qt/include/qregion.h /usr/lib/qt/include/qpen.h
-drawWidget.o: /usr/lib/qt/include/qbrush.h /usr/lib/qt/include/qpntarry.h
-drawWidget.o: /usr/lib/qt/include/qwmatrix.h /usr/lib/qt/include/qpixmap.h
-drawWidget.o: atfinterpreter.h /usr/lib/qt/include/qstack.h
-drawWidget.o: /usr/lib/qt/include/qglist.h /usr/lib/qt/include/qcollect.h
-drawWidget.o: /usr/lib/qt/include/qlist.h /usr/lib/qt/include/qfile.h
-drawWidget.o: /usr/lib/qt/include/qiodev.h /usr/include/stdio.h
-drawWidget.o: /usr/include/libio.h /usr/include/_G_config.h
-drawWidget.o: /usr/include/gnu/types.h
-drawWidget.o: /usr/lib/gcc-lib/alpha-redhat-linux/2.7.2.3/include/stdarg.h
-drawWidget.o: /usr/lib/gcc-lib/alpha-redhat-linux/2.7.2.3/include/va-alpha.h
-drawWidget.o: /usr/include/stdio_lim.h /usr/lib/qt/include/qstrlist.h
-drawWidget.o: /usr/lib/qt/include/qdstream.h drawWidget.moc
-drawWidget.o: /usr/lib/qt/include/qmetaobj.h /usr/lib/qt/include/qconnect.h
-atfinterpreter.o: atfinterpreter.h /usr/lib/qt/include/qobject.h
-atfinterpreter.o: /usr/lib/qt/include/qobjdefs.h
-atfinterpreter.o: /usr/lib/qt/include/qglobal.h /usr/lib/qt/include/qstring.h
-atfinterpreter.o: /usr/lib/qt/include/qarray.h /usr/lib/qt/include/qgarray.h
-atfinterpreter.o: /usr/lib/qt/include/qshared.h
-atfinterpreter.o: /usr/lib/qt/include/qgeneric.h /usr/include/string.h
-atfinterpreter.o: /usr/include/features.h /usr/include/sys/cdefs.h
-atfinterpreter.o: /usr/include/gnu/stubs.h
-atfinterpreter.o: /usr/lib/gcc-lib/alpha-redhat-linux/2.7.2.3/include/stddef.h
-atfinterpreter.o: /usr/lib/qt/include/qevent.h /usr/lib/qt/include/qwindefs.h
-atfinterpreter.o: /usr/lib/qt/include/qrect.h /usr/lib/qt/include/qsize.h
-atfinterpreter.o: /usr/lib/qt/include/qpoint.h /usr/lib/qt/include/qstack.h
-atfinterpreter.o: /usr/lib/qt/include/qglist.h /usr/lib/qt/include/qcollect.h
-atfinterpreter.o: /usr/lib/qt/include/qpntarry.h /usr/lib/qt/include/qlist.h
-atfinterpreter.o: /usr/lib/qt/include/qfile.h /usr/lib/qt/include/qiodev.h
-atfinterpreter.o: /usr/include/stdio.h /usr/include/libio.h
-atfinterpreter.o: /usr/include/_G_config.h /usr/include/gnu/types.h
-atfinterpreter.o: /usr/lib/gcc-lib/alpha-redhat-linux/2.7.2.3/include/stdarg.h
-atfinterpreter.o: /usr/lib/gcc-lib/alpha-redhat-linux/2.7.2.3/include/va-alpha.h
-atfinterpreter.o: /usr/include/stdio_lim.h /usr/lib/qt/include/qstrlist.h
-atfinterpreter.o: /usr/lib/qt/include/qdstream.h atfinterpreter.moc
-atfinterpreter.o: /usr/lib/qt/include/qmetaobj.h
-atfinterpreter.o: /usr/lib/qt/include/qconnect.h
-pntInsDia.o: pntInsDia.h /usr/lib/qt/include/qdialog.h
-pntInsDia.o: /usr/lib/qt/include/qwidget.h /usr/lib/qt/include/qwindefs.h
-pntInsDia.o: /usr/lib/qt/include/qobjdefs.h /usr/lib/qt/include/qglobal.h
-pntInsDia.o: /usr/lib/qt/include/qobject.h /usr/lib/qt/include/qstring.h
-pntInsDia.o: /usr/lib/qt/include/qarray.h /usr/lib/qt/include/qgarray.h
-pntInsDia.o: /usr/lib/qt/include/qshared.h /usr/lib/qt/include/qgeneric.h
-pntInsDia.o: /usr/include/string.h /usr/include/features.h
-pntInsDia.o: /usr/include/sys/cdefs.h /usr/include/gnu/stubs.h
-pntInsDia.o: /usr/lib/gcc-lib/alpha-redhat-linux/2.7.2.3/include/stddef.h
-pntInsDia.o: /usr/lib/qt/include/qevent.h /usr/lib/qt/include/qrect.h
-pntInsDia.o: /usr/lib/qt/include/qsize.h /usr/lib/qt/include/qpoint.h
-pntInsDia.o: /usr/lib/qt/include/qpaintd.h /usr/lib/qt/include/qpalette.h
-pntInsDia.o: /usr/lib/qt/include/qcolor.h /usr/lib/qt/include/qcursor.h
-pntInsDia.o: /usr/lib/qt/include/qfont.h /usr/lib/qt/include/qfontmet.h
-pntInsDia.o: /usr/lib/qt/include/qfontinf.h /usr/lib/qt/include/qlabel.h
-pntInsDia.o: /usr/lib/qt/include/qframe.h /usr/lib/qt/include/qpushbt.h
-pntInsDia.o: /usr/lib/qt/include/qbutton.h /usr/lib/qt/include/qradiobt.h
-pntInsDia.o: /usr/lib/qt/include/qbttngrp.h /usr/lib/qt/include/qgrpbox.h
-pntInsDia.o: /usr/local/kde/include/kspinbox.h /usr/lib/qt/include/qlined.h
-pntInsDia.o: /usr/lib/qt/include/qtimer.h /usr/lib/qt/include/qstrlist.h
-pntInsDia.o: /usr/lib/qt/include/qlist.h /usr/lib/qt/include/qglist.h
-pntInsDia.o: /usr/lib/qt/include/qcollect.h /usr/lib/qt/include/qdstream.h
-pntInsDia.o: /usr/lib/qt/include/qiodev.h pntInsDia.moc
-pntInsDia.o: /usr/lib/qt/include/qmetaobj.h /usr/lib/qt/include/qconnect.h
-afchoose.o: afchoose.h /usr/lib/qt/include/qtabdlg.h
-afchoose.o: /usr/lib/qt/include/qdialog.h /usr/lib/qt/include/qwidget.h
-afchoose.o: /usr/lib/qt/include/qwindefs.h /usr/lib/qt/include/qobjdefs.h
-afchoose.o: /usr/lib/qt/include/qglobal.h /usr/lib/qt/include/qobject.h
-afchoose.o: /usr/lib/qt/include/qstring.h /usr/lib/qt/include/qarray.h
-afchoose.o: /usr/lib/qt/include/qgarray.h /usr/lib/qt/include/qshared.h
-afchoose.o: /usr/lib/qt/include/qgeneric.h /usr/include/string.h
-afchoose.o: /usr/include/features.h /usr/include/sys/cdefs.h
-afchoose.o: /usr/include/gnu/stubs.h
-afchoose.o: /usr/lib/gcc-lib/alpha-redhat-linux/2.7.2.3/include/stddef.h
-afchoose.o: /usr/lib/qt/include/qevent.h /usr/lib/qt/include/qrect.h
-afchoose.o: /usr/lib/qt/include/qsize.h /usr/lib/qt/include/qpoint.h
-afchoose.o: /usr/lib/qt/include/qpaintd.h /usr/lib/qt/include/qpalette.h
-afchoose.o: /usr/lib/qt/include/qcolor.h /usr/lib/qt/include/qcursor.h
-afchoose.o: /usr/lib/qt/include/qfont.h /usr/lib/qt/include/qfontmet.h
-afchoose.o: /usr/lib/qt/include/qfontinf.h /usr/lib/qt/include/qlabel.h
-afchoose.o: /usr/lib/qt/include/qframe.h /usr/lib/qt/include/qpushbt.h
-afchoose.o: /usr/lib/qt/include/qbutton.h /usr/lib/qt/include/qlistbox.h
-afchoose.o: /usr/lib/qt/include/qtablevw.h /usr/lib/qt/include/qpixmap.h
-afchoose.o: /usr/lib/qt/include/qlist.h /usr/lib/qt/include/qglist.h
-afchoose.o: /usr/lib/qt/include/qcollect.h /usr/lib/qt/include/qfileinf.h
-afchoose.o: /usr/lib/qt/include/qfile.h /usr/lib/qt/include/qiodev.h
-afchoose.o: /usr/include/stdio.h /usr/include/libio.h
-afchoose.o: /usr/include/_G_config.h /usr/include/gnu/types.h
-afchoose.o: /usr/lib/gcc-lib/alpha-redhat-linux/2.7.2.3/include/stdarg.h
-afchoose.o: /usr/lib/gcc-lib/alpha-redhat-linux/2.7.2.3/include/va-alpha.h
-afchoose.o: /usr/include/stdio_lim.h /usr/lib/qt/include/qdatetm.h
-afchoose.o: /usr/local/kde/include/kiconloaderdialog.h
-afchoose.o: /usr/lib/qt/include/qapp.h /usr/lib/qt/include/qstrlist.h
-afchoose.o: /usr/lib/qt/include/qdstream.h /usr/lib/qt/include/qlined.h
-afchoose.o: /usr/lib/qt/include/qcombo.h /usr/local/kde/include/kapp.h
-afchoose.o: /usr/local/kde/include/kconfig.h
-afchoose.o: /usr/local/kde/include/kconfigbase.h
-afchoose.o: /usr/local/kde/include/kconfigdata.h /usr/lib/qt/include/qdict.h
-afchoose.o: /usr/lib/qt/include/qgdict.h /usr/lib/qt/include/qtstream.h
-afchoose.o: /usr/local/kde/include/kdebug.h /usr/local/kde/include/klocale.h
-afchoose.o: /usr/lib/qt/include/qintdict.h /usr/local/kde/include/drag.h
-afchoose.o: /usr/include/X11/X.h /usr/lib/qt/include/qpopmenu.h
-afchoose.o: /usr/lib/qt/include/qmenudta.h
-afchoose.o: /usr/local/kde/include/kiconloader.h afchoose.moc
-afchoose.o: /usr/lib/qt/include/qmetaobj.h /usr/lib/qt/include/qconnect.h
-saveAsDia.o: saveAsDia.h /usr/include/stdlib.h /usr/include/features.h
-saveAsDia.o: /usr/include/sys/cdefs.h /usr/include/gnu/stubs.h
-saveAsDia.o: /usr/lib/gcc-lib/alpha-redhat-linux/2.7.2.3/include/stddef.h
-saveAsDia.o: /usr/include/sys/types.h /usr/include/gnu/types.h
-saveAsDia.o: /usr/include/time.h /usr/include/endian.h /usr/include/bytesex.h
-saveAsDia.o: /usr/include/sys/select.h /usr/include/selectbits.h
-saveAsDia.o: /usr/include/alloca.h /usr/lib/qt/include/qdialog.h
-saveAsDia.o: /usr/lib/qt/include/qwidget.h /usr/lib/qt/include/qwindefs.h
-saveAsDia.o: /usr/lib/qt/include/qobjdefs.h /usr/lib/qt/include/qglobal.h
-saveAsDia.o: /usr/lib/qt/include/qobject.h /usr/lib/qt/include/qstring.h
-saveAsDia.o: /usr/lib/qt/include/qarray.h /usr/lib/qt/include/qgarray.h
-saveAsDia.o: /usr/lib/qt/include/qshared.h /usr/lib/qt/include/qgeneric.h
-saveAsDia.o: /usr/include/string.h /usr/lib/qt/include/qevent.h
-saveAsDia.o: /usr/lib/qt/include/qrect.h /usr/lib/qt/include/qsize.h
-saveAsDia.o: /usr/lib/qt/include/qpoint.h /usr/lib/qt/include/qpaintd.h
-saveAsDia.o: /usr/lib/qt/include/qpalette.h /usr/lib/qt/include/qcolor.h
-saveAsDia.o: /usr/lib/qt/include/qcursor.h /usr/lib/qt/include/qfont.h
-saveAsDia.o: /usr/lib/qt/include/qfontmet.h /usr/lib/qt/include/qfontinf.h
-saveAsDia.o: /usr/lib/qt/include/qlabel.h /usr/lib/qt/include/qframe.h
-saveAsDia.o: /usr/lib/qt/include/qpushbt.h /usr/lib/qt/include/qbutton.h
-saveAsDia.o: /usr/lib/qt/include/qstrlist.h /usr/lib/qt/include/qlist.h
-saveAsDia.o: /usr/lib/qt/include/qglist.h /usr/lib/qt/include/qcollect.h
-saveAsDia.o: /usr/lib/qt/include/qdstream.h /usr/lib/qt/include/qiodev.h
-saveAsDia.o: /usr/lib/qt/include/qlistbox.h /usr/lib/qt/include/qtablevw.h
-saveAsDia.o: /usr/lib/qt/include/qpixmap.h /usr/lib/qt/include/qlined.h
-saveAsDia.o: /usr/lib/qt/include/qfile.h /usr/include/stdio.h
-saveAsDia.o: /usr/include/libio.h /usr/include/_G_config.h
-saveAsDia.o: /usr/lib/gcc-lib/alpha-redhat-linux/2.7.2.3/include/stdarg.h
-saveAsDia.o: /usr/lib/gcc-lib/alpha-redhat-linux/2.7.2.3/include/va-alpha.h
-saveAsDia.o: /usr/include/stdio_lim.h /usr/local/kde/include/kapp.h
-saveAsDia.o: /usr/local/kde/include/kconfig.h
-saveAsDia.o: /usr/local/kde/include/kconfigbase.h
-saveAsDia.o: /usr/local/kde/include/kconfigdata.h /usr/lib/qt/include/qdict.h
-saveAsDia.o: /usr/lib/qt/include/qgdict.h /usr/lib/qt/include/qtstream.h
-saveAsDia.o: /usr/local/kde/include/kdebug.h /usr/local/kde/include/klocale.h
-saveAsDia.o: /usr/lib/qt/include/qintdict.h /usr/local/kde/include/drag.h
-saveAsDia.o: /usr/lib/qt/include/qapp.h /usr/include/X11/X.h
-saveAsDia.o: /usr/lib/qt/include/qpopmenu.h /usr/lib/qt/include/qmenudta.h
-saveAsDia.o: saveAsDia.moc /usr/lib/qt/include/qmetaobj.h
-saveAsDia.o: /usr/lib/qt/include/qconnect.h
+# Tell versions [3.59,3.63) of GNU make to not export all variables.
+# Otherwise a system limit (for SysV at least) may be exceeded.
+.NOEXPORT:

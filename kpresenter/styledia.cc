@@ -331,3 +331,5 @@ void StyleDia::changePWidth(int item)
   pen.setWidth(item+1);
   penPrev->setPen(pen);
 }
+
+
