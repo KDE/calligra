@@ -574,16 +574,16 @@ void KWordView::setupActions()
 
     // ---------------------- Table actions
 
-    actionTableInsertRow = new KAction( i18n( "&Insert Row..." ), "rowin", 0,
+    actionTableInsertRow = new KAction( i18n( "&Insert Row..." ), "insert_table_row", 0,
 			       this, SLOT( tableInsertRow() ),
 			       actionCollection(), "table_insrow" );
-    actionTableInsertCol = new KAction( i18n( "&Insert Column..." ), "colin", 0,
+    actionTableInsertCol = new KAction( i18n( "&Insert Column..." ), "insert_table_col", 0,
 			       this, SLOT( tableInsertCol() ),
 			       actionCollection(), "table_inscol" );
-    actionTableDelRow = new KAction( i18n( "&Delete Row..." ), "rowout", 0,
+    actionTableDelRow = new KAction( i18n( "&Delete Row..." ), "delete_table_rot", 0,
 				     this, SLOT( tableDeleteRow() ),
 				     actionCollection(), "table_delrow" );
-    actionTableDelCol = new KAction( i18n( "&Delete Column..." ), "colout", 0,
+    actionTableDelCol = new KAction( i18n( "&Delete Column..." ), "delete_table_col", 0,
 			       this, SLOT( tableDeleteCol() ),
 				     actionCollection(), "table_delcol" );
     actionTableJoinCells = new KAction( i18n( "&Join Cells" ), 0,
