@@ -27,7 +27,6 @@
 #include <koPoint.h>
 
 #include "vobject.h"
-#include "vpath.h"
 #include "svgpathparser.h"
 #include "vfillrule.h"
 
@@ -36,6 +35,7 @@ class QDomElement;
 class VPainter;
 class VSegment;
 class VVisitor;
+class VPath;
 
 typedef QPtrList<VPath> VPathList;
 typedef QPtrListIterator<VPath> VPathListIterator;
@@ -139,8 +139,7 @@ public:
 
 	virtual void draw( VPainter *painter, const KoRect* rect = 0L ) const;
 
-	const VSegment* lastSegment() const
-		{ return m_paths.getLast()->getLast(); }
+	const VSegment* lastSegment() const;
 
 	const VPathList& paths() const
 		{ return m_paths; }

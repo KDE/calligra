@@ -32,6 +32,7 @@
 #include "vsegment.h"
 #include "vstroke.h"
 #include "vvisitor.h"
+#include "vpath.h"
 
 #include <kdebug.h>
 
@@ -206,6 +207,12 @@ VComposite::close()
 	VPath* path = new VPath( this );
 	path->moveTo( currentPoint() );
 	m_paths.append( path );
+}
+
+const VSegment*
+VComposite::lastSegment() const
+{
+	return m_paths.getLast()->getLast();
 }
 
 void

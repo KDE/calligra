@@ -24,6 +24,7 @@
 #include "vcolor.h"
 #include "vstroke.h"
 #include "vpainter.h"
+#include "vpath.h"
 
 void
 VDrawSelection::visitVComposite( VComposite &composite )
