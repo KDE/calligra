@@ -13,7 +13,7 @@
 #include <klocale.h>
 
 KChartWizardSetupAxesPage::KChartWizardSetupAxesPage( QWidget* parent, 
-													  KChart* chart ) :
+													  KChartDoc* chart ) :
   QWidget( parent ),
   _chart( chart )
 {

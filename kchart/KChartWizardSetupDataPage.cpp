@@ -11,7 +11,7 @@
 #include <qlabel.h>
 
 KChartWizardSetupDataPage::KChartWizardSetupDataPage( QWidget* parent,
-													  KChart* chart) :
+													  KChartDoc* chart) :
   QWidget( parent ),
   _chart( chart ),
   _parent( (KChartWizard*)parent )

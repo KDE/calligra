@@ -15,11 +15,12 @@
 #include <kglobal.h>
 #include <kiconloader.h>
 
-KChartWizard::KChartWizard ( KChart* chart, QWidget *parent, const char* name, 
+KChartWizard::KChartWizard ( KChartDoc* chart, QWidget *parent, const char* name, 
 							 bool modal, WFlags f ) :
   KWizard( parent, name, modal, f ),
   _chart( chart )
 {
+  cerr << "Creating KChartWizard\n";
   KGlobal::iconLoader()->setIconType( "icon" );
 
   // First page: select the range
@@ -45,8 +46,9 @@ KChartWizard::KChartWizard ( KChart* chart, QWidget *parent, const char* name,
   // Sixth page: axes setup
   _axespage = new KChartWizardSetupAxesPage( this, _chart );
   addPage( _axespage, i18n( "Setup axes" ) );
-
+  
   resize( 620, 380 );
+  cerr << "Kchardwizard created\n";
 }
 
 

@@ -3,8 +3,9 @@
 
 #include <klocale.h>
 #include "kwizard.h"
+#include "kchart.h"
 
-class KChart;
+class KChartDoc;
 class KChartWizardSetupAxesPage;
 class KChartWizardLabelsLegendPage;
 class KChartWizardSelectChartSubTypePage;
@@ -16,11 +17,11 @@ class KChartWizard : public KWizard
 {
     Q_OBJECT
 public:
-    KChartWizard ( KChart* chart, QWidget *parent, const char* name, 
+    KChartWizard ( KChartDoc* chart, QWidget *parent, const char* name, 
 				   bool modal = true, WFlags f = 0 );
     ~KChartWizard();
 
-  KChart* chart() const { return _chart; }
+    KChartDoc* chart() const { return _chart; };
   void setDataArea( QString area ); 
   QString dataArea() const;
 
@@ -44,7 +45,7 @@ protected slots:
   virtual void accept();
 
 private:
-  KChart* _chart;
+  KChartDoc* _chart;
   KChartWizardSelectDataPage* _selectdatapage;
   KChartWizardSelectChartTypePage* _selectcharttypepage;
   KChartWizardSelectChartSubTypePage* _selectchartsubtypepage;

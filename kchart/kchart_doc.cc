@@ -17,6 +17,7 @@
    Boston, MA 02111-1307, USA.
 */
 
+#include "KChartWizard.h"
 #include <qprinter.h>
 #include "kchart_doc.h"
 #include "kchart_shell.h"
@@ -25,6 +26,7 @@
 #include <komlStreamFeed.h>
 #include <komlWriter.h>
 #include <komlMime.h>
+
 
 #include <fstream>
 
@@ -210,7 +212,9 @@ bool KChartDoc::completeLoading( KOStore::Store_ptr /* _store */ )
 
 void KChartDoc::showWizard()
 {
-  // TODO
+  cerr << "Now creating the wizard!!!\n";
+  KChartWizard *kcwiz = new KChartWizard(this, NULL, "KChard Wizard", true);
+  kcwiz->exec();
 }
 
 void KChartDoc::fill( const Chart::Range& range, const Chart::Matrix& matrix )

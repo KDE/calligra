@@ -21,6 +21,8 @@
 #include <klocale.h>
 #include <kiconloader.h>
 
+#include "KChartWizard.h"
+
 /*****************************************************************************
  *
  * KChartView
@@ -189,8 +191,11 @@ bool KChartView::mappingCreateMenubar( OpenPartsUI::MenuBar_ptr _menubar )
   text = i18n("&Edit Data...");
   m_idMenuEdit_Data = m_vMenuEdit->insertItem( text, this, "editData", CTRL + Key_E );
 
-  text = i18n(" C&onfigure Chart..." );
+  text = i18n("C&onfigure Chart..." );
   m_idMenuConfig_Chart = m_vMenuEdit->insertItem( text, this, "configChart", CTRL + Key_O );
+
+  text = i18n("Wizard!" );
+  m_idMenuConfig_Chart = m_vMenuEdit->insertItem( text, this, "wizard", CTRL + Key_O );
 
   m_vMenuEdit->insertSeparator( -1 );
 
@@ -260,6 +265,15 @@ void KChartView::modeBars()
 void KChartView::modeCakes()
 {
   m_pDoc->setDiaType( KoChart::DT_KREIS );
+}
+
+void KChartView::wizard()
+{
+  //  m_pDoc->showWizard();
+  cerr << "Now creating the wizard!!!\n";
+  KChartWizard *kcwiz = new KChartWizard(m_pDoc, NULL, "KChard Wizard", true);
+  kcwiz->exec();
+  
 }
 
 void KChartView::slotUpdateView()

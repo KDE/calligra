@@ -81,6 +81,11 @@ public:
     void pageLayout();
 
     /**
+     * wizard
+     */
+    void wizard();
+
+    /**
      * MenuBar
      */
     void configChart();

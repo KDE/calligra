@@ -6,7 +6,7 @@
 class QRadioButton;
 class QCheckBox;
 class KChartWidget;
-class KChart;
+class KChartDoc;
 class KChartWizard;
 
 class KChartWizardSetupDataPage : public QWidget
@@ -14,7 +14,7 @@ class KChartWizardSetupDataPage : public QWidget
   Q_OBJECT 
 
 public:
-  KChartWizardSetupDataPage( QWidget* parent, KChart* chart );
+  KChartWizardSetupDataPage( QWidget* parent, KChartDoc* chart );
   ~KChartWizardSetupDataPage();
   
 private slots:
@@ -24,7 +24,7 @@ private slots:
   void firstRowIsDescriptionToggled( bool );
 
 private:
-  KChart* _chart;
+  KChartDoc* _chart;
   KChartWizard* _parent;
   KChartWidget* preview;
   QRadioButton* datacol;

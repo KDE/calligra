@@ -14,7 +14,8 @@
 #include <kglobal.h>
 #include <klocale.h>
 
-KChartWizardSelectChartSubTypePage::KChartWizardSelectChartSubTypePage( QWidget* parent, KChart* chart ) :
+KChartWizardSelectChartSubTypePage::KChartWizardSelectChartSubTypePage( QWidget* parent, 
+						    KChartDoc* chart ) :
   QWidget( parent ),
   _chart( chart )
 {

@@ -6,20 +6,20 @@
 class QFrame;
 class QPushButton;
 class QButtonGroup;
-class KChart;
+class KChartDoc;
 
 class KChartWizardSelectChartTypePage : public QWidget
 {
   Q_OBJECT 
 
 public:
-  KChartWizardSelectChartTypePage( QWidget* parent, KChart* chart );
+  KChartWizardSelectChartTypePage( QWidget* parent, KChartDoc* chart );
 
 private slots:
   void chartTypeSelected( int type );
 
 private:
-  KChart* _chart;
+  KChartDoc* _chart;
   QButtonGroup* _typeBG;
   QPushButton* _barsPB;
   QPushButton* _linesPB;

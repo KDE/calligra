@@ -12,7 +12,7 @@
 
 #include <klocale.h>
 
-KChartWizardLabelsLegendPage::KChartWizardLabelsLegendPage( QWidget* parent, KChart* chart ) :
+KChartWizardLabelsLegendPage::KChartWizardLabelsLegendPage( QWidget* parent, KChartDoc* chart ) :
   QWidget( parent ),
   _chart( chart )
 {

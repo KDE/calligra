@@ -13,7 +13,7 @@
 #include <kglobal.h>
 #include <kiconloader.h>
 
-KChartWizardSelectChartTypePage::KChartWizardSelectChartTypePage( QWidget* parent, KChart* chart ) :
+KChartWizardSelectChartTypePage::KChartWizardSelectChartTypePage( QWidget* parent, KChartDoc* chart ) :
   QWidget( parent ),
   _chart( chart )
 {

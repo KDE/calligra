@@ -39,6 +39,7 @@ module KChart
 		slot void editData();
 		slot void pageLayout();
 		slot void configChart();
+		slot void wizard();
 
 		struct EventConfigured
 		{

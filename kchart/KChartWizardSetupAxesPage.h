@@ -4,7 +4,7 @@
 #include <qwidget.h>
 #include <qstring.h>
 
-class KChart;
+class KChartDoc;
 class KChartWidget;
 
 class KChartWizardSetupAxesPage : public QWidget
@@ -12,7 +12,7 @@ class KChartWizardSetupAxesPage : public QWidget
   Q_OBJECT
 
 public:
-  KChartWizardSetupAxesPage( QWidget* parent, KChart* chart );
+  KChartWizardSetupAxesPage( QWidget* parent, KChartDoc* chart );
   ~KChartWizardSetupAxesPage();
 
 public slots:
@@ -23,7 +23,7 @@ public slots:
 
 private:
   KChartWidget* preview;
-  KChart* _chart;
+  KChartDoc* _chart;
 };
 
 #endif
