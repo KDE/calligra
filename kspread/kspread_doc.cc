@@ -713,25 +713,12 @@ void KSpreadDoc::paperLayoutDlg()
     KoPageLayout pl;
     pl.format = paperFormat();
     pl.orientation = orientation();
-    pl.unit = paperUnit();
-    pl.mmWidth = m_paperWidth;
-    pl.mmHeight = m_paperHeight;
-    pl.mmLeft = leftBorder();
-    pl.mmRight = rightBorder();
-    pl.mmTop = topBorder();
-    pl.mmBottom = bottomBorder();
     pl.ptWidth = MM_TO_POINT( m_paperWidth );
     pl.ptHeight = MM_TO_POINT( m_paperHeight );
     pl.ptLeft = MM_TO_POINT( leftBorder() );
     pl.ptRight = MM_TO_POINT(  rightBorder() );
     pl.ptTop = MM_TO_POINT(  topBorder() );
     pl.ptBottom = MM_TO_POINT(  bottomBorder() );
-    pl.inchWidth = MM_TO_INCH( m_paperWidth );
-    pl.inchHeight = MM_TO_INCH( m_paperHeight );
-    pl.inchLeft = MM_TO_INCH( leftBorder() );
-    pl.inchRight = MM_TO_INCH(  rightBorder() );
-    pl.inchTop = MM_TO_INCH(  topBorder() );
-    pl.inchBottom = MM_TO_INCH(  bottomBorder() );
 
     KoHeadFoot hf;
     hf.headLeft = headLeft();
@@ -741,18 +728,21 @@ void KSpreadDoc::paperLayoutDlg()
     hf.footRight = footRight();
     hf.footMid = footMid();
 
-    if ( !KoPageLayoutDia::pageLayout( pl, hf, FORMAT_AND_BORDERS | HEADER_AND_FOOTER ) )
+    KoUnit::Unit unit = paperUnit();
+
+    if ( !KoPageLayoutDia::pageLayout( pl, hf, FORMAT_AND_BORDERS | HEADER_AND_FOOTER, unit ) )
         return;
 
     if ( pl.format == PG_CUSTOM )
     {
-        m_paperWidth = pl.mmWidth;
-        m_paperHeight = pl.mmHeight;
+        m_paperWidth = POINT_TO_MM(pl.ptWidth);
+        m_paperHeight = POINT_TO_MM(pl.ptHeight);
     }
 
-    setPaperLayout( pl.mmLeft, pl.mmTop, pl.mmRight, pl.mmBottom, pl.format, pl.orientation );
+    setPaperLayout( POINT_TO_MM(pl.ptLeft), POINT_TO_MM(pl.ptTop), POINT_TO_MM(pl.ptRight), POINT_TO_MM(pl.ptBottom), pl.format, pl.orientation );
 
     setHeadFootLine( hf.headLeft, hf.headMid, hf.headRight, hf.footLeft, hf.footMid, hf.footRight );
+    setPaperUnit( unit );
 }
 
 void KSpreadDoc::paintContent( QPainter& painter, const QRect& rect, bool transparent, double /*zoomX*/, double /*zoomY*/ )

@@ -55,15 +55,6 @@
 
 //#define DEBUG_PAGES
 
-#undef getPointBasedAttribute
-#define getPointBasedAttribute(structure, attribute, element, attributeName, defaultValue) \
-do \
-{ \
-    structure.pt##attribute = getAttribute( element, attributeName, defaultValue ); \
-    structure.mm##attribute = POINT_TO_MM( structure.pt##attribute ); \
-    structure.inch##attribute = POINT_TO_INCH( structure.pt##attribute ); \
-} while (0)
-
 /******************************************************************/
 /* Class: KWChild                                              */
 /******************************************************************/
@@ -335,7 +326,6 @@ void KWDocument::newZoomAndResolution( bool updateViews, bool forPrint )
 
 bool KWDocument::initDoc()
 {
-    m_pageLayout.unit = KoUnit::U_MM;
     m_pages = 1;
 
     m_pageColumns.columns = 1;
@@ -345,10 +335,6 @@ bool KWDocument::initDoc()
     m_pageHeaderFooter.footer = HF_SAME;
     m_pageHeaderFooter.ptHeaderBodySpacing = 10;
     m_pageHeaderFooter.ptFooterBodySpacing = 10;
-    m_pageHeaderFooter.inchHeaderBodySpacing = POINT_TO_INCH( 10 );
-    m_pageHeaderFooter.inchFooterBodySpacing = POINT_TO_INCH( 10 );
-    m_pageHeaderFooter.mmHeaderBodySpacing = POINT_TO_MM( 10 );
-    m_pageHeaderFooter.mmFooterBodySpacing = POINT_TO_MM( 10 );
 
     QString _template;
 
@@ -394,7 +380,6 @@ void KWDocument::initUnit()
 
 void KWDocument::initEmpty()
 {
-    m_pageLayout.unit = KoUnit::U_MM;
     m_pages = 1;
 
     m_pageColumns.columns = 1;
@@ -404,10 +389,6 @@ void KWDocument::initEmpty()
     m_pageHeaderFooter.footer = HF_SAME;
     m_pageHeaderFooter.ptHeaderBodySpacing = 10;
     m_pageHeaderFooter.ptFooterBodySpacing = 10;
-    m_pageHeaderFooter.inchHeaderBodySpacing = POINT_TO_INCH( 10 );
-    m_pageHeaderFooter.inchFooterBodySpacing = POINT_TO_INCH( 10 );
-    m_pageHeaderFooter.mmHeaderBodySpacing = POINT_TO_MM( 10 );
-    m_pageHeaderFooter.mmFooterBodySpacing = POINT_TO_MM( 10 );
 
     QString fileName( locate( "kword_template", "Normal/.source/PlainText.kwt" , KWFactory::global() ) );
     /*bool ok = */loadNativeFormat( fileName );
@@ -431,14 +412,6 @@ void KWDocument::setPageLayout( KoPageLayout _layout, KoColumns _cl, KoKWHeaderF
         m_pageLayout.ptRight = 0;
         m_pageLayout.ptTop = 0;
         m_pageLayout.ptBottom = 0;
-        m_pageLayout.mmLeft = 0;
-        m_pageLayout.mmRight = 0;
-        m_pageLayout.mmTop = 0;
-        m_pageLayout.mmBottom = 0;
-        m_pageLayout.inchLeft = 0;
-        m_pageLayout.inchRight = 0;
-        m_pageLayout.inchTop = 0;
-        m_pageLayout.inchBottom = 0;
         m_pageHeaderFooter = _hf;
     }
 
@@ -1018,36 +991,24 @@ bool KWDocument::loadXML( QIODevice *, const QDomDocument & doc )
     m_anchorRequests.clear();
     m_clipartRequests.clear();
 
-    m_pageLayout.unit = KoUnit::U_MM;
-
     m_pageColumns.columns = 1;
 
     m_pageHeaderFooter.header = HF_SAME;
     m_pageHeaderFooter.footer = HF_SAME;
     m_pageHeaderFooter.ptHeaderBodySpacing = 10;
     m_pageHeaderFooter.ptFooterBodySpacing = 10;
-    m_pageHeaderFooter.inchHeaderBodySpacing = POINT_TO_INCH( 10 );
-    m_pageHeaderFooter.inchFooterBodySpacing = POINT_TO_INCH( 10 );
-    m_pageHeaderFooter.mmHeaderBodySpacing = POINT_TO_MM( 10 );
-    m_pageHeaderFooter.mmFooterBodySpacing = POINT_TO_MM( 10 );
 
     m_varFormatCollection->clear();
 
     m_pages = 1;
 
     KoPageLayout __pgLayout;
-    __pgLayout.unit = KoUnit::U_MM;
     KoColumns __columns;
     KoKWHeaderFooter __hf;
     __hf.header = HF_SAME;
     __hf.footer = HF_SAME;
     __hf.ptHeaderBodySpacing = 10.0;
     __hf.ptFooterBodySpacing = 10.0;
-    __hf.mmHeaderBodySpacing = POINT_TO_MM( 10 );
-    __hf.mmFooterBodySpacing = POINT_TO_MM( 10 );
-    __hf.inchHeaderBodySpacing = POINT_TO_INCH( 10 );
-    __hf.inchFooterBodySpacing = POINT_TO_INCH( 10 );
-
 
     QString value;
     QDomElement word = doc.documentElement();
@@ -1096,12 +1057,12 @@ bool KWDocument::loadXML( QIODevice *, const QDomDocument & doc )
     {
         __pgLayout.format = static_cast<KoFormat>( KWDocument::getAttribute( paper, "format", 0 ) );
         __pgLayout.orientation = static_cast<KoOrientation>( KWDocument::getAttribute( paper, "orientation", 0 ) );
-        getPointBasedAttribute( __pgLayout, Width, paper, "width", 0.0 );
-        getPointBasedAttribute( __pgLayout, Height, paper, "height", 0.0 );
+        __pgLayout.ptWidth = getAttribute( paper, "width", 0.0 );
+        __pgLayout.ptHeight = getAttribute( paper, "height", 0.0 );
         __hf.header = static_cast<KoHFType>( KWDocument::getAttribute( paper, "hType", 0 ) );
         __hf.footer = static_cast<KoHFType>( KWDocument::getAttribute( paper, "fType", 0 ) );
-        getPointBasedAttribute( __hf, HeaderBodySpacing, paper, "spHeadBody", 0.0 );
-        getPointBasedAttribute( __hf, FooterBodySpacing, paper, "spFootBody", 0.0 );
+        __hf.ptHeaderBodySpacing = getAttribute( paper, "spHeadBody", 0.0 );
+        __hf.ptFooterBodySpacing  = getAttribute( paper, "spFootBody", 0.0 );
         __columns.columns = KWDocument::getAttribute( paper, "columns", 1 );
         __columns.ptColumnSpacing = KWDocument::getAttribute( paper, "columnspacing", 0.0 );
         // Now part of the app config
@@ -1110,34 +1071,34 @@ bool KWDocument::loadXML( QIODevice *, const QDomDocument & doc )
         //    setZoomAndResolution( m_zoom, QPaintDevice::x11AppDpiX(), QPaintDevice::x11AppDpiY(), false, false );
         // Support the undocumented syntax actually used by KDE 2.0 for some of the above (:-().
         if ( __pgLayout.ptWidth == 0.0 )
-            getPointBasedAttribute( __pgLayout, Width, paper, "ptWidth", 0.0 );
+            __pgLayout.ptWidth = getAttribute( paper, "ptWidth", 0.0 );
         if ( __pgLayout.ptHeight == 0.0 )
-            getPointBasedAttribute( __pgLayout, Height, paper, "ptHeight", 0.0 );
+            __pgLayout.ptHeight = getAttribute( paper, "ptHeight", 0.0 );
         if ( __hf.ptHeaderBodySpacing == 0.0 )
-            getPointBasedAttribute( __hf, HeaderBodySpacing, paper, "ptHeadBody", 0.0 );
+            __hf.ptHeaderBodySpacing = getAttribute( paper, "ptHeadBody", 0.0 );
         if ( __hf.ptFooterBodySpacing == 0.0 )
-            getPointBasedAttribute( __hf, FooterBodySpacing, paper, "ptFootBody", 0.0 );
+            __hf.ptFooterBodySpacing = getAttribute( paper, "ptFootBody", 0.0 );
         if ( __columns.ptColumnSpacing == 0.0 )
-            __columns.ptColumnSpacing = KWDocument::getAttribute( paper, "ptColumnspc", 0.0 );
+            __columns.ptColumnSpacing = getAttribute( paper, "ptColumnspc", 0.0 );
 
         // <PAPERBORDERS>
         QDomElement paperborders = paper.namedItem( "PAPERBORDERS" ).toElement();
         if ( !paperborders.isNull() )
         {
-            getPointBasedAttribute( __pgLayout, Left, paperborders, "left", 0.0 );
-            getPointBasedAttribute( __pgLayout, Top, paperborders, "top", 0.0 );
-            getPointBasedAttribute( __pgLayout, Right, paperborders, "right", 0.0 );
-            getPointBasedAttribute( __pgLayout, Bottom, paperborders, "bottom", 0.0 );
+            __pgLayout.ptLeft = getAttribute( paperborders, "left", 0.0 );
+            __pgLayout.ptTop = getAttribute( paperborders, "top", 0.0 );
+            __pgLayout.ptRight = getAttribute( paperborders, "right", 0.0 );
+            __pgLayout.ptBottom = getAttribute( paperborders, "bottom", 0.0 );
 
             // Support the undocumented syntax actually used by KDE 2.0 for some of the above (:-().
             if ( __pgLayout.ptLeft == 0.0 )
-                getPointBasedAttribute( __pgLayout, Left, paperborders, "ptLeft", 0.0 );
+                __pgLayout.ptLeft = getAttribute( paperborders, "ptLeft", 0.0 );
             if ( __pgLayout.ptTop == 0.0 )
-                getPointBasedAttribute( __pgLayout, Top, paperborders, "ptTop", 0.0 );
+                __pgLayout.ptTop = getAttribute( paperborders, "ptTop", 0.0 );
             if ( __pgLayout.ptRight == 0.0 )
-                getPointBasedAttribute( __pgLayout, Right, paperborders, "ptRight", 0.0 );
+                __pgLayout.ptRight = getAttribute( paperborders, "ptRight", 0.0 );
             if ( __pgLayout.ptBottom == 0.0 )
-                getPointBasedAttribute( __pgLayout, Bottom, paperborders, "ptBottom", 0.0 );
+                __pgLayout.ptBottom = getAttribute( paperborders, "ptBottom", 0.0 );
         }
     }
 
@@ -1159,7 +1120,6 @@ bool KWDocument::loadXML( QIODevice *, const QDomDocument & doc )
         unitName = "pt";
     }
     m_unit = KoUnit::unit( unitName );
-    __pgLayout.unit = m_unit;
 
     setPageLayout( __pgLayout, __columns, __hf );
 
@@ -2216,7 +2176,6 @@ void KWDocument::repaintAllViewsExcept( KWView *_view, bool erase )
 void KWDocument::setUnit( KoUnit::Unit _unit )
 {
     m_unit = _unit;
-    m_pageLayout.unit=m_unit;
     for ( KWView *viewPtr = m_lstViews.first(); viewPtr != 0; viewPtr = m_lstViews.next() ) {
         if ( viewPtr->getGUI() ) {
             viewPtr->getGUI()->getHorzRuler()->setUnit( KoUnit::unitName( m_unit ) );

@@ -543,7 +543,6 @@ public slots:
 protected slots:
     void unitChanged( QString );
 
-
 protected:
     void resizeEvent( QResizeEvent *e );
 

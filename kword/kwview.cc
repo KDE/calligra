@@ -2384,7 +2384,10 @@ void KWView::formatPage()
     else
         flags = flags | DISABLE_BORDERS;
 
-    if ( KoPageLayoutDia::pageLayout( pgLayout, hf, cl, kwhf, flags ) ) {
+    KoUnit::Unit unit = m_doc->getUnit();
+    KoUnit::Unit oldUnit = unit;
+
+    if ( KoPageLayoutDia::pageLayout( pgLayout, hf, cl, kwhf, flags, unit ) ) {
         if( !(tmpOldLayout._pgLayout==pgLayout)||
             tmpOldLayout._cl.columns!=cl.columns ||
             tmpOldLayout._cl.ptColumnSpacing!=cl.ptColumnSpacing||
@@ -2413,6 +2416,8 @@ void KWView::formatPage()
             m_gui->canvasWidget()->frameSizeChanged( pgLayout );
 #endif
         }
+        if ( unit != oldUnit )
+            m_doc->setUnit( unit ); // needs undo/redo support
     }
 }
 
@@ -3763,8 +3768,10 @@ void KWView::configureHeaderFooter()
 
     KoHeadFoot hf;
     int flags = KW_HEADER_AND_FOOTER;
+    KoUnit::Unit unit = m_doc->getUnit();
+    KoUnit::Unit oldUnit = unit;
 
-    if ( KoPageLayoutDia::pageLayout( pgLayout, hf, cl, kwhf, flags ) ) {
+    if ( KoPageLayoutDia::pageLayout( pgLayout, hf, cl, kwhf, flags, unit ) ) {
         if( tmpOldLayout._hf.header!=kwhf.header||
             tmpOldLayout._hf.footer!=kwhf.footer||
             tmpOldLayout._hf.ptHeaderBodySpacing != kwhf.ptHeaderBodySpacing ||
@@ -3783,6 +3790,8 @@ void KWView::configureHeaderFooter()
 
             m_doc->updateResizeHandles();
         }
+        if ( unit != oldUnit )
+            m_doc->setUnit( unit ); // needs undo/redo support
     }
 
 }
@@ -3897,9 +3906,9 @@ KWGUI::KWGUI( QWidget *parent, KWView *_view )
     tabChooser->setReadWrite(doc->isReadWrite());
 
     r_horz = new KoRuler( left, canvas->viewport(), Qt::Horizontal, layout,
-                          KoRuler::F_INDENTS | KoRuler::F_TABS, tabChooser );
+                          KoRuler::F_INDENTS | KoRuler::F_TABS, doc->getUnit(), tabChooser );
     r_horz->setReadWrite(doc->isReadWrite());
-    r_vert = new KoRuler( left, canvas->viewport(), Qt::Vertical, layout, 0 );
+    r_vert = new KoRuler( left, canvas->viewport(), Qt::Vertical, layout, 0, doc->getUnit() );
     connect( r_horz, SIGNAL( newPageLayout( KoPageLayout ) ), view, SLOT( newPageLayout( KoPageLayout ) ) );
     r_vert->setReadWrite(doc->isReadWrite());
 
@@ -3919,8 +3928,8 @@ KWGUI::KWGUI( QWidget *parent, KWView *_view )
     connect( r_vert, SIGNAL( doubleClicked() ), view, SLOT( formatPage() ) );
     connect( r_vert, SIGNAL( unitChanged( QString ) ), this, SLOT( unitChanged( QString ) ) );
 
-    r_horz->setUnit( doc->getUnitName() );
-    r_vert->setUnit( doc->getUnitName() );
+    r_horz->setUnit( doc->getUnit() );
+    r_vert->setUnit( doc->getUnit() );
 
     r_horz->hide();
     r_vert->hide();

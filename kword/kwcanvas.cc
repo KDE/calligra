@@ -197,7 +197,7 @@ void KWCanvas::drawContents( QPainter *painter, int cx, int cy, int cw, int ch )
 {
     if ( isUpdatesEnabled() )
     {
-        // Note: in drawContents, the painter is already to the contents coordinates
+        // Note: in drawContents, the painter is already translated to the contents coordinates
         painter->setBrushOrigin( -contentsX(), -contentsY() );
         drawDocument( painter, QRect( cx, cy, cw, ch ), m_viewMode );
     }
