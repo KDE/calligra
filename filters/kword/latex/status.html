@@ -43,7 +43,7 @@
 
     <tr BGCOLOR="#EEEEFF">
      <td VALIGN=TOP WIDTH=1% NOWRAP><b><font size=+1>Last update</font></b></td>
-     <td>-</td>
+		 <td>26 april 2003</td>
     </tr>
 
     <tr BGCOLOR="#CCCCFF">
@@ -53,17 +53,22 @@
 
     <tr BGCOLOR="#EEEEFF">
      <td VALIGN=TOP><b><font size=+1>Todo</font></b></td>
-     <td>Everything</td>
+		 <td>The parser may not analyse all tex document.</td>
     </tr>
 
     <tr BGCOLOR="#CCCCFF">
      <td VALIGN=TOP><b><font size=+1>History</font></b></td>
-     <td>-</td>
+		 <td>18 april 2003:<br/>
+			 <ul>
+				 <li>parser can parse some latex files;</li>
+				 <li>generator can generate a basic kword document.</li>
+			 </ul>
+		 </td>
     </tr>
 
     <tr BGCOLOR="#EEEEFF">
      <td VALIGN=TOP><b><font size=+1>Authors&nbsp;</font></b></td>
-     <td><!a href="mailto:someone@somewhere.zz">-</a></td>
+     <td><a href="mailto:rjacolin AT ifrance DOT com">-</a></td>
     </tr>
 
     <tr BGCOLOR="#CCCCFF">
@@ -108,7 +113,7 @@
 
     <tr BGCOLOR="#EEEEFF">
      <td VALIGN=TOP WIDTH=1% NOWRAP><b><font size=+1>Last update</font></b></td>
-     <td>27 October 2001</td>
+     <td>26 April 2003</td>
     </tr>
 
     <tr BGCOLOR="#CCCCFF">
@@ -140,7 +145,7 @@
 <B>VERSION 2</B>
 <table BORDER="0" WIDTH="100%">
 <tr><td>table</td> 				<td>STARTED</td></tr>
-<tr><td>picture</td>				<td>STARTED</td></tr>
+<tr><td>picture</td>				<td>DONE</td></tr>
 <tr><td>personalization</td>			<td></td></tr>
 </table>
 <B>VERSION 3</B>
@@ -157,9 +162,29 @@
 
     <tr BGCOLOR="#CCCCFF">
      <td VALIGN=TOP><b><font size=+1>History</font></b></td>
-
-     <td>
-	<ul>
+     <td>See the changelog for more informations.
+			 <ul>
+				 <li>02 March 2003
+				 <ul><li>Note support</li>
+					 <li>wave and double underline</li>
+					 <li>encoding</li>
+					 <li>language</li>
+				 </ul>
+				 </li>
+				 <li>23 February 2003
+				 <ul><li>Support path for pictures</li>
+					 <li>Background color</li></ul>
+				 </li>
+				 
+				 <li>3 November 2002
+				 <ul><li>Generate pictures in eps pictures</li></ul>
+				 </li>
+				 <li>12 september 2002
+				 <ul><li>New options</li></ul>
+				 </li>
+				 <li>19 may 2002
+				 <ul><li>support of border for tables</li></ul>
+					</li>
 	<li>03 February 2002
 	<ul>
 		<li>features
@@ -317,7 +342,7 @@
 
     <tr BGCOLOR="#EEEEFF">
      <td VALIGN=TOP><b><font size=+1>Authors</font></b></td>
-     <td><a href="mailto:rjacolin@ifrance.com">Robert JACOLIN</a></td>
+     <td><a href="mailto:rjacolin AT ifrance DOT com">Robert JACOLIN</a></td>
     </tr>
 
     <tr BGCOLOR="#CCCCFF">
@@ -330,287 +355,6 @@
     <tr BGCOLOR="#EEEEFF">
      <td VALIGN=TOP><b><font size=+1>Progress report </font></b></td>
      <td>
-<H2>Markup supported at 23 july 2001</H2>
-
-<table BORDER="0" WIDTH="100%">
-<tr><td colspan="2"><b><i>PAPER</i></b></td></tr>
-<tr><td>format</td>		<td></td>			<td>SUPPORTED</td></tr>
-<tr><td>Width	</td>		<td></td>			<td>SUPPORTED</td></tr>
-<tr><td>Height</td>		<td></td>			<td>SUPPORTED</td></tr>
-<tr><td>orientation</td>	<td></td>			<td>SUPPORTED</td></tr>
-<tr><td>columns</td>		<td></td>			<td>SUPPORTED</td></tr>
-<tr><td>Columnspcacing</td>	<td></td>			<td>ANALIZED</td></tr>
-<tr><td>hType</td>		<td></td>			<td>SUPPORTED</td></tr>
-<tr><td></td><td>0...On all pages (even/odd) the same headers<i>\chead</i></td></tr>
-<tr><td></td><td>2...Different header only on first page</td></tr>
-<tr><td></td><td>3...Different headers for even/odd pages<i>\fancyhead</i></td></tr>
-<tr><td>fType</td>		<td></td>			<td>SUPPORTED</td></tr>
-<tr><td>spHeadBody</td>		<td></td>			<td>SUPPORTED</td></tr>
-<tr><td>spFootBody</td>		<td></td>			<td>SUPPORTED</td></tr>
-<tr><td>zoom</td>		<td></td>			<td>UNUSEFULL</td></tr>
-<tr><td><b><i>PAPERBORDERS</i></b></td>	<td></td>			<td>SUPPORTED</td><td>Except for bottom (don't exist)
-				special use for Right and Left.</td></tr>
-<tr><td>Left</td>		<td></td>			<td>ANALYSED</td></tr>
-<tr><td>Top</td>		<td></td>			<td>ANALYSED</td></tr>
-<tr><td>Right</td>		<td></td>			<td>ANALYSED</td></tr>
-<tr><td>Bottom</td>		<td></td>			<td>ANALYSED</td></tr>
-<tr><td colspan="2"><b><i>ATTRIBUTES</i></b></td></tr>
-<tr><td>processing</td>		<td></td>			<td>ANALYSED</td></tr>
-<tr><td>standardpage</td>	<td></td>			<td>ANALYSED</td></tr>
-<tr><td>hasHeader</td>		<td></td>			<td>SUPPORTED</td></tr>
-<tr><td>hasFooter</td>		<td></td>			<td>SUPPORTED</td></tr>
-<tr><td>unit</td>		<td></td>			<td>ANALYSED</td></tr>
-<tr><td colspan="2"><b><i>FOOTNOTEMGR</i></b></td></tr>
-<tr><td>START</td>		<td></td>			<td>IGNORED</td></tr>
-<tr><td>FORMAT</td>		<td></td>			<td>IGNORED</td></tr>
-<tr><td>FIRSTPARAG</td>		<td></td>			<td>IGNORED</td></tr>
-<tr><td colspan="2"><b><i>FRAMESETS</i></b></td></tr>
-<tr><td><b><i>FRAMESET</i></b></td>		<td></td></tr>
-<tr><td>frameType</td>		<td></td></tr>
-<tr><td></td>			<td>0...Base frame</td>		<td>ANALYSED</td></tr>
-<tr><td></td>			<td>1...Text frame</td>		<td>SUPPORTED</td></tr>
-<tr><td></td>			<td>2...Picture frame</td>	<td>ANALYSED</td></tr>
-<tr><td></td>			<td>3...Part frame</td>		<td>ANALYSED</td></tr>
-<tr><td></td>			<td>4...Formula frame</td>	<td>SUPPORTED</td></tr>
-
-<tr><td>frameInfo</td>		<td></td></tr>
-<tr><td></td>			<td>0...Body</td>		<td>SUPPORTED</td></tr>
-<tr><td></td>			<td>1...First header</td>	<td>SUPPORTED</td></tr>
-<tr><td></td>			<td>2...Odd header</td>		<td>SUPPORTED</td></tr>
-<tr><td></td>			<td>3...Even header</td>	<td>SUPPORTED</td></tr>
-<tr><td></td>			<td>4...First footer</td>	<td>SUPPORTED</td></tr>
-<tr><td></td>			<td>5...Odd footer</td>		<td>SUPPORTED</td></tr>
-<tr><td></td>			<td>6...Even footer</td>	<td>SUPPORTED</td></tr>
-<tr><td></td>			<td>7...footnote</td>		<td>ANALYSED</td></tr>
-<tr><td>grpMgr</td>		<td></td>			<td>SUPPORTED</td></tr>
-<tr><td></td>			<td>row</td>			<td>SUPPORTED</td></tr>
-<tr><td></td>			<td>col</td>			<td>SUPPORTED</td></tr>
-<tr><td></td>			<td>rows</td>			<td>ANALYSED</td></tr>
-<tr><td></td>			<td>cols</td>			<td>ANALYSED</td></tr>
-<tr><td>removeable</td>		<td></td>			<td>ANALYSED</td></tr>
-<tr><td>visible</td>		<td></td>			<td>ANALYSED</td></tr>
-
-<tr><td colspan="2"><b><i>FRAME</i></b></td></tr>
-<tr><td>left</td>		<td></td>			<td>ANALYSED</td></tr>
-<tr><td>top</td>		<td></td>			<td>ANALYSED</td></tr>
-<tr><td>right</td>		<td></td>			<td>ANALYSED</td></tr>
-<tr><td>bottom</td>		<td></td>			<td>ANALYSED</td></tr>
-<tr><td>runaround</td>		<td></td>			<td>ANALYSED</td></tr>
-<tr><td></td>			<td>0...Don't run around frame</td></tr>
-<tr><td></td>			<td>1...Frame repels text in overlapping frames</td></tr>
-<tr><td></td>			<td>2...Text in overlapping frames will avoid the
-                                    complete horizontal space of this frame.</td></tr>
-<tr><td>runaroundGap</td>	<td></td>			<td>ANALYSED</td></tr>
-<tr><td>autoCreateNewFrame</td>	<td></td>			<td>ANALYSED</td></tr>
-<tr><td>newFrameBehaviour</td>	<td></td>			<td>ANALYSED</td></tr>
-<tr><td>sheetSide</td>		<td></td>			<td>ANALYSED</td></tr>
-<tr><td>lWidth</td>		<td></td>		</tr>
-<tr><td>lRed</td>		<td></td>		</tr>
-<tr><td>lGreen</td>		<td></td>		</tr>
-<tr><td>lBlue</td>		<td></td>		</tr>
-<tr><td>lStyle</td>		<td></td>		</tr>
-<tr><td></td>			<td>0...Solid</td></tr>
-<tr><td></td>			<td>1...Dash</td></tr>
-<tr><td></td>			<td>2...Dot</td></tr>
-<tr><td></td>			<td>3...Dash-Dot</td></tr>
-<tr><td></td>			<td>4...Dash-Dot-Dot</td></tr>
-<tr><td>rWidth</td>		<td></td>		</tr>
-<tr><td>rRed</td>		<td></td>		</tr>
-<tr><td>rGreen</td>		<td></td>		</tr>
-<tr><td>rBlue</td>		<td></td>		</tr>
-<tr><td>rStyle</td>		<td></td>		</tr>
-<tr><td>tWidth</td>		<td></td>		</tr>
-<tr><td>tRed</td>		<td></td>		</tr>
-<tr><td>tGreen</td>		<td></td>		</tr>
-<tr><td>tBlue</td>		<td></td>		</tr>
-<tr><td>tStyle</td>		<td></td>		</tr>
-<tr><td>bWidth</td>		<td></td>		</tr>
-<tr><td>bRed</td>		<td></td>		</tr>
-<tr><td>bGreen</td>		<td></td>		</tr>
-<tr><td>bBlue</td>		<td></td>		</tr>
-<tr><td>bStyle</td>		<td></td>		</tr>
-<tr><td>bkRed</td>		<td></td>		</tr>
-<tr><td>bkGreen</td>		<td></td>		</tr>
-<tr><td>bkBlue</td>		<td></td>		</tr>
-<tr><td>bleftpt</td>		<td></td>		</tr>
-<tr><td>bleftmm</td>		<td></td>		</tr>
-<tr><td>bleftinch</td>		<td></td>		</tr>
-<tr><td>brightpt</td>		<td></td>		</tr>
-<tr><td>brightmm</td>		<td></td>		</tr>
-<tr><td>brightinch</td>		<td></td>		</tr>
-<tr><td>btoppt</td>		<td></td>		</tr>
-<tr><td>btopmm</td>		<td></td>		</tr>
-<tr><td>btopinch</td>		<td></td>		</tr>
-<tr><td>bbottompt</td>		<td></td>		</tr>
-<tr><td>bbottommm</td>		<td></td>		</tr>
-<tr><td>bbottominch</td>	<td></td>		</tr>
-<tr><td colspan="2"><b><i>PARAGRAPH</i></b></td></tr>
-<tr><td><b><i>TEXT</i></b></td>	<td></td>			<td>SUPPORTED :))</td></tr>
-<tr><td><b><i>NAME</i></b></td>	<td></td>			<td>ANALYSED</td></tr>
-<tr><td>name</td>		<td></td></tr>
-<tr><td><b><i>INFO</i></b></td>	<td></td>			<td>SUPPORTED</td></tr>
-<tr><td>info</td>		<td></td>			<td>SUPPORTED</td></tr>
-<tr><td></td>			<td>0...No &quot;special&quot; information</td></tr>
-<tr><td></td>			<td>1...Footnote (see NAME)</td></tr>
-<tr><td><b><i>FORMATS</i></b></td></tr>
-<tr><td colspan="2"><b><i>FORMAT</i></b></td></tr>
-<tr><td>id</td>			<td></td>			<td>ANALYSED</td></tr>
-<tr><td></td>			<td>0...none (mustn't be in a file)</td></tr>
-<tr><td></td>			<td>1...&quot;normal&quot; text</td><td>SUPPORTED</td></tr>
-<tr><td></td>			<td>2...a picture</td>		<td>SUPPORTED</td><td>NEW</td></tr>
-<tr><td></td>			<td>3...tabulator</td></tr>
-<tr><td></td>			<td>4...a variable</td></tr>
-<tr><td></td>			<td>5...a footnote</td>		<td>SUPPORTED</td></tr>
-<tr><td>pos</td>		<td></td></tr>
-<tr><td>len</td>		<td></td></tr>
-<tr><td><b><i>FORMAT texte</i></b></td><td></td>		<td>SUPPORTED</td></tr>
-<tr><td>COLOR</td>		<td></td>			<td>SUPPORTED</td></tr>
-<tr><td>FONT</td>		<td></td>			<td>ANALYSED</td></tr>
-<tr><td>SIZE</td>		<td></td>			<td>SUPPORTED</td></tr>
-<tr><td>WEIGHT</td>		<td></td>			<td>SUPPORTED</td></tr>
-<tr><td>ITALIC</td>		<td></td>			<td>SUPPORTED</td></tr>
-<tr><td>UNDERLINE</td>		<td></td>			<td>SUPPORTED</td></tr>
-<tr><td>VERTALIGN</td>		<td></td>			<td>SUPPORTED</td></tr>
-<tr><td>STRIKEOUT</td>		<td></td>			<td>SUPPORTED</td><td>NEW</td></tr>
-<tr><td>HARDBREAKING</td>	<td></td>			<td>SUPPORTED</td><td></td></tr>
-<tr><td></td><td>hardBreak</td>					<td>SUPPORTED</td></tr>
-<tr><td></td><td>hardBreakAfter</td>			<td>SUPPORTED</td></tr>
-<tr><td></td><td>linesTogether</td>				<td>ANALYSED</td></tr>
-<tr><td><b><i>FORMAT picture</i></b></td></tr>
-<tr><td>FILENAME</td>		<td></td>			<td>ANALYSED</td><td>NEW</td></tr>
-<tr><td></td>			<td>value=&quot;/home/...&quot;</td></tr>
-<tr><td><b><i>FORMAT tabulator</i></b></td></tr>
-<tr><td><b><i>FORMAT variable</i></b></td><td>SUPPORTED</td></tr>
-<tr><td><b><i>TYPE type</i></b></td></tr>
-<tr><td></td>			<td>0...date (fix)</td></tr>
-<tr><td></td>			<td>1...unused</td></tr>
-<tr><td></td>			<td>2...time (fix)</td></tr>
-<tr><td></td>			<td>3...unused</td></tr>
-<tr><td></td>			<td>4...page number</td></tr>
-<tr><td>POS frameSet=&quot;1&quot; frame=&quot;1&quot; pageNum=&quot;1&quot;</td></tr>
-
-<tr><td>DATE</td>		<td></td><td>SUPPORTED</td></tr>
-<tr><td>COLOR</td>		<td></td><td>SUPPORTED</td></tr>
-<tr><td>FONT</td>		<td></td><td>SUPPORTED</td></tr>
-<tr><td>SIZE</td>		<td></td><td>SUPPORTED</td></tr>
-<tr><td>WEIGHT</td>		<td></td><td>SUPPORTED</td></tr>
-<tr><td>ITALIC</td>		<td></td><td>SUPPORTED</td></tr>
-<tr><td>UNDERLINE</td>		<td></td><td>SUPPORTED</td></tr>
-<tr><td>VERTALIGN</td>		<td></td><td>SUPPORTED</td></tr>
-
-<tr><td><b><i>FORMAT footnote</i></b></td><td></td>		<td>SUPPORTED</td></tr>
-<tr><td>INTERNAL</td>		<td></td></tr>
-<tr><td>PART</td>		<td></td></tr>
-<tr><td></td>			<td>from</td></tr>
-<tr><td></td>			<td>to</td></tr>
-<tr><td></td>			<td>space</td></tr>
-<tr><td>INTERNAL</td>		<td></td></tr>
-<tr><td>RANGE</td>		<td></td></tr>
-<tr><td>TEXT</td>		<td></td></tr>
-<tr><td>DESCRIPT</td>		<td></td></tr>
-<tr><td>COLOR</td>		<td></td></tr>
-<tr><td>FONT</td>		<td></td></tr>
-<tr><td>SIZE</td>		<td></td></tr>
-<tr><td>WEIGHT</td>		<td></td></tr>
-<tr><td>ITALIC</td>		<td></td></tr>
-<tr><td>UNDERLINE</td>		<td></td></tr>
-<tr><td>VERTALIGN</td>		<td></td></tr>
-
-<tr><td><b><i>LAYOUT</i></b></td></tr>
-<tr><td><b><i>NAME</i></b></td>		<td></td></tr>
-<tr><td></td>			<td>value</td>			<td>SUPPORTED</td></tr>
-<tr><td><b><i>FOLLOWING</i></b></td><td></td>		</tr>
-<tr><td>name</td>		<td></td>			<td>SUPPORTED</td></tr>
-<tr><td><b><i>FLOW</i></b></td>	<td></td>			<td>SUPPORTED</td></tr>
-<tr><td>value</td>		<td></td></tr>
-<tr><td></td>			<td>0...left</td></tr>
-<tr><td></td>			<td>1...right</td></tr>
-<tr><td></td>			<td>2...center</td></tr>
-<tr><td></td>			<td>3...block</td></tr>
-<tr><td><b><i>INDENTS</i></b></td></tr>
-<tr><td></td>			<td>first</td></tr>
-<tr><td></td>			<td>left</td></tr>
-<tr><td></td>			<td>right</td></tr>
-<tr><td><b><i>OFFSETS</i></b></td></tr>
-<tr><td></td>			<td>before</td></tr>
-<tr><td></td>			<td>after</td></tr>
-
-<tr><td><b><i>COUNTER</i></b></td></tr>
-<tr><td>type</td>		<td></td><td></td></tr>
-<tr><td></td>			<td>0...none</td></tr>
-<tr><td></td>			<td>1...numeral (e.g. &quot;1&quot;)</td><td>SUPPORTED</td></tr>
-<tr><td></td>			<td>2...alphabetics (e.g. &quot;a&quot;)</td><td>SUPPORTED</td></tr>
-<tr><td></td>			<td>3...alpha. uppercase (e.g. &quot;A&quot;)</td><td>SUPPORTED</td></tr>
-<tr><td></td>			<td>4...roman numbering (e.g. &quot;ii&quot;)</td><td>SUPPORTED</td></tr>
-<tr><td></td>			<td>5...roman numbering uppercase (e.g. &quot;IX&quot;)</td><td>SUPPORTED</td></tr>
-<tr><td></td>			<td>6...custom bullet (e.g. &quot;-&quot;)</td><td>SUPPORTED</td><td>To verify the special characters convertion</td></tr>
-<tr><td></td>			<td>7...custom (complex string)</td></tr>
-<tr><td></td>			<td>8...circle bullet (e.g. &quot;o&quot;)</td><td>SUPPORTED</td></tr>
-<tr><td></td>			<td>9...square bullet</td></tr>
-<tr><td></td>			<td>10...disc bullet</td></tr>
-<tr><td>depth</td>		<td></td>			<td>SUPPORTED</td></tr>
-<tr><td>bullet</td>		<td></td>			<td>SUPPORTED</td></tr>
-<tr><td>start</td>		<td></td>			<td></td></tr>
-<tr><td>numberingtype</td>	<td></td>			<td>SUPPORTED</td></tr>
-<tr><td>lefttext</td>		<td></td>			<td></td></tr>
-<tr><td>righttext</td>		<td></td>			<td></td></tr>
-<tr><td>bulletfont</td>		<td></td>			<td></td></tr>
-
-<tr><td><b><i>LINESPACE</i></b></td></tr>
-<tr><td>value</td>		<td></td></tr>
-
-<tr><td><b><i>LEFTBORDER</i></b></td>				<td></td></tr>
-<tr><td>red, green, blue</td>	<td></td><td></td></tr>
-<tr><td>style</td>		<td></td><td></td></tr>
-<tr><td></td>			<td>0...solid</td></tr>
-<tr><td></td>			<td>1...dash</td></tr>
-<tr><td></td>			<td>2...dot</td></tr>
-<tr><td></td>			<td>3...dash-dot-dash-dot-...</td></tr>
-<tr><td></td>			<td>4...dash-dot-dot-dash-dot-dot-...</td></tr>
-<tr><td>width</td>		<td></td></tr>
-<tr><td><b><i>RIGHTBORDER</i></b></td>	<td></td></tr>
-<tr><td>red, green, blue</td>	<td></td></tr>
-<tr><td>style</td>		<td></td></tr>
-<tr><td></td>			<td>0...solid</td></tr>
-<tr><td></td>			<td>1...dash</td></tr>
-<tr><td></td>			<td>2...dot</td></tr>
-<tr><td></td>			<td>3...dash-dot-dash-dot-...</td></tr>
-<tr><td></td>			<td>4...dash-dot-dot-dash-dot-dot-...</td></tr>
-<tr><td>width</td>		<td></td></tr>
-<tr><td><b><i>TOPBORDER</i></b></td>		<td></td></tr>
-<tr><td>red, green, blue</td>	<td></td></tr>
-<tr><td>style</td>		<td></td></tr>
-<tr><td></td>			<td>0...solid</td></tr>
-<tr><td></td>			<td>1...dash</td></tr>
-<tr><td></td>			<td>2...dot</td></tr>
-<tr><td></td>			<td>3...dash-dot-dash-dot-...</td></tr>
-<tr><td></td>			<td>4...dash-dot-dot-dash-dot-dot-...</td></tr>
-<tr><td>width</td>		<td></td></tr>
-<tr><td><b><i>BOTTOMBORDER</i></b></td>	<td></td></tr>
-<tr><td>red, green, blue</td>	<td></td></tr>
-<tr><td>style</td>		<td></td></tr>
-<tr><td></td>			<td>0...solid</td></tr>
-<tr><td></td>			<td>1...dash</td></tr>
-<tr><td></td>			<td>2...dot</td></tr>
-<tr><td></td>			<td>3...dash-dot-dash-dot-...</td></tr>
-<tr><td></td>			<td>4...dash-dot-dot-dash-dot-dot-...</td></tr>
-<tr><td>width</td>		<td></td></tr>
-
-<tr><td><b><i>FORMAT</i></b>	<td>A text zone inherits format from its father paragraph.</td></tr>
-
-<tr><td><b><i>TABULATOR</i></b></td><td></td><td></td></tr>
-<tr><td>ptpos</td>		<td></td><td></td></tr>
-<tr><td>type</td>		<td></td><td></td></tr>
-<tr><td></td>			<td>0...left</td><td></td></tr>
-<tr><td></td>			<td>1...center</td><td></td></tr>
-<tr><td></td>			<td>2...right</td><td></td></tr>
-<tr><td></td>			<td>3...decimal point</td><td></td></tr>
-
-<tr><td><b><i>ANCHOR</i></b></td></tr>
-<tr><td>instance</td>		<td></td><td>SUPPORTED</td></tr>
-<tr><td>type</td>			<td></td><td>SUPPORTED</td></tr>
-
-</table>
 
 </PRE>
      </td>

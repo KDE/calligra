@@ -157,6 +157,12 @@ void LATEXImportDia::slotOk()
 	LatexParser parser(_fileIn);
 	QPtrList<Element>* root = parser.parse();
 	kdDebug() << "---------- generate file -------------" << endl;
+	kdDebug() << "command: " << root->count() << endl;
+	Element* elt;
+	for(elt = root->first(); elt; elt = root->next())
+	{
+		elt->print();
+	}
 	KwordGenerator generator(root);
 	generator.convert(_out);
 	kdDebug() << "LATEX FILTER --> END" << endl;
