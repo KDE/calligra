@@ -62,8 +62,8 @@ void KexiNameDialog::init()
 	lyr->addWidget(m_widget,0,1);
 	lyr->addItem(new QSpacerItem( 25, 10, QSizePolicy::Expanding, QSizePolicy::Minimum ), 0, 2);
 	lyr->addItem(new QSpacerItem( 5, 10, QSizePolicy::Minimum, QSizePolicy::Expanding ), 1, 1);
-	m_widget->captionLineEdit()->selectAll();
-	m_widget->captionLineEdit()->setFocus();
+//	m_widget->captionLineEdit()->selectAll();
+//	m_widget->captionLineEdit()->setFocus();
 	resize( QSize(400, 140 + (m_widget->lbl_message->isVisible()?m_widget->lbl_message->height():0) )
 		.expandedTo(minimumSizeHint()) );
 	enableButtonOK( true );
@@ -89,6 +89,13 @@ void KexiNameDialog::accept()
 void KexiNameDialog::setDialogIcon(const QPixmap& icon)
 {
 	m_icon->setPixmap(icon);
+}
+
+void KexiNameDialog::show()
+{
+	m_widget->captionLineEdit()->selectAll();
+	m_widget->captionLineEdit()->setFocus();
+	KDialogBase::show();
 }
 
 #include "kexinamedialog.moc"

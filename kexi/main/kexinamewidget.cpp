@@ -74,7 +74,8 @@ void KexiNameWidget::init(
 
 	le_name = new KLineEdit( nameText, this, "le_name" );
 	le_name->setSizePolicy(QSizePolicy(QSizePolicy::Expanding, QSizePolicy::Preferred,1,0));
-	le_name->setValidator(m_validator=new Kexi::IdentifierValidator(this, "id_val"));
+	KexiValidator *idValidator = new Kexi::IdentifierValidator(0, "id_val");
+	le_name->setValidator( m_validator = new KexiMultiValidator(idValidator, this, "val") );
 //	le_name->installEventFilter(this);
 	lyr->addWidget( le_name, 2, 1 );
 
@@ -168,20 +169,36 @@ QString KexiNameWidget::nameText() const
 
 bool KexiNameWidget::checkValidity()
 {
-	if (acceptsEmptyValue())
-		return true;
-
-	if (le_name->text().isEmpty()) {
-		KMessageBox::information(0, m_nameWarning);
+	if (!acceptsEmptyValue()) {
+		if (le_name->text().isEmpty()) {
+			KMessageBox::sorry(0, m_nameWarning);
+			le_name->setFocus();
+			return false;
+		}
+		if (le_caption->text().stripWhiteSpace().isEmpty()) {
+			KMessageBox::sorry(0, m_captionWarning);
+			le_caption->setFocus();
+			return false;
+		}
+	}
+	QString dummy, message, details;
+	if (m_validator->check(dummy, le_name->text(), message, details)
+		==KexiValidator::Error) {
+		KMessageBox::detailedSorry(0, message, details);
 		le_name->setFocus();
 		return false;
 	}
-	if (le_caption->text().stripWhiteSpace().isEmpty()) {
-		KMessageBox::information(0, m_captionWarning);
-		le_caption->setFocus();
-		return false;
-	}
 	return true;
+}
+
+KexiValidator *KexiNameWidget::nameValidator() const 
+{
+	return m_validator;
+}
+
+void KexiNameWidget::addNameSubvalidator( KexiValidator* validator, bool owned )
+{
+	m_validator->addSubvalidator( validator, owned );
 }
 
 /*bool KexiNameWidget::eventFilter( QObject *obj, QEvent *ev )

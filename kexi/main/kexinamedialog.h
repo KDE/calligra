@@ -41,6 +41,8 @@ class KEXIMAIN_EXPORT KexiNameDialog : public KDialogBase
 
 		KexiNameWidget* widget() const { return m_widget; }
 
+		virtual void show();
+
 	public slots:
 		virtual void setDialogIcon(const QPixmap& icon);
 

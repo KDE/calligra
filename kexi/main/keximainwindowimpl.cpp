@@ -1617,6 +1617,9 @@ bool KexiMainWindowImpl::saveObject( KexiDialogBase *dlg, bool &cancelled ) //, 
 		if (!d->nameDialog) {
 			d->nameDialog = new KexiNameDialog(QString::null,
 				this, "nameDialog");
+			//check if that name is allowed
+			d->nameDialog->widget()->addNameSubvalidator( 
+				new Kexi::KexiDBObjectNameValidator(project()->dbConnection()->driver(), 0, "sub"));
 		}
 		d->nameDialog->widget()->setCaptionText(dlg->partItem()->caption());
 		d->nameDialog->widget()->setNameText(dlg->partItem()->name());
@@ -1636,6 +1639,7 @@ bool KexiMainWindowImpl::saveObject( KexiDialogBase *dlg, bool &cancelled ) //, 
 			if (found) {
 				KMessageBox::information(this, i18n("%1 \"%2\" already exists.\nPlease choose other name.")
 					.arg(dlg->part()->instanceName()).arg(d->nameDialog->widget()->nameText()));
+				continue;
 			}
 		}
 		while (found);
