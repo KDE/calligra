@@ -83,7 +83,7 @@ bool KivioDiaStencilSpawner::load(const QString &file)
 		return false;
 	}
 	dia.setContent(&f);
-	QDomNode diaMain = dia.firstChild().nextSibling();
+	QDomNode diaMain = dia.namedItem("shape");
 
 	// Set "creator" attribute
 	QDomElement firstElement = kivio.createElement("KivioShapeStencil");
