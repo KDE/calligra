@@ -144,6 +144,7 @@ KWordDocument::KWordDocument(QObject* parent, const char* name, bool singleViewM
     connect( this, SIGNAL( completed() ),
 	     this, SLOT( slotDocumentLoaded() ) );
     zoom = 100;
+    syntaxVersion = CURRENT_SYNTAX_VERSION;
 }
 
 /*================================================================*/
@@ -843,8 +844,16 @@ bool KWordDocument::loadXML( KOMLParser& parser, KoStore *)
 		cerr << "Unknown mime type " << ( *it ).m_strValue << endl;
 		return FALSE;
 	    }
-	} else if ( ( *it ).m_strName == "url" )
+	} else if ( ( *it ).m_strName == "url" ) {
 	    urlIntern = KURL( ( *it ).m_strValue.c_str() ).path();
+        } else if ( ( *it ).m_strName == "syntaxVersion" ) {
+	    syntaxVersion = atoi( ( *it ).m_strValue.c_str() );
+            if ( syntaxVersion < CURRENT_SYNTAX_VERSION )
+            {
+                // We can ignore the version mismatch for now. We will actually have to use it
+                // when the syntax is extended in an incompatible manner.
+            }
+        }
     }
 
     // PAPER
@@ -859,7 +868,7 @@ bool KWordDocument::loadXML( KOMLParser& parser, KoStore *)
 	    KWordChild *ch = new KWordChild( this );
 	    KWPartFrameSet *fs = 0;
 	    QRect r;
-	
+
 	    while ( parser.open( 0L, tag ) ) {
 		KOMLParser::parseTag( tag.c_str(), name, lst );
 		if ( name == "OBJECT" ) {
@@ -1486,11 +1495,16 @@ bool KWordDocument::completeLoading( KoStore *_store )
 /*================================================================*/
 bool KWordDocument::save(ostream &out,const char* /* _format */)
 {
+    // For now, we always save documents using the current syntax version.
+
+    syntaxVersion = CURRENT_SYNTAX_VERSION;
     out << "<?xml version=\"1.0\" encoding=\"UTF-8\"?>" << endl;
     //out << "<!DOCTYPE DOC SYSTEM \"" << kapp->kde_datadir() << "/kword/dtd/kword.dtd\"/>" << endl;
     out << otag << "<DOC author=\"" << "Reginald Stadlbauer and Torben Weis" << "\" email=\""
 	<< "reggie@kde.org and weis@kde.org"
-	<< "\" editor=\"" << "KWord" << "\" mime=\"" << "application/x-kword" << "\">" << endl;
+	<< "\" editor=\"" << "KWord" << "\" mime=\"" << "application/x-kword"
+	<< "\" syntaxVersion=\"" << syntaxVersion << "\">"
+        << endl;
     out << otag << "<PAPER format=\"" << static_cast<int>( pageLayout.format ) << "\" ptWidth=\"" << pageLayout.ptWidth
 	<< "\" ptHeight=\"" << pageLayout.ptHeight
 	<< "\" mmWidth =\"" << pageLayout.mmWidth << "\" mmHeight=\"" << pageLayout.mmHeight

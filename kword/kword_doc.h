@@ -102,6 +102,8 @@ public:
     static const int U_TABS = 512;
     static const int U_SMART = 1024;
 
+    static const int CURRENT_SYNTAX_VERSION = 1;
+
 public:
     virtual bool initDoc();
     void initEmpty();
@@ -371,6 +373,8 @@ public:
     unsigned int zoomIt( unsigned int z ) const;
     double zoomIt( double z ) const;
 
+    int getSyntaxVersion( ) const { return syntaxVersion; };
+
 signals:
     void sig_imageModified();
     void sig_insertObject( KWordChild *_child, KWPartFrameSet* );
@@ -464,6 +468,10 @@ protected:
     QRect tmpShellSize;
 
     int zoom;
+
+    // When a document is written out, the syntax version in use will be recorded. When read back
+    // in, this variable reflects that value.
+    int syntaxVersion;
 
 };
 
