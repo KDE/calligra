@@ -5537,61 +5537,53 @@ bool KSpreadTable::loadSelection( const QDomDocument& doc, int _xshift, int _ysh
 
     KSpreadCell* refreshCell = 0;
     KSpreadCell *cell;
-    KSpreadCell *cellLoad;
+    KSpreadCell *cellBackup = NULL;
     QDomElement c = e.firstChild().toElement();
     for( ; !c.isNull(); c = c.nextSibling().toElement() )
     {
-        if ( c.tagName() == "cell" )
+      if ( c.tagName() == "cell" )
+      {
+        int row = c.attribute( "row" ).toInt() + _yshift;
+        int col = c.attribute( "column" ).toInt() + _xshift;
+        // tile the selection with the clipboard contents
+
+        for (int roff = 0; row + roff - _yshift <= pasteHeight; roff += rowsInClpbrd)
         {
-            int row = c.attribute( "row" ).toInt() + _yshift;
-            int col = c.attribute( "column" ).toInt() + _xshift;
-            // tile the selection with the clipboard contents
+          for (int coff = 0; col + coff - _xshift <= pasteWidth; coff += columnsInClpbrd)
+          {
+            //kdDebug() << "loadSelection: cell at " << (col+coff) << "," << (row+roff) << " with roff,coff= "
+            //          << roff << "," << coff << ", _xshift: " << _xshift << ", _yshift: " << _yshift << endl;
 
-            for (int roff = 0; row + roff - _yshift <= pasteHeight; roff += rowsInClpbrd)
+            cell = nonDefaultCell( col + coff, row + roff );
+
+            cellBackup = new KSpreadCell(this, cell->column(), cell->row());
+            cellBackup->copyAll(cell);
+
+            if ( !cell->load( c, _xshift + coff, _yshift + roff, sp, op ) )
             {
-                for (int coff = 0; col + coff - _xshift <= pasteWidth; coff += columnsInClpbrd)
-                {
-                  //kdDebug() << "loadSelection: cell at " << (col+coff) << "," << (row+roff) << " with roff,coff= "
-                  //          << roff << "," << coff << ", _xshift: " << _xshift << ", _yshift: " << _yshift << endl;
-
-                    cell = cellAt( col + coff, row + roff );
-
-                    if ( ( cell->isDefault() ) || ( op == OverWrite && sp == Normal ) ) //we will generate a new or replace the existing cell
-                    {
-                        // Don't use insertCell with the cell itself, it will be deleted!
-                        // Therefore we need a temporary cell cellLoad, where we first load the data and then use this
-                        // to replace the existing one.
-
-                        cellLoad = new KSpreadCell( this, col + coff, row + roff );
-
-                        if ( !cellLoad->load( c, _xshift + coff, _yshift + roff, sp, op ) )
-                        {
-                            delete cell; //is this correct? Do we really delete the existing cell on failure?
-                            delete cellLoad; //Failure->we don't replace->actively delete the temporary cell
-                        }
-                        else
-                        {
-                            insertCell( cellLoad );
-                        }
-                    }
-                    else // we simply load into the existing one
-                    {
-                        if ( !cell->load( c, _xshift + coff, _yshift + roff, sp, op ) )
-                        {
-                            delete cell; //is this correct? Do we really delete the existing cell on failure?
-                        }
-                    }
-
-                    cell = cellAt( col + coff, row + roff );
-                    if( !refreshCell && cell->updateChart( false ) )
-                    {
-                        refreshCell = cell;
-                    }
-                }
+              cell->copyAll(cellBackup);
             }
+
+            delete cellBackup;
+
+
+
+            cell = cellAt( col + coff, row + roff );
+            if( !refreshCell && cell->updateChart( false ) )
+            {
+              refreshCell = cell;
+            }
+          }
         }
+      }
     }
     //refresh chart after that you paste all cells
+
+    /* John: I don't think this is gonna work....doesn't this only update
+       one chart -- the one which had a dependant cell update first?
+
+       I don't have time to check on this now....
+    */
     if ( refreshCell )
         refreshCell->updateChart();
     m_pDoc->setModified( true );
