@@ -1,4 +1,4 @@
-/* $Header$ */
+// $Header$
 
 /*
    This file is part of the KDE project
@@ -329,18 +329,19 @@ static void ProcessParagraphData ( QString &paraText, QValueList<FormatData> &pa
             
 	    if ((*paraFormatDataIt).abiprops.isEmpty())
             { 
-		//It's just normal text, so there is no <c> tag.
-		//Should rarely append, as we have always the font name and size
-             	outputText += partialText;
+		//It's just normal text, so no "props" attribute
+		//Should rarely happen, as we have always the font name and size
+                //Note: you must use a <c> tag!
+             	outputText += "<c>";
             }
             else
             { //Text with properties: embed it in a <c> tag!
                 outputText += "<c props=\"";
                 outputText += (*paraFormatDataIt).abiprops;
                 outputText += "\">";
-            	outputText += partialText;
-            	outputText += "</c>";
             }
+            outputText += partialText;
+            outputText += "</c>";
        }
 
     }
