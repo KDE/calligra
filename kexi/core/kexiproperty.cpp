@@ -40,7 +40,6 @@ class SPHelper
 	SPHelper() {
 		list << "Fixed" << "Maximum" << "Minimum" << "Preferred" << "Expanding" 
 			<< "MinimumExpanding" << "Ignored";
-
 	}
 	~SPHelper() {;}
 
@@ -58,6 +57,7 @@ SPHelper::valueToKey(int value)
 	QStringList::iterator it = list.at(value);
 	if (it==list.end())
 		return QString::null;//err
+	kdDebug() << "value is " << value << " key is " << *it << endl;
 	return *it;
 }
 /*
@@ -217,10 +217,10 @@ void KexiProperty::init(QVariant value)
 			QSizePolicy p = value.toSizePolicy();
 
 			addChild( new KexiProperty("horSizeType", spHelper.valueToKey(p.horData()), 
-				spHelper.list, i18n("horSizeType")) );
+				spHelper.list, spHelper.list, i18n("horSizeType")) );
 
 			addChild( new KexiProperty("verSizeType", 
-				spHelper.valueToKey(p.verData()), spHelper.list, i18n("verSizeType")) );
+				spHelper.valueToKey(p.verData()), spHelper.list, spHelper.list, i18n("verSizeType")) );
 
 			addChild( new KexiProperty("hStretch", (int)p.horStretch(), i18n("hStretch") ) );
 			addChild( new KexiProperty("vStretch", (int)p.verStretch(), i18n("vStretch") ) );

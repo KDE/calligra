@@ -49,6 +49,7 @@ test::test()
 	m_buffer->add(new KexiProperty("Date", QDate::currentDate(),"Date"));
 	m_buffer->add(new KexiProperty("Time", QTime::currentTime(),"Time"));
 	m_buffer->add(new KexiProperty("DateTime", QDateTime::currentDateTime(),"DateTime"));
+	m_buffer->add(new KexiProperty("SizePolicy", sizePolicy(), "Size"));
 	
 	KexiPropertyEditor *edit = new KexiPropertyEditor(this,true/*autosync*/);
 	setCentralWidget(edit);
