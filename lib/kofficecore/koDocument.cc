@@ -1500,7 +1500,7 @@ bool KoDocument::openFile()
 }
 
 // The caller must call store->close() if loadAndParse returns true.
-bool KoDocument::loadAndParse(KoStore* store, const QString& filename, QDomDocument& doc)
+bool KoDocument::loadAndParse(KoStore* store, const QString& filename, QDomDocument& doc, bool reportWhitespace)
 {
     //kdDebug(30003) << "loadAndParse: Trying to open " << filename << endl;
 
@@ -1513,29 +1513,34 @@ bool KoDocument::loadAndParse(KoStore* store, const QString& filename, QDomDocum
     // Error variables for QDomDocument::setContent
     QString errorMsg;
     int errorLine, errorColumn;
+    bool ok;
 
     // We need to be able to see the space in <text:span> </text:span>, this is why
     // we activate the "report-whitespace-only-CharData" feature.
     // Unfortunately this leads to lots of whitespace text nodes in between real
     // elements in the rest of the document, watch out for that.
-#if 1
-    QXmlInputSource source( store->device() );
-    // Copied from QDomDocumentPrivate::setContent, to change the whitespace thing
-    QXmlSimpleReader reader;
-    if ( false /*namespaceProcessing*/ ) {
-        reader.setFeature( "http://xml.org/sax/features/namespaces", TRUE );
-        reader.setFeature( "http://xml.org/sax/features/namespace-prefixes", FALSE );
-    } else {
-        reader.setFeature( "http://xml.org/sax/features/namespaces", FALSE );
-        reader.setFeature( "http://xml.org/sax/features/namespace-prefixes", TRUE );
-    }
-    reader.setFeature( "http://trolltech.com/xml/features/report-whitespace-only-CharData", TRUE );
-    //reader.setUndefEntityInAttrHack(true);
+    if ( reportWhitespace )
+    {
+        QXmlInputSource source( store->device() );
+        // Copied from QDomDocumentPrivate::setContent, to change the whitespace thing
+        QXmlSimpleReader reader;
+        if ( false /*namespaceProcessing*/ ) {
+            reader.setFeature( "http://xml.org/sax/features/namespaces", TRUE );
+            reader.setFeature( "http://xml.org/sax/features/namespace-prefixes", FALSE );
+        } else {
+            reader.setFeature( "http://xml.org/sax/features/namespaces", FALSE );
+            reader.setFeature( "http://xml.org/sax/features/namespace-prefixes", TRUE );
+        }
+        reader.setFeature( "http://trolltech.com/xml/features/report-whitespace-only-CharData", TRUE );
+        //reader.setUndefEntityInAttrHack(true);
 
-    if ( !doc.setContent( &source, &reader, &errorMsg, &errorLine, &errorColumn ) )
-#else
-    if ( !doc.setContent( store->device(), &errorMsg, &errorLine, &errorColumn ) )
-#endif
+        ok = doc.setContent( &source, &reader, &errorMsg, &errorLine, &errorColumn );
+    }
+    else
+    {
+        ok = doc.setContent( store->device(), &errorMsg, &errorLine, &errorColumn );
+    }
+    if ( !ok )
     {
         kdError(30003) << "Parsing error in " << filename << "! Aborting!" << endl
             << " In line: " << errorLine << ", column: " << errorColumn << endl
@@ -1646,11 +1651,11 @@ bool KoDocument::loadNativeFormatFromStore( const QString& file )
         // TODO read manifest?
         KoOasisStyles oasisStyles;
         QDomDocument contentDoc;
-        bool ok = loadAndParse( store, "content.xml", contentDoc );
+        bool ok = loadAndParse( store, "content.xml", contentDoc, true );
         if ( ok ) {
             store->close();
             QDomDocument stylesDoc;
-            if ( loadAndParse( store, "styles.xml", stylesDoc ) )
+            if ( loadAndParse( store, "styles.xml", stylesDoc, true ) )
                 store->close();
             // Load styles from style.xml
             oasisStyles.createStyleMap( stylesDoc );
@@ -1670,7 +1675,7 @@ bool KoDocument::loadNativeFormatFromStore( const QString& file )
         oasis = false;
 
         QDomDocument doc;
-        bool ok = loadAndParse( store, "root", doc );
+        bool ok = loadAndParse( store, "root", doc, false );
         if ( ok )
             ok = loadXML( store->device(), doc );
         if ( !ok )
@@ -1697,7 +1702,7 @@ bool KoDocument::loadNativeFormatFromStore( const QString& file )
 
     if ( oasis && store->hasFile( "meta.xml" ) ) {
         QDomDocument metaDoc;
-        if ( loadAndParse( store, "meta.xml", metaDoc ) ) {
+        if ( loadAndParse( store, "meta.xml", metaDoc, false ) ) {
             store->close();
             d->m_docInfo->loadOasis( metaDoc );
         }
@@ -1705,7 +1710,7 @@ bool KoDocument::loadNativeFormatFromStore( const QString& file )
     else if ( !oasis && store->hasFile( "documentinfo.xml" ) )
     {
         QDomDocument doc;
-        if ( loadAndParse( store, "documentinfo.xml", doc ) ) {
+        if ( loadAndParse( store, "documentinfo.xml", doc, false ) ) {
             store->close();
             d->m_docInfo->load( doc );
         }
