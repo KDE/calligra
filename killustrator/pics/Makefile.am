@@ -42,7 +42,8 @@ deleteNode.xpm \
 joinNodes.xpm \
 moveNode.xpm \
 newNode.xpm \
-split.xpm
+split.xpm \
+mini-killustrator.xpm
 
 EXTRA_DIST = $(data_DATA) 
 
