@@ -192,6 +192,7 @@ KoVariableFormat * KoVariableFormatCollection::createFormat( const QCString &key
 KoVariableCollection::KoVariableCollection()
 {
     m_variableSettings=new KoVariableSettings();
+    m_varSelected=0L;
 }
 
 KoVariableCollection::~KoVariableCollection()
@@ -257,6 +258,89 @@ bool KoVariableCollection::customVariableExist(const QString &varname) const
     return varValues.contains( varname );
 }
 
+void KoVariableCollection::changeTypeOfVariable()
+{
+    KAction * act = (KAction *)(sender());
+    VariableSubTextMap::Iterator it = m_variableSubTextMap.find( act );
+    if ( it == m_variableSubTextMap.end() )
+        kdWarning() << "Action not found in m_variableSubTextMap." << endl;
+    else
+    {
+        if( m_varSelected )
+        {
+            m_varSelected->setVariableSubType( *it );
+            recalcVariables(m_varSelected);
+        }
+    }
+}
+
+void KoVariableCollection::recalcVariables(KoVariable *var)
+{
+    if( var )
+    {
+        var->recalc();
+        Qt3::QTextParag * parag = var->paragraph();
+        if ( parag )
+        {
+            kdDebug() << "KoDoc::recalcVariables -> invalidating parag " << parag->paragId() << endl;
+            parag->invalidate( 0 );
+            parag->setChanged( true );
+        }
+        emit repaintVariable();
+    }
+}
+
+
+void KoVariableCollection::changeFormatOfVariable()
+{
+    //todo
+#if 0
+    KAction * act = (KAction *)(sender());
+    VariableDefMap::Iterator it = m_variableDefMap.find( act );
+    if ( it == m_variableDefMap.end() )
+        kdWarning() << "Action not found in m_variableDefMap." << endl;
+    else
+    {
+        edit->insertVariable( (*it).type, (*it).subtype );
+    }
+#endif
+ }
+
+void KoVariableCollection::setVariableSelected(KoVariable * var)
+{
+    m_varSelected=var;
+}
+
+QPtrList<KAction> KoVariableCollection::variableActionList()
+{
+    QPtrList<KAction> listAction=QPtrList<KAction>();
+    if( !m_varSelected)
+        return listAction;
+    else
+    {
+        QStringList list=m_varSelected->subTypeText();
+        QStringList::ConstIterator it = list.begin();
+        for ( int i = 0; it != list.end() ; ++it, ++i )
+        {
+            if( i == 0)
+                listAction.append( new KActionSeparator() );
+
+            if ( !(*it).isEmpty() ) // in case of removed subtypes or placeholders
+            {
+                KAction * act = new KAction( (*it));
+                connect( act, SIGNAL(activated()),this, SLOT(changeTypeOfVariable()) );
+
+                m_variableSubTextMap.insert( act, i );
+                listAction.append( act );
+            }
+        }
+    }
+
+    return listAction;
+}
+
+
+
 /******************************************************************/
 /* Class: KoVariable                                              */
 /******************************************************************/
@@ -272,6 +356,11 @@ KoVariable::~KoVariable()
 {
     //kdDebug() << "KoVariable::~KoVariable " << this << endl;
     m_varColl->unregisterVariable( this );
+}
+
+QStringList KoVariable::subTypeText()
+{
+    return QStringList();
 }
 
 void KoVariable::resize()
@@ -325,7 +414,7 @@ void KoVariable::drawCustomItem( QPainter* p, int x, int y, int /*cx*/, int /*cy
 
 void KoVariable::save( QDomElement &parentElem )
 {
-    kdDebug() << "KoVariable::save" << endl;
+    //kdDebug() << "KoVariable::save" << endl;
     QDomElement variableElem = parentElem.ownerDocument().createElement( "VARIABLE" );
     parentElem.appendChild( variableElem );
     QDomElement typeElem = parentElem.ownerDocument().createElement( "TYPE" );
@@ -613,6 +702,12 @@ QStringList KoDateVariable::actionTexts()
     return lst;
 }
 
+QStringList KoDateVariable::subTypeText()
+{
+    return KoDateVariable::actionTexts();
+}
+
+
 /******************************************************************/
 /* Class: KoTimeVariable                                          */
 /******************************************************************/
@@ -680,6 +775,11 @@ QStringList KoTimeVariable::actionTexts()
     lst << i18n( "Current time (variable)" );
     // TODO add time created, time printed, time last modified( BR #24242 )
     return lst;
+}
+
+QStringList KoTimeVariable::subTypeText()
+{
+    return KoTimeVariable::actionTexts();
 }
 
 
@@ -939,6 +1039,10 @@ QStringList KoFieldVariable::actionTexts()
     return lst;
 }
 
+QStringList KoFieldVariable::subTypeText()
+{
+    return KoFieldVariable::actionTexts();
+}
 
 /******************************************************************/
 /* Class: KoPgNumVariable                                         */

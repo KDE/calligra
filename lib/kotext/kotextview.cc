@@ -83,7 +83,7 @@ KoTextView::KoTextView( KoTextObject *textobj )
     possibleTripleClick = FALSE;
     afterTripleClick = FALSE;
     m_currentFormat = 0;
-    varLinkPosition =-1;
+    variablePosition =-1;
     //updateUI( true, true );
 }
 
@@ -647,7 +647,7 @@ void KoTextView::placeCursor( const QPoint &pos )
 {
     m_cursor->restoreState();
     Qt3::QTextParag *s = textDocument()->firstParag();
-    m_cursor->place( pos,  s,false,&varLinkPosition );
+    m_cursor->place( pos,  s,false,&variablePosition );
     updateUI( true );
 }
 
@@ -784,8 +784,8 @@ KoTextDocument * KoTextView::textDocument() const
 
 void KoTextView::referenceLink(QString & href)
 {
-     KoTextStringChar * ch = m_cursor->parag()->at( varLinkPosition );
-     ch = m_cursor->parag()->at( varLinkPosition );
+     KoTextStringChar * ch = m_cursor->parag()->at( variablePosition );
+     ch = m_cursor->parag()->at( variablePosition );
      if(ch->isCustom())
      {
          KoLinkVariable *var=dynamic_cast<KoLinkVariable *>(ch->customItem());
@@ -796,8 +796,8 @@ void KoTextView::referenceLink(QString & href)
 
 KoLinkVariable * KoTextView::linkVariable()
 {
-    KoTextStringChar * ch = m_cursor->parag()->at( varLinkPosition );
-     ch = m_cursor->parag()->at( varLinkPosition );
+    KoTextStringChar * ch = m_cursor->parag()->at( variablePosition );
+     ch = m_cursor->parag()->at( variablePosition );
      if(ch->isCustom())
      {
          KoLinkVariable *var=dynamic_cast<KoLinkVariable *>(ch->customItem());
@@ -806,12 +806,24 @@ KoLinkVariable * KoTextView::linkVariable()
      return 0L;
 }
 
+KoVariable *KoTextView::variable()
+{
+    KoTextStringChar * ch = m_cursor->parag()->at( variablePosition );
+    ch = m_cursor->parag()->at( variablePosition );
+    if(ch->isCustom())
+    {
+        KoVariable *var=dynamic_cast<KoVariable *>(ch->customItem());
+        return var;
+    }
+    return 0L;
+}
+
 QPtrList<KAction> KoTextView::dataToolActionList(KInstance * instance)
 {
     m_singleWord = false;
     m_wordUnderCursor = QString::null;
     m_refLink= QString::null;
-    if(varLinkPosition!=-1)
+    if(variablePosition!=-1)
         referenceLink(m_refLink);
     QString text;
     if ( textObject()->hasSelection() )

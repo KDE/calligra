@@ -26,6 +26,7 @@
 #include <qptrlist.h>
 #include <qmap.h>
 #include <qobject.h>
+#include <kaction.h>
 class QDomElement;
 // Always add new types at the _end_ of this list (but before VT_ALL of course).
 // (and update KWView::setupActions)
@@ -184,6 +185,7 @@ public:
     void registerVariable( KoVariable *var );
     void unregisterVariable( KoVariable *var );
     void recalcVariables(int type);
+    void recalcVariables(KoVariable *var);
 
     // For custom variables
     void setVariableValue( const QString &name, const QString &value );
@@ -199,12 +201,26 @@ public:
 
     KoVariableSettings *variableSetting(){return m_variableSettings;}
 
+    void setVariableSelected(KoVariable * var);
+
+    QPtrList<KAction> variableActionList();
+
+
  signals:
     void repaintVariable();
+
+ public slots:
+    void changeTypeOfVariable();
+    void changeFormatOfVariable();
+
  private:
+    typedef QMap<KAction *, int> VariableSubTextMap;
+    VariableSubTextMap m_variableSubTextMap;
+
     QPtrList<KoVariable> variables;
     QMap< QString, QString > varValues;
     KoVariableSettings *m_variableSettings;
+    KoVariable *m_varSelected;
 };
 
 
@@ -264,6 +280,10 @@ public:
       */
     virtual int typeId() const { return 4; }
 
+    virtual QStringList subTypeText();
+    virtual void setVariableSubType( short int /*type*/){;}
+
+
 protected:
     /** Variable should reimplement this to implement saving. */
     virtual void saveVariable( QDomElement &parentElem ) = 0;
@@ -293,6 +313,9 @@ public:
 
     virtual void saveVariable( QDomElement &parentElem );
     virtual void load( QDomElement &elem );
+    virtual QStringList subTypeText();
+
+    virtual void setVariableSubType( short int type){m_subtype=type;}
 
 protected:
     short int m_subtype;
@@ -321,6 +344,9 @@ public:
 
     virtual void saveVariable( QDomElement &parentElem );
     virtual void load( QDomElement &elem );
+
+    virtual QStringList subTypeText();
+    virtual void setVariableSubType( short int type){m_subtype=type;}
 
 protected:
     short int m_subtype;
@@ -384,6 +410,9 @@ public:
     QString value() const { return m_value; }
 
     static QStringList actionTexts();
+
+    virtual QStringList subTypeText();
+    virtual void setVariableSubType( short int type){m_subtype=type;}
 
 protected:
     short int m_subtype;

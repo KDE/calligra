@@ -37,6 +37,7 @@ class KAction;
 class KInstance;
 class KDataToolInfo;
 class KoLinkVariable;
+class KoVariable;
 class KoTextViewIface;
 #include "qrichtext_p.h"
 using namespace Qt3;
@@ -128,6 +129,9 @@ public:
     void changeCaseOfText(KoChangeCaseDia::TypeOfCase _type);
     void referenceLink(QString & href);
     KoLinkVariable * linkVariable();
+    //return a pointer to a variable
+    KoVariable *variable();
+
 
 public slots:
     /** Show the current settings (those for the paragraph and character under the cursor), in the GUI.
@@ -242,8 +246,9 @@ private:
     bool m_singleWord;
     QString m_wordUnderCursor;
     QString m_refLink;
-    //store variable link position.
-    int varLinkPosition;
+    //store variable position.
+    //all type of variable
+    int variablePosition;
 };
 
 #endif
