@@ -250,6 +250,8 @@ protected:
 private:
     void detectStartOfLink(const QString &word);
     void autoFormatIsActive();
+    void loadListOfWordCompletion();
+
     KoDocument *m_doc;
     KoVariableCollection *m_varCollection;
     KoVariableFormatCollection *m_varFormatCollection;

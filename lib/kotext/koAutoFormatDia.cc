@@ -28,7 +28,7 @@
 #include <klistview.h>
 
 #include <qlayout.h>
-#include <qwhatsthis.h> 
+#include <qwhatsthis.h>
 #include <qvbox.h>
 #include <qcheckbox.h>
 #include <qpushbutton.h>
@@ -37,6 +37,7 @@
 #include <kdebug.h>
 #include <knuminput.h>
 #include <kcompletion.h>
+#include <kconfig.h>
 
 KoAutoFormatLineEdit::KoAutoFormatLineEdit ( QWidget * parent, const char * name )
     : QLineEdit(parent,name)
@@ -430,6 +431,9 @@ void KoAutoFormatDia::setupTab5()
     if( list.count()==0 )
         pbRemoveCompletionEntry->setEnabled( false );
 
+    pbSaveCompletionEntry= new QPushButton(i18n( "Save Completion List"), tab5  );
+    connect( pbSaveCompletionEntry, SIGNAL( clicked() ), this, SLOT( slotSaveCompletionEntry()));
+
 
     QLabel *lab=new QLabel( i18n("Min. word length:"), tab5);
     lab->resize( lab->sizeHint() );
@@ -740,4 +744,12 @@ void KoAutoFormatDia::slotChangeStateDouble(bool b)
     pbDoubleQuote1->setEnabled(b);
     pbDoubleQuote2->setEnabled(b);
     pbDoubleDefault->setEnabled(b);
+}
+
+void KoAutoFormatDia::slotSaveCompletionEntry()
+{
+    KConfig config("kofficerc");
+    KConfigGroupSaver cgs( &config, "Completion Word" );
+    config.writeEntry( "list", m_autoFormat.listCompletion());
+    config.sync();
 }

@@ -112,6 +112,7 @@ protected:
     QPushButton *pbSimpleQuote1, *pbSimpleQuote2, *pbSimpleDefault;
 
     QPushButton *pbRemoveCompletionEntry;
+    QPushButton *pbSaveCompletionEntry;
 
     KCharSelect *charselect;
     KoAutoFormatLineEdit *m_find, *m_replace;
@@ -156,6 +157,7 @@ protected slots:
 
     void slotRemoveCompletionEntry();
     void slotCompletionWordSelected( const QString & );
+    void slotSaveCompletionEntry();
 };
 #endif
 

@@ -67,6 +67,15 @@ KoAutoFormat::KoAutoFormat( KoDocument *_doc, KoVariableCollection *_varCollecti
 {
     m_listCompletion=new KCompletion();
     m_bAutoFormatActive=true;
+    //load once this list not each time that we "readConfig"
+    loadListOfWordCompletion();
+}
+
+void KoAutoFormat::loadListOfWordCompletion()
+{
+    KConfig config("kofficerc");
+    KConfigGroupSaver cgs( &config, "Completion Word" );
+    m_listCompletion->insertItems(config.readListEntry( "list" ));
 }
 
 void KoAutoFormat::readConfig()
