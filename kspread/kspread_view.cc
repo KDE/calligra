@@ -3174,6 +3174,11 @@ void KSpreadView::setActiveTable( KSpreadSheet * _t, bool updateTable )
   QPoint newAnchor = (it == savedAnchors.end()) ? QPoint(1,1) : *it;
   QPoint newMarker = (it2 == savedMarkers.end()) ? QPoint(1,1) : *it2;
   selectionInfo()->setSelection(newMarker, newAnchor, m_pTable);
+  if( m_pCanvas->chooseMode())
+  {
+    selectionInfo()->setChooseTable( m_pTable );
+    selectionInfo()->setChooseMarker( QPoint(0,0) );
+  }
 
   m_pCanvas->scrollToCell(newMarker);
   resultOfCalc();

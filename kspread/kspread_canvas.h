@@ -236,6 +236,8 @@ public:
     void startChoose( const QRect& selection );
     void endChoose();
 
+    bool chooseMode(){ return m_bChoose; }
+
     /**
     * Adjust a area in height and width
     */

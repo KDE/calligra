@@ -425,12 +425,13 @@ void KSpreadCanvas::endChoose()
 
   updateChooseRect(QPoint(0,0), QPoint(0,0));
 
-  KSpreadSheet *table=m_pView->doc()->map()->findTable(m_chooseStartTable->tableName());
-  if (table)
-        m_pView->setActiveTable(table);
-
   length_namecell = 0;
   m_bChoose = FALSE;
+
+  KSpreadSheet *table=m_pView->doc()->map()->findTable(m_chooseStartTable->tableName());
+  if (table)
+    m_pView->setActiveTable(table);
+
   m_chooseStartTable = 0;
 }
 
@@ -534,6 +535,13 @@ void KSpreadCanvas::gotoLocation( QPoint const & location, KSpreadSheet* table,
     if (m_bChoose)
     {
       updateChooseRect(topLeft, topLeft);
+      if( m_pEditor )
+      {
+        if( m_chooseStartTable != table )
+          m_pEditor->hide();
+        else
+          m_pEditor->show();
+      }
     }
     else
     {
@@ -2965,6 +2973,9 @@ void KSpreadCanvas::closeEditor()
 
 void KSpreadCanvas::updateChooseRect(const QPoint &newMarker, const QPoint &newAnchor)
 {
+  if( !m_bChoose )
+    return;
+
   KSpreadSheet* table = activeTable();
 
   if ( ! table )
@@ -2996,7 +3007,10 @@ void KSpreadCanvas::updateChooseRect(const QPoint &newMarker, const QPoint &newA
     selectionInfo()->setChooseCursor(table, newMarker);
   }
 
+  m_pDoc->emitBeginOperation();
   setSelectionChangePaintDirty(table, oldChooseRect, newChooseRect);
+  repaint();
+  m_pDoc->emitEndOperation();
 
   /* this signal is used in the formula editor to update the text display */
   emit m_pView->sig_chooseSelectionChanged(activeTable(), newChooseRect);
@@ -3606,6 +3620,10 @@ void KSpreadCanvas::paintChooseRect(QPainter& painter, const KoRect &viewRect)
 
 void KSpreadCanvas::paintNormalMarker(QPainter& painter, const KoRect &viewRect)
 {
+
+  if( m_bChoose )
+    return;
+
   double positions[4];
   bool paintSides[4];
 
