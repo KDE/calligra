@@ -522,10 +522,14 @@ void KSpreadView::initializeInsertActions()
                                   SLOT( insertChart() ), actionCollection(),
                                   "insertChart" );
   m_insertChartFrame->setToolTip(i18n("Insert a chart."));
+
+#ifndef QT_NO_SQL
   m_insertFromDatabase = new KAction( i18n("From &Database..."), 0, this,
                                       SLOT( insertFromDatabase() ),
                                       actionCollection(), "insertFromDatabase");
   m_insertFromDatabase->setToolTip(i18n("Insert data from a SQL database"));
+#endif
+
   m_insertFromTextfile = new KAction( i18n("From &Text File..."), 0, this,
                                       SLOT( insertFromTextfile() ),
                                       actionCollection(), "insertFromTextfile");
@@ -3099,12 +3103,14 @@ void KSpreadView::insertHyperlink()
 
 void KSpreadView::insertFromDatabase()
 {
+#ifndef QT_NO_SQL
     m_pCanvas->closeEditor();
 
     QRect rect = m_selectionInfo->selection();
 
     KSpreadDatabaseDlg dlg(this, rect, "KSpreadDatabaseDlg");
     dlg.exec();
+#endif
 }
 
 void KSpreadView::insertFromTextfile()

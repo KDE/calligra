@@ -53,6 +53,8 @@
 #include <qwidget.h>
 
 
+#ifndef QT_NO_SQL
+
 /********************************************************
  *                 Database wizard                      *
  ********************************************************/
@@ -1156,5 +1158,7 @@ void KSpreadDatabaseDlg::tableViewClicked( QListViewItem * )
 //   kdDebug() << "clicked" << endl;
 }
 
+
 #include "kspread_dlg_database.moc"
 
+#endif // QT_NO_SQL
