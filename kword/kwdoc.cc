@@ -3504,7 +3504,7 @@ void KWDocument::deleteFrame( KWFrame * frame )
     emit docStructureChanged(docItem);
 }
 
-void KWDocument::deleteSeveralFrame()
+void KWDocument::deleteSelectedFrames()
 {
     QPtrList<KWFrame> frames=getSelectedFrames();
     int nbCommand=0;

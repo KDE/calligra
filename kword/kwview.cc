@@ -2386,7 +2386,7 @@ void KWView::deleteFrame( bool _warning )
                 return;
         }
 
-        m_doc->deleteSeveralFrame();
+        m_doc->deleteSelectedFrames();
 
         m_gui->canvasWidget()->emitFrameSelectedChanged();
     }

@@ -250,7 +250,7 @@ public:
     void deleteTable( KWTableFrameSet *groupManager );
     void deleteFrame( KWFrame * frame );
 
-    void deleteSeveralFrame();
+    void deleteSelectedFrames();
 
     // Those distances are in _pixels_, i.e. with zoom and resolution applied.
     unsigned int topBorder() const { return static_cast<unsigned int>(zoomItY( m_pageLayout.ptTop )); }
