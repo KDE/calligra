@@ -655,7 +655,7 @@ void KoTextView::placeCursor( const QPoint &pos )
 {
     m_cursor->restoreState();
     KoTextParag *s = textDocument()->firstParag();
-    m_cursor->place( pos,  s,false,&variablePosition );
+    m_cursor->place( pos, s, false, &variablePosition );
     updateUI( true );
 }
 
@@ -796,36 +796,39 @@ KoTextDocument * KoTextView::textDocument() const
 
 void KoTextView::referenceLink(QString & href)
 {
-     KoTextStringChar * ch = m_cursor->parag()->at( variablePosition );
-     ch = m_cursor->parag()->at( variablePosition );
-     if(ch->isCustom())
-     {
-         KoLinkVariable *var=dynamic_cast<KoLinkVariable *>(ch->customItem());
-         if(var)
-             href=var->url();
-     }
+    KoTextStringChar * ch = m_cursor->parag()->at( variablePosition );
+    ch = m_cursor->parag()->at( variablePosition );
+    if(ch->isCustom())
+    {
+        KoLinkVariable *var=dynamic_cast<KoLinkVariable *>(ch->customItem());
+        if(var)
+            href=var->url();
+    }
 }
 
 KoLinkVariable * KoTextView::linkVariable()
 {
     KoTextStringChar * ch = m_cursor->parag()->at( variablePosition );
-     ch = m_cursor->parag()->at( variablePosition );
-     if(ch->isCustom())
-     {
-         KoLinkVariable *var=dynamic_cast<KoLinkVariable *>(ch->customItem());
-         return var;
-     }
-     return 0L;
+    ch = m_cursor->parag()->at( variablePosition );
+    if(ch->isCustom())
+    {
+        KoLinkVariable *var=dynamic_cast<KoLinkVariable *>(ch->customItem());
+        return var;
+    }
+    return 0L;
 }
 
 KoVariable *KoTextView::variable()
 {
-    KoTextStringChar * ch = m_cursor->parag()->at( variablePosition );
-    ch = m_cursor->parag()->at( variablePosition );
-    if(ch->isCustom())
+    if ( variablePosition > -1 )
     {
-        KoVariable *var=dynamic_cast<KoVariable *>(ch->customItem());
-        return var;
+        KoTextStringChar * ch = m_cursor->parag()->at( variablePosition );
+        ch = m_cursor->parag()->at( variablePosition );
+        if(ch->isCustom())
+        {
+            KoVariable *var=dynamic_cast<KoVariable *>(ch->customItem());
+            return var;
+        }
     }
     return 0L;
 }
