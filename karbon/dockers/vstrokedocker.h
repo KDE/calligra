@@ -38,8 +38,7 @@ class VStrokeDocker : public VDocker
 
 public:
 	 VStrokeDocker( KarbonPart* part, KarbonView* parent = 0L, const char* name = 0L );
-	 VStroke stroke() { return *m_stroke; }
-  
+ 
 public slots:
 	virtual void setStroke( const VStroke & );
 
@@ -59,7 +58,7 @@ private slots:
 	void widthChanged();
 
 protected:
-	VStroke *m_stroke;
+	VStroke m_stroke;
 };
 
 #endif

@@ -99,11 +99,10 @@ VStrokeDocker::VStrokeDocker( KarbonPart* part, KarbonView* parent, const char* 
 	m_joinGroup->insert( button );
 	mainLayout->addWidget( m_joinGroup, 2, 1 );
 	connect( m_joinGroup, SIGNAL( clicked( int ) ), this, SLOT( slotJoinChanged( int ) ) );
-	
+
 	mainLayout->activate();
 	setWidget( mainWidget );
-	
-	m_stroke = new VStroke();
+
 	updateDocker();
 }
 
@@ -111,7 +110,7 @@ void VStrokeDocker::updateCanvas()
 {
 	if( m_part && m_part->document().selection()->objects().count() > 0 )
 	{
-		m_part->addCommand( new VStrokeCmd( &m_part->document(), m_stroke ), true );
+		m_part->addCommand( new VStrokeCmd( &m_part->document(), &m_stroke ), true );
 		m_view->selectionChanged();
 	}
 }
@@ -120,11 +119,11 @@ void VStrokeDocker::slotCapChanged( int ID )
 {
 	switch ( ID ) {
 		case 1:
-			m_stroke->setLineCap ( VStroke::capRound ); break;
+			m_stroke.setLineCap ( VStroke::capRound ); break;
 		case 2:
-			m_stroke->setLineCap ( VStroke::capSquare ); break;
+			m_stroke.setLineCap ( VStroke::capSquare ); break;
 		default:
-			m_stroke->setLineCap ( VStroke::capButt );
+			m_stroke.setLineCap ( VStroke::capButt );
 	}
 	updateCanvas();
 }
@@ -133,11 +132,11 @@ void VStrokeDocker::slotJoinChanged( int ID )
 {
 	switch ( ID ) {
 		case 1:
-			m_stroke->setLineJoin ( VStroke::joinRound ); break;
+			m_stroke.setLineJoin ( VStroke::joinRound ); break;
 		case 2:
-			m_stroke->setLineJoin ( VStroke::joinBevel ); break;
+			m_stroke.setLineJoin ( VStroke::joinBevel ); break;
 		default:
-			m_stroke->setLineJoin ( VStroke::joinMiter );
+			m_stroke.setLineJoin ( VStroke::joinMiter );
 	}
 	updateCanvas();
 }
@@ -148,7 +147,7 @@ void VStrokeDocker::updateDocker()
 	disconnect( m_capGroup, SIGNAL( clicked( int ) ), this, SLOT( slotCapChanged( int ) ) );
 	disconnect( m_joinGroup, SIGNAL( clicked( int ) ), this, SLOT( slotJoinChanged( int ) ) );
 
-	switch( m_stroke->lineCap() )
+	switch( m_stroke.lineCap() )
 	{
 		case VStroke::capRound:
 			m_capGroup->setButton( 1 ); break;
@@ -158,7 +157,7 @@ void VStrokeDocker::updateDocker()
 			m_capGroup->setButton( 0 );
 	}
 
-	switch( m_stroke->lineJoin() )
+	switch( m_stroke.lineJoin() )
 	{
 		case VStroke::joinRound:
 			m_joinGroup->setButton( 1 ); break;
@@ -168,7 +167,7 @@ void VStrokeDocker::updateDocker()
 			m_joinGroup->setButton( 0 );
 	}
 	
-	m_setLineWidth->setValue( m_stroke->lineWidth() );
+	m_setLineWidth->setValue( m_stroke.lineWidth() );
 	
 	connect( m_setLineWidth, SIGNAL( valueChanged( float ) ), this, SLOT( widthChanged() ) ); 
 	connect( m_capGroup, SIGNAL( clicked( int ) ), this, SLOT( slotCapChanged( int ) ) );
@@ -177,13 +176,13 @@ void VStrokeDocker::updateDocker()
 
 void VStrokeDocker::widthChanged()
 {
-	m_stroke->setLineWidth( m_setLineWidth->value() );
+	m_stroke.setLineWidth( m_setLineWidth->value() );
 	updateCanvas();
 }
 
 void VStrokeDocker::setStroke( const VStroke &stroke )
 {
-	m_stroke = &stroke;
+	m_stroke = stroke;
 	updateDocker();
 }
 
