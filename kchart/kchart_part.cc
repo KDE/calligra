@@ -139,10 +139,50 @@ void KChartPart::paintContent( QPainter& painter, const QRect& rect, bool transp
 void KChartPart::setPart( const KChartData& data )
 {
   currentData = data;
-
+  initLabelAndLegend();
   emit docChanged();
 }
 
+void KChartPart::initLabelAndLegend()
+{
+
+    if(_params->legend.isEmpty())
+    	{
+        for(unsigned int i=0;i<currentData.rows();i++)
+                {
+                QString tmp;
+                tmp="Legend "+tmp.setNum(i);
+                _params->legend+=tmp;
+                }
+        }
+
+    if(_params->xlbl.isEmpty())
+    	{
+        for(unsigned int i=0;i<currentData.cols();i++)
+                {
+                QString tmp;
+                tmp="Year 200"+tmp.setNum(i);
+    	        _params->xlbl+=tmp;
+                }
+    	}
+
+QArray<int> tmpExp(currentData.cols()*currentData.rows());
+QArray<bool> tmpMissing(currentData.cols()*currentData.rows());
+
+for(unsigned int i=0; i<(currentData.cols()*currentData.rows()); ++i )
+  {
+  tmpExp[i]=0;
+  tmpMissing[i]=FALSE;
+  }
+if(_params->missing.isEmpty())
+	{
+  	_params->missing=tmpMissing;
+  	}
+if(_params->explode.isEmpty())
+	{
+  	_params->explode=tmpExp;
+	}
+}
 
 void KChartPart::loadConfig( KConfig *conf ) {
     _params->loadConfig(conf);
@@ -803,6 +843,14 @@ bool KChartPart::load( istream& in, KoStore* store )
 
 /**
  * $Log$
+ * Revision 1.26  2000/02/13 14:34:18  hausmann
+ * - fixed segfault in KoView destructor (use a QGuardedPtr on the manager)
+ * - hacked KoDocument to hold a list of associated shells and kill them
+ *   upon destruction of the document
+ * - fixed KoMainWindow and all the apps to let each shell have a *correct*
+ *   KInstance assigned
+ * - ignore generated Makefiles in doc/katabase
+ *
  * Revision 1.25  2000/02/08 13:12:30  coolo
  * some fixes for ANSI C++ (I gave up on kchart ;(
  *
