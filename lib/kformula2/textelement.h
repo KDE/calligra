@@ -84,6 +84,12 @@ public:
      * Sets the element to be a symbol.
      */
     void setSymbol(bool s);
+
+    /**
+     * @returns the latex representation of the element and 
+     * of the element's children
+     */
+    virtual QString toLatex();
     
 protected:
 

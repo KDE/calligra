@@ -1086,3 +1086,23 @@ ElementIndexPtr IndexElement::getIndex(int position)
     }
     return getUpperRight();
 }
+
+
+
+QString IndexElement::toLatex()
+{
+    QString index="";
+    if(hasUpperLeft())
+        index+="^{"+upperLeft->toLatex()+"}";
+    if(hasLowerLeft())
+        index+="_{"+lowerLeft->toLatex()+"}";
+
+    index+="{"+content->toLatex()+"}";
+
+    if(hasUpperRight())
+        index+="^{"+upperRight->toLatex()+"}";
+    if(hasLowerRight())
+        index+="_{"+lowerRight->toLatex()+"}";
+	
+    return index;
+}

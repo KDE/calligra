@@ -214,3 +214,9 @@ SequenceElement* BasicElement::buildChild(QDomNode& node, QString name)
     }
     return child;
 }
+
+QString BasicElement::toLatex()
+{
+return "{}";
+}
+

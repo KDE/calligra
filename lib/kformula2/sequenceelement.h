@@ -227,6 +227,12 @@ public:
      * change their TokenType need to call this.
      */
     void parse();
+
+    /**
+     * @returns the latex representation of the element and 
+     * of the element's children
+     */
+    virtual QString toLatex();
     
 
 protected:
@@ -282,6 +288,7 @@ protected:
      * @param child the child's number
      */
     int getChildPosition(uint child);
+
     
 private:
 

@@ -145,8 +145,19 @@ protected:
      * Returns false if it failed.
      */
     virtual bool readContentFromDom(QDomNode& node);
+
+    /**
+     * @returns the latex representation of the element and 
+     * of the element's children
+     */
+    virtual QString toLatex();
+
     
 private:
+    /**
+     * @return a LaTex string for the given symbol
+     */
+     QString latexString(char);
 
     /**
      * Creates a new bracket object that matches the char.
@@ -164,6 +175,7 @@ private:
      * Our main child.
      */
     SequenceElement* content;
+
 };
 
 

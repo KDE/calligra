@@ -77,6 +77,12 @@ public:
      * @returns our documents symbol table
      */
     const SymbolTable& getSymbolTable() const;
+
+    /**
+     * @returns the latex representation of the element and 
+     * of the element's children
+     */
+    virtual QString toLatex();
     
 protected:
 
@@ -104,6 +110,7 @@ protected:
      * Returns false if it failed.
      */
     virtual bool readContentFromDom(QDomNode& node);
+
     
 private:
 

@@ -456,3 +456,19 @@ bool RootElement::readContentFromDom(QDomNode& node)
 
     return true;
 }
+
+QString RootElement::toLatex()
+{
+    QString root;
+    root="\\sqrt";
+    if(hasIndex()) {
+        root+="[";
+	root+=index->toLatex();
+	root+="]";
+    }	
+    root+="{";
+    root+=content->toLatex();
+    root+="}";
+    
+    return root;
+}

@@ -319,3 +319,34 @@ bool BracketElement::readContentFromDom(QDomNode& node)
     node = node.nextSibling();
     return true;
 }
+
+QString BracketElement::toLatex()
+{
+    QString ls,rs,cs;
+    cs=content->toLatex();
+    ls="\\left"+latexString(left->getType());    
+    rs="\\right"+latexString(right->getType());    
+
+    return ls+cs+rs;
+}
+
+QString BracketElement::latexString(char type)
+{
+    switch (type) {
+	case ']': 
+	    return "]";
+	case '[': 
+	    return "[";
+	case '{': 
+	    return "\\{";
+	case '}': 
+	    return "\\}";
+	case '(': 
+	    return "(";
+	case ')': 
+	    return ")";
+    
+    }
+    return " ";  //this must be a space
+}
+

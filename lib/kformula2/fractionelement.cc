@@ -393,3 +393,12 @@ bool FractionElement::readContentFromDom(QDomNode& node)
     
     return true;
 }
+
+QString FractionElement::toLatex()
+{
+    QString num,den,fra;
+    den=denominator->toLatex();
+    num=numerator->toLatex();
+    fra="\\frac{"+num+"}{"+den+"}";
+    return fra;
+}

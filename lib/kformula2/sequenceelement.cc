@@ -871,3 +871,31 @@ void SequenceElement::parse()
     // debug
     //parseTree->output();
 }
+
+QString SequenceElement::toLatex()
+{
+    QString content;
+    if (!isEmpty()) {
+    
+        uint count = children.count();
+	if(count > 1) content+="{";
+        for (uint i = 0; i < count; i++) {
+            BasicElement* child = children.at(i);
+            if (child->isPhantom())
+	    {
+		content+="\\phantom{";
+                content+=child->toLatex();
+		content+="}";
+    	    }
+	    else
+		content+=child->toLatex();
+	
+    	if(count>1)
+	    content+=" ";             
+	
+	}
+    	if(count > 1) content+="}";
+
+    }
+    return content;
+}

@@ -58,6 +58,7 @@ void TestWidget::keyPressEvent(QKeyEvent* event)
             case Qt::Key_Q: kapp->quit(); return;
             case Qt::Key_R: document->replaceElementWithMainChild(BasicElement::beforeCursor); return;
             case Qt::Key_S: document->save("test.xml"); return;
+            case Qt::Key_T: cout << document->texString().latin1() << endl; return;
             case Qt::Key_U: document->addGenericUpperIndex(); return;
             case Qt::Key_V: document->paste(); return;
             case Qt::Key_X: document->cut(); return;

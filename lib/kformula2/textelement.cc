@@ -211,3 +211,27 @@ bool TextElement::readContentFromDom(QDomNode& node)
 {
     return BasicElement::readContentFromDom(node);
 }
+
+QString TextElement::toLatex()
+{
+    if(isSymbol()) {
+	char latin1 = character.latin1();
+	switch (latin1) {
+	    case 'a': return "\\alpha";	
+	}
+    }
+     else
+    {
+
+	char latin1 = character.latin1();
+	switch (latin1) {
+	    case '\\': return "\\backslash";
+    
+            default:
+                return QChar(latin1);
+            
+	}
+    
+    }
+
+}

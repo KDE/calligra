@@ -45,6 +45,13 @@ const char* KFormulaMimeSource::format ( int n ) const
     {
      case 0:
       return "application/x-kformula";
+     case 1:
+      return "image/ppm";
+     case 2:
+      return "text/plain";
+     case 3:
+      return "text/x-tex";
+
     }
     return NULL;
 }
@@ -57,12 +64,21 @@ bool KFormulaMimeSource::provides ( const char * format) const
     if(QString(format)=="image/ppm")
      return true;
     else
+    if(QString(format)=="text/plain")
+     return true;
+    else
+    if(QString(format)=="text/x-tex")
+     return true;
+
+    else
      return false; 
      
 }
 
 QByteArray KFormulaMimeSource::encodedData ( const char *format ) const
 {
+    
+
     if(QString(format)=="application/x-kformula")
 	return document.toCString();
     else 
@@ -94,6 +110,19 @@ QByteArray KFormulaMimeSource::encodedData ( const char *format ) const
 	buff.close();
     	return d;
 	
+    }
+    else
+    if(QString(format)=="text/plain") {
+        KFormulaDocument document;
+        KFormulaContainer tmpContainer(&document);
+	FormulaCursor *c=tmpContainer.createCursor();
+        tmpContainer.setActiveCursor(c);
+        tmpContainer.paste();
+        delete c;
+        c = 0;
+    
+    	return tmpContainer.texString().utf8();
+
     }
     else 
 	return QByteArray();

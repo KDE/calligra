@@ -218,6 +218,11 @@ public:
      */
     ElementIndexPtr getIndex(int position);
 
+    /**
+     * @returns the latex representation of the element and 
+     * of the element's children
+     */
+    virtual QString toLatex();
     
 protected:
 

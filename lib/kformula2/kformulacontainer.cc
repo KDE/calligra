@@ -21,14 +21,17 @@
 #include <qapp.h>
 #include <qdom.h>
 #include <qevent.h>
-#include <qfile.h>
-#include <qpainter.h>
-#include <koprinter.h>
-#include <qstring.h>
 #include <qtextstream.h>
+#include <qfile.h>
+#include <qtextcodec.h>
+#include <qpainter.h>
+#include <qprinter.h>
+
+#include <qstring.h>
 
 #include <klocale.h>
 
+#include <koprinter.h>
 #include "MatrixDialog.h"
 #include "bracketelement.h"
 #include "contextstyle.h"
@@ -640,4 +643,10 @@ void KFormulaContainer::print(KPrinter& printer)
         rootElement->draw(painter, boundingRect(), getDocument()->getContextStyle());
     }
 }
+
+QString KFormulaContainer::texString()
+{
+    return rootElement->toLatex();
+}
+
 #include "kformulacontainer.moc"

@@ -503,3 +503,30 @@ bool MatrixElement::readContentFromDom(QDomNode& node)
     }
     return true;
 }
+
+QString MatrixElement::toLatex()
+{
+    //All the border handling must be implemented here too
+    
+    QString matrix;
+    uint cols=getColumns();
+    uint rows=getRows();
+    
+    matrix="\\begin{array}{ ";
+    for(uint i=0;i<cols;i++)
+	matrix+="c ";
+    
+    matrix+="}";
+     
+    for (uint r = 0; r < rows; r++) {
+        for (uint c = 0; c < cols; c++) {
+            matrix+=getElement(r, c)->toLatex();
+	    if( c < cols-1)    matrix+=" & ";
+        }
+    	if(r < rows-1 ) matrix+=" \\\\ ";
+    }
+    
+    matrix+="\\end{array}";
+    
+    return matrix;
+}

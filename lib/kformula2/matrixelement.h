@@ -113,6 +113,12 @@ public:
     //virtual QDomElement getElementDom(QDomDocument *doc);
     //virtual bool buildFromDom(QDomElement *elem);
 
+    /**
+     * @returns the latex representation of the element and 
+     * of the element's children
+     */
+    virtual QString toLatex();
+
 protected:
 
     //Save/load support

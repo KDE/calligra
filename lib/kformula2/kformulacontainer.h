@@ -136,6 +136,11 @@ public:
     bool load(QDomNode doc);
 
     /**
+     * @retruns a tex string for the formula
+     */
+    QString texString(); 
+
+    /**
      * Prints the formula.
      */
     void print(KPrinter& printer);

@@ -368,6 +368,14 @@ protected:
      */
     ElementType* getElementType() { return elementType; }
     
+    
+    /**
+     * @returns the latex representation of the element and 
+     * of the element's children
+     */
+    virtual QString toLatex();
+    
+    
 private:
 
     /**

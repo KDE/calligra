@@ -113,3 +113,8 @@ bool FormulaElement::readContentFromDom(QDomNode& node)
 {
     return inherited::readContentFromDom(node);
 }
+
+QString FormulaElement::toLatex()
+{
+    return inherited::toLatex();   //Consider $$ sorround
+}
