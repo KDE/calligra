@@ -831,9 +831,10 @@ void KWTextFrameSet::adjustFlow( int &yp, int w, int h, QTextParag * _parag, boo
     {
         if ( (*fIt).frame->runAround() == KWFrame::RA_SKIP )
         {
-            QRect rectOnTop = (*fIt).frame->outerRect();
+            QRect rectOnTop = m_doc->zoomRect( (*fIt).intersection );
             QPoint iTop, iBottom; // top and bottom in internal coordinates
             if ( normalToInternal( rectOnTop.topLeft(), iTop ) &&
+                 iTop.y() <= yp + h &&
                  normalToInternal( rectOnTop.bottomLeft(), iBottom ) &&
                  checkVerticalBreak( yp, h, parag, linesTogether,
                                      iTop.y(), iBottom.y() ) )

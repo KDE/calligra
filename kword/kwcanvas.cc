@@ -205,20 +205,21 @@ void KWCanvas::drawDocument( QPainter *painter, const QRect &crect )
 {
     //kdDebug(32002) << "KWCanvas::drawDocument crect: " << DEBUGRECT( crect ) << endl;
 
+    // Draw the outside of the pages (shadow, gray area)
+    // and the empty area first (in case of transparent frames)
+    if ( painter->device()->devType() != QInternal::Printer ) // except when printing
+    {
+        QRegion emptySpaceRegion( crect );
+        m_doc->createEmptyRegion( crect, emptySpaceRegion, m_viewMode );
+        m_viewMode->drawPageBorders( painter, crect, emptySpaceRegion );
+    }
+
     // Draw all framesets contents
     QListIterator<KWFrameSet> fit = m_doc->framesetsIterator();
     for ( ; fit.current() ; ++fit )
     {
         KWFrameSet * frameset = fit.current();
         drawFrameSet( frameset, painter, crect, false, true );
-    }
-
-    // Draw the outside of the pages (shadow, gray area)
-    if ( painter->device()->devType() != QInternal::Printer ) // except when printing
-    {
-        QRegion emptySpaceRegion( crect );
-        m_doc->createEmptyRegion( crect, emptySpaceRegion, m_viewMode );
-        m_viewMode->drawPageBorders( painter, crect, emptySpaceRegion );
     }
 }
 

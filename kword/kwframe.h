@@ -361,6 +361,8 @@ public:
     /**
      * @param emptyRegion The region is modified to subtract the areas painted, thus
      *                    allowing the caller to determine which areas remain to be painted.
+     * Framesets that can be transparent should reimplement this and make it a no-op,
+     * so that the background is painted below the transparent frame.
      */
     virtual void createEmptyRegion( const QRect & crect, QRegion & emptyRegion, KWViewMode *viewMode );
 
@@ -588,6 +590,9 @@ public:
                             QColorGroup &, bool onlyChanged, bool resetChanged,
                             KWFrameSetEdit *edit = 0L );
 
+    // Pixmaps can be transparent
+    virtual void createEmptyRegion( const QRect &, QRegion &, KWViewMode * ) { }
+
     virtual KWFrame *frameByBorder( const QPoint & nPoint );
 
     // RMB -> normal frame popup
@@ -626,6 +631,9 @@ public:
                             QColorGroup &, bool onlyChanged, bool resetChanged,
                             KWFrameSetEdit *edit = 0L );
 
+    // Cliparts can be transparent
+    virtual void createEmptyRegion( const QRect &, QRegion &, KWViewMode * ) { }
+
     virtual KWFrame *frameByBorder( const QPoint & nPoint );
 
     // RMB -> normal frame popup
@@ -656,6 +664,9 @@ public:
     virtual void drawFrame( KWFrame * frame, QPainter * p, const QRect & crect,
                             QColorGroup &, bool onlyChanged, bool resetChanged,
                             KWFrameSetEdit *edit = 0L );
+
+    // Embedded parts can be transparent
+    virtual void createEmptyRegion( const QRect &, QRegion &, KWViewMode * ) { }
 
     virtual void save( QDomElement &parentElem, bool saveFrames = true );
     virtual void load( QDomElement &attributes, bool loadFrames = true );
