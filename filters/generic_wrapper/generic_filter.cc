@@ -94,7 +94,7 @@ KoFilter::ConversionStatus GenericFilter::doImport()
         return KoFilter::StorageCreationError;
     }
     else {
-        QString exec = m_exec + " " + m_chain->inputFile() + " " + m_chain->outputFile();
+        QString exec = m_exec + " " + KProcess::quote(m_chain->inputFile()) + " " + KProcess::quote(m_chain->outputFile());
         system(QFile::encodeName(exec));
 
         kdDebug() << "Executing: " << exec << endl;
