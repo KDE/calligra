@@ -1112,7 +1112,7 @@ QString KSpreadStyle::saveOasisStyle( KoGenStyle &style, KoGenStyles &mainStyles
     }
     if ( featureSet( SFontSize ) )
     {
-        style.addProperty("fo:font-size",m_fontSize  );
+        style.addPropertyPt("fo:font-size",m_fontSize  );
     }
 
     if (m_fontFlags & (uint) FBold )
