@@ -179,7 +179,7 @@
             </filter>
             <filter id="kword_oowriter">
                 <title xml:lang="en_us">OpenOffice Writer</title>
-                <stat import="onestar" export="none"/>
+                <stat import="onestar" export="onestar"/>
             </filter>
             <filter id="kword_palmdoc">
                 <webcvs importsuffix="#import" exportsuffix="#export" path="koffice/filters/kword/palmdoc"/>
