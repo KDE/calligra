@@ -354,13 +354,8 @@ QString KPBackGround::saveOasisBackgroundPageStyle( KoStore *store, KoXmlWriter 
     {
         stylepageauto.addProperty( "presentation:transition-style", transition );
     }
-#if HEADERFOOTERBYPAGE
     stylepageauto.addProperty( "presentation:display-header", m_page->hasHeader());
     stylepageauto.addProperty( "presentation:display-footer", m_page->hasFooter());
-#else
-    stylepageauto.addProperty( "presentation:display-header", m_page->kPresenterDoc()->hasHeader());
-    stylepageauto.addProperty( "presentation:display-footer", m_page->kPresenterDoc()->hasFooter());
-#endif
 
     if ( pageTimer != 1 )
     {
@@ -678,20 +673,12 @@ void KPBackGround::loadOasis(KoOasisContext & context )
     if ( styleStack.hasAttribute( "presentation:display-header" ) )
     {
         QString tmp = styleStack.attribute( "presentation:display-header" );
-#if HEADERFOOTERBYPAGE
         m_page->setHeader( tmp =="true" ? true : false );
-#else
-        m_page->kPresenterDoc()->setHeader( tmp =="true" ? true : false );
-#endif
     }
     if ( styleStack.hasAttribute( "presentation:display-footer" ) )
     {
         QString tmp = styleStack.attribute( "presentation:display-footer" );
-#if HEADERFOOTERBYPAGE
         m_page->setFooter(tmp =="true" ? true : false);
-#else
-        m_page->kPresenterDoc()->setFooter(tmp =="true" ? true : false);
-#endif
     }
     if ( styleStack.hasAttribute("presentation:transition-style"))
     {
