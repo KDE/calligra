@@ -1016,8 +1016,11 @@ bool KPresenterDoc::loadOasis( const QDomDocument& doc, KoOasisStyles&oasisStyle
         }
         else if ( !context.styleStack().hasAttribute( "draw:fill" ) && backgroundStyle)
         {
+            context.styleStack().save();
+            context.addStyles( backgroundStyle );
+            m_pageList.at( pos )->background()->loadOasis(context);
+            context.styleStack().restore();
             kdDebug()<<" load standard bacground \n";
-            m_pageList.at( pos )->background()->loadStandardBackgroundOasis( context, backgroundStyle );
         }
 
 	//All animation object for current page is store into this element
