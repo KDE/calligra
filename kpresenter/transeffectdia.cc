@@ -117,14 +117,10 @@ KPTransEffectDia::KPTransEffectDia( QWidget *parent, const char *name,
     QVBoxLayout *rightlayout = new QVBoxLayout( rightpart, 0, spacingHint() );
     rightlayout->setAutoAdd( true );
 
-    QWidget* spacer1 = new QWidget( rightpart );
-    spacer1->setSizePolicy( QSizePolicy( QSizePolicy::Expanding,
-        QSizePolicy::Expanding ) );
-
     effectPreview = new KPEffectPreview( rightpart, doc, view );
 
-    QWidget* spacer2 = new QWidget( rightpart );
-    spacer2->setSizePolicy( QSizePolicy( QSizePolicy::Expanding,
+    QWidget* spacer = new QWidget( rightpart );
+    spacer->setSizePolicy( QSizePolicy( QSizePolicy::Expanding,
         QSizePolicy::Expanding ) );
 
     int pgnum = view->getCurrPgNum() - 1;  // getCurrPgNum() is 1-based 
