@@ -530,8 +530,9 @@ void KexiStartupDialog::slotOk() {
 	kdDebug()<<"KexiStartupDialog::slotOk()"<<endl;
 	if (activePageIndex()==d->pageOpenExistingID) {
 		if (d->openExistingFileDlg) {
-			d->openExistingFileDlg->okButton()->animateClick();
-			return;
+			if (d->openExistingFileDlg->okButton())
+				d->openExistingFileDlg->okButton()->animateClick();
+//			return;
 		}
 	}
 	KDialogBase::slotOk();
