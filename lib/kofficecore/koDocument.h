@@ -377,28 +377,21 @@ public:
      */
     bool checkAutoSaveFile();
 
-    // ### TODO Who calls initDoc?
-
-    enum InitDocFlags { InitDocAppStarting, InitDocFileNew, InitDocFileClose, InitDocEmbedded, InitDocEmpty };
-
     /**
-     *  Initializes an empty document (display the template dialog!).
-     *  You have to overload this method to initialize all your document variables.
-     */
-
-    virtual bool initDoc(InitDocFlags flags, QWidget* parentWidget=0) = 0; // BCI: pass a QWidget* parentWidget, to pass to KoTemplateChooseDia
-
-    /**
-     * Return some flags for initDoc (BCI: this should be merged with initDoc)
+     * This setting indicates who is calling initDoc.
      * Usually the app will want to
      * - show the template dialog with 'everything' if InitDocAppStarting, InitDocFileClose or InitDocEmbedded
      * - show the template dialog with 'templates only' if InitDocFileNew
+     * - create an empty document with default settings if InitDocEmpty
      */
-    InitDocFlags initDocFlags() const;
+    enum InitDocFlags { InitDocAppStarting, InitDocFileNew, InitDocFileClose, InitDocEmbedded, InitDocEmpty };
+
     /**
-     * For KoMainWindow only - don't use!
+     * Initializes an empty document (display the template dialog!).
+     * You have to overload this method to initialize all your document variables.
+     * @param flags see InitDocFlags
      */
-    void setInitDocFlags( InitDocFlags flags );
+    virtual bool initDoc(InitDocFlags flags, QWidget* parentWidget=0) = 0;
 
     /**
      *  Sets the modified flag on the document. This means that it has
