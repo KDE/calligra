@@ -31,6 +31,7 @@
 #include <kaction.h>
 #include <qmime.h>
 #include <qtoolbutton.h>
+#include <qtimer.h>
 
 #include <kapp.h>
 #include <klocale.h>
@@ -354,6 +355,16 @@ KSpreadView::KSpreadView( QWidget *_parent, const char *_name, KSpreadDoc* doc )
     connect( this, SIGNAL( childActivated( KoDocumentChild* ) ),
 	     this, SLOT( slotChildUnselected( KoDocumentChild* ) ) );
 
+    QTimer::singleShot( 0, this, SLOT( initialPosition() ) );
+
+}
+
+KSpreadView::~KSpreadView()
+{
+}
+
+void KSpreadView::initialPosition()
+{
     // Set the initial position for the marker as store in the XML file,
     // (1,1) otherwise
     int col = m_pDoc->map()->initialMarkerColumn();
@@ -361,11 +372,6 @@ KSpreadView::KSpreadView( QWidget *_parent, const char *_name, KSpreadDoc* doc )
     int row = m_pDoc->map()->initialMarkerRow();
     if ( row <= 0 ) row = 1;
     m_pCanvas->gotoLocation( col, row );
-
-}
-
-KSpreadView::~KSpreadView()
-{
 }
 
 /*
@@ -1525,7 +1531,7 @@ void KSpreadView::gotoCell()
 {
     KSpreadgoto* dlg = new KSpreadgoto( this, "GotoCell" );
     dlg->show();
-    
+
 }
 
 void KSpreadView::replace()
@@ -1671,10 +1677,10 @@ void KSpreadView::toggleFormular( bool mode)
 {
   if ( !m_pTable )
        return;
-  m_pTable->setShowFormular(mode);     
+  m_pTable->setShowFormular(mode);
   m_pTable->recalc();
-  m_pCanvas->repaint();  
-  
+  m_pCanvas->repaint();
+
 }
 
 void KSpreadView::editCell()

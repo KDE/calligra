@@ -150,6 +150,7 @@ public:
     virtual int canvasYOffset() const;
 
 public slots:
+    void initialPosition();
     /**
      * Actions
      */
@@ -243,7 +244,6 @@ public slots:
     void slotRemoveRow();
     void slotInsertColumn();
     void slotRemoveColumn();
-    
 
     /**
      * @ref #tabBar is connected to this slot.

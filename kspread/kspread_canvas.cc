@@ -290,10 +290,13 @@ void KSpreadCanvas::gotoLocation( int x, int y, KSpreadTable* table, bool make_s
   int xpos = table->columnPos( x, this );
   int ypos = table->rowPos( y, this );
 
+  //kdDebug() << "KSpreadCanvas::gotoLocation : zoom=" << zoom() << endl;
   int minX = (int) (100 * zoom()); // less than that, we scroll
   int minY = (int) (50 * zoom());
   int maxX = (int) (width() - 100 * zoom()); // more than that, we scroll
   int maxY = (int) (height() - 50 * zoom());
+  //kdDebug() << "KSpreadCanvas::gotoLocation : height=" << height() << endl;
+  //kdDebug() << "KSpreadCanvas::gotoLocation : width=" << width() << endl;
 
   if ( xpos < minX )
     horzScrollBar()->setValue( xOffset() + xpos - minX );
