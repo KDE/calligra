@@ -1,18 +1,20 @@
 Food for thought:
 =================
-Werner's thoughts about koffice:
-http://members.aon.at/wtrobin/koffice
-
-General info:
-- FAQ for comp.graphics.algorithms:
-  http://www.landfield.com/faqs/graphics/algorithms-faq/
+CAGD:
+- Geometric Modelling Notes
+  http://graphics.cs.ucdavis.edu/CAGDNotes/CAGD-Notes.html
 - Guru's Lair Cubic Spline Library 
   http://www.tinaja.com/cubic01.html
 - Graphics Gems Repository
   http://www.acm.org/tog/GraphicsGems/
-  (especially http://www.acm.org/tog/GraphicsGems/gemsiv/curve_isect/)
+- General polygon clipper library (gpc)
+  http://www.cs.man.ac.uk/~amurta/software/index.html
+- Geometry junkyard
+  http://www.ics.uci.edu/~eppstein/junkyard/
 - Magic Software (watch for the license !)
   http://www.magic-software.com/
+- FAQ for comp.graphics.algorithms:
+  http://www.landfield.com/faqs/graphics/algorithms-faq/
 - Preprints
   http://xxx.lanl.gov/archive/cs/intro.html
 - Graphics Paper
@@ -23,16 +25,16 @@ Similar projects:
   http://sodipodi.sourceforge.net/
 - Sketch Development Guide:
   http://sketch.sourceforge.net/Doc/devguide.html
+- Adobe Illustrator Features:
+  http://www.adobe.com/products/illustrator/features.html
+
+Postscript:
 - Adobe Illustrator Fileformat Specification:
   http://partners.adobe.com/asn/developer/PDFS/TN/5007.AI7FileFormat.pdf
 - Postscript Specs (since .AI is basically .PS):
   http://partners.adobe.com/asn/developer/technotes.html#postscript
-- Adobe Illustrator Features:
-  http://www.adobe.com/products/illustrator/features.html
-- Autotrace
-  http://homepages.go.com/~martweb/AutoTrace.htm
-
 
 Keywords for use with search engines:
-geometric design, computational geometry, computer aided geometric design, cagd,
-bezier, casteljau, intersection, algorithm, cubic spline
+
+knot insertion, bezier, casteljau, de Boor, affine map, chaikin,
+geometric design, computational geometry, computer aided geometric design, cagd
