@@ -83,7 +83,7 @@ libkontourpart_la_SOURCES = \
 	CreateOvalCmd.cc \
 	CreatePolygonCmd.cc \
 	CreateImageCmd.cc \
-	MovePointCmd.cc \
+	MoveNodeCmd.cc \
 	AlignCmd.cc \
 	DistributeCmd.cc \
 	OptionsDialog.cc \

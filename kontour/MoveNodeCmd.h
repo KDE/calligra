@@ -2,8 +2,9 @@
 
   $Id$
 
-  This file is part of KIllustrator.
+  This file is part of Kontour.
   Copyright (C) 1998 Kai-Uwe Sattler (kus@iti.cs.uni-magdeburg.de)
+  Copyright (C) 2002 Igor Jansen (rm@kde.org)
 
   This program is free software; you can redistribute it and/or modify
   it under the terms of the GNU Library General Public License as
@@ -22,41 +23,27 @@
 
 */
 
-#include <InsertPointCmd.h>
+#ifndef __MoveNodeCmd_h__
+#define __MoveNodeCmd_h__
 
-#include <klocale.h>
+#include "Command.h"
 
-#include <GDocument.h>
-#include <GPolyline.h>
+class GObject;
 
-InsertPointCmd::InsertPointCmd (GDocument* doc, GPolyline* o,
-                                int idx, float x, float y)
-  : Command(i18n("Insert Point"))
+class MoveNodeCmd : public Command
 {
-  document = doc;
-  obj = o;
-  obj->ref ();
-  index = idx;
-  point = Coord (x, y);
-  if (obj->isA ("GPolygon")) {
-    GPolygon *poly = (GPolygon *) obj;
-    kind = poly->getKind ();
-  }
-}
+public:
+  MoveNodeCmd(GDocument *aGDoc, GObject *o, int idx, double dx, double dy);
+  ~MoveNodeCmd();
 
-InsertPointCmd::~InsertPointCmd () {
-  obj->unref ();
-}
+  void execute();
+  void unexecute();
 
-void InsertPointCmd::execute () {
-  obj->insertPoint (index, point, true);
-}
+private:
+  GObject        *obj;
+  int             index;
+  double          xoff;
+  double          yoff;
+};
 
-void InsertPointCmd::unexecute () {
-  obj->removePoint (index);
-  if (obj->isA ("GPolygon")) {
-    GPolygon *poly = (GPolygon *) obj;
-    poly->setKind (kind);
-  }
-}
-
+#endif

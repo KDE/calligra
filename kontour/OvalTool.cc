@@ -43,13 +43,43 @@
 OvalTool::OvalTool(QString aId, ToolController *tc):
 Tool(aId, tc)
 {
-  ToolSelectAction* zoom = new ToolSelectAction(actionCollection(), "ToolAction" );
-  KRadioAction *mT1 = new KRadioAction(i18n("Circle"), "ellipse1", 0, actionCollection());
-  KRadioAction *mT2 = new KRadioAction(i18n("Circle"), "ellipse2", 0, actionCollection());
-  mT1->setExclusiveGroup("OvalTool");
-  mT2->setExclusiveGroup("OvalTool");
-  zoom->insert(mT1);
-  zoom->insert(mT2);
+  ToolSelectAction *oval = new ToolSelectAction(actionCollection(), "ToolAction");
+  KRadioAction *mT11 = new KRadioAction(i18n("Ellipse"), "ellipse1", 0, actionCollection());
+  mT11->setExclusiveGroup("OvalTool");
+  KRadioAction *mT12 = new KRadioAction(i18n("Circle"), "ellipse1", 0, actionCollection());
+  mT12->setExclusiveGroup("OvalTool");
+  KRadioAction *mT13 = new KRadioAction(i18n("Ellipse Arc"), "ellipse1", 0, actionCollection());
+  mT13->setExclusiveGroup("OvalTool");
+  KRadioAction *mT14 = new KRadioAction(i18n("Circle Arc"), "ellipse2", 0, actionCollection());
+  mT14->setExclusiveGroup("OvalTool");
+  KRadioAction *mT15 = new KRadioAction(i18n("Ellipse Sector"), "ellipse1", 0, actionCollection());
+  mT15->setExclusiveGroup("OvalTool");
+  KRadioAction *mT16 = new KRadioAction(i18n("Circle Sector"), "ellipse2", 0, actionCollection());
+  mT16->setExclusiveGroup("OvalTool");
+  KRadioAction *mT21 = new KRadioAction(i18n("Ellipse Segment"), "ellipse1", 0, actionCollection());
+  mT21->setExclusiveGroup("OvalTool");
+  KRadioAction *mT22 = new KRadioAction(i18n("Circle Segment"), "ellipse2", 0, actionCollection());
+  mT22->setExclusiveGroup("OvalTool");
+  KRadioAction *mT23 = new KRadioAction(i18n("Circle"), "ellipse1", 0, actionCollection());
+  mT23->setExclusiveGroup("OvalTool");
+  KRadioAction *mT24 = new KRadioAction(i18n("Circle"), "ellipse2", 0, actionCollection());
+  mT24->setExclusiveGroup("OvalTool");
+  KRadioAction *mT25 = new KRadioAction(i18n("Circle"), "ellipse1", 0, actionCollection());
+  mT25->setExclusiveGroup("OvalTool");
+  KRadioAction *mT26 = new KRadioAction(i18n("Circle"), "ellipse2", 0, actionCollection());
+  mT26->setExclusiveGroup("OvalTool");
+  oval->insert(mT11);
+  oval->insert(mT12);
+  oval->insert(mT13);
+  oval->insert(mT14);
+  oval->insert(mT15);
+  oval->insert(mT16);
+  oval->insert(mT21);
+  oval->insert(mT22);
+  oval->insert(mT23);
+  oval->insert(mT24);
+  oval->insert(mT25);
+  oval->insert(mT26);
 }
 
 void OvalTool::activate()

@@ -25,6 +25,8 @@
 
 #include "EditPointTool.h"
 
+#include <qcursor.h>
+
 #include <kaction.h>
 #include <klocale.h>
 #include <kdebug.h>
@@ -34,13 +36,14 @@
 #include "GObject.h"
 #include "Canvas.h"
 #include "ToolController.h"
-#include "MovePointCmd.h"
+#include "MoveNodeCmd.h"
 
 EditPointTool::EditPointTool(QString aId, ToolController *tc):
 Tool(aId, tc)
 {
   ToolSelectAction *editpoint = new ToolSelectAction(actionCollection(), "ToolAction");
-  KAction *mT1 = new KAction(i18n("Edit Point"), "", 0, actionCollection());
+  KRadioAction *mT1 = new KRadioAction(i18n("Move Point"), "moveNode", 0, actionCollection());
+  mT1->setExclusiveGroup("EditPointTool");
   editpoint->insert(mT1);
   mode = MovePoint;
 }
@@ -52,6 +55,7 @@ void EditPointTool::activate()
   toolController()->view()->activeDocument()->activePage()->updateSelection();
   obj = 0L;
   pointIdx = -1;
+  mCType = CArrow;
 }
 
 void EditPointTool::deactivate()
@@ -86,23 +90,13 @@ void EditPointTool::processButtonPressEvent(QMouseEvent *me, GPage *page, Canvas
   double y = me->y() - canvas->yOffset();
   //canvas->snapPositionToGrid (xpos, ypos);
 
-  obj = 0L;
-  pointIdx = -1;
-  // TODO for performance reasons check if an object from the selection
-  // has to be edited
-  for(QPtrListIterator<GObject>it(page->getSelection()); it.current(); ++it)
+  if(mode == MovePoint)
   {
-    GObject *o = *it;
-    int idx = o->getNeighbourPoint(KoPoint(x, y), 3.0);
-    if(idx != -1)
+    if(mCType == CNode)
     {
-      kdDebug() << "INDEX = " << idx << endl;
-      obj = o;
-      pointIdx = idx;
       mStartPoint.setX(x);
       mStartPoint.setY(y);
       mLastPoint = mStartPoint;
-      break;
     }
   }
     // if no currently selected object was found at the mouse position ...
@@ -153,15 +147,50 @@ void EditPointTool::processMouseMoveEvent(QMouseEvent *me, GPage *page, Canvas *
             canvas->setCursor(Qt::crossCursor);
       }
       else */
-  if(pointIdx != -1)
+  if(mode == MovePoint)
   {
-    double dx = x - mLastPoint.x();
-    double dy = y - mLastPoint.y();
-    if(dx != 0 || dy != 0)
-      obj->movePoint(pointIdx, dx, dy, me->state() & Qt::ControlButton);
-    mLastPoint.setX(x);
-    mLastPoint.setY(y);
-    page->document()->emitChanged(obj->boundingBox(), true);
+    if(me->state() & Qt::LeftButton)
+    {
+      if(pointIdx != -1)
+      {
+        double dx = x - mLastPoint.x();
+        double dy = y - mLastPoint.y();
+        if(dx != 0 || dy != 0)
+          obj->movePoint(pointIdx, dx, dy, me->state() & Qt::ControlButton);
+        mLastPoint.setX(x);
+        mLastPoint.setY(y);
+        page->document()->emitChanged(obj->boundingBox(), true);
+      }
+    }
+    else
+    {
+      // TODO for performance reasons check if an object from the selection
+      // has to be edited
+      obj = 0L;
+      pointIdx = -1;
+      for(QPtrListIterator<GObject>it(page->getSelection()); it.current(); ++it)
+      {
+        GObject *o = *it;
+        int idx = o->getNeighbourPoint(KoPoint(x, y), 3.0);
+        if(idx != -1)
+        {
+          obj = o;
+          pointIdx = idx;
+  	  if(mCType != CNode)
+          {
+            mCType = CNode;
+  	    canvas->setCursor(Qt::SizeAllCursor);
+          }
+          return;
+        }
+      }
+      if(mCType != CArrow)
+      {
+        mCType = CArrow;
+        canvas->setCursor(Qt::Qt::crossCursor);
+      }
+      return;
+    }
   }
 }
 
@@ -182,14 +211,17 @@ void EditPointTool::processButtonReleaseEvent(QMouseEvent *me, GPage *page, Canv
       dy = y - mStartPoint.y();
       if(dx != 0 || dy != 0)
       {
-        MovePointCmd *cmd = new MovePointCmd(toolController()->view()->activeDocument(), obj, pointIdx, dx, dy);
+        MoveNodeCmd *cmd = new MoveNodeCmd(toolController()->view()->activeDocument(), obj, pointIdx, dx, dy);
         KontourDocument *doc = (KontourDocument *)toolController()->view()->koDocument();
         doc->history()->addCommand(cmd);
       }
       pointIdx = -1;
     }
+    else
+    {
+      toolController()->selectTool("Select");
+    }
   }
-//  toolController()->selectTool("Select");
 }
 
 void EditPointTool::processKeyPressEvent(QKeyEvent *, GPage *, Canvas *)

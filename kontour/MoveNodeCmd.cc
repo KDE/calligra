@@ -23,13 +23,13 @@
 
 */
 
-#include "MovePointCmd.h"
+#include "MoveNodeCmd.h"
 
 #include <klocale.h>
 
 #include "GObject.h"
 
-MovePointCmd::MovePointCmd(GDocument *aGDoc, GObject *o, int idx, double dx, double dy):
+MoveNodeCmd::MoveNodeCmd(GDocument *aGDoc, GObject *o, int idx, double dx, double dy):
 Command(aGDoc, i18n("Move Point"))
 {
   obj = o;
@@ -39,17 +39,17 @@ Command(aGDoc, i18n("Move Point"))
   yoff = dy;
 }
 
-MovePointCmd::~MovePointCmd()
+MoveNodeCmd::~MoveNodeCmd()
 {
   obj->unref();
 }
 
-void MovePointCmd::execute()
+void MoveNodeCmd::execute()
 {
   obj->movePoint(index, xoff, yoff);
 }
 
-void MovePointCmd::unexecute()
+void MoveNodeCmd::unexecute()
 {
   obj->movePoint(index, -xoff, -yoff);
 }

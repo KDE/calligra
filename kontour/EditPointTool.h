@@ -51,7 +51,9 @@ protected:
 
 private:
   enum Mode {MovePoint, InsertPoint, RemovePoint, Join, Split};
+  enum CursorType {CArrow, CNode};
   Mode         mode;
+  CursorType   mCType;
   GObject     *obj;
   int          pointIdx;
   KoPoint      mStartPoint;
