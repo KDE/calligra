@@ -6320,6 +6320,10 @@ void KPresenterView::updateStyleList()
             actionFormatStyleMenu->insert( act );
         }
     }
+    bool isText=!m_canvas->applicableTextInterfaces().isEmpty();
+    actionFormatStyleMenu->setEnabled( isText );
+    actionFormatStyle->setEnabled(isText);
+
 }
 
 void KPresenterView::extraStylist()
