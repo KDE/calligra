@@ -2888,7 +2888,7 @@ void KWView::insertFootNote()
 {
     KWTextFrameSetEdit * edit = currentTextEdit();
     //Q_ASSERT( edit ); // the action should be disabled if we're not editing a textframeset...
-    if (edit ) // test for dcop call !
+    if ( edit ) // test for dcop call !
     {
         if ( edit->frameSet() != m_doc->frameSet(0) )
         {
@@ -5606,12 +5606,13 @@ void KWView::editFootEndNote()
     KWTextFrameSetEdit * edit = currentTextEdit();
     if ( edit )
     {
-        KoVariable * tmpVar=edit->variable();
-        KWFootNoteVariable * var = dynamic_cast<KWFootNoteVariable *>(tmpVar);
-        if(var && var->frameSet())
+        KWFootNoteVariable * var = dynamic_cast<KWFootNoteVariable *>( edit->variable() );
+        if ( var && var->frameSet() )
         {
-            m_gui->canvasWidget()->editFrameSet( var->frameSet());
-            m_gui->canvasWidget()->scrollToOffset( var->frameSet()->frame(0)->topLeft() );
+            m_gui->canvasWidget()->editFrameSet( var->frameSet() );
+            KWTextFrameSetEdit* textedit = currentTextEdit();
+            if ( textedit )
+                textedit->ensureCursorVisible();
         }
     }
 }
