@@ -37,7 +37,7 @@ protected:
     KChartParams* _params;
     //KChartGeometryConfigPage* _geompage;
     KChartColorConfigPage* _colorpage;
-    KChartParameterConfigPage*_parameterpage;
+    KChartParameterConfigPage*_axespage;
     KChartParameter3dConfigPage*_parameter3dpage;
     KChartParameterPieConfigPage*_parameterpiepage;
     KChartFontConfigPage*_parameterfontpage;

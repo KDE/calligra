@@ -32,7 +32,7 @@ KChartConfigDialog::KChartConfigDialog( KChartParams* params,
     QTabDialog( parent, "Chart config dialog", true ),
     _params( params ),
     _colorpage(0),
-    _parameterpage(0),
+    _axespage(0),
     _parameter3dpage(0),
     _parameterpiepage(0),
     _parameterfontpage(0),
@@ -88,12 +88,12 @@ KChartConfigDialog::KChartConfigDialog( KChartParams* params,
         _parameterLegend = new KChartLegendConfigPage(_params,this );
         addTab( _parameterLegend,i18n("Legend"));
         if( _params->chartType() != KDChartParams::Pie )	{
-            _parameterpage = new KChartParameterConfigPage(_params,this );
-            addTab( _parameterpage, i18n( "&Parameter" ) );
+            _axespage = new KChartParameterConfigPage(_params,this );
+            addTab( _axespage, i18n( "&Axes" ) );
 
         } else {
             _parameterpiepage = new KChartParameterPieConfigPage(_params,this );
-            addTab( _parameterpiepage, i18n( "&Parameter" ) );
+            addTab( _parameterpiepage, i18n( "&Axes" ) );
 
             _piepage = new KChartPieConfigPage(_params, this );
             addTab( _piepage, i18n( "&Pie" ) );
@@ -174,10 +174,10 @@ void KChartConfigDialog::apply()
         _params->setAxisParams( KDChartAxisParams::AxisPosLeft, leftparams );
         _params->setAxisParams( KDChartAxisParams::AxisPosRight, rightparams );
     }
-    if((_piepage&& _parameterpiepage) ||  _parameterpage )
+    if((_piepage&& _parameterpiepage) ||  _axespage )
     {
         if( _params->chartType() != KDChartParams::Pie )
-            _parameterpage->apply();
+            _axespage->apply();
         else
         {
             _parameterpiepage->apply();
@@ -241,11 +241,11 @@ void KChartConfigDialog::defaults()
         //_colorpage->setEdgeColor( _params->EdgeColor );
     }
 
-    if( _parameterpage || (_piepage && _parameterpiepage))
+    if( _axespage || (_piepage && _parameterpiepage))
     {
         if( _params->chartType() != KDChartParams::Pie )
         {
-            _parameterpage->init();
+            _axespage->init();
         }
         else
         {
