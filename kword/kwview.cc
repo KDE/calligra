@@ -3092,9 +3092,15 @@ void KWView::openPopupMenuEditFrame( const QPoint & _point )
         {
             KWFrame *frame=m_doc->getFirstSelectedFrame();
             if(frame->getFrameSet()->type()==FT_PICTURE)
+            {
+                actionList.append(new KActionSeparator());
                 actionList.append(actionChangePicture);
+            }
             else if(frame->getFrameSet()->type()==FT_CLIPART)
+            {
+                actionList.append(new KActionSeparator());
                 actionList.append(actionChangeClipart);
+            }
         }
         plugActionList( "picture_action", actionList );
         ((QPopupMenu*)factory()->container("frame_popup",this))->popup(_point);
