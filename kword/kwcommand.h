@@ -439,4 +439,23 @@ protected:
     unsigned int m_colPos;
 };
 
+/**
+ * Command created when splitting a cell
+ */
+class KWSplitCellCommand : public KCommand
+{
+public:
+    KWSplitCellCommand( const QString &name, KWTableFrameSet * _table,unsigned int colBegin,unsigned int rowBegin, unsigned int colEnd,unsigned int rowEnd );
+    ~KWSplitCellCommand() {}
+
+    void execute();
+    void unexecute();
+protected:
+    KWTableFrameSet *m_pTable;
+    unsigned int m_colBegin;
+    unsigned int m_rowBegin; 
+    unsigned int m_colEnd;
+    unsigned int m_rowEnd;
+};
+
 #endif

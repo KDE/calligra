@@ -1183,11 +1183,24 @@ bool KWTableFrameSet::joinCells(unsigned int colBegin,unsigned int rowBegin, uns
     return true;
 }
 
-bool KWTableFrameSet::splitCell(unsigned int intoRows, unsigned int intoCols) {
-    if(intoRows < 1 || intoCols < 1) return false; // assertion.
+KCommand *KWTableFrameSet::splitCell(unsigned int intoRows, unsigned int intoCols, int _col, int _row) {
+    if(intoRows < 1 || intoCols < 1)
+        return 0L;
+        //return false; // assertion.
 
     unsigned int col, row;
-    if ( !isOneSelected( row, col ) ) return false;
+    if(_col!=-1 && _row!=-1)
+    {
+        row=_row;
+        col=_col;
+    }
+    else
+    {
+        if ( !isOneSelected( row, col ) )
+            return 0L;
+        //return false;
+    }
+
 
     Cell *cell=getCell(row,col);
     KWFrame *firstFrame = cell->getFrame(0);
@@ -1278,7 +1291,8 @@ bool KWTableFrameSet::splitCell(unsigned int intoRows, unsigned int intoCols) {
 
     finalize();
 
-    return true;
+
+    return new KWSplitCellCommand(/*i18n(*/"Split Cell"/*)*/,this,col,row,intoCols, intoRows);
 }
 
 void KWTableFrameSet::viewFormatting( QPainter &/*painter*/, int )

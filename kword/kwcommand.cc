@@ -1040,3 +1040,43 @@ void KWRemoveColumnCommand::unexecute()
     doc->layout();
     doc->repaintAllViews();
 }
+
+
+
+KWSplitCellCommand::KWSplitCellCommand( const QString &name, KWTableFrameSet * _table,unsigned int colBegin,unsigned int rowBegin, unsigned int colEnd,unsigned int rowEnd ):
+    KCommand(name),
+    m_pTable(_table),
+    m_colBegin(colBegin),
+    m_rowBegin(rowBegin),
+    m_colEnd(colEnd),
+    m_rowEnd(rowEnd)
+{
+    ASSERT(m_pTable);
+}
+
+void KWSplitCellCommand::execute()
+{
+    kdDebug() << "KWSplitCellCommand::execute" << endl;
+    KWDocument * doc = m_pTable->kWordDocument();
+    doc->terminateEditing(m_pTable);
+
+    m_pTable->splitCell(m_rowEnd, m_colEnd,m_colBegin,m_rowBegin);
+
+    doc->updateAllFrames();
+    doc->layout();
+    doc->repaintAllViews();
+}
+
+void KWSplitCellCommand::unexecute()
+{
+    kdDebug() << "KWRemoveColumnCommand::unexecute" << endl;
+    KWDocument * doc = m_pTable->kWordDocument();
+    doc->terminateEditing(m_pTable);
+    //laurent
+    //m_colEnd =m_colEnd-1 value give by splitcelldialogbox
+    m_pTable->joinCells(m_colBegin,m_rowBegin,m_colEnd-1,m_rowEnd-1);
+
+    doc->updateAllFrames();
+    doc->layout();
+    doc->repaintAllViews();
+}

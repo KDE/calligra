@@ -200,7 +200,7 @@ public:
     /** merge cells to one cell. Will loose all text not in top-left cell */
     bool joinCells(unsigned int colBegin=0,unsigned int rowBegin=0, unsigned int colEnd=0,unsigned int rowEnd=0);
     /** split selected cell into a number of cells */
-    bool splitCell(unsigned int intoRows, unsigned int intoCols);
+    KCommand * splitCell(unsigned int intoRows, unsigned int intoCols, int _col=-1, int _row=-1);
 
     /** display formatting information */
     void viewFormatting( QPainter &painter, int zoom );

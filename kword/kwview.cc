@@ -2287,11 +2287,14 @@ void KWView::tableSplitCells(int cols, int rows)
     }
 
     //int rows=1, cols=2;
-    if ( !table->splitCell(rows,cols) ) {
+    KCommand *cmd=table->splitCell(rows,cols);
+    if ( !cmd ) {
         KMessageBox::sorry( this,
                             i18n("There is not enough space to split the cell into that many parts, make it bigger first"),
                             i18n("Split Cells") );
+        return;
     }
+    m_doc->addCommand(cmd);
     //KoRect r = m_doc->zoomRect( table->boundingRect() );
     //m_gui->canvasWidget()->repaintScreen( r, TRUE );
     m_doc->updateAllFrames();
