@@ -4,6 +4,17 @@ Fixes:
 - Fixed cursor not blinking in some cases
 - Fixed "blinking cursor erases formatting characters" bug
 - "Adjust object to contents" works as intended now
+- Purpose of the 'Notebar' is unknown (#63037)
+- kpresenter crashed when I tried to insert the variable
+  "section title" (#61735)
+- large footer from kpresenter 1.2.1 will crash kpresenter
+  (#61449)
+- embedded spreadsheet (table button) appears at wrong size
+  (#58498)
+- embedded kspread object displayed with wrong size (#33233)
+- KPresenter hangs when inserted text wraps to newline
+  (#56946)
+- layer lowering is incorrect (#53277)
 
 Changes after KPresenter 1.3 beta 2
 ===================================
