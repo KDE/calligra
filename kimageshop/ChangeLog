@@ -1,0 +1,42 @@
+Tue Aug 17 01:10:54 1999  Carsten Pfeiffer  <pfeiffer@kde.org>
+
+	* started ChangeLog :o)
+
+	* kimageshop.idl:
+	added slot viewBrushDialog()
+	
+	* kimageshop_view.cc,h:
+	added menu entry for the brushdialog and modified everything to use
+	the brusheswidget. Don't create brushes yourself, let the brusheswidget
+	do that!
+	
+	* brushdialog.cc,h: 
+	a floating tabdialog containing the BrushesWidget and more (TODO)
+	
+	* brusheswidget.cc,h: 
+	the brushes chooser is the interface to all available brushes, it 
+	loads them, offers a pointer to the current brush and emits a signal
+ 	when the brush is changed
+	TODO: creating, editing, manual loading and saving of brushes
+
+	* brush.cc,h:
+	inherited from IconItem and added method pixmap() to make it usable
+ 	with the IconChooser
+	const'ed a few methods
+
+	* canvas.cc,h, kimageshop_view.cc,h, brushtool.cc,h:
+	changed occurrences of Brush* to const Brush*
+
+	* iconchooser.cc,h, iconitem.h:
+	a generic iconchooser, used by the brusheswidget
+	inherit from iconitem
+	TODO: keyboard navigation
+	TODO: the look of the items could be improved a bit
+
+	* integerwidget.cc,h:
+	this is just a convenience widget, as it will be used quite often, I
+	think. Consists of a QSlider and a QSpinBox to allow setting some
+	integer value
+	TODO: The widgets are WAY too big though, need to paint them smaller
+	TODO: Need a way to set focus to the QSpinBox LineEdit
+

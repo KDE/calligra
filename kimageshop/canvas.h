@@ -66,7 +66,7 @@ public:
    *  Handle zoomFactor and offset.
    */
   void paintPixmap( QWidget *widget, QRect area, QPoint offset = QPoint( 0, 0 ), QPoint paintOffset = QPoint( 0, 0 ), float zoomFactor = 1 );
- 
+
   /**
    *  Returns current layer.
    */
@@ -102,14 +102,14 @@ public:
   void moveLayer( int dx, int dy, Layer *lay = 0 );
   void renderTileQuadrant( Layer *srcLay, int srcTile, Layer *dstLay, int dstTile,
 			   int srcX, int srcY, int dstX, int dstY, int w, int h );
-  void paintBrush( QPoint pt, Brush *brush );
+  void paintBrush( QPoint pt, const Brush *brush );
   LayerList layerList() { return layers; };
 
 public slots:
 
   void setCurrentLayerOpacity( double opacity )
   {  setLayerOpacity( (uchar) ( opacity * 255 / 100 ) ); };
-  
+
 protected:
 
   void compositeTile( int x, int y, Layer *dstLay = 0, int dstTile = -1 );
@@ -131,7 +131,7 @@ private:
   bool dragging;
   QPoint dragStart;
   uchar *background[5];
-  
+
   enum dispVisual { unknown, rgb565, rgb888x } visual;
   char *imageData;
   XImage *xi;

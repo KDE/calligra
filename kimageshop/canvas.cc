@@ -26,7 +26,7 @@
 #include <stdio.h>
 #include <iostream.h>
 #include <sys/time.h>
-#include <unistd.h>                                                      
+#include <unistd.h>
 
 #include <qpainter.h>
 #include <qwidget.h>
@@ -45,33 +45,33 @@ Canvas::Canvas(int width, int height)
   h=height;
   viewportRect=QRect(0,0,w,h);
   // SHOW_RECT_COORDS(viewportRect);
-  
+
   QRect tileExtents=::findTileExtents(viewportRect);
   // SHOW_RECT(tileExtents);
   xTiles=tileExtents.width()/TILE_SIZE;	
   yTiles=tileExtents.height()/TILE_SIZE;
   // showi(xTiles);
   // showi(yTiles);
-  
+
   setUpVisual();
   QPixmap::setDefaultOptimization(QPixmap::NoOptim);
-  
+
   tiles=new QPixmap* [xTiles*yTiles];
-  
+
   for(int y=0;y<yTiles;y++)
     for(int x=0;x<xTiles;x++) {
       tiles[y*xTiles+x]=new QPixmap(TILE_SIZE,TILE_SIZE);
       tiles[y*xTiles+x]->fill();
     }
   img.create(TILE_SIZE, TILE_SIZE, 32);
-  
+
   channels=3;
   currentLayer=0;
-  
+
   compose=new Layer(channels, false);
   compose->resizeToIncludePoint(QPoint(TILE_SIZE-1,TILE_SIZE-1));
   compose->setPixel(1,1, 0);
-  
+
   // make this like the compose layer
   for(int c=1;c<=channels;c++) {
     background[c]=new uchar[TILE_SIZE*TILE_SIZE];
@@ -85,7 +85,7 @@ Canvas::~Canvas()
 {
   // XXX delete individual tiles
   delete tiles;
-  
+
   if ((visual!=unknown) && (visual!=rgb888x))
     free(imageData);
 }
@@ -107,14 +107,14 @@ void Canvas::paintPixmap(QWidget *w, QRect area, QPoint offset, QPoint paintOffs
 
  int startX, startY, pixX, pixY = 0;
  int pixW, pixH = -1;
-  
+
  QPainter p;
  p.begin(w);
  p.scale(zoomFactor,zoomFactor);
 
   // XXX clip it correctly
   // XXX paint only what is needed
-  
+
  for(int y=0;y<yTiles;y++)
     {
       for(int x=0;x<xTiles;x++)
@@ -177,19 +177,19 @@ void Canvas::setUpVisual()
   int displayDepth=p.x11Depth();
   Visual *vis     =(Visual*)p.x11Visual();
   bool trueColour = (vis->c_class == TrueColor);
-  
+
   // change the false to true to test the faster image converters
   visual=unknown;
   if (true && trueColour) { // do they have a worthy display
     uint red_mask  =(uint)vis->red_mask;
     uint green_mask=(uint)vis->green_mask;
     uint blue_mask =(uint)vis->blue_mask;
-    
+
     if ((red_mask==0xf800) && (green_mask==0x7e0) && (blue_mask==0x1f))
       visual=rgb565;
     if ((red_mask==0xff0000) && (green_mask==0xff00) && (blue_mask==0xff))
       visual=rgb888x;
-    
+
     if (visual==unknown) {
       puts("Unoptimized visual - want to write an optimised routine?");
       printf("red=%8x green=%8x blue=%8x\n",red_mask,green_mask,blue_mask);
@@ -215,7 +215,7 @@ void Canvas::addRGBLayer(QString file)
     return;
   }
   img=img.convertDepth(32);
-  
+
   // XXX currently assumes the alpha image IS a greyscale and the same size as
   // the other channels
   QString alphaName=file;
@@ -228,10 +228,10 @@ void Canvas::addRGBLayer(QString file)
     puts("Incorrect sized alpha channel - not loaded");
     alpha=QImage();
   }
-  
+
   Layer *lay=new Layer(3, !alpha.isNull());
   lay->setName(QFileInfo(file).fileName());
-  
+
   lay->loadRGBImage(img, alpha);
   layers.append(lay);
   currentLayer=lay;
@@ -247,25 +247,25 @@ void Canvas::compositeTile(int x, int y, Layer *dstLay, int dstTile)
     dstTile=y*xTiles+x;
   if (dstLay==0)
     dstLay=compose;
-  
+
   KIS_DEBUG(tile, printf("\n*** compositeTile %d,%d\n",x,y); );
-  
+
   //printf("compositeTile: dstLay=%p dstTile=%d\n",dstLay, dstTile);
-  
+
   // Set the background
   for(int c=1; c<=channels; c++)
-    memcpy(dstLay->channelMem(c,dstTile,0,0), background[c], 
+    memcpy(dstLay->channelMem(c,dstTile,0,0), background[c],
 	   TILE_SIZE*TILE_SIZE);
-  
+
   // Find the tiles boundary in Canvas coordinates
   QRect tileBoundary(x*TILE_SIZE, y*TILE_SIZE, TILE_SIZE, TILE_SIZE);
-  
+
   int l=0;
   Layer *lay=layers.first();
   while(lay) { // Go through each layer and find its contribution to this tile
     l++;
     //printf("layer: %s opacity=%d\n",lay->name().data(), lay->opacity());
-    if ((lay->isVisible()) && 
+    if ((lay->isVisible()) &&
 	(tileBoundary.intersects(lay->imageExtents()))) {
       // The layer is part of the tile. Find out the 1-4 tiles of the channel
       // which are in it and render the appropriate proportions of each
@@ -283,7 +283,7 @@ void Canvas::compositeImage(QRect r)
   TIME_START;
   for(int y=0;y<yTiles;y++)
     for(int x=0;x<xTiles;x++)
-      if (r.isNull() || 
+      if (r.isNull() ||
 	  r.intersects(QRect(x*TILE_SIZE, y*TILE_SIZE,TILE_SIZE,TILE_SIZE))) {
 	compositeTile(x,y, compose, 0);
 	
@@ -298,9 +298,9 @@ void Canvas::renderLayerIntoTile(QRect tileBoundary, Layer *srcLay, Layer *dstLa
   // calculate the position in the layer of the topLeft of the drawing tile
   QPoint layerPoint=tileBoundary.topLeft()-srcLay->imageExtents().topLeft()
     + srcLay->channelOffset();
-  
+
   int tileNo, tileOffsetX, tileOffsetY, xTile, yTile;
-  srcLay->findTileNumberAndPos(layerPoint, &tileNo, 
+  srcLay->findTileNumberAndPos(layerPoint, &tileNo,
 			       &tileOffsetX, &tileOffsetY);
   xTile=tileNo%srcLay->xTiles();
   yTile=tileNo/srcLay->xTiles();
@@ -310,10 +310,10 @@ void Canvas::renderLayerIntoTile(QRect tileBoundary, Layer *srcLay, Layer *dstLa
     renderQ1=renderQ3=false;
   if (tileOffsetY<0)
     renderQ2=renderQ1=false;
-  
+
   KIS_DEBUG(render, showi(tileOffsetX); );
   KIS_DEBUG(render, showi(tileOffsetY); );
-  
+
   int maxLayerX=TILE_SIZE, maxLayerY=TILE_SIZE;
   if (srcLay->boundryTileX(tileNo)) {
     maxLayerX=srcLay->channelLastTileOffsetX();
@@ -323,7 +323,7 @@ void Canvas::renderLayerIntoTile(QRect tileBoundary, Layer *srcLay, Layer *dstLa
   }
   if (tileOffsetX==0)
     renderQ4=false;
-  
+
   if (srcLay->boundryTileY(tileNo)) {
     maxLayerY=srcLay->channelLastTileOffsetY();
 		if (tileOffsetY>=0)
@@ -332,24 +332,24 @@ void Canvas::renderLayerIntoTile(QRect tileBoundary, Layer *srcLay, Layer *dstLa
   }
   if (tileOffsetY==0)
     renderQ4=false;
-  
-  
+
+
   KIS_DEBUG(render, showi(renderQ1); );
   KIS_DEBUG(render, showi(renderQ2); );
   KIS_DEBUG(render, showi(renderQ3); );
   KIS_DEBUG(render, showi(renderQ4); );
-  
+
   // Render quadrants of each tile (either 1, 2 or 4 quadrants get rendered)
-  // 
+  //
   //  ---------
   //  | 1 | 2 |
   //  ---------
   //  | 3 | 4 |
   //  ---------
   //
-  
+
   dbg=false;
-  
+
   KIS_DEBUG(render, {
     SHOW_POINT(tileBoundary.topLeft());
     SHOW_POINT(layerPoint);
@@ -358,46 +358,46 @@ void Canvas::renderLayerIntoTile(QRect tileBoundary, Layer *srcLay, Layer *dstLa
   });
 
   int renderedToX, renderedToY;
-  
+
   KIS_DEBUG(render, printf("Test 1: "); );
   if (renderQ1) {
     // true => render 1
-    renderTileQuadrant(srcLay, tileNo, dstLay, dstTile, 
+    renderTileQuadrant(srcLay, tileNo, dstLay, dstTile,
 		       tileOffsetX, tileOffsetY, 0, 0,
 		       TILE_SIZE, TILE_SIZE);
     renderedToX=maxLayerX-tileOffsetX;
     renderedToY=maxLayerY-tileOffsetY;
   } else
     KIS_DEBUG(render, puts("ignore"); );
-  
+
   KIS_DEBUG(render, printf("Test 2:"); );
   if (renderQ2) {
     // true => render 2
     if (renderQ1)
-      renderTileQuadrant(srcLay, tileNo+1, dstLay, dstTile, 
+      renderTileQuadrant(srcLay, tileNo+1, dstLay, dstTile,
 			 0, tileOffsetY, maxLayerX-tileOffsetX, 0,
 			 TILE_SIZE, TILE_SIZE);
     else
-      renderTileQuadrant(srcLay, tileNo, dstLay, dstTile, 
+      renderTileQuadrant(srcLay, tileNo, dstLay, dstTile,
 			 0, tileOffsetY, -tileOffsetX,0,
 			 TILE_SIZE, TILE_SIZE);
   } else
     KIS_DEBUG(render, puts("ignore"));
-  
+
   KIS_DEBUG(render, printf("Test 3:"); );
   if (renderQ3) {
     // true => render 3
     if (renderQ1)
-      renderTileQuadrant(srcLay, tileNo+srcLay->xTiles(), dstLay, dstTile, 
-			 tileOffsetX, 0, 0, maxLayerY-tileOffsetY, 
+      renderTileQuadrant(srcLay, tileNo+srcLay->xTiles(), dstLay, dstTile,
+			 tileOffsetX, 0, 0, maxLayerY-tileOffsetY,
 			 TILE_SIZE, TILE_SIZE);
     else
-      renderTileQuadrant(srcLay, tileNo, dstLay, dstTile, 
-			 tileOffsetX, 0, 0, -tileOffsetY, 
+      renderTileQuadrant(srcLay, tileNo, dstLay, dstTile,
+			 tileOffsetX, 0, 0, -tileOffsetY,
 			 TILE_SIZE, TILE_SIZE);
   } else
     KIS_DEBUG(render, puts("ignore"); );
-  
+
   KIS_DEBUG(render, printf("Test 4:"); );
   // true => render 4
   if (renderQ4) {
@@ -417,7 +417,7 @@ void Canvas::renderLayerIntoTile(QRect tileBoundary, Layer *srcLay, Layer *dstLa
       if (!(renderQ1 && !renderQ2 && !renderQ3)) {
 	if (tileOffsetX>0) tileOffsetX=tileOffsetX-TILE_SIZE;
 	if (tileOffsetY>0) tileOffsetY=tileOffsetY-TILE_SIZE;
-	renderTileQuadrant(srcLay, newTile, dstLay, dstTile, 
+	renderTileQuadrant(srcLay, newTile, dstLay, dstTile,
 			   0, 0, -tileOffsetX, -tileOffsetY,
 			   TILE_SIZE, TILE_SIZE);
       }
@@ -425,13 +425,13 @@ void Canvas::renderLayerIntoTile(QRect tileBoundary, Layer *srcLay, Layer *dstLa
       KIS_DEBUG(render, puts("ignore"); );
   }	else
     KIS_DEBUG(render, puts("ignore"); );
-  
+
   dbg=false;
 }
 
-void Canvas::renderTileQuadrant(Layer *srcLay, int srcTile, 
+void Canvas::renderTileQuadrant(Layer *srcLay, int srcTile,
 				Layer *dstLay, int dstTile,
-				int srcX, int srcY, 
+				int srcX, int srcY,
 				int dstX, int dstY, int w, int h)
 {
   uchar *channelData[channels+1];
@@ -440,9 +440,9 @@ void Canvas::renderTileQuadrant(Layer *srcLay, int srcTile,
   channelData[1]=srcLay->channelMem(1,srcTile,0,0);
   channelData[2]=srcLay->channelMem(2,srcTile,0,0);
   channelData[3]=srcLay->channelMem(3,srcTile,0,0);
-  
+
   uchar opacity=srcLay->opacity();
-  
+
   // Constrain the width so that the copy is clipped to the overlap
   w=MIN(MIN(w, TILE_SIZE-srcX), TILE_SIZE-dstX);
   h=MIN(MIN(h, TILE_SIZE-srcY), TILE_SIZE-dstY);
@@ -452,14 +452,14 @@ void Canvas::renderTileQuadrant(Layer *srcLay, int srcTile,
   if (srcLay->boundryTileY(srcTile))
     h=MIN(h, srcLay->channelLastTileOffsetY()-srcY);
   // XXX now constrain for the boundry of the Canvas
-  
+
   KIS_DEBUG(render, printf("renderTileQuadrant: srcTile=%d src=(%d,%d) dstTile=%d dst=(%d,%d) size=(%d,%d)\n", srcTile, srcX, srcY, dstTile, dstX, dstY, w,h); );
-  
-  
-  
+
+
+
   uchar one=255;
   int leadIn=TILE_SIZE-w;
-  
+
   for(int c=1;c<=channels;c++) {
     uchar *composeD=dstLay->channelMem(c,dstTile, dstX, dstY);
     uchar *channelD=srcLay->channelMem(c,srcTile, srcX, srcY);
@@ -508,11 +508,11 @@ void Canvas::setLayerOpacity( uchar _opacity, Layer *_layer )
   _layer->setOpacity( _opacity );
 
   DEBUG("set layer: %s opacity to %d\n", _layer->name().data(), _opacity );
-  
+
   // FIXME: repaint
 }
 
-void Canvas::moveLayer( int _dx, int _dy, Layer *_lay ) 
+void Canvas::moveLayer( int _dx, int _dy, Layer *_lay )
 {
   _lay = layerPtr( _lay );
   _lay->moveBy( _dx, _dy );
@@ -532,36 +532,36 @@ void Canvas::convertImageToPixmap(QImage *image, QPixmap *pix)
       ushort *ptr=(ushort *)imageData;
       uchar *qimg=image->bits();
       for(int y=0;y<TILE_SIZE;y++)
-	for(int x=0;x<TILE_SIZE;x++) { 
+	for(int x=0;x<TILE_SIZE;x++) {
 	  s =(*qimg++)>>3;
 	  s|=(*qimg++ & 252)<<3;
-	  s|=(*qimg++ & 248)<<8; 
+	  s|=(*qimg++ & 248)<<8;
 	  qimg++;
 	  *ptr++=s;
 	}
     }
     break;
-    
+
     case rgb888x:
       xi->data=(char*)image->bits();
       break;
-      
+
     default: break;
     }
     XPutImage(pix->x11Display(), pix->handle(), qt_xget_readonly_gc(),
 	      xi, 0,0, 0,0, TILE_SIZE, TILE_SIZE);
     //TIME_END("fast convertImageToPixmap");
   }
-} 
+}
 
 void Canvas::convertTileToPixmap(Layer *lay, int tileNo, QPixmap *pix)
 {
   // Copy the composite image into a QImage so it can be converted to a
-  // QPixmap. 
+  // QPixmap.
   // Note: surprisingly it is not quicker to render directly into a QImage
   // probably due to the CPU cache, it's also useless wrt to other colour
   // spaces
-  
+
   // For RGB images XXX
   for(int c=1;c<=channels;c++) {
     uchar *comp=lay->channelMem(c,tileNo, 0,0);
@@ -577,26 +577,26 @@ void Canvas::convertTileToPixmap(Layer *lay, int tileNo, QPixmap *pix)
   convertImageToPixmap(&img, pix);
 }
 
-void Canvas::paintBrush(QPoint pt, Brush *brsh)
+void Canvas::paintBrush(QPoint pt, const Brush *brsh)
 {
   Layer *lay=layerPtr(0);
   QPoint layPt=pt-brsh->hotSpot()-lay->imageExtents().topLeft();
   QRect brushRect(layPt, brsh->brushSize());
-  
+
   int minYTile=brushRect.top()/TILE_SIZE;
   int maxYTile=brushRect.bottom()/TILE_SIZE;
   int minXTile=brushRect.left()/TILE_SIZE;
   int maxXTile=brushRect.right()/TILE_SIZE;
-  
+
   printf("paintBrush:: pt(%d,%d)\n",pt.x(),pt.y());
   printf("paintBrush:: layPt(%d,%d)\n",layPt.x(),layPt.y());
   printf("paintBrush:: y->(%d,%d) x->(%d,%d)\n",minYTile,maxYTile,minXTile,
 	 maxXTile);
-  
+
   SHOW_POINT(lay->channelOffset());
   QRect tileImage(layPt+lay->channelOffset(), brsh->imageExtents().size());
   SHOW_RECT(tileImage);
-  
+
   brsh->moveTo(layPt.x(), layPt.y());
   for(int y=minYTile; y<=maxYTile; y++)
     for(int x=minXTile; x<=maxXTile; x++) {
@@ -620,7 +620,7 @@ void Canvas::upperLayer( int _layer )
   if( _layer > 0 )
   {
     cerr << "Michael : move layer " << _layer << " to " << _layer - 1 << endl;
- 
+
     Layer *pLayer = layers.take( _layer );
     layers.insert( _layer - 1, pLayer );
   }
@@ -652,7 +652,7 @@ void Canvas::backgroundLayer( int _layer )
 void Canvas::setFrontLayer( int _layer )
 {
   ASSERT( ( _layer >= 0 ) && ( _layer < layers.count() ) );
- 
+
   if( _layer < ( layers.count() - 1 ) )
   {
     Layer *pLayer = layers.take( _layer );
@@ -663,7 +663,7 @@ void Canvas::setFrontLayer( int _layer )
 void Canvas::setBackgroundLayer( int _layer )
 {
   ASSERT( ( _layer >= 0 ) && ( _layer < layers.count() ) );
- 
+
   if( _layer > 0 )
   {
     Layer *pLayer = layers.take( _layer );

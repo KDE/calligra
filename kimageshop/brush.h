@@ -28,24 +28,33 @@
 #include "qsize.h"
 #include "qpoint.h"
 
-class Brush : public Layer
+#include "iconitem.h"
+
+class QImage;
+class QPixmap;
+
+class Brush : public Layer, public IconItem
 {
  public:
   Brush(QString file);
-  
-  int    spacing()   { return spacingVal; };
-  QSize  brushSize() { return sizeVal;    };
-  bool   isValid()   { return validVal;   };
-  void   setHotSpot(QPoint pt) { hotSpotVal=pt; }; // XXX check in brush
-  QPoint hotSpot()   { return hotSpotVal; };
-  
+
+  void 	 setSpacing(int s) 		{ spacingVal = s;    }
+  int    spacing()   		const	{ return spacingVal; }
+  QSize  brushSize() 		const	{ return sizeVal;    }
+  bool   isValid()   		const	{ return validVal;   }
+  void   setHotSpot(QPoint pt) 		{ hotSpotVal=pt;     } // XXX check in brush
+  QPoint hotSpot()   		const	{ return hotSpotVal; }
+  const QPixmap&  pixmap() 	const 	{ return pixmapVal;  }
+
  private:
   void loadBrush(QString file);
-  
+  void createPixmap(const QImage& img, const QImage& alpha);
+
   bool validVal;;
   int spacingVal;
   QSize sizeVal;
   QPoint hotSpotVal;
+  QPixmap pixmapVal;
 };
 
 #endif

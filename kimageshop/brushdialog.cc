@@ -1,7 +1,9 @@
 /*
- *  brushtool.h - part of KImageShop
+ *  brushdialog.cc - part of KImageShop
  *
- *  Copyright (c) 1999 Matthias Elter
+ *  A floating tabdialog showing a brushwidget and (later) some more properties
+ *
+ *  Copyright (c) 1999 Carsten Pfeiffer <pfeiffer@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -18,33 +20,27 @@
  *  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  */
 
-#ifndef __brushtool_h__
-#define __brushtool_h__
 
-#include <qpoint.h>
+#include <klocale.h>
 
-#include "tool.h"
+#include "brusheswidget.h"
+#include "brushdialog.h"
 
-class Brush;
 
-class BrushTool : public Tool
+BrushDialog::BrushDialog( QWidget* parent, const char* name,WFlags flags )
+  : KFloatingTabDialog( parent, name )
 {
- public:
-  BrushTool(KImageShopDoc *doc, const Brush *_brush);
-  ~BrushTool();
+  brushesTab = new BrushesWidget( this, "brushes widget" );
+  // more tabs to come in the future
 
-  virtual char* toolName() { return CORBA::string_dup("BrushTool"); }
+  addTab( brushesTab, i18n( "Brushes" ) );
+}
 
-  virtual void mousePress(const KImageShop::MouseEvent& e);
-  virtual void mouseMove(const KImageShop::MouseEvent& e);
-  virtual void mouseRelease(const KImageShop::MouseEvent& e);
 
-  void setBrush(const Brush *_brush);
+BrushDialog::~BrushDialog()
+{
+  delete brushesTab;
+}
 
- protected:
-  QPoint 	m_dragStart;
-  bool   	m_dragging;
-  const Brush  	*m_pBrush;
-};
 
-#endif //__brushtool_h__
+#include "brushdialog.moc"

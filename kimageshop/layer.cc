@@ -30,8 +30,9 @@ Layer::Layer(int ch, bool hasAlpha)
 	linked=false;
   alphaChannel=hasAlpha;
 
-	for(int c=(alphaChannel ? 0 : 1); c<=channels; c++)
+     for(int c=(alphaChannel ? 0 : 1); c<=channels; c++) {
 		channelPtrs[c]=new Channel(0,0);
+     }
 }
 
 Layer::~Layer()
@@ -132,14 +133,14 @@ Layer::channelOffset() // TopLeft of the image in the channel (not always 0,0)
 	return channelPtrs[1]->offset();
 }
 
-int   
-Layer::xTiles() 
+int
+Layer::xTiles()
 {
 	return channelPtrs[1]->xTiles();
 }
 
-int   
-Layer::yTiles() 
+int
+Layer::yTiles()
 {
 	return channelPtrs[1]->yTiles();
 }

@@ -1,7 +1,10 @@
 /*
- *  brushtool.h - part of KImageShop
+ *  iconitem.h - part of KImageShop
  *
- *  Copyright (c) 1999 Matthias Elter
+ *  A simple item for the IconChooser widget. Inherit from this class to create
+ *  custom items.
+ *
+ *  Copyright (c) 1999 Carsten Pfeiffer <pfeiffer@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -18,33 +21,20 @@
  *  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  */
 
-#ifndef __brushtool_h__
-#define __brushtool_h__
+#ifndef ICONITEM_H
+#define ICONITEM_H
 
-#include <qpoint.h>
+#include <qpixmap.h>
 
-#include "tool.h"
-
-class Brush;
-
-class BrushTool : public Tool
+class IconItem
 {
- public:
-  BrushTool(KImageShopDoc *doc, const Brush *_brush);
-  ~BrushTool();
+public:
+  IconItem() {}
+  virtual ~IconItem() {}
 
-  virtual char* toolName() { return CORBA::string_dup("BrushTool"); }
+  virtual const QPixmap& pixmap() const = 0;
 
-  virtual void mousePress(const KImageShop::MouseEvent& e);
-  virtual void mouseMove(const KImageShop::MouseEvent& e);
-  virtual void mouseRelease(const KImageShop::MouseEvent& e);
-
-  void setBrush(const Brush *_brush);
-
- protected:
-  QPoint 	m_dragStart;
-  bool   	m_dragging;
-  const Brush  	*m_pBrush;
 };
 
-#endif //__brushtool_h__
+
+#endif // ICONITEM_H

@@ -88,6 +88,7 @@ module KImageShop
                 // View menu
                 slot void viewLayerDialog();
 		slot void viewColorDialog();
+		slot void viewBrushDialog();
                 slot void viewPreferences();
 	};
 

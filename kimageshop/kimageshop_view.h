@@ -45,18 +45,20 @@ class BrushTool;
 class ZoomTool;
 class Brush;
 class ColorDialog;
+class BrushDialog;
+class BrushesWidget;
 
 class KImageShopView : public QWidget,
 		       virtual public KoViewIf,
 		       virtual public KImageShop::View_skel
 {
   Q_OBJECT
-    
+
 public:
 
   KImageShopView(QWidget* _parent, const char* _name, KImageShopDoc* _doc);
   ~KImageShopView();
-  
+
   virtual void cleanUp();
   virtual void createGUI();
 
@@ -94,7 +96,8 @@ public slots:
   void slotSetZoomFactor(float);
   void slotSetFGColor(const QColor&);
   void slotSetBGColor(const QColor&);
-
+  void slotSetBrush(const Brush *);
+  
   virtual void slotEditUndo();
   virtual void slotEditUndo2();
   virtual void slotEditUndo3();
@@ -122,6 +125,7 @@ public slots:
 
   virtual void viewLayerDialog();
   virtual void viewColorDialog();
+  virtual void viewBrushDialog();
   virtual void viewPreferences();
 
   virtual void slotActivateMoveTool();
@@ -163,18 +167,19 @@ protected:
   OpenPartsUI::Menu_var m_vMenuView;
   CORBA::Long m_idMenuView_LayerDialog;
   CORBA::Long m_idMenuView_ColorDialog;
+  CORBA::Long m_idMenuView_BrushDialog;
   CORBA::Long m_idMenuView_Preferences;
 
   OpenPartsUI::Menu_var m_vMenuImage;
   OpenPartsUI::Menu_var m_vMenuPlugIns;
   OpenPartsUI::Menu_var m_vMenuOptions;
-  
+
 private:
 
   enum { TBTOOLS_MOVETOOL, TBTOOLS_BRUSHTOOL, TBTOOLS_ZOOMTOOL, TBEDIT_UNDO, TBEDIT_REDO,
 	 TBEDIT_COPY, TBEDIT_CUT, TBEDIT_PASTE };
 
-  KImageShopDoc *m_pDoc; 
+  KImageShopDoc *m_pDoc;
   LayerDialog   *m_pLayerDialog;
   QScrollBar    *m_pHorz, *m_pVert;
   KRuler        *m_pHRuler, *m_pVRuler;
@@ -184,7 +189,9 @@ private:
   MoveTool      *m_pMoveTool;
   BrushTool     *m_pBrushTool;
   ZoomTool      *m_pZoomTool;
-  Brush         *m_pBrush; // current brush
+  const Brush   *m_pBrush; // current brush
+  BrushDialog 	*m_pBrushDialog;
+  const BrushesWidget *m_pBrushChooser;
   ColorDialog   *m_pColorDialog;
   QColor        m_fg, m_bg;
   float         m_ZoomFactor;

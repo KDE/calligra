@@ -22,10 +22,12 @@
  */
 
 #include "brush.h"
+#include <qbitmap.h>
+#include <qpixmap.h>
 #include <qregexp.h>
 #include <stdio.h>
 
-Brush::Brush(QString file) : Layer(3, true)
+Brush::Brush(QString file) : Layer(3, true), IconItem()
 {
   validVal=true;
   loadBrush(file);
@@ -43,7 +45,7 @@ void Brush::loadBrush(QString file)
       validVal=false;
       return;
     }
-  
+
   // XXX currently assumes the alpha image IS a greyscale and the same size as
   // the other channels
   QString alphaName=file;
@@ -59,4 +61,14 @@ void Brush::loadBrush(QString file)
     }
   loadRGBImage(img, alpha);
   sizeVal=img.size();
+  createPixmap(img, alpha);
+}
+
+
+void Brush::createPixmap(const QImage& img, const QImage& alpha)
+{
+  pixmapVal = img;
+  QBitmap bm;
+  bm = alpha;
+  pixmapVal.setMask( bm );
 }

@@ -46,6 +46,8 @@
 #include "brush.h"
 #include "layerdlg.h"
 #include "colordialog.h"
+#include "brushdialog.h"
+#include "brusheswidget.h"
 #include "tool.h"
 #include "movetool.h"
 #include "brushtool.h"
@@ -64,6 +66,8 @@ KImageShopView::KImageShopView( QWidget* _parent, const char* _name, KImageShopD
   m_pDoc = _doc;
   m_pCanvasView = 0L;
   m_pLayerDialog = 0L;
+  m_pBrushDialog = 0L;
+  m_pColorDialog = 0L;
   m_pHorz = 0L;
   m_pVert = 0L;
   m_pHRuler = 0L;
@@ -85,7 +89,7 @@ void KImageShopView::init()
 {
   // register the view at the parent-parts UI managers
   kdebug( KDEBUG_INFO, 0, "Registering menu as %li", id() );
-  
+
   OpenParts::MenuBarManager_var menu_bar_manager = m_vMainWindow->menuBarManager();
   if ( !CORBA::is_nil( menu_bar_manager ) )
     menu_bar_manager->registerClient( id(), this );
@@ -105,21 +109,21 @@ void KImageShopView::init()
 void KImageShopView::cleanUp()
 {
   kdebug( KDEBUG_INFO, 0, "void KImageShopView::cleanUp() " );
-  
+
   // avoid loops
   if ( m_bIsClean ) { return; }
-  
+
   // unregister the view from the parent parts UI managers
   kdebug( KDEBUG_INFO, 0, "1b) Unregistering menu and toolbar" );
 
   OpenParts::MenuBarManager_var menu_bar_manager = m_vMainWindow->menuBarManager();
   if ( !CORBA::is_nil( menu_bar_manager ) )
     menu_bar_manager->unregisterClient( id() );
-  
+
   OpenParts::ToolBarManager_var tool_bar_manager = m_vMainWindow->toolBarManager();
   if ( !CORBA::is_nil( tool_bar_manager ) )
     tool_bar_manager->unregisterClient( id() );
-  
+
   // let the document know that this view is gone
   m_pDoc->removeView(this);
 
@@ -129,23 +133,25 @@ void KImageShopView::cleanUp()
   delete m_pVRuler;
   delete m_pCanvasView;
   delete m_pLayerDialog;
+  delete m_pBrushDialog;
+  //  delete m_pColorDialog;
   delete m_pMoveTool;
   delete m_pBrushTool;
   delete m_pZoomTool;
-    
+
   KoViewIf::cleanUp();
 }
 
 bool KImageShopView::event( const char* _event, const CORBA::Any& _value )
 {
   EVENT_MAPPER( _event, _value );
- 
+
   // map OP events to member functions
   MAPPING( OpenPartsUI::eventCreateMenuBar, OpenPartsUI::typeCreateMenuBar_ptr, mappingCreateMenubar );
   MAPPING( OpenPartsUI::eventCreateToolBar, OpenPartsUI::typeCreateToolBar_ptr, mappingCreateToolbar );
-  
+
   END_EVENT_MAPPER;
-  
+
   return false;
 }
 
@@ -253,9 +259,9 @@ bool KImageShopView::mappingCreateMenubar( OpenPartsUI::MenuBar_ptr menubar )
     m_vMenuOptions = 0L;
     return true;
   }
- 
+
   KStdAccel stdAccel;
- 
+
   // don't use Q2C directly in arguments to avoid memory leaks!
   CORBA::WString_var text;
   OpenPartsUI::Pixmap_var pix;
@@ -303,6 +309,9 @@ bool KImageShopView::mappingCreateMenubar( OpenPartsUI::MenuBar_ptr menubar )
   text = Q2C( i18n( "&Color dialog" ) );
   m_idMenuView_ColorDialog = m_vMenuView->insertItem( text, this, "viewColorDialog", 0 );
 
+  text = Q2C( i18n( "&Brushes dialog" ) );
+  m_idMenuView_BrushDialog = m_vMenuView->insertItem( text, this, "viewBrushDialog", 0 );
+
   m_vMenuView->insertSeparator( -1 );
 
   text = Q2C( i18n( "&Preferences" ) );
@@ -333,7 +342,7 @@ void KImageShopView::createGUI()
   // m_pColorDialog = new ColorDialog(m_pCanvasView);
   //m_pColorDialog->move(100, 100);
   //m_pColorDialog->show();
-  
+
   // setup GUI
   setupScrollbars();
   setupRulers();
@@ -348,11 +357,16 @@ void KImageShopView::createGUI()
   m_pMoveTool = new MoveTool(m_pDoc);
   m_pTool = m_pMoveTool;
 
-  // create a default brush
-  QString _image = locate("appdata", "brushes/brush.jpg");
-  m_pBrush = new Brush(_image);
-  m_pBrush->setHotSpot(QPoint(25,25));
-  
+  // create brush dialog
+  m_pBrushDialog = new BrushDialog(this);
+  m_pBrushDialog->resize(205, 267);
+  m_pBrushDialog->move(405, 20);
+  m_pBrushDialog->show();
+
+  m_pBrushChooser = m_pBrushDialog->brushChooser();
+  m_pBrush = m_pBrushChooser->currentBrush();
+  QObject::connect(m_pBrushChooser, SIGNAL(selected(const Brush *)), this, SLOT(slotSetBrush(const Brush*)));
+
   // create brush tool
   m_pBrushTool = new BrushTool(m_pDoc, m_pBrush);
 
@@ -364,7 +378,7 @@ void KImageShopView::createGUI()
   m_pLayerDialog->resize(205,267);
   m_pLayerDialog->move(200,20);
   m_pLayerDialog->show();
-  
+
   resizeEvent(0L);
 }
 
@@ -375,7 +389,7 @@ void KImageShopView::setupScrollbars()
 
   if (m_pCanvasView)
     m_pCanvasView->resize(widget()->width()-16, widget()->height()-16);
-  
+
   m_pVert->setGeometry(widget()->width()-16, 0, 16, widget()->height()-16);
   m_pHorz->setGeometry(0, widget()->height()-16, widget()->width()-16, 16);
   m_pVert->show();
@@ -544,7 +558,7 @@ void KImageShopView::resizeEvent(QResizeEvent*)
 	  m_pHorz->show();
 	  m_pCanvasView->resize(width() - 36, height() - 36);
 	}
-      
+
       // ruler geometry
       m_pHRuler->setGeometry(20, 0, viewWidth(), 20);
       m_pVRuler->setGeometry(0, 20, 20, viewHeight());
@@ -552,7 +566,7 @@ void KImageShopView::resizeEvent(QResizeEvent*)
       // ruler ranges
       m_pVRuler->setRange(0, docHeight());
       m_pHRuler->setRange(0, docWidth());
-      
+
       // ruler offset
       if(m_pVert->isVisible())
 	m_pVRuler->setOffset(m_pVert->value());
@@ -582,7 +596,7 @@ void KImageShopView::slotActivateMoveTool()
       m_pMoveTool = new MoveTool(m_pDoc);
 
   m_pTool = m_pMoveTool;
-  
+
   if(m_vToolBarTools->isButtonOn(TBTOOLS_MOVETOOL))
     {
       // move tool is already on but will automatically be toggled by
@@ -602,12 +616,19 @@ void KImageShopView::slotActivateBrushTool()
 {
   if (!m_pBrush)
     {
-      // we have no brush -> create a default one
-      QString _image = locate("appdata", "brushes/brush.jpg");
-      m_pBrush = new Brush(_image);
-      m_pBrush->setHotSpot(QPoint(25,25));
+      if ( m_pBrushChooser )
+	m_pBrush = m_pBrushChooser->currentBrush();
+
+      else
+	{
+	  // FIXME this should go away
+	  // the chooser should be the only one dealing with brushes
+	  QString _image = locate("appdata", "brushes/brush.jpg");
+	  m_pBrush = new Brush(_image);
+	  // m_pBrush->setHotSpot(QPoint(25,25));
+	}
     }
-  
+
   if (!m_pBrushTool)
     m_pBrushTool = new BrushTool(m_pDoc, m_pBrush);
 
@@ -619,7 +640,7 @@ void KImageShopView::slotActivateBrushTool()
       // ktoolbar code -> toggle it by hand to keep it on.
       m_vToolBarTools->isButtonOn(TBTOOLS_BRUSHTOOL);
     }
-  
+
   // shut off movetool (move this to a function as soon as
   // we have more tools.
   if(m_vToolBarTools->isButtonOn(TBTOOLS_MOVETOOL))
@@ -634,14 +655,14 @@ void KImageShopView::slotActivateZoomTool()
     m_pZoomTool = new ZoomTool(this);
 
   m_pTool = m_pZoomTool;
-  
+
   if(m_vToolBarTools->isButtonOn(TBTOOLS_ZOOMTOOL))
     {
       // brush tool is already on but will automatically be toggled by
       // ktoolbar code -> toggle it by hand to keep it on.
       m_vToolBarTools->isButtonOn(TBTOOLS_ZOOMTOOL);
     }
-  
+
   // shut off movetool (move this to a function as soon as
   // we have more tools.
   if(m_vToolBarTools->isButtonOn(TBTOOLS_MOVETOOL))
@@ -672,7 +693,7 @@ void KImageShopView::slotCVPaint(QPaintEvent *)
 {
   // viewrect in canvas coordinates
   QRect viewRect(static_cast<int>(m_pHorz->value()/m_ZoomFactor), static_cast<int>(m_pVert->value()/m_ZoomFactor), m_pCanvasView->width()/m_ZoomFactor, m_pCanvasView->height()/m_ZoomFactor);
- 
+
   slotUpdateView(viewRect);
 }
 
@@ -687,11 +708,11 @@ void KImageShopView::slotCVMousePress(QMouseEvent *e)
   mouseEvent.posY = static_cast<long>((e->y() - yPaintOffset() + m_pVert->value()) / m_ZoomFactor);
   mouseEvent.globalPosX = e->globalX();
   mouseEvent.globalPosY = e->globalY();
-  
+
   mouseEvent.leftButton = (e->button() & LeftButton) ? true : false;
   mouseEvent.rightButton = (e->button() & RightButton) ? true : false;
   mouseEvent.midButton = (e->button() & MidButton) ? true : false;
-  
+
   mouseEvent.shiftButton = (e->state() & ShiftButton) ? true : false;
   mouseEvent.controlButton = (e->state() & ControlButton) ? true : false;
   mouseEvent.altButton = (e->state() & AltButton) ? true : false;
@@ -710,17 +731,17 @@ void KImageShopView::slotCVMouseMove(QMouseEvent *e)
   mouseEvent.posY = static_cast<long>((e->y() - yPaintOffset() + m_pVert->value()) / m_ZoomFactor);
   mouseEvent.globalPosX = e->globalX();
   mouseEvent.globalPosY = e->globalY();
-  
+
   mouseEvent.leftButton = (e->button() & LeftButton) ? true : false;
   mouseEvent.rightButton = (e->button() & RightButton) ? true : false;
   mouseEvent.midButton = (e->button() & MidButton) ? true : false;
-  
+
   mouseEvent.shiftButton = (e->state() & ShiftButton) ? true : false;
   mouseEvent.controlButton = (e->state() & ControlButton) ? true : false;
   mouseEvent.altButton = (e->state() & AltButton) ? true : false;
 
   m_pTool->mouseMove(mouseEvent);
-  
+
   m_pHRuler->slotNewValue(e->x() - xPaintOffset());
   m_pVRuler->slotNewValue(e->y() - yPaintOffset());
 }
@@ -736,11 +757,11 @@ void KImageShopView::slotCVMouseRelease(QMouseEvent *e)
   mouseEvent.posY = static_cast<long>((e->y() - yPaintOffset() + m_pVert->value()) / m_ZoomFactor);
   mouseEvent.globalPosX = e->globalX();
   mouseEvent.globalPosY = e->globalY();
-  
+
   mouseEvent.leftButton = (e->button() & LeftButton) ? true : false;
   mouseEvent.rightButton = (e->button() & RightButton) ? true : false;
   mouseEvent.midButton = (e->button() & MidButton) ? true : false;
-  
+
   mouseEvent.shiftButton = (e->state() & ShiftButton) ? true : false;
   mouseEvent.controlButton = (e->state() & ControlButton) ? true : false;
   mouseEvent.altButton = (e->state() & AltButton) ? true : false;
@@ -768,6 +789,11 @@ void KImageShopView::slotSetZoomFactor(float zoomFactor)
   m_ZoomFactor = zoomFactor;
 }
 
+void KImageShopView::slotSetBrush(const Brush *brush )
+{
+  m_pBrush = brush;
+}
+
 void KImageShopView::slotEditUndo()
 {
   m_pDoc->commandHistory()->undo();
@@ -782,7 +808,7 @@ void KImageShopView::slotEditUndo7() {}
 void KImageShopView::slotEditUndo8() {}
 void KImageShopView::slotEditUndo9() {}
 void KImageShopView::slotEditUndo10() {}
- 
+
 void KImageShopView::slotEditRedo()
 {
   m_pDoc->commandHistory()->redo();
@@ -797,15 +823,15 @@ void KImageShopView::slotEditRedo7() {}
 void KImageShopView::slotEditRedo8() {}
 void KImageShopView::slotEditRedo9() {}
 void KImageShopView::slotEditRedo10() {}
- 
+
 void KImageShopView::slotEditCut()
 {
 }
- 
+
 void KImageShopView::slotEditCopy()
 {
 }
- 
+
 void KImageShopView::slotEditPaste()
 {
 }
@@ -818,11 +844,25 @@ void KImageShopView::viewLayerDialog()
       m_pLayerDialog->hide();
     else
        m_pLayerDialog->show();
-      
+
     // TODO: make this working
     m_vMenuView->setItemChecked( m_idMenuView_LayerDialog, true );
   }
 }
+
+void KImageShopView::viewBrushDialog()
+{
+  if ( m_pBrushDialog ) {
+    if ( m_pBrushDialog->isVisible() )
+      m_pBrushDialog->hide();
+    else
+      m_pBrushDialog->show();
+
+    // TODO: make this working
+    m_vMenuView->setItemChecked( m_idMenuView_BrushDialog, true );
+  }
+}
+
 
 void KImageShopView::viewColorDialog()
 {
@@ -837,7 +877,7 @@ void KImageShopView::changeUndo( QString _text, bool _enable )
   cout << "ImageShopView::changeUndo : ";
 
   CORBA::WString_var text;
- 
+
   if( _enable )
   {
     m_vMenuEdit->setItemEnabled( m_idMenuEdit_Undo, true );
@@ -865,7 +905,7 @@ void KImageShopView::changeRedo( QString _text, bool _enable )
   cout << "KImageShopView::changeRedo : ";
 
   CORBA::WString_var text;
- 
+
   if( _enable )
   {
     m_vMenuEdit->setItemEnabled( m_idMenuEdit_Redo, true );
