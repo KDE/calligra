@@ -13,8 +13,10 @@ class kchartDataEditor : public KDialog {
      kchartDataEditor();
    void setData(KChartData* dat);
    void getData(KChartData* dat);
-   void getLabel(KChartParameters* params);
-   void setLabel(QStringList lbl);
+   void getLegend(KChartParameters* params);
+   void setLegend(QStringList legend);
+   void getXLabel(KChartParameters* params);
+   void setXLabel(QStringList xlbl);
  private:
    SheetDlg *_widget;
 };

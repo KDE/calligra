@@ -27,6 +27,7 @@ libkchart_la_SOURCES = kchart_shell.cc kchart_part.cc \
 	kchartBarConfigPage.cc \
 	kchartColorConfigPage.cc \
 	kchartParameterConfigPage.cc \
+	kchartFontConfigPage.cc \
 	kchartParameterPieConfigPage.cc \
 	kchartConfigDialog.cc \
 	kchartGeometryConfigPage.cc \
@@ -61,6 +62,7 @@ noinst_HEADERS =  kchart_global.h \
 		kchartColorConfigPage.h \
 		kchartParameterConfigPage.h \
 		kchartParameterPieConfigPage.h \
+		kchartFontConfigPage.h \
 		kchartConfigDialog.h \
 		kchartGeometryConfigPage.h \
 	   	kchartEngine.h \
@@ -85,6 +87,7 @@ libkchart_la_METASOURCES = kchart_shell.moc kchart_part.moc \
 		kchartColorConfigPage.moc \
 		kchartParameterConfigPage.moc \
 		kchartParameterPieConfigPage.moc \
+		kchartFontConfigPage.moc \
 		kchartConfigDialog.moc \
 		kchartGeometryConfigPage.moc \
 		kchartWizard.moc \

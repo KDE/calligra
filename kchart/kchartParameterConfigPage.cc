@@ -21,7 +21,7 @@ KChartParameterConfigPage::KChartParameterConfigPage(KChartParameters* params,QW
 {
     QVBoxLayout* toplevel = new QVBoxLayout( this, 10 );
     
-    QGridLayout* layout = new QGridLayout( 6, 3 );
+    QGridLayout* layout = new QGridLayout( 7, 3 );
     toplevel->addLayout( layout );
 	
     grid = new QCheckBox( i18n( "Grid" ), this );
@@ -41,6 +41,9 @@ KChartParameterConfigPage::KChartParameterConfigPage(KChartParameters* params,QW
     
     yaxis2 = new QCheckBox( i18n( "Y-Axis2" ), this );
     layout->addWidget(yaxis2,5,0);
+    
+    xlabel = new QCheckBox( i18n( "Has X-Label" ), this );
+    layout->addWidget(xlabel,6,0);
     
     QLabel *tmpLabel = new QLabel( i18n( "Title" ), this );
     tmpLabel->setAlignment(Qt::AlignCenter);
@@ -111,6 +114,7 @@ void KChartParameterConfigPage::init()
     border->setChecked(_params->border);
     xaxis->setChecked(_params->xaxis);
     yaxis->setChecked(_params->yaxis);
+    xlabel->setChecked(_params->hasxlabel);
     if(_params->has_yaxis2())
     	{
     	yaxis2->setChecked(_params->yaxis2);
@@ -147,7 +151,7 @@ void KChartParameterConfigPage::apply()
     _params->border=border->isChecked();
     _params->xaxis=xaxis->isChecked();
     _params->yaxis=yaxis->isChecked(); 
-    
+    _params->hasxlabel=xlabel->isChecked();    
     if(_params->has_yaxis2())
     	{
     	_params->yaxis2=yaxis2->isChecked(); 

@@ -37,9 +37,8 @@ int kchartEngine::init() {
   annote_len     = 0;
   annote_hgt     = 0;
   setno = 0;
-  hasxlabels = false;
+  //hasxlabels = false;
   
-
 
   // For now, we are assuming that the data is in columns with no labels at all
   // Ergo, num_sets is the number of rows

@@ -178,8 +178,10 @@ struct KChartParameters
     KChartColorArray ExtColor;
     KChartColorArray ExtVolColor;
     bool transparent_bg;
+    bool hasxlabel;
     QString BGImage;
-    QStringList lbl;
+    QStringList xlbl;
+    QStringList legend;
     QArray<int> explode; // pies
     QArray<bool> missing; // pies
     KChartPercentType percent_labels; // pies

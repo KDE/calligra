@@ -562,20 +562,16 @@ void kchartEngine::draw3DCombo() {
 void kchartEngine::drawPie() 
 {
   float val[num_points];
-  char lbl2[num_points][10];
-  for(int j=0;j<num_points;j++)
-  	{
-  	sprintf( lbl2[j],"toto" );
-  	}
-  for(int i=1; i<num_points; ++i ) 
+  
+  for(int i=0; i<num_points; ++i ) 
   {
   if( CELLEXISTS(i,1)) 
 	    {
-		val[i] = PY(CELLVALUE(i,1));
+		val[i] = CELLVALUE(i,1);
 	    }
   }
   
-  val[0]=50;
+  val[0]=5;
   pie_gif(imagewidth,imageheight,p,params,num_points,val);   
 }
 

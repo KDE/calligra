@@ -134,9 +134,9 @@ int kchartEngine::out_graph() {
     if( (params->grid || params->xaxis) &&!params->isPie() )	
     {
     
-      //qDebug("drawing  x ticks and xlabels");
-      // Commented out because it is prone to math error
-        //    drawXTicks();
+      qDebug("drawing  x ticks and xlabels");
+       //Commented out because it is prone to math error
+      drawXTicks();
     }
     /* ----- solid poly region (volume) ----- */
     /*  so that grid lines appear under solid */

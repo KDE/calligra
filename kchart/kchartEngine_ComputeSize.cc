@@ -55,25 +55,25 @@ void kchartEngine::computeSize() {
   qDebug( "done annote_len computation" );
 
   // for the time being: no x labels
-  hasxlabels = 0;
-  /*
-	if( params->xaxis && hasxlabels ) {
+  //hasxlabels = 0;
+ 
+	if( params->xaxis && params->hasxlabel ) 
+	{
 	int biggest     = -MAXINT;
-
-	int		len = 0;
-	for( i=0; i<num_points; ++i ) {
-	biggest = MAX( len, xlbl[i].length() );
-	}
-
+	int len = 0;
+	for( int i=0; i<num_points; ++i ) 
+		{
+		biggest = MAX( len, params->xlbl[i].length() );
+		len=biggest;
+		}
 	xlabel_hgt = 1+ biggest*params->xAxisFontWidth() +1;
 	}
-  */
 
   grapheight = imageheight - ( xtics          +
 			       2*xtitle_hgt     +
 			       xlabel_hgt     +
 			       title_hgt      +
-									 annote_hgt     +
+				 annote_hgt     +
 			       ydepth_3Dtotal +
 			       2 );
   if( params->hard_size && params->hard_graphheight )				/* user wants to use his */

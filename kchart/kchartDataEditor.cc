@@ -53,22 +53,43 @@ void kchartDataEditor::getData(KChartData* dat) {
     }
 }
 
-void kchartDataEditor::setLabel(QStringList lbl)
+void kchartDataEditor::setLegend(QStringList legend)
 {
 for (int row = 0;row < _widget->rows();row++)
 	{
-	if(!lbl[row].isNull())
+	if(!legend[row].isNull())
 		{
-		QString tmp=lbl[row];
+		QString tmp=legend[row];
 		_widget->fillY(row,tmp);
 		}
 	}
 }
 
-void kchartDataEditor::getLabel(KChartParameters* params)
+void kchartDataEditor::getLegend(KChartParameters* params)
 {
 
 for (int row = 0;row < _widget->rows();row++)
-	params->lbl[row]=_widget->getY(row);	
+	params->legend[row]=_widget->getY(row);	
 	
 }
+
+void kchartDataEditor::setXLabel(QStringList xlbl)
+{
+for (int col = 0;col < _widget->cols();col++)
+	{
+	if(!xlbl[col].isNull())
+		{
+		QString tmp=xlbl[col];
+		_widget->fillX(col,tmp);
+		}
+	}
+}
+
+void kchartDataEditor::getXLabel(KChartParameters* params)
+{
+
+for (int col = 0;col < _widget->cols();col++)
+	params->xlbl[col]=_widget->getX(col);	
+	
+}
+

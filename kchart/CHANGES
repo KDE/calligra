@@ -51,3 +51,9 @@ But Pb for writing % in label for the moment it's not good
 -Improved configparameters
 -bug fix
 -Start to install label 
+
+2000-01-21 - Montel laurent <montell@club-internet.fr>
+------------------------------------------------------
+-Now there are label and legend
+-Add new page for config font
+-Bug fix

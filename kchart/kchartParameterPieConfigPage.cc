@@ -19,24 +19,7 @@
 KChartParameterPieConfigPage::KChartParameterPieConfigPage(KChartParameters* params,QWidget* parent ) :
     QWidget( parent ),_params( params )
 {
-    /*QVBoxLayout* toplevel = new QVBoxLayout( this, 10 );
-    
-    QGridLayout* layout = new QGridLayout( 6, 3 );
-    toplevel->addLayout( layout );
-	
- 
-    QLabel *tmpLabel = new QLabel( i18n( "Title" ), this );
-    tmpLabel->setAlignment(Qt::AlignCenter);
-    layout->addWidget(tmpLabel,0,1);
-    
-    title= new QLineEdit( this );
-    title->setMaximumWidth(130);
-    layout->addWidget(title,1,1);*/
-        
-        
-     //essai
-     
-     
+       
     QGridLayout *grid1 = new QGridLayout(this,2,2,15,7);
 
     QButtonGroup* gb = new QButtonGroup( i18n( "Labels position" ), this );
@@ -112,7 +95,7 @@ KChartParameterPieConfigPage::KChartParameterPieConfigPage(KChartParameters* par
     label2->setAlignment(Qt::AlignCenter);
     grid3->addWidget( label2,2,0 );
 
-    //dist = new QLineEdit( gb2 );
+  
     dist = new QSpinBox(1, 400, 1, gb2);
     dist->resize(100, dist->sizeHint().height() );
     grid3->addWidget( dist,3,0 );
@@ -158,9 +141,9 @@ KChartParameterPieConfigPage::KChartParameterPieConfigPage(KChartParameters* par
     grid1->activate();       
     
     if(_params->label_line)
-    	lineLabel->setEnabled(true);
+    	dist->setEnabled(true);
     else
-    	lineLabel->setEnabled(false);
+    	dist->setEnabled(false);
     connect( lineLabel, SIGNAL( toggled( bool ) ),
   		   this, SLOT( changeState( bool ) ) );
 }

@@ -55,6 +55,7 @@ KChartParameters::KChartParameters() :
 	yaxis = true;
 	yaxis2 = true;
 	yval_style = true;
+	hasxlabel=true;
 	stack_type = KCHARTSTACKTYPE_DEPTH;
 	_3d_depth = 5.0;
 	_3d_angle = 45;

@@ -107,7 +107,7 @@ private:
   //	intExtColorShd[threeD?1:num_sets][threeD?1:num_points]; // compiler limitation
   QColor ExtColorShd[100][100];
   //  QColor ExtColorShd[num_sets][num_points];
-  bool hasxlabels;
+  // bool hasxlabels;
   //  QPointArray volpoly( 4 );
 
   int init();

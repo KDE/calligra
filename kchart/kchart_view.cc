@@ -90,27 +90,8 @@ void KChartView::createTempData()
 	    }
 	//      _dlg->exec();
     }
-    //init for pie chart
     
-    KChartParameters* params=((KChartPart*)part())->params();
-    QArray<int>tmp(nbrow);
-    QArray<bool>tmpbool(nbrow);
-    for (col = 0;col < nbrow;col++) 
-    	{	
-    	tmp[col]=0;
-    	tmpbool[col]=FALSE;
-    	}
-    	//init 4 elements
-    params->lbl+="KDE";
-    params->lbl+="KOFFICE";
-    params->lbl+="KCHART";
-    params->lbl+="LINUX";
-    tmp[0]=50;
-    tmpbool[0]=TRUE;
-    
-    params->explode=tmp;
-    params->missing=tmpbool;
-    
+        
 }
 
 
@@ -118,16 +99,17 @@ void KChartView::edit()
 {
   kchartDataEditor ed;
   KChartParameters* params=((KChartPart*)part())->params();
-  QStringList lbl=params->lbl;
+ 
   KChartData *dat = (( (KChartPart*)part())->data());
   ed.setData(dat);
-  ed.setLabel(lbl);
+  ed.setLegend(params->legend);
+  ed.setXLabel(params->xlbl);
   if (ed.exec() != QDialog::Accepted) {
     return;
   }
   ed.getData(dat);
-  
-  ed.getLabel(params);
+  ed.getLegend(params);
+  ed.getXLabel(params);
   repaint();
 }
 

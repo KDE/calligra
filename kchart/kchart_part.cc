@@ -77,9 +77,23 @@ void KChartPart::initRandomData() {
 	  t.value.setValue((double)row+col);
 	  // cerr << "Set cell for " << row << "," << col << "\n";
 	  currentData.setCell(row,col,t);
-	}
+	 params()->explode=0;
+	 params()->missing=FALSE;
+	 }
     }
-   
+    
+    params()->legend+="KDE";
+    params()->legend+="KOFFICE";
+    params()->legend+="KCHART";
+    params()->legend+="LINUX";
+    
+    params()->xlbl+="Year 2000";
+    params()->xlbl+="Year 2001";
+    params()->xlbl+="Year 2002";
+    params()->xlbl+="Year 2003";
+
+
+
 }
 
 
@@ -273,6 +287,7 @@ bool KChartPart::save( ostream& out, const char * /*_format*/ ) {
   graph.setAttribute("ystyle",(int)_params->yval_style);
   graph.setAttribute("border",(int)_params->border);
   graph.setAttribute("transbg",(int)_params->transparent_bg);
+  graph.setAttribute("xlabel",(int)_params->hasxlabel);
   params.appendChild(graph);
   //graph params
   QDomElement graphparams = doc.createElement("graphparams");
@@ -523,6 +538,11 @@ bool KChartPart::loadXML( const QDomDocument& doc, KoStore* /*store*/ ) {
                 _params->transparent_bg=(bool) graph.attribute("transbg").toInt( &ok );
                 if(!ok) return false;
                 }
+          if(graph.hasAttribute( "xlabel" ))
+                {
+                _params->hasxlabel=(bool) graph.attribute("xlabel").toInt( &ok );
+                if(!ok) return false;
+                }
         }
   QDomElement graphparams = params.namedItem( "graphparams" ).toElement();
   if(!graphparams.isNull())
@@ -634,6 +654,10 @@ bool KChartPart::load( istream& in, KoStore* store ) {
 
 /**
  * $Log$
+ * Revision 1.19  2000/01/08 20:36:21  mlaurent
+ * Now you can choose a "sub type chart"
+ * Now there are a color for same think
+ *
  * Revision 1.18  2000/01/07 20:37:42  mlaurent
  * *** empty log message ***
  *
