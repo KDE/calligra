@@ -443,7 +443,7 @@ bool OpenCalcImport::readCells( QDomElement & rowNode, KSpreadSheet  * table, in
         {
             QDomElement commentElement = node.toElement();
             if( !commentElement.isNull() )
-                if( commentElement.tagName() == "text:p" )
+                if ( commentElement.localName() == "p" && e.namespaceURI()==ooNS::text)
                 {
                     if( !comment.isEmpty() ) comment.append( '\n' );
                     comment.append( commentElement.text() );
@@ -496,7 +496,7 @@ bool OpenCalcImport::readCells( QDomElement & rowNode, KSpreadSheet  * table, in
           if ( !property.isNull() )
           {
             kdDebug(30518)<<"property.tagName() :"<<property.tagName()<<endl;
-            if ( property.tagName()=="style:map" && !foundValidation)
+            if ( property.localName()=="map" && property.namespaceURI() == ooNS::style && !foundValidation)
             {
               loadCondition( cell, property );
               foundValidation = true;
@@ -769,7 +769,8 @@ void OpenCalcImport::loadOasisCondition(KSpreadCell *cell,const QDomElement &pro
     while ( !elementItem.isNull() )
     {
         kdDebug(30518)<<"elementItem.tagName() :"<<elementItem.tagName()<<endl;
-        if ( elementItem.tagName()== "style:map"  )
+
+        if ( elementItem.localName()== "map" && property.namespaceURI() == ooNS::style )
         {
             bool ok = true;
             kdDebug(30518)<<"elementItem.attribute(style:condition ) :"<<elementItem.attributeNS( ooNS::style, "condition", QString::null )<<endl;
@@ -1406,6 +1407,7 @@ bool OpenCalcImport::parseBody( int numOfTables )
   KSpreadSheet * table;
   QDomNode sheet = KoDom::namedItemNS( body, ooNS::table, "table" );
 
+  kdDebug()<<" sheet :"<<sheet.isNull()<<endl;
   if ( sheet.isNull() )
     return false;
 
@@ -1427,6 +1429,7 @@ bool OpenCalcImport::parseBody( int numOfTables )
     m_doc->addTable( table );
 
     table->setTableName( t.attributeNS( ooNS::table, "name", QString::null ), true, false );
+    kdDebug()<<" table->name()"<<table->name()<<endl;
     sheet = sheet.nextSibling();
   }
 
@@ -1699,24 +1702,21 @@ QString * OpenCalcImport::loadFormat( QDomElement * element,
       if ( e.hasAttributeNS( ooNS::fo, "color" ) )
         negRed = true; // we only support red...
     }
-    else
-    if ( e.tagName() == "number:text" )
+    else if ( e.localName() == "text" && e.namespaceURI()==ooNS::number)
     {
       if ( negRed && ( e.text() == "-" ) )
         ;
       else
         format->append( e.text() );
     }
-    else
-    if ( e.tagName() == "number:currency-symbol" )
+    else if ( e.localName() == "currency-symbol" && e.namespaceURI()==ooNS::number)
     {
       QString sym( e.text() );
       kdDebug(30518) << "Currency: " << sym << endl;
       format->append( sym );
       // number:language="de" number:country="DE">€</number:currency-symbol>
     }
-    else
-    if ( e.tagName() == "number:day-of-week" )
+    else if ( e.localName() == "day-of-week" && e.namespaceURI()==ooNS::number)
     {
       if ( e.hasAttributeNS( ooNS::number, "style" ) )
       {
@@ -1728,8 +1728,7 @@ QString * OpenCalcImport::loadFormat( QDomElement * element,
       else
         format->append( "ddd" );
     }
-    else
-    if ( e.tagName() == "number:day" )
+    else if ( e.localName() == "day" && e.namespaceURI()==ooNS::number)
     {
       if ( e.hasAttributeNS( ooNS::number, "style" ) )
       {
@@ -1741,8 +1740,7 @@ QString * OpenCalcImport::loadFormat( QDomElement * element,
       else
         format->append( "d" );
     }
-    else
-    if ( e.tagName() == "number:month" )
+    else if ( e.localName() == "month" && e.namespaceURI()==ooNS::number)
     {
       if ( e.hasAttributeNS( ooNS::number, "textual" ) )
       {
@@ -1760,8 +1758,7 @@ QString * OpenCalcImport::loadFormat( QDomElement * element,
       else
         format->append( "m" );
     }
-    else
-    if ( e.tagName() == "number:year" )
+    else if ( e.localName() == "year" && e.namespaceURI()==ooNS::number)
     {
       if ( e.hasAttributeNS( ooNS::number, "style" ) )
       {
@@ -1773,8 +1770,7 @@ QString * OpenCalcImport::loadFormat( QDomElement * element,
       else
         format->append( "yy" );
     }
-    else
-    if ( e.tagName() == "number:hours" )
+    else if ( e.localName() == "hours" && e.namespaceURI()==ooNS::number)
     {
       if ( e.hasAttributeNS( ooNS::number, "style" ) )
       {
@@ -1786,8 +1782,7 @@ QString * OpenCalcImport::loadFormat( QDomElement * element,
       else
         format->append( "h" );
     }
-    else
-    if ( e.tagName() == "number:minutes" )
+    else if ( e.localName() == "minutes" && e.namespaceURI()==ooNS::number)
     {
       if ( e.hasAttributeNS( ooNS::number, "style" ) )
       {
@@ -1799,8 +1794,7 @@ QString * OpenCalcImport::loadFormat( QDomElement * element,
       else
         format->append( "m" );
     }
-    else
-    if ( e.tagName() == "number:seconds" )
+    else if ( e.localName() == "seconds" && e.namespaceURI()==ooNS::number)
     {
       if ( e.hasAttributeNS( ooNS::number, "style" ) )
       {
@@ -1812,13 +1806,11 @@ QString * OpenCalcImport::loadFormat( QDomElement * element,
       else
         format->append( "s" );
     }
-    else
-    if ( e.tagName() == "number:am-pm" )
+    else if ( e.localName() == "am-pm" && e.namespaceURI()==ooNS::number)
     {
       format->append( "AM/PM" );
     }
-    else
-    if ( e.tagName() == "number:number" )
+    else if ( e.localName() == "number" && e.namespaceURI()==ooNS::number)
     {
       // TODO: number:grouping="true"
 
@@ -1854,8 +1846,7 @@ QString * OpenCalcImport::loadFormat( QDomElement * element,
       for ( i = 0; i < precision; ++i )
         format->append( '0' );
     }
-    else
-    if ( e.tagName() == "number:scientific-number" )
+    else if ( e.localName() == "scientific-number" && e.namespaceURI()==ooNS::number)
     {
       int exp = 2;
 
@@ -1906,8 +1897,7 @@ QString * OpenCalcImport::loadFormat( QDomElement * element,
 
       formatType = Custom_format;
     }
-    else
-    if ( e.tagName() == "number:fraction" )
+    else if ( e.localName() == "fraction" && e.namespaceURI()==ooNS::number)
     {
       int integer = 0;
       int numerator = 1;
@@ -2219,7 +2209,7 @@ void OpenCalcImport::loadStyleProperties( KSpreadFormat * layout, QDomElement co
 void OpenCalcImport::readInStyle( KSpreadFormat * layout, QDomElement const & style )
 {
   kdDebug(30518) << "** Reading Style: " << style.tagName() << "; " << style.attributeNS( ooNS::style, "name", QString::null) << endl;
-  if ( style.tagName() == "style:style" )
+  if ( style.localName() == "style" && style.namespaceURI()==ooNS::style)
   {
     if ( style.hasAttributeNS( ooNS::style, "parent-style-name" ) )
     {
