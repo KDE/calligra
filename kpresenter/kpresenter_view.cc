@@ -220,16 +220,12 @@ CORBA::Boolean KPresenterView::printDlg()
 
   switch (m_pKPresenterDoc->pageLayout().format)
     {
-#if QT_VERSION >= 141
     case PG_DIN_A3: prt.setPageSize(QPrinter::A3);
       break;
-#endif
     case PG_DIN_A4: prt.setPageSize(QPrinter::A4);
       break;
-#if QT_VERSION >= 141
     case PG_DIN_A5: prt.setPageSize(QPrinter::A5);
       break;
-#endif
     case PG_US_LETTER: prt.setPageSize(QPrinter::Letter);
       break;
     case PG_US_LEGAL: prt.setPageSize(QPrinter::Legal);
@@ -2075,9 +2071,9 @@ void KPresenterView::spacingOk(int _lineSpacing,int _distBefore,int _distAfter)
 }
 
 /*================================================================*/
-unsigned int KPresenterView::getCurrPgNum() 
+unsigned int KPresenterView::getCurrPgNum()
 {
-  return static_cast<int>(vert->value() + page->height() / 2) / 
+  return static_cast<int>(vert->value() + page->height() / 2) /
     kPresenterDoc()->getPageSize(0,0,0,1.0,false).height() + 1;
 }
 
@@ -3713,7 +3709,7 @@ void KPresenterView::setupScrollbars()
 {
   vert = new QScrollBar(QScrollBar::Vertical,this);
   horz = new QScrollBar(QScrollBar::Horizontal,this);
-  vert->show(); 
+  vert->show();
   horz->show();
   QObject::connect(vert,SIGNAL(valueChanged(int)),this,SLOT(scrollV(int)));
   QObject::connect(horz,SIGNAL(valueChanged(int)),this,SLOT(scrollH(int)));

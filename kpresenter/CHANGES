@@ -99,3 +99,7 @@ Reggie, 12.4.1999:
   using this menu too
 - rmb presentation menu is initialized correctly for presentations now
 - Fixed a calculation bug in calculating the current page (happend in documents with lots of pages)
+
+Reggie, 13.4.1999:
+------------------
+- Fixes
