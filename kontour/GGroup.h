@@ -27,6 +27,7 @@
 #define __GGroup_h__
 
 #include "GObject.h"
+
 class GOState;
 class Coord;
 
@@ -39,23 +40,26 @@ public:
   GGroup(const GGroup &obj);
   ~GGroup();
 
+  GObject *copy() const;
+
   void addObject(GObject *obj);
 
+  QString typeName() const;
+  QDomElement writeToXml(QDomDocument &document);
+  void draw(QPainter &p, bool withBasePoints = false, bool outline = false, bool withEditMarks = true);
+
+  int getNeighbourPoint(const KoPoint &point);
+  void movePoint(int idx, double dx, double dy, bool ctrlPressed = false);
+  void removePoint(int idx, bool update = true);
+  bool contains(const KoPoint &p);
+  bool findNearestPoint(const KoPoint &p, double max_dist, double &dist, int &pidx, bool all);
+
+  void calcBoundingBox();
+  GPath *convertToPath() const;
+
+
   virtual void restoreState (GOState* state);
-
-  virtual void draw (QPainter &p, bool withBasePoints = false, bool outline = false, bool withEditMarks=true);
-  virtual bool contains (const Coord& p);
-
-  virtual QString typeName () const;
-
-  virtual GObject* copy ();
-  //virtual GObject* create (GDocument *doc, const QDomElement &element);
-
-  virtual QDomElement writeToXml(QDomDocument &document);
-
   const QPtrList<GObject> &getMembers() const { return members; }
-
-  void calcBoundingBox ();
 
 protected:
   virtual void updateProperties (GObject::Property prop, int mask);

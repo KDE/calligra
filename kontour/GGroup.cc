@@ -69,8 +69,9 @@ GObject(obj)
   calcBoundingBox();
 }
 
-GGroup::~GGroup () {
-    for (GObject *o=members.first(); o!=0L; o=members.next())
+GGroup::~GGroup()
+{
+  for(GObject *o=members.first(); o!=0L; o=members.next())
         o->unref();
 }
 

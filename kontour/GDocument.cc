@@ -59,13 +59,20 @@ GDocument::GDocument(KontourDocument *aDoc)
   mActivePage = addPage();
   mActivePage->name(i18n("Page %1").arg(1));
   mCurPageNum = 2;
-  
+
+  mUpdateCanvas = true;
+
   changeCanvas();
 }
 
 GDocument::~GDocument()
 {
   pages.clear();
+}
+
+void GDocument::updateCanvas(bool b)
+{
+  mUpdateCanvas = b;
 }
 
 void GDocument::zoomFactor(double factor)
@@ -377,7 +384,8 @@ GPage *GDocument::findPage(QString name)
 
 void GDocument::emitChanged(const KoRect &r, bool handle)
 {
-  emit changed(r, handle);
+  if(mUpdateCanvas)
+    emit changed(r, handle);
 }
 
 void GDocument::emitSelectionChanged()

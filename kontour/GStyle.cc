@@ -30,8 +30,10 @@ class GStylePrivate
 {
 public:
   KoColor          ocolor;
+  int              oopacity;
   unsigned int     lwidth;
   KoColor          fcolor;
+  int              fopacity;
   Qt::PenCapStyle  cap;
   Qt::PenJoinStyle join;
   Qt::BrushStyle   brushStyle;
@@ -41,14 +43,16 @@ public:
 
 GStyle::GStyle() : d(new GStylePrivate)
 {
+  d->stroked = true;
   d->ocolor = KoColor::black();
   d->lwidth = 1;
-  d->cap = Qt::RoundCap;
+  d->oopacity = 100;
   d->join = Qt::RoundJoin;
-  d->brushStyle = Qt::SolidPattern;
-  d->fcolor = KoColor::white();
-  d->stroked = true;
+  d->cap = Qt::RoundCap;
   d->filled = NoFill;
+  d->fcolor = KoColor::white();
+  d->fopacity = 100;
+  d->brushStyle = Qt::SolidPattern;
 }
 
 GStyle::GStyle(const QDomElement &style)
@@ -57,14 +61,16 @@ GStyle::GStyle(const QDomElement &style)
 
 GStyle::GStyle(GStyle &obj)
 {
+  d->stroked = obj.d->stroked;
   d->ocolor = obj.d->ocolor;
   d->lwidth = obj.d->lwidth;
-  d->cap = obj.d->cap;
+  d->oopacity = obj.d->oopacity;
   d->join = obj.d->join;
-  d->brushStyle = obj.d->brushStyle;
-  d->fcolor = obj.d->fcolor;
-  d->stroked = obj.d->stroked;
+  d->cap = obj.d->cap;
   d->filled = obj.d->filled;
+  d->fcolor = obj.d->fcolor;
+  d->fopacity = obj.d->fopacity;
+  d->brushStyle = obj.d->brushStyle;
 }
 
 GStyle::~GStyle()
@@ -75,6 +81,7 @@ GStyle::~GStyle()
 QDomElement GStyle::writeToXml(QDomDocument &document)
 {
   QDomElement style = document.createElement("style");
+  
   return style;
 }
   
@@ -86,6 +93,16 @@ void GStyle::outlineColor(const KoColor &c)
 const KoColor &GStyle::outlineColor() const
 {
   return d->ocolor;
+}
+
+int GStyle::outlineOpacity() const
+{
+  return d->oopacity;
+}
+
+void GStyle::outlineOpacity(int o)
+{
+  d->oopacity = o;
 }
 
 void GStyle::outlineWidth(unsigned int lwidth)
@@ -160,13 +177,15 @@ void GStyle::filled(int filled)
 
 GStyle &GStyle::operator=(const GStyle &s)
 {
+  d->stroked = s.d->stroked;
   d->ocolor = s.d->ocolor;
   d->lwidth = s.d->lwidth;
-  d->cap = s.d->cap;
+  d->oopacity = s.d->oopacity;
   d->join = s.d->join;
-  d->brushStyle = s.d->brushStyle;
-  d->fcolor = s.d->fcolor;
-  d->stroked = s.d->stroked;
+  d->cap = s.d->cap;
   d->filled = s.d->filled;
+  d->fcolor = s.d->fcolor;
+  d->fopacity = s.d->fopacity;
+  d->brushStyle = s.d->brushStyle;
   return *this;
 }

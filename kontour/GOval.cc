@@ -363,7 +363,7 @@ GPath *GOval::convertToPath() const
   path->lineTo(xx, sPoint.y());
   path->lineTo(sPoint.x(), yy);
   path->matrix(matrix());
-//  path->style(style());  //why???
+  path->style(style());
   return path;
 }
 

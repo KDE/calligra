@@ -51,14 +51,17 @@ public:
 
   QDomElement writeToXml(QDomDocument &document);
 
+  bool stroked() const;
+  void stroked(bool stroked);
+
   const KoColor &outlineColor() const;
   void outlineColor(const KoColor &c);
 
+  int outlineOpacity() const;
+  void outlineOpacity(int o);
+
   unsigned int outlineWidth() const;
   void outlineWidth(unsigned int lwidth);
-
-  const KoColor &fillColor() const;
-  void fillColor(const KoColor &c);
 
   Qt::PenJoinStyle joinStyle() const;
   void joinStyle(Qt::PenJoinStyle join);
@@ -66,14 +69,14 @@ public:
   Qt::PenCapStyle capStyle() const;
   void capStyle(Qt::PenCapStyle cap);
 
-  Qt::BrushStyle brushStyle() const;
-  void brushStyle(Qt::BrushStyle brushStyle);
-
-  bool stroked() const;
-  void stroked(bool stroked);
-
   int filled() const;
   void filled(int filled);
+
+  const KoColor &fillColor() const;
+  void fillColor(const KoColor &c);
+
+  Qt::BrushStyle brushStyle() const;
+  void brushStyle(Qt::BrushStyle brushStyle);
 
   GStyle &operator=(const GStyle &s);
 

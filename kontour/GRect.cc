@@ -327,7 +327,7 @@ GPath *GRect::convertToPath() const
   path->lineTo(ePoint.x(), sPoint.y());
   path->lineTo(sPoint.x(), sPoint.y());
   path->matrix(matrix());
-//  path->style(style());  //why???
+  path->style(style());
   return path;
 }
 

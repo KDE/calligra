@@ -51,6 +51,8 @@ public:
 
   GStyleList *styles() {return &mStyles; }
 
+  void updateCanvas(bool b);
+
   /**
    *
    *
@@ -94,7 +96,7 @@ public:
   int indexOfVertHelpline(double pos);
   void updateHorizHelpline(int idx, double pos);
   void updateVertHelpline(int idx, double pos);
-  
+
   void addHorizHelpline(double pos);
   void addVertHelpline(double pos);
 
@@ -184,6 +186,7 @@ private:
   GPage *mActivePage;                  // the current page
 
   int mCurPageNum;
+  bool mUpdateCanvas;                  // update canvas
 };
 
 #endif
