@@ -38,7 +38,7 @@ void KWTextParag::drawFormattingChars( QPainter &painter, const QString & /*s*/,
                                        int /*startX_pix*/, int lastY_pix, int baseLine_pix, int /*bw*/, int h_pix, // in pixels
                                        bool drawSelections,
                                        KoTextFormat *lastFormat, int /*i*/, const QMemArray<int> &selectionStarts,
-                                       const QMemArray<int> &selectionEnds, const QColorGroup &cg, bool rightToLeft )
+                                       const QMemArray<int> &selectionEnds, const QColorGroup &cg, bool rightToLeft, int line )
 {
     KWTextFrameSet * textfs = kwTextDocument()->textFrameSet();
     if ( textfs )
@@ -82,8 +82,8 @@ void KWTextParag::drawFormattingChars( QPainter &painter, const QString & /*s*/,
                             x, lastY_pix, // startX and lastY
                             zh->layoutUnitToPixelY( ch.ascent() ), // baseline
                             width, zh->layoutUnitToPixelY( ch.height() ), // bw and h
-                            drawSelections, &format, last, selectionStarts,
-                            selectionEnds, cg2, rightToLeft, zh );
+                            drawSelections, &format, selectionStarts,
+                            selectionEnds, cg2, rightToLeft, line, zh );
                     }
                     else
                     {

@@ -86,7 +86,7 @@ protected:
                                       int startX_pix, int lastY_pix, int baseLine_pix, int bw, int h_pix, // in pixels
                                       bool drawSelections,
                                       KoTextFormat *lastFormat, int i, const QMemArray<int> &selectionStarts,
-                                      const QMemArray<int> &selectionEnds, const QColorGroup &cg, bool rightToLeft );
+                                      const QMemArray<int> &selectionEnds, const QColorGroup &cg, bool rightToLeft, int line );
 
 };
 
