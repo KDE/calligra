@@ -203,7 +203,7 @@ QDomDocument KSpreadDoc::saveXML()
 
   /* don't pull focus away from the editor if this is just a background
      autosave */
-  if (!IsAutosaving())
+  if (!isAutosaving())
   {
     for (; it.current(); ++it )
       static_cast<KSpreadView *>( it.current() )->deleteEditor( true );
