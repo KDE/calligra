@@ -102,6 +102,16 @@ void KPTextViewIface::insertVariable( const QString & var)
     m_textview->insertVariable(4,0);
   else if (var=="TOTALPAGE")
     m_textview->insertVariable(4,1);
-
-
+  else if (var=="TELEPHONE")
+    m_textview->insertVariable(8,7);
+  else if (var=="FAX")
+    m_textview->insertVariable(8,8);
+  else if (var=="COUNTRY")
+    m_textview->insertVariable(8,9);
+  else if (var=="POSTAL_CODE")
+    m_textview->insertVariable(8,12);
+  else if (var=="CITY")
+    m_textview->insertVariable(8,13);
+  else if (var=="STREET")
+    m_textview->insertVariable(8,14);
 }
