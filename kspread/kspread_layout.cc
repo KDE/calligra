@@ -152,6 +152,7 @@ void KSpreadLayout::copy( const KSpreadLayout &_l )
     m_eFormatType = _l.m_eFormatType;
     m_rotateAngle = _l.m_rotateAngle;
     m_strComment = _l.m_strComment;
+    m_strFormat  = _l.m_strFormat;
     m_indent=_l.m_indent;
 }
 
@@ -347,6 +348,8 @@ QDomElement KSpreadLayout::saveLayout( QDomDocument& doc,int _col, int _row, boo
 	format.setAttribute( "faktor", factor(_col, _row ) );
     if ( hasProperty( PFormatType ) || hasNoFallBackProperties( PFormatType ) || force )
 	format.setAttribute( "format",(int)getFormatType(_col,_row ));
+    if ( hasProperty( PCustomFormat ) || hasNoFallBackProperties( PCustomFormat ) || force )
+        format.setAttribute( "custom", getFormatString( _col, _row ));
     if ( m_eFormatType == Money )
     {
       format.setAttribute( "type", (int) m_currency.type );
@@ -458,6 +461,8 @@ QDomElement KSpreadLayout::saveLayout( QDomDocument& doc, bool force ) const
 	format.setAttribute( "faktor", m_dFactor );
     if ( hasProperty( PFormatType ) || hasNoFallBackProperties( PFormatType ) || force )
 	format.setAttribute( "format",(int) m_eFormatType);
+    if ( hasProperty( PCustomFormat ) || hasNoFallBackProperties( PCustomFormat ) || force )
+        format.setAttribute( "custom", m_strFormat );
     if ( m_eFormatType == Money )
     {
       format.setAttribute( "type", (int) m_currency.type );
@@ -608,6 +613,10 @@ bool KSpreadLayout::loadLayout( const QDomElement& f, PasteMode pm )
         setFormatType((FormatType)f.attribute("format").toInt( &ok ));
         if ( !ok ) return false;
     }
+    if ( f.hasAttribute( "custom" ) )
+    {
+        setFormatString( f.attribute("custom") );
+    }
     if ( m_eFormatType == Money )
     {
       if ( f.hasAttribute( "type" ) )
@@ -725,18 +734,46 @@ bool KSpreadLayout::load( const QDomElement& f,PasteMode pm )
 //
 /////////////
 
+void KSpreadLayout::setFormatString( QString const & format, FormatType type )
+{
+  if ( format.isEmpty() )
+  {
+    clearProperty( PCustomFormat );
+    setNoFallBackProperties( PCustomFormat );    
+  }
+  else
+  {
+    setProperty( PCustomFormat );
+    clearNoFallBackProperties( PCustomFormat );
+
+    // now have a custom format...
+    clearProperty( PPrefix  );
+    clearProperty( PPostfix  );
+    clearProperty( PPrecision );
+    clearProperty( PFloatColor );
+    clearProperty( PFloatFormat );
+
+    setNoFallBackProperties( PPrecision );    
+    setNoFallBackProperties( PPrefix  );
+    setNoFallBackProperties( PPostfix );
+  }
+
+  m_strFormat = format;
+  setFormatType( type ); // calls layoutChanged();
+}
+
 void KSpreadLayout::setAlign( Align _align )
 {
-    if(_align==KSpreadLayout::Undefined)
-        {
+    if (_align==KSpreadLayout::Undefined)
+    {
         clearProperty( PAlign );
         setNoFallBackProperties(PAlign );
-        }
+    }
     else
-        {
+    {
         setProperty( PAlign );
         clearNoFallBackProperties(PAlign );
-        }
+    }
 
     m_eAlign = _align;
     layoutChanged();
@@ -744,16 +781,16 @@ void KSpreadLayout::setAlign( Align _align )
 
 void KSpreadLayout::setAlignY( AlignY _alignY)
 {
-    if(_alignY==KSpreadLayout::Middle)
-        {
+    if (_alignY==KSpreadLayout::Middle)
+    {
         clearProperty( PAlignY );
         setNoFallBackProperties(PAlignY );
-        }
+    }
     else
-        {
+    {
         setProperty( PAlignY );
         clearNoFallBackProperties( PAlignY );
-        }
+    }
     m_eAlignY = _alignY;
     layoutChanged();
 }
@@ -761,15 +798,15 @@ void KSpreadLayout::setAlignY( AlignY _alignY)
 void KSpreadLayout::setFactor( double _d )
 {
     if(_d==1.0)
-        {
+    {
         clearProperty( PFactor );
         setNoFallBackProperties(PFactor );
-        }
+    }
     else
-        {
+    {
         setProperty( PFactor );
         clearNoFallBackProperties( PFactor );
-        }
+    }
     m_dFactor = _d;
     layoutChanged();
 }
@@ -1318,7 +1355,7 @@ void KSpreadLayout::setDontPrintText( bool _b )
   }
   else
   {
-    setProperty(  PDontPrintText);
+    setProperty( PDontPrintText);
     clearNoFallBackProperties( PDontPrintText);
     setFlag( Flag_DontPrintText );
   }
@@ -1343,11 +1380,22 @@ void KSpreadLayout::setCurrency( int type, QString const & symbol )
 //
 /////////////
 
+QString const & KSpreadLayout::getFormatString( int col, int row ) const
+{
+    if ( !hasProperty( PCustomFormat ) && !hasNoFallBackProperties(PCustomFormat ))
+    {
+	const KSpreadLayout * l = fallbackLayout( col, row );
+	if ( l )
+	    return l->getFormatString( col, row );
+    }
+    return m_strFormat;
+}
+
 QString KSpreadLayout::prefix( int col, int row ) const
 {
     if ( !hasProperty( PPrefix ) && !hasNoFallBackProperties(PPrefix ))
     {
-	const KSpreadLayout* l = fallbackLayout( col, row );
+	const KSpreadLayout * l = fallbackLayout( col, row );
 	if ( l )
 	    return l->prefix( col, row );
     }
@@ -1358,7 +1406,7 @@ QString KSpreadLayout::postfix( int col, int row ) const
 {
     if ( !hasProperty( PPostfix ) && !hasNoFallBackProperties(PPostfix ))
     {
-	const KSpreadLayout* l = fallbackLayout( col, row );
+	const KSpreadLayout * l = fallbackLayout( col, row );
 	if ( l )
 	    return l->postfix( col, row );
     }

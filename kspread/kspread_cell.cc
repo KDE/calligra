@@ -1060,7 +1060,7 @@ void KSpreadCell::setOutputText()
 
 
 
-// Apply text format
+  // Apply text format
   // (this is the only format that dictates the datatype, it's usually the other way round)
   if ( formatType() == Text_format )
     m_dataType = StringData;
@@ -1090,7 +1090,7 @@ void KSpreadCell::setOutputText()
   }
   else if( isDate() )
   {
-    m_strOutText=util_dateFormat( locale(), valueDate(), formatType() );
+    m_strOutText = util_dateFormat( locale(), valueDate(), formatType() );
   }
   else if( isTime() )
   {

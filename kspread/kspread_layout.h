@@ -58,7 +58,10 @@ public:
                       date_format13=212,date_format14=213,date_format15=214,date_format16=215,
                       date_format17=216,date_format18=217,date_format19=218,date_format20=219,
                       date_format21=220,date_format22=221,date_format23=222,date_format24=223,
-                      date_format25=224,date_format26=225};
+                      date_format25=224,date_format26=225,
+                      Custom = 300, CustomDate = 301, CustomTime = 302, CustomPercentage = 303,
+                      CustomNumber = 304, CustomBoolean = 305, CustomScientific = 306,
+                      CustomCurrency = 307, CustomFraction = 308 };
 
     enum Properties{ PAlign  = 0x01,
 		     PAlignY = 0x02,
@@ -84,7 +87,8 @@ public:
                      PAngle = 0x200000,
                      PComment = 0x400000,
                      PIndent = 0x800000,
-		     PDontPrintText = 0x1000000};
+		     PDontPrintText = 0x1000000,
+                     PCustomFormat = 0x2000000 };
 
     struct Currency
     {
@@ -148,6 +152,11 @@ public:
 
     static void setGlobalColWidth( double width );
     static void setGlobalRowHeight( double height );
+
+    /**
+     * sets the format of the content, e.g. #.##0.00, dd/mmm/yyyy,...
+     */
+    virtual void setFormatString( QString const & format, FormatType type = Custom );
 
     virtual void setAlign( Align _align );
     virtual void setAlignY( AlignY _alignY );
@@ -227,6 +236,8 @@ public:
     // Methods for querying layout stuff.
     //
     ////////////////////////////////
+
+    QString const & getFormatString( int col, int row ) const;
 
     virtual const QPen& leftBorderPen( int col, int row ) const;
     int leftBorderWidth( int col, int row ) const;
@@ -367,7 +378,11 @@ protected:
     QFont toFont(QDomElement &element) const;
     QPen toPen(QDomElement &element) const;
 
-
+    /**
+     * Format of the content, e.g. #.##0.00, dd/mmm/yyyy,...
+     */
+    QString m_strFormat;
+  
     /**
      * Alignment of the text
      */
