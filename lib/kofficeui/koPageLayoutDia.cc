@@ -42,7 +42,7 @@
 /******************************************************************/
 
 /*===================== constrcutor ==============================*/
-KoPagePreview::KoPagePreview( QWidget* parent, const char *name, KoPageLayout _layout )
+KoPagePreview::KoPagePreview( QWidget* parent, const char *name, const KoPageLayout& _layout )
     : QGroupBox( i18n( "Page Preview" ), parent, name )
 {
     setPageLayout( _layout );
@@ -109,8 +109,10 @@ void KoPagePreview::drawContents( QPainter *painter )
 /******************************************************************/
 
 /*==================== constructor ===============================*/
-KoPageLayoutDia::KoPageLayoutDia( QWidget* parent, const char* name, KoPageLayout _layout,
-                                  KoHeadFoot _hf, int tabs, KoUnit::Unit unit )
+KoPageLayoutDia::KoPageLayoutDia( QWidget* parent, const char* name, 
+				  const KoPageLayout& _layout,
+                                  const KoHeadFoot& _hf, int tabs,
+				  KoUnit::Unit unit )
     : KDialogBase( KDialogBase::Tabbed, i18n("Page Layout"), KDialogBase::Ok | KDialogBase::Cancel,
                    KDialogBase::Ok, parent, name, true)
 {
@@ -137,8 +139,12 @@ KoPageLayoutDia::KoPageLayoutDia( QWidget* parent, const char* name, KoPageLayou
 }
 
 /*==================== constructor ===============================*/
-KoPageLayoutDia::KoPageLayoutDia( QWidget* parent, const char* name, KoPageLayout _layout, KoHeadFoot _hf,
-                                 KoColumns _cl, KoKWHeaderFooter _kwhf, int tabs, KoUnit::Unit unit )
+KoPageLayoutDia::KoPageLayoutDia( QWidget* parent, const char* name,
+				  const KoPageLayout& _layout,
+				  const KoHeadFoot& _hf,
+				  const KoColumns& _cl, 
+				  const KoKWHeaderFooter& _kwhf,
+				  int tabs, KoUnit::Unit unit )
     : KDialogBase( KDialogBase::Tabbed, i18n("Page Layout"), KDialogBase::Ok | KDialogBase::Cancel,
                    KDialogBase::Ok, parent, name, true)
 {
@@ -786,7 +792,7 @@ void KoPageLayoutDia::setupTab4()
 }
 
 /*====================== update the preview ======================*/
-void KoPageLayoutDia::updatePreview( KoPageLayout )
+void KoPageLayoutDia::updatePreview( const KoPageLayout& )
 {
     if ( pgPreview ) pgPreview->setPageLayout( layout );
     if ( pgPreview ) pgPreview->setPageColumns( cl );

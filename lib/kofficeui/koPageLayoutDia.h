@@ -53,7 +53,7 @@ public:
     /**
      *  constructor
      */
-    KoPagePreview( QWidget*, const char*, KoPageLayout );
+    KoPagePreview( QWidget*, const char*, const KoPageLayout & );
     /**
      *  destructor
      */
@@ -101,7 +101,10 @@ public:
      *  @param tabs     The number of tabs.
      *  @param unit       The unit to use for displaying the values to the user
      */
-    KoPageLayoutDia( QWidget* _parent, const char* _name, KoPageLayout _layout, KoHeadFoot _headfoot, int _tabs, KoUnit::Unit unit );
+    KoPageLayoutDia( QWidget* parent, const char* name,
+		     const KoPageLayout& layout,
+		     const KoHeadFoot& headfoot,
+		     int tabs, KoUnit::Unit unit );
 
     /**
      *  Constructor.
@@ -115,8 +118,12 @@ public:
      *  @param tabs       The number of tabs.
      *  @param unit       The unit to use for displaying the values to the user
      */
-    KoPageLayoutDia( QWidget* parent, const char* name, KoPageLayout layout, KoHeadFoot headfoot,
-		    KoColumns columns, KoKWHeaderFooter kwheadfoot, int tabs, KoUnit::Unit unit );
+    KoPageLayoutDia( QWidget* parent, const char* name,
+		     const KoPageLayout& layout,
+		     const KoHeadFoot& headfoot,
+		     const KoColumns& columns, 
+		     const KoKWHeaderFooter& kwheadfoot,
+		     int tabs, KoUnit::Unit unit );
 
     /**
      *  Destructor.
@@ -156,7 +163,7 @@ protected:
     void setupTab4();
 
     // update preview
-    void updatePreview( KoPageLayout );
+    void updatePreview( const KoPageLayout& );
 
     // dialog objects
     QComboBox *cpgFormat;

@@ -518,7 +518,7 @@ int KoFind::find(const QString &text, const QRegExp &pattern, int index, long op
 
                 // Is the match delimited correctly?
                 //pattern.match(text, index, matchedLength, false);
-                int pos = pattern.search( text.mid(index) );
+                /*int pos =*/ pattern.search( text.mid(index) );
                 *matchedLength = pattern.matchedLength();
                 if (isWholeWords(text, index, *matchedLength))
                     break;
@@ -537,7 +537,7 @@ int KoFind::find(const QString &text, const QRegExp &pattern, int index, long op
 
                 // Is the match delimited correctly?
                 //pattern.match(text, index, matchedLength, false);
-                int pos = pattern.search( text.mid(index) );
+                /*int pos =*/ pattern.search( text.mid(index) );
                 *matchedLength = pattern.matchedLength();
                 if (isWholeWords(text, index, *matchedLength))
                     break;
@@ -559,7 +559,7 @@ int KoFind::find(const QString &text, const QRegExp &pattern, int index, long op
         if (index != -1)
         {
             //pattern.match(text, index, matchedLength, false);
-            int pos = pattern.search( text.mid(index) );
+            /*int pos =*/ pattern.search( text.mid(index) );
             *matchedLength = pattern.matchedLength();
         }
     }
