@@ -1,9 +1,8 @@
-task-kde	   --  a metapackage for KDE
-task-kde-dev       --  a metapackage for developing KDE Applications
+task-koffice	   --  a metapackage for KOffice
 ----------------------------------------------------------------------------
  
 This package is a meta-package, meaning that its purpose is to contain
-dependencies for a complete, Debian-based environment for KDE.  
+dependencies for the complete KOffice (non-development) distribution.
  
 This package also carries optional 'Recommends' and/or 'Suggests'
 package suggestions.  The packages listed are suggested for

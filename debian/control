@@ -20,7 +20,7 @@ Package: koffice-common
 Architecture: all
 Section: x11
 Depends: koffice-libs
-Suggests: kdebase, kchart, kspread, killustrator, kpresenter
+Suggests: kdebase, kword, kchart, kspread, killustrator, kpresenter
 Description: KDE Office Suite (Common files)
  KDE Office Suite
  .
