@@ -27,7 +27,7 @@
  use KexiDB::versionMajor() and KexiDB::versionMinor() instead to get real version.
 */
 #define KEXIDB_VERSION_MAJOR 1
-#define KEXIDB_VERSION_MINOR 3
+#define KEXIDB_VERSION_MINOR 4
 
 
 /*! \namespace KexiDB 
