@@ -23,6 +23,7 @@
 #define _VTEXTTOOL_H_
 
 #include "qframe.h"
+#include "qgroupbox.h"
 
 #include "vcommand.h"
 #include "vtool.h"
@@ -35,6 +36,58 @@ class KIntNumInput;
 class QCheckBox;
 class QLineEdit;
 class VTextTool;
+class QTabWidget;
+
+class ShadowWidget;
+
+class ShadowPreview : public QWidget
+{
+	Q_OBJECT
+	
+	public:
+		ShadowPreview( ShadowWidget* parent  );
+		~ShadowPreview();
+
+	signals:
+		void changed( int angle, int distance, bool );
+
+	protected:
+		virtual void mouseReleaseEvent( QMouseEvent* );
+		virtual void paintEvent( QPaintEvent* );
+
+	private:
+		ShadowWidget*   m_parent;
+}; // ShadowPreview
+
+class ShadowWidget : public QGroupBox
+{
+	Q_OBJECT
+	
+	public:
+		ShadowWidget( QWidget* parent, const char* name, int angle, int distance, bool translucent );
+		~ShadowWidget();
+		
+		void setUseShadow( bool use );
+		bool useShadow();
+		void setShadowAngle( int angle );
+		int shadowAngle();
+		void setShadowDistance( int distance );
+		int shadowDistance();
+		void setTranslucent( bool translucent );
+		bool isTranslucent();
+
+	public slots:
+		void setShadowValues( int angle, int distance, bool translucent );
+		void updatePreview( int );
+		void updatePreview();
+
+	protected:
+		QCheckBox*     m_useShadow;
+		KIntNumInput*  m_angle;
+		KIntNumInput*  m_distance;
+		QCheckBox*     m_translucent;
+		ShadowPreview* m_preview;
+}; // ShadowWidget
 
 class VTextOptionsWidget : public QFrame
 {
@@ -58,11 +111,14 @@ class VTextOptionsWidget : public QFrame
 		void editBasePath();
 
 	protected:
+		QTabWidget*   m_tabWidget;
 		KFontCombo*   m_fontCombo;
 		QCheckBox*    m_boldCheck;
 		QCheckBox*    m_italicCheck;
 		KIntNumInput* m_fontSize;
 		QLineEdit*    m_textEditor;
+		ShadowWidget* m_shadow;
+		QComboBox*    m_textAlignment;
 		QComboBox*    m_textPosition;
 		QPushButton*  m_editBasePath;
 		QPushButton*  m_convertToShapes;

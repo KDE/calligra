@@ -35,6 +35,7 @@
 
 #include <X11/Xlib.h>
 #include <X11/Xft/XftFreetype.h>
+#include <freetype2/freetype/freetype.h>
 
 #include FT_FREETYPE_H
 #include FT_OUTLINE_H

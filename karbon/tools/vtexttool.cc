@@ -18,13 +18,18 @@
    Boston, MA 02111-1307, USA.
 */
 
+#include <math.h>
+
 #include <qlayout.h>
 #include <qcheckbox.h>
 #include <qlineedit.h>
 #include <qcombobox.h>
 #include <qpushbutton.h>
 #include <qlabel.h>
+#include <qtabwidget.h>
 #include <qcursor.h>
+#include <qpixmap.h>
+#include <qpainter.h>
 
 #include <kfontcombo.h>
 #include <knuminput.h>
@@ -35,22 +40,280 @@
 #include "vpainterfactory.h"
 #include "vtexttool.h"
 #include "vselection.h"
+#include "vkopainter.h"
+
+static void traceShape( VKoPainter* p, int x, int y, int w, int h )
+{
+	p->newPath();
+	p->moveTo( KoPoint( x + w    , y + h     ) );
+	p->lineTo( KoPoint( x + w / 3, y + h     ) );
+	p->lineTo( KoPoint( x + w / 3, y + h / 3 ) );
+	p->lineTo( KoPoint( x + w    , y + h / 3 ) );
+	p->lineTo( KoPoint( x + w    , y + h     ) );
+	
+	p->moveTo( KoPoint( x                , y                 ) );
+	p->lineTo( KoPoint( x + ( w / 3 ) * 2, y                 ) );
+	p->lineTo( KoPoint( x + ( w / 3 ) * 2, y + ( h / 3 ) * 2 ) );
+	p->lineTo( KoPoint( x                , y + ( h / 3 ) * 2 ) );
+	p->lineTo( KoPoint( x                , y                 ) );
+	
+} // traceShape [static]
+
+ShadowPreview::ShadowPreview( ShadowWidget* parent )
+		: QWidget( parent ), m_parent( parent )
+{
+	setMinimumSize( 60, 60 );
+
+	connect( this, SIGNAL( changed( int, int, bool ) ), m_parent, SLOT( setShadowValues( int, int, bool ) ) );
+} // ShadowPreview::ShadowPreview
+
+ShadowPreview::~ShadowPreview()
+{
+} // ShadowPreview::~ShadowPreview
+
+void ShadowPreview::mouseReleaseEvent( QMouseEvent* e )
+{
+	int dx = e->x() - width() / 2;
+	int dy = e->y() - height() / 2;
+
+	float fd = sqrt( dx * dx + dy * dy );
+	int a;
+	if ( fd == 0 )
+		a = 0;
+	else if ( dy == 0 && dx < 0 )
+		a = 180;
+	else
+	{
+		float r = acos( dx / fd );
+		a = ( dy <= 0 ? r : 6.2832 - r ) / 6.2832 * 360.;
+	}
+
+	emit changed( a, (int)fd, m_parent->isTranslucent() );
+} // ShadowPreview::mouseReleaseEvent
+
+void ShadowPreview::paintEvent( QPaintEvent* )
+{
+	int w = width() - 4;
+	int h = height() - 4;
+	int d = m_parent->shadowDistance();
+	int a = 6.2832 - m_parent->shadowAngle();
+
+	QPixmap pm( w, h );
+	VKoPainter p( &pm, w, h );
+	VColor color( VColor::rgb );
+	
+	VFill fill;
+	KIconLoader il;
+	fill.pattern() = VPattern( il.iconPath( "karbon.png", KIcon::Small ) );
+	fill.setType( VFill::patt );
+	p.newPath();
+	p.moveTo( KoPoint( 0, 0 ) );
+	p.lineTo( KoPoint( 0, h ) );
+	p.lineTo( KoPoint( w, h ) );
+	p.lineTo( KoPoint( w, 0 ) );
+	p.lineTo( KoPoint( 0, 0 ) );
+	p.setBrush( fill );
+	p.fillPath();
+	color.set( 1., 1., 1. );
+	color.setOpacity( .5 );
+	p.setBrush( VFill( color ) );
+	p.fillPath();
+	
+	if ( m_parent->isTranslucent() )
+	{
+		color.set( 0., 0., 0. );
+		color.setOpacity( .3 );
+	}
+	else
+	{
+		color.set( .3, .3, .3 );
+		color.setOpacity( 1. );
+	}
+	p.setPen( VStroke( color ) );
+	p.setBrush( VFill( color ) );
+	traceShape( &p, w / 4 + d * cos( a / 360. * 6.2832 ), h / 4 + d * sin( a / 360. * 6.2832 ), w / 2, h / 2 );
+	p.strokePath();
+	p.fillPath();
+	
+	color.set( 0., 0., 1. );
+	color.setOpacity( 1. );
+	p.setBrush( VFill( color ) );
+	color.set( 0., 0., .5 );
+	p.setPen( VStroke( color ) );
+	traceShape( &p, w / 4, h / 4, w / 2, h / 2 );
+	p.strokePath();
+	p.fillPath();
+
+	if ( !m_parent->useShadow() )
+	{
+		p.newPath();
+		p.moveTo( KoPoint( 0, 0 ) );
+		p.lineTo( KoPoint( 0, h ) );
+		p.lineTo( KoPoint( w, h ) );
+		p.lineTo( KoPoint( w, 0 ) );
+		p.lineTo( KoPoint( 0, 0 ) );
+		VColor c( colorGroup().background() );
+		c.setOpacity( .8 );
+		p.setBrush( VFill( c ) );
+		p.fillPath();
+	}
+	p.end();
+	
+	QPainter painter( this );
+	painter.drawPixmap( 2, 2, pm );
+	painter.setPen( colorGroup().light() );
+	painter.moveTo( 1, height() - 1 );
+	painter.lineTo( 1, 1 );
+	painter.lineTo( width() - 1, 1 );
+	painter.lineTo( width() - 1, height() - 1 );
+	painter.lineTo( 1, height() - 1 );
+	painter.setPen( colorGroup().dark() );
+	painter.moveTo( 0, height() - 1 );
+	painter.lineTo( 0, 0 );
+	painter.lineTo( width() - 1, 0 );
+	painter.moveTo( width() - 2, 2 );
+	painter.lineTo( width() - 2, height() - 2 );
+	painter.lineTo( 2, height() - 2 );    
+	painter.setPen( Qt::black );
+	painter.drawLine( width() / 2 - 2, height() / 2, width() / 2 + 2, height() / 2 );
+	painter.drawLine( width() / 2, height() / 2 - 2, width() / 2, height() / 2 + 2 );
+
+} // ShadowPreview::paintEvent
+
+ShadowWidget::ShadowWidget( QWidget* parent, const char* name, int angle, int distance, bool translucent )
+		: QGroupBox( parent, name )
+{
+	setTitle( i18n( "Shadow" ) );
+
+	QGridLayout* layout = new QGridLayout( this );
+	layout->addRowSpacing( 0, 12 );
+	layout->setMargin( 3 );
+	layout->setSpacing( 2 );
+	layout->addMultiCellWidget( m_preview = new ShadowPreview( this ), 1, 3, 0, 1 );
+	layout->addWidget( new QLabel( i18n( "Angle:" ), this ), 1, 2 );
+	layout->addWidget( m_angle = new KIntNumInput( this ), 1, 3 );
+	layout->addWidget( new QLabel( i18n( "Distance:" ), this ), 2, 2 );
+	layout->addWidget( m_distance = new KIntNumInput( this ), 2, 3 );
+	QHBoxLayout* cbLayout = new QHBoxLayout( layout );
+	layout->addMultiCell( cbLayout, 3, 3, 2, 3 );
+	cbLayout->add( m_translucent = new QCheckBox( i18n( "Draw translucent shadow" ), this ) );
+	cbLayout->add( m_useShadow = new QCheckBox( i18n( "Shadow" ), this ) );
+	m_distance->setRange( 1, 37, 1, true );
+	m_angle->setRange( 0, 360, 10, true );
+	m_angle->setValue( angle );
+	m_distance->setValue( distance );
+	m_translucent->setChecked( translucent );
+	
+	connect( m_angle, SIGNAL( valueChanged( int ) ), this, SLOT( updatePreview( int ) ) );
+	connect( m_distance, SIGNAL( valueChanged( int ) ), this, SLOT( updatePreview( int ) ) );
+	connect( m_useShadow, SIGNAL( clicked() ), this, SLOT( updatePreview() ) );
+	connect( m_translucent, SIGNAL( clicked() ), this, SLOT( updatePreview() ) );
+	
+	updatePreview();
+} // ShadowWidget::ShadowWidget 
+
+ShadowWidget::~ShadowWidget()
+{
+} // ShadowWidget::ShadowWidget
+
+void ShadowWidget::setUseShadow( bool use )
+{
+	m_useShadow->setChecked( use );
+	m_preview->repaint();
+} // ShadowWidget::setUseShadow
+
+bool ShadowWidget::useShadow()
+{
+	return m_useShadow->isChecked();
+} // ShadowWidget::useShadow
+
+void ShadowWidget::setShadowAngle( int angle )
+{
+	m_angle->setValue( angle );
+	m_preview->repaint();
+} // ShadowWidget::setShadowAngle
+
+int ShadowWidget::shadowAngle()
+{
+	return m_angle->value();
+} // ShadowWidget::shadowAngle
+
+void ShadowWidget::setShadowDistance( int distance )
+{
+	m_distance->setValue( distance );
+	m_preview->repaint();
+} // ShadowWidget::setShadowDistance
+
+int ShadowWidget::shadowDistance()
+{
+	return m_distance->value();
+} // ShadowWidget::shadowDistance
+
+void ShadowWidget::setTranslucent( bool translucent )
+{
+	m_translucent->setChecked( translucent );
+	m_preview->repaint();
+} // ShdowWidget::setTranslucent
+
+bool ShadowWidget::isTranslucent()
+{
+	return m_translucent->isChecked();
+} // ShadowWidget::isTranslucent
+
+void ShadowWidget::setShadowValues( int angle, int distance, bool translucent ) 
+{
+	m_angle->setValue( angle );
+	m_distance->setValue( distance );
+	m_translucent->setChecked( translucent );
+	m_preview->repaint();
+} // ShadowWidget::setShadowValues
+
+void ShadowWidget::updatePreview( int )
+{
+	m_preview->repaint();
+} // ShadowWidget::updatePreview
+
+void ShadowWidget::updatePreview()
+{
+	m_preview->repaint();
+	bool ok = m_useShadow->isChecked();
+	m_angle->setEnabled( ok );
+	m_distance->setEnabled( ok ); 
+	m_translucent->setEnabled( ok );
+} // ShadowWidget::updatePreview
 
 VTextOptionsWidget::VTextOptionsWidget( VTextTool* tool, QWidget* parent )
 		: QFrame( parent, "TextOptionsWidget" ), m_tool( tool )
 {
 	setFrameStyle( Box | Sunken );
-	QGridLayout* mainLayout = new QGridLayout( this );
+	QVBoxLayout* mainLayout = new QVBoxLayout( this );
 	mainLayout->setMargin( 3 );
-	mainLayout->setSpacing( 2 );
-	mainLayout->addMultiCellWidget( m_fontCombo = new KFontCombo( this ), 0, 0, 0, 3 );
-	mainLayout->addWidget( m_fontSize = new KIntNumInput( this ), 1, 0 );
-	mainLayout->addWidget( m_boldCheck = new QCheckBox( i18n( "Bold" ), this ), 1, 1 );
-	mainLayout->addWidget( m_italicCheck = new QCheckBox( i18n( "Italic" ), this ), 1, 2 );
-	mainLayout->addWidget( m_textPosition = new QComboBox( this ), 1, 3 );
-	mainLayout->addMultiCellWidget( m_textEditor = new QLineEdit( this ), 2, 2, 0, 3 );
-	mainLayout->addMultiCellWidget( m_editBasePath = new QPushButton( i18n( "Edit base path" ), this ), 3, 3, 0, 1 );
-	mainLayout->addMultiCellWidget( m_convertToShapes = new QPushButton( i18n( "Convert to shapes" ), this ), 3, 3, 2, 3 );
+	mainLayout->add( m_tabWidget = new QTabWidget( this ) );
+	m_tabWidget->setFont( QFont( "helvetica" , 8 ) );
+
+	QWidget* textWidget = new QWidget( m_tabWidget );
+	QGridLayout* textLayout = new QGridLayout( textWidget );
+	textLayout->setMargin( 3 );
+	textLayout->setSpacing( 2 );
+	textLayout->addMultiCellWidget( m_fontCombo = new KFontCombo( textWidget ), 0, 0, 0, 2 );
+	textLayout->addWidget( m_fontSize = new KIntNumInput( textWidget ), 1, 0 );
+	textLayout->addWidget( m_boldCheck = new QCheckBox( i18n( "Bold" ), textWidget ), 1, 1 );
+	textLayout->addWidget( m_italicCheck = new QCheckBox( i18n( "Italic" ), textWidget ), 1, 2 );
+	textLayout->addMultiCellWidget( m_textEditor = new QLineEdit( textWidget ), 2, 2, 0, 2 );
+	m_tabWidget->addTab( textWidget, i18n( "Text" ) );
+	
+	QWidget* fxWidget = new QWidget( m_tabWidget );
+	QGridLayout* fxLayout = new QGridLayout( fxWidget );
+	fxLayout->setMargin( 3 );
+	fxLayout->setSpacing( 2 );
+	fxLayout->addMultiCellWidget( m_shadow = new ShadowWidget( fxWidget, 0L, 315, 4, true ), 0, 0, 0, 3 );
+	fxLayout->addWidget( new QLabel( i18n( "Alignment:" ), fxWidget ), 1, 0 );
+	fxLayout->addWidget( m_textAlignment = new QComboBox( fxWidget ), 1, 1 );
+	fxLayout->addWidget( new QLabel( i18n( "Position:" ), fxWidget ), 1, 2 );
+	fxLayout->addWidget( m_textPosition = new QComboBox( fxWidget ), 1, 3 );
+	fxLayout->addMultiCellWidget( m_editBasePath = new QPushButton( i18n( "Edit base path" ), fxWidget ), 2, 2, 0, 1 );
+	fxLayout->addMultiCellWidget( m_convertToShapes = new QPushButton( i18n( "Convert to shapes" ), fxWidget ), 2, 2, 2, 3 );
+	m_tabWidget->addTab( fxWidget, i18n( "Effects" ) );
 	
 	m_fontCombo->setCurrentText( "Helvetica" );
 	m_fontSize->setValue( 12 );

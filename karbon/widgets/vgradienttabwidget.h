@@ -78,7 +78,6 @@ class VGradientTabWidget : public QTabWidget
 		void setupConnections();
 		
 	private:
-		QTabWidget*           m_tabWidget;
 		QGroupBox*            m_editGroup;
 		VGradientWidget*      m_gradientWidget;
 		KComboBox*            m_gradientTarget;
