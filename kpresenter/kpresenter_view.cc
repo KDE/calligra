@@ -50,7 +50,7 @@ KPresenterView::KPresenterView( QWidget *_parent, const char *_name, KPresenterD
   setWidget(this);
 
   shell = 0L;
-  
+
   OPPartIf::setFocusPolicy(OpenParts::Part::ClickFocus);
 
   m_pKPresenterDoc = 0L;
@@ -2114,7 +2114,6 @@ void KPresenterView::fontChanged(QFont* font)
       m_vToolBarText->setButton(ID_ITALIC,tbFont.italic());
       m_vToolBarText->setButton(ID_UNDERLINE,tbFont.underline());
       int pos = fontList.find(tbFont.family());
-      assert( pos != -1 );
       cerr << "Setting to number " << pos << endl;
       m_vToolBarText->setCurrentComboItem(ID_FONT_LIST, pos );
       cerr << "Never reached" << endl;
