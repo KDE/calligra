@@ -43,9 +43,11 @@ integer and fractional parts).
 
 - <XYZ foo="100" bar="0"/> equals <XYZ foo="100" bar="0"></XYZ>
 
-- Unicode-letters (UTF-8 compressed) are used to store the text
+- Unicode-letters (UTF-8 coded) are used to store the text
+(TODO/FIXME: KWord uses UTF-8. However XML can be coded in something else as long as it is correctly declared.)
 
-- Some special characters ('<', '>', '&') are "escaped" ('&lt;', '&gt;', '&amp;')
+- Some special characters ('<', '>', '&', '"', ''') are or can be "escaped" ('&lt;', '&gt;', '&amp;', '&quot;', '&apos;')
+(TODO: document that these five character references are the only ones allowed for KWord.)
 
 - Please launch Kword and save an empty file - it is much easier to follow
 this documentation if you wade through an (almost empty) example document.
@@ -78,10 +80,10 @@ don't put a </?xml...> at the end of the file!).
                             KWord can read all previous versions, but always saves in the latest.
 -->
 <!ELEMENT DOC
-    (PAPER, ATTRIBUTES,VARIABLESETTINGS, FRAMESETS, STYLES, PIXMAPS, (EMBEDDED*))>
+    (PAPER, ATTRIBUTES, VARIABLESETTINGS, FRAMESETS, STYLES, PIXMAPS, CLIPARTS, SERIALL, (EMBEDDED*))>
 <!ATTLIST DOC
     editor CDATA #IMPLIED
-    mime CDATA "application/x-kword"
+    mime CDATA #FIXED "application/x-kword"
     syntaxVersion CDATA #REQUIRED>
 
 <!--    Describes the page format. Can have no or one PAPERBORDERS child that
@@ -209,11 +211,13 @@ don't put a </?xml...> at the end of the file!).
 
         Attributes:
             startingPageNumber:     to the starting page number.
+            displaylink TODO: document! (#REQUIRED or #IMPLIED)
 -->
 <!ELEMENT VARIABLESETTINGS
     EMPTY>
 <!ATTLIST VARIABLESETTINGS
-    startingPageNumber CDATA #REQUIRED>
+    startingPageNumber CDATA #IMPLIED
+    displaylink CDATA #REQUIRED>
 
 <!--    Container that has a number of FRAMESET children.
 -->
@@ -233,7 +237,7 @@ don't put a </?xml...> at the end of the file!).
                             4...Formula frame (contains a FORMULA tag)
                             5...Clipart frame (contains a CLIPART tag)
 
-            frameInfo:      0...normal text
+            frameInfo:      0...normal text (TODO: also for non-text frames?)
                             1...header for first page
                             2...header for odd pages
                             3...header for even pages
@@ -243,7 +247,7 @@ don't put a </?xml...> at the end of the file!).
                             7...footnote
 
             removable:      Whether the header-frame is removable or not:
-                            Used in tables where header cells on new pages are 
+                            Used in tables where header cells on new pages are
                             auto created with this set to 1.
                                 0...no (default)
                                 1...yes
@@ -276,7 +280,7 @@ don't put a </?xml...> at the end of the file!).
 <!ELEMENT FRAMESET
     (FRAME|PARAGRAPH|IMAGE|CLIPART|FORMULA)*>  <!-- missing: defining FORMULA -->
 <!ATTLIST FRAMESET
-    name CDATA
+    name CDATA #REQUIRED
     frameType CDATA #REQUIRED
     frameInfo CDATA #REQUIRED
     removable CDATA #IMPLIED
@@ -306,7 +310,7 @@ don't put a </?xml...> at the end of the file!).
                                 between overlapping frames and runaround text
 
             autoCreateNewFrame: What to do if the text is bigger than the frame:
-                                0...AutoExtendFrame  
+                                0...AutoExtendFrame
                                     Make frame bigger to fit text.
                                 1...AutoCreateNewFrame (use this for the normal text body)
                                     Place a new frame on next page.
@@ -339,7 +343,7 @@ don't put a </?xml...> at the end of the file!).
                                              Solid = 0, Dash = 1, Dot = 2, Dash_dot = 3, Dash_dot_dot = 4
 
             bkRed, bkGreen, bkBlue: color (rgb) used as the frame's background color
-            bkStyle : style of a frame background color 
+            bkStyle : style of a frame background color
             SolidPattern = 0, Dense1Pattern = 1, Dense2Pattern = 2, Dense3Pattern = 3, Dense4Pattern = 4 etc... (look at in qbrush documentation)
 
             bleftpt, brightpt, btoppt, bbottompt: frame margins - not supported at the moment
@@ -351,7 +355,7 @@ don't put a </?xml...> at the end of the file!).
     bottom CDATA #REQUIRED
     runaround CDATA #IMPLIED
     runaroundGap CDATA #IMPLIED
-    autoCreateNewFrame CDATA #REQUIRED
+    autoCreateNewFrame CDATA #IMPLIED
     newFrameBehavior CDATA #REQUIRED
     copy CDATA #IMPLIED>
 
@@ -407,6 +411,19 @@ don't put a </?xml...> at the end of the file!).
     pos CDATA #IMPLIED
     len CDATA #IMPLIED>
 
+
+<!-- LAYOUT
+        A layout holds all the attributes related to a paragraph,
+        other than its text and formatting.
+        Each of the child elements can be present only once, except
+        TABULATOR which can be repeated.
+-->
+<!ENTITY % layout "NAME|FLOW|INDENTS|OFFSETS|LINESPACING|PAGEBREAKING|
+    LEFTBORDER|RIGHTBORDER|TOPBORDER|BOTTOMBORDER|COUNTER|FORMAT|
+    SHADOW|TABULATOR*">
+<!ELEMENT LAYOUT
+    (%layout;)*>
+
 <!--
         A style is a global setting that is used for all paragraphs which use that
         style. As the markup is stored in one place (the style) changing the markup
@@ -416,10 +433,7 @@ don't put a </?xml...> at the end of the file!).
 <!ELEMENT STYLES
     (STYLE*)>
 <!ELEMENT STYLE
-    (NAME|FOLLOWING|
-     FLOW|INDENTS|OFFSETS|LINESPACING|PAGEBREAKING|
-     LEFTBORDER|RIGHTBORDER|TOPBORDER|BOTTOMBORDER|
-     COUNTER|FORMAT|TABULATOR|SHADOW)*>
+    (%layout;|FOLLOWING)*>
 
 <!ELEMENT COLOR
     EMPTY>
@@ -488,7 +502,7 @@ don't put a </?xml...> at the end of the file!).
 <!-- VERTALIGN
             Super/sub script.
             0 = Normal
-            1 = Subscript 
+            1 = Subscript
             2 = Superscript
 -->
 <!ELEMENT VERTALIGN
@@ -506,17 +520,6 @@ don't put a </?xml...> at the end of the file!).
 <!ATTLIST CHARSET
     value CDATA #REQUIRED>
 
-<!-- LAYOUT
-        A layout holds all the attributes related to a paragraph,
-        other than its text and formatting.
-        Each of the child elements can be present only once, except
-        TABULATOR which can be repeated.
--->
-<!ELEMENT LAYOUT
-    (NAME|FLOW|INDENTS|OFFSETS|LINESPACING|PAGEBREAKING|
-     LEFTBORDER|RIGHTBORDER|TOPBORDER|BOTTOMBORDER|
-     COUNTER|FORMAT|TABULATOR|SHADOW)*>
-
 <!-- NAME
         The name of a style.
         If inside a <STYLE> tag, this defines the name of the style.
@@ -528,12 +531,12 @@ don't put a </?xml...> at the end of the file!).
 <!ATTLIST NAME
     value CDATA #REQUIRED>
 
-<!-- FOLLOWING 
+<!-- FOLLOWING
         The FOLLOWING tag is a styles tag. You can only embed it in a style.
         With this tag you can tell kword to switch to the style 'name' after
         enter was pressed and the current style was used.
         Example: Style H1 has the <following name="body"> tag. When the user is
-        finished typing the header tag and presses enter kword switches to the 
+        finished typing the header tag and presses enter kword switches to the
         style 'body'
         The style-name given should be available.
 -->
@@ -549,7 +552,7 @@ don't put a </?xml...> at the end of the file!).
 <!ELEMENT FLOW
     EMPTY>
 <!ATTLIST FLOW
-    align CDATA #REQUIRED>
+    align (left|right|center|justify) #REQUIRED>
 
 <!-- INDENTS
         first: indent (pt) from the left border (of the frame) of the first line of a paragraph
@@ -573,7 +576,7 @@ don't put a </?xml...> at the end of the file!).
     before CDATA #IMPLIED
     after CDATA #IMPLIED>
 
-<!-- 
+<!--
         A paragraph and a style can have counter data.
         The document will do the counting of the paragraphs that use this.
 
@@ -589,14 +592,14 @@ don't put a </?xml...> at the end of the file!).
                 9 = Square bullet
                 10 = Disc bullet
 
-        depth   The level of the numbering. 
+        depth   The level of the numbering.
                 Depth of 0 means the major numbering. (1, 2, 3...)
                 Depth of 1 is 1.1, 1.2, 1.3 etc.
 
         start   The first used number in the numbering (usually 1).
         numberingtype
                 0 = list numbering, 1 = chapter numbering.
-                List numbering starts at <start> everytime another list is used (everytime a 
+                List numbering starts at <start> everytime another list is used (everytime a
                 non numbering paragraph has been used)
                 Chapter numbering is used throughout the whole document (in future throughout books)
         lefttext
@@ -606,6 +609,7 @@ don't put a </?xml...> at the end of the file!).
                 A usual value for this one is "." (dot).
 
         bullet  The character code (in UTF-8) that is the custom bullet (for type=6)
+                (TODO/FIXME: it is not in UTF-8, it is the unicode value (no, not as character reference))
         bulletfont
                 The font to use for the custom bullet can be found in (use "symbol" if in doubt)
         customdef
@@ -631,7 +635,7 @@ don't put a </?xml...> at the end of the file!).
 <!ELEMENT LINESPACING
     EMPTY>
 <!ATTLIST LINESPACING
-    value CDATA #REQUIRED>
+    value (CDATA|oneandhalf|double) #REQUIRED>
 
 <!--
         Attributes relating to the way paragraphs are broken at the end of a frame/page.
@@ -652,7 +656,7 @@ don't put a </?xml...> at the end of the file!).
 
 <!--
         The borders can be used on a frame and on a paragraph.
-        the border has a color, displayed in the RGB value. 
+        the border has a color, displayed in the RGB value.
         The width is in points.
         Style   0 = solid
                 1 = dashes
@@ -769,9 +773,7 @@ don't put a </?xml...> at the end of the file!).
 <!--    Variable
 -->
 <!ELEMENT VARIABLE
-    (TYPE,PGNUM,DATE,TIME,CUSTOM,SERIALLETTER,FIELD)>
-<!ATTLIST VARIABLE
-    EMPTY>
+    ("TYPE|PGNUM|DATE|TIME|CUSTOM|SERIALLETTER|FIELD|LINK")>
 
 <!--    Variable type
         0... Date (uses DATE to save it)
@@ -784,13 +786,28 @@ don't put a </?xml...> at the end of the file!).
         7... Serial Letter (uses SERIALLETTER to save it)
         8... Field (uses FIELD to save it)
         9... Link
+
+        key  TODO: not documented ( #REQUIRED or #IMPLIED ?)
+        text TODO: not documented
 -->
 <!ELEMENT TYPE
     EMPTY>
 <!ATTLIST TYPE
+    key  CDATA #REQUIRED
+    text CDATA #REQUIRED
     type CDATA #REQUIRED>
 
-<!-- TODO PGNUM,DATE,TIME,CUSTOM,SERIALLETTER,LINK -->
+<!-- TODO: document -->
+<!ELEMENT DATE
+    EMPTY>
+<!-- TODO: document ( #REQUIRED or #IMPLIED ?)-->
+<!ATTLIST DATE
+    day   CDATA #REQUIRED
+    month CDATA #REQUIRED
+    year  CDATA #REQUIRED
+    fix   CDATA #REQUIRED>
+
+<!-- TODO PGNUM,TIME,CUSTOM,SERIALLETTER -->
 <!-- TODO modifiers in DATE and TIME - see #24242 -->
 
 <!--    A "field" variable (property of the document)
@@ -809,14 +826,14 @@ don't put a </?xml...> at the end of the file!).
 <!ELEMENT FIELD
     EMPTY>
 <!ATTLIST FIELD
-    subtype CDATA #REQUIRED,
+    subtype CDATA #REQUIRED
     value CDATA #REQUIRED>
 
 <!ELEMENT LINK
     EMPTY>
 <!ATTLIST LINK
-    linkName CDATA #REQUIRED,
-    hrefName CDATA #REQUIRED> 
+    linkName CDATA #REQUIRED
+    hrefName CDATA #REQUIRED>
 
 <!--
         Pixmap collection. This list holds the keys of all the pixmaps
@@ -825,23 +842,34 @@ don't put a </?xml...> at the end of the file!).
 -->
 <!ELEMENT PIXMAPS
     (KEY)*>
+
+<!-- TODO: document! -->
+<!ELEMENT CLIPARTS
+    (KEY)*>
+
+<!-- TODO: document! -->
+<!ELEMENT SERIALL
+    EMPTY>
+
 <!--
         The key mapping to one pixmap.
         [Old attribute was named "key" (the filename).]
         "name" is the relative path to the image in the store (e.g. picture/picture1.ext)
+        (TODO: document when name is needed (as child of PIXMAPS?) and when not)
+        (TODO: suggest *nix epoch (1970-01-01) if no date is available)
 -->
 <!ELEMENT KEY
     EMPTY>
 <!ATTLIST KEY
-    filename CDATA #REQUIRED,
-    year CDATA #REQUIRED,
-    month CDATA #REQUIRED,
-    day CDATA #REQUIRED,
-    hour CDATA #REQUIRED,
-    minute CDATA #REQUIRED,
-    second CDATA #REQUIRED,
-    msec CDATA #REQUIRED,
-    name CDATA #REQUIRED>
+    filename CDATA #REQUIRED
+    year CDATA #REQUIRED
+    month CDATA #REQUIRED
+    day CDATA #REQUIRED
+    hour CDATA #REQUIRED
+    minute CDATA #REQUIRED
+    second CDATA #REQUIRED
+    msec CDATA #REQUIRED
+    name CDATA #IMPLIED>
 
 <!--
         Embedded object
@@ -878,4 +906,4 @@ don't put a </?xml...> at the end of the file!).
 <!ELEMENT SETTINGS
     (FRAME)>
 <!ATTLIST SETTINGS
-    name #REQUIRED>
+    name CDATA #REQUIRED>
