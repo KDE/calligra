@@ -1221,8 +1221,6 @@ void FontRecord::setData( unsigned size, const unsigned char* data )
   // FIXME how about excel < 97 ?
   UString fn = EString::fromSheetName( data+14, size-14 ).str();
   setFontName( fn );
-  
-  dump( std::cout );
 }
 
 
