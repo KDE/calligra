@@ -1,0 +1,15 @@
+[Desktop Entry]
+Name=KWordHTMLFilter
+Exec=foo
+CORBAExec=kword_html --server
+Comment=Reggie's KWord HTML Filter
+Import=application/x-kword
+ImportDescription=KWord
+Export=text/html
+ExportDescription=HTML
+X-KDE-RepoIds=IDL:KOffice/FilterFactory:1.0#KWordHTML
+X-KDE-ActivationMode=shared
+Type=OpenPart
+Icon=unknown.xpm
+MiniIcon=unknown.xpm
+ServiceTypes=KOfficeFilter
