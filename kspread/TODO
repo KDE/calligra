@@ -20,6 +20,7 @@ Others bugs not in BT system (Report by - taken by):
 
 Other things: (please add the things you are working on!)
 
+- MUST: more than one currency!!
 - WYSIWYG
 - "Freeze/Unfreeze Panes", started but had some problems caused by the
         scrollbars, it works, but not very nice (not commited (Norbert))
@@ -34,7 +35,7 @@ Other things: (please add the things you are working on!)
         - Move sheet properties to seperate dialog (they are currently part of KSpread config dialog)
 - Scenerios
 - Locked areas (for formulas with a matrix as result)
-- Multible Operations (in Excel: "Data"->"Table")
+- Multible Operations (in Excel: "Data"->"Table") (Norbert)
 - Pivot tables
 - more chart types
 - Styles
@@ -46,8 +47,11 @@ Other things: (please add the things you are working on!)
 - Insert basic drawings, autoforms        
 - Insert widgets like buttons, drop down lists,... + having the possibily to
   define action if pressed, or selection changes,...
+- Transparancy for embedded objects
+- z-order for embedded objects (and possibility to change the order)
+- better handling of embedded objects: e.g. delete them just by marking them + Del-Key
+  not only in the context menu of the borders
 - Scrollbar that supports jumping one row/column forward or back
-- Named areas with something like "=x+5" ("='x'+5" works already)
 - formula result: fit the precision to the width of the cell
 - other bug fixes                               (everybody, every time)
 
@@ -97,11 +101,14 @@ Norbert
 =======
 
 - solver (see gnumeric)
+- option: ignore duplicate deliminers in CSV import and Insert data from file/clipboard
+- CSV export dialog: define deliminers, Table(s), cell content in ".."
 
 - Multiple Operations
 - Database functions 
+- Subtotals
 - more information functions (Excel compatible)
-=> all three after John is done enhancing KSContext (s.a.)
+=> all four after John is done enhancing KSContext (s.a.)
 
 Ariya
 =====
