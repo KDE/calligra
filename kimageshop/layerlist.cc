@@ -149,7 +149,7 @@ void LayerList::inverseVisibility( int _index )
   m_canvas->layerList().at( _index )->setVisible( !m_canvas->layerList().at( _index )->isVisible() );
   updateCell( _index, 0 );
   m_canvas->compositeImage( m_canvas->layerList().at( _index )->imageExtents() );
-  m_canvas->repaint( m_canvas->layerList().at( _index )->imageExtents(), false );
+  m_canvas->repaintAll(m_canvas->layerList().at( _index )->imageExtents());
 }
 
 void LayerList::inverseLinking( int _index )

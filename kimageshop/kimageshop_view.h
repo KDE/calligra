@@ -105,12 +105,8 @@ protected:
   OpenPartsUI::Menu_var m_vMenuOptions;
   
 private:
-<<<<<<< kimageshop_view.h
-
   enum { TBTOOLS_MOVETOOL, TBTOOLS_BRUSHTOOL };
-=======
 
->>>>>>> 1.6
   KImageShopDoc *m_pDoc; 
   LayerDialog   *m_pLayerDialog;
   QScrollBar    *m_pHorz, *m_pVert;
