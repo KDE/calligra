@@ -859,7 +859,7 @@ protected:
 
     QValueList<KoPictureKey> savePictureList();
 
-    void saveOasisSettings( KoXmlWriter &settingsWriter );
+    void saveOasisSettings( KoXmlWriter &settingsWriter ) const;
 
     void loadOasisIgnoreList( const KoOasisSettings& settings );
 
