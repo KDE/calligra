@@ -122,6 +122,7 @@ public:
                                KWFrameSetEdit *edit, KWViewMode *viewMode );
     // Dummy since we reimplement drawContents
     virtual void drawFrame(KWFrame *, QPainter *, const QRect &, const QRect&,
+                           const QPoint& translationOffset,
                            KWFrame *, const QColorGroup &, bool, bool,
                            KWFrameSetEdit *, KWViewMode *, bool ) {}
 

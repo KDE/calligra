@@ -666,7 +666,8 @@ void KWFrameSet::drawMargins( KWFrame *frame, QPainter *p, const QRect &crect, c
 {
     QRect outerRect( viewMode->normalToView( frame->outerRect() ) );
     //kdDebug(32001) << "KWFrameSet::drawMargins frame: " << frameFromPtr( frame )
-    //               << " outerRect: " << outerRect << endl;
+    //               << " outerRect: " << outerRect
+    //               << " crect: " << crect << endl;
 
     if ( !crect.intersects( outerRect ) )
     {
@@ -675,29 +676,35 @@ void KWFrameSet::drawMargins( KWFrame *frame, QPainter *p, const QRect &crect, c
 #endif
         return;
     }
-    QRect frameRect( viewMode->normalToView( m_doc->zoomRect(  *frame ) ) );
+    QRect frameRect( viewMode->normalToView( m_doc->zoomRect( *frame ) ) );
     p->save();
     QBrush bgBrush( frame->backgroundColor() );
     bgBrush.setColor( KWDocument::resolveBgColor( bgBrush.color(), p ) );
     p->setBrush( bgBrush );
-    if ( frame->bTop()!=0.0)
+    int leftMargin = m_doc->zoomItX(frame->bLeft());
+    int topMargin = m_doc->zoomItY(frame->bTop());
+    int rightMargin = m_doc->zoomItX(frame->bRight());
+    int bottomMargin = m_doc->zoomItY(frame->bBottom());
+    //kdDebug(32001) << "KWFrameSet::drawMargins leftMargin=" << leftMargin << " topMargin=" << topMargin << " rightMargin=" << rightMargin << " bottomMargin=" << bottomMargin << endl;
+
+    if ( topMargin != 0 )
     {
-        QRect r( frameRect.left(), frameRect.top(), frameRect.width(), m_doc->zoomItY(frame->bTop()));
+        QRect r( frameRect.left(), frameRect.top(), frameRect.width(), topMargin );
         p->fillRect( r, bgBrush );
     }
-    if ( frame->bLeft()!=0.0)
+    if ( leftMargin != 0 )
     {
-        QRect r( frameRect.left(), frameRect.top(), m_doc->zoomItX(frame->bLeft()), m_doc->zoomItY(frame->height()));
+        QRect r( frameRect.left(), frameRect.top(), leftMargin, frameRect.height() );
         p->fillRect( r, bgBrush );
     }
-    if ( frame->bRight()!=0.0)
+    if ( rightMargin != 0 )
     {
-        QRect r( frameRect.right()-m_doc->zoomItX(frame->bRight()), frameRect.top(), m_doc->zoomItX(frame->bRight()), m_doc->zoomItY(frame->height()));
+        QRect r( frameRect.right()-rightMargin, frameRect.top(), rightMargin, frameRect.height() );
         p->fillRect( r, bgBrush );
     }
-    if ( frame->bBottom()!=0.0)
+    if ( frame->bBottom() != 0 )
     {
-        QRect r( frameRect.left(), frameRect.bottom()-m_doc->zoomItY(frame->bBottom()), m_doc->zoomItX(frame->width()), m_doc->zoomItY(frame->bBottom()));
+        QRect r( frameRect.left(), frameRect.bottom()-bottomMargin, frameRect.width(), bottomMargin );
         p->fillRect( r, bgBrush );
     }
     p->restore();
@@ -1150,7 +1157,8 @@ void KWFrameSet::drawContents( QPainter *p, const QRect & crect, const QColorGro
         }
     } else {
         // Text view mode
-        drawFrame( 0L /*frame*/, p, crect, crect, 0L /*settingsFrame*/, cg, onlyChanged, resetChanged, edit, viewMode, true );
+        drawFrame( 0L /*frame*/, p, crect, crect, QPoint(0,0),
+                   0L /*settingsFrame*/, cg, onlyChanged, resetChanged, edit, viewMode, true );
     }
 }
 
@@ -1204,57 +1212,39 @@ void KWFrameSet::drawFrameAndBorders( KWFrame *frame,
 #ifdef DEBUG_DRAW
         kdDebug(32001) << "KWFrameSet::drawFrameAndBorders in frame coords:" << fcrect << ". Will translate painter by intersec-fcrect: " << innerCRect.x()-fcrect.x() << "," << innerCRect.y()-fcrect.y() << "." << endl;
 #endif
-        // not clipping against frame for inline frames -> frameClipRegion uses absolute coordinates.
         QRegion reg;
         if ( drawUnderlyingFrames )
-            reg = frameClipRegion( painter, frame, innerCRect, viewMode, onlyChanged, !isFloating() );
+            reg = frameClipRegion( painter, frame, outerCRect, viewMode );
         else // false means we are being drawn _as_ an underlying frame, so no clipping!
-            reg = painter->xForm( innerCRect );
-        if ( !reg.isEmpty() )
-        {
-            painter->save();
-            painter->setClipRegion( reg );
-
-            drawFrame( frame, painter, fcrect, innerCRect,
-                       settingsFrame, cg, onlyChanged, resetChanged,
-                       edit, viewMode, drawUnderlyingFrames );
-
-            painter->restore();
-        }
-
-        // Now draw the frame border
-        // Clip frames on top, but don't clip to the frame, the border is outside
-        // TODO (speed) : calc this one first, then reduce it to get the above inner-frame-region
-        if ( drawUnderlyingFrames )
-            reg = frameClipRegion( painter, frame, outerCRect, viewMode, onlyChanged, false );
-        else
             reg = painter->xForm( outerCRect );
         if ( !reg.isEmpty() )
         {
             painter->save();
             painter->setClipRegion( reg );
+
+            drawFrame( frame, painter, fcrect, outerCRect,
+                       innerCRect.topLeft() - fcrect.topLeft(), // This assume that viewToNormal() is only a translation
+                       settingsFrame, cg, onlyChanged, resetChanged,
+                       edit, viewMode, drawUnderlyingFrames );
+
             if( !getGroupManager() ) // not for table cells
                 drawFrameBorder( painter, frame, settingsFrame, outerCRect, viewMode );
-            if ( frame->bLeft() || frame->bTop() || frame->bRight() || frame->bBottom() )
-                drawMargins( frame, painter, outerCRect, cg, viewMode );
 
             painter->restore();
         }
-        //else
-        //    kdDebug(32001) << "KWFrameSet::drawContents not drawing border for frame " << frame << endl;
     }
 }
 
-void KWFrameSet::drawFrame( KWFrame *frame, QPainter *painter, const QRect &fcrect, const QRect &crect,
+void KWFrameSet::drawFrame( KWFrame *frame, QPainter *painter, const QRect &fcrect, const QRect &outerCRect,
+                            const QPoint& translationOffset,
                             KWFrame *settingsFrame, const QColorGroup &cg, bool onlyChanged, bool resetChanged,
                             KWFrameSetEdit *edit, KWViewMode* viewMode, bool drawUnderlyingFrames )
 {
     // In this method the painter is NOT translated yet. It's still in view coordinates.
-    if ( crect.isEmpty() )
+    if ( outerCRect.isEmpty() )
         return;
-    Q_ASSERT( fcrect.size() == crect.size() );
 #ifdef DEBUG_DRAW
-    kdDebug(32001) << "\nKWFrameSet::drawFrame " << getName() << " crect=" << crect << " frame-crect=" << fcrect << " drawUnderlyingFrames=" << drawUnderlyingFrames << endl;
+    kdDebug(32001) << "\nKWFrameSet::drawFrame " << getName() << " outerCRect=" << outerCRect << " frameCrect=" << fcrect << " drawUnderlyingFrames=" << drawUnderlyingFrames << endl;
 #endif
 
     QColorGroup frameColorGroup( cg );
@@ -1272,18 +1262,18 @@ void KWFrameSet::drawFrame( KWFrame *frame, QPainter *painter, const QRect &fcre
         QPixmap* pix = 0L;
         if ( painter->device()->devType() != QInternal::Printer )
         {
-            pix = m_doc->doubleBufferPixmap( crect.size() );
+            pix = m_doc->doubleBufferPixmap( outerCRect.size() );
             doubleBufPainter = new QPainter;
             doubleBufPainter->begin( pix );
             // Initialize the pixmap to the page background color
             // (if the frame is over the page margins, no underlying frame will paint anything there)
-            doubleBufPainter->fillRect( 0, 0, crect.width(), crect.height(), QApplication::palette().active().brush( QColorGroup::Base ) );
+            doubleBufPainter->fillRect( 0, 0, outerCRect.width(), outerCRect.height(), QApplication::palette().active().brush( QColorGroup::Base ) );
 
-            // The double-buffer pixmap has (0,0) at crect.topLeft(), so we need to
+            // The double-buffer pixmap has (0,0) at outerCRect.topLeft(), so we need to
             // translate the double-buffer painter; drawFrameAndBorders will draw using view coordinates.
-            doubleBufPainter->translate( -crect.x(), -crect.y() );
+            doubleBufPainter->translate( -outerCRect.x(), -outerCRect.y() );
 //#ifdef DEBUG_DRAW
-//            kdDebug(32001) << "  ... using double buffering. Portion covered: " << crect << endl;
+//            kdDebug(32001) << "  ... using double buffering. Portion covered: " << outerCRect << endl;
 //#endif
         }
 
@@ -1299,7 +1289,7 @@ void KWFrameSet::drawFrame( KWFrame *frame, QPainter *painter, const QRect &fcre
 #ifdef DEBUG_DRAW
             kdDebug(32001) << "  looking at frame below us: " << f->frameSet()->getName() << " frame " << frameFromPtr( frame ) << endl;
 #endif
-            QRect viewFrameCRect = crect.intersect( viewMode->normalToView( f->outerRect() ) );
+            QRect viewFrameCRect = outerCRect.intersect( viewMode->normalToView( f->outerRect() ) );
             if ( !viewFrameCRect.isEmpty() )
             {
 #ifdef DEBUG_DRAW
@@ -1310,11 +1300,13 @@ void KWFrameSet::drawFrame( KWFrame *frame, QPainter *painter, const QRect &fcre
             }
         }
 
+        if ( frame->bLeft() || frame->bTop() || frame->bRight() || frame->bBottom() )
+            drawMargins( frame, doubleBufPainter, outerCRect, cg, viewMode );
         doubleBufPainter->save();
 #ifdef DEBUG_DRAW
-        kdDebug(32001) << "  translating by " << crect.x() - fcrect.x() << ", " << crect.y() - fcrect.y() << " before drawFrameContents" << endl;
+        kdDebug(32001) << "  translating by " << translationOffset.x() << ", " << translationOffset.y() << " before drawFrameContents" << endl;
 #endif
-        doubleBufPainter->translate( crect.x() - fcrect.x(), crect.y() - fcrect.y() ); // This assume that viewToNormal() is only a translation
+        doubleBufPainter->translate( translationOffset.x(), translationOffset.y() ); // This assume that viewToNormal() is only a translation
         // We can't "repaint changed parags only" if we just drew the underlying frames, hence the "false"
         drawFrameContents( frame, doubleBufPainter, fcrect, frameColorGroup, false, resetChanged, edit, viewMode );
         doubleBufPainter->restore();
@@ -1322,15 +1314,20 @@ void KWFrameSet::drawFrame( KWFrame *frame, QPainter *painter, const QRect &fcre
         if ( painter->device()->devType() != QInternal::Printer )
         {
             doubleBufPainter->end();
-            painter->drawPixmap( crect.topLeft(), *pix );
+#ifdef DEBUG_DRAW
+            kdDebug(32001) << "  painting double-buf pixmap at position " << outerCRect.topLeft() << " (real painter pos:" << painter->xForm( outerCRect.topLeft() ) << ")" << endl;
+#endif
+            painter->drawPixmap( outerCRect.topLeft(), *pix );
             delete doubleBufPainter;
         }
     }
     else
     {
+        if ( frame->bLeft() || frame->bTop() || frame->bRight() || frame->bBottom() )
+            drawMargins( frame, painter, outerCRect, cg, viewMode );
         painter->save();
-        painter->translate( crect.x() - fcrect.x(), crect.y() - fcrect.y() ); // This assume that viewToNormal() is only a translation
-        //painter->setBrushOrigin( painter->brushOrigin() + crect.topLeft() - fcrect.topLeft() );
+        painter->translate( translationOffset.x(), translationOffset.y() );
+        //painter->setBrushOrigin( painter->brushOrigin() + translationOffset );
 
         drawFrameContents( frame, painter, fcrect, frameColorGroup, onlyChanged, resetChanged, edit, viewMode );
         painter->restore();
@@ -1546,7 +1543,7 @@ void KWFrameSet::finalize()
 }
 
 QRegion KWFrameSet::frameClipRegion( QPainter * painter, KWFrame *frame, const QRect & crect,
-                                     KWViewMode * viewMode, bool /*onlyChanged*/, bool clipFrame )
+                                     KWViewMode * viewMode )
 {
     KWDocument * doc = kWordDocument();
     QRect rc = painter->xForm( crect );
@@ -1556,6 +1553,7 @@ QRegion KWFrameSet::frameClipRegion( QPainter * painter, KWFrame *frame, const Q
 #endif
 
     Q_ASSERT( frame );
+#if 0 // done later
     if ( clipFrame )
     {
         rc &= painter->xForm( viewMode->normalToView( doc->zoomRect( (*frame) ) ) ); // intersect
@@ -1565,6 +1563,7 @@ QRegion KWFrameSet::frameClipRegion( QPainter * painter, KWFrame *frame, const Q
                        << " rc.isEmpty()=" << rc.isEmpty() << endl;
 #endif
     }
+#endif
     if ( !rc.isEmpty() )
     {
         QRegion reg( rc );

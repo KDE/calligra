@@ -570,11 +570,13 @@ public:
     /**
      * Draw a particular frame of this frameset.
      * This is called by drawContents and is what framesets must reimplement.
-     * @param fcrect rectangle to be repainted, in the _frame_'s coordinate system (in pixels).
-     * @param crect rectangle to be repainted, in view coordinates.
+     * @param fcrect rectangle to be repainted, in the _frame_'s coordinate system (in pixels). Doesn't include margins.
+     @
+     * @param crect rectangle to be repainted, in view coordinates. Includes margins.
      * Default implementation does double-buffering and calls drawFrameContents.
      */
     virtual void drawFrame( KWFrame *frame, QPainter *painter, const QRect &fcrect, const QRect &crect,
+                            const QPoint& translationOffset,
                             KWFrame *settingsFrame, const QColorGroup &cg, bool onlyChanged, bool resetChanged,
                             KWFrameSetEdit *edit, KWViewMode *viewMode, bool drawUnderlyingFrames );
 
@@ -584,7 +586,7 @@ public:
      * You MUST reimplement one or the other, or you'll get infinite recursion ;)
      *
      * In this method, the painter has been translated to the frame's coordinate system
-     * @param fcrect rectangle to be repainted, in the _frame_'s coordinate system (in pixels).
+     * @param fcrect rectangle to be repainted, in the _frame_'s coordinate system (in pixels). Doesn't include margins.
      */
     virtual void drawFrameContents( KWFrame * frame, QPainter *painter, const QRect& fcrect,
                                     const QColorGroup &cg, bool onlyChanged, bool resetChanged,
@@ -756,7 +758,7 @@ protected:
      * This determines where to clip the painter to draw the contents of a given frame
      */
     QRegion frameClipRegion( QPainter * painter, KWFrame *frame, const QRect & crect,
-                             KWViewMode * viewMode, bool /*onlyChanged*/, bool clipFrame = true );
+                             KWViewMode * viewMode );
 
     void deleteAnchor( KWAnchor * anchor );
     virtual void deleteAnchors();

@@ -506,6 +506,7 @@ void KWTextFrameSet::drawContents( QPainter *p, const QRect & crect, const QColo
 }
 
 void KWTextFrameSet::drawFrame( KWFrame *theFrame, QPainter *painter, const QRect &fcrect, const QRect &crect,
+                                const QPoint& translationOffset,
                                 KWFrame *settingsFrame, const QColorGroup &cg, bool onlyChanged, bool resetChanged,
                                 KWFrameSetEdit *edit, KWViewMode *viewMode, bool drawUnderlyingFrames )
 {
@@ -516,7 +517,7 @@ void KWTextFrameSet::drawFrame( KWFrame *theFrame, QPainter *painter, const QRec
         bool transparent = theFrame->backgroundColor().style() != Qt::SolidPattern;
         drawUnderlyingFrames &= transparent;
     }
-    KWFrameSet::drawFrame( theFrame, painter, fcrect, crect, settingsFrame, cg, onlyChanged, resetChanged, edit, viewMode, drawUnderlyingFrames );
+    KWFrameSet::drawFrame( theFrame, painter, fcrect, crect, translationOffset, settingsFrame, cg, onlyChanged, resetChanged, edit, viewMode, drawUnderlyingFrames );
 }
 
 void KWTextFrameSet::drawFrameContents( KWFrame *theFrame, QPainter *painter, const QRect &r,
@@ -526,7 +527,7 @@ void KWTextFrameSet::drawFrameContents( KWFrame *theFrame, QPainter *painter, co
     // In this method the painter is translated to the frame's coordinate system
     // (in the first frame (0,0) will be its topleft, in the second frame it will be (0,internalY) etc.
 
-    //kdDebug() << "KWTextFrameSet::drawFrameContents " << getName() << "(frame " << frameFromPtr( theFrame ) << ") crect(r)=" << r << " onlyChanged=" << onlyChanged << endl;
+    //kdDebug(32001) << "KWTextFrameSet::drawFrameContents " << getName() << "(frame " << frameFromPtr( theFrame ) << ") crect(r)=" << r << " onlyChanged=" << onlyChanged << endl;
     m_currentDrawnFrame = theFrame;
     if ( theFrame ) // 0L in the text viewmode
     {
@@ -675,8 +676,11 @@ void KWTextFrameSet::drawCursor( QPainter *p, KoTextCursor *cursor, bool cursorV
 #endif
 
         QRegion reg;
-        if ( hasFrames )
-            reg = frameClipRegion( p, theFrame, clip, viewMode, true );
+        if ( hasFrames ) {
+            reg = frameClipRegion( p, theFrame, clip, viewMode );
+            if ( !isFloating() ) // problem with multiparent inline frames
+                reg &= p->xForm( viewFrameRect );
+        }
 
         if ( !hasFrames || !reg.isEmpty() )
         {
