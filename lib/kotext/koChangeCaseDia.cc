@@ -44,7 +44,7 @@ KoChangeCaseDia::KoChangeCaseDia( QWidget *parent, const char *name )
 
     m_toggleCase=new QRadioButton( i18n("&Toggle case"), grp );
     m_sentenceCase=new QRadioButton( i18n("Sentence case"), grp );
-    QWhatsThis::add( m_sentenceCase, i18n("Convert &first letter of a sentence to &uppercase."));
+    QWhatsThis::add( m_sentenceCase, i18n("Convert first letter of a sentence to uppercase."));
 
     m_upperCase->setChecked(true);
     grp->setRadioButtonExclusive( TRUE );
