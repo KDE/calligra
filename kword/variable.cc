@@ -93,6 +93,7 @@ void KWVariable::resize()
     width = 0;
     for ( int i = 0 ; i < txt.length() ; ++i )
         width += txt.width( i );
+    height = fmt.height();
     //kdDebug() << "KWVariable::resize width=" << width << endl;
 }
 
