@@ -41,6 +41,7 @@ class KLocale;
 class KSpreadCurrency;
 class KSpreadStyle;
 class KoStyleStack;
+class KoGenStyle;
 
 /**
  */
@@ -125,6 +126,8 @@ public:
     QDomElement saveFormat( QDomDocument& doc, bool force = false, bool copy = false ) const;
     QDomElement saveFormat( QDomDocument& doc, int _col, int _row, bool force = false, bool copy = false ) const;
     virtual bool loadOasisStyleProperties(KoStyleStack & styleStack, const KoOasisStyles& oasisStyles );
+    virtual void saveOasisCellStyle( KoGenStyle &currentCellStyle, int _col, int _row );
+
     bool loadFontOasisStyle( KoStyleStack & font );
     QPen loadOasisBorder( const QString & borderDef );
     ////////////////////////////////

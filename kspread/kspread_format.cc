@@ -37,7 +37,7 @@
 #include <float.h>
 #include <koGlobal.h>
 #include <koStyleStack.h>
-
+#include <koGenStyles.h>
 #include <kdebug.h>
 #include <klocale.h>
 #include <iostream>
@@ -214,6 +214,107 @@ void KSpreadFormat::setNoFallBackProperties( Properties p )
 // Loading and saving
 //
 /////////////
+
+void KSpreadFormat::saveOasisCellStyle( KoGenStyle &currentCellStyle, int _col, int _row )
+{
+    KSpreadFormat::Align alignX = KSpreadFormat::Undefined;
+    if ( hasProperty( KSpreadFormat::PAlign ) || !hasNoFallBackProperties( KSpreadFormat::PAlign ) )
+    {
+        alignX = align( _col, _row );
+        QString value ="start";
+        if ( alignX == KSpreadFormat::Center )
+            value = "center";
+        else if ( alignX == KSpreadFormat::Right )
+            value = "end";
+        else if ( alignX == KSpreadFormat::Left )
+            value = "start";
+        currentCellStyle.addProperty( "fo:text-align", value );
+    }
+
+    if ( hasProperty( KSpreadFormat::PAlignY ) || !hasNoFallBackProperties( KSpreadFormat::PAlignY ) )
+    {
+        KSpreadFormat::AlignY align = alignY( _col, _row );
+        if ( align != KSpreadFormat::Bottom ) // default in OpenCalc
+            currentCellStyle.addProperty( "fo:vertical-align", ( align == KSpreadFormat::Middle ? "middle" : "top" ) );
+    }
+
+    if ( hasProperty( KSpreadFormat::PIndent ) || !hasNoFallBackProperties( KSpreadFormat::PIndent ) )
+    {
+        double indent = getIndent( _col, _row );
+        if ( indent > 0.0 )
+        {
+            currentCellStyle.addPropertyPt("fo:margin-left", indent );
+            if ( alignX == KSpreadFormat::Undefined )
+                currentCellStyle.addProperty("fo:text-align", "start" );
+        }
+    }
+
+    if ( hasProperty( KSpreadFormat::PAngle ) || !hasNoFallBackProperties( KSpreadFormat::PAngle ) )
+    {
+        currentCellStyle.addProperty( "style:rotation-angle", QString::number( -getAngle( _col, _row ) ) );
+    }
+
+    if ( hasProperty( KSpreadFormat::PMultiRow ) || !hasNoFallBackProperties( KSpreadFormat::PMultiRow ) )
+    {
+        if ( multiRow( _col, _row ) )
+            currentCellStyle.addProperty( "fo:wrap-option", "wrap" );
+    }
+    if ( hasProperty( KSpreadFormat::PVerticalText ) || !hasNoFallBackProperties( KSpreadFormat::PVerticalText ) )
+    {
+        if ( verticalText( _col, _row ) )
+        {
+            currentCellStyle.addProperty( "fo:direction", "ttb" );
+            currentCellStyle.addProperty( "style:rotation-angle", "0" );
+        }
+    }
+    if ( hasProperty( KSpreadFormat::PDontPrintText ) || !hasNoFallBackProperties( KSpreadFormat::PDontPrintText ) )
+    {
+        if ( !getDontprintText( _col, _row ) )
+        {
+            currentCellStyle.addProperty( "style:print-content", "false");
+        }
+    }
+    bool hideAll = false;
+    bool hideFormula = false;
+    bool isNotProtected = false;
+    if ( hasProperty( KSpreadFormat::PHideAll ) || !hasNoFallBackProperties( KSpreadFormat::PHideAll ) )
+        hideAll = isHideAll( _col, _row );
+
+    if ( hasProperty( KSpreadFormat::PHideFormula ) || !hasNoFallBackProperties( KSpreadFormat::PHideFormula ) )
+        hideFormula = isHideFormula( _col, _row );
+    if ( hasProperty( KSpreadFormat::PNotProtected ) || !hasNoFallBackProperties( KSpreadFormat::PNotProtected ) )
+        isNotProtected = notProtected( _col, _row );
+
+    if ( hideAll )
+        currentCellStyle.addProperty( "style:cell-protect", "hidden-and-protected" );
+    else
+    {
+        if ( isNotProtected && !hideFormula )
+            currentCellStyle.addProperty( "style:cell-protect", "none" );
+        else
+        {
+            if ( isNotProtected && hideFormula )
+                currentCellStyle.addProperty( "style:cell-protect", "formula-hidden" );
+            else if ( hideFormula )
+                currentCellStyle.addProperty( "style:cell-protect", "protected formula-hidden" );
+            else if ( !isNotProtected )
+                currentCellStyle.addProperty( "style:cell-protect", "protected" );
+        }
+    }
+#if 0
+    if ( hasProperty( KSpreadFormat::PLeftBorder ) || !hasNoFallBackProperties( KSpreadFormat::PLeftBorder ) )
+        cs.left  = leftBorderPen( col, row );
+
+    if ( hasProperty( KSpreadFormat::PRightBorder ) || !hasNoFallBackProperties( KSpreadFormat::PRightBorder ) )
+        cs.right = rightBorderPen( col, row );
+
+    if ( hasProperty( KSpreadFormat::PTopBorder ) || !hasNoFallBackProperties( KSpreadFormat::PTopBorder ) )
+        cs.top  = topBorderPen( col, row );
+
+    if ( hasProperty( KSpreadFormat::PBottomBorder ) || !hasNoFallBackProperties( KSpreadFormat::PBottomBorder ) )
+        cs.bottom  = bottomBorderPen( col, row );
+#endif
+}
 
 QDomElement KSpreadFormat::saveFormat( QDomDocument & doc, int _col, int _row, bool force, bool copy ) const
 {
