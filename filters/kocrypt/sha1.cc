@@ -242,6 +242,9 @@ const unsigned char *SHA1::getHash() {
 unsigned int t, msb, lsb;
 unsigned char *p;
 
+
+if (!_init) return (unsigned char *)_buf;
+
    process(0, 0);
 
    msb = 0;
@@ -302,6 +305,8 @@ unsigned char *p;
    X(4);
 
 #undef X
+
+_init = false;
 
 return (unsigned char *)_buf;
 }

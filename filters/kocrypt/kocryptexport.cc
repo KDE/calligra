@@ -219,6 +219,16 @@ int rc;
 
        // if we ran out of data already (!?!?) append random data.
        cursize += rc;
+
+       shortness = blocksize - (cursize % blocksize);
+       if (shortness < blocksize && shortness > 0) {
+          // Guess we have to append the hash now.
+          const unsigned char *res = sha1.getHash();
+
+          for (int h = 0; h < sha1.size()/8; h++)
+             p[cursize++] = res[h];
+       }
+
        shortness = blocksize - (cursize % blocksize);
        while (shortness < blocksize && shortness > 0) {
           p[cursize++] = (char) (rand()%0x100);
@@ -230,7 +240,8 @@ int rc;
     // kdDebug() << "++++++++ Cursize is " << cursize << endl;
 
     for (;;) {
-       // assert: cursize % blocksize == 0;
+       int readsz = 4096 - (4096 % blocksize);
+       // FIXME: assert: cursize % blocksize == 0;
 
        for (int i = 0; i < cursize/blocksize; i++) {
           rc = cbc.encrypt(&(p[i*blocksize]), blocksize);
@@ -241,7 +252,7 @@ int rc;
 
        if (done) break;
 
-       rc = inf.readBlock(p, 4096);
+       rc = inf.readBlock(p, readsz);
        READ_ERROR_CHECK();
 
        if (sha1.process(p, rc) != rc) {
@@ -250,8 +261,13 @@ int rc;
 
        cursize = rc;
 
-       if (rc != 4096) {
+       if (rc != readsz) {
           done = true;
+          const unsigned char *res = sha1.getHash();
+
+          for (int h = 0; h < sha1.size()/8; h++)
+             p[cursize++] = res[h];
+
           shortness = blocksize - (cursize % blocksize);
           while (shortness) {
              p[cursize++] = (char) (rand()%0x100);
@@ -259,6 +275,10 @@ int rc;
           }
        }
     }
+
+    /*************************************************
+
+    This is for debugging only.  It dumps out the hash.
 
     const unsigned char *res = sha1.getHash();
  
@@ -269,6 +289,7 @@ int rc;
        }
        printf("\n");
     }
+    **************************************************/
 
     return true;
 }

@@ -267,28 +267,57 @@ QFile outf(fileOut);
       CRYPT_ERROR_CHECK();
 
       if (fsize >= (unsigned int)blocksize) {
-         fsize -= blocksize;
          sha1.process(p, blocksize);
          rc = outf.writeBlock(p, blocksize);
          WRITE_ERROR_CHECK(blocksize);
+         fsize -= blocksize;
+         remaining = 0;
          continue;
       } else {
          sha1.process(p, fsize);
          rc = outf.writeBlock(p, fsize);
          WRITE_ERROR_CHECK((int)fsize);
+         remaining = blocksize - fsize;
          fsize = 0;
       }
     }
 
-    // FIXME: check the filesize and the hash to make sure it was successful
     const unsigned char *res = sha1.getHash();
- 
+    int cnt = 0;
+
+    /**************************************************
+
+    This is for debugging only.  It dumps out the apparent hash.
+
     if (res) {
        for (int i = 0; i < 20; i++) {
-          printf("%.2X", *res++);
+          printf("%.2X", res[i]);
           if (i>0 && (i-1)%2 == 0) printf(" ");
        }
        printf("\n");
+    }
+    ***************************************************/
+
+    while (cnt < 20) {
+       while (remaining > 0 && cnt < 20) {
+          if (res[cnt] != (unsigned char)p[blocksize-remaining]) {
+            // fprintf(stderr, "ERROR: byte %d was %.2X but we computed %.2X\n",
+            // cnt, (unsigned char)p[blocksize-remaining], res[cnt]);
+             QApplication::setOverrideCursor(Qt::arrowCursor);
+             KMessageBox::error(NULL, 
+                  i18n("This document is either corrupt or has been tampered with."),
+                  i18n("Encrypted Document Import"));
+             QApplication::restoreOverrideCursor();
+             return false;
+          }
+          cnt++; remaining--;
+       }
+       if (cnt == 20) break;
+       rc = inf.readBlock(p, blocksize);
+       READ_ERROR_CHECK(blocksize);
+       rc = cbc.decrypt(p, blocksize);
+       CRYPT_ERROR_CHECK();
+       remaining = rc;
     }
 
     return true;
