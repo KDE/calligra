@@ -45,7 +45,7 @@ KPPartObject &KPPartObject::operator=( const KPPartObject & )
 void KPPartObject::updateChildGeometry()
 {
     KoZoomHandler* zh = child->parent()->zoomHandler();
-    child->setGeometry( zh->zoomRect( KoRect( orig, ext ) ) );
+    child->setGeometry( zh->zoomRect( getRect() ), false );
     child->setRotationPoint( QPoint( zh->zoomItX( getOrig().x() + getSize().width() / 2 ),
                                      zh->zoomItY( getOrig().y() + getSize().height() / 2 ) ) );
 }
