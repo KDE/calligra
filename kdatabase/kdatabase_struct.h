@@ -17,6 +17,7 @@
 #define KDATABASE_STRUCT_H
 
 #include <qdom.h>
+#include <qptrlist.h>
 
 class KDBStruct;
 class KDBTable;
@@ -27,7 +28,7 @@ class KDBTable {
 //This class is meant for viewing and modifying table structure.
 //KDBTableData is for accessing and modifying data.
 public:
-      QString getColumns(QString *tableName, QString *returnMessage);
+      QPtrList<QString> getColumns(QString *tableName, QString *returnMessage);
       bool insertColumn(QString *tableName, QString *columnInfo, QString *returnMessage);
       bool modifyColumn(QString *tableName, QString *columnInfo, QString *returnMessage);
       bool deleteColumn(QString *tableName, QString *columnInfo, QString *returnMessage);
@@ -70,9 +71,9 @@ public:
     bool renameView(QString* oldViewName, QString newViewName);
     bool renameForm(QString* oldFormName, QString newFormName);
 
-    QString* getTables();
-    QString* getViews();
-    QString* getForms();
+    QPtrList<QString> getTables();
+    QPtrList<QString> getViews();
+    QPtrList<QString> getForms();
 
     QString* executeSQL(QString *sSQL, bool returnXML);
 

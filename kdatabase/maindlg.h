@@ -45,6 +45,7 @@ private:
 
     clsTblDesigner* myTblDesigner;
     QBuildDlg* myQueryBuilder;
+    KDBStruct* myStruct;
 
     QDomDocument* myKDBFile;
 };

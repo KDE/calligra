@@ -14,12 +14,13 @@
  *                                                                         *
  ***************************************************************************/
 #include "kdatabase_struct.h"
+#include <kdebug.h>
 #include <qdom.h>
-
+#include <qptrlist.h>
 
 KDBStruct::KDBStruct(QDomDocument* KDBFile){
 
-    myKDBFile = KDBFile;
+    myKDBNode = KDBFile;
 }
 
 bool KDBStruct::createTable(QString* tableName, QString fieldInfo){
@@ -38,25 +39,51 @@ bool KDBStruct::createReport(QString* reportName, QString reportSQL){
 }
 
 
-QString* KDBStruct::getTables(){
+QPtrList<QString> KDBStruct::getTables(){
 
-    return(NULL);
+    QPtrList<QString> tableList;
+    kdDebug() << "myKDBNode.nodeValue=" << myKDBNode->namedItem("STRUCTURE").toElement().tagName() << endl;
+    if(myKDBNode->isNull()) {
+       kdDebug() << "KDBNode is already null" << endl;
+      }
+    QDomNode myTablesNode = myKDBNode->namedItem("STRUCTURE");
+    if(myTablesNode.isNull()) {
+       kdDebug() << "myTablesNode is already null" << endl;
+      }
+
+    myTablesNode=myTablesNode.namedItem("TABLES");
+    QDomNode myTableWalker = myTablesNode.firstChild();
+    QDomElement myElement;
+    while(!myTableWalker.isNull()) {
+        myElement = myTableWalker.toElement();
+        const QString* tableName = new QString(myElement.attribute("name"));
+        tableList.append(tableName);
+        kdDebug() << "In while loop...last value was " << &tableName << endl;
+        myTableWalker = myTableWalker.nextSibling();
+        }
+
+    kdDebug() << "tableList contains " << tableList.count() << " items." << endl;
+    return(tableList);
 }
 
-QString* KDBStruct::getViews(){
+QPtrList<QString> KDBStruct::getViews(){
+    QPtrList<QString> viewList;
 
-    return(NULL);
+    return(viewList);
 }
 
-QString* KDBStruct::getForms(){
+QPtrList<QString> KDBStruct::getForms(){
+    QPtrList<QString> formList;
 
-    return(NULL);
+    return(formList);
 }
 
 
-QString KDBTable::getColumns(QString *tableName, QString *returnMessage){
+QPtrList<QString> KDBTable::getColumns(QString *tableName, QString *returnMessage){
 
-return(NULL);
+    QPtrList<QString> columnList;
+
+    return(columnList);
 }
 
 bool KDBTable::insertColumn(QString *tableName, QString *columnInfo, QString *returnMessage){

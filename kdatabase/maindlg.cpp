@@ -51,9 +51,11 @@ void MainDlg::slotAllItemClicked(QListViewItem *itemClicked){
      kdDebug() << "KDatabase:MainDlg all Item Clicked" << endl;
 }
 
+
 bool MainDlg::initStruct(QDomDocument *kdbFile){
 
     myKDBFile = kdbFile;
+    myStruct = new KDBStruct(kdbFile);
     refreshStructView();
     return(true);
 }		
@@ -73,6 +75,7 @@ return(true);
 bool MainDlg::refreshTableView(QDomNode tableSection){
 
     kdDebug() << "KDatabase:MainDlg refreshTableView" << endl;
+    myStruct->getTables();
     return(true);
 }
 
