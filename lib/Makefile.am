@@ -1,5 +1,5 @@
 
-SUBDIRS = store kwmf kofficecore kofficeui koscript kformula kotext
+SUBDIRS = store kwmf kofficecore kofficeui koscript kotext kformula
 
 messages:
 	$(EXTRACTRC) */*.rc > parts.cc
