@@ -302,12 +302,6 @@ void KoTextObject::UndoRedoInfo::clear()
     placeHolderCmd = 0L;
 }
 
-KoTextDocCommand *KoTextObject::deleteTextCommand( KoTextDocument *textdoc, int id, int index, const QMemArray<KoTextStringChar> & str, const CustomItemsMap & customItemsMap, const QValueList<KoParagLayout> & oldParagLayouts )
-{
-    return new KoTextDeleteCommand( textdoc, id, index, str, customItemsMap, oldParagLayouts );
-}
-
-
 void KoTextObject::copyCharFormatting( KoTextParag *parag, int position, int index /*in text*/, bool moveCustomItems )
 {
     KoTextStringChar * ch = parag->at( position );
@@ -2329,6 +2323,12 @@ KCommand *KoTextFormatInterface::setSpellCheckingLanguage(const QString &_lang)
     KoTextFormat format( *currentFormat() );
     format.setSpellCheckingLanguage(_lang);
     return setFormatCommand( &format, KoTextFormat::SpellCheckingLanguage );
+}
+
+KoTextDocCommand *KoTextFormatInterface::deleteTextCommand( KoTextDocument *textdoc, int id, int index, const QMemArray<KoTextStringChar> & str, const CustomItemsMap & customItemsMap, const QValueList<KoParagLayout> & oldParagLayouts )
+{
+    return new KoTextDeleteCommand( textdoc, id, index, str, customItemsMap, oldParagLayouts );
+
 }
 
 #include "kotextobject.moc"

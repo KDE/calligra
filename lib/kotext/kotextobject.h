@@ -59,6 +59,7 @@ public:
 
     virtual KCommand *setChangeCaseOfTextCommand(KoChangeCaseDia::TypeOfCase _type)=0;
 
+    virtual KoTextDocCommand *deleteTextCommand( KoTextDocument *textdoc, int id, int index, const QMemArray<KoTextStringChar> & str, const CustomItemsMap & customItemsMap, const QValueList<KoParagLayout> & oldParagLayouts );
 
     void setParagLayoutFormat( KoParagLayout *newLayout,int flags, int marginIndex=-1);
     void setFormat( KoTextFormat * newFormat, int flags, bool zoomFont = false );
@@ -189,9 +190,6 @@ public:
     }
     /** returns true if the given selection has any custom item in it */
     bool selectionHasCustomItems( int selectionId = KoTextDocument::Standard ) const;
-    /** necessary to make it virtual used in kword */
-    virtual KoTextDocCommand *deleteTextCommand( KoTextDocument *textdoc, int id, int index, const QMemArray<KoTextStringChar> & str, const CustomItemsMap & customItemsMap, const QValueList<KoParagLayout> & oldParagLayouts );
-
 
     /**
      * The main "insert" method, including undo/redo creation/update.
