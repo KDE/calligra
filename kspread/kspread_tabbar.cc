@@ -601,7 +601,7 @@ void KSpreadTabBar::mouseMoveEvent( QMouseEvent* _ev )
 
 void KSpreadTabBar::mouseDoubleClickEvent( QMouseEvent*  )
 {
-  if ( !m_pView->koDocument()->isReadWrite()|| !m_pView->doc()->getShowTabBar())
+  if ( !m_pView->koDocument()->isReadWrite()|| !m_pView->doc()->getShowTabBar() || m_pView->activeTable()->isProtected())
         return;
     slotRename();
 }

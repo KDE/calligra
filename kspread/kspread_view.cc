@@ -1968,7 +1968,7 @@ void KSpreadView::updateEditWidget()
     int row    = m_pCanvas->markerRow();
 
     KSpreadCell * cell = m_pTable->cellAt( column, row );
-    bool active = activeTable()->getShowFormula() 
+    bool active = activeTable()->getShowFormula()
       && !( m_pTable->isProtected() && cell && cell->isHideFormula( column, row ) );
 
     if ( m_pTable && !m_pTable->isProtected() )
@@ -1979,7 +1979,7 @@ void KSpreadView::updateEditWidget()
     }
 
     if ( !cell )
-    {      
+    {
         editWidget()->setText( "" );
         if ( m_pTable->isProtected() )
           editWidget()->setEnabled( false );
@@ -3081,7 +3081,7 @@ void KSpreadView::insertTable()
 {
   if ( m_pDoc->map()->isProtected() )
   {
-    KMessageBox::error( 0, i18n ( "You cannot change a protected sheet" ) ); 
+    KMessageBox::error( 0, i18n ( "You cannot change a protected sheet" ) );
     return;
   }
   m_pDoc->emitBeginOperation(false);
@@ -3989,7 +3989,7 @@ void KSpreadView::toggleProtectSheet( bool mode )
      m_pTable->setProtected( QCString() );
    }
    m_pDoc->setModified( true );
-   adjustActions( !mode );   
+   adjustActions( !mode );
    m_pDoc->emitBeginOperation();
    m_pTable->setRegionPaintDirty( QRect(QPoint( 0, 0 ), QPoint( KS_colMax, KS_rowMax ) ) );
    refreshView();
@@ -4647,10 +4647,11 @@ void KSpreadView::popupRowMenu(const QPoint & _point )
     bool isProtected = m_pTable->isProtected();
 
     if ( !isProtected )
-      m_cellLayout->plug( m_pPopupRow );
-    m_pPopupRow->insertSeparator();
-    if ( !isProtected )
-      m_cut->plug( m_pPopupRow );
+    {
+        m_cellLayout->plug( m_pPopupRow );
+        m_pPopupRow->insertSeparator();
+        m_cut->plug( m_pPopupRow );
+    }
     m_copy->plug( m_pPopupRow );
     if ( !isProtected )
     {
@@ -4718,11 +4719,11 @@ void KSpreadView::slotPopupAdjustRow()
 
 void KSpreadView::slotListChoosePopupMenu( )
 {
- assert( m_pTable );
- delete m_popupListChoose;
-
  if(!koDocument()->isReadWrite() )
    return;
+
+ assert( m_pTable );
+ delete m_popupListChoose;
 
  m_popupListChoose = new QPopupMenu();
  int id = 0;
@@ -4824,7 +4825,7 @@ void KSpreadView::openPopupMenu( const QPoint & _point )
     KSpreadCell *cell = m_pTable->cellAt( m_pCanvas->markerColumn(), m_pCanvas->markerRow() );
 
     bool isProtected = m_pTable->isProtected();
-    if ( !cell->isDefault() && cell->notProtected( m_pCanvas->markerColumn(), m_pCanvas->markerRow() ) 
+    if ( !cell->isDefault() && cell->notProtected( m_pCanvas->markerColumn(), m_pCanvas->markerRow() )
          && ( selection().width() == 1 ) && ( selection().height() == 1 ) )
       isProtected = false;
 
