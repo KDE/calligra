@@ -317,7 +317,7 @@ void OoImpressImport::createDocumentContent( QDomDocument &doccontent )
         dp = drawPage.toElement();
         m_styleStack.clear(); // remove all styles
         fillStyleStack( dp );
-        m_styleStack.setPageMark();
+        m_styleStack.setMark( StyleStack::PageMark );
 
         // take care of a possible page background or slide transition or sound
         if ( m_styleStack.hasAttribute( "draw:fill" )
@@ -1168,8 +1168,13 @@ QDomElement OoImpressImport::parseTextBox( QDomDocument& doc, const QDomElement&
         QDomElement e;
         if ( name == "text:p" ) // text paragraph
             e = parseParagraph( doc, t );
+        else if ( name == "text:h" ) // heading - can this happen in ooimpress?
+        {
+            e = parseParagraph( doc, t );
+        }
         else if ( name == "text:unordered-list" || name == "text:ordered-list" ) // listitem
             e = parseList( doc, t );
+        // TODO text:sequence-decls
         else
         {
             kdDebug(30518) << "Unsupported texttype '" << name << "'" << endl;
@@ -1177,7 +1182,7 @@ QDomElement OoImpressImport::parseTextBox( QDomDocument& doc, const QDomElement&
         }
 
         textObjectElement.appendChild( e );
-        m_styleStack.clearObjectMark(); // remove the styles added by the child-objects
+        m_styleStack.popToMark( StyleStack::ObjectMark ); // remove the styles added by the paragraph
     }
 
     return textObjectElement;
@@ -1197,6 +1202,7 @@ QDomElement OoImpressImport::parseList( QDomDocument& doc, const QDomElement& li
     QDomElement e;
     for ( QDomNode n = list.firstChild(); !n.isNull(); n = n.firstChild() )
     {
+        // DF: TODO: I feel some setMark/popToMark are missing here!
         e = n.toElement();
         QString name = e.tagName();
         if ( name == "text:unordered-list" )
@@ -1240,7 +1246,18 @@ QDomElement OoImpressImport::parseParagraph( QDomDocument& doc, const QDomElemen
 
     // parse the paragraph-properties
     fillStyleStack( paragraph );
+    m_styleStack.setMark( StyleStack::ParagraphMark );
 
+    // Style name
+    QString styleName = m_styleStack.userStyleName();
+    if ( !styleName.isEmpty() )
+    {
+        QDomElement nameElem = doc.createElement("NAME");
+        nameElem.setAttribute("value", styleName);
+        p.appendChild(nameElem);
+    }
+
+    // Paragraph alignment
     if ( m_styleStack.hasAttribute( "fo:text-align" ) )
     {
         QString align = m_styleStack.attribute( "fo:text-align" );
@@ -1293,6 +1310,13 @@ QDomElement OoImpressImport::parseParagraph( QDomDocument& doc, const QDomElemen
         {
             textData = "#";     // field placeholder
             appendField(doc, p, ts, pos);
+        }
+        else if ( tagName == "text:tab-stop" )
+        {
+            // KPresenter currently uses \t.
+            // Known bug: a line with only \t\t\t\t isn't loaded - XML (QDom) strips out whitespace.
+            // One more good reason to switch to <text:tab-stop> instead...
+            textData = '\t';
         }
         else if ( t.isNull() ) // no textnode, so maybe it's a text:span
         {
@@ -1352,8 +1376,11 @@ QDomElement OoImpressImport::parseParagraph( QDomDocument& doc, const QDomElemen
                 text.setAttribute( "family", m_styleStack.attribute( "fo:font-family" ).remove( "'" ) );
         }
         if ( m_styleStack.hasAttribute( "fo:font-size" ) )
-            text.setAttribute( "pointSize", KoUnit::parseValue( m_styleStack.attribute( "fo:font-size" ) ) );
-        if ( m_styleStack.hasAttribute( "fo:font-weight" ) )
+        {
+            double pointSize = m_styleStack.fontSize();
+            text.setAttribute( "pointSize", qRound(pointSize) ); // KPresenter uses toInt()!
+        }
+        if ( m_styleStack.hasAttribute( "fo:font-weight" ) ) // 3.10.24
             if ( m_styleStack.attribute( "fo:font-weight" ) == "bold" )
                 text.setAttribute( "bold", 1 );
         if ( m_styleStack.hasAttribute( "fo:font-style" ) )
@@ -1481,8 +1508,7 @@ QDomElement OoImpressImport::parseParagraph( QDomDocument& doc, const QDomElemen
 
         appendShadow( doc, p ); // this is necessary to take care of shadowed paragraphs
         p.appendChild( text );
-        m_styleStack.clearObjectMark(); // remove possible text:span styles from the stack
-        // DF: this looks wrong to me. We're losing the text:p styles too!
+        m_styleStack.popToMark( StyleStack::ParagraphMark ); // remove possible text:span styles from the stack
 
     } // for each text span
 
@@ -1635,18 +1661,19 @@ QString OoImpressImport::storeSound(const QDomElement & object, QDomElement & p,
 
 void OoImpressImport::storeObjectStyles( const QDomElement& object )
 {
-    m_styleStack.clearPageMark(); // remove styles of previous object
+    m_styleStack.popToMark( StyleStack::PageMark ); // remove styles of previous object
     fillStyleStack( object );
-    m_styleStack.setObjectMark();
+    m_styleStack.setMark( StyleStack::ObjectMark );
 }
 
 QDomElement OoImpressImport::saveHelper(const QString &tmpText, QDomDocument &doc)
 {
     QDomElement element=doc.createElement("TEXT");
 
-    if(tmpText.stripWhiteSpace().isEmpty())
+    if(tmpText.stripWhiteSpace().isEmpty()) // ### careful, this also strips \t and \n ....
         // working around a bug in QDom
         element.setAttribute("whitespace", tmpText.length());
+
     element.appendChild(doc.createTextNode(tmpText));
     return element;
 }
