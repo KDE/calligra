@@ -34,6 +34,7 @@
 
 #include "mailmerge_interface.h"
 #include "KWordMailMergeDatabaseIface.h"
+#include <koffice_export.h>
 
 class QListBox;
 class QPushButton;
@@ -53,7 +54,7 @@ class QVBox;
  *
  ******************************************************************/
 
-class KWMailMergeDataBase: public QObject,KWordMailMergeDatabaseIface
+class KWORD_EXPORT KWMailMergeDataBase: public QObject,KWordMailMergeDatabaseIface
 {
 Q_OBJECT
 

@@ -21,10 +21,10 @@
 #define __FLATTENCMD_H__
 
 #include <commands/vreplacingcmd.h>
-
+#include <koffice_export.h>
 class VSubpath;
 
-class VFlattenCmd : public VReplacingCmd
+class KARBONCOMMAND_EXPORT VFlattenCmd : public VReplacingCmd
 {
 public:
 	VFlattenCmd( VDocument *doc, double flatness );

@@ -1086,7 +1086,7 @@ private:
 
 // ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-class KoTextFormatterBase
+class KOTEXT_EXPORT KoTextFormatterBase
 {
 public:
     KoTextFormatterBase();

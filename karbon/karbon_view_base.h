@@ -27,6 +27,7 @@
 
 #include <koView.h>
 #include <koPoint.h>
+#include <koffice_export.h>
 
 class KarbonPartBase;
 class VPainterFactory;
@@ -34,7 +35,7 @@ class VCanvas;
 class VTool;
 class KoRect;
 
-class KarbonViewBase : public KoView
+class KARBONBASE_EXPORT KarbonViewBase : public KoView
 {
 public:
 	KarbonViewBase( KarbonPartBase* part, QWidget* parent = 0L, const char* name = 0L );

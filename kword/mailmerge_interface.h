@@ -26,7 +26,7 @@
 #include <qmap.h>
 #include <qobject.h>
 #include <dcopobject.h>
-
+#include <koffice_export.h>
 typedef QMap<QString,QString> DbRecord;
 #define KWSLUnspecified		0
 #define KWSLEdit		1
@@ -43,7 +43,7 @@ typedef QMap<QString,QString> DbRecord;
  *
  ******************************************************************/
 
-class KWMailMergeDataSource: public QObject, public DCOPObject
+class KWORD_EXPORT KWMailMergeDataSource: public QObject, public DCOPObject
 {
     Q_OBJECT
     K_DCOP

@@ -118,7 +118,7 @@ private:
 // This is a first attempt at a pattern chooser widget abstraction which is at least
 // useful for two applications(karbon and krita). It is really a light version of
 // kis_patternchooser. (Rob)
-class KoPatternChooser : public QWidget
+class KOPAINTER_EXPORT KoPatternChooser : public QWidget
 {
   Q_OBJECT
 public:

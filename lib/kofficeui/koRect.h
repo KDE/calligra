@@ -114,8 +114,8 @@ private:
 
 KoRect operator|(const KoRect &lhs, const KoRect &rhs);
 KoRect operator&(const KoRect &lhs, const KoRect &rhs);
-bool operator==(const KoRect &lhs, const KoRect &rhs);
-bool operator!=(const KoRect &lhs, const KoRect &rhs);
+KOFFICEUI_EXPORT bool operator==(const KoRect &lhs, const KoRect &rhs);
+KOFFICEUI_EXPORT bool operator!=(const KoRect &lhs, const KoRect &rhs);
 
 
 /** Show the position and size of a rectangle (use within kdDebug) */

@@ -498,7 +498,7 @@ public: // made public for KWTextFrameSet...
      * See also the place-holder command (in fact an empty macro-command is created
      * right at the beginning, so that it's possible to undo at any time).
      */
-    KOTEXT_EXPORT struct UndoRedoInfo { // borrowed from QTextEdit
+    struct KOTEXT_EXPORT UndoRedoInfo { // borrowed from QTextEdit
         enum Type { Invalid, Insert, Delete, Return, RemoveSelected };
         UndoRedoInfo( KoTextObject* textobj );
         ~UndoRedoInfo() {}

@@ -25,7 +25,7 @@
 #include <qdockwindow.h>
 
 #include <kaction.h>
-
+#include <koffice_export.h>
 class QPixmap;
 class QLabel;
 class QSimpleRichText;
@@ -208,7 +208,7 @@ class KoContextHelpPopup : public QWidget
  * This action displays on demand a context help in a popup.
  * The context help is set by the updateHelp slot.
  */
-class KoContextHelpAction : public KToggleAction
+class KOFFICEUI_EXPORT KoContextHelpAction : public KToggleAction
 {
 	Q_OBJECT
 
