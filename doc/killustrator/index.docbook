@@ -3,6 +3,7 @@
  <!ENTITY % addindex "IGNORE">
  <![ %addindex; [ <!ENTITY docindex SYSTEM "docindex.docbook"> ]]>
 ]>
+
 <book lang="en">
 <bookinfo>
 <title>The KIllustrator Handbook</title>
@@ -14,25 +15,18 @@
 <firstname>Hagen</firstname>
 <surname>Höpfner</surname>
 <affiliation>
-<address>
-<email><ulink url="mailto:Hagen.Hoepfner@gmx.de">Hagen.Hoepfner@gmx.de</ulink></email>
-</address>
+<address><email>Hagen.Hoepfner@gmx.de</email></address>
 </affiliation>
 </author>
 <date>08/11/1999</date>
-<releaseinfo>0.7.1</releaseinfo>
+<releaseinfo>0.07.01</releaseinfo>
 <abstract>
 <para>This Handbook describes KIllustrator Version 0.7.1 by Kai-Uwe Sattler.</para>
 </abstract>
 <keywordset>
+<keyword>KDE</keyword>
 <keyword>KIllustrator</keyword>
 </keywordset>
-<revhistory>
-<revision>
-<revnumber>0.3.1</revnumber>
-<date>08. November 1999</date>
-</revision>
-</revhistory>
 </bookinfo>
 
 <chapter id="introduction">

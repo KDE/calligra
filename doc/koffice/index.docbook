@@ -6,39 +6,22 @@
  <![ %addindex; [ <!ENTITY kdedocindex SYSTEM "docindex.docbook"> ]]>
 ]>
 
-<!-- kdoctemplate v0.8 October 1 1999 -->
-
-<book id="koffice" lang="en">
-
-
+<book lang="en">
 <bookinfo>
-
 <title>KOffice</title>
 <subtitle>A General Introduction</subtitle>
 <authorgroup>
 <author>
   <firstname>Jost</firstname>
   <surname>Schenck</surname>
-  <!-- Finalize this -->
-  <!-- <email>jost@schenck.de</email> --> 
+  <affiliation>
+  <address><email>jost@schenck.de</email></address>
+  </affiliation> 
 </author>
 </authorgroup> 
 
-<keywordset>
-<keyword>KDE</keyword>
-<keyword>KOffice</keyword>
-</keywordset>
-
-<!--
-  Date and version information of the documentation.
-  Don't forget to include this last date and this last revision number,
-  we need them for translation coordination!
-  Please respect the format of the date (DD/MM/YYYY) and of the version
-  (Major.minor.lesser), it could be used by automation scripts
--->
-
 <date>21/03/2000</date>
-<releaseinfo>0.1.1</releaseinfo>
+<releaseinfo>0.01.01</releaseinfo>
 
 <revhistory>
 <revision>
@@ -56,18 +39,21 @@ some minor changes (couldn't stop myself :)</revremark>
 </revision>
 </revhistory>
 
-<!-- Abstract about this handbook -->
-
 <abstract>
 <para>
 &KOffice; is an integrated office suite for the K Desktop Environment (KDE).
 </para>
 </abstract>
 
+<keywordset>
+<keyword>KDE</keyword>
+<keyword>KOffice</keyword>
+</keywordset>
+
 </bookinfo>
 
 
-<chapter ID="TODO">
+<chapter id="todo">
 <title>Still to be done in this manual</title>
 
 <para>
@@ -95,10 +81,10 @@ Jost <email>jost@schenck.de</email>
 </chapter>
 
 
-<chapter ID="Introduction">
+<chapter ID="introduction">
 <title>Introduction</title>
 
-<sect1 id="introintro">
+<sect1 id="intro-intro">
 <title>Introduction</title>
 
 <para>

@@ -3,49 +3,49 @@
  <!ENTITY % addindex "IGNORE">
  <![ %addindex; [ <!ENTITY kdedocindex SYSTEM "docindex.docbook"> ]]>
 ]>
-<!-- kdoctemplate v0.8 October 1 1999 -->
-<book id="kspread" lang="en">
+
+<book lang="en">
 <bookinfo>
 <title>The KSpread Users Manual</title>
-<authorgroup><author><firstname>Frank-Andreas</firstname><surname>Schmidt</surname>
-<!-- Finalize this -->
-<!-- <email>frank-andreas.schmidt@t-online.de</email> --> 
-</author></authorgroup> 
-<keywordset>
-<keyword>KDE</keyword>
-<keyword>KSpread</keyword>
-<keyword>KOffice</keyword>
-<keyword>Spreadsheet</keyword>
-</keywordset>
-<!-- Date and version information of the documentation
-Don't forget to include this last date and this last revision number, we
-need them for translation coordination !
-Please respect the format of the date (DD/MM/YYYY) and of the version
-(Major.minor.lesser), it could be used by automation scripts -->
+<authorgroup>
+<author>
+<firstname>Frank-Andreas</firstname>
+<surname>Schmidt</surname>
+<affiliation>
+<address><email>frank-andreas.schmidt@t-online.de</email></address>
+</affiliation>
+</author>
+</authorgroup> 
 
 <date>30/01/2000</date>
-<releaseinfo>0.1.0</releaseinfo>
-
+<releaseinfo>0.01.00</releaseinfo>
 <revhistory>
 <revision>
-<revnumber>0.1.0</revnumber>
+<revnumber>0.01.00</revnumber>
 <date>30/01/2000</date>
 <authorinitials>FSch</authorinitials>
 <revremark>First try to put a structure to doc based on MPM´s outline</revremark>
 </revision>
 </revhistory>
 
-<!-- Abstract about this handbook -->
-
 <abstract>
 <para>
-<application>KSpread</application> is complete a spreadsheet program.
+&KSpread; is complete a spreadsheet program.
 It is part of the KOffice suite of utilities.
 </para>
 </abstract>
 
+<keywordset>
+<keyword>KDE</keyword>
+<keyword>KSpread</keyword>
+<keyword>KOffice</keyword>
+<keyword>Spreadsheet</keyword>
+</keywordset>
+
 </bookinfo>
-<chapter ID="TODO"><title>Still to be done on this manual</title>
+
+<chapter ID="todo">
+<title>Still to be done on this manual</title>
 
 <para>This is a list of things which still need work in this manual:</para>
 

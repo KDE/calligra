@@ -3,28 +3,22 @@
  <!ENTITY % addindex "IGNORE">
  <![ %addindex; [ <!ENTITY kdedocindex SYSTEM "docindex.docbook"> ]]>
 ]>
-<!-- kdoctemplate v0.8 October 1 1999 -->
-<book id="kword" lang="en">
+
+<book lang="en">
 <bookinfo>
 <title>The KWord Users Manual</title>
-<authorgroup><author><firstname>Mike</firstname><surname>McBride</surname>
-<!-- Finalize this -->
-<!-- <email>mmcbride@ematic.com</email> --> 
-</author></authorgroup> 
-<keywordset>
-<keyword>KDE</keyword>
-<keyword>KWord</keyword>
-<keyword>koffice</keyword>
-<keyword>WordProcessing</keyword>
-</keywordset>
-<!-- Date and version information of the documentation
-Don't forget to include this last date and this last revision number, we
-need them for translation coordination !
-Please respect the format of the date (DD/MM/YYYY) and of the version
-(Major.minor.lesser), it could be used by automation scripts -->
+<authorgroup>
+<author>
+<firstname>Mike</firstname>
+<surname>McBride</surname>
+<affiliation>
+<address><email>mmcbride@ematic.com</email></address>
+</affiliation>
+</author>
+</authorgroup> 
 
-<date>20/5/2000</date>
-<releaseinfo>0.1.6</releaseinfo>
+<date>20/05/2000</date>
+<releaseinfo>0.01.06</releaseinfo>
 
 <revhistory>
 <revision>
@@ -79,7 +73,6 @@ Please respect the format of the date (DD/MM/YYYY) and of the version
 <revremark>Substantial updates.  Moved all graphics elements to /pics directories.</revremark>
 </revision>
 </revhistory>
-<!-- Abstract about this handbook -->
 
 <abstract>
 <para>
@@ -87,9 +80,17 @@ Please respect the format of the date (DD/MM/YYYY) and of the version
 </para>
 </abstract>
 
+<keywordset>
+<keyword>KDE</keyword>
+<keyword>KWord</keyword>
+<keyword>kOffice</keyword>
+<keyword>word processing</keyword>
+</keywordset>
+
 </bookinfo>
+
 <!-- **************************************************************************************************** -->   
-<chapter ID="TODO"><title>Current status of this manual</title>
+<chapter ID="todo"><title>Current status of this manual</title>
 <Sect1 id="todo1"><title>Whats done and what needs to be done</title>
 <sect2 id="done"><title>What is done</title>
 <para>Sections 1-4 have been reviewed, snapshots updated, icons correct, etc.  These sections are up to date</para>
@@ -2796,7 +2797,7 @@ This program is licensed under the terms of the <ulink url="common/gpl-license.h
 <glossentry><glossterm><anchor id="defvectorimage">Vector Image</glossterm><glossdef><para>A vector based graphic is described in terms of lines and shapes, not in terms of dots.  Because of this, Clipart usually scales better than bit-mapped images. </para></glossdef></glossentry>
 <glossentry><glossterm><anchor id="defviews">Views</glossterm><glossdef><para></para></glossdef></glossentry>
 <glossentry><glossterm><anchor id="defwysiwyg">WYSIWYG</glossterm><glossdef><para>Stands for What You See Is What You Get.  KWord is a WYSIWYG word processor, which means that the document will appear the same on the screen while you are editing it, as it will on the printed page.</para></glossdef></glossentry>
-<glossentry><glossterm><anchor id="defx">X Windows system</glossterm><glossdef><para>The X Windows System (also known simply as 'X') is required for KOffice to operate.  More information on X windows for linux can be found at <ulink url="">STUFF</ulink></para></glossdef></glossentry>
+<glossentry><glossterm><anchor id="defx">X-Window system</glossterm><glossdef><para>The X-Window System (also known simply as 'X') is required for KOffice to operate.  More information on X-Window for linux can be found at <ulink url="">STUFF</ulink></para></glossdef></glossentry>
 </glossary>
 
 <![ %addindex; [ &kdedocindex; ]]>

@@ -3,6 +3,7 @@
  <!ENTITY % addindex "IGNORE">
  <![ %addindex; [ <!ENTITY docindex SYSTEM "docindex.docbook"> ]]>
 ]>
+
 <book lang="en">
 <bookinfo>
 <title>The Ktables Handbook</title>
@@ -10,19 +11,21 @@
 <author>
 <firstname>Ørn</firstname>
 <othername>E.</othername>
-<surname>Hansen </surname>
+<surname>Hansen</surname>
 <affiliation>
-<address><email><ulink url="mailto:hanseno@mail.bip.net">hanseno@mail.bip.net</ulink></email></address>
+<address><email>hanseno@mail.bip.net</email></address>
 </affiliation>
 </author>
 </authorgroup>
-<releaseinfo>Version 0.1</releaseinfo>
-<date>Mið Júl  7 17:04:49 CEST 1999</date>
+<date>07/07/1999</date>
+<releaseinfo>0.01.00</releaseinfo>
 <abstract>
 <para>This Handbook describes Ktables Version 0.1</para>
 </abstract>
 <keywordset>
 <keyword>KDE</keyword>
+<keyword>katabase</keyword>
+<keyword>ktables</keyword>
 </keywordset>
 </bookinfo>
 
@@ -40,8 +43,8 @@
 <chapter id="installation">
 <title>Installation</title>
 
-<sect1 id="how-to-obtain-ktables-">
-<title>How to obtain Ktables </title>
+<sect1 id="how-to-obtain-ktables">
+<title>How to obtain Ktables</title>
 
 <para></para>
 
@@ -73,7 +76,7 @@ Should you run into problems please report them to the the author at
 </sect1>
 </chapter>
 
-<chapter id="usage-">
+<chapter id="usage">
 <title>Usage </title>
 
 <sect1 id="general-usage">
@@ -119,11 +122,3 @@ Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.</para>
 </chapter>
 <![ %addindex; [ &docindex; ]]>
 </book>
-<!--
-Local Variables:
-mode: sgml
-sgml-omittag: nil
-sgml-shorttag: t
-sgml-general-insert-case: lower
-End:
--->

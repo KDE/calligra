@@ -6,37 +6,21 @@
  <![ %addindex; [ <!ENTITY kdedocindex SYSTEM "docindex.docbook"> ]]>
 ]>
 
-<!-- kdoctemplate v0.8 October 1 1999 -->
-
-<book id="kpresenter" lang="en">
-
-<!-- oooooooooooooooooooooooooooooooooooooooooooooooooooooo -->
-
+<book lang="en">
 <bookinfo>
-
 <title>The KPresenter User's Manual</title>
-
 <authorgroup>
 <author>
 <firstname>Krishna</firstname>
 <surname>Tateneni</surname>
-<!-- Find out how to include email address later
-  <email>tateneni@pluto.njcc.com</email>
--->
+<affiliation>
+<address><email>tateneni@pluto.njcc.com</email></address>
+</affiliation>
 </author>
 </authorgroup>
 
-<keywordset>
-<keyword>KDE</keyword>
-<keyword>KPresenter</keyword>
-<keyword>KOffice</keyword>
-<keyword>Graphics</keyword>
-<keyword>Presentations</keyword>
-</keywordset>
-
 <date>31/01/2000</date>
 <releaseinfo>0.0.1</releaseinfo>
-
 <revhistory>
 <revision>
 <revnumber>0.0.1</revnumber>
@@ -49,10 +33,18 @@
 
 <abstract>
 <para>
-<application>KPresenter</application> is the presentations
-program in the KOffice suite of productivity applications.
+&KPresenter; is the presentations program in the KOffice
+suite of productivity applications.
 </para>
 </abstract>
+
+<keywordset>
+<keyword>KDE</keyword>
+<keyword>KPresenter</keyword>
+<keyword>KOffice</keyword>
+<keyword>Graphics</keyword>
+<keyword>Presentations</keyword>
+</keywordset>
 
 </bookinfo>
 
