@@ -192,7 +192,7 @@ KoFilter::ConversionStatus ExcelImport::convert( const QCString& from, const QCS
 
   QDomElement map;
   map = mainDocument.createElement( "map" );
-  map.setAttribute( "activeTable", "Table1" );
+  map.setAttribute( "activeTable", "Table1" ); // dummy
   spreadsheet.appendChild( map );
 
   for( unsigned i=0; i < workbook->sheetCount(); i++ )
@@ -205,6 +205,9 @@ KoFilter::ConversionStatus ExcelImport::convert( const QCString& from, const QCS
     table = mainDocument.createElement( "table" );
     table.setAttribute( "name", string( sheet->name() ).string() );
     map.appendChild( table );
+
+    // FIXME the real active sheet
+    if( i == 0 ) map.setAttribute( "activeTable",string( sheet->name() ).string() );
 
     for( unsigned i = 0; i <= sheet->maxColumn(); i++ )
     {
