@@ -384,29 +384,6 @@ void KSpreadCell::setValue( const KSpreadValue& v )
     clearAllErrors();
     d->value = v;
 
-    //set strText and strOutText
-    //TODO finish it, then remove from other places
-    switch (value().type()) {
-      case KSpreadValue::Empty:
-        d->strOutText = d->strText = QString::null;
-      break;
-      case KSpreadValue::Boolean:
-        d->strOutText = d->strText  = ( value().asBoolean() ? i18n("True") : i18n("False") );
-      break;
-      case KSpreadValue::Integer:
-      break;
-      case KSpreadValue::Float:
-      break;
-      case KSpreadValue::String:
-      break;
-      case KSpreadValue::Array:
-      break;
-      case KSpreadValue::CellRange: // not used yet
-      break;
-      case KSpreadValue::Error:
-      break;
-    };
-
     // Free all content data
     if (d->hasExtra())
     {
