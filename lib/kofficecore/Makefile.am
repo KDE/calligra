@@ -8,7 +8,7 @@ libkofficecore_la_LIBADD  = \
 
 ####### Files
 
-lib_LTLIBRARIES = libkofficecore.la
+lib_LTLIBRARIES = libkofficecore.la libkodocinfopropspage.la
 
 libkofficecore_la_SOURCES = koDocument.cc \
 	koStream.cc koFilterManager.cc \
@@ -31,8 +31,17 @@ include_HEADERS = koFilter.h \
 	koFilterDialog.h koView.h koFrame.h handler.h koDocumentChild.h \
 	koDocumentInfoDlg.h
 
-libkofficecore_la_METASOURCES = AUTO
+#libkofficecore_la_METASOURCES = AUTO
+
+libkodocinfopropspage_la_SOURCES = koDocInfoPropsFactory.cc
+libkodocinfopropspage_la_LIBADD = libkofficecore.la
+libkodocinfopropspage_la_LDFLAGS = $(all_libraries) -module -no-undefined
+#libkodocinfopropspage_la_METASOURCES = AUTO
+
+METASOURCES = AUTO
 
 rcdir = $(kde_datadir)/koffice
 rc_DATA = koffice_shell.rc
 
+service_DATA = kodocinfopropspage.desktop
+servicedir = $(kde_servicesdir)

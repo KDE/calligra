@@ -21,20 +21,31 @@
 #ifndef __koDocumentInfoDlg_h__
 #define __koDocumentInfoDlg_h__
 
-#include <kdialogbase.h>
+#include <qobject.h>
 
+#include <kpropsdlg.h>
+
+class KDialogBase;
 class KoDocumentInfo;
 class KoDocumentInfoAuthor;
 class KoDocumentInfoAbout;
+class KTarEntry;
 
-class KoDocumentInfoDlg : public KDialogBase
+class KoDocumentInfoDlg : public QObject
 {
   Q_OBJECT
 public:
-  KoDocumentInfoDlg( KoDocumentInfo *docInfo, QWidget *parent = 0, const char *name = 0 );
+  KoDocumentInfoDlg( KoDocumentInfo *docInfo, QWidget *parent = 0, const char *name = 0,
+		     KDialogBase *dialog = 0 );
   virtual ~KoDocumentInfoDlg();
 
+  int exec();
+  KDialogBase *dialog() const;
+
   void save();
+
+signals:
+  void changed();
 
 private:
   void addAuthorPage( KoDocumentInfoAuthor *authorInfo );
@@ -45,6 +56,21 @@ private:
 
   class KoDocumentInfoDlgPrivate;
   KoDocumentInfoDlgPrivate *d;
+};
+
+class KoDocumentInfoPropsPage : public PropsPage
+{
+  Q_OBJECT
+public:
+  KoDocumentInfoPropsPage( PropertiesDialog *props );
+  virtual ~KoDocumentInfoPropsPage();
+
+  virtual void applyChanges();
+
+private:
+  void copy( const QString &path, const KTarEntry *entry );
+  class KoDocumentInfoPropsPagePrivate;
+  KoDocumentInfoPropsPagePrivate *d;
 };
 
 #endif
