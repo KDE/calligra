@@ -426,11 +426,11 @@ void KoStyleManager::slotApply() {
 void KoStyleManager::apply() {
     noSignals=true;
     for (unsigned int i =0 ; m_origStyles.count() > i ; i++) {
-        if(m_origStyles.at(i) == 0) {           // newly added style
+        if(m_origStyles.at(i) == 0L && m_changedStyles.at(i)!=0L) {           // newly added style
             kdDebug(32500) << "adding new " << m_changedStyles.at(i)->name() << " (" << i << ")" << endl;
             KoStyle *tmp = addStyleTemplate(m_changedStyles.take(i));
             m_changedStyles.insert(i, tmp);
-        } else if(m_changedStyles.at(i) == 0) { // deleted style
+        } else if(m_changedStyles.at(i) == 0L && m_origStyles.at(i) != 0L) { // deleted style
             kdDebug(32500) << "deleting orig " << m_origStyles.at(i)->name() << " (" << i << ")" << endl;
 
             KoStyle *orig = m_origStyles.at(i);
@@ -438,7 +438,7 @@ void KoStyleManager::apply() {
             removeStyleTemplate( orig );
             // Note that the style is never deleted (we'll need it for undo/redo purposes)
 
-        } else /*if(m_changedStyles.at(i) != m_origStyles.at(i))*/ {
+        } else if(m_changedStyles.at(i) != 0L && m_origStyles.at(i)!=0L) {
             kdDebug(32500) << "update style " << m_changedStyles.at(i)->name() << " (" << i << ")" << endl;
                                                 // simply updated style
             KoStyle *orig = m_origStyles.at(i);
