@@ -573,7 +573,7 @@ bool kspreadfunc_dollarde( KSContext& context )
   double fl = floor( d );
   double r  = d - fl;
 
-  context.setValue( new KSValue( fl + ( r * pow( 10, n ) / (double) f ) ) );
+  context.setValue( new KSValue( fl + ( r * pow( 10.0, n ) / (double) f ) ) );
   return true;
 }
 
@@ -608,7 +608,7 @@ bool kspreadfunc_dollarfr( KSContext& context )
   double fl = floor( d );
   double r  = d - fl;
 
-  context.setValue( new KSValue( fl + ( ( r * (double) f ) / pow( 10, n ) ) ) );
+  context.setValue( new KSValue( fl + ( ( r * (double) f ) / pow( 10.0, n ) ) ) );
   return true;
 }
 
