@@ -342,7 +342,7 @@ QString KWFootNoteVariable::applyStyle(  )
     KoParagCounter tmpCounter = (m_noteType == FootNote) ? settings->footNoteCounter() : settings->endNoteCounter();
 
     QString tmp;
-    int val = m_numDisplay;
+    int val = m_numDisplay+ tmpCounter.startNumber()-1;
     switch ( tmpCounter.style() )
     {
     case KoParagCounter::STYLE_NUM:
