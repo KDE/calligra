@@ -726,8 +726,8 @@ void KWView::setupActions()
     connect( actionFormatFontSize, SIGNAL( fontSizeChanged( int ) ),
              this, SLOT( textSizeSelected( int ) ) );
 
-    actionFontSizeIncrease = new KAction( i18n("Increase Font Size") , CTRL + Key_Greater, this, SLOT( increaseFontSize() ), actionCollection(), "increase_fontsize" );
-    actionFontSizeDecrease = new KAction( i18n("Decrease Font Size"), CTRL + Key_Less, this, SLOT( decreaseFontSize() ), actionCollection(), "decrease_fontsize" );
+    actionFontSizeIncrease = new KAction( i18n("Increase Font Size"), "fontsizeup", CTRL + Key_Greater, this, SLOT( increaseFontSize() ), actionCollection(), "increase_fontsize" );
+    actionFontSizeDecrease = new KAction( i18n("Decrease Font Size"), "fontsizedown", CTRL + Key_Less, this, SLOT( decreaseFontSize() ), actionCollection(), "decrease_fontsize" );
 
 #ifdef KFONTACTION_HAS_CRITERIA_ARG
     actionFormatFontFamily = new KFontAction( KFontChooser::SmoothScalableFonts,
