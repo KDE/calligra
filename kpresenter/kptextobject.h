@@ -114,7 +114,7 @@ public:
 			QDomElement &parentElem,
 			int from /* default 0 */,
 			int to /* default length()-2 */ );
-    KoParagLayout loadParagLayout( QDomElement & parentElem);
+    KoParagLayout loadParagLayout( QDomElement & parentElem, KPresenterDoc *doc, bool useRefStyle);
 
     KoTextFormat loadFormat( QDomElement &n );
 

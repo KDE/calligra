@@ -1712,7 +1712,7 @@ KoTextCursor * KPrPasteTextCommand::execute( KoTextCursor *c )
             if ( item == 0 ) // This paragraph existed, store its parag layout
                 m_oldParagLayout = parag->paragLayout();
 
-            KoParagLayout paragLayout = textdoc->textObject()->loadParagLayout(paragElem);
+            KoParagLayout paragLayout = textdoc->textObject()->loadParagLayout(paragElem, textdoc->textObject()->kPresenterDocument(), true);
             parag->setParagLayout( paragLayout );
         }
         // Now load (parse) and apply the character formatting

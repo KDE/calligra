@@ -468,7 +468,7 @@ void KPTextObject::loadKTextObject( const QDomElement &elem, int type )
         if ( e.tagName() == tagP ) {
             QDomElement n = e.firstChild().toElement();
 
-            KoParagLayout paragLayout = loadParagLayout(e);
+            KoParagLayout paragLayout = loadParagLayout(e, m_doc, true);
             //compatibility
             if(type!=-1)
             {
@@ -503,7 +503,6 @@ void KPTextObject::loadKTextObject( const QDomElement &elem, int type )
                 paragLayout.margins[ QStyleSheetItem::MarginTop ] = topBorder;
             if ( paragLayout.margins[ QStyleSheetItem::MarginBottom ] == 0 )
                 paragLayout.margins[ QStyleSheetItem::MarginBottom ] = bottomBorder;
-
             lastParag->setParagLayout( paragLayout );
 
             if(e.hasAttribute(attrAlign))
@@ -618,9 +617,36 @@ KoTextFormat KPTextObject::loadFormat( QDomElement &n )
     return format;
 }
 
-KoParagLayout KPTextObject::loadParagLayout( QDomElement & parentElem)
+KoParagLayout KPTextObject::loadParagLayout( QDomElement & parentElem, KPresenterDoc *doc, bool findStyle)
 {
     KoParagLayout layout;
+
+    // Only when loading paragraphs, not when loading styles
+    if ( findStyle )
+    {
+        KoStyle *style;
+        // Name of the style. If there is no style, then we do not supply
+        // any default!
+        QDomElement element = parentElem.namedItem( "NAME" ).toElement();
+        if ( !element.isNull() )
+        {
+            QString styleName = element.attribute( "value" );
+            style = doc->styleCollection()->findStyle( styleName );
+            if (!style)
+            {
+                kdError(32001) << "Cannot find style \"" << styleName << "\" specified in paragraph LAYOUT - using Standard" << endl;
+                style = doc->styleCollection()->findStyle( "Standard" );
+            }
+            //else kdDebug() << "KoParagLayout::KoParagLayout setting style to " << style << " " << style->name() << endl;
+        }
+        else
+        {
+            kdError(32001) << "Missing NAME tag in paragraph LAYOUT - using Standard" << endl;
+            style = doc->styleCollection()->findStyle( "Standard" );
+        }
+        Q_ASSERT(style);
+        layout.style = style;
+    }
 
     QDomElement element = parentElem.namedItem( "INDENTS" ).toElement();
     if ( !element.isNull() )
@@ -744,7 +770,14 @@ KoParagLayout KPTextObject::loadParagLayout( QDomElement & parentElem)
 void KPTextObject::saveParagLayout( const KoParagLayout& layout, QDomElement & parentElem )
 {
     QDomDocument doc = parentElem.ownerDocument();
-    QDomElement element;
+    QDomElement element = doc.createElement( "NAME" );
+    parentElem.appendChild( element );
+    if ( layout.style )
+        element.setAttribute( "value", layout.style->name() );
+    else
+        kdWarning() << "KWTextParag::saveParagLayout: style==0L!" << endl;
+
+
     if ( layout.margins[QStyleSheetItem::MarginFirstLine] != 0 ||
          layout.margins[QStyleSheetItem::MarginLeft] != 0 ||
          layout.margins[QStyleSheetItem::MarginRight] != 0 )
