@@ -29,7 +29,7 @@
 KSpreadStyle::KSpreadStyle()
   : m_parent( 0 ),
     m_type( AUTO ),
-    m_usageCount( 1 ),
+    m_usageCount( 0 ),
     m_featuresSet( 0 ),
     m_alignX( KSpreadFormat::Undefined ),
     m_alignY( KSpreadFormat::Middle ),
@@ -88,6 +88,7 @@ KSpreadStyle::KSpreadStyle( KSpreadStyle * style )
     m_properties( style->m_properties )
 {
   kdDebug() << "Style constructor II" << endl;
+  kdDebug() << "This: " << this << " - " <<  m_parent << endl;
 }
 
 KSpreadStyle::~KSpreadStyle()
@@ -97,8 +98,6 @@ KSpreadStyle::~KSpreadStyle()
 
 void KSpreadStyle::saveXML( QDomDocument & doc, QDomElement & format ) const
 {
-  kdDebug() << "begin: saveXML" << endl;
-
   if ( featureSet( SAlignX ) && alignX() != KSpreadFormat::Undefined )
     format.setAttribute( "alignX", (int) m_alignX );
 
@@ -217,7 +216,6 @@ void KSpreadStyle::saveXML( QDomDocument & doc, QDomElement & format ) const
   }
 
   format.setAttribute( "type", m_type );
-  kdDebug() << "end: saveXML" << endl;
 }
 
 bool KSpreadStyle::loadXML( QDomElement & format )
@@ -490,6 +488,7 @@ bool KSpreadStyle::loadXML( QDomElement & format )
 
 void KSpreadStyle::setParent( KSpreadCustomStyle * parent )
 {
+  kdDebug() << "This: " << this << " - " << parent << endl;
   m_parent = parent;
   if ( m_parent )
     m_parentName = m_parent->name();
@@ -502,14 +501,65 @@ KSpreadCustomStyle * KSpreadStyle::parent() const
 
 bool KSpreadStyle::release() 
 {
+  --m_usageCount;
+
   if ( m_type == CUSTOM || m_type == BUILTIN )
     return false; // never delete builtin styles...
 
-  --m_usageCount;
   if ( m_usageCount < 1 )
     return true;
 
   return false;
+}
+
+void KSpreadStyle::addRef()
+{
+  ++m_usageCount;
+}
+
+bool KSpreadStyle::hasProperty( Properties p ) const 
+{
+  FlagsSet f;
+  switch( p )
+  {      
+   case PDontPrintText:
+    f = SDontPrintText;
+    break;
+   case PCustomFormat:
+    f = SCustomFormat;
+    break;
+   case PNotProtected:
+    f = SNotProtected;
+    break;
+   case PHideAll:
+    f = SHideAll;
+    break;
+   case PHideFormula:
+    f = SHideFormula;
+    break;
+   case PMultiRow:
+    f = SMultiRow;
+    break;
+   case PVerticalText:
+    f = SVerticalText;
+    break;
+   default:
+    kdWarning() << "Unhandled property" << endl;
+    return ( m_properties  & (uint) p ); 
+  }
+
+  return ( !m_parent || featureSet( f ) ? ( m_properties & (uint) p ) : m_parent->hasProperty( p ) );
+}
+
+bool KSpreadStyle::hasFeature( FlagsSet f ) const
+{
+  bool b = ( m_featuresSet & (uint) f );
+  
+  // check if feature is defined here or at parent level
+  if ( m_parent )
+    b = ( m_parent->hasFeature( f ) ? true : b );
+
+  return b;
 }
 
 QFont const & KSpreadStyle::font() const 
@@ -627,40 +677,6 @@ QString const & KSpreadStyle::postfix() const
   return ( !m_parent || featureSet( SPostfix ) ? m_postfix : m_parent->postfix() );   
 }
 
-bool KSpreadStyle::hasProperty( Properties p ) const 
-{
-  FlagsSet f;
-  switch( p )
-  {      
-   case PDontPrintText:
-    f = SDontPrintText;
-    break;
-   case PCustomFormat:
-    f = SCustomFormat;
-    break;
-   case PNotProtected:
-    f = SNotProtected;
-    break;
-   case PHideAll:
-    f = SHideAll;
-    break;
-   case PHideFormula:
-    f = SHideFormula;
-    break;
-   case PMultiRow:
-    f = SMultiRow;
-    break;
-   case PVerticalText:
-    f = SVerticalText;
-    break;
-   default:
-    kdWarning() << "Unhandled property" << endl;
-    return ( m_properties  & (uint) p ); 
-  }
-
-  return ( !m_parent || featureSet( f ) ? ( m_properties & (uint) p ) : m_parent->hasProperty( p ) );
-}
-
 
 
 KSpreadStyle * KSpreadStyle::setAlignX( KSpreadFormat::Align alignX )
@@ -697,11 +713,10 @@ KSpreadStyle * KSpreadStyle::setFont( QFont const & font )
 {
   if ( m_type != AUTO || m_usageCount > 1 )
   {
-    kdDebug() << "Setting font" << endl;
     KSpreadStyle * style = new KSpreadStyle( this );
     style->m_textFont = font;
     style->m_featuresSet |= SFont;
-    kdDebug() << "Setting font done" << endl;
+
     return style;
   }
 
@@ -1151,6 +1166,7 @@ KSpreadCustomStyle::KSpreadCustomStyle()
     m_name( "Default" )
 {
   kdDebug() << "CustomStyle constructor I" << endl;
+  m_parent = 0;
 }
 
 KSpreadCustomStyle::KSpreadCustomStyle( KSpreadStyle * parent, QString const & name )
@@ -1206,6 +1222,7 @@ KSpreadCustomStyle::KSpreadCustomStyle( QString const & name, KSpreadCustomStyle
     m_name( name )
 {
   kdDebug() << "CustomStyle constructor II" << endl;
+  kdDebug() << "This: " << this << " - " << parent << endl;
   m_parent = parent;
   if ( m_parent )
     m_parentName = m_parent->name();
@@ -1221,18 +1238,15 @@ void KSpreadCustomStyle::save( QDomDocument & doc, QDomElement & styles )
   if ( m_name.isEmpty() )
     return;
   
-  kdDebug() << "Saving..." << endl;
-
   QDomElement style( doc.createElement( "style" ) );
+  style.setAttribute( "type", (int) m_type );
   if ( m_parent )
     style.setAttribute( "parent", m_parent->name() );
   style.setAttribute( "name", m_name );
 
   QDomElement format( doc.createElement( "format" ) );
-  kdDebug() << "Saving format..." << endl;
   saveXML( doc, format );
   style.appendChild( format );
-  kdDebug() << "Saving done" << endl;
 
   styles.appendChild( style );
 }
@@ -1243,6 +1257,14 @@ bool KSpreadCustomStyle::loadXML( QDomElement const & style, QString const & nam
 
   if ( style.hasAttribute( "parent" ) )
     m_parentName = style.attribute( "parent" );
+
+  if ( !style.hasAttribute( "type" ) )
+    return false;
+
+  bool ok = true;
+  m_type = (StyleType) style.attribute( "type" ).toInt( &ok );
+  if ( !ok )
+    return false;
 
   QDomElement f( style.namedItem( "format" ).toElement() );
   if ( !f.isNull() )

@@ -529,7 +529,6 @@ void KSpreadCanvas::gotoLocation( QPoint location, KSpreadSheet* table,
     m_pView->updateEditWidgetOnPress();
 
   updatePosWidget();
-
 }
 
 
@@ -1426,7 +1425,10 @@ void KSpreadCanvas::dropEvent( QDropEvent * _ev )
   double ev_PosY = doc()->unzoomItY( _ev->pos().y() ) + yOffset();
 
   if ( r1.contains( QPoint( ev_PosX, ev_PosY ) ) )
+  {
     _ev->ignore( );
+    return;
+  }
   else
     _ev->accept( );
 

@@ -93,6 +93,10 @@ class KSpreadStyle
   bool loadXML( QDomElement & format );
 
   bool release();
+  void addRef();
+
+  bool   hasProperty( Properties p ) const;
+  bool   hasFeature( FlagsSet f ) const;
 
   QFont   const & font()    const;
   QPen    const & pen()     const;
@@ -120,8 +124,6 @@ class KSpreadStyle
   int    rotateAngle()     const;
   double indent()          const;
   double factor()          const;
-  bool   hasProperty( Properties p ) const;
-
 
   KSpreadStyle * setAlignX( KSpreadFormat::Align  alignX );
   KSpreadStyle * setAlignY( KSpreadFormat::AlignY alignY );
@@ -152,7 +154,6 @@ class KSpreadStyle
   KSpreadCustomStyle * parent() const;
   QString const & parentName() const { return m_parentName; }
   void setParent( KSpreadCustomStyle * parent );
-  uint features() const { return m_featuresSet; }
 
  protected:
   

@@ -29,7 +29,7 @@
 KSpreadStyleManager::KSpreadStyleManager()
   : m_defaultStyle( new KSpreadCustomStyle() )
 {
-  m_defaultStyle->setName( i18n( "Default" ) );
+  m_defaultStyle->setName( "Default" );
   m_defaultStyle->setType( KSpreadStyle::BUILTIN );
 }
 
@@ -105,6 +105,7 @@ bool KSpreadStyleManager::loadXML( QDomElement const & styles )
       if ( style->type() == KSpreadStyle::AUTO )
         style->setType( KSpreadStyle::CUSTOM );
       m_styles[name] = style;
+      kdDebug() << "Style " << name << ": " << style << endl;
     }
 
     e = e.nextSibling().toElement();
@@ -123,7 +124,7 @@ bool KSpreadStyleManager::loadXML( QDomElement const & styles )
     ++iter;
   }
 
-  m_defaultStyle->setName( i18n( "Default" ) );
+  m_defaultStyle->setName( "Default" );
   m_defaultStyle->setType( KSpreadStyle::BUILTIN );
 
   return true;
@@ -135,11 +136,35 @@ KSpreadCustomStyle * KSpreadStyleManager::style( QString const & name ) const
 
   if ( iter != m_styles.end() )
     return iter.data();
-
+ 
   if ( name == i18n( "Default" ) || name == "Default" )
     return m_defaultStyle;
 
   return 0;
+}
+
+void KSpreadStyleManager::takeStyle( KSpreadCustomStyle * style )
+{
+  KSpreadCustomStyle * parent = style->parent();
+
+  Styles::iterator iter = m_styles.begin();
+  Styles::iterator end  = m_styles.end();
+  
+  while ( iter != end )
+  {
+    if ( iter.data()->parent() == style )
+      iter.data()->setParent( parent );
+
+    ++iter;
+  }
+
+  Styles::iterator i( m_styles.find( style->name() ) );
+
+  if ( i != m_styles.end() )
+  {
+    kdDebug() << "Erasing style entry for " << style->name() << endl;
+    m_styles.erase( i );
+  }
 }
 
 bool KSpreadStyleManager::checkCircle( QString const & name, QString const & parent )

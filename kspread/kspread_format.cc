@@ -76,7 +76,8 @@ void KSpreadFormat::defaultStyleFormat()
   if ( m_pStyle->release() )
     delete m_pStyle;
 
-  m_pStyle = m_pTable->doc()->styleManager()->defaultStyle();
+  if ( m_pTable )
+    m_pStyle = m_pTable->doc()->styleManager()->defaultStyle();
 
   setComment( "" ); 
 }
@@ -110,14 +111,128 @@ void KSpreadFormat::setKSpreadStyle( KSpreadStyle * style )
   if ( m_pStyle && m_pStyle->release() )
     delete m_pStyle;
 
+  kdDebug() << "Type: " << style->type() << endl;
   if ( style->type() == KSpreadStyle::CUSTOM
        || style->type() == KSpreadStyle::BUILTIN )
   {
-    m_bNoFallBack = 0;
-    m_mask = style->features();
+    kdDebug() << "Setting new Properties" << endl;
+    if ( style->hasFeature( KSpreadStyle::SAlignX ) )
+      m_mask |= (Q_UINT32) PAlign;
+    else
+      m_mask &= ~(Q_UINT32) PAlign;
+    if ( style->hasFeature( KSpreadStyle::SAlignY ) )
+      m_mask |= (Q_UINT32) PAlignY;
+    else
+      m_mask &= ~(Q_UINT32) PAlignY;
+    if ( style->hasFeature( KSpreadStyle::SFactor ) )
+      m_mask |= (Q_UINT32) PFactor;
+    else
+      m_mask &= ~(Q_UINT32) PFactor;
+    if ( style->hasFeature( KSpreadStyle::SPrefix ) )
+      m_mask |= (Q_UINT32) PPrefix;
+    else
+      m_mask &= ~(Q_UINT32) PPrefix;
+    if ( style->hasFeature( KSpreadStyle::SPostfix ) )
+      m_mask |= (Q_UINT32) PPostfix;
+    else
+      m_mask &= ~(Q_UINT32) PPostfix;
+    if ( style->hasFeature( KSpreadStyle::SLeftBorder ) )
+      m_mask |= (Q_UINT32) PLeftBorder;
+    else
+      m_mask &= ~(Q_UINT32) PLeftBorder;
+    if ( style->hasFeature( KSpreadStyle::SRightBorder ) )
+      m_mask |= (Q_UINT32) PRightBorder;
+    else
+      m_mask &= ~(Q_UINT32) PRightBorder;
+    if ( style->hasFeature( KSpreadStyle::STopBorder ) )
+      m_mask |= (Q_UINT32) PTopBorder;
+    else
+      m_mask &= ~(Q_UINT32) PTopBorder;
+    if ( style->hasFeature( KSpreadStyle::SBottomBorder ) )
+      m_mask |= (Q_UINT32) PBottomBorder;
+    else
+      m_mask &= ~(Q_UINT32) PBottomBorder;
+    if ( style->hasFeature( KSpreadStyle::SFallDiagonal ) )
+      m_mask |= (Q_UINT32) PFallDiagonal;
+    else
+      m_mask &= ~(Q_UINT32) PFallDiagonal;
+    if ( style->hasFeature( KSpreadStyle::SGoUpDiagonal ) )
+      m_mask |= (Q_UINT32) PGoUpDiagonal;
+    else
+      m_mask &= ~(Q_UINT32) PGoUpDiagonal;
+    if ( style->hasFeature( KSpreadStyle::SBackgroundBrush ) )
+      m_mask |= (Q_UINT32) PBackgroundBrush;
+    else
+      m_mask &= ~(Q_UINT32) PBackgroundBrush;
+    if ( style->hasFeature( KSpreadStyle::SFont ) )
+      m_mask |= (Q_UINT32) PFont;
+    else
+      m_mask &= ~(Q_UINT32) PFont;
+    if ( style->hasFeature( KSpreadStyle::STextPen ) )
+      m_mask |= (Q_UINT32) PTextPen;
+    else
+      m_mask &= ~(Q_UINT32) PTextPen;
+    if ( style->hasFeature( KSpreadStyle::SBackgroundColor ) )
+      m_mask |= (Q_UINT32) PBackgroundColor;
+    else
+      m_mask &= ~(Q_UINT32) PBackgroundColor;
+    if ( style->hasFeature( KSpreadStyle::SFloatFormat ) )
+      m_mask |= (Q_UINT32) PFloatFormat;
+    else
+      m_mask &= ~(Q_UINT32) PFloatFormat;
+    if ( style->hasFeature( KSpreadStyle::SFloatColor ) )
+      m_mask |= (Q_UINT32) PFloatColor;
+    else
+      m_mask &= ~(Q_UINT32) PFloatColor;
+    if ( style->hasFeature( KSpreadStyle::SMultiRow ) )
+      m_mask |= (Q_UINT32) PMultiRow;
+    else
+      m_mask &= ~(Q_UINT32) PMultiRow;
+    if ( style->hasFeature( KSpreadStyle::SVerticalText ) )
+      m_mask |= (Q_UINT32) PVerticalText;
+    else
+      m_mask &= ~(Q_UINT32) PVerticalText;
+    if ( style->hasFeature( KSpreadStyle::SPrecision ) )
+      m_mask |= (Q_UINT32) PPrecision;
+    else
+      m_mask &= ~(Q_UINT32) PPrecision;
+    if ( style->hasFeature( KSpreadStyle::SFormatType ) )
+      m_mask |= (Q_UINT32) PFormatType;
+    else
+      m_mask &= ~(Q_UINT32) PFormatType;
+    if ( style->hasFeature( KSpreadStyle::SAngle ) )
+      m_mask |= (Q_UINT32) PAngle;
+    else
+      m_mask &= ~(Q_UINT32) PAngle;
+    if ( style->hasFeature( KSpreadStyle::SIndent ) )
+      m_mask |= (Q_UINT32) PIndent;
+    else
+      m_mask &= ~(Q_UINT32) PIndent;
+    if ( style->hasFeature( KSpreadStyle::SDontPrintText ) )
+      m_mask |= (Q_UINT32) PDontPrintText;
+    else
+      m_mask &= ~(Q_UINT32) PDontPrintText;
+    if ( style->hasFeature( KSpreadStyle::SCustomFormat ) )
+      m_mask |= (Q_UINT32) PCustomFormat;
+    else
+      m_mask &= ~(Q_UINT32) PCustomFormat;
+    if ( style->hasFeature( KSpreadStyle::SNotProtected ) )
+      m_mask |= (Q_UINT32) PNotProtected;
+    else
+      m_mask &= ~(Q_UINT32) PNotProtected;
+    if ( style->hasFeature( KSpreadStyle::SHideAll ) )
+      m_mask |= (Q_UINT32) PHideAll;
+    else
+      m_mask &= ~(Q_UINT32) PHideAll;
+    if ( style->hasFeature( KSpreadStyle::SHideFormula ) )
+      m_mask |= (Q_UINT32) PHideFormula;
+    else
+      m_mask &= ~(Q_UINT32) PHideFormula;
+    kdDebug() << "New Mask: " << m_mask << endl;
   }
-
+  m_bNoFallBack = 0;
   m_pStyle = style;
+  m_pStyle->addRef();
   formatChanged();
 }
 
@@ -205,8 +320,8 @@ QDomElement KSpreadFormat::saveFormat( QDomDocument & doc, int _col, int _row, b
   }
   else
   {
-    if ( m_pStyle->parent() )
-      format.setAttribute( "parent", m_pStyle->parentName() );
+    if ( m_pStyle->parent() && m_pStyle->parent()->name().length() > 0 )
+      format.setAttribute( "parent", m_pStyle->parent()->name() );
   }
   
   if ( hasProperty( PAlign ) || hasNoFallBackProperties( PAlign ) || force )
@@ -329,7 +444,7 @@ QDomElement KSpreadFormat::saveFormat( QDomDocument& doc, bool force ) const
   }
   else
   {
-    if ( m_pStyle->parent() )
+    if ( m_pStyle->parent() && m_pStyle->parentName().length() > 0 )
       format.setAttribute( "parent", m_pStyle->parentName() );
   }
 
@@ -450,12 +565,10 @@ bool KSpreadFormat::loadFormat( const QDomElement & f, PasteMode pm )
     {
       KSpreadStyle * s = m_pTable->doc()->styleManager()->style( f.attribute( "style-name" ) );
 
+      kdDebug() << "Using style: " << f.attribute( "style-name" ) << ", s: " << s << endl;
       if ( s )
       {
-        if ( m_pStyle->release() )
-          delete m_pStyle;
-        
-        m_pStyle = s;
+        setKSpreadStyle( s );
 
 #warning TODO: do not return if data got pasted
         return true;
@@ -464,12 +577,20 @@ bool KSpreadFormat::loadFormat( const QDomElement & f, PasteMode pm )
 #warning TODO: do not return if data got pasted
         return false;
     }
-
+    else
     if ( f.hasAttribute( "parent" ) )
     {
       KSpreadCustomStyle * s = (KSpreadCustomStyle *) m_pTable->doc()->styleManager()->style( f.attribute( "parent" ) );
+      kdDebug() << "Loading Style, parent: " << s->name() << ": " << s << endl;
+
       if ( s )
+      {
+        if ( m_pStyle && m_pStyle->release() )
+          delete m_pStyle;
+
+        m_pStyle = new KSpreadStyle();      
         m_pStyle->setParent( s );
+      }
     }
 
     bool ok;

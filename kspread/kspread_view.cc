@@ -1943,8 +1943,8 @@ void KSpreadView::updateButton( KSpreadCell *cell, int column, int row)
 
     color=cell->bgColor(  column, row );
 
-    if(!color.isValid())
-        color=QApplication::palette().active().base();
+    if ( !color.isValid() )
+        color = QApplication::palette().active().base();
 
     m_bgColor->setCurrentColor( color );
 
@@ -2017,7 +2017,6 @@ void KSpreadView::updateEditWidgetOnPress()
         editWidget()->setText( "" );
         return;
     }
-
     if ( cell->content() == KSpreadCell::VisualFormula )
         editWidget()->setText( "" );
     else if ( m_pTable->isProtected() && cell->isHideFormula( column, row ) )

@@ -66,7 +66,7 @@ StyleWidget::~StyleWidget()
 KSpreadStyleDlg::KSpreadStyleDlg( KSpreadView * parent, KSpreadStyleManager * manager, 
                                   const char * name )
   : KDialogBase( parent, name, true, "",
-                 KDialogBase::Ok | KDialogBase::Close | KDialogBase::User1 | KDialogBase::User2 | KDialogBase::User3, 
+                 KDialogBase::Ok | KDialogBase::User1 | KDialogBase::User2 | KDialogBase::User3 | KDialogBase::Close, 
                  KDialogBase::Ok, false, KGuiItem( i18n( "&New" ) ), KGuiItem( i18n( "&Modify" ) ), KGuiItem( i18n( "&Delete" ) ) ),
     m_view( parent ),
     m_styleManager( manager ),
@@ -77,11 +77,14 @@ KSpreadStyleDlg::KSpreadStyleDlg( KSpreadView * parent, KSpreadStyleManager * ma
   setMainWidget( m_dlg );
 
   slotDisplayMode( 0 );
+  enableButton( KDialogBase::User1, true );
+  enableButton( KDialogBase::User2, true );
   enableButton( KDialogBase::User3, false );
 
   connect( m_dlg->m_styleList, SIGNAL( selectionChanged( QListViewItem * ) ), 
            this, SLOT( slotSelectionChanged( QListViewItem * ) ) );
   connect( m_dlg->m_displayBox, SIGNAL( activated( int ) ), this, SLOT( slotDisplayMode( int ) ) );
+  connect( this, SIGNAL( user3Clicked() ), this, SLOT( slotUser3() ) );
 }
 
 KSpreadStyleDlg::~KSpreadStyleDlg()
@@ -162,6 +165,7 @@ void KSpreadStyleDlg::slotOk()
 
 void KSpreadStyleDlg::slotUser1()
 {
+  kdDebug() << "SlotUser1" << endl;
 }
 
 void KSpreadStyleDlg::slotUser2()
@@ -189,6 +193,30 @@ void KSpreadStyleDlg::slotUser2()
 
 void KSpreadStyleDlg::slotUser3()
 {
+  KListViewItem * item = (KListViewItem *) m_dlg->m_styleList->currentItem();
+
+  if ( !item )
+    return;
+
+  KSpreadCustomStyle * s = 0;
+
+  QString name( item->text( 0 ) );
+  if ( name == i18n( "Default" ) )
+    s = m_styleManager->defaultStyle();
+  else
+    s = m_styleManager->style( name );
+
+  kdDebug() << "S: " << s << ", s->type(): " << s->type() << endl;
+  if ( !s )
+    return;
+
+  if ( s->type() != KSpreadStyle::CUSTOM )
+    return;
+
+  s->setType( KSpreadStyle::AUTO );
+  m_styleManager->takeStyle( s );
+
+  slotDisplayMode( m_dlg->m_displayBox->currentItem() );
 }
 
 void KSpreadStyleDlg::slotSelectionChanged( QListViewItem * item )

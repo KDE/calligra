@@ -1949,7 +1949,6 @@ void KSpreadCell::paintCell( const KoRect& rect, QPainter &painter,
   if ( testFlag( Flag_LayoutDirty ) )
     makeLayout( painter, cellRef.x(), cellRef.y() );
 
-
   if ( !cellRect.intersects( rect ) )
   {
     clearFlag( Flag_PaintingCell );

@@ -46,6 +46,8 @@ class KSpreadStyleManager
   bool checkCircle( QString const & name, QString const & parent );
   bool validateStyleName( QString const & name, KSpreadCustomStyle * style );
 
+  void takeStyle( KSpreadCustomStyle * style );
+
   QStringList styleNames() const;
 
  private:
