@@ -640,7 +640,8 @@ private:
     QMap<KoPictureKey, QString> * m_pixmapMap;
     QMap<KoPictureKey, QString> * m_clipartMap;
 
-    QMap<KoPictureKey, KWTextImage *> m_imageRequests; // to be removed
+    /// List used to help loading and saving images of the old type ("text image" of class KWTextImage)
+    QMap<KoPictureKey, KWTextImage *> m_imageRequests;
     QPtrList<KWPictureFrameSet> m_imageRequests2;
     QPtrList<KWClipartFrameSet> m_clipartRequests;
     QMap<QString, KWAnchorPosition> m_anchorRequests;
@@ -652,8 +653,10 @@ private:
     KWMailMergeDataBase *m_slDataBase;
     int slRecordNum;
 
-    // When a document is written out, the syntax version in use will be recorded. When read back
-    // in, this variable reflects that value.
+    /*
+     * When a document is written out, the syntax version in use will be recorded. When read back
+     * in, this variable reflects that value.
+     */
     int m_syntaxVersion;
 
 
@@ -672,7 +675,7 @@ private:
     bool m_bAllowAutoFormat;
     bool m_bShowScrollBar;
 
-    // The document that is used by all formulas
+    /// The document that is used by all formulas
     KFormula::Document* m_formulaDocument;
 
     double m_indent; // in pt
