@@ -54,6 +54,10 @@ class TabBarPrivate;
  * When a hidden sheet is shown again, it will be on the same position as
  * before it was hidden.
  *
+ * When the document is protected, it is necessary to set the tab bar as
+ * read-only using setReadOnly (see also readOnly). If it is set to true,
+ * tabs can not be moved by dragging and context menu will not be displayed.
+ *
  * @short A bar with tabs and scroll buttons.
  */
 class TabBar : public QWidget
