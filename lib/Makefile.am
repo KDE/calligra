@@ -10,4 +10,3 @@ messages:
 	rm parts.cc
 
 include ../admin/Doxyfile.am
-DOXYGEN_EXCLUDE = koml/* kscript/*
