@@ -103,23 +103,12 @@ QFile outf(fileOut);
  //         ALSO crypto return codes!!
     inf.readBlock(p, blocksize);
     cbc->decrypt(p, blocksize);
-    kdDebug() <<  "p[0] = " << p[0]
-              << " p[1] = " << p[1]
-              << " p[2] = " << p[2]
-              << " p[3] = " << p[3]
-              << " p[4] = " << p[4]
-              << " p[5] = " << p[5]
-              << " p[6] = " << p[6]
-              << " p[7] = " << p[7] << endl;
+
     unsigned int previous_rand = ((unsigned char)p[0] + ((unsigned char)p[1] << 8)) % 5120;
     unsigned int fsize;
 
     // We skip the rest of this block since previous_rand%5120 has to be >=
     // blocksize.
-
-    kdDebug() << "previous_rand = " << previous_rand
-              << endl;
-
     previous_rand -= (blocksize-2);
 
     unsigned int remaining = 0;
@@ -147,7 +136,6 @@ QFile outf(fileOut);
        remaining--;
     }
 
-    kdDebug() << "fsize = " << fsize << endl;
     // Empty out this remaining block that we read in
     if (remaining > 0) {
       if (remaining > fsize) {
@@ -161,7 +149,6 @@ QFile outf(fileOut);
       }
     }
 
-kdDebug() << "First loop is done." << endl;
     // read in the rest of the file and decode
     while (fsize > 0) {
       inf.readBlock(p, blocksize);
@@ -178,8 +165,6 @@ kdDebug() << "First loop is done." << endl;
     }
 
     // FIXME: check the filesize and the hash to make sure it was successful
-
-kdDebug() << "Second loop is done." << endl;
 
     return true;
 }

@@ -126,11 +126,6 @@ int rc;
     p[(previous_rand % 5120)+4] = (filelen >> 16) & 0x00ff;
     p[(previous_rand % 5120)+5] = (filelen >> 24) & 0x00ff;
 
-    kdDebug() << "previous_rand = " << previous_rand % 5120
-              << " fsize = " << filelen << endl;
-    kdDebug() <<  "p[0] = " << p[0]
-              << " p[1] = " << p[1] << endl;
-
     // pad up to the nearest blocksize.
     bool done = false;
     int cursize = (previous_rand % 5120) + 6;
