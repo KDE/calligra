@@ -399,6 +399,8 @@ public:
     void addIgnoreWordAll( const QString & );
     void clearIgnoreWordAll( );
     KCommandHistory * commandHistory() { return m_commandHistory; }
+    void updateObjectStatusBarItem();
+
 public slots:
     void movePage( int from, int to );
     void copyPage( int from, int to );

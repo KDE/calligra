@@ -1594,6 +1594,10 @@ void ResizeCmd::execute()
         if(object->isSelected())
             doc->updateRuler();
     }
+    if ( object->isSelected())
+    {
+        doc->updateObjectStatusBarItem();
+    }
     doc->repaint( oldRect );
     doc->repaint( object );
 }
@@ -1616,6 +1620,10 @@ void ResizeCmd::unexecute( bool _repaint )
     {
         if(object->isSelected())
             doc->updateRuler();
+    }
+    if ( object->isSelected())
+    {
+        doc->updateObjectStatusBarItem();
     }
 
     if ( _repaint ) {

@@ -2989,4 +2989,12 @@ void KPresenterDoc::clearIgnoreWordAll( )
 }
 
 
+void KPresenterDoc::updateObjectStatusBarItem()
+{
+    QPtrListIterator<KoView> it( views() );
+    for (; it.current(); ++it )
+	((KPresenterView*)it.current())->updateObjectStatusBarItem();
+}
+
+
 #include <kpresenter_doc.moc>
