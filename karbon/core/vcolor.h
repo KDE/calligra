@@ -26,6 +26,9 @@ public:
 	void values(
 		double* v1 = 0L, double* v2 = 0L,
 		double* v3 = 0L, double* v4 = 0L ) const;
+	void setValues(
+		const double* v1 = 0L, const double* v2 = 0L,
+		const double* v3 = 0L, const double* v4 = 0L );
 
 	VColorSpace colorSpace() const { return m_colorSpace; }
 	void setColorSpace( const VColorSpace colorSpace );

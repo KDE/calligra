@@ -53,6 +53,21 @@ VColor::values(
 }
 
 void
+VColor::setValues(
+	const double* v1 = 0L, const double* v2 = 0L,
+	const double* v3 = 0L, const double* v4 = 0L )
+{
+	if( v1 )
+		m_value[0] = *v1;
+	if( v2 )
+		m_value[1] = *v2;
+	if( v3 )
+		m_value[2] = *v3;
+	if( v4 )
+		m_value[3] = *v4;
+}
+
+void
 VColor::setColorSpace( const VColorSpace colorSpace )
 {
 	if( colorSpace == m_colorSpace )
