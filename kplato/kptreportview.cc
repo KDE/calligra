@@ -523,13 +523,13 @@ void KPTReportView::getTemplateFile(const QString &tpl) {
 	QString localtpl;
 	bool isTemp = false;
 
-	if (url.isMalformed())
+	if (!url.isValid())
 	{
 			KMessageBox::sorry(this,i18n("Malformed template filename: %1").arg(url.prettyURL()));
 	}
 	else
 	{
-		if (KIO::NetAccess::download(url,localtpl))
+		if (KIO::NetAccess::download(url,localtpl,this))
 			isTemp = true;
 		else
 			KMessageBox::sorry(this,i18n("Unable to download template file: %1").arg(url.prettyURL()));
