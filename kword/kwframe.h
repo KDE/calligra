@@ -643,6 +643,9 @@ public:
     virtual void createEmptyRegion( const QRect &, QRegion &, KWViewMode * ) { }
 
     virtual KWFrame *frameByBorder( const QPoint & nPoint );
+#ifndef NDEBUG
+    virtual void printDebug( KWFrame* frame );
+#endif
 
     bool keepAspectRatio() const { return m_keepAspectRatio; }
     void setKeepAspectRatio( bool b ) { m_keepAspectRatio = b; }

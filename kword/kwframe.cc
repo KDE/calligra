@@ -1444,6 +1444,19 @@ KWFrame *KWPictureFrameSet::frameByBorder( const QPoint & nPoint )
     return 0L;
 }
 
+#ifndef NDEBUG
+void KWPictureFrameSet::printDebug( KWFrame *frame )
+{
+    KWFrameSet::printDebug( frame );
+    if ( !isDeleted() )
+    {
+        kdDebug() << "KoImage: key=" << m_image.key().toString()
+                  << " hasRawData=" << !m_image.rawData().isNull()
+                  << " image size=" << m_image.size().width() << "x" << m_image.size().height() << endl;
+    }
+}
+#endif
+
 /******************************************************************/
 /* Class: KWClipartFrameSet                                       */
 /******************************************************************/
