@@ -77,6 +77,7 @@ class KexiDBConnection
 		void	writeInfo(QDomDocument &doc);
 
 		void	flush(KoStore *store);
+		void	provide(KoStore *store);
 		void	clean();
 
 
@@ -102,6 +103,7 @@ class KexiDBConnection
 		QString		m_port;
 
 		QString		m_tmpname;
+		QStringList	m_tmpindex;
 };
 
 #endif

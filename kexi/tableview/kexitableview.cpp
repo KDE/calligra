@@ -708,9 +708,9 @@ void KexiTableView::contentsMousePressEvent( QMouseEvent* e )
 	}
 
 //	kdDebug()<<"void KexiTableView::contentsMousePressEvent( QMouseEvent* e ) by now the current items should be set, if not -> error + crash"<<endl;
-	if(m_pContextMenu && e->button() == RightButton)
+	if(e->button() == RightButton)
 	{
-		m_pContextMenu->exec(QCursor::pos());
+		emit contextMenuRequested(m_pCurrentItem, m_curRow, e->globalPos());
 	}
 	else if(e->button() == LeftButton)
 	{

@@ -108,6 +108,8 @@ KexiDBConnection::connectDB(KexiDB *parent, KoStore *store)
 			tempdir.mkdir(tmpfile);
 			m_tmpname = tmpfile;
 
+//			if(store)
+			provide(store);
 			try
 			{
 				addDB->load(tmpfile);
@@ -166,6 +168,11 @@ KexiDBConnection::loadInfo(QDomElement &rootElement)
 			KexiDBConnection *conn;
 			conn = new KexiDBConnection(engineElement.text(), hostElement.text(),
 			 nameElement.text(), userElement.text(), passElement.text(), 0);
+			return conn;
+		}
+		case KexiDB::LocalDirectoryDB:
+		{
+			KexiDBConnection *conn = new KexiDBConnection(engineElement.text(), 0);
 			return conn;
 		}
 		default:
@@ -267,38 +274,53 @@ KexiDBConnection::writeInfo(QDomDocument &domDoc)
 void
 KexiDBConnection::flush(KoStore *store)
 {
+	kdDebug() << "KexiDBConnection::flush()" << endl;
+	if(!m_tmpname.isEmpty() && m_type == KexiDB::LocalDirectoryDB && store)
+	{
+		QStringList index = store->addLocalDirectory(m_tmpname, "/db");
+		QString dindex = index.join("\n");
+		QByteArray rawIndex = dindex.utf8();
+		rawIndex.resize(rawIndex.size() - 1);
+		store->open("/db-index");
+		store->write(rawIndex);
+		store->close();
+		kdDebug() << "added data: " << index << endl;
+	}
+}
+//
+void
+KexiDBConnection::provide(KoStore *store)
+{
+	kdDebug() << "KexiDBConnection::provide()" << endl;
+	if(!store)
+	 return;
+//
 	if(!m_tmpname.isEmpty() && m_type == KexiDB::LocalDirectoryDB)
 	{
-		QDir tmpdir(m_tmpname);
-		QStringList index = tmpdir.entryList(QDir::All);
+		kdDebug() << "KexiDBConnection::provide(): right env" << endl;
+		if(!store->open("/db-index"))
+			return;
 
+		QByteArray rawIndex = store->read(store->size());
+		store->close();
+		QStringList index = QStringList::split("\n", QString(rawIndex));
 		for(QStringList::Iterator it = index.begin(); it != index.end(); ++it)
 		{
-			if((*it) == "." || (*it) == "..")
+			QString currentDest = *it;
+			currentDest = currentDest.replace("/db", "");
+			currentDest = m_tmpname + currentDest;
+//
+			kdDebug() << "KexiDBConnection::provide(): extracting " << *it << ":" << currentDest << endl;
+			if(!store->extractFile(*it, currentDest))
 			{
-				index.remove(it);
+				kdDebug() << "KexiDBConnection::provide(): extract faild" << endl;
 			}
-			else
-			{
-				QFile f(m_tmpname + "/" + (*it));
-				if(f.open(IO_ReadOnly))
-				{
-					store->open("/dir/" + (*it));
-					char *buffer = new char[f.size() * 2 + 2];
-					QDataStream sstream(&f);
-					sstream << buffer;
-					QDataStream tstream(store->device());
-					tstream >> buffer;
-					store->close();
-					f.close();
-				}
-			}
+//			else
+//			{
+//				kdDebug() << "KexiDBConnection::provide(): extract succeeded" << endl;
+//			}
 		}
 
-		QString pindex = index.join("\n");
-		store->open("/db-index");
-		store->write(pindex.utf8());
-		store->close();
 	}
 }
 

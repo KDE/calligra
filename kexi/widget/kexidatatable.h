@@ -31,8 +31,9 @@ class QLineEdit;
 class KPrinter;
 
 class KexiDBRecord;
-class KExiView;
+class KexiView;
 class KexiTableView;
+class KexiDB;
 
 class KexiDataTable : public KexiDialogBase
 {
@@ -48,7 +49,18 @@ class KexiDataTable : public KexiDialogBase
 		virtual KXMLGUIClient *guiClient(){return new KXMLGUIClient();}
 		virtual void print(KPrinter &printer);
 
-	protected:
+	protected slots:
+		void slotItemChanged(KexiTableItem *i, int col);
+		void slotContextMenu(KexiTableItem *i, int col, const QPoint &pos);
+
+		void slotRemoveCurrentRecord();
+		void slotUpdated(QObject *sender, const QString &table, const QString &field,
+		 uint record, QVariant &value);
+		void slotRemoved(QObject *sender, const QString &table, uint record);
+
+		void slotSearchChanged(const QString &);
+
+	private:
 		KexiTableView	*m_tableView;
 		QStatusBar	*m_statusBar;
 		QLineEdit	*m_search;
@@ -56,11 +68,7 @@ class KexiDataTable : public KexiDialogBase
 		KexiDBRecord	*m_record;
 
 		bool		m_first;
-
-	protected slots:
-		void slotItemChanged(KexiTableItem *i, int col);
-
-		void slotSearchChanged(const QString &);
+		KexiDB		*m_db;
 };
 
 #endif

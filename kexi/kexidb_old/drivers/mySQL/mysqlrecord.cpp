@@ -20,6 +20,8 @@ Boston, MA 02111-1307, USA.
 #include <kdebug.h>
 
 #include <kexidb.h>
+#include <kexidberror.h>
+#include <kexidbwatcher.h>
 
 #include "mysqldb.h"
 #include "mysqlresult.h"
@@ -76,7 +78,7 @@ MySqlRecord::commit(unsigned int record, bool insertBuffer)
 		if((*it).record == record && (*it).done == false)
 		{
 			QString value;
-			
+
 			if((*it).value.type() == QVariant::ByteArray)
 			{
 				value = m_db->escape((*it).value.toByteArray());
@@ -85,10 +87,10 @@ MySqlRecord::commit(unsigned int record, bool insertBuffer)
 			{
 				value = m_db->escape((*it).value.toString());
 			}
-			
+
 			QString key = m_db->escape(m_keyBuffer.find(record).data().toString());
 			int index = m_insertList.findIndex(record);
-			
+
 			if(!insertBuffer)
 			{
 				kdDebug() << "MySqlRecord::commit: committing update" << endl;
@@ -105,20 +107,23 @@ MySqlRecord::commit(unsigned int record, bool insertBuffer)
 				m_db->query(statement);
 				m_insertList.remove(m_insertList.at(index));
 				(*it).done = true;
-				
+
 				// hopefully asign magic data (no metter how :)
 				if(!m_keyBuffer.contains(record))
 				{
 					if((*it).field == m_keyField)
 					{
 						m_keyBuffer.insert(record, QVariant(value));
+						m_db->watcher()->update(0, m_table, (*it).field, record, QVariant(value));
 					}
 					if(fieldInfo(m_keyField)->auto_increment())
 					{
 						m_keyBuffer.insert(record, QVariant((unsigned int)m_db->lastAuto()));
+						uint autoID = m_db->lastAuto();
+						m_db->watcher()->update(0, m_table, m_keyField, record, QVariant(autoID));
 					}
 					// else, maybe we should wait, and don't insert it by now...
-					
+
 					m_lastID = (unsigned int)m_db->lastAuto();
 				}
 			}
@@ -216,20 +221,31 @@ MySqlRecord::insert()
 	if(readOnly())
 		return -1;
 
-	m_lastItem++;
-	
 	m_insertList.append(m_lastItem);
-	return m_lastItem;
+	int record = m_lastItem;
+	m_lastItem++;
+	return record;
 }
 
 bool
 MySqlRecord::deleteRecord(uint record)
 {
+	kdDebug() << "MySqlRecord::deleteRecord()" << endl;
 	if(readOnly())
 		return false;
 
 	QString key = m_db->escape(m_keyBuffer.find(record).data().toString());
-	QString statement("delete form " + m_table + " where " + m_keyField + " = '" + key + "'"); 
+	QString statement("delete from " + m_table + " where " + m_keyField + " = '" + key + "'");
+	kdDebug() << "MySqlRecord::deleteRecord():" << statement << endl;
+	try
+	{
+		m_db->query(statement);
+	}
+	catch(KexiDBError &err)
+	{
+		throw err;
+	}
+	return true;
 }
 
 void
@@ -258,7 +274,7 @@ MySqlRecord::next()
 //		m_keyContent = value(m_keyField);
 		if(readOnly())
 			return true;
-		
+
 		m_keyBuffer.insert(MySqlResult::currentRecord() - 1, value(m_keyField));
 		m_lastItem++;
 		return true;

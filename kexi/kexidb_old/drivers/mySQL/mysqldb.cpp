@@ -75,21 +75,21 @@ bool
 MySqlDB::connect(QString host, QString user, QString password, QString socket, QString port)
 {
 	kdDebug() << "MySqlDB::connect(" << host << "," << user << "," << password << ")" << endl;
-	
+
 	if(socket == "")
 	{
 		QStringList sockets;
 		sockets.append("/var/lib/mysql/mysql.sock");
 		sockets.append("/var/run/mysqld/mysqld.sock");
 		sockets.append("/tmp/mysql.sock");
-		
+
 		for(QStringList::Iterator it = sockets.begin(); it != sockets.end(); it++)
 		{
 			if(QFile(*it).exists())
 				socket = (*it);
 		}
 	}
-	
+
 	mysql_real_connect(m_mysql, host.local8Bit(), user.local8Bit(), password.local8Bit(), 0,
 		port.toUInt(), socket.local8Bit(), 0);
 	if(mysql_errno(m_mysql) == 0)
@@ -102,7 +102,7 @@ MySqlDB::connect(QString host, QString user, QString password, QString socket, Q
 		m_socket = socket;
 		return true;
 	}
-	
+
 	kdDebug() << "MySqlDB::connect(...) failed: " << mysql_error(m_mysql) << endl;
 	throw KexiDBError(0, mysql_error(m_mysql));
 	return false;
@@ -144,19 +144,26 @@ MySqlDB::connect(QString host, QString user, QString password, QString socket, Q
 	else
 	{
 		kdDebug() << "MySqlDB::connect(db): retrying..." << endl;
-		if(connect(host, user, password, socket, port))
+		try
 		{
-			//create new database if needed
-			if(create)
+			if(connect(host, user, password, socket, port))
 			{
-				query("create database " + db);
+				//create new database if needed
+				if(create)
+				{
+					query("create database " + db);
+				}
+
+				query("use "+db);
+				m_connectedDB = true;
+				return true;
 			}
-
-			query("use "+db);
-			m_connectedDB = true;
-			return true;
 		}
-
+		catch(KexiDBError &err)
+		{
+			throw err;
+			return false;
+		}
 	}
 
 	throw KexiDBError(0, mysql_error(m_mysql));

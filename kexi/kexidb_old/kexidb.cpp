@@ -28,6 +28,7 @@ KexiDB::KexiDB(QObject *parent, const char *name) : QObject(parent, name)
 {
 	kdDebug() << "KexiDB::KexiDB()" << endl;
 	m_manager = 0;
+	m_dbwatcher = new KexiDBWatcher(this, "dbwatcher");
 }
 
 KexiDB*

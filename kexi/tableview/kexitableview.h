@@ -95,6 +95,7 @@ public:
 	int		columnAt(int pos) const;
 	int		rowAt(int pos) const;
 
+	void		updateCell(int row, int col);
 	int		sorting();
 	void		clear();
 	void		clearAll();
@@ -156,7 +157,6 @@ protected:
 	void	createBuffer(int width, int height);
 	void	paintCell(QPainter* p, KexiTableItem *item, int col, const QRect &cr, bool print=false);
 	void	paintEmptyArea(QPainter *p, int cx, int cy, int cw, int ch);
-	void	updateCell(int row, int col);
 	void	updateGeometries();
 	QSize	tableSize() const;
 
@@ -206,6 +206,7 @@ signals:
 	void			itemRemoveRequest(KexiTableItem *);
 	void			addRecordRequest();
 	void			dropped(QDropEvent *);
+	void			contextMenuRequested(KexiTableItem *, int col, const QPoint &);
 
 protected:
 	// cursor position

@@ -25,6 +25,7 @@ Boston, MA 02111-1307, USA.
 
 #include "kexidbresult.h"
 #include "kexidbfield.h"
+#include "kexidbwatcher.h"
 
 class KexiDBInterfaceManager;
 class KexiDBDriver;
@@ -89,6 +90,7 @@ class KexiDB : public QObject
 		QStringList			getColumns(const QString& table);
 
 		virtual unsigned long		affectedRows();
+		virtual KexiDBWatcher		*watcher() { return m_dbwatcher; }
 
 		void appendManager(KexiDBInterfaceManager *m);
 
@@ -98,6 +100,7 @@ class KexiDB : public QObject
 
 		KexiDBInterfaceManager	*m_manager;
 		KexiDBDriver		*m_currentDriver;
+		KexiDBWatcher		*m_dbwatcher;
 };
 
 #endif

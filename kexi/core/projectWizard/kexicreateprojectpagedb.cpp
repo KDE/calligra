@@ -28,6 +28,7 @@ Boston, MA 02111-1307, USA.
 #include <klistview.h>
 #include <klineedit.h>
 #include <kdialog.h>
+#include <kmessagebox.h>
 
 #include "kexiDB/kexidb.h"
 
@@ -112,8 +113,15 @@ KexiCreateProjectPageDB::connectHost(const QString &driver, const QString &host,
 	KexiDB *db = new KexiDB;
 	db = db->add(driver);
 
-	if(!db->connect(host, user, password, socket, port))
-		return;
+	try
+	{
+		db->connect(host, user, password, socket, port);
+	}
+	catch(KexiDBError &err)
+	{
+		KMessageBox::detailedError(0, i18n("Error in databaseconnection"), err.message(), i18n("Database Connection"));
+		return false;
+	}
 
 	QStringList databases = db->databases();
 	for(QStringList::Iterator it = databases.begin(); it != databases.end(); it++)
