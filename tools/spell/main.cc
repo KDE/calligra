@@ -31,9 +31,6 @@
 #include <config.h>
 #endif
 
-#include <koSpell.h>
-#include <koSconfig.h>
-
 /***************************************************
  *
  * Factory
@@ -79,8 +76,6 @@ bool SpellChecker::run( const QString& command, void* data, const QString& datat
     QString buffer = *((QString *)data);
     buffer = buffer.stripWhiteSpace();
 
-    // Read config
-    KOSpellConfig kosconfig;
     if ( instance() )
     {
         KConfig * config = instance()->config();
@@ -92,7 +87,7 @@ bool SpellChecker::run( const QString& command, void* data, const QString& datat
         {
             //kdDebug() << "SpellChecker::run - group found -" << endl;
             config->setGroup( groupName );
-
+#if 0
             kosconfig.setNoRootAffix(config->readNumEntry ("KSpell_NoRootAffix", 0));
             kosconfig.setRunTogether(config->readNumEntry ("KSpell_RunTogether", 0));
             kosconfig.setDictionary(config->readEntry ("KSpell_Dictionary", ""));
@@ -109,14 +104,14 @@ bool SpellChecker::run( const QString& command, void* data, const QString& datat
             kosconfig.setDontCheckUpperWord(config->readBoolEntry("KSpell_dont_check_upper_word",false));
             kosconfig.setDontCheckTitleCase(config->readBoolEntry("KSpell_dont_check_title_case",false));
             kosconfig.setSpellWordWithNumber( config->readNumEntry("KSpell_SpellWordWithNumber", false));
-
+#endif
         }
     }
-
+#if 0 //PORT to kspell2
     // Call the spell checker
     KOSpell::modalCheck( buffer, &kosconfig );
     *((QString*)data) = buffer;
-
+#endif
 #if 0 //fixme
     // Call the spell checker
     KSpell::spellStatus status=(KSpell::spellStatus)KSpell::modalCheck( buffer, &ksconfig );

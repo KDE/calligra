@@ -1,6 +1,6 @@
 
-INCLUDES = -I$(srcdir)/../../lib/kofficecore -I$(top_srcdir)/lib/kospell $(all_includes)
-libkspelltool_la_LIBADD = ../../lib/kofficecore/libkofficecore.la ../../lib/kospell/libkospell.la
+INCLUDES = -I$(srcdir)/../../lib/kofficecore  $(all_includes)
+libkspelltool_la_LIBADD = ../../lib/kofficecore/libkofficecore.la 
 
 ####### Files
 
