@@ -208,7 +208,11 @@ QString KoVariableDateFormat::convert( const QVariant& data ) const
 
     if(m_strFormat.lower()==QString("locale")||m_strFormat.isEmpty())  // FIXME: "Locale" is I18N !
 	return KGlobal::locale()->formatDate( data.toDate(),m_bShort );
-    return data.toDate().toString(m_strFormat);
+
+    QString tmp=data.toDate().toString(m_strFormat);
+    tmp.replace("PPPP", KGlobal::locale()->monthNamePossessive(data.toDate().month(), false)); //long possessive month name
+    tmp.replace("PPP", KGlobal::locale()->monthNamePossessive(data.toDate().month(), true)); //short possessive month name
+    return tmp;
 }
 
 QCString KoVariableDateFormat::key() const
@@ -501,8 +505,13 @@ QPtrList<KAction> KoVariableCollection::variableActionList()
                         if((*it)==i18n("Locale").lower())
                             v.translatedString=KGlobal::locale()->formatDate( ct );
                         else
-                            v.translatedString=ct.toString(*it);
-                        v.format=*it;
+			{
+			    QString tmp=ct.toString(*it);
+			    tmp.replace("PPPP", KGlobal::locale()->monthNamePossessive(ct.month(), false)); //long possessive month name
+			    tmp.replace("PPP", KGlobal::locale()->monthNamePossessive(ct.month(), true)); //short possessive month name
+                            v.translatedString=tmp;
+                        }
+			v.format=(*it);
                         break;
                     }
                     case  VT_TIME:

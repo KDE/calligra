@@ -45,6 +45,8 @@ DateFormatWidget::DateFormatWidget( QWidget* parent,  const char* name, WFlags f
     combo2->insertItem( i18n( "Month (2 digits)" ) );
     combo2->insertItem( i18n( "Month (abbreviated name)" ) );
     combo2->insertItem( i18n( "Month (long name)" ) );
+    combo2->insertItem( i18n( "Month (possessive abbreviated name)" ) );
+    combo2->insertItem( i18n( "Month (possessive long name)" ) );
     combo2->insertItem( i18n( "Year (2 digits)" ) );
     combo2->insertItem( i18n( "Year (4 digits)" ) );
     combo2->setCurrentItem( 0 );
@@ -107,6 +109,10 @@ void DateFormatWidget::comboActivated()
         combo1->lineEdit()->insert("MMM");
     else if(string==i18n( "Month (long name)" ) )
         combo1->lineEdit()->insert("MMMM");
+    else if(string==i18n( "Month (possessive abbreviated name)" ) )
+        combo1->lineEdit()->insert("PPP");
+    else if(string==i18n( "Month (possessive long name)" ) )
+        combo1->lineEdit()->insert("PPPP");
     else if(string==i18n( "Year (2 digits)" ) )
         combo1->lineEdit()->insert("yy");
     else if(string==i18n( "Year (4 digits)" ) )
@@ -127,7 +133,10 @@ void DateFormatWidget::updateLabel()
 	label->setText(KGlobal::locale()->formatDate( ct ));
 	return;
       }
-    label->setText(ct.toString(combo1->currentText()));
+    QString tmp=combo1->currentText();;
+    tmp.replace("PPPP", KGlobal::locale()->monthNamePossessive(ct.month(), false)); //long possessive month name
+    tmp.replace("PPP", KGlobal::locale()->monthNamePossessive(ct.month(), true)); //short possessive month name
+    label->setText(ct.toString(tmp));
 }
 
 QString DateFormatWidget::resultString()

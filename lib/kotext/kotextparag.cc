@@ -1535,33 +1535,25 @@ void KoTextParag::drawFontEffects( QPainter * p, KoTextFormat *format, KoZoomHan
 	QPen pen(col, dim, Qt::SolidLine);
 	pen.setCapStyle(Qt::RoundCap);
 	p->setPen(pen);
-        int oldy = y;
-        int newy= oldy + offset;
-        int tmp = 0;
 	Q_ASSERT(offset);
-	int zigzag_x = (startX/offset+1)*offset;
+	double anc=acos(1.0-2*(static_cast<double>(offset-(startX)%offset)/static_cast<double>(offset)))/3.1415*180;
+	int pos=1;
+	//set starting position
 	if(2*((startX/offset)/2)==startX/offset)
-	{
-            tmp = oldy;
-            oldy = newy;
-            newy = tmp;
-	    p->drawLine( startX, y + startX%offset, zigzag_x, oldy);
-	}
-	else
-	    p->drawLine( startX, y + offset-startX%offset, zigzag_x, oldy);
-
-        for ( ; zigzag_x + offset <= bw+startX; zigzag_x += offset)
+	    pos*=-1;
+	//draw first part of wave
+	p->drawArc( (startX/offset)*offset, y, offset, offset, 0, anc*16 );
+        //now the main part
+	int zigzag_x = (startX/offset+1)*offset;
+	for ( ; zigzag_x + offset <= bw+startX; zigzag_x += offset)
         {
-            p->drawLine( zigzag_x, oldy, zigzag_x+offset, newy);
-            tmp = oldy;
-            oldy = newy;
-            newy = tmp;
+	    p->drawArc( zigzag_x, y, offset, offset, 0, pos*180*16 );
+	    pos*=-1;
         }
-	if(2*(((startX+bw)/offset)/2)==(startX+bw)/offset)
-	    p->drawLine( zigzag_x, oldy, bw+startX, y+(startX+bw)%offset);
-	else
-	    p->drawLine( zigzag_x, oldy, bw+startX, y+offset-(startX+bw)%offset);
-        p->restore();
+	//and here we finish
+	anc=acos(1.0-2*(static_cast<double>((startX+bw)%offset)/static_cast<double>(offset)))/3.1415*180;
+	p->drawArc( zigzag_x, y, offset, offset, 180*16, -pos*anc*16 );
+	p->restore();
         font.setUnderline( FALSE );
         p->setFont( font );
     }
