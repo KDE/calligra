@@ -30,12 +30,12 @@
 #include <kmessagebox.h>
 #include <kmimetype.h>
 
-#include "core/kexiaboutdata.h"
 #include "core/kexiproject.h"
-#include "core/keximainwindow.h"
 #include "core/kexidialogbase.h"
 #include "core/kexi.h"
-#include "core/startup/KexiStartup.h"
+#include "main/keximainwindowimpl.h"
+#include "main/kexiaboutdata.h"
+#include "main/startup/KexiStartup.h"
 
 #include <qfileinfo.h>
 
@@ -137,7 +137,7 @@ extern "C" int kdemain(int argc, char *argv[])
 //	app.dcopClient()->registerAs( "kexi" );
 
 //	KexiProject *project = new KexiProject();
-	KexiMainWindow *win = new KexiMainWindow();
+	KexiMainWindowImpl *win = new KexiMainWindowImpl();
 	app.setMainWidget(win);
 	win->show();
 	app.processEvents();//allow refresh our app
