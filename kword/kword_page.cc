@@ -1021,25 +1021,23 @@ void KWPage::vmrCreateTable()
             if ( useAnchor ) {
                 grpMgr = static_cast<KWGroupManager *>(anchor);
             }
-            else {
-                grpMgr = new KWGroupManager( doc );
-                QString _name;
-                int numGroupManagers=doc->getNumGroupManagers();
-                bool found=true; 
-                while(found) { // need a new name for the new groupmanager.
-                    bool same = false;
-                    _name.sprintf( "grpmgr_%d",numGroupManagers);
-                    for ( unsigned int i = 0;!same && i < doc->getNumGroupManagers(); ++i ) {
-                        if ( doc->getGroupManager( i )->getName() == _name ){
-                            same = true;
-                            break;
-                        }
+            grpMgr = new KWGroupManager( doc );
+            QString _name;
+            int numGroupManagers=doc->getNumGroupManagers();
+            bool found=true; 
+            while(found) { // need a new name for the new groupmanager.
+                bool same = false;
+                _name.sprintf( "grpmgr_%d",numGroupManagers);
+                for ( unsigned int i = 0;!same && i < doc->getNumGroupManagers(); ++i ) {
+                    if ( doc->getGroupManager( i )->getName() == _name ){
+                        same = true;
+                        break;
                     }
-                    if(!same) found=false;
-                    numGroupManagers++;
                 }
-                grpMgr->setName( _name );
+                if(!same) found=false;
+                numGroupManagers++;
             }
+            grpMgr->setName( _name );
             doc->addGroupManager( grpMgr );
             for ( unsigned int i = 0; i < trows; i++ ) {
                 for ( unsigned int j = 0; j < tcols; j++ ) {

@@ -167,7 +167,7 @@ void KWFrameDia::setupTab1(){ // TAB Frame Options
     else
         grid1->addWidget(floating,0,0);
     /* ideally the following properties could be given to any floating frame:
-       Position:
+       Position: (y)
         Top of frame
         Top of paragraph
         Above current line
@@ -175,12 +175,14 @@ void KWFrameDia::setupTab1(){ // TAB Frame Options
         Below current line
         Bottom of paragraph
         Bottom of frame
-       Alignment:
+        Absolute
+       Alignment: (x)
         Left
         Right
         Center
         Closest to binding
         Further from binding
+        Absolute
     */
 
     // formula frame
