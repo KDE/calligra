@@ -25,6 +25,7 @@
 #include <komlMime.h>
 
 #include <koStream.h>
+#include <koStoreStream.h>
 
 #include "kformviewer_doc.h"
 #include "kformviewer_shell.h"

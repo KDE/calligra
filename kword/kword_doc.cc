@@ -52,6 +52,7 @@
 #include <koFilterManager.h>
 #include <koTemplateChooseDia.h>
 #include <kstddirs.h>
+#include <koStoreStream.h>
 
 /******************************************************************/
 /* Class: KWordChild						  */

@@ -31,6 +31,7 @@
 #include <komlMime.h>
 
 #include <koStream.h>
+#include <koStoreStream.h>
 
 #include "kimage_doc.h"
 #include "kimage_shell.h"
