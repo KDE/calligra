@@ -117,19 +117,6 @@ public:
   Q_LONG write( const char* _data, Q_ULONG _len );
 
   /**
-   * DO NOT USE! WILL BE REMOVED SOON
-   * Embed a part contained in one store inside the current one, as the part
-   * indicated. The store to be embedded must not be open.
-   *
-   * @param dest the destination part, internal representation ("tar:0"). May
-   *        not be "root".
-   * @param store the source store.
-   * @param src the source part, internal representation ("root", "tar:0"...).
-   * @return the success of the operation.
-   */
-  bool embed( const QString &dest, KoStore *store, const QString &src = "root" );
-
-  /**
    * @return the size of the currently opened file, -1 on error.
    * Can be used as an argument for the read methods, for instance
    */
