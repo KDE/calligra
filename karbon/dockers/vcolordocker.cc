@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
    Made by Tomislav Lukman (tomislav.lukman@ck.tel.hr)
-   Copyright (C) 2002, 2003 The Karbon Developers
+   Copyright (C) 2002 - 2005, The Karbon Developers
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -26,20 +26,17 @@
 #include <klocale.h>
 #include <koMainWindow.h>
 
-#include "karbon_part.h"
 #include "karbon_view.h"
 #include "karbon_factory.h"
 #include "karbon_resourceserver.h"
 #include "vcolor.h"
 #include "vcolorslider.h"
-#include "vfillcmd.h"
 #include "vselection.h"
-#include "vstrokecmd.h"
 
 #include "vcolordocker.h"
 
-VColorDocker::VColorDocker( KarbonPart* part, KarbonView* parent, const char* /*name*/ )
-	: VDocker( parent->shell() ), m_part ( part ), m_view( parent )
+VColorDocker::VColorDocker(KarbonView* parent, const char* /*name*/ )
+	: VDocker( parent->shell() )
 {
 	m_isStrokeDocker = false;
 	setCaption( i18n( "Fill Color" ) );
@@ -104,20 +101,12 @@ VColorDocker::VColorDocker( KarbonPart* part, KarbonView* parent, const char* /*
 
 	setWidget( mainWidget );
 	
-	m_Color = new VColor();
+	m_color = new VColor();
 }
 
 VColorDocker::~VColorDocker()
 {
-	delete m_Color;
-}
-
-void VColorDocker::updateCanvas()
-{
-	if ( m_isStrokeDocker && m_part && m_part->document().selection() )
-		m_part->addCommand( new VStrokeCmd( &m_part->document(), *m_Color ), true );
-	else if( m_part && m_part->document().selection() )
-		m_part->addCommand( new VFillCmd( &m_part->document(), VFill( *m_Color ) ), true );
+	delete m_color;
 }
 
 void VColorDocker::updateRGB()
@@ -126,8 +115,8 @@ void VColorDocker::updateRGB()
 	float g = mGreenSlider->value() / 255.0;
 	float b = mBlueSlider->value() / 255.0;
 
-	m_Color->setColorSpace( VColor::rgb, false );
-	m_Color->set( r, g, b );
+	m_color->setColorSpace( VColor::rgb, false );
+	m_color->set( r, g, b );
 }
 
 void VColorDocker::updateCMYK()
@@ -137,20 +126,20 @@ void VColorDocker::updateCMYK()
 	float y = mYellowSlider->value() / 100.0;
 	float k = mBlackSlider->value() / 100.0;
 
-	m_Color->setColorSpace( VColor::cmyk, false );
-	m_Color->set( c, m, y, k );
+	m_color->setColorSpace( VColor::cmyk, false );
+	m_color->set( c, m, y, k );
 }
 
 void VColorDocker::updateOpacity()
 {
 	float op = mOpacity->value() / 100.0;
-	m_Color->setOpacity( op );
+	m_color->setOpacity( op );
 }
 
 void
 VColorDocker::mouseReleaseEvent( QMouseEvent * )
 {
-	updateCanvas();
+	emit colorChanged();
 }
 
 void VColorDocker::setFillDocker()
@@ -167,13 +156,13 @@ void VColorDocker::setStrokeDocker()
 
 void VColorDocker::setColor( VColor *color )
 {
-	m_Color = color;
+	m_color = color;
 	updateSliders();
 }
 
 void VColorDocker::updateSliders()
 {
-	//Disconnect sliders  to avoid canvas updating
+	//Disconnect sliders to avoid canvas updating
 	disconnect( mRedSlider, SIGNAL( valueChanged ( int ) ), this, SLOT( updateRGB() ) );
 	disconnect( mGreenSlider, SIGNAL( valueChanged ( int ) ), this, SLOT( updateRGB() ) );
 	disconnect( mBlueSlider, SIGNAL( valueChanged ( int ) ), this, SLOT( updateRGB() ) );   
@@ -184,21 +173,21 @@ void VColorDocker::updateSliders()
 	disconnect( mOpacity, SIGNAL( valueChanged ( int ) ), this, SLOT( updateOpacity() ) );
 	
 	//Update sliders
-	switch( m_Color->colorSpace() )
+	switch( m_color->colorSpace() )
 	{
 	case VColor::rgb:
-		mRedSlider->setValue( int ( m_Color->operator[](0) * 255 ) );
-		mGreenSlider->setValue( int ( m_Color->operator[](1) * 255 ) );
-		mBlueSlider->setValue( int ( m_Color->operator[](2) * 255 ) );
-		mOpacity->setValue( int ( m_Color->opacity() * 100 ) );
+		mRedSlider->setValue( int ( m_color->operator[](0) * 255 ) );
+		mGreenSlider->setValue( int ( m_color->operator[](1) * 255 ) );
+		mBlueSlider->setValue( int ( m_color->operator[](2) * 255 ) );
+		mOpacity->setValue( int ( m_color->opacity() * 100 ) );
 		mTabWidget->showPage( mRGBWidget );
 		break;
 	case VColor::cmyk:
-		mCyanSlider->setValue( int ( m_Color->operator[](0) * 100 ) );
-		mMagentaSlider->setValue( int ( m_Color->operator[](1) * 100 ) );
-		mYellowSlider->setValue( int ( m_Color->operator[](2) * 100 ) );
-		mBlackSlider->setValue( int ( m_Color->operator[](3) * 100 ) );
-		mOpacity->setValue( int ( m_Color->opacity() * 100 ) );
+		mCyanSlider->setValue( int ( m_color->operator[](0) * 100 ) );
+		mMagentaSlider->setValue( int ( m_color->operator[](1) * 100 ) );
+		mYellowSlider->setValue( int ( m_color->operator[](2) * 100 ) );
+		mBlackSlider->setValue( int ( m_color->operator[](3) * 100 ) );
+		mOpacity->setValue( int ( m_color->opacity() * 100 ) );
 		mTabWidget->showPage( mCMYKWidget );
 		break;
 	default: break;

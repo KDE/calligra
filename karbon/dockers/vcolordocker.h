@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
    Made by Tomislav Lukman (tomislav.lukman@ck.tel.hr)
-   Copyright (C) 2002, The Karbon Developers
+   Copyright (C) 2002 - 2005, The Karbon Developers
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -26,7 +26,6 @@
 class QTabWidget;
 class QWidget;
 class KarbonView;
-class KarbonPart;
 class VColor;
 class VColorSlider;
 
@@ -35,11 +34,11 @@ class VColorDocker : public VDocker
 	Q_OBJECT
 
 public:
-	 VColorDocker( KarbonPart* part, KarbonView* parent = 0L, const char* name = 0L );
+	 VColorDocker( KarbonView* parent = 0L, const char* name = 0L );
 	 virtual ~VColorDocker();
 
 	 virtual bool isStrokeDocker() { return m_isStrokeDocker; };
-	 VColor color() { return *m_Color; }
+	 VColor color() { return *m_color; }
 
 public slots:
 	virtual void setFillDocker();
@@ -60,19 +59,19 @@ private:
 	VColorSlider *mYellowSlider;
 	VColorSlider *mBlackSlider;
 	VColorSlider *mOpacity;
-	KarbonPart *m_part;
-	KarbonView *m_view;
 
 private slots:
-	void updateCanvas();
 	void updateCMYK();
 	void updateRGB();
 	void updateOpacity();
 	void updateSliders();
 
+signals:
+	void colorChanged();
+
 protected:
 	bool m_isStrokeDocker; //Are we setting stroke color ( true ) or fill color ( false )
-	VColor *m_Color;
+	VColor *m_color;
 };
 
 #endif

@@ -139,7 +139,8 @@ KarbonView::KarbonView( KarbonPart* p, QWidget* parent, const char* name )
 	if( shell() )
 	{
 		//Create Dockers
-		m_ColorManager = new VColorDocker( part(), this );
+		m_ColorManager = new VColorDocker( this );
+		connect( m_ColorManager, SIGNAL( colorChanged() ), this, SLOT( colorDockerChanged() ) );
 		m_strokeDocker = new VStrokeDocker( part(), this );
 		m_styleDocker = new VStyleDocker( part(), this );
 		m_TransformDocker = new VTransformDocker( part(), this );
@@ -182,8 +183,10 @@ KarbonView::~KarbonView()
 	if( shell() )
 	{
 		delete( m_ColorManager );
+		disconnect( m_ColorManager, SIGNAL( colorChanged() ), this, SLOT( colorDockerChanged() ) );
 		delete( m_strokeDocker );
 		delete( m_styleDocker );
+		disconnect( this, SIGNAL( selectionChange() ), m_TransformDocker, SLOT( update() ) );
 		delete( m_TransformDocker );
 	}
 
@@ -1090,6 +1093,14 @@ KarbonView::canvasContentsMoving( int x, int y )
 		m_vertRuler->setOffset( 0, y - m_canvas->pageOffsetY() );
 		m_vertRuler->setFrameStartEnd( 0/*y - m_canvas->pageOffsetY()*/, int( part()->document().height() * zoom() ) );
 	}
+}
+
+void KarbonView::colorDockerChanged()
+{
+	if ( m_ColorManager->isStrokeDocker() && m_part && m_part->document().selection() )
+		m_part->addCommand( new VStrokeCmd( &m_part->document(), m_ColorManager->color() ), true );
+	else if( m_part && m_part->document().selection() )
+		m_part->addCommand( new VFillCmd( &m_part->document(), VFill( m_ColorManager->color() ) ), true );
 }
 
 void

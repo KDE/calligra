@@ -171,6 +171,9 @@ protected slots:
 
 	void canvasContentsMoving( int x, int y );
 
+	// Docker related operations
+	void colorDockerChanged();
+
 signals:
 	void zoomChanged( double );
 	void selectionChange();
