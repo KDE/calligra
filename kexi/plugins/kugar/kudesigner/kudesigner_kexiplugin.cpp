@@ -34,6 +34,8 @@
 #include <kio/netaccess.h>
 #include <ksimpleconfig.h>
 #include <mycanvas.h>
+#include <canvkutemplate.h>
+#include <canvdetail.h>
 #include <kurl.h>
 
 //BEGIN KuKexiDataSourceComboBox

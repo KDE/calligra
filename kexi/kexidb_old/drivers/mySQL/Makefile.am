@@ -14,5 +14,5 @@ keximysqlinterface_la_LDFLAGS     = -module $(KDE_PLUGIN) -L$(MYSQL_LIBDIR)
 
 KDE_CXXFLAGS = $(USE_EXCEPTIONS)
 
-kde_services_DATA = mysqlinterface.desktop
+kde_services_DATA = keximysqlinterface.desktop
 

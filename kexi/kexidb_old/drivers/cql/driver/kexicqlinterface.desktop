@@ -9,3 +9,4 @@ InitialPreference=8
 MimeType=text/plain
 X-Kexi-Location = LocalDB
 X-Kexi-LocalType = Directory
+X-Kexi-DriverName = cql

@@ -81,7 +81,7 @@ KexiCreateProjectPageEngine::fill()
 void
 KexiCreateProjectPageEngine::fillSummery()
 {
-	QString engineSummery = project()->manager()->driverInfo(m_engine->currentText())->service()->comment();
+	QString engineSummery = project()->manager()->driverInfo(m_engine->currentText())->comment();
 	QString userSummery = QString("<b>" + m_engine->currentText() + "</b><br><hr><br>" + engineSummery);
 
 
@@ -90,7 +90,7 @@ KexiCreateProjectPageEngine::fillSummery()
 		m_summery->setText(userSummery);
 	}
 
-	QVariant location = project()->manager()->driverInfo(m_engine->currentText())->service()->property("X-Kexi-Location");
+	QVariant location = project()->manager()->driverInfo(m_engine->currentText())->property("X-Kexi-Location");
 	setProperty("location", location);
 }
 

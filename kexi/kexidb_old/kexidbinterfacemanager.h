@@ -27,7 +27,7 @@
 
 #include <klibloader.h>
 
-#include "kexidbdriver.h"
+#include <kservice.h>
 
 
 class KexiDBDriver;
@@ -52,21 +52,21 @@ class KexiDBInterfaceManager : public QObject
 		~KexiDBInterfaceManager();
 
 		QStringList drivers() const;
-		KexiDBDriver *driverInfo(const QString &driver);
-		KexiDB *require(const QString &driver);
+		KService::Ptr driverInfo(const QString &driver);
 
 		KexiDB* newDBInstance(const QString &driver);
 
-//		static  KexiDBInterfaceManager *self();
-//		void addRef();
-//		void remRef();
+		static  KexiDBInterfaceManager *self();
+		void addRef();
+		void remRef();
 
 	protected:
-		void load(const QString &driver);
+		KexiDB *load(const QString &driver);
 		void lookupDrivers();
 
-		DriverList	m_driverList;
-//		static KexiDBInterfaceManager *s_kexidbinterfacemanager;
+		QMap<QString, KService::Ptr> m_driverList;
+		static KexiDBInterfaceManager *s_kexidbinterfacemanager;
+		int m_ref;
 };
 
 #endif

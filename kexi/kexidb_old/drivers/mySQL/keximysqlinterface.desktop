@@ -8,3 +8,4 @@ Type= Service
 InitialPreference=8
 MimeType=text/plain
 X-Kexi-Location = RemoteDB
+X-Kexi-DriverName = mySQL

@@ -3,8 +3,23 @@ Encoding=UTF-8
 Type=ServiceType
 X-KDE-ServiceType=KexiDB/Interface
 Comment=Kexi SQL-Driver plugin
-Comment[es]=Plugin de controlador SQL de Kexi
-Comment[sv]=Kexi insticksprogram för SQL-drivrutin
+Comment[da]=Kexi SQL-driver-plugin
+Comment[el]=Πρόσθετο οδηγού SQL του Kexi
+Comment[es]=Plugin de SQL-Driver de kexi
+Comment[et]=Kexi SQL-draiveri plugin
+Comment[fr]=Module de pilotage SQL Kexi
+Comment[hu]=Kexi SQL-elérési bővítőmodul
+Comment[lo]=ປລັກອິນພາບ
+Comment[lv]=Kexi SQL-Draivera iespraudnis
+Comment[pt]='Plugin' do Controlador de SQL do Kexi
+Comment[pt_BR]=Plugin de Driver-SQL do Kexi
+Comment[ru]=Модуль драйвера SQL Kexi
+Comment[sk]=Modul ovládača SQL pre Kexi
+Comment[sv]=Kexi SQL-insticksdrivrutin
+Comment[zh_CN]=Kexi SQL 驱动插件
 
 [PropertyDef::X-Kexi-Location]
+Type=QString
+
+[PropertyDef::X-Kexi-DriverName]
 Type=QString

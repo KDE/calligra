@@ -18,5 +18,5 @@ kexitest_LDADD = $(LIB_KPARTS) $(LIB_QT) ../cql/sql/libcql.la kexicqlinterface.l
 
 KDE_CXXFLAGS = $(USE_EXCEPTIONS)
 
-kde_services_DATA = cqlinterface.desktop
+kde_services_DATA = kexicqlinterface.desktop
 

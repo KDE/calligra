@@ -52,7 +52,8 @@ KexiProject::KexiProject( QWidget *parentWidget, const char *widgetName, QObject
 	dcop = 0;
 	setInstance( KexiFactory::global(), false );
 	//m_db = new KexiDB(this, "db");
-	m_dbInterfaceManager=new KexiDBInterfaceManager(); //I think this class should be static
+	m_dbInterfaceManager=KexiDBInterfaceManager::self(); //I think this class should be static
+	m_dbInterfaceManager->addRef();
 	m_dbconnection = new KexiDBConnection();
 	m_relationManager=new KexiRelation(this);
 
@@ -66,6 +67,7 @@ KexiProject::~KexiProject()
 {
 	m_dbconnection->clean();
 	delete dcop;
+	m_dbInterfaceManager->remRef();
 }
 
 KexiRelation *KexiProject::relationManager() { return m_relationManager;}
