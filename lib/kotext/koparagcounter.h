@@ -161,21 +161,23 @@ private:
 
     char m_numbering; // Numbering
     char m_style;     // Style
-    bool m_restartCounter;
-    // you can add 7 bools here if you use :1 on all (including m_restartCounter)
     char m_displayLevels; // Number of levels to display (e.g. 3 => 1.2.1)
-    class Private;
-    Private *d; // define operator= and copy ctor when using this!
-    unsigned int m_depth;
-    int m_startNumber;
+    char m_depth;
+
+    bool m_restartCounter;
+    char unused; // padding, feel free to use
+    short int padding; // padding, feel free to use
+
+    short int m_startNumber;
+    QChar m_customBulletChar;
+
+    QString m_customBulletFont;
+    QString m_custom;
     QString m_prefix;
     QString m_suffix;
-    struct
-    {
-        QChar character;
-        QString font;
-    } m_customBullet;
-    QString m_custom;
+
+    class Private;
+    Private *d; // define operator= and copy ctor when using this!
 
     /** The cached, calculated values for this counter:
      *

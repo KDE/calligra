@@ -35,8 +35,8 @@ KoParagCounter::KoParagCounter()
     m_restartCounter = false;
     m_prefix = QString::null;
     m_suffix = '.';
-    m_customBullet.character = QChar( '-' );
-    m_customBullet.font = QString::null;
+    m_customBulletChar = QChar( '-' );
+    m_customBulletFont = QString::null;
     invalidate();
 }
 
@@ -51,8 +51,8 @@ bool KoParagCounter::operator==( const KoParagCounter & c2 ) const
             m_restartCounter==c2.m_restartCounter &&
             m_prefix==c2.m_prefix &&
             m_suffix==c2.m_suffix &&
-            m_customBullet.character==c2.m_customBullet.character &&
-            m_customBullet.font==c2.m_customBullet.font &&
+            m_customBulletChar==c2.m_customBulletChar &&
+            m_customBulletFont==c2.m_customBulletFont &&
             m_custom==c2.m_custom);
 
 }
@@ -64,12 +64,12 @@ QString KoParagCounter::custom() const
 
 QChar KoParagCounter::customBulletCharacter() const
 {
-    return m_customBullet.character;
+    return m_customBulletChar;
 }
 
 QString KoParagCounter::customBulletFont() const
 {
-    return m_customBullet.font;
+    return m_customBulletFont;
 }
 
 unsigned int KoParagCounter::depth() const
@@ -109,7 +109,7 @@ void KoParagCounter::load( QDomElement & element )
     if ( (Numbering)m_numbering == NUM_LIST && (Style)m_style == STYLE_NONE )
         m_numbering = NUM_NONE;
     m_depth = element.attribute("depth").toInt();
-    m_customBullet.character = QChar( element.attribute("bullet").toInt() );
+    m_customBulletChar = QChar( element.attribute("bullet").toInt() );
     m_prefix = element.attribute("lefttext");
     if ( m_prefix.lower() == "(null)" ) // very old kword thing
         m_prefix = QString::null;
@@ -128,7 +128,7 @@ void KoParagCounter::load( QDomElement & element )
         m_displayLevels = QMIN( s.toInt(), m_depth+1 ); // can't be > depth+1
     else // Not specified -> compat with koffice-1.2: make equal to depth+1
         m_displayLevels = m_depth+1;
-    m_customBullet.font = element.attribute("bulletfont");
+    m_customBulletFont = element.attribute("bulletfont");
     m_custom = element.attribute("customdef");
     QString restart = element.attribute("restart");
     m_restartCounter = (restart == "true") || (restart == "1");
@@ -302,9 +302,9 @@ void KoParagCounter::save( QDomElement & element )
     element.setAttribute( "depth", m_depth );
     if ( (Style)m_style == STYLE_CUSTOMBULLET )
     {
-        element.setAttribute( "bullet", m_customBullet.character.unicode() );
-        if ( !m_customBullet.font.isEmpty() )
-            element.setAttribute( "bulletfont", m_customBullet.font );
+        element.setAttribute( "bullet", m_customBulletChar.unicode() );
+        if ( !m_customBulletFont.isEmpty() )
+            element.setAttribute( "bulletfont", m_customBulletFont );
     }
     if ( !m_prefix.isEmpty() )
         element.setAttribute( "lefttext", m_prefix );
@@ -333,13 +333,13 @@ void KoParagCounter::setCustom( QString c )
 
 void KoParagCounter::setCustomBulletCharacter( QChar c )
 {
-    m_customBullet.character = c;
+    m_customBulletChar = c;
     invalidate();
 }
 
 void KoParagCounter::setCustomBulletFont( QString f )
 {
-    m_customBullet.font = f;
+    m_customBulletFont = f;
     invalidate();
 }
 
@@ -480,7 +480,7 @@ QString KoParagCounter::levelText( const KoTextParag *paragraph )
         text = 'O';
         break;
     case KoParagCounter::STYLE_CUSTOMBULLET:
-        text = m_customBullet.character;
+        text = m_customBulletChar;
         break;
     }
     // We want the '.' to be before the number in a RTL parag,
