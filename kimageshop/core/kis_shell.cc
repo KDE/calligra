@@ -80,14 +80,14 @@ bool KisShell::openDocument( const KURL & url )
   if (!doc)
 	{
 	  KoDocument* newdoc = createDoc();
-	  if (!newdoc->loadFromURL( url ))
+	  if (newdoc->openURL( url ))
 		{
 		  setRootDocument( newdoc );
 		  return true;
 		}
 	  return false;
 	}
-  return doc->loadFromURL( url );
+  return doc->openURL( url );
 }
 
 void KisShell::slotFilePrint()
