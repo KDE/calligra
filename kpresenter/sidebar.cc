@@ -54,6 +54,10 @@ SideBar::SideBar( QWidget *parent, KPresenterDoc *d, KPresenterView *v )
              this, SLOT( movedItems( QListViewItem *, QListViewItem *, QListViewItem * ) ) );
     connect( this, SIGNAL( rightButtonPressed( QListViewItem *, const QPoint &, int ) ),
              this, SLOT( rightButtonPressed( QListViewItem *, const QPoint &, int ) ) );
+
+    connect( this, SIGNAL( doubleClicked ( QListViewItem * )),
+             this, SLOT(renamePageTitle()));
+
     setAcceptDrops( TRUE );
     setDropVisualizer( TRUE );
     setDragEnabled( TRUE );
