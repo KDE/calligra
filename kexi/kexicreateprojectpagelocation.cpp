@@ -53,8 +53,10 @@ KexiCreateProjectPageLocation::KexiCreateProjectPageLocation(KexiCreateProject *
 
 	QLabel *lHost = new QLabel(i18n("Host:"), this);
 	m_host = new KLineEdit(this);
-	QCheckBox *customPortChk = new QCheckBox(i18n("Custom port:"), this);
+//	QCheckBox *customPortChk = new QCheckBox(i18n("Custom port:"), this);
+	QLabel *lPort = new QLabel(i18n("Port:"), this);
 	m_port = new QSpinBox(0, 9999, 1, this);
+	m_port ->setSpecialValueText(i18n("default port"));	
 	m_port->setEnabled(false);
 
 	//buttongroup hinting
@@ -71,7 +73,8 @@ KexiCreateProjectPageLocation::KexiCreateProjectPageLocation(KexiCreateProject *
 	m->addMultiCellWidget(remoteRBtn,	2,	2,	0,	2);
 	m->addWidget(lHost,			3,	1);
 	m->addWidget(m_host,			3,	2);
-	m->addWidget(customPortChk,		4,	1);
+//	m->addWidget(customPortChk,		4,	1);
+	m->addWidget(lPort,			4,	1);
 	m->addWidget(m_port,			4,	2);
 	m->setSpacing(KDialog::spacingHint());
 	
@@ -83,14 +86,14 @@ KexiCreateProjectPageLocation::KexiCreateProjectPageLocation(KexiCreateProject *
 	//Connections
 	connect(localRBtn, SIGNAL(toggled(bool)), this, SLOT(slotSetLocal(bool)));
 	connect(customSockChk, SIGNAL(toggled(bool)), this, SLOT(slotUseCustomSock(bool)));
-	connect(customPortChk, SIGNAL(toggled(bool)), this, SLOT(slotUseCustomPort(bool)));
+//	connect(customPortChk, SIGNAL(toggled(bool)), this, SLOT(slotUseCustomPort(bool)));
 	connect(m_host, SIGNAL(textChanged(const QString &)), this, SLOT(slotHostChanged(const QString &)));
 	connect(m_port, SIGNAL(valueChanged(const QString &)), this, SLOT(slotPortChanged(const QString &)));
 	connect(m_sock, SIGNAL(textChanged(const QString &)), this, SLOT(slotSockChanged(const QString &)));
 
 	// Default values
 	localRBtn->setChecked(true);
-	customPortChk->setChecked(false);
+//	customPortChk->setChecked(false);
 	customSockChk->setChecked(false);
 }
 
