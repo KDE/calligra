@@ -4517,9 +4517,12 @@ void KWView::changeLink()
             {
                 if(!link.isEmpty() && !ref.isEmpty())
                 {
-                    KWChangeLinkVariable*cmd=new KWChangeLinkVariable( i18n("Change link"), m_doc,oldhref, ref, oldLinkName,link, var);
-                    cmd->execute();
-                    m_doc->addCommand(cmd);
+                    if( ref != oldhref || link!=oldLinkName)
+                    {
+                        KWChangeLinkVariable*cmd=new KWChangeLinkVariable( i18n("Change link"), m_doc,oldhref, ref, oldLinkName,link, var);
+                        cmd->execute();
+                        m_doc->addCommand(cmd);
+                    }
                 }
             }
         }
