@@ -24,8 +24,8 @@
 #include <iostream>
 #include <fstream>
 
-#include <string>
-#include <list>
+#include <ministl/string>
+#include <ministl/list>
 #include <string.h>
 #include <unistd.h>
 
@@ -88,7 +88,7 @@ void importModule( const char *_id )
 string repoid2Ident( const char *_id, bool _strip_module = true, bool _strip_pragma = true )
 {
   string repoid = _id + 4;
-  repoid.erase( repoid.rfind( ":" ) );
+  repoid.remove( repoid.rfind( ":" ) );
   int pos;
   while ( ( pos = repoid.find( "/" ) ) != -1 )
     repoid[pos] = '.';
