@@ -64,6 +64,9 @@ public:
   KSpreadStyleManager* styleManager;
   KSpreadSheet *activeSheet;
   
+  static QValueList<KSpreadDoc*> s_docs;
+  static int s_docId;
+
   DCOPObject* dcop;
 
   // used to give every KSpreadSheet a unique default name.
@@ -133,15 +136,8 @@ public:
  *
  *****************************************************************************/
 
-QPtrList<KSpreadDoc>* KSpreadDoc::s_docs = 0;
-int KSpreadDoc::s_docId = 0;
-
-QPtrList<KSpreadDoc>& KSpreadDoc::documents()
-{
-    if ( s_docs == 0 )
-        s_docs = new QPtrList<KSpreadDoc>;
-    return *s_docs;
-}
+QValueList<KSpreadDoc*> DocPrivate::s_docs;
+int DocPrivate::s_docId = 0;
 
 KSpreadDoc::KSpreadDoc( QWidget *parentWidget, const char *widgetName, QObject* parent, const char* name, bool singleViewMode )
   : KoDocument( parentWidget, widgetName, parent, name, singleViewMode )
@@ -162,9 +158,7 @@ KSpreadDoc::KSpreadDoc( QWidget *parentWidget, const char *widgetName, QObject* 
 
   d->delayCalculation = false;
 
-  if ( s_docs == 0 )
-      s_docs = new QPtrList<KSpreadDoc>;
-  s_docs->append( this );
+  documents().append( this );
 
   setInstance( KSpreadFactory::global(), false );
 
@@ -172,7 +166,7 @@ KSpreadDoc::KSpreadDoc( QWidget *parentWidget, const char *widgetName, QObject* 
   if ( !name )
   {
       QString tmp( "Document%1" );
-      tmp = tmp.arg( s_docId++ );
+      tmp = tmp.arg( d->s_docId++ );
       setName( tmp.local8Bit());//tmp.latin1() );
   }
 
@@ -212,6 +206,34 @@ KSpreadDoc::KSpreadDoc( QWidget *parentWidget, const char *widgetName, QObject* 
   d->spellConfig = 0;
   d->dontCheckUpperWord = false;
   d->dontCheckTitleCase = false;
+}
+
+KSpreadDoc::~KSpreadDoc()
+{
+  //don't save config when kword is embedded into konqueror
+  if(isReadWrite())
+    saveConfig();
+  destroyInterpreter();
+
+  delete d->undoBuffer;
+
+  delete d->dcop;
+  d->s_docs.remove( this );
+  
+  kdDebug(36001) << "alive 1" << endl;
+  
+  delete d->workbook;
+  delete d->styleManager;
+  delete d->spellConfig;
+  
+  delete d;
+}
+
+
+
+QValueList<KSpreadDoc*> KSpreadDoc::documents()
+{
+  return DocPrivate::s_docs;
 }
 
 bool KSpreadDoc::initDoc()
@@ -1608,25 +1630,6 @@ void KSpreadDoc::retrieveMarkerInfo( const QRect &marker,
   positions[3] = QMIN( bottom, viewRect.bottom() );
 }
 
-
-KSpreadDoc::~KSpreadDoc()
-{
-  //don't save config when kword is embedded into konqueror
-  if(isReadWrite())
-    saveConfig();
-  destroyInterpreter();
-
-  delete d->undoBuffer;
-
-  delete d->dcop;
-  s_docs->removeRef(this);
-  kdDebug(36001) << "alive 1" << endl;
-  delete d->workbook;
-  delete d->styleManager;
-  delete d->spellConfig;
-  
-  delete d;
-}
 
 DCOPObject* KSpreadDoc::dcopObject()
 {

@@ -32,12 +32,12 @@ QMap<QString,DCOPRef> KSpreadAppIface::documents()
 {
     QMap<QString,DCOPRef> map;
 
-    QPtrList<KSpreadDoc>& lst = KSpreadDoc::documents();
-    QPtrListIterator<KSpreadDoc> it( lst );
-    for( ; it.current(); ++it )
+    QValueList<KSpreadDoc*> lst = KSpreadDoc::documents();
+    QValueListIterator<KSpreadDoc*> it = lst.begin();
+    for( ; it != lst.end(); ++it )
     {
-	map[ QString( it.current()->name() ) ] =
-	 DCOPRef( kapp->dcopClient()->appId(), it.current()->dcopObject()->objId() );
+	map[ QString( (*it)->name() ) ] =
+	 DCOPRef( kapp->dcopClient()->appId(), (*it)->dcopObject()->objId() );
     }
 
     return map;
@@ -45,11 +45,11 @@ QMap<QString,DCOPRef> KSpreadAppIface::documents()
 
 DCOPRef KSpreadAppIface::document( const QString& name )
 {
-    QPtrList<KSpreadDoc>& lst = KSpreadDoc::documents();
-    QPtrListIterator<KSpreadDoc> it( lst );
-    for( ; it.current(); ++it )
-	if ( name == it.current()->name() )
-	    return DCOPRef( kapp->dcopClient()->appId(), it.current()->dcopObject()->objId() );
+    QValueList<KSpreadDoc*> lst = KSpreadDoc::documents();
+    QValueListIterator<KSpreadDoc*> it = lst.begin();
+    for( ; it != lst.end(); ++it )
+	if ( name == (*it)->name() )
+	    return DCOPRef( kapp->dcopClient()->appId(), (*it)->dcopObject()->objId() );
 
     return DCOPRef();
 }

@@ -109,6 +109,11 @@ public:
   ~KSpreadDoc();
 
   /**
+   * Returns list of all documents.
+   */
+  static QValueList<KSpreadDoc*> documents();
+
+  /**
    * Returns the workbook which holds all the sheets.
    */
   KSpreadMap* workbook() const; 
@@ -504,8 +509,6 @@ public:
 
   virtual DCOPObject* dcopObject();
 
-  static QPtrList<KSpreadDoc>& documents();
-
   void addAreaName(const QRect &_rect,const QString & name,const QString & tableName);
   const QValueList<Reference>  & listArea();
   void removeArea( const QString &name);
@@ -651,9 +654,6 @@ protected:
    * Destroys the interpreter.
    */
   void destroyInterpreter();
-
-  static QPtrList<KSpreadDoc>* s_docs;
-  static int s_docId;
 
   class SavedDocParts : public QMap<QString, QDomElement> {};
   SavedDocParts m_savedDocParts;
