@@ -1,8 +1,9 @@
 [Desktop Entry]
 Name=Text oriented
+Name[af]=TEKS GEöRIENTEER
 Name[az]=İstiqamətləndirilmiş Mətn
 Name[bg]=Ориентиран текст
-Name[cs]=Textové dukumenty
+Name[cs]=Textové dokumenty
 Name[da]=Tekst orienteret
 Name[de]=Textorientiert
 Name[eo]=Tekstorientita
@@ -12,6 +13,7 @@ Name[fi]=Tekstipohjainen
 Name[fr]=Orientée texte
 Name[he]=טסקטל םאתומ
 Name[hu]=Szövegformátum
+Name[it]=Testuale
 Name[ja]=テキスト方向
 Name[lt]=Orientuotas į tekstą
 Name[lv]=Teksta orientēts
@@ -27,4 +29,5 @@ Name[sv]=Textorienterad
 Name[ta]=¯¨ÃÅÊÅ¡É
 Name[tr]=Metine dayalı
 Name[uk]=Текстовий
+Name[zh_CN.GB2312]=文本导向的
 X-KDE-DefaultTab=true

@@ -2,13 +2,13 @@
 [Desktop Entry]
 MimeType=application/x-krayon
 Comment=Krayon
+Comment[af]=KRAYON
 Comment[eo]=Krajono-grafikilo
 Comment[es]=Archivo de Krayon
+Comment[fr]=Manipulation d'images
 Comment[is]=Vaxlitir
-Comment[it]=KRayon
 Comment[ko]=K크레용
 Comment[pt_BR]=Krayon - editor de imagens bitmap
-Comment[ro]=Program de desenare
 Type=MimeType
 Patterns=*.kra;
 X-KDE-AutoEmbed=false
