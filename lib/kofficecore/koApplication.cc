@@ -40,10 +40,10 @@ KoApplication::~KoApplication()
 {
   // checking wether start the app as server or not
   QStringList::Iterator it;
-  if( m_params.paramIsPresent( "--server", "-s", true, it ) )
+  if( m_params.find( "--server", "-s", true, it ) )
   {
     m_bWithGUI = false;
-    m_params.deleteParam( it );
+    m_params.del( it );
   }
 }
     
@@ -51,14 +51,16 @@ void KoApplication::start()
 {
   KoMainWindow* pShell;
   QStringList openFiles;
+  QString tmpFilename;
  
   if( m_bWithGUI )
   {
-    for( uint i = 0; i < m_params.countParams(); i++ )
+    for( uint i = 0; i < m_params.count(); i++ )
     {
-      if( m_params.getParam( i ).left( 1 ) != "-" )
+      tmpFilename = m_params.get( i );
+      if( tmpFilename.left( 1 ) != "-" )
       {
-        openFiles.append( m_params.getParam( i ) );
+        openFiles.append( tmpFilename );
       }
     }
     if( openFiles.isEmpty() )
