@@ -80,7 +80,7 @@ struct KSpreadRange
     topFixed = ul.rowFixed;
     bottomFixed = lr.rowFixed;
   }
-  
+
   bool isValid() const { return ( range.left() >= 0 && ( table != 0 || tableName.isEmpty() ) ); }
   bool isTableKnown() const { return ( tableName.isEmpty() || table != 0 ); }
 

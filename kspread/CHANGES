@@ -592,3 +592,10 @@ moved icons in kdelibs or toolbar/hicolor etc... changed name
 -Improved layout managment in kspread_dlg_layout->border
 -Now you can customize penstyle ,you can change size
 and style of penStyle
+
+2000-06-02 -Montel laurent <montell@club-internet.fr>
+-----------------------------------------------------
+-improved layout managment in kspread_dlg_layout->pattern
+-Now "Find and replace" works. I add two options :
+"case sensitive"
+"Find Whole Words only"

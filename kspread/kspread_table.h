@@ -401,7 +401,8 @@ public:
     void paste( const QPoint &_marker, PasteMode=Normal, Operation=OverWrite );
     void defaultSelection(const QPoint &_marker );
 
-    bool replace( const QPoint &_marker,QString _find,QString _replace );
+    bool replace( const QPoint &_marker,QString _find,QString _replace,bool b_sensitive, bool b_whole );
+    QString replaceText( QString cellText,QString _find,QString _replace,bool b_sensitive, bool b_whole );
     void onlyRow( SortingOrder = Increase );
     void onlyColumn( SortingOrder = Increase );
     void sortByRow( int ref_row, SortingOrder = Increase );

@@ -27,6 +27,7 @@ class QPainter;
 #define YBORDER_WIDTH 40
 #define XBORDER_HEIGHT 20
 
+
 /**
  * The widget that appears above the table and allows to
  * edit the cells content.
@@ -39,7 +40,7 @@ public:
                        QButton *cancelButton, QButton *okButton);
 
     virtual void setText( const QString& t );
-	
+
     // Go into edit mode (enable the buttons)
     void setEditMode( bool mode );
 
@@ -132,7 +133,7 @@ public:
      * Internal. DONT USE.
      */
     void hideChooseMarker(){if(choose_visible==false) {return;}
-    			drawChooseMarker();choose_visible=false;}			
+    			drawChooseMarker();choose_visible=false;}
     /**
      * Internal. DONT USE.
      */

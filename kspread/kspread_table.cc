@@ -2150,17 +2150,17 @@ void KSpreadTable::changeNameCellRef2(const QPoint & pos, ChangeRef ref,QString 
           {
             erg += tmp;
             fix1 = FALSE;
-          }	
+          }
         }
       }
       it.current()->setCellText(erg, false /* no recalc deps for each, done independently */ );
     }
-	
+
   }
 }
 
 
-bool KSpreadTable::replace( const QPoint &_marker,QString _find,QString _replace )
+bool KSpreadTable::replace( const QPoint &_marker,QString _find,QString _replace, bool b_sensitive, bool b_whole )
 {
     m_pDoc->setModified( true );
 
@@ -2177,27 +2177,15 @@ bool KSpreadTable::replace( const QPoint &_marker,QString _find,QString _replace
 	if ( m_rctSelection.top() <= row && m_rctSelection.bottom() >= row )
 	{
 	  if(!it.current()->isValue() && !it.current()->isBool() &&!it.current()->isFormular() &&!it.current()->isDefault()&&!it.current()->text().isEmpty())
-		{	
-		if( it.current()->text().find(_find) >=0)
-			{
-			int index=0;
-			int lenreplace=0;
-			int lenfind=0;
-			it.current()->setDisplayDirtyFlag();
-			QString stmp=it.current()->text();
-			b_replace=true;
-			do
-				{
-				index=stmp.find(_find,index+lenreplace);
-				int len=stmp.length();
-				lenfind=_find.length();
-				lenreplace=_replace.length();
-				stmp=stmp.left(index)+_replace+stmp.right(len-index-lenfind);
-				}
-			while( stmp.find(_find,index+lenreplace) >=0);
-			it.current()->setCellText(stmp);
-			it.current()->clearDisplayDirtyFlag();
-			}
+		{
+                QString text;
+                if((text=replaceText(it.current()->text(), _find, _replace,b_sensitive,b_whole))!=it.current()->text())
+                        {
+                        it.current()->setDisplayDirtyFlag();
+                        it.current()->setCellText(text);
+                        it.current()->clearDisplayDirtyFlag();
+                        b_replace=true;
+                        }
 		}
 	}
       }
@@ -2216,28 +2204,16 @@ bool KSpreadTable::replace( const QPoint &_marker,QString _find,QString _replace
 	if ( m_rctSelection.left() <= col && m_rctSelection.right() >= col )
 	{
 	   if(!it.current()->isValue() && !it.current()->isBool() &&!it.current()->isFormular() &&!it.current()->isDefault()&&!it.current()->text().isEmpty())
-		{	
-		if( it.current()->text().find(_find) >=0)
-			{
-			int index=0;
-			int lenreplace=0;
-			int lenfind=0;
-			it.current()->setDisplayDirtyFlag();
-			QString stmp=it.current()->text();
-			b_replace=true;
-			do
-				{
-				index=stmp.find(_find,index+lenreplace);
-				int len=stmp.length();
-				lenfind=_find.length();
-				lenreplace=_replace.length();
-				stmp=stmp.left(index)+_replace+stmp.right(len-index-lenfind);
-				}
-			while( stmp.find(_find,index+lenreplace) >=0);
-			it.current()->setCellText(stmp);
-			it.current()->clearDisplayDirtyFlag();
-			}
-		}
+		{
+                QString text;
+                if((text=replaceText(it.current()->text(), _find, _replace,b_sensitive,b_whole))!=it.current()->text())
+                        {
+                        it.current()->setDisplayDirtyFlag();
+                        it.current()->setCellText(text);
+                        it.current()->clearDisplayDirtyFlag();
+                        b_replace=true;
+                        }
+                }
 	}
       }
 
@@ -2250,15 +2226,9 @@ bool KSpreadTable::replace( const QPoint &_marker,QString _find,QString _replace
 	if ( !selected )
 	    r.setCoords( _marker.x(), _marker.y(), _marker.x(), _marker.y() );
 
-	KSpreadUndoCellLayout *undo;
-	if ( !m_pDoc->undoBuffer()->isLocked() )
-	{
-	    undo = new KSpreadUndoCellLayout( m_pDoc, this, r );
-	    m_pDoc->undoBuffer()->appendUndo( undo );
-	}
 	for ( int x = r.left(); x <= r.right(); x++ )
 	    for ( int y = r.top(); y <= r.bottom(); y++ )
-	    {		
+	    {
 		KSpreadCell *cell = cellAt( x, y );
 
 		if ( cell == m_pDefaultCell )
@@ -2268,35 +2238,83 @@ bool KSpreadTable::replace( const QPoint &_marker,QString _find,QString _replace
 		    m_dctCells.insert( key, cell );
 		}
                 if(!cell->isValue() && !cell->isBool() &&!cell->isFormular() &&!cell->isDefault()&&!cell->text().isEmpty())
-		{	
-		if( cell->text().find(_find) >=0)
-			{
-			cell->setDisplayDirtyFlag();
-			QString stmp=cell->text();
-			int index=0;
-			int lenreplace=0;
-			int lenfind=0;
-			b_replace=true;
-			do
-				{
-				index=stmp.find(_find,index+lenreplace);
-				int len=stmp.length();
-				lenfind=_find.length();
-				lenreplace=_replace.length();
-				
-				stmp=stmp.left(index)+_replace+stmp.right(len-index-lenfind);
-				
-				}
-			while( stmp.find(_find,index+lenreplace) >=0);
-			cell->setCellText(stmp);
-			cell->clearDisplayDirtyFlag();
-			}
+		{
+                QString text;
+                if((text=replaceText(cell->text(), _find, _replace,b_sensitive,b_whole))!=cell->text())
+                        {
+                        cell->setDisplayDirtyFlag();
+                        cell->setCellText(text);
+                        cell->clearDisplayDirtyFlag();
+                        b_replace=true;
+                        }
 		}
 	    }
-	
+
 	emit sig_updateView( this, r );
 	return b_replace;
     }
+}
+
+QString KSpreadTable::replaceText(QString _cellText,QString _find,QString _replace, bool b_sensitive,bool b_whole)
+{
+QString findText;
+QString replaceText;
+QString realCellText;
+int index=0;
+int lenreplace=0;
+int lenfind=0;
+if(b_sensitive)
+        {
+        realCellText=_cellText;
+        findText=_find;
+        replaceText=_replace;
+        if( realCellText.find(findText) >=0)
+                {
+                do
+                        {
+                        index=realCellText.find(findText,index+lenreplace);
+                        int len=realCellText.length();
+                        lenfind=findText.length();
+                        lenreplace=replaceText.length();
+                        if(!b_whole)
+                                realCellText=realCellText.left(index)+replaceText+realCellText.right(len-index-lenfind);
+                        else if(b_whole)
+                                {
+                                if (((index==0 || realCellText.mid(index-1,1)==" ")
+                                        && (realCellText.mid(index+lenfind,1)==" "||(index+lenfind)==len)))
+                                        realCellText=realCellText.left(index)+replaceText+realCellText.right(len-index-lenfind);
+                                }
+                        }
+                while( realCellText.find(findText,index+lenreplace) >=0);
+                }
+        return realCellText;
+        }
+else
+        {
+        realCellText=_cellText;
+        findText=_find.lower();
+        replaceText=_replace;
+        if( realCellText.lower().find(findText) >=0)
+                {
+                do
+                        {
+                        index=realCellText.lower().find(findText,index+lenreplace);
+                        int len=realCellText.length();
+                        lenfind=findText.length();
+                        lenreplace=replaceText.length();
+                        if(!b_whole)
+                                realCellText=realCellText.left(index)+replaceText+realCellText.right(len-index-lenfind);
+                        else if(b_whole)
+                                {
+                                if (((index==0 || realCellText.mid(index-1,1)==" ")
+                                        && (realCellText.mid(index+lenfind,1)==" "||(index+lenfind)==len)))
+                                        realCellText=realCellText.left(index)+replaceText+realCellText.right(len-index-lenfind);
+                                }
+                        }
+                while( realCellText.lower().find(findText,index+lenreplace) >=0);
+                }
+        return realCellText;
+        }
 }
 
 void KSpreadTable::borderBottom( const QPoint &_marker,QColor _color )

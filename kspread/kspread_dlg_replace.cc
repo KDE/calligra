@@ -59,6 +59,12 @@ KSpreadreplace::KSpreadreplace( KSpreadView* parent, const char* name,const QPoi
   lay1->addWidget(l_replace);
   l_find->setFocus();
 
+  sensitive=new QCheckBox(i18n("Case Sensitive"),this);
+  lay1->addWidget(sensitive);
+
+  wholeWordOnly=new QCheckBox(i18n( "Find Whole Words only" ),this);
+  lay1->addWidget(wholeWordOnly);
+
   KButtonBox *bb = new KButtonBox( this );
   bb->addStretch();
   m_pOk = bb->addButton( i18n("Replace") );
@@ -86,7 +92,7 @@ else if(l_replace->text().isEmpty() || l_find->text().isEmpty())
 	}
 else
 	{
-	if(!(m_pView->activeTable()->replace( marker,l_find->text(),l_replace->text())))
+	if(!(m_pView->activeTable()->replace( marker,l_find->text(),l_replace->text(),sensitive->isChecked(),wholeWordOnly->isChecked())))
 		{
 		 KMessageBox::error( this, i18n("Not any text replaces") );
 	        }

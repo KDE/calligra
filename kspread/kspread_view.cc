@@ -147,6 +147,7 @@ KSpreadView::KSpreadView( QWidget *_parent, const char *_name, KSpreadDoc* doc )
     m_pPosWidget = new QLabel( m_pToolWidget );
     m_pPosWidget->setAlignment( AlignCenter );
     m_pPosWidget->setFrameStyle( QFrame::WinPanel|QFrame::Sunken );
+
     m_pPosWidget->setMinimumWidth( 100 );
     hbox->addWidget( m_pPosWidget );
     hbox->addSpacing( 6 );

@@ -25,6 +25,7 @@
 #include <qpushbutton.h>
 #include <qlineedit.h>
 #include <qrect.h>
+#include <qcheckbox.h>
 
 
 class KSpreadView;
@@ -44,12 +45,14 @@ public slots:
 protected:
 
   KSpreadView* m_pView;
-  
+
   QLineEdit* l_find;
   QLineEdit* l_replace;
   QPushButton* m_pOk;
   QPushButton* m_pClose;
   QPoint  marker;
+  QCheckBox* sensitive;
+  QCheckBox* wholeWordOnly;
 
 };
 

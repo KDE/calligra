@@ -506,7 +506,7 @@ CellLayoutPageFloat::CellLayoutPageFloat( QWidget* parent, CellLayoutDlg *_dlg )
 
     QVBoxLayout* layout = new QVBoxLayout( this, 6,10 );
     QGroupBox *box = new QGroupBox( this, "Box");
-    
+
     QGridLayout *grid = new QGridLayout(box,3,4,15,7);
 
 
@@ -2270,27 +2270,21 @@ void KSpreadBrushSelect::slotSelect()
 }
 
 
-
 CellLayoutPagePattern::CellLayoutPagePattern( QWidget* parent, CellLayoutDlg *_dlg ) : QWidget( parent )
 {
     dlg = _dlg;
 
+    QGridLayout *grid = new QGridLayout(this,3,2,15,15);
+
     QGroupBox* tmpQGroupBox;
     tmpQGroupBox = new QGroupBox( this, "GroupBox" );
-    tmpQGroupBox->setGeometry( 15, 15, 190, 185 );
     tmpQGroupBox->setFrameStyle( 49 );
     tmpQGroupBox->setTitle( i18n("Pattern") );
     tmpQGroupBox->setAlignment( 1 );
 
-    color = new KColorButton (this, "ColorButton_1" );
-    color->setGeometry( 200, 220, 80, 25 );
+    QGridLayout *grid2 = new QGridLayout(tmpQGroupBox,5,3,15,7);
 
-    QLabel *tmpQLabel = new QLabel( this, "Label_1" );
-    tmpQLabel->setGeometry( 150, 220, 35, 25 );
-    tmpQLabel->setText( i18n("Color") );
-
-    brush1 = new KSpreadBrushSelect( this, "Frame_1" );
-    brush1->setGeometry( 20, 40, 50, 20 );
+    brush1 = new KSpreadBrushSelect( tmpQGroupBox, "Frame_1" );
     {
 	QColorGroup normal( ( QColor( QRgb(0) ) ), QColor( QRgb(16777215) ), QColor( QRgb(16777215) ), QColor( QRgb(6316128) ), QColor( QRgb(10789024) ), QColor( QRgb(0) ), QColor( QRgb(16777215) ) );
 	QColorGroup disabled( ( QColor( QRgb(8421504) ) ), QColor( QRgb(12632256) ), QColor( QRgb(16777215) ), QColor( QRgb(6316128) ), QColor( QRgb(10789024) ), QColor( QRgb(8421504) ), QColor( QRgb(12632256) ) );
@@ -2299,9 +2293,9 @@ CellLayoutPagePattern::CellLayoutPagePattern( QWidget* parent, CellLayoutDlg *_d
 	brush1->setPalette( palette );
     }
     brush1->setFrameStyle( 50 );
+    grid2->addWidget(brush1,0,0);
 
-    brush2 = new KSpreadBrushSelect( this, "Frame_2" );
-    brush2->setGeometry( 80, 40, 50, 20 );
+    brush2 = new KSpreadBrushSelect( tmpQGroupBox, "Frame_2" );
     {
 	QColorGroup normal( ( QColor( QRgb(0) ) ), QColor( QRgb(16777215) ), QColor( QRgb(16777215) ), QColor( QRgb(6316128) ), QColor( QRgb(10789024) ), QColor( QRgb(0) ), QColor( QRgb(16777215) ) );
 	QColorGroup disabled( ( QColor( QRgb(8421504) ) ), QColor( QRgb(12632256) ), QColor( QRgb(16777215) ), QColor( QRgb(6316128) ), QColor( QRgb(10789024) ), QColor( QRgb(8421504) ), QColor( QRgb(12632256) ) );
@@ -2310,9 +2304,9 @@ CellLayoutPagePattern::CellLayoutPagePattern( QWidget* parent, CellLayoutDlg *_d
 	brush2->setPalette( palette );
     }
     brush2->setFrameStyle( 50 );
+    grid2->addWidget(brush2,0,1);
 
-    brush3 = new KSpreadBrushSelect( this, "Frame_3" );
-    brush3->setGeometry( 140, 40, 50, 20 );
+    brush3 = new KSpreadBrushSelect( tmpQGroupBox, "Frame_3" );
     {
 	QColorGroup normal( ( QColor( QRgb(0) ) ), QColor( QRgb(16777215) ), QColor( QRgb(16777215) ), QColor( QRgb(6316128) ), QColor( QRgb(10789024) ), QColor( QRgb(0) ), QColor( QRgb(16777215) ) );
 	QColorGroup disabled( ( QColor( QRgb(8421504) ) ), QColor( QRgb(12632256) ), QColor( QRgb(16777215) ), QColor( QRgb(6316128) ), QColor( QRgb(10789024) ), QColor( QRgb(8421504) ), QColor( QRgb(12632256) ) );
@@ -2321,9 +2315,9 @@ CellLayoutPagePattern::CellLayoutPagePattern( QWidget* parent, CellLayoutDlg *_d
 	brush3->setPalette( palette );
     }
     brush3->setFrameStyle( 50 );
+    grid2->addWidget(brush3,0,2);
 
-    brush4 = new KSpreadBrushSelect( this, "Frame_4" );
-    brush4->setGeometry( 20, 70, 50, 20 );
+    brush4 = new KSpreadBrushSelect( tmpQGroupBox, "Frame_4" );
     {
 	QColorGroup normal( ( QColor( QRgb(0) ) ), QColor( QRgb(16777215) ), QColor( QRgb(16777215) ), QColor( QRgb(6316128) ), QColor( QRgb(10789024) ), QColor( QRgb(0) ), QColor( QRgb(16777215) ) );
 	QColorGroup disabled( ( QColor( QRgb(8421504) ) ), QColor( QRgb(12632256) ), QColor( QRgb(16777215) ), QColor( QRgb(6316128) ), QColor( QRgb(10789024) ), QColor( QRgb(8421504) ), QColor( QRgb(12632256) ) );
@@ -2332,9 +2326,9 @@ CellLayoutPagePattern::CellLayoutPagePattern( QWidget* parent, CellLayoutDlg *_d
 	brush4->setPalette( palette );
     }
     brush4->setFrameStyle( 50 );
+    grid2->addWidget(brush4,1,0);
 
-    brush5 = new KSpreadBrushSelect( this, "Frame_5" );
-    brush5->setGeometry( 80, 70, 50, 20 );
+    brush5 = new KSpreadBrushSelect( tmpQGroupBox, "Frame_5" );
     {
 	QColorGroup normal( ( QColor( QRgb(0) ) ), QColor( QRgb(16777215) ), QColor( QRgb(16777215) ), QColor( QRgb(6316128) ), QColor( QRgb(10789024) ), QColor( QRgb(0) ), QColor( QRgb(16777215) ) );
 	QColorGroup disabled( ( QColor( QRgb(8421504) ) ), QColor( QRgb(12632256) ), QColor( QRgb(16777215) ), QColor( QRgb(6316128) ), QColor( QRgb(10789024) ), QColor( QRgb(8421504) ), QColor( QRgb(12632256) ) );
@@ -2343,9 +2337,9 @@ CellLayoutPagePattern::CellLayoutPagePattern( QWidget* parent, CellLayoutDlg *_d
 	brush5->setPalette( palette );
     }
     brush5->setFrameStyle( 50 );
+    grid2->addWidget(brush5,1,1);
 
-    brush6 = new KSpreadBrushSelect( this, "Frame_6" );
-    brush6->setGeometry( 140, 70, 50, 20 );
+    brush6 = new KSpreadBrushSelect( tmpQGroupBox, "Frame_6" );
     {
 	QColorGroup normal( ( QColor( QRgb(0) ) ), QColor( QRgb(16777215) ), QColor( QRgb(16777215) ), QColor( QRgb(6316128) ), QColor( QRgb(10789024) ), QColor( QRgb(0) ), QColor( QRgb(16777215) ) );
 	QColorGroup disabled( ( QColor( QRgb(8421504) ) ), QColor( QRgb(12632256) ), QColor( QRgb(16777215) ), QColor( QRgb(6316128) ), QColor( QRgb(10789024) ), QColor( QRgb(8421504) ), QColor( QRgb(12632256) ) );
@@ -2354,9 +2348,9 @@ CellLayoutPagePattern::CellLayoutPagePattern( QWidget* parent, CellLayoutDlg *_d
 	brush6->setPalette( palette );
     }
     brush6->setFrameStyle( 50 );
+    grid2->addWidget(brush6,1,2);
 
-    brush7 = new KSpreadBrushSelect( this, "Frame_7" );
-    brush7->setGeometry( 20, 100, 50, 20 );
+    brush7 = new KSpreadBrushSelect( tmpQGroupBox, "Frame_7" );
     {
 	QColorGroup normal( ( QColor( QRgb(0) ) ), QColor( QRgb(16777215) ), QColor( QRgb(16777215) ), QColor( QRgb(6316128) ), QColor( QRgb(10789024) ), QColor( QRgb(0) ), QColor( QRgb(16777215) ) );
 	QColorGroup disabled( ( QColor( QRgb(8421504) ) ), QColor( QRgb(12632256) ), QColor( QRgb(16777215) ), QColor( QRgb(6316128) ), QColor( QRgb(10789024) ), QColor( QRgb(8421504) ), QColor( QRgb(12632256) ) );
@@ -2365,9 +2359,9 @@ CellLayoutPagePattern::CellLayoutPagePattern( QWidget* parent, CellLayoutDlg *_d
 	brush7->setPalette( palette );
     }
     brush7->setFrameStyle( 50 );
+    grid2->addWidget(brush7,2,0);
 
-    brush8 = new KSpreadBrushSelect( this, "Frame_8" );
-    brush8->setGeometry( 80, 100, 50, 20 );
+    brush8 = new KSpreadBrushSelect( tmpQGroupBox, "Frame_8" );
     {
 	QColorGroup normal( ( QColor( QRgb(0) ) ), QColor( QRgb(16777215) ), QColor( QRgb(16777215) ), QColor( QRgb(6316128) ), QColor( QRgb(10789024) ), QColor( QRgb(0) ), QColor( QRgb(16777215) ) );
 	QColorGroup disabled( ( QColor( QRgb(8421504) ) ), QColor( QRgb(12632256) ), QColor( QRgb(16777215) ), QColor( QRgb(6316128) ), QColor( QRgb(10789024) ), QColor( QRgb(8421504) ), QColor( QRgb(12632256) ) );
@@ -2376,9 +2370,9 @@ CellLayoutPagePattern::CellLayoutPagePattern( QWidget* parent, CellLayoutDlg *_d
 	brush8->setPalette( palette );
     }
     brush8->setFrameStyle( 50 );
+    grid2->addWidget(brush8,2,1);
 
-    brush9 = new KSpreadBrushSelect( this, "Frame_9" );
-    brush9->setGeometry( 140, 100, 50, 20 );
+    brush9 = new KSpreadBrushSelect( tmpQGroupBox, "Frame_9" );
     {
 	QColorGroup normal( ( QColor( QRgb(0) ) ), QColor( QRgb(16777215) ), QColor( QRgb(16777215) ), QColor( QRgb(6316128) ), QColor( QRgb(10789024) ), QColor( QRgb(0) ), QColor( QRgb(16777215) ) );
 	QColorGroup disabled( ( QColor( QRgb(8421504) ) ), QColor( QRgb(12632256) ), QColor( QRgb(16777215) ), QColor( QRgb(6316128) ), QColor( QRgb(10789024) ), QColor( QRgb(8421504) ), QColor( QRgb(12632256) ) );
@@ -2387,9 +2381,9 @@ CellLayoutPagePattern::CellLayoutPagePattern( QWidget* parent, CellLayoutDlg *_d
 	brush9->setPalette( palette );
     }
     brush9->setFrameStyle( 50 );
+    grid2->addWidget(brush9,2,2);
 
-    brush10 = new KSpreadBrushSelect( this, "Frame_10" );
-    brush10->setGeometry( 20, 130, 50, 20 );
+    brush10 = new KSpreadBrushSelect( tmpQGroupBox, "Frame_10" );
     {
 	QColorGroup normal( ( QColor( QRgb(0) ) ), QColor( QRgb(16777215) ), QColor( QRgb(16777215) ), QColor( QRgb(6316128) ), QColor( QRgb(10789024) ), QColor( QRgb(0) ), QColor( QRgb(16777215) ) );
 	QColorGroup disabled( ( QColor( QRgb(8421504) ) ), QColor( QRgb(12632256) ), QColor( QRgb(16777215) ), QColor( QRgb(6316128) ), QColor( QRgb(10789024) ), QColor( QRgb(8421504) ), QColor( QRgb(12632256) ) );
@@ -2398,9 +2392,9 @@ CellLayoutPagePattern::CellLayoutPagePattern( QWidget* parent, CellLayoutDlg *_d
 	brush10->setPalette( palette );
     }
     brush10->setFrameStyle( 50 );
+    grid2->addWidget(brush10,3,0);
 
-    brush11 = new KSpreadBrushSelect( this, "Frame_11" );
-    brush11->setGeometry( 80, 130, 50, 20 );
+    brush11 = new KSpreadBrushSelect( tmpQGroupBox, "Frame_11" );
     {
 	QColorGroup normal( ( QColor( QRgb(0) ) ), QColor( QRgb(16777215) ), QColor( QRgb(16777215) ), QColor( QRgb(6316128) ), QColor( QRgb(10789024) ), QColor( QRgb(0) ), QColor( QRgb(16777215) ) );
 	QColorGroup disabled( ( QColor( QRgb(8421504) ) ), QColor( QRgb(12632256) ), QColor( QRgb(16777215) ), QColor( QRgb(6316128) ), QColor( QRgb(10789024) ), QColor( QRgb(8421504) ), QColor( QRgb(12632256) ) );
@@ -2409,9 +2403,9 @@ CellLayoutPagePattern::CellLayoutPagePattern( QWidget* parent, CellLayoutDlg *_d
 	brush11->setPalette( palette );
     }
     brush11->setFrameStyle( 50 );
+    grid2->addWidget(brush11,3,1);
 
-    brush12 = new KSpreadBrushSelect( this, "Frame_12" );
-    brush12->setGeometry( 140, 130, 50, 20 );
+    brush12 = new KSpreadBrushSelect( tmpQGroupBox, "Frame_12" );
     {
 	QColorGroup normal( ( QColor( QRgb(0) ) ), QColor( QRgb(16777215) ), QColor( QRgb(16777215) ), QColor( QRgb(6316128) ), QColor( QRgb(10789024) ), QColor( QRgb(0) ), QColor( QRgb(16777215) ) );
 	QColorGroup disabled( ( QColor( QRgb(8421504) ) ), QColor( QRgb(12632256) ), QColor( QRgb(16777215) ), QColor( QRgb(6316128) ), QColor( QRgb(10789024) ), QColor( QRgb(8421504) ), QColor( QRgb(12632256) ) );
@@ -2420,9 +2414,9 @@ CellLayoutPagePattern::CellLayoutPagePattern( QWidget* parent, CellLayoutDlg *_d
 	brush12->setPalette( palette );
     }
     brush12->setFrameStyle( 50 );
+    grid2->addWidget(brush12,3,2);
 
-    brush13 = new KSpreadBrushSelect( this, "Frame_13" );
-    brush13->setGeometry( 20, 160, 50, 20 );
+    brush13 = new KSpreadBrushSelect( tmpQGroupBox, "Frame_13" );
     {
 	QColorGroup normal( ( QColor( QRgb(0) ) ), QColor( QRgb(16777215) ), QColor( QRgb(16777215) ), QColor( QRgb(6316128) ), QColor( QRgb(10789024) ), QColor( QRgb(0) ), QColor( QRgb(16777215) ) );
 	QColorGroup disabled( ( QColor( QRgb(8421504) ) ), QColor( QRgb(12632256) ), QColor( QRgb(16777215) ), QColor( QRgb(6316128) ), QColor( QRgb(10789024) ), QColor( QRgb(8421504) ), QColor( QRgb(12632256) ) );
@@ -2431,9 +2425,9 @@ CellLayoutPagePattern::CellLayoutPagePattern( QWidget* parent, CellLayoutDlg *_d
 	brush13->setPalette( palette );
     }
     brush13->setFrameStyle( 50 );
+    grid2->addWidget(brush13,4,0);
 
-    brush14 = new KSpreadBrushSelect( this, "Frame_14" );
-    brush14->setGeometry( 80, 160, 50, 20 );
+    brush14 = new KSpreadBrushSelect( tmpQGroupBox, "Frame_14" );
     {
 	QColorGroup normal( ( QColor( QRgb(0) ) ), QColor( QRgb(16777215) ), QColor( QRgb(16777215) ), QColor( QRgb(6316128) ), QColor( QRgb(10789024) ), QColor( QRgb(0) ), QColor( QRgb(16777215) ) );
 	QColorGroup disabled( ( QColor( QRgb(8421504) ) ), QColor( QRgb(12632256) ), QColor( QRgb(16777215) ), QColor( QRgb(6316128) ), QColor( QRgb(10789024) ), QColor( QRgb(8421504) ), QColor( QRgb(12632256) ) );
@@ -2442,9 +2436,9 @@ CellLayoutPagePattern::CellLayoutPagePattern( QWidget* parent, CellLayoutDlg *_d
 	brush14->setPalette( palette );
     }
     brush14->setFrameStyle( 50 );
+    grid2->addWidget(brush14,4,1);
 
-    brush15 = new KSpreadBrushSelect( this, "Frame_15" );
-    brush15->setGeometry( 140, 160, 50, 20 );
+    brush15 = new KSpreadBrushSelect( tmpQGroupBox, "Frame_15" );
     {
 	QColorGroup normal( ( QColor( QRgb(0) ) ), QColor( QRgb(16777215) ), QColor( QRgb(16777215) ), QColor( QRgb(6316128) ), QColor( QRgb(10789024) ), QColor( QRgb(0) ), QColor( QRgb(16777215) ) );
 	QColorGroup disabled( ( QColor( QRgb(8421504) ) ), QColor( QRgb(12632256) ), QColor( QRgb(16777215) ), QColor( QRgb(6316128) ), QColor( QRgb(10789024) ), QColor( QRgb(8421504) ), QColor( QRgb(12632256) ) );
@@ -2453,13 +2447,28 @@ CellLayoutPagePattern::CellLayoutPagePattern( QWidget* parent, CellLayoutDlg *_d
 	brush15->setPalette( palette );
     }
     brush15->setFrameStyle( 50 );
+    grid2->addWidget(brush15,4,2);
 
-    tmpQLabel = new QLabel( this, "Label_2" );
-    tmpQLabel->setGeometry( 20, 220, 50, 20 );
+    grid->addMultiCellWidget(tmpQGroupBox,0,1,0,0);
+
+    tmpQGroupBox = new QGroupBox( this, "GroupBox1" );
+    tmpQGroupBox->setFrameStyle( 49 );
+    tmpQGroupBox->setAlignment( 1 );
+
+    grid2 = new QGridLayout(tmpQGroupBox,2,2,15,7);
+
+    color = new KColorButton (tmpQGroupBox, "ColorButton_1" );
+    grid2->addWidget(color,1,0);
+
+    QLabel *tmpQLabel = new QLabel( tmpQGroupBox, "Label_1" );
+    tmpQLabel->setText( i18n("Color") );
+    grid2->addWidget(tmpQLabel,0,0);
+
+    tmpQLabel = new QLabel( tmpQGroupBox, "Label_2" );
     tmpQLabel->setText( i18n("Current") );
+    grid2->addWidget(tmpQLabel,0,1);
 
-    current = new KSpreadBrushSelect( this, "Current" );
-    current->setGeometry( 80, 220, 50, 20 );
+    current = new KSpreadBrushSelect( tmpQGroupBox, "Current" );
     {
 	QColorGroup normal( ( QColor( QRgb(0) ) ), QColor( QRgb(16777215) ), QColor( QRgb(16777215) ), QColor( QRgb(6316128) ), QColor( QRgb(10789024) ), QColor( QRgb(0) ), QColor( QRgb(16777215) ) );
 	QColorGroup disabled( ( QColor( QRgb(8421504) ) ), QColor( QRgb(12632256) ), QColor( QRgb(16777215) ), QColor( QRgb(6316128) ), QColor( QRgb(10789024) ), QColor( QRgb(8421504) ), QColor( QRgb(12632256) ) );
@@ -2468,6 +2477,8 @@ CellLayoutPagePattern::CellLayoutPagePattern( QWidget* parent, CellLayoutDlg *_d
 	current->setPalette( palette );
     }
     current->setFrameStyle( 50 );
+    grid2->addWidget(current,1,1);
+    grid->addWidget( tmpQGroupBox,2,0);
 
     connect( brush1, SIGNAL( clicked( KSpreadBrushSelect* ) ),
 	     this, SLOT( slotUnselect2( KSpreadBrushSelect* ) ) );

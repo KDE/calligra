@@ -63,7 +63,7 @@ void KSpreadEditWidget::slotDoneEdit()
 void KSpreadEditWidget::keyPressEvent ( QKeyEvent* _ev )
 {
   // Dont handle special keys and accelerators
-  if ( _ev->state() & ( Qt::AltButton | Qt::ControlButton ) )
+if ( _ev->state() & ( Qt::AltButton | Qt::ControlButton ) )
   {
     QLineEdit::keyPressEvent( _ev );
     return;
@@ -1570,6 +1570,7 @@ void KSpreadCanvas::drawMarker( QPainter * _painter )
   	}
 
   m_pPosWidget->setText(buffer);
+
 }
 
 void KSpreadCanvas::updateChooseMarker( const QRect& _old, const QRect& _new )
