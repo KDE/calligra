@@ -3702,7 +3702,6 @@ void KPrCanvas::insertFreehand( const KoPointArray &_pointArray )
         tmpPoints.putPoints( index, 1, tmpX,tmpY );
         ++index;
     }
-
     m_activePage->insertFreehand( tmpPoints, rect, m_view->getPen(), m_view->getLineBegin(),
                                            m_view->getLineEnd() );
 
@@ -3729,7 +3728,6 @@ void KPrCanvas::insertPolyline( const KoPointArray &_pointArray )
         tmpPoints.putPoints( index, 1, tmpX,tmpY );
         ++index;
     }
-
     m_activePage->insertPolyline( tmpPoints, rect, m_view->getPen(), m_view->getLineBegin(),
                                            m_view->getLineEnd() );
 
@@ -3823,6 +3821,7 @@ void KPrCanvas::insertCubicBezierCurve( const KoPointArray &_pointArray )
         ++index;
     }
     //KoRect rect=m_view->zoomHandler()->unzoomRect(_rect);
+    _rect.moveBy(diffx(),diffy());
     if ( toolEditMode == INS_CUBICBEZIERCURVE ) {
         m_activePage->insertCubicBezierCurve( tmpPoints, tmpAllPoints, _rect, m_view->getPen(),
                                                        m_view->getLineBegin(), m_view->getLineEnd() );
@@ -3854,7 +3853,6 @@ void KPrCanvas::insertPolygon( const KoPointArray &_pointArray )
         tmpPoints.putPoints( index, 1, tmpX,tmpY );
         ++index;
     }
-
     m_activePage->insertPolygon( tmpPoints, rect, m_view->getPen(), m_view->getBrush(), m_view->getFillType(),
                                           m_view->getGColor1(), m_view->getGColor2(), m_view->getGType(), m_view->getGUnbalanced(),
                                           m_view->getGXFactor(), m_view->getGYFactor(),
