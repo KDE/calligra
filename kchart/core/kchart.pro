@@ -31,7 +31,7 @@ SOURCES     =	\
 		KChartPiePainter.cpp		\
 		KChartPie3DPainter.cpp	\
 		KChartColorArray.cpp	\
-		main11.cpp
+		main7.cpp
 
 TARGET      =	kchart
 

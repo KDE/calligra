@@ -12,10 +12,13 @@
 
 #include <qapp.h> // fatal
 #include <qstrlist.h> // QStrList
+#include <qfontmet.h>
 
 #include <kdebug.h>
 
+#ifdef INCLUDE_MOC_BULLSHIT
 #include "KChart.moc"
+#endif
 
 KChart::KChart( KChartType type ) :
   _charttype( type )
@@ -176,6 +179,10 @@ void KChart::setTitleFont( QFont font )
 {
   _titlefont = font;
 
+  QFontMetrics fm( font );
+  _titlefontwidth = fm.width( 'm' );
+  _titlefontheight = fm.height();
+
   doAutoUpdate();
 }
 
@@ -190,6 +197,12 @@ void KChart::setLabelFont( QFont font )
   _xlabelfont = font;
   _ylabelfont = font;
 
+  QFontMetrics fm( font );
+  _xlabelfontwidth = fm.width( 'm' );
+  _xlabelfontheight = fm.height();
+  _ylabelfontwidth = fm.width( 'm' );
+  _ylabelfontheight = fm.height();
+
   doAutoUpdate();
 }
 
@@ -202,6 +215,10 @@ QFont KChart::labelFont() const
 void KChart::setXLabelFont( QFont font  )
 {
   _xlabelfont = font;
+
+  QFontMetrics fm( font );
+  _xlabelfontwidth = fm.width( 'm' );
+  _xlabelfontheight = fm.height();
 
   doAutoUpdate();
 }
@@ -216,6 +233,10 @@ void KChart::setYLabelFont( QFont font )
 {
   _ylabelfont = font;
 
+  QFontMetrics fm( font );
+  _ylabelfontwidth = fm.width( 'm' );
+  _ylabelfontheight = fm.height();
+
   doAutoUpdate();
 }
 
@@ -227,21 +248,27 @@ QFont KChart::yLabelFont() const
 
 void KChart::setValueFont( QFont font  )
 {
-  fatal( "Sorry, not implemented: KChart::setValueFont\n" );
+  _valuefont = font;
+  QFontMetrics fm( font );
+  _valuefontwidth = fm.width( 'm' );
+  _valuefontheight = fm.height();
 
   doAutoUpdate();
 }
 
 QFont KChart::valueFont() const
 {
-  fatal( "Sorry, not implemented: KChart::valueFont\n" );
-  return QFont();
+  return _valuefont;
 }
 
 
 void KChart::setXAxisFont( QFont font  )
 {
   _xaxisfont = font;
+
+  QFontMetrics fm( font );
+  _xaxisfontwidth = fm.width( 'm' );
+  _xaxisfontheight = fm.height();
 
   doAutoUpdate();
 }
@@ -256,6 +283,10 @@ void KChart::setYAxisFont( QFont font )
 {
   _yaxisfont = font;
 
+  QFontMetrics fm( font );
+  _yaxisfontwidth = fm.width( 'm' );
+  _yaxisfontheight = fm.height();
+
   doAutoUpdate();
 }
 
@@ -267,6 +298,7 @@ QFont KChart::yAxisFont() const
 
 void KChart::setMargin( int margin )
 {
+  // PENDING(kalle) set the values for the margins seperately
   _topmargin = margin;
   _bottommargin = margin;
   _leftmargin = margin;
@@ -277,8 +309,7 @@ void KChart::setMargin( int margin )
 
 int KChart::margin() const
 {
-  fatal( "Sorry, not implemented: KChart::margin\n" );
-  return 0;
+  return _topmargin;
 }
 
 
@@ -644,6 +675,10 @@ int KChart::legendMarkerHeight() const
 void KChart::setLegendFont( QFont font )
 {
   _legendfont = font;
+
+  QFontMetrics fm( font );
+  _legendfontwidth = fm.width( 'm' );
+  _legendfontheight = fm.height();
 
   doAutoUpdate();
 }

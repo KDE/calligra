@@ -3,7 +3,7 @@
 ####### General stuff
 
 INCLUDES= $(all_includes) $(MICO_INCLUDES)
-CXXFLAGS += -O
+CXXFLAGS += -O -DINCLUDE_MOC_BULLSHIT
 
 ####### Files
 
@@ -25,7 +25,7 @@ SUFFIXES = .h .moc
 
 DISTCLEANFILES = $(BUILT_SOURCES)
 
-noinst_PROGRAMS = test test2 test3 test4 test5 test6 test7 test10 test11
+noinst_PROGRAMS = test test2 test3 test4 test5 test6 test7 test10 test11 test14
 noinst_HEADERS = KChartAreaPainter.h KChartAxesPainter.h KChartBarsPainter.h \
 	KChartLinesPainter.h KChartLinesPointsPainter.h KChartPointsPainter.h \
 	KChartPiePainter.h KChartPie3DPainter.h 
@@ -45,7 +45,8 @@ test6_SOURCES = main6.cpp
 test7_SOURCES = main7.cpp
 test10_SOURCES = main10.cpp
 test11_SOURCES = main11.cpp
+test14_SOURCES = main14.cpp
 
-LDFLAGS = $(all_libraries) $(KDE_RPATH)
+LDFLAGS = $(all_libraries)
 LDADD = libkchartcore.la -lkdecore -lqt -lXext -lX11 $(LIBSOCKET)
 

@@ -1,7 +1,9 @@
 /* $Id$ */
 
 #include "KChartData.h"
+#ifdef INCLUDE_MOC_BULLSHIT
 #include "KChartData.moc"
+#endif
 
 #include <values.h>
 #include <math.h> // MAXDOUBLE

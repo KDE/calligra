@@ -139,101 +139,100 @@ private:
   KChartPainter* _cp;
   KChartData* _chartdata;
 
-  QList<QPaintDevice> _autoupdatedevices;
-
-  // This is stuff that used to be in the painters
   KChartColorArray _datacolors;
-  uint _topmargin;
-  uint _bottommargin;
-  uint _leftmargin;
-  uint _rightmargin;
-
-  uint _top;
-  uint _bottom;
-  uint _left;
-  uint _right;
-
+  LegendPlacement _legendplacement;
+  OverwriteMode _overwrite;
+  QColor _accentcolor;
+  QColor _axislabelcolor;
   QColor _bgcolor;
   QColor _fgcolor;
-  QColor _textcolor;
   QColor _labelcolor;
-  QColor _axislabelcolor;
-  QColor _accentcolor;
-
-  QString _title;
-
-  bool _transparency;
-
-  uint _textspacing;
-
-  QFont _titlefont;
-  int _titlefontwidth;
-  int _titlefontheight;
-  double _ymins[2]; // calculated
-  double _ymaxs[2]; // calculated
-  QStrList _legends;
-  QFont _xlabelfont;
-  QFont _ylabelfont;
-  QFont _xaxisfont;
-  QFont _yaxisfont;
+  QColor _textcolor;
   QFont _legendfont;
+  QFont _titlefont;
+  QFont _valuefont;
+  QFont _xaxisfont;
+  QFont _xlabelfont;
+  QFont _yaxisfont;
+  QFont _ylabelfont;
+  QList<PenStyle> _linetypes;
+  QList<QPaintDevice> _autoupdatedevices;
+  QStrList _legends;
+  QString _title;
   QString _xlabel;
-  QString _ylabel;
   QString _y1label;
   QString _y2label;
-  double _ylabels[2][100]; // PENDING(kalle): Make this dynamic, use STL here
-  int _ticklength;
-  double _ymin; // user-supplied
-  double _y1min; // user-supplied
-  double _y2min; // user-supplied
-  double _ymax; // user-supplied
-  double _y1max; // user-supplied
-  double _y2max; // user-supplied
-  int _yticksnum;
-  int _xlabelskip;
-  int _ylabelskip;
-  int _axisspace;
-  int _legendmarkerheight;
-  int _legendelementheight;
-  int _legendmarkerwidth;
-  int _legendelementwidth;
-  int _legendspacing;
-  int _legendnum; // number of legend entries, computed
-  int _legendcols;
-  int _legendrows;
-  int _legendxsize;
-  int _legendysize;
-  int _legendxstart;
-  int _legendystart;
-  int _textfontwidth;
-  int _textfontheight;
-  int _xlabelfontwidth;
-  int _xlabelfontheight;
-  int _ylabelfontwidth;
-  int _ylabelfontheight;
-  int _ylabelfontheight1;
-  int _ylabelfontheight2;
-  int _xaxisfontwidth;
-  int _xaxisfontheight;
-  int _yaxisfontwidth;
-  int _yaxisfontheight;
-  int _legendfontwidth;
-  int _legendfontheight;
-  LegendPlacement _legendplacement;
-  int _xstep;
-  int _zeropoint;
-  int _ylabellength[2];
-  bool _longticks;
-  bool _xticks;
+  QString _ylabel;
   bool _boxaxis;
+  bool _longticks;
+  bool _transparency;
   bool _twoaxes;
   bool _xplotvalues;
+  bool _xticks;
   bool _yplotvalues;
-  OverwriteMode _overwrite;
   bool _zeroaxis;
   bool _zeroaxisonly;
+  double _y1max; // user-supplied
+  double _y1min; // user-supplied
+  double _y2max; // user-supplied
+  double _y2min; // user-supplied
+  double _ylabels[2][100]; // PENDING(kalle): Make this dynamic, use STL here
+  double _ymax; // user-supplied
+  double _ymaxs[2]; // calculated
+  double _ymin; // user-supplied
+  double _ymins[2]; // calculated
+  int _axisspace;
+  int _pieheight;
+  int _legendcols;
+  int _legendelementheight;
+  int _legendelementwidth;
+  int _legendfontheight;
+  int _legendfontwidth;
+  int _legendmarkerheight;
+  int _legendmarkerwidth;
+  int _legendnum; // number of legend entries, computed
+  int _legendrows;
+  int _legendspacing;
+  int _legendxsize;
+  int _legendxstart;
+  int _legendysize;
+  int _legendystart;
   int _linewidth;
-  QList<PenStyle> _linetypes;
+  int _startangle;
+  int _textfontheight;
+  int _textfontwidth;
+  int _ticklength;
+  int _titlefontheight;
+  int _titlefontwidth;
+  int _valuefontheight;
+  int _valuefontwidth;
+  int _xaxisfontheight;
+  int _xaxisfontwidth;
+  int _xlabelfontheight;
+  int _xlabelfontwidth;
+  int _xlabelskip;
+  int _xstep;
+  int _yaxisfontheight;
+  int _yaxisfontwidth;
+  int _ylabelfontheight1;
+  int _ylabelfontheight2;
+  int _ylabelfontheight;
+  int _ylabelfontwidth;
+  int _ylabellength[2];
+  int _ylabelskip;
+  int _yticksnum;
+  int _zeropoint;
+  uint _bottom;
+  uint _bottommargin;
+  uint _height;
+  uint _left;
+  uint _leftmargin;
+  uint _right;
+  uint _rightmargin;
+  uint _textspacing;
+  uint _top;
+  uint _topmargin;
+  uint _width;
 };
 
 

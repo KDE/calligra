@@ -18,10 +18,14 @@ public:
   virtual void paintChart( QPaintDevice* paintdev );
   virtual void drawData( QPainter* painter );
   virtual void drawText( QPainter* painter );
-  virtual QColor chooseDataColor( int dataset );
+  virtual void drawPie( QPainter* painter );
 
 protected:
+  const int _angleoffset = 90;
   bool setupCoords( QPaintDevice* );
+
+  int _xcenter;
+  int _ycenter;
 
 private:
 };
