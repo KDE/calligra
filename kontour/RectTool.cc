@@ -45,21 +45,21 @@ RectTool::RectTool(QString aId, ToolController *tc):
 Tool(aId, tc)
 {
   ToolSelectAction *zoom = new ToolSelectAction(actionCollection(), "ToolAction");
-  KRadioAction *mT1 = new KRadioAction(i18n("Square"), BarIcon("rect1", KontourFactory::global()), 0, actionCollection());
+  KRadioAction *mT1 = new KRadioAction(i18n("Square"), "rect1", 0, actionCollection());
   mT1->setExclusiveGroup("RectTool");
-  KRadioAction *mT2 = new KRadioAction(i18n("Rectangle"),BarIcon( "rect2", KontourFactory::global()), 0, actionCollection());
+  KRadioAction *mT2 = new KRadioAction(i18n("Rectangle"),"rect2", 0, actionCollection());
   mT2->setExclusiveGroup("RectTool");
-  KRadioAction *mT3 = new KRadioAction(i18n("Square"), BarIcon("rect3", KontourFactory::global()), 0, actionCollection());
+  KRadioAction *mT3 = new KRadioAction(i18n("Square"), "rect3", 0, actionCollection());
   mT3->setExclusiveGroup("RectTool");
-  KRadioAction *mT4 = new KRadioAction(i18n("Rectangle"), BarIcon("rect4", KontourFactory::global()), 0, actionCollection());
+  KRadioAction *mT4 = new KRadioAction(i18n("Rectangle"), "rect4", 0, actionCollection());
   mT4->setExclusiveGroup("RectTool");
-  KRadioAction *mT5 = new KRadioAction(i18n("Square"), BarIcon("rect5", KontourFactory::global()), 0, actionCollection());
+  KRadioAction *mT5 = new KRadioAction(i18n("Square"), "rect5", 0, actionCollection());
   mT5->setExclusiveGroup("RectTool");
-  KRadioAction *mT6 = new KRadioAction(i18n("Rectangle"), BarIcon("rect6", KontourFactory::global()), 0, actionCollection());
+  KRadioAction *mT6 = new KRadioAction(i18n("Rectangle"), "rect6", 0, actionCollection());
   mT6->setExclusiveGroup("RectTool");
-  KRadioAction *mT7 = new KRadioAction(i18n("Square"), BarIcon("rect7", KontourFactory::global()), 0, actionCollection());
+  KRadioAction *mT7 = new KRadioAction(i18n("Square"), "rect7", 0, actionCollection());
   mT7->setExclusiveGroup("RectTool");
-  KRadioAction *mT8 = new KRadioAction(i18n("Rectangle"), BarIcon("rect8", KontourFactory::global()), 0, actionCollection());
+  KRadioAction *mT8 = new KRadioAction(i18n("Rectangle"), "rect8", 0, actionCollection());
   mT8->setExclusiveGroup("RectTool");
   zoom->insert(mT1);
   zoom->insert(mT2);

@@ -30,10 +30,11 @@
 #include <ktoolbar.h>
 #include <ktoolbarbutton.h>
 
+#include "kontour_factory.h"
 #include "ToolController.h"
 
-ToolSelectAction::ToolSelectAction(QObject* parent, const char* name)
-:KActionMenu("",parent,name)
+ToolSelectAction::ToolSelectAction(QObject* parent, const char *name):
+KActionMenu("",parent,name)
 {
   m_actSelf = false;
   m_init = false;
@@ -126,6 +127,7 @@ void ToolSelectAction::setToggleState( bool state )
 
 Tool::Tool(QString aId, ToolController *tc)
 {
+  setInstance(KontourFactory::global());
   mToolController = tc;
   mId = aId;
 }

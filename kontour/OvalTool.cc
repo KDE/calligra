@@ -43,8 +43,8 @@ OvalTool::OvalTool(QString aId, ToolController *tc):
 Tool(aId, tc)
 {
   ToolSelectAction* zoom = new ToolSelectAction(actionCollection(), "ToolAction" );
-  KRadioAction *mT1 = new KRadioAction(i18n("Circle"), BarIcon("ellipse1", KontourFactory::global()), 0, actionCollection());
-  KRadioAction *mT2 = new KRadioAction(i18n("Circle"), BarIcon("ellipse2", KontourFactory::global()), 0, actionCollection());
+  KRadioAction *mT1 = new KRadioAction(i18n("Circle"), "ellipse1", 0, actionCollection());
+  KRadioAction *mT2 = new KRadioAction(i18n("Circle"), "ellipse2", 0, actionCollection());
   mT1->setExclusiveGroup("OvalTool");
   mT2->setExclusiveGroup("OvalTool");
   zoom->insert(mT1);
