@@ -547,7 +547,9 @@ void KoRuler::mouseMoveEvent( QMouseEvent *e )
     int ip_first = i_first;
 
     int mx = e->x();
+    mx = mx < 0 ? 0 : mx;
     int my = e->y();
+    my = my < 0 ? 0 : my;
 
     switch ( orientation ) {
     case Qt::Horizontal: {
@@ -589,26 +591,28 @@ void KoRuler::mouseMoveEvent( QMouseEvent *e )
 		}
 	    }
 	} else {
+	    // Note: All limits should be 0, but KWord crashes currently, when the
+	    // page is too small! (Werner)
 	    switch ( d->action ) {
 	    case A_BR_LEFT: {
-		if ( d->canvas ) {
+		if ( d->canvas && mx < right-10 ) {
 		    QPainter p;
 		    p.begin( d->canvas );
 		    p.setRasterOp( NotROP );
 		    p.setPen( QPen( black, 1, SolidLine ) );
 		    p.drawLine( d->oldMx, 0, d->oldMx, d->canvas->height() );
 		    p.drawLine( mx, 0, mx, d->canvas->height() );
-		    p.end();
 		    layout.left = layout.mmLeft = cPOINT_TO_MM( mx + diffx );
 		    layout.inchLeft = cPOINT_TO_INCH( mx + diffx );
 		    layout.ptLeft = mx + diffx;
 		    d->oldMx = e->x();
 		    d->oldMy = e->y();
+		    p.end();
 		    repaint( false );
 		}
 	    } break;
 	    case A_BR_RIGHT: {
-		if ( d->canvas ) {
+		if ( d->canvas && mx > left+10 ) {
 		    QPainter p;
 		    p.begin( d->canvas );
 		    p.setRasterOp( NotROP );
@@ -626,20 +630,17 @@ void KoRuler::mouseMoveEvent( QMouseEvent *e )
 	    } break;
 	    case A_FIRST_INDENT: {
 		if ( d->canvas ) {
-		    QPainter p;
-		    p.begin( d->canvas );
-		    p.setRasterOp( NotROP );
-		    p.setPen( QPen( black, 1, SolidLine ) );
-		    if ( mx - left >= 0 ) {
+		    if ( mx - left >= 0 && right - mx >= 10 ) {
+			QPainter p;
+			p.begin( d->canvas );
+			p.setRasterOp( NotROP );
+			p.setPen( QPen( black, 1, SolidLine ) );
 			p.drawLine( d->oldMx, 0, d->oldMx, d->canvas->height() );
 			p.drawLine( mx, 0, mx, d->canvas->height() );
-		    } else {
 			p.end();
+		    } else
 			return;
-		    }
-		    p.end();
 		    i_first = mx - left;
-		    if ( i_first < 0 ) i_first = 0;
 		    d->oldMx = e->x();
 		    d->oldMy = e->y();
 		    repaint( false );
@@ -647,22 +648,24 @@ void KoRuler::mouseMoveEvent( QMouseEvent *e )
 	    } break;
 	    case A_LEFT_INDENT: {
 		if ( d->canvas ) {
-		    QPainter p;
-		    p.begin( d->canvas );
-		    p.setRasterOp( NotROP );
-		    p.setPen( QPen( black, 1, SolidLine ) );
-		    if ( mx - left >= 0 ) {
+		    if ( mx - left >= 0 && right - mx >= 10 ) {
+			QPainter p;
+			p.begin( d->canvas );
+			p.setRasterOp( NotROP );
+			p.setPen( QPen( black, 1, SolidLine ) );
 			p.drawLine( d->oldMx, 0, d->oldMx, d->canvas->height() );
 			p.drawLine( mx, 0, mx, d->canvas->height() );
-		    } else {
 			p.end();
+		    } else
 			return;
-		    }
-		    p.end();
 		    int oldLeft = i_left;
+		    int oldDiff = i_first-i_left;
 		    i_left = mx - left;
-		    if ( i_left < 0 ) i_left = 0;
-		    else i_first += i_left - oldLeft;
+		    i_first = i_left + oldDiff;
+		    if( i_first < 0)
+			i_first=0;
+		    else if( i_first > right-left-10 )
+			i_first=right-left-10;
 		    d->oldMx = e->x();
 		    d->oldMy = e->y();
 		    repaint( false );
