@@ -1359,7 +1359,7 @@ void Worker::rk_internal( int row, int column, Q_UINT16 xf, Q_UINT32 number )
 	QDomElement text = m_root->createElement("text");
 	text.setAttribute("outStr", s);
 	text.setAttribute("dataType","Num");
-	text.appendChild(m_root->createTextNode(QString::number(value)));
+	text.appendChild(m_root->createTextNode(QString::number(value,'g',15)));
 	e.appendChild(text);
 	if( m_table ) m_table->appendChild(e);
 }
@@ -1453,7 +1453,7 @@ bool Worker::op_number(Q_UINT32, QDataStream &body)
 	QDomElement text = m_root->createElement("text");
 	text.setAttribute("outStr", s);
 	text.setAttribute("dataType","Num");
-	text.appendChild(m_root->createTextNode(QString::number(value)));
+	text.appendChild(m_root->createTextNode(QString::number(value,'g',15)));
 	e.appendChild(text);
 	if( m_table ) m_table->appendChild(e);
 

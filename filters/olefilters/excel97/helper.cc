@@ -400,22 +400,29 @@ double Helper::GetDoubleFromRK( Q_UINT32 nRKValue )
 {
     double fVal;
 
+    //kdDebug() << "RK raw: " << nRKValue << " => " << QString::number( nRKValue, 2 ) << endl;
     if( nRKValue & EXC_RK_INTFLAG )
+    {
         fVal = (double) (*((Q_UINT32*) &nRKValue) >> 2); // integer
+        kdDebug() << "RK integer: " << fVal << endl;
+    }
     else
     {
         // 64-Bit IEEE-Float
 #ifdef __BIGENDIAN
-        *((Q_UINT32*) &fVal + 1) = 0;                     // lower 32 bits = 0
-        *((Q_UINT32*) &fVal) = nRKValue & 0xFFFFFFFC;     // bit 0, 1 = 0
+        ((Q_UINT32*) &fVal)[1] = 0;                         // lower 32 bits = 0
+        ((Q_UINT32*) &fVal)[0] = nRKValue & 0xFFFFFFFC; // bit 0, 1 = 0
 #else
-        *((Q_UINT32*) &fVal) = 0;                         // lower 32 bits = 0
-        *((Q_UINT32*) &fVal + 1) = nRKValue & 0xFFFFFFFC; // bit 0, 1 = 0
+        ((Q_UINT32*) &fVal)[0] = 0;                         // lower 32 bits = 0
+        ((Q_UINT32*) &fVal)[1] = nRKValue & 0xFFFFFFFC; // bit 0, 1 = 0
 #endif
+        kdDebug() << "RK float: " << fVal << endl;
     }
 
     if( nRKValue & EXC_RK_100FLAG )
         fVal *= 0.01;
+
+    kdDebug() << "RK end result: " << fVal << endl;
 
     return fVal;
 }
