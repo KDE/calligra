@@ -577,7 +577,8 @@ QString KSpreadStyle::saveOasisStyleNumericText( KoGenStyles&mainStyles )
 
 QString KSpreadStyle::saveOasisStyleNumericMoney( KoGenStyles&mainStyles )
 {
-    return "";
+    QString format;
+    return KoOasisStyles::saveOasisCurrencyStyle( mainStyles, format );
 }
 
 QString KSpreadStyle::saveOasisStyleNumericPercentage( KoGenStyles&mainStyles )
@@ -586,8 +587,10 @@ QString KSpreadStyle::saveOasisStyleNumericPercentage( KoGenStyles&mainStyles )
     //<number:number number:decimal-places="6" number:min-integer-digits="1"/>
     //<number:text>%</number:text>
     //</number:percentage-style>
+    //TODO add decimal etc.
+    QString format;
 
-    return "";
+    return KoOasisStyles::saveOasisPercentageStyle( mainStyles, format );
 }
 
 
@@ -596,8 +599,9 @@ QString KSpreadStyle::saveOasisStyleNumericScientific( KoGenStyles&mainStyles )
     //<number:number-style style:name="N60" style:family="data-style">
     //  <number:scientific-number number:decimal-places="2" number:min-integer-digits="1" number:min-exponent-digits="3"/>
     //</number:number-style>
-
-    return "";
+    //TODO add decimal etc.
+    QString format;
+    return KoOasisStyles::saveOasisScientificStyle( mainStyles, format );
 }
 
 QString KSpreadStyle::saveOasisStyleNumericDate( KoGenStyles&mainStyles )
@@ -642,7 +646,7 @@ QString KSpreadStyle::saveOasisStyleNumericDate( KoGenStyles&mainStyles )
         format = "MMMM-yyyy";
         break;
     case date_format10:
-        format;/*"F-99" it doesn't exist into qdate*/
+        format = "MMMMM-yy";
         break;
     case date_format11:
         format = "dd/MMM";
@@ -701,6 +705,7 @@ QString KSpreadStyle::saveOasisStyleNumericDate( KoGenStyles&mainStyles )
 
 QString KSpreadStyle::saveOasisStyleNumericCustom( KoGenStyles&mainStyles )
 {
+    //TODO
     //<number:date-style style:name="N50" style:family="data-style" number:automatic-order="true" number:format-source="language">
     //<number:month/>
     //<number:text>/</number:text>
@@ -714,16 +719,7 @@ QString KSpreadStyle::saveOasisStyleNumericCustom( KoGenStyles&mainStyles )
     // <number:text> </number:text>
     //<number:am-pm/>
     //</number:date-style>
-    KoGenStyle currentCellStyle( KoGenStyle::STYLE_NUMERIC_DATE );
-    QBuffer buffer;
-    buffer.open( IO_WriteOnly );
-    KoXmlWriter elementWriter( &buffer );  // TODO pass indentation level
-
-
-
-    QString elementContents = QString::fromUtf8( buffer.buffer(), buffer.buffer().size() );
-    currentCellStyle.addChildElement( "number", elementContents );
-    return mainStyles.lookup( currentCellStyle, "N" );
+    return "";
 }
 
 QString KSpreadStyle::saveOasisStyleNumericTime( KoGenStyles& mainStyles )
