@@ -110,6 +110,32 @@ KoFilter::ConversionStatus ExcelImport::convert( const QCString& from, const QCS
     table.setAttribute( "name", string( sheet->name() ).string() );
     map.appendChild( table );
 
+    for( unsigned i = 0; i <= sheet->maxColumn(); i++ )
+    {
+      Sidewinder::Column* column = sheet->column( i, false );
+      if( column )
+      {
+        QDomElement e;
+        e = mainDocument.createElement( "column" );
+        e.setAttribute( "column", QString::number( i+1 ) );
+        e.setAttribute( "width", QString::number( column->width() ) );
+        table.appendChild( e );
+      }
+    }
+
+    for( unsigned i = 0; i <= sheet->maxRow(); i++ )
+    {
+      Sidewinder::Row* row = sheet->row( i, false );
+      if( row )
+      {
+        QDomElement e;
+        e = mainDocument.createElement( "row" );
+        e.setAttribute( "row", QString::number( i+1 ) );
+        e.setAttribute( "height", QString::number( POINT_TO_MM ( row->height() ) ) );
+        table.appendChild( e );
+      }
+    }
+
     for( unsigned row = 0; row <= sheet->maxRow(); row++ )
       for( unsigned col = 0; col <= sheet->maxColumn(); col++ )
       {
