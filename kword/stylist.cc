@@ -365,7 +365,9 @@ void KWStyleManager::apply() {
 
             int paragLayoutChanged = orig->paragLayout().compare( changed->paragLayout() );
             int formatChanged = orig->format().compare( changed->format() );
-            if(formatChanged || paragLayoutChanged || orig->name().compare(changed->name())!=0)
+
+            bool followingStyleChanged=(orig->followingStyle()!=changed->followingStyle());
+            if(formatChanged || paragLayoutChanged ||followingStyleChanged ||orig->name().compare(changed->name())!=0)
                 docIsChanged=true;
 
             //kdDebug() << "old format " << orig->format().key() << " pointsize " << orig->format().pointSizeFloat() << endl;
