@@ -245,7 +245,7 @@ void KSpreadEditWidget::setText( const QString& t )
  ****************************************************************/
 
 KSpreadCanvas::KSpreadCanvas( QWidget *_parent, KSpreadView *_view, KSpreadDoc* _doc )
-  : QWidget( _parent, "", WNorthWestGravity | WResizeNoErase | WRepaintNoErase )
+    : QWidget( _parent, "", /*WNorthWestGravity*/ WStaticContents| WResizeNoErase | WRepaintNoErase )
 {
   length_namecell = 0;
   m_chooseStartTable = 0;
@@ -1766,7 +1766,7 @@ void KSpreadCanvas::keyPressEvent ( QKeyEvent * _ev )
 	  m_pView->editWidget()->setFocus();
 	  if(m_pEditor)
 	      m_pView->editWidget()->setCursorPosition(m_pEditor->cursorPosition()-1);
-	  m_pView->editWidget()->cursorRight(false);
+	  m_pView->editWidget()->cursorForward(false);
 	  return;
       default:
 
@@ -2071,7 +2071,7 @@ void KSpreadCanvas::createEditor( EditorType ed, bool addFocus)
     int xpos = table->columnPos( markerColumn(), this );
     int ypos = table->rowPos( markerRow(), this );
     QPalette p = m_pEditor->palette();
-    QColorGroup g( p.normal() );
+    QColorGroup g( p.active() );
     QColor color=cell->textColor( markerColumn(), markerRow() );
     if(!color.isValid())
         color=QApplication::palette().active().text();
@@ -2778,7 +2778,7 @@ void KSpreadCanvas::equalizeColumn()
  ****************************************************************/
 
 KSpreadVBorder::KSpreadVBorder( QWidget *_parent, KSpreadCanvas *_canvas, KSpreadView *_view)
-  : QWidget( _parent, "", WNorthWestGravity | WResizeNoErase | WRepaintNoErase )
+    : QWidget( _parent, "", /*WNorthWestGravity*/WStaticContents | WResizeNoErase | WRepaintNoErase )
 {
   m_pView = _view;
   m_pCanvas = _canvas;
@@ -3266,7 +3266,7 @@ void KSpreadVBorder::paintEvent( QPaintEvent* _ev )
  ****************************************************************/
 
 KSpreadHBorder::KSpreadHBorder( QWidget *_parent, KSpreadCanvas *_canvas,KSpreadView *_view )
-  : QWidget( _parent, "", WNorthWestGravity | WResizeNoErase | WRepaintNoErase )
+    : QWidget( _parent, "", /*WNorthWestGravity*/ WStaticContents| WResizeNoErase | WRepaintNoErase )
 {
   m_pView = _view;
   m_pCanvas = _canvas;
