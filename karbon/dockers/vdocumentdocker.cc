@@ -419,12 +419,13 @@ VLayersTab::VLayersTab( KarbonView* view, QWidget* parent )
 	layout->setMargin( 3 );
 
 	m_layersListView->setAllColumnsShowFocus( true );
-	m_layersListView->addColumn( i18n( "Item" ), 40 );
-	m_layersListView->addColumn( i18n( "L" ) );
+	m_layersListView->addColumn( i18n( "Item" ), 120 );
+	m_layersListView->addColumn( i18n( "L" ), 20 );
 	m_layersListView->addColumn( i18n( "V" ), 20 );
 	m_layersListView->setColumnWidthMode( 0, QListView::Maximum );
+	m_layersListView->setColumnAlignment( 1, Qt::AlignCenter );
 	m_layersListView->setColumnAlignment( 2, Qt::AlignCenter );
-	m_layersListView->setResizeMode( QListView::LastColumn );
+	m_layersListView->setResizeMode( QListView::NoColumn );
 	m_layersListView->setSorting( 0, false );
 
 	connect( m_layersListView, SIGNAL( clicked( QListViewItem*, const QPoint&, int ) ), this, SLOT( selectionChanged( QListViewItem*, const QPoint&, int ) ) );
@@ -503,6 +504,7 @@ VLayersTab::selectionChanged( QListViewItem* item, const QPoint &, int col )
 					else if( obj->state() == VObject::hidden )
 						obj->setState( VObject::hidden_locked );
 				objectItem->update();
+				m_document->selection()->take( *obj );
 				m_view->part()->repaintAllViews();
 			}
 			else if( obj->state() == VObject::normal ||
@@ -540,7 +542,7 @@ VLayersTab::addLayer()
 	bool ok = true;
 	QString name = QInputDialog::getText( i18n( "New Layer" ), i18n( "Enter the name of the new layer:" ),
 	                             QLineEdit::Normal, i18n( "New layer" ), &ok, this );
-	if (ok)
+	if( ok )
 	{
 		VLayer* layer = new VLayer( m_document );
 		layer->setName( name );

@@ -75,7 +75,8 @@ void
 VSelection::take( VObject& object )
 {
 	m_objects.removeRef( &object );
-	object.setState( normal );
+	if( object.state() >= selected )
+		object.setState( normal );
 	invalidateBoundingBox();
 }
 
