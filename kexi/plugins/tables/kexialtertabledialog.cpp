@@ -358,6 +358,7 @@ void KexiAlterTableDialog::slotTogglePrimaryKey()
 
 void KexiAlterTableDialog::setPrimaryKey(KexiPropertyBuffer &buf, bool set)
 {
+	const bool was_pkey = buf["primaryKey"].value().toBool();
 	buf["primaryKey"] = QVariant(set, 1);
 	if (&buf==propertyBuffer()) {
 		//update action and icon @ column 0 (only if we're changing current buffer)
@@ -368,7 +369,8 @@ void KexiAlterTableDialog::setPrimaryKey(KexiPropertyBuffer &buf, bool set)
 			m_view->data()->updateRowEditBuffer(m_view->selectedItem(), COLUMN_ID_PK, QVariant(set ? "key" : ""));
 			m_view->data()->saveRowChanges(*m_view->selectedItem(), true);
 		}
-		d->primaryKeyExists = set;
+		if (was_pkey || set) //cahnge flag only if we're setting pk or really clearing it
+			d->primaryKeyExists = set;
 	}
 
 	if (set) {
