@@ -214,8 +214,8 @@ bool KSpreadSelection::setCursorPosition( const QPoint &position )
 {
   const KSpreadCell* cell = m_pView->activeTable()->cellAt(m_marker);
 
-  QRect markerArea(m_marker, QPoint(m_marker.x() + cell->extraXCells(),
-                                    m_marker.y() + cell->extraYCells()));
+  QRect markerArea(m_marker, QPoint(m_marker.x() + cell->mergedXCells(),
+                                    m_marker.y() + cell->mergedYCells()));
 
   if (markerArea.contains(position))
   {
