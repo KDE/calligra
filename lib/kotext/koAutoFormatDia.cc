@@ -820,8 +820,8 @@ void KoAutoFormatDia::refreshEntryList()
     bool state = !(m_replace->text().isEmpty()) && !(m_find->text().isEmpty());
     //we can delete item, as we search now in listbox and not in m_find lineedit
     pbRemove->setEnabled(m_pListView->currentItem() && m_pListView->selectedItem()!=0 );
-    pbChangeFormat->setEnabled(m_pListView->currentItem() && m_pListView->selectedItem()!=0 );
-    pbClearFormat->setEnabled(m_pListView->currentItem() && m_pListView->selectedItem()!=0 );
+    pbChangeFormat->setEnabled(state && m_pListView->currentItem() && m_pListView->selectedItem()!=0 );
+    pbClearFormat->setEnabled(state && m_pListView->currentItem() && m_pListView->selectedItem()!=0 );
 
     pbAdd->setEnabled(state);
 }
@@ -873,9 +873,8 @@ void KoAutoFormatDia::slotAddEntry()
     }
     else
         editEntryList(find, find, tmp);
-
-    m_find->clear();
     m_replace->clear();
+    m_find->clear();
 
     refreshEntryList();
     autocorrectionEntryChanged= true;
