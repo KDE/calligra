@@ -299,19 +299,19 @@ void TxtCursor::end()
 }
 
 /*=================== set absolute position ======================*/
-void TxtCursor::setPositionAbs( unsigned int pos )
+void TxtCursor::setPositionAbs( int pos )
 {
     absPos = pos;
     calcPos();
 }
 
 /*================== set position in a paragraph =================*/
-void TxtCursor::setPositionParagraph( unsigned int paragraph, unsigned int pos )
+void TxtCursor::setPositionParagraph( int paragraph, int pos )
 {
     absPos = 0;
     int i;
 
-    for ( i = 0; i < static_cast<int>( paragraph ); i++ )
+    for ( i = 0; i < paragraph; i++ )
 	absPos += txtObj->paragraphAt( i )->paragraphLength();
 
     absPos += pos;
@@ -320,15 +320,15 @@ void TxtCursor::setPositionParagraph( unsigned int paragraph, unsigned int pos )
 }
 
 /*================== set position in a paragraph =================*/
-void TxtCursor::setPositionParagraph( unsigned int paragraph, unsigned int line, unsigned int pos )
+void TxtCursor::setPositionParagraph( int paragraph, int line, int pos )
 {
     absPos = 0;
     int i;
 
-    for ( i = 0; i < static_cast<int>( paragraph ); i++ )
+    for ( i = 0; i < paragraph; i++ )
 	absPos += txtObj->paragraphAt( i )->paragraphLength();
 
-    for ( i = 0; i < static_cast<int>( line ); i++ )
+    for ( i = 0; i < line; i++ )
 	absPos += txtObj->paragraphAt( paragraph )->lineAt( i )->lineLength();
 
     absPos += pos;
@@ -337,12 +337,12 @@ void TxtCursor::setPositionParagraph( unsigned int paragraph, unsigned int line,
 }
 
 /*================== set position in a line ======================*/
-void TxtCursor::setPositionLine( unsigned int line, unsigned int pos )
+void TxtCursor::setPositionLine( int line, int pos )
 {
     absPos = 0;
     int i;
 
-    for ( i = 0; i < static_cast<int>( line ); i++ )
+    for ( i = 0; i < line; i++ )
 	absPos += txtObj->lineAt( i )->lineLength();
 
     absPos += pos;
@@ -358,7 +358,7 @@ void TxtCursor::calcPos()
     // if the textobject is valid
     if ( txtObj )
     {
-	unsigned int l1 = 0, l2 = 0, i, j;
+	int l1 = 0, l2 = 0, i, j;
 
 	for ( i = 0; i < txtObj->paragraphs(); i++ )
 	{
@@ -459,7 +459,7 @@ TxtObj::TxtObj( const QString &text, QFont f, QColor c, VertAlign va, ObjType ot
 }
 
 /*===================== width of the object ======================*/
-unsigned int TxtObj::width()
+int TxtObj::width()
 {
     QFontMetrics fm( objFont );
 
@@ -467,7 +467,7 @@ unsigned int TxtObj::width()
 }
 
 /*===================== height of the object =====================*/
-unsigned int TxtObj::height()
+int TxtObj::height()
 {
     QFontMetrics fm( objFont );
 
@@ -475,7 +475,7 @@ unsigned int TxtObj::height()
 }
 
 /*===================== ascent of the object =====================*/
-unsigned int TxtObj::ascent()
+int TxtObj::ascent()
 {
     QFontMetrics fm( objFont );
 
@@ -483,7 +483,7 @@ unsigned int TxtObj::ascent()
 }
 
 /*==================== descent of the object =====================*/
-unsigned int TxtObj::descent()
+int TxtObj::descent()
 {
     QFontMetrics fm( objFont );
 
@@ -496,7 +496,7 @@ int TxtObj::getPos( int pos )
     QFontMetrics fm( objFont );
     int w = 0;
 
-    for ( int i = 0; i < static_cast<int>( objText.length() ); i++ )
+    for ( unsigned int i = 0; i < objText.length(); i++ )
     {
 	if ( pos >= w && pos <= w + fm.width( objText[ i ] ) )
 	    return i;
@@ -526,19 +526,19 @@ TxtLine::TxtLine( bool init )
 }
 
 /*===================== insert a text ============================*/
-void TxtLine::insert( unsigned int /*pos*/, const QString &/*text*/, QFont /*f*/, QColor /*c*/,
+void TxtLine::insert( int /*pos*/, const QString &/*text*/, QFont /*f*/, QColor /*c*/,
 		      TxtObj::VertAlign /*va*/ )
 {
 }
 
 /*===================== insert a char ============================*/
-void TxtLine::insert( unsigned int /*pos*/, char /*text*/, QFont /*f*/, QColor /*c*/,
+void TxtLine::insert( int /*pos*/, char /*text*/, QFont /*f*/, QColor /*c*/,
 		      TxtObj::VertAlign /*va*/ )
 {
 }
 
 /*===================== delete character =========================*/
-void TxtLine::deleteChar( unsigned int pos )
+void TxtLine::deleteChar( int pos )
 {
     int obj = getInObj( pos );
 
@@ -559,7 +559,7 @@ void TxtLine::deleteChar( unsigned int pos )
 }
 
 /*===================== delete first character ===================*/
-void TxtLine::deleteFirstChar( unsigned int obj )
+void TxtLine::deleteFirstChar( int obj )
 {
     if ( itemAt( obj ) )
     {
@@ -569,7 +569,7 @@ void TxtLine::deleteFirstChar( unsigned int obj )
 }
 
 /*===================== backspace char ===========================*/
-void TxtLine::backspaceChar( unsigned int pos )
+void TxtLine::backspaceChar( int pos )
 {
     int obj = getInObj( pos );
 
@@ -588,7 +588,7 @@ void TxtLine::backspaceChar( unsigned int pos )
 }
 
 /*=================== backspace last char ========================*/
-void TxtLine::backspaceLastChar( unsigned int obj )
+void TxtLine::backspaceLastChar( int obj )
 {
     if ( itemAt( obj ) )
     {
@@ -598,9 +598,9 @@ void TxtLine::backspaceLastChar( unsigned int obj )
 }
 
 /*=================== get length of the line =====================*/
-unsigned int TxtLine::lineLength()
+int TxtLine::lineLength()
 {
-    unsigned int l = 0;
+    int l = 0;
 
     for ( objPtr = objList.first(); objPtr != 0; objPtr = objList.next() )
 	l += objPtr->textLength();
@@ -609,9 +609,9 @@ unsigned int TxtLine::lineLength()
 }
 
 /*==================== width of the line =========================*/
-unsigned int TxtLine::width()
+int TxtLine::width()
 {
-    unsigned int w = 0;
+    int w = 0;
 
     for ( objPtr = objList.first(); objPtr != 0; objPtr = objList.next() )
 	w += objPtr->width();
@@ -620,9 +620,9 @@ unsigned int TxtLine::width()
 }
 
 /*==================== height of the line ========================*/
-unsigned int TxtLine::height( TxtParagraph *_parag )
+int TxtLine::height( TxtParagraph *_parag )
 {
-    unsigned int h = 0;
+    int h = 0;
 
     for ( objPtr = objList.first(); objPtr != 0; objPtr = objList.next() )
 	h = max(h,objPtr->height());
@@ -635,9 +635,9 @@ unsigned int TxtLine::height( TxtParagraph *_parag )
 }
 
 /*==================== ascent of the line ========================*/
-unsigned int TxtLine::ascent( TxtParagraph *_parag )
+int TxtLine::ascent( TxtParagraph *_parag )
 {
-    unsigned int a = 0;
+    int a = 0;
 
     for ( objPtr = objList.first(); objPtr != 0; objPtr = objList.next() )
 	a = max(a,objPtr->ascent());
@@ -648,9 +648,9 @@ unsigned int TxtLine::ascent( TxtParagraph *_parag )
 }
 
 /*==================== descent of the line =======================*/
-unsigned int TxtLine::descent( TxtParagraph *_parag )
+int TxtLine::descent( TxtParagraph *_parag )
 {
-    unsigned int d = 0;
+    int d = 0;
 
     for ( objPtr = objList.first(); objPtr != 0; objPtr = objList.next() )
 	d = max(d,objPtr->ascent());
@@ -663,7 +663,7 @@ unsigned int TxtLine::descent( TxtParagraph *_parag )
 /*======================== operator = ============================*/
 TxtLine& TxtLine::operator=( TxtLine *l )
 {
-    unsigned int i;
+    int i;
     clear();
 
     for ( i = 0; i < l->items(); i++ )
@@ -675,7 +675,7 @@ TxtLine& TxtLine::operator=( TxtLine *l )
 /*======================== operator += ===========================*/
 TxtLine& TxtLine::operator+=( TxtLine *l )
 {
-    unsigned int i;
+    int i;
 
     for ( i = 0; i < l->items(); i++ )
 	append( new TxtObj( *l->itemAt( i ) ) );
@@ -684,7 +684,7 @@ TxtLine& TxtLine::operator+=( TxtLine *l )
 }
 
 /*======================= split an object ========================*/
-void TxtLine::splitObj( unsigned int pos )
+void TxtLine::splitObj( int pos )
 {
     int obj = getInObj( pos );
 
@@ -723,9 +723,9 @@ void TxtLine::splitObj( unsigned int pos )
 }
 
 /*=============== get position in an object ======================*/
-int TxtLine::getInObj( unsigned int pos, int *startpos	)
+int TxtLine::getInObj( int pos, int *startpos	)
 {
-    unsigned int i, obj = 0, objNum = 0;
+    int i, obj = 0, objNum = 0;
 
     // avoid segfaults :- )
     if ( pos > lineLength() || pos == 0 ) return -1;
@@ -754,9 +754,9 @@ int TxtLine::getInObj( unsigned int pos, int *startpos	)
 }
 
 /*============== get position before an object ===================*/
-int TxtLine::getBeforeObj( unsigned int pos, int *startpos  )
+int TxtLine::getBeforeObj( int pos, int *startpos  )
 {
-    unsigned int i, obj = 0, objNum = 0;
+    int i, obj = 0, objNum = 0;
 
     // avoid segfaults :- )
     if ( pos > lineLength() ) return -1;
@@ -784,9 +784,9 @@ int TxtLine::getBeforeObj( unsigned int pos, int *startpos  )
 }
 
 /*=============== get position after an object ===================*/
-int TxtLine::getAfterObj( unsigned int pos, int *startpos  )
+int TxtLine::getAfterObj( int pos, int *startpos  )
 {
-    unsigned int i, obj = 0, objNum = 0;
+    int i, obj = 0, objNum = 0;
 
     // avoid segfaults :- )
     if ( pos > lineLength() ) return -1;
@@ -834,9 +834,9 @@ QString TxtLine::getPartOfText( int _from, int _to )
 }
 
 /*===================== get number of words ======================*/
-unsigned int TxtLine::words()
+int TxtLine::words()
 {
-    unsigned int _words = 0, _ind, ind;
+    int _words = 0, _ind, ind;
 
     QString str = getText();
     str = str.simplifyWhiteSpace();
@@ -857,7 +857,7 @@ unsigned int TxtLine::words()
 }
 
 /*======================= get word ===============================*/
-QString TxtLine::wordAt( unsigned int pos, int &ind )
+QString TxtLine::wordAt( int pos, int &ind )
 {
     if ( pos < words() )
     {
@@ -935,7 +935,7 @@ void TxtParagraph::append( char , QFont , QColor , TxtObj::VertAlign  )
 }
 
 /*====================== insert a line ===========================*/
-void TxtParagraph::insert( unsigned int i, TxtLine *l )
+void TxtParagraph::insert( int i, TxtLine *l )
 {
     lineList.insert( i, l );
 }
@@ -947,7 +947,7 @@ void TxtParagraph::append( TxtLine *l )
 }
 
 /*======================= append an object =======================*/
-void TxtParagraph::insert( unsigned int /*i*/, TxtObj* )
+void TxtParagraph::insert( int /*i*/, TxtObj* )
 {
 }
 
@@ -965,9 +965,9 @@ void TxtParagraph::append( TxtObj* to )
 }
 
 /*============= return textlength of the paragraph ===============*/
-unsigned int TxtParagraph::paragraphLength()
+int TxtParagraph::paragraphLength()
 {
-    unsigned int l = 0;
+    int l = 0;
 
     for ( linePtr = lineList.first(); linePtr != 0; linePtr = lineList.next() )
 	l += linePtr->lineLength();
@@ -976,9 +976,9 @@ unsigned int TxtParagraph::paragraphLength()
 }
 
 /*==================== width of the paragraph ====================*/
-unsigned int TxtParagraph::width()
+int TxtParagraph::width()
 {
-    unsigned int w = 0;
+    int w = 0;
 
     for ( linePtr = lineList.first(); linePtr != 0; linePtr = lineList.next() )
 	w = max(w,linePtr->width());
@@ -987,9 +987,9 @@ unsigned int TxtParagraph::width()
 }
 
 /*==================== height of the paragraph ===================*/
-unsigned int TxtParagraph::height()
+int TxtParagraph::height()
 {
-    unsigned int h = 0;
+    int h = 0;
 
     for ( linePtr = lineList.first(); linePtr != 0; linePtr = lineList.next() )
 	h += linePtr->height( this );
@@ -1000,7 +1000,7 @@ unsigned int TxtParagraph::height()
 }
 
 /*======================= break lines ============================*/
-QRect TxtParagraph::breakLines( unsigned int wid, bool regExpMode , bool composerMode )
+QRect TxtParagraph::breakLines( int wid, bool regExpMode , bool composerMode )
 {
     //debug( "break lines begin" );
     //debug( " concat lines begin" );
@@ -1011,7 +1011,7 @@ QRect TxtParagraph::breakLines( unsigned int wid, bool regExpMode , bool compose
     if ( regExpMode && regExpList && !composerMode ) doRegExpMode( regExpList, !composerMode );
 
     line = new TxtLine();
-    unsigned int i, j, w = 0;
+    int i, j, w = 0;
 
   // if a line exists
     if ( linePtr ) {
@@ -1058,14 +1058,14 @@ QRect TxtParagraph::breakLines( unsigned int wid, bool regExpMode , bool compose
 }
 
 /*===================== break lines ==============================*/
-void TxtParagraph::break_Lines( unsigned int wid, bool regExpMode, bool composerMode )
+void TxtParagraph::break_Lines( int wid, bool regExpMode, bool composerMode )
 {
     linePtr = toOneLine();
 
     if ( regExpMode && regExpList && !composerMode ) doRegExpMode( regExpList, !composerMode );
 
     line = new TxtLine();
-    unsigned int i, j, w = 0;
+    int i, j, w = 0;
 
     // if a line exists
     if ( linePtr ) {
@@ -1100,7 +1100,7 @@ void TxtParagraph::break_Lines( unsigned int wid, bool regExpMode, bool composer
 /*==================== concat all lines to one line ==============*/
 TxtLine* TxtParagraph::toOneLine()
 {
-    unsigned int i;
+    int i;
     linePtr = new TxtLine();
 
     if ( !lineList.isEmpty() ) {
@@ -1277,9 +1277,9 @@ void TxtParagraph::doRegExpMode( QList<RegExpMode> *regExpList, bool revert )
 }
 
 /*==================== get number of TxtObjs =====================*/
-unsigned int TxtParagraph::items()
+int TxtParagraph::items()
 {
-    unsigned int _items = 0;
+    int _items = 0;
 
     if ( !lineList.isEmpty() )
     {
@@ -1291,9 +1291,9 @@ unsigned int TxtParagraph::items()
 }
 
 /*=================== get number of words ========================*/
-unsigned int TxtParagraph::words()
+int TxtParagraph::words()
 {
-    unsigned int _words = 0;
+    int _words = 0;
 
     if ( !lineList.isEmpty() )
     {
@@ -1305,7 +1305,7 @@ unsigned int TxtParagraph::words()
 }
 
 /*====================== get TxtObj ==============================*/
-TxtObj* TxtParagraph::itemAt( unsigned int pos )
+TxtObj* TxtParagraph::itemAt( int pos )
 {
     int _item = 0;
 
@@ -1326,7 +1326,7 @@ TxtObj* TxtParagraph::itemAt( unsigned int pos )
 }
 
 /*======================= get word ===============================*/
-QString TxtParagraph::wordAt( unsigned int pos, int &ind )
+QString TxtParagraph::wordAt( int pos, int &ind )
 {
     int _word = 0;
     ind = 0;
@@ -1423,22 +1423,22 @@ void TxtParagraph::deleteRegion( int _start, int _stop )
     for ( i = stop; i >= start; i-- )
     {
 	if ( i < static_cast<int>( linePtr->items() ) )
-	    linePtr->deleteItem( static_cast<unsigned int>( i ) );
+	    linePtr->deleteItem( static_cast<int>( i ) );
     }
 
     if ( linePtr->items() > 0 ) {
 	if ( linePtr->itemAt( linePtr->items() - 1 )->type() != TxtObj::SEPARATOR )
-	    linePtr->append( " ", linePtr->itemAt( linePtr->items() - 1 )->font(), 
+	    linePtr->append( " ", linePtr->itemAt( linePtr->items() - 1 )->font(),
 			     linePtr->itemAt( linePtr->items() - 1 )->color(), TxtObj::NORMAL, TxtObj::SEPARATOR );
     }
-    
+
     append( linePtr );
 }
 
 /*============= with from an obj to next separator ===============*/
-unsigned int TxtParagraph::widthToNextSep( unsigned int pos )
+int TxtParagraph::widthToNextSep( int pos )
 {
-    unsigned int i, w = 0;
+    int i, w = 0;
 
     for ( i = pos; i < linePtr->items() && linePtr->itemAt( i )->type() != TxtObj::SEPARATOR; i++ )
 	w += linePtr->itemAt( i )->width();
@@ -1447,9 +1447,9 @@ unsigned int TxtParagraph::widthToNextSep( unsigned int pos )
 }
 
 /*============= chars from an obj to next separator ==============*/
-unsigned int TxtParagraph::charsToNextSep( unsigned int pos )
+int TxtParagraph::charsToNextSep( int pos )
 {
-    unsigned int i, w = 0;
+    int i, w = 0;
 
     for ( i = pos; i < linePtr->items() && linePtr->itemAt( i )->type() != TxtObj::SEPARATOR; i++ )
 	w += linePtr->itemAt( i )->textLength();
@@ -1518,7 +1518,7 @@ void TxtParagraph::getOrigSpacings( int &ls, int &db, int &da )
 
 /*====================== constructor =============================*/
 KTextObject::KTextObject( QWidget *parent, const char *name, ObjType ot,
-			  unsigned int c, unsigned int r, int __width )
+			  int c, int r, int __width )
     : QTableView( parent, name )
 {
     gap = 0;
@@ -1545,7 +1545,7 @@ KTextObject::KTextObject( QWidget *parent, const char *name, ObjType ot,
     objUnsortListType.ofont = new QList<QFont>;
     objUnsortListType.chr = new QList<QChar>;
 
-    for ( unsigned int i = 0; i < 16; i++ )
+    for ( int i = 0; i < 16; i++ )
     {
 	objUnsortListType.font->append( new QFont( "times", 20 ) );
 	objUnsortListType.color->append( new QColor( Qt::red ) );
@@ -1666,9 +1666,9 @@ void KTextObject::setObjType( ObjType ot )
 }
 
 /*================= get length of the text =======================*/
-unsigned int KTextObject::textLength()
+int KTextObject::textLength()
 {
-    unsigned int l = 0;
+    int l = 0;
 
     for ( paragraphPtr = paragraphList.first(); paragraphPtr != 0; paragraphPtr = paragraphList.next() )
 	l += paragraphPtr->paragraphLength();
@@ -1769,7 +1769,7 @@ void KTextObject::zoom( float _fakt )
     TxtObj *txtObj;
     TxtLine *txtLine;
     TxtParagraph *txtParagraph;
-    unsigned int i, j, k;
+    int i, j, k;
     QFont font;
 
     for ( i = 0; i < paragraphs(); i++ ) {
@@ -1825,7 +1825,7 @@ void KTextObject::zoomOrig()
     TxtObj *txtObj;
     TxtLine *txtLine;
     TxtParagraph *txtParagraph;
-    unsigned int i, j, k;
+    int i, j, k;
     QFont font;
 
     for ( i = 0; i < paragraphs(); i++ ) {
@@ -1922,7 +1922,7 @@ QString KTextObject::toASCII( bool linebreak, bool makelist )
     TxtObj *txtObj;
     TxtLine *txtLine;
     TxtParagraph *txtParagraph;
-    unsigned int i, j, k;
+    int i, j, k;
     QString chr;
     QString space = "		       ";
 
@@ -1992,7 +1992,7 @@ QString KTextObject::toHTML( bool /*clean*/, bool /*onlyBody*/ )
 //   TxtObj *txtObj;
 //   TxtLine *txtLine;
 //   TxtParagraph *txtParagraph;
-//   unsigned int i, j, k;
+//   int i, j, k;
 //   QFont font;
 //   QColor color;
 
@@ -2361,7 +2361,7 @@ void KTextObject::parseHTML( QString )
 //   int tag_begin = -1, tag_end = -1;
 //   int font_fakt = 6;
 
-//   paragraphList.remove( static_cast<unsigned int>( 0 ) );
+//   paragraphList.remove( static_cast<int>( 0 ) );
 
 //   while ( true )
 //     {
@@ -2747,9 +2747,9 @@ void KTextObject::paste()
 }
 
 /*================== get number of TxtObjs =======================*/
-unsigned int KTextObject::items()
+int KTextObject::items()
 {
-    unsigned int _items = 0;
+    int _items = 0;
 
     for ( int i = 0; i < static_cast<int>( paragraphs() ); i++ )
     {
@@ -2761,7 +2761,7 @@ unsigned int KTextObject::items()
 }
 
 /*=================== get number of TxtObjs  in a line ===========*/
-unsigned int KTextObject::itemsInLine( int line )
+int KTextObject::itemsInLine( int line )
 {
     if ( line < static_cast<int>( lines() ) )
 	return lineAt( line )->items();
@@ -2770,7 +2770,7 @@ unsigned int KTextObject::itemsInLine( int line )
 }
 
 /*========== get number of TxtObjs in a line in a para ===========*/
-unsigned int KTextObject::itemsInLine( int line, int para )
+int KTextObject::itemsInLine( int line, int para )
 {
     if ( para < static_cast<int>( paragraphs() ) && line < static_cast<int>( paragraphAt( para )->lines() ) )
 	return paragraphAt( para )->lineAt( line )->items();
@@ -2778,7 +2778,7 @@ unsigned int KTextObject::itemsInLine( int line, int para )
 }
 
 /*=================== get number of TxtObjs in a para ============*/
-unsigned int KTextObject::itemsInParagraph( int para )
+int KTextObject::itemsInParagraph( int para )
 {
     if ( para < static_cast<int>( paragraphs() ) )
 	return paragraphAt( para )->items();
@@ -2786,9 +2786,9 @@ unsigned int KTextObject::itemsInParagraph( int para )
 }
 
 /*==================== get number of words =======================*/
-unsigned int KTextObject::words()
+int KTextObject::words()
 {
-    unsigned int _words = 0;
+    int _words = 0;
     QString str;
     int ind, _ind;
 
@@ -2817,7 +2817,7 @@ unsigned int KTextObject::words()
 }
 
 /*=================== get number of words in a line ==============*/
-unsigned int KTextObject::wordsInLine( int line )
+int KTextObject::wordsInLine( int line )
 {
     if ( line < static_cast<int>( lines() ) )
 	return lineAt( line )->words();
@@ -2826,7 +2826,7 @@ unsigned int KTextObject::wordsInLine( int line )
 }
 
 /*========== get number of words in a line in a para =============*/
-unsigned int KTextObject::wordsInLine( int line, int para )
+int KTextObject::wordsInLine( int line, int para )
 {
     if ( para < static_cast<int>( paragraphs() ) && line < static_cast<int>( paragraphAt( para )->lines() ) )
 	return paragraphAt( para )->lineAt( line )->words();
@@ -2835,7 +2835,7 @@ unsigned int KTextObject::wordsInLine( int line, int para )
 }
 
 /*=================== get number of words in a para ==============*/
-unsigned int KTextObject::wordsInParagraph( int para )
+int KTextObject::wordsInParagraph( int para )
 {
     if ( para < static_cast<int>( paragraphs() ) )
 	return paragraphAt( para )->words();
@@ -2844,9 +2844,9 @@ unsigned int KTextObject::wordsInParagraph( int para )
 }
 
 /*================== get number of lines =========================*/
-unsigned int KTextObject::lines()
+int KTextObject::lines()
 {
-    unsigned int _lines = 0;
+    int _lines = 0;
 
     for ( int i = 0; i < static_cast<int>( paragraphs() ); i++ )
 	_lines += paragraphAt( i )->lines();
@@ -2855,7 +2855,7 @@ unsigned int KTextObject::lines()
 }
 
 /*=================== get number of lines in a para ==============*/
-unsigned int KTextObject::linesInParagraph( int para )
+int KTextObject::linesInParagraph( int para )
 {
     if ( para < static_cast<int>( paragraphs() ) )
 	return paragraphAt( para )->lines();
@@ -3605,14 +3605,14 @@ void KTextObject::insertItems( QList<TxtObj> *items, TxtCursor *_cursor, bool re
 
     TxtObj *item;
 
-    unsigned int i, objPos, w = 0;
-    unsigned int para = _cursor->positionParagraph();
+    int i, objPos, w = 0;
+    int para = _cursor->positionParagraph();
     //int _h = cellHeight( para );
 
     lin = paragraphAt( para )->toOneLine();
     paragraphAt( para )->append( lin );
     _cursor->calcPos();
-    unsigned int inLine = _cursor->positionInLine();
+    int inLine = _cursor->positionInLine();
     lin = paragraphAt( para )->lineAt( 0 );
 
     changedParagraphs.append( ( int* )para );
@@ -4344,9 +4344,9 @@ void KTextObject::setFontToAll( QFont _font )
 
     for ( unsigned int i = 0; i < paragraphList.count(); i++ )
     {
-	for ( unsigned int j = 0; j < paragraphList.at( i )->lines(); j++ )
+	for ( int j = 0; j < paragraphList.at( i )->lines(); j++ )
 	{
-	    for ( unsigned int k = 0; k < paragraphList.at( i )->lineAt( j )->items(); k++ )
+	    for ( int k = 0; k < paragraphList.at( i )->lineAt( j )->items(); k++ )
 	    {
 		paragraphList.at( i )->lineAt( j )->itemAt( k )->setFont( _font );
 	    }
@@ -4362,9 +4362,9 @@ void KTextObject::setColorToAll( QColor _color )
 
     for ( unsigned int i = 0; i < paragraphList.count(); i++ )
     {
-	for ( unsigned int j = 0; j < paragraphList.at( i )->lines(); j++ )
+	for ( int j = 0; j < paragraphList.at( i )->lines(); j++ )
 	{
-	    for ( unsigned int k = 0; k < paragraphList.at( i )->lineAt( j )->items(); k++ )
+	    for ( int k = 0; k < paragraphList.at( i )->lineAt( j )->items(); k++ )
 	    {
 		paragraphList.at( i )->lineAt( j )->itemAt( k )->setColor( _color );
 	    }
@@ -4396,10 +4396,10 @@ void KTextObject::paintCell( class QPainter* painter, int row, int )
     paragraphPtr = 0;
     int x = xstart + getLeftIndent( row ), y = ystart;
     int w = cellWidth( 0 ); //, h = cellHeight( row );
-    unsigned int i = 0, j = 0, chars = 0, len = 0;
+    int i = 0, j = 0, chars = 0, len = 0;
     bool drawCursor = false, cursorDrawn = false;
     QPoint c1, c2;
-    unsigned int scrBar = 0, wid = 0;
+    int scrBar = 0, wid = 0;
     char chr[ 11 ];
     int ry;
     QPixmap pix;
@@ -4676,7 +4676,7 @@ int KTextObject::cellHeight( int i )
 int KTextObject::totalWidth()
 {
     int w = 0;
-    unsigned int i;
+    int i;
 
     for ( i = 0, cwhPtr = cellWidths.first(); cwhPtr != 0; cwhPtr = cellWidths.next(), i++ )
 	w += cellWidth( i );
@@ -4688,7 +4688,7 @@ int KTextObject::totalWidth()
 int KTextObject::totalHeight()
 {
     int h = 0;
-    unsigned int i;
+    int i;
 
     for ( i = 0, cwhPtr = cellHeights.first(); cwhPtr != 0; cwhPtr = cellHeights.next(), i++ )
 	h += cellHeight( i );
@@ -4712,7 +4712,7 @@ void KTextObject::keyPressEvent( QKeyEvent* e )
     //debug( "keyPressEvent begin" );
     if ( showCursor() )
     {
-	unsigned int i = 0;
+	int i = 0;
 	bool drawAbove = false;
 	changedParagraphs.clear();
 	bool drawFullPara = false;
@@ -5038,6 +5038,30 @@ void KTextObject::mouseMoveEvent( QMouseEvent *e )
     }
 }
 
+/*================================================================*/
+void KTextObject::mouseDoubleClickEvent( QMouseEvent * )
+{
+    TxtCursor *c1 = new TxtCursor( this );
+    *c1 = *txtCursor;
+    TxtCursor *c2 = new TxtCursor( this );
+    *c2 = *txtCursor;
+
+    c1->wordBackward();
+    c2->wordForward();
+    startCursor = *c1;
+    stopCursor = *c2;
+
+    if ( stopCursor.positionAbs() != startCursor.positionAbs() )
+	drawSelection = true;
+
+    recalc();
+    repaint( FALSE );
+    redrawSelection( startCursor, stopCursor );
+
+    delete c1;
+    delete c2;
+}
+
 /*=================== recalcualte everything =====================*/
 void KTextObject::recalc( bool breakAllLines )
 {
@@ -5131,8 +5155,8 @@ void KTextObject::splitParagraph()
     para3->setDistAfter( paragraphList.at( txtCursor->positionParagraph() )->getDistAfter() );
 
     int i;
-    unsigned int para = txtCursor->positionParagraph();
-    unsigned int line = txtCursor->positionLine();
+    int para = txtCursor->positionParagraph();
+    int line = txtCursor->positionLine();
     int p1 = para+1, p2 = para+2;
     obj = 0;
     TxtParagraph::HorzAlign ha;
@@ -5273,7 +5297,7 @@ void KTextObject::splitParagraph()
 	lin = paragraphAt( para )->toOneLine();
 	paragraphAt( para )->append( lin );
 	txtCursor->calcPos();
-	unsigned int inLine = txtCursor->positionInLine();
+	int inLine = txtCursor->positionInLine();
 
 	// if the cursor is in an object, split it
 	if ( lin->getInObj( inLine ) != -1 ) lin->splitObj( inLine );
@@ -5323,12 +5347,12 @@ void KTextObject::splitParagraph()
 }
 
 /*======================= join paragraph =========================*/
-void KTextObject::joinParagraphs( unsigned int p1, unsigned int p2 )
+void KTextObject::joinParagraphs( int p1, int p2 )
 {
     _modified = true;
 
-    unsigned int para1n = min(p1,p2);
-    unsigned int para2n = max(p1,p2);
+    int para1n = min(p1,p2);
+    int para2n = max(p1,p2);
     lin = new TxtLine();
     para1 = new TxtParagraph();
     para1->append( lin );
@@ -5362,9 +5386,9 @@ bool KTextObject::kbackspace()
 {
     _modified = true;
 
-    //unsigned int i;
-    unsigned int para = txtCursor->positionParagraph();
-    //unsigned int line = txtCursor->positionLine();
+    //int i;
+    int para = txtCursor->positionParagraph();
+    //int line = txtCursor->positionLine();
 
     changedParagraphs.append( ( int* )( para ) );
     int tmp = para-1;
@@ -5387,7 +5411,7 @@ bool KTextObject::kbackspace()
 	lin = paragraphAt( para )->toOneLine();
 	paragraphAt( para )->append( lin );
 	txtCursor->calcPos();
-	unsigned int inLine = txtCursor->positionInLine();
+	int inLine = txtCursor->positionInLine();
 	lin = paragraphAt( para )->lineAt( 0 );
 
 	// delete the char in front of the cursor
@@ -5420,9 +5444,9 @@ bool KTextObject::kbackspace()
 /*========================= key delete ===========================*/
 bool KTextObject::kdelete( bool _recalc )
 {
-    //unsigned int i;
-    unsigned int para = txtCursor->positionParagraph();
-    unsigned int line = txtCursor->positionLine();
+    //int i;
+    int para = txtCursor->positionParagraph();
+    int line = txtCursor->positionLine();
 
     changedParagraphs.append( ( int* )( para ) );
     int tmp = para-1;
@@ -5447,7 +5471,7 @@ bool KTextObject::kdelete( bool _recalc )
 	lin = paragraphAt( para )->toOneLine();
 	paragraphAt( para )->append( lin );
 	txtCursor->calcPos();
-	unsigned int inLine = txtCursor->positionInLine();
+	int inLine = txtCursor->positionInLine();
 	lin = paragraphAt( para )->lineAt( 0 );
 
       // delete the char behind the cursor
@@ -5481,8 +5505,8 @@ bool KTextObject::insertChar( QChar c )
 {
     _modified = true;
 
-    unsigned int i, objPos, w = 0;
-    unsigned int para = txtCursor->positionParagraph();
+    int i, objPos, w = 0;
+    int para = txtCursor->positionParagraph();
     QString str;
     str = "";
     bool insertC = true;
@@ -5511,7 +5535,7 @@ bool KTextObject::insertChar( QChar c )
     lin = paragraphAt( para )->toOneLine();
     paragraphAt( para )->append( lin );
     txtCursor->calcPos();
-    unsigned int inLine = txtCursor->positionInLine();
+    int inLine = txtCursor->positionInLine();
     lin = paragraphAt( para )->lineAt( 0 );
 
     changedParagraphs.append( ( int* )( para ) );
@@ -5673,7 +5697,7 @@ TxtCursor KTextObject::getCursorPos( int _x, int _y, bool &changed, bool set, bo
 
     paragraphPtr = paragraphAt( para );
     linePtr = paragraphPtr->lineAt( line );
-    unsigned int scrBar = 0;
+    int scrBar = 0;
     if ( tableFlags() & Tbl_vScrollBar ) scrBar = 16;
     x -= ( xstart + getLeftIndent( para ) );
     switch ( paragraphPtr->horzAlign() )
@@ -6430,14 +6454,13 @@ void KTextObject::extendContents2Height()
 /*================================================================*/
 QSize KTextObject::neededSize()
 {
-    int y;
-    rowYPos( numRows() - 1, &y );
-
-    unsigned int w = 0;
-    for ( unsigned int i = 0; i < paragraphList.count(); i++ )
+    int w = 0, h = 0;
+    for ( unsigned int i = 0; i < paragraphList.count(); i++ ) {
 	w = QMAX( w, paragraphList.at( i )->width() );
-
-    return QSize( w, y + cellHeight( numRows() - 1 ) );
+	h += paragraphList.at( i )->height();
+    }
+	
+    return QSize( w, h );
 }
 
 /*================================================================*/
@@ -6462,4 +6485,27 @@ void KTextObject::formatUnderline()
     currFont.setUnderline( !currFont.underline() );
     setFont( currFont );
     emit fontChanged( &currFont );
+}
+
+/*================================================================*/
+void KTextObject::selectAll()
+{
+    TxtCursor *c1 = new TxtCursor( this );
+    TxtCursor *c2 = new TxtCursor( this );
+
+    c1->setPositionAbs( 0 );
+    c2->setPositionAbs( textLength() - 1 );
+    txtCursor->setPositionAbs( textLength() - 1 );
+    startCursor = *c1;
+    stopCursor = *c2;
+
+    if ( stopCursor.positionAbs() != startCursor.positionAbs() )
+	drawSelection = true;
+
+    recalc();
+    repaint( FALSE );
+    redrawSelection( startCursor, stopCursor );
+
+    delete c1;
+    delete c2;
 }

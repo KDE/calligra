@@ -416,3 +416,8 @@ Reggie, 23.8.1999:
 Reggie, 26.8.1999:
 ------------------
 - Cleanups
+- Fixed calculating the needed size of a textobject
+- Implemented "select All" in the textobject
+- Implemented selecting a word in the textobject by
+  doubleclicking on it
+- lots of fixes in the textobject

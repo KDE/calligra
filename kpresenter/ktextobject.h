@@ -130,57 +130,57 @@ public:
     /**
      * Set the absolute position of the cursor in the text ( calculated in chars ).
      */
-    void setPositionAbs( unsigned int pos );
+    void setPositionAbs( int pos );
 
     /**
      * Set the position of the cursor in a paragraph ( calculated in chars ).
      */
-    void setPositionParagraph( unsigned int paragraph, unsigned int pos );
+    void setPositionParagraph( int paragraph, int pos );
 
     /**
      * Set the position of the cursor in a line in a paragraph ( calculated in chars ).
      */
-    void setPositionParagraph( unsigned int paragraph, unsigned int line, unsigned int pos );
+    void setPositionParagraph( int paragraph, int line, int pos );
 
     /**
      * Set the absolute position of the cursor in a line ( calculated in chars ).
      */
-    void setPositionLine( unsigned int line, unsigned int pos );
+    void setPositionLine( int line, int pos );
 
     /**
      * Returns the cursorposition relative to the whole text.
      */
-    unsigned int positionAbs() {return absPos; }
+    int positionAbs() {return absPos; }
 
     /**
      * Returns the paragraph, in which the cursor is.
      */
-    unsigned int positionParagraph() {return paragraph; }
+    int positionParagraph() {return paragraph; }
 
     /**
      * Returns the cursorposition relative to the paragraph.
      */
-    unsigned int positionInParagraph() {return inParagraph; }
+    int positionInParagraph() {return inParagraph; }
 
     /**
      * Returns the line in the paragraph, in which the the cursor is
      */
-    unsigned int positionLine() {return line; }
+    int positionLine() {return line; }
 
     /**
      * Returns the cursorposition relative to the line in the paragraph
      */
-    unsigned int positionInLine() {return inLine; }
+    int positionInLine() {return inLine; }
 
     /**
      * Set the maximal position of the cursor.
      */
-    void setMaxPosition( unsigned int m ) {objMaxPos = m; }
+    void setMaxPosition( int m ) {objMaxPos = m; }
 
     /**
      * Returns the maximal position of the cursor.
      */
-    unsigned int maxPosition() {return objMaxPos;}
+    int maxPosition() {return objMaxPos;}
 
     /**
      * ( Re )Calculate the cursor position. This is called, if something in the text changes.
@@ -220,12 +220,12 @@ public:
     /**
      * Set the height of the cursor in pixels
      */
-    void setHeight( unsigned int _height ) {__height = _height; }
+    void setHeight( int _height ) {__height = _height; }
 
     /**
      * Returns the height of the cursor in pixels
      */
-    unsigned int height() {return __height; }
+    int height() {return __height; }
 
     /**
      * Set the KTextObject.
@@ -241,16 +241,16 @@ protected:
 
     //*********** variables ***********
 
-    unsigned int absPos;
+    int absPos;
 
-    unsigned int paragraph;
-    unsigned int inParagraph;
+    int paragraph;
+    int inParagraph;
 
-    unsigned int line;
-    unsigned int inLine;
+    int line;
+    int inLine;
 
-    unsigned int objMaxPos;
-    unsigned int _xpos, _ypos, __height;
+    int objMaxPos;
+    int _xpos, _ypos, __height;
 
     KTextObject *txtObj;
 
@@ -350,12 +350,12 @@ public:
     /**
      * Inserts the string <i>text</i> at the position <i>index</i>.
      */
-    void insert( unsigned int index, const QString & text ) {objText.insert( index, text ); }
+    void insert( int index, const QString & text ) {objText.insert( index, text ); }
 
     /**
      * Inserts the char <i>c</i> at the position <i>index</i>.
      */
-    void insert( unsigned int index, QChar c ) {objText.insert( index, c ); }
+    void insert( int index, QChar c ) {objText.insert( index, c ); }
 
     /**
      * Appends the string <i>text</i>.
@@ -370,7 +370,7 @@ public:
     /**
      * Delete the character at the position <i>i</i>.
      */
-    void deleteChar( unsigned int i ) {objText.remove( i, 1 ); }
+    void deleteChar( int i ) {objText.remove( i, 1 ); }
 
     /**
      * Returns the text of the object.
@@ -380,27 +380,27 @@ public:
     /**
      * Returns the length of the text.
      */
-    unsigned int textLength() {return objText.length(); }
+    int textLength() {return objText.length(); }
 
     /**
      * Returns the width of the text.
      */
-    unsigned int width();
+    int width();
 
     /**
      * Returns the height of the text.
      */
-    unsigned int height();
+    int height();
 
     /**
      * Returns the ascent of the text.
      */
-    unsigned int ascent();
+    int ascent();
 
     /**
      * Returns the descent of the text.
      */
-    unsigned int descent();
+    int descent();
 
     /**
      * Returns the position ( in chars ) at which pos ( in pixels ) is.
@@ -448,17 +448,17 @@ public:
     /**
      * Insert a text ( with attributes ) at <i>pos</i>.
      */
-    void insert( unsigned int pos, const QString &, QFont, QColor, TxtObj::VertAlign );
+    void insert( int pos, const QString &, QFont, QColor, TxtObj::VertAlign );
 
     /**
      * Insert a character ( with attributes ) at <i>pos</i>.
      */
-    void insert( unsigned int pos, char, QFont, QColor, TxtObj::VertAlign );
+    void insert( int pos, char, QFont, QColor, TxtObj::VertAlign );
 
     /**
      * Insert a text object at <i>i</i>.
      */
-    void insert( unsigned int i, TxtObj *to )
+    void insert( int i, TxtObj *to )
     {objList.insert( i, to ); }
 
     /**
@@ -494,62 +494,62 @@ public:
     /**
      * Delete the character at <i>pos</i>.
      */
-    void deleteChar( unsigned int pos );
+    void deleteChar( int pos );
 
     /**
      * Delete the first character in the text object <i>obj</i>.
      */
-    void deleteFirstChar( unsigned int obj );
+    void deleteFirstChar( int obj );
 
     /**
      * Backspace the character at <i>pos</i>.
      */
-    void backspaceChar( unsigned int pos );
+    void backspaceChar( int pos );
 
     /**
      * Delete the last character in the text object <i>obj</i>.
      */
-    void backspaceLastChar( unsigned int obj );
+    void backspaceLastChar( int obj );
 
     /**
      * Delete the text object at the position <i>pos</i>.
      */
-    void deleteItem( unsigned int pos ) {objList.remove( pos ); }
+    void deleteItem( int pos ) {objList.remove( pos ); }
 
     /**
      * Returns the text object at the position <i>i</i>.
      */
-    TxtObj *itemAt( unsigned int i ) {return objList.at( i ); }
+    TxtObj *itemAt( int i ) {return objList.at( i ); }
 
     /**
      * Returns number of text objects.
      */
-    unsigned int items() {return objList.count(); }
+    int items() {return objList.count(); }
 
     /**
      * Returns the length of the line ( in chars ).
      */
-    unsigned int lineLength();
+    int lineLength();
 
     /**
      * Returns the width of the line.
      */
-    unsigned int width();
+    int width();
 
     /**
      * Returns the height of the line.
      */
-    unsigned int height( TxtParagraph *_parag );
+    int height( TxtParagraph *_parag );
 
     /**
      * Returns the maximal ascent of the line.
      */
-    unsigned int ascent( TxtParagraph *_parag );
+    int ascent( TxtParagraph *_parag );
 
     /**
      * Returns the maximal descent of the line.
      */
-    unsigned int descent( TxtParagraph *_parag );
+    int descent( TxtParagraph *_parag );
 
     /**
      * Assigns a textline.
@@ -569,25 +569,25 @@ public:
     /**
      * Split a text object in the line at <i>pos</i> in two objects.
      */
-    void splitObj( unsigned int pos );
+    void splitObj( int pos );
 
     /**
      * Returns the number of the text object, in which <i>pos</i> is. If <i>pos</i> is not in a text object,
      * return -1.
      */
-    int getInObj( unsigned int pos, int *startpos = 0L );
+    int getInObj( int pos, int *startpos = 0L );
 
     /**
      * Returns the number of the text object, before which <i>pos</i> is. If <i>pos</i> is not before a text object,
      * return -1.
      */
-    int getBeforeObj( unsigned int pos, int *startpos = 0L );
+    int getBeforeObj( int pos, int *startpos = 0L );
 
     /**
      * Returns the number of the text object, after which <i>pos</i> is. If <i>pos</i> is not after a text object,
      * return -1.
      */
-    int getAfterObj( unsigned int pos, int *startpos = 0L );
+    int getAfterObj( int pos, int *startpos = 0L );
 
     /**
      * Returns the text of a line.
@@ -602,12 +602,12 @@ public:
     /**
      * Returns number of words in that line.
      */
-    unsigned int words();
+    int words();
 
     /**
      * Returns the word at position <i>pos</i>. <i>ind</i> gives the index of the word.
      */
-    QString wordAt( unsigned int pos, int &ind );
+    QString wordAt( int pos, int &ind );
 
 protected:
 
@@ -681,7 +681,7 @@ public:
     /**
      * Insert a text line at the position <i>i</i>.
      */
-    void insert( unsigned int i, TxtLine *l );
+    void insert( int i, TxtLine *l );
 
     /**
      * Append a text line.
@@ -691,7 +691,7 @@ public:
     /**
      * Insert a text object at the position <i>i</i>.
      */
-    void insert( unsigned int i, TxtObj* );
+    void insert( int i, TxtObj* );
 
     /**
      * Append a text object.
@@ -701,27 +701,27 @@ public:
     /**
      * Returns the text line at the position <i>i</i>.
      */
-    TxtLine *lineAt( unsigned int i ) {return lineList.at( i ); }
+    TxtLine *lineAt( int i ) {return lineList.at( i ); }
 
     /**
      * Returns the number of text lines in the paragraph.
      */
-    unsigned int lines() {return lineList.count(); }
+    int lines() {return lineList.count(); }
 
     /**
      * Returns the length of the text of the paragraph ( in chars ).
      */
-    unsigned int paragraphLength();
+    int paragraphLength();
 
     /**
      * Returns the width of the paragraph.
      */
-    unsigned int width();
+    int width();
 
     /**
      * Returns the height of the paragraph.
      */
-    unsigned int height();
+    int height();
 
     /**
      * Set the horizontal alignment of the paragraph
@@ -736,12 +736,12 @@ public:
     /**
      * Breaks lines in a certain width ( pixels ). Returns the needed rect.<br>
      */
-    QRect breakLines( unsigned int, bool regexpMode=false, bool composerMode=false );
+    QRect breakLines( int, bool regexpMode=false, bool composerMode=false );
 
     /**
      * Breaks lines in a certain width ( chars ).<br>
      */
-    void break_Lines( unsigned int, bool regexpMode=false, bool composerMode=false );
+    void break_Lines( int, bool regexpMode=false, bool composerMode=false );
 
     /**
      * Concate all lines of the paragraph and return the reference to the resulting line.
@@ -761,27 +761,27 @@ public:
     /**
      * Returns number of TxtObjs in the paragraph.
      */
-    unsigned int items();
+    int items();
 
     /**
      * Returns number of words in that line.
      */
-    unsigned int words();
+    int words();
 
     /**
      * Returns the TxtObj at the position <i>pos</i>
      */
-    TxtObj* itemAt( unsigned int pos );
+    TxtObj* itemAt( int pos );
 
     /**
      * Returns the word at position <i>pos</i>. <i>ind</i> gives the index of the word.
      */
-    QString wordAt( unsigned int pos, int &ind );
+    QString wordAt( int pos, int &ind );
 
     /**
      * Delete a line.
      */
-    void deleteLine( unsigned int pos ) {lineList.remove( pos ); }
+    void deleteLine( int pos ) {lineList.remove( pos ); }
 
     /**
      * Set regexp-List.
@@ -856,11 +856,11 @@ public:
 
     void setOrigSpacings( int ls, int db, int da );
     void getOrigSpacings( int &ls, int &db, int &da );
-    
+
 protected:
 
-    unsigned int widthToNextSep( unsigned int );
-    unsigned int charsToNextSep( unsigned int );
+    int widthToNextSep( int );
+    int charsToNextSep( int );
 
     //*********** variables ***********
 
@@ -876,7 +876,7 @@ protected:
     int _depth, _leftIndent;
     int lineSpacing, distBefore, distAfter;
     int oLineSpacing, oDistBefore, oDistAfter;
-    
+
 };
 
 /******************************************************************/
@@ -944,7 +944,7 @@ public:
      */
     struct CellWidthHeight
     {
-        unsigned int wh;
+        int wh;
     };
 
     /**
@@ -966,11 +966,11 @@ public:
      * <i>QWidget *parent:</i> Parent widget<br>
      * <i>const char *name:</i> Name<br>
      * <i>@ref #ObjType ot:</i> Object Type<br>
-     * <i>unsigned int c</i> and <i>unsigned int r</i> are not needed at the moment. They will be useful
+     * <i>int c</i> and <i>int r</i> are not needed at the moment. They will be useful
      * in the future for a new feature.<br>
      * <i>_width</i>: Linebreak width. (< 1 means dynamically linebreak, >= 1 means max. _width chars in a line)<br>
      */
-    KTextObject( QWidget *parent=0, const char *name=0, ObjType ot=PLAIN, unsigned int c=0, unsigned int r=0, int __width=0 );
+    KTextObject( QWidget *parent=0, const char *name=0, ObjType ot=PLAIN, int c=0, int r=0, int __width=0 );
     ~KTextObject();
 
     /**
@@ -1053,22 +1053,22 @@ public:
     /**
      * This function does nothing at the moment
      */
-    void setRow( unsigned int r ) {objRow = r; }
+    void setRow( int r ) {objRow = r; }
 
     /**
      * This function does nothing at the moment
      */
-    unsigned int row() {return objRow; }
+    int row() {return objRow; }
 
     /**
      * This function does nothing at the moment
      */
-    void setCol( unsigned int c ) {objCol = c; }
+    void setCol( int c ) {objCol = c; }
 
     /**
      * This function does nothing at the moment
      */
-    unsigned int col() {return objCol; }
+    int col() {return objCol; }
 
     /**
      * Show textcursor if s is <i>true</i>, else hide it.
@@ -1083,17 +1083,17 @@ public:
     /**
      * Returns the length of the whole text.
      */
-    unsigned int textLength();
+    int textLength();
 
     /**
      * Returns the reference of a the paragraph number i. See @ref #TxtParagraph for more information.
      */
-    TxtParagraph *paragraphAt( unsigned int i ) {return paragraphList.at( i ); }
+    TxtParagraph *paragraphAt( int i ) {return paragraphList.at( i ); }
 
     /**
      * Returns the number of paragraphs, which ar in this text.
      */
-    unsigned int paragraphs() {return paragraphList.count(); }
+    int paragraphs() {return paragraphList.count(); }
 
     /**
      * Set the current font.
@@ -1317,52 +1317,52 @@ public:
      * Returns the number of TxtObjs in the KTextObject. <b>NOTE:</b> A TxtObj isn't a word. A
      * Word may consist of many TxtObs. To get the number of words, call @ref words.
      */
-    unsigned int items();
+    int items();
 
     /**
      * Returns the number of TxtObjs in the line <i>line</i>.
      */
-    unsigned int itemsInLine( int line );
+    int itemsInLine( int line );
 
     /**
      * Returns the number of TxtObjs in the line <i>line</i> in the paragraph <i>para</i>.
      */
-    unsigned int itemsInLine( int line, int para );
+    int itemsInLine( int line, int para );
 
     /**
      * Returns the number of TxtObjs in the paragraph <i>para</i>.
      */
-    unsigned int itemsInParagraph( int para );
+    int itemsInParagraph( int para );
 
     /**
      * Returns the number of words in the KTextObject.
      */
-    unsigned int words();
+    int words();
 
     /**
      * Returns the number of words in the line <i>line</i>.
      */
-    unsigned int wordsInLine( int line );
+    int wordsInLine( int line );
 
     /**
      * Returns the number of words in the line <i>line</i> in the paragraph <i>para</i>.
      */
-    unsigned int wordsInLine( int line, int para );
+    int wordsInLine( int line, int para );
 
     /**
      * Returns the number of words in the paragraph <i>para</i>.
      */
-    unsigned int wordsInParagraph( int para );
+    int wordsInParagraph( int para );
 
     /**
      * Returns the number of lines.
      */
-    unsigned int lines();
+    int lines();
 
     /**
      * Returns the number of lines in the paragraph <i>para</i>.
      */
-    unsigned int linesInParagraph( int para );
+    int linesInParagraph( int para );
 
     /**
      * Returns a pointer to the TxtObj at the position <i>pos</i> in the KTextObject.<br>
@@ -1890,6 +1890,8 @@ public:
 	return gap;
     }
 
+    void selectAll();
+    
 signals:
 
     /**
@@ -1960,11 +1962,12 @@ protected:
     void mousePressEvent( QMouseEvent* );
     void mouseReleaseEvent( QMouseEvent* );
     void mouseMoveEvent( QMouseEvent* );
-
+    void mouseDoubleClickEvent( QMouseEvent *e );
+    
     void recalc( bool breakAllLines=true );
 
     void splitParagraph();
-    void joinParagraphs( unsigned int, unsigned int );
+    void joinParagraphs( int, int );
 
     bool kbackspace();
     bool kdelete( bool _recalc=true );
@@ -2012,7 +2015,7 @@ protected slots:
     void formatBold();
     void formatItalic();
     void formatUnderline();
-    
+
 protected:
     //*********** variables ***********
 
@@ -2036,10 +2039,10 @@ protected:
 
     CellWidthHeight *cwhPtr;
 
-    unsigned int objRow, objCol;
+    int objRow, objCol;
 
-    unsigned int xstart;
-    unsigned int ystart;
+    int xstart;
+    int ystart;
 
     int drawLine;
     int drawParagraph;

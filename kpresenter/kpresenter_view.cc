@@ -357,8 +357,12 @@ void KPresenterView::editDelete()
 /*===============================================================*/
 void KPresenterView::editSelectAll()
 {
-    page->setToolEditMode( TEM_MOUSE );
-    page->selectAllObj();
+    if ( !page->kTxtObj() ) {
+	page->setToolEditMode( TEM_MOUSE );
+	page->selectAllObj();
+    } else {
+	page->kTxtObj()->selectAll();
+    }
 }
 
 /*===============================================================*/
