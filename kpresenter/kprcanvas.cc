@@ -605,8 +605,10 @@ void KPrCanvas::mousePressEvent( QMouseEvent *e )
                 return;
             }
 
-            if ( m_drawCubicBezierCurve && ( toolEditMode == INS_CUBICBEZIERCURVE || toolEditMode == INS_QUADRICBEZIERCURVE
-                                             || toolEditMode == INS_CLOSED_CUBICBEZIERCURVE || toolEditMode == INS_CLOSED_QUADRICBEZIERCURVE ) ) {
+            if ( m_drawCubicBezierCurve && ( toolEditMode == INS_CUBICBEZIERCURVE
+                                             || toolEditMode == INS_QUADRICBEZIERCURVE
+                                             || toolEditMode == INS_CLOSED_CUBICBEZIERCURVE
+                                             || toolEditMode == INS_CLOSED_QUADRICBEZIERCURVE ) ) {
                 if ( m_drawLineWithCubicBezierCurve ) {
                     QPainter p( this );
                     p.setPen( QPen( Qt::black, 1, Qt::SolidLine ) );
@@ -704,9 +706,8 @@ void KPrCanvas::mousePressEvent( QMouseEvent *e )
                     }
                 }
                 if ( resizeObjNum )
-                {
                     keepRatio = keepRatio || resizeObjNum->isKeepRatio();
-                }
+
                 if ( deSelAll && !( e->state() & ShiftButton ) && !( e->state() & ControlButton ) )
                     deSelectAllObj();
 
@@ -1130,7 +1131,6 @@ void KPrCanvas::calcBoundingRect()
 
     m_boundingRect=m_activePage->getBoundingRect(m_boundingRect);
     m_boundingRect=stickyPage()->getBoundingRect(m_boundingRect);
-
 }
 
 KoRect KPrCanvas::objectSelectedBoundingRect() const
@@ -1513,7 +1513,10 @@ void KPrCanvas::mouseReleaseEvent( QMouseEvent *e )
         break;
     case INS_PICTURE:
     case INS_CLIPART: {
-        if ( !insRect.isNull() ) insertPicture( insRect );
+        if ( insRect.width() > 10 && insRect.height() > 10 )
+            insertPicture( insRect );
+        else
+            insertPicture( QRect(), insRect.topLeft() ); // use the default size
         setToolEditMode( TEM_MOUSE );
     } break;
     case INS_CLOSED_FREEHAND: {
@@ -1522,7 +1525,9 @@ void KPrCanvas::mouseReleaseEvent( QMouseEvent *e )
     }break;
     default: break;
     }
+
     emit objectSelectedChanged();
+
     if ( toolEditMode != TEM_MOUSE && editMode )
         repaint( false );
 
@@ -4571,17 +4576,26 @@ void KPrCanvas::insertPolygon( const KoPointArray &_pointArray )
     m_indexPointArray = 0;
 }
 
-void KPrCanvas::insertPicture( const QRect &_r )
+void KPrCanvas::insertPicture( const QRect &_r, const QPoint & tl )
 {
-    QRect r( _r );
-    r.moveBy( diffx(), diffy() );
-    KoRect rect = m_view->zoomHandler()->unzoomRect( r );
     QString file = m_activePage->insPictureFile();
 
     QCursor c = cursor();
     setCursor( waitCursor );
     if ( !file.isEmpty() ) {
-        m_activePage->insertPicture( file, rect );
+        if (_r.isValid())
+        {
+            QRect r( _r );
+            r.moveBy( diffx(), diffy() );
+            KoRect rect = m_view->zoomHandler()->unzoomRect( r );
+            m_activePage->insertPicture( file, rect );
+        }
+        else
+        {
+            QPoint topleft(tl);
+            topleft += QPoint(diffx(), diffy());
+            m_activePage->insertPicture(file, topleft.x(), topleft.y());
+        }
         m_activePage->setInsPictureFile( QString::null );
     }
     setCursor( c );
@@ -4996,7 +5010,7 @@ void KPrCanvas::copyObjs()
     if ( store->open( "root" ) )
     {
         QCString s = doc.toCString(); // this is already Utf8!
-        //kdDebug() << "KPrCanvas::copyObject: " << s << endl;
+        //kdDebug(33001) << "KPrCanvas::copyObject: " << s << endl;
         (void)store->write( s.data(), s.size()-1 );
         store->close();
     }
@@ -5254,9 +5268,8 @@ void KPrCanvas::picViewOrigHelper(int x, int y)
     KoSize currentSize;
 
     obj=m_activePage->picViewOrigHelper();
-    if( !obj)
+    if (!obj)
         obj=stickyPage()->picViewOrigHelper();
-
 
     if ( obj && !getPixmapOrigAndCurrentSize( obj, &origSize, &currentSize ) )
         return;

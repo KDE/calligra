@@ -262,7 +262,6 @@ void KPresenterDocIface::setConfigUpperUpper( bool _uu )
 void KPresenterDocIface::setConfigAdvancedAutocorrect( bool _aa )
 {
     doc->getAutoFormat()->configAdvancedAutocorrect( _aa );
-
 }
 
 void KPresenterDocIface::setConfigAutoDetectUrl(bool _au)
@@ -298,12 +297,11 @@ bool KPresenterDocIface::configUpperUpper() const
 bool KPresenterDocIface::configAdvancedAutoCorrect() const
 {
     return doc->getAutoFormat()->getConfigAdvancedAutoCorrect();
-
 }
+
 bool KPresenterDocIface::configAutoDetectUrl() const
 {
     return doc->getAutoFormat()->getConfigAutoDetectUrl();
-
 }
 
 bool KPresenterDocIface::configIgnoreDoubleSpace() const
@@ -406,6 +404,7 @@ void KPresenterDocIface::setConfigAddCompletionWord( bool b )
 {
     doc->getAutoFormat()->configAddCompletionWord( b );
 }
+
 bool KPresenterDocIface::configAddCompletionWord() const
 {
     return doc->getAutoFormat()->getConfigAddCompletionWord();

@@ -293,9 +293,7 @@ KPresenterView::KPresenterView( KPresenterDoc* _doc, QWidget *_parent, const cha
     m_specialCharDlg=0L;
 
     if ( shell() )
-    {
         changeNbOfRecentFiles( m_pKPresenterDoc->maxRecentFiles() );
-    }
 
     connect(this, SIGNAL(embeddImage(const QString &)), SLOT(insertPicture(const QString &)));
     connect( m_pKPresenterDoc, SIGNAL( sig_refreshMenuCustomVariable()),
@@ -4758,19 +4756,18 @@ void KPresenterView::openPopupMenuMenuPage( const QPoint & _point )
 }
 
 
-void KPresenterView::openPopupMenuObject( const QString & name , const QPoint & _point )
+void KPresenterView::openPopupMenuObject( const QString & name, const QPoint & _point )
 {
     if(!koDocument()->isReadWrite() || !factory())
         return;
-    static_cast<QPopupMenu*>(factory()->container(name ,this))->popup(_point);
+    static_cast<QPopupMenu*>(factory()->container(name, this))->popup(_point);
 }
 
 void KPresenterView::openPopupMenuSideBar(const QPoint & _point)
 {
     if(!koDocument()->isReadWrite() || !factory())
         return;
-    static_cast<QPopupMenu*>(factory()->container("sidebarmenu_popup",this))->popup(_point);
-
+    static_cast<QPopupMenu*>(factory()->container("sidebarmenu_popup", this))->popup(_point);
 }
 
 void KPresenterView::renamePageTitle()

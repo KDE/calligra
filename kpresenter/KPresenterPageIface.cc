@@ -63,7 +63,6 @@ int KPresenterPageIface::numTextObject() const
     return m_page->numTextObject();
 }
 
-
 DCOPRef KPresenterPageIface::object( int num )
 {
     if( num >= (int)m_page->objNums())
@@ -192,7 +191,6 @@ void KPresenterPageIface::recalcPageNum()
 {
     m_page->recalcPageNum();
 }
-
 
 void KPresenterPageIface::setPageTimer(  int pageTimer )
 {
@@ -561,7 +559,6 @@ DCOPRef KPresenterPageIface::insertLineV( int x,int y, int h, int w, bool rev )
 
     view->getCanvas()->insertLineV( QRect(x,y,h,w), rev );
     return selectedObject();
-
 }
 
 DCOPRef KPresenterPageIface::insertLineD1( int x,int y, int h, int w, bool rev )
@@ -592,7 +589,6 @@ DCOPRef KPresenterPageIface::insertTextObject( int x,int y, int h, int w )
 
     view->getCanvas()->insertTextObject( QRect(x,y,h,w));
     return selectedObject();
-
 }
 
 DCOPRef KPresenterPageIface::insertPicture( const QString & file,int x,int y, int h, int w )
@@ -609,13 +605,15 @@ DCOPRef KPresenterPageIface::insertPicture( const QString & file,int x,int y, in
 void KPresenterPageIface::setBackGroundColor1(const QColor &col)
 {
     const QColor col2=backColor2();
-    m_page->setBackColor( col, col2, m_page->getBackColorType(),m_page->getBackUnbalanced(), backXFactor(), backYFactor() );
+    m_page->setBackColor( col, col2, m_page->getBackColorType(),
+                          m_page->getBackUnbalanced(), backXFactor(), backYFactor() );
 }
 
 void KPresenterPageIface::setBackGroundColor2(const QColor &col)
 {
     const QColor col1=backColor1();
-    m_page->setBackColor( col1, col, m_page->getBackColorType(),m_page->getBackUnbalanced(), backXFactor(), backYFactor() );
+    m_page->setBackColor( col1, col, m_page->getBackColorType(),
+                          m_page->getBackUnbalanced(), backXFactor(), backYFactor() );
 }
 
 void KPresenterPageIface::setBackGroundColorType(const QString &type)
@@ -647,7 +645,6 @@ void KPresenterPageIface::setBackGroundColorType(const QString &type)
 
     m_page->setBackColor( backColor1(), backColor2(), bctype,m_page->getBackUnbalanced(), backXFactor(), backYFactor() );
 }
-
 
 int KPresenterPageIface::rndY() const
 {

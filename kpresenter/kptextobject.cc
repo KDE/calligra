@@ -1105,7 +1105,7 @@ void KPTextObject::saveParagLayout( const KoParagLayout& layout, QDomElement & p
             element.setAttribute( "spacingvalue", layout.lineSpacingValue());
         }
         else
-            kdDebug()<<" error in lineSpacing Type\n";
+            kdDebug(33001) << " error in lineSpacing Type" << endl;
     }
 
     if ( layout.leftBorder.penWidth() > 0 )
@@ -1366,7 +1366,7 @@ void KPTextObject::highlightPortion( KoTextParag * parag, int index, int length,
         if ( canvas->activePage()->findTextObject( this ) ||
              (isSticky() && doc->stickyPage()->findTextObject( this ) ) )
         {
-            kdDebug() << k_funcinfo << "object in current page" << endl;
+            kdDebug(33001) << k_funcinfo << "object in current page" << endl;
         }
         else
         {
@@ -1918,7 +1918,7 @@ QPoint KPTextView::cursorPosition( const QPoint & pos )
     //m = m.invert();
     tmp = m * pos;
 
-    kdDebug()<<" tmp.x() :"<<tmp.x()<<" tmp.y() "<<tmp.y()<<endl;
+    kdDebug(33001)<<" tmp.x() :"<<tmp.x()<<" tmp.y() "<<tmp.y()<<endl;
 
     KoRect br = KoRect( 0, 0, kpTextObject()->getSize().width(), kpTextObject()->getSize().height() );
     double pw = br.width();
@@ -1938,14 +1938,14 @@ QPoint KPTextView::cursorPosition( const QPoint & pos )
 
     tmp = m * pos;
 
-    kdDebug()<<" tmp.x() :"<<tmp.x()<<" tmp.y() "<<tmp.y()<<endl;
-
+    kdDebug(33001)<<" tmp.x() :"<<tmp.x()<<" tmp.y() "<<tmp.y()<<endl;
 #endif
 
-
     QPoint iPoint=pos - kpTextObject()->kPresenterDocument()->zoomHandler()->zoomPoint(
-        kpTextObject()->getOrig()+KoPoint( kpTextObject()->bLeft(),kpTextObject()->bTop()+kpTextObject()->alignmentValue()) );
-    iPoint=kpTextObject()->kPresenterDocument()->zoomHandler()->pixelToLayoutUnit( QPoint(iPoint.x()+ m_canvas->diffx(),iPoint.y()+m_canvas->diffy()) );
+        kpTextObject()->getOrig()+KoPoint( kpTextObject()->bLeft(),
+                                           kpTextObject()->bTop()+kpTextObject()->alignmentValue()) );
+    iPoint=kpTextObject()->kPresenterDocument()->zoomHandler()->pixelToLayoutUnit(
+        QPoint(iPoint.x()+ m_canvas->diffx(),iPoint.y()+m_canvas->diffy()) );
     return iPoint;
 }
 
@@ -2060,7 +2060,8 @@ void KPTextView::insertLink(const QString &_linkName, const QString & hrefName)
 {
     KoVariable * var = 0L;
     KPresenterDoc * doc = kpTextObject()->kPresenterDocument();
-    var = new KoLinkVariable( textObject()->textDocument(),_linkName,hrefName , doc->variableFormatCollection()->format( "STRING" ),
+    var = new KoLinkVariable( textObject()->textDocument(),_linkName, hrefName,
+                              doc->variableFormatCollection()->format( "STRING" ),
                               doc->getVariableCollection());
     insertVariable( var);
 }

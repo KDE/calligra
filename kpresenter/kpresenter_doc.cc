@@ -156,13 +156,13 @@ KPresenterDoc::KPresenterDoc( QWidget *parentWidget, const char *widgetName, QOb
 
     // Try to force a scalable font.
     m_defaultFont.setStyleStrategy( QFont::ForceOutline );
-    //kdDebug() << "Default font: requested family: " << m_defaultFont.family() << endl;
-    //kdDebug() << "Default font: real family: " << QFontInfo(m_defaultFont).family() << endl;
+    //kdDebug(33001) << "Default font: requested family: " << m_defaultFont.family() << endl;
+    //kdDebug(33001) << "Default font: real family: " << QFontInfo(m_defaultFont).family() << endl;
 
     int ptSize = m_defaultFont.pointSize();
     if ( ptSize == -1 ) // specified with a pixel size ?
         ptSize = QFontInfo(m_defaultFont).pointSize();
-    //kdDebug() << "KPresenterDoc::KPresenterDoc[2] ptSize=" << ptSize << endl;
+    //kdDebug(33001) << "KPresenterDoc::KPresenterDoc[2] ptSize=" << ptSize << endl;
     // Ok, this is KPresenter. A default font of 10 makes no sense. Let's go for 20.
     ptSize = QMAX( 20, ptSize );
 

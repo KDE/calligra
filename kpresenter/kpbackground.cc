@@ -109,7 +109,7 @@ void KPBackGround::draw( QPainter *_painter, const QSize& ext, const QRect& crec
 
 void KPBackGround::reload()
 {
-    if ( ( backType == BT_PICTURE ) || ( backType == BT_CLIPART ) )
+    if ( backType == BT_PICTURE || backType == BT_CLIPART )
         backPicture = pictureCollection()->insertPicture(backPicture);
     else
         backPicture.clear();

@@ -2443,7 +2443,7 @@ void KPrPage::insertPicture( const QString &filename, int _x , int _y )
 void KPrPage::insertPicture( const QString &_file, const KoRect &_rect )
 {
     KoPictureKey key = m_doc->pictureCollection()->loadPicture( _file ).getKey();
-    KPPixmapObject *kppixmapobject = new KPPixmapObject( m_doc->pictureCollection() , key );
+    KPPixmapObject *kppixmapobject = new KPPixmapObject( m_doc->pictureCollection(), key );
 
     kppixmapobject->setOrig( _rect.x(), _rect.y() );
     kppixmapobject->setSize( _rect.width(), _rect.height() );
@@ -2580,7 +2580,7 @@ PageEffect KPrPage::getPageEffect( )const
     return kpbackground->getPageEffect();
 }
 
-int KPrPage::getPageTimer(  )const
+int KPrPage::getPageTimer( )const
 {
     return kpbackground->getPageTimer();
 }
@@ -2595,12 +2595,14 @@ QString KPrPage::getPageSoundFileName(  )const
     return kpbackground->getPageSoundFileName();
 }
 
-KoRect KPrPage::getPageRect() const {
+KoRect KPrPage::getPageRect() const
+{
     const KoPageLayout& p = m_doc->pageLayout();
     return KoRect( p.ptLeft, p.ptTop, p.ptWidth - p.ptRight - p.ptLeft, p.ptHeight - p.ptTop - p.ptBottom );
 }
 
-QRect KPrPage::getZoomPageRect()const {
+QRect KPrPage::getZoomPageRect() const
+{
     return m_doc->zoomHandler()->zoomRect(getPageRect());
 }
 
@@ -2740,13 +2742,10 @@ QString KPrPage::pageTitle( const QString &_title ) const
             {
                 KoVariable * var = dynamic_cast<KoVariable *>(ch->customItem());
                 if ( var )
-                {
                     txt += var->text(true);
-                }
             }
             else
                 txt += ch->c;
-
         }
     }
     if ( txt.stripWhiteSpace().isEmpty() || txt=="\n" )
@@ -2862,9 +2861,9 @@ QDomElement KPrPage::saveObjects( QDomDocument &doc, QDomElement &objects, doubl
     for (; oIt.current(); ++oIt )
     {
         //don't store header/footer (store in header/footer section)
-        if ( oIt.current()==m_doc->header() || oIt.current()==m_doc->footer())
-            continue;
-        if ( oIt.current()->getType() == OT_PART )
+        if ( oIt.current()==m_doc->header()
+             || oIt.current()==m_doc->footer()
+             ||  oIt.current()->getType() == OT_PART)
             continue;
         QDomElement object=doc.createElement("OBJECT");
         object.setAttribute("type", static_cast<int>( oIt.current()->getType() ));
@@ -2889,9 +2888,10 @@ bool KPrPage::oneObjectTextExist(bool forceAllTextObject)
     QPtrListIterator<KPObject> it( lst );
     for ( ; it.current() ; ++it )
     {
-        if ( (it.current()== m_doc->header() && !m_doc->hasHeader())|| (it.current()== m_doc->footer() && !m_doc->hasFooter()))
+        if ( (it.current() == m_doc->header() && !m_doc->hasHeader())
+             || (it.current() == m_doc->footer() && !m_doc->hasFooter()) )
             continue;
-        if (  it.current()->getType()==OT_TEXT)
+        if (it.current()->getType()==OT_TEXT)
             return true;
     }
     return false;
@@ -2991,7 +2991,6 @@ bool KPrPage::savePicture( KPresenterView *_view ) const
         if ( it.current()->isSelected() &&
              ( ( it.current()->getType() == OT_PICTURE )
                || ( it.current()->getType() == OT_CLIPART ) ) )
-
         {
             KPPixmapObject* obj=dynamic_cast<KPPixmapObject*>( it.current() );
             if( obj)
@@ -3278,7 +3277,7 @@ KPPixmapObject * KPrPage::picViewOrigHelper() const
     QPtrListIterator<KPObject> it( m_objectList );
     for ( ; it.current() ; ++it )
     {
-        if ( it.current()->isSelected()&&
+        if ( it.current()->isSelected() &&
              ( ( it.current()->getType() == OT_PICTURE )
                || ( it.current()->getType() == OT_CLIPART ) ) )
         {
@@ -3350,7 +3349,6 @@ bool KPrPage::differentProtect( bool p) const
     }
     return false;
 }
-
 
 bool KPrPage::differentKeepRatio( bool p) const
 {

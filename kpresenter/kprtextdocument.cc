@@ -1,3 +1,4 @@
+// -*- Mode: c++-mode; c-basic-offset: 4; indent-tabs-mode: nil; tab-width: 4; -*-
 /* This file is part of the KDE project
    Copyright (C) 2001 Laurent Montel <lmontel@mandrakesoft.com>
 
@@ -25,7 +26,7 @@
 KPrTextDocument::KPrTextDocument( KPTextObject * textobj, KoTextFormatCollection *fc, KoTextFormatter *formatter )
     : KoTextDocument( textobj->kPresenterDocument()->zoomHandler(), fc, formatter, true ), m_textobj( textobj )
 {
-    kdDebug() << "KPrTextDocument constructed " << this << "  KPTextObject:" << textobj << endl;
+    kdDebug(33001) << "KPrTextDocument constructed " << this << "  KPTextObject:" << textobj << endl;
 }
 
 KPrTextDocument::~KPrTextDocument()
