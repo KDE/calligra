@@ -448,6 +448,10 @@ public:
 
     int maxRecentFiles() const { return m_maxRecentFiles; }
 
+
+    void setChangeLastModeView(const QString &_mode){ m_lastModeView=_mode;}
+    const QString & ChangeLastModeView() {return m_lastModeView;}
+
     /**
      * @returns the document for the formulas
      */
@@ -615,6 +619,8 @@ private:
     static const unsigned int s_defaultColumnSpacing = 3;
 
     bool m_hasTOC;
+
+    QString m_lastModeView;
 };
 
 

@@ -66,6 +66,11 @@ public:
     virtual void setPagesPerRow(int) {}
     virtual int pagesPerRow() {return 0;}
     virtual bool drawSelections() {return true;}
+
+    virtual const QString type() = 0;
+
+    static KWViewMode *create( const QString & viewModeType, KWDocument * );
+
 protected:
     // Draw the border around one page, and clear up the empty space in that page
     void drawOnePageBorder( QPainter * painter, const QRect & crect, const QRect & pageRect,
@@ -88,6 +93,8 @@ public:
     virtual QPoint normalToView( const QPoint & nPoint ) { return nPoint; }
     virtual QPoint viewToNormal( const QPoint & vPoint ) { return vPoint; }
     virtual QSize contentsSize();
+
+    virtual const QString type() {return "ModeNormal";}
 
     virtual void drawPageBorders( QPainter * painter, const QRect & crect, const QRegion & emptySpaceRegion );
 };
@@ -115,6 +122,8 @@ public:
 
     virtual void drawPageBorders( QPainter *, const QRect &, const QRegion & ){}
     virtual bool drawSelections() { return false; }
+
+    virtual const QString type() {return "ModeEmbedded";}
 };
 
 
@@ -136,7 +145,7 @@ public:
 
     virtual void setPagesPerRow(int _nb) {m_pagesPerRow=_nb;}
     virtual int pagesPerRow() {return m_pagesPerRow;}
-
+    virtual const QString type() {return "ModePreview";}
 private:
     int m_pagesPerRow;
     int m_spacing;
@@ -156,6 +165,7 @@ public:
     virtual QSize contentsSize();
 
     virtual void drawPageBorders( QPainter * painter, const QRect & crect, const QRegion & emptySpaceRegion );
+    virtual const QString type() {return "ModeText";}
 };
 
 #endif

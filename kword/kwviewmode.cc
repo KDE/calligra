@@ -79,6 +79,33 @@ QRect KWViewMode::drawBottomShadow( QPainter * painter, const QRect & crect, con
     return shadowRect;
 }
 
+KWViewMode * KWViewMode::create( const QString & viewModeType, KWDocument *doc )
+{
+    Q_ASSERT(doc);
+    if(viewModeType=="ModeNormal")
+    {
+        return new KWViewModeNormal( doc );
+    }
+    else if(viewModeType=="ModeEmbedded")
+    {
+        return new KWViewModeEmbedded ( doc );
+    }
+    else if(viewModeType=="ModePreview")
+    {
+        return new KWViewModePreview( doc, doc->getNbPagePerRow() );
+    }
+    else if(viewModeType=="ModeText")
+    {
+        return new KWViewModeText( doc );
+    }
+    else
+    {
+        kdDebug()<<viewModeType <<" mode type is unknown\n";
+        return 0L;
+    }
+}
+
+
 void KWViewModeNormal::drawPageBorders( QPainter * painter, const QRect & crect, const QRegion & emptySpaceRegion )
 {
     painter->save();

@@ -204,6 +204,9 @@ KWView::KWView( QWidget *_parent, const char *_name, KWDocument* _doc )
         addStatusBarItem( m_sbPageLabel, 0 );
     }
     m_sbFramesLabel = 0L; // Only added when frames are selected
+
+    QString mode=m_doc->ChangeLastModeView();
+    m_gui->canvasWidget()->switchViewMode( KWViewMode::create( mode, m_doc ));
 }
 
 KWView::~KWView()
@@ -276,6 +279,17 @@ void KWView::initGui()
     slotFrameSetEditChanged();
     frameSelectedChanged();
     renameButtonTOC(m_doc->isTOC());
+
+    QString mode=m_gui->canvasWidget()->viewMode()->type();
+    if(mode=="ModePreview")
+        actionViewPreviewMode->setChecked(true);
+    else if(mode=="ModeText")
+        actionViewTextMode->setChecked(true);
+    else if(mode=="ModeNormal")
+        actionViewPageMode->setChecked(true);
+    else
+        actionViewPageMode->setChecked(true);
+
 }
 
 void KWView::setupActions()
@@ -1617,6 +1631,7 @@ void KWView::viewTextMode()
         showZoom( m_zoomViewModeNormal ); // share the same zoom
         setZoom( m_zoomViewModeNormal, false );
         m_gui->canvasWidget()->switchViewMode( new KWViewModeText( m_doc ) );
+        m_doc->setChangeLastModeView(m_gui->canvasWidget()->viewMode()->type());
     }
     else
         actionViewTextMode->setChecked( true ); // always one has to be checked !
@@ -1632,6 +1647,7 @@ void KWView::viewPageMode()
         setZoom( m_zoomViewModeNormal, false );
         slotUpdateRuler();
         m_gui->canvasWidget()->switchViewMode( new KWViewModeNormal( m_doc ) );
+        m_doc->setChangeLastModeView(m_gui->canvasWidget()->viewMode()->type());
     }
     else
         actionViewPageMode->setChecked( true ); // always one has to be checked !
@@ -1646,6 +1662,7 @@ void KWView::viewPreviewMode()
         setZoom( m_zoomViewModePreview, false );
         slotUpdateRuler();
         m_gui->canvasWidget()->switchViewMode( new KWViewModePreview( m_doc, m_doc->getNbPagePerRow() ) );
+        m_doc->setChangeLastModeView(m_gui->canvasWidget()->viewMode()->type());
     }
     else
         actionViewPreviewMode->setChecked( true ); // always one has to be checked !
