@@ -25,12 +25,12 @@
 */
 
 #include "kexidataawareobjectiface.h"
-#include "kexidataiteminterface.h"
 #include "kexivalidator.h"
 
 #include <widget/utils/kexirecordnavigator.h>
 #include <widget/utils/kexirecordmarker.h>
 #include <kexidb/roweditbuffer.h>
+#include <kexidataiteminterface.h>
 
 #include <kmessagebox.h>
 

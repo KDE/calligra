@@ -32,8 +32,6 @@
 
 #include <kexidb/connection.h>
 
-//class KexiTableView;
-
 typedef KexiDB::RowData KexiTableItemBase;
 
 class KEXIDATATABLE_EXPORT KexiTableItem : public KexiTableItemBase
