@@ -1,0 +1,10 @@
+[Desktop Entry]
+Encoding=UTF-8
+Comment=OpenOffice.org Drawing
+MimeType=application/vnd.sun.xml.draw
+Type=MimeType
+Icon=006_drawing_document.xpm
+Patterns=*.sxd;*.SXD;
+[Property::X-KDE-NativeExtension]
+Type=QString
+Value=.sxd

@@ -1,4 +1,5 @@
-application_DATA = x-magicpoint.desktop vnd.sun.xml.impress.desktop vnd.sun.xml.writer.desktop \
+application_DATA = x-magicpoint.desktop vnd.sun.xml.impress.desktop \
+vnd.sun.xml.writer.desktop vnd.sun.xml.draw.desktop \
 x-vnd.kde.kexi.desktop vnd.palm.desktop x-kudesigner.desktop \
 x-vnd.kde.kplato.desktop vnd.sun.xml.calc.desktop mathml+xml.desktop \
 x-vnd.kde.kugar.mixed.desktop
