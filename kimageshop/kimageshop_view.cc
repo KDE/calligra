@@ -47,6 +47,7 @@
 #include "canvasview.h"
 #include "brush.h"
 #include "layerdlg.h"
+#include "colordialog.h"
 #include "tool.h"
 #include "movetool.h"
 #include "brushtool.h"
@@ -292,6 +293,11 @@ void KImageShopView::createGUI()
   
   // create canvasview
   m_pCanvasView = new CanvasView(this);
+
+  m_pColorDialog = new ColorDialog(m_pCanvasView);
+  m_pColorDialog->move(100, 100);
+  m_pColorDialog->resize(46,63);
+  m_pColorDialog->show();
   
   // setup GUI
   setupScrollbars();

@@ -42,6 +42,7 @@ class MoveTool;
 class BrushTool;
 class ZoomTool;
 class Brush;
+class ColorDialog;
 
 class KImageShopView : public QWidget,
 		       virtual public KoViewIf,
@@ -154,6 +155,7 @@ private:
   BrushTool     *m_pBrushTool;
   ZoomTool      *m_pZoomTool;
   Brush         *m_pBrush; // current brush
+  ColorDialog   *m_pColorDialog;
   float         m_ZoomFactor;
 };
 
