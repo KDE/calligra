@@ -985,7 +985,7 @@ bool KoDocument::saveNativeFormat( const QString & file )
 
         if ( store->open( "Thumbnails/thumbnail.png" ) )
         {
-            if ( !saveOasisPreview( store ) || !store->close() ) {
+            if ( !saveOasisPreview( store, manifestWriter ) || !store->close() ) {
                 d->lastErrorMessage = i18n( "Error while trying to write '%1'. Partition full?" ).arg( "Thumbnails/thumbnail.png" );
                 delete store;
                 return false;
@@ -1174,7 +1174,7 @@ bool KoDocument::saveToStore( KoStore* _store, const QString & _path )
     return true;
 }
 
-bool KoDocument::saveOasisPreview( KoStore* store )
+bool KoDocument::saveOasisPreview( KoStore* store, KoXmlWriter* manifestWriter )
 {
     const QPixmap pix = generatePreview( QSize( 128, 128 ) );
     QImage preview ( pix.convertToImage().convertDepth( 32, Qt::ColorOnly ) );
@@ -1189,6 +1189,8 @@ bool KoDocument::saveOasisPreview( KoStore* store )
     if ( ! preview.save( &io, "PNG", 0 ) )
         return false;
     io.close();
+    manifestWriter->addManifestEntry( "Thumbnails/", "" );
+    manifestWriter->addManifestEntry( "Thumbnails/thumbnail.png", "" );
     return true;
 }
 
