@@ -105,9 +105,6 @@ protected:
     // This dialog will be destroyed whenever the M9r gets deleted.
     virtual KDialogBase *createPropertyDialog(QWidget *parent);
 
-    // TODO - Whenever an object is deleted,... its Status should be
-    // set correctly form the M9r. Check this in the DTOR and react
-    // accordingly!
     Mode m_mode;
     bool first_call; // Whether this is the first call for this M9r (no hit test!)
     KDialogBase *m_dialog;

@@ -41,21 +41,14 @@ GraphiteFactory::GraphiteFactory(QObject *parent, const char *name)
 }
 
 GraphiteFactory::~GraphiteFactory() {
-    if (s_global)
-    {
+
+    if (s_global) {
         delete s_global->aboutData();
         delete s_global;
     }
 }
 
 QObject *GraphiteFactory::create(QObject *parent, const char *name, const char *classname, const QStringList &) {
-
-/*
-    if (parent && !parent->inherits("KoDocument")) {
-        kdDebug(37001) << "GraphiteFactory: parent does not inherit KoDocument" << endl;
-        return 0L;
-    }
-*/
 
     bool bWantKoDocument=(strcmp(classname, "KoDocument")==0);
 
@@ -69,14 +62,16 @@ QObject *GraphiteFactory::create(QObject *parent, const char *name, const char *
 }
 
 KAboutData* GraphiteFactory::aboutData() {
-        KAboutData *aboutData=new KAboutData("graphite", I18N_NOOP("graphite"),
-                                             version, description, KAboutData::License_GPL,
-                                             "(c) 2000, Werner Trobin");
-        aboutData->addAuthor("Werner Trobin", 0, "wtrobin@mandrakesoft.com");
-        return aboutData;
+
+    KAboutData *aboutData=new KAboutData("graphite", I18N_NOOP("graphite"),
+					 version, description, KAboutData::License_GPL,
+					 "(c) 2000, Werner Trobin");
+    aboutData->addAuthor("Werner Trobin", 0, "wtrobin@mandrakesoft.com");
+    return aboutData;
 }
 
 KInstance *GraphiteFactory::global() {
+    
     if (!s_global) {
         s_global=new KInstance(aboutData());
     }
