@@ -620,7 +620,7 @@ void KoRuler::mouseMoveEvent( QMouseEvent *e )
     int bottom = qRound(zoomIt(layout.ptBottom));
     bottom = ph - bottom - diffy;
     // Cumulate first-line-indent
-    double ip_first = qRound( zoomIt( i_first + ( d->rtl ? d->i_right : i_left) ) );
+    int ip_first = qRound( zoomIt( i_first + ( d->rtl ? d->i_right : i_left) ) );
     int ip_left = qRound(zoomIt(i_left));
     int ip_right = qRound(zoomIt(d->i_right));
 
@@ -689,14 +689,6 @@ void KoRuler::mouseMoveEvent( QMouseEvent *e )
                         if ( d->canvas && mx < right-10 && mx+diffx-2 > 0) {
                             drawLine( d->oldMx, mx );
                             layout.ptLeft = unZoomIt(static_cast<double>(mx + diffx));
-#if 0
-                            if( ip_first > right-left-15 ) {
-                                ip_first=right-left-15;
-                                ip_first=ip_first<0 ? 0 : ip_first;
-                                i_first=unZoomItRtl( ip_first );
-                                emit newFirstIndent( i_first );
-                            }
-#endif
                             if( ip_left > right-left-15 ) {
                                 ip_left=right-left-15;
                                 ip_left=ip_left<0 ? 0 : ip_left;
@@ -720,14 +712,6 @@ void KoRuler::mouseMoveEvent( QMouseEvent *e )
                         if ( d->canvas && mx > left+10 && mx+diffx <= pw-2) {
                             drawLine( d->oldMx, mx );
                             layout.ptRight = unZoomIt(static_cast<double>(pw - ( mx + diffx )));
-#if 0
-                            if( ip_first > right-left-15 ) {
-                                ip_first=right-left-15;
-                                ip_first=ip_first<0 ? 0 : ip_first;
-                                i_first=unZoomItRtl( ip_first );
-                                emit newFirstIndent( i_first );
-                            }
-#endif
                             if( ip_left > right-left-15 ) {
                                 ip_left=right-left-15;
                                 ip_left=ip_left<0 ? 0 : ip_left;
@@ -895,23 +879,18 @@ void KoRuler::handleDoubleClick()
     if(!d->m_bReadWrite)
         return;
     if ( d->tabChooser && ( d->flags & F_TABS ) ) {
-        KoTabulatorList::ConstIterator it = d->tabList.begin();
-        for (  ; it != d->tabList.end() ; ++it )
-            kdDebug() << "    (start)"  << it.node << " " << ( *it ).ptPos << " " << ( *it ).type << endl;
         // Double-click and mousePressed inserted a tab -> need to remove it
         if ( d->tabChooser->getCurrTabType() != 0 && d->removeTab.type != T_INVALID && !d->tabList.isEmpty()) {
-            int c = d->tabList.count();
+            uint c = d->tabList.count();
             d->tabList.remove( d->removeTab );
             Q_ASSERT( d->tabList.count() < c );
 
             d->removeTab.type = T_INVALID;
             d->currTab.type = T_INVALID;
-            kdDebug() << "tabList is now " << d->tabList.count() << endl;
             emit tabListChanged( d->tabList );
             update();
         } else if ( d->action == A_TAB ) {
             // Double-click on a tab
-            kdDebug() << k_funcinfo << "dbl click on tab " << d->currTab.ptPos << endl;
             emit doubleClicked( d->currTab.ptPos );
             return;
         }
