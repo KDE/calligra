@@ -68,8 +68,17 @@ void KSpreadTableName::slotOk()
    if ( txt.isEmpty() )
    {
       QApplication::beep(); 
-      QMessageBox::information( this, i18n("Change sheet name"), i18n("Sheet name must not be empty"), i18n("OK") );
+      QMessageBox::information( this, i18n("Change table name"), i18n("Table name must not be empty."), i18n("OK") );
       return;
+   }
+   if ( KSpreadTable *tbl = m_pView->doc()->map()->findTable( txt.ascii() ) )
+   {
+      if ( tbl != m_pView->activeTable() )
+      {
+         QApplication::beep(); 
+         QMessageBox::information( this, i18n("Change table name"), i18n("A table with this name already exists."), i18n("OK") );
+         return;
+      }
    }
 
    accept();
