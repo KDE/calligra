@@ -1,0 +1,201 @@
+<!DOCTYPE QConfig ><QConfig>
+<MenuBar>
+ <Menu name="Edit"><text>Edit</text>
+  <Action name="edit_undo"/>
+  <Action name="edit_redo"/>
+  <Separator/>
+  <Action name="edit_cut"/>
+  <Action name="edit_copy"/>
+  <Action name="edit_paste"/>
+  <Action name="edit_delete"/>
+  <Separator/>
+  <Action name="edit_selectall"/>
+  <Separator/>
+  <Action name="edit_copypage"/>
+  <Action name="edit_delpage"/>
+  <Separator/>
+  <Action name="edit_find"/>
+  <Action name="edit_findreplace"/>
+  <Separator/>
+  <Action name="edit_headerfooter"/>
+ </Menu>
+ <Menu name="View"><text>View</text>
+  <Action name="view_newview"/>
+ </Menu>
+ <Menu name="Insert"><text>Insert</text>
+  <Action name="insert_page"/>
+  <Separator/>
+  <Action name="insert_picture"/>
+  <Action name="insert_clipart"/>
+ </Menu>
+ <Menu name="Tools"><text>Tools</text>
+  <Action name="tools_mouse"/>
+  <Separator/>
+  <Action name="tools_line"/>
+  <Action name="tools_rectangle"/>
+  <Action name="tools_circle"/>
+  <Action name="tools_pie"/>
+  <Action name="tools_text"/>
+  <Action name="tools_autoform"/>
+  <Action name="tools_diagramm"/>
+  <Action name="tools_table"/>
+  <Action name="tools_object"/>
+ </Menu>
+ <Menu name="Text"><text>Text</text>
+  <Action name="text_font"/>
+  <Action name="text_color"/>
+  <Separator/>
+  <Menu name="Align"><text>Align</text>
+   <Action name="text_alignleft"/>
+   <Action name="text_aligncenter"/>
+   <Action name="text_alignright"/>
+  </Menu>
+  <Separator/>
+  <Menu name="Type"><text>Type</text>
+   <Action name="text_enumList"/>
+   <Action name="text_unsortedList"/>
+   <Action name="text_normalText"/>
+  </Menu>
+  <Separator/>
+  <Action name="text_depthPlus"/>
+  <Action name="text_depthMinus"/>
+  <Action name="text_spacing"/>
+  <Separator/>
+  <Action name="text_con2hei"/>
+  <Action name="text_obj2cont"/>
+ </Menu>
+ <Menu name="Extra"><text>Extra</text>
+  <Action name="extra_penbrush"/>
+  <Action name="extra_configpie"/>
+  <Action name="extra_configrect"/>
+  <Separator/>
+  <Action name="extra_lower"/>
+  <Action name="extra_raise"/>
+  <Separator/>
+  <Action name="extra_rotate"/>
+  <Action name="extra_shadow"/>
+  <Separator/>
+  <Menu name="Align Objects"><text>Align Objects</text>
+   <Action name="extra_alignleft"/>
+   <Separator/>
+   <Action name="extra_aligncenterh"/>
+   <Separator/>
+   <Action name="extra_alignright"/>
+   <Separator/>
+   <Action name="extra_aligntop"/>
+   <Separator/>
+   <Action name="extra_aligncenterv"/>
+   <Separator/>
+   <Action name="extra_alignbottom"/>
+  </Menu>
+  <Separator/>
+  <Action name="extra_background"/>
+  <Action name="extra_layout"/>
+  <Separator/>
+  <Action name="extra_options"/>
+  <Separator/>
+  <Action name="extra_webpres"/>
+ </Menu>
+ <Menu name="Screen Presentations"><text>Screen Presentations</text>
+  <Action name="screen_configpages"/>
+  <Action name="screen_presstruct"/>
+  <Action name="screen_assigneffect"/>
+  <Separator/>
+  <Action name="screen_start"/>
+  <Separator/>
+  <Action name="screen_first"/>
+  <Action name="screen_prev"/>
+  <Action name="screen_next"/>
+  <Action name="screen_last"/>
+  <Separator/>
+  <Action name="screen_skip"/>
+  <Separator/>
+  <Action name="screen_pencolor"/>
+  <Action name="screen_penwidth"/>
+ </Menu>
+</MenuBar>
+<ToolBars>
+ <ToolBar position="top">
+  <Action name="edit_undo"/>
+  <Action name="edit_redo"/>
+  <Separator/>
+  <Action name="edit_cut"/>
+  <Action name="edit_copy"/>
+  <Action name="edit_paste"/>
+  <Separator/>
+  <Action name="edit_delete"/>
+ </ToolBar>
+ <ToolBar position="top">
+  <Action name="insert_page"/>
+  <Separator/>
+  <Action name="insert_picture"/>
+  <Action name="insert_clipart"/>
+ </ToolBar>
+ <ToolBar position="left">
+  <Action name="tools_mouse"/>
+  <Action name="tools_line"/>
+  <Action name="tools_rectangle"/>
+  <Action name="tools_circle"/>
+  <Action name="tools_pie"/>
+  <Action name="tools_text"/>
+  <Action name="tools_autoform"/>
+  <Action name="tools_diagramm"/>
+  <Action name="tools_table"/>
+  <Action name="tools_formula"/>
+  <Action name="tools_object"/>
+ </ToolBar>
+ <ToolBar position="bottom">
+  <Action name="text_fontsize"/>
+  <Action name="text_fontfamily"/>
+  <Separator/>
+  <Action name="text_bold"/>
+  <Action name="text_italic"/>
+  <Action name="text_underline"/>
+  <Action name="text_color"/>
+  <Separator/>
+  <Action name="text_alignleft"/>
+  <Action name="text_aligncenter"/>
+  <Action name="text_alignright"/>
+  <Separator/>
+  <Action name="text_enumList"/>
+  <Action name="text_unsortedList"/>
+  <Action name="text_normalText"/>
+  <Separator/>
+  <Action name="text_depthPlus"/>
+  <Action name="text_depthMinus"/>
+  <Action name="text_spacing"/>
+ </ToolBar>
+ <ToolBar position="top">
+  <Action name="extra_penbrush"/>
+  <Action name="extra_configpie"/>
+  <Action name="extra_configrect"/>
+  <Action name="extra_linebegin"/>
+  <Action name="extra_lineend"/>
+  <Separator/>
+  <Action name="extra_lower"/>
+  <Action name="extra_raise"/>
+  <Action name="extra_alignobjs"/>
+  <Separator/>
+  <Action name="extra_rotate"/>
+  <Action name="extra_shadow"/>
+  <Separator/>
+  <Action name="extra_webpres"/>
+ </ToolBar>
+ <ToolBar position="top">
+  <Action name="screen_assigneffect"/>
+  <Separator/>
+  <Action name="screen_start"/>
+  <Separator/>
+  <Action name="screen_first"/>
+  <Action name="screen_prev"/>
+  <Action name="screen_next"/>
+  <Action name="screen_last"/>
+  <Separator/>
+  <Action name="screen_pencolor"/>
+  <Action name="screen_penwidth"/>
+ </ToolBar>
+ <ToolBar position="top">
+  <Action name="colorbar"/>
+ </ToolBar>
+</ToolBars>
+</QConfig>
