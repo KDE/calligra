@@ -1,9 +1,10 @@
-/*
-                          main.cpp  -  description
-                             -------------------
+/* This file is part of the KDE project
+    
     begin                : Sun Jun  9 12:15:11 CEST 2002
     copyright            : (C) 2003 by lucijan busch, Joseph Wenninger
     email                : lucijan@gmx.at, jowenn@kde.org
+   
+   Copyright (C) 2003 Jaroslaw Staniek <js@iidea.pl>
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -60,7 +61,7 @@ bool startupActions(KexiProjectData * &projectData)
 	fname = args->arg(0);
 	QFileInfo finfo(fname);
 	if (fname.isEmpty() || !finfo.isReadable()) {
-		KMessageBox::sorry(0, i18n("<qt>The file <b>%1</b> does not exist.</qt>").arg(fname));
+		KMessageBox::sorry(0, QString( I18N_NOOP("<qt>The file <b>%1</b> does not exist.</qt>") ).arg(fname));
 		return false;
 	}
 	if (!finfo.isWritable()) {
@@ -76,8 +77,8 @@ bool startupActions(KexiProjectData * &projectData)
 	QString drivername = Kexi::driverManager.lookupByMime(mimename);
 	kdDebug() << "KexiProject::open(): driver name: " << drivername << endl;
 	if(drivername.isEmpty()) {
-		KMessageBox::detailedSorry(0, i18n("<qt>File <b>%1</b> is not recognised as supported by Kexi.</qt>").arg(fname),
-			i18n("Database driver for this file not found.<br>Detected MIME type: %1").arg(mimename));
+		KMessageBox::detailedSorry(0, QString( I18N_NOOP("<qt>File <b>%1</b> is not recognised as supported by Kexi.</qt>") ).arg(fname),
+			QString( I18N_NOOP("Database driver for this file not found.<br>Detected MIME type: %1") ).arg(mimename));
 		return false;
 	}
 	else {
@@ -125,11 +126,11 @@ bool startupActions(KexiProjectData * &projectData)
 		if (!pr || !pr->executeItem(obj_identifier)) {
 			if (!not_found_msg.isEmpty())
 				not_found_msg += ",<br>";
-			not_found_msg += (pr ? pr->part()->name() : i18n("Unknown object")) + " \"" + obj_name + "\"";
+			not_found_msg += (pr ? pr->part()->name() : I18N_NOOP("Unknown object")) + " \"" + obj_name + "\"";
 		}
 	}
 	if (!not_found_msg.isEmpty())
-		KMessageBox::sorry(0, "<p><b>" + i18n("Requested objects cannot be opened:") + "</b><p>" + not_found_msg );
+		KMessageBox::sorry(0, "<p><b>" + I18N_NOOP("Requested objects cannot be opened:") + "</b><p>" + not_found_msg );
 #endif //0
 	return true;
 }
@@ -144,7 +145,8 @@ int main(int argc, char *argv[])
 	KexiProjectData *projectData=0;
 	
 	if (!startupActions(projectData))
-		//return 1;
+		return 1;
+	
 	kdDebug() << "startupActions(): OK" <<endl;
 //	app.dcopClient()->attach();
 //	app.dcopClient()->registerAs( "kexi" );
