@@ -105,7 +105,6 @@ KoTemplateCreateDia::KoTemplateCreateDia( const QCString &templateType, KInstanc
     label=new QLabel(i18n("Group:"), mainwidget);
     leftbox->addWidget(label);
     d->m_groups=new KListView(mainwidget);
-    connect(d->m_groups,SIGNAL(executed( QListViewItem * )),this,SLOT(slotItemClicked(QListViewItem * )));
     leftbox->addWidget(d->m_groups);
     d->m_groups->addColumn("");
     d->m_groups->header()->hide();
@@ -169,25 +168,6 @@ void KoTemplateCreateDia::createTemplate( const QCString &templateType, KInstanc
     KoTemplateCreateDia *dia = new KoTemplateCreateDia( templateType, instance, file, pix, parent );
     dia->exec();
     delete dia;
-}
-
-void KoTemplateCreateDia::slotItemClicked(QListViewItem *_item )
-{
-    QString str=_item->text(0);
-    if(_item->depth()!=0)
-        _item=_item->parent();
-    KoTemplateGroup *group=d->m_tree->find(_item->text(0));
-    if(group!=0)
-        {
-
-            KoTemplate *tmpTemplate=group->find(str);
-            if(tmpTemplate!=0)
-                {
-                    d->m_preview->setPixmap(tmpTemplate->loadPicture());
-                }
-        }
-
-
 }
 
 void KoTemplateCreateDia::slotOk() {
