@@ -46,10 +46,6 @@ KPrImportStyleDia::~KPrImportStyleDia()
 
 void KPrImportStyleDia::loadFile()
 {
-    m_styleList.setAutoDelete(true);
-    m_styleList.clear();
-    m_listStyleName->clear();
-
     KFileDialog fd( QString::null, QString::null, 0, 0, TRUE );
     fd.setMimeFilter( "application/x-kpresenter" );
     fd.setCaption(i18n("Import Style"));
@@ -71,6 +67,10 @@ void KPrImportStyleDia::loadFile()
     {
         if (store->open("maindoc.xml") )
         {
+            m_styleList.setAutoDelete(true);
+            m_styleList.clear();
+            m_listStyleName->clear();
+
             QDomDocument doc;
             doc.setContent( store->device() );
             QDomElement word = doc.documentElement();
