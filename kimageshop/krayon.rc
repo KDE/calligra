@@ -29,6 +29,7 @@
   <Action name="tool_pen"/>
   <Action name="tool_brush"/>
   <Action name="tool_airbrush"/>
+  <Action name="tool_line"/>  
   <Action name="tool_gradient"/>
   <Action name="tool_eraser"/>
   <Action name="tool_fill"/>
@@ -108,7 +109,6 @@
   <Action name="cut"/>
   <Action name="paste"/>
   <Action name="remove"/>  
-  <Action name="delete"/>
 </ToolBar>
 <ToolBar name="krayonbox" position="top"><Text>KrayonBox</Text>
   <Action name="colors_dialog"/>
@@ -132,6 +132,7 @@
   <Action name="tool_pen"/>
   <Action name="tool_brush"/>
   <Action name="tool_airbrush"/>
+  <Action name="tool_line"/>    
   <Action name="tool_gradient"/>
   <Action name="tool_eraser"/>
   <Action name="tool_fill"/>  

@@ -74,6 +74,11 @@ public:
     virtual void paintContent( QPainter& painter, const QRect& rect, bool transparent = FALSE );
 
 	/*
+	 *  Current shell or frame window for this doc.
+	 */
+    KoMainWindow* currentShell();
+
+	/*
 	 * KOffice undo/redo.
 	 */
     KoCommandHistory* commandHistory() { return &m_commands; }; 
@@ -81,7 +86,7 @@ public:
 	/*
 	 * Use QPainter p to paint a rectangular are of the current image.
 	 */
-    void paintPixmap( QPainter *p, QRect area );
+    void paintPixmap( QPainter* p, QRect area );
 
 	/*
 	 * Create new KisImage, add it to our KisImage list and make it the current Image.

@@ -22,40 +22,41 @@
 #include "kis_canvas.h"
 #include "kis_cursor.h"
 
-KisCanvas::KisCanvas( QWidget* parent, const char* name ) : QWidget( parent, name )
+KisCanvas::KisCanvas( QWidget* parent, const char* name ) 
+    : QWidget( parent, name )
 {
-  setBackgroundMode( QWidget::NoBackground );
-  setMouseTracking( true );
+    setBackgroundMode( QWidget::NoBackground );
+    setMouseTracking( true );
 }
 
 void KisCanvas::paintEvent( QPaintEvent* e )
 {
-  emit gotPaintEvent(e);
+    emit gotPaintEvent(e);
 }
 
 void KisCanvas::mousePressEvent ( QMouseEvent *e )
 {
-  emit mousePressed(e);
+    emit mousePressed(e);
 }
 
 void KisCanvas::mouseReleaseEvent ( QMouseEvent *e )
 {
-  emit mouseReleased(e);
+    emit mouseReleased(e);
 }
 
 void KisCanvas::mouseMoveEvent ( QMouseEvent *e )
 {
-  emit mouseMoved(e);
+    emit mouseMoved(e);
 }
 
 void KisCanvas::enterEvent( QEvent*e )
 {
-  emit gotEnterEvent(e);
+    emit gotEnterEvent(e);
 }
 
 void KisCanvas::leaveEvent( QEvent*e )
 {
-  emit gotLeaveEvent(e);
+    emit gotLeaveEvent(e);
 }
 
 #include "kis_canvas.moc"

@@ -1,8 +1,7 @@
 /*
- *  gradienttool.h - part of KImageShop
+ *  linetool.cc - part of KImageShop
  *
- *  Copyright (c) 1999 Michael Koch <koch@kde.org>
- * Copyright (c) 2000 John Califf <jcaliff@compuzone.net>
+ *  Copyright (c) 2000 John Califf <jcaliff@compuzone.net>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -27,10 +26,10 @@
 #include "kis_color.h"
 #include "kis_canvas.h"
 #include "kis_gradient.h"
-#include "kis_tool_gradient.h"
+#include "kis_tool_line.h"
 
 
-GradientTool::GradientTool( KisDoc* _doc, KisView* _view, 
+LineTool::LineTool( KisDoc* _doc, KisView* _view, 
     KisCanvas* _canvas, KisGradient* _gradient )
   : KisTool( _doc, _view )
   , m_dragging( false )
@@ -39,12 +38,12 @@ GradientTool::GradientTool( KisDoc* _doc, KisView* _view,
 {
 }
 
-GradientTool::~GradientTool()
+LineTool::~LineTool()
 {
 }
 
 
-void GradientTool::mousePress( QMouseEvent* event )
+void LineTool::mousePress( QMouseEvent* event )
 {
     if ( m_pDoc->isEmpty() )
         return;
@@ -58,7 +57,7 @@ void GradientTool::mousePress( QMouseEvent* event )
 }
 
 
-void GradientTool::mouseMove( QMouseEvent* event )
+void LineTool::mouseMove( QMouseEvent* event )
 {
     if ( m_pDoc->isEmpty() )
         return;
@@ -72,7 +71,7 @@ void GradientTool::mouseMove( QMouseEvent* event )
 }
 
 
-void GradientTool::mouseRelease( QMouseEvent* event )
+void LineTool::mouseRelease( QMouseEvent* event )
 {
     if ( m_pDoc->isEmpty() )
         return;
@@ -82,12 +81,12 @@ void GradientTool::mouseRelease( QMouseEvent* event )
     {
         drawLine( m_dragStart, m_dragEnd );
         m_dragging = false;
-        drawGradient( m_dragStart, m_dragEnd );
+        drawLine( m_dragStart, m_dragEnd );
     }
 }
 
 
-void GradientTool::drawLine( const QPoint& start, const QPoint& end )
+void LineTool::drawLine( const QPoint& start, const QPoint& end )
 {
     QPainter p;
 
@@ -98,10 +97,10 @@ void GradientTool::drawLine( const QPoint& start, const QPoint& end )
 }
 
 
-void GradientTool::drawGradient( const QPoint& start, const QPoint& end )
+void LineTool::drawGradientLine( const QPoint& start, const QPoint& end )
 {
     KisImage * img = m_pDoc->current();
-    if (!img)   return;
+    if (!img)	return;
     int swap = 0;
     int x1, x2, y1, y2;
 
@@ -110,8 +109,6 @@ void GradientTool::drawGradient( const QPoint& start, const QPoint& end )
     x2 = end.x();
     y2 = end.y();
 
-    // establish rectanglular area to apply gradient to
-    // based on line endpoints
     if( x1 > x2 ) 
     {
         //swap( x1, x2 );
@@ -122,11 +119,12 @@ void GradientTool::drawGradient( const QPoint& start, const QPoint& end )
         //swap( y1, y2 );
         swap = y1; y1 = y2; y2 = swap;         
     }    
-    
-    // draw gradient within rectanguar area defined above
-    // beware of divide by zero errors here!
-    int length = (y2 - y1) > 0 ? y2 - y1 : 1;
-    
+    // draw gradient
+
+    int length = y2 - y1;
+
+    // int length = sqrt( sqr(x1 - x2) + sqr(y1 - y2) );
+
     KisColor startColor = m_pView->fgColor();
     KisColor endColor   = m_pView->bgColor();
 
@@ -141,30 +139,26 @@ void GradientTool::drawGradient( const QPoint& start, const QPoint& end )
         uchar g = img->getCurrentLayer()->pixel(1, x1, y1 );
         uchar b = img->getCurrentLayer()->pixel(2, x1, y1 );
         
-        color = (((uint)(r << 16)) + ((uint)(g << 8)) + (uint)(b));        
+        color = (((uint)r << 16) + ((uint)g << 8) + (b));        
         uint mask = color & 0xFF000000;
 
         int rDiff = ( endColor.R() - startColor.R() );
         int gDiff = ( endColor.G() - startColor.G() );
         int bDiff = ( endColor.B() - startColor.B() );
   
-        if( rDiff > 0 ) kdDebug() << "rDiff ist positiv" << endl;
-        if( gDiff > 0 ) kdDebug() << "gDiff ist positiv" << endl;
-        if( bDiff > 0 ) kdDebug() << "bDiff ist positiv" << endl;
+        if( rDiff > 0 ) kdDebug() <<  "rDiff ist positiv"  << endl;
+        if( gDiff > 0 ) kdDebug() <<  "gDiff ist positiv"  << endl;
+        if( bDiff > 0 ) kdDebug() <<  "bDiff ist positiv"  << endl;
   
         register int rl = rDiff << 16;
         register int gl = gDiff << 16;
         register int bl = bDiff << 16;
    
-        // avoid divide by zero errors
-        int rcDelta = ( 1<<16 ) / length * (rDiff > 0 ? rDiff : 1);
-        int gcDelta = ( 1<<16 ) / length * (gDiff > 0 ? gDiff : 1);
-        int bcDelta = ( 1<<16 ) / length * (bDiff > 0 ? bDiff : 1);
+        int rcDelta = ( 1<<16 ) / length * rDiff;
+        int gcDelta = ( 1<<16 ) / length * gDiff;
+        int bcDelta = ( 1<<16 ) / length * bDiff;
     
-        // draw rect - can add a shape mask to this also based
-        // on current selection within rectangular area
-        
-        // gradient defined vertically
+        // draw parallelogram
         for( int y = y1 ; y < y2 ; y++ )
         {
             // calc color
@@ -172,28 +166,17 @@ void GradientTool::drawGradient( const QPoint& start, const QPoint& end )
             gl += gcDelta;
             bl += bcDelta;
 
-            // this mask doesn't do anything because it is
-            // cumulatively added to gradient color
-            // same as ROP_COPY - we need to define different
-            // kis raster ops for these kinds of things! 
             color = mask |  ( ( rl>>16 ) * 0x010000 ) |
                             ( ( gl>>16 ) * 0x000100 ) |
                               ( bl>>16 );
 
-            // draw uniform horizontal line of color - 
+            // draw line of color
             for( int x = x1 ; x < x2 ; x++ )
             {
-                /* -jwc- We need to define setPixel by color 
-                in kis_layer.cc instead of doing it for each 
-                channel, for each color format, although this
-                inline code is faster */
-                 
-                img->getCurrentLayer()->setPixel(0, x, y, 
-                    (color & 0x00ff0000) >> 16 );
-                img->getCurrentLayer()->setPixel(1, x, y, 
-                    (color & 0x0000ff00) >>  8 );
-                img->getCurrentLayer()->setPixel(2, x, y, 
-                    (color & 0x000000ff) );                
+                // -jwc- need to define setPixel by color in kis_layer.cc
+                img->getCurrentLayer()->setPixel(0, x, y, (color & 0x00ff0000) >> 16 );
+                img->getCurrentLayer()->setPixel(1, x, y, (color & 0x0000ff00) >>  8 );
+                img->getCurrentLayer()->setPixel(2, x, y, (color & 0x000000ff) );                
             }
         }
     

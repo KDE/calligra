@@ -160,7 +160,7 @@ bool KisDoc::initDoc()
 
 QDomDocument KisDoc::saveXML( )
 {
-    cout << " --- KisDoc::saveXML --- " << endl;
+    cout << "KisDoc::saveXML" << endl;
     KisImage *img = m_pCurrent;
     
     // FIXME: implement saving of non-RGB modes.
@@ -393,14 +393,12 @@ kdDebug(0) << "bitDepth: " << bd << endl;
     // layer elements
     QDomNode l = layers.firstChild();
 
-    // FIXME - need to load layers and channels here, 
-    // as read from elements
     while (!l.isNull())
     {
         QDomElement layer = l.toElement();
         if (layer.tagName() != "layer" ) continue;
 
-	    cout << "--- layer ---" << endl;
+	    cout << "layer" << endl;
 
 	    // channels element
 	    QDomElement channels = layer.namedItem( "channels" ).toElement();
@@ -411,13 +409,13 @@ kdDebug(0) << "bitDepth: " << bd << endl;
 	
 	    while (!c.isNull())
 	    {
-	      QDomElement channel = c.toElement();
-	      if (channel.tagName() != "channel" ) continue;
+	        QDomElement channel = c.toElement();
+	        if (channel.tagName() != "channel" ) continue;
 
-          cout << "--- channel ---" << endl;
-          
-	      c = c.nextSibling();
+            cout << "channel" << endl;
+	        c = c.nextSibling();
 	    }
+
 	    l = l.nextSibling();
     }
 
@@ -448,18 +446,18 @@ kdDebug(0) << "KisDoc::completeLoading() entering" << endl;
 
     for (KisLayer *lay = layers.first(); lay != 0; lay = layers.next())
     {
-      for ( KisChannel* ch = lay->firstChannel(); ch != 0; ch = lay->nextChannel())
-	  {
-	    QString url = QString( "layers/%1/channels/ch%2.bin" ).arg( lay->name() )
-			.arg( static_cast<int>(ch->channelId()) );
+        for ( KisChannel* ch = lay->firstChannel(); ch != 0; ch = lay->nextChannel())
+	    {
+	        QString url = QString( "layers/%1/channels/ch%2.bin" ).arg( lay->name() )
+			    .arg( static_cast<int>(ch->channelId()) );
 
-          if ( store->open( url ) )
-	      {
-            kdDebug(0) << "KisDoc::completeLoading() ch->loadFromStore()" << endl;            
-            ch->loadFromStore(store);
-		    store->close();
+            if ( store->open( url ) )
+	        {
+                kdDebug(0) << "KisDoc::completeLoading() ch->loadFromStore()" << endl;            
+                ch->loadFromStore(store);
+		        store->close();
+	        }
 	    }
-	  }
     }
 
     // need this to force redraw of image data just loaded
@@ -482,12 +480,12 @@ kdDebug() << "KisDoc::setCurrentImage entering" << endl;
 
     if (m_pCurrent)
     {
-      // disconnect old current image
-      QObject::disconnect( m_pCurrent, SIGNAL( updated() ),
+        // disconnect old current image
+        QObject::disconnect( m_pCurrent, SIGNAL( updated() ),
 	            this, SLOT( slotImageUpdated() ) );
-      QObject::disconnect( m_pCurrent, SIGNAL( updated( const QRect& ) ),
+        QObject::disconnect( m_pCurrent, SIGNAL( updated( const QRect& ) ),
 	            this, SLOT( slotImageUpdated( const QRect& ) ) );
-      QObject::disconnect( m_pCurrent, SIGNAL( layersUpdated() ),
+        QObject::disconnect( m_pCurrent, SIGNAL( layersUpdated() ),
                     this, SLOT( slotLayersUpdated() ) );
     }
 
@@ -598,6 +596,21 @@ KisImage* KisDoc::current()
     return m_pCurrent;
 }
 
+
+KoMainWindow * KisDoc::currentShell()
+{
+    int shellCount = 0;
+    KoMainWindow * tmpKo = firstShell();
+    
+    for ( ; tmpKo ; tmpKo = nextShell() )
+    {
+        shellCount++;
+        tmpKo->statusBarLabel()->setText(
+            i18n(" KisShell Number : %1").arg(shellCount));
+    }
+    
+    return tmpKo;
+}
 
 /*
     KisDoc destructor - Note that since this is MDI, each image
@@ -1072,6 +1085,7 @@ KisImage* KisDoc::newImage(const QString& n, int width, int height,
     kdDebug() << "KisDoc::newImage(): entering" << endl; 
 
     KisImage *img = new KisImage( n, width, height, cm, bitDepth );
+
     kdDebug() << "KisDoc::newImage(): returned from KisImage constuctor" << endl;
 
     m_Images.append(img);
@@ -1106,6 +1120,7 @@ void KisDoc::slotRemoveImage( const QString& _name )
 	        removeImage(img);
 	        return;
 	    }
+
         img = m_Images.next();
     }
 }
@@ -1124,20 +1139,18 @@ bool KisDoc::slotNewImage()
         m_pNewDialog = new NewDialog();
 
     kdDebug() << "KisDoc::slotNewImage:NewDialog()->exec()" << endl; 
-    // jwc - this causes bad drawable, probably qt spin buttons,
-    // seems harmless, though
+
+    /* jwc - this causes bad drawable, invalid window paramater or
+    image, seems harmless, though. Error only occurs when document
+    is first created, not when adding new image tab */
     m_pNewDialog->exec();
     
     if(!m_pNewDialog->result() == QDialog::Accepted)
         return false;
 
-    kdDebug() << "KisDoc::slotNewImage:NewDialog()->newwidth()" << endl; 
     int w = m_pNewDialog->newwidth();
-    kdDebug() << "KisDoc::slotNewImage:NewDialog()->newheight()" << endl;     
     int h = m_pNewDialog->newheight();
-    kdDebug() << "KisDoc::slotNewImage:NewDialog()->backgroundMode()" << endl;     
     bgMode bg = m_pNewDialog->backgroundMode();
-    kdDebug() << "KisDoc::slotNewImage:NewDialog()->colorMode()" << endl;     
     cMode cm = m_pNewDialog->colorMode();
 
     kdDebug() << "KisDoc::slotNewImage: w: "<< w << "h: " << h << endl; 
@@ -1254,7 +1267,7 @@ void KisDoc::paintContent( QPainter& painter,
     }
     else
     {
-        kdDebug(0) <<  "Error KisDoc::paintContent() - no m_pCurrent" << endl; 
+        kdDebug(0) <<  "KisDoc::paintContent() - no m_pCurrent" << endl; 
     }    
 }
 
@@ -1270,7 +1283,7 @@ void KisDoc::paintPixmap(QPainter *p, QRect area)
     }
     else
     {
-        kdDebug(0) <<  "Error KisDoc::paintPixmap() - no m_pCurrent" << endl;     
+        kdDebug(0) <<  "KisDoc::paintPixmap() - no m_pCurrent" << endl;     
     }    
 }
 

@@ -283,9 +283,9 @@ bool  KisChannel::loadFromStore(KoStore *store)
     {
         for(uint tx = 0; tx < m_xTiles; tx++)
         {
-	    for(int y = 0; y < TILE_SIZE; y++)
+	        for(int y = 0; y < TILE_SIZE; y++)
             {
-		for(int x = 0; x < TILE_SIZE; x++)
+		        for(int x = 0; x < TILE_SIZE; x++)
                 {
                     /* read raw data from byte array stream, and thereby from
                     the byte array associated with it, into each pixel 

@@ -25,143 +25,146 @@
 
 ColorFrame::ColorFrame(QWidget *parent) : QFrame(parent)
 {
-  setFrameStyle(Panel | Sunken);
-  setBackgroundMode(NoBackground);
+    setFrameStyle(Panel | Sunken);
+    setBackgroundMode(NoBackground);
 
-  // default values
-  m_c1 = QColor(0, 0, 0);
-  m_c2 = QColor(255, 255, 255);
+    // default values
+    m_c1 = QColor(0, 0, 0);
+    m_c2 = QColor(255, 255, 255);
 
-  m_colorChanged = false;
-  m_pixChanged = false;
-  m_dragging = false;
+    m_colorChanged = false;
+    m_pixChanged = false;
+    m_dragging = false;
 }
 
 const QColor ColorFrame::colorAt (const QPoint& p)
 {
-  if (m_pixChanged)
+    if (m_pixChanged)
 	{
-	  m_pmImage = m_pm.convertToImage();
-	  m_pixChanged = false;
+	    m_pmImage = m_pm.convertToImage();
+	    m_pixChanged = false;
 	}
   
-  if (p.x() >= m_pm.width()
-	  || p.y() >= m_pm.height())
-	return QColor(255,255,255);
+    if (p.x() >= m_pm.width()
+	|| p.y() >= m_pm.height())
+	    return QColor(255,255,255);
   
-  return QColor(m_pmImage.pixel(p.x(), p.y()));
+    return QColor(m_pmImage.pixel(p.x(), p.y()));
 }
+
 
 void ColorFrame::slotSetColor1(const QColor& c)
 {
-  m_c1 = c;
-  m_colorChanged = true;
-  m_pixChanged = true;
-  repaint();
+    m_c1 = c;
+    m_colorChanged = true;
+    m_pixChanged = true;
+    repaint();
 }
 
 void ColorFrame::slotSetColor2(const QColor& c)
 {
-  m_c2 = c;
-  m_colorChanged = true;
-  repaint();
+    m_c2 = c;
+    m_colorChanged = true;
+    repaint();
 }
 
 void ColorFrame::drawContents(QPainter *p)
 {
-  QRect r = contentsRect();
+    QRect r = contentsRect();
   
-  if ((m_pm.size() != r.size()) || m_colorChanged)
+    if ((m_pm.size() != r.size()) || m_colorChanged)
 	{
-	  m_pm.resize(r.width() + 1, r.height() + 1);
-	  KPixmapEffect::gradient(m_pm, m_c1, m_c2, KPixmapEffect::HorizontalGradient);
-	  m_colorChanged = false;
-	  m_pixChanged = true;
+	    m_pm.resize(r.width() + 1, r.height() + 1);
+	    KPixmapEffect::gradient(m_pm, m_c1, m_c2, 
+            KPixmapEffect::HorizontalGradient);
+	    m_colorChanged = false;
+	    m_pixChanged = true;
 	}
   
-  p->drawPixmap(r.left(), r.top(), m_pm);
+    p->drawPixmap(r.left(), r.top(), m_pm);
 }
 
 void ColorFrame::mousePressEvent (QMouseEvent *e)
 {
-  if (e->button() & LeftButton)
+    if (e->button() & LeftButton)
     {
-	  emit clicked(e->pos());
+	    emit clicked(e->pos());
 
-	  m_dragging = true;
-	  QPoint pos = QPoint(e->pos().x() - contentsRect().left(),
+	    m_dragging = true;
+	    QPoint pos = QPoint(e->pos().x() - contentsRect().left(),
 						  e->pos().y() - contentsRect().top());
 
-	  if (pos.x() < 0)
-		pos.setX(0);
-	  else if (pos.x() >= contentsRect().width())
-		pos.setX(contentsRect().width()-1);
+	    if (pos.x() < 0)
+		    pos.setX(0);
+	    else if (pos.x() >= contentsRect().width())
+		    pos.setX(contentsRect().width()-1);
 
-	  if (pos.y() < 0)
-		pos.setY(0);
-	  else if (pos.y() >= contentsRect().height())
-		pos.setY(contentsRect().height()-1);
+	    if (pos.y() < 0)
+		    pos.setY(0);
+	    else if (pos.y() >= contentsRect().height())
+		    pos.setY(contentsRect().height()-1);
 
-	  QColor c = colorAt(pos);
-	  emit colorSelected(c);
+	    QColor c = colorAt(pos);
+	    emit colorSelected(c);
 	}
-  else
-	QFrame::mousePressEvent(e);
+    else
+	    QFrame::mousePressEvent(e);
 }
 
 void ColorFrame::mouseReleaseEvent(QMouseEvent *e)
 {
-  if (e->button() & LeftButton)
-	m_dragging = false;
-  else
-    QFrame::mouseReleaseEvent(e);
+    if (e->button() & LeftButton)
+	    m_dragging = false;
+    else
+        QFrame::mouseReleaseEvent(e);
 }
 
 void ColorFrame::mouseMoveEvent(QMouseEvent *e)
 {
-  if (m_dragging)
+    if (m_dragging)
     {
-	  bool set = false;
-	  int x = e->pos().x();
-	  int y = e->pos().y();
+	    bool set = false;
+	    int x = e->pos().x();
+	    int y = e->pos().y();
 	  
-	  int left = contentsRect().left();
-	  int right = contentsRect().left() + contentsRect().width();
-	  int top = contentsRect().top();
-	  int bottom =  contentsRect().top() + contentsRect().height();
+	    int left = contentsRect().left();
+	    int right = contentsRect().left() + contentsRect().width();
+	    int top = contentsRect().top();
+	    int bottom =  contentsRect().top() + contentsRect().height();
 	  
-	  if (x < left)
+	    if (x < left)
 		{
 		  x = left;
 		  set = true;
 		}
-	  else if (x > right)
+	    else if (x > right)
 		{
 		  x = right;
 		  set = true;
 		}
 	  
-	  if (y < top)
+	    if (y < top)
 		{
 		  y = top;
 		  set = true;
 		}
-	  else if (y > bottom)
+	    else if (y > bottom)
 		{
 		  y = bottom;
 		  set = true;
 		}
 	  
-	  if (set)
-		QCursor::setPos(mapToGlobal(QPoint(x,y)));
+	    if (set)
+		    QCursor::setPos(mapToGlobal(QPoint(x,y)));
 	  
-	  QPoint pos = QPoint(x - contentsRect().left(), y - contentsRect().top());
+	    QPoint pos = QPoint(x - contentsRect().left(), 
+            y - contentsRect().top());
 	  
-      QColor c = colorAt(pos);
-	  emit colorSelected(c);
+        QColor c = colorAt(pos);
+	    emit colorSelected(c);
 	}
-  else
-	QFrame::mouseMoveEvent(e);  
+    else
+	    QFrame::mouseMoveEvent(e);  
 }
 
 #include "colorframe.moc"

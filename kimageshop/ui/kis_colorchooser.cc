@@ -38,147 +38,147 @@
 
 KisColorChooser::KisColorChooser(QWidget *parent) : QWidget(parent)
 {
-  // init with defaults
-  m_fg = KisColor::white();
-  m_bg = KisColor::black();
-  m_active = ac_Foreground;
+    // init with defaults
+    m_fg = KisColor::white();
+    m_bg = KisColor::black();
+    m_active = ac_Foreground;
   
-  // setup color frame
-  m_pColorFrame = new ColorFrame(this);
+    // setup color frame
+    m_pColorFrame = new ColorFrame(this);
 
-  // connect color frame
-  connect(m_pColorFrame, SIGNAL(colorSelected(const QColor &)), this,
+    // connect color frame
+    connect(m_pColorFrame, SIGNAL(colorSelected(const QColor &)), this,
 		  SLOT(slotColorFrameChanged(const QColor &)));
 
-  // setup color widgets
-  m_pRGBWidget = new RGBWidget(this);
-  m_pGreyWidget = new GreyWidget(this);
+    // setup color widgets
+    m_pRGBWidget = new RGBWidget(this);
+    m_pGreyWidget = new GreyWidget(this);
 
-  // connect color widgets
-  connect(m_pRGBWidget, SIGNAL(colorChanged(const KisColor &)), this,
+    // connect color widgets
+    connect(m_pRGBWidget, SIGNAL(colorChanged(const KisColor &)), this,
 		  SLOT(slotRGBWidgetChanged(const KisColor &)));
 
-  //connect(m_pGreyWidget, SIGNAL(colorChanged(const KisColor &)), this,
-  //		  SLOT(slotGreyWidgetChanged(const KisColor &)));
+    //connect(m_pGreyWidget, SIGNAL(colorChanged(const KisColor &)), this,
+    //		  SLOT(slotGreyWidgetChanged(const KisColor &)));
 
-  // show RGB as default 
-  slotShowRGB();
+    // show RGB as default 
+    slotShowRGB();
 }
 
 void KisColorChooser::slotRGBWidgetChanged(const KisColor& c)
 {
-  if( m_active == ac_Foreground )
-	m_pColorFrame->slotSetColor1(c.color());
-  else
-	m_pColorFrame->slotSetColor2(c.color());
+    if( m_active == ac_Foreground )
+	    m_pColorFrame->slotSetColor1(c.color());
+    else
+	    m_pColorFrame->slotSetColor2(c.color());
 
-  emit colorChanged(c);
-  m_pGreyWidget->slotSetColor(c);
+    emit colorChanged(c);
+    m_pGreyWidget->slotSetColor(c);
 }
 
 void KisColorChooser::slotGreyWidgetChanged(const KisColor& c)
 {
-  if( m_active == ac_Foreground )
-	m_pColorFrame->slotSetColor1(c.color());
-  else
-	m_pColorFrame->slotSetColor2(c.color());
+    if( m_active == ac_Foreground )
+	    m_pColorFrame->slotSetColor1(c.color());
+    else
+	    m_pColorFrame->slotSetColor2(c.color());
 
-  emit colorChanged(c);
-  m_pRGBWidget->slotSetColor(c);
+    emit colorChanged(c);
+    m_pRGBWidget->slotSetColor(c);
 }
 
 void KisColorChooser::slotColorFrameChanged(const QColor& qc)
 {
-  KisColor c(qc);
+    KisColor c(qc);
 
-  emit colorChanged(c);
+    emit colorChanged(c);
 
-  m_pGreyWidget->slotSetColor(c);
-  m_pRGBWidget->slotSetColor(c);
+    m_pGreyWidget->slotSetColor(c);
+    m_pRGBWidget->slotSetColor(c);
 }
 
 void KisColorChooser::slotSetFGColor(const KisColor& c)
 {
-  m_fg = c;
+    m_fg = c;
 
-  if (m_active == ac_Foreground)
+    if (m_active == ac_Foreground)
 	{
-	  m_pColorFrame->slotSetColor1(c.color());
-  	  m_pRGBWidget->slotSetColor(c);
-	  m_pGreyWidget->slotSetColor(c);
+	    m_pColorFrame->slotSetColor1(c.color());
+  	    m_pRGBWidget->slotSetColor(c);
+	    m_pGreyWidget->slotSetColor(c);
 	}
 }
 
 void KisColorChooser::slotSetBGColor(const KisColor& c)
 {
-  m_bg = c;
+    m_bg = c;
 
-  if (m_active == ac_Background)
+    if (m_active == ac_Background)
 	{
-	  m_pColorFrame->slotSetColor1(c.color());
-	  m_pRGBWidget->slotSetColor(c);
-	  m_pGreyWidget->slotSetColor(c);
+	    m_pColorFrame->slotSetColor1(c.color());
+	    m_pRGBWidget->slotSetColor(c);
+	    m_pGreyWidget->slotSetColor(c);
 	}
 }
 
 void KisColorChooser::slotShowGrey()
 {
-  m_pRGBWidget->hide();
-  m_pGreyWidget->show();
+    m_pRGBWidget->hide();
+    m_pGreyWidget->show();
 }
 
 void KisColorChooser::slotShowRGB()
 {
-  m_pGreyWidget->hide();
-  m_pRGBWidget->show();
+    m_pGreyWidget->hide();
+    m_pRGBWidget->show();
 }
 
 void KisColorChooser::slotShowHSB()
 {
-  m_pGreyWidget->hide();
-  m_pRGBWidget->hide();
+    m_pGreyWidget->hide();
+    m_pRGBWidget->hide();
 }
 
 void KisColorChooser::slotShowCMYK()
 {
-  m_pGreyWidget->hide();
-  m_pRGBWidget->hide();
+    m_pGreyWidget->hide();
+    m_pRGBWidget->hide();
 }
 
 void KisColorChooser::slotShowLAB()
 {
-  m_pGreyWidget->hide();
-  m_pRGBWidget->hide();
+    m_pGreyWidget->hide();
+    m_pRGBWidget->hide();
 }
 
 void KisColorChooser::resizeEvent(QResizeEvent *)
 {
-  int w = width();
-  int h = height();
+    int w = width();
+    int h = height();
 
-  m_pColorFrame->setGeometry(2, h-22, w-4, 20);
+    m_pColorFrame->setGeometry(2, h-22, w-4, 20);
 
-  m_pRGBWidget->setGeometry(2, 2, w-4, h-24);
-  m_pGreyWidget->setGeometry(2, 2, w-4, h-24);
+    m_pRGBWidget->setGeometry(2, 2, w-4, h-24);
+    m_pGreyWidget->setGeometry(2, 2, w-4, h-24);
 }
 
 RGBWidget::RGBWidget(QWidget *parent) : QWidget(parent)
 {
-  // init with defaults
-  m_c = KisColor::white();
+    // init with defaults
+    m_c = KisColor::white();
 
-  // setup color sliders
-  m_pRSlider = new ColorSlider(this);
-  m_pRSlider->setMaximumHeight(20);
-  m_pRSlider->slotSetRange(0, 255);
+    // setup color sliders
+    m_pRSlider = new ColorSlider(this);
+    m_pRSlider->setMaximumHeight(20);
+    m_pRSlider->slotSetRange(0, 255);
 
-  m_pGSlider = new ColorSlider(this);
-  m_pGSlider->setMaximumHeight(20);
-  m_pGSlider->slotSetRange(0, 255);
+    m_pGSlider = new ColorSlider(this);
+    m_pGSlider->setMaximumHeight(20);
+    m_pGSlider->slotSetRange(0, 255);
 
-  m_pBSlider = new ColorSlider(this);
-  m_pBSlider->setMaximumHeight(20);
-  m_pBSlider->slotSetRange(0, 255);
+    m_pBSlider = new ColorSlider(this);
+    m_pBSlider->setMaximumHeight(20);
+    m_pBSlider->slotSetRange(0, 255);
  
   // setup slider labels
   m_pRLabel = new QLabel("R", this);
@@ -299,20 +299,20 @@ void RGBWidget::slotRSliderChanged(int r)
 
 void RGBWidget::slotGSliderChanged(int g)
 {
-  int r = m_c.R();
-  int b = m_c.B();
+    int r = m_c.R();
+    int b = m_c.B();
 
-  m_c = KisColor( r, g, b, cs_RGB );
+    m_c = KisColor( r, g, b, cs_RGB );
 
-  m_pRSlider->slotSetColor1( QColor( 0, g, b ) );
-  m_pRSlider->slotSetColor2( QColor( 255, g, b ) );
+    m_pRSlider->slotSetColor1( QColor( 0, g, b ) );
+    m_pRSlider->slotSetColor2( QColor( 255, g, b ) );
 
-  m_pBSlider->slotSetColor1( QColor( r, g, 0 ) );
-  m_pBSlider->slotSetColor2( QColor( r, g, 255 ) );
+    m_pBSlider->slotSetColor1( QColor( r, g, 0 ) );
+    m_pBSlider->slotSetColor2( QColor( r, g, 255 ) );
 
-  m_pGIn->setValue( g );
+    m_pGIn->setValue( g );
 
-  emit colorChanged(m_c);
+    emit colorChanged(m_c);
 }
 
 void RGBWidget::slotBSliderChanged(int b)

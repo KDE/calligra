@@ -74,6 +74,7 @@
 #include "kis_tool_airbrush.h"
 #include "kis_tool_pen.h"
 #include "kis_tool_gradient.h"
+#include "kis_tool_line.h"
 #include "kis_tool_colorpicker.h"
 #include "kis_tool_eraser.h"
 #include "kis_tool_fill.h"
@@ -215,8 +216,10 @@ void KisView::setupScrollBars()
     //m_pVert->show();
     //m_pHorz->show();
 
-    QObject::connect(m_pVert, SIGNAL(valueChanged(int)), this, SLOT(scrollV(int)));
-    QObject::connect(m_pHorz, SIGNAL(valueChanged(int)), this, SLOT(scrollH(int)));
+    QObject::connect(m_pVert, 
+        SIGNAL(valueChanged(int)), this, SLOT(scrollV(int)));
+    QObject::connect(m_pHorz, 
+        SIGNAL(valueChanged(int)), this, SLOT(scrollH(int)));
 }
 
 
@@ -303,6 +306,9 @@ void KisView::setupTools()
 
     // gradient tool
     m_pGradientTool = new GradientTool( m_pDoc, this, m_pCanvas, m_pGradient );
+
+    // line tool
+    m_pLineTool = new LineTool( m_pDoc, this, m_pCanvas, m_pGradient );
 
     // fill tool
     m_pFill = new Fill( m_pDoc, this );
@@ -448,7 +454,6 @@ void KisView::setupActions()
         actionCollection(), "tool_airbrush");
 
     m_tool_airbrush->setExclusiveGroup( "tools" );
-	//m_tool_airbrush->setEnabled( false );
 
     m_tool_fill = new KToggleAction( i18n("&Filler tool"),
         "fill", 0, this, SLOT( tool_fill() ),
@@ -473,6 +478,12 @@ void KisView::setupActions()
         actionCollection(), "tool_gradient");
 
     m_tool_gradient->setExclusiveGroup( "tools" );
+
+    m_tool_line = new KToggleAction( i18n("&Line tool"),
+        "line", 0, this, SLOT( tool_gradient() ),
+        actionCollection(), "tool_line");
+
+    m_tool_line->setExclusiveGroup( "tools" );
 
     // layer actions
 
@@ -1028,6 +1039,11 @@ void KisView::tool_gradient()
   activateTool( m_pGradientTool );
 }
 
+void KisView::tool_line()
+{
+  activateTool( m_pLineTool );
+}
+
 void KisView::tool_fill()
 {
   activateTool( m_pFill );
@@ -1160,20 +1176,16 @@ void KisView::zoom( int _x, int _y, float zf )
     if (x < 0) x = 0;
     if (y < 0) y = 0;
 
-    // clear old background
-    if(zf < 1)
-    {
-        QPainter p;
-        p.begin( m_pCanvas );
-
-        // clear everything
-        p.eraseRect( 0, 0, width(), height() );
-        p.end();
-    }
+    // clear everything
+    QPainter p;
+    p.begin( m_pCanvas );
+    p.eraseRect( 0, 0, width(), height() );
+    p.end();
 
     scrollTo( QPoint( x, y ) );
     m_pCanvas->update();
 }
+
 
 void KisView::zoom_in( int x, int y )
 {
@@ -1316,7 +1328,6 @@ void KisView::save_layer_image()
     if( !url.isEmpty() )
     {
         //  save as standard image file (jpg, png, xpm, bmp, NO gif)
-        
         if(!m_pDoc->saveAsQtImage(url.path()))
             kdDebug(0) << "Can't save doc as standard qt image" << endl;
     }

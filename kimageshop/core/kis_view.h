@@ -65,6 +65,7 @@ class PenTool;
 class ZoomTool;
 class KisGradient;
 class GradientTool;
+class LineTool;
 class ColorPicker;
 class Fill;
 class QButton;
@@ -166,6 +167,7 @@ class KisView : public KoView
     void tool_pen();
     void tool_eraser();
     void tool_gradient();
+    void tool_line();
     void tool_colorpicker();
     void tool_fill();
 
@@ -245,25 +247,27 @@ class KisView : public KoView
     // tool actions (main toolbar & menu)
     KToggleAction *m_tool_select_rect, *m_tool_select_polygon, *m_tool_move, 
     *m_tool_zoom, *m_tool_brush, *m_tool_draw, *m_tool_pen, *m_tool_gradient, 
-    *m_tool_colorpicker, *m_tool_fill, *m_tool_airbrush, *m_tool_eraser;
+    *m_tool_colorpicker, *m_tool_fill, *m_tool_airbrush, *m_tool_eraser,
+    *m_tool_line;
 
     KisDoc                *m_pDoc;  // inherited a lot by tools
     KisTool               *m_pTool; // currently active tool
 
     // tools    
 
-    SelectTool            *m_pSelectTool;
-    PasteTool             *m_pPasteTool;
-    MoveTool              *m_pMoveTool;
-    BrushTool             *m_pBrushTool;
-    EraserTool            *m_pEraserTool;
-    AirBrushTool          *m_pAirBrushTool;
-    PenTool               *m_pPenTool;
-    ZoomTool              *m_pZoomTool;
-    KisGradient           *m_pGradient;
-    GradientTool          *m_pGradientTool;
-    ColorPicker           *m_pColorPicker;
-    Fill                  *m_pFill;
+    SelectTool      *m_pSelectTool;
+    PasteTool       *m_pPasteTool;
+    MoveTool        *m_pMoveTool;
+    BrushTool       *m_pBrushTool;
+    EraserTool      *m_pEraserTool;
+    AirBrushTool    *m_pAirBrushTool;
+    PenTool         *m_pPenTool;
+    ZoomTool        *m_pZoomTool;
+    KisGradient     *m_pGradient;
+    GradientTool    *m_pGradientTool;
+    LineTool        *m_pLineTool;    
+    ColorPicker     *m_pColorPicker;
+    Fill            *m_pFill;
     
     const KisKrayon       *m_pKrayon;   // current krayon for this view   
     const KisBrush        *m_pBrush;    // current brush for this view
