@@ -50,7 +50,6 @@
 #include "kwtextparag.h"
 #include "defs.h"
 #include "clipbrd_dnd.h"
-#include "image.h"
 #include "kwutils.h"
 //#include "serialletter.h"
 #include "contents.h"
@@ -157,7 +156,7 @@ QDomElement KWChild::save( QDomDocument& doc )
 /*================================================================*/
 KWDocument::KWDocument(QWidget *parentWidget, const char *widgetName, QObject* parent, const char* name, bool singleViewMode )
     : KoDocument( parentWidget, widgetName, parent, name, singleViewMode ),
-      imageCollection( this ), unit( "mm" ), // footNoteManager( this ),
+      unit( "mm" ), // footNoteManager( this ),
       history( actionCollection(), false ),
       autoFormat(this),
       urlIntern(), pglChanged( TRUE )
@@ -1449,9 +1448,9 @@ bool KWDocument::completeLoading( KoStore *_store )
             if ( dashdash != -1 )
                 filename == filename.left( dashdash );
 
-            KWImage image( this, img, filename );
+            QImage image( filename );
             if ( !img.isNull() )
-                imageCollection.insertImage( *it, image );
+                m_imageCollection.insertImage( KoImage::Key( *it ), image );
         }
     }
 /*
@@ -1461,7 +1460,7 @@ bool KWDocument::completeLoading( KoStore *_store )
 
     QDictIterator<KWPictureFrameSet> it3( imageRequests2 );
     for ( ; it3.current(); ++it3 )
-        it3.current()->setImage( imageCollection.getImage( it3.currentKey() ) );
+        it3.current()->setImage( m_imageCollection.image( KoImage::Key( it3.currentKey() ) ) );
 
     return TRUE;
 }
@@ -1528,13 +1527,16 @@ QDomDocument KWDocument::saveXML()
     QDomElement pixmaps = doc.createElement( "PIXMAPS" );
     kwdoc.appendChild( pixmaps );
 
-    QDictIterator<KWImage> it = imageCollection.iterator();
-    QStringList keys, images;
+    KoImageCollection::Map imageData = m_imageCollection.data();
+    KoImageCollection::Map::ConstIterator it = imageData.begin();
+    KoImageCollection::Map::ConstIterator end = imageData.end();
+    QStringList images;
+    QValueList<KoImage::Key> keys;
     int i = 0;
-    for ( ; it.current(); ++it ) {
-        if ( keys.contains( it.currentKey() ) || images.contains( it.current()->getFilename() ) )
+    for ( ; it != end; ++it ) {
+        if ( keys.contains( it.key() ) || images.contains( it.key().m_filename ) )
             continue;
-        QString format = QFileInfo( it.current()->getFilename() ).extension().upper();
+        QString format = QFileInfo( it.key().m_filename ).extension().upper();
         if ( format == "JPG" )
             format = "JPEG";
         if ( QImage::outputFormats().find( QFile::encodeName(format) ) == -1 )
@@ -1545,11 +1547,11 @@ QDomDocument KWDocument::saveXML()
 
         QDomElement key = doc.createElement( "KEY" );
         pixmaps.appendChild( key );
-        key.setAttribute( "key", it.current()->getFilename() );
+        key.setAttribute( "key", it.key().m_filename );
         key.setAttribute( "name", pictureName );
 
-        keys.append( it.currentKey() );
-        images.append( it.current()->getFilename() );
+        keys.append( it.key() );
+        images.append( it.key().m_filename );
     }
 
     // Not needed anymore
@@ -1607,16 +1609,20 @@ bool KWDocument::completeSaving( KoStore *_store )
         return TRUE;
 
     QString u = KURL( url() ).path();
-    QDictIterator<KWImage> it = imageCollection.iterator();
 
-    QStringList keys, images;
+    KoImageCollection::Map imageData = m_imageCollection.data();
+    KoImageCollection::Map::ConstIterator it = imageData.begin();
+    KoImageCollection::Map::ConstIterator end = imageData.end();
+
+    QStringList images;
+    QValueList<KoImage::Key> keys;
     int i = 0;
 
-    for( ; it.current(); ++it ) {
-        if ( keys.contains( it.currentKey() ) || images.contains( it.current()->getFilename() ) )
+    for( ; it != end; ++it ) {
+        if ( keys.contains( it.key() ) || images.contains( it.key().m_filename ) )
             continue;
 
-        QString format = QFileInfo( it.current()->getFilename() ).extension().upper();
+        QString format = QFileInfo( it.key().m_filename ).extension().upper();
         if ( format == "JPG" )
             format = "JPEG";
         if ( QImage::outputFormats().find( QFile::encodeName(format) ) == -1 )
@@ -1630,13 +1636,13 @@ bool KWDocument::completeSaving( KoStore *_store )
             KoStoreDevice dev( _store );
             QImageIO io;
             io.setIODevice( &dev );
-            io.setImage( *it.current() );
+            io.setImage( (*it).image() );
             io.setFormat( QFile::encodeName(format) );
             io.write();
             _store->close();
         }
-        keys.append( it.currentKey() );
-        images.append( it.current()->getFilename() );
+        keys.append( it.key() );
+        images.append( it.key().m_filename );
     }
 
     return TRUE;
@@ -2935,12 +2941,14 @@ void KWDocument::printDebug() {
                 kdDebug() << "     Page "<< frame->getPageNum() << endl;
         }
     }
+    /*
     kdDebug() << "# Images: " << doc->getImageCollection()->iterator().count() <<endl;
     QDictIterator<KWImage> it( doc->getImageCollection()->iterator() );
     while ( it.current() ) {
         kdDebug() << " + " << it.current()->getFilename() << ": "<<it.current()->refCount() <<endl;
         ++it;
     }
+    */
 }
 
 void KWDocument::layout()

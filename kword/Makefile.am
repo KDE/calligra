@@ -10,7 +10,6 @@ lib_LTLIBRARIES = libkwordpart.la kword.la
 libkwordpart_la_SOURCES = kwfactory.cc kwdoc.cc kwview.cc kwcanvas.cc  \
                 kwtextparag.cc kwstyle.cc \
 		paragdia.cc searchdia.cc \
-                imagecollection.cc image.cc \
 		kwframe.cc kwtextframeset.cc kwgroupmanager.cc \
 		framedia.cc kcharselectdia.cc kwutils.cc preview.cc \
                 tabledia.cc insdia.cc deldia.cc docstruct.cc \

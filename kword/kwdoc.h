@@ -37,12 +37,12 @@ class KSpellConfig;
 #include <koDocumentChild.h>
 //#include <koPageLayoutDia.h>
 #include <koQueryTrader.h>
+#include <koImageCollection.h>
 
 #include <qtextstream.h>
 
 #include "kwview.h"
 #include "kwstyle.h"
-#include "imagecollection.h"
 #include "kwframe.h"
 //#include "variable.h"
 //#include "footnote.h"
@@ -188,7 +188,7 @@ public:
     int getPages() const { return pages; }
     //void setPages( int _pages ) { pages = _pages;  }
 
-    KWImageCollection *getImageCollection() { return &imageCollection; }
+    KoImageCollection *imageCollection() { return &m_imageCollection; }
 
     bool selection();
     QList <KWView> getAllViews() { return m_lstViews; }
@@ -407,7 +407,7 @@ private:
     KoKWHeaderFooter pageHeaderFooter;
     unsigned int m_ptColumnWidth;
 
-    KWImageCollection imageCollection;
+    KoImageCollection m_imageCollection;
     QList<KWFrameSet> frames;
     QList<KWStyle> m_styleList;
     QList<KWGroupManager> grpMgrs;

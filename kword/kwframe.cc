@@ -23,7 +23,6 @@
 #include "kwframe.h"
 #include "kwgroupmanager.h"
 #include "kwtextparag.h"
-#include "image.h"
 #include "defs.h"
 #include "kwutils.h"
 #include "resizehandles.h"
@@ -729,22 +728,15 @@ bool KWFrameSet::isVisible() const
 
 /*================================================================*/
 KWPictureFrameSet::~KWPictureFrameSet() {
-    if(image) {
-        image->decRef();
-    }
 }
 
 /*================================================================*/
+/*
 void KWPictureFrameSet::setFileName( QString _filename )
 {
     int dashdash = _filename.findRev( "--" );
     if ( dashdash != -1 )
         _filename == _filename.left( dashdash );
-
-    if ( image ) {
-        image->decRef();
-        image = 0L;
-    }
 
     filename = _filename;
 
@@ -762,10 +754,23 @@ void KWPictureFrameSet::setFileName( QString _filename )
     if ( del )
         delete _image;
 }
-
+*/
 /*================================================================*/
 void KWPictureFrameSet::setFileName( QString _filename, QSize _imgSize )
 {
+    KoImageCollection *collection = doc->imageCollection();
+
+    m_image = collection->image( KoImage::Key( _filename ) );
+    if ( !m_image.isValid() )
+    {
+        QImage img( _filename );
+        if ( !img.isNull() )
+            m_image = collection->insertImage( KoImage::Key( _filename ), img );
+    }
+
+    m_image = m_image.scale( _imgSize );
+
+    /*
     int dashdash = _filename.findRev( "--" );
     if ( dashdash != -1 )
         _filename == _filename.left( dashdash );
@@ -789,17 +794,21 @@ void KWPictureFrameSet::setFileName( QString _filename, QSize _imgSize )
 
     if ( del )
         delete _image;
+    */
 }
 
 /*================================================================*/
 void KWPictureFrameSet::setSize( QSize _imgSize )
 {
+    m_image = m_image.scale( _imgSize );
+    /*
     if ( image && _imgSize == image->size() ) return;
 
     QString key;
     image = doc->getImageCollection()->getImage( *image, key, _imgSize );
     if ( !image )
         setFileName( filename, _imgSize );
+    */
 }
 
 /*================================================================*/
@@ -815,7 +824,10 @@ void KWPictureFrameSet::save( QDomElement & parentElem )
 
     QDomElement imageElem = parentElem.ownerDocument().createElement( "IMAGE" );
     framesetElem.appendChild( imageElem );
-    image->save( imageElem );
+//    image->save( imageElem );
+    QDomElement elem = parentElem.ownerDocument().createElement( "FILENAME" );
+    imageElem.appendChild( elem );
+    elem.setAttribute( "value", correctQString( m_image.key().m_filename ) );
 }
 
 /*================================================================*/
@@ -826,11 +838,17 @@ void KWPictureFrameSet::load( QDomElement &attributes )
     // <IMAGE>
     QDomElement image = attributes.namedItem( "IMAGE" ).toElement();
     if ( !image.isNull() ) {
-        KWImage *_image = new KWImage();
-        _image->load( image, doc );
-        //setFileName( _image->getFilename() );
-        doc->addImageRequest( _image->getFilename(), this );
-        delete _image;
+        // <FILENAME>
+        QDomElement filenameElement = image.namedItem( "FILENAME" ).toElement();
+        if ( !filenameElement.isNull() )
+        {
+            QString filename = correctQString( filenameElement.attribute( "value" ) );
+            doc->addImageRequest( filename, this );
+        }
+        else
+        {
+            kdError(32001) << "Missing FILENAME tag in IMAGE" << endl;
+        }
     } else {
         kdError(32001) << "Missing IMAGE tag in FRAMESET" << endl;
     }
@@ -840,8 +858,13 @@ void KWPictureFrameSet::drawContents( QPainter *painter, int cx, int cy, int cw,
                                       QColorGroup &, bool /*onlyChanged*/ )
 {
     QRect r = *frames.first();
-    QImage img = image->smoothScale( r.width(), r.height() );
-    painter->drawImage( r.left(), r.top(), img, cx, cy, cw, ch );
+
+    if ( r.size() != m_image.image().size() )
+        m_image = m_image.scale( r.size() );
+
+    painter->drawPixmap( r.left(), r.top(), m_image.pixmap() );
+//    QImage img = m_image.image().smoothScale( r.width(), r.height() );
+//    painter->drawImage( r.left(), r.top(), img, cx, cy, cw, ch );
 }
 
 /******************************************************************/

@@ -29,6 +29,7 @@
 
 #include "border.h"
 #include <koMainWindow.h>
+#include <koImage.h>
 
 class KWFrame;
 class KWDocument;
@@ -403,21 +404,19 @@ class KWPictureFrameSet : public KWFrameSet
 {
 public:
     KWPictureFrameSet( KWDocument *_doc )
-        : KWFrameSet( _doc )
-    { image = 0L; }
+        : KWFrameSet( _doc ) {}
     virtual ~KWPictureFrameSet();
 
     virtual FrameType getFrameType() { return FT_PICTURE; }
 
-    virtual void setImage( KWImage *_image )
-    { image = _image; }
-    void setFileName( QString _filename );
+    void setImage( const KoImage &image ) { m_image = image; }
+    KoImage image() const { return m_image; }
+
+//    void setFileName( QString _filename );
     void setFileName( QString _filename, QSize _imgSize );
     void setSize( QSize _imgSize );
 
-    virtual KWImage* getImage()
-    { return image; }
-    QString getFileName() { return filename; }
+//    QString getFileName() { return filename; }
 
     virtual void save( QDomElement &parentElem );
     virtual void load( QDomElement &attributes );
@@ -426,9 +425,7 @@ public:
                                QColorGroup &, bool /*onlyChanged*/ );
 
 protected:
-    KWImage *image;
-    QString filename;
-
+    KoImage m_image;
 };
 
 /******************************************************************/
