@@ -104,7 +104,7 @@ class TemplateItem : public KIconViewItem
 		QString key, name, description;
 };
 
-TemplatesPage::TemplatesPage( Orientation o, QWidget * parent = 0, const char * name = 0 )
+TemplatesPage::TemplatesPage( Orientation o, QWidget * parent, const char * name )
 	: QSplitter(o, parent, name)
 {
 	templates = new KIconView(this, "templates");
