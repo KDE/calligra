@@ -46,9 +46,17 @@ class KexiFormBase : public KexiDialogBase
 		void paintEvent(QPaintEvent *ev);
 		void mouseMoveEvent(QMouseEvent *ev);
 		void mouseReleaseEvent(QMouseEvent *ev);
+		void resizeEvent(QResizeEvent *ev);
+		
+		void insertWidget(QWidget *widget, int x, int y, int w, int h);
+		
+		QWidget	*m_pendingWidget;
+		
+		QPixmap	m_dotBg;
 		
 		int	m_dotSpacing;
 
+		bool	m_widgetRectRequested;
 		bool	m_widgetRect;
 	
 		int	m_widgetRectBX;
@@ -58,6 +66,9 @@ class KexiFormBase : public KexiDialogBase
 
 	protected slots:
 		void slotWidgetLineEdit();
+		void slotWidgetPushButton();
+		
+		virtual bool eventFilter(QObject *obj, QEvent *ev);
 
 };
 
