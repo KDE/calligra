@@ -201,16 +201,16 @@ void KPFooterHeaderEditor::setupHeader()
     htool2->insertSeparator();
 
     h_pgnum = 8;
-    htool2->insertButton( BarIcon( "pgnum" ), h_pgnum,
+    htool2->insertButton( KPBarIcon( "pgnum" ), h_pgnum,
 			  SIGNAL( clicked() ), this,
 			  SLOT( headerInsertPageNum() ), true, i18n( "Insert Page Number" ) );
-        
+
     htool2->setMaximumHeight(tool1->maximumHeight());
     htool2->setMinimumHeight(tool1->maximumHeight());
 
-    connect( doc->header()->getKTextObject(), SIGNAL( fontChanged( QFont* ) ), 
+    connect( doc->header()->getKTextObject(), SIGNAL( fontChanged( QFont* ) ),
 	     this, SLOT( headerFontChanged( QFont* ) ) );
-    connect( doc->header()->getKTextObject(), SIGNAL( colorChanged( QColor* ) ), 
+    connect( doc->header()->getKTextObject(), SIGNAL( colorChanged( QColor* ) ),
 	     this, SLOT( headerColorChanged( QColor* ) ) );
     connect( doc->header()->getKTextObject(), SIGNAL( horzAlignChanged( TxtParagraph::HorzAlign ) ),
 	     this, SLOT( headerAlignChanged( TxtParagraph::HorzAlign ) ) );
@@ -324,16 +324,16 @@ void KPFooterHeaderEditor::setupFooter()
     ftool2->insertSeparator();
 
     f_pgnum = 8;
-    ftool2->insertButton( BarIcon( "pgnum" ), f_pgnum,
+    ftool2->insertButton( KPBarIcon( "pgnum" ), f_pgnum,
 			  SIGNAL( clicked() ), this,
 			  SLOT( footerInsertPageNum() ), true, i18n( "Insert Page Number" ) );
 
     ftool2->setMaximumHeight(tool1->maximumHeight());
     ftool2->setMinimumHeight(tool1->maximumHeight());
 
-    connect( doc->footer()->getKTextObject(), SIGNAL( fontChanged( QFont* ) ), 
+    connect( doc->footer()->getKTextObject(), SIGNAL( fontChanged( QFont* ) ),
 	     this, SLOT( footerFontChanged( QFont* ) ) );
-    connect( doc->footer()->getKTextObject(), SIGNAL( colorChanged( QColor* ) ), 
+    connect( doc->footer()->getKTextObject(), SIGNAL( colorChanged( QColor* ) ),
 	     this, SLOT( footerColorChanged( QColor* ) ) );
     connect( doc->footer()->getKTextObject(), SIGNAL( horzAlignChanged( TxtParagraph::HorzAlign ) ),
 	     this, SLOT( footerAlignChanged( TxtParagraph::HorzAlign ) ) );

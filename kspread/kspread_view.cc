@@ -196,42 +196,42 @@ KSpreadView::KSpreadView( QWidget *_parent, const char *_name, KSpreadDoc* doc )
     // Handler for moving and resizing embedded parts
     (void)new ContainerHandler( this, m_pCanvas );
 
-    m_bold = new KToggleAction( i18n("Bold"), "bold", CTRL + Key_B, actionCollection(), "bold");
+    m_bold = new KToggleAction( i18n("Bold"), KSBarIcon("bold"), CTRL + Key_B, actionCollection(), "bold");
     connect( m_bold, SIGNAL( toggled( bool ) ), this, SLOT( bold( bool ) ) );
-    m_italic = new KToggleAction( i18n("Italic"), "italic", CTRL + Key_I, actionCollection(), "italic");
+    m_italic = new KToggleAction( i18n("Italic"), KSBarIcon("italic"), CTRL + Key_I, actionCollection(), "italic");
     connect( m_italic, SIGNAL( toggled( bool ) ), this, SLOT( italic( bool ) ) );
-    m_underline = new KToggleAction( i18n("Underline"), "underline", CTRL + Key_U, actionCollection(), "underline");
+    m_underline = new KToggleAction( i18n("Underline"), KSBarIcon("underline"), CTRL + Key_U, actionCollection(), "underline");
     connect( m_underline, SIGNAL( toggled( bool ) ), this, SLOT( underline( bool ) ) );
 
-    m_percent = new KToggleAction( i18n("Percent format"), "percent", 0, actionCollection(), "percent");
+    m_percent = new KToggleAction( i18n("Percent format"), KSBarIcon("percent"), 0, actionCollection(), "percent");
     connect( m_percent, SIGNAL( toggled( bool ) ), this, SLOT( percent( bool ) ) );
-    m_precplus = new KAction( i18n("Increase precision"), "precplus", 0, this,
+    m_precplus = new KAction( i18n("Increase precision"), KSBarIcon("precplus"), 0, this,
 			      SLOT( precisionPlus() ), actionCollection(), "precplus");
-    m_precminus = new KAction( i18n("Decrease precision"), "precminus", 0, this,
+    m_precminus = new KAction( i18n("Decrease precision"), KSBarIcon("precminus"), 0, this,
 			      SLOT( precisionMinus() ), actionCollection(), "precminus");
-    m_money = new KToggleAction( i18n("Money format"), "money", 0, actionCollection(), "money");
+    m_money = new KToggleAction( i18n("Money format"), KSBarIcon("money"), 0, actionCollection(), "money");
     connect( m_money, SIGNAL( toggled( bool ) ), this, SLOT( moneyFormat( bool ) ) );
-    m_alignLeft = new KToggleAction( i18n("Align left"), "left", 0, actionCollection(), "left");
+    m_alignLeft = new KToggleAction( i18n("Align left"), KSBarIcon("left"), 0, actionCollection(), "left");
     connect( m_alignLeft, SIGNAL( toggled( bool ) ), this, SLOT( alignLeft( bool ) ) );
     m_alignLeft->setExclusiveGroup( "Align" );
-    m_alignCenter = new KToggleAction( i18n("Align center"), "center", 0, actionCollection(), "center");
+    m_alignCenter = new KToggleAction( i18n("Align center"), KSBarIcon("center"), 0, actionCollection(), "center");
     connect( m_alignCenter, SIGNAL( toggled( bool ) ), this, SLOT( alignCenter( bool ) ) );
     m_alignCenter->setExclusiveGroup( "Align" );
-    m_alignRight = new KToggleAction( i18n("Align right"), "right", 0, actionCollection(), "right");
+    m_alignRight = new KToggleAction( i18n("Align right"), KSBarIcon("right"), 0, actionCollection(), "right");
     connect( m_alignRight, SIGNAL( toggled( bool ) ), this, SLOT( alignRight( bool ) ) );
     m_alignRight->setExclusiveGroup( "Align" );
 
-    m_alignTop = new KToggleAction( i18n("Align top"), "top", 0, actionCollection(), "top");
+    m_alignTop = new KToggleAction( i18n("Align top"), KSBarIcon("top"), 0, actionCollection(), "top");
     connect( m_alignTop, SIGNAL( toggled( bool ) ), this, SLOT( alignTop( bool ) ) );
     m_alignTop->setExclusiveGroup( "Pos" );
-    m_alignMiddle = new KToggleAction( i18n("Align middle"), "middle", 0, actionCollection(), "middle");
+    m_alignMiddle = new KToggleAction( i18n("Align middle"), KSBarIcon("middle"), 0, actionCollection(), "middle");
     connect( m_alignMiddle, SIGNAL( toggled( bool ) ), this, SLOT( alignMiddle( bool ) ) );
     m_alignMiddle->setExclusiveGroup( "Pos" );
-    m_alignBottom = new KToggleAction( i18n("Align bottom"), "bottom", 0, actionCollection(), "bottom");
+    m_alignBottom = new KToggleAction( i18n("Align bottom"), KSBarIcon("bottom"), 0, actionCollection(), "bottom");
     connect( m_alignBottom, SIGNAL( toggled( bool ) ), this, SLOT( alignBottom( bool ) ) );
     m_alignBottom->setExclusiveGroup( "Pos" );
 
-    m_transform = new KAction( i18n("Transform object..."), "rotate", 0, this, SLOT( transformPart() ),
+    m_transform = new KAction( i18n("Transform object..."), KSBarIcon("rotate"), 0, this, SLOT( transformPart() ),
 			       actionCollection(), "transform" );
     m_transform->setEnabled( FALSE );
     connect( m_transform, SIGNAL( activated() ), this, SLOT( transformPart() ) );
@@ -246,15 +246,15 @@ KSpreadView::KSpreadView( QWidget *_parent, const char *_name, KSpreadDoc* doc )
     m_default = new KAction( i18n("Default"), 0, this, SLOT( defaultSelection() ), actionCollection(), "default" );
     m_areaName = new KAction( i18n("Area name"), 0, this, SLOT( setAreaName() ), actionCollection(), "areaname" );
     m_showArea = new KAction( i18n("Show area..."), 0, this, SLOT( showAreaName() ), actionCollection(), "showArea" );
-    m_resizeRow = new KAction( i18n("Resize row..."),"resizerow", 0, this, SLOT( resizeRow() ), actionCollection(), "resizeRow" );
-    m_resizeColumn = new KAction( i18n("Resize column..."),"resizecol", 0, this, SLOT( resizeColumn() ), actionCollection(), "resizeCol" );
-    m_equalizeRow = new KAction( i18n("Equalize row"),"adjustrow", 0, this, SLOT( equalizeRow() ), actionCollection(), "equalizeRow" );
-    m_equalizeColumn = new KAction( i18n("Equalize column"),"adjustcol", 0, this, SLOT( equalizeColumn() ), actionCollection(), "equalizeCol" );
+    m_resizeRow = new KAction( i18n("Resize row..."), KSBarIcon("resizerow"), 0, this, SLOT( resizeRow() ), actionCollection(), "resizeRow" );
+    m_resizeColumn = new KAction( i18n("Resize column..."), KSBarIcon("resizecol"), 0, this, SLOT( resizeColumn() ), actionCollection(), "resizeCol" );
+    m_equalizeRow = new KAction( i18n("Equalize row"), KSBarIcon("adjustrow"), 0, this, SLOT( equalizeRow() ), actionCollection(), "equalizeRow" );
+    m_equalizeColumn = new KAction( i18n("Equalize column"), KSBarIcon("adjustcol"), 0, this, SLOT( equalizeColumn() ), actionCollection(), "equalizeCol" );
 
-    m_fontSizeUp = new KAction( i18n("Increase font size"),"fontsizeup", 0, this, SLOT( increaseFontSize() ), actionCollection(), "increaseFontSize" );
-    m_fontSizeDown = new KAction( i18n("Decrease font size"),"fontsizedown", 0, this, SLOT( decreaseFontSize() ), actionCollection(), "decreaseFontSize" );
-    m_upper = new KAction( i18n("Upper case"),"upper", 0, this, SLOT( upper() ), actionCollection(), "upper" );
-    m_lower = new KAction( i18n("Lower case"),"lower", 0, this, SLOT( lower() ), actionCollection(), "lower" );
+    m_fontSizeUp = new KAction( i18n("Increase font size"), KSBarIcon("fontsizeup"), 0, this, SLOT( increaseFontSize() ), actionCollection(), "increaseFontSize" );
+    m_fontSizeDown = new KAction( i18n("Decrease font size"), KSBarIcon("fontsizedown"), 0, this, SLOT( decreaseFontSize() ), actionCollection(), "decreaseFontSize" );
+    m_upper = new KAction( i18n("Upper case"), KSBarIcon("upper"), 0, this, SLOT( upper() ), actionCollection(), "upper" );
+    m_lower = new KAction( i18n("Lower case"), KSBarIcon("lower"), 0, this, SLOT( lower() ), actionCollection(), "lower" );
 
     m_undo = KStdAction::undo( this, SLOT( undo() ), actionCollection(), "undo" );
     m_undo->setEnabled( FALSE );
@@ -285,19 +285,19 @@ KSpreadView::KSpreadView( QWidget *_parent, const char *_name, KSpreadDoc* doc )
     m_sort = new KAction( i18n("Sort"), 0, this, SLOT( sort() ), actionCollection(), "sort" );
     m_consolidate = new KAction( i18n("Consolidate..."), 0, this, SLOT( consolidate() ), actionCollection(), "consolidate" );
     //m_help = new KAction( i18n("KSpread Help..."), 0, this, SLOT( help() ), actionCollection(), "help" );
-    m_multiRow = new KToggleAction( i18n("Multi Row"), "multirow", 0, actionCollection(), "multiRow" );
+    m_multiRow = new KToggleAction( i18n("Multi Row"), KSBarIcon("multirow"), 0, actionCollection(), "multiRow" );
     connect( m_multiRow, SIGNAL( toggled( bool ) ), this, SLOT( multiRow( bool ) ) );
     m_selectFont = new KFontAction( i18n("Select Font"), 0, actionCollection(), "selectFont" );
     connect( m_selectFont, SIGNAL( activated( const QString& ) ), this, SLOT( fontSelected( const QString& ) ) );
     m_selectFontSize = new KFontSizeAction( i18n("Select Font Size"), 0, actionCollection(), "selectFontSize" );
     connect( m_selectFontSize, SIGNAL( fontSizeChanged( int ) ), this, SLOT( fontSizeSelected( int ) ) );
-    m_deleteColumn = new KAction( i18n("Delete Column"), "colout", 0, this, SLOT( deleteColumn() ),
+    m_deleteColumn = new KAction( i18n("Delete Column"), KSBarIcon("colout"), 0, this, SLOT( deleteColumn() ),
 				  actionCollection(), "deleteColumn" );
-    m_deleteRow = new KAction( i18n("Delete Row"), "rowout", 0, this, SLOT( deleteRow() ),
+    m_deleteRow = new KAction( i18n("Delete Row"), KSBarIcon("rowout"), 0, this, SLOT( deleteRow() ),
 			       actionCollection(), "deleteRow" );
-    m_insertColumn = new KAction( i18n("Insert Column"), "colin", 0, this, SLOT( insertColumn() ),
+    m_insertColumn = new KAction( i18n("Insert Column"), KSBarIcon("colin"), 0, this, SLOT( insertColumn() ),
 				  actionCollection(), "insertColumn" );
-    m_insertRow = new KAction( i18n("Insert Row"), "rowin", 0, this, SLOT( insertRow() ),
+    m_insertRow = new KAction( i18n("Insert Row"), KSBarIcon("rowin"), 0, this, SLOT( insertRow() ),
 			       actionCollection(), "insertRow" );
     m_cellLayout = new KAction( i18n("Cell Layout..."), CTRL + Key_L, this, SLOT( layoutDlg() ),
 			       actionCollection(), "cellLayout" );
@@ -344,26 +344,26 @@ KSpreadView::KSpreadView( QWidget *_parent, const char *_name, KSpreadDoc* doc )
     (void) new KAction( i18n("Anchor..."), 0, this, SLOT( createAnchor() ), actionCollection(), "createAnchor" );
     (void) new KAction( i18n("Object..."), "parts", 0, this, SLOT( insertObject() ),
                         actionCollection(), "insertPart");
-    (void) new KAction( i18n("Chart"), "chart", 0, this, SLOT( insertChart() ), actionCollection(), "insertChart" );
+    (void) new KAction( i18n("Chart"), KSBarIcon("chart"), 0, this, SLOT( insertChart() ), actionCollection(), "insertChart" );
 
-    m_autoSum = new KAction( i18n("AutoSum"), "black-sum", 0, this, SLOT( autoSum() ),
+    m_autoSum = new KAction( i18n("AutoSum"), KSBarIcon("black-sum"), 0, this, SLOT( autoSum() ),
                              actionCollection(), "autoSum" );
-    m_sortDec = new KAction( i18n("Sort descreasing"), "sort_decrease", 0, this, SLOT( sortDec() ),
+    m_sortDec = new KAction( i18n("Sort descreasing"), KSBarIcon("sort_decrease"), 0, this, SLOT( sortDec() ),
                              actionCollection(), "sortDec" );
-    m_sortInc = new KAction( i18n("Sort increasing"), "sort_incr", 0, this, SLOT( sortInc() ),
+    m_sortInc = new KAction( i18n("Sort increasing"), KSBarIcon("sort_incr"), 0, this, SLOT( sortInc() ),
                              actionCollection(), "sortInc" );
     m_textColor = new KColorAction( i18n("Text color"), KColorAction::TextColor, 0, this, SLOT( changeTextColor() ),
 			       actionCollection(), "textColor" );
     m_bgColor = new KColorAction( i18n("Background color"), KColorAction::BackgroundColor, 0, this, SLOT( changeBackgroundColor() ),
 			       actionCollection(), "backgroundColor" );
-    m_function = new KAction( i18n("Function"), "funct", 0, this, SLOT( funct() ), actionCollection(), "function" );
-    m_borderLeft = new KAction( i18n("Border left"), "borderleft", 0, this, SLOT( borderLeft() ), actionCollection(), "borderLeft" );
-    m_borderRight = new KAction( i18n("Border Right"), "borderright", 0, this, SLOT( borderRight() ), actionCollection(), "borderRight" );
-    m_borderTop = new KAction( i18n("Border Top"), "bordertop", 0, this, SLOT( borderTop() ), actionCollection(), "borderTop" );
-    m_borderBottom = new KAction( i18n("Border Bottom"), "borderbottom", 0, this, SLOT( borderBottom() ), actionCollection(), "borderBottom" );
-    m_borderAll = new KAction( i18n("All borders"), "borderall", 0, this, SLOT( borderAll() ), actionCollection(), "borderAll" );
-    m_borderRemove = new KAction( i18n("Remove Borders"), "borderremove", 0, this, SLOT( borderRemove() ), actionCollection(), "borderRemove" );
-    m_borderOutline = new KAction( i18n("Border Outline"), "borderoutline", 0, this, SLOT( borderOutline() ), actionCollection(), "borderOutline" );
+    m_function = new KAction( i18n("Function"), KSBarIcon("funct"), 0, this, SLOT( funct() ), actionCollection(), "function" );
+    m_borderLeft = new KAction( i18n("Border left"), KSBarIcon("borderleft"), 0, this, SLOT( borderLeft() ), actionCollection(), "borderLeft" );
+    m_borderRight = new KAction( i18n("Border Right"), KSBarIcon("borderright"), 0, this, SLOT( borderRight() ), actionCollection(), "borderRight" );
+    m_borderTop = new KAction( i18n("Border Top"), KSBarIcon("bordertop"), 0, this, SLOT( borderTop() ), actionCollection(), "borderTop" );
+    m_borderBottom = new KAction( i18n("Border Bottom"), KSBarIcon("borderbottom"), 0, this, SLOT( borderBottom() ), actionCollection(), "borderBottom" );
+    m_borderAll = new KAction( i18n("All borders"), KSBarIcon("borderall"), 0, this, SLOT( borderAll() ), actionCollection(), "borderAll" );
+    m_borderRemove = new KAction( i18n("Remove Borders"), KSBarIcon("borderremove"), 0, this, SLOT( borderRemove() ), actionCollection(), "borderRemove" );
+    m_borderOutline = new KAction( i18n("Border Outline"), KSBarIcon("borderoutline"), 0, this, SLOT( borderOutline() ), actionCollection(), "borderOutline" );
     m_borderColor = new KColorAction( i18n("Border Color"), KColorAction:: FrameColor, 0, this, SLOT( changeBorderColor() ),
 			       actionCollection(), "borderColor" );
     m_tableFormat = new KAction( i18n("Table Style..."), 0, this, SLOT( tableFormat() ), actionCollection(), "tableFormat" );
@@ -408,7 +408,7 @@ void KSpreadView::initialPosition()
     KSpreadTable *tbl;
     for ( tbl = m_pDoc->map()->firstTable(); tbl != 0L; tbl = m_pDoc->map()->nextTable() )
 	tbl->recalc(true);
-    m_bLoading =true;    
+    m_bLoading =true;
 }
 
 /*
@@ -2242,7 +2242,7 @@ void KSpreadView::showAreaName()
 
 void KSpreadView::resizeRow()
 {
-    QRect selection( activeTable()->selectionRect() ); 
+    QRect selection( activeTable()->selectionRect() );
     if(selection.bottom()==0x7FFF)
     	KMessageBox::error( this, i18n("Area too large!"));
     else
@@ -2254,7 +2254,7 @@ void KSpreadView::resizeRow()
 
 void KSpreadView::resizeColumn()
 {
-    QRect selection( activeTable()->selectionRect() ); 
+    QRect selection( activeTable()->selectionRect() );
     if(selection.right()==0x7FFF)
     	KMessageBox::error( this, i18n("Area too large!"));
     else
@@ -2266,7 +2266,7 @@ void KSpreadView::resizeColumn()
 
 void KSpreadView::equalizeRow()
 {
-    QRect selection( activeTable()->selectionRect() ); 
+    QRect selection( activeTable()->selectionRect() );
     if(selection.bottom()==0x7FFF)
     	KMessageBox::error( this, i18n("Area too large!"));
     else
@@ -2277,7 +2277,7 @@ void KSpreadView::equalizeRow()
 
 void KSpreadView::equalizeColumn()
 {
-    QRect selection( activeTable()->selectionRect() ); 
+    QRect selection( activeTable()->selectionRect() );
     if(selection.right()==0x7FFF)
     	KMessageBox::error( this, i18n("Area too large!"));
     else
@@ -2489,7 +2489,7 @@ void KSpreadView::removeTable()
     }
     QApplication::beep();
     int ret = KMessageBox::warningYesNo(this,i18n("You are going to remove the active table.\nDo you want to continue?"),i18n("Remove table"));
-                                
+
     if ( ret == 3 )
     {
         KSpreadTable *tbl = activeTable();

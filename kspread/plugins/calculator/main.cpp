@@ -95,8 +95,9 @@ Calculator::Calculator( KSpreadView* parent, const char* name )
 
     parent->installEventFilter( this );
 
-    (void)new KAction( i18n("Calculator"), "kspreadcalc", 0, this, SLOT( showCalculator() ),
-                       actionCollection(), "kspreadcalc");
+    // HACK: Don't know what to do with the icon (Werner)
+    (void)new KAction( i18n("Calculator"), SmallIcon("kspreadcalc", CalcFactory::global()),
+		       0, this, SLOT( showCalculator() ), actionCollection(), "kspreadcalc");
 }
 
 void Calculator::showCalculator()
