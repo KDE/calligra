@@ -535,6 +535,7 @@ KoFormatDia::KoFormatDia( QWidget* parent, const QString & _caption, KoSearchCon
     m_strikeOutItem->insertItem( i18n( "Without" ), -1 );
     m_strikeOutItem->insertItem( i18n( "Simple" ), -1 );
     m_strikeOutItem->insertItem( i18n( "Double" ), -1 );
+    m_strikeOutItem->insertItem( i18n( "Simple Bold" ), -1 );
     m_strikeOutItem->setCurrentItem( (int)m_ctx->m_strikeOut );
 
 

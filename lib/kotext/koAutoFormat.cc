@@ -459,6 +459,8 @@ void KoAutoFormat::loadEntry( const QDomElement &nl)
             tmp->formatEntryContext()->m_strikeOut = KoTextFormat::S_SIMPLE;
         else if ( value =="double" )
             tmp->formatEntryContext()->m_strikeOut = KoTextFormat::S_DOUBLE;
+        else if ( value =="single-bold" )
+            tmp->formatEntryContext()->m_strikeOut = KoTextFormat::S_SIMPLE_BOLD;
         else
             tmp->formatEntryContext()->m_strikeOut = KoTextFormat::S_NONE;
     }
@@ -674,6 +676,9 @@ QDomElement KoAutoFormat::saveEntry( QDictIterator<KoAutoFormatEntry> _entry, QD
                 break;
             case KoTextFormat::S_NONE:
                 data.setAttribute("STRIKEOUT", "none");
+                break;
+            case KoTextFormat::S_SIMPLE_BOLD:
+                data.setAttribute("STRIKEOUT", "single-bold");
                 break;
             }
         }
