@@ -29,7 +29,7 @@
 #include <kapp.h>
 #include <klocale.h>
 #include <kbuttonbox.h>
-
+#include <qrangecontrol.h>
 
 
 KSpreadgoto::KSpreadgoto( KSpreadView* parent, const char* name )
@@ -68,6 +68,8 @@ void KSpreadgoto::slotOk()
 QString tmp;
 tmp=m_pView->activeTable()->name() + "!" + name_cell->text();
 m_pView->canvasWidget()->hideMarker();
+m_pView->canvasWidget()->setgotohorz(true);
+m_pView->canvasWidget()->setgotovert(true);
 m_pView->canvasWidget()->gotoLocation( KSpreadPoint( tmp, m_pView->doc()->map() ) );
 KSpreadCell *cell = m_pView->activeTable()->cellAt( m_pView->canvasWidget()->markerColumn(), m_pView->canvasWidget()->markerRow() );
 if ( cell->text() != 0L )
@@ -75,7 +77,10 @@ if ( cell->text() != 0L )
  else
 	m_pView->editWidget()->setText( "" );
 m_pView->canvasWidget()->showMarker();
+
+
 accept();
+
 }
 
 void KSpreadgoto::slotClose()

@@ -93,7 +93,7 @@ public:
     QScrollBar* vertScrollBar() { return m_pVertScrollBar; }    
     KSpreadEditWidget* editWidget() { return m_pEditWidget; }
 
-    //laurent
+
     QString editEditor();
     void setEditor(QString text);
     int posEditor();
@@ -104,6 +104,10 @@ public:
     bool EditorisActivate() {return E_activate;}
     void setEditorActivate(bool _E_activate) { E_activate= _E_activate;
     						length_namecell=0;}
+    void setgotohorz(bool _gotohorz){m_gotohorz=_gotohorz;}
+    bool isgotohorz(){return m_gotohorz;}
+    void setgotovert(bool _gotovert){m_gotovert=_gotovert;}
+    bool isgotovert(){return m_gotovert;}
 
     						
     int choose_markerColumn() { return m_i_chooseMarkerColumn; }
@@ -318,10 +322,11 @@ private:
      */
     int m_iMarkerVisible;
 
-    //laurent
     bool E_activate;
     int m_i_chooseMarkerRow;
     int m_i_chooseMarkerColumn;
+    bool m_gotohorz;
+    bool m_gotovert;
 };
 
 /**

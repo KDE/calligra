@@ -252,7 +252,11 @@ void KSpreadCanvas::slotScrollHorz( int _value )
   m_iXOffset = _value;
   scroll( dx, 0 );
   m_pHBorderWidget->scroll( dx, 0 );
-
+  if(isgotohorz()==true)
+  	{
+  	setgotohorz(false);
+  	m_pView->horzScrollBar()->setValue(_value);
+  	}
   showMarker();
 
   activeTable()->enableScrollBarUpdates( true );
@@ -275,6 +279,11 @@ void KSpreadCanvas::slotScrollVert( int _value )
   scroll( 0, dy );
   m_pVBorderWidget->scroll( 0, dy );
 
+   if(isgotovert()==true)
+  	{
+  	setgotovert(false);
+  	m_pView->vertScrollBar()->setValue(_value);
+  	}
   showMarker();
 
   activeTable()->enableScrollBarUpdates( true );
