@@ -199,8 +199,7 @@ void KPresenterDoc::draw( QPaintDevice* _dev, CORBA::Long _width, CORBA::Long _h
 
     return;
 
-    if ( m_lstViews.count() > 0 )
-    {
+    if ( m_lstViews.count() > 0 ) {
 	QPainter painter;
 	painter.begin( _dev );
 
@@ -270,8 +269,7 @@ bool KPresenterDoc::save(ostream& out,const char * /* format */)
 	<< "\" ptHeight=\"" << _pageLayout.ptHeight
 	<< "\" mmWidth =\"" << _pageLayout.mmWidth << "\" mmHeight=\"" << _pageLayout.mmHeight
 	<< "\" inchWidth =\"" << _pageLayout.inchWidth << "\" inchHeight=\"" << _pageLayout.inchHeight
-	<< "\" orientation=\"" << static_cast<int>( _pageLayout.orientation ) << "\" unit=\"" << static_cast<int>( _pageLayout.unit ) 
-	<< "\">" << endl;
+	<< "\" orientation=\"" << static_cast<int>( _pageLayout.orientation ) << "\" unit=\"" << static_cast<int>( _pageLayout.unit ) << "\">" << endl;
     out << indent << "<PAPERBORDERS mmLeft=\"" << _pageLayout.mmLeft << "\" mmTop=\"" << _pageLayout.mmTop << "\" mmRight=\""
 	<< _pageLayout.mmRight << "\" mmBottom=\"" << _pageLayout.mmBottom
 	<< "\" ptLeft=\"" << _pageLayout.ptLeft << "\" ptTop=\"" << _pageLayout.ptTop << "\" ptRight=\""
@@ -281,8 +279,7 @@ bool KPresenterDoc::save(ostream& out,const char * /* format */)
     out << etag << "</PAPER>" << endl;
 
     out << otag << "<BACKGROUND" << " rastX=\"" << _rastX << "\" rastY=\"" << _rastY
-	<< "\" bred=\"" << _txtBackCol.red() << "\" bgreen=\"" << _txtBackCol.green() << "\" bblue=\"" << _txtBackCol.blue() << "\">" 
-	<< endl;
+	<< "\" bred=\"" << _txtBackCol.red() << "\" bgreen=\"" << _txtBackCol.green() << "\" bblue=\"" << _txtBackCol.blue() << "\">" << endl;
     saveBackground( out );
     out << etag << "</BACKGROUND>" << endl;
 
@@ -333,7 +330,7 @@ bool KPresenterDoc::save(ostream& out,const char * /* format */)
 
     out << otag << "<PIXMAPS>" << endl;
 
-    QMap< KPPixmapDataCollection::Key, QPixmap >::Iterator it = _pixmapCollection.getPixmapDataCollection().begin();
+    QMap< KPPixmapDataCollection::Key, QImage >::Iterator it = _pixmapCollection.getPixmapDataCollection().begin();
 
     for ( ; it != _pixmapCollection.getPixmapDataCollection().end(); ++it )
     {
@@ -415,7 +412,7 @@ bool KPresenterDoc::completeSaving( KOStore::Store_ptr _store )
 	return true;
 
     CORBA::String_var u = url();
-    QMap< KPPixmapDataCollection::Key, QPixmap >::Iterator it = _pixmapCollection.getPixmapDataCollection().begin();
+    QMap< KPPixmapDataCollection::Key, QImage >::Iterator it = _pixmapCollection.getPixmapDataCollection().begin();
 
     for( ; it != _pixmapCollection.getPixmapDataCollection().end(); ++it )
     {
@@ -435,9 +432,7 @@ bool KPresenterDoc::completeSaving( KOStore::Store_ptr _store )
 	    QString mime = "image/" + format.lower();
 	    _store->open( u2, mime.lower() );
 	    ostorestream out( _store );
-  	    QPixmap pix( it.data() );
- 	    pix.detach();
-  	    writeImageToStream( out, pix.convertToImage(), format );
+	    writeImageToStream( out, it.data(), format );
 	    out.flush();
 	    _store->close();
 	}
@@ -1244,9 +1239,7 @@ bool KPresenterDoc::completeLoading( KOStore::Store_ptr _store )
 	    }
 	    _store->close();
 
-	    QPixmap pix;
-	    pix.convertFromImage( img );
-	    _pixmapCollection.getPixmapDataCollection().insertPixmapData( it.node->data, pix );
+	    _pixmapCollection.getPixmapDataCollection().insertPixmapData( it.node->data, img );
 	}
 
 	QValueListIterator<KPClipartCollection::Key> it2 = clipartCollectionKeys.begin();
@@ -1417,7 +1410,7 @@ void KPresenterDoc::setPageLayout( KoPageLayout pgLayout, int diffx, int diffy )
     QRect r = getPageSize( 0, diffx, diffy );
 
     for ( int i = 0; i < static_cast<int>( _backgroundList.count() ); i++ ) {
-	if ( _backgroundList.at( i )->getSize() != QSize( r.width(), r.height() ) ) {
+	if ( QSize( r.width(), r.height() ) != _backgroundList.at( i )->getSize() ) {
 	    _backgroundList.at( i )->setSize( r.width(), r.height() );
 	    _backgroundList.at( i )->restore();
 	}
@@ -1425,7 +1418,8 @@ void KPresenterDoc::setPageLayout( KoPageLayout pgLayout, int diffx, int diffy )
 
 
     QString unit;
-    switch ( _pageLayout.unit ) {
+    switch ( _pageLayout.unit )
+    {
     case PG_MM: unit = "mm";
 	break;
     case PG_PT: unit = "pt";
@@ -1522,7 +1516,7 @@ void KPresenterDoc::setBackColor( unsigned int pageNum, QColor backColor1, QColo
 /*==================== set background picture ====================*/
 void KPresenterDoc::setBackPixFilename( unsigned int pageNum, QString backPix )
 {
-    QMap< KPPixmapDataCollection::Key, QPixmap >::Iterator it = _pixmapCollection.getPixmapDataCollection().begin();
+    QMap< KPPixmapDataCollection::Key, QImage >::Iterator it = _pixmapCollection.getPixmapDataCollection().begin();
     QDateTime dt;
 
     if ( !QFileInfo( backPix ).exists() )
@@ -2982,7 +2976,7 @@ void KPresenterDoc::raiseObjs( int /*diffx*/, int /*diffy*/ )
 /*=================== insert a picture ==========================*/
 void KPresenterDoc::insertPicture( QString filename, int diffx, int diffy, int _x , int _y )
 {
-    QMap< KPPixmapDataCollection::Key, QPixmap >::Iterator it = _pixmapCollection.getPixmapDataCollection().begin();
+    QMap< KPPixmapDataCollection::Key, QImage >::Iterator it = _pixmapCollection.getPixmapDataCollection().begin();
     QDateTime dt;
 
     if ( !QFileInfo( filename ).exists() )
@@ -3043,7 +3037,7 @@ void KPresenterDoc::changePicture( QString filename, int /*diffx*/, int /*diffy*
 {
     KPObject *kpobject = 0;
 
-    QMap< KPPixmapDataCollection::Key, QPixmap >::Iterator it = _pixmapCollection.getPixmapDataCollection().begin();
+    QMap< KPPixmapDataCollection::Key, QImage >::Iterator it = _pixmapCollection.getPixmapDataCollection().begin();
     QDateTime dt;
 
     if ( !QFileInfo( filename ).exists() )

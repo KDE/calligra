@@ -390,3 +390,5 @@ Reggie, 21.8.1999:
 ------------------
 - Make backups before saving
 - Fixed a bug in the pixmap handling
+- reverted and fixed some stuff, which I broke yesterday
+- Fixed some memleaks
