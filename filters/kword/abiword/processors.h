@@ -1,9 +1,10 @@
-/* $Header */
+/* $Header$ */
 
 /* This file is part of the KDE project
    Copyright (C) 1998, 1999 Reginald Stadlbauer <reggie@kde.org>
    Copyright (c) 2000 ID-PRO Deutschland GmbH. All rights reserved.
                       Contact: Wolf-Michael Bolle <Bolle@ID-PRO.de>
+   Copyright (C) 2001 Nicolas GOUTTE <nicog@snafu.de>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -23,11 +24,14 @@
 
 /* 
    19 Jan 2001  Nicolas GOUTTE <nicog@snafu.de>
-       Extracting the code from file:
+        Extracting the code from file:
            /home/kde/koffice/filters/kword/ascii/asciiexport.cc
-       and breaking the code into two new files:
+        and breaking the code into two new files:
            /home/kde/koffice/filters/kword/abiword/processors.cc 
 	   /home/kde/koffice/filters/kword/abiword/processors.h
+
+   19 Jan 2001  Nicolas GOUTTE <nicog@snafu.de>
+        New functions ending with Dom
 */
 
 // The class TagProcessing and the two functions ProcessSubtags () and
@@ -58,9 +62,29 @@ class TagProcessing
         void    *data;
 };
 
-void ProcessSubtags ( QDomNode                    parentNode,
-                      QValueList<TagProcessing>  &tagProcessingList,
-                      QString                    &outputText         );
+class TagProcessingDom
+{
+    public:
+        TagProcessingDom ()
+        {}
+
+        TagProcessingDom (QString  n,
+                         void     (*p)(QDomNode, void *, QDomNode&),
+                         void    *d) : name (n), processor (p), data (d)
+        {}
+
+        QString  name;
+        void     (*processor)(QDomNode, void *, QDomNode&);
+        void    *data;
+};
+
+void ProcessSubtags     ( QDomNode                   parentNode,
+                          QValueList<TagProcessing>  &tagProcessingList,
+                          QString                    &outputText         );
+
+void ProcessSubtagsDom  ( QDomNode                      parentNode,
+                          QValueList<TagProcessingDom>  &tagProcessingList,
+                          QDomNode                      &outputQDomNode );
 
 void AllowNoSubtags ( QDomNode  myNode );
 

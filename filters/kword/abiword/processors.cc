@@ -4,6 +4,7 @@
    Copyright (C) 1998, 1999 Reginald Stadlbauer <reggie@kde.org>
    Copyright (c) 2000 ID-PRO Deutschland GmbH. All rights reserved.
                       Contact: Wolf-Michael Bolle <Bolle@ID-PRO.de>
+   Copyright (C) 2001 Nicolas GOUTTE <nicog@snafu.de>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -23,11 +24,14 @@
 
 /* 
    19 Jan 2001  Nicolas GOUTTE <nicog@snafu.de>
-       Extracting the code from file:
+        Extracting the code from file:
            /home/kde/koffice/filters/kword/ascii/asciiexport.cc
-       and breaking the code into two new files:
+        and breaking the code into two new files:
            /home/kde/koffice/filters/kword/abiword/processors.cc 
 	   /home/kde/koffice/filters/kword/abiword/processors.h
+
+   19 Jan 2001  Nicolas GOUTTE <nicog@snafu.de>
+        New functions ending with Dom
 */
 
 #include <kdebug.h>
@@ -86,6 +90,49 @@ void ProcessSubtags ( QDomNode                    parentNode,
     }
 }
 
+void ProcessSubtagsDom ( QDomNode                       parentNode,
+                      	 QValueList<TagProcessingDom>   &tagProcessingList,
+                         QDomNode                       &outputQDomNote )
+{
+    QDomNode childNode;
+
+    for ( childNode = parentNode.firstChild (); !childNode.isNull (); childNode = childNode.nextSibling () )
+    {
+//      if ( childNode.isElement () )   // doesn't work!!!
+        if ( childNode.nodeType () == QDomNode::ElementNode )
+        {
+            bool found = false;
+
+            QValueList<TagProcessingDom>::Iterator  tagProcessingIt;
+
+            for ( tagProcessingIt = tagProcessingList.begin ();
+                  !found && tagProcessingIt != tagProcessingList.end ();
+                  tagProcessingIt++ )
+            {
+                if ( childNode.nodeName () == (*tagProcessingIt).name )
+                {
+                    found = true;
+
+                    if ( (*tagProcessingIt).processor != NULL )
+                    {
+                        ((*tagProcessingIt).processor) ( childNode, (*tagProcessingIt).data, outputQDomNote );
+                    }
+                    else
+                    {
+//                      kdError () << "<para>ignoring " << childNode.nodeName ()
+//                                      << " tag in " << parentNode.nodeName () << "!</para>" << endl;
+                    }
+                }
+            }
+
+            if ( !found )
+            {
+                kdError() << "Unexpected tag " << childNode.nodeName ()
+                               << " in " << parentNode.nodeName () << "!" << endl;
+            }
+        }
+    }
+}
 
 void AllowNoSubtags ( QDomNode  myNode )
 {
