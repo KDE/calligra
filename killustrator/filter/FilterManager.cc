@@ -33,6 +33,7 @@
 #include "filter/ImageExport.h"
 #include "filter/EPSExport.h"
 #include "filter/KilluImport.h"
+#include "filter/XfigImport.h"
 
 FilterManager* FilterManager::managerInstance = 0L;
 
@@ -69,6 +70,11 @@ void FilterManager::installDefaultFilters () {
 						  "KIllustrator", "kil",
 						  "Kai-Uwe Sattler",
 						  "0.1", killuFilter, 0L));
+  XfigImport* xfigFilter = new XfigImport ();
+  filters.insert ("Xfig", new FilterInfo (FilterInfo::FKind_Import,
+						  "Xfig", "fig",
+						  "Kai-Uwe Sattler",
+						  "0.1", xfigFilter, 0L));
   EPSExport* epsFilter = new EPSExport ();
   filters.insert ("EPS", new FilterInfo (FilterInfo::FKind_Export,
 					  "EPS", "eps",
