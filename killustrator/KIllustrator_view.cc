@@ -1250,14 +1250,18 @@ void KIllustratorView::slotSplitLine( bool b )
 
 void KIllustratorView::slotLayersPanel(bool b)
  {
-  mLayerPanel->manageDocument(activeDocument());
-  m_showLayers->setChecked(b);
+     if(mLayerPanel)
+     {
+         mLayerPanel->manageDocument(activeDocument());
+         m_showLayers->setChecked(b);
+     }
   //((KToggleAction*)actionCollection()->action("layers"))->setChecked(b);
  }
 
 void KIllustratorView::refreshLayerPanel()
 {
-   mLayerPanel->manageDocument(activeDocument());
+    if(mLayerPanel)
+        mLayerPanel->manageDocument(activeDocument());
 }
 
 void KIllustratorView::slotLoadPalette () {

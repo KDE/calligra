@@ -68,8 +68,8 @@ LayerPanel::LayerPanel (QWidget* parent, const char* name) :
 }
 
 void LayerPanel::manageDocument (GDocument* doc) {
-  document = doc;
-  layerView->setActiveDocument (doc);
+    document = doc;
+    layerView->setActiveDocument (doc);
   slotLayerChanged();
 }
 
@@ -124,6 +124,7 @@ void LayerPanel::slotLayerChanged(){
     QList<GLayer> list =document->activePage()->getLayers();
     btn_ll->setEnabled(list.first()!=document->activePage()->activeLayer ());
     btn_rl->setEnabled(list.last()!=document->activePage()->activeLayer ());
+
 }
 
 #include <LayerPanel.moc>
