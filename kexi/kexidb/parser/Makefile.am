@@ -29,3 +29,4 @@ coffie:
 	echo 'making coffie...'
 	sleep 5
 
+KDE_OPTIONS=nofinal
