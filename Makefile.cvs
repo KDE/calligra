@@ -7,7 +7,7 @@ all:
 	   echo "for cvs: use checkout once and after that update again" ;\
 	   echo "for cvsup: checkout kde-common from cvsup and" ;\
 	   echo "   link kde-common/admin to ./admin" ;\
-	   exit ;\
+	   exit 1 ;\
 	fi
 	cat admin/acinclude.m4.in admin/libtool.m4.in > acinclude.m4
 	aclocal
