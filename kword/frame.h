@@ -359,6 +359,8 @@ public:
   void moveBy(unsigned int dx,unsigned int dy);
   void drawAllRects(QPainter &p,int xOffset,int yOffset);
 
+  void deselectAll();
+
 protected:
   QList<Cell> cells;
   unsigned int rows,cols;

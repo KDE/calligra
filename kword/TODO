@@ -1,5 +1,11 @@
-If you are interested in doing one of the following tasks, please contact me at <reggie@kde.org>
+TODO-List:
+----------
 
 - Tab in the parag layout dialog for configuration of tabulators (adding/deleting/modifying them)
 - Preview widget for numbering
 - Preview widget for style templates editor
+- Make recalculation of frames (after resizing frames) and calculation of text running around frames much FASTER. Espacially the
+  recalculation of the whole text in these cases is very slow in long docs
+- When painting text the background has to be restored and not just deleted
+
+Reginald Stadlbauer <reggie@kde.org>

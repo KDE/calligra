@@ -55,24 +55,45 @@ void KWFrameDia::setupTab1TextFrameSet()
 {
   tab1 = new QWidget(this);
 
-  grid1 = new QGridLayout(tab1,2,1,15,7);
+  grid1 = new QGridLayout(tab1,4,1,15,7);
 
-  cAutoCreateFrame = new QCheckBox(i18n("&If the text of the frameset doesn't fit into the the frameset anymore \n"
-					"(not enough frames), automatically create a new frame."),tab1);
-  cAutoCreateFrame->resize(cAutoCreateFrame->sizeHint());
-  grid1->addWidget(cAutoCreateFrame,0,0);
+  lNewFrame = new QLabel(i18n("If the text of the frameset doesn't fit into the the frames of the frameset anymore:"),tab1);
+  lNewFrame->resize(lNewFrame->sizeHint());
+  grid1->addWidget(lNewFrame,0,0);
+  
+  rAppendFrame = new QRadioButton(i18n("Create automatically a new frame"),tab1);
+  rAppendFrame->resize(rAppendFrame->sizeHint());
+  grid1->addWidget(rAppendFrame,1,0);
+  
+  rResizeFrame = new QRadioButton(i18n("Resize automatically last frame"),tab1);
+  rResizeFrame->resize(rResizeFrame->sizeHint());
+  grid1->addWidget(rResizeFrame,2,0);
 
-  grid1->addColSpacing(0,cAutoCreateFrame->width());
+  QButtonGroup *grp = new QButtonGroup(tab1);
+  grp->hide();
+  grp->setExclusive(true);
+  grp->insert(rAppendFrame);
+  grp->insert(rResizeFrame);
+
+  grid1->addRowSpacing(0,lNewFrame->height());
+  grid1->addRowSpacing(1,rAppendFrame->height());
+  grid1->addRowSpacing(2,rResizeFrame->height());
+  grid1->setRowStretch(0,0);
+  grid1->setRowStretch(1,0);
+  grid1->setRowStretch(2,0);
+  grid1->setRowStretch(3,1);
+
+  grid1->addColSpacing(0,lNewFrame->width());
+  grid1->addColSpacing(0,rAppendFrame->width());
+  grid1->addColSpacing(0,rResizeFrame->width());
   grid1->setColStretch(0,1);
-
-  grid1->addRowSpacing(0,cAutoCreateFrame->height());
-  grid1->setRowStretch(1,1);
 
   grid1->activate();
 
   addTab(tab1,i18n("Frameset"));
 
-  cAutoCreateFrame->setChecked(dynamic_cast<KWTextFrameSet*>(frameset)->getAutoCreateNewFrame());
+  rAppendFrame->setChecked(dynamic_cast<KWTextFrameSet*>(frameset)->getAutoCreateNewFrame());
+  rResizeFrame->setChecked(!dynamic_cast<KWTextFrameSet*>(frameset)->getAutoCreateNewFrame());
 }
 
 /*================================================================*/
@@ -254,7 +275,7 @@ void KWFrameDia::runConturClicked()
 void KWFrameDia::applyChanges()
 {
   if ((flags & FD_FRAME_SET) && frameset && frameset->getFrameType() == FT_TEXT)
-    dynamic_cast<KWTextFrameSet*>(frameset)->setAutoCreateNewFrame(cAutoCreateFrame->isChecked());
+    dynamic_cast<KWTextFrameSet*>(frameset)->setAutoCreateNewFrame(rAppendFrame->isChecked());
 
   if ((flags & FD_FRAME && frame && (!frameset || frameset && frameset->getFrameType() == FT_TEXT)))
     {

@@ -26,9 +26,9 @@
 #include <qgroupbox.h>
 #include <qpixmap.h>
 #include <qradiobutton.h>
-#include <qcheckbox.h>
 #include <qevent.h>
 #include <qlistbox.h>
+#include <qbuttongroup.h>
 
 #include <kapp.h>
 #include <krestrictedline.h>
@@ -64,9 +64,9 @@ protected:
   QWidget *tab1,*tab2,*tab3;
   QGridLayout *grid1,*grid2,*grid3,*runGrid;
   QGroupBox *runGroup;
-  QRadioButton *rRunNo,*rRunBounding,*rRunContur;
+  QRadioButton *rRunNo,*rRunBounding,*rRunContur,*rResizeFrame,*rAppendFrame;
   QCheckBox *cAutoCreateFrame;
-  QLabel *lRunNo,*lRunBounding,*lRunContur,*lRGap,*lFrameSet;
+  QLabel *lRunNo,*lRunBounding,*lRunContur,*lRGap,*lFrameSet,*lNewFrame;
   QListBox *lFrameSList;
   
   KWFrameSet *frameset;

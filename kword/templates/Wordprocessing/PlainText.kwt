@@ -6,7 +6,7 @@
  <ATTRIBUTES processing="0" standardpage="1"/>
  <FRAMESETS>
   <FRAMESET frameType="1" autoCreateNewFrame="1">
-   <FRAME left="28" top="42" right="566" bottom="798" runaround="0" runaroundGap="1"/>
+   <FRAME left="28" top="42" right="566" bottom="798" runaround="1" runaroundGap="1"/>
    <PARAGRAPH>
     <TEXT></TEXT>
     <FORMATS>

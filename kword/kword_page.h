@@ -156,7 +156,7 @@ public:
   void editPaste(QString _string);
 
   void recalcText();
-  void recalcWholeText(bool _cursor = false);
+  void recalcWholeText(bool _cursor = false,int _except = -1);
   void footerHeaderDisappeared();
   void drawBorders(QPainter &_painter,KRect v_area);
   void drawFrameSelection(QPainter &_painter,KWFrame *_frame);
@@ -311,6 +311,8 @@ protected:
   int currFindFS;
   int selectedFrameSet,selectedFrame;
   unsigned int tcols,trows;
+
+  bool recalcingText;
 
 };
 

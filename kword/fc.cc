@@ -90,7 +90,7 @@ void KWFormatContext::init( KWParag *_parag, QPainter &_painter, bool _updateCou
   
       lineStartPos = 0;
       frame = parag->getStartFrame();
-      page = parag->getStartPage();
+      page = document->getFrameSet(frameSet - 1)->getPageOfFrame(frame - 1) + 1;
       
       makeLineLayout( _painter );
     }
@@ -1065,8 +1065,41 @@ bool KWFormatContext::makeLineLayout( QPainter &_painter, bool _checkIntersects 
     // Does this line still fit on this frame ?
     if (!document->isPTYInFrame(frameSet - 1,frame - 1,ptY + getLineHeight()))
       {
+	// Are we a header or footer?
+	if (isAHeader(document->getFrameSet(frameSet - 1)->getFrameInfo()) || isAFooter(document->getFrameSet(frameSet - 1)->getFrameInfo()))
+	  {
+	    int diff = (ptY + getLineHeight()) - document->getFrameSet(frameSet - 1)->getFrame(frame - 1)->bottom();
+		
+	    if (document->canResize(document->getFrameSet(frameSet - 1),document->getFrameSet(frameSet - 1)->getFrame(frame - 1),
+				    document->getFrameSet(frameSet - 1)->getPageOfFrame(frame - 1),diff + 1))
+	      {
+		QPaintDevice *dev = _painter.device();
+		_painter.end();
+		
+		document->getFrameSet(frameSet - 1)->getFrame(frame - 1)->
+		  setHeight(document->getFrameSet(frameSet - 1)->getFrame(frame - 1)->height() + diff + 1);
+		
+		if (document->getFrameSet(frameSet - 1)->getGroupManager())
+		  {
+		    document->getFrameSet(frameSet - 1)->getGroupManager()->deselectAll();
+		    document->getFrameSet(frameSet - 1)->getFrame(frame - 1)->setSelected(true);
+		    document->getFrameSet(frameSet - 1)->getGroupManager()->recalcRows();
+		  }
+		
+		document->recalcFrames();
+		document->updateAllFrames();
+		document->setNeedRedraw(true);
+		
+		_painter.begin(dev);
+	      }
+	    else
+	      {		
+		outOfFrame = true;
+		return false;
+	      }
+	  }
 	// Can we jump to the next frame ?
-	if (frame < document->getFrameSet(frameSet - 1)->getNumFrames())
+	else if (frame < document->getFrameSet(frameSet - 1)->getNumFrames())
 	  {
 	    frame++;
 	    if (document->getFrameSet(frameSet - 1)->getFrame(frame - 1)->top() >
@@ -1081,17 +1114,47 @@ bool KWFormatContext::makeLineLayout( QPainter &_painter, bool _checkIntersects 
 	  {
 	    if (!dynamic_cast<KWTextFrameSet*>(document->getFrameSet(frameSet - 1))->getAutoCreateNewFrame())
 	      {
-		outOfFrame = true;
-		return false;
+		int diff = (ptY + getLineHeight()) - document->getFrameSet(frameSet - 1)->getFrame(frame - 1)->bottom();
+		
+		if (document->canResize(document->getFrameSet(frameSet - 1),document->getFrameSet(frameSet - 1)->getFrame(frame - 1),
+					document->getFrameSet(frameSet - 1)->getPageOfFrame(frame - 1),diff + 1))
+		  {
+		    QPaintDevice *dev = _painter.device();
+		    _painter.end();
+
+		    document->getFrameSet(frameSet - 1)->getFrame(frame - 1)->
+		      setHeight(document->getFrameSet(frameSet - 1)->getFrame(frame - 1)->height() + diff + 1);
+		   
+		    if (document->getFrameSet(frameSet - 1)->getGroupManager())
+		      {
+			document->getFrameSet(frameSet - 1)->getGroupManager()->deselectAll();
+			document->getFrameSet(frameSet - 1)->getFrame(frame - 1)->setSelected(true);
+			document->getFrameSet(frameSet - 1)->getGroupManager()->recalcRows();
+		      }
+
+ 		    document->recalcFrames();
+ 		    document->updateAllFrames();
+ 		    document->setNeedRedraw(true);
+
+		    _painter.begin(dev);
+		  }
+		else
+		  {		
+		    outOfFrame = true;
+		    return false;
+		  }
 	      }
-	    
-	    document->appendPage(page - 1,_painter);
-	    page++;
-	    frame++;
-	    parag->setEndPage(page);
-	    parag->setEndFrame(frame);
-	    ptY = document->getFrameSet(frameSet - 1)->getFrame(frame - 1)->top();
-	    return makeLineLayout(_painter);
+	    else
+	      {
+		document->appendPage(page - 1,_painter);
+		page++;
+		frame++;
+		parag->setEndPage(page);
+		parag->setEndFrame(frame);
+		ptY = document->getFrameSet(frameSet - 1)->getFrame(frame - 1)->top();
+		return makeLineLayout(_painter);
+	  
+	      }
 	  }
       }
     

@@ -647,3 +647,11 @@ Reggie, 12.1.1999:
   - Moving tables works 
   - Resizing rows and cols works
   - Selecting cells works
+
+Reggie, 13.1.1999:
+------------------
+- Tons of fixes and improvements
+- Improvements for tables and headers/footers
+- If the text of a frameset doesn't fit into the frames anymore, and no new frames should be appended,
+  the last frame gets, if possible, automatically resized now (this is default for table cells and headers/footers)
+- Cleanup of framedia

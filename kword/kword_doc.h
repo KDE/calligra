@@ -265,7 +265,7 @@ public:
   void updateAllRanges();
   void updateAllCursors();
   void drawAllBorders(QPainter *_painter = 0);
-  void recalcWholeText(bool _cursor = false);
+  void recalcWholeText(bool _cursor = false,int _except = -1);
   void hideAllFrames();
 
   int getPages() { return pages; }
@@ -341,10 +341,15 @@ public:
   void setHeader(bool h);
   void setFooter(bool f);
 
-  void recalcFrames();
+  void recalcFrames(bool _cursor = false);
 
   KoHFType getHeaderType() { return pageHeaderFooter.header; }
   KoHFType getFooterType() { return pageHeaderFooter.footer; }
+  
+  bool canResize(KWFrameSet *frameset,KWFrame *frame,int page,int diff);
+
+  bool needRedraw() { return _needRedraw; }
+  void setNeedRedraw(bool _r) { _needRedraw = _r; }
 
 signals:
   void sig_imageModified();
@@ -437,6 +442,8 @@ protected:
   KWUserFont *cUserFont;
   KWDisplayFont *cDisplayFont;
   KWParagLayout *cParagLayout;
+
+  bool _needRedraw;
   
 };
 

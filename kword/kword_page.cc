@@ -28,6 +28,7 @@ KWPage::KWPage( QWidget *parent, KWordDocument *_doc, KWordGUI *_gui )
   : QWidget(parent,""), buffer(width(),height()), format(_doc)
 { 
   editNum = -1;
+  recalcingText = false;
 
   setBackgroundColor(white);
   buffer.fill(white);
@@ -519,8 +520,8 @@ void KWPage::mouseMoveEvent(QMouseEvent *e)
 	  } break;
 	case MM_CREATE_TEXT: case MM_CREATE_PIX: case MM_CREATE_PART: case MM_CREATE_TABLE: case MM_CREATE_FORMULA: case MM_CREATE_KSPREAD_TABLE:
 	  {
-	    int mx = e->x() + xOffset;
-	    int my = e->y() + yOffset;
+	    int mx = e->x();
+	    int my = e->y();
 	    if (doRaster)
 	      {
 		mx = (mx / doc->getRastX()) * doc->getRastX();
@@ -716,6 +717,8 @@ void KWPage::mousePressEvent(QMouseEvent *e)
 	    } break;
 	  case MM_CREATE_TEXT: case MM_CREATE_PART: case MM_CREATE_TABLE: case MM_CREATE_FORMULA: case MM_CREATE_KSPREAD_TABLE:
 	    {
+	      mx -= xOffset;
+	      my -= yOffset;
 	      mx = (mx / doc->getRastX()) * doc->getRastX();
 	      oldMx = mx;
 	      my = (my / doc->getRastX()) * doc->getRastY();
@@ -725,6 +728,8 @@ void KWPage::mousePressEvent(QMouseEvent *e)
 	    } break;
 	  case MM_CREATE_PIX:
 	    {
+	      mx -= xOffset;
+	      my -= yOffset;
 	      if (!pixmap_name.isEmpty()) 
 		{
 		  QPixmap _pix(pixmap_name);
@@ -878,7 +883,11 @@ void KWPage::mouseReleaseEvent(QMouseEvent *e)
 
 	insRect = insRect.normalize();
 	if (insRect.width() != 0 && insRect.height() != 0)
-	  doc->insertObject(insRect,partEntry,xOffset,yOffset);
+	  {
+	    doc->insertObject(insRect,partEntry,xOffset,yOffset);
+	    buffer.fill(white);
+	    repaint(false);
+	  }
 	mmEdit();
       } break;
     case MM_CREATE_TABLE:
@@ -897,14 +906,14 @@ void KWPage::mouseReleaseEvent(QMouseEvent *e)
 		    KWTextFrameSet *_frameSet = new KWTextFrameSet(doc);
 		    _frameSet->addFrame(frame);
 		    _frameSet->setAutoCreateNewFrame(false);
-		    doc->addFrameSet(_frameSet);
 		    _frameSet->setGroupManager(grpMgr);
 		    grpMgr->addFrameSet(_frameSet,i,j);
 		  }
 	      }
 	    grpMgr->init(insRect.x() + xOffset,insRect.y() + yOffset,insRect.width(),insRect.height());
+	    buffer.fill(white);
+	    repaint(false);
 	  }
-
 	mmEdit();
       } break;
     default: repaint(false);
@@ -1085,13 +1094,18 @@ void KWPage::recalcText()
 }
 
 /*================================================================*/
-void KWPage::recalcWholeText(bool _cursor = false)
+void KWPage::recalcWholeText(bool _cursor = false,int _except = -1)
 {
+  if (recalcingText) return;
+
+  recalcingText = true;
   QPainter painter;
   painter.begin(this);
 
   for (unsigned int i = 0;i < doc->getNumFrameSets();i++)
     {
+      if (static_cast<int>(i) == _except) continue;
+
       if (doc->getFrameSet(i)->getFrameType() != FT_TEXT || doc->getFrameSet(i)->getNumFrames() == 0) continue;      
       KWFormatContext _fc(doc,i + 1);
       _fc.init(doc->getFirstParag(i),painter,true);
@@ -1104,6 +1118,7 @@ void KWPage::recalcWholeText(bool _cursor = false)
 
   painter.end();
   if (_cursor) recalcCursor();
+  recalcingText = false;
 }
 
 /*================================================================*/
@@ -1156,7 +1171,7 @@ void KWPage::recalcPage(KWParag *_p)
 		if (i == fc->getFrameSet() - 1 && _p)
 		  {
 		    while (paintfc->getParag() != _p->getNext())
-		    paintfc->makeNextLineLayout(painter);  
+		      paintfc->makeNextLineLayout(painter);  
 		  }
 		else
 		  {
@@ -2164,7 +2179,13 @@ void KWPage::keyPressEvent(QKeyEvent *e)
 		fc->cursorGotoPos(tmpTextPos + 1,painter);
 	      }
 	    
-	    doc->updateAllViews(gui->getView());
+	    QPaintDevice *dev = painter.device();
+	    painter.end();
+
+	    doc->updateAllViews(doc->needRedraw() ? 0L : gui->getView());
+	    doc->setNeedRedraw(false);
+
+	    painter.begin(dev);
 	  }
       }  break;
     }

@@ -1094,6 +1094,9 @@ void KWGroupManager::init(unsigned int x,unsigned int y,unsigned int width,unsig
 	  frame->setRect(x + j * wid + 2 * j,y + i * hei + 2 * i,wid,hei);
 	}
     }
+
+  for (unsigned int k = 0;k < cells.count();k++)
+    doc->addFrameSet(cells.at(k)->frameSet);
 }
 
 /*================================================================*/
@@ -1125,7 +1128,7 @@ void KWGroupManager::recalcCols()
     {
       unsigned int j = 0;
       for (j = 0;j < rows;j++)
-	getFrameSet(j,i)->getFrame(0)->moveTopLeft(QPoint(x,getFrameSet(j,i)->getFrame(0)->y()));
+	getFrameSet(j,i)->getFrame(0)->moveTopLeft(KPoint(x,getFrameSet(j,i)->getFrame(0)->y()));
       x = getFrameSet(0,i)->getFrame(0)->right() + 3;
     }
 }
@@ -1147,7 +1150,7 @@ void KWGroupManager::recalcRows()
       if (hei != -1)
 	{
 	  if (getBoundingRect().y() + getBoundingRect().height() + (hei - _hei) > 
-	      static_cast<int>(doc->getPTPaperHeight()))
+	      static_cast<int>(doc->getPTPaperHeight() * (getFrameSet(0,0)->getPageOfFrame(0) + 1)))
 	    hei = _hei;
 	  for (i = 0;i < cols;i++)
 	    getFrameSet(j,i)->getFrame(0)->setHeight(hei);
@@ -1159,7 +1162,7 @@ void KWGroupManager::recalcRows()
     {
       unsigned int i = 0;
       for (i = 0;i < cols;i++)
-	getFrameSet(j,i)->getFrame(0)->moveTopLeft(QPoint(getFrameSet(j,i)->getFrame(0)->x(),y));
+	getFrameSet(j,i)->getFrame(0)->moveTopLeft(KPoint(getFrameSet(j,i)->getFrame(0)->x(),y));
       y = getFrameSet(j,0)->getFrame(0)->bottom() + 3;
     }
 }
@@ -1209,6 +1212,18 @@ void KWGroupManager::drawAllRects(QPainter &p,int xOffset,int yOffset)
     }
 }
 
+
+/*================================================================*/
+void KWGroupManager::deselectAll()
+{
+  KWFrame *frame = 0L;
+
+  for (unsigned int i = 0;i < cells.count();i++)
+    {
+      frame = cells.at(i)->frameSet->getFrame(0);
+      frame->setSelected(false);
+    }
+}
 
 /*================================================================*/
 bool isAHeader(FrameInfo fi) 

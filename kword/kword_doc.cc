@@ -88,6 +88,7 @@ KWordDocument::KWordDocument()
   _loaded = false;
   _header = false;
   _footer = false;
+  _needRedraw = false;
 
   cUserFont = 0L;
   cParagLayout = 0L;
@@ -206,7 +207,7 @@ void KWordDocument::setPageLayout(KoPageLayout _layout,KoColumns _cl,KoKWHeaderF
 }
 
 /*================================================================*/
-void KWordDocument::recalcFrames()
+void KWordDocument::recalcFrames(bool _cursor = false)
 {
   if (processingType != DTP)
     pages = 1;
@@ -609,7 +610,7 @@ void KWordDocument::recalcFrames()
 	}
     }
 
-  recalcWholeText();
+  recalcWholeText(_cursor);
   updateAllRanges();
 }
 
@@ -1747,10 +1748,13 @@ void KWordDocument::updateAllViews(KWordView *_view,bool _clear = false)
   if (!m_lstViews.isEmpty())
     {
       for (viewPtr = m_lstViews.first();viewPtr != 0;viewPtr = m_lstViews.next())
-	if (viewPtr != _view) 
-	  {
-	    if (_clear) viewPtr->getGUI()->getPaperWidget()->clear();
-	    viewPtr->getGUI()->getPaperWidget()->repaint(false);
+	if (viewPtr->getGUI() && viewPtr->getGUI()->getPaperWidget())
+	  {	
+	    if (viewPtr != _view) 
+	      {
+		if (_clear) viewPtr->getGUI()->getPaperWidget()->clear();
+		viewPtr->getGUI()->getPaperWidget()->repaint(false);
+	      }
 	  }
     }
 }
@@ -1764,8 +1768,11 @@ void KWordDocument::updateAllRanges()
     {
       for (viewPtr = m_lstViews.first();viewPtr != 0;viewPtr = m_lstViews.next())
 	{
-	  if (viewPtr->getGUI())
-	    viewPtr->getGUI()->setRanges();
+	if (viewPtr->getGUI() && viewPtr->getGUI()->getPaperWidget())
+	  {	
+	    if (viewPtr->getGUI())
+	      viewPtr->getGUI()->setRanges();
+	  }
 	}
     }
 }
@@ -1779,11 +1786,14 @@ void KWordDocument::updateAllCursors()
     {
       for (viewPtr = m_lstViews.first();viewPtr != 0;viewPtr = m_lstViews.next())
 	{
-	  if (viewPtr->getGUI())
-	    {
-	      viewPtr->getGUI()->getPaperWidget()->recalcText();
-	      viewPtr->getGUI()->getPaperWidget()->recalcCursor();
-	    }
+	if (viewPtr->getGUI() && viewPtr->getGUI()->getPaperWidget())
+	  {	
+	    if (viewPtr->getGUI())
+	      {
+		viewPtr->getGUI()->getPaperWidget()->recalcText();
+		viewPtr->getGUI()->getPaperWidget()->recalcCursor();
+	      }
+	  }
 	}
     }
 }
@@ -1795,10 +1805,13 @@ void KWordDocument::updateAllStyleLists()
 
   if (!m_lstViews.isEmpty())
     {
-      for (viewPtr = m_lstViews.first();viewPtr != 0;viewPtr = m_lstViews.next())
-	{
-	  viewPtr->updateStyleList();
-	}
+	if (viewPtr->getGUI() && viewPtr->getGUI()->getPaperWidget())
+	  {	
+	    for (viewPtr = m_lstViews.first();viewPtr != 0;viewPtr = m_lstViews.next())
+	      {
+		viewPtr->updateStyleList();
+	      }
+	  }
     }
 }
 
@@ -1812,17 +1825,20 @@ void KWordDocument::drawAllBorders(QPainter *_painter = 0)
     {
       for (viewPtr = m_lstViews.first();viewPtr != 0;viewPtr = m_lstViews.next())
 	{
-	  if (viewPtr->getGUI())
-	    {
-	      if (!_painter)
-		{
-		  p.begin(viewPtr->getGUI()->getPaperWidget());
-		  viewPtr->getGUI()->getPaperWidget()->drawBorders(p,viewPtr->getGUI()->getPaperWidget()->rect());
-		  p.end();
-		}
-	      else
-		viewPtr->getGUI()->getPaperWidget()->drawBorders(*_painter,viewPtr->getGUI()->getPaperWidget()->rect());
-	    }
+	if (viewPtr->getGUI() && viewPtr->getGUI()->getPaperWidget())
+	  {	
+	    if (viewPtr->getGUI())
+	      {
+		if (!_painter)
+		  {
+		    p.begin(viewPtr->getGUI()->getPaperWidget());
+		    viewPtr->getGUI()->getPaperWidget()->drawBorders(p,viewPtr->getGUI()->getPaperWidget()->rect());
+		    p.end();
+		  }
+		else
+		  viewPtr->getGUI()->getPaperWidget()->drawBorders(*_painter,viewPtr->getGUI()->getPaperWidget()->rect());
+	      }
+	  }
 	}
     }
 }
@@ -2266,6 +2282,10 @@ void KWordDocument::appendPage(unsigned int _page,QPainter &_painter)
   for (unsigned int i = 0;i < getNumFrameSets();i++)
     {
       if (getFrameSet(i)->getFrameType() != FT_TEXT || getFrameSet(i)->getFrameInfo() != FI_BODY) continue;
+      
+      // don't add tables! A table cell (frameset) _must_ not have more than one frame!
+      if (getFrameSet(i)->getGroupManager()) continue;
+
       frameSet = getFrameSet(i);
 
       for (unsigned int j = 0;j < frameSet->getNumFrames();j++)
@@ -2583,7 +2603,11 @@ void KWordDocument::updateAllFrames()
     }
 
   QList<KWFrame> _frames;
+  QList<KWGroupManager> mgrs;
+  QList<KWFrame> del;
   _frames.setAutoDelete(false);
+  mgrs.setAutoDelete(false);
+  del.setAutoDelete(true);
   unsigned int i = 0,j = 0;
   KWFrameSet *frameset = 0L;
   KWFrame *frame1,*frame2;
@@ -2593,8 +2617,22 @@ void KWordDocument::updateAllFrames()
     {
       frameset = frames.at(i);
       if (isAHeader(frameset->getFrameInfo()) || isAFooter(frameset->getFrameInfo())) continue;
-      for (j = 0;j < frameset->getNumFrames();j++)
-	_frames.append(frameset->getFrame(j));
+      if (frameset->getGroupManager())
+	{
+	  if (mgrs.findRef(frameset->getGroupManager()) == -1)
+	    {
+	      KRect r = frameset->getGroupManager()->getBoundingRect();
+	      KWFrame *frm = new KWFrame(r.x(),r.y(),r.width(),r.height());
+	      _frames.append(frm);
+	      del.append(frm);
+	      mgrs.append(frameset->getGroupManager());
+	    }
+	}
+      else
+	{
+	  for (j = 0;j < frameset->getNumFrames();j++)
+	    _frames.append(frameset->getFrame(j));
+	}
     }
 
   for (i = 0;i < _frames.count();i++)
@@ -2627,17 +2665,20 @@ void KWordDocument::updateAllFrames()
 	    }
 	}
     }
+
+  del.clear();
 }
 
 /*================================================================*/
-void KWordDocument::recalcWholeText(bool _cursor = false)
+void KWordDocument::recalcWholeText(bool _cursor = false,int _except = -1)
 {
   KWordView *viewPtr;
 
   if (!m_lstViews.isEmpty())
     {
       viewPtr = m_lstViews.first();
-      viewPtr->getGUI()->getPaperWidget()->recalcWholeText(_cursor);
+      if (viewPtr->getGUI() && viewPtr->getGUI()->getPaperWidget())
+	viewPtr->getGUI()->getPaperWidget()->recalcWholeText(_cursor,_except);
     }
 }
 
@@ -2696,8 +2737,7 @@ void KWordDocument::setHeader(bool h)
 	}
     }
 
-  recalcFrames(); 
-  recalcWholeText(true); 
+  recalcFrames(true); 
   updateAllViews(0L,true);
 }
 
@@ -2716,7 +2756,38 @@ void KWordDocument::setFooter(bool f)
 	}
     }
 
-  recalcFrames(); 
-  recalcWholeText(true); 
+  recalcFrames(true); 
   updateAllViews(0L,true); 
+}
+
+/*================================================================*/
+bool KWordDocument::canResize(KWFrameSet *frameset,KWFrame *frame,int page,int diff)
+{
+
+  if (diff < 0) return false;
+
+  if (!frameset->getGroupManager())
+    {
+      if (frameset->getFrameInfo() == FI_BODY)
+	{
+	  if (static_cast<int>(frame->bottom() + diff) < static_cast<int>((page + 1) * getPTPaperHeight()))
+	    return true;
+	  return false;
+	}
+      else
+	{
+	  if (isAFooter(frameset->getFrameInfo()))
+	    frame->moveTopLeft(KPoint(0,frame->y() - diff));
+	  return true;
+	}
+    }
+  else
+    {
+      KWGroupManager *grpMgr = frameset->getGroupManager();
+      if (static_cast<int>(grpMgr->getBoundingRect().bottom() + diff) < static_cast<int>((page + 1) * getPTPaperHeight()))
+	return true;
+      return false;
+    }
+  
+  return false;
 }
